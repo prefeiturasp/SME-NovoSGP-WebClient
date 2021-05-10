@@ -1,6 +1,6 @@
 import moment from 'moment';
 import PropTypes from 'prop-types';
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import shortid from 'shortid';
 import {
@@ -27,6 +27,7 @@ import {
   verificaSomenteConsulta,
   history,
   ServicoCalendarios,
+  AbrangenciaServico,
 } from '~/servicos';
 import ServicoRegistroItineranciaAEE from '~/servicos/Paginas/Relatorios/AEE/ServicoRegistroItineranciaAEE';
 import { ordenarPor } from '~/utils/funcoes/gerais';
@@ -36,7 +37,6 @@ import {
   ModalAlunos,
   ModalErrosItinerancia,
   ModalObjetivos,
-  ModalUE,
   TabelaLinhaRemovivel,
 } from './componentes';
 import { NOME_CAMPO_QUESTAO } from './componentes/ConstantesCamposDinâmicos';
@@ -46,12 +46,10 @@ const RegistroItineranciaAEECadastro = ({ match }) => {
   const [carregandoQuestoes, setCarregandoQuestoes] = useState(false);
   const [dataVisita, setDataVisita] = useState('');
   const [dataRetornoVerificacao, setDataRetornoVerificacao] = useState('');
-  const [modalVisivelUES, setModalVisivelUES] = useState(false);
   const [modalVisivelObjetivos, setModalVisivelObjetivos] = useState(false);
   const [modalVisivelAlunos, setModalVisivelAlunos] = useState(false);
   const [objetivosSelecionados, setObjetivosSelecionados] = useState([]);
   const [alunosSelecionados, setAlunosSelecionados] = useState([]);
-  const [uesSelecionados, setUesSelecionados] = useState([]);
   const [modoEdicao, setModoEdicao] = useState(false);
   const [objetivosBase, setObjetivosBase] = useState([]);
   const [itineranciaId, setItineranciaId] = useState();
@@ -71,6 +69,14 @@ const RegistroItineranciaAEECadastro = ({ match }) => {
   const [listaEvento, setListaEvento] = useState([]);
   const [eventoId, setEventoId] = useState();
 
+  const [carregandoDres, setCarregandoDres] = useState(false);
+  const [carregandoUes, setCarregandoUes] = useState(false);
+
+  const [listaDres, setListaDres] = useState([]);
+  const [listaUes, setListaUes] = useState([]);
+  const [dre, setDre] = useState();
+  const [ue, setUe] = useState();
+
   const usuario = useSelector(store => store.usuario);
   const permissoesTela =
     usuario.permissoes[RotasDto.RELATORIO_AEE_REGISTRO_ITINERANCIA];
@@ -83,7 +89,7 @@ const RegistroItineranciaAEECadastro = ({ match }) => {
       dataVisita,
       dataRetornoVerificacao: dataRetornoVerificacao || '',
       objetivosVisita: objetivosSelecionados,
-      ues: uesSelecionados,
+      ueId: ue?.id,
       alunos: alunosSelecionados,
       questoes: alunosSelecionados?.length ? [] : questoesItinerancia,
       anoLetivo: new Date().getFullYear(),
@@ -98,9 +104,9 @@ const RegistroItineranciaAEECadastro = ({ match }) => {
         'A itinerância precisa ter ao menos um objetivo selecionado'
       );
     }
-    if (!itinerancia.ues?.length) {
+    if (!itinerancia?.ueId) {
       camposComErro.push(
-        'A itinerância precisa ter ao menos uma unidade escolar selecionada'
+        'A itinerância precisa ter uma unidade escolar selecionada'
       );
     }
     if (itinerancia.alunos?.length) {
@@ -189,7 +195,7 @@ const RegistroItineranciaAEECadastro = ({ match }) => {
     }
   };
 
-  const mudarDataVisita = data => {
+  const onChangeDataVisita = data => {
     setDataVisita(data);
     setModoEdicao(true);
   };
@@ -212,13 +218,6 @@ const RegistroItineranciaAEECadastro = ({ match }) => {
               item.itineranciaObjetivoBaseId !== valor.itineranciaObjetivoBaseId
           )
         : []
-    );
-    setModoEdicao(true);
-  };
-
-  const removerUeSelecionada = text => {
-    setUesSelecionados(estadoAntigo =>
-      estadoAntigo.filter(item => item.key !== text.key)
     );
     setModoEdicao(true);
   };
@@ -261,7 +260,10 @@ const RegistroItineranciaAEECadastro = ({ match }) => {
     setDataVisita('');
     setDataRetornoVerificacao('');
     setObjetivosSelecionados([]);
-    setUesSelecionados([]);
+    setDre();
+    setListaDres();
+    setUe();
+    setListaUes([]);
     questoesItinerancia.forEach(questao => {
       questao.resposta = '';
     });
@@ -286,12 +288,13 @@ const RegistroItineranciaAEECadastro = ({ match }) => {
         objetivoBase.checked = true;
       });
     }
-    if (itinerancia.ues?.length) {
-      itinerancia.ues.forEach(ue => {
-        ue.key = ue.codigoUe;
-      });
-      setUesSelecionados(itinerancia.ues);
-    }
+    // TODO
+    // if (itinerancia.ues?.length) {
+    //   itinerancia.ues.forEach(item => {
+    //     item.key = item.codigoUe;
+    //   });
+    //   setUesSelecionados(itinerancia.ues);
+    // }
     if (itinerancia.questoes?.length) {
       setQuestoesItinerancia(itinerancia.questoes);
     }
@@ -390,7 +393,7 @@ const RegistroItineranciaAEECadastro = ({ match }) => {
   useEffect(() => {
     obterObjetivos();
     setSomenteConsulta(verificaSomenteConsulta(permissoesTela));
-  }, []);
+  }, [permissoesTela]);
 
   const desabilitarDataVisita = dataCorrente => {
     return (
@@ -418,23 +421,9 @@ const RegistroItineranciaAEECadastro = ({ match }) => {
     );
   };
 
-  const permiteApenasUmaUe = () => {
-    if (objetivosSelecionados?.length) {
-      const objetivosComApenasUmaUe = objetivosSelecionados.filter(
-        objetivo => !objetivo.permiteVariasUes
-      );
-      return objetivosComApenasUmaUe?.length > 0;
-    }
-    return false;
-  };
-
   const setQuestao = (valor, questao) => {
     setModoEdicao(true);
     questao.resposta = valor;
-  };
-
-  const possuiApenasUesInfantil = () => {
-    return uesSelecionados.length && uesSelecionados[0].ehInfantil;
   };
 
   const gerarRelatorio = () => {
@@ -462,48 +451,38 @@ const RegistroItineranciaAEECadastro = ({ match }) => {
     setModoEdicao(true);
   };
 
-  const hasAnoLetivoClause = t =>
-    moment(dataVisita).format('YYYY') ?? false
-      ? String(t.anoLetivo) === moment(dataVisita).format('YYYY')
-      : true;
+  const obterTiposCalendarios = useCallback(async () => {
+    setCarregandoTipos(true);
 
-  const hasActiveSituation = t => t.situacao;
+    const resposta = await ServicoCalendarios.obterTiposCalendarioAutoComplete(
+      '',
+      ue?.id
+    )
+      .catch(e => erros(e))
+      .finally(() => setCarregandoTipos(false));
 
-  const filterAllowedCalendarTypes = data => {
-    return data.filter(hasAnoLetivoClause).filter(hasActiveSituation);
-  };
+    if (resposta?.data?.length) {
+      const anoLetivo = dataVisita.get('year');
 
-  const loadTiposCalendarioEffect = () => {
-    let isSubscribed = true;
+      const listaCaledariosAtivos = resposta.data
+        .filter(t => !!t.situacao)
+        .filter(calendario => calendario.anoLetivo === anoLetivo);
 
-    (async () => {
-      setCarregandoTipos(true);
-
-      const { data } = await ServicoCalendarios
-        .obterTiposCalendarioAutoComplete
-        // pesquisaTipoCalendario
-        ();
-
-      if (isSubscribed) {
-        const allowedList = filterAllowedCalendarTypes(data);
-        setListaCalendario(allowedList);
-        if (allowedList?.length === 1) {
-          selecionaTipoCalendario(allowedList[0].id);
-        }
-        setCarregandoTipos(false);
+      setListaCalendario(listaCaledariosAtivos);
+      if (listaCaledariosAtivos?.length === 1) {
+        selecionaTipoCalendario(String(listaCaledariosAtivos[0].id));
       }
-    })();
-
-    return () => {
-      isSubscribed = false;
-    };
-  };
+    }
+  }, [ue, dataVisita]);
 
   useEffect(() => {
-    if (dataVisita) {
-      loadTiposCalendarioEffect();
+    if (dataVisita && ue?.id) {
+      obterTiposCalendarios();
+    } else {
+      setListaCalendario([]);
+      selecionaTipoCalendario();
     }
-  }, [dataVisita]);
+  }, [dataVisita, ue, obterTiposCalendarios]);
 
   const obterListaEventos = async (tipoCalendarioId, id) => {
     setCarregandoEventos(true);
@@ -539,6 +518,105 @@ const RegistroItineranciaAEECadastro = ({ match }) => {
     }
     setModoEdicao(true);
   };
+
+  const onChangeDre = valorNovo => {
+    if (valorNovo) {
+      const dreSelecionada = listaDres.find(item => item.codigo === valorNovo);
+      if (dreSelecionada) {
+        setDre(dreSelecionada);
+      } else {
+        setDre();
+      }
+    } else {
+      setDre();
+    }
+
+    setListaUes([]);
+    setUe();
+
+    setModoEdicao(true);
+  };
+
+  const onChangeUe = valorNovo => {
+    setModoEdicao(true);
+    if (dre && valorNovo) {
+      const ueSelecionada = listaUes.find(item => item.codigo === valorNovo);
+
+      if (ueSelecionada) {
+        setUe(ueSelecionada);
+        return;
+      }
+    }
+    setUe();
+  };
+
+  const obterDres = useCallback(async () => {
+    if (dataVisita && moment.isMoment(dataVisita)) {
+      const anoLetivo = dataVisita.get('year');
+      setCarregandoDres(true);
+      const resposta = await AbrangenciaServico.buscarDres(
+        `v1/abrangencias/false/dres?anoLetivo=${anoLetivo}`
+      )
+        .catch(e => erros(e))
+        .finally(() => setCarregandoDres(false));
+
+      if (resposta?.data?.length) {
+        setListaDres(resposta.data);
+
+        if (resposta.data.length === 1) {
+          setDre(resposta.data[0]);
+        }
+        return;
+      }
+    }
+    setListaDres([]);
+    setDre();
+  }, [dataVisita]);
+
+  useEffect(() => {
+    if (dataVisita) {
+      obterDres();
+    } else {
+      setListaDres([]);
+      setDre();
+    }
+  }, [dataVisita, obterDres]);
+
+  const obterUes = useCallback(async () => {
+    if (dataVisita && moment.isMoment(dataVisita) && dre?.codigo) {
+      const anoLetivo = dataVisita.get('year');
+
+      setCarregandoUes(true);
+      const resposta = await AbrangenciaServico.buscarUes(
+        dre?.codigo,
+        `v1/abrangencias/false/dres/${dre?.codigo}/ues?anoLetivo=${anoLetivo}`,
+        true
+      )
+        .catch(e => erros(e))
+        .finally(() => setCarregandoUes(false));
+
+      if (resposta?.data?.length) {
+        if (resposta.data.length === 1) {
+          setUe(resposta.data[0]);
+        }
+
+        setListaUes(resposta.data);
+        return;
+      }
+    }
+
+    setUe();
+    setListaUes([]);
+  }, [dre, dataVisita]);
+
+  useEffect(() => {
+    if (dataVisita && dre) {
+      obterUes();
+      return;
+    }
+    setUe();
+    setListaUes([]);
+  }, [dataVisita, dre, obterUes]);
 
   return (
     <>
@@ -604,22 +682,52 @@ const RegistroItineranciaAEECadastro = ({ match }) => {
                 </div>
               </div>
             )}
-            <div className="row mb-4 mt-2">
-              <div className="col-3">
+            <div className="row mt-2">
+              <div className="col-sm-12 col-md-6 col-lg-3 col-xl-3 mb-2">
                 <CampoData
                   name="dataVisita"
                   formatoData="DD/MM/YYYY"
                   valor={dataVisita}
                   label="Data da visita"
                   placeholder="Selecione a data"
-                  onChange={mudarDataVisita}
+                  onChange={onChangeDataVisita}
                   desabilitarData={desabilitarDataVisita}
                   desabilitado={desabilitarCamposPorPermissao()}
                 />
               </div>
             </div>
             <div className="row mb-4">
-              <div className="col-6">
+              <div className="col-sm-12 col-md-12 col-lg-6 col-xl-6 mb-2">
+                <Loader loading={carregandoDres} tip="">
+                  <SelectComponent
+                    id="dre"
+                    label="Diretoria Regional de Educação (DRE)"
+                    lista={listaDres}
+                    valueOption="codigo"
+                    valueText="nome"
+                    disabled={listaDres?.length === 1}
+                    onChange={onChangeDre}
+                    valueSelect={dre?.codigo}
+                    placeholder="Diretoria Regional De Educação (DRE)"
+                  />
+                </Loader>
+              </div>
+              <div className="col-sm-12 col-md-12 col-lg-6 col-xl-6 mb-2">
+                <Loader loading={carregandoUes} tip="">
+                  <SelectComponent
+                    id="ue"
+                    label="Unidade Escolar (UE)"
+                    lista={listaUes}
+                    valueOption="codigo"
+                    valueText="nome"
+                    disabled={listaUes?.length === 1}
+                    onChange={onChangeUe}
+                    valueSelect={ue?.codigo}
+                    placeholder="Unidade Escolar (UE)"
+                  />
+                </Loader>
+              </div>
+              <div className="col-sm-12 col-md-6 col-lg-6 col-xl-6 mb-2">
                 <Loader loading={carregandoTipos} tip="">
                   <SelectComponent
                     id="tipo-calendario"
@@ -634,7 +742,7 @@ const RegistroItineranciaAEECadastro = ({ match }) => {
                   />
                 </Loader>
               </div>
-              <div className="col-6">
+              <div className="col-sm-12 col-md-6 col-lg-6 col-xl-6 mb-2">
                 <Loader loading={carregandoEventos} tip="">
                   <SelectComponent
                     id="evento"
@@ -674,44 +782,18 @@ const RegistroItineranciaAEECadastro = ({ match }) => {
                 botaoAdicionar={() => setModalVisivelObjetivos(true)}
               />
             </div>
-            <div className="row mb-4">
-              <TabelaLinhaRemovivel
-                bordered
-                dataIndex="descricao"
-                labelTabela="Selecione as Unidades Escolares"
-                tituloTabela="Unidades Escolares selecionadas"
-                labelBotao="Adicionar nova unidade escolar"
-                pagination={false}
-                desabilitadoIncluir={
-                  !permissoesTela?.podeIncluir ||
-                  somenteConsulta ||
-                  permissaoStatus
-                }
-                desabilitadoExcluir={
-                  !permissoesTela?.podeAlterar ||
-                  alunosSelecionados?.length ||
-                  somenteConsulta ||
-                  permissaoStatus
-                }
-                dadosTabela={uesSelecionados}
-                removerUsuario={text => removerUeSelecionada(text)}
-                botaoAdicionar={() => setModalVisivelUES(true)}
-              />
-            </div>
-            {uesSelecionados?.length === 1 && (
+            {ue?.id && (
               <div className="row mb-4">
                 <div className="col-12 font-weight-bold mb-2">
                   <span style={{ color: Base.CinzaMako }}>
-                    {possuiApenasUesInfantil() ? 'Crianças' : 'Estudantes'}
+                    {ue?.ehInfantil ? 'Crianças' : 'Estudantes'}
                   </span>
                 </div>
                 <div className="col-12">
                   <Button
                     id={shortid.generate()}
                     label={`Adicionar ${
-                      possuiApenasUesInfantil()
-                        ? 'nova criança'
-                        : 'novo estudante'
+                      ue?.ehInfantil ? 'nova criança' : 'novo estudante'
                     }`}
                     color={Colors.Azul}
                     border
@@ -811,20 +893,6 @@ const RegistroItineranciaAEECadastro = ({ match }) => {
           )}
         </Card>
       </Loader>
-      {modalVisivelUES && (
-        <ModalUE
-          modalVisivel={modalVisivelUES}
-          setModalVisivel={setModalVisivelUES}
-          unEscolaresSelecionados={uesSelecionados}
-          setUnEscolaresSelecionados={setUesSelecionados}
-          permiteApenasUmaUe={permiteApenasUmaUe()}
-          setModoEdicaoItinerancia={setModoEdicao}
-          desabilitarBotaoExcluir={
-            !permissoesTela?.podeAlterar || alunosSelecionados?.length
-          }
-          temAlunosSelecionados={alunosSelecionados?.length}
-        />
-      )}
       {modalVisivelObjetivos && (
         <ModalObjetivos
           modalVisivel={modalVisivelObjetivos}
@@ -832,7 +900,6 @@ const RegistroItineranciaAEECadastro = ({ match }) => {
           objetivosSelecionados={objetivosSelecionados}
           setObjetivosSelecionados={setObjetivosSelecionados}
           listaObjetivos={objetivosBase}
-          variasUesSelecionadas={uesSelecionados?.length > 1}
           setModoEdicaoItinerancia={setModoEdicao}
         />
       )}
@@ -842,7 +909,7 @@ const RegistroItineranciaAEECadastro = ({ match }) => {
           setModalVisivel={setModalVisivelAlunos}
           alunosSelecionados={alunosSelecionados}
           setAlunosSelecionados={selecionarAlunos}
-          codigoUe={uesSelecionados.length && uesSelecionados[0].codigoUe}
+          codigoUe={ue?.codigo}
           questoes={questoesAlunos}
           setModoEdicaoItinerancia={setModoEdicao}
           dataVisita={dataVisita}
