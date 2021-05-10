@@ -27,8 +27,12 @@ class ServicoCalendarios {
     return api.post('v1/relatorios/calendarios/impressao', payload);
   };
 
-  obterTiposCalendarioAutoComplete = (descricao = '') => {
-    return api.get(`v1/calendarios/tipos/anos-letivos?descricao=${descricao}`);
+  obterTiposCalendarioAutoComplete = (descricao = '', ueId) => {
+    let url = `v1/calendarios/tipos/anos-letivos?descricao=${descricao}`;
+    if (ueId) {
+      url += `&ueId=${ueId}`;
+    }
+    return api.get(url);
   };
 
   obterDatasDeAulasDisponiveis = (
