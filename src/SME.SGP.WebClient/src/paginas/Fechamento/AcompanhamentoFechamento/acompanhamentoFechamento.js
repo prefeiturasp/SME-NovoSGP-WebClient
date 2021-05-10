@@ -155,7 +155,7 @@ const AcompanhamentoFechamento = () => {
                   text="Dados por turma"
                   tamanhoFonte="18"
                   altura="24"
-                  className="mb-3"
+                  className="mb-2"
                 />
                 <PainelCollapse accordion onChange={onChangeCollapse}>
                   {turmasAcompanhamentoFechamento.items.map(dadosTurmas => (
@@ -168,8 +168,8 @@ const AcompanhamentoFechamento = () => {
                       header={dadosTurmas?.nome}
                     >
                       <>
-                        <Label text="Fechamento" className="mb-3" altura="24" />
-                        <div className="d-flex justify-content-between">
+                        <Label text="Fechamento" className="mb-2" altura="24" />
+                        <div className="d-flex">
                           {dadosStatusFechamento?.map(dadosFechamento => (
                             <CardStatus dadosStatus={dadosFechamento} />
                           ))}
@@ -177,10 +177,10 @@ const AcompanhamentoFechamento = () => {
                         <Divider style={{ background: Base.CinzaDivisor }} />
                         <Label
                           text="Conselho de classe"
-                          className="mb-3"
+                          className="mb-2"
                           altura="24"
                         />
-                        <div className="d-flex justify-content-between">
+                        <div className="d-flex">
                           {dadosStatusConsselhoClasse?.map(
                             dadosConselhoClasse => (
                               <CardStatus dadosStatus={dadosConselhoClasse} />
