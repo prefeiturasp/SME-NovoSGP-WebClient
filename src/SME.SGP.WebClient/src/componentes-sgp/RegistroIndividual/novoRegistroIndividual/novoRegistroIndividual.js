@@ -29,6 +29,7 @@ import {
 } from '~/servicos';
 
 import SugestaoTopico from '../SugestaoTopico/sugestaoTopico';
+import CompensacaoAusenciaRegistroIndividual from '../compensacaoAusenciaRegistroIndividual/compensacaoAusenciaRegistroIndividual';
 
 const NovoRegistroIndividual = () => {
   const dataAtual = window.moment();
@@ -280,6 +281,7 @@ const NovoRegistroIndividual = () => {
                     }
                   />
                 </div>
+                <CompensacaoAusenciaRegistroIndividual />
                 {auditoria && (
                   <div className="mt-1 ml-n3">
                     <Auditoria
