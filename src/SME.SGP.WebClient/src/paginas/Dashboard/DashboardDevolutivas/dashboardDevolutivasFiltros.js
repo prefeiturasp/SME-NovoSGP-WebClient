@@ -3,6 +3,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { CheckboxComponent, Loader, SelectComponent } from '~/componentes';
 import { FiltroHelper } from '~/componentes-sgp';
+import { OPCAO_TODOS } from '~/constantes/constantesGerais';
 import { ServicoFiltroRelatorio } from '~/servicos';
 import AbrangenciaServico from '~/servicos/Abrangencia';
 import { erros } from '~/servicos/alertas';
@@ -26,8 +27,6 @@ const DashboardDevolutivasFiltros = () => {
   const [carregandoDres, setCarregandoDres] = useState(false);
   const [carregandoUes, setCarregandoUes] = useState(false);
   const [carregandoModalidades, setCarregandoModalidades] = useState(false);
-
-  const OPCAO_TODOS = '-99';
 
   const validarValorPadraoAnoLetivo = (lista, atual) => {
     let valorAtual;

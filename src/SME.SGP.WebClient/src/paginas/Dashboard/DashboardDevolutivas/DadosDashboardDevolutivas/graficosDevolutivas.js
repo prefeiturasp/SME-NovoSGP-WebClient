@@ -1,12 +1,11 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
+import { OPCAO_TODOS } from '~/constantes/constantesGerais';
 import QtdDevolutivasRegistradasEstimada from './QtdDevolutivasRegistradasEstimada/qtdDevolutivasRegistradasEstimada';
 import QtdDiarioBordoDevolutiva from './QtdDiarioBordoDevolutiva/qtdDiarioBordoDevolutiva';
 import QtdDiariosBordoCampoReflexoesReplanejamentoPreenchido from './QtdDiariosBordoCampoReflexoesReplanejamentoPreenchido/qtdDiariosBordoCampoReflexoesReplanejamentoPreenchido';
 
 const GraficosDevolutivas = () => {
-  const OPCAO_TODOS = '-99';
-
   const anoLetivo = useSelector(
     store => store.dashboardDevolutivas?.dadosDashboardDevolutivas?.anoLetivo
   );
