@@ -95,6 +95,7 @@ import RelatorioDevolutivas from '~/paginas/Relatorios/Planejamento/Devolutivas/
 import DashboardAEE from '~/paginas/Dashboard/AEE/dashboardAEE';
 import DashboardRegistroItinerancia from '~/paginas/Dashboard/DashboardRegistroItinerancia/dashboardRegistroItinerancia';
 import DashboardFrequencia from '~/paginas/Dashboard/DashboardFrequencia/dashboardFrequencia';
+import DashboardDevolutivas from '~/paginas/Dashboard/DashboardDevolutivas/dashboardDevolutivas';
 
 const rotas = new Map();
 
@@ -1334,6 +1335,17 @@ rotas.set(RotasDto.DASHBOARD_FREQUENCIA, {
   tipo: RotasTipo.EstruturadaAutenticada,
   temPermissionamento: true,
   chavePermissao: RotasDto.DASHBOARD_FREQUENCIA,
+});
+
+rotas.set(RotasDto.DASHBOARD_DEVOLUTIVAS, {
+  breadcrumbName: 'Devolutivas',
+  menu: ['Dashboard'],
+  parent: '/',
+  component: DashboardDevolutivas,
+  exact: true,
+  tipo: RotasTipo.EstruturadaAutenticada,
+  // temPermissionamento: true,
+  chavePermissao: RotasDto.DASHBOARD_DEVOLUTIVAS,
 });
 
 const rotasArray = [];

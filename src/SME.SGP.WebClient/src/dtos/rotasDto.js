@@ -75,6 +75,7 @@ const RotasDto = {
   DASHBOARD_AEE: '/dashboard/aee',
   DASHBOARD_REGISTRO_ITINERANCIA: '/dashboard/registro-itinerancia',
   DASHBOARD_FREQUENCIA: '/dashboard/frequencia',
+  DASHBOARD_DEVOLUTIVAS: '/dashboard/devolutivas',
 };
 
 export default RotasDto;
