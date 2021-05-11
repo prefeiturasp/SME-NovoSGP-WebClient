@@ -5,6 +5,7 @@ import { useSelector } from 'react-redux';
 import { Loader } from '~/componentes';
 import DataUltimaAtualizacao from '~/componentes-sgp/DataUltimaAtualizacao/dataUltimaAtualizacao';
 import GraficoBarras from '~/componentes-sgp/Graficos/graficoBarras';
+import { OPCAO_TODOS } from '~/constantes/constantesGerais';
 import { erros } from '~/servicos';
 import ServicoDashboardDevolutivas from '~/servicos/Paginas/Dashboard/ServicoDashboardDevolutivas';
 
@@ -19,8 +20,6 @@ const GraficoQtdDevolutivasRegistradasEstimada = props => {
 
   const [dadosGrafico, setDadosGrafico] = useState([]);
   const [exibirLoader, setExibirLoader] = useState(false);
-
-  const OPCAO_TODOS = '-99';
 
   const obterDadosGrafico = useCallback(async () => {
     setExibirLoader(true);
