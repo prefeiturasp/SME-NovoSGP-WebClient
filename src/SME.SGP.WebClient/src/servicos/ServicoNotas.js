@@ -61,10 +61,10 @@ class ServicoNota {
 
       if (quantidadeTotalNotas === 0) return true;
 
-      const persentualAbaixoMedia =
-        (quantidadeTotalNotasNaoAprovado / quantidadeTotalNotas) * 100;
+      const percentualAbaixoMedia =
+        100 - ((quantidadeTotalNotasNaoAprovado / quantidadeTotalNotas) * 100);
       const ehPorcentagemAceitavel =
-        persentualAbaixoMedia < percentualMinimoAprovados;
+        percentualAbaixoMedia >= percentualMinimoAprovados;
 
       return ehPorcentagemAceitavel;
     };
