@@ -23,7 +23,7 @@ pipeline {
             steps {
             sh "echo executando build de projeto"
             sh 'yarn install'
-            sh 'yarn build'    
+            //sh 'yarn build'    
             }
         }
         
