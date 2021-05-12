@@ -28,6 +28,7 @@ import {
   history,
   ServicoCalendarios,
   AbrangenciaServico,
+  ServicoFiltroRelatorio,
 } from '~/servicos';
 import ServicoRegistroItineranciaAEE from '~/servicos/Paginas/Relatorios/AEE/ServicoRegistroItineranciaAEE';
 import { ordenarPor } from '~/utils/funcoes/gerais';
@@ -74,8 +75,9 @@ const RegistroItineranciaAEECadastro = ({ match }) => {
 
   const [listaDres, setListaDres] = useState([]);
   const [listaUes, setListaUes] = useState([]);
-  const [dre, setDre] = useState();
-  const [ue, setUe] = useState();
+  const [listaModalidades, setListaModalidades] = useState([]);
+  const [dreId, setDreId] = useState();
+  const [ueId, setUeId] = useState();
 
   const usuario = useSelector(store => store.usuario);
   const permissoesTela =
@@ -89,7 +91,7 @@ const RegistroItineranciaAEECadastro = ({ match }) => {
       dataVisita,
       dataRetornoVerificacao: dataRetornoVerificacao || '',
       objetivosVisita: objetivosSelecionados,
-      ueId: ue?.id,
+      ueId,
       alunos: alunosSelecionados,
       questoes: alunosSelecionados?.length ? [] : questoesItinerancia,
       anoLetivo: new Date().getFullYear(),
@@ -260,10 +262,11 @@ const RegistroItineranciaAEECadastro = ({ match }) => {
     setDataVisita('');
     setDataRetornoVerificacao('');
     setObjetivosSelecionados([]);
-    setDre();
+    setDreId();
     setListaDres();
-    setUe();
+    setUeId();
     setListaUes([]);
+    setListaModalidades([]);
     questoesItinerancia.forEach(questao => {
       questao.resposta = '';
     });
@@ -288,13 +291,13 @@ const RegistroItineranciaAEECadastro = ({ match }) => {
         objetivoBase.checked = true;
       });
     }
-    // TODO
-    // if (itinerancia.ues?.length) {
-    //   itinerancia.ues.forEach(item => {
-    //     item.key = item.codigoUe;
-    //   });
-    //   setUesSelecionados(itinerancia.ues);
-    // }
+
+    if (itinerancia?.ueId) {
+      setUeId(String(itinerancia.ueId));
+    }
+    if (itinerancia?.dreId) {
+      setDreId(String(itinerancia.dreId));
+    }
     if (itinerancia.questoes?.length) {
       setQuestoesItinerancia(itinerancia.questoes);
     }
@@ -453,17 +456,15 @@ const RegistroItineranciaAEECadastro = ({ match }) => {
 
   const obterTiposCalendarios = useCallback(async () => {
     setCarregandoTipos(true);
-
-    const resposta = await ServicoCalendarios.obterTiposCalendarioAutoComplete(
-      '',
-      ue?.id
+    const anoLetivo = dataVisita.get('year');
+    const resposta = await ServicoCalendarios.obterTiposCalendarioPorAnoLetivoModalidade(
+      anoLetivo,
+      listaModalidades?.map(item => item?.valor)?.toString()
     )
       .catch(e => erros(e))
       .finally(() => setCarregandoTipos(false));
 
     if (resposta?.data?.length) {
-      const anoLetivo = dataVisita.get('year');
-
       const listaCaledariosAtivos = resposta.data
         .filter(t => !!t.situacao)
         .filter(calendario => calendario.anoLetivo === anoLetivo);
@@ -473,16 +474,16 @@ const RegistroItineranciaAEECadastro = ({ match }) => {
         selecionaTipoCalendario(String(listaCaledariosAtivos[0].id));
       }
     }
-  }, [ue, dataVisita]);
+  }, [dataVisita, listaModalidades]);
 
   useEffect(() => {
-    if (dataVisita && ue?.id) {
+    if (dataVisita && ueId && listaModalidades?.length) {
       obterTiposCalendarios();
     } else {
       setListaCalendario([]);
       selecionaTipoCalendario();
     }
-  }, [dataVisita, ue, obterTiposCalendarios]);
+  }, [dataVisita, ueId, listaModalidades, obterTiposCalendarios]);
 
   const obterListaEventos = async (tipoCalendarioId, id) => {
     setCarregandoEventos(true);
@@ -521,33 +522,27 @@ const RegistroItineranciaAEECadastro = ({ match }) => {
 
   const onChangeDre = valorNovo => {
     if (valorNovo) {
-      const dreSelecionada = listaDres.find(item => item.codigo === valorNovo);
-      if (dreSelecionada) {
-        setDre(dreSelecionada);
-      } else {
-        setDre();
-      }
+      setDreId(valorNovo);
     } else {
-      setDre();
+      setDreId();
     }
 
     setListaUes([]);
-    setUe();
+    setUeId();
+    setListaModalidades([]);
 
     setModoEdicao(true);
   };
 
   const onChangeUe = valorNovo => {
     setModoEdicao(true);
-    if (dre && valorNovo) {
-      const ueSelecionada = listaUes.find(item => item.codigo === valorNovo);
+    setListaModalidades([]);
 
-      if (ueSelecionada) {
-        setUe(ueSelecionada);
-        return;
-      }
+    if (dreId && valorNovo) {
+      setUeId(valorNovo);
+    } else {
+      setUeId();
     }
-    setUe();
   };
 
   const obterDres = useCallback(async () => {
@@ -564,13 +559,13 @@ const RegistroItineranciaAEECadastro = ({ match }) => {
         setListaDres(resposta.data);
 
         if (resposta.data.length === 1) {
-          setDre(resposta.data[0]);
+          setDreId(String(resposta.data[0]?.id));
         }
         return;
       }
     }
     setListaDres([]);
-    setDre();
+    setDreId();
   }, [dataVisita]);
 
   useEffect(() => {
@@ -578,18 +573,20 @@ const RegistroItineranciaAEECadastro = ({ match }) => {
       obterDres();
     } else {
       setListaDres([]);
-      setDre();
+      setDreId();
     }
   }, [dataVisita, obterDres]);
 
   const obterUes = useCallback(async () => {
-    if (dataVisita && moment.isMoment(dataVisita) && dre?.codigo) {
+    if (dataVisita && moment.isMoment(dataVisita) && dreId) {
       const anoLetivo = dataVisita.get('year');
-
+      const dreSelecionada = listaDres?.find(
+        item => item?.id === Number(dreId)
+      );
       setCarregandoUes(true);
       const resposta = await AbrangenciaServico.buscarUes(
-        dre?.codigo,
-        `v1/abrangencias/false/dres/${dre?.codigo}/ues?anoLetivo=${anoLetivo}`,
+        dreSelecionada?.codigo,
+        `v1/abrangencias/false/dres/${dreSelecionada?.codigo}/ues?anoLetivo=${anoLetivo}`,
         true
       )
         .catch(e => erros(e))
@@ -597,7 +594,7 @@ const RegistroItineranciaAEECadastro = ({ match }) => {
 
       if (resposta?.data?.length) {
         if (resposta.data.length === 1) {
-          setUe(resposta.data[0]);
+          setUeId(String(resposta.data[0]?.id));
         }
 
         setListaUes(resposta.data);
@@ -605,18 +602,63 @@ const RegistroItineranciaAEECadastro = ({ match }) => {
       }
     }
 
-    setUe();
+    setUeId();
     setListaUes([]);
-  }, [dre, dataVisita]);
+    setListaModalidades([]);
+  }, [dreId, dataVisita, listaDres]);
 
   useEffect(() => {
-    if (dataVisita && dre) {
+    if (dataVisita && dreId && listaDres?.length) {
       obterUes();
       return;
     }
-    setUe();
+    setUeId();
     setListaUes([]);
-  }, [dataVisita, dre, obterUes]);
+    setListaModalidades([]);
+  }, [dataVisita, dreId, listaDres, obterUes]);
+
+  const obterUeSelecionada = (id, lista) => {
+    const ueSelecionada = lista?.find(item => item?.id === Number(id));
+    if (ueSelecionada) {
+      return ueSelecionada;
+    }
+
+    return null;
+  };
+
+  const obterModalidades = useCallback(async () => {
+    const anoLetivo = dataVisita.get('year');
+    const ueSelecionada = obterUeSelecionada(ueId, listaUes);
+
+    const resultado = await ServicoFiltroRelatorio.obterModalidades(
+      ueSelecionada?.codigo,
+      anoLetivo,
+      false
+    ).catch(e => erros(e));
+
+    if (resultado?.data?.length) {
+      setListaModalidades(resultado.data);
+    } else {
+      setListaModalidades([]);
+    }
+  }, [ueId, dataVisita, listaUes]);
+
+  useEffect(() => {
+    if (ueId && dataVisita && listaUes?.length) {
+      obterModalidades();
+    } else {
+      setListaModalidades([]);
+    }
+  }, [ueId, dataVisita, listaUes, obterModalidades]);
+
+  const ueIdEhInfantil = (id, lista) => {
+    const ueSelecionada = obterUeSelecionada(id, lista);
+    if (ueSelecionada && ueSelecionada?.ehInfantil) {
+      return true;
+    }
+
+    return false;
+  };
 
   return (
     <>
@@ -703,11 +745,11 @@ const RegistroItineranciaAEECadastro = ({ match }) => {
                     id="dre"
                     label="Diretoria Regional de Educação (DRE)"
                     lista={listaDres}
-                    valueOption="codigo"
+                    valueOption="id"
                     valueText="nome"
                     disabled={listaDres?.length === 1}
                     onChange={onChangeDre}
-                    valueSelect={dre?.codigo}
+                    valueSelect={dreId}
                     placeholder="Diretoria Regional De Educação (DRE)"
                   />
                 </Loader>
@@ -718,11 +760,11 @@ const RegistroItineranciaAEECadastro = ({ match }) => {
                     id="ue"
                     label="Unidade Escolar (UE)"
                     lista={listaUes}
-                    valueOption="codigo"
+                    valueOption="id"
                     valueText="nome"
                     disabled={listaUes?.length === 1}
                     onChange={onChangeUe}
-                    valueSelect={ue?.codigo}
+                    valueSelect={ueId}
                     placeholder="Unidade Escolar (UE)"
                   />
                 </Loader>
@@ -734,7 +776,7 @@ const RegistroItineranciaAEECadastro = ({ match }) => {
                     label="Tipo de Calendário"
                     lista={listaCalendario}
                     valueOption="id"
-                    valueText="descricao"
+                    valueText="nome"
                     onChange={selecionaTipoCalendario}
                     valueSelect={tipoCalendarioSelecionado}
                     placeholder="Selecione um calendário"
@@ -782,18 +824,20 @@ const RegistroItineranciaAEECadastro = ({ match }) => {
                 botaoAdicionar={() => setModalVisivelObjetivos(true)}
               />
             </div>
-            {ue?.id && (
+            {ueId && (
               <div className="row mb-4">
                 <div className="col-12 font-weight-bold mb-2">
                   <span style={{ color: Base.CinzaMako }}>
-                    {ue?.ehInfantil ? 'Crianças' : 'Estudantes'}
+                    {ueIdEhInfantil(ueId, listaUes) ? 'Crianças' : 'Estudantes'}
                   </span>
                 </div>
                 <div className="col-12">
                   <Button
                     id={shortid.generate()}
                     label={`Adicionar ${
-                      ue?.ehInfantil ? 'nova criança' : 'novo estudante'
+                      ueIdEhInfantil(ueId, listaUes)
+                        ? 'nova criança'
+                        : 'novo estudante'
                     }`}
                     color={Colors.Azul}
                     border
@@ -909,7 +953,7 @@ const RegistroItineranciaAEECadastro = ({ match }) => {
           setModalVisivel={setModalVisivelAlunos}
           alunosSelecionados={alunosSelecionados}
           setAlunosSelecionados={selecionarAlunos}
-          codigoUe={ue?.codigo}
+          codigoUe={obterUeSelecionada(ueId, listaUes)?.codigo}
           questoes={questoesAlunos}
           setModoEdicaoItinerancia={setModoEdicao}
           dataVisita={dataVisita}
