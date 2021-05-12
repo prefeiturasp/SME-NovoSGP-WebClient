@@ -27,12 +27,8 @@ class ServicoCalendarios {
     return api.post('v1/relatorios/calendarios/impressao', payload);
   };
 
-  obterTiposCalendarioAutoComplete = (descricao = '', ueId) => {
-    let url = `v1/calendarios/tipos/anos-letivos?descricao=${descricao}`;
-    if (ueId) {
-      url += `&ueId=${ueId}`;
-    }
-    return api.get(url);
+  obterTiposCalendarioAutoComplete = (descricao = '') => {
+    return api.get(`v1/calendarios/tipos/anos-letivos?descricao=${descricao}`);
   };
 
   obterDatasDeAulasDisponiveis = (
@@ -57,6 +53,12 @@ class ServicoCalendarios {
   obterFrequenciaAluno = (alunoCodigo, turmaCodigo) => {
     const url = `v1/calendarios/frequencias/alunos/${alunoCodigo}/turmas/${turmaCodigo}/geral`;
     return api.get(url);
+  };
+
+  obterTiposCalendarioPorAnoLetivoModalidade = (anoLetivo, modalidades) => {
+    return api.get(
+      `v1/calendarios/tipos/ano-letivo/${anoLetivo}/modalidade/${modalidades}`
+    );
   };
 }
 
