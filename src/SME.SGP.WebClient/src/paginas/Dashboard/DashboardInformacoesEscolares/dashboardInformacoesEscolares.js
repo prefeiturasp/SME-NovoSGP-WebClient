@@ -201,6 +201,8 @@ const DashboardInformacoesEscolares = () => {
   };
 
   const onChangeUe = codigoUe => {
+    setModalidade();
+    setListaModalidades([]);
     if (codigoUe) {
       const ueAtual = listaUes?.find(item => item.codigo === codigoUe);
       if (ueAtual) {
@@ -231,7 +233,10 @@ const DashboardInformacoesEscolares = () => {
 
     if (respota?.data?.length) {
       if (respota.data.length > 1) {
-        respota.data.unshift({ ano: OPCAO_TODOS, modalidadeAno: 'Todos' });
+        respota.data.unshift({
+          ano: OPCAO_TODOS,
+          modalidadeAno: 'Todos os anos',
+        });
       }
       setListaAnosEscolares(respota.data);
     } else {
@@ -349,17 +354,13 @@ const DashboardInformacoesEscolares = () => {
           </div>
           <div className="row">
             <div className="col-md-12 mt-2">
-              {anoLetivo && dre && ue && modalidade ? (
-                <TabsDashboardInformacoesEscolares
-                  anoLetivo={anoLetivo}
-                  dreId={OPCAO_TODOS === dre?.codigo ? OPCAO_TODOS : dre?.id}
-                  ueId={OPCAO_TODOS === ue?.codigo ? OPCAO_TODOS : ue?.id}
-                  modalidade={modalidade}
-                  listaAnosEscolares={listaAnosEscolares}
-                />
-              ) : (
-                ''
-              )}
+              <TabsDashboardInformacoesEscolares
+                anoLetivo={anoLetivo}
+                dreId={OPCAO_TODOS === dre?.codigo ? OPCAO_TODOS : dre?.id}
+                ueId={OPCAO_TODOS === ue?.codigo ? OPCAO_TODOS : ue?.id}
+                modalidade={modalidade}
+                listaAnosEscolares={listaAnosEscolares}
+              />
             </div>
           </div>
         </div>

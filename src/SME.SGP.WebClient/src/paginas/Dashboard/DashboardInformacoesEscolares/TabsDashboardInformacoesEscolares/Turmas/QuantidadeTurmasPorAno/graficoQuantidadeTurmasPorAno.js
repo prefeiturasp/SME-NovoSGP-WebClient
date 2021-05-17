@@ -7,7 +7,14 @@ import { erros } from '~/servicos';
 import ServicoDashboardInformacoesEscolares from '~/servicos/Paginas/Dashboard/ServicoDashboardInformacoesEscolares';
 
 const GraficoQuantidadeTurmasPorAno = props => {
-  const { anoLetivo, dreId, ueId, modalidade, listaAnosEscolares } = props;
+  const {
+    anoLetivo,
+    dreId,
+    ueId,
+    modalidade,
+    listaAnosEscolares,
+    exibirAnosEscolares,
+  } = props;
 
   const [dadosGrafico, setDadosGrafico] = useState([]);
   const [exibirLoader, setExibirLoader] = useState(false);
@@ -20,7 +27,7 @@ const GraficoQuantidadeTurmasPorAno = props => {
       dreId === OPCAO_TODOS ? '' : dreId,
       ueId === OPCAO_TODOS ? '' : ueId,
       modalidade,
-      anoEscolar
+      anoEscolar === OPCAO_TODOS ? '' : anoEscolar
     )
       .catch(e => erros(e))
       .finally(() => setExibirLoader(false));
@@ -33,39 +40,57 @@ const GraficoQuantidadeTurmasPorAno = props => {
   }, [anoLetivo, dreId, ueId, modalidade, anoEscolar]);
 
   useEffect(() => {
-    if (anoLetivo && dreId && ueId && modalidade && anoEscolar) {
+    if (
+      anoLetivo &&
+      dreId &&
+      ueId &&
+      modalidade &&
+      (exibirAnosEscolares ? !!anoEscolar : true)
+    ) {
       obterDadosGrafico();
     } else {
       setDadosGrafico([]);
     }
-  }, [anoLetivo, dreId, ueId, modalidade, anoEscolar, obterDadosGrafico]);
+  }, [
+    anoLetivo,
+    dreId,
+    ueId,
+    modalidade,
+    anoEscolar,
+    exibirAnosEscolares,
+    obterDadosGrafico,
+  ]);
 
   useEffect(() => {
-    if (listaAnosEscolares?.length === 1) {
-      setAnoEscolar(String(listaAnosEscolares[0].ano));
+    if (exibirAnosEscolares) {
+      if (listaAnosEscolares?.length === 1) {
+        setAnoEscolar(String(listaAnosEscolares[0].ano));
+      }
+      if (listaAnosEscolares?.length > 1) {
+        setAnoEscolar(OPCAO_TODOS);
+      }
     }
-    if (listaAnosEscolares?.length > 1) {
-      setAnoEscolar(OPCAO_TODOS);
-    }
-  }, [listaAnosEscolares]);
+  }, [listaAnosEscolares, exibirAnosEscolares]);
 
   const onChangeAnoEscolar = valor => setAnoEscolar(valor);
 
   return (
     <>
       <div className="row">
-        <div className="col-sm-12 col-md-6 col-lg-3 col-xl-3 mb-2">
-          <SelectComponent
-            lista={listaAnosEscolares || []}
-            valueOption="ano"
-            valueText="modalidadeAno"
-            disabled={listaAnosEscolares?.length === 1}
-            valueSelect={anoEscolar}
-            onChange={onChangeAnoEscolar}
-            placeholder="Selecione o ano"
-            allowClear={false}
-          />
-        </div>
+        {exibirAnosEscolares && (
+          <div className="col-sm-12 col-md-6 col-lg-3 col-xl-3 mb-2">
+            <SelectComponent
+              lista={listaAnosEscolares || []}
+              valueOption="ano"
+              valueText="modalidadeAno"
+              disabled={listaAnosEscolares?.length === 1}
+              valueSelect={anoEscolar}
+              onChange={onChangeAnoEscolar}
+              placeholder="Selecione o ano"
+              allowClear={false}
+            />
+          </div>
+        )}
       </div>
       <Loader
         loading={exibirLoader}
@@ -93,6 +118,7 @@ GraficoQuantidadeTurmasPorAno.propTypes = {
   ueId: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   modalidade: PropTypes.string,
   listaAnosEscolares: PropTypes.oneOfType(PropTypes.array),
+  exibirAnosEscolares: PropTypes.bool,
 };
 
 GraficoQuantidadeTurmasPorAno.defaultProps = {
@@ -101,6 +127,7 @@ GraficoQuantidadeTurmasPorAno.defaultProps = {
   ueId: null,
   modalidade: '',
   listaAnosEscolares: [],
+  exibirAnosEscolares: false,
 };
 
 export default GraficoQuantidadeTurmasPorAno;

@@ -35,75 +35,14 @@ class ServicoDashboardInformacoesEscolares {
     modalidade,
     anoEscolar
   ) => {
-    // TODO MOCK!
-    // return this.montarConsultaPadraoGraficos(
-    //   'turmas/anos',
-    //   anoLetivo,
-    //   dreId,
-    //   ueId,
-    //   modalidade,
-    //   anoEscolar
-    // );
-
-    return new Promise(resolve => {
-      const mock = [
-        {
-          quantidade: 81,
-          descricao: 'BT',
-        },
-        {
-          quantidade: 106,
-          descricao: 'CL',
-        },
-        {
-          quantidade: 121,
-          descricao: 'CS',
-        },
-        {
-          quantidade: 107,
-          descricao: 'FB',
-        },
-        {
-          quantidade: 93,
-          descricao: 'GA',
-        },
-        {
-          quantidade: 62,
-          descricao: 'IP',
-        },
-        {
-          quantidade: 81,
-          descricao: 'IT',
-        },
-        {
-          quantidade: 106,
-          descricao: 'JT',
-        },
-        {
-          quantidade: 121,
-          descricao: 'PE',
-        },
-        {
-          quantidade: 107,
-          descricao: 'PI',
-        },
-        {
-          quantidade: 93,
-          descricao: 'SA',
-        },
-        {
-          quantidade: 62,
-          descricao: 'SM',
-        },
-        {
-          quantidade: 62,
-          descricao: 'MP',
-        },
-      ];
-      setTimeout(() => {
-        resolve({ data: mock });
-      }, 1000);
-    });
+    return this.montarConsultaPadraoGraficos(
+      'turmas',
+      anoLetivo,
+      dreId,
+      ueId,
+      modalidade,
+      anoEscolar
+    );
   };
 
   obterQuantidadeMatriculasPorAno = (
