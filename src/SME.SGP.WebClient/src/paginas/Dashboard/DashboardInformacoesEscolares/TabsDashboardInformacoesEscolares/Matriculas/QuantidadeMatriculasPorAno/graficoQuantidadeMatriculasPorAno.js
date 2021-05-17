@@ -9,13 +9,19 @@ import { erros } from '~/servicos';
 import ServicoDashboardInformacoesEscolares from '~/servicos/Paginas/Dashboard/ServicoDashboardInformacoesEscolares';
 
 const GraficoQuantidadeMatriculasPorAno = props => {
-  const { anoLetivo, dreId, ueId, modalidade, listaAnosEscolares } = props;
+  const {
+    anoLetivo,
+    dreId,
+    ueId,
+    modalidade,
+    listaAnosEscolares,
+    exibirAnosEscolares,
+  } = props;
 
   const [dadosGrafico, setDadosGrafico] = useState([]);
   const [exibirLoader, setExibirLoader] = useState(false);
   const [anoEscolar, setAnoEscolar] = useState();
 
-  // TODO MOCK!
   const dataUltimaConsolidacao = moment();
 
   const obterDadosGrafico = useCallback(async () => {
@@ -38,15 +44,29 @@ const GraficoQuantidadeMatriculasPorAno = props => {
   }, [anoLetivo, dreId, ueId, modalidade, anoEscolar]);
 
   useEffect(() => {
-    if (anoLetivo && dreId && ueId && modalidade) {
+    if (
+      anoLetivo &&
+      dreId &&
+      ueId &&
+      modalidade &&
+      (exibirAnosEscolares ? !!anoEscolar : true)
+    ) {
       obterDadosGrafico();
     } else {
       setDadosGrafico([]);
     }
-  }, [anoLetivo, dreId, ueId, modalidade, anoEscolar, obterDadosGrafico]);
+  }, [
+    anoLetivo,
+    dreId,
+    ueId,
+    modalidade,
+    anoEscolar,
+    exibirAnosEscolares,
+    obterDadosGrafico,
+  ]);
 
   useEffect(() => {
-    if (dreId === OPCAO_TODOS && ueId === OPCAO_TODOS) {
+    if (exibirAnosEscolares) {
       if (listaAnosEscolares?.length === 1) {
         setAnoEscolar(String(listaAnosEscolares[0].ano));
       }
@@ -54,14 +74,14 @@ const GraficoQuantidadeMatriculasPorAno = props => {
         setAnoEscolar(OPCAO_TODOS);
       }
     }
-  }, [listaAnosEscolares, dreId, ueId]);
+  }, [listaAnosEscolares, exibirAnosEscolares]);
 
   const onChangeAnoEscolar = valor => setAnoEscolar(valor);
 
   return (
     <>
       <div className="row">
-        {dreId === OPCAO_TODOS && ueId === OPCAO_TODOS && (
+        {exibirAnosEscolares && (
           <div className="col-sm-12 col-md-6 col-lg-3 col-xl-3 mb-2">
             <SelectComponent
               lista={listaAnosEscolares || []}
@@ -76,7 +96,13 @@ const GraficoQuantidadeMatriculasPorAno = props => {
           </div>
         )}
         {dataUltimaConsolidacao && (
-          <div className="col-sm-12 col-md-6 col-lg-9 col-xl-9 mb-2">
+          <div
+            className={
+              exibirAnosEscolares
+                ? 'col-sm-12 col-md-6 col-lg-9 col-xl-9 mb-2'
+                : 'col-md-12 mb-2'
+            }
+          >
             <DataUltimaAtualizacao
               dataFormatada={
                 dataUltimaConsolidacao
@@ -113,6 +139,7 @@ GraficoQuantidadeMatriculasPorAno.propTypes = {
   ueId: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   modalidade: PropTypes.string,
   listaAnosEscolares: PropTypes.oneOfType(PropTypes.array),
+  exibirAnosEscolares: PropTypes.bool,
 };
 
 GraficoQuantidadeMatriculasPorAno.defaultProps = {
@@ -121,6 +148,7 @@ GraficoQuantidadeMatriculasPorAno.defaultProps = {
   ueId: null,
   modalidade: '',
   listaAnosEscolares: [],
+  exibirAnosEscolares: false,
 };
 
 export default GraficoQuantidadeMatriculasPorAno;

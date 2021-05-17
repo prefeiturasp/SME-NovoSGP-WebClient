@@ -3,7 +3,14 @@ import React from 'react';
 import GraficoQuantidadeMatriculasPorAno from './QuantidadeMatriculasPorAno/graficoQuantidadeMatriculasPorAno';
 
 const GraficosMatriculas = props => {
-  const { anoLetivo, dreId, ueId, modalidade, listaAnosEscolares } = props;
+  const {
+    anoLetivo,
+    dreId,
+    ueId,
+    modalidade,
+    listaAnosEscolares,
+    exibirAnosEscolares,
+  } = props;
   return (
     <GraficoQuantidadeMatriculasPorAno
       anoLetivo={anoLetivo}
@@ -11,6 +18,7 @@ const GraficosMatriculas = props => {
       ueId={ueId}
       modalidade={modalidade}
       listaAnosEscolares={listaAnosEscolares}
+      exibirAnosEscolares={exibirAnosEscolares}
     />
   );
 };
@@ -21,6 +29,7 @@ GraficosMatriculas.propTypes = {
   ueId: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   modalidade: PropTypes.string,
   listaAnosEscolares: PropTypes.oneOfType(PropTypes.array),
+  exibirAnosEscolares: PropTypes.bool,
 };
 
 GraficosMatriculas.defaultProps = {
@@ -29,6 +38,7 @@ GraficosMatriculas.defaultProps = {
   ueId: null,
   modalidade: '',
   listaAnosEscolares: [],
+  exibirAnosEscolares: false,
 };
 
 export default GraficosMatriculas;
