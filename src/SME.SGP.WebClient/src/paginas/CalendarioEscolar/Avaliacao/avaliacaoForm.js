@@ -500,6 +500,7 @@ const AvaliacaoForm = ({ match, location }) => {
     );
     const desbilitar =
       disciplinaEncontrada?.regencia && !regenciaSelecionada.length;
+
     setMostrarDisciplinaRegencia(disciplinaEncontrada?.regencia);
     setDesabilitarBotaoCadastrar(desbilitar);
   }, [disciplinaSelecionada, listaDisciplinas, listaDisciplinasRegencia]);
