@@ -6,6 +6,7 @@ import { Cabecalho, FiltroHelper } from '~/componentes-sgp';
 import Button from '~/componentes/button';
 import Card from '~/componentes/card';
 import { Colors } from '~/componentes/colors';
+import { OPCAO_TODOS } from '~/constantes/constantes';
 import { URL_HOME } from '~/constantes/url';
 import { ServicoFiltroRelatorio } from '~/servicos';
 import AbrangenciaServico from '~/servicos/Abrangencia';
@@ -35,8 +36,6 @@ const DashboardInformacoesEscolares = () => {
   const [carregandoUes, setCarregandoUes] = useState(false);
   const [carregandoModalidades, setCarregandoModalidades] = useState(false);
 
-  const OPCAO_TODOS = '-99';
-
   const validarValorPadraoAnoLetivo = (lista, atual) => {
     if (lista?.length) {
       const temAnoAtualNaLista = lista.find(
@@ -57,7 +56,6 @@ const DashboardInformacoesEscolares = () => {
 
     const anosLetivos = await FiltroHelper.obterAnosLetivos({
       consideraHistorico,
-      anoMinimo: 2021,
     });
 
     if (!anosLetivos.length) {
@@ -242,7 +240,14 @@ const DashboardInformacoesEscolares = () => {
   }, [anoLetivo, dre, ue, modalidade]);
 
   useEffect(() => {
-    if (anoLetivo && dre && ue && modalidade) {
+    if (
+      anoLetivo &&
+      dre &&
+      ue &&
+      modalidade &&
+      dre?.codigo === OPCAO_TODOS &&
+      ue?.codigo === OPCAO_TODOS
+    ) {
       obterAnosEscolares();
     } else {
       setListaAnosEscolares([]);

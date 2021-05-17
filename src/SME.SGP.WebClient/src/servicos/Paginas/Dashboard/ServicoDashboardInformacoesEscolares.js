@@ -1,6 +1,6 @@
 import api from '~/servicos/api';
 
-const urlPadrao = 'v1/dashboard/informacoes-escolare';
+const urlPadrao = 'v1/dashboard/informacoes-escolares';
 
 class ServicoDashboardInformacoesEscolares {
   montarConsultaPadraoGraficos = (
@@ -22,7 +22,7 @@ class ServicoDashboardInformacoesEscolares {
       url += `&modalidade=${modalidade}`;
     }
     if (anoEscolar) {
-      url += `&anoEscolar=${anoEscolar}`;
+      url += `&ano=${anoEscolar}`;
     }
 
     return api.get(url);
@@ -113,43 +113,14 @@ class ServicoDashboardInformacoesEscolares {
     modalidade,
     anoEscolar
   ) => {
-    // TODO MOCK!
-    // return this.montarConsultaPadraoGraficos(
-    //   'matriculas',
-    //   anoLetivo,
-    //   dreId,
-    //   ueId,
-    //   modalidade,
-    //   anoEscolar
-    // );
-
-    return new Promise(resolve => {
-      const mock = [
-        {
-          quantidade: 260,
-          descricao: '1º ano',
-        },
-        {
-          quantidade: 335,
-          descricao: '2º ano',
-        },
-        {
-          quantidade: 378,
-          descricao: '3º ano',
-        },
-        {
-          quantidade: 312,
-          descricao: '4º ano',
-        },
-        {
-          quantidade: 294,
-          descricao: '5º ano',
-        },
-      ];
-      setTimeout(() => {
-        resolve({ data: mock });
-      }, 1000);
-    });
+    return this.montarConsultaPadraoGraficos(
+      'matriculas',
+      anoLetivo,
+      dreId,
+      ueId,
+      modalidade,
+      anoEscolar
+    );
   };
 }
 

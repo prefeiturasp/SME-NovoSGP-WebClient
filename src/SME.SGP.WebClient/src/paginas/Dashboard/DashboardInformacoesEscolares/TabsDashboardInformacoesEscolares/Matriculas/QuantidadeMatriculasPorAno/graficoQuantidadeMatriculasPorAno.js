@@ -25,7 +25,7 @@ const GraficoQuantidadeMatriculasPorAno = props => {
       dreId === OPCAO_TODOS ? '' : dreId,
       ueId === OPCAO_TODOS ? '' : ueId,
       modalidade,
-      anoEscolar
+      anoEscolar === OPCAO_TODOS ? '' : anoEscolar
     )
       .catch(e => erros(e))
       .finally(() => setExibirLoader(false));
@@ -38,7 +38,7 @@ const GraficoQuantidadeMatriculasPorAno = props => {
   }, [anoLetivo, dreId, ueId, modalidade, anoEscolar]);
 
   useEffect(() => {
-    if (anoLetivo && dreId && ueId && modalidade && anoEscolar) {
+    if (anoLetivo && dreId && ueId && modalidade) {
       obterDadosGrafico();
     } else {
       setDadosGrafico([]);
@@ -46,31 +46,35 @@ const GraficoQuantidadeMatriculasPorAno = props => {
   }, [anoLetivo, dreId, ueId, modalidade, anoEscolar, obterDadosGrafico]);
 
   useEffect(() => {
-    if (listaAnosEscolares?.length === 1) {
-      setAnoEscolar(String(listaAnosEscolares[0].ano));
+    if (dreId === OPCAO_TODOS && ueId === OPCAO_TODOS) {
+      if (listaAnosEscolares?.length === 1) {
+        setAnoEscolar(String(listaAnosEscolares[0].ano));
+      }
+      if (listaAnosEscolares?.length > 1) {
+        setAnoEscolar(OPCAO_TODOS);
+      }
     }
-    if (listaAnosEscolares?.length > 1) {
-      setAnoEscolar(OPCAO_TODOS);
-    }
-  }, [listaAnosEscolares]);
+  }, [listaAnosEscolares, dreId, ueId]);
 
   const onChangeAnoEscolar = valor => setAnoEscolar(valor);
 
   return (
     <>
       <div className="row">
-        <div className="col-sm-12 col-md-6 col-lg-3 col-xl-3 mb-2">
-          <SelectComponent
-            lista={listaAnosEscolares || []}
-            valueOption="ano"
-            valueText="modalidadeAno"
-            disabled={listaAnosEscolares?.length === 1}
-            valueSelect={anoEscolar}
-            onChange={onChangeAnoEscolar}
-            placeholder="Selecione o ano"
-            allowClear={false}
-          />
-        </div>
+        {dreId === OPCAO_TODOS && ueId === OPCAO_TODOS && (
+          <div className="col-sm-12 col-md-6 col-lg-3 col-xl-3 mb-2">
+            <SelectComponent
+              lista={listaAnosEscolares || []}
+              valueOption="ano"
+              valueText="modalidadeAno"
+              disabled={listaAnosEscolares?.length === 1}
+              valueSelect={anoEscolar}
+              onChange={onChangeAnoEscolar}
+              placeholder="Selecione o ano"
+              allowClear={false}
+            />
+          </div>
+        )}
         {dataUltimaConsolidacao && (
           <div className="col-sm-12 col-md-6 col-lg-9 col-xl-9 mb-2">
             <DataUltimaAtualizacao
