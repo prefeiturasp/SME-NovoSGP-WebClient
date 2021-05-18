@@ -161,7 +161,7 @@ pipeline {
             steps {
               sh 'echo build homologacao release 2'
                 
-        // Start JOB Rundeck para build das imagens Docker e push registry SME
+        // Start JOB Rundeck para build das imagens Docker
       
           script {
            step([$class: "RundeckNotifier",
