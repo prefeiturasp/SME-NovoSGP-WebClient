@@ -1,0 +1,37 @@
+# example
+stages:
+  - name: Build
+    # Conditions for stages
+    when:
+      branch: development
+      event: [ push, pull_request ]
+    steps:
+    - runScriptConfig:
+        image: busybox
+        shellScript: echo ${FIRST_KEY} && echo ${ALIAS_ENV}
+      # env:
+      #   FIRST_KEY: VALUE
+      #   SECOND_KEY: VALUE2
+      # envFrom:
+      # - sourceName: my-secret
+      #   sourceKey: secret-key
+      #   targetKey: ALIAS_ENV
+
+  - name: Deploy some workloads
+    steps:
+    - applyYamlConfig:
+        path: ./deployment.yaml
+
+branch:
+  include: [ master, release, release-r2, development ]
+  exclude: [ fix/*, feature/*, story/* ]
+
+timeout: 60
+# notification:
+#   recipients:
+#     recipient: "#mychannel"
+#     notifier: "c-wdcsr:n-c9pg7"
+#   - recipient: "test@example.com"
+#     notifier: "c-wdcsr:n-lkrhd"
+#   condition: ["Failed", "Success", "Changed"]
+#   message: "my-message"
