@@ -1,7 +1,6 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import QuestionarioDinamicoFuncoes from '~/componentes-sgp/QuestionarioDinamico/Funcoes/QuestionarioDinamicoFuncoes';
 import Button from '~/componentes/button';
 import { Colors } from '~/componentes/colors';
 import { RotasDto } from '~/dtos';
@@ -10,11 +9,11 @@ import {
   setExibirLoaderEncaminhamentoAEE,
   setExibirModalDevolverAEE,
   setExibirModalEncerramentoEncaminhamentoAEE,
-  setListaSecoesEmEdicao,
 } from '~/redux/modulos/encaminhamentoAEE/actions';
 import { confirmar, erros, sucesso } from '~/servicos';
 import history from '~/servicos/history';
 import ServicoEncaminhamentoAEE from '~/servicos/Paginas/Relatorios/AEE/ServicoEncaminhamentoAEE';
+import { BtnVoltarExcluirEncaminhamentoAEE } from '../encaminhamentoAEECadastro.css';
 
 const BotoesAcoesEncaminhamentoAEE = props => {
   const { match } = props;
@@ -55,11 +54,9 @@ const BotoesAcoesEncaminhamentoAEE = props => {
       false
     );
     if (salvou) {
-      let mensagem = 'Registro salvo com sucesso';
-      if (encaminhamentoId) {
-        mensagem = 'Registro alterado com sucesso';
-      }
-      sucesso(mensagem);
+      sucesso(
+        `Você salvou o encaminhamento como rascunho. Para dar andamento ao encaminhamento você precisa clicar em "Enviar"`
+      );
       history.push(RotasDto.RELATORIO_AEE_ENCAMINHAMENTO);
     }
   };
@@ -97,11 +94,9 @@ const BotoesAcoesEncaminhamentoAEE = props => {
           false
         );
         if (salvou) {
-          let mensagem = 'Registro salvo com sucesso';
-          if (encaminhamentoId) {
-            mensagem = 'Registro alterado com sucesso';
-          }
-          sucesso(mensagem);
+          sucesso(
+            `Você salvou o encaminhamento como rascunho. Para dar andamento ao encaminhamento você precisa clicar em "Enviar"`
+          );
           history.push(RotasDto.RELATORIO_AEE_ENCAMINHAMENTO);
         }
       } else {
@@ -109,20 +104,6 @@ const BotoesAcoesEncaminhamentoAEE = props => {
       }
     } else {
       history.push(RotasDto.RELATORIO_AEE_ENCAMINHAMENTO);
-    }
-  };
-
-  const onClickCancelar = async () => {
-    if (!desabilitarCamposEncaminhamentoAEE && questionarioDinamicoEmEdicao) {
-      const confirmou = await confirmar(
-        'Atenção',
-        'Você não salvou as informações preenchidas.',
-        'Deseja realmente cancelar as alterações?'
-      );
-      if (confirmou) {
-        QuestionarioDinamicoFuncoes.limparDadosOriginaisQuestionarioDinamico();
-        dispatch(setListaSecoesEmEdicao([]));
-      }
     }
   };
 
@@ -219,30 +200,18 @@ const BotoesAcoesEncaminhamentoAEE = props => {
 
   return (
     <>
-      <Button
+      <BtnVoltarExcluirEncaminhamentoAEE
         id="btn-voltar"
-        label="Voltar"
         icon="arrow-left"
         color={Colors.Azul}
         border
         className="mr-3"
         onClick={onClickVoltar}
       />
-      <Button
-        id="btn-cancelar"
-        label="Cancelar"
-        color={Colors.Roxo}
-        border
-        className="mr-3"
-        onClick={onClickCancelar}
-        disabled={
-          !questionarioDinamicoEmEdicao || desabilitarCamposEncaminhamentoAEE
-        }
-      />
-      <Button
+      <BtnVoltarExcluirEncaminhamentoAEE
         id="btn-excluir"
-        label="Excluir"
-        color={Colors.Vermelho}
+        icon="trash-alt"
+        color={Colors.Azul}
         border
         className="mr-3"
         onClick={onClickExcluir}
@@ -253,8 +222,8 @@ const BotoesAcoesEncaminhamentoAEE = props => {
         }
       />
       <Button
-        id="btn-salvar"
-        label={match?.params?.id ? 'Alterar' : 'Salvar'}
+        id="btn-salvar-rascunho"
+        label="Salvar rascunho"
         color={Colors.Azul}
         border
         bold
@@ -297,8 +266,8 @@ const BotoesAcoesEncaminhamentoAEE = props => {
         }
       />
       <Button
-        id="btn-encerrar"
-        label="Encerrar"
+        id="btn-indeferir"
+        label="Indeferir"
         color={Colors.Azul}
         border
         bold
