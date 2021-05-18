@@ -1,7 +1,7 @@
 pipeline {
     agent {
       node { 
-        label 'dockerdotnet2'
+        label 'sme-nodes16'
       }
     }
     
@@ -22,41 +22,12 @@ pipeline {
       stage('Build projeto') {
             steps {
             sh "echo executando build de projeto"
-            sh 'dotnet build'
+            sh 'yarn install'
+            //sh 'yarn build'    
             }
         }
         
-      stage('Testes API DEV') {
-        when {
-           branch 'development'
-        }
-        options { retry(3) }
-
-           steps {
-             withCredentials([file(credentialsId: 'dev-newman-sgp', variable: 'NEWMANSGPDEV')]) {
-               sh 'cp $NEWMANSGPDEV teste/Postman/Dev.json'
-               sh 'newman run teste/Postman/GradeComponentesCurriculares.json -e teste/Postman/Dev.json -r htmlextra --reporter-htmlextra-titleSize 4 --reporter-htmlextra-title "Grade dos Componentes Curriculares" --reporter-htmlextra-export ./results/reportgcc.html'
-               publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, keepAll: false, reportDir: 'results', reportFiles: 'reportgcc.html', reportName: 'Postman Report', reportTitles: 'Report'])
-             
-             } 
-           }
-      }
-
-      stage('Testes API HOM') {
-        when {
-           branch 'release'
-        }
-        options { retry(3) }
-
-           steps {
-             withCredentials([file(credentialsId: 'hom-newman-sgp', variable: 'NEWMANSGPHOM')]) {
-               sh 'cp $NEWMANSGPHOM teste/Postman/Hom.json'
-               sh 'newman run teste/Postman/GradeComponentesCurriculares.json -e teste/Postman/Hom.json -r htmlextra --reporter-htmlextra-titleSize 4 --reporter-htmlextra-title "Grade dos Componentes Curriculares" --reporter-htmlextra-export ./results/report.html'
-               publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, keepAll: false, reportDir: 'results', reportFiles: 'report.html', reportName: 'Postman Report', reportTitles: 'Report'])
-             
-             } 
-           }
-      }
+    
 
       stage('Docker build DEV') {
         when {
@@ -72,7 +43,7 @@ pipeline {
               includeRundeckLogs: true,
                                
               //JOB DE BUILD
-              jobId: "743ccbae-bd30-4ac6-b2a3-2f0d1c64e937",
+              jobId: "2ccfea8d-a628-47d9-a9e0-882a0360d7ee",
               nodeFilters: "",
               //options: """
               //     PARAM_1=value1
@@ -99,7 +70,7 @@ pipeline {
          script {
             step([$class: "RundeckNotifier",
               includeRundeckLogs: true,
-              jobId: "f6c3e74c-6411-466a-84a7-921d637c2645",
+              jobId: "9e3beab7-3664-4e4e-a194-f44d6d5a83fa",
               nodeFilters: "",
               //options: """
               //     PARAM_1=value1
@@ -132,7 +103,7 @@ pipeline {
                 
                
               //JOB DE BUILD
-              jobId: "397ce3f8-0af7-4d26-b65b-19f09ccf6c82",
+              jobId: "8ba69c19-5e08-4dc6-ac95-a3bd046edf66",
               nodeFilters: "",
               //options: """
               //     PARAM_1=value1
@@ -165,7 +136,7 @@ pipeline {
          script {
             step([$class: "RundeckNotifier",
               includeRundeckLogs: true,
-              jobId: "124f1ff0-d903-40fd-9455-fc91907293a7",
+              jobId: "53d39ad9-e8ce-41fe-84aa-a071992fcf8a",
               nodeFilters: "",
               //options: """
               //     PARAM_1=value1
@@ -183,12 +154,12 @@ pipeline {
             }
         }
         
-        stage('Docker build HOM-R2') {
+        stage('Docker build HOM2') {
             when {
               branch 'release-r2'
             }
             steps {
-              sh 'echo Deploying homologacao'
+              sh 'echo build homologacao release 2'
                 
         // Start JOB Rundeck para build das imagens Docker
       
@@ -198,7 +169,7 @@ pipeline {
                 
                
               //JOB DE BUILD
-              jobId: "e15cd478-1155-40a2-842c-11d1de0512eb",
+              jobId: "f82d52b9-27bd-41cd-ae14-419c099df263",
               nodeFilters: "",
               //options: """
               //     PARAM_1=value1
@@ -211,21 +182,27 @@ pipeline {
               tags: "",
               tailLog: true])
            }
-            }
+            } 
         }
-
-      stage('Deploy HOM-R2') {
+      
+      stage('Deploy HOM2') {
             when {
-              branch 'release-r2'
+                branch 'release-r2'
             }
-            steps {     
-                
+            steps {
+                 timeout(time: 24, unit: "HOURS") {
+               
+                 telegramSend("${JOB_NAME}...O Build ${BUILD_DISPLAY_NAME} - Requer uma aprovação para deploy !!!\n Consulte o log para detalhes -> [Job logs](${env.BUILD_URL}console)\n")
+                 input message: 'Deseja realizar o deploy?', ok: 'SIM', submitter: 'marlon_goncalves, marcos_costa, bruno_alevato, robson_silva, rafael_losi'
+            }  
+
+
        //Start JOB Rundeck para update de imagens no host homologação 
          
          script {
             step([$class: "RundeckNotifier",
               includeRundeckLogs: true,
-              jobId: "b45bb11d-889a-4783-b70d-4406ea6817d7",
+              jobId: "7fb476c7-18d2-4dcd-8abb-e91afe700423",
               nodeFilters: "",
               //options: """
               //     PARAM_1=value1
@@ -241,9 +218,8 @@ pipeline {
       
        
             }
-        }    
-
-
+        }
+        
         stage('Docker Build PROD') {
 
             when {
@@ -265,7 +241,7 @@ pipeline {
             
                
               //JOB DE BUILD
-              jobId: "b6ff0cbf-6267-41af-bb56-5cdc3eb86902",
+              jobId: "0763a665-5d44-46ae-aeaa-82a15b730cd7",
               nodeFilters: "",
               //options: """
               //     PARAM_1=value1
@@ -296,7 +272,7 @@ pipeline {
          script {
             step([$class: "RundeckNotifier",
               includeRundeckLogs: true,
-              jobId: "6a3d314b-672b-4fe3-9759-0b08847eb27e",
+              jobId: "310d82fe-a8ca-4086-a7d6-b7babf4f6234",
               nodeFilters: "",
               //options: """
               //     PARAM_1=value1
