@@ -9,7 +9,9 @@ import {
   setExibirLoaderEncaminhamentoAEE,
   setExibirModalDevolverAEE,
   setExibirModalEncerramentoEncaminhamentoAEE,
+  setListaSecoesEmEdicao,
 } from '~/redux/modulos/encaminhamentoAEE/actions';
+import { setQuestionarioDinamicoEmEdicao } from '~/redux/modulos/questionarioDinamico/actions';
 import { confirmar, erros, sucesso } from '~/servicos';
 import history from '~/servicos/history';
 import ServicoEncaminhamentoAEE from '~/servicos/Paginas/Relatorios/AEE/ServicoEncaminhamentoAEE';
@@ -54,10 +56,9 @@ const BotoesAcoesEncaminhamentoAEE = props => {
       false
     );
     if (salvou) {
-      sucesso(
-        `Você salvou o encaminhamento como rascunho. Para dar andamento ao encaminhamento você precisa clicar em "Enviar"`
-      );
-      history.push(RotasDto.RELATORIO_AEE_ENCAMINHAMENTO);
+      sucesso(`Rascunho salvo com sucesso`);
+      dispatch(setQuestionarioDinamicoEmEdicao(false));
+      dispatch(setListaSecoesEmEdicao([]));
     }
   };
 
@@ -94,12 +95,22 @@ const BotoesAcoesEncaminhamentoAEE = props => {
           false
         );
         if (salvou) {
-          sucesso(
-            `Você salvou o encaminhamento como rascunho. Para dar andamento ao encaminhamento você precisa clicar em "Enviar"`
-          );
+          sucesso(`Rascunho salvo com sucesso`);
           history.push(RotasDto.RELATORIO_AEE_ENCAMINHAMENTO);
         }
       } else {
+        history.push(RotasDto.RELATORIO_AEE_ENCAMINHAMENTO);
+      }
+    } else if (
+      match?.params?.id &&
+      dadosEncaminhamento?.situacao === situacaoAEE.Rascunho
+    ) {
+      const confirmou = await confirmar(
+        'Atenção',
+        '',
+        `Você salvou o encaminhamento como rascunho. Para dar andamento ao encaminhamento você precisa clicar em "Enviar", deseja realmente sair da tela?`
+      );
+      if (confirmou) {
         history.push(RotasDto.RELATORIO_AEE_ENCAMINHAMENTO);
       }
     } else {
