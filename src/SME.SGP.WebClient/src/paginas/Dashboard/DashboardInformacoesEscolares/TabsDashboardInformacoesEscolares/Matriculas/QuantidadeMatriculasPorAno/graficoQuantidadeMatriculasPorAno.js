@@ -2,11 +2,11 @@ import * as moment from 'moment';
 import PropTypes from 'prop-types';
 import React, { useCallback, useEffect, useState } from 'react';
 import { Loader, SelectComponent } from '~/componentes';
-import DataUltimaAtualizacao from '~/componentes-sgp/DataUltimaAtualizacao/dataUltimaAtualizacao';
 import GraficoBarras from '~/componentes-sgp/Graficos/graficoBarras';
 import { OPCAO_TODOS } from '~/constantes/constantes';
 import { erros } from '~/servicos';
 import ServicoDashboardInformacoesEscolares from '~/servicos/Paginas/Dashboard/ServicoDashboardInformacoesEscolares';
+import DataUltimaAtualizacaoDashboardInformacoesEscolares from '../../../dataUltimaAtualizacaoDashboardInformacoesEscolares';
 
 const GraficoQuantidadeMatriculasPorAno = props => {
   const {
@@ -103,12 +103,8 @@ const GraficoQuantidadeMatriculasPorAno = props => {
                 : 'col-md-12 mb-2'
             }
           >
-            <DataUltimaAtualizacao
-              dataFormatada={
-                dataUltimaConsolidacao
-                  ? moment(dataUltimaConsolidacao).format('DD/MM/YYYY HH:mm:ss')
-                  : ''
-              }
+            <DataUltimaAtualizacaoDashboardInformacoesEscolares
+              anoLetivo={anoLetivo}
             />
           </div>
         )}
