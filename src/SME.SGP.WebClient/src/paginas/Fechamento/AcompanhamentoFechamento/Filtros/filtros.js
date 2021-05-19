@@ -20,6 +20,7 @@ const Filtros = ({ onChangeFiltros, ehInfantil }) => {
   const [carregandoUes, setCarregandoUes] = useState(false);
   const [consideraHistorico, setConsideraHistorico] = useState(false);
   const [desabilitarCampos, setDesabilitarCampos] = useState(false);
+  const [dreCodigo, setDreCodigo] = useState('');
   const [dreId, setDreId] = useState('');
   const [listaAnosLetivo, setListaAnosLetivo] = useState([]);
   const [listaBimestres, setListaBimestres] = useState([]);
@@ -32,6 +33,7 @@ const Filtros = ({ onChangeFiltros, ehInfantil }) => {
   const [semestre, setSemestre] = useState('');
   const [turmasId, setTurmasId] = useState('');
   const [ueId, setUeId] = useState('');
+  const [ueCodigo, setUeCodigo] = useState('');
 
   const OPCAO_TODOS = '-99';
 
@@ -42,6 +44,7 @@ const Filtros = ({ onChangeFiltros, ehInfantil }) => {
   const limparCampos = () => {
     setListaUes([]);
     setUeId();
+    setUeCodigo();
 
     setListaModalidades([]);
     setModalidadeId();
@@ -134,7 +137,9 @@ const Filtros = ({ onChangeFiltros, ehInfantil }) => {
   }, [obterAnosLetivos]);
 
   const onChangeDre = dre => {
-    setDreId(dre);
+    const id = listaDres.find(d => d.valor === dre)?.id;
+    setDreId(id);
+    setDreCodigo(dre);
     limparCampos();
   };
 
@@ -151,7 +156,7 @@ const Filtros = ({ onChangeFiltros, ehInfantil }) => {
         const lista = resposta.data
           .map(item => ({
             desc: item.nome,
-            valor: String(item.codigo),
+            valor: item.codigo,
             abrev: item.abreviacao,
             id: item.id,
           }))
@@ -159,10 +164,12 @@ const Filtros = ({ onChangeFiltros, ehInfantil }) => {
         setListaDres(lista);
 
         if (lista && lista.length && lista.length === 1) {
+          setDreCodigo(lista[0].valor);
           setDreId(lista[0].id);
         }
         return;
       }
+      setDreCodigo(undefined);
       setDreId(undefined);
       setListaDres([]);
     }
@@ -175,18 +182,20 @@ const Filtros = ({ onChangeFiltros, ehInfantil }) => {
   }, [anoLetivo, obterDres]);
 
   const onChangeUe = ue => {
-    setUeId(ue);
+    const id = listaUes.find(d => d.valor === ue)?.id;
+    setUeId(id);
+    setUeCodigo(ue);
 
     setListaTurmas([]);
     setTurmasId();
   };
 
   const obterUes = useCallback(async () => {
-    if (anoLetivo && dreId) {
+    if (anoLetivo && dreCodigo) {
       setCarregandoUes(true);
       const resposta = await AbrangenciaServico.buscarUes(
-        dreId,
-        `v1/abrangencias/${consideraHistorico}/dres/${dreId}/ues?anoLetivo=${anoLetivo}`,
+        dreCodigo,
+        `v1/abrangencias/${consideraHistorico}/dres/${dreCodigo}/ues?anoLetivo=${anoLetivo}`,
         true
       )
         .catch(e => erros(e))
@@ -201,6 +210,7 @@ const Filtros = ({ onChangeFiltros, ehInfantil }) => {
 
         if (lista?.length === 1) {
           setUeId(lista[0].id);
+          setUeCodigo(lista[0].codigo);
         }
 
         setListaUes(lista);
@@ -248,13 +258,13 @@ const Filtros = ({ onChangeFiltros, ehInfantil }) => {
   }, []);
 
   useEffect(() => {
-    if (anoLetivo && ueId) {
-      obterModalidades(ueId);
+    if (anoLetivo && ueCodigo) {
+      obterModalidades(ueCodigo);
       return;
     }
     setModalidadeId();
     setListaModalidades([]);
-  }, [obterModalidades, anoLetivo, ueId]);
+  }, [obterModalidades, anoLetivo, ueCodigo]);
 
   const onChangeSemestre = valor => {
     setSemestre(valor);
@@ -315,10 +325,10 @@ const Filtros = ({ onChangeFiltros, ehInfantil }) => {
   };
 
   const obterTurmas = useCallback(async () => {
-    if (dreId && ueId && modalidadeId) {
+    if (dreCodigo && ueCodigo && modalidadeId) {
       setCarregandoTurmas(true);
       const { data } = await AbrangenciaServico.buscarTurmas(
-        ueId,
+        ueCodigo,
         modalidadeId,
         '',
         anoLetivo,
@@ -343,16 +353,16 @@ const Filtros = ({ onChangeFiltros, ehInfantil }) => {
         }
       }
     }
-  }, [ueId, dreId, consideraHistorico, anoLetivo, modalidadeId]);
+  }, [ueCodigo, dreId, consideraHistorico, anoLetivo, modalidadeId]);
 
   useEffect(() => {
-    if (ueId) {
+    if (ueCodigo) {
       obterTurmas();
       return;
     }
     setTurmasId();
     setListaTurmas([]);
-  }, [ueId, obterTurmas]);
+  }, [ueCodigo, obterTurmas]);
 
   const onChangeBimestre = valor => {
     setBimestre(valor);
@@ -429,7 +439,7 @@ const Filtros = ({ onChangeFiltros, ehInfantil }) => {
                 !anoLetivo || listaDres?.length === 1 || desabilitarCampos
               }
               onChange={onChangeDre}
-              valueSelect={dreId}
+              valueSelect={dreCodigo}
               placeholder="Diretoria Regional De Educação (DRE)"
             />
           </Loader>
@@ -442,9 +452,11 @@ const Filtros = ({ onChangeFiltros, ehInfantil }) => {
               lista={listaUes}
               valueOption="valor"
               valueText="desc"
-              disabled={!dreId || listaUes?.length === 1 || desabilitarCampos}
+              disabled={
+                !dreCodigo || listaUes?.length === 1 || desabilitarCampos
+              }
               onChange={onChangeUe}
-              valueSelect={ueId}
+              valueSelect={ueCodigo}
               placeholder="Unidade Escolar (UE)"
             />
           </Loader>
@@ -460,7 +472,7 @@ const Filtros = ({ onChangeFiltros, ehInfantil }) => {
               valueOption="valor"
               valueText="desc"
               disabled={
-                !ueId || listaModalidades?.length === 1 || desabilitarCampos
+                !ueCodigo || listaModalidades?.length === 1 || desabilitarCampos
               }
               onChange={onChangeModalidade}
               valueSelect={modalidadeId}
