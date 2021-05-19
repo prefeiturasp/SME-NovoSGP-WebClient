@@ -61,6 +61,10 @@ class ServicoDashboardInformacoesEscolares {
       anoEscolar
     );
   };
+
+  obterUltimaConsolidacao = anoLetivo => {
+    return api.get(`${urlPadrao}/consolidacao?anoLetivo=${anoLetivo}`);
+  };
 }
 
 export default new ServicoDashboardInformacoesEscolares();
