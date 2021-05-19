@@ -20,6 +20,7 @@ import { erros } from '~/servicos/alertas';
 import history from '~/servicos/history';
 import ServicoEncaminhamentoAEE from '~/servicos/Paginas/Relatorios/AEE/ServicoEncaminhamentoAEE';
 import FiltroHelper from '~componentes-sgp/filtro/helper';
+import { BtnVoltarExcluirEncaminhamentoAEE } from '../Cadastro/encaminhamentoAEECadastro.css';
 import ModalAvisoNovoEncaminhamentoAEE from './Componentes/AvisoCadastro/modalAvisoCadastro';
 
 const EncaminhamentoAEELista = () => {
@@ -489,9 +490,8 @@ const EncaminhamentoAEELista = () => {
         <div className="col-md-12">
           <div className="row">
             <div className="col-md-12 d-flex justify-content-end pb-4 justify-itens-end">
-              <Button
+              <BtnVoltarExcluirEncaminhamentoAEE
                 id="btn-voltar"
-                label="Voltar"
                 icon="arrow-left"
                 color={Colors.Azul}
                 border
