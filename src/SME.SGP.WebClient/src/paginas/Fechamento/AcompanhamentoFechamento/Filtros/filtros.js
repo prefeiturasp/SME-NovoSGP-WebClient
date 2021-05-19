@@ -64,7 +64,7 @@ const Filtros = ({ onChangeFiltros, ehInfantil }) => {
       modalidadeId,
       semestre: semestre || 0,
       turmasId,
-      bimestres: valorBimestre,
+      bimestre: valorBimestre,
     };
 
     const temSemestreOuNaoEja =
@@ -76,7 +76,7 @@ const Filtros = ({ onChangeFiltros, ehInfantil }) => {
       ueId &&
       modalidadeId &&
       turmasId?.length &&
-      valorBimestre?.length &&
+      bimestre &&
       temSemestreOuNaoEja &&
       !carregandoAcompanhamentoFechamento
     ) {
@@ -307,7 +307,7 @@ const Filtros = ({ onChangeFiltros, ehInfantil }) => {
 
   const onChangeTurma = valor => {
     setTurmasId(valor);
-    setBimestre([]);
+    setBimestre(undefined);
   };
 
   const onchangeMultiSelect = (valores, valorAtual, funSetarNovoValor) => {
@@ -532,10 +532,7 @@ const Filtros = ({ onChangeFiltros, ehInfantil }) => {
               !modalidadeId || listaBimestres?.length === 1 || desabilitarCampos
             }
             valueSelect={bimestre}
-            multiple
-            onChange={valores => {
-              onchangeMultiSelect(valores, bimestre, onChangeBimestre);
-            }}
+            onChange={onChangeBimestre}
             placeholder="Selecione o bimestre"
           />
         </div>

@@ -9,17 +9,10 @@ class ServicoAcompanhamentoFechamento {
     // turmaId: ["625915"]
     let url = `${urlPadrao}?anoLetivo=${params.anoLetivo}&dreId=${params.dreId}`;
     url = `${url}&ueId=${params.ueId}&modalidade=${params.modalidadeId}&semestre=${params.semestre}`;
-    url = `${url}&numeroPagina=${params.numeroPagina}&numeroRegistros=10`;
+    url = `${url}&bimestre=${params.bimestre}&numeroPagina=${params.numeroPagina}&numeroRegistros=10`;
 
     if (params.turmasId?.length) {
       url += `&turmasId=${params.turmasId.join('&turmasId=', params.turmasId)}`;
-    }
-
-    if (params.bimestres?.length) {
-      url += `&bimestres=${params.bimestres.join(
-        '&bimestres=',
-        params.bimestres
-      )}`;
     }
 
     return api.get(url);
