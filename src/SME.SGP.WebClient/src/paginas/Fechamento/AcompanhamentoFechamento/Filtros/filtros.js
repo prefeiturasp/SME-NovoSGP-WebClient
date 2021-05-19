@@ -30,7 +30,7 @@ const Filtros = ({ onChangeFiltros, ehInfantil }) => {
   const [listaUes, setListaUes] = useState([]);
   const [modalidadeId, setModalidadeId] = useState('');
   const [semestre, setSemestre] = useState('');
-  const [turmaId, setTurmaId] = useState('');
+  const [turmasId, setTurmasId] = useState('');
   const [ueId, setUeId] = useState('');
 
   const OPCAO_TODOS = '-99';
@@ -50,7 +50,7 @@ const Filtros = ({ onChangeFiltros, ehInfantil }) => {
     setSemestre();
 
     setListaTurmas([]);
-    setTurmaId();
+    setTurmasId();
   };
 
   const filtrar = valorBimestre => {
@@ -60,8 +60,8 @@ const Filtros = ({ onChangeFiltros, ehInfantil }) => {
       ueId,
       modalidadeId,
       semestre: semestre || 0,
-      turmaId,
-      bimestre: valorBimestre,
+      turmasId,
+      bimestres: valorBimestre,
     };
 
     const temSemestreOuNaoEja =
@@ -72,7 +72,7 @@ const Filtros = ({ onChangeFiltros, ehInfantil }) => {
       dreId &&
       ueId &&
       modalidadeId &&
-      turmaId?.length &&
+      turmasId?.length &&
       valorBimestre?.length &&
       temSemestreOuNaoEja &&
       !carregandoAcompanhamentoFechamento
@@ -178,7 +178,7 @@ const Filtros = ({ onChangeFiltros, ehInfantil }) => {
     setUeId(ue);
 
     setListaTurmas([]);
-    setTurmaId();
+    setTurmasId();
   };
 
   const obterUes = useCallback(async () => {
@@ -220,7 +220,7 @@ const Filtros = ({ onChangeFiltros, ehInfantil }) => {
   }, [dreId, obterUes]);
 
   const onChangeModalidade = valor => {
-    setTurmaId();
+    setTurmasId();
     setModalidadeId(valor);
   };
 
@@ -296,7 +296,7 @@ const Filtros = ({ onChangeFiltros, ehInfantil }) => {
   }, [obterAnosLetivos, modalidadeId, anoLetivo]);
 
   const onChangeTurma = valor => {
-    setTurmaId(valor);
+    setTurmasId(valor);
     setBimestre([]);
   };
 
@@ -339,7 +339,7 @@ const Filtros = ({ onChangeFiltros, ehInfantil }) => {
         );
         setListaTurmas(lista);
         if (lista.length === 1) {
-          setTurmaId([String(lista[0].id)]);
+          setTurmasId([String(lista[0].id)]);
         }
       }
     }
@@ -350,7 +350,7 @@ const Filtros = ({ onChangeFiltros, ehInfantil }) => {
       obterTurmas();
       return;
     }
-    setTurmaId();
+    setTurmasId();
     setListaTurmas([]);
   }, [ueId, obterTurmas]);
 
@@ -500,9 +500,9 @@ const Filtros = ({ onChangeFiltros, ehInfantil }) => {
               disabled={
                 !modalidadeId || listaTurmas?.length === 1 || desabilitarCampos
               }
-              valueSelect={turmaId}
+              valueSelect={turmasId}
               onChange={valores => {
-                onchangeMultiSelect(valores, turmaId, onChangeTurma);
+                onchangeMultiSelect(valores, turmasId, onChangeTurma);
               }}
               placeholder="Turma"
             />

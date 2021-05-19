@@ -6,7 +6,6 @@ const inicial = {
 };
 
 export default function AcompanhamentoFechamento(state = inicial, action) {
-  console.log('state', state);
   return produce(state, draft => {
     switch (action.type) {
       case '@acompanhamentoFechamento/setTurmasAcompanhamentoFechamento': {

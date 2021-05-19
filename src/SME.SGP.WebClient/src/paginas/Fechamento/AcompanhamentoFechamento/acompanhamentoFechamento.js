@@ -88,10 +88,10 @@ const AcompanhamentoFechamento = () => {
     setEhInfantil(infantil);
   }, [turmaSelecionada, permissoesTela, modalidadesFiltroPrincipal]);
 
-  const obterFechamentos = async turmaId => {
+  const obterFechamentos = async turmasId => {
     const retorno = await ServicoAcompanhamentoFechamento.obterFechamentos({
-      turmaId,
-      bimestre: parametrosFiltro.bimestre,
+      turmasId,
+      bimestres: parametrosFiltro.bimestres,
     });
 
     if (retorno?.data) {
@@ -99,10 +99,10 @@ const AcompanhamentoFechamento = () => {
     }
   };
 
-  const obterConselhoClasse = async turmaId => {
+  const obterConselhoClasse = async turmasId => {
     const retorno = await ServicoAcompanhamentoFechamento.obterConselhoClasse({
-      turmaId,
-      bimestre: parametrosFiltro.bimestre,
+      turmasId,
+      bimestres: parametrosFiltro.bimestres,
     });
 
     if (retorno?.data) {
@@ -110,10 +110,10 @@ const AcompanhamentoFechamento = () => {
     }
   };
 
-  const onChangeCollapse = turmaId => {
-    if (turmaId) {
+  const onChangeCollapse = turmasId => {
+    if (turmasId) {
       dispatch(setCarregandoAcompanhamentoFechamento(true));
-      Promise.all([obterFechamentos(turmaId), obterConselhoClasse(turmaId)])
+      Promise.all([obterFechamentos(turmasId), obterConselhoClasse(turmasId)])
         .catch(e => erros(e))
         .finally(() => dispatch(setCarregandoAcompanhamentoFechamento(false)));
     }
@@ -160,7 +160,7 @@ const AcompanhamentoFechamento = () => {
                 <PainelCollapse accordion onChange={onChangeCollapse}>
                   {turmasAcompanhamentoFechamento.items.map(dadosTurmas => (
                     <PainelCollapse.Painel
-                      key={dadosTurmas?.turmaId}
+                      key={dadosTurmas?.turmasId}
                       accordion
                       espacoPadrao
                       corBorda={Base.AzulBordaCollapse}
