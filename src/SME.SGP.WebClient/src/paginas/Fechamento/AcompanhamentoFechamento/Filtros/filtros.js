@@ -159,7 +159,7 @@ const Filtros = ({ onChangeFiltros, ehInfantil }) => {
         setListaDres(lista);
 
         if (lista && lista.length && lista.length === 1) {
-          setDreId(lista[0].valor);
+          setDreId(lista[0].id);
         }
         return;
       }
@@ -200,7 +200,7 @@ const Filtros = ({ onChangeFiltros, ehInfantil }) => {
         }));
 
         if (lista?.length === 1) {
-          setUeId(lista[0].valor);
+          setUeId(lista[0].id);
         }
 
         setListaUes(lista);
@@ -300,9 +300,9 @@ const Filtros = ({ onChangeFiltros, ehInfantil }) => {
     setBimestre([]);
   };
 
-  const onchangeMultiSelect = (valores, valoreAtual, funSetarNovoValor) => {
-    const opcaoTodosJaSelecionado = valoreAtual
-      ? valoreAtual.includes(OPCAO_TODOS)
+  const onchangeMultiSelect = (valores, valorAtual, funSetarNovoValor) => {
+    const opcaoTodosJaSelecionado = valorAtual
+      ? valorAtual.includes(OPCAO_TODOS)
       : false;
     if (opcaoTodosJaSelecionado) {
       const listaSemOpcaoTodos = valores.filter(v => v !== OPCAO_TODOS);
@@ -332,14 +332,14 @@ const Filtros = ({ onChangeFiltros, ehInfantil }) => {
         data.map(item =>
           lista.push({
             desc: item.nome,
-            valor: item.codigo,
+            valor: item.id,
             id: item.id,
             ano: item.ano,
           })
         );
         setListaTurmas(lista);
         if (lista.length === 1) {
-          setTurmasId([String(lista[0].id)]);
+          setTurmasId([String(lista[0].valor)]);
         }
       }
     }
