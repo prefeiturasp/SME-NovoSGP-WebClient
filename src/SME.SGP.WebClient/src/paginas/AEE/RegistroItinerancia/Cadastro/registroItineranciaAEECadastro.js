@@ -492,9 +492,11 @@ const RegistroItineranciaAEECadastro = ({ match }) => {
 
   const obterListaEventos = async (tipoCalendarioId, id) => {
     setCarregandoEventos(true);
+    const ueSelecionada = listaUes?.find(ue => ue?.id === Number(ueId));
     const retorno = await ServicoRegistroItineranciaAEE.obterEventos(
       tipoCalendarioId,
-      id
+      id,
+      ueSelecionada?.codigo
     )
       .catch(e => erros(e))
       .finally(() => setCarregandoEventos(false));
