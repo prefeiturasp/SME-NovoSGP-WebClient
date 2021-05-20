@@ -119,9 +119,7 @@ const DadosConselhoClasse = props => {
         usuario.turmaSelecionada.consideraHistorico
       ).catch(e => {
         erros(e);
-        if (e && e.response && e.response.status === 601) {
-          dispatch(setBimestreAtual(bimestreConsulta || '1'));
-        }
+        dispatch(setBimestreAtual(bimestreConsulta));
         dispatch(setDadosPrincipaisConselhoClasse({}));
         setSemDados(true);
       });
@@ -213,9 +211,7 @@ const DadosConselhoClasse = props => {
 
   useEffect(() => {
     if (codigoEOL && turmaSelecionada.turma == turmaAtual) {
-      if (!bimestreAtual.valor) {
-        caregarInformacoes();
-      } else {
+      if (bimestreAtual.valor) {
         const ehFinal = bimestreAtual.valor === 'final';
         caregarInformacoes(bimestreAtual.valor, ehFinal);
       }
@@ -275,7 +271,7 @@ const DadosConselhoClasse = props => {
 
   return (
     <>
-      {codigoEOL && bimestreAtual.valor ? (
+      {codigoEOL ? (
         <ContainerTabsCard
           type="card"
           onChange={onChangeTab}
@@ -312,6 +308,9 @@ const DadosConselhoClasse = props => {
         </ContainerTabsCard>
       ) : (
         ''
+      )}
+      {codigoEOL && !bimestreAtual?.valor && (
+        <div className="text-center">Selecione um bimestre</div>
       )}
     </>
   );
