@@ -245,14 +245,7 @@ const DashboardInformacoesEscolares = () => {
   }, [anoLetivo, dre, ue, modalidade]);
 
   useEffect(() => {
-    if (
-      anoLetivo &&
-      dre &&
-      ue &&
-      modalidade &&
-      dre?.codigo === OPCAO_TODOS &&
-      ue?.codigo === OPCAO_TODOS
-    ) {
+    if (anoLetivo && dre && ue && modalidade) {
       obterAnosEscolares();
     } else {
       setListaAnosEscolares([]);

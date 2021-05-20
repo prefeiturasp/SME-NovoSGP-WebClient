@@ -1,6 +1,6 @@
 import { Tabs } from 'antd';
 import PropTypes from 'prop-types';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { ContainerTabsCard } from '~/componentes/tabs/tabs.css';
 import { OPCAO_TODOS } from '~/constantes/constantes';
 import { ContainerTabsDashboard } from '../../style';
@@ -19,9 +19,6 @@ const TabsDashboardInformacoesEscolares = props => {
 
   const onChangeTab = tabAtiva => setTabSelecionada(tabAtiva);
 
-  const exibirAnosEscolares =
-    anoLetivo && modalidade && dreId === OPCAO_TODOS && ueId === OPCAO_TODOS;
-
   return (
     <ContainerTabsDashboard>
       <ContainerTabsCard
@@ -37,7 +34,12 @@ const TabsDashboardInformacoesEscolares = props => {
               ueId={ueId}
               modalidade={modalidade}
               listaAnosEscolares={listaAnosEscolares}
-              exibirAnosEscolares={exibirAnosEscolares}
+              exibirAnosEscolares={
+                anoLetivo &&
+                modalidade &&
+                dreId === OPCAO_TODOS &&
+                ueId === OPCAO_TODOS
+              }
             />
           )}
         </TabPane>
@@ -49,7 +51,12 @@ const TabsDashboardInformacoesEscolares = props => {
               ueId={ueId}
               modalidade={modalidade}
               listaAnosEscolares={listaAnosEscolares}
-              exibirAnosEscolares={exibirAnosEscolares}
+              exibirAnosEscolares={
+                anoLetivo &&
+                modalidade &&
+                ((dreId === OPCAO_TODOS && ueId === OPCAO_TODOS) ||
+                  (dreId !== OPCAO_TODOS && ueId !== OPCAO_TODOS))
+              }
             />
           )}
         </TabPane>

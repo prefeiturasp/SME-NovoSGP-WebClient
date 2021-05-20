@@ -9,7 +9,7 @@ class ServicoDashboardInformacoesEscolares {
     dreId,
     ueId,
     modalidade,
-    anoEscolar
+    anosEscolares
   ) => {
     let url = `${urlPadrao}/${rota}?anoLetivo=${anoLetivo}`;
     if (dreId) {
@@ -21,8 +21,8 @@ class ServicoDashboardInformacoesEscolares {
     if (modalidade) {
       url += `&modalidade=${modalidade}`;
     }
-    if (anoEscolar) {
-      url += `&ano=${anoEscolar}`;
+    if (anosEscolares?.length) {
+      url += `&anos=${anosEscolares.join('&anos=', anosEscolares)}`;
     }
 
     return api.get(url);
@@ -33,7 +33,7 @@ class ServicoDashboardInformacoesEscolares {
     dreId,
     ueId,
     modalidade,
-    anoEscolar
+    anosEscolares
   ) => {
     return this.montarConsultaPadraoGraficos(
       'turmas',
@@ -41,7 +41,7 @@ class ServicoDashboardInformacoesEscolares {
       dreId,
       ueId,
       modalidade,
-      anoEscolar
+      anosEscolares
     );
   };
 
@@ -50,7 +50,7 @@ class ServicoDashboardInformacoesEscolares {
     dreId,
     ueId,
     modalidade,
-    anoEscolar
+    anosEscolares
   ) => {
     return this.montarConsultaPadraoGraficos(
       'matriculas',
@@ -58,7 +58,7 @@ class ServicoDashboardInformacoesEscolares {
       dreId,
       ueId,
       modalidade,
-      anoEscolar
+      anosEscolares
     );
   };
 

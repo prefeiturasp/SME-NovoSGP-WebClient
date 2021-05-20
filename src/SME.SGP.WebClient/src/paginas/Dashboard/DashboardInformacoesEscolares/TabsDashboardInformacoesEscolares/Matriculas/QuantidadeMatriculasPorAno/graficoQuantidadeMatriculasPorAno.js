@@ -7,6 +7,7 @@ import { OPCAO_TODOS } from '~/constantes/constantes';
 import { erros } from '~/servicos';
 import ServicoDashboardInformacoesEscolares from '~/servicos/Paginas/Dashboard/ServicoDashboardInformacoesEscolares';
 import DataUltimaAtualizacaoDashboardInformacoesEscolares from '../../../dataUltimaAtualizacaoDashboardInformacoesEscolares';
+import LabelTotalMatriculas from '../../../labelTotalMatriculas';
 
 const GraficoQuantidadeMatriculasPorAno = props => {
   const {
@@ -20,7 +21,7 @@ const GraficoQuantidadeMatriculasPorAno = props => {
 
   const [dadosGrafico, setDadosGrafico] = useState([]);
   const [exibirLoader, setExibirLoader] = useState(false);
-  const [anoEscolar, setAnoEscolar] = useState();
+  const [anosEscolares, setAnosEscolares] = useState([]);
 
   const dataUltimaConsolidacao = moment();
 
@@ -31,7 +32,9 @@ const GraficoQuantidadeMatriculasPorAno = props => {
       dreId === OPCAO_TODOS ? '' : dreId,
       ueId === OPCAO_TODOS ? '' : ueId,
       modalidade,
-      anoEscolar === OPCAO_TODOS ? '' : anoEscolar
+      anosEscolares?.length === 1 && anosEscolares[0] === OPCAO_TODOS
+        ? ''
+        : anosEscolares
     )
       .catch(e => erros(e))
       .finally(() => setExibirLoader(false));
@@ -41,7 +44,7 @@ const GraficoQuantidadeMatriculasPorAno = props => {
     } else {
       setDadosGrafico([]);
     }
-  }, [anoLetivo, dreId, ueId, modalidade, anoEscolar]);
+  }, [anoLetivo, dreId, ueId, modalidade, anosEscolares]);
 
   useEffect(() => {
     if (
@@ -49,7 +52,7 @@ const GraficoQuantidadeMatriculasPorAno = props => {
       dreId &&
       ueId &&
       modalidade &&
-      (exibirAnosEscolares ? !!anoEscolar : true)
+      (exibirAnosEscolares ? anosEscolares?.length : true)
     ) {
       obterDadosGrafico();
     } else {
@@ -60,7 +63,7 @@ const GraficoQuantidadeMatriculasPorAno = props => {
     dreId,
     ueId,
     modalidade,
-    anoEscolar,
+    anosEscolares,
     exibirAnosEscolares,
     obterDadosGrafico,
   ]);
@@ -68,15 +71,29 @@ const GraficoQuantidadeMatriculasPorAno = props => {
   useEffect(() => {
     if (exibirAnosEscolares) {
       if (listaAnosEscolares?.length === 1) {
-        setAnoEscolar(String(listaAnosEscolares[0].ano));
+        setAnosEscolares([String(listaAnosEscolares[0].ano)]);
       }
       if (listaAnosEscolares?.length > 1) {
-        setAnoEscolar(OPCAO_TODOS);
+        setAnosEscolares([OPCAO_TODOS]);
       }
     }
   }, [listaAnosEscolares, exibirAnosEscolares]);
 
-  const onChangeAnoEscolar = valor => setAnoEscolar(valor);
+  const onChangeAnoEscolar = (novosValores, valoresAtuais) => {
+    const opcaoTodosJaSelecionado = valoresAtuais
+      ? valoresAtuais?.includes(OPCAO_TODOS)
+      : false;
+    if (opcaoTodosJaSelecionado) {
+      const listaSemOpcaoTodos = novosValores?.filter(
+        ano => ano !== OPCAO_TODOS
+      );
+      setAnosEscolares(listaSemOpcaoTodos);
+    } else if (novosValores?.includes(OPCAO_TODOS)) {
+      setAnosEscolares([OPCAO_TODOS]);
+    } else {
+      setAnosEscolares(novosValores);
+    }
+  };
 
   return (
     <>
@@ -88,10 +105,12 @@ const GraficoQuantidadeMatriculasPorAno = props => {
               valueOption="ano"
               valueText="modalidadeAno"
               disabled={listaAnosEscolares?.length === 1}
-              valueSelect={anoEscolar}
-              onChange={onChangeAnoEscolar}
+              valueSelect={anosEscolares}
+              onChange={valores => {
+                onChangeAnoEscolar(valores, anosEscolares);
+              }}
               placeholder="Selecione o ano"
-              allowClear={false}
+              multiple
             />
           </div>
         )}
@@ -105,6 +124,15 @@ const GraficoQuantidadeMatriculasPorAno = props => {
           >
             <DataUltimaAtualizacaoDashboardInformacoesEscolares
               anoLetivo={anoLetivo}
+            />
+          </div>
+        )}
+        {dadosGrafico?.length && (
+          <div className="col-md-12 mb-2">
+            <LabelTotalMatriculas
+              total={dadosGrafico
+                ?.map(item => item?.quantidade)
+                .reduce((total, valorAtual) => total + valorAtual)}
             />
           </div>
         )}
