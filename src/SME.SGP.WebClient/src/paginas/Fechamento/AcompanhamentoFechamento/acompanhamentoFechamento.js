@@ -125,87 +125,93 @@ const AcompanhamentoFechamento = () => {
   };
 
   return (
-    <Loader loading={carregandoAcompanhamentoFechamento} ignorarTip>
+    <>
       <AlertaModalidadeInfantil />
       <Cabecalho pagina="Acompanhamento do fechamento" classes="mb-2" />
-      <Card>
-        <div className="col-md-12 p-0">
-          <div className="row mb-2">
-            <div className="col-sm-12 d-flex justify-content-end">
-              <Button
-                id="botao-voltar"
-                label="Voltar"
-                icon="arrow-left"
-                color={Colors.Azul}
-                onClick={aoClicarBotaoVoltar}
-                border
+      <Loader loading={carregandoAcompanhamentoFechamento} ignorarTip>
+        <Card>
+          <div className="col-md-12 p-0">
+            <div className="row mb-2">
+              <div className="col-sm-12 d-flex justify-content-end">
+                <Button
+                  id="botao-voltar"
+                  label="Voltar"
+                  icon="arrow-left"
+                  color={Colors.Azul}
+                  onClick={aoClicarBotaoVoltar}
+                  border
+                />
+              </div>
+            </div>
+            <div className="mb-4">
+              <Filtros
+                onChangeFiltros={onChangeFiltros}
+                ehInfantil={ehInfantil}
               />
             </div>
-          </div>
-          <div className="mb-4">
-            <Filtros
-              onChangeFiltros={onChangeFiltros}
-              ehInfantil={ehInfantil}
-            />
-          </div>
-          {!!turmasAcompanhamentoFechamento?.items?.length && (
-            <>
-              <div className="mb-3 pt-3">
-                <Label
-                  text="Dados por turma"
-                  tamanhoFonte="18"
-                  altura="24"
-                  className="mb-2"
-                />
-                <PainelCollapse accordion onChange={onChangeCollapse}>
-                  {turmasAcompanhamentoFechamento.items.map(dadosTurmas => (
-                    <PainelCollapse.Painel
-                      key={dadosTurmas?.turmaId}
-                      accordion
-                      espacoPadrao
-                      corBorda={Base.AzulBordaCollapse}
-                      temBorda
-                      header={dadosTurmas?.nome}
-                    >
-                      <>
-                        <Label text="Fechamento" className="mb-2" altura="24" />
-                        <div className="d-flex">
-                          {dadosStatusFechamento?.map(dadosFechamento => (
-                            <CardStatus dadosStatus={dadosFechamento} />
-                          ))}
-                        </div>
-                        <Divider style={{ background: Base.CinzaDivisor }} />
-                        <Label
-                          text="Conselho de classe"
-                          className="mb-2"
-                          altura="24"
-                        />
-                        <div className="d-flex">
-                          {dadosStatusConsselhoClasse?.map(
-                            dadosConselhoClasse => (
-                              <CardStatus dadosStatus={dadosConselhoClasse} />
-                            )
-                          )}
-                        </div>
-                      </>
-                    </PainelCollapse.Painel>
-                  ))}
-                </PainelCollapse>
-              </div>
-              {exibiPaginacao && (
-                <div className="col-12 d-flex justify-content-center mt-2">
-                  <Paginacao
-                    numeroRegistros={numeroRegistros}
-                    pageSize={pageSize}
-                    onChangePaginacao={onChangePaginacao}
+            {!!turmasAcompanhamentoFechamento?.items?.length && (
+              <>
+                <div className="mb-3 pt-3">
+                  <Label
+                    text="Dados por turma"
+                    tamanhoFonte="18"
+                    altura="24"
+                    className="mb-2"
                   />
+                  <PainelCollapse accordion onChange={onChangeCollapse}>
+                    {turmasAcompanhamentoFechamento.items.map(dadosTurmas => (
+                      <PainelCollapse.Painel
+                        key={dadosTurmas?.turmaId}
+                        accordion
+                        espacoPadrao
+                        corBorda={Base.AzulBordaCollapse}
+                        temBorda
+                        header={dadosTurmas?.nome}
+                      >
+                        <>
+                          <Label
+                            text="Fechamento"
+                            className="mb-2"
+                            altura="24"
+                          />
+                          <div className="d-flex">
+                            {dadosStatusFechamento?.map(dadosFechamento => (
+                              <CardStatus dadosStatus={dadosFechamento} />
+                            ))}
+                          </div>
+                          <Divider style={{ background: Base.CinzaDivisor }} />
+                          <Label
+                            text="Conselho de classe"
+                            className="mb-2"
+                            altura="24"
+                          />
+                          <div className="d-flex">
+                            {dadosStatusConsselhoClasse?.map(
+                              dadosConselhoClasse => (
+                                <CardStatus dadosStatus={dadosConselhoClasse} />
+                              )
+                            )}
+                          </div>
+                        </>
+                      </PainelCollapse.Painel>
+                    ))}
+                  </PainelCollapse>
                 </div>
-              )}
-            </>
-          )}
-        </div>
-      </Card>
-    </Loader>
+                {exibiPaginacao && (
+                  <div className="col-12 d-flex justify-content-center mt-2">
+                    <Paginacao
+                      numeroRegistros={numeroRegistros}
+                      pageSize={pageSize}
+                      onChangePaginacao={onChangePaginacao}
+                    />
+                  </div>
+                )}
+              </>
+            )}
+          </div>
+        </Card>
+      </Loader>
+    </>
   );
 };
 

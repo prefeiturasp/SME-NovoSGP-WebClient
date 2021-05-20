@@ -1328,7 +1328,7 @@ rotas.set(RotasDto.DASHBOARD_REGISTRO_ITINERANCIA, {
 });
 
 rotas.set(RotasDto.ACOMPANHAMENTO_FECHAMENTO, {
-  breadcrumbName: 'Relatório do Acompanhamento da Aprendizagem',
+  breadcrumbName: 'Acompanhamento do Fechamento',
   menu: ['Fechamento'],
   parent: '/',
   component: AcompanhamentoFechamento,
