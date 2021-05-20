@@ -41,9 +41,7 @@ const PendenciasFechamentoLista = ({ match }) => {
   const [somenteConsulta, setSomenteConsulta] = useState(false);
   const [lista, setLista] = useState([]);
 
-  const [exibirLista, setExibirLista] = useState(false);
   const [carregandoDisciplinas, setCarregandoDisciplinas] = useState(false);
-  const [desabilitarDisciplina, setDesabilitarDisciplina] = useState(false);
   const [listaDisciplinas, setListaDisciplinas] = useState([]);
   const [pendenciasSelecionadas, setPendenciasSelecionadas] = useState([]);
   const [bimestreSelecionado, setBimestreSelecionado] = useState('');
@@ -127,7 +125,6 @@ const PendenciasFechamentoLista = ({ match }) => {
   const resetarFiltro = () => {
     setListaDisciplinas([]);
     setDisciplinaIdSelecionada(undefined);
-    setDesabilitarDisciplina(false);
     setBimestreSelecionado(undefined);
   };
 
@@ -166,18 +163,6 @@ const PendenciasFechamentoLista = ({ match }) => {
           `${RotasDto.PENDENCIAS_FECHAMENTO}`
         );
         return true;
-      } else {
-        const bimestreAtual = await api
-          .get(
-            `v1/periodo-escolar/modalidades/${turmaSelecionada.modalidade}/bimestres/atual`
-          )
-          .catch(e => erros(e));
-
-        if (bimestreAtual && bimestreAtual.data) {
-          setBimestreSelecionado(String(bimestreAtual.data));
-          return true;
-        }
-        return false;
       }
     };
 
@@ -203,7 +188,6 @@ const PendenciasFechamentoLista = ({ match }) => {
         setDisciplinaIdSelecionada(
           String(disciplina.codigoComponenteCurricular)
         );
-        setDesabilitarDisciplina(true);
       }
 
       if (
@@ -239,11 +223,6 @@ const PendenciasFechamentoLista = ({ match }) => {
   }, [turmaSelecionada, modalidadesFiltroPrincipal]);
 
   useEffect(() => {
-    if (bimestreSelecionado) {
-      setExibirLista(true);
-    } else {
-      setExibirLista(false);
-    }
     filtrar();
   }, [disciplinaIdSelecionada, bimestreSelecionado, filtrar]);
 
@@ -260,7 +239,6 @@ const PendenciasFechamentoLista = ({ match }) => {
     if (bimestre && listaDisciplinas && listaDisciplinas.length === 1) {
       const disciplina = listaDisciplinas[0];
       setDisciplinaIdSelecionada(String(disciplina.codigoComponenteCurricular));
-      setDesabilitarDisciplina(true);
     }
   };
 
@@ -428,7 +406,7 @@ const PendenciasFechamentoLista = ({ match }) => {
                       modalidadesFiltroPrincipal,
                       turmaSelecionada
                     ) ||
-                    desabilitarDisciplina ||
+                    listaDisciplinas?.length === 1 ||
                     !bimestreSelecionado
                   }
                 />
@@ -436,7 +414,7 @@ const PendenciasFechamentoLista = ({ match }) => {
             </div>
           </div>
         </div>
-        {exibirLista ? (
+        {filtro?.bimestre ? (
           <div className="col-md-12 pt-2">
             <ListaPaginada
               url="v1/fechamentos/pendencias/listar"
