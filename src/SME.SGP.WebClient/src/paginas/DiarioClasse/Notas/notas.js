@@ -209,7 +209,7 @@ const Notas = ({ match }) => {
 
   // Só é chamado quando: Seta, remove ou troca a disciplina e quando cancelar a edição;
   const obterDadosBimestres = useCallback(
-    async (disciplinaId, numeroBimestre) => {
+    async (disciplinaId, numeroBimestre, parametroPelaRota) => {
       if (disciplinaId > 0) {
         setCarregandoListaBimestres(true);
         const dados = await obterBimestres(disciplinaId, numeroBimestre);
@@ -270,7 +270,9 @@ const Notas = ({ match }) => {
                 break;
             }
 
-            setBimestreCorrente(dados.bimestreAtual);
+            if (parametroPelaRota) {
+              setBimestreCorrente(dados.bimestreAtual);
+            }
           });
 
           setAuditoriaInfo({
@@ -325,7 +327,7 @@ const Notas = ({ match }) => {
       match.params.bimestre
     ) {
       setDisciplinaSelecionada(String(match.params.disciplinaId));
-      obterDadosBimestres(match.params.disciplinaId, match.params.bimestre);
+      obterDadosBimestres(match.params.disciplinaId, match.params.bimestre, true);
     }
   }, [obterDadosBimestres, usuario.turmaSelecionada.turma]);
 
@@ -969,7 +971,7 @@ const Notas = ({ match }) => {
       clicouNoBotaoSalvar,
       clicouNoBotaoVoltar
     );
-  };  
+  };
 
   return (
     <Container>
@@ -1241,6 +1243,9 @@ const Notas = ({ match }) => {
                     </ContainerAuditoria>
                   </div>
                 </div>
+                {!bimestreCorrente && (
+                  <div className="text-center">Selecione um bimestre</div>
+                )}
               </>
             ) : (
               ''
