@@ -76,7 +76,7 @@ const Filtros = ({ onChangeFiltros, ehInfantil }) => {
       ueId &&
       modalidadeId &&
       turmasId?.length &&
-      bimestre &&
+      valorBimestre &&
       temSemestreOuNaoEja &&
       !carregandoAcompanhamentoFechamento
     ) {
@@ -506,7 +506,7 @@ const Filtros = ({ onChangeFiltros, ehInfantil }) => {
               multiple
               id="turma"
               lista={listaTurmas}
-              valueOption="id"
+              valueOption="valor"
               valueText="desc"
               label="Turmas"
               disabled={
