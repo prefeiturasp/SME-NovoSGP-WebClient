@@ -95,6 +95,7 @@ import RelatorioDevolutivas from '~/paginas/Relatorios/Planejamento/Devolutivas/
 import DashboardAEE from '~/paginas/Dashboard/AEE/dashboardAEE';
 import DashboardRegistroItinerancia from '~/paginas/Dashboard/DashboardRegistroItinerancia/dashboardRegistroItinerancia';
 import DashboardFrequencia from '~/paginas/Dashboard/DashboardFrequencia/dashboardFrequencia';
+import DashboardInformacoesEscolares from '~/paginas/Dashboard/DashboardInformacoesEscolares/dashboardInformacoesEscolares';
 
 const rotas = new Map();
 
@@ -1334,6 +1335,17 @@ rotas.set(RotasDto.DASHBOARD_FREQUENCIA, {
   tipo: RotasTipo.EstruturadaAutenticada,
   temPermissionamento: true,
   chavePermissao: RotasDto.DASHBOARD_FREQUENCIA,
+});
+
+rotas.set(RotasDto.DASHBOARD_INFORMACOES_ESCOLARES, {
+  breadcrumbName: 'Informações escolares',
+  menu: ['Dashboard'],
+  parent: '/',
+  component: DashboardInformacoesEscolares,
+  exact: true,
+  tipo: RotasTipo.EstruturadaAutenticada,
+  temPermissionamento: true,
+  chavePermissao: RotasDto.DASHBOARD_INFORMACOES_ESCOLARES,
 });
 
 const rotasArray = [];
