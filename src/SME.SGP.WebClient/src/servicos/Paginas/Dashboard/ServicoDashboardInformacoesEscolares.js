@@ -65,6 +65,16 @@ class ServicoDashboardInformacoesEscolares {
   obterUltimaConsolidacao = anoLetivo => {
     return api.get(`${urlPadrao}/consolidacao?anoLetivo=${anoLetivo}`);
   };
+
+  obterAnosEscolaresPorModalidade = (anoLetivo, dreId, ueId, modalidade) => {
+    return this.montarConsultaPadraoGraficos({
+      rota: 'modalidades/anos',
+      anoLetivo,
+      dreId,
+      ueId,
+      modalidade,
+    });
+  };
 }
 
 export default new ServicoDashboardInformacoesEscolares();
