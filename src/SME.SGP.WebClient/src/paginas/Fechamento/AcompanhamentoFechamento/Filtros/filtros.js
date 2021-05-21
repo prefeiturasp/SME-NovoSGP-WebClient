@@ -1,14 +1,22 @@
 import React, { useCallback, useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
-
-import { useSelector } from 'react-redux';
 import { CheckboxComponent, Loader, SelectComponent } from '~/componentes';
 import { FiltroHelper } from '~/componentes-sgp';
+
+
+import {
+  setCarregandoAcompanhamentoFechamento,
+  setTurmasAcompanhamentoFechamento,
+} from '~/redux/modulos/acompanhamentoFechamento/actions';
+
 
 import { ModalidadeDTO } from '~/dtos';
 import { AbrangenciaServico, erros, ServicoFiltroRelatorio } from '~/servicos';
 
 const Filtros = ({ onChangeFiltros, ehInfantil }) => {
+  
+  const dispatch = useDispatch();
   const [anoAtual] = useState(window.moment().format('YYYY'));
   const [anoLetivo, setAnoLetivo] = useState('');
   const [bimestre, setBimestre] = useState('');
@@ -196,6 +204,7 @@ const Filtros = ({ onChangeFiltros, ehInfantil }) => {
     setUeId(id);
     setUeCodigo(ue);
     setListaModalidades([]);
+    setModalidadeId();
     setListaTurmas([]);
     setTurmasId();
   };
@@ -376,6 +385,7 @@ const Filtros = ({ onChangeFiltros, ehInfantil }) => {
   }, [ueCodigo, obterTurmas]);
 
   const onChangeBimestre = valor => {
+    dispatch(setTurmasAcompanhamentoFechamento(undefined));
     setBimestre(valor);
     filtrar(valor);
   };

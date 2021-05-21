@@ -66,6 +66,7 @@ const AcompanhamentoFechamento = () => {
 
   const onChangeFiltros = async (params, paginaAlterada = numeroPagina) => {
     dispatch(setCarregandoAcompanhamentoFechamento(true));
+    dispatch(setTurmasAcompanhamentoFechamento(undefined));
     const retorno = await ServicoAcompanhamentoFechamento.obterTurmas({
       ...params,
       numeroPagina: paginaAlterada,
@@ -175,9 +176,16 @@ const AcompanhamentoFechamento = () => {
                             altura="24"
                           />
                           <div className="d-flex">
-                            {dadosStatusFechamento?.map(dadosFechamento => (
+                            {dadosStatusFechamento?.length > 0 ? 
+                            dadosStatusFechamento?.map(dadosFechamento => (
                               <CardStatus dadosStatus={dadosFechamento} />
-                            ))}
+                            )) : 
+                              <Label
+                              text="Não foram entrados fechamentos"
+                              className="mb-2"
+                              altura="16"
+                            />
+                            }
                           </div>
                           <Divider style={{ background: Base.CinzaDivisor }} />
                           <Label
@@ -186,11 +194,16 @@ const AcompanhamentoFechamento = () => {
                             altura="24"
                           />
                           <div className="d-flex">
-                            {dadosStatusConsselhoClasse?.map(
-                              dadosConselhoClasse => (
-                                <CardStatus dadosStatus={dadosConselhoClasse} />
-                              )
-                            )}
+                            {dadosStatusConsselhoClasse?.length > 0 ? 
+                            dadosStatusConsselhoClasse?.map(dadosConselhoClasse => (
+                              <CardStatus dadosStatus={dadosConselhoClasse} />
+                            )) : 
+                              <Label
+                              text="Não foram entrados conselhos de classe"
+                              className="mb-2"
+                              altura="16"
+                            />
+                            }
                           </div>
                         </>
                       </PainelCollapse.Painel>
