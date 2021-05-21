@@ -94,6 +94,7 @@ import AcompanhamentoAprendizagem from '~/paginas/Fechamento/AcompanhamentoApren
 import RelatorioDevolutivas from '~/paginas/Relatorios/Planejamento/Devolutivas/relatorioDevolutivas';
 import DashboardAEE from '~/paginas/Dashboard/AEE/dashboardAEE';
 import DashboardRegistroItinerancia from '~/paginas/Dashboard/DashboardRegistroItinerancia/dashboardRegistroItinerancia';
+import AcompanhamentoFechamento from '~/paginas/Fechamento/AcompanhamentoFechamento/acompanhamentoFechamento';
 import DashboardFrequencia from '~/paginas/Dashboard/DashboardFrequencia/dashboardFrequencia';
 import DashboardInformacoesEscolares from '~/paginas/Dashboard/DashboardInformacoesEscolares/dashboardInformacoesEscolares';
 
@@ -1324,6 +1325,17 @@ rotas.set(RotasDto.DASHBOARD_REGISTRO_ITINERANCIA, {
   tipo: RotasTipo.EstruturadaAutenticada,
   temPermissionamento: true,
   chavePermissao: RotasDto.DASHBOARD_REGISTRO_ITINERANCIA,
+});
+
+rotas.set(RotasDto.ACOMPANHAMENTO_FECHAMENTO, {
+  breadcrumbName: 'Acompanhamento do Fechamento',
+  menu: ['Fechamento'],
+  parent: '/',
+  component: AcompanhamentoFechamento,
+  exact: true,
+  tipo: RotasTipo.EstruturadaAutenticada,
+  temPermissionamento: false,
+  chavePermissao: RotasDto.ACOMPANHAMENTO_FECHAMENTO,
 });
 
 rotas.set(RotasDto.DASHBOARD_FREQUENCIA, {
