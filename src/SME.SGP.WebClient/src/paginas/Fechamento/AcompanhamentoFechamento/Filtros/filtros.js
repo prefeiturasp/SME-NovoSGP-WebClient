@@ -195,7 +195,7 @@ const Filtros = ({ onChangeFiltros, ehInfantil }) => {
     const id = listaUes.find(d => d.valor === ue)?.id;
     setUeId(id);
     setUeCodigo(ue);
-
+    setListaModalidades([]);
     setListaTurmas([]);
     setTurmasId();
   };
