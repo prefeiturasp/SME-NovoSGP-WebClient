@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Tooltip } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { Auditoria, Button, Colors, JoditEditor } from '~/componentes';
+import { Auditoria, Button, Colors } from '~/componentes';
 
 import {
   confirmar,
@@ -20,6 +20,8 @@ import {
 } from '~/redux/modulos/registroIndividual/actions';
 
 import { RotasDto } from '~/dtos';
+
+import EditorRegistrosAnteriores from './editorRegistrosAnteriores';
 
 import { ContainerBotoes } from './item.css';
 
@@ -149,14 +151,13 @@ const Item = ({ dados, setCarregandoGeral }) => {
   return (
     <div className="row justify-content-between">
       <div className="p-0 col-12" style={{ minHeight: 200 }}>
-        <JoditEditor
-          validarSeTemErro={validarSeTemErro}
-          mensagemErro="Campo obrigatório"
-          label={`Registro - ${window.moment(data).format('DD/MM/YYYY')}`}
-          id={`${id}-editor`}
-          value={registroAlterado}
+        <EditorRegistrosAnteriores
+          id={id}
+          registroAlterado={registroAlterado}
           onChange={onChange}
-          desabilitar={!editando}
+          editando={editando}
+          validarSeTemErro={validarSeTemErro}
+          data={data}
         />
       </div>
       {auditoria && (
