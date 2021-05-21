@@ -87,6 +87,9 @@ namespace SME.SGP.Dominio
         [Display(Name = "relatorios/itinerancias", ShortName = "Itinerâncias", Description = "Relatório do Registro de Itinerância")]
         Itinerancias = 29,
 
+        [Display(Name = "relatorios/acompanhamento-aprendizagem", ShortName = "AcompanhamentoAprendizagem", Description = "Relatório do Acompanhamento da Aprendizagem")]
+        AcompanhamentoAprendizagem = 31,
+        
         [Display(Name = "relatorios/registro-individual", ShortName = "RegistroIndividual", Description = "Relatório de Registro Individual")]
         RegistroIndividual = 30
     }

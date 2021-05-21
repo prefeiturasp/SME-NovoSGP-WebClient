@@ -9,13 +9,18 @@ export const Titulo = styled(Div)`
 `;
 
 export const Badge = styled.button`
+  &:focus {
+    outline: none;
+  }
+
   &:last-child {
     margin-right: 10 !important;
   }
 
   &[aria-pressed='true'] {
-    background: ${Base.CinzaBadge} !important;
+    background: ${Base.Roxo} !important;
     border-color: ${Base.CinzaBadge} !important;
+    color: ${Base.Branco} !important;
   }
 `;
 

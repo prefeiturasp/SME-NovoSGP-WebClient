@@ -36,6 +36,7 @@ import collapseAtribuicaoResponsavel from './collapseAtribuicaoResponsavel/reduc
 import acompanhamentoAprendizagem from './acompanhamentoAprendizagem/reducers';
 import listaFrequenciaPorBimestre from './listaFrequenciaPorBimestre/reducers';
 import acompanhamentoFechamento from './acompanhamentoFechamento/reducers';
+import dashboardFrequencia from './dashboardFrequencia/reducers';
 
 const reducers = combineReducers({
   navegacao,
@@ -74,6 +75,7 @@ const reducers = combineReducers({
   acompanhamentoAprendizagem,
   listaFrequenciaPorBimestre,
   acompanhamentoFechamento,
+  dashboardFrequencia,
 });
 
 const rootReducer = (state, action) => {

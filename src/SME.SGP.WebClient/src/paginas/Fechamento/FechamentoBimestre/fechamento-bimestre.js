@@ -58,7 +58,7 @@ const FechamentoBismestre = () => {
     listaDisciplinas && listaDisciplinas.length === 1
   );
   const [modoEdicao, setModoEdicao] = useState(false);
-  const [bimestreCorrente, setBimestreCorrente] = useState('1Bimestre');
+  const [bimestreCorrente, setBimestreCorrente] = useState();
   const [dadosBimestre1, setDadosBimestre1] = useState(undefined);
   const [dadosBimestre2, setDadosBimestre2] = useState(undefined);
   const [dadosBimestre3, setDadosBimestre3] = useState(undefined);
@@ -71,7 +71,7 @@ const FechamentoBismestre = () => {
   const [idDisciplinaTerritorioSaber, setIdDisciplinaTerritorioSaber] = useState(undefined);
 
   const resetarTela = () => {
-    setBimestreCorrente('1Bimestre');
+    setBimestreCorrente();
     setDadosBimestre1(undefined);
     setDadosBimestre2(undefined);
     setDadosBimestre3(undefined);
@@ -90,10 +90,10 @@ const FechamentoBismestre = () => {
     if (id) {
       const disciplina = listaDisciplinas.find(
         c => String(c.codigoComponenteCurricular) === id
-        );     
+        );
         setIdDisciplinaTerritorioSaber(disciplina.territorioSaber ? disciplina.id : id);
         setDisciplinaIdSelecionada(id);
-        setEhRegencia(disciplina && disciplina.regencia);      
+        setEhRegencia(disciplina && disciplina.regencia);
     } else {
       setDisciplinaIdSelecionada(id);
       resetarTela();
@@ -144,7 +144,7 @@ const FechamentoBismestre = () => {
             setDisciplinaIdSelecionada(
               String(lista.data[0].codigoComponenteCurricular)
             );
-            setEhRegencia(lista.data[0].regencia);            
+            setEhRegencia(lista.data[0].regencia);
             setDesabilitarDisciplina(true);
           }
         } else {
@@ -206,14 +206,10 @@ const FechamentoBismestre = () => {
   };
 
   useEffect(() => {
-    if (disciplinaIdSelecionada) obterDados();
-  }, [disciplinaIdSelecionada]);
-
-  useEffect(() => {
     if (disciplinaIdSelecionada) {
       const disciplina = listaDisciplinas.find(
         item => String(item.codigoComponenteCurricular) == disciplinaIdSelecionada
-      );      
+      );
       if (disciplina) {
         setRegistraFrequencia(disciplina.registraFrequencia);
       }
@@ -484,6 +480,9 @@ const FechamentoBismestre = () => {
                     />
                   </TabPane>
                 </ContainerTabsCard>
+                {!bimestreCorrente && (
+                  <div className="text-center">Selecione um bimestre</div>
+                )}
               </Fechamento>
             </div>
           </div>
