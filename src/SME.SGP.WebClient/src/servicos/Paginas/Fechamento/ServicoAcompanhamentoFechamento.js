@@ -4,9 +4,6 @@ const urlPadrao = `/v1/fechamentos/acompanhamentos/turmas`;
 
 class ServicoAcompanhamentoFechamento {
   obterTurmas = params => {
-    // bimestre: ["1"]
-
-    // turmaId: ["625915"]
     let url = `${urlPadrao}?anoLetivo=${params.anoLetivo}&dreId=${params.dreId}`;
     url = `${url}&ueId=${params.ueId}&modalidade=${params.modalidadeId}&semestre=${params.semestre}`;
     url = `${url}&bimestre=${params.bimestre}&numeroPagina=${params.numeroPagina}&numeroRegistros=10`;

@@ -59,10 +59,7 @@ const AcompanhamentoFechamento = () => {
   const exibiPaginacao = numeroRegistros > pageSize;
 
   const dispatch = useDispatch();
-
-  const aoClicarBotaoVoltar = () => {
-    history.push('/');
-  };
+  const aoClicarBotaoVoltar = () => history.push('/');
 
   const onChangeFiltros = async (params, paginaAlterada = numeroPagina) => {
     dispatch(setCarregandoAcompanhamentoFechamento(true));
@@ -82,6 +79,12 @@ const AcompanhamentoFechamento = () => {
   };
 
   useEffect(() => {
+    return () => {
+      dispatch(setTurmasAcompanhamentoFechamento(undefined));
+    };
+  }, [dispatch]);
+
+  useEffect(() => {
     const infantil = ehTurmaInfantil(
       modalidadesFiltroPrincipal,
       turmaSelecionada
@@ -93,7 +96,7 @@ const AcompanhamentoFechamento = () => {
     const retorno = await ServicoAcompanhamentoFechamento.obterFechamentos({
       turmaId,
       bimestre: parametrosFiltro.bimestre,
-    });
+    }).catch(e => erros(e));
 
     if (retorno?.data) {
       setDadosStatusFechamento(retorno.data);
@@ -104,7 +107,7 @@ const AcompanhamentoFechamento = () => {
     const retorno = await ServicoAcompanhamentoFechamento.obterConselhoClasse({
       turmaId,
       bimestre: parametrosFiltro.bimestre,
-    });
+    }).catch(e => erros(e));
 
     if (retorno?.data) {
       setDadosStatusConselhoClasse(retorno.data);
@@ -176,16 +179,17 @@ const AcompanhamentoFechamento = () => {
                             altura="24"
                           />
                           <div className="d-flex">
-                            {dadosStatusFechamento?.length > 0 ? 
-                            dadosStatusFechamento?.map(dadosFechamento => (
-                              <CardStatus dadosStatus={dadosFechamento} />
-                            )) : 
+                            {dadosStatusFechamento?.length > 0 ? (
+                              dadosStatusFechamento?.map(dadosFechamento => (
+                                <CardStatus dadosStatus={dadosFechamento} />
+                              ))
+                            ) : (
                               <Label
-                              text="Não foram entrados fechamentos"
-                              className="mb-2"
-                              altura="16"
-                            />
-                            }
+                                text="Não foram encontrados fechamentos"
+                                className="mb-2"
+                                altura="16"
+                              />
+                            )}
                           </div>
                           <Divider style={{ background: Base.CinzaDivisor }} />
                           <Label
@@ -194,16 +198,21 @@ const AcompanhamentoFechamento = () => {
                             altura="24"
                           />
                           <div className="d-flex">
-                            {dadosStatusConsselhoClasse?.length > 0 ? 
-                            dadosStatusConsselhoClasse?.map(dadosConselhoClasse => (
-                              <CardStatus dadosStatus={dadosConselhoClasse} />
-                            )) : 
+                            {dadosStatusConsselhoClasse?.length > 0 ? (
+                              dadosStatusConsselhoClasse?.map(
+                                dadosConselhoClasse => (
+                                  <CardStatus
+                                    dadosStatus={dadosConselhoClasse}
+                                  />
+                                )
+                              )
+                            ) : (
                               <Label
-                              text="Não foram entrados conselhos de classe"
-                              className="mb-2"
-                              altura="16"
-                            />
-                            }
+                                text="Não foram encontrados conselhos de classe"
+                                className="mb-2"
+                                altura="16"
+                              />
+                            )}
                           </div>
                         </>
                       </PainelCollapse.Painel>

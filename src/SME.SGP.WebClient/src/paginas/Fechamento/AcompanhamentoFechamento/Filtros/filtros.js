@@ -4,18 +4,13 @@ import PropTypes from 'prop-types';
 import { CheckboxComponent, Loader, SelectComponent } from '~/componentes';
 import { FiltroHelper } from '~/componentes-sgp';
 
-
-import {
-  setCarregandoAcompanhamentoFechamento,
-  setTurmasAcompanhamentoFechamento,
-} from '~/redux/modulos/acompanhamentoFechamento/actions';
-
+import { setTurmasAcompanhamentoFechamento } from '~/redux/modulos/acompanhamentoFechamento/actions';
 
 import { ModalidadeDTO } from '~/dtos';
 import { AbrangenciaServico, erros, ServicoFiltroRelatorio } from '~/servicos';
+import { OPCAO_TODOS } from '~/constantes/constantes';
 
 const Filtros = ({ onChangeFiltros, ehInfantil }) => {
-  
   const dispatch = useDispatch();
   const [anoAtual] = useState(window.moment().format('YYYY'));
   const [anoLetivo, setAnoLetivo] = useState('');
@@ -28,9 +23,6 @@ const Filtros = ({ onChangeFiltros, ehInfantil }) => {
   const [carregandoUes, setCarregandoUes] = useState(false);
   const [consideraHistorico, setConsideraHistorico] = useState(false);
   const [desabilitarCampos, setDesabilitarCampos] = useState(false);
-  const [desabilitarCampoHistorico, setDesabilitarCampoHistorico] = useState(
-    false
-  );
   const [dreCodigo, setDreCodigo] = useState('');
   const [dreId, setDreId] = useState('');
   const [listaAnosLetivo, setListaAnosLetivo] = useState([]);
@@ -46,8 +38,7 @@ const Filtros = ({ onChangeFiltros, ehInfantil }) => {
   const [ueId, setUeId] = useState('');
   const [ueCodigo, setUeCodigo] = useState('');
 
-  const OPCAO_TODOS = '-99';
-  const ANO_MINIMO = 2021;
+  const ANO_LETIVO_MINIMO = 2021;
 
   const carregandoAcompanhamentoFechamento = useSelector(
     store => store.acompanhamentoFechamento.carregandoAcompanhamentoFechamento
@@ -112,11 +103,11 @@ const Filtros = ({ onChangeFiltros, ehInfantil }) => {
 
     const anosLetivoComHistorico = await FiltroHelper.obterAnosLetivos({
       consideraHistorico: true,
-      anoMinimo: ANO_MINIMO,
+      anoMinimo: ANO_LETIVO_MINIMO,
     });
     const anosLetivoSemHistorico = await FiltroHelper.obterAnosLetivos({
       consideraHistorico: false,
-      anoMinimo: ANO_MINIMO,
+      anoMinimo: ANO_LETIVO_MINIMO,
     });
 
     anosLetivos = anosLetivos.concat(anosLetivoComHistorico);
@@ -133,10 +124,6 @@ const Filtros = ({ onChangeFiltros, ehInfantil }) => {
         valor: anoAtual,
       });
     }
-
-    setDesabilitarCampoHistorico(
-      anosLetivos.length === 1 && anosLetivos[0].valor === ANO_MINIMO
-    );
 
     if (anosLetivos && anosLetivos.length) {
       const temAnoAtualNaLista = anosLetivos.find(
@@ -181,7 +168,7 @@ const Filtros = ({ onChangeFiltros, ehInfantil }) => {
           .sort(FiltroHelper.ordenarLista('desc'));
         setListaDres(lista);
 
-        if (lista && lista.length && lista.length === 1) {
+        if (lista?.length === 1) {
           setDreCodigo(lista[0].valor);
           setDreId(lista[0].id);
         }
@@ -298,14 +285,16 @@ const Filtros = ({ onChangeFiltros, ehInfantil }) => {
       consideraHistorico,
       anoLetivoSelecionado,
       modalidadeSelecionada
-    ).finally(() => setCarregandoSemestres(false));
+    )
+      .catch(e => erros(e))
+      .finally(() => setCarregandoSemestres(false));
 
-    if (retorno && retorno.data) {
+    if (retorno?.data?.length) {
       const lista = retorno.data.map(periodo => {
         return { desc: periodo, valor: periodo };
       });
 
-      if (lista && lista.length && lista.length === 1) {
+      if (lista?.length === 1) {
         setSemestre(lista[0].valor);
       }
       setListaSemestres(lista);
@@ -347,19 +336,22 @@ const Filtros = ({ onChangeFiltros, ehInfantil }) => {
   const obterTurmas = useCallback(async () => {
     if (dreCodigo && ueCodigo && modalidadeId) {
       setCarregandoTurmas(true);
-      const { data } = await AbrangenciaServico.buscarTurmas(
+      const retorno = await AbrangenciaServico.buscarTurmas(
         ueCodigo,
         modalidadeId,
         '',
         anoLetivo,
         consideraHistorico
-      ).finally(() => setCarregandoTurmas(false));
-      if (data) {
+      )
+        .catch(e => erros(e))
+        .finally(() => setCarregandoTurmas(false));
+
+      if (retorno?.data?.length) {
         const lista = [];
-        if (data.length > 1) {
+        if (retorno.data.length > 1) {
           lista.push({ valor: OPCAO_TODOS, desc: 'Todas' });
         }
-        data.map(item =>
+        retorno.data.map(item =>
           lista.push({
             desc: item.nome,
             valor: item.id,
@@ -426,7 +418,11 @@ const Filtros = ({ onChangeFiltros, ehInfantil }) => {
             label="Exibir histórico?"
             onChangeCheckbox={onChangeConsideraHistorico}
             checked={consideraHistorico}
-            disabled={desabilitarCampos || desabilitarCampoHistorico}
+            disabled={
+              desabilitarCampos ||
+              (listaAnosLetivo.length === 1 &&
+                listaAnosLetivo[0].valor === ANO_LETIVO_MINIMO)
+            }
           />
         </div>
       </div>
