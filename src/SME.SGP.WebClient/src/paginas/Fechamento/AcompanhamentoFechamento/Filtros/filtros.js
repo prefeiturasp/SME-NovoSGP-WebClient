@@ -20,6 +20,9 @@ const Filtros = ({ onChangeFiltros, ehInfantil }) => {
   const [carregandoUes, setCarregandoUes] = useState(false);
   const [consideraHistorico, setConsideraHistorico] = useState(false);
   const [desabilitarCampos, setDesabilitarCampos] = useState(false);
+  const [desabilitarCampoHistorico, setDesabilitarCampoHistorico] = useState(
+    false
+  );
   const [dreCodigo, setDreCodigo] = useState('');
   const [dreId, setDreId] = useState('');
   const [listaAnosLetivo, setListaAnosLetivo] = useState([]);
@@ -36,6 +39,7 @@ const Filtros = ({ onChangeFiltros, ehInfantil }) => {
   const [ueCodigo, setUeCodigo] = useState('');
 
   const OPCAO_TODOS = '-99';
+  const ANO_MINIMO = 2021;
 
   const carregandoAcompanhamentoFechamento = useSelector(
     store => store.acompanhamentoFechamento.carregandoAcompanhamentoFechamento
@@ -100,9 +104,11 @@ const Filtros = ({ onChangeFiltros, ehInfantil }) => {
 
     const anosLetivoComHistorico = await FiltroHelper.obterAnosLetivos({
       consideraHistorico: true,
+      anoMinimo: ANO_MINIMO,
     });
     const anosLetivoSemHistorico = await FiltroHelper.obterAnosLetivos({
       consideraHistorico: false,
+      anoMinimo: ANO_MINIMO,
     });
 
     anosLetivos = anosLetivos.concat(anosLetivoComHistorico);
@@ -119,6 +125,10 @@ const Filtros = ({ onChangeFiltros, ehInfantil }) => {
         valor: anoAtual,
       });
     }
+
+    setDesabilitarCampoHistorico(
+      anosLetivos.length === 1 && anosLetivos[0].valor === ANO_MINIMO
+    );
 
     if (anosLetivos && anosLetivos.length) {
       const temAnoAtualNaLista = anosLetivos.find(
@@ -405,7 +415,7 @@ const Filtros = ({ onChangeFiltros, ehInfantil }) => {
             label="Exibir histórico?"
             onChangeCheckbox={onChangeConsideraHistorico}
             checked={consideraHistorico}
-            disabled={desabilitarCampos}
+            disabled={desabilitarCampos || desabilitarCampoHistorico}
           />
         </div>
       </div>
