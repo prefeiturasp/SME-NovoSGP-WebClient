@@ -15,7 +15,7 @@ export const TabelaColunasFixas = styled.div`
     position: relative;
     overflow: auto;
     white-space: nowrap;
-    height: 400px;
+    height: 600px;
 
     ::-webkit-scrollbar-track {
       background-color: #f4f4f4 !important;
@@ -40,19 +40,22 @@ export const TabelaColunasFixas = styled.div`
   }
 
   .col-numero-chamada {
-    width: 55px;
-    min-width: 55px;
-    max-width: 55px;
+    width: 50px;
+    min-width: 50px;
+    max-width: 50px;
     left: 0px;
     z-index: 2;
     border-left: solid 1px ${Base.CinzaDesabilitado};
+    font-size: 14px;
+    font-weight: 700;
+    vertical-align: middle;
   }
 
   .col-nome-aluno {
     width: 100%;
     min-width: 250px;
     max-width: 250px;
-    left: 55px;
+    left: 50px;
     text-overflow: ellipsis;
     overflow: hidden;
     white-space: nowrap;
@@ -63,18 +66,19 @@ export const TabelaColunasFixas = styled.div`
   }
 
   .col-frequencia {
-    width: 100px;
-    min-width: 100px;
-    max-width: 100px;
+    width: 90px;
+    min-width: 90px;
+    max-width: 90px;
     right: 0px;
     z-index: 2;
   }
 
   .col-nota-final {
-    width: 125px;
-    min-width: 125px;
-    max-width: 125px;
-    right: 100px;
+    white-space: initial;
+    width: 90px;
+    min-width: 90px;
+    max-width: 90px;
+    right: 90px;
     z-index: 2;
   }
 
@@ -116,10 +120,10 @@ export const TabelaColunasFixas = styled.div`
     }
   }
 
-  .width-150 {
-    width: 150px;
-    max-width: 150px;
-    min-width: 150px;
+  .width-110 {
+    width: 110px;
+    max-width: 110px;
+    min-width: 110px;
   }
 
   .cabecalho-nota-conceito-final {
@@ -186,8 +190,8 @@ export const TabelaColunasFixas = styled.div`
     text-overflow: ellipsis;
     overflow: hidden;
     white-space: nowrap;
-    max-width: 140px;
-    width: 140px;
+    /* max-width: 140px;
+    width: 140px; */
   }
 
   .border-registro-alterado {
@@ -271,7 +275,7 @@ export const IconePlusMarcadores = styled.i`
 
 export const InfoMarcador = styled.i`
   color: ${Base.Roxo} !important;
-  font-size: 15px;
+  font-size: 10px;
   margin-left: 2px;
   position: absolute;
   padding-top: 5px;

@@ -73,7 +73,7 @@ const Avaliacao = props => {
     return dados.avaliacoes && dados.avaliacoes.length > 0
       ? dados.avaliacoes.map(avaliacao => {
           return (
-            <th key={shortid.generate()} className="width-150">
+            <th key={shortid.generate()} className="width-110">
               <div className="texto-header-avaliacao">
                 <Tooltip title={avaliacao.nome}>{avaliacao.nome}</Tooltip>
               </div>
@@ -289,12 +289,18 @@ const Avaliacao = props => {
                       %Freq.
                     </th>
                   </tr>
-                  {dados.avaliacoes && dados.avaliacoes.length > 0 ? 
-                  <tr>
-                    <th className="sticky-col col-numero-chamada cinza-fundo" style={{ borderRight: 'none' }}/>
-                    <th className="sticky-col col-nome-aluno cinza-fundo" />
-                    {montarCabecalhoInterdisciplinar()}
-                  </tr> : ''}
+                  {dados.avaliacoes && dados.avaliacoes.length > 0 ? (
+                    <tr>
+                      <th
+                        className="sticky-col col-numero-chamada cinza-fundo"
+                        style={{ borderRight: 'none' }}
+                      />
+                      <th className="sticky-col col-nome-aluno cinza-fundo" />
+                      {montarCabecalhoInterdisciplinar()}
+                    </tr>
+                  ) : (
+                    ''
+                  )}
                 </thead>
               </table>
             </div>
@@ -308,32 +314,26 @@ const Avaliacao = props => {
                         <tr>
                           <td className="sticky-col col-numero-chamada">
                             {aluno.numeroChamada}
+                            {aluno.marcador && (
+                              <Tooltip
+                                title={aluno.marcador.descricao}
+                                placement="top"
+                              >
+                                <InfoMarcador className="fas fa-circle" />
+                              </Tooltip>
+                            )}
                           </td>
                           <td className="sticky-col col-nome-aluno">
-                            {aluno.marcador ? (
-                              <>
-                                <Tooltip
-                                  title={aluno.marcador.descricao}
-                                  placement="top"
-                                >
-                                  <InfoMarcador className="fas fa-circle" />
-                                </Tooltip>
-                                <div style={{ marginLeft: '30px' }}>
-                                  {aluno.nome}
-                                </div>
-                              </>
-                            ) : (
-                              <div style={{ marginLeft: '30px' }}>
-                                {aluno.nome}
-                              </div>
-                            )}
+                            <Tooltip title={aluno.nome} placement="top">
+                              {aluno.nome}
+                            </Tooltip>
                           </td>
                           {aluno.notasAvaliacoes.length
                             ? aluno.notasAvaliacoes.map(nota => {
                                 return (
                                   <td
                                     key={shortid.generate()}
-                                    className="width-150"
+                                    className="width-110"
                                   >
                                     {montarCampoNotaConceito(nota, aluno)}
                                     {nota.ausente ? (
