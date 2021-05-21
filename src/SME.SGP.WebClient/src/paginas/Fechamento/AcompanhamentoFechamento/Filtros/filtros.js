@@ -286,6 +286,7 @@ const Filtros = ({ onChangeFiltros, ehInfantil }) => {
   ) => {
     setCarregandoSemestres(true);
     const retorno = await AbrangenciaServico.obterSemestres(
+      consideraHistorico,
       anoLetivoSelecionado,
       modalidadeSelecionada
     ).finally(() => setCarregandoSemestres(false));
