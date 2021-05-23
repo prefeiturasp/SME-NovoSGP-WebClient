@@ -1,14 +1,14 @@
-import { Switch, Tooltip } from 'antd';
+import { Tooltip } from 'antd';
 import PropTypes from 'prop-types';
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import shortid from 'shortid';
-
-import { Lista, MarcadorSituacao, BtbAnotacao } from './listaFrequencia.css';
-import { verificaSomenteConsulta } from '~/servicos/servico-navegacao';
 import tipoIndicativoFrequencia from '~/dtos/tipoIndicativoFrequencia';
 import ModalAnotacoesFrequencia from '~/paginas/DiarioClasse/FrequenciaPlanoAula/ModalAnotacoes/modalAnotacoes';
+import { verificaSomenteConsulta } from '~/servicos/servico-navegacao';
 import SinalizacaoAEE from '../SinalizacaoAEE/sinalizacaoAEE';
+import CampoTipoFrequencia from './campoTipoFrequencia';
+import { BtbAnotacao, Lista, MarcadorSituacao } from './listaFrequencia.css';
 
 const ListaFrequencia = props => {
   const {
@@ -40,29 +40,6 @@ const ListaFrequencia = props => {
     if (!temPeriodoAberto) setDesabilitarCampos(!temPeriodoAberto);
   }, [frequenciaId, permissoesTela, temPeriodoAberto]);
 
-  const renderSwitch = (i, aula, aluno) => {
-    return (
-      <div
-        id={`switch-${i}`}
-        className={aula.compareceu ? 'presenca' : 'falta'}
-      >
-        <Switch
-          disabled={desabilitarCampos || aluno.desabilitado}
-          checkedChildren="C"
-          unCheckedChildren="F"
-          onChange={faltou => {
-            if (!desabilitarCampos || !aluno.desabilitado) {
-              aula.compareceu = !faltou;
-              setDataSource([...dataSource]);
-              onChangeFrequencia(true);
-            }
-          }}
-          checked={!aula.compareceu}
-        />
-      </div>
-    );
-  };
-
   const validaSeFaltouTodasAulas = aluno => {
     const totalAulas = aluno.aulas.length;
     const totalAulasFaltou = aluno.aulas.filter(aula => !aula.compareceu);
@@ -81,7 +58,7 @@ const ListaFrequencia = props => {
         aula.compareceu = marcarPresenca;
       });
       setDataSource([...dataSource]);
-      onChangeFrequencia(true);
+      onChangeFrequencia();
     }
   };
 
@@ -95,7 +72,7 @@ const ListaFrequencia = props => {
         }
       });
       setDataSource([...dataSource]);
-      onChangeFrequencia(true);
+      onChangeFrequencia();
     }
   };
 
@@ -139,9 +116,161 @@ const ListaFrequencia = props => {
     );
   };
 
+  const montarHeaderMarcarTodas = () => {
+    return (
+      dataSource[0].aulas.length > 0 && (
+        <>
+          <th
+            className="width-50 cursor-pointer"
+            onClick={() => marcarPresencaFaltaTodosAlunos(true)}
+          >
+            <div className="marcar-todas-frequencia">Marcar todas</div>
+            <div className="margin-marcar-todos">C</div>
+          </th>
+          <th
+            className="width-50 cursor-pointer"
+            onClick={() => marcarPresencaFaltaTodosAlunos(false)}
+          >
+            <div className="margin-marcar-todos">F</div>
+          </th>
+        </>
+      )
+    );
+  };
+
+  const montarHeaderAulas = () => {
+    return dataSource[0]?.aulas?.map((aula, i) => {
+      return (
+        <th
+          key={shortid.generate()}
+          className={
+            dataSource[0]?.aulas?.length - 1 === i
+              ? 'width-70'
+              : 'border-right-none width-70'
+          }
+        >
+          {aula.numeroAula}
+        </th>
+      );
+    });
+  };
+
+  const montarColunasEstudante = aluno => {
+    return (
+      <>
+        <td className="width-60 text-center font-weight-bold">
+          {aluno.numeroAlunoChamada}
+          {aluno.marcador ? (
+            <Tooltip title={aluno.marcador.descricao} placement="top">
+              <MarcadorSituacao className="fas fa-circle" />
+            </Tooltip>
+          ) : (
+            ''
+          )}
+        </td>
+        <td>
+          <div className="d-flex" style={{ justifyContent: 'space-between' }}>
+            <div className=" d-flex justify-content-start">
+              {aluno.nomeAluno}
+            </div>
+            <div className=" d-flex justify-content-end">
+              <div className="mr-3">
+                <SinalizacaoAEE exibirSinalizacao={aluno.ehAtendidoAEE} />
+              </div>
+              {btnAnotacao(aluno)}
+            </div>
+          </div>
+        </td>
+      </>
+    );
+  };
+
+  const montarColunaMarcarTodas = aluno => {
+    return (
+      dataSource[0]?.aulas?.length > 0 && (
+        <>
+          <td className="width-50">
+            <button
+              type="button"
+              onClick={() => marcaPresencaFaltaTodasAulas(aluno, true)}
+              className={`ant-btn ant-btn-circle ant-btn-sm btn-falta-presenca ${
+                validaSeCompareceuTodasAulas(aluno) ? 'btn-compareceu' : ''
+              } `}
+              disabled={desabilitarCampos || aluno.desabilitado}
+            >
+              <i className="fas fa-check fa-sm" />
+            </button>
+          </td>
+          <td className="width-50">
+            <button
+              type="button"
+              onClick={() => marcaPresencaFaltaTodasAulas(aluno, false)}
+              className={`ant-btn ant-btn-circle ant-btn-sm btn-falta-presenca ${
+                validaSeFaltouTodasAulas(aluno) ? 'btn-falta' : ''
+              } `}
+              disabled={desabilitarCampos || aluno.desabilitado}
+            >
+              <i className="fas fa-times fa-sm" />
+            </button>
+          </td>
+        </>
+      )
+    );
+  };
+
+  const montarColunaAulas = (aluno, indexAluno) => {
+    return aluno?.aulas?.map((aula, indexAula) => {
+      // TODO Rever solução para ocultar a borda!
+      return (
+        <td
+          key={shortid.generate()}
+          className={
+            dataSource[0].aulas.length - 1 === indexAula
+              ? 'width-70'
+              : 'border-right-none width-70'
+          }
+        >
+          <CampoTipoFrequencia
+            indexAula={indexAula}
+            indexAluno={indexAluno}
+            onChangeTipoFrequencia={valorNovo => {
+              aula.compareceu = valorNovo;
+              onChangeFrequencia();
+            }}
+            numeroAula={aula.numeroAula}
+          />
+        </td>
+      );
+    });
+  };
+
+  const montarColunaFrequencia = aluno => {
+    return (
+      <td className="width-70">
+        <span
+          className={`width-70 ${
+            aluno.indicativoFrequencia &&
+            tipoIndicativoFrequencia.Alerta === aluno.indicativoFrequencia.tipo
+              ? 'indicativo-alerta'
+              : ''
+          } ${
+            aluno.indicativoFrequencia &&
+            tipoIndicativoFrequencia.Critico === aluno.indicativoFrequencia.tipo
+              ? 'indicativo-critico'
+              : ''
+          } `}
+        >
+          {aluno.indicativoFrequencia
+            ? `${aluno.indicativoFrequencia.percentual}%`
+            : ''}
+        </span>
+      </td>
+    );
+  };
+
   return (
     <>
-      {exibirModalAnotacao ? (
+      {exibirModalAnotacao && (
         <ModalAnotacoesFrequencia
           exibirModal={exibirModalAnotacao}
           onCloseModal={onCloseModalAnotacao}
@@ -152,10 +281,9 @@ const ListaFrequencia = props => {
           componenteCurricularId={componenteCurricularId}
           desabilitarCampos={desabilitarCampos}
         />
-      ) : (
-        ''
       )}
-      {dataSource && dataSource.length > 0 ? (
+
+      {dataSource?.length > 0 ? (
         <Lista className="mt-4 table-responsive">
           <div className="scroll-tabela-frequencia-thead">
             <table className="table mb-0 ">
@@ -165,39 +293,8 @@ const ListaFrequencia = props => {
                   <th className="text-left">
                     Lista de {ehInfantil ? 'crianças' : 'estudantes'}
                   </th>
-                  {dataSource[0].aulas.length > 0 ? (
-                    <>
-                      <th
-                        className="width-50 cursor-pointer"
-                        onClick={() => marcarPresencaFaltaTodosAlunos(true)}
-                      >
-                        <div className="marcar-todas-frequencia">
-                          Marcar todas
-                        </div>
-                        <div className="margin-marcar-todos">C</div>
-                      </th>
-                      <th
-                        className="width-50 cursor-pointer"
-                        onClick={() => marcarPresencaFaltaTodosAlunos(false)}
-                      >
-                        <div className="margin-marcar-todos">F</div>
-                      </th>
-                    </>
-                  ) : null}
-                  {dataSource[0].aulas.map((aula, i) => {
-                    return (
-                      <th
-                        key={shortid.generate()}
-                        className={
-                          dataSource[0].aulas.length - 1 === i
-                            ? 'width-70'
-                            : 'border-right-none width-70'
-                        }
-                      >
-                        {aula.numeroAula}
-                      </th>
-                    );
-                  })}
+                  {montarHeaderMarcarTodas()}
+                  {montarHeaderAulas()}
                   <th className="width-70">
                     <i className="fas fa-exclamation-triangle" />
                   </th>
@@ -208,7 +305,7 @@ const ListaFrequencia = props => {
           <div className="scroll-tabela-frequencia-tbody">
             <table className="table mb-0">
               <tbody className="tabela-frequencia-tbody">
-                {dataSource.map((aluno, i) => {
+                {dataSource?.map((aluno, indexAluno) => {
                   return (
                     <React.Fragment key={shortid.generate()}>
                       <tr
@@ -218,115 +315,10 @@ const ListaFrequencia = props => {
                             : ''
                         }
                       >
-                        <td className="width-60 text-center font-weight-bold">
-                          {aluno.numeroAlunoChamada}
-                          {aluno.marcador ? (
-                            <Tooltip
-                              title={aluno.marcador.descricao}
-                              placement="top"
-                            >
-                              <MarcadorSituacao className="fas fa-circle" />
-                            </Tooltip>
-                          ) : (
-                            ''
-                          )}
-                        </td>
-                        <td>
-                          <div
-                            className="d-flex"
-                            style={{ justifyContent: 'space-between' }}
-                          >
-                            <div className=" d-flex justify-content-start">
-                              {aluno.nomeAluno}
-                            </div>
-                            <div className=" d-flex justify-content-end">
-                              <div className="mr-3">
-                                <SinalizacaoAEE
-                                  exibirSinalizacao={aluno.ehAtendidoAEE}
-                                />
-                              </div>
-                              {btnAnotacao(aluno)}
-                            </div>
-                          </div>
-                        </td>
-                        {dataSource[0].aulas.length > 0 ? (
-                          <>
-                            <td className="width-50">
-                              <button
-                                type="button"
-                                onClick={() =>
-                                  marcaPresencaFaltaTodasAulas(aluno, true)
-                                }
-                                className={`ant-btn ant-btn-circle ant-btn-sm btn-falta-presenca ${
-                                  validaSeCompareceuTodasAulas(aluno)
-                                    ? 'btn-compareceu'
-                                    : ''
-                                } `}
-                                disabled={
-                                  desabilitarCampos || aluno.desabilitado
-                                }
-                              >
-                                <i className="fas fa-check fa-sm" />
-                              </button>
-                            </td>
-                            <td className="width-50">
-                              <button
-                                type="button"
-                                onClick={() =>
-                                  marcaPresencaFaltaTodasAulas(aluno, false)
-                                }
-                                className={`ant-btn ant-btn-circle ant-btn-sm btn-falta-presenca ${
-                                  validaSeFaltouTodasAulas(aluno)
-                                    ? 'btn-falta'
-                                    : ''
-                                } `}
-                                disabled={
-                                  desabilitarCampos || aluno.desabilitado
-                                }
-                              >
-                                <i className="fas fa-times fa-sm" />
-                              </button>
-                            </td>
-                          </>
-                        ) : (
-                          <></>
-                        )}
-
-                        {aluno.aulas.map((aula, a) => {
-                          return (
-                            <td
-                              key={shortid.generate()}
-                              className={
-                                dataSource[0].aulas.length - 1 === a
-                                  ? 'width-70'
-                                  : 'border-right-none width-70'
-                              }
-                            >
-                              {renderSwitch(a, aula, aluno)}
-                            </td>
-                          );
-                        })}
-                        <td className="width-70">
-                          <span
-                            className={`width-70 ${
-                              aluno.indicativoFrequencia &&
-                              tipoIndicativoFrequencia.Alerta ===
-                                aluno.indicativoFrequencia.tipo
-                                ? 'indicativo-alerta'
-                                : ''
-                            } ${
-                              aluno.indicativoFrequencia &&
-                              tipoIndicativoFrequencia.Critico ===
-                                aluno.indicativoFrequencia.tipo
-                                ? 'indicativo-critico'
-                                : ''
-                            } `}
-                          >
-                            {aluno.indicativoFrequencia
-                              ? `${aluno.indicativoFrequencia.percentual}%`
-                              : ''}
-                          </span>
-                        </td>
+                        {montarColunasEstudante(aluno)}
+                        {montarColunaMarcarTodas(aluno)}
+                        {montarColunaAulas(aluno, indexAluno)}
+                        {montarColunaFrequencia(aluno)}
                       </tr>
                     </React.Fragment>
                   );
