@@ -8,7 +8,7 @@ import { setTurmasAcompanhamentoFechamento } from '~/redux/modulos/acompanhament
 
 import { ModalidadeDTO } from '~/dtos';
 import { AbrangenciaServico, erros, ServicoFiltroRelatorio } from '~/servicos';
-import { OPCAO_TODOS } from '~/constantes/constantes';
+import { OPCAO_TODOS, BIMESTRE_FINAL } from '~/constantes/constantes';
 
 const Filtros = ({ onChangeFiltros, ehInfantil }) => {
   const dispatch = useDispatch();
@@ -392,8 +392,8 @@ const Filtros = ({ onChangeFiltros, ehInfantil }) => {
       bi.push({ desc: '4º', valor: 4 });
     }
 
-    bi.push({ desc: 'Final', valor: 0 });
-    bi.push({ desc: 'Todos', valor: -99 });
+    bi.push({ desc: 'Final', valor: BIMESTRE_FINAL });
+    bi.push({ desc: 'Todos', valor: OPCAO_TODOS });
     setListaBimestres(bi);
   }, [modalidadeId]);
 

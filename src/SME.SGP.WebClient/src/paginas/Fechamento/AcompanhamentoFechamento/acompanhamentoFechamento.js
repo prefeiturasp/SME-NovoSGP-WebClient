@@ -28,6 +28,7 @@ import {
 
 import { CardStatus } from './CardStatus';
 import { Filtros } from './Filtros';
+import DetalhesConselhoClasse from './DetalhesConselhoClasse/detalhesConselhoClasse';
 
 const AcompanhamentoFechamento = () => {
   const [ehInfantil, setEhInfantil] = useState(false);
@@ -211,6 +212,14 @@ const AcompanhamentoFechamento = () => {
                                 text="Não foram encontrados conselhos de classe"
                                 className="mb-2"
                                 altura="16"
+                              />
+                            )}
+                          </div>
+                          <div className="row">
+                            {dadosStatusConsselhoClasse?.length && (
+                              <DetalhesConselhoClasse
+                                turmaId={dadosTurmas?.turmaId}
+                                bimestre={parametrosFiltro?.bimestre}
                               />
                             )}
                           </div>
