@@ -139,9 +139,9 @@ const ModalEncerramentoEncaminhamentoAEE = props => {
                   className="mt-2 mr-2"
                 />
                 <Button
-                  key="btn-encerrar"
-                  id="btn-encerrar"
-                  label="Encerrar"
+                  key="btn-indeferir"
+                  id="btn-indeferir"
+                  label="Indeferir"
                   color={Colors.Vermelho}
                   border
                   onClick={() => validaAntesDoSubmit(form)}
