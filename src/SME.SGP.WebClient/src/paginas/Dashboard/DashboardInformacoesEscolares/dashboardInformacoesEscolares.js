@@ -12,7 +12,7 @@ import { ServicoFiltroRelatorio } from '~/servicos';
 import AbrangenciaServico from '~/servicos/Abrangencia';
 import { erros } from '~/servicos/alertas';
 import history from '~/servicos/history';
-import ServicoDashboardFrequencia from '~/servicos/Paginas/Dashboard/ServicoDashboardFrequencia';
+import ServicoDashboardInformacoesEscolares from '~/servicos/Paginas/Dashboard/ServicoDashboardInformacoesEscolares';
 import TabsDashboardInformacoesEscolares from './TabsDashboardInformacoesEscolares/tabsDashboardInformacoesEscolares';
 
 const DashboardInformacoesEscolares = () => {
@@ -224,7 +224,7 @@ const DashboardInformacoesEscolares = () => {
   const onChangeModalidade = valor => setModalidade(valor);
 
   const obterAnosEscolares = useCallback(async () => {
-    const respota = await ServicoDashboardFrequencia.obterAnosEscolaresPorModalidade(
+    const respota = await ServicoDashboardInformacoesEscolares.obterAnosEscolaresPorModalidade(
       anoLetivo,
       dre?.id,
       ue?.id,
@@ -245,14 +245,7 @@ const DashboardInformacoesEscolares = () => {
   }, [anoLetivo, dre, ue, modalidade]);
 
   useEffect(() => {
-    if (
-      anoLetivo &&
-      dre &&
-      ue &&
-      modalidade &&
-      dre?.codigo === OPCAO_TODOS &&
-      ue?.codigo === OPCAO_TODOS
-    ) {
+    if (anoLetivo && dre && ue && modalidade) {
       obterAnosEscolares();
     } else {
       setListaAnosEscolares([]);

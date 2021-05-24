@@ -18,7 +18,7 @@ const GraficoQuantidadeTurmasPorAno = props => {
 
   const [dadosGrafico, setDadosGrafico] = useState([]);
   const [exibirLoader, setExibirLoader] = useState(false);
-  const [anoEscolar, setAnoEscolar] = useState();
+  const [anosEscolares, setAnosEscolares] = useState([]);
 
   const obterDadosGrafico = useCallback(async () => {
     setExibirLoader(true);
@@ -27,7 +27,9 @@ const GraficoQuantidadeTurmasPorAno = props => {
       dreId === OPCAO_TODOS ? '' : dreId,
       ueId === OPCAO_TODOS ? '' : ueId,
       modalidade,
-      anoEscolar === OPCAO_TODOS ? '' : anoEscolar
+      anosEscolares?.length === 1 && anosEscolares[0] === OPCAO_TODOS
+        ? ''
+        : anosEscolares
     )
       .catch(e => erros(e))
       .finally(() => setExibirLoader(false));
@@ -37,7 +39,7 @@ const GraficoQuantidadeTurmasPorAno = props => {
     } else {
       setDadosGrafico([]);
     }
-  }, [anoLetivo, dreId, ueId, modalidade, anoEscolar]);
+  }, [anoLetivo, dreId, ueId, modalidade, anosEscolares]);
 
   useEffect(() => {
     if (
@@ -45,7 +47,7 @@ const GraficoQuantidadeTurmasPorAno = props => {
       dreId &&
       ueId &&
       modalidade &&
-      (exibirAnosEscolares ? !!anoEscolar : true)
+      (exibirAnosEscolares ? anosEscolares?.length : true)
     ) {
       obterDadosGrafico();
     } else {
@@ -56,7 +58,7 @@ const GraficoQuantidadeTurmasPorAno = props => {
     dreId,
     ueId,
     modalidade,
-    anoEscolar,
+    anosEscolares,
     exibirAnosEscolares,
     obterDadosGrafico,
   ]);
@@ -64,15 +66,29 @@ const GraficoQuantidadeTurmasPorAno = props => {
   useEffect(() => {
     if (exibirAnosEscolares) {
       if (listaAnosEscolares?.length === 1) {
-        setAnoEscolar(String(listaAnosEscolares[0].ano));
+        setAnosEscolares([String(listaAnosEscolares[0].ano)]);
       }
       if (listaAnosEscolares?.length > 1) {
-        setAnoEscolar(OPCAO_TODOS);
+        setAnosEscolares([OPCAO_TODOS]);
       }
     }
   }, [listaAnosEscolares, exibirAnosEscolares]);
 
-  const onChangeAnoEscolar = valor => setAnoEscolar(valor);
+  const onChangeAnoEscolar = (novosValores, valoresAtuais) => {
+    const opcaoTodosJaSelecionado = valoresAtuais
+      ? valoresAtuais?.includes(OPCAO_TODOS)
+      : false;
+    if (opcaoTodosJaSelecionado) {
+      const listaSemOpcaoTodos = novosValores?.filter(
+        ano => ano !== OPCAO_TODOS
+      );
+      setAnosEscolares(listaSemOpcaoTodos);
+    } else if (novosValores?.includes(OPCAO_TODOS)) {
+      setAnosEscolares([OPCAO_TODOS]);
+    } else {
+      setAnosEscolares(novosValores);
+    }
+  };
 
   return (
     <>
@@ -84,10 +100,12 @@ const GraficoQuantidadeTurmasPorAno = props => {
               valueOption="ano"
               valueText="modalidadeAno"
               disabled={listaAnosEscolares?.length === 1}
-              valueSelect={anoEscolar}
-              onChange={onChangeAnoEscolar}
+              valueSelect={anosEscolares}
+              onChange={valores => {
+                onChangeAnoEscolar(valores, anosEscolares);
+              }}
               placeholder="Selecione o ano"
-              allowClear={false}
+              multiple
             />
           </div>
         )}
