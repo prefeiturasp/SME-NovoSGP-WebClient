@@ -63,17 +63,17 @@ class ServicoDashboardInformacoesEscolares {
   };
 
   obterUltimaConsolidacao = anoLetivo => {
-    return api.get(`${urlPadrao}/consolidacao?anoLetivo=${anoLetivo}`);
+    return api.get(`${urlPadrao}/ultima-consolidacao?anoLetivo=${anoLetivo}`);
   };
 
   obterAnosEscolaresPorModalidade = (anoLetivo, dreId, ueId, modalidade) => {
-    return this.montarConsultaPadraoGraficos({
-      rota: 'modalidades/anos',
+    return this.montarConsultaPadraoGraficos(
+      'modalidades/anos',
       anoLetivo,
       dreId,
       ueId,
-      modalidade,
-    });
+      modalidade
+    );
   };
 }
 
