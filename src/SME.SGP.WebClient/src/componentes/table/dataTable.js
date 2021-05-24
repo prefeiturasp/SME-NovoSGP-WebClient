@@ -1,3 +1,5 @@
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faAngleDown, faAngleUp } from '@fortawesome/free-solid-svg-icons';
 import { Table } from 'antd';
 import PropTypes from 'prop-types';
 import React from 'react';
@@ -19,6 +21,10 @@ const DataTable = props => {
     id,
     scroll,
     semHover,
+    expandIconColumnIndex,
+    expandedRowRender,
+    onClickExpandir,
+    expandedRowKeys,
   } = props;
 
   const rowSelection = {
@@ -48,7 +54,11 @@ const DataTable = props => {
   };
 
   return (
-    <Container className="table-responsive" semHover={semHover}>
+    <Container
+      className="table-responsive"
+      semHover={semHover}
+      temEventoOnClickRow={!!onClickRow}
+    >
       <Table
         id={id}
         scroll={scroll}
@@ -96,6 +106,23 @@ const DataTable = props => {
           };
         }}
         loading={loading}
+        expandedRowRender={expandedRowRender}
+        expandIconColumnIndex={expandIconColumnIndex}
+        expandIconAsCell={false}
+        expandIcon={({ expanded, onExpand, record }) => (
+          <FontAwesomeIcon
+            style={{
+              fontSize: '18px',
+              marginLeft: '5px',
+              marginRight: '5px',
+              cursor: 'pointer',
+            }}
+            icon={expanded ? faAngleUp : faAngleDown}
+            onClick={e => onExpand(record, e)}
+          />
+        )}
+        onExpand={onClickExpandir}
+        expandedRowKeys={expandedRowKeys}
       />
     </Container>
   );
@@ -116,6 +143,10 @@ DataTable.propTypes = {
   scroll: PropTypes.object,
   cpfRowMask: PropTypes.bool,
   semHover: PropTypes.bool,
+  expandIconColumnIndex: PropTypes.oneOfType(PropTypes.number),
+  expandedRowRender: PropTypes.oneOfType(PropTypes.any),
+  onClickExpandir: PropTypes.func,
+  expandedRowKeys: PropTypes.oneOfType(PropTypes.array),
 };
 
 DataTable.defaultProps = {
@@ -124,12 +155,16 @@ DataTable.defaultProps = {
   selectMultipleRows: false,
   pageSize: 10,
   pagination: true,
-  onRowClick: () => {},
+  onClickRow: null,
   locale: { emptyText: 'Sem dados' },
   idLinha: 'id',
   id: 'componente-tabela-sgp',
   scroll: {},
   semHover: false,
+  expandIconColumnIndex: -1,
+  expandedRowRender: null,
+  onClickExpandir: null,
+  expandedRowKeys: [],
 };
 
 export default DataTable;
