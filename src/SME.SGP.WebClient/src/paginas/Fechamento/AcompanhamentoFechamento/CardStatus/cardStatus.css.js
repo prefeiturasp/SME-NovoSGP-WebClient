@@ -36,10 +36,11 @@ export const Container = styled.div`
 `;
 
 export const MarcadorTriangulo = styled.div`
-  margin-top: -34px;
+  position: relative;
+  margin-top: -11.8px;
   height: 0;
   border-bottom: 15px solid transparent;
   border-right: 15px solid ${props => props.cor};
   float: right;
-  margin-right: -8px;
+  margin-right: -8.3px;
 `;

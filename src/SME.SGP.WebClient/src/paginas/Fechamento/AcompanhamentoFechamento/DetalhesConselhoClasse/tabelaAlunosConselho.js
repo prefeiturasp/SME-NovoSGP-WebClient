@@ -42,33 +42,29 @@ const TabelaAlunosConselho = props => {
     },
     {
       title: 'Situação do conselho de classe',
-      dataIndex: 'situacaoFechamento',
+      dataIndex: 'situacaoFechamentoCodigo',
       align: 'center',
-      render: (situacaoFechamento, dados) => {
+      render: (situacaoFechamentoCodigo, dados) => {
         const status = Object.keys(statusAcompanhamentoFechamento)?.find(
           item =>
-            statusAcompanhamentoFechamento?.[item]?.id === situacaoFechamento
+            statusAcompanhamentoFechamento?.[item]?.id ===
+            situacaoFechamentoCodigo
         );
 
         return (
-          <>
-            <div className="text-center">
-              {dados.descricaoSituacaoFechamento}
-            </div>
-            <MarcadorTriangulo
-              cor={statusAcompanhamentoFechamento?.[status]?.cor}
-            />
-          </>
+          <MarcadorTriangulo
+            cor={statusAcompanhamentoFechamento?.[status]?.cor}
+          />
         );
       },
     }
   );
 
-  const montarValorNota = valor => {
+  const montarValorNota = nota => {
     return (
       <>
-        <div className="text-center">{valor || '-'}</div>
-        {valor !== 0 && !valor && (
+        {nota || '-'}
+        {!nota && (
           <Tooltip title="Sem nota atribuída">
             <MarcadorTriangulo cor={Base.LaranjaStatus} />
           </Tooltip>
@@ -149,17 +145,22 @@ const TabelaAlunosConselho = props => {
         expandIconColumnIndex={3}
         expandedRowKeys={expandedRowKeys}
         onClickExpandir={obterDetalhamentoComponentesCurricularesAluno}
+        nomeColunaExpandir="situacaoFechamento"
         expandedRowRender={aluno => {
-          return (
-            <Loader loading={carregandoComponentes}>
-              <DataTable
-                id={`tabela-componente-aluno-${aluno?.alunoCodigo}`}
-                pagination={false}
-                columns={colunasTabelaComponentes}
-                dataSource={dadosComponentes}
-              />
-            </Loader>
-          );
+          if (aluno.podeExpandir) {
+            return (
+              <Loader loading={carregandoComponentes}>
+                <DataTable
+                  id={`tabela-componente-aluno-${aluno?.alunoCodigo}`}
+                  pagination={false}
+                  columns={colunasTabelaComponentes}
+                  dataSource={dadosComponentes}
+                />
+              </Loader>
+            );
+          }
+
+          return null;
         }}
       />
     </div>

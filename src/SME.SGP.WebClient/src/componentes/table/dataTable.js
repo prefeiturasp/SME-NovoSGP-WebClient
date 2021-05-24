@@ -25,6 +25,7 @@ const DataTable = props => {
     expandedRowRender,
     onClickExpandir,
     expandedRowKeys,
+    nomeColunaExpandir,
   } = props;
 
   const rowSelection = {
@@ -109,18 +110,29 @@ const DataTable = props => {
         expandedRowRender={expandedRowRender}
         expandIconColumnIndex={expandIconColumnIndex}
         expandIconAsCell={false}
-        expandIcon={({ expanded, onExpand, record }) => (
-          <FontAwesomeIcon
-            style={{
-              fontSize: '18px',
-              marginLeft: '5px',
-              marginRight: '5px',
-              cursor: 'pointer',
-            }}
-            icon={expanded ? faAngleUp : faAngleDown}
-            onClick={e => onExpand(record, e)}
-          />
-        )}
+        expandIcon={({ expanded, onExpand, record }) => {
+          if (record.podeExpandir) {
+            return (
+              <>
+                {nomeColunaExpandir ? record[nomeColunaExpandir] : ''}
+                <FontAwesomeIcon
+                  style={{
+                    fontSize: '18px',
+                    marginLeft: '5px',
+                    marginRight: '5px',
+                    cursor: 'pointer',
+                  }}
+                  icon={expanded ? faAngleUp : faAngleDown}
+                  onClick={e => onExpand(record, e)}
+                />
+              </>
+            );
+          }
+          if (!record.podeExpandir && nomeColunaExpandir) {
+            return record[nomeColunaExpandir];
+          }
+          return null;
+        }}
         onExpand={onClickExpandir}
         expandedRowKeys={expandedRowKeys}
       />
@@ -147,6 +159,7 @@ DataTable.propTypes = {
   expandedRowRender: PropTypes.oneOfType(PropTypes.any),
   onClickExpandir: PropTypes.func,
   expandedRowKeys: PropTypes.oneOfType(PropTypes.array),
+  nomeColunaExpandir: PropTypes.string,
 };
 
 DataTable.defaultProps = {
@@ -165,6 +178,7 @@ DataTable.defaultProps = {
   expandedRowRender: null,
   onClickExpandir: null,
   expandedRowKeys: [],
+  nomeColunaExpandir: '',
 };
 
 export default DataTable;
