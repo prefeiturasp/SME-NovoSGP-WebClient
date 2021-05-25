@@ -13,8 +13,8 @@ import { OPCAO_TODOS, BIMESTRE_FINAL } from '~/constantes/constantes';
 const Filtros = ({ onChangeFiltros, ehInfantil }) => {
   const dispatch = useDispatch();
   const [anoAtual] = useState(window.moment().format('YYYY'));
-  const [anoLetivo, setAnoLetivo] = useState('');
-  const [bimestre, setBimestre] = useState('');
+  const [anoLetivo, setAnoLetivo] = useState();
+  const [bimestre, setBimestre] = useState();
   const [carregandoAnosLetivos, setCarregandoAnosLetivos] = useState(false);
   const [carregandoDres, setCarregandoDres] = useState(false);
   const [carregandoModalidade, setCarregandoModalidade] = useState(false);
@@ -23,7 +23,7 @@ const Filtros = ({ onChangeFiltros, ehInfantil }) => {
   const [carregandoUes, setCarregandoUes] = useState(false);
   const [consideraHistorico, setConsideraHistorico] = useState(false);
   const [desabilitarCampos, setDesabilitarCampos] = useState(false);
-  const [dreCodigo, setDreCodigo] = useState('');
+  const [dreCodigo, setDreCodigo] = useState();
   const [dreId, setDreId] = useState('');
   const [listaAnosLetivo, setListaAnosLetivo] = useState([]);
   const [listaBimestres, setListaBimestres] = useState([]);
@@ -32,11 +32,11 @@ const Filtros = ({ onChangeFiltros, ehInfantil }) => {
   const [listaSemestres, setListaSemestres] = useState([]);
   const [listaTurmas, setListaTurmas] = useState([]);
   const [listaUes, setListaUes] = useState([]);
-  const [modalidadeId, setModalidadeId] = useState('');
-  const [semestre, setSemestre] = useState('');
+  const [modalidadeId, setModalidadeId] = useState();
+  const [semestre, setSemestre] = useState();
   const [turmasId, setTurmasId] = useState('');
   const [ueId, setUeId] = useState('');
-  const [ueCodigo, setUeCodigo] = useState('');
+  const [ueCodigo, setUeCodigo] = useState();
 
   const ANO_LETIVO_MINIMO = 2021;
 
@@ -88,11 +88,13 @@ const Filtros = ({ onChangeFiltros, ehInfantil }) => {
   };
 
   const onChangeConsideraHistorico = e => {
+    dispatch(setTurmasAcompanhamentoFechamento());
     setConsideraHistorico(e.target.checked);
     setAnoLetivo(anoAtual);
   };
 
   const onChangeAnoLetivo = ano => {
+    dispatch(setTurmasAcompanhamentoFechamento());
     setAnoLetivo(ano);
     limparCampos();
   };
@@ -142,6 +144,7 @@ const Filtros = ({ onChangeFiltros, ehInfantil }) => {
   }, [obterAnosLetivos]);
 
   const onChangeDre = dre => {
+    dispatch(setTurmasAcompanhamentoFechamento());
     const id = listaDres.find(d => d.valor === dre)?.id;
     setDreId(id);
     setDreCodigo(dre);
@@ -187,6 +190,7 @@ const Filtros = ({ onChangeFiltros, ehInfantil }) => {
   }, [anoLetivo, obterDres]);
 
   const onChangeUe = ue => {
+    dispatch(setTurmasAcompanhamentoFechamento());
     const id = listaUes.find(d => d.valor === ue)?.id;
     setUeId(id);
     setUeCodigo(ue);
@@ -236,6 +240,7 @@ const Filtros = ({ onChangeFiltros, ehInfantil }) => {
   }, [dreId, obterUes]);
 
   const onChangeModalidade = valor => {
+    dispatch(setTurmasAcompanhamentoFechamento());
     setTurmasId();
     setModalidadeId(valor);
   };
@@ -273,6 +278,7 @@ const Filtros = ({ onChangeFiltros, ehInfantil }) => {
   }, [obterModalidades, anoLetivo, ueCodigo]);
 
   const onChangeSemestre = valor => {
+    dispatch(setTurmasAcompanhamentoFechamento());
     setSemestre(valor);
   };
 
@@ -387,7 +393,7 @@ const Filtros = ({ onChangeFiltros, ehInfantil }) => {
     bi.push({ desc: '1º', valor: 1 });
     bi.push({ desc: '2º', valor: 2 });
 
-    if (modalidadeId !== ModalidadeDTO.EJA) {
+    if (Number(modalidadeId) !== ModalidadeDTO.EJA) {
       bi.push({ desc: '3º', valor: 3 });
       bi.push({ desc: '4º', valor: 4 });
     }
@@ -475,6 +481,7 @@ const Filtros = ({ onChangeFiltros, ehInfantil }) => {
               onChange={onChangeUe}
               valueSelect={ueCodigo}
               placeholder="Unidade Escolar (UE)"
+              showSearch
             />
           </Loader>
         </div>
@@ -532,6 +539,7 @@ const Filtros = ({ onChangeFiltros, ehInfantil }) => {
               valueSelect={turmasId}
               onChange={valores => {
                 onchangeMultiSelect(valores, turmasId, onChangeTurma);
+                dispatch(setTurmasAcompanhamentoFechamento());
               }}
               placeholder="Turma"
             />
@@ -539,14 +547,16 @@ const Filtros = ({ onChangeFiltros, ehInfantil }) => {
         </div>
       </div>
       <div className="row">
-        <div className="col-sm-12 col-md-4">
+        <div className="col-sm-12 col-md-3">
           <SelectComponent
             lista={listaBimestres}
             valueOption="valor"
             valueText="desc"
             label="Bimestre"
             disabled={
-              !modalidadeId || listaBimestres?.length === 1 || desabilitarCampos
+              !turmasId?.length ||
+              listaBimestres?.length === 1 ||
+              desabilitarCampos
             }
             valueSelect={bimestre}
             onChange={onChangeBimestre}

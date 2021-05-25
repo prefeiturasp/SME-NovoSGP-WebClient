@@ -1,6 +1,6 @@
 import { Tooltip } from 'antd';
 import PropTypes from 'prop-types';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Base, DataTable, Loader } from '~/componentes';
 import { BIMESTRE_FINAL } from '~/constantes/constantes';
 import { statusAcompanhamentoFechamento } from '~/dtos';
@@ -14,6 +14,34 @@ const TabelaAlunosConselho = props => {
 
   const [dadosComponentes, setDadosComponentes] = useState([]);
   const [expandedRowKeys, setExpandedRowKeys] = useState([]);
+  const [dadosComCores, setDadosComCores] = useState([]);
+
+  const obterCorSituacaoFechamento = dados => {
+    switch (dados?.situacaoFechamentoCodigo) {
+      case statusAcompanhamentoFechamento?.EM_ANDAMENTO?.id:
+        return statusAcompanhamentoFechamento?.EM_ANDAMENTO?.cor;
+      case statusAcompanhamentoFechamento?.CONCLUIDO?.id:
+        return statusAcompanhamentoFechamento?.CONCLUIDO?.cor;
+      default:
+        return statusAcompanhamentoFechamento?.EM_ANDAMENTO?.cor;
+    }
+  };
+
+  const montarDadosComCores = dados => {
+    const novoMap = dados.map(item => {
+      const cor = obterCorSituacaoFechamento(item);
+      return { ...item, cor };
+    });
+    setDadosComCores(novoMap);
+  };
+
+  useEffect(() => {
+    if (dadosAlunos?.length) {
+      montarDadosComCores(dadosAlunos);
+    } else {
+      setDadosComCores([]);
+    }
+  }, [dadosAlunos]);
 
   const colunasTabelaAlunos = [
     {
@@ -44,18 +72,14 @@ const TabelaAlunosConselho = props => {
       title: 'Situação do conselho de classe',
       dataIndex: 'situacaoFechamentoCodigo',
       align: 'center',
-      render: (situacaoFechamentoCodigo, dados) => {
-        const status = Object.keys(statusAcompanhamentoFechamento)?.find(
-          item =>
-            statusAcompanhamentoFechamento?.[item]?.id ===
-            situacaoFechamentoCodigo
-        );
-
-        return (
-          <MarcadorTriangulo
-            cor={statusAcompanhamentoFechamento?.[status]?.cor}
-          />
-        );
+      render: (situacaoFechamentoCodigo, aluno) => {
+        if (
+          statusAcompanhamentoFechamento?.NAO_INICIADO?.id !==
+          situacaoFechamentoCodigo
+        ) {
+          return <MarcadorTriangulo cor={aluno?.cor} />;
+        }
+        return null;
       },
     }
   );
@@ -105,6 +129,7 @@ const TabelaAlunosConselho = props => {
       title: 'Percentual de frequência',
       dataIndex: 'percentualFrequencia',
       align: 'center',
+      render: percentualFrequencia => `${percentualFrequencia}%`,
     },
   ];
 
@@ -140,9 +165,9 @@ const TabelaAlunosConselho = props => {
         id="tabela-alunos"
         idLinha="alunoCodigo"
         columns={colunasTabelaAlunos}
-        dataSource={dadosAlunos}
+        dataSource={dadosComCores}
         pagination={false}
-        expandIconColumnIndex={3}
+        expandIconColumnIndex={bimestre === BIMESTRE_FINAL ? 4 : 3}
         expandedRowKeys={expandedRowKeys}
         onClickExpandir={obterDetalhamentoComponentesCurricularesAluno}
         nomeColunaExpandir="situacaoFechamento"
