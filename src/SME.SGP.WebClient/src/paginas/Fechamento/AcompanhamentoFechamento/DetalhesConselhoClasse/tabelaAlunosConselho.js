@@ -105,6 +105,7 @@ const TabelaAlunosConselho = props => {
       title: 'Percentual de frequência',
       dataIndex: 'percentualFrequencia',
       align: 'center',
+      render: percentualFrequencia => `${percentualFrequencia}%`,
     },
   ];
 
