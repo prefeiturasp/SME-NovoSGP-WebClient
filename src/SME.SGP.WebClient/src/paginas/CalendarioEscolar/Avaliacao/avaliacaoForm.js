@@ -345,20 +345,17 @@ const AvaliacaoForm = ({ match, location }) => {
   };
 
   useEffect(() => {
-    if (
-      (!idAvaliacao && listaDisciplinas.length === 1) ||
-      mostrarDisciplinaRegencia
-    ) {
-      if (listaDisciplinas[0].regencia) {
-        setTemRegencia(true);
-        obterDisciplinasRegencia();
-      }
+    if (!idAvaliacao && listaDisciplinas.length === 1) {
       setDadosAvaliacao({
         ...dadosAvaliacao,
         disciplinasId: listaDisciplinas[0].codigoComponenteCurricular.toString(),
       });
       setPodeLancaNota(listaDisciplinas[0].lancaNota);
       setDisciplinaSelecionada(listaDisciplinas[0].codigoComponenteCurricular);
+    }
+    if (mostrarDisciplinaRegencia) {
+      setTemRegencia(true);
+      obterDisciplinasRegencia();
     }
   }, [listaDisciplinas, mostrarDisciplinaRegencia]);
 
