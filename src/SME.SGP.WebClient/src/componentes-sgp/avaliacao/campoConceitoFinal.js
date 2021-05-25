@@ -79,7 +79,7 @@ const CampoConceitoFinal = props => {
     >
       <div>
         <SelectComponent
-          label={label ? label : ''}
+          label={label || ''}
           onChange={valorNovo => setarValorNovo(valorNovo)}
           valueOption="id"
           valueText="valor"
@@ -96,12 +96,7 @@ const CampoConceitoFinal = props => {
               ? 'border-registro-alterado'
               : ''
           } `}
-          disabled={
-            desabilitarCampo ||
-            !podeEditar ||
-            !podeLancarNotaFinal ||
-            modoEdicaoGeral
-          }
+          disabled={desabilitarCampo || !podeEditar || !podeLancarNotaFinal}
         />
       </div>
     </Tooltip>
