@@ -216,7 +216,7 @@ const Filtros = ({ onChangeFiltros, ehInfantil }) => {
 
         if (lista?.length === 1) {
           setUeId(lista[0].id);
-          setUeCodigo(lista[0].codigo);
+          setUeCodigo(lista[0].valor);
         }
 
         setListaUes(lista);
