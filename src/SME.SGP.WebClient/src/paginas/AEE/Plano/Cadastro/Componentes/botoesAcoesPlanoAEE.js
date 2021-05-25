@@ -196,9 +196,11 @@ const BotoesAcoesPlanoAEE = props => {
   };
 
   const onClickEncerrarPlano = async () => {
-    const resposta = await ServicoPlanoAEE.salvarDevolutivaPAAI().catch(e =>
-      erros(e)
-    );
+    dispatch(setExibirLoaderPlanoAEE(true));
+    const resposta = await ServicoPlanoAEE.salvarDevolutivaPAAI()
+      .catch(e => erros(e))
+      .finally(() => dispatch(setExibirLoaderPlanoAEE(false)));
+
     if (resposta?.data) {
       sucesso('Encerramento do plano realizado com sucesso');
       limparDevolutiva();
