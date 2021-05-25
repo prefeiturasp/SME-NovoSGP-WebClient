@@ -124,6 +124,7 @@ export const TabelaColunasFixas = styled.div`
     width: 110px;
     max-width: 110px;
     min-width: 110px;
+    vertical-align: top;
   }
 
   .cabecalho-nota-conceito-final {
@@ -190,8 +191,6 @@ export const TabelaColunasFixas = styled.div`
     text-overflow: ellipsis;
     overflow: hidden;
     white-space: nowrap;
-    /* max-width: 140px;
-    width: 140px; */
   }
 
   .border-registro-alterado {

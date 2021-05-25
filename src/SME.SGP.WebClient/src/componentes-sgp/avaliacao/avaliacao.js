@@ -1,7 +1,6 @@
 import { Tooltip } from 'antd';
 import PropTypes from 'prop-types';
-import React, { createRef, useRef } from 'react';
-import ReactDOM from 'react-dom';
+import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import shortid from 'shortid';
 import { LabelSemDados } from '~/componentes';
@@ -14,7 +13,6 @@ import {
 import {
   acharItem,
   converterAcaoTecla,
-  esperarMiliSegundos,
   moverCursor,
   tratarString,
 } from '~/utils';
@@ -80,6 +78,18 @@ const Avaliacao = props => {
               <div className="texto-header-avaliacao">
                 {window.moment(avaliacao.data).format('DD/MM/YYYY')}
               </div>
+              {avaliacao.disciplinas && (
+                <div className="row justify-content-center px-3">
+                  {avaliacao.disciplinas.map(item => (
+                    <div
+                      alt={item}
+                      className="badge badge-pill border text-dark bg-white font-weight-light"
+                    >
+                      {item}
+                    </div>
+                  ))}
+                </div>
+              )}
             </th>
           );
         })

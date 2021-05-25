@@ -115,9 +115,7 @@ const CampoNota = props => {
       step={step}
       placeholder="Nota"
       classNameCampo={`${nota.ausente ? 'aluno-ausente-notas' : ''}`}
-      disabled={
-        desabilitarCampo || modoEdicaoGeralNotaFinal || !nota.podeEditar
-      }
+      disabled={desabilitarCampo || !nota.podeEditar}
       className={`${notaAlterada ? 'border-registro-alterado' : ''}`}
     />
   );
