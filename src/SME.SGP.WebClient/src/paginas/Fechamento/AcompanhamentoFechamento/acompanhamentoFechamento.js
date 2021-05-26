@@ -37,7 +37,6 @@ const AcompanhamentoFechamento = () => {
   const [dadosStatusConsselhoClasse, setDadosStatusConselhoClasse] = useState(
     []
   );
-  const [numeroPagina, setNumeroPagina] = useState(1);
 
   const usuario = useSelector(store => store.usuario);
   const { turmaSelecionada } = usuario;
@@ -126,7 +125,6 @@ const AcompanhamentoFechamento = () => {
   };
 
   const onChangePaginacao = pagina => {
-    setNumeroPagina(pagina);
     onChangeFiltros(parametrosFiltro, pagina);
   };
 
