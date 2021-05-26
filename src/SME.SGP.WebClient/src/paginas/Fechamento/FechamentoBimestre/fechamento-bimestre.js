@@ -1,7 +1,7 @@
 import { Tabs } from 'antd';
 import React, { useEffect, useState, useRef } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { Colors, Loader, Base } from '~/componentes';
+import { Colors, Loader } from '~/componentes';
 import Cabecalho from '~/componentes-sgp/cabecalho';
 import Alert from '~/componentes/alert';
 import Button from '~/componentes/button';
@@ -23,7 +23,6 @@ import ServicoFechamentoBimestre from '~/servicos/Paginas/Fechamento/ServicoFech
 import periodo from '~/dtos/periodo';
 import { setExpandirLinha } from '~/redux/modulos/notasConceitos/actions';
 import AlertaModalidadeInfantil from '~/componentes-sgp/AlertaModalidadeInfantil/alertaModalidadeInfantil';
-import modalidade from '~/dtos/modalidade';
 import { ehTurmaInfantil } from '~/servicos/Validacoes/validacoesInfatil';
 
 const FechamentoBismestre = () => {
@@ -254,7 +253,6 @@ const FechamentoBismestre = () => {
     }
   };
 
-  // FechamentoFinal
   const refFechamentoFinal = useRef();
   const [turmaPrograma, setTurmaPrograma] = useState(false);
 
