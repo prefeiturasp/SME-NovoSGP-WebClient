@@ -28,6 +28,7 @@ import {
 
 import { CardStatus } from './CardStatus';
 import { Filtros } from './Filtros';
+import DetalhesConselhoClasse from './DetalhesConselhoClasse/detalhesConselhoClasse';
 
 const AcompanhamentoFechamento = () => {
   const [ehInfantil, setEhInfantil] = useState(false);
@@ -36,7 +37,6 @@ const AcompanhamentoFechamento = () => {
   const [dadosStatusConsselhoClasse, setDadosStatusConselhoClasse] = useState(
     []
   );
-  const [numeroPagina, setNumeroPagina] = useState(1);
 
   const usuario = useSelector(store => store.usuario);
   const { turmaSelecionada } = usuario;
@@ -61,9 +61,8 @@ const AcompanhamentoFechamento = () => {
   const dispatch = useDispatch();
   const aoClicarBotaoVoltar = () => history.push('/');
 
-  const onChangeFiltros = async (params, paginaAlterada = numeroPagina) => {
+  const onChangeFiltros = async (params, paginaAlterada = 1) => {
     dispatch(setCarregandoAcompanhamentoFechamento(true));
-    dispatch(setTurmasAcompanhamentoFechamento(undefined));
     const retorno = await ServicoAcompanhamentoFechamento.obterTurmas({
       ...params,
       numeroPagina: paginaAlterada,
@@ -72,6 +71,8 @@ const AcompanhamentoFechamento = () => {
       .finally(() => dispatch(setCarregandoAcompanhamentoFechamento(false)));
     if (retorno?.data?.totalRegistros) {
       dispatch(setTurmasAcompanhamentoFechamento(retorno.data));
+    } else {
+      dispatch(setTurmasAcompanhamentoFechamento());
     }
     if (params) {
       setParametrosFiltro(params);
@@ -124,7 +125,6 @@ const AcompanhamentoFechamento = () => {
   };
 
   const onChangePaginacao = pagina => {
-    setNumeroPagina(pagina);
     onChangeFiltros(parametrosFiltro, pagina);
   };
 
@@ -198,7 +198,7 @@ const AcompanhamentoFechamento = () => {
                             altura="24"
                           />
                           <div className="d-flex">
-                            {dadosStatusConsselhoClasse?.length > 0 ? (
+                            {dadosStatusConsselhoClasse?.length ? (
                               dadosStatusConsselhoClasse?.map(
                                 dadosConselhoClasse => (
                                   <CardStatus
@@ -213,6 +213,14 @@ const AcompanhamentoFechamento = () => {
                                 altura="16"
                               />
                             )}
+                          </div>
+                          <div className="row">
+                            {dadosStatusConsselhoClasse?.length ? (
+                              <DetalhesConselhoClasse
+                                turmaId={dadosTurmas?.turmaId}
+                                bimestre={parametrosFiltro?.bimestre}
+                              />
+                            ) : null}
                           </div>
                         </>
                       </PainelCollapse.Painel>

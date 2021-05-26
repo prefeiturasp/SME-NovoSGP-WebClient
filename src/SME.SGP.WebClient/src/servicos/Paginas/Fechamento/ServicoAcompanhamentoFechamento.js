@@ -24,6 +24,22 @@ class ServicoAcompanhamentoFechamento {
       `${urlPadrao}/${turmaId}/conselho-classe/bimestres/${bimestre}`
     );
   };
+
+  obterListaAlunosPorTurma = (turmaId, bimestre) => {
+    return api.get(
+      `${urlPadrao}/${turmaId}/conselho-classe/bimestres/${bimestre}/alunos`
+    );
+  };
+
+  obterDetalhamentoComponentesCurricularesAluno = (
+    turmaId,
+    bimestre,
+    alunoCodigo
+  ) => {
+    return api.get(
+      `${urlPadrao}/${turmaId}/conselho-classe/bimestres/${bimestre}/alunos/${alunoCodigo}/componentes-curriculares/detalhamento`
+    );
+  };
 }
 
 export default new ServicoAcompanhamentoFechamento();

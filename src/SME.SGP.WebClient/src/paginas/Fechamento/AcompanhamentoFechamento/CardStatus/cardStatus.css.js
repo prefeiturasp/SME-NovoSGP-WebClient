@@ -34,3 +34,13 @@ export const Container = styled.div`
     color: ${Base.CinzaMako};
   }
 `;
+
+export const MarcadorTriangulo = styled.div`
+  position: relative;
+  margin-top: ${props => props.marginTop || '-11.8px'};
+  height: 0;
+  border-bottom: 15px solid transparent;
+  border-right: 15px solid ${props => props.cor};
+  float: right;
+  margin-right: -8.3px;
+`;
