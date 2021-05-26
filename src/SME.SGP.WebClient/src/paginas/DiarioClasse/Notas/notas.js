@@ -77,7 +77,7 @@ const Notas = ({ match }) => {
 
   const [validacoes] = useState(
     Yup.object({
-      descricao: Yup.string().required('Justificativa obrigatória'),
+      descricao: Yup.string().required('Justificativa obrigatória').max(1000, 'limite de 1000 caracteres'),
     })
   );
 
