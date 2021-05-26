@@ -96,7 +96,7 @@ const DashboardInformacoesEscolares = () => {
       if (resposta?.data?.length) {
         const lista = resposta.data;
 
-        if (usuario.possuiPerfilSmeOuDre) {
+        if (usuario.possuiPerfilSmeOuDre && lista?.length > 1) {
           lista.unshift({ codigo: OPCAO_TODOS, nome: 'Todas' });
         }
 
@@ -145,7 +145,7 @@ const DashboardInformacoesEscolares = () => {
 
       if (resposta?.data?.length) {
         const lista = resposta.data;
-        if (usuario.possuiPerfilSme) {
+        if (usuario.possuiPerfilSme && lista?.length > 1) {
           lista.unshift({ codigo: OPCAO_TODOS, nome: 'Todas' });
         }
         setListaDres(lista);
