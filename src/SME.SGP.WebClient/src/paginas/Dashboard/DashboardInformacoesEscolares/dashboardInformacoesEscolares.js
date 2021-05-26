@@ -12,7 +12,6 @@ import { ServicoFiltroRelatorio } from '~/servicos';
 import AbrangenciaServico from '~/servicos/Abrangencia';
 import { erros } from '~/servicos/alertas';
 import history from '~/servicos/history';
-import ServicoDashboardInformacoesEscolares from '~/servicos/Paginas/Dashboard/ServicoDashboardInformacoesEscolares';
 import TabsDashboardInformacoesEscolares from './TabsDashboardInformacoesEscolares/tabsDashboardInformacoesEscolares';
 
 const DashboardInformacoesEscolares = () => {
@@ -22,7 +21,6 @@ const DashboardInformacoesEscolares = () => {
   const [listaDres, setListaDres] = useState([]);
   const [listaUes, setListaUes] = useState([]);
   const [listaModalidades, setListaModalidades] = useState([]);
-  const [listaAnosEscolares, setListaAnosEscolares] = useState([]);
 
   const [consideraHistorico, setConsideraHistorico] = useState(false);
   const [anoAtual] = useState(moment().format('YYYY'));
@@ -223,35 +221,6 @@ const DashboardInformacoesEscolares = () => {
 
   const onChangeModalidade = valor => setModalidade(valor);
 
-  const obterAnosEscolares = useCallback(async () => {
-    const respota = await ServicoDashboardInformacoesEscolares.obterAnosEscolaresPorModalidade(
-      anoLetivo,
-      dre?.id,
-      ue?.id,
-      modalidade
-    ).catch(e => erros(e));
-
-    if (respota?.data?.length) {
-      if (respota.data.length > 1) {
-        respota.data.unshift({
-          ano: OPCAO_TODOS,
-          modalidadeAno: 'Todos os anos',
-        });
-      }
-      setListaAnosEscolares(respota.data);
-    } else {
-      setListaAnosEscolares([]);
-    }
-  }, [anoLetivo, dre, ue, modalidade]);
-
-  useEffect(() => {
-    if (anoLetivo && dre && ue && modalidade) {
-      obterAnosEscolares();
-    } else {
-      setListaAnosEscolares([]);
-    }
-  }, [anoLetivo, dre, ue, modalidade, obterAnosEscolares]);
-
   return (
     <>
       <Cabecalho pagina="Dashboard Informações escolares" />
@@ -352,7 +321,6 @@ const DashboardInformacoesEscolares = () => {
                 dreId={OPCAO_TODOS === dre?.codigo ? OPCAO_TODOS : dre?.id}
                 ueId={OPCAO_TODOS === ue?.codigo ? OPCAO_TODOS : ue?.id}
                 modalidade={modalidade}
-                listaAnosEscolares={listaAnosEscolares}
               />
             </div>
           </div>

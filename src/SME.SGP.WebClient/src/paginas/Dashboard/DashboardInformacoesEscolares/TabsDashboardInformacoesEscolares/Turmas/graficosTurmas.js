@@ -3,22 +3,13 @@ import React from 'react';
 import GraficoQuantidadeTurmasPorAno from './QuantidadeTurmasPorAno/graficoQuantidadeTurmasPorAno';
 
 const GraficosTurmas = props => {
-  const {
-    anoLetivo,
-    dreId,
-    ueId,
-    modalidade,
-    listaAnosEscolares,
-    exibirAnosEscolares,
-  } = props;
+  const { anoLetivo, dreId, ueId, modalidade } = props;
   return (
     <GraficoQuantidadeTurmasPorAno
       anoLetivo={anoLetivo}
       dreId={dreId}
       ueId={ueId}
       modalidade={modalidade}
-      listaAnosEscolares={listaAnosEscolares}
-      exibirAnosEscolares={exibirAnosEscolares}
     />
   );
 };
@@ -28,8 +19,6 @@ GraficosTurmas.propTypes = {
   dreId: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   ueId: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   modalidade: PropTypes.string,
-  listaAnosEscolares: PropTypes.oneOfType(PropTypes.array),
-  exibirAnosEscolares: PropTypes.bool,
 };
 
 GraficosTurmas.defaultProps = {
@@ -37,8 +26,6 @@ GraficosTurmas.defaultProps = {
   dreId: null,
   ueId: null,
   modalidade: '',
-  listaAnosEscolares: [],
-  exibirAnosEscolares: false,
 };
 
 export default GraficosTurmas;
