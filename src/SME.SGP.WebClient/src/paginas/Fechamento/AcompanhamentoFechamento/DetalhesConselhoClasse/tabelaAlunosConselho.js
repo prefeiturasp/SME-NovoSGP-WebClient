@@ -77,7 +77,7 @@ const TabelaAlunosConselho = props => {
           statusAcompanhamentoFechamento?.NAO_INICIADO?.id !==
           situacaoFechamentoCodigo
         ) {
-          return <MarcadorTriangulo cor={aluno?.cor} />;
+          return <MarcadorTriangulo cor={aluno?.cor} marginTop="-34.8px" />;
         }
         return null;
       },
@@ -171,6 +171,7 @@ const TabelaAlunosConselho = props => {
         expandedRowKeys={expandedRowKeys}
         onClickExpandir={obterDetalhamentoComponentesCurricularesAluno}
         nomeColunaExpandir="situacaoFechamento"
+        semHover
         expandedRowRender={aluno => {
           if (aluno.podeExpandir) {
             return (
@@ -180,6 +181,7 @@ const TabelaAlunosConselho = props => {
                   pagination={false}
                   columns={colunasTabelaComponentes}
                   dataSource={dadosComponentes}
+                  semHover
                 />
               </Loader>
             );
