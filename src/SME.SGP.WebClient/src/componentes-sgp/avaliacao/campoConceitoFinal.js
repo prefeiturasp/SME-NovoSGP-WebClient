@@ -88,7 +88,6 @@ const CampoConceitoFinal = props => {
             conceitoValorAtual ? String(conceitoValorAtual) : undefined
           }
           showSearch
-          placeholder="Final"
           className={`tamanho-conceito-final ${
             notaConceitoBimestre && notaConceitoBimestre.abaixoDaMedia
               ? 'border-abaixo-media'

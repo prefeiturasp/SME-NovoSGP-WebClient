@@ -254,9 +254,10 @@ export const TabelaColunasFixas = styled.div`
   }
 
   .desc-linha-conceito-final {
-    margin-left: 20px;
-    margin-top: 25px;
-    margin-right: 37px;
+    width: 400px;
+    display: flex;
+    height: 65px;
+    margin-left: 12%;
   }
 
   .tamanho-conceito-final {
