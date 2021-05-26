@@ -113,7 +113,7 @@ const DataTable = props => {
         expandIcon={({ expanded, onExpand, record }) => {
           if (record.podeExpandir) {
             return (
-              <>
+              <div style={{ color: record?.cor }}>
                 {nomeColunaExpandir ? record[nomeColunaExpandir] : ''}
                 <FontAwesomeIcon
                   style={{
@@ -125,7 +125,7 @@ const DataTable = props => {
                   icon={expanded ? faAngleUp : faAngleDown}
                   onClick={e => onExpand(record, e)}
                 />
-              </>
+              </div>
             );
           }
           if (!record.podeExpandir && nomeColunaExpandir) {
