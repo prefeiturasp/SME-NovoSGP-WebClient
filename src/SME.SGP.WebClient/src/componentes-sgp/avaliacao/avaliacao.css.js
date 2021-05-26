@@ -125,6 +125,11 @@ export const TabelaColunasFixas = styled.div`
     max-width: 110px;
     min-width: 110px;
     vertical-align: top;
+
+    .ant-input-number {
+      width: 85px !important;
+      margin-top: 4px;
+    }
   }
 
   .cabecalho-nota-conceito-final {
@@ -143,6 +148,13 @@ export const TabelaColunasFixas = styled.div`
   .linha-nota-conceito-final {
     box-shadow: -8px 0px 8px -4px #8080804d;
     background: ${Base.CinzaFundo};
+
+    .tamanho-conceito-final {
+      width: 60px;
+      max-width: 60px;
+      min-width: 60px;
+      margin-top: 4px;
+    }
   }
 
   .linha-nota-conceito-final-clicada {
@@ -216,12 +228,6 @@ export const TabelaColunasFixas = styled.div`
     padding-left: 2px !important;
   }
 
-  .tamanho-conceito-final {
-    width: 100px;
-    max-width: 100px;
-    min-width: 100px;
-  }
-
   .linha-conceito-final {
     border-left: solid 1px ${Base.CinzaDesabilitado};
     box-shadow: 0px 0px 7px 3px ${Base.CinzaDesabilitado};
@@ -251,6 +257,12 @@ export const TabelaColunasFixas = styled.div`
     margin-left: 20px;
     margin-top: 25px;
     margin-right: 37px;
+  }
+
+  .tamanho-conceito-final {
+    width: 100px;
+    max-width: 100px;
+    min-width: 100px;
   }
 `;
 
