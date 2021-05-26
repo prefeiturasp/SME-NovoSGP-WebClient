@@ -68,7 +68,10 @@ const FechamentoBismestre = () => {
   const [periodoFechamento, setPeriodoFechamento] = useState(periodo.Anual);
   const [situacaoFechamento, setSituacaoFechamento] = useState(0);
   const [registraFrequencia, setRegistraFrequencia] = useState(true);
-  const [idDisciplinaTerritorioSaber, setIdDisciplinaTerritorioSaber] = useState(undefined);
+  const [
+    idDisciplinaTerritorioSaber,
+    setIdDisciplinaTerritorioSaber,
+  ] = useState(undefined);
 
   const resetarTela = () => {
     setBimestreCorrente();
@@ -87,17 +90,19 @@ const FechamentoBismestre = () => {
   };
 
   const onChangeDisciplinas = id => {
+    resetarTela();
+
     if (id) {
       const disciplina = listaDisciplinas.find(
         c => String(c.codigoComponenteCurricular) === id
-        );
-        setIdDisciplinaTerritorioSaber(disciplina.territorioSaber ? disciplina.id : id);
-        setDisciplinaIdSelecionada(id);
-        setEhRegencia(disciplina && disciplina.regencia);
-    } else {
-      setDisciplinaIdSelecionada(id);
-      resetarTela();
+      );
+      setIdDisciplinaTerritorioSaber(
+        disciplina.territorioSaber ? disciplina.id : id
+      );
+      setEhRegencia(disciplina && disciplina.regencia);
     }
+
+    setDisciplinaIdSelecionada(id);
   };
 
   const onClickVoltar = async () => {
@@ -140,7 +145,9 @@ const FechamentoBismestre = () => {
           setListaDisciplinas([...lista.data]);
           if (lista.data.length === 1) {
             setDisciplinaIdSelecionada(undefined);
-            setIdDisciplinaTerritorioSaber(lista.data[0].territorioSaber ? lista.data[0].id : undefined);
+            setIdDisciplinaTerritorioSaber(
+              lista.data[0].territorioSaber ? lista.data[0].id : undefined
+            );
             setDisciplinaIdSelecionada(
               String(lista.data[0].codigoComponenteCurricular)
             );
@@ -208,7 +215,8 @@ const FechamentoBismestre = () => {
   useEffect(() => {
     if (disciplinaIdSelecionada) {
       const disciplina = listaDisciplinas.find(
-        item => String(item.codigoComponenteCurricular) == disciplinaIdSelecionada
+        item =>
+          String(item.codigoComponenteCurricular) == disciplinaIdSelecionada
       );
       if (disciplina) {
         setRegistraFrequencia(disciplina.registraFrequencia);
@@ -246,7 +254,7 @@ const FechamentoBismestre = () => {
     }
   };
 
-  //FechamentoFinal
+  // FechamentoFinal
   const refFechamentoFinal = useRef();
   const [turmaPrograma, setTurmaPrograma] = useState(false);
 
@@ -290,7 +298,7 @@ const FechamentoBismestre = () => {
       .catch(e => erros(e));
   };
 
-  //FechamentoFinal
+  // FechamentoFinal
   return (
     <>
       {!turmaSelecionada.turma &&
@@ -389,7 +397,9 @@ const FechamentoBismestre = () => {
                         ehRegencia={ehRegencia}
                         ehSintese={ehSintese}
                         situacaoFechamento={situacaoFechamento}
-                        codigoComponenteCurricular={idDisciplinaTerritorioSaber ?? disciplinaIdSelecionada}
+                        codigoComponenteCurricular={
+                          idDisciplinaTerritorioSaber ?? disciplinaIdSelecionada
+                        }
                         turmaId={turmaSelecionada.turma}
                         anoLetivo={turmaSelecionada.anoLetivo}
                         registraFrequencia={registraFrequencia}
@@ -408,7 +418,9 @@ const FechamentoBismestre = () => {
                         ehRegencia={ehRegencia}
                         ehSintese={ehSintese}
                         situacaoFechamento={situacaoFechamento}
-                        codigoComponenteCurricular={idDisciplinaTerritorioSaber ?? disciplinaIdSelecionada}
+                        codigoComponenteCurricular={
+                          idDisciplinaTerritorioSaber ?? disciplinaIdSelecionada
+                        }
                         turmaId={turmaSelecionada.turma}
                         anoLetivo={turmaSelecionada.anoLetivo}
                         registraFrequencia={registraFrequencia}
@@ -427,7 +439,10 @@ const FechamentoBismestre = () => {
                           ehRegencia={ehRegencia}
                           ehSintese={ehSintese}
                           situacaoFechamento={situacaoFechamento}
-                          codigoComponenteCurricular={idDisciplinaTerritorioSaber ?? disciplinaIdSelecionada}
+                          codigoComponenteCurricular={
+                            idDisciplinaTerritorioSaber ??
+                            disciplinaIdSelecionada
+                          }
                           turmaId={turmaSelecionada.turma}
                           anoLetivo={turmaSelecionada.anoLetivo}
                           registraFrequencia={registraFrequencia}
@@ -447,7 +462,10 @@ const FechamentoBismestre = () => {
                           ehRegencia={ehRegencia}
                           ehSintese={ehSintese}
                           situacaoFechamento={situacaoFechamento}
-                          codigoComponenteCurricular={idDisciplinaTerritorioSaber ?? disciplinaIdSelecionada}
+                          codigoComponenteCurricular={
+                            idDisciplinaTerritorioSaber ??
+                            disciplinaIdSelecionada
+                          }
                           turmaId={turmaSelecionada.turma}
                           anoLetivo={turmaSelecionada.anoLetivo}
                           registraFrequencia={registraFrequencia}
@@ -462,7 +480,9 @@ const FechamentoBismestre = () => {
                   >
                     <FechamentoFinal
                       turmaCodigo={turmaSelecionada.turma}
-                      disciplinaCodigo={idDisciplinaTerritorioSaber ?? disciplinaIdSelecionada}
+                      disciplinaCodigo={
+                        idDisciplinaTerritorioSaber ?? disciplinaIdSelecionada
+                      }
                       ehRegencia={ehRegencia}
                       turmaPrograma={turmaPrograma}
                       onChange={onChangeFechamentoFinal}
