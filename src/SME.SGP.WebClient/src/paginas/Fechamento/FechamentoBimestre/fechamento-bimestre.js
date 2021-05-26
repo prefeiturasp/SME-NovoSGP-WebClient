@@ -296,7 +296,6 @@ const FechamentoBismestre = () => {
       .catch(e => erros(e));
   };
 
-  // FechamentoFinal
   return (
     <>
       {!turmaSelecionada.turma &&
