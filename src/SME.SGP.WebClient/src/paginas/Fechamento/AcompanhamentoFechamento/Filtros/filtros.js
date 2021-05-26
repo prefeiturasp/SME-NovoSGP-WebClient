@@ -399,7 +399,6 @@ const Filtros = ({ onChangeFiltros, ehInfantil }) => {
     }
 
     bi.push({ desc: 'Final', valor: BIMESTRE_FINAL });
-    bi.push({ desc: 'Todos', valor: OPCAO_TODOS });
     setListaBimestres(bi);
   }, [modalidadeId]);
 

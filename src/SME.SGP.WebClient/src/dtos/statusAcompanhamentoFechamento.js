@@ -4,12 +4,12 @@ const statusAcompanhamentoFechamento = {
   NAO_INICIADO: {
     descricao: 'Não Iniciado',
     cor: Base.CinzaMako,
-    id: 1,
+    id: 0,
   },
   EM_ANDAMENTO: {
     descricao: 'Em Andamento',
     cor: Base.LaranjaStatus,
-    id: 2,
+    id: 1,
   },
   PROCESSADO_PENDENCIAS: {
     descricao: 'Processado com pendências',
@@ -26,7 +26,7 @@ const statusAcompanhamentoFechamento = {
   CONCLUIDO: {
     descricao: 'Concluído',
     cor: Base.Verde,
-    id: 3,
+    id: 2,
   },
 };
 
