@@ -162,11 +162,7 @@ const GraficoQuantidadeTurmasPorAno = props => {
         className={exibirLoader ? 'text-center' : ''}
       >
         {dadosGrafico?.length ? (
-          <GraficoBarras
-            data={dadosGrafico}
-            xAxisVisible
-            legendVisible={false}
-          />
+          <GraficoBarras data={dadosGrafico} />
         ) : !exibirLoader ? (
           <div className="text-center">Sem dados</div>
         ) : (
