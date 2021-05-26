@@ -85,7 +85,9 @@ const DashboardInformacoesEscolares = () => {
       setCarregandoUes(true);
       const resposta = await AbrangenciaServico.buscarUes(
         dre?.codigo,
-        `v1/abrangencias/${consideraHistorico}/dres/${dre?.codigo}/ues?anoLetivo=${anoLetivo}`,
+        `v1/abrangencias/${consideraHistorico}/dres/${
+          dre?.codigo
+        }/ues?anoLetivo=${anoLetivo}&consideraNovasUEs=${true}`,
         true
       )
         .catch(e => erros(e))
@@ -165,10 +167,10 @@ const DashboardInformacoesEscolares = () => {
   const obterModalidades = useCallback(async () => {
     setCarregandoModalidades(true);
 
-    const resultado = await ServicoFiltroRelatorio.obterModalidades(
+    const resultado = await ServicoFiltroRelatorio.obterModalidadesAnoLetivo(
       ue?.codigo,
       anoLetivo,
-      consideraHistorico
+      true
     )
       .catch(e => erros(e))
       .finally(() => setCarregandoModalidades(false));
@@ -183,7 +185,7 @@ const DashboardInformacoesEscolares = () => {
       setListaModalidades([]);
       setModalidade();
     }
-  }, [ue, anoLetivo, consideraHistorico]);
+  }, [ue, anoLetivo]);
 
   useEffect(() => {
     if (ue && anoLetivo) {
@@ -192,7 +194,7 @@ const DashboardInformacoesEscolares = () => {
       setListaModalidades([]);
       setModalidade();
     }
-  }, [ue, anoLetivo, consideraHistorico, obterModalidades]);
+  }, [ue, anoLetivo, obterModalidades]);
 
   const onClickVoltar = () => {
     history.push(URL_HOME);
