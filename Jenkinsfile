@@ -1,12 +1,12 @@
 pipeline {
     agent {
       node { 
-        label 'dockerdotnet2'
+        label 'sme-nodes16'
       }
     }
     
     options {
-      buildDiscarder(logRotator(numToKeepStr: '5', artifactNumToKeepStr: '5'))
+      buildDiscarder(logRotator(numToKeepStr: '50', artifactNumToKeepStr: '50'))
       disableConcurrentBuilds()
       skipDefaultCheckout()  
     }
@@ -19,24 +19,6 @@ pipeline {
         }
        }
        
-      stage('Início Análise Código') {
-         when {
-           branch 'development-NaoExecutar'
-         }
-           steps {
-               sh 'echo Analise SonarQube API'
-               sh 'dotnet-sonarscanner begin /k:"SME-NovoSGP" /d:sonar.host.url="http://sonar.sme.prefeitura.sp.gov.br" /d:sonar.login="8fd25bf927e18aa448d4d00ef7478004a67bf485" /d:sonar.cs.opencover.reportsPaths="teste/SME.SGP.Aplicacao.Teste/coverage.opencover.xml,teste/SME.SGP.Dominio.Servicos.Teste/coverage.opencover.xml,teste/SME.SGP.Dominio.Teste/coverage.opencover.xml,teste/SME.SGP.Dominio.Servicos.Teste/coverage.opencover.xml" /d:sonar.coverage.exclusions="**Test*.cs"'
-
-            //anlise codigo frontend
-             sh 'echo Analise SonarQube FRONTEND'
-                sh 'sonar-scanner \
-                -Dsonar.projectKey=SME-NovoSGP-WebClient \
-                -Dsonar.sources=src/SME.SGP.WebClient \
-                -Dsonar.host.url=http://sonar.sme.prefeitura.sp.gov.br \
-                -Dsonar.login=a0640671784ea3f1818bd2cb2ce65683f19bdc44'
-            }
-       } 
-         
       stage('Build projeto') {
             steps {
             sh "echo executando build de projeto"
@@ -44,22 +26,36 @@ pipeline {
             }
         }
         
-            
-      stage('Testes') {
-           steps {
-           //Executa os testes
-            sh 'dotnet test /p:CollectCoverage=true /p:CoverletOutputFormat=opencover'
+    
+
+      stage('Docker build DEV') {
+        when {
+          branch 'development'
+        }
+          steps {
+            sh 'echo Build Docker image'
+                
+        // Start JOB Rundeck para build das imagens Docker e push SME Registry
+      
+          script {
+           step([$class: "RundeckNotifier",
+              includeRundeckLogs: true,
+                               
+              //JOB DE BUILD
+              jobId: "2ccfea8d-a628-47d9-a9e0-882a0360d7ee",
+              nodeFilters: "",
+              //options: """
+              //     PARAM_1=value1
+               //    PARAM_2=value2
+              //     PARAM_3=
+              //     """,
+              rundeckInstance: "Rundeck-SME",
+              shouldFailTheBuild: true,
+              shouldWaitForRundeckJob: true,
+              tags: "",
+              tailLog: true])
            }
-       }
-        
-           stage('Fim Análise Código') {
-         when {
-           branch 'development-NaoExecutar'
-         }
-           steps {
-               sh 'echo Fim SonarQube API'
-               sh 'dotnet-sonarscanner end /d:sonar.login="8fd25bf927e18aa448d4d00ef7478004a67bf485"'
-           }
+          }
       }
 
       stage('Deploy DEV') {
@@ -67,35 +63,13 @@ pipeline {
           branch 'development'
         }
           steps {
-            sh 'echo Deploying desenvolvimento'
-                
-        // Start JOB Rundeck para build das imagens Docker e push SME Registry
-      
-          script {
-           step([$class: "RundeckNotifier",
-              includeRundeckLogs: true,
-                               
-              //JOB DE BUILD
-              jobId: "743ccbae-bd30-4ac6-b2a3-2f0d1c64e937",
-              nodeFilters: "",
-              //options: """
-              //     PARAM_1=value1
-               //    PARAM_2=value2
-              //     PARAM_3=
-              //     """,
-              rundeckInstance: "Rundeck-SME",
-              shouldFailTheBuild: true,
-              shouldWaitForRundeckJob: true,
-              tags: "",
-              tailLog: true])
-           }
-                
+            sh 'echo Deploying desenvolvimento'            
        //Start JOB Rundeck para update de deploy Kubernetes DEV
          
          script {
             step([$class: "RundeckNotifier",
               includeRundeckLogs: true,
-              jobId: "f6c3e74c-6411-466a-84a7-921d637c2645",
+              jobId: "9e3beab7-3664-4e4e-a194-f44d6d5a83fa",
               nodeFilters: "",
               //options: """
               //     PARAM_1=value1
@@ -113,41 +87,22 @@ pipeline {
             }
         }
         
-          stage('Deploy DEV-rc2') {
+      stage('Docker build HOM') {
             when {
-                branch 'development-r2'
+              branch 'release'
             }
             steps {
-                 
-                 sh 'echo Deploying desenvolvimento RC2'
+              sh 'echo Deploying homologacao'
                 
-        // Start JOB Rundeck para build das imagens Docker e push SME Registry
+        // Start JOB Rundeck para build das imagens Docker e push registry SME
       
           script {
            step([$class: "RundeckNotifier",
               includeRundeckLogs: true,
-                               
-              //JOB DE BUILD
-              jobId: "29e93baa-a956-46ac-b805-23862ddc6863",
-              nodeFilters: "",
-              //options: """
-              //     PARAM_1=value1
-               //    PARAM_2=value2
-              //     PARAM_3=
-              //     """,
-              rundeckInstance: "Rundeck-SME",
-              shouldFailTheBuild: true,
-              shouldWaitForRundeckJob: true,
-              tags: "",
-              tailLog: true])
-           }
                 
-       //Start JOB Rundeck para update de deploy Kubernetes DEV
-         
-         script {
-            step([$class: "RundeckNotifier",
-              includeRundeckLogs: true,
-              jobId: "7b136020-3ddd-4fce-9ac7-4fc9c4b9b2af",
+               
+              //JOB DE BUILD
+              jobId: "8ba69c19-5e08-4dc6-ac95-a3bd046edf66",
               nodeFilters: "",
               //options: """
               //     PARAM_1=value1
@@ -160,12 +115,8 @@ pipeline {
               tags: "",
               tailLog: true])
            }
-      
-       
-            }
+            } 
         }
-        
-       
       
       stage('Deploy HOM') {
             when {
@@ -175,38 +126,16 @@ pipeline {
                  timeout(time: 24, unit: "HOURS") {
                
                  telegramSend("${JOB_NAME}...O Build ${BUILD_DISPLAY_NAME} - Requer uma aprovação para deploy !!!\n Consulte o log para detalhes -> [Job logs](${env.BUILD_URL}console)\n")
-                 input message: 'Deseja realizar o deploy?', ok: 'SIM', submitter: 'marlon_goncalves, allan_santos, everton_nogueira, marcos_costa, bruno_alevato, robson_silva, rafael_losi'
-            }
-                 sh 'echo Deploying homologacao'
-                
-        // Start JOB Rundeck para build das imagens Docker e push registry SME
-      
-          script {
-           step([$class: "RundeckNotifier",
-              includeRundeckLogs: true,
-                
-               
-              //JOB DE BUILD
-              jobId: "397ce3f8-0af7-4d26-b65b-19f09ccf6c82",
-              nodeFilters: "",
-              //options: """
-              //     PARAM_1=value1
-               //    PARAM_2=value2
-              //     PARAM_3=
-              //     """,
-              rundeckInstance: "Rundeck-SME",
-              shouldFailTheBuild: true,
-              shouldWaitForRundeckJob: true,
-              tags: "",
-              tailLog: true])
-           }
-                
+                 input message: 'Deseja realizar o deploy?', ok: 'SIM', submitter: 'marlon_goncalves, marcos_costa, bruno_alevato, robson_silva, rafael_losi'
+            }  
+
+
        //Start JOB Rundeck para update de imagens no host homologação 
          
          script {
             step([$class: "RundeckNotifier",
               includeRundeckLogs: true,
-              jobId: "124f1ff0-d903-40fd-9455-fc91907293a7",
+              jobId: "53d39ad9-e8ce-41fe-84aa-a071992fcf8a",
               nodeFilters: "",
               //options: """
               //     PARAM_1=value1
@@ -223,18 +152,13 @@ pipeline {
        
             }
         }
-        
-        stage('Deploy HOM-R2') {
+
+        stage('Docker build HOM-R2') {
             when {
-                branch 'release-r2'
+              branch 'release-r2'
             }
             steps {
-            //     timeout(time: 24, unit: "HOURS") {
-               
-            //    telegramSend("${JOB_NAME}...O Build ${BUILD_DISPLAY_NAME} - Requer uma aprovação para deploy !!!\n Consulte o log para detalhes -> [Job logs](${env.BUILD_URL}console)\n")
-            //     input message: 'Deseja realizar o deploy?', ok: 'SIM', submitter: 'marcos_costa,danieli_paula,everton_nogueira,marlon_goncalves,rafael_losi'
-            //}
-                 sh 'echo Deploying homologacao'
+              sh 'echo Deploying homologacao'
                 
         // Start JOB Rundeck para build das imagens Docker e push registry SME
       
@@ -244,7 +168,7 @@ pipeline {
                 
                
               //JOB DE BUILD
-              jobId: "e15cd478-1155-40a2-842c-11d1de0512eb",
+              jobId: "f82d52b9-27bd-41cd-ae14-419c099df263",
               nodeFilters: "",
               //options: """
               //     PARAM_1=value1
@@ -257,13 +181,27 @@ pipeline {
               tags: "",
               tailLog: true])
            }
-                
+            } 
+        }
+        
+        stage('Deploy HOM-R2') {
+            when {
+                branch 'release-r2'
+            }
+            steps {
+                 timeout(time: 24, unit: "HOURS") {
+               
+                 telegramSend("${JOB_NAME}...O Build ${BUILD_DISPLAY_NAME} - Requer uma aprovação para deploy !!!\n Consulte o log para detalhes -> [Job logs](${env.BUILD_URL}console)\n")
+                 input message: 'Deseja realizar o deploy?', ok: 'SIM', submitter: 'marlon_goncalves, marcos_costa, bruno_alevato, robson_silva, rafael_losi'
+            }  
+
+
        //Start JOB Rundeck para update de imagens no host homologação 
          
          script {
             step([$class: "RundeckNotifier",
               includeRundeckLogs: true,
-              jobId: "b45bb11d-889a-4783-b70d-4406ea6817d7",
+              jobId: "7fb476c7-18d2-4dcd-8abb-e91afe700423",
               nodeFilters: "",
               //options: """
               //     PARAM_1=value1
@@ -279,19 +217,18 @@ pipeline {
       
        
             }
-        }    
+        }
 
-
-        stage('Deploy PROD') {
+        stage('Docker Build PROD') {
 
             when {
-                branch 'master'
+              branch 'master'
             }
             steps {
                  timeout(time: 24, unit: "HOURS") {
                
                  telegramSend("${JOB_NAME}...O Build ${BUILD_DISPLAY_NAME} - Requer uma aprovação para deploy !!!\n Consulte o log para detalhes -> [Job logs](${env.BUILD_URL}console)\n")
-                 input message: 'Deseja realizar o deploy?', ok: 'SIM', submitter: 'marlon_goncalves, allan_santos, everton_nogueira, marcos_costa, bruno_alevato, robson_silva, rafael_losi'
+                 input message: 'Deseja realizar o deploy?', ok: 'SIM', submitter: 'marlon_goncalves, marcos_costa, bruno_alevato, robson_silva, rafael_losi'
             }
                  sh 'echo Deploy produção'
                 
@@ -303,7 +240,7 @@ pipeline {
             
                
               //JOB DE BUILD
-              jobId: "b6ff0cbf-6267-41af-bb56-5cdc3eb86902",
+              jobId: "0763a665-5d44-46ae-aeaa-82a15b730cd7",
               nodeFilters: "",
               //options: """
               //     PARAM_1=value1
@@ -316,13 +253,25 @@ pipeline {
               tags: "",
               tailLog: true])
            }
+            }
+        }
+
+      stage('Deploy PROD') {
+          when {
+            branch 'master'
+          }
+          steps {
+            timeout(time: 24, unit: "HOURS") {
+              telegramSend("${JOB_NAME}...O Build ${BUILD_DISPLAY_NAME} - Requer uma aprovação para deploy !!!\n Consulte o log para detalhes -> [Job logs](${env.BUILD_URL}console)\n")
+              input message: 'Deseja realizar o deploy?', ok: 'SIM', submitter: 'marlon_goncalves, allan_santos, everton_nogueira, marcos_costa, bruno_alevato, robson_silva, rafael_losi'
+            }       
                 
        //Start JOB Rundeck para deploy em produção 
          
          script {
             step([$class: "RundeckNotifier",
               includeRundeckLogs: true,
-              jobId: "6a3d314b-672b-4fe3-9759-0b08847eb27e",
+              jobId: "310d82fe-a8ca-4086-a7d6-b7babf4f6234",
               nodeFilters: "",
               //options: """
               //     PARAM_1=value1
@@ -335,32 +284,9 @@ pipeline {
               tags: "",
               tailLog: true])
          }
-      
-       
-            }
         }
+      }
      
 }
 
-    
-post {
-        always {
-          echo 'One way or another, I have finished'
-        }
-        success {
-          telegramSend("${JOB_NAME}...O Build ${BUILD_DISPLAY_NAME} - Esta ok !!!\n Consulte o log para detalhes -> [Job logs](${env.BUILD_URL}console)\n\n Uma nova versão da aplicação esta disponivel!!!")
-        }
-        unstable {
-          telegramSend("O Build ${BUILD_DISPLAY_NAME} <${env.BUILD_URL}> - Esta instavel ...\nConsulte o log para detalhes -> [Job logs](${env.BUILD_URL}console)")
-        }
-        failure {
-          telegramSend("${JOB_NAME}...O Build ${BUILD_DISPLAY_NAME}  - Quebrou. \nConsulte o log para detalhes -> [Job logs](${env.BUILD_URL}console)")
-        }
-        changed {
-          echo 'Things were different before...'
-        }
-        aborted {
-          telegramSend("O Build ${BUILD_DISPLAY_NAME} - Foi abortado.\nConsulte o log para detalhes -> [Job logs](${env.BUILD_URL}console)")
-        }
-    }
 }
