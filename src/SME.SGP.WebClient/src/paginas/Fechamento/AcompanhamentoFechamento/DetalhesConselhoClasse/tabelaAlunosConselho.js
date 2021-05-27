@@ -84,7 +84,20 @@ const TabelaAlunosConselho = props => {
     }
   );
 
-  const montarValorNota = componenteCurricular => {
+  const montarValorNota = nota => {
+    return (
+      <>
+        {nota || '-'}
+        {!nota && (
+          <Tooltip title="Sem nota atribuída">
+            <MarcadorTriangulo cor={Base.LaranjaStatus} />
+          </Tooltip>
+        )}
+      </>
+    );
+  };
+
+  const montarNotaPosConselho = componenteCurricular => {
     return (
       <>
         {componenteCurricular?.nota || '-'}
@@ -109,15 +122,14 @@ const TabelaAlunosConselho = props => {
       title: 'Nota do fechamento',
       dataIndex: 'notaFechamento',
       align: 'center',
-      render: (_, componenteCurricular) =>
-        montarValorNota(componenteCurricular),
+      render: valor => montarValorNota(valor),
     },
     {
       title: 'Nota pós conselho',
       dataIndex: 'notaPosConselho',
       align: 'center',
       render: (_, componenteCurricular) =>
-        montarValorNota(componenteCurricular),
+        montarNotaPosConselho(componenteCurricular),
     },
     {
       title: 'Qtd. de ausências',
