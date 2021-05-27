@@ -31,7 +31,7 @@ const LocalizadorEstudante = props => {
   const classeCodigo = semMargin
     ? 'col-sm-12 col-md-6 col-lg-4 col-xl-4 p-0 pl-4'
     : 'col-sm-12 col-md-6 col-lg-4 col-xl-4';
-  
+
   const [dataSource, setDataSource] = useState([]);
   const [pessoaSelecionada, setPessoaSelecionada] = useState({});
   const [desabilitarCampo, setDesabilitarCampo] = useState({
@@ -50,6 +50,10 @@ const LocalizadorEstudante = props => {
       codigoTurma: '',
       turmaId: '',
       nomeComModalidadeTurma: '',
+    });
+    setDesabilitarCampo({
+      codigo: false,
+      nome: false,
     });
     setDataSource([]);
   }, [ueId, codigoTurma]);
