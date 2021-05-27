@@ -1,6 +1,11 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { SelectComponent, ListaPaginada, Loader, CheckboxComponent } from '~/componentes';
+import {
+  SelectComponent,
+  ListaPaginada,
+  Loader,
+  CheckboxComponent,
+} from '~/componentes';
 import { Cabecalho } from '~/componentes-sgp';
 import Button from '~/componentes/button';
 import Card from '~/componentes/card';
@@ -49,6 +54,7 @@ const HistoricoEscolar = () => {
 
   const [alunosSelecionados, setAlunosSelecionados] = useState([]);
   const [filtro, setFiltro] = useState({});
+  const [clicouBotaoGerar, setClicouBotaoGerar] = useState(false);
 
   const vaidaDesabilitarBtnGerar = useCallback(
     desabilitar => {
@@ -94,10 +100,10 @@ const HistoricoEscolar = () => {
 
   const obterAnosLetivos = useCallback(async () => {
     setCarregandoAnos(true);
-    let anosLetivos = await FiltroHelper.obterAnosLetivos({
-      consideraHistorico: consideraHistorico,
+    const anosLetivos = await FiltroHelper.obterAnosLetivos({
+      consideraHistorico,
     });
-    setListaAnosLetivo(anosLetivos); 
+    setListaAnosLetivo(anosLetivos);
     setAnoLetivo();
     setAnoLetivo(anosLetivos[0].valor);
     setDreId();
@@ -207,31 +213,34 @@ const HistoricoEscolar = () => {
 
   const [carregandoTurmas, setCarregandoTurmas] = useState(false);
 
-  const obterTurmas = useCallback(async (modalidadeSelecionada, ue, ano, consideraHistorico = false) => {
-    if (ue && modalidadeSelecionada) {
-      setCarregandoTurmas(true);
-      const { data } = await AbrangenciaServico.buscarTurmas(
-        ue,
-        modalidadeSelecionada,
-        '',
-        ano,
-        consideraHistorico,
-        true
-      );
-      if (data) {
-        const lista = data.map(item => ({
-          desc: item.nome,
-          valor: item.codigo,
-        }));
-        setListaTurmas(lista);
+  const obterTurmas = useCallback(
+    async (modalidadeSelecionada, ue, ano, consideraHistorico = false) => {
+      if (ue && modalidadeSelecionada) {
+        setCarregandoTurmas(true);
+        const { data } = await AbrangenciaServico.buscarTurmas(
+          ue,
+          modalidadeSelecionada,
+          '',
+          ano,
+          consideraHistorico,
+          true
+        );
+        if (data) {
+          const lista = data.map(item => ({
+            desc: item.nome,
+            valor: item.codigo,
+          }));
+          setListaTurmas(lista);
 
-        if (lista && lista.length && lista.length === 1) {
-          setTurmaId(lista[0].valor);
+          if (lista && lista.length && lista.length === 1) {
+            setTurmaId(lista[0].valor);
+          }
         }
+        setCarregandoTurmas(false);
       }
-      setCarregandoTurmas(false);
-    }
-  }, []);
+    },
+    []
+  );
 
   const [carregandoSemestres, setCarregandoSemestres] = useState(false);
 
@@ -299,10 +308,18 @@ const HistoricoEscolar = () => {
   }, [modalidadeId, anoLetivo, obterTurmas]);
 
   useEffect(() => {
+    const desabiltarAlunosSelecionados =
+      String(estudanteOpt) === '1'
+        ? !alunosSelecionados?.length
+        : codigosAlunosSelecionados?.length;
+
+    const desabilitarFiltros =
+      !anoLetivo || !dreId || !ueId || !modalidadeId || !turmaId;
+
     const desabilitar =
-      !alunoLocalizadorSelecionado &&
-      (!codigosAlunosSelecionados || codigosAlunosSelecionados?.length === 0) &&
-      (!anoLetivo || !dreId || !ueId || !modalidadeId || !turmaId);
+      (!alunoLocalizadorSelecionado && desabilitarFiltros) ||
+      desabiltarAlunosSelecionados ||
+      clicouBotaoGerar;
 
     if (String(modalidadeId) === String(modalidade.EJA)) {
       vaidaDesabilitarBtnGerar(!semestre || desabilitar);
@@ -319,6 +336,9 @@ const HistoricoEscolar = () => {
     turmaId,
     semestre,
     vaidaDesabilitarBtnGerar,
+    clicouBotaoGerar,
+    estudanteOpt,
+    alunosSelecionados,
   ]);
 
   useEffect(() => {
@@ -349,6 +369,7 @@ const HistoricoEscolar = () => {
 
   const onClickGerar = () => {
     setCarregandoGerar(true);
+    setClicouBotaoGerar(true);
 
     const params = {
       anoLetivo,
@@ -411,10 +432,15 @@ const HistoricoEscolar = () => {
     setTurmaId();
   };
 
-  const onChangeSemestre = valor => setSemestre(valor);
+  const onChangeSemestre = valor => {
+    setSemestre(valor);
+    setClicouBotaoGerar(false);
+  };
+
   const onChangeTurma = valor => {
     setTurmaId(valor);
     setEstudanteOpt('0');
+    setClicouBotaoGerar(false);
   };
 
   const onChangeEstudanteOpt = valor => {
@@ -431,11 +457,18 @@ const HistoricoEscolar = () => {
       setAlunosSelecionados([]);
     }
     setEstudanteOpt(valor);
+    setClicouBotaoGerar(false);
   };
 
-  const onChangeImprimirDadosResp = valor => setImprimirDadosResp(valor);
-  const onChangePreencherDataImpressao = valor =>
+  const onChangeImprimirDadosResp = valor => {
+    setImprimirDadosResp(valor);
+    setClicouBotaoGerar(false);
+  };
+
+  const onChangePreencherDataImpressao = valor => {
     setPreencherDataImpressao(valor);
+    setClicouBotaoGerar(false);
+  };
 
   const onChangeLocalizadorEstudante = aluno => {
     if (aluno?.alunoCodigo && aluno?.alunoNome) {
@@ -448,14 +481,16 @@ const HistoricoEscolar = () => {
       if (listaModalidades && listaModalidades.length === 1)
         setModalidadeId(String(listaModalidades[0].valor));
     }
+    setClicouBotaoGerar(false);
   };
 
   const onSelecionarItems = items => {
     setAlunosSelecionados([...items.map(item => String(item.codigo))]);
+    setClicouBotaoGerar(false);
   };
 
-  function onCheckedConsideraHistorico(e){   
-    setConsideraHistorico(e.target.checked);    
+  function onCheckedConsideraHistorico(e) {
+    setConsideraHistorico(e.target.checked);
   }
 
   return (
@@ -504,13 +539,13 @@ const HistoricoEscolar = () => {
                   disabled={desabilitarBtnGerar}
                 />
               </Loader>
-            </div>            
+            </div>
             <div className="col-sm-12 mb-4">
-              <CheckboxComponent 
-                label="Exibir histórico?" 
+              <CheckboxComponent
+                label="Exibir histórico?"
                 onChangeCheckbox={onCheckedConsideraHistorico}
                 checked={consideraHistorico}
-              />            
+              />
             </div>
             <div className="col-sm-12 col-md-6 col-lg-2 col-xl-2 mb-2">
               <Loader loading={carregandoAnos} tip="">

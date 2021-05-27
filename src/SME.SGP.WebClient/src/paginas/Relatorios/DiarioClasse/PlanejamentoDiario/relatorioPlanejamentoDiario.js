@@ -50,6 +50,7 @@ const RelatorioPlanejamentoDiario = () => {
   const [bimestre, setBimestre] = useState();
 
   const [consideraHistorico, setConsideraHistorico] = useState(false);
+  const [clicouBotaoGerar, setClicouBotaoGerar] = useState(false);
   const [desabilitarGerar, setDesabilitarGerar] = useState(true);
 
   const OPCAO_TODOS = '-99';
@@ -96,20 +97,24 @@ const RelatorioPlanejamentoDiario = () => {
 
   const onChangeComponenteCurricular = valor => {
     setComponenteCurricularId(valor);
+    setClicouBotaoGerar(false);
   };
 
   const onChangeBimestre = valor => {
     setBimestre(valor);
+    setClicouBotaoGerar(false);
   };
 
   const onChangeSemestre = valor => {
     setSemestre(valor);
+    setClicouBotaoGerar(false);
   };
 
   const onChangeTurma = valor => {
     setTurmaId(valor);
     setListarDataFutura(false);
     setExibirDetalhamento(false);
+    setClicouBotaoGerar(false);
   };
 
   const [anoAtual] = useState(moment().format('YYYY'));
@@ -148,7 +153,12 @@ const RelatorioPlanejamentoDiario = () => {
   }, [obterDres, anoLetivo, consideraHistorico]);
 
   useEffect(() => {
-    let desabilitar = !anoLetivo || !codigoDre || !codigoUe;
+    let desabilitar =
+      !anoLetivo ||
+      !codigoDre ||
+      !codigoUe ||
+      !componenteCurricularId?.length ||
+      clicouBotaoGerar;
 
     const temDreUeSelecionada = codigoDre && codigoUe;
 
@@ -183,6 +193,8 @@ const RelatorioPlanejamentoDiario = () => {
     modalidadeId,
     semestre,
     bimestre,
+    componenteCurricularId,
+    clicouBotaoGerar,
   ]);
 
   const validarValorPadraoAnoLetivo = lista => {
@@ -500,6 +512,8 @@ const RelatorioPlanejamentoDiario = () => {
     };
 
     setExibirLoader(true);
+    setClicouBotaoGerar(true);
+
     const retorno = await ServicoRelatorioPlanejamentoDiario.gerar(params)
       .catch(e => erros(e))
       .finally(setExibirLoader(false));
@@ -686,6 +700,7 @@ const RelatorioPlanejamentoDiario = () => {
                 valorInicial
                 onChange={e => {
                   setListarDataFutura(e.target.value);
+                  setClicouBotaoGerar(false);
                 }}
                 desabilitado={
                   !turmaId ||
@@ -704,6 +719,7 @@ const RelatorioPlanejamentoDiario = () => {
                 valorInicial
                 onChange={e => {
                   setExibirDetalhamento(e.target.value);
+                  setClicouBotaoGerar(false);
                 }}
                 value={exibirDetalhamento}
                 desabilitado={!turmaId || turmaId === OPCAO_TODOS}
