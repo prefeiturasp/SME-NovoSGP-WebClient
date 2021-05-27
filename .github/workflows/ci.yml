@@ -1,4 +1,4 @@
-name: CI/CD Dev
+name: CI/CD
 
 on:
   push:
@@ -18,8 +18,8 @@ jobs:
     - name: Build
       run: |
         cd $GITHUB_WORKSPACE
-        docker login registry.sme.prefeitura.sp.gov.br -u $docker_user -p $docker_pass
-        docker build -t registry.sme.prefeitura.sp.gov.br/sgp/sme-sgp-webclient:dev -f src/SME.SGP.WebClient/Dockerfile .
+        echo $docker_pass | docker login registry.sme.prefeitura.sp.gov.br -u $docker_user --password-stdin 
+        docker build -t registry.sme.prefeitura.sp.gov.br/sgp/sme-sgp-webclient:$branch -f src/SME.SGP.WebClient/Dockerfile .
         docker push registry.sme.prefeitura.sp.gov.br/sgp/sme-sgp-webclient:$branch
       env: # https://docs.github.com/en/actions/reference/environment-variables
         docker_user: ${{ secrets.DOCKER_USER }}
