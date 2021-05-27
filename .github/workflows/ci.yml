@@ -7,7 +7,8 @@ on:
     branches: [ dev ]
 
 jobs:
-  build:
+  docker:
+    name: Docker
     runs-on: self-hosted
 
     steps:
@@ -15,15 +16,12 @@ jobs:
       uses: actions/checkout@v2
 
     - name: Build
-      # https://docs.github.com/en/actions/reference/environment-variables
-      with:
-        docker_user: ${{ secrets.DOCKER_USER }}
-        docker_pass: ${{ secrets.DOCKER_PASS }}
-        branch: ${GITHUB_REF:10}
-      env: 
-        repository: ${{ github.repository }}
       run: |
         cd $GITHUB_WORKSPACE
         docker login registry.sme.prefeitura.sp.gov.br -u $docker_user -p $docker_pass
         docker build -t registry.sme.prefeitura.sp.gov.br/sgp/sme-sgp-webclient:dev -f src/SME.SGP.WebClient/Dockerfile .
         docker push registry.sme.prefeitura.sp.gov.br/sgp/sme-sgp-webclient:$branch
+      env: # https://docs.github.com/en/actions/reference/environment-variables
+        docker_user: ${{ secrets.DOCKER_USER }}
+        docker_pass: ${{ secrets.DOCKER_PASS }}
+        branch: ${GITHUB_REF:10}
