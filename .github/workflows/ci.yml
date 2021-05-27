@@ -15,9 +15,6 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v2
 
-    - name: Normalize branch name
-      run: echo "branch=$( ${GITHUB_REF:10} | tr '/' '-' )" >> $GITHUB_ENV
-
     - name: Build
       run: |
         cd $GITHUB_WORKSPACE
@@ -27,3 +24,4 @@ jobs:
       env: # https://docs.github.com/en/actions/reference/environment-variables
         docker_user: ${{ secrets.DOCKER_USER }}
         docker_pass: ${{ secrets.DOCKER_PASS }}
+        branch: ${{ github.ref }}
