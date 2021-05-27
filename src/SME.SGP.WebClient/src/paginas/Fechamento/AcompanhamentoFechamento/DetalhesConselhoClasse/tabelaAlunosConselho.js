@@ -100,8 +100,8 @@ const TabelaAlunosConselho = props => {
   const montarNotaPosConselho = componenteCurricular => {
     return (
       <>
-        {componenteCurricular?.nota || '-'}
-        {!componenteCurricular?.nota && componenteCurricular?.lancaNota ? (
+        {componenteCurricular?.notaPosConselho || '-'}
+        {!componenteCurricular?.notaPosConselho && componenteCurricular?.lancaNota ? (
           <Tooltip title="Sem nota atribuída">
             <MarcadorTriangulo cor={Base.LaranjaStatus} />
           </Tooltip>
