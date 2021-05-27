@@ -5,7 +5,6 @@ import Button from '~/componentes/button';
 import Card from '~/componentes/card';
 import { Colors } from '~/componentes/colors';
 import modalidade from '~/dtos/modalidade';
-import tipoEscolaDTO from '~/dtos/tipoEscolaDto';
 import AbrangenciaServico from '~/servicos/Abrangencia';
 import { erros, sucesso } from '~/servicos/alertas';
 import api from '~/servicos/api';
@@ -65,6 +64,9 @@ const RelatorioPendencias = () => {
   );
   const [bimestre, setBimestre] = useState(undefined);
   const [exibirDetalhamento, setExibirDetalhamento] = useState('1');
+  const [clicouBotaoGerar, setClicouBotaoGerar] = useState(false);
+  const [desabilitarBtnGerar, setDesabilitarBtnGerar] = useState(true);
+
   const listaSimNao = [
     { valor: '1', desc: 'Sim' },
     { valor: '0', desc: 'Não' },
@@ -99,26 +101,34 @@ const RelatorioPendencias = () => {
     setTurmaId();
     setComponentesCurricularesId();
     setModalidadeId(valor);
+    setClicouBotaoGerar(false);
   };
 
   const onChangeSemestre = valor => {
     setSemestre(valor);
+    setClicouBotaoGerar(false);
   };
 
   const onChangeTurma = valor => {
     setComponentesCurricularesId();
     setTurmaId(valor);
+    setClicouBotaoGerar(false);
   };
 
   const onChangeComponenteCurricular = valor => {
     setComponentesCurricularesId([valor]);
+    setClicouBotaoGerar(false);
   };
 
   const onChangeBimestre = valor => {
     setBimestre(valor);
+    setClicouBotaoGerar(false);
   };
 
-  const onChangeExibirDetalhamento = valor => setExibirDetalhamento(valor);
+  const onChangeExibirDetalhamento = valor => {
+    setExibirDetalhamento(valor);
+    setClicouBotaoGerar(false);
+  };
 
   const [anoAtual] = useState(window.moment().format('YYYY'));
 
@@ -400,19 +410,37 @@ const RelatorioPendencias = () => {
     await setAnoLetivo(anoAtual);
   };
 
-  const desabilitarGerar =
-    !anoLetivo ||
-    !dreId ||
-    !ueId ||
-    !modalidadeId ||
-    (String(modalidadeId) === String(modalidade.EJA) ? !semestre : false) ||
-    !turmaId ||
-    !componentesCurricularesId ||
-    !bimestre ||
-    !exibirDetalhamento;
+  useEffect(() => {
+    const desabilitar =
+      !anoLetivo ||
+      !dreId ||
+      !ueId ||
+      !modalidadeId ||
+      (String(modalidadeId) === String(modalidade.EJA) ? !semestre : false) ||
+      !turmaId ||
+      !componentesCurricularesId ||
+      !bimestre ||
+      !exibirDetalhamento ||
+      clicouBotaoGerar;
+
+    setDesabilitarBtnGerar(desabilitar);
+  }, [
+    anoLetivo,
+    dreId,
+    ueId,
+    modalidadeId,
+    turmaId,
+    semestre,
+    componentesCurricularesId,
+    bimestre,
+    exibirDetalhamento,
+    clicouBotaoGerar,
+  ]);
 
   const gerar = async () => {
     setCarregandoGerar(true);
+    setClicouBotaoGerar(true);
+
     const params = {
       anoLetivo,
       dreCodigo: dreId,
@@ -481,7 +509,7 @@ const RelatorioPendencias = () => {
                   bold
                   className="mr-0"
                   onClick={gerar}
-                  disabled={desabilitarGerar}
+                  disabled={desabilitarBtnGerar}
                 />
               </Loader>
             </div>
@@ -566,7 +594,7 @@ const RelatorioPendencias = () => {
                 />
               </Loader>
             </div>
-            <div className={`"col-sm-12 col-md-6 col-lg-2`}>
+            <div className="col-sm-12 col-md-6 col-lg-2">
               <Loader loading={carregandoTurmas} tip="">
                 <SelectComponent
                   id="drop-turma-rel-pendencias"
@@ -590,7 +618,7 @@ const RelatorioPendencias = () => {
                 />
               </Loader>
             </div>
-            <div className={`"col-sm-12 col-md-6 col-lg-2`}>
+            <div className="col-sm-12 col-md-6 col-lg-2 text-nowrap">
               <Loader loading={carregandoComponentesCurriculares} tip="">
                 <SelectComponent
                   id="drop-componente-curricular-rel-pendencias"
@@ -607,7 +635,7 @@ const RelatorioPendencias = () => {
                 />
               </Loader>
             </div>
-            <div className={`"col-sm-12 col-md-6 col-lg-2`}>
+            <div className="col-sm-12 col-md-6 col-lg-2">
               <SelectComponent
                 id="drop-bimestre-rel-pendencias"
                 lista={listaBimestres}
@@ -620,7 +648,7 @@ const RelatorioPendencias = () => {
                 placeholder="Bimestre"
               />
             </div>
-            <div className={`"col-sm-12 col-md-6 col-lg-2`}>
+            <div className="col-sm-12 col-md-6 col-lg-2">
               <SelectComponent
                 label="Exibir detalhamento"
                 lista={listaSimNao}

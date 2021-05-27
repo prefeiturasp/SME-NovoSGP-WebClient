@@ -51,6 +51,7 @@ const AtribuicaoCJ = () => {
 
   const [desabilitarBtnGerar, setDesabilitarBtnGerar] = useState(true);
   const [carregandoGeral, setCarregandoGeral] = useState(false);
+  const [clicouBotaoGerar, setClicouBotaoGerar] = useState(false);
 
   const OPCAO_TODOS = '-99';
 
@@ -85,6 +86,7 @@ const AtribuicaoCJ = () => {
   const onClickGerar = async () => {
     let turmasCodigo = turmaId;
     setCarregandoGeral(true);
+    setClicouBotaoGerar(true);
 
     if (turmaId?.length && turmaId?.find(item => item !== OPCAO_TODOS)) {
       turmasCodigo = listaTurmas.filter(
@@ -146,10 +148,12 @@ const AtribuicaoCJ = () => {
 
   const onChangeSemestre = valor => {
     setSemestre(valor);
+    setClicouBotaoGerar(false);
   };
 
   const onChangeTurma = valor => {
     setTurmaId(valor);
+    setClicouBotaoGerar(false);
   };
 
   const obterAnosLetivos = useCallback(async () => {
@@ -346,10 +350,11 @@ const AtribuicaoCJ = () => {
   }, [modalidadeId]);
 
   useEffect(() => {
-    const desabilitar = !anoLetivo || !dreCodigo || !ueCodigo;
+    const desabilitar =
+      !anoLetivo || !dreCodigo || !ueCodigo || clicouBotaoGerar;
 
     setDesabilitarBtnGerar(desabilitar);
-  }, [anoLetivo, dreCodigo, ueCodigo]);
+  }, [anoLetivo, dreCodigo, ueCodigo, clicouBotaoGerar]);
 
   const onchangeMultiSelect = (valores, valoreAtual, funSetarNovoValor) => {
     const opcaoTodosJaSelecionado = valoreAtual
@@ -517,6 +522,7 @@ const AtribuicaoCJ = () => {
                   } else {
                     setUsuarioRf(undefined);
                   }
+                  setClicouBotaoGerar(false);
                 }}
                 buscarOutrosCargos
                 classesRF="p-0"
@@ -531,6 +537,7 @@ const AtribuicaoCJ = () => {
                   valorInicial
                   onChange={e => {
                     setExibirAulas(e.target.value);
+                    setClicouBotaoGerar(false);
                   }}
                   value={exibirAulas}
                 />
@@ -542,6 +549,7 @@ const AtribuicaoCJ = () => {
                   valorInicial
                   onChange={e => {
                     setExibirAtribuicoesExporadicas(e.target.value);
+                    setClicouBotaoGerar(false);
                   }}
                   value={exibirAtribuicoesExporadicas}
                 />
@@ -553,6 +561,7 @@ const AtribuicaoCJ = () => {
                   valorInicial
                   onChange={e => {
                     setTipoVisualizacao(e.target.value);
+                    setClicouBotaoGerar(false);
                   }}
                   value={tipoVisualizacao}
                 />
