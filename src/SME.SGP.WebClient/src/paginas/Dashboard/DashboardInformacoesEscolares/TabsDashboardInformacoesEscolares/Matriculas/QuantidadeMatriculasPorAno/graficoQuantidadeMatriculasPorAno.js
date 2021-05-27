@@ -7,31 +7,40 @@ import { OPCAO_TODOS } from '~/constantes/constantes';
 import { erros } from '~/servicos';
 import ServicoDashboardInformacoesEscolares from '~/servicos/Paginas/Dashboard/ServicoDashboardInformacoesEscolares';
 import DataUltimaAtualizacaoDashboardInformacoesEscolares from '../../../dataUltimaAtualizacaoDashboardInformacoesEscolares';
+import LabelTotalMatriculas from '../../../labelTotalMatriculas';
 
 const GraficoQuantidadeMatriculasPorAno = props => {
-  const {
-    anoLetivo,
-    dreId,
-    ueId,
-    modalidade,
-    listaAnosEscolares,
-    exibirAnosEscolares,
-  } = props;
+  const { anoLetivo, dreId, ueId, modalidade } = props;
 
   const [dadosGrafico, setDadosGrafico] = useState([]);
   const [exibirLoader, setExibirLoader] = useState(false);
-  const [anoEscolar, setAnoEscolar] = useState();
+  const [anosEscolares, setAnosEscolares] = useState([]);
 
-  const dataUltimaConsolidacao = moment();
+  const [listaAnosEscolares, setListaAnosEscolares] = useState([]);
 
-  const obterDadosGrafico = useCallback(async () => {
+  const exibirAnosEscolares =
+    anoLetivo &&
+    modalidade &&
+    ((dreId === OPCAO_TODOS && ueId === OPCAO_TODOS) ||
+      (dreId !== OPCAO_TODOS && ueId !== OPCAO_TODOS));
+
+  const obterDadosGrafico = async (
+    ano,
+    dre,
+    ue,
+    mod,
+    anosEscolaresConsulta
+  ) => {
     setExibirLoader(true);
     const retorno = await ServicoDashboardInformacoesEscolares.obterQuantidadeMatriculasPorAno(
-      anoLetivo,
-      dreId === OPCAO_TODOS ? '' : dreId,
-      ueId === OPCAO_TODOS ? '' : ueId,
-      modalidade,
-      anoEscolar === OPCAO_TODOS ? '' : anoEscolar
+      ano,
+      dre === OPCAO_TODOS ? '' : dre,
+      ue === OPCAO_TODOS ? '' : ue,
+      mod,
+      anosEscolaresConsulta?.length === 1 &&
+        anosEscolaresConsulta[0] === OPCAO_TODOS
+        ? ''
+        : anosEscolaresConsulta
     )
       .catch(e => erros(e))
       .finally(() => setExibirLoader(false));
@@ -41,42 +50,99 @@ const GraficoQuantidadeMatriculasPorAno = props => {
     } else {
       setDadosGrafico([]);
     }
-  }, [anoLetivo, dreId, ueId, modalidade, anoEscolar]);
+  };
 
   useEffect(() => {
-    if (
-      anoLetivo &&
-      dreId &&
-      ueId &&
-      modalidade &&
-      (exibirAnosEscolares ? !!anoEscolar : true)
-    ) {
-      obterDadosGrafico();
+    if (anoLetivo && dreId && ueId && modalidade && !exibirAnosEscolares) {
+      obterDadosGrafico(anoLetivo, dreId, ueId, modalidade);
     } else {
       setDadosGrafico([]);
+    }
+  }, [anoLetivo, dreId, ueId, modalidade, exibirAnosEscolares]);
+
+  const onChangeAnoEscolar = (novosValores, valoresAtuais) => {
+    let novaListaAnos = [];
+
+    const opcaoTodosJaSelecionado = valoresAtuais
+      ? valoresAtuais?.includes(OPCAO_TODOS)
+      : false;
+    if (opcaoTodosJaSelecionado) {
+      const listaSemOpcaoTodos = novosValores?.filter(
+        ano => ano !== OPCAO_TODOS
+      );
+      novaListaAnos = listaSemOpcaoTodos;
+    } else if (novosValores?.includes(OPCAO_TODOS)) {
+      novaListaAnos = [OPCAO_TODOS];
+    } else {
+      novaListaAnos = novosValores;
+    }
+
+    setAnosEscolares(novaListaAnos);
+    if (novaListaAnos?.length) {
+      obterDadosGrafico(anoLetivo, dreId, ueId, modalidade, novaListaAnos);
+    } else {
+      setDadosGrafico([]);
+    }
+  };
+
+  const obterAnosEscolares = useCallback(async () => {
+    setExibirLoader(true);
+    const respota = await ServicoDashboardInformacoesEscolares.obterAnosEscolaresPorModalidade(
+      anoLetivo,
+      dreId === OPCAO_TODOS ? '' : dreId,
+      ueId === OPCAO_TODOS ? '' : ueId,
+      modalidade
+    ).catch(e => erros(e));
+
+    if (respota?.data?.length) {
+      if (respota.data.length > 1) {
+        respota.data.unshift({
+          ano: OPCAO_TODOS,
+          modalidadeAno: 'Todos os anos',
+        });
+      }
+
+      setListaAnosEscolares(respota.data);
+
+      let valorInicialAnoEscolar = [];
+
+      if (respota.data.length === 1) {
+        valorInicialAnoEscolar = [String(respota.data[0].ano)];
+      } else if (respota.data?.length > 1) {
+        valorInicialAnoEscolar = [OPCAO_TODOS];
+      }
+
+      setAnosEscolares(valorInicialAnoEscolar);
+      obterDadosGrafico(
+        anoLetivo,
+        dreId,
+        ueId,
+        modalidade,
+        valorInicialAnoEscolar
+      );
+    } else {
+      setExibirLoader(false);
+      setListaAnosEscolares([]);
+      setAnosEscolares([]);
+      setDadosGrafico([]);
+    }
+  }, [anoLetivo, dreId, ueId, modalidade]);
+
+  useEffect(() => {
+    if (anoLetivo && dreId && ueId && modalidade && exibirAnosEscolares) {
+      obterAnosEscolares();
+    } else {
+      setListaAnosEscolares([]);
+      setAnosEscolares([]);
     }
   }, [
     anoLetivo,
     dreId,
     ueId,
     modalidade,
-    anoEscolar,
     exibirAnosEscolares,
-    obterDadosGrafico,
+    obterAnosEscolares,
   ]);
-
-  useEffect(() => {
-    if (exibirAnosEscolares) {
-      if (listaAnosEscolares?.length === 1) {
-        setAnoEscolar(String(listaAnosEscolares[0].ano));
-      }
-      if (listaAnosEscolares?.length > 1) {
-        setAnoEscolar(OPCAO_TODOS);
-      }
-    }
-  }, [listaAnosEscolares, exibirAnosEscolares]);
-
-  const onChangeAnoEscolar = valor => setAnoEscolar(valor);
 
   return (
     <>
@@ -88,23 +154,34 @@ const GraficoQuantidadeMatriculasPorAno = props => {
               valueOption="ano"
               valueText="modalidadeAno"
               disabled={listaAnosEscolares?.length === 1}
-              valueSelect={anoEscolar}
-              onChange={onChangeAnoEscolar}
+              valueSelect={anosEscolares}
+              onChange={valores => {
+                onChangeAnoEscolar(valores, anosEscolares);
+              }}
               placeholder="Selecione o ano"
-              allowClear={false}
+              multiple
             />
           </div>
         )}
-        {dataUltimaConsolidacao && (
-          <div
-            className={
-              exibirAnosEscolares
-                ? 'col-sm-12 col-md-6 col-lg-9 col-xl-9 mb-2'
-                : 'col-md-12 mb-2'
-            }
-          >
-            <DataUltimaAtualizacaoDashboardInformacoesEscolares
-              anoLetivo={anoLetivo}
+
+        <div
+          className={
+            exibirAnosEscolares
+              ? 'col-sm-12 col-md-6 col-lg-9 col-xl-9 mb-2'
+              : 'col-md-12 mb-2'
+          }
+        >
+          <DataUltimaAtualizacaoDashboardInformacoesEscolares
+            anoLetivo={anoLetivo}
+          />
+        </div>
+
+        {dadosGrafico?.length && (
+          <div className="col-md-12 mb-2">
+            <LabelTotalMatriculas
+              total={dadosGrafico
+                ?.map(item => item?.quantidade)
+                .reduce((total, valorAtual) => total + valorAtual)}
             />
           </div>
         )}
@@ -134,8 +211,6 @@ GraficoQuantidadeMatriculasPorAno.propTypes = {
   dreId: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   ueId: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   modalidade: PropTypes.string,
-  listaAnosEscolares: PropTypes.oneOfType(PropTypes.array),
-  exibirAnosEscolares: PropTypes.bool,
 };
 
 GraficoQuantidadeMatriculasPorAno.defaultProps = {
@@ -143,8 +218,6 @@ GraficoQuantidadeMatriculasPorAno.defaultProps = {
   dreId: null,
   ueId: null,
   modalidade: '',
-  listaAnosEscolares: [],
-  exibirAnosEscolares: false,
 };
 
 export default GraficoQuantidadeMatriculasPorAno;

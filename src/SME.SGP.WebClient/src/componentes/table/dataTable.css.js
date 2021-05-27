@@ -35,9 +35,13 @@ export const Container = styled.div`
     cursor: pointer;
   }
 
+  .ant-table-tbody tr:hover.ant-table-expanded-row > td {
+    cursor: default !important;
+  }
+
   .ant-table-tbody tr td {
     border-right: solid 1px ${Base.CinzaDesabilitado};
-    cursor: pointer;
+    cursor: ${props => (props.temEventoOnClickRow ? 'pointer' : 'default')};
     white-space: nowrap;
   }
 
@@ -132,7 +136,7 @@ export const Container = styled.div`
             color: ${Base.Branco} !important;
           }
 
-          .ant-table-tbody tr:hover td {
+          .ant-table-tbody tr:hover td:not(.ant-table-expanded-row) > td {
             background: ${Base.Roxo} !important;
             color: ${Base.Branco} !important;
 
@@ -162,7 +166,7 @@ export const Container = styled.div`
             }
           }
 
-          .ant-table-tbody tr:hover {
+          .ant-table-tbody tr:hover:not(.ant-table-expanded-row) > td {
             background: ${Base.Roxo} !important;
             color: ${Base.Branco} !important;
           }
