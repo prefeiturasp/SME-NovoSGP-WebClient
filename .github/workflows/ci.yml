@@ -19,8 +19,8 @@ jobs:
       run: |
         cd $GITHUB_WORKSPACE
         echo $docker_pass | docker login registry.sme.prefeitura.sp.gov.br -u $docker_user --password-stdin 
-        docker build -t registry.sme.prefeitura.sp.gov.br/sgp/sme-sgp-webclient:$branch -f src/SME.SGP.WebClient/Dockerfile .
-        docker push registry.sme.prefeitura.sp.gov.br/sgp/sme-sgp-webclient:$branch
+        docker build -t registry.sme.prefeitura.sp.gov.br/sgp/sme-sgp-webclient:${branch:10} -f src/SME.SGP.WebClient/Dockerfile .
+        docker push registry.sme.prefeitura.sp.gov.br/sgp/sme-sgp-webclient:${branch:10}
       env: # https://docs.github.com/en/actions/reference/environment-variables
         docker_user: ${{ secrets.DOCKER_USER }}
         docker_pass: ${{ secrets.DOCKER_PASS }}
