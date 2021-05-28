@@ -2,12 +2,11 @@ FROM node:16-alpine as build-deps
 WORKDIR /usr/src/app
 # COPY src/SME.SGP.WebClient/package.json src/SME.SGP.WebClient/yarn.lock ./
 
-ENV NODE_OPTIONS --max_old_space_size=4096
+ENV NODE_OPTIONS --max_old_space_size=2048
 
 COPY /src/SME.SGP.WebClient/ .
-RUN set NODE_OPTIONS=--max_old_space_size=4096 && \ 
-    yarn install && \
-    yarn build
+RUN set NODE_OPTIONS=--max_old_space_size=2048
+RUN yarn install && yarn build
 
 FROM nginx:1.17-alpine
 
