@@ -22,8 +22,7 @@ pipeline {
       stage('Build projeto') {
             steps {
             sh "echo executando build de projeto"
-            sh 'yarn install'
-            //sh 'yarn build'    
+            //sh 'dotnet build'
             }
         }
         
@@ -153,15 +152,15 @@ pipeline {
        
             }
         }
-        
-        stage('Docker build HOM2') {
+
+        stage('Docker build HOM-R2') {
             when {
               branch 'release-r2'
             }
             steps {
-              sh 'echo build homologacao release 2'
+              sh 'echo Deploying homologacao'
                 
-        // Start JOB Rundeck para build das imagens Docker
+        // Start JOB Rundeck para build das imagens Docker e push registry SME
       
           script {
            step([$class: "RundeckNotifier",
@@ -184,8 +183,8 @@ pipeline {
            }
             } 
         }
-      
-      stage('Deploy HOM2') {
+        
+        stage('Deploy HOM-R2') {
             when {
                 branch 'release-r2'
             }
@@ -219,7 +218,7 @@ pipeline {
        
             }
         }
-        
+
         stage('Docker Build PROD') {
 
             when {

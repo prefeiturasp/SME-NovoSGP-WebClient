@@ -148,11 +148,11 @@ const AvaliacaoForm = ({ match, location }) => {
   const cadastrarAvaliacao = async dados => {
     const avaliacao = {};
     setCarregandoTela(true);
-    if (Object.entries(eventoAulaCalendarioEdicao).length) {
+    if (Object.entries(eventoAulaCalendarioEdicao)?.length) {
       avaliacao.dreId = eventoAulaCalendarioEdicao.dre;
       avaliacao.turmaId = eventoAulaCalendarioEdicao.turma;
       avaliacao.ueId = eventoAulaCalendarioEdicao.unidadeEscolar;
-    } else if (Object.entries(turmaSelecionada).length) {
+    } else if (Object.entries(turmaSelecionada)?.length) {
       avaliacao.dreId = turmaSelecionada.dre;
       avaliacao.turmaId = turmaSelecionada.turma;
       avaliacao.ueId = turmaSelecionada.unidadeEscolar;
@@ -187,7 +187,7 @@ const AvaliacaoForm = ({ match, location }) => {
     delete dadosValidacao.categoriaId;
     delete dadosValidacao.descricao;
 
-    if (descricao.length <= 500) {
+    if (descricao?.length <= 500) {
       const validacao = await ServicoAvaliacao.validar(dadosValidacao);
 
       if (validacao && validacao.status === 200) {
@@ -248,7 +248,7 @@ const AvaliacaoForm = ({ match, location }) => {
           exclusive: true,
           message:
             'Para categoria Interdisciplinar informe mais que um componente curricular',
-          test: value => (ehInterdisciplinar ? value.length > 1 : true),
+          test: value => (ehInterdisciplinar ? value?.length > 1 : true),
         }),
       tipoAvaliacaoId: Yup.string().required(
         'Selecione o tipo de atividade avaliativa'
@@ -345,20 +345,17 @@ const AvaliacaoForm = ({ match, location }) => {
   };
 
   useEffect(() => {
-    if (
-      (!idAvaliacao && listaDisciplinas.length === 1) ||
-      mostrarDisciplinaRegencia
-    ) {
-      if (listaDisciplinas[0].regencia) {
-        setTemRegencia(true);
-        obterDisciplinasRegencia();
-      }
+    if (!idAvaliacao && listaDisciplinas.length === 1) {
       setDadosAvaliacao({
         ...dadosAvaliacao,
         disciplinasId: listaDisciplinas[0].codigoComponenteCurricular.toString(),
       });
       setPodeLancaNota(listaDisciplinas[0].lancaNota);
       setDisciplinaSelecionada(listaDisciplinas[0].codigoComponenteCurricular);
+    }
+    if (mostrarDisciplinaRegencia) {
+      setTemRegencia(true);
+      obterDisciplinasRegencia();
     }
   }, [listaDisciplinas, mostrarDisciplinaRegencia]);
 
@@ -499,7 +496,7 @@ const AvaliacaoForm = ({ match, location }) => {
       item => item.selecionada
     );
     const desbilitar =
-      disciplinaEncontrada?.regencia && !regenciaSelecionada.length;
+      disciplinaEncontrada?.regencia && !regenciaSelecionada?.length;
 
     setMostrarDisciplinaRegencia(disciplinaEncontrada?.regencia);
     setDesabilitarBotaoCadastrar(desbilitar);
@@ -507,8 +504,8 @@ const AvaliacaoForm = ({ match, location }) => {
 
   useEffect(() => {
     if (
-      listaDisciplinasRegencia.length &&
-      atividadesRegencia.length &&
+      listaDisciplinasRegencia?.length &&
+      atividadesRegencia?.length &&
       desabilitarBotaoCadastrar &&
       mostrarDisciplinaRegencia
     ) {
@@ -668,7 +665,7 @@ const AvaliacaoForm = ({ match, location }) => {
                   </Div>
                   <Div className="row">
                     <Grid cols={4} className="mb-4">
-                      {listaDisciplinas.length > 1 &&
+                      {listaDisciplinas?.length > 1 &&
                       form.values.categoriaId ===
                         categorias.INTERDISCIPLINAR ? (
                         <SelectComponent
@@ -681,7 +678,7 @@ const AvaliacaoForm = ({ match, location }) => {
                           disabled={
                             desabilitarCampos ||
                             !dentroPeriodo ||
-                            listaDisciplinas.length === 1
+                            listaDisciplinas?.length === 1
                           }
                           placeholder="Selecione um componente curricular"
                           valueSelect={listaDisciplinasSelecionadas}
@@ -700,7 +697,7 @@ const AvaliacaoForm = ({ match, location }) => {
                           disabled={
                             desabilitarCampos ||
                             !dentroPeriodo ||
-                            listaDisciplinas.length === 1
+                            listaDisciplinas?.length === 1
                           }
                           placeholder="Selecione um componente curricular"
                           form={form}
@@ -804,7 +801,7 @@ const AvaliacaoForm = ({ match, location }) => {
                           desabilitarCopiarAvaliacao
                         }
                       />
-                      {copias.length > 0 && (
+                      {copias?.length > 0 && (
                         <div style={{ marginLeft: '14px' }}>
                           <span>Avaliação será copiada para: </span>
                           <br />

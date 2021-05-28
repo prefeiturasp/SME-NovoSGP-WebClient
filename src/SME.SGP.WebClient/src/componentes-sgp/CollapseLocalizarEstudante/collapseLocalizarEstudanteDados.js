@@ -24,6 +24,8 @@ const CollapseLocalizarEstudanteDados = props => {
   } = props;
   const dispatch = useDispatch();
 
+  const usuario = useSelector(store => store.usuario);
+
   const dadosIniciais = useSelector(
     store => store.collapseLocalizarEstudante.dadosIniciaisLocalizarEstudante
   );
@@ -317,7 +319,11 @@ const CollapseLocalizarEstudanteDados = props => {
             ueId={codigoDre ? codigoUe : ''}
             onChange={onChangeLocalizadorEstudante}
             anoLetivo={anoAtual}
-            desabilitado={!codigoDre || !codigoUe}
+            desabilitado={
+              !codigoUe ||
+              ((usuario?.ehProfessor || usuario?.ehProfessorInfantil) &&
+                !codigoTurma)
+            }
             codigoTurma={codigoDre ? codigoTurma : ''}
             valorInicialAlunoCodigo={alunoLocalizadorSelecionado?.codigoAluno}
           />
@@ -339,7 +345,11 @@ const CollapseLocalizarEstudanteDados = props => {
           border
           bold
           onClick={onClickProximoPasso}
-          disabled={!alunoLocalizadorSelecionado?.codigoAluno}
+          disabled={
+            !alunoLocalizadorSelecionado?.codigoAluno ||
+            ((usuario?.ehProfessor || usuario?.ehProfessorInfantil) &&
+              !codigoTurma)
+          }
         />
       </div>
     </div>

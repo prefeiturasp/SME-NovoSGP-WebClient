@@ -74,6 +74,7 @@ const RotasDto = {
   DASHBOARD_ESCOLA_AQUI: '/dashboard/escola-aqui',
   DASHBOARD_AEE: '/dashboard/aee',
   DASHBOARD_REGISTRO_ITINERANCIA: '/dashboard/registro-itinerancia',
+  ACOMPANHAMENTO_FECHAMENTO: '/fechamento/acompanhamento-fechamento',
   DASHBOARD_FREQUENCIA: '/dashboard/frequencia',
   DASHBOARD_INFORMACOES_ESCOLARES: '/dashboard/informacoes-escolares',
 };

@@ -12,7 +12,6 @@ import { ServicoFiltroRelatorio } from '~/servicos';
 import AbrangenciaServico from '~/servicos/Abrangencia';
 import { erros } from '~/servicos/alertas';
 import history from '~/servicos/history';
-import ServicoDashboardFrequencia from '~/servicos/Paginas/Dashboard/ServicoDashboardFrequencia';
 import TabsDashboardInformacoesEscolares from './TabsDashboardInformacoesEscolares/tabsDashboardInformacoesEscolares';
 
 const DashboardInformacoesEscolares = () => {
@@ -22,7 +21,6 @@ const DashboardInformacoesEscolares = () => {
   const [listaDres, setListaDres] = useState([]);
   const [listaUes, setListaUes] = useState([]);
   const [listaModalidades, setListaModalidades] = useState([]);
-  const [listaAnosEscolares, setListaAnosEscolares] = useState([]);
 
   const [consideraHistorico, setConsideraHistorico] = useState(false);
   const [anoAtual] = useState(moment().format('YYYY'));
@@ -87,7 +85,9 @@ const DashboardInformacoesEscolares = () => {
       setCarregandoUes(true);
       const resposta = await AbrangenciaServico.buscarUes(
         dre?.codigo,
-        `v1/abrangencias/${consideraHistorico}/dres/${dre?.codigo}/ues?anoLetivo=${anoLetivo}`,
+        `v1/abrangencias/${consideraHistorico}/dres/${
+          dre?.codigo
+        }/ues?anoLetivo=${anoLetivo}&consideraNovasUEs=${true}`,
         true
       )
         .catch(e => erros(e))
@@ -96,7 +96,7 @@ const DashboardInformacoesEscolares = () => {
       if (resposta?.data?.length) {
         const lista = resposta.data;
 
-        if (usuario.possuiPerfilSmeOuDre) {
+        if (usuario.possuiPerfilSmeOuDre && lista?.length > 1) {
           lista.unshift({ codigo: OPCAO_TODOS, nome: 'Todas' });
         }
 
@@ -145,7 +145,7 @@ const DashboardInformacoesEscolares = () => {
 
       if (resposta?.data?.length) {
         const lista = resposta.data;
-        if (usuario.possuiPerfilSme) {
+        if (usuario.possuiPerfilSme && lista?.length > 1) {
           lista.unshift({ codigo: OPCAO_TODOS, nome: 'Todas' });
         }
         setListaDres(lista);
@@ -167,9 +167,10 @@ const DashboardInformacoesEscolares = () => {
   const obterModalidades = useCallback(async () => {
     setCarregandoModalidades(true);
 
-    const resultado = await ServicoFiltroRelatorio.obterModalidades(
+    const resultado = await ServicoFiltroRelatorio.obterModalidadesAnoLetivo(
       ue?.codigo,
       anoLetivo,
+      true,
       consideraHistorico
     )
       .catch(e => erros(e))
@@ -185,7 +186,7 @@ const DashboardInformacoesEscolares = () => {
       setListaModalidades([]);
       setModalidade();
     }
-  }, [ue, anoLetivo, consideraHistorico]);
+  }, [ue, anoLetivo]);
 
   useEffect(() => {
     if (ue && anoLetivo) {
@@ -194,7 +195,7 @@ const DashboardInformacoesEscolares = () => {
       setListaModalidades([]);
       setModalidade();
     }
-  }, [ue, anoLetivo, consideraHistorico, obterModalidades]);
+  }, [ue, anoLetivo, obterModalidades]);
 
   const onClickVoltar = () => {
     history.push(URL_HOME);
@@ -222,42 +223,6 @@ const DashboardInformacoesEscolares = () => {
   };
 
   const onChangeModalidade = valor => setModalidade(valor);
-
-  const obterAnosEscolares = useCallback(async () => {
-    const respota = await ServicoDashboardFrequencia.obterAnosEscolaresPorModalidade(
-      anoLetivo,
-      dre?.id,
-      ue?.id,
-      modalidade
-    ).catch(e => erros(e));
-
-    if (respota?.data?.length) {
-      if (respota.data.length > 1) {
-        respota.data.unshift({
-          ano: OPCAO_TODOS,
-          modalidadeAno: 'Todos os anos',
-        });
-      }
-      setListaAnosEscolares(respota.data);
-    } else {
-      setListaAnosEscolares([]);
-    }
-  }, [anoLetivo, dre, ue, modalidade]);
-
-  useEffect(() => {
-    if (
-      anoLetivo &&
-      dre &&
-      ue &&
-      modalidade &&
-      dre?.codigo === OPCAO_TODOS &&
-      ue?.codigo === OPCAO_TODOS
-    ) {
-      obterAnosEscolares();
-    } else {
-      setListaAnosEscolares([]);
-    }
-  }, [anoLetivo, dre, ue, modalidade, obterAnosEscolares]);
 
   return (
     <>
@@ -359,7 +324,6 @@ const DashboardInformacoesEscolares = () => {
                 dreId={OPCAO_TODOS === dre?.codigo ? OPCAO_TODOS : dre?.id}
                 ueId={OPCAO_TODOS === ue?.codigo ? OPCAO_TODOS : ue?.id}
                 modalidade={modalidade}
-                listaAnosEscolares={listaAnosEscolares}
               />
             </div>
           </div>

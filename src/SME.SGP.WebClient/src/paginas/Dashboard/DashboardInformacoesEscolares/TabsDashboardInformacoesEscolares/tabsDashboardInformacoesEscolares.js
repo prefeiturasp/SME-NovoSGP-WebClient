@@ -2,7 +2,6 @@ import { Tabs } from 'antd';
 import PropTypes from 'prop-types';
 import React, { useEffect, useState } from 'react';
 import { ContainerTabsCard } from '~/componentes/tabs/tabs.css';
-import { OPCAO_TODOS } from '~/constantes/constantes';
 import { ContainerTabsDashboard } from '../../style';
 import GraficosMatriculas from './Matriculas/graficosMatriculas';
 import GraficosTurmas from './Turmas/graficosTurmas';
@@ -10,7 +9,7 @@ import GraficosTurmas from './Turmas/graficosTurmas';
 const { TabPane } = Tabs;
 
 const TabsDashboardInformacoesEscolares = props => {
-  const { anoLetivo, dreId, ueId, modalidade, listaAnosEscolares } = props;
+  const { anoLetivo, dreId, ueId, modalidade } = props;
 
   const [tabSelecionada, setTabSelecionada] = useState();
 
@@ -19,8 +18,13 @@ const TabsDashboardInformacoesEscolares = props => {
 
   const onChangeTab = tabAtiva => setTabSelecionada(tabAtiva);
 
-  const exibirAnosEscolares =
-    anoLetivo && modalidade && dreId === OPCAO_TODOS && ueId === OPCAO_TODOS;
+  const desabilitado = !anoLetivo || !dreId || !ueId || !modalidade;
+
+  useEffect(() => {
+    if (!modalidade) {
+      setTabSelecionada();
+    }
+  }, [modalidade]);
 
   return (
     <ContainerTabsDashboard>
@@ -29,27 +33,23 @@ const TabsDashboardInformacoesEscolares = props => {
         onChange={onChangeTab}
         activeKey={tabSelecionada}
       >
-        <TabPane tab="Turmas" key={TAB_TURMAS}>
+        <TabPane tab="Turmas" key={TAB_TURMAS} disabled={desabilitado}>
           {tabSelecionada === TAB_TURMAS && (
             <GraficosTurmas
               anoLetivo={anoLetivo}
               dreId={dreId}
               ueId={ueId}
               modalidade={modalidade}
-              listaAnosEscolares={listaAnosEscolares}
-              exibirAnosEscolares={exibirAnosEscolares}
             />
           )}
         </TabPane>
-        <TabPane tab="Matrículas" key={TAB_MATRICULAS}>
+        <TabPane tab="Matrículas" key={TAB_MATRICULAS} disabled={desabilitado}>
           {tabSelecionada === TAB_MATRICULAS && (
             <GraficosMatriculas
               anoLetivo={anoLetivo}
               dreId={dreId}
               ueId={ueId}
               modalidade={modalidade}
-              listaAnosEscolares={listaAnosEscolares}
-              exibirAnosEscolares={exibirAnosEscolares}
             />
           )}
         </TabPane>
@@ -63,7 +63,6 @@ TabsDashboardInformacoesEscolares.propTypes = {
   ueId: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   dreId: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   modalidade: PropTypes.string,
-  listaAnosEscolares: PropTypes.oneOfType(PropTypes.array),
 };
 
 TabsDashboardInformacoesEscolares.defaultProps = {
@@ -71,7 +70,6 @@ TabsDashboardInformacoesEscolares.defaultProps = {
   dreId: null,
   ueId: null,
   modalidade: '',
-  listaAnosEscolares: [],
 };
 
 export default TabsDashboardInformacoesEscolares;
