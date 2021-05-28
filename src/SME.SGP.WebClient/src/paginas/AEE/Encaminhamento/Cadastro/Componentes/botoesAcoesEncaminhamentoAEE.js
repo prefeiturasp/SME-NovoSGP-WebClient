@@ -67,6 +67,7 @@ const BotoesAcoesEncaminhamentoAEE = props => {
     const salvou = await ServicoEncaminhamentoAEE.salvarEncaminhamento(
       encaminhamentoId,
       situacaoAEE.Encaminhado,
+      true,
       true
     );
     if (salvou) {
