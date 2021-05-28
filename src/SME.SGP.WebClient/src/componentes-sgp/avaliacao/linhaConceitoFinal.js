@@ -25,16 +25,13 @@ const LinhaConceitoFinal = props => {
               colSpan={4 + quantidadeAvaliacoes}
               className="linha-conceito-final"
             >
-              <div style={{ width: '400px', display: 'flex', height: '65px' }}>
-                <div className="desc-linha-conceito-final">
-                  Conceitos finais Regência de classe
-                </div>
+              <div className="desc-linha-conceito-final">
                 {aluno && aluno.notasBimestre && aluno.notasBimestre.length
                   ? aluno.notasBimestre.map((item, index) => {
                       const disciplinaTratada = tratarString(item.disciplina);
                       return (
                         <div
-                          style={{ paddingRight: '22px' }}
+                          style={{ paddingRight: '16px' }}
                           key={shortid.generate()}
                           name={`${disciplinaTratada}${aluno?.id}`}
                         >
