@@ -1,7 +1,7 @@
 import { store } from '~/redux';
 import {
-  setListaDadosFrequencia,
   setExibirLoaderFrequenciaPlanoAula,
+  setListaDadosFrequencia,
   setTemPeriodoAbertoFrequenciaPlanoAula,
 } from '~/redux/modulos/frequenciaPlanoAula/actions';
 import { erros } from '~/servicos/alertas';
@@ -43,10 +43,17 @@ class ServicoFrequencia {
                 : componenteCurricular.codigoComponenteCurricular,
           },
         })
-        .finally(() => dispatch(setExibirLoaderFrequenciaPlanoAula(false)))
         .catch(e => erros(e));
 
-      if (frequenciaAlunos && frequenciaAlunos.data) {
+      if (frequenciaAlunos?.data) {
+        const tiposFrequencia = await this.obterTipoFrequencia().catch(e =>
+          erros(e)
+        );
+
+        frequenciaAlunos.data.tiposFrequencia = tiposFrequencia?.data?.length
+          ? tiposFrequencia.data
+          : [];
+
         dispatch(setListaDadosFrequencia(frequenciaAlunos.data));
         dispatch(
           setTemPeriodoAbertoFrequenciaPlanoAula(
@@ -57,11 +64,42 @@ class ServicoFrequencia {
         dispatch(setListaDadosFrequencia({}));
         dispatch(setTemPeriodoAbertoFrequenciaPlanoAula(true));
       }
+      dispatch(setExibirLoaderFrequenciaPlanoAula(false));
     }
   };
 
   salvarFrequencia = params => {
     return api.post(`v1/calendarios/frequencias`, params);
+  };
+
+  obterTipoFrequencia = () => {
+    return new Promise(resolve => {
+      setTimeout(() => {
+        resolve({
+          data: [
+            { valor: 'F', desc: 'F' },
+            { valor: 'C', desc: 'C' },
+            { valor: 'R', desc: 'R' },
+          ],
+        });
+      }, 1000);
+    });
+  };
+
+  obterPreDefinicaoAlunos = () => {
+    return new Promise(resolve => {
+      setTimeout(() => {
+        resolve({
+          data: [
+            { codigoAluno: '', tipoLancamento: 'C' },
+            { codigoAluno: '', tipoLancamento: 'R' },
+            { codigoAluno: '', tipoLancamento: 'R' },
+            { codigoAluno: '', tipoLancamento: 'F' },
+            { codigoAluno: '', tipoLancamento: 'F' },
+          ],
+        });
+      }, 1000);
+    });
   };
 }
 

@@ -94,33 +94,32 @@ const MontarListaFrequencia = () => {
             >
               {listaDadosFrequencia?.listaFrequencia?.length && (
                 <>
-                  <div className="col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-2">
-                    <Ordenacao
-                      conteudoParaOrdenar={listaDadosFrequencia.listaFrequencia}
-                      ordenarColunaNumero="numeroAlunoChamada"
-                      ordenarColunaTexto="nomeAluno"
-                      retornoOrdenado={retorno => {
-                        const dados = { ...listaDadosFrequencia };
-                        dados.listaFrequencia = retorno;
-                        dispatch(setListaDadosFrequencia(dados));
-                      }}
-                    />
-                    <ListaFrequencia
-                      frequenciaId={listaDadosFrequencia.id}
-                      onChangeFrequencia={onChangeFrequencia}
-                      permissoesTela={permissoesTela}
-                      temPeriodoAberto={listaDadosFrequencia.temPeriodoAberto}
-                      ehInfantil={ehTurmaInfantil(
-                        modalidadesFiltroPrincipal,
-                        turmaSelecionada
-                      )}
-                      aulaId={aulaId}
-                      componenteCurricularId={
-                        componenteCurricular.codigoComponenteCurricular
-                      }
-                      setDataSource={atualizarValoresAlterados}
-                    />
-                  </div>
+                  <Ordenacao
+                    conteudoParaOrdenar={listaDadosFrequencia.listaFrequencia}
+                    ordenarColunaNumero="numeroAlunoChamada"
+                    ordenarColunaTexto="nomeAluno"
+                    retornoOrdenado={retorno => {
+                      const dados = { ...listaDadosFrequencia };
+                      dados.listaFrequencia = retorno;
+                      dispatch(setListaDadosFrequencia(dados));
+                    }}
+                  />
+                  <ListaFrequencia
+                    frequenciaId={listaDadosFrequencia.id}
+                    onChangeFrequencia={onChangeFrequencia}
+                    permissoesTela={permissoesTela}
+                    temPeriodoAberto={listaDadosFrequencia.temPeriodoAberto}
+                    ehInfantil={ehTurmaInfantil(
+                      modalidadesFiltroPrincipal,
+                      turmaSelecionada
+                    )}
+                    aulaId={aulaId}
+                    componenteCurricularId={
+                      componenteCurricular.codigoComponenteCurricular
+                    }
+                    setDataSource={atualizarValoresAlterados}
+                  />
+
                   {listaDadosFrequencia?.criadoEm && (
                     <Auditoria
                       className="mt-2"

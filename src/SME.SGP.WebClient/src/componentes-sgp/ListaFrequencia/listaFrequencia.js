@@ -2,13 +2,18 @@ import { Tooltip } from 'antd';
 import PropTypes from 'prop-types';
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import shortid from 'shortid';
+import { DataTable } from '~/componentes';
 import tipoIndicativoFrequencia from '~/dtos/tipoIndicativoFrequencia';
 import ModalAnotacoesFrequencia from '~/paginas/DiarioClasse/FrequenciaPlanoAula/ModalAnotacoes/modalAnotacoes';
 import { verificaSomenteConsulta } from '~/servicos/servico-navegacao';
 import SinalizacaoAEE from '../SinalizacaoAEE/sinalizacaoAEE';
-import CampoTipoFrequencia from './campoTipoFrequencia';
-import { BtbAnotacao, Lista, MarcadorSituacao } from './listaFrequencia.css';
+import CampoPreDefinirFrequencia from './componentes/campoPreDefinirFrequencia';
+import CampoTipoFrequencia from './componentes/campoTipoFrequencia';
+import {
+  BtbAnotacao,
+  ContainerListaFrequencia,
+  MarcadorSituacao,
+} from './listaFrequencia.css';
 
 const ListaFrequencia = props => {
   const {
@@ -40,38 +45,38 @@ const ListaFrequencia = props => {
     if (!temPeriodoAberto) setDesabilitarCampos(!temPeriodoAberto);
   }, [frequenciaId, permissoesTela, temPeriodoAberto]);
 
-  const validaSeFaltouTodasAulas = aluno => {
-    const totalAulas = aluno.aulas.length;
-    const totalAulasFaltou = aluno.aulas.filter(aula => !aula.compareceu);
-    return totalAulas === totalAulasFaltou.length;
-  };
+  // const validaSeFaltouTodasAulas = aluno => {
+  //   const totalAulas = aluno.aulas.length;
+  //   const totalAulasFaltou = aluno.aulas.filter(aula => !aula.compareceu);
+  //   return totalAulas === totalAulasFaltou.length;
+  // };
 
-  const validaSeCompareceuTodasAulas = aluno => {
-    const totalAulas = aluno.aulas.length;
-    const totalAulasCompareceu = aluno.aulas.filter(aula => aula.compareceu);
-    return totalAulas === totalAulasCompareceu.length;
-  };
+  // const validaSeCompareceuTodasAulas = aluno => {
+  //   const totalAulas = aluno.aulas.length;
+  //   const totalAulasCompareceu = aluno.aulas.filter(aula => aula.compareceu);
+  //   return totalAulas === totalAulasCompareceu.length;
+  // };
 
-  const marcaPresencaFaltaTodasAulas = (aluno, marcarPresenca) => {
+  const marcaPresencaFaltaTodasAulas = (aluno, tipo) => {
     if (!desabilitarCampos && !aluno.desabilitado) {
       aluno.aulas.forEach(aula => {
-        aula.compareceu = marcarPresenca;
+        aula.compareceu = tipo;
       });
-      setDataSource([...dataSource]);
+      setDataSource(dataSource);
       onChangeFrequencia();
     }
   };
 
-  const marcarPresencaFaltaTodosAlunos = marcarPresenca => {
+  const marcarPresencaFaltaTodosAlunos = tipo => {
     if (!desabilitarCampos) {
       dataSource.forEach(aluno => {
         if (!aluno.desabilitado) {
           aluno.aulas.forEach(aula => {
-            aula.compareceu = marcarPresenca;
+            aula.compareceu = tipo;
           });
         }
       });
-      setDataSource([...dataSource]);
+      // setDataSource(dataSource);
       onChangeFrequencia();
     }
   };
@@ -116,157 +121,178 @@ const ListaFrequencia = props => {
     );
   };
 
-  const montarHeaderMarcarTodas = () => {
-    return (
-      dataSource[0].aulas.length > 0 && (
-        <>
-          <th
-            className="width-50 cursor-pointer"
-            onClick={() => marcarPresencaFaltaTodosAlunos(true)}
-          >
-            <div className="marcar-todas-frequencia">Marcar todas</div>
-            <div className="margin-marcar-todos">C</div>
-          </th>
-          <th
-            className="width-50 cursor-pointer"
-            onClick={() => marcarPresencaFaltaTodosAlunos(false)}
-          >
-            <div className="margin-marcar-todos">F</div>
-          </th>
-        </>
-      )
-    );
-  };
-
-  const montarHeaderAulas = () => {
-    return dataSource[0]?.aulas?.map((aula, i) => {
-      return (
-        <th
-          key={shortid.generate()}
-          className={
-            dataSource[0]?.aulas?.length - 1 === i
-              ? 'width-70'
-              : 'border-right-none width-70'
-          }
-        >
-          {aula.numeroAula}
-        </th>
-      );
-    });
-  };
-
   const montarColunasEstudante = aluno => {
     return (
-      <>
-        <td className="width-60 text-center font-weight-bold">
-          {aluno.numeroAlunoChamada}
-          {aluno.marcador ? (
-            <Tooltip title={aluno.marcador.descricao} placement="top">
-              <MarcadorSituacao className="fas fa-circle" />
+      <div className="d-flex" style={{ justifyContent: 'space-between' }}>
+        <div className=" d-flex justify-content-start">
+          {aluno?.marcador ? (
+            <Tooltip title={aluno?.marcador?.descricao} placement="top">
+              <MarcadorSituacao
+                className="fas fa-circle"
+                style={{ marginRight: '4px' }}
+              />
             </Tooltip>
           ) : (
-            ''
+            <div className="mr-3" />
           )}
-        </td>
-        <td>
-          <div className="d-flex" style={{ justifyContent: 'space-between' }}>
-            <div className=" d-flex justify-content-start">
-              {aluno.nomeAluno}
-            </div>
-            <div className=" d-flex justify-content-end">
-              <div className="mr-3">
-                <SinalizacaoAEE exibirSinalizacao={aluno.ehAtendidoAEE} />
-              </div>
-              {btnAnotacao(aluno)}
-            </div>
+          {aluno?.numeroAlunoChamada} - {aluno?.nomeAluno}
+        </div>
+        <div className="d-flex justify-content-end">
+          <div className="mr-3">
+            <SinalizacaoAEE exibirSinalizacao={aluno?.ehAtendidoAEE} />
           </div>
-        </td>
-      </>
+          {btnAnotacao(aluno)}
+        </div>
+      </div>
     );
   };
 
   const montarColunaMarcarTodas = aluno => {
     return (
       dataSource[0]?.aulas?.length > 0 && (
-        <>
-          <td className="width-50">
-            <button
-              type="button"
-              onClick={() => marcaPresencaFaltaTodasAulas(aluno, true)}
-              className={`ant-btn ant-btn-circle ant-btn-sm btn-falta-presenca ${
-                validaSeCompareceuTodasAulas(aluno) ? 'btn-compareceu' : ''
-              } `}
-              disabled={desabilitarCampos || aluno.desabilitado}
-            >
-              <i className="fas fa-check fa-sm" />
-            </button>
-          </td>
-          <td className="width-50">
-            <button
-              type="button"
-              onClick={() => marcaPresencaFaltaTodasAulas(aluno, false)}
-              className={`ant-btn ant-btn-circle ant-btn-sm btn-falta-presenca ${
-                validaSeFaltouTodasAulas(aluno) ? 'btn-falta' : ''
-              } `}
-              disabled={desabilitarCampos || aluno.desabilitado}
-            >
-              <i className="fas fa-times fa-sm" />
-            </button>
-          </td>
-        </>
+        <div className="d-flex justify-content-around">
+          <i
+            onClick={() => marcaPresencaFaltaTodasAulas(aluno, 'C')}
+            className="fas fa-check-circle"
+          />
+          <i
+            onClick={() => marcaPresencaFaltaTodasAulas(aluno, 'F')}
+            className="fas fa-times-circle"
+          />
+          <i
+            onClick={() => marcaPresencaFaltaTodasAulas(aluno, 'R')}
+            className="fas fa-dot-circle"
+          />
+        </div>
       )
     );
   };
 
-  const montarColunaAulas = (aluno, indexAluno) => {
-    return aluno?.aulas?.map((aula, indexAula) => {
-      // TODO Rever solução para ocultar a borda!
-      return (
-        <td
-          key={shortid.generate()}
-          className={
-            dataSource[0].aulas.length - 1 === indexAula
-              ? 'width-70'
-              : 'border-right-none width-70'
-          }
-        >
-          <CampoTipoFrequencia
-            indexAula={indexAula}
-            indexAluno={indexAluno}
-            onChangeTipoFrequencia={valorNovo => {
-              aula.compareceu = valorNovo;
-              onChangeFrequencia();
-            }}
-            numeroAula={aula.numeroAula}
-          />
-        </td>
-      );
-    });
+  const montarColunaAulas = (aula, indexAluno, indexAula) => {
+    return (
+      <CampoTipoFrequencia
+        indexAula={indexAula}
+        indexAluno={indexAluno}
+        onChange={valorNovo => {
+          aula.compareceu = valorNovo;
+          onChangeFrequencia();
+        }}
+        numeroAula={aula.numeroAula}
+      />
+    );
   };
 
   const montarColunaFrequencia = aluno => {
     return (
-      <td className="width-70">
-        <span
-          className={`width-70 ${
-            aluno.indicativoFrequencia &&
-            tipoIndicativoFrequencia.Alerta === aluno.indicativoFrequencia.tipo
-              ? 'indicativo-alerta'
-              : ''
-          } ${
-            aluno.indicativoFrequencia &&
-            tipoIndicativoFrequencia.Critico === aluno.indicativoFrequencia.tipo
-              ? 'indicativo-critico'
-              : ''
-          } `}
-        >
-          {aluno.indicativoFrequencia
-            ? `${aluno.indicativoFrequencia.percentual}%`
-            : ''}
-        </span>
-      </td>
+      <span
+        className={`width-70 ${
+          aluno.indicativoFrequencia &&
+          tipoIndicativoFrequencia.Alerta === aluno.indicativoFrequencia.tipo
+            ? 'indicativo-alerta'
+            : ''
+        } ${
+          aluno.indicativoFrequencia &&
+          tipoIndicativoFrequencia.Critico === aluno.indicativoFrequencia.tipo
+            ? 'indicativo-critico'
+            : ''
+        } `}
+      >
+        {aluno.indicativoFrequencia
+          ? `${aluno.indicativoFrequencia.percentual}%`
+          : ''}
+      </span>
     );
   };
+
+  const columns = [
+    {
+      title: () => (
+        <span className="fonte-16">
+          Lista de {ehInfantil ? 'crianças' : 'estudantes'}
+        </span>
+      ),
+      render: aluno => montarColunasEstudante(aluno),
+    },
+    {
+      title: 'Pré-definir frequência',
+      align: 'center',
+      width: '75px',
+      className: 'p-0',
+      render: aluno => {
+        const indexAluno = dataSource.indexOf(aluno);
+        return (
+          <CampoPreDefinirFrequencia
+            indexAluno={indexAluno}
+            onChange={tipoPreDefinir => {
+              aluno.tipoFrequenciaPreDefinido = tipoPreDefinir;
+              marcaPresencaFaltaTodasAulas(aluno, tipoPreDefinir);
+            }}
+          />
+        );
+      },
+    },
+    {
+      title: () => <span>Marcar todas aulas</span>,
+      align: 'center',
+      width: '100px',
+      className: 'p-1',
+      children: [
+        {
+          width: '100px',
+          align: 'center',
+          className: 'p-2',
+          title: () => {
+            return (
+              <div className="d-flex">
+                <div
+                  className="mr-3 ml-2"
+                  onClick={() => marcarPresencaFaltaTodosAlunos('C')}
+                >
+                  C
+                </div>
+                <div
+                  className="mr-3"
+                  o
+                  onClick={() => marcarPresencaFaltaTodosAlunos('F')}
+                >
+                  F
+                </div>
+                <div
+                  className="mr-2"
+                  onClick={() => marcarPresencaFaltaTodosAlunos('R')}
+                >
+                  R
+                </div>
+              </div>
+            );
+          },
+          render: aluno => montarColunaMarcarTodas(aluno),
+        },
+      ],
+    },
+  ];
+
+  if (dataSource[0]?.aulas?.length) {
+    dataSource[0].aulas.forEach((aula, indexAula) => {
+      columns.push({
+        title: () => <span className="fonte-16">{aula.numeroAula}</span>,
+        align: 'center',
+        dataIndex: `aulas.${indexAula}`,
+        width: '75px',
+        render: (dadosAula, aluno) => {
+          const indexAluno = dataSource.indexOf(aluno);
+          return montarColunaAulas(dadosAula, indexAluno, indexAula);
+        },
+      });
+    });
+  }
+
+  columns.push({
+    title: '%',
+    align: 'center',
+    width: '75px',
+    render: aluno => montarColunaFrequencia(aluno),
+  });
 
   return (
     <>
@@ -282,54 +308,16 @@ const ListaFrequencia = props => {
           desabilitarCampos={desabilitarCampos}
         />
       )}
-
-      {dataSource?.length > 0 ? (
-        <Lista className="mt-4 table-responsive">
-          <div className="scroll-tabela-frequencia-thead">
-            <table className="table mb-0 ">
-              <thead className="tabela-frequencia-thead">
-                <tr>
-                  <th className="width-60" />
-                  <th className="text-left">
-                    Lista de {ehInfantil ? 'crianças' : 'estudantes'}
-                  </th>
-                  {montarHeaderMarcarTodas()}
-                  {montarHeaderAulas()}
-                  <th className="width-70">
-                    <i className="fas fa-exclamation-triangle" />
-                  </th>
-                </tr>
-              </thead>
-            </table>
-          </div>
-          <div className="scroll-tabela-frequencia-tbody">
-            <table className="table mb-0">
-              <tbody className="tabela-frequencia-tbody">
-                {dataSource?.map((aluno, indexAluno) => {
-                  return (
-                    <React.Fragment key={shortid.generate()}>
-                      <tr
-                        className={
-                          desabilitarCampos || aluno.desabilitado
-                            ? 'desabilitar-aluno'
-                            : ''
-                        }
-                      >
-                        {montarColunasEstudante(aluno)}
-                        {montarColunaMarcarTodas(aluno)}
-                        {montarColunaAulas(aluno, indexAluno)}
-                        {montarColunaFrequencia(aluno)}
-                      </tr>
-                    </React.Fragment>
-                  );
-                })}
-              </tbody>
-            </table>
-          </div>
-        </Lista>
-      ) : (
-        <></>
-      )}
+      <ContainerListaFrequencia className="pt-2">
+        {dataSource?.length ? (
+          <DataTable
+            columns={columns}
+            dataSource={dataSource}
+            pagination={false}
+            semHover
+          />
+        ) : null}
+      </ContainerListaFrequencia>
     </>
   );
 };

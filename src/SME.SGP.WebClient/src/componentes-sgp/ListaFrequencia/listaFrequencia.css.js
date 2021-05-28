@@ -226,3 +226,9 @@ export const MarcadorSituacao = styled.i`
   margin-left: 2px;
   padding-top: 5px;
 `;
+
+export const ContainerListaFrequencia = styled.div`
+  td {
+    padding: 5px 0px 0px 0px !important;
+  }
+`;
