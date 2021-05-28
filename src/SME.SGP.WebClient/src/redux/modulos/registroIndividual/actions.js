@@ -112,3 +112,8 @@ export const resetarDadosRegistroIndividual = payload => ({
   type: '@registroIndividual/resetarDadosRegistroIndividual',
   payload,
 });
+
+export const setValorEditorRegistrosAnteriores = payload => ({
+  type: '@registroIndividual/setValorEditorRegistrosAnteriores',
+  payload,
+});

@@ -18,6 +18,7 @@ const inicial = {
   registroIndividualEmEdicao: false,
   resetDataNovoRegistroIndividual: false,
   podeRealizarNovoRegistro: false,
+  valorEditorRegistrosAnteriores: '',
 };
 
 export default function RegistroIndividual(state = inicial, action) {
@@ -224,6 +225,12 @@ export default function RegistroIndividual(state = inicial, action) {
           dadosRegistroAtual: {},
           dadosPrincipaisRegistroIndividual: {},
           resetDataNovoRegistroIndividual: true,
+        };
+      }
+      case '@registroIndividual/setValorEditorRegistrosAnteriores': {
+        return {
+          ...draft,
+          valorEditorRegistrosAnteriores: action.payload,
         };
       }
       default:
