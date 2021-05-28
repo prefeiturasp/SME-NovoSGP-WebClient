@@ -44,6 +44,7 @@ const SelectComponent = React.forwardRef((props, ref) => {
 
     .ant-select-arrow {
       color: ${Base.CinzaMako};
+      margin-top: -9px;
     }
 
     .ant-select-selection {
@@ -59,6 +60,7 @@ const SelectComponent = React.forwardRef((props, ref) => {
       align-items: center;
       display: flex;
       ${!size && 'height: 38px;'}
+      ${color && `color: ${color};`}
     }
 
     .ant-select-selection__rendered {
@@ -140,7 +142,7 @@ const SelectComponent = React.forwardRef((props, ref) => {
   const campoComValidacoes = () => (
     <Field
       mode={multiple && 'multiple'}
-      suffixIcon={<Icon type="caret-down" />}
+      suffixIcon={<i className="fas fa-angle-down" style={{ fontSize: 18 }} />}
       className={
         form
           ? `overflow-hidden ${possuiErro() ? 'is-invalid' : ''} ${className ||
@@ -176,7 +178,7 @@ const SelectComponent = React.forwardRef((props, ref) => {
   const campoSemValidacoes = () => (
     <Select
       mode={multiple && 'multiple'}
-      suffixIcon={<Icon type="caret-down" />}
+      suffixIcon={<i className="fas fa-angle-down" style={{ fontSize: 18 }} />}
       className={`overflow-hidden ${className}`}
       name={name}
       id={id}
