@@ -138,7 +138,9 @@ const AtribuicaoSupervisorCadastro = ({ match }) => {
             setListaUES([...ues]);
             setListaUESDreAtual([...ues]);
             if (supervisorSelecionado) obterListaUESAtribuidas(ues);
-          } // else erro('Nenhuma UE sem atribuição para a DRE selecionada.');
+          }else{
+            obterListaUESAtribuidas([]);
+          }
         })
         .catch(erros => {
           exibeErro(erros);
