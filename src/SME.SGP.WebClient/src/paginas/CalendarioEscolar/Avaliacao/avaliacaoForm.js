@@ -145,6 +145,8 @@ const AvaliacaoForm = ({ match, location }) => {
 
   const [dataAvaliacao, setDataAvaliacao] = useState();
 
+  const removerTagsHtml = texto => texto?.replace(/<\/?[^>]+(>|$)/g, '');
+
   const cadastrarAvaliacao = async dados => {
     const avaliacao = {};
     setCarregandoTela(true);
@@ -187,7 +189,10 @@ const AvaliacaoForm = ({ match, location }) => {
     delete dadosValidacao.categoriaId;
     delete dadosValidacao.descricao;
 
-    if (descricao.length <= 500) {
+    const textoLimpo = removerTagsHtml(descricao);
+    const tamanhoTexto = textoLimpo.length;
+
+    if (tamanhoTexto <= 500) {
       const validacao = await ServicoAvaliacao.validar(dadosValidacao);
 
       if (validacao && validacao.status === 200) {
@@ -236,6 +241,7 @@ const AvaliacaoForm = ({ match, location }) => {
   };
 
   const categorias = { NORMAL: 1, INTERDISCIPLINAR: 2 };
+  const [validacoes, setValidacoes] = useState(undefined);
 
   const montaValidacoes = categoria => {
     const ehInterdisciplinar = categoria === categorias.INTERDISCIPLINAR;
@@ -254,15 +260,18 @@ const AvaliacaoForm = ({ match, location }) => {
         'Selecione o tipo de atividade avaliativa'
       ),
       nome: Yup.string().required('Preencha o nome da atividade avaliativa'),
-      descricao: Yup.string().max(
-        500,
-        'A descrição não deve ter mais de 500 caracteres'
+      descricao: Yup.string().test(
+        'len',
+        'A descrição não deve ter mais de 500 caracteres',
+        texto => {
+          const textoLimpo = removerTagsHtml(texto);
+          const tamanhoTexto = textoLimpo?.length;
+          return tamanhoTexto <= 500;
+        }
       ),
     };
     setValidacoes(Yup.object(val));
   };
-
-  const [validacoes, setValidacoes] = useState(undefined);
 
   const [listaDisciplinas, setListaDisciplinas] = useState([]);
 
@@ -276,7 +285,6 @@ const AvaliacaoForm = ({ match, location }) => {
   ]);
 
   const campoNomeRef = useRef(null);
-  const textEditorRef = useRef(null);
 
   const aoTrocarTextEditor = valor => {
     setDescricao(valor);
