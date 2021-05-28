@@ -170,7 +170,8 @@ const DashboardInformacoesEscolares = () => {
     const resultado = await ServicoFiltroRelatorio.obterModalidadesAnoLetivo(
       ue?.codigo,
       anoLetivo,
-      true
+      true,
+      consideraHistorico
     )
       .catch(e => erros(e))
       .finally(() => setCarregandoModalidades(false));
