@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Tooltip } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { Auditoria, Button, Colors } from '~/componentes';
+import { Auditoria, Button, Colors, JoditEditor } from '~/componentes';
 
 import {
   confirmar,
@@ -17,11 +17,10 @@ import {
   excluirRegistroAnteriorId,
   setRegistroAnteriorEmEdicao,
   setRegistroAnteriorId,
+  setValorEditorRegistrosAnteriores,
 } from '~/redux/modulos/registroIndividual/actions';
 
 import { RotasDto } from '~/dtos';
-
-import EditorRegistrosAnteriores from './editorRegistrosAnteriores';
 
 import { ContainerBotoes } from './item.css';
 
@@ -46,14 +45,19 @@ const Item = ({ dados, setCarregandoGeral }) => {
   const dadosAlunoObjectCard = useSelector(
     store => store.registroIndividual.dadosAlunoObjectCard
   );
+  const valorEditorRegistrosAnteriores = useSelector(
+    store => store.registroIndividual.valorEditorRegistrosAnteriores
+  );
   const turmaSelecionada = useSelector(state => state.usuario.turmaSelecionada);
   const permissoes = useSelector(state => state.usuario.permissoes);
   const permissoesTela = permissoes[RotasDto.REGISTRO_INDIVIDUAL];
+  let tempoEditor;
 
   const dispatch = useDispatch();
 
   const onChange = valorNovo => {
-    setRegistroAlterado(valorNovo);
+    // setRegistroAlterado(valorNovo);
+    dispatch(setValorEditorRegistrosAnteriores(valorNovo));
   };
 
   const validarSeTemErro = valorEditado => {
@@ -91,12 +95,15 @@ const Item = ({ dados, setCarregandoGeral }) => {
 
   const resetarInfomacoes = texto => {
     setEditando(false);
-    setRegistroAlterado(texto);
+    tempoEditor = setTimeout(() => {
+      setRegistroAlterado(texto);
+    }, 100);
     dispatch(setRegistroAnteriorEmEdicao(false));
     dispatch(setRegistroAnteriorId({}));
   };
 
   const onClickCancelar = () => {
+    setRegistroAlterado(valorEditorRegistrosAnteriores);
     resetarInfomacoes(registro);
   };
 
@@ -107,7 +114,7 @@ const Item = ({ dados, setCarregandoGeral }) => {
       turmaId,
       componenteCurricularId,
       alunoCodigo,
-      registro: registroAlterado,
+      registro: valorEditorRegistrosAnteriores,
       data,
     })
       .catch(e => erros(e))
@@ -117,12 +124,12 @@ const Item = ({ dados, setCarregandoGeral }) => {
       sucesso('Registro editado com sucesso.');
       const dadosPraSalvar = {
         id,
-        registro: registroAlterado,
+        registro: valorEditorRegistrosAnteriores,
         auditoria: retorno.data,
       };
       dispatch(alterarRegistroAnterior(dadosPraSalvar));
-      setRegistroAlterado(registroAlterado);
-      resetarInfomacoes(registroAlterado);
+      setRegistroAlterado(valorEditorRegistrosAnteriores);
+      resetarInfomacoes(valorEditorRegistrosAnteriores);
     }
   };
 
@@ -130,7 +137,10 @@ const Item = ({ dados, setCarregandoGeral }) => {
     if (registro) {
       setRegistroAlterado(registro);
     }
-  }, [registro]);
+    return () => {
+      clearTimeout(tempoEditor);
+    };
+  }, [registro, tempoEditor]);
 
   useEffect(() => {
     if (
@@ -151,13 +161,14 @@ const Item = ({ dados, setCarregandoGeral }) => {
   return (
     <div className="row justify-content-between">
       <div className="p-0 col-12" style={{ minHeight: 200 }}>
-        <EditorRegistrosAnteriores
-          id={id}
-          registroAlterado={registroAlterado}
-          onChange={onChange}
-          editando={editando}
+        <JoditEditor
           validarSeTemErro={validarSeTemErro}
-          data={data}
+          mensagemErro="Campo obrigatório"
+          label={`Registro - ${window.moment(data).format('DD/MM/YYYY')}`}
+          id={`${id}-editor`}
+          value={registroAlterado}
+          onChange={onChange}
+          desabilitar={!editando}
         />
       </div>
       {auditoria && (
