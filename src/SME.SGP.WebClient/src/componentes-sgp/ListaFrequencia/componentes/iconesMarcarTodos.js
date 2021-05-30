@@ -20,10 +20,15 @@ const IconesMarcarTodos = props => {
       ]?.aulas
   );
 
+  const listaTiposFrequencia = useSelector(
+    state =>
+      state.frequenciaPlanoAula.listaDadosFrequencia?.listaTiposFrequencia
+  );
+
   const selecionadoTodasAulasPorTipo = tipo => {
     const totalAulas = aulas.length;
     const totalAulasPorTipo = aulas.filter(
-      aula => aula.compareceu === tipo.valor
+      aula => aula.tipoFrequencia === tipo.valor
     );
 
     return totalAulasPorTipo?.length === totalAulas;
@@ -52,23 +57,29 @@ const IconesMarcarTodos = props => {
     );
   };
 
+  const temTipoNaLista = tipo =>
+    listaTiposFrequencia?.find(item => item?.valor === tipo);
+
   return (
     <div className="d-flex" style={{ justifyContent: 'space-evenly' }}>
-      {montarIconesMarcarTodos(
-        faCheckCircle,
-        tipoFrequencia.Compareceu,
-        obterCor(tipoFrequencia.Compareceu)
-      )}
-      {montarIconesMarcarTodos(
-        faTimesCircle,
-        tipoFrequencia.Faltou,
-        obterCor(tipoFrequencia.Faltou)
-      )}
-      {montarIconesMarcarTodos(
-        faDotCircle,
-        tipoFrequencia.Remoto,
-        obterCor(tipoFrequencia.Remoto)
-      )}
+      {temTipoNaLista(tipoFrequencia.Compareceu.valor) &&
+        montarIconesMarcarTodos(
+          faCheckCircle,
+          tipoFrequencia.Compareceu,
+          obterCor(tipoFrequencia.Compareceu)
+        )}
+      {temTipoNaLista(tipoFrequencia.Faltou.valor) &&
+        montarIconesMarcarTodos(
+          faTimesCircle,
+          tipoFrequencia.Faltou,
+          obterCor(tipoFrequencia.Faltou)
+        )}
+      {temTipoNaLista(tipoFrequencia.Remoto.valor) &&
+        montarIconesMarcarTodos(
+          faDotCircle,
+          tipoFrequencia.Remoto,
+          obterCor(tipoFrequencia.Remoto)
+        )}
     </div>
   );
 };

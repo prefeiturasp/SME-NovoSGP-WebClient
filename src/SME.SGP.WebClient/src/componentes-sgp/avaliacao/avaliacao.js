@@ -368,7 +368,9 @@ const Avaliacao = props => {
                           </td>
 
                           <td className="sticky-col col-frequencia linha-frequencia ">
-                            {aluno.percentualFrequencia}%
+                            {aluno?.percentualFrequencia
+                              ? `${aluno.percentualFrequencia}%`
+                              : ''}
                           </td>
                         </tr>
                         <LinhaConceitoFinal

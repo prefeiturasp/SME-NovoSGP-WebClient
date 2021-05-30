@@ -27,9 +27,11 @@ class ServicoFrequencia {
     const { dispatch } = store;
     const state = store.getState();
 
-    const { frequenciaPlanoAula } = state;
+    const { frequenciaPlanoAula, usuario } = state;
 
     const { aulaId, componenteCurricular } = frequenciaPlanoAula;
+
+    const { turmaSelecionada } = usuario;
 
     if (aulaId) {
       dispatch(setExibirLoaderFrequenciaPlanoAula(true));
@@ -46,11 +48,13 @@ class ServicoFrequencia {
         .catch(e => erros(e));
 
       if (frequenciaAlunos?.data) {
-        const tiposFrequencia = await this.obterTipoFrequencia().catch(e =>
-          erros(e)
-        );
+        const tiposFrequencia = await this.obterTipoFrequencia(
+          turmaSelecionada?.modalidade,
+          turmaSelecionada?.anoLetivo
+        ).catch(e => erros(e));
 
-        frequenciaAlunos.data.tiposFrequencia = tiposFrequencia?.data?.length
+        frequenciaAlunos.data.listaTiposFrequencia = tiposFrequencia?.data
+          ?.length
           ? tiposFrequencia.data
           : [];
 
@@ -72,34 +76,10 @@ class ServicoFrequencia {
     return api.post(`v1/calendarios/frequencias`, params);
   };
 
-  obterTipoFrequencia = () => {
-    return new Promise(resolve => {
-      setTimeout(() => {
-        resolve({
-          data: [
-            { valor: 'F', desc: 'F' },
-            { valor: 'C', desc: 'C' },
-            { valor: 'R', desc: 'R' },
-          ],
-        });
-      }, 1000);
-    });
-  };
-
-  obterPreDefinicaoAlunos = () => {
-    return new Promise(resolve => {
-      setTimeout(() => {
-        resolve({
-          data: [
-            { codigoAluno: '', tipoLancamento: 'C' },
-            { codigoAluno: '', tipoLancamento: 'R' },
-            { codigoAluno: '', tipoLancamento: 'R' },
-            { codigoAluno: '', tipoLancamento: 'F' },
-            { codigoAluno: '', tipoLancamento: 'F' },
-          ],
-        });
-      }, 1000);
-    });
+  obterTipoFrequencia = (modalidade, anoLetivo) => {
+    return api.get(
+      `${urlPadrao}/frequencias/tipos?modalidade=${modalidade}&anoLetivo=${anoLetivo}`
+    );
   };
 }
 

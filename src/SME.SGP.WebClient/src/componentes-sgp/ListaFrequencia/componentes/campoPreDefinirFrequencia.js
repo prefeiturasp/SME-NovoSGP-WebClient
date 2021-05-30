@@ -9,8 +9,9 @@ import { ContainerTipoFrequencia } from './style';
 const CampoPreDefinirFrequencia = props => {
   const { indexAluno, onChange } = props;
 
-  const tiposFrequencia = useSelector(
-    state => state.frequenciaPlanoAula.listaDadosFrequencia?.tiposFrequencia
+  const listaTiposFrequencia = useSelector(
+    state =>
+      state.frequenciaPlanoAula.listaDadosFrequencia?.listaTiposFrequencia
   );
 
   const tipoFrequenciaPreDefinido = useSelector(
@@ -39,9 +40,9 @@ const CampoPreDefinirFrequencia = props => {
           border={cor}
           className="tamanho-campo-select"
           id={idCampo}
-          lista={tiposFrequencia || []}
+          lista={listaTiposFrequencia || []}
           valueOption="valor"
-          valueText="desc"
+          valueText="descricao"
           valueSelect={tipoFrequenciaPreDefinido}
           allowClear={false}
           onChange={onChange}
