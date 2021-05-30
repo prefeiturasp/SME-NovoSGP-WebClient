@@ -9,22 +9,23 @@ import { ContainerTipoFrequencia } from './style';
 const CampoTipoFrequencia = props => {
   const { onChange, indexAluno, indexAula, numeroAula } = props;
 
-  const compareceu = useSelector(
+  const tipoFrequencia = useSelector(
     state =>
       state.frequenciaPlanoAula?.listaDadosFrequencia?.listaFrequencia?.[
         indexAluno
-      ]?.aulas?.[indexAula]?.compareceu
+      ]?.aulas?.[indexAula]?.tipoFrequencia
   );
 
-  const tiposFrequencia = useSelector(
-    state => state.frequenciaPlanoAula.listaDadosFrequencia?.tiposFrequencia
+  const listaTiposFrequencia = useSelector(
+    state =>
+      state.frequenciaPlanoAula.listaDadosFrequencia?.listaTiposFrequencia
   );
 
   const [exibir, setExibir] = useState(false);
 
   const idCampo = `tipo-frequencia-aula-${numeroAula}`;
 
-  const cor = MetodosListaFrequencia.obterCorTipoFrequencia(compareceu);
+  const cor = MetodosListaFrequencia.obterCorTipoFrequencia(tipoFrequencia);
 
   return (
     <ContainerTipoFrequencia
@@ -37,10 +38,10 @@ const CampoTipoFrequencia = props => {
           border={cor}
           className="tamanho-campo-select"
           id={`tipo-frequencia-aula-${numeroAula}`}
-          lista={tiposFrequencia || []}
+          lista={listaTiposFrequencia || []}
           valueOption="valor"
-          valueText="desc"
-          valueSelect={compareceu}
+          valueText="descricao"
+          valueSelect={tipoFrequencia}
           allowClear={false}
           onChange={tipo => {
             onChange(tipo);
@@ -51,7 +52,7 @@ const CampoTipoFrequencia = props => {
         <CampoTipoFreqSomenteLeitura
           className="tamanho-campo-select"
           id={idCampo}
-          valor={compareceu}
+          valor={tipoFrequencia}
           style={{ color: cor, borderColor: cor }}
         />
       )}

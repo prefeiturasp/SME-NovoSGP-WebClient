@@ -36,6 +36,11 @@ const ListaFrequencia = props => {
     state => state.frequenciaPlanoAula.listaDadosFrequencia?.listaFrequencia
   );
 
+  const listaTiposFrequencia = useSelector(
+    state =>
+      state.frequenciaPlanoAula.listaDadosFrequencia?.listaTiposFrequencia
+  );
+
   const [desabilitarCampos, setDesabilitarCampos] = useState(false);
 
   useEffect(() => {
@@ -52,7 +57,7 @@ const ListaFrequencia = props => {
     if (!desabilitarCampos && !aluno.desabilitado) {
       const aulas = [...aluno.aulas];
       aulas.forEach(aula => {
-        aula.compareceu = tipo;
+        aula.tipoFrequencia = tipo;
       });
       aluno.aulas = aulas;
       setDataSource(dataSource);
@@ -66,7 +71,7 @@ const ListaFrequencia = props => {
         if (!aluno.desabilitado) {
           const aulas = [...aluno.aulas];
           aulas.forEach(aula => {
-            aula.compareceu = tipo;
+            aula.tipoFrequencia = tipo;
           });
           aluno.aulas = aulas;
         }
@@ -116,7 +121,7 @@ const ListaFrequencia = props => {
         indexAula={indexAula}
         indexAluno={indexAluno}
         onChange={valorNovo => {
-          aula.compareceu = valorNovo;
+          aula.tipoFrequencia = valorNovo;
           dataSource[indexAluno].aulas = [...dataSource[indexAluno].aulas];
           onChangeFrequencia();
         }}
@@ -141,32 +146,70 @@ const ListaFrequencia = props => {
   };
 
   const montarTituloColunaMarcarTodas = () => {
+    const exibirCompareceu = listaTiposFrequencia?.find(
+      item => item?.valor === tipoFrequencia.Compareceu.valor
+    );
+    const exibirFaltou = listaTiposFrequencia?.find(
+      item => item?.valor === tipoFrequencia.Faltou.valor
+    );
+    const exibirRemoto = listaTiposFrequencia?.find(
+      item => item?.valor === tipoFrequencia.Remoto.valor
+    );
+
+    let margin = '';
+    let totalColunas = 0;
+
+    if (exibirCompareceu) {
+      totalColunas += 1;
+    }
+    if (exibirFaltou) {
+      totalColunas += 1;
+    }
+    if (exibirRemoto) {
+      totalColunas += 1;
+    }
+
+    if (totalColunas === 2) {
+      margin = '15px';
+    }
+
     return (
       <div className="d-flex">
-        <MarcarTodasAulasTipoFrequencia
-          onClick={() =>
-            marcarPresencaFaltaTodosAlunos(tipoFrequencia.Compareceu.valor)
-          }
-        >
-          <Tooltip title="Compareceu">
-            {tipoFrequencia.Compareceu.valor}
-          </Tooltip>
-        </MarcarTodasAulasTipoFrequencia>
-        <MarcarTodasAulasTipoFrequencia
-          style={{ marginLeft: '21px', marginRight: '21px' }}
-          onClick={() =>
-            marcarPresencaFaltaTodosAlunos(tipoFrequencia.Faltou.valor)
-          }
-        >
-          <Tooltip title="Faltou">{tipoFrequencia.Faltou.valor}</Tooltip>
-        </MarcarTodasAulasTipoFrequencia>
-        <MarcarTodasAulasTipoFrequencia
-          onClick={() =>
-            marcarPresencaFaltaTodosAlunos(tipoFrequencia.Remoto.valor)
-          }
-        >
-          <Tooltip title="Remoto">{tipoFrequencia.Remoto.valor}</Tooltip>
-        </MarcarTodasAulasTipoFrequencia>
+        {exibirCompareceu && (
+          <MarcarTodasAulasTipoFrequencia
+            style={{ marginLeft: margin, marginRight: margin }}
+            onClick={() =>
+              marcarPresencaFaltaTodosAlunos(tipoFrequencia.Compareceu.valor)
+            }
+          >
+            <Tooltip title="Compareceu">
+              {tipoFrequencia.Compareceu.valor}
+            </Tooltip>
+          </MarcarTodasAulasTipoFrequencia>
+        )}
+        {exibirFaltou && (
+          <MarcarTodasAulasTipoFrequencia
+            style={{
+              marginLeft: totalColunas === 3 ? '21px' : margin,
+              marginRight: totalColunas === 3 ? '21px' : margin,
+            }}
+            onClick={() =>
+              marcarPresencaFaltaTodosAlunos(tipoFrequencia.Faltou.valor)
+            }
+          >
+            <Tooltip title="Faltou">{tipoFrequencia.Faltou.valor}</Tooltip>
+          </MarcarTodasAulasTipoFrequencia>
+        )}
+        {exibirRemoto && (
+          <MarcarTodasAulasTipoFrequencia
+            style={{ marginLeft: margin, marginRight: margin }}
+            onClick={() =>
+              marcarPresencaFaltaTodosAlunos(tipoFrequencia.Remoto.valor)
+            }
+          >
+            <Tooltip title="Remoto">{tipoFrequencia.Remoto.valor}</Tooltip>
+          </MarcarTodasAulasTipoFrequencia>
+        )}
       </div>
     );
   };

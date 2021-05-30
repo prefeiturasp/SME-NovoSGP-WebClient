@@ -121,15 +121,17 @@ const MontarListaFrequencia = () => {
                   />
 
                   {listaDadosFrequencia?.criadoEm && (
-                    <Auditoria
-                      className="mt-2"
-                      criadoEm={listaDadosFrequencia.criadoEm}
-                      criadoPor={listaDadosFrequencia.criadoPor}
-                      alteradoPor={listaDadosFrequencia.alteradoPor}
-                      alteradoEm={listaDadosFrequencia.alteradoEm}
-                      alteradoRf={listaDadosFrequencia.alteradoRF}
-                      criadoRf={listaDadosFrequencia.criadoRF}
-                    />
+                    <div className="row">
+                      <Auditoria
+                        className="mt-2"
+                        criadoEm={listaDadosFrequencia.criadoEm}
+                        criadoPor={listaDadosFrequencia.criadoPor}
+                        alteradoPor={listaDadosFrequencia.alteradoPor}
+                        alteradoEm={listaDadosFrequencia.alteradoEm}
+                        alteradoRf={listaDadosFrequencia.alteradoRF}
+                        criadoRf={listaDadosFrequencia.criadoRF}
+                      />
+                    </div>
                   )}
                 </>
               )}
