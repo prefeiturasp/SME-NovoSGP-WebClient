@@ -110,6 +110,7 @@ const RelatorioLeitura = () => {
     setTurmaId();
     setModalidadeId(valor);
     setGrupos([]);
+    setClicouBotaoGerar(false);
   };
 
   const onChangeSemestre = valor => {

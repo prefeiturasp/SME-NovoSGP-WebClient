@@ -144,6 +144,7 @@ const AtribuicaoCJ = () => {
   const onChangeModalidade = valor => {
     setTurmaId([]);
     setModalidadeId(valor);
+    setClicouBotaoGerar(false);
   };
 
   const onChangeSemestre = valor => {
