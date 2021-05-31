@@ -190,13 +190,12 @@ const GraficoQuantidadeMatriculasPorAno = props => {
         loading={exibirLoader}
         className={exibirLoader ? 'text-center' : ''}
       >
-        {!exibirLoader && dadosGrafico?.length ? (
-          <GraficoBarras data={dadosGrafico} />
-        ) : !exibirLoader ? (
-          <div className="text-center">Sem dados</div>
-        ) : (
-          ''
-        )}
+        {!exibirLoader &&
+          (dadosGrafico?.length ? (
+            <GraficoBarras data={dadosGrafico} />
+          ) : (
+            <div className="text-center">Sem dados</div>
+          ))}
       </Loader>
     </>
   );
