@@ -132,3 +132,8 @@ export const setMostrarMensagemSemHistorico = payload => ({
   type: '@registroIndividual/setMostrarMensagemSemHistorico',
   payload,
 });
+
+export const setValorEditorRegistrosAnteriores = payload => ({
+  type: '@registroIndividual/setValorEditorRegistrosAnteriores',
+  payload,
+});
