@@ -26,9 +26,9 @@ import {
   ServicoAcompanhamentoFechamento,
 } from '~/servicos';
 
-import { CardStatus } from './CardStatus';
 import { Filtros } from './Filtros';
-import DetalhesConselhoClasse from './DetalhesConselhoClasse/detalhesConselhoClasse';
+import SecaoFechamento from './SecaoFechamento/secaoFechamento';
+import SecaoConselhoClasse from './SecaoConselhoClasse/secaoConselhoClasse';
 
 const AcompanhamentoFechamento = () => {
   const [ehInfantil, setEhInfantil] = useState(false);
@@ -173,55 +173,17 @@ const AcompanhamentoFechamento = () => {
                         header={dadosTurmas?.nome}
                       >
                         <>
-                          <Label
-                            text="Fechamento"
-                            className="mb-2"
-                            altura="24"
+                          <SecaoFechamento
+                            dadosStatusFechamento={dadosStatusFechamento}
                           />
-                          <div className="d-flex">
-                            {dadosStatusFechamento?.length > 0 ? (
-                              dadosStatusFechamento?.map(dadosFechamento => (
-                                <CardStatus dadosStatus={dadosFechamento} />
-                              ))
-                            ) : (
-                              <Label
-                                text="Não foram encontrados fechamentos"
-                                className="mb-2"
-                                altura="16"
-                              />
-                            )}
-                          </div>
                           <Divider style={{ background: Base.CinzaDivisor }} />
-                          <Label
-                            text="Conselho de classe"
-                            className="mb-2"
-                            altura="24"
+                          <SecaoConselhoClasse
+                            dadosStatusConsselhoClasse={
+                              dadosStatusConsselhoClasse
+                            }
+                            dadosTurmas={dadosTurmas}
+                            parametrosFiltro={parametrosFiltro}
                           />
-                          <div className="d-flex">
-                            {dadosStatusConsselhoClasse?.length ? (
-                              dadosStatusConsselhoClasse?.map(
-                                dadosConselhoClasse => (
-                                  <CardStatus
-                                    dadosStatus={dadosConselhoClasse}
-                                  />
-                                )
-                              )
-                            ) : (
-                              <Label
-                                text="Não foram encontrados conselhos de classe"
-                                className="mb-2"
-                                altura="16"
-                              />
-                            )}
-                          </div>
-                          <div className="row">
-                            {dadosStatusConsselhoClasse?.length ? (
-                              <DetalhesConselhoClasse
-                                turmaId={dadosTurmas?.turmaId}
-                                bimestre={parametrosFiltro?.bimestre}
-                              />
-                            ) : null}
-                          </div>
                         </>
                       </PainelCollapse.Painel>
                     ))}

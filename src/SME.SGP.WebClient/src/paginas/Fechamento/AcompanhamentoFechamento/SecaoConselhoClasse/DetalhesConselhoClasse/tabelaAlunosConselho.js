@@ -5,7 +5,7 @@ import { Base, DataTable, Loader } from '~/componentes';
 import { BIMESTRE_FINAL } from '~/constantes/constantes';
 import { statusAcompanhamentoFechamento } from '~/dtos';
 import { erros, ServicoAcompanhamentoFechamento } from '~/servicos';
-import { MarcadorTriangulo } from '../CardStatus/cardStatus.css';
+import { MarcadorTriangulo } from '../../CardStatus/cardStatus.css';
 
 const TabelaAlunosConselho = props => {
   const { dadosAlunos, bimestre, turmaId } = props;
@@ -101,7 +101,8 @@ const TabelaAlunosConselho = props => {
     return (
       <>
         {componenteCurricular?.notaPosConselho || '-'}
-        {!componenteCurricular?.notaPosConselho && componenteCurricular?.lancaNota ? (
+        {!componenteCurricular?.notaPosConselho &&
+        componenteCurricular?.lancaNota ? (
           <Tooltip title="Sem nota atribuída">
             <MarcadorTriangulo cor={Base.LaranjaStatus} />
           </Tooltip>
