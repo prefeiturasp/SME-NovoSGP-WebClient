@@ -1,6 +1,8 @@
 import { Tabs } from 'antd';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import * as Yup from 'yup';
+import { Formik, Form } from 'formik';
 import { Grid, Loader, ModalConteudoHtml, Colors } from '~/componentes';
 import Button from '~/componentes/button';
 import Avaliacao from '~/componentes-sgp/avaliacao/avaliacao';
@@ -25,10 +27,7 @@ import { verificaSomenteConsulta } from '~/servicos/servico-navegacao';
 import ServicoNotas from '~/servicos/ServicoNotas';
 import BotoesAcoessNotasConceitos from './botoesAcoes';
 import { Container, ContainerAuditoria } from './notas.css';
-import * as Yup from 'yup';
-import { Formik, Form } from 'formik';
 import ServicoPeriodoFechamento from '~/servicos/Paginas/Calendario/ServicoPeriodoFechamento';
-import moment from 'moment';
 import AlertaModalidadeInfantil from '~/componentes-sgp/AlertaModalidadeInfantil/alertaModalidadeInfantil';
 import { ehTurmaInfantil } from '~/servicos/Validacoes/validacoesInfatil';
 import ServicoNotaConceito from '~/servicos/Paginas/DiarioClasse/ServicoNotaConceito';
@@ -77,7 +76,9 @@ const Notas = ({ match }) => {
 
   const [validacoes] = useState(
     Yup.object({
-      descricao: Yup.string().required('Justificativa obrigatória').max(1000, 'limite de 1000 caracteres'),
+      descricao: Yup.string()
+        .required('Justificativa obrigatória')
+        .max(1000, 'limite de 1000 caracteres'),
     })
   );
 
@@ -234,7 +235,10 @@ const Notas = ({ match }) => {
             setNotaTipo(dados.notaTipo);
 
             let listaTiposConceitos = [];
-            if (Number(notasConceitos.Conceitos) === Number(dados.notaTipo) || !(Number(notasConceitos.Notas) === notaTipo)) {
+            if (
+              Number(notasConceitos.Conceitos) === Number(dados.notaTipo) ||
+              !(Number(notasConceitos.Notas) === notaTipo)
+            ) {
               listaTiposConceitos = await obterListaConceitos(item.periodoFim);
             }
 
@@ -327,7 +331,11 @@ const Notas = ({ match }) => {
       match.params.bimestre
     ) {
       setDisciplinaSelecionada(String(match.params.disciplinaId));
-      obterDadosBimestres(match.params.disciplinaId, match.params.bimestre, true);
+      obterDadosBimestres(
+        match.params.disciplinaId,
+        match.params.bimestre,
+        true
+      );
     }
   }, [obterDadosBimestres, usuario.turmaSelecionada.turma]);
 
@@ -428,8 +436,17 @@ const Notas = ({ match }) => {
     return valorParaSalvar;
   };
 
-  const salvarNotasAvaliacoes = (resolve, reject, click) => {
+  const salvarNotasAvaliacoes = async (
+    resolve,
+    reject,
+    click,
+    salvarNotasAvaliacao
+  ) => {
     const valoresBimestresSalvar = [];
+
+    if (!salvarNotasAvaliacao) {
+      return;
+    }
 
     if (primeiroBimestre.modoEdicao) {
       valoresBimestresSalvar.push(
@@ -448,33 +465,31 @@ const Notas = ({ match }) => {
       valoresBimestresSalvar.push(...montarBimestreParaSalvar(quartoBimestre));
     }
     setCarregandoGeral(true);
-    return api
-      .post(`v1/avaliacoes/notas`, {
+    try {
+      const salvouNotas = await api.post(`v1/avaliacoes/notas`, {
         turmaId: usuario.turmaSelecionada.turma,
         disciplinaId: disciplinaSelecionada,
         notasConceitos: valoresBimestresSalvar,
-      })
-      .then(salvouNotas => {
-        setCarregandoGeral(false);
-        if (salvouNotas && salvouNotas.status === 200) {
-          sucesso('Suas informações foram salvas com sucesso.');
-          dispatch(setModoEdicaoGeral(false));
-          dispatch(setModoEdicaoGeralNotaFinal(false));
-          dispatch(setExpandirLinha([]));
-          if (click) {
-            aposSalvarNotas();
-          }
-          resolve(true);
-          return true;
-        }
-        resolve(false);
-        return false;
-      })
-      .catch(e => {
-        erros(e);
-        reject(e);
-        setCarregandoGeral(false);
       });
+      setCarregandoGeral(false);
+      if (salvouNotas && salvouNotas.status === 200) {
+        sucesso('Suas informações foram salvas com sucesso.');
+        dispatch(setModoEdicaoGeral(false));
+        dispatch(setModoEdicaoGeralNotaFinal(false));
+        dispatch(setExpandirLinha([]));
+        if (click) {
+          aposSalvarNotas();
+        }
+        resolve(true);
+        return true;
+      }
+      resolve(false);
+      return false;
+    } catch (e) {
+      erros(e);
+      reject(e);
+      setCarregandoGeral(false);
+    }
   };
 
   const pergutarParaSalvarNotaFinal = bimestresSemAvaliacaoBimestral => {
@@ -532,9 +547,19 @@ const Notas = ({ match }) => {
     }
   };
 
-  const salvarNotasFinais = (resolve, reject, click) => {
+  const salvarNotasFinais = async (
+    resolve,
+    reject,
+    click,
+    salvarNotaFinal,
+    salvarNotasAvaliacao
+  ) => {
     const valoresBimestresSalvar = [];
     const bimestresSemAvaliacaoBimestral = [];
+
+    if (!salvarNotaFinal) {
+      return;
+    }
 
     if (primeiroBimestre.modoEdicao) {
       montaQtdAvaliacaoBimestralPendent(
@@ -573,52 +598,63 @@ const Notas = ({ match }) => {
       );
     }
 
-    return pergutarParaSalvarNotaFinal(bimestresSemAvaliacaoBimestral)
-      .then(salvarAvaliacaoFinal => {
-        if (salvarAvaliacaoFinal) {
-          let valoresBimestresSalvarComNotas = valoresBimestresSalvar.filter(
-            x => x.notaConceitoAlunos.length > 0
-          );
+    try {
+      const salvarAvaliacaoFinal = await pergutarParaSalvarNotaFinal(
+        bimestresSemAvaliacaoBimestral
+      );
+      if (salvarAvaliacaoFinal) {
+        const valoresBimestresSalvarComNotas = valoresBimestresSalvar.filter(
+          x => x.notaConceitoAlunos.length > 0
+        );
 
-          if (valoresBimestresSalvarComNotas.length < 1) return resolve(false);
-          setCarregandoGeral(true);
-          return api
-            .post(`/v1/fechamentos/turmas`, valoresBimestresSalvarComNotas)
-            .then(salvouNotas => {
-              setCarregandoGeral(false);
-              if (salvouNotas && salvouNotas.status === 200) {
+        if (valoresBimestresSalvarComNotas.length < 1) return resolve(false);
+
+        setCarregandoGeral(true);
+        await api
+          .post(`/v1/fechamentos/turmas`, valoresBimestresSalvarComNotas)
+          .then(salvouNotas => {
+            setCarregandoGeral(false);
+            if (salvouNotas && salvouNotas.status === 200) {
+              if (!salvarNotasAvaliacao) {
                 sucesso('Suas informações foram salvas com sucesso.');
-                dispatch(setModoEdicaoGeral(false));
-                dispatch(setModoEdicaoGeralNotaFinal(false));
-                dispatch(setExpandirLinha([]));
-                if (click) {
-                  aposSalvarNotas();
-                }
-                return resolve(true);
               }
-              return resolve(false);
-            })
-            .catch(e => {
-              erros(e);
-              reject(e);
-              setCarregandoGeral(false);
-            });
-        }
-        return resolve(false);
-      })
-      .catch(e => {
-        erros(e);
-        reject(e);
-      });
+              dispatch(setModoEdicaoGeral(false));
+              dispatch(setModoEdicaoGeralNotaFinal(false));
+              dispatch(setExpandirLinha([]));
+              if (click) {
+                aposSalvarNotas();
+              }
+              return resolve(true);
+            }
+            return resolve(false);
+          })
+          .catch(e => {
+            erros(e);
+            reject(e);
+            setCarregandoGeral(false);
+          });
+        return;
+      }
+      return resolve(false);
+    } catch (e_1) {
+      erros(e_1);
+      reject(e_1);
+    }
   };
 
-  const onSalvarNotas = (click, salvarNotaFinal) => {
-    return new Promise((resolve, reject) => {
-      if (salvarNotaFinal) {
-        return salvarNotasFinais(resolve, reject, click);
-      }
-      return salvarNotasAvaliacoes(resolve, reject, click);
-    });
+  const onSalvarNotas = (click, salvarNotaFinal, salvarNotasAvaliacao) => {
+    return new Promise((resolve, reject) =>
+      Promise.all([
+        salvarNotasFinais(
+          resolve,
+          reject,
+          click,
+          salvarNotaFinal,
+          salvarNotasAvaliacao
+        ),
+        salvarNotasAvaliacoes(resolve, reject, click, salvarNotasAvaliacao),
+      ])
+    );
   };
 
   const onClickVoltar = async () => {
@@ -732,11 +768,10 @@ const Notas = ({ match }) => {
   ) => {
     setClicouNoBotaoSalvar(clicouSalvar);
     setClicouNoBotaoVoltar(clicouVoltar);
+    const estaEmModoEdicaoGeral = ServicoNotaConceito.estaEmModoEdicaoGeral();
+    const estaEmModoEdicaoGeralNotaFinal = ServicoNotaConceito.estaEmModoEdicaoGeralNotaFinal();
 
-    if (
-      ServicoNotaConceito.estaEmModoEdicaoGeral() ||
-      ServicoNotaConceito.estaEmModoEdicaoGeralNotaFinal()
-    ) {
+    if (estaEmModoEdicaoGeralNotaFinal || estaEmModoEdicaoGeral) {
       let confirmado = true;
 
       if (!clicouSalvar) {
@@ -747,7 +782,7 @@ const Notas = ({ match }) => {
         const bimestre = getDadosBimestreAtual();
         const temPorcentagemAceitavel = verificaPorcentagemAprovados();
         if (
-          ServicoNotaConceito.estaEmModoEdicaoGeralNotaFinal() &&
+          estaEmModoEdicaoGeralNotaFinal &&
           !temPorcentagemAceitavel &&
           bimestre.modoEdicao
         ) {
@@ -759,7 +794,8 @@ const Notas = ({ match }) => {
             : bimestre.justificativa;
           await onSalvarNotas(
             clicouSalvar,
-            ServicoNotaConceito.estaEmModoEdicaoGeralNotaFinal()
+            estaEmModoEdicaoGeralNotaFinal,
+            estaEmModoEdicaoGeral
           );
           aposValidarJustificativaAntesDeSalvar(
             numeroBimestre,
@@ -1223,26 +1259,34 @@ const Notas = ({ match }) => {
                     </ContainerTabsCard>
                   </div>
                 </div>
-                <div className="row mt-2 mb-2 mt-2">
-                  <div className="col-md-12">
-                    <ContainerAuditoria style={{ float: 'left' }}>
-                      <span>
-                        <p>{auditoriaInfo.auditoriaInserido || ''}</p>
-                        <p>{auditoriaInfo.auditoriaAlterado || ''}</p>
-                      </span>
-                    </ContainerAuditoria>
-                  </div>
-                </div>
-                <div className="row mt-2 mb-2 mt-2">
-                  <div className="col-md-12">
-                    <ContainerAuditoria style={{ float: 'left' }}>
-                      <span>
-                        <p>{auditoriaInfo.auditoriaBimestreInserido || ''}</p>
-                        <p>{auditoriaInfo.auditoriaBimestreAlterado || ''}</p>
-                      </span>
-                    </ContainerAuditoria>
-                  </div>
-                </div>
+                {!!bimestreCorrente && (
+                  <>
+                    <div className="row mt-2 mb-2 mt-2">
+                      <div className="col-md-12">
+                        <ContainerAuditoria style={{ float: 'left' }}>
+                          <span>
+                            <p>{auditoriaInfo.auditoriaInserido || ''}</p>
+                            <p>{auditoriaInfo.auditoriaAlterado || ''}</p>
+                          </span>
+                        </ContainerAuditoria>
+                      </div>
+                    </div>
+                    <div className="row mt-2 mb-2 mt-2">
+                      <div className="col-md-12">
+                        <ContainerAuditoria style={{ float: 'left' }}>
+                          <span>
+                            <p>
+                              {auditoriaInfo.auditoriaBimestreInserido || ''}
+                            </p>
+                            <p>
+                              {auditoriaInfo.auditoriaBimestreAlterado || ''}
+                            </p>
+                          </span>
+                        </ContainerAuditoria>
+                      </div>
+                    </div>
+                  </>
+                )}
                 {!bimestreCorrente && (
                   <div className="text-center">Selecione um bimestre</div>
                 )}
