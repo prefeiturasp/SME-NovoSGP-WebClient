@@ -78,6 +78,7 @@ const RelatorioEscolaAquiAdesao = () => {
     setDreCodigo(valor);
     setUeCodigo(undefined);
     setOpcaoListaUsuarios(1);
+    setClicouBotaoGerar(false);
   };
 
   const onChangeUe = valor => {
