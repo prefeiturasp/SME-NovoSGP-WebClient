@@ -141,7 +141,7 @@ const ListaFrequencia = props => {
       case tipoIndicativoFrequencia.Critico:
         return <IndicativoCritico>{percentual}</IndicativoCritico>;
       default:
-        return '';
+        return percentual;
     }
   };
 
