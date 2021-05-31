@@ -48,9 +48,7 @@ const CampoConceito = props => {
         conceitoAlterado ? 'border-registro-alterado' : ''
       }`}
       classNameContainer={nota.ausente ? 'aluno-ausente-conceitos' : ''}
-      disabled={
-        desabilitarCampo || modoEdicaoGeralNotaFinal || !nota.podeEditar
-      }
+      disabled={desabilitarCampo || !nota.podeEditar}
     />
   );
 };
