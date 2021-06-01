@@ -47,15 +47,17 @@ const ModalAnotacoesFrequencia = props => {
     exibirModalAnotacaoFrequencia
   );
 
-  const [listaMotivoAusencia, setListaMotivoAusencia] = useState([]);
-  const [modoEdicao, setModoEdicao] = useState(false);
-  const [refForm, setRefForm] = useState({});
-  const [valoresIniciais, setValoresIniciais] = useState({
+  const iniciar = {
     id: 0,
     anotacao: '',
     motivoAusenciaId: undefined,
     auditoria: {},
-  });
+  };
+
+  const [listaMotivoAusencia, setListaMotivoAusencia] = useState([]);
+  const [modoEdicao, setModoEdicao] = useState(false);
+  const [refForm, setRefForm] = useState({});
+  const [valoresIniciais, setValoresIniciais] = useState(iniciar);
 
   const [validacoes] = useState(
     Yup.object().shape(
@@ -84,6 +86,8 @@ const ModalAnotacoesFrequencia = props => {
   const onCloseModal = () => {
     dispatch(setDadosModalAnotacaoFrequencia({}));
     dispatch(setExibirModalAnotacaoFrequencia(false));
+    setValoresIniciais(iniciar);
+    setRefForm({});
   };
 
   const obterAnotacao = useCallback(async () => {

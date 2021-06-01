@@ -1,4 +1,4 @@
-import { faEdit } from '@fortawesome/free-solid-svg-icons';
+import { faEdit, faEye } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Tooltip } from 'antd';
 import PropTypes from 'prop-types';
@@ -39,7 +39,7 @@ const BotaoAnotacao = props => {
     dispatch(setExibirModalAnotacaoFrequencia(true));
   };
 
-  const cor = possuiAnotacao ? Base.Verde : Base.Azul;
+  const cor = possuiAnotacao ? Base.Azul : Base.CinzaDivisor;
 
   return (
     <Tooltip
@@ -61,15 +61,27 @@ const BotaoAnotacao = props => {
             }
           }}
         >
-          <FontAwesomeIcon
-            style={{
-              fontSize: '16px',
-              cursor: podeAbrirModal ? 'pointer' : 'not-allowed',
-              color: cor,
-              margin: '6.5px',
-            }}
-            icon={faEdit}
-          />
+          {possuiAnotacao ? (
+            <FontAwesomeIcon
+              style={{
+                fontSize: '16px',
+                cursor: podeAbrirModal ? 'pointer' : 'not-allowed',
+                color: cor,
+                margin: '6.5px',
+              }}
+              icon={faEye}
+            />
+          ) : (
+            <FontAwesomeIcon
+              style={{
+                fontSize: '16px',
+                cursor: podeAbrirModal ? 'pointer' : 'not-allowed',
+                color: cor,
+                margin: '6.5px',
+              }}
+              icon={faEdit}
+            />
+          )}
         </ContainerBtbAnotacao>
       </div>
     </Tooltip>
