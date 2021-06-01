@@ -271,7 +271,9 @@ const ListaFinal = props => {
                         ) : null}
                         {index === 0 ? (
                           <td rowSpan={alturaLinhaMesclada}>
-                            {dadosLista.componenteRegencia.frequencia}%
+                            {dadosLista?.componenteRegencia?.frequencia
+                              ? `${dadosLista.componenteRegencia.frequencia}%`
+                              : ''}
                           </td>
                         ) : null}
                       </tr>

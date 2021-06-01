@@ -47,6 +47,7 @@ const Base = {
   LaranjaAlerta: '#D06D12',
   VerdeBorda: '#20AA73',
   Bordo: '#864241',
+  LaranjaFrequencia: '#C0630E',
 };
 
 const Active = {
