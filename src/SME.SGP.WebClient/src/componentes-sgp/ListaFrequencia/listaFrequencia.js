@@ -131,10 +131,9 @@ const ListaFrequencia = props => {
   };
 
   const montarColunaFrequencia = aluno => {
-    const percentual =
-      aluno?.indicativoFrequencia?.percentual > -1
-        ? `${aluno.indicativoFrequencia.percentual}%`
-        : '';
+    const percentual = aluno?.indicativoFrequencia?.percentual
+      ? `${aluno.indicativoFrequencia.percentual}%`
+      : '';
 
     switch (aluno?.indicativoFrequencia?.tipo) {
       case tipoIndicativoFrequencia.Alerta:
