@@ -6,7 +6,11 @@ import { FiltroHelper } from '~/componentes-sgp';
 
 import { setTurmasAcompanhamentoFechamento } from '~/redux/modulos/acompanhamentoFechamento/actions';
 
-import { ModalidadeDTO } from '~/dtos';
+import {
+  ModalidadeDTO,
+  statusAcompanhamentoConselhoClasse,
+  statusAcompanhamentoFechamento,
+} from '~/dtos';
 import { AbrangenciaServico, erros, ServicoFiltroRelatorio } from '~/servicos';
 import { OPCAO_TODOS, BIMESTRE_FINAL } from '~/constantes/constantes';
 
@@ -30,10 +34,17 @@ const Filtros = ({ onChangeFiltros, ehInfantil }) => {
   const [listaDres, setListaDres] = useState([]);
   const [listaModalidades, setListaModalidades] = useState([]);
   const [listaSemestres, setListaSemestres] = useState([]);
+  const [listaSituacaoFechamento, setListaSituacaoFechamento] = useState([]);
+  const [
+    listaSituacaoConselhoClasse,
+    setListaSituacaoConselhoClasse,
+  ] = useState([]);
   const [listaTurmas, setListaTurmas] = useState([]);
   const [listaUes, setListaUes] = useState([]);
   const [modalidadeId, setModalidadeId] = useState();
   const [semestre, setSemestre] = useState();
+  const [situacaoConselhoClasse, setSituacaoConselhoClasse] = useState();
+  const [situacaoFechamento, setSituacaoFechamento] = useState();
   const [turmasId, setTurmasId] = useState('');
   const [ueId, setUeId] = useState('');
   const [ueCodigo, setUeCodigo] = useState();
@@ -59,7 +70,11 @@ const Filtros = ({ onChangeFiltros, ehInfantil }) => {
     setTurmasId();
   };
 
-  const filtrar = valorBimestre => {
+  const filtrar = (
+    valorBimestre,
+    valorSituacaoFechamento,
+    valorSituacaoConselhoClasse
+  ) => {
     const params = {
       anoLetivo,
       dreId,
@@ -68,6 +83,8 @@ const Filtros = ({ onChangeFiltros, ehInfantil }) => {
       semestre: semestre || 0,
       turmasId,
       bimestre: valorBimestre,
+      situacaoFechamento: valorSituacaoFechamento,
+      situacaoConselhoClasse: valorSituacaoConselhoClasse,
     };
 
     const temSemestreOuNaoEja =
@@ -83,6 +100,7 @@ const Filtros = ({ onChangeFiltros, ehInfantil }) => {
       temSemestreOuNaoEja &&
       !carregandoAcompanhamentoFechamento
     ) {
+      console.log('params', params);
       onChangeFiltros(params);
     }
   };
@@ -415,6 +433,33 @@ const Filtros = ({ onChangeFiltros, ehInfantil }) => {
     setDesabilitarCampos(ehInfantil);
   }, [ehInfantil]);
 
+  const onChangeSituacaoFechamento = valor => {
+    setSituacaoFechamento(valor);
+    filtrar(bimestre, valor, situacaoConselhoClasse);
+  };
+
+  const onChangeSituacaoConselhoClasse = valor => {
+    setSituacaoConselhoClasse(valor);
+    filtrar(bimestre, situacaoFechamento, valor);
+  };
+
+  const obterSituacaoFechamento = situacaoFechamentoCodigo =>
+    Object.keys(situacaoFechamentoCodigo).map(item => ({
+      valor: situacaoFechamentoCodigo[item].id,
+      desc: situacaoFechamentoCodigo[item].descricao,
+    }));
+
+  useEffect(() => {
+    const dadosSituacaoFechamento = obterSituacaoFechamento(
+      statusAcompanhamentoFechamento
+    );
+    const dadosSituacaoConselhoClasse = obterSituacaoFechamento(
+      statusAcompanhamentoConselhoClasse
+    );
+    setListaSituacaoFechamento(dadosSituacaoFechamento);
+    setListaSituacaoConselhoClasse(dadosSituacaoConselhoClasse);
+  }, []);
+
   return (
     <>
       <div className="row mb-2">
@@ -546,7 +591,7 @@ const Filtros = ({ onChangeFiltros, ehInfantil }) => {
         </div>
       </div>
       <div className="row">
-        <div className="col-sm-12 col-md-3">
+        <div className="col-sm-12 col-md-4 pr-0">
           <SelectComponent
             lista={listaBimestres}
             valueOption="valor"
@@ -560,6 +605,30 @@ const Filtros = ({ onChangeFiltros, ehInfantil }) => {
             valueSelect={bimestre}
             onChange={onChangeBimestre}
             placeholder="Selecione o bimestre"
+          />
+        </div>
+        <div className="col-sm-12 col-md-4 pr-0">
+          <SelectComponent
+            lista={listaSituacaoFechamento}
+            valueOption="valor"
+            valueText="desc"
+            label="Situação do fechamento"
+            disabled={!turmasId?.length || !bimestre || desabilitarCampos}
+            valueSelect={situacaoFechamento}
+            onChange={onChangeSituacaoFechamento}
+            placeholder="Situação do fechamento"
+          />
+        </div>
+        <div className="col-sm-12 col-md-4">
+          <SelectComponent
+            lista={listaSituacaoConselhoClasse}
+            valueOption="valor"
+            valueText="desc"
+            label="Situação do conselho de classe"
+            disabled={!turmasId?.length || !bimestre || desabilitarCampos}
+            valueSelect={situacaoConselhoClasse}
+            onChange={onChangeSituacaoConselhoClasse}
+            placeholder="Situação do conselho de classe"
           />
         </div>
       </div>
