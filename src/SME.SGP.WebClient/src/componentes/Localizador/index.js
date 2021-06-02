@@ -65,7 +65,8 @@ function Localizador({
       }, 200);
     }
 
-    if (valor.length < 2) return;
+    if (valor.length < 3) return;
+    setDataSource([]);
     const { data: dados } = await service.buscarAutocomplete({
       nome: valor,
       dreId,
