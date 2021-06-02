@@ -71,7 +71,7 @@ const RelatorioLeitura = () => {
 
   const [consideraHistorico, setConsideraHistorico] = useState(false);
   const [desabilitarGerar, setDesabilitarGerar] = useState(true);
-
+  const [clicouBotaoGerar, setClicouBotaoGerar] = useState(false);
   const [timeoutCampoPesquisa, setTimeoutCampoPesquisa] = useState();
 
   const OPCAO_TODOS = '-99';
@@ -97,6 +97,7 @@ const RelatorioLeitura = () => {
     setModalidadeId();
     setTurmaId();
     setCodigoUe(undefined);
+    setClicouBotaoGerar(false);
   };
 
   const onChangeUe = valor => {
@@ -110,14 +111,22 @@ const RelatorioLeitura = () => {
     setTurmaId();
     setModalidadeId(valor);
     setGrupos([]);
+    setClicouBotaoGerar(false);
   };
 
   const onChangeSemestre = valor => {
     setSemestre(valor);
+    setClicouBotaoGerar(false);
+  };
+
+  const onChangeAno = valor => {
+    setAnosEscolares(valor);
+    setTurmaId();
   };
 
   const onChangeTurma = valor => {
     setTurmaId(valor);
+    setClicouBotaoGerar(false);
   };
 
   const [anoAtual] = useState(window.moment().format('YYYY'));
@@ -166,7 +175,7 @@ const RelatorioLeitura = () => {
   }, [codigoDre]);
 
   useEffect(() => {
-    let desabilitar = !anoLetivo || !codigoDre || !codigoUe;
+    let desabilitar = !anoLetivo || !codigoDre || !codigoUe || clicouBotaoGerar;
 
     const temDreUeSelecionada =
       codigoDre &&
@@ -189,7 +198,15 @@ const RelatorioLeitura = () => {
     }
 
     setDesabilitarGerar(desabilitar);
-  }, [anoLetivo, codigoDre, codigoUe, turmaId, modalidadeId, semestre]);
+  }, [
+    anoLetivo,
+    codigoDre,
+    codigoUe,
+    turmaId,
+    modalidadeId,
+    semestre,
+    clicouBotaoGerar,
+  ]);
 
   useEffect(() => {
     if (
@@ -555,6 +572,8 @@ const RelatorioLeitura = () => {
     };
 
     setExibirLoaderGeral(true);
+    setClicouBotaoGerar(true);
+
     const retorno = await ServicoRelatorioLeitura.gerar(params)
       .catch(e => erros(e))
       .finally(setExibirLoaderGeral(false));
@@ -841,7 +860,7 @@ const RelatorioLeitura = () => {
                   label="Ano"
                   disabled={!modalidadeId || listaAnosEscolares?.length === 1}
                   valueSelect={anosEscolares}
-                  onChange={setAnosEscolares}
+                  onChange={onChangeAno}
                   placeholder="Selecione o ano"
                 />
               </Loader>
@@ -871,7 +890,12 @@ const RelatorioLeitura = () => {
                 label="Data de envio"
                 placeholder="Data inicial"
                 formatoData="DD/MM/YYYY"
-                onChange={setDataInicio}
+                onChange={valor => {
+                  if (dataFim) {
+                    setDataInicio(valor);
+                    setClicouBotaoGerar(false);
+                  }
+                }}
                 desabilitarData={desabilitarData}
                 valor={dataInicio}
               />
@@ -882,7 +906,12 @@ const RelatorioLeitura = () => {
                 className="mt-4"
                 placeholder="Data final"
                 formatoData="DD/MM/YYYY"
-                onChange={setDataFim}
+                onChange={valor => {
+                  setDataFim(valor);
+                  if (dataInicio) {
+                    setClicouBotaoGerar(false);
+                  }
+                }}
                 desabilitarData={desabilitarData}
                 valor={dataFim}
               />
@@ -900,7 +929,10 @@ const RelatorioLeitura = () => {
                   valueField="id"
                   textField="descricao"
                   onSelect={setComunicado}
-                  onChange={setComunicado}
+                  onChange={valor => {
+                    setComunicado(valor);
+                    setClicouBotaoGerar(false);
+                  }}
                   handleSearch={handleSearch}
                   value={comunicado}
                 />
@@ -913,6 +945,7 @@ const RelatorioLeitura = () => {
                 valorInicial
                 onChange={e => {
                   setListarResponsaveisEstudantes(e.target.value);
+                  setClicouBotaoGerar(false);
                 }}
                 value={listarResponsaveisEstudantes}
                 desabilitado={
@@ -929,6 +962,7 @@ const RelatorioLeitura = () => {
                 opcoes={opcoesRadioSimNao}
                 valorInicial
                 onChange={e => {
+                  setClicouBotaoGerar(false);
                   setListarComunicadosExpirados(e.target.value);
                 }}
                 value={listarComunicadosExpirados}
