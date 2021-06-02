@@ -145,7 +145,7 @@ const ListaFrequencia = props => {
     }
   };
 
-  const montarTituloColunaMarcarTodas = () => {
+  const obterTiposFrequenciaPermitidos = () => {
     const exibirCompareceu = listaTiposFrequencia?.find(
       item => item?.valor === tipoFrequencia.Compareceu.valor
     );
@@ -155,6 +155,16 @@ const ListaFrequencia = props => {
     const exibirRemoto = listaTiposFrequencia?.find(
       item => item?.valor === tipoFrequencia.Remoto.valor
     );
+
+    return { exibirCompareceu, exibirFaltou, exibirRemoto };
+  };
+
+  const montarTituloColunaMarcarTodas = () => {
+    const {
+      exibirCompareceu,
+      exibirFaltou,
+      exibirRemoto,
+    } = obterTiposFrequenciaPermitidos();
 
     let margin = '';
     let totalColunas = 0;
@@ -215,13 +225,19 @@ const ListaFrequencia = props => {
   };
 
   const montarTituloMarcarTodasAulas = () => {
+    const {
+      exibirCompareceu,
+      exibirFaltou,
+      exibirRemoto,
+    } = obterTiposFrequenciaPermitidos();
+
     return (
       <Tooltip
         title={
           <>
-            <div>C: Compareceu</div>
-            <div>F: Faltou</div>
-            <div>R: Remoto</div>
+            {exibirCompareceu ? <div>C: Compareceu</div> : ''}
+            {exibirFaltou ? <div>F: Faltou</div> : ''}
+            {exibirRemoto ? <div>R: Remoto</div> : ''}
           </>
         }
       >
