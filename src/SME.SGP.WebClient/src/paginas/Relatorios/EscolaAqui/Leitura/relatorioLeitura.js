@@ -97,6 +97,7 @@ const RelatorioLeitura = () => {
     setModalidadeId();
     setTurmaId();
     setCodigoUe(undefined);
+    setClicouBotaoGerar(false);
   };
 
   const onChangeUe = valor => {
