@@ -10,3 +10,4 @@ export { default as AlertaPermiteSomenteTurmaInfantil } from './AlertaPermiteSom
 export { default as Paginacao } from './Paginacao/paginacao';
 export { default as SinalizacaoAEE } from './SinalizacaoAEE/sinalizacaoAEE';
 export { default as NomeEstudanteLista } from './NomeEstudanteLista/nomeEstudanteLista';
+export { default as AlertaModalidadeInfantil } from './AlertaModalidadeInfantil/alertaModalidadeInfantil';

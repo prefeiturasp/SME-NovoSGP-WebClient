@@ -11,8 +11,11 @@ import {
   Loader,
   PainelCollapse,
 } from '~/componentes';
-import { Cabecalho, Paginacao } from '~/componentes-sgp';
-import AlertaModalidadeInfantil from '~/componentes-sgp/AlertaModalidadeInfantil/alertaModalidadeInfantil';
+import {
+  Cabecalho,
+  Paginacao,
+  AlertaModalidadeInfantil,
+} from '~/componentes-sgp';
 
 import {
   setCarregandoAcompanhamentoFechamento,
@@ -27,8 +30,8 @@ import {
 } from '~/servicos';
 
 import { Filtros } from './Filtros';
-import SecaoFechamento from './SecaoFechamento/secaoFechamento';
-import SecaoConselhoClasse from './SecaoConselhoClasse/secaoConselhoClasse';
+import { SecaoFechamento } from './SecaoFechamento';
+import { SecaoConselhoClasse } from './SecaoConselhoClasse';
 
 const AcompanhamentoFechamento = () => {
   const [ehInfantil, setEhInfantil] = useState(false);

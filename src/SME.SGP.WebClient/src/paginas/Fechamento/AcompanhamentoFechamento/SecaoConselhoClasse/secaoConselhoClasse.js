@@ -3,8 +3,10 @@ import PropTypes from 'prop-types';
 
 import { Label } from '~/componentes';
 
+import { statusAcompanhamentoConselhoClasse } from '~/dtos';
+
+import { DetalhesConselhoClasse } from './DetalhesConselhoClasse';
 import { CardStatus } from '../CardStatus';
-import DetalhesConselhoClasse from './DetalhesConselhoClasse/detalhesConselhoClasse';
 
 const SecaoConselhoClasse = ({
   dadosStatusConsselhoClasse,
@@ -20,6 +22,7 @@ const SecaoConselhoClasse = ({
             <CardStatus
               key={dadosConselhoClasse.descricao}
               dadosStatus={dadosConselhoClasse}
+              statusAcompanhamento={statusAcompanhamentoConselhoClasse}
             />
           ))
         ) : (
