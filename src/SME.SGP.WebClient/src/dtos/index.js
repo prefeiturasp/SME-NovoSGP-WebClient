@@ -6,3 +6,4 @@ export { default as tipoEscolaDTO } from './tipoEscolaDto';
 export { default as situacaoAEE } from './situacaoAEE';
 export { default as situacaoPlanoAEE } from './situacaoPlanoAEE';
 export { default as statusAcompanhamentoFechamento } from './statusAcompanhamentoFechamento';
+export { default as statusAcompanhamentoConselhoClasse } from './statusAcompanhamentoConselhoClasse';

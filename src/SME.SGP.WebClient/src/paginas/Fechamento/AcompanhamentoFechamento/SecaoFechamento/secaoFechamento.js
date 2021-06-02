@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 
 import { Label } from '~/componentes';
 import { CardStatus } from '../CardStatus';
+import DetalhesFechamento from './DetalhesFechamento/detalhesFechamento';
 
 const SecaoFechamento = ({ dadosStatusFechamento }) => {
   return (
@@ -23,6 +24,9 @@ const SecaoFechamento = ({ dadosStatusFechamento }) => {
             altura="16"
           />
         )}
+      </div>
+      <div className="row">
+        {!!dadosStatusFechamento?.length && <DetalhesFechamento />}
       </div>
     </>
   );

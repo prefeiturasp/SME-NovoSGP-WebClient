@@ -56,7 +56,7 @@ const DetalhesConselhoClasse = props => {
       </div>
 
       {alunosDetalhesConselho?.length ? (
-        <div className="col-md-12">
+        <div className="col-md-12 p-0">
           <TabelaAlunosConselho
             dadosAlunos={alunosDetalhesConselho}
             bimestre={bimestre}
