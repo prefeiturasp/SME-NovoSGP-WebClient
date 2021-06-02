@@ -1,11 +1,12 @@
 import { Modal } from 'antd';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import shortid from 'shortid';
 import styled from 'styled-components';
+import { Loader } from '~/componentes';
 
 import Button from '../componentes/button';
-import { Colors } from '../componentes/colors';
+import { Base, Colors } from '../componentes/colors';
 import { alertaFechar } from '../redux/modulos/alertas/actions';
 
 const ContainerModal = styled.div`
@@ -17,9 +18,15 @@ const ContainerModal = styled.div`
 const ContainerBotoes = styled.div`
   display: flex;
   justify-content: flex-end;
+
+  .botao-confirmacao {
+    color: ${({ loadingCliqueOk }) =>
+      loadingCliqueOk && `${Base.Branco} !important`};
+  }
 `;
 
 const ModalConfirmacao = () => {
+  const [loadingCliqueOk, setLoadingCliqueOk] = useState(false);
   const dispatch = useDispatch();
   const confirmacao = useSelector(state => state.alertas.confirmacao);
   const { primeiroExibirTextoNegrito } = confirmacao;
@@ -29,6 +36,12 @@ const ModalConfirmacao = () => {
     dispatch(alertaFechar());
   };
 
+  useEffect(() => {
+    if (!confirmacao.visivel && loadingCliqueOk) {
+      setLoadingCliqueOk(false);
+    }
+  }, [confirmacao.visivel]);
+
   return (
     <ContainerModal>
       <Modal
@@ -37,15 +50,24 @@ const ModalConfirmacao = () => {
         onOk={() => fecharConfirmacao(true)}
         onCancel={() => fecharConfirmacao(false)}
         footer={[
-          <ContainerBotoes key={shortid.generate()}>
-            <Button
-              id={shortid.generate()}
-              key={shortid.generate()}
-              onClick={() => fecharConfirmacao(true)}
-              label={confirmacao.textoOk}
-              color={Colors.Azul}
-              border
-            />
+          <ContainerBotoes
+            key={shortid.generate()}
+            loadingCliqueOk={loadingCliqueOk}
+          >
+            <Loader loading={loadingCliqueOk} ignorarTip className="mr-1">
+              <Button
+                id={shortid.generate()}
+                className="botao-confirmacao"
+                key={shortid.generate()}
+                onClick={() => {
+                  setLoadingCliqueOk(true);
+                  fecharConfirmacao(true);
+                }}
+                label={confirmacao.textoOk}
+                color={Colors.Azul}
+                border
+              />
+            </Loader>
             <Button
               id={shortid.generate()}
               key={shortid.generate()}

@@ -27,7 +27,7 @@ import { Linha } from '~/componentes/EstilosGlobais';
 
 // Serviços
 import AcompanhamentoPAPServico from '~/servicos/Paginas/Relatorios/PAP/Acompanhamento';
-import { erro, confirmar } from '~/servicos/alertas';
+import { erro, confirmar, sucesso } from '~/servicos/alertas';
 import history from '~/servicos/history';
 
 // Reducer Hook
@@ -80,7 +80,7 @@ function RelatorioPAPAcompanhamento() {
   };
 
   const salvarAlteracoes = useCallback(
-    async objetivo => {
+    async (objetivo, botaoSalvar) => {
       try {
         setCarregando(true);
         const req = await AcompanhamentoPAPServico.Salvar({
@@ -98,6 +98,9 @@ function RelatorioPAPAcompanhamento() {
           }
           setModoEdicao(false);
           setCarregando(false);
+          if (botaoSalvar) {
+            sucesso('Alterações salvas com sucesso');
+          }
         }
       } catch (err) {
         setCarregando(false);
@@ -345,7 +348,7 @@ function RelatorioPAPAcompanhamento() {
             modoEdicao={modoEdicao}
             temItemSelecionado
             onClickVoltar={() => onClickVoltarHandler()}
-            onClickBotaoPrincipal={() => salvarAlteracoes(estado.ObjetivoAtivo)}
+            onClickBotaoPrincipal={() => salvarAlteracoes(estado.ObjetivoAtivo, true)}
             onClickCancelar={() => onClickCancelarHandler()}
             labelBotaoPrincipal="Salvar"
             desabilitarBotaoPrincipal={
