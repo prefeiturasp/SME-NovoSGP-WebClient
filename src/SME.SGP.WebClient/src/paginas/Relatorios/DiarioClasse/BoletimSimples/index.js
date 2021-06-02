@@ -15,6 +15,8 @@ import modalidade from '~/dtos/modalidade';
 const BoletimSimples = () => {
   const [loaderSecao] = useState(false);
   const [somenteConsulta] = useState(false);
+  const [clicouBotaoGerar, setClicouBotaoGerar] = useState(false);
+  const [desabilitarBotaoGerar, setDesabilitarBotaoGerar] = useState(false);
 
   const [filtro, setFiltro] = useState({
     anoLetivo: '',
@@ -30,6 +32,7 @@ const BoletimSimples = () => {
 
   const onSelecionarItems = items => {
     setItensSelecionados([...items.map(item => String(item.codigo))]);
+    setClicouBotaoGerar(false);
   };
 
   const [selecionarAlunos, setSelecionarAlunos] = useState(false);
@@ -45,12 +48,13 @@ const BoletimSimples = () => {
         String(valoresFiltro.modalidadeId) === String(modalidade.EJA)
           ? valoresFiltro.semestre
           : 0,
-      consideraHistorico: valoresFiltro.consideraHistorico
+      consideraHistorico: valoresFiltro.consideraHistorico,
     });
     setItensSelecionados([]);
     setSelecionarAlunos(
       valoresFiltro.turmaId && valoresFiltro.opcaoAlunoId === '1'
     );
+    setClicouBotaoGerar(false);
   };
 
   const onClickVoltar = () => {
@@ -64,6 +68,7 @@ const BoletimSimples = () => {
   };
 
   const onClickBotaoPrincipal = async () => {
+    setClicouBotaoGerar(true);
     const resultado = await ServicoBoletimSimples.imprimirBoletim({
       ...filtro,
       alunosCodigo: itensSelecionados,
@@ -87,6 +92,17 @@ const BoletimSimples = () => {
     },
   ];
 
+  useEffect(() => {
+    const desabilitar =
+      String(filtro.modalidade) === String(modalidade.INFANTIL) ||
+      (filtro &&
+        filtro.turmaCodigo > 0 &&
+        selecionarAlunos &&
+        !itensSelecionados?.length) ||
+      clicouBotaoGerar;
+    setDesabilitarBotaoGerar(desabilitar);
+  }, [filtro, itensSelecionados, selecionarAlunos, clicouBotaoGerar]);
+
   return (
     <>
       <AlertaModalidadeInfantil
@@ -108,13 +124,7 @@ const BoletimSimples = () => {
             onClickVoltar={onClickVoltar}
             onClickCancelar={onClickCancelar}
             onClickBotaoPrincipal={onClickBotaoPrincipal}
-            desabilitarBotaoPrincipal={
-              String(filtro.modalidade) === String(modalidade.INFANTIL) ||
-              (filtro &&
-                filtro.turmaCodigo > 0 &&
-                selecionarAlunos &&
-                !itensSelecionados?.length)
-            }
+            desabilitarBotaoPrincipal={desabilitarBotaoGerar}
             botoesEstadoVariavel={false}
             labelBotaoPrincipal="Gerar"
             modoEdicao

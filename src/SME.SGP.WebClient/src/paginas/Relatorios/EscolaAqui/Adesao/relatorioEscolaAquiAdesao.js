@@ -34,6 +34,7 @@ const RelatorioEscolaAquiAdesao = () => {
     desabilitarRadioListarUsuario,
     setDesabilitarRadioListarUsuario,
   ] = useState(true);
+  const [clicouBotaoGerar, setClicouBotaoGerar] = useState(false);
 
   const opcoesListarUsuarios = [
     { label: 'Não', value: 1 },
@@ -56,6 +57,7 @@ const RelatorioEscolaAquiAdesao = () => {
 
   const gerar = async () => {
     setExibirLoader(true);
+    setClicouBotaoGerar(true);
 
     const retorno = await ServicoAdesaoEscolaAqui.gerar({
       dreCodigo,
@@ -76,7 +78,7 @@ const RelatorioEscolaAquiAdesao = () => {
     setDreCodigo(valor);
     setUeCodigo(undefined);
     setOpcaoListaUsuarios(1);
-
+    setClicouBotaoGerar(false);
   };
 
   const onChangeUe = valor => {
@@ -84,6 +86,7 @@ const RelatorioEscolaAquiAdesao = () => {
     if (valor === OPCAO_TODOS || !valor) {
       setOpcaoListaUsuarios(1);
     }
+    setClicouBotaoGerar(false);
   };
 
   const obterDres = async () => {
@@ -145,9 +148,9 @@ const RelatorioEscolaAquiAdesao = () => {
   }, [dreCodigo, obterUes]);
 
   useEffect(() => {
-    const desabilitar = !dreCodigo || !ueCodigo;
+    const desabilitar = !dreCodigo || !ueCodigo || clicouBotaoGerar;
     setDesabilitarBtnGerar(desabilitar);
-  }, [dreCodigo, ueCodigo]);
+  }, [dreCodigo, ueCodigo, clicouBotaoGerar]);
 
   useEffect(() => {
     const desabilitaDre = dreCodigo === OPCAO_TODOS ? true : !dreCodigo;
@@ -233,6 +236,7 @@ const RelatorioEscolaAquiAdesao = () => {
                 valorInicial
                 onChange={e => {
                   setOpcaoListaUsuarios(e.target.value);
+                  setClicouBotaoGerar(false);
                 }}
                 value={opcaoListaUsuarios}
                 desabilitado={desabilitarRadioListarUsuario}

@@ -82,6 +82,8 @@ const SelectComponent = React.forwardRef((props, ref) => {
 
     .ant-select-selection--multiple {
       min-height: 38px;
+      max-height: 39px;
+      overflow-x: hidden;
 
       .ant-select-selection__placeholder {
         line-height: 25px;
