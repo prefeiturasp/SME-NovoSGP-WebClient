@@ -1,8 +1,11 @@
-import PropTypes from 'prop-types';
 import React, { useCallback, useEffect, useState } from 'react';
+import PropTypes from 'prop-types';
+
 import { Button, Colors, Loader } from '~/componentes';
+
 import { erros, ServicoAcompanhamentoFechamento } from '~/servicos';
-import TabelaAlunosConselho from './tabelaAlunosConselho';
+
+import { TabelaAlunosConselho } from '../TabelaAlunosConselho';
 
 const DetalhesConselhoClasse = props => {
   const { turmaId, bimestre } = props;
@@ -56,7 +59,7 @@ const DetalhesConselhoClasse = props => {
       </div>
 
       {alunosDetalhesConselho?.length ? (
-        <div className="col-md-12">
+        <div className="col-md-12 p-0">
           <TabelaAlunosConselho
             dadosAlunos={alunosDetalhesConselho}
             bimestre={bimestre}

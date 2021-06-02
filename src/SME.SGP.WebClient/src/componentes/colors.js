@@ -57,6 +57,7 @@ const Active = {
   Laranja: Base.Laranja,
   Verde: Base.Verde,
   Vermelho: Base.Vermelho,
+  Branco: Base.Branco,
 };
 
 const Hover = {
