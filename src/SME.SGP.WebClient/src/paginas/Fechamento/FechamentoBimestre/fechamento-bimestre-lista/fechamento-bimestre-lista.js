@@ -338,8 +338,8 @@ const FechamentoBimestreLista = props => {
                           }`}
                         >
                           {item.percentualFrequencia
-                            ? `${item.percentualFrequencia} %`
-                            : '0%'}
+                            ? `${item.percentualFrequencia}%`
+                            : ''}
                         </td>
                       ) : (
                         ''

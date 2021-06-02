@@ -67,6 +67,7 @@ const ListaFrequencia = props => {
 
   const marcarPresencaFaltaTodosAlunos = tipo => {
     if (!desabilitarCampos) {
+      let teveAlteracao = false;
       dataSource.forEach(aluno => {
         if (!aluno.desabilitado) {
           const aulas = [...aluno.aulas];
@@ -74,21 +75,28 @@ const ListaFrequencia = props => {
             aula.tipoFrequencia = tipo;
           });
           aluno.aulas = aulas;
+          teveAlteracao = true;
         }
       });
-      onChangeFrequencia();
+      if (teveAlteracao) {
+        onChangeFrequencia();
+      }
     }
   };
 
   const montarColunasEstudante = aluno => {
     const indexAluno = dataSource.indexOf(aluno);
-
+    const desabilitar = desabilitarCampos || aluno?.desabilitado;
     return (
       <div
         className="d-flex"
         style={{ justifyContent: 'space-between', alignItems: 'center' }}
       >
-        <div className=" d-flex justify-content-start">
+        <div
+          className={`d-flex justify-content-start ${
+            desabilitar ? 'desabilitar' : ''
+          }`}
+        >
           {aluno?.marcador ? (
             <Tooltip title={aluno?.marcador?.descricao} placement="top">
               <MarcadorSituacao
@@ -115,7 +123,7 @@ const ListaFrequencia = props => {
     );
   };
 
-  const montarColunaAulas = (aula, indexAluno, indexAula) => {
+  const montarColunaAulas = (aula, indexAluno, indexAula, aluno) => {
     return (
       <CampoTipoFrequencia
         indexAula={indexAula}
@@ -126,6 +134,7 @@ const ListaFrequencia = props => {
           onChangeFrequencia();
         }}
         numeroAula={aula.numeroAula}
+        desabilitar={desabilitarCampos || aluno?.desabilitado}
       />
     );
   };
@@ -274,6 +283,7 @@ const ListaFrequencia = props => {
               aluno.tipoFrequenciaPreDefinido = tipoPreDefinir;
               marcaPresencaFaltaTodasAulas(aluno, tipoPreDefinir);
             }}
+            desabilitar={desabilitarCampos || aluno?.desabilitado}
           />
         );
       },
@@ -297,6 +307,7 @@ const ListaFrequencia = props => {
                 marcaPresencaFaltaTodasAulas={tipo =>
                   marcaPresencaFaltaTodasAulas(aluno, tipo)
                 }
+                desabilitar={desabilitarCampos || aluno?.desabilitado}
               />
             );
           },
@@ -314,7 +325,7 @@ const ListaFrequencia = props => {
         width: '75px',
         render: (dadosAula, aluno) => {
           const indexAluno = dataSource.indexOf(aluno);
-          return montarColunaAulas(dadosAula, indexAluno, indexAula);
+          return montarColunaAulas(dadosAula, indexAluno, indexAula, aluno);
         },
       });
     });
