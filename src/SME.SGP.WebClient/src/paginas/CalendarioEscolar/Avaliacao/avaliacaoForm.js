@@ -145,14 +145,16 @@ const AvaliacaoForm = ({ match, location }) => {
 
   const [dataAvaliacao, setDataAvaliacao] = useState();
 
+  const removerTagsHtml = texto => texto?.replace(/<\/?[^>]+(>|$)/g, '');
+
   const cadastrarAvaliacao = async dados => {
     const avaliacao = {};
     setCarregandoTela(true);
-    if (Object.entries(eventoAulaCalendarioEdicao).length) {
+    if (Object.entries(eventoAulaCalendarioEdicao)?.length) {
       avaliacao.dreId = eventoAulaCalendarioEdicao.dre;
       avaliacao.turmaId = eventoAulaCalendarioEdicao.turma;
       avaliacao.ueId = eventoAulaCalendarioEdicao.unidadeEscolar;
-    } else if (Object.entries(turmaSelecionada).length) {
+    } else if (Object.entries(turmaSelecionada)?.length) {
       avaliacao.dreId = turmaSelecionada.dre;
       avaliacao.turmaId = turmaSelecionada.turma;
       avaliacao.ueId = turmaSelecionada.unidadeEscolar;
@@ -187,7 +189,10 @@ const AvaliacaoForm = ({ match, location }) => {
     delete dadosValidacao.categoriaId;
     delete dadosValidacao.descricao;
 
-    if (descricao.length <= 500) {
+    const textoLimpo = removerTagsHtml(descricao);
+    const tamanhoTexto = textoLimpo.length;
+
+    if (tamanhoTexto <= 500) {
       const validacao = await ServicoAvaliacao.validar(dadosValidacao);
 
       if (validacao && validacao.status === 200) {
@@ -236,6 +241,7 @@ const AvaliacaoForm = ({ match, location }) => {
   };
 
   const categorias = { NORMAL: 1, INTERDISCIPLINAR: 2 };
+  const [validacoes, setValidacoes] = useState(undefined);
 
   const montaValidacoes = categoria => {
     const ehInterdisciplinar = categoria === categorias.INTERDISCIPLINAR;
@@ -248,21 +254,24 @@ const AvaliacaoForm = ({ match, location }) => {
           exclusive: true,
           message:
             'Para categoria Interdisciplinar informe mais que um componente curricular',
-          test: value => (ehInterdisciplinar ? value.length > 1 : true),
+          test: value => (ehInterdisciplinar ? value?.length > 1 : true),
         }),
       tipoAvaliacaoId: Yup.string().required(
         'Selecione o tipo de atividade avaliativa'
       ),
       nome: Yup.string().required('Preencha o nome da atividade avaliativa'),
-      descricao: Yup.string().max(
-        500,
-        'A descrição não deve ter mais de 500 caracteres'
+      descricao: Yup.string().test(
+        'len',
+        'A descrição não deve ter mais de 500 caracteres',
+        texto => {
+          const textoLimpo = removerTagsHtml(texto);
+          const tamanhoTexto = textoLimpo?.length;
+          return tamanhoTexto <= 500;
+        }
       ),
     };
     setValidacoes(Yup.object(val));
   };
-
-  const [validacoes, setValidacoes] = useState(undefined);
 
   const [listaDisciplinas, setListaDisciplinas] = useState([]);
 
@@ -276,7 +285,6 @@ const AvaliacaoForm = ({ match, location }) => {
   ]);
 
   const campoNomeRef = useRef(null);
-  const textEditorRef = useRef(null);
 
   const aoTrocarTextEditor = valor => {
     setDescricao(valor);
@@ -345,20 +353,17 @@ const AvaliacaoForm = ({ match, location }) => {
   };
 
   useEffect(() => {
-    if (
-      (!idAvaliacao && listaDisciplinas.length === 1) ||
-      mostrarDisciplinaRegencia
-    ) {
-      if (listaDisciplinas[0].regencia) {
-        setTemRegencia(true);
-        obterDisciplinasRegencia();
-      }
+    if (!idAvaliacao && listaDisciplinas.length === 1) {
       setDadosAvaliacao({
         ...dadosAvaliacao,
         disciplinasId: listaDisciplinas[0].codigoComponenteCurricular.toString(),
       });
       setPodeLancaNota(listaDisciplinas[0].lancaNota);
       setDisciplinaSelecionada(listaDisciplinas[0].codigoComponenteCurricular);
+    }
+    if (mostrarDisciplinaRegencia) {
+      setTemRegencia(true);
+      obterDisciplinasRegencia();
     }
   }, [listaDisciplinas, mostrarDisciplinaRegencia]);
 
@@ -499,7 +504,7 @@ const AvaliacaoForm = ({ match, location }) => {
       item => item.selecionada
     );
     const desbilitar =
-      disciplinaEncontrada?.regencia && !regenciaSelecionada.length;
+      disciplinaEncontrada?.regencia && !regenciaSelecionada?.length;
 
     setMostrarDisciplinaRegencia(disciplinaEncontrada?.regencia);
     setDesabilitarBotaoCadastrar(desbilitar);
@@ -507,8 +512,8 @@ const AvaliacaoForm = ({ match, location }) => {
 
   useEffect(() => {
     if (
-      listaDisciplinasRegencia.length &&
-      atividadesRegencia.length &&
+      listaDisciplinasRegencia?.length &&
+      atividadesRegencia?.length &&
       desabilitarBotaoCadastrar &&
       mostrarDisciplinaRegencia
     ) {
@@ -668,7 +673,7 @@ const AvaliacaoForm = ({ match, location }) => {
                   </Div>
                   <Div className="row">
                     <Grid cols={4} className="mb-4">
-                      {listaDisciplinas.length > 1 &&
+                      {listaDisciplinas?.length > 1 &&
                       form.values.categoriaId ===
                         categorias.INTERDISCIPLINAR ? (
                         <SelectComponent
@@ -681,7 +686,7 @@ const AvaliacaoForm = ({ match, location }) => {
                           disabled={
                             desabilitarCampos ||
                             !dentroPeriodo ||
-                            listaDisciplinas.length === 1
+                            listaDisciplinas?.length === 1
                           }
                           placeholder="Selecione um componente curricular"
                           valueSelect={listaDisciplinasSelecionadas}
@@ -700,7 +705,7 @@ const AvaliacaoForm = ({ match, location }) => {
                           disabled={
                             desabilitarCampos ||
                             !dentroPeriodo ||
-                            listaDisciplinas.length === 1
+                            listaDisciplinas?.length === 1
                           }
                           placeholder="Selecione um componente curricular"
                           form={form}
@@ -804,7 +809,7 @@ const AvaliacaoForm = ({ match, location }) => {
                           desabilitarCopiarAvaliacao
                         }
                       />
-                      {copias.length > 0 && (
+                      {copias?.length > 0 && (
                         <div style={{ marginLeft: '14px' }}>
                           <span>Avaliação será copiada para: </span>
                           <br />
