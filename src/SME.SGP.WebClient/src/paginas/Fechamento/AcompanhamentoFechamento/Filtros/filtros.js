@@ -100,7 +100,6 @@ const Filtros = ({ onChangeFiltros, ehInfantil }) => {
       temSemestreOuNaoEja &&
       !carregandoAcompanhamentoFechamento
     ) {
-      console.log('params', params);
       onChangeFiltros(params);
     }
   };
