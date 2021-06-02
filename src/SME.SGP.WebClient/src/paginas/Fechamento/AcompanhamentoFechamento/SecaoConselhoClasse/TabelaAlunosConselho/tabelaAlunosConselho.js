@@ -226,11 +226,8 @@ const TabelaAlunosConselho = props => {
           expandIcon(expanded, onExpand, record)
         }
         rowClassName={(record, _) => {
-          let nomeClasse = record.alunoCodigo;
           const ehLinhaExpandida = temLinhaExpandida(record.alunoCodigo);
-          if (ehLinhaExpandida.length) {
-            nomeClasse += ' linha-ativa';
-          }
+          const nomeClasse = ehLinhaExpandida.length ? 'linha-ativa' : '';
           return nomeClasse;
         }}
         expandedRowRender={aluno => {
@@ -239,6 +236,7 @@ const TabelaAlunosConselho = props => {
               <Loader loading={carregandoComponentes}>
                 <DataTable
                   id={`tabela-componente-aluno-${aluno?.alunoCodigo}`}
+                  idLinha="nomeComponenteCurricular"
                   pagination={false}
                   columns={colunasTabelaComponentes}
                   dataSource={dadosComponentes}

@@ -104,7 +104,7 @@ class ServicoAcompanhamentoFechamento {
     });
   };
 
-  obterDetalhamentoPendencias = () => {
+  obterDetalhesPendencias = () => {
     return Promise.resolve({
       data: [
         {
@@ -152,6 +152,23 @@ class ServicoAcompanhamentoFechamento {
           criadoEm: '2021-03-19T09:29:40.069065',
           criadoPor: 'JULIO CESAR PONTES BORDIGNON',
           criadoRF: '8461201',
+        },
+      ],
+    });
+  };
+
+  obterDetalhePendencia = () => {
+    return Promise.resolve({
+      data: [
+        {
+          professorRf: '1234567',
+          data: '23/02/2021',
+          professor: 'Aline Freitas Santos (1234567)',
+        },
+        {
+          professorRf: '1230987',
+          data: '29/01/2021',
+          professor: 'Fernando de Oliveira Santos (1230987)',
         },
       ],
     });

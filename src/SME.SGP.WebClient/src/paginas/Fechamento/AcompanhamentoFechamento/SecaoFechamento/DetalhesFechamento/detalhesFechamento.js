@@ -3,7 +3,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { Button, Colors, Loader } from '~/componentes';
 import { erros, ServicoAcompanhamentoFechamento } from '~/servicos';
 
-import TabelaComponentesCurriculares from './tabelaComponentesCurriculares';
+import { TabelaComponentesCurriculares } from '../TabelaComponentesCurriculares';
 
 const DetalhesFechamento = () => {
   const [exibirDetalhamento, setExibirDetalhamento] = useState(false);

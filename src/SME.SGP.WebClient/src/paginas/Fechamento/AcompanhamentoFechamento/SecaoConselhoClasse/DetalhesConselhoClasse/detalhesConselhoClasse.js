@@ -1,8 +1,11 @@
-import PropTypes from 'prop-types';
 import React, { useCallback, useEffect, useState } from 'react';
+import PropTypes from 'prop-types';
+
 import { Button, Colors, Loader } from '~/componentes';
+
 import { erros, ServicoAcompanhamentoFechamento } from '~/servicos';
-import TabelaAlunosConselho from './tabelaAlunosConselho';
+
+import { TabelaAlunosConselho } from '../TabelaAlunosConselho';
 
 const DetalhesConselhoClasse = props => {
   const { turmaId, bimestre } = props;

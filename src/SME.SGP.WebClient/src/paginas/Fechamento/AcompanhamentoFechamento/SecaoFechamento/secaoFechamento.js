@@ -2,8 +2,11 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import { Label } from '~/componentes';
+
+import { statusAcompanhamentoFechamento } from '~/dtos';
+
+import { DetalhesFechamento } from './DetalhesFechamento';
 import { CardStatus } from '../CardStatus';
-import DetalhesFechamento from './DetalhesFechamento/detalhesFechamento';
 
 const SecaoFechamento = ({ dadosStatusFechamento }) => {
   return (
@@ -15,6 +18,7 @@ const SecaoFechamento = ({ dadosStatusFechamento }) => {
             <CardStatus
               key={dadosFechamento.descricao}
               dadosStatus={dadosFechamento}
+              statusAcompanhamento={statusAcompanhamentoFechamento}
             />
           ))
         ) : (
