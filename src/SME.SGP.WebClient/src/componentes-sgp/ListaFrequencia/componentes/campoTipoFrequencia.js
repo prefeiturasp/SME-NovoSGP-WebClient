@@ -7,7 +7,7 @@ import CampoTipoFreqSomenteLeitura from './campoTipoFreqSomenteLeitura';
 import { ContainerTipoFrequencia } from './style';
 
 const CampoTipoFrequencia = props => {
-  const { onChange, indexAluno, indexAula, numeroAula } = props;
+  const { onChange, indexAluno, indexAula, numeroAula, desabilitar } = props;
 
   const tipoFrequencia = useSelector(
     state =>
@@ -27,12 +27,18 @@ const CampoTipoFrequencia = props => {
 
   const cor = MetodosListaFrequencia.obterCorTipoFrequencia(tipoFrequencia);
 
+  const validarExibir = valor => {
+    if (!desabilitar) {
+      setExibir(valor);
+    }
+  };
+
   return (
     <ContainerTipoFrequencia
-      onMouseEnter={() => setExibir(true)}
-      onMouseLeave={() => setExibir(false)}
+      onMouseEnter={() => validarExibir(true)}
+      onMouseLeave={() => validarExibir(false)}
     >
-      {exibir ? (
+      {!desabilitar && exibir ? (
         <SelectComponent
           color={cor}
           border={cor}
@@ -47,13 +53,15 @@ const CampoTipoFrequencia = props => {
             onChange(tipo);
             setExibir(false);
           }}
+          disabled={desabilitar}
         />
       ) : (
         <CampoTipoFreqSomenteLeitura
-          className="tamanho-campo-select"
+          className={`tamanho-campo-select ${desabilitar ? 'desabilitar' : ''}`}
           id={idCampo}
           valor={tipoFrequencia}
           style={{ color: cor, borderColor: cor }}
+          desabilitar={desabilitar}
         />
       )}
     </ContainerTipoFrequencia>
@@ -65,6 +73,7 @@ CampoTipoFrequencia.propTypes = {
   indexAluno: PropTypes.oneOfType(PropTypes.number),
   indexAula: PropTypes.oneOfType(PropTypes.number),
   numeroAula: PropTypes.oneOfType(PropTypes.number),
+  desabilitar: PropTypes.bool,
 };
 
 CampoTipoFrequencia.defaultProps = {
@@ -72,6 +81,7 @@ CampoTipoFrequencia.defaultProps = {
   indexAluno: null,
   indexAula: null,
   numeroAula: null,
+  desabilitar: false,
 };
 
 export default CampoTipoFrequencia;

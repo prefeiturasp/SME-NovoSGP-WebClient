@@ -39,7 +39,7 @@ const BotaoAnotacao = props => {
     dispatch(setExibirModalAnotacaoFrequencia(true));
   };
 
-  const cor = possuiAnotacao ? Base.Azul : Base.CinzaDivisor;
+  const cor = possuiAnotacao ? Base.Azul : Base.CinzaMako;
 
   return (
     <Tooltip
@@ -50,10 +50,15 @@ const BotaoAnotacao = props => {
       }
       placement="top"
     >
-      <div className="d-flex justify-content-end mr-2">
+      <div
+        className={`d-flex justify-content-end mr-2 ${
+          !podeAbrirModal ? 'desabilitar' : ''
+        }`}
+      >
         <ContainerBtbAnotacao
           style={{ marginTop: '-5px' }}
           podeAbrirModal={podeAbrirModal}
+          possuiAnotacao={possuiAnotacao}
           cor={cor}
           onClick={() => {
             if (podeAbrirModal) {

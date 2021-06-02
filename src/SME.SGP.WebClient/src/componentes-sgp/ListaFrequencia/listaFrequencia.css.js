@@ -213,7 +213,8 @@ export const Lista = styled.div`
 export const ContainerBtbAnotacao = styled.div`
   border-radius: 4px;
   color: ${props => props.cor};
-  border: solid 1px ${props => props.cor};
+  border: ${props =>
+    !props?.possuiAnotacao ? 'none' : `solid 1px ${props.cor}`};
   cursor: ${props => (props.podeAbrirModal ? 'pointer' : 'not-allowed')};
   height: 32px;
   width: 32px;
@@ -229,6 +230,11 @@ export const MarcadorSituacao = styled.i`
 export const ContainerListaFrequencia = styled.div`
   td {
     padding: 5px 0px 0px 0px !important;
+  }
+
+  .desabilitar {
+    opacity: 0.4 !important;
+    cursor: unset !important;
   }
 `;
 

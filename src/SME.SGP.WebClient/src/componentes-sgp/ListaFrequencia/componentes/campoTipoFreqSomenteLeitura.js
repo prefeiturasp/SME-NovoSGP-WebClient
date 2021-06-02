@@ -28,14 +28,14 @@ const Container = styled.div`
 `;
 
 const CampoTipoFreqSomenteLeitura = props => {
-  const { id, valor, className, style } = props;
+  const { id, valor, className, style, desabilitar } = props;
 
   return (
     <Container>
       <div id={id} className={`overflow-hidden ant-select ${className}`}>
         <div
           className="ant-select-selection ant-select-selection--single"
-          style={style}
+          style={{ ...style, cursor: desabilitar ? 'default' : 'pointer' }}
         >
           <div className="ant-select-selection__rendered">
             <div className="ant-select-selection-selected-value">{valor}</div>
@@ -54,6 +54,7 @@ CampoTipoFreqSomenteLeitura.propTypes = {
   valor: PropTypes.string,
   className: PropTypes.string,
   style: PropTypes.oneOfType(PropTypes.object),
+  desabilitar: PropTypes.bool,
 };
 
 CampoTipoFreqSomenteLeitura.defaultProps = {
@@ -61,6 +62,7 @@ CampoTipoFreqSomenteLeitura.defaultProps = {
   valor: '',
   className: '',
   style: {},
+  desabilitar: false,
 };
 
 export default CampoTipoFreqSomenteLeitura;

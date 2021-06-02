@@ -11,7 +11,7 @@ import { Base } from '~/componentes/colors';
 import tipoFrequencia from '~/dtos/tipoFrequencia';
 
 const IconesMarcarTodos = props => {
-  const { indexAluno, marcaPresencaFaltaTodasAulas } = props;
+  const { indexAluno, marcaPresencaFaltaTodasAulas, desabilitar } = props;
 
   const aulas = useSelector(
     state =>
@@ -44,6 +44,7 @@ const IconesMarcarTodos = props => {
   const montarIconesMarcarTodos = (icone, tipo, cor) => {
     return (
       <FontAwesomeIcon
+        className={desabilitar ? 'desabilitar' : ''}
         style={{
           fontSize: '18px',
           cursor: 'pointer',
@@ -87,11 +88,13 @@ const IconesMarcarTodos = props => {
 IconesMarcarTodos.propTypes = {
   marcaPresencaFaltaTodasAulas: PropTypes.oneOfType(PropTypes.func),
   indexAluno: PropTypes.number,
+  desabilitar: PropTypes.bool,
 };
 
 IconesMarcarTodos.defaultProps = {
   marcaPresencaFaltaTodasAulas: () => {},
   indexAluno: null,
+  desabilitar: false,
 };
 
 export default IconesMarcarTodos;

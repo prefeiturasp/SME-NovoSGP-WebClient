@@ -64,7 +64,7 @@ const MontarListaFrequencia = () => {
         temAulas = !!(aulas && aulas.length);
       }
 
-      if (temAulas && !frequenciaId) {
+      if (listaDadosFrequencia.temPeriodoAberto && temAulas && !frequenciaId) {
         dispatch(setModoEdicaoFrequencia(true));
       }
     }
