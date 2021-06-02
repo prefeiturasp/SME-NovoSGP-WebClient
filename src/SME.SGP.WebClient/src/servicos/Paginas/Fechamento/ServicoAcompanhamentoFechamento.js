@@ -6,6 +6,7 @@ class ServicoAcompanhamentoFechamento {
   obterTurmas = params => {
     let url = `${urlPadrao}?anoLetivo=${params.anoLetivo}&dreId=${params.dreId}`;
     url = `${url}&ueId=${params.ueId}&modalidade=${params.modalidadeId}&semestre=${params.semestre}`;
+    url = `${url}&situacaoFechamento=${params.situacaoFechamento}&situacaoConselhoClasse=${params.situacaoConselhoClasse}`;
     url = `${url}&bimestre=${params.bimestre}&numeroPagina=${params.numeroPagina}&numeroRegistros=10`;
 
     if (params.turmasId?.length) {
