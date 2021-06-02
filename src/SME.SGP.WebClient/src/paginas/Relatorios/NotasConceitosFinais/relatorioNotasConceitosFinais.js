@@ -52,6 +52,8 @@ const RelatorioNotasConceitosFinais = () => {
   ];
   const [listaCondicao, setListaCondicao] = useState(listaCondicaoInicial);
   const [condicao, setCondicao] = useState(undefined);
+  const [clicouBotaoGerar, setClicouBotaoGerar] = useState(false);
+  const [desabilitarBtnGerar, setDesabilitarBtnGerar] = useState(true);
 
   const listaFormatos = [
     { valor: '1', desc: 'PDF' },
@@ -374,19 +376,37 @@ const RelatorioNotasConceitosFinais = () => {
       ? false
       : valorCondicao === undefined || valorCondicao === '';
 
-  const desabilitarGerar =
-    !anoLetivo ||
-    !codigoDre ||
-    !codigoUe ||
-    !modalidadeId ||
-    !anosEscolares ||
-    !componentesCurriculares ||
-    !bimestres ||
-    !condicao ||
-    !tipoNota ||
-    valorCondicaoDesabilitar ||
-    (String(modalidadeId) === String(modalidade.EJA) ? !semestre : false) ||
-    !formato;
+  useEffect(() => {
+    const desabilitar =
+      !anoLetivo ||
+      !codigoDre ||
+      !codigoUe ||
+      !modalidadeId ||
+      !anosEscolares ||
+      !componentesCurriculares?.length ||
+      !bimestres ||
+      !condicao ||
+      !tipoNota ||
+      valorCondicaoDesabilitar ||
+      (String(modalidadeId) === String(modalidade.EJA) ? !semestre : false) ||
+      !formato ||
+      clicouBotaoGerar;
+
+    setDesabilitarBtnGerar(desabilitar);
+  }, [
+    anoLetivo,
+    codigoDre,
+    codigoUe,
+    modalidadeId,
+    anosEscolares,
+    componentesCurriculares,
+    semestre,
+    condicao,
+    valorCondicaoDesabilitar,
+    formato,
+    bimestres,
+    clicouBotaoGerar,
+  ]);
 
   useEffect(() => {
     obterAnosLetivos();
@@ -414,6 +434,8 @@ const RelatorioNotasConceitosFinais = () => {
 
   const onClickGerar = async () => {
     setCarregandoGeral(true);
+    setClicouBotaoGerar(true);
+
     const params = {
       anoLetivo,
       dreCodigo: codigoDre === '-99' ? '' : codigoDre,
@@ -485,20 +507,33 @@ const RelatorioNotasConceitosFinais = () => {
     setListaComponenteCurricular([]);
     setComponentesCurriculares(undefined);
   };
-  const onChangeSemestre = valor => setSemestre(valor);
-  const onChangeComponenteCurricular = valor =>
+
+  const onChangeSemestre = valor => {
+    setSemestre(valor);
+    setClicouBotaoGerar(false);
+  };
+
+  const onChangeComponenteCurricular = valor => {
     setComponentesCurriculares(valor);
-  const onChangeBimestre = valor => setBimestres(valor);
+    setClicouBotaoGerar(false);
+  };
+
+  const onChangeBimestre = valor => {
+    setBimestres(valor);
+    setClicouBotaoGerar(false);
+  };
 
   const onChangeCondicao = valor => {
     if (valor === '0') {
       setCampoBloqueado(true);
     }
     setCondicao(valor);
+    setClicouBotaoGerar(false);
   };
 
   const onChangeComparacao = valor => {
     setValorCondicao(valor);
+    setClicouBotaoGerar(false);
   };
 
   const onChangeTipoNota = valor => {
@@ -536,8 +571,13 @@ const RelatorioNotasConceitosFinais = () => {
     setCondicao(valorCampoCondicao);
     setTipoNotaSelecionada(valor);
     setCampoBloqueado(bloqueado);
+    setClicouBotaoGerar(false);
   };
-  const onChangeFormato = valor => setFormato(valor);
+
+  const onChangeFormato = valor => {
+    setFormato(valor);
+    setClicouBotaoGerar(false);
+  };
 
   const removeAdicionaOpcaoTodos = (
     valoresJaSelcionados,
@@ -614,7 +654,7 @@ const RelatorioNotasConceitosFinais = () => {
                   bold
                   className="mr-2"
                   onClick={() => onClickGerar()}
-                  disabled={desabilitarGerar}
+                  disabled={desabilitarBtnGerar}
                 />
               </div>
               <div className="col-sm-12 col-md-6 col-lg-3 col-xl-2 mb-2">

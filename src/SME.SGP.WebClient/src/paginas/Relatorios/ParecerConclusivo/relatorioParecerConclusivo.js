@@ -52,6 +52,8 @@ const RelatorioParecerConclusivo = () => {
   const [ano, setAno] = useState(undefined);
   const [parecerConclusivoId, setParecerConclusivoId] = useState(undefined);
   const [formato, setFormato] = useState('1');
+  const [clicouBotaoGerar, setClicouBotaoGerar] = useState(false);
+  const [desabilitarBtnGerar, setDesabilitarBtnGerar] = useState(true);
 
   const onChangeAnoLetivo = valor => {
     setAnoLetivo(valor);
@@ -89,12 +91,14 @@ const RelatorioParecerConclusivo = () => {
 
   const onChangeSemestre = valor => {
     setSemestre(valor);
+    setClicouBotaoGerar(false);
   };
 
   const onChangeCiclos = valor => {
     setAno();
     setListaAnos([]);
     setCiclo(valor);
+    setClicouBotaoGerar(false);
   };
 
   const onChangeAnos = valor => {
@@ -102,14 +106,17 @@ const RelatorioParecerConclusivo = () => {
       valor = '-99';
     }
     setAno(valor);
+    setClicouBotaoGerar(false);
   };
 
   const onChangeParecerConclusivo = valor => {
     setParecerConclusivoId(valor);
+    setClicouBotaoGerar(false);
   };
 
   const onChangeFormato = valor => {
     setFormato(valor);
+    setClicouBotaoGerar(false);
   };
 
   const [anoAtual] = useState(window.moment().format('YYYY'));
@@ -397,22 +404,40 @@ const RelatorioParecerConclusivo = () => {
     await setFormato('1');
   };
 
-  const desabilitarGerar =
-    !anoLetivo ||
-    !dreId ||
-    !ueId ||
-    !modalidadeId ||
-    (String(modalidadeId) === String(modalidade.EJA) ? !semestre : false) ||
-    (String(modalidadeId) !== String(modalidade.ENSINO_MEDIO)
-      ? !ciclo
-      : false) ||
-    !ano ||
-    ano?.length <= 0 ||
-    !parecerConclusivoId ||
-    !formato;
+  useEffect(() => {
+    const desabilitar =
+      !anoLetivo ||
+      !dreId ||
+      !ueId ||
+      !modalidadeId ||
+      (String(modalidadeId) === String(modalidade.EJA) ? !semestre : false) ||
+      (String(modalidadeId) !== String(modalidade.ENSINO_MEDIO)
+        ? !ciclo
+        : false) ||
+      !ano ||
+      ano?.length <= 0 ||
+      !parecerConclusivoId ||
+      !formato ||
+      clicouBotaoGerar;
+
+    setDesabilitarBtnGerar(desabilitar);
+  }, [
+    anoLetivo,
+    dreId,
+    ueId,
+    modalidadeId,
+    ciclo,
+    semestre,
+    parecerConclusivoId,
+    formato,
+    ano,
+    clicouBotaoGerar,
+  ]);
 
   const gerar = async () => {
     setCarregandoGerar(true);
+    setClicouBotaoGerar(true);
+
     const params = {
       anoLetivo,
       dreCodigo: dreId === '-99' ? '' : dreId,
@@ -483,7 +508,7 @@ const RelatorioParecerConclusivo = () => {
                   bold
                   className="mr-0"
                   onClick={gerar}
-                  disabled={desabilitarGerar}
+                  disabled={desabilitarBtnGerar}
                 />
               </Loader>
             </div>

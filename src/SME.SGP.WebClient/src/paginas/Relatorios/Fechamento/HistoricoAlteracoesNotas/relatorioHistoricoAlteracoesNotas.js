@@ -47,6 +47,8 @@ const RelatorioHistoricoAlteracoesNotas = () => {
   const [bimestre, setBimestre] = useState(undefined);
   const [tipoDeNota, setTipoDeNota] = useState('1');
   const [consideraHistorico, setConsideraHistorico] = useState(false);
+  const [clicouBotaoGerar, setClicouBotaoGerar] = useState(false);
+  const [desabilitarBtnGerar, setDesabilitarBtnGerar] = useState(true);
 
   const OPCAO_TODOS = '-99';
 
@@ -83,23 +85,28 @@ const RelatorioHistoricoAlteracoesNotas = () => {
 
   const onChangeSemestre = valor => {
     setSemestre(valor);
+    setClicouBotaoGerar(false);
   };
 
   const onChangeTurma = valor => {
     setComponentesCurricularesId();
     setTurmaId(valor);
+    setClicouBotaoGerar(false);
   };
 
   const onChangeComponenteCurricular = valor => {
     setComponentesCurricularesId(valor);
+    setClicouBotaoGerar(false);
   };
 
   const onChangeBimestre = valor => {
     setBimestre(valor);
+    setClicouBotaoGerar(false);
   };
 
   const onChangeTipoNota = valor => {
     setTipoDeNota(valor);
+    setClicouBotaoGerar(false);
   };
 
   const [anoAtual] = useState(window.moment().format('YYYY'));
@@ -365,7 +372,7 @@ const RelatorioHistoricoAlteracoesNotas = () => {
   const obterSemestres = async (
     modalidadeSelecionada,
     anoLetivoSelecionado,
-    historico,
+    historico
   ) => {
     setExibirLoader(true);
     const retorno = await api.get(
@@ -410,16 +417,32 @@ const RelatorioHistoricoAlteracoesNotas = () => {
     await setTipoDeNota('1');
   };
 
-  const desabilitarGerar =
-    !anoLetivo ||
-    !dreId ||
-    !ueId ||
-    !modalidadeId ||
-    (String(modalidadeId) === String(modalidade.EJA) ? !semestre : false) ||
-    !turmaId ||
-    !componentesCurricularesId?.length ||
-    !bimestre?.length ||
-    !tipoDeNota;
+  useEffect(() => {
+    const desabilitar =
+      !anoLetivo ||
+      !dreId ||
+      !ueId ||
+      !modalidadeId ||
+      (String(modalidadeId) === String(modalidade.EJA) ? !semestre : false) ||
+      !turmaId ||
+      !componentesCurricularesId?.length ||
+      !bimestre?.length ||
+      !tipoDeNota ||
+      clicouBotaoGerar;
+
+    setDesabilitarBtnGerar(desabilitar);
+  }, [
+    anoLetivo,
+    dreId,
+    ueId,
+    modalidadeId,
+    turmaId,
+    componentesCurricularesId,
+    semestre,
+    bimestre,
+    tipoDeNota,
+    clicouBotaoGerar,
+  ]);
 
   const gerar = async () => {
     let turmas = turmaId;
@@ -445,6 +468,8 @@ const RelatorioHistoricoAlteracoesNotas = () => {
     };
 
     setExibirLoader(true);
+    setClicouBotaoGerar(true);
+
     const retorno = await ServicoHistoricoAlteracoesNotas.gerar(params)
       .catch(e => erros(e))
       .finally(setExibirLoader(false));
@@ -525,7 +550,7 @@ const RelatorioHistoricoAlteracoesNotas = () => {
                 className="mr-0"
                 onClick={gerar}
                 disabled={
-                  desabilitarGerar ||
+                  desabilitarBtnGerar ||
                   String(modalidadeId) === String(modalidade.INFANTIL)
                 }
               />
