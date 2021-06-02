@@ -59,6 +59,8 @@ const ControleGrade = () => {
   );
   const [bimestre, setBimestre] = useState(undefined);
   const [tipoRelatorio, setTipoRelatorio] = useState(undefined);
+  const [clicouBotaoGerar, setClicouBotaoGerar] = useState(false);
+  const [desabilitarBtnGerar, setDesabilitarBtnGerar] = useState(true);
 
   const onChangeAnoLetivo = async valor => {
     setDreId();
@@ -93,23 +95,28 @@ const ControleGrade = () => {
 
   const onChangeSemestre = valor => {
     setSemestre(valor);
+    setClicouBotaoGerar(false);
   };
 
   const onChangeTurma = valor => {
     setComponentesCurricularesId();
     setTurmaId(valor);
+    setClicouBotaoGerar(false);
   };
 
   const onChangeComponenteCurricular = valor => {
     setComponentesCurricularesId(valor);
+    setClicouBotaoGerar(false);
   };
 
   const onChangeBimestre = valor => {
     setBimestre(valor);
+    setClicouBotaoGerar(false);
   };
 
   const onChangeTipoRelatorio = valor => {
     setTipoRelatorio(valor);
+    setClicouBotaoGerar(false);
   };
 
   const [anoAtual] = useState(window.moment().format('YYYY'));
@@ -400,19 +407,36 @@ const ControleGrade = () => {
     await setTipoRelatorio();
   };
 
-  const desabilitarGerar =
-    !anoLetivo ||
-    !dreId ||
-    !ueId ||
-    !modalidadeId ||
-    (String(modalidadeId) === String(modalidade.EJA) ? !semestre : false) ||
-    !turmaId ||
-    !componentesCurricularesId ||
-    !bimestre ||
-    !tipoRelatorio;
+  useEffect(() => {
+    const desabilitar =
+      !anoLetivo ||
+      !dreId ||
+      !ueId ||
+      !modalidadeId ||
+      (String(modalidadeId) === String(modalidade.EJA) ? !semestre : false) ||
+      !turmaId ||
+      !componentesCurricularesId ||
+      !bimestre ||
+      !tipoRelatorio ||
+      clicouBotaoGerar;
+
+    setDesabilitarBtnGerar(desabilitar);
+  }, [
+    anoLetivo,
+    dreId,
+    ueId,
+    modalidadeId,
+    turmaId,
+    componentesCurricularesId,
+    semestre,
+    bimestre,
+    tipoRelatorio,
+    clicouBotaoGerar,
+  ]);
 
   const gerar = async () => {
     setExibirLoader(true);
+    setClicouBotaoGerar(true);
 
     let turmas = [];
     let componentesCurriculares = [componentesCurricularesId];
@@ -431,7 +455,7 @@ const ControleGrade = () => {
       componentesCurriculares = listaComponentesCurriculares
         .filter(item => item.valor !== '0')
         .map(b => b.valor);
-     }
+    }
 
     if (bimestre[0] === '0') {
       bimestres = listaBimestres
@@ -498,7 +522,7 @@ const ControleGrade = () => {
                   bold
                   className="mr-0"
                   onClick={gerar}
-                  disabled={desabilitarGerar}
+                  disabled={desabilitarBtnGerar}
                 />
               </div>
               <div className="col-sm-12 col-md-6 col-lg-2 col-xl-2 mb-2">
