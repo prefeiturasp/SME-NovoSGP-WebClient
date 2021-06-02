@@ -133,6 +133,7 @@ const AtribuicaoCJ = () => {
     setModalidadeId();
     setTurmaId([]);
     setUeCodigo(undefined);
+    setClicouBotaoGerar(false);
   };
 
   const onChangeUe = valor => {
