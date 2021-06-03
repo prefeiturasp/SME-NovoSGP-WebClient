@@ -130,7 +130,8 @@ class ServicoEncaminhamentoAEE {
   salvarEncaminhamento = async (
     encaminhamentoId,
     situacao,
-    validarCamposObrigatorios
+    validarCamposObrigatorios,
+    enviarEncaminhamento
   ) => {
     const { dispatch } = store;
 
@@ -195,16 +196,30 @@ class ServicoEncaminhamentoAEE {
           formsQuestionarioDinamico?.filter(a => a)?.length;
       }
 
-      if (listaSecoesEmEdicao?.length === 0 && todosOsFormsEstaoValidos) {
+      if (
+        listaSecoesEmEdicao?.length === 0 &&
+        todosOsFormsEstaoValidos &&
+        !enviarEncaminhamento
+      ) {
         return true;
       }
 
       if (todosOsFormsEstaoValidos) {
-        const formsParaSalvar = formsQuestionarioDinamico.filter(f =>
-          listaSecoesEmEdicao.find(
-            secaoEdicao => secaoEdicao.secaoId === f.secaoId
-          )
-        );
+        let formsParaSalvar = [];
+        const enviarSemEditarForms =
+          enviarEncaminhamento && listaSecoesEmEdicao?.length === 0;
+
+        if (enviarSemEditarForms) {
+          formsParaSalvar = formsQuestionarioDinamico?.filter(
+            item => !!item?.secaoId
+          );
+        } else {
+          formsParaSalvar = formsQuestionarioDinamico.filter(f =>
+            listaSecoesEmEdicao.find(
+              secaoEdicao => secaoEdicao.secaoId === f.secaoId
+            )
+          );
+        }
 
         const valoresParaSalvar = {
           id: encaminhamentoId || 0,
