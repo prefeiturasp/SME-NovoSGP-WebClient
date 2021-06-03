@@ -1,7 +1,7 @@
 import { store } from '~/redux';
 import {
-  setListaDadosFrequencia,
   setExibirLoaderFrequenciaPlanoAula,
+  setListaDadosFrequencia,
   setTemPeriodoAbertoFrequenciaPlanoAula,
 } from '~/redux/modulos/frequenciaPlanoAula/actions';
 import { erros } from '~/servicos/alertas';
@@ -27,9 +27,11 @@ class ServicoFrequencia {
     const { dispatch } = store;
     const state = store.getState();
 
-    const { frequenciaPlanoAula } = state;
+    const { frequenciaPlanoAula, usuario } = state;
 
     const { aulaId, componenteCurricular } = frequenciaPlanoAula;
+
+    const { turmaSelecionada } = usuario;
 
     if (aulaId) {
       dispatch(setExibirLoaderFrequenciaPlanoAula(true));
@@ -43,10 +45,19 @@ class ServicoFrequencia {
                 : componenteCurricular.codigoComponenteCurricular,
           },
         })
-        .finally(() => dispatch(setExibirLoaderFrequenciaPlanoAula(false)))
         .catch(e => erros(e));
 
-      if (frequenciaAlunos && frequenciaAlunos.data) {
+      if (frequenciaAlunos?.data) {
+        const tiposFrequencia = await this.obterTipoFrequencia(
+          turmaSelecionada?.modalidade,
+          turmaSelecionada?.anoLetivo
+        ).catch(e => erros(e));
+
+        frequenciaAlunos.data.listaTiposFrequencia = tiposFrequencia?.data
+          ?.length
+          ? tiposFrequencia.data
+          : [];
+
         dispatch(setListaDadosFrequencia(frequenciaAlunos.data));
         dispatch(
           setTemPeriodoAbertoFrequenciaPlanoAula(
@@ -57,11 +68,18 @@ class ServicoFrequencia {
         dispatch(setListaDadosFrequencia({}));
         dispatch(setTemPeriodoAbertoFrequenciaPlanoAula(true));
       }
+      dispatch(setExibirLoaderFrequenciaPlanoAula(false));
     }
   };
 
   salvarFrequencia = params => {
     return api.post(`v1/calendarios/frequencias`, params);
+  };
+
+  obterTipoFrequencia = (modalidade, anoLetivo) => {
+    return api.get(
+      `${urlPadrao}/frequencias/tipos?modalidade=${modalidade}&anoLetivo=${anoLetivo}`
+    );
   };
 }
 

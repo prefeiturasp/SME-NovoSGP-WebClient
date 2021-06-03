@@ -210,14 +210,14 @@ export const Lista = styled.div`
   }
 `;
 
-export const BtbAnotacao = styled.div`
-  font-size: 10px;
-  border-radius: 3px;
-  padding: 5px;
-  color: #a4a4a4;
-  border: solid 1px #f5f6f8;
-  background-color: #f5f6f8;
+export const ContainerBtbAnotacao = styled.div`
+  border-radius: 4px;
+  color: ${props => props.cor};
+  border: ${props =>
+    !props?.possuiAnotacao ? 'none' : `solid 1px ${props.cor}`};
   cursor: ${props => (props.podeAbrirModal ? 'pointer' : 'not-allowed')};
+  height: 32px;
+  width: 32px;
 `;
 
 export const MarcadorSituacao = styled.i`
@@ -225,4 +225,38 @@ export const MarcadorSituacao = styled.i`
   font-size: 10px;
   margin-left: 2px;
   padding-top: 5px;
+`;
+
+export const ContainerListaFrequencia = styled.div`
+  td {
+    padding: 5px 0px 0px 0px !important;
+  }
+
+  .desabilitar {
+    opacity: 0.4 !important;
+    cursor: unset !important;
+  }
+`;
+
+export const MarcarTodasAulasTipoFrequencia = styled.div`
+  font-size: 16px;
+  cursor: pointer;
+`;
+
+export const IndicativoAlerta = styled.div`
+  display: inline-block;
+  background-color: #ffff30;
+  color: black;
+  border-radius: 4px;
+  border-right: solid 5px #ffff30;
+  border-left: solid 5px #ffff30;
+`;
+
+export const IndicativoCritico = styled.div`
+  display: inline-block;
+  background-color: ${Base.Vermelho};
+  color: white;
+  border-radius: 4px;
+  border-right: solid 5px ${Base.Vermelho};
+  border-left: solid 5px ${Base.Vermelho};
 `;

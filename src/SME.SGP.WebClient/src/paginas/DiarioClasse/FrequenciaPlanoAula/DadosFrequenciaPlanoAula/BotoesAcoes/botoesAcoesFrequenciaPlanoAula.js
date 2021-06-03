@@ -28,6 +28,10 @@ const BotoesAcoesFrequenciaPlanoAula = () => {
     state => state.frequenciaPlanoAula.somenteConsulta
   );
 
+  const idFrequencia = useSelector(
+    state => state.frequenciaPlanoAula.listaDadosFrequencia?.id
+  );
+
   const onClickSalvar = async () => {
     servicoSalvarFrequenciaPlanoAula.validarSalvarFrequenciPlanoAula();
   };
@@ -101,7 +105,7 @@ const BotoesAcoesFrequenciaPlanoAula = () => {
       />
       <Button
         id="btn-salvar"
-        label="Salvar"
+        label={idFrequencia ? 'Alterar' : 'Cadastrar'}
         color={Colors.Roxo}
         border
         bold

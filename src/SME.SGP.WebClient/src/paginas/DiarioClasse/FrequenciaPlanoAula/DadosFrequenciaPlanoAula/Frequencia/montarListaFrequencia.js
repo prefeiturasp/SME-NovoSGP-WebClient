@@ -57,11 +57,7 @@ const MontarListaFrequencia = () => {
 
     if (!desabilitarCampos && permiteRegistroFrequencia) {
       let temAulas = false;
-      if (
-        listaDadosFrequencia &&
-        listaDadosFrequencia.listaFrequencia &&
-        listaDadosFrequencia.listaFrequencia.length
-      ) {
+      if (listaDadosFrequencia?.listaFrequencia?.length) {
         const aulas = listaDadosFrequencia.listaFrequencia.filter(
           item => item.aulas && item.aulas.length
         );
@@ -75,9 +71,7 @@ const MontarListaFrequencia = () => {
     dispatch(setExibirCardCollapseFrequencia(!exibirCardCollapseFrequencia));
   };
 
-  const onChangeFrequencia = () => {
-    dispatch(setModoEdicaoFrequencia(true));
-  };
+  const onChangeFrequencia = () => dispatch(setModoEdicaoFrequencia(true));
 
   const atualizarValoresAlterados = dados => {
     listaDadosFrequencia.listaFrequencia = dados;
@@ -86,24 +80,20 @@ const MontarListaFrequencia = () => {
 
   return (
     <>
-      {componenteCurricular &&
-      componenteCurricular.codigoComponenteCurricular &&
-      dataSelecionada &&
-      aulaId ? (
-        <div className="col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-2">
-          <CardCollapse
-            key="frequencia-collapse"
-            onClick={onClickFrequencia}
-            titulo="Frequência"
-            indice="frequencia-collapse"
-            alt="card-collapse-frequencia"
-            show={exibirCardCollapseFrequencia}
-          >
-            {listaDadosFrequencia &&
-            listaDadosFrequencia.listaFrequencia &&
-            listaDadosFrequencia.listaFrequencia.length ? (
-              <>
-                <div className="col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-2">
+      {componenteCurricular?.codigoComponenteCurricular &&
+        dataSelecionada &&
+        aulaId && (
+          <div className="col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-2">
+            <CardCollapse
+              key="frequencia-collapse"
+              onClick={onClickFrequencia}
+              titulo="Frequência"
+              indice="frequencia-collapse"
+              alt="card-collapse-frequencia"
+              show={exibirCardCollapseFrequencia}
+            >
+              {listaDadosFrequencia?.listaFrequencia?.length && (
+                <>
                   <Ordenacao
                     conteudoParaOrdenar={listaDadosFrequencia.listaFrequencia}
                     ordenarColunaNumero="numeroAlunoChamada"
@@ -115,7 +105,6 @@ const MontarListaFrequencia = () => {
                     }}
                   />
                   <ListaFrequencia
-                    dataSource={listaDadosFrequencia.listaFrequencia}
                     frequenciaId={listaDadosFrequencia.id}
                     onChangeFrequencia={onChangeFrequencia}
                     permissoesTela={permissoesTela}
@@ -130,25 +119,25 @@ const MontarListaFrequencia = () => {
                     }
                     setDataSource={atualizarValoresAlterados}
                   />
-                </div>
-                {listaDadosFrequencia && listaDadosFrequencia.criadoEm ? (
-                  <Auditoria
-                    className="mt-2"
-                    criadoEm={listaDadosFrequencia.criadoEm}
-                    criadoPor={listaDadosFrequencia.criadoPor}
-                    alteradoPor={listaDadosFrequencia.alteradoPor}
-                    alteradoEm={listaDadosFrequencia.alteradoEm}
-                  />
-                ) : (
-                  ''
-                )}
-              </>
-            ) : null}
-          </CardCollapse>
-        </div>
-      ) : (
-        ''
-      )}
+
+                  {listaDadosFrequencia?.criadoEm && (
+                    <div className="row">
+                      <Auditoria
+                        className="mt-2"
+                        criadoEm={listaDadosFrequencia.criadoEm}
+                        criadoPor={listaDadosFrequencia.criadoPor}
+                        alteradoPor={listaDadosFrequencia.alteradoPor}
+                        alteradoEm={listaDadosFrequencia.alteradoEm}
+                        alteradoRf={listaDadosFrequencia.alteradoRF}
+                        criadoRf={listaDadosFrequencia.criadoRF}
+                      />
+                    </div>
+                  )}
+                </>
+              )}
+            </CardCollapse>
+          </div>
+        )}
     </>
   );
 };
