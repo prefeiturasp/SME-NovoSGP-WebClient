@@ -43,8 +43,8 @@ const Filtros = ({ onChangeFiltros, ehInfantil }) => {
   const [listaUes, setListaUes] = useState([]);
   const [modalidadeId, setModalidadeId] = useState();
   const [semestre, setSemestre] = useState();
-  const [situacaoConselhoClasse, setSituacaoConselhoClasse] = useState('');
-  const [situacaoFechamento, setSituacaoFechamento] = useState('');
+  const [situacaoConselhoClasse, setSituacaoConselhoClasse] = useState();
+  const [situacaoFechamento, setSituacaoFechamento] = useState();
   const [turmasId, setTurmasId] = useState('');
   const [ueId, setUeId] = useState('');
   const [ueCodigo, setUeCodigo] = useState();
