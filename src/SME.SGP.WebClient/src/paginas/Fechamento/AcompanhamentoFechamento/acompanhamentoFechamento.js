@@ -66,6 +66,8 @@ const AcompanhamentoFechamento = () => {
 
   const onChangeFiltros = async (params, paginaAlterada = 1) => {
     dispatch(setCarregandoAcompanhamentoFechamento(true));
+    dispatch(setTurmasAcompanhamentoFechamento([]));
+
     const retorno = await ServicoAcompanhamentoFechamento.obterTurmas({
       ...params,
       numeroPagina: paginaAlterada,
@@ -100,6 +102,7 @@ const AcompanhamentoFechamento = () => {
     const retorno = await ServicoAcompanhamentoFechamento.obterFechamentos({
       turmaId,
       bimestre: parametrosFiltro.bimestre,
+      situacaoFechamento: parametrosFiltro.situacaoFechamento,
     }).catch(e => erros(e));
 
     if (retorno?.data) {
@@ -111,6 +114,7 @@ const AcompanhamentoFechamento = () => {
     const retorno = await ServicoAcompanhamentoFechamento.obterConselhoClasse({
       turmaId,
       bimestre: parametrosFiltro.bimestre,
+      situacaoConselhoClasse: parametrosFiltro.situacaoConselhoClasse,
     }).catch(e => erros(e));
 
     if (retorno?.data) {

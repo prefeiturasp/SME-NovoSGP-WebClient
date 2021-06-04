@@ -37,7 +37,7 @@ const SecaoConselhoClasse = ({
         {dadosStatusConsselhoClasse?.length ? (
           <DetalhesConselhoClasse
             turmaId={dadosTurmas?.turmaId}
-            bimestre={parametrosFiltro?.bimestre}
+            parametrosFiltro={parametrosFiltro}
           />
         ) : null}
       </div>
