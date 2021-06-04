@@ -177,7 +177,9 @@ const AcompanhamentoFechamento = () => {
                       >
                         <>
                           <SecaoFechamento
+                            dadosTurmas={dadosTurmas}
                             dadosStatusFechamento={dadosStatusFechamento}
+                            parametrosFiltro={parametrosFiltro}
                           />
                           <Divider style={{ background: Base.CinzaDivisor }} />
                           <SecaoConselhoClasse

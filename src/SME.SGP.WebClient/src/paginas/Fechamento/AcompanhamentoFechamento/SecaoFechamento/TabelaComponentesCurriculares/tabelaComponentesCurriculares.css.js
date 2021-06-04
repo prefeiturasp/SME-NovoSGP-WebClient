@@ -10,6 +10,7 @@ export const LinhaTabela = styled.div`
 
   tr {
     border: 1px solid #e8e8e8;
+    height: 48px;
   }
 
   .linha-ativa {
@@ -28,8 +29,33 @@ export const LinhaTabela = styled.div`
         border: 0 !important;
         padding: 0 4px !important;
       }
-      &:nth-child(2) {
-        width: 70.5% !important;
+    }
+    .container-botao-detalhar {
+      margin-right: 14.4px;
+    }
+  }
+
+  .tabela-pendencias-html {
+    padding: 8px 6px 0;
+
+    table {
+      font-size: 14px;
+      width: 100%;
+
+      tr,
+      td {
+        border: 1px solid #e8e8e8;
+      }
+
+      tr {
+        &:first-child {
+          background: #f5f6f8 !important;
+          color: #323c47;
+          font-weight: bold;
+        }
+        & > td {
+          padding: 11px 8px;
+        }
       }
     }
   }

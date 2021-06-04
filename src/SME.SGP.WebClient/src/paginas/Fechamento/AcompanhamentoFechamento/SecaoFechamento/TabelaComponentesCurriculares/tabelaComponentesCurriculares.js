@@ -7,11 +7,11 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 
 import { Base, Button, Colors, DataTable, Loader } from '~/componentes';
-import { Paginacao } from '~/componentes-sgp';
 
 import { statusAcompanhamentoFechamento } from '~/dtos';
 import { erros, ServicoAcompanhamentoFechamento } from '~/servicos';
 
+import { RenderizarHtml } from '../RenderizarHtml';
 import {
   MarcadorTriangulo,
   TextoEstilizado,
@@ -19,7 +19,11 @@ import {
 } from '../../acompanhamentoFechamento.css';
 import { LinhaTabela, IconeSeta } from './tabelaComponentesCurriculares.css';
 
-const TabelaComponentesCurriculares = ({ dadosComponentesCurriculares }) => {
+const TabelaComponentesCurriculares = ({
+  dadosComponentesCurriculares,
+  turmaId,
+  bimestre,
+}) => {
   const [carregandoComponentes, setCarregandoComponentes] = useState(false);
   const [carregandoDetalhePendencia, setCarregandoDetalhePendencia] = useState(
     false
@@ -32,10 +36,6 @@ const TabelaComponentesCurriculares = ({ dadosComponentesCurriculares }) => {
   const [dadosComCores, setDadosComCores] = useState([]);
   const [mostrarDetalhePendencia, setMostrarDetalhePendencia] = useState(false);
   const [detalhePendenciaEscolhido, setDetalhePendenciaEscolhido] = useState();
-
-  const numeroRegistros = 1;
-  const pageSize = 10;
-  const exibiPaginacao = numeroRegistros > pageSize;
 
   const obterCorSituacaoFechamento = situacaoFechamentoCodigo =>
     Object.keys(statusAcompanhamentoFechamento)
@@ -90,7 +90,7 @@ const TabelaComponentesCurriculares = ({ dadosComponentesCurriculares }) => {
           const corTexto = ehLinhaExpandida.length
             ? Base.Branco
             : componente?.cor;
-          return <MarcadorTriangulo cor={corTexto} marginTop="-33.8px" />;
+          return <MarcadorTriangulo cor={corTexto} marginTop="-34.8px" />;
         }
         return null;
       },
@@ -103,15 +103,19 @@ const TabelaComponentesCurriculares = ({ dadosComponentesCurriculares }) => {
     let mostrarPendencia = false;
     setCarregandoDetalhePendencia(true);
 
-    const resposta = await ServicoAcompanhamentoFechamento.obterDetalhePendencia()
+    const resposta = await ServicoAcompanhamentoFechamento.obterDetalhePendencia(
+      dadosLinha?.tipoPendencia,
+      dadosLinha?.pendenciaId
+    )
       .catch(e => erros(e))
       .finally(() => setCarregandoDetalhePendencia(false));
 
-    if (resposta?.data?.length) {
+    if (resposta?.data) {
       mostrarPendencia = true;
       dados = dadosLinha;
       dadosResposta = resposta.data;
     }
+
     setDadosDetalhePendencias(dadosResposta);
     setDetalhePendenciaEscolhido(dados);
     setMostrarDetalhePendencia(mostrarPendencia);
@@ -146,32 +150,21 @@ const TabelaComponentesCurriculares = ({ dadosComponentesCurriculares }) => {
         const corTexto = ehLinhaClicada ? Colors.Branco : Colors.Azul;
         const corTextoHover = ehLinhaClicada ? Colors.Azul : '';
         return (
-          <Button
-            id="botao-detalhar"
-            className="mx-auto"
-            label="Detalhar"
-            color={corTexto}
-            corTextoHover={corTextoHover}
-            onClick={e => onClickExibirDetalhamento(e, record)}
-            border
-            mudarCorBorda
-            height="32px"
-          />
+          <div className="container-botao-detalhar">
+            <Button
+              id="botao-detalhar"
+              className="mx-auto"
+              label="Detalhar"
+              color={corTexto}
+              corTextoHover={corTextoHover}
+              onClick={e => onClickExibirDetalhamento(e, record)}
+              border
+              mudarCorBorda
+              height="32px"
+            />
+          </div>
         );
       },
-    },
-  ];
-
-  const colunasTabelaDetalhePendencias = [
-    {
-      title: 'Data da aula',
-      dataIndex: 'data',
-      align: 'left',
-    },
-    {
-      title: 'Professor',
-      dataIndex: 'professor',
-      align: 'left',
     },
   ];
 
@@ -179,7 +172,11 @@ const TabelaComponentesCurriculares = ({ dadosComponentesCurriculares }) => {
     if (expandir) {
       setCarregandoComponentes(true);
       setLinhasExpandidasPendencia([componente?.professorRf]);
-      const resposta = await ServicoAcompanhamentoFechamento.obterDetalhesPendencias()
+      const resposta = await ServicoAcompanhamentoFechamento.obterDetalhesPendencias(
+        turmaId,
+        bimestre,
+        componente.id
+      )
         .catch(e => erros(e))
         .finally(() => setCarregandoComponentes(false));
 
@@ -188,6 +185,9 @@ const TabelaComponentesCurriculares = ({ dadosComponentesCurriculares }) => {
         return;
       }
     }
+
+    setDetalhePendenciaEscolhido('');
+    setMostrarDetalhePendencia(false);
     setDadosPendencias([]);
     setLinhasExpandidasPendencia([]);
   };
@@ -216,8 +216,6 @@ const TabelaComponentesCurriculares = ({ dadosComponentesCurriculares }) => {
       </TextoEstilizado>
     );
   };
-
-  const onChangePaginacao = pagina => {};
 
   return (
     <LinhaTabela className="col-md-12">
@@ -271,39 +269,28 @@ const TabelaComponentesCurriculares = ({ dadosComponentesCurriculares }) => {
       />
       {mostrarDetalhePendencia && (
         <>
-          <div className="px-1 pt-2">
-            <Loader loading={carregandoDetalhePendencia}>
-              <DataTable
-                id="tabela-detalhe-pendencias"
-                idLinha="professorRf"
-                pagination={false}
-                columns={colunasTabelaDetalhePendencias}
-                dataSource={dadosDetalhePendencias}
-                semHover
-              />
-            </Loader>
-          </div>
-          {exibiPaginacao && (
-            <div className="col-12 d-flex justify-content-center mt-2">
-              <Paginacao
-                numeroRegistros={numeroRegistros}
-                pageSize={pageSize}
-                onChangePaginacao={onChangePaginacao}
-              />
-            </div>
-          )}
+          <Loader loading={carregandoDetalhePendencia}>
+            <RenderizarHtml
+              textoHtml={dadosDetalhePendencias?.descricaoHtml}
+              className="tabela-pendencias-html"
+            />
+          </Loader>
         </>
       )}
     </LinhaTabela>
   );
 };
 
-TabelaComponentesCurriculares.propTypes = {
-  dadosComponentesCurriculares: PropTypes.oneOfType([PropTypes.array]),
-};
-
 TabelaComponentesCurriculares.defaultProps = {
   dadosComponentesCurriculares: [],
+  turmaId: 0,
+  bimestre: '',
+};
+
+TabelaComponentesCurriculares.propTypes = {
+  dadosComponentesCurriculares: PropTypes.oneOfType([PropTypes.array]),
+  turmaId: PropTypes.number,
+  bimestre: PropTypes.string,
 };
 
 export default TabelaComponentesCurriculares;
