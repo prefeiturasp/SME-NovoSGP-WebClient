@@ -56,13 +56,16 @@ function ModalCopiarConteudoPlanoAula() {
     async function buscaTurmas() {
       const { data } = await AbrangenciaServico.buscarTurmas(
         filtro.unidadeEscolar,
-        filtro.modalidade
+        filtro.modalidade,
+        '',
+        filtro.anoLetivo,
+        filtro.consideraHistorico
       );
 
       if (data) {
         setListaTurmas(
           data
-            .filter(x => x.ano === filtro.ano)
+            .filter(x => x.ano === filtro.ano && x.codigo != filtro.turma)
             .map(item => ({
               desc: item.nome,
               valor: item.codigo,
