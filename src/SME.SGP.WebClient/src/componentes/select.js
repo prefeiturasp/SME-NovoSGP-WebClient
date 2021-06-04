@@ -66,7 +66,7 @@ const SelectComponent = React.forwardRef((props, ref) => {
     }
 
     .ant-select-selection__placeholder {
-      display: block !important;
+      display: block;
     }
 
     .ant-select .ant-select-search__field {
