@@ -8,7 +8,11 @@ import { statusAcompanhamentoFechamento } from '~/dtos';
 import { DetalhesFechamento } from './DetalhesFechamento';
 import { CardStatus } from '../CardStatus';
 
-const SecaoFechamento = ({ dadosStatusFechamento }) => {
+const SecaoFechamento = ({
+  dadosTurmas,
+  dadosStatusFechamento,
+  parametrosFiltro,
+}) => {
   return (
     <>
       <Label text="Fechamento" className="mb-2" altura="24" />
@@ -30,20 +34,29 @@ const SecaoFechamento = ({ dadosStatusFechamento }) => {
         )}
       </div>
       <div className="row">
-        {!!dadosStatusFechamento?.length && <DetalhesFechamento />}
+        {!!dadosStatusFechamento?.length && (
+          <DetalhesFechamento
+            turmaId={dadosTurmas?.turmaId}
+            bimestre={parametrosFiltro?.bimestre}
+          />
+        )}
       </div>
     </>
   );
 };
 
 SecaoFechamento.defaultProps = {
+  dadosTurmas: {},
   dadosStatusFechamento: {},
+  parametrosFiltro: {},
 };
 SecaoFechamento.propTypes = {
+  dadosTurmas: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
   dadosStatusFechamento: PropTypes.oneOfType([
     PropTypes.object,
     PropTypes.array,
   ]),
+  parametrosFiltro: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
 };
 
 export default SecaoFechamento;
