@@ -11,10 +11,6 @@ const statusAcompanhamentoFechamento = {
     cor: Base.LaranjaStatus,
     id: 1,
   },
-  PROCESSADO: {
-    descricao: 'Processado',
-    cor: Base.Verde,
-  },
   CONCLUIDO: {
     descricao: 'Concluído',
     cor: Base.Verde,

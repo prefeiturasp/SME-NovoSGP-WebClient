@@ -7,8 +7,7 @@ import { erros, ServicoAcompanhamentoFechamento } from '~/servicos';
 
 import { TabelaAlunosConselho } from '../TabelaAlunosConselho';
 
-const DetalhesConselhoClasse = props => {
-  const { turmaId, bimestre } = props;
+const DetalhesConselhoClasse = ({ turmaId, parametrosFiltro }) => {
   const [exibirDetalhamento, setExibirDetalhamento] = useState(false);
   const [alunosDetalhesConselho, setAlunosDetalhesConselho] = useState([]);
 
@@ -22,7 +21,8 @@ const DetalhesConselhoClasse = props => {
 
     const resposta = await ServicoAcompanhamentoFechamento.obterListaAlunosPorTurma(
       turmaId,
-      bimestre
+      parametrosFiltro?.bimestre,
+      parametrosFiltro?.situacaoConselhoClasse
     )
       .catch(e => erros(e))
       .finally(() => setCarregandoAlunos(false));
@@ -30,7 +30,7 @@ const DetalhesConselhoClasse = props => {
     if (resposta?.data?.length) {
       setAlunosDetalhesConselho(resposta.data);
     }
-  }, [turmaId, bimestre]);
+  }, [turmaId, parametrosFiltro]);
 
   useEffect(() => {
     if (exibirDetalhamento) {
@@ -62,7 +62,7 @@ const DetalhesConselhoClasse = props => {
         <div className="col-md-12 p-0">
           <TabelaAlunosConselho
             dadosAlunos={alunosDetalhesConselho}
-            bimestre={bimestre}
+            bimestre={parametrosFiltro?.bimestre}
             turmaId={turmaId}
           />
         </div>
@@ -73,11 +73,11 @@ const DetalhesConselhoClasse = props => {
 
 DetalhesConselhoClasse.propTypes = {
   turmaId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-  bimestre: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+  parametrosFiltro: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
 };
 
 DetalhesConselhoClasse.defaultProps = {
   turmaId: null,
-  bimestre: null,
+  parametrosFiltro: {},
 };
 export default DetalhesConselhoClasse;

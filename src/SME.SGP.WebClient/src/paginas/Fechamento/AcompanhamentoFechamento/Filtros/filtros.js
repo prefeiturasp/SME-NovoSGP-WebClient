@@ -50,6 +50,7 @@ const Filtros = ({ onChangeFiltros, ehInfantil }) => {
   const [ueCodigo, setUeCodigo] = useState();
 
   const ANO_LETIVO_MINIMO = 2021;
+  const OPCAO_PADRAO = '-99';
 
   const carregandoAcompanhamentoFechamento = useSelector(
     store => store.acompanhamentoFechamento.carregandoAcompanhamentoFechamento
@@ -83,8 +84,8 @@ const Filtros = ({ onChangeFiltros, ehInfantil }) => {
       semestre: semestre || 0,
       turmasId,
       bimestre: valorBimestre,
-      situacaoFechamento: valorSituacaoFechamento,
-      situacaoConselhoClasse: valorSituacaoConselhoClasse,
+      situacaoFechamento: valorSituacaoFechamento || OPCAO_PADRAO,
+      situacaoConselhoClasse: valorSituacaoConselhoClasse || OPCAO_PADRAO,
     };
 
     const temSemestreOuNaoEja =
