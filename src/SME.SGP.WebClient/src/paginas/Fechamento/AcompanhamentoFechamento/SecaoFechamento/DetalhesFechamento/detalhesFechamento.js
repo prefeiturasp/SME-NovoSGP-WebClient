@@ -6,7 +6,7 @@ import { erros, ServicoAcompanhamentoFechamento } from '~/servicos';
 
 import { TabelaComponentesCurriculares } from '../TabelaComponentesCurriculares';
 
-const DetalhesFechamento = ({ turmaId, bimestre }) => {
+const DetalhesFechamento = ({ turmaId, parametrosFiltro }) => {
   const [exibirDetalhamento, setExibirDetalhamento] = useState(false);
   const [
     carregandoComponetesCurriculares,
@@ -22,7 +22,8 @@ const DetalhesFechamento = ({ turmaId, bimestre }) => {
 
     const resposta = await ServicoAcompanhamentoFechamento.obterComponentesCurricularesFechamento(
       turmaId,
-      bimestre
+      parametrosFiltro?.bimestre,
+      parametrosFiltro?.situacaoFechamento
     )
       .catch(e => erros(e))
       .finally(() => setCarregandoComponetesCurriculares(false));
@@ -30,7 +31,7 @@ const DetalhesFechamento = ({ turmaId, bimestre }) => {
     if (resposta?.data?.length) {
       setComponentesCurriculares(resposta.data);
     }
-  }, [turmaId, bimestre]);
+  }, [turmaId, parametrosFiltro]);
 
   useEffect(() => {
     if (exibirDetalhamento) {
@@ -63,7 +64,7 @@ const DetalhesFechamento = ({ turmaId, bimestre }) => {
           <TabelaComponentesCurriculares
             dadosComponentesCurriculares={componentesCurriculares}
             turmaId={turmaId}
-            bimestre={bimestre}
+            bimestre={parametrosFiltro?.bimestre}
           />
         </div>
       )}
@@ -73,12 +74,12 @@ const DetalhesFechamento = ({ turmaId, bimestre }) => {
 
 DetalhesFechamento.defaultProps = {
   turmaId: 0,
-  bimestre: '',
+  parametrosFiltro: {},
 };
 
 DetalhesFechamento.propTypes = {
   turmaId: PropTypes.number,
-  bimestre: PropTypes.string,
+  parametrosFiltro: PropTypes.oneOfType(PropTypes.array, PropTypes.object),
 };
 
 export default DetalhesFechamento;

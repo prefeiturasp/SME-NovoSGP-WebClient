@@ -37,7 +37,7 @@ const SecaoFechamento = ({
         {!!dadosStatusFechamento?.length && (
           <DetalhesFechamento
             turmaId={dadosTurmas?.turmaId}
-            bimestre={parametrosFiltro?.bimestre}
+            parametrosFiltro={parametrosFiltro}
           />
         )}
       </div>

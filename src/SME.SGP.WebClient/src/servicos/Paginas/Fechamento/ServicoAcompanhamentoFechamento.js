@@ -6,7 +6,6 @@ class ServicoAcompanhamentoFechamento {
   obterTurmas = params => {
     let url = `${urlPadrao}?anoLetivo=${params.anoLetivo}&dreId=${params.dreId}`;
     url = `${url}&ueId=${params.ueId}&modalidade=${params.modalidadeId}&semestre=${params.semestre}`;
-    url = `${url}&situacaoFechamento=${params.situacaoFechamento}&situacaoConselhoClasse=${params.situacaoConselhoClasse}`;
     url = `${url}&bimestre=${params.bimestre}&numeroPagina=${params.numeroPagina}&numeroRegistros=10`;
 
     if (params.turmasId?.length) {
@@ -16,19 +15,21 @@ class ServicoAcompanhamentoFechamento {
     return api.get(url);
   };
 
-  obterFechamentos = ({ turmaId, bimestre }) => {
-    return api.get(`${urlPadrao}/${turmaId}/fechamentos/bimestres/${bimestre}`);
-  };
-
-  obterConselhoClasse = ({ turmaId, bimestre }) => {
+  obterFechamentos = ({ turmaId, bimestre, situacaoFechamento }) => {
     return api.get(
-      `${urlPadrao}/${turmaId}/conselho-classe/bimestres/${bimestre}`
+      `${urlPadrao}/${turmaId}/fechamentos/bimestres/${bimestre}?situacaoFechamento=${situacaoFechamento}`
     );
   };
 
-  obterListaAlunosPorTurma = (turmaId, bimestre) => {
+  obterConselhoClasse = ({ turmaId, bimestre, situacaoConselhoClasse }) => {
     return api.get(
-      `${urlPadrao}/${turmaId}/conselho-classe/bimestres/${bimestre}/alunos`
+      `${urlPadrao}/${turmaId}/conselho-classe/bimestres/${bimestre}?situacaoConselhoClasse=${situacaoConselhoClasse}`
+    );
+  };
+
+  obterListaAlunosPorTurma = (turmaId, bimestre, situacaoConselhoClasse) => {
+    return api.get(
+      `${urlPadrao}/${turmaId}/conselho-classe/bimestres/${bimestre}/alunos?situacaoConselhoClasse=${situacaoConselhoClasse}`
     );
   };
 
@@ -42,9 +43,13 @@ class ServicoAcompanhamentoFechamento {
     );
   };
 
-  obterComponentesCurricularesFechamento = (turmaId, bimestre) => {
+  obterComponentesCurricularesFechamento = (
+    turmaId,
+    bimestre,
+    situacaoFechamento
+  ) => {
     return api.get(
-      `${urlPadrao}/${turmaId}/fechamento/bimestres/${bimestre}/componentes-curriculares`
+      `${urlPadrao}/${turmaId}/fechamento/bimestres/${bimestre}/componentes-curriculares?situacaoFechamento=${situacaoFechamento}`
     );
   };
 
