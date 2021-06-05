@@ -808,7 +808,11 @@ const EventosForm = ({ match }) => {
   };
 
   const onSaveRecorrencia = recurrence => {
-    setRecorrencia(parseScreenObject(recurrence));
+    if (recurrence) {
+      setRecorrencia(parseScreenObject(recurrence));
+    } else {
+      setRecorrencia();
+    }
   };
 
   const desabilitarData = current => {

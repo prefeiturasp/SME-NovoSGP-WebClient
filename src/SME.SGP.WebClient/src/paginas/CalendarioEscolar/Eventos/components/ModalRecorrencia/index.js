@@ -164,7 +164,7 @@ function ModalRecorrencia({
     setDataTermino('');
     setDiasSemana([]);
     setValoresIniciais(valoresDefault);
-    onSaveRecorrencia(valoresDefault);
+    onSaveRecorrencia();
     onCloseRecorrencia();
   };
 
@@ -184,7 +184,7 @@ function ModalRecorrencia({
         titulo="Repetir"
         visivel={show}
         closable
-        onClose={() => onCloseModal()}
+        onClose={() => onCloseRecorrencia()}
         onConfirmacaoSecundaria={() => onCloseModal()}
         onConfirmacaoPrincipal={() => onSubmitRecorrencia()}
         labelBotaoPrincipal="Salvar"
