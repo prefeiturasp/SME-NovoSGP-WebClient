@@ -62,18 +62,11 @@ const CampoConceitoFinal = props => {
     }
   };
 
-  return (
-    <Tooltip
-      placement="bottom"
-      title={
-        notaConceitoBimestre && notaConceitoBimestre.abaixoDaMedia
-          ? 'Abaixo da Média'
-          : ''
-      }
-    >
+  const campo = () => {
+    return (
       <div>
         <SelectComponent
-          label={label ? label : ''}
+          label={label || ''}
           onChange={valorNovo => setarValorNovo(valorNovo)}
           valueOption="id"
           valueText="valor"
@@ -93,7 +86,19 @@ const CampoConceitoFinal = props => {
           disabled={desabilitarCampo || !podeEditar}
         />
       </div>
-    </Tooltip>
+    );
+  };
+
+  return (
+    <>
+      {notaConceitoBimestre?.abaixoDaMedia ? (
+        <Tooltip placement="left" title="Abaixo da Média">
+          {campo()}
+        </Tooltip>
+      ) : (
+        campo()
+      )}
+    </>
   );
 };
 
