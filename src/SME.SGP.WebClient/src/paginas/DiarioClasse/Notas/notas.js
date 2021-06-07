@@ -232,6 +232,7 @@ const Notas = ({ match }) => {
         semestre: usuario.turmaSelecionada.periodo,
         periodoInicioTicks: dadosBimestre.periodoInicioTicks,
         periodoFimTicks: dadosBimestre.periodoFimTicks,
+        periodoEscolarId: dadosBimestre.periodoEscolarId,
       };
       const dados = await ServicoNotas.obterNotas({ params }).catch(e =>
         erros(e)
@@ -301,6 +302,7 @@ const Notas = ({ match }) => {
               podeLancarNotaFinal: item.podeLancarNotaFinal,
               periodoInicioTicks: dadosBimestre.periodoInicioTicks,
               periodoFimTicks: dadosBimestre.periodoFimTicks,
+              periodoEscolarId: dadosBimestre.periodoEscolarId,
             };
 
             switch (Number(item.numero)) {
@@ -956,6 +958,7 @@ const Notas = ({ match }) => {
           justificativa: bimestrePesquisado.justificativa,
           periodoInicioTicks: dadosBimestre.periodoInicioTicks,
           periodoFimTicks: dadosBimestre.periodoFimTicks,
+          periodoEscolarId: dadosBimestre.periodoEscolarId,
         };
 
         switch (Number(numeroBimestre)) {
@@ -1018,6 +1021,7 @@ const Notas = ({ match }) => {
       podeLancarNotaFinal: bimestreOrdenado.podeLancarNotaFinal,
       periodoInicioTicks: bimestreOrdenado.periodoInicioTicks,
       periodoFimTicks: bimestreOrdenado.periodoFimTicks,
+      periodoEscolarId: bimestreOrdenado.periodoEscolarId,
     };
     switch (Number(bimestreOrdenado.numero)) {
       case 1:
