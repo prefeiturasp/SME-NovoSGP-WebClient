@@ -228,6 +228,7 @@ const Notas = ({ match }) => {
         disciplinaCodigo: disciplinaId,
         modalidade: usuario.turmaSelecionada.modalidade,
         turmaCodigo: usuario.turmaSelecionada.turma,
+        turmaId: usuario.turmaSelecionada.id,
         turmaHistorico: usuario.turmaSelecionada.consideraHistorico,
         semestre: usuario.turmaSelecionada.periodo,
         periodoInicioTicks: dadosBimestre.periodoInicioTicks,
