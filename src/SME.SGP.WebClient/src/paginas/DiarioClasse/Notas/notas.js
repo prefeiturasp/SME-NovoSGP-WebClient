@@ -235,7 +235,6 @@ const Notas = ({ match }) => {
         periodoFimTicks: dadosBimestre.periodoFimTicks,
         periodoEscolarId: dadosBimestre.periodoEscolarId,
       };
-      
       const dados = await ServicoNotas.obterNotas({ params }).catch(e =>
         erros(e)
       );
@@ -671,9 +670,9 @@ const Notas = ({ match }) => {
         return;
       }
       return resolve(false);
-    } catch (e) {
-      erros(e);
-      reject(e);
+    } catch (e_1) {
+      erros(e_1);
+      reject(e_1);
     }
   };
 
