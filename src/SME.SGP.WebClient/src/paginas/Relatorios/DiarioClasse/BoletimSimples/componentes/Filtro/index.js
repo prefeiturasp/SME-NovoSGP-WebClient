@@ -46,10 +46,6 @@ const Filtros = ({ onFiltrar, filtrou, setFiltrou, cancelou, setCancelou }) => {
   ];
 
   const limparCampos = () => {
-    setListaDres([]);
-    setDreCodigo();
-    setDreId();
-
     setListaUes([]);
     setUeCodigo();
 
@@ -408,6 +404,9 @@ const Filtros = ({ onFiltrar, filtrou, setFiltrou, cancelou, setCancelou }) => {
   useEffect(() => {
     if (cancelou) {
       limparCampos();
+      setListaDres([]);
+      setDreCodigo();
+      setDreId();
       setAnoLetivo(anoAtual);
       setCancelou(false);
       setFiltrou(false);
