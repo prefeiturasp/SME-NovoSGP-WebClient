@@ -321,27 +321,13 @@ const Filtros = ({ onFiltrar, filtrou, setFiltrou, cancelou, setCancelou }) => {
   }, [obterAnosLetivos, modalidadeId, anoLetivo]);
 
   const onChangeTurma = valor => {
-    const temOpcaoTodas = valor && valor.find(id => id === OPCAO_TODOS);
+    const temOpcaoTodas = String(valor) === OPCAO_TODOS;
 
     setTurmasId(valor);
     setOpcaoEstudanteId('0');
     setModeloBoletimId('1');
     setDesabilitarEstudante(temOpcaoTodas);
     setFiltrou(false);
-  };
-
-  const onchangeMultiSelect = (valores, valorAtual, funSetarNovoValor) => {
-    const opcaoTodosJaSelecionado = valorAtual
-      ? valorAtual.includes(OPCAO_TODOS)
-      : false;
-    if (opcaoTodosJaSelecionado) {
-      const listaSemOpcaoTodos = valores.filter(v => v !== OPCAO_TODOS);
-      funSetarNovoValor(listaSemOpcaoTodos);
-    } else if (valores.includes(OPCAO_TODOS)) {
-      funSetarNovoValor([OPCAO_TODOS]);
-    } else {
-      funSetarNovoValor(valores);
-    }
   };
 
   const obterTurmas = useCallback(async () => {
@@ -509,17 +495,14 @@ const Filtros = ({ onFiltrar, filtrou, setFiltrou, cancelou, setCancelou }) => {
         <div className="col-sm-12 col-md-4">
           <Loader loading={carregandoTurmas} ignorarTip>
             <SelectComponent
-              multiple
               id="turma"
               lista={listaTurmas}
               valueOption="valor"
               valueText="desc"
-              label="Turmas"
+              label="Turma"
               disabled={!modalidadeId || listaTurmas?.length === 1}
               valueSelect={turmasId}
-              onChange={valores => {
-                onchangeMultiSelect(valores, turmasId, onChangeTurma);
-              }}
+              onChange={onChangeTurma}
               placeholder="Turma"
             />
           </Loader>
