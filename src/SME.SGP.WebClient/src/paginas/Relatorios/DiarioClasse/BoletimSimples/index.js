@@ -8,7 +8,7 @@ import history from '~/servicos/history';
 
 import Filtro from './componentes/Filtro';
 import ServicoBoletimSimples from '~/servicos/Paginas/Relatorios/DiarioClasse/BoletimSimples/ServicoBoletimSimples';
-import { sucesso, erro } from '~/servicos/alertas';
+import { sucesso, erro, confirmar } from '~/servicos/alertas';
 import AlertaModalidadeInfantil from '~/componentes-sgp/AlertaModalidadeInfantil/alertaModalidadeInfantil';
 import modalidade from '~/dtos/modalidade';
 
@@ -17,6 +17,7 @@ const BoletimSimples = () => {
   const [somenteConsulta] = useState(false);
   const [clicouBotaoGerar, setClicouBotaoGerar] = useState(false);
   const [desabilitarBotaoGerar, setDesabilitarBotaoGerar] = useState(false);
+  const [filtrou, setFiltrou] = useState(false);
 
   const [filtro, setFiltro] = useState({
     anoLetivo: '',
@@ -26,6 +27,7 @@ const BoletimSimples = () => {
     ueCodigo: '',
     turmaCodigo: '',
     consideraHistorico: false,
+    modeloBoletimId: '',
   });
 
   const [itensSelecionados, setItensSelecionados] = useState([]);
@@ -41,44 +43,54 @@ const BoletimSimples = () => {
     setFiltro({
       anoLetivo: valoresFiltro.anoLetivo,
       modalidade: valoresFiltro.modalidadeId,
-      dreCodigo: valoresFiltro.dreId,
-      ueCodigo: valoresFiltro.ueId,
-      turmaCodigo: valoresFiltro.turmaId,
+      dreCodigo: valoresFiltro.dreCodigo,
+      ueCodigo: valoresFiltro.ueCodigo,
+      turmaCodigo: valoresFiltro.turmasId,
       semestre:
         String(valoresFiltro.modalidadeId) === String(modalidade.EJA)
           ? valoresFiltro.semestre
           : 0,
       consideraHistorico: valoresFiltro.consideraHistorico,
+      modeloBoletimId: valoresFiltro.modeloBoletimId,
     });
     setItensSelecionados([]);
     setSelecionarAlunos(
-      valoresFiltro.turmaId && valoresFiltro.opcaoAlunoId === '1'
+      valoresFiltro.turmasId && valoresFiltro.opcaoEstudanteId === '1'
     );
     setClicouBotaoGerar(false);
+    setFiltrou(true);
   };
 
   const onClickVoltar = () => {
     history.push('/');
   };
 
-  const [resetForm, setResetForm] = useState(false);
-
   const onClickCancelar = () => {
-    setResetForm(shortid.generate());
+    // setResetForm(shortid.generate());
   };
 
   const onClickBotaoPrincipal = async () => {
-    setClicouBotaoGerar(true);
-    const resultado = await ServicoBoletimSimples.imprimirBoletim({
-      ...filtro,
-      alunosCodigo: itensSelecionados,
-    });
-    if (resultado.erro)
-      erro('Não foi possível socilitar a impressão do Boletim');
-    else
-      sucesso(
-        'Solicitação de geração do relatório gerada com sucesso. Em breve você receberá uma notificação com o resultado.'
-      );
+    const confirmou = await confirmar(
+      'Modelo de boletim detalhado',
+      'O modelo de boletim detalhado vai gerar pelo menos uma página para cada estudante. Deseja continuar?',
+      '',
+      'Cancelar',
+      'Continuar'
+    );
+
+    if (confirmou) {
+      setClicouBotaoGerar(true);
+      const resultado = await ServicoBoletimSimples.imprimirBoletim({
+        ...filtro,
+        alunosCodigo: itensSelecionados,
+      });
+      if (resultado.erro)
+        erro('Não foi possível socilitar a impressão do Boletim');
+      else
+        sucesso(
+          'Solicitação de geração do relatório gerada com sucesso. Em breve você receberá uma notificação com o resultado.'
+        );
+    }
   };
 
   const colunas = [
@@ -100,6 +112,7 @@ const BoletimSimples = () => {
         selecionarAlunos &&
         !itensSelecionados?.length) ||
       clicouBotaoGerar;
+
     setDesabilitarBotaoGerar(desabilitar);
   }, [filtro, itensSelecionados, selecionarAlunos, clicouBotaoGerar]);
 
@@ -109,7 +122,7 @@ const BoletimSimples = () => {
         exibir={String(filtro.modalidade) === String(modalidade.INFANTIL)}
         validarModalidadeFiltroPrincipal={false}
       />
-      <Cabecalho pagina="Impressão de Boletim" />
+      <Cabecalho pagina="Impressão de Boletim" classes="mb-2" />
       <Loader loading={loaderSecao}>
         <Card mx="mx-0">
           <ButtonGroup
@@ -128,10 +141,15 @@ const BoletimSimples = () => {
             botoesEstadoVariavel={false}
             labelBotaoPrincipal="Gerar"
             modoEdicao
+            paddingBottom="8px"
           />
-          <Filtro onFiltrar={onChangeFiltro} resetForm={resetForm} />
+          <Filtro
+            onFiltrar={onChangeFiltro}
+            filtrou={filtrou}
+            setFiltrou={setFiltrou}
+          />
           {filtro && filtro.turmaCodigo > 0 && selecionarAlunos ? (
-            <div className="col-md-12 pt-2 py-0 px-0">
+            <div className="col-md-12 pt-4 py-0 px-0">
               <ListaPaginada
                 id="lista-alunos"
                 url="v1/boletim/alunos"
