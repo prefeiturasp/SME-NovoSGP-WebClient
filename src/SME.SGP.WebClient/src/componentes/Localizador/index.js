@@ -68,6 +68,7 @@ function Localizador({
     }
 
     if (valor.length < 3) return;
+    setDataSource([]);
     setExibirLoader(true);
     const { data: dados } = await service
       .buscarAutocomplete({

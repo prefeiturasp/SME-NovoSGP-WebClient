@@ -408,7 +408,8 @@ const EventosForm = ({ match }) => {
       setPodeAlterarExcluir(
         usuarioStore.possuiPerfilSme === true ||
           (usuarioStore.possuiPerfilDre === true && evento.data.dreId) ||
-          evento.data.criadoRF === usuarioStore.rf
+          evento.data.criadoRF === usuarioStore.rf ||
+          evento.data.podeAlterarExcluirPorPerfilAbrangencia === true
       );
 
       setValoresIniciais({
