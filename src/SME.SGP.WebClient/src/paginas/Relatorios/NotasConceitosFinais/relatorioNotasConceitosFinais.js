@@ -93,9 +93,12 @@ const RelatorioNotasConceitosFinais = () => {
   const obterModalidades = async ue => {
     if (ue) {
       setCarregandoGeral(true);
+      const anoAtual = new Date().getFullYear();
+      const considHistorico = anoLetivo < anoAtual;
       const retorno = await ServicoFiltroRelatorio.obterModalidadesAnoLetivo(
         ue,
-        anoLetivo
+        anoLetivo,
+        considHistorico
       ).catch(e => {
         erros(e);
         setCarregandoGeral(false);
