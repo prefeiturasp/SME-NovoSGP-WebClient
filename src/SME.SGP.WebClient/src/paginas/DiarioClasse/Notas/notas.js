@@ -73,7 +73,6 @@ const Notas = ({ match }) => {
   const [valoresIniciais] = useState({ descricao: undefined });
   const [refForm, setRefForm] = useState({});
   const [carregandoGeral, setCarregandoGeral] = useState(false);
-  const [dadosBimestreAtual, setDadosBimestreAtual] = useState();
 
   const [validacoes] = useState(
     Yup.object({
@@ -142,6 +141,21 @@ const Notas = ({ match }) => {
   useEffect(() => {
     validaSeDesabilitaCampos(bimestreCorrente);
   }, [bimestreCorrente, validaSeDesabilitaCampos]);
+
+  const getDadosBimestreAtual = (numeroBimestre = bimestreCorrente) => {
+    switch (Number(numeroBimestre)) {
+      case 1:
+        return primeiroBimestre;
+      case 2:
+        return segundoBimestre;
+      case 3:
+        return terceiroBimestre;
+      case 4:
+        return quartoBimestre;
+      default:
+        break;
+    }
+  };
 
   const resetarTela = useCallback(() => {
     setDisciplinaSelecionada(undefined);
@@ -440,8 +454,7 @@ const Notas = ({ match }) => {
   };
 
   const aposSalvarNotas = () => {
-    // resetarBimestres();
-    obterDadosBimestres(disciplinaSelecionada, dadosBimestreAtual);
+    obterDadosBimestres(disciplinaSelecionada, getDadosBimestreAtual());
   };
 
   const montarBimestreParaSalvar = bimestreParaMontar => {
@@ -754,7 +767,7 @@ const Notas = ({ match }) => {
 
   const verificaPorcentagemAprovados = () => {
     return ServicoNotas.temQuantidadeMinimaAprovada(
-      dadosBimestreAtual,
+      getDadosBimestreAtual(),
       percentualMinimoAprovados,
       notaTipo
     );
@@ -782,6 +795,7 @@ const Notas = ({ match }) => {
     setClicouNoBotaoVoltar(clicouVoltar);
     const estaEmModoEdicaoGeral = ServicoNotaConceito.estaEmModoEdicaoGeral();
     const estaEmModoEdicaoGeralNotaFinal = ServicoNotaConceito.estaEmModoEdicaoGeralNotaFinal();
+    const dadosBimestreAtual = getDadosBimestreAtual();
 
     if (estaEmModoEdicaoGeralNotaFinal || estaEmModoEdicaoGeral) {
       let confirmado = true;
@@ -789,7 +803,6 @@ const Notas = ({ match }) => {
       if (!clicouSalvar) {
         confirmado = await pergutarParaSalvar();
       }
-
       if (confirmado) {
         const temPorcentagemAceitavel = verificaPorcentagemAprovados();
         if (
@@ -834,23 +847,6 @@ const Notas = ({ match }) => {
     if (disciplinaSelecionada) {
       validarJustificativaAntesDeSalvar(numeroBimestre, false, false);
     }
-
-    switch (Number(bimestreCorrente)) {
-      case 1:
-        setDadosBimestreAtual(primeiroBimestre);
-        break;
-      case 2:
-        setDadosBimestreAtual(segundoBimestre);
-        break;
-      case 3:
-        setDadosBimestreAtual(terceiroBimestre);
-        break;
-      case 4:
-        setDadosBimestreAtual(quartoBimestre);
-        break;
-      default:
-        break;
-    }
   };
 
   const validaPeriodoFechamento = dados => {
@@ -863,21 +859,6 @@ const Notas = ({ match }) => {
       validaSeDesabilitaCampos(dados.bimestreAtual);
     } else {
       setShowMsgPeriodoFechamento(false);
-    }
-  };
-
-  const getDadosBimestreAtual = (numeroBimestre = bimestreCorrente) => {
-    switch (Number(numeroBimestre)) {
-      case 1:
-        return primeiroBimestre;
-      case 2:
-        return segundoBimestre;
-      case 3:
-        return terceiroBimestre;
-      case 4:
-        return quartoBimestre;
-      default:
-        break;
     }
   };
 
@@ -986,7 +967,7 @@ const Notas = ({ match }) => {
 
   const onClickCancelar = async cancelar => {
     if (cancelar) {
-      obterDadosBimestres(disciplinaSelecionada, dadosBimestreAtual);
+      obterDadosBimestres(disciplinaSelecionada, getDadosBimestreAtual());
       dispatch(setModoEdicaoGeral(false));
       dispatch(setModoEdicaoGeralNotaFinal(false));
       dispatch(setExpandirLinha([]));
@@ -1030,7 +1011,7 @@ const Notas = ({ match }) => {
   };
 
   const onChangeJustificativa = valor => {
-    dadosBimestreAtual.justificativa = valor;
+    getDadosBimestreAtual().justificativa = valor;
   };
 
   const validaAntesDoSubmit = form => {
