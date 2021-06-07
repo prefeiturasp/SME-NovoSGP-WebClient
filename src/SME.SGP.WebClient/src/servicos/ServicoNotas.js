@@ -1,5 +1,7 @@
 import notasConceitos from '~/dtos/notasConceitos';
+import api from './api';
 
+const urlPadrao = 'v1/avaliacoes/';
 class ServicoNota {
   temQuantidadeMinimaAprovada = (
     dados,
@@ -37,7 +39,6 @@ class ServicoNota {
     const validaConceitos = alunos => {
       let quantidadeTotalNotas = 0;
       let quantidadeTotalNotasNaoAprovado = 0;
-      let naoPreenchidos = 0;
 
       const listaTiposConceitos = dados.listaTiposConceitos;
       const tipoNaoAprovado = listaTiposConceitos.find(tipo => !tipo.aprovado);
@@ -62,7 +63,7 @@ class ServicoNota {
       if (quantidadeTotalNotas === 0) return true;
 
       const percentualAbaixoMedia =
-        100 - ((quantidadeTotalNotasNaoAprovado / quantidadeTotalNotas) * 100);
+        100 - (quantidadeTotalNotasNaoAprovado / quantidadeTotalNotas) * 100;
       const ehPorcentagemAceitavel =
         percentualAbaixoMedia >= percentualMinimoAprovados;
 
@@ -90,6 +91,16 @@ class ServicoNota {
     }
 
     return true;
+  };
+
+  obterPeriodos = params => {
+    const url = `${urlPadrao}notas/periodos`;
+    return api.get(url, params);
+  };
+
+  obterNotas = params => {
+    const url = `${urlPadrao}notas`;
+    return api.get(url, params);
   };
 }
 
