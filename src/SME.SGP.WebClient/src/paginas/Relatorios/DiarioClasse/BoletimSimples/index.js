@@ -12,14 +12,16 @@ import { sucesso, erro, confirmar } from '~/servicos/alertas';
 import AlertaModalidadeInfantil from '~/componentes-sgp/AlertaModalidadeInfantil/alertaModalidadeInfantil';
 import modalidade from '~/dtos/modalidade';
 
+import { EstiloModal } from './boletimSimples.css';
+
 const BoletimSimples = () => {
   const [loaderSecao] = useState(false);
   const [somenteConsulta] = useState(false);
   const [clicouBotaoGerar, setClicouBotaoGerar] = useState(false);
   const [desabilitarBotaoGerar, setDesabilitarBotaoGerar] = useState(false);
   const [filtrou, setFiltrou] = useState(false);
-
-  const [filtro, setFiltro] = useState({
+  const [cancelou, setCancelou] = useState(false);
+  const estadoInicial = {
     anoLetivo: '',
     modalidade: '',
     semestre: '',
@@ -27,8 +29,9 @@ const BoletimSimples = () => {
     ueCodigo: '',
     turmaCodigo: '',
     consideraHistorico: false,
-    modeloBoletimId: '',
-  });
+    modelo: '',
+  };
+  const [filtro, setFiltro] = useState(estadoInicial);
 
   const [itensSelecionados, setItensSelecionados] = useState([]);
 
@@ -51,7 +54,7 @@ const BoletimSimples = () => {
           ? valoresFiltro.semestre
           : 0,
       consideraHistorico: valoresFiltro.consideraHistorico,
-      modeloBoletimId: valoresFiltro.modeloBoletimId,
+      modelo: valoresFiltro.modeloBoletimId,
     });
     setItensSelecionados([]);
     setSelecionarAlunos(
@@ -66,7 +69,8 @@ const BoletimSimples = () => {
   };
 
   const onClickCancelar = () => {
-    // setResetForm(shortid.generate());
+    setCancelou(true);
+    setFiltro(estadoInicial);
   };
 
   const onClickBotaoPrincipal = async () => {
@@ -78,14 +82,14 @@ const BoletimSimples = () => {
       'Continuar'
     );
 
-    if (confirmou) {
+    if (!confirmou) {
       setClicouBotaoGerar(true);
       const resultado = await ServicoBoletimSimples.imprimirBoletim({
         ...filtro,
         alunosCodigo: itensSelecionados,
       });
       if (resultado.erro)
-        erro('Não foi possível socilitar a impressão do Boletim');
+        erro('Não foi possível solicitar a impressão do Boletim');
       else
         sucesso(
           'Solicitação de geração do relatório gerada com sucesso. Em breve você receberá uma notificação com o resultado.'
@@ -114,10 +118,11 @@ const BoletimSimples = () => {
       clicouBotaoGerar;
 
     setDesabilitarBotaoGerar(desabilitar);
-  }, [filtro, itensSelecionados, selecionarAlunos, clicouBotaoGerar]);
+  }, [filtro, itensSelecionados, selecionarAlunos, clicouBotaoGerar, cancelou]);
 
   return (
     <>
+      <EstiloModal />
       <AlertaModalidadeInfantil
         exibir={String(filtro.modalidade) === String(modalidade.INFANTIL)}
         validarModalidadeFiltroPrincipal={false}
@@ -147,6 +152,8 @@ const BoletimSimples = () => {
             onFiltrar={onChangeFiltro}
             filtrou={filtrou}
             setFiltrou={setFiltrou}
+            cancelou={cancelou}
+            setCancelou={setCancelou}
           />
           {filtro && filtro.turmaCodigo > 0 && selecionarAlunos ? (
             <div className="col-md-12 pt-4 py-0 px-0">

@@ -1,19 +1,15 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import { useDispatch } from 'react-redux';
 
 import { CheckboxComponent, Loader, SelectComponent } from '~/componentes';
 import { FiltroHelper } from '~/componentes-sgp';
-
-import { setTurmasAcompanhamentoFechamento } from '~/redux/modulos/acompanhamentoFechamento/actions';
 
 import { ModalidadeDTO } from '~/dtos';
 import { AbrangenciaServico, erros, ServicoFiltroRelatorio } from '~/servicos';
 import { OPCAO_TODOS } from '~/constantes/constantes';
 import { AvisoBoletim } from './styles';
 
-const Filtros = ({ onFiltrar, filtrou, setFiltrou }) => {
-  const dispatch = useDispatch();
+const Filtros = ({ onFiltrar, filtrou, setFiltrou, cancelou, setCancelou }) => {
   const [anoAtual] = useState(window.moment().format('YYYY'));
   const [anoLetivo, setAnoLetivo] = useState();
   const [carregandoAnosLetivos, setCarregandoAnosLetivos] = useState(false);
@@ -37,7 +33,6 @@ const Filtros = ({ onFiltrar, filtrou, setFiltrou }) => {
   const [semestre, setSemestre] = useState();
   const [opcaoEstudanteId, setOpcaoEstudanteId] = useState();
   const [turmasId, setTurmasId] = useState('');
-  const [ueId, setUeId] = useState('');
   const [ueCodigo, setUeCodigo] = useState();
 
   const opcoesEstudantes = [
@@ -51,8 +46,11 @@ const Filtros = ({ onFiltrar, filtrou, setFiltrou }) => {
   ];
 
   const limparCampos = () => {
+    setListaDres([]);
+    setDreCodigo();
+    setDreId();
+
     setListaUes([]);
-    setUeId();
     setUeCodigo();
 
     setListaModalidades([]);
@@ -106,13 +104,11 @@ const Filtros = ({ onFiltrar, filtrou, setFiltrou }) => {
   ]);
 
   const onChangeConsideraHistorico = e => {
-    dispatch(setTurmasAcompanhamentoFechamento());
     setConsideraHistorico(e.target.checked);
     setAnoLetivo(anoAtual);
   };
 
   const onChangeAnoLetivo = ano => {
-    dispatch(setTurmasAcompanhamentoFechamento());
     setAnoLetivo(ano);
     limparCampos();
   };
@@ -160,7 +156,6 @@ const Filtros = ({ onFiltrar, filtrou, setFiltrou }) => {
   }, [obterAnosLetivos]);
 
   const onChangeDre = dre => {
-    dispatch(setTurmasAcompanhamentoFechamento());
     const id = listaDres.find(d => d.valor === dre)?.id;
     setDreId(id);
     setDreCodigo(dre);
@@ -200,15 +195,12 @@ const Filtros = ({ onFiltrar, filtrou, setFiltrou }) => {
   }, [anoLetivo, consideraHistorico]);
 
   useEffect(() => {
-    if (anoLetivo) {
+    if (anoLetivo && !listaDres.length) {
       obterDres();
     }
-  }, [anoLetivo, obterDres]);
+  }, [anoLetivo, listaDres, obterDres]);
 
   const onChangeUe = ue => {
-    dispatch(setTurmasAcompanhamentoFechamento());
-    const id = listaUes.find(d => d.valor === ue)?.id;
-    setUeId(id);
     setUeCodigo(ue);
     setListaModalidades([]);
     setModalidadeId();
@@ -235,7 +227,6 @@ const Filtros = ({ onFiltrar, filtrou, setFiltrou }) => {
         }));
 
         if (lista?.length === 1) {
-          setUeId(lista[0].id);
           setUeCodigo(lista[0].valor);
         }
 
@@ -251,12 +242,10 @@ const Filtros = ({ onFiltrar, filtrou, setFiltrou }) => {
       obterUes();
       return;
     }
-    setUeId();
     setListaUes([]);
   }, [dreId, obterUes]);
 
   const onChangeModalidade = valor => {
-    dispatch(setTurmasAcompanhamentoFechamento());
     setTurmasId();
     setModalidadeId(valor);
   };
@@ -294,7 +283,6 @@ const Filtros = ({ onFiltrar, filtrou, setFiltrou }) => {
   }, [obterModalidades, anoLetivo, ueCodigo]);
 
   const onChangeSemestre = valor => {
-    dispatch(setTurmasAcompanhamentoFechamento());
     setSemestre(valor);
   };
 
@@ -417,6 +405,15 @@ const Filtros = ({ onFiltrar, filtrou, setFiltrou }) => {
     setFiltrou(false);
   };
 
+  useEffect(() => {
+    if (cancelou) {
+      limparCampos();
+      setAnoLetivo(anoAtual);
+      setCancelou(false);
+      setFiltrou(false);
+    }
+  }, [cancelou, setFiltrou, setCancelou, anoAtual]);
+
   return (
     <div className="col-12 p-0">
       <div className="row mb-2">
@@ -523,7 +520,6 @@ const Filtros = ({ onFiltrar, filtrou, setFiltrou }) => {
               valueSelect={turmasId}
               onChange={valores => {
                 onchangeMultiSelect(valores, turmasId, onChangeTurma);
-                dispatch(setTurmasAcompanhamentoFechamento());
               }}
               placeholder="Turma"
             />
@@ -565,10 +561,18 @@ const Filtros = ({ onFiltrar, filtrou, setFiltrou }) => {
 
 Filtros.propTypes = {
   onFiltrar: PropTypes.func,
+  filtrou: PropTypes.bool,
+  setFiltrou: PropTypes.func,
+  cancelou: PropTypes.bool,
+  setCancelou: PropTypes.func,
 };
 
 Filtros.defaultProps = {
-  onFiltrar: () => null,
+  onFiltrar: () => {},
+  filtrou: false,
+  setFiltrou: () => {},
+  cancelou: false,
+  setCancelou: () => {},
 };
 
 export default Filtros;
