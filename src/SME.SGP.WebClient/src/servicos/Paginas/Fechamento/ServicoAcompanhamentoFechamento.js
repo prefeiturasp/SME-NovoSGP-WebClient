@@ -15,19 +15,21 @@ class ServicoAcompanhamentoFechamento {
     return api.get(url);
   };
 
-  obterFechamentos = ({ turmaId, bimestre }) => {
-    return api.get(`${urlPadrao}/${turmaId}/fechamentos/bimestres/${bimestre}`);
-  };
-
-  obterConselhoClasse = ({ turmaId, bimestre }) => {
+  obterFechamentos = ({ turmaId, bimestre, situacaoFechamento }) => {
     return api.get(
-      `${urlPadrao}/${turmaId}/conselho-classe/bimestres/${bimestre}`
+      `${urlPadrao}/${turmaId}/fechamentos/bimestres/${bimestre}?situacaoFechamento=${situacaoFechamento}`
     );
   };
 
-  obterListaAlunosPorTurma = (turmaId, bimestre) => {
+  obterConselhoClasse = ({ turmaId, bimestre, situacaoConselhoClasse }) => {
     return api.get(
-      `${urlPadrao}/${turmaId}/conselho-classe/bimestres/${bimestre}/alunos`
+      `${urlPadrao}/${turmaId}/conselho-classe/bimestres/${bimestre}?situacaoConselhoClasse=${situacaoConselhoClasse}`
+    );
+  };
+
+  obterListaAlunosPorTurma = (turmaId, bimestre, situacaoConselhoClasse) => {
+    return api.get(
+      `${urlPadrao}/${turmaId}/conselho-classe/bimestres/${bimestre}/alunos?situacaoConselhoClasse=${situacaoConselhoClasse}`
     );
   };
 
@@ -39,6 +41,34 @@ class ServicoAcompanhamentoFechamento {
     return api.get(
       `${urlPadrao}/${turmaId}/conselho-classe/bimestres/${bimestre}/alunos/${alunoCodigo}/componentes-curriculares/detalhamento`
     );
+  };
+
+  obterComponentesCurricularesFechamento = (
+    turmaId,
+    bimestre,
+    situacaoFechamento
+  ) => {
+    return api.get(
+      `${urlPadrao}/${turmaId}/fechamento/bimestres/${bimestre}/componentes-curriculares?situacaoFechamento=${situacaoFechamento}`
+    );
+  };
+
+  obterDetalhesPendencias = (turmaId, bimestre, componenteCurricularId) => {
+    return api.get(
+      `${urlPadrao}/${turmaId}/fechamento/bimestres/${bimestre}/componentes-curriculares/${componenteCurricularId}/pendencias`
+    );
+  };
+
+  obterDetalhePendencia = (tipoPendencia, pendenciaId) => {
+    switch (tipoPendencia) {
+      case 5:
+      case 6:
+        return api.get(`${urlPadrao}/pendencias/${pendenciaId}/detalhamentos`);
+      default:
+        return api.get(
+          `${urlPadrao}/pendencias/${pendenciaId}/aulas/detalhamentos`
+        );
+    }
   };
 }
 

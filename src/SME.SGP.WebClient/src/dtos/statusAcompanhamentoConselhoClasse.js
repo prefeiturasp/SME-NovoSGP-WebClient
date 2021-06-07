@@ -7,19 +7,14 @@ const statusAcompanhamentoFechamento = {
     id: 0,
   },
   EM_ANDAMENTO: {
-    descricao: 'Em Processamento',
+    descricao: 'Em Andamento',
     cor: Base.LaranjaStatus,
     id: 1,
   },
-  PROCESSADO_PENDENCIAS: {
-    descricao: 'Processado com pendências',
-    cor: Base.LaranjaStatus,
-    id: 2,
-  },
-  PROCESSADO_SUCESSO: {
-    descricao: 'Processado com sucesso',
+  CONCLUIDO: {
+    descricao: 'Concluído',
     cor: Base.Verde,
-    id: 3,
+    id: 2,
   },
 };
 
