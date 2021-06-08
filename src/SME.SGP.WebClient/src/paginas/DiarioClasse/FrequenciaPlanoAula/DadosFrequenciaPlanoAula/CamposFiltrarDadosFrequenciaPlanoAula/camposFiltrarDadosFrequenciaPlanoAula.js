@@ -110,7 +110,7 @@ const CamposFiltrarDadosFrequenciaPlanoAula = () => {
       setDiasParaHabilitar();
       dispatch(setExibirLoaderFrequenciaPlanoAula(false));
     }
-  }, [turmaSelecionada, codigoComponenteCurricular, dispatch]);
+  }, [codigoComponenteCurricular, dispatch]);
 
   const obterListaComponenteCurricular = useCallback(async () => {
     dispatch(setExibirLoaderFrequenciaPlanoAula(true));
@@ -152,18 +152,16 @@ const CamposFiltrarDadosFrequenciaPlanoAula = () => {
 
   // Quando selecionar o componente curricular vai realizar a consulta das das que tem aulas cadastrada para essa turma!
   useEffect(() => {
-    if (
-      (codigoComponenteCurricular && turmaSelecionada?.turma) ||
-      atualizarDatas
-    ) {
+    if (codigoComponenteCurricular && turmaSelecionada?.turma) {
       obterDatasDeAulasDisponiveis();
     }
-  }, [
-    codigoComponenteCurricular,
-    obterDatasDeAulasDisponiveis,
-    turmaSelecionada,
-    atualizarDatas,
-  ]);
+  }, [codigoComponenteCurricular, obterDatasDeAulasDisponiveis]);
+
+  useEffect(() => {
+    if (atualizarDatas) {
+      obterDatasDeAulasDisponiveis();
+    }
+  }, [atualizarDatas]);
 
   // Quando tem valor do componente curricular no redux vai setar o id no componente select!
   useEffect(() => {
