@@ -169,6 +169,7 @@ class FiltroHelper {
             turmas.push({
               id: turma.id,
               desc: turma.nomeFiltro ? turma.nomeFiltro : turma.nome,
+              modalidadeTurmaNome: turma.modalidadeTurmaNome,
               valor: turma.codigo,
               ano: turma.ano,
               ensinoEspecial: turma.ensinoEspecial,

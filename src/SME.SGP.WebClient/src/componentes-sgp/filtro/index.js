@@ -161,9 +161,11 @@ const Filtro = () => {
         unidadeEscolar: unidadeEscolarSelecionada,
         turma: turmaSelecionada,
         ano: turmaSelecionadaCompleta.ano,
-        desc: `${
-          modalidadeDesc && modalidadeDesc.desc ? modalidadeDesc.desc : ''
-        } - ${turmaAtual && turmaAtual.desc ? turmaAtual.desc : ''} - ${
+        desc: `${anoLetivoSelecionado} - ${
+          turmaAtual && turmaAtual.modalidadeTurmaNome
+            ? turmaAtual.modalidadeTurmaNome
+            : ''
+        } - ${
           unidadeEscolarDesc && unidadeEscolarDesc.desc
             ? unidadeEscolarDesc.desc
             : ''
