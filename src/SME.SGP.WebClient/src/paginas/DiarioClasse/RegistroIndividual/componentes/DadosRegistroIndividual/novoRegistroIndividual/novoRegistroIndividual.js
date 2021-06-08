@@ -27,6 +27,8 @@ import {
   ServicoRegistroIndividual,
   verificaSomenteConsulta,
 } from '~/servicos';
+import moment from 'moment';
+import { aviso } from '~/servicos/alertas';
 
 const NovoRegistroIndividual = () => {
   const dataAtual = window.moment();
@@ -196,7 +198,8 @@ const NovoRegistroIndividual = () => {
   }, [validaPermissoes, podeRealizarNovoRegistro]);
 
   const desabilitarData = dataCorrente => {
-    return dataCorrente && dataCorrente > window.moment();
+    return dataCorrente && (dataCorrente > window.moment() 
+    || moment(dataCorrente).format('MM-DD-YYYY') < moment(dadosAlunoObjectCard.dataSituacao).format('MM-DD-YYYY'));
   };
 
   const expandirAlternado = useCallback(() => setExpandir(!expandir), [
@@ -210,8 +213,12 @@ const NovoRegistroIndividual = () => {
 
   const mudarData = valor => {
     if (valor) {
-      setData(valor);
-      resetarDados();
+      if(moment(valor).format('MM-DD-YYYY') < moment(dadosAlunoObjectCard.dataSituacao).format('MM-DD-YYYY')){
+        aviso('Aluno(a) ativo(a) em ' + moment(dadosAlunoObjectCard.dataSituacao).format('DD-MM-YYYY').toString());
+      }else{
+        setData(valor);
+        resetarDados();
+      }
     }
   };
 
