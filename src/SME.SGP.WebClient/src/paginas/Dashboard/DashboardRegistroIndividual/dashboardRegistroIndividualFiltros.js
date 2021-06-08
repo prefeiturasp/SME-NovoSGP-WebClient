@@ -7,7 +7,6 @@ import { OPCAO_TODOS } from '~/constantes/constantes';
 import { ServicoFiltroRelatorio } from '~/servicos';
 import AbrangenciaServico from '~/servicos/Abrangencia';
 import { erros } from '~/servicos/alertas';
-import ServicoDashboardFrequencia from '~/servicos/Paginas/Dashboard/ServicoDashboardFrequencia';
 import ServicoDashboardRegistroIndividual from '~/servicos/Paginas/Dashboard/ServicoDashboardRegistroIndividual';
 
 const DashboardRegistroIndividualFiltros = () => {
@@ -238,41 +237,6 @@ const DashboardRegistroIndividualFiltros = () => {
 
   const onChangeModalidade = valor =>
     ServicoDashboardRegistroIndividual.atualizarFiltros('modalidade', valor);
-
-  const obterAnosEscolares = useCallback(async () => {
-    const respota = await ServicoDashboardFrequencia.obterAnosEscolaresPorModalidade(
-      anoLetivo,
-      dre?.id,
-      ue?.id,
-      modalidade
-    ).catch(e => erros(e));
-
-    if (respota?.data?.length) {
-      if (respota.data.length > 1) {
-        respota.data.unshift({ ano: OPCAO_TODOS, modalidadeAno: 'Todos' });
-      }
-      ServicoDashboardRegistroIndividual.atualizarFiltros(
-        'listaAnosEscolares',
-        respota.data
-      );
-    } else {
-      ServicoDashboardRegistroIndividual.atualizarFiltros(
-        'listaAnosEscolares',
-        []
-      );
-    }
-  }, [anoLetivo, dre, ue, modalidade]);
-
-  useEffect(() => {
-    if (anoLetivo && dre && ue && modalidade) {
-      obterAnosEscolares();
-    } else {
-      ServicoDashboardRegistroIndividual.atualizarFiltros(
-        'listaAnosEscolares',
-        []
-      );
-    }
-  }, [anoLetivo, dre, ue, modalidade, obterAnosEscolares]);
 
   const obterUltimaConsolidacao = useCallback(async () => {
     const resposta = await ServicoDashboardRegistroIndividual.obterUltimaConsolidacao(
