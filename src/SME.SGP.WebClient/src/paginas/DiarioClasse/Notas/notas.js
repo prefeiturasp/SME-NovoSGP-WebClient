@@ -170,7 +170,7 @@ const Notas = ({ match }) => {
     resetarBimestres();
     dispatch(setModoEdicaoGeral(false));
     dispatch(setModoEdicaoGeralNotaFinal(false));
-    dispatch(setExpandirLinha([]));
+    dispatch(setExpandirLinha([]));    
   }, [dispatch]);
 
   useEffect(() => {
@@ -414,7 +414,6 @@ const Notas = ({ match }) => {
       !ehTurmaInfantil(modalidadesFiltroPrincipal, usuario.turmaSelecionada)
     ) {
       obterDisciplinas();
-      obterPeriodos();
       dispatch(setModoEdicaoGeral(false));
       dispatch(setModoEdicaoGeralNotaFinal(false));
       dispatch(setExpandirLinha([]));
@@ -423,7 +422,20 @@ const Notas = ({ match }) => {
       setDesabilitarDisciplina(false);
       resetarTela();
     }
-  }, [obterDisciplinas, usuario.turmaSelecionada.turma, resetarTela]);
+  }, [
+    obterDisciplinas,
+    usuario.turmaSelecionada.turma,
+    resetarTela,
+    disciplinaSelecionada,
+  ]);
+
+  useEffect(() => {
+    if (usuario?.turmaSelecionada?.turma && disciplinaSelecionada) {
+      obterPeriodos();
+    } else {
+      resetarTela();
+    }
+  }, [disciplinaSelecionada, usuario.turmaSelecionada]);
 
   const pergutarParaSalvar = () => {
     return confirmar(
