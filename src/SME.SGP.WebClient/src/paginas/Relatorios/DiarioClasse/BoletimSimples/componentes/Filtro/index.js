@@ -60,9 +60,6 @@ const Filtros = ({ onFiltrar, filtrou, setFiltrou, cancelou, setCancelou }) => {
   };
 
   useEffect(() => {
-    const temSemestreOuNaoEja =
-      String(modalidadeId) !== String(ModalidadeDTO.EJA) || semestre;
-
     const params = {
       anoLetivo,
       dreCodigo,
@@ -74,16 +71,7 @@ const Filtros = ({ onFiltrar, filtrou, setFiltrou, cancelou, setCancelou }) => {
       modeloBoletimId,
     };
 
-    if (
-      anoLetivo &&
-      dreCodigo &&
-      ueCodigo &&
-      modalidadeId &&
-      turmasId?.length &&
-      modeloBoletimId &&
-      temSemestreOuNaoEja &&
-      !filtrou
-    ) {
+    if (!filtrou) {
       onFiltrar(params);
     }
   }, [
@@ -102,11 +90,16 @@ const Filtros = ({ onFiltrar, filtrou, setFiltrou, cancelou, setCancelou }) => {
   const onChangeConsideraHistorico = e => {
     setConsideraHistorico(e.target.checked);
     setAnoLetivo(anoAtual);
+    limparCampos();
+    setDreCodigo();
+    setDreId();
+    setFiltrou(false);
   };
 
   const onChangeAnoLetivo = ano => {
     setAnoLetivo(ano);
     limparCampos();
+    setFiltrou(false);
   };
 
   const obterAnosLetivos = useCallback(async () => {
@@ -156,6 +149,7 @@ const Filtros = ({ onFiltrar, filtrou, setFiltrou, cancelou, setCancelou }) => {
     setDreId(id);
     setDreCodigo(dre);
     limparCampos();
+    setFiltrou(false);
   };
 
   const obterDres = useCallback(async () => {
@@ -202,6 +196,7 @@ const Filtros = ({ onFiltrar, filtrou, setFiltrou, cancelou, setCancelou }) => {
     setModalidadeId();
     setListaTurmas([]);
     setTurmasId();
+    setFiltrou(false);
   };
 
   const obterUes = useCallback(async () => {
@@ -244,6 +239,7 @@ const Filtros = ({ onFiltrar, filtrou, setFiltrou, cancelou, setCancelou }) => {
   const onChangeModalidade = valor => {
     setTurmasId();
     setModalidadeId(valor);
+    setFiltrou(false);
   };
 
   const obterModalidades = useCallback(async ue => {
@@ -280,6 +276,7 @@ const Filtros = ({ onFiltrar, filtrou, setFiltrou, cancelou, setCancelou }) => {
 
   const onChangeSemestre = valor => {
     setSemestre(valor);
+    setFiltrou(false);
   };
 
   const obterSemestres = async (
@@ -532,12 +529,10 @@ const Filtros = ({ onFiltrar, filtrou, setFiltrou, cancelou, setCancelou }) => {
             onChange={onChangeModeloBoletim}
             placeholder="Modelo de boletim"
           />
-          {modeloBoletimId === '2' ? (
+          {modeloBoletimId === '2' && (
             <AvisoBoletim>
               Neste modelo cada estudante ocupará no mínimo 1 página
             </AvisoBoletim>
-          ) : (
-            ''
           )}
         </div>
       </div>
