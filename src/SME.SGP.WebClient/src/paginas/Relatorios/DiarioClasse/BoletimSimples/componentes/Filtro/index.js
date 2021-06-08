@@ -532,9 +532,13 @@ const Filtros = ({ onFiltrar, filtrou, setFiltrou, cancelou, setCancelou }) => {
             onChange={onChangeModeloBoletim}
             placeholder="Modelo de boletim"
           />
-          <AvisoBoletim>
-            Neste modelo cada estudante ocupará no mínimo 1 página
-          </AvisoBoletim>
+          {modeloBoletimId === '2' ? (
+            <AvisoBoletim>
+              Neste modelo cada estudante ocupará no mínimo 1 página
+            </AvisoBoletim>
+          ) : (
+            ''
+          )}
         </div>
       </div>
     </div>
