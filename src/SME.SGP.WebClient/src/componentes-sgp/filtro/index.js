@@ -1229,7 +1229,7 @@ const Filtro = () => {
               </Loader>
             </div>
             <div className="form-row d-flex justify-content-between">
-              <Grid cols={3} className="form-group">
+              <Grid cols={9} className="form-group">
                 <Loader loading={carregandoTurmas} tip="">
                   <SelectComponent
                     className="fonte-14"
