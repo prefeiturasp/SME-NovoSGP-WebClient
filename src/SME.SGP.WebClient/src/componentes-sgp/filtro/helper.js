@@ -168,7 +168,7 @@ class FiltroHelper {
           resposta.data.forEach(turma => {
             turmas.push({
               id: turma.id,
-              desc: turma.nome,
+              desc: turma.nomeFiltro ? turma.nomeFiltro : turma.nome,
               valor: turma.codigo,
               ano: turma.ano,
               ensinoEspecial: turma.ensinoEspecial,
