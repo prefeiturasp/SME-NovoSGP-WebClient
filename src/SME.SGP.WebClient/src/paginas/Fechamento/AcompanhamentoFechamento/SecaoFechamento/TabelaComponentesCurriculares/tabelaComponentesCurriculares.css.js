@@ -27,16 +27,21 @@ export const LinhaTabela = styled.div`
 
       &:first-child {
         border: 0 !important;
-        padding: 0 4px !important;
+        padding: 0 2px !important;
+
+        .tabela-pendencias-html {
+          tr {
+            & > td {
+              padding: 11px 8px !important;
+            }
+          }
+        }
       }
-    }
-    .container-botao-detalhar {
-      margin-right: 14.4px;
     }
   }
 
   .tabela-pendencias-html {
-    padding: 8px 6px 0;
+    padding: 8px 1px;
 
     table {
       font-size: 14px;
@@ -48,15 +53,20 @@ export const LinhaTabela = styled.div`
       }
 
       tr {
-        &:first-child {
-          background: #f5f6f8 !important;
-          color: #323c47;
-          font-weight: bold;
-        }
         & > td {
-          padding: 11px 8px;
+          padding: 11px 8px !important;
         }
       }
+    }
+
+    .cabecalho {
+      background: #f5f6f8 !important;
+      color: #323c47;
+      font-weight: bold;
+    }
+
+    .nao-exibir {
+      display: none;
     }
   }
 `;

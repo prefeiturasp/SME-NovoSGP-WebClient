@@ -81,12 +81,13 @@ const TabelaComponentesCurriculares = ({
       title: 'Situação do fechamento',
       dataIndex: 'situacaoFechamentoCodigo',
       align: 'center',
+      width: 330,
       render: (situacaoFechamentoCodigo, componente) => {
         if (
           statusAcompanhamentoFechamento?.NAO_INICIADO?.id !==
           situacaoFechamentoCodigo
         ) {
-          const ehLinhaExpandida = temLinhaExpandida(componente.professorRf);
+          const ehLinhaExpandida = temLinhaExpandida(componente.id);
           const corTexto = ehLinhaExpandida.length
             ? Base.Branco
             : componente?.cor;
@@ -144,34 +145,36 @@ const TabelaComponentesCurriculares = ({
     {
       dataIndex: '',
       align: 'center',
+      width: 328,
       render: (_, record) => {
         const ehLinhaClicada =
           record.pendenciaId === detalhePendenciaEscolhido?.pendenciaId;
         const corTexto = ehLinhaClicada ? Colors.Branco : Colors.Azul;
         const corTextoHover = ehLinhaClicada ? Colors.Azul : '';
         return (
-          <div className="container-botao-detalhar">
-            <Button
-              id="botao-detalhar"
-              className="mx-auto"
-              label="Detalhar"
-              color={corTexto}
-              corTextoHover={corTextoHover}
-              onClick={e => onClickExibirDetalhamento(e, record)}
-              border
-              mudarCorBorda
-              height="32px"
-            />
-          </div>
+          <Button
+            id="botao-detalhar"
+            className="mx-auto"
+            label="Detalhar"
+            color={corTexto}
+            corTextoHover={corTextoHover}
+            onClick={e => onClickExibirDetalhamento(e, record)}
+            border
+            mudarCorBorda
+            height="32px"
+          />
         );
       },
     },
   ];
 
   const obterDetalhesPendencias = async (expandir, componente) => {
+    let componenteSelecionado = [];
+    let dadosComponentes = [];
+
     if (expandir) {
       setCarregandoComponentes(true);
-      setLinhasExpandidasPendencia([componente?.professorRf]);
+
       const resposta = await ServicoAcompanhamentoFechamento.obterDetalhesPendencias(
         turmaId,
         bimestre,
@@ -181,15 +184,15 @@ const TabelaComponentesCurriculares = ({
         .finally(() => setCarregandoComponentes(false));
 
       if (resposta?.data?.length) {
-        setDadosPendencias(resposta.data);
-        return;
+        componenteSelecionado = [componente?.id];
+        dadosComponentes = resposta.data;
       }
     }
 
-    setDetalhePendenciaEscolhido('');
+    setDetalhePendenciaEscolhido([]);
     setMostrarDetalhePendencia(false);
-    setDadosPendencias([]);
-    setLinhasExpandidasPendencia([]);
+    setDadosPendencias(dadosComponentes);
+    setLinhasExpandidasPendencia(componenteSelecionado);
   };
 
   const expandIcon = (expanded, onExpand, record) => {
@@ -197,11 +200,11 @@ const TabelaComponentesCurriculares = ({
       record?.situacaoFechamentoCodigo ===
       statusAcompanhamentoFechamento.PROCESSADO_PENDENCIAS.id
     ) {
-      const ehLinhaExpandida = temLinhaExpandida(record.professorRf);
+      const ehLinhaExpandida = temLinhaExpandida(record.id);
       const corTexto = ehLinhaExpandida.length ? Base.Branco : record?.cor;
       return (
         <TextoEstilizado cor={corTexto}>
-          {record.situacaoFechamento}
+          {record.situacaoFechamentoNome}
           <IconeEstilizado
             icon={expanded ? faAngleUp : faAngleDown}
             onClick={e => onExpand(record, e)}
@@ -212,7 +215,7 @@ const TabelaComponentesCurriculares = ({
 
     return (
       <TextoEstilizado cor={record?.cor}>
-        {record?.situacaoFechamento}
+        {record?.situacaoFechamentoNome}
       </TextoEstilizado>
     );
   };
@@ -221,7 +224,7 @@ const TabelaComponentesCurriculares = ({
     <LinhaTabela className="col-md-12">
       <DataTable
         id="tabela-componentes-curriculares"
-        idLinha="professorRf"
+        idLinha="id"
         columns={colunasTabelaComponentesCurriculares}
         dataSource={dadosComCores}
         pagination={false}
@@ -233,7 +236,7 @@ const TabelaComponentesCurriculares = ({
           expandIcon(expanded, onExpand, record)
         }
         rowClassName={(record, _) => {
-          const ehLinhaExpandida = temLinhaExpandida(record.professorRf);
+          const ehLinhaExpandida = temLinhaExpandida(record.id);
           const nomeClasse = ehLinhaExpandida.length ? 'linha-ativa' : '';
           return nomeClasse;
         }}
@@ -243,40 +246,43 @@ const TabelaComponentesCurriculares = ({
             statusAcompanhamentoFechamento.PROCESSADO_PENDENCIAS.id
           ) {
             return (
-              <Loader loading={carregandoComponentes}>
-                <DataTable
-                  id={`tabela-componente-pendencias-${componentes?.professorRf}`}
-                  idLinha="pendenciaId"
-                  pagination={false}
-                  showHeader={false}
-                  columns={colunasTabelaComponentes}
-                  dataSource={dadosPendencias}
-                  semHover
-                  rowClassName={(record, _) => {
-                    const ehLinhaClicada =
-                      record.pendenciaId ===
-                      detalhePendenciaEscolhido?.pendenciaId;
-                    const nomeClasse = ehLinhaClicada ? 'linha-ativa' : '';
-                    return nomeClasse;
-                  }}
-                />
-              </Loader>
+              <>
+                <Loader loading={carregandoComponentes}>
+                  <DataTable
+                    id={`tabela-componente-pendencias-${componentes?.id}`}
+                    idLinha="pendenciaId"
+                    pagination={false}
+                    showHeader={false}
+                    columns={colunasTabelaComponentes}
+                    dataSource={dadosPendencias}
+                    semHover
+                    rowClassName={(record, _) => {
+                      const ehLinhaClicada =
+                        record.pendenciaId ===
+                        detalhePendenciaEscolhido?.pendenciaId;
+                      const nomeClasse = ehLinhaClicada ? 'linha-ativa' : '';
+                      return nomeClasse;
+                    }}
+                  />
+                </Loader>
+
+                {mostrarDetalhePendencia && (
+                  <>
+                    <Loader loading={carregandoDetalhePendencia}>
+                      <RenderizarHtml
+                        textoHtml={dadosDetalhePendencias?.descricaoHtml}
+                        className="tabela-pendencias-html"
+                      />
+                    </Loader>
+                  </>
+                )}
+              </>
             );
           }
 
           return null;
         }}
       />
-      {mostrarDetalhePendencia && (
-        <>
-          <Loader loading={carregandoDetalhePendencia}>
-            <RenderizarHtml
-              textoHtml={dadosDetalhePendencias?.descricaoHtml}
-              className="tabela-pendencias-html"
-            />
-          </Loader>
-        </>
-      )}
     </LinhaTabela>
   );
 };
