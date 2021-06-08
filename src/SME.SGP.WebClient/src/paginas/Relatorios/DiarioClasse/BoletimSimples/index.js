@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 
-import shortid from 'shortid';
 import { Loader, Card, ButtonGroup, ListaPaginada } from '~/componentes';
 import { Cabecalho } from '~/componentes-sgp';
 
@@ -13,6 +12,7 @@ import AlertaModalidadeInfantil from '~/componentes-sgp/AlertaModalidadeInfantil
 import modalidade from '~/dtos/modalidade';
 
 import { EstiloModal } from './boletimSimples.css';
+import { ModalidadeDTO } from '~/dtos';
 
 const BoletimSimples = () => {
   const [loaderSecao] = useState(false);
@@ -29,6 +29,7 @@ const BoletimSimples = () => {
     ueCodigo: '',
     turmaCodigo: '',
     consideraHistorico: false,
+    opcaoEstudanteId: '',
     modelo: '',
   };
   const [filtro, setFiltro] = useState(estadoInicial);
@@ -54,6 +55,7 @@ const BoletimSimples = () => {
           ? valoresFiltro.semestre
           : 0,
       consideraHistorico: valoresFiltro.consideraHistorico,
+      opcaoEstudanteId: valoresFiltro.opcaoEstudanteId,
       modelo: valoresFiltro.modeloBoletimId,
     });
     setItensSelecionados([]);
@@ -74,29 +76,19 @@ const BoletimSimples = () => {
   };
 
   const onClickBotaoPrincipal = async () => {
+    let confirmou = false;
+
     if (filtro.modelo === '2') {
-      const confirmou = await confirmar(
+      confirmou = await confirmar(
         'Modelo de boletim detalhado',
         'O modelo de boletim detalhado vai gerar pelo menos uma página para cada estudante. Deseja continuar?',
         '',
         'Cancelar',
         'Continuar'
       );
+    }
 
-      if (!confirmou) {
-        setClicouBotaoGerar(true);
-        const resultado = await ServicoBoletimSimples.imprimirBoletim({
-          ...filtro,
-          alunosCodigo: itensSelecionados,
-        });
-        if (resultado.erro)
-          erro('Não foi possível solicitar a impressão do Boletim');
-        else
-          sucesso(
-            'Solicitação de geração do relatório gerada com sucesso. Em breve você receberá uma notificação com o resultado.'
-          );
-      }
-    } else {
+    if (!confirmou) {
       setClicouBotaoGerar(true);
       const resultado = await ServicoBoletimSimples.imprimirBoletim({
         ...filtro,
@@ -123,12 +115,22 @@ const BoletimSimples = () => {
   ];
 
   useEffect(() => {
+    const temSemestreOuNaoEja =
+      String(filtro?.modalidade) !== String(ModalidadeDTO.EJA) ||
+      filtro?.semestre;
+    const ehInfantil =
+      String(filtro.modalidade) === String(modalidade.INFANTIL);
+    const temEstudanteSelecionados =
+      selecionarAlunos && !itensSelecionados?.length;
+
     const desabilitar =
-      String(filtro.modalidade) === String(modalidade.INFANTIL) ||
-      (filtro &&
-        filtro.turmaCodigo > 0 &&
-        selecionarAlunos &&
-        !itensSelecionados?.length) ||
+      ehInfantil ||
+      temEstudanteSelecionados ||
+      !filtro?.modalidade ||
+      !filtro?.turmaCodigo?.length ||
+      !filtro?.opcaoEstudanteId ||
+      !temSemestreOuNaoEja ||
+      !filtro?.modelo ||
       clicouBotaoGerar;
 
     setDesabilitarBotaoGerar(desabilitar);
@@ -169,7 +171,7 @@ const BoletimSimples = () => {
             cancelou={cancelou}
             setCancelou={setCancelou}
           />
-          {filtro && filtro.turmaCodigo > 0 && selecionarAlunos ? (
+          {!!filtro?.turmaCodigo?.length && selecionarAlunos && (
             <div className="col-md-12 pt-4 py-0 px-0">
               <ListaPaginada
                 id="lista-alunos"
@@ -185,7 +187,7 @@ const BoletimSimples = () => {
                 filtroEhValido
               />
             </div>
-          ) : null}
+          )}
         </Card>
       </Loader>
     </>
