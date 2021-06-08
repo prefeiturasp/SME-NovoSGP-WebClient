@@ -400,7 +400,6 @@ const Notas = ({ match }) => {
       !ehTurmaInfantil(modalidadesFiltroPrincipal, usuario.turmaSelecionada)
     ) {
       obterDisciplinas();
-      obterPeriodos();
       dispatch(setModoEdicaoGeral(false));
       dispatch(setModoEdicaoGeralNotaFinal(false));
       dispatch(setExpandirLinha([]));
