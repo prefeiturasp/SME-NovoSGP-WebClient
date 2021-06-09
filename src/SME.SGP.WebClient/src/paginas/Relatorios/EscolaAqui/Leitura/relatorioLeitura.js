@@ -24,6 +24,7 @@ import ServicoFiltroRelatorio from '~/servicos/Paginas/FiltroRelatorio/ServicoFi
 import ServicoDashboardEscolaAqui from '~/servicos/Paginas/Dashboard/ServicoDashboardEscolaAqui';
 import ServicoRelatorioLeitura from '~/servicos/Paginas/Relatorios/EscolaAqui/Leitura/ServicoRelatorioLeitura';
 import FiltroHelper from '~componentes-sgp/filtro/helper';
+import { OPCAO_TODOS } from '~/constantes/constantes';
 
 const RelatorioLeitura = () => {
   const usuario = useSelector(store => store.usuario);
@@ -73,8 +74,6 @@ const RelatorioLeitura = () => {
   const [desabilitarGerar, setDesabilitarGerar] = useState(true);
   const [clicouBotaoGerar, setClicouBotaoGerar] = useState(false);
   const [timeoutCampoPesquisa, setTimeoutCampoPesquisa] = useState();
-
-  const OPCAO_TODOS = '-99';
 
   const opcoesRadioSimNao = [
     { label: 'Não', value: false },

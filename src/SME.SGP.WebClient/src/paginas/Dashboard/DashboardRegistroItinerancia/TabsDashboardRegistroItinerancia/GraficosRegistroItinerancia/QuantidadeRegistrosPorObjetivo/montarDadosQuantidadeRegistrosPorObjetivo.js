@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
 import React, { useCallback, useEffect, useState } from 'react';
 import { Loader, SelectComponent } from '~/componentes';
+import { OPCAO_TODOS } from '~/constantes/constantes';
 import MontarGraficoBarras from '~/paginas/Dashboard/ComponentesDashboard/montarGraficoBarras';
 import { erros } from '~/servicos';
 import ServicoDashboardRegistroItinerancia from '~/servicos/Paginas/Dashboard/ServicoDashboardRegistroItinerancia';
@@ -8,8 +9,6 @@ import ServicoFuncionario from '~/servicos/Paginas/ServicoFuncionario';
 
 const MontarDadosQuantidadeRegistrosPorObjetivo = props => {
   const { anoLetivo, dreId, ueId, mesSelecionado } = props;
-
-  const OPCAO_TODOS = '-99';
 
   const [carregandoPAAIs, setCarregandoPAAIs] = useState(false);
   const [listaPAAIs, setListaPAAIs] = useState(false);

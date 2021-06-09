@@ -10,6 +10,7 @@ import Button from '~/componentes/button';
 import CampoNumero from '~/componentes/campoNumero';
 import Card from '~/componentes/card';
 import { Colors } from '~/componentes/colors';
+import { OPCAO_TODOS } from '~/constantes/constantes';
 import { URL_HOME } from '~/constantes/url';
 import { erros, sucesso } from '~/servicos/alertas';
 import history from '~/servicos/history';
@@ -43,8 +44,6 @@ const RelatorioUsuarios = () => {
   const [desabilitarBtnGerar, setDesabilitarBtnGerar] = useState(true);
 
   const [anoAtual] = useState(window.moment().format('YYYY'));
-
-  const OPCAO_TODOS = '-99';
 
   const obterUes = useCallback(async dre => {
     if (dre) {

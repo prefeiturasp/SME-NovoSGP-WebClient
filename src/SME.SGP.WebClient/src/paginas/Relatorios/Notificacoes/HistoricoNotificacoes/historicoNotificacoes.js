@@ -9,6 +9,7 @@ import { Cabecalho } from '~/componentes-sgp';
 import Button from '~/componentes/button';
 import Card from '~/componentes/card';
 import { Colors } from '~/componentes/colors';
+import { OPCAO_TODOS } from '~/constantes/constantes';
 import { URL_HOME } from '~/constantes/url';
 import modalidade from '~/dtos/modalidade';
 import AbrangenciaServico from '~/servicos/Abrangencia';
@@ -48,8 +49,6 @@ const HistoricoNotificacoes = () => {
 
   const [carregandoGeral, setCarregandoGeral] = useState(false);
   const [desabilitarBtnGerar, setDesabilitarBtnGerar] = useState(true);
-
-  const OPCAO_TODAS = '-99';
 
   const opcoesExibirDescricao = [
     { label: 'Sim', value: true },
@@ -188,7 +187,7 @@ const HistoricoNotificacoes = () => {
 
   const obterTurmas = useCallback(async () => {
     if (codigoUe === OPCAO_TODAS) {
-      setListaTurmas([{ valor: '-99', descricao: 'Todas' }]);
+      setListaTurmas([{ valor: OPCAO_TODOS, descricao: 'Todas' }]);
       setTurmaId(OPCAO_TODAS);
       return;
     }
@@ -206,7 +205,7 @@ const HistoricoNotificacoes = () => {
     if (resposta?.data?.length) {
       const lista = resposta.data;
       if (lista.length > 1) {
-        lista.unshift({ valor: '-99', descricao: 'Todas' });
+        lista.unshift({ valor: OPCAO_TODOS, descricao: 'Todas' });
       }
 
       setListaTurmas(lista);
@@ -417,13 +416,13 @@ const HistoricoNotificacoes = () => {
 
   const onchangeMultiSelect = (valores, valoreAtual, funSetarNovoValor) => {
     const opcaoTodosJaSelecionado = valoreAtual
-      ? valoreAtual.includes('-99')
+      ? valoreAtual.includes(OPCAO_TODOS)
       : false;
     if (opcaoTodosJaSelecionado) {
-      const listaSemOpcaoTodos = valores.filter(v => v !== '-99');
+      const listaSemOpcaoTodos = valores.filter(v => v !== OPCAO_TODOS);
       funSetarNovoValor(listaSemOpcaoTodos);
-    } else if (valores.includes('-99')) {
-      funSetarNovoValor(['-99']);
+    } else if (valores.includes(OPCAO_TODOS)) {
+      funSetarNovoValor([OPCAO_TODOS]);
     } else {
       funSetarNovoValor(valores);
     }

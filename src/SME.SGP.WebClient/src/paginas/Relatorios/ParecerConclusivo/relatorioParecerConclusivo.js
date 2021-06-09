@@ -14,6 +14,7 @@ import FiltroHelper from '~componentes-sgp/filtro/helper';
 import AlertaModalidadeInfantil from '~/componentes-sgp/AlertaModalidadeInfantil/alertaModalidadeInfantil';
 import { CorpoRelatorio } from './relatorioParecerConclusivo.css';
 import { ordenarListaMaiorParaMenor } from '~/utils/funcoes/gerais';
+import { OPCAO_TODOS } from '~/constantes/constantes';
 
 const RelatorioParecerConclusivo = () => {
   const [carregandoGerar, setCarregandoGerar] = useState(false);
@@ -102,8 +103,8 @@ const RelatorioParecerConclusivo = () => {
   };
 
   const onChangeAnos = valor => {
-    if (valor.find(e => e === '-99')) {
-      valor = '-99';
+    if (valor.find(e => e === OPCAO_TODOS)) {
+      valor = OPCAO_TODOS;
     }
     setAno(valor);
     setClicouBotaoGerar(false);
@@ -289,8 +290,8 @@ const RelatorioParecerConclusivo = () => {
       String(modalidadeSelecionada) === String(modalidade.EJA) ||
       String(modalidadeSelecionada) === String(modalidade.ENSINO_MEDIO)
     ) {
-      setListaCiclos([{ id: '-99', descricao: 'Todos' }]);
-      setCiclo('-99');
+      setListaCiclos([{ id: OPCAO_TODOS, descricao: 'Todos' }]);
+      setCiclo(OPCAO_TODOS);
     } else if (String(modalidadeSelecionada) === String(modalidade.INFANTIL)) {
       setListaCiclos([]);
       setCiclo();
@@ -310,7 +311,7 @@ const RelatorioParecerConclusivo = () => {
           await setCiclo(String(retorno.data[0].id));
         } else {
           setCiclo();
-          let lista = [{ id: '-99', descricao: 'Todos' }];
+          let lista = [{ id: OPCAO_TODOS, descricao: 'Todos' }];
           lista = lista.concat(retorno.data);
           setListaCiclos(lista);
         }
@@ -327,7 +328,7 @@ const RelatorioParecerConclusivo = () => {
       });
     if (retorno && retorno.data) {
       setParecerConclusivoId();
-      let lista = retorno.data.length > 1 ? [{ id: '-99', nome: 'Todos' }] : [];
+      let lista = retorno.data.length > 1 ? [{ id: OPCAO_TODOS, nome: 'Todos' }] : [];
       lista = lista.concat(retorno.data);
       setListaPareceresConclusivos(lista);
     }
@@ -339,12 +340,12 @@ const RelatorioParecerConclusivo = () => {
 
   const obterAnos = async (modalidadeIdSelecionada, cicloSelecionado) => {
     if (String(modalidadeIdSelecionada) === String(modalidade.EJA)) {
-      setListaAnos([{ valor: '-99', descricao: 'Todos' }]);
-      setAno('-99');
+      setListaAnos([{ valor: OPCAO_TODOS, descricao: 'Todos' }]);
+      setAno(OPCAO_TODOS);
     } else if (modalidadeIdSelecionada && cicloSelecionado) {
       setCarregandoAnos(true);
       cicloSelecionado =
-        cicloSelecionado === '-99' ||
+        cicloSelecionado === OPCAO_TODOS ||
         String(modalidadeIdSelecionada) === String(modalidade.ENSINO_MEDIO)
           ? '0'
           : cicloSelecionado;
@@ -357,10 +358,10 @@ const RelatorioParecerConclusivo = () => {
           setListaAnos(retorno.data);
           setAno(String(retorno.data[0].valor));
         } else {
-          let lista = [{ valor: '-99', descricao: 'Todos' }];
+          let lista = [{ valor: OPCAO_TODOS, descricao: 'Todos' }];
           lista = lista.concat(retorno.data);
           if (cicloSelecionado === '0' && retorno.data.length > 1) {
-            setAno('-99');
+            setAno(OPCAO_TODOS);
           }
           setListaAnos(lista);
         }
@@ -440,15 +441,15 @@ const RelatorioParecerConclusivo = () => {
 
     const params = {
       anoLetivo,
-      dreCodigo: dreId === '-99' ? '' : dreId,
-      ueCodigo: ueId === '-99' ? '' : ueId,
-      modalidade: modalidadeId === '-99' ? null : modalidadeId,
+      dreCodigo: dreId === OPCAO_TODOS ? '' : dreId,
+      ueCodigo: ueId === OPCAO_TODOS ? '' : ueId,
+      modalidade: modalidadeId === OPCAO_TODOS ? null : modalidadeId,
       semestre:
         String(modalidadeId) === String(modalidade.EJA) ? semestre : null,
-      ciclo: ciclo === '-99' ? 0 : ciclo,
-      anos: ano.toString() !== '-99' ? [].concat(ano) : [],
+      ciclo: ciclo === OPCAO_TODOS ? 0 : ciclo,
+      anos: ano.toString() !== OPCAO_TODOS ? [].concat(ano) : [],
       parecerConclusivoId:
-        parecerConclusivoId === '-99' ? 0 : parecerConclusivoId,
+        parecerConclusivoId === OPCAO_TODOS ? 0 : parecerConclusivoId,
       tipoFormatoRelatorio: formato,
     };
     await ServicoRelatorioParecerConclusivo.gerar(params)

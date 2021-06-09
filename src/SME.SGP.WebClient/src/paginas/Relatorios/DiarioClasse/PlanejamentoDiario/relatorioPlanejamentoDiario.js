@@ -21,6 +21,7 @@ import ServicoRelatorioPlanejamentoDiario from '~/servicos/Paginas/Relatorios/Di
 import ServicoPeriodoEscolar from '~/servicos/Paginas/Calendario/ServicoPeriodoEscolar';
 
 import FiltroHelper from '~componentes-sgp/filtro/helper';
+import { OPCAO_TODOS } from '~/constantes/constantes';
 
 const RelatorioPlanejamentoDiario = () => {
   const [exibirLoader, setExibirLoader] = useState(false);
@@ -52,8 +53,6 @@ const RelatorioPlanejamentoDiario = () => {
   const [consideraHistorico, setConsideraHistorico] = useState(false);
   const [clicouBotaoGerar, setClicouBotaoGerar] = useState(false);
   const [desabilitarGerar, setDesabilitarGerar] = useState(true);
-
-  const OPCAO_TODOS = '-99';
 
   const opcoesRadioSimNao = [
     { label: 'Não', value: false },

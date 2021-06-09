@@ -25,6 +25,7 @@ import { ordenarDescPor } from '~/utils/funcoes/gerais';
 import { ModalidadeDTO } from '~/dtos';
 
 import { URL_HOME } from '~/constantes';
+import { OPCAO_TODOS } from '~/constantes/constantes';
 
 const AtribuicaoCJ = () => {
   const [listaAnosLetivo, setListaAnosLetivo] = useState([]);
@@ -52,8 +53,6 @@ const AtribuicaoCJ = () => {
   const [desabilitarBtnGerar, setDesabilitarBtnGerar] = useState(true);
   const [carregandoGeral, setCarregandoGeral] = useState(false);
   const [clicouBotaoGerar, setClicouBotaoGerar] = useState(false);
-
-  const OPCAO_TODOS = '-99';
 
   const opcoesExibir = [
     { label: 'Não', value: false },

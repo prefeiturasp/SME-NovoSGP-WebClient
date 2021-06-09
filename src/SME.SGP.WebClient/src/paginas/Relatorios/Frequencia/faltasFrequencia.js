@@ -15,6 +15,7 @@ import ServicoFaltasFrequencia from '~/servicos/Paginas/Relatorios/FaltasFrequen
 import ServicoFiltroRelatorio from '~/servicos/Paginas/FiltroRelatorio/ServicoFiltroRelatorio';
 import ServicoComponentesCurriculares from '~/servicos/Paginas/ComponentesCurriculares/ServicoComponentesCurriculares';
 import tipoDeRelatorio from '~/dtos/tipoDeRelatorio';
+import { OPCAO_TODOS } from '~/constantes/constantes';
 
 const FaltasFrequencia = () => {
   const [listaAnosLetivo, setListaAnosLetivo] = useState([]);
@@ -179,7 +180,7 @@ const FaltasFrequencia = () => {
     const retorno = await api
       .get(
         `v1/abrangencias/false/semestres?anoLetivo=${anoLetivoSelecionado}&modalidade=${modalidadeSelecionada ||
-        0}`
+          0}`
       )
       .catch(e => {
         erros(e);
@@ -218,8 +219,8 @@ const FaltasFrequencia = () => {
 
   const obterAnosEscolares = useCallback(async (mod, ue) => {
     if (mod == modalidade.EJA || mod == modalidade.INFANTIL) {
-      setListaAnosEscolares([{ descricao: 'Todos', valor: '-99' }]);
-      setAnosEscolares(['-99']);
+      setListaAnosEscolares([{ descricao: 'Todos', valor: OPCAO_TODOS }]);
+      setAnosEscolares([OPCAO_TODOS]);
     } else {
       setCarregandoGeral(true);
       const respota = await ServicoFiltroRelatorio.obterAnosEscolares(
@@ -259,7 +260,7 @@ const FaltasFrequencia = () => {
   }, [condicao]);
 
   useEffect(() => {
-    const selecionouTodos = anosEscolares?.find(ano => ano === '-99');
+    const selecionouTodos = anosEscolares?.find(ano => ano === OPCAO_TODOS);
     if (!selecionouTodos) {
       setTurmasPrograma(false);
     }
@@ -267,7 +268,7 @@ const FaltasFrequencia = () => {
 
   const obterCodigoTodosAnosEscolares = useCallback(() => {
     let todosAnosEscolares = anosEscolares;
-    const selecionouTodos = anosEscolares?.find(ano => ano === '-99');
+    const selecionouTodos = anosEscolares?.find(ano => ano === OPCAO_TODOS);
     if (selecionouTodos) {
       todosAnosEscolares = listaAnosEscolares.map(item => item.valor);
     }
@@ -276,7 +277,9 @@ const FaltasFrequencia = () => {
 
   const obterCodigoTodosComponentesCorriculares = () => {
     let todosComponentesCurriculares = componentesCurriculares;
-    const selecionouTodos = componentesCurriculares.find(ano => ano === '-99');
+    const selecionouTodos = componentesCurriculares.find(
+      ano => ano === OPCAO_TODOS
+    );
     if (selecionouTodos) {
       todosComponentesCurriculares = listaComponenteCurricular.map(
         item => item.valor
@@ -371,15 +374,15 @@ const FaltasFrequencia = () => {
   useEffect(() => {
     let desabilitar =
       !anoLetivo ||
-        !codigoDre ||
-        !codigoUe ||
-        !modalidadeId ||
-        !anosEscolares ||
-        !componentesCurriculares ||
-        !bimestres ||
-        !tipoRelatorio ||
-        !condicao ||
-        !formato;
+      !codigoDre ||
+      !codigoUe ||
+      !modalidadeId ||
+      !anosEscolares ||
+      !componentesCurriculares ||
+      !bimestres ||
+      !tipoRelatorio ||
+      !condicao ||
+      !formato;
 
     if (!desabilitar && condicao !== OPCAO_TODOS_ESTUDANTES) {
       desabilitar = !valorCondicao;
@@ -520,16 +523,16 @@ const FaltasFrequencia = () => {
     const todosEhUnicoJaSelecionado =
       valoresJaSelcionados &&
       valoresJaSelcionados.length === 1 &&
-      valoresJaSelcionados[0] === '-99';
+      valoresJaSelcionados[0] === OPCAO_TODOS;
 
     if (todosEhUnicoJaSelecionado) {
       if (
         valoresParaSelecionar &&
         valoresParaSelecionar.length > 1 &&
-        valoresParaSelecionar.includes('-99')
+        valoresParaSelecionar.includes(OPCAO_TODOS)
       ) {
         valoresParaSelecionar = valoresParaSelecionar.filter(
-          item => item !== '-99'
+          item => item !== OPCAO_TODOS
         );
       }
     }
@@ -539,10 +542,10 @@ const FaltasFrequencia = () => {
       valoresParaSelecionar &&
       valoresParaSelecionar.length &&
       valoresParaSelecionar.length > 1 &&
-      valoresParaSelecionar.includes('-99')
+      valoresParaSelecionar.includes(OPCAO_TODOS)
     ) {
       valoresParaSelecionar = valoresParaSelecionar.filter(
-        item => item === '-99'
+        item => item === OPCAO_TODOS
       );
     }
 
@@ -726,8 +729,8 @@ const FaltasFrequencia = () => {
                     A condição considerada será pela quantidade de faltas
                   </span>
                 ) : (
-                    ''
-                  )}
+                  ''
+                )}
               </div>
               <div className="col-sm-12 col-md-6 col-lg-3 col-xl-3 mb-2">
                 <SelectComponent
@@ -776,7 +779,7 @@ const FaltasFrequencia = () => {
                   desabilitado={
                     !anosEscolares ||
                     (anosEscolares.length &&
-                      !!anosEscolares?.find(ano => ano !== '-99'))
+                      !!anosEscolares?.find(ano => ano !== OPCAO_TODOS))
                   }
                 />
               </div>

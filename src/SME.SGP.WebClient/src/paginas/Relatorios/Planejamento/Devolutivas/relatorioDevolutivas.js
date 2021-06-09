@@ -15,6 +15,7 @@ import {
   Cabecalho,
   FiltroHelper,
 } from '~/componentes-sgp';
+import { OPCAO_TODOS } from '~/constantes/constantes';
 
 import { ModalidadeDTO } from '~/dtos';
 
@@ -59,7 +60,6 @@ const RelatorioDevolutivas = () => {
 
   const { turmaSelecionada } = useSelector(store => store.usuario);
 
-  const OPCAO_TODOS = '-99';
   const opcoesRadioSimNao = [
     { label: 'Não', value: false },
     { label: 'Sim', value: true },

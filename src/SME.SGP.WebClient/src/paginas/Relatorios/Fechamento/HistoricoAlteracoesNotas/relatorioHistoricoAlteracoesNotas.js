@@ -5,6 +5,7 @@ import Alert from '~/componentes/alert';
 import Button from '~/componentes/button';
 import Card from '~/componentes/card';
 import { Colors } from '~/componentes/colors';
+import { OPCAO_TODOS } from '~/constantes/constantes';
 import modalidade from '~/dtos/modalidade';
 import AbrangenciaServico from '~/servicos/Abrangencia';
 import { erros, sucesso } from '~/servicos/alertas';
@@ -49,8 +50,6 @@ const RelatorioHistoricoAlteracoesNotas = () => {
   const [consideraHistorico, setConsideraHistorico] = useState(false);
   const [clicouBotaoGerar, setClicouBotaoGerar] = useState(false);
   const [desabilitarBtnGerar, setDesabilitarBtnGerar] = useState(true);
-
-  const OPCAO_TODOS = '-99';
 
   const onChangeAnoLetivo = async valor => {
     setDreId();

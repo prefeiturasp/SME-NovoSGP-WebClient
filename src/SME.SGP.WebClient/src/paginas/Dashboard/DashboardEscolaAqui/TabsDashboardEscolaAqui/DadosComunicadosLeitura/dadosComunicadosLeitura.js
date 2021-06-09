@@ -33,6 +33,7 @@ import LeituraDeComunicadosPorTurmas from './leituraDeComunicadosPorTurmas';
 import FiltroHelperComunicados from '~/paginas/AcompanhamentoEscolar/Comunicados/Helper/helper';
 import ServicoComunicados from '~/servicos/Paginas/AcompanhamentoEscolar/Comunicados/ServicoComunicados';
 import { ordenarListaMaiorParaMenor } from '~/utils/funcoes/gerais';
+import { OPCAO_TODOS } from '~/constantes/constantes';
 
 const DadosComunicadosLeitura = props => {
   const { codigoDre, codigoUe } = props;
@@ -99,8 +100,6 @@ const DadosComunicadosLeitura = props => {
     },
   ]);
   const [visualizacao, setVisualizacao] = useState('1');
-
-  const OPCAO_TODOS = '-99';
 
   const [anoAtual] = useState(window.moment().format('YYYY'));
 

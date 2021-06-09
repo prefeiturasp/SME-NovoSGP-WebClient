@@ -19,6 +19,7 @@ import {
 } from '~/servicos';
 
 import { URL_HOME } from '~/constantes';
+import { OPCAO_TODOS } from '~/constantes/constantes';
 
 const RelatorioEscolaAquiAdesao = () => {
   const [exibirLoader, setExibirLoader] = useState(false);
@@ -42,8 +43,6 @@ const RelatorioEscolaAquiAdesao = () => {
     { label: 'CPF irregular no EOL', value: 3 },
     { label: 'Todos', value: 4 },
   ];
-
-  const OPCAO_TODOS = '-99';
 
   const voltar = () => {
     history.push(URL_HOME);

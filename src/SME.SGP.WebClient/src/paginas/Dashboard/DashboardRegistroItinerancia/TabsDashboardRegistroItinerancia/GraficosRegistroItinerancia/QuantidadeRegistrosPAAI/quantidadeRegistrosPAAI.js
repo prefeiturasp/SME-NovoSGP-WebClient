@@ -2,6 +2,7 @@ import PropTypes from 'prop-types';
 import React, { useState } from 'react';
 import { Base } from '~/componentes';
 import CardCollapse from '~/componentes/cardCollapse';
+import { OPCAO_TODOS } from '~/constantes/constantes';
 import MontarGraficoBarras from '~/paginas/Dashboard/ComponentesDashboard/montarGraficoBarras';
 import ServicoDashboardRegistroItinerancia from '~/servicos/Paginas/Dashboard/ServicoDashboardRegistroItinerancia';
 
@@ -16,8 +17,6 @@ const QuantidadeRegistrosPAAI = props => {
   const [exibir, setExibir] = useState(false);
 
   const key = 'quantidade-registros-paai';
-
-  const OPCAO_TODOS = '-99';
 
   return (
     <div className="mt-3">

@@ -2,6 +2,7 @@ import PropTypes from 'prop-types';
 import React, { useCallback, useEffect, useState } from 'react';
 import { Loader } from '~/componentes';
 import GraficoBarras from '~/componentes-sgp/Graficos/graficoBarras';
+import { OPCAO_TODOS } from '~/constantes/constantes';
 import { erros } from '~/servicos';
 import ServicoDashboardFrequencia from '~/servicos/Paginas/Dashboard/ServicoDashboardFrequencia';
 
@@ -10,8 +11,6 @@ const GraficoQuantidadeAusenciasPossuemJustificativa = props => {
 
   const [dadosGrafico, setDadosGrafico] = useState([]);
   const [exibirLoader, setExibirLoader] = useState(false);
-
-  const OPCAO_TODOS = '-99';
 
   const obterDadosGrafico = useCallback(async () => {
     setExibirLoader(true);
