@@ -57,7 +57,7 @@ const Avaliacao = props => {
   };
 
   const onChangeNotaConceitoFinal = (notaBimestre, valorNovo) => {
-    if (!desabilitarCampos && valorNovo !== null) {
+    if (!desabilitarCampos) {
       notaBimestre.notaConceito = valorNovo;
       notaBimestre.modoEdicao = true;
       dados.modoEdicao = true;
