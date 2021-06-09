@@ -189,10 +189,7 @@ const AvaliacaoForm = ({ match, location }) => {
     delete dadosValidacao.categoriaId;
     delete dadosValidacao.descricao;
 
-    const textoLimpo = removerTagsHtml(descricao);
-    const tamanhoTexto = textoLimpo.length;
-
-    if (tamanhoTexto <= 500) {
+    if (tamanhoTextoDescricao(descricao) <= 500) {
       const validacao = await ServicoAvaliacao.validar(dadosValidacao);
 
       if (validacao && validacao.status === 200) {
@@ -263,15 +260,19 @@ const AvaliacaoForm = ({ match, location }) => {
       descricao: Yup.string().test(
         'len',
         'A descrição não deve ter mais de 500 caracteres',
-        texto => {
-          const textoLimpo = removerTagsHtml(texto);
-          const tamanhoTexto = textoLimpo?.length;
-          return tamanhoTexto <= 500;
+        texto => {          
+          return texto === undefined || (tamanhoTextoDescricao(texto) <= 500);
         }
       ),
     };
     setValidacoes(Yup.object(val));
   };
+
+  const tamanhoTextoDescricao = textoComHtml => {
+    const textoLimpo = removerTagsHtml(textoComHtml);
+    const textoComEspacos = textoLimpo?.replaceAll('&nbsp;', ' ');
+    return (textoComEspacos.length + 1) - textoComEspacos.split(' ').length;
+  }
 
   const [listaDisciplinas, setListaDisciplinas] = useState([]);
 
