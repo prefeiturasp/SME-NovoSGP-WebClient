@@ -385,6 +385,7 @@ const DashboardFrequenciaFiltros = () => {
               onChange={onChangeDre}
               valueSelect={dre?.codigo}
               placeholder="Diretoria Regional de Educação (DRE)"
+              showSearch
             />
           </Loader>
         </div>

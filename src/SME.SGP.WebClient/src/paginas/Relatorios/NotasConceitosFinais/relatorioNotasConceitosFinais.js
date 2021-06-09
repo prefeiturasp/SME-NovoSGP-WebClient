@@ -679,6 +679,7 @@ const RelatorioNotasConceitosFinais = () => {
                   onChange={onChangeDre}
                   valueSelect={codigoDre}
                   placeholder="Diretoria Regional de Educação (DRE)"
+                  showSearch
                 />
               </div>
               <div className="col-sm-12 col-md-6 col-lg-9 col-xl-5 mb-2">
@@ -691,6 +692,7 @@ const RelatorioNotasConceitosFinais = () => {
                   onChange={onChangeUe}
                   valueSelect={codigoUe}
                   placeholder="Unidade Escolar (UE)"
+                  showSearch
                 />
               </div>
               <div className="col-sm-12 col-md-6 col-lg-3 col-xl-3 mb-2">

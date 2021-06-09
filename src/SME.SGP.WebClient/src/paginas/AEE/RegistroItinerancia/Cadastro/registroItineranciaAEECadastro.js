@@ -760,6 +760,7 @@ const RegistroItineranciaAEECadastro = ({ match }) => {
                     onChange={onChangeDre}
                     valueSelect={dreId}
                     placeholder="Diretoria Regional De Educação (DRE)"
+                    showSearch
                   />
                 </Loader>
               </div>
@@ -775,6 +776,7 @@ const RegistroItineranciaAEECadastro = ({ match }) => {
                     onChange={onChangeUe}
                     valueSelect={ueId}
                     placeholder="Unidade Escolar (UE)"
+                    showSearch
                   />
                 </Loader>
               </div>
@@ -790,6 +792,7 @@ const RegistroItineranciaAEECadastro = ({ match }) => {
                     valueSelect={tipoCalendarioSelecionado}
                     placeholder="Selecione um calendário"
                     showSearch
+                    searchValue={false}
                   />
                 </Loader>
               </div>
@@ -805,6 +808,7 @@ const RegistroItineranciaAEECadastro = ({ match }) => {
                     valueSelect={eventoId}
                     placeholder="Selecione um evento"
                     showSearch
+                    searchValue={false}
                   />
                 </Loader>
               </div>

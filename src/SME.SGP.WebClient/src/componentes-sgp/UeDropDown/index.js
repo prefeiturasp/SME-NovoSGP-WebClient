@@ -99,6 +99,7 @@ function UeDropDown({
             ? forcaDesabilitado || desabilitado
             : listaUes.length === 0 || listaUes.length === 1 || desabilitado
         }
+        showSearch
       />
     </Loader>
   );

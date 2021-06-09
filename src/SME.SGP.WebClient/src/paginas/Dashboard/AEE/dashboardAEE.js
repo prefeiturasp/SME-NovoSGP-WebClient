@@ -180,6 +180,7 @@ const DashboardAEE = () => {
                   onChange={onChangeDre}
                   valueSelect={dre?.codigo}
                   placeholder="Diretoria Regional de Educação (DRE)"
+                  showSearch
                 />
               </Loader>
             </div>
@@ -195,6 +196,7 @@ const DashboardAEE = () => {
                   onChange={onChangeUe}
                   valueSelect={ue?.codigo}
                   placeholder="Unidade Escolar (UE)"
+                  showSearch
                 />
               </Loader>
             </div>

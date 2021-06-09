@@ -293,6 +293,7 @@ const DadosComunicadosLeitura = props => {
             valor: item.codigo,
             id: item.id,
             ano: item.ano,
+            nomeFiltro: item.nomeFiltro,
           })
         );
 
@@ -702,7 +703,7 @@ const DadosComunicadosLeitura = props => {
                 id="select-turma"
                 lista={listaTurmas}
                 valueOption="valor"
-                valueText="desc"
+                valueText="nomeFiltro"
                 label="Turma"
                 disabled={
                   codigoUe === OPCAO_TODOS ||
@@ -712,6 +713,7 @@ const DadosComunicadosLeitura = props => {
                 valueSelect={codigoTurma}
                 onChange={onChangeTurma}
                 placeholder="Turma"
+                showSearch
               />
             </Loader>
           </div>

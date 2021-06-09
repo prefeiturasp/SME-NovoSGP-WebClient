@@ -351,11 +351,12 @@ const RelatorioPlanejamentoDiario = () => {
             valor: item.codigo,
             id: item.id,
             ano: item.ano,
+            nomeFiltro: item.nomeFiltro,
           })
         );
 
         if (turmas.length > 1) {
-          turmas.unshift({ valor: OPCAO_TODOS, desc: 'Todas' });
+          turmas.unshift({ valor: OPCAO_TODOS, nomeFiltro: 'Todas' });
         }
         setListaTurmas(turmas);
         if (turmas.length === 1) {
@@ -604,6 +605,7 @@ const RelatorioPlanejamentoDiario = () => {
                 onChange={onChangeDre}
                 valueSelect={codigoDre}
                 placeholder="Diretoria Regional De Educação (DRE)"
+                showSearch
               />
             </div>
             <div className="col-sm-12 col-md-12 col-lg-5 col-xl-5 mb-2">
@@ -617,6 +619,7 @@ const RelatorioPlanejamentoDiario = () => {
                 onChange={onChangeUe}
                 valueSelect={codigoUe}
                 placeholder="Unidade Escolar (UE)"
+                showSearch
               />
             </div>
             <div className="col-sm-12 col-md-6 col-lg-4 col-xl-4 mb-2">
@@ -649,20 +652,21 @@ const RelatorioPlanejamentoDiario = () => {
                 placeholder="Semestre"
               />
             </div>
-            <div className="col-sm-12 col-md-6 col-lg-2 col-xl-4 mb-2">
+            <div className="col-sm-12 col-md-12 col-lg-6 col-xl-4 mb-2">
               <SelectComponent
                 id="drop-turma"
                 lista={listaTurmas}
                 valueOption="valor"
-                valueText="desc"
+                valueText="nomeFiltro"
                 label="Turma"
                 disabled={!modalidadeId || listaTurmas?.length === 1}
                 valueSelect={turmaId}
                 placeholder="Turma"
                 onChange={onChangeTurma}
+                showSearch
               />
             </div>
-            <div className="col-sm-12 col-md-6 col-lg-4 col-xl-3  mb-2">
+            <div className="col-sm-12 col-md-8 col-lg-8 col-xl-3  mb-2">
               <SelectComponent
                 id="drop-componente-curricular"
                 lista={listaComponentesCurriculares}
@@ -679,7 +683,7 @@ const RelatorioPlanejamentoDiario = () => {
                 placeholder="Componente curricular"
               />
             </div>
-            <div className="col-sm-12 col-md-6 col-lg-6 col-xl-4  mb-2">
+            <div className="col-sm-12 col-md-4 col-lg-4 col-xl-4  mb-2">
               <SelectComponent
                 id="drop-bimestre"
                 lista={listaBimestres}
@@ -692,7 +696,7 @@ const RelatorioPlanejamentoDiario = () => {
                 placeholder="Bimestre"
               />
             </div>
-            <div className="col-sm-12 col-md-3 col-lg-3 col-xl-2 mb-2">
+            <div className="col-sm-12 col-md-6 col-lg-3 col-xl-2 mb-2">
               <RadioGroupButton
                 id="radio-datas-futuras"
                 label="Listar datas futuras"
@@ -711,7 +715,7 @@ const RelatorioPlanejamentoDiario = () => {
                 value={listarDataFutura}
               />
             </div>
-            <div className="col-sm-12 col-md-3 col-lg-3 col-xl-2 mb-2">
+            <div className="col-sm-12 col-md-6 col-lg-3 col-xl-2 mb-2">
               <RadioGroupButton
                 id="radio-exibir-detalhamento"
                 label="Exibir detalhamento"

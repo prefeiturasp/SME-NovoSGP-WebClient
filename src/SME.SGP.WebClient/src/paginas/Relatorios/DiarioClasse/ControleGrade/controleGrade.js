@@ -230,7 +230,7 @@ const ControleGrade = () => {
       if (data) {
         const lista = [];
         if (data.length > 1) {
-          lista.push({ valor: '0', desc: 'Todas' });
+          lista.push({ valor: '0', nomeFiltro: 'Todas' });
         }
         data.map(item =>
           lista.push({
@@ -238,6 +238,7 @@ const ControleGrade = () => {
             valor: item.codigo,
             id: item.id,
             ano: item.ano,
+            nomeFiltro: item.nomeFiltro,
           })
         );
         setListaTurmas(lista);
@@ -549,6 +550,7 @@ const ControleGrade = () => {
                   onChange={onChangeDre}
                   valueSelect={dreId}
                   placeholder="Diretoria Regional De Educação (DRE)"
+                  showSearch
                 />
               </div>
               <div className="col-sm-12 col-md-12 col-lg-5 col-xl-5 mb-2">
@@ -562,6 +564,7 @@ const ControleGrade = () => {
                   onChange={onChangeUe}
                   valueSelect={ueId}
                   placeholder="Unidade Escolar (UE)"
+                  showSearch
                 />
               </div>
               <div className="col-sm-12 col-md-6 col-lg-4 col-xl-4  mb-2">
@@ -601,7 +604,7 @@ const ControleGrade = () => {
                   id="drop-turma"
                   lista={listaTurmas}
                   valueOption="valor"
-                  valueText="desc"
+                  valueText="nomeFiltro"
                   label="Turma"
                   disabled={
                     !modalidadeId || (listaTurmas && listaTurmas.length === 1)
@@ -609,6 +612,7 @@ const ControleGrade = () => {
                   valueSelect={turmaId}
                   onChange={onChangeTurma}
                   placeholder="Turma"
+                  showSearch
                 />
               </div>
               <div className="col-sm-12 col-md-6 col-lg-4 col-xl-4  mb-2">

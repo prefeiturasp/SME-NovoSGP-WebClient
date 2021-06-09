@@ -211,6 +211,7 @@ const RelatorioEscolaAquiAdesao = () => {
                 onChange={onChangeDre}
                 valueSelect={dreCodigo}
                 placeholder="Diretoria Regional de Educação (DRE)"
+                showSearch
               />
             </div>
             <div className="col-sm-12 col-md-12 col-lg-6 col-xl-6 mb-2 pl-0">
@@ -224,6 +225,7 @@ const RelatorioEscolaAquiAdesao = () => {
                 onChange={onChangeUe}
                 valueSelect={ueCodigo}
                 placeholder="Unidade Escolar (UE)"
+                showSearch
               />
             </div>
           </div>

@@ -55,7 +55,7 @@ const FaltasFrequencia = () => {
     { valor: '3', desc: 'Menor' },
     { valor: OPCAO_TODOS_ESTUDANTES, desc: 'Todos os estudantes' },
   ]);
-  
+
   const [condicao, setCondicao] = useState(undefined);
 
   const listaFormatos = [
@@ -71,7 +71,7 @@ const FaltasFrequencia = () => {
     { label: 'Sim', value: true },
     { label: 'Não', value: false },
   ];
-  const [turmasPrograma, setTurmasPrograma] = useState(false); 
+  const [turmasPrograma, setTurmasPrograma] = useState(false);
 
   const obterAnosLetivos = useCallback(async () => {
     setCarregandoGeral(true);
@@ -378,12 +378,12 @@ const FaltasFrequencia = () => {
         !componentesCurriculares ||
         !bimestres ||
         !tipoRelatorio ||
-        !condicao ||        
+        !condicao ||
         !formato;
 
     if (!desabilitar && condicao !== OPCAO_TODOS_ESTUDANTES) {
       desabilitar = !valorCondicao;
-    }   
+    }
 
     if (modalidadeId == modalidade.EJA) {
       setDesabilitarBtnGerar(!semestre || desabilitar);
@@ -609,6 +609,7 @@ const FaltasFrequencia = () => {
                   onChange={onChangeDre}
                   valueSelect={codigoDre}
                   placeholder="Diretoria Regional de Educação (DRE)"
+                  showSearch
                 />
               </div>
               <div className="col-sm-12 col-md-6 col-lg-9 col-xl-5 mb-2">
@@ -621,6 +622,7 @@ const FaltasFrequencia = () => {
                   onChange={onChangeUe}
                   valueSelect={codigoUe}
                   placeholder="Unidade Escolar (UE)"
+                  showSearch
                 />
               </div>
               <div className="col-sm-12 col-md-6 col-lg-3 col-xl-3 mb-2">

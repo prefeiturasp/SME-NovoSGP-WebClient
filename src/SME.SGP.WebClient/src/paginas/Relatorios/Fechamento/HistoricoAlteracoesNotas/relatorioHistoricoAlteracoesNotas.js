@@ -233,7 +233,7 @@ const RelatorioHistoricoAlteracoesNotas = () => {
       if (data) {
         const lista = [];
         if (data.length > 1) {
-          lista.push({ valor: OPCAO_TODOS, desc: 'Todas' });
+          lista.push({ valor: OPCAO_TODOS, nomeFiltro: 'Todas' });
         }
         data.map(item =>
           lista.push({
@@ -241,6 +241,7 @@ const RelatorioHistoricoAlteracoesNotas = () => {
             valor: item.codigo,
             id: item.id,
             ano: item.ano,
+            nomeFiltro: item.nomeFiltro,
           })
         );
         setListaTurmas(lista);
@@ -594,6 +595,7 @@ const RelatorioHistoricoAlteracoesNotas = () => {
                 onChange={onChangeDre}
                 valueSelect={dreId}
                 placeholder="Diretoria Regional De Educação (DRE)"
+                showSearch
               />
             </div>
             <div className="col-sm-12 col-md-12 col-lg-5 col-xl-5 mb-2">
@@ -607,6 +609,7 @@ const RelatorioHistoricoAlteracoesNotas = () => {
                 onChange={onChangeUe}
                 valueSelect={ueId}
                 placeholder="Unidade Escolar (UE)"
+                showSearch
               />
             </div>
             <div className="col-sm-12 col-md-6 col-lg-4 col-xl-4  mb-2">
@@ -646,7 +649,7 @@ const RelatorioHistoricoAlteracoesNotas = () => {
                 id="drop-turma"
                 lista={listaTurmas}
                 valueOption="valor"
-                valueText="desc"
+                valueText="nomeFiltro"
                 label="Turma"
                 disabled={
                   !modalidadeId || (listaTurmas && listaTurmas.length === 1)
@@ -657,6 +660,7 @@ const RelatorioHistoricoAlteracoesNotas = () => {
                 onChange={valores => {
                   onchangeMultiSelect(valores, turmaId, onChangeTurma);
                 }}
+                showSearch
               />
             </div>
             <div className="col-sm-12 col-md-6 col-lg-4 col-xl-4  mb-2">

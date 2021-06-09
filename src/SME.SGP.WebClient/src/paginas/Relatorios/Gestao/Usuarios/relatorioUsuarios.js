@@ -267,6 +267,7 @@ const RelatorioUsuarios = () => {
                   onChange={onChangeDre}
                   valueSelect={codigoDre}
                   placeholder="Diretoria Regional de Educação (DRE)"
+                  showSearch
                 />
               </div>
               <div className="col-sm-12 col-md-12 col-lg-6 col-xl-6 mb-2">
@@ -279,6 +280,7 @@ const RelatorioUsuarios = () => {
                   onChange={onChangeUe}
                   valueSelect={codigoUe}
                   placeholder="Unidade Escolar (UE)"
+                  showSearch
                 />
               </div>
               <div className="col-md-12 mb-2">

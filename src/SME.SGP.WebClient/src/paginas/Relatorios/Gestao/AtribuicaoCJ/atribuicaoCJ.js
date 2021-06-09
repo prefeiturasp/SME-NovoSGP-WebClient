@@ -308,7 +308,7 @@ const AtribuicaoCJ = () => {
       if (data) {
         const lista = [];
         if (data.length > 1) {
-          lista.push({ valor: OPCAO_TODOS, desc: 'Todas' });
+          lista.push({ valor: OPCAO_TODOS, nomeFiltro: 'Todas' });
         }
         data.map(item =>
           lista.push({
@@ -316,6 +316,7 @@ const AtribuicaoCJ = () => {
             valor: item.codigo,
             id: item.id,
             ano: item.ano,
+            nomeFiltro: item.nomeFiltro,
           })
         );
         setListaTurmas(lista);
@@ -412,7 +413,7 @@ const AtribuicaoCJ = () => {
             </div>
 
             <div className="row mb-4">
-              <div className="col-sm-12 col-md-6 col-lg-2 col-xl-2 mb-2 pl-0">
+              <div className="col-sm-12 col-md-6 col-lg-2 col-xl-2 mb-2">
                 <SelectComponent
                   id="drop-ano-letivo"
                   label="Ano letivo"
@@ -425,7 +426,7 @@ const AtribuicaoCJ = () => {
                   placeholder="Ano letivo"
                 />
               </div>
-              <div className="col-sm-12 col-md-12 col-lg-5 col-xl-5 mb-2 pl-0">
+              <div className="col-sm-12 col-md-12 col-lg-5 col-xl-5 mb-2">
                 <SelectComponent
                   id="drop-dre"
                   label="DRE"
@@ -436,9 +437,10 @@ const AtribuicaoCJ = () => {
                   onChange={onChangeDre}
                   valueSelect={dreCodigo}
                   placeholder="Diretoria Regional De Educação (DRE)"
+                  showSearch
                 />
               </div>
-              <div className="col-sm-12 col-md-12 col-lg-5 col-xl-5 mb-2 p-0">
+              <div className="col-sm-12 col-md-12 col-lg-5 col-xl-5 mb-2">
                 <SelectComponent
                   id="drop-ue"
                   label="UE"
@@ -449,12 +451,13 @@ const AtribuicaoCJ = () => {
                   onChange={onChangeUe}
                   valueSelect={ueCodigo}
                   placeholder="Unidade Escolar (UE)"
+                  showSearch
                 />
               </div>
             </div>
 
             <div className="row mb-4">
-              <div className="col-sm-12 col-md-6 col-lg-4 col-xl-4 mb-2 pl-0">
+              <div className="col-sm-12 col-md-8 col-lg-4 col-xl-4 mb-2">
                 <SelectComponent
                   id="drop-modalidade"
                   label="Modalidade"
@@ -470,7 +473,7 @@ const AtribuicaoCJ = () => {
                   placeholder="Modalidade"
                 />
               </div>
-              <div className="col-sm-12 col-md-6 col-lg-4 col-xl-4 mb-2 pl-0">
+              <div className="col-sm-12 col-md-4 col-lg-2 col-xl-2 mb-2">
                 <SelectComponent
                   id="drop-semestre"
                   lista={listaSemestres}
@@ -487,12 +490,12 @@ const AtribuicaoCJ = () => {
                   placeholder="Semestre"
                 />
               </div>
-              <div className="col-sm-12 col-md-6 col-lg-4 col-xl-4 mb-2 p-0">
+              <div className="col-sm-12 col-md-12 col-lg-6 col-xl-6 mb-2">
                 <SelectComponent
                   id="drop-turma"
                   lista={listaTurmas}
                   valueOption="valor"
-                  valueText="desc"
+                  valueText="nomeFiltro"
                   label="Turma"
                   disabled={
                     !modalidadeId || (listaTurmas && listaTurmas.length === 1)
@@ -503,6 +506,7 @@ const AtribuicaoCJ = () => {
                   onChange={valores => {
                     onchangeMultiSelect(valores, turmaId, onChangeTurma);
                   }}
+                  showSearch
                 />
               </div>
             </div>
@@ -527,12 +531,12 @@ const AtribuicaoCJ = () => {
                   setClicouBotaoGerar(false);
                 }}
                 buscarOutrosCargos
-                classesRF="p-0"
+                className="col-md-12"
               />
             </div>
 
             <div className="row mb-4">
-              <div className="col-sm-12 col-md-6 col-lg-2 col-xl-2 mb-2 pl-0">
+              <div className="col-sm-12 col-md-6 col-lg-2 col-xl-2 mb-2">
                 <RadioGroupButton
                   label="Exibir aulas"
                   opcoes={opcoesExibir}
@@ -544,7 +548,7 @@ const AtribuicaoCJ = () => {
                   value={exibirAulas}
                 />
               </div>
-              <div className="col-sm-12 col-md-6 col-lg-3 col-xl-3 mb-2 pl-0">
+              <div className="col-sm-12 col-md-6 col-lg-3 col-xl-3 mb-2">
                 <RadioGroupButton
                   label="Exibir atribuições esporádicas"
                   opcoes={opcoesExibir}
@@ -556,7 +560,7 @@ const AtribuicaoCJ = () => {
                   value={exibirAtribuicoesExporadicas}
                 />
               </div>
-              <div className="col-sm-12 col-md-6 col-lg-7 col-xl-7 mb-2 p-0">
+              <div className="col-sm-12 col-md-6 col-lg-7 col-xl-7 mb-2">
                 <RadioGroupButton
                   label="Tipo de visualização"
                   opcoes={opcoesTipoVisualizacao}

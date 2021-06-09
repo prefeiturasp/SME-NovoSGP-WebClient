@@ -489,6 +489,7 @@ const HistoricoNotificacoes = () => {
                   onChange={onChangeDre}
                   valueSelect={codigoDre}
                   placeholder="Diretoria Regional de Educação (DRE)"
+                  showSearch
                 />
               </div>
               <div className="col-sm-12 col-md-12 col-lg-12 col-xl-5 mb-2">
@@ -501,6 +502,7 @@ const HistoricoNotificacoes = () => {
                   onChange={onChangeUe}
                   valueSelect={codigoUe}
                   placeholder="Unidade Escolar (UE)"
+                  showSearch
                 />
               </div>
               <div className="col-sm-12 col-md-6 col-lg-4 col-xl-5 mb-2">
@@ -531,7 +533,7 @@ const HistoricoNotificacoes = () => {
                   placeholder="Selecione o semestre"
                 />
               </div>
-              <div className="col-sm-12 col-md-6 col-lg-4 col-xl-5 mb-2">
+              <div className="col-sm-12 col-md-12 col-lg-4 col-xl-5 mb-2">
                 <SelectComponent
                   id="drop-turma"
                   lista={listaTurmas}
@@ -544,6 +546,7 @@ const HistoricoNotificacoes = () => {
                   valueSelect={turmaId}
                   onChange={setTurmaId}
                   placeholder="Turma"
+                  showSearch
                 />
               </div>
               <div className="col-md-12 mb-2">
