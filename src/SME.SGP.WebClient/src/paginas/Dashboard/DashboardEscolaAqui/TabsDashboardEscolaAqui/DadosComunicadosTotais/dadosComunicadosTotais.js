@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
 import React, { useCallback, useEffect, useState } from 'react';
 import { CoresGraficos, Loader, SelectComponent } from '~/componentes';
+import { OPCAO_TODOS } from '~/constantes/constantes';
 import { AbrangenciaServico, erros } from '~/servicos';
 import ServicoDashboardEscolaAqui from '~/servicos/Paginas/Dashboard/ServicoDashboardEscolaAqui';
 import GraficoBarraDashboard from '../../../ComponentesDashboard/graficoBarraDashboard';
@@ -54,8 +55,8 @@ const DadosComunicadosTotais = props => {
   const obterComunicadosTotaisSme = useCallback(async () => {
     setExibirLoader(true);
     const retorno = await ServicoDashboardEscolaAqui.obterComunicadosTotaisSme(
-      codigoDre === '-99' ? '' : codigoDre,
-      codigoUe === '-99' ? '' : codigoUe,
+      codigoDre === OPCAO_TODOS ? '' : codigoDre,
+      codigoUe === OPCAO_TODOS ? '' : codigoUe,
       anoLetivo
     )
       .catch(e => erros(e))
@@ -99,7 +100,7 @@ const DadosComunicadosTotais = props => {
   }, []);
 
   const obterComunicadosTotaisAgrupadosPorDre = useCallback(async () => {
-    if (codigoDre === '-99' && codigoUe === '-99' && anoLetivo) {
+    if (codigoDre === OPCAO_TODOS && codigoUe === OPCAO_TODOS && anoLetivo) {
       setExibirLoader(true);
       const retorno = await ServicoDashboardEscolaAqui.obterComunicadosTotaisAgrupadosPorDre(
         anoLetivo

@@ -483,7 +483,7 @@ const RegistroItineranciaAEELista = () => {
                 />
               </Loader>
             </div>
-            <div className="col-sm-12 col-md-5 col-lg-5 col-xl-5 pr-0">
+            <div className="col-sm-12 col-md-12 col-lg-5 col-xl-5">
               <Loader loading={carregandoDres} tip="">
                 <SelectComponent
                   id="dre"
@@ -495,10 +495,11 @@ const RegistroItineranciaAEELista = () => {
                   onChange={onChangeDre}
                   valueSelect={dreId}
                   placeholder="Diretoria Regional De Educação (DRE)"
+                  showSearch
                 />
               </Loader>
             </div>
-            <div className="col-sm-12 col-md-5 col-lg-5 col-xl-5">
+            <div className="col-sm-12 col-md-12 col-lg-5 col-xl-5">
               <Loader loading={carregandoUes} tip="">
                 <SelectComponent
                   id="ue"
@@ -510,27 +511,29 @@ const RegistroItineranciaAEELista = () => {
                   onChange={onChangeUe}
                   valueSelect={ueId}
                   placeholder="Unidade Escolar (UE)"
+                  showSearch
                 />
               </Loader>
             </div>
           </div>
           <div className="row mb-4">
-            <div className="col-sm-12 col-md-2 pr-0">
+            <div className="col-sm-12 col-md-6 col-lg-6 col-xl-4">
               <Loader loading={carregandoTurmas} tip="">
                 <SelectComponent
                   id="turma (Regular)"
                   lista={listaTurmas}
                   valueOption="codigo"
-                  valueText="modalidadeTurmaNome"
+                  valueText="nomeFiltro"
                   label="Turma"
                   disabled={listaTurmas?.length === 1}
                   valueSelect={turmaId}
                   onChange={onChangeTurma}
                   placeholder="Turma"
+                  showSearch
                 />
               </Loader>
             </div>
-            <div className="col-sm-12 col-md-5 pr-0">
+            <div className="col-sm-12 col-md-6 col-lg-6 col-xl-4">
               <LocalizadorPadrao
                 showLabel
                 labelNome="Criado por"
@@ -541,7 +544,7 @@ const RegistroItineranciaAEELista = () => {
                 campoDescricao="nome"
               />
             </div>
-            <div className="col-sm-12 col-md-5 p-0">
+            <div className="col-sm-12 col-md-6 col-lg-6 col-xl-4 p-0">
               <LocalizadorEstudantesAtivos
                 id="estudante"
                 showLabel
@@ -558,9 +561,7 @@ const RegistroItineranciaAEELista = () => {
                 semMargin
               />
             </div>
-          </div>
-          <div className="row mb-4">
-            <div className="col-sm-12 col-md-6 pr-0">
+            <div className="col-sm-12 col-md-6 col-lg-3 col-xl-3">
               <Loader loading={carregandoSituacao} tip="">
                 <SelectComponent
                   id="situacao"
@@ -575,7 +576,7 @@ const RegistroItineranciaAEELista = () => {
                 />
               </Loader>
             </div>
-            <div className="col-sm-3 col-md-3 pr-0">
+            <div className="col-sm-12 col-md-6 col-lg-3 col-xl-3">
               <CampoData
                 formatoData="DD/MM/YYYY"
                 name="dataInicial"
@@ -586,7 +587,7 @@ const RegistroItineranciaAEELista = () => {
                 desabilitarData={desabilitarData}
               />
             </div>
-            <div className="col-sm-3 col-md-3 pt-4">
+            <div className="col-sm-3 col-md-6 pt-4">
               <CampoData
                 formatoData="DD/MM/YYYY"
                 name="dataFinal"

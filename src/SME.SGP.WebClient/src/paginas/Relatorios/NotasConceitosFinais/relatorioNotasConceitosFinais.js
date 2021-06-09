@@ -16,6 +16,7 @@ import ServicoRelatorioNotasConceitos from '~/servicos/Paginas/Relatorios/NotasC
 import ServicoNotaConceito from '~/servicos/Paginas/DiarioClasse/ServicoNotaConceito';
 import tipoNota from '~/dtos/tipoNota';
 import AlertaModalidadeInfantil from '~/componentes-sgp/AlertaModalidadeInfantil/alertaModalidadeInfantil';
+import { OPCAO_TODOS } from '~/constantes/constantes';
 
 const RelatorioNotasConceitosFinais = () => {
   const [listaAnosLetivo, setListaAnosLetivo] = useState([]);
@@ -215,8 +216,8 @@ const RelatorioNotasConceitosFinais = () => {
   const obterAnosEscolares = useCallback(
     async (mod, ue, anoLetivoSelecionado) => {
       if (String(mod) === String(modalidade.EJA)) {
-        setListaAnosEscolares([{ descricao: 'Todos', valor: '-99' }]);
-        setAnosEscolares(['-99']);
+        setListaAnosEscolares([{ descricao: 'Todos', valor: OPCAO_TODOS }]);
+        setAnosEscolares([OPCAO_TODOS]);
       } else {
         setCarregandoGeral(true);
         const anoAtual = window.moment().format('YYYY');
@@ -231,7 +232,7 @@ const RelatorioNotasConceitosFinais = () => {
 
         if (respota && respota.data && respota.data.length) {
           setListaAnosEscolares(
-            [{ descricao: 'Todos', valor: '-99' }].concat(respota.data)
+            [{ descricao: 'Todos', valor: OPCAO_TODOS }].concat(respota.data)
           );
 
           if (
@@ -261,7 +262,9 @@ const RelatorioNotasConceitosFinais = () => {
 
   const obterCodigoTodosAnosEscolares = useCallback(() => {
     let todosAnosEscolares = anosEscolares;
-    const selecionouTodos = [].concat(anosEscolares).find(ano => ano === '-99');
+    const selecionouTodos = []
+      .concat(anosEscolares)
+      .find(ano => ano === OPCAO_TODOS);
     if (selecionouTodos) {
       todosAnosEscolares = listaAnosEscolares.map(item => item.valor);
     }
@@ -438,13 +441,16 @@ const RelatorioNotasConceitosFinais = () => {
 
     const params = {
       anoLetivo,
-      dreCodigo: codigoDre === '-99' ? '' : codigoDre,
-      ueCodigo: codigoUe === '-99' ? '' : codigoUe,
+      dreCodigo: codigoDre === OPCAO_TODOS ? '' : codigoDre,
+      ueCodigo: codigoUe === OPCAO_TODOS ? '' : codigoUe,
       modalidade: modalidadeId,
       semestre,
-      anos: anosEscolares.toString() !== '-99' ? [].concat(anosEscolares) : [],
+      anos:
+        anosEscolares.toString() !== OPCAO_TODOS
+          ? [].concat(anosEscolares)
+          : [],
       componentesCurriculares:
-        componentesCurriculares.toString() !== '-99'
+        componentesCurriculares.toString() !== OPCAO_TODOS
           ? [].concat(componentesCurriculares)
           : [],
       bimestres: [bimestres],
@@ -586,16 +592,16 @@ const RelatorioNotasConceitosFinais = () => {
     const todosEhUnicoJaSelecionado =
       valoresJaSelcionados &&
       valoresJaSelcionados.length === 1 &&
-      valoresJaSelcionados[0] === '-99';
+      valoresJaSelcionados[0] === OPCAO_TODOS;
 
     if (todosEhUnicoJaSelecionado) {
       if (
         valoresParaSelecionar &&
         valoresParaSelecionar.length > 1 &&
-        valoresParaSelecionar.includes('-99')
+        valoresParaSelecionar.includes(OPCAO_TODOS)
       ) {
         valoresParaSelecionar = valoresParaSelecionar.filter(
-          item => item !== '-99'
+          item => item !== OPCAO_TODOS
         );
       }
     }
@@ -605,10 +611,10 @@ const RelatorioNotasConceitosFinais = () => {
       valoresParaSelecionar &&
       valoresParaSelecionar.length &&
       valoresParaSelecionar.length > 1 &&
-      valoresParaSelecionar.includes('-99')
+      valoresParaSelecionar.includes(OPCAO_TODOS)
     ) {
       valoresParaSelecionar = valoresParaSelecionar.filter(
-        item => item === '-99'
+        item => item === OPCAO_TODOS
       );
     }
 
@@ -679,6 +685,7 @@ const RelatorioNotasConceitosFinais = () => {
                   onChange={onChangeDre}
                   valueSelect={codigoDre}
                   placeholder="Diretoria Regional de Educação (DRE)"
+                  showSearch
                 />
               </div>
               <div className="col-sm-12 col-md-6 col-lg-9 col-xl-5 mb-2">
@@ -691,6 +698,7 @@ const RelatorioNotasConceitosFinais = () => {
                   onChange={onChangeUe}
                   valueSelect={codigoUe}
                   placeholder="Unidade Escolar (UE)"
+                  showSearch
                 />
               </div>
               <div className="col-sm-12 col-md-6 col-lg-3 col-xl-3 mb-2">

@@ -670,6 +670,7 @@ const EventosLista = ({ match }) => {
                     disabled={dreDesabilitada}
                     placeholder="Selecione uma DRE (Opcional)"
                     form={form}
+                    showSearch
                   />
                 </div>
                 <div className="col-sm-12 col-md-4 col-lg-4 col-xl-4 pb-2">
@@ -683,6 +684,7 @@ const EventosLista = ({ match }) => {
                     disabled={campoUeDesabilitado || ueDesabilitada}
                     placeholder="Selecione uma UE (Opcional)"
                     form={form}
+                    showSearch
                   />
                 </div>
                 <div className="col-sm-12 col-md-4 col-lg-4 col-xl-4 pb-2">

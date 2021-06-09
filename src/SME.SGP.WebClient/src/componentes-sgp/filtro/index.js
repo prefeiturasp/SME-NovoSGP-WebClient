@@ -1210,6 +1210,7 @@ const Filtro = () => {
                   valueSelect={dreSelecionada && `${dreSelecionada}`}
                   placeholder="Diretoria Regional De Educação (DRE)"
                   disabled={campoDreDesabilitado}
+                  showSearch
                 />
               </Loader>
             </div>
@@ -1227,6 +1228,7 @@ const Filtro = () => {
                   }
                   placeholder="Unidade Escolar (UE)"
                   disabled={campoUnidadeEscolarDesabilitado}
+                  showSearch
                 />
               </Loader>
             </div>
@@ -1243,6 +1245,7 @@ const Filtro = () => {
                     valueSelect={turmaSelecionada && `${turmaSelecionada}`}
                     placeholder="Turma"
                     disabled={campoTurmaDesabilitado}
+                    showSearch
                   />
                 </Loader>
               </Grid>

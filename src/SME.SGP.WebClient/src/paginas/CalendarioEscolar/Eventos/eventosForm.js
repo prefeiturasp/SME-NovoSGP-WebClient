@@ -964,6 +964,7 @@ const EventosForm = ({ match }) => {
                       dreDesabilitada ||
                       !usuarioPodeAlterar
                     }
+                    showSearch
                   />
                 </div>
                 <div className="col-sm-12 col-md-12 col-lg-6 col-xl-6 pb-2">
@@ -979,6 +980,7 @@ const EventosForm = ({ match }) => {
                     disabled={
                       desabilitarCampos || ueDesabilitada || !usuarioPodeAlterar
                     }
+                    showSearch
                   />
                 </div>
                 <div className="col-sm-12 col-md-6 col-lg-6 col-xl-6 pb-2">

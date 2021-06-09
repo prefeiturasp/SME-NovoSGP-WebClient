@@ -92,6 +92,7 @@ const LeituraDeComunicadosPorAlunos = props => {
               setCodigoTurmaSelecionado(valor);
             }}
             disabled={listaTurmas?.length === 1}
+            showSearch
           />
         </div>
       </>

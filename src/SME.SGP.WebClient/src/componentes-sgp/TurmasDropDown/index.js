@@ -30,6 +30,7 @@ function TurmasDropDown({
           data.map(item => ({
             desc: item.nome,
             valor: item.codigo,
+            nomeFiltro: item.nomeFiltro,
           }))
         );
       }
@@ -60,11 +61,12 @@ function TurmasDropDown({
       onChange={onChange}
       lista={listaTurmas}
       valueOption="valor"
-      valueText="desc"
+      valueText="nomeFiltro"
       placeholder="Turma"
       valueSelect={valor}
       disabled={form && (listaTurmas.length === 0 || listaTurmas.length === 1)}
       allowClear={allowClear}
+      showSearch
     />
   );
 }

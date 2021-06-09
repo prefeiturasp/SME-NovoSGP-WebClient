@@ -225,12 +225,13 @@ const RelatorioCompensacaoAusencia = () => {
       if (data) {
         const lista = [];
         if (data.length > 1) {
-          lista.push({ valor: '0', desc: 'Todas' });
+          lista.push({ valor: '0', nomeFiltro: 'Todas' });
         }
         data.map(item =>
           lista.push({
             desc: item.nome,
             valor: item.codigo,
+            nomeFiltro: item.nomeFiltro,
           })
         );
         setListaTurmas(lista);
@@ -508,6 +509,7 @@ const RelatorioCompensacaoAusencia = () => {
                   onChange={onChangeDre}
                   valueSelect={dreId}
                   placeholder="Diretoria Regional De Educação (DRE)"
+                  showSearch
                 />
               </Loader>
             </div>
@@ -523,6 +525,7 @@ const RelatorioCompensacaoAusencia = () => {
                   onChange={onChangeUe}
                   valueSelect={ueId}
                   placeholder="Unidade Escolar (UE)"
+                  showSearch
                 />
               </Loader>
             </div>
@@ -562,13 +565,13 @@ const RelatorioCompensacaoAusencia = () => {
                 />
               </Loader>
             </div>
-            <div className={`"col-sm-12 col-md-6 col-lg-2`}>
+            <div className="col-sm-12 col-md-12 col-lg-6 col-xl-6 mb-2">
               <Loader loading={carregandoTurmas} tip="">
                 <SelectComponent
                   id="drop-turma-rel-pendencias"
                   lista={listaTurmas}
                   valueOption="valor"
-                  valueText="desc"
+                  valueText="nomeFiltro"
                   label="Turma"
                   disabled={
                     !modalidadeId || (listaTurmas && listaTurmas.length === 1)
@@ -583,6 +586,7 @@ const RelatorioCompensacaoAusencia = () => {
                     }
                   }}
                   placeholder="Turma"
+                  showSearch
                 />
               </Loader>
             </div>
