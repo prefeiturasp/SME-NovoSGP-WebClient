@@ -28,6 +28,7 @@ import { verificaSomenteConsulta } from '~/servicos/servico-navegacao';
 import AlertaModalidadeInfantil from '~/componentes-sgp/AlertaModalidadeInfantil/alertaModalidadeInfantil';
 import { ehTurmaInfantil } from '~/servicos/Validacoes/validacoesInfatil';
 import JoditEditor from '~/componentes/jodit-editor/joditEditor';
+import { IframeStyle } from './pendenciasFechamentoLista.css';
 
 const PendenciasFechamentoForm = ({ match }) => {
   const usuario = useSelector(store => store.usuario);
@@ -143,14 +144,14 @@ const PendenciasFechamentoForm = ({ match }) => {
             componenteCurricular,
             bimestre,
             descricao,
-            detalhamento,
+            detalhamentoFormatado,
           } = retorno.data;
           setSituacaoId(situacao);
           setSituacaoNome(situacaoNome);
           setCodigoComponenteCurricular(String(componenteCurricular));
           setBimestre(String(bimestre));
           setdescricao(descricao);
-          setDetalhamento(detalhamento);
+          setDetalhamento(detalhamentoFormatado);
 
           const {
             criadoPor,
@@ -319,6 +320,7 @@ const PendenciasFechamentoForm = ({ match }) => {
                 value={detalhamento}
                 removerToolbar
                 desabilitar
+                iframeStyle={IframeStyle}
                 disablePlugins="resize-cells"
               />
             </div>
