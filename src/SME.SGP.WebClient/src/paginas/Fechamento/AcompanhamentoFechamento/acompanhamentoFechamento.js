@@ -64,9 +64,15 @@ const AcompanhamentoFechamento = () => {
   const dispatch = useDispatch();
   const aoClicarBotaoVoltar = () => history.push('/');
 
-  const onChangeFiltros = async (params, paginaAlterada = 1) => {
+  const onChangeFiltros = async (
+    params,
+    paginaAlterada = 1,
+    limparDados = true
+  ) => {
     dispatch(setCarregandoAcompanhamentoFechamento(true));
-    dispatch(setTurmasAcompanhamentoFechamento([]));
+    if (limparDados) {
+      dispatch(setTurmasAcompanhamentoFechamento([]));
+    }
 
     const retorno = await ServicoAcompanhamentoFechamento.obterTurmas({
       ...params,
@@ -132,7 +138,7 @@ const AcompanhamentoFechamento = () => {
   };
 
   const onChangePaginacao = pagina => {
-    onChangeFiltros(parametrosFiltro, pagina);
+    onChangeFiltros(parametrosFiltro, pagina, false);
   };
 
   return (
