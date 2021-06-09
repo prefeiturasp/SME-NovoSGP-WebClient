@@ -37,6 +37,8 @@ const TabelaComponentesCurriculares = ({
   const [mostrarDetalhePendencia, setMostrarDetalhePendencia] = useState(false);
   const [detalhePendenciaEscolhido, setDetalhePendenciaEscolhido] = useState();
 
+  const STATUS_EM_PROCESSAMENTO = 1;
+
   const obterCorSituacaoFechamento = situacaoFechamentoCodigo =>
     Object.keys(statusAcompanhamentoFechamento)
       .map(
@@ -49,7 +51,10 @@ const TabelaComponentesCurriculares = ({
 
   const montarDadosComCores = useCallback(dados => {
     const novoMap = dados.map(item => {
-      const cor = obterCorSituacaoFechamento(item.situacaoFechamentoCodigo);
+      const cor =
+        item.situacaoFechamentoCodigo !== STATUS_EM_PROCESSAMENTO
+          ? obterCorSituacaoFechamento(item.situacaoFechamentoCodigo)
+          : statusAcompanhamentoFechamento.NAO_INICIADO.cor;
       return { ...item, cor };
     });
     setDadosComCores(novoMap);
@@ -85,7 +90,8 @@ const TabelaComponentesCurriculares = ({
       render: (situacaoFechamentoCodigo, componente) => {
         if (
           statusAcompanhamentoFechamento?.NAO_INICIADO?.id !==
-          situacaoFechamentoCodigo
+            situacaoFechamentoCodigo &&
+          STATUS_EM_PROCESSAMENTO !== situacaoFechamentoCodigo
         ) {
           const ehLinhaExpandida = temLinhaExpandida(componente.id);
           const corTexto = ehLinhaExpandida.length

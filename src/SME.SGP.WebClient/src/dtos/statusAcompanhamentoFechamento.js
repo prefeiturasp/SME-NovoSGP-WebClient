@@ -6,11 +6,6 @@ const statusAcompanhamentoFechamento = {
     cor: Base.CinzaMako,
     id: 0,
   },
-  EM_ANDAMENTO: {
-    descricao: 'Em Processamento',
-    cor: Base.LaranjaStatus,
-    id: 1,
-  },
   PROCESSADO_PENDENCIAS: {
     descricao: 'Processado com pendências',
     cor: Base.LaranjaStatus,
