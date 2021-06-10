@@ -24,8 +24,9 @@ export const Row = styled.div`
   }
 `;
 
-export const AvisoBoletim = styled.span`
+export const AvisoBoletim = styled.div`
   font-size: 12px;
   line-height: 16px;
   color: ${Base.LaranjaStatus};
+  opacity: ${props => (props.visivel ? 1 : 0)};
 `;

@@ -31,6 +31,7 @@ const BoletimSimples = () => {
     consideraHistorico: false,
     opcaoEstudanteId: '',
     modelo: '',
+    filtroEhValido: true,
   };
   const [filtro, setFiltro] = useState(estadoInicial);
 
@@ -43,7 +44,7 @@ const BoletimSimples = () => {
 
   const [selecionarAlunos, setSelecionarAlunos] = useState(false);
 
-  const onChangeFiltro = valoresFiltro => {
+  const onChangeFiltro = (valoresFiltro, naoLimparItensSelecionados) => {
     setFiltro({
       anoLetivo: valoresFiltro.anoLetivo,
       modalidade: valoresFiltro.modalidadeId,
@@ -57,8 +58,11 @@ const BoletimSimples = () => {
       consideraHistorico: valoresFiltro.consideraHistorico,
       opcaoEstudanteId: valoresFiltro.opcaoEstudanteId,
       modelo: valoresFiltro.modeloBoletimId,
+      filtroEhValido: !naoLimparItensSelecionados,
     });
-    setItensSelecionados([]);
+    if (!naoLimparItensSelecionados) {
+      setItensSelecionados([]);
+    }
     setSelecionarAlunos(
       valoresFiltro.turmasId && valoresFiltro.opcaoEstudanteId === '1'
     );
@@ -184,7 +188,7 @@ const BoletimSimples = () => {
                 selecionarItems={onSelecionarItems}
                 temPaginacao={false}
                 multiSelecao
-                filtroEhValido
+                filtroEhValido={filtro?.filtroEhValido}
               />
             </div>
           )}
