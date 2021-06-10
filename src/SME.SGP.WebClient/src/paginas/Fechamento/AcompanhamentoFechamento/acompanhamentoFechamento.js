@@ -11,8 +11,11 @@ import {
   Loader,
   PainelCollapse,
 } from '~/componentes';
-import { Cabecalho, Paginacao } from '~/componentes-sgp';
-import AlertaModalidadeInfantil from '~/componentes-sgp/AlertaModalidadeInfantil/alertaModalidadeInfantil';
+import {
+  Cabecalho,
+  Paginacao,
+  AlertaModalidadeInfantil,
+} from '~/componentes-sgp';
 
 import {
   setCarregandoAcompanhamentoFechamento,
@@ -26,9 +29,9 @@ import {
   ServicoAcompanhamentoFechamento,
 } from '~/servicos';
 
-import { CardStatus } from './CardStatus';
 import { Filtros } from './Filtros';
-import DetalhesConselhoClasse from './DetalhesConselhoClasse/detalhesConselhoClasse';
+import { SecaoFechamento } from './SecaoFechamento';
+import { SecaoConselhoClasse } from './SecaoConselhoClasse';
 
 const AcompanhamentoFechamento = () => {
   const [ehInfantil, setEhInfantil] = useState(false);
@@ -61,8 +64,16 @@ const AcompanhamentoFechamento = () => {
   const dispatch = useDispatch();
   const aoClicarBotaoVoltar = () => history.push('/');
 
-  const onChangeFiltros = async (params, paginaAlterada = 1) => {
+  const onChangeFiltros = async (
+    params,
+    paginaAlterada = 1,
+    limparDados = true
+  ) => {
     dispatch(setCarregandoAcompanhamentoFechamento(true));
+    if (limparDados) {
+      dispatch(setTurmasAcompanhamentoFechamento([]));
+    }
+
     const retorno = await ServicoAcompanhamentoFechamento.obterTurmas({
       ...params,
       numeroPagina: paginaAlterada,
@@ -97,6 +108,7 @@ const AcompanhamentoFechamento = () => {
     const retorno = await ServicoAcompanhamentoFechamento.obterFechamentos({
       turmaId,
       bimestre: parametrosFiltro.bimestre,
+      situacaoFechamento: parametrosFiltro.situacaoFechamento,
     }).catch(e => erros(e));
 
     if (retorno?.data) {
@@ -108,6 +120,7 @@ const AcompanhamentoFechamento = () => {
     const retorno = await ServicoAcompanhamentoFechamento.obterConselhoClasse({
       turmaId,
       bimestre: parametrosFiltro.bimestre,
+      situacaoConselhoClasse: parametrosFiltro.situacaoConselhoClasse,
     }).catch(e => erros(e));
 
     if (retorno?.data) {
@@ -125,7 +138,7 @@ const AcompanhamentoFechamento = () => {
   };
 
   const onChangePaginacao = pagina => {
-    onChangeFiltros(parametrosFiltro, pagina);
+    onChangeFiltros(parametrosFiltro, pagina, false);
   };
 
   return (
@@ -173,55 +186,19 @@ const AcompanhamentoFechamento = () => {
                         header={dadosTurmas?.nome}
                       >
                         <>
-                          <Label
-                            text="Fechamento"
-                            className="mb-2"
-                            altura="24"
+                          <SecaoFechamento
+                            dadosTurmas={dadosTurmas}
+                            dadosStatusFechamento={dadosStatusFechamento}
+                            parametrosFiltro={parametrosFiltro}
                           />
-                          <div className="d-flex">
-                            {dadosStatusFechamento?.length > 0 ? (
-                              dadosStatusFechamento?.map(dadosFechamento => (
-                                <CardStatus dadosStatus={dadosFechamento} />
-                              ))
-                            ) : (
-                              <Label
-                                text="Não foram encontrados fechamentos"
-                                className="mb-2"
-                                altura="16"
-                              />
-                            )}
-                          </div>
                           <Divider style={{ background: Base.CinzaDivisor }} />
-                          <Label
-                            text="Conselho de classe"
-                            className="mb-2"
-                            altura="24"
+                          <SecaoConselhoClasse
+                            dadosStatusConsselhoClasse={
+                              dadosStatusConsselhoClasse
+                            }
+                            dadosTurmas={dadosTurmas}
+                            parametrosFiltro={parametrosFiltro}
                           />
-                          <div className="d-flex">
-                            {dadosStatusConsselhoClasse?.length ? (
-                              dadosStatusConsselhoClasse?.map(
-                                dadosConselhoClasse => (
-                                  <CardStatus
-                                    dadosStatus={dadosConselhoClasse}
-                                  />
-                                )
-                              )
-                            ) : (
-                              <Label
-                                text="Não foram encontrados conselhos de classe"
-                                className="mb-2"
-                                altura="16"
-                              />
-                            )}
-                          </div>
-                          <div className="row">
-                            {dadosStatusConsselhoClasse?.length ? (
-                              <DetalhesConselhoClasse
-                                turmaId={dadosTurmas?.turmaId}
-                                bimestre={parametrosFiltro?.bimestre}
-                              />
-                            ) : null}
-                          </div>
                         </>
                       </PainelCollapse.Painel>
                     ))}

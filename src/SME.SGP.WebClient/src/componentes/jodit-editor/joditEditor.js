@@ -39,6 +39,7 @@ const JoditEditor = forwardRef((props, ref) => {
     readonly,
     removerToolbar,
     iframeStyle,
+    disablePlugins,
   } = props;
 
   const textArea = useRef(null);
@@ -90,7 +91,7 @@ const JoditEditor = forwardRef((props, ref) => {
         }
       },
     },
-    disablePlugins: ['image-properties', 'inline-popup'],
+    disablePlugins: ['image-properties', 'inline-popup', disablePlugins],
     language: 'pt_br',
     height,
     readonly: readonly || desabilitar,
@@ -360,6 +361,7 @@ JoditEditor.propTypes = {
   readonly: PropTypes.bool,
   removerToolbar: PropTypes.bool,
   iframeStyle: PropTypes.string,
+  disablePlugins: PropTypes.string,
 };
 
 JoditEditor.defaultProps = {
@@ -379,6 +381,7 @@ JoditEditor.defaultProps = {
   readonly: false,
   removerToolbar: false,
   iframeStyle: '',
+  disablePlugins: '',
 };
 
 export default JoditEditor;
