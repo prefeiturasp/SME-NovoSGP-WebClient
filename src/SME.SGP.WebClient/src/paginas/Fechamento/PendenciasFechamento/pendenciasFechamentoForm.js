@@ -321,6 +321,7 @@ const PendenciasFechamentoForm = ({ match }) => {
                 removerToolbar
                 desabilitar
                 iframeStyle={IframeStyle}
+                disablePlugins="resize-cells"
               />
             </div>
           </div>
