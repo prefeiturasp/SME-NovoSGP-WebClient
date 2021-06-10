@@ -93,7 +93,7 @@ const GraficoQtdDevolutivasRegistradasEstimada = props => {
       {dadosGrafico?.length ? (
         <GraficoBarras
           data={dadosGrafico}
-          xField="turma"
+          xField="turmaAno"
           xAxisVisible
           isGroup
           colors={['#0288D1', '#F57C00']}
