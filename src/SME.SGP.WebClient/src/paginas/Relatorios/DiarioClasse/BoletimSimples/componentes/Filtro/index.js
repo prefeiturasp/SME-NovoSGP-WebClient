@@ -375,7 +375,10 @@ const Filtros = ({ onFiltrar, filtrou, setFiltrou, cancelou, setCancelou }) => {
     setOpcaoEstudanteId(valor);
   };
 
-  const onChangeModeloBoletim = valor => setModeloBoletimId(valor);
+  const onChangeModeloBoletim = valor => {
+    setModeloBoletimId(valor);
+    setFiltrou(false);
+  };
 
   useEffect(() => {
     if (cancelou) {
