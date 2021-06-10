@@ -99,7 +99,7 @@ const DevolutivasForm = ({ match }) => {
           datas.push(novaData.format('YYYY-MM-DD'));
         }
         setPeriodoLetivo(datas);
-      }      
+      }
     }
   }
 
@@ -187,13 +187,23 @@ const DevolutivasForm = ({ match }) => {
     [turmaCodigo]
   );
 
-  const obterDatasFimParaHabilitar = periodoInicio => {
+  const obterDatasFimParaHabilitar = async periodoInicio => {
     const dataInicial = moment({ ...periodoInicio });
     const datas = [dataInicial.format('YYYY-MM-DD')];
-    const qtdMaxDias = 30;
-    for (let index = 0; index < qtdMaxDias; index += 1) {
-      const novaData = dataInicial.add(1, 'days');
-      datas.push(novaData.format('YYYY-MM-DD'));
+
+    setCarregandoGeral(true);
+    const periodoDeDiasDevolutivaPorParametro = await ServicoDevolutivas.obterPeriodoDeDiasDevolutivaPorParametro(
+      turmaSelecionada?.anoLetivo
+    )
+      .catch(e => erros(e))
+      .finally(() => setCarregandoGeral(false));
+
+    const qtdMaxDias = periodoDeDiasDevolutivaPorParametro?.data || 0;
+    if (qtdMaxDias) {
+      for (let index = 0; index < qtdMaxDias; index += 1) {
+        const novaData = dataInicial.add(1, 'days');
+        datas.push(novaData.format('YYYY-MM-DD'));
+      }
     }
     return datas;
   };
