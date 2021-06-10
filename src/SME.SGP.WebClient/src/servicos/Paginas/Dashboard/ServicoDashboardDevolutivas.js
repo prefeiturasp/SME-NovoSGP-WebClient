@@ -1,4 +1,3 @@
-import * as moment from 'moment';
 import { store } from '~/redux';
 import { setDadosDashboardDevolutivas } from '~/redux/modulos/dashboardDevolutivas/actions';
 import api from '~/servicos/api';
@@ -64,13 +63,7 @@ class ServicoDashboardDevolutivas {
   };
 
   obterUltimaConsolidacao = anoLetivo => {
-    // TODO - Validar rota e parametros!
-    // return api.get(`${urlPadrao}/consolidacao?anoLetivo=${anoLetivo}`);
-    return new Promise(resolve => {
-      setTimeout(() => {
-        resolve({ data: moment() });
-      }, 2000);
-    });
+    return api.get(`${urlPadrao}/consolidacao?anoLetivo=${anoLetivo}`);
   };
 
   atualizarFiltros = (nomeParametro, valor) => {
