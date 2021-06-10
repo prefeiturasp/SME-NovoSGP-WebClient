@@ -8,6 +8,7 @@ import { URL_HOME } from '~/constantes/url';
 import { limparDadosDashboardDevolutivas } from '~/redux/modulos/dashboardDevolutivas/actions';
 import history from '~/servicos/history';
 import GraficosDevolutivas from './DadosDashboardDevolutivas/graficosDevolutivas';
+import DashboardDevolutivasAlertaInfantil from './dashboardDevolutivasAlertaInfantil';
 import DashboardDevolutivasFiltros from './dashboardDevolutivasFiltros';
 
 const DashboardDevolutivas = () => {
@@ -25,6 +26,7 @@ const DashboardDevolutivas = () => {
 
   return (
     <>
+      <DashboardDevolutivasAlertaInfantil />
       <Cabecalho pagina="Dashboard devolutivas" />
       <Card>
         <div className="col-md-12">
