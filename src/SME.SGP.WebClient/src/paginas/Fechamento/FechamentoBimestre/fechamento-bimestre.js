@@ -24,6 +24,7 @@ import periodo from '~/dtos/periodo';
 import { setExpandirLinha } from '~/redux/modulos/notasConceitos/actions';
 import AlertaModalidadeInfantil from '~/componentes-sgp/AlertaModalidadeInfantil/alertaModalidadeInfantil';
 import { ehTurmaInfantil } from '~/servicos/Validacoes/validacoesInfatil';
+import { ModalidadeDTO } from '~/dtos';
 
 const FechamentoBismestre = () => {
   const dispatch = useDispatch();
@@ -424,7 +425,8 @@ const FechamentoBismestre = () => {
                       />
                     ) : null}
                   </TabPane>
-                  {periodoFechamento === periodo.Anual ? (
+                  {periodoFechamento === periodo.Anual &&
+                  turmaSelecionada?.modalidade !== ModalidadeDTO.EJA ? (
                     <TabPane
                       tab="3º Bimestre"
                       key="3"
@@ -447,7 +449,8 @@ const FechamentoBismestre = () => {
                       ) : null}
                     </TabPane>
                   ) : null}
-                  {periodoFechamento === periodo.Anual ? (
+                  {periodoFechamento === periodo.Anual &&
+                  turmaSelecionada?.modalidade !== ModalidadeDTO.EJA ? (
                     <TabPane
                       tab="4º Bimestre"
                       key="4"
@@ -493,6 +496,7 @@ const FechamentoBismestre = () => {
                       }
                       bimestreCorrente={bimestreCorrente}
                       registraFrequencia={registraFrequencia}
+                      semestre={turmaSelecionada.periodo}
                     />
                   </TabPane>
                 </ContainerTabsCard>
