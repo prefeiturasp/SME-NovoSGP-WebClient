@@ -68,7 +68,6 @@ const Filtros = ({ onFiltrar, filtrou, setFiltrou, cancelou, setCancelou }) => {
       semestre: semestre || 0,
       turmasId,
       opcaoEstudanteId,
-      modeloBoletimId,
     };
 
     if (!filtrou) {
@@ -82,10 +81,24 @@ const Filtros = ({ onFiltrar, filtrou, setFiltrou, cancelou, setCancelou }) => {
     semestre,
     turmasId,
     opcaoEstudanteId,
-    modeloBoletimId,
     onFiltrar,
     filtrou,
   ]);
+
+  useEffect(() => {
+    const params = {
+      anoLetivo,
+      dreCodigo,
+      ueCodigo,
+      modalidadeId,
+      semestre: semestre || 0,
+      turmasId,
+      opcaoEstudanteId,
+      modeloBoletimId,
+    };
+
+    onFiltrar(params, true);
+  }, [modeloBoletimId]);
 
   const onChangeConsideraHistorico = e => {
     setConsideraHistorico(e.target.checked);
@@ -379,10 +392,7 @@ const Filtros = ({ onFiltrar, filtrou, setFiltrou, cancelou, setCancelou }) => {
     }
   };
 
-  const onChangeModeloBoletim = valor => {
-    setModeloBoletimId(valor);
-    setFiltrou(false);
-  };
+  const onChangeModeloBoletim = valor => setModeloBoletimId(valor);
 
   useEffect(() => {
     if (cancelou) {
@@ -529,11 +539,9 @@ const Filtros = ({ onFiltrar, filtrou, setFiltrou, cancelou, setCancelou }) => {
             onChange={onChangeModeloBoletim}
             placeholder="Modelo de boletim"
           />
-          {modeloBoletimId === '2' && (
-            <AvisoBoletim>
-              Neste modelo cada estudante ocupará no mínimo 1 página
-            </AvisoBoletim>
-          )}
+          <AvisoBoletim visivel={modeloBoletimId === '2'}>
+            Neste modelo cada estudante ocupará no mínimo 1 página
+          </AvisoBoletim>
         </div>
       </div>
     </div>
