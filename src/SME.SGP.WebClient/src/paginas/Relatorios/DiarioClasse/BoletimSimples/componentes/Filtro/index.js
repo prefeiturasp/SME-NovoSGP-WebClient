@@ -68,6 +68,7 @@ const Filtros = ({ onFiltrar, filtrou, setFiltrou, cancelou, setCancelou }) => {
       semestre: semestre || 0,
       turmasId,
       opcaoEstudanteId,
+      modeloBoletimId,
     };
 
     if (!filtrou) {
@@ -83,22 +84,8 @@ const Filtros = ({ onFiltrar, filtrou, setFiltrou, cancelou, setCancelou }) => {
     opcaoEstudanteId,
     onFiltrar,
     filtrou,
+    modeloBoletimId,
   ]);
-
-  useEffect(() => {
-    const params = {
-      anoLetivo,
-      dreCodigo,
-      ueCodigo,
-      modalidadeId,
-      semestre: semestre || 0,
-      turmasId,
-      opcaoEstudanteId,
-      modeloBoletimId,
-    };
-
-    onFiltrar(params, true);
-  }, [modeloBoletimId]);
 
   const onChangeConsideraHistorico = e => {
     setConsideraHistorico(e.target.checked);
@@ -387,13 +374,12 @@ const Filtros = ({ onFiltrar, filtrou, setFiltrou, cancelou, setCancelou }) => {
   const onChangeOpcaoEstudante = valor => {
     setFiltrou(false);
     setOpcaoEstudanteId(valor);
-
-    if (!modeloBoletimId) {
-      setModeloBoletimId('1');
-    }
   };
 
-  const onChangeModeloBoletim = valor => setModeloBoletimId(valor);
+  const onChangeModeloBoletim = valor => {
+    setModeloBoletimId(valor);
+    setFiltrou(false);
+  };
 
   useEffect(() => {
     if (cancelou) {
