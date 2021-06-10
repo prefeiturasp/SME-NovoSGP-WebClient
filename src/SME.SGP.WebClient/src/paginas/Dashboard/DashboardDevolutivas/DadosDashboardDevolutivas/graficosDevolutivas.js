@@ -1,6 +1,7 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 import { OPCAO_TODOS } from '~/constantes/constantesGerais';
+import { ModalidadeDTO } from '~/dtos';
 import QtdDevolutivasRegistradasEstimada from './QtdDevolutivasRegistradasEstimada/qtdDevolutivasRegistradasEstimada';
 import QtdDiarioBordoDevolutiva from './QtdDiarioBordoDevolutiva/qtdDiarioBordoDevolutiva';
 import QtdDiariosBordoCampoReflexoesReplanejamentoPreenchido from './QtdDiariosBordoCampoReflexoesReplanejamentoPreenchido/qtdDiariosBordoCampoReflexoesReplanejamentoPreenchido';
@@ -22,7 +23,10 @@ const GraficosDevolutivas = () => {
   const dreId = OPCAO_TODOS === dre?.codigo ? OPCAO_TODOS : dre?.id;
   const ueId = OPCAO_TODOS === ue?.codigo ? OPCAO_TODOS : ue?.id;
 
-  return anoLetivo && dre && ue && modalidade ? (
+  const naoEhInfantil =
+    modalidade && Number(modalidade) !== ModalidadeDTO.INFANTIL;
+
+  return anoLetivo && dre && ue && modalidade && !naoEhInfantil ? (
     <>
       <QtdDevolutivasRegistradasEstimada
         anoLetivo={anoLetivo}

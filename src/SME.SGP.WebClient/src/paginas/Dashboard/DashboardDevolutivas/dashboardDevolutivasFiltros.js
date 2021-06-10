@@ -28,6 +28,8 @@ const DashboardDevolutivasFiltros = () => {
   const [carregandoUes, setCarregandoUes] = useState(false);
   const [carregandoModalidades, setCarregandoModalidades] = useState(false);
 
+  const ANO_MINIMO = 2021;
+
   const validarValorPadraoAnoLetivo = (lista, atual) => {
     let valorAtual;
 
@@ -50,6 +52,7 @@ const DashboardDevolutivasFiltros = () => {
 
     const anosLetivos = await FiltroHelper.obterAnosLetivos({
       consideraHistorico,
+      anoMinimo: ANO_MINIMO,
     });
 
     if (!anosLetivos.length) {
@@ -271,6 +274,7 @@ const DashboardDevolutivasFiltros = () => {
               onChange={onChangeDre}
               valueSelect={dre?.codigo}
               placeholder="Diretoria Regional de Educação (DRE)"
+              showSearch
             />
           </Loader>
         </div>

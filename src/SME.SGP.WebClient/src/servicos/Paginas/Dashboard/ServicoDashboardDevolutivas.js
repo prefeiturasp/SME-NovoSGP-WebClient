@@ -29,82 +29,22 @@ class ServicoDashboardDevolutivas {
     ueId,
     modalidade
   ) => {
-    // TODO - Validar rota e parametros!
-    // return this.montarConsultaPadraoGraficos({
-    //   rota: 'SEM-ROTA-AINDA',
-    //   anoLetivo,
-    //   dreId,
-    //   ueId,
-    //   modalidade,
-    // });
-    const mock = [
-      {
-        quantidade: 500,
-        descricao: 'Qtd. estimativa de devolutivas',
-        turma: 'EI-5',
-      },
-      {
-        quantidade: 326,
-        descricao: 'Qtd. de devolutivas registradas',
-        turma: 'EI-5',
-      },
-      {
-        quantidade: 400,
-        descricao: 'Qtd. estimativa de devolutivas',
-        turma: 'EI-6',
-      },
-      {
-        quantidade: 360,
-        descricao: 'Qtd. de devolutivas registradas',
-        turma: 'EI-6',
-      },
-    ];
-
-    return new Promise(resolve => {
-      const retorno = { data: mock };
-      setTimeout(() => {
-        resolve(retorno);
-      }, 2000);
+    return this.montarConsultaPadraoGraficos({
+      rota: 'consolidacao/turma-ano',
+      anoLetivo,
+      dreId,
+      ueId,
+      modalidade,
     });
   };
 
   obterQtdDiarioBordoDevolutiva = (anoLetivo, dreId, ueId, modalidade) => {
-    // TODO - Validar rota e parametros!
-    // return this.montarConsultaPadraoGraficos({
-    //   rota: 'SEM-ROTA-AINDA',
-    //   anoLetivo,
-    //   dreId,
-    //   ueId,
-    //   modalidade,
-    // });
-    const mock = [
-      {
-        quantidade: 500,
-        descricao: 'Qtd. com devolutiva',
-        turma: 'EI-5',
-      },
-      {
-        quantidade: 72,
-        descricao: 'Qtd.com devolutiva pendente',
-        turma: 'EI-5',
-      },
-      {
-        quantidade: 400,
-        descricao: 'Qtd. com devolutiva',
-        turma: 'EI-6',
-      },
-      {
-        quantidade: 150,
-        descricao: 'Qtd.com devolutiva pendente',
-        turma: 'EI-6',
-      },
-    ];
-
-    return new Promise(resolve => {
-      const retorno = { data: mock };
-      setTimeout(() => {
-        resolve(retorno);
-      }, 2000);
+    return this.montarConsultaPadraoGraficos({
+      rota: 'diarios-bordo/turma-ano',
+      anoLetivo,
+      dreId,
+      ueId,
+      modalidade,
     });
   };
 
@@ -114,42 +54,12 @@ class ServicoDashboardDevolutivas {
     ueId,
     modalidade
   ) => {
-    // TODO - Validar rota e parametros!
-    // return this.montarConsultaPadraoGraficos({
-    //   rota: 'SEM-ROTA-AINDA',
-    //   anoLetivo,
-    //   dreId,
-    //   ueId,
-    //   modalidade,
-    // });
-    const mock = [
-      {
-        quantidade: 500,
-        descricao: 'Qtd. com o campo reflexões e replanejamento preenchido',
-        turma: 'EI-5',
-      },
-      {
-        quantidade: 200,
-        descricao: 'Qtd. com o campo reflexões e replanejamento não preenchido',
-        turma: 'EI-5',
-      },
-      {
-        quantidade: 400,
-        descricao: 'Qtd. com o campo reflexões e replanejamento preenchido',
-        turma: 'EI-6',
-      },
-      {
-        quantidade: 150,
-        descricao: 'Qtd. com o campo reflexões e replanejamento não preenchido',
-        turma: 'EI-6',
-      },
-    ];
-
-    return new Promise(resolve => {
-      const retorno = { data: mock };
-      setTimeout(() => {
-        resolve(retorno);
-      }, 2000);
+    return this.montarConsultaPadraoGraficos({
+      rota: 'diarios-bordo/reflexoes-replanejamentos/turma-ano',
+      anoLetivo,
+      dreId,
+      ueId,
+      modalidade,
     });
   };
 
