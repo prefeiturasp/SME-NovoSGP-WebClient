@@ -319,6 +319,7 @@ const PendenciasFechamentoForm = ({ match }) => {
                 value={detalhamento}
                 removerToolbar
                 desabilitar
+                disablePlugins="resize-cells"
               />
             </div>
           </div>
