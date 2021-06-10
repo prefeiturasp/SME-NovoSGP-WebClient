@@ -348,7 +348,8 @@ const Filtros = ({ onFiltrar, filtrou, setFiltrou, cancelou, setCancelou }) => {
         modalidadeId,
         '',
         anoLetivo,
-        consideraHistorico
+        consideraHistorico,
+        [1]
       )
         .catch(e => erros(e))
         .finally(() => setCarregandoTurmas(false));
