@@ -1344,7 +1344,7 @@ rotas.set(RotasDto.DASHBOARD_DEVOLUTIVAS, {
   component: DashboardDevolutivas,
   exact: true,
   tipo: RotasTipo.EstruturadaAutenticada,
-  // temPermissionamento: true,
+  temPermissionamento: true,
   chavePermissao: RotasDto.DASHBOARD_DEVOLUTIVAS,
 });
 
