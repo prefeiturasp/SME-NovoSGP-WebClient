@@ -54,6 +54,8 @@ const RelatorioNotasConceitosFinais = () => {
   const [condicao, setCondicao] = useState(undefined);
   const [clicouBotaoGerar, setClicouBotaoGerar] = useState(false);
   const [desabilitarBtnGerar, setDesabilitarBtnGerar] = useState(true);
+  const [anoAtual, setAnoAtual] = useState(new Date().getFullYear());
+  const [consideraHistorico, setConsideraHistorico] = useState(false);
 
   const listaFormatos = [
     { valor: '1', desc: 'PDF' },
@@ -93,12 +95,10 @@ const RelatorioNotasConceitosFinais = () => {
   const obterModalidades = async ue => {
     if (ue) {
       setCarregandoGeral(true);
-      const anoAtual = new Date().getFullYear();
-      const considHistorico = anoLetivo < anoAtual;
       const retorno = await ServicoFiltroRelatorio.obterModalidadesAnoLetivo(
         ue,
         anoLetivo,
-        considHistorico
+        consideraHistorico
       ).catch(e => {
         erros(e);
         setCarregandoGeral(false);
@@ -178,7 +178,7 @@ const RelatorioNotasConceitosFinais = () => {
     setCarregandoGeral(true);
     const retorno = await api
       .get(
-        `v1/abrangencias/false/semestres?anoLetivo=${anoLetivoSelecionado}&modalidade=${modalidadeSelecionada ||
+        `v1/abrangencias/${consideraHistorico}/semestres?anoLetivo=${anoLetivoSelecionado}&modalidade=${modalidadeSelecionada ||
           0}`
       )
       .catch(e => {
@@ -196,6 +196,10 @@ const RelatorioNotasConceitosFinais = () => {
       setListaSemestre(lista);
     }
   };
+
+  useEffect(() => {
+    setConsideraHistorico(anoLetivo < anoAtual);
+  }, [anoLetivo]);
 
   useEffect(() => {
     if (codigoUe) {
