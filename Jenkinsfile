@@ -225,9 +225,6 @@ pipeline {
               branch 'master'
             }
             steps {
-                 
-                 sh 'Build docker image produção'
-                
         // Start JOB Rundeck para build das imagens Docker e push registry SME
       
           script {
