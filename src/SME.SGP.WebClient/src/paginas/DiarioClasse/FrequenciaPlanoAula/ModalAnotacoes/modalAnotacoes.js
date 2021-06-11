@@ -1,6 +1,7 @@
 import { Form, Formik } from 'formik';
 import PropTypes from 'prop-types';
 import React, { useCallback, useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import shortid from 'shortid';
 import * as Yup from 'yup';
 import { Auditoria, Colors, Loader, ModalConteudoHtml } from '~/componentes';
@@ -8,15 +9,16 @@ import DetalhesAluno from '~/componentes/Alunos/Detalhes';
 import Button from '~/componentes/button';
 import JoditEditor from '~/componentes/jodit-editor/joditEditor';
 import SelectComponent from '~/componentes/select';
+import {
+  setDadosModalAnotacaoFrequencia,
+  setExibirModalAnotacaoFrequencia,
+} from '~/redux/modulos/frequenciaPlanoAula/actions';
 import { confirmar, erros, sucesso } from '~/servicos/alertas';
 import ServicoAnotacaoFrequenciaAluno from '~/servicos/Paginas/DiarioClasse/ServicoAnotacaoFrequenciaAluno';
 import { EditorAnotacao } from './modalAnotacoes.css';
 
 const ModalAnotacoesFrequencia = props => {
   const {
-    exibirModal,
-    onCloseModal,
-    dadosModalAnotacao,
     dadosListaFrequencia,
     ehInfantil,
     aulaId,
@@ -24,19 +26,38 @@ const ModalAnotacoesFrequencia = props => {
     desabilitarCampos,
   } = props;
 
-  const [showModal, setShowModal] = useState(exibirModal);
-  const [carregandoMotivosAusencia, setCarregandoMotivosAusencia] = useState(
-    exibirModal
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    return () => {
+      dispatch(setDadosModalAnotacaoFrequencia({}));
+      dispatch(setExibirModalAnotacaoFrequencia(false));
+    };
+  }, [dispatch]);
+
+  const exibirModalAnotacaoFrequencia = useSelector(
+    state => state.frequenciaPlanoAula.exibirModalAnotacaoFrequencia
   );
-  const [listaMotivoAusencia, setListaMotivoAusencia] = useState([]);
-  const [modoEdicao, setModoEdicao] = useState(false);
-  const [refForm, setRefForm] = useState({});
-  const [valoresIniciais, setValoresIniciais] = useState({
+
+  const dadosModalAnotacaoFrequencia = useSelector(
+    state => state.frequenciaPlanoAula.dadosModalAnotacaoFrequencia
+  );
+
+  const [carregandoMotivosAusencia, setCarregandoMotivosAusencia] = useState(
+    exibirModalAnotacaoFrequencia
+  );
+
+  const iniciar = {
     id: 0,
     anotacao: '',
     motivoAusenciaId: undefined,
     auditoria: {},
-  });
+  };
+
+  const [listaMotivoAusencia, setListaMotivoAusencia] = useState([]);
+  const [modoEdicao, setModoEdicao] = useState(false);
+  const [refForm, setRefForm] = useState({});
+  const [valoresIniciais, setValoresIniciais] = useState(iniciar);
 
   const [validacoes] = useState(
     Yup.object().shape(
@@ -62,9 +83,16 @@ const ModalAnotacoesFrequencia = props => {
 
   const [dadosEstudanteOuCrianca, setDadosEstudanteOuCrianca] = useState({});
 
+  const onCloseModal = () => {
+    dispatch(setDadosModalAnotacaoFrequencia({}));
+    dispatch(setExibirModalAnotacaoFrequencia(false));
+    setValoresIniciais(iniciar);
+    setRefForm({});
+  };
+
   const obterAnotacao = useCallback(async () => {
     const resultado = await ServicoAnotacaoFrequenciaAluno.obterAnotacao(
-      dadosModalAnotacao.codigoAluno,
+      dadosModalAnotacaoFrequencia.codigoAluno,
       aulaId
     ).catch(e => erros(e));
 
@@ -74,7 +102,7 @@ const ModalAnotacoesFrequencia = props => {
         : undefined;
       setValoresIniciais(resultado.data);
     }
-  }, [aulaId, dadosModalAnotacao]);
+  }, [aulaId, dadosModalAnotacaoFrequencia]);
 
   const obterListaMotivosAusencia = async () => {
     const retorno = await ServicoAnotacaoFrequenciaAluno.obterMotivosAusencia().catch(
@@ -90,26 +118,26 @@ const ModalAnotacoesFrequencia = props => {
 
   const montarDadosAluno = useCallback(() => {
     const aluno = {
-      ...dadosModalAnotacao,
-      nome: dadosModalAnotacao.nomeAluno,
-      numeroChamada: dadosModalAnotacao.numeroAlunoChamada,
-      dataNascimento: dadosModalAnotacao.dataNascimento,
-      codigoEOL: dadosModalAnotacao.codigoAluno,
+      ...dadosModalAnotacaoFrequencia,
+      nome: dadosModalAnotacaoFrequencia?.nomeAluno,
+      numeroChamada: dadosModalAnotacaoFrequencia?.numeroAlunoChamada,
+      dataNascimento: dadosModalAnotacaoFrequencia?.dataNascimento,
+      codigoEOL: dadosModalAnotacaoFrequencia?.codigoAluno,
     };
     setDadosEstudanteOuCrianca(aluno);
-  }, [dadosModalAnotacao]);
+  }, [dadosModalAnotacaoFrequencia]);
 
   useEffect(() => {
-    if (dadosModalAnotacao) {
+    if (dadosModalAnotacaoFrequencia?.codigoAluno) {
       obterAnotacao();
       montarDadosAluno();
       obterListaMotivosAusencia();
     }
-  }, [dadosModalAnotacao, obterAnotacao, montarDadosAluno]);
+  }, [dadosModalAnotacaoFrequencia, obterAnotacao, montarDadosAluno]);
 
   const fecharAposSalvarExcluir = (salvou, excluiu) => {
     const linhaEditada = dadosListaFrequencia.find(
-      item => item.codigoAluno === dadosModalAnotacao.codigoAluno
+      item => item.codigoAluno === dadosModalAnotacaoFrequencia.codigoAluno
     );
     const index = dadosListaFrequencia.indexOf(linhaEditada);
     if (salvou) {
@@ -147,7 +175,7 @@ const ModalAnotacoesFrequencia = props => {
   };
 
   const onClickSalvar = async valores => {
-    const { codigoAluno } = dadosModalAnotacao;
+    const { codigoAluno } = dadosModalAnotacaoFrequencia;
     const { anotacao, motivoAusenciaId } = valores;
     const params = {
       motivoAusenciaId,
@@ -185,7 +213,7 @@ const ModalAnotacoesFrequencia = props => {
 
   const validaAntesDeExcluir = async id => {
     if (!desabilitarCampos) {
-      setShowModal(false);
+      dispatch(setExibirModalAnotacaoFrequencia(false));
       const confirmado = await confirmar(
         'Atenção',
         '',
@@ -194,14 +222,14 @@ const ModalAnotacoesFrequencia = props => {
       if (confirmado) {
         onClickExcluir(id);
       } else {
-        setShowModal(true);
+        dispatch(setExibirModalAnotacaoFrequencia(true));
       }
     }
   };
 
   const validaAntesDeFechar = async () => {
     if (modoEdicao && !desabilitarCampos) {
-      setShowModal(false);
+      dispatch(setExibirModalAnotacaoFrequencia(false));
       const confirmado = await confirmar(
         'Atenção',
         '',
@@ -225,11 +253,11 @@ const ModalAnotacoesFrequencia = props => {
     }
   };
 
-  return dadosEstudanteOuCrianca ? (
+  return exibirModalAnotacaoFrequencia && dadosEstudanteOuCrianca ? (
     <ModalConteudoHtml
       id={shortid.generate()}
       key="inserir-anotacao"
-      visivel={showModal}
+      visivel={exibirModalAnotacaoFrequencia}
       titulo={`Anotações ${ehInfantil ? 'da criança' : 'do estudante'}`}
       onClose={() => validaAntesDeFechar()}
       esconderBotaoPrincipal
@@ -259,6 +287,7 @@ const ModalAnotacoesFrequencia = props => {
                 dados={dadosEstudanteOuCrianca}
                 exibirBotaoImprimir={false}
                 exibirFrequencia={false}
+                permiteAlterarImagem={false}
               />
             </div>
             <div className="col-md-12 mt-2">
@@ -333,7 +362,7 @@ const ModalAnotacoesFrequencia = props => {
                   onClick={() => validaAntesDeExcluir(form.values.id)}
                   disabled={
                     desabilitarCampos ||
-                    (dadosModalAnotacao && !dadosModalAnotacao.possuiAnotacao)
+                    !dadosModalAnotacaoFrequencia?.possuiAnotacao
                   }
                 />
                 <Button
@@ -361,9 +390,6 @@ const ModalAnotacoesFrequencia = props => {
 };
 
 ModalAnotacoesFrequencia.propTypes = {
-  exibirModal: PropTypes.bool,
-  onCloseModal: PropTypes.func,
-  dadosModalAnotacao: PropTypes.oneOfType([PropTypes.object]),
   dadosListaFrequencia: PropTypes.oneOfType([PropTypes.array]),
   ehInfantil: PropTypes.bool,
   aulaId: PropTypes.oneOfType([PropTypes.any]),
@@ -372,9 +398,6 @@ ModalAnotacoesFrequencia.propTypes = {
 };
 
 ModalAnotacoesFrequencia.defaultProps = {
-  exibirModal: false,
-  onCloseModal: () => {},
-  dadosModalAnotacao: {},
   dadosListaFrequencia: [],
   ehInfantil: false,
   aulaId: '',
