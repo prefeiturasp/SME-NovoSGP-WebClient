@@ -1,6 +1,5 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Auditoria } from '~/componentes';
 import ListaFrequencia from '~/componentes-sgp/ListaFrequencia/listaFrequencia';
 import Ordenacao from '~/componentes-sgp/Ordenacao/ordenacao';
 import CardCollapse from '~/componentes/cardCollapse';
@@ -11,6 +10,7 @@ import {
   setModoEdicaoFrequencia,
 } from '~/redux/modulos/frequenciaPlanoAula/actions';
 import { ehTurmaInfantil } from '~/servicos/Validacoes/validacoesInfatil';
+import AuditoriaFrequencia from './auditoriaFrequencia';
 
 const MontarListaFrequencia = () => {
   const dispatch = useDispatch();
@@ -120,19 +120,7 @@ const MontarListaFrequencia = () => {
                     setDataSource={atualizarValoresAlterados}
                   />
 
-                  {listaDadosFrequencia?.criadoEm && (
-                    <div className="row">
-                      <Auditoria
-                        className="mt-2"
-                        criadoEm={listaDadosFrequencia.criadoEm}
-                        criadoPor={listaDadosFrequencia.criadoPor}
-                        alteradoPor={listaDadosFrequencia.alteradoPor}
-                        alteradoEm={listaDadosFrequencia.alteradoEm}
-                        alteradoRf={listaDadosFrequencia.alteradoRF}
-                        criadoRf={listaDadosFrequencia.criadoRF}
-                      />
-                    </div>
-                  )}
+                  {listaDadosFrequencia?.criadoEm && <AuditoriaFrequencia />}
                 </>
               )}
             </CardCollapse>
