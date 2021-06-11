@@ -87,6 +87,21 @@ const Filtros = ({ onFiltrar, filtrou, setFiltrou, cancelou, setCancelou }) => {
     modeloBoletimId,
   ]);
 
+  useEffect(() => {
+    const params = {
+      anoLetivo,
+      dreCodigo,
+      ueCodigo,
+      modalidadeId,
+      semestre: semestre || 0,
+      turmasId,
+      opcaoEstudanteId,
+      modeloBoletimId,
+    };
+
+    onFiltrar(params, true);
+  }, [modeloBoletimId]);
+
   const onChangeConsideraHistorico = e => {
     setConsideraHistorico(e.target.checked);
     setAnoLetivo(anoAtual);
@@ -374,11 +389,14 @@ const Filtros = ({ onFiltrar, filtrou, setFiltrou, cancelou, setCancelou }) => {
   const onChangeOpcaoEstudante = valor => {
     setFiltrou(false);
     setOpcaoEstudanteId(valor);
+
+    if (!modeloBoletimId) {
+      setModeloBoletimId('1');
+    }
   };
 
   const onChangeModeloBoletim = valor => {
     setModeloBoletimId(valor);
-    setFiltrou(false);
   };
 
   useEffect(() => {
