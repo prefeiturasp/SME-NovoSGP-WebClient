@@ -1,13 +1,12 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Auditoria } from '~/componentes';
-
 import { RotasDto } from '~/dtos';
 import modalidade from '~/dtos/modalidade';
 import {
   setDesabilitarCamposPlanoAula,
   setExibirSwitchEscolhaObjetivos,
 } from '~/redux/modulos/frequenciaPlanoAula/actions';
+import AuditoriaPlanoAula from './auditoriaPlanoAula';
 import CabecalhoDadosPlanoAula from './CabecalhoDadosPlanoAula/cabecalhoDadosPlanoAula';
 import DesenvolvimentoDaAula from './CamposEditorPlanoAula/desenvolvimentoDaAula';
 import LicaoDeCasa from './CamposEditorPlanoAula/licaoDeCasa';
@@ -79,19 +78,7 @@ const DadosPlanoAula = () => {
           <DesenvolvimentoDaAula />
           <RecuperacaoContinua />
           <LicaoDeCasa />
-          {dadosPlanoAula && dadosPlanoAula.id > 0 ? (
-            <Auditoria
-              className="mt-2"
-              alteradoEm={dadosPlanoAula.alteradoEm}
-              alteradoPor={dadosPlanoAula.alteradoPor}
-              alteradoRf={dadosPlanoAula.alteradoRf}
-              criadoEm={dadosPlanoAula.criadoEm}
-              criadoPor={dadosPlanoAula.criadoPor}
-              criadoRf={dadosPlanoAula.criadoRf}
-            />
-          ) : (
-            ''
-          )}
+          {dadosPlanoAula?.id > 0 ? <AuditoriaPlanoAula /> : ''}
         </>
       ) : (
         ''
