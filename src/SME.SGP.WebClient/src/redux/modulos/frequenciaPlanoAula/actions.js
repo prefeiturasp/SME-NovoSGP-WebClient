@@ -169,3 +169,13 @@ export const setAtualizarDatas = payload => ({
   type: '@frequenciaPlanoAula/setAtualizarDatas',
   payload,
 });
+
+export const setExibirModalAnotacaoFrequencia = payload => ({
+  type: '@frequenciaPlanoAula/setExibirModalAnotacaoFrequencia',
+  payload,
+});
+
+export const setDadosModalAnotacaoFrequencia = payload => ({
+  type: '@frequenciaPlanoAula/setDadosModalAnotacaoFrequencia',
+  payload,
+});

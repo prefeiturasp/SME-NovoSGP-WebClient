@@ -10,10 +10,14 @@
     "cmz": "npx git-cz"
   },
   "dependencies": {
+    "@ant-design/charts": "^1.1.2",
     "@ant-design/icons": "^4.2.2",
     "@ckeditor/ckeditor5-build-classic": "^16.0.0",
     "@ckeditor/ckeditor5-react": "^2.0.0",
     "@fortawesome/fontawesome-free": "^5.10.2",
+    "@fortawesome/fontawesome-svg-core": "^1.2.35",
+    "@fortawesome/free-solid-svg-icons": "^5.15.3",
+    "@fortawesome/react-fontawesome": "^0.1.14",
     "@nivo/bar": "^0.61.1",
     "@nivo/pie": "^0.63.1",
     "antd": "^3.22.0",

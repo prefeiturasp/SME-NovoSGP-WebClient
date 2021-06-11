@@ -2,6 +2,7 @@ import { Tooltip } from 'antd';
 import PropTypes from 'prop-types';
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import NomeEstudanteLista from '~/componentes-sgp/NomeEstudanteLista/nomeEstudanteLista';
 
 import { setExpandirLinha } from '~/redux/modulos/notasConceitos/actions';
 import {
@@ -183,7 +184,12 @@ const LinhaAluno = ({
             <div style={{ display: 'inline' }}>{aluno.numeroChamada}</div>
           )}
         </td>
-        <td className="col-nome-aluno"> {aluno.nome}</td>
+        <td className="col-nome-aluno">
+          <NomeEstudanteLista
+            nome={aluno?.nome}
+            exibirSinalizacao={aluno.ehAtendidoAEE}
+          />
+        </td>
         {ehSintese ? (
           <td className="col-nota-conceito">{aluno.sintese}</td>
         ) : (
@@ -202,7 +208,11 @@ const LinhaAluno = ({
             )}
           </td>
         )}
-        {registraFrequencia ? <td>{aluno.frequencia}%</td> : ''}
+        {registraFrequencia && aluno?.frequencia ? (
+          <td>{aluno?.frequencia}%</td>
+        ) : (
+          ''
+        )}
       </tr>
       <LinhaConceitoFinal
         indexLinha={indexAluno}

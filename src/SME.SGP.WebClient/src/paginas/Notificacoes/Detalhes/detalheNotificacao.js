@@ -347,7 +347,7 @@ const DetalheNotificacao = ({ match }) => {
                             <div className="notificacao-horario">
                               {`Notificação automática ${notificacao.criadoEm.substr(
                                 0,
-                                9
+                                10
                               )}`}
                             </div>
                           </div>

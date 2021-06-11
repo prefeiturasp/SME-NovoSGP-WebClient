@@ -56,7 +56,10 @@ function ModalCopiarConteudoPlanoAula() {
     async function buscaTurmas() {
       const { data } = await AbrangenciaServico.buscarTurmas(
         filtro.unidadeEscolar,
-        filtro.modalidade
+        filtro.modalidade,
+        '',
+        filtro.anoLetivo,
+        filtro.consideraHistorico
       );
 
       if (data) {
