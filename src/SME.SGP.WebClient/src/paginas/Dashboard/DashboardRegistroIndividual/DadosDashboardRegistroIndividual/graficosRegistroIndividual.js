@@ -1,6 +1,7 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 import { OPCAO_TODOS } from '~/constantes/constantes';
+import { ModalidadeDTO } from '~/dtos';
 import MediaPeriodoRegistrosIndividuaisPorCrianca from './MediaPeriodoRegistrosIndividuaisPorCrianca/mediaPeriodoRegistrosIndividuaisPorCrianca';
 import QuantidadeCriancasSemRegistros from './QuantidadeCriancasSemRegistros/quantidadeCriancasSemRegistros';
 import QuantidadeTotalRegistrosIndividuais from './QuantidadeTotalRegistrosIndividuais/quantidadeTotalRegistrosIndividuais';
@@ -28,7 +29,10 @@ const GraficosRegistroIndividual = () => {
   const dreId = OPCAO_TODOS === dre?.codigo ? OPCAO_TODOS : dre?.id;
   const ueId = OPCAO_TODOS === ue?.codigo ? OPCAO_TODOS : ue?.id;
 
-  return anoLetivo && dre && ue && modalidade ? (
+  const naoEhInfantil =
+    modalidade && Number(modalidade) !== ModalidadeDTO.INFANTIL;
+
+  return anoLetivo && dre && ue && modalidade && !naoEhInfantil ? (
     <>
       <QuantidadeTotalRegistrosIndividuais
         anoLetivo={anoLetivo}

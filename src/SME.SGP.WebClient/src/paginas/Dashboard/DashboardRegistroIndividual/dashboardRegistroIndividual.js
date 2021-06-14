@@ -8,6 +8,7 @@ import { URL_HOME } from '~/constantes/url';
 import { limparDadosDashboardRegistroIndividual } from '~/redux/modulos/dashboardRegistroIndividual/actions';
 import history from '~/servicos/history';
 import GraficosRegistroIndividual from './DadosDashboardRegistroIndividual/graficosRegistroIndividual';
+import DashboardRegistroIndividualAlertaInfantil from './dashboardRegistroIndividualAlertaInfantil';
 import DashboardRegistroIndividualFiltros from './dashboardRegistroIndividualFiltros';
 
 const DashboardRegistroIndividual = () => {
@@ -23,6 +24,7 @@ const DashboardRegistroIndividual = () => {
 
   return (
     <>
+      <DashboardRegistroIndividualAlertaInfantil />
       <Cabecalho pagina="Dashboard registro individual" />
       <Card>
         <div className="col-md-12">
