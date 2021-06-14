@@ -73,6 +73,7 @@ const Notas = ({ match }) => {
   const [valoresIniciais] = useState({ descricao: undefined });
   const [refForm, setRefForm] = useState({});
   const [carregandoGeral, setCarregandoGeral] = useState(false);
+  const [dadosBimestreAtual, setDadosBimestreAtual] = useState();
 
   const [validacoes] = useState(
     Yup.object({
@@ -177,20 +178,66 @@ const Notas = ({ match }) => {
     return [];
   };
 
+  const obterPeriodos = useCallback(async () => {
+    const params = {
+      anoLetivo: usuario.turmaSelecionada.anoLetivo,
+      modalidade: usuario.turmaSelecionada.modalidade,
+    };
+    const dados = await ServicoNotas.obterPeriodos({ params }).catch(e =>
+      erros(e)
+    );
+    const resultado = dados ? dados.data : [];
+    if (
+      resultado.percentualAlunosInsuficientes &&
+      resultado.percentualAlunosInsuficientes > 0
+    ) {
+      setPercentualMinimoAprovados(resultado.percentualAlunosInsuficientes);
+    }
+    if (resultado.length) {
+      resultado.forEach(periodo => {
+        const bimestreAtualizado = { ...periodo };
+        bimestreAtualizado.numero = periodo.bimestre;
+        bimestreAtualizado.descricao = `${periodo.bimestre}º bimestre`;
+
+        switch (Number(periodo.bimestre)) {
+          case 1:
+            setPrimeiroBimestre(bimestreAtualizado);
+            break;
+          case 2:
+            setSegundoBimestre(bimestreAtualizado);
+            break;
+          case 3:
+            setTerceiroBimestre(bimestreAtualizado);
+            break;
+          case 4:
+            setQuartoBimestre(bimestreAtualizado);
+            break;
+
+          default:
+            break;
+        }
+      });
+    }
+  });
+
   const obterBimestres = useCallback(
-    async (disciplinaId, numeroBimestre) => {
+    async (disciplinaId, dadosBimestre) => {
       const params = {
         anoLetivo: usuario.turmaSelecionada.anoLetivo,
-        bimestre: numeroBimestre,
+        bimestre: dadosBimestre.numero,
         disciplinaCodigo: disciplinaId,
         modalidade: usuario.turmaSelecionada.modalidade,
         turmaCodigo: usuario.turmaSelecionada.turma,
+        turmaId: usuario.turmaSelecionada.id,
         turmaHistorico: usuario.turmaSelecionada.consideraHistorico,
         semestre: usuario.turmaSelecionada.periodo,
+        periodoInicioTicks: dadosBimestre.periodoInicioTicks,
+        periodoFimTicks: dadosBimestre.periodoFimTicks,
+        periodoEscolarId: dadosBimestre.periodoEscolarId,
       };
-      const dados = await api
-        .get('v1/avaliacoes/notas/', { params })
-        .catch(e => erros(e));
+      const dados = await ServicoNotas.obterNotas({ params }).catch(e =>
+        erros(e)
+      );
 
       const resultado = dados ? dados.data : [];
       if (
@@ -210,10 +257,10 @@ const Notas = ({ match }) => {
 
   // Só é chamado quando: Seta, remove ou troca a disciplina e quando cancelar a edição;
   const obterDadosBimestres = useCallback(
-    async (disciplinaId, numeroBimestre, parametroPelaRota) => {
+    async (disciplinaId, dadosBimestre) => {
       if (disciplinaId > 0) {
         setCarregandoListaBimestres(true);
-        const dados = await obterBimestres(disciplinaId, numeroBimestre);
+        const dados = await obterBimestres(disciplinaId, dadosBimestre);
         validaPeriodoFechamento(dados);
         if (dados && dados.bimestres && dados.bimestres.length) {
           dados.bimestres.forEach(async item => {
@@ -254,6 +301,9 @@ const Notas = ({ match }) => {
               listaTiposConceitos,
               observacoes: item.observacoes,
               podeLancarNotaFinal: item.podeLancarNotaFinal,
+              periodoInicioTicks: dadosBimestre.periodoInicioTicks,
+              periodoFimTicks: dadosBimestre.periodoFimTicks,
+              periodoEscolarId: dadosBimestre.periodoEscolarId,
             };
 
             switch (Number(item.numero)) {
@@ -272,10 +322,6 @@ const Notas = ({ match }) => {
 
               default:
                 break;
-            }
-
-            if (parametroPelaRota) {
-              setBimestreCorrente(dados.bimestreAtual);
             }
           });
 
@@ -320,24 +366,11 @@ const Notas = ({ match }) => {
       setEhRegencia(disciplina.regencia);
       setDisciplinaSelecionada(String(disciplina.codigoComponenteCurricular));
       setDesabilitarDisciplina(true);
-      if (disciplina.lancaNota) {
-        obterDadosBimestres(disciplina.codigoComponenteCurricular);
-      }
     }
-    if (
-      match &&
-      match.params &&
-      match.params.disciplinaId &&
-      match.params.bimestre
-    ) {
-      setDisciplinaSelecionada(String(match.params.disciplinaId));
-      obterDadosBimestres(
-        match.params.disciplinaId,
-        match.params.bimestre,
-        true
-      );
+    if (match?.params?.disciplinaId && match?.params?.bimestre) {
+      setDisciplinaSelecionada(String(match?.params.disciplinaId));
     }
-  }, [obterDadosBimestres, usuario.turmaSelecionada.turma]);
+  }, [usuario.turmaSelecionada.turma]);
 
   const obterTituloTela = useCallback(async () => {
     if (usuario && usuario.turmaSelecionada && usuario.turmaSelecionada.turma) {
@@ -420,7 +453,7 @@ const Notas = ({ match }) => {
 
   const aposSalvarNotas = () => {
     // resetarBimestres();
-    obterDadosBimestres(disciplinaSelecionada, bimestreCorrente);
+    obterDadosBimestres(disciplinaSelecionada, dadosBimestreAtual);
   };
 
   const montarBimestreParaSalvar = bimestreParaMontar => {
@@ -721,41 +754,19 @@ const Notas = ({ match }) => {
       if (confirmaSalvar) {
         await onSalvarNotas(false);
         setDisciplinaSelecionada(disciplinaId);
-        obterDadosBimestres(disciplinaId, 0);
       } else {
         setDisciplinaSelecionada(disciplinaId);
         resetarTela();
-        if (disciplinaId) {
-          obterDadosBimestres(disciplinaId, 0);
-        }
       }
     } else {
       resetarTela();
-      if (lancaNota) {
-        obterDadosBimestres(disciplinaId, 0);
-      }
       setDisciplinaSelecionada(disciplinaId);
-    }
-  };
-
-  const getDadosBimestreAtual = () => {
-    switch (Number(bimestreCorrente)) {
-      case 1:
-        return primeiroBimestre;
-      case 2:
-        return segundoBimestre;
-      case 3:
-        return terceiroBimestre;
-      case 4:
-        return quartoBimestre;
-      default:
-        break;
     }
   };
 
   const verificaPorcentagemAprovados = () => {
     return ServicoNotas.temQuantidadeMinimaAprovada(
-      getDadosBimestreAtual(),
+      dadosBimestreAtual,
       percentualMinimoAprovados,
       notaTipo
     );
@@ -792,19 +803,18 @@ const Notas = ({ match }) => {
       }
 
       if (confirmado) {
-        const bimestre = getDadosBimestreAtual();
         const temPorcentagemAceitavel = verificaPorcentagemAprovados();
         if (
           estaEmModoEdicaoGeralNotaFinal &&
           !temPorcentagemAceitavel &&
-          bimestre.modoEdicao
+          dadosBimestreAtual.modoEdicao
         ) {
           setProximoBimestre(numeroBimestre);
           setExibeModalJustificativa(true);
         } else {
-          bimestre.justificativa = temPorcentagemAceitavel
+          dadosBimestreAtual.justificativa = temPorcentagemAceitavel
             ? null
-            : bimestre.justificativa;
+            : dadosBimestreAtual.justificativa;
           await onSalvarNotas(
             clicouSalvar,
             estaEmModoEdicaoGeralNotaFinal,
@@ -836,6 +846,23 @@ const Notas = ({ match }) => {
     if (disciplinaSelecionada) {
       validarJustificativaAntesDeSalvar(numeroBimestre, false, false);
     }
+
+    switch (Number(bimestreCorrente)) {
+      case 1:
+        setDadosBimestreAtual(primeiroBimestre);
+        break;
+      case 2:
+        setDadosBimestreAtual(segundoBimestre);
+        break;
+      case 3:
+        setDadosBimestreAtual(terceiroBimestre);
+        break;
+      case 4:
+        setDadosBimestreAtual(quartoBimestre);
+        break;
+      default:
+        break;
+    }
   };
 
   const validaPeriodoFechamento = dados => {
@@ -851,7 +878,23 @@ const Notas = ({ match }) => {
     }
   };
 
+  const getDadosBimestreAtual = (numeroBimestre = bimestreCorrente) => {
+    switch (Number(numeroBimestre)) {
+      case 1:
+        return primeiroBimestre;
+      case 2:
+        return segundoBimestre;
+      case 3:
+        return terceiroBimestre;
+      case 4:
+        return quartoBimestre;
+      default:
+        break;
+    }
+  };
+
   const confirmarTrocaTab = async numeroBimestre => {
+    const dadosBimestre = getDadosBimestreAtual(numeroBimestre);
     if (disciplinaSelecionada) {
       resetarBimestres();
       setNotaTipo(0);
@@ -868,7 +911,7 @@ const Notas = ({ match }) => {
       setBimestreCorrente(numeroBimestre);
 
       setCarregandoListaBimestres(true);
-      const dados = await obterBimestres(disciplinaSelecionada, numeroBimestre);
+      const dados = await obterBimestres(disciplinaSelecionada, dadosBimestre);
       validaPeriodoFechamento(dados);
       if (dados && dados.bimestres && dados.bimestres.length) {
         const bimestrePesquisado = dados.bimestres.find(
@@ -913,6 +956,9 @@ const Notas = ({ match }) => {
           observacoes: bimestrePesquisado.observacoes,
           podeLancarNotaFinal: bimestrePesquisado.podeLancarNotaFinal,
           justificativa: bimestrePesquisado.justificativa,
+          periodoInicioTicks: dadosBimestre.periodoInicioTicks,
+          periodoFimTicks: dadosBimestre.periodoFimTicks,
+          periodoEscolarId: dadosBimestre.periodoEscolarId,
         };
 
         switch (Number(numeroBimestre)) {
@@ -952,7 +998,7 @@ const Notas = ({ match }) => {
 
   const onClickCancelar = async cancelar => {
     if (cancelar) {
-      obterDadosBimestres(disciplinaSelecionada, bimestreCorrente);
+      obterDadosBimestres(disciplinaSelecionada, dadosBimestreAtual);
       dispatch(setModoEdicaoGeral(false));
       dispatch(setModoEdicaoGeralNotaFinal(false));
       dispatch(setExpandirLinha([]));
@@ -973,6 +1019,9 @@ const Notas = ({ match }) => {
       listaTiposConceitos: bimestreOrdenado.listaTiposConceitos,
       observacoes: bimestreOrdenado.observacoes,
       podeLancarNotaFinal: bimestreOrdenado.podeLancarNotaFinal,
+      periodoInicioTicks: bimestreOrdenado.periodoInicioTicks,
+      periodoFimTicks: bimestreOrdenado.periodoFimTicks,
+      periodoEscolarId: bimestreOrdenado.periodoEscolarId,
     };
     switch (Number(bimestreOrdenado.numero)) {
       case 1:
@@ -993,7 +1042,7 @@ const Notas = ({ match }) => {
   };
 
   const onChangeJustificativa = valor => {
-    getDadosBimestreAtual().justificativa = valor;
+    dadosBimestreAtual.justificativa = valor;
   };
 
   const validaAntesDoSubmit = form => {
