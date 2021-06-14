@@ -1,16 +1,15 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 import { AlertaPermiteSomenteTurmaInfantil } from '~/componentes-sgp';
-import { ModalidadeDTO } from '~/dtos';
 
 const DashboardDevolutivasAlertaInfantil = () => {
-  const { modalidade } = useSelector(
+  const { ue } = useSelector(
     store => store.dashboardDevolutivas?.dadosDashboardDevolutivas
   );
 
   return (
     <AlertaPermiteSomenteTurmaInfantil
-      exibir={modalidade && Number(modalidade) !== ModalidadeDTO.INFANTIL}
+      exibir={ue && !ue?.ehInfantil}
       validarModalidadeFiltroPrincipal={false}
     />
   );
