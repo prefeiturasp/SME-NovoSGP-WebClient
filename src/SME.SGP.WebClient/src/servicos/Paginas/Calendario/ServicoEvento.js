@@ -50,18 +50,7 @@ class ServicoEvento {
   };
 
   obterBimestres = tipoCalendarioId => {
-    // return api.get(`v1/calendarios/tipos/${tipoCalendarioId}/bimestres`);
-
-    return Promise.resolve({
-      data: [
-        { desc: 'Todos', valor: '-99' },
-        { desc: '1º', valor: '1' },
-        { desc: '2º', valor: '2' },
-        { desc: '3º', valor: '3' },
-        { desc: '4º', valor: '4' },
-        { desc: 'Final', valor: '0' },
-      ],
-    });
+    return api.get(`v1/calendarios/tipos/${tipoCalendarioId}/bimestres`);
   };
 }
 
