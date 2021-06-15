@@ -5,7 +5,6 @@ import Button from '~/componentes/button';
 import Card from '~/componentes/card';
 import { Colors } from '~/componentes/colors';
 import modalidade from '~/dtos/modalidade';
-import tipoEscolaDTO from '~/dtos/tipoEscolaDto';
 import AbrangenciaServico from '~/servicos/Abrangencia';
 import { erros, sucesso } from '~/servicos/alertas';
 import api from '~/servicos/api';
@@ -65,6 +64,9 @@ const RelatorioPendencias = () => {
   );
   const [bimestre, setBimestre] = useState(undefined);
   const [exibirDetalhamento, setExibirDetalhamento] = useState('1');
+  const [clicouBotaoGerar, setClicouBotaoGerar] = useState(false);
+  const [desabilitarBtnGerar, setDesabilitarBtnGerar] = useState(true);
+
   const listaSimNao = [
     { valor: '1', desc: 'Sim' },
     { valor: '0', desc: 'Não' },
@@ -99,26 +101,34 @@ const RelatorioPendencias = () => {
     setTurmaId();
     setComponentesCurricularesId();
     setModalidadeId(valor);
+    setClicouBotaoGerar(false);
   };
 
   const onChangeSemestre = valor => {
     setSemestre(valor);
+    setClicouBotaoGerar(false);
   };
 
   const onChangeTurma = valor => {
     setComponentesCurricularesId();
     setTurmaId(valor);
+    setClicouBotaoGerar(false);
   };
 
   const onChangeComponenteCurricular = valor => {
     setComponentesCurricularesId([valor]);
+    setClicouBotaoGerar(false);
   };
 
   const onChangeBimestre = valor => {
     setBimestre(valor);
+    setClicouBotaoGerar(false);
   };
 
-  const onChangeExibirDetalhamento = valor => setExibirDetalhamento(valor);
+  const onChangeExibirDetalhamento = valor => {
+    setExibirDetalhamento(valor);
+    setClicouBotaoGerar(false);
+  };
 
   const [anoAtual] = useState(window.moment().format('YYYY'));
 
@@ -231,12 +241,13 @@ const RelatorioPendencias = () => {
       if (data) {
         const lista = [];
         if (data.length > 1) {
-          lista.push({ valor: '0', desc: 'Todas' });
+          lista.push({ valor: '0', nomeFiltro: 'Todas' });
         }
         data.map(item =>
           lista.push({
             desc: item.nome,
             valor: item.codigo,
+            nomeFiltro: item.nomeFiltro,
           })
         );
         setListaTurmas(lista);
@@ -400,19 +411,37 @@ const RelatorioPendencias = () => {
     await setAnoLetivo(anoAtual);
   };
 
-  const desabilitarGerar =
-    !anoLetivo ||
-    !dreId ||
-    !ueId ||
-    !modalidadeId ||
-    (String(modalidadeId) === String(modalidade.EJA) ? !semestre : false) ||
-    !turmaId ||
-    !componentesCurricularesId ||
-    !bimestre ||
-    !exibirDetalhamento;
+  useEffect(() => {
+    const desabilitar =
+      !anoLetivo ||
+      !dreId ||
+      !ueId ||
+      !modalidadeId ||
+      (String(modalidadeId) === String(modalidade.EJA) ? !semestre : false) ||
+      !turmaId ||
+      !componentesCurricularesId ||
+      !bimestre ||
+      !exibirDetalhamento ||
+      clicouBotaoGerar;
+
+    setDesabilitarBtnGerar(desabilitar);
+  }, [
+    anoLetivo,
+    dreId,
+    ueId,
+    modalidadeId,
+    turmaId,
+    semestre,
+    componentesCurricularesId,
+    bimestre,
+    exibirDetalhamento,
+    clicouBotaoGerar,
+  ]);
 
   const gerar = async () => {
     setCarregandoGerar(true);
+    setClicouBotaoGerar(true);
+
     const params = {
       anoLetivo,
       dreCodigo: dreId,
@@ -481,7 +510,7 @@ const RelatorioPendencias = () => {
                   bold
                   className="mr-0"
                   onClick={gerar}
-                  disabled={desabilitarGerar}
+                  disabled={desabilitarBtnGerar}
                 />
               </Loader>
             </div>
@@ -512,6 +541,7 @@ const RelatorioPendencias = () => {
                   onChange={onChangeDre}
                   valueSelect={dreId}
                   placeholder="Diretoria Regional De Educação (DRE)"
+                  showSearch
                 />
               </Loader>
             </div>
@@ -527,10 +557,11 @@ const RelatorioPendencias = () => {
                   onChange={onChangeUe}
                   valueSelect={ueId}
                   placeholder="Unidade Escolar (UE)"
+                  showSearch
                 />
               </Loader>
             </div>
-            <div className="col-sm-12 col-md-6 col-lg-3 col-xl-3  mb-2">
+            <div className="col-sm-12 col-md-8 col-lg-4 col-xl-4 mb-2">
               <Loader loading={carregandoModalidades} tip="">
                 <SelectComponent
                   id="drop-modalidade-rel-pendencias"
@@ -547,7 +578,7 @@ const RelatorioPendencias = () => {
                 />
               </Loader>
             </div>
-            <div className="col-sm-12 col-md-6 col-lg-1 col-xl-1 mb-2">
+            <div className="col-sm-12 col-md-4 col-lg-2 col-xl-2 mb-2">
               <Loader loading={carregandoSemestres} tip="">
                 <SelectComponent
                   id="drop-semestre-rel-pendencias"
@@ -566,13 +597,13 @@ const RelatorioPendencias = () => {
                 />
               </Loader>
             </div>
-            <div className={`"col-sm-12 col-md-6 col-lg-2`}>
+            <div className="col-sm-12 col-md-12 col-lg-6 col-xl-6 mb-2">
               <Loader loading={carregandoTurmas} tip="">
                 <SelectComponent
                   id="drop-turma-rel-pendencias"
                   lista={listaTurmas}
                   valueOption="valor"
-                  valueText="desc"
+                  valueText="nomeFiltro"
                   label="Turma"
                   disabled={
                     !modalidadeId || (listaTurmas && listaTurmas.length === 1)
@@ -587,10 +618,11 @@ const RelatorioPendencias = () => {
                     }
                   }}
                   placeholder="Turma"
+                  showSearch
                 />
               </Loader>
             </div>
-            <div className={`"col-sm-12 col-md-6 col-lg-2`}>
+            <div className="col-sm-12 col-md-9 col-lg-6 col-xl-6 mb-2">
               <Loader loading={carregandoComponentesCurriculares} tip="">
                 <SelectComponent
                   id="drop-componente-curricular-rel-pendencias"
@@ -607,7 +639,7 @@ const RelatorioPendencias = () => {
                 />
               </Loader>
             </div>
-            <div className={`"col-sm-12 col-md-6 col-lg-2`}>
+            <div className="col-sm-12 col-md-3 col-lg-3 mb-2">
               <SelectComponent
                 id="drop-bimestre-rel-pendencias"
                 lista={listaBimestres}
@@ -620,7 +652,7 @@ const RelatorioPendencias = () => {
                 placeholder="Bimestre"
               />
             </div>
-            <div className={`"col-sm-12 col-md-6 col-lg-2`}>
+            <div className="col-sm-12 col-md-4 col-lg-3 mb-2">
               <SelectComponent
                 label="Exibir detalhamento"
                 lista={listaSimNao}

@@ -15,6 +15,7 @@ import {
   Cabecalho,
   FiltroHelper,
 } from '~/componentes-sgp';
+import { OPCAO_TODOS } from '~/constantes/constantes';
 
 import { ModalidadeDTO } from '~/dtos';
 
@@ -59,7 +60,6 @@ const RelatorioDevolutivas = () => {
 
   const { turmaSelecionada } = useSelector(store => store.usuario);
 
-  const OPCAO_TODOS = '-99';
   const opcoesRadioSimNao = [
     { label: 'Não', value: false },
     { label: 'Sim', value: true },
@@ -108,6 +108,7 @@ const RelatorioDevolutivas = () => {
   const onCheckedConsideraHistorico = () => {
     limparFiltrosSelecionados();
     setConsideraHistorico(!consideraHistorico);
+    setAnoLetivo(anoAtual);
   };
 
   const onChangeAnoLetivo = ano => {
@@ -336,7 +337,7 @@ const RelatorioDevolutivas = () => {
       if (data) {
         const lista = [];
         if (data.length > 1) {
-          lista.push({ valor: OPCAO_TODOS, desc: 'Todas' });
+          lista.push({ valor: OPCAO_TODOS, nomeFiltro: 'Todas' });
         }
         data.map(item =>
           lista.push({
@@ -344,6 +345,7 @@ const RelatorioDevolutivas = () => {
             valor: item.codigo,
             id: item.id,
             ano: item.ano,
+            nomeFiltro: item.nomeFiltro,
           })
         );
         setListaTurmas(lista);
@@ -447,7 +449,7 @@ const RelatorioDevolutivas = () => {
               />
             </div>
           </div>
-          <div className="row mb-4">
+          <div className="row mb-2">
             <div className="col-sm-12">
               <CheckboxComponent
                 id="exibir-historico"
@@ -458,8 +460,8 @@ const RelatorioDevolutivas = () => {
               />
             </div>
           </div>
-          <div className="row mb-4">
-            <div className="col-sm-12 col-md-2 col-lg-2 col-xl-2 pr-0">
+          <div className="row">
+            <div className="col-sm-12 col-md-2 col-lg-2 col-xl-2 mb-2">
               <Loader loading={carregandoAnosLetivos} ignorarTip>
                 <SelectComponent
                   id="drop-ano-letivo"
@@ -467,14 +469,18 @@ const RelatorioDevolutivas = () => {
                   lista={listaAnosLetivo}
                   valueOption="valor"
                   valueText="desc"
-                  disabled={!consideraHistorico || naoEhInfantil || listaAnosLetivo?.length === 1}
+                  disabled={
+                    !consideraHistorico ||
+                    naoEhInfantil ||
+                    listaAnosLetivo?.length === 1
+                  }
                   onChange={onChangeAnoLetivo}
                   valueSelect={anoLetivo}
                   placeholder="Ano letivo"
                 />
               </Loader>
             </div>
-            <div className="col-sm-12 col-md-5 col-lg-5 col-xl-5 pr-0">
+            <div className="col-sm-12 col-md-12 col-lg-5 col-xl-5 mb-2">
               <Loader loading={carregandoDres} tip="">
                 <SelectComponent
                   id="dre"
@@ -488,10 +494,11 @@ const RelatorioDevolutivas = () => {
                   onChange={onChangeDre}
                   valueSelect={dreId}
                   placeholder="Diretoria Regional De Educação (DRE)"
+                  showSearch
                 />
               </Loader>
             </div>
-            <div className="col-sm-12 col-md-5 col-lg-5 col-xl-5">
+            <div className="col-sm-12 col-md-12 col-lg-5 col-xl-5 mb-2">
               <Loader loading={carregandoUes} tip="">
                 <SelectComponent
                   id="ue"
@@ -503,12 +510,13 @@ const RelatorioDevolutivas = () => {
                   onChange={onChangeUe}
                   valueSelect={ueId}
                   placeholder="Unidade Escolar (UE)"
+                  showSearch
                 />
               </Loader>
             </div>
           </div>
-          <div className="row mb-4">
-            <div className="col-sm-12 col-md-4 pr-0">
+          <div className="row">
+            <div className="col-sm-12 col-md-12 col-lg-4 mb-2">
               <Loader loading={carregandoModalidade} ignorarTip>
                 <SelectComponent
                   id="drop-modalidade"
@@ -523,14 +531,14 @@ const RelatorioDevolutivas = () => {
                 />
               </Loader>
             </div>
-            <div className="col-sm-12 col-md-4 pr-0">
+            <div className="col-sm-12 col-md-12 col-lg-8 mb-2">
               <Loader loading={carregandoTurmas} ignorarTip>
                 <SelectComponent
                   multiple
                   id="turma"
                   lista={listaTurmas}
                   valueOption="id"
-                  valueText="desc"
+                  valueText="nomeFiltro"
                   label="Turma"
                   disabled={!modalidadeId || listaTurmas?.length === 1}
                   valueSelect={turmaId}
@@ -538,10 +546,11 @@ const RelatorioDevolutivas = () => {
                     onchangeMultiSelect(valores, turmaId, onChangeTurma);
                   }}
                   placeholder="Turma"
+                  showSearch
                 />
               </Loader>
             </div>
-            <div className="col-sm-12 col-md-4">
+            <div className="col-sm-12 col-md-4 mb-2">
               <SelectComponent
                 lista={listaBimestre}
                 valueOption="valor"
@@ -556,9 +565,7 @@ const RelatorioDevolutivas = () => {
                 placeholder="Selecione o bimestre"
               />
             </div>
-          </div>
-          <div className="row">
-            <div className="col-sm-12">
+            <div className="col-sm-12 col-md-6 mb-2">
               <RadioGroupButton
                 label="Exibir conteúdo da devolutiva"
                 opcoes={opcoesRadioSimNao}

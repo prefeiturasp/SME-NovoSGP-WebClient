@@ -33,6 +33,7 @@ const SelectComponent = React.forwardRef((props, ref) => {
     allowClear,
     defaultValue,
     style,
+    searchValue,
   } = props;
 
   const Container = styled.div`
@@ -44,6 +45,7 @@ const SelectComponent = React.forwardRef((props, ref) => {
 
     .ant-select-arrow {
       color: ${Base.CinzaMako};
+      margin-top: -9px;
     }
 
     .ant-select-selection {
@@ -59,6 +61,7 @@ const SelectComponent = React.forwardRef((props, ref) => {
       align-items: center;
       display: flex;
       ${!size && 'height: 38px;'}
+      ${color && `color: ${color};`}
     }
 
     .ant-select-selection__rendered {
@@ -80,6 +83,8 @@ const SelectComponent = React.forwardRef((props, ref) => {
 
     .ant-select-selection--multiple {
       min-height: 38px;
+      max-height: 39px;
+      overflow-x: hidden;
 
       .ant-select-selection__placeholder {
         line-height: 25px;
@@ -137,10 +142,22 @@ const SelectComponent = React.forwardRef((props, ref) => {
     );
   };
 
+  const filterOption = (input, option) => {
+    const value = option?.props?.value?.toLowerCase();
+    const drescription = option?.props?.children?.toLowerCase();
+    if (searchValue) {
+      return (
+        value?.indexOf(input?.toLowerCase()) >= 0 ||
+        drescription?.toLowerCase().indexOf(input?.toLowerCase()) >= 0
+      );
+    }
+    return drescription?.toLowerCase().indexOf(input?.toLowerCase()) >= 0;
+  };
+
   const campoComValidacoes = () => (
     <Field
       mode={multiple && 'multiple'}
-      suffixIcon={<Icon type="caret-down" />}
+      suffixIcon={<i className="fas fa-angle-down" style={{ fontSize: 18 }} />}
       className={
         form
           ? `overflow-hidden ${possuiErro() ? 'is-invalid' : ''} ${className ||
@@ -165,6 +182,8 @@ const SelectComponent = React.forwardRef((props, ref) => {
       }}
       innerRef={ref}
       defaultValue={defaultValue}
+      filterOption={filterOption}
+      showSearch={showSearch}
     >
       {opcoesLista()}
     </Field>
@@ -176,7 +195,7 @@ const SelectComponent = React.forwardRef((props, ref) => {
   const campoSemValidacoes = () => (
     <Select
       mode={multiple && 'multiple'}
-      suffixIcon={<Icon type="caret-down" />}
+      suffixIcon={<i className="fas fa-angle-down" style={{ fontSize: 18 }} />}
       className={`overflow-hidden ${className}`}
       name={name}
       id={id}
@@ -194,6 +213,7 @@ const SelectComponent = React.forwardRef((props, ref) => {
       size={size || 'default'}
       defaultValue={defaultValue}
       style={style}
+      filterOption={filterOption}
     >
       {opcoesLista()}
     </Select>
@@ -230,11 +250,13 @@ SelectComponent.propTypes = {
   color: PropTypes.string,
   allowClear: PropTypes.bool,
   style: PropTypes.oneOfType([PropTypes.object]),
+  searchValue: PropTypes.bool,
 };
 
 SelectComponent.defaultProps = {
   allowClear: true,
   style: null,
+  searchValue: true,
 };
 
 export default SelectComponent;

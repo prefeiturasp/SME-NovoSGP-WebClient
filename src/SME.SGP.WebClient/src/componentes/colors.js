@@ -23,6 +23,7 @@ const Base = {
   CinzaBotao: '#A4A4A4',
   CinzaCalendario: '#F7F9FA',
   CinzaDesabilitado: '#DADADA',
+  CinzaDivisor: '#BFBFBF',
   CinzaFundo: '#F5F6F8',
   CinzaFundoEditor: '#F1F1F1',
   CinzaIconeNotificacao: '#707683',
@@ -31,6 +32,7 @@ const Base = {
   CinzaMenuItem: '#686868',
   CinzaTabela: '#FAFAFA',
   Laranja: '#F39200',
+  LaranjaStatus: '#C0630E',
   Preto: '#000',
   RosaCalendario: '#FEE4E2',
   Roxo: '#6933FF',
@@ -45,6 +47,7 @@ const Base = {
   LaranjaAlerta: '#D06D12',
   VerdeBorda: '#20AA73',
   Bordo: '#864241',
+  LaranjaFrequencia: '#C0630E',
 };
 
 const Active = {
@@ -55,6 +58,7 @@ const Active = {
   Laranja: Base.Laranja,
   Verde: Base.Verde,
   Vermelho: Base.Vermelho,
+  Branco: Base.Branco,
 };
 
 const Hover = {

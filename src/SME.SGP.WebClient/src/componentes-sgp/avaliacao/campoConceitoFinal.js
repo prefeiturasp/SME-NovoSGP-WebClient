@@ -79,7 +79,7 @@ const CampoConceitoFinal = props => {
     >
       <div>
         <SelectComponent
-          label={label ? label : ''}
+          label={label || ''}
           onChange={valorNovo => setarValorNovo(valorNovo)}
           valueOption="id"
           valueText="valor"
@@ -88,7 +88,6 @@ const CampoConceitoFinal = props => {
             conceitoValorAtual ? String(conceitoValorAtual) : undefined
           }
           showSearch
-          placeholder="Final"
           className={`tamanho-conceito-final ${
             notaConceitoBimestre && notaConceitoBimestre.abaixoDaMedia
               ? 'border-abaixo-media'
@@ -96,12 +95,8 @@ const CampoConceitoFinal = props => {
               ? 'border-registro-alterado'
               : ''
           } `}
-          disabled={
-            desabilitarCampo ||
-            !podeEditar ||
-            !podeLancarNotaFinal ||
-            modoEdicaoGeral
-          }
+          disabled={desabilitarCampo || !podeEditar || !podeLancarNotaFinal}
+          searchValue={false}
         />
       </div>
     </Tooltip>

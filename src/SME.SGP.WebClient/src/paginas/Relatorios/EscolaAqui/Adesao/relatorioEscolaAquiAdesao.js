@@ -19,6 +19,7 @@ import {
 } from '~/servicos';
 
 import { URL_HOME } from '~/constantes';
+import { OPCAO_TODOS } from '~/constantes/constantes';
 
 const RelatorioEscolaAquiAdesao = () => {
   const [exibirLoader, setExibirLoader] = useState(false);
@@ -34,6 +35,7 @@ const RelatorioEscolaAquiAdesao = () => {
     desabilitarRadioListarUsuario,
     setDesabilitarRadioListarUsuario,
   ] = useState(true);
+  const [clicouBotaoGerar, setClicouBotaoGerar] = useState(false);
 
   const opcoesListarUsuarios = [
     { label: 'Não', value: 1 },
@@ -41,8 +43,6 @@ const RelatorioEscolaAquiAdesao = () => {
     { label: 'CPF irregular no EOL', value: 3 },
     { label: 'Todos', value: 4 },
   ];
-
-  const OPCAO_TODOS = '-99';
 
   const voltar = () => {
     history.push(URL_HOME);
@@ -56,6 +56,7 @@ const RelatorioEscolaAquiAdesao = () => {
 
   const gerar = async () => {
     setExibirLoader(true);
+    setClicouBotaoGerar(true);
 
     const retorno = await ServicoAdesaoEscolaAqui.gerar({
       dreCodigo,
@@ -76,7 +77,7 @@ const RelatorioEscolaAquiAdesao = () => {
     setDreCodigo(valor);
     setUeCodigo(undefined);
     setOpcaoListaUsuarios(1);
-
+    setClicouBotaoGerar(false);
   };
 
   const onChangeUe = valor => {
@@ -84,6 +85,7 @@ const RelatorioEscolaAquiAdesao = () => {
     if (valor === OPCAO_TODOS || !valor) {
       setOpcaoListaUsuarios(1);
     }
+    setClicouBotaoGerar(false);
   };
 
   const obterDres = async () => {
@@ -145,9 +147,9 @@ const RelatorioEscolaAquiAdesao = () => {
   }, [dreCodigo, obterUes]);
 
   useEffect(() => {
-    const desabilitar = !dreCodigo || !ueCodigo;
+    const desabilitar = !dreCodigo || !ueCodigo || clicouBotaoGerar;
     setDesabilitarBtnGerar(desabilitar);
-  }, [dreCodigo, ueCodigo]);
+  }, [dreCodigo, ueCodigo, clicouBotaoGerar]);
 
   useEffect(() => {
     const desabilitaDre = dreCodigo === OPCAO_TODOS ? true : !dreCodigo;
@@ -208,6 +210,7 @@ const RelatorioEscolaAquiAdesao = () => {
                 onChange={onChangeDre}
                 valueSelect={dreCodigo}
                 placeholder="Diretoria Regional de Educação (DRE)"
+                showSearch
               />
             </div>
             <div className="col-sm-12 col-md-12 col-lg-6 col-xl-6 mb-2 pl-0">
@@ -221,6 +224,7 @@ const RelatorioEscolaAquiAdesao = () => {
                 onChange={onChangeUe}
                 valueSelect={ueCodigo}
                 placeholder="Unidade Escolar (UE)"
+                showSearch
               />
             </div>
           </div>
@@ -233,6 +237,7 @@ const RelatorioEscolaAquiAdesao = () => {
                 valorInicial
                 onChange={e => {
                   setOpcaoListaUsuarios(e.target.value);
+                  setClicouBotaoGerar(false);
                 }}
                 value={opcaoListaUsuarios}
                 desabilitado={desabilitarRadioListarUsuario}

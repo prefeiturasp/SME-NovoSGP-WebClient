@@ -82,6 +82,16 @@ class ServicoPlanoAula {
         .catch(e => erros(e));
 
       if (plano && plano.data) {
+        const auditoria = {
+          criadoEm: plano.data.criadoEm,
+          criadoPor: plano.data.criadoPor,
+          alteradoPor: plano.data.alteradoPor,
+          alteradoEm: plano.data.alteradoEm,
+          alteradoRF: plano.data.alteradoRF,
+          criadoRF: plano.data.criadoRF,
+        };
+        plano.data.auditoria = { ...auditoria };
+
         dispatch(setDadosPlanoAula({ ...plano.data }));
         setarDadosOriginaisPlanoAula({ ...plano.data });
         dispatch(

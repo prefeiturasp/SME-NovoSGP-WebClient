@@ -93,7 +93,7 @@ const DashboardEscolaAqui = () => {
 
   return (
     <>
-      <Cabecalho pagina="Dashboard" />
+      <Cabecalho pagina="Dashboard escola aqui" />
       <Loader loading={carregandoGeral}>
         <Card>
           <div className="col-md-12">
@@ -120,6 +120,7 @@ const DashboardEscolaAqui = () => {
                   onChange={onChangeDre}
                   valueSelect={codigoDre}
                   placeholder="Diretoria Regional de Educação (DRE)"
+                  showSearch
                 />
               </div>
               <div className="col-sm-12 col-md-12 col-lg-6 col-xl-6 mb-2">
@@ -133,6 +134,7 @@ const DashboardEscolaAqui = () => {
                   onChange={onChangeUe}
                   valueSelect={codigoUe}
                   placeholder="Unidade Escolar (UE)"
+                  showSearch
                 />
               </div>
             </div>

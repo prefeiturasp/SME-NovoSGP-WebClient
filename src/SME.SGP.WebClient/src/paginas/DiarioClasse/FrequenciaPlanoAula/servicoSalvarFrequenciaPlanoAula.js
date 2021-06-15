@@ -1,10 +1,12 @@
 import { store } from '~/redux';
 import {
   setAtualizarDatas,
+  setDadosPlanoAula,
   setDataSelecionadaFrequenciaPlanoAula,
   setErrosPlanoAula,
   setExibirLoaderFrequenciaPlanoAula,
   setExibirModalErrosPlanoAula,
+  setListaDadosFrequencia,
   setModoEdicaoFrequencia,
   setModoEdicaoPlanoAula,
 } from '~/redux/modulos/frequenciaPlanoAula/actions';
@@ -27,13 +29,23 @@ class ServicoSalvarFrequenciaPlanoAula {
 
     dispatch(setExibirLoaderFrequenciaPlanoAula(true));
 
-    const salvouFrequencia = await ServicoFrequencia.salvarFrequencia(
-      valorParaSalvar
-    )
+    const resposta = await ServicoFrequencia.salvarFrequencia(valorParaSalvar)
       .finally(() => dispatch(setExibirLoaderFrequenciaPlanoAula(false)))
       .catch(e => erros(e));
 
-    if (salvouFrequencia && salvouFrequencia.status === 200) {
+    if (resposta?.status === 200) {
+      const auditoria = {
+        criadoEm: resposta.data.criadoEm,
+        criadoPor: resposta.data.criadoPor,
+        alteradoPor: resposta.data.alteradoPor,
+        alteradoEm: resposta.data.alteradoEm,
+        alteradoRF: resposta.data.alteradoRF,
+        criadoRF: resposta.data.criadoRF,
+      };
+      listaDadosFrequencia.auditoria = { ...auditoria };
+      listaDadosFrequencia.id = resposta.data.id;
+      dispatch(setListaDadosFrequencia(listaDadosFrequencia));
+
       sucesso('Frequência realizada com sucesso.');
       dispatch(setModoEdicaoFrequencia(false));
       return true;
@@ -158,13 +170,23 @@ class ServicoSalvarFrequenciaPlanoAula {
 
     dispatch(setExibirLoaderFrequenciaPlanoAula(true));
 
-    const salvouPlanoAula = await ServicoPlanoAula.salvarPlanoAula(
-      valorParaSalvar
-    )
+    const resposta = await ServicoPlanoAula.salvarPlanoAula(valorParaSalvar)
       .finally(() => dispatch(setExibirLoaderFrequenciaPlanoAula(false)))
       .catch(e => erros(e));
 
-    if (salvouPlanoAula && salvouPlanoAula.status === 200) {
+    if (resposta?.status === 200) {
+      const auditoria = {
+        criadoEm: resposta.data.criadoEm,
+        criadoPor: resposta.data.criadoPor,
+        alteradoPor: resposta.data.alteradoPor,
+        alteradoEm: resposta.data.alteradoEm,
+        alteradoRF: resposta.data.alteradoRF,
+        criadoRF: resposta.data.criadoRF,
+      };
+      dadosPlanoAula.auditoria = { ...auditoria };
+      dadosPlanoAula.id = resposta.data.id;
+      dispatch(setDadosPlanoAula(dadosPlanoAula));
+
       sucesso('Plano de aula salvo com sucesso.');
       dispatch(setModoEdicaoPlanoAula(false));
       return true;
@@ -199,7 +221,7 @@ class ServicoSalvarFrequenciaPlanoAula {
 
     const salvouComSucesso = salvouFrequencia && salvouPlanoAula;
 
-    if (salvouComSucesso) {      
+    if (salvouComSucesso) {
       dispatch(setAtualizarDatas(true));
     }
     return salvouComSucesso;

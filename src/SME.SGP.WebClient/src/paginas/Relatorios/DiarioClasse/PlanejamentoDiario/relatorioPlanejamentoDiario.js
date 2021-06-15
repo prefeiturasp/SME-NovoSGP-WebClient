@@ -21,6 +21,7 @@ import ServicoRelatorioPlanejamentoDiario from '~/servicos/Paginas/Relatorios/Di
 import ServicoPeriodoEscolar from '~/servicos/Paginas/Calendario/ServicoPeriodoEscolar';
 
 import FiltroHelper from '~componentes-sgp/filtro/helper';
+import { OPCAO_TODOS } from '~/constantes/constantes';
 
 const RelatorioPlanejamentoDiario = () => {
   const [exibirLoader, setExibirLoader] = useState(false);
@@ -50,9 +51,8 @@ const RelatorioPlanejamentoDiario = () => {
   const [bimestre, setBimestre] = useState();
 
   const [consideraHistorico, setConsideraHistorico] = useState(false);
+  const [clicouBotaoGerar, setClicouBotaoGerar] = useState(false);
   const [desabilitarGerar, setDesabilitarGerar] = useState(true);
-
-  const OPCAO_TODOS = '-99';
 
   const opcoesRadioSimNao = [
     { label: 'Não', value: false },
@@ -96,20 +96,24 @@ const RelatorioPlanejamentoDiario = () => {
 
   const onChangeComponenteCurricular = valor => {
     setComponenteCurricularId(valor);
+    setClicouBotaoGerar(false);
   };
 
   const onChangeBimestre = valor => {
     setBimestre(valor);
+    setClicouBotaoGerar(false);
   };
 
   const onChangeSemestre = valor => {
     setSemestre(valor);
+    setClicouBotaoGerar(false);
   };
 
   const onChangeTurma = valor => {
     setTurmaId(valor);
     setListarDataFutura(false);
     setExibirDetalhamento(false);
+    setClicouBotaoGerar(false);
   };
 
   const [anoAtual] = useState(moment().format('YYYY'));
@@ -148,7 +152,12 @@ const RelatorioPlanejamentoDiario = () => {
   }, [obterDres, anoLetivo, consideraHistorico]);
 
   useEffect(() => {
-    let desabilitar = !anoLetivo || !codigoDre || !codigoUe;
+    let desabilitar =
+      !anoLetivo ||
+      !codigoDre ||
+      !codigoUe ||
+      !componenteCurricularId?.length ||
+      clicouBotaoGerar;
 
     const temDreUeSelecionada = codigoDre && codigoUe;
 
@@ -183,6 +192,8 @@ const RelatorioPlanejamentoDiario = () => {
     modalidadeId,
     semestre,
     bimestre,
+    componenteCurricularId,
+    clicouBotaoGerar,
   ]);
 
   const validarValorPadraoAnoLetivo = lista => {
@@ -339,11 +350,12 @@ const RelatorioPlanejamentoDiario = () => {
             valor: item.codigo,
             id: item.id,
             ano: item.ano,
+            nomeFiltro: item.nomeFiltro,
           })
         );
 
         if (turmas.length > 1) {
-          turmas.unshift({ valor: OPCAO_TODOS, desc: 'Todas' });
+          turmas.unshift({ valor: OPCAO_TODOS, nomeFiltro: 'Todas' });
         }
         setListaTurmas(turmas);
         if (turmas.length === 1) {
@@ -500,6 +512,8 @@ const RelatorioPlanejamentoDiario = () => {
     };
 
     setExibirLoader(true);
+    setClicouBotaoGerar(true);
+
     const retorno = await ServicoRelatorioPlanejamentoDiario.gerar(params)
       .catch(e => erros(e))
       .finally(setExibirLoader(false));
@@ -590,6 +604,7 @@ const RelatorioPlanejamentoDiario = () => {
                 onChange={onChangeDre}
                 valueSelect={codigoDre}
                 placeholder="Diretoria Regional De Educação (DRE)"
+                showSearch
               />
             </div>
             <div className="col-sm-12 col-md-12 col-lg-5 col-xl-5 mb-2">
@@ -603,6 +618,7 @@ const RelatorioPlanejamentoDiario = () => {
                 onChange={onChangeUe}
                 valueSelect={codigoUe}
                 placeholder="Unidade Escolar (UE)"
+                showSearch
               />
             </div>
             <div className="col-sm-12 col-md-6 col-lg-4 col-xl-4 mb-2">
@@ -635,20 +651,21 @@ const RelatorioPlanejamentoDiario = () => {
                 placeholder="Semestre"
               />
             </div>
-            <div className="col-sm-12 col-md-6 col-lg-2 col-xl-4 mb-2">
+            <div className="col-sm-12 col-md-12 col-lg-6 col-xl-4 mb-2">
               <SelectComponent
                 id="drop-turma"
                 lista={listaTurmas}
                 valueOption="valor"
-                valueText="desc"
+                valueText="nomeFiltro"
                 label="Turma"
                 disabled={!modalidadeId || listaTurmas?.length === 1}
                 valueSelect={turmaId}
                 placeholder="Turma"
                 onChange={onChangeTurma}
+                showSearch
               />
             </div>
-            <div className="col-sm-12 col-md-6 col-lg-4 col-xl-3  mb-2">
+            <div className="col-sm-12 col-md-8 col-lg-8 col-xl-3  mb-2">
               <SelectComponent
                 id="drop-componente-curricular"
                 lista={listaComponentesCurriculares}
@@ -665,7 +682,7 @@ const RelatorioPlanejamentoDiario = () => {
                 placeholder="Componente curricular"
               />
             </div>
-            <div className="col-sm-12 col-md-6 col-lg-6 col-xl-4  mb-2">
+            <div className="col-sm-12 col-md-4 col-lg-4 col-xl-4  mb-2">
               <SelectComponent
                 id="drop-bimestre"
                 lista={listaBimestres}
@@ -678,7 +695,7 @@ const RelatorioPlanejamentoDiario = () => {
                 placeholder="Bimestre"
               />
             </div>
-            <div className="col-sm-12 col-md-3 col-lg-3 col-xl-2 mb-2">
+            <div className="col-sm-12 col-md-6 col-lg-3 col-xl-2 mb-2">
               <RadioGroupButton
                 id="radio-datas-futuras"
                 label="Listar datas futuras"
@@ -686,6 +703,7 @@ const RelatorioPlanejamentoDiario = () => {
                 valorInicial
                 onChange={e => {
                   setListarDataFutura(e.target.value);
+                  setClicouBotaoGerar(false);
                 }}
                 desabilitado={
                   !turmaId ||
@@ -696,7 +714,7 @@ const RelatorioPlanejamentoDiario = () => {
                 value={listarDataFutura}
               />
             </div>
-            <div className="col-sm-12 col-md-3 col-lg-3 col-xl-2 mb-2">
+            <div className="col-sm-12 col-md-6 col-lg-3 col-xl-2 mb-2">
               <RadioGroupButton
                 id="radio-exibir-detalhamento"
                 label="Exibir detalhamento"
@@ -704,6 +722,7 @@ const RelatorioPlanejamentoDiario = () => {
                 valorInicial
                 onChange={e => {
                   setExibirDetalhamento(e.target.value);
+                  setClicouBotaoGerar(false);
                 }}
                 value={exibirDetalhamento}
                 desabilitado={!turmaId || turmaId === OPCAO_TODOS}

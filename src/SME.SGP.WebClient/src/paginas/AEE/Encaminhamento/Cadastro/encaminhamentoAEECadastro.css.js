@@ -1,6 +1,7 @@
 import { Steps } from 'antd';
 import styled from 'styled-components';
 import { Base } from '~/componentes/colors';
+import Button from '~/componentes/button';
 
 export const ContainerStepsEncaminhamento = styled(Steps)`
   margin-top: 1rem !important;
@@ -64,5 +65,12 @@ export const ContainerStepsEncaminhamento = styled(Steps)`
 
   .tabela-invalida {
     border: 1px solid #dc3545;
+  }
+`;
+
+export const BtnVoltarExcluirEncaminhamentoAEE = styled(Button)`
+  i {
+    margin-right: 0px !important;
+    font-size: 18px !important;
   }
 `;

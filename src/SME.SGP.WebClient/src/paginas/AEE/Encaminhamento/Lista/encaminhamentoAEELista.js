@@ -20,6 +20,7 @@ import { erros } from '~/servicos/alertas';
 import history from '~/servicos/history';
 import ServicoEncaminhamentoAEE from '~/servicos/Paginas/Relatorios/AEE/ServicoEncaminhamentoAEE';
 import FiltroHelper from '~componentes-sgp/filtro/helper';
+import { BtnVoltarExcluirEncaminhamentoAEE } from '../Cadastro/encaminhamentoAEECadastro.css';
 import ModalAvisoNovoEncaminhamentoAEE from './Componentes/AvisoCadastro/modalAvisoCadastro';
 
 const EncaminhamentoAEELista = () => {
@@ -489,9 +490,8 @@ const EncaminhamentoAEELista = () => {
         <div className="col-md-12">
           <div className="row">
             <div className="col-md-12 d-flex justify-content-end pb-4 justify-itens-end">
-              <Button
+              <BtnVoltarExcluirEncaminhamentoAEE
                 id="btn-voltar"
-                label="Voltar"
                 icon="arrow-left"
                 color={Colors.Azul}
                 border
@@ -543,6 +543,7 @@ const EncaminhamentoAEELista = () => {
                   onChange={onChangeDre}
                   valueSelect={dre?.codigo}
                   placeholder="Diretoria Regional De Educação (DRE)"
+                  showSearch
                 />
               </Loader>
             </div>
@@ -558,21 +559,23 @@ const EncaminhamentoAEELista = () => {
                   onChange={onChangeUe}
                   valueSelect={ue?.codigo}
                   placeholder="Unidade Escolar (UE)"
+                  showSearch
                 />
               </Loader>
             </div>
-            <div className="col-sm-12 col-md-6 col-lg-6 col-xl-6 mb-2">
+            <div className="col-sm-12 col-md-12 col-lg-6 col-xl-6 mb-2">
               <Loader loading={carregandoTurmas} tip="">
                 <SelectComponent
                   id="turma"
                   lista={listaTurmas}
                   valueOption="codigo"
-                  valueText="modalidadeTurmaNome"
+                  valueText="nomeFiltro"
                   label="Turma"
                   disabled={listaTurmas?.length === 1}
                   valueSelect={turma?.codigo}
                   onChange={onChangeTurma}
                   placeholder="Turma"
+                  showSearch
                 />
               </Loader>
             </div>

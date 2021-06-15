@@ -1,5 +1,6 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
+import { OPCAO_TODOS } from '~/constantes/constantes';
 import { ModalidadeDTO } from '~/dtos';
 import FrequenciaGlobalPorAno from './FrequenciaGlobalPorAno/frequenciaGlobalPorAno';
 import FrequenciaGlobalPorDRE from './FrequenciaGlobalPorDRE/frequenciaGlobalPorDRE';
@@ -7,8 +8,6 @@ import QuantidadeAusenciasPossuemJustificativa from './QuantidadeAusenciasPossue
 import QuantidadeJustificativasPorMotivo from './QuantidadeJustificativasPorMotivo/quantidadeJustificativasPorMotivo';
 
 const GraficosFrequencia = () => {
-  const OPCAO_TODOS = '-99';
-
   const anoLetivo = useSelector(
     store => store.dashboardFrequencia?.dadosDashboardFrequencia?.anoLetivo
   );

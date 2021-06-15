@@ -9,7 +9,7 @@ import {
   ModalConteudoHtml,
 } from '~/componentes';
 import { setObjetivosItinerancia } from '~/redux/modulos/itinerancia/action';
-import { aviso, confirmar } from '~/servicos';
+import { confirmar } from '~/servicos';
 import { clonarObjeto } from '~/utils';
 import {
   NOME_CAMPO_OBJETIVO,
@@ -23,7 +23,6 @@ const ModalObjetivos = ({
   setObjetivosSelecionados,
   listaObjetivos,
   objetivosSelecionados,
-  variasUesSelecionadas,
   setModoEdicaoItinerancia,
 }) => {
   const dispatch = useDispatch();
@@ -117,30 +116,19 @@ const ModalObjetivos = ({
       o => o.itineranciaObjetivoBaseId === item.itineranciaObjetivoBaseId
     );
     if (objetivo) {
-      if (
-        !objetivo.permiteVariasUes &&
-        variasUesSelecionadas &&
+      objetivo.checked = !objetivo.checked;
+      form.setFieldValue(
+        NOME_CHECK_OBJETIVO + objetivo.itineranciaObjetivoBaseId,
         !objetivo.checked
-      ) {
-        aviso(
-          'Este objetivo só pode ser selecionado quando o registro é de uma unidade apenas e você está' +
-            ' com mais de uma unidade selecionada.'
-        );
-      } else {
-        objetivo.checked = !objetivo.checked;
+      );
+      if (!objetivo.checked) {
+        objetivo.descricao = '';
         form.setFieldValue(
-          NOME_CHECK_OBJETIVO + objetivo.itineranciaObjetivoBaseId,
-          !objetivo.checked
+          NOME_CAMPO_OBJETIVO + objetivo.itineranciaObjetivoBaseId,
+          ''
         );
-        if (!objetivo.checked) {
-          objetivo.descricao = '';
-          form.setFieldValue(
-            NOME_CAMPO_OBJETIVO + objetivo.itineranciaObjetivoBaseId,
-            ''
-          );
-        }
-        setModoEdicao(true);
       }
+      setModoEdicao(true);
     }
   };
 
@@ -191,16 +179,12 @@ const ModalObjetivos = ({
               </div>
               {listaObjetivos?.length > 0 &&
                 listaObjetivos.map(item => {
-                  const textoUe = item.permiteVariasUes
-                    ? '(uma ou mais unidades)'
-                    : '(apenas uma unidade)';
-
                   return (
                     <React.Fragment key={item.itineranciaObjetivoBaseId}>
                       <CheckboxComponent
                         key={item.itineranciaObjetivoBaseId}
                         className="mb-3 ml-n2"
-                        label={`${item.nome} ${textoUe}`}
+                        label={item.nome}
                         name={
                           NOME_CHECK_OBJETIVO + item.itineranciaObjetivoBaseId
                         }
@@ -241,7 +225,6 @@ ModalObjetivos.defaultProps = {
   modalVisivel: false,
   setModalVisivel: () => {},
   setObjetivosSelecionados: () => {},
-  variasUesSelecionadas: false,
   listaObjetivos: [],
   objetivosSelecionados: [],
   setModoEdicaoItinerancia: () => {},
@@ -251,7 +234,6 @@ ModalObjetivos.propTypes = {
   modalVisivel: PropTypes.bool,
   setModalVisivel: PropTypes.func,
   setObjetivosSelecionados: PropTypes.func,
-  variasUesSelecionadas: PropTypes.bool,
   listaObjetivos: PropTypes.oneOfType([PropTypes.array]),
   objetivosSelecionados: PropTypes.oneOfType([PropTypes.array]),
   setModoEdicaoItinerancia: PropTypes.func,

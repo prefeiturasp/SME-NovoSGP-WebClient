@@ -25,6 +25,7 @@ import { ordenarDescPor } from '~/utils/funcoes/gerais';
 import { ModalidadeDTO } from '~/dtos';
 
 import { URL_HOME } from '~/constantes';
+import { OPCAO_TODOS } from '~/constantes/constantes';
 
 const AtribuicaoCJ = () => {
   const [listaAnosLetivo, setListaAnosLetivo] = useState([]);
@@ -51,8 +52,7 @@ const AtribuicaoCJ = () => {
 
   const [desabilitarBtnGerar, setDesabilitarBtnGerar] = useState(true);
   const [carregandoGeral, setCarregandoGeral] = useState(false);
-
-  const OPCAO_TODOS = '-99';
+  const [clicouBotaoGerar, setClicouBotaoGerar] = useState(false);
 
   const opcoesExibir = [
     { label: 'Não', value: false },
@@ -85,6 +85,7 @@ const AtribuicaoCJ = () => {
   const onClickGerar = async () => {
     let turmasCodigo = turmaId;
     setCarregandoGeral(true);
+    setClicouBotaoGerar(true);
 
     if (turmaId?.length && turmaId?.find(item => item !== OPCAO_TODOS)) {
       turmasCodigo = listaTurmas.filter(
@@ -131,6 +132,7 @@ const AtribuicaoCJ = () => {
     setModalidadeId();
     setTurmaId([]);
     setUeCodigo(undefined);
+    setClicouBotaoGerar(false);
   };
 
   const onChangeUe = valor => {
@@ -142,14 +144,17 @@ const AtribuicaoCJ = () => {
   const onChangeModalidade = valor => {
     setTurmaId([]);
     setModalidadeId(valor);
+    setClicouBotaoGerar(false);
   };
 
   const onChangeSemestre = valor => {
     setSemestre(valor);
+    setClicouBotaoGerar(false);
   };
 
   const onChangeTurma = valor => {
     setTurmaId(valor);
+    setClicouBotaoGerar(false);
   };
 
   const obterAnosLetivos = useCallback(async () => {
@@ -302,7 +307,7 @@ const AtribuicaoCJ = () => {
       if (data) {
         const lista = [];
         if (data.length > 1) {
-          lista.push({ valor: OPCAO_TODOS, desc: 'Todas' });
+          lista.push({ valor: OPCAO_TODOS, nomeFiltro: 'Todas' });
         }
         data.map(item =>
           lista.push({
@@ -310,6 +315,7 @@ const AtribuicaoCJ = () => {
             valor: item.codigo,
             id: item.id,
             ano: item.ano,
+            nomeFiltro: item.nomeFiltro,
           })
         );
         setListaTurmas(lista);
@@ -346,10 +352,11 @@ const AtribuicaoCJ = () => {
   }, [modalidadeId]);
 
   useEffect(() => {
-    const desabilitar = !anoLetivo || !dreCodigo || !ueCodigo;
+    const desabilitar =
+      !anoLetivo || !dreCodigo || !ueCodigo || clicouBotaoGerar;
 
     setDesabilitarBtnGerar(desabilitar);
-  }, [anoLetivo, dreCodigo, ueCodigo]);
+  }, [anoLetivo, dreCodigo, ueCodigo, clicouBotaoGerar]);
 
   const onchangeMultiSelect = (valores, valoreAtual, funSetarNovoValor) => {
     const opcaoTodosJaSelecionado = valoreAtual
@@ -405,7 +412,7 @@ const AtribuicaoCJ = () => {
             </div>
 
             <div className="row mb-4">
-              <div className="col-sm-12 col-md-6 col-lg-2 col-xl-2 mb-2 pl-0">
+              <div className="col-sm-12 col-md-6 col-lg-2 col-xl-2 mb-2">
                 <SelectComponent
                   id="drop-ano-letivo"
                   label="Ano letivo"
@@ -418,7 +425,7 @@ const AtribuicaoCJ = () => {
                   placeholder="Ano letivo"
                 />
               </div>
-              <div className="col-sm-12 col-md-12 col-lg-5 col-xl-5 mb-2 pl-0">
+              <div className="col-sm-12 col-md-12 col-lg-5 col-xl-5 mb-2">
                 <SelectComponent
                   id="drop-dre"
                   label="DRE"
@@ -429,9 +436,10 @@ const AtribuicaoCJ = () => {
                   onChange={onChangeDre}
                   valueSelect={dreCodigo}
                   placeholder="Diretoria Regional De Educação (DRE)"
+                  showSearch
                 />
               </div>
-              <div className="col-sm-12 col-md-12 col-lg-5 col-xl-5 mb-2 p-0">
+              <div className="col-sm-12 col-md-12 col-lg-5 col-xl-5 mb-2">
                 <SelectComponent
                   id="drop-ue"
                   label="UE"
@@ -442,12 +450,13 @@ const AtribuicaoCJ = () => {
                   onChange={onChangeUe}
                   valueSelect={ueCodigo}
                   placeholder="Unidade Escolar (UE)"
+                  showSearch
                 />
               </div>
             </div>
 
             <div className="row mb-4">
-              <div className="col-sm-12 col-md-6 col-lg-4 col-xl-4 mb-2 pl-0">
+              <div className="col-sm-12 col-md-8 col-lg-4 col-xl-4 mb-2">
                 <SelectComponent
                   id="drop-modalidade"
                   label="Modalidade"
@@ -463,7 +472,7 @@ const AtribuicaoCJ = () => {
                   placeholder="Modalidade"
                 />
               </div>
-              <div className="col-sm-12 col-md-6 col-lg-4 col-xl-4 mb-2 pl-0">
+              <div className="col-sm-12 col-md-4 col-lg-2 col-xl-2 mb-2">
                 <SelectComponent
                   id="drop-semestre"
                   lista={listaSemestres}
@@ -480,12 +489,12 @@ const AtribuicaoCJ = () => {
                   placeholder="Semestre"
                 />
               </div>
-              <div className="col-sm-12 col-md-6 col-lg-4 col-xl-4 mb-2 p-0">
+              <div className="col-sm-12 col-md-12 col-lg-6 col-xl-6 mb-2">
                 <SelectComponent
                   id="drop-turma"
                   lista={listaTurmas}
                   valueOption="valor"
-                  valueText="desc"
+                  valueText="nomeFiltro"
                   label="Turma"
                   disabled={
                     !modalidadeId || (listaTurmas && listaTurmas.length === 1)
@@ -496,6 +505,7 @@ const AtribuicaoCJ = () => {
                   onChange={valores => {
                     onchangeMultiSelect(valores, turmaId, onChangeTurma);
                   }}
+                  showSearch
                 />
               </div>
             </div>
@@ -517,42 +527,46 @@ const AtribuicaoCJ = () => {
                   } else {
                     setUsuarioRf(undefined);
                   }
+                  setClicouBotaoGerar(false);
                 }}
                 buscarOutrosCargos
-                classesRF="p-0"
+                className="col-md-12"
               />
             </div>
 
             <div className="row mb-4">
-              <div className="col-sm-12 col-md-6 col-lg-2 col-xl-2 mb-2 pl-0">
+              <div className="col-sm-12 col-md-6 col-lg-2 col-xl-2 mb-2">
                 <RadioGroupButton
                   label="Exibir aulas"
                   opcoes={opcoesExibir}
                   valorInicial
                   onChange={e => {
                     setExibirAulas(e.target.value);
+                    setClicouBotaoGerar(false);
                   }}
                   value={exibirAulas}
                 />
               </div>
-              <div className="col-sm-12 col-md-6 col-lg-3 col-xl-3 mb-2 pl-0">
+              <div className="col-sm-12 col-md-6 col-lg-3 col-xl-3 mb-2">
                 <RadioGroupButton
                   label="Exibir atribuições esporádicas"
                   opcoes={opcoesExibir}
                   valorInicial
                   onChange={e => {
                     setExibirAtribuicoesExporadicas(e.target.value);
+                    setClicouBotaoGerar(false);
                   }}
                   value={exibirAtribuicoesExporadicas}
                 />
               </div>
-              <div className="col-sm-12 col-md-6 col-lg-7 col-xl-7 mb-2 p-0">
+              <div className="col-sm-12 col-md-6 col-lg-7 col-xl-7 mb-2">
                 <RadioGroupButton
                   label="Tipo de visualização"
                   opcoes={opcoesTipoVisualizacao}
                   valorInicial
                   onChange={e => {
                     setTipoVisualizacao(e.target.value);
+                    setClicouBotaoGerar(false);
                   }}
                   value={tipoVisualizacao}
                 />

@@ -22,8 +22,7 @@ pipeline {
       stage('Build projeto') {
             steps {
             sh "echo executando build de projeto"
-            sh 'yarn install'
-            sh 'yarn build'    
+            //sh 'dotnet build'
             }
         }
         
@@ -153,20 +152,79 @@ pipeline {
        
             }
         }
-        
-        stage('Docker Build PROD') {
 
+        stage('Docker build HOM-R2') {
             when {
-              branch 'master'
+              branch 'release-r2'
+            }
+            steps {
+              sh 'echo Deploying homologacao'
+                
+        // Start JOB Rundeck para build das imagens Docker e push registry SME
+      
+          script {
+           step([$class: "RundeckNotifier",
+              includeRundeckLogs: true,
+                
+               
+              //JOB DE BUILD
+              jobId: "f82d52b9-27bd-41cd-ae14-419c099df263",
+              nodeFilters: "",
+              //options: """
+              //     PARAM_1=value1
+               //    PARAM_2=value2
+              //     PARAM_3=
+              //     """,
+              rundeckInstance: "Rundeck-SME",
+              shouldFailTheBuild: true,
+              shouldWaitForRundeckJob: true,
+              tags: "",
+              tailLog: true])
+           }
+            } 
+        }
+        
+        stage('Deploy HOM-R2') {
+            when {
+                branch 'release-r2'
             }
             steps {
                  timeout(time: 24, unit: "HOURS") {
                
                  telegramSend("${JOB_NAME}...O Build ${BUILD_DISPLAY_NAME} - Requer uma aprovação para deploy !!!\n Consulte o log para detalhes -> [Job logs](${env.BUILD_URL}console)\n")
                  input message: 'Deseja realizar o deploy?', ok: 'SIM', submitter: 'marlon_goncalves, marcos_costa, bruno_alevato, robson_silva, rafael_losi'
+            }  
+
+
+       //Start JOB Rundeck para update de imagens no host homologação 
+         
+         script {
+            step([$class: "RundeckNotifier",
+              includeRundeckLogs: true,
+              jobId: "7fb476c7-18d2-4dcd-8abb-e91afe700423",
+              nodeFilters: "",
+              //options: """
+              //     PARAM_1=value1
+               //    PARAM_2=value2
+              //     PARAM_3=
+              //     """,
+              rundeckInstance: "Rundeck-SME",
+              shouldFailTheBuild: true,
+              shouldWaitForRundeckJob: true,
+              tags: "",
+              tailLog: true])
+           }
+      
+       
             }
-                 sh 'echo Deploy produção'
-                
+        }
+
+        stage('Docker Build PROD') {
+
+            when {
+              branch 'master'
+            }
+            steps {
         // Start JOB Rundeck para build das imagens Docker e push registry SME
       
           script {

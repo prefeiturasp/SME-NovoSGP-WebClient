@@ -54,6 +54,12 @@ class ServicoCalendarios {
     const url = `v1/calendarios/frequencias/alunos/${alunoCodigo}/turmas/${turmaCodigo}/geral`;
     return api.get(url);
   };
+
+  obterTiposCalendarioPorAnoLetivoModalidade = (anoLetivo, modalidades) => {
+    return api.get(
+      `v1/calendarios/tipos/ano-letivo/${anoLetivo}/modalidade/${modalidades}`
+    );
+  };
 }
 
 export default new ServicoCalendarios();

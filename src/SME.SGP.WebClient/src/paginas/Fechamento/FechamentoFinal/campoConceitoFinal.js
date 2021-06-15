@@ -91,6 +91,7 @@ const CampoConceitoFinal = props => {
               : ''
           } `}
           disabled={desabilitarCampo || !podeEditar}
+          searchValue={false}
         />
       </div>
     </Tooltip>

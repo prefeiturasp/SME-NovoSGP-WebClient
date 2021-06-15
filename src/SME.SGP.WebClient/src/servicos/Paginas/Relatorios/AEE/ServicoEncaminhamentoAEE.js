@@ -1,4 +1,5 @@
 import QuestionarioDinamicoFuncoes from '~/componentes-sgp/QuestionarioDinamico/Funcoes/QuestionarioDinamicoFuncoes';
+import { RotasDto } from '~/dtos';
 import tipoQuestao from '~/dtos/tipoQuestao';
 import { store } from '~/redux';
 import {
@@ -22,6 +23,7 @@ import {
 import { setDadosObjectCardEstudante } from '~/redux/modulos/objectCardEstudante/actions';
 import { erros } from '~/servicos/alertas';
 import api from '~/servicos/api';
+import history from '~/servicos/history';
 
 const urlPadrao = 'v1/encaminhamento-aee';
 
@@ -128,7 +130,8 @@ class ServicoEncaminhamentoAEE {
   salvarEncaminhamento = async (
     encaminhamentoId,
     situacao,
-    validarCamposObrigatorios
+    validarCamposObrigatorios,
+    enviarEncaminhamento
   ) => {
     const { dispatch } = store;
 
@@ -193,16 +196,30 @@ class ServicoEncaminhamentoAEE {
           formsQuestionarioDinamico?.filter(a => a)?.length;
       }
 
-      if (listaSecoesEmEdicao?.length === 0 && todosOsFormsEstaoValidos) {
+      if (
+        listaSecoesEmEdicao?.length === 0 &&
+        todosOsFormsEstaoValidos &&
+        !enviarEncaminhamento
+      ) {
         return true;
       }
 
       if (todosOsFormsEstaoValidos) {
-        const formsParaSalvar = formsQuestionarioDinamico.filter(f =>
-          listaSecoesEmEdicao.find(
-            secaoEdicao => secaoEdicao.secaoId === f.secaoId
-          )
-        );
+        let formsParaSalvar = [];
+        const enviarSemEditarForms =
+          enviarEncaminhamento && listaSecoesEmEdicao?.length === 0;
+
+        if (enviarSemEditarForms) {
+          formsParaSalvar = formsQuestionarioDinamico?.filter(
+            item => !!item?.secaoId
+          );
+        } else {
+          formsParaSalvar = formsQuestionarioDinamico.filter(f =>
+            listaSecoesEmEdicao.find(
+              secaoEdicao => secaoEdicao.secaoId === f.secaoId
+            )
+          );
+        }
 
         const valoresParaSalvar = {
           id: encaminhamentoId || 0,
@@ -351,6 +368,12 @@ class ServicoEncaminhamentoAEE {
             .post(`${urlPadrao}/salvar`, valoresParaSalvar)
             .catch(e => erros(e))
             .finally(() => dispatch(setExibirLoaderEncaminhamentoAEE(false)));
+
+          if (resposta?.data?.id) {
+            history.push(
+              `${RotasDto.RELATORIO_AEE_ENCAMINHAMENTO}/editar/${resposta?.data?.id}`
+            );
+          }
 
           if (resposta?.status === 200) {
             return true;

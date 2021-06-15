@@ -3,6 +3,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { CheckboxComponent, Loader, SelectComponent } from '~/componentes';
 import { FiltroHelper } from '~/componentes-sgp';
+import { OPCAO_TODOS } from '~/constantes/constantes';
 import { ModalidadeDTO } from '~/dtos';
 import { ServicoFiltroRelatorio } from '~/servicos';
 import AbrangenciaServico from '~/servicos/Abrangencia';
@@ -34,8 +35,6 @@ const DashboardFrequenciaFiltros = () => {
   const [carregandoUes, setCarregandoUes] = useState(false);
   const [carregandoModalidades, setCarregandoModalidades] = useState(false);
   const [carregandoSemestres, setCarregandoSemestres] = useState(false);
-
-  const OPCAO_TODOS = '-99';
 
   const validarValorPadraoAnoLetivo = (lista, atual) => {
     let valorAtual;
@@ -385,6 +384,7 @@ const DashboardFrequenciaFiltros = () => {
               onChange={onChangeDre}
               valueSelect={dre?.codigo}
               placeholder="Diretoria Regional de Educação (DRE)"
+              showSearch
             />
           </Loader>
         </div>

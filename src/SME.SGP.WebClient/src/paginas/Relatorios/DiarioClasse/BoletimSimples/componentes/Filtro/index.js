@@ -1,326 +1,572 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 
-import { Form, Formik } from 'formik';
+import { CheckboxComponent, Loader, SelectComponent } from '~/componentes';
+import { FiltroHelper } from '~/componentes-sgp';
 
-import { Grid, SelectComponent, Loader, CheckboxComponent } from '~/componentes';
-import { Linha } from '~/componentes/EstilosGlobais';
+import { ModalidadeDTO } from '~/dtos';
+import { AbrangenciaServico, erros, ServicoFiltroRelatorio } from '~/servicos';
+import { OPCAO_TODOS } from '~/constantes/constantes';
+import { AvisoBoletim } from './styles';
 
-import AnoLetivoDropDown from './componentes/AnoLetivoDropDown';
-import modalidade from '~/dtos/modalidade';
-import FiltroHelper from '~/componentes-sgp/filtro/helper';
-import { DreDropDown, UeDropDown } from '~/componentes-sgp';
-import TurmasDropDown from './componentes/TurmasDropDown';
-
-function Filtro({ onFiltrar, resetForm }) {
-  const [refForm, setRefForm] = useState({});
-
-  const [carregandoModalidades, setCarregandoModalidades] = useState(false);
-  const [carregandoPeriodos, setCarregandoPeriodos] = useState(false);
-
-  const [modalidadeId, setModalidadeId] = useState(undefined);
-  const [semestreId, setSemestreId] = useState(undefined);
-  const [anoLetivo, setAnoLetivo] = useState(undefined);
-  const [dreId, setDreId] = useState(undefined);
+const Filtros = ({ onFiltrar, filtrou, setFiltrou, cancelou, setCancelou }) => {
+  const [anoAtual] = useState(window.moment().format('YYYY'));
+  const [anoLetivo, setAnoLetivo] = useState();
+  const [carregandoAnosLetivos, setCarregandoAnosLetivos] = useState(false);
+  const [carregandoDres, setCarregandoDres] = useState(false);
+  const [carregandoModalidade, setCarregandoModalidade] = useState(false);
+  const [carregandoSemestres, setCarregandoSemestres] = useState(false);
+  const [carregandoTurmas, setCarregandoTurmas] = useState(false);
+  const [carregandoUes, setCarregandoUes] = useState(false);
   const [consideraHistorico, setConsideraHistorico] = useState(false);
+  const [desabilitarEstudante, setDesabilitarEstudante] = useState(false);
+  const [dreCodigo, setDreCodigo] = useState();
+  const [dreId, setDreId] = useState('');
+  const [listaAnosLetivo, setListaAnosLetivo] = useState([]);
+  const [listaDres, setListaDres] = useState([]);
+  const [listaModalidades, setListaModalidades] = useState([]);
+  const [listaSemestres, setListaSemestres] = useState([]);
+  const [listaTurmas, setListaTurmas] = useState([]);
+  const [listaUes, setListaUes] = useState([]);
+  const [modalidadeId, setModalidadeId] = useState();
+  const [modeloBoletimId, setModeloBoletimId] = useState();
+  const [semestre, setSemestre] = useState();
+  const [opcaoEstudanteId, setOpcaoEstudanteId] = useState();
+  const [turmasId, setTurmasId] = useState('');
+  const [ueCodigo, setUeCodigo] = useState();
 
-  const [urlDre, setUrlDre] = useState(`v1/abrangencias/${consideraHistorico}/dres`);
-  const [urlUe, setUrlUe] = useState(`v1/abrangencias/${consideraHistorico}/dres/${dreId}/ues`);
-
-  const [modalidades, setModalidades] = useState([]);
-  const [periodos, setPeriodos] = useState([]);
-
-  useEffect(() => {
-    if (modalidadeId && anoLetivo) {
-      let url = `v1/abrangencias/${consideraHistorico}/dres?modalidade=${modalidadeId}&anoLetivo=${anoLetivo}`;
-      if (modalidadeId === '3' && semestreId) url += `&periodo=${semestreId}`;
-      setUrlDre(url);
-    }
-  }, [modalidadeId, semestreId, anoLetivo]);
-
-  useEffect(() => {
-    setCarregandoModalidades(true);
-    setModalidades([]);
-    const obterModalidades = async () => {
-      var modalidades = await FiltroHelper.obterModalidades({
-        consideraHistorico,
-        anoLetivoSelecionado: anoLetivo
-      });
-      setModalidades(modalidades);
-
-      if (modalidades.length === 1)
-        setModalidadeId(modalidades[0].valor);
-
-    }
-    if (anoLetivo)
-      obterModalidades();
-    setCarregandoModalidades(false);
-  }, [anoLetivo]);
-
-  useEffect(() => {
-    if (modalidades && modalidades.length === 1 && refForm) {
-      refForm.setFieldValue('modalidadeId', String(modalidades[0].valor));
-      setModalidadeId(String(modalidades[0].valor));
-    }
-    else if (modalidades && modalidades.length > 1 && refForm){
-      refForm.setFieldValue('modalidadeId', '');
-      setModalidadeId('');
-    }
-  }, [modalidades, refForm]);
-
-  useEffect(() => {
-    if (resetForm) {
-      if (refForm && refForm.fields && Object.keys(refForm.fields).length) {
-        const fields = Object.keys(refForm.fields);
-        fields.forEach(field => {
-          const value =
-            refForm.fields[field] &&
-            refForm.fields[field].props &&
-            refForm.fields[field].props.children &&
-            Object.entries(refForm.fields[field].props.children).length === 1
-              ? String(refForm.fields[field].props.children[0].props.value)
-              : '';
-          refForm.setFieldValue(`${field}`, value);          setConsideraHistorico(false);
-          if (field === 'modalidadeId') setModalidadeId(value);
-          if (field === 'dreId') setDreId(value);
-          if (
-            field === 'ueId' &&
-            !Object.entries(refForm.fields.dreId.props.children).length
-          )
-          refForm.setFieldValue('ueId', '');
-          setConsideraHistorico(false);
-          refForm.setFieldValue('consideraHistorico', false);
-        });
-      }
-    }
-  }, [refForm, resetForm]);
-
-  useEffect(() => {
-    setCarregandoPeriodos(true);
-
-    const obterPeriodos = async () => {
-      let periodosLista = [];
-
-      periodosLista = await FiltroHelper.obterPeriodos({
-        consideraHistorico: consideraHistorico,
-        modalidadeSelecionada: modalidadeId,
-        anoLetivoSelecionado: anoLetivo,
-      });
-
-      setPeriodos(periodosLista);
-
-      if (periodosLista && periodosLista.length === 1) {
-        refForm.setFieldValue('semestre', String(periodosLista[0].valor));
-        setSemestreId(periodosLista[0].valor);
-      }
-    };
-    if (
-      anoLetivo &&
-      modalidadeId &&
-      String(modalidadeId) === String(modalidade.EJA)
-    ) {
-      obterPeriodos();
-    } else if (refForm && refForm.setFieldValue) {
-      refForm.setFieldValue('semestre', undefined);
-    }
-
-    setCarregandoPeriodos(false);
-  }, [refForm, modalidadeId]);
-
-  const aoTrocarModalidadeId = id => {
-    if (!id) refForm.setFieldValue('semestre', undefined);
-    setModalidadeId(id);
-    refForm.setFieldValue('dreId', undefined);
-    setDreId();
-    refForm.setFieldValue('ueId', undefined);
-    refForm.setFieldValue('turmaId', undefined);
-    refForm.setFieldValue('opcaoAlunoId', '0');
-  };
-
-  const aoTrocarSemestre = id => {
-    setSemestreId(id);
-  };
-
-  const aoTrocarDreId = id => {
-    if (!id) refForm.setFieldValue('ueId', undefined);
-    setDreId(id);
-    if (modalidadeId && anoLetivo && id) {
-      let url = `v1/abrangencias/${consideraHistorico}/dres/${dreId}/ues?modalidade=${modalidadeId}&anoLetivo=${anoLetivo}`;
-      if (modalidadeId === '3' && semestreId) url += `&periodo=${semestreId}`;
-      setUrlUe(url);
-    }
-  };
-
-  const aoTrocarUeId = id => {
-    if (!id) refForm.setFieldValue('turmaId', undefined);
-  };
-
-  const aoTrocarTurma = () => {
-    refForm.setFieldValue('opcaoAlunoId', '0');
-  };
-
-  const opcoesAlunos = [
+  const opcoesEstudantes = [
     { desc: 'Todos', valor: '0' },
     { desc: 'Selecionar Alunos', valor: '1' },
   ];
 
-  const onSubmitFiltro = valores => {
-    onFiltrar(valores);
+  const opcoesModeloBoletim = [
+    { valor: 1, desc: 'Simples' },
+    { valor: 2, desc: 'Detalhado' },
+  ];
+
+  const limparCampos = () => {
+    setListaUes([]);
+    setUeCodigo();
+
+    setListaModalidades([]);
+    setModalidadeId();
+
+    setListaSemestres([]);
+    setSemestre();
+
+    setListaTurmas([]);
+    setTurmasId();
   };
 
-  function onChangeAnoLetivo(ano){
-    setCarregandoModalidades(true);
-    setAnoLetivo(ano);
-  }
+  useEffect(() => {
+    const params = {
+      anoLetivo,
+      dreCodigo,
+      ueCodigo,
+      modalidadeId,
+      semestre: semestre || 0,
+      turmasId,
+      opcaoEstudanteId,
+      modeloBoletimId,
+    };
 
-  function onCheckedConsideraHistorico(e){
-    refForm.setFieldValue('modalidadeId', undefined);
-    refForm.setFieldValue('semestre', undefined);
-    refForm.setFieldValue('dreId', undefined);
-    refForm.setFieldValue('ueId', undefined);
-    refForm.setFieldValue('turmaId', undefined);
-    refForm.setFieldValue('opcaoAlunoId', '0');
+    if (!filtrou) {
+      onFiltrar(params);
+    }
+  }, [
+    anoLetivo,
+    dreCodigo,
+    ueCodigo,
+    modalidadeId,
+    semestre,
+    turmasId,
+    opcaoEstudanteId,
+    onFiltrar,
+    filtrou,
+    modeloBoletimId,
+  ]);
+
+  useEffect(() => {
+    const params = {
+      anoLetivo,
+      dreCodigo,
+      ueCodigo,
+      modalidadeId,
+      semestre: semestre || 0,
+      turmasId,
+      opcaoEstudanteId,
+      modeloBoletimId,
+    };
+
+    onFiltrar(params, true);
+  }, [modeloBoletimId]);
+
+  const onChangeConsideraHistorico = e => {
     setConsideraHistorico(e.target.checked);
-    refForm.setFieldValue('consideraHistorico', e.target.checked);
-  }
+    setAnoLetivo(anoAtual);
+    limparCampos();
+    setDreCodigo();
+    setDreId();
+    setFiltrou(false);
+  };
+
+  const onChangeAnoLetivo = ano => {
+    setAnoLetivo(ano);
+    limparCampos();
+    setFiltrou(false);
+  };
+
+  const obterAnosLetivos = useCallback(async () => {
+    setCarregandoAnosLetivos(true);
+    let anosLetivos = [];
+
+    const anosLetivoComHistorico = await FiltroHelper.obterAnosLetivos({
+      consideraHistorico: true,
+    });
+    const anosLetivoSemHistorico = await FiltroHelper.obterAnosLetivos({
+      consideraHistorico: false,
+    });
+
+    anosLetivos = anosLetivos.concat(anosLetivoComHistorico);
+
+    anosLetivoSemHistorico.forEach(ano => {
+      if (!anosLetivoComHistorico.find(a => a.valor === ano.valor)) {
+        anosLetivos.push(ano);
+      }
+    });
+
+    if (!anosLetivos.length) {
+      anosLetivos.push({
+        desc: anoAtual,
+        valor: anoAtual,
+      });
+    }
+
+    if (anosLetivos && anosLetivos.length) {
+      const temAnoAtualNaLista = anosLetivos.find(
+        item => String(item.valor) === String(anoAtual)
+      );
+      if (temAnoAtualNaLista) setAnoLetivo(anoAtual);
+      else setAnoLetivo(anosLetivos[0].valor);
+    }
+
+    setListaAnosLetivo(anosLetivos);
+    setCarregandoAnosLetivos(false);
+  }, [anoAtual]);
+
+  useEffect(() => {
+    obterAnosLetivos();
+  }, [obterAnosLetivos]);
+
+  const onChangeDre = dre => {
+    const id = listaDres.find(d => d.valor === dre)?.id;
+    setDreId(id);
+    setDreCodigo(dre);
+    limparCampos();
+    setFiltrou(false);
+  };
+
+  const obterDres = useCallback(async () => {
+    if (anoLetivo) {
+      setCarregandoDres(true);
+      const resposta = await AbrangenciaServico.buscarDres(
+        `v1/abrangencias/${consideraHistorico}/dres?anoLetivo=${anoLetivo}`
+      )
+        .catch(e => erros(e))
+        .finally(() => setCarregandoDres(false));
+
+      if (resposta?.data?.length) {
+        const lista = resposta.data
+          .map(item => ({
+            desc: item.nome,
+            valor: item.codigo,
+            abrev: item.abreviacao,
+            id: item.id,
+          }))
+          .sort(FiltroHelper.ordenarLista('desc'));
+        setListaDres(lista);
+
+        if (lista?.length === 1) {
+          setDreCodigo(lista[0].valor);
+          setDreId(lista[0].id);
+        }
+        return;
+      }
+      setDreCodigo(undefined);
+      setDreId(undefined);
+      setListaDres([]);
+    }
+  }, [anoLetivo, consideraHistorico]);
+
+  useEffect(() => {
+    if (anoLetivo && !listaDres.length) {
+      obterDres();
+    }
+  }, [anoLetivo, listaDres, obterDres]);
+
+  const onChangeUe = ue => {
+    setUeCodigo(ue);
+    setListaModalidades([]);
+    setModalidadeId();
+    setListaTurmas([]);
+    setTurmasId();
+    setFiltrou(false);
+  };
+
+  const obterUes = useCallback(async () => {
+    if (anoLetivo && dreCodigo) {
+      setCarregandoUes(true);
+      const resposta = await AbrangenciaServico.buscarUes(
+        dreCodigo,
+        `v1/abrangencias/${consideraHistorico}/dres/${dreCodigo}/ues?anoLetivo=${anoLetivo}`,
+        true
+      )
+        .catch(e => erros(e))
+        .finally(() => setCarregandoUes(false));
+
+      if (resposta?.data) {
+        const lista = resposta.data.map(item => ({
+          desc: item.nome,
+          valor: String(item.codigo),
+          id: item.id,
+        }));
+
+        if (lista?.length === 1) {
+          setUeCodigo(lista[0].valor);
+        }
+
+        setListaUes(lista);
+        return;
+      }
+      setListaUes([]);
+    }
+  }, [dreId, anoLetivo, consideraHistorico]);
+
+  useEffect(() => {
+    if (dreId) {
+      obterUes();
+      return;
+    }
+    setListaUes([]);
+  }, [dreId, obterUes]);
+
+  const onChangeModalidade = valor => {
+    setTurmasId();
+    setModalidadeId(valor);
+    setFiltrou(false);
+  };
+
+  const obterModalidades = useCallback(async ue => {
+    if (ue) {
+      setCarregandoModalidade(true);
+      const {
+        data,
+      } = await ServicoFiltroRelatorio.obterModalidadesPorAbrangencia(
+        ue
+      ).finally(() => setCarregandoModalidade(false));
+
+      if (data?.length) {
+        const lista = data.map(item => ({
+          desc: item.descricao,
+          valor: String(item.valor),
+        }));
+
+        setListaModalidades(lista);
+        if (lista?.length === 1) {
+          setModalidadeId(lista[0].valor);
+        }
+      }
+    }
+  }, []);
+
+  useEffect(() => {
+    if (anoLetivo && ueCodigo) {
+      obterModalidades(ueCodigo);
+      return;
+    }
+    setModalidadeId();
+    setListaModalidades([]);
+  }, [obterModalidades, anoLetivo, ueCodigo]);
+
+  const onChangeSemestre = valor => {
+    setSemestre(valor);
+    setFiltrou(false);
+  };
+
+  const obterSemestres = async (
+    modalidadeSelecionada,
+    anoLetivoSelecionado
+  ) => {
+    setCarregandoSemestres(true);
+    const retorno = await AbrangenciaServico.obterSemestres(
+      consideraHistorico,
+      anoLetivoSelecionado,
+      modalidadeSelecionada
+    )
+      .catch(e => erros(e))
+      .finally(() => setCarregandoSemestres(false));
+
+    if (retorno?.data?.length) {
+      const lista = retorno.data.map(periodo => {
+        return { desc: periodo, valor: periodo };
+      });
+
+      if (lista?.length === 1) {
+        setSemestre(lista[0].valor);
+      }
+      setListaSemestres(lista);
+    }
+  };
+
+  useEffect(() => {
+    if (
+      modalidadeId &&
+      anoLetivo &&
+      String(modalidadeId) === String(ModalidadeDTO.EJA)
+    ) {
+      obterSemestres(modalidadeId, anoLetivo);
+      return;
+    }
+    setSemestre();
+    setListaSemestres([]);
+  }, [obterAnosLetivos, modalidadeId, anoLetivo]);
+
+  const onChangeTurma = valor => {
+    const temOpcaoTodas = String(valor) === OPCAO_TODOS;
+
+    setTurmasId(valor);
+    setOpcaoEstudanteId('0');
+    setModeloBoletimId('1');
+    setDesabilitarEstudante(temOpcaoTodas);
+    setFiltrou(false);
+  };
+
+  const obterTurmas = useCallback(async () => {
+    if (dreCodigo && ueCodigo && modalidadeId) {
+      setCarregandoTurmas(true);
+      const retorno = await AbrangenciaServico.buscarTurmas(
+        ueCodigo,
+        modalidadeId,
+        '',
+        anoLetivo,
+        consideraHistorico,
+        [1]
+      )
+        .catch(e => erros(e))
+        .finally(() => setCarregandoTurmas(false));
+
+      if (retorno?.data?.length) {
+        const lista = [];
+        if (retorno.data.length > 1) {
+          lista.push({ valor: OPCAO_TODOS, desc: 'Todas' });
+        }
+        retorno.data.map(item =>
+          lista.push({
+            desc: item.nome,
+            valor: item.codigo,
+            id: item.id,
+            ano: item.ano,
+          })
+        );
+        setListaTurmas(lista);
+        if (lista.length === 1) {
+          setTurmasId([String(lista[0].valor)]);
+        }
+      }
+    }
+  }, [ueCodigo, dreId, consideraHistorico, anoLetivo, modalidadeId]);
+
+  useEffect(() => {
+    if (ueCodigo) {
+      obterTurmas();
+      return;
+    }
+    setTurmasId();
+    setListaTurmas([]);
+  }, [ueCodigo, obterTurmas]);
+
+  const onChangeOpcaoEstudante = valor => {
+    setFiltrou(false);
+    setOpcaoEstudanteId(valor);
+
+    if (!modeloBoletimId) {
+      setModeloBoletimId('1');
+    }
+  };
+
+  const onChangeModeloBoletim = valor => {
+    setModeloBoletimId(valor);
+  };
+
+  useEffect(() => {
+    if (cancelou) {
+      limparCampos();
+      setListaDres([]);
+      setDreCodigo();
+      setDreId();
+      setAnoLetivo(anoAtual);
+      setCancelou(false);
+      setFiltrou(false);
+    }
+  }, [cancelou, setFiltrou, setCancelou, anoAtual]);
 
   return (
-    <Formik
-      enableReinitialize
-      validate={valores => onSubmitFiltro(valores)}
-      ref={refFormik => setRefForm(refFormik)}
-      validateOnBlur={false}
-      validateOnChange
-    >
-      {form => (
-        <Form className="col-md-12 mb-4">
-          <Linha className="row mb-4">
-              <Grid col={2}>
-              <CheckboxComponent
-                label="Exibir histórico?"
-                onChangeCheckbox={onCheckedConsideraHistorico}
-                checked={consideraHistorico}
-              />
-              </Grid>
-          </Linha>
-          <Linha className="row mb-2">
-            <Grid cols={2}>
-              <AnoLetivoDropDown
-                form={form}
-                onChange={ano =>  onChangeAnoLetivo(ano)}
-                consideraHistorico={consideraHistorico}
-              />
-            </Grid>
-            <Grid
-              cols={
-                modalidadeId && String(modalidadeId) === String(modalidade.EJA)
-                  ? 5
-                  : 10
+    <div className="col-12 p-0">
+      <div className="row mb-2">
+        <div className="col-12">
+          <CheckboxComponent
+            label="Exibir histórico?"
+            onChangeCheckbox={onChangeConsideraHistorico}
+            checked={consideraHistorico}
+            disabled={listaAnosLetivo.length === 1}
+          />
+        </div>
+      </div>
+      <div className="row mb-2">
+        <div className="col-sm-12 col-md-2 col-lg-2 col-xl-2 pr-0">
+          <Loader loading={carregandoAnosLetivos} ignorarTip>
+            <SelectComponent
+              label="Ano Letivo"
+              lista={listaAnosLetivo}
+              valueOption="valor"
+              valueText="desc"
+              disabled={!consideraHistorico || listaAnosLetivo?.length === 1}
+              onChange={onChangeAnoLetivo}
+              valueSelect={anoLetivo}
+              placeholder="Ano letivo"
+            />
+          </Loader>
+        </div>
+        <div className="col-sm-12 col-md-5 col-lg-5 col-xl-5 pr-0">
+          <Loader loading={carregandoDres} ignorarTip>
+            <SelectComponent
+              label="Diretoria Regional de Educação (DRE)"
+              lista={listaDres}
+              valueOption="valor"
+              valueText="desc"
+              disabled={!anoLetivo || listaDres?.length === 1}
+              onChange={onChangeDre}
+              valueSelect={dreCodigo}
+              placeholder="Diretoria Regional De Educação (DRE)"
+            />
+          </Loader>
+        </div>
+        <div className="col-sm-12 col-md-5 col-lg-5 col-xl-5">
+          <Loader loading={carregandoUes} ignorarTip>
+            <SelectComponent
+              id="ue"
+              label="Unidade Escolar (UE)"
+              lista={listaUes}
+              valueOption="valor"
+              valueText="desc"
+              disabled={!dreCodigo || listaUes?.length === 1}
+              onChange={onChangeUe}
+              valueSelect={ueCodigo}
+              placeholder="Unidade Escolar (UE)"
+              showSearch
+            />
+          </Loader>
+        </div>
+      </div>
+      <div className="row mb-3">
+        <div className="col-sm-12 col-md-4 pr-0">
+          <Loader loading={carregandoModalidade} ignorarTip>
+            <SelectComponent
+              id="drop-modalidade"
+              label="Modalidade"
+              lista={listaModalidades}
+              valueOption="valor"
+              valueText="desc"
+              disabled={!ueCodigo || listaModalidades?.length === 1}
+              onChange={onChangeModalidade}
+              valueSelect={modalidadeId}
+              placeholder="Modalidade"
+            />
+          </Loader>
+        </div>
+        <div className="col-sm-12 col-md-4 pr-0">
+          <Loader loading={carregandoSemestres} ignorarTip>
+            <SelectComponent
+              id="drop-semestre"
+              lista={listaSemestres}
+              valueOption="valor"
+              valueText="desc"
+              label="Semestre"
+              disabled={
+                !modalidadeId ||
+                listaSemestres?.length === 1 ||
+                String(modalidadeId) !== String(ModalidadeDTO.EJA)
               }
-            >
-              <Loader loading={carregandoModalidades} tip="">
-                <SelectComponent
-                  form={form}
-                  name="modalidadeId"
-                  className="fonte-14"
-                  onChange={valor => aoTrocarModalidadeId(valor)}
-                  lista={modalidades}
-                  valueOption="valor"
-                  valueText="desc"
-                  placeholder="Modalidade"
-                  label="Modalidade"
-                  disabled={
-                    !anoLetivo ||
-                    (modalidades && (modalidades.length < 1 || modalidades.length === 1))
-                  }
-                />
-              </Loader>
-            </Grid>
-            {modalidadeId && String(modalidadeId) === String(modalidade.EJA) ? (
-              <Grid cols={5}>
-                <Loader loading={carregandoPeriodos} tip="">
-                  <SelectComponent
-                    form={form}
-                    name="semestre"
-                    className="fonte-14"
-                    onChange={semestre => aoTrocarSemestre(semestre)}
-                    lista={periodos}
-                    valueOption="valor"
-                    valueText="desc"
-                    placeholder="Semestre"
-                    label="Semestre"
-                    disabled={!modalidadeId || periodos?.length < 2}
-                  />
-                </Loader>
-              </Grid>
-            ) : null}
-          </Linha>
-          <Linha className="row mb-2">
-            <Grid cols={6}>
-              <DreDropDown
-                temModalidade={!!modalidadeId}
-                form={form}
-                onChange={dre => aoTrocarDreId(dre)}
-                url={urlDre}
-                label="Diretoria Regional de Educação (DRE)"
-                desabilitado={!modalidadeId}
-              />
-            </Grid>
-            <Grid cols={6}>
-              <UeDropDown
-                dreId={dreId}
-                form={form}
-                onChange={ue => aoTrocarUeId(ue)}
-                url={urlUe}
-                label="Unidade Escolar (UE)"
-                temParametros
-              />
-            </Grid>
-          </Linha>
-          <Linha className="row mb-2">
-            <Grid cols={6}>
-              <TurmasDropDown
-                form={form}
-                onChange={aoTrocarTurma}
-                label="Turma"
-                consideraHistorico={consideraHistorico}
-                anoLetivo={anoLetivo}
-              />
-            </Grid>
-            <Grid cols={6}>
-              <SelectComponent
-                form={form}
-                name="opcaoAlunoId"
-                className="fonte-14"
-                lista={opcoesAlunos}
-                valueOption="valor"
-                valueText="desc"
-                placeholder="Alunos"
-                label="Alunos"
-                disabled={
-                  refForm &&
-                  refForm.state &&
-                  refForm.state.values &&
-                  (!refForm.state.values.turmaId ||
-                    refForm.state.values.turmaId === '0')
-                }
-              />
-            </Grid>
-          </Linha>
-        </Form>
-      )}
-    </Formik>
+              valueSelect={semestre}
+              onChange={onChangeSemestre}
+              placeholder="Semestre"
+            />
+          </Loader>
+        </div>
+        <div className="col-sm-12 col-md-4">
+          <Loader loading={carregandoTurmas} ignorarTip>
+            <SelectComponent
+              id="turma"
+              lista={listaTurmas}
+              valueOption="valor"
+              valueText="desc"
+              label="Turma"
+              disabled={!modalidadeId || listaTurmas?.length === 1}
+              valueSelect={turmasId}
+              onChange={onChangeTurma}
+              placeholder="Turma"
+            />
+          </Loader>
+        </div>
+      </div>
+      <div className="row">
+        <div className="col-sm-12 col-md-4 pr-0">
+          <SelectComponent
+            lista={opcoesEstudantes}
+            valueOption="valor"
+            valueText="desc"
+            label="Estudante(s)"
+            disabled={!turmasId?.length || desabilitarEstudante}
+            valueSelect={opcaoEstudanteId}
+            onChange={onChangeOpcaoEstudante}
+            placeholder="Estudante(s)"
+          />
+        </div>
+        <div className="col-sm-12 col-md-4 pr-0">
+          <SelectComponent
+            lista={opcoesModeloBoletim}
+            valueOption="valor"
+            valueText="desc"
+            label="Modelo de boletim"
+            disabled={!turmasId?.length || !opcaoEstudanteId}
+            valueSelect={modeloBoletimId}
+            onChange={onChangeModeloBoletim}
+            placeholder="Modelo de boletim"
+          />
+          <AvisoBoletim visivel={modeloBoletimId === '2'}>
+            Neste modelo cada estudante ocupará no mínimo 1 página
+          </AvisoBoletim>
+        </div>
+      </div>
+    </div>
   );
-}
+};
 
-Filtro.propTypes = {
+Filtros.propTypes = {
   onFiltrar: PropTypes.func,
-  resetForm: PropTypes.oneOfType([PropTypes.any])
+  filtrou: PropTypes.bool,
+  setFiltrou: PropTypes.func,
+  cancelou: PropTypes.bool,
+  setCancelou: PropTypes.func,
 };
 
-Filtro.defaultProps = {
-  onFiltrar: () => null,
-  resetForm: false
+Filtros.defaultProps = {
+  onFiltrar: () => {},
+  filtrou: false,
+  setFiltrou: () => {},
+  cancelou: false,
+  setCancelou: () => {},
 };
 
-export default Filtro;
+export default Filtros;

@@ -1,7 +1,6 @@
 import { Tooltip } from 'antd';
 import PropTypes from 'prop-types';
-import React, { createRef, useRef } from 'react';
-import ReactDOM from 'react-dom';
+import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import shortid from 'shortid';
 import { LabelSemDados } from '~/componentes';
@@ -15,7 +14,6 @@ import NomeEstudanteLista from '../NomeEstudanteLista/nomeEstudanteLista';
 import {
   acharItem,
   converterAcaoTecla,
-  esperarMiliSegundos,
   moverCursor,
   tratarString,
 } from '~/utils';
@@ -61,7 +59,7 @@ const Avaliacao = props => {
   };
 
   const onChangeNotaConceitoFinal = (notaBimestre, valorNovo) => {
-    if (!desabilitarCampos && valorNovo !== null) {
+    if (!desabilitarCampos) {
       notaBimestre.notaConceito = valorNovo;
       notaBimestre.modoEdicao = true;
       dados.modoEdicao = true;
@@ -75,13 +73,25 @@ const Avaliacao = props => {
     return dados.avaliacoes && dados.avaliacoes.length > 0
       ? dados.avaliacoes.map(avaliacao => {
           return (
-            <th key={shortid.generate()} className="width-150">
+            <th key={shortid.generate()} className="width-110">
               <div className="texto-header-avaliacao">
                 <Tooltip title={avaliacao.nome}>{avaliacao.nome}</Tooltip>
               </div>
               <div className="texto-header-avaliacao">
                 {window.moment(avaliacao.data).format('DD/MM/YYYY')}
               </div>
+              {avaliacao.disciplinas && (
+                <div className="row justify-content-center px-3">
+                  {avaliacao.disciplinas.map(item => (
+                    <div
+                      alt={item}
+                      className="badge badge-pill border text-dark bg-white font-weight-light"
+                    >
+                      {item}
+                    </div>
+                  ))}
+                </div>
+              )}
             </th>
           );
         })
@@ -291,14 +301,18 @@ const Avaliacao = props => {
                       %Freq.
                     </th>
                   </tr>
-                  <tr>
-                    <th
-                      className="sticky-col col-numero-chamada cinza-fundo"
-                      style={{ borderRight: 'none' }}
-                    />
-                    <th className="sticky-col col-nome-aluno cinza-fundo" />
-                    {montarCabecalhoInterdisciplinar()}
-                  </tr>
+                  {dados.avaliacoes && dados.avaliacoes.length > 0 ? (
+                    <tr>
+                      <th
+                        className="sticky-col col-numero-chamada cinza-fundo"
+                        style={{ borderRight: 'none' }}
+                      />
+                      <th className="sticky-col col-nome-aluno cinza-fundo" />
+                      {montarCabecalhoInterdisciplinar()}
+                    </tr>
+                  ) : (
+                    ''
+                  )}
                 </thead>
               </table>
             </div>
@@ -312,8 +326,6 @@ const Avaliacao = props => {
                         <tr>
                           <td className="sticky-col col-numero-chamada">
                             {aluno.numeroChamada}
-                          </td>
-                          <td className="sticky-col col-nome-aluno">
                             {aluno.marcador && (
                               <Tooltip
                                 title={aluno.marcador.descricao}
@@ -322,19 +334,18 @@ const Avaliacao = props => {
                                 <InfoMarcador className="fas fa-circle" />
                               </Tooltip>
                             )}
-                            <div style={{ marginLeft: '30px' }}>
-                              <NomeEstudanteLista
-                                nome={aluno?.nome}
-                                exibirSinalizacao={aluno?.ehAtendidoAEE}
-                              />
-                            </div>
+                          </td>
+                          <td className="sticky-col col-nome-aluno">
+                            <Tooltip title={aluno.nome} placement="top">
+                              {aluno.nome}
+                            </Tooltip>
                           </td>
                           {aluno.notasAvaliacoes.length
                             ? aluno.notasAvaliacoes.map(nota => {
                                 return (
                                   <td
                                     key={shortid.generate()}
-                                    className="width-150"
+                                    className="width-110"
                                   >
                                     {montarCampoNotaConceito(nota, aluno)}
                                     {nota.ausente ? (
@@ -357,7 +368,9 @@ const Avaliacao = props => {
                           </td>
 
                           <td className="sticky-col col-frequencia linha-frequencia ">
-                            {aluno.percentualFrequencia}%
+                            {aluno?.percentualFrequencia
+                              ? `${aluno.percentualFrequencia}%`
+                              : ''}
                           </td>
                         </tr>
                         <LinhaConceitoFinal

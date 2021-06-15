@@ -94,8 +94,11 @@ import AcompanhamentoAprendizagem from '~/paginas/Fechamento/AcompanhamentoApren
 import RelatorioDevolutivas from '~/paginas/Relatorios/Planejamento/Devolutivas/relatorioDevolutivas';
 import DashboardAEE from '~/paginas/Dashboard/AEE/dashboardAEE';
 import DashboardRegistroItinerancia from '~/paginas/Dashboard/DashboardRegistroItinerancia/dashboardRegistroItinerancia';
+import AcompanhamentoFechamento from '~/paginas/Fechamento/AcompanhamentoFechamento/acompanhamentoFechamento';
 import DashboardFrequencia from '~/paginas/Dashboard/DashboardFrequencia/dashboardFrequencia';
 import DashboardDevolutivas from '~/paginas/Dashboard/DashboardDevolutivas/dashboardDevolutivas';
+import DashboardInformacoesEscolares from '~/paginas/Dashboard/DashboardInformacoesEscolares/dashboardInformacoesEscolares';
+import DashboardDiarioBordo from '~/paginas/Dashboard/DashboardDiarioBordo/dashboardDiarioBordo';
 
 const rotas = new Map();
 
@@ -1326,6 +1329,17 @@ rotas.set(RotasDto.DASHBOARD_REGISTRO_ITINERANCIA, {
   chavePermissao: RotasDto.DASHBOARD_REGISTRO_ITINERANCIA,
 });
 
+rotas.set(RotasDto.ACOMPANHAMENTO_FECHAMENTO, {
+  breadcrumbName: 'Acompanhamento do Fechamento',
+  menu: ['Fechamento'],
+  parent: '/',
+  component: AcompanhamentoFechamento,
+  exact: true,
+  tipo: RotasTipo.EstruturadaAutenticada,
+  temPermissionamento: false,
+  chavePermissao: RotasDto.ACOMPANHAMENTO_FECHAMENTO,
+});
+
 rotas.set(RotasDto.DASHBOARD_FREQUENCIA, {
   breadcrumbName: 'Frequência',
   menu: ['Dashboard'],
@@ -1346,6 +1360,28 @@ rotas.set(RotasDto.DASHBOARD_DEVOLUTIVAS, {
   tipo: RotasTipo.EstruturadaAutenticada,
   temPermissionamento: true,
   chavePermissao: RotasDto.DASHBOARD_DEVOLUTIVAS,
+});
+
+rotas.set(RotasDto.DASHBOARD_INFORMACOES_ESCOLARES, {
+  breadcrumbName: 'Informações escolares',
+  menu: ['Dashboard'],
+  parent: '/',
+  component: DashboardInformacoesEscolares,
+  exact: true,
+  tipo: RotasTipo.EstruturadaAutenticada,
+  temPermissionamento: true,
+  chavePermissao: RotasDto.DASHBOARD_INFORMACOES_ESCOLARES,
+});
+
+rotas.set(RotasDto.DASHBOARD_DIARIO_BORDO, {
+  breadcrumbName: 'Diário de bordo',
+  menu: ['Dashboard'],
+  parent: '/',
+  component: DashboardDiarioBordo,
+  exact: true,
+  tipo: RotasTipo.EstruturadaAutenticada,
+  // temPermissionamento: true,
+  chavePermissao: RotasDto.DASHBOARD_DIARIO_BORDO,
 });
 
 const rotasArray = [];

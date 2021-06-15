@@ -50,6 +50,7 @@ const CampoConceitoPosConselho = props => {
         showSearch
         placeholder="Conceito"
         disabled={desabilitarCampo}
+        searchValue={false}
       />
     </Combo>
   );
