@@ -1368,7 +1368,7 @@ rotas.set(RotasDto.DASHBOARD_DIARIO_BORDO, {
   component: DashboardDiarioBordo,
   exact: true,
   tipo: RotasTipo.EstruturadaAutenticada,
-  // temPermissionamento: true,
+  temPermissionamento: true,
   chavePermissao: RotasDto.DASHBOARD_DIARIO_BORDO,
 });
 
