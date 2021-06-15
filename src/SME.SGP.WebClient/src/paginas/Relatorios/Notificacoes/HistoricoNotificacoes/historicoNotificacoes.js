@@ -186,9 +186,9 @@ const HistoricoNotificacoes = () => {
   };
 
   const obterTurmas = useCallback(async () => {
-    if (codigoUe === OPCAO_TODAS) {
+    if (codigoUe === OPCAO_TODOS) {
       setListaTurmas([{ valor: OPCAO_TODOS, descricao: 'Todas' }]);
-      setTurmaId(OPCAO_TODAS);
+      setTurmaId(OPCAO_TODOS);
       return;
     }
 
@@ -283,7 +283,7 @@ const HistoricoNotificacoes = () => {
     const status = await api.get('v1/notificacoes/status').catch(e => erros(e));
     if (status?.data?.length) {
       if (status.data.length > 1) {
-        status.data.unshift({ descricao: 'Todas', id: OPCAO_TODAS });
+        status.data.unshift({ descricao: 'Todas', id: OPCAO_TODOS });
       }
       setListaSituacao(status.data);
     } else {
@@ -296,7 +296,7 @@ const HistoricoNotificacoes = () => {
 
     if (cat?.data?.length) {
       if (cat.data.length > 1) {
-        cat.data.unshift({ descricao: 'Todas', id: OPCAO_TODAS });
+        cat.data.unshift({ descricao: 'Todas', id: OPCAO_TODOS });
       }
       setListaCategorias(cat.data);
     } else {
@@ -306,7 +306,7 @@ const HistoricoNotificacoes = () => {
     const tip = await api.get('v1/notificacoes/tipos').catch(e => erros(e));
     if (tip?.data?.length) {
       if (tip.data.length > 1) {
-        tip.data.unshift({ descricao: 'Todos', id: OPCAO_TODAS });
+        tip.data.unshift({ descricao: 'Todos', id: OPCAO_TODOS });
       }
       setListaTipos(tip.data);
     } else {
