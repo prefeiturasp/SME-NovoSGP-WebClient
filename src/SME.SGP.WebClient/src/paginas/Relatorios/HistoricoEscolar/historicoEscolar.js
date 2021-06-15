@@ -229,6 +229,7 @@ const HistoricoEscolar = () => {
           const lista = data.map(item => ({
             desc: item.nome,
             valor: item.codigo,
+            nomeFiltro: item.nomeFiltro,
           }));
           setListaTurmas(lista);
 
@@ -575,6 +576,7 @@ const HistoricoEscolar = () => {
                   onChange={onChangeDre}
                   valueSelect={dreId}
                   placeholder="Diretoria Regional De Educação (DRE)"
+                  showSearch
                 />
               </Loader>
             </div>
@@ -589,6 +591,7 @@ const HistoricoEscolar = () => {
                   onChange={onChangeUe}
                   valueSelect={ueId}
                   placeholder="Unidade Escolar (UE)"
+                  showSearch
                 />
               </Loader>
             </div>
@@ -659,7 +662,7 @@ const HistoricoEscolar = () => {
                 <SelectComponent
                   lista={listaTurmas}
                   valueOption="valor"
-                  valueText="desc"
+                  valueText="nomeFiltro"
                   label="Turma"
                   disabled={
                     !modalidadeId ||
@@ -670,6 +673,7 @@ const HistoricoEscolar = () => {
                   valueSelect={turmaId}
                   onChange={onChangeTurma}
                   placeholder="Turma"
+                  showSearch
                 />
               </Loader>
             </div>

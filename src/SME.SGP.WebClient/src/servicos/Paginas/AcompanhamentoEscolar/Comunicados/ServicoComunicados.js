@@ -1,6 +1,5 @@
+import { OPCAO_TODOS } from '~/constantes/constantes';
 import api from '../../../api';
-
-const TODAS_UES_ID = '-99';
 
 class ServicoComunicados {
   listarGrupos = async () => {
@@ -90,7 +89,7 @@ class ServicoComunicados {
 
   buscarAnosPorModalidade = async (modalidade, codigoUe, params) => {
     return api.get(
-      (codigoUe != null && codigoUe !== TODAS_UES_ID)
+      (codigoUe != null && codigoUe !== OPCAO_TODOS)
         ? `v1/comunicado/anos/modalidade/${modalidade}?codigoUe=${codigoUe}`
         : `v1/comunicado/anos/modalidade/${modalidade}`,
       {

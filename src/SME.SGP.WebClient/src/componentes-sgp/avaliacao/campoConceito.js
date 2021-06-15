@@ -49,6 +49,7 @@ const CampoConceito = props => {
       }`}
       classNameContainer={nota.ausente ? 'aluno-ausente-conceitos' : ''}
       disabled={desabilitarCampo || !nota.podeEditar}
+      searchValue={false}
     />
   );
 };

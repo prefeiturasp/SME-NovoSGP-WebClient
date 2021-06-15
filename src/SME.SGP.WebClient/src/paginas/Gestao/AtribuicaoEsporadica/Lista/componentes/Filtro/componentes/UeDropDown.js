@@ -48,6 +48,7 @@ function UeDropDown({ form, onChange, dreId }) {
       valueText="desc"
       placeholder="Unidade Escolar (UE)"
       disabled={listaUes.length === 0 || listaUes.length === 1}
+      showSearch
     />
   );
 }

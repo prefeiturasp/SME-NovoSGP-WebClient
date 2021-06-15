@@ -1214,6 +1214,7 @@ const ComunicadosCadastro = ({ match }) => {
                       onChange={x => {
                         onChangeDre(x);
                       }}
+                      showSearch
                     />
                   </Grid>
                   <Grid cols={5}>
@@ -1232,6 +1233,7 @@ const ComunicadosCadastro = ({ match }) => {
                       onChange={x => {
                         onChangeUe(x);
                       }}
+                      showSearch
                     />
                   </Grid>
                 </Linha>
@@ -1318,6 +1320,7 @@ const ComunicadosCadastro = ({ match }) => {
                       allowClear={false}
                       multiple
                       onChange={codigosTurmas => onChangeTurmas(codigosTurmas)}
+                      showSearch
                     />
                   </Grid>
                 </Linha>
