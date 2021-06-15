@@ -52,6 +52,7 @@ import entidadeStatusDto from '~/dtos/entidadeStatusDto';
 import AbrangenciaServico from '~/servicos/Abrangencia';
 import ServicoCalendarios from '~/servicos/Paginas/Calendario/ServicoCalendarios';
 import tipoEvento from '~/dtos/tipoEvento';
+import { OPCAO_TODOS } from '~/constantes/constantes';
 
 const EventosForm = ({ match }) => {
   const usuarioStore = useSelector(store => store.usuario);
@@ -126,7 +127,6 @@ const EventosForm = ({ match }) => {
     { label: 'Sim', value: 1 },
     { label: 'Não', value: 2 },
   ];
-  const OPCAO_TODOS = '-99';
 
   const [validacoes, setValidacoes] = useState({});
 
