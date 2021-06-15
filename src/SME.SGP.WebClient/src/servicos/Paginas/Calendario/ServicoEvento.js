@@ -48,10 +48,6 @@ class ServicoEvento {
         };
       });
   };
-
-  obterBimestres = tipoCalendarioId => {
-    return api.get(`v1/calendarios/tipos/${tipoCalendarioId}/bimestres`);
-  };
 }
 
 export default new ServicoEvento();

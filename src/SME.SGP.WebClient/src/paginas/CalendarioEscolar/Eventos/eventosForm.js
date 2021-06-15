@@ -906,7 +906,7 @@ const EventosForm = ({ match }) => {
   };
 
   const obterBimestres = async idTipoCalendario => {
-    const resposta = await servicoEvento.obterBimestres(idTipoCalendario);
+    const resposta = await ServicoCalendarios.obterBimestres(idTipoCalendario);
     if (resposta?.data) {
       setListaBimestres(resposta?.data);
     }
