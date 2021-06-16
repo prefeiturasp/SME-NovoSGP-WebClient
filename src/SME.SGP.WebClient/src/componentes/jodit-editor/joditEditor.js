@@ -143,7 +143,12 @@ const JoditEditor = forwardRef((props, ref) => {
             textArea.current.selection.insertHTML(
               `<video width="600" height="240" controls><source src="${dados.path}"></video>`
             );
-          } else textArea.current.selection.insertImage(dados.path);
+          } else{
+            //textArea.current.selection.insertImage(dados.path);
+            textArea.current.selection.insertHTML(
+              `<img src="${dados.path}" style="max-width: 100%; max-height: 700px; object-fit: cover; object-position: bottom;"/>`
+            );
+          }
         }
       },
       defaultHandlerError: e => {
