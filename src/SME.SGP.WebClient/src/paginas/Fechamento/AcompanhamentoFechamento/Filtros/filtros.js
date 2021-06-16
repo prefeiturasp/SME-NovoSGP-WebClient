@@ -380,7 +380,7 @@ const Filtros = ({ onChangeFiltros, ehInfantil }) => {
         retorno.data.map(item =>
           lista.push({
             desc: item.nome,
-            valor: item.id,
+            valor: item.codigo,
             id: item.id,
             ano: item.ano,
             nomeFiltro: item.nomeFiltro,

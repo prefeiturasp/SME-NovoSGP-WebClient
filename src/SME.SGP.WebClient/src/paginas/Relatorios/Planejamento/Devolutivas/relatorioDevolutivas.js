@@ -88,12 +88,24 @@ const RelatorioDevolutivas = () => {
     setExibirLoaderGeral(true);
 
     const ue = listaUes.find(item => String(item.valor) === String(ueId));
+    const turmasParaConsulta = [];
+    if (turmaId?.length === 1 && turmaId[0] === OPCAO_TODOS) {
+      turmasParaConsulta.push(turmaId[0]);
+    } else {
+      turmaId.forEach(codigoTurma => {
+        const turma = listaTurmas.find(t => t.valor === codigoTurma);
+        if (turma) {
+          turmasParaConsulta.push(turma.id);
+        }
+      });
+    }
+
     const retorno = await ServicoRelatorioDevolutivas.gerar({
       ano: anoLetivo,
       dreId,
       ueId: ue?.id,
       bimestres,
-      turmas: turmaId,
+      turmas: turmasParaConsulta,
       exibirDetalhes: exibirConteudoDevolutiva,
     })
       .catch(e => erros(e))
@@ -537,7 +549,7 @@ const RelatorioDevolutivas = () => {
                   multiple
                   id="turma"
                   lista={listaTurmas}
-                  valueOption="id"
+                  valueOption="valor"
                   valueText="nomeFiltro"
                   label="Turma"
                   disabled={!modalidadeId || listaTurmas?.length === 1}
