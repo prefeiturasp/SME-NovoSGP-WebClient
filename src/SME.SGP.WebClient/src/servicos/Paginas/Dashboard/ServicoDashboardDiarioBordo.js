@@ -22,49 +22,13 @@ class ServicoDashboardDiarioBordo {
     return api.get(url);
   };
 
-  obterQuantidadeTotalDiariosBordos = (
-    anoLetivo,
-    dreId,
-    ueId,
-    modalidade,
-    semestre
-  ) => {
-    // TODO
-    // return this.montarConsultaPadraoGraficos({
-    //   rota: '',
-    //   anoLetivo,
-    //   dreId,
-    //   ueId,
-    //   modalidade,
-    // });
-
-    const mock = [
-      {
-        quantidade: 500,
-        descricao: 'Qtd. diários de bordos preenchidos',
-        turma: 'EI - 5',
-      },
-      {
-        quantidade: 326,
-        descricao: 'Qtd. de diários com devolutiva',
-        turma: 'EI - 5',
-      },
-      {
-        quantidade: 400,
-        descricao: 'Qtd. diários de bordos preenchidos',
-        turma: 'EI - 6',
-      },
-      {
-        quantidade: 360,
-        descricao: 'Qtd. de diários com devolutiva',
-        turma: 'EI - 6',
-      },
-    ];
-
-    return new Promise(resolve => {
-      return setTimeout(() => {
-        resolve({ data: mock });
-      }, 1000);
+  obterQuantidadeTotalDiariosBordos = (anoLetivo, dreId, ueId, modalidade) => {
+    return this.montarConsultaPadraoGraficos({
+      rota: 'quantidade-total-diarios-e-turmas',
+      anoLetivo,
+      dreId,
+      ueId,
+      modalidade,
     });
   };
 
@@ -74,24 +38,12 @@ class ServicoDashboardDiarioBordo {
     ueId,
     modalidade
   ) => {
-    // TODO
-    // return this.montarConsultaPadraoGraficos({
-    //   rota: '',
-    //   anoLetivo,
-    //   dreId,
-    //   ueId,
-    //   modalidade,
-    // });
-
-    const mock = [
-      { quantidade: 50, descricao: 'EI - 5' },
-      { quantidade: 42, descricao: 'EI - 6' },
-    ];
-
-    return new Promise(resolve => {
-      return setTimeout(() => {
-        resolve({ data: mock });
-      }, 1000);
+    return this.montarConsultaPadraoGraficos({
+      rota: 'quantidade-diarios-pendentes',
+      anoLetivo,
+      dreId,
+      ueId,
+      modalidade,
     });
   };
 
