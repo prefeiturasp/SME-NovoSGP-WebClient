@@ -60,6 +60,10 @@ class ServicoCalendarios {
       `v1/calendarios/tipos/ano-letivo/${anoLetivo}/modalidade/${modalidades}`
     );
   };
+
+  obterBimestres = tipoCalendarioId => {
+    return api.get(`v1/calendarios/tipos/${tipoCalendarioId}/bimestres`);
+  };
 }
 
 export default new ServicoCalendarios();
