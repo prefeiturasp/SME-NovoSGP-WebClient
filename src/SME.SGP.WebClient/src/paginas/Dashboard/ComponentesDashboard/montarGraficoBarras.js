@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
 import React, { useCallback, useEffect, useState } from 'react';
 import { CoresGraficos, Loader } from '~/componentes';
+import { OPCAO_TODOS } from '~/constantes/constantes';
 import GraficoBarraDashboard from '~/paginas/Dashboard/ComponentesDashboard/graficoBarraDashboard';
 import {
   adicionarCoresNosGraficos,
@@ -29,8 +30,6 @@ const MontarGraficoBarras = props => {
   const [dadosGrafico, setDadosGrafico] = useState([]);
   const [exibirLoader, setExibirLoader] = useState(false);
   const [dadosLegendaGrafico, setDadosLegendaGrafico] = useState([]);
-
-  const OPCAO_TODOS = '-99';
 
   const customPropsColors = item => {
     if (item.id === chavesGraficoAgrupado[0]?.nomeChave) {

@@ -161,9 +161,11 @@ const Filtro = () => {
         unidadeEscolar: unidadeEscolarSelecionada,
         turma: turmaSelecionada,
         ano: turmaSelecionadaCompleta.ano,
-        desc: `${
-          modalidadeDesc && modalidadeDesc.desc ? modalidadeDesc.desc : ''
-        } - ${turmaAtual && turmaAtual.desc ? turmaAtual.desc : ''} - ${
+        desc: `${anoLetivoSelecionado} - ${
+          turmaAtual && turmaAtual.modalidadeTurmaNome
+            ? turmaAtual.modalidadeTurmaNome
+            : ''
+        } - ${
           unidadeEscolarDesc && unidadeEscolarDesc.desc
             ? unidadeEscolarDesc.desc
             : ''
@@ -1208,6 +1210,7 @@ const Filtro = () => {
                   valueSelect={dreSelecionada && `${dreSelecionada}`}
                   placeholder="Diretoria Regional De Educação (DRE)"
                   disabled={campoDreDesabilitado}
+                  showSearch
                 />
               </Loader>
             </div>
@@ -1225,11 +1228,12 @@ const Filtro = () => {
                   }
                   placeholder="Unidade Escolar (UE)"
                   disabled={campoUnidadeEscolarDesabilitado}
+                  showSearch
                 />
               </Loader>
             </div>
             <div className="form-row d-flex justify-content-between">
-              <Grid cols={3} className="form-group">
+              <Grid cols={9} className="form-group">
                 <Loader loading={carregandoTurmas} tip="">
                   <SelectComponent
                     className="fonte-14"
@@ -1241,6 +1245,7 @@ const Filtro = () => {
                     valueSelect={turmaSelecionada && `${turmaSelecionada}`}
                     placeholder="Turma"
                     disabled={campoTurmaDesabilitado}
+                    showSearch
                   />
                 </Loader>
               </Grid>

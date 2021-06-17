@@ -96,6 +96,7 @@ import DashboardAEE from '~/paginas/Dashboard/AEE/dashboardAEE';
 import DashboardRegistroItinerancia from '~/paginas/Dashboard/DashboardRegistroItinerancia/dashboardRegistroItinerancia';
 import AcompanhamentoFechamento from '~/paginas/Fechamento/AcompanhamentoFechamento/acompanhamentoFechamento';
 import DashboardFrequencia from '~/paginas/Dashboard/DashboardFrequencia/dashboardFrequencia';
+import DashboardDevolutivas from '~/paginas/Dashboard/DashboardDevolutivas/dashboardDevolutivas';
 import DashboardInformacoesEscolares from '~/paginas/Dashboard/DashboardInformacoesEscolares/dashboardInformacoesEscolares';
 import DashboardDiarioBordo from '~/paginas/Dashboard/DashboardDiarioBordo/dashboardDiarioBordo';
 
@@ -1350,6 +1351,17 @@ rotas.set(RotasDto.DASHBOARD_FREQUENCIA, {
   chavePermissao: RotasDto.DASHBOARD_FREQUENCIA,
 });
 
+rotas.set(RotasDto.DASHBOARD_DEVOLUTIVAS, {
+  breadcrumbName: 'Devolutivas',
+  menu: ['Dashboard'],
+  parent: '/',
+  component: DashboardDevolutivas,
+  exact: true,
+  tipo: RotasTipo.EstruturadaAutenticada,
+  temPermissionamento: true,
+  chavePermissao: RotasDto.DASHBOARD_DEVOLUTIVAS,
+});
+
 rotas.set(RotasDto.DASHBOARD_INFORMACOES_ESCOLARES, {
   breadcrumbName: 'Informações escolares',
   menu: ['Dashboard'],
@@ -1368,7 +1380,7 @@ rotas.set(RotasDto.DASHBOARD_DIARIO_BORDO, {
   component: DashboardDiarioBordo,
   exact: true,
   tipo: RotasTipo.EstruturadaAutenticada,
-  // temPermissionamento: true,
+  temPermissionamento: true,
   chavePermissao: RotasDto.DASHBOARD_DIARIO_BORDO,
 });
 

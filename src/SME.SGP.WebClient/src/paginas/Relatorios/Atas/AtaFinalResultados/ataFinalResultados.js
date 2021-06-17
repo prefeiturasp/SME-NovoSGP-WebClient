@@ -15,6 +15,7 @@ import history from '~/servicos/history';
 import ServicoConselhoAtaFinal from '~/servicos/Paginas/ConselhoAtaFinal/ServicoConselhoAtaFinal';
 import FiltroHelper from '~componentes-sgp/filtro/helper';
 import AlertaModalidadeInfantil from '~/componentes-sgp/AlertaModalidadeInfantil/alertaModalidadeInfantil';
+import { OPCAO_TODOS } from '~/constantes/constantes';
 
 const AtaFinalResultados = () => {
   const usuarioStore = useSelector(store => store.usuario);
@@ -190,9 +191,10 @@ const AtaFinalResultados = () => {
           const lista = data.map(item => ({
             desc: item.nome,
             valor: item.codigo,
+            nomeFiltro: item.nomeFiltro,
           }));
 
-          lista.unshift({ desc: 'Todas', valor: '-99' });
+          lista.unshift({ nomeFiltro: 'Todas', valor: OPCAO_TODOS });
 
           setListaTurmas(lista);
 
@@ -344,13 +346,13 @@ const AtaFinalResultados = () => {
 
   useEffect(() => {
     let turmaExcecao = false;
-    if (turmaId?.length && turmaId[0] !== '-99') {
+    if (turmaId?.length && turmaId[0] !== OPCAO_TODOS) {
       turmaExcecao = checarTipoTurma(turmaId);
     }
     const desabilita =
       !modalidadeId ||
       !turmaId ||
-      (turmaId.length === 1 && turmaId[0] !== '-99' && turmaExcecao) ||
+      (turmaId.length === 1 && turmaId[0] !== OPCAO_TODOS && turmaExcecao) ||
       parseInt(modalidadeId, 10) !== parseInt(modalidade.ENSINO_MEDIO, 10) ||
       !turmaId.length ||
       turmaExcecao;
@@ -381,7 +383,7 @@ const AtaFinalResultados = () => {
         tipoFormatoRelatorio: formato,
         visualizacao,
       };
-      if (turmaId.find(t => t === '-99')) {
+      if (turmaId.find(t => t === OPCAO_TODOS)) {
         params.turmasCodigos = listaTurmas.map(item => String(item.valor));
       } else {
         params.turmasCodigos = turmaId;
@@ -452,8 +454,8 @@ const AtaFinalResultados = () => {
   const onChangeSemestre = valor => setSemestre(valor);
 
   const onChangeTurma = valor => {
-    const todosSetado = turmaId?.find(a => a === '-99');
-    const todos = valor.find(a => a === '-99' && !todosSetado);
+    const todosSetado = turmaId?.find(a => a === OPCAO_TODOS);
+    const todos = valor.find(a => a === OPCAO_TODOS && !todosSetado);
     const novoValor = todosSetado && valor.length === 2 ? [valor[1]] : valor;
     setTurmaId(todos ? [todos] : novoValor);
     habilitarSelecaoFormato(valor);
@@ -521,7 +523,7 @@ const AtaFinalResultados = () => {
                 checked={consideraHistorico}
               />
             </div>
-            <div className="col-sm-12 col-md-6 col-lg-2 col-xl-2 mb-2">
+            <div className="col-sm-12 col-md-4 col-lg-2 col-xl-2 mb-2">
               <Loader loading={carregandoAnosLetivos} tip="">
                 <SelectComponent
                   label="Ano Letivo"
@@ -537,7 +539,7 @@ const AtaFinalResultados = () => {
                 />
               </Loader>
             </div>
-            <div className="col-sm-12 col-md-6 col-lg-5 col-xl-5 mb-2">
+            <div className="col-sm-12 col-md-12 col-lg-5 col-xl-5 mb-2">
               <Loader loading={carregandoDres} tip="">
                 <SelectComponent
                   label="Diretoria Regional de Educação (DRE)"
@@ -551,10 +553,11 @@ const AtaFinalResultados = () => {
                   }
                   onChange={onChangeDre}
                   valueSelect={dreId}
+                  showSearch
                 />
               </Loader>
             </div>
-            <div className="col-sm-12 col-md-6 col-lg-5 col-xl-5 mb-2">
+            <div className="col-sm-12 col-md-12 col-lg-5 col-xl-5 mb-2">
               <Loader loading={carregandoUes} tip="">
                 <SelectComponent
                   label="Unidade Escolar (UE)"
@@ -568,10 +571,11 @@ const AtaFinalResultados = () => {
                   }
                   onChange={onChangeUe}
                   valueSelect={ueId}
+                  showSearch
                 />
               </Loader>
             </div>
-            <div className="col-sm-12 col-md-6 col-lg-5 col-xl-3 mb-2">
+            <div className="col-sm-12 col-md-8 col-lg-4 col-xl-4 mb-2">
               <SelectComponent
                 label="Modalidade"
                 lista={listaModalidades}
@@ -586,7 +590,7 @@ const AtaFinalResultados = () => {
                 valueSelect={modalidadeId}
               />
             </div>
-            <div className="col-sm-12 col-md-3 col-lg-2 col-xl-2 mb-2">
+            <div className="col-sm-12 col-md-4 col-lg-2 col-xl-2 mb-2">
               <SelectComponent
                 lista={listaSemestre}
                 valueOption="valor"
@@ -602,11 +606,11 @@ const AtaFinalResultados = () => {
                 onChange={onChangeSemestre}
               />
             </div>
-            <div className="col-sm-12 col-md-3 col-lg-5 col-xl-2 mb-2">
+            <div className="col-sm-12 col-md-12 col-lg-6 col-xl-6 mb-2">
               <SelectComponent
                 lista={listaTurmas}
                 valueOption="valor"
-                valueText="desc"
+                valueText="nomeFiltro"
                 label="Turma"
                 disabled={
                   !permissoesTela.podeConsultar ||
@@ -616,6 +620,7 @@ const AtaFinalResultados = () => {
                 valueSelect={turmaId}
                 onChange={onChangeTurma}
                 multiple
+                showSearch
               />
             </div>
             <div className="col-sm-12 col-md-3 col-lg-5 col-xl-3 mb-2">

@@ -87,6 +87,21 @@ const Filtros = ({ onFiltrar, filtrou, setFiltrou, cancelou, setCancelou }) => {
     modeloBoletimId,
   ]);
 
+  useEffect(() => {
+    const params = {
+      anoLetivo,
+      dreCodigo,
+      ueCodigo,
+      modalidadeId,
+      semestre: semestre || 0,
+      turmasId,
+      opcaoEstudanteId,
+      modeloBoletimId,
+    };
+
+    onFiltrar(params, true);
+  }, [modeloBoletimId]);
+
   const onChangeConsideraHistorico = e => {
     setConsideraHistorico(e.target.checked);
     setAnoLetivo(anoAtual);
@@ -344,7 +359,7 @@ const Filtros = ({ onFiltrar, filtrou, setFiltrou, cancelou, setCancelou }) => {
       if (retorno?.data?.length) {
         const lista = [];
         if (retorno.data.length > 1) {
-          lista.push({ valor: OPCAO_TODOS, desc: 'Todas' });
+          lista.push({ valor: OPCAO_TODOS, nomeFiltro: 'Todas' });
         }
         retorno.data.map(item =>
           lista.push({
@@ -352,6 +367,7 @@ const Filtros = ({ onFiltrar, filtrou, setFiltrou, cancelou, setCancelou }) => {
             valor: item.codigo,
             id: item.id,
             ano: item.ano,
+            nomeFiltro: item.nomeFiltro,
           })
         );
         setListaTurmas(lista);
@@ -374,11 +390,14 @@ const Filtros = ({ onFiltrar, filtrou, setFiltrou, cancelou, setCancelou }) => {
   const onChangeOpcaoEstudante = valor => {
     setFiltrou(false);
     setOpcaoEstudanteId(valor);
+
+    if (!modeloBoletimId) {
+      setModeloBoletimId('1');
+    }
   };
 
   const onChangeModeloBoletim = valor => {
     setModeloBoletimId(valor);
-    setFiltrou(false);
   };
 
   useEffect(() => {
@@ -431,6 +450,7 @@ const Filtros = ({ onFiltrar, filtrou, setFiltrou, cancelou, setCancelou }) => {
               onChange={onChangeDre}
               valueSelect={dreCodigo}
               placeholder="Diretoria Regional De Educação (DRE)"
+              showSearch
             />
           </Loader>
         </div>
@@ -492,7 +512,7 @@ const Filtros = ({ onFiltrar, filtrou, setFiltrou, cancelou, setCancelou }) => {
               id="turma"
               lista={listaTurmas}
               valueOption="valor"
-              valueText="desc"
+              valueText="nomeFiltro"
               label="Turma"
               disabled={!modalidadeId || listaTurmas?.length === 1}
               valueSelect={turmasId}

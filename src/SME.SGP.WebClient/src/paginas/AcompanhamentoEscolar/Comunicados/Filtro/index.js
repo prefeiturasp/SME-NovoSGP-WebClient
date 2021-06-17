@@ -728,6 +728,7 @@ function Filtro({ onFiltrar }) {
                   validarFiltro();
                   onChangeDre(x);
                 }}
+                showSearch
               />
             </Grid>
             <Grid cols={5}>
@@ -747,6 +748,7 @@ function Filtro({ onFiltrar }) {
                   validarFiltro();
                   onChangeUe(x);
                 }}
+                showSearch
               />
             </Grid>
           </Linha>
@@ -825,6 +827,7 @@ function Filtro({ onFiltrar }) {
                   validarFiltro();
                   onTurmaChange(x);
                 }}
+                showSearch
               />
             </Grid>
           </Linha>

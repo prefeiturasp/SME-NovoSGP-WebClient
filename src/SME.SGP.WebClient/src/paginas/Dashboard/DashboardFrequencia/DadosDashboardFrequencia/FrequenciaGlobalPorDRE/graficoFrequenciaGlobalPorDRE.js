@@ -5,6 +5,7 @@ import { useSelector } from 'react-redux';
 import { Loader, SelectComponent } from '~/componentes';
 import DataUltimaAtualizacao from '~/componentes-sgp/DataUltimaAtualizacao/dataUltimaAtualizacao';
 import GraficoBarras from '~/componentes-sgp/Graficos/graficoBarras';
+import { OPCAO_TODOS } from '~/constantes/constantes';
 import { erros } from '~/servicos';
 import ServicoDashboardFrequencia from '~/servicos/Paginas/Dashboard/ServicoDashboardFrequencia';
 
@@ -25,8 +26,6 @@ const GraficoFrequenciaGlobalPorDRE = props => {
   const [dadosGrafico, setDadosGrafico] = useState([]);
   const [exibirLoader, setExibirLoader] = useState(false);
   const [anoEscolar, setAnoEscolar] = useState();
-
-  const OPCAO_TODOS = '-99';
 
   const obterDadosGrafico = useCallback(async () => {
     setExibirLoader(true);

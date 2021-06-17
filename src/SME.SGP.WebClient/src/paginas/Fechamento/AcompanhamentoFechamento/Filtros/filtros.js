@@ -375,14 +375,15 @@ const Filtros = ({ onChangeFiltros, ehInfantil }) => {
       if (retorno?.data?.length) {
         const lista = [];
         if (retorno.data.length > 1) {
-          lista.push({ valor: OPCAO_TODOS, desc: 'Todas' });
+          lista.push({ valor: OPCAO_TODOS, nomeFiltro: 'Todas' });
         }
         retorno.data.map(item =>
           lista.push({
             desc: item.nome,
-            valor: item.id,
+            valor: item.codigo,
             id: item.id,
             ano: item.ano,
+            nomeFiltro: item.nomeFiltro,
           })
         );
         setListaTurmas(lista);
@@ -510,6 +511,7 @@ const Filtros = ({ onChangeFiltros, ehInfantil }) => {
               onChange={onChangeDre}
               valueSelect={dreCodigo}
               placeholder="Diretoria Regional De Educação (DRE)"
+              showSearch
             />
           </Loader>
         </div>
@@ -577,7 +579,7 @@ const Filtros = ({ onChangeFiltros, ehInfantil }) => {
               id="turma"
               lista={listaTurmas}
               valueOption="valor"
-              valueText="desc"
+              valueText="nomeFiltro"
               label="Turmas"
               disabled={
                 !modalidadeId || listaTurmas?.length === 1 || desabilitarCampos
@@ -588,6 +590,7 @@ const Filtros = ({ onChangeFiltros, ehInfantil }) => {
                 dispatch(setTurmasAcompanhamentoFechamento());
               }}
               placeholder="Turma"
+              showSearch
             />
           </Loader>
         </div>

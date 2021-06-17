@@ -33,6 +33,7 @@ import LeituraDeComunicadosPorTurmas from './leituraDeComunicadosPorTurmas';
 import FiltroHelperComunicados from '~/paginas/AcompanhamentoEscolar/Comunicados/Helper/helper';
 import ServicoComunicados from '~/servicos/Paginas/AcompanhamentoEscolar/Comunicados/ServicoComunicados';
 import { ordenarListaMaiorParaMenor } from '~/utils/funcoes/gerais';
+import { OPCAO_TODOS } from '~/constantes/constantes';
 
 const DadosComunicadosLeitura = props => {
   const { codigoDre, codigoUe } = props;
@@ -99,8 +100,6 @@ const DadosComunicadosLeitura = props => {
     },
   ]);
   const [visualizacao, setVisualizacao] = useState('1');
-
-  const OPCAO_TODOS = '-99';
 
   const [anoAtual] = useState(window.moment().format('YYYY'));
 
@@ -293,6 +292,7 @@ const DadosComunicadosLeitura = props => {
             valor: item.codigo,
             id: item.id,
             ano: item.ano,
+            nomeFiltro: item.nomeFiltro,
           })
         );
 
@@ -702,7 +702,7 @@ const DadosComunicadosLeitura = props => {
                 id="select-turma"
                 lista={listaTurmas}
                 valueOption="valor"
-                valueText="desc"
+                valueText="nomeFiltro"
                 label="Turma"
                 disabled={
                   codigoUe === OPCAO_TODOS ||
@@ -712,6 +712,7 @@ const DadosComunicadosLeitura = props => {
                 valueSelect={codigoTurma}
                 onChange={onChangeTurma}
                 placeholder="Turma"
+                showSearch
               />
             </Loader>
           </div>

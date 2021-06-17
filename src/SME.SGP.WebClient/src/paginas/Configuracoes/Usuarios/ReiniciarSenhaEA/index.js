@@ -264,6 +264,7 @@ export default function ReiniciarSenhaEA() {
             valueSelect={String(dreSelecionada) || ''}
             label="Diretoria Regional de Educação (DRE)"
             placeholder="Diretoria Regional de Educação (DRE)"
+            showSearch
           />
         </div>
         <div className="col-sm-12 col-md-12 col-lg-6 col-xl-6 pb-2">
@@ -278,6 +279,7 @@ export default function ReiniciarSenhaEA() {
             valueSelect={ueSelecionada || ''}
             label="Unidade Escolar (UE)"
             placeholder="Unidade Escolar (UE)"
+            showSearch
           />
         </div>
       </div>

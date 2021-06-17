@@ -22,6 +22,10 @@ class ServicoDevolutivas {
   obterDevolutiva = id => {
     return api.get(`${urlPadrao}/${id}`);
   };
+
+  obterPeriodoDeDiasDevolutivaPorParametro = anoLetivo => {
+    return api.get(`${urlPadrao}/periodo-dias?anoLetivo=${anoLetivo}`);
+  };
 }
 
 export default new ServicoDevolutivas();
