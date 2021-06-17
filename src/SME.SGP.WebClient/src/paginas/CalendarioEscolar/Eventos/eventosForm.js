@@ -188,6 +188,24 @@ const EventosForm = ({ match }) => {
   }, []);
 
   useEffect(() => {
+    if (listaDres?.length === 1) {
+      refFormulario.current.setFieldValue(
+        'dreId',
+        String(listaDres[0].codigo)
+      );
+    }
+  }, [listaDres, current]);
+
+  useEffect(() => {
+    if (listaUes?.length === 1) {
+      refFormulario.current.setFieldValue(
+        'ueId',
+        String(listaUes[0].codigo)
+      );
+    }
+  }, [listaUes, current]);
+
+  useEffect(() => {
     if (listaTipoEvento?.length === 1 && current?.state?.values?.ueId) {
       refFormulario.current.setFieldValue(
         'tipoEventoId',
