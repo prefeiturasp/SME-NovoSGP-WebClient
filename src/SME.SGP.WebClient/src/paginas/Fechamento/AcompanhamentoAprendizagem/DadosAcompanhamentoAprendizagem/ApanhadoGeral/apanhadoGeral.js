@@ -27,6 +27,7 @@ const ApanhadoGeral = props => {
       titulo="Percurso Coletivo da Turma"
       indice="apanhado-geral"
       alt="apanhado-geral"
+      show={true}
     >
       <CampoApanhadoGeral />
       <AuditoriaApanhadoGeral />
