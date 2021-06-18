@@ -91,7 +91,16 @@ const TabelaAlunosConselho = props => {
         ) {
           const ehLinhaExpandida = temLinhaExpandida(aluno.alunoCodigo);
           const corTexto = ehLinhaExpandida.length ? Base.Branco : aluno?.cor;
-          return <MarcadorTriangulo cor={corTexto} marginTop="-33.8px" />;
+          const marginRight = ehLinhaExpandida.length && '-11.3px';
+          const marginTop = ehLinhaExpandida.length ? '-33.8px' : '-34.8px';
+
+          return (
+            <MarcadorTriangulo
+              cor={corTexto}
+              marginTop={marginTop}
+              marginRight={marginRight}
+            />
+          );
         }
         return null;
       },
@@ -101,10 +110,14 @@ const TabelaAlunosConselho = props => {
   const montarValorNota = nota => {
     return (
       <>
-        {nota || '-'}
+        {nota || <span className="sem-nota">-</span>}
         {!nota && (
           <Tooltip title="Sem nota atribuída">
-            <MarcadorTriangulo cor={Base.LaranjaStatus} />
+            <MarcadorTriangulo
+              cor={Base.LaranjaStatus}
+              marginTop="-34.8px"
+              marginRight="-11.8px"
+            />
           </Tooltip>
         )}
       </>
@@ -114,11 +127,13 @@ const TabelaAlunosConselho = props => {
   const montarNotaPosConselho = componenteCurricular => {
     return (
       <>
-        {componenteCurricular?.notaPosConselho || '-'}
+        {componenteCurricular?.notaPosConselho || (
+          <span className="sem-nota">-</span>
+        )}
         {!componenteCurricular?.notaPosConselho &&
         componenteCurricular?.lancaNota ? (
           <Tooltip title="Sem nota atribuída">
-            <MarcadorTriangulo cor={Base.LaranjaStatus} />
+            <MarcadorTriangulo cor={Base.LaranjaStatus} marginTop="-34.8px" />
           </Tooltip>
         ) : (
           ''
@@ -132,6 +147,8 @@ const TabelaAlunosConselho = props => {
       title: 'Componentes curriculares',
       dataIndex: 'nomeComponenteCurricular',
       align: 'left',
+      ellipsis: true,
+      width: 330,
     },
     {
       title: 'Nota do fechamento',
@@ -241,6 +258,7 @@ const TabelaAlunosConselho = props => {
                   columns={colunasTabelaComponentes}
                   dataSource={dadosComponentes}
                   semHover
+                  tableLayout="fixed"
                 />
               </Loader>
             );
