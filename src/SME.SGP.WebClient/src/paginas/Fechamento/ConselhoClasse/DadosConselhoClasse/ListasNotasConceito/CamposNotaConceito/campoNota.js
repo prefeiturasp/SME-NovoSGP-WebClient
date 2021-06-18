@@ -179,7 +179,7 @@ const CampoNota = props => {
         step={step}
         className={abaixoMedia ? 'borda-abaixo-media' : ''}
         desabilitado={
-          (alunoDesabilitado && !podeEditarNota) ||
+          alunoDesabilitado ||
           !podeEditarNota ||
           desabilitarCampos ||
           !dentroPeriodo
