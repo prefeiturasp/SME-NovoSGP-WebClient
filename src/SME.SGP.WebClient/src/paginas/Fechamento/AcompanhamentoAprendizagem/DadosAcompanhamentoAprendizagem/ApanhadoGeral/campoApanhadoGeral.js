@@ -17,6 +17,11 @@ const CampoApanhadoGeral = () => {
     store => store.acompanhamentoAprendizagem.dadosApanhadoGeral
   );
 
+  const qtdMaxImagensCampoPercursoColetivo = useSelector(
+    store =>
+      store.acompanhamentoAprendizagem?.qtdMaxImagensCampoPercursoColetivo
+  );
+
   const usuario = useSelector(store => store.usuario);
 
   const permissoesTela =
@@ -52,7 +57,7 @@ const CampoApanhadoGeral = () => {
       onChange={onChange}
       readonly={desabilitarCampo}
       permiteVideo={false}
-      qtdMaxImg={dadosApanhadoGeral?.quantidadeMaxImagens}
+      qtdMaxImg={qtdMaxImagensCampoPercursoColetivo}
       imagensCentralizadas
     />
   );
