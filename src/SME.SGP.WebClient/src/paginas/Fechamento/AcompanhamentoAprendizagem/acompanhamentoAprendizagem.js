@@ -297,6 +297,9 @@ const AcompanhamentoAprendizagem = () => {
                       semestre={semestreSelecionado}
                     />
                   </div>
+                  <div className="col-md-12 mb-2 mt-2">
+                    <ApanhadoGeral semestreSelecionado={semestreSelecionado} />
+                  </div>
                   <div className="col-md-12 mb-2">
                     <TabelaRetratilAcompanhamentoAprendizagem
                       onChangeAlunoSelecionado={onChangeAlunoSelecionado}
@@ -311,9 +314,6 @@ const AcompanhamentoAprendizagem = () => {
                         semestreSelecionado={semestreSelecionado}
                       />
                     </TabelaRetratilAcompanhamentoAprendizagem>
-                  </div>
-                  <div className="col-md-12 mb-2 mt-2">
-                    <ApanhadoGeral semestreSelecionado={semestreSelecionado} />
                   </div>
                 </>
               ) : (
