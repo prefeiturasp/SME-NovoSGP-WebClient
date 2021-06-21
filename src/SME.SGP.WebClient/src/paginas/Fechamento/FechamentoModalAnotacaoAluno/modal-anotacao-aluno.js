@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import shortid from 'shortid';
-import { ModalConteudoHtml, Colors, Auditoria } from '~/componentes';
+import { ModalConteudoHtml, Colors, Auditoria, DetalhesAluno } from '~/componentes';
 import api from '~/servicos/api';
 import { erros, sucesso, erro, confirmar } from '~/servicos/alertas';
 import Button from '~/componentes/button';
@@ -156,13 +156,12 @@ const ModalAnotacaoAluno = props => {
         {form => (
           <Form>
             <div className="col-md-12">
-              <DadosAlunoModal>
-                <i className="fas fa-user-circle icone-perfil" />
-                <div>
-                  <p>Nome do estudante: {dadosAluno.aluno.nome}</p>
-                  <p>Nº de chamada: {dadosAluno.aluno.numeroChamada}</p>
-                </div>
-              </DadosAlunoModal>
+              <DetalhesAluno
+                exibirResponsavel
+                exibirBotaoImprimir={false}
+                exibirFrequencia={false}
+                dados={dadosAluno.aluno}
+              />
             </div>
             <div className="col-md-12">
               <EditorAnotacao className="mt-3">
