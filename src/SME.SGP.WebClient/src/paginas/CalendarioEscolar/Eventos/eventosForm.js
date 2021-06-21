@@ -801,11 +801,13 @@ const EventosForm = ({ match }) => {
       let valorLetivo = 1;
       let valorEvento = false;
       let valorOpcaoLetivo = false;
+      let tipoUnico = false;
 
       if (tipoEventoSelecionado?.id === tipoEvento.LiberacaoBoletim) {
         valorEvento = true;
         valorOpcaoLetivo = true;
         valorLetivo = 0;
+        tipoUnico = true;
       }
       if (form) {
         form.setFieldValue('letivo', valorLetivo);
@@ -813,6 +815,7 @@ const EventosForm = ({ match }) => {
 
       setEventoTipoLocalOcorrenciaSMESelecionado(valorEvento);
       setDesabilitarOpcaoLetivo(valorOpcaoLetivo);
+      setTipoDataUnico(tipoUnico);
     } else {
       setEventoTipoFeriadoSelecionado(false);
     }
