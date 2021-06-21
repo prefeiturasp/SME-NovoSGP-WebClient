@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux';
 import AuditoriaAcompanhamentoAprendizagem from '../../AuditoriaAcompanhamento/auditoriaAcompanhamento';
 import FotosCrianca from './FotosCrianca/fotosCrianca';
 import ObservacoesAdicionais from './ObservacoesAdicionais/observacoesAdicionais';
-import RegistrosIndividuais from './RegistrosIndividuais/registrosIndividuais';
+import PercursoIndividual from './PercursoIndividual/percursoIndividual';
 
 const RegistrosFotos = props => {
   const { semestreSelecionado } = props;
@@ -15,7 +15,7 @@ const RegistrosFotos = props => {
 
   return dadosAcompanhamentoAprendizagem ? (
     <>
-      <RegistrosIndividuais semestreSelecionado={semestreSelecionado} />
+      <PercursoIndividual />
       <ObservacoesAdicionais />
       <FotosCrianca semestreSelecionado={semestreSelecionado} />
       <AuditoriaAcompanhamentoAprendizagem />
