@@ -23,11 +23,11 @@ const ApanhadoGeral = props => {
 
   return (
     <CardCollapse
-      key="apanhado-geral-collapse"
+      key="percurso-coletivo-turma-collapse"
       titulo="Percurso Coletivo da Turma"
-      indice="apanhado-geral"
-      alt="apanhado-geral"
-      show={true}
+      indice="percurso-coletivo-turma"
+      alt="percurso-coletivo-turma"
+      show
     >
       <CampoApanhadoGeral />
       <AuditoriaApanhadoGeral />
