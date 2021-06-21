@@ -19,6 +19,14 @@ export const LinhaTabela = styled.div`
     border: 0 !important;
   }
 
+  @supports (-moz-appearance: none) {
+    .ant-table {
+      table {
+        border-collapse: inherit;
+      }
+    }
+  }
+
   tr {
     position: relative;
     height: 48px;
@@ -119,6 +127,7 @@ export const LinhaTabela = styled.div`
         &:first-child {
           padding: 8px 12px !important;
           white-space: break-spaces;
+          border: 1px solid #bfbfbf !important;
         }
       }
     }

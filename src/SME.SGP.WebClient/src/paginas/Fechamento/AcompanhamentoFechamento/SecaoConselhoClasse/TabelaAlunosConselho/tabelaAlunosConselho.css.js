@@ -7,6 +7,14 @@ export const LinhaTabela = styled.div`
     border: 0 !important;
   }
 
+  @supports (-moz-appearance: none) {
+    .ant-table {
+      table {
+        border-collapse: inherit;
+      }
+    }
+  }
+
   tr {
     position: relative;
     height: 48px;
@@ -19,6 +27,10 @@ export const LinhaTabela = styled.div`
     & > td {
       padding: 8px 12px !important;
       white-space: break-spaces !important;
+
+      @supports (-moz-appearance: none) {
+        padding: 3px 12px !important;
+      }
     }
   }
 
@@ -42,6 +54,11 @@ export const LinhaTabela = styled.div`
         padding-left: 24px;
         overflow: hidden;
         white-space: break-spaces;
+
+        @supports (-moz-appearance: none) {
+          margin-top: -22px;
+          padding-left: 25px;
+        }
       }
 
       table {
