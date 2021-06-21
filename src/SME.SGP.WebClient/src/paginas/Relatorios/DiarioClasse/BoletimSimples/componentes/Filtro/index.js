@@ -518,6 +518,7 @@ const Filtros = ({ onFiltrar, filtrou, setFiltrou, cancelou, setCancelou }) => {
               valueSelect={turmasId}
               onChange={onChangeTurma}
               placeholder="Turma"
+              showSearch
             />
           </Loader>
         </div>
