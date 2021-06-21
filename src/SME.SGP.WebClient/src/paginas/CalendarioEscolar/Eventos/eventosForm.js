@@ -458,7 +458,10 @@ const EventosForm = ({ match }) => {
       setExibirAuditoria(true);
 
       if (evento.data.bimestre) {
-        setBimestre(evento.data.bimestre);
+        const bimesresConvertidos = evento.data.bimestre.map(item =>
+          String(item)
+        );
+        setBimestre(bimesresConvertidos);
       }
     }
   };
@@ -798,13 +801,11 @@ const EventosForm = ({ match }) => {
       let valorLetivo = 1;
       let valorEvento = false;
       let valorOpcaoLetivo = false;
-      let tipoUnico = true;
 
       if (tipoEventoSelecionado?.id === tipoEvento.LiberacaoBoletim) {
         valorEvento = true;
         valorOpcaoLetivo = true;
         valorLetivo = 0;
-        tipoUnico = false;
       }
       if (form) {
         form.setFieldValue('letivo', valorLetivo);
@@ -812,7 +813,6 @@ const EventosForm = ({ match }) => {
 
       setEventoTipoLocalOcorrenciaSMESelecionado(valorEvento);
       setDesabilitarOpcaoLetivo(valorOpcaoLetivo);
-      setTipoDataUnico(tipoUnico);
     } else {
       setEventoTipoFeriadoSelecionado(false);
     }
