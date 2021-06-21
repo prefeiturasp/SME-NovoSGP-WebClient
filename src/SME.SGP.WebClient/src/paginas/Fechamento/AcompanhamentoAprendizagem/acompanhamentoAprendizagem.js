@@ -115,6 +115,9 @@ const AcompanhamentoAprendizagem = () => {
     ) {
       obterComponentesCurriculares();
       obterListaSemestres();
+      ServicoAcompanhamentoAprendizagem.obterQtdMaxImagensCampoPercursoColetivo(
+        turmaSelecionada?.anoLetivo
+      );
     } else {
       setSemestreSelecionado(undefined);
       setListaSemestres([]);
