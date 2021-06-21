@@ -62,9 +62,7 @@ const CaixaTextoExpandivel = ({ item }) => {
     >
       <div className="card">
         <div className="card-header d-flex">
-          <div>
-            {`${item.data ? moment(item.data).format('L') : ''} - Planejamento`}
-          </div>
+          <div>{item?.data ? moment(item.data).format('L') : ''}</div>
           {totalRegistros > 1 && (
             <div>
               <BotaoEstilizado
