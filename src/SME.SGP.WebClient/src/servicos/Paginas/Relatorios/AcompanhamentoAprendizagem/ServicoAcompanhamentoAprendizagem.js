@@ -274,17 +274,13 @@ class ServicoAcompanhamentoAprendizagem {
   obterQtdMaxImagensCampoPercursoColetivo = async anoLetivo => {
     const { dispatch } = store;
 
-    // TODO - Remover mock, descomentar código e atualizar a URL do endpoint!
-    // const url = `url-endpoint?anoLetivo=${anoLetivo}`;
-    // const retorno = await api.get(url).catch(e => erros(e));
-    // if (retorno?.data) {
-    //   dispatch(setQtdMaxImagensCampoPercursoColetivo(retorno.data));
-    // } else {
-    //   dispatch(setQtdMaxImagensCampoPercursoColetivo());
-    // }
-
-    const qtdMock = 2;
-    dispatch(setQtdMaxImagensCampoPercursoColetivo(qtdMock));
+    const url = `v1/acompanhamento/turmas/quantidade-imagens?ano=${anoLetivo}`;
+    const retorno = await api.get(url).catch(e => erros(e));
+    if (retorno?.data) {
+      dispatch(setQtdMaxImagensCampoPercursoColetivo(retorno.data));
+    } else {
+      dispatch(setQtdMaxImagensCampoPercursoColetivo());
+    }
   };
 }
 
