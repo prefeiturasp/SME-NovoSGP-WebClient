@@ -34,7 +34,6 @@ class ServicoDashboardRelAcompanhamentoAprendizagem {
     //   ueId,
     //   semestre,
     // });
-    debugger
 
     return new Promise(resolve =>
       resolve({
