@@ -49,3 +49,8 @@ export const setApanhadoGeralEmEdicao = payload => ({
   type: '@acompanhamentoAprendizagem/setApanhadoGeralEmEdicao',
   payload,
 });
+
+export const setQtdMaxImagensCampoPercursoColetivo = payload => ({
+  type: '@acompanhamentoAprendizagem/setQtdMaxImagensCampoPercursoColetivo',
+  payload,
+});

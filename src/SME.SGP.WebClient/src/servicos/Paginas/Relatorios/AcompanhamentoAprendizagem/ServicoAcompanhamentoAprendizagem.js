@@ -5,6 +5,7 @@ import {
   setDadosAcompanhamentoAprendizagem,
   setDadosApanhadoGeral,
   setExibirLoaderGeralAcompanhamentoAprendizagem,
+  setQtdMaxImagensCampoPercursoColetivo,
 } from '~/redux/modulos/acompanhamentoAprendizagem/actions';
 import { limparDadosRegistroIndividual } from '~/redux/modulos/registroIndividual/actions';
 import { erros, sucesso } from '~/servicos/alertas';
@@ -84,7 +85,7 @@ class ServicoAcompanhamentoAprendizagem {
     );
   };
 
-  atualizarObservacoes = valorNovo => {
+  atualizarDadosPorNomeCampo = (valorNovo, nomeCampo) => {
     const { dispatch } = store;
     const state = store.getState();
 
@@ -93,7 +94,7 @@ class ServicoAcompanhamentoAprendizagem {
     const { dadosAcompanhamentoAprendizagem } = acompanhamentoAprendizagem;
 
     const dadosAcompanhamentoAtual = dadosAcompanhamentoAprendizagem;
-    dadosAcompanhamentoAtual.observacoes = valorNovo;
+    dadosAcompanhamentoAtual[nomeCampo] = valorNovo;
     dispatch(setDadosAcompanhamentoAprendizagem(dadosAcompanhamentoAtual));
   };
 
@@ -123,6 +124,8 @@ class ServicoAcompanhamentoAprendizagem {
         semestre: semestreSelecionado,
         alunoCodigo: codigoEOL,
         observacoes: dadosAcompanhamentoAprendizagem.observacoes || '',
+        percursoIndividual:
+          dadosAcompanhamentoAprendizagem.percursoIndividual || '',
       };
 
       dispatch(setExibirLoaderGeralAcompanhamentoAprendizagem(true));
@@ -218,9 +221,9 @@ class ServicoAcompanhamentoAprendizagem {
 
       if (salvouApanhadoGeral) {
         if (dadosApanhadoGeral.acompanhamentoTurmaId) {
-          sucesso('Apanhado geral alterado com sucesso');
+          sucesso('Percurso Coletivo da Turma alterado com sucesso');
         } else {
-          sucesso('Apanhado geral inserido com sucesso');
+          sucesso('Percurso Coletivo da Turma inserido com sucesso');
         }
 
         paramsApanhadoGeral.auditoria = retornoApanhadoGeral.data;
@@ -266,6 +269,18 @@ class ServicoAcompanhamentoAprendizagem {
   gerar = params => {
     const url = `v1/relatorios/acompanhamento-aprendizagem`;
     return api.post(url, params);
+  };
+
+  obterQtdMaxImagensCampoPercursoColetivo = async anoLetivo => {
+    const { dispatch } = store;
+
+    const url = `v1/acompanhamento/turmas/quantidade-imagens?ano=${anoLetivo}`;
+    const retorno = await api.get(url).catch(e => erros(e));
+    if (retorno?.data) {
+      dispatch(setQtdMaxImagensCampoPercursoColetivo(retorno.data));
+    } else {
+      dispatch(setQtdMaxImagensCampoPercursoColetivo());
+    }
   };
 }
 
