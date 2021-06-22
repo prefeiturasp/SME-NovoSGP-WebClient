@@ -26,7 +26,7 @@ const CampoObservacoesAdicionais = () => {
   const onChange = valorNovo => {
     ServicoAcompanhamentoAprendizagem.atualizarDadosPorNomeCampo(
       valorNovo,
-      'observacao'
+      'observacoes'
     );
     dispatch(setAcompanhamentoAprendizagemEmEdicao(true));
   };
