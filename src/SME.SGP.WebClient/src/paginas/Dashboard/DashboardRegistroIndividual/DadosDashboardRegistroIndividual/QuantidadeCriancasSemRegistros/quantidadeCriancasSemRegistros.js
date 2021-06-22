@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
 import React, { useState } from 'react';
+import { useSelector } from 'react-redux';
 import { Base } from '~/componentes';
 import CardCollapse from '~/componentes/cardCollapse';
 import GraficoQuantidadeCriancasSemRegistros from './graficoQuantidadeCriancasSemRegistros';
@@ -14,15 +15,20 @@ const QuantidadeCriancasSemRegistros = props => {
 
   const [exibir, setExibir] = useState(false);
 
-  // TODO
-  const DIAS = 15;
+  const diasSemRegistro = useSelector(
+    store =>
+      store.dashboardRegistroIndividual?.dadosDashboardRegistroIndividual
+        ?.diasSemRegistro
+  );
 
-  const key = `quantidade-criancas-estao-sem-registros-mais-${DIAS}-dias`;
+  const key = `quantidade-criancas-estao-sem-registros-mais-${diasSemRegistro ||
+    0}-dias`;
 
   return (
     <div className="mt-3">
       <CardCollapse
-        titulo={`Quantidade de crianças que estão sem registros a mais de ${DIAS} dias`}
+        titulo={`Quantidade de crianças que estão sem registros a mais de ${diasSemRegistro ||
+          0} dias`}
         key={`${key}-collapse-key`}
         indice={`${key}-collapse-indice`}
         alt={`${key}-alt`}

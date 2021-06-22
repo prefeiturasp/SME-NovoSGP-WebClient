@@ -2,7 +2,7 @@ import { store } from '~/redux';
 import { setDadosDashboardRegistroIndividual } from '~/redux/modulos/dashboardRegistroIndividual/actions';
 import api from '~/servicos/api';
 
-const urlPadrao = 'v1/dashboard/registro-individual';
+const urlPadrao = 'v1/dashboard/registros_individuais';
 
 class ServicoDashboardRegistroIndividual {
   montarConsultaPadraoGraficos = params => {
@@ -26,27 +26,14 @@ class ServicoDashboardRegistroIndividual {
     anoLetivo,
     dreId,
     ueId,
-    modalidade,
-    semestre
+    modalidade
   ) => {
-    // TODO
-    // return this.montarConsultaPadraoGraficos({
-    //   rota: '',
-    //   anoLetivo,
-    //   dreId,
-    //   ueId,
-    //   modalidade,
-    // });
-
-    const mock = [
-      { quantidade: 500, descricao: 'EI - 5' },
-      { quantidade: 350, descricao: 'EI - 6' },
-    ];
-
-    return new Promise(resolve => {
-      return setTimeout(() => {
-        resolve({ data: mock });
-      }, 1000);
+    return this.montarConsultaPadraoGraficos({
+      rota: 'total-ano-turma',
+      anoLetivo,
+      dreId,
+      ueId,
+      modalidade,
     });
   };
 
@@ -56,24 +43,12 @@ class ServicoDashboardRegistroIndividual {
     ueId,
     modalidade
   ) => {
-    // TODO
-    // return this.montarConsultaPadraoGraficos({
-    //   rota: '',
-    //   anoLetivo,
-    //   dreId,
-    //   ueId,
-    //   modalidade,
-    // });
-
-    const mock = [
-      { quantidade: 30, descricao: 'EI - 5' },
-      { quantidade: 25, descricao: 'EI - 6' },
-    ];
-
-    return new Promise(resolve => {
-      return setTimeout(() => {
-        resolve({ data: mock });
-      }, 1000);
+    return this.montarConsultaPadraoGraficos({
+      rota: 'media',
+      anoLetivo,
+      dreId,
+      ueId,
+      modalidade,
     });
   };
 
@@ -83,33 +58,23 @@ class ServicoDashboardRegistroIndividual {
     ueId,
     modalidade
   ) => {
-    // TODO
-    // return this.montarConsultaPadraoGraficos({
-    //   rota: '',
-    //   anoLetivo,
-    //   dreId,
-    //   ueId,
-    //   modalidade,
-    // });
-
-    const mock = [
-      { quantidade: 100, descricao: 'EI - 5' },
-      { quantidade: 75, descricao: 'EI - 6' },
-    ];
-
-    return new Promise(resolve => {
-      return setTimeout(() => {
-        resolve({ data: mock });
-      }, 1000);
+    return this.montarConsultaPadraoGraficos({
+      rota: 'alunos-sem-registro',
+      anoLetivo,
+      dreId,
+      ueId,
+      modalidade,
     });
   };
 
   obterUltimaConsolidacao = anoLetivo => {
-    // TODO
-    // return api.get(`${urlPadrao}/consolidacao?anoLetivo=${anoLetivo}`);
-    return new Promise(resolve => {
-      return resolve({ data: '2021-06-07T17:36:39-03:00' });
-    });
+    return api.get(`${urlPadrao}/ultima-consolidacao?anoLetivo=${anoLetivo}`);
+  };
+
+  obterQuantidadeDiasSemRegistro = anoLetivo => {
+    return api.get(
+      `${urlPadrao}/quantidade-dias-sem-registro?anoLetivo=${anoLetivo}`
+    );
   };
 
   atualizarFiltros = (nomeParametro, valor) => {
