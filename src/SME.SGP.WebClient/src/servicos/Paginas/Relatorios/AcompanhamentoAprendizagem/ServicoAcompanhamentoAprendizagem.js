@@ -36,7 +36,12 @@ class ServicoAcompanhamentoAprendizagem {
     });
   };
 
-  obterAcompanhamentoEstudante = async (turmaId, alunoId, semestre) => {
+  obterAcompanhamentoEstudante = async (
+    turmaId,
+    alunoId,
+    semestre,
+    componenteCurricularId
+  ) => {
     const { dispatch } = store;
     dispatch(setExibirLoaderGeralAcompanhamentoAprendizagem(true));
 
@@ -45,7 +50,7 @@ class ServicoAcompanhamentoAprendizagem {
 
     const retorno = await api
       .get(
-        `${urlPadrao}?turmaId=${turmaId}&alunoId=${alunoId}&semestre=${semestre}`
+        `${urlPadrao}?turmaId=${turmaId}&alunoId=${alunoId}&semestre=${semestre}&componenteCurricularId=${componenteCurricularId}`
       )
       .catch(e => erros(e))
       .finally(() =>
