@@ -72,6 +72,8 @@ const DadosAcompanhamentoAprendizagem = props => {
       obterDadosAcompanhamentoAprendizagemPorEstudante();
     }
   }, [turmaSelecionada, codigoEOL, semestreSelecionado]);
+  
+  const exibirTabs = false;
 
   return (
     <>
@@ -95,12 +97,20 @@ const DadosAcompanhamentoAprendizagem = props => {
               ''
             )}
           </TabPane>
-          <TabPane tab="Observações" key={TAB_OBSERVACOES} disabled>
-            {tabAtual === TAB_OBSERVACOES ? 'Observações' : ''}
-          </TabPane>
-          <TabPane tab="Dieta especial" key={TAB_DIETA_ESPECIAL} disabled>
-            {tabAtual === TAB_DIETA_ESPECIAL ? 'Dieta especial' : ''}
-          </TabPane>
+          {
+            exibirTabs ? (
+              <TabPane tab="Observações" key={TAB_OBSERVACOES} disabled>
+                {tabAtual === TAB_OBSERVACOES ? 'Observações' : ''}
+              </TabPane>
+              ) : ('')
+          }
+           {
+            exibirTabs ? (
+              <TabPane tab="Dieta especial" key={TAB_DIETA_ESPECIAL} disabled>
+                {tabAtual === TAB_DIETA_ESPECIAL ? 'Dieta especial' : ''}
+              </TabPane>
+              ) : ('')
+          } 
         </ContainerTabsCard>
       ) : (
         ''
