@@ -1368,7 +1368,7 @@ rotas.set(RotasDto.DASHBOARD_REGISTRO_INDIVIDUAL, {
   component: DashboardRegistroIndividual,
   exact: true,
   tipo: RotasTipo.EstruturadaAutenticada,
-  // temPermissionamento: true,
+  temPermissionamento: true,
   chavePermissao: RotasDto.DASHBOARD_REGISTRO_INDIVIDUAL,
 });
 

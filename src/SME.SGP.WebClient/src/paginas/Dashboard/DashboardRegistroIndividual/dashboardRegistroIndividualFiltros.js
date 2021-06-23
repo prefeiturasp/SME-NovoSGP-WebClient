@@ -243,17 +243,16 @@ const DashboardRegistroIndividualFiltros = () => {
       anoLetivo
     ).catch(e => erros(e));
 
+    let valorAtual = null;
+
     if (resposta?.data) {
-      ServicoDashboardRegistroIndividual.atualizarFiltros(
-        'dataUltimaConsolidacao',
-        resposta.data
-      );
-    } else {
-      ServicoDashboardRegistroIndividual.atualizarFiltros(
-        'dataUltimaConsolidacao',
-        undefined
-      );
+      valorAtual = resposta.data;
     }
+
+    ServicoDashboardRegistroIndividual.atualizarFiltros(
+      'dataUltimaConsolidacao',
+      valorAtual
+    );
   }, [anoLetivo]);
 
   useEffect(() => {
@@ -262,10 +261,38 @@ const DashboardRegistroIndividualFiltros = () => {
     } else {
       ServicoDashboardRegistroIndividual.atualizarFiltros(
         'dataUltimaConsolidacao',
-        undefined
+        null
       );
     }
   }, [anoLetivo, obterUltimaConsolidacao]);
+
+  const obterQuantidadeDiasSemRegistro = useCallback(async () => {
+    const resposta = await ServicoDashboardRegistroIndividual.obterQuantidadeDiasSemRegistro(
+      anoLetivo
+    ).catch(e => erros(e));
+
+    let valorAtual = null;
+
+    if (resposta?.data) {
+      valorAtual = resposta.data;
+    }
+
+    ServicoDashboardRegistroIndividual.atualizarFiltros(
+      'diasSemRegistro',
+      valorAtual
+    );
+  }, [anoLetivo]);
+
+  useEffect(() => {
+    if (anoLetivo) {
+      obterQuantidadeDiasSemRegistro();
+    } else {
+      ServicoDashboardRegistroIndividual.atualizarFiltros(
+        'diasSemRegistro',
+        null
+      );
+    }
+  }, [anoLetivo, obterQuantidadeDiasSemRegistro]);
 
   return (
     <>
