@@ -24,7 +24,7 @@ const DadosAcompanhamentoAprendizagem = props => {
 
   const { codigoEOL } = dadosAlunoObjectCard;
 
-  const { semestreSelecionado } = props;
+  const { semestreSelecionado, componenteCurricularId } = props;
 
   const permissoesTela =
     usuario.permissoes[RotasDto.ACOMPANHAMENTO_APRENDIZAGEM];
@@ -60,7 +60,8 @@ const DadosAcompanhamentoAprendizagem = props => {
     const retorno = await ServicoAcompanhamentoAprendizagem.obterAcompanhamentoEstudante(
       turmaSelecionada?.id,
       codigoEOL,
-      semestreSelecionado
+      semestreSelecionado,
+      componenteCurricularId
     );
 
     const { acompanhamentoAlunoSemestreId, podeEditar } = retorno;
@@ -72,7 +73,7 @@ const DadosAcompanhamentoAprendizagem = props => {
       obterDadosAcompanhamentoAprendizagemPorEstudante();
     }
   }, [turmaSelecionada, codigoEOL, semestreSelecionado]);
-  
+
   const exibirTabs = false;
 
   return (
@@ -92,25 +93,28 @@ const DadosAcompanhamentoAprendizagem = props => {
           </TabPane>
           <TabPane tab="Registros e fotos" key={TAB_REGISTROS_FOTOS}>
             {tabAtual === TAB_REGISTROS_FOTOS ? (
-              <RegistrosFotos semestreSelecionado={semestreSelecionado} />
+              <RegistrosFotos
+                semestreSelecionado={semestreSelecionado}
+                componenteCurricularId={componenteCurricularId}
+              />
             ) : (
               ''
             )}
           </TabPane>
-          {
-            exibirTabs ? (
-              <TabPane tab="Observações" key={TAB_OBSERVACOES} disabled>
-                {tabAtual === TAB_OBSERVACOES ? 'Observações' : ''}
-              </TabPane>
-              ) : ('')
-          }
-           {
-            exibirTabs ? (
-              <TabPane tab="Dieta especial" key={TAB_DIETA_ESPECIAL} disabled>
-                {tabAtual === TAB_DIETA_ESPECIAL ? 'Dieta especial' : ''}
-              </TabPane>
-              ) : ('')
-          } 
+          {exibirTabs ? (
+            <TabPane tab="Observações" key={TAB_OBSERVACOES} disabled>
+              {tabAtual === TAB_OBSERVACOES ? 'Observações' : ''}
+            </TabPane>
+          ) : (
+            ''
+          )}
+          {exibirTabs ? (
+            <TabPane tab="Dieta especial" key={TAB_DIETA_ESPECIAL} disabled>
+              {tabAtual === TAB_DIETA_ESPECIAL ? 'Dieta especial' : ''}
+            </TabPane>
+          ) : (
+            ''
+          )}
         </ContainerTabsCard>
       ) : (
         ''
@@ -121,10 +125,12 @@ const DadosAcompanhamentoAprendizagem = props => {
 
 DadosAcompanhamentoAprendizagem.propTypes = {
   semestreSelecionado: PropTypes.string,
+  componenteCurricularId: PropTypes.string,
 };
 
 DadosAcompanhamentoAprendizagem.defaultProps = {
   semestreSelecionado: '',
+  componenteCurricularId: '',
 };
 
 export default DadosAcompanhamentoAprendizagem;

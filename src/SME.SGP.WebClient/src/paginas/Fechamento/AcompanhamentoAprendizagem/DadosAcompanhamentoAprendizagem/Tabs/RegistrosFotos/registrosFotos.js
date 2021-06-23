@@ -7,7 +7,7 @@ import ObservacoesAdicionais from './ObservacoesAdicionais/observacoesAdicionais
 import PercursoIndividual from './PercursoIndividual/percursoIndividual';
 
 const RegistrosFotos = props => {
-  const { semestreSelecionado } = props;
+  const { semestreSelecionado, componenteCurricularId } = props;
 
   const dadosAcompanhamentoAprendizagem = useSelector(
     store => store.acompanhamentoAprendizagem.dadosAcompanhamentoAprendizagem
@@ -17,7 +17,10 @@ const RegistrosFotos = props => {
     <>
       <PercursoIndividual />
       <ObservacoesAdicionais />
-      <FotosCrianca semestreSelecionado={semestreSelecionado} />
+      <FotosCrianca
+        semestreSelecionado={semestreSelecionado}
+        componenteCurricularId={componenteCurricularId}
+      />
       <AuditoriaAcompanhamentoAprendizagem />
     </>
   ) : (
@@ -27,10 +30,12 @@ const RegistrosFotos = props => {
 
 RegistrosFotos.propTypes = {
   semestreSelecionado: PropTypes.string,
+  componenteCurricularId: PropTypes.string,
 };
 
 RegistrosFotos.defaultProps = {
   semestreSelecionado: '',
+  componenteCurricularId: '',
 };
 
 export default RegistrosFotos;
