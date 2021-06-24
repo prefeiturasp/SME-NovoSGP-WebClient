@@ -1,7 +1,5 @@
-import * as moment from 'moment';
 import PropTypes from 'prop-types';
 import React, { useCallback, useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
 import { Loader } from '~/componentes';
 import GraficoBarras from '~/componentes-sgp/Graficos/graficoBarras';
 import { OPCAO_TODOS } from '~/constantes/constantes';
@@ -10,12 +8,6 @@ import ServicoDashboardRegistroIndividual from '~/servicos/Paginas/Dashboard/Ser
 
 const GraficoMediaPeriodoPorCrianca = props => {
   const { anoLetivo, dreId, ueId, modalidade } = props;
-
-  const dataUltimaConsolidacao = useSelector(
-    store =>
-      store.dashboardRegistroIndividual?.dadosDashboardRegistroIndividual
-        ?.dataUltimaConsolidacao
-  );
 
   const [dadosGrafico, setDadosGrafico] = useState([]);
   const [exibirLoader, setExibirLoader] = useState(false);
