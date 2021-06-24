@@ -37,6 +37,7 @@ import acompanhamentoAprendizagem from './acompanhamentoAprendizagem/reducers';
 import listaFrequenciaPorBimestre from './listaFrequenciaPorBimestre/reducers';
 import acompanhamentoFechamento from './acompanhamentoFechamento/reducers';
 import dashboardFrequencia from './dashboardFrequencia/reducers';
+import dashboardRegistroIndividual from './dashboardRegistroIndividual/reducers';
 import dashboardDevolutivas from './dashboardDevolutivas/reducers';
 import dashboardDiarioBordo from './dashboardDiarioBordo/reducers';
 
@@ -78,6 +79,7 @@ const reducers = combineReducers({
   listaFrequenciaPorBimestre,
   acompanhamentoFechamento,
   dashboardFrequencia,
+  dashboardRegistroIndividual,
   dashboardDevolutivas,
   dashboardDiarioBordo,
 });
