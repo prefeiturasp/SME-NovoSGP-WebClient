@@ -1383,7 +1383,8 @@ rotas.set(RotasDto.DASHBOARD_REGISTRO_INDIVIDUAL, {
   tipo: RotasTipo.EstruturadaAutenticada,
   temPermissionamento: true,
   chavePermissao: RotasDto.DASHBOARD_REGISTRO_INDIVIDUAL,
-  
+});
+
 rotas.set(RotasDto.DASHBOARD_DIARIO_BORDO, {
   breadcrumbName: 'Diário de bordo',
   menu: ['Dashboard'],
