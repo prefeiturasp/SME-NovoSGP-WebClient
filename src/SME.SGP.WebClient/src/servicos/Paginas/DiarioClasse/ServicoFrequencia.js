@@ -58,6 +58,14 @@ class ServicoFrequencia {
           ? tiposFrequencia.data
           : [];
 
+        frequenciaAlunos.data.auditoria = {
+          criadoEm: frequenciaAlunos.data.criadoEm,
+          criadoPor: frequenciaAlunos.data.criadoPor,
+          alteradoPor: frequenciaAlunos.data.alteradoPor,
+          alteradoEm: frequenciaAlunos.data.alteradoEm,
+          alteradoRF: frequenciaAlunos.data.alteradoRF,
+          criadoRF: frequenciaAlunos.data.criadoRF,
+        };
         dispatch(setListaDadosFrequencia(frequenciaAlunos.data));
         dispatch(
           setTemPeriodoAbertoFrequenciaPlanoAula(

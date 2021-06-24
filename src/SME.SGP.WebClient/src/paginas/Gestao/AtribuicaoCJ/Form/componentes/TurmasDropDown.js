@@ -64,6 +64,7 @@ function TurmasDropDown({ form, onChange, label }) {
         valueOption="valor"
         valueText="desc"
         placeholder="Turma"
+        showSearch
       />
     </Loader>
   );

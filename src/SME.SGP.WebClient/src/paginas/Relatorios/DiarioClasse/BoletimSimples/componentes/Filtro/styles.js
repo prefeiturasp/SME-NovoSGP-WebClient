@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import { Base } from '~/componentes';
 
 export const Row = styled.div`
   [class*='col-'] {
@@ -21,4 +22,11 @@ export const Row = styled.div`
     margin-bottom: 0 !important;
     margin-top: 0 !important;
   }
+`;
+
+export const AvisoBoletim = styled.div`
+  font-size: 12px;
+  line-height: 16px;
+  color: ${Base.LaranjaStatus};
+  opacity: ${props => (props.visivel ? 1 : 0)};
 `;

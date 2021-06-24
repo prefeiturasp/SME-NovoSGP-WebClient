@@ -543,6 +543,7 @@ const EncaminhamentoAEELista = () => {
                   onChange={onChangeDre}
                   valueSelect={dre?.codigo}
                   placeholder="Diretoria Regional De Educação (DRE)"
+                  showSearch
                 />
               </Loader>
             </div>
@@ -558,21 +559,23 @@ const EncaminhamentoAEELista = () => {
                   onChange={onChangeUe}
                   valueSelect={ue?.codigo}
                   placeholder="Unidade Escolar (UE)"
+                  showSearch
                 />
               </Loader>
             </div>
-            <div className="col-sm-12 col-md-6 col-lg-6 col-xl-6 mb-2">
+            <div className="col-sm-12 col-md-12 col-lg-6 col-xl-6 mb-2">
               <Loader loading={carregandoTurmas} tip="">
                 <SelectComponent
                   id="turma"
                   lista={listaTurmas}
                   valueOption="codigo"
-                  valueText="modalidadeTurmaNome"
+                  valueText="nomeFiltro"
                   label="Turma"
                   disabled={listaTurmas?.length === 1}
                   valueSelect={turma?.codigo}
                   onChange={onChangeTurma}
                   placeholder="Turma"
+                  showSearch
                 />
               </Loader>
             </div>

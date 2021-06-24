@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import {
   faAngleDown,
   faAngleUp,
-  faLevelUpAlt,
+  faLongArrowAltRight,
 } from '@fortawesome/free-solid-svg-icons';
 
 import { Base, Button, Colors, DataTable, Loader } from '~/componentes';
@@ -17,7 +17,11 @@ import {
   TextoEstilizado,
   IconeEstilizado,
 } from '../../acompanhamentoFechamento.css';
-import { LinhaTabela, IconeSeta } from './tabelaComponentesCurriculares.css';
+import {
+  LinhaTabela,
+  IconeSeta,
+  LinhaVertical,
+} from './tabelaComponentesCurriculares.css';
 
 const TabelaComponentesCurriculares = ({
   dadosComponentesCurriculares,
@@ -33,9 +37,15 @@ const TabelaComponentesCurriculares = ({
   const [linhasExpandidasPendencia, setLinhasExpandidasPendencia] = useState(
     []
   );
+  const [
+    linhasExpandidasDetalhamento,
+    setLinhasExpandidasDetalhamento,
+  ] = useState([]);
+
   const [dadosComCores, setDadosComCores] = useState([]);
-  const [mostrarDetalhePendencia, setMostrarDetalhePendencia] = useState(false);
   const [detalhePendenciaEscolhido, setDetalhePendenciaEscolhido] = useState();
+
+  const STATUS_EM_PROCESSAMENTO = 1;
 
   const obterCorSituacaoFechamento = situacaoFechamentoCodigo =>
     Object.keys(statusAcompanhamentoFechamento)
@@ -49,7 +59,10 @@ const TabelaComponentesCurriculares = ({
 
   const montarDadosComCores = useCallback(dados => {
     const novoMap = dados.map(item => {
-      const cor = obterCorSituacaoFechamento(item.situacaoFechamentoCodigo);
+      const cor =
+        item.situacaoFechamentoCodigo !== STATUS_EM_PROCESSAMENTO
+          ? obterCorSituacaoFechamento(item.situacaoFechamentoCodigo)
+          : statusAcompanhamentoFechamento.NAO_INICIADO.cor;
       return { ...item, cor };
     });
     setDadosComCores(novoMap);
@@ -81,97 +94,76 @@ const TabelaComponentesCurriculares = ({
       title: 'Situação do fechamento',
       dataIndex: 'situacaoFechamentoCodigo',
       align: 'center',
+      width: 330,
       render: (situacaoFechamentoCodigo, componente) => {
         if (
           statusAcompanhamentoFechamento?.NAO_INICIADO?.id !==
-          situacaoFechamentoCodigo
+            situacaoFechamentoCodigo &&
+          STATUS_EM_PROCESSAMENTO !== situacaoFechamentoCodigo
         ) {
-          const ehLinhaExpandida = temLinhaExpandida(componente.professorRf);
+          const ehLinhaExpandida = temLinhaExpandida(componente.id);
           const corTexto = ehLinhaExpandida.length
             ? Base.Branco
             : componente?.cor;
-          return <MarcadorTriangulo cor={corTexto} marginTop="-34.8px" />;
+          const marginRight = ehLinhaExpandida.length && '-10.3px';
+          const marginTop = ehLinhaExpandida.length ? '-33.8px' : '-34.8px';
+
+          return (
+            <MarcadorTriangulo
+              cor={corTexto}
+              marginTop={marginTop}
+              marginRight={marginRight}
+            />
+          );
         }
         return null;
       },
     },
   ];
 
-  const obterDetalhePendencia = async dadosLinha => {
+  const obterDetalhePendencia = async (expandir, componente) => {
     let dados = [];
     let dadosResposta = [];
-    let mostrarPendencia = false;
+    let componenteSelecionado = [];
+
     setCarregandoDetalhePendencia(true);
 
     const resposta = await ServicoAcompanhamentoFechamento.obterDetalhePendencia(
-      dadosLinha?.tipoPendencia,
-      dadosLinha?.pendenciaId
+      componente?.tipoPendencia,
+      componente?.pendenciaId
     )
       .catch(e => erros(e))
       .finally(() => setCarregandoDetalhePendencia(false));
 
     if (resposta?.data) {
-      mostrarPendencia = true;
-      dados = dadosLinha;
+      dados = componente;
       dadosResposta = resposta.data;
+      componenteSelecionado = [componente?.pendenciaId];
     }
 
     setDadosDetalhePendencias(dadosResposta);
     setDetalhePendenciaEscolhido(dados);
-    setMostrarDetalhePendencia(mostrarPendencia);
-  };
-
-  const onClickExibirDetalhamento = (_, dadosLinha) => {
-    obterDetalhePendencia(dadosLinha);
+    setLinhasExpandidasDetalhamento(componenteSelecionado);
   };
 
   const colunasTabelaComponentes = [
     {
       dataIndex: 'descricao',
       align: 'left',
-      render: (_, pendencias) => {
-        const ehLinhaClicada =
-          pendencias.pendenciaId === detalhePendenciaEscolhido?.pendenciaId;
-        const corTexto = ehLinhaClicada ? Base.Branco : Base.CinzaMako;
-        return (
-          <div className="d-flex align-items-center">
-            <IconeSeta cor={corTexto} icon={faLevelUpAlt} />
-            {pendencias.descricao}
-          </div>
-        );
-      },
     },
     {
       dataIndex: '',
       align: 'center',
-      render: (_, record) => {
-        const ehLinhaClicada =
-          record.pendenciaId === detalhePendenciaEscolhido?.pendenciaId;
-        const corTexto = ehLinhaClicada ? Colors.Branco : Colors.Azul;
-        const corTextoHover = ehLinhaClicada ? Colors.Azul : '';
-        return (
-          <div className="container-botao-detalhar">
-            <Button
-              id="botao-detalhar"
-              className="mx-auto"
-              label="Detalhar"
-              color={corTexto}
-              corTextoHover={corTextoHover}
-              onClick={e => onClickExibirDetalhamento(e, record)}
-              border
-              mudarCorBorda
-              height="32px"
-            />
-          </div>
-        );
-      },
     },
   ];
 
   const obterDetalhesPendencias = async (expandir, componente) => {
+    let componenteSelecionado = [];
+    let dadosComponentes = [];
+
     if (expandir) {
       setCarregandoComponentes(true);
-      setLinhasExpandidasPendencia([componente?.professorRf]);
+
       const resposta = await ServicoAcompanhamentoFechamento.obterDetalhesPendencias(
         turmaId,
         bimestre,
@@ -181,15 +173,13 @@ const TabelaComponentesCurriculares = ({
         .finally(() => setCarregandoComponentes(false));
 
       if (resposta?.data?.length) {
-        setDadosPendencias(resposta.data);
-        return;
+        componenteSelecionado = [componente?.id];
+        dadosComponentes = resposta.data;
       }
     }
 
-    setDetalhePendenciaEscolhido('');
-    setMostrarDetalhePendencia(false);
-    setDadosPendencias([]);
-    setLinhasExpandidasPendencia([]);
+    setDadosPendencias(dadosComponentes);
+    setLinhasExpandidasPendencia(componenteSelecionado);
   };
 
   const expandIcon = (expanded, onExpand, record) => {
@@ -197,11 +187,11 @@ const TabelaComponentesCurriculares = ({
       record?.situacaoFechamentoCodigo ===
       statusAcompanhamentoFechamento.PROCESSADO_PENDENCIAS.id
     ) {
-      const ehLinhaExpandida = temLinhaExpandida(record.professorRf);
+      const ehLinhaExpandida = temLinhaExpandida(record.id);
       const corTexto = ehLinhaExpandida.length ? Base.Branco : record?.cor;
       return (
         <TextoEstilizado cor={corTexto}>
-          {record.situacaoFechamento}
+          {record.situacaoFechamentoNome}
           <IconeEstilizado
             icon={expanded ? faAngleUp : faAngleDown}
             onClick={e => onExpand(record, e)}
@@ -212,16 +202,32 @@ const TabelaComponentesCurriculares = ({
 
     return (
       <TextoEstilizado cor={record?.cor}>
-        {record?.situacaoFechamento}
+        {record?.situacaoFechamentoNome}
       </TextoEstilizado>
     );
+  };
+
+  const components = {
+    table: props => {
+      return <table {...props} className="tabela-expandida-pendencias" />;
+    },
+    body: {
+      row: ({ className, children, ...rest }) => {
+        return (
+          <tr {...rest} className={`borda-seta ${className}`}>
+            <IconeSeta icon={faLongArrowAltRight} />
+            {children}
+          </tr>
+        );
+      },
+    },
   };
 
   return (
     <LinhaTabela className="col-md-12">
       <DataTable
         id="tabela-componentes-curriculares"
-        idLinha="professorRf"
+        idLinha="id"
         columns={colunasTabelaComponentesCurriculares}
         dataSource={dadosComCores}
         pagination={false}
@@ -233,7 +239,7 @@ const TabelaComponentesCurriculares = ({
           expandIcon(expanded, onExpand, record)
         }
         rowClassName={(record, _) => {
-          const ehLinhaExpandida = temLinhaExpandida(record.professorRf);
+          const ehLinhaExpandida = temLinhaExpandida(record.id);
           const nomeClasse = ehLinhaExpandida.length ? 'linha-ativa' : '';
           return nomeClasse;
         }}
@@ -245,10 +251,11 @@ const TabelaComponentesCurriculares = ({
             return (
               <Loader loading={carregandoComponentes}>
                 <DataTable
-                  id={`tabela-componente-pendencias-${componentes?.professorRf}`}
+                  id={`tabela-componente-pendencias-${componentes?.id}`}
                   idLinha="pendenciaId"
                   pagination={false}
                   showHeader={false}
+                  expandIconColumnIndex={2}
                   columns={colunasTabelaComponentes}
                   dataSource={dadosPendencias}
                   semHover
@@ -259,6 +266,42 @@ const TabelaComponentesCurriculares = ({
                     const nomeClasse = ehLinhaClicada ? 'linha-ativa' : '';
                     return nomeClasse;
                   }}
+                  expandedRowKeys={linhasExpandidasDetalhamento}
+                  onClickExpandir={obterDetalhePendencia}
+                  expandIcon={({ _, onExpand, record }) => {
+                    const ehLinhaClicada =
+                      record.pendenciaId ===
+                      detalhePendenciaEscolhido?.pendenciaId;
+                    const corTexto = ehLinhaClicada
+                      ? Colors.Branco
+                      : Colors.Azul;
+                    const corTextoHover = ehLinhaClicada ? Colors.Azul : '';
+                    return (
+                      <Button
+                        id="botao-detalhar"
+                        className="mx-auto"
+                        label="Detalhar"
+                        color={corTexto}
+                        corTextoHover={corTextoHover}
+                        onClick={e => onExpand(record, e)}
+                        border
+                        mudarCorBorda
+                        height="32px"
+                      />
+                    );
+                  }}
+                  expandedRowRender={() => {
+                    return (
+                      <Loader loading={carregandoDetalhePendencia}>
+                        <LinhaVertical />
+                        <RenderizarHtml
+                          textoHtml={dadosDetalhePendencias?.descricaoHtml}
+                          className="tabela-pendencias-html"
+                        />
+                      </Loader>
+                    );
+                  }}
+                  components={components}
                 />
               </Loader>
             );
@@ -267,16 +310,6 @@ const TabelaComponentesCurriculares = ({
           return null;
         }}
       />
-      {mostrarDetalhePendencia && (
-        <>
-          <Loader loading={carregandoDetalhePendencia}>
-            <RenderizarHtml
-              textoHtml={dadosDetalhePendencias?.descricaoHtml}
-              className="tabela-pendencias-html"
-            />
-          </Loader>
-        </>
-      )}
     </LinhaTabela>
   );
 };

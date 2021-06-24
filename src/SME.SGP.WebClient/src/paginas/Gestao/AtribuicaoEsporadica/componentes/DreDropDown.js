@@ -64,6 +64,7 @@ function DreDropDown({ form, onChange, label, desabilitado }) {
         listaDres.length === 1 ||
         (typeof desabilitado === 'boolean' && desabilitado === true)
       }
+      showSearch
     />
   );
 }

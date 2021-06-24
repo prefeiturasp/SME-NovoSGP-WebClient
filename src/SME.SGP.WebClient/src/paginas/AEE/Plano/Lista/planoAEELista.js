@@ -440,6 +440,7 @@ const PlanoAEELista = () => {
                   onChange={onChangeDre}
                   valueSelect={dreId}
                   placeholder="Diretoria Regional De Educação (DRE)"
+                  showSearch
                 />
               </Loader>
             </div>
@@ -455,25 +456,27 @@ const PlanoAEELista = () => {
                   onChange={onChangeUe}
                   valueSelect={ueId}
                   placeholder="Unidade Escolar (UE)"
+                  showSearch
                 />
               </Loader>
             </div>
-            <div className="col-sm-12 col-md-4 col-lg-3 col-xl-3 mb-2">
+            <div className="col-sm-12 col-md-12 col-lg-6 col-xl-5 mb-2">
               <Loader loading={carregandoTurmas} tip="">
                 <SelectComponent
                   id="turma"
                   lista={listaTurmas}
                   valueOption="codigo"
-                  valueText="modalidadeTurmaNome"
+                  valueText="nomeFiltro"
                   label="Turma"
                   disabled={listaTurmas?.length === 1}
                   valueSelect={turmaId}
                   onChange={onChangeTurma}
                   placeholder="Turma"
+                  showSearch
                 />
               </Loader>
             </div>
-            <div className="col-sm-12 col-md-8 col-lg-6 col-xl-6 mb-2">
+            <div className="col-sm-12 col-md-12 col-lg-6 col-xl-7 mb-2">
               <div className="row">
                 <LocalizadorEstudante
                   id="estudante"
@@ -488,7 +491,7 @@ const PlanoAEELista = () => {
                 />
               </div>
             </div>
-            <div className="col-sm-12 col-md-6 col-lg-3 col-xl-3 mb-2">
+            <div className="col-sm-12 col-md-6 col-lg-6 col-xl-5 mb-2">
               <Loader loading={carregandoSituacao} tip="">
                 <SelectComponent
                   id="situacao"

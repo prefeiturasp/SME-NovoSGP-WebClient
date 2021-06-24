@@ -3,6 +3,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Loader, SelectComponent } from '~/componentes';
 import GraficoBarras from '~/componentes-sgp/Graficos/graficoBarras';
+import { OPCAO_TODOS } from '~/constantes/constantes';
 import { ModalidadeDTO } from '~/dtos';
 import { AbrangenciaServico, erros } from '~/servicos';
 import ServicoDashboardFrequencia from '~/servicos/Paginas/Dashboard/ServicoDashboardFrequencia';
@@ -27,8 +28,6 @@ const GraficoQuantidadeJustificativasPorMotivo = props => {
   const [turmaId, setTurmaId] = useState();
 
   const [carregandoTurma, setCarregandoTurma] = useState();
-
-  const OPCAO_TODOS = '-99';
 
   const obterDadosGrafico = useCallback(async () => {
     setExibirLoader(true);
@@ -113,7 +112,7 @@ const GraficoQuantidadeJustificativasPorMotivo = props => {
       }
 
       if (resultado.data.length > 1) {
-        resultado.data.unshift({ id: OPCAO_TODOS, nome: 'Todas' });
+        resultado.data.unshift({ id: OPCAO_TODOS, nomeFiltro: 'Todas' });
         setTurmaId(OPCAO_TODOS);
       }
     }
@@ -141,20 +140,21 @@ const GraficoQuantidadeJustificativasPorMotivo = props => {
   return (
     <>
       <div className="row">
-        <div className="col-sm-12 col-md-6 col-lg-3 col-xl-3 mb-2">
+        <div className="col-sm-12 col-md-6 col-lg-6 col-xl-6 mb-2">
           {ueId && ueId !== OPCAO_TODOS ? (
             <Loader loading={carregandoTurma}>
               <SelectComponent
                 id="turma"
                 lista={listaTurmas}
                 valueOption="id"
-                valueText="nome"
+                valueText="nomeFiltro"
                 label="Turma"
                 disabled={!modalidade || listaTurmas?.length === 1}
                 valueSelect={turmaId}
                 placeholder="Turma"
                 onChange={onChangeTurma}
                 allowClear={false}
+                showSearch
               />
             </Loader>
           ) : (
