@@ -1,9 +1,6 @@
-import * as moment from 'moment';
 import PropTypes from 'prop-types';
 import React, { useCallback, useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
 import { Loader } from '~/componentes';
-import DataUltimaAtualizacao from '~/componentes-sgp/DataUltimaAtualizacao/dataUltimaAtualizacao';
 import GraficoBarras from '~/componentes-sgp/Graficos/graficoBarras';
 import { OPCAO_TODOS } from '~/constantes/constantes';
 import { erros } from '~/servicos';
@@ -11,13 +8,6 @@ import ServicoDashboardRegistroIndividual from '~/servicos/Paginas/Dashboard/Ser
 
 const GraficoQuantidadeTotalRegistrosIndividuais = props => {
   const { anoLetivo, dreId, ueId, modalidade } = props;
-
-  const dataUltimaConsolidacao = useSelector(
-    store =>
-      store.dashboardRegistroIndividual?.dadosDashboardRegistroIndividual
-        ?.dataUltimaConsolidacao
-  );
-
   const [dadosGrafico, setDadosGrafico] = useState([]);
   const [exibirLoader, setExibirLoader] = useState(false);
 
@@ -52,15 +42,6 @@ const GraficoQuantidadeTotalRegistrosIndividuais = props => {
       loading={exibirLoader}
       className={exibirLoader ? 'text-center' : ''}
     >
-      {dataUltimaConsolidacao && (
-        <DataUltimaAtualizacao
-          dataFormatada={
-            dataUltimaConsolidacao
-              ? moment(dataUltimaConsolidacao).format('DD/MM/YYYY HH:mm:ss')
-              : ''
-          }
-        />
-      )}
       {dadosGrafico?.length ? (
         <GraficoBarras data={dadosGrafico} xAxisVisible legendVisible={false} />
       ) : !exibirLoader ? (
