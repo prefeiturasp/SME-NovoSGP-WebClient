@@ -16,7 +16,6 @@ import {
   EditorPlanejamento,
   FundoEditor,
   IframeStyle,
-  TextoSimples,
 } from './caixaTextoExpandivel.css';
 
 const CaixaTextoExpandivel = ({ item }) => {
@@ -78,22 +77,20 @@ const CaixaTextoExpandivel = ({ item }) => {
         </div>
         <div className="card-body">
           <EditorPlanejamento>
-            {totalRegistros === 1 || planejamentoExpandido ? (
-              <FundoEditor>
-                <JoditEditor
-                  id="planejamento-diario-bordo-um"
-                  value={item.planejamento}
-                  removerToolbar
-                  readonly
-                  height="560px"
-                  iframeStyle={IframeStyle}
-                />
-              </FundoEditor>
-            ) : (
-              <TextoSimples>
-                <div>{item.planejamentoSimples}</div>
-              </TextoSimples>
-            )}
+            <FundoEditor>
+              <JoditEditor
+                id="planejamento-diario-bordo-um"
+                value={
+                  totalRegistros === 1 || planejamentoExpandido
+                    ? item.planejamento
+                    : item.planejamentoSimples
+                }
+                removerToolbar
+                readonly
+                height="560px"
+                iframeStyle={IframeStyle}
+              />
+            </FundoEditor>
           </EditorPlanejamento>
         </div>
       </div>

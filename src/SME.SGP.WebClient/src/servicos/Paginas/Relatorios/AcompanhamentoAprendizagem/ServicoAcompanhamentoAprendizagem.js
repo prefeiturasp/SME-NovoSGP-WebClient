@@ -141,26 +141,27 @@ class ServicoAcompanhamentoAprendizagem {
         );
 
       if (retorno?.status === 200) {
-        if (!dadosAcompanhamentoAprendizagem?.acompanhamentoAlunoSemestreId) {
-          this.obterAcompanhamentoEstudante(
-            turmaSelecionada?.id,
-            codigoEOL,
-            semestreSelecionado
-          );
-        } else {
-          const dadosAcompanhamentoAtual = dadosAcompanhamentoAprendizagem;
-          dadosAcompanhamentoAtual.auditoria = retorno.data;
-          dispatch(
-            setDadosAcompanhamentoAprendizagem(dadosAcompanhamentoAtual)
-          );
-        }
-
-        dispatch(setAcompanhamentoAprendizagemEmEdicao(false));
         if (dadosAcompanhamentoAprendizagem.acompanhamentoAlunoId) {
           sucesso('Registro alterado com sucesso');
         } else {
           sucesso('Registro inserido com sucesso');
         }
+
+        const dadosNovos = dadosAcompanhamentoAprendizagem;
+
+        const {
+          auditoria,
+          acompanhamentoAlunoId,
+          acompanhamentoAlunoSemestreId,
+        } = retorno.data;
+
+        dadosNovos.auditoria = auditoria;
+        dadosNovos.acompanhamentoAlunoId = acompanhamentoAlunoId;
+        dadosNovos.acompanhamentoAlunoSemestreId = acompanhamentoAlunoSemestreId;
+        dispatch(setDadosAcompanhamentoAprendizagem(dadosNovos));
+
+        dispatch(setAcompanhamentoAprendizagemEmEdicao(false));
+
         return true;
       }
       return false;
