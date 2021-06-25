@@ -39,7 +39,6 @@ const JoditEditor = forwardRef((props, ref) => {
     readonly,
     removerToolbar,
     iframeStyle,
-    disablePlugins,
     permiteVideo,
     qtdMaxImg,
     imagensCentralizadas,
@@ -167,7 +166,7 @@ const JoditEditor = forwardRef((props, ref) => {
               `<img src="${
                 dados.path
               }" style="max-width: 100%; max-height: 700px; ${
-                imagensCentralizadas ? 'display: block' : ''
+                imagensCentralizadas ? 'display: block; margin: auto;' : ''
               }">`
             );
           } else {
@@ -175,7 +174,7 @@ const JoditEditor = forwardRef((props, ref) => {
               `<img src="${
                 dados.path
               }" style="max-width: 100%; max-height: 700px; object-fit: cover; object-position: bottom; ${
-                imagensCentralizadas ? 'display: block' : ''
+                imagensCentralizadas ? 'display: block; margin: auto;' : ''
               }"/>`
             );
           }
@@ -395,7 +394,6 @@ JoditEditor.propTypes = {
   readonly: PropTypes.bool,
   removerToolbar: PropTypes.bool,
   iframeStyle: PropTypes.string,
-  disablePlugins: PropTypes.string,
   permiteVideo: PropTypes.bool,
   qtdMaxImg: PropTypes.number,
   imagensCentralizadas: PropTypes.bool,
@@ -418,7 +416,6 @@ JoditEditor.defaultProps = {
   readonly: false,
   removerToolbar: false,
   iframeStyle: '',
-  disablePlugins: '',
   permiteVideo: true,
   qtdMaxImg: null,
   imagensCentralizadas: false,
