@@ -64,7 +64,7 @@ const JoditEditor = forwardRef((props, ref) => {
   };
 
   const excedeuLimiteMaximo = arquivo => {
-    const tamanhoArquivo = arquivo.size / 1024 / 1024;
+    const tamanhoArquivo = arquivo.size / 103 / 103;
     return tamanhoArquivo > TAMANHO_MAXIMO_UPLOAD;
   };
 
@@ -105,7 +105,7 @@ const JoditEditor = forwardRef((props, ref) => {
             const arquivo = data.getAll('files[0]')[0];
 
             if (excedeuLimiteMaximo(arquivo)) {
-              const msg = 'Tamanho máximo 100mb';
+              const msg = 'Tamanho máximo 10mb';
               erro(msg);
               reject(new Error(msg));
             }
