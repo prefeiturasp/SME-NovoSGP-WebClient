@@ -38,6 +38,7 @@ import DadosAcompanhamentoAprendizagem from './DadosAcompanhamentoAprendizagem/d
 import ObjectCardAcompanhamentoAprendizagem from './DadosAcompanhamentoAprendizagem/ObjectCardAcompanhamentoAprendizagem/objectCardAcompanhamentoAprendizagem';
 import TabelaRetratilAcompanhamentoAprendizagem from './DadosAcompanhamentoAprendizagem/TabelaRetratilAcompanhamentoAprendizagem/tabelaRetratilAcompanhamentoAprendizagem';
 import LoaderAcompanhamentoAprendizagem from './loaderAcompanhamentoAprendizagem';
+import ModalErrosAcompanhamentoAprendizagem from './modalErrosAcompanhamentoAprendizagem';
 
 const AcompanhamentoAprendizagem = () => {
   const dispatch = useDispatch();
@@ -249,6 +250,7 @@ const AcompanhamentoAprendizagem = () => {
         ''
       )}
       {turmaSelecionada.turma ? <AlertaPermiteSomenteTurmaInfantil /> : ''}
+      <ModalErrosAcompanhamentoAprendizagem />
       <Cabecalho pagina="Relatório do Acompanhamento da Aprendizagem" />
       <LoaderAcompanhamentoAprendizagem>
         <Card>
