@@ -19,7 +19,7 @@ const Campo = styled.div`
 `;
 
 let CHANGE_DEBOUNCE_FLAG;
-const TAMANHO_MAXIMO_UPLOAD = 100;
+const TAMANHO_MAXIMO_UPLOAD = 10;
 
 const JoditEditor = forwardRef((props, ref) => {
   const {
@@ -64,7 +64,7 @@ const JoditEditor = forwardRef((props, ref) => {
   };
 
   const excedeuLimiteMaximo = arquivo => {
-    const tamanhoArquivo = arquivo.size / 103 / 103;
+    const tamanhoArquivo = arquivo.size / 1024 / 1024;
     return tamanhoArquivo > TAMANHO_MAXIMO_UPLOAD;
   };
 
