@@ -22,7 +22,7 @@ function AtribuicaoEsporadicaLista() {
   const [filtro, setFiltro] = useState({});
   const [somenteConsulta, setSomenteConsulta] = useState(false);
   const usuario = useSelector(store => store.usuario);
-  const permissoesTela = usuario.permissoes[RotasDto.RELATORIO_SEMESTRAL];
+  const permissoesTela = usuario.permissoes[RotasDto.ATRIBUICAO_ESPORADICA_LISTA];
 
   const formatarCampoDataGrid = data => {
     let dataFormatada = '';
@@ -131,7 +131,7 @@ function AtribuicaoEsporadicaLista() {
           <ButtonGroup
             somenteConsulta={somenteConsulta}
             permissoesTela={
-              permissoesTela[RotasDto.ATRIBUICAO_ESPORADICA_LISTA]
+              permissoesTela
             }
             temItemSelecionado={
               itensSelecionados && itensSelecionados.length >= 1
