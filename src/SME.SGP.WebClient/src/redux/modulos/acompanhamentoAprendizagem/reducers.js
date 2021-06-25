@@ -11,6 +11,8 @@ const inicial = {
   dadosApanhadoGeral: {},
   apanhadoGeralEmEdicao: false,
   qtdMaxImagensCampoPercursoColetivo: null,
+  errosAcompanhamentoAprendizagem: [],
+  exibirModalErrosAcompanhamentoAprendizagem: false,
 };
 
 export default function AcompanhamentoAprendizagem(state = inicial, action) {
@@ -42,6 +44,8 @@ export default function AcompanhamentoAprendizagem(state = inicial, action) {
           exibirLoaderGeralAcompanhamentoAprendizagem: false,
           dadosAcompanhamentoAprendizagem: null,
           acompanhamentoAprendizagemEmEdicao: false,
+          errosAcompanhamentoAprendizagem: [],
+          exibirModalErrosAcompanhamentoAprendizagem: false,
         };
       }
       case '@acompanhamentoAprendizagem/setExibirLoaderGeralAcompanhamentoAprendizagem': {
@@ -84,6 +88,18 @@ export default function AcompanhamentoAprendizagem(state = inicial, action) {
         return {
           ...draft,
           qtdMaxImagensCampoPercursoColetivo: action.payload,
+        };
+      }
+      case '@acompanhamentoAprendizagem/setErrosAcompanhamentoAprendizagem': {
+        return {
+          ...draft,
+          errosAcompanhamentoAprendizagem: action.payload,
+        };
+      }
+      case '@acompanhamentoAprendizagem/setExibirModalErrosAcompanhamentoAprendizagem': {
+        return {
+          ...draft,
+          exibirModalErrosAcompanhamentoAprendizagem: action.payload,
         };
       }
 
