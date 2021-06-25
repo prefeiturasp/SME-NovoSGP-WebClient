@@ -847,7 +847,7 @@ const Notas = ({ match }) => {
       validarJustificativaAntesDeSalvar(numeroBimestre, false, false);
     }
 
-    switch (Number(bimestreCorrente)) {
+    switch (Number(numeroBimestre)) {
       case 1:
         setDadosBimestreAtual(primeiroBimestre);
         break;
