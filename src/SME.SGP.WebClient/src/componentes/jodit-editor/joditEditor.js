@@ -146,9 +146,7 @@ const JoditEditor = forwardRef((props, ref) => {
           } else{
             //textArea.current.selection.insertImage(dados.path);
             if (dados.contentType.startsWith('image/gif')){
-              textArea.current.selection.insertHTML(
-                `<img src="${dados.path}" style="max-width: 100%; max-height: 700px;">`
-              );
+              textArea.current.selection.insertImage(dados.path);
             }else{
               textArea.current.selection.insertHTML(
               `<img src="${dados.path}" style="max-width: 100%; max-height: 700px; object-fit: cover; object-position: bottom;"/>`
