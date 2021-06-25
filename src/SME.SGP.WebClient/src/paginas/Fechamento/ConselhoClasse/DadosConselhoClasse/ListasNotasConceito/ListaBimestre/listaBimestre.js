@@ -38,7 +38,8 @@ const ListaBimestre = props => {
     id,
     notaPosConselho,
     idCampo,
-    codigoComponenteCurricular
+    codigoComponenteCurricular,
+    podeEditar
   ) => {
     switch (Number(tipoNota)) {
       case Number(notasConceitos.Notas):
@@ -51,7 +52,7 @@ const ListaBimestre = props => {
             idCampo={idCampo}
             codigoComponenteCurricular={String(codigoComponenteCurricular)}
             mediaAprovacao={mediaAprovacao}
-            alunoDesabilitado={alunoDesabilitado}
+            alunoDesabilitado={alunoDesabilitado || !podeEditar}
           />
         );
       case Number(notasConceitos.Conceitos):
@@ -62,7 +63,7 @@ const ListaBimestre = props => {
             id={id}
             idCampo={idCampo}
             codigoComponenteCurricular={codigoComponenteCurricular}
-            alunoDesabilitado={alunoDesabilitado}
+            alunoDesabilitado={alunoDesabilitado || !podeEditar}
           />
         );
       default:
@@ -143,7 +144,8 @@ const ListaBimestre = props => {
                           item.notaPosConselho.id,
                           item.notaPosConselho.nota,
                           `${descricaoGrupoMatriz} ${index} componente`,
-                          item.codigoComponenteCurricular
+                          item.codigoComponenteCurricular,
+                          item.notaPosConselho.podeEditar
                         )}
                       </td>
                       <td>{item.quantidadeAulas}</td>
