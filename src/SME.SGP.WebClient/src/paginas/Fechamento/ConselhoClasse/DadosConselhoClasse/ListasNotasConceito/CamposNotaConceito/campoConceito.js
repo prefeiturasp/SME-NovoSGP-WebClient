@@ -147,7 +147,7 @@ const CampoConceito = props => {
           placeholder="Conceito"
           className={abaixoMedia ? 'borda-abaixo-media' : ''}
           disabled={
-            (alunoDesabilitado && !podeEditarNota) ||
+            alunoDesabilitado ||
             !podeEditarNota ||
             desabilitarCampos ||
             !dentroPeriodo
