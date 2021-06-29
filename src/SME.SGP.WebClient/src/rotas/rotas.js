@@ -100,6 +100,7 @@ import DashboardDevolutivas from '~/paginas/Dashboard/DashboardDevolutivas/dashb
 import DashboardInformacoesEscolares from '~/paginas/Dashboard/DashboardInformacoesEscolares/dashboardInformacoesEscolares';
 import DashboardRegistroIndividual from '~/paginas/Dashboard/DashboardRegistroIndividual/dashboardRegistroIndividual';
 import DashboardDiarioBordo from '~/paginas/Dashboard/DashboardDiarioBordo/dashboardDiarioBordo';
+import DashboardRelAcompanhamentoAprendizagem from '~/paginas/Dashboard/DashboardRelAcompanhamentoAprendizagem/dashboardRelAcompanhamentoAprendizagem';
 
 const rotas = new Map();
 
@@ -1394,6 +1395,17 @@ rotas.set(RotasDto.DASHBOARD_DIARIO_BORDO, {
   tipo: RotasTipo.EstruturadaAutenticada,
   temPermissionamento: true,
   chavePermissao: RotasDto.DASHBOARD_DIARIO_BORDO,
+});
+
+rotas.set(RotasDto.DASHBOARD_RELATORIO_ACOMPANHAMENTO_APRENDIZAGEM, {
+  breadcrumbName: 'Relatório do Acompanhamento da Aprendizagem',
+  menu: ['Dashboard'],
+  parent: '/',
+  component: DashboardRelAcompanhamentoAprendizagem,
+  exact: true,
+  tipo: RotasTipo.EstruturadaAutenticada,
+  temPermissionamento: true,
+  chavePermissao: RotasDto.DASHBOARD_RELATORIO_ACOMPANHAMENTO_APRENDIZAGEM,
 });
 
 const rotasArray = [];
