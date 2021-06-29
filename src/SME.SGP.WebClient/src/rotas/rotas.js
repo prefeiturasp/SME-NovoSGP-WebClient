@@ -1392,7 +1392,7 @@ rotas.set(RotasDto.DASHBOARD_RELATORIO_ACOMPANHAMENTO_APRENDIZAGEM, {
   component: DashboardRelAcompanhamentoAprendizagem,
   exact: true,
   tipo: RotasTipo.EstruturadaAutenticada,
-  // temPermissionamento: true,
+  temPermissionamento: true,
   chavePermissao: RotasDto.DASHBOARD_RELATORIO_ACOMPANHAMENTO_APRENDIZAGEM,
 });
 
