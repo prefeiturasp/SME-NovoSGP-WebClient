@@ -8,7 +8,7 @@ import GraficosAcompanhamentoAprendizagem from './GraficosAcompanhamentoAprendiz
 const { TabPane } = Tabs;
 
 const TabsDashboardRelAcompanhamentoAprendizagem = props => {
-  const { anoLetivo, dreId, ueId } = props;
+  const { anoLetivo, dreId, ueId, dataUltimaConsolidacao } = props;
 
   const [tabSelecionada, setTabSelecionada] = useState();
 
@@ -43,6 +43,7 @@ const TabsDashboardRelAcompanhamentoAprendizagem = props => {
                 anoLetivo={anoLetivo}
                 dreId={dreId}
                 ueId={ueId}
+                dataUltimaConsolidacao={dataUltimaConsolidacao}
               />
             </TabPane>
           </ContainerTabsCard>
@@ -58,12 +59,14 @@ TabsDashboardRelAcompanhamentoAprendizagem.propTypes = {
   anoLetivo: PropTypes.oneOfType(PropTypes.any),
   ueId: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   dreId: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+  dataUltimaConsolidacao: PropTypes.oneOfType(PropTypes.any),
 };
 
 TabsDashboardRelAcompanhamentoAprendizagem.defaultProps = {
   anoLetivo: null,
   dreId: null,
   ueId: null,
+  dataUltimaConsolidacao: null,
 };
 
 export default TabsDashboardRelAcompanhamentoAprendizagem;

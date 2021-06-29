@@ -5,7 +5,7 @@ import CardCollapse from '~/componentes/cardCollapse';
 import GraficoTotalCriancasComRelAcompanhamentoAprendizagem from './graficoTotalCriancas';
 
 const TotalCriancasComRelAcompanhamentoAprendizagem = props => {
-  const { anoLetivo, dreId, ueId } = props;
+  const { anoLetivo, dreId, ueId, dataUltimaConsolidacao } = props;
 
   const configCabecalho = {
     altura: '44px',
@@ -34,6 +34,7 @@ const TotalCriancasComRelAcompanhamentoAprendizagem = props => {
             anoLetivo={anoLetivo}
             dreId={dreId}
             ueId={ueId}
+            dataUltimaConsolidacao={dataUltimaConsolidacao}
           />
         ) : (
           ''
@@ -47,12 +48,14 @@ TotalCriancasComRelAcompanhamentoAprendizagem.propTypes = {
   anoLetivo: PropTypes.oneOfType(PropTypes.any),
   dreId: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   ueId: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+  dataUltimaConsolidacao: PropTypes.oneOfType(PropTypes.any),
 };
 
 TotalCriancasComRelAcompanhamentoAprendizagem.defaultProps = {
   anoLetivo: null,
   dreId: null,
   ueId: null,
+  dataUltimaConsolidacao: null,
 };
 
 export default TotalCriancasComRelAcompanhamentoAprendizagem;
