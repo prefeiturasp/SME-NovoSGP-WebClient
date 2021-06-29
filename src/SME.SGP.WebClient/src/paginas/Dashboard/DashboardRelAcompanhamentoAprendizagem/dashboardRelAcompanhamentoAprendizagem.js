@@ -15,6 +15,7 @@ import { URL_HOME } from '~/constantes/url';
 import AbrangenciaServico from '~/servicos/Abrangencia';
 import { erros } from '~/servicos/alertas';
 import history from '~/servicos/history';
+import ServicoDashboardRelAcompanhamentoAprendizagem from '~/servicos/Paginas/Dashboard/ServicoDashboardRelAcompanhamentoAprendizagem';
 import TabsDashboardRelAcompanhamentoAprendizagem from './TabsDashboardRelAcompanhamentoAprendizagem/tabsDashboardRelAcompanhamentoAprendizagem';
 
 const DashboardRelAcompanhamentoAprendizagem = () => {
@@ -29,6 +30,7 @@ const DashboardRelAcompanhamentoAprendizagem = () => {
   const [anoLetivo, setAnoLetivo] = useState(anoAtual);
   const [dre, setDre] = useState();
   const [ue, setUe] = useState();
+  const [dataUltimaConsolidacao, setDataUltimaConsolidacao] = useState();
 
   const [carregandoAnosLetivos, setCarregandoAnosLetivos] = useState(false);
   const [carregandoDres, setCarregandoDres] = useState(false);
@@ -183,6 +185,24 @@ const DashboardRelAcompanhamentoAprendizagem = () => {
     setAnoLetivo(ano);
   };
 
+  const obterUltimaConsolidacao = useCallback(async () => {
+    if (anoLetivo) {
+      const resposta = await ServicoDashboardRelAcompanhamentoAprendizagem.obterUltimaConsolidacao(
+        anoLetivo
+      ).catch(e => erros(e));
+
+      if (resposta?.data) {
+        setDataUltimaConsolidacao(resposta.data);
+      } else {
+        setDataUltimaConsolidacao();
+      }
+    }
+  }, [anoLetivo]);
+
+  useEffect(() => {
+    obterUltimaConsolidacao();
+  }, [anoLetivo, obterUltimaConsolidacao]);
+
   return (
     <>
       <AlertaPermiteSomenteTurmaInfantil
@@ -277,6 +297,7 @@ const DashboardRelAcompanhamentoAprendizagem = () => {
                   anoLetivo={anoLetivo}
                   dreId={OPCAO_TODOS === dre?.codigo ? OPCAO_TODOS : dre?.id}
                   ueId={OPCAO_TODOS === ue?.codigo ? OPCAO_TODOS : ue?.id}
+                  dataUltimaConsolidacao={dataUltimaConsolidacao}
                 />
               ) : (
                 ''

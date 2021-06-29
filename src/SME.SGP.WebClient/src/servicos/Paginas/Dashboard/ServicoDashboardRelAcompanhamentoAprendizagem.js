@@ -26,41 +26,17 @@ class ServicoDashboardRelAcompanhamentoAprendizagem {
     ueId,
     semestre
   ) => {
-    // TODO
-    // return this.montarConsultaPadraoGraficos({
-    //   rota: 'TODO',
-    //   anoLetivo,
-    //   dreId,
-    //   ueId,
-    //   semestre,
-    // });
+    return this.montarConsultaPadraoGraficos({
+      rota: 'acompanhamento-aluno',
+      anoLetivo,
+      dreId,
+      ueId,
+      semestre,
+    });
+  };
 
-    return new Promise(resolve =>
-      resolve({
-        data: [
-          {
-            quantidade: 5748,
-            descricao: 'Qtd. de crianças com relatório pedagógico registrado',
-            turma: 'EI-5',
-          },
-          {
-            quantidade: 1321,
-            descricao: 'Qtd. de crianças com relatório pedagógico pendente',
-            turma: 'EI-5',
-          },
-          {
-            quantidade: 3741,
-            descricao: 'Qtd. de crianças com relatório pedagógico registrado',
-            turma: 'EI-6',
-          },
-          {
-            quantidade: 1145,
-            descricao: 'Qtd. de crianças com relatório pedagógico pendente',
-            turma: 'EI-6',
-          },
-        ],
-      })
-    );
+  obterUltimaConsolidacao = anoLetivo => {
+    return api.get(`${urlPadrao}/ultima-consolidacao?anoLetivo=${anoLetivo}`);
   };
 }
 

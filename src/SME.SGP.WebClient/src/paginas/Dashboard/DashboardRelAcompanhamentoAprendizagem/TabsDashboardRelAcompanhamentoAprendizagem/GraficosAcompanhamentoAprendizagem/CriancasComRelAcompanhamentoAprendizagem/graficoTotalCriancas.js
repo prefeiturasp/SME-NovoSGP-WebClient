@@ -1,13 +1,15 @@
+import * as moment from 'moment';
 import PropTypes from 'prop-types';
 import React, { useCallback, useEffect, useState } from 'react';
 import { Loader, SelectComponent } from '~/componentes';
+import DataUltimaAtualizacao from '~/componentes-sgp/DataUltimaAtualizacao/dataUltimaAtualizacao';
 import GraficoBarras from '~/componentes-sgp/Graficos/graficoBarras';
 import { OPCAO_TODOS } from '~/constantes/constantes';
 import { erros } from '~/servicos';
 import ServicoDashboardRelAcompanhamentoAprendizagem from '~/servicos/Paginas/Dashboard/ServicoDashboardRelAcompanhamentoAprendizagem';
 
 const GraficoTotalCriancasComRelAcompanhamentoAprendizagem = props => {
-  const { anoLetivo, dreId, ueId } = props;
+  const { anoLetivo, dreId, ueId, dataUltimaConsolidacao } = props;
 
   const [dadosGrafico, setDadosGrafico] = useState([]);
   const [exibirLoader, setExibirLoader] = useState(false);
@@ -66,6 +68,15 @@ const GraficoTotalCriancasComRelAcompanhamentoAprendizagem = props => {
         loading={exibirLoader}
         className={exibirLoader ? 'text-center' : ''}
       >
+        {dataUltimaConsolidacao && (
+          <DataUltimaAtualizacao
+            dataFormatada={
+              dataUltimaConsolidacao
+                ? moment(dataUltimaConsolidacao).format('DD/MM/YYYY HH:mm:ss')
+                : ''
+            }
+          />
+        )}
         {dadosGrafico?.length ? (
           <GraficoBarras
             data={dadosGrafico}
@@ -88,12 +99,14 @@ GraficoTotalCriancasComRelAcompanhamentoAprendizagem.propTypes = {
   anoLetivo: PropTypes.oneOfType(PropTypes.any),
   dreId: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   ueId: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+  dataUltimaConsolidacao: PropTypes.oneOfType(PropTypes.any),
 };
 
 GraficoTotalCriancasComRelAcompanhamentoAprendizagem.defaultProps = {
   anoLetivo: null,
   dreId: null,
   ueId: null,
+  dataUltimaConsolidacao: null,
 };
 
 export default GraficoTotalCriancasComRelAcompanhamentoAprendizagem;
