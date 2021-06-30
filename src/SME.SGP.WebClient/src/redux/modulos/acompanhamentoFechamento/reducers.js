@@ -3,6 +3,7 @@ import produce from 'immer';
 const inicial = {
   turmasAcompanhamentoFechamento: [],
   carregandoAcompanhamentoFechamento: false,
+  escolheuModalidadeInfantil: false,
 };
 
 export default function AcompanhamentoFechamento(state = inicial, action) {
@@ -18,6 +19,12 @@ export default function AcompanhamentoFechamento(state = inicial, action) {
         return {
           ...draft,
           carregandoAcompanhamentoFechamento: action.payload,
+        };
+      }
+      case '@acompanhamentoFechamento/setEscolheuModalidadeInfantil': {
+        return {
+          ...draft,
+          escolheuModalidadeInfantil: action.payload,
         };
       }
 

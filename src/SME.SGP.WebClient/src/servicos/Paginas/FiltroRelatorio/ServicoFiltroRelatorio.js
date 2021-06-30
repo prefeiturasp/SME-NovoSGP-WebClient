@@ -100,6 +100,28 @@ class ServicoFiltroRelatorio {
 
     return api.get(url);
   };
+
+  obterBimestres = ({
+    modalidadeId,
+    opcaoTodos = false,
+    opcaoFinal = false,
+  }) => {
+    return api.get(
+      `${urlPadrao}/bimestres/${modalidadeId}?opcaoTodos=${opcaoTodos}&opcaoFinal=${opcaoFinal}`
+    );
+  };
+
+  obterSituacaoFechamento = unificarNaoIniciado => {
+    return api.get(
+      `${urlPadrao}/acompanhamento-fechamento/fechamento/situacao/${unificarNaoIniciado}`
+    );
+  };
+
+  obterSituacaoConselhoClasse = () => {
+    return api.get(
+      `${urlPadrao}/acompanhamento-fechamento/conselho-de-classe/situacao`
+    );
+  };
 }
 
 export default new ServicoFiltroRelatorio();
