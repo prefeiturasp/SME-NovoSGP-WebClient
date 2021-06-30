@@ -3,6 +3,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { CheckboxComponent, Loader, SelectComponent } from '~/componentes';
 import { FiltroHelper } from '~/componentes-sgp';
+import { ANO_INICIO_INFANTIL } from '~/constantes/constantes';
 import { OPCAO_TODOS } from '~/constantes/constantesGerais';
 import { ServicoFiltroRelatorio } from '~/servicos';
 import AbrangenciaServico from '~/servicos/Abrangencia';
@@ -28,8 +29,6 @@ const DashboardDevolutivasFiltros = () => {
   const [carregandoUes, setCarregandoUes] = useState(false);
   const [carregandoModalidades, setCarregandoModalidades] = useState(false);
 
-  const ANO_MINIMO = 2021;
-
   const validarValorPadraoAnoLetivo = (lista, atual) => {
     let valorAtual;
 
@@ -52,7 +51,7 @@ const DashboardDevolutivasFiltros = () => {
 
     const anosLetivos = await FiltroHelper.obterAnosLetivos({
       consideraHistorico,
-      anoMinimo: ANO_MINIMO,
+      anoMinimo: ANO_INICIO_INFANTIL,
     });
 
     if (!anosLetivos.length) {

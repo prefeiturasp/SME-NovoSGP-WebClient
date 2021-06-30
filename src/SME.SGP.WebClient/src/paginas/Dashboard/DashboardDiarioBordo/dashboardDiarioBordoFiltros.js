@@ -3,7 +3,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { CheckboxComponent, Loader, SelectComponent } from '~/componentes';
 import { FiltroHelper } from '~/componentes-sgp';
-import { OPCAO_TODOS } from '~/constantes/constantes';
+import { ANO_INICIO_INFANTIL, OPCAO_TODOS } from '~/constantes/constantes';
 import { ServicoFiltroRelatorio } from '~/servicos';
 import AbrangenciaServico from '~/servicos/Abrangencia';
 import { erros } from '~/servicos/alertas';
@@ -28,8 +28,6 @@ const DashboardDiarioBordoFiltros = () => {
   const [carregandoUes, setCarregandoUes] = useState(false);
   const [carregandoModalidades, setCarregandoModalidades] = useState(false);
 
-  const ANO_MINIMO = 2021;
-
   const validarValorPadraoAnoLetivo = (lista, atual) => {
     let valorAtual;
 
@@ -52,7 +50,7 @@ const DashboardDiarioBordoFiltros = () => {
 
     const anosLetivos = await FiltroHelper.obterAnosLetivos({
       consideraHistorico,
-      anoMinimo: ANO_MINIMO,
+      anoMinimo: ANO_INICIO_INFANTIL,
     });
 
     if (!anosLetivos.length) {
