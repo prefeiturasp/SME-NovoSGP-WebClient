@@ -10,7 +10,7 @@ import {
 import Button from '~/componentes/button';
 import Card from '~/componentes/card';
 import { Colors } from '~/componentes/colors';
-import { OPCAO_TODOS } from '~/constantes/constantes';
+import { ANO_INICIO_INFANTIL, OPCAO_TODOS } from '~/constantes/constantes';
 import { URL_HOME } from '~/constantes/url';
 import AbrangenciaServico from '~/servicos/Abrangencia';
 import { erros } from '~/servicos/alertas';
@@ -34,8 +34,6 @@ const DashboardRelAcompanhamentoAprendizagem = () => {
   const [carregandoDres, setCarregandoDres] = useState(false);
   const [carregandoUes, setCarregandoUes] = useState(false);
 
-  const ANO_MINIMO = 2021;
-
   const validarValorPadraoAnoLetivo = (lista, atual) => {
     if (lista?.length) {
       const temAnoAtualNaLista = lista.find(
@@ -56,7 +54,7 @@ const DashboardRelAcompanhamentoAprendizagem = () => {
 
     const anosLetivos = await FiltroHelper.obterAnosLetivos({
       consideraHistorico,
-      anoMinimo: ANO_MINIMO,
+      anoMinimo: ANO_INICIO_INFANTIL,
     });
 
     if (!anosLetivos.length) {
