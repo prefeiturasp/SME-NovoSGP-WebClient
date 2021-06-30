@@ -13,18 +13,13 @@ class ServicoFiltroRelatorio {
     return api.get(url);
   };
 
-  obterModalidades = (codigoUe, anoLetivo, consideraHistorico) => {
-    const url = `${urlPadrao}/ues/${codigoUe}/modalidades?anoLetivo=${anoLetivo}&consideraHistorico=${consideraHistorico}`;
-    return api.get(url);
-  };
-
-  obterModalidadesAnoLetivo = (
+  obterModalidades = (
     codigoUe,
     anoLetivo,
-    consideraNovasModalidades = false,
-    consideraHistorico = false
+    consideraHistorico,
+    consideraNovasModalidades = false
   ) => {
-    const url = `${urlPadrao}/ues/${codigoUe}/${anoLetivo}/modalidades?consideraNovasModalidades=${consideraNovasModalidades}&consideraHistorico=${consideraHistorico}`;
+    const url = `${urlPadrao}/ues/${codigoUe}/modalidades?anoLetivo=${anoLetivo}&consideraHistorico=${consideraHistorico}&consideraNovasModalidades=${consideraNovasModalidades}`;
     return api.get(url);
   };
 
