@@ -56,7 +56,7 @@ const DashboardRelAcompanhamentoAprendizagem = () => {
 
     const anosLetivos = await FiltroHelper.obterAnosLetivos({
       consideraHistorico,
-      ANO_MINIMO,
+      anoMinimo: ANO_MINIMO,
     });
 
     if (!anosLetivos.length) {
