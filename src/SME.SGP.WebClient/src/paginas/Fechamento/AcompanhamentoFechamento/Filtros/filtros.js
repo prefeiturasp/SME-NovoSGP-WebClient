@@ -4,15 +4,14 @@ import PropTypes from 'prop-types';
 import { CheckboxComponent, Loader, SelectComponent } from '~/componentes';
 import { FiltroHelper } from '~/componentes-sgp';
 
-import { setTurmasAcompanhamentoFechamento } from '~/redux/modulos/acompanhamentoFechamento/actions';
-
 import {
-  ModalidadeDTO,
-  statusAcompanhamentoConselhoClasse,
-  statusAcompanhamentoFechamento,
-} from '~/dtos';
+  setEscolheuModalidadeInfantil,
+  setTurmasAcompanhamentoFechamento,
+} from '~/redux/modulos/acompanhamentoFechamento/actions';
+
+import { ModalidadeDTO } from '~/dtos';
 import { AbrangenciaServico, erros, ServicoFiltroRelatorio } from '~/servicos';
-import { OPCAO_TODOS, BIMESTRE_FINAL } from '~/constantes/constantes';
+import { OPCAO_TODOS } from '~/constantes/constantes';
 
 const Filtros = ({ onChangeFiltros, ehInfantil }) => {
   const dispatch = useDispatch();
@@ -20,9 +19,18 @@ const Filtros = ({ onChangeFiltros, ehInfantil }) => {
   const [anoLetivo, setAnoLetivo] = useState();
   const [bimestre, setBimestre] = useState();
   const [carregandoAnosLetivos, setCarregandoAnosLetivos] = useState(false);
+  const [carregandoBimestres, setCarregandoBimestres] = useState(false);
   const [carregandoDres, setCarregandoDres] = useState(false);
   const [carregandoModalidade, setCarregandoModalidade] = useState(false);
   const [carregandoSemestres, setCarregandoSemestres] = useState(false);
+  const [
+    carregandoSituacaoConselhoClasse,
+    setCarregandoSituacaoConselhoClasse,
+  ] = useState(false);
+  const [
+    carregandoSituacaoFechamento,
+    setCarregandoSituacaoFechamento,
+  ] = useState(false);
   const [carregandoTurmas, setCarregandoTurmas] = useState(false);
   const [carregandoUes, setCarregandoUes] = useState(false);
   const [consideraHistorico, setConsideraHistorico] = useState(false);
@@ -209,13 +217,16 @@ const Filtros = ({ onChangeFiltros, ehInfantil }) => {
 
   const onChangeUe = ue => {
     dispatch(setTurmasAcompanhamentoFechamento());
-    const id = listaUes.find(d => d.valor === ue)?.id;
-    setUeId(id);
+    const ueSelecionada = listaUes.find(d => d.valor === ue);
+    setUeId(ueSelecionada?.id);
     setUeCodigo(ue);
     setListaModalidades([]);
     setModalidadeId();
     setListaTurmas([]);
     setTurmasId();
+
+    dispatch(setEscolheuModalidadeInfantil(ueSelecionada?.ehInfantil));
+    setDesabilitarCampos(ueSelecionada?.ehInfantil);
   };
 
   const obterUes = useCallback(async () => {
@@ -234,6 +245,7 @@ const Filtros = ({ onChangeFiltros, ehInfantil }) => {
           desc: item.nome,
           valor: String(item.codigo),
           id: item.id,
+          ehInfantil: item.ehInfantil,
         }));
 
         if (lista?.length === 1) {
@@ -246,7 +258,7 @@ const Filtros = ({ onChangeFiltros, ehInfantil }) => {
       }
       setListaUes([]);
     }
-  }, [dreId, anoLetivo, consideraHistorico]);
+  }, [dreCodigo, anoLetivo, consideraHistorico]);
 
   useEffect(() => {
     if (dreId) {
@@ -287,43 +299,43 @@ const Filtros = ({ onChangeFiltros, ehInfantil }) => {
   }, []);
 
   useEffect(() => {
-    if (anoLetivo && ueCodigo) {
+    if (anoLetivo && ueCodigo && !ehInfantil) {
       obterModalidades(ueCodigo);
       return;
     }
     setModalidadeId();
     setListaModalidades([]);
-  }, [obterModalidades, anoLetivo, ueCodigo]);
+  }, [obterModalidades, anoLetivo, ueCodigo, ehInfantil]);
 
   const onChangeSemestre = valor => {
     dispatch(setTurmasAcompanhamentoFechamento());
     setSemestre(valor);
   };
 
-  const obterSemestres = async (
-    modalidadeSelecionada,
-    anoLetivoSelecionado
-  ) => {
-    setCarregandoSemestres(true);
-    const retorno = await AbrangenciaServico.obterSemestres(
-      consideraHistorico,
-      anoLetivoSelecionado,
-      modalidadeSelecionada
-    )
-      .catch(e => erros(e))
-      .finally(() => setCarregandoSemestres(false));
+  const obterSemestres = useCallback(
+    async (modalidadeSelecionada, anoLetivoSelecionado) => {
+      setCarregandoSemestres(true);
+      const retorno = await AbrangenciaServico.obterSemestres(
+        consideraHistorico,
+        anoLetivoSelecionado,
+        modalidadeSelecionada
+      )
+        .catch(e => erros(e))
+        .finally(() => setCarregandoSemestres(false));
 
-    if (retorno?.data?.length) {
-      const lista = retorno.data.map(periodo => {
-        return { desc: periodo, valor: periodo };
-      });
+      if (retorno?.data?.length) {
+        const lista = retorno.data.map(periodo => {
+          return { desc: periodo, valor: periodo };
+        });
 
-      if (lista?.length === 1) {
-        setSemestre(lista[0].valor);
+        if (lista?.length === 1) {
+          setSemestre(lista[0].valor);
+        }
+        setListaSemestres(lista);
       }
-      setListaSemestres(lista);
-    }
-  };
+    },
+    [consideraHistorico]
+  );
 
   useEffect(() => {
     if (
@@ -336,7 +348,7 @@ const Filtros = ({ onChangeFiltros, ehInfantil }) => {
     }
     setSemestre();
     setListaSemestres([]);
-  }, [obterAnosLetivos, modalidadeId, anoLetivo]);
+  }, [obterAnosLetivos, obterSemestres, modalidadeId, anoLetivo]);
 
   const onChangeTurma = valor => {
     setTurmasId(valor);
@@ -392,7 +404,7 @@ const Filtros = ({ onChangeFiltros, ehInfantil }) => {
         }
       }
     }
-  }, [ueCodigo, dreId, consideraHistorico, anoLetivo, modalidadeId]);
+  }, [ueCodigo, dreCodigo, consideraHistorico, anoLetivo, modalidadeId]);
 
   useEffect(() => {
     if (ueCodigo) {
@@ -409,18 +421,22 @@ const Filtros = ({ onChangeFiltros, ehInfantil }) => {
     filtrar(valor);
   };
 
-  const obterBimestres = useCallback(() => {
-    const bi = [];
-    bi.push({ desc: '1º', valor: 1 });
-    bi.push({ desc: '2º', valor: 2 });
+  const obterBimestres = useCallback(async () => {
+    setCarregandoBimestres(true);
+    const retorno = await ServicoFiltroRelatorio.obterBimestres({
+      modalidadeId,
+      opcaoFinal: true,
+    })
+      .catch(e => erros(e))
+      .finally(setCarregandoBimestres(false));
 
-    if (Number(modalidadeId) !== ModalidadeDTO.EJA) {
-      bi.push({ desc: '3º', valor: 3 });
-      bi.push({ desc: '4º', valor: 4 });
+    if (retorno?.data) {
+      const lista = retorno.data.map(item => ({
+        desc: item.descricao,
+        valor: item.valor,
+      }));
+      setListaBimestres(lista);
     }
-
-    bi.push({ desc: 'Final', valor: BIMESTRE_FINAL });
-    setListaBimestres(bi);
   }, [modalidadeId]);
 
   useEffect(() => {
@@ -434,7 +450,8 @@ const Filtros = ({ onChangeFiltros, ehInfantil }) => {
 
   useEffect(() => {
     setDesabilitarCampos(ehInfantil);
-  }, [ehInfantil]);
+    dispatch(setEscolheuModalidadeInfantil(ehInfantil));
+  }, [dispatch, ehInfantil]);
 
   const onChangeSituacaoFechamento = valor => {
     setSituacaoFechamento(valor);
@@ -446,22 +463,43 @@ const Filtros = ({ onChangeFiltros, ehInfantil }) => {
     filtrar(bimestre, situacaoFechamento, valor);
   };
 
-  const obterSituacaoFechamento = situacaoFechamentoCodigo =>
-    Object.keys(situacaoFechamentoCodigo).map(item => ({
-      valor: situacaoFechamentoCodigo[item].id,
-      desc: situacaoFechamentoCodigo[item].descricao,
-    }));
+  const obterSituacaoFechamento = useCallback(async () => {
+    setCarregandoSituacaoFechamento(true);
+
+    const retorno = await ServicoFiltroRelatorio.obterSituacaoFechamento(true)
+      .catch(e => erros(e))
+      .finally(setCarregandoSituacaoFechamento(false));
+
+    if (retorno?.data) {
+      const lista = retorno.data.map(item => ({
+        desc: item.descricao,
+        valor: item.codigo,
+      }));
+      setListaSituacaoFechamento(lista);
+    }
+  }, []);
+
+  const obterSituacaoConselhoClasse = useCallback(async () => {
+    setCarregandoSituacaoConselhoClasse(true);
+
+    const retorno = await ServicoFiltroRelatorio.obterSituacaoConselhoClasse()
+      .catch(e => erros(e))
+      .finally(setCarregandoSituacaoConselhoClasse(false));
+
+    if (retorno?.data) {
+      const lista = retorno.data.map(item => ({
+        desc: item.descricao,
+        valor: item.codigo,
+      }));
+      setListaSituacaoConselhoClasse(lista);
+    }
+  }, []);
 
   useEffect(() => {
-    const dadosSituacaoFechamento = obterSituacaoFechamento(
-      statusAcompanhamentoFechamento
-    );
-    const dadosSituacaoConselhoClasse = obterSituacaoFechamento(
-      statusAcompanhamentoConselhoClasse
-    );
-    setListaSituacaoFechamento(dadosSituacaoFechamento);
-    setListaSituacaoConselhoClasse(dadosSituacaoConselhoClasse);
-  }, []);
+    if (bimestre?.length) {
+      Promise.all([obterSituacaoFechamento(), obterSituacaoConselhoClasse()]);
+    }
+  }, [obterSituacaoFechamento, obterSituacaoConselhoClasse, bimestre]);
 
   return (
     <>
@@ -472,9 +510,8 @@ const Filtros = ({ onChangeFiltros, ehInfantil }) => {
             onChangeCheckbox={onChangeConsideraHistorico}
             checked={consideraHistorico}
             disabled={
-              desabilitarCampos ||
-              (listaAnosLetivo.length === 1 &&
-                listaAnosLetivo[0].valor === ANO_LETIVO_MINIMO)
+              listaAnosLetivo.length === 1 &&
+              listaAnosLetivo[0].valor === ANO_LETIVO_MINIMO
             }
           />
         </div>
@@ -487,11 +524,7 @@ const Filtros = ({ onChangeFiltros, ehInfantil }) => {
               lista={listaAnosLetivo}
               valueOption="valor"
               valueText="desc"
-              disabled={
-                !consideraHistorico ||
-                listaAnosLetivo?.length === 1 ||
-                desabilitarCampos
-              }
+              disabled={!consideraHistorico || listaAnosLetivo?.length === 1}
               onChange={onChangeAnoLetivo}
               valueSelect={anoLetivo}
               placeholder="Ano letivo"
@@ -505,9 +538,7 @@ const Filtros = ({ onChangeFiltros, ehInfantil }) => {
               lista={listaDres}
               valueOption="valor"
               valueText="desc"
-              disabled={
-                !anoLetivo || listaDres?.length === 1 || desabilitarCampos
-              }
+              disabled={!anoLetivo || listaDres?.length === 1}
               onChange={onChangeDre}
               valueSelect={dreCodigo}
               placeholder="Diretoria Regional De Educação (DRE)"
@@ -523,9 +554,7 @@ const Filtros = ({ onChangeFiltros, ehInfantil }) => {
               lista={listaUes}
               valueOption="valor"
               valueText="desc"
-              disabled={
-                !dreCodigo || listaUes?.length === 1 || desabilitarCampos
-              }
+              disabled={!dreCodigo || listaUes?.length === 1}
               onChange={onChangeUe}
               valueSelect={ueCodigo}
               placeholder="Unidade Escolar (UE)"
@@ -597,44 +626,50 @@ const Filtros = ({ onChangeFiltros, ehInfantil }) => {
       </div>
       <div className="row">
         <div className="col-sm-12 col-md-4 pr-0">
-          <SelectComponent
-            lista={listaBimestres}
-            valueOption="valor"
-            valueText="desc"
-            label="Bimestre"
-            disabled={
-              !turmasId?.length ||
-              listaBimestres?.length === 1 ||
-              desabilitarCampos
-            }
-            valueSelect={bimestre}
-            onChange={onChangeBimestre}
-            placeholder="Selecione o bimestre"
-          />
+          <Loader loading={carregandoBimestres} ignorarTip>
+            <SelectComponent
+              lista={listaBimestres}
+              valueOption="valor"
+              valueText="desc"
+              label="Bimestre"
+              disabled={
+                !turmasId?.length ||
+                listaBimestres?.length === 1 ||
+                desabilitarCampos
+              }
+              valueSelect={bimestre}
+              onChange={onChangeBimestre}
+              placeholder="Selecione o bimestre"
+            />
+          </Loader>
         </div>
         <div className="col-sm-12 col-md-4 pr-0">
-          <SelectComponent
-            lista={listaSituacaoFechamento}
-            valueOption="valor"
-            valueText="desc"
-            label="Situação do fechamento"
-            disabled={!turmasId?.length || !bimestre || desabilitarCampos}
-            valueSelect={situacaoFechamento}
-            onChange={onChangeSituacaoFechamento}
-            placeholder="Situação do fechamento"
-          />
+          <Loader loading={carregandoSituacaoFechamento} ignorarTip>
+            <SelectComponent
+              lista={listaSituacaoFechamento}
+              valueOption="valor"
+              valueText="desc"
+              label="Situação do fechamento"
+              disabled={!turmasId?.length || !bimestre || desabilitarCampos}
+              valueSelect={situacaoFechamento}
+              onChange={onChangeSituacaoFechamento}
+              placeholder="Situação do fechamento"
+            />
+          </Loader>
         </div>
         <div className="col-sm-12 col-md-4">
-          <SelectComponent
-            lista={listaSituacaoConselhoClasse}
-            valueOption="valor"
-            valueText="desc"
-            label="Situação do conselho de classe"
-            disabled={!turmasId?.length || !bimestre || desabilitarCampos}
-            valueSelect={situacaoConselhoClasse}
-            onChange={onChangeSituacaoConselhoClasse}
-            placeholder="Situação do conselho de classe"
-          />
+          <Loader loading={carregandoSituacaoConselhoClasse} ignorarTip>
+            <SelectComponent
+              lista={listaSituacaoConselhoClasse}
+              valueOption="valor"
+              valueText="desc"
+              label="Situação do conselho de classe"
+              disabled={!turmasId?.length || !bimestre || desabilitarCampos}
+              valueSelect={situacaoConselhoClasse}
+              onChange={onChangeSituacaoConselhoClasse}
+              placeholder="Situação do conselho de classe"
+            />
+          </Loader>
         </div>
       </div>
     </>
