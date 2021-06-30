@@ -35,7 +35,8 @@ const AbrangenciaServico = {
     anoLetivo = '',
     consideraHistorico = false,
     turmasRegulares = false,
-    tipos = undefined
+    tipos = undefined,
+    consideraNovosAnosInfantil = false
   ) {
     let params = {};
     if (modalidade) {
@@ -51,8 +52,8 @@ const AbrangenciaServico = {
     }
 
     return api.get(
-      `v1/abrangencias/${consideraHistorico}/dres/ues/${ue}/${action}${
-        anoLetivo ? `?anoLetivo=${anoLetivo}${adicionaTipos}` : ''
+      `v1/abrangencias/${consideraHistorico}/dres/ues/${ue}/${action}?consideraNovosAnosInfantil=${consideraNovosAnosInfantil}${
+        anoLetivo ? `&anoLetivo=${anoLetivo}${adicionaTipos}` : ''
       }`,
       {
         params,

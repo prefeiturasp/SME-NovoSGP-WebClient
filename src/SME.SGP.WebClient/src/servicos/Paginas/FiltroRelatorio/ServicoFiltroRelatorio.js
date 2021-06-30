@@ -55,14 +55,15 @@ class ServicoFiltroRelatorio {
     anoLetivo,
     codigoUe,
     modalidade,
-    semestre
+    semestre,
+    consideraNovosAnosInfantil
   ) => {
     try {
-      let url = `${urlPadrao}/ues/${codigoUe}/anoletivo/${anoLetivo}/turmas?`;
+      let url = `${urlPadrao}/ues/${codigoUe}/anoletivo/${anoLetivo}/turmas?consideraNovosAnosInfantil=${consideraNovosAnosInfantil}`;
 
-      if (semestre && semestre !== 0) url += `semestre=${semestre}&`;
+      if (semestre && semestre !== 0) url += `&semestre=${semestre}`;
 
-      if (modalidade && modalidade !== 0) url += `modalidade=${modalidade}`;
+      if (modalidade && modalidade !== 0) url += `&modalidade=${modalidade}`;
 
       const dados = await api.get(url);
 
