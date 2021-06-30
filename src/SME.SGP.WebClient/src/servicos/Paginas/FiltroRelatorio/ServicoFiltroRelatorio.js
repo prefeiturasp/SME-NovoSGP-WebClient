@@ -56,7 +56,7 @@ class ServicoFiltroRelatorio {
     codigoUe,
     modalidade,
     semestre,
-    consideraNovosAnosInfantil
+    consideraNovosAnosInfantil = false
   ) => {
     try {
       let url = `${urlPadrao}/ues/${codigoUe}/anoletivo/${anoLetivo}/turmas?consideraNovosAnosInfantil=${consideraNovosAnosInfantil}`;
