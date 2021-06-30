@@ -34,6 +34,8 @@ const DashboardRelAcompanhamentoAprendizagem = () => {
   const [carregandoDres, setCarregandoDres] = useState(false);
   const [carregandoUes, setCarregandoUes] = useState(false);
 
+  const ANO_MINIMO = 2021;
+
   const validarValorPadraoAnoLetivo = (lista, atual) => {
     if (lista?.length) {
       const temAnoAtualNaLista = lista.find(
@@ -54,6 +56,7 @@ const DashboardRelAcompanhamentoAprendizagem = () => {
 
     const anosLetivos = await FiltroHelper.obterAnosLetivos({
       consideraHistorico,
+      ANO_MINIMO,
     });
 
     if (!anosLetivos.length) {
