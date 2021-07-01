@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import React, { useEffect, useState } from 'react';
 import { ContainerTabsCard } from '~/componentes/tabs/tabs.css';
 import { ContainerTabsDashboard } from '../../style';
-import GraficosAcompanhamentoAprendizagem from './GraficosAcompanhamentoAprendizagem/graficosAcompanhamentoAprendizagem';
+import GraficosAcompanhamentoAprendizagem from './Graficos/graficosAcompAprend';
 
 const { TabPane } = Tabs;
 

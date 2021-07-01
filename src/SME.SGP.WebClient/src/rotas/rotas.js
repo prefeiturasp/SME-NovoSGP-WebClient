@@ -100,7 +100,7 @@ import DashboardDevolutivas from '~/paginas/Dashboard/DashboardDevolutivas/dashb
 import DashboardInformacoesEscolares from '~/paginas/Dashboard/DashboardInformacoesEscolares/dashboardInformacoesEscolares';
 import DashboardRegistroIndividual from '~/paginas/Dashboard/DashboardRegistroIndividual/dashboardRegistroIndividual';
 import DashboardDiarioBordo from '~/paginas/Dashboard/DashboardDiarioBordo/dashboardDiarioBordo';
-import DashboardRelAcompanhamentoAprendizagem from '~/paginas/Dashboard/DashboardRelAcompanhamentoAprendizagem/dashboardRelAcompanhamentoAprendizagem';
+import DashboardRelAcompanhamentoAprendizagem from '~/paginas/Dashboard/DashboardRelAcompAprend/dashboardRelAcompAprend';
 
 const rotas = new Map();
 
