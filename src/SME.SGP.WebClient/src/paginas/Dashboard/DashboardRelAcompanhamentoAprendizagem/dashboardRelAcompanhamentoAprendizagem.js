@@ -2,7 +2,11 @@ import * as moment from 'moment';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { CheckboxComponent, Loader, SelectComponent } from '~/componentes';
-import { Cabecalho, FiltroHelper } from '~/componentes-sgp';
+import {
+  AlertaPermiteSomenteTurmaInfantil,
+  Cabecalho,
+  FiltroHelper,
+} from '~/componentes-sgp';
 import Button from '~/componentes/button';
 import Card from '~/componentes/card';
 import { Colors } from '~/componentes/colors';
@@ -11,23 +15,22 @@ import { URL_HOME } from '~/constantes/url';
 import AbrangenciaServico from '~/servicos/Abrangencia';
 import { erros } from '~/servicos/alertas';
 import history from '~/servicos/history';
-import { obterTodosMeses } from '~/utils';
-import TabsDashboardRegistroItinerancia from './TabsDashboardRegistroItinerancia/tabsDashboardRegistroItinerancia';
+import ServicoDashboardRelAcompanhamentoAprendizagem from '~/servicos/Paginas/Dashboard/ServicoDashboardRelAcompanhamentoAprendizagem';
+import TabsDashboardRelAcompanhamentoAprendizagem from './TabsDashboardRelAcompanhamentoAprendizagem/tabsDashboardRelAcompanhamentoAprendizagem';
 
-const DashboardRegistroItinerancia = () => {
+const DashboardRelAcompanhamentoAprendizagem = () => {
   const usuario = useSelector(store => store.usuario);
 
   const [listaAnosLetivo, setListaAnosLetivo] = useState([]);
   const [listaDres, setListaDres] = useState([]);
   const [listaUes, setListaUes] = useState([]);
-  const [listaTodosMeses, setListaTodosMeses] = useState([]);
 
   const [consideraHistorico, setConsideraHistorico] = useState(false);
   const [anoAtual] = useState(moment().format('YYYY'));
   const [anoLetivo, setAnoLetivo] = useState(anoAtual);
   const [dre, setDre] = useState();
   const [ue, setUe] = useState();
-  const [mesSelecionado, setMesSelecionado] = useState();
+  const [dataUltimaConsolidacao, setDataUltimaConsolidacao] = useState();
 
   const [carregandoAnosLetivos, setCarregandoAnosLetivos] = useState(false);
   const [carregandoDres, setCarregandoDres] = useState(false);
@@ -94,7 +97,7 @@ const DashboardRegistroItinerancia = () => {
       if (resposta?.data?.length) {
         const lista = resposta.data;
 
-        if (usuario.possuiPerfilSmeOuDre) {
+        if (usuario.possuiPerfilSmeOuDre && lista?.length > 1) {
           lista.unshift({ codigo: OPCAO_TODOS, nome: 'Todas' });
         }
 
@@ -107,7 +110,7 @@ const DashboardRegistroItinerancia = () => {
         setListaUes([]);
       }
     }
-  }, [consideraHistorico, anoLetivo, dre, usuario.possuiPerfilSme]);
+  }, [consideraHistorico, anoLetivo, dre, usuario.possuiPerfilSmeOuDre]);
 
   useEffect(() => {
     if (dre?.codigo) {
@@ -143,7 +146,7 @@ const DashboardRegistroItinerancia = () => {
 
       if (resposta?.data?.length) {
         const lista = resposta.data;
-        if (usuario.possuiPerfilSme) {
+        if (usuario.possuiPerfilSme && lista?.length > 1) {
           lista.unshift({ codigo: OPCAO_TODOS, nome: 'Todas' });
         }
         setListaDres(lista);
@@ -162,24 +165,7 @@ const DashboardRegistroItinerancia = () => {
     obterDres();
   }, [obterDres, anoLetivo, consideraHistorico]);
 
-  const montarMeses = useCallback(() => {
-    if (dre && ue) {
-      const meses = obterTodosMeses();
-      meses.push({ numeroMes: OPCAO_TODOS, nome: 'Todos' });
-      setListaTodosMeses(meses);
-    } else {
-      setListaTodosMeses([]);
-      setMesSelecionado();
-    }
-  }, [dre, ue]);
-
-  useEffect(() => {
-    montarMeses();
-  }, [montarMeses]);
-
-  const onClickVoltar = () => {
-    history.push(URL_HOME);
-  };
+  const onClickVoltar = () => history.push(URL_HOME);
 
   const onChangeUe = codigoUe => {
     if (codigoUe) {
@@ -200,14 +186,31 @@ const DashboardRegistroItinerancia = () => {
     setAnoLetivo(ano);
   };
 
-  const onChangeMes = mes => {
-    setMesSelecionado(mes);
-  };
+  const obterUltimaConsolidacao = useCallback(async () => {
+    if (anoLetivo) {
+      const resposta = await ServicoDashboardRelAcompanhamentoAprendizagem.obterUltimaConsolidacao(
+        anoLetivo
+      ).catch(e => erros(e));
+
+      if (resposta?.data) {
+        setDataUltimaConsolidacao(resposta.data);
+      } else {
+        setDataUltimaConsolidacao();
+      }
+    }
+  }, [anoLetivo]);
+
+  useEffect(() => {
+    obterUltimaConsolidacao();
+  }, [anoLetivo, obterUltimaConsolidacao]);
 
   return (
     <>
-      <Cabecalho pagina="Dashboard registro de itinerância" />
-
+      <AlertaPermiteSomenteTurmaInfantil
+        exibir={ue && ue?.codigo !== OPCAO_TODOS && !ue?.ehInfantil}
+        validarModalidadeFiltroPrincipal={false}
+      />
+      <Cabecalho pagina="Dashboard Relatório do Acompanhamento da Aprendizagem" />
       <Card>
         <div className="col-md-12">
           <div className="row">
@@ -284,28 +287,18 @@ const DashboardRegistroItinerancia = () => {
                 />
               </Loader>
             </div>
-            <div className="col-sm-12 col-md-6 col-lg-4 col-xl-4 mb-2">
-              <SelectComponent
-                id="meses"
-                label="Mês"
-                lista={listaTodosMeses}
-                valueOption="numeroMes"
-                valueText="nome"
-                disabled={listaTodosMeses?.length === 1}
-                onChange={onChangeMes}
-                valueSelect={mesSelecionado}
-                placeholder="Mês"
-              />
-            </div>
           </div>
           <div className="row">
             <div className="col-md-12 mt-2">
-              {anoLetivo && dre && ue && mesSelecionado ? (
-                <TabsDashboardRegistroItinerancia
+              {anoLetivo &&
+              dre &&
+              ue &&
+              (ue?.codigo === OPCAO_TODOS || ue?.ehInfantil) ? (
+                <TabsDashboardRelAcompanhamentoAprendizagem
                   anoLetivo={anoLetivo}
                   dreId={OPCAO_TODOS === dre?.codigo ? OPCAO_TODOS : dre?.id}
                   ueId={OPCAO_TODOS === ue?.codigo ? OPCAO_TODOS : ue?.id}
-                  mesSelecionado={mesSelecionado}
+                  dataUltimaConsolidacao={dataUltimaConsolidacao}
                 />
               ) : (
                 ''
@@ -318,4 +311,4 @@ const DashboardRegistroItinerancia = () => {
   );
 };
 
-export default DashboardRegistroItinerancia;
+export default DashboardRelAcompanhamentoAprendizagem;

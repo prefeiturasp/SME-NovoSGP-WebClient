@@ -3,18 +3,17 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { CheckboxComponent, Loader, SelectComponent } from '~/componentes';
 import { FiltroHelper } from '~/componentes-sgp';
-import { ANO_INICIO_INFANTIL } from '~/constantes/constantes';
-import { OPCAO_TODOS } from '~/constantes/constantesGerais';
+import { OPCAO_TODOS } from '~/constantes/constantes';
 import { ServicoFiltroRelatorio } from '~/servicos';
 import AbrangenciaServico from '~/servicos/Abrangencia';
 import { erros } from '~/servicos/alertas';
-import ServicoDashboardDevolutivas from '~/servicos/Paginas/Dashboard/ServicoDashboardDevolutivas';
+import ServicoDashboardRegistroIndividual from '~/servicos/Paginas/Dashboard/ServicoDashboardRegistroIndividual';
 
-const DashboardDevolutivasFiltros = () => {
+const DashboardRegistroIndividualFiltros = () => {
   const usuario = useSelector(store => store.usuario);
 
   const { anoLetivo, dre, ue, modalidade, consideraHistorico } = useSelector(
-    store => store.dashboardDevolutivas?.dadosDashboardDevolutivas
+    store => store.dashboardRegistroIndividual?.dadosDashboardRegistroIndividual
   );
 
   const [listaAnosLetivo, setListaAnosLetivo] = useState([]);
@@ -28,6 +27,8 @@ const DashboardDevolutivasFiltros = () => {
   const [carregandoDres, setCarregandoDres] = useState(false);
   const [carregandoUes, setCarregandoUes] = useState(false);
   const [carregandoModalidades, setCarregandoModalidades] = useState(false);
+
+  const ANO_MINIMO = 2021;
 
   const validarValorPadraoAnoLetivo = (lista, atual) => {
     let valorAtual;
@@ -43,7 +44,10 @@ const DashboardDevolutivasFiltros = () => {
       }
     }
 
-    ServicoDashboardDevolutivas.atualizarFiltros('anoLetivo', valorAtual);
+    ServicoDashboardRegistroIndividual.atualizarFiltros(
+      'anoLetivo',
+      valorAtual
+    );
   };
 
   const obterAnosLetivos = useCallback(async () => {
@@ -51,7 +55,7 @@ const DashboardDevolutivasFiltros = () => {
 
     const anosLetivos = await FiltroHelper.obterAnosLetivos({
       consideraHistorico,
-      anoMinimo: ANO_INICIO_INFANTIL,
+      anoMinimo: ANO_MINIMO,
     });
 
     if (!anosLetivos.length) {
@@ -76,7 +80,7 @@ const DashboardDevolutivasFiltros = () => {
       if (dre?.codigo === OPCAO_TODOS) {
         const ueTodos = { nome: 'Todas', codigo: OPCAO_TODOS };
         setListaUes([ueTodos]);
-        ServicoDashboardDevolutivas.atualizarFiltros('ue', ueTodos);
+        ServicoDashboardRegistroIndividual.atualizarFiltros('ue', ueTodos);
         return;
       }
 
@@ -99,7 +103,7 @@ const DashboardDevolutivasFiltros = () => {
         setListaUes(lista);
 
         if (lista?.length === 1) {
-          ServicoDashboardDevolutivas.atualizarFiltros('ue', lista[0]);
+          ServicoDashboardRegistroIndividual.atualizarFiltros('ue', lista[0]);
         }
       } else {
         setListaUes([]);
@@ -111,7 +115,7 @@ const DashboardDevolutivasFiltros = () => {
     if (dre?.codigo) {
       obterUes();
     } else {
-      ServicoDashboardDevolutivas.atualizarFiltros('ue', undefined);
+      ServicoDashboardRegistroIndividual.atualizarFiltros('ue', undefined);
       setListaUes([]);
     }
   }, [dre, anoLetivo, consideraHistorico, obterUes]);
@@ -126,8 +130,8 @@ const DashboardDevolutivasFiltros = () => {
       }
     }
     setListaUes([]);
-    ServicoDashboardDevolutivas.atualizarFiltros('ue', undefined);
-    ServicoDashboardDevolutivas.atualizarFiltros('dre', valorAtal);
+    ServicoDashboardRegistroIndividual.atualizarFiltros('ue', undefined);
+    ServicoDashboardRegistroIndividual.atualizarFiltros('dre', valorAtal);
   };
 
   const obterDres = useCallback(async () => {
@@ -148,11 +152,14 @@ const DashboardDevolutivasFiltros = () => {
         setListaDres(lista);
 
         if (resposta.data.length === 1) {
-          ServicoDashboardDevolutivas.atualizarFiltros('dre', resposta.data[0]);
+          ServicoDashboardRegistroIndividual.atualizarFiltros(
+            'dre',
+            resposta.data[0]
+          );
         }
       } else {
         setListaDres([]);
-        ServicoDashboardDevolutivas.atualizarFiltros('dre', undefined);
+        ServicoDashboardRegistroIndividual.atualizarFiltros('dre', undefined);
       }
     }
   }, [usuario.possuiPerfilSme, anoLetivo, consideraHistorico]);
@@ -162,7 +169,10 @@ const DashboardDevolutivasFiltros = () => {
   }, [obterDres, anoLetivo, consideraHistorico]);
 
   const onChangeUe = codigoUe => {
-    ServicoDashboardDevolutivas.atualizarFiltros('modalidade', undefined);
+    ServicoDashboardRegistroIndividual.atualizarFiltros(
+      'modalidade',
+      undefined
+    );
     setListaModalidades([]);
 
     let valorAtal;
@@ -172,16 +182,16 @@ const DashboardDevolutivasFiltros = () => {
         valorAtal = ueAtual;
       }
     }
-    ServicoDashboardDevolutivas.atualizarFiltros('ue', valorAtal);
+    ServicoDashboardRegistroIndividual.atualizarFiltros('ue', valorAtal);
   };
 
   const onChangeAnoLetivo = ano => {
     setListaDres([]);
     setListaUes([]);
 
-    ServicoDashboardDevolutivas.atualizarFiltros('dre', undefined);
-    ServicoDashboardDevolutivas.atualizarFiltros('ue', undefined);
-    ServicoDashboardDevolutivas.atualizarFiltros('anoLetivo', ano);
+    ServicoDashboardRegistroIndividual.atualizarFiltros('dre', undefined);
+    ServicoDashboardRegistroIndividual.atualizarFiltros('ue', undefined);
+    ServicoDashboardRegistroIndividual.atualizarFiltros('anoLetivo', ano);
   };
 
   const obterModalidades = useCallback(async () => {
@@ -197,7 +207,7 @@ const DashboardDevolutivasFiltros = () => {
 
     if (resultado?.data?.length) {
       if (resultado.data.length === 1) {
-        ServicoDashboardDevolutivas.atualizarFiltros(
+        ServicoDashboardRegistroIndividual.atualizarFiltros(
           'modalidade',
           resultado.data[0].valor
         );
@@ -206,7 +216,10 @@ const DashboardDevolutivasFiltros = () => {
       setListaModalidades(resultado.data);
     } else {
       setListaModalidades([]);
-      ServicoDashboardDevolutivas.atualizarFiltros('modalidade', undefined);
+      ServicoDashboardRegistroIndividual.atualizarFiltros(
+        'modalidade',
+        undefined
+      );
     }
   }, [ue, anoLetivo, consideraHistorico]);
 
@@ -215,13 +228,71 @@ const DashboardDevolutivasFiltros = () => {
       obterModalidades();
     } else {
       setListaModalidades([]);
-      ServicoDashboardDevolutivas.atualizarFiltros('modalidade', undefined);
+      ServicoDashboardRegistroIndividual.atualizarFiltros(
+        'modalidade',
+        undefined
+      );
     }
   }, [ue, anoLetivo, consideraHistorico, obterModalidades]);
 
-  const onChangeModalidade = valor => {
-    ServicoDashboardDevolutivas.atualizarFiltros('modalidade', valor);
-  };
+  const onChangeModalidade = valor =>
+    ServicoDashboardRegistroIndividual.atualizarFiltros('modalidade', valor);
+
+  const obterUltimaConsolidacao = useCallback(async () => {
+    const resposta = await ServicoDashboardRegistroIndividual.obterUltimaConsolidacao(
+      anoLetivo
+    ).catch(e => erros(e));
+
+    let valorAtual = null;
+
+    if (resposta?.data) {
+      valorAtual = resposta.data;
+    }
+
+    ServicoDashboardRegistroIndividual.atualizarFiltros(
+      'dataUltimaConsolidacao',
+      valorAtual
+    );
+  }, [anoLetivo]);
+
+  useEffect(() => {
+    if (anoLetivo) {
+      obterUltimaConsolidacao();
+    } else {
+      ServicoDashboardRegistroIndividual.atualizarFiltros(
+        'dataUltimaConsolidacao',
+        null
+      );
+    }
+  }, [anoLetivo, obterUltimaConsolidacao]);
+
+  const obterQuantidadeDiasSemRegistro = useCallback(async () => {
+    const resposta = await ServicoDashboardRegistroIndividual.obterQuantidadeDiasSemRegistro(
+      anoLetivo
+    ).catch(e => erros(e));
+
+    let valorAtual = null;
+
+    if (resposta?.data) {
+      valorAtual = resposta.data;
+    }
+
+    ServicoDashboardRegistroIndividual.atualizarFiltros(
+      'diasSemRegistro',
+      valorAtual
+    );
+  }, [anoLetivo]);
+
+  useEffect(() => {
+    if (anoLetivo) {
+      obterQuantidadeDiasSemRegistro();
+    } else {
+      ServicoDashboardRegistroIndividual.atualizarFiltros(
+        'diasSemRegistro',
+        null
+      );
+    }
+  }, [anoLetivo, obterQuantidadeDiasSemRegistro]);
 
   return (
     <>
@@ -230,13 +301,19 @@ const DashboardDevolutivasFiltros = () => {
           <CheckboxComponent
             label="Exibir histórico?"
             onChangeCheckbox={e => {
-              ServicoDashboardDevolutivas.atualizarFiltros(
+              ServicoDashboardRegistroIndividual.atualizarFiltros(
                 'anoLetivo',
                 undefined
               );
-              ServicoDashboardDevolutivas.atualizarFiltros('dre', undefined);
-              ServicoDashboardDevolutivas.atualizarFiltros('ue', undefined);
-              ServicoDashboardDevolutivas.atualizarFiltros(
+              ServicoDashboardRegistroIndividual.atualizarFiltros(
+                'dre',
+                undefined
+              );
+              ServicoDashboardRegistroIndividual.atualizarFiltros(
+                'ue',
+                undefined
+              );
+              ServicoDashboardRegistroIndividual.atualizarFiltros(
                 'consideraHistorico',
                 e.target.checked
               );
@@ -313,4 +390,4 @@ const DashboardDevolutivasFiltros = () => {
   );
 };
 
-export default DashboardDevolutivasFiltros;
+export default DashboardRegistroIndividualFiltros;

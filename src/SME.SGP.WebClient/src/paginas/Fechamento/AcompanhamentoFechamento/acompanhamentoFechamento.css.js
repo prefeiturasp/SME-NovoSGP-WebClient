@@ -8,7 +8,7 @@ export const MarcadorTriangulo = styled.div`
   border-bottom: 15px solid transparent;
   border-right: 15px solid ${props => props.cor};
   float: right;
-  margin-right: -8.3px;
+  margin-right: ${props => props.marginRight || '-12.3px'};
 `;
 
 export const TextoEstilizado = styled.div`
