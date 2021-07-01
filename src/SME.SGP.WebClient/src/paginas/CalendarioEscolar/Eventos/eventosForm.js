@@ -196,19 +196,13 @@ const EventosForm = ({ match }) => {
 
   useEffect(() => {
     if (listaDres?.length === 1) {
-      refFormulario.current.setFieldValue(
-        'dreId',
-        String(listaDres[0].codigo)
-      );
+      refFormulario.current.setFieldValue('dreId', String(listaDres[0].codigo));
     }
   }, [listaDres, current]);
 
   useEffect(() => {
     if (listaUes?.length === 1) {
-      refFormulario.current.setFieldValue(
-        'ueId',
-        String(listaUes[0].codigo)
-      );
+      refFormulario.current.setFieldValue('ueId', String(listaUes[0].codigo));
     }
   }, [listaUes, current]);
 
@@ -716,6 +710,9 @@ const EventosForm = ({ match }) => {
   const onChangeDre = (dre, form) => {
     setListaUes([]);
     form.setFieldValue('ueId', undefined);
+    onChangeTipoEvento(undefined);
+    form.setFieldValue('tipoEventoId', undefined);
+    setEventoTipoLocalOcorrenciaSMESelecionado(false);
 
     if (dre) {
       carregarUes(dre);
