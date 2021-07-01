@@ -1,4 +1,5 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
+
 import { useSelector } from 'react-redux';
 
 import {
@@ -16,13 +17,13 @@ import {
   FiltroHelper,
 } from '~/componentes-sgp';
 
-import { BIMESTRE_FINAL, OPCAO_TODOS } from '~/constantes/constantes';
+import { OPCAO_TODOS } from '~/constantes/constantes';
 import {
   ModalidadeDTO,
   statusAcompanhamentoConselhoClasse,
   statusAcompanhamentoFechamento,
 } from '~/dtos';
-import modalidade from '~/dtos/modalidade';
+import modalidadeDTO from '~/dtos/modalidade';
 
 import {
   AbrangenciaServico,
@@ -37,8 +38,9 @@ import {
 const AcompanhamentoFechamento = () => {
   const [anoAtual] = useState(window.moment().format('YYYY'));
   const [anoLetivo, setAnoLetivo] = useState();
-  const [bimestre, setBimestre] = useState();
+  const [bimestres, setBimestres] = useState();
   const [carregandoAnosLetivos, setCarregandoAnosLetivos] = useState(false);
+  const [carregandoBimestres, setCarregandoBimestres] = useState(false);
   const [carregandoGeral, setCarregandoGeral] = useState(false);
   const [consideraHistorico, setConsideraHistorico] = useState(false);
   const [desabilitarGerar, setDesabilitarGerar] = useState(true);
@@ -58,7 +60,6 @@ const AcompanhamentoFechamento = () => {
   const [clicouBotaoGerar, setClicouBotaoGerar] = useState(false);
   const [desabilitarCampos, setDesabilitarCampos] = useState(false);
   const [dreCodigo, setDreCodigo] = useState();
-  const [dreId, setDreId] = useState('');
   const [escolheuModalidadeInfantil, setEscolheuModalidadeInfantil] = useState(
     false
   );
@@ -74,21 +75,26 @@ const AcompanhamentoFechamento = () => {
   ] = useState([]);
   const [listaTurmas, setListaTurmas] = useState([]);
   const [listaUes, setListaUes] = useState([]);
-  const [modalidadeId, setModalidadeId] = useState();
+  const [modalidade, setModalidade] = useState();
   const [semestre, setSemestre] = useState();
   const [situacaoConselhoClasse, setSituacaoConselhoClasse] = useState();
   const [situacaoFechamento, setSituacaoFechamento] = useState();
-  const [turmasId, setTurmasId] = useState('');
+  const [turmasCodigo, setTurmasCodigo] = useState('');
   const [ueCodigo, setUeCodigo] = useState();
-  const [listarPendencias, setListarPendencias] = useState('0');
+  const [listarPendencias, setListarPendencias] = useState(false);
   const [
     desabilitarListarPendencias,
     setDesabilitarListarPendencias,
   ] = useState(true);
 
+  const OPCAO_TODAS = useMemo(
+    () => ({ valor: OPCAO_TODOS, desc: 'Todas' }),
+    []
+  );
+
   const opcoesRadioSimNao = [
-    { label: 'Não', value: '0' },
-    { label: 'Sim', value: '1' },
+    { label: 'Não', value: false },
+    { label: 'Sim', value: true },
   ];
 
   const desabilitarCampoSituacao = dreCodigo === OPCAO_TODOS;
@@ -102,22 +108,21 @@ const AcompanhamentoFechamento = () => {
 
   const limparCampos = (limparDre = false, limparUe = false) => {
     setListaModalidades([]);
-    setModalidadeId();
+    setModalidade();
 
     setListaSemestres([]);
     setSemestre();
 
     setListaTurmas([]);
-    setTurmasId();
+    setTurmasCodigo();
 
     setSituacaoFechamento(undefined);
 
     setSituacaoConselhoClasse(undefined);
 
-    setListarPendencias('0');
+    setListarPendencias(false);
 
     if (limparDre) {
-      setDreId();
       setDreCodigo();
     }
 
@@ -181,8 +186,6 @@ const AcompanhamentoFechamento = () => {
   }, [obterAnosLetivos]);
 
   const onChangeDre = dre => {
-    const id = listaDres.find(d => d.valor === dre)?.id;
-    setDreId(id);
     setDreCodigo(dre);
     limparCampos(false, true);
   };
@@ -214,7 +217,6 @@ const AcompanhamentoFechamento = () => {
 
         if (lista?.length === 1) {
           setDreCodigo(lista[0].valor);
-          setDreId(lista[0].id);
         } else {
           lista.unshift(OPCAO_TODAS_DRE);
         }
@@ -224,7 +226,6 @@ const AcompanhamentoFechamento = () => {
         return;
       }
       setDreCodigo(undefined);
-      setDreId(undefined);
       setListaDres([]);
     }
   }, [anoLetivo, consideraHistorico]);
@@ -295,9 +296,9 @@ const AcompanhamentoFechamento = () => {
   }, [dreCodigo, obterUes]);
 
   const onChangeModalidade = valor => {
-    setTurmasId();
-    setModalidadeId(valor);
-    setBimestre(undefined);
+    setTurmasCodigo();
+    setModalidade(valor);
+    setBimestres(undefined);
   };
 
   const obterModalidades = useCallback(async ue => {
@@ -315,24 +316,26 @@ const AcompanhamentoFechamento = () => {
             desc: item.descricao,
             valor: String(item.valor),
           }))
-          .filter(item => String(item.valor) !== String(modalidade.INFANTIL));
+          .filter(
+            item => String(item.valor) !== String(modalidadeDTO.INFANTIL)
+          );
 
         setListaModalidades(lista);
         if (lista?.length === 1) {
-          setModalidadeId(lista[0].valor);
+          setModalidade(lista[0].valor);
         }
       }
     }
   }, []);
 
   useEffect(() => {
-    if (anoLetivo && ueCodigo) {
+    if (anoLetivo && ueCodigo && !escolheuModalidadeInfantil) {
       obterModalidades(ueCodigo);
       return;
     }
-    setModalidadeId();
+    setModalidade();
     setListaModalidades([]);
-  }, [obterModalidades, anoLetivo, ueCodigo]);
+  }, [obterModalidades, anoLetivo, ueCodigo, escolheuModalidadeInfantil]);
 
   const onChangeSemestre = valor => {
     setSemestre(valor);
@@ -366,20 +369,20 @@ const AcompanhamentoFechamento = () => {
 
   useEffect(() => {
     if (
-      modalidadeId &&
+      modalidade &&
       anoLetivo &&
-      String(modalidadeId) === String(ModalidadeDTO.EJA)
+      String(modalidade) === String(ModalidadeDTO.EJA)
     ) {
-      obterSemestres(modalidadeId, anoLetivo);
+      obterSemestres(modalidade, anoLetivo);
       return;
     }
     setSemestre();
     setListaSemestres([]);
-  }, [obterSemestres, modalidadeId, anoLetivo]);
+  }, [obterSemestres, modalidade, anoLetivo]);
 
   const onChangeTurma = valor => {
-    setTurmasId(valor);
-    setBimestre(undefined);
+    setTurmasCodigo(valor);
+    setBimestres(undefined);
     setClicouBotaoGerar(false);
   };
 
@@ -401,14 +404,14 @@ const AcompanhamentoFechamento = () => {
     const OPCAO_TODAS_TURMA = { valor: OPCAO_TODOS, nomeFiltro: 'Todas' };
     if (ueCodigo === OPCAO_TODOS) {
       setListaTurmas([OPCAO_TODAS_TURMA]);
-      setTurmasId([OPCAO_TODAS_TURMA.valor]);
+      setTurmasCodigo([OPCAO_TODAS_TURMA.valor]);
       return;
     }
-    if (dreCodigo && ueCodigo && modalidadeId) {
+    if (dreCodigo && ueCodigo && modalidade) {
       setCarregandoTurmas(true);
       const retorno = await AbrangenciaServico.buscarTurmas(
         ueCodigo,
-        modalidadeId,
+        modalidade,
         '',
         anoLetivo,
         consideraHistorico,
@@ -427,7 +430,7 @@ const AcompanhamentoFechamento = () => {
         }));
 
         if (lista.length === 1) {
-          setTurmasId([String(lista[0].valor)]);
+          setTurmasCodigo([String(lista[0].valor)]);
         } else {
           lista.unshift(OPCAO_TODAS_TURMA);
         }
@@ -435,108 +438,123 @@ const AcompanhamentoFechamento = () => {
         setListaTurmas(lista);
       }
     }
-  }, [dreCodigo, ueCodigo, consideraHistorico, anoLetivo, modalidadeId]);
+  }, [dreCodigo, ueCodigo, consideraHistorico, anoLetivo, modalidade]);
 
   useEffect(() => {
     if (ueCodigo) {
       obterTurmas();
       return;
     }
-    setTurmasId();
+    setTurmasCodigo();
     setListaTurmas([]);
   }, [ueCodigo, obterTurmas]);
 
   const onChangeBimestre = valor => {
-    setBimestre(valor);
+    setBimestres(valor);
     setClicouBotaoGerar(false);
   };
 
-  const obterBimestres = useCallback(() => {
-    const opcoesBimestres = [
-      { desc: 'Todos', valor: OPCAO_TODOS },
-      { desc: '1º', valor: 1 },
-      { desc: '2º', valor: 2 },
-    ];
+  const obterBimestres = useCallback(async () => {
+    setCarregandoBimestres(true);
+    const retorno = await ServicoFiltroRelatorio.obterBimestres({
+      modalidadeId: modalidade,
+      opcaoTodos: true,
+      opcaoFinal: true,
+    })
+      .catch(e => erros(e))
+      .finally(setCarregandoBimestres(false));
 
-    if (Number(modalidadeId) !== ModalidadeDTO.EJA) {
-      const bimestresCompletos = [
-        { desc: '3º', valor: 3 },
-        { desc: '4º', valor: 4 },
-      ];
-      opcoesBimestres.push(...bimestresCompletos);
+    if (retorno?.data) {
+      const lista = retorno.data.map(item => ({
+        desc: item.descricao,
+        valor: item.valor,
+      }));
+      setListaBimestres(lista);
     }
-
-    opcoesBimestres.push({ desc: 'Final', valor: BIMESTRE_FINAL });
-    setListaBimestres(opcoesBimestres);
-  }, [modalidadeId]);
+  }, [modalidade]);
 
   useEffect(() => {
-    if (modalidadeId) {
+    if (modalidade) {
       obterBimestres();
       return;
     }
     setListaBimestres([]);
-    setBimestre(undefined);
-  }, [modalidadeId, obterBimestres]);
+    setBimestres(undefined);
+  }, [modalidade, obterBimestres]);
 
   const onChangeSituacaoFechamento = valor => {
     setSituacaoFechamento(valor);
     setClicouBotaoGerar(false);
   };
 
-  const obterSituacaoFechamento = useCallback(
-    async situacaoFechamentoCodigo => {
-      setCarregandoSituacaoFechamento(true);
+  const obterSituacaoFechamento = useCallback(async () => {
+    setCarregandoSituacaoFechamento(true);
 
-      const retorno = await ServicoRelatorioAcompanhamentoFechamento.obterSituacaoFechamento(
-        situacaoFechamentoCodigo
-      )
-        .catch(e => erros(e))
-        .finally(setCarregandoSituacaoFechamento(false));
+    const retorno = await ServicoFiltroRelatorio.obterSituacaoFechamento(false)
+      .catch(e => erros(e))
+      .finally(setCarregandoSituacaoFechamento(false));
 
-      if (retorno?.data) {
-        setListaSituacaoFechamento(retorno?.data);
-      }
-    },
-    []
-  );
+    if (retorno?.data) {
+      const lista = retorno.data.map(item => ({
+        desc: item.descricao,
+        valor: item.codigo,
+      }));
+      lista.unshift(OPCAO_TODAS);
+      setListaSituacaoFechamento(lista);
+    }
+  }, [OPCAO_TODAS]);
 
   useEffect(() => {
-    if (bimestre?.length && !desabilitarCampoSituacao) {
+    if (
+      !listaSituacaoFechamento?.length &&
+      bimestres?.length &&
+      !desabilitarCampoSituacao
+    ) {
       obterSituacaoFechamento(statusAcompanhamentoFechamento);
     }
-  }, [obterSituacaoFechamento, bimestre, dreCodigo, desabilitarCampoSituacao]);
+  }, [
+    obterSituacaoFechamento,
+    bimestres,
+    dreCodigo,
+    desabilitarCampoSituacao,
+    listaSituacaoFechamento,
+  ]);
 
   const onChangeSituacaoConselhoClasse = valor => {
     setSituacaoConselhoClasse(valor);
     setClicouBotaoGerar(false);
   };
 
-  const obterSituacaoConselhoClasse = useCallback(
-    async situacaoConselhoClasseCodigo => {
-      setCarregandoSituacaoConselhoClasse(true);
+  const obterSituacaoConselhoClasse = useCallback(async () => {
+    setCarregandoSituacaoConselhoClasse(true);
 
-      const retorno = await ServicoRelatorioAcompanhamentoFechamento.obterSituacaoConselhoClasse(
-        situacaoConselhoClasseCodigo
-      )
-        .catch(e => erros(e))
-        .finally(setCarregandoSituacaoConselhoClasse(false));
+    const retorno = await ServicoFiltroRelatorio.obterSituacaoConselhoClasse()
+      .catch(e => erros(e))
+      .finally(setCarregandoSituacaoConselhoClasse(false));
 
-      if (retorno?.data) {
-        setListaSituacaoConselhoClasse(retorno?.data);
-      }
-    },
-    []
-  );
+    if (retorno?.data) {
+      const lista = retorno.data.map(item => ({
+        desc: item.descricao,
+        valor: item.codigo,
+      }));
+      lista.unshift(OPCAO_TODAS);
+      setListaSituacaoConselhoClasse(lista);
+    }
+  }, [OPCAO_TODAS]);
 
   useEffect(() => {
-    if (situacaoFechamento && !desabilitarCampoSituacao) {
+    if (
+      !listaSituacaoConselhoClasse?.length &&
+      situacaoFechamento &&
+      !desabilitarCampoSituacao
+    ) {
       obterSituacaoConselhoClasse(statusAcompanhamentoConselhoClasse);
     }
   }, [
     situacaoFechamento,
     obterSituacaoConselhoClasse,
     desabilitarCampoSituacao,
+    listaSituacaoConselhoClasse,
   ]);
 
   const onChangeListarPendencias = e => {
@@ -550,7 +568,8 @@ const AcompanhamentoFechamento = () => {
       turmaSelecionada
     );
     setDesabilitarCampos(infantil);
-  }, [turmaSelecionada, modalidadesFiltroPrincipal, modalidadeId]);
+    setEscolheuModalidadeInfantil(infantil);
+  }, [turmaSelecionada, modalidadesFiltroPrincipal, modalidade]);
 
   useEffect(() => {
     const desabilitarSituacaoFechamento =
@@ -562,10 +581,10 @@ const AcompanhamentoFechamento = () => {
       !anoLetivo ||
       !dreCodigo ||
       !ueCodigo ||
-      !modalidadeId ||
-      (String(modalidadeId) === String(modalidade.EJA) ? !semestre : false) ||
-      !turmasId?.length ||
-      !bimestre?.length ||
+      !modalidade ||
+      (String(modalidade) === String(modalidadeDTO.EJA) ? !semestre : false) ||
+      !turmasCodigo?.length ||
+      !bimestres?.length ||
       desabilitarSituacaoFechamento ||
       desabilitarSituacaoConselhoClasse ||
       escolheuModalidadeInfantil ||
@@ -576,10 +595,10 @@ const AcompanhamentoFechamento = () => {
     anoLetivo,
     dreCodigo,
     ueCodigo,
-    modalidadeId,
+    modalidade,
     semestre,
-    turmasId,
-    bimestre,
+    turmasCodigo,
+    bimestres,
     situacaoFechamento,
     situacaoConselhoClasse,
     escolheuModalidadeInfantil,
@@ -603,10 +622,10 @@ const AcompanhamentoFechamento = () => {
       anoLetivo,
       dreCodigo,
       ueCodigo,
-      modalidadeId,
+      modalidade,
       semestre,
-      turmasId,
-      bimestre,
+      turmasCodigo,
+      bimestres,
       situacaoFechamento,
       situacaoConselhoClasse,
       listarPendencias,
@@ -748,7 +767,7 @@ const AcompanhamentoFechamento = () => {
                       desabilitarCampos
                     }
                     onChange={onChangeModalidade}
-                    valueSelect={modalidadeId}
+                    valueSelect={modalidade}
                     placeholder="Modalidade"
                   />
                 </Loader>
@@ -762,9 +781,9 @@ const AcompanhamentoFechamento = () => {
                     valueText="desc"
                     label="Semestre"
                     disabled={
-                      !modalidadeId ||
+                      !modalidade ||
                       listaSemestres?.length === 1 ||
-                      String(modalidadeId) !== String(ModalidadeDTO.EJA) ||
+                      String(modalidade) !== String(ModalidadeDTO.EJA) ||
                       desabilitarCampos
                     }
                     valueSelect={semestre}
@@ -783,13 +802,13 @@ const AcompanhamentoFechamento = () => {
                     valueText="nomeFiltro"
                     label="Turmas"
                     disabled={
-                      !modalidadeId ||
+                      !modalidade ||
                       listaTurmas?.length === 1 ||
                       desabilitarCampos
                     }
-                    valueSelect={turmasId}
+                    valueSelect={turmasCodigo}
                     onChange={valores => {
-                      onchangeMultiSelect(valores, turmasId, onChangeTurma);
+                      onchangeMultiSelect(valores, turmasCodigo, onChangeTurma);
                     }}
                     placeholder="Turma"
                     showSearch
@@ -799,23 +818,25 @@ const AcompanhamentoFechamento = () => {
             </div>
             <div className="row mb-3">
               <div className="col-sm-12 col-md-4 pr-0">
-                <SelectComponent
-                  lista={listaBimestres}
-                  valueOption="valor"
-                  valueText="desc"
-                  label="Bimestre"
-                  disabled={
-                    !turmasId?.length ||
-                    listaBimestres?.length === 1 ||
-                    desabilitarCampos
-                  }
-                  valueSelect={bimestre}
-                  onChange={valores => {
-                    onchangeMultiSelect(valores, bimestre, onChangeBimestre);
-                  }}
-                  placeholder="Selecione o bimestre"
-                  multiple
-                />
+                <Loader loading={carregandoBimestres} ignorarTip>
+                  <SelectComponent
+                    lista={listaBimestres}
+                    valueOption="valor"
+                    valueText="desc"
+                    label="Bimestre"
+                    disabled={
+                      !turmasCodigo?.length ||
+                      listaBimestres?.length === 1 ||
+                      desabilitarCampos
+                    }
+                    valueSelect={bimestres}
+                    onChange={valores => {
+                      onchangeMultiSelect(valores, bimestres, onChangeBimestre);
+                    }}
+                    placeholder="Selecione o bimestre"
+                    multiple
+                  />
+                </Loader>
               </div>
               <div className="col-sm-12 col-md-4 pr-0">
                 <Loader loading={carregandoSituacaoFechamento} ignorarTip>
@@ -825,8 +846,8 @@ const AcompanhamentoFechamento = () => {
                     valueText="desc"
                     label="Situação do fechamento"
                     disabled={
-                      !turmasId?.length ||
-                      !bimestre ||
+                      !turmasCodigo?.length ||
+                      !bimestres ||
                       desabilitarCampos ||
                       desabilitarCampoSituacao
                     }
@@ -844,8 +865,8 @@ const AcompanhamentoFechamento = () => {
                     valueText="desc"
                     label="Situação do conselho de classe"
                     disabled={
-                      !turmasId?.length ||
-                      !bimestre ||
+                      !turmasCodigo?.length ||
+                      !bimestres ||
                       !situacaoFechamento ||
                       desabilitarCampos ||
                       desabilitarCampoSituacao

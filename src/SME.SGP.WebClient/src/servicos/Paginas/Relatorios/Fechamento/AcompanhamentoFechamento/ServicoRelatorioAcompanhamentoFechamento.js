@@ -4,7 +4,7 @@ const OPCAO_TODAS = { valor: '-99', desc: 'Todas' };
 
 class ServicoRelatorioAcompanhamentoFechamento {
   gerar = params => {
-    return Promise.resolve();
+    return api.post('v1/relatorios/acompanhamento-fechamento', params);
   };
 
   obterSituacaoFechamento = situacaoFechamentoCodigo => {
