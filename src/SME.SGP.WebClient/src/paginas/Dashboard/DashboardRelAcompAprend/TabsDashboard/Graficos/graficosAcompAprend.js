@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import TotalCriancasComRelAcompanhamentoAprendizagem from './CriancasComRelAcompanhamentoAprendizagem/criancasComAcomp';
+import TotalCriancasComRelAcompanhamentoAprendizagem from './CriancasComAcomp/criancasComAcomp';
 
 const GraficosAcompanhamentoAprendizagem = props => {
   const { anoLetivo, dreId, ueId, dataUltimaConsolidacao } = props;

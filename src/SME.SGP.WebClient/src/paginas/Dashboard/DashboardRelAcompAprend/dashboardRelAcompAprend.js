@@ -16,7 +16,7 @@ import AbrangenciaServico from '~/servicos/Abrangencia';
 import { erros } from '~/servicos/alertas';
 import history from '~/servicos/history';
 import ServicoDashboardRelAcompanhamentoAprendizagem from '~/servicos/Paginas/Dashboard/ServicoDashboardRelAcompanhamentoAprendizagem';
-import TabsDashboardRelAcompanhamentoAprendizagem from './TabsDashboardRelAcompanhamentoAprendizagem/tabsDashboardRelAcompanhamentoAprendizagem';
+import TabsDashboardRelAcompanhamentoAprendizagem from './TabsDashboard/tabsDashboard';
 
 const DashboardRelAcompanhamentoAprendizagem = () => {
   const usuario = useSelector(store => store.usuario);
