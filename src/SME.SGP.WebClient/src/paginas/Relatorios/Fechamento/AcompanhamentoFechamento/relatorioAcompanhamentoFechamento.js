@@ -490,7 +490,7 @@ const AcompanhamentoFechamento = () => {
   const obterSituacaoFechamento = useCallback(async () => {
     setCarregandoSituacaoFechamento(true);
 
-    const retorno = await ServicoFiltroRelatorio.obterSituacaoFechamento(false)
+    const retorno = await ServicoFiltroRelatorio.obterSituacaoFechamento(true)
       .catch(e => erros(e))
       .finally(setCarregandoSituacaoFechamento(false));
 
