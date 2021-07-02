@@ -47,7 +47,7 @@ const PlanoAula = () => {
             indice="plano-aula-collapse"
             show={exibirCardCollapsePlanoAula.exibir}
           >
-            <DadosPlanoAula />
+            <DadosPlanoAula aulaId={aulaId} />
           </CardCollapse>
         </div>
       ) : (
