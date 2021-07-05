@@ -26,6 +26,7 @@ const tipoEvento = {
   Seminario: 25,
   Palestra: 26,
   Reuniao: 27,
+  ItineranciaPAAI: 28,
 };
 
 export default tipoEvento;

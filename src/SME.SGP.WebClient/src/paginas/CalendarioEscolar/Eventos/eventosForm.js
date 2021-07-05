@@ -52,6 +52,7 @@ import entidadeStatusDto from '~/dtos/entidadeStatusDto';
 import AbrangenciaServico from '~/servicos/Abrangencia';
 import ServicoCalendarios from '~/servicos/Paginas/Calendario/ServicoCalendarios';
 import tipoEvento from '~/dtos/tipoEvento';
+import { OPCAO_TODOS } from '~/constantes/constantes';
 
 const EventosForm = ({ match }) => {
   const usuarioStore = useSelector(store => store.usuario);
@@ -72,6 +73,10 @@ const EventosForm = ({ match }) => {
   const [
     eventoTipoFeriadoSelecionado,
     setEventoTipoFeriadoSelecionado,
+  ] = useState(false);
+  const [
+    eventoTipoLocalOcorrenciaSMESelecionado,
+    setEventoTipoLocalOcorrenciaSMESelecionado,
   ] = useState(false);
   const [tipoDataUnico, setTipoDataUnico] = useState(true);
   const [desabilitarOpcaoLetivo, setDesabilitarOpcaoLetivo] = useState(true);
@@ -115,6 +120,8 @@ const EventosForm = ({ match }) => {
   };
   const [valoresIniciais, setValoresIniciais] = useState(inicial);
   const [usuarioPodeAlterar, setUsuarioPodeAlterar] = useState(true);
+  const [listaBimestres, setListaBimestres] = useState([]);
+  const [bimestre, setBimestre] = useState();
 
   const opcoesLetivo = [
     { label: 'Sim', value: 1 },
@@ -189,19 +196,13 @@ const EventosForm = ({ match }) => {
 
   useEffect(() => {
     if (listaDres?.length === 1) {
-      refFormulario.current.setFieldValue(
-        'dreId',
-        String(listaDres[0].codigo)
-      );
+      refFormulario.current.setFieldValue('dreId', String(listaDres[0].codigo));
     }
   }, [listaDres, current]);
 
   useEffect(() => {
     if (listaUes?.length === 1) {
-      refFormulario.current.setFieldValue(
-        'ueId',
-        String(listaUes[0].codigo)
-      );
+      refFormulario.current.setFieldValue('ueId', String(listaUes[0].codigo));
     }
   }, [listaUes, current]);
 
@@ -212,13 +213,11 @@ const EventosForm = ({ match }) => {
         String(listaTipoEvento[0].id)
       );
 
-      if (listaTipoEvento[0].descricao === 'Itinerância PAAI') {
+      if (listaTipoEvento[0].id === tipoEvento.ItineranciaPAAI) {
         setDesabilitarLetivo(true);
         refFormulario.current.setFieldValue('letivo', 0);
       }
-      return;
     }
-    refFormulario.current.setFieldValue('tipoEventoId', '');
   }, [listaTipoEvento, current]);
 
   useEffect(() => {
@@ -469,6 +468,13 @@ const EventosForm = ({ match }) => {
       onChangeTipoEvento(evento.data.tipoEventoId);
 
       setExibirAuditoria(true);
+
+      if (evento.data.bimestre) {
+        const bimesresConvertidos = evento.data.bimestre.map(item =>
+          String(item)
+        );
+        setBimestre(bimesresConvertidos);
+      }
     }
   };
 
@@ -633,6 +639,7 @@ const EventosForm = ({ match }) => {
         ...valoresForm,
         recorrenciaEventos: recorrencia ? { ...recorrencia } : null,
         tiposCalendarioParaCopiar,
+        bimestre,
       };
 
       const atualizarEventosFuturos = await exibirModalAtualizarEventos();
@@ -703,6 +710,9 @@ const EventosForm = ({ match }) => {
   const onChangeDre = (dre, form) => {
     setListaUes([]);
     form.setFieldValue('ueId', undefined);
+    onChangeTipoEvento(undefined);
+    form.setFieldValue('tipoEventoId', undefined);
+    setEventoTipoLocalOcorrenciaSMESelecionado(false);
 
     if (dre) {
       carregarUes(dre);
@@ -802,6 +812,25 @@ const EventosForm = ({ match }) => {
           form.setFieldValue('letivo', tipoEventoSelecionado.letivo);
         }
       }
+
+      let valorLetivo = 1;
+      let valorEvento = false;
+      let valorOpcaoLetivo = false;
+      let tipoUnico = false;
+
+      if (tipoEventoSelecionado?.id === tipoEvento.LiberacaoBoletim) {
+        valorEvento = true;
+        valorOpcaoLetivo = true;
+        valorLetivo = 0;
+        tipoUnico = true;
+      }
+      if (form) {
+        form.setFieldValue('letivo', valorLetivo);
+      }
+
+      setEventoTipoLocalOcorrenciaSMESelecionado(valorEvento);
+      setDesabilitarOpcaoLetivo(valorOpcaoLetivo);
+      setTipoDataUnico(tipoUnico);
     } else {
       setEventoTipoFeriadoSelecionado(false);
     }
@@ -875,6 +904,38 @@ const EventosForm = ({ match }) => {
       }
     });
   };
+
+  const onChangeBimestre = valor => {
+    setBimestre(valor);
+  };
+
+  const onchangeMultiSelect = (valores, valoreAtual, funSetarNovoValor) => {
+    const opcaoTodosJaSelecionado = valoreAtual
+      ? valoreAtual.includes(OPCAO_TODOS)
+      : false;
+    if (opcaoTodosJaSelecionado) {
+      const listaSemOpcaoTodos = valores.filter(v => v !== OPCAO_TODOS);
+      funSetarNovoValor(listaSemOpcaoTodos);
+    } else if (valores.includes(OPCAO_TODOS)) {
+      funSetarNovoValor([OPCAO_TODOS]);
+    } else {
+      funSetarNovoValor(valores);
+    }
+  };
+
+  const obterBimestres = async idTipoCalendario => {
+    const resposta = await ServicoCalendarios.obterBimestres(idTipoCalendario);
+    if (resposta?.data) {
+      setListaBimestres(resposta?.data);
+    }
+  };
+
+  useEffect(() => {
+    const idTipoCalendario = match?.params?.tipoCalendarioId;
+    if (idTipoCalendario) {
+      obterBimestres(idTipoCalendario);
+    }
+  }, [match]);
 
   return (
     <Loader loading={carregandoSalvar} tip="">
@@ -1014,7 +1075,8 @@ const EventosForm = ({ match }) => {
                 </div>
                 <div
                   className={`col-sm-12 ${
-                    eventoTipoFeriadoSelecionado
+                    eventoTipoFeriadoSelecionado ||
+                    eventoTipoLocalOcorrenciaSMESelecionado
                       ? 'col-md-3 col-lg-3 col-xl-3'
                       : 'col-md-6 col-lg-6 col-xl-6'
                   } pb-2`}
@@ -1054,6 +1116,27 @@ const EventosForm = ({ match }) => {
                   </div>
                 ) : (
                   ''
+                )}
+                {eventoTipoLocalOcorrenciaSMESelecionado && (
+                  <div className="col-sm-12 col-md-3 col-lg-3 col-xl-3 pb-2">
+                    <SelectComponent
+                      id="drop-bimestre"
+                      lista={listaBimestres}
+                      valueOption="valor"
+                      valueText="desc"
+                      label="Bimestre"
+                      valueSelect={bimestre}
+                      multiple
+                      onChange={valores => {
+                        onchangeMultiSelect(
+                          valores,
+                          bimestre,
+                          onChangeBimestre
+                        );
+                      }}
+                      placeholder="Bimestre"
+                    />
+                  </div>
                 )}
                 <div className="col-sm-12 col-md-6 col-lg-3 col-xl-3 pb-2">
                   <CampoData
