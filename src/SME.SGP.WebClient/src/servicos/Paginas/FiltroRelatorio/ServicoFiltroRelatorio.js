@@ -111,19 +111,19 @@ class ServicoFiltroRelatorio {
     opcaoFinal = false,
   }) => {
     return api.get(
-      `${urlPadrao}/bimestres/${modalidadeId}?opcaoTodos=${opcaoTodos}&opcaoFinal=${opcaoFinal}`
+      `${urlPadrao}/bimestres/modalidades/${modalidadeId}?opcaoTodos=${opcaoTodos}&opcaoFinal=${opcaoFinal}`
     );
   };
 
   obterSituacaoFechamento = unificarNaoIniciado => {
     return api.get(
-      `${urlPadrao}/acompanhamento-fechamento/fechamento/situacao/${unificarNaoIniciado}`
+      `${urlPadrao}/acompanhamento-fechamento/fechamentos/situacoes/${unificarNaoIniciado}`
     );
   };
 
   obterSituacaoConselhoClasse = () => {
     return api.get(
-      `${urlPadrao}/acompanhamento-fechamento/conselho-de-classe/situacao`
+      `${urlPadrao}/acompanhamento-fechamento/conselho-de-classe/situacoes`
     );
   };
 }
