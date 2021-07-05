@@ -82,6 +82,8 @@ const RotasDto = {
   DASHBOARD_DIARIO_BORDO: '/dashboard/diario-bordo',
   RELATORIO_ACOMPANHAMENTO_FECHAMENTO:
     '/fechamento/relatorio-acompanhamento-fechamento',
+  DASHBOARD_RELATORIO_ACOMPANHAMENTO_APRENDIZAGEM:
+    '/dashboard/acompanhamento-aprendizagem',
 };
 
 export default RotasDto;

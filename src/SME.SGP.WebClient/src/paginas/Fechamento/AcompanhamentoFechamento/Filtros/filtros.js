@@ -11,7 +11,7 @@ import {
 
 import { ModalidadeDTO } from '~/dtos';
 import { AbrangenciaServico, erros, ServicoFiltroRelatorio } from '~/servicos';
-import { OPCAO_TODOS } from '~/constantes/constantes';
+import { OPCAO_TODOS, BIMESTRE_FINAL, ANO_INICIO_INFANTIL } from '~/constantes/constantes';
 
 const Filtros = ({ onChangeFiltros, ehInfantil }) => {
   const dispatch = useDispatch();
@@ -57,7 +57,6 @@ const Filtros = ({ onChangeFiltros, ehInfantil }) => {
   const [ueId, setUeId] = useState('');
   const [ueCodigo, setUeCodigo] = useState();
 
-  const ANO_LETIVO_MINIMO = 2021;
   const OPCAO_PADRAO = '-99';
 
   const carregandoAcompanhamentoFechamento = useSelector(
@@ -131,11 +130,11 @@ const Filtros = ({ onChangeFiltros, ehInfantil }) => {
 
     const anosLetivoComHistorico = await FiltroHelper.obterAnosLetivos({
       consideraHistorico: true,
-      anoMinimo: ANO_LETIVO_MINIMO,
+      anoMinimo: ANO_INICIO_INFANTIL,
     });
     const anosLetivoSemHistorico = await FiltroHelper.obterAnosLetivos({
       consideraHistorico: false,
-      anoMinimo: ANO_LETIVO_MINIMO,
+      anoMinimo: ANO_INICIO_INFANTIL,
     });
 
     anosLetivos = anosLetivos.concat(anosLetivoComHistorico);
@@ -510,8 +509,9 @@ const Filtros = ({ onChangeFiltros, ehInfantil }) => {
             onChangeCheckbox={onChangeConsideraHistorico}
             checked={consideraHistorico}
             disabled={
-              listaAnosLetivo.length === 1 &&
-              listaAnosLetivo[0].valor === ANO_LETIVO_MINIMO
+              desabilitarCampos ||
+              (listaAnosLetivo.length === 1 &&
+                listaAnosLetivo[0].valor === ANO_INICIO_INFANTIL)
             }
           />
         </div>
