@@ -979,7 +979,7 @@ const ComunicadosCadastro = ({ match }) => {
       alunos: alunosSelecionados,
       alunosEspecificados: alunoEspecificado,
       turmas: valores.turmas.filter(x => x !== TODAS_TURMAS_ID),
-      modalidade: null,
+      modalidade: [valores.modalidade],
       seriesResumidas: valores.anosModalidade?.join(',') ?? '',
       CodigoUe: valores.CodigoUe == TODAS_UE_ID ? 'todas' : valores.CodigoUe,
       CodigoDre:
@@ -992,13 +992,13 @@ const ComunicadosCadastro = ({ match }) => {
       }),
     };
 
-    dadosSalvar.anosModalidade = null;
     dadosSalvar.tipoCalendarioId = tipoCalendarioSelecionado ?? null;
     dadosSalvar.eventoId = eventoSelecionado?.id ?? null;
     dadosSalvar.semestre =
       dadosSalvar.semestre === '' ? 0 : dadosSalvar.semestre;
 
     setLoaderSecao(true);
+
     const salvou = await ServicoComunicados.salvar(dadosSalvar);
     if (salvou && salvou.data) {
       history.push(RotasDto.ACOMPANHAMENTO_COMUNICADOS);
