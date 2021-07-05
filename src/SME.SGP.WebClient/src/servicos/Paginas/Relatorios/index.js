@@ -4,3 +4,4 @@ export { default as ServicoAdesaoEscolaAqui } from './EscolaAqui/Adesao/ServicoA
 export { default as ServicoRegistroItineranciaAEE } from './AEE/ServicoRegistroItineranciaAEE';
 export { default as ServicoRelatorioDevolutivas } from './Planejamento/servicoRelatorioDevolutivas';
 export { default as ServicoAcompanhamentoAprendizagem } from './AcompanhamentoAprendizagem/ServicoAcompanhamentoAprendizagem';
+export { default as ServicoRelatorioAcompanhamentoFechamento } from './Fechamento/AcompanhamentoFechamento/ServicoRelatorioAcompanhamentoFechamento';

@@ -57,6 +57,10 @@ const AcompanhamentoFechamento = () => {
     state => state.acompanhamentoFechamento.turmasAcompanhamentoFechamento
   );
 
+  const escolheuModalidadeInfantil = useSelector(
+    state => state.acompanhamentoFechamento.escolheuModalidadeInfantil
+  );
+
   const numeroRegistros = turmasAcompanhamentoFechamento?.totalRegistros;
   const pageSize = 10;
   const exibiPaginacao = numeroRegistros > pageSize;
@@ -143,7 +147,10 @@ const AcompanhamentoFechamento = () => {
 
   return (
     <>
-      <AlertaModalidadeInfantil />
+      <AlertaModalidadeInfantil
+        exibir={escolheuModalidadeInfantil}
+        validarModalidadeFiltroPrincipal={false}
+      />
       <Cabecalho pagina="Acompanhamento do fechamento" classes="mb-2" />
       <Loader loading={carregandoAcompanhamentoFechamento} ignorarTip>
         <Card>
