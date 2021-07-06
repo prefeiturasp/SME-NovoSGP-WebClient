@@ -38,7 +38,6 @@ class ServicoDashboardEscolaAqui {
     anoLetivo,
     codigoDre,
     codigoUe,
-    gruposIds,
     modalidade,
     semestre,
     anoEscolar,
@@ -63,7 +62,7 @@ class ServicoDashboardEscolaAqui {
     }
 
     if (modalidade) {
-      url += `&modalidade=${modalidade}`;
+      url += `&modalidades=${modalidade}`;
     }
 
     if (semestre) {
@@ -86,9 +85,9 @@ class ServicoDashboardEscolaAqui {
       url += `&dataEnvioFinal=${dataEnvioFinal.format('YYYY-MM-DD')}`;
     }
 
-    if (gruposIds?.length) {
-      url += `&gruposIds=${gruposIds.join('&gruposIds=', gruposIds)}`;
-    }
+    // if (gruposIds?.length) {
+    //   url += `&gruposIds=${gruposIds.join('&gruposIds=', gruposIds)}`;
+    // }
 
     return api.get(url);
   };
