@@ -555,13 +555,7 @@ const RelatorioLeitura = () => {
   useEffect(() => {
     let isSubscribed = true;
     (async () => {
-      if (
-        isSubscribed &&
-        anoLetivo &&
-        codigoDre &&
-        codigoUe &&
-        modalidadeId?.length
-      ) {
+      if (isSubscribed && anoLetivo && codigoDre && codigoUe && modalidadeId) {
         if (
           modalidadeId &&
           String(modalidadeId) === String(ModalidadeDTO.EJA) &&
@@ -632,20 +626,6 @@ const RelatorioLeitura = () => {
       setDataInicio(dtInicio);
       setDataFim(dtFim);
       setClicouBotaoGerar(false);
-    }
-  };
-
-  const onchangeMultiSelect = (valores, valorAtual, funSetarNovoValor) => {
-    const opcaoTodosJaSelecionado = valorAtual
-      ? valorAtual.includes(OPCAO_TODOS)
-      : false;
-    if (opcaoTodosJaSelecionado) {
-      const listaSemOpcaoTodos = valores.filter(v => v !== OPCAO_TODOS);
-      funSetarNovoValor(listaSemOpcaoTodos);
-    } else if (valores.includes(OPCAO_TODOS)) {
-      funSetarNovoValor([OPCAO_TODOS]);
-    } else {
-      funSetarNovoValor(valores);
     }
   };
 
@@ -759,20 +739,13 @@ const RelatorioLeitura = () => {
             <div className="col-sm-12 col-md-6 col-lg-4 col-xl-4 mb-3 pr-0">
               <Loader loading={carregandoModalidade}>
                 <SelectComponent
-                  multiple
                   id="drop-modalidade"
                   label="Modalidade"
                   lista={listaModalidades}
                   valueOption="valor"
                   valueText="desc"
                   disabled={!codigoUe || listaModalidades?.length === 1}
-                  onChange={valores => {
-                    onchangeMultiSelect(
-                      valores,
-                      modalidadeId,
-                      onChangeModalidade
-                    );
-                  }}
+                  onChange={onChangeModalidade}
                   valueSelect={modalidadeId}
                   placeholder="Modalidade"
                 />
