@@ -113,7 +113,7 @@ class ServicoFiltroRelatorio {
 
   obterSituacaoFechamento = unificarNaoIniciado => {
     return api.get(
-      `${urlPadrao}/acompanhamento-fechamento/fechamentos/situacoes/${unificarNaoIniciado}`
+      `${urlPadrao}/acompanhamento-fechamento/fechamentos/situacoes?unificarNaoIniciado=${unificarNaoIniciado}`
     );
   };
 
