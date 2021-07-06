@@ -410,6 +410,9 @@ const ComunicadosCadastro = ({ match }) => {
     async function obterPorId(id) {
       const comunicado = await ServicoComunicados.consultarPorId(id);
       if (comunicado && Object.entries(comunicado).length) {
+        const valorModalidade =
+          comunicado?.modalidades?.length && String(comunicado.modalidades[0]);
+
         setValoresIniciais({
           id: comunicado.id,
           anoLetivo: comunicado.anoLetivo,
@@ -422,7 +425,7 @@ const ComunicadosCadastro = ({ match }) => {
           modalidade:
             String(comunicado.modalidade) === '0'
               ? TODAS_MODALIDADES_ID
-              : String(comunicado.modalidade),
+              : valorModalidade,
           semestre:
             String(comunicado.semestre) === '0'
               ? ''
@@ -979,7 +982,7 @@ const ComunicadosCadastro = ({ match }) => {
       alunos: alunosSelecionados,
       alunosEspecificados: alunoEspecificado,
       turmas: valores.turmas.filter(x => x !== TODAS_TURMAS_ID),
-      modalidade: null,
+      modalidades: [valores.modalidade],
       seriesResumidas: valores.anosModalidade?.join(',') ?? '',
       CodigoUe: valores.CodigoUe == TODAS_UE_ID ? 'todas' : valores.CodigoUe,
       CodigoDre:
@@ -992,13 +995,13 @@ const ComunicadosCadastro = ({ match }) => {
       }),
     };
 
-    dadosSalvar.anosModalidade = null;
     dadosSalvar.tipoCalendarioId = tipoCalendarioSelecionado ?? null;
     dadosSalvar.eventoId = eventoSelecionado?.id ?? null;
     dadosSalvar.semestre =
       dadosSalvar.semestre === '' ? 0 : dadosSalvar.semestre;
 
     setLoaderSecao(true);
+
     const salvou = await ServicoComunicados.salvar(dadosSalvar);
     if (salvou && salvou.data) {
       history.push(RotasDto.ACOMPANHAMENTO_COMUNICADOS);

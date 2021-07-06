@@ -331,7 +331,7 @@ const DadosComunicadosLeitura = props => {
   useEffect(() => {
     let isSubscribed = true;
     (async () => {
-      if (isSubscribed && anoLetivo && codigoDre && codigoUe) {
+      if (isSubscribed && anoLetivo && codigoDre && codigoUe && modalidadeId) {
         if (
           modalidadeId &&
           String(modalidadeId) === String(ModalidadeDTO.EJA) &&
@@ -345,7 +345,7 @@ const DadosComunicadosLeitura = props => {
           anoLetivo || '',
           codigoDre === OPCAO_TODOS ? '' : codigoDre || '',
           codigoUe === OPCAO_TODOS ? '' : codigoUe || '',
-          '',
+          modalidadeId,
           semestre || '',
           anosEscolares || '',
           codigoTurma === OPCAO_TODOS ? '' : codigoTurma || '',
