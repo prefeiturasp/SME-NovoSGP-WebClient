@@ -85,10 +85,6 @@ class ServicoDashboardEscolaAqui {
       url += `&dataEnvioFinal=${dataEnvioFinal.format('YYYY-MM-DD')}`;
     }
 
-    // if (gruposIds?.length) {
-    //   url += `&gruposIds=${gruposIds.join('&gruposIds=', gruposIds)}`;
-    // }
-
     return api.get(url);
   };
 
