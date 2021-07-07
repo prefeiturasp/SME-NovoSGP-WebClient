@@ -14,7 +14,6 @@ import Button from '~/componentes/button';
 import Card from '~/componentes/card';
 import { Colors } from '~/componentes/colors';
 import { ModalidadeDTO } from '~/dtos';
-import FiltroHelperComunicados from '~/paginas/AcompanhamentoEscolar/Comunicados/Helper/helper';
 import AbrangenciaServico from '~/servicos/Abrangencia';
 import { erros, sucesso } from '~/servicos/alertas';
 import api from '~/servicos/api';
@@ -42,7 +41,6 @@ const RelatorioLeitura = () => {
   const [listaAnosLetivo, setListaAnosLetivo] = useState([]);
   const [listaDres, setListaDres] = useState([]);
   const [listaUes, setListaUes] = useState([]);
-  const [listaGrupos, setListaGrupos] = useState([]);
   const [listaModalidades, setListaModalidades] = useState([]);
   const [listaSemestres, setListaSemestres] = useState([]);
   const [listaAnosEscolares, setListaAnosEscolares] = useState([]);
@@ -53,7 +51,6 @@ const RelatorioLeitura = () => {
   const [anoLetivo, setAnoLetivo] = useState();
   const [codigoDre, setCodigoDre] = useState();
   const [codigoUe, setCodigoUe] = useState();
-  const [grupos, setGrupos] = useState();
   const [modalidadeId, setModalidadeId] = useState();
   const [semestre, setSemestre] = useState();
   const [anosEscolares, setAnosEscolares] = useState();
@@ -83,7 +80,6 @@ const RelatorioLeitura = () => {
   const onChangeAnoLetivo = async valor => {
     setCodigoDre();
     setCodigoUe();
-    setGrupos();
     setModalidadeId();
     setTurmaId();
     setAnoLetivo(valor);
@@ -92,7 +88,6 @@ const RelatorioLeitura = () => {
   const onChangeDre = valor => {
     setCodigoDre(valor);
     setCodigoUe();
-    setGrupos();
     setModalidadeId();
     setTurmaId();
     setCodigoUe(undefined);
@@ -100,7 +95,6 @@ const RelatorioLeitura = () => {
   };
 
   const onChangeUe = valor => {
-    setGrupos();
     setModalidadeId();
     setTurmaId();
     setCodigoUe(valor);
@@ -109,7 +103,6 @@ const RelatorioLeitura = () => {
   const onChangeModalidade = valor => {
     setTurmaId();
     setModalidadeId(valor);
-    setGrupos([]);
     setClicouBotaoGerar(false);
   };
 
@@ -367,22 +360,6 @@ const RelatorioLeitura = () => {
     }
   }, [modalidadeId]);
 
-  const obterGruposIdPorModalidade = async mod => {
-    if (!mod) return;
-
-    const dados = await FiltroHelperComunicados.ObterGruposIdPorModalidade(mod);
-
-    if (dados?.length === 0) return;
-
-    setGrupos(dados);
-  };
-
-  useEffect(() => {
-    if (modalidadeId) {
-      obterGruposIdPorModalidade(modalidadeId);
-    }
-  }, [modalidadeId]);
-
   const obterAnosLetivos = useCallback(async () => {
     setCarregandoAnosLetivos(true);
     let anosLetivos = [];
@@ -421,35 +398,8 @@ const RelatorioLeitura = () => {
     setCarregandoAnosLetivos(false);
   }, [anoAtual]);
 
-  const obterListaGrupos = async () => {
-    const resposta = await api
-      .get('v1/comunicacao/grupos/listar')
-      .catch(e => erros(e));
-
-    if (resposta?.data?.length) {
-      const lista = resposta.data.map(g => {
-        return {
-          valor: g.id,
-          desc: g.nome,
-        };
-      });
-
-      if (lista.length > 1) {
-        lista.unshift({ valor: OPCAO_TODOS, desc: 'Todos' });
-      }
-      if (lista?.length === 1) {
-        setGrupos([lista[0].valor]);
-      }
-
-      setListaGrupos(lista);
-    } else {
-      setListaGrupos([]);
-    }
-  };
-
   useEffect(() => {
     obterAnosLetivos();
-    obterListaGrupos();
   }, [obterAnosLetivos]);
 
   const obterSemestres = async (
@@ -524,8 +474,7 @@ const RelatorioLeitura = () => {
     await setCodigoDre();
     await setListaComunicado();
     await setComunicado();
-    await setGrupos();
-    await setListarComunicadosExpirados(false);
+    await await setListarComunicadosExpirados(false);
     await setListarResponsaveisEstudantes(false);
     await setPesquisaComunicado();
     await setDataFim();
@@ -563,7 +512,6 @@ const RelatorioLeitura = () => {
       semestre,
       ano: anoLetivo,
       turma: turmaId,
-      grupos,
       dataInicio,
       dataFim,
       notificacaoId: obterCominicadoId(comunicado),
@@ -581,20 +529,6 @@ const RelatorioLeitura = () => {
       sucesso(
         'Solicitação de geração do relatório gerada com sucesso. Em breve você receberá uma notificação com o resultado.'
       );
-    }
-  };
-
-  const onchangeMultiSelect = (valores, valoreAtual, funSetarNovoValor) => {
-    const opcaoTodosJaSelecionado = valoreAtual
-      ? valoreAtual.includes(OPCAO_TODOS)
-      : false;
-    if (opcaoTodosJaSelecionado) {
-      const listaSemOpcaoTodos = valores.filter(v => v !== OPCAO_TODOS);
-      funSetarNovoValor(listaSemOpcaoTodos);
-    } else if (valores.includes(OPCAO_TODOS)) {
-      funSetarNovoValor([OPCAO_TODOS]);
-    } else {
-      funSetarNovoValor(valores);
     }
   };
 
@@ -621,7 +555,7 @@ const RelatorioLeitura = () => {
   useEffect(() => {
     let isSubscribed = true;
     (async () => {
-      if (isSubscribed && anoLetivo && codigoDre && codigoUe) {
+      if (isSubscribed && anoLetivo && codigoDre && codigoUe && modalidadeId) {
         if (
           modalidadeId &&
           String(modalidadeId) === String(ModalidadeDTO.EJA) &&
@@ -630,20 +564,12 @@ const RelatorioLeitura = () => {
           return;
         }
 
-        const todosGrupos =
-          grupos && grupos[0] === OPCAO_TODOS
-            ? listaGrupos
-                .filter(item => item.valor !== OPCAO_TODOS)
-                .map(g => g.valor)
-            : grupos;
-
         setCarregandoComunicados(true);
         const resposta = await ServicoDashboardEscolaAqui.obterComunicadosAutoComplete(
           anoLetivo || '',
           codigoDre === OPCAO_TODOS ? '' : codigoDre || '',
           codigoUe === OPCAO_TODOS ? '' : codigoUe || '',
-          todosGrupos,
-          '',
+          modalidadeId,
           semestre || '',
           anosEscolares || '',
           turmaId === OPCAO_TODOS ? '' : turmaId || '',
@@ -685,7 +611,6 @@ const RelatorioLeitura = () => {
     anoLetivo,
     codigoDre,
     codigoUe,
-    grupos,
     modalidadeId,
     semestre,
     anosEscolares,
@@ -693,14 +618,22 @@ const RelatorioLeitura = () => {
     dataInicio,
     dataFim,
     pesquisaComunicado,
-    listaGrupos,
   ]);
+
+  const onChangeIntervaloDatas = valor => {
+    const [dtInicio, dtFim] = valor;
+    if (dtFim) {
+      setDataInicio(dtInicio);
+      setDataFim(dtFim);
+      setClicouBotaoGerar(false);
+    }
+  };
 
   return (
     <Loader loading={exibirLoaderGeral}>
-      <Cabecalho pagina="Relatório de leitura" />
+      <Cabecalho pagina="Relatório de leitura" classes="mb-2" />
       <Card>
-        <div className="col-md-12">
+        <div className="col-md-12 p-0">
           <div className="row">
             <div className="col-md-12 d-flex justify-content-end pb-4 justify-itens-end">
               <Button
@@ -709,7 +642,7 @@ const RelatorioLeitura = () => {
                 icon="arrow-left"
                 color={Colors.Azul}
                 border
-                className="mr-2"
+                className="mr-3"
                 onClick={() => {
                   history.push('/');
                 }}
@@ -717,10 +650,10 @@ const RelatorioLeitura = () => {
               <Button
                 id="btn-cancelar"
                 label="Cancelar"
-                color={Colors.Roxo}
+                color={Colors.Azul}
                 border
                 bold
-                className="mr-2"
+                className="mr-3"
                 onClick={() => {
                   cancelar();
                 }}
@@ -745,7 +678,6 @@ const RelatorioLeitura = () => {
                 onChangeCheckbox={e => {
                   setAnoLetivo();
                   setCodigoDre();
-                  setGrupos();
                   setDataInicio();
                   setDataFim();
                   setConsideraHistorico(e.target.checked);
@@ -755,7 +687,7 @@ const RelatorioLeitura = () => {
             </div>
           </div>
           <div className="row">
-            <div className="col-sm-12 col-md-4 col-lg-2 col-xl-2 mb-2">
+            <div className="col-sm-12 col-md-4 col-lg-2 col-xl-2 mb-3 pr-0">
               <Loader loading={carregandoAnosLetivos}>
                 <SelectComponent
                   id="drop-ano-letivo"
@@ -772,7 +704,7 @@ const RelatorioLeitura = () => {
                 />
               </Loader>
             </div>
-            <div className="col-sm-12 col-md-12 col-lg-5 col-xl-5 mb-2">
+            <div className="col-sm-12 col-md-12 col-lg-5 col-xl-5 mb-3 pr-0">
               <Loader loading={carregandoDres}>
                 <SelectComponent
                   id="drop-dre"
@@ -788,7 +720,7 @@ const RelatorioLeitura = () => {
                 />
               </Loader>
             </div>
-            <div className="col-sm-12 col-md-12 col-lg-5 col-xl-5 mb-2">
+            <div className="col-sm-12 col-md-12 col-lg-5 col-xl-5 mb-3">
               <Loader loading={carregandoUes}>
                 <SelectComponent
                   id="drop-ue"
@@ -804,23 +736,7 @@ const RelatorioLeitura = () => {
                 />
               </Loader>
             </div>
-            <div className="col-sm-12 col-md-6 col-lg-6 col-xl-4 mb-2">
-              <SelectComponent
-                id="select-grupo"
-                label="Grupo"
-                lista={listaGrupos}
-                valueOption="valor"
-                valueText="desc"
-                valueSelect={grupos}
-                placeholder="Selecione o grupo"
-                multiple
-                onChange={valores => {
-                  onchangeMultiSelect(valores, grupos, setGrupos);
-                }}
-                disabled={modalidadeId}
-              />
-            </div>
-            <div className="col-sm-12 col-md-6 col-lg-4 col-xl-4 mb-2">
+            <div className="col-sm-12 col-md-6 col-lg-4 col-xl-4 mb-3 pr-0">
               <Loader loading={carregandoModalidade}>
                 <SelectComponent
                   id="drop-modalidade"
@@ -835,7 +751,7 @@ const RelatorioLeitura = () => {
                 />
               </Loader>
             </div>
-            <div className="col-sm-12 col-md-6 col-lg-2 col-xl-4 mb-2">
+            <div className="col-sm-12 col-md-4 mb-3 pr-0">
               <SelectComponent
                 id="drop-semestre"
                 lista={listaSemestres}
@@ -852,7 +768,7 @@ const RelatorioLeitura = () => {
                 placeholder="Semestre"
               />
             </div>
-            <div className="col-sm-12 col-md-6 col-lg-6 col-xl-3 mb-2">
+            <div className="col-sm-12 col-md-4 mb-3">
               <Loader loading={carregandoAnosEscolares}>
                 <SelectComponent
                   id="select-ano-escolar"
@@ -867,7 +783,7 @@ const RelatorioLeitura = () => {
                 />
               </Loader>
             </div>
-            <div className="col-sm-12 col-md-12 col-lg-6 col-xl-6 mb-2">
+            <div className="col-sm-12 col-md-4 mb-3 pr-0">
               <Loader loading={carregandoTurma}>
                 <SelectComponent
                   id="drop-turma"
@@ -887,39 +803,18 @@ const RelatorioLeitura = () => {
                 />
               </Loader>
             </div>
-            <div className="col-sm-12 col-md-6 col-lg-3 col-xl-3 pb-2">
+            <div className="col-sm-12 col-md-4 mb-3 pr-0">
               <CampoData
-                if="data-inicio"
+                className="intervalo-datas"
                 label="Data de envio"
-                placeholder="Data inicial"
                 formatoData="DD/MM/YYYY"
-                onChange={valor => {
-                  if (dataFim) {
-                    setDataInicio(valor);
-                    setClicouBotaoGerar(false);
-                  }
-                }}
+                onChange={onChangeIntervaloDatas}
                 desabilitarData={desabilitarData}
-                valor={dataInicio}
+                valor={[dataInicio, dataFim]}
+                intervaloDatas
               />
             </div>
-            <div className="col-sm-12 col-md-6 col-lg-3 col-xl-3 pb-2">
-              <CampoData
-                id="data-fim"
-                className="mt-4"
-                placeholder="Data final"
-                formatoData="DD/MM/YYYY"
-                onChange={valor => {
-                  setDataFim(valor);
-                  if (dataInicio) {
-                    setClicouBotaoGerar(false);
-                  }
-                }}
-                desabilitarData={desabilitarData}
-                valor={dataFim}
-              />
-            </div>
-            <div className="col-sm-12 col-md-6 col-lg-6 col-xl-6 mb-2">
+            <div className="col-sm-12 col-md-4 mb-3">
               <Loader loading={carregandoComunicados}>
                 <SelectAutocomplete
                   id="autocomplete-comunicados"
@@ -941,7 +836,7 @@ const RelatorioLeitura = () => {
                 />
               </Loader>
             </div>
-            <div className="col-sm-12 col-md-6 col-lg-3 col-xl-3 mb-2">
+            <div className="col-sm-12 col-md-6 col-lg-3 col-xl-3 mb-3 pr-0">
               <RadioGroupButton
                 label="Listar responsáveis/estudantes"
                 opcoes={opcoesRadioSimNao}
@@ -959,7 +854,7 @@ const RelatorioLeitura = () => {
                 }
               />
             </div>
-            <div className="col-sm-12 col-md-6 col-lg-3 col-xl-3 mb-2">
+            <div className="col-sm-12 col-md-6 col-lg-3 col-xl-3 mb-3">
               <RadioGroupButton
                 label="Listar comunicados expirados"
                 opcoes={opcoesRadioSimNao}

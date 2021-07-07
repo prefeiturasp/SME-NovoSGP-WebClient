@@ -24,7 +24,7 @@ class ServicoFiltroRelatorio {
     consideraNovasModalidades = false,
     consideraHistorico = false
   ) => {
-    const url = `${urlPadrao}/ues/${codigoUe}/${anoLetivo}/modalidades?consideraNovasModalidades=${consideraNovasModalidades}&consideraHistorico=${consideraHistorico}`;
+    const url = `${urlPadrao}/ues/${codigoUe}/${anoLetivo}/${consideraHistorico}/modalidades?consideraNovasModalidades=${consideraNovasModalidades}`;
     return api.get(url);
   };
 

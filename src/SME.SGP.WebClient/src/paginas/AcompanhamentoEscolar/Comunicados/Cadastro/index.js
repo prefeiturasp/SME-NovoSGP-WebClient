@@ -33,7 +33,7 @@ import ServicoComunicadoEvento from '~/servicos/Paginas/AcompanhamentoEscolar/Co
 import { confirmar, erro, erros, sucesso } from '~/servicos/alertas';
 import { setBreadcrumbManual } from '~/servicos/breadcrumb-services';
 
-import FiltroHelper from '~/paginas/AcompanhamentoEscolar/Comunicados/Helper/helper.js';
+import FiltroHelper from '~/paginas/AcompanhamentoEscolar/Comunicados/Helper/helper';
 import ListaAlunosSelecionados from './Lista/ListaAlunosSelecionados';
 import { ServicoCalendarios } from '~/servicos';
 import modalidade from '~/dtos/modalidade';
@@ -103,7 +103,6 @@ const ComunicadosCadastro = ({ match }) => {
 
   const [turmasSelecionadas, setTurmasSelecionadas] = useState([]);
   const [alunoEspecificado, setAlunoEspecificado] = useState();
-  const [gruposId, setGruposId] = useState([]);
   const [modalidadeSelecionada, setModalidadeSelecionada] = useState();
 
   const [alunosLoader, setAlunosLoader] = useState(false);
@@ -239,7 +238,7 @@ const ComunicadosCadastro = ({ match }) => {
         .finally(() => setCarregandoTipos(false));
 
       if (isSubscribed && !bloquearCamposCalendarioEventos) {
-        let allowedList = filterAllowedCalendarTypes(data);
+        const allowedList = filterAllowedCalendarTypes(data);
         setListaCalendario(allowedList);
 
         if (idComunicado) {
@@ -282,7 +281,7 @@ const ComunicadosCadastro = ({ match }) => {
       setCarregandoEventos(true);
 
       const _form = refForm?.state?.values;
-      let filter = {
+      const filter = {
         tipoCalendario: +(tipoCalendarioSelecionado ?? null),
         anoLetivo: +(_form?.anoLetivo ?? null),
         modalidade: +(_form?.modalidade ?? null),
@@ -358,14 +357,13 @@ const ComunicadosCadastro = ({ match }) => {
 
   useEffect(() => {
     const anoLetivo = refForm?.state?.values?.anoLetivo;
-    if (anoLetivo){
+    if (anoLetivo) {
       ObterModalidades(TODAS_MODALIDADES_ID, anoLetivo);
     }
   }, [refForm?.state?.values?.anoLetivo]);
 
   const valoresIniciaisImutaveis = {
     id: 0,
-    gruposId: [],
     anosModalidade: [],
     seriesResumidas: '',
     dataEnvio: '',
@@ -412,10 +410,12 @@ const ComunicadosCadastro = ({ match }) => {
     async function obterPorId(id) {
       const comunicado = await ServicoComunicados.consultarPorId(id);
       if (comunicado && Object.entries(comunicado).length) {
+        const valorModalidade =
+          comunicado?.modalidades?.length && String(comunicado.modalidades[0]);
+
         setValoresIniciais({
           id: comunicado.id,
           anoLetivo: comunicado.anoLetivo,
-          gruposId: [...comunicado.grupos.map(grupo => String(grupo.id))],
           CodigoDre: comunicado.codigoDre
             ? String(comunicado.codigoDre)
             : TODAS_DRE_ID,
@@ -425,7 +425,7 @@ const ComunicadosCadastro = ({ match }) => {
           modalidade:
             String(comunicado.modalidade) === '0'
               ? TODAS_MODALIDADES_ID
-              : String(comunicado.modalidade),
+              : valorModalidade,
           semestre:
             String(comunicado.semestre) === '0'
               ? ''
@@ -514,7 +514,6 @@ const ComunicadosCadastro = ({ match }) => {
     dataEnvio: momentSchema.required('Campo obrigatório'),
     CodigoDre: Yup.string().required('Campo obrigatório'),
     CodigoUe: Yup.string().required('Campo obrigatório'),
-    gruposId: Yup.string().required('Campo obrigatório'),
     eventoId: Yup.string().test(
       'validaEventoId',
       'Campo obrigatório',
@@ -610,8 +609,6 @@ const ComunicadosCadastro = ({ match }) => {
     });
   };
 
-  const [gruposLista, setGruposLista] = useState([]);
-
   const dreDesabilitada = useMemo(() => {
     return dres.length <= 1;
   }, [dres]);
@@ -621,8 +618,8 @@ const ComunicadosCadastro = ({ match }) => {
   }, [ues]);
 
   const modalidadeDesabilitada = useMemo(() => {
-    return modalidades.length <= 1 || gruposId?.length != 0;
-  }, [refForm, modalidades, ues, dres, gruposId]);
+    return modalidades.length <= 1;
+  }, [refForm, modalidades, ues, dres]);
 
   const semestreDesabilitado = useMemo(() => {
     return modalidadeSelecionada !== '3' ?? true;
@@ -636,15 +633,6 @@ const ComunicadosCadastro = ({ match }) => {
       modalidadeSelecionada === ''
     );
   }, [modalidadeSelecionada, anosModalidade, turmas]);
-
-  const gruposDesabilitados = useMemo(() => {
-    return (
-      (!!modalidadeSelecionada &&
-        modalidadeSelecionada !== '' &&
-        modalidadeSelecionada !== TODAS_MODALIDADES_ID) ||
-      unidadeEscolarUE
-    );
-  }, [modalidadeSelecionada]);
 
   const estudantesDesabilitados = useMemo(() => {
     return (
@@ -662,12 +650,6 @@ const ComunicadosCadastro = ({ match }) => {
     if (!refForm?.setFieldValue) return;
     let isSubscribed = true;
 
-    async function obterListaGrupos() {
-      const lista = await ServicoComunicados.listarGrupos();
-      setGruposLista(lista);
-    }
-
-    obterListaGrupos();
     ObterAnoLetivo();
 
     return () => (isSubscribed = false);
@@ -717,23 +699,9 @@ const ComunicadosCadastro = ({ match }) => {
     if (dados.length === 1) {
       refForm.setFieldValue('modalidade', dados[0].id);
       setModalidadeSelecionada(dados[0].id);
-      ObterGruposIdPorModalidade(dados[0].id);
 
       if (dados[0].id !== '3')
         ObterTurmas(refForm.state.values.anoLetivo, ue, dados[0].id, 0);
-    }
-
-    if (ue !== TODAS_MODALIDADES_ID && dados.length > 1) {
-      const data = [];
-      dados.forEach(value => {
-        if (value.id !== TODAS_MODALIDADES_ID) {
-          const dataItem = gruposLista.filter(item => item.nome === value.nome);
-          data.push(...dataItem);
-        }
-      });
-      const arrayString = data.map(x => `${x.id}`);
-
-      refForm.setFieldValue('gruposId', arrayString);
     }
 
     setModalidades(dados);
@@ -752,16 +720,6 @@ const ComunicadosCadastro = ({ match }) => {
     setTurmas(dados);
   };
 
-  const ObterGruposIdPorModalidade = async modalidade => {
-    if (!modalidade || modalidade === '') return;
-
-    const dados = await FiltroHelper.ObterGruposIdPorModalidade(modalidade);
-
-    if (!dados || dados.length === 0) return;
-
-    refForm.setFieldValue('gruposId', dados);
-  };
-
   const chainTodosAnos = (dados, modalidade) => {
     if (
       dados.length == 1 ||
@@ -769,14 +727,12 @@ const ComunicadosCadastro = ({ match }) => {
       modalidade == MODALIDADE_EJA_ID
     ) {
       refForm.setFieldValue('ano', 'Todos');
-      return;
     }
   };
 
   const chainLimpaAnos = (dados, modalidade) => {
     if (modalidade != TODAS_MODALIDADES_ID && modalidade != MODALIDADE_EJA_ID) {
       refForm.setFieldValue('ano', '');
-      return;
     }
   };
 
@@ -796,16 +752,6 @@ const ComunicadosCadastro = ({ match }) => {
     setAnosModalidade(dados);
     chainTodosAnos(dados, modalidade);
     chainLimpaAnos(dados, modalidade);
-  };
-
-  const ObterGruposIdPorModalidadeFiltro = async modalidade => {
-    if (!modalidade || modalidade === '') return;
-
-    const dados = await FiltroHelper.ObterGruposIdPorModalidade(modalidade);
-
-    if (!dados || dados.length === 0) return;
-
-    return dados;
   };
 
   const obterTurmasEspecificas = async anos => {
@@ -847,10 +793,8 @@ const ComunicadosCadastro = ({ match }) => {
   };
 
   const ResetarModalidade = async () => {
-    setGruposId([]);
     setModalidades(todosTurmasModalidade);
     setModalidadeSelecionada(TODAS_MODALIDADES_ID);
-    refForm.setFieldValue('gruposId', []);
     refForm.setFieldValue('modalidade', TODAS_MODALIDADES_ID);
     refForm.setFieldValue('semestre', '');
   };
@@ -938,7 +882,6 @@ const ComunicadosCadastro = ({ match }) => {
     handleModoEdicao();
 
     refForm.setFieldValue('semestre', '');
-    refForm.setFieldValue('gruposId', []);
 
     refForm.setFieldValue('anosModalidade', []);
 
@@ -946,7 +889,6 @@ const ComunicadosCadastro = ({ match }) => {
     loadTiposCalendarioEffect();
 
     if (modalidade !== TODAS_MODALIDADES_ID) {
-      await ObterGruposIdPorModalidade(modalidade);
       await ObterAnosPorModalidade(
         modalidade,
         refForm?.state?.values.CodigoUe ?? null
@@ -1040,7 +982,7 @@ const ComunicadosCadastro = ({ match }) => {
       alunos: alunosSelecionados,
       alunosEspecificados: alunoEspecificado,
       turmas: valores.turmas.filter(x => x !== TODAS_TURMAS_ID),
-      modalidade: null,
+      modalidades: [valores.modalidade],
       seriesResumidas: valores.anosModalidade?.join(',') ?? '',
       CodigoUe: valores.CodigoUe == TODAS_UE_ID ? 'todas' : valores.CodigoUe,
       CodigoDre:
@@ -1053,13 +995,13 @@ const ComunicadosCadastro = ({ match }) => {
       }),
     };
 
-    dadosSalvar.anosModalidade = null;
     dadosSalvar.tipoCalendarioId = tipoCalendarioSelecionado ?? null;
     dadosSalvar.eventoId = eventoSelecionado?.id ?? null;
     dadosSalvar.semestre =
       dadosSalvar.semestre === '' ? 0 : dadosSalvar.semestre;
 
     setLoaderSecao(true);
+
     const salvou = await ServicoComunicados.salvar(dadosSalvar);
     if (salvou && salvou.data) {
       history.push(RotasDto.ACOMPANHAMENTO_COMUNICADOS);
@@ -1087,13 +1029,6 @@ const ComunicadosCadastro = ({ match }) => {
       );
       if (confirmou) resetarTela(form);
     }
-  };
-
-  const onChangeGruposId = gruposId => {
-    setGruposId(gruposId);
-    refForm.setFieldValue('modalidade', TODAS_MODALIDADES_ID);
-    setModalidadeSelecionada(TODAS_MODALIDADES_ID);
-    handleModoEdicao();
   };
 
   const onChangeTurmas = turmas => {
@@ -1325,22 +1260,7 @@ const ComunicadosCadastro = ({ match }) => {
                   </Grid>
                 </Linha>
                 <Linha className="row mb-2">
-                  <Grid cols={3}>
-                    <Label control="gruposId" text="Grupo" />
-                    <SelectComponent
-                      form={form}
-                      name="gruposId"
-                      placeholder="Selecione um grupo"
-                      valueSelect={form.values.gruposId}
-                      multiple
-                      onChange={onChangeGruposId}
-                      lista={gruposLista}
-                      valueOption="id"
-                      valueText="nome"
-                      disabled={gruposDesabilitados || modoEdicaoConsulta}
-                    />
-                  </Grid>
-                  <Grid cols={3}>
+                  <Grid cols={4}>
                     <Label control="dataEnvio" text="Data de envio" />
                     <CampoData
                       form={form}
@@ -1351,7 +1271,7 @@ const ComunicadosCadastro = ({ match }) => {
                       onChange={handleModoEdicao}
                     />
                   </Grid>
-                  <Grid cols={3}>
+                  <Grid cols={4}>
                     <Label control="dataExpiracao" text="Data de expiração" />
                     <CampoData
                       form={form}
@@ -1362,8 +1282,8 @@ const ComunicadosCadastro = ({ match }) => {
                       onChange={handleModoEdicao}
                     />
                   </Grid>
-                  <Grid cols={3}>
-                    <Label control="Alunos" text="Estudantes"></Label>
+                  <Grid cols={4}>
+                    <Label control="Alunos" text="Estudantes" />
                     <SelectComponent
                       form={form}
                       name="alunos"
@@ -1522,7 +1442,7 @@ const ComunicadosCadastro = ({ match }) => {
                         ]);
                       }}
                       refForm={refForm}
-                    ></ListaAlunos>
+                    />
                     <ListaAlunosSelecionados
                       dadosAlunos={alunos}
                       alunosSelecionados={alunosSelecionados}
