@@ -648,7 +648,7 @@ const AcompanhamentoFechamento = () => {
         validarModalidadeFiltroPrincipal={false}
       />
       <Cabecalho
-        pagina="Relatório do acompanhamento do fechamento"
+        pagina="Relatório de acompanhamento do fechamento"
         classes="mb-2"
       />
       <Loader loading={carregandoGeral} ignorarTip>
