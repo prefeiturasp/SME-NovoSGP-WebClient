@@ -1400,7 +1400,7 @@ rotas.set(RotasDto.DASHBOARD_DIARIO_BORDO, {
 
 rotas.set(RotasDto.RELATORIO_ACOMPANHAMENTO_FECHAMENTO, {
   breadcrumbName: 'Relatório de Acompanhamento do Fechamento',
-  menu: ['Relatórios'],
+  menu: ['Fechamento'],
   parent: '/',
   component: RelatorioAcompanhamentoFechamento,
   exact: true,
