@@ -115,6 +115,9 @@ const AcompanhamentoAprendizagem = () => {
     ) {
       obterComponentesCurriculares();
       obterListaSemestres();
+      ServicoAcompanhamentoAprendizagem.obterQtdMaxImagensCampoPercursoColetivo(
+        turmaSelecionada?.anoLetivo
+      );
     } else {
       setSemestreSelecionado(undefined);
       setListaSemestres([]);
@@ -254,6 +257,7 @@ const AcompanhamentoAprendizagem = () => {
               <div className="col-md-12 d-flex justify-content-end pb-4">
                 <BotoesAcoesAcompanhamentoAprendizagem
                   semestreSelecionado={semestreSelecionado}
+                  componenteCurricularId={componenteCurricularSelecionado}
                 />
               </div>
             </div>
@@ -273,6 +277,9 @@ const AcompanhamentoAprendizagem = () => {
                       valueSelect={componenteCurricularSelecionado}
                       placeholder="Selecione um componente curricular"
                       disabled={listaComponenteCurricular?.length === 1}
+                      onChange={valorNovo => {
+                        dispatch(setComponenteCurricularSelecionado(valorNovo));
+                      }}
                     />
                   </div>
                   <div className="col-sm-12 col-md-6 col-lg-6 col-xl-4 mb-2">
@@ -312,6 +319,7 @@ const AcompanhamentoAprendizagem = () => {
                         codigoTurma={turmaSelecionada.turma}
                         modalidade={turmaSelecionada.modalidade}
                         semestreSelecionado={semestreSelecionado}
+                        componenteCurricularId={componenteCurricularSelecionado}
                       />
                     </TabelaRetratilAcompanhamentoAprendizagem>
                   </div>

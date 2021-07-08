@@ -39,6 +39,9 @@ const JoditEditor = forwardRef((props, ref) => {
     readonly,
     removerToolbar,
     iframeStyle,
+    permiteVideo,
+    qtdMaxImg,
+    imagensCentralizadas,
   } = props;
 
   const textArea = useRef(null);
@@ -79,7 +82,7 @@ const JoditEditor = forwardRef((props, ref) => {
 
           if (
             !texto ||
-            textArea.current.value.includes('<video') ||
+            (permiteVideo && textArea.current.value.includes('<video')) ||
             textArea.current.value.includes('<img')
           ) {
             valorParaValidar = textArea.current.value;
@@ -109,9 +112,24 @@ const JoditEditor = forwardRef((props, ref) => {
 
             if (
               arquivo.type.substring(0, 5) === 'image' ||
-              arquivo.type.substring(0, 5) === 'video'
+              (permiteVideo && arquivo.type.substring(0, 5) === 'video')
             ) {
-              resolve(data);
+              if (arquivo.type.substring(0, 5) === 'image' && qtdMaxImg) {
+                const quantidadeTotalImagens = (
+                  textArea?.current?.value?.match(/<img/g) || []
+                )?.length;
+                if (quantidadeTotalImagens < qtdMaxImg) {
+                  resolve(data);
+                } else {
+                  const msg = `Você pode inserir apenas ${qtdMaxImg} ${
+                    qtdMaxImg > 1 ? 'imagens' : 'imagem'
+                  }`;
+                  erro(msg);
+                  reject(new Error(msg));
+                }
+              } else {
+                resolve(data);
+              }
             } else {
               const msg = 'Formato inválido';
               erro(msg);
@@ -142,6 +160,22 @@ const JoditEditor = forwardRef((props, ref) => {
           if (dados.contentType.startsWith('video')) {
             textArea.current.selection.insertHTML(
               `<video width="600" height="240" controls><source src="${dados.path}"></video>`
+            );
+          } else if (dados.contentType.startsWith('image/gif')) {
+            textArea.current.selection.insertHTML(
+              `<img src="${
+                dados.path
+              }" style="max-width: 100%; max-height: 700px; ${
+                imagensCentralizadas ? 'display: block; margin: auto;' : ''
+              }">`
+            );
+          } else {
+            textArea.current.selection.insertHTML(
+              `<img src="${
+                dados.path
+              }" style="max-width: 100%; max-height: 700px; object-fit: cover; object-position: bottom; ${
+                imagensCentralizadas ? 'display: block; margin: auto;' : ''
+              }"/>`
             );
           } else textArea.current.selection.insertImage(dados.path);
         }
@@ -182,7 +216,7 @@ const JoditEditor = forwardRef((props, ref) => {
 
       if (
         !texto ||
-        textArea.current.value.includes('<video') ||
+        (permiteVideo && textArea.current.value.includes('<video')) ||
         textArea.current.value.includes('<img')
       ) {
         valorParaValidar = textArea.current.value;
@@ -194,7 +228,7 @@ const JoditEditor = forwardRef((props, ref) => {
 
     if (
       texto ||
-      textArea.current.value.includes('<video') ||
+      (permiteVideo && textArea.current.value.includes('<video')) ||
       textArea.current.value.includes('<img')
     ) {
       changeHandler(textArea.current.value);
@@ -209,7 +243,7 @@ const JoditEditor = forwardRef((props, ref) => {
 
     if (
       texto ||
-      textArea.current.value.includes('<video') ||
+      (permiteVideo && textArea.current.value.includes('<video')) ||
       textArea.current.value.includes('<img')
     ) {
       valorAtual = textArea.current.value;
@@ -360,6 +394,9 @@ JoditEditor.propTypes = {
   readonly: PropTypes.bool,
   removerToolbar: PropTypes.bool,
   iframeStyle: PropTypes.string,
+  permiteVideo: PropTypes.bool,
+  qtdMaxImg: PropTypes.number,
+  imagensCentralizadas: PropTypes.bool,
 };
 
 JoditEditor.defaultProps = {
@@ -379,6 +416,9 @@ JoditEditor.defaultProps = {
   readonly: false,
   removerToolbar: false,
   iframeStyle: '',
+  permiteVideo: true,
+  qtdMaxImg: null,
+  imagensCentralizadas: false,
 };
 
 export default JoditEditor;

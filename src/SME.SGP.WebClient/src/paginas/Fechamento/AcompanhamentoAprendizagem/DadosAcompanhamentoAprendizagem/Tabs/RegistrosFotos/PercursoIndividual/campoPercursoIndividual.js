@@ -4,7 +4,7 @@ import { JoditEditor } from '~/componentes';
 import { setAcompanhamentoAprendizagemEmEdicao } from '~/redux/modulos/acompanhamentoAprendizagem/actions';
 import ServicoAcompanhamentoAprendizagem from '~/servicos/Paginas/Relatorios/AcompanhamentoAprendizagem/ServicoAcompanhamentoAprendizagem';
 
-const CampoObservacoesAdicionais = () => {
+const CampoPercursoIndividual = () => {
   const dispatch = useDispatch();
 
   const dadosAcompanhamentoAprendizagem = useSelector(
@@ -17,28 +17,28 @@ const CampoObservacoesAdicionais = () => {
         .desabilitarCamposAcompanhamentoAprendizagem
   );
 
-  const [observacao, setObservacao] = useState();
+  const [percursoIndividual, setPercursoIndividual] = useState();
 
   useEffect(() => {
-    setObservacao(dadosAcompanhamentoAprendizagem?.observacoes);
+    setPercursoIndividual(dadosAcompanhamentoAprendizagem?.percursoIndividual);
   }, [dadosAcompanhamentoAprendizagem]);
 
   const onChange = valorNovo => {
     ServicoAcompanhamentoAprendizagem.atualizarDadosPorNomeCampo(
       valorNovo,
-      'observacoes'
+      'percursoIndividual'
     );
     dispatch(setAcompanhamentoAprendizagemEmEdicao(true));
   };
 
   return (
     <JoditEditor
-      id="observacoes-adicionais-editor"
-      value={observacao}
+      id="percurso-individual-editor"
+      value={percursoIndividual}
       onChange={onChange}
       readonly={desabilitarCamposAcompanhamentoAprendizagem}
     />
   );
 };
 
-export default CampoObservacoesAdicionais;
+export default CampoPercursoIndividual;
