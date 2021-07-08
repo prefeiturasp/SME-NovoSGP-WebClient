@@ -279,7 +279,10 @@ const DadosComunicadosLeitura = props => {
         modalidadeId,
         '',
         anoLetivo,
-        consideraHistorico
+        consideraHistorico,
+        false,
+        undefined,
+        true
       )
         .catch(e => erros(e))
         .finally(() => setCarregandoTurmas(false));

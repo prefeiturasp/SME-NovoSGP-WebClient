@@ -126,7 +126,8 @@ class FiltroHelper {
         anoLetivo,
         codigoUe,
         modalidade,
-        semestre
+        semestre,
+        true
       );
 
       const dados = retorno.data.map(x => {
