@@ -177,7 +177,7 @@ const JoditEditor = forwardRef((props, ref) => {
                 imagensCentralizadas ? 'display: block; margin: auto;' : ''
               }"/>`
             );
-          } else textArea.current.selection.insertImage(dados.path);
+          }
         }
       },
       defaultHandlerError: e => {
