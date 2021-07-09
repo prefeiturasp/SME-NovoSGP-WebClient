@@ -10,6 +10,7 @@ const inicial = {
   desabilitarCamposAcompanhamentoAprendizagem: false,
   dadosApanhadoGeral: {},
   apanhadoGeralEmEdicao: false,
+  qtdMaxImagensCampoPercursoColetivo: null,
 };
 
 export default function AcompanhamentoAprendizagem(state = inicial, action) {
@@ -77,6 +78,12 @@ export default function AcompanhamentoAprendizagem(state = inicial, action) {
         return {
           ...draft,
           apanhadoGeralEmEdicao: action.payload,
+        };
+      }
+      case '@acompanhamentoAprendizagem/setQtdMaxImagensCampoPercursoColetivo': {
+        return {
+          ...draft,
+          qtdMaxImagensCampoPercursoColetivo: action.payload,
         };
       }
 
