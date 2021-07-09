@@ -24,7 +24,7 @@ class ServicoFiltroRelatorio {
     consideraNovasModalidades = false,
     consideraHistorico = false
   ) => {
-    const url = `${urlPadrao}/ues/${codigoUe}/${anoLetivo}/modalidades?consideraNovasModalidades=${consideraNovasModalidades}&consideraHistorico=${consideraHistorico}`;
+    const url = `${urlPadrao}/ues/${codigoUe}/${anoLetivo}/${consideraHistorico}/modalidades?consideraNovasModalidades=${consideraNovasModalidades}`;
     return api.get(url);
   };
 
@@ -103,6 +103,28 @@ class ServicoFiltroRelatorio {
       codigoUeAndAnoLetivo + semestreParams + modalidadePrams + anosParams;
 
     return api.get(url);
+  };
+
+  obterBimestres = ({
+    modalidadeId,
+    opcaoTodos = false,
+    opcaoFinal = false,
+  }) => {
+    return api.get(
+      `${urlPadrao}/bimestres/modalidades/${modalidadeId}?opcaoTodos=${opcaoTodos}&opcaoFinal=${opcaoFinal}`
+    );
+  };
+
+  obterSituacaoFechamento = unificarNaoIniciado => {
+    return api.get(
+      `${urlPadrao}/acompanhamento-fechamento/fechamentos/situacoes?unificarNaoIniciado=${unificarNaoIniciado}`
+    );
+  };
+
+  obterSituacaoConselhoClasse = () => {
+    return api.get(
+      `${urlPadrao}/acompanhamento-fechamento/conselho-de-classe/situacoes`
+    );
   };
 }
 

@@ -80,6 +80,8 @@ const RotasDto = {
   DASHBOARD_INFORMACOES_ESCOLARES: '/dashboard/informacoes-escolares',
   DASHBOARD_REGISTRO_INDIVIDUAL: '/dashboard/registro-individual',
   DASHBOARD_DIARIO_BORDO: '/dashboard/diario-bordo',
+  RELATORIO_ACOMPANHAMENTO_FECHAMENTO:
+    '/relatorios/fechamentos/acompanhamento-fechamento',
   DASHBOARD_RELATORIO_ACOMPANHAMENTO_APRENDIZAGEM:
     '/dashboard/acompanhamento-aprendizagem',
 };

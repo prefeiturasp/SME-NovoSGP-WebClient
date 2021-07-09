@@ -139,6 +139,8 @@ const EventosForm = ({ match }) => {
 
   const [aguardandoAprovacao, setAguardandoAprovacao] = useState(false);
 
+  const [valorCarregadoBimestre, setValorCarregadoBimestre] = useState([]);
+
   const { current } = refFormulario;
 
   const obterUesPorDre = (dre, modalidade) => {
@@ -196,19 +198,13 @@ const EventosForm = ({ match }) => {
 
   useEffect(() => {
     if (listaDres?.length === 1) {
-      refFormulario.current.setFieldValue(
-        'dreId',
-        String(listaDres[0].codigo)
-      );
+      refFormulario.current.setFieldValue('dreId', String(listaDres[0].codigo));
     }
   }, [listaDres, current]);
 
   useEffect(() => {
     if (listaUes?.length === 1) {
-      refFormulario.current.setFieldValue(
-        'ueId',
-        String(listaUes[0].codigo)
-      );
+      refFormulario.current.setFieldValue('ueId', String(listaUes[0].codigo));
     }
   }, [listaUes, current]);
 
@@ -480,6 +476,7 @@ const EventosForm = ({ match }) => {
           String(item)
         );
         setBimestre(bimesresConvertidos);
+        setValorCarregadoBimestre(bimesresConvertidos);
       }
     }
   };
@@ -568,6 +565,7 @@ const EventosForm = ({ match }) => {
   const resetarTela = form => {
     form.resetForm();
     setModoEdicao(false);
+    setBimestre(valorCarregadoBimestre);
     onChangeTipoEvento(form.initialValues.tipoEventoId);
   };
 
@@ -716,6 +714,9 @@ const EventosForm = ({ match }) => {
   const onChangeDre = (dre, form) => {
     setListaUes([]);
     form.setFieldValue('ueId', undefined);
+    onChangeTipoEvento(undefined);
+    form.setFieldValue('tipoEventoId', undefined);
+    setEventoTipoLocalOcorrenciaSMESelecionado(false);
 
     if (dre) {
       carregarUes(dre);
@@ -910,6 +911,9 @@ const EventosForm = ({ match }) => {
 
   const onChangeBimestre = valor => {
     setBimestre(valor);
+    if (!modoEdicao) {
+      setModoEdicao(true);
+    }
   };
 
   const onchangeMultiSelect = (valores, valoreAtual, funSetarNovoValor) => {
