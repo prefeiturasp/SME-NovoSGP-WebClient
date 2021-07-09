@@ -1,7 +1,8 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
+
 import { OPCAO_TODOS } from '~/constantes/constantes';
-import { ModalidadeDTO } from '~/dtos';
+
 import FrequenciaGlobalPorAno from './FrequenciaGlobalPorAno/frequenciaGlobalPorAno';
 import FrequenciaGlobalPorDRE from './FrequenciaGlobalPorDRE/frequenciaGlobalPorDRE';
 import QuantidadeAusenciasPossuemJustificativa from './QuantidadeAusenciasPossuemJustificativa/quantidadeAusenciasPossuemJustificativa';
@@ -24,17 +25,14 @@ const GraficosFrequencia = () => {
     store => store.dashboardFrequencia?.dadosDashboardFrequencia?.semestre
   );
 
-  const dreId = OPCAO_TODOS === dre?.codigo ? OPCAO_TODOS : dre?.id;
-  const ueId = OPCAO_TODOS === ue?.codigo ? OPCAO_TODOS : ue?.id;
+  const ehTodosDre = OPCAO_TODOS === dre?.codigo;
+  const ehTodosUe = OPCAO_TODOS === ue?.codigo;
+  const dreId = ehTodosDre ? OPCAO_TODOS : dre?.id;
+  const ueId = ehTodosUe ? OPCAO_TODOS : ue?.id;
 
-  const exibirFrequenciaGlobalPorDRE =
-    dre?.codigo === OPCAO_TODOS && ue?.codigo === OPCAO_TODOS;
+  const exibirFrequenciaGlobalPorDRE = ehTodosDre && ue?.codigo === OPCAO_TODOS;
 
-  return anoLetivo &&
-    dre &&
-    ue &&
-    modalidade &&
-    !!(Number(modalidade) === ModalidadeDTO.EJA ? semestre : !semestre) ? (
+  return (
     <>
       <FrequenciaGlobalPorAno
         anoLetivo={anoLetivo}
@@ -66,8 +64,6 @@ const GraficosFrequencia = () => {
         codigoUe={ue?.codigo}
       />
     </>
-  ) : (
-    ''
   );
 };
 
