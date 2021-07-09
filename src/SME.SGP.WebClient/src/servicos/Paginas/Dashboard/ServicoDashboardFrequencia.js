@@ -143,6 +143,30 @@ class ServicoDashboardFrequencia {
 
     dispatch(setDadosDashboardFrequencia(novoMap));
   };
+
+  obterTotalEstudantesPresenciasRemotosAusentes = (
+    anoLetivo,
+    dreId,
+    ueId,
+    modalidade,
+    anoTurma,
+    dataInicio,
+    dataFim,
+    tipoPeriodoDashboard
+  ) => {
+    return api.get(
+      `/v1/dashboard/frequencias/anos/${anoLetivo}/dres/${dreId}/ues/${ueId}/modalidades/` +
+        `${modalidade}/consolidado/anos-turmas`,
+      {
+        params: {
+          anoTurma,
+          dataInicio,
+          dataFim,
+          tipoPeriodoDashboard,
+        },
+      }
+    );
+  };
 }
 
 export default new ServicoDashboardFrequencia();
