@@ -149,16 +149,41 @@ class ServicoDashboardFrequencia {
     dreId,
     ueId,
     modalidade,
+    semestre,
     anoTurma,
     dataInicio,
     dataFim,
     tipoPeriodoDashboard
   ) => {
     return api.get(
-      `/v1/dashboard/frequencias/anos/${anoLetivo}/dres/${dreId}/ues/${ueId}/modalidades/` +
+      `${urlPadrao}/anos/${anoLetivo}/dres/${dreId}/ues/${ueId}/modalidades/` +
         `${modalidade}/consolidado/anos-turmas`,
       {
         params: {
+          semestre,
+          anoTurma,
+          dataInicio,
+          dataFim,
+          tipoPeriodoDashboard,
+        },
+      }
+    );
+  };
+
+  obterTotalEstudantesPresenciasRemotosAusentesPorDre = (
+    anoLetivo,
+    modalidade,
+    semestre,
+    anoTurma,
+    dataInicio,
+    dataFim,
+    tipoPeriodoDashboard
+  ) => {
+    return api.get(
+      `${urlPadrao}/anos/${anoLetivo}/modalidades/${modalidade}/consolidado/dres`,
+      {
+        params: {
+          semestre,
           anoTurma,
           dataInicio,
           dataFim,

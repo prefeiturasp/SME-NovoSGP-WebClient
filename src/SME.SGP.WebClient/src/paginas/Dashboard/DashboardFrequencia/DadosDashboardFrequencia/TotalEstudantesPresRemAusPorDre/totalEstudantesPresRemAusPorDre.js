@@ -3,12 +3,10 @@ import PropTypes from 'prop-types';
 
 import { Base, CardCollapse } from '~/componentes';
 
-import GraficoFrequenciaGlobalPorAno from '../FrequenciaGlobalPorAno/graficoFrequenciaGlobalPorAno';
+import GraficoTotalEstudantesPresenciasRemotosAusentesPorDre from './graficototalEstudantesPresRemAusPorDre';
 
 const TotalEstudantesPresenciasRemotosAusentesPorDre = ({
   anoLetivo,
-  dreId,
-  ueId,
   modalidade,
   semestre,
 }) => {
@@ -33,10 +31,8 @@ const TotalEstudantesPresenciasRemotosAusentesPorDre = ({
         onClick={() => setExibir(!exibir)}
       >
         {exibir && (
-          <GraficoFrequenciaGlobalPorAno
+          <GraficoTotalEstudantesPresenciasRemotosAusentesPorDre
             anoLetivo={anoLetivo}
-            dreId={dreId}
-            ueId={ueId}
             modalidade={modalidade}
             semestre={semestre}
           />

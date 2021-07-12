@@ -13,10 +13,8 @@ import { obterTodosMeses } from '~/utils';
 
 import ServicoDashboardFrequencia from '~/servicos/Paginas/Dashboard/ServicoDashboardFrequencia';
 
-const GraficoTotalEstudantesPresenciasRemotosAusentes = ({
+const GraficoTotalEstudantesPresenciasRemotosAusentesPorDre = ({
   anoLetivo,
-  dreId,
-  ueId,
   modalidade,
   semestre,
 }) => {
@@ -39,10 +37,8 @@ const GraficoTotalEstudantesPresenciasRemotosAusentes = ({
 
   const obterDadosGrafico = useCallback(async () => {
     setExibirLoader(true);
-    const retorno = await ServicoDashboardFrequencia.obterTotalEstudantesPresenciasRemotosAusentes(
+    const retorno = await ServicoDashboardFrequencia.obterTotalEstudantesPresenciasRemotosAusentesPorDre(
       anoLetivo,
-      dreId,
-      ueId,
       modalidade,
       semestre,
       anoTurma,
@@ -61,8 +57,6 @@ const GraficoTotalEstudantesPresenciasRemotosAusentes = ({
     setDadosGrafico(dadosRetorno);
   }, [
     anoLetivo,
-    dreId,
-    ueId,
     modalidade,
     semestre,
     anoTurma,
@@ -79,8 +73,6 @@ const GraficoTotalEstudantesPresenciasRemotosAusentes = ({
     setDadosGrafico([]);
   }, [
     anoLetivo,
-    dreId,
-    ueId,
     modalidade,
     semestre,
     anoTurma,
@@ -253,20 +245,16 @@ const GraficoTotalEstudantesPresenciasRemotosAusentes = ({
   );
 };
 
-GraficoTotalEstudantesPresenciasRemotosAusentes.propTypes = {
+GraficoTotalEstudantesPresenciasRemotosAusentesPorDre.propTypes = {
   anoLetivo: PropTypes.oneOfType(PropTypes.any),
-  dreId: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
-  ueId: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   modalidade: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   semestre: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
 };
 
-GraficoTotalEstudantesPresenciasRemotosAusentes.defaultProps = {
+GraficoTotalEstudantesPresenciasRemotosAusentesPorDre.defaultProps = {
   anoLetivo: null,
-  dreId: null,
-  ueId: null,
   modalidade: null,
   semestre: null,
 };
 
-export default GraficoTotalEstudantesPresenciasRemotosAusentes;
+export default GraficoTotalEstudantesPresenciasRemotosAusentesPorDre;

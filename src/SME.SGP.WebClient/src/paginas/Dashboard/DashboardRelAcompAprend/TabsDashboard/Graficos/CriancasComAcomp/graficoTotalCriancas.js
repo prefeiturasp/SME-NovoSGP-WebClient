@@ -2,8 +2,7 @@ import * as moment from 'moment';
 import PropTypes from 'prop-types';
 import React, { useCallback, useEffect, useState } from 'react';
 import { Loader, SelectComponent } from '~/componentes';
-import DataUltimaAtualizacao from '~/componentes-sgp/DataUltimaAtualizacao/dataUltimaAtualizacao';
-import GraficoBarras from '~/componentes-sgp/Graficos/graficoBarras';
+import { GraficoBarras, TagGrafico } from '~/componentes-sgp';
 import { OPCAO_TODOS } from '~/constantes/constantes';
 import { erros } from '~/servicos';
 import ServicoDashboardRelAcompanhamentoAprendizagem from '~/servicos/Paginas/Dashboard/ServicoDashboardRelAcompanhamentoAprendizagem';
@@ -69,10 +68,12 @@ const GraficoTotalCriancasComRelAcompanhamentoAprendizagem = props => {
         className={exibirLoader ? 'text-center' : ''}
       >
         {dataUltimaConsolidacao && (
-          <DataUltimaAtualizacao
-            dataFormatada={
+          <TagGrafico
+            valor={
               dataUltimaConsolidacao
-                ? moment(dataUltimaConsolidacao).format('DD/MM/YYYY HH:mm:ss')
+                ? `Data da última atualização: ${moment(
+                    dataUltimaConsolidacao
+                  ).format('DD/MM/YYYY HH:mm:ss')}`
                 : ''
             }
           />
