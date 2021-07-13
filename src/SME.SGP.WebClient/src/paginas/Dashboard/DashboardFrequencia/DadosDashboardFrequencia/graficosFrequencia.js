@@ -7,6 +7,8 @@ import FrequenciaGlobalPorAno from './FrequenciaGlobalPorAno/frequenciaGlobalPor
 import FrequenciaGlobalPorDRE from './FrequenciaGlobalPorDRE/frequenciaGlobalPorDRE';
 import QuantidadeAusenciasPossuemJustificativa from './QuantidadeAusenciasPossuemJustificativa/quantidadeAusenciasPossuemJustificativa';
 import QuantidadeJustificativasPorMotivo from './QuantidadeJustificativasPorMotivo/quantidadeJustificativasPorMotivo';
+import TotalEstudantesPresenciasRemotosAusentes from './TotalEstudantesPresRemAus/totalEstudantesPresRemAus';
+import TotalEstudantesPresenciasRemotosAusentesPorDre from './TotalEstudantesPresRemAusPorDre/totalEstudantesPresRemAusPorDre';
 
 const GraficosFrequencia = () => {
   const anoLetivo = useSelector(
@@ -48,6 +50,18 @@ const GraficosFrequencia = () => {
           semestre={semestre}
         />
       )}
+      <TotalEstudantesPresenciasRemotosAusentes
+        anoLetivo={anoLetivo}
+        dreId={dreId}
+        ueId={ueId}
+        modalidade={modalidade}
+        semestre={semestre}
+      />
+      <TotalEstudantesPresenciasRemotosAusentesPorDre
+        anoLetivo={anoLetivo}
+        modalidade={modalidade}
+        semestre={semestre}
+      />
       <QuantidadeAusenciasPossuemJustificativa
         anoLetivo={anoLetivo}
         dreId={dreId}
