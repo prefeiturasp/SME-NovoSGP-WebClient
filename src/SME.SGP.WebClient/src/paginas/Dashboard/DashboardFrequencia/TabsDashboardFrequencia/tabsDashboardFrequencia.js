@@ -5,6 +5,7 @@ import { useSelector } from 'react-redux';
 import { ModalidadeDTO } from '~/dtos';
 
 import GraficosFrequencia from '../DadosDashboardFrequencia/graficosFrequencia';
+import GraficoCompensacaoAusencia from '../DadosDashboardCompensacaoAusencia/graficoCompensacaoAusencia';
 
 import { ContainerTabsCard } from '~/componentes/tabs/tabs.css';
 import { ContainerTabsDashboardFrequencia } from '../dashboardFrequencia.css';
@@ -28,6 +29,7 @@ const TabsDashboardFrequencia = () => {
   );
 
   const ehModalidadeEJA = Number(modalidade) === ModalidadeDTO.EJA;
+  const ehModalidadeInfatil = Number(modalidade) === ModalidadeDTO.INFANTIL;
   const semestreDesabilitado = !!(ehModalidadeEJA ? semestre : !semestre);
   const exibirAbas =
     anoLetivo && dre && ue && modalidade && semestreDesabilitado;
@@ -35,9 +37,9 @@ const TabsDashboardFrequencia = () => {
   const montarDados = () => {
     return (
       <>
-        <div className="col-md-12 mb-2 p-0">
+        <div className="col-md-12 p-0">
           {tabSelecionada === '1' && <GraficosFrequencia />}
-          {tabSelecionada === '2' && <div>Compensação de ausência</div>}
+          {tabSelecionada === '2' && <GraficoCompensacaoAusencia />}
         </div>
       </>
     );
@@ -59,9 +61,11 @@ const TabsDashboardFrequencia = () => {
             <Tabs.TabPane tab="Frequência" key="1">
               {montarDados()}
             </Tabs.TabPane>
-            <Tabs.TabPane tab="Compensação de ausência" key="2">
-              {montarDados()}
-            </Tabs.TabPane>
+            {!ehModalidadeInfatil && (
+              <Tabs.TabPane tab="Compensação de ausência" key="2">
+                {montarDados()}
+              </Tabs.TabPane>
+            )}
           </ContainerTabsCard>
         </ContainerTabsDashboardFrequencia>
       )}

@@ -7,11 +7,9 @@ import { CampoData, Loader, SelectComponent } from '~/componentes';
 import { GraficoBarras, TagGrafico } from '~/componentes-sgp';
 
 import { OPCAO_TODOS } from '~/constantes/constantes';
-import { erros } from '~/servicos';
+import { erros, ServicoDashboardFrequencia } from '~/servicos';
 import { tipoGraficos } from '~/dtos';
 import { obterTodosMeses } from '~/utils';
-
-import ServicoDashboardFrequencia from '~/servicos/Paginas/Dashboard/ServicoDashboardFrequencia';
 
 const GraficoTotalEstudantesPresenciasRemotosAusentesPorDre = ({
   anoLetivo,
@@ -23,28 +21,45 @@ const GraficoTotalEstudantesPresenciasRemotosAusentesPorDre = ({
   const [anoTurma, setAnoTurma] = useState();
   const [dadosGrafico, setDadosGrafico] = useState([]);
   const [dataDiaria, setDataDiaria] = useState(moment());
-  const [exibirLoader, setExibirLoader] = useState(false);
-  const [listaMeses, setListaMeses] = useState([]);
-  const [listaTipoGrafico, setListaTipoGrafico] = useState([]);
+  const [dataFim, setDataFim] = useState();
+  const [dataInicio, setDataInicio] = useState();
   const [dataMensal, setDataMensal] = useState(mesAtual.toString());
   const [dataSemanal, setDataSemanal] = useState();
+  const [exibirLoader, setExibirLoader] = useState(false);
   const [tipoPeriodoDashboard, setTipoPeriodoDashboard] = useState('1');
 
   const listaAnosEscolares = useSelector(
     store =>
       store.dashboardFrequencia?.dadosDashboardFrequencia?.listaAnosEscolares
   );
+  const listaTipoGrafico = useSelector(
+    store =>
+      store.dashboardFrequencia?.dadosDashboardFrequencia?.listaTipoGrafico
+  );
+  const listaMeses = useSelector(
+    store => store.dashboardFrequencia?.dadosDashboardFrequencia?.listaMeses
+  );
+  const listaSemanas = useSelector(
+    store => store.dashboardFrequencia?.dadosDashboardFrequencia?.listaSemanas
+  );
 
   const obterDadosGrafico = useCallback(async () => {
     setExibirLoader(true);
+    const ehTipoMensal =
+      Number(tipoPeriodoDashboard) === tipoGraficos.MENSAL.valor;
+    const dataDiariaSelecionada = ehTipoMensal
+      ? undefined
+      : dataDiaria.format('YYYY-MM-DD');
+    const dataSelecionada = dataInicio || dataDiariaSelecionada;
     const retorno = await ServicoDashboardFrequencia.obterTotalEstudantesPresenciasRemotosAusentesPorDre(
       anoLetivo,
       modalidade,
       semestre,
       anoTurma,
-      null, // dataInicio,
-      null, // dataFim
-      tipoPeriodoDashboard
+      dataSelecionada,
+      dataFim,
+      tipoPeriodoDashboard,
+      dataMensal
     )
       .catch(e => erros(e))
       .finally(() => setExibirLoader(false));
@@ -60,9 +75,11 @@ const GraficoTotalEstudantesPresenciasRemotosAusentesPorDre = ({
     modalidade,
     semestre,
     anoTurma,
-    // dataInicio,
-    // dataFim,
+    dataDiaria,
+    dataInicio,
+    dataFim,
     tipoPeriodoDashboard,
+    dataMensal,
   ]);
 
   useEffect(() => {
@@ -76,9 +93,11 @@ const GraficoTotalEstudantesPresenciasRemotosAusentesPorDre = ({
     modalidade,
     semestre,
     anoTurma,
-    // dataInicio,
-    // dataFim,
+    dataInicio,
+    dataDiaria,
+    dataFim,
     tipoPeriodoDashboard,
+    dataMensal,
     obterDadosGrafico,
   ]);
 
@@ -95,18 +114,21 @@ const GraficoTotalEstudantesPresenciasRemotosAusentesPorDre = ({
     setAnoTurma(valor);
   };
 
-  const obterTipoGraficos = () => {
-    const retorno = Object.keys(tipoGraficos).map(item => tipoGraficos[item]);
-    setListaTipoGrafico(retorno);
-  };
-
   useEffect(() => {
     if (!listaTipoGrafico?.length) {
-      obterTipoGraficos();
+      ServicoDashboardFrequencia.obterTipoGraficos(tipoGraficos);
     }
   }, [listaTipoGrafico]);
 
+  const limparDatas = () => {
+    setDataInicio(undefined);
+    setDataFim(undefined);
+    setDataDiaria(moment());
+    setDataSemanal(undefined);
+  };
+
   const onChangeTipoPeriodoDashboard = valor => {
+    limparDatas();
     setTipoPeriodoDashboard(valor);
   };
 
@@ -121,24 +143,47 @@ const GraficoTotalEstudantesPresenciasRemotosAusentesPorDre = ({
     setDataDiaria(data);
   };
 
-  const obterListaMeses = useCallback(() => {
-    const retorno = obterTodosMeses();
-    setListaMeses(retorno);
-  }, []);
-
   useEffect(() => {
-    if (!obterListaMeses?.length) {
-      obterListaMeses();
+    if (!listaMeses?.length) {
+      ServicoDashboardFrequencia.obterListaMeses(obterTodosMeses);
     }
-  }, [obterListaMeses]);
+  }, [listaMeses]);
 
   const onChangeDataMensal = mes => {
     setDataMensal(mes);
   };
 
   const onChangeDataSemanal = semana => {
+    const semanaSelecionada = listaSemanas.find(item => item.valor === semana);
+    setDataInicio(semanaSelecionada?.inicio);
+    setDataFim(semanaSelecionada?.fim);
     setDataSemanal(semana);
   };
+
+  const obterSemanas = useCallback(async () => {
+    const retorno = await ServicoDashboardFrequencia.obterSemanas(
+      anoLetivo
+    ).catch(e => erros(e));
+
+    if (retorno?.data) {
+      ServicoDashboardFrequencia.atualizarFiltros('listaSemanas', retorno.data);
+    }
+  }, [anoLetivo]);
+
+  useEffect(() => {
+    const ehTipoSemanal =
+      Number(tipoPeriodoDashboard) === tipoGraficos.SEMANAL.valor;
+    if (!listaSemanas?.length && ehTipoSemanal) {
+      obterSemanas();
+      return;
+    }
+
+    if (listaSemanas?.length && ehTipoSemanal) {
+      setDataSemanal(listaSemanas[0].valor);
+      setDataInicio(listaSemanas[0].inicio);
+      setDataFim(listaSemanas[0].fim);
+    }
+  }, [listaSemanas, tipoPeriodoDashboard, obterSemanas]);
 
   const montarCampoData = valor => {
     switch (valor) {
@@ -156,9 +201,9 @@ const GraficoTotalEstudantesPresenciasRemotosAusentesPorDre = ({
       case '2':
         return (
           <SelectComponent
-            lista={[]}
+            lista={listaSemanas}
             valueOption="valor"
-            valueText="desc"
+            valueText="descricao"
             valueSelect={dataSemanal}
             onChange={onChangeDataSemanal}
             placeholder="Selecione o tipo"
@@ -223,7 +268,7 @@ const GraficoTotalEstudantesPresenciasRemotosAusentesPorDre = ({
       </div>
       <Loader
         loading={exibirLoader}
-        className={exibirLoader ? 'text-center' : ''}
+        className={exibirLoader ? 'text-center my-4' : ''}
       >
         {dadosGrafico?.dadosFrequenciaDashboard && (
           <GraficoBarras
