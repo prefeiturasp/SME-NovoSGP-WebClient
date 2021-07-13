@@ -32,7 +32,7 @@ const GraficosFrequencia = () => {
   const dreId = ehTodosDre ? OPCAO_TODOS : dre?.id;
   const ueId = ehTodosUe ? OPCAO_TODOS : ue?.id;
 
-  const exibirFrequenciaGlobalPorDRE = ehTodosDre && ue?.codigo === OPCAO_TODOS;
+  const exibirFrequenciaPorDRE = ehTodosDre && ue?.codigo === OPCAO_TODOS;
 
   return (
     <>
@@ -43,7 +43,7 @@ const GraficosFrequencia = () => {
         modalidade={modalidade}
         semestre={semestre}
       />
-      {exibirFrequenciaGlobalPorDRE && (
+      {exibirFrequenciaPorDRE && (
         <FrequenciaGlobalPorDRE
           anoLetivo={anoLetivo}
           modalidade={modalidade}
@@ -57,11 +57,13 @@ const GraficosFrequencia = () => {
         modalidade={modalidade}
         semestre={semestre}
       />
-      <TotalEstudantesPresenciasRemotosAusentesPorDre
-        anoLetivo={anoLetivo}
-        modalidade={modalidade}
-        semestre={semestre}
-      />
+      {exibirFrequenciaPorDRE && (
+        <TotalEstudantesPresenciasRemotosAusentesPorDre
+          anoLetivo={anoLetivo}
+          modalidade={modalidade}
+          semestre={semestre}
+        />
+      )}
       <QuantidadeAusenciasPossuemJustificativa
         anoLetivo={anoLetivo}
         dreId={dreId}
