@@ -11,13 +11,13 @@ import AbrangenciaServico from '~/servicos/Abrangencia';
 import { erros, sucesso } from '~/servicos/alertas';
 import api from '~/servicos/api';
 import history from '~/servicos/history';
-import ServicoFaltasFrequencia from '~/servicos/Paginas/Relatorios/FaltasFrequencia/ServicoFaltasFrequencia';
+import ServicoRelatorioFrequencia from '~/servicos/Paginas/Relatorios/Frequencia/ServicoRelatorioFrequencia';
 import ServicoFiltroRelatorio from '~/servicos/Paginas/FiltroRelatorio/ServicoFiltroRelatorio';
 import ServicoComponentesCurriculares from '~/servicos/Paginas/ComponentesCurriculares/ServicoComponentesCurriculares';
 import tipoDeRelatorio from '~/dtos/tipoDeRelatorio';
 import { OPCAO_TODOS } from '~/constantes/constantes';
 
-const FaltasFrequencia = () => {
+const RelatorioFrequencia = () => {
   const [listaAnosLetivo, setListaAnosLetivo] = useState([]);
   const [listaSemestre, setListaSemestre] = useState([]);
   const [listaDres, setListaDres] = useState([]);
@@ -98,12 +98,12 @@ const FaltasFrequencia = () => {
   const obterModalidades = async ue => {
     if (ue) {
       setCarregandoGeral(true);
-      const retorno = await ServicoFiltroRelatorio.obterModalidadesPorAbrangencia(ue).catch(
-        e => {
-          erros(e);
-          setCarregandoGeral(false);
-        }
-      );
+      const retorno = await ServicoFiltroRelatorio.obterModalidadesPorAbrangencia(
+        ue
+      ).catch(e => {
+        erros(e);
+        setCarregandoGeral(false);
+      });
       if (retorno && retorno.data) {
         if (retorno.data && retorno.data.length && retorno.data.length === 1) {
           setModalidadeId(retorno.data[0].valor);
@@ -455,7 +455,7 @@ const FaltasFrequencia = () => {
       turmasPrograma,
     };
     setCarregandoGeral(true);
-    const retorno = await ServicoFaltasFrequencia.gerar(params).catch(e => {
+    const retorno = await ServicoRelatorioFrequencia.gerar(params).catch(e => {
       erros(e);
       setCarregandoGeral(false);
     });
@@ -554,14 +554,14 @@ const FaltasFrequencia = () => {
 
   return (
     <>
-      <Cabecalho pagina="Faltas e frequência" />
+      <Cabecalho pagina="Frequência" />
       <Loader loading={carregandoGeral}>
         <Card>
           <div className="col-md-12">
             <div className="row">
               <div className="col-md-12 d-flex justify-content-end pb-4">
                 <Button
-                  id="btn-voltar-frequencia-faltas"
+                  id="btn-voltar-frequencia"
                   label="Voltar"
                   icon="arrow-left"
                   color={Colors.Azul}
@@ -570,7 +570,7 @@ const FaltasFrequencia = () => {
                   onClick={onClickVoltar}
                 />
                 <Button
-                  id="btn-cancelar-frequencia-faltas"
+                  id="btn-cancelar-frequencia"
                   label="Cancelar"
                   color={Colors.Roxo}
                   border
@@ -579,7 +579,7 @@ const FaltasFrequencia = () => {
                   onClick={() => onClickCancelar()}
                 />
                 <Button
-                  id="btn-gerar-frequencia-faltas"
+                  id="btn-gerar-frequencia"
                   icon="print"
                   label="Gerar"
                   color={Colors.Azul}
@@ -791,4 +791,4 @@ const FaltasFrequencia = () => {
   );
 };
 
-export default FaltasFrequencia;
+export default RelatorioFrequencia;
