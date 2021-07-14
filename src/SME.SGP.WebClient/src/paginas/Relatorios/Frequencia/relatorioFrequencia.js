@@ -11,7 +11,7 @@ import AbrangenciaServico from '~/servicos/Abrangencia';
 import { erros, sucesso } from '~/servicos/alertas';
 import api from '~/servicos/api';
 import history from '~/servicos/history';
-import ServicoFaltasFrequencia from '~/servicos/Paginas/Relatorios/FaltasFrequencia/ServicoFaltasFrequencia';
+import ServicoRelatorioFrequencia from '~/servicos/Paginas/Relatorios/Frequencia/ServicoRelatorioFrequencia';
 import ServicoFiltroRelatorio from '~/servicos/Paginas/FiltroRelatorio/ServicoFiltroRelatorio';
 import ServicoComponentesCurriculares from '~/servicos/Paginas/ComponentesCurriculares/ServicoComponentesCurriculares';
 import tipoDeRelatorio from '~/dtos/tipoDeRelatorio';
@@ -455,7 +455,7 @@ const RelatorioFrequencia = () => {
       turmasPrograma,
     };
     setCarregandoGeral(true);
-    const retorno = await ServicoFaltasFrequencia.gerar(params).catch(e => {
+    const retorno = await ServicoRelatorioFrequencia.gerar(params).catch(e => {
       erros(e);
       setCarregandoGeral(false);
     });
@@ -561,7 +561,7 @@ const RelatorioFrequencia = () => {
             <div className="row">
               <div className="col-md-12 d-flex justify-content-end pb-4">
                 <Button
-                  id="btn-voltar-frequencia-faltas"
+                  id="btn-voltar-frequencia"
                   label="Voltar"
                   icon="arrow-left"
                   color={Colors.Azul}
@@ -570,7 +570,7 @@ const RelatorioFrequencia = () => {
                   onClick={onClickVoltar}
                 />
                 <Button
-                  id="btn-cancelar-frequencia-faltas"
+                  id="btn-cancelar-frequencia"
                   label="Cancelar"
                   color={Colors.Roxo}
                   border
@@ -579,7 +579,7 @@ const RelatorioFrequencia = () => {
                   onClick={() => onClickCancelar()}
                 />
                 <Button
-                  id="btn-gerar-frequencia-faltas"
+                  id="btn-gerar-frequencia"
                   icon="print"
                   label="Gerar"
                   color={Colors.Azul}
