@@ -156,7 +156,7 @@ const Notas = ({ match }) => {
     resetarBimestres();
     dispatch(setModoEdicaoGeral(false));
     dispatch(setModoEdicaoGeralNotaFinal(false));
-    dispatch(setExpandirLinha([]));    
+    dispatch(setExpandirLinha([]));
   }, [dispatch]);
 
   useEffect(() => {
@@ -182,6 +182,7 @@ const Notas = ({ match }) => {
     const params = {
       anoLetivo: usuario.turmaSelecionada.anoLetivo,
       modalidade: usuario.turmaSelecionada.modalidade,
+      semestre: usuario.turmaSelecionada.periodo,
     };
     const dados = await ServicoNotas.obterPeriodos({ params }).catch(e =>
       erros(e)
