@@ -57,7 +57,7 @@ import HistoricoEscolar from '~/paginas/Relatorios/HistoricoEscolar/historicoEsc
 import AtaFinalResultados from '~/paginas/Relatorios/Atas/AtaFinalResultados/ataFinalResultados';
 
 import BoletimSimples from '~/paginas/Relatorios/DiarioClasse/BoletimSimples';
-import FaltasFrequencia from '~/paginas/Relatorios/Frequencia/faltasFrequencia';
+import RelatorioFrequencia from '~/paginas/Relatorios/Frequencia/relatorioFrequencia';
 import ListaDiarioBordo from '~/paginas/DiarioClasse/DiarioBordo/listaDiarioBordo';
 import DiarioBordo from '~/paginas/DiarioClasse/DiarioBordo/diarioBordo';
 import RelatorioPendencias from '~/paginas/Relatorios/Pendencias/relatorioPendencias';
@@ -876,15 +876,15 @@ rotas.set(RotasDto.HISTORICO_ESCOLAR, {
   // chavePermissao: RotasDto.HISTORICO_ESCOLAR,
 });
 
-rotas.set(RotasDto.FALTAS_FREQUENCIA, {
-  breadcrumbName: 'Faltas e frequência',
+rotas.set(RotasDto.RELATORIO_FREQUENCIA, {
+  breadcrumbName: 'Frequência',
   menu: ['Relatórios', 'Frequência'],
   parent: '/',
-  component: FaltasFrequencia,
+  component: RelatorioFrequencia,
   exact: true,
   tipo: RotasTipo.EstruturadaAutenticada,
   temPermissionamento: true,
-  chavePermissao: RotasDto.FALTAS_FREQUENCIA,
+  chavePermissao: RotasDto.RELATORIO_FREQUENCIA,
 });
 
 rotas.set(RotasDto.DIARIO_BORDO, {

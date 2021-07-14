@@ -17,7 +17,7 @@ import ServicoComponentesCurriculares from '~/servicos/Paginas/ComponentesCurric
 import tipoDeRelatorio from '~/dtos/tipoDeRelatorio';
 import { OPCAO_TODOS } from '~/constantes/constantes';
 
-const FaltasFrequencia = () => {
+const RelatorioFrequencia = () => {
   const [listaAnosLetivo, setListaAnosLetivo] = useState([]);
   const [listaSemestre, setListaSemestre] = useState([]);
   const [listaDres, setListaDres] = useState([]);
@@ -98,12 +98,12 @@ const FaltasFrequencia = () => {
   const obterModalidades = async ue => {
     if (ue) {
       setCarregandoGeral(true);
-      const retorno = await ServicoFiltroRelatorio.obterModalidadesPorAbrangencia(ue).catch(
-        e => {
-          erros(e);
-          setCarregandoGeral(false);
-        }
-      );
+      const retorno = await ServicoFiltroRelatorio.obterModalidadesPorAbrangencia(
+        ue
+      ).catch(e => {
+        erros(e);
+        setCarregandoGeral(false);
+      });
       if (retorno && retorno.data) {
         if (retorno.data && retorno.data.length && retorno.data.length === 1) {
           setModalidadeId(retorno.data[0].valor);
@@ -554,7 +554,7 @@ const FaltasFrequencia = () => {
 
   return (
     <>
-      <Cabecalho pagina="Faltas e frequência" />
+      <Cabecalho pagina="Frequência" />
       <Loader loading={carregandoGeral}>
         <Card>
           <div className="col-md-12">
@@ -791,4 +791,4 @@ const FaltasFrequencia = () => {
   );
 };
 
-export default FaltasFrequencia;
+export default RelatorioFrequencia;
