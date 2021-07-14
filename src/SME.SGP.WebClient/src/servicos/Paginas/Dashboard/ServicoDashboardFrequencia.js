@@ -144,6 +144,20 @@ class ServicoDashboardFrequencia {
     dispatch(setDadosDashboardFrequencia(novoMap));
   };
 
+  obterTipoGraficos = tipoGraficos => {
+    const retorno = Object.keys(tipoGraficos).map(item => tipoGraficos[item]);
+    this.atualizarFiltros('listaTipoGrafico', retorno);
+  };
+
+  obterListaMeses = obterTodosMeses => {
+    const retorno = obterTodosMeses();
+    this.atualizarFiltros('listaMeses', retorno);
+  };
+
+  obterSemanas = anoLetivo => {
+    return api.get(`${urlPadrao}/filtro/anos/${anoLetivo}/semanas`);
+  };
+
   obterTotalEstudantesPresenciasRemotosAusentes = (
     anoLetivo,
     dreId,
@@ -153,7 +167,8 @@ class ServicoDashboardFrequencia {
     anoTurma,
     dataInicio,
     dataFim,
-    tipoPeriodoDashboard
+    tipoPeriodoDashboard,
+    mes
   ) => {
     return api.get(
       `${urlPadrao}/anos/${anoLetivo}/dres/${dreId}/ues/${ueId}/modalidades/` +
@@ -165,6 +180,7 @@ class ServicoDashboardFrequencia {
           dataInicio,
           dataFim,
           tipoPeriodoDashboard,
+          mes,
         },
       }
     );
@@ -177,7 +193,8 @@ class ServicoDashboardFrequencia {
     anoTurma,
     dataInicio,
     dataFim,
-    tipoPeriodoDashboard
+    tipoPeriodoDashboard,
+    mes
   ) => {
     return api.get(
       `${urlPadrao}/anos/${anoLetivo}/modalidades/${modalidade}/consolidado/dres`,
@@ -188,6 +205,47 @@ class ServicoDashboardFrequencia {
           dataInicio,
           dataFim,
           tipoPeriodoDashboard,
+          mes,
+        },
+      }
+    );
+  };
+
+  obterTotalAusenciasCompensadas = (
+    anoLetivo,
+    dreId,
+    ueId,
+    modalidade,
+    semestre,
+    bimestre
+  ) => {
+    return api.get(
+      `/v1/dashboard/compensacoes/ausencia/anos/${anoLetivo}/dres/${dreId}/ues/${ueId}/modalidades/${modalidade}/` +
+        `consolidado/anos-turmas`,
+      {
+        params: {
+          semestre,
+          bimestre,
+        },
+      }
+    );
+  };
+
+  obterTotalAtividadeCompensacao = (
+    anoLetivo,
+    dreId,
+    ueId,
+    modalidade,
+    semestre,
+    bimestre
+  ) => {
+    return api.get(
+      `/v1/dashboard/compensacoes/ausencia/anos/${anoLetivo}/dres/${dreId}/ues/${ueId}/modalidades/${modalidade}/` +
+        `consolidado/compensacoes-consideradas`,
+      {
+        params: {
+          semestre,
+          bimestre,
         },
       }
     );
