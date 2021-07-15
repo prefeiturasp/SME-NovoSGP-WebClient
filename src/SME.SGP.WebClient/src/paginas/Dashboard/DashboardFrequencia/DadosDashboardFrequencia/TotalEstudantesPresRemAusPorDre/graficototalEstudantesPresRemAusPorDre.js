@@ -51,15 +51,20 @@ const GraficoTotalEstudantesPresenciasRemotosAusentesPorDre = ({
       ? undefined
       : dataDiaria.format('YYYY-MM-DD');
     const dataSelecionada = dataInicio || dataDiariaSelecionada;
-    const retorno = await ServicoDashboardFrequencia.obterTotalEstudantesPresenciasRemotosAusentesPorDre(
+    const dataMensalSelecionada = ehTipoMensal ? dataMensal : undefined;
+
+    const retorno = await ServicoDashboardFrequencia.obterTotalEstudantesPresenciasRemotosAusentes(
       anoLetivo,
+      '',
+      '',
       modalidade,
       semestre,
       anoTurma,
       dataSelecionada,
       dataFim,
       tipoPeriodoDashboard,
-      dataMensal
+      dataMensalSelecionada,
+      true
     )
       .catch(e => erros(e))
       .finally(() => setExibirLoader(false));
@@ -259,9 +264,9 @@ const GraficoTotalEstudantesPresenciasRemotosAusentesPorDre = ({
           </div>
         </div>
         <div className="row">
-          {dadosGrafico?.totalFrequenciaFormatado && (
+          {dadosGrafico?.TagTotalFrequencia && (
             <div className="col-sm-12 mb-2">
-              <TagGrafico valor={dadosGrafico?.totalFrequenciaFormatado} />
+              <TagGrafico valor={dadosGrafico?.TagTotalFrequencia} />
             </div>
           )}
         </div>
@@ -270,7 +275,7 @@ const GraficoTotalEstudantesPresenciasRemotosAusentesPorDre = ({
         loading={exibirLoader}
         className={exibirLoader ? 'text-center my-4' : ''}
       >
-        {dadosGrafico?.dadosFrequenciaDashboard && (
+        {!!dadosGrafico?.dadosFrequenciaDashboard?.length && (
           <GraficoBarras
             data={dadosGrafico?.dadosFrequenciaDashboard}
             xField="turmaAno"
@@ -282,7 +287,7 @@ const GraficoTotalEstudantesPresenciasRemotosAusentesPorDre = ({
             labelVisible={false}
           />
         )}
-        {!exibirLoader && !dadosGrafico?.dadosFrequenciaDashboard && (
+        {!exibirLoader && !dadosGrafico?.dadosFrequenciaDashboard?.length && (
           <div className="text-center">Sem dados</div>
         )}
       </Loader>

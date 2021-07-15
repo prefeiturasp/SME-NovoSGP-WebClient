@@ -111,18 +111,18 @@ const GraficoTotalAusenciaCompensada = ({
               allowClear={false}
             />
           </div>
-          {dadosGrafico?.totalAusenciasFormatado && (
+          {dadosGrafico?.TagTotalFrequencia && (
             <div className="col-9 mb-2">
-              <TagGrafico valor={dadosGrafico?.totalAusenciasFormatado} />
+              <TagGrafico valor={dadosGrafico?.TagTotalFrequencia} />
             </div>
           )}
         </div>
       </div>
       <Loader
         loading={exibirLoader}
-        className={exibirLoader ? 'text-center' : ''}
+        className={exibirLoader ? 'text-center my-4' : ''}
       >
-        {dadosGrafico?.dadosCompensacaoAusenciaDashboard && (
+        {!!dadosGrafico?.dadosCompensacaoAusenciaDashboard?.length && (
           <GraficoBarras
             data={dadosGrafico?.dadosCompensacaoAusenciaDashboard}
             xAxisVisible
@@ -131,9 +131,10 @@ const GraficoTotalAusenciaCompensada = ({
             legendVisible={false}
           />
         )}
-        {!exibirLoader && !dadosGrafico?.dadosCompensacaoAusenciaDashboard && (
-          <div className="text-center">Sem dados</div>
-        )}
+        {!exibirLoader &&
+          !dadosGrafico?.dadosCompensacaoAusenciaDashboard?.length && (
+            <div className="text-center">Sem dados</div>
+          )}
       </Loader>
     </>
   );
