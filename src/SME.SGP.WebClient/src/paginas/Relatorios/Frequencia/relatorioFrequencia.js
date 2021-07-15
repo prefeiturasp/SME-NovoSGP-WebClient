@@ -1,54 +1,104 @@
-import React, { useCallback, useEffect, useState } from 'react';
-import { Loader, RadioGroupButton, SelectComponent } from '~/componentes';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
+
+import {
+  Button,
+  CampoNumero,
+  Card,
+  Colors,
+  Loader,
+  RadioGroupButton,
+  SelectComponent,
+} from '~/componentes';
 import { Cabecalho } from '~/componentes-sgp';
-import Button from '~/componentes/button';
-import CampoNumero from '~/componentes/campoNumero';
-import Card from '~/componentes/card';
-import { Colors } from '~/componentes/colors';
-import { URL_HOME } from '~/constantes/url';
-import modalidade from '~/dtos/modalidade';
-import AbrangenciaServico from '~/servicos/Abrangencia';
-import { erros, sucesso } from '~/servicos/alertas';
-import api from '~/servicos/api';
-import history from '~/servicos/history';
-import ServicoRelatorioFrequencia from '~/servicos/Paginas/Relatorios/Frequencia/ServicoRelatorioFrequencia';
-import ServicoFiltroRelatorio from '~/servicos/Paginas/FiltroRelatorio/ServicoFiltroRelatorio';
-import ServicoComponentesCurriculares from '~/servicos/Paginas/ComponentesCurriculares/ServicoComponentesCurriculares';
-import tipoDeRelatorio from '~/dtos/tipoDeRelatorio';
-import { OPCAO_TODOS } from '~/constantes/constantes';
+
+import { URL_HOME, OPCAO_TODOS } from '~/constantes';
+import { ModalidadeDTO } from '~/dtos';
+import { onchangeMultiSelect, primeiroMaisculo } from '~/utils';
+
+import {
+  erros,
+  sucesso,
+  AbrangenciaServico,
+  api,
+  history,
+  ServicoRelatorioFrequencia,
+  ServicoFiltroRelatorio,
+  ServicoComponentesCurriculares,
+} from '~/servicos';
 
 const RelatorioFrequencia = () => {
-  const [listaAnosLetivo, setListaAnosLetivo] = useState([]);
-  const [listaSemestre, setListaSemestre] = useState([]);
-  const [listaDres, setListaDres] = useState([]);
-  const [listaUes, setListaUes] = useState([]);
-  const [listaModalidades, setListaModalidades] = useState([]);
-  const [listaAnosEscolares, setListaAnosEscolares] = useState([]);
-  const [listaComponenteCurricular, setListaComponenteCurricular] = useState(
-    []
-  );
-  const [listaBimestre, setListaBimestre] = useState([]);
-
   const [anoLetivo, setAnoLetivo] = useState(undefined);
+  const [anosEscolares, setAnosEscolares] = useState(undefined);
+  const [bimestres, setBimestres] = useState(undefined);
+  const [carregandoAnosEscolares, setCarregandoAnosEscolares] = useState(false);
+  const [carregandoAnosLetivos, setCarregandoAnosLetivos] = useState(false);
+  const [carregandoBimestres, setCarregandoBimestres] = useState(false);
+  const [
+    carregandoComponentesCurriculares,
+    setCarregandoComponentesCurriculares,
+  ] = useState(false);
+  const [carregandoDres, setCarregandoDres] = useState(false);
+  const [carregandoGeral, setCarregandoGeral] = useState(false);
+  const [carregandoModalidade, setCarregandoModalidade] = useState(false);
+  const [carregandoSemestres, setCarregandoSemestres] = useState(false);
+  const [carregandoTurmas, setCarregandoTurmas] = useState(false);
+  const [carregandoUes, setCarregandoUes] = useState(false);
   const [codigoDre, setCodigoDre] = useState(undefined);
   const [codigoUe, setCodigoUe] = useState(undefined);
-  const [modalidadeId, setModalidadeId] = useState(undefined);
-  const [semestre, setSemestre] = useState(undefined);
-  const [anosEscolares, setAnosEscolares] = useState(undefined);
   const [componentesCurriculares, setComponentesCurriculares] = useState(
     undefined
   );
-  const [bimestres, setBimestres] = useState(undefined);
+  const [condicao, setCondicao] = useState(undefined);
+  const [desabilitarBtnGerar, setDesabilitarBtnGerar] = useState(true);
+  const [desabilitarTipoRelatorio, setDesabilitarTipoRelatorio] = useState(
+    false
+  );
+  const [formato, setFormato] = useState('1');
+  const [listaAnosEscolares, setListaAnosEscolares] = useState([]);
+  const [listaAnosLetivo, setListaAnosLetivo] = useState([]);
+  const [listaBimestre, setListaBimestre] = useState([]);
+  const [listaComponenteCurricular, setListaComponenteCurricular] = useState(
+    []
+  );
+  const [listaDres, setListaDres] = useState([]);
+  const [listaModalidades, setListaModalidades] = useState([]);
+  const [listaSemestre, setListaSemestre] = useState([]);
+  const [listaTurmas, setListaTurmas] = useState([]);
+  const [listaUes, setListaUes] = useState([]);
+  const [modalidadeId, setModalidadeId] = useState(undefined);
+  const [semestre, setSemestre] = useState(undefined);
+  const [tipoRelatorio, setTipoRelatorio] = useState('1');
+  const [turmasCodigo, setTurmasCodigo] = useState();
+  const [turmasPrograma, setTurmasPrograma] = useState(false);
   const [valorCondicao, setValorCondicao] = useState(undefined);
 
-  const [listaTipoRelatorio] = useState([
-    { valor: '1', desc: 'Faltas' },
-    { valor: '2', desc: 'Frequência' },
-    { valor: '3', desc: 'Ambos' },
-  ]);
-  const [tipoRelatorio, setTipoRelatorio] = useState(undefined);
-
+  const TIPO_RELATORIO = useMemo(
+    () => ({
+      TURMA: '1',
+      ANO: '2',
+    }),
+    []
+  );
+  const FORMATOS = {
+    PDF: '1',
+    EXCEL: '4',
+  };
   const OPCAO_TODOS_ESTUDANTES = '4';
+  const ehTurma = tipoRelatorio === TIPO_RELATORIO.TURMA;
+
+  const opcoesListarTurmasDePrograma = [
+    { label: 'Sim', value: true },
+    { label: 'Não', value: false },
+  ];
+  const opcoesTipoRelatorio = Object.keys(TIPO_RELATORIO).map(chave => ({
+    label: primeiroMaisculo(chave),
+    value: TIPO_RELATORIO[chave],
+  }));
+
+  const opcoesListaFormatos = Object.keys(FORMATOS).map(chave => ({
+    label: chave,
+    value: FORMATOS[chave],
+  }));
 
   const [listaCondicao] = useState([
     { valor: '1', desc: 'Igual' },
@@ -57,84 +107,63 @@ const RelatorioFrequencia = () => {
     { valor: OPCAO_TODOS_ESTUDANTES, desc: 'Todos os estudantes' },
   ]);
 
-  const [condicao, setCondicao] = useState(undefined);
-
-  const listaFormatos = [
-    { valor: '1', desc: 'PDF' },
-    { valor: '4', desc: 'EXCEL' },
-  ];
-  const [formato, setFormato] = useState('1');
-
-  const [carregandoGeral, setCarregandoGeral] = useState(false);
-  const [desabilitarBtnGerar, setDesabilitarBtnGerar] = useState(true);
-
-  const opcoesListarTurmasDePrograma = [
-    { label: 'Sim', value: true },
-    { label: 'Não', value: false },
-  ];
-  const [turmasPrograma, setTurmasPrograma] = useState(false);
-
   const obterAnosLetivos = useCallback(async () => {
-    setCarregandoGeral(true);
-    const anosLetivo = await AbrangenciaServico.buscarTodosAnosLetivos().catch(
-      e => {
-        erros(e);
-        setCarregandoGeral(false);
-      }
-    );
-    if (anosLetivo && anosLetivo.data) {
-      const a = [];
-      anosLetivo.data.forEach(ano => {
-        a.push({ desc: ano, valor: ano });
-      });
-      setAnoLetivo(a[0].valor);
-      setListaAnosLetivo(a);
-    } else {
-      setListaAnosLetivo([]);
+    setCarregandoAnosLetivos(true);
+    const anosLetivo = await AbrangenciaServico.buscarTodosAnosLetivos()
+      .catch(e => erros(e))
+      .finally(() => setCarregandoAnosLetivos(false));
+
+    if (anosLetivo?.data) {
+      const lista = anosLetivo.data.map(ano => ({ desc: ano, valor: ano }));
+      setAnoLetivo(lista[0].valor);
+      setListaAnosLetivo(lista);
+      return;
     }
-    setCarregandoGeral(false);
+    setListaAnosLetivo([]);
   }, []);
 
   const obterModalidades = async ue => {
     if (ue) {
-      setCarregandoGeral(true);
+      setCarregandoModalidade(true);
       const retorno = await ServicoFiltroRelatorio.obterModalidadesPorAbrangencia(
         ue
-      ).catch(e => {
-        erros(e);
-        setCarregandoGeral(false);
-      });
-      if (retorno && retorno.data) {
-        if (retorno.data && retorno.data.length && retorno.data.length === 1) {
+      )
+        .catch(e => {
+          erros(e);
+        })
+        .finally(() => setCarregandoModalidade(false));
+
+      if (retorno?.data) {
+        if (retorno.data.length === 1) {
           setModalidadeId(retorno.data[0].valor);
         }
         setListaModalidades(retorno.data);
       }
-      setCarregandoGeral(false);
     }
   };
 
   const obterUes = useCallback(async dre => {
     if (dre) {
-      setCarregandoGeral(true);
-      const retorno = await ServicoFiltroRelatorio.obterUes(dre).catch(e => {
-        erros(e);
-        setCarregandoGeral(false);
-      });
-      if (retorno && retorno.data) {
+      setCarregandoUes(true);
+      const retorno = await ServicoFiltroRelatorio.obterUes(dre)
+        .catch(e => {
+          erros(e);
+        })
+        .finally(() => setCarregandoUes(false));
+
+      if (retorno?.data) {
         const lista = retorno.data.map(item => ({
           desc: item.nome,
           valor: String(item.codigo),
         }));
 
-        if (lista && lista.length && lista.length === 1) {
+        if (lista?.length === 1) {
           setCodigoUe(lista[0].valor);
         }
         setListaUes(lista);
-      } else {
-        setListaUes([]);
+        return;
       }
-      setCarregandoGeral(false);
+      setListaUes([]);
     }
   }, []);
 
@@ -155,103 +184,105 @@ const RelatorioFrequencia = () => {
   };
 
   const obterDres = async () => {
-    setCarregandoGeral(true);
-    const retorno = await ServicoFiltroRelatorio.obterDres().catch(e => {
-      erros(e);
-      setCarregandoGeral(false);
-    });
-    if (retorno && retorno.data && retorno.data.length) {
+    setCarregandoDres(true);
+    const retorno = await ServicoFiltroRelatorio.obterDres()
+      .catch(e => erros(e))
+      .finally(() => setCarregandoDres(false));
+
+    if (retorno?.data?.length) {
       setListaDres(retorno.data);
 
-      if (retorno && retorno.data.length && retorno.data.length === 1) {
+      if (retorno.data.length === 1) {
         setCodigoDre(retorno.data[0].codigo);
       }
-    } else {
-      setListaDres([]);
+      return;
     }
-    setCarregandoGeral(false);
+    setListaDres([]);
   };
 
   const obterSemestres = async (
     modalidadeSelecionada,
     anoLetivoSelecionado
   ) => {
-    setCarregandoGeral(true);
+    setCarregandoSemestres(true);
     const retorno = await api
       .get(
         `v1/abrangencias/false/semestres?anoLetivo=${anoLetivoSelecionado}&modalidade=${modalidadeSelecionada ||
           0}`
       )
-      .catch(e => {
-        erros(e);
-        setCarregandoGeral(false);
-      });
-    if (retorno && retorno.data) {
-      const lista = retorno.data.map(periodo => {
-        return { desc: periodo, valor: periodo };
-      });
+      .catch(e => erros(e))
+      .finally(() => setCarregandoSemestres(false));
 
-      if (lista && lista.length && lista.length === 1) {
+    if (retorno?.data) {
+      const lista = retorno.data.map(periodo => ({
+        desc: periodo,
+        valor: periodo,
+      }));
+
+      if (lista?.length === 1) {
         setSemestre(lista[0].valor);
       }
       setListaSemestre(lista);
     }
-    setCarregandoGeral(false);
   };
 
   useEffect(() => {
     if (codigoUe) {
       obterModalidades(codigoUe);
-    } else {
-      setModalidadeId(undefined);
-      setListaModalidades([]);
+      return;
     }
+    setModalidadeId(undefined);
+    setListaModalidades([]);
   }, [codigoUe]);
 
   useEffect(() => {
     if (codigoDre) {
       obterUes(codigoDre);
-    } else {
-      setCodigoUe(undefined);
-      setListaUes([]);
+      return;
     }
+    setCodigoUe(undefined);
+    setListaUes([]);
   }, [codigoDre, obterUes]);
 
   const obterAnosEscolares = useCallback(async (mod, ue) => {
-    if (mod == modalidade.EJA || mod == modalidade.INFANTIL) {
+    if (
+      Number(mod) === ModalidadeDTO.EJA ||
+      Number(mod) === ModalidadeDTO.INFANTIL
+    ) {
       setListaAnosEscolares([{ descricao: 'Todos', valor: OPCAO_TODOS }]);
       setAnosEscolares([OPCAO_TODOS]);
     } else {
-      setCarregandoGeral(true);
-      const respota = await ServicoFiltroRelatorio.obterAnosEscolares(
-        ue,
-        mod
-      ).catch(e => {
-        erros(e);
-        setCarregandoGeral(false);
-      });
+      setCarregandoAnosEscolares(true);
+      const respota = await ServicoFiltroRelatorio.obterAnosEscolares(ue, mod)
+        .catch(e => erros(e))
+        .finally(() => setCarregandoAnosEscolares(false));
 
-      if (respota && respota.data && respota.data.length) {
+      if (respota?.data?.length) {
         setListaAnosEscolares(respota.data);
 
-        if (respota.data && respota.data.length && respota.data.length === 1) {
+        if (respota.data.length === 1) {
           setAnosEscolares(respota.data[0].valor);
         }
-      } else {
-        setListaAnosEscolares([]);
+        return;
       }
-      setCarregandoGeral(false);
+      setListaAnosEscolares([]);
     }
   }, []);
 
   useEffect(() => {
-    if (modalidadeId && codigoUe) {
+    if (modalidadeId && codigoUe && tipoRelatorio === TIPO_RELATORIO.ANO) {
       obterAnosEscolares(modalidadeId, codigoUe);
-    } else {
-      setAnosEscolares(undefined);
-      setListaAnosEscolares([]);
+      return;
     }
-  }, [modalidadeId, codigoUe, obterAnosEscolares]);
+    setAnosEscolares(undefined);
+    setListaAnosEscolares([]);
+  }, [
+    modalidadeId,
+    codigoUe,
+    tipoRelatorio,
+    TIPO_RELATORIO,
+    obterAnosEscolares,
+  ]);
 
   useEffect(() => {
     if (condicao === OPCAO_TODOS_ESTUDANTES) {
@@ -291,30 +322,29 @@ const RelatorioFrequencia = () => {
   const obterComponenteCurricular = useCallback(async () => {
     const codigoTodosAnosEscolares = obterCodigoTodosAnosEscolares();
     if (anoLetivo) {
-      setCarregandoGeral(true);
+      setCarregandoComponentesCurriculares(true);
       const retorno = await ServicoComponentesCurriculares.obterComponetensCuriculares(
         codigoUe,
         modalidadeId,
         anoLetivo,
         codigoTodosAnosEscolares,
         turmasPrograma
-      ).catch(e => {
-        erros(e);
-        setCarregandoGeral(false);
-      });
-      if (retorno && retorno.data && retorno.data.length) {
-        const lista = retorno.data.map(item => {
-          return { desc: item.descricao, valor: String(item.codigo) };
-        });
+      )
+        .catch(e => erros(e))
+        .finally(() => setCarregandoComponentesCurriculares(false));
+      if (retorno?.data?.length) {
+        const lista = retorno.data.map(item => ({
+          desc: item.descricao,
+          valor: String(item.codigo),
+        }));
 
         setListaComponenteCurricular(lista);
-        if (lista && lista.length && lista.length === 1) {
+        if (lista?.length === 1) {
           setComponentesCurriculares([lista[0].valor]);
         }
-      } else {
-        setListaComponenteCurricular([]);
+        return;
       }
-      setCarregandoGeral(false);
+      setListaComponenteCurricular([]);
     }
   }, [
     modalidadeId,
@@ -325,50 +355,53 @@ const RelatorioFrequencia = () => {
   ]);
 
   useEffect(() => {
-    if (anosEscolares && anosEscolares.length) {
+    if (anosEscolares?.length) {
       obterComponenteCurricular();
-    } else {
-      setComponentesCurriculares(undefined);
-      setListaComponenteCurricular([]);
+      return;
     }
+    setComponentesCurriculares(undefined);
+    setListaComponenteCurricular([]);
   }, [anosEscolares, turmasPrograma, obterComponenteCurricular]);
 
-  const obterBimestres = useCallback(() => {
-    const bi = [];
-    bi.push({ desc: '1º', valor: 1 });
-    bi.push({ desc: '2º', valor: 2 });
+  const obterBimestres = useCallback(async () => {
+    setCarregandoBimestres(true);
+    const retorno = await ServicoFiltroRelatorio.obterBimestres({
+      modalidadeId,
+      opcaoTodos: true,
+      opcaoFinal: true,
+    })
+      .catch(e => erros(e))
+      .finally(setCarregandoBimestres(false));
 
-    if (modalidadeId != modalidade.EJA) {
-      bi.push({ desc: '3º', valor: 3 });
-      bi.push({ desc: '4º', valor: 4 });
+    if (retorno?.data) {
+      const lista = retorno.data.map(item => ({
+        desc: item.descricao,
+        valor: item.valor,
+      }));
+      setListaBimestre(lista);
     }
-
-    bi.push({ desc: 'Final', valor: 0 });
-    bi.push({ desc: 'Todos', valor: -99 });
-    setListaBimestre(bi);
   }, [modalidadeId]);
 
   useEffect(() => {
     if (modalidadeId) {
       obterBimestres();
-    } else {
-      setListaBimestre([]);
-      setBimestres(undefined);
+      return;
     }
+    setListaBimestre([]);
+    setBimestres(undefined);
   }, [modalidadeId, obterBimestres]);
 
   useEffect(() => {
-    if (modalidadeId && anoLetivo) {
-      if (modalidadeId == modalidade.EJA) {
-        obterSemestres(modalidadeId, anoLetivo);
-      } else {
-        setSemestre(undefined);
-        setListaSemestre([]);
-      }
-    } else {
-      setSemestre(undefined);
-      setListaSemestre([]);
+    if (
+      modalidadeId &&
+      anoLetivo &&
+      Number(modalidadeId) === ModalidadeDTO.EJA
+    ) {
+      obterSemestres(modalidadeId, anoLetivo);
+      return;
     }
+    setSemestre(undefined);
+    setListaSemestre([]);
   }, [modalidadeId, anoLetivo]);
 
   useEffect(() => {
@@ -377,22 +410,24 @@ const RelatorioFrequencia = () => {
       !codigoDre ||
       !codigoUe ||
       !modalidadeId ||
+      (String(modalidadeId) === String(ModalidadeDTO.EJA)
+        ? !semestre
+        : false) ||
       !anosEscolares ||
+      !turmasCodigo?.length ||
       !componentesCurriculares ||
       !bimestres ||
-      !tipoRelatorio ||
-      !condicao ||
-      !formato;
+      !condicao;
 
     if (!desabilitar && condicao !== OPCAO_TODOS_ESTUDANTES) {
       desabilitar = !valorCondicao;
     }
 
-    if (modalidadeId == modalidade.EJA) {
+    if (Number(modalidadeId) === ModalidadeDTO.EJA) {
       setDesabilitarBtnGerar(!semestre || desabilitar);
-    } else {
-      setDesabilitarBtnGerar(desabilitar);
+      return;
     }
+    setDesabilitarBtnGerar(desabilitar);
   }, [
     anoLetivo,
     codigoDre,
@@ -400,13 +435,12 @@ const RelatorioFrequencia = () => {
     modalidadeId,
     semestre,
     anosEscolares,
+    turmasCodigo,
     componentesCurriculares,
     bimestres,
     tipoRelatorio,
     condicao,
     valorCondicao,
-    formato,
-    turmasPrograma,
   ]);
 
   useEffect(() => {
@@ -419,18 +453,13 @@ const RelatorioFrequencia = () => {
   };
 
   const onClickCancelar = () => {
-    setAnoLetivo(undefined);
-    setCodigoDre(undefined);
-    setTipoRelatorio(undefined);
+    const anoAtual = listaAnosLetivo?.length && listaAnosLetivo[0].valor;
+    setAnoLetivo(anoAtual);
+    setCodigoDre();
+    setTipoRelatorio(TIPO_RELATORIO.TURMA);
     setCondicao(undefined);
     setValorCondicao(undefined);
-    setListaAnosLetivo([]);
-    setListaDres([]);
-
-    obterAnosLetivos();
-    obterDres();
-
-    setFormato('PDF');
+    setFormato(FORMATOS.PDF);
   };
 
   const onClickGerar = async () => {
@@ -455,17 +484,18 @@ const RelatorioFrequencia = () => {
       turmasPrograma,
     };
     setCarregandoGeral(true);
-    const retorno = await ServicoRelatorioFrequencia.gerar(params).catch(e => {
-      erros(e);
-      setCarregandoGeral(false);
-    });
+    const retorno = await ServicoRelatorioFrequencia.gerar(params)
+      .catch(e => {
+        erros(e);
+      })
+      .finally(() => setCarregandoGeral(false));
+
     if (retorno && retorno.status === 200) {
       sucesso(
         'Solicitação de geração do relatório gerada com sucesso. Em breve você receberá uma notificação com o resultado.'
       );
       setDesabilitarBtnGerar(true);
     }
-    setCarregandoGeral(false);
   };
 
   const onChangeUe = ue => {
@@ -479,6 +509,9 @@ const RelatorioFrequencia = () => {
 
     setListaAnosEscolares([]);
     setAnosEscolares(undefined);
+
+    setTipoRelatorio(TIPO_RELATORIO.TURMA);
+    setDesabilitarTipoRelatorio(ue !== OPCAO_TODOS);
   };
 
   const onChangeModalidade = novaModalidade => {
@@ -507,14 +540,13 @@ const RelatorioFrequencia = () => {
     setListaComponenteCurricular([]);
     setComponentesCurriculares(undefined);
   };
+
   const onChangeSemestre = valor => setSemestre(valor);
   const onChangeComponenteCurricular = valor =>
     setComponentesCurriculares(valor);
   const onChangeBimestre = valor => setBimestres(valor);
-  const onChangeTipoRelatorio = valor => setTipoRelatorio(valor);
   const onChangeCondicao = valor => setCondicao(valor);
   const onChangeComparacao = valor => setValorCondicao(valor);
-  const onChangeFormato = valor => setFormato(valor);
 
   const removeAdicionaOpcaoTodos = (
     valoresJaSelcionados,
@@ -525,16 +557,15 @@ const RelatorioFrequencia = () => {
       valoresJaSelcionados.length === 1 &&
       valoresJaSelcionados[0] === OPCAO_TODOS;
 
-    if (todosEhUnicoJaSelecionado) {
-      if (
-        valoresParaSelecionar &&
-        valoresParaSelecionar.length > 1 &&
-        valoresParaSelecionar.includes(OPCAO_TODOS)
-      ) {
-        valoresParaSelecionar = valoresParaSelecionar.filter(
-          item => item !== OPCAO_TODOS
-        );
-      }
+    if (
+      todosEhUnicoJaSelecionado &&
+      valoresParaSelecionar &&
+      valoresParaSelecionar.length > 1 &&
+      valoresParaSelecionar.includes(OPCAO_TODOS)
+    ) {
+      valoresParaSelecionar = valoresParaSelecionar.filter(
+        item => item !== OPCAO_TODOS
+      );
     }
 
     if (
@@ -552,12 +583,72 @@ const RelatorioFrequencia = () => {
     return valoresParaSelecionar;
   };
 
+  const onChangeTurma = valor => {
+    setTurmasCodigo(valor);
+    setBimestres(undefined);
+  };
+
+  const obterTurmas = useCallback(async () => {
+    const OPCAO_TODAS_TURMA = { valor: OPCAO_TODOS, nomeFiltro: 'Todas' };
+    if (codigoUe === OPCAO_TODOS) {
+      setListaTurmas([OPCAO_TODAS_TURMA]);
+      setTurmasCodigo([OPCAO_TODAS_TURMA.valor]);
+      return;
+    }
+    if (codigoDre && codigoUe && modalidadeId) {
+      setCarregandoTurmas(true);
+      const retorno = await AbrangenciaServico.buscarTurmas(
+        codigoUe,
+        modalidadeId,
+        '',
+        anoLetivo,
+        false,
+        false
+      )
+        .catch(e => erros(e))
+        .finally(() => setCarregandoTurmas(false));
+
+      if (retorno?.data?.length) {
+        const lista = retorno.data.map(item => ({
+          desc: item.nome,
+          valor: item.codigo,
+          id: item.id,
+          ano: item.ano,
+          nomeFiltro: item.nomeFiltro,
+        }));
+
+        if (lista.length === 1) {
+          setTurmasCodigo([String(lista[0].valor)]);
+        } else {
+          lista.unshift(OPCAO_TODAS_TURMA);
+        }
+
+        setListaTurmas(lista);
+      }
+    }
+  }, [codigoDre, codigoUe, anoLetivo, modalidadeId]);
+
+  useEffect(() => {
+    if (codigoUe) {
+      obterTurmas();
+      return;
+    }
+    setTurmasCodigo();
+    setListaTurmas([]);
+  }, [codigoUe, obterTurmas]);
+
+  useEffect(() => {
+    if (ehTurma) {
+      setFormato(FORMATOS.PDF);
+    }
+  }, [ehTurma, FORMATOS]);
+
   return (
     <>
-      <Cabecalho pagina="Frequência" />
+      <Cabecalho pagina="Frequência" classes="mb-2" />
       <Loader loading={carregandoGeral}>
         <Card>
-          <div className="col-md-12">
+          <div className="col-md-12 p-0">
             <div className="row">
               <div className="col-md-12 d-flex justify-content-end pb-4">
                 <Button
@@ -572,7 +663,7 @@ const RelatorioFrequencia = () => {
                 <Button
                   id="btn-cancelar-frequencia"
                   label="Cancelar"
-                  color={Colors.Roxo}
+                  color={Colors.Azul}
                   border
                   bold
                   className="mr-3"
@@ -585,189 +676,130 @@ const RelatorioFrequencia = () => {
                   color={Colors.Azul}
                   border
                   bold
-                  className="mr-2"
                   onClick={() => onClickGerar()}
                   disabled={desabilitarBtnGerar}
                 />
               </div>
-              <div className="col-sm-12 col-md-6 col-lg-3 col-xl-2 mb-2">
-                <SelectComponent
-                  label="Ano Letivo"
-                  lista={listaAnosLetivo}
-                  valueOption="valor"
-                  valueText="desc"
-                  disabled={listaAnosLetivo && listaAnosLetivo.length === 1}
-                  onChange={onChangeAnoLetivo}
-                  valueSelect={anoLetivo}
-                  placeholder="Selecione o ano"
-                />
+            </div>
+            <div className="row my-3">
+              <div className="col-sm-12 col-md-6 col-lg-3 col-xl-2 pr-0">
+                <Loader loading={carregandoAnosLetivos} ignorarTip>
+                  <SelectComponent
+                    label="Ano Letivo"
+                    lista={listaAnosLetivo}
+                    valueOption="valor"
+                    valueText="desc"
+                    disabled={listaAnosLetivo?.length === 1}
+                    onChange={onChangeAnoLetivo}
+                    valueSelect={anoLetivo}
+                    placeholder="Selecione o ano"
+                  />
+                </Loader>
               </div>
-              <div className="col-sm-12 col-md-6 col-lg-9 col-xl-5 mb-2">
-                <SelectComponent
-                  label="DRE"
-                  lista={listaDres}
-                  valueOption="codigo"
-                  valueText="nome"
-                  disabled={listaDres && listaDres.length === 1}
-                  onChange={onChangeDre}
-                  valueSelect={codigoDre}
-                  placeholder="Diretoria Regional de Educação (DRE)"
-                  showSearch
-                />
+              <div className="col-sm-12 col-md-6 col-lg-9 col-xl-5 pr-0">
+                <Loader loading={carregandoDres} ignorarTip>
+                  <SelectComponent
+                    label="DRE"
+                    lista={listaDres}
+                    valueOption="codigo"
+                    valueText="nome"
+                    disabled={listaDres?.length === 1 || !anoLetivo}
+                    onChange={onChangeDre}
+                    valueSelect={codigoDre}
+                    placeholder="Diretoria Regional de Educação (DRE)"
+                    showSearch
+                  />
+                </Loader>
               </div>
-              <div className="col-sm-12 col-md-6 col-lg-9 col-xl-5 mb-2">
-                <SelectComponent
-                  label="Unidade Escolar (UE)"
-                  lista={listaUes}
-                  valueOption="valor"
-                  valueText="desc"
-                  disabled={listaUes && listaUes.length === 1}
-                  onChange={onChangeUe}
-                  valueSelect={codigoUe}
-                  placeholder="Unidade Escolar (UE)"
-                  showSearch
-                />
+              <div className="col-sm-12 col-md-6 col-lg-9 col-xl-5">
+                <Loader loading={carregandoUes} ignorarTip>
+                  <SelectComponent
+                    label="Unidade Escolar (UE)"
+                    lista={listaUes}
+                    valueOption="valor"
+                    valueText="desc"
+                    disabled={listaUes?.length === 1 || !codigoDre}
+                    onChange={onChangeUe}
+                    valueSelect={codigoUe}
+                    placeholder="Unidade Escolar (UE)"
+                    showSearch
+                  />
+                </Loader>
               </div>
-              <div className="col-sm-12 col-md-6 col-lg-3 col-xl-3 mb-2">
-                <SelectComponent
-                  label="Modalidade"
-                  lista={listaModalidades}
-                  valueOption="valor"
-                  valueText="descricao"
-                  disabled={listaModalidades && listaModalidades.length === 1}
-                  onChange={onChangeModalidade}
-                  valueSelect={modalidadeId}
-                  placeholder="Selecione uma modalidade"
-                />
+            </div>
+            <div className="row mb-3">
+              <div className="col-sm-12 col-md-4 pr-0">
+                <Loader loading={carregandoModalidade} ignorarTip>
+                  <SelectComponent
+                    label="Modalidade"
+                    lista={listaModalidades}
+                    valueOption="valor"
+                    valueText="descricao"
+                    disabled={listaModalidades?.length === 1 || !codigoUe}
+                    onChange={onChangeModalidade}
+                    valueSelect={modalidadeId}
+                    placeholder="Selecione uma modalidade"
+                  />
+                </Loader>
               </div>
-              <div className="col-sm-12 col-md-3 col-lg-2 col-xl-2 mb-2">
-                <SelectComponent
-                  lista={listaSemestre}
-                  valueOption="valor"
-                  valueText="desc"
-                  label="Semestre"
-                  disabled={
-                    !modalidadeId ||
-                    modalidadeId != modalidade.EJA ||
-                    (listaSemestre && listaSemestre.length === 1)
-                  }
-                  valueSelect={semestre}
-                  onChange={onChangeSemestre}
-                  placeholder="Selecione o semestre"
-                />
+              <div className="col-sm-12 col-md-4 pr-0">
+                <Loader loading={carregandoSemestres} ignorarTip>
+                  <SelectComponent
+                    lista={listaSemestre}
+                    valueOption="valor"
+                    valueText="desc"
+                    label="Semestre"
+                    disabled={
+                      !modalidadeId ||
+                      Number(modalidadeId) !== ModalidadeDTO.EJA ||
+                      listaSemestre?.length === 1
+                    }
+                    valueSelect={semestre}
+                    onChange={onChangeSemestre}
+                    placeholder="Selecione o semestre"
+                  />
+                </Loader>
               </div>
-              <div className="col-sm-12 col-md-9 col-lg-10 col-xl-7 mb-2">
-                <SelectComponent
-                  lista={listaAnosEscolares}
-                  valueOption="valor"
-                  valueText="descricao"
-                  label="Ano"
-                  disabled={
-                    listaAnosEscolares && listaAnosEscolares.length === 1
-                  }
-                  valueSelect={anosEscolares}
-                  onChange={valoresNovos => {
-                    valoresNovos = removeAdicionaOpcaoTodos(
-                      anosEscolares,
-                      valoresNovos
-                    );
-                    onChangeAnos(valoresNovos);
-                  }}
-                  placeholder="Selecione o ano"
-                  multiple
-                />
-              </div>
-              <div className="col-sm-12 col-md-9 col-lg-9 col-xl-5 mb-2">
-                <SelectComponent
-                  lista={listaComponenteCurricular}
-                  valueOption="valor"
-                  valueText="desc"
-                  label="Componente Curricular"
-                  disabled={
-                    listaComponenteCurricular &&
-                    listaComponenteCurricular.length === 1
-                  }
-                  valueSelect={componentesCurriculares}
-                  onChange={valoresNovos => {
-                    valoresNovos = removeAdicionaOpcaoTodos(
-                      componentesCurriculares,
-                      valoresNovos
-                    );
-                    onChangeComponenteCurricular(valoresNovos);
-                  }}
-                  placeholder="Selecione o componente curricular"
-                  multiple
-                />
-              </div>
-              <div className="col-sm-12 col-md-3 col-lg-3 col-xl-2 mb-2">
-                <SelectComponent
-                  lista={listaBimestre}
-                  valueOption="valor"
-                  valueText="desc"
-                  label="Bimestre"
-                  disabled={listaBimestre && listaBimestre.length === 1}
-                  valueSelect={bimestres}
-                  onChange={onChangeBimestre}
-                  placeholder="Selecione o bimestre"
-                />
-              </div>
-              <div className="col-sm-12 col-md-6 col-lg-3 col-xl-2 mb-2">
-                <SelectComponent
-                  lista={listaTipoRelatorio}
-                  valueOption="valor"
-                  valueText="desc"
+              <div className="col-sm-12 col-md-4">
+                <RadioGroupButton
                   label="Tipo de relatório"
-                  disabled={
-                    listaTipoRelatorio && listaTipoRelatorio.length === 1
-                  }
-                  valueSelect={tipoRelatorio}
-                  onChange={onChangeTipoRelatorio}
-                  placeholder="Selecione o tipo"
-                />
-                {tipoRelatorio === tipoDeRelatorio.AMBOS ? (
-                  <span style={{ marginLeft: '11px' }}>
-                    A condição considerada será pela quantidade de faltas
-                  </span>
-                ) : (
-                  ''
-                )}
-              </div>
-              <div className="col-sm-12 col-md-6 col-lg-3 col-xl-3 mb-2">
-                <SelectComponent
-                  lista={listaCondicao}
-                  valueOption="valor"
-                  valueText="desc"
-                  label="Condição"
-                  disabled={listaCondicao && listaCondicao.length === 1}
-                  valueSelect={condicao}
-                  onChange={onChangeCondicao}
-                  placeholder="Selecione a condição"
+                  opcoes={opcoesTipoRelatorio}
+                  valorInicial
+                  onChange={e => {
+                    setTipoRelatorio(e.target.value);
+                  }}
+                  value={tipoRelatorio}
+                  desabilitado={!codigoUe || desabilitarTipoRelatorio}
                 />
               </div>
-              <div className="col-sm-12 col-md-6 col-lg-3 col-xl-2 mb-4">
-                <CampoNumero
-                  onChange={onChangeComparacao}
-                  value={valorCondicao}
-                  min={0}
-                  label="Valor"
-                  className="w-100"
-                  placeholder="Digite o valor"
-                  ehDecimal={false}
-                  disabled={condicao === OPCAO_TODOS_ESTUDANTES}
-                />
+            </div>
+            <div className="row mb-3">
+              <div className="col-sm-12 col-md-4 pr-0">
+                <Loader loading={carregandoAnosEscolares} ignorarTip>
+                  <SelectComponent
+                    lista={listaAnosEscolares}
+                    valueOption="valor"
+                    valueText="descricao"
+                    label="Ano"
+                    disabled={
+                      !listaAnosEscolares?.length ||
+                      listaAnosEscolares?.length === 1 ||
+                      ehTurma
+                    }
+                    valueSelect={anosEscolares}
+                    onChange={valoresNovos => {
+                      valoresNovos = removeAdicionaOpcaoTodos(
+                        anosEscolares,
+                        valoresNovos
+                      );
+                      onChangeAnos(valoresNovos);
+                    }}
+                    placeholder="Selecione o ano"
+                    multiple
+                  />
+                </Loader>
               </div>
-              <div className="col-sm-12 col-md-6 col-lg-3 col-xl-3 mb-2">
-                <SelectComponent
-                  label="Formato"
-                  lista={listaFormatos}
-                  valueOption="valor"
-                  valueText="desc"
-                  valueSelect={formato}
-                  onChange={onChangeFormato}
-                  placeholder="Selecione o formato"
-                />
-              </div>
-              <div className="col-sm-6 col-md-6 col-lg-4 col-xl-3 mb-2">
+              <div className="col-sm-12 col-md-4 pr-0">
                 <RadioGroupButton
                   label="Listar turmas de programa"
                   opcoes={opcoesListarTurmasDePrograma}
@@ -777,10 +809,106 @@ const RelatorioFrequencia = () => {
                   }}
                   value={turmasPrograma}
                   desabilitado={
+                    ehTurma ||
                     !anosEscolares ||
-                    (anosEscolares.length &&
+                    (anosEscolares?.length &&
                       !!anosEscolares?.find(ano => ano !== OPCAO_TODOS))
                   }
+                />
+              </div>
+              <div className="col-sm-12 col-md-4">
+                <Loader loading={carregandoTurmas} ignorarTip>
+                  <SelectComponent
+                    multiple
+                    id="turma"
+                    lista={listaTurmas}
+                    valueOption="valor"
+                    valueText="nomeFiltro"
+                    label="Turma"
+                    disabled={!modalidadeId || listaTurmas?.length === 1}
+                    valueSelect={turmasCodigo}
+                    onChange={valores => {
+                      onchangeMultiSelect(valores, turmasCodigo, onChangeTurma);
+                    }}
+                    placeholder="Turma"
+                    showSearch
+                  />
+                </Loader>
+              </div>
+            </div>
+
+            <div className="row mb-3">
+              <div className="col-sm-12 col-md-4 pr-0">
+                <Loader loading={carregandoComponentesCurriculares} ignorarTip>
+                  <SelectComponent
+                    lista={listaComponenteCurricular}
+                    valueOption="valor"
+                    valueText="desc"
+                    label="Componente Curricular"
+                    disabled={listaComponenteCurricular?.length === 1}
+                    valueSelect={componentesCurriculares}
+                    onChange={valoresNovos => {
+                      valoresNovos = removeAdicionaOpcaoTodos(
+                        componentesCurriculares,
+                        valoresNovos
+                      );
+                      onChangeComponenteCurricular(valoresNovos);
+                    }}
+                    placeholder="Selecione o componente curricular"
+                    multiple
+                  />
+                </Loader>
+              </div>
+              <div className="col-sm-12 col-md-4 pr-0">
+                <Loader loading={carregandoBimestres} ignorarTip>
+                  <SelectComponent
+                    lista={listaBimestre}
+                    valueOption="valor"
+                    valueText="desc"
+                    label="Bimestre"
+                    disabled={listaBimestre?.length === 1}
+                    valueSelect={bimestres}
+                    onChange={onChangeBimestre}
+                    placeholder="Selecione o bimestre"
+                  />
+                </Loader>
+              </div>
+              <div className="col-sm-12 col-md-4">
+                <SelectComponent
+                  lista={listaCondicao}
+                  valueOption="valor"
+                  valueText="desc"
+                  label="Condição"
+                  disabled={listaCondicao?.length === 1}
+                  valueSelect={condicao}
+                  onChange={onChangeCondicao}
+                  placeholder="Selecione a condição"
+                />
+              </div>
+            </div>
+            <div className="row mb-3">
+              <div className="col-sm-12 col-md-4 pr-0">
+                <CampoNumero
+                  onChange={onChangeComparacao}
+                  value={valorCondicao}
+                  min={0}
+                  label="Quantidade de ausências"
+                  className="w-100"
+                  placeholder="Digite a quantidade de ausências"
+                  ehDecimal={false}
+                  disabled={condicao === OPCAO_TODOS_ESTUDANTES}
+                />
+              </div>
+              <div className="col-sm-12 col-md-4 pr-0">
+                <RadioGroupButton
+                  label="Formato"
+                  opcoes={opcoesListaFormatos}
+                  valorInicial
+                  onChange={e => {
+                    setFormato(e.target.value);
+                  }}
+                  value={formato}
+                  desabilitado={ehTurma}
                 />
               </div>
             </div>

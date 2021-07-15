@@ -24,6 +24,7 @@ import {
   statusAcompanhamentoFechamento,
 } from '~/dtos';
 import modalidadeDTO from '~/dtos/modalidade';
+import { onchangeMultiSelect } from '~/utils';
 
 import {
   AbrangenciaServico,
@@ -384,20 +385,6 @@ const AcompanhamentoFechamento = () => {
     setTurmasCodigo(valor);
     setBimestres(undefined);
     setClicouBotaoGerar(false);
-  };
-
-  const onchangeMultiSelect = (valores, valorAtual, funSetarNovoValor) => {
-    const opcaoTodosJaSelecionado = valorAtual
-      ? valorAtual.includes(OPCAO_TODOS)
-      : false;
-    if (opcaoTodosJaSelecionado) {
-      const listaSemOpcaoTodos = valores.filter(v => v !== OPCAO_TODOS);
-      funSetarNovoValor(listaSemOpcaoTodos);
-    } else if (valores.includes(OPCAO_TODOS)) {
-      funSetarNovoValor([OPCAO_TODOS]);
-    } else {
-      funSetarNovoValor(valores);
-    }
   };
 
   const obterTurmas = useCallback(async () => {
