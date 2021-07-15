@@ -36,3 +36,4 @@ export { default as InputBusca } from './InputBusca/InputBusca';
 export { default as LocalizadorEstudante } from './LocalizadorEstudante';
 export { default as LocalizadorEstudantesAtivos } from './LocalizadorEstudantesAtivos';
 export { default as MarcadorSituacao } from './MarcadorSituacao/marcadorSituacao';
+export { default as CampoNumero } from './campoNumero';
