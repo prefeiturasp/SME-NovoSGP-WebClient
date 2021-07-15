@@ -60,6 +60,8 @@ const GraficosFrequencia = () => {
       {exibirFrequenciaPorDRE && (
         <TotalEstudantesPresenciasRemotosAusentesPorDre
           anoLetivo={anoLetivo}
+          dreId={dreId}
+          ueId={ueId}
           modalidade={modalidade}
           semestre={semestre}
         />

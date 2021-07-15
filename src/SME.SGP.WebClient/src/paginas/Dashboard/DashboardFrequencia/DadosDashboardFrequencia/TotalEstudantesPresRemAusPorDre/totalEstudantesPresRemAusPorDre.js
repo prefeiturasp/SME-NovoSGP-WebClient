@@ -7,6 +7,8 @@ import GraficoTotalEstudantesPresenciasRemotosAusentesPorDre from './graficotota
 
 const TotalEstudantesPresenciasRemotosAusentesPorDre = ({
   anoLetivo,
+  dreId,
+  ueId,
   modalidade,
   semestre,
 }) => {
@@ -33,6 +35,8 @@ const TotalEstudantesPresenciasRemotosAusentesPorDre = ({
         {exibir && (
           <GraficoTotalEstudantesPresenciasRemotosAusentesPorDre
             anoLetivo={anoLetivo}
+            dreId={dreId}
+            ueId={ueId}
             modalidade={modalidade}
             semestre={semestre}
           />

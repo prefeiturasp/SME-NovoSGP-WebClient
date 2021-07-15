@@ -13,6 +13,8 @@ import { obterTodosMeses } from '~/utils';
 
 const GraficoTotalEstudantesPresenciasRemotosAusentesPorDre = ({
   anoLetivo,
+  dreId,
+  ueId,
   modalidade,
   semestre,
 }) => {
@@ -55,8 +57,8 @@ const GraficoTotalEstudantesPresenciasRemotosAusentesPorDre = ({
 
     const retorno = await ServicoDashboardFrequencia.obterTotalEstudantesPresenciasRemotosAusentes(
       anoLetivo,
-      '',
-      '',
+      dreId,
+      ueId,
       modalidade,
       semestre,
       anoTurma,
@@ -77,6 +79,8 @@ const GraficoTotalEstudantesPresenciasRemotosAusentesPorDre = ({
     setDadosGrafico(dadosRetorno);
   }, [
     anoLetivo,
+    dreId,
+    ueId,
     modalidade,
     semestre,
     anoTurma,
@@ -95,6 +99,8 @@ const GraficoTotalEstudantesPresenciasRemotosAusentesPorDre = ({
     setDadosGrafico([]);
   }, [
     anoLetivo,
+    dreId,
+    ueId,
     modalidade,
     semestre,
     anoTurma,
@@ -297,12 +303,16 @@ const GraficoTotalEstudantesPresenciasRemotosAusentesPorDre = ({
 
 GraficoTotalEstudantesPresenciasRemotosAusentesPorDre.propTypes = {
   anoLetivo: PropTypes.oneOfType(PropTypes.any),
+  dreId: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+  ueId: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   modalidade: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   semestre: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
 };
 
 GraficoTotalEstudantesPresenciasRemotosAusentesPorDre.defaultProps = {
   anoLetivo: null,
+  dreId: null,
+  ueId: null,
   modalidade: null,
   semestre: null,
 };
