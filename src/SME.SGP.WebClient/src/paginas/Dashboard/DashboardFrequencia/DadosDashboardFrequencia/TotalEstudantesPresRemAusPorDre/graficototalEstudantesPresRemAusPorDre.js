@@ -13,6 +13,8 @@ import { obterTodosMeses } from '~/utils';
 
 const GraficoTotalEstudantesPresenciasRemotosAusentesPorDre = ({
   anoLetivo,
+  dreId,
+  ueId,
   modalidade,
   semestre,
 }) => {
@@ -51,15 +53,20 @@ const GraficoTotalEstudantesPresenciasRemotosAusentesPorDre = ({
       ? undefined
       : dataDiaria.format('YYYY-MM-DD');
     const dataSelecionada = dataInicio || dataDiariaSelecionada;
-    const retorno = await ServicoDashboardFrequencia.obterTotalEstudantesPresenciasRemotosAusentesPorDre(
+    const dataMensalSelecionada = ehTipoMensal ? dataMensal : undefined;
+
+    const retorno = await ServicoDashboardFrequencia.obterTotalEstudantesPresenciasRemotosAusentes(
       anoLetivo,
+      dreId,
+      ueId,
       modalidade,
       semestre,
       anoTurma,
       dataSelecionada,
       dataFim,
       tipoPeriodoDashboard,
-      dataMensal
+      dataMensalSelecionada,
+      true
     )
       .catch(e => erros(e))
       .finally(() => setExibirLoader(false));
@@ -72,6 +79,8 @@ const GraficoTotalEstudantesPresenciasRemotosAusentesPorDre = ({
     setDadosGrafico(dadosRetorno);
   }, [
     anoLetivo,
+    dreId,
+    ueId,
     modalidade,
     semestre,
     anoTurma,
@@ -90,6 +99,8 @@ const GraficoTotalEstudantesPresenciasRemotosAusentesPorDre = ({
     setDadosGrafico([]);
   }, [
     anoLetivo,
+    dreId,
+    ueId,
     modalidade,
     semestre,
     anoTurma,
@@ -145,9 +156,9 @@ const GraficoTotalEstudantesPresenciasRemotosAusentesPorDre = ({
 
   useEffect(() => {
     if (!listaMeses?.length) {
-      ServicoDashboardFrequencia.obterListaMeses(obterTodosMeses);
+      ServicoDashboardFrequencia.obterListaMeses(obterTodosMeses, mesAtual);
     }
-  }, [listaMeses]);
+  }, [listaMeses, mesAtual]);
 
   const onChangeDataMensal = mes => {
     setDataMensal(mes);
@@ -259,9 +270,9 @@ const GraficoTotalEstudantesPresenciasRemotosAusentesPorDre = ({
           </div>
         </div>
         <div className="row">
-          {dadosGrafico?.totalFrequenciaFormatado && (
+          {dadosGrafico?.tagTotalFrequencia && (
             <div className="col-sm-12 mb-2">
-              <TagGrafico valor={dadosGrafico?.totalFrequenciaFormatado} />
+              <TagGrafico valor={dadosGrafico?.tagTotalFrequencia} />
             </div>
           )}
         </div>
@@ -270,7 +281,7 @@ const GraficoTotalEstudantesPresenciasRemotosAusentesPorDre = ({
         loading={exibirLoader}
         className={exibirLoader ? 'text-center my-4' : ''}
       >
-        {dadosGrafico?.dadosFrequenciaDashboard && (
+        {!!dadosGrafico?.dadosFrequenciaDashboard?.length && (
           <GraficoBarras
             data={dadosGrafico?.dadosFrequenciaDashboard}
             xField="turmaAno"
@@ -282,7 +293,7 @@ const GraficoTotalEstudantesPresenciasRemotosAusentesPorDre = ({
             labelVisible={false}
           />
         )}
-        {!exibirLoader && !dadosGrafico?.dadosFrequenciaDashboard && (
+        {!exibirLoader && !dadosGrafico?.dadosFrequenciaDashboard?.length && (
           <div className="text-center">Sem dados</div>
         )}
       </Loader>
@@ -292,12 +303,16 @@ const GraficoTotalEstudantesPresenciasRemotosAusentesPorDre = ({
 
 GraficoTotalEstudantesPresenciasRemotosAusentesPorDre.propTypes = {
   anoLetivo: PropTypes.oneOfType(PropTypes.any),
+  dreId: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+  ueId: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   modalidade: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   semestre: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
 };
 
 GraficoTotalEstudantesPresenciasRemotosAusentesPorDre.defaultProps = {
   anoLetivo: null,
+  dreId: null,
+  ueId: null,
   modalidade: null,
   semestre: null,
 };

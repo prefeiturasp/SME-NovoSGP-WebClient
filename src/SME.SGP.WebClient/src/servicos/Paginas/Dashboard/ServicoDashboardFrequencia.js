@@ -149,9 +149,10 @@ class ServicoDashboardFrequencia {
     this.atualizarFiltros('listaTipoGrafico', retorno);
   };
 
-  obterListaMeses = obterTodosMeses => {
+  obterListaMeses = (obterTodosMeses, mesAtual) => {
     const retorno = obterTodosMeses();
-    this.atualizarFiltros('listaMeses', retorno);
+    const meses = retorno.filter(item => Number(item.numeroMes) <= mesAtual);
+    this.atualizarFiltros('listaMeses', meses);
   };
 
   obterSemanas = anoLetivo => {
@@ -168,7 +169,8 @@ class ServicoDashboardFrequencia {
     dataInicio,
     dataFim,
     tipoPeriodoDashboard,
-    mes
+    mes,
+    visaoDre
   ) => {
     return api.get(
       `${urlPadrao}/anos/${anoLetivo}/dres/${dreId}/ues/${ueId}/modalidades/` +
@@ -181,31 +183,7 @@ class ServicoDashboardFrequencia {
           dataFim,
           tipoPeriodoDashboard,
           mes,
-        },
-      }
-    );
-  };
-
-  obterTotalEstudantesPresenciasRemotosAusentesPorDre = (
-    anoLetivo,
-    modalidade,
-    semestre,
-    anoTurma,
-    dataInicio,
-    dataFim,
-    tipoPeriodoDashboard,
-    mes
-  ) => {
-    return api.get(
-      `${urlPadrao}/anos/${anoLetivo}/modalidades/${modalidade}/consolidado/dres`,
-      {
-        params: {
-          semestre,
-          anoTurma,
-          dataInicio,
-          dataFim,
-          tipoPeriodoDashboard,
-          mes,
+          visaoDre,
         },
       }
     );

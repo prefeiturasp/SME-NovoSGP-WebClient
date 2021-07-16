@@ -53,6 +53,8 @@ const GraficoTotalEstudantesPresenciasRemotosAusentes = ({
       ? undefined
       : dataDiaria.format('YYYY-MM-DD');
     const dataSelecionada = dataInicio || dataDiariaSelecionada;
+    const dataMensalSelecionada = ehTipoMensal ? dataMensal : undefined;
+
     const retorno = await ServicoDashboardFrequencia.obterTotalEstudantesPresenciasRemotosAusentes(
       anoLetivo,
       dreId,
@@ -63,7 +65,8 @@ const GraficoTotalEstudantesPresenciasRemotosAusentes = ({
       dataSelecionada,
       dataFim,
       tipoPeriodoDashboard,
-      dataMensal
+      dataMensalSelecionada,
+      false
     )
       .catch(e => erros(e))
       .finally(() => setExibirLoader(false));
@@ -153,9 +156,9 @@ const GraficoTotalEstudantesPresenciasRemotosAusentes = ({
 
   useEffect(() => {
     if (!listaMeses?.length) {
-      ServicoDashboardFrequencia.obterListaMeses(obterTodosMeses);
+      ServicoDashboardFrequencia.obterListaMeses(obterTodosMeses, mesAtual);
     }
-  }, [listaMeses]);
+  }, [listaMeses, mesAtual]);
 
   const onChangeDataMensal = mes => {
     setDataMensal(mes);
@@ -267,9 +270,9 @@ const GraficoTotalEstudantesPresenciasRemotosAusentes = ({
           </div>
         </div>
         <div className="row">
-          {dadosGrafico?.totalFrequenciaFormatado && (
+          {dadosGrafico?.tagTotalFrequencia && (
             <div className="col-sm-12 mb-2">
-              <TagGrafico valor={dadosGrafico?.totalFrequenciaFormatado} />
+              <TagGrafico valor={dadosGrafico?.tagTotalFrequencia} />
             </div>
           )}
         </div>
@@ -278,7 +281,7 @@ const GraficoTotalEstudantesPresenciasRemotosAusentes = ({
         loading={exibirLoader}
         className={exibirLoader ? 'text-center my-4' : ''}
       >
-        {dadosGrafico?.dadosFrequenciaDashboard && (
+        {!!dadosGrafico?.dadosFrequenciaDashboard?.length && (
           <GraficoBarras
             data={dadosGrafico?.dadosFrequenciaDashboard}
             xField="turmaAno"
@@ -290,7 +293,7 @@ const GraficoTotalEstudantesPresenciasRemotosAusentes = ({
             labelVisible={false}
           />
         )}
-        {!exibirLoader && !dadosGrafico?.dadosFrequenciaDashboard && (
+        {!exibirLoader && !dadosGrafico?.dadosFrequenciaDashboard?.length && (
           <div className="text-center">Sem dados</div>
         )}
       </Loader>
