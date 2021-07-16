@@ -149,9 +149,10 @@ class ServicoDashboardFrequencia {
     this.atualizarFiltros('listaTipoGrafico', retorno);
   };
 
-  obterListaMeses = obterTodosMeses => {
+  obterListaMeses = (obterTodosMeses, mesAtual) => {
     const retorno = obterTodosMeses();
-    this.atualizarFiltros('listaMeses', retorno);
+    const meses = retorno.filter(item => Number(item.numeroMes) <= mesAtual);
+    this.atualizarFiltros('listaMeses', meses);
   };
 
   obterSemanas = anoLetivo => {

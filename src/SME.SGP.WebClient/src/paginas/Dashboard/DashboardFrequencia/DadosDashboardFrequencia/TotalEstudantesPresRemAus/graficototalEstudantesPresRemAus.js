@@ -156,9 +156,9 @@ const GraficoTotalEstudantesPresenciasRemotosAusentes = ({
 
   useEffect(() => {
     if (!listaMeses?.length) {
-      ServicoDashboardFrequencia.obterListaMeses(obterTodosMeses);
+      ServicoDashboardFrequencia.obterListaMeses(obterTodosMeses, mesAtual);
     }
-  }, [listaMeses]);
+  }, [listaMeses, mesAtual]);
 
   const onChangeDataMensal = mes => {
     setDataMensal(mes);
@@ -270,9 +270,9 @@ const GraficoTotalEstudantesPresenciasRemotosAusentes = ({
           </div>
         </div>
         <div className="row">
-          {dadosGrafico?.TagTotalFrequencia && (
+          {dadosGrafico?.tagTotalFrequencia && (
             <div className="col-sm-12 mb-2">
-              <TagGrafico valor={dadosGrafico?.TagTotalFrequencia} />
+              <TagGrafico valor={dadosGrafico?.tagTotalFrequencia} />
             </div>
           )}
         </div>
