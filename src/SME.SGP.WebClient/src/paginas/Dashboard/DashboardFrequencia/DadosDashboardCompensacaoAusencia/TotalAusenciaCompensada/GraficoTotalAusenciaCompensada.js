@@ -111,9 +111,9 @@ const GraficoTotalAusenciaCompensada = ({
               allowClear={false}
             />
           </div>
-          {dadosGrafico?.tagTotalFrequencia && (
+          {dadosGrafico?.tagTotalCompensacaoAusencia && (
             <div className="col-9 mb-2">
-              <TagGrafico valor={dadosGrafico?.tagTotalFrequencia} />
+              <TagGrafico valor={dadosGrafico?.tagTotalCompensacaoAusencia} />
             </div>
           )}
         </div>
