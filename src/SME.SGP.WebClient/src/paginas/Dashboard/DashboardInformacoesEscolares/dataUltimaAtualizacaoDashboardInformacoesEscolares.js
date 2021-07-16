@@ -1,7 +1,7 @@
 import * as moment from 'moment';
 import PropTypes from 'prop-types';
 import React, { useCallback, useEffect, useState } from 'react';
-import DataUltimaAtualizacao from '~/componentes-sgp/DataUltimaAtualizacao/dataUltimaAtualizacao';
+import { TagGrafico } from '~/componentes-sgp';
 import { erros } from '~/servicos';
 import ServicoDashboardInformacoesEscolares from '~/servicos/Paginas/Dashboard/ServicoDashboardInformacoesEscolares';
 
@@ -31,10 +31,14 @@ const DataUltimaAtualizacaoDashboardInformacoesEscolares = props => {
   }, [anoLetivo, obterDataUltimaAtualizacao]);
 
   return dataUltimaConsolidacao ? (
-    <DataUltimaAtualizacao
-      dataFormatada={moment(dataUltimaConsolidacao).format(
-        'DD/MM/YYYY HH:mm:ss'
-      )}
+    <TagGrafico
+      valor={
+        dataUltimaConsolidacao
+          ? `Data da última atualização: ${moment(
+              dataUltimaConsolidacao
+            ).format('DD/MM/YYYY HH:mm:ss')}`
+          : ''
+      }
     />
   ) : (
     ''
