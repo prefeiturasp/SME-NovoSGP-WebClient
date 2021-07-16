@@ -1,26 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import _ from 'lodash';
-
-// Form
 import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
+import { useSelector } from 'react-redux';
 
-// Redux
-import { useSelector, useDispatch } from 'react-redux';
-
-// Serviços
-import RotasDto from '~/dtos/rotasDto';
-import history from '~/servicos/history';
-import AtribuicaoEsporadicaServico from '~/servicos/Paginas/AtribuicaoEsporadica';
-import { erros, erro, sucesso, confirmar } from '~/servicos/alertas';
-import { setBreadcrumbManual } from '~/servicos/breadcrumb-services';
-import { verificaSomenteConsulta } from '~/servicos/servico-navegacao';
-
-// Componentes SGP
-import { Cabecalho } from '~/componentes-sgp';
-
-// Componentes
+import { Cabecalho, FiltroHelper } from '~/componentes-sgp';
 import {
   Card,
   ButtonGroup,
@@ -30,19 +15,29 @@ import {
   momentSchema,
   Loader,
   Auditoria,
+  CheckboxComponent,
+  SelectComponent,
 } from '~/componentes';
 import DreDropDown from '../componentes/DreDropDown';
 import UeDropDown from '../componentes/UeDropDown';
-import AnoLetivoTag from '../componentes/AnoLetivoTag';
 
-// Styles
+import RotasDto from '~/dtos/rotasDto';
+import history from '~/servicos/history';
+import AtribuicaoEsporadicaServico from '~/servicos/Paginas/AtribuicaoEsporadica';
+import {
+  erros,
+  erro,
+  sucesso,
+  confirmar,
+  setBreadcrumbManual,
+  verificaSomenteConsulta,
+} from '~/servicos';
+
+import { validaSeObjetoEhNuloOuVazio } from '~/utils';
+
 import { Row } from './styles';
 
-// Funçoes
-import { validaSeObjetoEhNuloOuVazio } from '~/utils/funcoes/gerais';
-
 function AtribuicaoEsporadicaForm({ match }) {
-  const dispatch = useDispatch();
   const [carregando, setCarregando] = useState(false);
   const permissoesTela = useSelector(store => store.usuario.permissoes);
   const somenteConsulta = verificaSomenteConsulta(
@@ -63,6 +58,9 @@ function AtribuicaoEsporadicaForm({ match }) {
 
   const [listaDres, setListaDres] = useState([]);
   const [listaUes, setListaUes] = useState([]);
+  const [consideraHistorico, setConsideraHistorico] = useState(false);
+  const [listaAnosLetivo, setListaAnosLetivo] = useState([]);
+  const [anoLetivo, setAnoLetivo] = useState();
 
   const [valoresIniciais, setValoresIniciais] = useState({
     professorRf: '',
@@ -233,7 +231,7 @@ function AtribuicaoEsporadicaForm({ match }) {
   };
 
   useEffect(() => {
-    if (match && match.params && match.params.id) {
+    if (match?.params?.id) {
       setNovoRegistro(false);
       setBreadcrumbManual(
         match.url,
@@ -242,6 +240,69 @@ function AtribuicaoEsporadicaForm({ match }) {
       );
       buscarPorId(match.params.id);
     }
+  }, [match]);
+
+  const onChangeConsideraHistorico = e => {
+    setConsideraHistorico(e.target.checked);
+  };
+
+  const obterAnosLetivos = useCallback(async () => {
+    let anosLetivos = [];
+
+    const anosLetivoComHistorico = await FiltroHelper.obterAnosLetivos({
+      consideraHistorico: true,
+    });
+    const anosLetivoSemHistorico = await FiltroHelper.obterAnosLetivos({
+      consideraHistorico: false,
+    });
+
+    anosLetivos = anosLetivos.concat(anosLetivoComHistorico);
+
+    anosLetivoSemHistorico.forEach(ano => {
+      if (!anosLetivoComHistorico.find(a => a.valor === ano.valor)) {
+        anosLetivos.push(ano);
+      }
+    });
+
+    if (!anosLetivos.length) {
+      anosLetivos.push({
+        desc: anoAtual,
+        valor: anoAtual,
+      });
+    }
+
+    if (anosLetivos && anosLetivos.length) {
+      const temAnoAtualNaLista = anosLetivos.find(
+        item => String(item.valor) === String(anoAtual)
+      );
+      if (temAnoAtualNaLista) setAnoLetivo(anoAtual);
+      else setAnoLetivo(anosLetivos[0].valor);
+    }
+
+    setListaAnosLetivo(anosLetivos);
+  }, [anoAtual]);
+
+  useEffect(() => {
+    obterAnosLetivos();
+  }, [obterAnosLetivos]);
+
+  const onChangeAnoLetivo = ano => {
+    setAnoLetivo(ano);
+  };
+
+  const obterPeriodos = async () => {
+    const retorno = await AtribuicaoEsporadicaServico.obterPeriodos(
+      ueId,
+      anoLetivo
+    ).catch(e => erros(e));
+
+    if (retorno?.data) {
+      console.log('rdt', retorno.data);
+    }
+  };
+
+  useEffect(() => {
+    obterPeriodos();
   }, []);
 
   return (
@@ -274,9 +335,32 @@ function AtribuicaoEsporadicaForm({ match }) {
                   onClickExcluir={() => onClickExcluir(form)}
                   modoEdicao={modoEdicao}
                 />
+                <Row className="row mb-2">
+                  <CheckboxComponent
+                    name="exibirHistorico"
+                    form={form}
+                    label="Exibir histórico?"
+                    onChangeCheckbox={onChangeConsideraHistorico}
+                    checked={consideraHistorico}
+                    disabled={listaAnosLetivo.length === 1}
+                  />
+                </Row>
                 <Row className="row">
                   <Grid cols={2}>
-                    <AnoLetivoTag label="Ano Letivo" />
+                    <SelectComponent
+                      name="anoLetivo"
+                      label="Ano Letivo"
+                      form={form}
+                      lista={listaAnosLetivo}
+                      valueOption="valor"
+                      valueText="desc"
+                      disabled={
+                        !consideraHistorico || listaAnosLetivo?.length === 1
+                      }
+                      onChange={onChangeAnoLetivo}
+                      valueSelect={anoLetivo}
+                      placeholder="Ano letivo"
+                    />
                   </Grid>
                   <Grid cols={5}>
                     <DreDropDown

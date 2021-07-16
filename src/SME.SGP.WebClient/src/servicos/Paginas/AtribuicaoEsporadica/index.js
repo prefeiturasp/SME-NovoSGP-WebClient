@@ -16,6 +16,10 @@ const AtribuicaoEsporadicaServico = {
   deletarAtribuicaoEsporadica(id) {
     return api.delete(`/v1/atribuicao/esporadica/${id}`);
   },
+  obterPeriodos(ueId, anoLetivo) {
+    return api.get(`
+    /api/v1/atribuicao/esporadica/periodos/ues/${ueId}/anos/${anoLetivo}`);
+  },
 };
 
 export default AtribuicaoEsporadicaServico;

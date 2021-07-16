@@ -1,31 +1,32 @@
-import React, { useState, useCallback, memo } from 'react';
+import React, { useState, useCallback, memo, useEffect } from 'react';
 import PropTypes from 'prop-types';
-
-// Formulario
 import { Form, Formik } from 'formik';
 import * as Yup from 'yup';
-
-// Redux
 import { useDispatch } from 'react-redux';
 
-// Componentes
-import { Grid, Localizador } from '~/componentes';
+import {
+  CheckboxComponent,
+  Grid,
+  Localizador,
+  SelectComponent,
+} from '~/componentes';
 import DreDropDown from '~/componentes-sgp/DreDropDown';
 import UeDropDown from '~/componentes-sgp/UeDropDown';
-import AnoLetivoTag from '../../../componentes/AnoLetivoTag';
 
-// Styles
 import { Linha } from '~/componentes/EstilosGlobais';
 
-// Utils
 import { validaSeObjetoEhNuloOuVazio } from '~/utils/funcoes/gerais';
 
 import { selecionarUe } from '~/redux/modulos/atribuicaoEsporadica/actions';
+import { FiltroHelper } from '~/componentes-sgp';
 
 const Filtro = memo(({ onFiltrar }) => {
   const dispatch = useDispatch();
   const [refForm, setRefForm] = useState({});
   const [dreId, setDreId] = useState('');
+  const [consideraHistorico, setConsideraHistorico] = useState(false);
+  const [listaAnosLetivo, setListaAnosLetivo] = useState([]);
+  const [anoLetivo, setAnoLetivo] = useState();
 
   const anoAtual = window.moment().format('YYYY');
 
@@ -52,6 +53,54 @@ const Filtro = memo(({ onFiltrar }) => {
     setDreId(valor);
   }, []);
 
+  const onChangeConsideraHistorico = e => {
+    setConsideraHistorico(e.target.checked);
+  };
+
+  const obterAnosLetivos = useCallback(async () => {
+    let anosLetivos = [];
+
+    const anosLetivoComHistorico = await FiltroHelper.obterAnosLetivos({
+      consideraHistorico: true,
+    });
+    const anosLetivoSemHistorico = await FiltroHelper.obterAnosLetivos({
+      consideraHistorico: false,
+    });
+
+    anosLetivos = anosLetivos.concat(anosLetivoComHistorico);
+
+    anosLetivoSemHistorico.forEach(ano => {
+      if (!anosLetivoComHistorico.find(a => a.valor === ano.valor)) {
+        anosLetivos.push(ano);
+      }
+    });
+
+    if (!anosLetivos.length) {
+      anosLetivos.push({
+        desc: anoAtual,
+        valor: anoAtual,
+      });
+    }
+
+    if (anosLetivos && anosLetivos.length) {
+      const temAnoAtualNaLista = anosLetivos.find(
+        item => String(item.valor) === String(anoAtual)
+      );
+      if (temAnoAtualNaLista) setAnoLetivo(anoAtual);
+      else setAnoLetivo(anosLetivos[0].valor);
+    }
+
+    setListaAnosLetivo(anosLetivos);
+  }, [anoAtual]);
+
+  useEffect(() => {
+    obterAnosLetivos();
+  }, [obterAnosLetivos]);
+
+  const onChangeAnoLetivo = ano => {
+    setAnoLetivo(ano);
+  };
+
   return (
     <Formik
       enableReinitialize
@@ -61,13 +110,32 @@ const Filtro = memo(({ onFiltrar }) => {
       ref={refFormik => setRefForm(refFormik)}
       validate={valores => validarFiltro(valores)}
       validateOnChange
-      // validateOnBlur
     >
       {form => (
         <Form className="col-md-12 mb-4">
           <Linha className="row mb-2">
+            <CheckboxComponent
+              name="exibirHistorico"
+              form={form}
+              label="Exibir histórico?"
+              onChangeCheckbox={onChangeConsideraHistorico}
+              checked={consideraHistorico}
+              disabled={listaAnosLetivo.length === 1}
+            />
+          </Linha>
+          <Linha className="row mb-2">
             <Grid cols={2}>
-              <AnoLetivoTag form={form} />
+              <SelectComponent
+                name="anoLetivo"
+                form={form}
+                lista={listaAnosLetivo}
+                valueOption="valor"
+                valueText="desc"
+                disabled={!consideraHistorico || listaAnosLetivo?.length === 1}
+                onChange={onChangeAnoLetivo}
+                valueSelect={anoLetivo}
+                placeholder="Ano letivo"
+              />
             </Grid>
             <Grid cols={5}>
               <DreDropDown form={form} onChange={valor => onChangeDre(valor)} />
