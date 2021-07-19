@@ -26,6 +26,10 @@ const DadosAcompanhamentoAprendizagem = props => {
 
   const { semestreSelecionado } = props;
 
+  const componenteCurricularSelecionado = useSelector(
+    state => state.registroIndividual.componenteCurricularSelecionado
+  );
+
   const permissoesTela =
     usuario.permissoes[RotasDto.ACOMPANHAMENTO_APRENDIZAGEM];
 
@@ -60,7 +64,8 @@ const DadosAcompanhamentoAprendizagem = props => {
     const retorno = await ServicoAcompanhamentoAprendizagem.obterAcompanhamentoEstudante(
       turmaSelecionada?.id,
       codigoEOL,
-      semestreSelecionado
+      semestreSelecionado,
+      componenteCurricularSelecionado
     );
 
     const { acompanhamentoAlunoSemestreId, podeEditar } = retorno;
@@ -72,7 +77,7 @@ const DadosAcompanhamentoAprendizagem = props => {
       obterDadosAcompanhamentoAprendizagemPorEstudante();
     }
   }, [turmaSelecionada, codigoEOL, semestreSelecionado]);
-  
+
   const exibirTabs = false;
 
   return (
@@ -97,20 +102,20 @@ const DadosAcompanhamentoAprendizagem = props => {
               ''
             )}
           </TabPane>
-          {
-            exibirTabs ? (
-              <TabPane tab="Observações" key={TAB_OBSERVACOES} disabled>
-                {tabAtual === TAB_OBSERVACOES ? 'Observações' : ''}
-              </TabPane>
-              ) : ('')
-          }
-           {
-            exibirTabs ? (
-              <TabPane tab="Dieta especial" key={TAB_DIETA_ESPECIAL} disabled>
-                {tabAtual === TAB_DIETA_ESPECIAL ? 'Dieta especial' : ''}
-              </TabPane>
-              ) : ('')
-          } 
+          {exibirTabs ? (
+            <TabPane tab="Observações" key={TAB_OBSERVACOES} disabled>
+              {tabAtual === TAB_OBSERVACOES ? 'Observações' : ''}
+            </TabPane>
+          ) : (
+            ''
+          )}
+          {exibirTabs ? (
+            <TabPane tab="Dieta especial" key={TAB_DIETA_ESPECIAL} disabled>
+              {tabAtual === TAB_DIETA_ESPECIAL ? 'Dieta especial' : ''}
+            </TabPane>
+          ) : (
+            ''
+          )}
         </ContainerTabsCard>
       ) : (
         ''

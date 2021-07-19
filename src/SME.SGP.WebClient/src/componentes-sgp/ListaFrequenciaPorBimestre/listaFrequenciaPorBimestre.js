@@ -45,10 +45,16 @@ const ListaFrequenciaPorBimestre = props => {
                                   {data.ausencias}
                                 </td>
                                 <td className="col-valor-linha-dois">
-                                  {data.frequencia}
-                                  <BtnExpandirAusenciaEstudante
-                                    indexLinha={index}
-                                  />
+                                  {data.frequencia ? (
+                                    <>
+                                      {data.frequencia}
+                                      <BtnExpandirAusenciaEstudante
+                                        indexLinha={index}
+                                      />
+                                    </>
+                                  ) : (
+                                    ''
+                                  )}
                                 </td>
                               </tr>
                               <AusenciasEstudante

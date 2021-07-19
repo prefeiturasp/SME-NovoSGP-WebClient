@@ -31,6 +31,10 @@ const FotosCriancaDados = props => {
 
   const { semestreSelecionado } = props;
 
+  const componenteCurricularSelecionado = useSelector(
+    state => state.registroIndividual.componenteCurricularSelecionado
+  );
+
   const [exibirLoader, setExibirLoader] = useState(false);
   const [listaInicialImagens, setListaInicialImagens] = useState([]);
 
@@ -101,7 +105,8 @@ const FotosCriancaDados = props => {
       ServicoAcompanhamentoAprendizagem.obterAcompanhamentoEstudante(
         turmaSelecionada?.id,
         codigoEOL,
-        semestreSelecionado
+        semestreSelecionado,
+        componenteCurricularSelecionado
       );
     } else {
       atualizarDados(dados);

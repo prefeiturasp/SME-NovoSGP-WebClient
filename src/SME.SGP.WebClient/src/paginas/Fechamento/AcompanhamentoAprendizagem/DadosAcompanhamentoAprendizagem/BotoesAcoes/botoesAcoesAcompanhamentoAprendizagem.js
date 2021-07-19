@@ -37,6 +37,10 @@ const BotoesAcoesAcompanhamentoAprendizagem = props => {
 
   const { codigoEOL } = dadosAlunoObjectCard;
 
+  const componenteCurricularSelecionado = useSelector(
+    state => state.registroIndividual.componenteCurricularSelecionado
+  );
+
   const usuario = useSelector(store => store.usuario);
   const { turmaSelecionada } = usuario;
 
@@ -85,7 +89,8 @@ const BotoesAcoesAcompanhamentoAprendizagem = props => {
       ServicoAcompanhamentoAprendizagem.obterAcompanhamentoEstudante(
         turmaSelecionada?.id,
         codigoEOL,
-        semestreSelecionado
+        semestreSelecionado,
+        componenteCurricularSelecionado
       );
     }
 
