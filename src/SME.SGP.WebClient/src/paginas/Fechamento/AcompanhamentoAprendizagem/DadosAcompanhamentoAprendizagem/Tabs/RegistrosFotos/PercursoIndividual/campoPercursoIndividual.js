@@ -37,6 +37,8 @@ const CampoPercursoIndividual = () => {
       value={percursoIndividual}
       onChange={onChange}
       readonly={desabilitarCamposAcompanhamentoAprendizagem}
+      mensagemErro="Campo obrigatório"
+      validarSeTemErro={valorNovo => !valorNovo}
     />
   );
 };

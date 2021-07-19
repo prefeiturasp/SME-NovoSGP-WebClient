@@ -4,7 +4,9 @@ import {
   setApanhadoGeralEmEdicao,
   setDadosAcompanhamentoAprendizagem,
   setDadosApanhadoGeral,
+  setErrosAcompanhamentoAprendizagem,
   setExibirLoaderGeralAcompanhamentoAprendizagem,
+  setExibirModalErrosAcompanhamentoAprendizagem,
   setQtdMaxImagensCampoPercursoColetivo,
 } from '~/redux/modulos/acompanhamentoAprendizagem/actions';
 import { limparDadosRegistroIndividual } from '~/redux/modulos/registroIndividual/actions';
@@ -120,6 +122,16 @@ class ServicoAcompanhamentoAprendizagem {
     const { codigoEOL } = dadosAlunoObjectCard;
 
     const salvar = async () => {
+      if (!dadosAcompanhamentoAprendizagem.percursoIndividual) {
+        dispatch(
+          setErrosAcompanhamentoAprendizagem([
+            'Campo percurso individual é obrigatório',
+          ])
+        );
+        dispatch(setExibirModalErrosAcompanhamentoAprendizagem(true));
+        return false;
+      }
+
       const params = {
         acompanhamentoAlunoId:
           dadosAcompanhamentoAprendizagem.acompanhamentoAlunoId,
