@@ -1,16 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { isEqual } from 'lodash';
 import queryString from 'query-string';
-
-// Form
 import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
-
-// Redux
 import { useSelector } from 'react-redux';
 
-// Serviços
 import RotasDto from '~/dtos/rotasDto';
 import history from '~/servicos/history';
 import { erro, sucesso, confirmar } from '~/servicos/alertas';
@@ -18,10 +13,12 @@ import { setBreadcrumbManual } from '~/servicos/breadcrumb-services';
 import AtribuicaoCJServico from '~/servicos/Paginas/AtribuicaoCJ';
 import { obterPerfis } from '~/servicos/Paginas/ServicoUsuario';
 
-// Componentes SGP
-import { Cabecalho, DreDropDown, UeDropDown } from '~/componentes-sgp';
-
-// Componentes
+import {
+  Cabecalho,
+  DreDropDown,
+  FiltroHelper,
+  UeDropDown,
+} from '~/componentes-sgp';
 import {
   Card,
   ButtonGroup,
@@ -29,15 +26,15 @@ import {
   Localizador,
   Loader,
   Auditoria,
+  SelectComponent,
+  CheckboxComponent,
 } from '~/componentes';
 import ModalidadesDropDown from './componentes/ModalidadesDropDown';
 import TurmasDropDown from './componentes/TurmasDropDown';
 import Tabela from './componentes/Tabela';
 
-// Styles
 import { Row } from './styles';
 
-// Funçoes
 import {
   validaSeObjetoEhNuloOuVazio,
   valorNuloOuVazio,
@@ -45,6 +42,7 @@ import {
 } from '~/utils/funcoes/gerais';
 
 function AtribuicaoCJForm({ match, location }) {
+  const anoAtual = window.moment().format('YYYY');
   const [carregando, setCarregando] = useState(false);
   const [carregandoTabela, setcarregandoTabela] = useState(false);
   const permissoesTela = useSelector(store => store.usuario.permissoes);
@@ -55,7 +53,12 @@ function AtribuicaoCJForm({ match, location }) {
   const [auditoria, setAuditoria] = useState({});
   const [refForm, setRefForm] = useState(null);
   const [listaProfessores, setListaProfessores] = useState([]);
+  const [consideraHistorico, setConsideraHistorico] = useState(false);
+  const [listaAnosLetivo, setListaAnosLetivo] = useState([]);
+  const [anoLetivo, setAnoLetivo] = useState(anoAtual);
   const [valoresForm, setValoresForm] = useState({});
+  const [somenteConsulta, setSomenteConsulta] = useState(false);
+  const [ehEdicao, setEhEdicao] = useState(false);
   const [valoresIniciais, setValoresIniciais] = useState({
     professorRf: '',
     professorNome: '',
@@ -63,6 +66,7 @@ function AtribuicaoCJForm({ match, location }) {
     ueId: '',
     modalidadeId: '',
     turmaId: '',
+    anoLetivo: anoAtual,
   });
 
   const validacoes = () => {
@@ -159,6 +163,11 @@ function AtribuicaoCJForm({ match, location }) {
     if (location && location.search) {
       const query = queryString.parse(location.search);
       setBreadcrumbManual(match.url, 'Atribuição', '/gestao/atribuicao-cjs');
+      console.log('query', query);
+
+      if (query?.modalidadeId || query?.turmaId) {
+        setEhEdicao(true);
+      }
 
       setValoresIniciais({
         ...valoresIniciais,
@@ -224,11 +233,69 @@ function AtribuicaoCJForm({ match, location }) {
     }
   }, [refForm, valoresForm]);
 
-  const anoAtual = window.moment().format('YYYY');
+  const limparCampos = () => {
+    setAnoLetivo(anoAtual);
+    refForm.setFieldValue('anoLetivo', anoAtual);
+  };
+
+  const onChangeConsideraHistorico = e => {
+    setConsideraHistorico(e.target.checked);
+    limparCampos();
+  };
+
+  const obterAnosLetivos = useCallback(async () => {
+    let anosLetivos = [];
+
+    const anosLetivoComHistorico = await FiltroHelper.obterAnosLetivos({
+      consideraHistorico: true,
+    });
+    const anosLetivoSemHistorico = await FiltroHelper.obterAnosLetivos({
+      consideraHistorico: false,
+    });
+
+    anosLetivos = anosLetivos.concat(anosLetivoComHistorico);
+
+    anosLetivoSemHistorico.forEach(ano => {
+      if (!anosLetivoComHistorico.find(a => a.valor === ano.valor)) {
+        anosLetivos.push(ano);
+      }
+    });
+
+    if (!anosLetivos.length) {
+      anosLetivos.push({
+        desc: anoAtual,
+        valor: anoAtual,
+      });
+    }
+
+    if (anosLetivos && anosLetivos.length) {
+      const temAnoAtualNaLista = anosLetivos.find(
+        item => String(item.valor) === String(anoAtual)
+      );
+      if (temAnoAtualNaLista) setAnoLetivo(anoAtual);
+      else setAnoLetivo(anosLetivos[0].valor);
+    }
+
+    setListaAnosLetivo(anosLetivos);
+  }, [anoAtual]);
+
+  useEffect(() => {
+    obterAnosLetivos();
+  }, [obterAnosLetivos]);
+
+  const onChangeAnoLetivo = ano => {
+    setAnoLetivo(ano);
+  };
+
+  useEffect(() => {
+    const desabilitar = !permissoesTela[RotasDto.ATRIBUICAO_CJ_LISTA]
+      ?.podeIncluir;
+    setSomenteConsulta(desabilitar);
+  }, [permissoesTela]);
 
   return (
     <>
-      <Cabecalho pagina="Atribuição" />
+      <Cabecalho pagina="Atribuição" classes="mb-2" />
       <Loader loading={carregando}>
         <Card>
           <Formik
@@ -254,21 +321,56 @@ function AtribuicaoCJForm({ match, location }) {
                   modoEdicao={modoEdicao}
                 />
                 <Row className="row">
-                  <Grid cols={6}>
+                  <CheckboxComponent
+                    name="exibirHistorico"
+                    form={form}
+                    label="Exibir histórico?"
+                    onChangeCheckbox={onChangeConsideraHistorico}
+                    checked={consideraHistorico}
+                    disabled={
+                      listaAnosLetivo.length === 1 ||
+                      somenteConsulta ||
+                      ehEdicao
+                    }
+                  />
+                </Row>
+                <Row className="row">
+                  <Grid cols={2}>
+                    <SelectComponent
+                      name="anoLetivo"
+                      placeholder="Ano letivo"
+                      label="Ano letivo"
+                      lista={listaAnosLetivo}
+                      valueText="desc"
+                      valueOption="valor"
+                      form={form}
+                      onChange={onChangeAnoLetivo}
+                      valueSelect={anoLetivo}
+                      allowClear={false}
+                      disabled={
+                        !consideraHistorico ||
+                        listaAnosLetivo?.length === 1 ||
+                        somenteConsulta
+                      }
+                    />
+                  </Grid>
+                  <Grid cols={5}>
                     <DreDropDown
                       url="v1/dres/atribuicoes"
                       label="Diretoria Regional de Educação (DRE)"
                       form={form}
                       onChange={valor => setDreId(valor)}
+                      desabilitado={somenteConsulta}
                     />
                   </Grid>
-                  <Grid cols={6}>
+                  <Grid cols={5}>
                     <UeDropDown
                       label="Unidade Escolar (UE)"
                       dreId={dreId}
                       form={form}
                       url="v1/dres"
                       onChange={() => {}}
+                      desabilitado={somenteConsulta}
                     />
                   </Grid>
                 </Row>
@@ -281,6 +383,7 @@ function AtribuicaoCJForm({ match, location }) {
                         showLabel
                         form={form}
                         onChange={() => {}}
+                        desabilitado={somenteConsulta}
                       />
                     </Row>
                   </Grid>
@@ -288,7 +391,9 @@ function AtribuicaoCJForm({ match, location }) {
                     <ModalidadesDropDown
                       label="Modalidade"
                       form={form}
-                      disabled={valoresIniciais?.modalidadeId}
+                      disabled={
+                        valoresIniciais?.modalidadeId || somenteConsulta
+                      }
                       onChange={value => {
                         if (
                           value !== undefined &&
@@ -316,6 +421,7 @@ function AtribuicaoCJForm({ match, location }) {
                           });
                         }
                       }}
+                      desabilitado={somenteConsulta}
                     />
                   </Grid>
                 </Row>

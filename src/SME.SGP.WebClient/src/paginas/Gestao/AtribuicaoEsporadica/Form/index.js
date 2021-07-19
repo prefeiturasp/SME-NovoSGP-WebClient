@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import _ from 'lodash';
 import { Formik, Form } from 'formik';
@@ -65,10 +65,16 @@ function AtribuicaoEsporadicaForm({ match }) {
   const [anoLetivo, setAnoLetivo] = useState();
   const [periodos, setPeriodos] = useState();
 
+  const valorPadrao = useMemo(() => {
+    const dataParcial = moment().format('MM-DD');
+    const dataInteira = moment(`${dataParcial}-${anoLetivo}`);
+    return dataInteira;
+  }, [anoLetivo]);
+
   const [valoresIniciais, setValoresIniciais] = useState({
     professorRf: '',
     professorNome: '',
-    dataInicio: window.moment(),
+    dataInicio: '',
     dataFim: '',
     ueId: '',
     dreId: '',
@@ -247,6 +253,8 @@ function AtribuicaoEsporadicaForm({ match }) {
 
   const onChangeConsideraHistorico = e => {
     setConsideraHistorico(e.target.checked);
+    setAnoLetivo(anoAtual);
+    refForm.setFieldValue('anoLetivo', anoAtual);
   };
 
   const obterAnosLetivos = useCallback(async () => {
@@ -307,10 +315,10 @@ function AtribuicaoEsporadicaForm({ match }) {
   }, [anoLetivo, ueCodigo, listaUes]);
 
   useEffect(() => {
-    if (ueCodigo) {
+    if (ueCodigo && anoLetivo) {
       obterPeriodos();
     }
-  }, [obterPeriodos, ueCodigo]);
+  }, [obterPeriodos, ueCodigo, anoLetivo]);
 
   const desabilitarData = dataCorrente =>
     dataCorrente <= moment(periodos?.dataInicio) ||
@@ -420,6 +428,7 @@ function AtribuicaoEsporadicaForm({ match }) {
                       formatoData="DD/MM/YYYY"
                       desabilitado={somenteConsulta}
                       desabilitarData={desabilitarData}
+                      valorPadrao={valorPadrao}
                     />
                   </Grid>
                   <Grid cols={2}>
@@ -431,6 +440,7 @@ function AtribuicaoEsporadicaForm({ match }) {
                       formatoData="DD/MM/YYYY"
                       desabilitado={somenteConsulta}
                       desabilitarData={desabilitarData}
+                      valorPadrao={valorPadrao}
                     />
                   </Grid>
                 </Row>
