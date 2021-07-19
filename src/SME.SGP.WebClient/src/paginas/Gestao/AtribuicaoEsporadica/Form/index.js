@@ -4,6 +4,7 @@ import _ from 'lodash';
 import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
 import { useSelector } from 'react-redux';
+import moment from 'moment';
 
 import { Cabecalho, FiltroHelper } from '~/componentes-sgp';
 import {
@@ -47,6 +48,7 @@ function AtribuicaoEsporadicaForm({ match }) {
     store => store.atribuicaoEsporadica.filtro
   );
   const [dreId, setDreId] = useState('');
+  const [ueCodigo, setUeCodigo] = useState('');
   const [novoRegistro, setNovoRegistro] = useState(true);
   const [modoEdicao, setModoEdicao] = useState(false);
   const [auditoria, setAuditoria] = useState({});
@@ -61,6 +63,7 @@ function AtribuicaoEsporadicaForm({ match }) {
   const [consideraHistorico, setConsideraHistorico] = useState(false);
   const [listaAnosLetivo, setListaAnosLetivo] = useState([]);
   const [anoLetivo, setAnoLetivo] = useState();
+  const [periodos, setPeriodos] = useState();
 
   const [valoresIniciais, setValoresIniciais] = useState({
     professorRf: '',
@@ -290,20 +293,28 @@ function AtribuicaoEsporadicaForm({ match }) {
     setAnoLetivo(ano);
   };
 
-  const obterPeriodos = async () => {
+  const obterPeriodos = useCallback(async () => {
+    const ue = listaUes.find(item => item.valor === ueCodigo);
+    const ueId = ue?.id;
     const retorno = await AtribuicaoEsporadicaServico.obterPeriodos(
       ueId,
       anoLetivo
     ).catch(e => erros(e));
 
     if (retorno?.data) {
-      console.log('rdt', retorno.data);
+      setPeriodos(retorno.data);
     }
-  };
+  }, [anoLetivo, ueCodigo, listaUes]);
 
   useEffect(() => {
-    obterPeriodos();
-  }, []);
+    if (ueCodigo) {
+      obterPeriodos();
+    }
+  }, [obterPeriodos, ueCodigo]);
+
+  const desabilitarData = dataCorrente =>
+    dataCorrente <= moment(periodos?.dataInicio) ||
+    dataCorrente >= moment(periodos?.dataFim);
 
   return (
     <>
@@ -378,7 +389,8 @@ function AtribuicaoEsporadicaForm({ match }) {
                       label="Unidade Escolar (UE)"
                       dreId={dreId}
                       form={form}
-                      onChange={(v, infantil, lista) => {
+                      onChange={(codigo, infantil, lista) => {
+                        setUeCodigo(codigo);
                         setEhInfantil(infantil);
                         setListaUes(lista);
                       }}
@@ -407,6 +419,7 @@ function AtribuicaoEsporadicaForm({ match }) {
                       name="dataInicio"
                       formatoData="DD/MM/YYYY"
                       desabilitado={somenteConsulta}
+                      desabilitarData={desabilitarData}
                     />
                   </Grid>
                   <Grid cols={2}>
@@ -417,6 +430,7 @@ function AtribuicaoEsporadicaForm({ match }) {
                       name="dataFim"
                       formatoData="DD/MM/YYYY"
                       desabilitado={somenteConsulta}
+                      desabilitarData={desabilitarData}
                     />
                   </Grid>
                 </Row>

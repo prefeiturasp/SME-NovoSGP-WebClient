@@ -17,8 +17,9 @@ const AtribuicaoEsporadicaServico = {
     return api.delete(`/v1/atribuicao/esporadica/${id}`);
   },
   obterPeriodos(ueId, anoLetivo) {
-    return api.get(`
-    /api/v1/atribuicao/esporadica/periodos/ues/${ueId}/anos/${anoLetivo}`);
+    return api.get(
+      `/v1/atribuicao/esporadica/periodos/ues/${ueId}/anos/${anoLetivo}`
+    );
   },
 };
 

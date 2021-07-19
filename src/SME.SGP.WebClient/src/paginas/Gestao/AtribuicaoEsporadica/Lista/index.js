@@ -100,19 +100,14 @@ function AtribuicaoEsporadicaLista() {
     history.push(`/gestao/atribuicao-esporadica/editar/${item.id}`);
   };
 
-  const anoAtual = window.moment().format('YYYY');
-
-  const onChangeFiltro = useCallback(
-    valoresFiltro => {
-      setFiltro({
-        AnoLetivo: anoAtual,
-        DreId: valoresFiltro.dreId,
-        UeId: valoresFiltro.ueId,
-        ProfessorRF: valoresFiltro.professorRf,
-      });
-    },
-    [anoAtual]
-  );
+  const onChangeFiltro = useCallback(valoresFiltro => {
+    setFiltro({
+      AnoLetivo: valoresFiltro.anoLetivo,
+      DreId: valoresFiltro.dreId,
+      UeId: valoresFiltro.ueId,
+      ProfessorRF: valoresFiltro.professorRf,
+    });
+  }, []);
 
   const validarFiltro = () => {
     return !!filtro.DreId && !!filtro.UeId;

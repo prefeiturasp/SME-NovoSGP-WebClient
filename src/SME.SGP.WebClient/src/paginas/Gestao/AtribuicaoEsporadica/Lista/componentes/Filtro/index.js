@@ -41,6 +41,13 @@ const Filtro = memo(({ onFiltrar }) => {
     return Yup.object({});
   };
 
+  const limparCampos = () => {
+    setAnoLetivo(anoAtual);
+    setDreId('');
+    refForm.setFieldValue('anoLetivo', anoAtual);
+    refForm.setFieldValue('dreId', '');
+  };
+
   const validarFiltro = valores => {
     if (validaSeObjetoEhNuloOuVazio(valores)) return;
     const formContext = refForm && refForm.getFormikContext();
@@ -55,6 +62,7 @@ const Filtro = memo(({ onFiltrar }) => {
 
   const onChangeConsideraHistorico = e => {
     setConsideraHistorico(e.target.checked);
+    limparCampos();
   };
 
   const obterAnosLetivos = useCallback(async () => {
