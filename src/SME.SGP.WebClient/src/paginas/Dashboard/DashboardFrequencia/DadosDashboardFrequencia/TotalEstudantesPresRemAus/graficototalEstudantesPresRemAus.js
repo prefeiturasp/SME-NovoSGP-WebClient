@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
 import { useSelector } from 'react-redux';
@@ -20,9 +20,15 @@ const GraficoTotalEstudantesPresenciasRemotosAusentes = ({
 }) => {
   const mesAtual = Number(moment().format('MM'));
 
+  const valorPadrao = useMemo(() => {
+    const dataParcial = moment().format('MM-DD');
+    const dataInteira = moment(`${dataParcial}-${anoLetivo}`);
+    return dataInteira;
+  }, [anoLetivo]);
+
   const [anoTurma, setAnoTurma] = useState();
   const [dadosGrafico, setDadosGrafico] = useState([]);
-  const [dataDiaria, setDataDiaria] = useState(moment());
+  const [dataDiaria, setDataDiaria] = useState(valorPadrao);
   const [dataFim, setDataFim] = useState();
   const [dataInicio, setDataInicio] = useState();
   const [dataMensal, setDataMensal] = useState(mesAtual.toString());
@@ -30,6 +36,10 @@ const GraficoTotalEstudantesPresenciasRemotosAusentes = ({
   const [exibirLoader, setExibirLoader] = useState(false);
   const [tipoPeriodoDashboard, setTipoPeriodoDashboard] = useState('1');
 
+  const consideraHistorico = useSelector(
+    store =>
+      store.dashboardFrequencia?.dadosDashboardFrequencia?.consideraHistorico
+  );
   const listaAnosEscolares = useSelector(
     store =>
       store.dashboardFrequencia?.dadosDashboardFrequencia?.listaAnosEscolares
@@ -144,21 +154,31 @@ const GraficoTotalEstudantesPresenciasRemotosAusentes = ({
   };
 
   const desabilitarData = dataCorrente => {
+    const anoMinimo = consideraHistorico
+      ? moment(`12-31-${anoLetivo}`)
+      : moment();
+
     return (
       dataCorrente &&
-      (dataCorrente > moment() || dataCorrente < moment(`01-01-${anoLetivo}`))
+      (dataCorrente > anoMinimo || dataCorrente < moment(`01-01-${anoLetivo}`))
     );
   };
 
   const onChangeDataDiaria = data => {
-    setDataDiaria(data);
+    if (data) {
+      setDataDiaria(data);
+    }
   };
 
   useEffect(() => {
     if (!listaMeses?.length) {
-      ServicoDashboardFrequencia.obterListaMeses(obterTodosMeses, mesAtual);
+      ServicoDashboardFrequencia.obterListaMeses(
+        obterTodosMeses,
+        mesAtual,
+        consideraHistorico
+      );
     }
-  }, [listaMeses, mesAtual]);
+  }, [listaMeses, mesAtual, consideraHistorico]);
 
   const onChangeDataMensal = mes => {
     setDataMensal(mes);
@@ -207,6 +227,7 @@ const GraficoTotalEstudantesPresenciasRemotosAusentes = ({
             formatoData="DD/MM/YYYY"
             onChange={onChangeDataDiaria}
             desabilitarData={desabilitarData}
+            valorPadrao={valorPadrao}
           />
         );
       case '2':
