@@ -22,6 +22,7 @@ function UeDropDown({ form, onChange, dreId, label, desabilitado }) {
     const { data } = await AtribuicaoEsporadicaServico.buscarUes(dreId);
     if (data) {
       const lista = data.map(item => ({
+        id: item.id,
         desc: item.nome,
         valor: item.codigo,
         ehInfantil: item.ehInfantil,
@@ -75,7 +76,7 @@ UeDropDown.propTypes = {
 
 UeDropDown.defaultProps = {
   form: {},
-  onChange: () => { },
+  onChange: () => {},
   dreId: '',
   label: null,
   desabilitado: null,
