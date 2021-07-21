@@ -178,6 +178,9 @@ const GraficoTotalEstudantesPresenciasRemotosAusentes = ({
         consideraHistorico
       );
     }
+    if (consideraHistorico) {
+      ServicoDashboardFrequencia.atualizarFiltros('listaSemanas', []);
+    }
   }, [listaMeses, mesAtual, consideraHistorico]);
 
   const onChangeDataMensal = mes => {
