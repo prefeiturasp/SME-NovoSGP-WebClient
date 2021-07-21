@@ -10,7 +10,7 @@ import AtribuicaoCJServico from '~/servicos/Paginas/AtribuicaoCJ';
 import FiltroHelper from '~/componentes-sgp/filtro/helper';
 import { erros } from '~/servicos/alertas';
 
-function TurmasDropDown({ form, onChange, label }) {
+function TurmasDropDown({ form, onChange, label, desabilitado }) {
   const [listaTurmas, setListaTurmas] = useState([]);
   const [carregandoLista, setCarregandoLista] = useState(false);
 
@@ -65,6 +65,7 @@ function TurmasDropDown({ form, onChange, label }) {
         valueText="desc"
         placeholder="Turma"
         showSearch
+        disabled={desabilitado}
       />
     </Loader>
   );
@@ -77,12 +78,14 @@ TurmasDropDown.propTypes = {
   ]),
   onChange: PropTypes.func,
   label: PropTypes.string,
+  desabilitado: PropTypes.bool,
 };
 
 TurmasDropDown.defaultProps = {
   form: {},
   onChange: () => {},
   label: null,
+  desabilitado: false,
 };
 
 export default TurmasDropDown;

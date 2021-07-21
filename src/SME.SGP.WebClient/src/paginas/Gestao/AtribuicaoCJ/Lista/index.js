@@ -1,24 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import shortid from 'shortid';
-
-// Redux
 import { useSelector } from 'react-redux';
 
-// Servicos
 import history from '~/servicos/history';
 import RotasDto from '~/dtos/rotasDto';
 import AtribuicaoCJServico from '~/servicos/Paginas/AtribuicaoCJ';
 import { verificaSomenteConsulta } from '~/servicos/servico-navegacao';
 import { erros } from '~/servicos/alertas';
 
-// Componentes SGP
 import { Cabecalho } from '~/componentes-sgp';
-
-// Componentes
 import { Card, DataTable, ButtonGroup, Loader } from '~/componentes';
 import Filtro from './componentes/Filtro';
 
-// Styles
 import { PilulaEstilo } from './styles';
 
 function AtribuicaoCJLista() {
@@ -66,7 +59,8 @@ function AtribuicaoCJLista() {
 
   const onClickEditar = item => {
     history.push(
-      `/gestao/atribuicao-cjs/editar?modalidadeId=${item.modalidadeId}&turmaId=${item.turmaId}&dreId=${filtro.DreId}&ueId=${filtro.UeId}`
+      `/gestao/atribuicao-cjs/editar?modalidadeId=${item.modalidadeId}&turmaId=` +
+        `${item.turmaId}&dreId=${filtro.DreId}&ueId=${filtro.UeId}`
     );
   };
 
@@ -84,7 +78,9 @@ function AtribuicaoCJLista() {
   }, [filtro]);
 
   useEffect(() => {
-    setSomenteConsulta(verificaSomenteConsulta(permissoesTela));
+    setSomenteConsulta(
+      verificaSomenteConsulta(permissoesTela[RotasDto.ATRIBUICAO_CJ_LISTA])
+    );
   }, [permissoesTela]);
 
   useEffect(() => {
