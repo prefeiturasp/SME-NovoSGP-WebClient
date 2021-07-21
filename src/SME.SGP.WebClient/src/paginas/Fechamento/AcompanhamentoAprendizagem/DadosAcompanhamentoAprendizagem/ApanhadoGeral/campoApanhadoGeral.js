@@ -2,11 +2,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { JoditEditor } from '~/componentes';
 import { RotasDto } from '~/dtos';
-import {
-  setAcompanhamentoAprendizagemEmEdicao,
-  setApanhadoGeralEmEdicao,
-  setDesabilitarCamposAcompanhamentoAprendizagem,
-} from '~/redux/modulos/acompanhamentoAprendizagem/actions';
+import { setApanhadoGeralEmEdicao } from '~/redux/modulos/acompanhamentoAprendizagem/actions';
 import { verificaSomenteConsulta } from '~/servicos';
 import ServicoAcompanhamentoAprendizagem from '~/servicos/Paginas/Relatorios/AcompanhamentoAprendizagem/ServicoAcompanhamentoAprendizagem';
 
