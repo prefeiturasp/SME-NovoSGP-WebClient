@@ -189,52 +189,54 @@ const AvaliacaoForm = ({ match, location }) => {
     delete dadosValidacao.categoriaId;
     delete dadosValidacao.descricao;
 
-    if (tamanhoTextoDescricao(descricao) <= 500) {
-      const validacao = await ServicoAvaliacao.validar(dadosValidacao);
-
-      if (validacao && validacao.status === 200) {
-        const salvar = await ServicoAvaliacao.salvar(idAvaliacao, {
-          ...dados,
-          ...avaliacao,
-          turmasParaCopiar: copias.map(z => ({
-            turmaId: z.turmaId,
-            dataAtividadeAvaliativa: z.dataAvaliacao,
-          })),
-        });
-
-        if (salvar && salvar.status === 200) {
-          if (salvar.data && salvar.data.length) {
-            salvar.data.forEach(item => {
-              if (item.mensagem.includes('Erro')) {
-                setCarregandoTela(false);
-                erro(item.mensagem);
-              } else {
-                setCarregandoTela(false);
-                sucesso(item.mensagem);
-              }
-            });
+    if(!dadosAvaliacao.importado) {
+      if (tamanhoTextoDescricao(descricao) <= 500) {
+        const validacao = await ServicoAvaliacao.validar(dadosValidacao);
+  
+        if (validacao && validacao.status === 200) {
+          const salvar = await ServicoAvaliacao.salvar(idAvaliacao, {
+            ...dados,
+            ...avaliacao,
+            turmasParaCopiar: copias.map(z => ({
+              turmaId: z.turmaId,
+              dataAtividadeAvaliativa: z.dataAvaliacao,
+            })),
+          });
+  
+          if (salvar && salvar.status === 200) {
+            if (salvar.data && salvar.data.length) {
+              salvar.data.forEach(item => {
+                if (item.mensagem.includes('Erro')) {
+                  setCarregandoTela(false);
+                  erro(item.mensagem);
+                } else {
+                  setCarregandoTela(false);
+                  sucesso(item.mensagem);
+                }
+              });
+            } else {
+              setCarregandoTela(false);
+              sucesso(
+                `Avaliação ${
+                  idAvaliacao ? 'atualizada' : 'cadastrada'
+                } com sucesso.`
+              );
+            }
+            setCarregandoTela(false);
+            history.push(RotasDTO.CALENDARIO_PROFESSOR);
           } else {
             setCarregandoTela(false);
-            sucesso(
-              `Avaliação ${
-                idAvaliacao ? 'atualizada' : 'cadastrada'
-              } com sucesso.`
-            );
+            erro(salvar);
           }
-          setCarregandoTela(false);
-          history.push(RotasDTO.CALENDARIO_PROFESSOR);
         } else {
           setCarregandoTela(false);
-          erro(salvar);
+          erro(validacao);
         }
       } else {
         setCarregandoTela(false);
-        erro(validacao);
+        erro('A descrição não deve ter mais de 500 caracteres');
       }
-    } else {
-      setCarregandoTela(false);
-      erro('A descrição não deve ter mais de 500 caracteres');
-    }
+    }    
   };
 
   const categorias = { NORMAL: 1, INTERDISCIPLINAR: 2 };
@@ -299,6 +301,7 @@ const AvaliacaoForm = ({ match, location }) => {
     disciplinaContidaRegenciaId: [],
     nome: '',
     tipoAvaliacaoId: undefined,
+    importado: false,
   };
 
   const clicouBotaoCancelar = form => {
