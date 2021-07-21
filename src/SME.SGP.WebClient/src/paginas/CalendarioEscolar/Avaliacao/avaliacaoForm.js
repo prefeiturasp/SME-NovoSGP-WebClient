@@ -189,54 +189,55 @@ const AvaliacaoForm = ({ match, location }) => {
     delete dadosValidacao.categoriaId;
     delete dadosValidacao.descricao;
 
-    if(!dadosAvaliacao.importado) {
-      if (tamanhoTextoDescricao(descricao) <= 500) {
-        const validacao = await ServicoAvaliacao.validar(dadosValidacao);
-  
-        if (validacao && validacao.status === 200) {
-          const salvar = await ServicoAvaliacao.salvar(idAvaliacao, {
-            ...dados,
-            ...avaliacao,
-            turmasParaCopiar: copias.map(z => ({
-              turmaId: z.turmaId,
-              dataAtividadeAvaliativa: z.dataAvaliacao,
-            })),
-          });
-  
-          if (salvar && salvar.status === 200) {
-            if (salvar.data && salvar.data.length) {
-              salvar.data.forEach(item => {
-                if (item.mensagem.includes('Erro')) {
-                  setCarregandoTela(false);
-                  erro(item.mensagem);
-                } else {
-                  setCarregandoTela(false);
-                  sucesso(item.mensagem);
-                }
-              });
-            } else {
-              setCarregandoTela(false);
-              sucesso(
-                `Avaliação ${
-                  idAvaliacao ? 'atualizada' : 'cadastrada'
-                } com sucesso.`
-              );
-            }
-            setCarregandoTela(false);
-            history.push(RotasDTO.CALENDARIO_PROFESSOR);
+    if (validaTamanhoCaracteres()) {
+      const validacao = await ServicoAvaliacao.validar(dadosValidacao);
+
+      if (validacao && validacao.status === 200) {
+        const salvar = await ServicoAvaliacao.salvar(idAvaliacao, {
+          ...dados,
+          ...avaliacao,
+          turmasParaCopiar: copias.map(z => ({
+            turmaId: z.turmaId,
+            dataAtividadeAvaliativa: z.dataAvaliacao,
+          })),
+        });
+
+        if (salvar && salvar.status === 200) {
+          if (salvar.data && salvar.data.length) {
+            salvar.data.forEach(item => {
+              if (item.mensagem.includes('Erro')) {
+                setCarregandoTela(false);
+                erro(item.mensagem);
+              } else {
+                setCarregandoTela(false);
+                sucesso(item.mensagem);
+              }
+            });
           } else {
             setCarregandoTela(false);
-            erro(salvar);
+            sucesso(
+              `Avaliação ${idAvaliacao ? 'atualizada' : 'cadastrada'
+              } com sucesso.`
+            );
           }
+          setCarregandoTela(false);
+          history.push(RotasDTO.CALENDARIO_PROFESSOR);
         } else {
           setCarregandoTela(false);
-          erro(validacao);
+          erro(salvar);
         }
       } else {
         setCarregandoTela(false);
-        erro('A descrição não deve ter mais de 500 caracteres');
+        erro(validacao);
       }
-    }    
+    } else {
+      setCarregandoTela(false);
+      erro('A descrição não deve ter mais de 500 caracteres');
+    }
+  };
+
+  const validaTamanhoCaracteres = () => {
+    return dadosAvaliacao.importado ? true : (tamanhoTextoDescricao(descricao) <= 500);
   };
 
   const categorias = { NORMAL: 1, INTERDISCIPLINAR: 2 };
@@ -262,7 +263,7 @@ const AvaliacaoForm = ({ match, location }) => {
       descricao: Yup.string().test(
         'len',
         'A descrição não deve ter mais de 500 caracteres',
-        texto => {          
+        texto => {
           return texto === undefined || (tamanhoTextoDescricao(texto) <= 500);
         }
       ),
@@ -678,7 +679,7 @@ const AvaliacaoForm = ({ match, location }) => {
                   <Div className="row">
                     <Grid cols={4} className="mb-4">
                       {listaDisciplinas?.length > 1 &&
-                      form.values.categoriaId ===
+                        form.values.categoriaId ===
                         categorias.INTERDISCIPLINAR ? (
                         <SelectComponent
                           id="disciplinasId"
@@ -835,7 +836,7 @@ const AvaliacaoForm = ({ match, location }) => {
                   <Grid cols={12}>
                     <InseridoAlterado className="mt-4">
                       {inseridoAlterado.criadoPor &&
-                      inseridoAlterado.criadoEm ? (
+                        inseridoAlterado.criadoEm ? (
                         <p className="pt-2">
                           INSERIDO por {inseridoAlterado.criadoPor} em{' '}
                           {window.moment(inseridoAlterado.criadoEm).format()}
@@ -845,7 +846,7 @@ const AvaliacaoForm = ({ match, location }) => {
                       )}
 
                       {inseridoAlterado.alteradoPor &&
-                      inseridoAlterado.alteradoEm ? (
+                        inseridoAlterado.alteradoEm ? (
                         <p>
                           ALTERADO por {inseridoAlterado.alteradoPor} em{' '}
                           {window.moment(inseridoAlterado.alteradoEm).format()}
