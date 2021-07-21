@@ -41,6 +41,7 @@ const AvaliacaoForm = ({ match, location }) => {
   const [refForm, setRefForm] = useState({});
 
   const [desabilitarCampos, setDesabilitarCampos] = useState(false);
+  const [importado, setImportado] = useState(false);
   const [modoEdicao, setModoEdicao] = useState(false);
   const [dentroPeriodo, setDentroPeriodo] = useState(true);
   const [podeLancaNota, setPodeLancaNota] = useState(true);
@@ -237,7 +238,7 @@ const AvaliacaoForm = ({ match, location }) => {
   };
 
   const validaTamanhoCaracteres = () => {
-    return dadosAvaliacao.importado ? true : (tamanhoTextoDescricao(descricao) <= 500);
+    return importado ? true : (tamanhoTextoDescricao(descricao) <= 500);
   };
 
   const categorias = { NORMAL: 1, INTERDISCIPLINAR: 2 };
@@ -264,7 +265,7 @@ const AvaliacaoForm = ({ match, location }) => {
         'len',
         'A descrição não deve ter mais de 500 caracteres',
         texto => {
-          return texto === undefined || (tamanhoTextoDescricao(texto) <= 500);
+          return texto === undefined || validaTamanhoCaracteres();
         }
       ),
     };
@@ -433,8 +434,9 @@ const AvaliacaoForm = ({ match, location }) => {
         setListaDisciplinasSelecionadas(avaliacao.data.disciplinasId);
         setDisciplinaSelecionada(avaliacao.data.disciplinasId[0]);
         validaInterdisciplinar(avaliacao.data.categoriaId);
-        const tipoAvaliacaoId = avaliacao.data.tipoAvaliacaoId.toString();
-        setDadosAvaliacao({ ...avaliacao.data, tipoAvaliacaoId });
+        const tipoAvaliacaoId = avaliacao.data.tipoAvaliacaoId.toString();        
+        setImportado(avaliacao.data.importado);
+        setDadosAvaliacao({ ...avaliacao.data, tipoAvaliacaoId, importado });
         setDescricao(avaliacao.data.descricao);
         setInseridoAlterado({
           alteradoEm: avaliacao.data.alteradoEm,
