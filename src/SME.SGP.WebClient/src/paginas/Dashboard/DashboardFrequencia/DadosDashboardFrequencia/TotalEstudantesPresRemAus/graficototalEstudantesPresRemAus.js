@@ -27,6 +27,7 @@ const GraficoTotalEstudantesPresenciasRemotosAusentes = ({
   }, [anoLetivo]);
 
   const [anoTurma, setAnoTurma] = useState();
+  const [carregandoSemanas, setCarregandoSemanas] = useState(false);
   const [dadosGrafico, setDadosGrafico] = useState([]);
   const [dataDiaria, setDataDiaria] = useState(valorPadrao);
   const [dataFim, setDataFim] = useState();
@@ -178,6 +179,7 @@ const GraficoTotalEstudantesPresenciasRemotosAusentes = ({
         consideraHistorico
       );
     }
+    ServicoDashboardFrequencia.atualizarFiltros('listaSemanas', []);
   }, [listaMeses, mesAtual, consideraHistorico]);
 
   const onChangeDataMensal = mes => {
@@ -192,9 +194,10 @@ const GraficoTotalEstudantesPresenciasRemotosAusentes = ({
   };
 
   const obterSemanas = useCallback(async () => {
-    const retorno = await ServicoDashboardFrequencia.obterSemanas(
-      anoLetivo
-    ).catch(e => erros(e));
+    setCarregandoSemanas(true);
+    const retorno = await ServicoDashboardFrequencia.obterSemanas(anoLetivo)
+      .catch(e => erros(e))
+      .finally(() => setCarregandoSemanas(false));
 
     if (retorno?.data) {
       ServicoDashboardFrequencia.atualizarFiltros('listaSemanas', retorno.data);
@@ -232,15 +235,17 @@ const GraficoTotalEstudantesPresenciasRemotosAusentes = ({
         );
       case '2':
         return (
-          <SelectComponent
-            lista={listaSemanas}
-            valueOption="valor"
-            valueText="descricao"
-            valueSelect={dataSemanal}
-            onChange={onChangeDataSemanal}
-            placeholder="Selecione o tipo"
-            allowClear={false}
-          />
+          <Loader loading={carregandoSemanas} ignorarTip>
+            <SelectComponent
+              lista={listaSemanas}
+              valueOption="valor"
+              valueText="descricao"
+              valueSelect={dataSemanal}
+              onChange={onChangeDataSemanal}
+              placeholder="Selecione o tipo"
+              allowClear={false}
+            />
+          </Loader>
         );
       case '3':
         return (
