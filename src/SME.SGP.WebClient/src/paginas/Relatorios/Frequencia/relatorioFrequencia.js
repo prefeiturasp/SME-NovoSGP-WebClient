@@ -69,8 +69,9 @@ const RelatorioFrequencia = () => {
   const [semestre, setSemestre] = useState(undefined);
   const [tipoRelatorio, setTipoRelatorio] = useState('1');
   const [turmasCodigo, setTurmasCodigo] = useState();
-  const [turmasPrograma, setTurmasPrograma] = useState(false);
+  const [turmasPrograma, setTurmasPrograma] = useState(true);
   const [valorCondicao, setValorCondicao] = useState(undefined);
+  const [desabilitarSemestre, setDesabilitarSemestre] = useState(false);
 
   const TIPO_RELATORIO = useMemo(
     () => ({
@@ -327,7 +328,7 @@ const RelatorioFrequencia = () => {
         codigoUe,
         modalidadeId,
         anoLetivo,
-        codigoTodosAnosEscolares,
+        codigoTodosAnosEscolares || [OPCAO_TODOS],
         turmasPrograma
       )
         .catch(e => erros(e))
@@ -355,13 +356,13 @@ const RelatorioFrequencia = () => {
   ]);
 
   useEffect(() => {
-    if (anosEscolares?.length) {
+    if (modalidadeId) {
       obterComponenteCurricular();
       return;
     }
     setComponentesCurriculares(undefined);
     setListaComponenteCurricular([]);
-  }, [anosEscolares, turmasPrograma, obterComponenteCurricular]);
+  }, [modalidadeId, turmasPrograma, obterComponenteCurricular]);
 
   const obterBimestres = useCallback(async () => {
     setCarregandoBimestres(true);
@@ -405,16 +406,21 @@ const RelatorioFrequencia = () => {
   }, [modalidadeId, anoLetivo]);
 
   useEffect(() => {
+    const desabilitado =
+      String(modalidadeId) === String(ModalidadeDTO.EJA) && !semestre;
+
+    setDesabilitarSemestre(desabilitado);
+  }, [modalidadeId, semestre]);
+
+  useEffect(() => {
     let desabilitar =
       !anoLetivo ||
       !codigoDre ||
       !codigoUe ||
       !modalidadeId ||
-      (String(modalidadeId) === String(ModalidadeDTO.EJA)
-        ? !semestre
-        : false) ||
-      !anosEscolares ||
-      !turmasCodigo?.length ||
+      desabilitarSemestre ||
+      (!ehTurma && !anosEscolares) ||
+      (ehTurma && !turmasCodigo?.length) ||
       !componentesCurriculares ||
       !bimestres ||
       !condicao;
@@ -434,6 +440,7 @@ const RelatorioFrequencia = () => {
     codigoUe,
     modalidadeId,
     semestre,
+    desabilitarSemestre,
     anosEscolares,
     turmasCodigo,
     componentesCurriculares,
@@ -441,6 +448,7 @@ const RelatorioFrequencia = () => {
     tipoRelatorio,
     condicao,
     valorCondicao,
+    ehTurma,
   ]);
 
   useEffect(() => {
@@ -640,8 +648,15 @@ const RelatorioFrequencia = () => {
   useEffect(() => {
     if (ehTurma) {
       setFormato(FORMATOS.PDF);
+      setTurmasPrograma(true);
+
+      if (codigoUe === OPCAO_TODOS) {
+        setTurmasCodigo(OPCAO_TODOS);
+      }
+      return;
     }
-  }, [ehTurma, FORMATOS]);
+    setTurmasCodigo(undefined);
+  }, [ehTurma, FORMATOS, codigoUe]);
 
   return (
     <>
@@ -673,7 +688,7 @@ const RelatorioFrequencia = () => {
                   id="btn-gerar-frequencia"
                   icon="print"
                   label="Gerar"
-                  color={Colors.Azul}
+                  color={Colors.Roxo}
                   border
                   bold
                   onClick={() => onClickGerar()}
@@ -769,7 +784,12 @@ const RelatorioFrequencia = () => {
                     setTipoRelatorio(e.target.value);
                   }}
                   value={tipoRelatorio}
-                  desabilitado={!codigoUe || desabilitarTipoRelatorio}
+                  desabilitado={
+                    !codigoUe ||
+                    desabilitarTipoRelatorio ||
+                    !modalidadeId ||
+                    desabilitarSemestre
+                  }
                 />
               </div>
             </div>
