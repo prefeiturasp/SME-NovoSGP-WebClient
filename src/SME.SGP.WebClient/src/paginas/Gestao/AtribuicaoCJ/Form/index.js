@@ -163,8 +163,6 @@ function AtribuicaoCJForm({ match, location }) {
     if (location && location.search) {
       const query = queryString.parse(location.search);
       setBreadcrumbManual(match.url, 'Atribuição', '/gestao/atribuicao-cjs');
-      console.log('query', query);
-
       if (query?.modalidadeId || query?.turmaId) {
         setEhEdicao(true);
       }
