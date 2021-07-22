@@ -208,11 +208,11 @@ const LinhaAluno = ({
             )}
           </td>
         )}
-        {registraFrequencia && aluno?.frequencia ? (
-          <td>{aluno?.frequencia}%</td>
-        ) : (
-          ''
-        )}
+        <td>
+          {registraFrequencia && aluno?.frequencia
+            ? `${aluno?.frequencia}%`
+            : ''}
+        </td>
       </tr>
       <LinhaConceitoFinal
         indexLinha={indexAluno}
