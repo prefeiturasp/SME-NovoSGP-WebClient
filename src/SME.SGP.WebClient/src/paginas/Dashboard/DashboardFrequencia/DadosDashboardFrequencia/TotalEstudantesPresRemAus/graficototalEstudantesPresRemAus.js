@@ -172,15 +172,16 @@ const GraficoTotalEstudantesPresenciasRemotosAusentes = ({
   };
 
   useEffect(() => {
-    if (!listaMeses?.length) {
-      ServicoDashboardFrequencia.obterListaMeses(
-        obterTodosMeses,
-        mesAtual,
-        consideraHistorico
-      );
-    }
+    const ehAnoAtual = anoLetivo === moment().format('YYYY');
+    const todosMeses = ehAnoAtual ? false : consideraHistorico;
+    ServicoDashboardFrequencia.atualizarFiltros('listaMeses', []);
     ServicoDashboardFrequencia.atualizarFiltros('listaSemanas', []);
-  }, [listaMeses, mesAtual, consideraHistorico]);
+    ServicoDashboardFrequencia.obterListaMeses(
+      obterTodosMeses,
+      mesAtual,
+      todosMeses
+    );
+  }, [mesAtual, anoLetivo, consideraHistorico]);
 
   const onChangeDataMensal = mes => {
     setDataMensal(mes);
