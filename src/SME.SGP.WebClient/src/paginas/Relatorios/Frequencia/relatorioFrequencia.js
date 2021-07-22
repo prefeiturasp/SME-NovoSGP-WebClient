@@ -320,16 +320,42 @@ const RelatorioFrequencia = () => {
     return todosComponentesCurriculares;
   };
 
+  const escolherChamadaEndpointComponeteCurricular = useCallback(
+    (codigoTodosAnosEscolares, turmas) => {
+      if (ehTurma) {
+        return ServicoComponentesCurriculares.obterComponetensCuricularesPorTurma(
+          codigoUe,
+          turmas
+        );
+      }
+      return ServicoComponentesCurriculares.obterComponetensCuriculares(
+        codigoUe,
+        modalidadeId,
+        anoLetivo,
+        codigoTodosAnosEscolares,
+        turmasPrograma
+      );
+    },
+    [modalidadeId, anoLetivo, codigoUe, turmasPrograma, ehTurma]
+  );
+
   const obterComponenteCurricular = useCallback(async () => {
     const codigoTodosAnosEscolares = obterCodigoTodosAnosEscolares();
     if (anoLetivo) {
       setCarregandoComponentesCurriculares(true);
-      const retorno = await ServicoComponentesCurriculares.obterComponetensCuriculares(
-        codigoUe,
-        modalidadeId,
-        anoLetivo,
-        codigoTodosAnosEscolares || [OPCAO_TODOS],
-        turmasPrograma
+      const ehTodasTurmas = turmasCodigo === OPCAO_TODOS;
+      const turmas = ehTodasTurmas
+        ? listaTurmas
+            .map(item => item.valor)
+            .filter(item => item !== '0')
+            .concat()
+        : turmasCodigo;
+      if (!turmas) {
+        return;
+      }
+      const retorno = await escolherChamadaEndpointComponeteCurricular(
+        codigoTodosAnosEscolares,
+        turmas
       )
         .catch(e => erros(e))
         .finally(() => setCarregandoComponentesCurriculares(false));
@@ -348,21 +374,30 @@ const RelatorioFrequencia = () => {
       setListaComponenteCurricular([]);
     }
   }, [
-    modalidadeId,
     anoLetivo,
     obterCodigoTodosAnosEscolares,
-    codigoUe,
-    turmasPrograma,
+    escolherChamadaEndpointComponeteCurricular,
+    turmasCodigo,
+    listaTurmas,
   ]);
 
   useEffect(() => {
-    if (modalidadeId) {
+    const permiteChamadaEndpoint =
+      (ehTurma && turmasCodigo) || anosEscolares?.length;
+    if (modalidadeId && permiteChamadaEndpoint) {
       obterComponenteCurricular();
       return;
     }
     setComponentesCurriculares(undefined);
     setListaComponenteCurricular([]);
-  }, [modalidadeId, turmasPrograma, obterComponenteCurricular]);
+  }, [
+    modalidadeId,
+    turmasPrograma,
+    ehTurma,
+    anosEscolares,
+    turmasCodigo,
+    obterComponenteCurricular,
+  ]);
 
   const obterBimestres = useCallback(async () => {
     setCarregandoBimestres(true);
