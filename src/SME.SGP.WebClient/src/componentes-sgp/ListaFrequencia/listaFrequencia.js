@@ -41,17 +41,22 @@ const ListaFrequencia = props => {
       state.frequenciaPlanoAula.listaDadosFrequencia?.listaTiposFrequencia
   );
 
+  const componenteCurricular = useSelector(
+    state => state.frequenciaPlanoAula.componenteCurricular
+  );
+
   const [desabilitarCampos, setDesabilitarCampos] = useState(false);
 
   useEffect(() => {
     const somenteConsulta = verificaSomenteConsulta(permissoesTela);
     const desabilitar =
-      frequenciaId > 0
+      !componenteCurricular?.registraFrequencia ||
+      (frequenciaId > 0
         ? somenteConsulta || !permissoesTela.podeAlterar
-        : somenteConsulta || !permissoesTela.podeIncluir;
+        : somenteConsulta || !permissoesTela.podeIncluir);
     setDesabilitarCampos(desabilitar);
     if (!temPeriodoAberto) setDesabilitarCampos(!temPeriodoAberto);
-  }, [frequenciaId, permissoesTela, temPeriodoAberto]);
+  }, [frequenciaId, permissoesTela, temPeriodoAberto, componenteCurricular]);
 
   const marcaPresencaFaltaTodasAulas = (aluno, tipo) => {
     if (!desabilitarCampos && !aluno.desabilitado) {
