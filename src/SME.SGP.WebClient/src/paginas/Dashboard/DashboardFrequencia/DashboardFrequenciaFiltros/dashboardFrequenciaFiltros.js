@@ -337,7 +337,7 @@ const DashboardFrequenciaFiltros = () => {
   return (
     <>
       <div className="row">
-        <div className="col-sm-12 col-md-6 col-lg-4 col-xl-4 mb-2">
+        <div className="col-sm-12 col-md-6 col-lg-4 col-xl-4 mb-2 mt-1">
           <CheckboxComponent
             label="Exibir histórico?"
             onChangeCheckbox={e => {
@@ -357,8 +357,8 @@ const DashboardFrequenciaFiltros = () => {
         </div>
       </div>
       <div className="row">
-        <div className="col-sm-12 col-md-6 col-lg-3 col-xl-2 mb-2">
-          <Loader loading={carregandoAnosLetivos}>
+        <div className="col-sm-12 col-md-6 col-lg-3 col-xl-2 mb-3 pr-0">
+          <Loader loading={carregandoAnosLetivos} ignorarTip>
             <SelectComponent
               id="ano-letivo"
               label="Ano Letivo"
@@ -372,11 +372,11 @@ const DashboardFrequenciaFiltros = () => {
             />
           </Loader>
         </div>
-        <div className="col-sm-12 col-md-12 col-lg-9 col-xl-5 mb-2">
-          <Loader loading={carregandoDres}>
+        <div className="col-sm-12 col-md-12 col-lg-9 col-xl-5 mb-3 pr-0">
+          <Loader loading={carregandoDres} ignorarTip>
             <SelectComponent
               id="dre"
-              label="DRE"
+              label="Diretoria Regional de Educação (DRE)"
               lista={listaDres}
               valueOption="codigo"
               valueText="nome"
@@ -388,8 +388,8 @@ const DashboardFrequenciaFiltros = () => {
             />
           </Loader>
         </div>
-        <div className="col-sm-12 col-md-12 col-lg-12 col-xl-5 mb-2">
-          <Loader loading={carregandoUes}>
+        <div className="col-sm-12 col-md-12 col-lg-12 col-xl-5 mb-3">
+          <Loader loading={carregandoUes} ignorarTip>
             <SelectComponent
               id="ue"
               label="Unidade Escolar (UE)"
@@ -404,8 +404,8 @@ const DashboardFrequenciaFiltros = () => {
             />
           </Loader>
         </div>
-        <div className="col-sm-12 col-md-6 col-lg-6 col-xl-4 mb-2">
-          <Loader loading={carregandoModalidades}>
+        <div className="col-sm-12 col-md-6 col-lg-6 col-xl-4 mb-3 pr-0">
+          <Loader loading={carregandoModalidades} ignorarTip>
             <SelectComponent
               id="modalidade"
               label="Modalidade"
@@ -419,8 +419,8 @@ const DashboardFrequenciaFiltros = () => {
             />
           </Loader>
         </div>
-        <div className="col-sm-12 col-md-6 col-lg-6 col-xl-3 mb-2">
-          <Loader loading={carregandoSemestres}>
+        <div className="col-sm-12 col-md-6 col-lg-6 col-xl-3 mb-3">
+          <Loader loading={carregandoSemestres} ignorarTip>
             <SelectComponent
               id="semestre"
               label="Semestre"

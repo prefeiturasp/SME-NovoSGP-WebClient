@@ -203,7 +203,7 @@ const DadosAdesao = props => {
   };
 
   return (
-    <Loader loading={exibirLoader} className="text-center">
+    <Loader loading={exibirLoader} className="text-center mb-3">
       <div className="col-md-12 mt-2">
         <DataUltimaAtualizacaoDashboardEscolaAqui nomeConsulta="ConsolidarAdesaoEOL" />
       </div>
