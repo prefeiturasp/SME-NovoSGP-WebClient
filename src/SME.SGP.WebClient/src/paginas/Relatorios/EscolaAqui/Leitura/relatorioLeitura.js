@@ -314,7 +314,10 @@ const RelatorioLeitura = () => {
         modalidadeId,
         '',
         anoLetivo,
-        consideraHistorico
+        consideraHistorico,
+        false,
+        undefined,
+        true
       );
       if (data) {
         const turmas = [];

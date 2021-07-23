@@ -24,6 +24,7 @@ const CampoNota = props => {
     name,
     clicarSetas,
     step,
+    podeEditar,
   } = props;
 
   const fechamentoPeriodoInicioFim = useSelector(
@@ -177,11 +178,13 @@ const CampoNota = props => {
         min={0}
         max={10}
         step={step}
-        className={abaixoMedia ? 'borda-abaixo-media' : ''}        
-        disabled={alunoDesabilitado ||
+        className={abaixoMedia ? 'borda-abaixo-media' : ''}
+        disabled={
+          alunoDesabilitado ||
           !podeEditarNota ||
           desabilitarCampos ||
-          !dentroPeriodo}
+          !dentroPeriodo
+        }
       />
     );
   };
@@ -218,6 +221,7 @@ const CampoNota = props => {
 };
 
 CampoNota.propTypes = {
+  podeEditar: PropTypes.bool,
   id: PropTypes.oneOfType([PropTypes.any]),
   notaPosConselho: PropTypes.oneOfType([PropTypes.any]),
   idCampo: PropTypes.oneOfType([PropTypes.string]),
@@ -231,6 +235,7 @@ CampoNota.propTypes = {
 };
 
 CampoNota.defaultProps = {
+  podeEditar: true,
   id: 0,
   notaPosConselho: '',
   idCampo: '',
