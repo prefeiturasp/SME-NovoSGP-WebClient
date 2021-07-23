@@ -305,7 +305,7 @@ const RelatorioFrequencia = () => {
       todosAnosEscolares = listaAnosEscolares.map(item => item.valor);
     }
     return todosAnosEscolares;
-  }, [anosEscolares, listaAnosEscolares]);
+  }, [anosEscolares]);
 
   const obterCodigoTodosComponentesCorriculares = () => {
     let todosComponentesCurriculares = componentesCurriculares;
@@ -320,43 +320,37 @@ const RelatorioFrequencia = () => {
     return todosComponentesCurriculares;
   };
 
-  const escolherChamadaEndpointComponeteCurricular = useCallback(
-    (codigoTodosAnosEscolares, turmas) => {
-      if (ehTurma) {
-        return ServicoComponentesCurriculares.obterComponetensCuricularesPorTurma(
-          codigoUe,
-          turmas
-        );
-      }
-      return ServicoComponentesCurriculares.obterComponetensCuriculares(
+  const escolherChamadaEndpointComponeteCurricular = useCallback(() => {
+    if (ehTurma) {
+      const turmas =
+        turmasCodigo === OPCAO_TODOS ? [OPCAO_TODOS] : turmasCodigo;
+      return ServicoComponentesCurriculares.obterComponetensCuricularesPorTurma(
         codigoUe,
-        modalidadeId,
-        anoLetivo,
-        codigoTodosAnosEscolares,
-        turmasPrograma
+        turmas
       );
-    },
-    [modalidadeId, anoLetivo, codigoUe, turmasPrograma, ehTurma]
-  );
+    }
+    const codigoTodosAnosEscolares = obterCodigoTodosAnosEscolares();
+    return ServicoComponentesCurriculares.obterComponetensCuriculares(
+      codigoUe,
+      modalidadeId,
+      anoLetivo,
+      codigoTodosAnosEscolares,
+      turmasPrograma
+    );
+  }, [
+    modalidadeId,
+    anoLetivo,
+    codigoUe,
+    turmasPrograma,
+    ehTurma,
+    obterCodigoTodosAnosEscolares,
+    turmasCodigo,
+  ]);
 
   const obterComponenteCurricular = useCallback(async () => {
-    const codigoTodosAnosEscolares = obterCodigoTodosAnosEscolares();
     if (anoLetivo) {
       setCarregandoComponentesCurriculares(true);
-      const ehTodasTurmas = turmasCodigo === OPCAO_TODOS;
-      const turmas = ehTodasTurmas
-        ? listaTurmas
-            .map(item => item.valor)
-            .filter(item => item !== '0')
-            .concat()
-        : turmasCodigo;
-      if (!turmas) {
-        return;
-      }
-      const retorno = await escolherChamadaEndpointComponeteCurricular(
-        codigoTodosAnosEscolares,
-        turmas
-      )
+      const retorno = await escolherChamadaEndpointComponeteCurricular()
         .catch(e => erros(e))
         .finally(() => setCarregandoComponentesCurriculares(false));
       if (retorno?.data?.length) {
@@ -373,13 +367,7 @@ const RelatorioFrequencia = () => {
       }
       setListaComponenteCurricular([]);
     }
-  }, [
-    anoLetivo,
-    obterCodigoTodosAnosEscolares,
-    escolherChamadaEndpointComponeteCurricular,
-    turmasCodigo,
-    listaTurmas,
-  ]);
+  }, [anoLetivo, escolherChamadaEndpointComponeteCurricular]);
 
   useEffect(() => {
     const permiteChamadaEndpoint =
@@ -392,7 +380,6 @@ const RelatorioFrequencia = () => {
     setListaComponenteCurricular([]);
   }, [
     modalidadeId,
-    turmasPrograma,
     ehTurma,
     anosEscolares,
     turmasCodigo,
