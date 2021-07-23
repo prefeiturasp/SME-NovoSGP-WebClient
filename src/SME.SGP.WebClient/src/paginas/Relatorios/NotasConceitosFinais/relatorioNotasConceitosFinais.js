@@ -95,7 +95,7 @@ const RelatorioNotasConceitosFinais = () => {
   const obterModalidades = async ue => {
     if (ue) {
       setCarregandoGeral(true);
-      const retorno = await ServicoFiltroRelatorio.obterModalidadesAnoLetivo(
+      const retorno = await ServicoFiltroRelatorio.obterModalidades(
         ue,
         anoLetivo,
         consideraHistorico
