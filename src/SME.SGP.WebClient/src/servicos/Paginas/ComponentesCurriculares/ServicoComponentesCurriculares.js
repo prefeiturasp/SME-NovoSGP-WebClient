@@ -17,6 +17,10 @@ class ServicoComponentesCurriculares {
     return api.get(url);
   };
 
+  obterComponetensCuricularesPorTurma = (codigoUe, turmas) => {
+    return api.post(`${urlPadrao}/ues/${codigoUe}/turmas`, turmas);
+  };
+
   obterComponetensCuricularesRegencia = turmaId => {
     return api.get(`${urlPadrao}/turmas/${turmaId}/regencia/componentes`);
   };
