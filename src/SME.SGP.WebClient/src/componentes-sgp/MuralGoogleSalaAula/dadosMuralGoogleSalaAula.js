@@ -1,12 +1,13 @@
-import * as moment from 'moment';
 import PropTypes from 'prop-types';
 import React, { useCallback, useEffect, useState } from 'react';
+import shortid from 'shortid';
 import Loader from '~/componentes/loader';
 import { erros } from '~/servicos';
 import ServicoMuralGoogleSalaAula from '~/servicos/Paginas/MuralGoogleSalaAula/ServicoMuralGoogleSalaAula';
+import CampoMensagem from './campoMensagem';
 
 const DadosMuralGoogleSalaAula = props => {
-  const { aulaId } = props;
+  const { aulaId, podeAlterar } = props;
 
   const [carregandoDados, setCarregandoDados] = useState(false);
   const [dados, setDados] = useState([]);
@@ -35,17 +36,11 @@ const DadosMuralGoogleSalaAula = props => {
       {dados?.length ? (
         dados.map(item => {
           return (
-            <div className="mb-3">
-              <div>
-                {`Data/Hora da publicação: ${
-                  item?.dataPublicacao
-                    ? moment(item.dataPublicacao).format('DD/MM/YYYY HH:mm')
-                    : ''
-                }`}
-              </div>
-              <div>{item?.email}</div>
-              <div>{item?.mensagem}</div>
-            </div>
+            <CampoMensagem
+              podeAlterar={podeAlterar}
+              item={item}
+              key={shortid.generate()}
+            />
           );
         })
       ) : (
@@ -59,10 +54,12 @@ const DadosMuralGoogleSalaAula = props => {
 
 DadosMuralGoogleSalaAula.propTypes = {
   aulaId: PropTypes.number,
+  podeAlterar: PropTypes.bool,
 };
 
 DadosMuralGoogleSalaAula.defaultProps = {
   aulaId: 0,
+  podeAlterar: true,
 };
 
 export default DadosMuralGoogleSalaAula;

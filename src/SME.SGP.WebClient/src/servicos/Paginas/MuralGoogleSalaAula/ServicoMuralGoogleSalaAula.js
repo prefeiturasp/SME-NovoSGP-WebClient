@@ -6,6 +6,10 @@ class ServicoMuralGoogleSalaAula {
   obterDadosMuralGoogleSalaAula = aulaId => {
     return api.get(`${urlPadrao}?aulaId=${aulaId}`);
   };
+
+  editarMensagem = (avisoId, mensagem) => {
+    return api.put(`${urlPadrao}/${avisoId}`, { mensagem });
+  };
 }
 
 export default new ServicoMuralGoogleSalaAula();
