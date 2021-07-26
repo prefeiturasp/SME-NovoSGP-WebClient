@@ -50,10 +50,9 @@ const ListaFrequencia = props => {
   useEffect(() => {
     const somenteConsulta = verificaSomenteConsulta(permissoesTela);
     const desabilitar =
-      !componenteCurricular?.registraFrequencia ||
-      (frequenciaId > 0
+      frequenciaId > 0
         ? somenteConsulta || !permissoesTela.podeAlterar
-        : somenteConsulta || !permissoesTela.podeIncluir);
+        : somenteConsulta || !permissoesTela.podeIncluir;
     setDesabilitarCampos(desabilitar);
     if (!temPeriodoAberto) setDesabilitarCampos(!temPeriodoAberto);
   }, [frequenciaId, permissoesTela, temPeriodoAberto, componenteCurricular]);
@@ -121,7 +120,9 @@ const ListaFrequencia = props => {
           <BotaoAnotacao
             indexAluno={indexAluno}
             ehInfantil={ehInfantil}
-            desabilitarCampos={desabilitarCampos}
+            desabilitarCampos={
+              desabilitarCampos || !componenteCurricular.registraFrequencia
+            }
           />
         </div>
       </div>
@@ -274,7 +275,10 @@ const ListaFrequencia = props => {
       title: montarTituloEstudante,
       render: montarColunasEstudante,
     },
-    {
+  ];
+
+  if (componenteCurricular.registraFrequencia) {
+    columns.push({
       title: 'Pré-definir frequência',
       align: 'center',
       width: '75px',
@@ -292,8 +296,8 @@ const ListaFrequencia = props => {
           />
         );
       },
-    },
-    {
+    });
+    columns.push({
       title: montarTituloMarcarTodasAulas(),
       align: 'center',
       width: '100px',
@@ -318,10 +322,10 @@ const ListaFrequencia = props => {
           },
         },
       ],
-    },
-  ];
+    });
+  }
 
-  if (dataSource[0]?.aulas?.length) {
+  if (dataSource[0]?.aulas?.length && componenteCurricular.registraFrequencia) {
     dataSource[0].aulas.forEach((aula, indexAula) => {
       columns.push({
         title: () => <span className="fonte-16">{aula.numeroAula}</span>,
@@ -334,14 +338,13 @@ const ListaFrequencia = props => {
         },
       });
     });
+    columns.push({
+      title: '%',
+      align: 'center',
+      width: '75px',
+      render: montarColunaFrequencia,
+    });
   }
-
-  columns.push({
-    title: '%',
-    align: 'center',
-    width: '75px',
-    render: montarColunaFrequencia,
-  });
 
   return (
     <>
