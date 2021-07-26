@@ -701,6 +701,7 @@ const DiarioBordo = ({ match }) => {
                           >
                             {valoresIniciais?.aulaId && (
                               <DadosMuralGoogleSalaAula
+                                podeAlterar={!desabilitarCampos}
                                 aulaId={valoresIniciais?.aulaId}
                               />
                             )}

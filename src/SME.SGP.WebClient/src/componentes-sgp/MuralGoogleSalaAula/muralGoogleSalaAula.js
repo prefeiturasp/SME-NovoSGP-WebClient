@@ -5,7 +5,7 @@ import CardCollapse from '~/componentes/cardCollapse';
 import DadosMuralGoogleSalaAula from './dadosMuralGoogleSalaAula';
 
 const MuralGoogleSalaAula = props => {
-  const { aulaId } = props;
+  const { aulaId, podeAlterar } = props;
 
   const configCabecalho = {
     altura: '44px',
@@ -28,17 +28,23 @@ const MuralGoogleSalaAula = props => {
         setExibir(!exibir);
       }}
     >
-      {exibir ? <DadosMuralGoogleSalaAula aulaId={aulaId} /> : ''}
+      {exibir ? (
+        <DadosMuralGoogleSalaAula aulaId={aulaId} podeAlterar={podeAlterar} />
+      ) : (
+        ''
+      )}
     </CardCollapse>
   );
 };
 
 MuralGoogleSalaAula.propTypes = {
   aulaId: PropTypes.number,
+  podeAlterar: PropTypes.bool,
 };
 
 MuralGoogleSalaAula.defaultProps = {
   aulaId: 0,
+  podeAlterar: true,
 };
 
 export default MuralGoogleSalaAula;
