@@ -5,7 +5,7 @@ import React, { useState } from 'react';
 import Button from '~/componentes/button';
 import { Colors } from '~/componentes/colors';
 import Loader from '~/componentes/loader';
-import { confirmar, erros } from '~/servicos/alertas';
+import { confirmar, erros, sucesso } from '~/servicos/alertas';
 import ServicoMuralGoogleSalaAula from '~/servicos/Paginas/MuralGoogleSalaAula/ServicoMuralGoogleSalaAula';
 import { ContainerCampoObservacao } from '../ObservacoesUsuario/observacoesUsuario.css';
 import { ContainerBotoes } from '../RegistroIndividual/registrosAnteriores/registrosAnterioresConteudo/item/item.css';
@@ -33,6 +33,7 @@ const CampoMensagem = props => {
     if (resultado?.status === 200) {
       item.mensagem = mensagemEditada;
       setModoEdicao(false);
+      sucesso('Registro editado com sucesso');
     }
   };
 
