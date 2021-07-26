@@ -62,7 +62,7 @@ const JoditEditor = forwardRef((props, ref) => {
   };
 
   const excedeuLimiteMaximo = arquivo => {
-    const tamanhoArquivo = arquivo.size / 1024 / 1024;
+    const tamanhoArquivo = arquivo.size / 103 / 103;
     return tamanhoArquivo > TAMANHO_MAXIMO_UPLOAD;
   };
 
@@ -103,7 +103,7 @@ const JoditEditor = forwardRef((props, ref) => {
             const arquivo = data.getAll('files[0]')[0];
 
             if (excedeuLimiteMaximo(arquivo)) {
-              const msg = 'Tamanho máximo 100mb';
+              const msg = 'Tamanho máximo 10mb';
               erro(msg);
               reject(new Error(msg));
             }
@@ -144,7 +144,16 @@ const JoditEditor = forwardRef((props, ref) => {
             textArea.current.selection.insertHTML(
               `<video width="600" height="240" controls><source src="${dados.path}"></video>`
             );
-          } else textArea.current.selection.insertImage(dados.path);
+          } else{
+            //textArea.current.selection.insertImage(dados.path);
+            if (dados.contentType.startsWith('image/gif')){
+              textArea.current.selection.insertImage(dados.path);
+            }else{
+              textArea.current.selection.insertHTML(
+              `<img src="${dados.path}" style="max-width: 100%; max-height: 700px; object-fit: cover; object-position: bottom;"/>`
+            );
+            }
+          }
         }
       },
       defaultHandlerError: e => {
