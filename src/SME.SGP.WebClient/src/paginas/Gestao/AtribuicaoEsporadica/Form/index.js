@@ -311,8 +311,10 @@ function AtribuicaoEsporadicaForm({ match }) {
 
     if (retorno?.data) {
       setPeriodos(retorno.data);
+      refForm.setFieldValue('dataInicio', moment(retorno.data.dataInicio));
+      refForm.setFieldValue('dataFim', moment(retorno.data.dataFim));
     }
-  }, [anoLetivo, ueCodigo, listaUes]);
+  }, [anoLetivo, ueCodigo, listaUes, refForm]);
 
   useEffect(() => {
     if (ueCodigo && anoLetivo) {
