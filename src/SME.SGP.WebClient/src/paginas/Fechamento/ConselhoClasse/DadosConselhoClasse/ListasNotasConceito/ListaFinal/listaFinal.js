@@ -76,7 +76,8 @@ const ListaFinal = props => {
     notaPosConselho,
     idCampo,
     codigoComponenteCurricular,
-    item
+    item,
+    podeEditar
   ) => {
     const nomeComponenteCurricular = tratarString(item?.nome);
     switch (Number(tipoNota)) {
@@ -93,6 +94,7 @@ const ListaFinal = props => {
             codigoComponenteCurricular={String(codigoComponenteCurricular)}
             mediaAprovacao={mediaAprovacao}
             alunoDesabilitado={alunoDesabilitado}
+            podeEditar={podeEditar}
           />
         );
       case Number(notasConceitos.Conceitos):
@@ -104,6 +106,7 @@ const ListaFinal = props => {
             idCampo={idCampo}
             codigoComponenteCurricular={codigoComponenteCurricular}
             alunoDesabilitado={alunoDesabilitado}
+            podeEditar={notaPosConselho.podeEditar}
           />
         );
       default:
@@ -217,7 +220,8 @@ const ListaFinal = props => {
                           item.notaPosConselho.nota,
                           `${descricaoGrupoMatriz} ${index} componente`,
                           item.codigoComponenteCurricular,
-                          item
+                          item,
+                          item.notaPosConselho.podeEditar
                         )}
                       </td>
                       <td>{item.faltas}</td>
