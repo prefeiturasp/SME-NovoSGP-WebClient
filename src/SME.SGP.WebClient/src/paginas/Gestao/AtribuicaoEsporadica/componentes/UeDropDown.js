@@ -7,7 +7,14 @@ import { SelectComponent } from '~/componentes';
 // Servicos
 import AtribuicaoEsporadicaServico from '~/servicos/Paginas/AtribuicaoEsporadica';
 
-function UeDropDown({ form, onChange, dreId, label, desabilitado }) {
+function UeDropDown({
+  form,
+  onChange,
+  dreId,
+  label,
+  desabilitado,
+  preencherLista,
+}) {
   const [listaUes, setListaUes] = useState([]);
 
   const ehInfantil = valor => {
@@ -28,6 +35,7 @@ function UeDropDown({ form, onChange, dreId, label, desabilitado }) {
         ehInfantil: item.ehInfantil,
       }));
       setListaUes(lista);
+      preencherLista(lista);
       if (lista.length === 1) {
         form.setFieldValue('ueId', lista[0].valor);
         onChange(lista[0].valor, lista[0].ehInfantil, listaUes);
@@ -72,6 +80,7 @@ UeDropDown.propTypes = {
   dreId: PropTypes.string,
   label: PropTypes.string,
   desabilitado: PropTypes.bool,
+  preencherLista: PropTypes.func,
 };
 
 UeDropDown.defaultProps = {
@@ -80,6 +89,7 @@ UeDropDown.defaultProps = {
   dreId: '',
   label: null,
   desabilitado: null,
+  preencherLista: () => {},
 };
 
 export default UeDropDown;

@@ -301,35 +301,36 @@ function AtribuicaoEsporadicaForm({ match }) {
     setAnoLetivo(ano);
   };
 
-  const obterPeriodos = useCallback(async () => {
-    const ue = listaUes.find(item => item.valor === ueCodigo);
-    const ueId = ue?.id;
-    const retorno = await AtribuicaoEsporadicaServico.obterPeriodos(
-      ueId,
-      anoLetivo
-    ).catch(e => erros(e));
+  const obterPeriodos = useCallback(
+    async ueId => {
+      const retorno = await AtribuicaoEsporadicaServico.obterPeriodos(
+        ueId,
+        anoLetivo || valoresIniciais?.anoLetivo
+      ).catch(e => erros(e));
 
-    if (retorno?.data) {
-      setPeriodos(retorno.data);
-      refForm.setFieldValue('dataInicio', moment(retorno.data.dataInicio));
-      refForm.setFieldValue('dataFim', moment(retorno.data.dataFim));
-    }
-  }, [anoLetivo, ueCodigo, listaUes, refForm]);
+      if (retorno?.data) {
+        setPeriodos(retorno.data);
+        if (!match?.params?.id) {
+          refForm.setFieldValue('dataInicio', moment(retorno.data.dataInicio));
+          refForm.setFieldValue('dataFim', moment(retorno.data.dataFim));
+        }
+      }
+    },
+    [anoLetivo, refForm, match, valoresIniciais]
+  );
 
   useEffect(() => {
-    if (ueCodigo && anoLetivo) {
-      obterPeriodos();
+    const ueComparacao = ueCodigo || valoresIniciais?.ueId;
+    const ue = listaUes.find(item => item.valor === ueComparacao);
+    const ueId = ue?.id;
+    if (ueCodigo || ueId) {
+      obterPeriodos(ueId);
     }
-  }, [obterPeriodos, ueCodigo, anoLetivo]);
+  }, [obterPeriodos, listaUes, ueCodigo, valoresIniciais]);
 
-  const desabilitarData = dataCorrente => {
-    const dataInicio =
-      periodos?.dataInicio || refForm?.state?.values?.dataInicio;
-    const dataFim = periodos?.dataFim || refForm?.state?.values?.dataFim;
-    return (
-      dataCorrente <= moment(dataInicio) || dataCorrente >= moment(dataFim)
-    );
-  };
+  const desabilitarData = dataCorrente =>
+    dataCorrente <= moment(periodos?.dataInicio) ||
+    dataCorrente >= moment(periodos?.dataFim);
 
   return (
     <>
@@ -410,6 +411,7 @@ function AtribuicaoEsporadicaForm({ match }) {
                         setListaUes(lista);
                       }}
                       desabilitado={somenteConsulta}
+                      preencherLista={setListaUes}
                     />
                   </Grid>
                 </Row>
