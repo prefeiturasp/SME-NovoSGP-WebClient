@@ -395,6 +395,7 @@ function AtribuicaoCJForm({ match, location }) {
                       disabled={
                         valoresIniciais?.modalidadeId || somenteConsulta
                       }
+                      anoLetivo={anoLetivo}
                       onChange={value => {
                         if (
                           value !== undefined &&
@@ -423,6 +424,7 @@ function AtribuicaoCJForm({ match, location }) {
                         }
                       }}
                       desabilitado={somenteConsulta}
+                      anoLetivo={anoLetivo}
                     />
                   </Grid>
                 </Row>
