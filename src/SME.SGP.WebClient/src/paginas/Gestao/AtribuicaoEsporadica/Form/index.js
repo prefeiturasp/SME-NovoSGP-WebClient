@@ -81,7 +81,7 @@ function AtribuicaoEsporadicaForm({ match }) {
     anoLetivo: anoAtual,
   });
 
-  const labelBotaoPrincipal = match?.params.id ? 'Alterar' : 'Cadastrar';
+  const labelBotaoPrincipal = match?.params?.id ? 'Alterar' : 'Cadastrar';
   const validacoes = () => {
     return Yup.object({
       dataInicio: momentSchema.required('Campo obrigatório'),
