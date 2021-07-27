@@ -132,9 +132,6 @@ function AtribuicaoEsporadicaLista() {
             onClickExcluir={onClickExcluir}
             onClickBotaoPrincipal={onClickBotaoPrincipal}
             labelBotaoPrincipal="Novo"
-            desabilitarBotaoPrincipal={
-              !!filtro.DreId === false && !!filtro.UeId === false
-            }
           />
           <Filtro onFiltrar={onChangeFiltro} />
           <div className="col-md-12 pt-2 py-0 px-0">
