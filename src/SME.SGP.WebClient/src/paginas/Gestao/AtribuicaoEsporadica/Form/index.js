@@ -81,6 +81,7 @@ function AtribuicaoEsporadicaForm({ match }) {
     anoLetivo: anoAtual,
   });
 
+  const labelBotaoPrincipal = match?.params.id ? 'Alterar' : 'Cadastrar';
   const validacoes = () => {
     return Yup.object({
       dataInicio: momentSchema.required('Campo obrigatório'),
@@ -355,7 +356,7 @@ function AtribuicaoEsporadicaForm({ match }) {
                     permissoesTela[RotasDto.ATRIBUICAO_ESPORADICA_LISTA]
                   }
                   novoRegistro={novoRegistro}
-                  labelBotaoPrincipal="Cadastrar"
+                  labelBotaoPrincipal={labelBotaoPrincipal}
                   onClickBotaoPrincipal={() => onClickBotaoPrincipal(form)}
                   onClickCancelar={formulario => onClickCancelar(formulario)}
                   onClickVoltar={() => onClickVoltar()}
@@ -396,6 +397,8 @@ function AtribuicaoEsporadicaForm({ match }) {
                       onChange={(valor, lista) => {
                         setDreId(valor);
                         setListaDres(lista);
+                        setUeCodigo('');
+                        form.setFieldValue('ueId', '');
                       }}
                       desabilitado={somenteConsulta}
                     />
@@ -457,14 +460,16 @@ function AtribuicaoEsporadicaForm({ match }) {
             )}
           </Formik>
           {auditoria && (
-            <Auditoria
-              criadoEm={auditoria.criadoEm}
-              criadoPor={auditoria.criadoPor}
-              criadoRf={auditoria.criadoRf}
-              alteradoPor={auditoria.alteradoPor}
-              alteradoEm={auditoria.alteradoEm}
-              alteradoRf={auditoria.alteradoRf}
-            />
+            <div className="ml-n3">
+              <Auditoria
+                criadoEm={auditoria.criadoEm}
+                criadoPor={auditoria.criadoPor}
+                criadoRf={auditoria.criadoRf}
+                alteradoPor={auditoria.alteradoPor}
+                alteradoEm={auditoria.alteradoEm}
+                alteradoRf={auditoria.alteradoRf}
+              />
+            </div>
           )}
         </Card>
       </Loader>

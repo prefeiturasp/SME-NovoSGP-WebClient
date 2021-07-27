@@ -74,6 +74,7 @@ function Filtro({ onFiltrar }) {
 
   const onChangeConsideraHistorico = e => {
     setConsideraHistorico(e.target.checked);
+    refForm.setFieldValue('anoLetivo', anoAtual);
   };
 
   return (
