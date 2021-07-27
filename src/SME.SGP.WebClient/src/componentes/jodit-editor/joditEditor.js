@@ -64,7 +64,7 @@ const JoditEditor = forwardRef((props, ref) => {
   };
 
   const excedeuLimiteMaximo = arquivo => {
-    const tamanhoArquivo = arquivo.size / 1024 / 1024;
+    const tamanhoArquivo = arquivo.size / 103 / 103;
     return tamanhoArquivo > TAMANHO_MAXIMO_UPLOAD;
   };
 
