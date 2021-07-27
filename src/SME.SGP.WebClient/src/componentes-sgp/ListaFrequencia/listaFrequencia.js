@@ -120,9 +120,7 @@ const ListaFrequencia = props => {
           <BotaoAnotacao
             indexAluno={indexAluno}
             ehInfantil={ehInfantil}
-            desabilitarCampos={
-              desabilitarCampos || !componenteCurricular.registraFrequencia
-            }
+            desabilitarCampos={desabilitarCampos}
           />
         </div>
       </div>
