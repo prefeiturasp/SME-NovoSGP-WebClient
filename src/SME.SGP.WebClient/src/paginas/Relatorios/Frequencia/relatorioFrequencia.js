@@ -375,7 +375,7 @@ const RelatorioFrequencia = () => {
 
   useEffect(() => {
     const permiteChamadaEndpoint =
-      (ehTurma && turmasCodigo?.length) || anosEscolares?.length;
+      (ehTurma && turmasCodigo?.length) || (!ehTurma && anosEscolares?.length);
     if (modalidadeId && permiteChamadaEndpoint) {
       obterComponenteCurricular();
       return;
