@@ -39,6 +39,7 @@ import {
   validaSeObjetoEhNuloOuVazio,
   valorNuloOuVazio,
   objetoEstaTodoPreenchido,
+  ordenarDescPor,
 } from '~/utils/funcoes/gerais';
 
 function AtribuicaoCJForm({ match, location }) {
@@ -274,7 +275,8 @@ function AtribuicaoCJForm({ match, location }) {
       else setAnoLetivo(anosLetivos[0].valor);
     }
 
-    setListaAnosLetivo(anosLetivos);
+    const anosOrdenados = ordenarDescPor(anosLetivos, 'valor');
+    setListaAnosLetivo(anosOrdenados);
   }, [anoAtual]);
 
   useEffect(() => {
@@ -354,7 +356,7 @@ function AtribuicaoCJForm({ match, location }) {
                   </Grid>
                   <Grid cols={5}>
                     <DreDropDown
-                      url="v1/dres/atribuicoes"
+                      url={`v1/dres/atribuicoes?anoLetivo=${form.values.anoLetivo}`}
                       label="Diretoria Regional de Educação (DRE)"
                       form={form}
                       onChange={valor => setDreId(valor)}
@@ -363,10 +365,11 @@ function AtribuicaoCJForm({ match, location }) {
                   </Grid>
                   <Grid cols={5}>
                     <UeDropDown
+                      temParametros
+                      url={`v1/dres/${form.values.dreId}/ues/atribuicoes?anoLetivo=${form.values.anoLetivo}`}
                       label="Unidade Escolar (UE)"
                       dreId={dreId}
                       form={form}
-                      url="v1/dres"
                       onChange={() => {}}
                       desabilitado={somenteConsulta}
                     />
@@ -392,6 +395,7 @@ function AtribuicaoCJForm({ match, location }) {
                       disabled={
                         valoresIniciais?.modalidadeId || somenteConsulta
                       }
+                      anoLetivo={anoLetivo}
                       onChange={value => {
                         if (
                           value !== undefined &&
@@ -420,6 +424,7 @@ function AtribuicaoCJForm({ match, location }) {
                         }
                       }}
                       desabilitado={somenteConsulta}
+                      anoLetivo={anoLetivo}
                     />
                   </Grid>
                 </Row>

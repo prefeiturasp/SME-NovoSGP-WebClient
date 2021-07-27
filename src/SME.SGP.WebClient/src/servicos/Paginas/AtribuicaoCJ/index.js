@@ -14,8 +14,8 @@ const AtribuicaoCJServico = {
   salvarAtribuicoes(data) {
     return api.post(`/v1/atribuicoes/cjs`, data);
   },
-  buscarModalidades(ue) {
-    return api.get(`/v1/ues/${ue}/modalidades?ano=${anoAtual}`);
+  buscarModalidades(ue, anoLetivo = anoAtual) {
+    return api.get(`/v1/ues/${ue}/modalidades?ano=${anoLetivo}`);
   },
   buscarTurmas(ue, modalidade, anoLetivo) {
     const anoCorrente = anoLetivo || anoAtual;
