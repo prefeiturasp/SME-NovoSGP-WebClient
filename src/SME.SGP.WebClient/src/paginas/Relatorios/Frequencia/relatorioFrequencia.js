@@ -359,6 +359,10 @@ const RelatorioFrequencia = () => {
           valor: String(item.codigo),
         }));
 
+        if (ehTurma && lista.length > 1) {
+          lista.unshift({ desc: 'Todos', valor: OPCAO_TODOS });
+        }
+
         setListaComponenteCurricular(lista);
         if (lista?.length === 1) {
           setComponentesCurriculares([lista[0].valor]);
@@ -367,11 +371,11 @@ const RelatorioFrequencia = () => {
       }
       setListaComponenteCurricular([]);
     }
-  }, [anoLetivo, escolherChamadaEndpointComponeteCurricular]);
+  }, [anoLetivo, ehTurma, escolherChamadaEndpointComponeteCurricular]);
 
   useEffect(() => {
     const permiteChamadaEndpoint =
-      (ehTurma && turmasCodigo) || anosEscolares?.length;
+      (ehTurma && turmasCodigo?.length) || anosEscolares?.length;
     if (modalidadeId && permiteChamadaEndpoint) {
       obterComponenteCurricular();
       return;
