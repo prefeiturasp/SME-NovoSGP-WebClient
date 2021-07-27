@@ -322,9 +322,14 @@ function AtribuicaoEsporadicaForm({ match }) {
     }
   }, [obterPeriodos, ueCodigo, anoLetivo]);
 
-  const desabilitarData = dataCorrente =>
-    dataCorrente <= moment(periodos?.dataInicio) ||
-    dataCorrente >= moment(periodos?.dataFim);
+  const desabilitarData = dataCorrente => {
+    const dataInicio =
+      periodos?.dataInicio || refForm?.state?.values?.dataInicio;
+    const dataFim = periodos?.dataFim || refForm?.state?.values?.dataFim;
+    return (
+      dataCorrente <= moment(dataInicio) || dataCorrente >= moment(dataFim)
+    );
+  };
 
   return (
     <>

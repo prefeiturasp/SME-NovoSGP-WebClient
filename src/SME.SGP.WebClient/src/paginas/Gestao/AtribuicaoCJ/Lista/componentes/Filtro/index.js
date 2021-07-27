@@ -14,6 +14,7 @@ import UeDropDown from '~/componentes-sgp/UeDropDown/';
 
 import { Linha } from '~/componentes/EstilosGlobais';
 import { FiltroHelper } from '~/componentes-sgp';
+import { ordenarDescPor } from '~/utils';
 
 function Filtro({ onFiltrar }) {
   const anoAtual = window.moment().format('YYYY');
@@ -30,11 +31,6 @@ function Filtro({ onFiltrar }) {
 
   const validacoes = () => {
     return Yup.object({});
-  };
-
-  const limparCampos = () => {
-    refForm.setFieldValue('anoLetivo', anoAtual);
-    refForm.setFieldValue('dreId', '');
   };
 
   const validarFiltro = valores => {
@@ -68,7 +64,8 @@ function Filtro({ onFiltrar }) {
         valor: anoAtual,
       });
     }
-    setListaAnosLetivo(anosLetivos);
+    const anosOrdenados = ordenarDescPor(anosLetivos, 'valor');
+    setListaAnosLetivo(anosOrdenados);
   }, [anoAtual]);
 
   useEffect(() => {
@@ -77,7 +74,6 @@ function Filtro({ onFiltrar }) {
 
   const onChangeConsideraHistorico = e => {
     setConsideraHistorico(e.target.checked);
-    limparCampos();
   };
 
   return (
@@ -119,14 +115,15 @@ function Filtro({ onFiltrar }) {
             </Grid>
             <Grid cols={5}>
               <DreDropDown
-                url="v1/dres/atribuicoes"
+                url={`v1/dres/atribuicoes?anoLetivo=${form.values.anoLetivo}`}
                 form={form}
                 onChange={() => null}
               />
             </Grid>
             <Grid cols={5}>
               <UeDropDown
-                url="v1/dres"
+                temParametros
+                url={`v1/dres/${form.values.dreId}/ues/atribuicoes?anoLetivo=${form.values.anoLetivo}`}
                 dreId={form.values.dreId}
                 form={form}
                 onChange={() => null}

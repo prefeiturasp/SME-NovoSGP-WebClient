@@ -24,24 +24,25 @@ function DreDropDown({
   const [carregando, setCarregando] = useState(false);
   const [listaDres, setListaDres] = useState([]);
 
-  useEffect(() => {
-    async function buscarDres() {
-      setCarregando(true);
-      const { data } = await AbrangenciaServico.buscarDres(url);
-      if (data) {
-        const lista = data
-          .map(item => ({
-            desc: item.nome,
-            valor: item.codigo,
-            abrev: item.abreviacao,
-          }))
-          .sort(FiltroHelper.ordenarLista('desc'));
-        if (opcaoTodas && lista.length > 1)
-          lista.unshift({ desc: 'Todas', valor: '0' });
-        setListaDres(lista);
-      }
-      setCarregando(false);
+  const buscarDres = async () => {
+    setCarregando(true);
+    const { data } = await AbrangenciaServico.buscarDres(url);
+    if (data) {
+      const lista = data
+        .map(item => ({
+          desc: item.nome,
+          valor: item.codigo,
+          abrev: item.abreviacao,
+        }))
+        .sort(FiltroHelper.ordenarLista('desc'));
+      if (opcaoTodas && lista.length > 1)
+        lista.unshift({ desc: 'Todas', valor: '0' });
+      setListaDres(lista);
     }
+    setCarregando(false);
+  };
+
+  useEffect(() => {
     if (temModalidade) buscarDres();
   }, [url]);
 
@@ -70,7 +71,7 @@ function DreDropDown({
         valueOption="valor"
         valueText="desc"
         placeholder="Diretoria Regional De Educação (DRE)"
-        disabled={listaDres.length === 1 || desabilitado}
+        disabled={!listaDres.length || listaDres.length === 1 || desabilitado}
         showSearch
       />
     </Loader>
