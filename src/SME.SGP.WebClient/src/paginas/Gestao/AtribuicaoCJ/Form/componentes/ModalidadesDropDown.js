@@ -10,13 +10,14 @@ import AtribuicaoCJServico from '~/servicos/Paginas/AtribuicaoCJ';
 // Funções
 import { valorNuloOuVazio } from '~/utils/funcoes/gerais';
 
-function ModalidadesDropDown({ label, form, onChange, disabled }) {
+function ModalidadesDropDown({ label, form, onChange, disabled, anoLetivo }) {
   const [listaModalidades, setListaModalidades] = useState([]);
 
   useEffect(() => {
     async function buscarModalidades() {
       const { data } = await AtribuicaoCJServico.buscarModalidades(
-        form.values.ueId
+        form.values.ueId,
+        anoLetivo
       );
       if (data) {
         setListaModalidades(
@@ -66,6 +67,7 @@ ModalidadesDropDown.propTypes = {
   onChange: t.func,
   label: t.string,
   disabled: t.bool,
+  anoLetivo: t.string,
 };
 
 ModalidadesDropDown.defaultProps = {
@@ -73,6 +75,7 @@ ModalidadesDropDown.defaultProps = {
   onChange: () => {},
   label: null,
   disabled: false,
+  anoLetivo: '',
 };
 
 export default ModalidadesDropDown;
