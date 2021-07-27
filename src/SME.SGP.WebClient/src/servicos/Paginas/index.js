@@ -6,4 +6,4 @@ export * from './Dashboard';
 export { default as ServicoFiltroRelatorio } from './FiltroRelatorio/ServicoFiltroRelatorio';
 export { default as ServicoDisciplina } from './ServicoDisciplina';
 export { default as ServicoOcorrencias } from './Gestao/Ocorrencias/ServicoOcorrencias';
-export { default as ServicoRelatorioAcompanhamentoFechamento } from './Relatorios/Fechamento/AcompanhamentoFechamento/ServicoRelatorioAcompanhamentoFechamento';
+export { default as ServicoComponentesCurriculares } from './ComponentesCurriculares/ServicoComponentesCurriculares';
