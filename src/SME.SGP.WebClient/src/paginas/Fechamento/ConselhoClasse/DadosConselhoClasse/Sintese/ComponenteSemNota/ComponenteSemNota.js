@@ -50,7 +50,6 @@ const ComponenteSemNota = props => {
                     {item.percentualFrequencia
                       ? `${item.percentualFrequencia}%`
                       : ''}
-                    teste
                   </td>
                   {ehFinal ? <td>{item.parecerFinal || '--'}</td> : null}
                 </tr>
