@@ -42,12 +42,11 @@ import { verificaSomenteConsulta } from '~/servicos/servico-navegacao';
 import LocalOcorrencia from '~/constantes/localOcorrencia';
 
 // Styles
-import { ListaCopiarEventos, StatusAguardandoAprovacao } from './eventos.css';
+import { ListaCopiarEventos } from './eventos.css';
 
 // Utils
 import { parseScreenObject } from '~/utils/parsers/eventRecurrence';
 import FiltroHelper from '~/componentes-sgp/filtro/helper';
-import tipoEscolaDTO from '~/dtos/tipoEscolaDto';
 import entidadeStatusDto from '~/dtos/entidadeStatusDto';
 import AbrangenciaServico from '~/servicos/Abrangencia';
 import ServicoCalendarios from '~/servicos/Paginas/Calendario/ServicoCalendarios';
@@ -189,19 +188,13 @@ const EventosForm = ({ match }) => {
 
   useEffect(() => {
     if (listaDres?.length === 1) {
-      refFormulario.current.setFieldValue(
-        'dreId',
-        String(listaDres[0].codigo)
-      );
+      refFormulario.current.setFieldValue('dreId', String(listaDres[0].codigo));
     }
   }, [listaDres, current]);
 
   useEffect(() => {
     if (listaUes?.length === 1) {
-      refFormulario.current.setFieldValue(
-        'ueId',
-        String(listaUes[0].codigo)
-      );
+      refFormulario.current.setFieldValue('ueId', String(listaUes[0].codigo));
     }
   }, [listaUes, current]);
 
@@ -216,9 +209,7 @@ const EventosForm = ({ match }) => {
         setDesabilitarLetivo(true);
         refFormulario.current.setFieldValue('letivo', 0);
       }
-      return;
     }
-    refFormulario.current.setFieldValue('tipoEventoId', '');
   }, [listaTipoEvento, current]);
 
   useEffect(() => {
@@ -958,10 +949,10 @@ const EventosForm = ({ match }) => {
                     onClick={() => validaAntesDoSubmit(form)}
                     disabled={
                       desabilitarCampos ||
-                      (!novoRegistro &&
-                        (somenteConsulta ||
-                          !permissoesTela.podeAlterar ||
-                          !podeAlterarExcluir)) ||
+                      (!novoRegistro && !idEvento) ||
+                      somenteConsulta ||
+                      !permissoesTela.podeAlterar ||
+                      !podeAlterarExcluir ||
                       !usuarioPodeAlterar
                     }
                   />
