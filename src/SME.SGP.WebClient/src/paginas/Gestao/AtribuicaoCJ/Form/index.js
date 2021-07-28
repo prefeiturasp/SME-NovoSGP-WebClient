@@ -168,15 +168,16 @@ function AtribuicaoCJForm({ match, location }) {
         setEhEdicao(true);
       }
 
+      const anoSelecionado = query.anoLetivo || anoAtual;
       setValoresIniciais({
         ...valoresIniciais,
         modalidadeId: query.modalidadeId,
         turmaId: query.turmaId,
         ueId: query.ueId,
         dreId: query.dreId,
-        anoLetivo: query.anoLetivo,
+        anoLetivo: anoSelecionado,
       });
-      setAnoLetivo(query.anoLetivo);
+      setAnoLetivo(anoSelecionado);
     }
   }, [location, match.url]);
 
