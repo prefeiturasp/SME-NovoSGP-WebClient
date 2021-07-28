@@ -70,11 +70,11 @@ function UeDropDown({
 
   useEffect(() => {
     let valorUeId;
-    if (form?.values?.ueId && listaUes?.length > 0) {
-      valorUeId = listaUes.find(a => a.valor === form.values.ueId)?.valor;
+    const valorUe = form?.values?.ueId || form?.initialValues?.ueId;
+    if (valorUe && listaUes?.length > 0) {
+      valorUeId = listaUes.find(a => a.valor === valorUe)?.valor;
     }
     form.setFieldValue('ueId', valorUeId);
-
     if (listaUes.length === 1) {
       form.setFieldValue('ueId', listaUes[0].valor);
       onChange(listaUes[0].valor, listaUes);
