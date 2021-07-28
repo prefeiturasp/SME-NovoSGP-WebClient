@@ -174,7 +174,9 @@ function AtribuicaoCJForm({ match, location }) {
         turmaId: query.turmaId,
         ueId: query.ueId,
         dreId: query.dreId,
+        anoLetivo: query.anoLetivo,
       });
+      setAnoLetivo(query.anoLetivo);
     }
   }, [location, match.url]);
 
@@ -356,7 +358,7 @@ function AtribuicaoCJForm({ match, location }) {
                   </Grid>
                   <Grid cols={5}>
                     <DreDropDown
-                      url={`v1/dres/atribuicoes?anoLetivo=${form.values.anoLetivo}`}
+                      url={`v1/dres/atribuicoes?anoLetivo=${anoLetivo}`}
                       label="Diretoria Regional de Educação (DRE)"
                       form={form}
                       onChange={valor => setDreId(valor)}
@@ -366,7 +368,7 @@ function AtribuicaoCJForm({ match, location }) {
                   <Grid cols={5}>
                     <UeDropDown
                       temParametros
-                      url={`v1/dres/${form.values.dreId}/ues/atribuicoes?anoLetivo=${form.values.anoLetivo}`}
+                      url={`v1/dres/${form.values.dreId}/ues/atribuicoes?anoLetivo=${anoLetivo}`}
                       label="Unidade Escolar (UE)"
                       dreId={dreId}
                       form={form}

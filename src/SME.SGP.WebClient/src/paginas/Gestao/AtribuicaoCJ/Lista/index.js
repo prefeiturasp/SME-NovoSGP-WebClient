@@ -60,7 +60,7 @@ function AtribuicaoCJLista() {
   const onClickEditar = item => {
     history.push(
       `/gestao/atribuicao-cjs/editar?modalidadeId=${item.modalidadeId}&turmaId=` +
-        `${item.turmaId}&dreId=${filtro.DreId}&ueId=${filtro.UeId}`
+        `${item.turmaId}&dreId=${filtro.DreId}&ueId=${filtro.UeId}&anoLetivo=${filtro.AnoLetivo}`
     );
   };
 
