@@ -307,19 +307,6 @@ const RelatorioFrequencia = () => {
     return todosAnosEscolares;
   }, [anosEscolares]);
 
-  const obterCodigoTodosComponentesCorriculares = () => {
-    let todosComponentesCurriculares = componentesCurriculares;
-    const selecionouTodos = componentesCurriculares.find(
-      ano => ano === OPCAO_TODOS
-    );
-    if (selecionouTodos) {
-      todosComponentesCurriculares = listaComponenteCurricular.map(
-        item => item.valor
-      );
-    }
-    return todosComponentesCurriculares;
-  };
-
   const escolherChamadaEndpointComponeteCurricular = useCallback(() => {
     if (ehTurma) {
       const turmas =
@@ -499,17 +486,14 @@ const RelatorioFrequencia = () => {
   const onClickGerar = async () => {
     setCarregandoGeral(true);
 
-    const codigoTodosAnosEscolares = obterCodigoTodosAnosEscolares();
-    const codigoTodosComponentesCorriculares = obterCodigoTodosComponentesCorriculares();
-
     const params = {
       anoLetivo,
       codigoDre,
       codigoUe,
       modalidade: modalidadeId,
       semestre,
-      anosEscolares: codigoTodosAnosEscolares,
-      componentesCurriculares: codigoTodosComponentesCorriculares,
+      anosEscolares,
+      componentesCurriculares,
       bimestres: [bimestres],
       tipoRelatorio,
       condicao,
