@@ -856,7 +856,6 @@ const RelatorioFrequencia = () => {
                   value={turmasPrograma}
                   desabilitado={
                     ehTurma ||
-                    !anosEscolares ||
                     (anosEscolares?.length &&
                       !!anosEscolares?.find(ano => ano !== OPCAO_TODOS))
                   }
