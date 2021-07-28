@@ -173,6 +173,7 @@ const RelatorioFrequencia = () => {
 
     setListaUes([]);
     setCodigoUe(undefined);
+    setDesabilitarTipoRelatorio(false);
 
     setListaModalidades([]);
     setModalidadeId(undefined);
@@ -436,7 +437,8 @@ const RelatorioFrequencia = () => {
       (ehTurma && !turmasCodigo?.length) ||
       !componentesCurriculares ||
       !bimestres ||
-      !condicao;
+      !condicao ||
+      !formato;
 
     if (!desabilitar && condicao !== OPCAO_TODOS_ESTUDANTES) {
       desabilitar = !valorCondicao;
@@ -462,6 +464,7 @@ const RelatorioFrequencia = () => {
     condicao,
     valorCondicao,
     ehTurma,
+    formato,
   ]);
 
   useEffect(() => {
@@ -485,7 +488,7 @@ const RelatorioFrequencia = () => {
 
   const onClickGerar = async () => {
     setCarregandoGeral(true);
-
+    const turmas = turmasCodigo === OPCAO_TODOS ? [OPCAO_TODOS] : turmasCodigo;
     const params = {
       anoLetivo,
       codigoDre,
@@ -497,9 +500,10 @@ const RelatorioFrequencia = () => {
       bimestres: [bimestres],
       tipoRelatorio,
       condicao,
-      valorCondicao,
+      quantidadeAusencia: valorCondicao,
       tipoFormatoRelatorio: formato,
       turmasPrograma,
+      codigosTurma: turmas,
     };
     setCarregandoGeral(true);
     const retorno = await ServicoRelatorioFrequencia.gerar(params)
