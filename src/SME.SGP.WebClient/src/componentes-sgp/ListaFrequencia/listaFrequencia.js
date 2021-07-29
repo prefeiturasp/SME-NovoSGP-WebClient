@@ -41,6 +41,10 @@ const ListaFrequencia = props => {
       state.frequenciaPlanoAula.listaDadosFrequencia?.listaTiposFrequencia
   );
 
+  const componenteCurricular = useSelector(
+    state => state.frequenciaPlanoAula.componenteCurricular
+  );
+
   const [desabilitarCampos, setDesabilitarCampos] = useState(false);
 
   useEffect(() => {
@@ -51,7 +55,7 @@ const ListaFrequencia = props => {
         : somenteConsulta || !permissoesTela.podeIncluir;
     setDesabilitarCampos(desabilitar);
     if (!temPeriodoAberto) setDesabilitarCampos(!temPeriodoAberto);
-  }, [frequenciaId, permissoesTela, temPeriodoAberto]);
+  }, [frequenciaId, permissoesTela, temPeriodoAberto, componenteCurricular]);
 
   const marcaPresencaFaltaTodasAulas = (aluno, tipo) => {
     if (!desabilitarCampos && !aluno.desabilitado) {
@@ -269,7 +273,10 @@ const ListaFrequencia = props => {
       title: montarTituloEstudante,
       render: montarColunasEstudante,
     },
-    {
+  ];
+
+  if (componenteCurricular.registraFrequencia) {
+    columns.push({
       title: 'Pré-definir frequência',
       align: 'center',
       width: '75px',
@@ -287,8 +294,8 @@ const ListaFrequencia = props => {
           />
         );
       },
-    },
-    {
+    });
+    columns.push({
       title: montarTituloMarcarTodasAulas(),
       align: 'center',
       width: '100px',
@@ -313,10 +320,10 @@ const ListaFrequencia = props => {
           },
         },
       ],
-    },
-  ];
+    });
+  }
 
-  if (dataSource[0]?.aulas?.length) {
+  if (dataSource[0]?.aulas?.length && componenteCurricular.registraFrequencia) {
     dataSource[0].aulas.forEach((aula, indexAula) => {
       columns.push({
         title: () => <span className="fonte-16">{aula.numeroAula}</span>,
@@ -329,14 +336,13 @@ const ListaFrequencia = props => {
         },
       });
     });
+    columns.push({
+      title: '%',
+      align: 'center',
+      width: '75px',
+      render: montarColunaFrequencia,
+    });
   }
-
-  columns.push({
-    title: '%',
-    align: 'center',
-    width: '75px',
-    render: montarColunaFrequencia,
-  });
 
   return (
     <>
