@@ -46,7 +46,7 @@ import PeriodoFechamentoReaberturaForm from '~/paginas/CalendarioEscolar/Periodo
 import RelatorioPAPAcompanhamento from '~/paginas/Relatorios/PAP/Acompanhamento';
 import PendenciasFechamentoLista from '~/paginas/Fechamento/PendenciasFechamento/pendenciasFechamentoLista';
 import PendenciasFechamentoForm from '~/paginas/Fechamento/PendenciasFechamento/pendenciasFechamentoForm';
-import ComunicadosLista from '~/paginas/AcompanhamentoEscolar/Comunicados/Lista';
+import ComunicadosLista from '~/paginas/Gestao/Comunicados/listaComunicados';
 import ComunicadosCadastro from '~/paginas/AcompanhamentoEscolar/Comunicados/Cadastro';
 import ConselhoClasse from '~/paginas/Fechamento/ConselhoClasse/conselhoClasse';
 import RelatorioSemestral from '~/paginas/Relatorios/PAP/RelatorioSemestral/relatorioSemestral';
