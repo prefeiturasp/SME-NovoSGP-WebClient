@@ -53,7 +53,7 @@ const ListaFrequenciaPorBimestre = props => {
                                       />
                                     </>
                                   ) : (
-                                    ''
+                                    '0'
                                   )}
                                 </td>
                               </tr>
