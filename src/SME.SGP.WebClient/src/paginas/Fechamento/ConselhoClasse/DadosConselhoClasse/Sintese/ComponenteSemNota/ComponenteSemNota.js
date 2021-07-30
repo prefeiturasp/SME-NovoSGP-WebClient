@@ -46,11 +46,7 @@ const ComponenteSemNota = props => {
                   >
                     {item.totalFaltas || 0}
                   </td>
-                  <td>
-                    {item.percentualFrequencia
-                      ? `${item.percentualFrequencia}%`
-                      : ''}
-                  </td>
+                  <td>{item.percentualFrequencia}</td>
                   {ehFinal ? <td>{item.parecerFinal || '--'}</td> : null}
                 </tr>
               );
