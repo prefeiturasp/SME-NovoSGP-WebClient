@@ -200,7 +200,8 @@ function AtribuicaoCJForm({ match, location }) {
           ueId,
           modalidadeId,
           turmaId,
-          professorRf
+          professorRf,
+          anoLetivo
         );
 
         if (data && status === 200) {
