@@ -52,8 +52,9 @@ const ListaFrequenciaPorBimestre = props => {
                                         indexLinha={index}
                                       />
                                     </>
-                                  ) : (
-                                    '0'
+                                  ) 
+                                  : (
+                                    data.frequencia
                                   )}
                                 </td>
                               </tr>
