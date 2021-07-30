@@ -640,7 +640,6 @@ const DadosComunicadosLeitura = props => {
               label="Data de envio"
               placeholder="DD/MM/AAAA"
               formatoData="DD/MM/YYYY"
-              // onChange={setDataInicio}
               onChange={onChangeIntervaloDatas}
               desabilitarData={desabilitarData}
               valor={[dataInicio, dataFim]}

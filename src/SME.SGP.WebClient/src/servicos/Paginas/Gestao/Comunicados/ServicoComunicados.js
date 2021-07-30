@@ -1,28 +1,16 @@
+import queryString from 'query-string';
+
 import { OPCAO_TODOS } from '~/constantes/constantes';
 import api from '../../../api';
 
+const urlPadrão = 'v1/comunicado';
+
 class ServicoComunicados {
-  obterIdGrupoComunicadoPorModalidade = async modalidade => {
-    try {
-      const retorno = await api.get(`listar/modalidade/${modalidade}`);
-
-      return {
-        sucesso: true,
-        data: retorno.data,
-      };
-    } catch (error) {
-      return {
-        sucesso: false,
-        erro: error,
-      };
-    }
-  };
-
   consultarPorId = async id => {
     let comunicado = {};
 
     try {
-      const requisicao = await api.get(`v1/comunicado/${id}`);
+      const requisicao = await api.get(`${urlPadrão}/${id}`);
       if (requisicao.data) comunicado = requisicao.data;
     } catch {
       return comunicado;
@@ -35,7 +23,7 @@ class ServicoComunicados {
     let salvou = {};
 
     let metodo = 'post';
-    let url = 'v1/comunicado';
+    let url = `${urlPadrão}`;
 
     if (dados.id && dados.id > 0) {
       metodo = 'put';
@@ -57,7 +45,7 @@ class ServicoComunicados {
     const parametros = { data: ids };
 
     try {
-      const requisicao = await api.delete('v1/comunicado', parametros);
+      const requisicao = await api.delete(`${urlPadrão}`, parametros);
       if (requisicao && requisicao.status === 200) exclusao = requisicao;
     } catch (erro) {
       exclusao = [...erro.response.data.mensagens];
@@ -69,8 +57,8 @@ class ServicoComunicados {
   buscarAnosPorModalidade = async (modalidade, codigoUe, params) => {
     return api.get(
       codigoUe != null && codigoUe !== OPCAO_TODOS
-        ? `v1/comunicado/anos/modalidade/${modalidade}?codigoUe=${codigoUe}`
-        : `v1/comunicado/anos/modalidade/${modalidade}`,
+        ? `${urlPadrão}/anos/modalidade/${modalidade}?codigoUe=${codigoUe}`
+        : `${urlPadrão}/anos/modalidade/${modalidade}`,
       {
         params,
       }
@@ -94,7 +82,7 @@ class ServicoComunicados {
   obterAlunos = async (codigoTurma, anoLetivo) => {
     try {
       const requisicao = await api.get(
-        `v1/comunicado/${codigoTurma}/alunos/${anoLetivo}`
+        `${urlPadrão}/${codigoTurma}/alunos/${anoLetivo}`
       );
 
       if (requisicao && requisicao.status === 204) return [];
@@ -105,19 +93,32 @@ class ServicoComunicados {
     }
   };
 
-  obterTipoEscola = () => {
-    return Promise.resolve({
-      data: [
-        {
-          valor: '1',
-          desc: 1,
+  obterAnosLetivos = () => {
+    return api.get(`${urlPadrão}/anos-letivos`);
+  };
+
+  obterTipoEscola = (dreCodigo, ueCodigo) => {
+    return api.get(`/v1/ues/dres/${dreCodigo}/ues/${ueCodigo}/tipos-escolas`);
+  };
+
+  obterTurmas = (anoLetivo, ueCodigo, semestre, modalidades, anos) => {
+    return api.get(
+      `${urlPadrão}/ues/${ueCodigo}/anoletivo/${anoLetivo}/turmas`,
+      {
+        params: {
+          semestre,
+          modalidades,
+          anos,
         },
-        {
-          valor: '2',
-          desc: 2,
+        paramsSerializer(params) {
+          return queryString.stringify(params, {
+            arrayFormat: 'repeat',
+            skipEmptyString: true,
+            skipNull: true,
+          });
         },
-      ],
-    });
+      }
+    );
   };
 }
 
