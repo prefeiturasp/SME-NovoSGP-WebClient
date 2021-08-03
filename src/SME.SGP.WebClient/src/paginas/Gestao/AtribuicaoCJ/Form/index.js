@@ -239,6 +239,10 @@ function AtribuicaoCJForm({ match, location }) {
   const limparCampos = () => {
     setAnoLetivo(anoAtual);
     refForm.setFieldValue('anoLetivo', anoAtual);
+    refForm.setFieldValue('modalidadeId', undefined);
+    refForm.setFieldValue('turmaId', undefined);
+    setListaProfessores([]);
+    setAuditoria({});
   };
 
   const onChangeConsideraHistorico = e => {
@@ -289,10 +293,7 @@ function AtribuicaoCJForm({ match, location }) {
 
   const onChangeAnoLetivo = ano => {
     setAnoLetivo(ano);
-    refForm.setFieldValue('modalidadeId', undefined);
-    refForm.setFieldValue('turmaId', undefined);
-    setListaProfessores([]);
-    setAuditoria({});
+    limparCampos();
   };
 
   useEffect(() => {
@@ -433,6 +434,7 @@ function AtribuicaoCJForm({ match, location }) {
                       }}
                       desabilitado={somenteConsulta}
                       anoLetivo={anoLetivo}
+                      consideraHistorico={consideraHistorico}
                     />
                   </Grid>
                 </Row>

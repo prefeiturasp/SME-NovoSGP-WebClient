@@ -10,7 +10,14 @@ import AtribuicaoCJServico from '~/servicos/Paginas/AtribuicaoCJ';
 import FiltroHelper from '~/componentes-sgp/filtro/helper';
 import { erros } from '~/servicos/alertas';
 
-function TurmasDropDown({ form, onChange, label, desabilitado, anoLetivo }) {
+function TurmasDropDown({
+  form,
+  onChange,
+  label,
+  desabilitado,
+  anoLetivo,
+  consideraHistorico,
+}) {
   const [listaTurmas, setListaTurmas] = useState([]);
   const [carregandoLista, setCarregandoLista] = useState(false);
 
@@ -21,7 +28,8 @@ function TurmasDropDown({ form, onChange, label, desabilitado, anoLetivo }) {
       const { data } = await AtribuicaoCJServico.buscarTurmas(
         ueId,
         modalidadeId,
-        anoLetivo
+        anoLetivo,
+        consideraHistorico
       ).catch(e => {
         erros(e);
         setCarregandoLista(false);
@@ -81,6 +89,7 @@ TurmasDropDown.propTypes = {
   label: PropTypes.string,
   desabilitado: PropTypes.bool,
   anoLetivo: PropTypes.string,
+  consideraHistorico: PropTypes.bool,
 };
 
 TurmasDropDown.defaultProps = {
@@ -88,6 +97,7 @@ TurmasDropDown.defaultProps = {
   onChange: () => {},
   label: null,
   desabilitado: false,
+  consideraHistorico: false,
   anoLetivo: '',
 };
 
