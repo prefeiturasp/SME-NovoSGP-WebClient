@@ -200,7 +200,8 @@ function AtribuicaoCJForm({ match, location }) {
           ueId,
           modalidadeId,
           turmaId,
-          professorRf
+          professorRf,
+          anoLetivo
         );
 
         if (data && status === 200) {
@@ -288,6 +289,10 @@ function AtribuicaoCJForm({ match, location }) {
 
   const onChangeAnoLetivo = ano => {
     setAnoLetivo(ano);
+    refForm.setFieldValue('modalidadeId', undefined);
+    refForm.setFieldValue('turmaId', undefined);
+    setListaProfessores([]);
+    setAuditoria({});
   };
 
   useEffect(() => {

@@ -6,9 +6,10 @@ const AtribuicaoCJServico = {
   buscarLista(params) {
     return api.get(`/v1/atribuicoes/cjs`, { params });
   },
-  buscarAtribuicoes(ue, modalidade, turma, professorRf) {
+  buscarAtribuicoes(ue, modalidade, turma, professorRf, anoLetivo) {
     return api.get(
-      `/v1/atribuicoes/cjs/ues/${ue}/modalidades/${modalidade}/turmas/${turma}/professores/${professorRf}`
+      `/v1/atribuicoes/cjs/ues/${ue}/modalidades/${modalidade}/turmas/${turma}/professores` +
+        `/${professorRf}?anoLetivo=${anoLetivo}`
     );
   },
   salvarAtribuicoes(data) {
