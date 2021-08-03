@@ -18,10 +18,10 @@ const AtribuicaoCJServico = {
   buscarModalidades(ue, anoLetivo = anoAtual) {
     return api.get(`/v1/ues/${ue}/modalidades?ano=${anoLetivo}`);
   },
-  buscarTurmas(ue, modalidade, anoLetivo) {
+  buscarTurmas(ue, modalidade, anoLetivo, consideraHistorico) {
     const anoCorrente = anoLetivo || anoAtual;
     return api.get(
-      `/v1/ues/${ue}/modalidades/${modalidade}?ano=${anoCorrente}`
+      `/v1/ues/${ue}/modalidades/${modalidade}?ano=${anoCorrente}&historico=${consideraHistorico}`
     );
   },
 };
