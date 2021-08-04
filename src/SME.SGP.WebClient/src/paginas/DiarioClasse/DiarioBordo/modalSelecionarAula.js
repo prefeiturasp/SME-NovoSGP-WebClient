@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import React, { useState } from 'react';
 import * as Yup from 'yup';
 import { ModalConteudoHtml, SelectComponent } from '~/componentes';
+import tipoAula from '~/dtos/tipoAula';
 
 const ModalSelecionarAula = props => {
   const {
@@ -12,12 +13,20 @@ const ModalSelecionarAula = props => {
     onClickSelecionarAula,
   } = props;
 
-  const opcoesAulas = aulasParaSelecionar.sort((a, b) => a.aulaCJ ? 1:-1)
+  const opcoesAulas = aulasParaSelecionar
+    .sort((a, b) => (a.aulaCJ ? 1 : -1))
     .map(item => {
-    const lbl = (item.aulaCJ ? 'Aula CJ - ' : 'Aula normal - ') + item.criadoPor + ` (${item.professorRf})`;
-    const aula = {label: lbl, value: item.aulaId};
-    return aula;
-  });
+      const textoReposicao =
+        item.tipoAula === tipoAula.Reposicao ? '(Reposição)' : '';
+      const lbl =
+        (item.aulaCJ
+          ? `Aula CJ ${textoReposicao} - `
+          : `Aula normal ${textoReposicao} - `) +
+        item.criadoPor +
+        ` (${item.professorRf})`;
+      const aula = { label: lbl, value: item.aulaId };
+      return aula;
+    });
   const [refForm, setRefForm] = useState({});
   const inicial = {
     aula: '',
@@ -30,7 +39,9 @@ const ModalSelecionarAula = props => {
 
   const onClickConfirmar = valores => {
     let aula = null;
-    aula = aulasParaSelecionar.find(item => String(item.aulaId) === valores.aula);
+    aula = aulasParaSelecionar.find(
+      item => String(item.aulaId) === valores.aula
+    );
     onClickSelecionarAula(aula);
     refForm.resetForm();
     setValoresIniciais(inicial);
@@ -89,14 +100,14 @@ const ModalSelecionarAula = props => {
                 </p>
               </div>
               <div className="col-md-12">
-              <SelectComponent
-                id="aula"
-                lista={opcoesAulas}
-                placeholder="Selecione uma aula"
-                valueText="label"
-                valueOption="value"
-                name="aula"
-                form={form}
+                <SelectComponent
+                  id="aula"
+                  lista={opcoesAulas}
+                  placeholder="Selecione uma aula"
+                  valueText="label"
+                  valueOption="value"
+                  name="aula"
+                  form={form}
                 />
               </div>
             </div>
