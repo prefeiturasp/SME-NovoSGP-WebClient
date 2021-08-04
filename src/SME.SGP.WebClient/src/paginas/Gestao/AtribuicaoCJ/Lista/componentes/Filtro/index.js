@@ -27,6 +27,7 @@ function Filtro({ onFiltrar }) {
     dreId: '',
     ueId: '',
     professorRf: '',
+    exibirHistorico: false,
   });
 
   const validacoes = () => {
