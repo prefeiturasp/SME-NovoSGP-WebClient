@@ -952,7 +952,7 @@ const EventosForm = ({ match }) => {
                       (!novoRegistro && !idEvento) ||
                       somenteConsulta ||
                       !permissoesTela.podeAlterar ||
-                      !podeAlterarExcluir ||
+                      (!podeAlterarExcluir && !novoRegistro) ||
                       !usuarioPodeAlterar
                     }
                   />
