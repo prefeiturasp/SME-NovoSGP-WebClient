@@ -293,7 +293,10 @@ function AtribuicaoCJForm({ match, location }) {
 
   const onChangeAnoLetivo = ano => {
     setAnoLetivo(ano);
-    limparCampos();
+    refForm.setFieldValue('modalidadeId', undefined);
+    refForm.setFieldValue('turmaId', undefined);
+    setListaProfessores([]);
+    setAuditoria({});
   };
 
   useEffect(() => {
