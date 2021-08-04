@@ -93,8 +93,12 @@ class ServicoComunicados {
     }
   };
 
-  obterAnosLetivos = () => {
-    return api.get(`${urlPadrão}/anos-letivos`);
+  obterAnosLetivos = anoMinimo => {
+    return api.get(`${urlPadrão}/anos-letivos`, {
+      params: {
+        anoMinimo,
+      },
+    });
   };
 
   obterTipoEscola = (dreCodigo, ueCodigo) => {

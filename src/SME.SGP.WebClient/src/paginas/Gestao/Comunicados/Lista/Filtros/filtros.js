@@ -31,12 +31,15 @@ const Filtros = ({ onChangeFiltros }) => {
   const [carregandoModalidade, setCarregandoModalidade] = useState(false);
   const [carregandoSemestres, setCarregandoSemestres] = useState(false);
   const [carregandoUes, setCarregandoUes] = useState(false);
-  const [dreCodigo, setDreCodigo] = useState();
-  const [ueCodigo, setUeCodigo] = useState();
   const [consideraHistorico, setConsideraHistorico] = useState(false);
+  const [dreCodigo, setDreCodigo] = useState();
   const [dreId, setDreId] = useState();
   const [filtrosPrincipais, setFiltrosPrincipais] = useState();
-  const [listaAnosLetivo, setListaAnosLetivo] = useState([]);
+  const [
+    habilitaConsideraHistorico,
+    setHabilitaConsideraHistorico,
+  ] = useState();
+  const [listaAnosLetivo, setListaAnosLetivo] = useState({});
   const [listaDres, setListaDres] = useState([]);
   const [listaModalidades, setListaModalidades] = useState([]);
   const [listaSemestres, setListaSemestres] = useState([]);
@@ -44,7 +47,10 @@ const Filtros = ({ onChangeFiltros }) => {
   const [modalidades, setModalidades] = useState();
   const [mostrarFiltrosAvancados, setMostrarFiltrosAvancados] = useState(false);
   const [semestre, setSemestre] = useState();
+  const [ueCodigo, setUeCodigo] = useState();
   const [ueId, setUeId] = useState();
+
+  const ANO_MINIMO = '2021';
 
   const limparCampos = (limpar = false) => {
     setListaUes([]);
@@ -79,17 +85,23 @@ const Filtros = ({ onChangeFiltros }) => {
 
   const obterAnosLetivos = useCallback(async () => {
     setCarregandoAnosLetivos(true);
-    const retorno = await ServicoComunicados.obterAnosLetivos()
+    const retorno = await ServicoComunicados.obterAnosLetivos(ANO_MINIMO)
       .catch(e => erros(e))
       .finally(() => setCarregandoAnosLetivos(false));
 
-    const anoSelecionado = retorno?.data ? retorno?.data : [];
-    setAnoLetivo(anoSelecionado);
+    const anoSelecionado = retorno?.data.anosLetivosHistorico?.length
+      ? retorno?.data.anosLetivosHistorico.map(item => ({
+          desc: item,
+          valor: item,
+        }))
+      : [];
+    setAnoLetivo(retorno?.data?.anoLetivoAtual);
+    setHabilitaConsideraHistorico(retorno?.data?.temHistorico);
     setListaAnosLetivo(anoSelecionado);
   }, []);
 
   useEffect(() => {
-    if (!listaAnosLetivo?.length) {
+    if (!Object.keys(listaAnosLetivo)?.length) {
       obterAnosLetivos();
     }
   }, [obterAnosLetivos, listaAnosLetivo]);
@@ -221,13 +233,13 @@ const Filtros = ({ onChangeFiltros }) => {
   }, []);
 
   useEffect(() => {
-    if (anoLetivo && ueCodigo) {
+    if (anoLetivo && dreCodigo && ueCodigo) {
       obterModalidades(ueCodigo);
       return;
     }
     setModalidades();
     setListaModalidades([]);
-  }, [obterModalidades, anoLetivo, ueCodigo]);
+  }, [obterModalidades, dreCodigo, anoLetivo, ueCodigo]);
 
   const onChangeSemestre = valor => {
     setBuscou(false);
@@ -271,7 +283,7 @@ const Filtros = ({ onChangeFiltros }) => {
     }
     setSemestre();
     setListaSemestres([]);
-  }, [obterAnosLetivos, obterSemestres, modalidades, anoLetivo]);
+  }, [obterSemestres, modalidades, anoLetivo]);
 
   const filtrar = useCallback(() => {
     const params = {
@@ -318,7 +330,7 @@ const Filtros = ({ onChangeFiltros }) => {
             label="Exibir histórico?"
             onChangeCheckbox={onChangeConsideraHistorico}
             checked={consideraHistorico}
-            disabled={listaAnosLetivo.length === 1}
+            disabled={!habilitaConsideraHistorico}
           />
         </div>
       </div>

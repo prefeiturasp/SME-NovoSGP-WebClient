@@ -1,3 +1,4 @@
+import moment from 'moment';
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 
@@ -90,12 +91,21 @@ const ListaComunicados = () => {
     setItensSelecionados([...items.map(item => String(item.id))]);
   };
 
+  const converterData = valor =>
+    valor ? moment(valor).format('MM-DD-YYYY') : '';
+
   const onChangeFiltros = valoresFiltro => {
     setFiltros(estadoAntigo => ({
       ...estadoAntigo,
       ...valoresFiltro,
+      dataEnvioInicio: converterData(valoresFiltro.dataEnvioInicio),
+      dataEnvioFim: converterData(valoresFiltro.dataEnvioFim),
+      dataExpiracaoInicio: converterData(valoresFiltro.dataExpiracaoInicio),
+      dataExpiracaoFim: converterData(valoresFiltro.dataExpiracaoFim),
     }));
   };
+
+  console.log('filtros', filtros);
 
   return (
     <>
