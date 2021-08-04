@@ -180,17 +180,14 @@ function AtribuicaoEsporadicaForm({ match }) {
       'Cancelar'
     );
     if (confirmado) {
-      try {
-        const excluir = await AtribuicaoEsporadicaServico.deletarAtribuicaoEsporadica(
-          form.values.id
-        );
-        if (excluir) {
+      await AtribuicaoEsporadicaServico.deletarAtribuicaoEsporadica(
+        form.values.id
+      )
+        .catch(e => erros(e))
+        .finally(() => {
           sucesso(`Atribuição excluida com sucesso!`);
           history.push('/gestao/atribuicao-esporadica');
-        }
-      } catch (err) {
-        erros(err);
-      }
+        });
     }
   };
 
