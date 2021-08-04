@@ -13,18 +13,13 @@ class ServicoFiltroRelatorio {
     return api.get(url);
   };
 
-  obterModalidades = (codigoUe, anoLetivo, consideraHistorico) => {
-    const url = `${urlPadrao}/ues/${codigoUe}/modalidades?anoLetivo=${anoLetivo}&consideraHistorico=${consideraHistorico}`;
-    return api.get(url);
-  };
-
-  obterModalidadesAnoLetivo = (
+  obterModalidades = (
     codigoUe,
     anoLetivo,
-    consideraNovasModalidades = false,
-    consideraHistorico = false
+    consideraHistorico,
+    consideraNovasModalidades = false
   ) => {
-    const url = `${urlPadrao}/ues/${codigoUe}/${anoLetivo}/${consideraHistorico}/modalidades?consideraNovasModalidades=${consideraNovasModalidades}`;
+    const url = `${urlPadrao}/ues/${codigoUe}/modalidades?anoLetivo=${anoLetivo}&consideraHistorico=${consideraHistorico}&consideraNovasModalidades=${consideraNovasModalidades}`;
     return api.get(url);
   };
 
@@ -55,14 +50,15 @@ class ServicoFiltroRelatorio {
     anoLetivo,
     codigoUe,
     modalidade,
-    semestre
+    semestre,
+    consideraNovosAnosInfantil = false
   ) => {
     try {
-      let url = `${urlPadrao}/ues/${codigoUe}/anoletivo/${anoLetivo}/turmas?`;
+      let url = `${urlPadrao}/ues/${codigoUe}/anoletivo/${anoLetivo}/turmas?consideraNovosAnosInfantil=${consideraNovosAnosInfantil}`;
 
-      if (semestre && semestre !== 0) url += `semestre=${semestre}&`;
+      if (semestre && semestre !== 0) url += `&semestre=${semestre}`;
 
-      if (modalidade && modalidade !== 0) url += `modalidade=${modalidade}`;
+      if (modalidade && modalidade !== 0) url += `&modalidade=${modalidade}`;
 
       const dados = await api.get(url);
 

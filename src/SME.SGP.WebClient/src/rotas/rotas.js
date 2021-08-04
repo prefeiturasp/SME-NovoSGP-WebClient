@@ -1143,7 +1143,7 @@ rotas.set(RotasDto.RELATORIO_ALTERACAO_NOTAS, {
 
 rotas.set(RotasDto.RELATORIO_DEVOLUTIVAS, {
   breadcrumbName: 'Devolutivas',
-  menu: ['Relatórios', 'Planejamento'],
+  menu: ['Relatórios', 'Diário de Classe'],
   parent: '/',
   component: RelatorioDevolutivas,
   exact: true,

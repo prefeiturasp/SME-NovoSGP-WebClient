@@ -42,12 +42,11 @@ import { verificaSomenteConsulta } from '~/servicos/servico-navegacao';
 import LocalOcorrencia from '~/constantes/localOcorrencia';
 
 // Styles
-import { ListaCopiarEventos, StatusAguardandoAprovacao } from './eventos.css';
+import { ListaCopiarEventos } from './eventos.css';
 
 // Utils
 import { parseScreenObject } from '~/utils/parsers/eventRecurrence';
 import FiltroHelper from '~/componentes-sgp/filtro/helper';
-import tipoEscolaDTO from '~/dtos/tipoEscolaDto';
 import entidadeStatusDto from '~/dtos/entidadeStatusDto';
 import AbrangenciaServico from '~/servicos/Abrangencia';
 import ServicoCalendarios from '~/servicos/Paginas/Calendario/ServicoCalendarios';
@@ -1026,10 +1025,10 @@ const EventosForm = ({ match }) => {
                     onClick={() => validaAntesDoSubmit(form)}
                     disabled={
                       desabilitarCampos ||
-                      (!novoRegistro &&
-                        (somenteConsulta ||
-                          !permissoesTela.podeAlterar ||
-                          !podeAlterarExcluir)) ||
+                      (!novoRegistro && !idEvento) ||
+                      somenteConsulta ||
+                      !permissoesTela.podeAlterar ||
+                      !podeAlterarExcluir ||
                       !usuarioPodeAlterar
                     }
                   />

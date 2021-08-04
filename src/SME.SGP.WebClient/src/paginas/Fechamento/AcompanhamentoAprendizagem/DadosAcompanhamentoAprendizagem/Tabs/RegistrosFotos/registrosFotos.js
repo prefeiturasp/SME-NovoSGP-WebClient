@@ -4,10 +4,10 @@ import { useSelector } from 'react-redux';
 import AuditoriaAcompanhamentoAprendizagem from '../../AuditoriaAcompanhamento/auditoriaAcompanhamento';
 import FotosCrianca from './FotosCrianca/fotosCrianca';
 import ObservacoesAdicionais from './ObservacoesAdicionais/observacoesAdicionais';
-import RegistrosIndividuais from './RegistrosIndividuais/registrosIndividuais';
+import PercursoIndividual from './PercursoIndividual/percursoIndividual';
 
 const RegistrosFotos = props => {
-  const { semestreSelecionado } = props;
+  const { semestreSelecionado, componenteCurricularId } = props;
 
   const dadosAcompanhamentoAprendizagem = useSelector(
     store => store.acompanhamentoAprendizagem.dadosAcompanhamentoAprendizagem
@@ -15,9 +15,12 @@ const RegistrosFotos = props => {
 
   return dadosAcompanhamentoAprendizagem ? (
     <>
-      <RegistrosIndividuais semestreSelecionado={semestreSelecionado} />
+      <PercursoIndividual />
       <ObservacoesAdicionais />
-      <FotosCrianca semestreSelecionado={semestreSelecionado} />
+      <FotosCrianca
+        semestreSelecionado={semestreSelecionado}
+        componenteCurricularId={componenteCurricularId}
+      />
       <AuditoriaAcompanhamentoAprendizagem />
     </>
   ) : (
@@ -27,10 +30,12 @@ const RegistrosFotos = props => {
 
 RegistrosFotos.propTypes = {
   semestreSelecionado: PropTypes.string,
+  componenteCurricularId: PropTypes.string,
 };
 
 RegistrosFotos.defaultProps = {
   semestreSelecionado: '',
+  componenteCurricularId: '',
 };
 
 export default RegistrosFotos;

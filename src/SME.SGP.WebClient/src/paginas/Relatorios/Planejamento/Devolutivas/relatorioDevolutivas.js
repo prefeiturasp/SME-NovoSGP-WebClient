@@ -349,7 +349,7 @@ const RelatorioDevolutivas = () => {
       if (data) {
         const lista = [];
         if (data.length > 1) {
-          lista.push({ valor: OPCAO_TODOS, nomeFiltro: 'Todas' });
+          lista.push({ id: OPCAO_TODOS, desc: 'Todas' });
         }
         data.map(item =>
           lista.push({

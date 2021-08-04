@@ -29,7 +29,7 @@ const FotosCriancaDados = props => {
 
   const { codigoEOL } = dadosAlunoObjectCard;
 
-  const { semestreSelecionado } = props;
+  const { semestreSelecionado, componenteCurricularId } = props;
 
   const [exibirLoader, setExibirLoader] = useState(false);
   const [listaInicialImagens, setListaInicialImagens] = useState([]);
@@ -101,7 +101,8 @@ const FotosCriancaDados = props => {
       ServicoAcompanhamentoAprendizagem.obterAcompanhamentoEstudante(
         turmaSelecionada?.id,
         codigoEOL,
-        semestreSelecionado
+        semestreSelecionado,
+        componenteCurricularId
       );
     } else {
       atualizarDados(dados);
@@ -154,10 +155,12 @@ const FotosCriancaDados = props => {
 
 FotosCriancaDados.propTypes = {
   semestreSelecionado: PropTypes.string,
+  componenteCurricularId: PropTypes.string,
 };
 
 FotosCriancaDados.defaultProps = {
   semestreSelecionado: '',
+  componenteCurricularId: '',
 };
 
 export default FotosCriancaDados;
