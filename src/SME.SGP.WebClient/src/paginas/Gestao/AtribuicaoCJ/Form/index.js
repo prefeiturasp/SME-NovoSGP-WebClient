@@ -67,7 +67,7 @@ function AtribuicaoCJForm({ match, location }) {
     ueId: '',
     modalidadeId: '',
     turmaId: '',
-    anoLetivo: anoAtual,
+    anoLetivo: anoAtual
   });
 
   const validacoes = () => {
@@ -169,6 +169,7 @@ function AtribuicaoCJForm({ match, location }) {
       }
 
       const anoSelecionado = query.anoLetivo || anoAtual;
+      const historico = query.historico || consideraHistorico;
       setValoresIniciais({
         ...valoresIniciais,
         modalidadeId: query.modalidadeId,
@@ -177,6 +178,7 @@ function AtribuicaoCJForm({ match, location }) {
         dreId: query.dreId,
         anoLetivo: anoSelecionado,
       });
+      setConsideraHistorico(historico);
       setAnoLetivo(anoSelecionado);
     }
   }, [location, match.url]);
@@ -362,7 +364,7 @@ function AtribuicaoCJForm({ match, location }) {
                       disabled={
                         !consideraHistorico ||
                         listaAnosLetivo?.length === 1 ||
-                        somenteConsulta
+                        somenteConsulta || ehEdicao
                       }
                     />
                   </Grid>
