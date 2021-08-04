@@ -182,7 +182,7 @@ function AtribuicaoEsporadicaForm({ match }) {
     if (confirmado) {
       const excluir = await AtribuicaoEsporadicaServico.deletarAtribuicaoEsporadica(
         form.values.id
-      );
+      ).catch(e => erros(e));
       if (excluir) {
         sucesso(`Atribuição excluida com sucesso!`);
         history.push('/gestao/atribuicao-esporadica');
