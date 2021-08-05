@@ -247,7 +247,7 @@ const FiltrosAvancados = ({ filtrosPrincipais, onChangeFiltros }) => {
   };
 
   const verificarData = useCallback(() => {
-    if (!dataExpiracaoInicio) return true;
+    if (!dataEnvioFim || !dataExpiracaoInicio) return true;
     return (
       moment(dataEnvioFim, 'MM-DD-YYYY') <
       moment(dataExpiracaoInicio, 'MM-DD-YYYY')
