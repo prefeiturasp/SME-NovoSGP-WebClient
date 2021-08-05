@@ -67,7 +67,7 @@ function AtribuicaoCJForm({ match, location }) {
     ueId: '',
     modalidadeId: '',
     turmaId: '',
-    anoLetivo: anoAtual
+    anoLetivo: anoAtual,
   });
 
   const validacoes = () => {
@@ -101,6 +101,7 @@ function AtribuicaoCJForm({ match, location }) {
       setCarregando(true);
       const { data, status } = await AtribuicaoCJServico.salvarAtribuicoes({
         ...valores,
+        historico: consideraHistorico,
         usuarioRf: valores.professorRf,
         modalidade: valores.modalidadeId,
         disciplinas: [...listaProfessores],
@@ -364,7 +365,8 @@ function AtribuicaoCJForm({ match, location }) {
                       disabled={
                         !consideraHistorico ||
                         listaAnosLetivo?.length === 1 ||
-                        somenteConsulta || ehEdicao
+                        somenteConsulta ||
+                        ehEdicao
                       }
                     />
                   </Grid>
