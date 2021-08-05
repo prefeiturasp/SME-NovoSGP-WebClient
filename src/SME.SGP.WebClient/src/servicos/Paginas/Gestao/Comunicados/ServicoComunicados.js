@@ -54,20 +54,20 @@ class ServicoComunicados {
     return exclusao;
   };
 
-  buscarAnosPorModalidade = async (modalidade, codigoUe, params) => {
-    const modalidades = queryString.stringify(modalidade, {
-      arrayFormat: 'repeat',
-      skipEmptyString: true,
-      skipNull: true,
+  buscarAnosPorModalidade = async (modalidades, codigoUe) => {
+    return api.get(`${urlPadrão}/anos/modalidades`, {
+      params: {
+        modalidades,
+        codigoUe,
+      },
+      paramsSerializer(params) {
+        return queryString.stringify(params, {
+          arrayFormat: 'repeat',
+          skipEmptyString: true,
+          skipNull: true,
+        });
+      },
     });
-    return api.get(
-      codigoUe != null && codigoUe !== OPCAO_TODOS
-        ? `${urlPadrão}/anos/modalidade/${modalidades}?codigoUe=${codigoUe}`
-        : `${urlPadrão}/anos/modalidade/${modalidades}`,
-      {
-        params,
-      }
-    );
   };
 
   obterGruposPorModalidade = async modalidade => {
