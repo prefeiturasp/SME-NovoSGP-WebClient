@@ -25,6 +25,9 @@ import { onchangeMultiSelect } from '~/utils';
 const Filtros = ({ onChangeFiltros }) => {
   const [anoAtual] = useState(window.moment().format('YYYY'));
   const [anoLetivo, setAnoLetivo] = useState();
+  const [atualizaFiltrosAvançados, setAtualizaFiltrosAvançados] = useState(
+    false
+  );
   const [buscou, setBuscou] = useState(false);
   const [carregandoAnosLetivos, setCarregandoAnosLetivos] = useState(false);
   const [carregandoDres, setCarregandoDres] = useState(false);
@@ -63,6 +66,7 @@ const Filtros = ({ onChangeFiltros }) => {
     setListaSemestres([]);
     setSemestre();
     setBuscou(false);
+    setAtualizaFiltrosAvançados(true);
 
     if (limpar) {
       setDreCodigo();
@@ -202,6 +206,7 @@ const Filtros = ({ onChangeFiltros }) => {
     setModalidades(valor);
     setBuscou(false);
     setSemestre();
+    setAtualizaFiltrosAvançados(true);
   };
 
   const obterModalidades = useCallback(async ue => {
@@ -245,6 +250,7 @@ const Filtros = ({ onChangeFiltros }) => {
   const onChangeSemestre = valor => {
     setBuscou(false);
     setSemestre(valor);
+    setAtualizaFiltrosAvançados(true);
   };
 
   const obterSemestres = useCallback(
@@ -440,8 +446,10 @@ const Filtros = ({ onChangeFiltros }) => {
 
       {mostrarFiltrosAvancados && (
         <FiltrosAvancados
+          atualizaFiltrosAvançados={atualizaFiltrosAvançados}
           filtrosPrincipais={filtrosPrincipais}
           onChangeFiltros={onChangeFiltros}
+          setAtualizaFiltrosAvançados={setAtualizaFiltrosAvançados}
         />
       )}
     </>

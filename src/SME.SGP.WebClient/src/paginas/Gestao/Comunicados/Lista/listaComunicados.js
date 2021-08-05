@@ -23,6 +23,15 @@ const ListaComunicados = () => {
   const [somenteConsulta, setSomenteConsulta] = useState(false);
   const permissoesTela = useSelector(store => store.usuario.permissoes);
 
+  const filtroEhValido = !!(
+    (filtros?.anoLetivo &&
+      filtros?.dreCodigo &&
+      filtros?.ueCodigo &&
+      filtros?.modalidades?.length &&
+      String(filtros?.modalidades) !== String(ModalidadeDTO.EJA)) ||
+    filtros?.semestre
+  );
+
   useEffect(() => {
     const ehSomenteConsulta = verificaSomenteConsulta(
       permissoesTela[RotasDto.ACOMPANHAMENTO_COMUNICADOS]
@@ -140,31 +149,23 @@ const ListaComunicados = () => {
           </div>
           <Filtros onChangeFiltros={onChangeFiltros} />
 
-          <div className="col-md-12 px-0" style={{ paddingTop: 38 }}>
-            <ListaPaginada
-              id="lista-comunicados"
-              url="v1/comunicado"
-              idLinha="id"
-              colunaChave="id"
-              colunas={colunas}
-              onClick={onClickEditar}
-              multiSelecao
-              filtro={filtros}
-              paramArrayFormat="repeat"
-              selecionarItems={onSelecionarItems}
-              filtroEhValido={
-                !!(
-                  (filtros?.anoLetivo &&
-                    filtros?.dreCodigo &&
-                    filtros?.ueCodigo &&
-                    filtros?.modalidades?.length &&
-                    String(filtros?.modalidades) !==
-                      String(ModalidadeDTO.EJA)) ||
-                  filtros?.semestre
-                )
-              }
-            />
-          </div>
+          {filtroEhValido && (
+            <div className="col-md-12 px-0" style={{ paddingTop: 38 }}>
+              <ListaPaginada
+                id="lista-comunicados"
+                url="v1/comunicado"
+                idLinha="id"
+                colunaChave="id"
+                colunas={colunas}
+                onClick={onClickEditar}
+                multiSelecao
+                filtro={filtros}
+                paramArrayFormat="repeat"
+                selecionarItems={onSelecionarItems}
+                filtroEhValido={filtroEhValido}
+              />
+            </div>
+          )}
         </div>
       </Card>
     </>

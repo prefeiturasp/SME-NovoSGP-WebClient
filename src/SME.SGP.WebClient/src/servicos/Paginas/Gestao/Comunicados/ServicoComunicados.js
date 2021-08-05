@@ -55,10 +55,15 @@ class ServicoComunicados {
   };
 
   buscarAnosPorModalidade = async (modalidade, codigoUe, params) => {
+    const modalidades = queryString.stringify(modalidade, {
+      arrayFormat: 'repeat',
+      skipEmptyString: true,
+      skipNull: true,
+    });
     return api.get(
       codigoUe != null && codigoUe !== OPCAO_TODOS
-        ? `${urlPadrão}/anos/modalidade/${modalidade}?codigoUe=${codigoUe}`
-        : `${urlPadrão}/anos/modalidade/${modalidade}`,
+        ? `${urlPadrão}/anos/modalidade/${modalidades}?codigoUe=${codigoUe}`
+        : `${urlPadrão}/anos/modalidade/${modalidades}`,
       {
         params,
       }

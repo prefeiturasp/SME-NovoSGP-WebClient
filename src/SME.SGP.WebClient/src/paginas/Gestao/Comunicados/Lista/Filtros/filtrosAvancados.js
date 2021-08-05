@@ -14,7 +14,12 @@ import { erros, ServicoComunicados } from '~/servicos';
 import { onchangeMultiSelect } from '~/utils';
 import { OPCAO_TODOS } from '~/constantes/constantesGerais';
 
-const FiltrosAvancados = ({ filtrosPrincipais, onChangeFiltros }) => {
+const FiltrosAvancados = ({
+  atualizaFiltrosAvançados,
+  filtrosPrincipais,
+  onChangeFiltros,
+  setAtualizaFiltrosAvançados,
+}) => {
   const [anosEscolares, setAnosEscolares] = useState();
   const [buscouFiltrosAvancados, setBuscouFiltrosAvancados] = useState(false);
   const [carregandoAnosEscolares, setCarregandoAnosEscolares] = useState(false);
@@ -56,7 +61,7 @@ const FiltrosAvancados = ({ filtrosPrincipais, onChangeFiltros }) => {
 
     const dados = response.data.length
       ? response.data.map(item => ({
-          codigo: item.codTipoEscola,
+          valor: item.codTipoEscola,
           desc: item.descricao,
           id: item.id,
         }))
@@ -69,7 +74,7 @@ const FiltrosAvancados = ({ filtrosPrincipais, onChangeFiltros }) => {
       });
     }
     if (dados?.length === 1) {
-      setTipoEscola(dados[0].codigo.toString());
+      setTipoEscola(dados[0].valor.toString());
     }
 
     setListaTipoEscola(dados);
@@ -134,7 +139,7 @@ const FiltrosAvancados = ({ filtrosPrincipais, onChangeFiltros }) => {
     if (
       filtrosPrincipais?.modalidades?.length &&
       filtrosPrincipais?.ueCodigo &&
-      !listaAnosEscolares.length &&
+      !listaAnosEscolares?.length &&
       !carregandoAnosEscolares
     ) {
       ObterAnosEscolares();
@@ -154,7 +159,7 @@ const FiltrosAvancados = ({ filtrosPrincipais, onChangeFiltros }) => {
   };
 
   useEffect(() => {
-    if (ehTodasModalidade && listaAnosEscolares.length) {
+    if (ehTodasModalidade && listaAnosEscolares?.length) {
       setAnosEscolares([OPCAO_TODOS]);
     }
   }, [filtrosPrincipais, ehTodasModalidade, listaAnosEscolares]);
@@ -223,14 +228,6 @@ const FiltrosAvancados = ({ filtrosPrincipais, onChangeFiltros }) => {
     setBuscouFiltrosAvancados(false);
   };
 
-  const desabilitarDatasEnvio = current => {
-    if (current && filtrosPrincipais?.anoLetivo) {
-      const ano = moment(`${filtrosPrincipais?.anoLetivo}-01-01`, 'MM-DD-YYYY');
-      return current < ano.startOf('year') || current > ano.endOf('year');
-    }
-    return false;
-  };
-
   const onChangeIntervaloDatasExpiracao = valor => {
     const [dtInicioExpiracao, dtFimExpiracao] = valor;
     setDataExpiracaoInicio(dtInicioExpiracao);
@@ -238,7 +235,7 @@ const FiltrosAvancados = ({ filtrosPrincipais, onChangeFiltros }) => {
     setBuscouFiltrosAvancados(false);
   };
 
-  const desabilitarDatasExpiracao = current => {
+  const desabilitarDatas = current => {
     if (current && filtrosPrincipais?.anoLetivo) {
       const ano = moment(`${filtrosPrincipais?.anoLetivo}-01-01`);
       return current < ano.startOf('year') || current > ano.endOf('year');
@@ -266,7 +263,7 @@ const FiltrosAvancados = ({ filtrosPrincipais, onChangeFiltros }) => {
   }, [dataEnvioFim, dataExpiracaoInicio, verificarData]);
 
   const onChangeTitulo = e => {
-    setTitulo(e.target.value);
+    setTitulo(e?.target?.value);
     setBuscouFiltrosAvancados(false);
   };
 
@@ -327,10 +324,11 @@ const FiltrosAvancados = ({ filtrosPrincipais, onChangeFiltros }) => {
 
   useEffect(() => {
     if (
-      !filtrosPrincipais?.dreCodigo ||
-      !filtrosPrincipais?.ueCodigo ||
-      !filtrosPrincipais?.modalidades?.length
+      !filtrosPrincipais?.modalidades?.length ||
+      (filtrosPrincipais?.modalidades?.length && atualizaFiltrosAvançados)
     ) {
+      setAtualizaFiltrosAvançados(false);
+
       setListaTipoEscola([]);
       setTipoEscola();
 
@@ -340,7 +338,11 @@ const FiltrosAvancados = ({ filtrosPrincipais, onChangeFiltros }) => {
       setListaTurmas([]);
       setTurmasCodigo();
     }
-  }, [filtrosPrincipais]);
+  }, [
+    filtrosPrincipais,
+    atualizaFiltrosAvançados,
+    setAtualizaFiltrosAvançados,
+  ]);
 
   return (
     <div className="mt-4">
@@ -387,7 +389,8 @@ const FiltrosAvancados = ({ filtrosPrincipais, onChangeFiltros }) => {
               disabled={
                 !filtrosPrincipais?.modalidades?.length ||
                 !listaAnosEscolares.length ||
-                listaAnosEscolares?.length === 1
+                listaAnosEscolares?.length === 1 ||
+                ehTodasModalidade
               }
               valueSelect={anosEscolares}
               onChange={valores => {
@@ -415,7 +418,8 @@ const FiltrosAvancados = ({ filtrosPrincipais, onChangeFiltros }) => {
               disabled={
                 !filtrosPrincipais?.modalidades ||
                 listaTurmas?.length === 1 ||
-                !anosEscolares?.length
+                !anosEscolares?.length ||
+                ehTodasModalidade
               }
               valueSelect={turmasCodigo}
               onChange={valores => {
@@ -435,7 +439,7 @@ const FiltrosAvancados = ({ filtrosPrincipais, onChangeFiltros }) => {
             label="Data de envio"
             formatoData="DD/MM/YYYY"
             onChange={onChangeIntervaloDatasEnvio}
-            desabilitarData={desabilitarDatasEnvio}
+            desabilitarData={desabilitarDatas}
             valor={[dataEnvioInicio, dataEnvioFim]}
             valorPadrao={valorPadrao}
             intervaloDatas
@@ -447,7 +451,7 @@ const FiltrosAvancados = ({ filtrosPrincipais, onChangeFiltros }) => {
             label="Data de expiração"
             formatoData="DD/MM/YYYY"
             onChange={onChangeIntervaloDatasExpiracao}
-            desabilitarData={desabilitarDatasExpiracao}
+            desabilitarData={desabilitarDatas}
             valor={[dataExpiracaoInicio, dataExpiracaoFim]}
             valorPadrao={valorPadrao}
             intervaloDatas
@@ -470,13 +474,17 @@ const FiltrosAvancados = ({ filtrosPrincipais, onChangeFiltros }) => {
 };
 
 FiltrosAvancados.propTypes = {
+  atualizaFiltrosAvançados: PropTypes.bool,
   filtrosPrincipais: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
   onChangeFiltros: PropTypes.func,
+  setAtualizaFiltrosAvançados: PropTypes.func,
 };
 
 FiltrosAvancados.defaultProps = {
+  atualizaFiltrosAvançados: false,
   filtrosPrincipais: {},
   onChangeFiltros: () => {},
+  setAtualizaFiltrosAvançados: () => {},
 };
 
 export default FiltrosAvancados;
