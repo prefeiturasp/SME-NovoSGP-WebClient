@@ -391,7 +391,11 @@ const Filtros = ({ onChangeFiltros }) => {
               lista={listaModalidades}
               valueOption="valor"
               valueText="desc"
-              disabled={!ueCodigo || listaModalidades?.length === 1}
+              disabled={
+                !ueCodigo ||
+                listaModalidades?.length === 1 ||
+                !listaModalidades?.length
+              }
               onChange={valores => {
                 onchangeMultiSelect(valores, modalidades, onChangeModalidade);
               }}

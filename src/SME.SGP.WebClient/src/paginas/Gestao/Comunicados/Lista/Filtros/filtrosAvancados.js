@@ -150,6 +150,7 @@ const FiltrosAvancados = ({ filtrosPrincipais, onChangeFiltros }) => {
     setAnosEscolares(valor);
     setTurmasCodigo();
     setListaTurmas([]);
+    setBuscouFiltrosAvancados(false);
   };
 
   useEffect(() => {
@@ -295,8 +296,9 @@ const FiltrosAvancados = ({ filtrosPrincipais, onChangeFiltros }) => {
   ]);
 
   useEffect(() => {
-    const pesquisarTitulo = titulo?.length === 0 || titulo?.length > 3;
+    const pesquisarTitulo = !titulo?.length || titulo?.length > 3;
     const dataValida = verificarData();
+
     if (
       (tipoEscola?.length ||
         anosEscolares?.length ||
