@@ -1,7 +1,6 @@
 import PropTypes from 'prop-types';
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import MuralGoogleSalaAula from '~/componentes-sgp/MuralGoogleSalaAula/muralGoogleSalaAula';
 import { RotasDto } from '~/dtos';
 import modalidade from '~/dtos/modalidade';
 import {
@@ -16,6 +15,7 @@ import ObjetivosEspecificosParaAula from './CamposEditorPlanoAula/objetivosEspec
 import RecuperacaoContinua from './CamposEditorPlanoAula/recuperacaoContinua';
 import ModalCopiarConteudoPlanoAula from './ModalCopiarConteudo/modalCopiarConteudoPlanoAula';
 import ModalErrosPlanoAula from './ModalErros/modalErrosPlanoAula';
+import MuralPlanoAula from './muralPlanoAula';
 import ObjetivosAprendizagemDesenvolvimento from './ObjetivosAprendizagemDesenvolvimento/objetivosAprendizagemDesenvolvimento';
 
 const DadosPlanoAula = props => {
@@ -81,7 +81,7 @@ const DadosPlanoAula = props => {
           <ObjetivosEspecificosParaAula />
           <DesenvolvimentoDaAula />
           <div className="mt-3 mb-3">
-            <MuralGoogleSalaAula aulaId={aulaId} />
+            <MuralPlanoAula aulaId={aulaId} />
           </div>
           <RecuperacaoContinua />
           <LicaoDeCasa />

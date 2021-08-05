@@ -226,7 +226,7 @@ const ListaFinal = props => {
                       </td>
                       <td>{item.faltas}</td>
                       <td>{item.ausenciasCompensadas}</td>
-                      <td>{item.frequencia}%</td>
+                      <td>{item.frequencia ? `${item.frequencia}%` : ''}</td>
                     </tr>
                     <LinhaJustificativa
                       idCampo={`${descricaoGrupoMatriz} ${index} componente`}

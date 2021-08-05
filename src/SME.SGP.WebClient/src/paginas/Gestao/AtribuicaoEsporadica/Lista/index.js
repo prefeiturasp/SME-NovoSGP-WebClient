@@ -1,20 +1,15 @@
 import React, { useState, useEffect, useCallback } from 'react';
-
-// Redux
 import { useSelector } from 'react-redux';
 
-// Servicos
+import { Cabecalho } from '~/componentes-sgp';
+import { Card, ListaPaginada, ButtonGroup, Loader } from '~/componentes';
+
 import history from '~/servicos/history';
 import RotasDto from '~/dtos/rotasDto';
 import AtribuicaoEsporadicaServico from '~/servicos/Paginas/AtribuicaoEsporadica';
 import { verificaSomenteConsulta } from '~/servicos/servico-navegacao';
 import { confirmar, sucesso } from '~/servicos/alertas';
 
-// Componentes SGP
-import { Cabecalho } from '~/componentes-sgp';
-
-// Componentes
-import { Card, ListaPaginada, ButtonGroup, Loader } from '~/componentes';
 import Filtro from './componentes/Filtro';
 
 function AtribuicaoEsporadicaLista() {
@@ -22,7 +17,8 @@ function AtribuicaoEsporadicaLista() {
   const [filtro, setFiltro] = useState({});
   const [somenteConsulta, setSomenteConsulta] = useState(false);
   const usuario = useSelector(store => store.usuario);
-  const permissoesTela = usuario.permissoes[RotasDto.ATRIBUICAO_ESPORADICA_LISTA];
+  const permissoesTela =
+    usuario.permissoes[RotasDto.ATRIBUICAO_ESPORADICA_LISTA];
 
   const formatarCampoDataGrid = data => {
     let dataFormatada = '';
@@ -104,11 +100,9 @@ function AtribuicaoEsporadicaLista() {
     history.push(`/gestao/atribuicao-esporadica/editar/${item.id}`);
   };
 
-  const anoAtual = window.moment().format('YYYY');
-
   const onChangeFiltro = useCallback(valoresFiltro => {
     setFiltro({
-      AnoLetivo: anoAtual,
+      AnoLetivo: valoresFiltro.anoLetivo,
       DreId: valoresFiltro.dreId,
       UeId: valoresFiltro.ueId,
       ProfessorRF: valoresFiltro.professorRf,
@@ -125,14 +119,12 @@ function AtribuicaoEsporadicaLista() {
 
   return (
     <>
-      <Cabecalho pagina="Atribuição esporádica" />
+      <Cabecalho pagina="Atribuição esporádica" classes="mb-2" />
       <Loader loading={false}>
         <Card mx="mx-0">
           <ButtonGroup
             somenteConsulta={somenteConsulta}
-            permissoesTela={
-              permissoesTela
-            }
+            permissoesTela={permissoesTela}
             temItemSelecionado={
               itensSelecionados && itensSelecionados.length >= 1
             }
@@ -140,9 +132,6 @@ function AtribuicaoEsporadicaLista() {
             onClickExcluir={onClickExcluir}
             onClickBotaoPrincipal={onClickBotaoPrincipal}
             labelBotaoPrincipal="Novo"
-            desabilitarBotaoPrincipal={
-              !!filtro.DreId === false && !!filtro.UeId === false
-            }
           />
           <Filtro onFiltrar={onChangeFiltro} />
           <div className="col-md-12 pt-2 py-0 px-0">

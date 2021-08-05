@@ -6,21 +6,22 @@ const AtribuicaoCJServico = {
   buscarLista(params) {
     return api.get(`/v1/atribuicoes/cjs`, { params });
   },
-  buscarAtribuicoes(ue, modalidade, turma, professorRf) {
+  buscarAtribuicoes(ue, modalidade, turma, professorRf, anoLetivo) {
     return api.get(
-      `/v1/atribuicoes/cjs/ues/${ue}/modalidades/${modalidade}/turmas/${turma}/professores/${professorRf}`
+      `/v1/atribuicoes/cjs/ues/${ue}/modalidades/${modalidade}/turmas/${turma}/professores` +
+        `/${professorRf}?anoLetivo=${anoLetivo}`
     );
   },
   salvarAtribuicoes(data) {
     return api.post(`/v1/atribuicoes/cjs`, data);
   },
-  buscarModalidades(ue) {
-    return api.get(`/v1/ues/${ue}/modalidades?ano=${anoAtual}`);
+  buscarModalidades(ue, anoLetivo = anoAtual) {
+    return api.get(`/v1/ues/${ue}/modalidades?ano=${anoLetivo}`);
   },
-  buscarTurmas(ue, modalidade, anoLetivo) {
+  buscarTurmas(ue, modalidade, anoLetivo, consideraHistorico) {
     const anoCorrente = anoLetivo || anoAtual;
     return api.get(
-      `/v1/ues/${ue}/modalidades/${modalidade}?ano=${anoCorrente}`
+      `/v1/ues/${ue}/modalidades/${modalidade}?ano=${anoCorrente}&historico=${consideraHistorico}`
     );
   },
 };
