@@ -13,7 +13,7 @@ import history from '~/servicos/history';
 import ServicoAcompanhamentoAprendizagem from '~/servicos/Paginas/Relatorios/AcompanhamentoAprendizagem/ServicoAcompanhamentoAprendizagem';
 
 const BotoesAcoesAcompanhamentoAprendizagem = props => {
-  const { semestreSelecionado } = props;
+  const { semestreSelecionado, componenteCurricularId } = props;
 
   const dispatch = useDispatch();
 
@@ -90,7 +90,7 @@ const BotoesAcoesAcompanhamentoAprendizagem = props => {
         turmaSelecionada?.id,
         codigoEOL,
         semestreSelecionado,
-        componenteCurricularSelecionado
+        componenteCurricularId
       );
     }
 
@@ -157,10 +157,12 @@ const BotoesAcoesAcompanhamentoAprendizagem = props => {
 
 BotoesAcoesAcompanhamentoAprendizagem.propTypes = {
   semestreSelecionado: PropTypes.string,
+  componenteCurricularId: PropTypes.string,
 };
 
 BotoesAcoesAcompanhamentoAprendizagem.defaultProps = {
   semestreSelecionado: '',
+  componenteCurricularId: '',
 };
 
 export default BotoesAcoesAcompanhamentoAprendizagem;

@@ -24,7 +24,7 @@ const DadosAcompanhamentoAprendizagem = props => {
 
   const { codigoEOL } = dadosAlunoObjectCard;
 
-  const { semestreSelecionado } = props;
+  const { semestreSelecionado, componenteCurricularId } = props;
 
   const componenteCurricularSelecionado = useSelector(
     state => state.registroIndividual.componenteCurricularSelecionado
@@ -65,7 +65,7 @@ const DadosAcompanhamentoAprendizagem = props => {
       turmaSelecionada?.id,
       codigoEOL,
       semestreSelecionado,
-      componenteCurricularSelecionado
+      componenteCurricularId
     );
 
     const { acompanhamentoAlunoSemestreId, podeEditar } = retorno;
@@ -97,7 +97,10 @@ const DadosAcompanhamentoAprendizagem = props => {
           </TabPane>
           <TabPane tab="Registros e fotos" key={TAB_REGISTROS_FOTOS}>
             {tabAtual === TAB_REGISTROS_FOTOS ? (
-              <RegistrosFotos semestreSelecionado={semestreSelecionado} />
+              <RegistrosFotos
+                semestreSelecionado={semestreSelecionado}
+                componenteCurricularId={componenteCurricularId}
+              />
             ) : (
               ''
             )}
@@ -126,10 +129,12 @@ const DadosAcompanhamentoAprendizagem = props => {
 
 DadosAcompanhamentoAprendizagem.propTypes = {
   semestreSelecionado: PropTypes.string,
+  componenteCurricularId: PropTypes.string,
 };
 
 DadosAcompanhamentoAprendizagem.defaultProps = {
   semestreSelecionado: '',
+  componenteCurricularId: '',
 };
 
 export default DadosAcompanhamentoAprendizagem;
