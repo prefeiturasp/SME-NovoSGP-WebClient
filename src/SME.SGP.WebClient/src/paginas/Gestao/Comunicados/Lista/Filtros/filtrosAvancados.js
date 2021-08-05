@@ -29,8 +29,8 @@ const FiltrosAvancados = ({ filtrosPrincipais, onChangeFiltros }) => {
   const [listaTurmas, setListaTurmas] = useState([]);
   const [tipoEscola, setTipoEscola] = useState();
   const [titulo, setTitulo] = useState();
-  const [turmasId, setTurmasId] = useState();
-  const [validacaoData, setValidacaoData] = useState(false);
+  const [turmasCodigo, setTurmasCodigo] = useState();
+  const [ehDataValida, setEhDataValida] = useState(true);
 
   const ehTodasModalidade = filtrosPrincipais?.modalidades?.find(
     item => item === OPCAO_TODOS
@@ -148,7 +148,7 @@ const FiltrosAvancados = ({ filtrosPrincipais, onChangeFiltros }) => {
 
   const onChangeAnosEscolares = valor => {
     setAnosEscolares(valor);
-    setTurmasId();
+    setTurmasCodigo();
     setListaTurmas([]);
   };
 
@@ -163,7 +163,7 @@ const FiltrosAvancados = ({ filtrosPrincipais, onChangeFiltros }) => {
 
     if (ehTodasModalidade) {
       setListaTurmas([todasTurmas]);
-      setTurmasId([OPCAO_TODOS]);
+      setTurmasCodigo([OPCAO_TODOS]);
       return;
     }
 
@@ -192,7 +192,7 @@ const FiltrosAvancados = ({ filtrosPrincipais, onChangeFiltros }) => {
       );
       setListaTurmas(lista);
       if (lista.length === 1) {
-        setTurmasId([String(lista[0].valor)]);
+        setTurmasCodigo([String(lista[0].valor)]);
       }
     }
   }, [filtrosPrincipais, ehTodasModalidade, anosEscolares]);
@@ -245,18 +245,24 @@ const FiltrosAvancados = ({ filtrosPrincipais, onChangeFiltros }) => {
     return false;
   };
 
+  const verificarData = useCallback(() => {
+    if (!dataExpiracaoInicio) return true;
+    return (
+      moment(dataEnvioFim, 'MM-DD-YYYY') <
+      moment(dataExpiracaoInicio, 'MM-DD-YYYY')
+    );
+  }, [dataEnvioFim, dataExpiracaoInicio]);
+
   useEffect(() => {
     if (dataEnvioFim && dataExpiracaoInicio) {
-      const ehDataValida =
-        moment(dataEnvioFim, 'MM-DD-YYYY') <
-        moment(dataExpiracaoInicio, 'MM-DD-YYYY');
-      setValidacaoData(!ehDataValida);
+      const dataValida = verificarData();
+      setEhDataValida(dataValida);
     }
 
     if (!dataEnvioFim) {
-      setValidacaoData(false);
+      setEhDataValida(true);
     }
-  }, [dataEnvioFim, dataExpiracaoInicio]);
+  }, [dataEnvioFim, dataExpiracaoInicio, verificarData]);
 
   const onChangeTitulo = e => {
     setTitulo(e.target.value);
@@ -267,7 +273,7 @@ const FiltrosAvancados = ({ filtrosPrincipais, onChangeFiltros }) => {
     const params = {
       tipoEscola,
       anosEscolares,
-      turmasId,
+      turmasCodigo,
       dataEnvioInicio,
       dataEnvioFim,
       dataExpiracaoInicio,
@@ -280,7 +286,7 @@ const FiltrosAvancados = ({ filtrosPrincipais, onChangeFiltros }) => {
     onChangeFiltros,
     tipoEscola,
     anosEscolares,
-    turmasId,
+    turmasCodigo,
     dataEnvioInicio,
     dataEnvioFim,
     dataExpiracaoInicio,
@@ -290,14 +296,16 @@ const FiltrosAvancados = ({ filtrosPrincipais, onChangeFiltros }) => {
 
   useEffect(() => {
     const pesquisarTitulo = titulo?.length === 0 || titulo?.length > 3;
+    const dataValida = verificarData();
     if (
       (tipoEscola?.length ||
         anosEscolares?.length ||
-        turmasId?.length ||
+        turmasCodigo?.length ||
         (dataEnvioInicio && dataEnvioFim) ||
-        (dataExpiracaoInicio && dataExpiracaoFim) ||
-        pesquisarTitulo) &&
-      !buscouFiltrosAvancados
+        (dataExpiracaoInicio && dataExpiracaoFim)) &&
+      !buscouFiltrosAvancados &&
+      dataValida &&
+      pesquisarTitulo
     ) {
       filtrarAvancado();
     }
@@ -306,12 +314,13 @@ const FiltrosAvancados = ({ filtrosPrincipais, onChangeFiltros }) => {
     buscouFiltrosAvancados,
     tipoEscola,
     anosEscolares,
-    turmasId,
+    turmasCodigo,
     dataEnvioInicio,
     dataEnvioFim,
     dataExpiracaoInicio,
     dataExpiracaoFim,
     titulo,
+    verificarData,
   ]);
 
   useEffect(() => {
@@ -327,7 +336,7 @@ const FiltrosAvancados = ({ filtrosPrincipais, onChangeFiltros }) => {
       setAnosEscolares();
 
       setListaTurmas([]);
-      setTurmasId();
+      setTurmasCodigo();
     }
   }, [filtrosPrincipais]);
 
@@ -402,11 +411,13 @@ const FiltrosAvancados = ({ filtrosPrincipais, onChangeFiltros }) => {
               valueText="desc"
               label="Turma"
               disabled={
-                !filtrosPrincipais?.modalidades || listaTurmas?.length === 1
+                !filtrosPrincipais?.modalidades ||
+                listaTurmas?.length === 1 ||
+                !anosEscolares?.length
               }
-              valueSelect={turmasId}
+              valueSelect={turmasCodigo}
               onChange={valores => {
-                onchangeMultiSelect(valores, turmasId, setTurmasId);
+                onchangeMultiSelect(valores, turmasCodigo, setTurmasCodigo);
                 setBuscouFiltrosAvancados(false);
               }}
               placeholder="Turma"
@@ -438,7 +449,7 @@ const FiltrosAvancados = ({ filtrosPrincipais, onChangeFiltros }) => {
             valor={[dataExpiracaoInicio, dataExpiracaoFim]}
             valorPadrao={valorPadrao}
             intervaloDatas
-            temErro={validacaoData}
+            temErro={!ehDataValida}
             mensagemErro="Data de expiração deve ser maior que a data de envio"
           />
         </div>

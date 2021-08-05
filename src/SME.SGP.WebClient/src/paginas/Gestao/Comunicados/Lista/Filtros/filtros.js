@@ -167,7 +167,7 @@ const Filtros = ({ onChangeFiltros }) => {
       setCarregandoUes(true);
       const resposta = await AbrangenciaServico.buscarUes(
         dreCodigo,
-        `v1/abrangencias/${consideraHistorico}/dres/${dreCodigo}/ues?anoLetivo=${anoLetivo}`,
+        `v1/abrangencias/${consideraHistorico}/dres/${dreCodigo}/ues?anoLetivo=${anoLetivo}&consideraNovasUEs=${true}`,
         true
       )
         .catch(e => erros(e))
@@ -210,7 +210,8 @@ const Filtros = ({ onChangeFiltros }) => {
       const {
         data,
       } = await ServicoFiltroRelatorio.obterModalidadesPorAbrangencia(
-        ue
+        ue,
+        true
       ).finally(() => setCarregandoModalidade(false));
 
       if (data?.length) {
