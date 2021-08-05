@@ -80,9 +80,10 @@ class FiltroHelper {
 
   async obterModalidadesAnoLetivo(ue, anoLetivo, consideraNovasModalidades) {
     try {
-      const retorno = await ServicoFiltroRelatorio.obterModalidadesAnoLetivo(
+      const retorno = await ServicoFiltroRelatorio.obterModalidades(
         ue,
         anoLetivo,
+        false,
         consideraNovasModalidades
       );
 
@@ -101,9 +102,10 @@ class FiltroHelper {
 
   async obterModalidadesAnoLetivo(ue, anoLetivo) {
     try {
-      const retorno = await ServicoFiltroRelatorio.obterModalidadesAnoLetivo(
+      const retorno = await ServicoFiltroRelatorio.obterModalidades(
         ue,
         anoLetivo,
+        false,
         true
       );
 
@@ -126,7 +128,8 @@ class FiltroHelper {
         anoLetivo,
         codigoUe,
         modalidade,
-        semestre
+        semestre,
+        true
       );
 
       const dados = retorno.data.map(x => {

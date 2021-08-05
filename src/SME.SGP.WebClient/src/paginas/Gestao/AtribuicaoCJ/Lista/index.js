@@ -50,7 +50,7 @@ function AtribuicaoCJLista() {
 
   const onClickBotaoPrincipal = () =>
     history.push(
-      `/gestao/atribuicao-cjs/novo?dreId=${filtro.DreId}&ueId=${filtro.UeId}&historico=${filtro.his}`
+      `/gestao/atribuicao-cjs/novo?dreId=${filtro.DreId}&ueId=${filtro.UeId}&historico=${filtro.Historico}`
     );
 
   const onSelecionarItems = items => {

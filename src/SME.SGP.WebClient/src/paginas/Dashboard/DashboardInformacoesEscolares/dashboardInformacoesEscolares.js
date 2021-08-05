@@ -167,11 +167,11 @@ const DashboardInformacoesEscolares = () => {
   const obterModalidades = useCallback(async () => {
     setCarregandoModalidades(true);
 
-    const resultado = await ServicoFiltroRelatorio.obterModalidadesAnoLetivo(
+    const resultado = await ServicoFiltroRelatorio.obterModalidades(
       ue?.codigo,
       anoLetivo,
-      true,
-      consideraHistorico
+      consideraHistorico,
+      true
     )
       .catch(e => erros(e))
       .finally(() => setCarregandoModalidades(false));

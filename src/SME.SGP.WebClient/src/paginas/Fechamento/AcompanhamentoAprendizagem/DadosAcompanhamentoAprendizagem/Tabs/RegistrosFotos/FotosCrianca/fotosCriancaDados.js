@@ -29,7 +29,7 @@ const FotosCriancaDados = props => {
 
   const { codigoEOL } = dadosAlunoObjectCard;
 
-  const { semestreSelecionado } = props;
+  const { semestreSelecionado, componenteCurricularId } = props;
 
   const componenteCurricularSelecionado = useSelector(
     state => state.registroIndividual.componenteCurricularSelecionado
@@ -106,7 +106,7 @@ const FotosCriancaDados = props => {
         turmaSelecionada?.id,
         codigoEOL,
         semestreSelecionado,
-        componenteCurricularSelecionado
+        componenteCurricularId
       );
     } else {
       atualizarDados(dados);
@@ -159,10 +159,12 @@ const FotosCriancaDados = props => {
 
 FotosCriancaDados.propTypes = {
   semestreSelecionado: PropTypes.string,
+  componenteCurricularId: PropTypes.string,
 };
 
 FotosCriancaDados.defaultProps = {
   semestreSelecionado: '',
+  componenteCurricularId: '',
 };
 
 export default FotosCriancaDados;
