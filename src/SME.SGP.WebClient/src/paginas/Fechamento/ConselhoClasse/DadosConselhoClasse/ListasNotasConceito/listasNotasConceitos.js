@@ -23,6 +23,9 @@ const ListasNotasConceitos = props => {
   const dadosPrincipaisConselhoClasse = useSelector(
     store => store.conselhoClasse.dadosPrincipaisConselhoClasse
   );
+
+  const turmaStore = useSelector(state => state.usuario.turmaSelecionada);
+
   const {
     fechamentoTurmaId,
     conselhoClasseId,
@@ -61,7 +64,8 @@ const ListasNotasConceitos = props => {
       fechamentoTurmaId,
       alunoCodigo,
       turmaCodigo,
-      bimestreSelecionado?.valor
+      bimestreSelecionado?.valor,
+      turmaStore?.consideraHistorico
     ).catch(e => erros(e));
 
     if (resultado && resultado.data) {
