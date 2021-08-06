@@ -21,6 +21,7 @@ const FiltrosAvancados = ({
   setAtualizaFiltrosAvançados,
 }) => {
   const [anosEscolares, setAnosEscolares] = useState();
+  const [anosEscolaresId, setAnosEscolaresId] = useState();
   const [buscouFiltrosAvancados, setBuscouFiltrosAvancados] = useState(false);
   const [carregandoAnosEscolares, setCarregandoAnosEscolares] = useState(false);
   const [carregandoTipoEscola, setCarregandoTipoEscola] = useState(false);
@@ -100,16 +101,14 @@ const FiltrosAvancados = ({
   ]);
 
   const ObterAnosEscolares = useCallback(async () => {
-    const todosAnosEscolares = [
-      {
-        valor: OPCAO_TODOS,
-        desc: 'Todos',
-      },
-    ];
-
+    const todosAnosEscolares = {
+      id: OPCAO_TODOS,
+      desc: 'Todos',
+    };
     if (ehTodasModalidade) {
-      setListaAnosEscolares(todosAnosEscolares);
+      setListaAnosEscolares([todosAnosEscolares]);
       setAnosEscolares([OPCAO_TODOS]);
+      setAnosEscolaresId([OPCAO_TODOS]);
       return;
     }
 
@@ -123,16 +122,14 @@ const FiltrosAvancados = ({
 
     const dados = response?.data?.length
       ? response.data.map(item => ({
-          valor: item.ano,
+          id: item.id,
+          ano: item.ano,
           desc: item.anoComModalidade,
         }))
       : [];
     const dadosSelecionados = dados?.length === 1 ? dados[0].valor : dados;
     if (dados?.length > 1) {
-      dados.unshift({
-        valor: OPCAO_TODOS,
-        desc: 'Todos',
-      });
+      dados.unshift(todosAnosEscolares);
     }
     setListaAnosEscolares(dadosSelecionados);
   }, [filtrosPrincipais, ehTodasModalidade]);
@@ -153,8 +150,19 @@ const FiltrosAvancados = ({
     carregandoAnosEscolares,
   ]);
 
+  const encontrarValor = (item, valor) =>
+    valor.find(ano => ano === String(item.id));
+  const removerDuplicados = (v, i, a) => a.findIndex(t => t.id === v.id) === i;
+  const reduzirParaAnos = ({ ano }) => ano;
+
   const onChangeAnosEscolares = valor => {
-    setAnosEscolares(valor);
+    const anosSelecionado = listaAnosEscolares
+      .filter(item => encontrarValor(item, valor))
+      .filter(removerDuplicados)
+      .map(reduzirParaAnos);
+
+    setAnosEscolares(anosSelecionado);
+    setAnosEscolaresId(valor);
     setTurmasCodigo();
     setListaTurmas([]);
     setBuscouFiltrosAvancados(false);
@@ -163,6 +171,7 @@ const FiltrosAvancados = ({
   useEffect(() => {
     if (ehTodasModalidade && listaAnosEscolares?.length) {
       setAnosEscolares([OPCAO_TODOS]);
+      setAnosEscolaresId([OPCAO_TODOS]);
     }
 
     if (ehTodosAnosEscolares) {
@@ -203,7 +212,7 @@ const FiltrosAvancados = ({
       }
       retorno.data.map(item =>
         lista.push({
-          desc: item.descricao,
+          desc: item.descricaoTurma,
           valor: item.valor,
         })
       );
@@ -263,14 +272,8 @@ const FiltrosAvancados = ({
   }, [dataEnvioFim, dataExpiracaoInicio]);
 
   useEffect(() => {
-    if (dataEnvioFim && dataExpiracaoInicio) {
-      const dataValida = verificarData();
-      setEhDataValida(dataValida);
-    }
-
-    if (!dataEnvioFim) {
-      setEhDataValida(true);
-    }
+    const dataValida = verificarData();
+    setEhDataValida(dataValida);
   }, [dataEnvioFim, dataExpiracaoInicio, verificarData]);
 
   const onChangeTitulo = e => {
@@ -345,6 +348,7 @@ const FiltrosAvancados = ({
 
       setListaAnosEscolares([]);
       setAnosEscolares();
+      setAnosEscolaresId();
 
       setListaTurmas([]);
       setTurmasCodigo();
@@ -394,7 +398,7 @@ const FiltrosAvancados = ({
             <SelectComponent
               id="select-ano-escolar"
               lista={listaAnosEscolares}
-              valueOption="valor"
+              valueOption="id"
               valueText="desc"
               label="Ano"
               disabled={
@@ -403,11 +407,11 @@ const FiltrosAvancados = ({
                 listaAnosEscolares?.length === 1 ||
                 ehTodasModalidade
               }
-              valueSelect={anosEscolares}
+              valueSelect={anosEscolaresId}
               onChange={valores => {
                 onchangeMultiSelect(
                   valores,
-                  anosEscolares,
+                  anosEscolaresId,
                   onChangeAnosEscolares
                 );
                 setBuscouFiltrosAvancados(false);
