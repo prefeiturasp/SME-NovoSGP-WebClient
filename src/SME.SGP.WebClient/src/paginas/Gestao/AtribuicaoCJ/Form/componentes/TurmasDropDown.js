@@ -15,17 +15,17 @@ function TurmasDropDown({
   onChange,
   label,
   desabilitado,
-  anoLetivo,
   consideraHistorico,
 }) {
   const [listaTurmas, setListaTurmas] = useState([]);
   const [carregandoLista, setCarregandoLista] = useState(false);
 
-  const { ueId, modalidadeId } = form.values;
+  const { ueId, modalidadeId, anoLetivo } = form.values;
+
   useEffect(() => {
     async function buscaTurmas() {
       setCarregandoLista(true);
-      const { data } = await AtribuicaoCJServico.buscarTurmas(
+      const resposta = await AtribuicaoCJServico.buscarTurmas(
         ueId,
         modalidadeId,
         anoLetivo,
@@ -34,9 +34,9 @@ function TurmasDropDown({
         erros(e);
         setCarregandoLista(false);
       });
-      if (data) {
+      if (resposta?.data) {
         setListaTurmas(
-          data
+          resposta.data
             .map(item => ({
               desc: item.nome,
               valor: item.codigo,
@@ -47,12 +47,12 @@ function TurmasDropDown({
       setCarregandoLista(false);
     }
 
-    if (ueId && modalidadeId) {
+    if (ueId && modalidadeId && anoLetivo) {
       buscaTurmas();
     } else {
       setListaTurmas([]);
     }
-  }, [ueId, modalidadeId]);
+  }, [ueId, modalidadeId, anoLetivo, consideraHistorico]);
 
   useEffect(() => {
     if (listaTurmas.length === 1) {
