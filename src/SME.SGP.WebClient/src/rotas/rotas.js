@@ -47,7 +47,7 @@ import RelatorioPAPAcompanhamento from '~/paginas/Relatorios/PAP/Acompanhamento'
 import PendenciasFechamentoLista from '~/paginas/Fechamento/PendenciasFechamento/pendenciasFechamentoLista';
 import PendenciasFechamentoForm from '~/paginas/Fechamento/PendenciasFechamento/pendenciasFechamentoForm';
 import ComunicadosLista from '~/paginas/AcompanhamentoEscolar/Comunicados/Lista';
-import ComunicadosCadastro from '~/paginas/AcompanhamentoEscolar/Comunicados/Cadastro';
+import ComunicadosCadastro from '~/paginas/Gestao/Comunicados/Cadastro/cadastroComunicados';
 import ConselhoClasse from '~/paginas/Fechamento/ConselhoClasse/conselhoClasse';
 import RelatorioSemestral from '~/paginas/Relatorios/PAP/RelatorioSemestral/relatorioSemestral';
 
