@@ -40,6 +40,9 @@ const FiltrosAvancados = ({
   const ehTodasModalidade = filtrosPrincipais?.modalidades?.find(
     item => item === OPCAO_TODOS
   );
+  const ehTodosAnosEscolares = anosEscolares?.find(
+    item => item === OPCAO_TODOS
+  );
 
   const valorPadrao = useMemo(() => {
     const dataParcial = moment().format('MM-DD');
@@ -73,11 +76,10 @@ const FiltrosAvancados = ({
         desc: 'Todos',
       });
     }
-    if (dados?.length === 1) {
-      setTipoEscola(dados[0].valor.toString());
-    }
-
     setListaTipoEscola(dados);
+    if (dados?.length === 1) {
+      setTipoEscola([String(dados[0].valor)]);
+    }
   }, [filtrosPrincipais]);
 
   useEffect(() => {
@@ -122,7 +124,7 @@ const FiltrosAvancados = ({
     const dados = response?.data?.length
       ? response.data.map(item => ({
           valor: item.ano,
-          desc: item.ano,
+          desc: item.anoComModalidade,
         }))
       : [];
     const dadosSelecionados = dados?.length === 1 ? dados[0].valor : dados;
@@ -162,7 +164,16 @@ const FiltrosAvancados = ({
     if (ehTodasModalidade && listaAnosEscolares?.length) {
       setAnosEscolares([OPCAO_TODOS]);
     }
-  }, [filtrosPrincipais, ehTodasModalidade, listaAnosEscolares]);
+
+    if (ehTodosAnosEscolares) {
+      setTurmasCodigo([OPCAO_TODOS]);
+    }
+  }, [
+    filtrosPrincipais,
+    ehTodasModalidade,
+    ehTodosAnosEscolares,
+    listaAnosEscolares,
+  ]);
 
   const obterTurmas = useCallback(async () => {
     const todasTurmas = { valor: OPCAO_TODOS, desc: 'Todas' };
@@ -359,7 +370,7 @@ const FiltrosAvancados = ({
             <SelectComponent
               id="tipo-escola"
               lista={listaTipoEscola}
-              valueOption="codigo"
+              valueOption="valor"
               valueText="desc"
               label="Tipo de escola"
               disabled={
@@ -419,7 +430,8 @@ const FiltrosAvancados = ({
                 !filtrosPrincipais?.modalidades ||
                 listaTurmas?.length === 1 ||
                 !anosEscolares?.length ||
-                ehTodasModalidade
+                ehTodasModalidade ||
+                ehTodosAnosEscolares
               }
               valueSelect={turmasCodigo}
               onChange={valores => {
