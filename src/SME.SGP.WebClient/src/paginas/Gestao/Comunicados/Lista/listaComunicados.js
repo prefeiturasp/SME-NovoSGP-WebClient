@@ -23,13 +23,17 @@ const ListaComunicados = () => {
   const [somenteConsulta, setSomenteConsulta] = useState(false);
   const permissoesTela = useSelector(store => store.usuario.permissoes);
 
+  const temModalidadeEja = !!filtros?.modalidades?.find(
+    item => String(item) === String(ModalidadeDTO.EJA)
+  );
+  const temSemestre = temModalidadeEja ? filtros?.semestre : true;
+
   const filtroEhValido = !!(
-    (filtros?.anoLetivo &&
-      filtros?.dreCodigo &&
-      filtros?.ueCodigo &&
-      filtros?.modalidades?.length &&
-      String(filtros?.modalidades) !== String(ModalidadeDTO.EJA)) ||
-    filtros?.semestre
+    filtros?.anoLetivo &&
+    filtros?.dreCodigo &&
+    filtros?.ueCodigo &&
+    filtros?.modalidades?.length &&
+    temSemestre
   );
 
   useEffect(() => {
@@ -147,7 +151,10 @@ const ListaComunicados = () => {
               />
             </div>
           </div>
-          <Filtros onChangeFiltros={onChangeFiltros} />
+          <Filtros
+            onChangeFiltros={onChangeFiltros}
+            temModalidadeEja={temModalidadeEja}
+          />
 
           {filtroEhValido && (
             <div className="col-md-12 px-0" style={{ paddingTop: 38 }}>

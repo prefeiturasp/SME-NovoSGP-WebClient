@@ -22,7 +22,7 @@ import FiltrosAvancados from './filtrosAvancados';
 import { OPCAO_TODOS } from '~/constantes';
 import { onchangeMultiSelect } from '~/utils';
 
-const Filtros = ({ onChangeFiltros }) => {
+const Filtros = ({ onChangeFiltros, temModalidadeEja }) => {
   const [anoAtual] = useState(window.moment().format('YYYY'));
   const [anoLetivo, setAnoLetivo] = useState();
   const [atualizaFiltrosAvançados, setAtualizaFiltrosAvançados] = useState(
@@ -49,14 +49,11 @@ const Filtros = ({ onChangeFiltros }) => {
   const [listaUes, setListaUes] = useState([]);
   const [modalidades, setModalidades] = useState();
   const [mostrarFiltrosAvancados, setMostrarFiltrosAvancados] = useState(false);
-  const [semestre, setSemestre] = useState();
+  const [semestre, setSemestre] = useState('0');
   const [ueCodigo, setUeCodigo] = useState();
   const [ueId, setUeId] = useState();
 
   const ANO_MINIMO = '2021';
-  const temModalidadeEja = !!modalidades?.find(
-    item => String(item) === String(ModalidadeDTO.EJA)
-  );
 
   const limparCampos = (limpar = false) => {
     setListaUes([]);
@@ -260,10 +257,11 @@ const Filtros = ({ onChangeFiltros }) => {
   const obterSemestres = useCallback(
     async (modalidadeSelecionada, anoLetivoSelecionado) => {
       setCarregandoSemestres(true);
-      const retorno = await AbrangenciaServico.obterSemestres(
+      const retorno = await ServicoComunicados.obterSemestres(
         consideraHistorico,
+        modalidadeSelecionada,
         anoLetivoSelecionado,
-        modalidadeSelecionada
+        ueCodigo
       )
         .catch(e => erros(e))
         .finally(() => setCarregandoSemestres(false));
@@ -273,14 +271,16 @@ const Filtros = ({ onChangeFiltros }) => {
           desc: periodo,
           valor: periodo,
         }));
+        setListaSemestres(lista);
 
         if (lista?.length === 1) {
-          setSemestre(lista[0].valor);
+          setSemestre(String(lista[0].valor));
+          setBuscou(false);
+          setAtualizaFiltrosAvançados(true);
         }
-        setListaSemestres(lista);
       }
     },
-    [consideraHistorico]
+    [consideraHistorico, ueCodigo]
   );
 
   useEffect(() => {
@@ -300,7 +300,7 @@ const Filtros = ({ onChangeFiltros }) => {
       ueId,
       ueCodigo,
       modalidades,
-      semestre: semestre || 0,
+      semestre,
     };
 
     onChangeFiltros(params);
@@ -432,7 +432,7 @@ const Filtros = ({ onChangeFiltros }) => {
         </div>
         <div className="col-sm-12 col-md-2 mt-4">
           <Button
-            id="botao-voltar"
+            id="botao-filtros-avancados"
             label="Filtros avançados"
             icon="filter"
             color={Colors.Azul}
@@ -459,10 +459,12 @@ const Filtros = ({ onChangeFiltros }) => {
 
 Filtros.propTypes = {
   onChangeFiltros: PropTypes.func,
+  temModalidadeEja: PropTypes.bool,
 };
 
 Filtros.defaultProps = {
   onChangeFiltros: () => {},
+  temModalidadeEja: false,
 };
 
 export default Filtros;

@@ -1,16 +1,15 @@
 import queryString from 'query-string';
 
-import { OPCAO_TODOS } from '~/constantes/constantes';
 import api from '../../../api';
 
-const urlPadrão = 'v1/comunicado';
+const urlPadrao = 'v1/comunicado';
 
 class ServicoComunicados {
   consultarPorId = async id => {
     let comunicado = {};
 
     try {
-      const requisicao = await api.get(`${urlPadrão}/${id}`);
+      const requisicao = await api.get(`${urlPadrao}/${id}`);
       if (requisicao.data) comunicado = requisicao.data;
     } catch {
       return comunicado;
@@ -23,7 +22,7 @@ class ServicoComunicados {
     let salvou = {};
 
     let metodo = 'post';
-    let url = `${urlPadrão}`;
+    let url = `${urlPadrao}`;
 
     if (dados.id && dados.id > 0) {
       metodo = 'put';
@@ -45,7 +44,7 @@ class ServicoComunicados {
     const parametros = { data: ids };
 
     try {
-      const requisicao = await api.delete(`${urlPadrão}`, parametros);
+      const requisicao = await api.delete(`${urlPadrao}`, parametros);
       if (requisicao && requisicao.status === 200) exclusao = requisicao;
     } catch (erro) {
       exclusao = [...erro.response.data.mensagens];
@@ -55,7 +54,7 @@ class ServicoComunicados {
   };
 
   buscarAnosPorModalidade = async (modalidades, codigoUe) => {
-    return api.get(`${urlPadrão}/anos/modalidades`, {
+    return api.get(`${urlPadrao}/anos/modalidades`, {
       params: {
         modalidades,
         codigoUe,
@@ -87,7 +86,7 @@ class ServicoComunicados {
   obterAlunos = async (codigoTurma, anoLetivo) => {
     try {
       const requisicao = await api.get(
-        `${urlPadrão}/${codigoTurma}/alunos/${anoLetivo}`
+        `${urlPadrao}/${codigoTurma}/alunos/${anoLetivo}`
       );
 
       if (requisicao && requisicao.status === 204) return [];
@@ -99,7 +98,7 @@ class ServicoComunicados {
   };
 
   obterAnosLetivos = anoMinimo => {
-    return api.get(`${urlPadrão}/anos-letivos`, {
+    return api.get(`${urlPadrao}/anos-letivos`, {
       params: {
         anoMinimo,
       },
@@ -112,7 +111,7 @@ class ServicoComunicados {
 
   obterTurmas = (anoLetivo, ueCodigo, semestre, modalidades, anos) => {
     return api.get(
-      `${urlPadrão}/ues/${ueCodigo}/anoletivo/${anoLetivo}/turmas`,
+      `${urlPadrao}/ues/${ueCodigo}/anoletivo/${anoLetivo}/turmas`,
       {
         params: {
           semestre,
@@ -125,6 +124,19 @@ class ServicoComunicados {
             skipEmptyString: true,
             skipNull: true,
           });
+        },
+      }
+    );
+  };
+
+  obterSemestres = (consideraHistorico, modalidade, anoLetivo, ueCodigo) => {
+    return api.get(
+      `${urlPadrao}/semestres/consideraHistorico/${consideraHistorico}`,
+      {
+        params: {
+          modalidade,
+          anoLetivo,
+          ueCodigo,
         },
       }
     );
