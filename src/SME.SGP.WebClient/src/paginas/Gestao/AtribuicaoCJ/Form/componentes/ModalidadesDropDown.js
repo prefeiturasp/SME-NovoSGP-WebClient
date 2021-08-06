@@ -10,13 +10,15 @@ import AtribuicaoCJServico from '~/servicos/Paginas/AtribuicaoCJ';
 // Funções
 import { valorNuloOuVazio } from '~/utils/funcoes/gerais';
 
-function ModalidadesDropDown({ label, form, onChange, disabled, anoLetivo }) {
+function ModalidadesDropDown({ label, form, onChange, disabled }) {
   const [listaModalidades, setListaModalidades] = useState([]);
+
+  const { ueId, anoLetivo, modalidadeId } = form.values;
 
   useEffect(() => {
     async function buscarModalidades() {
       const { data } = await AtribuicaoCJServico.buscarModalidades(
-        form.values.ueId,
+        ueId,
         anoLetivo
       );
       if (data) {
@@ -28,9 +30,9 @@ function ModalidadesDropDown({ label, form, onChange, disabled, anoLetivo }) {
         );
       }
     }
-    if (!form.values.ueId) return;
+    if (!ueId) return;
     buscarModalidades();
-  }, [form.values.ueId]);
+  }, [ueId, anoLetivo]);
 
   useEffect(() => {
     if (listaModalidades.length === 1) {
@@ -41,10 +43,10 @@ function ModalidadesDropDown({ label, form, onChange, disabled, anoLetivo }) {
 
   useEffect(() => {
     onChange();
-    if (!valorNuloOuVazio(form.values.modalidadeId)) {
-      onChange(form.values.modalidadeId);
+    if (!valorNuloOuVazio(modalidadeId)) {
+      onChange(modalidadeId);
     }
-  }, [form.values.modalidadeId]);
+  }, [modalidadeId]);
 
   return (
     <SelectComponent
