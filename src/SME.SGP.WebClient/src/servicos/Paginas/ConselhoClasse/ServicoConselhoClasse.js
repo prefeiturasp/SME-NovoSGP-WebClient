@@ -110,13 +110,14 @@ class ServicoConselhoClasse {
     fechamentoTurmaId,
     alunoCodigo,
     turmaId,
-    bimestre
+    bimestre,
+    consideraHistorico=false
   ) => {
     const url = `v1/conselhos-classe/${conselhoClasseId ||
       0}/fechamentos/${fechamentoTurmaId ||
       0}/alunos/${alunoCodigo}/turmas/${turmaId}/bimestres/${
       bimestre === 'final' ? 0 : bimestre
-    }/notas`;
+    }/notas?consideraHistorico=${consideraHistorico}`;
     return api.get(url);
   };
 
