@@ -54,6 +54,9 @@ const Filtros = ({ onChangeFiltros }) => {
   const [ueId, setUeId] = useState();
 
   const ANO_MINIMO = '2021';
+  const temModalidadeEja = !!modalidades?.find(
+    item => String(item) === String(ModalidadeDTO.EJA)
+  );
 
   const limparCampos = (limpar = false) => {
     setListaUes([]);
@@ -204,8 +207,9 @@ const Filtros = ({ onChangeFiltros }) => {
 
   const onChangeModalidade = valor => {
     setModalidades(valor);
-    setBuscou(false);
     setSemestre();
+    setListaSemestres([]);
+    setBuscou(false);
     setAtualizaFiltrosAvançados(true);
   };
 
@@ -280,17 +284,13 @@ const Filtros = ({ onChangeFiltros }) => {
   );
 
   useEffect(() => {
-    if (
-      modalidades &&
-      anoLetivo &&
-      String(modalidades) === String(ModalidadeDTO.EJA)
-    ) {
-      obterSemestres(modalidades, anoLetivo);
+    if (modalidades?.length && anoLetivo && temModalidadeEja) {
+      obterSemestres(ModalidadeDTO.EJA, anoLetivo);
       return;
     }
     setSemestre();
     setListaSemestres([]);
-  }, [obterSemestres, modalidades, anoLetivo]);
+  }, [obterSemestres, temModalidadeEja, modalidades, anoLetivo]);
 
   const filtrar = useCallback(() => {
     const params = {
@@ -422,7 +422,7 @@ const Filtros = ({ onChangeFiltros }) => {
               disabled={
                 !modalidades ||
                 listaSemestres?.length === 1 ||
-                String(modalidades) !== String(ModalidadeDTO.EJA)
+                !temModalidadeEja
               }
               valueSelect={semestre}
               onChange={onChangeSemestre}
@@ -450,6 +450,7 @@ const Filtros = ({ onChangeFiltros }) => {
           filtrosPrincipais={filtrosPrincipais}
           onChangeFiltros={onChangeFiltros}
           setAtualizaFiltrosAvançados={setAtualizaFiltrosAvançados}
+          temModalidadeEja={temModalidadeEja}
         />
       )}
     </>
