@@ -11,7 +11,11 @@ import {
 
 import { ModalidadeDTO } from '~/dtos';
 import { AbrangenciaServico, erros, ServicoFiltroRelatorio } from '~/servicos';
-import { OPCAO_TODOS, BIMESTRE_FINAL, ANO_INICIO_INFANTIL } from '~/constantes/constantes';
+import {
+  OPCAO_TODOS,
+  BIMESTRE_FINAL,
+  ANO_INICIO_INFANTIL,
+} from '~/constantes/constantes';
 
 const Filtros = ({ onChangeFiltros, ehInfantil }) => {
   const dispatch = useDispatch();
