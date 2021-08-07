@@ -105,10 +105,8 @@ const Filtros = ({ onChangeFiltros, temModalidadeEja }) => {
   }, []);
 
   useEffect(() => {
-    if (!Object.keys(listaAnosLetivo)?.length) {
-      obterAnosLetivos();
-    }
-  }, [obterAnosLetivos, listaAnosLetivo]);
+    obterAnosLetivos();
+  }, [obterAnosLetivos]);
 
   const onChangeDre = dre => {
     const id = listaDres.find(d => d.valor === dre)?.id;
