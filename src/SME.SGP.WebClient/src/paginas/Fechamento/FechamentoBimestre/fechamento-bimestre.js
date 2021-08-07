@@ -175,9 +175,11 @@ const FechamentoBismestre = () => {
         idDisciplinaTerritorioSaber ?? disciplinaIdSelecionada,
         bimestre,
         turmaSelecionada.periodo
-      ).finally(() => {
-        setCarregandoBimestres(false);
-      });
+      )
+        .catch(e => erros(e))
+        .finally(() => {
+          setCarregandoBimestres(false);
+        });
       if (fechamento && fechamento.data) {
         const dadosFechamento = fechamento.data;
         setEhSintese(dadosFechamento.ehSintese);

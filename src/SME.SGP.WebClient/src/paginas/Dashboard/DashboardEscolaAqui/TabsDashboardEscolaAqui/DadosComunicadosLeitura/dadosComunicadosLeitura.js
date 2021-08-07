@@ -245,7 +245,10 @@ const DadosComunicadosLeitura = props => {
         modalidadeId,
         '',
         anoLetivo,
-        consideraHistorico
+        consideraHistorico,
+        false,
+        undefined,
+        true
       )
         .catch(e => erros(e))
         .finally(() => setCarregandoTurmas(false));
@@ -640,7 +643,6 @@ const DadosComunicadosLeitura = props => {
               label="Data de envio"
               placeholder="DD/MM/AAAA"
               formatoData="DD/MM/YYYY"
-              // onChange={setDataInicio}
               onChange={onChangeIntervaloDatas}
               desabilitarData={desabilitarData}
               valor={[dataInicio, dataFim]}

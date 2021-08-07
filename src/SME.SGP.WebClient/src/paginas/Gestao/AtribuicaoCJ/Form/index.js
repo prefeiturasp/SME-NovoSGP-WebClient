@@ -101,6 +101,7 @@ function AtribuicaoCJForm({ match, location }) {
       setCarregando(true);
       const { data, status } = await AtribuicaoCJServico.salvarAtribuicoes({
         ...valores,
+        historico: consideraHistorico,
         usuarioRf: valores.professorRf,
         modalidade: valores.modalidadeId,
         disciplinas: [...listaProfessores],
@@ -169,6 +170,7 @@ function AtribuicaoCJForm({ match, location }) {
       }
 
       const anoSelecionado = query.anoLetivo || anoAtual;
+      const historico = query.historico || consideraHistorico;
       setValoresIniciais({
         ...valoresIniciais,
         modalidadeId: query.modalidadeId,
@@ -177,6 +179,7 @@ function AtribuicaoCJForm({ match, location }) {
         dreId: query.dreId,
         anoLetivo: anoSelecionado,
       });
+      setConsideraHistorico(historico);
       setAnoLetivo(anoSelecionado);
     }
   }, [location, match.url]);
@@ -293,7 +296,10 @@ function AtribuicaoCJForm({ match, location }) {
 
   const onChangeAnoLetivo = ano => {
     setAnoLetivo(ano);
-    limparCampos();
+    refForm.setFieldValue('modalidadeId', undefined);
+    refForm.setFieldValue('turmaId', undefined);
+    setListaProfessores([]);
+    setAuditoria({});
   };
 
   useEffect(() => {
@@ -359,7 +365,8 @@ function AtribuicaoCJForm({ match, location }) {
                       disabled={
                         !consideraHistorico ||
                         listaAnosLetivo?.length === 1 ||
-                        somenteConsulta
+                        somenteConsulta ||
+                        ehEdicao
                       }
                     />
                   </Grid>
