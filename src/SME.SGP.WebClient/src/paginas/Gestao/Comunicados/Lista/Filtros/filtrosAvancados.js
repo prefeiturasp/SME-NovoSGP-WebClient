@@ -87,18 +87,11 @@ const FiltrosAvancados = ({
     if (
       filtrosPrincipais?.dreCodigo &&
       filtrosPrincipais?.ueCodigo &&
-      filtrosPrincipais?.modalidades?.length &&
-      !listaTipoEscola?.length &&
-      !carregandoTipoEscola
+      filtrosPrincipais?.modalidades?.length
     ) {
       ObterTiposEscola();
     }
-  }, [
-    ObterTiposEscola,
-    filtrosPrincipais,
-    listaTipoEscola,
-    carregandoTipoEscola,
-  ]);
+  }, [ObterTiposEscola, filtrosPrincipais]);
 
   const ObterAnosEscolares = useCallback(async () => {
     const todosAnosEscolares = {
@@ -133,20 +126,10 @@ const FiltrosAvancados = ({
   }, [filtrosPrincipais, ehTodasModalidade]);
 
   useEffect(() => {
-    if (
-      filtrosPrincipais?.modalidades?.length &&
-      filtrosPrincipais?.ueCodigo &&
-      !listaAnosEscolares?.length &&
-      !carregandoAnosEscolares
-    ) {
+    if (filtrosPrincipais?.modalidades?.length && filtrosPrincipais?.ueCodigo) {
       ObterAnosEscolares();
     }
-  }, [
-    ObterAnosEscolares,
-    filtrosPrincipais,
-    listaAnosEscolares,
-    carregandoAnosEscolares,
-  ]);
+  }, [ObterAnosEscolares, filtrosPrincipais]);
 
   const onChangeAnosEscolares = valor => {
     setAnosEscolares(valor);
@@ -213,19 +196,11 @@ const FiltrosAvancados = ({
     if (
       filtrosPrincipais?.ueCodigo &&
       filtrosPrincipais?.modalidades?.length &&
-      anosEscolares?.length &&
-      !listaTurmas?.length &&
-      !carregandoTurmas
+      anosEscolares?.length
     ) {
       obterTurmas();
     }
-  }, [
-    anosEscolares,
-    filtrosPrincipais,
-    listaTurmas,
-    carregandoTurmas,
-    obterTurmas,
-  ]);
+  }, [anosEscolares, filtrosPrincipais, obterTurmas]);
 
   const onChangeIntervaloDatasEnvio = valor => {
     const [dtInicioEnvio, dtFimEnvio] = valor;
@@ -296,16 +271,7 @@ const FiltrosAvancados = ({
     const pesquisarTitulo = !titulo?.length || titulo?.length > 3;
     const dataValida = verificarData();
 
-    if (
-      (tipoEscola?.length ||
-        anosEscolares?.length ||
-        turmasCodigo?.length ||
-        (dataEnvioInicio && dataEnvioFim) ||
-        (dataExpiracaoInicio && dataExpiracaoFim)) &&
-      !buscouFiltrosAvancados &&
-      dataValida &&
-      pesquisarTitulo
-    ) {
+    if (!buscouFiltrosAvancados && dataValida && pesquisarTitulo) {
       filtrarAvancado();
     }
   }, [
@@ -352,7 +318,6 @@ const FiltrosAvancados = ({
         altura="24"
         tamanhoFonte="18"
       />
-
       <div className="row p-0 mb-3">
         <div className="col-sm-12 col-md-4 pr-0">
           <Loader loading={carregandoTipoEscola} ignorarTip>
