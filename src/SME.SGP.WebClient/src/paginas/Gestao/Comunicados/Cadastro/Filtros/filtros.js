@@ -2,23 +2,32 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
 
 import moment from 'moment';
+import { Divider } from 'antd';
 import {
   Button,
+  CampoData,
+  CampoTexto,
   CheckboxComponent,
   Colors,
   Loader,
+  SelectAutocomplete,
   SelectComponent,
 } from '~/componentes';
 import { FiltroHelper } from '~/componentes-sgp';
 
 import { ModalidadeDTO } from '~/dtos';
-import { AbrangenciaServico, erros, ServicoFiltroRelatorio } from '~/servicos';
+import {
+  AbrangenciaServico,
+  erros,
+  ServicoFiltroRelatorio,
+  ServicoComunicados,
+} from '~/servicos';
 
 import { OPCAO_TODOS } from '~/constantes';
 import { onchangeMultiSelect } from '~/utils';
-import ServicoComunicados from '~/servicos/Paginas/AcompanhamentoEscolar/Comunicados/ServicoComunicados';
 
 const Filtros = ({ onChangeFiltros }) => {
+  const [alunoEspecifico, setAlunoEspecifico] = useState();
   const [anoAtual] = useState(window.moment().format('YYYY'));
   const [anoLetivo, setAnoLetivo] = useState();
   const [anosEscolares, setAnosEscolares] = useState();
@@ -54,6 +63,7 @@ const Filtros = ({ onChangeFiltros }) => {
   const [listaTurmas, setListaTurmas] = useState([]);
   const [listaUes, setListaUes] = useState([]);
   const [modalidades, setModalidades] = useState();
+  const [modoEdicaoConsulta, setModoEdicaoConsulta] = useState(false);
   const [semestre, setSemestre] = useState();
   const [tipoEscola, setTipoEscola] = useState();
   const [titulo, setTitulo] = useState();
@@ -61,10 +71,50 @@ const Filtros = ({ onChangeFiltros }) => {
   const [ueCodigo, setUeCodigo] = useState();
   const [ueId, setUeId] = useState();
 
+  const [
+    bloquearCamposCalendarioEventos,
+    setBloquearCamposCalendarioEventos,
+  ] = useState(false);
+  const [idComunicado, setIdComunicado] = useState();
+  const [carregandoTipoCalendario, setCarregandoTipoCalendario] = useState(
+    false
+  );
+  const [listaCalendario, setListaCalendario] = useState([]);
+  const [valorTipoCalendario, setValorTipoCalendario] = useState('');
+  const [tipoCalendarioSelecionado, setTipoCalendarioSelecionado] = useState(
+    ''
+  );
+  const [pesquisaTipoCalendario, setPesquisaTipoCalendario] = useState('');
+
+  const [carregandoEventos, setCarregandoEventos] = useState(false);
+  const [listaEvento, setListaEvento] = useState([]);
+  const [selecionouEvento, setSelecionouEvento] = useState(false);
+  const [valorEvento, setValorEvento] = useState('');
+  const [eventoSelecionado, setEventoSelecionado] = useState('');
+  const [pesquisaEvento, setPesquisaEvento] = useState('');
+  const [novoRegistro, setNovoRegistro] = useState(true);
+  const [dataEnvio, setDataEnvio] = useState();
+  const [dataExpiracao, setDataExpiracao] = useState();
+
+  const temModalidadeEja = modalidades?.find(
+    item => String(item) === String(ModalidadeDTO.EJA)
+  );
+  const temSemestre = temModalidadeEja ? semestre : true;
   const ehTodasModalidade = modalidades?.find(item => item === OPCAO_TODOS);
   const ehTodosAnosEscolares = anosEscolares?.find(
     item => item === OPCAO_TODOS
   );
+
+  const opcoesAlunos = [
+    { id: '1', nome: 'Todos' },
+    { id: '2', nome: 'Alunos Especificados' },
+  ];
+
+  const estudantesDesabilitados = useMemo(() => {
+    return (
+      (turmasCodigo?.length !== 1 || turmasCodigo[0] === OPCAO_TODOS) ?? true
+    );
+  }, [turmasCodigo]);
 
   const valorPadrao = useMemo(() => {
     const dataParcial = moment().format('MM-DD');
@@ -122,10 +172,8 @@ const Filtros = ({ onChangeFiltros }) => {
   }, []);
 
   useEffect(() => {
-    // if (!Object.keys(listaAnosLetivo)?.length) {
-    //   obterAnosLetivos();
-    // }
-  }, [obterAnosLetivos, listaAnosLetivo]);
+    obterAnosLetivos();
+  }, [obterAnosLetivos]);
 
   const onChangeDre = dre => {
     const id = listaDres.find(d => d.valor === dre)?.id;
@@ -379,6 +427,221 @@ const Filtros = ({ onChangeFiltros }) => {
     carregandoTipoEscola,
   ]);
 
+  const ObterAnosEscolares = useCallback(async () => {
+    const todosAnosEscolares = {
+      valor: OPCAO_TODOS,
+      desc: 'Todos',
+    };
+    if (ehTodasModalidade) {
+      setListaAnosEscolares([todosAnosEscolares]);
+      setAnosEscolares([OPCAO_TODOS]);
+      return;
+    }
+
+    setCarregandoAnosEscolares(true);
+    const response = await ServicoComunicados.buscarAnosPorModalidade(
+      modalidades,
+      ueCodigo
+    )
+      .catch(e => erros(e))
+      .finally(() => setCarregandoAnosEscolares(false));
+
+    const dados = response?.data?.length
+      ? response.data.map(item => ({
+          valor: item.ano,
+          desc: item.descricao,
+        }))
+      : [];
+    const dadosSelecionados = dados?.length === 1 ? dados[0].valor : dados;
+    if (dados?.length > 1) {
+      dados.unshift(todosAnosEscolares);
+    }
+    setListaAnosEscolares(dadosSelecionados);
+  }, [modalidades, ueCodigo, ehTodasModalidade]);
+
+  useEffect(() => {
+    if (
+      modalidades?.length &&
+      ueCodigo &&
+      !listaAnosEscolares?.length &&
+      !carregandoAnosEscolares
+    ) {
+      ObterAnosEscolares();
+    }
+  }, [
+    ObterAnosEscolares,
+    modalidades,
+    ueCodigo,
+    listaAnosEscolares,
+    carregandoAnosEscolares,
+  ]);
+
+  const onChangeAnosEscolares = valor => {
+    setAnosEscolares(valor);
+    setTurmasCodigo();
+    setListaTurmas([]);
+    setBuscouFiltrosAvancados(false);
+  };
+
+  const obterTurmas = useCallback(async () => {
+    const todasTurmas = { valor: OPCAO_TODOS, desc: 'Todas' };
+
+    if (ehTodasModalidade) {
+      setListaTurmas([todasTurmas]);
+      setTurmasCodigo([OPCAO_TODOS]);
+      return;
+    }
+
+    setCarregandoTurmas(true);
+
+    const retorno = await ServicoComunicados.obterTurmas(
+      anoLetivo,
+      ueCodigo,
+      semestre,
+      modalidades,
+      anosEscolares
+    )
+      .catch(e => erros(e))
+      .finally(() => setCarregandoTurmas(false));
+
+    if (retorno?.data?.length) {
+      const lista = [];
+      if (retorno.data.length > 1) {
+        lista.push(todasTurmas);
+      }
+      retorno.data.map(item =>
+        lista.push({
+          desc: item.descricaoTurma,
+          valor: item.valor,
+        })
+      );
+      setListaTurmas(lista);
+      if (lista.length === 1) {
+        setTurmasCodigo([String(lista[0].valor)]);
+      }
+    }
+  }, [
+    anoLetivo,
+    anosEscolares,
+    semestre,
+    ueCodigo,
+    modalidades,
+    ehTodasModalidade,
+  ]);
+
+  useEffect(() => {
+    if (
+      ueCodigo &&
+      modalidades?.length &&
+      anosEscolares?.length &&
+      !listaTurmas?.length &&
+      !carregandoTurmas
+    ) {
+      obterTurmas();
+    }
+  }, [
+    anosEscolares,
+    ueCodigo,
+    modalidades,
+    listaTurmas,
+    carregandoTurmas,
+    obterTurmas,
+  ]);
+
+  const selecionaTipoCalendario = (descricao, form, tipoCalend, onChange) => {
+    let tipo = '';
+
+    if (tipoCalend) {
+      tipo = tipoCalend;
+    } else {
+      tipo = listaCalendario?.find(t => {
+        return t.descricao === descricao;
+      });
+    }
+
+    if (tipo?.id) {
+      setValorTipoCalendario(tipo.descricao);
+      setTipoCalendarioSelecionado(tipo.id);
+      if (form && form.setFieldValue) {
+        form.setFieldValue('tipoCalendarioId', tipo.descricao);
+      }
+    } else {
+      setValorTipoCalendario('');
+      setTipoCalendarioSelecionado();
+      if (form && form.setFieldValue) {
+        form.setFieldValue('tipoCalendarioId', '');
+      }
+    }
+
+    if (onChange) {
+      // selecionaEvento('', form);
+    }
+  };
+
+  const selecionaEvento = (nome, form, onChange, tipoEvento) => {
+    let evento = '';
+
+    if (tipoEvento) {
+      evento = tipoEvento;
+    } else {
+      evento = listaEvento?.find(t => {
+        return t.nome === nome;
+      });
+    }
+
+    if (evento?.id) {
+      setSelecionouEvento(true);
+      setValorEvento(evento.nome);
+      setEventoSelecionado(evento);
+      if (form && form.setFieldValue) {
+        form.setFieldValue('eventoId', evento.nome);
+      }
+    } else if (!onChange) {
+      setSelecionouEvento(false);
+      setValorEvento('');
+      setEventoSelecionado('');
+      if (form && form.setFieldValue) {
+        form.setFieldValue('eventoId', '');
+      }
+    }
+
+    if (onChange && !evento) {
+      setValorEvento(nome);
+    }
+  };
+
+  const onChangeDataEnvio = valor => {
+    setDataEnvio(valor);
+  };
+
+  const onChangeDataExpiracao = valor => {
+    setDataExpiracao(valor);
+  };
+
+  const desabilitarDatas = current => {
+    if (current && anoLetivo) {
+      const ano = moment(`${anoLetivo}-01-01`);
+      return current < ano.startOf('year') || current > ano.endOf('year');
+    }
+    return false;
+  };
+
+  const verificarData = useCallback(() => {
+    if (!dataEnvio || !dataExpiracao) return true;
+    return (
+      moment(dataEnvio, 'MM-DD-YYYY') < moment(dataExpiracao, 'MM-DD-YYYY')
+    );
+  }, [dataEnvio, dataExpiracao]);
+
+  useEffect(() => {
+    const dataValida = verificarData();
+    setEhDataValida(dataValida);
+  }, [dataEnvio, dataExpiracao, verificarData]);
+
+  const onChangeTitulo = e => {
+    setTitulo(e?.target?.value);
+  };
+
   useEffect(() => {
     if (!buscou) {
       filtrar();
@@ -512,6 +775,77 @@ const Filtros = ({ onChangeFiltros }) => {
         </div>
       </div>
       <div className="row mb-3">
+        <div className="col-sm-12 col-md-2 pr-0">
+          <Loader loading={carregandoAnosEscolares} ignorarTip>
+            <SelectComponent
+              id="select-ano-escolar"
+              lista={listaAnosEscolares}
+              valueOption="valor"
+              valueText="desc"
+              label="Ano"
+              disabled={
+                !modalidades?.length ||
+                !listaAnosEscolares.length ||
+                listaAnosEscolares?.length === 1 ||
+                ehTodasModalidade
+              }
+              valueSelect={anosEscolares}
+              onChange={valores => {
+                onchangeMultiSelect(
+                  valores,
+                  anosEscolares,
+                  onChangeAnosEscolares
+                );
+                setBuscouFiltrosAvancados(false);
+              }}
+              placeholder="Selecione o ano"
+              multiple
+            />
+          </Loader>
+        </div>
+        <div className="col-sm-12 col-md-4 pr-0">
+          <Loader loading={carregandoTurmas} ignorarTip>
+            <SelectComponent
+              multiple
+              id="turma"
+              lista={listaTurmas}
+              valueOption="valor"
+              valueText="desc"
+              label="Turma"
+              disabled={
+                !modalidades ||
+                listaTurmas?.length === 1 ||
+                !anosEscolares?.length ||
+                ehTodasModalidade ||
+                ehTodosAnosEscolares ||
+                (temModalidadeEja && semestre)
+              }
+              valueSelect={turmasCodigo}
+              onChange={valores => {
+                onchangeMultiSelect(valores, turmasCodigo, setTurmasCodigo);
+                setBuscouFiltrosAvancados(false);
+              }}
+              placeholder="Turma"
+              showSearch
+            />
+          </Loader>
+        </div>
+        <div className="col-sm-12 col-md-4 pr-0">
+          <SelectComponent
+            name="alunos"
+            label="Crianças/Estudantes"
+            placeholder="Selec. a(s) criança(s)/estudante(s)"
+            valueSelect={alunoEspecifico}
+            lista={opcoesAlunos}
+            valueOption="id"
+            valueText="nome"
+            disabled={estudantesDesabilitados || modoEdicaoConsulta}
+            allowClear={false}
+            onChange={tipoAluno => {
+              setAlunoEspecifico(tipoAluno);
+            }}
+          />
+        </div>
         <div className="col-sm-12 col-md-2 mt-4">
           <Button
             id="botao-criancas-estudantes"
@@ -521,6 +855,93 @@ const Filtros = ({ onChangeFiltros }) => {
             border
             className="mr-3"
             width="100%"
+            disabled={!alunoEspecifico || alunoEspecifico !== '2'}
+          />
+        </div>
+      </div>
+
+      <div className="row">
+        <div className="col-sm-12 col-md-3 pr-0">
+          <Loader loading={carregandoTipoCalendario} ignorarTip>
+            <SelectAutocomplete
+              id="select-tipo-calendario"
+              name="tipoCalendarioId"
+              className="col-md-12"
+              label="Tipo de calendário"
+              placeholder="Selecione um calendário"
+              valueField="id"
+              textField="descricao"
+              showList
+              isHandleSearch
+              lista={listaCalendario}
+              disabled={idComunicado || bloquearCamposCalendarioEventos}
+              onSelect={valor => selecionaTipoCalendario(valor, '', '', true)}
+              onChange={valor => selecionaTipoCalendario(valor, '', '', true)}
+              value={valorTipoCalendario}
+            />
+          </Loader>
+        </div>
+        <div className="col-sm-12 col-md-3 pr-0">
+          <Loader loading={carregandoEventos} ignorarTip>
+            <SelectAutocomplete
+              id="select-evento"
+              name="eventoId"
+              className="col-md-12"
+              key="select-evento-key"
+              label="Evento"
+              placeholder="Selecione um evento"
+              valueField="id"
+              textField="nome"
+              showList
+              isHandleSearch
+              disabled={idComunicado || bloquearCamposCalendarioEventos}
+              lista={listaEvento.filter(
+                item => item.nome.toLowerCase().indexOf(valorEvento) > -1
+              )}
+              onSelect={valor => selecionaEvento(valor, '')}
+              onChange={valor => selecionaEvento(valor, '', true)}
+              value={valorEvento}
+            />
+          </Loader>
+        </div>
+        <div className="col-sm-12 col-md-3 pr-0">
+          <CampoData
+            label="Data de envio"
+            formatoData="DD/MM/YYYY"
+            placeholder="Selecione a data"
+            onChange={onChangeDataEnvio}
+            desabilitarData={desabilitarDatas}
+            valor={dataEnvio}
+            valorPadrao={valorPadrao}
+          />
+        </div>
+        <div className="col-sm-12 col-md-3">
+          <CampoData
+            label="Data de expiração"
+            formatoData="DD/MM/YYYY"
+            placeholder="Selecione a data"
+            onChange={onChangeDataExpiracao}
+            desabilitarData={desabilitarDatas}
+            valor={dataExpiracao}
+            valorPadrao={valorPadrao}
+            temErro={!ehDataValida}
+            mensagemErro="Data de expiração deve ser maior que a data de envio"
+          />
+        </div>
+      </div>
+      <div className="row">
+        <div className="col-sm-12">
+          <Divider />
+        </div>
+      </div>
+      <div className="row">
+        <div className="col-sm-12">
+          <CampoTexto
+            label="Título"
+            name="titulo"
+            placeholder="Pesquise pelo título do comunicado"
+            value={titulo}
+            onChange={onChangeTitulo}
           />
         </div>
       </div>
