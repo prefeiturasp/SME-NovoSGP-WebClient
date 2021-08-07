@@ -50,7 +50,7 @@ function AtribuicaoCJLista() {
 
   const onClickBotaoPrincipal = () =>
     history.push(
-      `/gestao/atribuicao-cjs/novo?dreId=${filtro.DreId}&ueId=${filtro.UeId}`
+      `/gestao/atribuicao-cjs/novo?dreId=${filtro.DreId}&ueId=${filtro.UeId}&historico=${filtro.Historico}`
     );
 
   const onSelecionarItems = items => {
@@ -60,7 +60,7 @@ function AtribuicaoCJLista() {
   const onClickEditar = item => {
     history.push(
       `/gestao/atribuicao-cjs/editar?modalidadeId=${item.modalidadeId}&turmaId=` +
-        `${item.turmaId}&dreId=${filtro.DreId}&ueId=${filtro.UeId}&anoLetivo=${filtro.AnoLetivo}`
+        `${item.turmaId}&dreId=${filtro.DreId}&ueId=${filtro.UeId}&anoLetivo=${filtro.AnoLetivo}&historico=${filtro.Historico}`
     );
   };
 
@@ -70,6 +70,7 @@ function AtribuicaoCJLista() {
       DreId: valoresFiltro.dreId,
       UeId: valoresFiltro.ueId,
       UsuarioRF: valoresFiltro.professorRf,
+      Historico: valoresFiltro.exibirHistorico,
     });
   };
 
