@@ -4,11 +4,12 @@ import PropTypes from 'prop-types';
 import moment from 'moment';
 import { Divider } from 'antd';
 import {
+  Auditoria,
   Button,
   CampoData,
   CampoTexto,
-  CheckboxComponent,
   Colors,
+  JoditEditor,
   Loader,
   SelectAutocomplete,
   SelectComponent,
@@ -26,12 +27,15 @@ import {
 import { OPCAO_TODOS } from '~/constantes';
 import { onchangeMultiSelect } from '~/utils';
 
+import MensagemRodape from '../MensagemRodape/mensagemRodape';
+import ListaAlunos from '../ListaAlunos/listaAlunos';
+import ListaDestinatarios from '../ListaDestinatarios/listaDestinatarios';
+
 const Filtros = ({ onChangeFiltros }) => {
   const [alunoEspecifico, setAlunoEspecifico] = useState();
   const [anoAtual] = useState(window.moment().format('YYYY'));
   const [anoLetivo, setAnoLetivo] = useState();
   const [anosEscolares, setAnosEscolares] = useState();
-  const [anosEscolaresId, setAnosEscolaresId] = useState();
   const [buscou, setBuscou] = useState(false);
   const [buscouFiltrosAvancados, setBuscouFiltrosAvancados] = useState(false);
   const [carregandoAnosEscolares, setCarregandoAnosEscolares] = useState(false);
@@ -42,7 +46,6 @@ const Filtros = ({ onChangeFiltros }) => {
   const [carregandoTipoEscola, setCarregandoTipoEscola] = useState(false);
   const [carregandoTurmas, setCarregandoTurmas] = useState(false);
   const [carregandoUes, setCarregandoUes] = useState(false);
-  const [consideraHistorico, setConsideraHistorico] = useState(false);
   const [dataEnvioFim, setDataEnvioFim] = useState();
   const [dataEnvioInicio, setDataEnvioInicio] = useState();
   const [dataExpiracaoFim, setDataExpiracaoFim] = useState();
@@ -50,10 +53,6 @@ const Filtros = ({ onChangeFiltros }) => {
   const [dreCodigo, setDreCodigo] = useState();
   const [dreId, setDreId] = useState();
   const [ehDataValida, setEhDataValida] = useState(true);
-  const [
-    habilitaConsideraHistorico,
-    setHabilitaConsideraHistorico,
-  ] = useState();
   const [listaAnosEscolares, setListaAnosEscolares] = useState([]);
   const [listaAnosLetivo, setListaAnosLetivo] = useState({});
   const [listaDres, setListaDres] = useState([]);
@@ -95,6 +94,16 @@ const Filtros = ({ onChangeFiltros }) => {
   const [novoRegistro, setNovoRegistro] = useState(true);
   const [dataEnvio, setDataEnvio] = useState();
   const [dataExpiracao, setDataExpiracao] = useState();
+  const [descricaoComunicado, setDescricaoComunicado] = useState('');
+  const [auditoria, setAuditoria] = useState({});
+  const [exibirTotalReponsaveis, setExibirTotalReponsaveis] = useState(false);
+
+  const [alunosLoader, setAlunosLoader] = useState(false);
+  const [alunos, setAlunos] = useState([]);
+  const [alunosSelecionados, setAlunosSelecionado] = useState([]);
+  const [linhasSelecionadas, setLinhasSelecionadas] = useState();
+  const [modalAlunosVisivel, setModalAlunosVisivel] = useState(false);
+  const [carregouAlunos, setCarregouAlunos] = useState(true);
 
   const temModalidadeEja = modalidades?.find(
     item => String(item) === String(ModalidadeDTO.EJA)
@@ -106,8 +115,8 @@ const Filtros = ({ onChangeFiltros }) => {
   );
 
   const opcoesAlunos = [
-    { id: '1', nome: 'Todos' },
-    { id: '2', nome: 'Alunos Especificados' },
+    { id: OPCAO_TODOS, nome: 'Todos' },
+    { id: '1', nome: 'Alunos Especificados' },
   ];
 
   const estudantesDesabilitados = useMemo(() => {
@@ -143,12 +152,6 @@ const Filtros = ({ onChangeFiltros }) => {
     }
   };
 
-  const onChangeConsideraHistorico = e => {
-    setConsideraHistorico(e.target.checked);
-    setAnoLetivo(anoAtual);
-    limparCampos(true);
-  };
-
   const onChangeAnoLetivo = ano => {
     setAnoLetivo(ano);
     limparCampos();
@@ -167,7 +170,6 @@ const Filtros = ({ onChangeFiltros }) => {
         }))
       : [];
     setAnoLetivo(retorno?.data?.anoLetivoAtual);
-    setHabilitaConsideraHistorico(retorno?.data?.temHistorico);
     setListaAnosLetivo(anoSelecionado);
   }, []);
 
@@ -186,7 +188,7 @@ const Filtros = ({ onChangeFiltros }) => {
     if (anoLetivo) {
       setCarregandoDres(true);
       const resposta = await AbrangenciaServico.buscarDres(
-        `v1/abrangencias/${consideraHistorico}/dres?anoLetivo=${anoLetivo}`
+        `v1/abrangencias/false/dres?anoLetivo=${anoLetivo}`
       )
         .catch(e => erros(e))
         .finally(() => setCarregandoDres(false));
@@ -207,7 +209,7 @@ const Filtros = ({ onChangeFiltros }) => {
       setDreId(undefined);
       setListaDres([]);
     }
-  }, [anoLetivo, consideraHistorico]);
+  }, [anoLetivo]);
 
   useEffect(() => {
     if (anoLetivo) {
@@ -236,7 +238,7 @@ const Filtros = ({ onChangeFiltros }) => {
       setCarregandoUes(true);
       const resposta = await AbrangenciaServico.buscarUes(
         dreCodigo,
-        `v1/abrangencias/${consideraHistorico}/dres/${dreCodigo}/ues?anoLetivo=${anoLetivo}&consideraNovasUEs=${true}`,
+        `v1/abrangencias/false/dres/${dreCodigo}/ues?anoLetivo=${anoLetivo}&consideraNovasUEs=${true}`,
         true
       )
         .catch(e => erros(e))
@@ -256,7 +258,7 @@ const Filtros = ({ onChangeFiltros }) => {
       }
       setListaUes([]);
     }
-  }, [anoLetivo, dreCodigo, consideraHistorico]);
+  }, [anoLetivo, dreCodigo]);
 
   useEffect(() => {
     if (dreCodigo) {
@@ -320,7 +322,7 @@ const Filtros = ({ onChangeFiltros }) => {
     async (modalidadeSelecionada, anoLetivoSelecionado) => {
       setCarregandoSemestres(true);
       const retorno = await AbrangenciaServico.obterSemestres(
-        consideraHistorico,
+        false,
         anoLetivoSelecionado,
         modalidadeSelecionada
       )
@@ -339,7 +341,7 @@ const Filtros = ({ onChangeFiltros }) => {
         setListaSemestres(lista);
       }
     },
-    [consideraHistorico]
+    []
   );
 
   useEffect(() => {
@@ -486,12 +488,11 @@ const Filtros = ({ onChangeFiltros }) => {
   const obterTurmas = useCallback(async () => {
     const todasTurmas = { valor: OPCAO_TODOS, desc: 'Todas' };
 
-    if (ehTodasModalidade) {
+    if (ehTodasModalidade || ehTodosAnosEscolares) {
       setListaTurmas([todasTurmas]);
       setTurmasCodigo([OPCAO_TODOS]);
       return;
     }
-
     setCarregandoTurmas(true);
 
     const retorno = await ServicoComunicados.obterTurmas(
@@ -527,6 +528,7 @@ const Filtros = ({ onChangeFiltros }) => {
     ueCodigo,
     modalidades,
     ehTodasModalidade,
+    ehTodosAnosEscolares,
   ]);
 
   useEffect(() => {
@@ -547,6 +549,20 @@ const Filtros = ({ onChangeFiltros }) => {
     carregandoTurmas,
     obterTurmas,
   ]);
+
+  const selecionaAlunosEspecificos = valorTurma => {
+    const ehTodasTurma = valorTurma?.find(item => item === OPCAO_TODOS);
+    const validacaoTurma = ehTodasTurma || valorTurma?.length > 1;
+    const valorAlunoEspecifico = validacaoTurma ? OPCAO_TODOS : undefined;
+
+    setAlunoEspecifico(valorAlunoEspecifico);
+  };
+
+  const onChangeTurma = valor => {
+    setTurmasCodigo(valor);
+    selecionaAlunosEspecificos(valor);
+    setCarregouAlunos(false);
+  };
 
   const selecionaTipoCalendario = (descricao, form, tipoCalend, onChange) => {
     let tipo = '';
@@ -642,6 +658,33 @@ const Filtros = ({ onChangeFiltros }) => {
     setTitulo(e?.target?.value);
   };
 
+  const onChangeDescricaoComunicado = descricao => {
+    setDescricaoComunicado(descricao);
+    // handleModoEdicao();
+  };
+
+  const ObterAlunos = useCallback(async () => {
+    setAlunosLoader(true);
+    const retorno = await ServicoComunicados.obterAlunos(
+      turmasCodigo,
+      anoLetivo
+    )
+      .catch(e => erros(e))
+      .finally(() => setAlunosLoader(false));
+    const dados = retorno?.data?.length ? retorno.data : [];
+    setAlunos(dados);
+  }, [turmasCodigo, anoLetivo]);
+
+  useEffect(() => {
+    if (modalAlunosVisivel && !carregouAlunos) {
+      ObterAlunos();
+      setCarregouAlunos(true);
+    }
+    if (!modalAlunosVisivel && !carregouAlunos) {
+      setCarregouAlunos(false);
+    }
+  }, [ObterAlunos, modalAlunosVisivel, carregouAlunos]);
+
   useEffect(() => {
     if (!buscou) {
       filtrar();
@@ -650,17 +693,7 @@ const Filtros = ({ onChangeFiltros }) => {
 
   return (
     <>
-      <div className="row mb-2">
-        <div className="col-12">
-          <CheckboxComponent
-            label="Exibir histórico?"
-            onChangeCheckbox={onChangeConsideraHistorico}
-            checked={consideraHistorico}
-            disabled={!habilitaConsideraHistorico}
-          />
-        </div>
-      </div>
-      <div className="row mb-3">
+      <div className="row py-3">
         <div className="col-sm-12 col-md-2 pr-0">
           <Loader loading={carregandoAnosLetivos} ignorarTip>
             <SelectComponent
@@ -668,7 +701,7 @@ const Filtros = ({ onChangeFiltros }) => {
               lista={listaAnosLetivo}
               valueOption="valor"
               valueText="desc"
-              disabled={!consideraHistorico || listaAnosLetivo?.length === 1}
+              disabled={listaAnosLetivo?.length === 1}
               onChange={onChangeAnoLetivo}
               valueSelect={anoLetivo}
               placeholder="Ano letivo"
@@ -822,7 +855,7 @@ const Filtros = ({ onChangeFiltros }) => {
               }
               valueSelect={turmasCodigo}
               onChange={valores => {
-                onchangeMultiSelect(valores, turmasCodigo, setTurmasCodigo);
+                onchangeMultiSelect(valores, turmasCodigo, onChangeTurma);
                 setBuscouFiltrosAvancados(false);
               }}
               placeholder="Turma"
@@ -851,15 +884,14 @@ const Filtros = ({ onChangeFiltros }) => {
             id="botao-criancas-estudantes"
             label="Crianças/estudantes"
             color={Colors.Azul}
-            onClick={() => {}}
+            onClick={() => setModalAlunosVisivel(true)}
             border
             className="mr-3"
             width="100%"
-            disabled={!alunoEspecifico || alunoEspecifico !== '2'}
+            disabled={!alunoEspecifico || alunoEspecifico === OPCAO_TODOS}
           />
         </div>
       </div>
-
       <div className="row">
         <div className="col-sm-12 col-md-3 pr-0">
           <Loader loading={carregandoTipoCalendario} ignorarTip>
@@ -934,7 +966,22 @@ const Filtros = ({ onChangeFiltros }) => {
           <Divider />
         </div>
       </div>
-      <div className="row">
+      {!!alunosSelecionados.length && (
+        <div className="row mb-4">
+          <div className="col-sm-12">
+            <ListaDestinatarios
+              alunosSelecionados={alunosSelecionados}
+              dadosAlunos={alunos}
+              removerAlunos={codigoAluno => {
+                setAlunosSelecionado(
+                  alunosSelecionados.filter(item => item !== codigoAluno)
+                );
+              }}
+            />
+          </div>
+        </div>
+      )}
+      <div className="row mb-3">
         <div className="col-sm-12">
           <CampoTexto
             label="Título"
@@ -945,6 +992,57 @@ const Filtros = ({ onChangeFiltros }) => {
           />
         </div>
       </div>
+      <div className="row">
+        <div className="col-sm-12">
+          <JoditEditor
+            label="Descrição"
+            name="descricao"
+            value={descricaoComunicado}
+            onChange={valor => {
+              onChangeDescricaoComunicado(valor);
+            }}
+            // desabilitar={somenteConsulta}
+            permiteInserirArquivo={false}
+          />
+        </div>
+        {auditoria && (
+          <div className="col-sm-12 mt-1">
+            <Auditoria
+              ignorarMarginTop
+              criadoEm={auditoria.criadoEm}
+              criadoPor={auditoria.criadoPor}
+              criadoRf={auditoria.criadoRF}
+              alteradoPor={auditoria.alteradoPor}
+              alteradoEm={auditoria.alteradoEm}
+              alteradoRf={auditoria.alteradoRF}
+            />
+          </div>
+        )}
+        {exibirTotalReponsaveis && (
+          <div className="col-sm-12">
+            <MensagemRodape>
+              Os responsáveis de 10364 crianças/estudantes poderão receber este
+              comunicado.
+            </MensagemRodape>
+          </div>
+        )}
+      </div>
+
+      {modalAlunosVisivel && (
+        <ListaAlunos
+          alunosLoader={alunosLoader}
+          alunosSelecionados={alunosSelecionados}
+          dadosAlunos={alunos}
+          linhasSelecionadas={linhasSelecionadas}
+          modalAlunosVisivel={modalAlunosVisivel}
+          onConfirm={alunosSel => {
+            setAlunosSelecionado([...alunosSelecionados, ...alunosSel]);
+          }}
+          setLinhasSelecionadas={setLinhasSelecionadas}
+          setModalAlunosVisivel={setModalAlunosVisivel}
+          // modoEdicaoConsulta={modoEdicaoConsulta}
+        />
+      )}
     </>
   );
 };

@@ -83,18 +83,8 @@ class ServicoComunicados {
     }
   };
 
-  obterAlunos = async (codigoTurma, anoLetivo) => {
-    try {
-      const requisicao = await api.get(
-        `${urlPadrao}/${codigoTurma}/alunos/${anoLetivo}`
-      );
-
-      if (requisicao && requisicao.status === 204) return [];
-
-      return requisicao.data;
-    } catch (error) {
-      throw error;
-    }
+  obterAlunos = (codigoTurma, anoLetivo) => {
+    return api.get(`${urlPadrao}/${codigoTurma}/alunos/${anoLetivo}`);
   };
 
   obterAnosLetivos = anoMinimo => {

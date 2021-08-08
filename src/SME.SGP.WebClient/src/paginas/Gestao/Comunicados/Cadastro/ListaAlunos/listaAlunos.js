@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 import { Colors, Loader, Button, ModalConteudoHtml } from '~/componentes';
 
-import { BotaoEstilizado, TabelaEstilizada } from './ListaAlunos.css';
+import { BotaoEstilizado, TabelaEstilizada } from './listaAlunos.css';
 
 const ModalAlunos = props => {
   const {
@@ -32,15 +32,17 @@ const ModalAlunos = props => {
   ];
 
   const obterAlunos = useCallback(() => {
-    const alunosLista = dadosAlunos?.map(x => ({
-      key: x.codigoAluno,
-      nomeAluno: x.nomeAluno,
-      numeroAlunoChamada: x.numeroAlunoChamada,
-      codigoAluno: x.codigoAluno,
-      selecionado: !!alunosSelecionados?.find(z => z === x.codigoAluno),
+    const alunosLista = dadosAlunos?.map(aluno => ({
+      key: aluno.codigoAluno,
+      nomeAluno: aluno.nomeAluno,
+      numeroAlunoChamada: aluno.numeroAlunoChamada,
+      codigoAluno: aluno.codigoAluno,
+      selecionado: !!alunosSelecionados?.find(
+        item => item === aluno.codigoAluno
+      ),
     }));
 
-    setAlunos(alunosLista);
+    setAlunos(alunosLista.filter(item => !item.selecionado));
   }, [dadosAlunos, alunosSelecionados]);
 
   useEffect(() => {
@@ -63,13 +65,6 @@ const ModalAlunos = props => {
       titulo="Selecione a(s) criança(s)/estudante(s)"
       visivel={modalAlunosVisivel}
       onClose={() => {
-        setModalAlunosVisivel(false);
-      }}
-      onConfirmacaoSecundaria={() => {
-        setModalAlunosVisivel(false);
-      }}
-      onConfirmacaoPrincipal={() => {
-        onConfirm(linhasSelecionadas.map(x => x.codigoAluno));
         setModalAlunosVisivel(false);
       }}
       closable
@@ -101,7 +96,7 @@ const ModalAlunos = props => {
               border
               className="padding-btn-confirmacao"
               onClick={() => {
-                onConfirm(linhasSelecionadas.map(x => x.codigoAluno));
+                onConfirm(linhasSelecionadas.map(item => item.codigoAluno));
                 setModalAlunosVisivel(false);
               }}
             />

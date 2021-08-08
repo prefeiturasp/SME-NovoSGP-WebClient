@@ -7,7 +7,6 @@ import { Cabecalho } from '~/componentes-sgp';
 
 import { RotasDto } from '~/dtos';
 import { verificaSomenteConsulta } from '~/servicos';
-import ServicoComunicados from '~/servicos/Paginas/AcompanhamentoEscolar/Comunicados/ServicoComunicados';
 
 import Filtros from './Filtros/filtros';
 
@@ -26,6 +25,8 @@ const CadastroComunicados = () => {
   const aoClicarBotaoVoltar = () => {};
 
   const aoClicarBotaoCancelar = () => {};
+
+  const aoClicarBotaoExcluir = () => {};
 
   const aoClicarBotaoCadastrar = () => {};
 
@@ -46,7 +47,7 @@ const CadastroComunicados = () => {
       <Cabecalho pagina="Comunicação com pais ou responsáveis" classes="mb-2" />
       <Card>
         <div className="col-md-12 p-0">
-          <div className="row mb-2">
+          <div className="row mb-4">
             <div className="col-sm-12 d-flex justify-content-end">
               <Button
                 id="botao-voltar"
@@ -62,6 +63,15 @@ const CadastroComunicados = () => {
                 label="Cancelar"
                 color={Colors.Azul}
                 onClick={aoClicarBotaoCancelar}
+                border
+                className="mr-3"
+                disabled={somenteConsulta}
+              />
+              <Button
+                id="botao-excluir"
+                label="Excluir"
+                color={Colors.Azul}
+                onClick={aoClicarBotaoExcluir}
                 border
                 className="mr-3"
                 disabled={somenteConsulta}
