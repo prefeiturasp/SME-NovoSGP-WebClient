@@ -179,7 +179,7 @@ const Filtros = ({ onChangeFiltros, temModalidadeEja }) => {
         const lista = resposta.data;
         if (lista?.length === 1) {
           setUeId(lista[0].id);
-          setUeCodigo(lista[0].valor);
+          setUeCodigo(lista[0].codigo);
         } else {
           lista.unshift(ueTodos);
         }
@@ -315,17 +315,41 @@ const Filtros = ({ onChangeFiltros, temModalidadeEja }) => {
   ]);
 
   useEffect(() => {
-    setFiltrosPrincipais({
-      anoLetivo,
-      dreCodigo,
-      ueCodigo,
-      modalidades,
-      semestre,
-    });
     if (!buscou) {
+      setFiltrosPrincipais({
+        anoLetivo,
+        dreCodigo,
+        ueCodigo,
+        modalidades,
+        semestre,
+      });
       filtrar();
     }
   }, [filtrar, buscou, anoLetivo, dreCodigo, ueCodigo, modalidades, semestre]);
+
+  useEffect(() => {
+    if (atualizaFiltrosAvançados && !mostrarFiltrosAvancados) {
+      const paramsFiltroavancado = {
+        tipoEscola: [],
+        anosEscolares: [],
+        turmasCodigo: [],
+        dataEnvioInicio: '',
+        dataEnvioFim: '',
+        dataExpiracaoInicio: '',
+        dataExpiracaoFim: '',
+        titulo: '',
+      };
+      if (!buscou) {
+        onChangeFiltros(paramsFiltroavancado);
+        setBuscou(true);
+      }
+    }
+  }, [
+    onChangeFiltros,
+    atualizaFiltrosAvançados,
+    mostrarFiltrosAvancados,
+    buscou,
+  ]);
 
   return (
     <>
@@ -434,7 +458,11 @@ const Filtros = ({ onChangeFiltros, temModalidadeEja }) => {
             label="Filtros avançados"
             icon="filter"
             color={Colors.Azul}
-            onClick={() => setMostrarFiltrosAvancados(true)}
+            onClick={() => {
+              setMostrarFiltrosAvancados(!mostrarFiltrosAvancados);
+              setAtualizaFiltrosAvançados(true);
+              setBuscou(false);
+            }}
             border
             className="mr-3"
             width="100%"

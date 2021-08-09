@@ -30,13 +30,13 @@ const FiltrosAvancados = ({
   const [dataExpiracaoFim, setDataExpiracaoFim] = useState();
   const [dataEnvioInicio, setDataEnvioInicio] = useState();
   const [dataExpiracaoInicio, setDataExpiracaoInicio] = useState();
+  const [ehDataValida, setEhDataValida] = useState(true);
   const [listaAnosEscolares, setListaAnosEscolares] = useState([]);
   const [listaTipoEscola, setListaTipoEscola] = useState([]);
   const [listaTurmas, setListaTurmas] = useState([]);
   const [tipoEscola, setTipoEscola] = useState();
   const [titulo, setTitulo] = useState();
   const [turmasCodigo, setTurmasCodigo] = useState();
-  const [ehDataValida, setEhDataValida] = useState(true);
 
   const ehTodasModalidade = filtrosPrincipais?.modalidades?.find(
     item => item === OPCAO_TODOS
@@ -155,8 +155,9 @@ const FiltrosAvancados = ({
 
   const obterTurmas = useCallback(async () => {
     const todasTurmas = { valor: OPCAO_TODOS, desc: 'Todas' };
+    const ehTodasUe = filtrosPrincipais?.ueCodigo === OPCAO_TODOS;
 
-    if (ehTodasModalidade) {
+    if (ehTodasModalidade || ehTodasUe) {
       setListaTurmas([todasTurmas]);
       setTurmasCodigo([OPCAO_TODOS]);
       return;
