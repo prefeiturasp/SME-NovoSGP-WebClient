@@ -22,6 +22,7 @@ import {
   erros,
   ServicoFiltroRelatorio,
   ServicoComunicados,
+  ServicoCalendarios,
 } from '~/servicos';
 
 import { OPCAO_TODOS } from '~/constantes';
@@ -30,6 +31,7 @@ import { onchangeMultiSelect } from '~/utils';
 import MensagemRodape from '../MensagemRodape/mensagemRodape';
 import ListaAlunos from '../ListaAlunos/listaAlunos';
 import ListaDestinatarios from '../ListaDestinatarios/listaDestinatarios';
+import ServicoComunicadoEvento from '~/servicos/Paginas/AcompanhamentoEscolar/ComunicadoEvento/ServicoComunicadoEvento';
 
 const Filtros = ({ onChangeFiltros }) => {
   const [alunoEspecifico, setAlunoEspecifico] = useState();
@@ -46,10 +48,6 @@ const Filtros = ({ onChangeFiltros }) => {
   const [carregandoTipoEscola, setCarregandoTipoEscola] = useState(false);
   const [carregandoTurmas, setCarregandoTurmas] = useState(false);
   const [carregandoUes, setCarregandoUes] = useState(false);
-  const [dataEnvioFim, setDataEnvioFim] = useState();
-  const [dataEnvioInicio, setDataEnvioInicio] = useState();
-  const [dataExpiracaoFim, setDataExpiracaoFim] = useState();
-  const [dataExpiracaoInicio, setDataExpiracaoInicio] = useState();
   const [dreCodigo, setDreCodigo] = useState();
   const [dreId, setDreId] = useState();
   const [ehDataValida, setEhDataValida] = useState(true);
@@ -78,7 +76,7 @@ const Filtros = ({ onChangeFiltros }) => {
   const [carregandoTipoCalendario, setCarregandoTipoCalendario] = useState(
     false
   );
-  const [listaCalendario, setListaCalendario] = useState([]);
+  const [listaTipoCalendario, setListaTipoCalendario] = useState([]);
   const [valorTipoCalendario, setValorTipoCalendario] = useState('');
   const [tipoCalendarioSelecionado, setTipoCalendarioSelecionado] = useState(
     ''
@@ -113,10 +111,11 @@ const Filtros = ({ onChangeFiltros }) => {
   const ehTodosAnosEscolares = anosEscolares?.find(
     item => item === OPCAO_TODOS
   );
+  const ehTodasUe = ueCodigo === OPCAO_TODOS;
 
   const opcoesAlunos = [
     { id: OPCAO_TODOS, nome: 'Todos' },
-    { id: '1', nome: 'Alunos Especificados' },
+    { id: '1', nome: 'Crianças/Estudantes Selecionados' },
   ];
 
   const estudantesDesabilitados = useMemo(() => {
@@ -143,6 +142,10 @@ const Filtros = ({ onChangeFiltros }) => {
     setListaSemestres([]);
     setSemestre();
     setBuscou(false);
+
+    setValorTipoCalendario();
+    setTipoCalendarioSelecionado();
+    setListaTipoCalendario([]);
 
     if (limpar) {
       setDreCodigo();
@@ -197,7 +200,7 @@ const Filtros = ({ onChangeFiltros }) => {
         const lista = resposta.data.sort(FiltroHelper.ordenarLista('nome'));
 
         if (lista?.length === 1) {
-          setDreCodigo(lista[0].valor);
+          setDreCodigo(lista[0].codigo);
           setDreId(lista[0].id);
         } else {
           lista.unshift({ codigo: OPCAO_TODOS, nome: 'Todas' });
@@ -224,6 +227,10 @@ const Filtros = ({ onChangeFiltros }) => {
     setListaModalidades([]);
     setModalidades();
     setBuscou(false);
+
+    setValorTipoCalendario();
+    setTipoCalendarioSelecionado();
+    setListaTipoCalendario([]);
   };
 
   const obterUes = useCallback(async () => {
@@ -248,7 +255,7 @@ const Filtros = ({ onChangeFiltros }) => {
         const lista = resposta.data;
         if (lista?.length === 1) {
           setUeId(lista[0].id);
-          setUeCodigo(lista[0].valor);
+          setUeCodigo(lista[0].codigo);
         } else {
           lista.unshift(ueTodos);
         }
@@ -273,6 +280,22 @@ const Filtros = ({ onChangeFiltros }) => {
     setModalidades(valor);
     setBuscou(false);
     setSemestre();
+
+    setListaTipoEscola([]);
+    setTipoEscola();
+
+    setListaAnosEscolares([]);
+    setAnosEscolares();
+
+    setListaTurmas([]);
+    setTurmasCodigo();
+
+    setValorTipoCalendario();
+    setTipoCalendarioSelecionado();
+    setListaTipoCalendario();
+
+    setListaEvento([]);
+    setEventoSelecionado();
   };
 
   const obterModalidades = useCallback(async ue => {
@@ -360,28 +383,53 @@ const Filtros = ({ onChangeFiltros }) => {
   const filtrar = useCallback(() => {
     const params = {
       anoLetivo,
-      dreId,
       dreCodigo,
-      ueId,
       ueCodigo,
       modalidades,
       semestre: semestre || 0,
+      tipoEscola,
+      anosEscolares,
+      turmasCodigo,
+      tipoCalendarioId: tipoCalendarioSelecionado,
+      eventoId: eventoSelecionado,
+      dataEnvio,
+      dataExpiracao,
+      alunosSelecionados,
+      titulo,
+      descricaoComunicado,
     };
 
     onChangeFiltros(params);
     setBuscou(true);
   }, [
     anoLetivo,
-    dreId,
     dreCodigo,
-    ueId,
     ueCodigo,
     modalidades,
     semestre,
+    tipoEscola,
+    anosEscolares,
+    turmasCodigo,
+    tipoCalendarioSelecionado,
+    eventoSelecionado,
+    dataEnvio,
+    dataExpiracao,
+    alunosSelecionados,
+    titulo,
+    descricaoComunicado,
     onChangeFiltros,
   ]);
 
   const ObterTiposEscola = useCallback(async () => {
+    const todosTipoEscola = {
+      valor: OPCAO_TODOS,
+      desc: 'Todos',
+    };
+    if (ehTodasUe) {
+      setListaTipoEscola([todosTipoEscola]);
+      setTipoEscola([OPCAO_TODOS]);
+      return;
+    }
     setCarregandoTipoEscola(true);
     const response = await ServicoComunicados.obterTipoEscola(
       dreCodigo,
@@ -399,35 +447,19 @@ const Filtros = ({ onChangeFiltros }) => {
       : [];
 
     if (dados?.length > 1) {
-      dados.unshift({
-        valor: OPCAO_TODOS,
-        desc: 'Todos',
-      });
+      dados.unshift(todosTipoEscola);
     }
     setListaTipoEscola(dados);
-    if (dados?.length === 1) {
-      setTipoEscola([String(dados[0].valor)]);
-    }
-  }, [dreCodigo, ueCodigo]);
+
+    const dadoTipoEscola = dados?.length === 1 ? String(dados[0].valor) : '';
+    setTipoEscola([dadoTipoEscola]);
+  }, [dreCodigo, ueCodigo, ehTodasUe]);
 
   useEffect(() => {
-    if (
-      dreCodigo &&
-      ueCodigo &&
-      modalidades?.length &&
-      !listaTipoEscola?.length &&
-      !carregandoTipoEscola
-    ) {
+    if (dreCodigo && ueCodigo && modalidades?.length) {
       ObterTiposEscola();
     }
-  }, [
-    ObterTiposEscola,
-    dreCodigo,
-    ueCodigo,
-    modalidades,
-    listaTipoEscola,
-    carregandoTipoEscola,
-  ]);
+  }, [ObterTiposEscola, dreCodigo, ueCodigo, modalidades]);
 
   const ObterAnosEscolares = useCallback(async () => {
     const todosAnosEscolares = {
@@ -462,33 +494,21 @@ const Filtros = ({ onChangeFiltros }) => {
   }, [modalidades, ueCodigo, ehTodasModalidade]);
 
   useEffect(() => {
-    if (
-      modalidades?.length &&
-      ueCodigo &&
-      !listaAnosEscolares?.length &&
-      !carregandoAnosEscolares
-    ) {
+    if (ueCodigo && modalidades?.length) {
       ObterAnosEscolares();
     }
-  }, [
-    ObterAnosEscolares,
-    modalidades,
-    ueCodigo,
-    listaAnosEscolares,
-    carregandoAnosEscolares,
-  ]);
+  }, [ObterAnosEscolares, modalidades, ueCodigo]);
 
   const onChangeAnosEscolares = valor => {
     setAnosEscolares(valor);
     setTurmasCodigo();
     setListaTurmas([]);
-    setBuscouFiltrosAvancados(false);
+    setBuscou(false);
   };
 
   const obterTurmas = useCallback(async () => {
     const todasTurmas = { valor: OPCAO_TODOS, desc: 'Todas' };
-
-    if (ehTodasModalidade || ehTodosAnosEscolares) {
+    if (ehTodasModalidade || ehTodosAnosEscolares || ehTodasUe) {
       setListaTurmas([todasTurmas]);
       setTurmasCodigo([OPCAO_TODOS]);
       return;
@@ -529,26 +549,14 @@ const Filtros = ({ onChangeFiltros }) => {
     modalidades,
     ehTodasModalidade,
     ehTodosAnosEscolares,
+    ehTodasUe,
   ]);
 
   useEffect(() => {
-    if (
-      ueCodigo &&
-      modalidades?.length &&
-      anosEscolares?.length &&
-      !listaTurmas?.length &&
-      !carregandoTurmas
-    ) {
+    if (ueCodigo && modalidades?.length && anosEscolares?.length) {
       obterTurmas();
     }
-  }, [
-    anosEscolares,
-    ueCodigo,
-    modalidades,
-    listaTurmas,
-    carregandoTurmas,
-    obterTurmas,
-  ]);
+  }, [anosEscolares, ueCodigo, modalidades, obterTurmas]);
 
   const selecionaAlunosEspecificos = valorTurma => {
     const ehTodasTurma = valorTurma?.find(item => item === OPCAO_TODOS);
@@ -562,82 +570,99 @@ const Filtros = ({ onChangeFiltros }) => {
     setTurmasCodigo(valor);
     selecionaAlunosEspecificos(valor);
     setCarregouAlunos(false);
+    setBuscou(false);
   };
 
-  const selecionaTipoCalendario = (descricao, form, tipoCalend, onChange) => {
-    let tipo = '';
-
-    if (tipoCalend) {
-      tipo = tipoCalend;
-    } else {
-      tipo = listaCalendario?.find(t => {
-        return t.descricao === descricao;
-      });
-    }
+  const selecionaTipoCalendario = descricao => {
+    const tipo = listaTipoCalendario?.find(
+      item => item.descricao === descricao
+    );
 
     if (tipo?.id) {
       setValorTipoCalendario(tipo.descricao);
       setTipoCalendarioSelecionado(tipo.id);
-      if (form && form.setFieldValue) {
-        form.setFieldValue('tipoCalendarioId', tipo.descricao);
-      }
-    } else {
-      setValorTipoCalendario('');
-      setTipoCalendarioSelecionado();
-      if (form && form.setFieldValue) {
-        form.setFieldValue('tipoCalendarioId', '');
-      }
-    }
-
-    if (onChange) {
-      // selecionaEvento('', form);
     }
   };
 
-  const selecionaEvento = (nome, form, onChange, tipoEvento) => {
-    let evento = '';
+  const obterTiposCalendario = useCallback(async () => {
+    setCarregandoTipoCalendario(true);
 
-    if (tipoEvento) {
-      evento = tipoEvento;
-    } else {
-      evento = listaEvento?.find(t => {
-        return t.nome === nome;
-      });
+    const retorno = await ServicoComunicados.obterTiposCalendario(
+      anoLetivo,
+      pesquisaTipoCalendario,
+      modalidades
+    )
+      .catch(e => erros(e))
+      .finally(() => setCarregandoTipoCalendario(false));
+
+    const dados = retorno?.data || [];
+
+    setListaTipoCalendario(dados);
+    const dadoTipoCalendario = dados?.length === 1 ? dados[0].id : undefined;
+    const dadoValorCalendario =
+      dados?.length === 1 ? dados[0].descricao : undefined;
+    setTipoCalendarioSelecionado(dadoTipoCalendario);
+    setValorTipoCalendario(dadoValorCalendario);
+  }, [pesquisaTipoCalendario, anoLetivo, modalidades]);
+
+  useEffect(() => {
+    if (ueCodigo && modalidades?.length) {
+      obterTiposCalendario();
     }
+  }, [ueCodigo, modalidades, obterTiposCalendario]);
+
+  const selecionaEvento = nome => {
+    const evento = listaEvento?.find(item => item.nome === nome);
 
     if (evento?.id) {
       setSelecionouEvento(true);
-      setValorEvento(evento.nome);
-      setEventoSelecionado(evento);
-      if (form && form.setFieldValue) {
-        form.setFieldValue('eventoId', evento.nome);
-      }
-    } else if (!onChange) {
-      setSelecionouEvento(false);
-      setValorEvento('');
-      setEventoSelecionado('');
-      if (form && form.setFieldValue) {
-        form.setFieldValue('eventoId', '');
-      }
-    }
-
-    if (onChange && !evento) {
       setValorEvento(nome);
+      setEventoSelecionado(evento.id);
     }
   };
 
+  const obterEventos = useCallback(async () => {
+    setCarregandoEventos(true);
+    const retorno = await ServicoComunicadoEvento.listarPor({
+      tipoCalendario: tipoCalendarioSelecionado,
+      anoLetivo,
+      codigoDre: dreCodigo,
+      codigoUe: ueCodigo,
+      modalidades,
+    })
+      .catch(e => erros(e))
+      .finally(() => setCarregandoEventos(false));
+
+    const dados = retorno?.data?.length ? retorno?.data : [];
+
+    console.log(dados);
+    setListaEvento(dados);
+    if (retorno?.data?.length === 1) {
+      setValorEvento(retorno?.data?.nome);
+      setEventoSelecionado(retorno?.data?.id);
+    }
+  }, [tipoCalendarioSelecionado, anoLetivo, dreCodigo, ueCodigo, modalidades]);
+
+  useEffect(() => {
+    if (tipoCalendarioSelecionado && ueCodigo && modalidades?.length) {
+      obterEventos();
+    }
+  }, [tipoCalendarioSelecionado, ueCodigo, modalidades, obterEventos]);
+
   const onChangeDataEnvio = valor => {
     setDataEnvio(valor);
+    setBuscou(false);
   };
 
   const onChangeDataExpiracao = valor => {
     setDataExpiracao(valor);
+    setBuscou(false);
   };
 
   const desabilitarDatas = current => {
     if (current && anoLetivo) {
       const ano = moment(`${anoLetivo}-01-01`);
-      return current < ano.startOf('year') || current > ano.endOf('year');
+      return current < moment().startOf('day') || current > ano.endOf('year');
     }
     return false;
   };
@@ -645,7 +670,7 @@ const Filtros = ({ onChangeFiltros }) => {
   const verificarData = useCallback(() => {
     if (!dataEnvio || !dataExpiracao) return true;
     return (
-      moment(dataEnvio, 'MM-DD-YYYY') < moment(dataExpiracao, 'MM-DD-YYYY')
+      moment(dataEnvio, 'MM-DD-YYYY') <= moment(dataExpiracao, 'MM-DD-YYYY')
     );
   }, [dataEnvio, dataExpiracao]);
 
@@ -656,10 +681,12 @@ const Filtros = ({ onChangeFiltros }) => {
 
   const onChangeTitulo = e => {
     setTitulo(e?.target?.value);
+    setBuscou(false);
   };
 
   const onChangeDescricaoComunicado = descricao => {
     setDescricaoComunicado(descricao);
+    setBuscou(false);
     // handleModoEdicao();
   };
 
@@ -701,7 +728,7 @@ const Filtros = ({ onChangeFiltros }) => {
               lista={listaAnosLetivo}
               valueOption="valor"
               valueText="desc"
-              disabled={listaAnosLetivo?.length === 1}
+              disabled
               onChange={onChangeAnoLetivo}
               valueSelect={anoLetivo}
               placeholder="Ano letivo"
@@ -905,10 +932,10 @@ const Filtros = ({ onChangeFiltros }) => {
               textField="descricao"
               showList
               isHandleSearch
-              lista={listaCalendario}
-              disabled={idComunicado || bloquearCamposCalendarioEventos}
-              onSelect={valor => selecionaTipoCalendario(valor, '', '', true)}
-              onChange={valor => selecionaTipoCalendario(valor, '', '', true)}
+              lista={listaTipoCalendario}
+              disabled={idComunicado || !modalidades?.length}
+              onSelect={selecionaTipoCalendario}
+              onChange={selecionaTipoCalendario}
               value={valorTipoCalendario}
             />
           </Loader>
@@ -926,12 +953,16 @@ const Filtros = ({ onChangeFiltros }) => {
               textField="nome"
               showList
               isHandleSearch
-              disabled={idComunicado || bloquearCamposCalendarioEventos}
+              disabled={
+                idComunicado ||
+                !tipoCalendarioSelecionado ||
+                !listaEvento?.length
+              }
               lista={listaEvento.filter(
                 item => item.nome.toLowerCase().indexOf(valorEvento) > -1
               )}
-              onSelect={valor => selecionaEvento(valor, '')}
-              onChange={valor => selecionaEvento(valor, '', true)}
+              onSelect={selecionaEvento}
+              onChange={selecionaEvento}
               value={valorEvento}
             />
           </Loader>
@@ -989,6 +1020,7 @@ const Filtros = ({ onChangeFiltros }) => {
             placeholder="Pesquise pelo título do comunicado"
             value={titulo}
             onChange={onChangeTitulo}
+            maxLength={50}
           />
         </div>
       </div>

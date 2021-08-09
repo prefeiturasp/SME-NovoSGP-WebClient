@@ -160,7 +160,7 @@ const ListaComunicados = () => {
             <div className="col-md-12 px-0" style={{ paddingTop: 38 }}>
               <ListaPaginada
                 id="lista-comunicados"
-                url="v1/comunicado"
+                url="v1/comunicados"
                 idLinha="id"
                 colunaChave="id"
                 colunas={colunas}

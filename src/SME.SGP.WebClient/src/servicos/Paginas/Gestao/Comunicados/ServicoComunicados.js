@@ -2,7 +2,7 @@ import queryString from 'query-string';
 
 import api from '../../../api';
 
-const urlPadrao = 'v1/comunicado';
+const urlPadrao = 'v1/comunicados';
 
 class ServicoComunicados {
   consultarPorId = async id => {
@@ -19,6 +19,8 @@ class ServicoComunicados {
   };
 
   salvar = async dados => {
+    console.log('dados', dados);
+
     let salvou = {};
 
     let metodo = 'post';
@@ -130,6 +132,22 @@ class ServicoComunicados {
         },
       }
     );
+  };
+
+  obterTiposCalendario = (anoLetivo, descricao, modalidades) => {
+    return api.get(`v1/calendarios/tipos/ano-letivo/${anoLetivo}/modalidades`, {
+      params: {
+        descricao,
+        modalidades,
+      },
+      paramsSerializer(params) {
+        return queryString.stringify(params, {
+          arrayFormat: 'repeat',
+          skipEmptyString: true,
+          skipNull: true,
+        });
+      },
+    });
   };
 }
 
