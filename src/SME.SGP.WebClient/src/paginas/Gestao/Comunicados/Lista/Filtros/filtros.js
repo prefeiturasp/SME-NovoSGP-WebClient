@@ -128,7 +128,7 @@ const Filtros = ({ onChangeFiltros, temModalidadeEja }) => {
         const lista = resposta.data.sort(FiltroHelper.ordenarLista('nome'));
 
         if (lista?.length === 1) {
-          setDreCodigo(lista[0].valor);
+          setDreCodigo(lista[0].codigo);
           setDreId(lista[0].id);
         } else {
           lista.unshift({ codigo: OPCAO_TODOS, nome: 'Todas' });
