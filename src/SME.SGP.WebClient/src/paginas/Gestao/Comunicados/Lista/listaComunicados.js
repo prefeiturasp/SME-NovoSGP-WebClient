@@ -1,20 +1,17 @@
 import moment from 'moment';
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-
 import { Button, Card, Colors, ListaPaginada } from '~/componentes';
 import { Cabecalho } from '~/componentes-sgp';
-
 import { ModalidadeDTO, RotasDto } from '~/dtos';
 import {
   confirmar,
-  erro,
+  erros,
   history,
+  ServicoComunicados,
   sucesso,
   verificaSomenteConsulta,
 } from '~/servicos';
-import ServicoComunicados from '~/servicos/Paginas/AcompanhamentoEscolar/Comunicados/ServicoComunicados';
-
 import Filtros from './Filtros/filtros';
 
 const ListaComunicados = () => {
@@ -73,18 +70,26 @@ const ListaComunicados = () => {
   };
 
   const aoClicarBotaoExcluir = async () => {
-    if (itensSelecionados && itensSelecionados.length >= 1) {
-      const confirmado = await confirmar(
-        'Atenção',
-        'Você tem certeza que deseja excluir este(s) registro(s)?'
-      );
+    if (itensSelecionados.length) {
+      const msgConfirm = `Você tem certeza que deseja excluir ${
+        itensSelecionados.length > 1 ? 'estes registros' : 'este registro'
+      }?`;
+      const confirmado = await confirmar('Atenção', msgConfirm);
+
       if (confirmado) {
-        const exclusao = await ServicoComunicados.excluir(itensSelecionados);
-        if (exclusao?.status === 200) {
-          sucesso('Registro(s) excluído(s) com sucesso');
+        const resposta = await ServicoComunicados.excluir(
+          itensSelecionados
+        ).catch(e => erros(e));
+
+        if (resposta?.status === 200) {
+          const msgSucesso = `${
+            itensSelecionados.length > 1
+              ? 'Registros excluídos'
+              : 'Registro excluído'
+          } com sucesso`;
+
+          sucesso(msgSucesso);
           setFiltros({ ...filtros });
-        } else {
-          erro(exclusao);
         }
       }
     }

@@ -1,23 +1,22 @@
 import moment from 'moment';
+import PropTypes from 'prop-types';
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-
 import { Button, Card, Colors, Loader } from '~/componentes';
 import { Cabecalho } from '~/componentes-sgp';
-
 import { RotasDto } from '~/dtos';
 import {
   confirmar,
-  verificaSomenteConsulta,
-  ServicoComunicados,
-  history,
-  sucesso,
   erro,
+  erros,
+  history,
+  ServicoComunicados,
+  sucesso,
+  verificaSomenteConsulta,
 } from '~/servicos';
-
 import Filtros from './Filtros/filtros';
 
-const CadastroComunicados = () => {
+const CadastroComunicados = ({ match }) => {
   const [filtros, setFiltros] = useState({});
   const [somenteConsulta, setSomenteConsulta] = useState(false);
   const permissoesTela = useSelector(store => store.usuario.permissoes);
@@ -33,20 +32,20 @@ const CadastroComunicados = () => {
   }, [permissoesTela]);
 
   const aoClicarBotaoExcluir = async () => {
-    if (filtros?.idComunicado) {
+    if (match?.params?.id) {
       const confirmado = await confirmar(
         'Atenção',
         'Você tem certeza que deseja excluir este registro?'
       );
       if (confirmado) {
-        const exclusao = await ServicoComunicados.excluir([
-          filtros?.idComunicado,
-        ]);
-        if (exclusao && exclusao.status === 200) {
-          history.push(RotasDto.ACOMPANHAMENTO_COMUNICADOS);
+        setLoaderSecao(true);
+        const resposta = await ServicoComunicados.excluir([match?.params?.id])
+          .catch(e => erros(e))
+          .finally(() => setLoaderSecao(false));
+
+        if (resposta?.status === 200) {
           sucesso('Registro excluído com sucesso');
-        } else {
-          erro(exclusao);
+          history.push(RotasDto.ACOMPANHAMENTO_COMUNICADOS);
         }
       }
     }
@@ -164,7 +163,7 @@ const CadastroComunicados = () => {
                 <Button
                   id="botao-excluir"
                   label="Excluir"
-                  color={Colors.Azul}
+                  color={Colors.Vermelho}
                   onClick={aoClicarBotaoExcluir}
                   border
                   className="mr-3"
@@ -189,6 +188,14 @@ const CadastroComunicados = () => {
       </Loader>
     </>
   );
+};
+
+CadastroComunicados.propTypes = {
+  match: PropTypes.objectOf(PropTypes.object),
+};
+
+CadastroComunicados.defaultProps = {
+  match: {},
 };
 
 export default CadastroComunicados;

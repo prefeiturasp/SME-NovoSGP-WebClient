@@ -41,19 +41,7 @@ class ServicoComunicados {
     return salvou;
   };
 
-  excluir = async ids => {
-    let exclusao = {};
-    const parametros = { data: ids };
-
-    try {
-      const requisicao = await api.delete(`${urlPadrao}`, parametros);
-      if (requisicao && requisicao.status === 200) exclusao = requisicao;
-    } catch (erro) {
-      exclusao = [...erro.response.data.mensagens];
-    }
-
-    return exclusao;
-  };
+  excluir = async ids => api.delete(`${urlPadrao}`, { data: ids });
 
   buscarAnosPorModalidade = async (modalidades, codigoUe) => {
     return api.get(`${urlPadrao}/anos/modalidades`, {
