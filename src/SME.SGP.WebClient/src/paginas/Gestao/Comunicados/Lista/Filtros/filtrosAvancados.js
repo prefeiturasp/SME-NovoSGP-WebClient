@@ -384,8 +384,7 @@ const FiltrosAvancados = ({
                 listaTurmas?.length === 1 ||
                 !listaTurmas?.length ||
                 !anosEscolares?.length ||
-                ehTodasModalidade ||
-                !(temModalidadeEja && filtrosPrincipais?.semestre)
+                ehTodasModalidade
               }
               valueSelect={turmasCodigo}
               onChange={valores => {
