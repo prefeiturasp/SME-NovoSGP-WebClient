@@ -325,10 +325,20 @@ const Filtros = ({ onChangeFiltros, temModalidadeEja }) => {
         ueCodigo,
         modalidades,
         semestre,
+        consideraHistorico,
       });
       filtrar();
     }
-  }, [filtrar, buscou, anoLetivo, dreCodigo, ueCodigo, modalidades, semestre]);
+  }, [
+    filtrar,
+    buscou,
+    consideraHistorico,
+    anoLetivo,
+    dreCodigo,
+    ueCodigo,
+    modalidades,
+    semestre,
+  ]);
 
   useEffect(() => {
     if (atualizaFiltrosAvançados && !mostrarFiltrosAvancados) {

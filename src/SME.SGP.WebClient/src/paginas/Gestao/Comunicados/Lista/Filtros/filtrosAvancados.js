@@ -168,7 +168,8 @@ const FiltrosAvancados = ({
       filtrosPrincipais?.ueCodigo,
       filtrosPrincipais?.semestre,
       filtrosPrincipais?.modalidades,
-      anosEscolares
+      anosEscolares,
+      filtrosPrincipais?.consideraHistorico
     )
       .catch(e => erros(e))
       .finally(() => setCarregandoTurmas(false));
