@@ -282,7 +282,10 @@ const Filtros = ({ onChangeFiltros, temModalidadeEja }) => {
   );
 
   useEffect(() => {
-    if (modalidades?.length && anoLetivo && temModalidadeEja) {
+    const temEja = modalidades?.find(
+      item => String(item) === String(ModalidadeDTO.EJA)
+    );
+    if (modalidades?.length && anoLetivo && temEja) {
       obterSemestres(ModalidadeDTO.EJA, anoLetivo);
       return;
     }
