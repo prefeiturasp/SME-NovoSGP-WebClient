@@ -382,6 +382,7 @@ const FiltrosAvancados = ({
               disabled={
                 !filtrosPrincipais?.modalidades ||
                 listaTurmas?.length === 1 ||
+                !listaTurmas?.length ||
                 !anosEscolares?.length ||
                 ehTodasModalidade ||
                 !(temModalidadeEja && filtrosPrincipais?.semestre)
