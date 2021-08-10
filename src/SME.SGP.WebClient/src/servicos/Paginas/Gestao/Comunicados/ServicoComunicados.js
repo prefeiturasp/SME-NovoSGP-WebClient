@@ -109,7 +109,14 @@ class ServicoComunicados {
     return api.get(`/v1/ues/dres/${dreCodigo}/ues/${ueCodigo}/tipos-escolas`);
   };
 
-  obterTurmas = (anoLetivo, ueCodigo, semestre, modalidades, anos) => {
+  obterTurmas = (
+    anoLetivo,
+    ueCodigo,
+    semestre,
+    modalidades,
+    anos,
+    consideraHistorico
+  ) => {
     return api.get(
       `${urlPadrao}/ues/${ueCodigo}/anoletivo/${anoLetivo}/turmas`,
       {
@@ -117,6 +124,7 @@ class ServicoComunicados {
           semestre,
           modalidades,
           anos,
+          consideraHistorico,
         },
         paramsSerializer(params) {
           return queryString.stringify(params, {
