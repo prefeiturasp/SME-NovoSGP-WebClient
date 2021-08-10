@@ -7,7 +7,6 @@ import { Cabecalho } from '~/componentes-sgp';
 import { RotasDto } from '~/dtos';
 import {
   confirmar,
-  erro,
   erros,
   history,
   ServicoComunicados,
@@ -17,22 +16,23 @@ import {
 import Filtros from './Filtros/filtros';
 
 const CadastroComunicados = ({ match }) => {
+  const usuario = useSelector(store => store.usuario);
+  const permissoesTela =
+    usuario.permissoes[RotasDto.ACOMPANHAMENTO_COMUNICADOS];
+
   const [filtros, setFiltros] = useState({});
   const [somenteConsulta, setSomenteConsulta] = useState(false);
-  const permissoesTela = useSelector(store => store.usuario.permissoes);
   const [modoEdicao, setModoEdicao] = useState(false);
   const [resetarFiltros, setResetarFiltros] = useState(false);
   const [loaderSecao, setLoaderSecao] = useState(false);
 
   useEffect(() => {
-    const ehSomenteConsulta = verificaSomenteConsulta(
-      permissoesTela[RotasDto.ACOMPANHAMENTO_COMUNICADOS]
-    );
+    const ehSomenteConsulta = verificaSomenteConsulta(permissoesTela);
     setSomenteConsulta(ehSomenteConsulta);
   }, [permissoesTela]);
 
   const aoClicarBotaoExcluir = async () => {
-    if (match?.params?.id) {
+    if (!somenteConsulta && match?.params?.id && permissoesTela.podeExcluir) {
       const confirmado = await confirmar(
         'Atenção',
         'Você tem certeza que deseja excluir este registro?'
@@ -51,50 +51,69 @@ const CadastroComunicados = ({ match }) => {
     }
   };
 
-  const aoClicarBotaoVoltar = async () => {
-    if (modoEdicao) {
-      const confirmou = await confirmar(
-        'Atenção',
-        'Você não salvou as informações preenchidas.',
-        'Deseja realmente cancelar as alterações?'
-      );
-      if (confirmou) history.push(RotasDto.ACOMPANHAMENTO_COMUNICADOS);
-    } else {
-      history.push(RotasDto.ACOMPANHAMENTO_COMUNICADOS);
+  const aoClicarBotaoCadastrar = async () => {
+    if (
+      !somenteConsulta &&
+      (permissoesTela.podeIncluir || permissoesTela.podeAlterar)
+    ) {
+      const dadosSalvar = {
+        anoLetivo: filtros?.anoLetivo,
+        CodigoDre: filtros?.dreCodigo,
+        CodigoUe: filtros?.ueCodigo,
+        modalidades: filtros?.modalidades,
+        semestre: filtros?.semestre || 0,
+        tipoEscola: filtros?.tipoEscola,
+        ano: filtros?.anoEscolares,
+        turmas: filtros?.turmasCodigo,
+        alunos: filtros?.alunosSelecionados,
+        alunosEspecificados: filtros?.alunoEspecificado,
+        seriesResumidas: '',
+        tipoCalendarioId: filtros?.tipoCalendarioId,
+        eventoId: filtros?.eventoId,
+        dataEnvio: filtros?.dataEnvio,
+        dataExpiracao: filtros?.dataExpiracao,
+        titulo: filtros?.titulo,
+        descricao: filtros?.descricaoComunicado,
+      };
+
+      console.log('dadosSalvar', dadosSalvar);
+
+      setLoaderSecao(true);
+
+      const resposta = await ServicoComunicados.salvar(dadosSalvar)
+        .catch(e => erros(e))
+        .finally(() => setLoaderSecao(false));
+
+      if (resposta.status === 200) {
+        history.push(RotasDto.ACOMPANHAMENTO_COMUNICADOS);
+        sucesso(
+          `Comunicado ${
+            match?.params?.id ? 'alterado' : 'cadastrado'
+          } com sucesso`
+        );
+      }
     }
   };
 
-  const aoClicarBotaoCadastrar = async () => {
-    const dadosSalvar = {
-      anoLetivo: filtros?.anoLetivo,
-      CodigoDre: filtros?.dreCodigo,
-      CodigoUe: filtros?.ueCodigo,
-      modalidades: filtros?.modalidades,
-      semestre: filtros?.semestre || 0,
-      tipoEscola: filtros?.tipoEscola,
-      ano: filtros?.anoEscolares,
-      turmas: filtros?.turmasCodigo,
-      alunos: filtros?.alunosSelecionados,
-      alunosEspecificados: filtros?.alunoEspecificado,
-      seriesResumidas: '',
-      tipoCalendarioId: filtros?.tipoCalendarioId,
-      eventoId: filtros?.eventoId,
-      dataEnvio: filtros?.dataEnvio,
-      dataExpiracao: filtros?.dataExpiracao,
-      titulo: filtros?.titulo,
-      descricao: filtros?.descricaoComunicado,
-    };
+  const aoClicarBotaoVoltar = async () => {
+    if (
+      modoEdicao &&
+      !somenteConsulta &&
+      (permissoesTela.podeIncluir || permissoesTela.podeAlterar)
+    ) {
+      const confirmou = await confirmar(
+        'Atenção',
+        '',
+        'Suas alterações não foram salvas, deseja salvar agora?'
+      );
 
-    console.log('dadosSalvar', dadosSalvar);
-
-    setLoaderSecao(true);
-
-    const salvou = await ServicoComunicados.salvar(dadosSalvar)
-      .catch(e => erro(e))
-      .finally(() => setLoaderSecao(false));
-    if (salvou && salvou.data) {
+      if (confirmou) {
+        aoClicarBotaoCadastrar();
+      } else {
+        history.push(RotasDto.ACOMPANHAMENTO_COMUNICADOS);
+      }
+    } else {
       history.push(RotasDto.ACOMPANHAMENTO_COMUNICADOS);
-      sucesso('Registro salvo com sucesso');
     }
   };
 
@@ -167,19 +186,29 @@ const CadastroComunicados = ({ match }) => {
                   onClick={aoClicarBotaoExcluir}
                   border
                   className="mr-3"
-                  disabled={somenteConsulta}
-                />
-                <Button
-                  id="botao-cadastrar"
-                  label="Cadastrar"
-                  color={Colors.Roxo}
-                  onClick={aoClicarBotaoCadastrar}
                   disabled={
-                    // desabilitarBotaoPrincipal ||
-                    somenteConsulta
-                    // || !permissoesTela.podeIncluir
+                    somenteConsulta ||
+                    !match?.params?.id ||
+                    !permissoesTela.podeExcluir
                   }
                 />
+                {match?.params?.id ? (
+                  <Button
+                    id="botao-alterar"
+                    label="Alterar"
+                    color={Colors.Roxo}
+                    onClick={aoClicarBotaoCadastrar}
+                    disabled={somenteConsulta || !permissoesTela.podeAlterar}
+                  />
+                ) : (
+                  <Button
+                    id="botao-cadastrar"
+                    label="Cadastrar"
+                    color={Colors.Roxo}
+                    onClick={aoClicarBotaoCadastrar}
+                    disabled={somenteConsulta || !permissoesTela.podeIncluir}
+                  />
+                )}
               </div>
             </div>
             <Filtros onChangeFiltros={onChangeFiltros} />
