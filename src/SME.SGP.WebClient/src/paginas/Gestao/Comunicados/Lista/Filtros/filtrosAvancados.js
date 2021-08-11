@@ -98,6 +98,7 @@ const FiltrosAvancados = ({
     if (ehTodasModalidade) {
       setListaAnosEscolares([todosAnosEscolares]);
       setAnosEscolares([OPCAO_TODOS]);
+      setBuscouFiltrosAvancados(false);
       return;
     }
 
@@ -158,6 +159,7 @@ const FiltrosAvancados = ({
     if (ehTodasModalidade || ehTodasUe) {
       setListaTurmas([todasTurmas]);
       setTurmasCodigo([OPCAO_TODOS]);
+      setBuscouFiltrosAvancados(false);
       return;
     }
 
