@@ -6,6 +6,7 @@ const inicial = {
   exibirLoaderGeralComunicados: false,
   alunosComunicados: [],
   exibirModalAlunos: false,
+  listaModalidadesComunicados: [],
 };
 
 export default function comunicados(state = inicial, action) {
@@ -45,6 +46,12 @@ export default function comunicados(state = inicial, action) {
         return {
           ...draft,
           exibirModalAlunos: action.payload,
+        };
+      }
+      case '@comunicados/setListaModalidadesComunicados': {
+        return {
+          ...draft,
+          listaModalidadesComunicados: action.payload,
         };
       }
       default:

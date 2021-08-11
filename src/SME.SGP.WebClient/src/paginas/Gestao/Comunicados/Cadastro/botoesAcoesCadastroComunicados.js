@@ -1,7 +1,9 @@
+import * as moment from 'moment';
 import PropTypes from 'prop-types';
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Button, Colors } from '~/componentes';
+import { OPCAO_TODOS } from '~/constantes';
 import { RotasDto } from '~/dtos';
 import {
   setExibirLoaderGeralComunicados,
@@ -58,6 +60,9 @@ const BotoesAcoesCadastroComunicados = props => {
     }
   };
 
+  const converterData = valor =>
+    valor ? moment(valor).format('MM-DD-YYYY') : '';
+
   const onClickCadastrar = async () => {
     if (
       !somenteConsulta &&
@@ -71,19 +76,35 @@ const BotoesAcoesCadastroComunicados = props => {
         codigoUe: filtros?.codigoUe,
         modalidades: filtros?.modalidades,
         semestre: filtros?.semestre || 0,
-        tipoEscola: filtros?.tipoEscola,
+        tiposEscolas: filtros?.tipoEscola,
         anosEscolares: filtros?.anosEscolares,
         turmas: filtros?.turmas,
+        alunoEspecificado: false,
         alunos: filtros?.alunos,
-        // alunosEspecificados: filtros?.alunoEspecificado,
-        // seriesResumidas: '',
-        // tipoCalendarioId: filtros?.tipoCalendarioId,
-        // eventoId: filtros?.eventoId,
-        // dataEnvio: filtros?.dataEnvio,
-        // dataExpiracao: filtros?.dataExpiracao,
-        // titulo: filtros?.titulo,
-        // descricao: filtros?.descricaoComunicado,
+        tipoCalendarioId: filtros?.tipoCalendarioId,
+        eventoId: filtros?.eventoId,
+        titulo: filtros?.titulo,
+        descricao: filtros?.descricao,
+        id: comunicadoId || 0,
       };
+
+      if (filtros?.alunoEspecifico) {
+        const todosAluno = filtros.alunoEspecifico === OPCAO_TODOS;
+        if (todosAluno) {
+          dadosSalvar.alunoEspecificado = false;
+        } else {
+          dadosSalvar.alunoEspecificado = true;
+        }
+      }
+      if (filtros?.alunos?.length) {
+        dadosSalvar.alunos = filtros.alunos.map(aluno => aluno.codigoAluno);
+      }
+      if (filtros?.dataEnvio) {
+        dadosSalvar.dataEnvio = converterData(filtros?.dataEnvio);
+      }
+      if (filtros?.dataExpiracao) {
+        dadosSalvar.dataExpiracao = converterData(filtros?.dataExpiracao);
+      }
 
       dispatch(setExibirLoaderGeralComunicados(true));
       const resposta = await ServicoComunicados.salvar(dadosSalvar)

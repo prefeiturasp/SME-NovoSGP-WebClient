@@ -1,8 +1,9 @@
 import PropTypes from 'prop-types';
 import React, { useCallback, useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Loader, SelectComponent } from '~/componentes';
 import { OPCAO_TODOS } from '~/constantes';
+import { setAlunosComunicados } from '~/redux/modulos/comunicados/actions';
 import { erros, ServicoComunicados } from '~/servicos';
 import { onchangeMultiSelect } from '~/utils';
 
@@ -13,6 +14,8 @@ const TipoEscolaComunicados = ({ form, onChangeCampos, desabilitar }) => {
   const [listaTipoEscola, setListaTipoEscola] = useState([]);
 
   const { codigoDre, codigoUe, tipoEscola } = form.values;
+
+  const dispatch = useDispatch();
 
   const nomeCampo = 'tipoEscola';
 
@@ -88,6 +91,11 @@ const TipoEscolaComunicados = ({ form, onChangeCampos, desabilitar }) => {
         onChange={valores => {
           onchangeMultiSelect(valores, tipoEscola, onChangeTipoEscola);
           onChangeCampos();
+          form.setFieldValue('alunoEspecifico', undefined);
+          form.setFieldValue('alunos', []);
+          form.setFieldValue('tipoCalendarioId', undefined);
+          form.setFieldValue('eventoId', undefined);
+          dispatch(setAlunosComunicados([]));
         }}
       />
     </Loader>

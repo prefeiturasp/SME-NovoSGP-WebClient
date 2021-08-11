@@ -1,7 +1,9 @@
 import PropTypes from 'prop-types';
 import React, { useCallback, useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
 import { Loader, SelectComponent } from '~/componentes';
 import { ModalidadeDTO } from '~/dtos';
+import { setAlunosComunicados } from '~/redux/modulos/comunicados/actions';
 import { erros, ServicoComunicados } from '~/servicos';
 
 const SemestreComunicados = ({ form, onChangeCampos, desabilitar }) => {
@@ -13,6 +15,8 @@ const SemestreComunicados = ({ form, onChangeCampos, desabilitar }) => {
   const temModalidadeEja = modalidades?.find(
     item => String(item) === String(ModalidadeDTO.EJA)
   );
+
+  const dispatch = useDispatch();
 
   const nomeCampo = 'semestre';
 
@@ -76,6 +80,14 @@ const SemestreComunicados = ({ form, onChangeCampos, desabilitar }) => {
         form={form}
         onChange={() => {
           onChangeCampos();
+          form.setFieldValue('tipoEscola', []);
+          form.setFieldValue('anosEscolares', []);
+          form.setFieldValue('turmas', []);
+          form.setFieldValue('alunoEspecifico', undefined);
+          form.setFieldValue('alunos', []);
+          form.setFieldValue('tipoCalendarioId', undefined);
+          form.setFieldValue('eventoId', undefined);
+          dispatch(setAlunosComunicados([]));
         }}
       />
     </Loader>

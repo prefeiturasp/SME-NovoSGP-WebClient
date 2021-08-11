@@ -1,7 +1,9 @@
 import PropTypes from 'prop-types';
 import React, { useCallback, useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
 import { Loader, SelectComponent } from '~/componentes';
 import { OPCAO_TODOS } from '~/constantes';
+import { setAlunosComunicados } from '~/redux/modulos/comunicados/actions';
 import { AbrangenciaServico, erros } from '~/servicos';
 
 const UeComunicados = ({ form, onChangeCampos, desabilitar }) => {
@@ -11,6 +13,8 @@ const UeComunicados = ({ form, onChangeCampos, desabilitar }) => {
   const { anoLetivo, codigoDre } = form.values;
 
   const nomeCampo = 'codigoUe';
+
+  const dispatch = useDispatch();
 
   const obterUes = useCallback(async () => {
     const ueTodos = { nome: 'Todas', codigo: OPCAO_TODOS };
@@ -73,6 +77,15 @@ const UeComunicados = ({ form, onChangeCampos, desabilitar }) => {
         onChange={() => {
           onChangeCampos();
           form.setFieldValue('modalidades', []);
+          form.setFieldValue('semestre', undefined);
+          form.setFieldValue('tipoEscola', []);
+          form.setFieldValue('anosEscolares', []);
+          form.setFieldValue('turmas', []);
+          form.setFieldValue('alunoEspecifico', undefined);
+          form.setFieldValue('alunos', []);
+          form.setFieldValue('tipoCalendarioId', undefined);
+          form.setFieldValue('eventoId', undefined);
+          dispatch(setAlunosComunicados([]));
         }}
       />
     </Loader>

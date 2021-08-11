@@ -1,10 +1,11 @@
 import { Divider } from 'antd';
 import { Form, Formik } from 'formik';
+import * as moment from 'moment';
 import PropTypes from 'prop-types';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import * as Yup from 'yup';
-import { Loader } from '~/componentes';
+import { Loader, momentSchema } from '~/componentes';
 import { OPCAO_TODOS } from '~/constantes';
 import { ModalidadeDTO, RotasDto } from '~/dtos';
 import {
@@ -13,14 +14,20 @@ import {
   setModoEdicaoCadastroComunicados,
 } from '~/redux/modulos/comunicados/actions';
 import { erros, ServicoComunicados } from '~/servicos';
+import AuditoriaCadastroComunicados from '../auditoriaCadastroComunicados';
 import ListaDestinatarios from '../ListaDestinatarios/listaDestinatarios';
 import AnoEscolarComunicados from './campos/anoEscolarComunicados';
 import AnoLetivoComunicados from './campos/anoLetivoComunicados';
 import CriancasEstudantesComunicados from './campos/criancasEstudantesComunicados';
+import DataEnvioExpiracaoComunicados from './campos/dataEnvioExpiracaoComunicados';
+import DescricaoComunicados from './campos/descricaoComunicados';
 import DreComunicados from './campos/dreComunicados';
+import EventosComunicados from './campos/eventosComunicados';
 import ModalidadeComunicados from './campos/modalidadeComunicados';
 import SemestreComunicados from './campos/semestreComunicados';
+import TipoCalendarioComunicados from './campos/tipoCalendarioComunicados';
 import TipoEscolaComunicados from './campos/tipoEscolaComunicados';
+import TituloComunicados from './campos/tituloComunicados';
 import TurmasComunicados from './campos/turmasComunicados';
 import UeComunicados from './campos/ueComunicados';
 
@@ -44,6 +51,12 @@ const FormCadastroComunicados = props => {
     turmas: [],
     alunoEspecifico: undefined,
     alunos: [],
+    tipoCalendarioId: undefined,
+    eventoId: undefined,
+    dataEnvio: '',
+    dataExpiracao: '',
+    titulo: '',
+    descricao: '',
   };
   const [initialValues, setInitialValues] = useState(
     comunicadoId ? null : inicial
@@ -76,6 +89,46 @@ const FormCadastroComunicados = props => {
       valores.modalidades = valores.modalidades.map(valor => String(valor));
     } else {
       valores.modalidades = [OPCAO_TODOS];
+    }
+
+    if (valores?.dataEnvio) {
+      valores.dataEnvio = moment(valores.dataEnvio);
+    } else {
+      valores.dataEnvio = '';
+    }
+
+    if (valores?.dataExpiracao) {
+      valores.dataExpiracao = moment(valores.dataExpiracao);
+    } else {
+      valores.dataExpiracao = '';
+    }
+
+    if (valores?.alunoEspecificado) {
+      valores.alunoEspecifico = '1';
+    }
+    if (
+      valores?.turmas?.length === 1 &&
+      valores?.turmas?.[0]?.codigoTurma === OPCAO_TODOS
+    ) {
+      valores.alunoEspecifico = OPCAO_TODOS;
+    }
+
+    if (valores?.turmas?.length) {
+      valores.turmas = valores.turmas.map(turma => turma?.codigoTurma);
+    } else {
+      valores.turmas = [];
+    }
+
+    if (valores?.tipoCalendarioId) {
+      valores.tipoCalendarioId = String(valores.tipoCalendarioId);
+    }
+
+    if (valores?.eventoId) {
+      valores.eventoId = String(valores.eventoId);
+    }
+
+    if (valores?.tiposEscolas) {
+      valores.tipoEscola = valores.tiposEscolas;
     }
 
     return valores;
@@ -147,6 +200,20 @@ const FormCadastroComunicados = props => {
     turmas: Yup.array()
       .nullable()
       .required(textoCampoObrigatorio),
+    tipoCalendarioId: Yup.string()
+      .nullable()
+      .required(textoCampoObrigatorio),
+    eventoId: Yup.string()
+      .nullable()
+      .required(textoCampoObrigatorio),
+    dataEnvio: momentSchema.required(textoCampoObrigatorio),
+    dataExpiracao: momentSchema.required(textoCampoObrigatorio),
+    titulo: Yup.string()
+      .nullable()
+      .required(textoCampoObrigatorio),
+    descricao: Yup.string()
+      .nullable()
+      .required(textoCampoObrigatorio),
   });
 
   return (
@@ -213,7 +280,7 @@ const FormCadastroComunicados = props => {
                     desabilitar={desabilitarCampos}
                   />
                 </div>
-                <div className="col-sm-12 col-md-12 col-lg-6 col-xl-6 mb-2">
+                <div className="col-sm-12 col-md-12 col-lg-8 col-xl-6 mb-2">
                   <TurmasComunicados
                     form={form}
                     onChangeCampos={onChangeCampos}
@@ -221,6 +288,25 @@ const FormCadastroComunicados = props => {
                   />
                 </div>
                 <CriancasEstudantesComunicados
+                  form={form}
+                  onChangeCampos={onChangeCampos}
+                  desabilitar={desabilitarCampos}
+                />
+                <div className="col-sm-12 col-md-12 col-lg-6 col-xl-6 mb-2">
+                  <TipoCalendarioComunicados
+                    form={form}
+                    onChangeCampos={onChangeCampos}
+                    desabilitar={desabilitarCampos}
+                  />
+                </div>
+                <div className="col-sm-12 col-md-12 col-lg-6 col-xl-6 mb-2">
+                  <EventosComunicados
+                    form={form}
+                    onChangeCampos={onChangeCampos}
+                    desabilitar={desabilitarCampos}
+                  />
+                </div>
+                <DataEnvioExpiracaoComunicados
                   form={form}
                   onChangeCampos={onChangeCampos}
                   desabilitar={desabilitarCampos}
@@ -235,6 +321,21 @@ const FormCadastroComunicados = props => {
                     desabilitar={desabilitarCampos}
                   />
                 </div>
+                <div className="col-sm-12 mb-2">
+                  <TituloComunicados
+                    form={form}
+                    onChangeCampos={onChangeCampos}
+                    desabilitar={desabilitarCampos}
+                  />
+                </div>
+                <div className="col-sm-12 mb-2">
+                  <DescricaoComunicados
+                    form={form}
+                    onChangeCampos={onChangeCampos}
+                    desabilitar={desabilitarCampos}
+                  />
+                </div>
+                <AuditoriaCadastroComunicados form={form} />
               </div>
             </Form>
           )}

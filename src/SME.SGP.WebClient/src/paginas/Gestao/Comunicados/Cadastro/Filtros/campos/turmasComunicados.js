@@ -1,8 +1,10 @@
 import PropTypes from 'prop-types';
 import React, { useCallback, useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
 import { Loader, SelectComponent } from '~/componentes';
 import { OPCAO_TODOS } from '~/constantes';
 import { ModalidadeDTO } from '~/dtos';
+import { setAlunosComunicados } from '~/redux/modulos/comunicados/actions';
 import { erros, ServicoComunicados } from '~/servicos';
 import { onchangeMultiSelect } from '~/utils';
 
@@ -18,6 +20,8 @@ const TurmasComunicados = ({ form, onChangeCampos, desabilitar }) => {
     anosEscolares,
     turmas,
   } = form.values;
+
+  const dispatch = useDispatch();
 
   const ehTodasModalidade = modalidades?.find(item => item === OPCAO_TODOS);
   const ehTodasUe = codigoUe === OPCAO_TODOS;
@@ -78,7 +82,7 @@ const TurmasComunicados = ({ form, onChangeCampos, desabilitar }) => {
   ]);
 
   useEffect(() => {
-    if (anosEscolares?.length) {
+    if (anosEscolares?.length && codigoUe && modalidades) {
       obterTurmas();
     } else {
       setListaTurmas([]);
@@ -119,6 +123,9 @@ const TurmasComunicados = ({ form, onChangeCampos, desabilitar }) => {
           onChangeCampos();
           form.setFieldValue('alunoEspecifico', undefined);
           form.setFieldValue('alunos', []);
+          form.setFieldValue('tipoCalendarioId', undefined);
+          form.setFieldValue('eventoId', undefined);
+          dispatch(setAlunosComunicados([]));
         }}
       />
     </Loader>

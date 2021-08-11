@@ -63,7 +63,7 @@ const CriancasEstudantesComunicados = ({
 
   return (
     <>
-      <div className="col-sm-12 col-md-4 mb-2">
+      <div className="col-sm-12 col-md-8 col-lg-4 col-xl-4 mb-2">
         <Loader loading={alunosLoader}>
           <SelectComponent
             label="Crianças/Estudantes"
@@ -71,17 +71,24 @@ const CriancasEstudantesComunicados = ({
             lista={opcoesAlunos}
             valueOption="id"
             valueText="nome"
-            disabled={desabilitar || !turmas?.length || ehTodasTurma()}
+            disabled={
+              desabilitar ||
+              !turmas?.length ||
+              ehTodasTurma() ||
+              turmas?.length > 1
+            }
             allowClear={false}
             name={nomeCampo}
             form={form}
             onChange={() => {
               onChangeCampos();
+              form.setFieldValue('alunos', []);
+              dispatch(setAlunosComunicados([]));
             }}
           />
         </Loader>
       </div>
-      <div className="col-sm-12 col-md-2 mb-2 mt-4">
+      <div className="col-sm-12 col-md-4 col-lg-4 col-xl-2 mb-2 mt-4">
         <Loader loading={alunosLoader}>
           <Button
             id="botao-criancas-estudantes"

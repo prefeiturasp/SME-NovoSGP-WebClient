@@ -27,3 +27,8 @@ export const setExibirModalAlunos = payload => ({
   type: '@comunicados/setExibirModalAlunos',
   payload,
 });
+
+export const setListaModalidadesComunicados = payload => ({
+  type: '@comunicados/setListaModalidadesComunicados',
+  payload,
+});

@@ -28,6 +28,8 @@ const ListaDestinatarios = ({ form, onChangeCampos, desabilitar }) => {
   useEffect(() => {
     if (alunosComunicados?.length && alunos?.length) {
       obterAlunos();
+    } else {
+      setDadosAlunosSelecionados([]);
     }
   }, [obterAlunos, alunosComunicados, alunos]);
 
@@ -39,27 +41,27 @@ const ListaDestinatarios = ({ form, onChangeCampos, desabilitar }) => {
     onChangeCampos();
   };
 
-  return (
+  return dadosAlunosSelecionados?.length ? (
     <>
       <Label text="Destinatários" />
       <div className="d-flex flex-wrap">
-        {dadosAlunosSelecionados?.length
-          ? dadosAlunosSelecionados.map(aluno => (
-              <Conteudo>
-                {aluno?.nomeAluno}
-                <IconeEstilizado
-                  icon={faTimes}
-                  onClick={() => {
-                    if (!desabilitar) {
-                      removerAluno(aluno?.codigoAluno);
-                    }
-                  }}
-                />
-              </Conteudo>
-            ))
-          : ''}
+        {dadosAlunosSelecionados.map(aluno => (
+          <Conteudo>
+            {aluno?.nomeAluno}
+            <IconeEstilizado
+              icon={faTimes}
+              onClick={() => {
+                if (!desabilitar) {
+                  removerAluno(aluno?.codigoAluno);
+                }
+              }}
+            />
+          </Conteudo>
+        ))}
       </div>
     </>
+  ) : (
+    ''
   );
 };
 
