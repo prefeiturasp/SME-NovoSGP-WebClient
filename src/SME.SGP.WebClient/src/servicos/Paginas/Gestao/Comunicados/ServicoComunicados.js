@@ -5,40 +5,14 @@ import api from '../../../api';
 const urlPadrao = 'v1/comunicados';
 
 class ServicoComunicados {
-  consultarPorId = async id => {
-    let comunicado = {};
+  consultarPorId = id => api.get(`${urlPadrao}/${id}`);
 
-    try {
-      const requisicao = await api.get(`${urlPadrao}/${id}`);
-      if (requisicao.data) comunicado = requisicao.data;
-    } catch {
-      return comunicado;
+  salvar = dados => {
+    if (dados?.id) {
+      return api.put(`${urlPadrao}/${dados.id}`, dados);
     }
 
-    return comunicado;
-  };
-
-  salvar = async dados => {
-    console.log('dados', dados);
-
-    let salvou = {};
-
-    let metodo = 'post';
-    let url = `${urlPadrao}`;
-
-    if (dados.id && dados.id > 0) {
-      metodo = 'put';
-      url = `${url}/${dados.id}`;
-    }
-
-    try {
-      const requisicao = await api[metodo](url, dados);
-      if (requisicao.data) salvou = requisicao;
-    } catch (erro) {
-      salvou = [...erro.response.data.mensagens];
-    }
-
-    return salvou;
+    return api.post(urlPadrao, dados);
   };
 
   excluir = async ids => api.delete(`${urlPadrao}`, { data: ids });

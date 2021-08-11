@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import React, { useCallback, useEffect, useState } from 'react';
 import { Loader } from '~/componentes';
 import GraficoBarras from '~/componentes-sgp/Graficos/graficoBarras';
-import { OPCAO_TODOS } from '~/constantes/constantesGerais';
+import { OPCAO_TODOS } from '~/constantes';
 import { erros } from '~/servicos';
 import ServicoDashboardDevolutivas from '~/servicos/Paginas/Dashboard/ServicoDashboardDevolutivas';
 
