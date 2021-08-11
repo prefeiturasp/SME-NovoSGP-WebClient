@@ -21,19 +21,6 @@ const CadastroComunicados = ({ match }) => {
     setSomenteConsulta(ehSomenteConsulta);
   }, [permissoesTela]);
 
-  // TODO
-  // const converterData = valor =>
-  //   valor ? moment(valor).format('MM-DD-YYYY') : '';
-
-  // const onChangeFiltros = valoresFiltro => {
-  //   setFiltros(estadoAntigo => ({
-  //     ...estadoAntigo,
-  //     ...valoresFiltro,
-  //     dataEnvio: converterData(valoresFiltro.dataEnvio),
-  //     dataExpiracao: converterData(valoresFiltro.dataExpiracao),
-  //   }));
-  // };
-
   return (
     <>
       <Cabecalho pagina="Comunicação com pais ou responsáveis" classes="mb-2" />
