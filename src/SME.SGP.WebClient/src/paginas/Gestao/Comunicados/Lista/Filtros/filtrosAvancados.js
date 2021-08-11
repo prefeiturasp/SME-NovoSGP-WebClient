@@ -30,18 +30,15 @@ const FiltrosAvancados = ({
   const [dataExpiracaoFim, setDataExpiracaoFim] = useState();
   const [dataEnvioInicio, setDataEnvioInicio] = useState();
   const [dataExpiracaoInicio, setDataExpiracaoInicio] = useState();
+  const [ehDataValida, setEhDataValida] = useState(true);
   const [listaAnosEscolares, setListaAnosEscolares] = useState([]);
   const [listaTipoEscola, setListaTipoEscola] = useState([]);
   const [listaTurmas, setListaTurmas] = useState([]);
   const [tipoEscola, setTipoEscola] = useState();
   const [titulo, setTitulo] = useState();
   const [turmasCodigo, setTurmasCodigo] = useState();
-  const [ehDataValida, setEhDataValida] = useState(true);
 
   const ehTodasModalidade = filtrosPrincipais?.modalidades?.find(
-    item => item === OPCAO_TODOS
-  );
-  const ehTodosAnosEscolares = anosEscolares?.find(
     item => item === OPCAO_TODOS
   );
 
@@ -101,6 +98,7 @@ const FiltrosAvancados = ({
     if (ehTodasModalidade) {
       setListaAnosEscolares([todosAnosEscolares]);
       setAnosEscolares([OPCAO_TODOS]);
+      setBuscouFiltrosAvancados(false);
       return;
     }
 
@@ -118,11 +116,21 @@ const FiltrosAvancados = ({
           desc: item.descricao,
         }))
       : [];
-    const dadosSelecionados = dados?.length === 1 ? dados[0].valor : dados;
+
+    if (dados?.length === 1) {
+      const ehTodosAnos = dados[0].valor === OPCAO_TODOS;
+
+      if (ehTodosAnos) {
+        setListaAnosEscolares([todosAnosEscolares]);
+        setAnosEscolares([OPCAO_TODOS]);
+        return;
+      }
+      setAnosEscolares([dados[0].valor]);
+    }
     if (dados?.length > 1) {
       dados.unshift(todosAnosEscolares);
     }
-    setListaAnosEscolares(dadosSelecionados);
+    setListaAnosEscolares(dados);
   }, [filtrosPrincipais, ehTodasModalidade]);
 
   useEffect(() => {
@@ -142,23 +150,16 @@ const FiltrosAvancados = ({
     if (ehTodasModalidade && listaAnosEscolares?.length) {
       setAnosEscolares([OPCAO_TODOS]);
     }
-
-    if (ehTodosAnosEscolares) {
-      setTurmasCodigo([OPCAO_TODOS]);
-    }
-  }, [
-    filtrosPrincipais,
-    ehTodasModalidade,
-    ehTodosAnosEscolares,
-    listaAnosEscolares,
-  ]);
+  }, [filtrosPrincipais, ehTodasModalidade, listaAnosEscolares]);
 
   const obterTurmas = useCallback(async () => {
     const todasTurmas = { valor: OPCAO_TODOS, desc: 'Todas' };
+    const ehTodasUe = filtrosPrincipais?.ueCodigo === OPCAO_TODOS;
 
-    if (ehTodasModalidade) {
+    if (ehTodasModalidade || ehTodasUe) {
       setListaTurmas([todasTurmas]);
       setTurmasCodigo([OPCAO_TODOS]);
+      setBuscouFiltrosAvancados(false);
       return;
     }
 
@@ -169,7 +170,8 @@ const FiltrosAvancados = ({
       filtrosPrincipais?.ueCodigo,
       filtrosPrincipais?.semestre,
       filtrosPrincipais?.modalidades,
-      anosEscolares
+      anosEscolares,
+      filtrosPrincipais?.consideraHistorico
     )
       .catch(e => erros(e))
       .finally(() => setCarregandoTurmas(false));
@@ -225,12 +227,12 @@ const FiltrosAvancados = ({
   };
 
   const verificarData = useCallback(() => {
-    if (!dataEnvioFim || !dataExpiracaoInicio) return true;
+    if (!dataEnvioInicio || !dataExpiracaoInicio) return true;
     return (
-      moment(dataEnvioFim, 'MM-DD-YYYY') <
+      moment(dataEnvioInicio, 'MM-DD-YYYY') <=
       moment(dataExpiracaoInicio, 'MM-DD-YYYY')
     );
-  }, [dataEnvioFim, dataExpiracaoInicio]);
+  }, [dataEnvioInicio, dataExpiracaoInicio]);
 
   useEffect(() => {
     const dataValida = verificarData();
@@ -268,7 +270,7 @@ const FiltrosAvancados = ({
   ]);
 
   useEffect(() => {
-    const pesquisarTitulo = !titulo?.length || titulo?.length > 3;
+    const pesquisarTitulo = !titulo?.length || titulo?.length >= 3;
     const dataValida = verificarData();
 
     if (!buscouFiltrosAvancados && dataValida && pesquisarTitulo) {
@@ -355,7 +357,8 @@ const FiltrosAvancados = ({
                 !filtrosPrincipais?.modalidades?.length ||
                 !listaAnosEscolares.length ||
                 listaAnosEscolares?.length === 1 ||
-                ehTodasModalidade
+                ehTodasModalidade ||
+                (temModalidadeEja && !filtrosPrincipais?.semestre)
               }
               valueSelect={anosEscolares}
               onChange={valores => {
@@ -383,10 +386,10 @@ const FiltrosAvancados = ({
               disabled={
                 !filtrosPrincipais?.modalidades ||
                 listaTurmas?.length === 1 ||
+                !listaTurmas?.length ||
                 !anosEscolares?.length ||
                 ehTodasModalidade ||
-                ehTodosAnosEscolares ||
-                (temModalidadeEja && filtrosPrincipais?.semestre)
+                (temModalidadeEja && !filtrosPrincipais?.semestre)
               }
               valueSelect={turmasCodigo}
               onChange={valores => {

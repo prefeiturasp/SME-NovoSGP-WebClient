@@ -128,7 +128,7 @@ const Filtros = ({ onChangeFiltros, temModalidadeEja }) => {
         const lista = resposta.data.sort(FiltroHelper.ordenarLista('nome'));
 
         if (lista?.length === 1) {
-          setDreCodigo(lista[0].valor);
+          setDreCodigo(lista[0].codigo);
           setDreId(lista[0].id);
         } else {
           lista.unshift({ codigo: OPCAO_TODOS, nome: 'Todas' });
@@ -179,7 +179,7 @@ const Filtros = ({ onChangeFiltros, temModalidadeEja }) => {
         const lista = resposta.data;
         if (lista?.length === 1) {
           setUeId(lista[0].id);
-          setUeCodigo(lista[0].valor);
+          setUeCodigo(lista[0].codigo);
         } else {
           lista.unshift(ueTodos);
         }
@@ -282,7 +282,10 @@ const Filtros = ({ onChangeFiltros, temModalidadeEja }) => {
   );
 
   useEffect(() => {
-    if (modalidades?.length && anoLetivo && temModalidadeEja) {
+    const temEja = modalidades?.find(
+      item => String(item) === String(ModalidadeDTO.EJA)
+    );
+    if (modalidades?.length && anoLetivo && temEja) {
       obterSemestres(ModalidadeDTO.EJA, anoLetivo);
       return;
     }
@@ -315,17 +318,51 @@ const Filtros = ({ onChangeFiltros, temModalidadeEja }) => {
   ]);
 
   useEffect(() => {
-    setFiltrosPrincipais({
-      anoLetivo,
-      dreCodigo,
-      ueCodigo,
-      modalidades,
-      semestre,
-    });
     if (!buscou) {
+      setFiltrosPrincipais({
+        anoLetivo,
+        dreCodigo,
+        ueCodigo,
+        modalidades,
+        semestre,
+        consideraHistorico,
+      });
       filtrar();
     }
-  }, [filtrar, buscou, anoLetivo, dreCodigo, ueCodigo, modalidades, semestre]);
+  }, [
+    filtrar,
+    buscou,
+    consideraHistorico,
+    anoLetivo,
+    dreCodigo,
+    ueCodigo,
+    modalidades,
+    semestre,
+  ]);
+
+  useEffect(() => {
+    if (atualizaFiltrosAvançados && !mostrarFiltrosAvancados) {
+      const paramsFiltroavancado = {
+        tipoEscola: [],
+        anosEscolares: [],
+        turmasCodigo: [],
+        dataEnvioInicio: '',
+        dataEnvioFim: '',
+        dataExpiracaoInicio: '',
+        dataExpiracaoFim: '',
+        titulo: '',
+      };
+      if (!buscou) {
+        onChangeFiltros(paramsFiltroavancado);
+        setBuscou(true);
+      }
+    }
+  }, [
+    onChangeFiltros,
+    atualizaFiltrosAvançados,
+    mostrarFiltrosAvancados,
+    buscou,
+  ]);
 
   return (
     <>
@@ -434,7 +471,11 @@ const Filtros = ({ onChangeFiltros, temModalidadeEja }) => {
             label="Filtros avançados"
             icon="filter"
             color={Colors.Azul}
-            onClick={() => setMostrarFiltrosAvancados(true)}
+            onClick={() => {
+              setMostrarFiltrosAvancados(!mostrarFiltrosAvancados);
+              setAtualizaFiltrosAvançados(true);
+              setBuscou(false);
+            }}
             border
             className="mr-3"
             width="100%"
