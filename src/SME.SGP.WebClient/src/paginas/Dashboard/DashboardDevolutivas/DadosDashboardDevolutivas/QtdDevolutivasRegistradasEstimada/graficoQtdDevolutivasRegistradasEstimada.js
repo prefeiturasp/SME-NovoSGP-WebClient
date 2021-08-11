@@ -4,7 +4,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Loader } from '~/componentes';
 import { GraficoBarras, TagGrafico } from '~/componentes-sgp';
-import { OPCAO_TODOS } from '~/constantes/constantesGerais';
+import { OPCAO_TODOS } from '~/constantes';
 import { erros } from '~/servicos';
 import ServicoDashboardDevolutivas from '~/servicos/Paginas/Dashboard/ServicoDashboardDevolutivas';
 

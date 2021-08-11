@@ -15,7 +15,7 @@ export const Conteudo = styled.div`
   line-height: 16px;
 
   padding: 4px;
-  margin: 4px;
+  margin: 4px 8px 4px 0;
 `;
 
 export const IconeEstilizado = styled(FontAwesomeIcon)`

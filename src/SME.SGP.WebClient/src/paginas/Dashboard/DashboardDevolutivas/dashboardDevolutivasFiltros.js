@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux';
 import { CheckboxComponent, Loader, SelectComponent } from '~/componentes';
 import { FiltroHelper } from '~/componentes-sgp';
 import { ANO_INICIO_INFANTIL } from '~/constantes/constantes';
-import { OPCAO_TODOS } from '~/constantes/constantesGerais';
+import { OPCAO_TODOS } from '~/constantes';
 import { ServicoFiltroRelatorio } from '~/servicos';
 import AbrangenciaServico from '~/servicos/Abrangencia';
 import { erros } from '~/servicos/alertas';
