@@ -244,6 +244,22 @@ const FiltrosAvancados = ({
     setBuscouFiltrosAvancados(false);
   };
 
+  const [timeoutCampoPesquisa, setTimeoutCampoPesquisa] = useState();
+
+  const validarFiltroDebounce = useCallback(
+    params => {
+      if (timeoutCampoPesquisa) {
+        clearTimeout(timeoutCampoPesquisa);
+      }
+      const timeout = setTimeout(() => {
+        onChangeFiltros(params);
+      }, 500);
+
+      setTimeoutCampoPesquisa(timeout);
+    },
+    [timeoutCampoPesquisa, onChangeFiltros]
+  );
+
   const filtrarAvancado = useCallback(() => {
     const params = {
       tipoEscola,
@@ -255,10 +271,10 @@ const FiltrosAvancados = ({
       dataExpiracaoFim,
       titulo,
     };
-    onChangeFiltros(params);
+    validarFiltroDebounce(params);
     setBuscouFiltrosAvancados(true);
   }, [
-    onChangeFiltros,
+    validarFiltroDebounce,
     tipoEscola,
     anosEscolares,
     turmasCodigo,
@@ -305,6 +321,13 @@ const FiltrosAvancados = ({
 
       setListaTurmas([]);
       setTurmasCodigo();
+
+      setDataEnvioInicio();
+      setDataEnvioFim();
+      setDataExpiracaoInicio();
+      setDataExpiracaoFim();
+
+      setTitulo();
     }
   }, [
     filtrosPrincipais,
@@ -330,7 +353,7 @@ const FiltrosAvancados = ({
               valueText="desc"
               label="Tipo de escola"
               disabled={
-                !filtrosPrincipais?.modalidades ||
+                !filtrosPrincipais?.modalidades?.length ||
                 !listaTipoEscola?.length ||
                 listaTipoEscola?.length === 1
               }
@@ -384,7 +407,7 @@ const FiltrosAvancados = ({
               valueText="desc"
               label="Turma"
               disabled={
-                !filtrosPrincipais?.modalidades ||
+                !filtrosPrincipais?.modalidades?.length ||
                 listaTurmas?.length === 1 ||
                 !listaTurmas?.length ||
                 !anosEscolares?.length ||
@@ -413,6 +436,7 @@ const FiltrosAvancados = ({
             valor={[dataEnvioInicio, dataEnvioFim]}
             valorPadrao={valorPadrao}
             intervaloDatas
+            desabilitado={!filtrosPrincipais?.modalidades?.length}
           />
         </div>
         <div className="col-sm-12 col-md-4 pr-0">
@@ -427,6 +451,7 @@ const FiltrosAvancados = ({
             intervaloDatas
             temErro={!ehDataValida}
             mensagemErro="Data de expiração deve ser maior que a data de envio"
+            desabilitado={!filtrosPrincipais?.modalidades?.length}
           />
         </div>
         <div className="col-sm-12 col-md-4">
@@ -436,6 +461,7 @@ const FiltrosAvancados = ({
             placeholder="Pesquise pelo título do comunicado"
             value={titulo}
             onChange={onChangeTitulo}
+            desabilitado={!filtrosPrincipais?.modalidades?.length}
           />
         </div>
       </div>
