@@ -18,7 +18,7 @@ import AbrangenciaServico from '~/servicos/Abrangencia';
 import { erros, sucesso } from '~/servicos/alertas';
 import api from '~/servicos/api';
 import history from '~/servicos/history';
-import ServicoComunicados from '~/servicos/Paginas/AcompanhamentoEscolar/Comunicados/ServicoComunicados';
+import ServicoComunicados from '~/servicos/Paginas/Gestao/Comunicados/ServicoComunicados';
 import ServicoFiltroRelatorio from '~/servicos/Paginas/FiltroRelatorio/ServicoFiltroRelatorio';
 import ServicoDashboardEscolaAqui from '~/servicos/Paginas/Dashboard/ServicoDashboardEscolaAqui';
 import ServicoRelatorioLeitura from '~/servicos/Paginas/Relatorios/EscolaAqui/Leitura/ServicoRelatorioLeitura';
@@ -440,7 +440,7 @@ const RelatorioLeitura = () => {
 
   const obterAnosEscolaresPorModalidade = useCallback(async () => {
     const resposta = await ServicoComunicados.buscarAnosPorModalidade(
-      modalidadeId,
+      [modalidadeId],
       codigoUe
     )
       .catch(e => erros(e))
