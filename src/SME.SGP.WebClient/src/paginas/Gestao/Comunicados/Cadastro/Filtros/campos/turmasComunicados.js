@@ -117,6 +117,8 @@ const TurmasComunicados = ({ form, onChangeCampos, desabilitar }) => {
         onChange={valores => {
           onchangeMultiSelect(valores, turmas, onChangeAnosEscolares);
           onChangeCampos();
+          form.setFieldValue('alunoEspecifico', undefined);
+          form.setFieldValue('alunos', []);
         }}
       />
     </Loader>

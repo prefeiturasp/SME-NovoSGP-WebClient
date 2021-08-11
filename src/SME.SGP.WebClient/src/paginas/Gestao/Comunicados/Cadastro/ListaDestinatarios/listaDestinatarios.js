@@ -1,63 +1,78 @@
-import React, { useCallback, useEffect, useState } from 'react';
-import PropTypes from 'prop-types';
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
-
-import { Conteudo, IconeEstilizado } from './listaDestinatarios.css';
+import PropTypes from 'prop-types';
+import React, { useCallback, useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 import { Label } from '~/componentes';
+import { Conteudo, IconeEstilizado } from './listaDestinatarios.css';
 
-const ListaDestinatarios = ({
-  alunosSelecionados,
-  dadosAlunos,
-  removerAlunos,
-}) => {
-  const [alunos, setAlunos] = useState([]);
+const ListaDestinatarios = ({ form, onChangeCampos, desabilitar }) => {
+  const alunosComunicados = useSelector(
+    store => store.comunicados?.alunosComunicados
+  );
 
-  const ObterAlunos = useCallback(() => {
-    if (dadosAlunos.length === 0) return;
+  const { alunos } = form.values;
 
-    const alunosLista = dadosAlunos.map(aluno => {
-      return {
-        key: `alunos${aluno.codigoAluno}selecionados`,
-        nomeAluno: aluno.nomeAluno,
-        numeroAlunoChamada: aluno.numeroAlunoChamada,
-        codigoAluno: aluno.codigoAluno,
-        selecionado: !!alunosSelecionados.find(
-          item => item === aluno.codigoAluno
-        ),
-      };
-    });
+  const [dadosAlunosSelecionados, setDadosAlunosSelecionados] = useState([]);
 
-    setAlunos(alunosLista.filter(item => item.selecionado));
-  }, [dadosAlunos, alunosSelecionados]);
+  const obterAlunos = useCallback(() => {
+    const listaAlunos = alunosComunicados?.filter(aluno =>
+      alunos.find(a => a?.codigoAluno === aluno?.codigoAluno)
+    );
+    if (listaAlunos?.length) {
+      setDadosAlunosSelecionados(listaAlunos);
+    } else {
+      setDadosAlunosSelecionados([]);
+    }
+  }, [alunosComunicados, alunos]);
 
   useEffect(() => {
-    ObterAlunos();
-  }, [ObterAlunos, alunosSelecionados, dadosAlunos]);
+    if (alunosComunicados?.length && alunos?.length) {
+      obterAlunos();
+    }
+  }, [obterAlunos, alunosComunicados, alunos]);
+
+  const removerAluno = codigoAluno => {
+    const novaListaAlunos = alunos.filter(
+      aluno => aluno?.codigoAluno !== codigoAluno
+    );
+    form.setFieldValue('alunos', [...novaListaAlunos]);
+    onChangeCampos();
+  };
 
   return (
     <>
       <Label text="Destinatários" />
       <div className="d-flex flex-wrap">
-        {!!alunos.length &&
-          alunos.map(item => (
-            <Conteudo>
-              {item.nomeAluno}
-              <IconeEstilizado
-                icon={faTimes}
-                onClick={() => removerAlunos(item.codigoAluno)}
-              />
-            </Conteudo>
-          ))}
+        {dadosAlunosSelecionados?.length
+          ? dadosAlunosSelecionados.map(aluno => (
+              <Conteudo>
+                {aluno?.nomeAluno}
+                <IconeEstilizado
+                  icon={faTimes}
+                  onClick={() => {
+                    if (!desabilitar) {
+                      removerAluno(aluno?.codigoAluno);
+                    }
+                  }}
+                />
+              </Conteudo>
+            ))
+          : ''}
       </div>
     </>
   );
 };
 
 ListaDestinatarios.propTypes = {
-  alunosSelecionados: PropTypes.oneOfType([PropTypes.array]).isRequired,
-  dadosAlunos: PropTypes.oneOfType([PropTypes.object, PropTypes.array])
-    .isRequired,
-  removerAlunos: PropTypes.func.isRequired,
+  form: PropTypes.oneOfType([PropTypes.object]),
+  onChangeCampos: PropTypes.func,
+  desabilitar: PropTypes.bool,
+};
+
+ListaDestinatarios.defaultProps = {
+  form: null,
+  onChangeCampos: () => null,
+  desabilitar: false,
 };
 
 export default ListaDestinatarios;

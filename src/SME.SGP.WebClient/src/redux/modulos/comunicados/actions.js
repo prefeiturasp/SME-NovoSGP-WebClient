@@ -17,3 +17,13 @@ export const setLimparDadosComunicados = payload => ({
   type: '@comunicados/setLimparDadosComunicados',
   payload,
 });
+
+export const setAlunosComunicados = payload => ({
+  type: '@comunicados/setAlunosComunicados',
+  payload,
+});
+
+export const setExibirModalAlunos = payload => ({
+  type: '@comunicados/setExibirModalAlunos',
+  payload,
+});

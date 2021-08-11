@@ -1,23 +1,24 @@
-import React, { useState, useEffect, useCallback } from 'react';
 import PropTypes from 'prop-types';
-
-import { Colors, Loader, Button, ModalConteudoHtml } from '~/componentes';
-
-import { BotaoEstilizado, TabelaEstilizada } from './listaAlunos.css';
+import React, { useCallback, useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { Button, Colors, DataTable, ModalConteudoHtml } from '~/componentes';
+import { setExibirModalAlunos } from '~/redux/modulos/comunicados/actions';
+import { BotaoEstilizado } from './listaAlunos.css';
 
 const ModalAlunos = props => {
-  const {
-    alunosLoader,
-    alunosSelecionados,
-    dadosAlunos,
-    linhasSelecionadas,
-    modalAlunosVisivel,
-    onConfirm,
-    setLinhasSelecionadas,
-    setModalAlunosVisivel,
-  } = props;
+  const { alunosSelecionados, onCloseModal } = props;
 
-  const [alunos, setAlunos] = useState([]);
+  const dispatch = useDispatch();
+
+  const alunosComunicados = useSelector(
+    store => store.comunicados?.alunosComunicados
+  );
+
+  const exibirModalAlunos = useSelector(
+    store => store.comunicados?.exibirModalAlunos
+  );
+
+  const [idsAlunosSelecionados, setIdsAlunosSelecionados] = useState([]);
 
   const columns = [
     {
@@ -32,43 +33,29 @@ const ModalAlunos = props => {
   ];
 
   const obterAlunos = useCallback(() => {
-    const alunosLista = dadosAlunos?.map(aluno => ({
-      key: aluno.codigoAluno,
-      nomeAluno: aluno.nomeAluno,
-      numeroAlunoChamada: aluno.numeroAlunoChamada,
-      codigoAluno: aluno.codigoAluno,
-      selecionado: !!alunosSelecionados?.find(
-        item => item === aluno.codigoAluno
-      ),
-    }));
-
-    setAlunos(alunosLista.filter(item => !item.selecionado));
-  }, [dadosAlunos, alunosSelecionados]);
+    if (alunosSelecionados?.length) {
+      setIdsAlunosSelecionados(
+        alunosSelecionados.map(aluno => aluno.codigoAluno)
+      );
+    } else {
+      setIdsAlunosSelecionados([]);
+    }
+  }, [alunosSelecionados]);
 
   useEffect(() => {
-    if (dadosAlunos?.length) {
+    if (alunosComunicados?.length) {
       obterAlunos();
     }
-  }, [obterAlunos, dadosAlunos]);
+  }, [obterAlunos, alunosComunicados]);
 
-  const rowSelection = {
-    onChange: (selectedRowKeys, selectedRows) => {
-      setLinhasSelecionadas(selectedRows);
-    },
-    getCheckboxProps: record => ({
-      name: record.name,
-    }),
-  };
-
-  return (
+  return exibirModalAlunos ? (
     <ModalConteudoHtml
       titulo="Selecione a(s) criança(s)/estudante(s)"
-      visivel={modalAlunosVisivel}
+      visivel={exibirModalAlunos}
       onClose={() => {
-        setModalAlunosVisivel(false);
+        dispatch(setExibirModalAlunos(false));
       }}
       closable
-      loader={alunosLoader}
       width="50%"
       fecharAoClicarFora
       fecharAoClicarEsc
@@ -84,7 +71,7 @@ const ModalAlunos = props => {
               bold
               className="mr-2 padding-btn-confirmacao"
               onClick={() => {
-                setModalAlunosVisivel(false);
+                dispatch(setExibirModalAlunos(false));
               }}
             />
             <Button
@@ -96,47 +83,39 @@ const ModalAlunos = props => {
               border
               className="padding-btn-confirmacao"
               onClick={() => {
-                onConfirm(linhasSelecionadas.map(item => item.codigoAluno));
-                setModalAlunosVisivel(false);
+                onCloseModal(idsAlunosSelecionados);
+                dispatch(setExibirModalAlunos(false));
               }}
             />
           </div>
         </>
       }
     >
-      <Loader loading={alunosLoader}>
-        <TabelaEstilizada
-          bordered
-          rowSelection={{
-            type: 'checkbox',
-            ...rowSelection,
-          }}
-          columns={columns}
-          dataSource={alunos}
-          pagination={false}
-          scroll={{ y: 300 }}
-        />
-      </Loader>
+      <DataTable
+        idLinha="codigoAluno"
+        id="lista-alunos"
+        selectedRowKeys={idsAlunosSelecionados}
+        onSelectRow={ids => setIdsAlunosSelecionados(ids)}
+        columns={columns}
+        dataSource={alunosComunicados}
+        selectMultipleRows
+        scroll={{ y: 300 }}
+        pagination={false}
+      />
     </ModalConteudoHtml>
+  ) : (
+    ''
   );
 };
 
 ModalAlunos.propTypes = {
-  dadosAlunos: PropTypes.oneOfType([PropTypes.object, PropTypes.array])
-    .isRequired,
-  alunosSelecionados: PropTypes.oneOfType([
-    PropTypes.object.isRequired,
-    PropTypes.array,
-  ]).isRequired,
-  alunosLoader: PropTypes.bool.isRequired,
-  onConfirm: PropTypes.func.isRequired,
-  modalAlunosVisivel: PropTypes.bool.isRequired,
-  setModalAlunosVisivel: PropTypes.bool.isRequired,
-  linhasSelecionadas: PropTypes.oneOfType([
-    PropTypes.object.isRequired,
-    PropTypes.array,
-  ]).isRequired,
-  setLinhasSelecionadas: PropTypes.func.isRequired,
+  alunosSelecionados: PropTypes.oneOfType([PropTypes.array]),
+  onCloseModal: PropTypes.func,
+};
+
+ModalAlunos.defaultProps = {
+  alunosSelecionados: [],
+  onCloseModal: () => null,
 };
 
 export default ModalAlunos;

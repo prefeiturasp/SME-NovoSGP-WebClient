@@ -1,3 +1,4 @@
+import { Divider } from 'antd';
 import { Form, Formik } from 'formik';
 import PropTypes from 'prop-types';
 import React, { useCallback, useEffect, useState } from 'react';
@@ -12,8 +13,10 @@ import {
   setModoEdicaoCadastroComunicados,
 } from '~/redux/modulos/comunicados/actions';
 import { erros, ServicoComunicados } from '~/servicos';
+import ListaDestinatarios from '../ListaDestinatarios/listaDestinatarios';
 import AnoEscolarComunicados from './campos/anoEscolarComunicados';
 import AnoLetivoComunicados from './campos/anoLetivoComunicados';
+import CriancasEstudantesComunicados from './campos/criancasEstudantesComunicados';
 import DreComunicados from './campos/dreComunicados';
 import ModalidadeComunicados from './campos/modalidadeComunicados';
 import SemestreComunicados from './campos/semestreComunicados';
@@ -39,6 +42,8 @@ const FormCadastroComunicados = props => {
     tipoEscola: [],
     anosEscolares: [],
     turmas: [],
+    alunoEspecifico: undefined,
+    alunos: [],
   };
   const [initialValues, setInitialValues] = useState(
     comunicadoId ? null : inicial
@@ -210,6 +215,21 @@ const FormCadastroComunicados = props => {
                 </div>
                 <div className="col-sm-12 col-md-12 col-lg-6 col-xl-6 mb-2">
                   <TurmasComunicados
+                    form={form}
+                    onChangeCampos={onChangeCampos}
+                    desabilitar={desabilitarCampos}
+                  />
+                </div>
+                <CriancasEstudantesComunicados
+                  form={form}
+                  onChangeCampos={onChangeCampos}
+                  desabilitar={desabilitarCampos}
+                />
+                <div className="col-sm-12">
+                  <Divider />
+                </div>
+                <div className="col-sm-12 mb-2">
+                  <ListaDestinatarios
                     form={form}
                     onChangeCampos={onChangeCampos}
                     desabilitar={desabilitarCampos}

@@ -4,6 +4,8 @@ const inicial = {
   modoEdicaoCadastroComunicados: false,
   formComunicados: null,
   exibirLoaderGeralComunicados: false,
+  alunosComunicados: [],
+  exibirModalAlunos: false,
 };
 
 export default function comunicados(state = inicial, action) {
@@ -31,6 +33,18 @@ export default function comunicados(state = inicial, action) {
         return {
           ...draft,
           exibirLoaderGeralComunicados: action.payload,
+        };
+      }
+      case '@comunicados/setAlunosComunicados': {
+        return {
+          ...draft,
+          alunosComunicados: action.payload,
+        };
+      }
+      case '@comunicados/setExibirModalAlunos': {
+        return {
+          ...draft,
+          exibirModalAlunos: action.payload,
         };
       }
       default:

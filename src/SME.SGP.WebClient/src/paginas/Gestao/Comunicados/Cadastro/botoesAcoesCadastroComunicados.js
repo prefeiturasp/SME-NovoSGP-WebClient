@@ -74,7 +74,7 @@ const BotoesAcoesCadastroComunicados = props => {
         tipoEscola: filtros?.tipoEscola,
         anosEscolares: filtros?.anosEscolares,
         turmas: filtros?.turmas,
-        // alunos: filtros?.alunosSelecionados,
+        alunos: filtros?.alunos,
         // alunosEspecificados: filtros?.alunoEspecificado,
         // seriesResumidas: '',
         // tipoCalendarioId: filtros?.tipoCalendarioId,
