@@ -118,6 +118,8 @@ const ListaComunicados = () => {
     }));
   };
 
+  console.log('filtros', filtros);
+
   return (
     <>
       <Cabecalho pagina="Comunicação com pais ou responsáveis" classes="mb-2" />

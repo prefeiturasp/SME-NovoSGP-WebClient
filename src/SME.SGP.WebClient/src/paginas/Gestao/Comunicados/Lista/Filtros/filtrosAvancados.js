@@ -288,7 +288,6 @@ const FiltrosAvancados = ({
   useEffect(() => {
     const pesquisarTitulo = !titulo?.length || titulo?.length >= 3;
     const dataValida = verificarData();
-
     if (!buscouFiltrosAvancados && dataValida && pesquisarTitulo) {
       filtrarAvancado();
     }
@@ -312,6 +311,7 @@ const FiltrosAvancados = ({
       (filtrosPrincipais?.modalidades?.length && atualizaFiltrosAvançados)
     ) {
       setAtualizaFiltrosAvançados(false);
+      setBuscouFiltrosAvancados(false);
 
       setListaTipoEscola([]);
       setTipoEscola();
