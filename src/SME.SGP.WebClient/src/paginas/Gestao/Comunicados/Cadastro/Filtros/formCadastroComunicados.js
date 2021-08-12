@@ -201,12 +201,6 @@ const FormCadastroComunicados = props => {
     turmas: Yup.array()
       .nullable()
       .required(textoCampoObrigatorio),
-    tipoCalendarioId: Yup.string()
-      .nullable()
-      .required(textoCampoObrigatorio),
-    eventoId: Yup.string()
-      .nullable()
-      .required(textoCampoObrigatorio),
     dataEnvio: momentSchema.required(textoCampoObrigatorio),
     dataExpiracao: momentSchema
       .required(textoCampoObrigatorio)

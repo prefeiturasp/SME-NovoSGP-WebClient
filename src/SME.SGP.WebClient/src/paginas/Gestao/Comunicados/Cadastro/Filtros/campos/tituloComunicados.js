@@ -9,7 +9,6 @@ const TituloComunicados = ({ form, onChangeCampos, desabilitar }) => {
       name="titulo"
       placeholder="Pesquise pelo título do comunicado"
       onChange={() => onChangeCampos()}
-      maxLength={50}
       form={form}
       desabilitado={desabilitar}
     />

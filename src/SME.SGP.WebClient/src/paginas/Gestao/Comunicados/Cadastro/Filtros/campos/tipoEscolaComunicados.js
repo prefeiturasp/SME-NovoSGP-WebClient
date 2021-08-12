@@ -21,10 +21,13 @@ const TipoEscolaComunicados = ({ form, onChangeCampos, desabilitar }) => {
 
   const obterTiposEscola = useCallback(async () => {
     setExibirLoader(true);
+
+    const ehTodas = modalidades?.length === 1 && modalidades[0] === OPCAO_TODOS;
+
     const resposta = await ServicoComunicados.obterTipoEscola(
       codigoDre,
       codigoUe,
-      modalidades
+      ehTodas ? [] : modalidades
     )
       .catch(e => erros(e))
       .finally(() => setExibirLoader(false));
