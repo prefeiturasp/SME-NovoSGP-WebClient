@@ -109,10 +109,7 @@ const CriancasEstudantesComunicados = ({
       <ModalAlunos
         alunosSelecionados={alunos}
         onCloseModal={alunosSelecionados => {
-          const novaListaAlunos = alunosSelecionados.map(codigo => {
-            return { codigoAluno: codigo };
-          });
-          form.setFieldValue('alunos', [...alunos, ...novaListaAlunos]);
+          form.setFieldValue('alunos', [...alunos, ...alunosSelecionados]);
         }}
       />
     </>

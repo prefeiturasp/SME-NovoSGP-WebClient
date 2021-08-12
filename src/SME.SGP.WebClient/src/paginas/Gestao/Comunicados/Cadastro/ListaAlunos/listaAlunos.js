@@ -83,7 +83,16 @@ const ModalAlunos = props => {
               border
               className="padding-btn-confirmacao"
               onClick={() => {
-                onCloseModal(idsAlunosSelecionados);
+                const novaListaAlunos = idsAlunosSelecionados.map(codigo => {
+                  const dadosAluno = alunosComunicados.find(
+                    aluno => aluno.codigoAluno === codigo
+                  );
+                  return {
+                    alunoCodigo: codigo,
+                    alunoNome: dadosAluno.nomeAluno,
+                  };
+                });
+                onCloseModal(novaListaAlunos);
                 dispatch(setExibirModalAlunos(false));
               }}
             />

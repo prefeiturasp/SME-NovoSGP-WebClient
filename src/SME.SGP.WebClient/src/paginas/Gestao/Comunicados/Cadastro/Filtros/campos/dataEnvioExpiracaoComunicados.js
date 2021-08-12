@@ -7,12 +7,19 @@ const DataEnvioExpiracaoComunicados = ({
   form,
   onChangeCampos,
   desabilitar,
+  comunicadoId,
 }) => {
   const { anoLetivo } = form.values;
+  const { dataEnvio } = form.initialValues;
 
   const desabilitarDatas = current => {
     if (current && anoLetivo) {
       const ano = moment(`${anoLetivo}-01-01`);
+      if (comunicadoId) {
+        return (
+          current < dataEnvio?.startOf('day') || current > ano.endOf('year')
+        );
+      }
       return current < moment().startOf('day') || current > ano.endOf('year');
     }
     return false;
@@ -54,12 +61,14 @@ DataEnvioExpiracaoComunicados.propTypes = {
   form: PropTypes.oneOfType([PropTypes.object]),
   onChangeCampos: PropTypes.func,
   desabilitar: PropTypes.bool,
+  comunicadoId: PropTypes.string,
 };
 
 DataEnvioExpiracaoComunicados.defaultProps = {
   form: null,
   onChangeCampos: () => null,
   desabilitar: false,
+  comunicadoId: '',
 };
 
 export default DataEnvioExpiracaoComunicados;
