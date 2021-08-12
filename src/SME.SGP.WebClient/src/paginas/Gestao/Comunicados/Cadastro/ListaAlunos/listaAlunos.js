@@ -35,7 +35,7 @@ const ModalAlunos = props => {
   const obterAlunos = useCallback(() => {
     if (alunosSelecionados?.length) {
       setIdsAlunosSelecionados(
-        alunosSelecionados.map(aluno => aluno.codigoAluno)
+        alunosSelecionados.map(aluno => aluno.alunoCodigo)
       );
     } else {
       setIdsAlunosSelecionados([]);

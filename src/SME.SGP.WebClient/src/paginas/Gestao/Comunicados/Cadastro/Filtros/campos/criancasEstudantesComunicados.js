@@ -112,7 +112,7 @@ const CriancasEstudantesComunicados = ({
       <ModalAlunos
         alunosSelecionados={alunos}
         onCloseModal={alunosSelecionados => {
-          form.setFieldValue('alunos', [...alunos, ...alunosSelecionados]);
+          form.setFieldValue('alunos', [...alunosSelecionados]);
         }}
       />
     </>
