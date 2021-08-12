@@ -59,8 +59,12 @@ class ServicoComunicados {
     });
   };
 
-  obterTipoEscola = (dreCodigo, ueCodigo) => {
-    return api.get(`/v1/ues/dres/${dreCodigo}/ues/${ueCodigo}/tipos-escolas`);
+  obterTipoEscola = (dreCodigo, ueCodigo, modalidades) => {
+    let url = `/v1/ues/dres/${dreCodigo}/ues/${ueCodigo}/tipos-escolas`;
+    if (modalidades?.length) {
+      url += `?modalidades=${modalidades.join('&modalidades=', modalidades)}`;
+    }
+    return api.get(url);
   };
 
   obterTurmas = (
@@ -118,6 +122,22 @@ class ServicoComunicados {
         });
       },
     });
+  };
+
+  obterQuantidadeCrianca = (
+    anoLetivo, 
+    codigoDre,
+    codigoUe,
+    turmas,
+    modalidades,
+    anosEscolares
+  ) => {
+    let url = `${urlPadrao}/filtro/anos-letivos/${anoLetivo}/dres/${codigoDre}/ues/${codigoUe}/quantidade-alunos`;
+    url += `?turmas=${turmas.join('&turmas=', turmas)}`;
+    url += `&modalidades=${modalidades.join('&modalidades=', modalidades)}`;
+    url += `&anoTurma=${anosEscolares.join('&anoTurma=', anosEscolares)}`;
+
+    return api.get(url);
   };
 }
 
