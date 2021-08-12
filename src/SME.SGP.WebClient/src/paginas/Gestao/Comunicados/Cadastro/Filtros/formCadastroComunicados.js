@@ -256,7 +256,7 @@ const FormCadastroComunicados = props => {
                   <DreComunicados
                     form={form}
                     onChangeCampos={onChangeCampos}
-                    desabilitar={desabilitarCampos}
+                    desabilitar={desabilitarCampos || !!comunicadoId}
                     comunicadoId={comunicadoId}
                   />
                 </div>
@@ -264,67 +264,68 @@ const FormCadastroComunicados = props => {
                   <UeComunicados
                     form={form}
                     onChangeCampos={onChangeCampos}
-                    desabilitar={desabilitarCampos}
+                    desabilitar={desabilitarCampos || !!comunicadoId}
                   />
                 </div>
                 <div className="col-sm-12 col-md-12 col-lg-8 col-xl-8 mb-2">
                   <ModalidadeComunicados
                     form={form}
                     onChangeCampos={onChangeCampos}
-                    desabilitar={desabilitarCampos}
+                    desabilitar={desabilitarCampos || !!comunicadoId}
                   />
                 </div>
                 <div className="col-sm-12 col-md-12 col-lg-4 col-xl-4 mb-2">
                   <SemestreComunicados
                     form={form}
                     onChangeCampos={onChangeCampos}
-                    desabilitar={desabilitarCampos}
+                    desabilitar={desabilitarCampos || !!comunicadoId}
                   />
                 </div>
                 <div className="col-sm-12 col-md-12 col-lg-6 col-xl-6 mb-2">
                   <TipoEscolaComunicados
                     form={form}
                     onChangeCampos={onChangeCampos}
-                    desabilitar={desabilitarCampos}
+                    desabilitar={desabilitarCampos || !!comunicadoId}
                   />
                 </div>
                 <div className="col-sm-12 col-md-12 col-lg-6 col-xl-6 mb-2">
                   <AnoEscolarComunicados
                     form={form}
                     onChangeCampos={onChangeCampos}
-                    desabilitar={desabilitarCampos}
+                    desabilitar={desabilitarCampos || !!comunicadoId}
                   />
                 </div>
                 <div className="col-sm-12 col-md-12 col-lg-8 col-xl-6 mb-2">
                   <TurmasComunicados
                     form={form}
                     onChangeCampos={onChangeCampos}
-                    desabilitar={desabilitarCampos}
+                    desabilitar={desabilitarCampos || !!comunicadoId}
                   />
                 </div>
                 <CriancasEstudantesComunicados
                   form={form}
                   onChangeCampos={onChangeCampos}
-                  desabilitar={desabilitarCampos}
+                  desabilitar={desabilitarCampos || !!comunicadoId}
                 />
                 <div className="col-sm-12 col-md-12 col-lg-6 col-xl-6 mb-2">
                   <TipoCalendarioComunicados
                     form={form}
                     onChangeCampos={onChangeCampos}
-                    desabilitar={desabilitarCampos}
+                    desabilitar={desabilitarCampos || !!comunicadoId}
                   />
                 </div>
                 <div className="col-sm-12 col-md-12 col-lg-6 col-xl-6 mb-2">
                   <EventosComunicados
                     form={form}
                     onChangeCampos={onChangeCampos}
-                    desabilitar={desabilitarCampos}
+                    desabilitar={desabilitarCampos || !!comunicadoId}
                   />
                 </div>
                 <DataEnvioExpiracaoComunicados
                   form={form}
                   onChangeCampos={onChangeCampos}
                   desabilitar={desabilitarCampos}
+                  comunicadoId={comunicadoId}
                 />
                 <div className="col-sm-12">
                   <Divider />
@@ -333,7 +334,7 @@ const FormCadastroComunicados = props => {
                   <ListaDestinatarios
                     form={form}
                     onChangeCampos={onChangeCampos}
-                    desabilitar={desabilitarCampos}
+                    desabilitar={desabilitarCampos || !!comunicadoId}
                   />
                 </div>
                 <div className="col-sm-12 mb-2">

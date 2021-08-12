@@ -1,58 +1,32 @@
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
 import PropTypes from 'prop-types';
-import React, { useCallback, useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
+import React from 'react';
 import { Label } from '~/componentes';
 import { Conteudo, IconeEstilizado } from './listaDestinatarios.css';
 
 const ListaDestinatarios = ({ form, onChangeCampos, desabilitar }) => {
-  const alunosComunicados = useSelector(
-    store => store.comunicados?.alunosComunicados
-  );
-
   const { alunos } = form.values;
 
-  const [dadosAlunosSelecionados, setDadosAlunosSelecionados] = useState([]);
-
-  const obterAlunos = useCallback(() => {
-    const listaAlunos = alunosComunicados?.filter(aluno =>
-      alunos.find(a => a?.codigoAluno === aluno?.codigoAluno)
-    );
-    if (listaAlunos?.length) {
-      setDadosAlunosSelecionados(listaAlunos);
-    } else {
-      setDadosAlunosSelecionados([]);
-    }
-  }, [alunosComunicados, alunos]);
-
-  useEffect(() => {
-    if (alunosComunicados?.length && alunos?.length) {
-      obterAlunos();
-    } else {
-      setDadosAlunosSelecionados([]);
-    }
-  }, [obterAlunos, alunosComunicados, alunos]);
-
-  const removerAluno = codigoAluno => {
+  const removerAluno = alunoCodigo => {
     const novaListaAlunos = alunos.filter(
-      aluno => aluno?.codigoAluno !== codigoAluno
+      aluno => aluno?.alunoCodigo !== alunoCodigo
     );
     form.setFieldValue('alunos', [...novaListaAlunos]);
     onChangeCampos();
   };
 
-  return dadosAlunosSelecionados?.length ? (
+  return alunos?.length ? (
     <>
       <Label text="Destinatários" />
       <div className="d-flex flex-wrap">
-        {dadosAlunosSelecionados.map(aluno => (
+        {alunos.map(aluno => (
           <Conteudo>
-            {aluno?.nomeAluno}
+            {`${aluno?.alunoNome} (${aluno?.alunoCodigo})`}
             <IconeEstilizado
               icon={faTimes}
               onClick={() => {
                 if (!desabilitar) {
-                  removerAluno(aluno?.codigoAluno);
+                  removerAluno(aluno?.alunoCodigo);
                 }
               }}
             />
