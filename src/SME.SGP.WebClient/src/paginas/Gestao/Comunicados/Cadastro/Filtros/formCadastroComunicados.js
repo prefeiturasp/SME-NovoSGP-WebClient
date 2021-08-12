@@ -104,16 +104,6 @@ const FormCadastroComunicados = props => {
       valores.dataExpiracao = '';
     }
 
-    if (valores?.alunoEspecificado) {
-      valores.alunoEspecifico = '1';
-    }
-    if (
-      valores?.turmas?.length === 1 &&
-      valores?.turmas?.[0]?.codigoTurma === OPCAO_TODOS
-    ) {
-      valores.alunoEspecifico = OPCAO_TODOS;
-    }
-
     if (valores?.turmas?.length) {
       valores.turmas = valores.turmas.map(turma => turma?.codigoTurma);
     } else {

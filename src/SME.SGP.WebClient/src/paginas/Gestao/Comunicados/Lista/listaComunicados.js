@@ -1,7 +1,7 @@
 import moment from 'moment';
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { Button, Card, Colors, ListaPaginada } from '~/componentes';
+import { Button, Card, Colors, ListaPaginada, Loader } from '~/componentes';
 import { Cabecalho } from '~/componentes-sgp';
 import { ModalidadeDTO, RotasDto } from '~/dtos';
 import {
@@ -18,6 +18,7 @@ const ListaComunicados = () => {
   const [filtros, setFiltros] = useState({});
   const [itensSelecionados, setItensSelecionados] = useState([]);
   const [somenteConsulta, setSomenteConsulta] = useState(false);
+  const [exibirLoader, setExibirLoader] = useState(false);
   const usuario = useSelector(store => store.usuario);
   const permissoesTela =
     usuario.permissoes[RotasDto.ACOMPANHAMENTO_COMUNICADOS];
@@ -77,9 +78,10 @@ const ListaComunicados = () => {
       const confirmado = await confirmar('Atenção', msgConfirm);
 
       if (confirmado) {
-        const resposta = await ServicoComunicados.excluir(
-          itensSelecionados
-        ).catch(e => erros(e));
+        setExibirLoader(true);
+        const resposta = await ServicoComunicados.excluir(itensSelecionados)
+          .catch(e => erros(e))
+          .finally(() => setExibirLoader(false));
 
         if (resposta?.status === 200) {
           const msgSucesso = `${
@@ -128,65 +130,67 @@ const ListaComunicados = () => {
   return (
     <>
       <Cabecalho pagina="Comunicação com pais ou responsáveis" classes="mb-2" />
-      <Card>
-        <div className="col-md-12 p-0">
-          <div className="row mb-2">
-            <div className="col-sm-12 d-flex justify-content-end">
-              <Button
-                id="botao-voltar"
-                label="Voltar"
-                icon="arrow-left"
-                color={Colors.Azul}
-                onClick={aoClicarBotaoVoltar}
-                border
-                className="mr-3"
-              />
-              <Button
-                id="botao-excluir"
-                label="Excluir"
-                color={Colors.Vermelho}
-                onClick={aoClicarBotaoExcluir}
-                border
-                className="mr-3"
-                disabled={
-                  somenteConsulta ||
-                  itensSelecionados?.length < 1 ||
-                  !permissoesTela.podeExcluir
-                }
-              />
-              <Button
-                id="botao-novo"
-                label="Novo"
-                color={Colors.Roxo}
-                onClick={aoClicarBotaoNovo}
-                disabled={somenteConsulta || !permissoesTela.podeIncluir}
-              />
+      <Loader loading={exibirLoader}>
+        <Card>
+          <div className="col-md-12 p-0">
+            <div className="row mb-2">
+              <div className="col-sm-12 d-flex justify-content-end">
+                <Button
+                  id="botao-voltar"
+                  label="Voltar"
+                  icon="arrow-left"
+                  color={Colors.Azul}
+                  onClick={aoClicarBotaoVoltar}
+                  border
+                  className="mr-3"
+                />
+                <Button
+                  id="botao-excluir"
+                  label="Excluir"
+                  color={Colors.Vermelho}
+                  onClick={aoClicarBotaoExcluir}
+                  border
+                  className="mr-3"
+                  disabled={
+                    somenteConsulta ||
+                    itensSelecionados?.length < 1 ||
+                    !permissoesTela.podeExcluir
+                  }
+                />
+                <Button
+                  id="botao-novo"
+                  label="Novo"
+                  color={Colors.Roxo}
+                  onClick={aoClicarBotaoNovo}
+                  disabled={somenteConsulta || !permissoesTela.podeIncluir}
+                />
+              </div>
             </div>
-          </div>
-          <Filtros
-            onChangeFiltros={onChangeFiltros}
-            temModalidadeEja={temModalidadeEja}
-          />
+            <Filtros
+              onChangeFiltros={onChangeFiltros}
+              temModalidadeEja={temModalidadeEja}
+            />
 
-          {filtroEhValido && (
-            <div className="col-md-12 px-0" style={{ paddingTop: 38 }}>
-              <ListaPaginada
-                id="lista-comunicados"
-                url="v1/comunicados"
-                idLinha="id"
-                colunaChave="id"
-                colunas={colunas}
-                onClick={onClickEditar}
-                multiSelecao
-                filtro={filtros}
-                paramArrayFormat="repeat"
-                selecionarItems={onSelecionarItems}
-                filtroEhValido={filtroEhValido}
-              />
-            </div>
-          )}
-        </div>
-      </Card>
+            {filtroEhValido && (
+              <div className="col-md-12 px-0" style={{ paddingTop: 38 }}>
+                <ListaPaginada
+                  id="lista-comunicados"
+                  url="v1/comunicados"
+                  idLinha="id"
+                  colunaChave="id"
+                  colunas={colunas}
+                  onClick={onClickEditar}
+                  multiSelecao
+                  filtro={filtros}
+                  paramArrayFormat="repeat"
+                  selecionarItems={onSelecionarItems}
+                  filtroEhValido={filtroEhValido}
+                />
+              </div>
+            )}
+          </div>
+        </Card>
+      </Loader>
     </>
   );
 };
