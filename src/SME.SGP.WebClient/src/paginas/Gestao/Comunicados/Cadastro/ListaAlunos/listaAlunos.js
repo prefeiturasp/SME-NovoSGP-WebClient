@@ -29,6 +29,7 @@ const ModalAlunos = props => {
     {
       title: 'Criança/estudante',
       dataIndex: 'nomeAluno',
+      render: (nomeAluno, aluno) => `${nomeAluno} (${aluno.codigoAluno})`,
     },
   ];
 

@@ -64,7 +64,7 @@ const TipoCalendarioComunicados = ({ form, onChangeCampos, desabilitar }) => {
     <Loader loading={exibirLoader} ignorarTip>
       <SelectComponent
         id="tipo-calendario"
-        label="Tipo de Calendário"
+        label="Tipo de calendário"
         lista={listaCalendario}
         valueOption="id"
         valueText="nome"

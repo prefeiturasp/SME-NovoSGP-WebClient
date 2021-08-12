@@ -20,6 +20,7 @@ const InfoEstudantesReceberComunicados = ({ form }) => {
     turmas,
     modalidades,
     anosEscolares,
+    alunos,
   } = form.values;
 
   const [infoEstudante, setInfoEstudante] = useState();
@@ -48,9 +49,14 @@ const InfoEstudantesReceberComunicados = ({ form }) => {
       codigoUe &&
       turmas?.length &&
       modalidades?.length &&
-      anosEscolares?.length
+      anosEscolares?.length &&
+      !alunos?.length
     ) {
       obterQuantidadeCrianca();
+    } else if (alunos?.length) {
+      setInfoEstudante(
+        `Os responsáveis de ${alunos?.length} crianças/estudantes poderão receber este comunicado.`
+      );
     } else {
       setInfoEstudante();
     }
@@ -61,6 +67,7 @@ const InfoEstudantesReceberComunicados = ({ form }) => {
     turmas,
     modalidades,
     anosEscolares,
+    alunos,
     obterQuantidadeCrianca,
   ]);
 
