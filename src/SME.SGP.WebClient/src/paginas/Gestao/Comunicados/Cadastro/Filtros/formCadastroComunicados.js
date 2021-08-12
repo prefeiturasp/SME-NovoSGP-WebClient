@@ -30,6 +30,7 @@ import TipoEscolaComunicados from './campos/tipoEscolaComunicados';
 import TituloComunicados from './campos/tituloComunicados';
 import TurmasComunicados from './campos/turmasComunicados';
 import UeComunicados from './campos/ueComunicados';
+import InfoEstudantesReceberComunicados from './infoEstudantesReceberComunicado';
 
 const FormCadastroComunicados = props => {
   const { comunicadoId, somenteConsulta } = props;
@@ -207,10 +208,30 @@ const FormCadastroComunicados = props => {
       .nullable()
       .required(textoCampoObrigatorio),
     dataEnvio: momentSchema.required(textoCampoObrigatorio),
-    dataExpiracao: momentSchema.required(textoCampoObrigatorio),
+    dataExpiracao: momentSchema
+      .required(textoCampoObrigatorio)
+      .test(
+        'validaDataMaiorQueEnvio',
+        'Data de expiração deve ser maior que a data de envio',
+        function validar() {
+          const { dataEnvio } = this.parent;
+          const { dataExpiracao } = this.parent;
+          if (
+            dataEnvio &&
+            dataExpiracao &&
+            moment(dataExpiracao) < moment(dataEnvio)
+          ) {
+            return false;
+          }
+
+          return true;
+        }
+      ),
     titulo: Yup.string()
       .nullable()
-      .required(textoCampoObrigatorio),
+      .required(textoCampoObrigatorio)
+      .min(10, 'Deve conter no mínimo 10 caracteres')
+      .max(50, 'Deve conter no máximo 50 caracteres'),
     descricao: Yup.string()
       .nullable()
       .required(textoCampoObrigatorio),
@@ -336,6 +357,9 @@ const FormCadastroComunicados = props => {
                   />
                 </div>
                 <AuditoriaCadastroComunicados form={form} />
+                <div className="col-sm-12 mb-2">
+                  <InfoEstudantesReceberComunicados form={form} />
+                </div>
               </div>
             </Form>
           )}

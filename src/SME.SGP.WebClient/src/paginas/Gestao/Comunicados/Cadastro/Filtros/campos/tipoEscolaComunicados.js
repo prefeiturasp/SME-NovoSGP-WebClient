@@ -13,7 +13,7 @@ const TipoEscolaComunicados = ({ form, onChangeCampos, desabilitar }) => {
   const [exibirLoader, setExibirLoader] = useState(false);
   const [listaTipoEscola, setListaTipoEscola] = useState([]);
 
-  const { codigoDre, codigoUe, tipoEscola } = form.values;
+  const { codigoDre, codigoUe, tipoEscola, modalidades } = form.values;
 
   const dispatch = useDispatch();
 
@@ -23,7 +23,8 @@ const TipoEscolaComunicados = ({ form, onChangeCampos, desabilitar }) => {
     setExibirLoader(true);
     const resposta = await ServicoComunicados.obterTipoEscola(
       codigoDre,
-      codigoUe
+      codigoUe,
+      modalidades
     )
       .catch(e => erros(e))
       .finally(() => setExibirLoader(false));
@@ -53,7 +54,7 @@ const TipoEscolaComunicados = ({ form, onChangeCampos, desabilitar }) => {
       form.setFieldValue(nomeCampo, []);
       setListaTipoEscola([]);
     }
-  }, [codigoDre, codigoUe]);
+  }, [codigoDre, codigoUe, modalidades]);
 
   useEffect(() => {
     if (codigoUe) {
