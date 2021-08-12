@@ -42,17 +42,19 @@ const CriancasEstudantesComunicados = ({
   }, [selecionaAlunosEspecificos, turmas]);
 
   const obterAlunos = useCallback(async () => {
-    setAlunosLoader(true);
-    const retorno = await ServicoComunicados.obterAlunos(turmas, anoLetivo)
-      .catch(e => erros(e))
-      .finally(() => setAlunosLoader(false));
+    if (!desabilitar) {
+      setAlunosLoader(true);
+      const retorno = await ServicoComunicados.obterAlunos(turmas, anoLetivo)
+        .catch(e => erros(e))
+        .finally(() => setAlunosLoader(false));
 
-    if (retorno?.data?.length) {
-      dispatch(setAlunosComunicados(retorno.data));
-    } else {
-      dispatch(setAlunosComunicados([]));
+      if (retorno?.data?.length) {
+        dispatch(setAlunosComunicados(retorno.data));
+      } else {
+        dispatch(setAlunosComunicados([]));
+      }
+      dispatch(setExibirModalAlunos(true));
     }
-    dispatch(setExibirModalAlunos(true));
   }, [turmas, anoLetivo, dispatch]);
 
   useEffect(() => {
@@ -99,6 +101,7 @@ const CriancasEstudantesComunicados = ({
             className="mr-3"
             width="100%"
             disabled={
+              desabilitar ||
               !alunoEspecifico ||
               alunoEspecifico === OPCAO_TODOS ||
               !turmas?.length

@@ -9,6 +9,7 @@ export const Container = styled.div`
   font-size: 12px;
   line-height: 16px;
   color: #c0640e;
+  margin-top: 10px;
 `;
 
 const InfoEstudantesReceberComunicados = ({ form }) => {
