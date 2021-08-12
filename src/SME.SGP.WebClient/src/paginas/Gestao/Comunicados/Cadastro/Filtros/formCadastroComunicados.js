@@ -122,6 +122,12 @@ const FormCadastroComunicados = props => {
       valores.tipoEscola = valores.tiposEscolas;
     }
 
+    if (valores?.alunoEspecificado) {
+      valores.alunoEspecifico = '1';
+    } else {
+      valores.alunoEspecifico = OPCAO_TODOS;
+    }
+
     return valores;
   };
 
@@ -219,6 +225,43 @@ const FormCadastroComunicados = props => {
     descricao: Yup.string()
       .nullable()
       .required(textoCampoObrigatorio),
+    eventoId: Yup.string()
+      .nullable()
+      .test('validaSeObrigatorio', textoCampoObrigatorio, function validar() {
+        const { codigoUe, eventoId } = this.parent;
+        const ehTodos = codigoUe === OPCAO_TODOS;
+
+        if (codigoUe && !ehTodos && !eventoId) {
+          return false;
+        }
+        return true;
+      }),
+    tipoCalendarioId: Yup.string()
+      .nullable()
+      .test('validaSeObrigatorio', textoCampoObrigatorio, function validar() {
+        const { codigoUe, tipoCalendarioId } = this.parent;
+        const ehTodos = codigoUe === OPCAO_TODOS;
+
+        if (codigoUe && !ehTodos && !tipoCalendarioId) {
+          return false;
+        }
+        return true;
+      }),
+    alunoEspecifico: Yup.string()
+      .nullable()
+      .test(
+        'validaSeObrigatorio',
+        'Deve selecionar pelo menos uma criança/estudante',
+        function validar() {
+          const { alunos, alunoEspecifico } = this.parent;
+          const ehTodos = alunoEspecifico === OPCAO_TODOS;
+
+          if (alunoEspecifico && !ehTodos && !alunos?.length) {
+            return false;
+          }
+          return true;
+        }
+      ),
   });
 
   return (
@@ -295,6 +338,7 @@ const FormCadastroComunicados = props => {
                 <CriancasEstudantesComunicados
                   form={form}
                   onChangeCampos={onChangeCampos}
+                  comunicadoId={comunicadoId}
                   desabilitar={desabilitarCampos || !!comunicadoId}
                 />
                 <div className="col-sm-12 col-md-12 col-lg-6 col-xl-6 mb-2">

@@ -31,7 +31,7 @@ const CadastroComunicados = ({ match }) => {
 
   return (
     <>
-      <Cabecalho pagina="Comunicação com pais ou responsáveis" classes="mb-2" />
+      <Cabecalho pagina="Cadastro de comunicados" classes="mb-2" />
       <LoaderGeralComunicados>
         <Card>
           <div className="col-md-12 p-0">

@@ -14,6 +14,7 @@ const CriancasEstudantesComunicados = ({
   form,
   onChangeCampos,
   desabilitar,
+  comunicadoId,
 }) => {
   const dispatch = useDispatch();
 
@@ -38,8 +39,10 @@ const CriancasEstudantesComunicados = ({
   }, [turmas]);
 
   useEffect(() => {
-    selecionaAlunosEspecificos(turmas);
-  }, [selecionaAlunosEspecificos, turmas]);
+    if (!comunicadoId) {
+      selecionaAlunosEspecificos(turmas);
+    }
+  }, [selecionaAlunosEspecificos, turmas, comunicadoId]);
 
   const obterAlunos = useCallback(async () => {
     if (!desabilitar) {
@@ -123,12 +126,14 @@ CriancasEstudantesComunicados.propTypes = {
   form: PropTypes.oneOfType([PropTypes.object]),
   onChangeCampos: PropTypes.func,
   desabilitar: PropTypes.bool,
+  comunicadoId: PropTypes.string,
 };
 
 CriancasEstudantesComunicados.defaultProps = {
   form: null,
   onChangeCampos: () => null,
   desabilitar: false,
+  comunicadoId: '',
 };
 
 export default CriancasEstudantesComunicados;

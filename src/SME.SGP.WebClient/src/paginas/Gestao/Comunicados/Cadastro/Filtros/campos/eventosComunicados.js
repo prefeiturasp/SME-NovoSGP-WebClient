@@ -37,7 +37,7 @@ const EventosComunicados = ({ form, onChangeCampos, desabilitar }) => {
 
       if (lista.length === 1) {
         const { id } = lista[0];
-        form.setFieldValue(nomeCampo, id);
+        form.setFieldValue(nomeCampo, String(id));
       }
     } else {
       setListaEventos([]);
@@ -61,7 +61,7 @@ const EventosComunicados = ({ form, onChangeCampos, desabilitar }) => {
         label="Evento"
         lista={listaEventos}
         valueOption="id"
-        valueText="nome"
+        valueText="descricao"
         placeholder="Selecione um evento"
         searchValue={false}
         disabled={
