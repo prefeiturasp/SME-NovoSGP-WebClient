@@ -97,7 +97,7 @@ const BotoesAcoesCadastroComunicados = props => {
         }
       }
       if (filtros?.alunos?.length) {
-        dadosSalvar.alunos = filtros.alunos.map(aluno => aluno.codigoAluno);
+        dadosSalvar.alunos = filtros.alunos.map(aluno => aluno.alunoCodigo);
       }
       if (filtros?.dataEnvio) {
         dadosSalvar.dataEnvio = converterData(filtros?.dataEnvio);
