@@ -12,7 +12,7 @@ import {
 
 import { erros, ServicoComunicados } from '~/servicos';
 import { onchangeMultiSelect } from '~/utils';
-import { OPCAO_TODOS } from '~/constantes/constantesGerais';
+import { OPCAO_TODOS } from '~/constantes';
 
 const FiltrosAvancados = ({
   atualizaFiltrosAvançados,
