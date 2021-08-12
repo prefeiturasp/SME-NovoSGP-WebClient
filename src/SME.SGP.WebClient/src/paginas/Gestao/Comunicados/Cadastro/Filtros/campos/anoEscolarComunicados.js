@@ -47,7 +47,7 @@ const AnoEscolarComunicados = ({ form, onChangeCampos, desabilitar }) => {
 
       if (lista?.length === 1) {
         const { ano } = lista[0];
-        form.setFieldValue(nomeCampo, ano);
+        form.setFieldValue(nomeCampo, [ano]);
       }
 
       if (lista?.length > 1) {
@@ -100,8 +100,8 @@ const AnoEscolarComunicados = ({ form, onChangeCampos, desabilitar }) => {
           form.setFieldValue('turmas', []);
           form.setFieldValue('alunoEspecifico', undefined);
           form.setFieldValue('alunos', []);
-          form.setFieldValue('tipoCalendarioId', undefined);
-          form.setFieldValue('eventoId', undefined);
+          // form.setFieldValue('tipoCalendarioId', undefined);
+          // form.setFieldValue('eventoId', undefined);
           dispatch(setAlunosComunicados([]));
         }}
       />

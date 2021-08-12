@@ -125,7 +125,7 @@ class ServicoComunicados {
   };
 
   obterQuantidadeCrianca = (
-    anoLetivo, 
+    anoLetivo,
     codigoDre,
     codigoUe,
     turmas,

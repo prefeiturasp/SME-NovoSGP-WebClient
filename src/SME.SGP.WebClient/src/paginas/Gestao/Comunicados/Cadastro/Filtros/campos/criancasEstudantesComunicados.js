@@ -74,7 +74,7 @@ const CriancasEstudantesComunicados = ({
             disabled={
               desabilitar ||
               !turmas?.length ||
-              ehTodasTurma() ||
+              !!ehTodasTurma() ||
               turmas?.length > 1
             }
             allowClear={false}
