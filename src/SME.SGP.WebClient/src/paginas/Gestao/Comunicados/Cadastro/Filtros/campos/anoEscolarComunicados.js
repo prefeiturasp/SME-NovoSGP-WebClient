@@ -100,8 +100,6 @@ const AnoEscolarComunicados = ({ form, onChangeCampos, desabilitar }) => {
           form.setFieldValue('turmas', []);
           form.setFieldValue('alunoEspecifico', undefined);
           form.setFieldValue('alunos', []);
-          // form.setFieldValue('tipoCalendarioId', undefined);
-          // form.setFieldValue('eventoId', undefined);
           dispatch(setAlunosComunicados([]));
         }}
       />
