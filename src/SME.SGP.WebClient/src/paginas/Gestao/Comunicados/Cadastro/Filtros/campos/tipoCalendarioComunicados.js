@@ -3,13 +3,14 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Loader, SelectComponent } from '~/componentes';
 import { OPCAO_TODOS } from '~/constantes';
+import { ModalidadeDTO } from '~/dtos';
 import { erros, ServicoCalendarios } from '~/servicos';
 
 const TipoCalendarioComunicados = ({ form, onChangeCampos, desabilitar }) => {
   const [exibirLoader, setExibirLoader] = useState(false);
   const [listaCalendario, setListaCalendario] = useState([]);
 
-  const { anoLetivo, modalidades } = form.values;
+  const { anoLetivo, modalidades, semestre } = form.values;
 
   const listaModalidadesComunicados = useSelector(
     store => store.comunicados?.listaModalidadesComunicados
@@ -30,7 +31,8 @@ const TipoCalendarioComunicados = ({ form, onChangeCampos, desabilitar }) => {
 
     const resposta = await ServicoCalendarios.obterTiposCalendarioPorAnoLetivoModalidade(
       anoLetivo,
-      modalidadesConsulta
+      modalidadesConsulta,
+      semestre
     )
       .catch(e => erros(e))
       .finally(() => setExibirLoader(false));
@@ -50,15 +52,25 @@ const TipoCalendarioComunicados = ({ form, onChangeCampos, desabilitar }) => {
       form.setFieldValue(nomeCampo, undefined);
       setListaCalendario([]);
     }
-  }, [anoLetivo, modalidades, listaModalidadesComunicados]);
+  }, [anoLetivo, modalidades, listaModalidadesComunicados, semestre]);
 
   useEffect(() => {
     if (modalidades?.length && listaModalidadesComunicados?.length) {
-      obterTiposCalendarios();
+      const ehEja = modalidades.find(mod => Number(mod) === ModalidadeDTO.EJA);
+      if (ehEja && semestre) {
+        obterTiposCalendarios();
+      } else if (!ehEja && !semestre) {
+        obterTiposCalendarios();
+      }
     } else {
       setListaCalendario([]);
     }
-  }, [modalidades, listaModalidadesComunicados, obterTiposCalendarios]);
+  }, [
+    modalidades,
+    listaModalidadesComunicados,
+    obterTiposCalendarios,
+    semestre,
+  ]);
 
   return (
     <Loader loading={exibirLoader} ignorarTip>
