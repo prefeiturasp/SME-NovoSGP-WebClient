@@ -40,6 +40,8 @@ const AnotacoesRecomendacoes = props => {
     anotacoesAluno: '',
   });
 
+  const turmaStore = useSelector(state => state.usuario.turmaSelecionada);
+
   const [exibir, setExibir] = useState(false);
   const [carregando, setCarregando] = useState(false);
 
@@ -117,7 +119,8 @@ const AnotacoesRecomendacoes = props => {
       fechamentoTurmaId,
       alunoCodigo,
       codigoTurma,
-      bimestre.valor
+      bimestre.valor,
+      turmaStore?.consideraHistorico
     ).catch(e => erros(e));
 
     if (resposta && resposta.data) {
