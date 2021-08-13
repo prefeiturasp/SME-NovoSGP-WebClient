@@ -7,7 +7,12 @@ import { setAlunosComunicados } from '~/redux/modulos/comunicados/actions';
 import { erros, ServicoComunicados } from '~/servicos';
 import { onchangeMultiSelect } from '~/utils';
 
-const TipoEscolaComunicados = ({ form, onChangeCampos, desabilitar }) => {
+const TipoEscolaComunicados = ({
+  form,
+  onChangeCampos,
+  desabilitar,
+  comunicadoId,
+}) => {
   const usuario = useSelector(store => store.usuario);
 
   const [exibirLoader, setExibirLoader] = useState(false);
@@ -44,7 +49,9 @@ const TipoEscolaComunicados = ({ form, onChangeCampos, desabilitar }) => {
           valor: OPCAO_TODOS,
           desc: 'Todas',
         });
-        form.setFieldValue(nomeCampo, [OPCAO_TODOS]);
+        if (!comunicadoId) {
+          form.setFieldValue(nomeCampo, [OPCAO_TODOS]);
+        }
       }
 
       setListaTipoEscola(lista);
@@ -108,12 +115,14 @@ TipoEscolaComunicados.propTypes = {
   form: PropTypes.oneOfType([PropTypes.object]),
   onChangeCampos: PropTypes.func,
   desabilitar: PropTypes.bool,
+  comunicadoId: PropTypes.string,
 };
 
 TipoEscolaComunicados.defaultProps = {
   form: null,
   onChangeCampos: () => null,
   desabilitar: false,
+  comunicadoId: '',
 };
 
 export default TipoEscolaComunicados;

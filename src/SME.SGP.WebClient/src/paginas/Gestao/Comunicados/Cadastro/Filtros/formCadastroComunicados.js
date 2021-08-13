@@ -118,14 +118,14 @@ const FormCadastroComunicados = props => {
       valores.eventoId = String(valores.eventoId);
     }
 
-    if (valores?.tiposEscolas) {
-      valores.tipoEscola = valores.tiposEscolas;
-    }
-
     if (valores?.alunoEspecificado) {
       valores.alunoEspecifico = '1';
     } else {
       valores.alunoEspecifico = OPCAO_TODOS;
+    }
+
+    if (valores?.tiposEscolas?.length) {
+      valores.tipoEscola = valores.tiposEscolas.map(valor => String(valor));
     }
 
     return valores;
@@ -319,6 +319,7 @@ const FormCadastroComunicados = props => {
                     form={form}
                     onChangeCampos={onChangeCampos}
                     desabilitar={desabilitarCampos || !!comunicadoId}
+                    comunicadoId={comunicadoId}
                   />
                 </div>
                 <div className="col-sm-12 col-md-12 col-lg-6 col-xl-6 mb-2">
