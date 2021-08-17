@@ -84,6 +84,7 @@ const RotasDto = {
     '/relatorios/fechamentos/acompanhamento-fechamento',
   DASHBOARD_RELATORIO_ACOMPANHAMENTO_APRENDIZAGEM:
     '/dashboard/acompanhamento-aprendizagem',
+  DASHBOARD_FECHAMENTO: '/dashboard/fechamento',
 };
 
 export default RotasDto;
