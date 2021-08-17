@@ -40,6 +40,7 @@ import dashboardFrequencia from './dashboardFrequencia/reducers';
 import dashboardRegistroIndividual from './dashboardRegistroIndividual/reducers';
 import dashboardDevolutivas from './dashboardDevolutivas/reducers';
 import dashboardDiarioBordo from './dashboardDiarioBordo/reducers';
+import comunicados from './comunicados/reducers';
 
 const reducers = combineReducers({
   navegacao,
@@ -82,6 +83,7 @@ const reducers = combineReducers({
   dashboardRegistroIndividual,
   dashboardDevolutivas,
   dashboardDiarioBordo,
+  comunicados,
 });
 
 const rootReducer = (state, action) => {

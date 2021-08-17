@@ -12,7 +12,7 @@ import {
 
 import { erros, ServicoComunicados } from '~/servicos';
 import { onchangeMultiSelect } from '~/utils';
-import { OPCAO_TODOS } from '~/constantes/constantesGerais';
+import { OPCAO_TODOS } from '~/constantes';
 
 const FiltrosAvancados = ({
   atualizaFiltrosAvançados,
@@ -34,7 +34,7 @@ const FiltrosAvancados = ({
   const [listaAnosEscolares, setListaAnosEscolares] = useState([]);
   const [listaTipoEscola, setListaTipoEscola] = useState([]);
   const [listaTurmas, setListaTurmas] = useState([]);
-  const [tipoEscola, setTipoEscola] = useState();
+  const [tiposEscolas, setTiposEscolas] = useState();
   const [titulo, setTitulo] = useState();
   const [turmasCodigo, setTurmasCodigo] = useState();
 
@@ -76,7 +76,7 @@ const FiltrosAvancados = ({
     }
     setListaTipoEscola(dados);
     if (dados?.length === 1) {
-      setTipoEscola([String(dados[0].valor)]);
+      setTiposEscolas([String(dados[0].valor)]);
     }
   }, [filtrosPrincipais]);
 
@@ -262,7 +262,7 @@ const FiltrosAvancados = ({
 
   const filtrarAvancado = useCallback(() => {
     const params = {
-      tipoEscola,
+      tiposEscolas,
       anosEscolares,
       turmasCodigo,
       dataEnvioInicio,
@@ -275,7 +275,7 @@ const FiltrosAvancados = ({
     setBuscouFiltrosAvancados(true);
   }, [
     validarFiltroDebounce,
-    tipoEscola,
+    tiposEscolas,
     anosEscolares,
     turmasCodigo,
     dataEnvioInicio,
@@ -294,7 +294,7 @@ const FiltrosAvancados = ({
   }, [
     filtrarAvancado,
     buscouFiltrosAvancados,
-    tipoEscola,
+    tiposEscolas,
     anosEscolares,
     turmasCodigo,
     dataEnvioInicio,
@@ -314,7 +314,7 @@ const FiltrosAvancados = ({
       setBuscouFiltrosAvancados(false);
 
       setListaTipoEscola([]);
-      setTipoEscola();
+      setTiposEscolas();
 
       setListaAnosEscolares([]);
       setAnosEscolares();
@@ -357,9 +357,9 @@ const FiltrosAvancados = ({
                 !listaTipoEscola?.length ||
                 listaTipoEscola?.length === 1
               }
-              valueSelect={tipoEscola}
+              valueSelect={tiposEscolas}
               onChange={valores => {
-                onchangeMultiSelect(valores, tipoEscola, setTipoEscola);
+                onchangeMultiSelect(valores, tiposEscolas, setTiposEscolas);
                 setBuscouFiltrosAvancados(false);
               }}
               placeholder="Selecione o tipo de escola"

@@ -2,56 +2,20 @@ import queryString from 'query-string';
 
 import api from '../../../api';
 
-const urlPadrao = 'v1/comunicado';
+const urlPadrao = 'v1/comunicados';
 
 class ServicoComunicados {
-  consultarPorId = async id => {
-    let comunicado = {};
+  consultarPorId = id => api.get(`${urlPadrao}/${id}`);
 
-    try {
-      const requisicao = await api.get(`${urlPadrao}/${id}`);
-      if (requisicao.data) comunicado = requisicao.data;
-    } catch {
-      return comunicado;
+  salvar = dados => {
+    if (dados?.id) {
+      return api.put(`${urlPadrao}/${dados.id}`, dados);
     }
 
-    return comunicado;
+    return api.post(urlPadrao, dados);
   };
 
-  salvar = async dados => {
-    let salvou = {};
-
-    let metodo = 'post';
-    let url = `${urlPadrao}`;
-
-    if (dados.id && dados.id > 0) {
-      metodo = 'put';
-      url = `${url}/${dados.id}`;
-    }
-
-    try {
-      const requisicao = await api[metodo](url, dados);
-      if (requisicao.data) salvou = requisicao;
-    } catch (erro) {
-      salvou = [...erro.response.data.mensagens];
-    }
-
-    return salvou;
-  };
-
-  excluir = async ids => {
-    let exclusao = {};
-    const parametros = { data: ids };
-
-    try {
-      const requisicao = await api.delete(`${urlPadrao}`, parametros);
-      if (requisicao && requisicao.status === 200) exclusao = requisicao;
-    } catch (erro) {
-      exclusao = [...erro.response.data.mensagens];
-    }
-
-    return exclusao;
-  };
+  excluir = async ids => api.delete(`${urlPadrao}`, { data: ids });
 
   buscarAnosPorModalidade = async (modalidades, codigoUe) => {
     return api.get(`${urlPadrao}/anos/modalidades`, {
@@ -83,18 +47,8 @@ class ServicoComunicados {
     }
   };
 
-  obterAlunos = async (codigoTurma, anoLetivo) => {
-    try {
-      const requisicao = await api.get(
-        `${urlPadrao}/${codigoTurma}/alunos/${anoLetivo}`
-      );
-
-      if (requisicao && requisicao.status === 204) return [];
-
-      return requisicao.data;
-    } catch (error) {
-      throw error;
-    }
+  obterAlunos = (codigoTurma, anoLetivo) => {
+    return api.get(`${urlPadrao}/${codigoTurma}/alunos/${anoLetivo}`);
   };
 
   obterAnosLetivos = anoMinimo => {
@@ -105,8 +59,12 @@ class ServicoComunicados {
     });
   };
 
-  obterTipoEscola = (dreCodigo, ueCodigo) => {
-    return api.get(`/v1/ues/dres/${dreCodigo}/ues/${ueCodigo}/tipos-escolas`);
+  obterTipoEscola = (dreCodigo, ueCodigo, modalidades) => {
+    let url = `/v1/ues/dres/${dreCodigo}/ues/${ueCodigo}/tipos-escolas`;
+    if (modalidades?.length) {
+      url += `?modalidades=${modalidades.join('&modalidades=', modalidades)}`;
+    }
+    return api.get(url);
   };
 
   obterTurmas = (
@@ -148,6 +106,38 @@ class ServicoComunicados {
         },
       }
     );
+  };
+
+  obterTiposCalendario = (anoLetivo, descricao, modalidades) => {
+    return api.get(`v1/calendarios/tipos/ano-letivo/${anoLetivo}/modalidades`, {
+      params: {
+        descricao,
+        modalidades,
+      },
+      paramsSerializer(params) {
+        return queryString.stringify(params, {
+          arrayFormat: 'repeat',
+          skipEmptyString: true,
+          skipNull: true,
+        });
+      },
+    });
+  };
+
+  obterQuantidadeCrianca = (
+    anoLetivo,
+    codigoDre,
+    codigoUe,
+    turmas,
+    modalidades,
+    anosEscolares
+  ) => {
+    let url = `${urlPadrao}/filtro/anos-letivos/${anoLetivo}/dres/${codigoDre}/ues/${codigoUe}/quantidade-alunos`;
+    url += `?turmas=${turmas.join('&turmas=', turmas)}`;
+    url += `&modalidades=${modalidades.join('&modalidades=', modalidades)}`;
+    url += `&anoTurma=${anosEscolares.join('&anoTurma=', anosEscolares)}`;
+
+    return api.get(url);
   };
 }
 

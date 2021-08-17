@@ -35,7 +35,7 @@ const RotasDto = {
     '/calendario-escolar/periodo-fechamento-reabertura',
   RELATORIO_PAP_ACOMPANHAMENTO: '/relatorios/pap/relatorio-preenchimento',
   PENDENCIAS_FECHAMENTO: '/fechamento/pendencias-fechamento',
-  ACOMPANHAMENTO_COMUNICADOS: '/gestao/acompanhamento-escolar/comunicados',
+  ACOMPANHAMENTO_COMUNICADOS: '/gestao/comunicados',
   CONSELHO_CLASSE: '/fechamento/conselho-classe',
   RELATORIO_SEMESTRAL: '/relatorios/pap/relatorio-semestral',
   SEM_PERMISSAO: '/sem-permissao',

@@ -7,6 +7,7 @@ const Colors = {
   Laranja: 'Laranja',
   Verde: 'Verde',
   Vermelho: 'Vermelho',
+  CinzaMako: 'CinzaMako',
 };
 
 const Base = {

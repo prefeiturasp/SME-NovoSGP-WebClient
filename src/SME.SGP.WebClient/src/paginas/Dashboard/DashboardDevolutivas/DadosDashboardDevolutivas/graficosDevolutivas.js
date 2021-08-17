@@ -1,6 +1,6 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
-import { OPCAO_TODOS } from '~/constantes/constantesGerais';
+import { OPCAO_TODOS } from '~/constantes';
 import { ModalidadeDTO } from '~/dtos';
 import QtdDevolutivasRegistradasEstimada from './QtdDevolutivasRegistradasEstimada/qtdDevolutivasRegistradasEstimada';
 import QtdDiarioBordoDevolutiva from './QtdDiarioBordoDevolutiva/qtdDiarioBordoDevolutiva';
