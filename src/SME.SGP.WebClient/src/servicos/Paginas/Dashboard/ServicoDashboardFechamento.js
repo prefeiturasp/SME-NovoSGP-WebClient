@@ -40,90 +40,81 @@ class ServicoDashboardFechamento {
     return api.get(url);
   };
 
-  obterFrequenciaGlobalPorAno = (
-    anoLetivo,
-    dreId,
-    ueId,
-    modalidade,
-    semestre
-  ) => {
-    return this.montarConsultaPadraoGraficos({
-      rota: 'global/por-ano',
-      anoLetivo,
-      dreId,
-      ueId,
-      modalidade,
-      semestre,
-    });
-  };
-
-  obterFrequenciaGlobalPorDRE = (
-    anoLetivo,
-    modalidade,
-    anoEscolar,
-    semestre
-  ) => {
-    return this.montarConsultaPadraoGraficos({
-      rota: 'global/dre',
-      anoLetivo,
-      modalidade,
-      anoEscolar,
-      semestre,
-    });
-  };
-
-  obterQuantidadeAusenciasPossuemJustificativa = (
-    anoLetivo,
-    dreId,
-    ueId,
-    modalidade,
-    semestre
-  ) => {
-    return this.montarConsultaPadraoGraficos({
-      rota: 'ausencias/justificativas',
-      anoLetivo,
-      dreId,
-      ueId,
-      modalidade,
-      semestre,
-    });
-  };
-
-  obterQuantidadeJustificativasMotivo = (
+  obterSituacaoProcessoFechamento = (
     anoLetivo,
     dreId,
     ueId,
     modalidade,
     semestre,
-    anoEscolar,
-    turmaId
+    bimestre
   ) => {
-    return this.montarConsultaPadraoGraficos({
-      rota: 'ausencias/motivo',
-      anoLetivo,
-      dreId,
-      ueId,
-      modalidade,
-      semestre,
-      anoEscolar,
-      turmaId,
+    return new Promise((resolve, reject) => {
+      resolve({
+        data: [
+          {
+            turma: 'EF - 1',
+            descricao: 'Qtd. acima do mínimo de frequencia',
+            quantidade: 3018,
+          },
+          {
+            turma: 'EF - 1',
+            descricao: 'Qtd. abaixo do mínimo de frequencia',
+            quantidade: 300,
+          },
+        ],
+      });
     });
   };
 
-  obterAnosEscolaresPorModalidade = (
+  obterFechamentoPorEstudantes = (
     anoLetivo,
     dreId,
     ueId,
     modalidade,
-    semestre
+    semestre,
+    bimestre
   ) => {
-    return this.montarConsultaPadraoGraficos({
-      rota: 'modalidades/ano',
-      anoLetivo,
-      dreId,
-      ueId,
-      modalidade,
-      semestre,
+    return new Promise((resolve, reject) => {
+      resolve({
+        data: [
+          {
+            turma: 'EF - 1',
+            descricao: 'Qtd. acima do mínimo de frequencia',
+            quantidade: 3018,
+          },
+          {
+            turma: 'EF - 1',
+            descricao: 'Qtd. abaixo do mínimo de frequencia',
+            quantidade: 300,
+          },
+        ],
+      });
+    });
+  };
+
+  obterPendenciasFechamento = (
+    anoLetivo,
+    dreId,
+    ueId,
+    modalidade,
+    semestre,
+    bimestre
+  ) => {
+    return new Promise((resolve, reject) => {
+      resolve({
+        data: [
+          {
+            turma: 'EF - 1',
+            descricao: 'Qtd. acima do mínimo de frequencia',
+            quantidade: 3018,
+          },
+          {
+            turma: 'EF - 1',
+            descricao: 'Qtd. abaixo do mínimo de frequencia',
+            quantidade: 300,
+          },
+        ],
+      });
     });
   };
 
@@ -144,91 +135,21 @@ class ServicoDashboardFechamento {
     dispatch(setDadosDashboardFechamento(novoMap));
   };
 
-  obterTipoGraficos = tipoGraficos => {
-    const retorno = Object.keys(tipoGraficos).map(item => tipoGraficos[item]);
-    this.atualizarFiltros('listaTipoGrafico', retorno);
-  };
-
-  obterListaMeses = (obterTodosMeses, mesAtual, todosMeses) => {
-    const retorno = obterTodosMeses();
-    const meses = todosMeses
-      ? retorno
-      : retorno.filter(item => Number(item.numeroMes) <= mesAtual);
-    this.atualizarFiltros('listaMeses', meses);
-  };
-
-  obterSemanas = anoLetivo => {
-    return api.get(`${urlPadrao}/filtro/anos/${anoLetivo}/semanas`);
-  };
-
-  obterTotalEstudantesPresenciasRemotosAusentes = (
+  obterAnosEscolaresPorModalidade = (
     anoLetivo,
     dreId,
     ueId,
     modalidade,
-    semestre,
-    anoTurma,
-    dataInicio,
-    dataFim,
-    tipoPeriodoDashboard,
-    mes,
-    visaoDre
+    semestre
   ) => {
-    return api.get(
-      `${urlPadrao}/anos/${anoLetivo}/dres/${dreId}/ues/${ueId}/modalidades/` +
-        `${modalidade}/consolidado/anos-turmas`,
-      {
-        params: {
-          semestre,
-          anoTurma,
-          dataInicio,
-          dataFim,
-          tipoPeriodoDashboard,
-          mes,
-          visaoDre,
-        },
-      }
-    );
-  };
-
-  obterTotalAusenciasCompensadas = (
-    anoLetivo,
-    dreId,
-    ueId,
-    modalidade,
-    semestre,
-    bimestre
-  ) => {
-    return api.get(
-      `/v1/dashboard/compensacoes/ausencia/anos/${anoLetivo}/dres/${dreId}/ues/${ueId}/modalidades/${modalidade}/` +
-        `consolidado/anos-turmas`,
-      {
-        params: {
-          semestre,
-          bimestre,
-        },
-      }
-    );
-  };
-
-  obterTotalAtividadeCompensacao = (
-    anoLetivo,
-    dreId,
-    ueId,
-    modalidade,
-    semestre,
-    bimestre
-  ) => {
-    return api.get(
-      `/v1/dashboard/compensacoes/ausencia/anos/${anoLetivo}/dres/${dreId}/ues/${ueId}/modalidades/${modalidade}/` +
-        `consolidado/compensacoes-consideradas`,
-      {
-        params: {
-          semestre,
-          bimestre,
-        },
-      }
-    );
+    return this.montarConsultaPadraoGraficos({
+      rota: 'modalidades/ano',
+      anoLetivo,
+      dreId,
+      ueId,
+      modalidade,
+      semestre,
+    });
   };
 }
 

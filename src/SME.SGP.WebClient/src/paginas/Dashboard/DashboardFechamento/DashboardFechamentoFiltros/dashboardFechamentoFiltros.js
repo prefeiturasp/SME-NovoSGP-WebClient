@@ -8,8 +8,8 @@ import { ModalidadeDTO } from '~/dtos';
 import { ServicoFiltroRelatorio } from '~/servicos';
 import AbrangenciaServico from '~/servicos/Abrangencia';
 import { erros } from '~/servicos/alertas';
+import ServicoPeriodoEscolar from '~/servicos/Paginas/Calendario/ServicoPeriodoEscolar';
 import ServicoDashboardFechamento from '~/servicos/Paginas/Dashboard/ServicoDashboardFechamento';
-import { default as modalidadeDto } from '~/dtos/modalidade';
 
 const DashboardFechamentoFiltros = () => {
   const usuario = useSelector(store => store.usuario);
@@ -331,6 +331,23 @@ const DashboardFechamentoFiltros = () => {
     }
   }, [anoLetivo]);
 
+  const obterBimestres = useCallback(async () => {
+    const dados = await ServicoPeriodoEscolar.obterPeriodosPorAnoLetivoModalidade(
+      modalidade,
+      anoLetivo
+    );
+    if (dados?.data?.length) {
+      const dadosBimestres = dados.data.map(item => {
+        return {
+          valor: item.bimestre.toString(),
+          descricao: item.descricao,
+        };
+      });
+      dadosBimestres.push({ valor: 'final', descricao: 'Final' });
+      setListaBimestres(dadosBimestres);
+    } else setListaBimestres([]);
+  }, [anoLetivo, modalidade]);
+
   useEffect(() => {
     if (anoLetivo) {
       obterUltimaConsolidacao();
@@ -343,24 +360,10 @@ const DashboardFechamentoFiltros = () => {
   }, [anoLetivo, obterUltimaConsolidacao]);
 
   useEffect(() => {
-    if (modalidade) {
-      if (modalidade.toString() === modalidadeDto.EJA.toString()) {
-        setListaBimestres([
-          { valor: '1', descricao: '1º Bimestre' },
-          { valor: '2', descricao: '2º Bimestre' },
-          { valor: 'final', descricao: 'Final' },
-        ]);
-      } else {
-        setListaBimestres([
-          { valor: '1', descricao: '1º Bimestre' },
-          { valor: '2', descricao: '2º Bimestre' },
-          { valor: '3', descricao: '3º Bimestre' },
-          { valor: '4', descricao: '4º Bimestre' },
-          { valor: 'final', descricao: 'Final' },
-        ]);
-      }
-    } else setListaBimestres([]);
-  }, [modalidade]);
+    if (anoLetivo && modalidade) {
+      obterBimestres();
+    }
+  }, [obterBimestres, anoLetivo, modalidade]);
 
   return (
     <>
