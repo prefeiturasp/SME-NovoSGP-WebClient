@@ -6,3 +6,4 @@ export { default as ServicoRelatorioDevolutivas } from './Planejamento/servicoRe
 export { default as ServicoAcompanhamentoAprendizagem } from './AcompanhamentoAprendizagem/ServicoAcompanhamentoAprendizagem';
 export { default as ServicoRelatorioFrequencia } from './Frequencia/ServicoRelatorioFrequencia';
 export { default as ServicoRelatorioAcompanhamentoFechamento } from './Fechamento/AcompanhamentoFechamento/ServicoRelatorioAcompanhamentoFechamento';
+export { default as ServicoRelatorioPendencias } from './Pendencias/ServicoRelatorioPendencias';

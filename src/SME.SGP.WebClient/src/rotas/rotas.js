@@ -921,8 +921,8 @@ rotas.set(`${RotasDto.DIARIO_BORDO}/detalhes/:aulaId`, {
 });
 
 rotas.set(RotasDto.RELATORIO_PENDENCIAS, {
-  breadcrumbName: 'Relatório de pendências',
-  menu: ['Relatórios'],
+  breadcrumbName: 'Pendências',
+  menu: ['Relatórios', 'Gestão'],
   parent: '/',
   component: RelatorioPendencias,
   exact: true,
