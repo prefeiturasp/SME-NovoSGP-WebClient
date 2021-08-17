@@ -75,7 +75,7 @@ const RelatorioPendencias = () => {
   );
   const [tipoPendenciaGrupo, setTipoPendenciaGrupo] = useState();
   const [exibirPendenciasResolvidas, setExibirPendenciasResolvidas] = useState(
-    '0'
+    false
   );
   const [carregandoBimestres, setCarregandoBimestres] = useState(false);
   const [
@@ -84,8 +84,8 @@ const RelatorioPendencias = () => {
   ] = useState(true);
 
   const opcaoExibirPendenciasResolvidas = [
-    { value: '0', label: 'Não' },
-    { value: '1', label: 'Sim' },
+    { value: false, label: 'Não' },
+    { value: true, label: 'Sim' },
   ];
 
   const onChangeAnoLetivo = async valor => {
@@ -478,7 +478,7 @@ const RelatorioPendencias = () => {
       return;
     }
     setDesabilitarExibirPendenciasResolvidas(true);
-    setExibirPendenciasResolvidas('0');
+    setExibirPendenciasResolvidas(false);
   }, [tipoPendenciaGrupo]);
 
   const cancelar = () => {
@@ -615,7 +615,7 @@ const RelatorioPendencias = () => {
                   id="btn-gerar-rel-pendencias"
                   icon="print"
                   label="Gerar"
-                  color={Colors.Azul}
+                  color={Colors.Roxo}
                   border
                   bold
                   className="mr-0"

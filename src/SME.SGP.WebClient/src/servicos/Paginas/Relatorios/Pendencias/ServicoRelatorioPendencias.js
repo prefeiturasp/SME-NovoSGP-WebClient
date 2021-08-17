@@ -1,6 +1,6 @@
 import api from '~/servicos/api';
 
-const urlPadrao = '/v1/relatorios/fechamentos/pendencias';
+const urlPadrao = '/v1/relatorios/pendencias';
 class ServicoRelatorioPendencias {
   gerar = async params => {
     return api.post(urlPadrao, params);
