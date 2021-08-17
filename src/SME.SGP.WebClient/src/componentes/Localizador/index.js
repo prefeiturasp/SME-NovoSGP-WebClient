@@ -37,6 +37,8 @@ function Localizador({
   limparCamposAposPesquisa,
   validaPerfilProfessor,
   mensagemErroConsultaRF,
+  colunasNome,
+  buscarCaracterPartir,
 }) {
   const usuario = useSelector(store => store.usuario);
   const [dataSource, setDataSource] = useState([]);
@@ -67,7 +69,7 @@ function Localizador({
       }, 200);
     }
 
-    if (valor.length < 3) return;
+    if (valor.length < buscarCaracterPartir) return;
     setDataSource([]);
     setExibirLoader(true);
     const { data: dados } = await service
@@ -236,7 +238,7 @@ function Localizador({
           exibirLoader={exibirLoader}
         />
       </Grid>
-      <Grid className="pr-0" cols={8}>
+      <Grid className="pr-0" cols={colunasNome}>
         {showLabel && <Label text={labelNome} control="professorNome" />}
         <InputNome
           dataSource={dataSource}
@@ -279,6 +281,8 @@ Localizador.propTypes = {
   limparCamposAposPesquisa: PropTypes.bool,
   validaPerfilProfessor: PropTypes.bool,
   mensagemErroConsultaRF: PropTypes.string,
+  colunasNome: PropTypes.string,
+  buscarCaracterPartir: PropTypes.number,
 };
 
 Localizador.defaultProps = {
@@ -299,6 +303,8 @@ Localizador.defaultProps = {
   limparCamposAposPesquisa: false,
   validaPerfilProfessor: true,
   mensagemErroConsultaRF: '',
+  colunasNome: '8',
+  buscarCaracterPartir: 3,
 };
 
 export default Localizador;
