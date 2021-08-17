@@ -80,8 +80,6 @@ const SemestreComunicados = ({ form, onChangeCampos, desabilitar }) => {
         form={form}
         onChange={() => {
           onChangeCampos();
-          form.setFieldValue('tipoEscola', []);
-          form.setFieldValue('anosEscolares', []);
           form.setFieldValue('turmas', []);
           form.setFieldValue('alunoEspecifico', undefined);
           form.setFieldValue('alunos', []);
