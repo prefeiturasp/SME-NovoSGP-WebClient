@@ -59,7 +59,7 @@ const AtaFinalResultados = () => {
     if (anosLetivo) {
       setListaAnosLetivo(anosLetivo);
       setAnoLetivo(anosLetivo[0].valor);
-      setDreId();
+      setDreId();      
     } else {
       setListaAnosLetivo([]);
     }
@@ -212,7 +212,7 @@ const AtaFinalResultados = () => {
     anoLetivoSelecionado
   ) => {
     const retorno = await api.get(
-      `v1/abrangencias/false/semestres?anoLetivo=${anoLetivoSelecionado}&modalidade=${modalidadeSelecionada ||
+      `v1/abrangencias/${consideraHistorico}/semestres?anoLetivo=${anoLetivoSelecionado}&modalidade=${modalidadeSelecionada ||
         0}`
     );
     if (retorno && retorno.data) {
@@ -278,9 +278,10 @@ const AtaFinalResultados = () => {
       !formato;
 
     let desabilitado = desabilitar;
-
+    
     if (Number(modalidadeId) === Number(modalidade.EJA)) {
-      desabilitado = semestre || desabilitar;
+      const semestresValidos = [1, 2];
+      desabilitado = !semestresValidos.includes(semestre) || desabilitar;
     } else if (Number(modalidadeId) === Number(modalidade.ENSINO_MEDIO)) {
       desabilitado = desabilitar || !visualizacao;
     }
@@ -417,6 +418,9 @@ const AtaFinalResultados = () => {
     setListaSemestre([]);
     setSemestre(undefined);
 
+    if (novaModalidade == modalidade.EJA)
+      obterSemestres(novaModalidade, anoLetivo);
+
     setListaTurmas([]);
     setTurmaId(undefined);
     setVisualizacao('');
@@ -466,6 +470,7 @@ const AtaFinalResultados = () => {
   };
 
   function onCheckedConsideraHistorico(e) {
+    setAnoLetivo(undefined);
     setConsideraHistorico(e.target.checked);
   }
 
@@ -595,7 +600,7 @@ const AtaFinalResultados = () => {
                 disabled={
                   !permissoesTela.podeConsultar ||
                   !modalidadeId ||
-                  modalidadeId !== modalidade.EJA ||
+                  modalidadeId != modalidade.EJA ||
                   (listaSemestre && listaSemestre.length === 1)
                 }
                 valueSelect={semestre}
