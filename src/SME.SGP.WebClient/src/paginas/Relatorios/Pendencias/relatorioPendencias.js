@@ -616,7 +616,6 @@ const RelatorioPendencias = () => {
                   icon="print"
                   label="Gerar"
                   color={Colors.Roxo}
-                  border
                   bold
                   className="mr-0"
                   onClick={gerar}
