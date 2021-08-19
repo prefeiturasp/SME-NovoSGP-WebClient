@@ -3,6 +3,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import {
   Button,
   Card,
+  CheckboxComponent,
   Colors,
   Loader,
   Localizador,
@@ -82,44 +83,50 @@ const RelatorioPendencias = () => {
     desabilitarExibirPendenciasResolvidas,
     setDesabilitarExibirPendenciasResolvidas,
   ] = useState(true);
+  const [consideraHistorico, setConsideraHistorico] = useState(false);
 
   const opcaoExibirPendenciasResolvidas = [
     { value: false, label: 'Não' },
     { value: true, label: 'Sim' },
   ];
-
-  const onChangeAnoLetivo = async valor => {
-    setDreId();
-    setUeId();
+  const limparCampos = () => {
     setModalidadeId();
-    setTurmaId();
-    setComponentesCurricularesId();
-    setAnoLetivo(valor);
-  };
-
-  const onChangeDre = valor => {
-    setDreId(valor);
-    setUeId();
-    setModalidadeId();
-    setTurmaId();
-    setComponentesCurricularesId();
-    setUeId(undefined);
-  };
-
-  const onChangeUe = valor => {
-    setModalidadeId();
-    setTurmaId();
-    setComponentesCurricularesId();
-    setUeId(valor);
-  };
-
-  const onChangeModalidade = valor => {
-    setModalidadeId(valor);
     setTurmaId();
     setComponentesCurricularesId();
     setBimestre();
     setTipoPendenciaGrupo();
     setClicouBotaoGerar(false);
+  };
+
+  const onChangeConsideraHistorico = e => {
+    setConsideraHistorico(e.target.checked);
+    setAnoLetivo(anoAtual);
+    setDreId();
+    setUeId();
+  };
+
+  const onChangeAnoLetivo = async valor => {
+    setDreId();
+    setUeId();
+    setAnoLetivo(valor);
+    limparCampos();
+  };
+
+  const onChangeDre = valor => {
+    setDreId(valor);
+    setUeId();
+    setUeId(undefined);
+    limparCampos();
+  };
+
+  const onChangeUe = valor => {
+    setUeId(valor);
+    limparCampos();
+  };
+
+  const onChangeModalidade = valor => {
+    limparCampos();
+    setModalidadeId(valor);
   };
 
   const onChangeSemestre = valor => {
@@ -156,7 +163,7 @@ const RelatorioPendencias = () => {
   const obterDres = useCallback(async () => {
     setCarregandoDres(true);
     const { data } = await AbrangenciaServico.buscarDres(
-      `v1/abrangencias/false/dres?anoLetivo=${anoLetivo}`
+      `v1/abrangencias/${consideraHistorico}/dres?anoLetivo=${anoLetivo}`
     )
       .catch(e => erros(e))
       .finally(() => setCarregandoDres(false));
@@ -177,7 +184,7 @@ const RelatorioPendencias = () => {
     }
     setListaDres([]);
     setDreId(undefined);
-  }, [anoLetivo]);
+  }, [anoLetivo, consideraHistorico]);
 
   useEffect(() => {
     if (anoLetivo) {
@@ -185,32 +192,35 @@ const RelatorioPendencias = () => {
     }
   }, [obterDres, anoLetivo]);
 
-  const obterUes = useCallback(async (dre, ano) => {
-    if (dre) {
-      setCarregandoUes(true);
-      const { data } = await AbrangenciaServico.buscarUes(
-        dre,
-        `v1/abrangencias/false/dres/${dre}/ues?anoLetivo=${ano}`,
-        true
-      )
-        .catch(e => erros(e))
-        .finally(() => setCarregandoUes(false));
-      if (data) {
-        const lista = data.map(item => ({
-          desc: item.nome,
-          valor: String(item.codigo),
-        }));
+  const obterUes = useCallback(
+    async (dre, ano) => {
+      if (dre) {
+        setCarregandoUes(true);
+        const { data } = await AbrangenciaServico.buscarUes(
+          dre,
+          `v1/abrangencias/${consideraHistorico}/dres/${dre}/ues?anoLetivo=${ano}`,
+          true
+        )
+          .catch(e => erros(e))
+          .finally(() => setCarregandoUes(false));
+        if (data) {
+          const lista = data.map(item => ({
+            desc: item.nome,
+            valor: String(item.codigo),
+          }));
 
-        if (lista?.length === 1) {
-          setUeId(lista[0].valor);
+          if (lista?.length === 1) {
+            setUeId(lista[0].valor);
+          }
+
+          setListaUes(lista);
+          return;
         }
-
-        setListaUes(lista);
-        return;
+        setListaUes([]);
       }
-      setListaUes([]);
-    }
-  }, []);
+    },
+    [consideraHistorico]
+  );
 
   useEffect(() => {
     if (dreId) {
@@ -253,37 +263,41 @@ const RelatorioPendencias = () => {
     setListaModalidades([]);
   }, [anoLetivo, ueId]);
 
-  const obterTurmas = useCallback(async (modalidadeSelecionada, ue, ano) => {
-    if (ue && modalidadeSelecionada) {
-      setCarregandoTurmas(true);
-      const { data } = await AbrangenciaServico.buscarTurmas(
-        ue,
-        modalidadeSelecionada,
-        '',
-        ano
-      )
-        .catch(e => erros(e))
-        .finally(() => setCarregandoTurmas(false));
+  const obterTurmas = useCallback(
+    async (modalidadeSelecionada, ue, ano) => {
+      if (ue && modalidadeSelecionada) {
+        setCarregandoTurmas(true);
+        const { data } = await AbrangenciaServico.buscarTurmas(
+          ue,
+          modalidadeSelecionada,
+          '',
+          ano,
+          consideraHistorico
+        )
+          .catch(e => erros(e))
+          .finally(() => setCarregandoTurmas(false));
 
-      if (data) {
-        const lista = [];
-        if (data.length > 1) {
-          lista.push({ valor: '0', nomeFiltro: 'Todas' });
-        }
-        data.map(item =>
-          lista.push({
-            desc: item.nome,
-            valor: item.codigo,
-            nomeFiltro: item.nomeFiltro,
-          })
-        );
-        setListaTurmas(lista);
-        if (lista.length === 1) {
-          setTurmaId(lista[0].valor);
+        if (data) {
+          const lista = [];
+          if (data.length > 1) {
+            lista.push({ valor: '0', nomeFiltro: 'Todas' });
+          }
+          data.map(item =>
+            lista.push({
+              desc: item.nome,
+              valor: item.codigo,
+              nomeFiltro: item.nomeFiltro,
+            })
+          );
+          setListaTurmas(lista);
+          if (lista.length === 1) {
+            setTurmaId(lista[0].valor);
+          }
         }
       }
-    }
-  }, []);
+    },
+    [consideraHistorico]
+  );
 
   useEffect(() => {
     if (modalidadeId && ueId) {
@@ -411,27 +425,27 @@ const RelatorioPendencias = () => {
     }
   }, [ueId, turmaId, listaTurmas, obterComponentesCurriculares]);
 
-  const obterSemestres = async (
-    modalidadeSelecionada,
-    anoLetivoSelecionado
-  ) => {
-    setCarregandoSemestres(true);
-    const retorno = await api.get(
-      `v1/abrangencias/false/semestres?anoLetivo=${anoLetivoSelecionado}&modalidade=${modalidadeSelecionada ||
-        0}`
-    );
-    if (retorno && retorno.data) {
-      const lista = retorno.data.map(periodo => {
-        return { desc: periodo, valor: periodo };
-      });
+  const obterSemestres = useCallback(
+    async (modalidadeSelecionada, anoLetivoSelecionado) => {
+      setCarregandoSemestres(true);
+      const retorno = await api.get(
+        `v1/abrangencias/${consideraHistorico}/semestres?anoLetivo=${anoLetivoSelecionado}&modalidade=${modalidadeSelecionada ||
+          0}`
+      );
+      if (retorno && retorno.data) {
+        const lista = retorno.data.map(periodo => {
+          return { desc: periodo, valor: periodo };
+        });
 
-      if (lista && lista.length && lista.length === 1) {
-        setSemestre(lista[0].valor);
+        if (lista && lista.length && lista.length === 1) {
+          setSemestre(lista[0].valor);
+        }
+        setListaSemestres(lista);
       }
-      setListaSemestres(lista);
-    }
-    setCarregandoSemestres(false);
-  };
+      setCarregandoSemestres(false);
+    },
+    [consideraHistorico]
+  );
 
   useEffect(() => {
     if (
@@ -444,7 +458,7 @@ const RelatorioPendencias = () => {
     }
     setSemestre();
     setListaSemestres([]);
-  }, [obterAnosLetivos, modalidadeId, anoLetivo]);
+  }, [obterSemestres, modalidadeId, anoLetivo]);
 
   const obterTipoPendenciaGrupo = useCallback(async () => {
     setCarregandoTipoPendenciaGrupo(true);
@@ -624,6 +638,16 @@ const RelatorioPendencias = () => {
               </Loader>
             </div>
           </div>
+          <div className="row mb-2">
+            <div className="col-12">
+              <CheckboxComponent
+                label="Exibir histórico?"
+                onChangeCheckbox={onChangeConsideraHistorico}
+                checked={consideraHistorico}
+                disabled={listaAnosLetivo.length === 1}
+              />
+            </div>
+          </div>
           <div className="row mb-3">
             <div className="col-sm-12 col-md-6 col-lg-2 pr-0">
               <Loader loading={carregandoAnos} ignorarTip>
@@ -633,7 +657,11 @@ const RelatorioPendencias = () => {
                   lista={listaAnosLetivo}
                   valueOption="valor"
                   valueText="desc"
-                  disabled={listaAnosLetivo && listaAnosLetivo.length === 1}
+                  disabled={
+                    !consideraHistorico ||
+                    !listaAnosLetivo?.length ||
+                    listaAnosLetivo?.length === 1
+                  }
                   onChange={onChangeAnoLetivo}
                   valueSelect={anoLetivo}
                   placeholder="Ano letivo"
