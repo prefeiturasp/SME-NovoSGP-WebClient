@@ -155,7 +155,7 @@ function TabelaRetratil({
               <LinhaTabela
                 className={isAlunoSelecionado(item) && `selecionado`}
                 key={shortid.generate()}
-                ativo={!item.desabilitado}
+                ativo={true}
                 onClick={() => onClickLinhaAluno(item)}
                 processoConcluido={item.processoConcluido}
               >
