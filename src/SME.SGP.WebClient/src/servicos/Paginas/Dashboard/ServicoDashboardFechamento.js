@@ -2,7 +2,7 @@ import api from '~/servicos/api';
 import { store } from '~/redux';
 import { setDadosDashboardFechamento } from '~/redux/modulos/dashboardFechamento/actions';
 
-const urlPadrao = 'v1/dashboard/frequencias';
+const urlPadrao = 'v1/dashboard/fechamentos';
 
 class ServicoDashboardFechamento {
   montarConsultaPadraoGraficos = params => {
@@ -13,11 +13,10 @@ class ServicoDashboardFechamento {
       ueId,
       modalidade,
       semestre,
-      anoEscolar,
-      turmaId,
+      bimestre,
     } = params;
 
-    let url = `${urlPadrao}/${rota}?anoLetivo=${anoLetivo}`;
+    let url = `v1/dashboard/fechamentos/${rota}?anoLetivo=${anoLetivo}`;
 
     if (dreId) {
       url += `&dreId=${dreId}`;
@@ -31,11 +30,8 @@ class ServicoDashboardFechamento {
     if (semestre) {
       url += `&semestre=${semestre}`;
     }
-    if (anoEscolar) {
-      url += `&ano=${anoEscolar}`;
-    }
-    if (turmaId) {
-      url += `&turmaId=${turmaId}`;
+    if (bimestre) {
+      url += `&bimestre=${bimestre}`;
     }
     return api.get(url);
   };
@@ -48,21 +44,14 @@ class ServicoDashboardFechamento {
     semestre,
     bimestre
   ) => {
-    return new Promise((resolve, reject) => {
-      resolve({
-        data: [
-          {
-            turma: 'EF - 1',
-            descricao: 'Qtd. acima do mínimo de frequencia',
-            quantidade: 3018,
-          },
-          {
-            turma: 'EF - 1',
-            descricao: 'Qtd. abaixo do mínimo de frequencia',
-            quantidade: 300,
-          },
-        ],
-      });
+    return this.montarConsultaPadraoGraficos({
+      rota: 'situacoes',
+      anoLetivo,
+      dreId,
+      ueId,
+      modalidade,
+      semestre,
+      bimestre,
     });
   };
 
@@ -74,21 +63,14 @@ class ServicoDashboardFechamento {
     semestre,
     bimestre
   ) => {
-    return new Promise((resolve, reject) => {
-      resolve({
-        data: [
-          {
-            turma: 'EF - 1',
-            descricao: 'Qtd. acima do mínimo de frequencia',
-            quantidade: 3018,
-          },
-          {
-            turma: 'EF - 1',
-            descricao: 'Qtd. abaixo do mínimo de frequencia',
-            quantidade: 300,
-          },
-        ],
-      });
+    return this.montarConsultaPadraoGraficos({
+      rota: 'estudantes',
+      anoLetivo,
+      dreId,
+      ueId,
+      modalidade,
+      semestre,
+      bimestre,
     });
   };
 
@@ -100,26 +82,15 @@ class ServicoDashboardFechamento {
     semestre,
     bimestre
   ) => {
-    return new Promise((resolve, reject) => {
-      resolve({
-        data: [
-          {
-            turma: 'EF - 1',
-            descricao: 'Qtd. acima do mínimo de frequencia',
-            quantidade: 3018,
-          },
-          {
-            turma: 'EF - 1',
-            descricao: 'Qtd. abaixo do mínimo de frequencia',
-            quantidade: 300,
-          },
-        ],
-      });
+    return this.montarConsultaPadraoGraficos({
+      rota: 'pendencias',
+      anoLetivo,
+      dreId,
+      ueId,
+      modalidade,
+      semestre,
+      bimestre,
     });
-  };
-
-  obterUltimaConsolidacao = anoLetivo => {
-    return api.get(`${urlPadrao}/consolidacao?anoLetivo=${anoLetivo}`);
   };
 
   atualizarFiltros = (nomeParametro, valor) => {

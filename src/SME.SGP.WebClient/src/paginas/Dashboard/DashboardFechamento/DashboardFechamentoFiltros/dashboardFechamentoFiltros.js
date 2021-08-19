@@ -136,6 +136,7 @@ const DashboardFechamentoFiltros = () => {
     }
     setListaUes([]);
     ServicoDashboardFechamento.atualizarFiltros('ue', undefined);
+    ServicoDashboardFechamento.atualizarFiltros('bimestre', undefined);
     ServicoDashboardFechamento.atualizarFiltros('dre', valorAtal);
   };
 
@@ -172,6 +173,7 @@ const DashboardFechamentoFiltros = () => {
 
   const onChangeUe = codigoUe => {
     ServicoDashboardFechamento.atualizarFiltros('modalidade', undefined);
+    ServicoDashboardFechamento.atualizarFiltros('bimestre', undefined);
     setListaModalidades([]);
 
     let valorAtal;
@@ -231,6 +233,7 @@ const DashboardFechamentoFiltros = () => {
 
   const onChangeModalidade = valor => {
     ServicoDashboardFechamento.atualizarFiltros('semestre', undefined);
+    ServicoDashboardFechamento.atualizarFiltros('bimestre', undefined);
     setListaSemestres([]);
 
     ServicoDashboardFechamento.atualizarFiltros('modalidade', valor);
@@ -276,60 +279,13 @@ const DashboardFechamentoFiltros = () => {
   }, [ue, modalidade, anoLetivo, consideraHistorico, obterSemestres]);
 
   const onChangeSemestre = valor => {
+    ServicoDashboardFechamento.atualizarFiltros('bimestre', undefined);
     ServicoDashboardFechamento.atualizarFiltros('semestre', valor);
   };
 
   const onChangeBimestre = valor => {
     ServicoDashboardFechamento.atualizarFiltros('bimestre', valor);
   };
-
-  const obterAnosEscolares = useCallback(async () => {
-    const respota = await ServicoDashboardFechamento.obterAnosEscolaresPorModalidade(
-      anoLetivo,
-      dre?.id,
-      ue?.id,
-      modalidade,
-      semestre
-    ).catch(e => erros(e));
-
-    if (respota?.data?.length) {
-      if (respota.data.length > 1) {
-        respota.data.unshift({ ano: OPCAO_TODOS, modalidadeAno: 'Todos' });
-      }
-      ServicoDashboardFechamento.atualizarFiltros(
-        'listaAnosEscolares',
-        respota.data
-      );
-    } else {
-      ServicoDashboardFechamento.atualizarFiltros('listaAnosEscolares', []);
-    }
-  }, [anoLetivo, dre, ue, modalidade, semestre]);
-
-  useEffect(() => {
-    if (anoLetivo && dre && ue && modalidade) {
-      obterAnosEscolares();
-    } else {
-      ServicoDashboardFechamento.atualizarFiltros('listaAnosEscolares', []);
-    }
-  }, [anoLetivo, dre, ue, modalidade, semestre, obterAnosEscolares]);
-
-  const obterUltimaConsolidacao = useCallback(async () => {
-    const resposta = await ServicoDashboardFechamento.obterUltimaConsolidacao(
-      anoLetivo
-    ).catch(e => erros(e));
-
-    if (resposta?.data) {
-      ServicoDashboardFechamento.atualizarFiltros(
-        'dataUltimaConsolidacao',
-        resposta.data
-      );
-    } else {
-      ServicoDashboardFechamento.atualizarFiltros(
-        'dataUltimaConsolidacao',
-        undefined
-      );
-    }
-  }, [anoLetivo]);
 
   const obterBimestres = useCallback(async () => {
     const dados = await ServicoPeriodoEscolar.obterPeriodosPorAnoLetivoModalidade(
@@ -343,21 +299,10 @@ const DashboardFechamentoFiltros = () => {
           descricao: item.descricao,
         };
       });
-      dadosBimestres.push({ valor: 'final', descricao: 'Final' });
+      dadosBimestres.push({ valor: '0', descricao: 'Final' });
       setListaBimestres(dadosBimestres);
     } else setListaBimestres([]);
   }, [anoLetivo, modalidade]);
-
-  useEffect(() => {
-    if (anoLetivo) {
-      obterUltimaConsolidacao();
-    } else {
-      ServicoDashboardFechamento.atualizarFiltros(
-        'dataUltimaConsolidacao',
-        undefined
-      );
-    }
-  }, [anoLetivo, obterUltimaConsolidacao]);
 
   useEffect(() => {
     if (anoLetivo && modalidade) {

@@ -21,6 +21,9 @@ const TabsDashboardFechamento = () => {
   const modalidade = useSelector(
     store => store.dashboardFechamento?.dadosDashboardFechamento?.modalidade
   );
+  const bimestre = useSelector(
+    store => store.dashboardFechamento?.dadosDashboardFechamento?.bimestre
+  );
   const semestre = useSelector(
     store => store.dashboardFechamento?.dadosDashboardFechamento?.semestre
   );
@@ -28,7 +31,7 @@ const TabsDashboardFechamento = () => {
   const ehModalidadeEJA = Number(modalidade) === ModalidadeDTO.EJA;
   const semestreDesabilitado = !!(ehModalidadeEJA ? semestre : !semestre);
   const exibirAbas =
-    anoLetivo && dre && ue && modalidade && semestreDesabilitado;
+    anoLetivo && dre && ue && modalidade && bimestre && semestreDesabilitado;
 
   const onChangeTab = tabAtiva => {
     setTabSelecionada(tabAtiva);
