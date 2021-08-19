@@ -1,21 +1,13 @@
-import * as moment from 'moment';
-import React, { useCallback, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import { useSelector } from 'react-redux';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Loader } from '~/componentes';
-import { GraficoBarras, TagGrafico } from '~/componentes-sgp';
+import { GraficoBarras } from '~/componentes-sgp';
 import { OPCAO_TODOS } from '~/constantes/constantes';
 import { erros } from '~/servicos';
-import ServicoDashboardFechamento from '../../../../../servicos/Paginas/Dashboard/ServicoDashboardFechamento';
+import ServicoDashboardFechamento from '~/servicos/Paginas/Dashboard/ServicoDashboardFechamento';
 
-const GraficoFechamentoPorEstudantes = props => {
+const GraficoFechamentoPorEstudante = props => {
   const { anoLetivo, dreId, ueId, modalidade, semestre, bimestre } = props;
-
-  const dataUltimaConsolidacao = useSelector(
-    store =>
-      store.dashboardFrequencia?.dadosDashboardFrequencia
-        ?.dataUltimaConsolidacao
-  );
 
   const [dadosGrafico, setDadosGrafico] = useState([]);
   const [exibirLoader, setExibirLoader] = useState(false);
@@ -41,7 +33,7 @@ const GraficoFechamentoPorEstudantes = props => {
   }, [anoLetivo, dreId, ueId, modalidade, semestre, bimestre]);
 
   useEffect(() => {
-    if (modalidade && anoLetivo && dreId && ueId) {
+    if (modalidade && anoLetivo && dreId && ueId && bimestre) {
       obterDadosGrafico();
     } else {
       setDadosGrafico([]);
@@ -53,24 +45,13 @@ const GraficoFechamentoPorEstudantes = props => {
       loading={exibirLoader}
       className={exibirLoader ? 'text-center' : ''}
     >
-      {dataUltimaConsolidacao && (
-        <TagGrafico
-          valor={
-            dataUltimaConsolidacao
-              ? `Data da última atualização: ${moment(
-                  dataUltimaConsolidacao
-                ).format('DD/MM/YYYY HH:mm:ss')}`
-              : ''
-          }
-        />
-      )}
       {dadosGrafico?.length ? (
         <GraficoBarras
           data={dadosGrafico}
-          xField="turma"
+          xField="grupo"
           xAxisVisible
           isGroup
-          colors={['#0288D1', '#F57C00']}
+          colors={['#0288D1', '#F57C00', '#C2185B']}
         />
       ) : !exibirLoader ? (
         <div className="text-center">Sem dados</div>
@@ -81,7 +62,7 @@ const GraficoFechamentoPorEstudantes = props => {
   );
 };
 
-GraficoFechamentoPorEstudantes.propTypes = {
+GraficoFechamentoPorEstudante.propTypes = {
   anoLetivo: PropTypes.oneOfType(PropTypes.any),
   dreId: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   ueId: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
@@ -90,7 +71,7 @@ GraficoFechamentoPorEstudantes.propTypes = {
   bimestre: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
 };
 
-GraficoFechamentoPorEstudantes.defaultProps = {
+GraficoFechamentoPorEstudante.defaultProps = {
   anoLetivo: null,
   dreId: null,
   ueId: null,
@@ -99,4 +80,4 @@ GraficoFechamentoPorEstudantes.defaultProps = {
   bimestre: null,
 };
 
-export default GraficoFechamentoPorEstudantes;
+export default GraficoFechamentoPorEstudante;

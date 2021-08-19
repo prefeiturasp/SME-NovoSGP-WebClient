@@ -15,7 +15,7 @@ const DashboardFechamento = () => {
 
   return (
     <>
-      <Cabecalho pagina="Dashboard frequência" classes="mb-2" />
+      <Cabecalho pagina="Dashboard fechamento" classes="mb-2" />
       <Card>
         <div className="col-md-12 p-0">
           <div className="row">

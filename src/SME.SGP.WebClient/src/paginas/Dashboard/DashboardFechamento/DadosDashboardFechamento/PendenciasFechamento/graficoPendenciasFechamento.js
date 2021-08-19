@@ -1,28 +1,20 @@
-import * as moment from 'moment';
-import React, { useCallback, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import { useSelector } from 'react-redux';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Loader } from '~/componentes';
-import { GraficoBarras, TagGrafico } from '~/componentes-sgp';
+import { GraficoBarras } from '~/componentes-sgp';
 import { OPCAO_TODOS } from '~/constantes/constantes';
 import { erros } from '~/servicos';
-import ServicoDashboardFechamento from '../../../../../servicos/Paginas/Dashboard/ServicoDashboardFechamento';
+import ServicoDashboardFechamento from '~/servicos/Paginas/Dashboard/ServicoDashboardFechamento';
 
 const GraficoPendenciasFechamento = props => {
   const { anoLetivo, dreId, ueId, modalidade, semestre, bimestre } = props;
-
-  const dataUltimaConsolidacao = useSelector(
-    store =>
-      store.dashboardFrequencia?.dadosDashboardFrequencia
-        ?.dataUltimaConsolidacao
-  );
 
   const [dadosGrafico, setDadosGrafico] = useState([]);
   const [exibirLoader, setExibirLoader] = useState(false);
 
   const obterDadosGrafico = useCallback(async () => {
     setExibirLoader(true);
-    const retorno = await ServicoDashboardFechamento.obterFechamentoPorEstudantes(
+    const retorno = await ServicoDashboardFechamento.obterPendenciasFechamento(
       anoLetivo,
       dreId === OPCAO_TODOS ? '' : dreId,
       ueId === OPCAO_TODOS ? '' : ueId,
@@ -41,7 +33,7 @@ const GraficoPendenciasFechamento = props => {
   }, [anoLetivo, dreId, ueId, modalidade, semestre, bimestre]);
 
   useEffect(() => {
-    if (modalidade && anoLetivo && dreId && ueId) {
+    if (modalidade && anoLetivo && dreId && ueId && bimestre) {
       obterDadosGrafico();
     } else {
       setDadosGrafico([]);
@@ -53,25 +45,8 @@ const GraficoPendenciasFechamento = props => {
       loading={exibirLoader}
       className={exibirLoader ? 'text-center' : ''}
     >
-      {dataUltimaConsolidacao && (
-        <TagGrafico
-          valor={
-            dataUltimaConsolidacao
-              ? `Data da última atualização: ${moment(
-                  dataUltimaConsolidacao
-                ).format('DD/MM/YYYY HH:mm:ss')}`
-              : ''
-          }
-        />
-      )}
       {dadosGrafico?.length ? (
-        <GraficoBarras
-          data={dadosGrafico}
-          xField="turma"
-          xAxisVisible
-          isGroup
-          colors={['#0288D1', '#F57C00']}
-        />
+        <GraficoBarras data={dadosGrafico} />
       ) : !exibirLoader ? (
         <div className="text-center">Sem dados</div>
       ) : (
