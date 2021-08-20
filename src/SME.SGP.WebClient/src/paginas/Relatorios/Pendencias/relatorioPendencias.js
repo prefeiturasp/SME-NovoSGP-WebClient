@@ -588,6 +588,7 @@ const RelatorioPendencias = () => {
       exibirPendenciasResolvidas,
       tipoPendenciaGrupo,
     };
+
     await ServicoRelatorioPendencias.gerar(params)
       .then(() => {
         sucesso(
