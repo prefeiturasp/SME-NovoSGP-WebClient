@@ -95,6 +95,7 @@ const RelatorioPendencias = () => {
     setComponentesCurricularesId();
     setBimestre();
     setTipoPendenciaGrupo();
+    setUsuarioRf();
     setClicouBotaoGerar(false);
   };
 
@@ -103,6 +104,7 @@ const RelatorioPendencias = () => {
     setAnoLetivo(anoAtual);
     setDreId();
     setUeId();
+    setUsuarioRf();
   };
 
   const onChangeAnoLetivo = async valor => {
@@ -167,13 +169,13 @@ const RelatorioPendencias = () => {
 
   const obterDres = useCallback(async () => {
     setCarregandoDres(true);
-    const { data } = await AbrangenciaServico.buscarDres(
+    const retorno = await AbrangenciaServico.buscarDres(
       `v1/abrangencias/${consideraHistorico}/dres?anoLetivo=${anoLetivo}`
     )
       .catch(e => erros(e))
       .finally(() => setCarregandoDres(false));
-    if (data?.length) {
-      const lista = data
+    if (retorno?.data?.length) {
+      const lista = retorno.data
         .map(item => ({
           desc: item.nome,
           valor: String(item.codigo),
@@ -572,6 +574,7 @@ const RelatorioPendencias = () => {
     setClicouBotaoGerar(true);
 
     const params = {
+      exibirHistorico: consideraHistorico,
       anoLetivo,
       dreCodigo: dreId,
       ueCodigo: ueId,
