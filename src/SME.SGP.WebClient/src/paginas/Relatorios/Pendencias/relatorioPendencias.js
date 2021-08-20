@@ -135,18 +135,23 @@ const RelatorioPendencias = () => {
   };
 
   const onChangeTurma = valor => {
-    setComponentesCurricularesId();
     setTurmaId(valor);
+    setComponentesCurricularesId();
+    setBimestre();
+    setTipoPendenciaGrupo();
     setClicouBotaoGerar(false);
   };
 
   const onChangeComponenteCurricular = valor => {
     setComponentesCurricularesId([valor]);
+    setBimestre();
+    setTipoPendenciaGrupo();
     setClicouBotaoGerar(false);
   };
 
   const onChangeBimestre = valor => {
     setBimestre(valor);
+    setTipoPendenciaGrupo();
     setClicouBotaoGerar(false);
   };
 
@@ -280,7 +285,7 @@ const RelatorioPendencias = () => {
         if (data) {
           const lista = [];
           if (data.length > 1) {
-            lista.push({ valor: '0', nomeFiltro: 'Todas' });
+            lista.push({ valor: OPCAO_TODOS, nomeFiltro: 'Todas' });
           }
           data.map(item =>
             lista.push({
@@ -291,7 +296,7 @@ const RelatorioPendencias = () => {
           );
           setListaTurmas(lista);
           if (lista.length === 1) {
-            setTurmaId(lista[0].valor);
+            setTurmaId([lista[0].valor]);
           }
         }
       }
@@ -571,7 +576,7 @@ const RelatorioPendencias = () => {
       dreCodigo: dreId,
       ueCodigo: ueId,
       modalidade: modalidadeId,
-      turmasCodigo: turmaId === '0' ? [] : [].concat(turmaId),
+      turmasCodigo: turmaId === OPCAO_TODOS ? [] : [].concat(turmaId),
       bimestre,
       componentesCurriculares:
         componentesCurricularesId?.length === 1 &&
@@ -751,12 +756,8 @@ const RelatorioPendencias = () => {
                   }
                   multiple
                   valueSelect={turmaId}
-                  onChange={valor => {
-                    if (valor.includes('0')) {
-                      onChangeTurma('0');
-                    } else {
-                      onChangeTurma(valor);
-                    }
+                  onChange={valores => {
+                    onchangeMultiSelect(valores, turmaId, onChangeTurma);
                   }}
                   placeholder="Turma"
                   showSearch
@@ -823,6 +824,7 @@ const RelatorioPendencias = () => {
             <Localizador
               classesRF="pr-0"
               dreId={dreId}
+              ueId={ueId}
               rfEdicao={usuarioRf}
               anoLetivo={anoLetivo}
               showLabel

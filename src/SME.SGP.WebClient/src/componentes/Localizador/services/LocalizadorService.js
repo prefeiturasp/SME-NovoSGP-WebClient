@@ -19,16 +19,26 @@ class LocalizadorService {
     });
   }
 
-  buscarAutocomplete({ anoLetivo, dreId, nome }) {
+  buscarAutocomplete({ anoLetivo, dreId, nome, ueId }) {
     return api.get(
-      `${this.urlProfessores}/${anoLetivo}/autocomplete/${dreId}?nomeProfessor=${nome}`
+      `${this.urlProfessores}/${anoLetivo}/autocomplete/${dreId}`,
+      {
+        params: {
+          nomeProfessor: nome,
+          ueId,
+        },
+      }
     );
   }
 
-  buscarPorRf({ anoLetivo, rf, buscarOutrosCargos }) {
-    return api.get(
-      `${this.urlProfessores}/${rf}/resumo/${anoLetivo}?buscarOutrosCargos=${buscarOutrosCargos}`
-    );
+  buscarPorRf({ anoLetivo, rf, buscarOutrosCargos, dreId, ueId }) {
+    return api.get(`${this.urlProfessores}/${rf}/resumo/${anoLetivo}`, {
+      params: {
+        buscarOutrosCargos,
+        dreId,
+        ueId,
+      },
+    });
   }
 
   buscarPessoa({ rf, nome }) {

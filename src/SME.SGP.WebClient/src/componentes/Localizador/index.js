@@ -39,6 +39,7 @@ function Localizador({
   mensagemErroConsultaRF,
   colunasNome,
   buscarCaracterPartir,
+  ueId,
 }) {
   const usuario = useSelector(store => store.usuario);
   const [dataSource, setDataSource] = useState([]);
@@ -77,6 +78,7 @@ function Localizador({
         nome: valor,
         dreId,
         anoLetivo,
+        ueId,
       })
       .finally(() => setExibirLoader(false));
 
@@ -101,6 +103,8 @@ function Localizador({
             rf,
             anoLetivo,
             buscarOutrosCargos,
+            dreId,
+            ueId,
           })
           .finally(() => setExibirLoader(false));
 
@@ -131,7 +135,7 @@ function Localizador({
         });
       }
     },
-    [anoLetivo, buscarOutrosCargos, mensagemErroConsultaRF]
+    [anoLetivo, buscarOutrosCargos, mensagemErroConsultaRF, dreId, ueId]
   );
 
   const onChangeRF = valor => {
@@ -283,6 +287,7 @@ Localizador.propTypes = {
   mensagemErroConsultaRF: PropTypes.string,
   colunasNome: PropTypes.string,
   buscarCaracterPartir: PropTypes.number,
+  ueId: PropTypes.string,
 };
 
 Localizador.defaultProps = {
@@ -305,6 +310,7 @@ Localizador.defaultProps = {
   mensagemErroConsultaRF: '',
   colunasNome: '8',
   buscarCaracterPartir: 3,
+  ueId: null,
 };
 
 export default Localizador;
