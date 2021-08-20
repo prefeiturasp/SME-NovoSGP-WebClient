@@ -31,7 +31,13 @@ const TabsDashboardFechamento = () => {
   const ehModalidadeEJA = Number(modalidade) === ModalidadeDTO.EJA;
   const semestreDesabilitado = !!(ehModalidadeEJA ? semestre : !semestre);
   const exibirAbas =
-    anoLetivo && dre && ue && modalidade && bimestre && semestreDesabilitado;
+    anoLetivo &&
+    dre &&
+    ue &&
+    modalidade &&
+    bimestre &&
+    semestreDesabilitado &&
+    String(modalidade) !== String(ModalidadeDTO.INFANTIL);
 
   const onChangeTab = tabAtiva => {
     setTabSelecionada(tabAtiva);

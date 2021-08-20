@@ -233,7 +233,6 @@ const DashboardFechamentoFiltros = () => {
 
   const onChangeModalidade = valor => {
     ServicoDashboardFechamento.atualizarFiltros('semestre', undefined);
-    ServicoDashboardFechamento.atualizarFiltros('bimestre', undefined);
     setListaSemestres([]);
 
     ServicoDashboardFechamento.atualizarFiltros('modalidade', valor);
@@ -279,7 +278,6 @@ const DashboardFechamentoFiltros = () => {
   }, [ue, modalidade, anoLetivo, consideraHistorico, obterSemestres]);
 
   const onChangeSemestre = valor => {
-    ServicoDashboardFechamento.atualizarFiltros('bimestre', undefined);
     ServicoDashboardFechamento.atualizarFiltros('semestre', valor);
   };
 

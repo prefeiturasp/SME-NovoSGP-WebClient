@@ -4,6 +4,7 @@ import { Cabecalho } from '~/componentes-sgp';
 
 import { URL_HOME } from '~/constantes';
 import { history } from '~/servicos';
+import DashboardFechamentoAlertaInfantil from './dashboardDevolutivasAlertaInfantil';
 
 import DashboardFechamentoFiltros from './DashboardFechamentoFiltros/dashboardFechamentoFiltros';
 import TabsDashboardFechamento from './TabsDashboardFechamento/tabsDashboardFechamento';
@@ -15,6 +16,7 @@ const DashboardFechamento = () => {
 
   return (
     <>
+      <DashboardFechamentoAlertaInfantil />
       <Cabecalho pagina="Dashboard fechamento" classes="mb-2" />
       <Card>
         <div className="col-md-12 p-0">
