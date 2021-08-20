@@ -829,7 +829,6 @@ const RelatorioPendencias = () => {
               anoLetivo={anoLetivo}
               showLabel
               onChange={onChangeLocalizador}
-              buscarOutrosCargos
               colunasNome="4"
               buscarCaracterPartir={5}
               desabilitado={!ueId}
