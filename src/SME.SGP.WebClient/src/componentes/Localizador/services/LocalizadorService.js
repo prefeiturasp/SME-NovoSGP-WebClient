@@ -31,10 +31,22 @@ class LocalizadorService {
     );
   }
 
-  buscarPorRf({ anoLetivo, rf, buscarOutrosCargos, dreId, ueId }) {
-    return api.get(`${this.urlProfessores}/${rf}/resumo/${anoLetivo}`, {
+  buscarPorRf({
+    anoLetivo,
+    rf,
+    buscarOutrosCargos,
+    dreId,
+    ueId,
+    buscarPorAbrangencia,
+  }) {
+    const urlPadrao = `${this.urlProfessores}/${rf}/resumo/${anoLetivo}`;
+    const urlPorAbrangencia = `${this.urlProfessores}/rfs/${rf}/anos-letivos/${anoLetivo}/buscar`;
+    const url = buscarPorAbrangencia ? urlPorAbrangencia : urlPadrao;
+    const outrosCargos = buscarPorAbrangencia ? null : buscarOutrosCargos;
+
+    return api.get(url, {
       params: {
-        buscarOutrosCargos,
+        buscarOutrosCargos: outrosCargos,
         dreId,
         ueId,
       },

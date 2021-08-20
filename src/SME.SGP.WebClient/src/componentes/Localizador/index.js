@@ -40,6 +40,7 @@ function Localizador({
   colunasNome,
   buscarCaracterPartir,
   ueId,
+  buscarPorAbrangencia,
 }) {
   const usuario = useSelector(store => store.usuario);
   const [dataSource, setDataSource] = useState([]);
@@ -105,6 +106,7 @@ function Localizador({
             buscarOutrosCargos,
             dreId,
             ueId,
+            buscarPorAbrangencia,
           })
           .finally(() => setExibirLoader(false));
 
@@ -288,6 +290,7 @@ Localizador.propTypes = {
   colunasNome: PropTypes.string,
   buscarCaracterPartir: PropTypes.number,
   ueId: PropTypes.string,
+  buscarPorAbrangencia: PropTypes.bool,
 };
 
 Localizador.defaultProps = {
@@ -311,6 +314,7 @@ Localizador.defaultProps = {
   colunasNome: '8',
   buscarCaracterPartir: 3,
   ueId: null,
+  buscarPorAbrangencia: false,
 };
 
 export default Localizador;

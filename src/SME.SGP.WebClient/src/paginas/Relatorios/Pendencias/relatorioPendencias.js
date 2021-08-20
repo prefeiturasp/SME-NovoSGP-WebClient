@@ -832,6 +832,7 @@ const RelatorioPendencias = () => {
               colunasNome="4"
               buscarCaracterPartir={5}
               desabilitado={!ueId}
+              buscarPorAbrangencia
             />
             <div className="col-sm-12 col-md-4 col-lg-4">
               <RadioGroupButton
