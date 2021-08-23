@@ -68,15 +68,8 @@ const CampoConceitoFinal = props => {
     }
   };
 
-  return (
-    <Tooltip
-      placement="bottom"
-      title={
-        notaConceitoBimestre && notaConceitoBimestre.abaixoDaMedia
-          ? 'Abaixo da Média'
-          : ''
-      }
-    >
+  const campo = () => {
+    return (
       <div>
         <SelectComponent
           label={label || ''}
@@ -99,7 +92,19 @@ const CampoConceitoFinal = props => {
           searchValue={false}
         />
       </div>
-    </Tooltip>
+    );
+  };
+
+  return (
+    <>
+      {notaConceitoBimestre?.abaixoDaMedia ? (
+        <Tooltip placement="left" title="Abaixo da Média">
+          {campo()}
+        </Tooltip>
+      ) : (
+        campo()
+      )}
+    </>
   );
 };
 
