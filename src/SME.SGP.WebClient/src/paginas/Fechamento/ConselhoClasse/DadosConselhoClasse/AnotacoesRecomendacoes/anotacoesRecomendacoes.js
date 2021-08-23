@@ -17,6 +17,7 @@ import AnotacoesAluno from './AnotacoesAluno/anotacoesAluno';
 import AnotacoesPedagogicas from './AnotacoesPedagogicas/anotacoesPedagogicas';
 import AuditoriaAnotacaoRecomendacao from './AuditoriaAnotacaoRecomendacao/auditoriaAnotacaoRecomendacao';
 import RecomendacaoAlunoFamilia from './RecomendacaoAlunoFamilia/recomendacaoAlunoFamilia';
+import moment from 'moment';
 
 const AnotacoesRecomendacoes = props => {
   const { codigoTurma, bimestre } = props;
@@ -39,6 +40,16 @@ const AnotacoesRecomendacoes = props => {
     recomendacaoFamilia: '',
     anotacoesAluno: '',
   });
+
+  const turmaStore = useSelector(state => state.usuario.turmaSelecionada);
+  
+  const fechamentoPeriodoInicioFim = useSelector(
+    store => store.conselhoClasse.fechamentoPeriodoInicioFim
+  );
+
+  const dadosAlunoObjectCard = useSelector(
+    store => store.conselhoClasse.dadosAlunoObjectCard
+  );
 
   const [exibir, setExibir] = useState(false);
   const [carregando, setCarregando] = useState(false);
@@ -117,11 +128,12 @@ const AnotacoesRecomendacoes = props => {
       fechamentoTurmaId,
       alunoCodigo,
       codigoTurma,
-      bimestre.valor
+      bimestre.valor,
+      turmaStore?.consideraHistorico
     ).catch(e => erros(e));
 
     if (resposta && resposta.data) {
-      if (!alunoDesabilitado) {
+      if (!desabilitarEdicaoAluno()) {
         setarDentroDoPeriodo(!resposta.data.somenteLeitura);
       }
       onChangeAnotacoesPedagogicas(resposta.data.anotacoesPedagogicas);
@@ -158,6 +170,16 @@ const AnotacoesRecomendacoes = props => {
     dispatch(setConselhoClasseEmEdicao(emEdicao));
   };
 
+  const desabilitarEdicaoAluno = () => {
+    const dataSituacao = moment(dadosAlunoObjectCard.dataSituacao).format('MM-DD-YYYY');
+    const dataFimFechamento = moment(fechamentoPeriodoInicioFim.periodoFechamentoFim).format('MM-DD-YYYY');
+
+    if (!alunoDesabilitado || (dataSituacao >= dataFimFechamento))
+       return false
+    
+    return true;
+  }
+
   return (
     <Loader
       className={carregando ? 'text-center' : ''}
@@ -167,7 +189,7 @@ const AnotacoesRecomendacoes = props => {
       {exibir ? (
         <>
           <RecomendacaoAlunoFamilia
-            alunoDesabilitado={alunoDesabilitado}
+            alunoDesabilitado={desabilitarEdicaoAluno()}
             onChangeRecomendacaoAluno={valor => {
               onChangeRecomendacaoAluno(valor);
               setarConselhoClasseEmEdicao(true);
@@ -179,7 +201,7 @@ const AnotacoesRecomendacoes = props => {
             dadosIniciais={dadosIniciais}
           />
           <AnotacoesPedagogicas
-            alunoDesabilitado={alunoDesabilitado}
+            alunoDesabilitado={desabilitarEdicaoAluno()}
             onChange={valor => {
               onChangeAnotacoesPedagogicas(valor);
               setarConselhoClasseEmEdicao(true);

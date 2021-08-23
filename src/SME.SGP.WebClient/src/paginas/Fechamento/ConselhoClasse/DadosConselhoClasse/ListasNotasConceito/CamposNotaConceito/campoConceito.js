@@ -175,13 +175,12 @@ const CampoConceito = props => {
             </Tooltip>
           </CampoAlerta>
         </CampoCentralizado>
-      ) : (
-        <Tooltip
-          placement="bottom"
-          title={abaixoDaMedia ? 'Abaixo da Média' : ''}
-        >
+      ) : abaixoDaMedia ? (
+        <Tooltip placement="left" title="Abaixo da Média">
           {campoConceitoPosConselho(abaixoDaMedia, true)}
         </Tooltip>
+      ) : (
+        campoConceitoPosConselho(abaixoDaMedia, true)
       )}
     </>
   );

@@ -9,6 +9,7 @@ import {
 } from '~/redux/modulos/conselhoClasse/actions';
 import { erros } from '~/servicos/alertas';
 import ServicoConselhoClasse from '~/servicos/Paginas/ConselhoClasse/ServicoConselhoClasse';
+import moment from 'moment';
 import ListasCarregar from './listasCarregar';
 
 const ListasNotasConceitos = props => {
@@ -23,6 +24,17 @@ const ListasNotasConceitos = props => {
   const dadosPrincipaisConselhoClasse = useSelector(
     store => store.conselhoClasse.dadosPrincipaisConselhoClasse
   );
+
+  const fechamentoPeriodoInicioFim = useSelector(
+    store => store.conselhoClasse.fechamentoPeriodoInicioFim
+  );
+
+  const dadosAlunoObjectCard = useSelector(
+    store => store.conselhoClasse.dadosAlunoObjectCard
+  );
+
+  const turmaStore = useSelector(state => state.usuario.turmaSelecionada);
+
   const {
     fechamentoTurmaId,
     conselhoClasseId,
@@ -36,8 +48,19 @@ const ListasNotasConceitos = props => {
   const [exibir, setExibir] = useState(false);
   const [carregando, setCarregando] = useState(false);
 
+  const desabilitarEdicaoAluno = () => {
+    const dataSituacao = moment(dadosAlunoObjectCard.dataSituacao).format('MM-DD-YYYY');
+    const dataFimFechamento = moment(fechamentoPeriodoInicioFim.periodoFechamentoFim).format('MM-DD-YYYY');
+
+    if (!alunoDesabilitado || (dataSituacao >= dataFimFechamento))
+       return false
+    
+    return true;
+  }
+
   const habilitaConselhoClasse = dados => {
     const { conselhoClasseAlunoId } = dadosPrincipaisConselhoClasse;
+
     let notasFechamentosPreenchidas = true;
     dados.notasConceitos.map(notasConceitos =>
       notasConceitos.componentesCurriculares.map(componentesCurriculares =>
@@ -61,7 +84,8 @@ const ListasNotasConceitos = props => {
       fechamentoTurmaId,
       alunoCodigo,
       turmaCodigo,
-      bimestreSelecionado?.valor
+      bimestreSelecionado?.valor,
+      turmaStore?.consideraHistorico
     ).catch(e => erros(e));
 
     if (resultado && resultado.data) {
@@ -109,7 +133,7 @@ const ListasNotasConceitos = props => {
           tipoNota={tipoNota}
           listaTiposConceitos={listaTiposConceitos}
           mediaAprovacao={media}
-          alunoDesabilitado={alunoDesabilitado}
+          alunoDesabilitado={desabilitarEdicaoAluno()}
         />
       ) : (
         ''
