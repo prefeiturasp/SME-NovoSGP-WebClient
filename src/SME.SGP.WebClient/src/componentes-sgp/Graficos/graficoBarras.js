@@ -15,8 +15,16 @@ const GraficoBarras = props => {
     colors,
     labelVisible,
     radius,
+    showTitle,
     ...rest
   } = props;
+
+  const scrollConfig =
+    window.innerWidth <= 960 && data?.length > 62
+      ? {
+          type: 'horizontal',
+        }
+      : null;
 
   const config = {
     ...rest,
@@ -25,6 +33,7 @@ const GraficoBarras = props => {
     xField,
     yField,
     seriesField,
+    scrollbar: scrollConfig,
     columnStyle: {
       radius,
     },
@@ -72,7 +81,7 @@ const GraficoBarras = props => {
         }
       : false,
     tooltip: {
-      showTitle: false,
+      showTitle,
       domStyles: {
         'g2-tooltip-list': {
           textAlign: 'left',
@@ -97,6 +106,7 @@ GraficoBarras.propTypes = {
   colors: PropTypes.oneOfType(PropTypes.array),
   labelVisible: PropTypes.bool,
   radius: PropTypes.oneOfType(PropTypes.array),
+  showTitle: PropTypes.bool,
 };
 
 GraficoBarras.defaultProps = {
@@ -110,6 +120,7 @@ GraficoBarras.defaultProps = {
   colors: [],
   labelVisible: true,
   radius: [4, 4, 0, 0],
+  showTitle: false,
 };
 
 export default GraficoBarras;

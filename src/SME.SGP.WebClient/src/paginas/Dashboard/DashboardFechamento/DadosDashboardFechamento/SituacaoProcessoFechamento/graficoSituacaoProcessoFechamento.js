@@ -52,6 +52,7 @@ const GraficoSituacaoProcessoFechamento = props => {
           xAxisVisible
           isGroup
           colors={['#0288D1', '#F57C00', '#C2185B']}
+          showTitle
         />
       ) : !exibirLoader ? (
         <div className="text-center">Sem dados</div>

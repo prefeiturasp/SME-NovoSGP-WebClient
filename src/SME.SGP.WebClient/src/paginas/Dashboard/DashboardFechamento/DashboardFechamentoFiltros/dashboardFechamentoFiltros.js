@@ -61,6 +61,7 @@ const DashboardFechamentoFiltros = () => {
 
     const anosLetivos = await FiltroHelper.obterAnosLetivos({
       consideraHistorico,
+      anoMinimo: 2021,
     });
 
     if (!anosLetivos.length) {
@@ -233,6 +234,7 @@ const DashboardFechamentoFiltros = () => {
 
   const onChangeModalidade = valor => {
     ServicoDashboardFechamento.atualizarFiltros('semestre', undefined);
+    ServicoDashboardFechamento.atualizarFiltros('bimestre', undefined);
     setListaSemestres([]);
 
     ServicoDashboardFechamento.atualizarFiltros('modalidade', valor);
