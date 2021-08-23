@@ -182,7 +182,8 @@ const ListaBimestre = props => {
                             item.notaPosConselho.id,
                             item.notaPosConselho.nota,
                             `${descricaoGrupoMatriz} ${index} regencia`,
-                            item.codigoComponenteCurricular
+                            item.codigoComponenteCurricular,
+                            item.notaPosConselho.podeEditar
                           )}
                         </td>
                         {index === 0 ? (
