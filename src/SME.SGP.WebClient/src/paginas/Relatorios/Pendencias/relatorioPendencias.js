@@ -3,6 +3,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import {
   Button,
   Card,
+  CheckboxComponent,
   Colors,
   Loader,
   Localizador,
@@ -75,51 +76,59 @@ const RelatorioPendencias = () => {
   );
   const [tipoPendenciaGrupo, setTipoPendenciaGrupo] = useState();
   const [exibirPendenciasResolvidas, setExibirPendenciasResolvidas] = useState(
-    '0'
+    false
   );
   const [carregandoBimestres, setCarregandoBimestres] = useState(false);
   const [
     desabilitarExibirPendenciasResolvidas,
     setDesabilitarExibirPendenciasResolvidas,
   ] = useState(true);
+  const [consideraHistorico, setConsideraHistorico] = useState(false);
 
   const opcaoExibirPendenciasResolvidas = [
-    { value: '0', label: 'Não' },
-    { value: '1', label: 'Sim' },
+    { value: false, label: 'Não' },
+    { value: true, label: 'Sim' },
   ];
+  const limparCampos = () => {
+    setModalidadeId();
+    setTurmaId();
+    setComponentesCurricularesId();
+    setBimestre();
+    setTipoPendenciaGrupo();
+    setUsuarioRf();
+    setClicouBotaoGerar(false);
+  };
+
+  const onChangeConsideraHistorico = e => {
+    setConsideraHistorico(e.target.checked);
+    setAnoLetivo(anoAtual);
+    setDreId();
+    setUeId();
+    setUsuarioRf();
+  };
 
   const onChangeAnoLetivo = async valor => {
     setDreId();
     setUeId();
-    setModalidadeId();
-    setTurmaId();
-    setComponentesCurricularesId();
     setAnoLetivo(valor);
+    limparCampos();
   };
 
   const onChangeDre = valor => {
     setDreId(valor);
     setUeId();
-    setModalidadeId();
-    setTurmaId();
-    setComponentesCurricularesId();
     setUeId(undefined);
+    limparCampos();
   };
 
   const onChangeUe = valor => {
-    setModalidadeId();
-    setTurmaId();
-    setComponentesCurricularesId();
     setUeId(valor);
+    limparCampos();
   };
 
   const onChangeModalidade = valor => {
+    limparCampos();
     setModalidadeId(valor);
-    setTurmaId();
-    setComponentesCurricularesId();
-    setBimestre();
-    setTipoPendenciaGrupo();
-    setClicouBotaoGerar(false);
   };
 
   const onChangeSemestre = valor => {
@@ -128,18 +137,23 @@ const RelatorioPendencias = () => {
   };
 
   const onChangeTurma = valor => {
-    setComponentesCurricularesId();
     setTurmaId(valor);
+    setComponentesCurricularesId();
+    setBimestre();
+    setTipoPendenciaGrupo();
     setClicouBotaoGerar(false);
   };
 
   const onChangeComponenteCurricular = valor => {
     setComponentesCurricularesId([valor]);
+    setBimestre();
+    setTipoPendenciaGrupo();
     setClicouBotaoGerar(false);
   };
 
   const onChangeBimestre = valor => {
     setBimestre(valor);
+    setTipoPendenciaGrupo();
     setClicouBotaoGerar(false);
   };
 
@@ -155,13 +169,13 @@ const RelatorioPendencias = () => {
 
   const obterDres = useCallback(async () => {
     setCarregandoDres(true);
-    const { data } = await AbrangenciaServico.buscarDres(
-      `v1/abrangencias/false/dres?anoLetivo=${anoLetivo}`
+    const retorno = await AbrangenciaServico.buscarDres(
+      `v1/abrangencias/${consideraHistorico}/dres?anoLetivo=${anoLetivo}`
     )
       .catch(e => erros(e))
       .finally(() => setCarregandoDres(false));
-    if (data?.length) {
-      const lista = data
+    if (retorno?.data?.length) {
+      const lista = retorno.data
         .map(item => ({
           desc: item.nome,
           valor: String(item.codigo),
@@ -177,7 +191,7 @@ const RelatorioPendencias = () => {
     }
     setListaDres([]);
     setDreId(undefined);
-  }, [anoLetivo]);
+  }, [anoLetivo, consideraHistorico]);
 
   useEffect(() => {
     if (anoLetivo) {
@@ -185,32 +199,35 @@ const RelatorioPendencias = () => {
     }
   }, [obterDres, anoLetivo]);
 
-  const obterUes = useCallback(async (dre, ano) => {
-    if (dre) {
-      setCarregandoUes(true);
-      const { data } = await AbrangenciaServico.buscarUes(
-        dre,
-        `v1/abrangencias/false/dres/${dre}/ues?anoLetivo=${ano}`,
-        true
-      )
-        .catch(e => erros(e))
-        .finally(() => setCarregandoUes(false));
-      if (data) {
-        const lista = data.map(item => ({
-          desc: item.nome,
-          valor: String(item.codigo),
-        }));
+  const obterUes = useCallback(
+    async (dre, ano) => {
+      if (dre) {
+        setCarregandoUes(true);
+        const { data } = await AbrangenciaServico.buscarUes(
+          dre,
+          `v1/abrangencias/${consideraHistorico}/dres/${dre}/ues?anoLetivo=${ano}`,
+          true
+        )
+          .catch(e => erros(e))
+          .finally(() => setCarregandoUes(false));
+        if (data) {
+          const lista = data.map(item => ({
+            desc: item.nome,
+            valor: String(item.codigo),
+          }));
 
-        if (lista?.length === 1) {
-          setUeId(lista[0].valor);
+          if (lista?.length === 1) {
+            setUeId(lista[0].valor);
+          }
+
+          setListaUes(lista);
+          return;
         }
-
-        setListaUes(lista);
-        return;
+        setListaUes([]);
       }
-      setListaUes([]);
-    }
-  }, []);
+    },
+    [consideraHistorico]
+  );
 
   useEffect(() => {
     if (dreId) {
@@ -253,37 +270,41 @@ const RelatorioPendencias = () => {
     setListaModalidades([]);
   }, [anoLetivo, ueId]);
 
-  const obterTurmas = useCallback(async (modalidadeSelecionada, ue, ano) => {
-    if (ue && modalidadeSelecionada) {
-      setCarregandoTurmas(true);
-      const { data } = await AbrangenciaServico.buscarTurmas(
-        ue,
-        modalidadeSelecionada,
-        '',
-        ano
-      )
-        .catch(e => erros(e))
-        .finally(() => setCarregandoTurmas(false));
+  const obterTurmas = useCallback(
+    async (modalidadeSelecionada, ue, ano) => {
+      if (ue && modalidadeSelecionada) {
+        setCarregandoTurmas(true);
+        const { data } = await AbrangenciaServico.buscarTurmas(
+          ue,
+          modalidadeSelecionada,
+          '',
+          ano,
+          consideraHistorico
+        )
+          .catch(e => erros(e))
+          .finally(() => setCarregandoTurmas(false));
 
-      if (data) {
-        const lista = [];
-        if (data.length > 1) {
-          lista.push({ valor: '0', nomeFiltro: 'Todas' });
-        }
-        data.map(item =>
-          lista.push({
-            desc: item.nome,
-            valor: item.codigo,
-            nomeFiltro: item.nomeFiltro,
-          })
-        );
-        setListaTurmas(lista);
-        if (lista.length === 1) {
-          setTurmaId(lista[0].valor);
+        if (data) {
+          const lista = [];
+          if (data.length > 1) {
+            lista.push({ valor: OPCAO_TODOS, nomeFiltro: 'Todas' });
+          }
+          data.map(item =>
+            lista.push({
+              desc: item.nome,
+              valor: item.codigo,
+              nomeFiltro: item.nomeFiltro,
+            })
+          );
+          setListaTurmas(lista);
+          if (lista.length === 1) {
+            setTurmaId([lista[0].valor]);
+          }
         }
       }
-    }
-  }, []);
+    },
+    [consideraHistorico]
+  );
 
   useEffect(() => {
     if (modalidadeId && ueId) {
@@ -411,27 +432,27 @@ const RelatorioPendencias = () => {
     }
   }, [ueId, turmaId, listaTurmas, obterComponentesCurriculares]);
 
-  const obterSemestres = async (
-    modalidadeSelecionada,
-    anoLetivoSelecionado
-  ) => {
-    setCarregandoSemestres(true);
-    const retorno = await api.get(
-      `v1/abrangencias/false/semestres?anoLetivo=${anoLetivoSelecionado}&modalidade=${modalidadeSelecionada ||
-        0}`
-    );
-    if (retorno && retorno.data) {
-      const lista = retorno.data.map(periodo => {
-        return { desc: periodo, valor: periodo };
-      });
+  const obterSemestres = useCallback(
+    async (modalidadeSelecionada, anoLetivoSelecionado) => {
+      setCarregandoSemestres(true);
+      const retorno = await api.get(
+        `v1/abrangencias/${consideraHistorico}/semestres?anoLetivo=${anoLetivoSelecionado}&modalidade=${modalidadeSelecionada ||
+          0}`
+      );
+      if (retorno && retorno.data) {
+        const lista = retorno.data.map(periodo => {
+          return { desc: periodo, valor: periodo };
+        });
 
-      if (lista && lista.length && lista.length === 1) {
-        setSemestre(lista[0].valor);
+        if (lista && lista.length && lista.length === 1) {
+          setSemestre(lista[0].valor);
+        }
+        setListaSemestres(lista);
       }
-      setListaSemestres(lista);
-    }
-    setCarregandoSemestres(false);
-  };
+      setCarregandoSemestres(false);
+    },
+    [consideraHistorico]
+  );
 
   useEffect(() => {
     if (
@@ -444,7 +465,7 @@ const RelatorioPendencias = () => {
     }
     setSemestre();
     setListaSemestres([]);
-  }, [obterAnosLetivos, modalidadeId, anoLetivo]);
+  }, [obterSemestres, modalidadeId, anoLetivo]);
 
   const obterTipoPendenciaGrupo = useCallback(async () => {
     setCarregandoTipoPendenciaGrupo(true);
@@ -478,7 +499,7 @@ const RelatorioPendencias = () => {
       return;
     }
     setDesabilitarExibirPendenciasResolvidas(true);
-    setExibirPendenciasResolvidas('0');
+    setExibirPendenciasResolvidas(false);
   }, [tipoPendenciaGrupo]);
 
   const cancelar = () => {
@@ -553,11 +574,12 @@ const RelatorioPendencias = () => {
     setClicouBotaoGerar(true);
 
     const params = {
+      exibirHistorico: consideraHistorico,
       anoLetivo,
       dreCodigo: dreId,
       ueCodigo: ueId,
       modalidade: modalidadeId,
-      turmasCodigo: turmaId === '0' ? [] : [].concat(turmaId),
+      turmasCodigo: turmaId === OPCAO_TODOS ? [] : [].concat(turmaId),
       bimestre,
       componentesCurriculares:
         componentesCurricularesId?.length === 1 &&
@@ -569,6 +591,7 @@ const RelatorioPendencias = () => {
       exibirPendenciasResolvidas,
       tipoPendenciaGrupo,
     };
+
     await ServicoRelatorioPendencias.gerar(params)
       .then(() => {
         sucesso(
@@ -615,14 +638,23 @@ const RelatorioPendencias = () => {
                   id="btn-gerar-rel-pendencias"
                   icon="print"
                   label="Gerar"
-                  color={Colors.Azul}
-                  border
+                  color={Colors.Roxo}
                   bold
                   className="mr-0"
                   onClick={gerar}
                   disabled={desabilitarBtnGerar}
                 />
               </Loader>
+            </div>
+          </div>
+          <div className="row mb-2">
+            <div className="col-12">
+              <CheckboxComponent
+                label="Exibir histórico?"
+                onChangeCheckbox={onChangeConsideraHistorico}
+                checked={consideraHistorico}
+                disabled={listaAnosLetivo.length === 1}
+              />
             </div>
           </div>
           <div className="row mb-3">
@@ -634,7 +666,11 @@ const RelatorioPendencias = () => {
                   lista={listaAnosLetivo}
                   valueOption="valor"
                   valueText="desc"
-                  disabled={listaAnosLetivo && listaAnosLetivo.length === 1}
+                  disabled={
+                    !consideraHistorico ||
+                    !listaAnosLetivo?.length ||
+                    listaAnosLetivo?.length === 1
+                  }
                   onChange={onChangeAnoLetivo}
                   valueSelect={anoLetivo}
                   placeholder="Ano letivo"
@@ -724,12 +760,8 @@ const RelatorioPendencias = () => {
                   }
                   multiple
                   valueSelect={turmaId}
-                  onChange={valor => {
-                    if (valor.includes('0')) {
-                      onChangeTurma('0');
-                    } else {
-                      onChangeTurma(valor);
-                    }
+                  onChange={valores => {
+                    onchangeMultiSelect(valores, turmaId, onChangeTurma);
                   }}
                   placeholder="Turma"
                   showSearch
@@ -796,14 +828,15 @@ const RelatorioPendencias = () => {
             <Localizador
               classesRF="pr-0"
               dreId={dreId}
+              ueId={ueId}
               rfEdicao={usuarioRf}
               anoLetivo={anoLetivo}
               showLabel
               onChange={onChangeLocalizador}
-              buscarOutrosCargos
               colunasNome="4"
               buscarCaracterPartir={5}
               desabilitado={!ueId}
+              buscarPorAbrangencia
             />
             <div className="col-sm-12 col-md-4 col-lg-4">
               <RadioGroupButton
