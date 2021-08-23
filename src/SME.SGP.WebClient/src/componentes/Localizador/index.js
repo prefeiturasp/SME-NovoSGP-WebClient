@@ -37,6 +37,10 @@ function Localizador({
   limparCamposAposPesquisa,
   validaPerfilProfessor,
   mensagemErroConsultaRF,
+  colunasNome,
+  buscarCaracterPartir,
+  ueId,
+  buscarPorAbrangencia,
 }) {
   const usuario = useSelector(store => store.usuario);
   const [dataSource, setDataSource] = useState([]);
@@ -67,7 +71,7 @@ function Localizador({
       }, 200);
     }
 
-    if (valor.length < 3) return;
+    if (valor.length < buscarCaracterPartir) return;
     setDataSource([]);
     setExibirLoader(true);
     const { data: dados } = await service
@@ -75,6 +79,7 @@ function Localizador({
         nome: valor,
         dreId,
         anoLetivo,
+        ueId,
       })
       .finally(() => setExibirLoader(false));
 
@@ -99,6 +104,9 @@ function Localizador({
             rf,
             anoLetivo,
             buscarOutrosCargos,
+            dreId,
+            ueId,
+            buscarPorAbrangencia,
           })
           .finally(() => setExibirLoader(false));
 
@@ -129,7 +137,7 @@ function Localizador({
         });
       }
     },
-    [anoLetivo, buscarOutrosCargos, mensagemErroConsultaRF]
+    [anoLetivo, buscarOutrosCargos, mensagemErroConsultaRF, dreId, ueId]
   );
 
   const onChangeRF = valor => {
@@ -236,7 +244,7 @@ function Localizador({
           exibirLoader={exibirLoader}
         />
       </Grid>
-      <Grid className="pr-0" cols={8}>
+      <Grid className="pr-0" cols={colunasNome}>
         {showLabel && <Label text={labelNome} control="professorNome" />}
         <InputNome
           dataSource={dataSource}
@@ -279,6 +287,10 @@ Localizador.propTypes = {
   limparCamposAposPesquisa: PropTypes.bool,
   validaPerfilProfessor: PropTypes.bool,
   mensagemErroConsultaRF: PropTypes.string,
+  colunasNome: PropTypes.string,
+  buscarCaracterPartir: PropTypes.number,
+  ueId: PropTypes.string,
+  buscarPorAbrangencia: PropTypes.bool,
 };
 
 Localizador.defaultProps = {
@@ -299,6 +311,10 @@ Localizador.defaultProps = {
   limparCamposAposPesquisa: false,
   validaPerfilProfessor: true,
   mensagemErroConsultaRF: '',
+  colunasNome: '8',
+  buscarCaracterPartir: 3,
+  ueId: null,
+  buscarPorAbrangencia: false,
 };
 
 export default Localizador;

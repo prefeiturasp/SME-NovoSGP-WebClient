@@ -480,6 +480,7 @@ const RelatorioFrequencia = () => {
     const anoAtual = listaAnosLetivo?.length && listaAnosLetivo[0].valor;
     setAnoLetivo(anoAtual);
     setCodigoDre();
+    obterDres();
     setTipoRelatorio(TIPO_RELATORIO.TURMA);
     setCondicao(undefined);
     setValorCondicao(undefined);

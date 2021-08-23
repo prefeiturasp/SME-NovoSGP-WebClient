@@ -10,7 +10,7 @@ import { erros, sucesso } from '~/servicos/alertas';
 import api from '~/servicos/api';
 import history from '~/servicos/history';
 import ServicoRelatorioPendencias from '~/servicos/Paginas/Relatorios/Pendencias/ServicoRelatorioPendencias';
-import ServicoComponentesCurriculares from '~/servicos/ServicoComponentesCurriculares';
+import { ServicoComponentesCurriculares } from '~/servicos';
 import FiltroHelper from '~componentes-sgp/filtro/helper';
 import ServicoFiltroRelatorio from '~/servicos/Paginas/FiltroRelatorio/ServicoFiltroRelatorio';
 import AlertaModalidadeInfantil from '~/componentes-sgp/AlertaModalidadeInfantil/alertaModalidadeInfantil';
