@@ -102,6 +102,7 @@ import DashboardRegistroIndividual from '~/paginas/Dashboard/DashboardRegistroIn
 import DashboardDiarioBordo from '~/paginas/Dashboard/DashboardDiarioBordo/dashboardDiarioBordo';
 import RelatorioAcompanhamentoFechamento from '~/paginas/Relatorios/Fechamento/AcompanhamentoFechamento/relatorioAcompanhamentoFechamento';
 import DashboardRelAcompanhamentoAprendizagem from '~/paginas/Dashboard/DashboardRelAcompAprend/dashboardRelAcompAprend';
+import DashboardFechamento from '~/paginas/Dashboard/DashboardFechamento/dashboardFechamento';
 
 const rotas = new Map();
 
@@ -1418,6 +1419,17 @@ rotas.set(RotasDto.DASHBOARD_RELATORIO_ACOMPANHAMENTO_APRENDIZAGEM, {
   tipo: RotasTipo.EstruturadaAutenticada,
   temPermissionamento: true,
   chavePermissao: RotasDto.DASHBOARD_RELATORIO_ACOMPANHAMENTO_APRENDIZAGEM,
+});
+
+rotas.set(RotasDto.DASHBOARD_FECHAMENTO, {
+  breadcrumbName: 'Fechamento',
+  menu: ['Dashboard'],
+  parent: '/',
+  component: DashboardFechamento,
+  exact: true,
+  tipo: RotasTipo.EstruturadaAutenticada,
+  temPermissionamento: false,
+  chavePermissao: RotasDto.DASHBOARD_FECHAMENTO,
 });
 
 const rotasArray = [];
