@@ -29,6 +29,11 @@ class ServicoComponentesCurriculares {
     const url = `v1/professores/disciplinas/turmas`;
     return api.post(url, turmasId);
   };
+
+  obterComponentesPorUeTurmas = (ueId, turmasId) => {
+    const url = `v1/componentes-curriculares/ues/${ueId}/turmas`;
+    return api.post(url, turmasId);
+  };
 }
 
 export default new ServicoComponentesCurriculares();
