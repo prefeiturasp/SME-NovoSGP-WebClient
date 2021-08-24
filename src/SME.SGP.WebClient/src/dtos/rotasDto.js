@@ -45,7 +45,7 @@ const RotasDto = {
   ATA_FINAL_RESULTADOS: '/relatorios/atas/ata-final-resultados',
   RELATORIO_FREQUENCIA: '/relatorios/frequencia/frequencia',
   DIARIO_BORDO: '/diario-classe/diario-bordo',
-  RELATORIO_PENDENCIAS: '/relatorios/pendencias-fechamento',
+  RELATORIO_PENDENCIAS: '/relatorios/gestao/pendencias',
   CARTA_INTENCOES: '/planejamento/carta-intencoes',
   RELATORIO_PARECER_CONCLUSIVO: '/relatorios/parecer-conclusivo',
   RELATORIO_NOTAS_CONCEITOS_FINAIS: '/relatorios/notas-conceitos-finais',
@@ -84,6 +84,7 @@ const RotasDto = {
     '/relatorios/fechamentos/acompanhamento-fechamento',
   DASHBOARD_RELATORIO_ACOMPANHAMENTO_APRENDIZAGEM:
     '/dashboard/acompanhamento-aprendizagem',
+  DASHBOARD_FECHAMENTO: '/dashboard/fechamento',
 };
 
 export default RotasDto;
