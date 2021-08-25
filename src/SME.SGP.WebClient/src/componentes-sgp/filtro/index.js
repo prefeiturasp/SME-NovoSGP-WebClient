@@ -16,7 +16,8 @@ import {
   SGP_SELECT_FILTRO_PRINCIPAL_MODALIDADE,
   SGP_SELECT_FILTRO_PRINCIPAL_PERIODO,
   SGP_SELECT_FILTRO_PRINCIPAL_DRE,
-  SGP_SELECT_FILTRO_PRINCIPAL_UE
+  SGP_SELECT_FILTRO_PRINCIPAL_UE,
+  SGP_CAMPO_FILTRO_PRINCIPAL_PESQUISAR_TURMA
 } from './idsCampos';
 
 import Grid from '~/componentes/grid';
@@ -1092,6 +1093,7 @@ const Filtro = () => {
         <div className="form-group mb-0 w-100 position-relative">
           <Busca className="fa fa-search fa-lg bg-transparent position-absolute text-center" />
           <Campo
+            id={SGP_CAMPO_FILTRO_PRINCIPAL_PESQUISAR_TURMA}
             type="text"
             className="form-control form-control-lg rounded d-flex px-5 border-0 fonte-14"
             placeholder="Pesquisar Turma"

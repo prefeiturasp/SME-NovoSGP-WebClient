@@ -5,3 +5,4 @@ export const SGP_SELECT_FILTRO_PRINCIPAL_MODALIDADE = 'sgp-select-filtro-princip
 export const SGP_SELECT_FILTRO_PRINCIPAL_PERIODO = 'sgp-select-filtro-principal-periodo';
 export const SGP_SELECT_FILTRO_PRINCIPAL_DRE = 'sgp-select-filtro-principal-dre';
 export const SGP_SELECT_FILTRO_PRINCIPAL_UE = 'sgp-select-filtro-principal-ue';
+export const SGP_CAMPO_FILTRO_PRINCIPAL_PESQUISAR_TURMA = 'sgp-campo-filtro-principal-pesquisar-turma';
