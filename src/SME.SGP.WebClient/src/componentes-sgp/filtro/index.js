@@ -1138,6 +1138,7 @@ const Filtro = () => {
             <div className="form-row">
               <Grid cols={3} className="form-group">
                 <SelectComponent
+                  id="sgpSelectFiltroPrincipalAnoLetivo"
                   className="fonte-14"
                   onChange={aoTrocarAnoLetivo}
                   lista={anosLetivos}
@@ -1162,6 +1163,7 @@ const Filtro = () => {
               >
                 <Loader loading={carregandoModalidades} tip="">
                   <SelectComponent
+                    id="sgpSelectFiltroPrincipalModalidade"
                     className="fonte-14"
                     onChange={aoTrocarModalidade}
                     lista={modalidades}
@@ -1182,6 +1184,7 @@ const Filtro = () => {
                   <Grid cols={4} className="form-group">
                     <Loader loading={carregandoPeriodos} tip="">
                       <SelectComponent
+                        id="sgpSelectFiltroPrincipalPeriodo"
                         className="fonte-14"
                         onChange={aoTrocarPeriodo}
                         lista={periodos}
@@ -1202,6 +1205,7 @@ const Filtro = () => {
               <Loader loading={carregandoDres} tip="">
                 <SelectComponent
                   className="fonte-14"
+                  id="sgpSelectFiltroPrincipalDRE"
                   onChange={aoTrocarDre}
                   lista={dres}
                   valueOption="valor"
@@ -1218,6 +1222,7 @@ const Filtro = () => {
               <Loader loading={carregandoUes} tip="">
                 <SelectComponent
                   className="fonte-14"
+                  id="sgpSelectFiltroPrincipalUE"
                   onChange={aoTrocarUnidadeEscolar}
                   lista={unidadesEscolares}
                   valueOption="valor"
@@ -1236,6 +1241,7 @@ const Filtro = () => {
               <Grid cols={9} className="form-group">
                 <Loader loading={carregandoTurmas} tip="">
                   <SelectComponent
+                  id="sgpSelectFiltroPrincipalTurma"
                     className="fonte-14"
                     onChange={aoTrocarTurma}
                     lista={turmas}
@@ -1251,6 +1257,7 @@ const Filtro = () => {
               </Grid>
               <Grid cols={3} className="form-group text-right">
                 <Button
+                id="sgpButtonFiltroPrincipalAplicar"
                   id={shortid.generate()}
                   label="Aplicar filtro"
                   color={Colors.Roxo}
