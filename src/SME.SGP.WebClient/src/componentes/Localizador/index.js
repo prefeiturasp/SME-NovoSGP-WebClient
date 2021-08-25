@@ -97,6 +97,8 @@ function Localizador({
   const onBuscarPorRF = useCallback(
     async ({ rf }) => {
       try {
+        if (buscarPorAbrangencia && !ueId) return;
+
         buscandoDados(true);
         setExibirLoader(true);
         const { data: dados } = await service

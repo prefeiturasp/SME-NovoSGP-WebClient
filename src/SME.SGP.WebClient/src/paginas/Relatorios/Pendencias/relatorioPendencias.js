@@ -89,13 +89,13 @@ const RelatorioPendencias = () => {
     { value: false, label: 'Não' },
     { value: true, label: 'Sim' },
   ];
+
   const limparCampos = () => {
     setModalidadeId();
     setTurmaId();
     setComponentesCurricularesId();
     setBimestre();
     setTipoPendenciaGrupo();
-    setUsuarioRf();
     setClicouBotaoGerar(false);
   };
 
@@ -685,7 +685,9 @@ const RelatorioPendencias = () => {
                   lista={listaDres}
                   valueOption="valor"
                   valueText="desc"
-                  disabled={!anoLetivo || (listaDres && listaDres.length === 1)}
+                  disabled={
+                    !anoLetivo || listaDres?.length === 1 || !listaDres?.length
+                  }
                   onChange={onChangeDre}
                   valueSelect={dreId}
                   placeholder="Diretoria Regional De Educação (DRE)"

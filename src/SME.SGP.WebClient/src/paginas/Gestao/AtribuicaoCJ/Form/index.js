@@ -396,7 +396,7 @@ function AtribuicaoCJForm({ match, location }) {
                     <Row className="row">
                       <Localizador
                         dreId={form.values.dreId}
-                        anoLetivo={anoAtual}
+                        anoLetivo={anoLetivo}
                         showLabel
                         form={form}
                         onChange={() => {}}
@@ -411,7 +411,6 @@ function AtribuicaoCJForm({ match, location }) {
                       disabled={
                         valoresIniciais?.modalidadeId || somenteConsulta
                       }
-                      anoLetivo={anoLetivo}
                       onChange={value => {
                         if (
                           value !== undefined &&
@@ -440,7 +439,6 @@ function AtribuicaoCJForm({ match, location }) {
                         }
                       }}
                       desabilitado={somenteConsulta}
-                      anoLetivo={anoLetivo}
                       consideraHistorico={consideraHistorico}
                     />
                   </Grid>
