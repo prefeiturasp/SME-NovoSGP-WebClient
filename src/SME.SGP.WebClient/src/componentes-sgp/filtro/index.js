@@ -8,6 +8,17 @@ import {
   removerTurma,
   setarConsideraHistorico,
 } from '~/redux/modulos/usuario/actions';
+
+import {
+  SGP_BUTTON_FILTRO_PRINCIPAL_APLICAR,
+  SGP_SELECT_FILTRO_PRINCIPAL_ANOLETIVO ,
+  SGP_SELECT_FILTRO_PRINCIPAL_TURMA ,
+  SGP_SELECT_FILTRO_PRINCIPAL_MODALIDADE,
+  SGP_SELECT_FILTRO_PRINCIPAL_PERIODO,
+  SGP_SELECT_FILTRO_PRINCIPAL_DRE,
+  SGP_SELECT_FILTRO_PRINCIPAL_UE
+} from './idsCampos';
+
 import Grid from '~/componentes/grid';
 import Button from '~/componentes/button';
 import { Colors } from '~/componentes/colors';
@@ -1138,7 +1149,7 @@ const Filtro = () => {
             <div className="form-row">
               <Grid cols={3} className="form-group">
                 <SelectComponent
-                  id="sgpSelectFiltroPrincipalAnoLetivo"
+                  id={SGP_SELECT_FILTRO_PRINCIPAL_ANOLETIVO}
                   className="fonte-14"
                   onChange={aoTrocarAnoLetivo}
                   lista={anosLetivos}
@@ -1163,7 +1174,7 @@ const Filtro = () => {
               >
                 <Loader loading={carregandoModalidades} tip="">
                   <SelectComponent
-                    id="sgpSelectFiltroPrincipalModalidade"
+                    id={SGP_SELECT_FILTRO_PRINCIPAL_MODALIDADE}
                     className="fonte-14"
                     onChange={aoTrocarModalidade}
                     lista={modalidades}
@@ -1184,7 +1195,7 @@ const Filtro = () => {
                   <Grid cols={4} className="form-group">
                     <Loader loading={carregandoPeriodos} tip="">
                       <SelectComponent
-                        id="sgpSelectFiltroPrincipalPeriodo"
+                        id={SGP_SELECT_FILTRO_PRINCIPAL_PERIODO}
                         className="fonte-14"
                         onChange={aoTrocarPeriodo}
                         lista={periodos}
@@ -1205,7 +1216,7 @@ const Filtro = () => {
               <Loader loading={carregandoDres} tip="">
                 <SelectComponent
                   className="fonte-14"
-                  id="sgpSelectFiltroPrincipalDRE"
+                  id={SGP_SELECT_FILTRO_PRINCIPAL_DRE}
                   onChange={aoTrocarDre}
                   lista={dres}
                   valueOption="valor"
@@ -1222,7 +1233,7 @@ const Filtro = () => {
               <Loader loading={carregandoUes} tip="">
                 <SelectComponent
                   className="fonte-14"
-                  id="sgpSelectFiltroPrincipalUE"
+                  id={SGP_SELECT_FILTRO_PRINCIPAL_UE}
                   onChange={aoTrocarUnidadeEscolar}
                   lista={unidadesEscolares}
                   valueOption="valor"
@@ -1241,7 +1252,7 @@ const Filtro = () => {
               <Grid cols={9} className="form-group">
                 <Loader loading={carregandoTurmas} tip="">
                   <SelectComponent
-                  id="sgpSelectFiltroPrincipalTurma"
+                  id={SGP_SELECT_FILTRO_PRINCIPAL_TURMA}
                     className="fonte-14"
                     onChange={aoTrocarTurma}
                     lista={turmas}
@@ -1257,7 +1268,7 @@ const Filtro = () => {
               </Grid>
               <Grid cols={3} className="form-group text-right">
                 <Button
-                  id="sgpButtonFiltroPrincipalAplicar"
+                  id={SGP_BUTTON_FILTRO_PRINCIPAL_APLICAR}
                   label="Aplicar filtro"
                   color={Colors.Roxo}
                   className="ml-auto"
