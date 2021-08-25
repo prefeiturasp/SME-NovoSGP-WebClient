@@ -1257,8 +1257,7 @@ const Filtro = () => {
               </Grid>
               <Grid cols={3} className="form-group text-right">
                 <Button
-                id="sgpButtonFiltroPrincipalAplicar"
-                  id={shortid.generate()}
+                  id="sgpButtonFiltroPrincipalAplicar"
                   label="Aplicar filtro"
                   color={Colors.Roxo}
                   className="ml-auto"
