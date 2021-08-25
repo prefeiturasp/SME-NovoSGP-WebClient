@@ -1269,7 +1269,6 @@ const Filtro = () => {
               <Grid cols={3} className="form-group text-right">
                 <Button
                   id={SGP_BUTTON_FILTRO_PRINCIPAL_APLICAR}
-                  id="sgp-button-filtro-principal-aplicar"
                   label="Aplicar filtro"
                   color={Colors.Roxo}
                   className="ml-auto"
