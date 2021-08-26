@@ -174,12 +174,12 @@ function Filtro({ onFiltrar, resetForm }) {
     onFiltrar(valores);
   };
 
-  function onChangeAnoLetivo(ano){
-    setCarregandoModalidades(true);
+  function onChangeAnoLetivo(ano) {
     setAnoLetivo(ano);
   }
 
-  function onCheckedConsideraHistorico(e){
+  function onCheckedConsideraHistorico(e) {
+    if (anoLetivo) onChangeAnoLetivo(anoLetivo);
     refForm.setFieldValue('modalidadeId', undefined);
     refForm.setFieldValue('semestre', undefined);
     refForm.setFieldValue('dreId', undefined);
@@ -187,7 +187,7 @@ function Filtro({ onFiltrar, resetForm }) {
     refForm.setFieldValue('turmaId', undefined);
     refForm.setFieldValue('opcaoAlunoId', '0');
     setConsideraHistorico(e.target.checked);
-    refForm.setFieldValue('consideraHistorico', e.target.checked);    
+    refForm.setFieldValue('consideraHistorico', e.target.checked);
   }
 
   return (
