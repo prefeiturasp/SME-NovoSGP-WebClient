@@ -1,12 +1,15 @@
-import PropTypes from 'prop-types';
 import React, { useCallback, useEffect, useState } from 'react';
+import PropTypes from 'prop-types';
+
 import { Loader } from '~/componentes';
 import { GraficoBarras } from '~/componentes-sgp';
+
 import { OPCAO_TODOS } from '~/constantes/constantes';
 import { erros } from '~/servicos';
+
 import ServicoDashboardFechamento from '~/servicos/Paginas/Dashboard/ServicoDashboardFechamento';
 
-const GraficoSituacaoProcessoFechamento = props => {
+const GraficoSituacaoConselhoClasse = props => {
   const { anoLetivo, dreId, ueId, modalidade, semestre, bimestre } = props;
 
   const [dadosGrafico, setDadosGrafico] = useState([]);
@@ -14,6 +17,7 @@ const GraficoSituacaoProcessoFechamento = props => {
 
   const obterDadosGrafico = useCallback(async () => {
     setExibirLoader(true);
+    // alterar aqui
     const retorno = await ServicoDashboardFechamento.obterSituacaoProcessoFechamento(
       anoLetivo,
       dreId === OPCAO_TODOS ? '' : dreId,
@@ -63,7 +67,7 @@ const GraficoSituacaoProcessoFechamento = props => {
   );
 };
 
-GraficoSituacaoProcessoFechamento.propTypes = {
+GraficoSituacaoConselhoClasse.propTypes = {
   anoLetivo: PropTypes.oneOfType(PropTypes.any),
   dreId: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   ueId: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
@@ -72,7 +76,7 @@ GraficoSituacaoProcessoFechamento.propTypes = {
   bimestre: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
 };
 
-GraficoSituacaoProcessoFechamento.defaultProps = {
+GraficoSituacaoConselhoClasse.defaultProps = {
   anoLetivo: null,
   dreId: null,
   ueId: null,
@@ -81,4 +85,4 @@ GraficoSituacaoProcessoFechamento.defaultProps = {
   bimestre: null,
 };
 
-export default GraficoSituacaoProcessoFechamento;
+export default GraficoSituacaoConselhoClasse;
