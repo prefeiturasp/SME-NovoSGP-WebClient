@@ -5,6 +5,7 @@ import { useSelector } from 'react-redux';
 import { ModalidadeDTO } from '~/dtos';
 
 import GraficosFechamento from '../DadosDashboardFechamento/Fechamento/graficosFechamento';
+import GraficoSituacaoConselhoClasse from '../DadosDashboardFechamento/ConselhoClasse/graficosConselhoClasse';
 
 import { ContainerTabsDashboardFechamento } from '../dashboardFechamento.css';
 import { ContainerTabsCard } from '~/componentes/tabs/tabs.css';
@@ -50,7 +51,7 @@ const TabsDashboardFechamento = () => {
       <>
         <div className="col-md-12 p-0">
           {tabSelecionada === '1' && <GraficosFechamento />}
-          {tabSelecionada === '2' && <div>GraficosConselhoClasse</div>}
+          {tabSelecionada === '2' && <GraficoSituacaoConselhoClasse />}
         </div>
       </>
     );
