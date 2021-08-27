@@ -38,7 +38,7 @@ function Filtro({ onFiltrar, resetForm }) {
     }
   }, [modalidadeId, semestreId, anoLetivo]);
 
-  useEffect(() => {
+  async function CarregarModalidades(){
     setCarregandoModalidades(true);
     setModalidades([]);
     const obterModalidades = async () => {
@@ -50,12 +50,18 @@ function Filtro({ onFiltrar, resetForm }) {
 
       if (modalidades.length === 1)
         setModalidadeId(modalidades[0].valor);
-
     }
-    if (anoLetivo)
-      obterModalidades();
+    if (anoLetivo) await obterModalidades();
     setCarregandoModalidades(false);
+  }
+
+  useEffect(() => {
+    CarregarModalidades();
   }, [anoLetivo]);
+
+  useEffect(() => {
+    if (anoLetivo) CarregarModalidades();
+  }, [consideraHistorico]);
 
   useEffect(() => {
     if (modalidades && modalidades.length === 1 && refForm) {
@@ -168,12 +174,12 @@ function Filtro({ onFiltrar, resetForm }) {
     onFiltrar(valores);
   };
 
-  function onChangeAnoLetivo(ano){
-    setCarregandoModalidades(true);
+  function onChangeAnoLetivo(ano) {
     setAnoLetivo(ano);
   }
 
-  function onCheckedConsideraHistorico(e){
+  function onCheckedConsideraHistorico(e) {
+    if (anoLetivo) onChangeAnoLetivo(anoLetivo);
     refForm.setFieldValue('modalidadeId', undefined);
     refForm.setFieldValue('semestre', undefined);
     refForm.setFieldValue('dreId', undefined);
