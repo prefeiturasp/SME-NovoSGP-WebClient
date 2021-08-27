@@ -399,7 +399,7 @@ const DashboardFechamentoFiltros = () => {
             />
           </Loader>
         </div>
-        <div className="col-sm-12 col-md-6 col-lg-6 col-xl-4 mb-3">
+        <div className="col-sm-12 col-md-6 col-lg-6 col-xl-4 mb-3 pr-0">
           <Loader loading={carregandoSemestres} ignorarTip>
             <SelectComponent
               id="semestre"

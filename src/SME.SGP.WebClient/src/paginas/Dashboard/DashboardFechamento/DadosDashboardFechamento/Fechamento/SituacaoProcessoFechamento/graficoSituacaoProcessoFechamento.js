@@ -1,9 +1,12 @@
-import PropTypes from 'prop-types';
 import React, { useCallback, useEffect, useState } from 'react';
+import PropTypes from 'prop-types';
+
 import { Loader } from '~/componentes';
 import { GraficoBarras } from '~/componentes-sgp';
+
 import { OPCAO_TODOS } from '~/constantes/constantes';
 import { erros } from '~/servicos';
+
 import ServicoDashboardFechamento from '~/servicos/Paginas/Dashboard/ServicoDashboardFechamento';
 
 const GraficoSituacaoProcessoFechamento = props => {

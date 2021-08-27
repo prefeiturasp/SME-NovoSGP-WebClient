@@ -2,9 +2,9 @@ import PropTypes from 'prop-types';
 import React, { useState } from 'react';
 import { Base } from '~/componentes';
 import CardCollapse from '~/componentes/cardCollapse';
-import GraficoPendenciasFechamento from './graficoPendenciasFechamento';
+import GraficoSituacaoProcessoFechamento from './graficoSituacaoProcessoFechamento';
 
-const PendenciasFechamento = props => {
+const SituacaoProcessoFechamento = props => {
   const { anoLetivo, dreId, ueId, modalidade, semestre, bimestre } = props;
 
   const configCabecalho = {
@@ -14,12 +14,12 @@ const PendenciasFechamento = props => {
 
   const [exibir, setExibir] = useState(false);
 
-  const key = 'pendencias-fechamento';
+  const key = 'situacao-processo-fechamento';
 
   return (
     <>
       <CardCollapse
-        titulo="Pendências do fechamento"
+        titulo="Situacao do processo de fechamento (total de componentes por situação)"
         key={`${key}-collapse-key`}
         indice={`${key}-collapse-indice`}
         alt={`${key}-alt`}
@@ -30,7 +30,7 @@ const PendenciasFechamento = props => {
         }}
       >
         {exibir ? (
-          <GraficoPendenciasFechamento
+          <GraficoSituacaoProcessoFechamento
             anoLetivo={anoLetivo}
             dreId={dreId}
             ueId={ueId}
@@ -46,7 +46,7 @@ const PendenciasFechamento = props => {
   );
 };
 
-PendenciasFechamento.propTypes = {
+SituacaoProcessoFechamento.propTypes = {
   anoLetivo: PropTypes.oneOfType(PropTypes.any),
   dreId: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   ueId: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
@@ -55,7 +55,7 @@ PendenciasFechamento.propTypes = {
   bimestre: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
 };
 
-PendenciasFechamento.defaultProps = {
+SituacaoProcessoFechamento.defaultProps = {
   anoLetivo: null,
   dreId: null,
   ueId: null,
@@ -64,4 +64,4 @@ PendenciasFechamento.defaultProps = {
   bimestre: null,
 };
 
-export default PendenciasFechamento;
+export default SituacaoProcessoFechamento;
