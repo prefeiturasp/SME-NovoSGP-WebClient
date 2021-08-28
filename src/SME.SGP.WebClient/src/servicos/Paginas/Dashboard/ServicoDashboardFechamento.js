@@ -2,8 +2,6 @@ import api from '~/servicos/api';
 import { store } from '~/redux';
 import { setDadosDashboardFechamento } from '~/redux/modulos/dashboardFechamento/actions';
 
-const urlPadrao = 'v1/dashboard/fechamentos';
-
 class ServicoDashboardFechamento {
   montarConsultaPadraoGraficos = params => {
     const {
@@ -120,6 +118,63 @@ class ServicoDashboardFechamento {
       ueId,
       modalidade,
       semestre,
+    });
+  };
+
+  obterSituacaoConselhoClasse = (
+    anoLetivo,
+    dreId,
+    ueId,
+    modalidade,
+    semestre,
+    bimestre
+  ) => {
+    return this.montarConsultaPadraoGraficos({
+      rota: 'situacoes',
+      anoLetivo,
+      dreId,
+      ueId,
+      modalidade,
+      semestre,
+      bimestre,
+    });
+  };
+
+  obterNotasFinais = (
+    anoLetivo,
+    dreId,
+    ueId,
+    modalidade,
+    semestre,
+    bimestre
+  ) => {
+    return this.montarConsultaPadraoGraficos({
+      rota: 'situacoes',
+      anoLetivo,
+      dreId,
+      ueId,
+      modalidade,
+      semestre,
+      bimestre,
+    });
+  };
+
+  obterParecerConclusivo = (
+    anoLetivo,
+    dreId,
+    ueId,
+    modalidade,
+    semestre,
+    bimestre
+  ) => {
+    return this.montarConsultaPadraoGraficos({
+      rota: 'situacoes',
+      anoLetivo,
+      dreId,
+      ueId,
+      modalidade,
+      semestre,
+      bimestre,
     });
   };
 }
