@@ -1,3 +1,4 @@
+import moment from 'moment';
 import PropTypes from 'prop-types';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -9,7 +10,6 @@ import {
 } from '~/redux/modulos/conselhoClasse/actions';
 import { erros } from '~/servicos/alertas';
 import ServicoConselhoClasse from '~/servicos/Paginas/ConselhoClasse/ServicoConselhoClasse';
-import moment from 'moment';
 import ListasCarregar from './listasCarregar';
 
 const ListasNotasConceitos = props => {
@@ -49,14 +49,17 @@ const ListasNotasConceitos = props => {
   const [carregando, setCarregando] = useState(false);
 
   const desabilitarEdicaoAluno = () => {
-    const dataSituacao = moment(dadosAlunoObjectCard.dataSituacao).format('MM-DD-YYYY');
-    const dataFimFechamento = moment(fechamentoPeriodoInicioFim.periodoFechamentoFim).format('MM-DD-YYYY');
+    const dataSituacao = moment(dadosAlunoObjectCard.dataSituacao).format(
+      'MM-DD-YYYY'
+    );
+    const dataFimFechamento = moment(
+      fechamentoPeriodoInicioFim.periodoFechamentoFim
+    ).format('MM-DD-YYYY');
 
-    if (!alunoDesabilitado || (dataSituacao >= dataFimFechamento))
-       return false
-    
+    if (!alunoDesabilitado || dataSituacao >= dataFimFechamento) return false;
+
     return true;
-  }
+  };
 
   const habilitaConselhoClasse = dados => {
     const { conselhoClasseAlunoId } = dadosPrincipaisConselhoClasse;
@@ -65,13 +68,17 @@ const ListasNotasConceitos = props => {
     dados.notasConceitos.map(notasConceitos =>
       notasConceitos.componentesCurriculares.map(componentesCurriculares =>
         componentesCurriculares.notasFechamentos.map(notasFechamentos => {
-          if (!notasFechamentos.notaConceito) {
+          if (
+            notasFechamentos.notaConceito === null ||
+            notasFechamentos.notaConceito < 0
+          ) {
             notasFechamentosPreenchidas = false;
           }
           return notasFechamentos;
         })
       )
     );
+
     if (!conselhoClasseAlunoId && notasFechamentosPreenchidas) {
       dispatch(setConselhoClasseEmEdicao(true));
     }
