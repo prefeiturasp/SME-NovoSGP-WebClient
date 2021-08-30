@@ -1,23 +1,20 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 
-import { statusAcompanhamentoFechamento } from '~/dtos';
-
 import { Container } from './cardStatus.css';
 
-const CardStatus = ({ dadosStatus }) => {
+const CardStatus = ({ dadosStatus, statusAcompanhamento }) => {
   const [corStatus, setCorStatus] = useState('');
 
   useEffect(() => {
-    const status = Object.keys(statusAcompanhamentoFechamento).find(
-      item =>
-        statusAcompanhamentoFechamento[item].descricao === dadosStatus.descricao
+    const status = Object.keys(statusAcompanhamento).find(
+      item => statusAcompanhamento[item].descricao === dadosStatus.descricao
     );
 
     if (status) {
-      setCorStatus(statusAcompanhamentoFechamento[status].cor);
+      setCorStatus(statusAcompanhamento[status].cor);
     }
-  }, [dadosStatus]);
+  }, [dadosStatus, statusAcompanhamento]);
 
   return (
     <Container corStatus={corStatus}>
@@ -29,9 +26,14 @@ const CardStatus = ({ dadosStatus }) => {
 
 CardStatus.propTypes = {
   dadosStatus: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
+  statusAcompanhamento: PropTypes.oneOfType([
+    PropTypes.object,
+    PropTypes.array,
+  ]),
 };
 
 CardStatus.defaultProps = {
   dadosStatus: [],
+  statusAcompanhamento: {},
 };
 export default CardStatus;
