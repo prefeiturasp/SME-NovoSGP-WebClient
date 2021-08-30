@@ -97,10 +97,7 @@ import DashboardRegistroItinerancia from '~/paginas/Dashboard/DashboardRegistroI
 import AcompanhamentoFechamento from '~/paginas/Fechamento/AcompanhamentoFechamento/acompanhamentoFechamento';
 import DashboardFrequencia from '~/paginas/Dashboard/DashboardFrequencia/dashboardFrequencia';
 import DashboardInformacoesEscolares from '~/paginas/Dashboard/DashboardInformacoesEscolares/dashboardInformacoesEscolares';
-import DashboardRegistroIndividual from '~/paginas/Dashboard/DashboardRegistroIndividual/dashboardRegistroIndividual';
-import DashboardDiarioBordo from '~/paginas/Dashboard/DashboardDiarioBordo/dashboardDiarioBordo';
 import RelatorioAcompanhamentoFechamento from '~/paginas/Fechamento/RelatorioAcompanhamentoFechamento/relatorioAcompanhamentoFechamento';
-import DashboardRelAcompanhamentoAprendizagem from '~/paginas/Dashboard/DashboardRelAcompAprend/dashboardRelAcompAprend';
 
 const rotas = new Map();
 
@@ -1362,28 +1359,6 @@ rotas.set(RotasDto.DASHBOARD_INFORMACOES_ESCOLARES, {
   tipo: RotasTipo.EstruturadaAutenticada,
   temPermissionamento: true,
   chavePermissao: RotasDto.DASHBOARD_INFORMACOES_ESCOLARES,
-});
-
-rotas.set(RotasDto.DASHBOARD_REGISTRO_INDIVIDUAL, {
-  breadcrumbName: 'Registro individual',
-  menu: ['Dashboard'],
-  parent: '/',
-  component: DashboardRegistroIndividual,
-  exact: true,
-  tipo: RotasTipo.EstruturadaAutenticada,
-  temPermissionamento: true,
-  chavePermissao: RotasDto.DASHBOARD_REGISTRO_INDIVIDUAL,
-});
-
-rotas.set(RotasDto.DASHBOARD_DIARIO_BORDO, {
-  breadcrumbName: 'Diário de bordo',
-  menu: ['Dashboard'],
-  parent: '/',
-  component: DashboardDiarioBordo,
-  exact: true,
-  tipo: RotasTipo.EstruturadaAutenticada,
-  temPermissionamento: true,
-  chavePermissao: RotasDto.DASHBOARD_DIARIO_BORDO,
 });
 
 rotas.set(RotasDto.RELATORIO_ACOMPANHAMENTO_FECHAMENTO, {
