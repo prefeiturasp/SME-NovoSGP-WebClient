@@ -103,6 +103,7 @@ import DashboardDiarioBordo from '~/paginas/Dashboard/DashboardDiarioBordo/dashb
 import RelatorioAcompanhamentoFechamento from '~/paginas/Relatorios/Fechamento/AcompanhamentoFechamento/relatorioAcompanhamentoFechamento';
 import DashboardRelAcompanhamentoAprendizagem from '~/paginas/Dashboard/DashboardRelAcompAprend/dashboardRelAcompAprend';
 import DashboardFechamento from '~/paginas/Dashboard/DashboardFechamento/dashboardFechamento';
+import RelatorioAtaBimestral from '~/paginas/Relatorios/Atas/AtaBimestral/relatorioAtaBimestral';
 
 const rotas = new Map();
 
@@ -1430,6 +1431,17 @@ rotas.set(RotasDto.DASHBOARD_FECHAMENTO, {
   tipo: RotasTipo.EstruturadaAutenticada,
   temPermissionamento: false,
   chavePermissao: RotasDto.DASHBOARD_FECHAMENTO,
+});
+
+rotas.set(RotasDto.ATA_BIMESTRAL, {
+  breadcrumbName: 'Ata bimestral',
+  menu: ['Relatórios', 'Atas'],
+  parent: '/',
+  component: RelatorioAtaBimestral,
+  exact: true,
+  tipo: RotasTipo.EstruturadaAutenticada,
+  temPermissionamento: false,
+  chavePermissao: RotasDto.ATA_BIMESTRAL,
 });
 
 const rotasArray = [];
