@@ -186,6 +186,7 @@ const AulaDadaAulaPrevista = () => {
         .then(res => {
           if (res.status === 200)
             sucesso('Suas informações foram salvas com sucesso');
+          setModoEdicao(false);
         })
         .then(() => {
           setCarregamento(false);
