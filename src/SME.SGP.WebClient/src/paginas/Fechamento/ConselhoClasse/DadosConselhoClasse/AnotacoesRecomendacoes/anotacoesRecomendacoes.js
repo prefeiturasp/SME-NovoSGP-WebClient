@@ -10,6 +10,7 @@ import {
   setDentroPeriodo,
   setRecomendacaoAluno,
   setRecomendacaoFamilia,
+  setSituacaoConselhoAluno,
 } from '~/redux/modulos/conselhoClasse/actions';
 import { erros } from '~/servicos/alertas';
 import ServicoConselhoClasse from '~/servicos/Paginas/ConselhoClasse/ServicoConselhoClasse';
@@ -42,7 +43,7 @@ const AnotacoesRecomendacoes = props => {
   });
 
   const turmaStore = useSelector(state => state.usuario.turmaSelecionada);
-  
+
   const fechamentoPeriodoInicioFim = useSelector(
     store => store.conselhoClasse.fechamentoPeriodoInicioFim
   );
@@ -95,6 +96,13 @@ const AnotacoesRecomendacoes = props => {
     [dispatch]
   );
 
+  const setarSituacaoConselho = useCallback(
+    valor => {
+      dispatch(setSituacaoConselhoAluno(valor));
+    },
+    [dispatch]
+  );
+
   const setarDentroDoPeriodo = useCallback(
     valor => {
       dispatch(setDentroPeriodo(valor));
@@ -136,10 +144,12 @@ const AnotacoesRecomendacoes = props => {
       if (!desabilitarEdicaoAluno()) {
         setarDentroDoPeriodo(!resposta.data.somenteLeitura);
       }
+
       onChangeAnotacoesPedagogicas(resposta.data.anotacoesPedagogicas);
       onChangeRecomendacaoAluno(resposta.data.recomendacaoAluno);
       onChangeRecomendacaoFamilia(resposta.data.recomendacaoFamilia);
       setarAnotacaoAluno(resposta.data.anotacoesAluno);
+      setarSituacaoConselho(resposta.data.situacaoConselho);
       setarAuditoria(resposta.data);
       setExibir(true);
     } else {
@@ -156,6 +166,7 @@ const AnotacoesRecomendacoes = props => {
     setarAnotacaoAluno,
     setarAuditoria,
     setarDentroDoPeriodo,
+    setarSituacaoConselho,
     alunoDesabilitado,
     bimestre,
   ]);
@@ -171,14 +182,17 @@ const AnotacoesRecomendacoes = props => {
   };
 
   const desabilitarEdicaoAluno = () => {
-    const dataSituacao = moment(dadosAlunoObjectCard.dataSituacao).format('MM-DD-YYYY');
-    const dataFimFechamento = moment(fechamentoPeriodoInicioFim.periodoFechamentoFim).format('MM-DD-YYYY');
+    const dataSituacao = moment(dadosAlunoObjectCard.dataSituacao).format(
+      'MM-DD-YYYY'
+    );
+    const dataFimFechamento = moment(
+      fechamentoPeriodoInicioFim.periodoFechamentoFim
+    ).format('MM-DD-YYYY');
 
-    if (!alunoDesabilitado || (dataSituacao >= dataFimFechamento))
-       return false
-    
+    if (!alunoDesabilitado || dataSituacao >= dataFimFechamento) return false;
+
     return true;
-  }
+  };
 
   return (
     <Loader
