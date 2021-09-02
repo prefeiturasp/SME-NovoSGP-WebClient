@@ -27,6 +27,7 @@ import MarcadorParecerConclusivo from './MarcadorParecerConclusivo/marcadorParec
 import { verificaSomenteConsulta } from '~/servicos/servico-navegacao';
 import RotasDto from '~/dtos/rotasDto';
 import { ehTurmaInfantil } from '~/servicos/Validacoes/validacoesInfatil';
+import MarcadorSituacaoConselho from './MarcadorSituacaoConselho/marcadorSituacaoConselho';
 
 const { TabPane } = Tabs;
 
@@ -240,13 +241,13 @@ const DadosConselhoClasse = props => {
     }
   };
 
-
   const montarDados = () => {
     return (
       <Loader loading={carregando} className={carregando ? 'text-center' : ''}>
-        {!semDados && turmaSelecionada.turma == turmaAtual ? (
+        {!semDados && turmaSelecionada.turma === turmaAtual ? (
           <>
             <AlertaDentroPeriodo />
+            <MarcadorSituacaoConselho />
             {bimestreAtual.valor === 'final' ? (
               <MarcadorParecerConclusivo />
             ) : null}

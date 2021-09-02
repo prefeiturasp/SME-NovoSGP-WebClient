@@ -26,6 +26,7 @@ const inicial = {
   exibirModalImpressaoConselhoClasse: false,
   dadosBimestresConselhoClasse: [],
   exibirLoaderGeralConselhoClasse: false,
+  situacaoConselho: '',
 };
 
 export default function ConselhoClasse(state = inicial, action) {
@@ -214,6 +215,10 @@ export default function ConselhoClasse(state = inicial, action) {
       }
       case '@conselhoClasse/setJustificativaAtual': {
         draft.notaConceitoPosConselhoAtual.justificativa = action.payload;
+        break;
+      }
+      case '@conselhoClasse/setSituacaoConselhoAluno': {
+        draft.situacaoConselho = action.payload;
         break;
       }
 
