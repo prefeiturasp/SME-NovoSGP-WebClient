@@ -12,7 +12,9 @@ const MarcadorSituacaoConselho = () => {
       {situacaoConselho ? (
         <div className="col-m-12 position-absolute mb-2 ml-3">
           <Situacao>
-            <span>Situação do conselho: {situacaoConselho}</span>
+            <p>
+              <span>Situação do conselho:</span> {situacaoConselho}
+            </p>
           </Situacao>
         </div>
       ) : (

@@ -3,7 +3,7 @@ import { Base } from '~/componentes';
 
 export const Situacao = styled.div`
   font-size: 12px;
-  color: ${Base.VermelhoAlerta};
+  color: ${Base.Preto};
   display: 'flex';
   align-items: 'center';
   justify-content: 'center';
@@ -11,9 +11,8 @@ export const Situacao = styled.div`
   margin-right: 13px;
   height: 23px;
   padding-top: 3px;
-  border: 1px solid ${Base.VermelhoAlerta};
 
   span {
-    margin: 11px;
+    font-weight: bold;
   }
 `;
