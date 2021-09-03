@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import { Base } from '~/componentes';
 
-const Situacao = styled.div`
+export const Situacao = styled.div`
   font-size: 12px;
   color: ${Base.VermelhoAlerta};
   display: 'flex';
