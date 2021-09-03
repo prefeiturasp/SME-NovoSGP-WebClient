@@ -26,6 +26,11 @@ import ListasNotasConceitos from './ListasNotasConceito/listasNotasConceitos';
 import MarcadorParecerConclusivo from './MarcadorParecerConclusivo/marcadorParecerConclusivo';
 import MarcadorPeriodoInicioFim from './MarcadorPeriodoInicioFim/marcadorPeriodoInicioFim';
 import Sintese from './Sintese/Sintese';
+import MarcadorParecerConclusivo from './MarcadorParecerConclusivo/marcadorParecerConclusivo';
+import { verificaSomenteConsulta } from '~/servicos/servico-navegacao';
+import RotasDto from '~/dtos/rotasDto';
+import { ehTurmaInfantil } from '~/servicos/Validacoes/validacoesInfatil';
+import MarcadorSituacaoConselho from './MarcadorSituacaoConselho/marcadorSituacaoConselho';
 
 const { TabPane } = Tabs;
 
@@ -275,6 +280,7 @@ const DadosConselhoClasse = props => {
         {!semDados && turmaSelecionada.turma == turmaAtual ? (
           <>
             <AlertaDentroPeriodo />
+            <MarcadorSituacaoConselho />
             {bimestreAtual.valor === 'final' ? (
               <MarcadorParecerConclusivo />
             ) : null}
