@@ -244,7 +244,7 @@ const DadosConselhoClasse = props => {
   const montarDados = () => {
     return (
       <Loader loading={carregando} className={carregando ? 'text-center' : ''}>
-        {!semDados && turmaSelecionada.turma === turmaAtual ? (
+        {!semDados && turmaSelecionada.turma == turmaAtual ? (
           <>
             <AlertaDentroPeriodo />
             <MarcadorSituacaoConselho />
