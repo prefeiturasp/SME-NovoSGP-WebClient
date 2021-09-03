@@ -78,6 +78,7 @@ function CadastroDeAula({ match, location }) {
     turmaId: turmaSelecionada.turma,
     ueId: turmaSelecionada.unidadeEscolar,
     tipoCalendarioId,
+    quantidade: 1,
   };
 
   const [recorrenciaAulaEmEdicao, setRecorrenciaAulaEmEdicao] = useState({
@@ -348,6 +349,8 @@ function CadastroDeAula({ match, location }) {
     const componente = obterComponenteSelecionadoPorId(
       valoresForm.disciplinaId
     );
+    if (valoresForm.quantidade == 0) valoresForm.quantidade = 1;
+
     if (componente) valoresForm.disciplinaNome = componente.nome;
     setCarregandoDados(true);
     servicoCadastroAula
