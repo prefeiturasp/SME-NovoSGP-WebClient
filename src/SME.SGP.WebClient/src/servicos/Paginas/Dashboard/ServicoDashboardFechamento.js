@@ -130,7 +130,7 @@ class ServicoDashboardFechamento {
     bimestre
   ) => {
     return this.montarConsultaPadraoGraficos({
-      rota: 'situacoes',
+      rota: 'conselhos-classes/situacoes',
       anoLetivo,
       dreId,
       ueId,
@@ -149,7 +149,7 @@ class ServicoDashboardFechamento {
     bimestre
   ) => {
     return this.montarConsultaPadraoGraficos({
-      rota: 'situacoes',
+      rota: 'conselhos-classes/notas-finais',
       anoLetivo,
       dreId,
       ueId,
@@ -168,7 +168,7 @@ class ServicoDashboardFechamento {
     bimestre
   ) => {
     return this.montarConsultaPadraoGraficos({
-      rota: 'situacoes',
+      rota: 'conselhos-classes/pareceres-conclusivos',
       anoLetivo,
       dreId,
       ueId,
