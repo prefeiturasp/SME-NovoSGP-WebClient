@@ -1263,6 +1263,16 @@ const Notas = ({ match }) => {
                             ehProfessorCj={ehProfessorCj}
                             ehRegencia={ehRegencia}
                             disciplinaSelecionada={disciplinaSelecionada}
+                            exibirTootipStatusGsa={
+                              !!primeiroBimestre?.alunos?.find?.(a =>
+                                a?.notasAvaliacoes?.find?.(n => !!n?.statusGsa)
+                              )
+                            }
+                            exibirStatusAlunoAusente={
+                              !!primeiroBimestre?.alunos?.find?.(a =>
+                                a?.notasAvaliacoes?.find?.(n => !!n?.ausente)
+                              )
+                            }
                           />
                         </TabPane>
                       ) : (
@@ -1280,6 +1290,16 @@ const Notas = ({ match }) => {
                             desabilitarCampos={desabilitarCampos}
                             ehProfessorCj={ehProfessorCj}
                             ehRegencia={ehRegencia}
+                            exibirTootipStatusGsa={
+                              !!segundoBimestre?.alunos?.find?.(a =>
+                                a?.notasAvaliacoes?.find?.(n => !!n?.statusGsa)
+                              )
+                            }
+                            exibirStatusAlunoAusente={
+                              !!segundoBimestre?.alunos?.find?.(a =>
+                                a?.notasAvaliacoes?.find?.(n => !!n?.ausente)
+                              )
+                            }
                           />
                         </TabPane>
                       ) : (
@@ -1297,6 +1317,16 @@ const Notas = ({ match }) => {
                             desabilitarCampos={desabilitarCampos}
                             ehProfessorCj={ehProfessorCj}
                             ehRegencia={ehRegencia}
+                            exibirTootipStatusGsa={
+                              !!terceiroBimestre?.alunos?.find?.(a =>
+                                a?.notasAvaliacoes?.find?.(n => !!n?.statusGsa)
+                              )
+                            }
+                            exibirStatusAlunoAusente={
+                              !!terceiroBimestre?.alunos?.find?.(a =>
+                                a?.notasAvaliacoes?.find?.(n => !!n?.ausente)
+                              )
+                            }
                           />
                         </TabPane>
                       ) : (
@@ -1314,6 +1344,16 @@ const Notas = ({ match }) => {
                             desabilitarCampos={desabilitarCampos}
                             ehProfessorCj={ehProfessorCj}
                             ehRegencia={ehRegencia}
+                            exibirTootipStatusGsa={
+                              !!quartoBimestre?.alunos?.find?.(a =>
+                                a?.notasAvaliacoes?.find?.(n => !!n?.statusGsa)
+                              )
+                            }
+                            exibirStatusAlunoAusente={
+                              !!quartoBimestre?.alunos?.find?.(a =>
+                                a?.notasAvaliacoes?.find?.(n => !!n?.ausente)
+                              )
+                            }
                           />
                         </TabPane>
                       ) : (
