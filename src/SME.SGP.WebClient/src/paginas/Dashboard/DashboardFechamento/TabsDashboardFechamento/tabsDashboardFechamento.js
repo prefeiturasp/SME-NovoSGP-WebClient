@@ -3,9 +3,12 @@ import { Tabs } from 'antd';
 import { useSelector } from 'react-redux';
 
 import { ModalidadeDTO } from '~/dtos';
+
+import GraficosFechamento from '../DadosDashboardFechamento/Fechamento/graficosFechamento';
+import GraficoSituacaoConselhoClasse from '../DadosDashboardFechamento/ConselhoClasse/graficosConselhoClasse';
+
 import { ContainerTabsDashboardFechamento } from '../dashboardFechamento.css';
 import { ContainerTabsCard } from '~/componentes/tabs/tabs.css';
-import GraficosFechamento from '../DadosDashboardFechamento/graficosFechamento';
 
 const TabsDashboardFechamento = () => {
   const [tabSelecionada, setTabSelecionada] = useState();
@@ -48,6 +51,7 @@ const TabsDashboardFechamento = () => {
       <>
         <div className="col-md-12 p-0">
           {tabSelecionada === '1' && <GraficosFechamento />}
+          {tabSelecionada === '2' && <GraficoSituacaoConselhoClasse />}
         </div>
       </>
     );
@@ -63,6 +67,9 @@ const TabsDashboardFechamento = () => {
             activeKey={tabSelecionada}
           >
             <Tabs.TabPane tab="Fechamento" key="1">
+              {montarDados()}
+            </Tabs.TabPane>
+            <Tabs.TabPane tab="Conselho de classe" key="2">
               {montarDados()}
             </Tabs.TabPane>
           </ContainerTabsCard>

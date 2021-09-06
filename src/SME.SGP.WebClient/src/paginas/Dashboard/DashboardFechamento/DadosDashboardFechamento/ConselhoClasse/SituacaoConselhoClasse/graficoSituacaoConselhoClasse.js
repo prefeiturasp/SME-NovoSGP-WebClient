@@ -1,12 +1,15 @@
-import PropTypes from 'prop-types';
 import React, { useCallback, useEffect, useState } from 'react';
+import PropTypes from 'prop-types';
+
 import { Loader } from '~/componentes';
 import { GraficoBarras } from '~/componentes-sgp';
+
 import { OPCAO_TODOS } from '~/constantes/constantes';
 import { erros } from '~/servicos';
+
 import ServicoDashboardFechamento from '~/servicos/Paginas/Dashboard/ServicoDashboardFechamento';
 
-const GraficoSituacaoProcessoFechamento = props => {
+const GraficoSituacaoConselhoClasse = props => {
   const { anoLetivo, dreId, ueId, modalidade, semestre, bimestre } = props;
 
   const [dadosGrafico, setDadosGrafico] = useState([]);
@@ -14,7 +17,7 @@ const GraficoSituacaoProcessoFechamento = props => {
 
   const obterDadosGrafico = useCallback(async () => {
     setExibirLoader(true);
-    const retorno = await ServicoDashboardFechamento.obterSituacaoProcessoFechamento(
+    const retorno = await ServicoDashboardFechamento.obterSituacaoConselhoClasse(
       anoLetivo,
       dreId === OPCAO_TODOS ? '' : dreId,
       ueId === OPCAO_TODOS ? '' : ueId,
@@ -25,19 +28,16 @@ const GraficoSituacaoProcessoFechamento = props => {
       .catch(e => erros(e))
       .finally(() => setExibirLoader(false));
 
-    if (retorno?.data?.length) {
-      setDadosGrafico(retorno.data);
-    } else {
-      setDadosGrafico([]);
-    }
+    const dados = retorno?.data?.length ? retorno.data : [];
+    setDadosGrafico(dados);
   }, [anoLetivo, dreId, ueId, modalidade, semestre, bimestre]);
 
   useEffect(() => {
     if (modalidade && anoLetivo && dreId && ueId && bimestre) {
       obterDadosGrafico();
-    } else {
-      setDadosGrafico([]);
+      return;
     }
+    setDadosGrafico([]);
   }, [modalidade, anoLetivo, dreId, ueId, bimestre, obterDadosGrafico]);
 
   return (
@@ -54,16 +54,14 @@ const GraficoSituacaoProcessoFechamento = props => {
           colors={['#0288D1', '#F57C00', '#C2185B']}
           showTitle
         />
-      ) : !exibirLoader ? (
-        <div className="text-center">Sem dados</div>
       ) : (
-        ''
+        !exibirLoader && <div className="text-center">Sem dados</div>
       )}
     </Loader>
   );
 };
 
-GraficoSituacaoProcessoFechamento.propTypes = {
+GraficoSituacaoConselhoClasse.propTypes = {
   anoLetivo: PropTypes.oneOfType(PropTypes.any),
   dreId: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   ueId: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
@@ -72,7 +70,7 @@ GraficoSituacaoProcessoFechamento.propTypes = {
   bimestre: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
 };
 
-GraficoSituacaoProcessoFechamento.defaultProps = {
+GraficoSituacaoConselhoClasse.defaultProps = {
   anoLetivo: null,
   dreId: null,
   ueId: null,
@@ -81,4 +79,4 @@ GraficoSituacaoProcessoFechamento.defaultProps = {
   bimestre: null,
 };
 
-export default GraficoSituacaoProcessoFechamento;
+export default GraficoSituacaoConselhoClasse;

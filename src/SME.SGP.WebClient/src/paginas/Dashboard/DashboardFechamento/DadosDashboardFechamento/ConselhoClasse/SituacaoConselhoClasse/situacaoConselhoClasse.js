@@ -1,10 +1,13 @@
-import PropTypes from 'prop-types';
 import React, { useState } from 'react';
-import { Base } from '~/componentes';
-import CardCollapse from '~/componentes/cardCollapse';
-import GraficoPendenciasFechamento from './graficoPendenciasFechamento';
+import PropTypes from 'prop-types';
 
-const PendenciasFechamento = props => {
+import { Base, CardCollapse } from '~/componentes';
+
+import { OPCAO_TODOS } from '~/constantes';
+
+import GraficoSituacaoConselhoClasse from './graficoSituacaoConselhoClasse';
+
+const SituacaoConselhoClasse = props => {
   const { anoLetivo, dreId, ueId, modalidade, semestre, bimestre } = props;
 
   const configCabecalho = {
@@ -14,12 +17,14 @@ const PendenciasFechamento = props => {
 
   const [exibir, setExibir] = useState(false);
 
-  const key = 'pendencias-fechamento';
+  const key = 'situacao-conselho-classe';
+
+  const tipoGrafico = ueId === OPCAO_TODOS ? 'Ano' : 'Turma';
 
   return (
     <>
       <CardCollapse
-        titulo="Pendências do fechamento"
+        titulo={`Situação do conselho de classe (${tipoGrafico} X Estudantes)`}
         key={`${key}-collapse-key`}
         indice={`${key}-collapse-indice`}
         alt={`${key}-alt`}
@@ -30,7 +35,7 @@ const PendenciasFechamento = props => {
         }}
       >
         {exibir ? (
-          <GraficoPendenciasFechamento
+          <GraficoSituacaoConselhoClasse
             anoLetivo={anoLetivo}
             dreId={dreId}
             ueId={ueId}
@@ -46,7 +51,7 @@ const PendenciasFechamento = props => {
   );
 };
 
-PendenciasFechamento.propTypes = {
+SituacaoConselhoClasse.propTypes = {
   anoLetivo: PropTypes.oneOfType(PropTypes.any),
   dreId: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   ueId: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
@@ -55,7 +60,7 @@ PendenciasFechamento.propTypes = {
   bimestre: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
 };
 
-PendenciasFechamento.defaultProps = {
+SituacaoConselhoClasse.defaultProps = {
   anoLetivo: null,
   dreId: null,
   ueId: null,
@@ -64,4 +69,4 @@ PendenciasFechamento.defaultProps = {
   bimestre: null,
 };
 
-export default PendenciasFechamento;
+export default SituacaoConselhoClasse;
