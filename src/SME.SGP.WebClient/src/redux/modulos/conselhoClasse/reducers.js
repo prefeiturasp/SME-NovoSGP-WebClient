@@ -8,7 +8,7 @@ const inicial = {
   recomendacaoFamilia: '',
   anotacoesPedagogicas: '',
   anotacoesAluno: [],
-  bimestreAtual: { valor: '' },
+  bimestreAtual: { valor: '', dataInicio: null, dataFim: null },
   conselhoClasseEmEdicao: false,
   dadosPrincipaisConselhoClasse: {},
   auditoriaAnotacaoRecomendacao: null,
@@ -70,7 +70,7 @@ export default function ConselhoClasse(state = inicial, action) {
       case '@conselhoClasse/setBimestreAtual': {
         return {
           ...draft,
-          bimestreAtual: { valor: action.payload },
+          bimestreAtual: action.payload,
         };
       }
       case '@conselhoClasse/limparDadosConselhoClasse': {
