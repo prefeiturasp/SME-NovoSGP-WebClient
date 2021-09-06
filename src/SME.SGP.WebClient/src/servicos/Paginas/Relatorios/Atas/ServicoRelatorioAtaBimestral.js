@@ -1,11 +1,9 @@
 import api from '~/servicos/api';
 
-const urlPadrao = 'v1/';
+const urlPadrao = 'v1/relatorios';
 class ServicoRelatorioAtaBimestral {
   gerar = dados => {
-    console.log('dados', dados);
-    return Promise.resolve({ status: 200 });
-    // return api.get(urlPadrao, dados);
+    return api.post(`${urlPadrao}/atas-bimestrais`, dados);
   };
 
   obterModalidades = (anoLetivo, ue) => {
