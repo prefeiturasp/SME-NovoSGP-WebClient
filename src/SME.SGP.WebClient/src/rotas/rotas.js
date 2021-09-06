@@ -1440,7 +1440,7 @@ rotas.set(RotasDto.ATA_BIMESTRAL, {
   component: RelatorioAtaBimestral,
   exact: true,
   tipo: RotasTipo.EstruturadaAutenticada,
-  temPermissionamento: false,
+  temPermissionamento: true,
   chavePermissao: RotasDto.ATA_BIMESTRAL,
 });
 

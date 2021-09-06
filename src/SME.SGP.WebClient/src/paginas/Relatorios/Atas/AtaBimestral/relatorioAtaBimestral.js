@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 
 import {
   Button,
@@ -16,7 +17,7 @@ import {
 } from '~/componentes-sgp';
 
 import { OPCAO_TODOS, URL_HOME } from '~/constantes';
-import { ModalidadeDTO } from '~/dtos';
+import { ModalidadeDTO, RotasDto } from '~/dtos';
 import {
   AbrangenciaServico,
   erros,
@@ -39,11 +40,11 @@ const RelatorioAtaBimestral = () => {
   const [anoLetivo, setAnoLetivo] = useState();
   const [bimestre, setBimestre] = useState();
   const [consideraHistorico, setConsideraHistorico] = useState(false);
-  const [dreId, setDreId] = useState();
+  const [dreCodigo, setDreCodigo] = useState();
   const [modalidadeId, setModalidadeId] = useState();
   const [semestre, setSemestre] = useState();
-  const [turmaId, setTurmaId] = useState();
-  const [ueId, setUeId] = useState();
+  const [turmaCodigo, setTurmaCodigo] = useState();
+  const [ueCodigo, setUeCodigo] = useState();
 
   const [carregandoAnosLetivos, setCarregandoAnosLetivos] = useState(false);
   const [carregandoBimestres, setCarregandoBimestres] = useState(false);
@@ -55,14 +56,17 @@ const RelatorioAtaBimestral = () => {
 
   const [desabilitarBtnGerar, setDesabilitarBtnGerar] = useState(true);
 
+  const usuarioStore = useSelector(store => store.usuario);
+  const permissoesTela = usuarioStore.permissoes[RotasDto.ATA_BIMESTRAL];
+
   const onClickCancelar = () => {
     setConsideraHistorico(false);
     setAnoLetivo(anoAtual);
-    setDreId();
-    setUeId();
+    setDreCodigo();
+    setUeCodigo();
     setModalidadeId();
     setSemestre();
-    setTurmaId();
+    setTurmaCodigo();
     setBimestre();
     setDesabilitarBtnGerar(true);
   };
@@ -80,7 +84,7 @@ const RelatorioAtaBimestral = () => {
     if (anosLetivo) {
       setListaAnosLetivo(anosLetivo);
       setAnoLetivo(anosLetivo[0].valor);
-      setDreId();
+      setDreCodigo();
     } else {
       setListaAnosLetivo([]);
     }
@@ -93,7 +97,7 @@ const RelatorioAtaBimestral = () => {
 
   const onChangeAnoLetivo = ano => {
     setAnoLetivo(ano);
-    setDreId();
+    setDreCodigo();
 
     setListaModalidades([]);
     setModalidadeId();
@@ -102,7 +106,7 @@ const RelatorioAtaBimestral = () => {
     setSemestre();
 
     setListaTurmas([]);
-    setTurmaId();
+    setTurmaCodigo();
   };
 
   const obterDres = useCallback(async () => {
@@ -126,11 +130,11 @@ const RelatorioAtaBimestral = () => {
         setListaDres(lista);
 
         if (lista?.length === 1) {
-          setDreId(lista[0].id);
+          setDreCodigo(lista[0].id);
         }
         return;
       }
-      setDreId();
+      setDreCodigo();
       setListaDres([]);
     }
   }, [anoLetivo, consideraHistorico]);
@@ -142,10 +146,10 @@ const RelatorioAtaBimestral = () => {
   }, [obterDres, anoLetivo]);
 
   const onChangeDre = dre => {
-    setDreId(dre);
+    setDreCodigo(dre);
 
     setListaUes([]);
-    setUeId();
+    setUeCodigo();
 
     setListaModalidades([]);
     setModalidadeId();
@@ -154,7 +158,7 @@ const RelatorioAtaBimestral = () => {
     setSemestre();
 
     setListaTurmas([]);
-    setTurmaId();
+    setTurmaCodigo();
   };
 
   const obterUes = useCallback(
@@ -178,7 +182,7 @@ const RelatorioAtaBimestral = () => {
           }));
 
           if (lista && lista.length && lista.length === 1) {
-            setUeId(lista[0].valor);
+            setUeCodigo(lista[0].valor);
           }
 
           setListaUes(lista);
@@ -191,16 +195,16 @@ const RelatorioAtaBimestral = () => {
   );
 
   useEffect(() => {
-    if (dreId) {
-      obterUes(dreId);
+    if (dreCodigo) {
+      obterUes(dreCodigo);
       return;
     }
-    setUeId();
+    setUeCodigo();
     setListaUes([]);
-  }, [dreId, obterUes]);
+  }, [dreCodigo, obterUes]);
 
   const onChangeUe = ue => {
-    setUeId(ue);
+    setUeCodigo(ue);
 
     setListaModalidades([]);
     setModalidadeId();
@@ -209,7 +213,7 @@ const RelatorioAtaBimestral = () => {
     setSemestre();
 
     setListaTurmas([]);
-    setTurmaId();
+    setTurmaCodigo();
   };
 
   const obterModalidades = useCallback(async (ue, ano) => {
@@ -237,13 +241,13 @@ const RelatorioAtaBimestral = () => {
   }, []);
 
   useEffect(() => {
-    if (anoLetivo && ueId) {
-      obterModalidades(ueId, anoLetivo);
+    if (anoLetivo && ueCodigo) {
+      obterModalidades(ueCodigo, anoLetivo);
       return;
     }
     setModalidadeId();
     setListaModalidades([]);
-  }, [anoLetivo, ueId, obterModalidades]);
+  }, [anoLetivo, ueCodigo, obterModalidades]);
 
   const onChangeModalidade = novaModalidade => {
     setModalidadeId(novaModalidade);
@@ -252,7 +256,7 @@ const RelatorioAtaBimestral = () => {
     setSemestre();
 
     setListaTurmas([]);
-    setTurmaId();
+    setTurmaCodigo();
 
     setListaBimestres([]);
     setBimestre();
@@ -325,7 +329,7 @@ const RelatorioAtaBimestral = () => {
           setListaTurmas(lista);
 
           if (lista?.length === 1) {
-            setTurmaId(lista[0].valor);
+            setTurmaCodigo(lista[0].valor);
           }
           return;
         }
@@ -336,19 +340,19 @@ const RelatorioAtaBimestral = () => {
   );
 
   useEffect(() => {
-    if (modalidadeId && ueId) {
-      obterTurmas(modalidadeId, ueId);
+    if (modalidadeId && ueCodigo) {
+      obterTurmas(modalidadeId, ueCodigo);
       return;
     }
-    setTurmaId();
+    setTurmaCodigo();
     setListaTurmas([]);
-  }, [modalidadeId, ueId, obterTurmas]);
+  }, [modalidadeId, ueCodigo, obterTurmas]);
 
   const onChangeTurma = valor => {
-    const todosSetado = turmaId?.find(a => a === OPCAO_TODOS);
+    const todosSetado = turmaCodigo?.find(a => a === OPCAO_TODOS);
     const todos = valor.find(a => a === OPCAO_TODOS && !todosSetado);
     const novoValor = todosSetado && valor.length === 2 ? [valor[1]] : valor;
-    setTurmaId(todos ? [todos] : novoValor);
+    setTurmaCodigo(todos ? [todos] : novoValor);
   };
 
   const obterBimestres = useCallback(async () => {
@@ -384,10 +388,10 @@ const RelatorioAtaBimestral = () => {
   useEffect(() => {
     const desabilitar =
       !anoLetivo ||
-      !dreId ||
-      !ueId ||
+      !dreCodigo ||
+      !ueCodigo ||
       !modalidadeId ||
-      !turmaId?.length ||
+      !turmaCodigo?.length ||
       !bimestre;
 
     let desabilitado = desabilitar;
@@ -396,17 +400,26 @@ const RelatorioAtaBimestral = () => {
       desabilitado = !semestre || desabilitar;
     }
     setDesabilitarBtnGerar(desabilitado);
-  }, [anoLetivo, dreId, ueId, modalidadeId, turmaId, semestre, bimestre]);
+  }, [
+    anoLetivo,
+    dreCodigo,
+    ueCodigo,
+    modalidadeId,
+    turmaCodigo,
+    semestre,
+    bimestre,
+  ]);
 
   const onClickGerar = async () => {
     const params = {
       anoLetivo,
-      dreId,
-      ueId,
+      dreCodigo,
+      ueCodigo,
       modalidadeId,
       semestre,
-      turmaId,
+      turmaCodigo,
       bimestre,
+      exibirHistorico: consideraHistorico,
     };
     const retorno = await ServicoRelatorioAtaBimestral.gerar(params).catch(e =>
       erros(e)
@@ -457,7 +470,8 @@ const RelatorioAtaBimestral = () => {
                 onClick={onClickGerar}
                 disabled={
                   String(modalidadeId) === String(ModalidadeDTO.INFANTIL) ||
-                  desabilitarBtnGerar
+                  desabilitarBtnGerar ||
+                  !permissoesTela?.podeConsultar
                 }
               />
             </div>
@@ -468,6 +482,7 @@ const RelatorioAtaBimestral = () => {
                 label="Exibir histórico?"
                 onChangeCheckbox={onCheckedConsideraHistorico}
                 checked={consideraHistorico}
+                disabled={!permissoesTela?.podeConsultar}
               />
             </div>
           </div>
@@ -481,7 +496,9 @@ const RelatorioAtaBimestral = () => {
                   valueOption="valor"
                   valueText="desc"
                   disabled={
-                    listaAnosLetivo?.length === 1 || !listaAnosLetivo?.length
+                    listaAnosLetivo?.length === 1 ||
+                    !listaAnosLetivo?.length ||
+                    !permissoesTela?.podeConsultar
                   }
                   onChange={onChangeAnoLetivo}
                   valueSelect={anoLetivo}
@@ -497,10 +514,13 @@ const RelatorioAtaBimestral = () => {
                   valueOption="valor"
                   valueText="desc"
                   disabled={
-                    listaDres?.length === 1 || !listaDres?.length || !anoLetivo
+                    listaDres?.length === 1 ||
+                    !listaDres?.length ||
+                    !anoLetivo ||
+                    !permissoesTela?.podeConsultar
                   }
                   onChange={onChangeDre}
-                  valueSelect={dreId}
+                  valueSelect={dreCodigo}
                   showSearch
                 />
               </Loader>
@@ -514,10 +534,13 @@ const RelatorioAtaBimestral = () => {
                   valueOption="valor"
                   valueText="desc"
                   disabled={
-                    listaUes?.length === 1 || !listaUes?.length || !dreId
+                    listaUes?.length === 1 ||
+                    !listaUes?.length ||
+                    !dreCodigo ||
+                    !permissoesTela?.podeConsultar
                   }
                   onChange={onChangeUe}
-                  valueSelect={ueId}
+                  valueSelect={ueCodigo}
                   showSearch
                 />
               </Loader>
@@ -535,7 +558,8 @@ const RelatorioAtaBimestral = () => {
                   disabled={
                     listaModalidades.length === 1 ||
                     !listaModalidades.length ||
-                    !ueId
+                    !ueCodigo ||
+                    !permissoesTela?.podeConsultar
                   }
                   onChange={onChangeModalidade}
                   valueSelect={modalidadeId}
@@ -554,7 +578,8 @@ const RelatorioAtaBimestral = () => {
                     !modalidadeId ||
                     Number(modalidadeId) !== ModalidadeDTO.EJA ||
                     listaSemestres?.length === 1 ||
-                    !listaSemestres?.length
+                    !listaSemestres?.length ||
+                    !permissoesTela?.podeConsultar
                   }
                   valueSelect={semestre}
                   onChange={onChangeSemestre}
@@ -572,9 +597,10 @@ const RelatorioAtaBimestral = () => {
                   disabled={
                     listaTurmas.length === 1 ||
                     !listaTurmas.length ||
-                    !modalidadeId
+                    !modalidadeId ||
+                    !permissoesTela?.podeConsultar
                   }
-                  valueSelect={turmaId}
+                  valueSelect={turmaCodigo}
                   onChange={onChangeTurma}
                   multiple
                   showSearch
@@ -591,9 +617,10 @@ const RelatorioAtaBimestral = () => {
                   valueText="desc"
                   label="Bimestre"
                   disabled={
-                    !turmaId?.length ||
+                    !turmaCodigo?.length ||
                     listaBimestres?.length === 1 ||
-                    !listaBimestres?.length
+                    !listaBimestres?.length ||
+                    !permissoesTela?.podeConsultar
                   }
                   valueSelect={bimestre}
                   onChange={onChangeBimestre}
