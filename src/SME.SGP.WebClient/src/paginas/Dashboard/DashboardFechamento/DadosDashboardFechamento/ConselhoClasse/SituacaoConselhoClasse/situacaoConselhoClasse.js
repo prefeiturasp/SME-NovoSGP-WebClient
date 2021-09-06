@@ -24,7 +24,7 @@ const SituacaoConselhoClasse = props => {
   return (
     <>
       <CardCollapse
-        titulo={`Situacao do conselho de classe (${tipoGrafico} X Estudantes)`}
+        titulo={`Situação do conselho de classe (${tipoGrafico} X Estudantes)`}
         key={`${key}-collapse-key`}
         indice={`${key}-collapse-indice`}
         alt={`${key}-alt`}
