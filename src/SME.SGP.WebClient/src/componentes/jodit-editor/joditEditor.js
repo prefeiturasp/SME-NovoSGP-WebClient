@@ -19,7 +19,7 @@ const Campo = styled.div`
 `;
 
 let CHANGE_DEBOUNCE_FLAG;
-const TAMANHO_MAXIMO_UPLOAD = 10;
+const TAMANHO_MAXIMO_UPLOAD = 100;
 
 const JoditEditor = forwardRef((props, ref) => {
   const {
