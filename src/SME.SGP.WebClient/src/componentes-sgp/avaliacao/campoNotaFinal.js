@@ -154,8 +154,7 @@ const CampoNotaFinal = props => {
           disabled={
             desabilitarCampo ||
             !podeEditar ||
-            !podeLancarNotaFinal ||
-            modoEdicaoGeral
+            !podeLancarNotaFinal
           }
           className={`tamanho-conceito-final ${
             abaixoDaMedia
