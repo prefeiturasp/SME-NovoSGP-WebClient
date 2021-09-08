@@ -39,9 +39,11 @@ const JoditEditor = forwardRef((props, ref) => {
     readonly,
     removerToolbar,
     iframeStyle,
+    disablePlugins,
     permiteVideo,
     qtdMaxImg,
     imagensCentralizadas,
+    valideClipboardHTML,
   } = props;
 
   const textArea = useRef(null);
@@ -93,7 +95,8 @@ const JoditEditor = forwardRef((props, ref) => {
         }
       },
     },
-    disablePlugins: ['image-properties', 'inline-popup'],
+    askBeforePasteHTML: valideClipboardHTML,
+    disablePlugins: ['image-properties', 'inline-popup', disablePlugins],
     language: 'pt_br',
     height,
     readonly: readonly || desabilitar,
@@ -394,9 +397,11 @@ JoditEditor.propTypes = {
   readonly: PropTypes.bool,
   removerToolbar: PropTypes.bool,
   iframeStyle: PropTypes.string,
+  disablePlugins: PropTypes.string,
   permiteVideo: PropTypes.bool,
   qtdMaxImg: PropTypes.number,
   imagensCentralizadas: PropTypes.bool,
+  valideClipboardHTML: PropTypes.bool,
 };
 
 JoditEditor.defaultProps = {
@@ -416,9 +421,11 @@ JoditEditor.defaultProps = {
   readonly: false,
   removerToolbar: false,
   iframeStyle: '',
+  disablePlugins: '',
   permiteVideo: true,
   qtdMaxImg: null,
   imagensCentralizadas: false,
+  valideClipboardHTML: true,
 };
 
 export default JoditEditor;

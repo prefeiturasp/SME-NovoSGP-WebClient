@@ -89,7 +89,13 @@ const BotoesAcoesConselhoClasse = () => {
   // Setar valor para renderizar a tela novamente!
   const recarregarDados = () => {
     dispatch(setConselhoClasseEmEdicao(false));
-    dispatch(setBimestreAtual(bimestreAtual.valor));
+    dispatch(
+      setBimestreAtual({
+        valor: bimestreAtual.valor,
+        dataInicio: bimestreAtual.dataInicio,
+        dataFim: bimestreAtual.dataFim,
+      })
+    );
     dispatch(setExpandirLinha([]));
     dispatch(setNotaConceitoPosConselhoAtual({}));
     dispatch(setIdCamposNotasPosConselho({}));
