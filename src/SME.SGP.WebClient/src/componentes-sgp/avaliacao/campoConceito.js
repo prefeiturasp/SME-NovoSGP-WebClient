@@ -2,6 +2,8 @@ import PropTypes from 'prop-types';
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import SelectComponent from '~/componentes/select';
+import TooltipEstudanteAusente from './tooltipEstudanteAusente';
+import TooltipStatusGsa from './tooltipStatusGsa';
 
 const CampoConceito = props => {
   const {
@@ -36,21 +38,31 @@ const CampoConceito = props => {
   };
 
   return (
-    <SelectComponent
-      onChange={valorNovo => setarValorNovo(valorNovo)}
-      valueOption="id"
-      valueText="valor"
-      lista={listaTiposConceitos}
-      valueSelect={conceitoValorAtual ? String(conceitoValorAtual) : undefined}
-      showSearch
-      placeholder="Conceito"
-      className={`select-conceitos ${
-        conceitoAlterado ? 'border-registro-alterado' : ''
-      }`}
-      classNameContainer={nota.ausente ? 'aluno-ausente-conceitos' : ''}
-      disabled={desabilitarCampo || !nota.podeEditar}
-      searchValue={false}
-    />
+    <div
+      style={{
+        display: 'flex',
+        alignItems: 'center',
+      }}
+    >
+      <SelectComponent
+        onChange={valorNovo => setarValorNovo(valorNovo)}
+        valueOption="id"
+        valueText="valor"
+        lista={listaTiposConceitos}
+        valueSelect={conceitoValorAtual ? String(conceitoValorAtual) : undefined}
+        showSearch
+        placeholder="Conceito"
+        className={`select-conceitos ${
+          conceitoAlterado ? 'border-registro-alterado' : ''
+        }`}
+        classNameContainer={nota.ausente ? 'aluno-ausente-conceitos' : ''}
+        disabled={desabilitarCampo || !nota.podeEditar}
+        searchValue={false}
+        style={{ width: '86px' }}
+      />
+      {nota?.ausente && <TooltipEstudanteAusente />}
+      {nota?.statusGsa && <TooltipStatusGsa />}
+    </div>
   );
 };
 
