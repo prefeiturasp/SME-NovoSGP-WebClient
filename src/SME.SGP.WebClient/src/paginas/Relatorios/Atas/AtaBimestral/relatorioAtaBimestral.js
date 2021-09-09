@@ -122,7 +122,7 @@ const RelatorioAtaBimestral = () => {
         const lista = resposta.data
           .map(item => ({
             desc: item.nome,
-            valor: item.codigo,
+            valor: String(item.codigo),
             abrev: item.abreviacao,
             id: item.id,
           }))
@@ -130,7 +130,7 @@ const RelatorioAtaBimestral = () => {
         setListaDres(lista);
 
         if (lista?.length === 1) {
-          setDreCodigo(lista[0].id);
+          setDreCodigo(lista[0].valor);
         }
         return;
       }
@@ -470,7 +470,7 @@ const RelatorioAtaBimestral = () => {
                 onClick={onClickGerar}
                 disabled={
                   String(modalidadeId) === String(ModalidadeDTO.INFANTIL) ||
-                  desabilitarBtnGerar 
+                  desabilitarBtnGerar
                 }
               />
             </div>
@@ -494,8 +494,7 @@ const RelatorioAtaBimestral = () => {
                   valueOption="valor"
                   valueText="desc"
                   disabled={
-                    listaAnosLetivo?.length === 1 ||
-                    !listaAnosLetivo?.length 
+                    listaAnosLetivo?.length === 1 || !listaAnosLetivo?.length
                   }
                   onChange={onChangeAnoLetivo}
                   valueSelect={anoLetivo}
@@ -511,9 +510,7 @@ const RelatorioAtaBimestral = () => {
                   valueOption="valor"
                   valueText="desc"
                   disabled={
-                    listaDres?.length === 1 ||
-                    !listaDres?.length ||
-                    !anoLetivo 
+                    listaDres?.length === 1 || !listaDres?.length || !anoLetivo
                   }
                   onChange={onChangeDre}
                   valueSelect={dreCodigo}
@@ -530,9 +527,7 @@ const RelatorioAtaBimestral = () => {
                   valueOption="valor"
                   valueText="desc"
                   disabled={
-                    listaUes?.length === 1 ||
-                    !listaUes?.length ||
-                    !dreCodigo 
+                    listaUes?.length === 1 || !listaUes?.length || !dreCodigo
                   }
                   onChange={onChangeUe}
                   valueSelect={ueCodigo}
@@ -572,7 +567,7 @@ const RelatorioAtaBimestral = () => {
                     !modalidadeId ||
                     Number(modalidadeId) !== ModalidadeDTO.EJA ||
                     listaSemestres?.length === 1 ||
-                    !listaSemestres?.length 
+                    !listaSemestres?.length
                   }
                   valueSelect={semestre}
                   onChange={onChangeSemestre}
@@ -590,7 +585,7 @@ const RelatorioAtaBimestral = () => {
                   disabled={
                     listaTurmas.length === 1 ||
                     !listaTurmas.length ||
-                    !modalidadeId 
+                    !modalidadeId
                   }
                   valueSelect={turmaCodigo}
                   onChange={onChangeTurma}
@@ -611,7 +606,7 @@ const RelatorioAtaBimestral = () => {
                   disabled={
                     !turmaCodigo?.length ||
                     listaBimestres?.length === 1 ||
-                    !listaBimestres?.length 
+                    !listaBimestres?.length
                   }
                   valueSelect={bimestre}
                   onChange={onChangeBimestre}
