@@ -7,3 +7,4 @@ export { default as ServicoAcompanhamentoAprendizagem } from './AcompanhamentoAp
 export { default as ServicoRelatorioFrequencia } from './Frequencia/ServicoRelatorioFrequencia';
 export { default as ServicoRelatorioAcompanhamentoFechamento } from './Fechamento/AcompanhamentoFechamento/ServicoRelatorioAcompanhamentoFechamento';
 export { default as ServicoRelatorioPendencias } from './Pendencias/ServicoRelatorioPendencias';
+export { default as ServicoRelatorioAtaBimestral } from './Atas/ServicoRelatorioAtaBimestral';

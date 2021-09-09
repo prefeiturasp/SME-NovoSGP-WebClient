@@ -85,6 +85,7 @@ const RotasDto = {
   DASHBOARD_RELATORIO_ACOMPANHAMENTO_APRENDIZAGEM:
     '/dashboard/acompanhamento-aprendizagem',
   DASHBOARD_FECHAMENTO: '/dashboard/fechamento',
+  ATA_BIMESTRAL: '/relatorios/atas/ata-bimestral',
 };
 
 export default RotasDto;

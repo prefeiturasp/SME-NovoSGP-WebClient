@@ -1,10 +1,11 @@
-import PropTypes from 'prop-types';
 import React, { useState } from 'react';
-import { Base } from '~/componentes';
-import CardCollapse from '~/componentes/cardCollapse';
-import GraficoSituacaoProcessoFechamento from './graficoSituacaoProcessoFechamento';
+import PropTypes from 'prop-types';
 
-const SituacaoProcessoFechamento = props => {
+import { Base, CardCollapse } from '~/componentes';
+
+import GraficoNotasFinais from './graficoNotasFinais';
+
+const NotasFinais = props => {
   const { anoLetivo, dreId, ueId, modalidade, semestre, bimestre } = props;
 
   const configCabecalho = {
@@ -14,12 +15,12 @@ const SituacaoProcessoFechamento = props => {
 
   const [exibir, setExibir] = useState(false);
 
-  const key = 'situacao-processo-fechamento';
+  const key = 'notas-finais';
 
   return (
     <>
       <CardCollapse
-        titulo="Situacao do processo de fechamento"
+        titulo="Notas finais"
         key={`${key}-collapse-key`}
         indice={`${key}-collapse-indice`}
         alt={`${key}-alt`}
@@ -30,7 +31,7 @@ const SituacaoProcessoFechamento = props => {
         }}
       >
         {exibir ? (
-          <GraficoSituacaoProcessoFechamento
+          <GraficoNotasFinais
             anoLetivo={anoLetivo}
             dreId={dreId}
             ueId={ueId}
@@ -46,7 +47,7 @@ const SituacaoProcessoFechamento = props => {
   );
 };
 
-SituacaoProcessoFechamento.propTypes = {
+NotasFinais.propTypes = {
   anoLetivo: PropTypes.oneOfType(PropTypes.any),
   dreId: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   ueId: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
@@ -55,7 +56,7 @@ SituacaoProcessoFechamento.propTypes = {
   bimestre: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
 };
 
-SituacaoProcessoFechamento.defaultProps = {
+NotasFinais.defaultProps = {
   anoLetivo: null,
   dreId: null,
   ueId: null,
@@ -64,4 +65,4 @@ SituacaoProcessoFechamento.defaultProps = {
   bimestre: null,
 };
 
-export default SituacaoProcessoFechamento;
+export default NotasFinais;

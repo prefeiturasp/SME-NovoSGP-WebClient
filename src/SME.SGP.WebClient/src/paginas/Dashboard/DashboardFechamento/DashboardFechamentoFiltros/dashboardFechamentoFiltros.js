@@ -38,6 +38,7 @@ const DashboardFechamentoFiltros = () => {
   const [carregandoUes, setCarregandoUes] = useState(false);
   const [carregandoModalidades, setCarregandoModalidades] = useState(false);
   const [carregandoSemestres, setCarregandoSemestres] = useState(false);
+  const [carregandoBimestres, setCarregandoBimestres] = useState(false);
 
   const validarValorPadraoAnoLetivo = (lista, atual) => {
     let valorAtual;
@@ -288,10 +289,12 @@ const DashboardFechamentoFiltros = () => {
   };
 
   const obterBimestres = useCallback(async () => {
+    setCarregandoBimestres(true);
     const dados = await ServicoPeriodoEscolar.obterPeriodosPorAnoLetivoModalidade(
       modalidade,
       anoLetivo
-    );
+    ).finally(() => setCarregandoBimestres(false));
+
     if (dados?.data?.length) {
       const dadosBimestres = dados.data.map(item => {
         return {
@@ -399,7 +402,7 @@ const DashboardFechamentoFiltros = () => {
             />
           </Loader>
         </div>
-        <div className="col-sm-12 col-md-6 col-lg-6 col-xl-4 mb-3">
+        <div className="col-sm-12 col-md-6 col-lg-6 col-xl-4 mb-3 pr-0">
           <Loader loading={carregandoSemestres} ignorarTip>
             <SelectComponent
               id="semestre"
@@ -418,17 +421,19 @@ const DashboardFechamentoFiltros = () => {
           </Loader>
         </div>
         <div className="col-sm-12 col-md-6 col-lg-6 col-xl-4 mb-3">
-          <SelectComponent
-            id="bimestre"
-            label="Bimestre"
-            name="bimestre"
-            lista={listaBimestres}
-            valueOption="valor"
-            valueText="descricao"
-            valueSelect={bimestre}
-            placeholder="Selecione um bimestre"
-            onChange={onChangeBimestre}
-          />
+          <Loader loading={carregandoBimestres} ignorarTip>
+            <SelectComponent
+              id="bimestre"
+              label="Bimestre"
+              name="bimestre"
+              lista={listaBimestres}
+              valueOption="valor"
+              valueText="descricao"
+              valueSelect={bimestre}
+              placeholder="Selecione um bimestre"
+              onChange={onChangeBimestre}
+            />
+          </Loader>
         </div>
       </div>
     </>

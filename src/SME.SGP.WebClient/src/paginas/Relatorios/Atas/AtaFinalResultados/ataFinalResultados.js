@@ -28,12 +28,12 @@ const AtaFinalResultados = () => {
   const [listaModalidades, setListaModalidades] = useState([]);
   const [listaTurmas, setListaTurmas] = useState([]);
 
-  const [anoLetivo, setAnoLetivo] = useState(undefined);
-  const [dreId, setDreId] = useState(undefined);
-  const [ueId, setUeId] = useState(undefined);
-  const [modalidadeId, setModalidadeId] = useState(undefined);
-  const [semestre, setSemestre] = useState(undefined);
-  const [turmaId, setTurmaId] = useState(undefined);
+  const [anoLetivo, setAnoLetivo] = useState();
+  const [dreId, setDreId] = useState();
+  const [ueId, setUeId] = useState();
+  const [modalidadeId, setModalidadeId] = useState();
+  const [semestre, setSemestre] = useState();
+  const [turmaId, setTurmaId] = useState();
   const [formato, setFormato] = useState('1');
   const [consideraHistorico, setConsideraHistorico] = useState(false);
 
@@ -486,7 +486,7 @@ const AtaFinalResultados = () => {
       <Card>
         <div className="col-md-12 p-0">
           <div className="row">
-            <div className="col-md-12 d-flex justify-content-end pb-4">
+            <div className="col-md-12 d-flex justify-content-end pb-2">
               <Button
                 id="btn-voltar-ata-final-resultado"
                 label="Voltar"
@@ -499,7 +499,7 @@ const AtaFinalResultados = () => {
               <Button
                 id="btn-cancelar-ata-final-resultado"
                 label="Cancelar"
-                color={Colors.Roxo}
+                color={Colors.Azul}
                 border
                 bold
                 className="mr-3"
@@ -509,8 +509,7 @@ const AtaFinalResultados = () => {
                 id="btn-gerar-ata-final-resultado"
                 icon="print"
                 label="Gerar"
-                color={Colors.Azul}
-                border
+                color={Colors.Roxo}
                 bold
                 onClick={() => onClickGerar()}
                 disabled={
@@ -627,7 +626,7 @@ const AtaFinalResultados = () => {
                 showSearch
               />
             </div>
-            <div className="col-sm-12 col-md-3 col-lg-5 col-xl-3 pr-0">
+            <div className="col-sm-12 col-md-3 col-lg-5 col-xl-3 mb-3 pr-0">
               <SelectComponent
                 label="Visualização"
                 lista={listaVisualizacao}

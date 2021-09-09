@@ -1,18 +1,30 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
+
 import { Card, Button, Colors } from '~/componentes';
 import { Cabecalho } from '~/componentes-sgp';
 
 import { URL_HOME } from '~/constantes';
 import { history } from '~/servicos';
-import DashboardFechamentoAlertaInfantil from './dashboardDevolutivasAlertaInfantil';
 
+import { limparDadosDashboardFechamento } from '~/redux/modulos/dashboardFechamento/actions';
+
+import DashboardFechamentoAlertaInfantil from './dashboardDevolutivasAlertaInfantil';
 import DashboardFechamentoFiltros from './DashboardFechamentoFiltros/dashboardFechamentoFiltros';
 import TabsDashboardFechamento from './TabsDashboardFechamento/tabsDashboardFechamento';
 
 const DashboardFechamento = () => {
+  const dispatch = useDispatch();
+
   const onClickVoltar = () => {
     history.push(URL_HOME);
   };
+
+  useEffect(() => {
+    return () => {
+      dispatch(limparDadosDashboardFechamento());
+    };
+  }, [dispatch]);
 
   return (
     <>

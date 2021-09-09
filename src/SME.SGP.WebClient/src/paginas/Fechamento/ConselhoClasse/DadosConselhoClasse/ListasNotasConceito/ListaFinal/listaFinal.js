@@ -106,7 +106,7 @@ const ListaFinal = props => {
             idCampo={idCampo}
             codigoComponenteCurricular={codigoComponenteCurricular}
             alunoDesabilitado={alunoDesabilitado}
-            podeEditar={notaPosConselho.podeEditar}
+            podeEditar={notaPosConselho?.podeEditar}
           />
         );
       default:
