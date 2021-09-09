@@ -282,11 +282,11 @@ const AtaFinalResultados = () => {
     let desabilitado = desabilitar;
 
     if (Number(modalidadeId) === Number(modalidade.EJA)) {
-      const semestresValidos = [1, 2];
-      desabilitado = !semestresValidos.includes(semestre) || desabilitar;
+      desabilitado = !semestre || desabilitar;
     } else if (Number(modalidadeId) === Number(modalidade.ENSINO_MEDIO)) {
       desabilitado = desabilitar || !visualizacao;
     }
+
     setDesabilitarBtnGerar(desabilitado);
   }, [
     anoLetivo,
@@ -609,7 +609,7 @@ const AtaFinalResultados = () => {
                 onChange={onChangeSemestre}
               />
             </div>
-            <div className="col-sm-12 col-md-12 col-lg-6 col-xl-6 mb-2">
+            <div className="col-sm-12 col-md-12 col-lg-6 col-xl-6 mb-3">
               <SelectComponent
                 lista={listaTurmas}
                 valueOption="valor"
@@ -637,7 +637,7 @@ const AtaFinalResultados = () => {
                 disabled={desabilitaVisualizacao}
               />
             </div>
-            <div className="col-sm-12 col-md-3 col-lg-2 col-xl-2 mb-2">
+            <div className="col-sm-12 col-md-3 col-lg-2 col-xl-2">
               <SelectComponent
                 label="Formato"
                 lista={listaFormatos}
