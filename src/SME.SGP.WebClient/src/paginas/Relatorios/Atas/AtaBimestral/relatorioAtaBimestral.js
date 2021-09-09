@@ -57,7 +57,7 @@ const RelatorioAtaBimestral = () => {
   const [desabilitarBtnGerar, setDesabilitarBtnGerar] = useState(true);
 
   const usuarioStore = useSelector(store => store.usuario);
-  // const permissoesTela = usuarioStore.permissoes[RotasDto.ATA_BIMESTRAL];
+  const permissoesTela = usuarioStore.permissoes[RotasDto.ATA_BIMESTRAL];
 
   const onClickCancelar = () => {
     setConsideraHistorico(false);
@@ -470,7 +470,8 @@ const RelatorioAtaBimestral = () => {
                 onClick={onClickGerar}
                 disabled={
                   String(modalidadeId) === String(ModalidadeDTO.INFANTIL) ||
-                  desabilitarBtnGerar
+                  desabilitarBtnGerar ||
+                  !permissoesTela?.podeConsultar
                 }
               />
             </div>
@@ -481,6 +482,7 @@ const RelatorioAtaBimestral = () => {
                 label="Exibir histórico?"
                 onChangeCheckbox={onCheckedConsideraHistorico}
                 checked={consideraHistorico}
+                disabled={!permissoesTela?.podeConsultar}
               />
             </div>
           </div>
@@ -494,7 +496,9 @@ const RelatorioAtaBimestral = () => {
                   valueOption="valor"
                   valueText="desc"
                   disabled={
-                    listaAnosLetivo?.length === 1 || !listaAnosLetivo?.length
+                    listaAnosLetivo?.length === 1 || 
+                    !listaAnosLetivo?.length ||
+                    !permissoesTela?.podeConsultar
                   }
                   onChange={onChangeAnoLetivo}
                   valueSelect={anoLetivo}
@@ -510,7 +514,8 @@ const RelatorioAtaBimestral = () => {
                   valueOption="valor"
                   valueText="desc"
                   disabled={
-                    listaDres?.length === 1 || !listaDres?.length || !anoLetivo
+                    listaDres?.length === 1 || !listaDres?.length || !anoLetivo ||
+                    !permissoesTela?.podeConsultar
                   }
                   onChange={onChangeDre}
                   valueSelect={dreCodigo}
@@ -527,7 +532,8 @@ const RelatorioAtaBimestral = () => {
                   valueOption="valor"
                   valueText="desc"
                   disabled={
-                    listaUes?.length === 1 || !listaUes?.length || !dreCodigo
+                    listaUes?.length === 1 || !listaUes?.length || !dreCodigo ||
+                    !permissoesTela?.podeConsultar
                   }
                   onChange={onChangeUe}
                   valueSelect={ueCodigo}
@@ -548,7 +554,8 @@ const RelatorioAtaBimestral = () => {
                   disabled={
                     listaModalidades.length === 1 ||
                     !listaModalidades.length ||
-                    !ueCodigo
+                    !ueCodigo ||
+                    !permissoesTela?.podeConsultar
                   }
                   onChange={onChangeModalidade}
                   valueSelect={modalidadeId}
@@ -567,7 +574,8 @@ const RelatorioAtaBimestral = () => {
                     !modalidadeId ||
                     Number(modalidadeId) !== ModalidadeDTO.EJA ||
                     listaSemestres?.length === 1 ||
-                    !listaSemestres?.length
+                    !listaSemestres?.length ||
+                    !permissoesTela?.podeConsultar
                   }
                   valueSelect={semestre}
                   onChange={onChangeSemestre}
@@ -585,7 +593,8 @@ const RelatorioAtaBimestral = () => {
                   disabled={
                     listaTurmas.length === 1 ||
                     !listaTurmas.length ||
-                    !modalidadeId
+                    !modalidadeId ||
+                    !permissoesTela?.podeConsultar
                   }
                   valueSelect={turmaCodigo}
                   onChange={onChangeTurma}
@@ -606,7 +615,8 @@ const RelatorioAtaBimestral = () => {
                   disabled={
                     !turmaCodigo?.length ||
                     listaBimestres?.length === 1 ||
-                    !listaBimestres?.length
+                    !listaBimestres?.length ||
+                    !permissoesTela?.podeConsultar
                   }
                   valueSelect={bimestre}
                   onChange={onChangeBimestre}
