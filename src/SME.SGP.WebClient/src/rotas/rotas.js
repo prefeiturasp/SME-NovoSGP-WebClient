@@ -1439,8 +1439,8 @@ rotas.set(RotasDto.ATA_BIMESTRAL, {
   parent: '/',
   component: RelatorioAtaBimestral,
   exact: true,
-  tipo: RotasTipo.EstruturadaAutenticada,
-  temPermissionamento: true,
+  // tipo: RotasTipo.EstruturadaAutenticada,
+  // temPermissionamento: true,
   chavePermissao: RotasDto.ATA_BIMESTRAL,
 });
 
