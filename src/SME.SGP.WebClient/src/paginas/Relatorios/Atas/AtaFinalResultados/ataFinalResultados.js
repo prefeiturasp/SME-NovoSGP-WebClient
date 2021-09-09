@@ -28,12 +28,12 @@ const AtaFinalResultados = () => {
   const [listaModalidades, setListaModalidades] = useState([]);
   const [listaTurmas, setListaTurmas] = useState([]);
 
-  const [anoLetivo, setAnoLetivo] = useState(undefined);
-  const [dreId, setDreId] = useState(undefined);
-  const [ueId, setUeId] = useState(undefined);
-  const [modalidadeId, setModalidadeId] = useState(undefined);
-  const [semestre, setSemestre] = useState(undefined);
-  const [turmaId, setTurmaId] = useState(undefined);
+  const [anoLetivo, setAnoLetivo] = useState();
+  const [dreId, setDreId] = useState();
+  const [ueId, setUeId] = useState();
+  const [modalidadeId, setModalidadeId] = useState();
+  const [semestre, setSemestre] = useState();
+  const [turmaId, setTurmaId] = useState();
   const [formato, setFormato] = useState('1');
   const [consideraHistorico, setConsideraHistorico] = useState(false);
 
@@ -60,7 +60,7 @@ const AtaFinalResultados = () => {
     if (anosLetivo) {
       setListaAnosLetivo(anosLetivo);
       setAnoLetivo(anosLetivo[0].valor);
-      setDreId();      
+      setDreId();
     } else {
       setListaAnosLetivo([]);
     }
@@ -280,7 +280,7 @@ const AtaFinalResultados = () => {
       !formato;
 
     let desabilitado = desabilitar;
-    
+
     if (Number(modalidadeId) === Number(modalidade.EJA)) {
       const semestresValidos = [1, 2];
       desabilitado = !semestresValidos.includes(semestre) || desabilitar;
@@ -482,24 +482,24 @@ const AtaFinalResultados = () => {
         exibir={String(modalidadeId) === String(modalidade.INFANTIL)}
         validarModalidadeFiltroPrincipal={false}
       />
-      <Cabecalho pagina="Ata de resultados finais" />
+      <Cabecalho pagina="Ata de resultados finais" classes="mb-2" />
       <Card>
-        <div className="col-md-12">
+        <div className="col-md-12 p-0">
           <div className="row">
-            <div className="col-md-12 d-flex justify-content-end pb-4">
+            <div className="col-md-12 d-flex justify-content-end pb-2">
               <Button
                 id="btn-voltar-ata-final-resultado"
                 label="Voltar"
                 icon="arrow-left"
                 color={Colors.Azul}
                 border
-                className="mr-2"
+                className="mr-3"
                 onClick={onClickVoltar}
               />
               <Button
                 id="btn-cancelar-ata-final-resultado"
                 label="Cancelar"
-                color={Colors.Roxo}
+                color={Colors.Azul}
                 border
                 bold
                 className="mr-3"
@@ -509,10 +509,8 @@ const AtaFinalResultados = () => {
                 id="btn-gerar-ata-final-resultado"
                 icon="print"
                 label="Gerar"
-                color={Colors.Azul}
-                border
+                color={Colors.Roxo}
                 bold
-                className="mr-2"
                 onClick={() => onClickGerar()}
                 disabled={
                   String(modalidadeId) === String(modalidade.INFANTIL) ||
@@ -521,14 +519,14 @@ const AtaFinalResultados = () => {
                 }
               />
             </div>
-            <div className="col-sm-12 mb-4">
+            <div className="col-sm-12 mb-2">
               <CheckboxComponent
                 label="Exibir histórico?"
                 onChangeCheckbox={onCheckedConsideraHistorico}
                 checked={consideraHistorico}
               />
             </div>
-            <div className="col-sm-12 col-md-4 col-lg-2 col-xl-2 mb-2">
+            <div className="col-sm-12 col-md-4 col-lg-2 col-xl-2 mb-3 pr-0">
               <Loader loading={carregandoAnosLetivos} tip="">
                 <SelectComponent
                   label="Ano Letivo"
@@ -544,7 +542,7 @@ const AtaFinalResultados = () => {
                 />
               </Loader>
             </div>
-            <div className="col-sm-12 col-md-12 col-lg-5 col-xl-5 mb-2">
+            <div className="col-sm-12 col-md-12 col-lg-5 col-xl-5 mb-3 pr-0">
               <Loader loading={carregandoDres} tip="">
                 <SelectComponent
                   label="Diretoria Regional de Educação (DRE)"
@@ -580,7 +578,7 @@ const AtaFinalResultados = () => {
                 />
               </Loader>
             </div>
-            <div className="col-sm-12 col-md-8 col-lg-4 col-xl-4 mb-2">
+            <div className="col-sm-12 col-md-8 col-lg-4 col-xl-4 mb-3 pr-0">
               <SelectComponent
                 label="Modalidade"
                 lista={listaModalidades}
@@ -595,7 +593,7 @@ const AtaFinalResultados = () => {
                 valueSelect={modalidadeId}
               />
             </div>
-            <div className="col-sm-12 col-md-4 col-lg-2 col-xl-2 mb-2">
+            <div className="col-sm-12 col-md-4 col-lg-2 col-xl-2 mb-3 pr-0">
               <SelectComponent
                 lista={listaSemestre}
                 valueOption="valor"
@@ -628,7 +626,7 @@ const AtaFinalResultados = () => {
                 showSearch
               />
             </div>
-            <div className="col-sm-12 col-md-3 col-lg-5 col-xl-3 mb-2">
+            <div className="col-sm-12 col-md-3 col-lg-5 col-xl-3 mb-3 pr-0">
               <SelectComponent
                 label="Visualização"
                 lista={listaVisualizacao}
