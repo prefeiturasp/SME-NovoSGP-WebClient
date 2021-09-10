@@ -248,7 +248,7 @@ const AulaDadaAulaPrevista = () => {
   };
 
   return (
-    <Loader loading={carregamento} tip="Carregando...">
+    <Loader loading={carregamento}>
       {!turmaSelecionada.turma &&
       !ehTurmaInfantil(modalidadesFiltroPrincipal, turmaSelecionada) ? (
         <Grid cols={12} className="p-0">
@@ -262,7 +262,7 @@ const AulaDadaAulaPrevista = () => {
             className="mb-2"
           />
         </Grid>
-      ) : null}{' '}
+      ) : null}
       <AlertaModalidadeInfantil />
       <Grid cols={12} className="p-0">
         <Titulo>
