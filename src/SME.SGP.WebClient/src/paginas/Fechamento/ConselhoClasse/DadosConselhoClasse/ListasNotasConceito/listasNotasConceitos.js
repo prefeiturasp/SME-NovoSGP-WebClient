@@ -11,6 +11,7 @@ import {
 import { erros } from '~/servicos/alertas';
 import ServicoConselhoClasse from '~/servicos/Paginas/ConselhoClasse/ServicoConselhoClasse';
 import ListasCarregar from './listasCarregar';
+import { valorNuloOuVazio } from '~/utils/funcoes/gerais';
 
 const ListasNotasConceitos = props => {
   const { bimestreSelecionado } = props;
@@ -82,10 +83,7 @@ const ListasNotasConceitos = props => {
     dados.notasConceitos.map(notasConceitos =>
       notasConceitos.componentesCurriculares.map(componentesCurriculares =>
         componentesCurriculares.notasFechamentos.map(notasFechamentos => {
-          if (
-            notasFechamentos.notaConceito === null ||
-            notasFechamentos.notaConceito < 0
-          ) {
+          if (valorNuloOuVazio(notasFechamentos.notaConceito)) {
             notasFechamentosPreenchidas = false;
           }
           return notasFechamentos;

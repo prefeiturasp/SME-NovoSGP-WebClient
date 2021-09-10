@@ -1,22 +1,22 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { Titulo, TituloAno } from './aulaDadaAulaPrevista.css';
-import Grid from '~/componentes/grid';
-import Card from '~/componentes/card';
-import Button from '~/componentes/button';
-import SelectComponent from '~/componentes/select';
-import ServicoDisciplina from '~/servicos/Paginas/ServicoDisciplina';
-import { Colors, Auditoria, Loader } from '~/componentes';
-import ListaAulasPorBimestre from './ListaAulasPorBimestre/ListaAulasPorBimestre';
-import api from '~/servicos/api';
-import Alert from '~/componentes/alert';
-import RotasDto from '~/dtos/rotasDto';
-import { verificaSomenteConsulta } from '~/servicos/servico-navegacao';
-import { confirmar, erros, sucesso, erro, exibirAlerta } from '~/servicos/alertas';
-import { URL_HOME } from '~/constantes/url';
-import history from '~/servicos/history';
+import { Auditoria, Colors, Loader } from '~/componentes';
 import AlertaModalidadeInfantil from '~/componentes-sgp/AlertaModalidadeInfantil/alertaModalidadeInfantil';
+import Alert from '~/componentes/alert';
+import Button from '~/componentes/button';
+import Card from '~/componentes/card';
+import Grid from '~/componentes/grid';
+import SelectComponent from '~/componentes/select';
+import { URL_HOME } from '~/constantes/url';
+import RotasDto from '~/dtos/rotasDto';
+import { confirmar, erros, exibirAlerta, sucesso } from '~/servicos/alertas';
+import api from '~/servicos/api';
+import history from '~/servicos/history';
+import ServicoDisciplina from '~/servicos/Paginas/ServicoDisciplina';
+import { verificaSomenteConsulta } from '~/servicos/servico-navegacao';
 import { ehTurmaInfantil } from '~/servicos/Validacoes/validacoesInfatil';
+import { Titulo, TituloAno } from './aulaDadaAulaPrevista.css';
+import ListaAulasPorBimestre from './ListaAulasPorBimestre/ListaAulasPorBimestre';
 
 const AulaDadaAulaPrevista = () => {
   const usuario = useSelector(store => store.usuario);
@@ -36,6 +36,7 @@ const AulaDadaAulaPrevista = () => {
   const [auditoria, setAuditoria] = useState(undefined);
   const permissoesTela = usuario.permissoes[RotasDto.AULA_DADA_AULA_PREVISTA];
   const [somenteConsulta, setSomenteConsulta] = useState(false);
+  const [carregamento, setCarregamento] = useState(false);
 
   const modalidadesFiltroPrincipal = useSelector(
     store => store.filtro.modalidades
@@ -120,8 +121,11 @@ const AulaDadaAulaPrevista = () => {
         if (item.previstas.mensagens && item.previstas.mensagens.length > 0) {
           item.previstas.temDivergencia = true;
         }
-        periodosFechados += !item.podeEditar ?
-          (periodosFechados.length > 0 ? `, ${item.bimestre}` : item.bimestre) : '';
+        periodosFechados += !item.podeEditar
+          ? periodosFechados.length > 0
+            ? `, ${item.bimestre}`
+            : item.bimestre
+          : '';
       });
       const dados = {
         id: dadosAula.id,
@@ -158,6 +162,8 @@ const AulaDadaAulaPrevista = () => {
   };
 
   const salvar = async () => {
+    setCarregamento(true);
+
     const bimestresQuantidade = [];
     dadoslista.bimestres.forEach(item => {
       if (item?.previstas?.quantidade && item?.previstas?.quantidade > 0) {
@@ -182,6 +188,9 @@ const AulaDadaAulaPrevista = () => {
             sucesso('Suas informações foram salvas com sucesso');
           setModoEdicao(false);
         })
+        .then(() => {
+          setCarregamento(false);
+        })
         .catch(e => erros(e));
     } else {
       await api
@@ -191,6 +200,9 @@ const AulaDadaAulaPrevista = () => {
             sucesso('Suas informações foram salvas com sucesso');
           buscarDados();
           resetarTela();
+        })
+        .then(() => {
+          setCarregamento(false);
         })
         .catch(e => erros(e));
     }
@@ -237,21 +249,21 @@ const AulaDadaAulaPrevista = () => {
   };
 
   return (
-    <>
+    <Loader loading={carregamento}>
       {!turmaSelecionada.turma &&
-        !ehTurmaInfantil(modalidadesFiltroPrincipal, turmaSelecionada) ? (
-          <Grid cols={12} className="p-0">
-            <Alert
-              alerta={{
-                tipo: 'warning',
-                id: 'AlertaPrincipal',
-                mensagem: 'Você precisa escolher uma turma.',
-                estiloTitulo: { fontSize: '18px' },
-              }}
-              className="mb-2"
-            />
-          </Grid>
-        ) : null}{' '}
+      !ehTurmaInfantil(modalidadesFiltroPrincipal, turmaSelecionada) ? (
+        <Grid cols={12} className="p-0">
+          <Alert
+            alerta={{
+              tipo: 'warning',
+              id: 'AlertaPrincipal',
+              mensagem: 'Você precisa escolher uma turma.',
+              estiloTitulo: { fontSize: '18px' },
+            }}
+            className="mb-2"
+          />
+        </Grid>
+      ) : null}
       <AlertaModalidadeInfantil />
       <Grid cols={12} className="p-0">
         <Titulo>
@@ -333,13 +345,13 @@ const AulaDadaAulaPrevista = () => {
                   alteradoRf={auditoria.alteradoRf}
                 />
               ) : (
-                  ''
-                )}
+                ''
+              )}
             </div>
           </div>
         </div>
       </Card>
-    </>
+    </Loader>
   );
 };
 
