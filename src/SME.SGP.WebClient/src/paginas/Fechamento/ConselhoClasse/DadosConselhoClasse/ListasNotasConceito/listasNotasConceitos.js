@@ -56,7 +56,7 @@ const ListasNotasConceitos = props => {
       fechamentoPeriodoInicioFim.periodoFechamentoFim
     ).format('MM-DD-YYYY');
 
-    if (!alunoDesabilitado || dataSituacao >= dataFimFechamento) return false;
+    if (!alunoDesabilitado || dataSituacao <= dataFimFechamento) return false;
 
     return true;
   };

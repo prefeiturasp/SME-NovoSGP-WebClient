@@ -99,7 +99,6 @@ const Justificativa = props => {
                         id="justificativa"
                         desabilitar={
                           (alunoDesabilitado && !podeEditarNota) ||
-                          !podeEditarNota ||
                           desabilitarCampos ||
                           !dentroPeriodo ||
                           !ehEdicao
@@ -130,7 +129,6 @@ const Justificativa = props => {
                           }}
                           disabled={
                             (alunoDesabilitado && !podeEditarNota) ||
-                            !podeEditarNota ||
                             desabilitarCampos ||
                             !dentroPeriodo ||
                             !ehEdicao
