@@ -23,11 +23,7 @@ const ListasNotasConceitos = props => {
 
   const dadosPrincipaisConselhoClasse = useSelector(
     store => store.conselhoClasse.dadosPrincipaisConselhoClasse
-  );
-
-  const bimestrePeriodoInicioFim = useSelector(
-    store => store.conselhoClasse.bimestrePeriodoInicioFim
-  );
+  ); 
 
   const dadosAlunoObjectCard = useSelector(
     store => store.conselhoClasse.dadosAlunoObjectCard
@@ -52,19 +48,6 @@ const ListasNotasConceitos = props => {
   const [exibir, setExibir] = useState(false);
   const [carregando, setCarregando] = useState(false);
 
-  const desabilitarEdicaoAluno = () => {
-    const dataSituacao = moment(dadosAlunoObjectCard.dataSituacao).format(
-      'MM-DD-YYYY'
-    );
-    const dataFimBimestre = moment(
-      bimestrePeriodoInicioFim.bimestrePeriodoFim
-    ).format('MM-DD-YYYY');
-
-    if (!alunoDesabilitado || dataSituacao >= dataFimBimestre) return false;
-
-    return true;
-  };
-
   const alunoTransferidoAposFimDoBimestre = () => {
     const dataSituacao = moment(dadosAlunoObjectCard.dataSituacao).format(
       'MM-DD-YYYY'
@@ -73,6 +56,12 @@ const ListasNotasConceitos = props => {
     const dataFimPeriodo = moment(bimestreAtual.dataFim).format('MM-DD-YYYY');
 
     return dataSituacao >= dataFimPeriodo;
+  };
+
+  const desabilitarEdicaoAluno = () => {
+    if (!alunoDesabilitado || alunoTransferidoAposFimDoBimestre()) return false;
+
+    return true;
   };
 
   const habilitaConselhoClasse = dados => {
