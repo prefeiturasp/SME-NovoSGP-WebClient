@@ -5,7 +5,7 @@ import { useSelector } from 'react-redux';
 import { ContainerTabsCard } from '~/componentes/tabs/tabs.css';
 import { situacaoPlanoAEE } from '~/dtos';
 import ServicoPlanoAEE from '~/servicos/Paginas/Relatorios/AEE/ServicoPlanoAEE';
-import SecaoDevolutivasPlanoCollapse from '../SecaoDevolutivasPlano/secaoDevolutivasPlanoCollapse';
+import SecaoParecerPlanoCollapse from '../SecaoParecerPlanoCollapse/secaoParecerPlanoCollapse';
 import SecaoPlanoCollapse from '../SecaoPlanoCollapse/secaoPlanoCollapse';
 import SecaoReestruturacaoPlano from '../SecaoReestruturacaoPlano/secaoReestruturacaoPlano';
 
@@ -52,7 +52,7 @@ const MontarDadosTabs = props => {
           key="3"
           disabled={planoAEEDados?.situacao === situacaoPlanoAEE.Expirado}
         >
-          <SecaoDevolutivasPlanoCollapse match={match} />
+          <SecaoParecerPlanoCollapse match={match} />
         </TabPane>
       )}
     </ContainerTabsCard>

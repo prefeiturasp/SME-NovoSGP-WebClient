@@ -10,10 +10,10 @@ const inicial = {
   exibirModalErrosPlano: false,
   reestruturacaoDados: [],
   atualizarDados: false,
-  dadosDevolutiva: {},
+  dadosParecer: {},
   parecerCoordenacao: '',
   parecerPAAI: '',
-  devolutivaEmEdicao: false,
+  parecerEmEdicao: false,
   dadosAtribuicaoResponsavel: {},
   exibirCollapseVersao: null,
   dadosModalReestruturacao: {},
@@ -112,10 +112,10 @@ export default function PlanoAEE(state = inicial, action) {
           },
         };
       }
-      case '@planoAEE/setDadosDevolutiva': {
+      case '@planoAEE/setDadosParecer': {
         return {
           ...draft,
-          dadosDevolutiva: action.payload,
+          dadosParecer: action.payload,
         };
       }
       case '@planoAEE/setParecerCoordenacao': {
@@ -136,13 +136,13 @@ export default function PlanoAEE(state = inicial, action) {
           parecerPAAI: action.payload,
         };
       }
-      case '@planoAEE/setDevolutivaEmEdicao': {
+      case '@planoAEE/setParecerEmEdicao': {
         return {
           ...draft,
-          devolutivaEmEdicao: action.payload,
+          parecerEmEdicao: action.payload,
         };
       }
-      case '@planoAEE/limparDadosDevolutiva': {
+      case '@planoAEE/limparDadosParecer': {
         return {
           ...draft,
           parecerCoordenacao: '',

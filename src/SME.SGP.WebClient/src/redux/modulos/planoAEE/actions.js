@@ -58,8 +58,8 @@ export const setAtualizarPlanoAEEDados = payload => ({
   payload,
 });
 
-export const setDadosDevolutiva = payload => ({
-  type: '@planoAEE/setDadosDevolutiva',
+export const setDadosParecer = payload => ({
+  type: '@planoAEE/setDadosParecer',
   payload,
 });
 
@@ -73,13 +73,13 @@ export const setParecerPAAI = payload => ({
   payload,
 });
 
-export const setDevolutivaEmEdicao = payload => ({
-  type: '@planoAEE/setDevolutivaEmEdicao',
+export const setParecerEmEdicao = payload => ({
+  type: '@planoAEE/setParecerEmEdicao',
   payload,
 });
 
-export const limparDadosDevolutiva = payload => ({
-  type: '@planoAEE/limparDadosDevolutiva',
+export const limparDadosParecer = payload => ({
+  type: '@planoAEE/limparDadosParecer',
   payload,
 });
 

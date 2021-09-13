@@ -4,9 +4,9 @@ import situacaoPlanoAEE from '~/dtos/situacaoPlanoAEE';
 import tipoQuestao from '~/dtos/tipoQuestao';
 import { store } from '~/redux';
 import {
-  limparDadosDevolutiva,
+  limparDadosParecer,
   setAtualizarDados,
-  setDevolutivaEmEdicao,
+  setParecerEmEdicao,
   setExibirLoaderPlanoAEE,
   setExibirModalErrosPlano,
 } from '~/redux/modulos/planoAEE/actions';
@@ -296,19 +296,17 @@ class ServicoPlanoAEE {
       QuestionarioDinamicoFuncoes.limparDadosOriginaisQuestionarioDinamico();
     }
     if (!questionarioDinamicoEmEdicao && key !== '3') {
-      const salvou = await this.escolherAcaoDevolutivas(
-        planoAEEDados?.situacao
-      );
+      const salvou = await this.escolherAcao(planoAEEDados?.situacao);
       if (salvou) {
         dispatch(setAtualizarDados(true));
       }
 
-      dispatch(limparDadosDevolutiva());
-      dispatch(setDevolutivaEmEdicao(false));
+      dispatch(limparDadosParecer());
+      dispatch(setParecerEmEdicao(false));
     }
   };
 
-  obterDevolutiva = planoAeeId => {
+  obterParecer = planoAeeId => {
     return api.get(`${urlPadrao}/${planoAeeId}/parecer`);
   };
 
@@ -341,16 +339,16 @@ class ServicoPlanoAEE {
     });
   };
 
-  escolherAcaoDevolutivas = async () => {
+  escolherAcao = async () => {
     const { dispatch, getState } = store;
     const { planoAEE } = getState();
     const {
-      dadosDevolutiva,
+      dadosParecer,
       planoAEEDados,
       dadosAtribuicaoResponsavel,
-      devolutivaEmEdicao,
+      parecerEmEdicao,
     } = planoAEE;
-    if (devolutivaEmEdicao) {
+    if (parecerEmEdicao) {
       const confirmou = await confirmar(
         'Atenção',
         '',
@@ -374,7 +372,7 @@ class ServicoPlanoAEE {
         }
         if (
           planoAEEDados?.situacao === situacaoPlanoAEE.ParecerPAAI &&
-          dadosDevolutiva?.podeEditarParecerPAAI
+          dadosParecer?.podeEditarParecerPAAI
         ) {
           await this.salvarParecerPAAI();
           sucesso('Encerramento do plano realizado com sucesso');
