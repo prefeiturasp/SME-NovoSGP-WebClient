@@ -24,7 +24,7 @@ const SecaoDevolutivaCoordenacao = ({ desabilitarDevolutivaCordenacao }) => {
   return (
     <div className="mb-3">
       <Editor
-        label="Devolutiva da coordenação"
+        label="Parecer da coordenação"
         onChange={mudarDescricaoCordenacao}
         inicial={
           dadosDevolutiva?.parecerCoordenacao || parecerCoordenacao || ''

@@ -72,7 +72,7 @@ const ReestruturacaoTabela = ({ key, listaDados, match, semestre }) => {
     setModoConsulta(
       somenteConsulta ||
         !permissoesTela.podeIncluir ||
-        (planoAEEDados?.situacao !== situacaoPlanoAEE.EmAndamento &&
+        (planoAEEDados?.situacao !== situacaoPlanoAEE.Validado &&
           planoAEEDados?.situacao !== situacaoPlanoAEE.Expirado &&
           planoAEEDados?.situacao !== situacaoPlanoAEE.Reestruturado)
     );
@@ -104,7 +104,7 @@ const ReestruturacaoTabela = ({ key, listaDados, match, semestre }) => {
           pagination={false}
         />
       </div>
-      {(planoAEEDados?.situacao === situacaoPlanoAEE.EmAndamento ||
+      {(planoAEEDados?.situacao === situacaoPlanoAEE.Validado ||
         planoAEEDados?.situacao === situacaoPlanoAEE.Expirado ||
         planoAEEDados?.situacao === situacaoPlanoAEE.Reestruturado) &&
         !somenteConsulta &&

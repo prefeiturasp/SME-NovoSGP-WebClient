@@ -309,25 +309,25 @@ class ServicoPlanoAEE {
   };
 
   obterDevolutiva = planoAeeId => {
-    return api.get(`${urlPadrao}/${planoAeeId}/devolutiva`);
+    return api.get(`${urlPadrao}/${planoAeeId}/parecer`);
   };
 
   encerrarPlano = planoAeeId => {
     return api.post(`${urlPadrao}/encerrar-plano?planoAeeId=${planoAeeId}`);
   };
 
-  salvarDevolutivaCP = () => {
+  salvarParecerCP = () => {
     const { planoAEE } = store.getState();
     const { planoAEEDados, parecerCoordenacao } = planoAEE;
-    return api.post(`${urlPadrao}/${planoAEEDados.id}/devolutiva/cp`, {
+    return api.post(`${urlPadrao}/${planoAEEDados.id}/parecer/cp`, {
       parecer: parecerCoordenacao,
     });
   };
 
-  salvarDevolutivaPAAI = () => {
+  salvarParecerPAAI = () => {
     const { planoAEE } = store.getState();
     const { planoAEEDados, parecerPAAI } = planoAEE;
-    return api.post(`${urlPadrao}/${planoAEEDados.id}/devolutiva/paai`, {
+    return api.post(`${urlPadrao}/${planoAEEDados.id}/parecer/paai`, {
       parecer: parecerPAAI,
     });
   };
@@ -358,13 +358,13 @@ class ServicoPlanoAEE {
       );
       if (confirmou) {
         if (
-          (planoAEEDados.situacao === situacaoPlanoAEE.DevolutivaCP ||
+          (planoAEEDados.situacao === situacaoPlanoAEE.ParecerCP ||
             planoAEEDados.situacao === situacaoPlanoAEE.AtribuicaoPAAI) &&
           !dadosAtribuicaoResponsavel?.codigoRF
         ) {
-          await this.salvarDevolutivaCP();
+          await this.salvarParecerCP();
           dispatch(setAtualizarDados(true));
-          sucesso('Devolutiva realizada com sucesso');
+          sucesso('Parecer realizada com sucesso');
           return true;
         }
         if (planoAEEDados.situacao === situacaoPlanoAEE.AtribuicaoPAAI) {
@@ -373,10 +373,10 @@ class ServicoPlanoAEE {
           return true;
         }
         if (
-          planoAEEDados?.situacao === situacaoPlanoAEE.DevolutivaPAAI &&
+          planoAEEDados?.situacao === situacaoPlanoAEE.ParecerPAAI &&
           dadosDevolutiva?.podeEditarParecerPAAI
         ) {
-          await this.salvarDevolutivaPAAI();
+          await this.salvarParecerPAAI();
           sucesso('Encerramento do plano realizado com sucesso');
           return true;
         }
@@ -386,19 +386,16 @@ class ServicoPlanoAEE {
   };
 
   obterDadosObservacoes = id => {
-    // TODO - Validar!
     return api.get(`${urlPadrao}/${id}/observacoes`);
   };
 
   obterNofiticarUsuarios = ({ turmaId, observacaoId = '' }) => {
-    // TODO - Validar!
     return api.get(
       `${urlPadrao}/notificacoes/usuarios?turmaId=${turmaId}&observacaoId=${observacaoId}`
     );
   };
 
   salvarEditarObservacao = (id, dados) => {
-    // TODO - Validar!
     if (id) {
       const url = `${urlPadrao}/observacoes/${id}`;
       return api.put(url, dados);
@@ -409,8 +406,11 @@ class ServicoPlanoAEE {
   };
 
   excluirObservacao = id => {
-    // TODO - Validar!
     return api.delete(`${urlPadrao}/observacoes/${id}`);
+  };
+
+  devolverPlanoAEE = params => {
+    return api.post(`${urlPadrao}/devolver`, params);
   };
 }
 

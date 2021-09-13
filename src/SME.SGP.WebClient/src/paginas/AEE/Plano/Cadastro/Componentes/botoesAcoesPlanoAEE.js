@@ -13,6 +13,7 @@ import {
   setExibirLoaderPlanoAEE,
   setDevolutivaEmEdicao,
   setAtualizarDados,
+  setExibirModalDevolverPlanoAEE,
 } from '~/redux/modulos/planoAEE/actions';
 import { setQuestionarioDinamicoEmEdicao } from '~/redux/modulos/questionarioDinamico/actions';
 
@@ -43,9 +44,9 @@ const BotoesAcoesPlanoAEE = props => {
   const permissoesTela = usuario.permissoes[RotasDto.RELATORIO_AEE_PLANO];
 
   const situacaoDevolutivaCP =
-    planoAEEDados?.situacao === situacaoPlanoAEE.DevolutivaCP;
+    planoAEEDados?.situacao === situacaoPlanoAEE.ParecerCP;
   const situacaoDevolutivaPAAI =
-    planoAEEDados?.situacao === situacaoPlanoAEE.DevolutivaPAAI &&
+    planoAEEDados?.situacao === situacaoPlanoAEE.ParecerPAAI &&
     dadosDevolutiva?.podeEditarParecerPAAI;
   const situacaoAtribuicaoPAAI =
     planoAEEDados?.situacao === situacaoPlanoAEE.AtribuicaoPAAI;
@@ -78,10 +79,8 @@ const BotoesAcoesPlanoAEE = props => {
     let msg = '';
     let resposta = [];
     if (situacaoDevolutiva) {
-      resposta = await ServicoPlanoAEE.salvarDevolutivaCP().catch(e =>
-        erros(e)
-      );
-      msg = 'Devolutiva realizada com sucesso';
+      resposta = await ServicoPlanoAEE.salvarParecerCP().catch(e => erros(e));
+      msg = 'Parecer realizado com sucesso';
     }
     if (situacaoAtribuicaoPAAI) {
       resposta = await ServicoPlanoAEE.atribuirResponsavel().catch(e =>
@@ -90,9 +89,7 @@ const BotoesAcoesPlanoAEE = props => {
       msg = 'Atribuição do responsável realizada com sucesso';
     }
     if (situacaoDevolutivaPAAI) {
-      resposta = await ServicoPlanoAEE.salvarDevolutivaPAAI().catch(e =>
-        erros(e)
-      );
+      resposta = await ServicoPlanoAEE.salvarParecerPAAI().catch(e => erros(e));
       msg = 'Encerramento do plano realizado com sucesso';
     }
     if (resposta?.data) {
@@ -195,18 +192,20 @@ const BotoesAcoesPlanoAEE = props => {
     }
   };
 
-  const onClickEncerrarPlano = async () => {
+  const onClickSalvarPlano = async () => {
     dispatch(setExibirLoaderPlanoAEE(true));
-    const resposta = await ServicoPlanoAEE.salvarDevolutivaPAAI()
+    const resposta = await ServicoPlanoAEE.salvarParecerPAAI()
       .catch(e => erros(e))
       .finally(() => dispatch(setExibirLoaderPlanoAEE(false)));
 
     if (resposta?.data) {
-      sucesso('Encerramento do plano realizado com sucesso');
+      sucesso('Plano salvo com sucesso');
       limparDevolutiva();
       history.push(RotasDto.RELATORIO_AEE_PLANO);
     }
   };
+
+  const onClickDevolver = () => dispatch(setExibirModalDevolverPlanoAEE(true));
 
   return (
     <>
@@ -247,7 +246,7 @@ const BotoesAcoesPlanoAEE = props => {
         onClick={onClickSolicitarEncerramento}
         hidden={
           !planoAEEDados?.situacao ||
-          (planoAEEDados?.situacao !== situacaoPlanoAEE.EmAndamento &&
+          (planoAEEDados?.situacao !== situacaoPlanoAEE.Validado &&
             planoAEEDados?.situacao !== situacaoPlanoAEE.Expirado &&
             planoAEEDados?.situacao !== situacaoPlanoAEE.Reestruturado)
         }
@@ -259,15 +258,30 @@ const BotoesAcoesPlanoAEE = props => {
       />
 
       <Button
-        id="btn-encerrar-plano"
-        label="Encerrar plano"
+        id="btn-devolver-plano"
+        label="Devolver"
         color={Colors.Roxo}
         bold
         className="ml-3"
-        onClick={onClickEncerrarPlano}
+        onClick={onClickDevolver}
+        hidden={!planoAEEDados?.podeDevolverPlanoAEE}
+        disabled={
+          desabilitarCamposPlanoAEE ||
+          questionarioDinamicoEmEdicao ||
+          !permissoesTela?.podeAlterar
+        }
+      />
+
+      <Button
+        id="btn-salvar-plano"
+        label="Salvar plano"
+        color={Colors.Roxo}
+        bold
+        className="ml-3"
+        onClick={onClickSalvarPlano}
         hidden={
           !planoAEEDados?.situacao ||
-          planoAEEDados?.situacao !== situacaoPlanoAEE.DevolutivaPAAI
+          planoAEEDados?.situacao !== situacaoPlanoAEE.ParecerPAAI
         }
         disabled={
           !dadosDevolutiva?.podeEditarParecerPAAI ||

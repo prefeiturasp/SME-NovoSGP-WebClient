@@ -17,6 +17,7 @@ const inicial = {
   dadosAtribuicaoResponsavel: {},
   exibirCollapseVersao: null,
   dadosModalReestruturacao: {},
+  exibirModalDevolverPlanoAEE: false,
 };
 
 export default function PlanoAEE(state = inicial, action) {
@@ -167,6 +168,13 @@ export default function PlanoAEE(state = inicial, action) {
         return {
           ...draft,
           dadosModalReestruturacao: action.payload,
+        };
+      }
+
+      case '@planoAEE/setExibirModalDevolverPlanoAEE': {
+        return {
+          ...draft,
+          exibirModalDevolverPlanoAEE: action.payload,
         };
       }
       default:

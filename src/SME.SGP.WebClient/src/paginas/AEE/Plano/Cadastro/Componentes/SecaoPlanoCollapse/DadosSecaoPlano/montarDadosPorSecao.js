@@ -24,7 +24,7 @@ const MontarDadosPorSecao = props => {
     return (
       desabilitarCamposPlanoAEE ||
       (planoId &&
-        planoAEEDados?.situacao !== situacaoPlanoAEE.EmAndamento &&
+        planoAEEDados?.situacao !== situacaoPlanoAEE.Validado &&
         planoAEEDados?.situacao !== situacaoPlanoAEE.Expirado &&
         planoAEEDados?.situacao !== situacaoPlanoAEE.Reestruturado)
     );

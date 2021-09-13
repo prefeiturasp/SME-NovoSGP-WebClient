@@ -24,7 +24,7 @@ const SecaoDevolutivaPaai = () => {
   return (
     <div className="mb-3">
       <Editor
-        label="Devolutiva do PAAI"
+        label="Parecer do CEFAI"
         onChange={mudarDescricaoPAAI}
         inicial={dadosDevolutiva?.parecerPAAI || parecerPAAI || ''}
         desabilitar={!dadosDevolutiva?.podeEditarParecerPAAI}

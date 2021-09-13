@@ -97,3 +97,8 @@ export const setDadosModalReestruturacao = payload => ({
   type: '@planoAEE/setDadosModalReestruturacao',
   payload,
 });
+
+export const setExibirModalDevolverPlanoAEE = payload => ({
+  type: '@planoAEE/setExibirModalDevolverPlanoAEE',
+  payload,
+});
