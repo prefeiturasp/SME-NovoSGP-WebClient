@@ -177,7 +177,7 @@ const AnotacoesRecomendacoes = props => {
     ).format('MM-DD-YYYY');
     if (!alunoDesabilitado || dataSituacao <= dataFimFechamento) return false;
 
-    return false;
+    return true;
   };
 
   return (
