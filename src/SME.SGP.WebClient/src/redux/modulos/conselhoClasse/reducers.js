@@ -8,7 +8,7 @@ const inicial = {
   recomendacaoFamilia: '',
   anotacoesPedagogicas: '',
   anotacoesAluno: [],
-  bimestreAtual: { valor: '' },
+  bimestreAtual: { valor: '', dataInicio: null, dataFim: null },
   conselhoClasseEmEdicao: false,
   dadosPrincipaisConselhoClasse: {},
   auditoriaAnotacaoRecomendacao: null,
@@ -26,6 +26,7 @@ const inicial = {
   exibirModalImpressaoConselhoClasse: false,
   dadosBimestresConselhoClasse: [],
   exibirLoaderGeralConselhoClasse: false,
+  situacaoConselho: '',
 };
 
 export default function ConselhoClasse(state = inicial, action) {
@@ -70,7 +71,7 @@ export default function ConselhoClasse(state = inicial, action) {
       case '@conselhoClasse/setBimestreAtual': {
         return {
           ...draft,
-          bimestreAtual: { valor: action.payload },
+          bimestreAtual: action.payload,
         };
       }
       case '@conselhoClasse/limparDadosConselhoClasse': {
@@ -97,7 +98,6 @@ export default function ConselhoClasse(state = inicial, action) {
           desabilitarCampos: false,
           exibirModalImpressaoConselhoClasse: false,
           exibirLoaderGeralConselhoClasse: false,
-          bimestrePeriodoInicioFim: {},
         };
       }
       case '@conselhoClasse/setConselhoClasseEmEdicao': {
@@ -217,8 +217,8 @@ export default function ConselhoClasse(state = inicial, action) {
         draft.notaConceitoPosConselhoAtual.justificativa = action.payload;
         break;
       }
-      case '@conselhoClasse/seBimestrePeriodoInicioFim': {
-        draft.bimestrePeriodoInicioFim = action.payload;
+      case '@conselhoClasse/setSituacaoConselhoAluno': {
+        draft.situacaoConselho = action.payload;
         break;
       }
 

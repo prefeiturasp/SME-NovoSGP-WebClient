@@ -77,6 +77,12 @@ const RotasDto = {
   ACOMPANHAMENTO_FECHAMENTO: '/fechamento/acompanhamento-fechamento',
   DASHBOARD_FREQUENCIA: '/dashboard/frequencia',
   DASHBOARD_INFORMACOES_ESCOLARES: '/dashboard/informacoes-escolares',
+  DASHBOARD_REGISTRO_INDIVIDUAL: '/dashboard/registro-individual',
+  DASHBOARD_DIARIO_BORDO: '/dashboard/diario-bordo',
+  RELATORIO_ACOMPANHAMENTO_FECHAMENTO:
+    '/relatorios/fechamentos/acompanhamento-fechamento',
+  DASHBOARD_RELATORIO_ACOMPANHAMENTO_APRENDIZAGEM:
+    '/dashboard/acompanhamento-aprendizagem',
 };
 
 export default RotasDto;

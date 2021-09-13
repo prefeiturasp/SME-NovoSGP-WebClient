@@ -138,7 +138,7 @@ export const setJustificativaAtual = payload => ({
   payload,
 });
 
-export const seBimestrePeriodoInicioFim = payload => ({
-  type: '@conselhoClasse/seBimestrePeriodoInicioFim',
+export const setSituacaoConselhoAluno = payload => ({
+  type: '@conselhoClasse/setSituacaoConselhoAluno',
   payload,
 });

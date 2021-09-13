@@ -33,6 +33,10 @@ const ListasNotasConceitos = props => {
     store => store.conselhoClasse.dadosAlunoObjectCard
   );
 
+  const bimestreAtual = useSelector(
+    store => store.conselhoClasse.bimestreAtual
+  );
+
   const turmaStore = useSelector(state => state.usuario.turmaSelecionada);
 
   const {
@@ -61,6 +65,16 @@ const ListasNotasConceitos = props => {
     return true;
   };
 
+  const alunoTransferidoAposFimDoBimestre = () => {
+    const dataSituacao = moment(dadosAlunoObjectCard.dataSituacao).format(
+      'MM-DD-YYYY'
+    );
+
+    const dataFimPeriodo = moment(bimestreAtual.dataFim).format('MM-DD-YYYY');
+
+    return dataSituacao >= dataFimPeriodo;
+  };
+
   const habilitaConselhoClasse = dados => {
     const { conselhoClasseAlunoId } = dadosPrincipaisConselhoClasse;
 
@@ -79,7 +93,13 @@ const ListasNotasConceitos = props => {
       )
     );
 
-    if (!conselhoClasseAlunoId && notasFechamentosPreenchidas) {
+    const alunoDentroDoPeriodoDoBimestre = alunoTransferidoAposFimDoBimestre();
+
+    if (
+      !conselhoClasseAlunoId &&
+      notasFechamentosPreenchidas &&
+      alunoDentroDoPeriodoDoBimestre
+    ) {
       dispatch(setConselhoClasseEmEdicao(true));
     }
   };

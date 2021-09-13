@@ -28,6 +28,7 @@ const Button = React.forwardRef((props, ref) => {
     id,
     customRadius,
     iconType,
+    corTextoHover,
   } = props;
 
   const Icon = styled.i``;
@@ -53,7 +54,7 @@ const Button = React.forwardRef((props, ref) => {
         : `border: 0 none !important;`
     };
     ${customRadius || ''};
-    font-weight: bold !important;
+    font-weight: ${corTextoHover ? 'normal' : 'bold !important'};
     ${width ? `width: ${width};` : ''}
     ${fontSize && `font-size: ${fontSize} !important;`}
     ${padding && `padding: ${padding} !important;`}
@@ -61,7 +62,9 @@ const Button = React.forwardRef((props, ref) => {
     ${lineHeight && `line-height: ${lineHeight}`}
     &:hover {
       background: ${border ? Active[color] : Hover[color]} !important;
-      color: ${!steady ? Base.Branco : 'initial'} !important;
+      color: ${
+        !steady ? Active[corTextoHover] || Base.Branco : 'initial'
+      } !important;
     }
     &[disabled] {
       background: transparent !important;
@@ -120,6 +123,7 @@ Button.propTypes = {
   id: PropTypes.string,
   customRadius: PropTypes.string,
   iconType: PropTypes.string,
+  corTextoHover: PropTypes.string,
 };
 
 Button.defaultProps = {
@@ -144,6 +148,7 @@ Button.defaultProps = {
   id: shortid.generate(),
   customRadius: '',
   iconType: '',
+  corTextoHover: '',
 };
 
 export default Button;

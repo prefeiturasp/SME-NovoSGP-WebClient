@@ -80,7 +80,7 @@ const RelatorioDevolutivas = () => {
   };
 
   const onClickCancelar = () => {
-    setAnoLetivo();
+    setAnoLetivo(anoAtual);
     limparFiltrosSelecionados();
   };
 
