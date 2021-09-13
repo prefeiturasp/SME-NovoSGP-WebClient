@@ -40,8 +40,8 @@ const GraficoBarras = props => {
       style: {
         fill: Base.CinzaMako,
         textAlign: 'center',
-        fontSize: 14,
-        fontWeight: 400,
+        fontSize: 8.5,
+        fontWeight: 600,
       },
     },
     legend: legendVisible
