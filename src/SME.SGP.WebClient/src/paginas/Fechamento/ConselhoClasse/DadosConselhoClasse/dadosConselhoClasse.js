@@ -95,7 +95,7 @@ const DadosConselhoClasse = props => {
         ? somenteConsulta || !permissoesTela.podeIncluir
         : somenteConsulta || !permissoesTela.podeAlterar;
 
-      dispatch(setDesabilitarCampos(false));
+      dispatch(setDesabilitarCampos(desabilitar));
     },
     [dispatch, permissoesTela, turmaSelecionada, modalidadesFiltroPrincipal]
   );

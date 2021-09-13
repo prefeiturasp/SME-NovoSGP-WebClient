@@ -51,13 +51,6 @@ const CampoNota = props => {
     store => store.conselhoClasse.dentroPeriodo
   );
 
-  const desabilitarEdicaoAluno = () => {
-
-    if (alunoDesabilitado == true || podeEditarNota == false || desabilitarCampos == true || dentroPeriodo == false)
-       return false;
-
-    return true;
-  };
   const { periodoFechamentoFim } = fechamentoPeriodoInicioFim;
 
   const [notaValorAtual, setNotaValorAtual] = useState(notaPosConselho);
@@ -186,11 +179,7 @@ const CampoNota = props => {
         max={10}
         step={step}
         className={abaixoMedia ? 'borda-abaixo-media' : ''}
-        disabled={
-          alunoDesabilitado ||
-          desabilitarCampos ||
-          !dentroPeriodo
-        }
+        disabled={alunoDesabilitado || desabilitarCampos || !dentroPeriodo}
       />
     );
   };
