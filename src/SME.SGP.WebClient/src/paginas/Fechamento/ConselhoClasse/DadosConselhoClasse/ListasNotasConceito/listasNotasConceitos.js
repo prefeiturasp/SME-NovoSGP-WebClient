@@ -11,6 +11,7 @@ import {
 import { erros } from '~/servicos/alertas';
 import ServicoConselhoClasse from '~/servicos/Paginas/ConselhoClasse/ServicoConselhoClasse';
 import ListasCarregar from './listasCarregar';
+import { valorNuloOuVazio } from '~/utils/funcoes/gerais';
 
 const ListasNotasConceitos = props => {
   const { bimestreSelecionado } = props;
@@ -23,10 +24,6 @@ const ListasNotasConceitos = props => {
 
   const dadosPrincipaisConselhoClasse = useSelector(
     store => store.conselhoClasse.dadosPrincipaisConselhoClasse
-  );
-
-  const fechamentoPeriodoInicioFim = useSelector(
-    store => store.conselhoClasse.fechamentoPeriodoInicioFim
   );
 
   const dadosAlunoObjectCard = useSelector(
@@ -52,19 +49,6 @@ const ListasNotasConceitos = props => {
   const [exibir, setExibir] = useState(false);
   const [carregando, setCarregando] = useState(false);
 
-  const desabilitarEdicaoAluno = () => {
-    const dataSituacao = moment(dadosAlunoObjectCard.dataSituacao).format(
-      'MM-DD-YYYY'
-    );
-    const dataFimFechamento = moment(
-      fechamentoPeriodoInicioFim.periodoFechamentoFim
-    ).format('MM-DD-YYYY');
-
-    if (!alunoDesabilitado || dataSituacao >= dataFimFechamento) return false;
-
-    return true;
-  };
-
   const alunoTransferidoAposFimDoBimestre = () => {
     const dataSituacao = moment(dadosAlunoObjectCard.dataSituacao).format(
       'MM-DD-YYYY'
@@ -75,6 +59,12 @@ const ListasNotasConceitos = props => {
     return dataSituacao >= dataFimPeriodo;
   };
 
+  const desabilitarEdicaoAluno = () => {
+    if (!alunoDesabilitado || alunoTransferidoAposFimDoBimestre()) return false;
+
+    return true;
+  };
+
   const habilitaConselhoClasse = dados => {
     const { conselhoClasseAlunoId } = dadosPrincipaisConselhoClasse;
 
@@ -82,10 +72,7 @@ const ListasNotasConceitos = props => {
     dados.notasConceitos.map(notasConceitos =>
       notasConceitos.componentesCurriculares.map(componentesCurriculares =>
         componentesCurriculares.notasFechamentos.map(notasFechamentos => {
-          if (
-            notasFechamentos.notaConceito === null ||
-            notasFechamentos.notaConceito < 0
-          ) {
+          if (valorNuloOuVazio(notasFechamentos.notaConceito)) {
             notasFechamentosPreenchidas = false;
           }
           return notasFechamentos;

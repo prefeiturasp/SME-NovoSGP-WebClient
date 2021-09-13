@@ -44,8 +44,8 @@ const AnotacoesRecomendacoes = props => {
 
   const turmaStore = useSelector(state => state.usuario.turmaSelecionada);
 
-  const fechamentoPeriodoInicioFim = useSelector(
-    store => store.conselhoClasse.fechamentoPeriodoInicioFim
+  const bimestreAtual = useSelector(
+    store => store.conselhoClasse.bimestreAtual
   );
 
   const dadosAlunoObjectCard = useSelector(
@@ -185,11 +185,9 @@ const AnotacoesRecomendacoes = props => {
     const dataSituacao = moment(dadosAlunoObjectCard.dataSituacao).format(
       'MM-DD-YYYY'
     );
-    const dataFimFechamento = moment(
-      fechamentoPeriodoInicioFim.periodoFechamentoFim
-    ).format('MM-DD-YYYY');
+    const dataFimBimestre = moment(bimestreAtual.dataFim).format('MM-DD-YYYY');
 
-    if (!alunoDesabilitado || dataSituacao >= dataFimFechamento) return false;
+    if (!alunoDesabilitado || dataSituacao >= dataFimBimestre) return false;
 
     return true;
   };

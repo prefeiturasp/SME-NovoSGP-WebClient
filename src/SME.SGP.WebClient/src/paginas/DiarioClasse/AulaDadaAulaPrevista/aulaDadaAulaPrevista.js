@@ -263,7 +263,7 @@ const AulaDadaAulaPrevista = () => {
             className="mb-2"
           />
         </Grid>
-      ) : null}{' '}
+      ) : null}
       <AlertaModalidadeInfantil />
       <Grid cols={12} className="p-0">
         <Titulo>
