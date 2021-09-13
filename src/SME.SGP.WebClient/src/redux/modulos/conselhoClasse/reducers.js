@@ -97,6 +97,7 @@ export default function ConselhoClasse(state = inicial, action) {
           desabilitarCampos: false,
           exibirModalImpressaoConselhoClasse: false,
           exibirLoaderGeralConselhoClasse: false,
+          bimestrePeriodoInicioFim: {},
         };
       }
       case '@conselhoClasse/setConselhoClasseEmEdicao': {
@@ -214,6 +215,10 @@ export default function ConselhoClasse(state = inicial, action) {
       }
       case '@conselhoClasse/setJustificativaAtual': {
         draft.notaConceitoPosConselhoAtual.justificativa = action.payload;
+        break;
+      }
+      case '@conselhoClasse/seBimestrePeriodoInicioFim': {
+        draft.bimestrePeriodoInicioFim = action.payload;
         break;
       }
 

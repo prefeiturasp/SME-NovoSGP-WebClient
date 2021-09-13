@@ -179,7 +179,12 @@ const CampoNota = props => {
         max={10}
         step={step}
         className={abaixoMedia ? 'borda-abaixo-media' : ''}
-        disabled={alunoDesabilitado || desabilitarCampos || !dentroPeriodo}
+        disabled={
+          alunoDesabilitado ||
+          !podeEditarNota ||
+          desabilitarCampos ||
+          !dentroPeriodo
+        }
       />
     );
   };

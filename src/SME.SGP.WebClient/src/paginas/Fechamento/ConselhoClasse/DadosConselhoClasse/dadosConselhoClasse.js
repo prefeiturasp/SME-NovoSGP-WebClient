@@ -14,6 +14,7 @@ import {
   setIdCamposNotasPosConselho,
   setDesabilitarCampos,
   setConselhoClasseEmEdicao,
+  seBimestrePeriodoInicioFim,
 } from '~/redux/modulos/conselhoClasse/actions';
 import { erros } from '~/servicos/alertas';
 import ServicoConselhoClasse from '~/servicos/Paginas/ConselhoClasse/ServicoConselhoClasse';
@@ -134,6 +135,8 @@ const DadosConselhoClasse = props => {
           tipoNota,
           media,
           anoLetivo,
+          bimestrePeriodoInicio,
+          bimestrePeriodoFim,
         } = retorno.data;
 
         const novoRegistro = !conselhoClasseId;
@@ -173,6 +176,12 @@ const DadosConselhoClasse = props => {
           periodoFechamentoFim,
         };
         dispatch(setFechamentoPeriodoInicioFim(datas));
+
+        const datasBimstres = {
+          bimestrePeriodoInicio,
+          bimestrePeriodoFim,
+        };
+        dispatch(seBimestrePeriodoInicioFim(datasBimstres));
 
         if (periodoFechamentoFim) {
           ServicoConselhoClasse.carregarListaTiposConceito(
@@ -239,7 +248,6 @@ const DadosConselhoClasse = props => {
       caregarInformacoes(numeroBimestre, ehFinal);
     }
   };
-
 
   const montarDados = () => {
     return (

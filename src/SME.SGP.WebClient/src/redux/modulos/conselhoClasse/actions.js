@@ -137,3 +137,8 @@ export const setJustificativaAtual = payload => ({
   type: '@conselhoClasse/setJustificativaAtual',
   payload,
 });
+
+export const seBimestrePeriodoInicioFim = payload => ({
+  type: '@conselhoClasse/seBimestrePeriodoInicioFim',
+  payload,
+});
