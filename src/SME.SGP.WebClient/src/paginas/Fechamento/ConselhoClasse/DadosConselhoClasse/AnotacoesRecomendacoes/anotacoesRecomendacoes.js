@@ -186,8 +186,7 @@ const AnotacoesRecomendacoes = props => {
       'MM-DD-YYYY'
     );
     const dataFimBimestre = moment(bimestreAtual.dataFim).format('MM-DD-YYYY');
-    console.log(bimestreAtual);
-    debugger;
+
     if (!alunoDesabilitado || dataSituacao >= dataFimBimestre) return false;
 
     return true;
