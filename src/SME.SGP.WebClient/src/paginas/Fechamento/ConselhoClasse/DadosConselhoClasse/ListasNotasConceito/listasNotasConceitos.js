@@ -1,3 +1,4 @@
+import moment from 'moment';
 import PropTypes from 'prop-types';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -9,8 +10,8 @@ import {
 } from '~/redux/modulos/conselhoClasse/actions';
 import { erros } from '~/servicos/alertas';
 import ServicoConselhoClasse from '~/servicos/Paginas/ConselhoClasse/ServicoConselhoClasse';
-import moment from 'moment';
 import ListasCarregar from './listasCarregar';
+import { valorNuloOuVazio } from '~/utils/funcoes/gerais';
 
 const ListasNotasConceitos = props => {
   const { bimestreSelecionado } = props;
@@ -33,6 +34,10 @@ const ListasNotasConceitos = props => {
     store => store.conselhoClasse.dadosAlunoObjectCard
   );
 
+  const bimestreAtual = useSelector(
+    store => store.conselhoClasse.bimestreAtual
+  );
+
   const turmaStore = useSelector(state => state.usuario.turmaSelecionada);
 
   const {
@@ -49,14 +54,27 @@ const ListasNotasConceitos = props => {
   const [carregando, setCarregando] = useState(false);
 
   const desabilitarEdicaoAluno = () => {
-    const dataSituacao = moment(dadosAlunoObjectCard.dataSituacao).format('MM-DD-YYYY');
-    const dataFimFechamento = moment(fechamentoPeriodoInicioFim.periodoFechamentoFim).format('MM-DD-YYYY');
+    const dataSituacao = moment(dadosAlunoObjectCard.dataSituacao).format(
+      'MM-DD-YYYY'
+    );
+    const dataFimFechamento = moment(
+      fechamentoPeriodoInicioFim.periodoFechamentoFim
+    ).format('MM-DD-YYYY');
 
-    if (!alunoDesabilitado || (dataSituacao >= dataFimFechamento))
-       return false
-    
+    if (!alunoDesabilitado || dataSituacao >= dataFimFechamento) return false;
+
     return true;
-  }
+  };
+
+  const alunoTransferidoAposFimDoBimestre = () => {
+    const dataSituacao = moment(dadosAlunoObjectCard.dataSituacao).format(
+      'MM-DD-YYYY'
+    );
+
+    const dataFimPeriodo = moment(bimestreAtual.dataFim).format('MM-DD-YYYY');
+
+    return dataSituacao >= dataFimPeriodo;
+  };
 
   const habilitaConselhoClasse = dados => {
     const { conselhoClasseAlunoId } = dadosPrincipaisConselhoClasse;
@@ -65,14 +83,21 @@ const ListasNotasConceitos = props => {
     dados.notasConceitos.map(notasConceitos =>
       notasConceitos.componentesCurriculares.map(componentesCurriculares =>
         componentesCurriculares.notasFechamentos.map(notasFechamentos => {
-          if (!notasFechamentos.notaConceito) {
+          if (valorNuloOuVazio(notasFechamentos.notaConceito)) {
             notasFechamentosPreenchidas = false;
           }
           return notasFechamentos;
         })
       )
     );
-    if (!conselhoClasseAlunoId && notasFechamentosPreenchidas) {
+
+    const alunoDentroDoPeriodoDoBimestre = alunoTransferidoAposFimDoBimestre();
+
+    if (
+      !conselhoClasseAlunoId &&
+      notasFechamentosPreenchidas &&
+      alunoDentroDoPeriodoDoBimestre
+    ) {
       dispatch(setConselhoClasseEmEdicao(true));
     }
   };
