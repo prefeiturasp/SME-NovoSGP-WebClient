@@ -15,7 +15,7 @@ const CabecalhoDadosPlanoAula = () => {
   );
 
   const idPlanoAula = useSelector(
-    state => state.frequenciaPlanoAula.dadosPlanoAula.id
+    state => state.frequenciaPlanoAula.dadosPlanoAula?.id
   );
 
   const desabilitarCamposPlanoAula = useSelector(
