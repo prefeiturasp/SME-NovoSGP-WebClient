@@ -1,11 +1,11 @@
 import { Tabs } from 'antd';
 import PropTypes from 'prop-types';
-import React, { useState } from 'react';
+import React from 'react';
 import { useSelector } from 'react-redux';
 import { ContainerTabsCard } from '~/componentes/tabs/tabs.css';
 import { situacaoPlanoAEE } from '~/dtos';
 import ServicoPlanoAEE from '~/servicos/Paginas/Relatorios/AEE/ServicoPlanoAEE';
-import SecaoDevolutivasPlanoCollapse from '../SecaoDevolutivasPlano/secaoDevolutivasPlanoCollapse';
+import SecaoParecerPlanoCollapse from '../SecaoParecerPlanoCollapse/secaoParecerPlanoCollapse';
 import SecaoPlanoCollapse from '../SecaoPlanoCollapse/secaoPlanoCollapse';
 import SecaoReestruturacaoPlano from '../SecaoReestruturacaoPlano/secaoReestruturacaoPlano';
 
@@ -37,9 +37,7 @@ const MontarDadosTabs = props => {
           tab="Reestruturação"
           key="2"
           disabled={
-            planoAEEDados?.situacao !== situacaoPlanoAEE.EmAndamento &&
             planoAEEDados?.situacao !== situacaoPlanoAEE.Expirado &&
-            planoAEEDados?.situacao !== situacaoPlanoAEE.Reestruturado &&
             planoAEEDados?.situacao !== situacaoPlanoAEE.Encerrado &&
             planoAEEDados?.situacao !==
               situacaoPlanoAEE.EncerradoAutomaticamento
@@ -50,15 +48,11 @@ const MontarDadosTabs = props => {
       )}
       {temId && (
         <TabPane
-          tab="Devolutivas"
+          tab="Parecer"
           key="3"
-          disabled={
-            planoAEEDados?.situacao === situacaoPlanoAEE.EmAndamento ||
-            planoAEEDados?.situacao === situacaoPlanoAEE.Expirado ||
-            planoAEEDados?.situacao === situacaoPlanoAEE.Reestruturado
-          }
+          disabled={planoAEEDados?.situacao === situacaoPlanoAEE.Expirado}
         >
-          <SecaoDevolutivasPlanoCollapse match={match} />
+          <SecaoParecerPlanoCollapse match={match} />
         </TabPane>
       )}
     </ContainerTabsCard>

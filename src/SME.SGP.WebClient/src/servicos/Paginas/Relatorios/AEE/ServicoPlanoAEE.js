@@ -4,9 +4,9 @@ import situacaoPlanoAEE from '~/dtos/situacaoPlanoAEE';
 import tipoQuestao from '~/dtos/tipoQuestao';
 import { store } from '~/redux';
 import {
-  limparDadosDevolutiva,
+  limparDadosParecer,
   setAtualizarDados,
-  setDevolutivaEmEdicao,
+  setParecerEmEdicao,
   setExibirLoaderPlanoAEE,
   setExibirModalErrosPlano,
 } from '~/redux/modulos/planoAEE/actions';
@@ -296,38 +296,36 @@ class ServicoPlanoAEE {
       QuestionarioDinamicoFuncoes.limparDadosOriginaisQuestionarioDinamico();
     }
     if (!questionarioDinamicoEmEdicao && key !== '3') {
-      const salvou = await this.escolherAcaoDevolutivas(
-        planoAEEDados?.situacao
-      );
+      const salvou = await this.escolherAcao(planoAEEDados?.situacao);
       if (salvou) {
         dispatch(setAtualizarDados(true));
       }
 
-      dispatch(limparDadosDevolutiva());
-      dispatch(setDevolutivaEmEdicao(false));
+      dispatch(limparDadosParecer());
+      dispatch(setParecerEmEdicao(false));
     }
   };
 
-  obterDevolutiva = planoAeeId => {
-    return api.get(`${urlPadrao}/${planoAeeId}/devolutiva`);
+  obterParecer = planoAeeId => {
+    return api.get(`${urlPadrao}/${planoAeeId}/parecer`);
   };
 
   encerrarPlano = planoAeeId => {
     return api.post(`${urlPadrao}/encerrar-plano?planoAeeId=${planoAeeId}`);
   };
 
-  salvarDevolutivaCP = () => {
+  salvarParecerCP = () => {
     const { planoAEE } = store.getState();
     const { planoAEEDados, parecerCoordenacao } = planoAEE;
-    return api.post(`${urlPadrao}/${planoAEEDados.id}/devolutiva/cp`, {
+    return api.post(`${urlPadrao}/${planoAEEDados.id}/parecer/cp`, {
       parecer: parecerCoordenacao,
     });
   };
 
-  salvarDevolutivaPAAI = () => {
+  salvarParecerPAAI = () => {
     const { planoAEE } = store.getState();
     const { planoAEEDados, parecerPAAI } = planoAEE;
-    return api.post(`${urlPadrao}/${planoAEEDados.id}/devolutiva/paai`, {
+    return api.post(`${urlPadrao}/${planoAEEDados.id}/parecer/paai`, {
       parecer: parecerPAAI,
     });
   };
@@ -341,16 +339,16 @@ class ServicoPlanoAEE {
     });
   };
 
-  escolherAcaoDevolutivas = async () => {
+  escolherAcao = async () => {
     const { dispatch, getState } = store;
     const { planoAEE } = getState();
     const {
-      dadosDevolutiva,
+      dadosParecer,
       planoAEEDados,
       dadosAtribuicaoResponsavel,
-      devolutivaEmEdicao,
+      parecerEmEdicao,
     } = planoAEE;
-    if (devolutivaEmEdicao) {
+    if (parecerEmEdicao) {
       const confirmou = await confirmar(
         'Atenção',
         '',
@@ -358,13 +356,13 @@ class ServicoPlanoAEE {
       );
       if (confirmou) {
         if (
-          (planoAEEDados.situacao === situacaoPlanoAEE.DevolutivaCP ||
+          (planoAEEDados.situacao === situacaoPlanoAEE.ParecerCP ||
             planoAEEDados.situacao === situacaoPlanoAEE.AtribuicaoPAAI) &&
           !dadosAtribuicaoResponsavel?.codigoRF
         ) {
-          await this.salvarDevolutivaCP();
+          await this.salvarParecerCP();
           dispatch(setAtualizarDados(true));
-          sucesso('Devolutiva realizada com sucesso');
+          sucesso('Parecer realizada com sucesso');
           return true;
         }
         if (planoAEEDados.situacao === situacaoPlanoAEE.AtribuicaoPAAI) {
@@ -373,10 +371,10 @@ class ServicoPlanoAEE {
           return true;
         }
         if (
-          planoAEEDados?.situacao === situacaoPlanoAEE.DevolutivaPAAI &&
-          dadosDevolutiva?.podeEditarParecerPAAI
+          planoAEEDados?.situacao === situacaoPlanoAEE.ParecerPAAI &&
+          dadosParecer?.podeEditarParecerPAAI
         ) {
-          await this.salvarDevolutivaPAAI();
+          await this.salvarParecerPAAI();
           sucesso('Encerramento do plano realizado com sucesso');
           return true;
         }
@@ -386,19 +384,16 @@ class ServicoPlanoAEE {
   };
 
   obterDadosObservacoes = id => {
-    // TODO - Validar!
     return api.get(`${urlPadrao}/${id}/observacoes`);
   };
 
   obterNofiticarUsuarios = ({ turmaId, observacaoId = '' }) => {
-    // TODO - Validar!
     return api.get(
       `${urlPadrao}/notificacoes/usuarios?turmaId=${turmaId}&observacaoId=${observacaoId}`
     );
   };
 
   salvarEditarObservacao = (id, dados) => {
-    // TODO - Validar!
     if (id) {
       const url = `${urlPadrao}/observacoes/${id}`;
       return api.put(url, dados);
@@ -409,8 +404,11 @@ class ServicoPlanoAEE {
   };
 
   excluirObservacao = id => {
-    // TODO - Validar!
     return api.delete(`${urlPadrao}/observacoes/${id}`);
+  };
+
+  devolverPlanoAEE = params => {
+    return api.post(`${urlPadrao}/devolver`, params);
   };
 }
 
