@@ -47,18 +47,19 @@ const GraficoBarras = props => {
         },
       },
     },
-    label: labelVisible
-      ? {
-          position: 'top',
-          offset: 0,
-          style: {
-            fill: Base.CinzaMako,
-            textAlign: 'center',
-            fontSize: 14,
-            fontWeight: 400,
-          },
-        }
-      : null,
+    columnStyle: {
+      radius: [4, 4, 0, 0],
+    },
+    label: {
+      position: 'top',
+      offset: 0,
+      style: {
+        fill: Base.CinzaMako,
+        textAlign: 'center',
+        fontSize: 8.5,
+        fontWeight: 600,
+      },
+    },
     legend: legendVisible
       ? {
           position: 'bottom',
