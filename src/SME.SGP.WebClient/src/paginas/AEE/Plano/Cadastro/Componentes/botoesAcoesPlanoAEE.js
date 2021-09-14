@@ -53,12 +53,10 @@ const BotoesAcoesPlanoAEE = props => {
     (situacaoAtribuicaoPAAI && !dadosAtribuicaoResponsavel?.codigoRF);
 
   const planoAeeId = match?.params?.id;
-  const labelBotaoSalvar =
-    situacaoParecer || !planoAeeId ? 'Salvar' : 'Alterar';
+  const labelBotaoSalvar = !planoAeeId ? 'Salvar plano' : 'Alterar plano';
 
-  const desabilitarBotaoSalvar = situacaoParecer
-    ? !parecerEmEdicao
-    : desabilitarCamposPlanoAEE || !questionarioDinamicoEmEdicao;
+  const desabilitarBotaoSalvar =
+    desabilitarCamposPlanoAEE || !questionarioDinamicoEmEdicao;
 
   const desabilitarBotaoCancelar =
     situacaoParecer || parecerPAAI
@@ -72,22 +70,29 @@ const BotoesAcoesPlanoAEE = props => {
     dispatch(setParecerEmEdicao(false));
   };
 
-  const escolherAcao = async () => {
+  const escolherAcaoAbaParecer = async () => {
     let msg = '';
     let resposta = [];
     if (situacaoParecer) {
-      resposta = await ServicoPlanoAEE.salvarParecerCP().catch(e => erros(e));
+      dispatch(setExibirLoaderPlanoAEE(true));
+      resposta = await ServicoPlanoAEE.salvarParecerCP()
+        .catch(e => erros(e))
+        .catch(() => dispatch(setExibirLoaderPlanoAEE(false)));
       msg = 'Parecer realizado com sucesso';
     }
     if (situacaoAtribuicaoPAAI) {
-      resposta = await ServicoPlanoAEE.atribuirResponsavel().catch(e =>
-        erros(e)
-      );
+      dispatch(setExibirLoaderPlanoAEE(true));
+      resposta = await ServicoPlanoAEE.atribuirResponsavel()
+        .catch(e => erros(e))
+        .catch(() => dispatch(setExibirLoaderPlanoAEE(false)));
       msg = 'Atribuição do responsável realizada com sucesso';
     }
     if (parecerPAAI) {
-      resposta = await ServicoPlanoAEE.salvarParecerPAAI().catch(e => erros(e));
-      msg = 'Encerramento do plano realizado com sucesso';
+      dispatch(setExibirLoaderPlanoAEE(true));
+      resposta = await ServicoPlanoAEE.salvarParecerPAAI()
+        .catch(e => erros(e))
+        .catch(() => dispatch(setExibirLoaderPlanoAEE(false)));
+      msg = 'Parecer realizado com sucesso';
     }
     if (resposta?.data) {
       sucesso(msg);
@@ -106,7 +111,7 @@ const BotoesAcoesPlanoAEE = props => {
 
       if (confirmou) {
         if (parecerEmEdicao) {
-          escolherAcao();
+          escolherAcaoAbaParecer();
           return;
         }
         const salvou = await ServicoPlanoAEE.salvarPlano();
@@ -151,10 +156,6 @@ const BotoesAcoesPlanoAEE = props => {
   };
 
   const onClickSalvar = async () => {
-    if (situacaoParecer) {
-      escolherAcao();
-      return;
-    }
     const planoId = await ServicoPlanoAEE.salvarPlano(true);
     const registroNovo = !match?.params?.id;
 
@@ -172,33 +173,6 @@ const BotoesAcoesPlanoAEE = props => {
       } else {
         dispatch(setAtualizarDados(true));
       }
-    }
-  };
-
-  const onClickSolicitarEncerramento = async () => {
-    if (!desabilitarCamposPlanoAEE && !questionarioDinamicoEmEdicao) {
-      dispatch(setExibirLoaderPlanoAEE(true));
-
-      const resposta = await ServicoPlanoAEE.encerrarPlano(planoAeeId)
-        .catch(e => erros(e))
-        .finally(() => dispatch(setExibirLoaderPlanoAEE(false)));
-      if (resposta?.data) {
-        sucesso('Solicitação de encerramento realizada com sucesso');
-        dispatch(setAtualizarPlanoAEEDados(resposta?.data));
-      }
-    }
-  };
-
-  const onClickSalvarPlano = async () => {
-    dispatch(setExibirLoaderPlanoAEE(true));
-    const resposta = await ServicoPlanoAEE.salvarParecerPAAI()
-      .catch(e => erros(e))
-      .finally(() => dispatch(setExibirLoaderPlanoAEE(false)));
-
-    if (resposta?.data) {
-      sucesso('Plano salvo com sucesso');
-      limparParecer();
-      history.push(RotasDto.RELATORIO_AEE_PLANO);
     }
   };
 
@@ -233,27 +207,29 @@ const BotoesAcoesPlanoAEE = props => {
         onClick={onClickSalvar}
         disabled={desabilitarBotaoSalvar}
       />
-
       <Button
-        id="btn-solicitar-encerramento"
-        label="Solicitar encerramento"
+        id="btn-acao-aba-parecer"
+        label={
+          situacaoAtribuicaoPAAI ? 'Atribuir responsável' : 'Salvar parecer'
+        }
         color={Colors.Roxo}
         bold
         className="ml-3"
-        onClick={onClickSolicitarEncerramento}
+        onClick={escolherAcaoAbaParecer}
         hidden={
-          !planoAEEDados?.situacao ||
-          (planoAEEDados?.situacao !== situacaoPlanoAEE.Validado &&
-            planoAEEDados?.situacao !== situacaoPlanoAEE.Expirado &&
-            planoAEEDados?.situacao !== situacaoPlanoAEE.Reestruturado)
+          planoAEEDados?.situacao !== situacaoPlanoAEE.ParecerCP &&
+          planoAEEDados?.situacao !== situacaoPlanoAEE.AtribuicaoPAAI &&
+          planoAEEDados?.situacao !== situacaoPlanoAEE.ParecerPAAI
         }
         disabled={
+          (planoAEEDados?.situacao === situacaoPlanoAEE.ParecerPAAI &&
+            !dadosParecer?.podeEditarParecerPAAI) ||
           desabilitarCamposPlanoAEE ||
           questionarioDinamicoEmEdicao ||
+          !parecerEmEdicao ||
           !permissoesTela?.podeAlterar
         }
       />
-
       <Button
         id="btn-devolver-plano"
         label="Devolver"
@@ -265,26 +241,6 @@ const BotoesAcoesPlanoAEE = props => {
         disabled={
           desabilitarCamposPlanoAEE ||
           questionarioDinamicoEmEdicao ||
-          !permissoesTela?.podeAlterar
-        }
-      />
-
-      <Button
-        id="btn-salvar-plano"
-        label="Salvar plano"
-        color={Colors.Roxo}
-        bold
-        className="ml-3"
-        onClick={onClickSalvarPlano}
-        hidden={
-          !planoAEEDados?.situacao ||
-          planoAEEDados?.situacao !== situacaoPlanoAEE.ParecerPAAI
-        }
-        disabled={
-          !dadosParecer?.podeEditarParecerPAAI ||
-          desabilitarCamposPlanoAEE ||
-          questionarioDinamicoEmEdicao ||
-          !parecerEmEdicao ||
           !permissoesTela?.podeAlterar
         }
       />

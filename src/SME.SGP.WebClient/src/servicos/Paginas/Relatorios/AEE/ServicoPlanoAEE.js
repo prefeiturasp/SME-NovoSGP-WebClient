@@ -362,7 +362,7 @@ class ServicoPlanoAEE {
         ) {
           await this.salvarParecerCP();
           dispatch(setAtualizarDados(true));
-          sucesso('Parecer realizada com sucesso');
+          sucesso('Parecer realizado com sucesso');
           return true;
         }
         if (planoAEEDados.situacao === situacaoPlanoAEE.AtribuicaoPAAI) {
@@ -375,7 +375,7 @@ class ServicoPlanoAEE {
           dadosParecer?.podeEditarParecerPAAI
         ) {
           await this.salvarParecerPAAI();
-          sucesso('Encerramento do plano realizado com sucesso');
+          sucesso('Parecer realizado com sucesso');
           return true;
         }
       }
