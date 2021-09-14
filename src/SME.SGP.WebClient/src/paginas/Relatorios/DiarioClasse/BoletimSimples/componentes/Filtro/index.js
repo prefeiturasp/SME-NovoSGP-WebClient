@@ -1,15 +1,17 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import PropTypes from 'prop-types';
-
 import { Form, Formik } from 'formik';
-
-import { Grid, SelectComponent, Loader, CheckboxComponent } from '~/componentes';
-import { Linha } from '~/componentes/EstilosGlobais';
-
-import AnoLetivoDropDown from './componentes/AnoLetivoDropDown';
-import modalidade from '~/dtos/modalidade';
-import FiltroHelper from '~/componentes-sgp/filtro/helper';
+import PropTypes from 'prop-types';
+import React, { useEffect, useState } from 'react';
+import {
+  CheckboxComponent,
+  Grid,
+  Loader,
+  SelectComponent,
+} from '~/componentes';
 import { DreDropDown, UeDropDown } from '~/componentes-sgp';
+import FiltroHelper from '~/componentes-sgp/filtro/helper';
+import { Linha } from '~/componentes/EstilosGlobais';
+import modalidade from '~/dtos/modalidade';
+import AnoLetivoDropDown from './componentes/AnoLetivoDropDown';
 import TurmasDropDown from './componentes/TurmasDropDown';
 
 function Filtro({ onFiltrar, resetForm }) {
@@ -24,8 +26,12 @@ function Filtro({ onFiltrar, resetForm }) {
   const [dreId, setDreId] = useState(undefined);
   const [consideraHistorico, setConsideraHistorico] = useState(false);
 
-  const [urlDre, setUrlDre] = useState(`v1/abrangencias/${consideraHistorico}/dres`);
-  const [urlUe, setUrlUe] = useState(`v1/abrangencias/${consideraHistorico}/dres/${dreId}/ues`);
+  const [urlDre, setUrlDre] = useState(
+    `v1/abrangencias/${consideraHistorico}/dres`
+  );
+  const [urlUe, setUrlUe] = useState(
+    `v1/abrangencias/${consideraHistorico}/dres/${dreId}/ues`
+  );
 
   const [modalidades, setModalidades] = useState([]);
   const [periodos, setPeriodos] = useState([]);
@@ -38,37 +44,36 @@ function Filtro({ onFiltrar, resetForm }) {
     }
   }, [modalidadeId, semestreId, anoLetivo]);
 
-  async function CarregarModalidades(){
+  async function carregarModalidades() {
     setCarregandoModalidades(true);
     setModalidades([]);
     const obterModalidades = async () => {
-      var modalidades = await FiltroHelper.obterModalidades({
+      const modalidadesFiltradas = await FiltroHelper.obterModalidades({
         consideraHistorico,
-        anoLetivoSelecionado: anoLetivo
+        anoLetivoSelecionado: anoLetivo,
       });
-      setModalidades(modalidades);
+      setModalidades(modalidadesFiltradas);
 
-      if (modalidades.length === 1)
-        setModalidadeId(modalidades[0].valor);
-    }
+      if (modalidadesFiltradas.length === 1)
+        setModalidadeId(modalidadesFiltradas[0].valor);
+    };
     if (anoLetivo) await obterModalidades();
     setCarregandoModalidades(false);
   }
 
   useEffect(() => {
-    CarregarModalidades();
+    carregarModalidades();
   }, [anoLetivo]);
 
   useEffect(() => {
-    if (anoLetivo) CarregarModalidades();
+    if (anoLetivo) carregarModalidades();
   }, [consideraHistorico]);
 
   useEffect(() => {
     if (modalidades && modalidades.length === 1 && refForm) {
       refForm.setFieldValue('modalidadeId', String(modalidades[0].valor));
       setModalidadeId(String(modalidades[0].valor));
-    }
-    else if (modalidades && modalidades.length > 1 && refForm){
+    } else if (modalidades && modalidades.length > 1 && refForm) {
       refForm.setFieldValue('modalidadeId', '');
       setModalidadeId('');
     }
@@ -86,14 +91,15 @@ function Filtro({ onFiltrar, resetForm }) {
             Object.entries(refForm.fields[field].props.children).length === 1
               ? String(refForm.fields[field].props.children[0].props.value)
               : '';
-          refForm.setFieldValue(`${field}`, value);          setConsideraHistorico(false);
+          refForm.setFieldValue(`${field}`, value);
+          setConsideraHistorico(false);
           if (field === 'modalidadeId') setModalidadeId(value);
           if (field === 'dreId') setDreId(value);
           if (
             field === 'ueId' &&
             !Object.entries(refForm.fields.dreId.props.children).length
           )
-          refForm.setFieldValue('ueId', '');
+            refForm.setFieldValue('ueId', '');
           setConsideraHistorico(false);
           refForm.setFieldValue('consideraHistorico', false);
         });
@@ -108,7 +114,7 @@ function Filtro({ onFiltrar, resetForm }) {
       let periodosLista = [];
 
       periodosLista = await FiltroHelper.obterPeriodos({
-        consideraHistorico: consideraHistorico,
+        consideraHistorico,
         modalidadeSelecionada: modalidadeId,
         anoLetivoSelecionado: anoLetivo,
       });
@@ -201,19 +207,19 @@ function Filtro({ onFiltrar, resetForm }) {
       {form => (
         <Form className="col-md-12 mb-4">
           <Linha className="row mb-4">
-              <Grid col={2}>
+            <Grid col={2}>
               <CheckboxComponent
                 label="Exibir histórico?"
                 onChangeCheckbox={onCheckedConsideraHistorico}
                 checked={consideraHistorico}
               />
-              </Grid>
+            </Grid>
           </Linha>
           <Linha className="row mb-2">
             <Grid cols={2}>
               <AnoLetivoDropDown
                 form={form}
-                onChange={ano =>  onChangeAnoLetivo(ano)}
+                onChange={ano => onChangeAnoLetivo(ano)}
                 consideraHistorico={consideraHistorico}
               />
             </Grid>
@@ -237,7 +243,8 @@ function Filtro({ onFiltrar, resetForm }) {
                   label="Modalidade"
                   disabled={
                     !anoLetivo ||
-                    (modalidades && (modalidades.length < 1 || modalidades.length === 1))
+                    (modalidades &&
+                      (modalidades.length < 1 || modalidades.length === 1))
                   }
                 />
               </Loader>
@@ -321,12 +328,12 @@ function Filtro({ onFiltrar, resetForm }) {
 
 Filtro.propTypes = {
   onFiltrar: PropTypes.func,
-  resetForm: PropTypes.oneOfType([PropTypes.any])
+  resetForm: PropTypes.oneOfType([PropTypes.any]),
 };
 
 Filtro.defaultProps = {
   onFiltrar: () => null,
-  resetForm: false
+  resetForm: false,
 };
 
 export default Filtro;
