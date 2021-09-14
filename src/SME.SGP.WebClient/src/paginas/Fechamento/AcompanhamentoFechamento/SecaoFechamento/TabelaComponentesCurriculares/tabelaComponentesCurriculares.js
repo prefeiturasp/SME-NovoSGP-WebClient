@@ -43,6 +43,7 @@ const TabelaComponentesCurriculares = ({
   ] = useState([]);
 
   const [dadosComCores, setDadosComCores] = useState([]);
+  const [mostrarDetalhePendencia, setMostrarDetalhePendencia] = useState(false);
   const [detalhePendenciaEscolhido, setDetalhePendenciaEscolhido] = useState();
 
   const STATUS_EM_PROCESSAMENTO = 1;
@@ -146,14 +147,49 @@ const TabelaComponentesCurriculares = ({
     setLinhasExpandidasDetalhamento(componenteSelecionado);
   };
 
+  const onClickExibirDetalhamento = (_, dadosLinha) => {
+    obterDetalhePendencia(dadosLinha);
+  };
+
   const colunasTabelaComponentes = [
     {
       dataIndex: 'descricao',
       align: 'left',
+      render: (_, pendencias) => {
+        const ehLinhaClicada =
+          pendencias.pendenciaId === detalhePendenciaEscolhido?.pendenciaId;
+        const corTexto = ehLinhaClicada ? Base.Branco : Base.CinzaMako;
+        return (
+          <div className="d-flex align-items-center">
+            <IconeSeta cor={corTexto} icon={faLevelUpAlt} />
+            {pendencias.descricao}
+          </div>
+        );
+      },
     },
     {
       dataIndex: '',
       align: 'center',
+      width: 328,
+      render: (_, record) => {
+        const ehLinhaClicada =
+          record.pendenciaId === detalhePendenciaEscolhido?.pendenciaId;
+        const corTexto = ehLinhaClicada ? Colors.Branco : Colors.Azul;
+        const corTextoHover = ehLinhaClicada ? Colors.Azul : '';
+        return (
+          <Button
+            id="botao-detalhar"
+            className="mx-auto"
+            label="Detalhar"
+            color={corTexto}
+            corTextoHover={corTextoHover}
+            onClick={e => onClickExibirDetalhamento(e, record)}
+            border
+            mudarCorBorda
+            height="32px"
+          />
+        );
+      },
     },
   ];
 
@@ -178,6 +214,8 @@ const TabelaComponentesCurriculares = ({
       }
     }
 
+    setDetalhePendenciaEscolhido([]);
+    setMostrarDetalhePendencia(false);
     setDadosPendencias(dadosComponentes);
     setLinhasExpandidasPendencia(componenteSelecionado);
   };
@@ -249,23 +287,24 @@ const TabelaComponentesCurriculares = ({
             statusAcompanhamentoFechamento.PROCESSADO_PENDENCIAS.id
           ) {
             return (
-              <Loader loading={carregandoComponentes}>
-                <DataTable
-                  id={`tabela-componente-pendencias-${componentes?.id}`}
-                  idLinha="pendenciaId"
-                  pagination={false}
-                  showHeader={false}
+              <>
+                <Loader loading={carregandoComponentes}>
+                  <DataTable
+                    id={`tabela-componente-pendencias-${componentes?.id}`}
+                    idLinha="pendenciaId"
+                    pagination={false}
+                    showHeader={false}
                   expandIconColumnIndex={2}
-                  columns={colunasTabelaComponentes}
-                  dataSource={dadosPendencias}
-                  semHover
-                  rowClassName={(record, _) => {
-                    const ehLinhaClicada =
-                      record.pendenciaId ===
-                      detalhePendenciaEscolhido?.pendenciaId;
-                    const nomeClasse = ehLinhaClicada ? 'linha-ativa' : '';
-                    return nomeClasse;
-                  }}
+                    columns={colunasTabelaComponentes}
+                    dataSource={dadosPendencias}
+                    semHover
+                    rowClassName={(record, _) => {
+                      const ehLinhaClicada =
+                        record.pendenciaId ===
+                        detalhePendenciaEscolhido?.pendenciaId;
+                      const nomeClasse = ehLinhaClicada ? 'linha-ativa' : '';
+                      return nomeClasse;
+                    }}
                   expandedRowKeys={linhasExpandidasDetalhamento}
                   onClickExpandir={obterDetalhePendencia}
                   expandIcon={({ _, onExpand, record }) => {
@@ -287,18 +326,18 @@ const TabelaComponentesCurriculares = ({
                         border
                         mudarCorBorda
                         height="32px"
-                      />
+                  />
                     );
                   }}
                   expandedRowRender={() => {
                     return (
-                      <Loader loading={carregandoDetalhePendencia}>
+                    <Loader loading={carregandoDetalhePendencia}>
                         <LinhaVertical />
-                        <RenderizarHtml
-                          textoHtml={dadosDetalhePendencias?.descricaoHtml}
-                          className="tabela-pendencias-html"
-                        />
-                      </Loader>
+                      <RenderizarHtml
+                        textoHtml={dadosDetalhePendencias?.descricaoHtml}
+                        className="tabela-pendencias-html"
+                      />
+                    </Loader>
                     );
                   }}
                   components={components}

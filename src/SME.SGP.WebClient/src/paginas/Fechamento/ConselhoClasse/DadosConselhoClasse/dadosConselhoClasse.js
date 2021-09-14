@@ -5,28 +5,27 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Loader } from '~/componentes';
 import { ContainerTabsCard } from '~/componentes/tabs/tabs.css';
 import modalidadeDto from '~/dtos/modalidade';
+import RotasDto from '~/dtos/rotasDto';
 import {
   setBimestreAtual,
   setDadosPrincipaisConselhoClasse,
-  setFechamentoPeriodoInicioFim,
-  setExpandirLinha,
-  setNotaConceitoPosConselhoAtual,
-  setIdCamposNotasPosConselho,
   setDesabilitarCampos,
-  setConselhoClasseEmEdicao,
+  setExpandirLinha,
+  setFechamentoPeriodoInicioFim,
+  setIdCamposNotasPosConselho,
+  setNotaConceitoPosConselhoAtual,
 } from '~/redux/modulos/conselhoClasse/actions';
 import { erros } from '~/servicos/alertas';
 import ServicoConselhoClasse from '~/servicos/Paginas/ConselhoClasse/ServicoConselhoClasse';
+import { verificaSomenteConsulta } from '~/servicos/servico-navegacao';
+import { ehTurmaInfantil } from '~/servicos/Validacoes/validacoesInfatil';
 import servicoSalvarConselhoClasse from '../servicoSalvarConselhoClasse';
 import AlertaDentroPeriodo from './AlertaDentroPeriodo/alertaDentroPeriodo';
 import AnotacoesRecomendacoes from './AnotacoesRecomendacoes/anotacoesRecomendacoes';
 import ListasNotasConceitos from './ListasNotasConceito/listasNotasConceitos';
+import MarcadorParecerConclusivo from './MarcadorParecerConclusivo/marcadorParecerConclusivo';
 import MarcadorPeriodoInicioFim from './MarcadorPeriodoInicioFim/marcadorPeriodoInicioFim';
 import Sintese from './Sintese/Sintese';
-import MarcadorParecerConclusivo from './MarcadorParecerConclusivo/marcadorParecerConclusivo';
-import { verificaSomenteConsulta } from '~/servicos/servico-navegacao';
-import RotasDto from '~/dtos/rotasDto';
-import { ehTurmaInfantil } from '~/servicos/Validacoes/validacoesInfatil';
 
 const { TabPane } = Tabs;
 
@@ -119,7 +118,13 @@ const DadosConselhoClasse = props => {
         usuario.turmaSelecionada.consideraHistorico
       ).catch(e => {
         erros(e);
-        dispatch(setBimestreAtual(bimestreConsulta));
+        dispatch(
+          setBimestreAtual({
+            valor: bimestreConsulta,
+            dataInicio: null,
+            dataFim: null,
+          })
+        );
         dispatch(setDadosPrincipaisConselhoClasse({}));
         setSemDados(true);
       });
@@ -129,6 +134,8 @@ const DadosConselhoClasse = props => {
           fechamentoTurmaId,
           conselhoClasseAlunoId,
           bimestre,
+          bimestrePeriodoInicio,
+          bimestrePeriodoFim,
           periodoFechamentoInicio,
           periodoFechamentoFim,
           tipoNota,
@@ -150,7 +157,13 @@ const DadosConselhoClasse = props => {
           podeAcessarAbaFinal = podeAcessar;
         }
         if (!podeAcessarAbaFinal) {
-          dispatch(setBimestreAtual(bimestreConsulta));
+          dispatch(
+            setBimestreAtual({
+              valor: bimestreConsulta,
+              dataInicio: bimestrePeriodoInicio,
+              dataFim: bimestrePeriodoFim,
+            })
+          );
           setCarregando(false);
           return;
         }
@@ -185,11 +198,25 @@ const DadosConselhoClasse = props => {
         }
 
         if (ehFinal) {
-          dispatch(setBimestreAtual(bimestreConsulta));
+          dispatch(
+            setBimestreAtual({
+              valor: bimestreConsulta,
+              dataInicio: null,
+              dataFim: null,
+            })
+          );
         } else if (bimestre) {
-          dispatch(setBimestreAtual(String(bimestre)));
+          dispatch(
+            setBimestreAtual({
+              valor: String(bimestre),
+              dataInicio: bimestrePeriodoInicio,
+              dataFim: bimestrePeriodoFim,
+            })
+          );
         } else {
-          dispatch(setBimestreAtual('1'));
+          dispatch(
+            setBimestreAtual({ valor: '1', dataInicio: null, dataFim: null })
+          );
         }
         setSemDados(false);
         setCarregando(false);
@@ -217,7 +244,9 @@ const DadosConselhoClasse = props => {
       }
     }
     if (turmaSelecionada.turma != turmaAtual) {
-      dispatch(setBimestreAtual(''));
+      dispatch(
+        setBimestreAtual({ valor: '', dataInicio: null, dataFim: null })
+      );
       setTurmaAtual(turmaSelecionada.turma);
     }
   }, [codigoEOL, turmaSelecionada, turmaAtual]);
@@ -239,7 +268,6 @@ const DadosConselhoClasse = props => {
       caregarInformacoes(numeroBimestre, ehFinal);
     }
   };
-
 
   const montarDados = () => {
     return (

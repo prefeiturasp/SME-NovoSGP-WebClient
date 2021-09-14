@@ -18,6 +18,7 @@ const TabelaRetratilConselhoClasse = ({
         <TabelaRetratil
           onChangeAlunoSelecionado={onChangeAlunoSelecionado}
           permiteOnChangeAluno={permiteOnChangeAluno}
+          pularDesabilitados
           alunos={alunosConselhoClasse}
         >
           {children}

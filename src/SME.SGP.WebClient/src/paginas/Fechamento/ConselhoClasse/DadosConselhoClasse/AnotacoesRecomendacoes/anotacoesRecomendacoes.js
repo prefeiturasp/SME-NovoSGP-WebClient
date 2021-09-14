@@ -1,6 +1,7 @@
+import moment from 'moment';
+import PropTypes from 'prop-types';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import PropTypes from 'prop-types';
 import { Loader } from '~/componentes';
 import {
   setAnotacoesAluno,
@@ -17,7 +18,6 @@ import AnotacoesAluno from './AnotacoesAluno/anotacoesAluno';
 import AnotacoesPedagogicas from './AnotacoesPedagogicas/anotacoesPedagogicas';
 import AuditoriaAnotacaoRecomendacao from './AuditoriaAnotacaoRecomendacao/auditoriaAnotacaoRecomendacao';
 import RecomendacaoAlunoFamilia from './RecomendacaoAlunoFamilia/recomendacaoAlunoFamilia';
-import moment from 'moment';
 
 const AnotacoesRecomendacoes = props => {
   const { codigoTurma, bimestre } = props;
@@ -42,7 +42,7 @@ const AnotacoesRecomendacoes = props => {
   });
 
   const turmaStore = useSelector(state => state.usuario.turmaSelecionada);
-  
+
   const fechamentoPeriodoInicioFim = useSelector(
     store => store.conselhoClasse.fechamentoPeriodoInicioFim
   );
@@ -133,9 +133,7 @@ const AnotacoesRecomendacoes = props => {
     ).catch(e => erros(e));
 
     if (resposta && resposta.data) {
-      if (!desabilitarEdicaoAluno()) {
-        setarDentroDoPeriodo(!resposta.data.somenteLeitura);
-      }
+      setarDentroDoPeriodo(!resposta.data.somenteLeitura);
       onChangeAnotacoesPedagogicas(resposta.data.anotacoesPedagogicas);
       onChangeRecomendacaoAluno(resposta.data.recomendacaoAluno);
       onChangeRecomendacaoFamilia(resposta.data.recomendacaoFamilia);
@@ -171,14 +169,17 @@ const AnotacoesRecomendacoes = props => {
   };
 
   const desabilitarEdicaoAluno = () => {
-    const dataSituacao = moment(dadosAlunoObjectCard.dataSituacao).format('MM-DD-YYYY');
-    const dataFimFechamento = moment(fechamentoPeriodoInicioFim.periodoFechamentoFim).format('MM-DD-YYYY');
+    const dataSituacao = moment(dadosAlunoObjectCard.dataSituacao).format(
+      'MM-DD-YYYY'
+    );
+    const dataFimFechamento = moment(
+      fechamentoPeriodoInicioFim.periodoFechamentoFim
+    ).format('MM-DD-YYYY');
 
-    if (!alunoDesabilitado || (dataSituacao >= dataFimFechamento))
-       return false
-    
+    if (!alunoDesabilitado || dataSituacao >= dataFimFechamento) return false;
+
     return true;
-  }
+  };
 
   return (
     <Loader

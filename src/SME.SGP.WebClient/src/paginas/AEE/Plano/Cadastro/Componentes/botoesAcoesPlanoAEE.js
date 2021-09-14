@@ -245,7 +245,9 @@ const BotoesAcoesPlanoAEE = props => {
         bold
         className="ml-3"
         onClick={onClickSolicitarEncerramento}
-        hidden={
+        // Ocultando de acordo com o BUG 48173
+        hidden={true}
+        /*hidden={
           !planoAEEDados?.situacao ||
           (planoAEEDados?.situacao !== situacaoPlanoAEE.EmAndamento &&
             planoAEEDados?.situacao !== situacaoPlanoAEE.Expirado &&
@@ -255,7 +257,7 @@ const BotoesAcoesPlanoAEE = props => {
           desabilitarCamposPlanoAEE ||
           questionarioDinamicoEmEdicao ||
           !permissoesTela?.podeAlterar
-        }
+        }*/
       />
 
       <Button
