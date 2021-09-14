@@ -39,7 +39,7 @@ function UeDropDown({
         url,
         temParametros,
         modalidade
-      );
+      ).finally(() => setCarregando(false));
       let lista = [];
       if (data) {
         lista = data.map(item => ({
@@ -60,7 +60,6 @@ function UeDropDown({
         }
       }
       setListaUes(lista);
-      setCarregando(false);
     }
     if (dreId) {
       buscarUes();
@@ -71,11 +70,11 @@ function UeDropDown({
 
   useEffect(() => {
     let valorUeId;
-    if (form?.values?.ueId && listaUes?.length > 0) {
-      valorUeId = listaUes.find(a => a.valor === form.values.ueId)?.valor;
+    const valorUe = form?.values?.ueId || form?.initialValues?.ueId;
+    if (valorUe && listaUes?.length > 0) {
+      valorUeId = listaUes.find(a => a.valor === valorUe)?.valor;
     }
     form.setFieldValue('ueId', valorUeId);
-
     if (listaUes.length === 1) {
       form.setFieldValue('ueId', listaUes[0].valor);
       onChange(listaUes[0].valor, listaUes);
@@ -99,6 +98,7 @@ function UeDropDown({
             ? forcaDesabilitado || desabilitado
             : listaUes.length === 0 || listaUes.length === 1 || desabilitado
         }
+        showSearch
       />
     </Loader>
   );
@@ -122,7 +122,7 @@ UeDropDown.propTypes = {
 
 UeDropDown.defaultProps = {
   form: {},
-  onChange: () => { },
+  onChange: () => {},
   dreId: '',
   label: null,
   url: '',

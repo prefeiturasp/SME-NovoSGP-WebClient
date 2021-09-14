@@ -148,10 +148,11 @@ const AcompanhamentoAprendizagem = () => {
     verificaSomenteConsulta(permissoesTela, !ehInfantil);
   }, [turmaSelecionada, permissoesTela, modalidadesFiltroPrincipal]);
 
-  const obterFrequenciaAluno = async codigoAluno => {
-    const retorno = await ServicoCalendarios.obterFrequenciaAluno(
+  const obterFrequenciaAluno = async (codigoAluno, semestre) => {
+    const retorno = await ServicoCalendarios.obterFrequenciaAlunoPorSemestre(
       codigoAluno,
-      turma
+      turma,
+      semestre
     ).catch(e => erros(e));
     if (retorno && retorno.data) {
       return retorno.data;
@@ -159,9 +160,9 @@ const AcompanhamentoAprendizagem = () => {
     return 0;
   };
 
-  const onChangeAlunoSelecionado = async aluno => {
+  const onChangeAlunoSelecionado = async (aluno, semestreSelecionado) => {
     resetarInfomacoes();
-    const frequenciaGeralAluno = await obterFrequenciaAluno(aluno.codigoEOL);
+    const frequenciaGeralAluno = await obterFrequenciaAluno(aluno.codigoEOL, semestreSelecionado);
     const novoAluno = aluno;
     novoAluno.frequencia = frequenciaGeralAluno;
     dispatch(setDadosAlunoObjectCard(aluno));
@@ -191,7 +192,7 @@ const AcompanhamentoAprendizagem = () => {
             item => item.situacaoCodigo === situacaoMatriculaAluno.Ativo
           );
           if (primeiroEstudanteAtivo) {
-            onChangeAlunoSelecionado(primeiroEstudanteAtivo);
+            onChangeAlunoSelecionado(primeiroEstudanteAtivo, semestreConsulta);
           }
         } else {
           resetarInfomacoes();
@@ -311,7 +312,10 @@ const AcompanhamentoAprendizagem = () => {
                   </div>
                   <div className="col-md-12 mb-2">
                     <TabelaRetratilAcompanhamentoAprendizagem
-                      onChangeAlunoSelecionado={onChangeAlunoSelecionado}
+                      onChangeAlunoSelecionado={value => 
+                        { 
+                          onChangeAlunoSelecionado(value, semestreSelecionado); 
+                        }}
                       permiteOnChangeAluno={permiteOnChangeAluno}
                     >
                       <ObjectCardAcompanhamentoAprendizagem

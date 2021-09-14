@@ -3,8 +3,8 @@ import PropTypes from 'prop-types';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Loader } from '~/componentes';
-import DataUltimaAtualizacao from '~/componentes-sgp/DataUltimaAtualizacao/dataUltimaAtualizacao';
-import GraficoBarras from '~/componentes-sgp/Graficos/graficoBarras';
+import { GraficoBarras, TagGrafico } from '~/componentes-sgp';
+import { OPCAO_TODOS } from '~/constantes/constantes';
 import { erros } from '~/servicos';
 import ServicoDashboardFrequencia from '~/servicos/Paginas/Dashboard/ServicoDashboardFrequencia';
 
@@ -19,8 +19,6 @@ const GraficoFrequenciaGlobalPorAno = props => {
 
   const [dadosGrafico, setDadosGrafico] = useState([]);
   const [exibirLoader, setExibirLoader] = useState(false);
-
-  const OPCAO_TODOS = '-99';
 
   const obterDadosGrafico = useCallback(async () => {
     setExibirLoader(true);
@@ -55,10 +53,12 @@ const GraficoFrequenciaGlobalPorAno = props => {
       className={exibirLoader ? 'text-center' : ''}
     >
       {dataUltimaConsolidacao && (
-        <DataUltimaAtualizacao
-          dataFormatada={
+        <TagGrafico
+          valor={
             dataUltimaConsolidacao
-              ? moment(dataUltimaConsolidacao).format('DD/MM/YYYY HH:mm:ss')
+              ? `Data da última atualização: ${moment(
+                  dataUltimaConsolidacao
+                ).format('DD/MM/YYYY HH:mm:ss')}`
               : ''
           }
         />

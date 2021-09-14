@@ -78,6 +78,7 @@ function CadastroDeAula({ match, location }) {
     turmaId: turmaSelecionada.turma,
     ueId: turmaSelecionada.unidadeEscolar,
     tipoCalendarioId,
+    quantidade: 1,
   };
 
   const [recorrenciaAulaEmEdicao, setRecorrenciaAulaEmEdicao] = useState({
@@ -184,12 +185,21 @@ function CadastroDeAula({ match, location }) {
             const componenteSelecionado = componentes.find(
               c => c.codigoComponenteCurricular == respostaAula.disciplinaId
             );
-            carregarGrade(
-              componenteSelecionado,
-              respostaAula.dataAula,
-              respostaAula.tipoAula,
-              respostaAula.tipoAula == 1
-            );
+            if (componenteSelecionado){
+              carregarGrade(
+                componenteSelecionado,
+                respostaAula.dataAula,
+                respostaAula.tipoAula,
+                respostaAula.tipoAula == 1
+              );
+            } else {
+              setAula({
+                ...respostaAula,
+                disciplinaId: null,
+              });
+              setSomenteLeitura(false);
+              setCarregandoDados(false);
+            }
           }
         })
         .catch(e => {
@@ -348,6 +358,8 @@ function CadastroDeAula({ match, location }) {
     const componente = obterComponenteSelecionadoPorId(
       valoresForm.disciplinaId
     );
+    if (valoresForm.quantidade == 0) valoresForm.quantidade = 1;
+
     if (componente) valoresForm.disciplinaNome = componente.nome;
     setCarregandoDados(true);
     servicoCadastroAula
@@ -734,7 +746,7 @@ function CadastroDeAula({ match, location }) {
                         valueText="nome"
                         placeholder="Selecione um componente curricular"
                         form={form}
-                        disabled={!!id || listaComponentes.length === 1}
+                        disabled={(!!id && aula?.disciplinaId) || (listaComponentes.length === 1 && !id)}
                         onChange={onChangeComponente}
                       />
                     </div>

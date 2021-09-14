@@ -33,6 +33,8 @@ const SelectComponent = React.forwardRef((props, ref) => {
     allowClear,
     defaultValue,
     style,
+    searchValue,
+    setValueOnlyOnChange,
   } = props;
 
   const Container = styled.div`
@@ -141,6 +143,18 @@ const SelectComponent = React.forwardRef((props, ref) => {
     );
   };
 
+  const filterOption = (input, option) => {
+    const value = option?.props?.value?.toLowerCase();
+    const drescription = option?.props?.children?.toLowerCase();
+    if (searchValue) {
+      return (
+        value?.indexOf(input?.toLowerCase()) >= 0 ||
+        drescription?.toLowerCase().indexOf(input?.toLowerCase()) >= 0
+      );
+    }
+    return drescription?.toLowerCase().indexOf(input?.toLowerCase()) >= 0;
+  };
+
   const campoComValidacoes = () => (
     <Field
       mode={multiple && 'multiple'}
@@ -163,12 +177,18 @@ const SelectComponent = React.forwardRef((props, ref) => {
       component={Select}
       type="input"
       onChange={e => {
-        form.setFieldValue(name, e || '');
-        form.setFieldTouched(name, true, true);
-        if (onChange) onChange(e || '');
+        if (setValueOnlyOnChange) {
+          if (onChange) onChange(e || '');
+        } else {
+          form.setFieldValue(name, e || '');
+          form.setFieldTouched(name, true, true);
+          if (onChange) onChange(e || '');
+        }
       }}
       innerRef={ref}
       defaultValue={defaultValue}
+      filterOption={filterOption}
+      showSearch={showSearch}
     >
       {opcoesLista()}
     </Field>
@@ -198,6 +218,7 @@ const SelectComponent = React.forwardRef((props, ref) => {
       size={size || 'default'}
       defaultValue={defaultValue}
       style={style}
+      filterOption={filterOption}
     >
       {opcoesLista()}
     </Select>
@@ -234,11 +255,15 @@ SelectComponent.propTypes = {
   color: PropTypes.string,
   allowClear: PropTypes.bool,
   style: PropTypes.oneOfType([PropTypes.object]),
+  searchValue: PropTypes.bool,
+  setValueOnlyOnChange: PropTypes.bool,
 };
 
 SelectComponent.defaultProps = {
   allowClear: true,
   style: null,
+  searchValue: true,
+  setValueOnlyOnChange: false,
 };
 
 export default SelectComponent;

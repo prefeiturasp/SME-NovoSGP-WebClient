@@ -25,7 +25,8 @@ const DataTable = props => {
     expandedRowRender,
     onClickExpandir,
     expandedRowKeys,
-    nomeColunaExpandir,
+    expandIcon,
+    ...rest
   } = props;
 
   const rowSelection = {
@@ -61,6 +62,7 @@ const DataTable = props => {
       temEventoOnClickRow={!!onClickRow}
     >
       <Table
+        {...rest}
         id={id}
         scroll={scroll}
         className={selectMultipleRows ? '' : 'ocultar-coluna-multi-selecao'}
@@ -110,29 +112,7 @@ const DataTable = props => {
         expandedRowRender={expandedRowRender}
         expandIconColumnIndex={expandIconColumnIndex}
         expandIconAsCell={false}
-        expandIcon={({ expanded, onExpand, record }) => {
-          if (record.podeExpandir) {
-            return (
-              <div style={{ color: record?.cor }}>
-                {nomeColunaExpandir ? record[nomeColunaExpandir] : ''}
-                <FontAwesomeIcon
-                  style={{
-                    fontSize: '18px',
-                    marginLeft: '5px',
-                    marginRight: '5px',
-                    cursor: 'pointer',
-                  }}
-                  icon={expanded ? faAngleUp : faAngleDown}
-                  onClick={e => onExpand(record, e)}
-                />
-              </div>
-            );
-          }
-          if (!record.podeExpandir && nomeColunaExpandir) {
-            return record[nomeColunaExpandir];
-          }
-          return null;
-        }}
+        expandIcon={expandIcon}
         onExpand={onClickExpandir}
         expandedRowKeys={expandedRowKeys}
       />
@@ -159,7 +139,7 @@ DataTable.propTypes = {
   expandedRowRender: PropTypes.oneOfType(PropTypes.any),
   onClickExpandir: PropTypes.func,
   expandedRowKeys: PropTypes.oneOfType(PropTypes.array),
-  nomeColunaExpandir: PropTypes.string,
+  expandIcon: PropTypes.oneOfType(PropTypes.any),
 };
 
 DataTable.defaultProps = {
@@ -178,7 +158,7 @@ DataTable.defaultProps = {
   expandedRowRender: null,
   onClickExpandir: null,
   expandedRowKeys: [],
-  nomeColunaExpandir: '',
+  expandIcon: null,
 };
 
 export default DataTable;

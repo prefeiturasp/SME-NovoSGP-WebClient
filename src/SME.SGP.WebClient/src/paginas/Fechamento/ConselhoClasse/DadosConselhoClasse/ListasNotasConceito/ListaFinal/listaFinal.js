@@ -106,7 +106,7 @@ const ListaFinal = props => {
             idCampo={idCampo}
             codigoComponenteCurricular={codigoComponenteCurricular}
             alunoDesabilitado={alunoDesabilitado}
-            podeEditar={notaPosConselho.podeEditar}
+            podeEditar={notaPosConselho?.podeEditar}
           />
         );
       default:
@@ -226,7 +226,7 @@ const ListaFinal = props => {
                       </td>
                       <td>{item.faltas}</td>
                       <td>{item.ausenciasCompensadas}</td>
-                      <td>{item.frequencia}%</td>
+                      <td>{item.frequencia ? `${item.frequencia}%` : ''}</td>
                     </tr>
                     <LinhaJustificativa
                       idCampo={`${descricaoGrupoMatriz} ${index} componente`}

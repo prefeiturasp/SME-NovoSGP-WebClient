@@ -45,6 +45,7 @@ function DreDropDown({ form, onChange }) {
       valueText="desc"
       placeholder="Diretoria Regional De Educação (DRE)"
       disabled={listaDres.length === 1}
+      showSearch
     />
   );
 }

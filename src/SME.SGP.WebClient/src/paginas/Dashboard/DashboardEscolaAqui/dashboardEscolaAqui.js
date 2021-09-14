@@ -93,23 +93,23 @@ const DashboardEscolaAqui = () => {
 
   return (
     <>
-      <Cabecalho pagina="Dashboard" />
+      <Cabecalho pagina="Dashboard escola aqui" classes="mb-2" />
       <Loader loading={carregandoGeral}>
         <Card>
-          <div className="col-md-12">
-            <div className="row">
-              <div className="col-md-12 d-flex justify-content-end pb-4">
+          <div className="col-md-12 p-0">
+            <div className="row mb-4">
+              <div className="col-md-12 d-flex justify-content-end mb-4">
                 <Button
                   id="btn-voltar"
                   label="Voltar"
                   icon="arrow-left"
                   color={Colors.Azul}
                   border
-                  className="mr-2"
+                  className="mr-0"
                   onClick={onClickVoltar}
                 />
               </div>
-              <div className="col-sm-12 col-md-12 col-lg-6 col-xl-6 mb-2">
+              <div className="col-sm-12 col-md-12 col-lg-6 col-xl-6 mb-2 mt-3 pr-0">
                 <SelectComponent
                   id="select-component-dre"
                   label="Diretoria Regional de Educação (DRE)"
@@ -120,9 +120,10 @@ const DashboardEscolaAqui = () => {
                   onChange={onChangeDre}
                   valueSelect={codigoDre}
                   placeholder="Diretoria Regional de Educação (DRE)"
+                  showSearch
                 />
               </div>
-              <div className="col-sm-12 col-md-12 col-lg-6 col-xl-6 mb-2">
+              <div className="col-sm-12 col-md-12 col-lg-6 col-xl-6 mt-3 mb-2">
                 <SelectComponent
                   id="select-component-ue"
                   label="Unidade Escolar (UE)"
@@ -133,11 +134,12 @@ const DashboardEscolaAqui = () => {
                   onChange={onChangeUe}
                   valueSelect={codigoUe}
                   placeholder="Unidade Escolar (UE)"
+                  showSearch
                 />
               </div>
             </div>
             <div className="row">
-              <div className="col-md-12">
+              <div className="col-md-12 mt-3">
                 <TabsDashboardEscolaAqui
                   codigoDre={codigoDre}
                   codigoUe={codigoUe}

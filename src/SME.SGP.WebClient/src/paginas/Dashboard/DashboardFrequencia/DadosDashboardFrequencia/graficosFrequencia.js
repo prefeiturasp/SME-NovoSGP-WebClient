@@ -1,14 +1,16 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
-import { ModalidadeDTO } from '~/dtos';
+
+import { OPCAO_TODOS } from '~/constantes/constantes';
+
 import FrequenciaGlobalPorAno from './FrequenciaGlobalPorAno/frequenciaGlobalPorAno';
 import FrequenciaGlobalPorDRE from './FrequenciaGlobalPorDRE/frequenciaGlobalPorDRE';
 import QuantidadeAusenciasPossuemJustificativa from './QuantidadeAusenciasPossuemJustificativa/quantidadeAusenciasPossuemJustificativa';
 import QuantidadeJustificativasPorMotivo from './QuantidadeJustificativasPorMotivo/quantidadeJustificativasPorMotivo';
+import TotalEstudantesPresenciasRemotosAusentes from './TotalEstudantesPresRemAus/totalEstudantesPresRemAus';
+import TotalEstudantesPresenciasRemotosAusentesPorDre from './TotalEstudantesPresRemAusPorDre/totalEstudantesPresRemAusPorDre';
 
 const GraficosFrequencia = () => {
-  const OPCAO_TODOS = '-99';
-
   const anoLetivo = useSelector(
     store => store.dashboardFrequencia?.dadosDashboardFrequencia?.anoLetivo
   );
@@ -25,17 +27,14 @@ const GraficosFrequencia = () => {
     store => store.dashboardFrequencia?.dadosDashboardFrequencia?.semestre
   );
 
-  const dreId = OPCAO_TODOS === dre?.codigo ? OPCAO_TODOS : dre?.id;
-  const ueId = OPCAO_TODOS === ue?.codigo ? OPCAO_TODOS : ue?.id;
+  const ehTodosDre = OPCAO_TODOS === dre?.codigo;
+  const ehTodosUe = OPCAO_TODOS === ue?.codigo;
+  const dreId = ehTodosDre ? OPCAO_TODOS : dre?.id;
+  const ueId = ehTodosUe ? OPCAO_TODOS : ue?.id;
 
-  const exibirFrequenciaGlobalPorDRE =
-    dre?.codigo === OPCAO_TODOS && ue?.codigo === OPCAO_TODOS;
+  const exibirFrequenciaPorDRE = ehTodosDre && ue?.codigo === OPCAO_TODOS;
 
-  return anoLetivo &&
-    dre &&
-    ue &&
-    modalidade &&
-    !!(Number(modalidade) === ModalidadeDTO.EJA ? semestre : !semestre) ? (
+  return (
     <>
       <FrequenciaGlobalPorAno
         anoLetivo={anoLetivo}
@@ -44,9 +43,25 @@ const GraficosFrequencia = () => {
         modalidade={modalidade}
         semestre={semestre}
       />
-      {exibirFrequenciaGlobalPorDRE && (
+      {exibirFrequenciaPorDRE && (
         <FrequenciaGlobalPorDRE
           anoLetivo={anoLetivo}
+          modalidade={modalidade}
+          semestre={semestre}
+        />
+      )}
+      <TotalEstudantesPresenciasRemotosAusentes
+        anoLetivo={anoLetivo}
+        dreId={dreId}
+        ueId={ueId}
+        modalidade={modalidade}
+        semestre={semestre}
+      />
+      {exibirFrequenciaPorDRE && (
+        <TotalEstudantesPresenciasRemotosAusentesPorDre
+          anoLetivo={anoLetivo}
+          dreId={dreId}
+          ueId={ueId}
           modalidade={modalidade}
           semestre={semestre}
         />
@@ -67,8 +82,6 @@ const GraficosFrequencia = () => {
         codigoUe={ue?.codigo}
       />
     </>
-  ) : (
-    ''
   );
 };
 

@@ -1,16 +1,18 @@
 import 'moment/locale/pt-br';
 
-import { DatePicker, TimePicker, Icon, Input } from 'antd';
+import { DatePicker, TimePicker, Icon } from 'antd';
 import locale from 'antd/es/date-picker/locale/pt_BR';
 import { Field } from 'formik';
-import * as moment from 'moment';
+import moment from 'moment';
 import PropTypes from 'prop-types';
 import React from 'react';
-import styled from 'styled-components';
 import * as Yup from 'yup';
+import { faLongArrowAltRight } from '@fortawesome/free-solid-svg-icons';
 
 import { Base } from '../colors';
 import Label from '../label';
+
+import { Campo, IconeEstilizado } from './campoDataNovo.css';
 
 class MomentSchema extends Yup.mixed {
   constructor() {
@@ -21,56 +23,6 @@ class MomentSchema extends Yup.mixed {
     });
   }
 }
-
-const Campo = styled.div`
-  width: 100%;
-
-  span {
-    color: ${Base.Vermelho};
-  }
-
-  span[class*='is-invalid'] {
-    .ant-calendar-picker-input {
-      border-color: #dc3545 !important;
-    }
-
-    .ant-time-picker-input {
-      border-color: #dc3545 !important;
-    }
-  }
-
-  .ant-calendar-picker-input {
-    height: 38px;
-  }
-
-  .ant-time-picker-input {
-    height: 38px;
-  }
-
-  .ant-time-picker {
-    width: 100%;
-  }
-
-  .ant-calendar-picker {
-    width: 100%;
-  }
-
-  .ant-calendar-disabled-cell.ant-calendar-today .ant-calendar-date {
-    background-color: #f5f5f5;
-    ::before {
-      border: 0;
-    }
-  }
-
-  .ant-calendar-today .ant-calendar-date {
-    color: black;
-    border: 0;
-  }
-
-  label {
-    font-weight: bold;
-  }
-`;
 
 const CampoData = ({
   formatoData,
@@ -93,6 +45,7 @@ const CampoData = ({
   executarOnChangeExterno,
   valorPadrao,
   diasParaSinalizar,
+  intervaloDatas,
 }) => {
   const habilitarDatas = dataAtual => {
     let retorno = true;
@@ -285,9 +238,40 @@ const CampoData = ({
     );
   };
 
+  const campoIntervaloDatas = () => {
+    return (
+      <>
+        <IconeEstilizado icon={faLongArrowAltRight} />
+        <DatePicker.RangePicker
+          disabled={desabilitado}
+          locale={locale}
+          format={formatoData}
+          suffixIcon={Icone}
+          name={name}
+          id={id || name}
+          className={`${possuiErro() ? 'is-invalid' : ''} ${className || ''}`}
+          onBlur={executaOnBlur}
+          onChange={valorData => {
+            onChange(valorData || '');
+          }}
+          separator=""
+          value={valor || [null, null]}
+          disabledDate={habilitarDatas}
+          showToday={false}
+          defaultPickerValue={valorPadrao}
+          dateRender={dataRender}
+        />
+      </>
+    );
+  };
+
   const validaTipoCampo = () => {
     if (somenteHora) {
       return form ? campoHoraAntComValidacoes() : campoHoraAntSemValidacoes();
+    }
+
+    if (intervaloDatas) {
+      return campoIntervaloDatas();
     }
 
     return form ? campoDataAntComValidacoes() : campoDataAntSemValidacoes();
@@ -333,10 +317,11 @@ CampoData.propTypes = {
   temErro: PropTypes.bool,
   mensagemErro: PropTypes.string,
   carregando: PropTypes.bool,
-  campoOpcional: PropTypes.bool,
+  campoOpcional: PropTypes.oneOfType([PropTypes.bool, PropTypes.string]),
   executarOnChangeExterno: PropTypes.bool,
-  valorPadrao: PropTypes.string,
+  valorPadrao: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
   diasParaSinalizar: PropTypes.oneOfType([PropTypes.array]),
+  intervaloDatas: PropTypes.bool,
 };
 
 CampoData.defaultProps = {
@@ -356,10 +341,11 @@ CampoData.defaultProps = {
   temErro: null,
   mensagemErro: null,
   carregando: false,
-  campoOpcional: false,
+  campoOpcional: '',
   executarOnChangeExterno: false,
   valorPadrao: '',
   diasParaSinalizar: [],
+  intervaloDatas: false,
 };
 
 const momentSchema = new MomentSchema();

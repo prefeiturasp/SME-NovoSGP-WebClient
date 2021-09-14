@@ -17,10 +17,9 @@ import {
 } from '~/componentes';
 
 import { Linha } from '~/componentes/EstilosGlobais';
-import ServicoComunicados from '~/servicos/Paginas/AcompanhamentoEscolar/Comunicados/ServicoComunicados';
 import ServicoComunicadoEvento from '~/servicos/Paginas/AcompanhamentoEscolar/ComunicadoEvento/ServicoComunicadoEvento';
 import { erros, ServicoCalendarios } from '~/servicos';
-import FiltroHelper from '~/paginas/AcompanhamentoEscolar/Comunicados/Helper/helper.js';
+import FiltroHelper from '~/paginas/AcompanhamentoEscolar/Comunicados/Helper/helper';
 
 const MODALIDADE_EJA_ID = '3';
 const TODAS_MODALIDADES_ID = '-99';
@@ -48,12 +47,12 @@ function Filtro({ onFiltrar }) {
   const todos = [{ id: TODAS_MODALIDADES_ID, nome: 'Todas' }];
   const todosTurmasModalidade = [{ id: TODAS_TURMAS_ID, nome: 'Todas' }];
   const semestresLista = [
+    { id: '-99', nome: 'Todos' },
     { id: '1', nome: '1º Semestre' },
     { id: '2', nome: '2º Semestre' },
-  ];
-
+  ];  
+  const anosPorModalidadeDefault = [{ modalidade: '-99', ano: 'Todos'}];
   const [refForm, setRefForm] = useState({});
-  const [gruposLista, setGruposLista] = useState([]);
   const [anosLetivos, setAnosLetivos] = useState([]);
   const [modalidades, setModalidades] = useState(todosTurmasModalidade);
   const [dres, setDres] = useState([]);
@@ -66,7 +65,6 @@ function Filtro({ onFiltrar }) {
     TODAS_MODALIDADES_ID
   );
   const [anosModalidade, setAnosModalidade] = useState([]);
-  const [gruposSelecionados, setGruposSelecionados] = useState([]);
   const [timeoutCampoPesquisa, setTimeoutCampoPesquisa] = useState();
   const [
     bloquearCamposCalendarioEventos,
@@ -82,8 +80,8 @@ function Filtro({ onFiltrar }) {
   }, [ues]);
 
   const modalidadeDesabilitada = useMemo(() => {
-    return modalidades.length <= 1 || gruposSelecionados?.length != 0;
-  }, [refForm, modalidades, ues, dres, gruposSelecionados]);
+    return modalidades.length <= 1;
+  }, [refForm, modalidades, ues, dres]);
 
   const semestreDesabilitado = useMemo(() => {
     return modalidadeSelecionada !== MODALIDADE_EJA_ID;
@@ -93,18 +91,7 @@ function Filtro({ onFiltrar }) {
     return turmas.length <= 1;
   }, [turmas]);
 
-  const gruposDesabilitados = useMemo(() => {
-    return (
-      modalidadeSelecionada &&
-      modalidadeSelecionada !== '' &&
-      modalidadeSelecionada !== TODAS_MODALIDADES_ID &&
-      modalidadeSelecionada !== 'Todas' &&
-      gruposSelecionados?.length > 0
-    );
-  }, [modalidadeSelecionada]);
-
   const [valoresIniciais] = useState({
-    gruposId: '',
     dataEnvio: '',
     dataExpiracao: '',
     titulo: '',
@@ -112,7 +99,7 @@ function Filtro({ onFiltrar }) {
     CodigoDre: TODAS_DRE_ID,
     CodigoUe: TODAS_UES_ID,
     modalidade: TODAS_MODALIDADES_ID,
-    semestre: 'Todos',
+    semestre: todos[0].id,
     turmas: [TODAS_TURMAS_ID],
     tipoCalendarioId: '',
     eventoId: '',
@@ -166,7 +153,11 @@ function Filtro({ onFiltrar }) {
   const [listaEvento, setListaEvento] = useState([]);
   const [valorEvento, setValorEvento] = useState('');
   const [eventoSelecionado, setEventoSelecionado] = useState('');
+  const [carregandoAnosLetivos, setCarregandoAnosLetivos] = useState(false);
   const [pesquisaEvento, setPesquisaEvento] = useState('');
+  const [carregandoDres, setCarregandoDres] = useState(false);
+  const [carregandoUes, setCarregandoUes] = useState(false);
+  const [carregandoModalidades, setCarregandoModalidades] = useState(false);
 
   const limparDadosEvento = form => {
     setValorEvento('');
@@ -332,57 +323,75 @@ function Filtro({ onFiltrar }) {
   };
 
   const ObterDres = useCallback(async () => {
+    setCarregandoDres(true);
     const dados = await FiltroHelper.ObterDres();
 
-    if (!dados || dados.length === 0) return;
+    if (!dados || dados.length === 0)
+    {
+      setCarregandoDres(false);
+      return;
+    } 
 
     if (dados.length === 1) {
       refForm.setFieldValue('CodigoDre', String(dados[0].id));
       ObterUes(dados[0].id);
     }
-
     setDres(dados);
+    validarFiltro();
+    setCarregandoDres(false);
   }, [setDres, refForm]);
 
   const ObterAnoLetivo = useCallback(async () => {
+    setCarregandoAnosLetivos(true);
     const dados = await FiltroHelper.ObterAnoLetivo();
 
-    if (!dados || dados.length === 0) return;
+    if (!dados || dados.length === 0) {
+      setCarregandoAnosLetivos(false);
+      return;
+    }
 
     setAnosLetivos(dados);
     validarFiltro();
     await ObterDres();
+    setCarregandoAnosLetivos(false);
   }, [setAnosLetivos, ObterDres]);
 
   useEffect(() => {
     if (!refForm?.setFieldValue) return;
-
-    obterListaGrupos();
     ObterAnoLetivo();
   }, [ObterAnoLetivo, refForm]);
 
   const ObterUes = async dre => {
+    setCarregandoUes(true);
     const dados = await FiltroHelper.ObterUes(dre);
 
-    if (!dados || dados.length === 0) return;
-
-    if (dados.length === 1) {
-      refForm.setFieldValue('CodigoUe', dados[0].id);
-      validarFiltro();
+    if (!dados || dados.length === 0) {
+      setCarregandoUes(false);
+      return;
     }
 
+    if (dados.length === 1)
+      refForm.setFieldValue('CodigoUe', dados[0].id);
+
     setUes(dados);
+    validarFiltro();
+    setCarregandoUes(false);
   };
 
   async function ObterModalidades(ue) {
-    const anoForm = refForm?.state?.values?.anoLetivo
+    setCarregandoModalidades(true);
+    const anoForm = refForm?.state?.values?.anoLetivo    
       ? refForm.state.values.anoLetivo
       : moment().year();
     const dados = await FiltroHelper.obterModalidadesAnoLetivo(ue, anoForm);
 
-    if (!dados || dados.length === 0) return;
+    if (!dados || dados.length === 0){
+      setCarregandoModalidades(false);
+      return;
+    } 
     if (dados.length === 1) refForm.setFieldValue('modalidade', dados[0].id);
     setModalidades(dados);
+    setCarregandoModalidades(false);
   }
 
   const ObterTurmas = async (anoLetivo, codigoUe, modalidade, semestre) => {
@@ -395,12 +404,6 @@ function Filtro({ onFiltrar }) {
     if (!dados || dados.length === 0) return;
     setTurmas(dados);
     refForm.setFieldValue('turmas', ['Todas']);
-  };
-
-  const ObterGruposIdPorModalidade = async modalidade => {
-    const dados = await FiltroHelper.ObterGruposIdPorModalidade(modalidade);
-    if (!dados || dados.length === 0) return;
-    refForm.setFieldValue('gruposId', dados);
   };
 
   const chainTodosAnos = (dados, modalidade) => {
@@ -435,15 +438,17 @@ function Filtro({ onFiltrar }) {
       return;
     }
 
-    setAnosModalidade(dados);
+    dados.splice(0, 0, { modalidade: dados[0].modalidade, ano: "Todos" });    
+    setAnosModalidade(dados);    
     chainTodosAnos(dados, modalidade);
     chainLimpaAnos(dados, modalidade);
+    refForm.setFieldValue('ano', 'Todos');
   };
 
   const onChangeAnoLetivo = async ano => {
-    refForm.setFieldValue('CodigoDre', TODAS_DRE_ID);
+    refForm.setFieldValue('CodigoDre', TODAS_DRE_ID);    
     refForm.setFieldValue('tipoCalendarioId', '');
-    onChangeDre(TODAS_DRE_ID);
+    onChangeDre(TODAS_DRE_ID);    
 
     if (ano == 0 || !ano || ano == '') {
       setDres(todos);
@@ -456,8 +461,8 @@ function Filtro({ onFiltrar }) {
 
   const onChangeDre = async dre => {
     setUeSelecionada(TODAS_UES_ID);
-    refForm.setFieldValue('CodigoUe', ueSelecionada);
-    onChangeUe(ueSelecionada);
+    refForm.setFieldValue('CodigoUe', TODAS_UES_ID);
+    onChangeUe(TODAS_UES_ID);
 
     if (dre == TODAS_DRE_ID) {
       setUes(todos);
@@ -507,11 +512,9 @@ function Filtro({ onFiltrar }) {
   }, [ueSelecionada]);
 
   const onChangeModalidade = async modalidade => {
-    refForm.setFieldValue('semestre', '');
-    refForm.setFieldValue('ano', []);
+    refForm.setFieldValue('semestre', todos[0].id);
+    refForm.setFieldValue('ano', 'Todos');
     refForm.setFieldValue('turmas', [TODAS_TURMAS_ID]);
-    refForm.setFieldValue('gruposId', '');
-    setGruposSelecionados([]);
 
     setTurmas(todosTurmasModalidade);
 
@@ -521,13 +524,13 @@ function Filtro({ onFiltrar }) {
       modalidade === TODAS_MODALIDADES_ID
     ) {
       setModalidadeSelecionada(TODAS_MODALIDADES_ID);
+      refForm.setFieldValue('modalidade', TODAS_MODALIDADES_ID);
       return;
     }
 
     setModalidadeSelecionada(modalidade);
     loadTiposCalendarioEffect();
 
-    await ObterGruposIdPorModalidade(modalidade);
     await ObterAnosPorModalidade(modalidade, ueSelecionada);
 
     if (modalidade !== MODALIDADE_EJA_ID) {
@@ -581,13 +584,6 @@ function Filtro({ onFiltrar }) {
     validarFiltro();
   };
 
-  const onGrupoChange = grupos => {
-    refForm.setFieldValue('modalidade', TODAS_MODALIDADES_ID);
-    refForm.setFieldValue('ano', []);
-    setModalidadeSelecionada(TODAS_MODALIDADES_ID);
-    setGruposSelecionados(grupos);
-  };
-
   const onSubmitFiltro = valores => {
     if (dres?.length && ues?.length) {
       const valoresSubmit = {
@@ -602,7 +598,6 @@ function Filtro({ onFiltrar }) {
         CodigoUe: valores.CodigoUe == TODAS_UES_ID ? 'todas' : valores.CodigoUe,
         CodigoDre:
           valores.CodigoDre == TODAS_DRE_ID ? 'todas' : valores.CodigoDre,
-        gruposId: gruposSelecionados,
         dataEnvio: valores?.dataEnvio?.set({ hour: 0, minute: 0, second: 0 }),
         dataExpiracao: valores?.dataExpiracao?.set({
           hour: 23,
@@ -614,11 +609,6 @@ function Filtro({ onFiltrar }) {
       onFiltrar(valoresSubmit);
     }
   };
-
-  async function obterListaGrupos() {
-    const lista = await ServicoComunicados.listarGrupos();
-    setGruposLista(lista);
-  }
 
   const validarFiltro = () => {
     const arrayCampos = Object.keys(valoresIniciais);
@@ -692,23 +682,25 @@ function Filtro({ onFiltrar }) {
           <Linha className="row mb-2">
             <Grid cols={2}>
               <Label form={form} text="Ano Letivo" control="anoLetivo" />
-              <SelectComponent
-                form={form}
-                id="anoLetivo"
-                name="anoLetivo"
-                placeholder="Selecione um ano letivo"
-                valueOption="id"
-                valueText="nome"
-                value={form.values.anoLetivo}
-                lista={anosLetivos}
-                allowClear={false}
-                onChange={x => {
-                  validarFiltro();
-                  onChangeAnoLetivo(x);
-                }}
-              />
+              <Loader loading={carregandoAnosLetivos} tip="">
+                <SelectComponent
+                  form={form}
+                  id="anoLetivo"
+                  name="anoLetivo"
+                  placeholder="Selecione um ano letivo"
+                  valueOption="id"
+                  valueText="nome"
+                  value={form.values.anoLetivo}
+                  lista={anosLetivos}
+                  allowClear={false}
+                  onChange={x => {
+                    validarFiltro();
+                    onChangeAnoLetivo(x);
+                  }}
+                />
+              </Loader>
             </Grid>
-            <Grid cols={5}>
+            <Grid cols={5}>                
               <Label
                 control="CodigoDre"
                 text="Diretoria Regional de Educação (DRE)"
@@ -728,6 +720,7 @@ function Filtro({ onFiltrar }) {
                   validarFiltro();
                   onChangeDre(x);
                 }}
+                showSearch
               />
             </Grid>
             <Grid cols={5}>
@@ -747,28 +740,31 @@ function Filtro({ onFiltrar }) {
                   validarFiltro();
                   onChangeUe(x);
                 }}
+                showSearch
               />
             </Grid>
           </Linha>
           <Linha className="row mb-2">
             <Grid cols={4}>
               <Label control="modalidade" text="Modalidade" />
-              <SelectComponent
-                form={form}
-                id="modalidade"
-                name="modalidade"
-                placeholder="Selecione uma modalidade"
-                valueOption="id"
-                valueText="nome"
-                value={form.values.modalidade}
-                lista={modalidades}
-                allowClear
-                disabled={modalidadeDesabilitada}
-                onChange={x => {
-                  validarFiltro();
-                  onChangeModalidade(x);
-                }}
-              />
+              <Loader loading={carregandoModalidades} tip="">
+                <SelectComponent
+                  form={form}
+                  id="modalidade"
+                  name="modalidade"
+                  placeholder="Selecione uma modalidade"
+                  valueOption="id"
+                  valueText="nome"
+                  value={form.values.modalidade}
+                  lista={modalidades}
+                  allowClear
+                  disabled={modalidadeDesabilitada}
+                  onChange={x => {
+                    validarFiltro();
+                    onChangeModalidade(x);
+                  }}
+                />
+              </Loader>
             </Grid>
             <Grid cols={2}>
               <Label control="semestre" text="Semestre" />
@@ -825,28 +821,33 @@ function Filtro({ onFiltrar }) {
                   validarFiltro();
                   onTurmaChange(x);
                 }}
+                showSearch
               />
             </Grid>
           </Linha>
           <Linha className="row mb-2">
             <Grid cols={4}>
-              <Label control="gruposId" text="Grupo" />
-              <SelectComponent
-                form={form}
-                id="gruposId"
-                name="gruposId"
-                placeholder="Selecione um grupo"
-                value={form.values.gruposId}
-                multiple
-                disabled={gruposDesabilitados}
-                lista={gruposLista}
-                valueOption="id"
-                valueText="nome"
-                onChange={grupo => {
-                  validarFiltro();
-                  onGrupoChange(grupo);
-                }}
-              />
+              <Label control="tipoCalendarioId" text="Tipo de Calendário" />
+              <Loader loading={carregandoTipos} tip="">
+                <SelectAutocomplete
+                  hideLabel
+                  showList
+                  isHandleSearch
+                  placeholder="Selecione um calendário"
+                  className="col-md-12"
+                  name="tipoCalendarioId"
+                  id="select-tipo-calendario"
+                  lista={listaCalendario}
+                  valueField="id"
+                  textField="descricao"
+                  onSelect={valor => selecionaTipoCalendario(valor, form)}
+                  onChange={valor => selecionaTipoCalendario(valor, form)}
+                  value={valorTipoCalendario}
+                  form={form}
+                  allowClear
+                  disabled={bloquearCamposCalendarioEventos}
+                />
+              </Loader>
             </Grid>
             <Grid cols={4}>
               <Label control="dataEnvio" text="Data de envio" />
@@ -871,29 +872,6 @@ function Filtro({ onFiltrar }) {
           </Linha>
           <Linha className="row mb-2">
             <Grid cols={6}>
-              <Label control="tipoCalendarioId" text="Tipo de Calendário" />
-              <Loader loading={carregandoTipos} tip="">
-                <SelectAutocomplete
-                  hideLabel
-                  showList
-                  isHandleSearch
-                  placeholder="Selecione um calendário"
-                  className="col-md-12"
-                  name="tipoCalendarioId"
-                  id="select-tipo-calendario"
-                  lista={listaCalendario}
-                  valueField="id"
-                  textField="descricao"
-                  onSelect={valor => selecionaTipoCalendario(valor, form)}
-                  onChange={valor => selecionaTipoCalendario(valor, form)}
-                  value={valorTipoCalendario}
-                  form={form}
-                  allowClear={true}
-                  disabled={bloquearCamposCalendarioEventos}
-                />
-              </Loader>
-            </Grid>
-            <Grid cols={6}>
               <Label control="evento" text="Evento" />
               <Loader loading={carregandoEventos} tip="">
                 <SelectAutocomplete
@@ -917,9 +895,7 @@ function Filtro({ onFiltrar }) {
                 />
               </Loader>
             </Grid>
-          </Linha>
-          <Linha className="row">
-            <Grid cols={12}>
+            <Grid cols={6}>
               <Label control="titulo" text="Título" />
               <CampoTexto
                 form={form}

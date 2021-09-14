@@ -6,20 +6,17 @@ import shortid from 'shortid';
 import { LabelSemDados } from '~/componentes';
 import notasConceitos from '~/dtos/notasConceitos';
 import {
+  setExpandirLinha,
   setModoEdicaoGeral,
   setModoEdicaoGeralNotaFinal,
-  setExpandirLinha,
 } from '~/redux/modulos/notasConceitos/actions';
-import NomeEstudanteLista from '../NomeEstudanteLista/nomeEstudanteLista';
 import {
   acharItem,
   converterAcaoTecla,
   moverCursor,
   tratarString,
 } from '~/utils';
-
 import Ordenacao from '../Ordenacao/ordenacao';
-import SinalizacaoAEE from '../SinalizacaoAEE/sinalizacaoAEE';
 import {
   CaixaMarcadores,
   InfoMarcador,
@@ -43,6 +40,8 @@ const Avaliacao = props => {
     ehProfessorCj,
     ehRegencia,
     disciplinaSelecionada,
+    exibirTootipStatusGsa,
+    exibirStatusAlunoAusente,
   } = props;
 
   const expandirLinha = useSelector(
@@ -67,13 +66,21 @@ const Avaliacao = props => {
     }
   };
 
-  const descricaoAlunoAusente = 'Aluno ausente na data da avaliação';
+  const obterTamanhoColuna = () => {
+    if (exibirTootipStatusGsa && exibirStatusAlunoAusente) {
+      return 'width-150';
+    }
+    if (!exibirTootipStatusGsa && !exibirStatusAlunoAusente) {
+      return 'width-110';
+    }
+    return 'width-135';
+  };
 
   const montarCabecalhoAvaliacoes = () => {
     return dados.avaliacoes && dados.avaliacoes.length > 0
       ? dados.avaliacoes.map(avaliacao => {
           return (
-            <th key={shortid.generate()} className="width-110">
+            <th key={shortid.generate()} className={obterTamanhoColuna()}>
               <div className="texto-header-avaliacao">
                 <Tooltip title={avaliacao.nome}>{avaliacao.nome}</Tooltip>
               </div>
@@ -345,16 +352,9 @@ const Avaliacao = props => {
                                 return (
                                   <td
                                     key={shortid.generate()}
-                                    className="width-110"
+                                    className={obterTamanhoColuna()}
                                   >
                                     {montarCampoNotaConceito(nota, aluno)}
-                                    {nota.ausente ? (
-                                      <Tooltip title={descricaoAlunoAusente}>
-                                        <i className="fas fa-user-times icon-aluno-ausente" />
-                                      </Tooltip>
-                                    ) : (
-                                      ''
-                                    )}
                                   </td>
                                 );
                               })
@@ -408,11 +408,15 @@ const Avaliacao = props => {
 Avaliacao.propTypes = {
   notaTipo: PropTypes.number,
   onChangeOrdenacao: () => {},
+  exibirTootipStatusGsa: PropTypes.bool,
+  exibirStatusAlunoAusente: PropTypes.bool,
 };
 
 Avaliacao.defaultProps = {
   notaTipo: 0,
   onChangeOrdenacao: () => {},
+  exibirTootipStatusGsa: false,
+  exibirStatusAlunoAusente: false,
 };
 
 export default Avaliacao;

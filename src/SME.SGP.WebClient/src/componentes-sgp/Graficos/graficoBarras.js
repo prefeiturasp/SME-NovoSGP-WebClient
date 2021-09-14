@@ -13,14 +13,30 @@ const GraficoBarras = props => {
     yField,
     seriesField,
     colors,
+    labelVisible,
+    radius,
+    showTitle,
+    ...rest
   } = props;
 
+  const scrollConfig =
+    window.innerWidth <= 960 && data?.length > 62
+      ? {
+          type: 'horizontal',
+        }
+      : null;
+
   const config = {
+    ...rest,
     data,
     isGroup,
     xField,
     yField,
     seriesField,
+    scrollbar: scrollConfig,
+    columnStyle: {
+      radius,
+    },
     xAxis: {
       visible: xAxisVisible,
       label: {
@@ -40,8 +56,8 @@ const GraficoBarras = props => {
       style: {
         fill: Base.CinzaMako,
         textAlign: 'center',
-        fontSize: 14,
-        fontWeight: 400,
+        fontSize: 8.5,
+        fontWeight: 600,
       },
     },
     legend: legendVisible
@@ -66,7 +82,7 @@ const GraficoBarras = props => {
         }
       : false,
     tooltip: {
-      showTitle: false,
+      showTitle,
       domStyles: {
         'g2-tooltip-list': {
           textAlign: 'left',
@@ -89,6 +105,9 @@ GraficoBarras.propTypes = {
   yField: PropTypes.string,
   seriesField: PropTypes.string,
   colors: PropTypes.oneOfType(PropTypes.array),
+  labelVisible: PropTypes.bool,
+  radius: PropTypes.oneOfType(PropTypes.array),
+  showTitle: PropTypes.bool,
 };
 
 GraficoBarras.defaultProps = {
@@ -100,6 +119,9 @@ GraficoBarras.defaultProps = {
   yField: 'quantidade',
   seriesField: 'descricao',
   colors: [],
+  labelVisible: true,
+  radius: [4, 4, 0, 0],
+  showTitle: false,
 };
 
 export default GraficoBarras;

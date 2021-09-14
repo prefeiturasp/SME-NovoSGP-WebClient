@@ -5,6 +5,7 @@ import { Cabecalho } from '~/componentes-sgp';
 import Button from '~/componentes/button';
 import Card from '~/componentes/card';
 import { Colors } from '~/componentes/colors';
+import { OPCAO_TODOS } from '~/constantes/constantes';
 import { URL_HOME } from '~/constantes/url';
 import AbrangenciaServico from '~/servicos/Abrangencia';
 import { erros } from '~/servicos/alertas';
@@ -25,8 +26,6 @@ const DashboardAEE = () => {
   const [carregandoAnosLetivos, setCarregandoAnosLetivos] = useState(false);
   const [carregandoDres, setCarregandoDres] = useState(false);
   const [carregandoUes, setCarregandoUes] = useState(false);
-
-  const OPCAO_TODOS = '-99';
 
   const obterAnosLetivos = useCallback(async () => {
     setCarregandoAnosLetivos(true);
@@ -180,6 +179,7 @@ const DashboardAEE = () => {
                   onChange={onChangeDre}
                   valueSelect={dre?.codigo}
                   placeholder="Diretoria Regional de Educação (DRE)"
+                  showSearch
                 />
               </Loader>
             </div>
@@ -195,6 +195,7 @@ const DashboardAEE = () => {
                   onChange={onChangeUe}
                   valueSelect={ue?.codigo}
                   placeholder="Unidade Escolar (UE)"
+                  showSearch
                 />
               </Loader>
             </div>

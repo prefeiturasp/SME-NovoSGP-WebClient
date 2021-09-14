@@ -9,6 +9,7 @@ import { Cabecalho } from '~/componentes-sgp';
 import Button from '~/componentes/button';
 import Card from '~/componentes/card';
 import { Colors } from '~/componentes/colors';
+import { OPCAO_TODOS } from '~/constantes/constantes';
 import { URL_HOME } from '~/constantes/url';
 import modalidade from '~/dtos/modalidade';
 import AbrangenciaServico from '~/servicos/Abrangencia';
@@ -48,8 +49,6 @@ const HistoricoNotificacoes = () => {
 
   const [carregandoGeral, setCarregandoGeral] = useState(false);
   const [desabilitarBtnGerar, setDesabilitarBtnGerar] = useState(true);
-
-  const OPCAO_TODAS = '-99';
 
   const opcoesExibirDescricao = [
     { label: 'Sim', value: true },
@@ -187,9 +186,9 @@ const HistoricoNotificacoes = () => {
   };
 
   const obterTurmas = useCallback(async () => {
-    if (codigoUe === OPCAO_TODAS) {
-      setListaTurmas([{ valor: '-99', descricao: 'Todas' }]);
-      setTurmaId(OPCAO_TODAS);
+    if (codigoUe === OPCAO_TODOS) {
+      setListaTurmas([{ valor: OPCAO_TODOS, descricao: 'Todas' }]);
+      setTurmaId(OPCAO_TODOS);
       return;
     }
 
@@ -206,7 +205,7 @@ const HistoricoNotificacoes = () => {
     if (resposta?.data?.length) {
       const lista = resposta.data;
       if (lista.length > 1) {
-        lista.unshift({ valor: '-99', descricao: 'Todas' });
+        lista.unshift({ valor: OPCAO_TODOS, descricao: 'Todas' });
       }
 
       setListaTurmas(lista);
@@ -284,7 +283,7 @@ const HistoricoNotificacoes = () => {
     const status = await api.get('v1/notificacoes/status').catch(e => erros(e));
     if (status?.data?.length) {
       if (status.data.length > 1) {
-        status.data.unshift({ descricao: 'Todas', id: OPCAO_TODAS });
+        status.data.unshift({ descricao: 'Todas', id: OPCAO_TODOS });
       }
       setListaSituacao(status.data);
     } else {
@@ -297,7 +296,7 @@ const HistoricoNotificacoes = () => {
 
     if (cat?.data?.length) {
       if (cat.data.length > 1) {
-        cat.data.unshift({ descricao: 'Todas', id: OPCAO_TODAS });
+        cat.data.unshift({ descricao: 'Todas', id: OPCAO_TODOS });
       }
       setListaCategorias(cat.data);
     } else {
@@ -307,7 +306,7 @@ const HistoricoNotificacoes = () => {
     const tip = await api.get('v1/notificacoes/tipos').catch(e => erros(e));
     if (tip?.data?.length) {
       if (tip.data.length > 1) {
-        tip.data.unshift({ descricao: 'Todos', id: OPCAO_TODAS });
+        tip.data.unshift({ descricao: 'Todos', id: OPCAO_TODOS });
       }
       setListaTipos(tip.data);
     } else {
@@ -417,13 +416,13 @@ const HistoricoNotificacoes = () => {
 
   const onchangeMultiSelect = (valores, valoreAtual, funSetarNovoValor) => {
     const opcaoTodosJaSelecionado = valoreAtual
-      ? valoreAtual.includes('-99')
+      ? valoreAtual.includes(OPCAO_TODOS)
       : false;
     if (opcaoTodosJaSelecionado) {
-      const listaSemOpcaoTodos = valores.filter(v => v !== '-99');
+      const listaSemOpcaoTodos = valores.filter(v => v !== OPCAO_TODOS);
       funSetarNovoValor(listaSemOpcaoTodos);
-    } else if (valores.includes('-99')) {
-      funSetarNovoValor(['-99']);
+    } else if (valores.includes(OPCAO_TODOS)) {
+      funSetarNovoValor([OPCAO_TODOS]);
     } else {
       funSetarNovoValor(valores);
     }
@@ -489,6 +488,7 @@ const HistoricoNotificacoes = () => {
                   onChange={onChangeDre}
                   valueSelect={codigoDre}
                   placeholder="Diretoria Regional de Educação (DRE)"
+                  showSearch
                 />
               </div>
               <div className="col-sm-12 col-md-12 col-lg-12 col-xl-5 mb-2">
@@ -501,6 +501,7 @@ const HistoricoNotificacoes = () => {
                   onChange={onChangeUe}
                   valueSelect={codigoUe}
                   placeholder="Unidade Escolar (UE)"
+                  showSearch
                 />
               </div>
               <div className="col-sm-12 col-md-6 col-lg-4 col-xl-5 mb-2">
@@ -531,7 +532,7 @@ const HistoricoNotificacoes = () => {
                   placeholder="Selecione o semestre"
                 />
               </div>
-              <div className="col-sm-12 col-md-6 col-lg-4 col-xl-5 mb-2">
+              <div className="col-sm-12 col-md-12 col-lg-4 col-xl-5 mb-2">
                 <SelectComponent
                   id="drop-turma"
                   lista={listaTurmas}
@@ -544,6 +545,7 @@ const HistoricoNotificacoes = () => {
                   valueSelect={turmaId}
                   onChange={setTurmaId}
                   placeholder="Turma"
+                  showSearch
                 />
               </div>
               <div className="col-md-12 mb-2">

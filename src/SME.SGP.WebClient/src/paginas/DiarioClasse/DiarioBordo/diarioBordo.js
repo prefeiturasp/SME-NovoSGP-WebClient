@@ -6,6 +6,7 @@ import { Auditoria, CampoData, Loader, PainelCollapse } from '~/componentes';
 import AlertaPermiteSomenteTurmaInfantil from '~/componentes-sgp/AlertaPermiteSomenteTurmaInfantil/alertaPermiteSomenteTurmaInfantil';
 import Cabecalho from '~/componentes-sgp/cabecalho';
 import AlertaPeriodoEncerrado from '~/componentes-sgp/Calendario/componentes/MesCompleto/componentes/Dias/componentes/DiaCompleto/componentes/AlertaPeriodoEncerrado';
+import DadosMuralGoogleSalaAula from '~/componentes-sgp/MuralGoogleSalaAula/dadosMuralGoogleSalaAula';
 import ObservacoesUsuario from '~/componentes-sgp/ObservacoesUsuario/observacoesUsuario';
 import ServicoObservacoesUsuario from '~/componentes-sgp/ObservacoesUsuario/ServicoObservacoesUsuario';
 import Alert from '~/componentes/alert';
@@ -669,7 +670,7 @@ const DiarioBordo = ({ match }) => {
                   componenteCurricularSelecionado &&
                   dataSelecionada ? (
                     <>
-                      <div className="col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-2">
+                      <div className="col-md-12 mb-2">
                         <PainelCollapse defaultActiveKey="1">
                           <PainelCollapse.Painel
                             temBorda
@@ -677,6 +678,7 @@ const DiarioBordo = ({ match }) => {
                             key="1"
                           >
                             <JoditEditor
+                              valideClipboardHTML={false}
                               form={form}
                               value={form.values.planejamento}
                               name="planejamento"
@@ -691,7 +693,23 @@ const DiarioBordo = ({ match }) => {
                           </PainelCollapse.Painel>
                         </PainelCollapse>
                       </div>
-                      <div className="col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-2">
+                      <div className="col-md-12 mb-2">
+                        <PainelCollapse>
+                          <PainelCollapse.Painel
+                            temBorda
+                            header="Mural do Google Sala de Aula"
+                            key="3"
+                          >
+                            {valoresIniciais?.aulaId && (
+                              <DadosMuralGoogleSalaAula
+                                podeAlterar={!desabilitarCampos}
+                                aulaId={valoresIniciais?.aulaId}
+                              />
+                            )}
+                          </PainelCollapse.Painel>
+                        </PainelCollapse>
+                      </div>
+                      <div className="col-md-12 mb-2">
                         <PainelCollapse defaultActiveKey="2">
                           <PainelCollapse.Painel
                             temBorda
@@ -699,6 +717,7 @@ const DiarioBordo = ({ match }) => {
                             key="2"
                           >
                             <JoditEditor
+                              valideClipboardHTML={false}
                               form={form}
                               value={form.values.reflexoesReplanejamento}
                               name="reflexoesReplanejamento"
@@ -715,11 +734,12 @@ const DiarioBordo = ({ match }) => {
                           </PainelCollapse.Painel>
                         </PainelCollapse>
                       </div>
-                      <div className="col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-2">
+                      <div className="col-md-12 mb-2">
                         <PainelCollapse>
                           <PainelCollapse.Painel temBorda header="Devolutivas">
                             {form && form.values && form.values.devolutivas ? (
                               <JoditEditor
+                                valideClipboardHTML={false}
                                 label="Somente leitura"
                                 form={form}
                                 value={form.values.devolutivas}

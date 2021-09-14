@@ -11,6 +11,7 @@ import {
 import { erros } from '~/servicos/alertas';
 import ServicoConselhoClasse from '~/servicos/Paginas/ConselhoClasse/ServicoConselhoClasse';
 import ListasCarregar from './listasCarregar';
+import { valorNuloOuVazio } from '~/utils/funcoes/gerais';
 
 const ListasNotasConceitos = props => {
   const { bimestreSelecionado } = props;
@@ -25,12 +26,12 @@ const ListasNotasConceitos = props => {
     store => store.conselhoClasse.dadosPrincipaisConselhoClasse
   );
 
-  const fechamentoPeriodoInicioFim = useSelector(
-    store => store.conselhoClasse.fechamentoPeriodoInicioFim
-  );
-
   const dadosAlunoObjectCard = useSelector(
     store => store.conselhoClasse.dadosAlunoObjectCard
+  );
+
+  const bimestreAtual = useSelector(
+    store => store.conselhoClasse.bimestreAtual
   );
 
   const turmaStore = useSelector(state => state.usuario.turmaSelecionada);
@@ -48,15 +49,18 @@ const ListasNotasConceitos = props => {
   const [exibir, setExibir] = useState(false);
   const [carregando, setCarregando] = useState(false);
 
-  const desabilitarEdicaoAluno = () => {
+  const alunoTransferidoAposFimDoBimestre = () => {
     const dataSituacao = moment(dadosAlunoObjectCard.dataSituacao).format(
       'MM-DD-YYYY'
     );
-    const dataFimFechamento = moment(
-      fechamentoPeriodoInicioFim.periodoFechamentoFim
-    ).format('MM-DD-YYYY');
 
-    if (!alunoDesabilitado || dataSituacao >= dataFimFechamento) return false;
+    const dataFimPeriodo = moment(bimestreAtual.dataFim).format('MM-DD-YYYY');
+
+    return dataSituacao >= dataFimPeriodo;
+  };
+
+  const desabilitarEdicaoAluno = () => {
+    if (!alunoDesabilitado || alunoTransferidoAposFimDoBimestre()) return false;
 
     return true;
   };
@@ -68,10 +72,7 @@ const ListasNotasConceitos = props => {
     dados.notasConceitos.map(notasConceitos =>
       notasConceitos.componentesCurriculares.map(componentesCurriculares =>
         componentesCurriculares.notasFechamentos.map(notasFechamentos => {
-          if (
-            notasFechamentos.notaConceito === null ||
-            notasFechamentos.notaConceito < 0
-          ) {
+          if (valorNuloOuVazio(notasFechamentos.notaConceito)) {
             notasFechamentosPreenchidas = false;
           }
           return notasFechamentos;
@@ -79,7 +80,13 @@ const ListasNotasConceitos = props => {
       )
     );
 
-    if (!conselhoClasseAlunoId && notasFechamentosPreenchidas) {
+    const alunoDentroDoPeriodoDoBimestre = alunoTransferidoAposFimDoBimestre();
+
+    if (
+      !conselhoClasseAlunoId &&
+      notasFechamentosPreenchidas &&
+      alunoDentroDoPeriodoDoBimestre
+    ) {
       dispatch(setConselhoClasseEmEdicao(true));
     }
   };

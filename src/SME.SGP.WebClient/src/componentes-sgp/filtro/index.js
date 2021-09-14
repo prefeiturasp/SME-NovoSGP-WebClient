@@ -8,6 +8,18 @@ import {
   removerTurma,
   setarConsideraHistorico,
 } from '~/redux/modulos/usuario/actions';
+
+import {
+  SGP_BUTTON_FILTRO_PRINCIPAL_APLICAR,
+  SGP_SELECT_FILTRO_PRINCIPAL_ANOLETIVO ,
+  SGP_SELECT_FILTRO_PRINCIPAL_TURMA ,
+  SGP_SELECT_FILTRO_PRINCIPAL_MODALIDADE,
+  SGP_SELECT_FILTRO_PRINCIPAL_PERIODO,
+  SGP_SELECT_FILTRO_PRINCIPAL_DRE,
+  SGP_SELECT_FILTRO_PRINCIPAL_UE,
+  SGP_CAMPO_FILTRO_PRINCIPAL_PESQUISAR_TURMA
+} from './idsCampos';
+
 import Grid from '~/componentes/grid';
 import Button from '~/componentes/button';
 import { Colors } from '~/componentes/colors';
@@ -161,9 +173,11 @@ const Filtro = () => {
         unidadeEscolar: unidadeEscolarSelecionada,
         turma: turmaSelecionada,
         ano: turmaSelecionadaCompleta.ano,
-        desc: `${
-          modalidadeDesc && modalidadeDesc.desc ? modalidadeDesc.desc : ''
-        } - ${turmaAtual && turmaAtual.desc ? turmaAtual.desc : ''} - ${
+        desc: `${anoLetivoSelecionado} - ${
+          turmaAtual && turmaAtual.modalidadeTurmaNome
+            ? turmaAtual.modalidadeTurmaNome
+            : ''
+        } - ${
           unidadeEscolarDesc && unidadeEscolarDesc.desc
             ? unidadeEscolarDesc.desc
             : ''
@@ -1079,6 +1093,7 @@ const Filtro = () => {
         <div className="form-group mb-0 w-100 position-relative">
           <Busca className="fa fa-search fa-lg bg-transparent position-absolute text-center" />
           <Campo
+            id={SGP_CAMPO_FILTRO_PRINCIPAL_PESQUISAR_TURMA}
             type="text"
             className="form-control form-control-lg rounded d-flex px-5 border-0 fonte-14"
             placeholder="Pesquisar Turma"
@@ -1136,6 +1151,7 @@ const Filtro = () => {
             <div className="form-row">
               <Grid cols={3} className="form-group">
                 <SelectComponent
+                  id={SGP_SELECT_FILTRO_PRINCIPAL_ANOLETIVO}
                   className="fonte-14"
                   onChange={aoTrocarAnoLetivo}
                   lista={anosLetivos}
@@ -1160,6 +1176,7 @@ const Filtro = () => {
               >
                 <Loader loading={carregandoModalidades} tip="">
                   <SelectComponent
+                    id={SGP_SELECT_FILTRO_PRINCIPAL_MODALIDADE}
                     className="fonte-14"
                     onChange={aoTrocarModalidade}
                     lista={modalidades}
@@ -1180,6 +1197,7 @@ const Filtro = () => {
                   <Grid cols={4} className="form-group">
                     <Loader loading={carregandoPeriodos} tip="">
                       <SelectComponent
+                        id={SGP_SELECT_FILTRO_PRINCIPAL_PERIODO}
                         className="fonte-14"
                         onChange={aoTrocarPeriodo}
                         lista={periodos}
@@ -1200,6 +1218,7 @@ const Filtro = () => {
               <Loader loading={carregandoDres} tip="">
                 <SelectComponent
                   className="fonte-14"
+                  id={SGP_SELECT_FILTRO_PRINCIPAL_DRE}
                   onChange={aoTrocarDre}
                   lista={dres}
                   valueOption="valor"
@@ -1208,6 +1227,7 @@ const Filtro = () => {
                   valueSelect={dreSelecionada && `${dreSelecionada}`}
                   placeholder="Diretoria Regional De Educação (DRE)"
                   disabled={campoDreDesabilitado}
+                  showSearch
                 />
               </Loader>
             </div>
@@ -1215,6 +1235,7 @@ const Filtro = () => {
               <Loader loading={carregandoUes} tip="">
                 <SelectComponent
                   className="fonte-14"
+                  id={SGP_SELECT_FILTRO_PRINCIPAL_UE}
                   onChange={aoTrocarUnidadeEscolar}
                   lista={unidadesEscolares}
                   valueOption="valor"
@@ -1225,13 +1246,15 @@ const Filtro = () => {
                   }
                   placeholder="Unidade Escolar (UE)"
                   disabled={campoUnidadeEscolarDesabilitado}
+                  showSearch
                 />
               </Loader>
             </div>
             <div className="form-row d-flex justify-content-between">
-              <Grid cols={3} className="form-group">
+              <Grid cols={9} className="form-group">
                 <Loader loading={carregandoTurmas} tip="">
                   <SelectComponent
+                  id={SGP_SELECT_FILTRO_PRINCIPAL_TURMA}
                     className="fonte-14"
                     onChange={aoTrocarTurma}
                     lista={turmas}
@@ -1241,12 +1264,13 @@ const Filtro = () => {
                     valueSelect={turmaSelecionada && `${turmaSelecionada}`}
                     placeholder="Turma"
                     disabled={campoTurmaDesabilitado}
+                    showSearch
                   />
                 </Loader>
               </Grid>
               <Grid cols={3} className="form-group text-right">
                 <Button
-                  id={shortid.generate()}
+                  id={SGP_BUTTON_FILTRO_PRINCIPAL_APLICAR}
                   label="Aplicar filtro"
                   color={Colors.Roxo}
                   className="ml-auto"

@@ -35,7 +35,7 @@ const RotasDto = {
     '/calendario-escolar/periodo-fechamento-reabertura',
   RELATORIO_PAP_ACOMPANHAMENTO: '/relatorios/pap/relatorio-preenchimento',
   PENDENCIAS_FECHAMENTO: '/fechamento/pendencias-fechamento',
-  ACOMPANHAMENTO_COMUNICADOS: '/gestao/acompanhamento-escolar/comunicados',
+  ACOMPANHAMENTO_COMUNICADOS: '/gestao/comunicados',
   CONSELHO_CLASSE: '/fechamento/conselho-classe',
   RELATORIO_SEMESTRAL: '/relatorios/pap/relatorio-semestral',
   SEM_PERMISSAO: '/sem-permissao',
@@ -43,9 +43,9 @@ const RotasDto = {
   HISTORICO_ESCOLAR: '/relatorios/historico-escolar',
   RELATORIO_BOLETIM_SIMPLES: '/relatorios/diario-classe/boletim-simples',
   ATA_FINAL_RESULTADOS: '/relatorios/atas/ata-final-resultados',
-  FALTAS_FREQUENCIA: '/relatorios/frequencia/faltas-frequencia',
+  RELATORIO_FREQUENCIA: '/relatorios/frequencia/frequencia',
   DIARIO_BORDO: '/diario-classe/diario-bordo',
-  RELATORIO_PENDENCIAS: '/relatorios/pendencias-fechamento',
+  RELATORIO_PENDENCIAS: '/relatorios/gestao/pendencias',
   CARTA_INTENCOES: '/planejamento/carta-intencoes',
   RELATORIO_PARECER_CONCLUSIVO: '/relatorios/parecer-conclusivo',
   RELATORIO_NOTAS_CONCEITOS_FINAIS: '/relatorios/notas-conceitos-finais',
@@ -76,7 +76,16 @@ const RotasDto = {
   DASHBOARD_REGISTRO_ITINERANCIA: '/dashboard/registro-itinerancia',
   ACOMPANHAMENTO_FECHAMENTO: '/fechamento/acompanhamento-fechamento',
   DASHBOARD_FREQUENCIA: '/dashboard/frequencia',
+  DASHBOARD_DEVOLUTIVAS: '/dashboard/devolutivas',
   DASHBOARD_INFORMACOES_ESCOLARES: '/dashboard/informacoes-escolares',
+  DASHBOARD_REGISTRO_INDIVIDUAL: '/dashboard/registro-individual',
+  DASHBOARD_DIARIO_BORDO: '/dashboard/diario-bordo',
+  RELATORIO_ACOMPANHAMENTO_FECHAMENTO:
+    '/relatorios/fechamentos/acompanhamento-fechamento',
+  DASHBOARD_RELATORIO_ACOMPANHAMENTO_APRENDIZAGEM:
+    '/dashboard/acompanhamento-aprendizagem',
+  DASHBOARD_FECHAMENTO: '/dashboard/fechamento',
+  ATA_BIMESTRAL: '/relatorios/atas/ata-bimestral',
 };
 
 export default RotasDto;
