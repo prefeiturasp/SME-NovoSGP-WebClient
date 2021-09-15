@@ -43,6 +43,7 @@ const JoditEditor = forwardRef((props, ref) => {
     permiteVideo,
     qtdMaxImg,
     imagensCentralizadas,
+    valideClipboardHTML,
   } = props;
 
   const textArea = useRef(null);
@@ -94,6 +95,7 @@ const JoditEditor = forwardRef((props, ref) => {
         }
       },
     },
+    askBeforePasteHTML: valideClipboardHTML,
     disablePlugins: ['image-properties', 'inline-popup', disablePlugins],
     language: 'pt_br',
     height,
@@ -399,6 +401,7 @@ JoditEditor.propTypes = {
   permiteVideo: PropTypes.bool,
   qtdMaxImg: PropTypes.number,
   imagensCentralizadas: PropTypes.bool,
+  valideClipboardHTML: PropTypes.bool,
 };
 
 JoditEditor.defaultProps = {
@@ -422,6 +425,7 @@ JoditEditor.defaultProps = {
   permiteVideo: true,
   qtdMaxImg: null,
   imagensCentralizadas: false,
+  valideClipboardHTML: true,
 };
 
 export default JoditEditor;

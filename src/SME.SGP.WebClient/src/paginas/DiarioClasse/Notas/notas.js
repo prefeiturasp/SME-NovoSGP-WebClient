@@ -766,12 +766,57 @@ const Notas = ({ match }) => {
   };
 
   const verificaPorcentagemAprovados = () => {
+    let bimestreAtual = dadosBimestreAtual;
+    let bimestre = {};
+    switch (Number(dadosBimestreAtual.bimestre)) {
+      case 1:
+        bimestre = primeiroBimestre;
+        break;
+      case 2:
+        bimestre = segundoBimestre;
+        break;
+      case 3:
+        bimestre = terceiroBimestre;
+        break;
+      case 4:
+        bimestre = quartoBimestre;
+        break;
+      default:
+        break;
+    }
+
+    bimestreAtual = {
+      ...dadosBimestreAtual,
+      mediaAprovacaoBimestre : bimestre.mediaAprovacaoBimestre, 
+      modoEdicao : bimestre.modoEdicao, 
+      listaTiposConceitos : bimestre.listaTiposConceitos ? bimestre.listaTiposConceitos : []
+    };
+    bimestreAtual.alunos = bimestre.alunos;
+
+    setDadosBimestreAtual(bimestreAtual);
     return ServicoNotas.temQuantidadeMinimaAprovada(
-      dadosBimestreAtual,
+      bimestreAtual,
       percentualMinimoAprovados,
       notaTipo
     );
   };
+
+  const bimestreEmModoEdicao = (
+    numeroBimestre
+    ) => {
+    switch (Number(numeroBimestre)) {
+      case 1:
+        return primeiroBimestre.modoEdicao;
+      case 2:
+        return segundoBimestre.modoEdicao;
+      case 3:
+        return terceiroBimestre.modoEdicao;
+      case 4:
+        return quartoBimestre.modoEdicao;
+      default:
+        return false;
+    }
+  }
 
   const aposValidarJustificativaAntesDeSalvar = (
     numeroBimestre,
@@ -795,6 +840,7 @@ const Notas = ({ match }) => {
     setClicouNoBotaoVoltar(clicouVoltar);
     const estaEmModoEdicaoGeral = ServicoNotaConceito.estaEmModoEdicaoGeral();
     const estaEmModoEdicaoGeralNotaFinal = ServicoNotaConceito.estaEmModoEdicaoGeralNotaFinal();
+    const modoEdicao = bimestreEmModoEdicao(numeroBimestre);
 
     if (estaEmModoEdicaoGeralNotaFinal || estaEmModoEdicaoGeral) {
       let confirmado = true;
@@ -808,7 +854,7 @@ const Notas = ({ match }) => {
         if (
           estaEmModoEdicaoGeralNotaFinal &&
           !temPorcentagemAceitavel &&
-          dadosBimestreAtual.modoEdicao
+          modoEdicao
         ) {
           setProximoBimestre(numeroBimestre);
           setExibeModalJustificativa(true);

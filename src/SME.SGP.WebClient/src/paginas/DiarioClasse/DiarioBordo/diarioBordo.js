@@ -678,6 +678,7 @@ const DiarioBordo = ({ match }) => {
                             key="1"
                           >
                             <JoditEditor
+                              valideClipboardHTML={false}
                               form={form}
                               value={form.values.planejamento}
                               name="planejamento"
@@ -716,6 +717,7 @@ const DiarioBordo = ({ match }) => {
                             key="2"
                           >
                             <JoditEditor
+                              valideClipboardHTML={false}
                               form={form}
                               value={form.values.reflexoesReplanejamento}
                               name="reflexoesReplanejamento"
@@ -737,6 +739,7 @@ const DiarioBordo = ({ match }) => {
                           <PainelCollapse.Painel temBorda header="Devolutivas">
                             {form && form.values && form.values.devolutivas ? (
                               <JoditEditor
+                                valideClipboardHTML={false}
                                 label="Somente leitura"
                                 form={form}
                                 value={form.values.devolutivas}

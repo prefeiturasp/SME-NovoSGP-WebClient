@@ -215,11 +215,14 @@ const BotoesAcoesPlanoAEE = props => {
         color={Colors.Roxo}
         bold
         className="ml-3"
-        onClick={escolherAcaoAbaParecer}
-        hidden={
-          planoAEEDados?.situacao !== situacaoPlanoAEE.ParecerCP &&
-          planoAEEDados?.situacao !== situacaoPlanoAEE.AtribuicaoPAAI &&
-          planoAEEDados?.situacao !== situacaoPlanoAEE.ParecerPAAI
+        //onClick={onClickSolicitarEncerramento}
+        // Ocultando de acordo com o BUG 48173
+        hidden={true}
+        /*hidden={
+          !planoAEEDados?.situacao ||
+          (planoAEEDados?.situacao !== situacaoPlanoAEE.EmAndamento &&
+            planoAEEDados?.situacao !== situacaoPlanoAEE.Expirado &&
+            planoAEEDados?.situacao !== situacaoPlanoAEE.Reestruturado)
         }
         disabled={
           (planoAEEDados?.situacao === situacaoPlanoAEE.ParecerPAAI &&
@@ -228,7 +231,7 @@ const BotoesAcoesPlanoAEE = props => {
           questionarioDinamicoEmEdicao ||
           !parecerEmEdicao ||
           !permissoesTela?.podeAlterar
-        }
+        }*/
       />
       <Button
         id="btn-devolver-plano"
