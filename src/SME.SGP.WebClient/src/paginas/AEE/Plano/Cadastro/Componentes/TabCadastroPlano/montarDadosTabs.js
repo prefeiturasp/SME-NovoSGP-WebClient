@@ -13,9 +13,7 @@ const { TabPane } = Tabs;
 
 const MontarDadosTabs = props => {
   const { match } = props;
-  //const temId = match?.params?.id;
-  //Ocultando de acordo com o BUG 48173
-  const temId = false;
+  const temId = match?.params?.id;
 
   const dadosCollapseLocalizarEstudante = useSelector(
     store => store.collapseLocalizarEstudante.dadosCollapseLocalizarEstudante
