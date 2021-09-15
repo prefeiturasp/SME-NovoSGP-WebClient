@@ -324,7 +324,7 @@ function AtribuicaoEsporadicaForm({ match }) {
     const ueComparacao = ueCodigo || valoresIniciais?.ueId;
     const ue = listaUes.find(item => item.valor === ueComparacao);
     const ueId = ue?.id;
-    if (ueCodigo || ueId) {
+    if (ueId) {
       obterPeriodos(ueId);
     }
   }, [obterPeriodos, listaUes, ueCodigo, valoresIniciais]);
