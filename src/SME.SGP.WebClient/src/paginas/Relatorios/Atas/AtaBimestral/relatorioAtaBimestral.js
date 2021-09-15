@@ -350,7 +350,7 @@ const RelatorioAtaBimestral = () => {
           anoLetivo,
           consideraHistorico,
           false,
-          [1, 7]
+          [1, 2, 7]
         )
           .catch(e => erros(e))
           .finally(() => setCarregandoTurmas(false));
