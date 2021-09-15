@@ -144,7 +144,7 @@ function DiaCompleto({
                           </span>
                         )}
                         {eventoAula.estaAguardandoAprovacao && (
-                          <Pilula cor={Base.Branco} fundo={Base.AzulCalendario}>
+                          <Pilula cor={Base.Branco} fundo={Base.Roxo}>
                             Aguardando aprovação
                           </Pilula>
                         )}

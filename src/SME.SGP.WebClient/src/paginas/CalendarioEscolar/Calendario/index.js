@@ -13,7 +13,7 @@ import {
   SelectComponent,
   SelectAutocomplete,
 } from '~/componentes';
-import { FiltroHelper } from '~/componentes-sgp';
+import { Cabecalho, FiltroHelper } from '~/componentes-sgp';
 import Calendario from '~/componentes-sgp/calendarioEscolar/Calendario';
 
 import {
@@ -343,17 +343,59 @@ const CalendarioEscolar = () => {
   };
 
   return (
-    <Corpo className="col-12">
-      <Grid cols={12} className="mb-1 p-0">
-        <Titulo className="font-weight-bold">Calendário escolar</Titulo>
-      </Grid>
-      <Card className="rounded mb-4 mx-auto">
-        <Grid cols={12} className="mb-4">
+    <>
+      <Cabecalho pagina="Calendário escolar" />
+      <Card>
+        <Grid cols={12}>
           <Div className="row">
-            <Grid cols={4}>
+            <Grid
+              cols={12}
+              className="d-flex justify-content-end pb-4 justify-itens-end"
+            >
+              <Button
+                id="btn-voltar-calendario-escolar"
+                label="Voltar"
+                icon="arrow-left"
+                color={Colors.Azul}
+                onClick={aoClicarBotaoVoltar}
+                border
+              />
+            </Grid>
+            <Grid cols={6} className="mb-2">
+              <Loader loading={carregandoDres} tip="">
+                <SelectComponent
+                  id="dre"
+                  onChange={aoSelecionarDre}
+                  lista={dres}
+                  valueOption="valor"
+                  valueText="desc"
+                  valueSelect={dreSelecionada}
+                  placeholder="Diretoria Regional de Educação (DRE)"
+                  disabled={!tipoCalendarioSelecionado || dres?.length === 1}
+                  showSearch
+                  label="Diretoria Regional de Educação (DRE)"
+                />
+              </Loader>
+            </Grid>
+            <Grid cols={6} className="mb-2">
+              <Loader loading={carregandoUes} tip="">
+                <SelectComponent
+                  id="ue"
+                  onChange={aoSelecionarUnidadeEscolar}
+                  lista={unidadesEscolares}
+                  valueOption="valor"
+                  valueText="desc"
+                  valueSelect={unidadeEscolarSelecionada}
+                  placeholder="Unidade Escolar (UE)"
+                  disabled={!dreSelecionada || unidadesEscolares?.length === 1}
+                  showSearch
+                  label="Unidade Escolar (UE)"
+                />
+              </Loader>
+            </Grid>
+            <Grid cols={6}>
               <Loader loading={carregandoTipos} tip="">
                 <SelectAutocomplete
-                  hideLabel
                   showList
                   isHandleSearch
                   placeholder="Tipo de calendário"
@@ -367,127 +409,98 @@ const CalendarioEscolar = () => {
                   onChange={selecionaTipoCalendario}
                   handleSearch={handleSearch}
                   value={valorTipoCalendario}
-                  disabled={listaTipoCalendario?.length === 1}
+                  isabled={listaTipoCalendario?.length === 1}
+                  label="Calendário"
                 />
               </Loader>
             </Grid>
-            <Grid cols={4}>
-              {diasLetivos && diasLetivos.dias && (
-                <Div>
-                  <Button
-                    id={shortid.generate()}
-                    label={diasLetivos.dias.toString()}
-                    color={
-                      diasLetivos.estaAbaixoPermitido
-                        ? Colors.Vermelho
-                        : Colors.Verde
-                    }
-                    className="float-left"
-                  />
-                  <Div className="float-left w-50 ml-2 mt-1">
-                    Nº de dias letivos no calendário
-                  </Div>
-                </Div>
-              )}
-              {diasLetivos && diasLetivos.estaAbaixoPermitido && (
-                <Div
-                  className="clearfix font-weight-bold pt-2"
-                  style={{ clear: 'both', color: Base.Vermelho, fontSize: 12 }}
-                >
-                  <Icone className="fa fa-exclamation-triangle mr-2" />
-                  Abaixo do mínimo estabelecido pela legislação
-                </Div>
-              )}
-            </Grid>
-            <Grid cols={4} className="d-flex justify-content-end">
-              <Div className="p-0 mr-4">
-                <Loader loading={imprimindo} ignorarTip>
-                  <Button
-                    className="btn-imprimir"
-                    icon="print"
-                    color={Colors.Azul}
-                    border
-                    onClick={() => gerarRelatorio()}
-                    disabled={!podeImprimir}
-                    id="btn-imprimir-relatorio-calendario"
-                  />
-                </Loader>
-              </Div>
-              <Div>
+            <Grid
+              cols={12}
+              className="mb-2 d-flex justify-content-start"
+              style={{ marginTop: '40px' }}
+            >
+              <Loader loading={imprimindo} ignorarTip>
                 <Button
-                  id={shortid.generate()}
-                  label="Voltar"
-                  icon="arrow-left"
+                  className="btn-imprimir"
+                  icon="print"
                   color={Colors.Azul}
-                  onClick={aoClicarBotaoVoltar}
                   border
-                />
-              </Div>
-            </Grid>
-          </Div>
-        </Grid>
-        <Grid cols={12} className="mb-4">
-          <Div className="row">
-            <Grid cols={1} className="d-flex align-items-center pr-0">
-              <Div className="w-100">
-                <Tooltip
-                  placement="top"
-                  title={`${
-                    eventoSme
-                      ? 'Exibindo eventos da SME'
-                      : 'Não exibindo eventos da SME'
-                  }`}
-                >
-                  <Switch
-                    onChange={aoTrocarEventoSme}
-                    checked={eventoSme}
-                    size="small"
-                    className="mr-2"
-                    disabled={!tipoCalendarioSelecionado}
-                  />
-                  <Label className="my-auto">SME</Label>
-                </Tooltip>
-              </Div>
-            </Grid>
-            <Grid cols={6}>
-              <Loader loading={carregandoDres} tip="">
-                <SelectComponent
-                  className="fonte-14"
-                  onChange={aoSelecionarDre}
-                  lista={dres}
-                  valueOption="valor"
-                  valueText="desc"
-                  valueSelect={dreSelecionada}
-                  placeholder="Diretoria Regional de Educação (DRE)"
-                  disabled={!tipoCalendarioSelecionado || dres.length < 2}
-                  showSearch
+                  onClick={() => gerarRelatorio()}
+                  disabled={!podeImprimir}
+                  id="btn-imprimir-relatorio-calendario"
                 />
               </Loader>
             </Grid>
-            <Grid cols={5}>
-              <Loader loading={carregandoUes} tip="">
-                <SelectComponent
-                  className="fonte-14"
-                  onChange={aoSelecionarUnidadeEscolar}
-                  lista={unidadesEscolares}
-                  valueOption="valor"
-                  valueText="desc"
-                  valueSelect={unidadeEscolarSelecionada}
-                  placeholder="Unidade Escolar (UE)"
-                  disabled={!dreSelecionada || unidadesEscolares?.length === 1}
-                  showSearch
-                />
+
+            <Div className="row">
+              <Grid cols={4}>
+                {diasLetivos && diasLetivos.dias && (
+                  <Div>
+                    <Button
+                      id={shortid.generate()}
+                      label={diasLetivos.dias.toString()}
+                      color={
+                        diasLetivos.estaAbaixoPermitido
+                          ? Colors.Vermelho
+                          : Colors.Verde
+                      }
+                      className="float-left"
+                    />
+                    <Div className="float-left w-50 ml-2 mt-1">
+                      Nº de dias letivos no calendário
+                    </Div>
+                  </Div>
+                )}
+                {diasLetivos && diasLetivos.estaAbaixoPermitido && (
+                  <Div
+                    className="clearfix font-weight-bold pt-2"
+                    style={{
+                      clear: 'both',
+                      color: Base.Vermelho,
+                      fontSize: 12,
+                    }}
+                  >
+                    <Icone className="fa fa-exclamation-triangle mr-2" />
+                    Abaixo do mínimo estabelecido pela legislação
+                  </Div>
+                )}
+              </Grid>
+            </Div>
+
+            {/* <Grid cols={12} className="mb-4">
+              <Div className="row">
+                <Grid cols={1} className="d-flex align-items-center pr-0">
+                  <Div className="w-100">
+                    <Tooltip
+                      placement="top"
+                      title={`${
+                        eventoSme
+                          ? 'Exibindo eventos da SME'
+                          : 'Não exibindo eventos da SME'
+                      }`}
+                    >
+                      <Switch
+                        onChange={aoTrocarEventoSme}
+                        checked={eventoSme}
+                        size="small"
+                        className="mr-2"
+                        disabled={!tipoCalendarioSelecionado}
+                      />
+                      <Label className="my-auto">SME</Label>
+                    </Tooltip>
+                  </Div>
+                </Grid>
+              </Div>
+            </Grid> */}
+            <Grid cols={12}>
+              <Loader loading={carregandoMeses}>
+                <Calendario filtros={filtros} />
               </Loader>
             </Grid>
           </Div>
-        </Grid>
-        <Grid cols={12}>
-          <Loader loading={carregandoMeses}>
-            <Calendario filtros={filtros} />
-          </Loader>
         </Grid>
       </Card>
-    </Corpo>
+    </>
   );
 };
 
