@@ -17,6 +17,7 @@ import BotaoVerSituacaoEncaminhamentoAEE from './Componentes/BotaoVerSituacaoEnc
 import BotoesAcoesPlanoAEE from './Componentes/botoesAcoesPlanoAEE';
 import LoaderPlano from './Componentes/LoaderPlano/loaderPlano';
 import MarcadorSituacaoPlanoAEE from './Componentes/MarcadorSituacaoPlanoAEE/marcadorSituacaoPlanoAEE';
+import ModalDevolverPlanoAEE from './Componentes/ModalDevolverPlanoAEE/modalDevolverPlanoAEE';
 import ObjectCardEstudantePlanoAEE from './Componentes/ObjectCardEstudantePlanoAEE/objectCardEstudantePlanoAEE';
 import ObservacoesPlanoAEE from './Componentes/ObservacoesPlanoAEE/observacoesPlanoAEE';
 import SituacaoEncaminhamentoAEE from './Componentes/SituacaoEncaminhamentoAEE/situacaoEncaminhamentoAEE';
@@ -109,6 +110,7 @@ const PlanoAEECadastro = ({ match }) => {
             </div>
           </div>
         </div>
+        <ModalDevolverPlanoAEE match={match} />
       </Card>
     </LoaderPlano>
   );

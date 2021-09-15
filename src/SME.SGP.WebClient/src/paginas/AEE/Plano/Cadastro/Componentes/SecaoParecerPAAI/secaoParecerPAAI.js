@@ -2,13 +2,13 @@ import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Editor } from '~/componentes';
 import {
-  setDevolutivaEmEdicao,
+  setParecerEmEdicao,
   setParecerPAAI,
 } from '~/redux/modulos/planoAEE/actions';
 
-const SecaoDevolutivaPaai = () => {
+const SecaoParecerPAAI = () => {
   const parecerPAAI = useSelector(store => store.planoAEE.parecerPAAI);
-  const dadosDevolutiva = useSelector(store => store.planoAEE.dadosDevolutiva);
+  const dadosParecer = useSelector(store => store.planoAEE.dadosParecer);
 
   const dispatch = useDispatch();
 
@@ -17,21 +17,21 @@ const SecaoDevolutivaPaai = () => {
     if (texto) {
       edicao = true;
     }
-    dispatch(setDevolutivaEmEdicao(edicao));
+    dispatch(setParecerEmEdicao(edicao));
     dispatch(setParecerPAAI(texto));
   };
 
   return (
     <div className="mb-3">
       <Editor
-        label="Devolutiva do PAAI"
+        label="Parecer do CEFAI"
         onChange={mudarDescricaoPAAI}
-        inicial={dadosDevolutiva?.parecerPAAI || parecerPAAI || ''}
-        desabilitar={!dadosDevolutiva?.podeEditarParecerPAAI}
-        removerToolbar={!dadosDevolutiva?.podeEditarParecerPAAI}
+        inicial={dadosParecer?.parecerPAAI || parecerPAAI || ''}
+        desabilitar={!dadosParecer?.podeEditarParecerPAAI}
+        removerToolbar={!dadosParecer?.podeEditarParecerPAAI}
       />
     </div>
   );
 };
 
-export default SecaoDevolutivaPaai;
+export default SecaoParecerPAAI;

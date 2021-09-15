@@ -1,20 +1,21 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import Button from '~/componentes/button';
 import { Colors } from '~/componentes';
-import { confirmar, erros, history, sucesso } from '~/servicos';
-import { RotasDto, situacaoPlanoAEE } from '~/dtos';
-import ServicoPlanoAEE from '~/servicos/Paginas/Relatorios/AEE/ServicoPlanoAEE';
 import QuestionarioDinamicoFuncoes from '~/componentes-sgp/QuestionarioDinamico/Funcoes/QuestionarioDinamicoFuncoes';
+import Button from '~/componentes/button';
+import { RotasDto, situacaoPlanoAEE } from '~/dtos';
 import {
-  limparDadosDevolutiva,
+  limparDadosParecer,
+  setAtualizarDados,
   setAtualizarPlanoAEEDados,
   setExibirLoaderPlanoAEE,
-  setDevolutivaEmEdicao,
-  setAtualizarDados,
+  setExibirModalDevolverPlanoAEE,
+  setParecerEmEdicao,
 } from '~/redux/modulos/planoAEE/actions';
 import { setQuestionarioDinamicoEmEdicao } from '~/redux/modulos/questionarioDinamico/actions';
+import { confirmar, erros, history, sucesso } from '~/servicos';
+import ServicoPlanoAEE from '~/servicos/Paginas/Relatorios/AEE/ServicoPlanoAEE';
 
 const BotoesAcoesPlanoAEE = props => {
   const { match } = props;
@@ -27,11 +28,9 @@ const BotoesAcoesPlanoAEE = props => {
     store => store.planoAEE.desabilitarCamposPlanoAEE
   );
 
-  const dadosDevolutiva = useSelector(store => store.planoAEE.dadosDevolutiva);
+  const dadosParecer = useSelector(store => store.planoAEE.dadosParecer);
 
-  const devolutivaEmEdicao = useSelector(
-    store => store.planoAEE.devolutivaEmEdicao
-  );
+  const parecerEmEdicao = useSelector(store => store.planoAEE.parecerEmEdicao);
 
   const planoAEEDados = useSelector(store => store.planoAEE.planoAEEDados);
 
@@ -42,68 +41,68 @@ const BotoesAcoesPlanoAEE = props => {
   const usuario = useSelector(store => store.usuario);
   const permissoesTela = usuario.permissoes[RotasDto.RELATORIO_AEE_PLANO];
 
-  const situacaoDevolutivaCP =
-    planoAEEDados?.situacao === situacaoPlanoAEE.DevolutivaCP;
-  const situacaoDevolutivaPAAI =
-    planoAEEDados?.situacao === situacaoPlanoAEE.DevolutivaPAAI &&
-    dadosDevolutiva?.podeEditarParecerPAAI;
+  const parecerCP = planoAEEDados?.situacao === situacaoPlanoAEE.ParecerCP;
+  const parecerPAAI =
+    planoAEEDados?.situacao === situacaoPlanoAEE.ParecerPAAI &&
+    dadosParecer?.podeEditarParecerPAAI;
   const situacaoAtribuicaoPAAI =
     planoAEEDados?.situacao === situacaoPlanoAEE.AtribuicaoPAAI;
 
-  const situacaoDevolutiva =
-    situacaoDevolutivaCP ||
+  const situacaoParecer =
+    parecerCP ||
     (situacaoAtribuicaoPAAI && !dadosAtribuicaoResponsavel?.codigoRF);
 
   const planoAeeId = match?.params?.id;
-  const labelBotaoSalvar =
-    situacaoDevolutiva || !planoAeeId ? 'Salvar' : 'Alterar';
+  const labelBotaoSalvar = !planoAeeId ? 'Salvar plano' : 'Alterar plano';
 
-  const desabilitarBotaoSalvar = situacaoDevolutiva
-    ? !devolutivaEmEdicao
-    : desabilitarCamposPlanoAEE || !questionarioDinamicoEmEdicao;
+  const desabilitarBotaoSalvar =
+    desabilitarCamposPlanoAEE || !questionarioDinamicoEmEdicao;
 
   const desabilitarBotaoCancelar =
-    situacaoDevolutiva || situacaoDevolutivaPAAI
-      ? !devolutivaEmEdicao
+    situacaoParecer || parecerPAAI
+      ? !parecerEmEdicao
       : desabilitarCamposPlanoAEE || !questionarioDinamicoEmEdicao;
 
   const dispatch = useDispatch();
 
-  const limparDevolutiva = () => {
-    dispatch(limparDadosDevolutiva());
-    dispatch(setDevolutivaEmEdicao(false));
+  const limparParecer = () => {
+    dispatch(limparDadosParecer());
+    dispatch(setParecerEmEdicao(false));
   };
 
-  const escolherAcaoDevolutivas = async () => {
+  const escolherAcaoAbaParecer = async () => {
     let msg = '';
     let resposta = [];
-    if (situacaoDevolutiva) {
-      resposta = await ServicoPlanoAEE.salvarDevolutivaCP().catch(e =>
-        erros(e)
-      );
-      msg = 'Devolutiva realizada com sucesso';
+    if (situacaoParecer) {
+      dispatch(setExibirLoaderPlanoAEE(true));
+      resposta = await ServicoPlanoAEE.salvarParecerCP()
+        .catch(e => erros(e))
+        .catch(() => dispatch(setExibirLoaderPlanoAEE(false)));
+      msg = 'Parecer realizado com sucesso';
     }
     if (situacaoAtribuicaoPAAI) {
-      resposta = await ServicoPlanoAEE.atribuirResponsavel().catch(e =>
-        erros(e)
-      );
+      dispatch(setExibirLoaderPlanoAEE(true));
+      resposta = await ServicoPlanoAEE.atribuirResponsavel()
+        .catch(e => erros(e))
+        .catch(() => dispatch(setExibirLoaderPlanoAEE(false)));
       msg = 'Atribuição do responsável realizada com sucesso';
     }
-    if (situacaoDevolutivaPAAI) {
-      resposta = await ServicoPlanoAEE.salvarDevolutivaPAAI().catch(e =>
-        erros(e)
-      );
-      msg = 'Encerramento do plano realizado com sucesso';
+    if (parecerPAAI) {
+      dispatch(setExibirLoaderPlanoAEE(true));
+      resposta = await ServicoPlanoAEE.salvarParecerPAAI()
+        .catch(e => erros(e))
+        .catch(() => dispatch(setExibirLoaderPlanoAEE(false)));
+      msg = 'Parecer realizado com sucesso';
     }
     if (resposta?.data) {
       sucesso(msg);
-      limparDevolutiva();
+      limparParecer();
       history.push(RotasDto.RELATORIO_AEE_PLANO);
     }
   };
 
   const onClickVoltar = async () => {
-    if (questionarioDinamicoEmEdicao || devolutivaEmEdicao) {
+    if (questionarioDinamicoEmEdicao || parecerEmEdicao) {
       const confirmou = await confirmar(
         'Atenção',
         '',
@@ -111,8 +110,8 @@ const BotoesAcoesPlanoAEE = props => {
       );
 
       if (confirmou) {
-        if (devolutivaEmEdicao) {
-          escolherAcaoDevolutivas();
+        if (parecerEmEdicao) {
+          escolherAcaoAbaParecer();
           return;
         }
         const salvou = await ServicoPlanoAEE.salvarPlano();
@@ -127,7 +126,7 @@ const BotoesAcoesPlanoAEE = props => {
           history.push(RotasDto.RELATORIO_AEE_PLANO);
         }
       } else {
-        limparDevolutiva();
+        limparParecer();
         history.push(RotasDto.RELATORIO_AEE_PLANO);
       }
     } else {
@@ -138,7 +137,7 @@ const BotoesAcoesPlanoAEE = props => {
   const onClickCancelar = async () => {
     if (
       !desabilitarCamposPlanoAEE &&
-      (questionarioDinamicoEmEdicao || devolutivaEmEdicao)
+      (questionarioDinamicoEmEdicao || parecerEmEdicao)
     ) {
       const confirmou = await confirmar(
         'Atenção',
@@ -146,8 +145,8 @@ const BotoesAcoesPlanoAEE = props => {
         'Deseja realmente cancelar as alterações?'
       );
       if (confirmou) {
-        if (devolutivaEmEdicao) {
-          limparDevolutiva();
+        if (parecerEmEdicao) {
+          limparParecer();
           dispatch(setAtualizarPlanoAEEDados(true));
           return;
         }
@@ -157,10 +156,6 @@ const BotoesAcoesPlanoAEE = props => {
   };
 
   const onClickSalvar = async () => {
-    if (situacaoDevolutiva) {
-      escolherAcaoDevolutivas();
-      return;
-    }
     const planoId = await ServicoPlanoAEE.salvarPlano(true);
     const registroNovo = !match?.params?.id;
 
@@ -181,32 +176,7 @@ const BotoesAcoesPlanoAEE = props => {
     }
   };
 
-  const onClickSolicitarEncerramento = async () => {
-    if (!desabilitarCamposPlanoAEE && !questionarioDinamicoEmEdicao) {
-      dispatch(setExibirLoaderPlanoAEE(true));
-
-      const resposta = await ServicoPlanoAEE.encerrarPlano(planoAeeId)
-        .catch(e => erros(e))
-        .finally(() => dispatch(setExibirLoaderPlanoAEE(false)));
-      if (resposta?.data) {
-        sucesso('Solicitação de encerramento realizada com sucesso');
-        dispatch(setAtualizarPlanoAEEDados(resposta?.data));
-      }
-    }
-  };
-
-  const onClickEncerrarPlano = async () => {
-    dispatch(setExibirLoaderPlanoAEE(true));
-    const resposta = await ServicoPlanoAEE.salvarDevolutivaPAAI()
-      .catch(e => erros(e))
-      .finally(() => dispatch(setExibirLoaderPlanoAEE(false)));
-
-    if (resposta?.data) {
-      sucesso('Encerramento do plano realizado com sucesso');
-      limparDevolutiva();
-      history.push(RotasDto.RELATORIO_AEE_PLANO);
-    }
-  };
+  const onClickDevolver = () => dispatch(setExibirModalDevolverPlanoAEE(true));
 
   return (
     <>
@@ -237,14 +207,15 @@ const BotoesAcoesPlanoAEE = props => {
         onClick={onClickSalvar}
         disabled={desabilitarBotaoSalvar}
       />
-
       <Button
-        id="btn-solicitar-encerramento"
-        label="Solicitar encerramento"
+        id="btn-acao-aba-parecer"
+        label={
+          situacaoAtribuicaoPAAI ? 'Atribuir responsável' : 'Salvar parecer'
+        }
         color={Colors.Roxo}
         bold
         className="ml-3"
-        onClick={onClickSolicitarEncerramento}
+        //onClick={onClickSolicitarEncerramento}
         // Ocultando de acordo com o BUG 48173
         hidden={true}
         /*hidden={
@@ -254,28 +225,25 @@ const BotoesAcoesPlanoAEE = props => {
             planoAEEDados?.situacao !== situacaoPlanoAEE.Reestruturado)
         }
         disabled={
+          (planoAEEDados?.situacao === situacaoPlanoAEE.ParecerPAAI &&
+            !dadosParecer?.podeEditarParecerPAAI) ||
           desabilitarCamposPlanoAEE ||
           questionarioDinamicoEmEdicao ||
+          !parecerEmEdicao ||
           !permissoesTela?.podeAlterar
         }*/
       />
-
       <Button
-        id="btn-encerrar-plano"
-        label="Encerrar plano"
+        id="btn-devolver-plano"
+        label="Devolver"
         color={Colors.Roxo}
         bold
         className="ml-3"
-        onClick={onClickEncerrarPlano}
-        hidden={
-          !planoAEEDados?.situacao ||
-          planoAEEDados?.situacao !== situacaoPlanoAEE.DevolutivaPAAI
-        }
+        onClick={onClickDevolver}
+        hidden={!planoAEEDados?.podeDevolverPlanoAEE}
         disabled={
-          !dadosDevolutiva?.podeEditarParecerPAAI ||
           desabilitarCamposPlanoAEE ||
           questionarioDinamicoEmEdicao ||
-          !devolutivaEmEdicao ||
           !permissoesTela?.podeAlterar
         }
       />

@@ -1,23 +1,20 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-
 import { Button, Colors, Label } from '~/componentes';
 import LocalizadorFuncionario from '~/componentes-sgp/LocalizadorFuncionario';
-
+import { RotasDto } from '~/dtos';
+import {
+  setDadosAtribuicaoResponsavel,
+  setParecerEmEdicao,
+} from '~/redux/modulos/planoAEE/actions';
 import { erros, history, sucesso } from '~/servicos';
 import ServicoPlanoAEE from '~/servicos/Paginas/Relatorios/AEE/ServicoPlanoAEE';
-import { RotasDto } from '~/dtos';
 
-import {
-  setDevolutivaEmEdicao,
-  setDadosAtribuicaoResponsavel,
-} from '~/redux/modulos/planoAEE/actions';
-
-const SecaoDevolutivaResponsavel = () => {
+const SecaoParecerResponsavel = () => {
   const [limparCampos, setLimparCampos] = useState(false);
   const [responsavelSelecionado, setResponsavelSelecionado] = useState();
 
-  const dadosDevolutiva = useSelector(store => store.planoAEE.dadosDevolutiva);
+  const dadosParecer = useSelector(store => store.planoAEE.dadosParecer);
   const planoAEEDados = useSelector(store => store.planoAEE.planoAEEDados);
   const dadosAtribuicaoResponsavel = useSelector(
     store => store.planoAEE.dadosAtribuicaoResponsavel
@@ -36,9 +33,9 @@ const SecaoDevolutivaResponsavel = () => {
       setResponsavelSelecionado(params);
       if (
         !dadosAtribuicaoResponsavel?.codigoRF &&
-        !dadosDevolutiva?.responsavelRF
+        !dadosParecer?.responsavelRF
       ) {
-        dispatch(setDevolutivaEmEdicao(true));
+        dispatch(setParecerEmEdicao(true));
       }
     }
   };
@@ -56,7 +53,7 @@ const SecaoDevolutivaResponsavel = () => {
 
   const onClickCancelar = () => {
     dispatch(setDadosAtribuicaoResponsavel({}));
-    dispatch(setDevolutivaEmEdicao(false));
+    dispatch(setParecerEmEdicao(false));
     setLimparCampos(true);
   };
 
@@ -67,13 +64,13 @@ const SecaoDevolutivaResponsavel = () => {
   }, [dadosAtribuicaoResponsavel]);
 
   useEffect(() => {
-    if (!dadosDevolutiva?.codigoRF) {
+    if (!dadosParecer?.codigoRF) {
       setResponsavelSelecionado({
-        codigoRF: dadosDevolutiva?.responsavelRF,
-        nomeServidor: dadosDevolutiva?.responsavelNome,
+        codigoRF: dadosParecer?.responsavelRF,
+        nomeServidor: dadosParecer?.responsavelNome,
       });
     }
-  }, [dadosDevolutiva]);
+  }, [dadosParecer]);
 
   return (
     <>
@@ -91,7 +88,7 @@ const SecaoDevolutivaResponsavel = () => {
           }}
           desabilitado={
             responsavelSelecionado?.codigoRF ||
-            !dadosDevolutiva?.podeAtribuirResponsavel
+            !dadosParecer?.podeAtribuirResponsavel
           }
         />
       </div>
@@ -105,7 +102,7 @@ const SecaoDevolutivaResponsavel = () => {
           onClick={onClickCancelar}
           disabled={
             !responsavelSelecionado?.codigoRF ||
-            !dadosDevolutiva?.podeAtribuirResponsavel
+            !dadosParecer?.podeAtribuirResponsavel
           }
         />
         <Button
@@ -117,7 +114,7 @@ const SecaoDevolutivaResponsavel = () => {
           onClick={onClickAtribuirResponsavel}
           disabled={
             !responsavelSelecionado?.codigoRF ||
-            !dadosDevolutiva?.podeAtribuirResponsavel
+            !dadosParecer?.podeAtribuirResponsavel
           }
         />
       </div>
@@ -125,4 +122,4 @@ const SecaoDevolutivaResponsavel = () => {
   );
 };
 
-export default SecaoDevolutivaResponsavel;
+export default SecaoParecerResponsavel;
