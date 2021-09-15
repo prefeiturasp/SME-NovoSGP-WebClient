@@ -26,6 +26,7 @@ import ListasNotasConceitos from './ListasNotasConceito/listasNotasConceitos';
 import MarcadorParecerConclusivo from './MarcadorParecerConclusivo/marcadorParecerConclusivo';
 import MarcadorPeriodoInicioFim from './MarcadorPeriodoInicioFim/marcadorPeriodoInicioFim';
 import Sintese from './Sintese/Sintese';
+import MarcadorSituacaoConselho from './MarcadorSituacaoConselho/marcadorSituacaoConselho';
 
 const { TabPane } = Tabs;
 
@@ -275,6 +276,7 @@ const DadosConselhoClasse = props => {
         {!semDados && turmaSelecionada.turma == turmaAtual ? (
           <>
             <AlertaDentroPeriodo />
+            <MarcadorSituacaoConselho />
             {bimestreAtual.valor === 'final' ? (
               <MarcadorParecerConclusivo />
             ) : null}
