@@ -34,7 +34,7 @@ export const LinhaTabela = styled.div`
     th,
     td {
       border: 1px solid #bfbfbf !important;
-    }
+  }
 
     & > td {
       padding: 8px 12px !important;
@@ -100,10 +100,10 @@ export const LinhaTabela = styled.div`
             &:last-child {
               width: 329px;
             }
+            }
           }
         }
       }
-    }
 
     div {
       width: 100%;
@@ -145,9 +145,11 @@ export const LinhaTabela = styled.div`
 `;
 
 export const IconeSeta = styled(FontAwesomeIcon)`
+  color: ${({ cor }) => cor} !important;
   font-size: 16px;
   color: ${Base.Roxo};
   font-weight: 900;
+  transform: rotate(90deg);
   margin-left: 8px;
   margin-right: 16px;
 

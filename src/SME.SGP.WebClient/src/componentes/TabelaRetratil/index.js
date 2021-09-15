@@ -1,16 +1,10 @@
-import React, { useState, useCallback, useEffect } from 'react';
-import t from 'prop-types';
-import shortid from 'shortid';
-
-// Ant
 import { Tooltip } from 'antd';
-
-// Componentes
-import Cabecalho from './componentes/Cabecalho';
-
-// Estilos
-import { TabelaEstilo, Tabela, DetalhesAluno, LinhaTabela } from './style';
+import t from 'prop-types';
+import React, { useCallback, useEffect, useState } from 'react';
+import shortid from 'shortid';
 import SinalizacaoAEE from '~/componentes-sgp/SinalizacaoAEE/sinalizacaoAEE';
+import Cabecalho from './componentes/Cabecalho';
+import { DetalhesAluno, LinhaTabela, Tabela, TabelaEstilo } from './style';
 
 function TabelaRetratil({
   alunos,
@@ -155,7 +149,7 @@ function TabelaRetratil({
               <LinhaTabela
                 className={isAlunoSelecionado(item) && `selecionado`}
                 key={shortid.generate()}
-                ativo={true}
+                ativo={!item.desabilitado}
                 onClick={() => onClickLinhaAluno(item)}
                 processoConcluido={item.processoConcluido}
               >
