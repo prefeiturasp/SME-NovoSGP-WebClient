@@ -497,10 +497,18 @@ const RelatorioAtaBimestral = () => {
       ueCodigo,
       modalidadeId,
       semestre,
-      turmasCodigo: turmaCodigo,
+      turmasCodigo: [],
       bimestre,
       exibirHistorico: consideraHistorico,
     };
+    if (turmaCodigo.find(item => item === OPCAO_TODOS)) {
+      params.turmasCodigo = listaTurmas.filter(
+        item => String(item.valor) !== OPCAO_TODOS
+      );
+    } else {
+      params.turmasCodigo = turmaCodigo;
+    }
+
     const retorno = await ServicoRelatorioAtaBimestral.gerar(params).catch(e =>
       erros(e)
     );
