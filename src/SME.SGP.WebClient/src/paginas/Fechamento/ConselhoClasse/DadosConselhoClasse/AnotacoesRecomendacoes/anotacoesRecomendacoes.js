@@ -1,7 +1,6 @@
-import moment from 'moment';
-import PropTypes from 'prop-types';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import PropTypes from 'prop-types';
 import { Loader } from '~/componentes';
 import {
   setAnotacoesAluno,
@@ -11,6 +10,7 @@ import {
   setDentroPeriodo,
   setRecomendacaoAluno,
   setRecomendacaoFamilia,
+  setSituacaoConselhoAluno,
 } from '~/redux/modulos/conselhoClasse/actions';
 import { erros } from '~/servicos/alertas';
 import ServicoConselhoClasse from '~/servicos/Paginas/ConselhoClasse/ServicoConselhoClasse';
@@ -18,6 +18,7 @@ import AnotacoesAluno from './AnotacoesAluno/anotacoesAluno';
 import AnotacoesPedagogicas from './AnotacoesPedagogicas/anotacoesPedagogicas';
 import AuditoriaAnotacaoRecomendacao from './AuditoriaAnotacaoRecomendacao/auditoriaAnotacaoRecomendacao';
 import RecomendacaoAlunoFamilia from './RecomendacaoAlunoFamilia/recomendacaoAlunoFamilia';
+import moment from 'moment';
 
 const AnotacoesRecomendacoes = props => {
   const { codigoTurma, bimestre } = props;
@@ -43,8 +44,8 @@ const AnotacoesRecomendacoes = props => {
 
   const turmaStore = useSelector(state => state.usuario.turmaSelecionada);
 
-  const fechamentoPeriodoInicioFim = useSelector(
-    store => store.conselhoClasse.fechamentoPeriodoInicioFim
+  const bimestreAtual = useSelector(
+    store => store.conselhoClasse.bimestreAtual
   );
 
   const dadosAlunoObjectCard = useSelector(
@@ -95,6 +96,13 @@ const AnotacoesRecomendacoes = props => {
     [dispatch]
   );
 
+  const setarSituacaoConselho = useCallback(
+    valor => {
+      dispatch(setSituacaoConselhoAluno(valor));
+    },
+    [dispatch]
+  );
+
   const setarDentroDoPeriodo = useCallback(
     valor => {
       dispatch(setDentroPeriodo(valor));
@@ -133,11 +141,15 @@ const AnotacoesRecomendacoes = props => {
     ).catch(e => erros(e));
 
     if (resposta && resposta.data) {
-      setarDentroDoPeriodo(!resposta.data.somenteLeitura);
+      if (!desabilitarEdicaoAluno()) {
+        setarDentroDoPeriodo(!resposta.data.somenteLeitura);
+      }
+
       onChangeAnotacoesPedagogicas(resposta.data.anotacoesPedagogicas);
       onChangeRecomendacaoAluno(resposta.data.recomendacaoAluno);
       onChangeRecomendacaoFamilia(resposta.data.recomendacaoFamilia);
       setarAnotacaoAluno(resposta.data.anotacoesAluno);
+      setarSituacaoConselho(resposta.data.situacaoConselho);
       setarAuditoria(resposta.data);
       setExibir(true);
     } else {
@@ -154,6 +166,7 @@ const AnotacoesRecomendacoes = props => {
     setarAnotacaoAluno,
     setarAuditoria,
     setarDentroDoPeriodo,
+    setarSituacaoConselho,
     alunoDesabilitado,
     bimestre,
   ]);
@@ -172,11 +185,9 @@ const AnotacoesRecomendacoes = props => {
     const dataSituacao = moment(dadosAlunoObjectCard.dataSituacao).format(
       'MM-DD-YYYY'
     );
-    const dataFimFechamento = moment(
-      fechamentoPeriodoInicioFim.periodoFechamentoFim
-    ).format('MM-DD-YYYY');
+    const dataFimBimestre = moment(bimestreAtual.dataFim).format('MM-DD-YYYY');
 
-    if (!alunoDesabilitado || dataSituacao >= dataFimFechamento) return false;
+    if (!alunoDesabilitado || dataSituacao >= dataFimBimestre) return false;
 
     return true;
   };
