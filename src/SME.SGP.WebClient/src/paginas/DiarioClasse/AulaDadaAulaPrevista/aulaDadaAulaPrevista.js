@@ -249,7 +249,7 @@ const AulaDadaAulaPrevista = () => {
   };
 
   return (
-    <Loader loading={carregamento}>
+    <Loader loading={carregamento} tip="Carregando...">
       {!turmaSelecionada.turma &&
       !ehTurmaInfantil(modalidadesFiltroPrincipal, turmaSelecionada) ? (
         <Grid cols={12} className="p-0">
