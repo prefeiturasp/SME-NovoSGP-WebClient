@@ -11,7 +11,11 @@ import {
 
 import { ModalidadeDTO } from '~/dtos';
 import { AbrangenciaServico, erros, ServicoFiltroRelatorio } from '~/servicos';
-import { OPCAO_TODOS } from '~/constantes/constantes';
+import {
+  OPCAO_TODOS,
+  BIMESTRE_FINAL,
+  ANO_INICIO_INFANTIL,
+} from '~/constantes/constantes';
 
 const Filtros = ({ onChangeFiltros, ehInfantil }) => {
   const dispatch = useDispatch();
@@ -57,7 +61,6 @@ const Filtros = ({ onChangeFiltros, ehInfantil }) => {
   const [ueId, setUeId] = useState('');
   const [ueCodigo, setUeCodigo] = useState();
 
-  const ANO_LETIVO_MINIMO = 2021;
   const OPCAO_PADRAO = '-99';
 
   const carregandoAcompanhamentoFechamento = useSelector(
@@ -131,11 +134,11 @@ const Filtros = ({ onChangeFiltros, ehInfantil }) => {
 
     const anosLetivoComHistorico = await FiltroHelper.obterAnosLetivos({
       consideraHistorico: true,
-      anoMinimo: ANO_LETIVO_MINIMO,
+      anoMinimo: ANO_INICIO_INFANTIL,
     });
     const anosLetivoSemHistorico = await FiltroHelper.obterAnosLetivos({
       consideraHistorico: false,
-      anoMinimo: ANO_LETIVO_MINIMO,
+      anoMinimo: ANO_INICIO_INFANTIL,
     });
 
     anosLetivos = anosLetivos.concat(anosLetivoComHistorico);
@@ -387,14 +390,15 @@ const Filtros = ({ onChangeFiltros, ehInfantil }) => {
       if (retorno?.data?.length) {
         const lista = [];
         if (retorno.data.length > 1) {
-          lista.push({ valor: OPCAO_TODOS, desc: 'Todas' });
+          lista.push({ valor: OPCAO_TODOS, nomeFiltro: 'Todas' });
         }
         retorno.data.map(item =>
           lista.push({
             desc: item.nome,
-            valor: item.id,
+            valor: item.codigo,
             id: item.id,
             ano: item.ano,
+            nomeFiltro: item.nomeFiltro,
           })
         );
         setListaTurmas(lista);
@@ -509,8 +513,9 @@ const Filtros = ({ onChangeFiltros, ehInfantil }) => {
             onChangeCheckbox={onChangeConsideraHistorico}
             checked={consideraHistorico}
             disabled={
-              listaAnosLetivo.length === 1 &&
-              listaAnosLetivo[0].valor === ANO_LETIVO_MINIMO
+              desabilitarCampos ||
+              (listaAnosLetivo.length === 1 &&
+                listaAnosLetivo[0].valor === ANO_INICIO_INFANTIL)
             }
           />
         </div>
@@ -541,6 +546,7 @@ const Filtros = ({ onChangeFiltros, ehInfantil }) => {
               onChange={onChangeDre}
               valueSelect={dreCodigo}
               placeholder="Diretoria Regional De Educação (DRE)"
+              showSearch
             />
           </Loader>
         </div>
@@ -606,7 +612,7 @@ const Filtros = ({ onChangeFiltros, ehInfantil }) => {
               id="turma"
               lista={listaTurmas}
               valueOption="valor"
-              valueText="desc"
+              valueText="nomeFiltro"
               label="Turmas"
               disabled={
                 !modalidadeId || listaTurmas?.length === 1 || desabilitarCampos
@@ -617,6 +623,7 @@ const Filtros = ({ onChangeFiltros, ehInfantil }) => {
                 dispatch(setTurmasAcompanhamentoFechamento());
               }}
               placeholder="Turma"
+              showSearch
             />
           </Loader>
         </div>

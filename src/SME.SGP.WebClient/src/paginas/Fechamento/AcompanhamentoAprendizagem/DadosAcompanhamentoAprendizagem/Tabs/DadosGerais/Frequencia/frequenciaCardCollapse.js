@@ -20,11 +20,16 @@ const FrequenciaCardCollapse = props => {
 
   const [dados, setDados] = useState([]);
 
+  const componenteCurricularSelecionado = useSelector(
+    state => state.registroIndividual.componenteCurricularSelecionado
+  );
+
   const obterInformacoesEscolaresDoAluno = useCallback(async () => {
     const resposta = await ServicoAcompanhamentoFrequencia.obterInformacoesDeFrequenciaAlunoPorSemestre(
       turmaSelecionada?.id,
       semestreSelecionado,
-      codigoEOL
+      codigoEOL,
+      componenteCurricularSelecionado
     ).catch(e => erros(e));
 
     if (resposta?.data) {
@@ -32,7 +37,12 @@ const FrequenciaCardCollapse = props => {
     } else {
       setDados([]);
     }
-  }, [turmaSelecionada, codigoEOL, semestreSelecionado]);
+  }, [
+    turmaSelecionada,
+    codigoEOL,
+    semestreSelecionado,
+    componenteCurricularSelecionado,
+  ]);
 
   useEffect(() => {
     obterInformacoesEscolaresDoAluno();

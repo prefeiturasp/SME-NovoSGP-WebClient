@@ -11,6 +11,7 @@ import {
 import DataUltimaAtualizacaoDashboardEscolaAqui from '../ComponentesDashboardEscolaAqui/dataUltimaAtualizacaoDashboardEscolaAqui';
 import GraficoBarraDashboard from '~/paginas/Dashboard/ComponentesDashboard/graficoBarraDashboard';
 import GraficoPizzaDashboard from '~/paginas/Dashboard/ComponentesDashboard/graficoPizzaDashboard';
+import { OPCAO_TODOS } from '~/constantes/constantes';
 
 const DadosAdesao = props => {
   const { codigoDre, codigoUe } = props;
@@ -39,8 +40,6 @@ const DadosAdesao = props => {
   ] = useState([]);
 
   const [exibirLoader, setExibirLoader] = useState(false);
-
-  const OPCAO_TODOS = '-99';
 
   const mapearParaDtoGraficoPizza = dados => {
     const dadosParaMapear = [];
@@ -204,7 +203,7 @@ const DadosAdesao = props => {
   };
 
   return (
-    <Loader loading={exibirLoader} className="text-center">
+    <Loader loading={exibirLoader} className="text-center mb-3">
       <div className="col-md-12 mt-2">
         <DataUltimaAtualizacaoDashboardEscolaAqui nomeConsulta="ConsolidarAdesaoEOL" />
       </div>

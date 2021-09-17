@@ -46,8 +46,8 @@ import PeriodoFechamentoReaberturaForm from '~/paginas/CalendarioEscolar/Periodo
 import RelatorioPAPAcompanhamento from '~/paginas/Relatorios/PAP/Acompanhamento';
 import PendenciasFechamentoLista from '~/paginas/Fechamento/PendenciasFechamento/pendenciasFechamentoLista';
 import PendenciasFechamentoForm from '~/paginas/Fechamento/PendenciasFechamento/pendenciasFechamentoForm';
-import ComunicadosLista from '~/paginas/AcompanhamentoEscolar/Comunicados/Lista';
-import ComunicadosCadastro from '~/paginas/AcompanhamentoEscolar/Comunicados/Cadastro';
+import ComunicadosCadastro from '~/paginas/Gestao/Comunicados/Cadastro/cadastroComunicados';
+import ComunicadosLista from '~/paginas/Gestao/Comunicados/Lista/listaComunicados';
 import ConselhoClasse from '~/paginas/Fechamento/ConselhoClasse/conselhoClasse';
 import RelatorioSemestral from '~/paginas/Relatorios/PAP/RelatorioSemestral/relatorioSemestral';
 
@@ -57,7 +57,7 @@ import HistoricoEscolar from '~/paginas/Relatorios/HistoricoEscolar/historicoEsc
 import AtaFinalResultados from '~/paginas/Relatorios/Atas/AtaFinalResultados/ataFinalResultados';
 
 import BoletimSimples from '~/paginas/Relatorios/DiarioClasse/BoletimSimples';
-import FaltasFrequencia from '~/paginas/Relatorios/Frequencia/faltasFrequencia';
+import RelatorioFrequencia from '~/paginas/Relatorios/Frequencia/relatorioFrequencia';
 import ListaDiarioBordo from '~/paginas/DiarioClasse/DiarioBordo/listaDiarioBordo';
 import DiarioBordo from '~/paginas/DiarioClasse/DiarioBordo/diarioBordo';
 import RelatorioPendencias from '~/paginas/Relatorios/Pendencias/relatorioPendencias';
@@ -96,8 +96,14 @@ import DashboardAEE from '~/paginas/Dashboard/AEE/dashboardAEE';
 import DashboardRegistroItinerancia from '~/paginas/Dashboard/DashboardRegistroItinerancia/dashboardRegistroItinerancia';
 import AcompanhamentoFechamento from '~/paginas/Fechamento/AcompanhamentoFechamento/acompanhamentoFechamento';
 import DashboardFrequencia from '~/paginas/Dashboard/DashboardFrequencia/dashboardFrequencia';
+import DashboardDevolutivas from '~/paginas/Dashboard/DashboardDevolutivas/dashboardDevolutivas';
 import DashboardInformacoesEscolares from '~/paginas/Dashboard/DashboardInformacoesEscolares/dashboardInformacoesEscolares';
-import RelatorioAcompanhamentoFechamento from '~/paginas/Fechamento/RelatorioAcompanhamentoFechamento/relatorioAcompanhamentoFechamento';
+import DashboardRegistroIndividual from '~/paginas/Dashboard/DashboardRegistroIndividual/dashboardRegistroIndividual';
+import DashboardDiarioBordo from '~/paginas/Dashboard/DashboardDiarioBordo/dashboardDiarioBordo';
+import RelatorioAcompanhamentoFechamento from '~/paginas/Relatorios/Fechamento/AcompanhamentoFechamento/relatorioAcompanhamentoFechamento';
+import DashboardRelAcompanhamentoAprendizagem from '~/paginas/Dashboard/DashboardRelAcompAprend/dashboardRelAcompAprend';
+import DashboardFechamento from '~/paginas/Dashboard/DashboardFechamento/dashboardFechamento';
+import RelatorioAtaBimestral from '~/paginas/Relatorios/Atas/AtaBimestral/relatorioAtaBimestral';
 
 const rotas = new Map();
 
@@ -134,7 +140,7 @@ rotas.set(`${RotasDto.ACOMPANHAMENTO_COMUNICADOS}/novo`, {
 });
 
 rotas.set(`${RotasDto.ACOMPANHAMENTO_COMUNICADOS}/editar/:id`, {
-  breadcrumbName: 'Comunicados',
+  breadcrumbName: 'Cadastro de comunicados',
   menu: ['Gestão'],
   parent: RotasDto.ACOMPANHAMENTO_COMUNICADOS,
   component: ComunicadosCadastro,
@@ -872,15 +878,15 @@ rotas.set(RotasDto.HISTORICO_ESCOLAR, {
   // chavePermissao: RotasDto.HISTORICO_ESCOLAR,
 });
 
-rotas.set(RotasDto.FALTAS_FREQUENCIA, {
-  breadcrumbName: 'Faltas e frequência',
+rotas.set(RotasDto.RELATORIO_FREQUENCIA, {
+  breadcrumbName: 'Frequência',
   menu: ['Relatórios', 'Frequência'],
   parent: '/',
-  component: FaltasFrequencia,
+  component: RelatorioFrequencia,
   exact: true,
   tipo: RotasTipo.EstruturadaAutenticada,
   temPermissionamento: true,
-  chavePermissao: RotasDto.FALTAS_FREQUENCIA,
+  chavePermissao: RotasDto.RELATORIO_FREQUENCIA,
 });
 
 rotas.set(RotasDto.DIARIO_BORDO, {
@@ -917,8 +923,8 @@ rotas.set(`${RotasDto.DIARIO_BORDO}/detalhes/:aulaId`, {
 });
 
 rotas.set(RotasDto.RELATORIO_PENDENCIAS, {
-  breadcrumbName: 'Relatório de pendências',
-  menu: ['Relatórios'],
+  breadcrumbName: 'Pendências',
+  menu: ['Relatórios', 'Gestão'],
   parent: '/',
   component: RelatorioPendencias,
   exact: true,
@@ -1350,6 +1356,17 @@ rotas.set(RotasDto.DASHBOARD_FREQUENCIA, {
   chavePermissao: RotasDto.DASHBOARD_FREQUENCIA,
 });
 
+rotas.set(RotasDto.DASHBOARD_DEVOLUTIVAS, {
+  breadcrumbName: 'Devolutivas',
+  menu: ['Dashboard'],
+  parent: '/',
+  component: DashboardDevolutivas,
+  exact: true,
+  tipo: RotasTipo.EstruturadaAutenticada,
+  temPermissionamento: true,
+  chavePermissao: RotasDto.DASHBOARD_DEVOLUTIVAS,
+});
+
 rotas.set(RotasDto.DASHBOARD_INFORMACOES_ESCOLARES, {
   breadcrumbName: 'Informações escolares',
   menu: ['Dashboard'],
@@ -1361,15 +1378,70 @@ rotas.set(RotasDto.DASHBOARD_INFORMACOES_ESCOLARES, {
   chavePermissao: RotasDto.DASHBOARD_INFORMACOES_ESCOLARES,
 });
 
+rotas.set(RotasDto.DASHBOARD_REGISTRO_INDIVIDUAL, {
+  breadcrumbName: 'Registro individual',
+  menu: ['Dashboard'],
+  parent: '/',
+  component: DashboardRegistroIndividual,
+  exact: true,
+  tipo: RotasTipo.EstruturadaAutenticada,
+  temPermissionamento: true,
+  chavePermissao: RotasDto.DASHBOARD_REGISTRO_INDIVIDUAL,
+});
+
+rotas.set(RotasDto.DASHBOARD_DIARIO_BORDO, {
+  breadcrumbName: 'Diário de bordo',
+  menu: ['Dashboard'],
+  parent: '/',
+  component: DashboardDiarioBordo,
+  exact: true,
+  tipo: RotasTipo.EstruturadaAutenticada,
+  temPermissionamento: true,
+  chavePermissao: RotasDto.DASHBOARD_DIARIO_BORDO,
+});
+
 rotas.set(RotasDto.RELATORIO_ACOMPANHAMENTO_FECHAMENTO, {
-  breadcrumbName: 'Relatório do Acompanhamento do Fechamento',
-  menu: ['Fechamento'],
+  breadcrumbName: 'Relatório de Acompanhamento do Fechamento',
+  menu: ['Relatórios', 'Fechamento'],
   parent: '/',
   component: RelatorioAcompanhamentoFechamento,
   exact: true,
   tipo: RotasTipo.EstruturadaAutenticada,
   temPermissionamento: true,
   chavePermissao: RotasDto.RELATORIO_ACOMPANHAMENTO_FECHAMENTO,
+});
+
+rotas.set(RotasDto.DASHBOARD_RELATORIO_ACOMPANHAMENTO_APRENDIZAGEM, {
+  breadcrumbName: 'Relatório do Acompanhamento da Aprendizagem',
+  menu: ['Dashboard'],
+  parent: '/',
+  component: DashboardRelAcompanhamentoAprendizagem,
+  exact: true,
+  tipo: RotasTipo.EstruturadaAutenticada,
+  temPermissionamento: true,
+  chavePermissao: RotasDto.DASHBOARD_RELATORIO_ACOMPANHAMENTO_APRENDIZAGEM,
+});
+
+rotas.set(RotasDto.DASHBOARD_FECHAMENTO, {
+  breadcrumbName: 'Fechamento',
+  menu: ['Dashboard'],
+  parent: '/',
+  component: DashboardFechamento,
+  exact: true,
+  tipo: RotasTipo.EstruturadaAutenticada,
+  temPermissionamento: false,
+  chavePermissao: RotasDto.DASHBOARD_FECHAMENTO,
+});
+
+rotas.set(RotasDto.ATA_BIMESTRAL, {
+  breadcrumbName: 'Ata bimestral',
+  menu: ['Relatórios', 'Atas'],
+  parent: '/',
+  component: RelatorioAtaBimestral,
+  exact: true,
+  // tipo: RotasTipo.EstruturadaAutenticada,
+  // temPermissionamento: true,
+  chavePermissao: RotasDto.ATA_BIMESTRAL,
 });
 
 const rotasArray = [];

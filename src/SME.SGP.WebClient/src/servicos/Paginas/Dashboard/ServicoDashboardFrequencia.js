@@ -143,6 +143,93 @@ class ServicoDashboardFrequencia {
 
     dispatch(setDadosDashboardFrequencia(novoMap));
   };
+
+  obterTipoGraficos = tipoGraficos => {
+    const retorno = Object.keys(tipoGraficos).map(item => tipoGraficos[item]);
+    this.atualizarFiltros('listaTipoGrafico', retorno);
+  };
+
+  obterListaMeses = (obterTodosMeses, mesAtual, todosMeses) => {
+    const retorno = obterTodosMeses();
+    const meses = todosMeses
+      ? retorno
+      : retorno.filter(item => Number(item.numeroMes) <= mesAtual);
+    this.atualizarFiltros('listaMeses', meses);
+  };
+
+  obterSemanas = anoLetivo => {
+    return api.get(`${urlPadrao}/filtro/anos/${anoLetivo}/semanas`);
+  };
+
+  obterTotalEstudantesPresenciasRemotosAusentes = (
+    anoLetivo,
+    dreId,
+    ueId,
+    modalidade,
+    semestre,
+    anoTurma,
+    dataInicio,
+    dataFim,
+    tipoPeriodoDashboard,
+    mes,
+    visaoDre
+  ) => {
+    return api.get(
+      `${urlPadrao}/anos/${anoLetivo}/dres/${dreId}/ues/${ueId}/modalidades/` +
+        `${modalidade}/consolidado/anos-turmas`,
+      {
+        params: {
+          semestre,
+          anoTurma,
+          dataInicio,
+          dataFim,
+          tipoPeriodoDashboard,
+          mes,
+          visaoDre,
+        },
+      }
+    );
+  };
+
+  obterTotalAusenciasCompensadas = (
+    anoLetivo,
+    dreId,
+    ueId,
+    modalidade,
+    semestre,
+    bimestre
+  ) => {
+    return api.get(
+      `/v1/dashboard/compensacoes/ausencia/anos/${anoLetivo}/dres/${dreId}/ues/${ueId}/modalidades/${modalidade}/` +
+        `consolidado/anos-turmas`,
+      {
+        params: {
+          semestre,
+          bimestre,
+        },
+      }
+    );
+  };
+
+  obterTotalAtividadeCompensacao = (
+    anoLetivo,
+    dreId,
+    ueId,
+    modalidade,
+    semestre,
+    bimestre
+  ) => {
+    return api.get(
+      `/v1/dashboard/compensacoes/ausencia/anos/${anoLetivo}/dres/${dreId}/ues/${ueId}/modalidades/${modalidade}/` +
+        `consolidado/compensacoes-consideradas`,
+      {
+        params: {
+          semestre,
+          bimestre,
+        },
+      }
+    );
+  };
 }
 
 export default new ServicoDashboardFrequencia();

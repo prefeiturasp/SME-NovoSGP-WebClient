@@ -460,6 +460,7 @@ const CalendarioEscolar = () => {
                   valueSelect={dreSelecionada}
                   placeholder="Diretoria Regional de Educação (DRE)"
                   disabled={!tipoCalendarioSelecionado || dres.length < 2}
+                  showSearch
                 />
               </Loader>
             </Grid>
@@ -474,6 +475,7 @@ const CalendarioEscolar = () => {
                   valueSelect={unidadeEscolarSelecionada}
                   placeholder="Unidade Escolar (UE)"
                   disabled={!dreSelecionada || unidadesEscolares?.length === 1}
+                  showSearch
                 />
               </Loader>
             </Grid>

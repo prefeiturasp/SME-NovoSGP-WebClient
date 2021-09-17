@@ -266,7 +266,7 @@ const CollapseLocalizarEstudanteDados = props => {
           placeholder="Ano letivo"
         />
       </div>
-      <div className="col-sm-12 col-md-12 col-lg-5 col-xl-5 mb-2">
+      <div className="col-sm-12 col-md-12 col-lg-12 col-xl-5 mb-2">
         <Loader loading={carregandoDres} tip="">
           <SelectComponent
             id="dre"
@@ -278,10 +278,11 @@ const CollapseLocalizarEstudanteDados = props => {
             onChange={onChangeDre}
             valueSelect={codigoDre}
             placeholder="Diretoria Regional De Educação (DRE)"
+            showSearch
           />
         </Loader>
       </div>
-      <div className="col-sm-12 col-md-12 col-lg-5 col-xl-5 mb-2">
+      <div className="col-sm-12 col-md-12 col-lg-12 col-xl-5 mb-2">
         <Loader loading={carregandoUes} tip="">
           <SelectComponent
             id="ue"
@@ -293,25 +294,27 @@ const CollapseLocalizarEstudanteDados = props => {
             onChange={onChangeUe}
             valueSelect={codigoUe}
             placeholder="Unidade Escolar (UE)"
+            showSearch
           />
         </Loader>
       </div>
-      <div className="col-sm-12 col-md-12 col-lg-12 col-xl-3 mb-2">
+      <div className="col-sm-12 col-md-12 col-lg-12 col-xl-4 mb-2">
         <Loader loading={carregandoTurmas} tip="">
           <SelectComponent
             id="turma"
             lista={listaTurmas}
             valueOption="codigo"
-            valueText="modalidadeTurmaNome"
+            valueText="nomeFiltro"
             label="Turma"
             valueSelect={codigoTurma}
             onChange={onChangeTurma}
             placeholder="Turma"
             disabled={listaTurmas?.length === 1}
+            showSearch
           />
         </Loader>
       </div>
-      <div className="col-sm-12 col-md-12 col-lg-12 col-xl-9 mb-2">
+      <div className="col-sm-12 col-md-12 col-lg-12 col-xl-8 mb-2">
         <div className="row">
           <LocalizadorEstudante
             id="estudante"

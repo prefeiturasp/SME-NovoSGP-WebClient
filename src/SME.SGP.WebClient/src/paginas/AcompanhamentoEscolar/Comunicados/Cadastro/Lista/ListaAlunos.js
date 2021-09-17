@@ -20,7 +20,7 @@ import {
 } from '~/componentes';
 
 const ListaAlunos = props => {
-  var {
+  const {
     dadosAlunos,
     alunosSelecionados,
     alunosLoader,
@@ -55,9 +55,7 @@ const ListaAlunos = props => {
         nomeAluno: x.nomeAluno,
         numeroAlunoChamada: x.numeroAlunoChamada,
         codigoAluno: x.codigoAluno,
-        selecionado: alunosSelecionados.find(z => z === x.codigoAluno)
-          ? true
-          : false,
+        selecionado: !!alunosSelecionados.find(z => z === x.codigoAluno),
       };
     });
 
@@ -89,7 +87,7 @@ const ListaAlunos = props => {
       return;
     }
 
-    var retorno = await ObterAlunos(
+    const retorno = await ObterAlunos(
       refForm.state.values.turmas[0],
       refForm.state.values.anoLetivo
     );
@@ -97,13 +95,16 @@ const ListaAlunos = props => {
     setModalAlunosVisivel(retorno);
   };
 
+  console.log('alunos', alunos);
+  console.log('linhasSelecionadas', linhasSelecionadas);
+
   return (
     <Linha className="row">
       <Grid cols={12}>
         <Label
           className="float-left"
           text="Estudantes selecionados que receberão a mensagem"
-        ></Label>
+        />
         <Button
           type="button"
           color="Roxo"
@@ -138,7 +139,7 @@ const ListaAlunos = props => {
           fecharAoClicarEsc
         >
           <Loader loading={alunosLoader}>
-            <Label text="Selecione os estudantes"></Label>
+            <Label text="Selecione os estudantes" />
             <Table
               showHeader={false}
               rowSelection={{

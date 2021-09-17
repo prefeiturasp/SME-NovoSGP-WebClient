@@ -41,6 +41,7 @@ const AvaliacaoForm = ({ match, location }) => {
   const [refForm, setRefForm] = useState({});
 
   const [desabilitarCampos, setDesabilitarCampos] = useState(false);
+  const [importado, setImportado] = useState(false);
   const [modoEdicao, setModoEdicao] = useState(false);
   const [dentroPeriodo, setDentroPeriodo] = useState(true);
   const [podeLancaNota, setPodeLancaNota] = useState(true);
@@ -189,7 +190,7 @@ const AvaliacaoForm = ({ match, location }) => {
     delete dadosValidacao.categoriaId;
     delete dadosValidacao.descricao;
 
-    if (tamanhoTextoDescricao(descricao) <= 500) {
+    if (validaTamanhoCaracteres()) {
       const validacao = await ServicoAvaliacao.validar(dadosValidacao);
 
       if (validacao && validacao.status === 200) {
@@ -216,8 +217,7 @@ const AvaliacaoForm = ({ match, location }) => {
           } else {
             setCarregandoTela(false);
             sucesso(
-              `Avaliação ${
-                idAvaliacao ? 'atualizada' : 'cadastrada'
+              `Avaliação ${idAvaliacao ? 'atualizada' : 'cadastrada'
               } com sucesso.`
             );
           }
@@ -235,6 +235,10 @@ const AvaliacaoForm = ({ match, location }) => {
       setCarregandoTela(false);
       erro('A descrição não deve ter mais de 500 caracteres');
     }
+  };
+
+  const validaTamanhoCaracteres = () => {
+    return importado ? true : (tamanhoTextoDescricao(descricao) <= 500);
   };
 
   const categorias = { NORMAL: 1, INTERDISCIPLINAR: 2 };
@@ -260,8 +264,8 @@ const AvaliacaoForm = ({ match, location }) => {
       descricao: Yup.string().test(
         'len',
         'A descrição não deve ter mais de 500 caracteres',
-        texto => {          
-          return texto === undefined || (tamanhoTextoDescricao(texto) <= 500);
+        texto => {
+          return texto === undefined || validaTamanhoCaracteres();
         }
       ),
     };
@@ -299,6 +303,7 @@ const AvaliacaoForm = ({ match, location }) => {
     disciplinaContidaRegenciaId: [],
     nome: '',
     tipoAvaliacaoId: undefined,
+    importado: false,
   };
 
   const clicouBotaoCancelar = form => {
@@ -429,8 +434,9 @@ const AvaliacaoForm = ({ match, location }) => {
         setListaDisciplinasSelecionadas(avaliacao.data.disciplinasId);
         setDisciplinaSelecionada(avaliacao.data.disciplinasId[0]);
         validaInterdisciplinar(avaliacao.data.categoriaId);
-        const tipoAvaliacaoId = avaliacao.data.tipoAvaliacaoId.toString();
-        setDadosAvaliacao({ ...avaliacao.data, tipoAvaliacaoId });
+        const tipoAvaliacaoId = avaliacao.data.tipoAvaliacaoId.toString();        
+        setImportado(avaliacao.data.importado);
+        setDadosAvaliacao({ ...avaliacao.data, tipoAvaliacaoId, importado });
         setDescricao(avaliacao.data.descricao);
         setInseridoAlterado({
           alteradoEm: avaliacao.data.alteradoEm,
@@ -675,7 +681,7 @@ const AvaliacaoForm = ({ match, location }) => {
                   <Div className="row">
                     <Grid cols={4} className="mb-4">
                       {listaDisciplinas?.length > 1 &&
-                      form.values.categoriaId ===
+                        form.values.categoriaId ===
                         categorias.INTERDISCIPLINAR ? (
                         <SelectComponent
                           id="disciplinasId"
@@ -832,7 +838,7 @@ const AvaliacaoForm = ({ match, location }) => {
                   <Grid cols={12}>
                     <InseridoAlterado className="mt-4">
                       {inseridoAlterado.criadoPor &&
-                      inseridoAlterado.criadoEm ? (
+                        inseridoAlterado.criadoEm ? (
                         <p className="pt-2">
                           INSERIDO por {inseridoAlterado.criadoPor} em{' '}
                           {window.moment(inseridoAlterado.criadoEm).format()}
@@ -842,7 +848,7 @@ const AvaliacaoForm = ({ match, location }) => {
                       )}
 
                       {inseridoAlterado.alteradoPor &&
-                      inseridoAlterado.alteradoEm ? (
+                        inseridoAlterado.alteradoEm ? (
                         <p>
                           ALTERADO por {inseridoAlterado.alteradoPor} em{' '}
                           {window.moment(inseridoAlterado.alteradoEm).format()}
