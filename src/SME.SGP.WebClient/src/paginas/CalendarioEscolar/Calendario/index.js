@@ -1,33 +1,39 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { Tooltip, Switch } from 'antd';
-import shortid from 'shortid';
-
+import styled from 'styled-components';
 import {
   Base,
   Button,
   Card,
   Colors,
-  Loader,
   Grid,
-  SelectComponent,
+  Loader,
   SelectAutocomplete,
+  SelectComponent,
 } from '~/componentes';
 import { Cabecalho, FiltroHelper } from '~/componentes-sgp';
 import Calendario from '~/componentes-sgp/calendarioEscolar/Calendario';
-
+import { store } from '~/redux';
+import { zeraCalendario } from '~/redux/modulos/calendarioEscolar/actions';
 import {
+  AbrangenciaServico,
   api,
   history,
   ServicoCalendarios,
-  AbrangenciaServico,
 } from '~/servicos';
 import { erro, sucesso } from '~/servicos/alertas';
+import { Div } from './index.css';
+import { OPCAO_TODOS } from '~/constantes';
 
-import { store } from '~/redux';
-import { zeraCalendario } from '~/redux/modulos/calendarioEscolar/actions';
-
-import { Div, Titulo, Icone, Label, Corpo } from './index.css';
+export const ContainerLabelDiasLetivos = styled.div`
+  font-style: normal;
+  font-weight: 700;
+  font-size: 12px;
+  background-color: ${props => props.color};
+  color: white;
+  padding: 6px;
+  border-radius: 4px;
+`;
 
 const CalendarioEscolar = () => {
   const [tipoCalendarioSelecionado, setTipoCalendarioSelecionado] = useState(
@@ -48,7 +54,9 @@ const CalendarioEscolar = () => {
     state => state.calendarioEscolar.eventoCalendarioEdicao
   );
 
-  const [eventoSme, setEventoSme] = useState(true);
+  const usuario = useSelector(s => s.usuario);
+
+  const [eventoSme] = useState(true);
 
   const selecionarTipoCalendario = useCallback(() => {
     const calendarioId = eventoCalendarioEdicao.tipoCalendario;
@@ -65,7 +73,6 @@ const CalendarioEscolar = () => {
   useEffect(() => {
     if (eventoCalendarioEdicao?.tipoCalendario) {
       if (eventoCalendarioEdicao.eventoSme) {
-        setEventoSme(eventoCalendarioEdicao.eventoSme);
         selecionarTipoCalendario();
       }
     }
@@ -111,9 +118,13 @@ const CalendarioEscolar = () => {
                 abrev: dre.abreviacao,
               });
             });
+            if (usuario.possuiPerfilSme) {
+              lista.unshift({ valor: OPCAO_TODOS, desc: 'Todas' });
+              setDreSelecionada(OPCAO_TODOS);
+            }
             setDres(lista.sort(FiltroHelper.ordenarLista('desc')));
-            setCarregandoDres(false);
           }
+          setCarregandoDres(false);
         }
       })
       .catch(() => {
@@ -132,16 +143,10 @@ const CalendarioEscolar = () => {
   const [carregandoMeses, setCarregandoMeses] = useState(false);
 
   useEffect(() => {
-    if (tipoCalendarioSelecionado) {
-      consultarDiasLetivos();
-      obterDres();
-      setDreSelecionada(undefined);
-      setDres([]);
-    } else {
-      setDiasLetivos();
-      setDreSelecionada();
-      setUnidadeEscolarSelecionada();
-    }
+    setDreSelecionada(undefined);
+    setDres([]);
+    obterDres();
+
     setFiltros({
       tipoCalendarioSelecionado,
       eventoSme,
@@ -149,14 +154,26 @@ const CalendarioEscolar = () => {
       unidadeEscolarSelecionada,
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [tipoCalendarioSelecionado]);
+  }, []);
+
+  useEffect(() => {
+    if (tipoCalendarioSelecionado && unidadeEscolarSelecionada) {
+      consultarDiasLetivos();
+    } else {
+      setDiasLetivos();
+    }
+    store.dispatch(zeraCalendario());
+    setFiltros({
+      tipoCalendarioSelecionado,
+      eventoSme,
+      dreSelecionada,
+      unidadeEscolarSelecionada,
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [tipoCalendarioSelecionado, unidadeEscolarSelecionada]);
 
   const aoClicarBotaoVoltar = () => {
     history.push('/');
-  };
-
-  const aoTrocarEventoSme = valor => {
-    setEventoSme(valor);
   };
 
   useEffect(() => {
@@ -189,6 +206,11 @@ const CalendarioEscolar = () => {
   );
 
   const obterUnidadesEscolares = dre => {
+    if (dre === OPCAO_TODOS) {
+      setUnidadesEscolares([{ valor: OPCAO_TODOS, desc: 'Todas' }]);
+      return;
+    }
+
     setCarregandoUes(true);
     const calendario = listaTipoCalendario.find(
       item => item.id === tipoCalendarioSelecionado
@@ -208,10 +230,15 @@ const CalendarioEscolar = () => {
                 valor: unidade.codigo,
               });
             });
+
             setUnidadesEscolares(lista);
-            setCarregandoUes(false);
+            if (lista.length && usuario.possuiPerfilSmeOuDre) {
+              lista.unshift({ valor: OPCAO_TODOS, desc: 'Todas' });
+              setUnidadeEscolarSelecionada(OPCAO_TODOS);
+            }
           }
         }
+        setCarregandoUes(false);
       })
       .catch(() => {
         setUnidadesEscolares(unidadesEscolaresStore);
@@ -238,11 +265,6 @@ const CalendarioEscolar = () => {
   };
 
   useEffect(() => {
-    if (carregandoMeses && dreSelecionada && !unidadeEscolarSelecionada) {
-      setCarregandoUes(true);
-      return;
-    }
-    setCarregandoUes(false);
     if (unidadesEscolares.length === 1) {
       setUnidadeEscolarSelecionada(unidadesEscolares[0].valor);
     } else if (
@@ -257,13 +279,15 @@ const CalendarioEscolar = () => {
   }, [unidadesEscolares, carregandoMeses]);
 
   const aoSelecionarDre = dre => {
+    setValorTipoCalendario();
+    setTipoCalendarioSelecionado();
+    store.dispatch(zeraCalendario());
     setDreSelecionada(dre);
     setUnidadeEscolarSelecionada();
   };
 
   useEffect(() => {
     if (dreSelecionada) {
-      consultarDiasLetivos();
       obterUnidadesEscolares(dreSelecionada);
     } else {
       setUnidadeEscolarSelecionada();
@@ -278,21 +302,10 @@ const CalendarioEscolar = () => {
   }, [dreSelecionada]);
 
   const aoSelecionarUnidadeEscolar = unidade => {
+    setValorTipoCalendario();
+    setTipoCalendarioSelecionado();
     setUnidadeEscolarSelecionada(unidade);
   };
-
-  useEffect(() => {
-    if (unidadeEscolarSelecionada) consultarDiasLetivos();
-
-    setFiltros({
-      tipoCalendarioSelecionado,
-      eventoSme,
-      dreSelecionada,
-      unidadeEscolarSelecionada,
-    });
-    store.dispatch(zeraCalendario());
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [unidadeEscolarSelecionada]);
 
   useEffect(() => {
     setPodeImprimir(tipoCalendarioSelecionado);
@@ -301,6 +314,11 @@ const CalendarioEscolar = () => {
   useEffect(() => {
     let isSubscribed = true;
     (async () => {
+      if (!unidadeEscolarSelecionada) {
+        setValorTipoCalendario();
+        setTipoCalendarioSelecionado();
+        return;
+      }
       setCarregandoTipos(true);
       setCarregandoMeses(true);
 
@@ -325,7 +343,7 @@ const CalendarioEscolar = () => {
     return () => {
       isSubscribed = false;
     };
-  }, [pesquisaTipoCalendario]);
+  }, [pesquisaTipoCalendario, unidadeEscolarSelecionada]);
 
   const selecionaTipoCalendario = descricao => {
     const tipo = listaTipoCalendario?.find(t => t.descricao === descricao);
@@ -362,7 +380,7 @@ const CalendarioEscolar = () => {
               />
             </Grid>
             <Grid cols={6} className="mb-2">
-              <Loader loading={carregandoDres} tip="">
+              <Loader loading={carregandoDres}>
                 <SelectComponent
                   id="dre"
                   onChange={aoSelecionarDre}
@@ -371,7 +389,7 @@ const CalendarioEscolar = () => {
                   valueText="desc"
                   valueSelect={dreSelecionada}
                   placeholder="Diretoria Regional de Educação (DRE)"
-                  disabled={!tipoCalendarioSelecionado || dres?.length === 1}
+                  disabled={!dres?.length || dres?.length === 1}
                   showSearch
                   label="Diretoria Regional de Educação (DRE)"
                 />
@@ -409,89 +427,63 @@ const CalendarioEscolar = () => {
                   onChange={selecionaTipoCalendario}
                   handleSearch={handleSearch}
                   value={valorTipoCalendario}
-                  isabled={listaTipoCalendario?.length === 1}
+                  disabled={
+                    listaTipoCalendario?.length === 1 ||
+                    !unidadeEscolarSelecionada
+                  }
                   label="Calendário"
                 />
               </Loader>
             </Grid>
+          </Div>
+          <Div className="row ">
             <Grid
               cols={12}
-              className="mb-2 d-flex justify-content-start"
-              style={{ marginTop: '40px' }}
+              className="d-flex"
+              style={{ justifyContent: 'space-between', marginTop: '40px' }}
             >
-              <Loader loading={imprimindo} ignorarTip>
-                <Button
-                  className="btn-imprimir"
-                  icon="print"
-                  color={Colors.Azul}
-                  border
-                  onClick={() => gerarRelatorio()}
-                  disabled={!podeImprimir}
-                  id="btn-imprimir-relatorio-calendario"
-                />
-              </Loader>
-            </Grid>
-
-            <Div className="row">
-              <Grid cols={4}>
-                {diasLetivos && diasLetivos.dias && (
-                  <Div>
-                    <Button
-                      id={shortid.generate()}
-                      label={diasLetivos.dias.toString()}
-                      color={
-                        diasLetivos.estaAbaixoPermitido
-                          ? Colors.Vermelho
-                          : Colors.Verde
-                      }
-                      className="float-left"
-                    />
-                    <Div className="float-left w-50 ml-2 mt-1">
-                      Nº de dias letivos no calendário
-                    </Div>
-                  </Div>
-                )}
-                {diasLetivos && diasLetivos.estaAbaixoPermitido && (
-                  <Div
-                    className="clearfix font-weight-bold pt-2"
-                    style={{
-                      clear: 'both',
-                      color: Base.Vermelho,
-                      fontSize: 12,
-                    }}
-                  >
-                    <Icone className="fa fa-exclamation-triangle mr-2" />
-                    Abaixo do mínimo estabelecido pela legislação
-                  </Div>
-                )}
-              </Grid>
-            </Div>
-
-            {/* <Grid cols={12} className="mb-4">
-              <Div className="row">
-                <Grid cols={1} className="d-flex align-items-center pr-0">
-                  <Div className="w-100">
-                    <Tooltip
-                      placement="top"
-                      title={`${
-                        eventoSme
-                          ? 'Exibindo eventos da SME'
-                          : 'Não exibindo eventos da SME'
-                      }`}
-                    >
-                      <Switch
-                        onChange={aoTrocarEventoSme}
-                        checked={eventoSme}
-                        size="small"
-                        className="mr-2"
-                        disabled={!tipoCalendarioSelecionado}
-                      />
-                      <Label className="my-auto">SME</Label>
-                    </Tooltip>
-                  </Div>
-                </Grid>
+              <Div className="mb-2">
+                <Loader loading={imprimindo} ignorarTip>
+                  <Button
+                    className="btn-imprimir"
+                    icon="print"
+                    color={Colors.Azul}
+                    border
+                    onClick={() => gerarRelatorio()}
+                    disabled={!podeImprimir}
+                    id="btn-imprimir-relatorio-calendario"
+                  />
+                </Loader>
               </Div>
-            </Grid> */}
+
+              <Div className="mb-2 d-flex" style={{ alignItems: 'center' }}>
+                {diasLetivos && diasLetivos?.estaAbaixoPermitido ? (
+                  <ContainerLabelDiasLetivos color={Base.LaranjaCalendario}>
+                    Abaixo do mínimo estabelecido pela legislação
+                  </ContainerLabelDiasLetivos>
+                ) : (
+                  ''
+                )}
+                {diasLetivos &&
+                (diasLetivos.dias || diasLetivos?.estaAbaixoPermitido) ? (
+                  <ContainerLabelDiasLetivos
+                    className="ml-2"
+                    color={
+                      diasLetivos?.estaAbaixoPermitido
+                        ? Base.LaranjaCalendario
+                        : Base.Azul
+                    }
+                  >
+                    Nº de dias letivos: {diasLetivos?.dias?.toString()}
+                  </ContainerLabelDiasLetivos>
+                ) : (
+                  ''
+                )}
+              </Div>
+            </Grid>
+          </Div>
+
+          <Div className="row">
             <Grid cols={12}>
               <Loader loading={carregandoMeses}>
                 <Calendario filtros={filtros} />
