@@ -132,6 +132,30 @@ export const TabelaColunasFixas = styled.div`
     }
   }
 
+  .width-135 {
+    width: 135px;
+    max-width: 135px;
+    min-width: 135px;
+    vertical-align: top;
+
+    .ant-input-number {
+      width: 85px !important;
+      margin-top: 4px;
+    }
+  }
+
+  .width-150 {
+    width: 150px;
+    max-width: 150px;
+    min-width: 150px;
+    vertical-align: top;
+
+    .ant-input-number {
+      width: 85px !important;
+      margin-top: 4px;
+    }
+  }
+
   .cabecalho-nota-conceito-final {
     box-shadow: -8px 0px 8px -4px #8080804d;
     border-bottom: 0 !important;
@@ -172,20 +196,16 @@ export const TabelaColunasFixas = styled.div`
   }
 
   .aluno-ausente-notas {
-    border-top: solid 3px #d06d12 !important;
     background-color: #d06d12 !important;
     border-radius: 7px !important;
-    margin-right: 3px !important;
-    margin-left: 10px !important;
-    padding-right: 11px !important;
+    border-right: solid 22px #d06d12 !important;
+    padding-left: 4px !important;
   }
 
   .icon-aluno-ausente {
     color: white;
-    float: right;
-    margin-top: -27px;
     font-size: 10px;
-    margin-right: 5px;
+    margin-left: -16px;
   }
 
   .desabilitar-nota {

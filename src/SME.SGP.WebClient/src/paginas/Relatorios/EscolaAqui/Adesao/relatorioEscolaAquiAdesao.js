@@ -19,6 +19,7 @@ import {
 } from '~/servicos';
 
 import { URL_HOME } from '~/constantes';
+import { OPCAO_TODOS } from '~/constantes/constantes';
 
 const RelatorioEscolaAquiAdesao = () => {
   const [exibirLoader, setExibirLoader] = useState(false);
@@ -42,8 +43,6 @@ const RelatorioEscolaAquiAdesao = () => {
     { label: 'CPF irregular no EOL', value: 3 },
     { label: 'Todos', value: 4 },
   ];
-
-  const OPCAO_TODOS = '-99';
 
   const voltar = () => {
     history.push(URL_HOME);
@@ -211,6 +210,7 @@ const RelatorioEscolaAquiAdesao = () => {
                 onChange={onChangeDre}
                 valueSelect={dreCodigo}
                 placeholder="Diretoria Regional de Educação (DRE)"
+                showSearch
               />
             </div>
             <div className="col-sm-12 col-md-12 col-lg-6 col-xl-6 mb-2 pl-0">
@@ -224,6 +224,7 @@ const RelatorioEscolaAquiAdesao = () => {
                 onChange={onChangeUe}
                 valueSelect={ueCodigo}
                 placeholder="Unidade Escolar (UE)"
+                showSearch
               />
             </div>
           </div>

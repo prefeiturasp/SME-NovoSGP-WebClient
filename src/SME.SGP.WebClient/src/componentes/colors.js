@@ -7,6 +7,7 @@ const Colors = {
   Laranja: 'Laranja',
   Verde: 'Verde',
   Vermelho: 'Vermelho',
+  CinzaMako: 'CinzaMako',
 };
 
 const Base = {
@@ -36,6 +37,7 @@ const Base = {
   Preto: '#000',
   RosaCalendario: '#FEE4E2',
   Roxo: '#6933FF',
+  RoxoBorda: '#E2DEF0',
   RoxoFundo: '#6331EA',
   RoxoClaro: '#B99FFF',
   RoxoEventoCalendario: '#9670FF',
@@ -75,8 +77,8 @@ const CoresGraficos = [
   '#00796B',
   '#689F38',
   '#F57C00',
-  '#616161',
   '#5D4037',
+  '#616161',
   '#C2185B',
   '#512DA8',
   '#1976D2',

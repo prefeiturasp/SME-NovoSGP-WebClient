@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
 export const ButtonGroupEstilo = styled.div`
-  padding-bottom: 48px !important;
+  padding-bottom: ${({ paddingBottom }) => `${paddingBottom} !important`};
   .btnGroupItem:not(:last-child) {
     margin-right: 16px;
   }

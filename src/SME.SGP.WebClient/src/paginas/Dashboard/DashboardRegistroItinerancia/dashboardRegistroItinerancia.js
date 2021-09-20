@@ -6,6 +6,7 @@ import { Cabecalho, FiltroHelper } from '~/componentes-sgp';
 import Button from '~/componentes/button';
 import Card from '~/componentes/card';
 import { Colors } from '~/componentes/colors';
+import { ANO_INICIO_INFANTIL, OPCAO_TODOS } from '~/constantes/constantes';
 import { URL_HOME } from '~/constantes/url';
 import AbrangenciaServico from '~/servicos/Abrangencia';
 import { erros } from '~/servicos/alertas';
@@ -32,8 +33,6 @@ const DashboardRegistroItinerancia = () => {
   const [carregandoDres, setCarregandoDres] = useState(false);
   const [carregandoUes, setCarregandoUes] = useState(false);
 
-  const OPCAO_TODOS = '-99';
-
   const validarValorPadraoAnoLetivo = (lista, atual) => {
     if (lista?.length) {
       const temAnoAtualNaLista = lista.find(
@@ -54,7 +53,7 @@ const DashboardRegistroItinerancia = () => {
 
     const anosLetivos = await FiltroHelper.obterAnosLetivos({
       consideraHistorico,
-      anoMinimo: 2021,
+      anoMinimo: ANO_INICIO_INFANTIL,
     });
 
     if (!anosLetivos.length) {
@@ -265,6 +264,7 @@ const DashboardRegistroItinerancia = () => {
                   onChange={onChangeDre}
                   valueSelect={dre?.codigo}
                   placeholder="Diretoria Regional de Educação (DRE)"
+                  showSearch
                 />
               </Loader>
             </div>
@@ -280,6 +280,7 @@ const DashboardRegistroItinerancia = () => {
                   onChange={onChangeUe}
                   valueSelect={ue?.codigo}
                   placeholder="Unidade Escolar (UE)"
+                  showSearch
                 />
               </Loader>
             </div>

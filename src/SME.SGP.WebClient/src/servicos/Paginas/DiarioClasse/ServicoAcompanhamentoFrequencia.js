@@ -42,10 +42,13 @@ class ServicoAcompanhamentoFrequencia {
   obterInformacoesDeFrequenciaAlunoPorSemestre = (
     turmaId,
     semestre,
-    alunoCodigo
+    alunoCodigo,
+    componenteCurricularId
   ) => {
     const url = `${urlPadrao}/turmas/${turmaId}/semestres/${semestre}/alunos/${alunoCodigo}`;
-    return api.get(url);
+    return api.get(url, {
+      params: { componenteCurricularId },
+    });
   };
 }
 

@@ -1,14 +1,16 @@
 import React, { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
+
 import { Cabecalho } from '~/componentes-sgp';
-import Button from '~/componentes/button';
-import Card from '~/componentes/card';
-import { Colors } from '~/componentes/colors';
-import { URL_HOME } from '~/constantes/url';
+import { Button, Card, Colors } from '~/componentes';
+
+import { URL_HOME } from '~/constantes';
+import { history } from '~/servicos';
+
 import { limparDadosDashboardFrequencia } from '~/redux/modulos/dashboardFrequencia/actions';
-import history from '~/servicos/history';
-import GraficosFrequencia from './DadosDashboardFrequencia/graficosFrequencia';
-import DashboardFrequenciaFiltros from './dashboardFrequenciaFiltros';
+
+import DashboardFrequenciaFiltros from './DashboardFrequenciaFiltros/dashboardFrequenciaFiltros';
+import TabsDashboardFrequencia from './TabsDashboardFrequencia/tabsDashboardFrequencia';
 
 const DashboardFrequencia = () => {
   const dispatch = useDispatch();
@@ -25,11 +27,11 @@ const DashboardFrequencia = () => {
 
   return (
     <>
-      <Cabecalho pagina="Dashboard frequência" />
+      <Cabecalho pagina="Dashboard frequência" classes="mb-2" />
       <Card>
-        <div className="col-md-12">
+        <div className="col-md-12 p-0">
           <div className="row">
-            <div className="col-md-12 d-flex justify-content-end pb-4">
+            <div className="col-md-12 d-flex justify-content-end pb-2">
               <Button
                 id="btn-voltar"
                 label="Voltar"
@@ -42,8 +44,8 @@ const DashboardFrequencia = () => {
           </div>
           <DashboardFrequenciaFiltros />
           <div className="row">
-            <div className="col-md-12 mt-2">
-              <GraficosFrequencia />
+            <div className="col-md-12 mt-3">
+              <TabsDashboardFrequencia />
             </div>
           </div>
         </div>

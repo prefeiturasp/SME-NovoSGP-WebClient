@@ -392,11 +392,17 @@ export default createGlobalStyle`
     }
   }
 
-  .ant-tooltip {    
-    z-index: 999999 !important;    
+  .ant-tooltip {
+    z-index: 999999 !important;
   }
 
   .ant-time-picker-panel {
-    z-index: 999999 !important;  
+    z-index: 999999 !important;
+  }
+
+  .ant-tooltip-inner-286 {
+    .ant-tooltip-inner {
+      min-width: 286px !important;
+    }
   }
 `;

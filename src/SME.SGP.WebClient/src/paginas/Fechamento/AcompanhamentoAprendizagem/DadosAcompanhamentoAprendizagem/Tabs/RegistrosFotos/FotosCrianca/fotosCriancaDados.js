@@ -31,6 +31,10 @@ const FotosCriancaDados = props => {
 
   const { semestreSelecionado, componenteCurricularId } = props;
 
+  const componenteCurricularSelecionado = useSelector(
+    state => state.registroIndividual.componenteCurricularSelecionado
+  );
+
   const [exibirLoader, setExibirLoader] = useState(false);
   const [listaInicialImagens, setListaInicialImagens] = useState([]);
 

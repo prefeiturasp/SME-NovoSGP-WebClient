@@ -17,10 +17,9 @@ import {
 } from '~/componentes';
 
 import { Linha } from '~/componentes/EstilosGlobais';
-import ServicoComunicados from '~/servicos/Paginas/AcompanhamentoEscolar/Comunicados/ServicoComunicados';
 import ServicoComunicadoEvento from '~/servicos/Paginas/AcompanhamentoEscolar/ComunicadoEvento/ServicoComunicadoEvento';
 import { erros, ServicoCalendarios } from '~/servicos';
-import FiltroHelper from '~/paginas/AcompanhamentoEscolar/Comunicados/Helper/helper.js';
+import FiltroHelper from '~/paginas/AcompanhamentoEscolar/Comunicados/Helper/helper';
 
 const MODALIDADE_EJA_ID = '3';
 const TODAS_MODALIDADES_ID = '-99';
@@ -54,7 +53,6 @@ function Filtro({ onFiltrar }) {
   ];  
   const anosPorModalidadeDefault = [{ modalidade: '-99', ano: 'Todos'}];
   const [refForm, setRefForm] = useState({});
-  const [gruposLista, setGruposLista] = useState([]);
   const [anosLetivos, setAnosLetivos] = useState([]);
   const [modalidades, setModalidades] = useState(todosTurmasModalidade);
   const [dres, setDres] = useState([]);
@@ -83,8 +81,8 @@ function Filtro({ onFiltrar }) {
   }, [ues]);
 
   const modalidadeDesabilitada = useMemo(() => {
-    return modalidades.length <= 1 || gruposSelecionados?.length != 0;
-  }, [refForm, modalidades, ues, dres, gruposSelecionados]);
+    return modalidades.length <= 1;
+  }, [refForm, modalidades, ues, dres]);
 
   const semestreDesabilitado = useMemo(() => {
     return modalidadeSelecionada !== MODALIDADE_EJA_ID;
@@ -94,18 +92,7 @@ function Filtro({ onFiltrar }) {
     return turmas.length <= 1;
   }, [turmas]);
 
-  const gruposDesabilitados = useMemo(() => {
-    return (
-      modalidadeSelecionada &&
-      modalidadeSelecionada !== '' &&
-      modalidadeSelecionada !== TODAS_MODALIDADES_ID &&
-      modalidadeSelecionada !== 'Todas' &&
-      gruposSelecionados?.length > 0
-    );
-  }, [modalidadeSelecionada]);
-
   const [valoresIniciais] = useState({
-    gruposId: '',
     dataEnvio: '',
     dataExpiracao: '',
     titulo: '',
@@ -372,8 +359,6 @@ function Filtro({ onFiltrar }) {
 
   useEffect(() => {
     if (!refForm?.setFieldValue) return;
-
-    obterListaGrupos();
     ObterAnoLetivo();
   }, [ObterAnoLetivo, refForm]);
 
@@ -420,12 +405,6 @@ function Filtro({ onFiltrar }) {
     if (!dados || dados.length === 0) return;
     setTurmas(dados);
     refForm.setFieldValue('turmas', ['Todas']);
-  };
-
-  const ObterGruposIdPorModalidade = async modalidade => {
-    const dados = await FiltroHelper.ObterGruposIdPorModalidade(modalidade);
-    if (!dados || dados.length === 0) return;
-    refForm.setFieldValue('gruposId', dados);
   };
 
   const chainTodosAnos = (dados, modalidade) => {
@@ -537,8 +516,6 @@ function Filtro({ onFiltrar }) {
     refForm.setFieldValue('semestre', todos[0].id);
     refForm.setFieldValue('ano', 'Todos');
     refForm.setFieldValue('turmas', [TODAS_TURMAS_ID]);
-    refForm.setFieldValue('gruposId', '');
-    setGruposSelecionados([]);
 
     setTurmas(todosTurmasModalidade);
 
@@ -555,7 +532,6 @@ function Filtro({ onFiltrar }) {
     setModalidadeSelecionada(modalidade);
     loadTiposCalendarioEffect();
 
-    await ObterGruposIdPorModalidade(modalidade);
     await ObterAnosPorModalidade(modalidade, ueSelecionada);
 
     if (modalidade !== MODALIDADE_EJA_ID) {
@@ -609,13 +585,6 @@ function Filtro({ onFiltrar }) {
     validarFiltro();
   };
 
-  const onGrupoChange = grupos => {
-    refForm.setFieldValue('modalidade', TODAS_MODALIDADES_ID);
-    refForm.setFieldValue('ano', []);
-    setModalidadeSelecionada(TODAS_MODALIDADES_ID);
-    setGruposSelecionados(grupos);
-  };
-
   const onSubmitFiltro = valores => {
     if (dres?.length && ues?.length) {
       const valoresSubmit = {
@@ -630,7 +599,6 @@ function Filtro({ onFiltrar }) {
         CodigoUe: valores.CodigoUe == TODAS_UES_ID ? 'todas' : valores.CodigoUe,
         CodigoDre:
           valores.CodigoDre == TODAS_DRE_ID ? 'todas' : valores.CodigoDre,
-        gruposId: gruposSelecionados,
         dataEnvio: valores?.dataEnvio?.set({ hour: 0, minute: 0, second: 0 }),
         dataExpiracao: valores?.dataExpiracao?.set({
           hour: 23,
@@ -642,11 +610,6 @@ function Filtro({ onFiltrar }) {
       onFiltrar(valoresSubmit);
     }
   };
-
-  async function obterListaGrupos() {
-    const lista = await ServicoComunicados.listarGrupos();
-    setGruposLista(lista);
-  }
 
   const validarFiltro = () => {
     const arrayCampos = Object.keys(valoresIniciais);
@@ -861,28 +824,33 @@ function Filtro({ onFiltrar }) {
                   validarFiltro();
                   onTurmaChange(x);
                 }}
+                showSearch
               />
             </Grid>
           </Linha>
           <Linha className="row mb-2">
             <Grid cols={4}>
-              <Label control="gruposId" text="Grupo" />
-              <SelectComponent
-                form={form}
-                id="gruposId"
-                name="gruposId"
-                placeholder="Selecione um grupo"
-                value={form.values.gruposId}
-                multiple
-                disabled={gruposDesabilitados}
-                lista={gruposLista}
-                valueOption="id"
-                valueText="nome"
-                onChange={grupo => {
-                  validarFiltro();
-                  onGrupoChange(grupo);
-                }}
-              />
+              <Label control="tipoCalendarioId" text="Tipo de Calendário" />
+              <Loader loading={carregandoTipos} tip="">
+                <SelectAutocomplete
+                  hideLabel
+                  showList
+                  isHandleSearch
+                  placeholder="Selecione um calendário"
+                  className="col-md-12"
+                  name="tipoCalendarioId"
+                  id="select-tipo-calendario"
+                  lista={listaCalendario}
+                  valueField="id"
+                  textField="descricao"
+                  onSelect={valor => selecionaTipoCalendario(valor, form)}
+                  onChange={valor => selecionaTipoCalendario(valor, form)}
+                  value={valorTipoCalendario}
+                  form={form}
+                  allowClear
+                  disabled={bloquearCamposCalendarioEventos}
+                />
+              </Loader>
             </Grid>
             <Grid cols={4}>
               <Label control="dataEnvio" text="Data de envio" />
@@ -907,29 +875,6 @@ function Filtro({ onFiltrar }) {
           </Linha>
           <Linha className="row mb-2">
             <Grid cols={6}>
-              <Label control="tipoCalendarioId" text="Tipo de Calendário" />
-              <Loader loading={carregandoTipos} tip="">
-                <SelectAutocomplete
-                  hideLabel
-                  showList
-                  isHandleSearch
-                  placeholder="Selecione um calendário"
-                  className="col-md-12"
-                  name="tipoCalendarioId"
-                  id="select-tipo-calendario"
-                  lista={listaCalendario}
-                  valueField="id"
-                  textField="descricao"
-                  onSelect={valor => selecionaTipoCalendario(valor, form)}
-                  onChange={valor => selecionaTipoCalendario(valor, form)}
-                  value={valorTipoCalendario}
-                  form={form}
-                  allowClear={true}
-                  disabled={bloquearCamposCalendarioEventos}
-                />
-              </Loader>
-            </Grid>
-            <Grid cols={6}>
               <Label control="evento" text="Evento" />
               <Loader loading={carregandoEventos} tip="">
                 <SelectAutocomplete
@@ -953,9 +898,7 @@ function Filtro({ onFiltrar }) {
                 />
               </Loader>
             </Grid>
-          </Linha>
-          <Linha className="row">
-            <Grid cols={12}>
+            <Grid cols={6}>
               <Label control="titulo" text="Título" />
               <CampoTexto
                 form={form}

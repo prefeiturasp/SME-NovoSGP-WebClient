@@ -17,7 +17,7 @@ const FrequenciaGlobalPorAno = props => {
   const key = 'frequencia-global-por-ano';
 
   return (
-    <div className="mt-3">
+    <>
       <CardCollapse
         titulo="Frequência global por ano"
         key={`${key}-collapse-key`}
@@ -41,7 +41,7 @@ const FrequenciaGlobalPorAno = props => {
           ''
         )}
       </CardCollapse>
-    </div>
+    </>
   );
 };
 

@@ -152,6 +152,7 @@ const CampoConceito = props => {
             desabilitarCampos ||
             !dentroPeriodo
           }
+          searchValue={false}
         />
       </Combo>
     );

@@ -1,3 +1,5 @@
+import { OPCAO_TODOS } from '~/constantes/constantes';
+
 /**
  * @description Verifica se o objeto está inteiro vazio ou nulo
  * @param {Object} obj Objeto a ser validado
@@ -159,6 +161,7 @@ const obterTamanhoImagemPorArquivo = file => {
     reader.readAsDataURL(file);
   });
 };
+
 const obterTodosMeses = () => {
   const meses = [
     {
@@ -214,6 +217,28 @@ const obterTodosMeses = () => {
   return meses;
 };
 
+const onchangeMultiSelect = (valores, valorAtual, funSetarNovoValor) => {
+  let valorParaSetar = valores;
+  const valorAtualTemOpcaoTodos = valorAtual?.includes(OPCAO_TODOS);
+  const valoresTemOpcaoTodos = valores.includes(OPCAO_TODOS);
+
+  if (valorAtualTemOpcaoTodos) {
+    const listaSemOpcaoTodos = valores.filter(valor => valor !== OPCAO_TODOS);
+    valorParaSetar = listaSemOpcaoTodos;
+  }
+  if (!valorAtualTemOpcaoTodos && valoresTemOpcaoTodos) {
+    valorParaSetar = [OPCAO_TODOS];
+  }
+
+  funSetarNovoValor(valorParaSetar);
+};
+
+const primeiroMaisculo = valor => {
+  return valor
+    .toLowerCase()
+    .replace(/\b\S/g, caracter => caracter.toUpperCase());
+};
+
 export {
   validaSeObjetoEhNuloOuVazio,
   valorNuloOuVazio,
@@ -232,4 +257,6 @@ export {
   getBase64DataURL,
   obterTamanhoImagemPorArquivo,
   obterTodosMeses,
+  onchangeMultiSelect,
+  primeiroMaisculo,
 };

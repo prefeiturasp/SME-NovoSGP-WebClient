@@ -26,6 +26,10 @@ const DadosAcompanhamentoAprendizagem = props => {
 
   const { semestreSelecionado, componenteCurricularId } = props;
 
+  const componenteCurricularSelecionado = useSelector(
+    state => state.registroIndividual.componenteCurricularSelecionado
+  );
+
   const permissoesTela =
     usuario.permissoes[RotasDto.ACOMPANHAMENTO_APRENDIZAGEM];
 

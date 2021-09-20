@@ -60,10 +60,20 @@ class ServicoCalendarios {
     return api.get(url);
   };
 
-  obterTiposCalendarioPorAnoLetivoModalidade = (anoLetivo, modalidades) => {
-    return api.get(
-      `v1/calendarios/tipos/ano-letivo/${anoLetivo}/modalidade/${modalidades}`
-    );
+  obterTiposCalendarioPorAnoLetivoModalidade = (
+    anoLetivo,
+    modalidades,
+    semestre
+  ) => {
+    let url = `v1/calendarios/tipos/ano-letivo/${anoLetivo}/modalidade/${modalidades}`;
+    if (semestre) {
+      url += `?semestre=${semestre}`;
+    }
+    return api.get(url);
+  };
+
+  obterBimestres = tipoCalendarioId => {
+    return api.get(`v1/calendarios/tipos/${tipoCalendarioId}/bimestres`);
   };
 }
 
