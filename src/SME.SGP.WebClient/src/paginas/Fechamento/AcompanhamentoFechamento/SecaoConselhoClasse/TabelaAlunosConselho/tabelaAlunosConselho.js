@@ -107,11 +107,13 @@ const TabelaAlunosConselho = props => {
     }
   );
 
-  const montarValorNota = nota => {
+  const montarValorNota = componenteCurricular => {
+    const nota = componenteCurricular?.notaFechamento;
+    const lancaNota = componenteCurricular?.lancaNota;
     return (
       <>
         {nota || <span className="sem-nota">-</span>}
-        {!nota && (
+        {lancaNota && !nota && (
           <Tooltip title="Sem nota atribuída">
             <MarcadorTriangulo
               cor={Base.LaranjaStatus}
@@ -154,7 +156,8 @@ const TabelaAlunosConselho = props => {
       title: 'Nota do fechamento',
       dataIndex: 'notaFechamento',
       align: 'center',
-      render: valor => montarValorNota(valor),
+      render: (_, componenteCurricular) =>
+        montarValorNota(componenteCurricular),
     },
     {
       title: 'Nota pós conselho',
