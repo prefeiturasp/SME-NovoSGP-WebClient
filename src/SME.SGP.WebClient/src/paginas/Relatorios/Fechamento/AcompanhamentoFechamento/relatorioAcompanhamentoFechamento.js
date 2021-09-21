@@ -194,12 +194,6 @@ const AcompanhamentoFechamento = () => {
   const obterDres = useCallback(async () => {
     if (anoLetivo) {
       setCarregandoDres(true);
-      const OPCAO_TODAS_DRE = {
-        desc: 'Todas',
-        valor: '-99',
-        abrev: 'Todas',
-        id: 0,
-      };
       const resposta = await AbrangenciaServico.buscarDres(
         `v1/abrangencias/${consideraHistorico}/dres?anoLetivo=${anoLetivo}`
       )
@@ -218,12 +212,8 @@ const AcompanhamentoFechamento = () => {
 
         if (lista?.length === 1) {
           setDreCodigo(lista[0].valor);
-        } else {
-          lista.unshift(OPCAO_TODAS_DRE);
         }
-
         setListaDres(lista);
-
         return;
       }
       setDreCodigo(undefined);
@@ -252,11 +242,6 @@ const AcompanhamentoFechamento = () => {
       id: 0,
       ehInfantil: false,
     };
-    if (dreCodigo === OPCAO_TODOS) {
-      setListaUes([OPCAO_TODAS_UE]);
-      setUeCodigo(OPCAO_TODAS_UE.valor);
-      return;
-    }
     if (anoLetivo && dreCodigo) {
       setCarregandoUes(true);
       const resposta = await AbrangenciaServico.buscarUes(
@@ -650,7 +635,7 @@ const AcompanhamentoFechamento = () => {
                   color={Colors.Azul}
                   onClick={onClickVoltar}
                   border
-                  className="mr-2"
+                  className="mr-3"
                 />
                 <Button
                   id="btn-cancelar"
@@ -658,7 +643,7 @@ const AcompanhamentoFechamento = () => {
                   color={Colors.Azul}
                   border
                   bold
-                  className="mr-2"
+                  className="mr-3"
                   onClick={onClickCancelar}
                   disabled={desabilitarCampos || !dreCodigo}
                 />
