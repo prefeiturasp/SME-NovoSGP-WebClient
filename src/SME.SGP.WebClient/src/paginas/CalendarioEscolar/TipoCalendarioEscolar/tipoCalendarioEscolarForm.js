@@ -55,6 +55,7 @@ const TipoCalendarioEscolarForm = ({ match }) => {
   const [valoresIniciais, setValoresIniciais] = useState(valoresIniciaisForm);
   const [listaAnosLetivo, setListaAnosLetivo] = useState([]);
   const [carregandoAnos, setCarregandoAnos] = useState(false);
+  const [carregandoBotoesAcao, setCarregandoBotoesAcao] = useState(false);
 
   const [validacoes] = useState(
     Yup.object({
@@ -219,6 +220,7 @@ const TipoCalendarioEscolarForm = ({ match }) => {
   };
 
   const validaAntesDoSubmit = form => {
+    setCarregandoBotoesAcao(true);
     const arrayCampos = Object.keys(valoresIniciaisForm);
     arrayCampos.forEach(campo => {
       form.setFieldTouched(campo, true, true);
@@ -228,6 +230,7 @@ const TipoCalendarioEscolarForm = ({ match }) => {
         form.handleSubmit(e => e);
       }
     });
+    setCarregandoBotoesAcao(true);
   };
 
   const onChangeAnoLetivo = async valor => {
@@ -274,46 +277,48 @@ const TipoCalendarioEscolarForm = ({ match }) => {
         >
           {form => (
             <Form className="col-md-12 mb-4">
-              <div className="col-md-12 d-flex justify-content-end pb-4">
-                <Button
-                  label="Voltar"
-                  icon="arrow-left"
-                  color={Colors.Azul}
-                  border
-                  className="mr-2"
-                  onClick={onClickVoltar}
-                />
-                <Button
-                  label="Cancelar"
-                  color={Colors.Roxo}
-                  border
-                  className="mr-2"
-                  onClick={() => onClickCancelar(form)}
-                  disabled={!modoEdicao}
-                />
-                <Button
-                  label="Excluir"
-                  color={Colors.Vermelho}
-                  border
-                  className="mr-2"
-                  disabled={
-                    somenteConsulta ||
-                    !permissoesTela.podeExcluir ||
-                    novoRegistro ||
-                    possuiEventos
-                  }
-                  onClick={onClickExcluir}
-                />
-                <Button
-                  label={idTipoCalendario > 0 ? 'Alterar' : 'Cadastrar'}
-                  color={Colors.Roxo}
-                  border
-                  bold
-                  className="mr-2"
-                  onClick={() => validaAntesDoSubmit(form)}
-                  disabled={desabilitarCampos}
-                />
-              </div>
+              <Loader loading={carregandoBotoesAcao} tooltip="">
+                <div className="col-md-12 d-flex justify-content-end pb-4">
+                  <Button
+                    label="Voltar"
+                    icon="arrow-left"
+                    color={Colors.Azul}
+                    border
+                    className="mr-2"
+                    onClick={onClickVoltar}
+                  />
+                  <Button
+                    label="Cancelar"
+                    color={Colors.Roxo}
+                    border
+                    className="mr-2"
+                    onClick={() => onClickCancelar(form)}
+                    disabled={!modoEdicao}
+                  />
+                  <Button
+                    label="Excluir"
+                    color={Colors.Vermelho}
+                    border
+                    className="mr-2"
+                    disabled={
+                      somenteConsulta ||
+                      !permissoesTela.podeExcluir ||
+                      novoRegistro ||
+                      possuiEventos
+                    }
+                    onClick={onClickExcluir}
+                  />
+                  <Button
+                    label={idTipoCalendario > 0 ? 'Alterar' : 'Cadastrar'}
+                    color={Colors.Roxo}
+                    border
+                    bold
+                    className="mr-2"
+                    onClick={() => validaAntesDoSubmit(form)}
+                    disabled={desabilitarCampos}
+                  />
+                </div>
+              </Loader>
               <div className="row">
                 <div className="col-sm-4 col-md-2 col-lg-2 col-xl-2 mb-2">
                   <Loader loading={carregandoAnos} tip="">
