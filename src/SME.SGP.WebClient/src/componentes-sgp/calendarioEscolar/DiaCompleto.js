@@ -9,6 +9,7 @@ import { OPCAO_TODOS } from '~/constantes';
 import { store } from '~/redux';
 import { selecionaDia } from '~/redux/modulos/calendarioEscolar/actions';
 import api from '~/servicos/api';
+import DataInicioFim from '../Calendario/componentes/MesCompleto/componentes/Dias/componentes/DiaCompleto/componentes/DataInicioFim';
 import {
   ContainerDetalhesIcon,
   DiaCompletoWrapper,
@@ -115,7 +116,6 @@ const DiaCompleto = props => {
             <>
               {eventosDia.map(evento => {
                 return (
-                  // TODO - Remover dados mock!
                   <Linha key={shortid.generate()}>
                     <LinhaEvento
                       className="evento"
@@ -133,9 +133,9 @@ const DiaCompleto = props => {
                         </TipoEvento>
                       </div>
                       <div className="tituloEventoAula">
+                        <div className="detalhesEvento">{evento.nome}</div>
                         <div className="detalhesEvento">
-                          {/* <DataInicioFim dadosAula={eventoAula} /> */}
-                          Data Início: 01/01/2021 - Data Fim: 31/01/2021
+                          <DataInicioFim dadosAula={evento} />
                         </div>
                         {evento.dreNome ? (
                           <div className="detalhesEvento">

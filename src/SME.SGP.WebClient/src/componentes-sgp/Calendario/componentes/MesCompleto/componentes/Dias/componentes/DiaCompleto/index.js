@@ -169,20 +169,19 @@ function DiaCompleto({
                         )}
                         <DataInicioFim dadosAula={eventoAula} />
                       </div>
-                      {/*  // TODO - Remover dados mock! */}
-                      {!eventoAula.ehAula && eventoAula.dreNome ? (
+                      {!eventoAula.ehAula && eventoAula.dre ? (
                         <div className="detalhesEvento">
                           <span>
-                            DRE: <strong>{eventoAula.dreNome}</strong>
+                            DRE: <strong>{eventoAula.dre}</strong>
                           </span>
                         </div>
                       ) : (
                         ''
                       )}
-                      {!eventoAula.ehAula && eventoAula.c ? (
+                      {!eventoAula.ehAula && eventoAula.ue ? (
                         <div className="detalhesEvento">
                           <span>
-                            UE: <strong>{eventoAula.ueNome}</strong>
+                            UE: <strong>{eventoAula.ue}</strong>
                           </span>
                         </div>
                       ) : (
