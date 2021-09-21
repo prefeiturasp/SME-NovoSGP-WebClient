@@ -1,38 +1,48 @@
-import React, { useMemo } from 'react';
-import shortid from 'shortid';
 import t from 'prop-types';
-
-// Componentes
-import { Colors } from '~/componentes';
-
-// Estilos
+import React from 'react';
+import shortid from 'shortid';
+import { Base, Colors } from '~/componentes';
+import { TipoEvento } from '~/componentes-sgp/calendarioProfessor/Semana.css';
 import { Botao } from '../styles';
 
 function LabelAulaEvento({ dadosEvento }) {
-  const tipoEventoMemo = useMemo(() => {
+  const montarAulaEvento = () => {
     const { ehAula, ehAulaCJ, tipoEvento } = dadosEvento;
 
-    if (ehAula && !ehAulaCJ) return 'Aula';
-    if (ehAula && ehAulaCJ) return 'CJ';
+    let label = '';
+    if (ehAula && !ehAulaCJ) {
+      label = 'Aula';
+    }
+    if (ehAula && ehAulaCJ) {
+      label = 'CJ';
+    }
 
-    return tipoEvento;
-  }, [dadosEvento]);
+    if (label) {
+      return (
+        <Botao
+          id={shortid.generate()}
+          label={label}
+          color={
+            (label === 'Aula' && Colors.Roxo) ||
+            (label === 'CJ' && Colors.Laranja) ||
+            Colors.CinzaBotao
+          }
+          className="w-100"
+          height={dadosEvento.ehAula ? '38px' : 'auto'}
+          border
+          steady
+        />
+      );
+    }
 
-  return (
-    <Botao
-      id={shortid.generate()}
-      label={tipoEventoMemo}
-      color={
-        (tipoEventoMemo === 'Aula' && Colors.Roxo) ||
-        (tipoEventoMemo === 'CJ' && Colors.Laranja) ||
-        Colors.CinzaBotao
-      }
-      className="w-100"
-      height={dadosEvento.ehAula ? '38px' : 'auto'}
-      border
-      steady
-    />
-  );
+    return (
+      <TipoEvento cor={Base.AzulEventoCalendario} className="mb-2">
+        {tipoEvento}
+      </TipoEvento>
+    );
+  };
+
+  return montarAulaEvento();
 }
 
 LabelAulaEvento.propTypes = {

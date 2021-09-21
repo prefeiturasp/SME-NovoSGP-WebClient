@@ -49,7 +49,7 @@ const Mes = props => {
       mes.style = { color: Base.Preto };
     }
 
-    mes.chevronColor = Base.AzulCalendario;
+    mes.chevronColor = Base.Roxo;
     if (mes.estaAberto) mes.chevronColor = Base.Branco;
 
     setMesSelecionado(mes);

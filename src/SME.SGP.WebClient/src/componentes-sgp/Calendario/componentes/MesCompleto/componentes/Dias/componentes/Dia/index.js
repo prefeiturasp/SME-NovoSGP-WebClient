@@ -8,13 +8,13 @@ import { Tooltip } from 'antd';
 import {
   DiaWrapper,
   TipoEventosLista,
-  TipoEvento,
   IconeAtividadeAvaliativa,
 } from './styles';
 
 // Componentes
 import { Base } from '~/componentes';
 import { IconeDiaComPendencia } from '../../styles';
+import { TipoEvento } from '~/componentes-sgp/calendarioProfessor/Semana.css';
 
 function Dia({
   dia,
@@ -56,7 +56,7 @@ function Dia({
           {eventos.temAula && <TipoEvento cor={Base.Roxo}>Aula</TipoEvento>}
           {eventos.temAulaCJ && <TipoEvento cor={Base.Laranja}>CJ</TipoEvento>}
           {eventos.temEvento && (
-            <TipoEvento cor={Base.RoxoEventoCalendario}>Evento</TipoEvento>
+            <TipoEvento cor={Base.AzulEventoCalendario}>Evento</TipoEvento>
           )}
         </TipoEventosLista>
       )}
