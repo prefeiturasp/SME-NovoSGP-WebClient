@@ -169,20 +169,20 @@ function DiaCompleto({
                         )}
                         <DataInicioFim dadosAula={eventoAula} />
                       </div>
-                      {/* TODO: REMOVER MOCK! */}
-                      {!eventoAula.ehAula && !eventoAula.dre ? (
+                      {/*  // TODO - Remover dados mock! */}
+                      {!eventoAula.ehAula && eventoAula.dreNome ? (
                         <div className="detalhesEvento">
                           <span>
-                            DRE: <strong>TODAS</strong>
+                            DRE: <strong>{eventoAula.dreNome}</strong>
                           </span>
                         </div>
                       ) : (
                         ''
                       )}
-                      {!eventoAula.ehAula && !eventoAula.ue ? (
+                      {!eventoAula.ehAula && eventoAula.c ? (
                         <div className="detalhesEvento">
                           <span>
-                            UE: <strong>TODAS</strong>
+                            UE: <strong>{eventoAula.ueNome}</strong>
                           </span>
                         </div>
                       ) : (
@@ -207,12 +207,12 @@ function DiaCompleto({
                     )}
                   </LinhaEvento>
                   {eventoAula.descricao ? (
-                    <Tooltip title={eventoAula.descricao}>
-                      <ContainerDetalhesIcon>
+                    <ContainerDetalhesIcon>
+                      <Tooltip title={eventoAula.descricao}>
                         <i className="fas fa-info-circle" />
                         Detalhes
-                      </ContainerDetalhesIcon>
-                    </Tooltip>
+                      </Tooltip>
+                    </ContainerDetalhesIcon>
                   ) : (
                     ''
                   )}

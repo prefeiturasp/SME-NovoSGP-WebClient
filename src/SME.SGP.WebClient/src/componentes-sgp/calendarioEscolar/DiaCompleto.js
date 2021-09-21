@@ -129,28 +129,27 @@ const DiaCompleto = props => {
                           cor={Base.AzulEventoCalendario}
                           className="mb-2"
                         >
-                          Fechamentos do bimestre
+                          {evento.tipoEvento || ''}
                         </TipoEvento>
                       </div>
                       <div className="tituloEventoAula">
-                        <div>Evento: Fechamento 1º bimestre</div>
                         <div className="detalhesEvento">
                           {/* <DataInicioFim dadosAula={eventoAula} /> */}
                           Data Início: 01/01/2021 - Data Fim: 31/01/2021
                         </div>
-                        {!evento.dre ? (
+                        {evento.dreNome ? (
                           <div className="detalhesEvento">
                             <span>
-                              DRE: <strong>TODAS</strong>
+                              DRE: <strong>{evento.dreNome}</strong>
                             </span>
                           </div>
                         ) : (
                           ''
                         )}
-                        {!evento.ue ? (
+                        {evento.ueNome ? (
                           <div className="detalhesEvento">
                             <span>
-                              UE: <strong>TODAS</strong>
+                              UE: <strong>{evento.ueNome}</strong>
                             </span>
                           </div>
                         ) : (
@@ -158,15 +157,13 @@ const DiaCompleto = props => {
                         )}
                       </div>
                     </LinhaEvento>
-                    {!evento.descricao ? (
-                      <Tooltip
-                        title={evento.descricao || 'ASDASD ASD ASDAS ASD'}
-                      >
-                        <ContainerDetalhesIcon>
+                    {evento.descricao ? (
+                      <ContainerDetalhesIcon>
+                        <Tooltip title={evento.descricao}>
                           <i className="fas fa-info-circle" />
                           Detalhes
-                        </ContainerDetalhesIcon>
-                      </Tooltip>
+                        </Tooltip>
+                      </ContainerDetalhesIcon>
                     ) : (
                       ''
                     )}
