@@ -36,6 +36,7 @@ const DiaCompleto = props => {
     eventoSme,
     dreSelecionada,
     unidadeEscolarSelecionada,
+    anoLetivo,
   } = filtros;
   const [eventosDia, setEventosDia] = useState([]);
 
@@ -59,18 +60,15 @@ const DiaCompleto = props => {
           setCarregandoDia(true);
           api
             .get(
-              `v1/calendarios/eventos/meses/${mesAtual}/dias/${diaSelecionado.getDate()}?EhEventoSme=${eventoSme}&${
+              `v1/calendarios/eventos/meses/${mesAtual}/dias/${diaSelecionado.getDate()}?EhEventoSme=${eventoSme}&idTipoCalendario=${tipoCalendarioSelecionado}&anoLetivo=${anoLetivo}
+              ${
                 dreSelecionada && dreSelecionada !== OPCAO_TODOS
-                  ? `DreId=${dreSelecionada}&`
-                  : ''
-              }${
-                tipoCalendarioSelecionado
-                  ? `IdTipoCalendario=${tipoCalendarioSelecionado}&`
+                  ? `&DreId=${dreSelecionada}`
                   : ''
               }${
                 unidadeEscolarSelecionada &&
                 unidadeEscolarSelecionada !== OPCAO_TODOS
-                  ? `UeId=${unidadeEscolarSelecionada}`
+                  ? `&UeId=${unidadeEscolarSelecionada}`
                   : ''
               }`
             )
