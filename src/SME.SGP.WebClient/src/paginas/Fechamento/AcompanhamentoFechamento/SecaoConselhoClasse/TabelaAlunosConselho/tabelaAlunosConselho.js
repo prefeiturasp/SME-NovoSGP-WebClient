@@ -113,7 +113,7 @@ const TabelaAlunosConselho = props => {
     const lancaNota = componenteCurricular?.lancaNota;
     return (
       <>
-        {!valorNuloOuVazio(nota) || <span className="sem-nota">-</span>}
+        {valorNuloOuVazio(nota) ? <span className="sem-nota">-</span> : nota}
         {lancaNota && valorNuloOuVazio(nota) && (
           <Tooltip title="Sem nota atribuída">
             <MarcadorTriangulo
@@ -130,8 +130,10 @@ const TabelaAlunosConselho = props => {
   const montarNotaPosConselho = componenteCurricular => {
     return (
       <>
-        {!valorNuloOuVazio(componenteCurricular?.notaPosConselho) || (
+        {valorNuloOuVazio(componenteCurricular?.notaPosConselho) ? (
           <span className="sem-nota">-</span>
+        ) : (
+          componenteCurricular?.notaPosConselho
         )}
         {valorNuloOuVazio(componenteCurricular?.notaPosConselho) &&
         componenteCurricular?.lancaNota ? (
