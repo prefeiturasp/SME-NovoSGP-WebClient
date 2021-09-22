@@ -49,7 +49,7 @@ const Avaliacao = props => {
   );
 
   const onChangeNotaConceito = (nota, valorNovo) => {
-    if (!desabilitarCampos && nota.podeEditar && valorNovo !== null) {
+    if (!desabilitarCampos && nota.podeEditar) {
       nota.notaConceito = valorNovo;
       nota.modoEdicao = true;
       dados.modoEdicao = true;
