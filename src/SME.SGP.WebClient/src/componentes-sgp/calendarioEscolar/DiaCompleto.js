@@ -1,38 +1,22 @@
-﻿import React, { useEffect, useState } from 'react';
+﻿import { Tooltip } from 'antd';
 import PropTypes from 'prop-types';
-import styled from 'styled-components';
+import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import shortid from 'shortid';
-import { Base, Colors } from '~/componentes/colors';
-import api from '~/servicos/api';
-import history from '~/servicos/history';
-import Button from '~/componentes/button';
-import { store } from '~/redux';
-import {
-  selecionaDia,
-  salvarEventoCalendarioEdicao,
-} from '~/redux/modulos/calendarioEscolar/actions';
+import { Base } from '~/componentes/colors';
 import Loader from '~/componentes/loader';
-import RotasDTO from '~/dtos/rotasDto';
-
-const Div = styled.div``;
-const Evento = styled(Div)`
-  display: flex;
-
-  div:first-child {
-    margin-right: 1rem;
-  }
-  &:hover {
-    background: ${Base.Roxo};
-    color: ${Base.Branco};
-  }
-`;
-const Botao = styled(Button)`
-  ${Evento}:hover & {
-    border-color: ${Base.Branco} !important;
-    color: ${Base.Branco} !important;
-  }
-`;
+import { OPCAO_TODOS } from '~/constantes';
+import { store } from '~/redux';
+import { selecionaDia } from '~/redux/modulos/calendarioEscolar/actions';
+import api from '~/servicos/api';
+import DataInicioFim from '../Calendario/componentes/MesCompleto/componentes/Dias/componentes/DiaCompleto/componentes/DataInicioFim';
+import {
+  ContainerDetalhesIcon,
+  DiaCompletoWrapper,
+  Linha,
+  LinhaEvento,
+} from '../Calendario/componentes/MesCompleto/componentes/Dias/componentes/DiaCompleto/styles';
+import { TipoEvento } from '../calendarioProfessor/Semana.css';
 
 const SemEvento = () => {
   return (
@@ -55,10 +39,6 @@ const DiaCompleto = props => {
   } = filtros;
   const [eventosDia, setEventosDia] = useState([]);
 
-  const permissaoTela = useSelector(
-    state => state.usuario.permissoes[RotasDTO.CALENDARIO_ESCOLAR]
-  );
-
   const diaSelecionado = useSelector(
     state => state.calendarioEscolar.diaSelecionado
   );
@@ -80,13 +60,16 @@ const DiaCompleto = props => {
           api
             .get(
               `v1/calendarios/eventos/meses/${mesAtual}/dias/${diaSelecionado.getDate()}?EhEventoSme=${eventoSme}&${
-                dreSelecionada ? `DreId=${dreSelecionada}&` : ''
+                dreSelecionada && dreSelecionada !== OPCAO_TODOS
+                  ? `DreId=${dreSelecionada}&`
+                  : ''
               }${
                 tipoCalendarioSelecionado
                   ? `IdTipoCalendario=${tipoCalendarioSelecionado}&`
                   : ''
               }${
-                unidadeEscolarSelecionada
+                unidadeEscolarSelecionada &&
+                unidadeEscolarSelecionada !== OPCAO_TODOS
                   ? `UeId=${unidadeEscolarSelecionada}`
                   : ''
               }`
@@ -121,61 +104,81 @@ const DiaCompleto = props => {
     store.dispatch(selecionaDia(undefined));
   }, [filtros]);
 
-  const aoClicarEvento = id => {
-    if (permissaoTela && permissaoTela.podeConsultar) {
-      store.dispatch(
-        salvarEventoCalendarioEdicao(
-          tipoCalendarioSelecionado,
-          eventoSme,
-          dreSelecionada,
-          unidadeEscolarSelecionada,
-          mesAtual,
-          diaSelecionado
-        )
-      );
-      history.push(`calendario-escolar/eventos/editar/${id}`);
-    }
-  };
-
   return (
-    estaAberto && (
-      <Loader loading={carregandoDia} tip="">
-        <Div className="border-bottom border-top-0 h-100 p-3">
+    <DiaCompletoWrapper className={`${estaAberto && `visivel`}`}>
+      {estaAberto && (
+        <Loader
+          loading={carregandoDia}
+          tip="Carregando eventos..."
+          className={carregandoDia ? 'text-center' : ''}
+        >
           {eventosDia && eventosDia.length > 0 ? (
-            <Div className="list-group list-group-flush fade show">
+            <>
               {eventosDia.map(evento => {
                 return (
-                  <Evento
-                    key={shortid.generate()}
-                    className="list-group-item list-group-item-action d-flex rounded oi"
-                    onClick={() => aoClicarEvento(evento.id)}
-                    style={{ cursor: 'pointer' }}
-                  >
-                    <Div cols={1} className="pl-0">
-                      <Botao
-                        id={shortid.generate()}
-                        label="Evento"
-                        color={Colors.CinzaBotao}
-                        border
-                        steady
-                      />
-                    </Div>
-                    <Div
-                      cols={11}
-                      className="align-self-center font-weight-bold"
+                  <Linha key={shortid.generate()}>
+                    <LinhaEvento
+                      className="evento"
+                      style={{
+                        flexDirection: 'column',
+                        alignItems: 'flex-start',
+                      }}
                     >
-                      <Div>{evento.nome ? evento.nome : 'Evento'}</Div>
-                    </Div>
-                  </Evento>
+                      <div className="labelEventoAula ml-2 ">
+                        <TipoEvento
+                          cor={Base.AzulEventoCalendario}
+                          className="mb-2"
+                        >
+                          {evento.tipoEvento || ''}
+                        </TipoEvento>
+                      </div>
+                      <div className="tituloEventoAula">
+                        <div className="detalhesEvento">{evento.nome}</div>
+                        <div className="detalhesEvento">
+                          <DataInicioFim dadosAula={evento} />
+                        </div>
+                        {evento.dreNome ? (
+                          <div className="detalhesEvento">
+                            <span>
+                              DRE: <strong>{evento.dreNome}</strong>
+                            </span>
+                          </div>
+                        ) : (
+                          ''
+                        )}
+                        {evento.ueNome ? (
+                          <div className="detalhesEvento">
+                            <span>
+                              UE: <strong>{evento.ueNome}</strong>
+                            </span>
+                          </div>
+                        ) : (
+                          ''
+                        )}
+                      </div>
+                    </LinhaEvento>
+                    {evento.descricao ? (
+                      <ContainerDetalhesIcon>
+                        <Tooltip title={evento.descricao}>
+                          <i className="fas fa-info-circle" />
+                          Detalhes
+                        </Tooltip>
+                      </ContainerDetalhesIcon>
+                    ) : (
+                      ''
+                    )}
+                  </Linha>
                 );
               })}
-            </Div>
-          ) : (
+            </>
+          ) : !carregandoDia ? (
             <SemEvento />
+          ) : (
+            ''
           )}
-        </Div>
-      </Loader>
-    )
+        </Loader>
+      )}
+    </DiaCompletoWrapper>
   );
 };
 
