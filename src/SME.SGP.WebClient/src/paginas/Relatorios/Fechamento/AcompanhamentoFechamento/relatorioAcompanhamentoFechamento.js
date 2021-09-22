@@ -341,8 +341,7 @@ const AcompanhamentoFechamento = () => {
           1,
           anoLetivoSelecionado,
           consideraHistorico,
-          false,
-          [1, 7]
+          false
         ),
         AbrangenciaServico.buscarTurmas(
           ue,
@@ -350,8 +349,7 @@ const AcompanhamentoFechamento = () => {
           2,
           anoLetivoSelecionado,
           consideraHistorico,
-          false,
-          [1, 2, 7]
+          false
         ),
       ])
         .catch(e => erros(e))

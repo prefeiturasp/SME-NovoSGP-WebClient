@@ -286,7 +286,7 @@ const RelatorioAtaBimestral = () => {
           anoLetivoSelecionado,
           consideraHistorico,
           false,
-          [1, 7]
+          [1, 2, 7]
         ),
         AbrangenciaServico.buscarTurmas(
           ue,
