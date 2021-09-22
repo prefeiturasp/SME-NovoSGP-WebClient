@@ -69,6 +69,7 @@ const AcompanhamentoFechamento = () => {
   const [listaDres, setListaDres] = useState([]);
   const [listaModalidades, setListaModalidades] = useState([]);
   const [listaSemestres, setListaSemestres] = useState([]);
+  const [listaTurmasPorSemestre, setListaTurmasPorSemestre] = useState([]);
   const [listaSituacaoFechamento, setListaSituacaoFechamento] = useState([]);
   const [
     listaSituacaoConselhoClasse,
@@ -113,6 +114,7 @@ const AcompanhamentoFechamento = () => {
 
     setListaSemestres([]);
     setSemestre();
+    setListaTurmasPorSemestre({});
 
     setListaTurmas([]);
     setTurmasCodigo();
@@ -329,26 +331,49 @@ const AcompanhamentoFechamento = () => {
   };
 
   const obterSemestres = useCallback(
-    async (modalidadeSelecionada, anoLetivoSelecionado) => {
+    async (modalidadeSelecionada, anoLetivoSelecionado, ue) => {
       setCarregandoSemestres(true);
-      const retorno = await AbrangenciaServico.obterSemestres(
-        consideraHistorico,
-        anoLetivoSelecionado,
-        modalidadeSelecionada
-      )
+
+      const [primeiroSemestre, segundoSemestre] = await Promise.all([
+        AbrangenciaServico.buscarTurmas(
+          ue,
+          modalidadeSelecionada,
+          1,
+          anoLetivoSelecionado,
+          consideraHistorico,
+          false
+        ),
+        AbrangenciaServico.buscarTurmas(
+          ue,
+          modalidadeSelecionada,
+          2,
+          anoLetivoSelecionado,
+          consideraHistorico,
+          false
+        ),
+      ])
         .catch(e => erros(e))
         .finally(() => setCarregandoSemestres(false));
 
-      if (retorno?.data?.length) {
-        const lista = retorno.data.map(periodo => {
-          return { desc: periodo, valor: periodo };
-        });
+      const lista = [];
+      const listaTurmasSemestre = {};
 
-        if (lista?.length === 1) {
-          setSemestre(lista[0].valor);
-        }
-        setListaSemestres(lista);
+      if (primeiroSemestre?.data?.length) {
+        lista.push({ desc: 1, valor: 1 });
+        listaTurmasSemestre[1] = primeiroSemestre.data;
       }
+
+      if (segundoSemestre?.data?.length) {
+        lista.push({ desc: 2, valor: 2 });
+        listaTurmasSemestre[2] = segundoSemestre.data;
+      }
+
+      if (lista?.length === 1) {
+        setSemestre(lista[0].valor);
+      }
+
+      setListaSemestres(lista);
+      setListaTurmasPorSemestre(listaTurmasSemestre);
     },
     [consideraHistorico]
   );
@@ -359,18 +384,46 @@ const AcompanhamentoFechamento = () => {
       anoLetivo &&
       String(modalidade) === String(ModalidadeDTO.EJA)
     ) {
-      obterSemestres(modalidade, anoLetivo);
+      obterSemestres(modalidade, anoLetivo, ueCodigo);
       return;
     }
     setSemestre();
     setListaSemestres([]);
-  }, [obterSemestres, modalidade, anoLetivo]);
+  }, [obterAnosLetivos, obterSemestres, modalidade, ueCodigo, anoLetivo]);
 
   const onChangeTurma = valor => {
     setTurmasCodigo(valor);
     setBimestres(undefined);
     setClicouBotaoGerar(false);
   };
+
+  const obterTurmasEJA = useCallback(
+    async (semestreSelecionado, listaTurmasPorSemestreSelecionada) => {
+      if (
+        Object.keys(listaTurmasPorSemestreSelecionada)?.length &&
+        semestreSelecionado
+      ) {
+        const lista = listaTurmasPorSemestreSelecionada[
+          semestreSelecionado
+        ].map(item => ({
+          desc: item.nome,
+          valor: item.codigo,
+          nomeFiltro: item.nomeFiltro,
+        }));
+        lista.unshift({ nomeFiltro: 'Todas', valor: OPCAO_TODOS });
+
+        setListaTurmas(lista);
+
+        if (lista?.length === 1) {
+          setTurmasCodigo(lista[0].valor);
+        }
+        return;
+      }
+      setListaTurmas([]);
+      setListaTurmasPorSemestre({});
+    },
+    []
+  );
 
   const obterTurmas = useCallback(async () => {
     const OPCAO_TODAS_TURMA = { valor: OPCAO_TODOS, nomeFiltro: 'Todas' };
@@ -413,13 +466,28 @@ const AcompanhamentoFechamento = () => {
   }, [dreCodigo, ueCodigo, consideraHistorico, anoLetivo, modalidade]);
 
   useEffect(() => {
-    if (ueCodigo) {
-      obterTurmas();
+    const temModalidadeEja = Number(modalidade) === ModalidadeDTO.EJA;
+    if (modalidade && ueCodigo && !temModalidadeEja) {
+      obterTurmas(modalidade, ueCodigo);
       return;
     }
-    setTurmasCodigo();
-    setListaTurmas([]);
-  }, [ueCodigo, obterTurmas]);
+    if (
+      modalidade &&
+      ueCodigo &&
+      temModalidadeEja &&
+      Object.keys(listaTurmasPorSemestre)?.length &&
+      semestre
+    ) {
+      obterTurmasEJA(semestre, listaTurmasPorSemestre);
+    }
+  }, [
+    modalidade,
+    ueCodigo,
+    semestre,
+    listaTurmasPorSemestre,
+    obterTurmasEJA,
+    obterTurmas,
+  ]);
 
   const onChangeBimestre = valor => {
     setBimestres(valor);
