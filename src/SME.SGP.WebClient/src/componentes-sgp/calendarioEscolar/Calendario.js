@@ -16,7 +16,7 @@ const Div = styled.div`
 
 const Calendario = props => {
   const { filtros } = props;
-  console.log(filtros);
+ 
 
   return (
     <Div>
