@@ -118,11 +118,11 @@ const CalendarioEscolar = () => {
                 abrev: dre.abreviacao,
               });
             });
+            setDres(lista.sort(FiltroHelper.ordenarLista('desc')));
             if (usuario.possuiPerfilSme) {
               lista.unshift({ valor: OPCAO_TODOS, desc: 'Todas' });
               setDreSelecionada(OPCAO_TODOS);
             }
-            setDres(lista.sort(FiltroHelper.ordenarLista('desc')));
           }
           setCarregandoDres(false);
         }
