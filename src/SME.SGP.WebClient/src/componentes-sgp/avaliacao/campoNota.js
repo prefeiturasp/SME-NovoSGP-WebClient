@@ -126,8 +126,8 @@ const CampoNota = props => {
         disabled={desabilitarCampo || !nota.podeEditar}
         className={`${notaAlterada ? 'border-registro-alterado' : ''}`}
       />
-      {nota?.ausente && <TooltipEstudanteAusente />}
-      {nota?.statusGsa && <TooltipStatusGsa />}
+      {nota?.ausente ? <TooltipEstudanteAusente /> : ''}
+      {nota?.statusGsa ? <TooltipStatusGsa /> : ''}
     </div>
   );
 };

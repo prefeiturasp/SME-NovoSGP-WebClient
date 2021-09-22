@@ -9,7 +9,11 @@ class ServicoNota {
     notaTipo
   ) => {
     const validaNotas = alunos => {
-      let quantidadeTotalNotas = dados.alunos.reduce((total, aluno) => total + aluno.notasBimestre.length, 0);
+      const quantidadeTotalNotas = alunos.reduce(
+        (total, aluno) => total + aluno.notasBimestre.length,
+        0
+      );
+
       let quantidadeTotalNotasNaoAprovado = 0;
 
       const mediaAprovacaoBimestre = dados.mediaAprovacaoBimestre;
@@ -31,7 +35,7 @@ class ServicoNota {
       const percentualAbaixoMedia =
         (quantidadeTotalNotasNaoAprovado / quantidadeTotalNotas) * 100;
       const ehPorcentagemAceitavel =
-        percentualAbaixoMedia < percentualMinimoAprovados;
+        percentualAbaixoMedia <= percentualMinimoAprovados;
       return ehPorcentagemAceitavel;
     };
 

@@ -62,6 +62,7 @@ function ModalCopiarAvaliacao({ show, disciplina, onClose, onSalvarCopias }) {
           data.map(item => ({
             desc: item.nome,
             valor: item.codigo,
+            nomeFiltro: item.nome,
           }))
         );
       }
