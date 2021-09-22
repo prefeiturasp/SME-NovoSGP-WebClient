@@ -355,7 +355,7 @@ const CalendarioEscolar = () => {
   };
 
   const handleSearch = descricao => {
-    if (descricao.length > 3 || descricao.length === 0) {
+    if (descricao.length > 2 || descricao.length === 0) {
       setPesquisaTipoCalendario(descricao);
     }
   };
