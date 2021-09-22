@@ -36,6 +36,7 @@ export const ContainerLabelDiasLetivos = styled.div`
 `;
 
 const CalendarioEscolar = () => {
+  const [anoLetivo, setAnoLetivo] = useState();
   const [tipoCalendarioSelecionado, setTipoCalendarioSelecionado] = useState(
     undefined
   );
@@ -67,6 +68,7 @@ const CalendarioEscolar = () => {
     if (calendario) {
       setValorTipoCalendario(calendario.descricao);
       setTipoCalendarioSelecionado(calendarioId);
+      setAnoLetivo(calendario.anoLetivo);
     }
   }, [eventoCalendarioEdicao, listaTipoCalendario]);
 
@@ -281,6 +283,7 @@ const CalendarioEscolar = () => {
   const aoSelecionarDre = dre => {
     setValorTipoCalendario();
     setTipoCalendarioSelecionado();
+    setAnoLetivo();
     store.dispatch(zeraCalendario());
     setDreSelecionada(dre);
     setUnidadeEscolarSelecionada();
@@ -304,6 +307,7 @@ const CalendarioEscolar = () => {
   const aoSelecionarUnidadeEscolar = unidade => {
     setValorTipoCalendario();
     setTipoCalendarioSelecionado();
+    setAnoLetivo();
     setUnidadeEscolarSelecionada(unidade);
   };
 
@@ -317,6 +321,7 @@ const CalendarioEscolar = () => {
       if (!unidadeEscolarSelecionada) {
         setValorTipoCalendario();
         setTipoCalendarioSelecionado();
+        setAnoLetivo();
         return;
       }
       setCarregandoTipos(true);
@@ -336,6 +341,7 @@ const CalendarioEscolar = () => {
         if (data?.length === 1) {
           setValorTipoCalendario(data[0].descricao);
           setTipoCalendarioSelecionado(data[0].id);
+          setAnoLetivo(data[0].anoLetivo);
         }
       }
     })();
@@ -352,6 +358,7 @@ const CalendarioEscolar = () => {
       setValorTipoCalendario(descricao);
     }
     setTipoCalendarioSelecionado(tipo?.id);
+    setAnoLetivo(tipo?.anoLetivo);
   };
 
   const handleSearch = descricao => {
@@ -486,7 +493,7 @@ const CalendarioEscolar = () => {
           <Div className="row">
             <Grid cols={12}>
               <Loader loading={carregandoMeses}>
-                <Calendario filtros={filtros} />
+                <Calendario filtros={{ ...filtros, anoLetivo }} />
               </Loader>
             </Grid>
           </Div>
