@@ -579,7 +579,7 @@ const Notas = ({ match }) => {
       bimestre: bimestreParaMontar.numero,
       disciplinaId: disciplinaSelecionada,
       notaConceitoAlunos,
-      justificativa: bimestreParaMontar.justificativa,
+      justificativa: dadosBimestreAtual.justificativa,
     };
   };
 
