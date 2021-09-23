@@ -45,7 +45,7 @@ const DivMes = styled.div`
     height: 75px;
     width: 35px;
     color: ${Base.Branco};
-    background-color: ${Base.AzulCalendario};
+    background-color: ${Base.Roxo};
 
     .iconeSeta {
       transition: all 0.5s !important;

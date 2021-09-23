@@ -100,3 +100,14 @@ export const Pilula = styled.div`
   margin: 0 5px;
   display: inline-flex;
 `;
+
+export const ContainerDetalhesIcon = styled.div`
+  display: flex;
+  align-items: center;
+  font-size: 14px;
+  color: ${Base.Azul};
+  margin-right: 5px;
+  i {
+    margin-right: 8px;
+  }
+`;

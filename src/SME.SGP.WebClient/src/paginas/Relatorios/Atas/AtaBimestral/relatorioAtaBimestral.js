@@ -286,7 +286,7 @@ const RelatorioAtaBimestral = () => {
           anoLetivoSelecionado,
           consideraHistorico,
           false,
-          [1, 7]
+          [1, 2, 7]
         ),
         AbrangenciaServico.buscarTurmas(
           ue,
@@ -381,7 +381,8 @@ const RelatorioAtaBimestral = () => {
     async (semestreSelecionado, listaTurmasPorSemestreSelecionada) => {
       if (
         Object.keys(listaTurmasPorSemestreSelecionada)?.length &&
-        !ehModalidadeInfantil
+        !ehModalidadeInfantil &&
+        semestreSelecionado
       ) {
         const lista = listaTurmasPorSemestreSelecionada[
           semestreSelecionado
@@ -415,7 +416,8 @@ const RelatorioAtaBimestral = () => {
       modalidadeId &&
       ueCodigo &&
       temModalidadeEja &&
-      Object.keys(listaTurmasPorSemestre)?.length
+      Object.keys(listaTurmasPorSemestre)?.length &&
+      semestre
     ) {
       obterTurmasEJA(semestre, listaTurmasPorSemestre);
     }
