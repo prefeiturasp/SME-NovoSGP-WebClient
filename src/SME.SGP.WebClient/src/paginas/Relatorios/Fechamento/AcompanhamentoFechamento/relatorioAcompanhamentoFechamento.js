@@ -384,6 +384,14 @@ const AcompanhamentoFechamento = () => {
       anoLetivo &&
       String(modalidade) === String(ModalidadeDTO.EJA)
     ) {
+      if (ueCodigo === OPCAO_TODOS) {
+        const semestresLista = [
+          { desc: 1, valor: 1 },
+          { desc: 2, valor: 2 },
+        ];
+        setListaSemestres(semestresLista);
+        return;
+      }
       obterSemestres(modalidade, anoLetivo, ueCodigo);
       return;
     }
@@ -425,50 +433,53 @@ const AcompanhamentoFechamento = () => {
     []
   );
 
-  const obterTurmas = useCallback(async () => {
+  const obterTurmas = useCallback(
+    async OPCAO_TODAS_TURMA => {
+      if (dreCodigo && ueCodigo && modalidade) {
+        setCarregandoTurmas(true);
+        const retorno = await AbrangenciaServico.buscarTurmas(
+          ueCodigo,
+          modalidade,
+          '',
+          anoLetivo,
+          consideraHistorico,
+          false
+        )
+          .catch(e => erros(e))
+          .finally(() => setCarregandoTurmas(false));
+
+        if (retorno?.data?.length) {
+          const lista = retorno.data.map(item => ({
+            desc: item.nome,
+            valor: item.codigo,
+            id: item.id,
+            ano: item.ano,
+            nomeFiltro: item.nomeFiltro,
+          }));
+
+          if (lista.length === 1) {
+            setTurmasCodigo([String(lista[0].valor)]);
+          } else {
+            lista.unshift(OPCAO_TODAS_TURMA);
+          }
+
+          setListaTurmas(lista);
+        }
+      }
+    },
+    [dreCodigo, ueCodigo, consideraHistorico, anoLetivo, modalidade]
+  );
+
+  useEffect(() => {
+    const temModalidadeEja = Number(modalidade) === ModalidadeDTO.EJA;
     const OPCAO_TODAS_TURMA = { valor: OPCAO_TODOS, nomeFiltro: 'Todas' };
     if (ueCodigo === OPCAO_TODOS) {
       setListaTurmas([OPCAO_TODAS_TURMA]);
       setTurmasCodigo([OPCAO_TODAS_TURMA.valor]);
       return;
     }
-    if (dreCodigo && ueCodigo && modalidade) {
-      setCarregandoTurmas(true);
-      const retorno = await AbrangenciaServico.buscarTurmas(
-        ueCodigo,
-        modalidade,
-        '',
-        anoLetivo,
-        consideraHistorico,
-        false
-      )
-        .catch(e => erros(e))
-        .finally(() => setCarregandoTurmas(false));
-
-      if (retorno?.data?.length) {
-        const lista = retorno.data.map(item => ({
-          desc: item.nome,
-          valor: item.codigo,
-          id: item.id,
-          ano: item.ano,
-          nomeFiltro: item.nomeFiltro,
-        }));
-
-        if (lista.length === 1) {
-          setTurmasCodigo([String(lista[0].valor)]);
-        } else {
-          lista.unshift(OPCAO_TODAS_TURMA);
-        }
-
-        setListaTurmas(lista);
-      }
-    }
-  }, [dreCodigo, ueCodigo, consideraHistorico, anoLetivo, modalidade]);
-
-  useEffect(() => {
-    const temModalidadeEja = Number(modalidade) === ModalidadeDTO.EJA;
     if (modalidade && ueCodigo && !temModalidadeEja) {
-      obterTurmas(modalidade, ueCodigo);
+      obterTurmas(OPCAO_TODAS_TURMA);
       return;
     }
     if (
