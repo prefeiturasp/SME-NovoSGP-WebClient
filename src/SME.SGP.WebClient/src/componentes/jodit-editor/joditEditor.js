@@ -3,7 +3,7 @@ import { Jodit } from 'jodit';
 import 'jodit/build/jodit.min.css';
 import PropTypes from 'prop-types';
 import React, { forwardRef, useEffect, useRef, useState } from 'react';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import { store } from '~/redux';
 import { erro } from '~/servicos/alertas';
 import { urlBase } from '~/servicos/variaveis';
@@ -96,7 +96,7 @@ const JoditEditor = forwardRef((props, ref) => {
       },
     },
     askBeforePasteHTML: valideClipboardHTML,
-    disablePlugins: ['image-properties', 'inline-popup', disablePlugins],
+    disablePlugins: ['image-properties', disablePlugins],
     language: 'pt_br',
     height,
     readonly: readonly || desabilitar,
@@ -275,6 +275,29 @@ const JoditEditor = forwardRef((props, ref) => {
       }, 300);
     }
   };
+
+  useEffect(() => {
+    const pegarElemento = elemento => document.getElementsByClassName(elemento);
+    const aplicarDisplayNone = elemento => {
+      if (elemento?.length) {
+        elemento[0].style.cssText = 'display: none !important';
+      }
+    };
+
+    const removerBotoes = () => {
+      const botaoEditarImagem = pegarElemento('jodit-toolbar-button_pencil');
+      const botaoSetas = pegarElemento('jodit-toolbar-button_valign');
+
+      aplicarDisplayNone(botaoEditarImagem);
+      aplicarDisplayNone(botaoSetas);
+    };
+
+    document.body.addEventListener('DOMSubtreeModified', removerBotoes);
+
+    return () => {
+      document.body.removeEventListener('DOMSubtreeModified', removerBotoes);
+    };
+  });
 
   useEffect(() => {
     if (url) {
