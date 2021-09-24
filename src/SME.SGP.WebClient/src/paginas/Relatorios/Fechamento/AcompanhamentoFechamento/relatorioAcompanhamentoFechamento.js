@@ -708,6 +708,7 @@ const AcompanhamentoFechamento = () => {
       situacaoFechamento,
       situacaoConselhoClasse,
       listarPendencias,
+      exibirHistorico: consideraHistorico,
     };
 
     await ServicoRelatorioAcompanhamentoFechamento.gerar(params)
