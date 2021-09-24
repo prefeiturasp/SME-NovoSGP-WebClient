@@ -39,6 +39,8 @@ const CampoPercursoIndividual = () => {
       readonly={desabilitarCamposAcompanhamentoAprendizagem}
       mensagemErro="Campo obrigatório"
       validarSeTemErro={valorNovo => !valorNovo}
+      permiteVideo={false}
+      permiteGif={false}
     />
   );
 };
