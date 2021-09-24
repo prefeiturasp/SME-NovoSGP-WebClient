@@ -44,6 +44,7 @@ const JoditEditor = forwardRef((props, ref) => {
     qtdMaxImg,
     imagensCentralizadas,
     valideClipboardHTML,
+    permiteGif,
   } = props;
 
   const textArea = useRef(null);
@@ -66,7 +67,7 @@ const JoditEditor = forwardRef((props, ref) => {
   };
 
   const excedeuLimiteMaximo = arquivo => {
-    return Math.ceil(arquivo.size / 1048576) > TAMANHO_MAXIMO_UPLOAD_MB;    
+    return Math.ceil(arquivo.size / 1048576) > TAMANHO_MAXIMO_UPLOAD_MB;
   };
 
   const config = {
@@ -105,6 +106,9 @@ const JoditEditor = forwardRef((props, ref) => {
         return new Promise((resolve, reject) => {
           if (permiteInserirArquivo) {
             const arquivo = data.getAll('files[0]')[0];
+            const permiteInserirGif = arquivo.type.includes('gif')
+              ? permiteGif
+              : true;
 
             if (excedeuLimiteMaximo(arquivo)) {
               const msg = `Tamanho máximo ${TAMANHO_MAXIMO_UPLOAD_MB}MB.`;
@@ -113,13 +117,15 @@ const JoditEditor = forwardRef((props, ref) => {
             }
 
             if (
-              arquivo.type.substring(0, 5) === 'image' ||
-              (permiteVideo && arquivo.type.substring(0, 5) === 'video')
+              (arquivo.type.substring(0, 5) === 'image' ||
+                (permiteVideo && arquivo.type.substring(0, 5) === 'video')) &&
+              permiteInserirGif
             ) {
               if (arquivo.type.substring(0, 5) === 'image' && qtdMaxImg) {
                 const quantidadeTotalImagens = (
                   textArea?.current?.value?.match(/<img/g) || []
                 )?.length;
+
                 if (quantidadeTotalImagens < qtdMaxImg) {
                   resolve(data);
                 } else {
@@ -401,6 +407,7 @@ JoditEditor.propTypes = {
   qtdMaxImg: PropTypes.number,
   imagensCentralizadas: PropTypes.bool,
   valideClipboardHTML: PropTypes.bool,
+  permiteGif: PropTypes.bool,
 };
 
 JoditEditor.defaultProps = {
@@ -421,10 +428,11 @@ JoditEditor.defaultProps = {
   removerToolbar: false,
   iframeStyle: '',
   disablePlugins: '',
-  permiteVideo: true,
+  permiteVideo: false,
   qtdMaxImg: null,
   imagensCentralizadas: false,
   valideClipboardHTML: true,
+  permiteGif: false,
 };
 
 export default JoditEditor;
