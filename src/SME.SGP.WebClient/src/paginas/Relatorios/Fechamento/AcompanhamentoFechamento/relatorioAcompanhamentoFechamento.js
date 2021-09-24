@@ -378,6 +378,31 @@ const AcompanhamentoFechamento = () => {
     [consideraHistorico]
   );
 
+  const obterSemestresEja = useCallback(
+    async (modalidadeSelecionada, anoLetivoSelecionado) => {
+      setCarregandoSemestres(true);
+      const retorno = await AbrangenciaServico.obterSemestres(
+        consideraHistorico,
+        anoLetivoSelecionado,
+        modalidadeSelecionada
+      )
+        .catch(e => erros(e))
+        .finally(() => setCarregandoSemestres(false));
+
+      if (retorno?.data?.length) {
+        const lista = retorno.data.map(periodo => {
+          return { desc: periodo, valor: periodo };
+        });
+
+        if (lista?.length === 1) {
+          setSemestre(lista[0].valor);
+        }
+        setListaSemestres(lista);
+      }
+    },
+    [consideraHistorico]
+  );
+
   useEffect(() => {
     if (
       modalidade &&
@@ -385,11 +410,7 @@ const AcompanhamentoFechamento = () => {
       String(modalidade) === String(ModalidadeDTO.EJA)
     ) {
       if (ueCodigo === OPCAO_TODOS) {
-        const semestresLista = [
-          { desc: 1, valor: 1 },
-          { desc: 2, valor: 2 },
-        ];
-        setListaSemestres(semestresLista);
+        obterSemestresEja(modalidade, anoLetivo);
         return;
       }
       obterSemestres(modalidade, anoLetivo, ueCodigo);
@@ -397,7 +418,14 @@ const AcompanhamentoFechamento = () => {
     }
     setSemestre();
     setListaSemestres([]);
-  }, [obterAnosLetivos, obterSemestres, modalidade, ueCodigo, anoLetivo]);
+  }, [
+    obterAnosLetivos,
+    obterSemestres,
+    obterSemestresEja,
+    modalidade,
+    ueCodigo,
+    anoLetivo,
+  ]);
 
   const onChangeTurma = valor => {
     setTurmasCodigo(valor);
