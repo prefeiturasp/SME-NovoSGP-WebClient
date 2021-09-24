@@ -106,7 +106,7 @@ const JoditEditor = forwardRef((props, ref) => {
         return new Promise((resolve, reject) => {
           if (permiteInserirArquivo) {
             const arquivo = data.getAll('files[0]')[0];
-            const permiteInserirGif = arquivo.type.includes('gif')
+            const validaInserirTiposArquivos = arquivo.type.includes('gif')
               ? permiteGif
               : true;
 
@@ -119,7 +119,7 @@ const JoditEditor = forwardRef((props, ref) => {
             if (
               (arquivo.type.substring(0, 5) === 'image' ||
                 (permiteVideo && arquivo.type.substring(0, 5) === 'video')) &&
-              permiteInserirGif
+              validaInserirTiposArquivos
             ) {
               if (arquivo.type.substring(0, 5) === 'image' && qtdMaxImg) {
                 const quantidadeTotalImagens = (
@@ -428,11 +428,11 @@ JoditEditor.defaultProps = {
   removerToolbar: false,
   iframeStyle: '',
   disablePlugins: '',
-  permiteVideo: false,
+  permiteVideo: true,
   qtdMaxImg: null,
   imagensCentralizadas: false,
   valideClipboardHTML: true,
-  permiteGif: false,
+  permiteGif: true,
 };
 
 export default JoditEditor;
