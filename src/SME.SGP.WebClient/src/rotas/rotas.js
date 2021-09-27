@@ -104,6 +104,7 @@ import RelatorioAcompanhamentoFechamento from '~/paginas/Relatorios/Fechamento/A
 import DashboardRelAcompanhamentoAprendizagem from '~/paginas/Dashboard/DashboardRelAcompAprend/dashboardRelAcompAprend';
 import DashboardFechamento from '~/paginas/Dashboard/DashboardFechamento/dashboardFechamento';
 import RelatorioAtaBimestral from '~/paginas/Relatorios/Atas/AtaBimestral/relatorioAtaBimestral';
+import EventosListaNovo from '~/paginas/CalendarioEscolar/Eventos/lista/eventosListaNovo';
 
 const rotas = new Map();
 
@@ -429,6 +430,7 @@ rotas.set(RotasDto.PRINCIPAL, {
   dicaIcone: 'Página Inicial',
   tipo: RotasTipo.EstruturadaAutenticada,
   temPermissionamento: false,
+  breadcrumbName: 'Início',
 });
 
 rotas.set(RotasDto.TIPO_FERIADO, {
@@ -472,10 +474,10 @@ rotas.set(RotasDto.SEM_PERMISSAO, {
 });
 
 rotas.set(RotasDto.EVENTOS, {
-  breadcrumbName: 'Evento do Calendário Escolar',
-  menu: ['Calendário Escolar'],
+  breadcrumbName: 'Eventos do calendário escolar',
+  menu: ['Calendário escolar'],
   parent: '/',
-  component: EventosLista,
+  component: EventosListaNovo,
   exact: true,
   tipo: RotasTipo.EstruturadaAutenticada,
   temPermissionamento: true,
@@ -483,10 +485,10 @@ rotas.set(RotasDto.EVENTOS, {
 });
 
 rotas.set(`${RotasDto.EVENTOS}/:tipoCalendarioId`, {
-  breadcrumbName: 'Evento do Calendário Escolar',
-  menu: ['Calendário Escolar'],
+  breadcrumbName: 'Eventos do calendário escolar',
+  menu: ['Calendário escolar'],
   parent: '/',
-  component: EventosLista,
+  component: EventosListaNovo,
   exact: true,
   tipo: RotasTipo.EstruturadaAutenticada,
   temPermissionamento: true,
