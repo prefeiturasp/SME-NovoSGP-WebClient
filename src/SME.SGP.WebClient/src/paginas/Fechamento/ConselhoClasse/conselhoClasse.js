@@ -22,6 +22,7 @@ import BotaoOrdenarListaAlunos from './DadosConselhoClasse/BotaoOrdenarListaAlun
 import BotoesAcoesConselhoClasse from './DadosConselhoClasse/BotoesAcoes/botoesAcoesConselhoClasse';
 import DadosConselhoClasse from './DadosConselhoClasse/dadosConselhoClasse';
 import LoaderConselhoClasse from './DadosConselhoClasse/LoaderConselhoClasse/laderConselhoClasse';
+import MarcadorParecerConclusivo from './DadosConselhoClasse/MarcadorParecerConclusivo/marcadorParecerConclusivo';
 import ModalImpressaoBimestre from './DadosConselhoClasse/ModalImpressaoBimestre/modalImpressaoBimestre';
 import ObjectCardConselhoClasse from './DadosConselhoClasse/ObjectCardConselhoClasse/objectCardConselhoClasse';
 import TabelaRetratilConselhoClasse from './DadosConselhoClasse/TabelaRetratilConselhoClasse/tabelaRetratilConselhoClasse';
@@ -60,12 +61,12 @@ const ConselhoClasse = () => {
     dispatch(setExibirLoaderGeralConselhoClasse(true));
     const retorno = await ServicoConselhoClasse.obterDadosBimestres(
       turmaSelecionada.id
-    ).catch(e => erros(e));
+    )
+      .catch(e => erros(e))
+      .finally(() => setExibirLoaderGeralConselhoClasse(false));
     if (retorno && retorno.data) {
       dispatch(setDadosBimestresConselhoClasse(retorno.data));
       obterListaAlunos();
-    } else {
-      dispatch(setExibirLoaderGeralConselhoClasse(false));
     }
   }, [dispatch, turmaSelecionada, obterListaAlunos]);
 
@@ -181,6 +182,7 @@ const ConselhoClasse = () => {
                     >
                       <>
                         <ObjectCardConselhoClasse />
+                        <MarcadorParecerConclusivo />
                         <DadosConselhoClasse
                           turmaCodigo={turmaSelecionada.turma}
                           modalidade={turmaSelecionada.modalidade}
