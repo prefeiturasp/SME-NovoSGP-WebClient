@@ -55,7 +55,7 @@ const MarcadorParecerConclusivo = () => {
   return (
     <>
       {parecer ? (
-        <div className="col-m-12 d-flex justify-content-end mb-2">
+        <div className="col-m-12 d-flex ml-3 my-3">
           <LabelParecer>
             <Loader loading={gerandoParecerConclusivo} tip="">
               <span>{montarDescricao()}</span>

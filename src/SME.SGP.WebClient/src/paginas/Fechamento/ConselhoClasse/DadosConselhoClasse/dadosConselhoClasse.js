@@ -102,7 +102,7 @@ const DadosConselhoClasse = props => {
 
   // Quando passa bimestre 0 o retorno vai trazer dados do bimestre corrente!
   const caregarInformacoes = useCallback(
-    async (bimestreConsulta = 0, ehFinal = false) => {
+    async (bimestreConsulta = 0, mostrarParecer = false) => {
       limparDadosNotaPosConselhoJustificativa();
       ServicoConselhoClasse.setarParecerConclusivo('');
       setCarregando(true);
@@ -111,11 +111,11 @@ const DadosConselhoClasse = props => {
         turmaCodigo,
         usuario.turmaSelecionada.consideraHistorico && bimestreConsulta === 0
           ? '1'
-          : ehFinal
+          : mostrarParecer
           ? '0'
           : bimestreConsulta,
         codigoEOL,
-        ehFinal,
+        mostrarParecer,
         usuario.turmaSelecionada.consideraHistorico
       ).catch(e => {
         erros(e);
@@ -148,7 +148,7 @@ const DadosConselhoClasse = props => {
         validaPermissoes(novoRegistro);
 
         let podeAcessarAbaFinal = true;
-        if (ehFinal) {
+        if (mostrarParecer) {
           const podeAcessar = await validaAbaFinal(
             conselhoClasseId,
             fechamentoTurmaId,
@@ -194,11 +194,11 @@ const DadosConselhoClasse = props => {
           );
         } else {
           ServicoConselhoClasse.carregarListaTiposConceito(
-            anoLetivo + '/12/31'
+            `${anoLetivo}/12/31`
           );
         }
 
-        if (ehFinal) {
+        if (mostrarParecer) {
           dispatch(
             setBimestreAtual({
               valor: bimestreConsulta,
@@ -265,8 +265,7 @@ const DadosConselhoClasse = props => {
     }
 
     if (continuar) {
-      const ehFinal = numeroBimestre === 'final';
-      caregarInformacoes(numeroBimestre, ehFinal);
+      caregarInformacoes(numeroBimestre, true);
     }
   };
 
@@ -277,9 +276,6 @@ const DadosConselhoClasse = props => {
           <>
             <AlertaDentroPeriodo />
             <MarcadorSituacaoConselho />
-            {bimestreAtual.valor === 'final' ? (
-              <MarcadorParecerConclusivo />
-            ) : null}
             <MarcadorPeriodoInicioFim />
             <ListasNotasConceitos bimestreSelecionado={bimestreAtual} />
             <Sintese
