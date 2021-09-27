@@ -792,11 +792,17 @@ const EventosForm = ({ match }) => {
           form.setFieldValue('feriadoId', '');
         }
       }
+
+      let valorLetivo = 1;
+      let valorEvento = false;
+      let valorOpcaoLetivo = false;
+      let tipoUnico = false;
+
       if (
         tipoEventoSelecionado &&
         tipoEventoSelecionado.tipoData === eventoTipoData.Unico
       ) {
-        setTipoDataUnico(true);
+        tipoUnico = true;
         if (form) {
           form.setFieldValue('dataFim', '');
         }
@@ -804,29 +810,25 @@ const EventosForm = ({ match }) => {
         tipoEventoSelecionado &&
         tipoEventoSelecionado.tipoData === eventoTipoData.InicioFim
       ) {
-        setTipoDataUnico(false);
+        tipoUnico = false;
       }
 
       if (form && tipoEventoSelecionado && tipoEventoSelecionado.letivo) {
         if (tipoEventoSelecionado.letivo === eventoLetivo.Opcional) {
-          setDesabilitarOpcaoLetivo(false);
+          valorOpcaoLetivo = false;
         } else {
-          setDesabilitarOpcaoLetivo(true);
-          form.setFieldValue('letivo', tipoEventoSelecionado.letivo);
+          valorOpcaoLetivo = true;
+          valorLetivo = tipoEventoSelecionado.letivo;
         }
       }
 
-      let valorLetivo = 1;
-      let valorEvento = false;
-      let valorOpcaoLetivo = false;
-      let tipoUnico = false;
-
       if (tipoEventoSelecionado?.id === tipoEvento.LiberacaoBoletim) {
+        valorLetivo = 0;
         valorEvento = true;
         valorOpcaoLetivo = true;
-        valorLetivo = 0;
         tipoUnico = true;
       }
+
       if (form) {
         form.setFieldValue('letivo', valorLetivo);
       }
