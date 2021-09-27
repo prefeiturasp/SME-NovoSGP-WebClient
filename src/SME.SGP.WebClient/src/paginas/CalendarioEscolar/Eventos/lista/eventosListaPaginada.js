@@ -46,8 +46,8 @@ const EventosListaPaginada = () => {
         ehTodasUes: codigoUe === OPCAO_TODOS,
         tipoEventoId: tipoEventoSelecionado,
         nomeEvento,
-        dataInicio: dataInicio ? moment(dataInicio).format('MM-DD-YYYY') : '',
-        dataFim: dataFim ? moment(dataFim).format('MM-DD-YYYY') : '',
+        dataInicio: dataInicio ? moment(dataInicio).format('DD-MM-YYYY') : '',
+        dataFim: dataFim ? moment(dataFim).format('DD-MM-YYYY') : '',
       };
       setFiltros({ ...params });
     } else {
@@ -73,7 +73,7 @@ const EventosListaPaginada = () => {
       filtrar();
       seFiltrarNovaConsulta(false);
     }
-  }, [filtrarNovaConsulta, filtrar]);
+  }, [filtrarNovaConsulta]);
 
   const formatarCampoData = data => {
     let dataFormatada = '';
@@ -125,7 +125,7 @@ const EventosListaPaginada = () => {
 
   return (
     <Col span={24}>
-      {calendarioSelecionado?.id && codigoDre ? (
+      {calendarioSelecionado?.id && codigoDre && codigoUe ? (
         <ListaPaginada
           url="v1/calendarios/eventos"
           id="lista-eventos"

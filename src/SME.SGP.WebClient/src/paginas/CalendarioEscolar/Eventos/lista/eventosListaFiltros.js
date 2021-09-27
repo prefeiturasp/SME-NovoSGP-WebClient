@@ -85,6 +85,19 @@ const EventosListaFiltros = () => {
     }
   }, []);
 
+  const limparQuandoSemCalendario = () => {
+    setNomeEvento();
+    setTipoEventoSelecionado();
+    setDataInicio();
+    setDataFim();
+  };
+
+  useEffect(() => {
+    if (!calendarioSelecionado?.id) {
+      limparQuandoSemCalendario();
+    }
+  }, [calendarioSelecionado]);
+
   const selecionaTipoCalendario = descricao => {
     const calendario = listaCalendarios?.find(t => t?.descricao === descricao);
     if (calendario) {
@@ -204,6 +217,22 @@ const EventosListaFiltros = () => {
     seFiltrarNovaConsulta(true);
   };
 
+  const filtrarDatas = (inicio, fim) =>
+    (inicio && fim && fim >= inicio) || (!inicio && !fim);
+
+  const temErroDataFim = () =>
+    (dataInicio && !dataFim) || (dataInicio && dataFim && dataInicio > dataFim);
+
+  const mensagemErroDataFim = () => {
+    if (dataInicio && !dataFim) {
+      return 'Data obrigatória';
+    }
+    if (dataInicio && dataFim && dataInicio > dataFim) {
+      return 'Data inicial maior que final';
+    }
+    return '';
+  };
+
   return (
     <Col span={24}>
       <Row gutter={[16, 16]}>
@@ -294,11 +323,15 @@ const EventosListaFiltros = () => {
             formatoData="DD/MM/YYYY"
             onChange={data => {
               setDataInicio(data);
-              // seFiltrarNovaConsulta(true);
+              if (filtrarDatas(data, dataFim)) {
+                seFiltrarNovaConsulta(true);
+              }
             }}
             placeholder="Data início"
             desabilitado={!calendarioSelecionado?.id}
             valor={dataInicio}
+            temErro={!dataInicio && dataFim}
+            mensagemErro={!dataInicio && dataFim ? 'Data obrigatória' : ''}
           />
         </Col>
         <Col sm={12} md={6} xl={4}>
@@ -307,11 +340,15 @@ const EventosListaFiltros = () => {
             formatoData="DD/MM/YYYY"
             onChange={data => {
               setDataFim(data);
-              seFiltrarNovaConsulta(true);
+              if (filtrarDatas(dataInicio, data)) {
+                seFiltrarNovaConsulta(true);
+              }
             }}
             placeholder="Data fim"
             valor={dataFim}
             desabilitado={!calendarioSelecionado?.id}
+            temErro={temErroDataFim()}
+            mensagemErro={mensagemErroDataFim()}
           />
         </Col>
       </Row>
