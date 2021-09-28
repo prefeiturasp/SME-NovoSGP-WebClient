@@ -23,7 +23,6 @@ import servicoSalvarConselhoClasse from '../servicoSalvarConselhoClasse';
 import AlertaDentroPeriodo from './AlertaDentroPeriodo/alertaDentroPeriodo';
 import AnotacoesRecomendacoes from './AnotacoesRecomendacoes/anotacoesRecomendacoes';
 import ListasNotasConceitos from './ListasNotasConceito/listasNotasConceitos';
-import MarcadorParecerConclusivo from './MarcadorParecerConclusivo/marcadorParecerConclusivo';
 import MarcadorPeriodoInicioFim from './MarcadorPeriodoInicioFim/marcadorPeriodoInicioFim';
 import Sintese from './Sintese/Sintese';
 import MarcadorSituacaoConselho from './MarcadorSituacaoConselho/marcadorSituacaoConselho';
@@ -57,9 +56,9 @@ const DadosConselhoClasse = props => {
   const [carregando, setCarregando] = useState(false);
   const [turmaAtual, setTurmaAtual] = useState(0);
 
-  const validaAbaFinal = useCallback(
+  const validaParecerConclusivo = useCallback(
     async (conselhoClasseId, fechamentoTurmaId, alunoCodigo, codigoTurma) => {
-      const resposta = await ServicoConselhoClasse.acessarAbaFinalParecerConclusivo(
+      const resposta = await ServicoConselhoClasse.acessarParecerConclusivo(
         conselhoClasseId,
         fechamentoTurmaId,
         alunoCodigo,
@@ -149,7 +148,7 @@ const DadosConselhoClasse = props => {
 
         let podeAcessarAbaFinal = true;
         if (mostrarParecer) {
-          const podeAcessar = await validaAbaFinal(
+          const podeAcessar = await validaParecerConclusivo(
             conselhoClasseId,
             fechamentoTurmaId,
             codigoEOL,
@@ -232,7 +231,7 @@ const DadosConselhoClasse = props => {
       dispatch,
       limparDadosNotaPosConselhoJustificativa,
       turmaCodigo,
-      validaAbaFinal,
+      validaParecerConclusivo,
       validaPermissoes,
     ]
   );
