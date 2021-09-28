@@ -7,7 +7,7 @@ import EventosListaContextProvider from './eventosListaContextProvider';
 import EventosListaFiltros from './eventosListaFiltros';
 import EventosListaPaginada from './eventosListaPaginada';
 
-const EventosListaNovo = () => {
+const EventosLista = () => {
   return (
     <EventosListaContextProvider>
       <AlertaCalendarioObrigatorio />
@@ -21,4 +21,4 @@ const EventosListaNovo = () => {
   );
 };
 
-export default EventosListaNovo;
+export default EventosLista;
