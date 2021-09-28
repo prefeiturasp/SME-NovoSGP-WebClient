@@ -20,7 +20,6 @@ import TipoCalendarioEscolarForm from '~/paginas/CalendarioEscolar/TipoCalendari
 import TipoFeriadoLista from '~/paginas/CalendarioEscolar/TipoFeriado/tipoFeriadoLista';
 import TipoFeriadoForm from '~/paginas/CalendarioEscolar/TipoFeriado/tipoFeriadoForm';
 import CalendarioEscolar from '~/paginas/CalendarioEscolar/Calendario';
-import EventosLista from '~/paginas/CalendarioEscolar/Eventos/eventosLista';
 import EventosForm from '~/paginas/CalendarioEscolar/Eventos/eventosForm';
 import TipoEventosLista from '~/paginas/CalendarioEscolar/TipoEventos/tipoEventosLista';
 import TipoEventosForm from '~/paginas/CalendarioEscolar/TipoEventos/tipoEventosForm';
@@ -104,6 +103,7 @@ import RelatorioAcompanhamentoFechamento from '~/paginas/Relatorios/Fechamento/A
 import DashboardRelAcompanhamentoAprendizagem from '~/paginas/Dashboard/DashboardRelAcompAprend/dashboardRelAcompAprend';
 import DashboardFechamento from '~/paginas/Dashboard/DashboardFechamento/dashboardFechamento';
 import RelatorioAtaBimestral from '~/paginas/Relatorios/Atas/AtaBimestral/relatorioAtaBimestral';
+import EventosLista from '~/paginas/CalendarioEscolar/Eventos/lista/eventosLista';
 
 const rotas = new Map();
 
@@ -429,6 +429,7 @@ rotas.set(RotasDto.PRINCIPAL, {
   dicaIcone: 'Página Inicial',
   tipo: RotasTipo.EstruturadaAutenticada,
   temPermissionamento: false,
+  breadcrumbName: 'Início',
 });
 
 rotas.set(RotasDto.TIPO_FERIADO, {
@@ -472,8 +473,8 @@ rotas.set(RotasDto.SEM_PERMISSAO, {
 });
 
 rotas.set(RotasDto.EVENTOS, {
-  breadcrumbName: 'Evento do Calendário Escolar',
-  menu: ['Calendário Escolar'],
+  breadcrumbName: 'Eventos do calendário escolar',
+  menu: ['Calendário escolar'],
   parent: '/',
   component: EventosLista,
   exact: true,
@@ -483,8 +484,8 @@ rotas.set(RotasDto.EVENTOS, {
 });
 
 rotas.set(`${RotasDto.EVENTOS}/:tipoCalendarioId`, {
-  breadcrumbName: 'Evento do Calendário Escolar',
-  menu: ['Calendário Escolar'],
+  breadcrumbName: 'Eventos do calendário escolar',
+  menu: ['Calendário escolar'],
   parent: '/',
   component: EventosLista,
   exact: true,
