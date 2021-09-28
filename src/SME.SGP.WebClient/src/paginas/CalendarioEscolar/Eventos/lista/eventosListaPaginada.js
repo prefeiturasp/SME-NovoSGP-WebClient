@@ -1,7 +1,7 @@
 import { Col } from 'antd';
 import * as moment from 'moment';
 import React, { useCallback, useContext, useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { ListaPaginada } from '~/componentes';
 import { OPCAO_TODOS } from '~/constantes';
 import { RotasDto } from '~/dtos';
@@ -25,10 +25,7 @@ const EventosListaPaginada = () => {
 
   const [filtros, setFiltros] = useState({});
   const [filtroEhValido, setFiltroEhValido] = useState(false);
-
-  const { filtroListaEventos } = useSelector(
-    state => state.calendarioEscolar.filtroListaEventos
-  );
+  const dispatch = useDispatch();
 
   useEffect(() => {
     if (filtros?.tipoCalendarioId) {
@@ -108,12 +105,19 @@ const EventosListaPaginada = () => {
       render: data => formatarCampoData(data),
     },
   ];
+  const salvarFiltros = () => {
+    dispatch(
+      setFiltroListaEventos({
+        calendarioSelecionado,
+        codigoDre,
+        codigoUe,
+        eventoCalendarioId: true,
+      })
+    );
+  };
 
   const onClickEditar = evento => {
-    setFiltroListaEventos({
-      ...filtroListaEventos,
-      eventoCalendarioId: true,
-    });
+    salvarFiltros();
     history.push(
       `${RotasDto.EVENTOS}/editar/${evento.id}/${calendarioSelecionado?.id}`
     );
