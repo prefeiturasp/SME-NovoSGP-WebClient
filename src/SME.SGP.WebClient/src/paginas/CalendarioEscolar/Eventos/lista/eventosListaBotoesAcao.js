@@ -1,9 +1,9 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Button, Colors } from '~/componentes';
 import { URL_HOME } from '~/constantes';
 import { RotasDto } from '~/dtos';
-import { setFiltroCalendarioEscolar } from '~/redux/modulos/calendarioEscolar/actions';
+import { setFiltroListaEventos } from '~/redux/modulos/calendarioEscolar/actions';
 import {
   confirmar,
   erros,
@@ -18,15 +18,15 @@ const EventosListaBotoesAcao = () => {
   const usuario = useSelector(store => store.usuario);
   const permissoesTela = usuario.permissoes[RotasDto.EVENTOS];
 
-  const { filtroCalendarioEscolar } = useSelector(
-    state => state.calendarioEscolar.filtroCalendarioEscolar
-  );
+  const dispatch = useDispatch();
 
   const {
     eventosSelecionados,
     calendarioSelecionado,
     setEventosSelecionados,
     seFiltrarNovaConsulta,
+    codigoDre,
+    codigoUe,
   } = useContext(EventosListaContext);
 
   const [podeAlterarExcluir, setPodeAlterarExcluir] = useState(false);
@@ -85,11 +85,19 @@ const EventosListaBotoesAcao = () => {
     }
   };
 
+  const salvarFiltros = () => {
+    dispatch(
+      setFiltroListaEventos({
+        calendarioSelecionado,
+        codigoDre,
+        codigoUe,
+        eventoCalendarioId: true,
+      })
+    );
+  };
+
   const onClickNovo = () => {
-    setFiltroCalendarioEscolar({
-      ...filtroCalendarioEscolar,
-      eventoCalendarioId: true,
-    });
+    salvarFiltros();
     history.push(`${RotasDto.EVENTOS}/novo/${calendarioSelecionado?.id}`);
   };
 

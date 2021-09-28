@@ -1,5 +1,7 @@
 import { Col, Row } from 'antd';
 import React, { useCallback, useContext, useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useParams } from 'react-router-dom';
 import {
   CampoData,
   CampoTexto,
@@ -9,6 +11,7 @@ import {
 } from '~/componentes';
 import { FiltroHelper } from '~/componentes-sgp';
 import { OPCAO_TODOS } from '~/constantes';
+import { setFiltroListaEventos } from '~/redux/modulos/calendarioEscolar/actions';
 import {
   AbrangenciaServico,
   erros,
@@ -21,6 +24,9 @@ const EventosListaFiltros = () => {
   const [carregandoCalendarios, setCarregandoCalendarios] = useState(false);
   const [carregandoDres, setCarregandoDres] = useState(false);
   const [carregandoUes, setCarregandoUes] = useState(false);
+
+  const paramsRota = useParams();
+  const dispatch = useDispatch();
 
   const {
     listaDres,
@@ -47,6 +53,10 @@ const EventosListaFiltros = () => {
     setDataFim,
     dataFim,
   } = useContext(EventosListaContext);
+
+  const filtroListaEventos = useSelector(
+    state => state.calendarioEscolar.filtroListaEventos
+  );
 
   const onChangeTipoEvento = tipo => {
     setTipoEventoSelecionado(tipo);
@@ -141,16 +151,6 @@ const EventosListaFiltros = () => {
     obterListaEventos();
   }, [obterTiposCalendarios, obterDres, obterListaEventos]);
 
-  // TODO - Validar se vamos limpar os campos DRE e UE quando selecionar o calendário!
-  // useEffect(() => {
-  //   if (calendarioSelecionado?.id) {
-  //     obterDres();
-  //   } else {
-  //     setCodigoDre();
-  //     setListaDres([]);
-  //   }
-  // }, [calendarioSelecionado, obterDres, setCodigoDre, setListaDres]);
-
   const onChangeDre = codigo => {
     setCodigoUe();
     setListaUes();
@@ -232,6 +232,47 @@ const EventosListaFiltros = () => {
     }
     return '';
   };
+
+  const limparFiltrosSalvos = useCallback(() => {
+    dispatch(
+      setFiltroListaEventos({
+        calendarioSelecionado: null,
+        codigoDre: '',
+        codigoUe: '',
+        eventoCalendarioId: false,
+      })
+    );
+  }, [dispatch]);
+
+  useEffect(() => {
+    const tipoCalendarioId = paramsRota?.tipoCalendarioId;
+
+    if (!tipoCalendarioId && filtroListaEventos?.codigoDre) {
+      limparFiltrosSalvos();
+    }
+
+    if (
+      listaCalendarios?.length &&
+      filtroListaEventos?.eventoCalendarioId &&
+      paramsRota?.tipoCalendarioId
+    ) {
+      // Quando voltar da tela de cadastro de Eventos setar filtros!
+      const tipoCalendarioIdParseado = Number(tipoCalendarioId);
+      const tipoCalendarioParaSetar = listaCalendarios.find(
+        item => item.id === tipoCalendarioIdParseado
+      );
+
+      if (tipoCalendarioParaSetar) {
+        setCalendarioSelecionado(tipoCalendarioParaSetar);
+        if (filtroListaEventos?.codigoDre) {
+          setCodigoDre(filtroListaEventos?.codigoDre);
+        }
+        if (filtroListaEventos?.codigoUe) {
+          setCodigoUe(filtroListaEventos?.codigoUe);
+        }
+      }
+    }
+  }, [paramsRota, listaCalendarios, filtroListaEventos, limparFiltrosSalvos]);
 
   return (
     <Col span={24}>

@@ -5,7 +5,7 @@ import { useSelector } from 'react-redux';
 import { ListaPaginada } from '~/componentes';
 import { OPCAO_TODOS } from '~/constantes';
 import { RotasDto } from '~/dtos';
-import { setFiltroCalendarioEscolar } from '~/redux/modulos/calendarioEscolar/actions';
+import { setFiltroListaEventos } from '~/redux/modulos/calendarioEscolar/actions';
 import { history } from '~/servicos';
 import EventosListaContext from './eventosListaContext';
 
@@ -26,8 +26,8 @@ const EventosListaPaginada = () => {
   const [filtros, setFiltros] = useState({});
   const [filtroEhValido, setFiltroEhValido] = useState(false);
 
-  const { filtroCalendarioEscolar } = useSelector(
-    state => state.calendarioEscolar.filtroCalendarioEscolar
+  const { filtroListaEventos } = useSelector(
+    state => state.calendarioEscolar.filtroListaEventos
   );
 
   useEffect(() => {
@@ -110,8 +110,8 @@ const EventosListaPaginada = () => {
   ];
 
   const onClickEditar = evento => {
-    setFiltroCalendarioEscolar({
-      ...filtroCalendarioEscolar,
+    setFiltroListaEventos({
+      ...filtroListaEventos,
       eventoCalendarioId: true,
     });
     history.push(
