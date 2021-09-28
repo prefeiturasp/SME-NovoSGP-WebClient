@@ -1,28 +1,24 @@
+import { faSyncAlt } from '@fortawesome/free-solid-svg-icons';
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import styled from 'styled-components';
-import { Base, Loader } from '~/componentes';
-
-const LabelParecer = styled.div`
-  font-size: 12px;
-  color: rgb(33, 37, 41);
-  background-color: ${Base.Roxo};
-  color: ${Base.Branco};
-  display: 'flex';
-  align-items: 'center';
-  justify-content: 'center';
-  text-align: center;
-  border-radius: 4px;
-  margin-right: 14px;
-  height: 23px;
-  padding-top: 3px;
-
-  span {
-    margin: 11px;
-  }
-`;
+import { statusParecerConclusivo } from '~/dtos';
+import { Loader } from '~/componentes';
+import ServicoConselhoClasse from '~/servicos/Paginas/ConselhoClasse/ServicoConselhoClasse';
+import { erros } from '~/servicos';
+import { LabelParecer, IconeEstilizado } from './marcadorParecerConclusivo.css';
 
 const MarcadorParecerConclusivo = () => {
+  const [sincronizando, setSincronizando] = useState(false);
+
+  const dadosPrincipaisConselhoClasse = useSelector(
+    store => store.conselhoClasse.dadosPrincipaisConselhoClasse
+  );
+  const {
+    conselhoClasseId,
+    fechamentoTurmaId,
+    alunoCodigo,
+  } = dadosPrincipaisConselhoClasse;
+
   const marcadorParecerConclusivo = useSelector(
     store => store.conselhoClasse.marcadorParecerConclusivo
   );
@@ -52,6 +48,27 @@ const MarcadorParecerConclusivo = () => {
     return parecer;
   };
 
+  const sincronizar = async () => {
+    setSincronizando(true);
+    const retorno = await ServicoConselhoClasse.gerarParecerConclusivo(
+      conselhoClasseId,
+      fechamentoTurmaId,
+      alunoCodigo
+    )
+      .catch(e => erros(e))
+      .finally(() => setSincronizando(false));
+    if (retorno?.data) {
+      ServicoConselhoClasse.setarParecerConclusivo(retorno.data);
+    }
+  };
+
+  const exibirIconeSincronizar = () => {
+    return (
+      statusParecerConclusivo.RETIDO === parecer ||
+      statusParecerConclusivo.RETIDO_FREQUENCIA === parecer
+    );
+  };
+
   return (
     <>
       {parecer ? (
@@ -61,6 +78,13 @@ const MarcadorParecerConclusivo = () => {
               <span>{montarDescricao()}</span>
             </Loader>
           </LabelParecer>
+          {exibirIconeSincronizar && (
+            <IconeEstilizado
+              icon={faSyncAlt}
+              onClick={sincronizar}
+              sincronizando={sincronizando}
+            />
+          )}
         </div>
       ) : (
         ''
