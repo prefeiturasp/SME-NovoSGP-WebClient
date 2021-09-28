@@ -38,9 +38,6 @@ const EventosListaBotoesAcao = () => {
 
   const onClickVoltar = () => history.push(URL_HOME);
 
-  // const params = useParams();
-  // console.log(params);
-
   useEffect(() => {
     if (eventosSelecionados?.length) {
       setPodeAlterarExcluir(
