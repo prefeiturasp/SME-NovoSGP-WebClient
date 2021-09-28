@@ -62,6 +62,13 @@ const MarcadorParecerConclusivo = () => {
     }
   };
 
+  const exibirIconeSincronizar = () => {
+    return (
+      statusParecerConclusivo.RETIDO === parecer ||
+      statusParecerConclusivo.RETIDO_FREQUENCIA === parecer
+    );
+  };
+
   return (
     <>
       {parecer ? (
@@ -71,7 +78,7 @@ const MarcadorParecerConclusivo = () => {
               <span>{montarDescricao()}</span>
             </Loader>
           </LabelParecer>
-          {statusParecerConclusivo !== parecer && (
+          {exibirIconeSincronizar && (
             <IconeEstilizado
               icon={faSyncAlt}
               onClick={sincronizar}
