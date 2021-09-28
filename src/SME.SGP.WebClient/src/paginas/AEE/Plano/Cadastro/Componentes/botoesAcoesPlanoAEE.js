@@ -219,7 +219,8 @@ const BotoesAcoesPlanoAEE = props => {
         hidden={
           planoAEEDados?.situacao !== situacaoPlanoAEE.ParecerCP &&
           planoAEEDados?.situacao !== situacaoPlanoAEE.AtribuicaoPAAI &&
-          planoAEEDados?.situacao !== situacaoPlanoAEE.ParecerPAAI
+          planoAEEDados?.situacao !== situacaoPlanoAEE.ParecerPAAI &&
+          planoAEEDados?.situacao !== situacaoPlanoAEE.Devolvido
         }
         disabled={
           (planoAEEDados?.situacao === situacaoPlanoAEE.ParecerPAAI &&
