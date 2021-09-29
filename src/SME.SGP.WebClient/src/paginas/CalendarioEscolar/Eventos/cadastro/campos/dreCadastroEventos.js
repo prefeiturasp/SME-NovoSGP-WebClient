@@ -16,6 +16,8 @@ const DreCadastroEventos = ({
 
   const [exibirLoader, setExibirLoader] = useState(false);
 
+  const { dreId } = form.values;
+
   const nomeCampo = 'dreId';
 
   const obterDres = useCallback(async () => {
@@ -45,7 +47,9 @@ const DreCadastroEventos = ({
   }, [eventoId]);
 
   useEffect(() => {
-    obterDres();
+    if (!eventoId || (eventoId && dreId)) {
+      obterDres();
+    }
   }, [obterDres]);
 
   return (

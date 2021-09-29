@@ -42,17 +42,17 @@ const EventosCadastroBotoesAcao = () => {
 
   const urlTelaListagemEventos = () => {
     if (tipoCalendarioId) {
-      return `/calendario-escolar/eventos/${tipoCalendarioId}`;
+      return `${RotasDto.EVENTOS}/${tipoCalendarioId}`;
     }
-    return '/calendario-escolar/eventos';
+    return RotasDto.EVENTOS;
   };
 
   const setBreadcrumbLista = () => {
     if (tipoCalendarioId) {
       setBreadcrumbManual(
-        `/calendario-escolar/eventos/${tipoCalendarioId}`,
+        `${RotasDto.EVENTOS}/${tipoCalendarioId}`,
         '',
-        '/calendario-escolar/eventos'
+        RotasDto.EVENTOS
       );
     }
   };

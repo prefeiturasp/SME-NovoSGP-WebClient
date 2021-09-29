@@ -2,7 +2,7 @@ import { Col, Row } from 'antd';
 import { Form, Formik } from 'formik';
 import React, { useCallback, useContext, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { useParams } from 'react-router-dom';
+import { useParams, useLocation } from 'react-router-dom';
 import shortid from 'shortid';
 import * as Yup from 'yup';
 import {
@@ -29,6 +29,7 @@ import {
   history,
   ServicoCalendarios,
   ServicoEvento,
+  setBreadcrumbManual,
   sucesso,
 } from '~/servicos';
 import { parseScreenObject } from '~/utils/parsers/eventRecurrence';
@@ -102,6 +103,7 @@ const EventosCadastroForm = () => {
   const permissoesTela = usuarioStore.permissoes[RotasDto.EVENTOS];
 
   const paramsRota = useParams();
+  const paramsLocation = useLocation();
 
   const eventoId = paramsRota?.id;
   const tipoCalendarioId = paramsRota?.tipoCalendarioId;
@@ -111,6 +113,12 @@ const EventosCadastroForm = () => {
   );
 
   const [validacoes, setValidacoes] = useState({});
+
+  setBreadcrumbManual(
+    paramsLocation?.pathname,
+    'Cadastro de eventos do calendário escolar',
+    RotasDto.EVENTOS
+  );
 
   useEffect(() => {
     const desabilitar = eventoId
@@ -913,8 +921,7 @@ const EventosCadastroForm = () => {
                     </Col>
                   </Row>
                   <Row gutter={[16, 16]}>
-                    <Col sm={24}>
-                      {/* <div className="row"> */}
+                    <Col span={24}>
                       <Button
                         id="btn-copiar-evento"
                         label="Copiar Evento"
@@ -936,25 +943,26 @@ const EventosCadastroForm = () => {
                       ) : (
                         ''
                       )}
-                      {/* </div> */}
                     </Col>
                   </Row>
+
+                  {auditoriaEventos?.criadoEm ? (
+                    <Auditoria
+                      className="ant-col ant-col-24"
+                      criadoEm={auditoriaEventos.criadoEm}
+                      criadoPor={auditoriaEventos.criadoPor}
+                      criadoRf={auditoriaEventos.criadoRf}
+                      alteradoPor={auditoriaEventos.alteradoPor}
+                      alteradoEm={auditoriaEventos.alteradoEm}
+                      alteradoRf={auditoriaEventos.alteradoRf}
+                    />
+                  ) : (
+                    ''
+                  )}
                 </Col>
               </Form>
             )}
           </Formik>
-          {auditoriaEventos?.criadoEm ? (
-            <Auditoria
-              criadoEm={auditoriaEventos.criadoEm}
-              criadoPor={auditoriaEventos.criadoPor}
-              criadoRf={auditoriaEventos.criadoRf}
-              alteradoPor={auditoriaEventos.alteradoPor}
-              alteradoEm={auditoriaEventos.alteradoEm}
-              alteradoRf={auditoriaEventos.alteradoRf}
-            />
-          ) : (
-            ''
-          )}
         </>
       ) : (
         ''
