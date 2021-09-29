@@ -1,7 +1,7 @@
 import { Col } from 'antd';
 import * as moment from 'moment';
 import React, { useCallback, useContext, useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { ListaPaginada } from '~/componentes';
 import { OPCAO_TODOS } from '~/constantes';
 import { RotasDto } from '~/dtos';
@@ -21,14 +21,12 @@ const EventosListaPaginada = () => {
     nomeEvento,
     dataInicio,
     dataFim,
+    exibirEventosTodaRede,
   } = useContext(EventosListaContext);
 
   const [filtros, setFiltros] = useState({});
   const [filtroEhValido, setFiltroEhValido] = useState(false);
-
-  const { filtroListaEventos } = useSelector(
-    state => state.calendarioEscolar.filtroListaEventos
-  );
+  const dispatch = useDispatch();
 
   useEffect(() => {
     if (filtros?.tipoCalendarioId) {
@@ -48,6 +46,7 @@ const EventosListaPaginada = () => {
         nomeEvento,
         dataInicio: dataInicio ? moment(dataInicio).format('DD-MM-YYYY') : '',
         dataFim: dataFim ? moment(dataFim).format('DD-MM-YYYY') : '',
+        exibirEventosTodaRede,
       };
       setFiltros({ ...params });
     } else {
@@ -62,6 +61,7 @@ const EventosListaPaginada = () => {
     nomeEvento,
     dataInicio,
     dataFim,
+    exibirEventosTodaRede,
   ]);
 
   useEffect(() => {
@@ -80,40 +80,52 @@ const EventosListaPaginada = () => {
     if (data) {
       dataFormatada = moment(data).format('DD/MM/YYYY');
     }
-    return <span> {dataFormatada}</span>;
+    return dataFormatada;
   };
 
   const colunas = [
     {
       title: 'Nome do evento',
       dataIndex: 'nome',
-      width: '45%',
     },
     {
       title: 'Tipo de evento',
       dataIndex: 'tipo',
-      width: '20%',
       render: (text, row) => <span> {row.tipoEvento.descricao}</span>,
     },
     {
-      title: 'Data início',
-      dataIndex: 'dataInicio',
-      width: '15%',
+      title: 'Cadastrado por',
+      dataIndex: 'criadoPor',
+      render: (criadoPor, linha) => `${criadoPor} (${linha.criadoRF})`,
+    },
+    {
+      title: 'Data do cadastro',
+      dataIndex: 'criadoEm',
       render: data => formatarCampoData(data),
     },
     {
-      title: 'Data fim',
-      dataIndex: 'dataFim',
-      width: '15%',
-      render: data => formatarCampoData(data),
+      title: 'Data início e fim',
+      dataIndex: 'dataInicio',
+      render: (inicio, linha) => {
+        return `${formatarCampoData(inicio)} - ${formatarCampoData(
+          linha.dataFim
+        )}`;
+      },
     },
   ];
+  const salvarFiltros = () => {
+    dispatch(
+      setFiltroListaEventos({
+        calendarioSelecionado,
+        codigoDre,
+        codigoUe,
+        eventoCalendarioId: true,
+      })
+    );
+  };
 
   const onClickEditar = evento => {
-    setFiltroListaEventos({
-      ...filtroListaEventos,
-      eventoCalendarioId: true,
-    });
+    salvarFiltros();
     history.push(
       `${RotasDto.EVENTOS}/editar/${evento.id}/${calendarioSelecionado?.id}`
     );
@@ -124,7 +136,7 @@ const EventosListaPaginada = () => {
   };
 
   return (
-    <Col span={24}>
+    <Col span={24} style={{ marginTop: '20px' }}>
       {calendarioSelecionado?.id && codigoDre && codigoUe ? (
         <ListaPaginada
           url="v1/calendarios/eventos"

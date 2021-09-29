@@ -41,3 +41,10 @@ export const StatusAguardandoAprovacao = styled.div`
   text-align: center;
   margin-right: 9px;
 `;
+
+export const ContainerSwitchExibirEventos = styled.div`
+  .ant-switch-checked {
+    background-color: ${Base.Roxo} !important;
+  }
+  display: flex;
+`;

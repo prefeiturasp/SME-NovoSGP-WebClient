@@ -43,8 +43,8 @@ const EventosListaBotoesAcao = () => {
       setPodeAlterarExcluir(
         eventosSelecionados.filter(
           item =>
-            usuario.possuiPerfilSme === true ||
-            (usuario.possuiPerfilDre === true && item.dreId && item.ueId) ||
+            usuario.possuiPerfilSme ||
+            (usuario.possuiPerfilDre && item.dreId && item.ueId) ||
             item.criadoRF === usuario.rf
         ).length
       );
