@@ -77,32 +77,37 @@ const EventosListaPaginada = () => {
     if (data) {
       dataFormatada = moment(data).format('DD/MM/YYYY');
     }
-    return <span> {dataFormatada}</span>;
+    return dataFormatada;
   };
 
   const colunas = [
     {
       title: 'Nome do evento',
       dataIndex: 'nome',
-      width: '45%',
     },
     {
       title: 'Tipo de evento',
       dataIndex: 'tipo',
-      width: '20%',
       render: (text, row) => <span> {row.tipoEvento.descricao}</span>,
     },
     {
-      title: 'Data início',
-      dataIndex: 'dataInicio',
-      width: '15%',
+      title: 'Cadastrado por',
+      dataIndex: 'criadoPor',
+      render: (criadoPor, linha) => `${criadoPor} (${linha.criadoRF})`,
+    },
+    {
+      title: 'Data do cadastro',
+      dataIndex: 'criadoEm',
       render: data => formatarCampoData(data),
     },
     {
-      title: 'Data fim',
-      dataIndex: 'dataFim',
-      width: '15%',
-      render: data => formatarCampoData(data),
+      title: 'Data início e fim',
+      dataIndex: 'dataInicio',
+      render: (inicio, linha) => {
+        return `${formatarCampoData(inicio)} - ${formatarCampoData(
+          linha.dataFim
+        )}`;
+      },
     },
   ];
   const salvarFiltros = () => {
