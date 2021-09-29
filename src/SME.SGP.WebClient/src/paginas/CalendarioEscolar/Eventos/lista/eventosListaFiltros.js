@@ -1,15 +1,17 @@
-import { Col, Row } from 'antd';
+import { Col, Row, Switch } from 'antd';
 import React, { useCallback, useContext, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import {
   CampoData,
   CampoTexto,
+  Label,
   Loader,
   SelectAutocomplete,
   SelectComponent,
 } from '~/componentes';
 import { FiltroHelper } from '~/componentes-sgp';
+import { Base } from '~/componentes/colors';
 import { OPCAO_TODOS } from '~/constantes';
 import { setFiltroListaEventos } from '~/redux/modulos/calendarioEscolar/actions';
 import {
@@ -18,12 +20,15 @@ import {
   ServicoCalendarios,
   ServicoEvento,
 } from '~/servicos';
+import { ContainerSwitchExibirEventos } from '../eventos.css';
 import EventosListaContext from './eventosListaContext';
 
 const EventosListaFiltros = () => {
   const [carregandoCalendarios, setCarregandoCalendarios] = useState(false);
   const [carregandoDres, setCarregandoDres] = useState(false);
   const [carregandoUes, setCarregandoUes] = useState(false);
+
+  const usuarioStore = useSelector(store => store.usuario);
 
   const paramsRota = useParams();
   const dispatch = useDispatch();
@@ -52,6 +57,8 @@ const EventosListaFiltros = () => {
     dataInicio,
     setDataFim,
     dataFim,
+    setExibirEventosTodaRede,
+    exibirEventosTodaRede,
   } = useContext(EventosListaContext);
 
   const filtroListaEventos = useSelector(
@@ -392,6 +399,26 @@ const EventosListaFiltros = () => {
             mensagemErro={mensagemErroDataFim()}
           />
         </Col>
+        {usuarioStore?.possuiPerfilSme &&
+        codigoDre === OPCAO_TODOS &&
+        codigoUe === OPCAO_TODOS ? (
+          <Col span={24}>
+            <ContainerSwitchExibirEventos>
+              <Switch
+                onChange={() => {
+                  setExibirEventosTodaRede(!exibirEventosTodaRede);
+                  seFiltrarNovaConsulta(true);
+                }}
+                checked={exibirEventosTodaRede}
+                size="default"
+                style={{ marginRight: '10px', color: Base.Roxo }}
+              />
+              <Label text="Exibir somente eventos válidos para toda a rede" />
+            </ContainerSwitchExibirEventos>
+          </Col>
+        ) : (
+          ''
+        )}
       </Row>
     </Col>
   );

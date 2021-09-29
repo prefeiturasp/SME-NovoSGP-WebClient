@@ -21,6 +21,7 @@ const EventosListaPaginada = () => {
     nomeEvento,
     dataInicio,
     dataFim,
+    exibirEventosTodaRede,
   } = useContext(EventosListaContext);
 
   const [filtros, setFiltros] = useState({});
@@ -45,6 +46,7 @@ const EventosListaPaginada = () => {
         nomeEvento,
         dataInicio: dataInicio ? moment(dataInicio).format('DD-MM-YYYY') : '',
         dataFim: dataFim ? moment(dataFim).format('DD-MM-YYYY') : '',
+        exibirEventosTodaRede,
       };
       setFiltros({ ...params });
     } else {
@@ -59,6 +61,7 @@ const EventosListaPaginada = () => {
     nomeEvento,
     dataInicio,
     dataFim,
+    exibirEventosTodaRede,
   ]);
 
   useEffect(() => {
@@ -133,7 +136,7 @@ const EventosListaPaginada = () => {
   };
 
   return (
-    <Col span={24}>
+    <Col span={24} style={{ marginTop: '20px' }}>
       {calendarioSelecionado?.id && codigoDre && codigoUe ? (
         <ListaPaginada
           url="v1/calendarios/eventos"
