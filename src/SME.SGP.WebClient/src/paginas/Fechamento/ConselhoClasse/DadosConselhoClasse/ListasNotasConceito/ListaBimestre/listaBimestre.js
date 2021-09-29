@@ -1,11 +1,13 @@
 import PropTypes from 'prop-types';
 import React from 'react';
+import { Tooltip } from 'antd';
 import shortid from 'shortid';
 import notasConceitos from '~/dtos/notasConceitos';
 import CampoConceito from '../CamposNotaConceito/campoConceito';
 import CampoNota from '../CamposNotaConceito/campoNota';
 import { BarraLateralLista, Lista } from '../listasNotasConceitos.css';
 import LinhaJustificativa from '../../Justificativa/LinhaJustificativa/LinhaJustificativa';
+import { MarcadorTriangulo } from '~/componentes';
 
 const ListaBimestre = props => {
   const {
@@ -139,13 +141,18 @@ const ListaBimestre = props => {
                       <td className="text-center">
                         {montarValoresNotasConceitos(item)}
                       </td>
-                      <td>
+                      <td className="position-relative">
                         {montaCampoPosConselho(
                           item.notaPosConselho.id,
                           item.notaPosConselho.nota,
                           `${descricaoGrupoMatriz} ${index} componente`,
                           item.codigoComponenteCurricular,
                           item.notaPosConselho.podeEditar
+                        )}
+                        {item.notaPosConselho.emAprovacao && (
+                          <Tooltip title="Aguardando aprovação">
+                            <MarcadorTriangulo />
+                          </Tooltip>
                         )}
                       </td>
                       <td>{item.quantidadeAulas}</td>
