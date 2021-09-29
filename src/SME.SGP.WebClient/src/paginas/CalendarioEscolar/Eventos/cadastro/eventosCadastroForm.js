@@ -516,6 +516,8 @@ const EventosCadastroForm = () => {
 
   const montaValidacoes = useCallback(() => {
     const val = {
+      dreId: Yup.string().required('DRE obrigatória'),
+      ueId: Yup.string().required('UE obrigatória'),
       dataInicio: momentSchema.required('Data obrigatória'),
       nome: Yup.string().required('Nome obrigatório'),
       tipoCalendarioId: Yup.string().required('Calendário obrigatório'),
@@ -538,15 +540,6 @@ const EventosCadastroForm = () => {
       ),
     };
 
-    if (usuarioStore.possuiPerfilDre) {
-      val.dreId = Yup.string().required('DRE obrigatória');
-    }
-
-    if (!usuarioStore.possuiPerfilSmeOuDre) {
-      val.dreId = Yup.string().required('DRE obrigatória');
-      val.ueId = Yup.string().required('UE obrigatória');
-    }
-
     if (eventoTipoFeriadoSelecionado) {
       val.feriadoId = Yup.string().required('Feriado obrigatório');
     }
@@ -556,12 +549,7 @@ const EventosCadastroForm = () => {
     }
 
     setValidacoes(Yup.object(val));
-  }, [
-    eventoTipoFeriadoSelecionado,
-    tipoDataUnico,
-    usuarioStore.possuiPerfilDre,
-    usuarioStore.possuiPerfilSmeOuDre,
-  ]);
+  }, [eventoTipoFeriadoSelecionado, tipoDataUnico]);
 
   useEffect(() => {
     montaValidacoes();
@@ -606,10 +594,10 @@ const EventosCadastroForm = () => {
       setPodeAlterarEvento(evento.data.podeAlterar);
 
       setPodeAlterarExcluir(
-        usuarioStore.possuiPerfilSme === true ||
-          (usuarioStore.possuiPerfilDre === true && evento.data.dreId) ||
+        usuarioStore.possuiPerfilSme ||
+          (usuarioStore.possuiPerfilDre && evento.data.dreId) ||
           evento.data.criadoRF === usuarioStore.rf ||
-          evento.data.podeAlterarExcluirPorPerfilAbrangencia === true
+          evento.data.podeAlterarExcluirPorPerfilAbrangencia
       );
 
       let bimestreParaSetar = [];

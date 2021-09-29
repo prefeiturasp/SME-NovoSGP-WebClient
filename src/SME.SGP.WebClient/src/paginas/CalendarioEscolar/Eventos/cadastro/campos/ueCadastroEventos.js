@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
 import React, { useCallback, useContext, useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 import { Loader, SelectComponent } from '~/componentes';
 import { OPCAO_TODOS } from '~/constantes';
 import { AbrangenciaServico, erros, ServicoCalendarios } from '~/servicos';
@@ -10,6 +11,7 @@ const UeCadastroEventos = ({ form, onChangeCampos, desabilitar, eventoId }) => {
     EventosCadastroContext
   );
 
+  const usuario = useSelector(store => store.usuario);
   const [exibirLoader, setExibirLoader] = useState(false);
 
   const { dreId, tipoCalendarioId } = form.values;
@@ -20,9 +22,9 @@ const UeCadastroEventos = ({ form, onChangeCampos, desabilitar, eventoId }) => {
     const ueTodos = { nome: 'Todas', codigo: OPCAO_TODOS };
 
     if (dreId === OPCAO_TODOS) {
-      setListaUes([ueTodos]);
       form.setFieldValue(nomeCampo, OPCAO_TODOS);
       form.initialValues[nomeCampo] = OPCAO_TODOS;
+      setListaUes([ueTodos]);
       return;
     }
 
@@ -55,9 +57,12 @@ const UeCadastroEventos = ({ form, onChangeCampos, desabilitar, eventoId }) => {
         if (!eventoId) {
           form.initialValues.ueId = codigo;
         }
-      } else {
+      }
+
+      if (usuario.possuiPerfilSmeOuDre && lista?.length > 1) {
         lista.unshift(ueTodos);
       }
+
       setListaUes(lista);
     } else {
       form.setFieldValue(nomeCampo, undefined);

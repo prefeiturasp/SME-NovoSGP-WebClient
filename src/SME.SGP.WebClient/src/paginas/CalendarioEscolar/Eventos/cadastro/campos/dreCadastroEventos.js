@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
 import React, { useCallback, useContext, useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 import { Loader, SelectComponent } from '~/componentes';
 import { FiltroHelper } from '~/componentes-sgp';
 import { OPCAO_TODOS } from '~/constantes';
@@ -14,6 +15,7 @@ const DreCadastroEventos = ({
 }) => {
   const { setListaDres, listaDres } = useContext(EventosCadastroContext);
 
+  const usuario = useSelector(store => store.usuario);
   const [exibirLoader, setExibirLoader] = useState(false);
 
   const { dreId } = form.values;
@@ -32,19 +34,25 @@ const DreCadastroEventos = ({
       if (lista?.length === 1) {
         const { codigo } = lista[0];
 
-        form.setFieldValue('dreId', codigo);
         if (!eventoId) {
+          form.setFieldValue('dreId', codigo);
           form.initialValues.dreId = codigo;
         }
-      } else {
+      }
+
+      if (usuario.possuiPerfilSme && lista?.length > 1) {
         lista.unshift({ codigo: OPCAO_TODOS, nome: 'Todas' });
+        if (!eventoId) {
+          form.setFieldValue('dreId', OPCAO_TODOS);
+          form.initialValues.dreId = OPCAO_TODOS;
+        }
       }
       setListaDres(lista);
     } else {
       form.setFieldValue('dreId', undefined);
       setListaDres([]);
     }
-  }, [eventoId]);
+  }, [eventoId, usuario.possuiPerfilSme]);
 
   useEffect(() => {
     if (!eventoId || (eventoId && dreId)) {

@@ -61,6 +61,8 @@ const EventosListaFiltros = () => {
     exibirEventosTodaRede,
   } = useContext(EventosListaContext);
 
+  const usuario = useSelector(store => store.usuario);
+
   const filtroListaEventos = useSelector(
     state => state.calendarioEscolar.filtroListaEventos
   );
@@ -119,6 +121,7 @@ const EventosListaFiltros = () => {
     const calendario = listaCalendarios?.find(t => t?.descricao === descricao);
     if (calendario) {
       setCalendarioSelecionado(calendario);
+      setCodigoUe();
     } else {
       setCalendarioSelecionado({ descricao });
     }
@@ -142,9 +145,13 @@ const EventosListaFiltros = () => {
       if (lista?.length === 1) {
         const { codigo } = lista[0];
         setCodigoDre(codigo);
-      } else {
-        lista.unshift({ codigo: OPCAO_TODOS, nome: 'Todas' });
       }
+
+      if (usuario.possuiPerfilSme && lista?.length > 1) {
+        lista.unshift({ codigo: OPCAO_TODOS, nome: 'Todas' });
+        setCodigoDre(OPCAO_TODOS);
+      }
+
       setListaDres(lista);
     } else {
       setCodigoDre();
@@ -195,7 +202,9 @@ const EventosListaFiltros = () => {
       if (lista?.length === 1) {
         const { codigo } = lista[0];
         setCodigoUe(codigo);
-      } else {
+      }
+
+      if (usuario.possuiPerfilSmeOuDre && lista?.length > 1) {
         lista.unshift(ueTodos);
       }
 
@@ -210,7 +219,6 @@ const EventosListaFiltros = () => {
     if (codigoDre) {
       obterUes();
     } else {
-      setCodigoUe();
       setListaUes([]);
     }
   }, [codigoDre, obterUes]);
