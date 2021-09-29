@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import shortid from 'shortid';
-import { LabelSemDados } from '~/componentes';
+import { LabelSemDados, MarcadorTriangulo } from '~/componentes';
 import notasConceitos from '~/dtos/notasConceitos';
 import {
   setExpandirLinha,
@@ -359,11 +359,16 @@ const Avaliacao = props => {
                                 );
                               })
                             : ''}
-                          <td className="sticky-col col-nota-final linha-nota-conceito-final">
+                          <td className="sticky-col col-nota-final linha-nota-conceito-final position-relative">
                             {ehRegencia ? (
                               <ColunaNotaFinalRegencia indexLinha={i} />
                             ) : (
                               montarCampoNotaConceitoFinal(aluno)
+                            )}
+                            {aluno?.notaBimestre?.emAprovacao && (
+                              <Tooltip title="Aguardando aprovação">
+                                <MarcadorTriangulo />
+                              </Tooltip>
                             )}
                           </td>
 
