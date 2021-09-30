@@ -13,6 +13,9 @@ const EventosListaContextProvider = ({ children }) => {
   const [dataInicio, setDataInicio] = useState();
   const [dataFim, setDataFim] = useState();
   const [exibirEventosTodaRede, setExibirEventosTodaRede] = useState(false);
+  const [exibirLoaderListaEventos, setExibirLoaderListaEventos] = useState(
+    false
+  );
 
   return (
     <EventosListaContext.Provider
@@ -37,6 +40,8 @@ const EventosListaContextProvider = ({ children }) => {
         setDataFim,
         exibirEventosTodaRede,
         setExibirEventosTodaRede,
+        exibirLoaderListaEventos,
+        setExibirLoaderListaEventos,
       }}
     >
       {children}

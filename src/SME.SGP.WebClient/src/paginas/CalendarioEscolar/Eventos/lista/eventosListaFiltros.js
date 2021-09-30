@@ -24,15 +24,6 @@ import { ContainerSwitchExibirEventos } from '../eventos.css';
 import EventosListaContext from './eventosListaContext';
 
 const EventosListaFiltros = () => {
-  const [carregandoCalendarios, setCarregandoCalendarios] = useState(false);
-  const [carregandoDres, setCarregandoDres] = useState(false);
-  const [carregandoUes, setCarregandoUes] = useState(false);
-
-  const usuarioStore = useSelector(store => store.usuario);
-
-  const paramsRota = useParams();
-  const dispatch = useDispatch();
-
   const {
     codigoDre,
     setCodigoDre,
@@ -53,12 +44,19 @@ const EventosListaFiltros = () => {
     exibirEventosTodaRede,
   } = useContext(EventosListaContext);
 
+  const [carregandoCalendarios, setCarregandoCalendarios] = useState(false);
+  const [carregandoDres, setCarregandoDres] = useState(false);
+  const [carregandoUes, setCarregandoUes] = useState(false);
+
   const [listaDres, setListaDres] = useState([]);
   const [listaUes, setListaUes] = useState([]);
   const [listaCalendarios, setListaCalendarios] = useState([]);
   const [listaTipoEventos, setListaTipoEventos] = useState([]);
 
   const usuario = useSelector(store => store.usuario);
+
+  const paramsRota = useParams();
+  const dispatch = useDispatch();
 
   const filtroListaEventos = useSelector(
     state => state.calendarioEscolar.filtroListaEventos
@@ -404,7 +402,7 @@ const EventosListaFiltros = () => {
             mensagemErro={mensagemErroDataFim()}
           />
         </Col>
-        {usuarioStore?.possuiPerfilSme &&
+        {usuario?.possuiPerfilSme &&
         codigoDre === OPCAO_TODOS &&
         codigoUe === OPCAO_TODOS ? (
           <Col span={24}>

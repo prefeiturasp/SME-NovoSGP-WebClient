@@ -28,6 +28,7 @@ const EventosListaBotoesAcao = () => {
     seFiltrarNovaConsulta,
     codigoDre,
     codigoUe,
+    setExibirLoaderListaEventos,
   } = useContext(EventosListaContext);
 
   const [podeAlterarExcluir, setPodeAlterarExcluir] = useState(false);
@@ -66,9 +67,11 @@ const EventosListaBotoesAcao = () => {
       );
       if (confirmado) {
         const idsDeletar = eventosSelecionados.map(c => c.id);
-        const resposta = await ServicoEvento.deletar(idsDeletar).catch(e =>
-          erros(e)
-        );
+        setExibirLoaderListaEventos(true);
+        const resposta = await ServicoEvento.deletar(idsDeletar)
+          .catch(e => erros(e))
+          .finally(() => setExibirLoaderListaEventos(false));
+
         if (resposta?.status === 200) {
           const mensagemSucesso = `${
             eventosSelecionados.length > 1

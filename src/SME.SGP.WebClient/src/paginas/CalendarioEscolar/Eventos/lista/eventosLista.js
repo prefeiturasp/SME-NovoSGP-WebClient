@@ -5,6 +5,7 @@ import AlertaCalendarioObrigatorio from './alertaCalendarioObrigatorio';
 import EventosListaBotoesAcao from './eventosListaBotoesAcao';
 import EventosListaContextProvider from './eventosListaContextProvider';
 import EventosListaFiltros from './eventosListaFiltros';
+import EventosListaLoader from './eventosListaLoader';
 import EventosListaPaginada from './eventosListaPaginada';
 
 const EventosLista = () => {
@@ -12,11 +13,13 @@ const EventosLista = () => {
     <EventosListaContextProvider>
       <AlertaCalendarioObrigatorio />
       <Cabecalho pagina="Eventos do calendário escolar" />
-      <Card>
-        <EventosListaBotoesAcao />
-        <EventosListaFiltros />
-        <EventosListaPaginada />
-      </Card>
+      <EventosListaLoader>
+        <Card>
+          <EventosListaBotoesAcao />
+          <EventosListaFiltros />
+          <EventosListaPaginada />
+        </Card>
+      </EventosListaLoader>
     </EventosListaContextProvider>
   );
 };
