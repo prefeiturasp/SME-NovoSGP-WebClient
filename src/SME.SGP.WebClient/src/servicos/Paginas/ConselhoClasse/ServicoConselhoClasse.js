@@ -94,7 +94,7 @@ class ServicoConselhoClasse {
     }
   };
 
-  acessarAbaFinalParecerConclusivo = (
+  acessarParecerConclusivo = (
     conselhoClasseId,
     fechamentoTurmaId,
     alunoCodigo,

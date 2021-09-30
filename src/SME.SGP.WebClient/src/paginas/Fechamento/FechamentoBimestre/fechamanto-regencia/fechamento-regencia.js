@@ -1,5 +1,6 @@
 import shortid from 'shortid';
 import React from 'react';
+import { Tooltip } from 'antd';
 import {
   CampoNotaRegencia,
   LinhaNotaRegencia,
@@ -7,6 +8,7 @@ import {
   TrRegencia,
 } from './fechamento-regencia.css';
 import ServicoFechamentoBimestre from '~/servicos/Paginas/Fechamento/ServicoFechamentoBimestre';
+import { MarcadorTriangulo } from '~/componentes';
 
 const FechamentoRegencia = props => {
   const { idRegencia, dados } = props;
@@ -18,20 +20,33 @@ const FechamentoRegencia = props => {
       </td>
       <TdRegencia colSpan="4">
         <LinhaNotaRegencia>
-          {dados
-            ? dados.map(item => (
-                <CampoNotaRegencia key={shortid.generate()}>
-                  <span className="centro disciplina">{item.disciplina}</span>
-                  <span className="centro nota">
-                    {item.ehConceito
-                      ? item.conceitoDescricao
-                      : ServicoFechamentoBimestre.formatarNotaConceito(
-                          item.notaConceito
+          <table>
+            <tbody>
+              <tr>
+                {dados
+                  ? dados.map(item => (
+                      <CampoNotaRegencia key={shortid.generate()}>
+                        <span className="centro disciplina">
+                          {item.disciplina}
+                        </span>
+                        <span className="centro nota">
+                          {item.ehConceito
+                            ? item.conceitoDescricao
+                            : ServicoFechamentoBimestre.formatarNotaConceito(
+                                item.notaConceito
+                              )}
+                        </span>
+                        {item?.emAprovacao && (
+                          <Tooltip title="Aguardando aprovação">
+                            <MarcadorTriangulo />
+                          </Tooltip>
                         )}
-                  </span>
-                </CampoNotaRegencia>
-              ))
-            : null}
+                      </CampoNotaRegencia>
+                    ))
+                  : null}
+              </tr>
+            </tbody>
+          </table>
         </LinhaNotaRegencia>
       </TdRegencia>
     </TrRegencia>
