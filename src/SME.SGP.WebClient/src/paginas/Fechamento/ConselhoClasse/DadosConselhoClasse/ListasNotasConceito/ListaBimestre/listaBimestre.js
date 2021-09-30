@@ -184,13 +184,18 @@ const ListaBimestre = props => {
                           {item.nome}
                         </td>
                         <td>{montarValoresNotasConceitos(item)}</td>
-                        <td>
+                        <td className="position-relative">
                           {montaCampoPosConselho(
                             item.notaPosConselho.id,
                             item.notaPosConselho.nota,
                             `${descricaoGrupoMatriz} ${index} regencia`,
                             item.codigoComponenteCurricular,
                             item.notaPosConselho.podeEditar
+                          )}
+                          {item.notaPosConselho.emAprovacao && (
+                            <Tooltip title="Aguardando aprovação">
+                              <MarcadorTriangulo />
+                            </Tooltip>
                           )}
                         </td>
                         {index === 0 ? (
