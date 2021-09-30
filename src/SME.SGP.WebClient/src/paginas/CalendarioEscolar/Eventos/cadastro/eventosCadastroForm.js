@@ -2,7 +2,7 @@ import { Col, Row } from 'antd';
 import { Form, Formik } from 'formik';
 import React, { useCallback, useContext, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { useParams, useLocation } from 'react-router-dom';
+import { useLocation, useParams } from 'react-router-dom';
 import shortid from 'shortid';
 import * as Yup from 'yup';
 import {
@@ -11,7 +11,6 @@ import {
   CampoData,
   CampoTexto,
   Colors,
-  ModalConteudoHtml,
   momentSchema,
   RadioGroupButton,
   SelectComponent,
@@ -41,6 +40,7 @@ import DreCadastroEventos from './campos/dreCadastroEventos';
 import TipoEventoCadastroEventos from './campos/tipoEventoCadastroEventos';
 import UeCadastroEventos from './campos/ueCadastroEventos';
 import EventosCadastroContext from './eventosCadastroContext';
+import EventosModalCopiarEvento from './eventosModalCopiarEvento';
 
 const EventosCadastroForm = () => {
   const {
@@ -56,46 +56,40 @@ const EventosCadastroForm = () => {
     setExecutaResetarTela,
     setListaCalendarios,
     listaCalendarios,
-    eventoTipoFeriadoSelecionado,
-    setEventoTipoLocalOcorrenciaSMESelecionado,
-    eventoTipoLocalOcorrenciaSMESelecionado,
     listaTipoEvento,
-    setEventoTipoFeriadoSelecionado,
-    listaFeriados,
-    setListaFeriados,
-    desabilitarOpcaoLetivo,
-    setDesabilitarOpcaoLetivo,
-    tipoDataUnico,
-    setTipoDataUnico,
     setListaTipoEvento,
     listaTipoEventoOrigem,
-    showModalRecorrencia,
-    setShowModalRecorrencia,
-    recorrencia,
-    setRecorrencia,
     desabilitarLetivo,
     listaCalendarioEscolar,
     setListaCalendarioEscolar,
-    listaCalendarioParaCopiarInicial,
     setListaCalendarioParaCopiarInicial,
     listaCalendarioParaCopiar,
-    setListaCalendarioParaCopiar,
-    exibirModalCopiarEvento,
     setExibirModalCopiarEvento,
-    exibirModalRetornoCopiarEvento,
     setExibirModalRetornoCopiarEvento,
-    listaMensagensCopiarEvento,
     setListaMensagensCopiarEvento,
-    auditoriaEventos,
     setExibirLoaderSalvar,
-    aguardandoAprovacao,
-    setAguardandoAprovacao,
     setPodeAlterarEvento,
     setPodeAlterarExcluir,
-    setAuditoriaEventos,
     somenteConsulta,
     setDesabilitarCampos,
   } = useContext(EventosCadastroContext);
+
+  const [validacoes, setValidacoes] = useState({});
+  const [listaFeriados, setListaFeriados] = useState([]);
+  const [desabilitarOpcaoLetivo, setDesabilitarOpcaoLetivo] = useState(true);
+  const [tipoDataUnico, setTipoDataUnico] = useState(true);
+  const [recorrencia, setRecorrencia] = useState(null);
+  const [showModalRecorrencia, setShowModalRecorrencia] = useState(false);
+  const [auditoriaEventos, setAuditoriaEventos] = useState({});
+  const [aguardandoAprovacao, setAguardandoAprovacao] = useState(false);
+  const [
+    eventoTipoFeriadoSelecionado,
+    setEventoTipoFeriadoSelecionado,
+  ] = useState(false);
+  const [
+    eventoTipoLocalOcorrenciaSMESelecionado,
+    setEventoTipoLocalOcorrenciaSMESelecionado,
+  ] = useState(false);
 
   const usuarioStore = useSelector(store => store.usuario);
   const { turmaSelecionada } = usuarioStore;
@@ -111,8 +105,6 @@ const EventosCadastroForm = () => {
   const [valoresIniciais, setValoresIniciais] = useState(
     eventoId ? null : valoresIniciaisPadrao
   );
-
-  const [validacoes, setValidacoes] = useState({});
 
   setBreadcrumbManual(
     paramsLocation?.pathname,
@@ -130,6 +122,7 @@ const EventosCadastroForm = () => {
       return;
     }
     setDesabilitarCampos(desabilitar);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     somenteConsulta,
     eventoId,
@@ -292,6 +285,7 @@ const EventosCadastroForm = () => {
       resetarTela();
       setExecutaResetarTela(false);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [executaResetarTela]);
 
   const onChangeUe = (ue, form) => {
@@ -326,6 +320,7 @@ const EventosCadastroForm = () => {
     if (recorrencia) {
       onCloseRecorrencia();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [recorrencia]);
 
   const onClickCopiarEvento = async () => {
@@ -355,33 +350,11 @@ const EventosCadastroForm = () => {
     setExibirModalCopiarEvento(true);
   };
 
-  const onCloseCopiarConteudo = () => {
-    setExibirModalCopiarEvento(false);
-  };
-
-  const onConfirmarCopiarEvento = () => {
-    onCloseCopiarConteudo();
-  };
-
-  const onCancelarCopiarEvento = () => {
-    setListaCalendarioParaCopiar(listaCalendarioParaCopiarInicial);
-    onCloseCopiarConteudo();
-  };
-
-  const onChangeCopiarEvento = eventos => {
-    setListaCalendarioParaCopiar(eventos);
-  };
-
   const urlTelaListagemEventos = () => {
     if (tipoCalendarioId) {
-      return `/calendario-escolar/eventos/${tipoCalendarioId}`;
+      return `${RotasDto.EVENTOS}/${tipoCalendarioId}`;
     }
-    return '/calendario-escolar/eventos';
-  };
-
-  const onCloseRetornoCopiarEvento = () => {
-    setExibirModalRetornoCopiarEvento(false);
-    history.push(urlTelaListagemEventos());
+    return RotasDto.EVENTOS;
   };
 
   const exibirModalAtualizarEventos = async values => {
@@ -472,11 +445,11 @@ const EventosCadastroForm = () => {
       }
 
       cadastrado = await ServicoEvento.salvar(eventoId || 0, payload);
-      if (cadastrado && cadastrado.status === 200) {
+      if (cadastrado?.status === 200) {
         sucessoAoSalvar(cadastrado, recorrencia);
       }
     } catch (e) {
-      if (e && e.response && e.response.status === 602) {
+      if (e?.response?.status === 602) {
         const confirmaData = await exibirModalConfirmaData(e.response.data);
         if (confirmaData) {
           const request = await ServicoEvento.salvar(eventoId || 0, {
@@ -585,8 +558,8 @@ const EventosCadastroForm = () => {
   const consultaPorId = async id => {
     const evento = await ServicoEvento.obterPorId(id).catch(e => erros(e));
 
-    if (evento && evento.data) {
-      if (evento.data.status == entidadeStatusDto.AguardandoAprovacao) {
+    if (evento?.data) {
+      if (evento.data.status === entidadeStatusDto.AguardandoAprovacao) {
         setAguardandoAprovacao(true);
       } else {
         setAguardandoAprovacao(false);
@@ -653,6 +626,7 @@ const EventosCadastroForm = () => {
     if (eventoId) {
       consultaPorId(eventoId);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [eventoId]);
 
   return (
@@ -665,61 +639,7 @@ const EventosCadastroForm = () => {
           dataInicio: refFormEventos?.state?.values?.dataInicio,
         }}
       />
-
-      <ModalConteudoHtml
-        key="copiarEvento"
-        visivel={exibirModalCopiarEvento}
-        onConfirmacaoPrincipal={onConfirmarCopiarEvento}
-        onConfirmacaoSecundaria={onCancelarCopiarEvento}
-        onClose={onCloseCopiarConteudo}
-        labelBotaoPrincipal="Selecionar"
-        labelBotaoSecundario="Cancelar"
-        titulo="Copiar evento"
-        closable={false}
-        fecharAoClicarFora={false}
-        fecharAoClicarEsc={false}
-      >
-        <SelectComponent
-          id="copiar-evento-select"
-          lista={listaCalendarioEscolar}
-          valueOption="id"
-          valueText="descricaoTipoCalendario"
-          onChange={onChangeCopiarEvento}
-          valueSelect={listaCalendarioParaCopiar}
-          multiple
-          placeholder="Selecione 1 ou mais tipos de calendários"
-        />
-      </ModalConteudoHtml>
-
-      <ModalConteudoHtml
-        key="retornoCopiarEvento"
-        visivel={exibirModalRetornoCopiarEvento}
-        onConfirmacaoSecundaria={onCloseRetornoCopiarEvento}
-        onClose={onCloseRetornoCopiarEvento}
-        labelBotaoSecundario="Ok"
-        titulo="Cadastro de evento"
-        closable={false}
-        fecharAoClicarFora={false}
-        fecharAoClicarEsc={false}
-        esconderBotaoPrincipal
-      >
-        {listaMensagensCopiarEvento.map(item => (
-          <p key={shortid.generate()}>
-            {item.sucesso ? (
-              <strong>
-                <i className="fas fa-check text-success mr-2" />
-                {item.mensagem}
-              </strong>
-            ) : (
-              <strong className="text-danger">
-                <i className="fas fa-times mr-3" />
-                {item.mensagem}
-              </strong>
-            )}
-          </p>
-        ))}
-      </ModalConteudoHtml>
-
+      <EventosModalCopiarEvento />
       {valoresIniciais ? (
         <>
           <Formik

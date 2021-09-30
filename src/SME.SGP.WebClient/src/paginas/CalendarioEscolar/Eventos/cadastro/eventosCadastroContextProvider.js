@@ -10,44 +10,28 @@ const EventosCadastroContextProvider = ({ children }) => {
   const [somenteConsulta, setSomenteConsulta] = useState(false);
   const [podeAlterarExcluir, setPodeAlterarExcluir] = useState(true);
   const [desabilitarCampos, setDesabilitarCampos] = useState(false);
-  const [listaDres, setListaDres] = useState([]);
   const [listaUes, setListaUes] = useState([]);
   const [listaCalendarios, setListaCalendarios] = useState([]);
   const [listaTipoEvento, setListaTipoEvento] = useState([]);
   const [listaTipoEventoOrigem, setListaTipoEventoOrigem] = useState([]);
-  const [
-    eventoTipoFeriadoSelecionado,
-    setEventoTipoFeriadoSelecionado,
-  ] = useState(false);
-  const [
-    eventoTipoLocalOcorrenciaSMESelecionado,
-    setEventoTipoLocalOcorrenciaSMESelecionado,
-  ] = useState(false);
-  const [listaFeriados, setListaFeriados] = useState([]);
-  const [desabilitarOpcaoLetivo, setDesabilitarOpcaoLetivo] = useState(true);
-  const [tipoDataUnico, setTipoDataUnico] = useState(true);
-  const [recorrencia, setRecorrencia] = useState(null);
-  const [showModalRecorrencia, setShowModalRecorrencia] = useState(false);
   const [desabilitarLetivo, setDesabilitarLetivo] = useState(false);
   const [listaCalendarioEscolar, setListaCalendarioEscolar] = useState([]);
+  const [exibirLoaderSalvar, setExibirLoaderSalvar] = useState(false);
+  const [exibirModalCopiarEvento, setExibirModalCopiarEvento] = useState(false);
   const [
     listaCalendarioParaCopiarInicial,
     setListaCalendarioParaCopiarInicial,
   ] = useState([]);
-  const [listaCalendarioParaCopiar, setListaCalendarioParaCopiar] = useState(
-    []
-  );
-  const [exibirModalCopiarEvento, setExibirModalCopiarEvento] = useState(false);
   const [
     exibirModalRetornoCopiarEvento,
     setExibirModalRetornoCopiarEvento,
   ] = useState(false);
+  const [listaCalendarioParaCopiar, setListaCalendarioParaCopiar] = useState(
+    []
+  );
   const [listaMensagensCopiarEvento, setListaMensagensCopiarEvento] = useState(
     []
   );
-  const [auditoriaEventos, setAuditoriaEventos] = useState({});
-  const [exibirLoaderSalvar, setExibirLoaderSalvar] = useState(false);
-  const [aguardandoAprovacao, setAguardandoAprovacao] = useState(false);
 
   const valoresIniciaisPadrao = {
     dataFim: '',
@@ -82,8 +66,6 @@ const EventosCadastroContextProvider = ({ children }) => {
         setPodeAlterarExcluir,
         desabilitarCampos,
         setDesabilitarCampos,
-        listaDres,
-        setListaDres,
         listaUes,
         setListaUes,
         listaCalendarios,
@@ -92,20 +74,6 @@ const EventosCadastroContextProvider = ({ children }) => {
         setListaTipoEvento,
         listaTipoEventoOrigem,
         setListaTipoEventoOrigem,
-        eventoTipoFeriadoSelecionado,
-        setEventoTipoFeriadoSelecionado,
-        eventoTipoLocalOcorrenciaSMESelecionado,
-        setEventoTipoLocalOcorrenciaSMESelecionado,
-        listaFeriados,
-        setListaFeriados,
-        desabilitarOpcaoLetivo,
-        setDesabilitarOpcaoLetivo,
-        tipoDataUnico,
-        setTipoDataUnico,
-        recorrencia,
-        setRecorrencia,
-        setShowModalRecorrencia,
-        showModalRecorrencia,
         desabilitarLetivo,
         setDesabilitarLetivo,
         listaCalendarioEscolar,
@@ -120,12 +88,8 @@ const EventosCadastroContextProvider = ({ children }) => {
         setExibirModalRetornoCopiarEvento,
         listaMensagensCopiarEvento,
         setListaMensagensCopiarEvento,
-        auditoriaEventos,
-        setAuditoriaEventos,
         exibirLoaderSalvar,
         setExibirLoaderSalvar,
-        aguardandoAprovacao,
-        setAguardandoAprovacao,
       }}
     >
       {children}

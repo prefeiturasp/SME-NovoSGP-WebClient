@@ -1,3 +1,4 @@
+import { Col, Row } from 'antd';
 import React, { useContext, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
@@ -38,6 +39,7 @@ const EventosCadastroBotoesAcao = () => {
 
   useEffect(() => {
     setSomenteConsulta(verificaSomenteConsulta(permissoesTela));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [permissoesTela]);
 
   const urlTelaListagemEventos = () => {
@@ -96,7 +98,6 @@ const EventosCadastroBotoesAcao = () => {
         'Cancelar'
       );
       if (confirmado) {
-        // TODO - Loader!
         const resposta = await ServicoEvento.deletar([eventoId]).catch(e =>
           erros(e)
         );
@@ -121,60 +122,65 @@ const EventosCadastroBotoesAcao = () => {
   };
 
   return (
-    <div className="col-md-12 d-flex justify-content-end pb-4">
-      <div className="row">
-        <Button
-          id="btn-voltar"
-          label="Voltar"
-          icon="arrow-left"
-          color={Colors.Azul}
-          border
-          className="mr-3"
-          onClick={onClickVoltar}
-        />
-        <Button
-          id="btn-cancelar"
-          label="Cancelar"
-          color={Colors.Roxo}
-          border
-          className="mr-3"
-          onClick={() => onClickCancelar()}
-          disabled={!emEdicao || !podeAlterarEvento}
-        />
-        <Button
-          id="btn-excluir"
-          label="Excluir"
-          color={Colors.Vermelho}
-          border
-          className="mr-3"
-          hidden={novoRegistro}
-          onClick={onClickExcluir}
-          disabled={
-            somenteConsulta ||
-            !permissoesTela?.podeExcluir ||
-            novoRegistro ||
-            !podeAlterarEvento ||
-            !podeAlterarExcluir
-          }
-        />
-        <Button
-          id={novoRegistro ? 'btn-cadastrar' : 'btn-alterar'}
-          label={novoRegistro ? 'Cadastrar' : 'Alterar'}
-          color={Colors.Roxo}
-          border
-          bold
-          onClick={() => validaAntesDoSubmit()}
-          disabled={
-            desabilitarCampos ||
-            (!novoRegistro && !eventoId) ||
-            somenteConsulta ||
-            !permissoesTela?.podeAlterar ||
-            (!podeAlterarExcluir && !novoRegistro) ||
-            !podeAlterarEvento
-          }
-        />
-      </div>
-    </div>
+    <Col span={24}>
+      <Row gutter={[16, 16]} style={{ justifyContent: 'end', display: 'flex' }}>
+        <Col>
+          <Button
+            id="btn-voltar"
+            label="Voltar"
+            icon="arrow-left"
+            color={Colors.Azul}
+            border
+            onClick={onClickVoltar}
+          />
+        </Col>
+        <Col>
+          <Button
+            id="btn-cancelar"
+            label="Cancelar"
+            color={Colors.Roxo}
+            border
+            onClick={() => onClickCancelar()}
+            disabled={!emEdicao || !podeAlterarEvento}
+          />
+        </Col>
+        <Col>
+          <Button
+            id="btn-excluir"
+            label="Excluir"
+            color={Colors.Vermelho}
+            border
+            hidden={novoRegistro}
+            onClick={onClickExcluir}
+            disabled={
+              somenteConsulta ||
+              !permissoesTela?.podeExcluir ||
+              novoRegistro ||
+              !podeAlterarEvento ||
+              !podeAlterarExcluir
+            }
+          />
+        </Col>
+        <Col>
+          <Button
+            id={novoRegistro ? 'btn-cadastrar' : 'btn-alterar'}
+            label={novoRegistro ? 'Cadastrar' : 'Alterar'}
+            color={Colors.Roxo}
+            border
+            bold
+            onClick={() => validaAntesDoSubmit()}
+            disabled={
+              desabilitarCampos ||
+              (!novoRegistro && !eventoId) ||
+              somenteConsulta ||
+              !permissoesTela?.podeAlterar ||
+              (!podeAlterarExcluir && !novoRegistro) ||
+              !podeAlterarEvento
+            }
+          />
+        </Col>
+      </Row>
+    </Col>
   );
 };
 
