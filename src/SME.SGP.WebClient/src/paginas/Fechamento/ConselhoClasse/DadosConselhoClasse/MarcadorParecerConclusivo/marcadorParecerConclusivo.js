@@ -1,5 +1,6 @@
 import { faSyncAlt } from '@fortawesome/free-solid-svg-icons';
 import React, { useEffect, useState } from 'react';
+import { Tooltip } from 'antd';
 import { useSelector } from 'react-redux';
 import { statusParecerConclusivo } from '~/dtos';
 import { Loader } from '~/componentes';
@@ -73,11 +74,13 @@ const MarcadorParecerConclusivo = () => {
     <>
       {parecer ? (
         <div className="col-m-12 d-flex ml-3 my-3">
-          <LabelParecer>
-            <Loader loading={gerandoParecerConclusivo} tip="">
-              <span>{montarDescricao()}</span>
-            </Loader>
-          </LabelParecer>
+          <Tooltip title="Aguardando aprovação">
+            <LabelParecer>
+              <Loader loading={gerandoParecerConclusivo} tip="">
+                <span>{montarDescricao()}</span>
+              </Loader>
+            </LabelParecer>
+          </Tooltip>
           {exibirIconeSincronizar && (
             <IconeEstilizado
               icon={faSyncAlt}
