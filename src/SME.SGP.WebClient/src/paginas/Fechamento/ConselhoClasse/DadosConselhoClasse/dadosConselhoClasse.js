@@ -23,7 +23,6 @@ import servicoSalvarConselhoClasse from '../servicoSalvarConselhoClasse';
 import AlertaDentroPeriodo from './AlertaDentroPeriodo/alertaDentroPeriodo';
 import AnotacoesRecomendacoes from './AnotacoesRecomendacoes/anotacoesRecomendacoes';
 import ListasNotasConceitos from './ListasNotasConceito/listasNotasConceitos';
-import MarcadorParecerConclusivo from './MarcadorParecerConclusivo/marcadorParecerConclusivo';
 import MarcadorPeriodoInicioFim from './MarcadorPeriodoInicioFim/marcadorPeriodoInicioFim';
 import Sintese from './Sintese/Sintese';
 import MarcadorSituacaoConselho from './MarcadorSituacaoConselho/marcadorSituacaoConselho';
@@ -57,9 +56,9 @@ const DadosConselhoClasse = props => {
   const [carregando, setCarregando] = useState(false);
   const [turmaAtual, setTurmaAtual] = useState(0);
 
-  const validaAbaFinal = useCallback(
+  const validaParecerConclusivo = useCallback(
     async (conselhoClasseId, fechamentoTurmaId, alunoCodigo, codigoTurma) => {
-      const resposta = await ServicoConselhoClasse.acessarAbaFinalParecerConclusivo(
+      const resposta = await ServicoConselhoClasse.acessarParecerConclusivo(
         conselhoClasseId,
         fechamentoTurmaId,
         alunoCodigo,
@@ -102,7 +101,7 @@ const DadosConselhoClasse = props => {
 
   // Quando passa bimestre 0 o retorno vai trazer dados do bimestre corrente!
   const caregarInformacoes = useCallback(
-    async (bimestreConsulta = 0, ehFinal = false) => {
+    async (bimestreConsulta = 0, mostrarParecer = false) => {
       limparDadosNotaPosConselhoJustificativa();
       ServicoConselhoClasse.setarParecerConclusivo('');
       setCarregando(true);
@@ -111,11 +110,11 @@ const DadosConselhoClasse = props => {
         turmaCodigo,
         usuario.turmaSelecionada.consideraHistorico && bimestreConsulta === 0
           ? '1'
-          : ehFinal
+          : mostrarParecer
           ? '0'
           : bimestreConsulta,
         codigoEOL,
-        ehFinal,
+        mostrarParecer,
         usuario.turmaSelecionada.consideraHistorico
       ).catch(e => {
         erros(e);
@@ -148,8 +147,8 @@ const DadosConselhoClasse = props => {
         validaPermissoes(novoRegistro);
 
         let podeAcessarAbaFinal = true;
-        if (ehFinal) {
-          const podeAcessar = await validaAbaFinal(
+        if (mostrarParecer) {
+          const podeAcessar = await validaParecerConclusivo(
             conselhoClasseId,
             fechamentoTurmaId,
             codigoEOL,
@@ -194,11 +193,11 @@ const DadosConselhoClasse = props => {
           );
         } else {
           ServicoConselhoClasse.carregarListaTiposConceito(
-            anoLetivo + '/12/31'
+            `${anoLetivo}/12/31`
           );
         }
 
-        if (ehFinal) {
+        if (mostrarParecer) {
           dispatch(
             setBimestreAtual({
               valor: bimestreConsulta,
@@ -232,7 +231,7 @@ const DadosConselhoClasse = props => {
       dispatch,
       limparDadosNotaPosConselhoJustificativa,
       turmaCodigo,
-      validaAbaFinal,
+      validaParecerConclusivo,
       validaPermissoes,
     ]
   );
@@ -265,8 +264,7 @@ const DadosConselhoClasse = props => {
     }
 
     if (continuar) {
-      const ehFinal = numeroBimestre === 'final';
-      caregarInformacoes(numeroBimestre, ehFinal);
+      caregarInformacoes(numeroBimestre, true);
     }
   };
 
@@ -277,9 +275,6 @@ const DadosConselhoClasse = props => {
           <>
             <AlertaDentroPeriodo />
             <MarcadorSituacaoConselho />
-            {bimestreAtual.valor === 'final' ? (
-              <MarcadorParecerConclusivo />
-            ) : null}
             <MarcadorPeriodoInicioFim />
             <ListasNotasConceitos bimestreSelecionado={bimestreAtual} />
             <Sintese
