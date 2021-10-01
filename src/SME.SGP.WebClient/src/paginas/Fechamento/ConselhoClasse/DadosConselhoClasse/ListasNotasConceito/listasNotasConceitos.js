@@ -91,6 +91,23 @@ const ListasNotasConceitos = props => {
     }
   };
 
+  const habilitaConselhoClassePorNotasPosConselho = dados => {
+    let notasPosConselhoPreenchidas = true;
+    if (!dados.temConselhoClasseAluno) {
+    dados.notasConceitos.map(notasConceitos =>
+      notasConceitos.componentesCurriculares.map(componentesCurriculares => {
+        if (valorNuloOuVazio(componentesCurriculares.notaPosConselho.nota)) {
+          notasPosConselhoPreenchidas = false;
+        }
+        return componentesCurriculares;
+      })
+    );
+    if (notasPosConselhoPreenchidas) {
+      dispatch(setConselhoClasseEmEdicao(true));
+    }
+  }
+  };
+
   const obterDadosLista = useCallback(async () => {
     setCarregando(true);
     const resultado = await ServicoConselhoClasse.obterNotasConceitosConselhoClasse(
@@ -108,6 +125,7 @@ const ListasNotasConceitos = props => {
       setExibir(true);
       if (bimestreSelecionado?.valor !== 'final')
         habilitaConselhoClasse(resultado.data);
+        habilitaConselhoClassePorNotasPosConselho(resultado.data);
     } else {
       setExibir(false);
     }
