@@ -33,6 +33,8 @@ const EventosCadastroContextProvider = ({ children }) => {
     []
   );
 
+  const [aguardandoAprovacao, setAguardandoAprovacao] = useState(false);
+
   const valoresIniciaisPadrao = {
     dataFim: '',
     dataInicio: '',
@@ -90,6 +92,8 @@ const EventosCadastroContextProvider = ({ children }) => {
         setListaMensagensCopiarEvento,
         exibirLoaderSalvar,
         setExibirLoaderSalvar,
+        aguardandoAprovacao,
+        setAguardandoAprovacao,
       }}
     >
       {children}

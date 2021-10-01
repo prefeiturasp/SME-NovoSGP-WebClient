@@ -72,6 +72,8 @@ const EventosCadastroForm = () => {
     somenteConsulta,
     setDesabilitarCampos,
     setListaTipoEventoOrigem,
+    setAguardandoAprovacao,
+    aguardandoAprovacao,
   } = useContext(EventosCadastroContext);
 
   const [validacoes, setValidacoes] = useState({});
@@ -81,7 +83,6 @@ const EventosCadastroForm = () => {
   const [recorrencia, setRecorrencia] = useState(null);
   const [showModalRecorrencia, setShowModalRecorrencia] = useState(false);
   const [auditoriaEventos, setAuditoriaEventos] = useState({});
-  const [aguardandoAprovacao, setAguardandoAprovacao] = useState(false);
   const [
     eventoTipoFeriadoSelecionado,
     setEventoTipoFeriadoSelecionado,
