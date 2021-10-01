@@ -99,9 +99,19 @@ const DadosConselhoClasse = props => {
     [dispatch, permissoesTela, turmaSelecionada, modalidadesFiltroPrincipal]
   );
 
+  const verificarExibicaoMarcador = () => {
+    return ServicoConselhoClasse.obterInformacoesPrincipais(
+      turmaCodigo,
+      0,
+      codigoEOL,
+      true,
+      usuario.turmaSelecionada.consideraHistorico
+    );
+  };
+
   // Quando passa bimestre 0 o retorno vai trazer dados do bimestre corrente!
   const caregarInformacoes = useCallback(
-    async (bimestreConsulta = 0, mostrarParecer = false) => {
+    async (bimestreConsulta = 0, ehFinal = false) => {
       limparDadosNotaPosConselhoJustificativa();
       ServicoConselhoClasse.setarParecerConclusivo('');
       setCarregando(true);
@@ -110,11 +120,11 @@ const DadosConselhoClasse = props => {
         turmaCodigo,
         usuario.turmaSelecionada.consideraHistorico && bimestreConsulta === 0
           ? '1'
-          : mostrarParecer
+          : ehFinal
           ? '0'
           : bimestreConsulta,
         codigoEOL,
-        mostrarParecer,
+        ehFinal,
         usuario.turmaSelecionada.consideraHistorico
       ).catch(e => {
         erros(e);
@@ -128,6 +138,7 @@ const DadosConselhoClasse = props => {
         dispatch(setDadosPrincipaisConselhoClasse({}));
         setSemDados(true);
       });
+
       if (retorno && retorno.data) {
         const {
           conselhoClasseId,
@@ -146,16 +157,27 @@ const DadosConselhoClasse = props => {
         const novoRegistro = !conselhoClasseId;
         validaPermissoes(novoRegistro);
 
+        let retornoVerificarMarcador = [];
+        if (!ehFinal) {
+          retornoVerificarMarcador = await verificarExibicaoMarcador();
+        }
+
         let podeAcessarAbaFinal = true;
-        if (mostrarParecer) {
+        if (
+          retornoVerificarMarcador?.data ||
+          (conselhoClasseId && fechamentoTurmaId)
+        ) {
           const podeAcessar = await validaParecerConclusivo(
-            conselhoClasseId,
-            fechamentoTurmaId,
+            retornoVerificarMarcador?.data?.conselhoClasseId ||
+              conselhoClasseId,
+            retornoVerificarMarcador?.data?.fechamentoTurmaId ||
+              fechamentoTurmaId,
             codigoEOL,
             turmaCodigo
           ).catch(e => erros(e));
           podeAcessarAbaFinal = podeAcessar;
         }
+
         if (!podeAcessarAbaFinal) {
           dispatch(
             setBimestreAtual({
@@ -197,7 +219,7 @@ const DadosConselhoClasse = props => {
           );
         }
 
-        if (mostrarParecer) {
+        if (ehFinal) {
           dispatch(
             setBimestreAtual({
               valor: bimestreConsulta,
@@ -264,7 +286,8 @@ const DadosConselhoClasse = props => {
     }
 
     if (continuar) {
-      caregarInformacoes(numeroBimestre, true);
+      const ehFinal = numeroBimestre === 'final';
+      caregarInformacoes(numeroBimestre, ehFinal);
     }
   };
 

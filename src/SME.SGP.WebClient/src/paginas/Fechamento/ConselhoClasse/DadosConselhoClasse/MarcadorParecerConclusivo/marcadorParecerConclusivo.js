@@ -74,7 +74,7 @@ const MarcadorParecerConclusivo = () => {
     <>
       {parecer ? (
         <div className="col-m-12 d-flex ml-3 my-3">
-          {marcadorParecerConclusivo?.emAprovacao && (
+          {marcadorParecerConclusivo?.emAprovacao ? (
             <Tooltip title="Aguardando aprovação">
               <LabelParecer>
                 <Loader loading={gerandoParecerConclusivo} tip="">
@@ -82,6 +82,12 @@ const MarcadorParecerConclusivo = () => {
                 </Loader>
               </LabelParecer>
             </Tooltip>
+          ) : (
+            <LabelParecer>
+              <Loader loading={gerandoParecerConclusivo} tip="">
+                <span>{montarDescricao()}</span>
+              </Loader>
+            </LabelParecer>
           )}
           {exibirIconeSincronizar && (
             <IconeEstilizado
