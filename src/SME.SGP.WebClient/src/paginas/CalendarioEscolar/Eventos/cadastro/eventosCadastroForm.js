@@ -106,6 +106,8 @@ const EventosCadastroForm = () => {
     eventoId ? null : valoresIniciaisPadrao
   );
 
+  const textCampoObrigatorio = 'Campo obrigatório';
+
   setBreadcrumbManual(
     paramsLocation?.pathname,
     'Cadastro de eventos do calendário escolar',
@@ -232,7 +234,7 @@ const EventosCadastroForm = () => {
     }
   };
 
-  const onChangeDre = (dre, form) => {
+  const onChangeDre = form => {
     setListaUes([]);
     form.setFieldValue('ueId', undefined);
     form.setFieldValue('tipoEventoId', undefined);
@@ -460,15 +462,15 @@ const EventosCadastroForm = () => {
 
   const montaValidacoes = useCallback(() => {
     const val = {
-      dreId: Yup.string().required('DRE obrigatória'),
-      ueId: Yup.string().required('UE obrigatória'),
-      dataInicio: momentSchema.required('Data obrigatória'),
-      nome: Yup.string().required('Nome obrigatório'),
-      tipoCalendarioId: Yup.string().required('Calendário obrigatório'),
-      tipoEventoId: Yup.string().required('Tipo obrigatório'),
+      dreId: Yup.string().required(textCampoObrigatorio),
+      ueId: Yup.string().required(textCampoObrigatorio),
+      dataInicio: momentSchema.required(textCampoObrigatorio),
+      nome: Yup.string().required(textCampoObrigatorio),
+      tipoCalendarioId: Yup.string().required(textCampoObrigatorio),
+      tipoEventoId: Yup.string().required(textCampoObrigatorio),
       descricao: Yup.string().test(
         'validaDescricaoObrigatoria',
-        'Descrição obrigatória',
+        textCampoObrigatorio,
         function validar() {
           const { tipoEventoId, descricao } = this.parent;
           if (
@@ -485,11 +487,11 @@ const EventosCadastroForm = () => {
     };
 
     if (eventoTipoFeriadoSelecionado) {
-      val.feriadoId = Yup.string().required('Feriado obrigatório');
+      val.feriadoId = Yup.string().required(textCampoObrigatorio);
     }
 
     if (!tipoDataUnico) {
-      val.dataFim = Yup.string().required('Data obrigatória');
+      val.dataFim = Yup.string().required(textCampoObrigatorio);
     }
 
     setValidacoes(Yup.object(val));
@@ -556,9 +558,7 @@ const EventosCadastroForm = () => {
         dataFim: evento.data.dataFim ? window.moment(evento.data.dataFim) : '',
         dataInicio: window.moment(evento.data.dataInicio),
         descricao: evento.data.descricao,
-        dreId: !validaSeValorInvalido(evento.data.dreId)
-          ? String(evento.data.dreId)
-          : undefined,
+        dreId: evento.data.dreId ? evento.data.dreId : OPCAO_TODOS,
         feriadoId: !validaSeValorInvalido(evento.data.feriadoId)
           ? String(evento.data.feriadoId)
           : undefined,
@@ -570,9 +570,7 @@ const EventosCadastroForm = () => {
         tipoEventoId: !validaSeValorInvalido(evento.data.tipoEventoId)
           ? String(evento.data.tipoEventoId)
           : undefined,
-        ueId: !validaSeValorInvalido(evento.data.ueId)
-          ? String(evento.data.ueId)
-          : undefined,
+        ueId: evento.data.ueId ? evento.data.ueId : OPCAO_TODOS,
         id: evento.data.id,
         recorrenciaEventos: evento.data.recorrenciaEventos,
         podeAlterar: evento.data.podeAlterar,
@@ -656,8 +654,8 @@ const EventosCadastroForm = () => {
                     <Col md={24} xl={12}>
                       <DreCadastroEventos
                         form={form}
-                        onChangeCampos={dre => {
-                          onChangeDre(dre, form);
+                        onChangeCampos={() => {
+                          onChangeDre(form);
                         }}
                         desabilitar={desabilitarCampos || !podeAlterarEvento}
                         eventoId={eventoId}
