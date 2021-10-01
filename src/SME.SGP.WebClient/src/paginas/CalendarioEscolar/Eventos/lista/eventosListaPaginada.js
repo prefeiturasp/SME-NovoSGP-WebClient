@@ -83,15 +83,25 @@ const EventosListaPaginada = () => {
     return dataFormatada;
   };
 
+  const montarColunaNome = (nome, linha) => {
+    return (
+      <>
+        <div>{nome}</div>
+        {linha.descricaoDreUe ? <div>{linha.descricaoDreUe}</div> : ''}
+      </>
+    );
+  };
+
   const colunas = [
     {
       title: 'Nome do evento',
       dataIndex: 'nome',
+      render: montarColunaNome,
     },
     {
       title: 'Tipo de evento',
       dataIndex: 'tipo',
-      render: (text, row) => <span> {row.tipoEvento.descricao}</span>,
+      render: (_, row) => <span> {row.tipoEvento.descricao}</span>,
     },
     {
       title: 'Cadastrado por',
