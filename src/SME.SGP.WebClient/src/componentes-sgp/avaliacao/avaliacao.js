@@ -352,23 +352,23 @@ const Avaliacao = props => {
                                 return (
                                   <td
                                     key={shortid.generate()}
-                                    className={obterTamanhoColuna()}
+                                    className={`${obterTamanhoColuna()} position-relative`}
                                   >
                                     {montarCampoNotaConceito(nota, aluno)}
+                                    {aluno?.notasBimestre[i]?.emAprovacao && (
+                                      <Tooltip title="Aguardando aprovação">
+                                        <MarcadorTriangulo />
+                                      </Tooltip>
+                                    )}
                                   </td>
                                 );
                               })
                             : ''}
-                          <td className="sticky-col col-nota-final linha-nota-conceito-final position-relative">
+                          <td className="sticky-col col-nota-final linha-nota-conceito-final">
                             {ehRegencia ? (
                               <ColunaNotaFinalRegencia indexLinha={i} />
                             ) : (
                               montarCampoNotaConceitoFinal(aluno)
-                            )}
-                            {aluno?.notaBimestre?.emAprovacao && (
-                              <Tooltip title="Aguardando aprovação">
-                                <MarcadorTriangulo />
-                              </Tooltip>
                             )}
                           </td>
 
