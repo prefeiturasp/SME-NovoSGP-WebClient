@@ -61,6 +61,13 @@ const UeCadastroEventos = ({ form, onChangeCampos, desabilitar, eventoId }) => {
 
       if (usuario.possuiPerfilSmeOuDre && lista?.length > 1) {
         lista.unshift(ueTodos);
+
+        if (!eventoId) {
+          if (dreId && dreId !== OPCAO_TODOS) {
+            form.setFieldValue(nomeCampo, OPCAO_TODOS);
+            form.initialValues.ueId = OPCAO_TODOS;
+          }
+        }
       }
 
       setListaUes(lista);

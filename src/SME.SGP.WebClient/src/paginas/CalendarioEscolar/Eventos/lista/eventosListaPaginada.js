@@ -5,6 +5,7 @@ import { useDispatch } from 'react-redux';
 import { ListaPaginada } from '~/componentes';
 import { OPCAO_TODOS } from '~/constantes';
 import { RotasDto } from '~/dtos';
+import entidadeStatusDto from '~/dtos/entidadeStatusDto';
 import { setFiltroListaEventos } from '~/redux/modulos/calendarioEscolar/actions';
 import { history } from '~/servicos';
 import EventosListaContext from './eventosListaContext';
@@ -83,15 +84,31 @@ const EventosListaPaginada = () => {
     return dataFormatada;
   };
 
+  const descStatus = linha => {
+    return linha.status === entidadeStatusDto.AguardandoAprovacao
+      ? '(Aguardando aprovação)'
+      : '';
+  };
+
+  const montarColunaNome = (nome, linha) => {
+    return (
+      <>
+        <div>{`${nome} ${descStatus(linha)}`}</div>
+        {linha.descricaoDreUe ? <div>{linha.descricaoDreUe}</div> : ''}
+      </>
+    );
+  };
+
   const colunas = [
     {
       title: 'Nome do evento',
       dataIndex: 'nome',
+      render: montarColunaNome,
     },
     {
       title: 'Tipo de evento',
       dataIndex: 'tipo',
-      render: (text, row) => <span> {row.tipoEvento.descricao}</span>,
+      render: (_, row) => <span> {row.tipoEvento.descricao}</span>,
     },
     {
       title: 'Cadastrado por',

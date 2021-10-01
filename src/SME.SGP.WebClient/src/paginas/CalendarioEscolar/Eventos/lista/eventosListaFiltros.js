@@ -53,6 +53,8 @@ const EventosListaFiltros = () => {
   const [listaCalendarios, setListaCalendarios] = useState([]);
   const [listaTipoEventos, setListaTipoEventos] = useState([]);
 
+  const [timeoutBuscarPorNome, setTimeoutBuscarPorNome] = useState('');
+
   const usuario = useSelector(store => store.usuario);
 
   const paramsRota = useParams();
@@ -156,9 +158,38 @@ const EventosListaFiltros = () => {
 
   useEffect(() => {
     obterTiposCalendarios('');
-    obterDres();
     obterListaEventos();
-  }, [obterTiposCalendarios, obterDres, obterListaEventos]);
+
+    return () => {
+      clearTimeout(timeoutBuscarPorNome);
+    };
+  }, [obterTiposCalendarios, obterListaEventos]);
+
+  const setarDreListaAtual = useCallback(() => {
+    if (listaDres?.length === 1) {
+      setCodigoDre(listaDres[0].codigo);
+    } else if (usuario.possuiPerfilSme && listaDres?.length > 1) {
+      setCodigoDre(OPCAO_TODOS);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [listaDres, usuario]);
+
+  useEffect(() => {
+    const temCaledarioNaotemDres = !!(
+      calendarioSelecionado?.id && !listaDres?.length
+    );
+    const temCaledarioTemDres = !!(
+      calendarioSelecionado?.id && listaDres?.length
+    );
+
+    if (temCaledarioNaotemDres) {
+      obterDres();
+    } else if (temCaledarioTemDres) {
+      setarDreListaAtual();
+    } else {
+      setCodigoDre();
+    }
+  }, [obterDres, calendarioSelecionado, listaDres, setarDreListaAtual]);
 
   const onChangeDre = codigo => {
     setCodigoUe();
@@ -201,6 +232,9 @@ const EventosListaFiltros = () => {
 
       if (usuario.possuiPerfilSmeOuDre && lista?.length > 1) {
         lista.unshift(ueTodos);
+        if (codigoDre && codigoDre !== OPCAO_TODOS) {
+          setCodigoUe(OPCAO_TODOS);
+        }
       }
 
       setListaUes(lista);
@@ -208,23 +242,39 @@ const EventosListaFiltros = () => {
       setCodigoUe();
       setListaUes([]);
     }
-  }, [codigoDre, calendarioSelecionado]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [codigoDre, calendarioSelecionado, usuario]);
 
   useEffect(() => {
-    if (codigoDre) {
+    if (codigoDre && calendarioSelecionado?.id) {
       obterUes();
     } else {
       setListaUes([]);
+      setCodigoUe();
     }
-  }, [codigoDre, obterUes]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [codigoDre, calendarioSelecionado, obterUes]);
 
   const onChangeUe = codigo => {
     setCodigoUe(codigo);
   };
 
   const onChangeNomeEvento = e => {
-    setNomeEvento(e.target.value);
-    seFiltrarNovaConsulta(true);
+    const valor = e.target.value;
+    setNomeEvento(valor);
+
+    if (timeoutBuscarPorNome) {
+      clearTimeout(timeoutBuscarPorNome);
+    }
+    if (valor) {
+      const timeout = setTimeout(() => {
+        seFiltrarNovaConsulta(true);
+      }, 800);
+
+      setTimeoutBuscarPorNome(timeout);
+    } else {
+      seFiltrarNovaConsulta(true);
+    }
   };
 
   const filtrarDatas = (inicio, fim) =>
@@ -282,6 +332,7 @@ const EventosListaFiltros = () => {
         }
       }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [paramsRota, listaCalendarios, filtroListaEventos, limparFiltrosSalvos]);
 
   return (

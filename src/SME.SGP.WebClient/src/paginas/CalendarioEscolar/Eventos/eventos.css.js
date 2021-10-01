@@ -48,3 +48,19 @@ export const ContainerSwitchExibirEventos = styled.div`
   }
   display: flex;
 `;
+
+export const LabelAguardandoAprovacao = styled.span`
+  background-color: ${Base.Roxo};
+  border: solid 0.5px ${Base.Roxo};
+  border-radius: 3px;
+  color: ${Base.Branco};
+  font-weight: bold;
+  padding: 0px 5px 0px 5px;
+  margin-right: 16px;
+`;
+
+export const ContainerCabecalhoCadastroEvento = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+`;

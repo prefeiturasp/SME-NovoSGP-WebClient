@@ -58,7 +58,6 @@ const EventosCadastroForm = () => {
     listaCalendarios,
     listaTipoEvento,
     setListaTipoEvento,
-    listaTipoEventoOrigem,
     desabilitarLetivo,
     listaCalendarioEscolar,
     setListaCalendarioEscolar,
@@ -72,6 +71,9 @@ const EventosCadastroForm = () => {
     setPodeAlterarExcluir,
     somenteConsulta,
     setDesabilitarCampos,
+    setListaTipoEventoOrigem,
+    setAguardandoAprovacao,
+    aguardandoAprovacao,
   } = useContext(EventosCadastroContext);
 
   const [validacoes, setValidacoes] = useState({});
@@ -81,7 +83,6 @@ const EventosCadastroForm = () => {
   const [recorrencia, setRecorrencia] = useState(null);
   const [showModalRecorrencia, setShowModalRecorrencia] = useState(false);
   const [auditoriaEventos, setAuditoriaEventos] = useState({});
-  const [aguardandoAprovacao, setAguardandoAprovacao] = useState(false);
   const [
     eventoTipoFeriadoSelecionado,
     setEventoTipoFeriadoSelecionado,
@@ -105,6 +106,8 @@ const EventosCadastroForm = () => {
   const [valoresIniciais, setValoresIniciais] = useState(
     eventoId ? null : valoresIniciaisPadrao
   );
+
+  const textCampoObrigatorio = 'Campo obrigatório';
 
   setBreadcrumbManual(
     paramsLocation?.pathname,
@@ -170,9 +173,9 @@ const EventosCadastroForm = () => {
     }
   };
 
-  const onChangeTipoEvento = (evento, form) => {
+  const onChangeTipoEvento = (listaTipoEventoAtual, evento, form) => {
     if (evento) {
-      const tipoEventoSelecionado = listaTipoEvento.find(
+      const tipoEventoSelecionado = listaTipoEventoAtual.find(
         item => item.id.toString() === evento.toString()
       );
       if (
@@ -232,11 +235,11 @@ const EventosCadastroForm = () => {
     }
   };
 
-  const onChangeDre = (dre, form) => {
+  const onChangeDre = form => {
     setListaUes([]);
     form.setFieldValue('ueId', undefined);
     form.setFieldValue('tipoEventoId', undefined);
-    onChangeTipoEvento(undefined);
+    onChangeTipoEvento(listaTipoEvento, undefined);
     onChangeCampos();
   };
 
@@ -245,7 +248,10 @@ const EventosCadastroForm = () => {
     refFormEventos.resetForm({});
     refFormEventos.resetForm(initialValues);
     setEmEdicao(false);
-    onChangeTipoEvento(refFormEventos.initialValues.tipoEventoId);
+    onChangeTipoEvento(
+      listaTipoEvento,
+      refFormEventos.initialValues.tipoEventoId
+    );
   };
 
   useEffect(() => {
@@ -457,15 +463,15 @@ const EventosCadastroForm = () => {
 
   const montaValidacoes = useCallback(() => {
     const val = {
-      dreId: Yup.string().required('DRE obrigatória'),
-      ueId: Yup.string().required('UE obrigatória'),
-      dataInicio: momentSchema.required('Data obrigatória'),
-      nome: Yup.string().required('Nome obrigatório'),
-      tipoCalendarioId: Yup.string().required('Calendário obrigatório'),
-      tipoEventoId: Yup.string().required('Tipo obrigatório'),
+      dreId: Yup.string().required(textCampoObrigatorio),
+      ueId: Yup.string().required(textCampoObrigatorio),
+      dataInicio: momentSchema.required(textCampoObrigatorio),
+      nome: Yup.string().required(textCampoObrigatorio),
+      tipoCalendarioId: Yup.string().required(textCampoObrigatorio),
+      tipoEventoId: Yup.string().required(textCampoObrigatorio),
       descricao: Yup.string().test(
         'validaDescricaoObrigatoria',
-        'Descrição obrigatória',
+        textCampoObrigatorio,
         function validar() {
           const { tipoEventoId, descricao } = this.parent;
           if (
@@ -482,11 +488,11 @@ const EventosCadastroForm = () => {
     };
 
     if (eventoTipoFeriadoSelecionado) {
-      val.feriadoId = Yup.string().required('Feriado obrigatório');
+      val.feriadoId = Yup.string().required(textCampoObrigatorio);
     }
 
     if (!tipoDataUnico) {
-      val.dataFim = Yup.string().required('Data obrigatória');
+      val.dataFim = Yup.string().required(textCampoObrigatorio);
     }
 
     setValidacoes(Yup.object(val));
@@ -523,7 +529,7 @@ const EventosCadastroForm = () => {
     setDesabilitarOpcaoLetivo(!tipoEventoOpcional);
   };
 
-  const consultaPorId = async id => {
+  const consultaPorId = async (id, listaEventoAtual) => {
     const evento = await ServicoEvento.obterPorId(id).catch(e => erros(e));
 
     if (evento?.data) {
@@ -553,9 +559,7 @@ const EventosCadastroForm = () => {
         dataFim: evento.data.dataFim ? window.moment(evento.data.dataFim) : '',
         dataInicio: window.moment(evento.data.dataInicio),
         descricao: evento.data.descricao,
-        dreId: !validaSeValorInvalido(evento.data.dreId)
-          ? String(evento.data.dreId)
-          : undefined,
+        dreId: evento.data.dreId ? evento.data.dreId : OPCAO_TODOS,
         feriadoId: !validaSeValorInvalido(evento.data.feriadoId)
           ? String(evento.data.feriadoId)
           : undefined,
@@ -567,9 +571,7 @@ const EventosCadastroForm = () => {
         tipoEventoId: !validaSeValorInvalido(evento.data.tipoEventoId)
           ? String(evento.data.tipoEventoId)
           : undefined,
-        ueId: !validaSeValorInvalido(evento.data.ueId)
-          ? String(evento.data.ueId)
-          : undefined,
+        ueId: evento.data.ueId ? evento.data.ueId : OPCAO_TODOS,
         id: evento.data.id,
         recorrenciaEventos: evento.data.recorrenciaEventos,
         podeAlterar: evento.data.podeAlterar,
@@ -586,16 +588,33 @@ const EventosCadastroForm = () => {
 
       verificarAlteracaoLetivoEdicao(listaTipoEvento, evento.data.tipoEventoId);
 
-      onChangeTipoEvento(evento.data.tipoEventoId);
+      onChangeTipoEvento(listaEventoAtual, evento.data.tipoEventoId);
     }
   };
 
-  useEffect(() => {
+  const obterTiposEvento = useCallback(async () => {
+    const tiposEvento = await api.get(
+      'v1/calendarios/eventos/tipos/listar?ehCadastro=true&numeroRegistros=100'
+    );
+    const lista = tiposEvento?.data?.items?.length
+      ? tiposEvento?.data?.items
+      : [];
+    if (lista?.length) {
+      setListaTipoEvento([...lista]);
+      setListaTipoEventoOrigem([...lista]);
+    } else {
+      setListaTipoEvento([]);
+      setListaTipoEventoOrigem([]);
+    }
     if (eventoId) {
-      consultaPorId(eventoId);
+      consultaPorId(eventoId, lista);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [eventoId]);
+
+  useEffect(() => {
+    obterTiposEvento();
+  }, [obterTiposEvento]);
 
   return (
     <>
@@ -636,8 +655,8 @@ const EventosCadastroForm = () => {
                     <Col md={24} xl={12}>
                       <DreCadastroEventos
                         form={form}
-                        onChangeCampos={dre => {
-                          onChangeDre(dre, form);
+                        onChangeCampos={() => {
+                          onChangeDre(form);
                         }}
                         desabilitar={desabilitarCampos || !podeAlterarEvento}
                         eventoId={eventoId}
@@ -680,7 +699,7 @@ const EventosCadastroForm = () => {
                       <TipoEventoCadastroEventos
                         form={form}
                         onChangeCampos={tipo => {
-                          onChangeTipoEvento(tipo, form);
+                          onChangeTipoEvento(listaTipoEvento, tipo, form);
                           onChangeCampos();
                         }}
                         desabilitar={desabilitarCampos || !podeAlterarEvento}
