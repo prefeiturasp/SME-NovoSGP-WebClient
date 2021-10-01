@@ -141,7 +141,6 @@ const EventosListaPaginada = () => {
         <ListaPaginada
           url="v1/calendarios/eventos"
           id="lista-eventos"
-          colunaChave="id"
           colunas={colunas}
           filtro={filtros}
           onClick={onClickEditar}

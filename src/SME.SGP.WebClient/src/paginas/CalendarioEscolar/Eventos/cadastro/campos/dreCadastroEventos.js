@@ -1,11 +1,10 @@
 import PropTypes from 'prop-types';
-import React, { useCallback, useContext, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Loader, SelectComponent } from '~/componentes';
 import { FiltroHelper } from '~/componentes-sgp';
 import { OPCAO_TODOS } from '~/constantes';
 import { AbrangenciaServico, erros } from '~/servicos';
-import EventosCadastroContext from '../eventosCadastroContext';
 
 const DreCadastroEventos = ({
   form,
@@ -13,7 +12,7 @@ const DreCadastroEventos = ({
   desabilitar,
   eventoId,
 }) => {
-  const { setListaDres, listaDres } = useContext(EventosCadastroContext);
+  const [listaDres, setListaDres] = useState([]);
 
   const usuario = useSelector(store => store.usuario);
   const [exibirLoader, setExibirLoader] = useState(false);

@@ -1,3 +1,4 @@
+import { Col, Row } from 'antd';
 import React, { useContext, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Button, Colors } from '~/componentes';
@@ -27,6 +28,7 @@ const EventosListaBotoesAcao = () => {
     seFiltrarNovaConsulta,
     codigoDre,
     codigoUe,
+    setExibirLoaderListaEventos,
   } = useContext(EventosListaContext);
 
   const [podeAlterarExcluir, setPodeAlterarExcluir] = useState(false);
@@ -65,9 +67,11 @@ const EventosListaBotoesAcao = () => {
       );
       if (confirmado) {
         const idsDeletar = eventosSelecionados.map(c => c.id);
-        const resposta = await ServicoEvento.deletar(idsDeletar).catch(e =>
-          erros(e)
-        );
+        setExibirLoaderListaEventos(true);
+        const resposta = await ServicoEvento.deletar(idsDeletar)
+          .catch(e => erros(e))
+          .finally(() => setExibirLoaderListaEventos(false));
+
         if (resposta?.status === 200) {
           const mensagemSucesso = `${
             eventosSelecionados.length > 1
@@ -99,46 +103,50 @@ const EventosListaBotoesAcao = () => {
   };
 
   return (
-    <div className="col-md-12 d-flex justify-content-end pb-4">
-      <div className="row">
-        <Button
-          id="btn-voltar"
-          label="Voltar"
-          icon="arrow-left"
-          color={Colors.Azul}
-          border
-          className="mr-3"
-          onClick={onClickVoltar}
-        />
-        <Button
-          id="btn-excluir"
-          label="Excluir"
-          color={Colors.Vermelho}
-          border
-          className="mr-3"
-          onClick={onClickExcluir}
-          disabled={
-            !permissoesTela.podeExcluir ||
-            !calendarioSelecionado?.id ||
-            eventosSelecionados?.length < 1 ||
-            !podeAlterarExcluir
-          }
-        />
-        <Button
-          id="btn-novo"
-          label="Novo"
-          color={Colors.Roxo}
-          border
-          bold
-          onClick={onClickNovo}
-          disabled={
-            somenteConsulta ||
-            !permissoesTela.podeIncluir ||
-            !calendarioSelecionado?.id
-          }
-        />
-      </div>
-    </div>
+    <Col span={24}>
+      <Row gutter={[16, 16]} style={{ justifyContent: 'end', display: 'flex' }}>
+        <Col>
+          <Button
+            id="btn-voltar"
+            label="Voltar"
+            icon="arrow-left"
+            color={Colors.Azul}
+            border
+            onClick={onClickVoltar}
+          />
+        </Col>
+        <Col>
+          <Button
+            id="btn-excluir"
+            label="Excluir"
+            color={Colors.Vermelho}
+            border
+            onClick={onClickExcluir}
+            disabled={
+              !permissoesTela.podeExcluir ||
+              !calendarioSelecionado?.id ||
+              eventosSelecionados?.length < 1 ||
+              !podeAlterarExcluir
+            }
+          />
+        </Col>
+        <Col>
+          <Button
+            id="btn-novo"
+            label="Novo"
+            color={Colors.Roxo}
+            border
+            bold
+            onClick={onClickNovo}
+            disabled={
+              somenteConsulta ||
+              !permissoesTela.podeIncluir ||
+              !calendarioSelecionado?.id
+            }
+          />
+        </Col>
+      </Row>
+    </Col>
   );
 };
 
