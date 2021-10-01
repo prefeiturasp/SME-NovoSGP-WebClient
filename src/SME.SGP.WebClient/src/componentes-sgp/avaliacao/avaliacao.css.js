@@ -78,7 +78,6 @@ export const TabelaColunasFixas = styled.div`
     width: 90px;
     min-width: 90px;
     max-width: 90px;
-    right: 90px;
     z-index: 2;
   }
 
