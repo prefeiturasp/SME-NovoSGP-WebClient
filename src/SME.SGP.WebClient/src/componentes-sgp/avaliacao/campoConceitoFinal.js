@@ -89,6 +89,7 @@ const CampoConceitoFinal = props => {
               : ''
           } `}
           disabled={desabilitarCampo || !podeEditar || !podeLancarNotaFinal}
+          searchValue={false}
         />
       </div>
     );

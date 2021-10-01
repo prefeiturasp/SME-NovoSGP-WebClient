@@ -69,6 +69,7 @@ function ModalCopiarConteudoPlanoAula() {
             .map(item => ({
               desc: item.nome,
               valor: item.codigo,
+              nomeFiltro: item.nome,
             }))
         );
       }

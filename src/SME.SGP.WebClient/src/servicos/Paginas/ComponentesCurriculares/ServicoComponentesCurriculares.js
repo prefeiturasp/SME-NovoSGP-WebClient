@@ -17,12 +17,21 @@ class ServicoComponentesCurriculares {
     return api.get(url);
   };
 
+  obterComponetensCuricularesPorTurma = (codigoUe, turmas) => {
+    return api.post(`${urlPadrao}/ues/${codigoUe}/turmas`, turmas);
+  };
+
   obterComponetensCuricularesRegencia = turmaId => {
     return api.get(`${urlPadrao}/turmas/${turmaId}/regencia/componentes`);
   };
 
   obterComponentesPorListaDeTurmas = turmasId => {
     const url = `v1/professores/disciplinas/turmas`;
+    return api.post(url, turmasId);
+  };
+
+  obterComponentesPorUeTurmas = (ueId, turmasId) => {
+    const url = `v1/componentes-curriculares/ues/${ueId}/turmas`;
     return api.post(url, turmasId);
   };
 }

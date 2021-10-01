@@ -79,6 +79,7 @@ const ModalConteudoHtml = props => {
     paddingBottom,
     paddingRight,
     colorBotaoSecundario,
+    botoesRodape,
   } = props;
   return (
     <Container
@@ -94,7 +95,8 @@ const ModalConteudoHtml = props => {
       paddingBottom={paddingBottom}
       paddingRight={paddingRight}
       footer={
-        tituloAtencao || perguntaAtencao ? (
+        botoesRodape ||
+        (tituloAtencao || perguntaAtencao ? (
           <>
             <Row className="m-b-10">
               <Grid cols={12} className="p-l-8 p-r-8">
@@ -159,7 +161,7 @@ const ModalConteudoHtml = props => {
               hidden={esconderBotaoPrincipal}
             />
           </div>
-        )
+        ))
       }
     >
       {children}
@@ -177,6 +179,7 @@ ModalConteudoHtml.propTypes = {
   paddingBottom: PropTypes.string,
   paddingRight: PropTypes.string,
   colorBotaoSecundario: PropTypes.string,
+  botoesRodape: PropTypes.node,
 };
 
 ModalConteudoHtml.defaultProps = {
@@ -190,6 +193,7 @@ ModalConteudoHtml.defaultProps = {
   paddingBottom: '15',
   paddingRight: '20',
   colorBotaoSecundario: 'Roxo',
+  botoesRodape: null,
 };
 
 export default ModalConteudoHtml;

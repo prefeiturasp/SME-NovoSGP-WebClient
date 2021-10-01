@@ -8,12 +8,12 @@ import { SelectComponent } from '~/componentes';
 // Servicos
 import AbrangenciaServico from '~/servicos/Abrangencia';
 
-function TurmasDropDown({ form, onChange, label, consideraHistorico, anoLetivo }) {  
-  const [listaTurmas, setListaTurmas] = useState([]);  
-  const { ueId, modalidadeId } = form.values;      
+function TurmasDropDown({ form, onChange, label, consideraHistorico, anoLetivo }) {
+  const [listaTurmas, setListaTurmas] = useState([]);
+  const { ueId, modalidadeId } = form.values;
 
-  useEffect(() => {    
-    async function buscaTurmas() {      
+  useEffect(() => {
+    async function buscaTurmas() {
       const { data } = await AbrangenciaServico.buscarTurmas(
         ueId,
         modalidadeId,
@@ -26,9 +26,10 @@ function TurmasDropDown({ form, onChange, label, consideraHistorico, anoLetivo }
         const lista = data.map(item => ({
           desc: item.nome,
           valor: item.codigo,
+          nomeFiltro: item.nomeFiltro,
         }));
 
-        lista.unshift({ desc: 'Todas', valor: '0' });
+        lista.unshift({ nomeFiltro: 'Todas', valor: '0' });
         setListaTurmas(lista);
       }
     }
@@ -56,9 +57,10 @@ function TurmasDropDown({ form, onChange, label, consideraHistorico, anoLetivo }
       onChange={onChange}
       lista={listaTurmas}
       valueOption="valor"
-      valueText="desc"
+      valueText="nomeFiltro"
       placeholder="Turma"
       disabled={!ueId || !modalidadeId}
+      showSearch
     />
   );
 }

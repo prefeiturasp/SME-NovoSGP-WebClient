@@ -22,6 +22,7 @@ function ButtonGroup({
   onClickCancelar,
   somenteConsulta,
   botoesEstadoVariavel,
+  paddingBottom,
 }) {
   const desabilitarExcluir = () => {
     const { podeExcluir } = permissoesTela;
@@ -36,7 +37,10 @@ function ButtonGroup({
   };
 
   return (
-    <ButtonGroupEstilo className="col-md-12 d-flex justify-content-end p-0">
+    <ButtonGroupEstilo
+      className="col-md-12 d-flex justify-content-end p-0"
+      paddingBottom={paddingBottom}
+    >
       <Button
         id={shortid.generate()}
         label="Voltar"
@@ -109,6 +113,7 @@ ButtonGroup.propTypes = {
   onClickBotaoPrincipal: PropTypes.func,
   somenteConsulta: PropTypes.bool,
   botoesEstadoVariavel: PropTypes.bool,
+  paddingBottom: PropTypes.string,
 };
 
 ButtonGroup.defaultProps = {
@@ -125,6 +130,7 @@ ButtonGroup.defaultProps = {
   onClickBotaoPrincipal: null,
   somenteConsulta: false,
   botoesEstadoVariavel: false,
+  paddingBottom: '48px',
 };
 
 export default ButtonGroup;

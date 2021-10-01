@@ -8,6 +8,7 @@ import { Base, DataTable, Loader } from '~/componentes';
 import { BIMESTRE_FINAL } from '~/constantes/constantes';
 import { statusAcompanhamentoConselhoClasse } from '~/dtos';
 import { erros, ServicoAcompanhamentoFechamento } from '~/servicos';
+import { valorNuloOuVazio } from '~/utils/funcoes/gerais';
 
 import {
   MarcadorTriangulo,
@@ -91,20 +92,35 @@ const TabelaAlunosConselho = props => {
         ) {
           const ehLinhaExpandida = temLinhaExpandida(aluno.alunoCodigo);
           const corTexto = ehLinhaExpandida.length ? Base.Branco : aluno?.cor;
-          return <MarcadorTriangulo cor={corTexto} marginTop="-33.8px" />;
+          const marginRight = ehLinhaExpandida.length && '-11.3px';
+          const marginTop = ehLinhaExpandida.length ? '-33.8px' : '-34.8px';
+
+          return (
+            <MarcadorTriangulo
+              cor={corTexto}
+              marginTop={marginTop}
+              marginRight={marginRight}
+            />
+          );
         }
         return null;
       },
     }
   );
 
-  const montarValorNota = nota => {
+  const montarValorNota = componenteCurricular => {
+    const nota = componenteCurricular?.notaFechamento;
+    const lancaNota = componenteCurricular?.lancaNota;
     return (
       <>
-        {nota || '-'}
-        {!nota && (
+        {valorNuloOuVazio(nota) ? <span className="sem-nota">-</span> : nota}
+        {lancaNota && valorNuloOuVazio(nota) && (
           <Tooltip title="Sem nota atribuída">
-            <MarcadorTriangulo cor={Base.LaranjaStatus} />
+            <MarcadorTriangulo
+              cor={Base.LaranjaStatus}
+              marginTop="-34.8px"
+              marginRight="-11.8px"
+            />
           </Tooltip>
         )}
       </>
@@ -114,11 +130,15 @@ const TabelaAlunosConselho = props => {
   const montarNotaPosConselho = componenteCurricular => {
     return (
       <>
-        {componenteCurricular?.notaPosConselho || '-'}
-        {!componenteCurricular?.notaPosConselho &&
+        {valorNuloOuVazio(componenteCurricular?.notaPosConselho) ? (
+          <span className="sem-nota">-</span>
+        ) : (
+          componenteCurricular?.notaPosConselho
+        )}
+        {valorNuloOuVazio(componenteCurricular?.notaPosConselho) &&
         componenteCurricular?.lancaNota ? (
           <Tooltip title="Sem nota atribuída">
-            <MarcadorTriangulo cor={Base.LaranjaStatus} />
+            <MarcadorTriangulo cor={Base.LaranjaStatus} marginTop="-34.8px" />
           </Tooltip>
         ) : (
           ''
@@ -132,12 +152,15 @@ const TabelaAlunosConselho = props => {
       title: 'Componentes curriculares',
       dataIndex: 'nomeComponenteCurricular',
       align: 'left',
+      ellipsis: true,
+      width: 330,
     },
     {
       title: 'Nota do fechamento',
       dataIndex: 'notaFechamento',
       align: 'center',
-      render: valor => montarValorNota(valor),
+      render: (_, componenteCurricular) =>
+        montarValorNota(componenteCurricular),
     },
     {
       title: 'Nota pós conselho',
@@ -241,6 +264,7 @@ const TabelaAlunosConselho = props => {
                   columns={colunasTabelaComponentes}
                   dataSource={dadosComponentes}
                   semHover
+                  tableLayout="fixed"
                 />
               </Loader>
             );

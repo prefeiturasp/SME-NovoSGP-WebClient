@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
 import React, { useCallback, useEffect, useState } from 'react';
 import { CoresGraficos, Loader } from '~/componentes';
+import { OPCAO_TODOS } from '~/constantes/constantes';
 import GraficoBarraDashboard from '~/paginas/Dashboard/ComponentesDashboard/graficoBarraDashboard';
 import {
   adicionarCoresNosGraficos,
@@ -13,6 +14,7 @@ const MontarGraficoBarras = props => {
     anoLetivo,
     dreId,
     ueId,
+    modalidade,
     mesSelecionado,
     rf,
     nomeIndiceDesc,
@@ -29,8 +31,6 @@ const MontarGraficoBarras = props => {
   const [dadosGrafico, setDadosGrafico] = useState([]);
   const [exibirLoader, setExibirLoader] = useState(false);
   const [dadosLegendaGrafico, setDadosLegendaGrafico] = useState([]);
-
-  const OPCAO_TODOS = '-99';
 
   const customPropsColors = item => {
     if (item.id === chavesGraficoAgrupado[0]?.nomeChave) {
@@ -113,7 +113,8 @@ const MontarGraficoBarras = props => {
       dreCodigo === OPCAO_TODOS ? '' : dreCodigo,
       ueCodigo === OPCAO_TODOS ? '' : ueCodigo,
       mesSelecionado === OPCAO_TODOS ? '' : mesSelecionado,
-      rf === OPCAO_TODOS ? '' : rf
+      rf === OPCAO_TODOS ? '' : rf,
+      modalidade
     )
       .catch(e => erros(e))
       .finally(() => setExibirLoader(false));
@@ -137,16 +138,28 @@ const MontarGraficoBarras = props => {
     dreCodigo,
     ueCodigo,
     mesSelecionado,
+    modalidade,
     rf,
   ]);
 
   useEffect(() => {
-    if (anoLetivo && ((dreId && ueId) || (dreCodigo && ueCodigo))) {
+    if (
+      (anoLetivo && ((dreId && ueId) || (dreCodigo && ueCodigo))) ||
+      modalidade
+    ) {
       obterDadosGrafico();
     } else {
       setDadosGrafico([]);
     }
-  }, [anoLetivo, dreId, ueId, dreCodigo, ueCodigo, obterDadosGrafico]);
+  }, [
+    anoLetivo,
+    dreId,
+    ueId,
+    dreCodigo,
+    ueCodigo,
+    modalidade,
+    obterDadosGrafico,
+  ]);
 
   const graficoBarras = dados => {
     return (
@@ -190,6 +203,7 @@ MontarGraficoBarras.propTypes = {
   anoLetivo: PropTypes.oneOfType(PropTypes.any),
   dreId: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   ueId: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+  modalidade: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   mesSelecionado: PropTypes.string,
   rf: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   nomeIndiceDesc: PropTypes.string,
@@ -206,6 +220,7 @@ MontarGraficoBarras.defaultProps = {
   anoLetivo: null,
   dreId: null,
   ueId: null,
+  modalidade: null,
   mesSelecionado: '',
   rf: '',
   nomeIndiceDesc: '',

@@ -1,9 +1,13 @@
 import api from '~/servicos/api';
 
+const urlPadrao = '/v1/relatorios/pendencias';
 class ServicoRelatorioPendencias {
   gerar = async params => {
-    const url = '/v1/relatorios/fechamentos/pendencias';
-    return api.post(url, params);
+    return api.post(urlPadrao, params);
+  };
+
+  obterTipoPendenciasGrupos = ({ opcaoTodos }) => {
+    return api.get(`${urlPadrao}/tipos?opcaoTodos=${opcaoTodos}`);
   };
 }
 

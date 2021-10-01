@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { RotasDto } from '~/dtos';
@@ -14,10 +15,13 @@ import ObjetivosEspecificosParaAula from './CamposEditorPlanoAula/objetivosEspec
 import RecuperacaoContinua from './CamposEditorPlanoAula/recuperacaoContinua';
 import ModalCopiarConteudoPlanoAula from './ModalCopiarConteudo/modalCopiarConteudoPlanoAula';
 import ModalErrosPlanoAula from './ModalErros/modalErrosPlanoAula';
+import MuralPlanoAula from './muralPlanoAula';
 import ObjetivosAprendizagemDesenvolvimento from './ObjetivosAprendizagemDesenvolvimento/objetivosAprendizagemDesenvolvimento';
 
-const DadosPlanoAula = () => {
+const DadosPlanoAula = props => {
   const dispatch = useDispatch();
+
+  const { aulaId } = props;
 
   const usuario = useSelector(state => state.usuario);
   const permissoesTela = usuario.permissoes[RotasDto.FREQUENCIA_PLANO_AULA];
@@ -76,6 +80,9 @@ const DadosPlanoAula = () => {
           <ObjetivosAprendizagemDesenvolvimento />
           <ObjetivosEspecificosParaAula />
           <DesenvolvimentoDaAula />
+          <div className="mt-3 mb-3">
+            <MuralPlanoAula aulaId={aulaId} />
+          </div>
           <RecuperacaoContinua />
           <LicaoDeCasa />
           {dadosPlanoAula?.id > 0 ? <AuditoriaPlanoAula /> : ''}
@@ -85,6 +92,14 @@ const DadosPlanoAula = () => {
       )}
     </>
   );
+};
+
+DadosPlanoAula.propTypes = {
+  aulaId: PropTypes.number,
+};
+
+DadosPlanoAula.defaultProps = {
+  aulaId: 0,
 };
 
 export default DadosPlanoAula;

@@ -11,3 +11,5 @@ export { default as Paginacao } from './Paginacao/paginacao';
 export { default as SinalizacaoAEE } from './SinalizacaoAEE/sinalizacaoAEE';
 export { default as NomeEstudanteLista } from './NomeEstudanteLista/nomeEstudanteLista';
 export { default as AlertaModalidadeInfantil } from './AlertaModalidadeInfantil/alertaModalidadeInfantil';
+export { default as GraficoBarras } from './Graficos/graficoBarras';
+export { default as TagGrafico } from './TagGrafico/tagGrafico';

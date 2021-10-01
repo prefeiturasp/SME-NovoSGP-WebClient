@@ -5,6 +5,8 @@ import CampoNumero from '~/componentes/campoNumero';
 import { erros } from '~/servicos/alertas';
 import api from '~/servicos/api';
 import { converterAcaoTecla } from '~/utils';
+import TooltipEstudanteAusente from './tooltipEstudanteAusente';
+import TooltipStatusGsa from './tooltipStatusGsa';
 
 const CampoNota = props => {
   const {
@@ -93,31 +95,40 @@ const CampoNota = props => {
   };
 
   return (
-    <CampoNumero
-      esconderSetas={esconderSetas}
-      name={name}
-      onKeyDown={clicarSetas}
-      onKeyUp={apertarTecla}
-      onChange={valorNovo => {
-        let valorEnviado = null;
-        if (valorNovo) {
-          const invalido = valorInvalido(valorNovo);
-          if (!invalido && editouCampo(notaValorAtual, valorNovo)) {
-            valorEnviado = valorNovo;
-          }
-        }
-        const valorCampo = valorNovo > 0 ? valorNovo : null;
-        setarValorNovo(valorEnviado || valorCampo);
+    <div
+      style={{
+        display: 'flex',
+        alignItems: 'center',
       }}
-      value={notaValorAtual}
-      min={0}
-      max={10}
-      step={step}
-      placeholder="Nota"
-      classNameCampo={`${nota.ausente ? 'aluno-ausente-notas' : ''}`}
-      disabled={desabilitarCampo || !nota.podeEditar}
-      className={`${notaAlterada ? 'border-registro-alterado' : ''}`}
-    />
+    >
+      <CampoNumero
+        esconderSetas={esconderSetas}
+        name={name}
+        onKeyDown={clicarSetas}
+        onKeyUp={apertarTecla}
+        onChange={valorNovo => {
+          let valorEnviado = null;
+          if (valorNovo) {
+            const invalido = valorInvalido(valorNovo);
+            if (!invalido && editouCampo(notaValorAtual, valorNovo)) {
+              valorEnviado = valorNovo;
+            }
+          }
+          const valorCampo = valorNovo > 0 ? valorNovo : null;
+          setarValorNovo(valorEnviado || valorCampo);
+        }}
+        value={notaValorAtual}
+        min={0}
+        max={10}
+        step={step}
+        placeholder="Nota"
+        classNameCampo={`${nota.ausente ? 'aluno-ausente-notas' : ''}`}
+        disabled={desabilitarCampo || !nota.podeEditar}
+        className={`${notaAlterada ? 'border-registro-alterado' : ''}`}
+      />
+      {nota?.ausente ? <TooltipEstudanteAusente /> : ''}
+      {nota?.statusGsa ? <TooltipStatusGsa /> : ''}
+    </div>
   );
 };
 

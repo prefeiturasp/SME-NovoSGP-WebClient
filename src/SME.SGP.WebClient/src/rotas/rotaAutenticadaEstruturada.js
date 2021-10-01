@@ -36,7 +36,10 @@ const RotaAutenticadaEstruturada = memo(
 
     return (
       <Loader loading={loaderGeral || !carregandoPerfil}>
-        <Route {...propriedades} component={Component} />
+        <Route
+          {...propriedades}
+          render={propriedade => <Component {...propriedade} />}
+        />
       </Loader>
     );
   }

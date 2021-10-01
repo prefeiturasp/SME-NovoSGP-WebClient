@@ -10,24 +10,33 @@ import AtribuicaoCJServico from '~/servicos/Paginas/AtribuicaoCJ';
 import FiltroHelper from '~/componentes-sgp/filtro/helper';
 import { erros } from '~/servicos/alertas';
 
-function TurmasDropDown({ form, onChange, label }) {
+function TurmasDropDown({
+  form,
+  onChange,
+  label,
+  desabilitado,
+  consideraHistorico,
+}) {
   const [listaTurmas, setListaTurmas] = useState([]);
   const [carregandoLista, setCarregandoLista] = useState(false);
 
-  const { ueId, modalidadeId } = form.values;
+  const { ueId, modalidadeId, anoLetivo } = form.values;
+
   useEffect(() => {
     async function buscaTurmas() {
       setCarregandoLista(true);
-      const { data } = await AtribuicaoCJServico.buscarTurmas(
+      const resposta = await AtribuicaoCJServico.buscarTurmas(
         ueId,
-        modalidadeId
+        modalidadeId,
+        anoLetivo,
+        consideraHistorico
       ).catch(e => {
         erros(e);
         setCarregandoLista(false);
       });
-      if (data) {
+      if (resposta?.data) {
         setListaTurmas(
-          data
+          resposta.data
             .map(item => ({
               desc: item.nome,
               valor: item.codigo,
@@ -38,12 +47,12 @@ function TurmasDropDown({ form, onChange, label }) {
       setCarregandoLista(false);
     }
 
-    if (ueId && modalidadeId) {
+    if (ueId && modalidadeId && anoLetivo) {
       buscaTurmas();
     } else {
       setListaTurmas([]);
     }
-  }, [ueId, modalidadeId]);
+  }, [ueId, modalidadeId, anoLetivo, consideraHistorico]);
 
   useEffect(() => {
     if (listaTurmas.length === 1) {
@@ -64,6 +73,8 @@ function TurmasDropDown({ form, onChange, label }) {
         valueOption="valor"
         valueText="desc"
         placeholder="Turma"
+        showSearch
+        disabled={desabilitado}
       />
     </Loader>
   );
@@ -76,12 +87,18 @@ TurmasDropDown.propTypes = {
   ]),
   onChange: PropTypes.func,
   label: PropTypes.string,
+  desabilitado: PropTypes.bool,
+  anoLetivo: PropTypes.string,
+  consideraHistorico: PropTypes.bool,
 };
 
 TurmasDropDown.defaultProps = {
   form: {},
   onChange: () => {},
   label: null,
+  desabilitado: false,
+  consideraHistorico: false,
+  anoLetivo: '',
 };
 
 export default TurmasDropDown;
