@@ -1,6 +1,8 @@
 import PropTypes from 'prop-types';
 import React, { useCallback, useContext, useEffect } from 'react';
 import { SelectComponent } from '~/componentes';
+import { OPCAO_TODOS } from '~/constantes';
+import ListaLocalOcorrencia from '~/constantes/localOcorrencia';
 import tipoEvento from '~/dtos/tipoEvento';
 import { api } from '~/servicos';
 import EventosCadastroContext from '../eventosCadastroContext';
@@ -11,9 +13,10 @@ const TipoEventoCadastroEventos = ({ form, onChangeCampos, desabilitar }) => {
     setListaTipoEvento,
     setListaTipoEventoOrigem,
     setDesabilitarLetivo,
+    listaTipoEventoOrigem,
   } = useContext(EventosCadastroContext);
 
-  const { ueId } = form.values;
+  const { dreId, ueId, tipoEventoId } = form.values;
 
   const nomeCampo = 'tipoEventoId';
 
@@ -45,6 +48,49 @@ const TipoEventoCadastroEventos = ({ form, onChangeCampos, desabilitar }) => {
       }
     }
   }, [listaTipoEvento, ueId]);
+
+  const filtraSomenteUE = () =>
+    listaTipoEventoOrigem.filter(
+      element =>
+        element.localOcorrencia === ListaLocalOcorrencia.UE ||
+        element.localOcorrencia === ListaLocalOcorrencia.SMEUE ||
+        element.localOcorrencia === ListaLocalOcorrencia.TODOS
+    );
+
+  const filtraSomenteDRE = () =>
+    listaTipoEventoOrigem.filter(
+      element =>
+        element.localOcorrencia === ListaLocalOcorrencia.DRE ||
+        element.localOcorrencia === ListaLocalOcorrencia.TODOS
+    );
+
+  const filtraSomenteSME = () =>
+    listaTipoEventoOrigem.filter(
+      element =>
+        element.localOcorrencia === ListaLocalOcorrencia.SME ||
+        element.localOcorrencia === ListaLocalOcorrencia.SMEUE ||
+        element.localOcorrencia === ListaLocalOcorrencia.TODOS
+    );
+
+  const filtraTipoEvento = (dre, ue) => {
+    if (ue && ue !== OPCAO_TODOS) return setListaTipoEvento(filtraSomenteUE());
+    if (dre && dre !== OPCAO_TODOS)
+      return setListaTipoEvento(filtraSomenteDRE());
+    return setListaTipoEvento(filtraSomenteSME());
+  };
+
+  useEffect(() => {
+    if (dreId || ueId) {
+      filtraTipoEvento(dreId, ueId);
+    }
+  }, [dreId, ueId]);
+
+  useEffect(() => {
+    if (!tipoEventoId) {
+      form.setFieldValue('feriadoId', '');
+      form.setFieldValue('bimestre', []);
+    }
+  }, [tipoEventoId]);
 
   return (
     <SelectComponent

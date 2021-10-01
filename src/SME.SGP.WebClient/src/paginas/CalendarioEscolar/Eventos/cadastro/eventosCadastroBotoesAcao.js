@@ -144,23 +144,27 @@ const EventosCadastroBotoesAcao = () => {
             disabled={!emEdicao || !podeAlterarEvento}
           />
         </Col>
-        <Col>
-          <Button
-            id="btn-excluir"
-            label="Excluir"
-            color={Colors.Vermelho}
-            border
-            hidden={novoRegistro}
-            onClick={onClickExcluir}
-            disabled={
-              somenteConsulta ||
-              !permissoesTela?.podeExcluir ||
-              novoRegistro ||
-              !podeAlterarEvento ||
-              !podeAlterarExcluir
-            }
-          />
-        </Col>
+        {!novoRegistro ? (
+          <Col>
+            <Button
+              id="btn-excluir"
+              label="Excluir"
+              color={Colors.Vermelho}
+              border
+              hidden={novoRegistro}
+              onClick={onClickExcluir}
+              disabled={
+                somenteConsulta ||
+                !permissoesTela?.podeExcluir ||
+                novoRegistro ||
+                !podeAlterarEvento ||
+                !podeAlterarExcluir
+              }
+            />
+          </Col>
+        ) : (
+          <></>
+        )}
         <Col>
           <Button
             id={novoRegistro ? 'btn-cadastrar' : 'btn-alterar'}
