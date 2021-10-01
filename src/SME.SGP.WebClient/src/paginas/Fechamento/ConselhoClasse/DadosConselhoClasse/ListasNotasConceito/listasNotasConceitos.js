@@ -93,6 +93,7 @@ const ListasNotasConceitos = props => {
 
   const habilitaConselhoClassePorNotasPosConselho = dados => {
     let notasPosConselhoPreenchidas = true;
+    if (!dados.temConselhoClasseAluno) {
     dados.notasConceitos.map(notasConceitos =>
       notasConceitos.componentesCurriculares.map(componentesCurriculares => {
         if (valorNuloOuVazio(componentesCurriculares.notaPosConselho.nota)) {
@@ -104,6 +105,7 @@ const ListasNotasConceitos = props => {
     if (notasPosConselhoPreenchidas) {
       dispatch(setConselhoClasseEmEdicao(true));
     }
+  }
   };
 
   const obterDadosLista = useCallback(async () => {
