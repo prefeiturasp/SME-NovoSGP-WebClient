@@ -15,7 +15,7 @@ import {
   RadioGroupButton,
   SelectComponent,
 } from '~/componentes';
-import ListaLocalOcorrencia from '~/constantes/localOcorrencia';
+import { OPCAO_TODOS } from '~/constantes';
 import { RotasDto } from '~/dtos';
 import entidadeStatusDto from '~/dtos/entidadeStatusDto';
 import eventoLetivo from '~/dtos/eventoLetivo';
@@ -200,13 +200,12 @@ const EventosCadastroForm = () => {
           form.setFieldValue('dataFim', '');
         }
       } else if (
-        tipoEventoSelecionado &&
-        tipoEventoSelecionado.tipoData === eventoTipoData.InicioFim
+        tipoEventoSelecionado?.tipoData === eventoTipoData?.InicioFim
       ) {
         tipoUnico = false;
       }
 
-      if (form && tipoEventoSelecionado && tipoEventoSelecionado.letivo) {
+      if (form && tipoEventoSelecionado?.letivo) {
         if (tipoEventoSelecionado.letivo === eventoLetivo.Opcional) {
           valorOpcaoLetivo = false;
         } else {
@@ -229,46 +228,15 @@ const EventosCadastroForm = () => {
       setTipoDataUnico(tipoUnico);
     } else {
       setEventoTipoFeriadoSelecionado(false);
+      setEventoTipoLocalOcorrenciaSMESelecionado(false);
     }
-  };
-
-  const filtraSomenteUE = () =>
-    listaTipoEventoOrigem.filter(
-      element =>
-        element.localOcorrencia === ListaLocalOcorrencia.UE ||
-        element.localOcorrencia === ListaLocalOcorrencia.SMEUE ||
-        element.localOcorrencia === ListaLocalOcorrencia.TODOS
-    );
-
-  const filtraSomenteDRE = () =>
-    listaTipoEventoOrigem.filter(
-      element =>
-        element.localOcorrencia === ListaLocalOcorrencia.DRE ||
-        element.localOcorrencia === ListaLocalOcorrencia.TODOS
-    );
-
-  const filtraSomenteSME = () =>
-    listaTipoEventoOrigem.filter(
-      element =>
-        element.localOcorrencia === ListaLocalOcorrencia.SME ||
-        element.localOcorrencia === ListaLocalOcorrencia.SMEUE ||
-        element.localOcorrencia === ListaLocalOcorrencia.TODOS
-    );
-
-  const filtraTipoEvento = (dre, ue) => {
-    if (ue) return setListaTipoEvento(filtraSomenteUE());
-    if (dre) return setListaTipoEvento(filtraSomenteDRE());
-    return setListaTipoEvento(filtraSomenteSME());
   };
 
   const onChangeDre = (dre, form) => {
     setListaUes([]);
     form.setFieldValue('ueId', undefined);
-    onChangeTipoEvento(undefined);
     form.setFieldValue('tipoEventoId', undefined);
-    setEventoTipoLocalOcorrenciaSMESelecionado(false);
-
-    filtraTipoEvento(dre);
+    onChangeTipoEvento(undefined);
     onChangeCampos();
   };
 
@@ -288,9 +256,7 @@ const EventosCadastroForm = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [executaResetarTela]);
 
-  const onChangeUe = (ue, form) => {
-    filtraTipoEvento(form.values.dreId, ue);
-
+  const onChangeUe = () => {
     onChangeCampos();
   };
 
@@ -432,6 +398,8 @@ const EventosCadastroForm = () => {
         ...valoresForm,
         recorrenciaEventos: recorrencia ? { ...recorrencia } : null,
         tiposCalendarioParaCopiar,
+        dreId: valoresForm.dreId === OPCAO_TODOS ? '' : valoresForm.dreId,
+        ueId: valoresForm.ueId === OPCAO_TODOS ? '' : valoresForm.ueId,
       };
 
       const atualizarEventosFuturos = await exibirModalAtualizarEventos(
@@ -679,6 +647,7 @@ const EventosCadastroForm = () => {
                       <UeCadastroEventos
                         form={form}
                         onChangeCampos={ue => {
+                          form.setFieldValue('tipoEventoId', undefined);
                           onChangeUe(ue, form);
                         }}
                         desabilitar={desabilitarCampos || !podeAlterarEvento}
