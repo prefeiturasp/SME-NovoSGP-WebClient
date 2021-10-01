@@ -53,6 +53,8 @@ const EventosListaFiltros = () => {
   const [listaCalendarios, setListaCalendarios] = useState([]);
   const [listaTipoEventos, setListaTipoEventos] = useState([]);
 
+  const [timeoutBuscarPorNome, setTimeoutBuscarPorNome] = useState('');
+
   const usuario = useSelector(store => store.usuario);
 
   const paramsRota = useParams();
@@ -157,6 +159,10 @@ const EventosListaFiltros = () => {
   useEffect(() => {
     obterTiposCalendarios('');
     obterListaEventos();
+
+    return () => {
+      clearTimeout(timeoutBuscarPorNome);
+    };
   }, [obterTiposCalendarios, obterListaEventos]);
 
   const setarDreListaAtual = useCallback(() => {
@@ -254,8 +260,21 @@ const EventosListaFiltros = () => {
   };
 
   const onChangeNomeEvento = e => {
-    setNomeEvento(e.target.value);
-    seFiltrarNovaConsulta(true);
+    const valor = e.target.value;
+    setNomeEvento(valor);
+
+    if (timeoutBuscarPorNome) {
+      clearTimeout(timeoutBuscarPorNome);
+    }
+    if (valor) {
+      const timeout = setTimeout(() => {
+        seFiltrarNovaConsulta(true);
+      }, 800);
+
+      setTimeoutBuscarPorNome(timeout);
+    } else {
+      seFiltrarNovaConsulta(true);
+    }
   };
 
   const filtrarDatas = (inicio, fim) =>
