@@ -40,8 +40,8 @@ const EventosListaFiltros = () => {
     dataInicio,
     setDataFim,
     dataFim,
-    setExibirEventosTodaRede,
-    exibirEventosTodaRede,
+    setEhEventosTodaRede,
+    ehEventosTodaRede,
   } = useContext(EventosListaContext);
 
   const [carregandoCalendarios, setCarregandoCalendarios] = useState(false);
@@ -409,10 +409,10 @@ const EventosListaFiltros = () => {
             <ContainerSwitchExibirEventos>
               <Switch
                 onChange={() => {
-                  setExibirEventosTodaRede(!exibirEventosTodaRede);
+                  setEhEventosTodaRede(!ehEventosTodaRede);
                   seFiltrarNovaConsulta(true);
                 }}
-                checked={exibirEventosTodaRede}
+                checked={ehEventosTodaRede}
                 size="default"
                 style={{ marginRight: '10px', color: Base.Roxo }}
               />

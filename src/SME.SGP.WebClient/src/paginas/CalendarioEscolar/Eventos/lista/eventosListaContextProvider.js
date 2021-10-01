@@ -12,7 +12,7 @@ const EventosListaContextProvider = ({ children }) => {
   const [nomeEvento, setNomeEvento] = useState('');
   const [dataInicio, setDataInicio] = useState();
   const [dataFim, setDataFim] = useState();
-  const [exibirEventosTodaRede, setExibirEventosTodaRede] = useState(false);
+  const [ehEventosTodaRede, setEhEventosTodaRede] = useState(false);
   const [exibirLoaderListaEventos, setExibirLoaderListaEventos] = useState(
     false
   );
@@ -38,8 +38,8 @@ const EventosListaContextProvider = ({ children }) => {
         setDataInicio,
         dataFim,
         setDataFim,
-        exibirEventosTodaRede,
-        setExibirEventosTodaRede,
+        ehEventosTodaRede,
+        setEhEventosTodaRede,
         exibirLoaderListaEventos,
         setExibirLoaderListaEventos,
       }}
