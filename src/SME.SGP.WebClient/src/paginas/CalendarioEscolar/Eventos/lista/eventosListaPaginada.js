@@ -21,7 +21,7 @@ const EventosListaPaginada = () => {
     nomeEvento,
     dataInicio,
     dataFim,
-    exibirEventosTodaRede,
+    ehEventosTodaRede,
   } = useContext(EventosListaContext);
 
   const [filtros, setFiltros] = useState({});
@@ -46,7 +46,7 @@ const EventosListaPaginada = () => {
         nomeEvento,
         dataInicio: dataInicio ? moment(dataInicio).format('DD-MM-YYYY') : '',
         dataFim: dataFim ? moment(dataFim).format('DD-MM-YYYY') : '',
-        exibirEventosTodaRede,
+        ehEventosTodaRede,
       };
       setFiltros({ ...params });
     } else {
@@ -61,7 +61,7 @@ const EventosListaPaginada = () => {
     nomeEvento,
     dataInicio,
     dataFim,
-    exibirEventosTodaRede,
+    ehEventosTodaRede,
   ]);
 
   useEffect(() => {
