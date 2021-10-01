@@ -58,7 +58,6 @@ const EventosCadastroForm = () => {
     listaCalendarios,
     listaTipoEvento,
     setListaTipoEvento,
-    listaTipoEventoOrigem,
     desabilitarLetivo,
     listaCalendarioEscolar,
     setListaCalendarioEscolar,
@@ -72,6 +71,7 @@ const EventosCadastroForm = () => {
     setPodeAlterarExcluir,
     somenteConsulta,
     setDesabilitarCampos,
+    setListaTipoEventoOrigem,
   } = useContext(EventosCadastroContext);
 
   const [validacoes, setValidacoes] = useState({});
@@ -170,9 +170,9 @@ const EventosCadastroForm = () => {
     }
   };
 
-  const onChangeTipoEvento = (evento, form) => {
+  const onChangeTipoEvento = (listaTipoEventoAtual, evento, form) => {
     if (evento) {
-      const tipoEventoSelecionado = listaTipoEvento.find(
+      const tipoEventoSelecionado = listaTipoEventoAtual.find(
         item => item.id.toString() === evento.toString()
       );
       if (
@@ -236,7 +236,7 @@ const EventosCadastroForm = () => {
     setListaUes([]);
     form.setFieldValue('ueId', undefined);
     form.setFieldValue('tipoEventoId', undefined);
-    onChangeTipoEvento(undefined);
+    onChangeTipoEvento(listaTipoEvento, undefined);
     onChangeCampos();
   };
 
@@ -245,7 +245,10 @@ const EventosCadastroForm = () => {
     refFormEventos.resetForm({});
     refFormEventos.resetForm(initialValues);
     setEmEdicao(false);
-    onChangeTipoEvento(refFormEventos.initialValues.tipoEventoId);
+    onChangeTipoEvento(
+      listaTipoEvento,
+      refFormEventos.initialValues.tipoEventoId
+    );
   };
 
   useEffect(() => {
@@ -523,7 +526,7 @@ const EventosCadastroForm = () => {
     setDesabilitarOpcaoLetivo(!tipoEventoOpcional);
   };
 
-  const consultaPorId = async id => {
+  const consultaPorId = async (id, listaEventoAtual) => {
     const evento = await ServicoEvento.obterPorId(id).catch(e => erros(e));
 
     if (evento?.data) {
@@ -586,16 +589,33 @@ const EventosCadastroForm = () => {
 
       verificarAlteracaoLetivoEdicao(listaTipoEvento, evento.data.tipoEventoId);
 
-      onChangeTipoEvento(evento.data.tipoEventoId);
+      onChangeTipoEvento(listaEventoAtual, evento.data.tipoEventoId);
     }
   };
 
-  useEffect(() => {
+  const obterTiposEvento = useCallback(async () => {
+    const tiposEvento = await api.get(
+      'v1/calendarios/eventos/tipos/listar?ehCadastro=true&numeroRegistros=100'
+    );
+    const lista = tiposEvento?.data?.items?.length
+      ? tiposEvento?.data?.items
+      : [];
+    if (lista?.length) {
+      setListaTipoEvento([...lista]);
+      setListaTipoEventoOrigem([...lista]);
+    } else {
+      setListaTipoEvento([]);
+      setListaTipoEventoOrigem([]);
+    }
     if (eventoId) {
-      consultaPorId(eventoId);
+      consultaPorId(eventoId, lista);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [eventoId]);
+
+  useEffect(() => {
+    obterTiposEvento();
+  }, [obterTiposEvento]);
 
   return (
     <>
@@ -680,7 +700,7 @@ const EventosCadastroForm = () => {
                       <TipoEventoCadastroEventos
                         form={form}
                         onChangeCampos={tipo => {
-                          onChangeTipoEvento(tipo, form);
+                          onChangeTipoEvento(listaTipoEvento, tipo, form);
                           onChangeCampos();
                         }}
                         desabilitar={desabilitarCampos || !podeAlterarEvento}
