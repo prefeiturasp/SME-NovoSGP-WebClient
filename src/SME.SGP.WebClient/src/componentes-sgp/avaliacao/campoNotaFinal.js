@@ -121,7 +121,7 @@ const CampoNotaFinal = props => {
 
   const apertarTecla = e => {
     const teclaEscolhida = converterAcaoTecla(e.keyCode);
-    if (teclaEscolhida === 0) {
+    if (teclaEscolhida === 0 && !notaValorAtual) {
       setarValorNovo(0);
     }
   };
@@ -151,11 +151,7 @@ const CampoNotaFinal = props => {
           max={10}
           step={step}
           placeholder="Nota Final"
-          disabled={
-            desabilitarCampo ||
-            !podeEditar ||
-            !podeLancarNotaFinal
-          }
+          disabled={desabilitarCampo || !podeEditar || !podeLancarNotaFinal}
           className={`tamanho-conceito-final ${
             abaixoDaMedia
               ? 'border-abaixo-media'
