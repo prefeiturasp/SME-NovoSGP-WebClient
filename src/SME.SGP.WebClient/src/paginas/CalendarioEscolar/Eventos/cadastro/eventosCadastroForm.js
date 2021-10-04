@@ -302,13 +302,7 @@ const EventosCadastroForm = () => {
       const calendarioSelecionado = listaCalendarios?.find(
         item => item?.id === form?.values?.tipoCalendarioId
       );
-
-      const modalidade = calendarioSelecionado?.modalidade
-        ? ServicoCalendarios.converterModalidade(
-            calendarioSelecionado?.modalidade
-          )
-        : '';
-      modalidadeConsulta = modalidade;
+      modalidadeConsulta = calendarioSelecionado?.modalidade;
     }
 
     const anoAtual = window.moment().format('YYYY');
@@ -700,7 +694,7 @@ const EventosCadastroForm = () => {
                         placeholder="Nome do evento"
                         onChange={onChangeCampos}
                         name="nome"
-                        desabilitado={desabilitarCampos}
+                        desabilitado={desabilitarCampos || !podeAlterarEvento}
                       />
                     </Col>
                     <Col
