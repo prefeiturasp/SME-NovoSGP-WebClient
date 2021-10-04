@@ -58,6 +58,10 @@ class ServicoDashboardDiarioBordo {
     });
   };
 
+  obterUltimaConsolidacao = anoLetivo => {
+    return api.get(`${urlPadrao}/consolidacao?anoLetivo=${anoLetivo}`);
+  };
+
   atualizarFiltros = (nomeParametro, valor) => {
     const { dispatch } = store;
     const state = store.getState();

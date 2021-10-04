@@ -1,6 +1,8 @@
+import * as moment from 'moment';
 import PropTypes from 'prop-types';
 import React, { useCallback, useEffect, useState } from 'react';
 import { Loader, SelectComponent } from '~/componentes';
+import { TagGrafico } from '~/componentes-sgp';
 import GraficoBarras from '~/componentes-sgp/Graficos/graficoBarras';
 import { OPCAO_TODOS } from '~/constantes/constantes';
 import { erros, ServicoDashboardFrequencia } from '~/servicos';
@@ -14,6 +16,8 @@ const GraficoTotalDiariosBordoPorDRE = props => {
 
   const [listaAnosEscolares, setListaAnosEscolares] = useState([]);
   const [anoEscolar, setAnoEscolar] = useState();
+
+  const [dataUltimaConsolidacao, setDataUltimaConsolidacao] = useState();
 
   const obterDadosGrafico = useCallback(async () => {
     setExibirLoader(true);
@@ -72,6 +76,24 @@ const GraficoTotalDiariosBordoPorDRE = props => {
     setAnoEscolar(valor);
   };
 
+  const obterUltimaConsolidacao = useCallback(async () => {
+    if (anoLetivo) {
+      const resposta = await ServicoDashboardDiarioBordo.obterUltimaConsolidacao(
+        anoLetivo
+      ).catch(e => erros(e));
+
+      if (resposta?.data) {
+        setDataUltimaConsolidacao(resposta.data);
+      } else {
+        setDataUltimaConsolidacao();
+      }
+    }
+  }, [anoLetivo]);
+
+  useEffect(() => {
+    obterUltimaConsolidacao();
+  }, [anoLetivo, obterUltimaConsolidacao]);
+
   return (
     <Loader
       loading={exibirLoader}
@@ -91,6 +113,20 @@ const GraficoTotalDiariosBordoPorDRE = props => {
           />
         </div>
       </div>
+
+      {dataUltimaConsolidacao ? (
+        <TagGrafico
+          valor={
+            dataUltimaConsolidacao
+              ? `Data da última atualização: ${moment(
+                  dataUltimaConsolidacao
+                ).format('DD/MM/YYYY HH:mm:ss')}`
+              : ''
+          }
+        />
+      ) : (
+        <></>
+      )}
       {dadosGrafico?.length ? (
         <GraficoBarras
           data={dadosGrafico}
