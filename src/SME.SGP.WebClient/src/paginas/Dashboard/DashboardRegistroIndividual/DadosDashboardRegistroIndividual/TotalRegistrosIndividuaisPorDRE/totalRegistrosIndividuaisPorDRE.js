@@ -1,11 +1,10 @@
 import PropTypes from 'prop-types';
 import React, { useState } from 'react';
-import { useSelector } from 'react-redux';
 import { Base } from '~/componentes';
 import CardCollapse from '~/componentes/cardCollapse';
-import GraficoQuantidadeCriancasSemRegistros from './graficoQuantidadeCriancasSemRegistros';
+import GraficoTotalRegistrosIndividuaisPorDRE from './graficoTotalRegistrosIndividuaisPorDRE';
 
-const QuantidadeCriancasSemRegistros = props => {
+const TotalRegistrosIndividuaisPorDRE = props => {
   const { anoLetivo, dreId, ueId, modalidade } = props;
 
   const configCabecalho = {
@@ -15,20 +14,12 @@ const QuantidadeCriancasSemRegistros = props => {
 
   const [exibir, setExibir] = useState(false);
 
-  const diasSemRegistro = useSelector(
-    store =>
-      store.dashboardRegistroIndividual?.dadosDashboardRegistroIndividual
-        ?.diasSemRegistro
-  );
-
-  const key = `quantidade-criancas-estao-sem-registros-mais-${diasSemRegistro ||
-    0}-dias`;
+  const key = 'total-registros-individuais-por-dre';
 
   return (
     <div className="mt-3">
       <CardCollapse
-        titulo={`Total de crianças que estão sem registros a mais de ${diasSemRegistro ||
-          0} dias`}
+        titulo="Total de registros individuais por DRE"
         key={`${key}-collapse-key`}
         indice={`${key}-collapse-indice`}
         alt={`${key}-alt`}
@@ -39,7 +30,7 @@ const QuantidadeCriancasSemRegistros = props => {
         }}
       >
         {exibir ? (
-          <GraficoQuantidadeCriancasSemRegistros
+          <GraficoTotalRegistrosIndividuaisPorDRE
             anoLetivo={anoLetivo}
             dreId={dreId}
             ueId={ueId}
@@ -53,18 +44,18 @@ const QuantidadeCriancasSemRegistros = props => {
   );
 };
 
-QuantidadeCriancasSemRegistros.propTypes = {
+TotalRegistrosIndividuaisPorDRE.propTypes = {
   anoLetivo: PropTypes.oneOfType(PropTypes.any),
   dreId: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   ueId: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   modalidade: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
 };
 
-QuantidadeCriancasSemRegistros.defaultProps = {
+TotalRegistrosIndividuaisPorDRE.defaultProps = {
   anoLetivo: null,
   dreId: null,
   ueId: null,
   modalidade: null,
 };
 
-export default QuantidadeCriancasSemRegistros;
+export default TotalRegistrosIndividuaisPorDRE;
