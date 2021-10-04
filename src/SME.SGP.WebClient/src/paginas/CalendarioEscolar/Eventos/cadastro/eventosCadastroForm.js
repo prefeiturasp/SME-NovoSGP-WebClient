@@ -75,6 +75,7 @@ const EventosCadastroForm = () => {
     setAguardandoAprovacao,
     aguardandoAprovacao,
     setListaCalendarioParaCopiar,
+    setLimparRecorrencia,
   } = useContext(EventosCadastroContext);
 
   const [validacoes, setValidacoes] = useState({});
@@ -253,6 +254,7 @@ const EventosCadastroForm = () => {
       listaTipoEvento,
       refFormEventos.initialValues.tipoEventoId
     );
+    setLimparRecorrencia(true);
   };
 
   useEffect(() => {
@@ -282,7 +284,11 @@ const EventosCadastroForm = () => {
   };
 
   const onSaveRecorrencia = recurrence => {
-    setRecorrencia(parseScreenObject(recurrence));
+    if (recurrence) {
+      setRecorrencia(parseScreenObject(recurrence));
+    } else {
+      setRecorrencia(null);
+    }
   };
 
   const onCloseRecorrencia = () => {
@@ -501,7 +507,20 @@ const EventosCadastroForm = () => {
     }
 
     if (!tipoDataUnico) {
-      val.dataFim = Yup.string().required(textCampoObrigatorio);
+      val.dataInicio = momentSchema
+        .required(textCampoObrigatorio)
+        .test(
+          'validaInicio',
+          'Data inicial maior que final',
+          function validar() {
+            const { dataInicio, dataFim } = this.parent;
+            if (dataInicio && dataFim && dataInicio.isAfter(dataFim, 'date'))
+              return false;
+            return true;
+          }
+        );
+
+      val.dataFim = momentSchema.required(textCampoObrigatorio);
     }
 
     setValidacoes(Yup.object(val));
@@ -625,6 +644,18 @@ const EventosCadastroForm = () => {
     obterTiposEvento();
   }, [obterTiposEvento]);
 
+  const desabilitarRecorrencia = form =>
+    desabilitarCampos ||
+    !form.values.dataInicio ||
+    !!valoresIniciais.id ||
+    !podeAlterarEvento ||
+    (!tipoDataUnico &&
+      !(
+        form.values.dataInicio &&
+        form.values.dataFim &&
+        form.values.dataInicio.isSame(form.values.dataFim, 'date')
+      ));
+
   return (
     <>
       <ModalRecorrencia
@@ -676,6 +707,7 @@ const EventosCadastroForm = () => {
                         form={form}
                         onChangeCampos={ue => {
                           form.setFieldValue('tipoEventoId', undefined);
+                          setLimparRecorrencia(true);
                           onChangeUe(ue, form);
                           setListaCalendarioParaCopiar([]);
                         }}
@@ -711,6 +743,7 @@ const EventosCadastroForm = () => {
                         onChangeCampos={tipo => {
                           onChangeTipoEvento(listaTipoEvento, tipo, form);
                           onChangeCampos();
+                          setLimparRecorrencia(true);
                         }}
                         desabilitar={desabilitarCampos || !podeAlterarEvento}
                       />
@@ -783,12 +816,7 @@ const EventosCadastroForm = () => {
                         border
                         className="mt-4"
                         onClick={onClickRecorrencia}
-                        disabled={
-                          desabilitarCampos ||
-                          !form.values.dataInicio ||
-                          !!valoresIniciais.id ||
-                          !podeAlterarEvento
-                        }
+                        disabled={desabilitarRecorrencia(form)}
                       />
                       {!!recorrencia && recorrencia.dataInicio && (
                         <small>Existe recorrência cadastrada</small>
