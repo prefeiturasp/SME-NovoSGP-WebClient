@@ -5,6 +5,7 @@ import { ModalidadeDTO } from '~/dtos';
 import MediaPeriodoRegistrosIndividuaisPorCrianca from './MediaPeriodoRegistrosIndividuaisPorCrianca/mediaPeriodoRegistrosIndividuaisPorCrianca';
 import QuantidadeCriancasSemRegistros from './QuantidadeCriancasSemRegistros/quantidadeCriancasSemRegistros';
 import QuantidadeTotalRegistrosIndividuais from './QuantidadeTotalRegistrosIndividuais/quantidadeTotalRegistrosIndividuais';
+import TotalRegistrosIndividuaisPorDRE from './TotalRegistrosIndividuaisPorDRE/totalRegistrosIndividuaisPorDRE';
 
 const GraficosRegistroIndividual = () => {
   const anoLetivo = useSelector(
@@ -40,6 +41,16 @@ const GraficosRegistroIndividual = () => {
         ueId={ueId}
         modalidade={modalidade}
       />
+      {dre?.codigo === OPCAO_TODOS ? (
+        <TotalRegistrosIndividuaisPorDRE
+          anoLetivo={anoLetivo}
+          dreId={dreId}
+          ueId={ueId}
+          modalidade={modalidade}
+        />
+      ) : (
+        <></>
+      )}
       <MediaPeriodoRegistrosIndividuaisPorCrianca
         anoLetivo={anoLetivo}
         dreId={dreId}

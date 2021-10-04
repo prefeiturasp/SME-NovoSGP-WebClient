@@ -2,9 +2,9 @@ import PropTypes from 'prop-types';
 import React, { useState } from 'react';
 import { Base } from '~/componentes';
 import CardCollapse from '~/componentes/cardCollapse';
-import GraficoQtdDiarioBordoDevolutiva from './graficoQtdDiarioBordoDevolutiva';
+import GraficoTotalRegistrosIndividuaisPorDRE from './graficoTotalRegistrosIndividuaisPorDRE';
 
-const QtdDiarioBordoDevolutiva = props => {
+const TotalRegistrosIndividuaisPorDRE = props => {
   const { anoLetivo, dreId, ueId, modalidade } = props;
 
   const configCabecalho = {
@@ -14,12 +14,12 @@ const QtdDiarioBordoDevolutiva = props => {
 
   const [exibir, setExibir] = useState(false);
 
-  const key = 'quantidade-diarios-bordo-com-devolutiva';
+  const key = 'total-registros-individuais-por-dre';
 
   return (
     <div className="mt-3">
       <CardCollapse
-        titulo="Total de diários de bordo com devolutiva comparado a quantidade de diários de bordo com devolutiva pendente"
+        titulo="Total de registros individuais por DRE"
         key={`${key}-collapse-key`}
         indice={`${key}-collapse-indice`}
         alt={`${key}-alt`}
@@ -30,7 +30,7 @@ const QtdDiarioBordoDevolutiva = props => {
         }}
       >
         {exibir ? (
-          <GraficoQtdDiarioBordoDevolutiva
+          <GraficoTotalRegistrosIndividuaisPorDRE
             anoLetivo={anoLetivo}
             dreId={dreId}
             ueId={ueId}
@@ -44,18 +44,18 @@ const QtdDiarioBordoDevolutiva = props => {
   );
 };
 
-QtdDiarioBordoDevolutiva.propTypes = {
+TotalRegistrosIndividuaisPorDRE.propTypes = {
   anoLetivo: PropTypes.oneOfType(PropTypes.any),
   dreId: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   ueId: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   modalidade: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
 };
 
-QtdDiarioBordoDevolutiva.defaultProps = {
+TotalRegistrosIndividuaisPorDRE.defaultProps = {
   anoLetivo: null,
   dreId: null,
   ueId: null,
   modalidade: null,
 };
 
-export default QtdDiarioBordoDevolutiva;
+export default TotalRegistrosIndividuaisPorDRE;

@@ -19,7 +19,7 @@ const TotalCriancasComRelAcompanhamentoAprendizagem = props => {
   return (
     <div className="mt-3">
       <CardCollapse
-        titulo="Total de crianças com Relatório do Acompanhamento da Aprendizagem registrado"
+        titulo="Total de crianças com relatório do acompanhamento da aprendizagem registrado"
         key={`${key}-collapse-key`}
         indice={`${key}-collapse-indice`}
         alt={`${key}-alt`}

@@ -6,7 +6,7 @@ const urlPadrao = 'v1/dashboard/devolutivas';
 
 class ServicoDashboardDevolutivas {
   montarConsultaPadraoGraficos = params => {
-    const { rota, anoLetivo, dreId, ueId, modalidade } = params;
+    const { rota, anoLetivo, dreId, ueId, modalidade, anoEscolar } = params;
 
     let url = `${urlPadrao}/${rota}?anoLetivo=${anoLetivo}`;
 
@@ -18,6 +18,9 @@ class ServicoDashboardDevolutivas {
     }
     if (modalidade) {
       url += `&modalidade=${modalidade}`;
+    }
+    if (anoEscolar) {
+      url += `&ano=${anoEscolar}`;
     }
     return api.get(url);
   };
@@ -59,6 +62,14 @@ class ServicoDashboardDevolutivas {
       dreId,
       ueId,
       modalidade,
+    });
+  };
+
+  obterTotalDevolutivasPorDRE = (anoLetivo, anoEscolar) => {
+    return this.montarConsultaPadraoGraficos({
+      rota: 'devolutivas/dre',
+      anoLetivo,
+      anoEscolar,
     });
   };
 
