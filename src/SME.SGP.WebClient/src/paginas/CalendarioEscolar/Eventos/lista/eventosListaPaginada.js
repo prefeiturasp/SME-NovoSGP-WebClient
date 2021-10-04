@@ -33,10 +33,10 @@ const EventosListaPaginada = () => {
     if (filtros?.tipoCalendarioId) {
       setFiltroEhValido(!!(filtros?.tipoCalendarioId && codigoDre && codigoUe));
     }
-  }, [filtros]);
+  }, [filtros, codigoDre, codigoUe]);
 
   const filtrar = useCallback(() => {
-    if (codigoUe) {
+    if (calendarioSelecionado?.id && codigoDre && codigoUe) {
       const params = {
         tipoCalendarioId: calendarioSelecionado?.id,
         dreId: codigoDre === OPCAO_TODOS ? '' : codigoDre,
@@ -154,7 +154,7 @@ const EventosListaPaginada = () => {
 
   return (
     <Col span={24} style={{ marginTop: '20px' }}>
-      {calendarioSelecionado?.id && codigoDre && codigoUe ? (
+      {filtros?.tipoCalendarioId && codigoDre && codigoUe ? (
         <ListaPaginada
           url="v1/calendarios/eventos"
           id="lista-eventos"

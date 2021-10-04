@@ -74,6 +74,7 @@ const EventosCadastroForm = () => {
     setListaTipoEventoOrigem,
     setAguardandoAprovacao,
     aguardandoAprovacao,
+    setListaCalendarioParaCopiar,
   } = useContext(EventosCadastroContext);
 
   const [validacoes, setValidacoes] = useState({});
@@ -295,13 +296,27 @@ const EventosCadastroForm = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [recorrencia]);
 
-  const onClickCopiarEvento = async () => {
+  const onClickCopiarEvento = async form => {
+    let modalidadeConsulta = '';
+    if (form?.values?.ueId && form?.values?.ueId !== OPCAO_TODOS) {
+      const calendarioSelecionado = listaCalendarios?.find(
+        item => item?.id === form?.values?.tipoCalendarioId
+      );
+
+      const modalidade = calendarioSelecionado?.modalidade
+        ? ServicoCalendarios.converterModalidade(
+            calendarioSelecionado?.modalidade
+          )
+        : '';
+      modalidadeConsulta = modalidade;
+    }
+
     const anoAtual = window.moment().format('YYYY');
     const tiposCalendario = await api
       .get(
         usuarioStore && turmaSelecionada?.anoLetivo
-          ? `v1/calendarios/tipos/anos/letivos/${turmaSelecionada.anoLetivo}`
-          : `v1/calendarios/tipos/anos/letivos/${anoAtual}`
+          ? `v1/calendarios/tipos/anos/letivos/${turmaSelecionada.anoLetivo}?modalidade=${modalidadeConsulta}`
+          : `v1/calendarios/tipos/anos/letivos/${anoAtual}?modalidade=${modalidadeConsulta}`
       )
       .catch(e => erros(e));
 
@@ -668,6 +683,7 @@ const EventosCadastroForm = () => {
                         onChangeCampos={ue => {
                           form.setFieldValue('tipoEventoId', undefined);
                           onChangeUe(ue, form);
+                          setListaCalendarioParaCopiar([]);
                         }}
                         desabilitar={desabilitarCampos || !podeAlterarEvento}
                         eventoId={eventoId}
@@ -825,7 +841,7 @@ const EventosCadastroForm = () => {
                         color={Colors.Azul}
                         border
                         className="mt-4 mr-3"
-                        onClick={onClickCopiarEvento}
+                        onClick={() => onClickCopiarEvento(form)}
                         disabled={desabilitarCampos || !podeAlterarEvento}
                       />
                       {listaCalendarioParaCopiar &&
