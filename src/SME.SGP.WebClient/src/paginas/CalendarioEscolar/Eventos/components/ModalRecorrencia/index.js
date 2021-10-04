@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useContext } from 'react';
 import PropTypes from 'prop-types';
 
 // Form
@@ -17,6 +17,7 @@ import DropDownQuantidade from './components/DropDownQuantidade';
 import DropDownTipoRecorrencia from './components/DropDownTipoRecorrencia';
 import TextoDiasDaSemana from './components/TextoDiasDaSemana';
 import TextoInformativo from './components/TextoInformativo';
+import EventosCadastroContext from '../../cadastro/eventosCadastroContext';
 
 function ModalRecorrencia({
   show,
@@ -24,6 +25,9 @@ function ModalRecorrencia({
   onCloseRecorrencia,
   onSaveRecorrencia,
 }) {
+  const { limparRecorrencia, setLimparRecorrencia } = useContext(
+    EventosCadastroContext
+  );
   const [habilitaSalvar, setHabilitaSalvar] = useState(false);
 
   const [dataInicio, setDataInicio] = useState('');
@@ -53,6 +57,7 @@ function ModalRecorrencia({
   };
 
   const [valoresIniciais, setValoresIniciais] = useState(valoresDefault);
+  const [refForm, setRefForm] = useState();
 
   /**
    * @description Verifica se o botao de salvar deve ser habilitado
@@ -164,9 +169,20 @@ function ModalRecorrencia({
     setDataTermino('');
     setDiasSemana([]);
     setValoresIniciais(valoresDefault);
-    onSaveRecorrencia(valoresDefault);
+    onSaveRecorrencia(null);
     onCloseRecorrencia();
+    if (refForm && refForm.resetForm) {
+      refForm.resetForm();
+    }
+    setQuantidadeRecorrencia(1);
   };
+
+  useEffect(() => {
+    if (limparRecorrencia) {
+      onCloseModal();
+      setLimparRecorrencia(false);
+    }
+  }, [limparRecorrencia]);
 
   const desabilitarData = current => {
     if (current) {
@@ -197,6 +213,7 @@ function ModalRecorrencia({
           validationSchema={constroiValidacoes}
           validateOnChange
           validateOnBlur
+          ref={f => setRefForm(f)}
         >
           {form => (
             <Form>

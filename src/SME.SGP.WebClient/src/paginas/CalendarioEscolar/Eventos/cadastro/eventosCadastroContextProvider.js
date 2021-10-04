@@ -34,6 +34,7 @@ const EventosCadastroContextProvider = ({ children }) => {
   );
 
   const [aguardandoAprovacao, setAguardandoAprovacao] = useState(false);
+  const [limparRecorrencia, setLimparRecorrencia] = useState(false);
 
   const valoresIniciaisPadrao = {
     dataFim: '',
@@ -94,6 +95,8 @@ const EventosCadastroContextProvider = ({ children }) => {
         setExibirLoaderSalvar,
         aguardandoAprovacao,
         setAguardandoAprovacao,
+        limparRecorrencia,
+        setLimparRecorrencia,
       }}
     >
       {children}
