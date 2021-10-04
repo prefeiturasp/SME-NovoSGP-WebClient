@@ -45,6 +45,8 @@ const DreCadastroEventos = ({
           form.setFieldValue('dreId', OPCAO_TODOS);
           form.initialValues.dreId = OPCAO_TODOS;
         }
+      } else if (eventoId && form.initialValues.dreId === OPCAO_TODOS) {
+        lista.unshift({ codigo: OPCAO_TODOS, nome: 'Todas' });
       }
       setListaDres(lista);
     } else {

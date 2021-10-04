@@ -64,6 +64,14 @@ const EventosListaFiltros = () => {
     state => state.calendarioEscolar.filtroListaEventos
   );
 
+  const setarFiltrosSalvos = !!(
+    listaCalendarios?.length &&
+    filtroListaEventos?.eventoCalendarioId &&
+    filtroListaEventos?.codigoDre &&
+    filtroListaEventos?.codigoUe &&
+    paramsRota?.tipoCalendarioId
+  );
+
   const onChangeTipoEvento = tipo => {
     setTipoEventoSelecionado(tipo);
     seFiltrarNovaConsulta(true);
@@ -118,6 +126,7 @@ const EventosListaFiltros = () => {
     const calendario = listaCalendarios?.find(t => t?.descricao === descricao);
     if (calendario) {
       setCalendarioSelecionado(calendario);
+      setListaUes([]);
       setCodigoUe();
     } else {
       setCalendarioSelecionado({ descricao });
@@ -129,6 +138,15 @@ const EventosListaFiltros = () => {
       obterTiposCalendarios(descricao);
     }
   };
+
+  const filtroListaLimparDre = useCallback(() => {
+    dispatch(
+      setFiltroListaEventos({
+        ...filtroListaEventos,
+        codigoDre: '',
+      })
+    );
+  }, [dispatch, filtroListaEventos]);
 
   const obterDres = useCallback(async () => {
     setCarregandoDres(true);
@@ -146,7 +164,15 @@ const EventosListaFiltros = () => {
 
       if (usuario.possuiPerfilSme && lista?.length > 1) {
         lista.unshift({ codigo: OPCAO_TODOS, nome: 'Todas' });
-        setCodigoDre(OPCAO_TODOS);
+        if (filtroListaEventos?.codigoDre) {
+          setCodigoDre(filtroListaEventos?.codigoDre);
+        } else {
+          setCodigoDre(OPCAO_TODOS);
+        }
+      } else if (listaDres?.length > 1) {
+        if (filtroListaEventos?.codigoDre) {
+          setCodigoDre(filtroListaEventos?.codigoDre);
+        }
       }
 
       setListaDres(lista);
@@ -169,10 +195,21 @@ const EventosListaFiltros = () => {
     if (listaDres?.length === 1) {
       setCodigoDre(listaDres[0].codigo);
     } else if (usuario.possuiPerfilSme && listaDres?.length > 1) {
-      setCodigoDre(OPCAO_TODOS);
+      if (filtroListaEventos?.codigoDre) {
+        setCodigoDre(filtroListaEventos?.codigoDre);
+        filtroListaLimparDre();
+      } else {
+        setCodigoDre(OPCAO_TODOS);
+      }
+    } else if (listaDres?.length > 1) {
+      if (filtroListaEventos?.codigoDre) {
+        setCodigoDre(filtroListaEventos?.codigoDre);
+        filtroListaLimparDre();
+      }
     }
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [listaDres, usuario]);
+  }, [listaDres, usuario, filtroListaEventos]);
 
   useEffect(() => {
     const temCaledarioNaotemDres = !!(
@@ -189,13 +226,33 @@ const EventosListaFiltros = () => {
     } else {
       setCodigoDre();
     }
-  }, [obterDres, calendarioSelecionado, listaDres, setarDreListaAtual]);
+  }, [obterDres, calendarioSelecionado, listaDres]);
 
   const onChangeDre = codigo => {
     setCodigoUe();
-    setListaUes();
+    setListaUes([]);
     setCodigoDre(codigo);
   };
+
+  const limparFiltrosSalvos = useCallback(() => {
+    dispatch(
+      setFiltroListaEventos({
+        calendarioSelecionado: null,
+        codigoDre: '',
+        codigoUe: '',
+        eventoCalendarioId: false,
+      })
+    );
+  }, [dispatch]);
+
+  const filtroListaLimparUe = useCallback(() => {
+    dispatch(
+      setFiltroListaEventos({
+        ...filtroListaEventos,
+        codigoUe: '',
+      })
+    );
+  }, [dispatch, filtroListaEventos]);
 
   const obterUes = useCallback(async () => {
     const ueTodos = { nome: 'Todas', codigo: OPCAO_TODOS };
@@ -233,11 +290,22 @@ const EventosListaFiltros = () => {
       if (usuario.possuiPerfilSmeOuDre && lista?.length > 1) {
         lista.unshift(ueTodos);
         if (codigoDre && codigoDre !== OPCAO_TODOS) {
-          setCodigoUe(OPCAO_TODOS);
+          if (filtroListaEventos?.codigoUe) {
+            setCodigoUe(filtroListaEventos?.codigoUe);
+            filtroListaLimparUe();
+          } else {
+            setCodigoUe(OPCAO_TODOS);
+          }
+        }
+      } else if (lista?.length > 1) {
+        if (filtroListaEventos?.codigoUe) {
+          setCodigoDre(filtroListaEventos?.codigoUe);
+          filtroListaLimparUe();
         }
       }
 
       setListaUes(lista);
+      limparFiltrosSalvos();
     } else {
       setCodigoUe();
       setListaUes([]);
@@ -293,17 +361,6 @@ const EventosListaFiltros = () => {
     return '';
   };
 
-  const limparFiltrosSalvos = useCallback(() => {
-    dispatch(
-      setFiltroListaEventos({
-        calendarioSelecionado: null,
-        codigoDre: '',
-        codigoUe: '',
-        eventoCalendarioId: false,
-      })
-    );
-  }, [dispatch]);
-
   useEffect(() => {
     const tipoCalendarioId = paramsRota?.tipoCalendarioId;
 
@@ -311,11 +368,7 @@ const EventosListaFiltros = () => {
       limparFiltrosSalvos();
     }
 
-    if (
-      listaCalendarios?.length &&
-      filtroListaEventos?.eventoCalendarioId &&
-      paramsRota?.tipoCalendarioId
-    ) {
+    if (setarFiltrosSalvos) {
       // Quando voltar da tela de cadastro de Eventos setar filtros!
       const tipoCalendarioIdParseado = Number(tipoCalendarioId);
       const tipoCalendarioParaSetar = listaCalendarios.find(
@@ -324,12 +377,6 @@ const EventosListaFiltros = () => {
 
       if (tipoCalendarioParaSetar) {
         setCalendarioSelecionado(tipoCalendarioParaSetar);
-        if (filtroListaEventos?.codigoDre) {
-          setCodigoDre(filtroListaEventos?.codigoDre);
-        }
-        if (filtroListaEventos?.codigoUe) {
-          setCodigoUe(filtroListaEventos?.codigoUe);
-        }
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
