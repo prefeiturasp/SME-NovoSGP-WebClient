@@ -39,7 +39,7 @@ import {
   verificaSomenteConsulta,
 } from '~/servicos';
 
-import { setFiltroCalendarioEscolar } from '~/redux/modulos/calendarioEscolar/actions';
+import { setFiltroListaEventos } from '~/redux/modulos/calendarioEscolar/actions';
 
 const EventosLista = ({ match }) => {
   const usuario = useSelector(store => store.usuario);
@@ -111,13 +111,13 @@ const EventosLista = ({ match }) => {
     })
   );
 
-  const { filtroCalendarioEscolar } = useSelector(
-    state => state.calendarioEscolar.filtroCalendarioEscolar
+  const { filtroListaEventos } = useSelector(
+    state => state.calendarioEscolar.filtroListaEventos
   );
 
   const dispatch = useDispatch();
   const setFiltroCalendario = useCallback(
-    value => dispatch(setFiltroCalendarioEscolar(value)),
+    value => dispatch(setFiltroListaEventos(value)),
     [dispatch]
   );
 
@@ -216,8 +216,8 @@ const EventosLista = ({ match }) => {
     descricao => {
       const tipo = listaCalendario?.find(t => t.descricao === descricao);
       const filtroAtual = filtro;
-      const dreId = filtroCalendarioEscolar?.dreId || dreSelecionada;
-      const ueId = filtroCalendarioEscolar?.ueId || ueSelecionada;
+      const dreId = filtroListaEventos?.dreId || dreSelecionada;
+      const ueId = filtroListaEventos?.ueId || ueSelecionada;
 
       if (tipo?.id) {
         filtroAtual.dreId = dreId;
@@ -258,7 +258,7 @@ const EventosLista = ({ match }) => {
       refForm,
       validarFiltrar,
       setFiltroCalendario,
-      filtroCalendarioEscolar,
+      filtroListaEventos,
       dreSelecionada,
       ueSelecionada,
     ]
@@ -268,7 +268,7 @@ const EventosLista = ({ match }) => {
     if (
       refForm &&
       listaCalendario?.length &&
-      filtroCalendarioEscolar?.eventoCalendarioId &&
+      filtroListaEventos?.eventoCalendarioId &&
       match?.params?.tipoCalendarioId
     ) {
       const { tipoCalendarioId } = match.params;
@@ -298,7 +298,7 @@ const EventosLista = ({ match }) => {
     refForm,
     filtrar,
     selecionaTipoCalendario,
-    filtroCalendarioEscolar,
+    filtroListaEventos,
     setFiltroCalendario,
   ]);
 
@@ -476,7 +476,7 @@ const EventosLista = ({ match }) => {
 
   const onClickNovo = () => {
     setFiltroCalendario({
-      ...filtroCalendarioEscolar,
+      ...filtroListaEventos,
       eventoCalendarioId: true,
     });
     history.push(
@@ -518,7 +518,7 @@ const EventosLista = ({ match }) => {
 
   const onClickEditar = evento => {
     setFiltroCalendario({
-      ...filtroCalendarioEscolar,
+      ...filtroListaEventos,
       eventoCalendarioId: true,
     });
     history.push(
