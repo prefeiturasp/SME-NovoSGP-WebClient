@@ -31,6 +31,7 @@ const inicial = {
 
 export default function ConselhoClasse(state = inicial, action) {
   return produce(state, draft => {
+    // console.log('state', state);
     switch (action.type) {
       case '@conselhoClasse/setDadosAlunoObjectCard': {
         return {
@@ -224,6 +225,54 @@ export default function ConselhoClasse(state = inicial, action) {
       case '@conselhoClasse/setExibirLoaderGeralConselhoClasse': {
         draft.exibirLoaderGeralConselhoClasse = action.payload;
         break;
+      }
+      case '@conselhoClasse/setAtualizarEmAprovacao': {
+        const novosDadosListasNotasConceitos = state.dadosListasNotasConceitos.map(
+          dados => {
+            const componenteEscolhido = action.payload.ehNota
+              ? dados.componentesCurriculares
+              : dados.componenteRegencia.componentesCurriculares;
+            const novaNota = action.payload.ehNota ? 'nota' : 'conceito';
+
+            const novosComponentes = componenteEscolhido.map(componentes => {
+              if (
+                componentes.codigoComponenteCurricular ===
+                Number(action.payload.codigoComponenteCurricular)
+              ) {
+                return {
+                  ...componentes,
+                  notaPosConselho: {
+                    ...componentes.notaPosConselho,
+                    emAprovacao: action.payload.emAprovacao,
+                    nota: action.payload[novaNota],
+                  },
+                };
+              }
+
+              return componentes;
+            });
+
+            if (action.payload.ehNota) {
+              return {
+                ...dados,
+                componentesCurriculares: novosComponentes,
+              };
+            }
+
+            return {
+              ...dados,
+              componenteRegencia: {
+                ...dados.componenteRegencia,
+                componentesCurriculares: novosComponentes,
+              },
+            };
+          }
+        );
+
+        return {
+          ...draft,
+          dadosListasNotasConceitos: novosDadosListasNotasConceitos,
+        };
       }
 
       default:

@@ -10,6 +10,7 @@ import {
   setNotaConceitoPosConselhoAtual,
   setGerandoParecerConclusivo,
   setExibirLoaderGeralConselhoClasse,
+  setAtualizarEmAprovacao,
 } from '~/redux/modulos/conselhoClasse/actions';
 import notasConceitos from '~/dtos/notasConceitos';
 
@@ -227,6 +228,13 @@ class ServicoSalvarConselhoClasse {
         retorno.data.conselhoClasseId;
       dadosPrincipaisConselhoClasse.fechamentoTurmaId =
         retorno.data.fechamentoTurmaId;
+      dispatch(
+        setAtualizarEmAprovacao({
+          ...retorno.data,
+          ...notaDto,
+          ehNota,
+        })
+      );
       dispatch(setDadosPrincipaisConselhoClasse(dadosPrincipaisConselhoClasse));
 
       const { auditoria } = retorno.data;
