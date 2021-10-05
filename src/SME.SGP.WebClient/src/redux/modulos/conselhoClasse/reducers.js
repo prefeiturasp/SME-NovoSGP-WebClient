@@ -31,7 +31,6 @@ const inicial = {
 
 export default function ConselhoClasse(state = inicial, action) {
   return produce(state, draft => {
-    // console.log('state', state);
     switch (action.type) {
       case '@conselhoClasse/setDadosAlunoObjectCard': {
         return {
