@@ -11,6 +11,7 @@ const inicial = {
   dadosApanhadoGeral: {},
   apanhadoGeralEmEdicao: false,
   qtdMaxImagensCampoPercursoColetivo: null,
+  qtdMaxImagensCampoPercursoIndividual: null,
   errosAcompanhamentoAprendizagem: [],
   exibirModalErrosAcompanhamentoAprendizagem: false,
 };
@@ -88,6 +89,12 @@ export default function AcompanhamentoAprendizagem(state = inicial, action) {
         return {
           ...draft,
           qtdMaxImagensCampoPercursoColetivo: action.payload,
+        };
+      }
+      case '@acompanhamentoAprendizagem/setQtdMaxImagensCampoPercursoIndividual': {
+        return {
+          ...draft,
+          qtdMaxImagensCampoPercursoIndividual: action.payload,
         };
       }
       case '@acompanhamentoAprendizagem/setErrosAcompanhamentoAprendizagem': {
