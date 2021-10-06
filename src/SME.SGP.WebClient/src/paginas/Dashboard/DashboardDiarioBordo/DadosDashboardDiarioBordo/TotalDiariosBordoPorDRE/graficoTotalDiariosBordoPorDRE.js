@@ -130,7 +130,7 @@ const GraficoTotalDiariosBordoPorDRE = props => {
       {dadosGrafico?.length ? (
         <GraficoBarras
           data={dadosGrafico}
-          xField="dre"
+          xField="grupo"
           xAxisVisible
           isGroup
           colors={['#0288D1', '#F57C00']}

@@ -1,6 +1,9 @@
+import * as moment from 'moment';
 import PropTypes from 'prop-types';
 import React, { useCallback, useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 import { Loader, SelectComponent } from '~/componentes';
+import { TagGrafico } from '~/componentes-sgp';
 import GraficoBarras from '~/componentes-sgp/Graficos/graficoBarras';
 import { OPCAO_TODOS } from '~/constantes/constantes';
 import { erros, ServicoDashboardFrequencia } from '~/servicos';
@@ -14,6 +17,12 @@ const GraficoTotalDevolutivasPorDRE = props => {
 
   const [listaAnosEscolares, setListaAnosEscolares] = useState([]);
   const [anoEscolar, setAnoEscolar] = useState();
+
+  const dataUltimaConsolidacao = useSelector(
+    store =>
+      store.dashboardDevolutivas?.dadosDashboardDevolutivas
+        ?.dataUltimaConsolidacao
+  );
 
   const obterDadosGrafico = useCallback(async () => {
     setExibirLoader(true);
@@ -91,6 +100,17 @@ const GraficoTotalDevolutivasPorDRE = props => {
           />
         </div>
       </div>
+      {dataUltimaConsolidacao && (
+        <TagGrafico
+          valor={
+            dataUltimaConsolidacao
+              ? `Data da última atualização: ${moment(
+                  dataUltimaConsolidacao
+                ).format('DD/MM/YYYY HH:mm:ss')}`
+              : ''
+          }
+        />
+      )}
       {dadosGrafico?.length ? (
         <GraficoBarras data={dadosGrafico} xAxisVisible legendVisible={false} />
       ) : !exibirLoader ? (
