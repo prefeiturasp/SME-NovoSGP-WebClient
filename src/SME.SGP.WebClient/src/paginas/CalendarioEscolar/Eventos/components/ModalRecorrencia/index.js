@@ -58,6 +58,7 @@ function ModalRecorrencia({
 
   const [valoresIniciais, setValoresIniciais] = useState(valoresDefault);
   const [refForm, setRefForm] = useState();
+  const [validacoes, setValidacoes] = useState();
 
   /**
    * @description Verifica se o botao de salvar deve ser habilitado
@@ -134,32 +135,57 @@ function ModalRecorrencia({
 
   const constroiValidacoes = () => {
     const val = {
-      dataInicio: momentSchema.required('Data obrigatória'),
+      dataInicio: momentSchema
+        .required('Data obrigatória')
+        .test(
+          'validaInicio',
+          'Data inicial maior que final',
+          function validar() {
+            if (
+              this.parent.dataInicio &&
+              this.parent.dataTermino &&
+              this.parent.dataInicio.isAfter(this.parent.dataTermino, 'date')
+            )
+              return false;
+            return true;
+          }
+        ),
     };
 
-    if (tipoRecorrencia.value === '2') {
+    if (tipoRecorrencia?.value === '2') {
       val.padraoRecorrencia = Yup.string().required(
         'Padrão recorrência obrigatório'
       );
     }
 
-    if (padraoRecorrencia.value === '0') {
+    if (padraoRecorrencia?.value === '0') {
       val.diaSemana = Yup.string().required('Dia obrigatório');
     }
 
-    return Yup.object(val);
+    setValidacoes(Yup.object(val));
   };
+  useEffect(() => {
+    constroiValidacoes();
+  }, []);
 
   const onSubmitRecorrencia = () => {
-    onSaveRecorrencia({
-      dataInicio,
-      dataTermino,
-      diasSemana,
-      diaSemana,
-      diaNumero,
-      padraoRecorrencia,
-      quantidadeRecorrencia,
-      tipoRecorrencia,
+    const arrayCampos = Object.keys(valoresIniciais);
+    arrayCampos.forEach(campo => {
+      refForm.setFieldTouched(campo, true, true);
+    });
+    refForm.validateForm().then(() => {
+      if (Object.keys(refForm.state.errors).length === 0) {
+        onSaveRecorrencia({
+          dataInicio,
+          dataTermino,
+          diasSemana,
+          diaSemana,
+          diaNumero,
+          padraoRecorrencia,
+          quantidadeRecorrencia,
+          tipoRecorrencia,
+        });
+      }
     });
   };
 
@@ -210,7 +236,7 @@ function ModalRecorrencia({
         <Formik
           enableReinitialize
           initialValues={valoresIniciais}
-          validationSchema={constroiValidacoes}
+          validationSchema={validacoes}
           validateOnChange
           validateOnBlur
           ref={f => setRefForm(f)}
@@ -232,6 +258,8 @@ function ModalRecorrencia({
                 </div>
                 <div className="col-lg-6">
                   <CampoData
+                    form={form}
+                    name="dataTermino"
                     label="Data fim"
                     valor={dataTermino}
                     onChange={onChangeDataTermino}
