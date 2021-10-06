@@ -355,11 +355,6 @@ const Avaliacao = props => {
                                     className={`${obterTamanhoColuna()} position-relative`}
                                   >
                                     {montarCampoNotaConceito(nota, aluno)}
-                                    {aluno?.notasBimestre[i]?.emAprovacao && (
-                                      <Tooltip title="Aguardando aprovação">
-                                        <MarcadorTriangulo />
-                                      </Tooltip>
-                                    )}
                                   </td>
                                 );
                               })
@@ -369,6 +364,11 @@ const Avaliacao = props => {
                               <ColunaNotaFinalRegencia indexLinha={i} />
                             ) : (
                               montarCampoNotaConceitoFinal(aluno)
+                            )}
+                            {aluno?.notasBimestre[0]?.emAprovacao && (
+                              <Tooltip title="Aguardando aprovação">
+                                <MarcadorTriangulo />
+                              </Tooltip>
                             )}
                           </td>
 
