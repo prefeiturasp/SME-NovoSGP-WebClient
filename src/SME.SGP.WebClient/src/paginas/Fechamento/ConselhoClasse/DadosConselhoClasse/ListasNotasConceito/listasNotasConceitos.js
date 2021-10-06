@@ -100,7 +100,9 @@ const ListasNotasConceitos = props => {
       turmaCodigo,
       bimestreSelecionado?.valor,
       turmaStore?.consideraHistorico
-    ).catch(e => erros(e));
+    )
+      .catch(e => erros(e))
+      .finally(() => setCarregando(false));
 
     if (resultado && resultado.data) {
       dispatch(setDadosListasNotasConceitos(resultado.data.notasConceitos));
@@ -111,7 +113,6 @@ const ListasNotasConceitos = props => {
     } else {
       setExibir(false);
     }
-    setCarregando(false);
   }, [
     alunoCodigo,
     conselhoClasseId,
