@@ -126,18 +126,20 @@ const DadosConselhoClasse = props => {
         codigoEOL,
         ehFinal,
         usuario.turmaSelecionada.consideraHistorico
-      ).catch(e => {
-        erros(e);
-        dispatch(
-          setBimestreAtual({
-            valor: bimestreConsulta,
-            dataInicio: null,
-            dataFim: null,
-          })
-        );
-        dispatch(setDadosPrincipaisConselhoClasse({}));
-        setSemDados(true);
-      });
+      )
+        .catch(e => {
+          erros(e);
+          dispatch(
+            setBimestreAtual({
+              valor: bimestreConsulta,
+              dataInicio: null,
+              dataFim: null,
+            })
+          );
+          dispatch(setDadosPrincipaisConselhoClasse({}));
+          setSemDados(true);
+        })
+        .finally(() => setCarregando(false));
 
       if (retorno && retorno.data) {
         const {
