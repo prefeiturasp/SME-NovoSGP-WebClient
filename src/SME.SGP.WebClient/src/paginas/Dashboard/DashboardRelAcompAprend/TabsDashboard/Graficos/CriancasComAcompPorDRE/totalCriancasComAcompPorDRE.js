@@ -5,7 +5,7 @@ import CardCollapse from '~/componentes/cardCollapse';
 import GraficoTotalCriancasComAcompPorDRE from './graficoCriancasComAcompPorDRE';
 
 const TotalCriancasComAcompPorDRE = props => {
-  const { anoLetivo } = props;
+  const { anoLetivo, dataUltimaConsolidacao } = props;
 
   const configCabecalho = {
     altura: '44px',
@@ -30,7 +30,10 @@ const TotalCriancasComAcompPorDRE = props => {
         }}
       >
         {exibir ? (
-          <GraficoTotalCriancasComAcompPorDRE anoLetivo={anoLetivo} />
+          <GraficoTotalCriancasComAcompPorDRE
+            anoLetivo={anoLetivo}
+            dataUltimaConsolidacao={dataUltimaConsolidacao}
+          />
         ) : (
           <></>
         )}
@@ -41,10 +44,12 @@ const TotalCriancasComAcompPorDRE = props => {
 
 TotalCriancasComAcompPorDRE.propTypes = {
   anoLetivo: PropTypes.oneOfType(PropTypes.any),
+  dataUltimaConsolidacao: PropTypes.oneOfType(PropTypes.any),
 };
 
 TotalCriancasComAcompPorDRE.defaultProps = {
   anoLetivo: null,
+  dataUltimaConsolidacao: null,
 };
 
 export default TotalCriancasComAcompPorDRE;

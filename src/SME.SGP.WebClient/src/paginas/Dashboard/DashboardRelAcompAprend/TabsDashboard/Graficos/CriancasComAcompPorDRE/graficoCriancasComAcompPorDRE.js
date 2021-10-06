@@ -1,12 +1,13 @@
+import * as moment from 'moment';
 import PropTypes from 'prop-types';
 import React, { useCallback, useEffect, useState } from 'react';
 import { Loader, SelectComponent } from '~/componentes';
-import { GraficoBarras } from '~/componentes-sgp';
+import { GraficoBarras, TagGrafico } from '~/componentes-sgp';
 import { erros } from '~/servicos';
 import ServicoDashboardRelAcompanhamentoAprendizagem from '~/servicos/Paginas/Dashboard/ServicoDashboardRelAcompanhamentoAprendizagem';
 
 const GraficoTotalCriancasComAcompPorDRE = props => {
-  const { anoLetivo } = props;
+  const { anoLetivo, dataUltimaConsolidacao } = props;
 
   const [dadosGrafico, setDadosGrafico] = useState([]);
   const [exibirLoader, setExibirLoader] = useState(false);
@@ -63,6 +64,17 @@ const GraficoTotalCriancasComAcompPorDRE = props => {
         loading={exibirLoader}
         className={exibirLoader ? 'text-center' : ''}
       >
+        {dataUltimaConsolidacao && (
+          <TagGrafico
+            valor={
+              dataUltimaConsolidacao
+                ? `Data da última atualização: ${moment(
+                    dataUltimaConsolidacao
+                  ).format('DD/MM/YYYY HH:mm:ss')}`
+                : ''
+            }
+          />
+        )}
         {dadosGrafico?.length ? (
           <GraficoBarras
             data={dadosGrafico}
@@ -83,10 +95,12 @@ const GraficoTotalCriancasComAcompPorDRE = props => {
 
 GraficoTotalCriancasComAcompPorDRE.propTypes = {
   anoLetivo: PropTypes.oneOfType(PropTypes.any),
+  dataUltimaConsolidacao: PropTypes.oneOfType(PropTypes.any),
 };
 
 GraficoTotalCriancasComAcompPorDRE.defaultProps = {
   anoLetivo: null,
+  dataUltimaConsolidacao: null,
 };
 
 export default GraficoTotalCriancasComAcompPorDRE;

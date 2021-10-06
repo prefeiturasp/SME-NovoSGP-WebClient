@@ -15,7 +15,10 @@ const GraficosAcompanhamentoAprendizagem = props => {
         dataUltimaConsolidacao={dataUltimaConsolidacao}
       />
       {dreId === OPCAO_TODOS ? (
-        <TotalCriancasComAcompPorDRE anoLetivo={anoLetivo} />
+        <TotalCriancasComAcompPorDRE
+          anoLetivo={anoLetivo}
+          dataUltimaConsolidacao={dataUltimaConsolidacao}
+        />
       ) : (
         <></>
       )}
