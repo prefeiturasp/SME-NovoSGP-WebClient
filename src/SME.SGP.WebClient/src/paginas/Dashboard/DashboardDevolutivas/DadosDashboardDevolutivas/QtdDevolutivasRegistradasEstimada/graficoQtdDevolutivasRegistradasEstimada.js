@@ -46,35 +46,6 @@ const GraficoQtdDevolutivasRegistradasEstimada = props => {
     }
   }, [modalidade, anoLetivo, dreId, ueId, obterDadosGrafico]);
 
-  const obterUltimaConsolidacao = useCallback(async () => {
-    const resposta = await ServicoDashboardDevolutivas.obterUltimaConsolidacao(
-      anoLetivo
-    ).catch(e => erros(e));
-
-    if (resposta?.data) {
-      ServicoDashboardDevolutivas.atualizarFiltros(
-        'dataUltimaConsolidacao',
-        resposta.data
-      );
-    } else {
-      ServicoDashboardDevolutivas.atualizarFiltros(
-        'dataUltimaConsolidacao',
-        undefined
-      );
-    }
-  }, [anoLetivo]);
-
-  useEffect(() => {
-    if (anoLetivo) {
-      obterUltimaConsolidacao();
-    } else {
-      ServicoDashboardDevolutivas.atualizarFiltros(
-        'dataUltimaConsolidacao',
-        undefined
-      );
-    }
-  }, [anoLetivo, obterUltimaConsolidacao]);
-
   return (
     <Loader
       loading={exibirLoader}

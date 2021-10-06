@@ -2,10 +2,10 @@ import PropTypes from 'prop-types';
 import React, { useState } from 'react';
 import { Base } from '~/componentes';
 import CardCollapse from '~/componentes/cardCollapse';
-import GraficoTotalCriancasComRelAcompanhamentoAprendizagem from './graficoTotalCriancas';
+import GraficoTotalCriancasComAcompPorDRE from './graficoCriancasComAcompPorDRE';
 
-const TotalCriancasComRelAcompanhamentoAprendizagem = props => {
-  const { anoLetivo, dreId, ueId, dataUltimaConsolidacao } = props;
+const TotalCriancasComAcompPorDRE = props => {
+  const { anoLetivo, dataUltimaConsolidacao } = props;
 
   const configCabecalho = {
     altura: '44px',
@@ -14,12 +14,12 @@ const TotalCriancasComRelAcompanhamentoAprendizagem = props => {
 
   const [exibir, setExibir] = useState(false);
 
-  const key = 'total-criancas-relatorio-acompanhamento-aprendizagem-registrado';
+  const key = 'total-criancas-relatorio-acompanhamento-aprendizagem-por-dre';
 
   return (
     <div className="mt-3">
       <CardCollapse
-        titulo="Total de crianças com relatório do acompanhamento da aprendizagem registrado"
+        titulo="Total de crianças com relatório do acompanhamento da aprendizagem por DRE"
         key={`${key}-collapse-key`}
         indice={`${key}-collapse-indice`}
         alt={`${key}-alt`}
@@ -30,32 +30,26 @@ const TotalCriancasComRelAcompanhamentoAprendizagem = props => {
         }}
       >
         {exibir ? (
-          <GraficoTotalCriancasComRelAcompanhamentoAprendizagem
+          <GraficoTotalCriancasComAcompPorDRE
             anoLetivo={anoLetivo}
-            dreId={dreId}
-            ueId={ueId}
             dataUltimaConsolidacao={dataUltimaConsolidacao}
           />
         ) : (
-          ''
+          <></>
         )}
       </CardCollapse>
     </div>
   );
 };
 
-TotalCriancasComRelAcompanhamentoAprendizagem.propTypes = {
+TotalCriancasComAcompPorDRE.propTypes = {
   anoLetivo: PropTypes.oneOfType(PropTypes.any),
-  dreId: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
-  ueId: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   dataUltimaConsolidacao: PropTypes.oneOfType(PropTypes.any),
 };
 
-TotalCriancasComRelAcompanhamentoAprendizagem.defaultProps = {
+TotalCriancasComAcompPorDRE.defaultProps = {
   anoLetivo: null,
-  dreId: null,
-  ueId: null,
   dataUltimaConsolidacao: null,
 };
 
-export default TotalCriancasComRelAcompanhamentoAprendizagem;
+export default TotalCriancasComAcompPorDRE;
