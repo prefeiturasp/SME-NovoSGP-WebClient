@@ -56,23 +56,6 @@ const DadosConselhoClasse = props => {
   const [carregando, setCarregando] = useState(false);
   const [turmaAtual, setTurmaAtual] = useState(0);
 
-  const validaParecerConclusivo = useCallback(
-    async (conselhoClasseId, fechamentoTurmaId, alunoCodigo, codigoTurma) => {
-      const resposta = await ServicoConselhoClasse.acessarParecerConclusivo(
-        conselhoClasseId,
-        fechamentoTurmaId,
-        alunoCodigo,
-        codigoTurma
-      ).catch(e => erros(e));
-      if (resposta && resposta.data) {
-        ServicoConselhoClasse.setarParecerConclusivo(resposta.data);
-        return true;
-      }
-      return false;
-    },
-    []
-  );
-
   const limparDadosNotaPosConselhoJustificativa = useCallback(() => {
     dispatch(setExpandirLinha([]));
     dispatch(setNotaConceitoPosConselhoAtual({}));
@@ -100,12 +83,9 @@ const DadosConselhoClasse = props => {
   );
 
   const verificarExibicaoMarcador = () => {
-    return ServicoConselhoClasse.obterInformacoesPrincipais(
+    return ServicoConselhoClasse.obterVisibilidadeMarcadorParecer(
       turmaCodigo,
-      0,
-      codigoEOL,
-      true,
-      usuario.turmaSelecionada.consideraHistorico
+      codigoEOL
     );
   };
 
@@ -159,26 +139,7 @@ const DadosConselhoClasse = props => {
         const novoRegistro = !conselhoClasseId;
         validaPermissoes(novoRegistro);
 
-        let retornoVerificarMarcador = [];
-        if (!ehFinal) {
-          retornoVerificarMarcador = await verificarExibicaoMarcador();
-        }
-
-        let podeAcessarAbaFinal = true;
-        if (
-          retornoVerificarMarcador?.data ||
-          (conselhoClasseId && fechamentoTurmaId)
-        ) {
-          const podeAcessar = await validaParecerConclusivo(
-            retornoVerificarMarcador?.data?.conselhoClasseId ||
-              conselhoClasseId,
-            retornoVerificarMarcador?.data?.fechamentoTurmaId ||
-              fechamentoTurmaId,
-            codigoEOL,
-            turmaCodigo
-          ).catch(e => erros(e));
-          podeAcessarAbaFinal = podeAcessar;
-        }
+        const podeAcessarAbaFinal = await verificarExibicaoMarcador();
 
         if (!podeAcessarAbaFinal) {
           dispatch(
@@ -255,7 +216,6 @@ const DadosConselhoClasse = props => {
       dispatch,
       limparDadosNotaPosConselhoJustificativa,
       turmaCodigo,
-      validaParecerConclusivo,
       validaPermissoes,
     ]
   );
