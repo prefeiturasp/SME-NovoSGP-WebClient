@@ -139,9 +139,13 @@ const DadosConselhoClasse = props => {
         const novoRegistro = !conselhoClasseId;
         validaPermissoes(novoRegistro);
 
-        const podeAcessarAbaFinal = await verificarExibicaoMarcador();
+        const resposta = await verificarExibicaoMarcador().catch(e => erros(e));
 
-        if (!podeAcessarAbaFinal) {
+        if (resposta?.data) {
+          ServicoConselhoClasse.setarParecerConclusivo(resposta.data);
+        }
+
+        if (!resposta?.data) {
           dispatch(
             setBimestreAtual({
               valor: bimestreConsulta,
