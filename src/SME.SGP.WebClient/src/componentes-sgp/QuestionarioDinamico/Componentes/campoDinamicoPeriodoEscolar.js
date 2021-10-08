@@ -1,16 +1,18 @@
 import PropTypes from 'prop-types';
 import React, { useCallback, useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
 import Loader from '~/componentes/loader';
 import SelectComponent from '~/componentes/select';
 import { erros } from '~/servicos';
 import ServicoPeriodoEscolar from '~/servicos/Paginas/Calendario/ServicoPeriodoEscolar';
+import { setQuestionarioDinamicoEmEdicao } from '~/redux/modulos/questionarioDinamico/actions';
 
 const CampoDinamicoPeriodoEscolar = props => {
   const { questaoAtual, form, label, desabilitado, onChange, turmaId } = props;
 
   const [lista, setLista] = useState([]);
   const [exibirLoader, setExibirLoader] = useState(false);
-
+  const dispatch = useDispatch();
   const obterBimestres = useCallback(async () => {
     setExibirLoader(true);
     const retorno = await ServicoPeriodoEscolar.obterBimestresPorTurmaId(
@@ -26,6 +28,12 @@ const CampoDinamicoPeriodoEscolar = props => {
     }
   }, [turmaId]);
 
+  const habilitaEdicaoSeMudarBimestreAtual = (questao, bimestreAtual) => {
+    if (questao.resposta[0].texto !== String(bimestreAtual)) {
+      dispatch(setQuestionarioDinamicoEmEdicao(true));
+    }
+  };
+
   const obterBimestreAtual = useCallback(async () => {
     setExibirLoader(true);
     const retorno = await ServicoPeriodoEscolar.obterBimestreAtualPorTurmaId(
@@ -33,8 +41,8 @@ const CampoDinamicoPeriodoEscolar = props => {
     )
       .catch(e => erros(e))
       .finally(() => setExibirLoader(false));
-
     if (retorno?.data) {
+      habilitaEdicaoSeMudarBimestreAtual(questaoAtual, retorno.data.id);
       form.setFieldValue(String(questaoAtual.id), String(retorno.data.id));
     } else {
       form.setFieldValue(String(questaoAtual.id), '');
