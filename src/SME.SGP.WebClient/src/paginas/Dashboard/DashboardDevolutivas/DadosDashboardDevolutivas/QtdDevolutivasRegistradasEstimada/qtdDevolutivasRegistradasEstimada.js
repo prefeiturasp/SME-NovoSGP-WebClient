@@ -19,7 +19,7 @@ const QtdDevolutivasRegistradasEstimada = props => {
   return (
     <div className="mt-3">
       <CardCollapse
-        titulo="Quantidade de devolutivas registradas e a quantidade estimada de devolutivas"
+        titulo="Total de devolutivas registradas comparado a quantidade estimada de devolutivas"
         key={`${key}-collapse-key`}
         indice={`${key}-collapse-indice`}
         alt={`${key}-alt`}

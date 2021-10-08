@@ -35,6 +35,14 @@ class ServicoDashboardRelAcompanhamentoAprendizagem {
     });
   };
 
+  obterTotalCriancasComAcompPorDRE = (anoLetivo, semestre) => {
+    return this.montarConsultaPadraoGraficos({
+      rota: 'acompanhamento-aluno-dre',
+      anoLetivo,
+      semestre,
+    });
+  };
+
   obterUltimaConsolidacao = anoLetivo => {
     return api.get(`${urlPadrao}/ultima-consolidacao?anoLetivo=${anoLetivo}`);
   };

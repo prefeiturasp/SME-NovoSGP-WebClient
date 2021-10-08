@@ -94,7 +94,7 @@ class ServicoConselhoClasse {
     }
   };
 
-  acessarAbaFinalParecerConclusivo = (
+  acessarParecerConclusivo = (
     conselhoClasseId,
     fechamentoTurmaId,
     alunoCodigo,
@@ -181,6 +181,12 @@ class ServicoConselhoClasse {
 
   obterDadosBimestres = turmaId => {
     return api.get(`/v1/conselhos-classe/turmas/${turmaId}/bimestres`);
+  };
+
+  obterVisibilidadeMarcadorParecer = (codigoTurma, alunoCodigo) => {
+    return api.get(
+      `/v1/conselhos-classe/turmas/${codigoTurma}/alunos/${alunoCodigo}/parecer`
+    );
   };
 }
 

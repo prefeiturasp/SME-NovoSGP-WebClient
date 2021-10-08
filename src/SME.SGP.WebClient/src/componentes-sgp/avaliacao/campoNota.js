@@ -89,7 +89,7 @@ const CampoNota = props => {
 
   const apertarTecla = e => {
     const teclaEscolhida = converterAcaoTecla(e.keyCode);
-    if (teclaEscolhida === 0) {
+    if (teclaEscolhida === 0 && !notaValorAtual) {
       setarValorNovo(0);
     }
   };

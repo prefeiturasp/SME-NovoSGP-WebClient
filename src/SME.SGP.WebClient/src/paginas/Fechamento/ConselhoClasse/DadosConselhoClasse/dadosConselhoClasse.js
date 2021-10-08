@@ -23,7 +23,6 @@ import servicoSalvarConselhoClasse from '../servicoSalvarConselhoClasse';
 import AlertaDentroPeriodo from './AlertaDentroPeriodo/alertaDentroPeriodo';
 import AnotacoesRecomendacoes from './AnotacoesRecomendacoes/anotacoesRecomendacoes';
 import ListasNotasConceitos from './ListasNotasConceito/listasNotasConceitos';
-import MarcadorParecerConclusivo from './MarcadorParecerConclusivo/marcadorParecerConclusivo';
 import MarcadorPeriodoInicioFim from './MarcadorPeriodoInicioFim/marcadorPeriodoInicioFim';
 import Sintese from './Sintese/Sintese';
 import MarcadorSituacaoConselho from './MarcadorSituacaoConselho/marcadorSituacaoConselho';
@@ -57,23 +56,6 @@ const DadosConselhoClasse = props => {
   const [carregando, setCarregando] = useState(false);
   const [turmaAtual, setTurmaAtual] = useState(0);
 
-  const validaAbaFinal = useCallback(
-    async (conselhoClasseId, fechamentoTurmaId, alunoCodigo, codigoTurma) => {
-      const resposta = await ServicoConselhoClasse.acessarAbaFinalParecerConclusivo(
-        conselhoClasseId,
-        fechamentoTurmaId,
-        alunoCodigo,
-        codigoTurma
-      ).catch(e => erros(e));
-      if (resposta && resposta.data) {
-        ServicoConselhoClasse.setarParecerConclusivo(resposta.data);
-        return true;
-      }
-      return false;
-    },
-    []
-  );
-
   const limparDadosNotaPosConselhoJustificativa = useCallback(() => {
     dispatch(setExpandirLinha([]));
     dispatch(setNotaConceitoPosConselhoAtual({}));
@@ -100,6 +82,13 @@ const DadosConselhoClasse = props => {
     [dispatch, permissoesTela, turmaSelecionada, modalidadesFiltroPrincipal]
   );
 
+  const verificarExibicaoMarcador = () => {
+    return ServicoConselhoClasse.obterVisibilidadeMarcadorParecer(
+      turmaCodigo,
+      codigoEOL
+    );
+  };
+
   // Quando passa bimestre 0 o retorno vai trazer dados do bimestre corrente!
   const caregarInformacoes = useCallback(
     async (bimestreConsulta = 0, ehFinal = false) => {
@@ -117,18 +106,21 @@ const DadosConselhoClasse = props => {
         codigoEOL,
         ehFinal,
         usuario.turmaSelecionada.consideraHistorico
-      ).catch(e => {
-        erros(e);
-        dispatch(
-          setBimestreAtual({
-            valor: bimestreConsulta,
-            dataInicio: null,
-            dataFim: null,
-          })
-        );
-        dispatch(setDadosPrincipaisConselhoClasse({}));
-        setSemDados(true);
-      });
+      )
+        .catch(e => {
+          erros(e);
+          dispatch(
+            setBimestreAtual({
+              valor: bimestreConsulta,
+              dataInicio: null,
+              dataFim: null,
+            })
+          );
+          dispatch(setDadosPrincipaisConselhoClasse({}));
+          setSemDados(true);
+        })
+        .finally(() => setCarregando(false));
+
       if (retorno && retorno.data) {
         const {
           conselhoClasseId,
@@ -147,17 +139,13 @@ const DadosConselhoClasse = props => {
         const novoRegistro = !conselhoClasseId;
         validaPermissoes(novoRegistro);
 
-        let podeAcessarAbaFinal = true;
-        if (ehFinal) {
-          const podeAcessar = await validaAbaFinal(
-            conselhoClasseId,
-            fechamentoTurmaId,
-            codigoEOL,
-            turmaCodigo
-          ).catch(e => erros(e));
-          podeAcessarAbaFinal = podeAcessar;
+        const resposta = await verificarExibicaoMarcador().catch(e => erros(e));
+
+        if (resposta?.data) {
+          ServicoConselhoClasse.setarParecerConclusivo(resposta.data);
         }
-        if (!podeAcessarAbaFinal) {
+
+        if (!resposta?.data) {
           dispatch(
             setBimestreAtual({
               valor: bimestreConsulta,
@@ -194,7 +182,7 @@ const DadosConselhoClasse = props => {
           );
         } else {
           ServicoConselhoClasse.carregarListaTiposConceito(
-            anoLetivo + '/12/31'
+            `${anoLetivo}/12/31`
           );
         }
 
@@ -232,7 +220,6 @@ const DadosConselhoClasse = props => {
       dispatch,
       limparDadosNotaPosConselhoJustificativa,
       turmaCodigo,
-      validaAbaFinal,
       validaPermissoes,
     ]
   );
@@ -277,9 +264,6 @@ const DadosConselhoClasse = props => {
           <>
             <AlertaDentroPeriodo />
             <MarcadorSituacaoConselho />
-            {bimestreAtual.valor === 'final' ? (
-              <MarcadorParecerConclusivo />
-            ) : null}
             <MarcadorPeriodoInicioFim />
             <ListasNotasConceitos bimestreSelecionado={bimestreAtual} />
             <Sintese

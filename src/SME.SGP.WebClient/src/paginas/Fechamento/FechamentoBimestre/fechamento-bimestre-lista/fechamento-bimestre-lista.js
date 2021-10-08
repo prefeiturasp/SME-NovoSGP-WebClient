@@ -12,7 +12,7 @@ import {
   SituacaoProcessadoComPendencias,
   DataFechamentoProcessado,
 } from './fechamento-bimestre-lista.css';
-import { Colors } from '~/componentes';
+import { Colors, MarcadorTriangulo } from '~/componentes';
 import Button from '~/componentes/button';
 import situacaoFechamentoDto from '~/dtos/situacaoFechamentoDto';
 import ServicoFechamentoBimestre from '~/servicos/Paginas/Fechamento/ServicoFechamentoBimestre';
@@ -296,7 +296,7 @@ const FechamentoBimestreLista = props => {
                         </div>
                       </td>
                       <td
-                        className={`text-center ${
+                        className={`text-center position-relative ,${
                           !item.ativo ? 'fundo-cinza' : ''
                         }`}
                       >
@@ -316,6 +316,11 @@ const FechamentoBimestreLista = props => {
                             )
                           )
                         ) : null}
+                        {item?.notas?.length && item.notas[0].emAprovacao && (
+                          <Tooltip title="Aguardando aprovação">
+                            <MarcadorTriangulo />
+                          </Tooltip>
+                        )}
                       </td>
                       <td
                         className={`text-center ${

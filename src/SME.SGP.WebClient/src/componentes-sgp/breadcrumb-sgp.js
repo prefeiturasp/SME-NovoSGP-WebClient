@@ -195,6 +195,12 @@ const BreadcrumbSgp = () => {
                 title={item.dicaIcone}
               />
               <span hidden={item.path === '/'}>{item.breadcrumbName}</span>
+              <span
+                hidden={item.path !== '/' && item.icone !== 'fas fa-home'}
+                style={{ marginLeft: 8 }}
+              >
+                {item.breadcrumbName}
+              </span>
             </Link>
             <i
               hidden={!item.ehEstatico}

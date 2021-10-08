@@ -40,7 +40,7 @@ const Conteudo = () => {
       </Switch>
       <div
         className="row"
-        style={{ bottom: 0, position: 'relative', padding: '1rem 0.5rem' }}
+        style={{ bottom: 0, position: 'relative', padding: '1rem 1rem' }}
       >
         <div className="col-md-12">
           {!versao ? '' : <strong>{versao}&nbsp;</strong>} - Sistema homologado
