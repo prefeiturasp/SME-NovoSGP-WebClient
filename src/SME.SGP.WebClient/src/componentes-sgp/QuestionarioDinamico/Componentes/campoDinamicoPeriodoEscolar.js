@@ -31,6 +31,8 @@ const CampoDinamicoPeriodoEscolar = props => {
   const habilitaEdicaoSeMudarBimestreAtual = (questao, bimestreAtual) => {
     if (questao.resposta[0].texto !== String(bimestreAtual)) {
       dispatch(setQuestionarioDinamicoEmEdicao(true));
+    } else {
+      dispatch(setQuestionarioDinamicoEmEdicao(false));
     }
   };
 
