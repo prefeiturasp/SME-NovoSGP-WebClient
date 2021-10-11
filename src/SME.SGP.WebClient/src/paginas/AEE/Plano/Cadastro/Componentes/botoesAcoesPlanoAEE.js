@@ -167,7 +167,6 @@ const BotoesAcoesPlanoAEE = props => {
       sucesso(mensagem);
 
       dispatch(setQuestionarioDinamicoEmEdicao(false));
-      console.log('salvou e setou falso');
       if (registroNovo) {
         history.push(`${RotasDto.RELATORIO_AEE_PLANO}`);
       } else {
