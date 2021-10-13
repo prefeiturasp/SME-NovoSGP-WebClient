@@ -72,7 +72,7 @@ const BotoesAcoesConselhoClasse = () => {
       !desabilitarCampos &&
       (conselhoClasseEmEdicao || notaConceitoPosConselhoAtual.ehEdicao)
     ) {
-      const confirmado = await perguntaAoSalvar();
+      const confirmado = true;
       if (confirmado) {
         const salvou = await onClickSalvar();
         if (salvou) {

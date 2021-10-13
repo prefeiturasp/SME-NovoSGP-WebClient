@@ -131,7 +131,7 @@ class ServicoSalvarConselhoClasse {
       };
 
       // Tenta salvar os registros se estão válidos e continuar para executação a ação!
-      const perguntaAantesSalvar = await perguntarParaSalvar();
+      const perguntaAantesSalvar = true;
       if (perguntaAantesSalvar) return salvar();
     }
     return true;
