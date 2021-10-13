@@ -109,6 +109,7 @@ const Filtros = ({ onFiltrar, filtrou, setFiltrou, cancelou, setCancelou }) => {
     setDreCodigo();
     setDreId();
     setFiltrou(false);
+    setListaDres([]);
   };
 
   const onChangeAnoLetivo = ano => {
