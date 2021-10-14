@@ -12,8 +12,8 @@ const LicaoDeCasa = () => {
     state => state.frequenciaPlanoAula.desabilitarCamposPlanoAula
   );
 
-  const dadosPlanoAula = useSelector(
-    state => state.frequenciaPlanoAula.dadosPlanoAula
+  const licaoCasa = useSelector(
+    state => state.frequenciaPlanoAula?.dadosPlanoAula?.licaoCasa
   );
 
   const temPeriodoAberto = useSelector(
@@ -42,7 +42,7 @@ const LicaoDeCasa = () => {
           <JoditEditor
             desabilitar={desabilitarCamposPlanoAula || !temPeriodoAberto}
             onChange={onChangeLicaoCasa}
-            value={dadosPlanoAula.licaoCasa}
+            value={licaoCasa}
           />
         </fieldset>
       </CardCollapse>
