@@ -2,7 +2,10 @@ import api from '~/servicos/api';
 
 class ServicoAcompanhamentoRegistros {
   gerar = params => {
-    return Promise.resolve();
+    return api.post(
+      'v1/relatorios/acompanhamento-registros-pedagogicos',
+      params
+    );
   };
 }
 

@@ -57,7 +57,7 @@ const AcompanhamentoRegistros = () => {
   const [semestre, setSemestre] = useState();
   const [turmaId, setTurmaId] = useState();
   const [componentesCurricularesId, setComponentesCurricularesId] = useState();
-  const [bimestre, setBimestre] = useState();
+  const [bimestres, setBimestres] = useState();
   const [clicouBotaoGerar, setClicouBotaoGerar] = useState(false);
   const [desabilitarBtnGerar, setDesabilitarBtnGerar] = useState(true);
   const [carregandoBimestres, setCarregandoBimestres] = useState(false);
@@ -67,7 +67,7 @@ const AcompanhamentoRegistros = () => {
     setModalidadeId();
     setTurmaId();
     setComponentesCurricularesId();
-    setBimestre();
+    setBimestres();
     setClicouBotaoGerar(false);
   };
 
@@ -296,7 +296,7 @@ const AcompanhamentoRegistros = () => {
   const onChangeTurma = valor => {
     setTurmaId(valor);
     setComponentesCurricularesId();
-    setBimestre();
+    setBimestres();
     setClicouBotaoGerar(false);
   };
 
@@ -347,7 +347,7 @@ const AcompanhamentoRegistros = () => {
 
   const onChangeComponenteCurricular = valor => {
     setComponentesCurricularesId(valor);
-    setBimestre();
+    setBimestres();
     setClicouBotaoGerar(false);
   };
 
@@ -398,7 +398,7 @@ const AcompanhamentoRegistros = () => {
   }, [ueId, turmaId, listaTurmas, obterComponentesCurriculares]);
 
   const onChangeBimestre = valor => {
-    setBimestre(valor);
+    setBimestres(valor);
     setClicouBotaoGerar(false);
   };
 
@@ -426,7 +426,7 @@ const AcompanhamentoRegistros = () => {
       return;
     }
     setListaBimestres([]);
-    setBimestre();
+    setBimestres();
   }, [modalidadeId, obterBimestres]);
 
   const onChangeLocalizador = valores => {
@@ -449,7 +449,7 @@ const AcompanhamentoRegistros = () => {
     setComponentesCurricularesId(undefined);
 
     setTurmaId(undefined);
-    setBimestre();
+    setBimestres();
     setUsuarioRf();
   };
 
@@ -465,7 +465,7 @@ const AcompanhamentoRegistros = () => {
       consideraSemestre ||
       !turmaId?.length ||
       !componentesCurricularesId ||
-      !bimestre ||
+      !bimestres ||
       clicouBotaoGerar;
 
     setDesabilitarBtnGerar(desabilitar);
@@ -477,7 +477,7 @@ const AcompanhamentoRegistros = () => {
     turmaId,
     semestre,
     componentesCurricularesId,
-    bimestre,
+    bimestres,
     usuarioRf,
     clicouBotaoGerar,
   ]);
@@ -493,7 +493,7 @@ const AcompanhamentoRegistros = () => {
       ueCodigo: ueId,
       modalidade: modalidadeId,
       turmasCodigo: turmaId,
-      bimestre,
+      bimestres,
       componentesCurriculares: componentesCurricularesId,
       semestre,
       usuarioRf,
@@ -715,9 +715,9 @@ const AcompanhamentoRegistros = () => {
                     !turmaId?.length ||
                     !componentesCurricularesId?.length
                   }
-                  valueSelect={bimestre}
+                  valueSelect={bimestres}
                   onChange={valores => {
-                    onchangeMultiSelect(valores, bimestre, onChangeBimestre);
+                    onchangeMultiSelect(valores, bimestres, onChangeBimestre);
                   }}
                   multiple
                   placeholder="Bimestre"
