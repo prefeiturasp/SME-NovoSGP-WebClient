@@ -56,7 +56,7 @@ const AcompanhamentoRegistros = () => {
   const [modalidadeId, setModalidadeId] = useState();
   const [semestre, setSemestre] = useState();
   const [turmaId, setTurmaId] = useState();
-  const [componentesCurricularesId, setComponentesCurricularesId] = useState();
+  const [componentesCurriculares, setComponentesCurriculares] = useState();
   const [bimestres, setBimestres] = useState();
   const [clicouBotaoGerar, setClicouBotaoGerar] = useState(false);
   const [desabilitarBtnGerar, setDesabilitarBtnGerar] = useState(true);
@@ -66,7 +66,7 @@ const AcompanhamentoRegistros = () => {
   const limparCampos = () => {
     setModalidadeId();
     setTurmaId();
-    setComponentesCurricularesId();
+    setComponentesCurriculares();
     setBimestres();
     setClicouBotaoGerar(false);
   };
@@ -295,7 +295,7 @@ const AcompanhamentoRegistros = () => {
 
   const onChangeTurma = valor => {
     setTurmaId(valor);
-    setComponentesCurricularesId();
+    setComponentesCurriculares();
     setBimestres();
     setClicouBotaoGerar(false);
   };
@@ -346,7 +346,7 @@ const AcompanhamentoRegistros = () => {
   }, [modalidadeId, ueId, anoLetivo, obterTurmas]);
 
   const onChangeComponenteCurricular = valor => {
-    setComponentesCurricularesId(valor);
+    setComponentesCurriculares(valor);
     setBimestres();
     setClicouBotaoGerar(false);
   };
@@ -363,30 +363,33 @@ const AcompanhamentoRegistros = () => {
         const disciplinas = await ServicoComponentesCurriculares.obterComponentesPorUeTurmas(
           ueCodigo,
           turmas
-        ).catch(e => erros(e));
-        let componentesCurriculares = [];
-        componentesCurriculares.push({
-          codigo: OPCAO_TODOS,
-          descricao: 'Todos',
-        });
+        )
+          .catch(e => erros(e))
+          .finally(() => setCarregandoComponentesCurriculares(false));
 
-        if (disciplinas && disciplinas.data && disciplinas.data.length) {
+        let dadosComponentesCurriculares = [
+          {
+            codigo: OPCAO_TODOS,
+            descricao: 'Todos',
+          },
+        ];
+
+        if (disciplinas?.data?.length) {
           if (disciplinas.data.length > 1) {
-            componentesCurriculares = componentesCurriculares.concat(
+            dadosComponentesCurriculares = dadosComponentesCurriculares.concat(
               disciplinas.data
             );
-            setListaComponentesCurriculares(componentesCurriculares);
-          } else {
-            setListaComponentesCurriculares(disciplinas.data);
+            setListaComponentesCurriculares(dadosComponentesCurriculares);
+            return;
           }
-        } else {
-          setListaComponentesCurriculares([]);
+
+          setListaComponentesCurriculares(disciplinas.data);
+          return;
         }
-        setCarregandoComponentesCurriculares(false);
-      } else {
-        setComponentesCurricularesId();
-        setListaComponentesCurriculares([]);
       }
+
+      setComponentesCurriculares();
+      setListaComponentesCurriculares([]);
     },
     []
   );
@@ -446,7 +449,7 @@ const AcompanhamentoRegistros = () => {
     setListaUes([]);
 
     setModalidadeId();
-    setComponentesCurricularesId(undefined);
+    setComponentesCurriculares(undefined);
 
     setTurmaId(undefined);
     setBimestres();
@@ -464,7 +467,7 @@ const AcompanhamentoRegistros = () => {
       !modalidadeId ||
       consideraSemestre ||
       !turmaId?.length ||
-      !componentesCurricularesId ||
+      !componentesCurriculares ||
       !bimestres ||
       clicouBotaoGerar;
 
@@ -476,7 +479,7 @@ const AcompanhamentoRegistros = () => {
     modalidadeId,
     turmaId,
     semestre,
-    componentesCurricularesId,
+    componentesCurriculares,
     bimestres,
     usuarioRf,
     clicouBotaoGerar,
@@ -492,9 +495,9 @@ const AcompanhamentoRegistros = () => {
       dreCodigo: dreId,
       ueCodigo: ueId,
       modalidade: modalidadeId,
-      turmasCodigo: turmaId,
+      turmaId,
       bimestres,
-      componentesCurriculares: componentesCurricularesId,
+      componentesCurriculares,
       semestre,
       usuarioRf,
     };
@@ -689,11 +692,11 @@ const AcompanhamentoRegistros = () => {
                     !turmaId?.length ||
                     listaComponentesCurriculares?.length === 1
                   }
-                  valueSelect={componentesCurricularesId}
+                  valueSelect={componentesCurriculares}
                   onChange={valores => {
                     onchangeMultiSelect(
                       valores,
-                      componentesCurricularesId,
+                      componentesCurriculares,
                       onChangeComponenteCurricular
                     );
                   }}
@@ -713,7 +716,7 @@ const AcompanhamentoRegistros = () => {
                   disabled={
                     !modalidadeId ||
                     !turmaId?.length ||
-                    !componentesCurricularesId?.length
+                    !componentesCurriculares?.length
                   }
                   valueSelect={bimestres}
                   onChange={valores => {
