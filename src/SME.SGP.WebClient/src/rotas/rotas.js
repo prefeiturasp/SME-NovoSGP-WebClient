@@ -1453,7 +1453,7 @@ rotas.set(RotasDto.RELATORIO_ACOMPANHAMENTO_REGISTROS, {
   component: RelatorioAcompanhamentoRegistros,
   exact: true,
   tipo: RotasTipo.EstruturadaAutenticada,
-  temPermissionamento: false,
+  temPermissionamento: true,
   chavePermissao: RotasDto.RELATORIO_ACOMPANHAMENTO_REGISTROS,
 });
 
