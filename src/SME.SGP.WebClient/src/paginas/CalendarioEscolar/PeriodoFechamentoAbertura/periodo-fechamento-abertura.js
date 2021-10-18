@@ -389,19 +389,7 @@ const PeriodoFechamentoAbertura = () => {
         carregaDados();
         setModoEdicao(false);
       })
-      .catch(async e => {
-        if (e && e.response && e.response.status === 602) {
-          if (e && e.response && e.response.data && e.response.data.mensagens) {
-            const confirmacao = await confirmar(
-              'Atenção',
-              e.response.data.mensagens[0]
-            );
-            if (confirmacao) {
-              onSubmit(form, true);
-            }
-          }
-        } else erros(e);
-      })
+      .catch(e => erros(e))
       .finally(() => setEmprocessamento(false));
   };
 
