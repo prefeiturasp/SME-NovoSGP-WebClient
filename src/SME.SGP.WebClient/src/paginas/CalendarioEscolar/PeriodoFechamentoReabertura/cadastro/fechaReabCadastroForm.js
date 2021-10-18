@@ -10,10 +10,11 @@ import Auditoria from '~/componentes/auditoria';
 import CampoTexto from '~/componentes/campoTexto';
 import { OPCAO_TODOS } from '~/constantes';
 import RotasDto from '~/dtos/rotasDto';
-import { setBreadcrumbManual } from '~/servicos';
+import { ServicoCalendarios, setBreadcrumbManual } from '~/servicos';
 import { erros, sucesso } from '~/servicos/alertas';
 import history from '~/servicos/history';
 import ServicoFechamentoReabertura from '~/servicos/Paginas/Calendario/ServicoFechamentoReabertura';
+import { ContainerDataHoraUsuarioAprovador } from '../periodoFechamentoReaberuraLista.css';
 import BimestreReabertura from './campos/bimestreReabertura';
 import DreReabertura from './campos/dreReabertura';
 import TipoCalendarioReabertura from './campos/tipoCalendarioReabertura';
@@ -37,6 +38,8 @@ const FechaReabCadastroForm = () => {
     setCalendarioSelecionado,
     calendarioSelecionado,
     listaBimestres,
+    setCarregandoCalendarios,
+    setListaTipoCalendarioEscolar,
   } = useContext(FechaReabCadastroContext);
 
   const paramsRota = useParams();
@@ -48,8 +51,6 @@ const FechaReabCadastroForm = () => {
     RotasDto.PERIODO_FECHAMENTO_REABERTURA
   );
 
-  const novoRegistro = !paramsRota?.id;
-
   const usuarioStore = useSelector(store => store.usuario);
 
   let { anoLetivo } = usuarioStore.turmaSelecionada;
@@ -59,6 +60,7 @@ const FechaReabCadastroForm = () => {
   }
 
   const [validacoes, setValidacoes] = useState({});
+  const [dataHoraUsuarioAprovador, setDataHoraUsuarioAprovador] = useState();
 
   const [valoresIniciais, setValoresIniciais] = useState(
     paramsRota?.id
@@ -87,7 +89,7 @@ const FechaReabCadastroForm = () => {
       if (calAtual) {
         setCalendarioSelecionado(calAtual);
       }
-    } else {
+    } else if (!paramsRota?.id) {
       setCalendarioSelecionado();
     }
   };
@@ -114,8 +116,8 @@ const FechaReabCadastroForm = () => {
   const setarValoresIniciaisConsultaPorId = dados => {
     const valoresAtuais = {
       tipoCalendarioId: String(dados.tipoCalendarioId),
-      dreCodigo: dados.dreCodigo || undefined,
-      ueCodigo: dados.ueCodigo || undefined,
+      dreCodigo: dados.dreCodigo ? dados.dreCodigo : OPCAO_TODOS,
+      ueCodigo: dados.ueCodigo ? dados.ueCodigo : OPCAO_TODOS,
       dataInicio: moment(dados.dataInicio),
       dataFim: moment(dados.dataFim),
       descricao: dados.descricao,
@@ -155,7 +157,7 @@ const FechaReabCadastroForm = () => {
       if (calendarioAtual) {
         setCalendarioSelecionado(calendarioAtual);
       }
-
+      setDataHoraUsuarioAprovador(retorno.data.dataHoraUsuarioAprovador);
       setarValoresIniciaisConsultaPorId(retorno.data);
       setarAuditorioConsultaPorId(retorno.data);
     } else {
@@ -220,17 +222,16 @@ const FechaReabCadastroForm = () => {
     const prametrosParaSalvar = {
       bimestres,
       descricao,
-      dreCodigo,
+      ueCodigo: ueCodigo === OPCAO_TODOS ? '' : ueCodigo,
+      dreCodigo: dreCodigo === OPCAO_TODOS ? '' : dreCodigo,
       fim: dataFim,
       inicio: dataInicio,
       tipoCalendarioId: calendarioSelecionado?.id,
-      ueCodigo,
       id: paramsRota?.id,
     };
 
     setExibirLoaderReabertura(true);
     const retorno = await ServicoFechamentoReabertura.salvar(
-      paramsRota?.id,
       prametrosParaSalvar
     )
       .catch(e => {
@@ -251,9 +252,30 @@ const FechaReabCadastroForm = () => {
     onChangeCampos();
   };
 
+  const obterTiposCalendarios = useCallback(async descricao => {
+    setCarregandoCalendarios(true);
+
+    const resposta = await ServicoCalendarios.obterTiposCalendarioAutoComplete(
+      descricao
+    )
+      .catch(e => erros(e))
+      .finally(() => setCarregandoCalendarios(false));
+
+    if (resposta?.data) {
+      setListaTipoCalendarioEscolar(resposta.data);
+    } else {
+      setListaTipoCalendarioEscolar([]);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    obterTiposCalendarios();
+  }, [obterTiposCalendarios]);
+
   return (
     <>
-      {true ? (
+      {valoresIniciais ? (
         <>
           <Formik
             ref={f => setRefForm(f)}
@@ -274,6 +296,7 @@ const FechaReabCadastroForm = () => {
                         onChangeCampos={() => {
                           onChangeCampos();
                         }}
+                        obterTiposCalendarios={obterTiposCalendarios}
                       />
                     </Col>
                   </Row>
@@ -304,7 +327,7 @@ const FechaReabCadastroForm = () => {
                         type="textarea"
                         form={form}
                         onChange={onChangeCampos}
-                        desabilitado={desabilitarCampos || !novoRegistro}
+                        desabilitado={desabilitarCampos}
                       />
                     </Col>
                   </Row>
@@ -350,6 +373,13 @@ const FechaReabCadastroForm = () => {
                       alteradoEm={auditoriaFechaReab.alteradoEm}
                       alteradoRf={auditoriaFechaReab.alteradoRf}
                     />
+                  ) : (
+                    <></>
+                  )}
+                  {dataHoraUsuarioAprovador ? (
+                    <ContainerDataHoraUsuarioAprovador className="ant-col ant-col-24">
+                      {dataHoraUsuarioAprovador}
+                    </ContainerDataHoraUsuarioAprovador>
                   ) : (
                     <></>
                   )}

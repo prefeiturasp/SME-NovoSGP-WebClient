@@ -1,20 +1,26 @@
 import PropTypes from 'prop-types';
-import React, { useCallback, useContext, useEffect, useState } from 'react';
+import React, { useContext } from 'react';
+import { useParams } from 'react-router-dom';
 import { Loader, SelectAutocomplete } from '~/componentes';
-import { erros, ServicoCalendarios } from '~/servicos';
 import FechaReabCadastroContext from '../fechaReabCadastroContext';
 
-const TipoCalendarioReabertura = ({ form, onChangeCampos }) => {
+const TipoCalendarioReabertura = ({
+  form,
+  onChangeCampos,
+  obterTiposCalendarios,
+}) => {
   const {
-    setListaTipoCalendarioEscolar,
     listaTipoCalendarioEscolar,
     setCalendarioSelecionado,
     calendarioSelecionado,
     setListaUes,
     emEdicao,
+    desabilitarCampos,
+    carregandoCalendarios,
   } = useContext(FechaReabCadastroContext);
 
-  const [carregandoCalendarios, setCarregandoCalendarios] = useState(false);
+  const paramsRota = useParams();
+  const novoRegistro = !paramsRota?.id;
 
   const selecionaTipoCalendario = descricao => {
     const calendario = listaTipoCalendarioEscolar?.find(
@@ -32,33 +38,12 @@ const TipoCalendarioReabertura = ({ form, onChangeCampos }) => {
     onChangeCampos();
   };
 
-  const obterTiposCalendarios = useCallback(async descricao => {
-    setCarregandoCalendarios(true);
-
-    const resposta = await ServicoCalendarios.obterTiposCalendarioAutoComplete(
-      descricao
-    )
-      .catch(e => erros(e))
-      .finally(() => setCarregandoCalendarios(false));
-
-    if (resposta?.data) {
-      setListaTipoCalendarioEscolar(resposta.data);
-    } else {
-      setListaTipoCalendarioEscolar([]);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
   const handleSearch = descricao => {
     if (descricao.length > 2 || descricao.length === 0) {
       obterTiposCalendarios(descricao);
     }
     onChangeCampos();
   };
-
-  useEffect(() => {
-    obterTiposCalendarios();
-  }, [obterTiposCalendarios]);
 
   return (
     <Loader loading={carregandoCalendarios} tip="">
@@ -78,6 +63,7 @@ const TipoCalendarioReabertura = ({ form, onChangeCampos }) => {
         value={calendarioSelecionado?.descricao || ''}
         temErro={emEdicao && !calendarioSelecionado?.id}
         mensagemErro="Campo obrigatório"
+        disabled={desabilitarCampos || !novoRegistro}
       />
     </Loader>
   );
@@ -86,11 +72,13 @@ const TipoCalendarioReabertura = ({ form, onChangeCampos }) => {
 TipoCalendarioReabertura.propTypes = {
   form: PropTypes.oneOfType([PropTypes.object]),
   onChangeCampos: PropTypes.func,
+  obterTiposCalendarios: PropTypes.func,
 };
 
 TipoCalendarioReabertura.defaultProps = {
   form: null,
   onChangeCampos: () => null,
+  obterTiposCalendarios: () => null,
 };
 
 export default TipoCalendarioReabertura;

@@ -64,7 +64,8 @@ const DreReabertura = ({ form, onChangeCampos }) => {
     if (!paramsRota?.id || (paramsRota?.id && dreCodigo)) {
       obterDres();
     }
-  }, [obterDres, dreCodigo, paramsRota]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [obterDres, paramsRota]);
 
   return (
     <Loader loading={exibirLoader} ignorarTip>

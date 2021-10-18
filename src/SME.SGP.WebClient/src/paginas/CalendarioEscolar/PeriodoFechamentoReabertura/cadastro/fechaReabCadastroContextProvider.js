@@ -10,13 +10,14 @@ const FechaReabCadastroContextProvider = ({ children }) => {
   const [somenteConsulta, setSomenteConsulta] = useState(false);
   const [desabilitarCampos, setDesabilitarCampos] = useState(false);
   const [exibirLoaderReabertura, setExibirLoaderReabertura] = useState(false);
-  const [listaTipoCalendarioEscolar, setListaTipoCalendarioEscolar] = useState(
-    []
-  );
+  const [carregandoCalendarios, setCarregandoCalendarios] = useState(false);
   const [listaUes, setListaUes] = useState([]);
   const [listaDres, setListaDres] = useState([]);
   const [calendarioSelecionado, setCalendarioSelecionado] = useState('');
   const [listaBimestres, setListaBimestres] = useState([]);
+  const [listaTipoCalendarioEscolar, setListaTipoCalendarioEscolar] = useState(
+    []
+  );
 
   const valoresIniciaisPadrao = {
     tipoCalendarioId: 0,
@@ -56,6 +57,8 @@ const FechaReabCadastroContextProvider = ({ children }) => {
         calendarioSelecionado,
         setListaBimestres,
         listaBimestres,
+        setCarregandoCalendarios,
+        carregandoCalendarios,
       }}
     >
       {children}
