@@ -9,12 +9,19 @@ const FechaReabCadastroContextProvider = ({ children }) => {
   const [executaResetarTela, setExecutaResetarTela] = useState(false);
   const [somenteConsulta, setSomenteConsulta] = useState(false);
   const [desabilitarCampos, setDesabilitarCampos] = useState(false);
-  const [exibirLoaderSalvar, setExibirLoaderSalvar] = useState(false);
+  const [exibirLoaderReabertura, setExibirLoaderReabertura] = useState(false);
+  const [listaTipoCalendarioEscolar, setListaTipoCalendarioEscolar] = useState(
+    []
+  );
+  const [listaUes, setListaUes] = useState([]);
+  const [listaDres, setListaDres] = useState([]);
+  const [calendarioSelecionado, setCalendarioSelecionado] = useState('');
+  const [listaBimestres, setListaBimestres] = useState([]);
 
   const valoresIniciaisPadrao = {
     tipoCalendarioId: 0,
-    dreId: undefined,
-    ueId: undefined,
+    dreCodigo: undefined,
+    ueCodigo: undefined,
     dataInicio: '',
     dataFim: '',
     descricao: '',
@@ -37,8 +44,18 @@ const FechaReabCadastroContextProvider = ({ children }) => {
         somenteConsulta,
         setDesabilitarCampos,
         desabilitarCampos,
-        setExibirLoaderSalvar,
-        exibirLoaderSalvar,
+        setExibirLoaderReabertura,
+        exibirLoaderReabertura,
+        setListaTipoCalendarioEscolar,
+        listaTipoCalendarioEscolar,
+        setListaUes,
+        listaUes,
+        setListaDres,
+        listaDres,
+        setCalendarioSelecionado,
+        calendarioSelecionado,
+        setListaBimestres,
+        listaBimestres,
       }}
     >
       {children}

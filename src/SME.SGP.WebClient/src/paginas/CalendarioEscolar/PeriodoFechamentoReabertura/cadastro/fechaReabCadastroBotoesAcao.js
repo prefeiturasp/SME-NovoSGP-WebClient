@@ -24,6 +24,8 @@ const FechaReabCadastroBotoesAcao = () => {
     desabilitarCampos,
     setDesabilitarCampos,
     setSomenteConsulta,
+    calendarioSelecionado,
+    setExibirLoaderReabertura,
   } = useContext(FechaReabCadastroContext);
 
   const usuarioStore = useSelector(store => store.usuario);
@@ -104,10 +106,12 @@ const FechaReabCadastroBotoesAcao = () => {
         'Cancelar'
       );
       if (confirmado) {
-        // TODO - LOADER!
+        setExibirLoaderReabertura(true);
         const resposta = await ServicoFechamentoReabertura.deletar([
           fechamentoReaberturaId,
-        ]).catch(e => erros(e));
+        ])
+          .catch(e => erros(e))
+          .finally(() => setExibirLoaderReabertura(false));
 
         if (resposta?.status === 200) {
           sucesso(resposta.data);
@@ -165,7 +169,7 @@ const FechaReabCadastroBotoesAcao = () => {
             border
             bold
             onClick={() => validaAntesDoSubmit()}
-            disabled={desabilitarCampos}
+            disabled={desabilitarCampos || !calendarioSelecionado?.id}
           />
         </Col>
       </Row>

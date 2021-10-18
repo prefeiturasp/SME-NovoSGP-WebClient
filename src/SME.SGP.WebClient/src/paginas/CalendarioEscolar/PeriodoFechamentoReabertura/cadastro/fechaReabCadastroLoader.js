@@ -5,10 +5,10 @@ import FechaReabCadastroContext from './fechaReabCadastroContext';
 
 const FechaReabCadastroLoader = props => {
   const { children } = props;
-  const { exibirLoaderSalvar } = useContext(FechaReabCadastroContext);
+  const { exibirLoaderReabertura } = useContext(FechaReabCadastroContext);
 
   return (
-    <Loader loading={exibirLoaderSalvar} ignorarTip>
+    <Loader loading={exibirLoaderReabertura} ignorarTip>
       {children}
     </Loader>
   );
