@@ -60,14 +60,19 @@ const SelectAutocomplete = ({
   valueField,
   disabled,
   form,
+  temErro,
+  mensagemErro,
 }) => {
   const [itensFiltrados, setItensFiltrados] = useState(lista);
 
   const possuiErro = () => {
-    return form && form.errors[name] && form.touched[name];
+    return temErro || (form && form.errors[name] && form.touched[name]);
   };
 
   const obterErros = () => {
+    if (temErro && mensagemErro) {
+      return <Erro style={{ marginTop: 2 }}>{mensagemErro}</Erro>;
+    }
     return form && form.touched[name] && form.errors[name] ? (
       <Erro>{form.errors[name]}</Erro>
     ) : (
@@ -75,7 +80,7 @@ const SelectAutocomplete = ({
     );
   };
 
-  const Erro = styled.span`
+  const Erro = styled.div`
     color: ${Base.Vermelho};
   `;
 
@@ -142,7 +147,7 @@ const SelectAutocomplete = ({
 
   const campoSemValidacoes = () => (
     <AutoComplete
-      className={className}
+      className={`${className} ${possuiErro() ? 'is-invalid' : ''}`}
       onSearch={onSearch}
       placeholder={placeholder}
       dataSource={showDataSource}
@@ -163,7 +168,7 @@ const SelectAutocomplete = ({
     <Container>
       {!hideLabel && <Label text={label} control={name} />}
       {form ? campoComValidacoes() : campoSemValidacoes()}
-      {form ? obterErros() : ''}
+      {obterErros()}
     </Container>
   );
 };
@@ -187,6 +192,8 @@ SelectAutocomplete.defaultProps = {
   value: '',
   valueField: '',
   disabled: false,
+  temErro: false,
+  mensagemErro: '',
 };
 
 SelectAutocomplete.propTypes = {
@@ -207,6 +214,8 @@ SelectAutocomplete.propTypes = {
   showList: PropTypes.bool,
   value: PropTypes.string,
   valueField: PropTypes.string,
+  temErro: PropTypes.bool,
+  mensagemErro: PropTypes.string,
 };
 
 export default SelectAutocomplete;
