@@ -132,9 +132,9 @@ const PeriodoFechamentoReaberturaLista = () => {
       };
 
       if (dreSelecionada) {
-        novoFiltro.dreCodigo = dreSelecionada === '0' ? '' : dreSelecionada;
+        novoFiltro.dreCodigo = dreSelecionada;
         if (ueSelecionada) {
-          novoFiltro.ueCodigo = ueSelecionada === '0' ? '' : ueSelecionada;
+          novoFiltro.ueCodigo = ueSelecionada;
         }
       } else {
         novoFiltro.ueCodigo = '';
@@ -361,7 +361,6 @@ const PeriodoFechamentoReaberturaLista = () => {
                         }
                       }}
                       desabilitado={false}
-                      opcaoTodas={!!usuario.possuiPerfilSme}
                     />
                   )}
                 </div>
@@ -375,7 +374,6 @@ const PeriodoFechamentoReaberturaLista = () => {
                       onChange={ueId => setUeSelecionada(ueId)}
                       desabilitado={false}
                       modalidade={modalidadeTurma}
-                      opcaoTodas={!!usuario.possuiPerfilSmeOuDre}
                     />
                   )}
                 </div>
