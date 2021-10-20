@@ -98,10 +98,7 @@ const ListaObjetivosPlanoAula = React.memo(props => {
   );
 
   const obterObjetivosPorAnoEComponenteCurricular = useCallback(() => {
-    if (
-      componenteCurricular &&
-      componenteCurricular.codigoComponenteCurricular
-    ) {
+    if (componenteCurricular?.codigoComponenteCurricular) {
       dispatch(setExibirLoaderFrequenciaPlanoAula(true));
       ServicoPlanoAula.obterListaObjetivosPorAnoEComponenteCurricular()
         .then(listaObjetivos => {
