@@ -160,6 +160,8 @@ class ServicoPlanoAula {
 
     let objetivos = [];
 
+    if (!dataSelecionada || !codigoComponenteCurricular) return objetivos;
+
     objetivos = await api.get(
       `v1/objetivos-aprendizagem/objetivos/turmas/${
         turmaSelecionada.id
@@ -168,7 +170,7 @@ class ServicoPlanoAula {
       )}&regencia=${false}`
     );
 
-    if (objetivos && objetivos.data && objetivos.data.length) {
+    if (objetivos?.data?.length) {
       dispatch(setListaObjetivosComponenteCurricular(objetivos.data));
       return objetivos.data;
     }
