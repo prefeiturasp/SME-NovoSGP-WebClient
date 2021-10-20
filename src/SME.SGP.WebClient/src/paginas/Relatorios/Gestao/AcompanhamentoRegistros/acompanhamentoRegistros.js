@@ -256,12 +256,19 @@ const AcompanhamentoRegistros = () => {
   };
 
   const obterSemestres = useCallback(
-    async (modalidadeSelecionada, anoLetivoSelecionado) => {
+    async (
+      modalidadeSelecionada,
+      anoLetivoSelecionado,
+      dreSelecionada,
+      ueSelecionada
+    ) => {
       setCarregandoSemestres(true);
       const retorno = await AbrangenciaServico.obterSemestres(
         consideraHistorico,
         anoLetivoSelecionado,
-        modalidadeSelecionada
+        modalidadeSelecionada,
+        dreSelecionada,
+        ueSelecionada
       )
         .catch(e => erros(e))
         .finally(() => setCarregandoSemestres(false));
@@ -286,12 +293,12 @@ const AcompanhamentoRegistros = () => {
       anoLetivo &&
       String(modalidadeId) === String(ModalidadeDTO.EJA)
     ) {
-      obterSemestres(modalidadeId, anoLetivo);
+      obterSemestres(modalidadeId, anoLetivo, dreId, ueId);
       return;
     }
     setSemestre();
     setListaSemestres([]);
-  }, [obterAnosLetivos, obterSemestres, modalidadeId, anoLetivo]);
+  }, [obterAnosLetivos, obterSemestres, modalidadeId, anoLetivo, dreId, ueId]);
 
   const onChangeTurma = valor => {
     setTurmasCodigo(valor);
