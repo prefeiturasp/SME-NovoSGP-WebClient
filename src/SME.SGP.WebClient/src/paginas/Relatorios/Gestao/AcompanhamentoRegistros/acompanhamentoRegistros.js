@@ -55,7 +55,7 @@ const AcompanhamentoRegistros = () => {
   const [ueId, setUeId] = useState();
   const [modalidadeId, setModalidadeId] = useState();
   const [semestre, setSemestre] = useState();
-  const [turmasId, setTurmasId] = useState();
+  const [turmasCodigo, setTurmasCodigo] = useState();
   const [componentesCurriculares, setComponentesCurriculares] = useState();
   const [bimestres, setBimestres] = useState();
   const [clicouBotaoGerar, setClicouBotaoGerar] = useState(false);
@@ -65,7 +65,7 @@ const AcompanhamentoRegistros = () => {
 
   const limparCampos = () => {
     setModalidadeId();
-    setTurmasId();
+    setTurmasCodigo();
     setComponentesCurriculares();
     setBimestres();
     setClicouBotaoGerar(false);
@@ -294,7 +294,7 @@ const AcompanhamentoRegistros = () => {
   }, [obterAnosLetivos, obterSemestres, modalidadeId, anoLetivo]);
 
   const onChangeTurma = valor => {
-    setTurmasId(valor);
+    setTurmasCodigo(valor);
     setComponentesCurriculares();
     setBimestres();
     setClicouBotaoGerar(false);
@@ -328,7 +328,7 @@ const AcompanhamentoRegistros = () => {
           );
           setListaTurmas(lista);
           if (lista.length === 1) {
-            setTurmasId([lista[0].valor]);
+            setTurmasCodigo([lista[0].valor]);
           }
         }
       }
@@ -341,7 +341,7 @@ const AcompanhamentoRegistros = () => {
       obterTurmas(modalidadeId, ueId, anoLetivo);
       return;
     }
-    setTurmasId();
+    setTurmasCodigo();
     setListaTurmas([]);
   }, [modalidadeId, ueId, anoLetivo, obterTurmas]);
 
@@ -395,10 +395,10 @@ const AcompanhamentoRegistros = () => {
   );
 
   useEffect(() => {
-    if (ueId && turmasId && listaTurmas) {
-      obterComponentesCurriculares(ueId, turmasId, listaTurmas);
+    if (ueId && turmasCodigo && listaTurmas) {
+      obterComponentesCurriculares(ueId, turmasCodigo, listaTurmas);
     }
-  }, [ueId, turmasId, listaTurmas, obterComponentesCurriculares]);
+  }, [ueId, turmasCodigo, listaTurmas, obterComponentesCurriculares]);
 
   const onChangeBimestre = valor => {
     setBimestres(valor);
@@ -451,7 +451,7 @@ const AcompanhamentoRegistros = () => {
     setModalidadeId();
     setComponentesCurriculares(undefined);
 
-    setTurmasId(undefined);
+    setTurmasCodigo(undefined);
     setBimestres();
     setUsuarioRf();
   };
@@ -466,9 +466,9 @@ const AcompanhamentoRegistros = () => {
       !ueId ||
       !modalidadeId ||
       consideraSemestre ||
-      !turmasId?.length ||
-      !componentesCurriculares ||
-      !bimestres ||
+      !turmasCodigo?.length ||
+      !componentesCurriculares?.length ||
+      !bimestres?.length ||
       clicouBotaoGerar;
 
     setDesabilitarBtnGerar(desabilitar);
@@ -477,7 +477,7 @@ const AcompanhamentoRegistros = () => {
     dreId,
     ueId,
     modalidadeId,
-    turmasId,
+    turmasCodigo,
     semestre,
     componentesCurriculares,
     bimestres,
@@ -495,7 +495,7 @@ const AcompanhamentoRegistros = () => {
       dreCodigo: dreId,
       ueCodigo: ueId,
       modalidade: modalidadeId,
-      turmasId,
+      turmasCodigo,
       bimestres,
       componentesCurriculares,
       semestre,
@@ -668,9 +668,9 @@ const AcompanhamentoRegistros = () => {
                     !modalidadeId || (listaTurmas && listaTurmas.length === 1)
                   }
                   multiple
-                  valueSelect={turmasId}
+                  valueSelect={turmasCodigo}
                   onChange={valores => {
-                    onchangeMultiSelect(valores, turmasId, onChangeTurma);
+                    onchangeMultiSelect(valores, turmasCodigo, onChangeTurma);
                   }}
                   placeholder="Turma"
                   showSearch
@@ -689,7 +689,7 @@ const AcompanhamentoRegistros = () => {
                   label="Componente curricular"
                   disabled={
                     !modalidadeId ||
-                    !turmasId?.length ||
+                    !turmasCodigo?.length ||
                     listaComponentesCurriculares?.length === 1
                   }
                   valueSelect={componentesCurriculares}
@@ -715,7 +715,7 @@ const AcompanhamentoRegistros = () => {
                   label="Bimestre"
                   disabled={
                     !modalidadeId ||
-                    !turmasId?.length ||
+                    !turmasCodigo?.length ||
                     !componentesCurriculares?.length
                   }
                   valueSelect={bimestres}
