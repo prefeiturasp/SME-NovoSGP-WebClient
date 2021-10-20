@@ -55,7 +55,7 @@ const AcompanhamentoRegistros = () => {
   const [ueId, setUeId] = useState();
   const [modalidadeId, setModalidadeId] = useState();
   const [semestre, setSemestre] = useState();
-  const [turmaId, setTurmaId] = useState();
+  const [turmasId, setTurmasId] = useState();
   const [componentesCurriculares, setComponentesCurriculares] = useState();
   const [bimestres, setBimestres] = useState();
   const [clicouBotaoGerar, setClicouBotaoGerar] = useState(false);
@@ -65,7 +65,7 @@ const AcompanhamentoRegistros = () => {
 
   const limparCampos = () => {
     setModalidadeId();
-    setTurmaId();
+    setTurmasId();
     setComponentesCurriculares();
     setBimestres();
     setClicouBotaoGerar(false);
@@ -294,7 +294,7 @@ const AcompanhamentoRegistros = () => {
   }, [obterAnosLetivos, obterSemestres, modalidadeId, anoLetivo]);
 
   const onChangeTurma = valor => {
-    setTurmaId(valor);
+    setTurmasId(valor);
     setComponentesCurriculares();
     setBimestres();
     setClicouBotaoGerar(false);
@@ -328,7 +328,7 @@ const AcompanhamentoRegistros = () => {
           );
           setListaTurmas(lista);
           if (lista.length === 1) {
-            setTurmaId([lista[0].valor]);
+            setTurmasId([lista[0].valor]);
           }
         }
       }
@@ -341,7 +341,7 @@ const AcompanhamentoRegistros = () => {
       obterTurmas(modalidadeId, ueId, anoLetivo);
       return;
     }
-    setTurmaId();
+    setTurmasId();
     setListaTurmas([]);
   }, [modalidadeId, ueId, anoLetivo, obterTurmas]);
 
@@ -395,10 +395,10 @@ const AcompanhamentoRegistros = () => {
   );
 
   useEffect(() => {
-    if (ueId && turmaId && listaTurmas) {
-      obterComponentesCurriculares(ueId, turmaId, listaTurmas);
+    if (ueId && turmasId && listaTurmas) {
+      obterComponentesCurriculares(ueId, turmasId, listaTurmas);
     }
-  }, [ueId, turmaId, listaTurmas, obterComponentesCurriculares]);
+  }, [ueId, turmasId, listaTurmas, obterComponentesCurriculares]);
 
   const onChangeBimestre = valor => {
     setBimestres(valor);
@@ -451,7 +451,7 @@ const AcompanhamentoRegistros = () => {
     setModalidadeId();
     setComponentesCurriculares(undefined);
 
-    setTurmaId(undefined);
+    setTurmasId(undefined);
     setBimestres();
     setUsuarioRf();
   };
@@ -466,7 +466,7 @@ const AcompanhamentoRegistros = () => {
       !ueId ||
       !modalidadeId ||
       consideraSemestre ||
-      !turmaId?.length ||
+      !turmasId?.length ||
       !componentesCurriculares ||
       !bimestres ||
       clicouBotaoGerar;
@@ -477,7 +477,7 @@ const AcompanhamentoRegistros = () => {
     dreId,
     ueId,
     modalidadeId,
-    turmaId,
+    turmasId,
     semestre,
     componentesCurriculares,
     bimestres,
@@ -495,7 +495,7 @@ const AcompanhamentoRegistros = () => {
       dreCodigo: dreId,
       ueCodigo: ueId,
       modalidade: modalidadeId,
-      turmaId,
+      turmasId,
       bimestres,
       componentesCurriculares,
       semestre,
@@ -668,9 +668,9 @@ const AcompanhamentoRegistros = () => {
                     !modalidadeId || (listaTurmas && listaTurmas.length === 1)
                   }
                   multiple
-                  valueSelect={turmaId}
+                  valueSelect={turmasId}
                   onChange={valores => {
-                    onchangeMultiSelect(valores, turmaId, onChangeTurma);
+                    onchangeMultiSelect(valores, turmasId, onChangeTurma);
                   }}
                   placeholder="Turma"
                   showSearch
@@ -689,7 +689,7 @@ const AcompanhamentoRegistros = () => {
                   label="Componente curricular"
                   disabled={
                     !modalidadeId ||
-                    !turmaId?.length ||
+                    !turmasId?.length ||
                     listaComponentesCurriculares?.length === 1
                   }
                   valueSelect={componentesCurriculares}
@@ -715,7 +715,7 @@ const AcompanhamentoRegistros = () => {
                   label="Bimestre"
                   disabled={
                     !modalidadeId ||
-                    !turmaId?.length ||
+                    !turmasId?.length ||
                     !componentesCurriculares?.length
                   }
                   valueSelect={bimestres}
