@@ -49,7 +49,7 @@ const AcompanhamentoRegistros = () => {
     setListaComponentesCurriculares,
   ] = useState([]);
   const [listaBimestres, setListaBimestres] = useState([]);
-  const [usuarioRf, setUsuarioRf] = useState();
+  const [professorCodigo, setProfessorCodigo] = useState();
   const [anoLetivo, setAnoLetivo] = useState();
   const [dreId, setDreId] = useState();
   const [ueId, setUeId] = useState();
@@ -76,7 +76,7 @@ const AcompanhamentoRegistros = () => {
     setAnoLetivo(anoAtual);
     setDreId();
     setUeId();
-    setUsuarioRf();
+    setProfessorCodigo();
   };
 
   const onChangeAnoLetivo = async valor => {
@@ -433,7 +433,7 @@ const AcompanhamentoRegistros = () => {
   }, [modalidadeId, obterBimestres]);
 
   const onChangeLocalizador = valores => {
-    setUsuarioRf(valores?.professorRf);
+    setProfessorCodigo(valores?.professorRf);
     setClicouBotaoGerar(false);
   };
 
@@ -453,7 +453,7 @@ const AcompanhamentoRegistros = () => {
 
     setTurmasCodigo(undefined);
     setBimestres();
-    setUsuarioRf();
+    setProfessorCodigo();
   };
 
   useEffect(() => {
@@ -481,7 +481,7 @@ const AcompanhamentoRegistros = () => {
     semestre,
     componentesCurriculares,
     bimestres,
-    usuarioRf,
+    professorCodigo,
     clicouBotaoGerar,
   ]);
 
@@ -499,7 +499,7 @@ const AcompanhamentoRegistros = () => {
       bimestres,
       componentesCurriculares,
       semestre,
-      usuarioRf,
+      professorCodigo,
     };
 
     await ServicoAcompanhamentoRegistros.gerar(params)
@@ -733,7 +733,7 @@ const AcompanhamentoRegistros = () => {
               classesRF="px-0"
               dreId={dreId}
               ueId={ueId}
-              rfEdicao={usuarioRf}
+              rfEdicao={professorCodigo}
               anoLetivo={anoLetivo}
               showLabel
               onChange={onChangeLocalizador}
