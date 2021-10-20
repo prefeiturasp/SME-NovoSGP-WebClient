@@ -109,6 +109,7 @@ const DiaCompleto = props => {
           loading={carregandoDia}
           tip="Carregando eventos..."
           className={carregandoDia ? 'text-center' : ''}
+          style={{ width: 'inherit' }}
         >
           {eventosDia && eventosDia.length > 0 ? (
             <>

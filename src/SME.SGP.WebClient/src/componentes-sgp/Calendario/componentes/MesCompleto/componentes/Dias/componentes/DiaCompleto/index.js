@@ -123,7 +123,11 @@ function DiaCompleto({
   return (
     <DiaCompletoWrapper className={`${deveExibir && `visivel`}`}>
       {deveExibir && (
-        <Loader loading={carregandoDia} tip="Carregando...">
+        <Loader
+          loading={carregandoDia}
+          tip="Carregando..."
+          style={{ width: 'inherit' }}
+        >
           <AlertaDentroPeriodo
             exibir={!!dadosDia?.dados?.mensagemPeriodoEncerrado}
           />
