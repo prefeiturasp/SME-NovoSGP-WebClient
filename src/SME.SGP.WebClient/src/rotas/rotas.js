@@ -1448,7 +1448,7 @@ rotas.set(RotasDto.ATA_BIMESTRAL, {
 
 rotas.set(RotasDto.RELATORIO_ACOMPANHAMENTO_REGISTROS, {
   breadcrumbName: 'Acompanhamento dos registros',
-  menu: ['Gestão'],
+  menu: ['Relatórios', 'Gestão'],
   parent: '/',
   component: RelatorioAcompanhamentoRegistros,
   exact: true,
