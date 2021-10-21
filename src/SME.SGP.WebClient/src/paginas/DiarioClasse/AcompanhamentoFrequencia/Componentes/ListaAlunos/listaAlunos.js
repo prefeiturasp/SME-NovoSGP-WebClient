@@ -9,6 +9,7 @@ import ModalAnotacoes from '~/componentes-sgp/ListaFrequenciaPorBimestre/modalAn
 import NomeEstudanteLista from '~/componentes-sgp/NomeEstudanteLista/nomeEstudanteLista';
 import Ordenacao from '~/componentes-sgp/Ordenacao/ordenacao';
 import { Base, Colors } from '~/componentes/colors';
+import { BIMESTRE_FINAL } from '~/constantes';
 import {
   setExibirModalImpressao,
   setExpandirLinhaFrequenciaAluno,
@@ -101,15 +102,16 @@ const ListaAlunos = props => {
                     onChangeOrdenacao(retorno);
                   }}
                 />
-                <BotaoCustomizado
-                  icon="print"
-                  className="ml-2"
-                  color={Colors.Azul}
-                  border
-                  onClick={() => dispatch(setExibirModalImpressao(true))}
-                  // disabled={desabilitarImprimir}
-                  id="btn-imprimir-frequencia"
-                />
+                {String(bimestreSelecionado) !== BIMESTRE_FINAL && (
+                  <BotaoCustomizado
+                    icon="print"
+                    className="ml-2"
+                    color={Colors.Azul}
+                    border
+                    onClick={() => dispatch(setExibirModalImpressao(true))}
+                    id="btn-imprimir-frequencia"
+                  />
+                )}
               </div>
 
               <Marcadores className="col-md-6 col-sm-12 d-flex justify-content-end">
@@ -144,17 +146,17 @@ const ListaAlunos = props => {
                       <th className="col-linha-quatro" colSpan="2">
                         Nome
                       </th>
-                      <th className="col-linha-dois">Ausências no Bimestre</th>
+                      <th className="col-linha-dois">Ausências</th>
                       {!ehTurmaInfantil(
                         modalidadesFiltroPrincipal,
                         turmaSelecionada
                       ) ? (
-                        <th className="col-linha-dois">
-                          Compensações de ausência
-                        </th>
+                        <th className="col-linha-dois">Compensações</th>
                       ) : (
                         <></>
                       )}
+                      <th className="col-linha-dois">Presenças</th>
+                      <th className="col-linha-dois">Remoto</th>
                       <th className="col-linha-dois">Frequência</th>
                     </tr>
                   </thead>
@@ -234,6 +236,26 @@ const ListaAlunos = props => {
                             ) : (
                               <></>
                             )}
+                            <td
+                              className="col-valor-linha-dois"
+                              style={{
+                                borderRight: data?.marcadorFrequencia
+                                  ? `solid 1px ${Base.CinzaBotao}`
+                                  : `solid 1px ${Base.CinzaDesabilitado}`,
+                              }}
+                            >
+                              {data.presencas}
+                            </td>
+                            <td
+                              className="col-valor-linha-dois"
+                              style={{
+                                borderRight: data?.marcadorFrequencia
+                                  ? `solid 1px ${Base.CinzaBotao}`
+                                  : `solid 1px ${Base.CinzaDesabilitado}`,
+                              }}
+                            >
+                              {data.remotos}
+                            </td>
                             <td className="col-valor-linha-dois">
                               {data?.frequencia ? `${data.frequencia}%` : ''}
                               {data.ausencias > 0 &&

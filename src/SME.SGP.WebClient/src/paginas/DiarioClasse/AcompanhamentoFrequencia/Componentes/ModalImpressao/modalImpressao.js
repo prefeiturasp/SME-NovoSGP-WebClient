@@ -1,9 +1,15 @@
 import React, { useState } from 'react';
+import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { Button, Colors, DataTable, ModalConteudoHtml } from '~/componentes';
+import {
+  Button,
+  CheckboxComponent,
+  Colors,
+  DataTable,
+  ModalConteudoHtml,
+} from '~/componentes';
 
-import { confirmar, erro } from '~/servicos';
 import { setExibirModalImpressao } from '~/redux/modulos/acompanhamentoFrequencia/actions';
 
 import {
@@ -13,13 +19,13 @@ import {
 } from './modalImpressao.css';
 
 const ModalImpressao = ({ dadosAlunos }) => {
-  const [modoEdicao, setModoEdicao] = useState(false);
   const [incluirCriancaImpressao, setIncluirCriancaImpressao] = useState(1);
   const [alunosSelecionados, setAlunosSelecionados] = useState([]);
+  const [imprimirTodosBimestres, setImprimirTodosBimestres] = useState(false);
 
   const opcaoExibirPendenciasResolvidas = [
-    { value: 1, label: 'Todas as crianças' },
-    { value: 2, label: 'Crianças selecionadas' },
+    { value: 1, label: 'Todas as crianças/estudantes' },
+    { value: 2, label: 'Crianças/estudantes selecionadas' },
   ];
 
   const columns = [
@@ -29,28 +35,22 @@ const ModalImpressao = ({ dadosAlunos }) => {
       width: 50,
     },
     {
-      title: 'Criança/estudante',
+      title: 'Crianças/estudantes',
       dataIndex: 'nome',
       render: (nome, aluno) => `${nome} (${aluno.alunoRf})`,
     },
   ];
 
-  console.log('dados', dadosAlunos);
-
   const exibirModalImpressao = useSelector(
     store => store.acompanhamentoFrequencia.exibirModalImpressao
   );
+  const bimestreSelecionado = useSelector(
+    store => store.acompanhamentoFrequencia.bimestreSelecionado
+  );
+
   const dispatch = useDispatch();
 
   const esconderModal = () => dispatch(setExibirModalImpressao(false));
-
-  const perguntarSalvarListaUsuario = async () => {
-    const resposta = await confirmar(
-      'Atenção',
-      'Suas alterações não foram salvas, deseja salvar agora?'
-    );
-    return resposta;
-  };
 
   const onConfirmarModal = () => {
     esconderModal();
@@ -58,12 +58,6 @@ const ModalImpressao = ({ dadosAlunos }) => {
 
   const fecharModal = async () => {
     esconderModal();
-    if (modoEdicao) {
-      const ehPraSalvar = await perguntarSalvarListaUsuario();
-      if (ehPraSalvar) {
-        onConfirmarModal();
-      }
-    }
   };
 
   const botoesRodape = () => (
@@ -81,9 +75,9 @@ const ModalImpressao = ({ dadosAlunos }) => {
           }}
         />
         <Button
-          id="btn-confirmar"
-          key="btn-confirmar"
-          label="Gerar relatório"
+          id="btn-gerar"
+          key="btn-gerar"
+          label="Gerar"
           color={Colors.Azul}
           bold
           border
@@ -96,7 +90,7 @@ const ModalImpressao = ({ dadosAlunos }) => {
 
   return (
     <ModalConteudoHtml
-      titulo="Impressão do relatório de frequência com justificativa"
+      titulo={`Impressão do relatório de frequência - ${bimestreSelecionado}º Bimestre`}
       visivel={exibirModalImpressao}
       onClose={fecharModal}
       onConfirmacaoPrincipal={onConfirmarModal}
@@ -109,6 +103,14 @@ const ModalImpressao = ({ dadosAlunos }) => {
       fontSizeTitulo="18"
       tipoFonte="bold"
     >
+      <CheckboxComponent
+        id="imprimir-bimestres"
+        label="Imprimir todos os bimestres"
+        className="pb-3"
+        onChangeCheckbox={e => setImprimirTodosBimestres(e.target.checked)}
+        checked={imprimirTodosBimestres}
+      />
+
       <RadioGroupButtonCustomizado
         label="Quais crianças deseja incluir na impressão do relatório?"
         opcoes={opcaoExibirPendenciasResolvidas}
@@ -129,13 +131,21 @@ const ModalImpressao = ({ dadosAlunos }) => {
             columns={columns}
             dataSource={dadosAlunos}
             selectMultipleRows
-            scroll={{ y: 250 }}
+            scroll={{ y: 225 }}
             pagination={false}
           />
         </div>
       )}
     </ModalConteudoHtml>
   );
+};
+
+ModalImpressao.propTypes = {
+  dadosAlunos: PropTypes.oneOfType([PropTypes.array]),
+};
+
+ModalImpressao.defaultProps = {
+  dadosAlunos: [],
 };
 
 export default ModalImpressao;
