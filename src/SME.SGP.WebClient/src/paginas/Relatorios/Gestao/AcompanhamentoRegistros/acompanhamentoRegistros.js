@@ -308,13 +308,13 @@ const AcompanhamentoRegistros = () => {
   };
 
   const obterTurmas = useCallback(
-    async (modalidadeSelecionada, ue, ano) => {
+    async (modalidadeSelecionada, ue, ano, semestreSelecionado) => {
       if (ue && modalidadeSelecionada) {
         setCarregandoTurmas(true);
         const { data } = await AbrangenciaServico.buscarTurmas(
           ue,
           modalidadeSelecionada,
-          '',
+          semestreSelecionado,
           ano,
           consideraHistorico
         )
@@ -345,41 +345,48 @@ const AcompanhamentoRegistros = () => {
 
   useEffect(() => {
     if (modalidadeId && ueId) {
-      obterTurmas(modalidadeId, ueId, anoLetivo);
+      obterTurmas(modalidadeId, ueId, anoLetivo, semestre);
       return;
     }
     setTurmasCodigo();
     setListaTurmas([]);
-  }, [modalidadeId, ueId, anoLetivo, obterTurmas]);
+  }, [modalidadeId, ueId, anoLetivo, semestre, obterTurmas]);
 
   const onChangeComponenteCurricular = valor => {
     setComponentesCurriculares(valor);
-    setBimestres();
     setClicouBotaoGerar(false);
   };
 
   const obterComponentesCurriculares = useCallback(
-    async (ueCodigo, idsTurma, lista) => {
-      if (idsTurma?.length > 0) {
+    async (codigosTurma, lista) => {
+      if (codigosTurma?.length > 0) {
+        let dadosComponentesCurriculares = [
+          {
+            codigo: OPCAO_TODOS,
+            nome: 'Todos',
+          },
+        ];
+
+        const ehTurmaTodas = codigosTurma.find(
+          codigo => codigo === OPCAO_TODOS
+        );
+        if (ehTurmaTodas) {
+          setListaComponentesCurriculares(dadosComponentesCurriculares);
+          setComponentesCurriculares(OPCAO_TODOS);
+          return;
+        }
+
         setCarregandoComponentesCurriculares(true);
         const turmas = [].concat(
-          idsTurma[0] === '0'
+          codigosTurma[0] === '0'
             ? lista.map(a => a.valor).filter(a => a !== '0')
-            : idsTurma
+            : codigosTurma
         );
-        const disciplinas = await ServicoComponentesCurriculares.obterComponentesPorUeTurmas(
-          ueCodigo,
+        const disciplinas = await ServicoComponentesCurriculares.obterComponentesPorListaDeTurmas(
           turmas
         )
           .catch(e => erros(e))
           .finally(() => setCarregandoComponentesCurriculares(false));
-
-        let dadosComponentesCurriculares = [
-          {
-            codigo: OPCAO_TODOS,
-            descricao: 'Todos',
-          },
-        ];
 
         if (disciplinas?.data?.length) {
           if (disciplinas.data.length > 1) {
@@ -391,6 +398,11 @@ const AcompanhamentoRegistros = () => {
           }
 
           setListaComponentesCurriculares(disciplinas.data);
+
+          if (disciplinas.data.length === 1) {
+            setComponentesCurriculares(String(disciplinas.data[0].codigo));
+          }
+
           return;
         }
       }
@@ -403,7 +415,7 @@ const AcompanhamentoRegistros = () => {
 
   useEffect(() => {
     if (ueId && turmasCodigo && listaTurmas) {
-      obterComponentesCurriculares(ueId, turmasCodigo, listaTurmas);
+      obterComponentesCurriculares(turmasCodigo, listaTurmas);
     }
   }, [ueId, turmasCodigo, listaTurmas, obterComponentesCurriculares]);
 
@@ -692,7 +704,7 @@ const AcompanhamentoRegistros = () => {
                   id="drop-componente-curricular-rel-pendencias"
                   lista={listaComponentesCurriculares}
                   valueOption="codigo"
-                  valueText="descricao"
+                  valueText="nome"
                   label="Componente curricular"
                   disabled={
                     !modalidadeId ||
@@ -720,11 +732,7 @@ const AcompanhamentoRegistros = () => {
                   valueOption="valor"
                   valueText="desc"
                   label="Bimestre"
-                  disabled={
-                    !modalidadeId ||
-                    !turmasCodigo?.length ||
-                    !componentesCurriculares?.length
-                  }
+                  disabled={!modalidadeId || !turmasCodigo?.length}
                   valueSelect={bimestres}
                   onChange={valores => {
                     onchangeMultiSelect(valores, bimestres, onChangeBimestre);
@@ -735,19 +743,21 @@ const AcompanhamentoRegistros = () => {
               </Loader>
             </Col>
           </Row>
-          <Row gutter={[16, 16]} type="flex" style={{ padding: '8px 8px 5px' }}>
-            <Localizador
-              classesRF="px-0"
-              dreId={dreId}
-              ueId={ueId}
-              rfEdicao={professorCodigo}
-              anoLetivo={anoLetivo}
-              showLabel
-              onChange={onChangeLocalizador}
-              buscarCaracterPartir={5}
-              desabilitado={!ueId}
-              buscarPorAbrangencia
-            />
+          <Row gutter={[16, 16]} style={{ padding: '8px 8px 5px' }}>
+            <Row type="flex">
+              <Localizador
+                classesRF="px-0"
+                dreId={dreId}
+                ueId={ueId}
+                rfEdicao={professorCodigo}
+                anoLetivo={anoLetivo}
+                showLabel
+                onChange={onChangeLocalizador}
+                buscarCaracterPartir={5}
+                desabilitado={!ueId}
+                buscarPorAbrangencia
+              />
+            </Row>
           </Row>
         </Col>
       </Card>
