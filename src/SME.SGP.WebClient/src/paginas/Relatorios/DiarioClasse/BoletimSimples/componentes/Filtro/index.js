@@ -61,6 +61,7 @@ const Filtros = ({ onFiltrar, filtrou, setFiltrou, cancelou, setCancelou }) => {
 
   useEffect(() => {
     const params = {
+      consideraHistorico,
       anoLetivo,
       dreCodigo,
       ueCodigo,
@@ -75,6 +76,7 @@ const Filtros = ({ onFiltrar, filtrou, setFiltrou, cancelou, setCancelou }) => {
       onFiltrar(params);
     }
   }, [
+    consideraHistorico,
     anoLetivo,
     dreCodigo,
     ueCodigo,
@@ -89,6 +91,7 @@ const Filtros = ({ onFiltrar, filtrou, setFiltrou, cancelou, setCancelou }) => {
 
   useEffect(() => {
     const params = {
+      consideraHistorico,
       anoLetivo,
       dreCodigo,
       ueCodigo,
