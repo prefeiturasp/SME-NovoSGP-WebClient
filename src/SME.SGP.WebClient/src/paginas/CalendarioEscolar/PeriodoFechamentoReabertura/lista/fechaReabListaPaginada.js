@@ -4,7 +4,7 @@ import React, { useCallback, useContext, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { Base, ListaPaginada } from '~/componentes';
 import { OPCAO_TODOS } from '~/constantes';
-import { RotasDto } from '~/dtos';
+import { modalidadeTipoCalendario, RotasDto } from '~/dtos';
 import { history } from '~/servicos';
 import FechaReabListaContext from './fechaReabListaContext';
 
@@ -26,6 +26,7 @@ const FechaReabListaPaginada = () => {
 
   const [filtros, setFiltros] = useState({});
   const [filtroEhValido, setFiltroEhValido] = useState(false);
+  const [colunasBimestre, setColunasBimestre] = useState();
 
   useEffect(() => {
     if (filtros?.tipoCalendarioId) {
@@ -86,10 +87,10 @@ const FechaReabListaPaginada = () => {
       width: '15%',
       render: data => formatarCampoData(data),
     },
-    // {
-    //   title: 'Bimestres',
-    //   children: colunasBimestre,
-    // },
+    {
+      title: 'Bimestres',
+      children: colunasBimestre,
+    },
   ];
 
   const onClickEditar = item => {
@@ -99,6 +100,75 @@ const FechaReabListaPaginada = () => {
   const onSelecionarItems = ids => {
     setIdsReaberturasSelecionadas(ids);
   };
+
+  const criarCampoBimestre = (index, data) => {
+    const bimestre = data[index];
+    return bimestre ? (
+      <CampoBimestre>
+        <i className="fas fa-check" />
+      </CampoBimestre>
+    ) : (
+      <></>
+    );
+  };
+
+  const getColunasBimestreAnual = () => {
+    return [
+      {
+        title: '1',
+        dataIndex: 'bimestres',
+        key: '1',
+        render: data => criarCampoBimestre(0, data),
+      },
+      {
+        title: '2',
+        dataIndex: 'bimestres',
+        key: '2',
+        render: data => criarCampoBimestre(1, data),
+      },
+      {
+        title: '3',
+        dataIndex: 'bimestres',
+        key: '3',
+        render: data => criarCampoBimestre(2, data),
+      },
+      {
+        title: '4',
+        dataIndex: 'bimestres',
+        key: '4',
+        render: data => criarCampoBimestre(3, data),
+      },
+    ];
+  };
+
+  const getColunasBimestreSemestral = () => {
+    return [
+      {
+        title: '1',
+        dataIndex: 'bimestres',
+        key: '1',
+        render: data => criarCampoBimestre(0, data),
+      },
+      {
+        title: '2',
+        dataIndex: 'bimestres',
+        key: '2',
+        render: data => criarCampoBimestre(1, data),
+      },
+    ];
+  };
+
+  useEffect(() => {
+    if (calendarioSelecionado?.modalidade) {
+      const colBim =
+        calendarioSelecionado?.modalidade === modalidadeTipoCalendario.EJA
+          ? getColunasBimestreSemestral()
+          : getColunasBimestreAnual();
+      setColunasBimestre([...colBim]);
+    }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [calendarioSelecionado]);
 
   return (
     <Col span={24} style={{ marginTop: '20px' }}>
