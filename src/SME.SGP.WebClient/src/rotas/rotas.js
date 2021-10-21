@@ -39,7 +39,7 @@ import FechamentoBismestre from '~/paginas/Fechamento/FechamentoBimestre/fechame
 import PeriodoFechamentoAbertura from '~/paginas/CalendarioEscolar/PeriodoFechamentoAbertura/periodo-fechamento-abertura';
 import ResumosGraficosPAP from '~/paginas/Relatorios/PAP/ResumosGraficos';
 import PaginaComErro from '~/paginas/Erro/pagina-com-erro';
-import PeriodoFechamentoReaberturaLista from '~/paginas/CalendarioEscolar/PeriodoFechamentoReabertura/periodoFechamentoReaberturaLista';
+import FechaReabLista from '~/paginas/CalendarioEscolar/PeriodoFechamentoReabertura/lista/fechaReabLista';
 import FechaReabCadastro from '~/paginas/CalendarioEscolar/PeriodoFechamentoReabertura/cadastro/fechaReabCadastro';
 import RelatorioPAPAcompanhamento from '~/paginas/Relatorios/PAP/Acompanhamento';
 import PendenciasFechamentoLista from '~/paginas/Fechamento/PendenciasFechamento/pendenciasFechamentoLista';
@@ -754,7 +754,7 @@ rotas.set(`${RotasDto.PERIODO_FECHAMENTO_REABERTURA}`, {
   breadcrumbName: 'Reabertura',
   menu: ['Calendário Escolar', 'Período de Fechamento'],
   parent: '/',
-  component: PeriodoFechamentoReaberturaLista,
+  component: FechaReabLista,
   exact: true,
   tipo: RotasTipo.EstruturadaAutenticada,
   temPermissionamento: true,

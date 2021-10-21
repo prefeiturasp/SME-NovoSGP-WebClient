@@ -4,6 +4,7 @@ import * as moment from 'moment';
 import React, { useCallback, useContext, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useLocation, useParams } from 'react-router-dom';
+import styled from 'styled-components';
 import * as Yup from 'yup';
 import { CampoData, momentSchema } from '~/componentes';
 import Auditoria from '~/componentes/auditoria';
@@ -14,12 +15,21 @@ import { ServicoCalendarios, setBreadcrumbManual } from '~/servicos';
 import { erros, sucesso } from '~/servicos/alertas';
 import history from '~/servicos/history';
 import ServicoFechamentoReabertura from '~/servicos/Paginas/Calendario/ServicoFechamentoReabertura';
-import { ContainerDataHoraUsuarioAprovador } from '../periodoFechamentoReaberuraLista.css';
 import BimestreReabertura from './campos/bimestreReabertura';
 import DreReabertura from './campos/dreReabertura';
 import TipoCalendarioReabertura from './campos/tipoCalendarioReabertura';
 import UeReabertura from './campos/ueReabertura';
 import FechaReabCadastroContext from './fechaReabCadastroContext';
+
+export const ContainerDataHoraUsuarioAprovador = styled.div`
+  object-fit: contain;
+  font-family: Roboto;
+  font-size: 9px;
+  font-weight: bold;
+  color: #42474a;
+  width: 100%;
+  margin-top: 5rem !important;
+`;
 
 const FechaReabCadastroForm = () => {
   const {
