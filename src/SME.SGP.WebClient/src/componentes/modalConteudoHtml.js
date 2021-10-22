@@ -29,6 +29,8 @@ const Container = styled(Modal)`
     color: #42474a;
     font-size: 25px;
     padding-bottom: 7px;
+    font-size: ${({ fontSizeTitulo }) => fontSizeTitulo}px !important;
+    font-weight: ${({ tipoFonte }) => tipoFonte};
   }
   .ant-modal-close-x {
     font-style: normal;
@@ -80,6 +82,8 @@ const ModalConteudoHtml = props => {
     paddingRight,
     colorBotaoSecundario,
     botoesRodape,
+    fontSizeTitulo,
+    tipoFonte,
   } = props;
   return (
     <Container
@@ -94,6 +98,8 @@ const ModalConteudoHtml = props => {
       width={width}
       paddingBottom={paddingBottom}
       paddingRight={paddingRight}
+      fontSizeTitulo={fontSizeTitulo}
+      tipoFonte={tipoFonte}
       footer={
         botoesRodape ||
         (tituloAtencao || perguntaAtencao ? (
@@ -180,6 +186,8 @@ ModalConteudoHtml.propTypes = {
   paddingRight: PropTypes.string,
   colorBotaoSecundario: PropTypes.string,
   botoesRodape: PropTypes.node,
+  fontSizeTitulo: PropTypes.string,
+  tipoFonte: PropTypes.string,
 };
 
 ModalConteudoHtml.defaultProps = {
@@ -194,6 +202,8 @@ ModalConteudoHtml.defaultProps = {
   paddingRight: '20',
   colorBotaoSecundario: 'Roxo',
   botoesRodape: null,
+  fontSizeTitulo: '24',
+  tipoFonte: '',
 };
 
 export default ModalConteudoHtml;
