@@ -28,6 +28,7 @@ import AlertaModalidadeInfantil from '~/componentes-sgp/AlertaModalidadeInfantil
 import { ehTurmaInfantil } from '~/servicos/Validacoes/validacoesInfatil';
 import { BotaoImprimir } from './pendenciasFechamentoLista.css';
 import ServicoRelatorioPendencias from '~/servicos/Paginas/Relatorios/Pendencias/ServicoRelatorioPendencias';
+import ServicoPeriodoEscolar from '~/servicos/Paginas/Calendario/ServicoPeriodoEscolar';
 
 const PendenciasFechamentoLista = ({ match }) => {
   const usuario = useSelector(store => store.usuario);
@@ -52,6 +53,7 @@ const PendenciasFechamentoLista = ({ match }) => {
   );
   const [filtrouValoresRota, setFiltrouValoresRota] = useState(false);
   const [imprimindo, setImprimido] = useState(false);
+  const [bimestresAbertoFechado, setBimestresAbertoFechado] = useState([]);
 
   useEffect(() => {
     const naoSetarSomenteConsultaNoStore = ehTurmaInfantil(
@@ -166,6 +168,17 @@ const PendenciasFechamentoLista = ({ match }) => {
       }
     };
 
+    const obterBimestresAbertoFechado = async () => {
+      const retorno = await ServicoPeriodoEscolar.obterPeriodosAbertos(
+        turmaSelecionada.turma
+      ).catch(e => erros(e));
+      if (retorno?.data?.length) {
+        setBimestresAbertoFechado(retorno.data);
+      } else {
+        setBimestresAbertoFechado([]);
+      }
+    };
+
     const obterDisciplinas = async temSugestaoBimestre => {
       setCarregandoDisciplinas(true);
       const disciplinas = await ServicoDisciplina.obterDisciplinasPorTurma(
@@ -216,6 +229,7 @@ const PendenciasFechamentoLista = ({ match }) => {
     ) {
       montaBimestres().then(temSugestaoBimestre => {
         obterDisciplinas(temSugestaoBimestre);
+        obterBimestresAbertoFechado();
       });
     } else {
       resetarFiltro();
@@ -305,8 +319,29 @@ const PendenciasFechamentoLista = ({ match }) => {
       .finally(setImprimido(false));
   };
 
+  const periodoAberto =
+    bimestresAbertoFechado?.length &&
+    bimestresAbertoFechado?.find(
+      b => String(b?.bimestre) === bimestreSelecionado
+    )?.aberto;
+
   return (
     <>
+      {bimestreSelecionado && !periodoAberto ? (
+        <div className="col-md-12">
+          <Alert
+            alerta={{
+              tipo: 'warning',
+              mensagem:
+                'Apenas é possível consultar este registro pois o período não está em aberto.',
+              estiloTitulo: { fontSize: '18px' },
+            }}
+            className="mb-2"
+          />
+        </div>
+      ) : (
+        <></>
+      )}
       {!turmaSelecionada.turma &&
       !ehTurmaInfantil(modalidadesFiltroPrincipal, turmaSelecionada) ? (
         <Alert
@@ -356,6 +391,7 @@ const PendenciasFechamentoLista = ({ match }) => {
                 className="mr-2"
                 onClick={onClickAprovar}
                 disabled={
+                  !periodoAberto ||
                   ehTurmaInfantil(
                     modalidadesFiltroPrincipal,
                     turmaSelecionada

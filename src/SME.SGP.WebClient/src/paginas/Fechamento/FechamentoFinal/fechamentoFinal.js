@@ -17,6 +17,7 @@ import ServicoDisciplina from '~/servicos/Paginas/ServicoDisciplina';
 import { ContainerAuditoria, Lista } from './fechamentoFinal.css';
 import LinhaAluno from './linhaAluno';
 import { setExpandirLinha } from '~/redux/modulos/notasConceitos/actions';
+import Alert from '~/componentes/alert';
 
 const FechamentoFinal = forwardRef((props, ref) => {
   const {
@@ -181,6 +182,23 @@ const FechamentoFinal = forwardRef((props, ref) => {
   };
   return (
     <>
+      {alunos?.length && !dadosFechamentoFinal?.periodoAberto ? (
+        <div className="row">
+          <div className="col-md-12">
+            <Alert
+              alerta={{
+                tipo: 'warning',
+                mensagem:
+                  'Apenas é possível consultar este registro pois o período não está em aberto.',
+                estiloTitulo: { fontSize: '18px' },
+              }}
+              className="mb-2"
+            />
+          </div>
+        </div>
+      ) : (
+        <></>
+      )}
       <Lista>
         {alunos?.length && !ehSintese && ehRegencia ? (
           <div>
@@ -266,7 +284,10 @@ const FechamentoFinal = forwardRef((props, ref) => {
                         notaMedia={dadosFechamentoFinal.notaMedia}
                         frequenciaMedia={dadosFechamentoFinal.frequenciaMedia}
                         indexAluno={i}
-                        desabilitarCampo={desabilitarCampo}
+                        desabilitarCampo={
+                          desabilitarCampo ||
+                          !dadosFechamentoFinal?.periodoAberto
+                        }
                         ehSintese={ehSintese}
                         registraFrequencia={registraFrequencia}
                       />

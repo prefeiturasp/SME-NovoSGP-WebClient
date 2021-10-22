@@ -22,6 +22,7 @@ import RotasDto from '~/dtos/rotasDto';
 import { BtbAnotacao } from '../fechamento-bimestre.css';
 import ModalAnotacaoAluno from '../../FechamentoModalAnotacaoAluno/modal-anotacao-aluno';
 import SinalizacaoAEE from '~/componentes-sgp/SinalizacaoAEE/sinalizacaoAEE';
+import Alert from '~/componentes/alert';
 
 const FechamentoBimestreLista = props => {
   const {
@@ -127,7 +128,22 @@ const FechamentoBimestreLista = props => {
         ''
       )}
       <div className="row pb-4">
-        {dados.fechamentoId && dataFechamento ? (
+        {!podeProcessarReprocessar ? (
+          <div className="col-md-12">
+            <Alert
+              alerta={{
+                tipo: 'warning',
+                mensagem:
+                  'Apenas é possível consultar este registro pois o período não está em aberto.',
+                estiloTitulo: { fontSize: '18px' },
+              }}
+              className="mb-2"
+            />
+          </div>
+        ) : (
+          <></>
+        )}
+        {dados?.fechamentoId && dataFechamento ? (
           <div className="col-md-12 d-flex justify-content-end">
             <DataFechamentoProcessado>
               <span>{`${situacaosituacaoNomeFechamento} em ${moment(
@@ -147,12 +163,9 @@ const FechamentoBimestreLista = props => {
             retornoOrdenado={retorno => {
               setDadosLista(retorno);
             }}
-            desabilitado={dadosLista ? dadosLista.length <= 0 : true}
+            desabilitado={!dadosLista?.length}
           />
-          {!ehSintese &&
-          podeProcessarReprocessar &&
-          situacaoFechamento ==
-            situacaoFechamentoDto.ProcessadoComPendencias ? (
+          {!ehSintese ? (
             <>
               <Button
                 id="btn-reprocessar"
@@ -161,6 +174,13 @@ const FechamentoBimestreLista = props => {
                 border
                 className="mr-2"
                 onClick={onClickReprocessarNotasConceitos}
+                disabled={
+                  !(
+                    podeProcessarReprocessar &&
+                    situacaoFechamento ===
+                      situacaoFechamentoDto.ProcessadoComPendencias
+                  )
+                }
               />
               <Button
                 id="btn-pendencias"
@@ -169,23 +189,33 @@ const FechamentoBimestreLista = props => {
                 border
                 className="mr-2"
                 onClick={onClickVerPendecias}
+                disabled={
+                  ehSintese ||
+                  !podeProcessarReprocessar ||
+                  situacaoFechamento !==
+                    situacaoFechamentoDto.ProcessadoComPendencias
+                }
               />
             </>
           ) : (
-            ''
+            <></>
           )}
-          {ehSintese &&
-          podeProcessarReprocessar &&
-          situacaoFechamento != situacaoFechamentoDto.EmProcessamento ? (
+          {ehSintese ? (
             <Button
-              label={dados.fechamentoId ? 'Reprocessar' : 'Processar'}
+              label={dados?.fechamentoId ? 'Reprocessar' : 'Processar'}
               color={Colors.Azul}
               border
               className="mr-2"
               onClick={onClickProcessarReprocessarSintese}
+              disabled={
+                !(
+                  podeProcessarReprocessar &&
+                  situacaoFechamento !== situacaoFechamentoDto.EmProcessamento
+                )
+              }
             />
           ) : (
-            ''
+            <></>
           )}
         </div>
         <Marcadores className="col-md-6 col-sm-12 d-flex justify-content-end">
