@@ -8,3 +8,4 @@ export { default as ServicoRelatorioFrequencia } from './Frequencia/ServicoRelat
 export { default as ServicoRelatorioAcompanhamentoFechamento } from './Fechamento/AcompanhamentoFechamento/ServicoRelatorioAcompanhamentoFechamento';
 export { default as ServicoRelatorioPendencias } from './Pendencias/ServicoRelatorioPendencias';
 export { default as ServicoRelatorioAtaBimestral } from './Atas/ServicoRelatorioAtaBimestral';
+export { default as ServicoAcompanhamentoRegistros } from './Gestao/AcompanhamentoRegistros/ServicoAcompanhamentoRegistros';
