@@ -372,7 +372,7 @@ const AcompanhamentoRegistros = () => {
         );
         if (ehTurmaTodas) {
           setListaComponentesCurriculares(dadosComponentesCurriculares);
-          setComponentesCurriculares(OPCAO_TODOS);
+          setComponentesCurriculares([OPCAO_TODOS]);
           return;
         }
 
@@ -400,7 +400,7 @@ const AcompanhamentoRegistros = () => {
           setListaComponentesCurriculares(disciplinas.data);
 
           if (disciplinas.data.length === 1) {
-            setComponentesCurriculares(String(disciplinas.data[0].codigo));
+            setComponentesCurriculares([String(disciplinas.data[0].codigo)]);
           }
 
           return;
