@@ -137,6 +137,22 @@ const FechaReabCadastroForm = () => {
     setValoresIniciais(valoresAtuais);
   };
 
+  const montarDataHoraUsuarioAprovador = dados => {
+    const dataFormatada = dados?.aprovadoEm
+      ? `${moment?.(dados?.aprovadoEm)?.format('DD/MM/YYYY')}  às ${moment?.(
+          dados?.aprovadoEm
+        )?.format('HH:mm')}`
+      : '';
+
+    if (dataFormatada && dados.aprovadoPor) {
+      setDataHoraUsuarioAprovador(
+        `Aprovado por ${dados.aprovadoPor} em ${dataFormatada}`
+      );
+    } else {
+      setDataHoraUsuarioAprovador('');
+    }
+  };
+
   const setarAuditorioConsultaPorId = dados => {
     const auditoriaAtual = {
       criadoPor: dados.criadoPor,
@@ -167,7 +183,8 @@ const FechaReabCadastroForm = () => {
       if (calendarioAtual) {
         setCalendarioSelecionado(calendarioAtual);
       }
-      setDataHoraUsuarioAprovador(retorno.data.dataHoraUsuarioAprovador);
+
+      montarDataHoraUsuarioAprovador(retorno.data);
       setarValoresIniciaisConsultaPorId(retorno.data);
       setarAuditorioConsultaPorId(retorno.data);
     } else {
