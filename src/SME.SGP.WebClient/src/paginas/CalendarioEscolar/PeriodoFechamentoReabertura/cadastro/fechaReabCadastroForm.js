@@ -28,7 +28,7 @@ export const ContainerDataHoraUsuarioAprovador = styled.div`
   font-weight: bold;
   color: #42474a;
   width: 100%;
-  margin-top: 5rem !important;
+  margin-top: 0.5rem !important;
 `;
 
 const FechaReabCadastroForm = () => {
