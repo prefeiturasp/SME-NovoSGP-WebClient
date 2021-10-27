@@ -120,9 +120,11 @@ const AnotacoesRecomendacoes = props => {
           criadoRF: auditoria.criadoRF,
           alteradoEm: auditoria.alteradoEm,
           alteradoPor: auditoria.alteradoPor,
-          alteradoRF: auditoria.alteradoRF,
+          alteradoRF: auditoria.alteradoRF,          
         };
-        dispatch(setAuditoriaAnotacaoRecomendacao(auditoriaDto));
+        dispatch(setAuditoriaAnotacaoRecomendacao(auditoriaDto));       
+      }else {
+        dispatch(setAuditoriaAnotacaoRecomendacao(null));       
       }
     },
     [dispatch]
