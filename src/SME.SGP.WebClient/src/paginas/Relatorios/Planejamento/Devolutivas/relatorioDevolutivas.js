@@ -58,6 +58,7 @@ const RelatorioDevolutivas = () => {
   const [turmaId, setTurmaId] = useState();
   const [ueId, setUeId] = useState();
   const [alterouCampos, setAlterouCampos] = useState(true);
+  const [recarregar, setRecarregar] = useState(false);
 
   const { turmaSelecionada } = useSelector(store => store.usuario);
 
@@ -67,6 +68,9 @@ const RelatorioDevolutivas = () => {
   ];
 
   const limparFiltrosSelecionados = () => {
+    setRecarregar(true);
+    setConsideraHistorico(false);
+    setAnoLetivo(anoAtual);
     setDreId();
     setListaDres([]);
     setUeId();
@@ -204,10 +208,11 @@ const RelatorioDevolutivas = () => {
   }, [anoLetivo, consideraHistorico]);
 
   useEffect(() => {
-    if (anoLetivo) {
+    if (anoLetivo || recarregar) {
       obterDres();
+      setRecarregar(false);
     }
-  }, [anoLetivo, obterDres]);
+  }, [anoLetivo, recarregar, obterDres]);
 
   const onChangeDre = dre => {
     setDreId(dre);
