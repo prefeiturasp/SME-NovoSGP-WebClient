@@ -57,6 +57,7 @@ const RelatorioDevolutivas = () => {
   const [naoEhInfantil, setNaoEhInfantil] = useState(false);
   const [turmaId, setTurmaId] = useState();
   const [ueId, setUeId] = useState();
+  const [alterouCampos, setAlterouCampos] = useState(true);
 
   const { turmaSelecionada } = useSelector(store => store.usuario);
 
@@ -86,6 +87,8 @@ const RelatorioDevolutivas = () => {
 
   const gerar = async () => {
     setExibirLoaderGeral(true);
+    setDesabilitarGerar(true);
+    setAlterouCampos(false);
 
     const ue = listaUes.find(item => String(item.valor) === String(ueId));
     const turmasParaConsulta = [];
@@ -349,7 +352,12 @@ const RelatorioDevolutivas = () => {
       if (data) {
         const lista = [];
         if (data.length > 1) {
-          lista.push({ id: OPCAO_TODOS, desc: 'Todas' });
+          lista.push({
+            desc: 'Todas',
+            valor: OPCAO_TODOS,
+            id: OPCAO_TODOS,
+            nomeFiltro: 'Todas',
+          });
         }
         data.map(item =>
           lista.push({
@@ -389,7 +397,7 @@ const RelatorioDevolutivas = () => {
       bi.push({ desc: '4º', valor: 4 });
     }
 
-    bi.push({ desc: 'Todos', valor: -99 });
+    bi.unshift({ desc: 'Todos', valor: -99 });
     setListaBimestre(bi);
   }, [modalidadeId]);
 
@@ -413,9 +421,14 @@ const RelatorioDevolutivas = () => {
 
   useEffect(() => {
     const desabilitar =
-      !anoLetivo || !dreId || !ueId || !turmaId?.length || !bimestres?.length;
+      !anoLetivo ||
+      !dreId ||
+      !ueId ||
+      !turmaId?.length ||
+      !bimestres?.length ||
+      !alterouCampos;
     setDesabilitarGerar(desabilitar);
-  }, [anoLetivo, dreId, ueId, turmaId, bimestres]);
+  }, [anoLetivo, dreId, ueId, turmaId, bimestres, alterouCampos]);
 
   return (
     <Loader loading={exibirLoaderGeral}>
@@ -572,6 +585,7 @@ const RelatorioDevolutivas = () => {
                 valueSelect={bimestres}
                 multiple
                 onChange={valores => {
+                  setAlterouCampos(true);
                   onchangeMultiSelect(valores, bimestres, onChangeBimestre);
                 }}
                 placeholder="Selecione o bimestre"
@@ -583,6 +597,7 @@ const RelatorioDevolutivas = () => {
                 opcoes={opcoesRadioSimNao}
                 valorInicial
                 onChange={e => {
+                  setAlterouCampos(true);
                   setExibirConteudoDevolutiva(e.target.value);
                 }}
                 value={exibirConteudoDevolutiva}
