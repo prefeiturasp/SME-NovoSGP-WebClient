@@ -50,6 +50,10 @@ class ServicoAcompanhamentoFrequencia {
       params: { componenteCurricularId },
     });
   };
+
+  gerar = params => {
+    return api.post('/v1/relatorios/acompanhamento-frequencia', params);
+  };
 }
 
 export default new ServicoAcompanhamentoFrequencia();

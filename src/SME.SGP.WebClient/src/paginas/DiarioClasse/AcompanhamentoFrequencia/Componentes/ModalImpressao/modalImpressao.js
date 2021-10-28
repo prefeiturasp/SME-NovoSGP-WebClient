@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -17,15 +17,21 @@ import {
   BotoesRodape,
   RadioGroupButtonCustomizado,
 } from './modalImpressao.css';
+import ServicoAcompanhamentoFrequencia from '~/servicos/Paginas/DiarioClasse/ServicoAcompanhamentoFrequencia';
+import { erros, sucesso } from '~/servicos';
+import { OPCAO_TODOS } from '~/constantes';
 
 const ModalImpressao = ({ dadosAlunos }) => {
-  const [incluirCriancaImpressao, setIncluirCriancaImpressao] = useState(1);
+  const [incluirAlunosImpressao, setIncluirAlunosImpressao] = useState(
+    OPCAO_TODOS
+  );
   const [alunosSelecionados, setAlunosSelecionados] = useState([]);
   const [imprimirTodosBimestres, setImprimirTodosBimestres] = useState(false);
+  const [desabilitarBotaoGerar, setDesabilitarBotaoGerar] = useState(false);
 
   const opcaoExibirPendenciasResolvidas = [
-    { value: 1, label: 'Todas as crianças/estudantes' },
-    { value: 2, label: 'Crianças/estudantes selecionadas' },
+    { value: OPCAO_TODOS, label: 'Todas as crianças/estudantes' },
+    { value: '1', label: 'Crianças/estudantes selecionadas' },
   ];
 
   const columns = [
@@ -41,12 +47,16 @@ const ModalImpressao = ({ dadosAlunos }) => {
     },
   ];
 
+  const ehAlunosSelecionados = incluirAlunosImpressao === '1';
+
   const exibirModalImpressao = useSelector(
     store => store.acompanhamentoFrequencia.exibirModalImpressao
   );
   const bimestreSelecionado = useSelector(
     store => store.acompanhamentoFrequencia.bimestreSelecionado
   );
+  const usuario = useSelector(store => store.usuario);
+  const { turmaSelecionada } = usuario;
 
   const dispatch = useDispatch();
 
@@ -59,6 +69,31 @@ const ModalImpressao = ({ dadosAlunos }) => {
   const fecharModal = async () => {
     esconderModal();
   };
+
+  const onClickGerar = async () => {
+    const bimestre = imprimirTodosBimestres ? OPCAO_TODOS : bimestreSelecionado;
+    const codigoCriancasSelecionadas = ehAlunosSelecionados
+      ? alunosSelecionados
+      : OPCAO_TODOS;
+
+    const retorno = await ServicoAcompanhamentoFrequencia.gerar({
+      codigoCriancasSelecionadas,
+      codigoDre: turmaSelecionada?.dre,
+      codigoUe: turmaSelecionada?.unidadeEscolar,
+      bimestre,
+    }).catch(e => erros(e));
+    if (retorno?.status === 200) {
+      sucesso(
+        'Solicitação de geração do relatório gerada com sucesso. Em breve você receberá uma notificação com o resultado.'
+      );
+    }
+    fecharModal();
+  };
+
+  useEffect(() => {
+    const desabilitar = ehAlunosSelecionados && !alunosSelecionados?.length;
+    setDesabilitarBotaoGerar(desabilitar);
+  }, [imprimirTodosBimestres, ehAlunosSelecionados, alunosSelecionados]);
 
   const botoesRodape = () => (
     <>
@@ -82,7 +117,8 @@ const ModalImpressao = ({ dadosAlunos }) => {
           bold
           border
           className="padding-btn-confirmacao"
-          onClick={() => {}}
+          onClick={onClickGerar}
+          disabled={desabilitarBotaoGerar}
         />
       </BotoesRodape>
     </>
@@ -116,12 +152,12 @@ const ModalImpressao = ({ dadosAlunos }) => {
         opcoes={opcaoExibirPendenciasResolvidas}
         valorInicial
         onChange={e => {
-          setIncluirCriancaImpressao(e.target.value);
+          setIncluirAlunosImpressao(e.target.value);
         }}
-        value={incluirCriancaImpressao}
+        value={incluirAlunosImpressao}
       />
 
-      {incluirCriancaImpressao === 2 && (
+      {ehAlunosSelecionados && (
         <div className="pt-3">
           <DataTable
             idLinha="alunoRf"
