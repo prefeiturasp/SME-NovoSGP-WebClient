@@ -33,6 +33,7 @@ const FechamentoBimestreLista = props => {
     turmaId,
     anoLetivo,
     registraFrequencia,
+    desabilitarCampo,
   } = props;
   const [dadosLista, setDadosLista] = useState(
     dados ? dados.alunos : undefined
@@ -123,6 +124,7 @@ const FechamentoBimestreLista = props => {
           codigoTurma={turmaId}
           anoLetivo={anoLetivo}
           dadosAlunoSelecionado={alunoModalAnotacao}
+          desabilitar={desabilitarCampo || !podeProcessarReprocessar}
         />
       ) : (
         ''
