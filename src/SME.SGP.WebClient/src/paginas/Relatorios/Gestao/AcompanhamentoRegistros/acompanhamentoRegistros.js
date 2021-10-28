@@ -457,6 +457,7 @@ const AcompanhamentoRegistros = () => {
   };
 
   const cancelar = () => {
+    setConsideraHistorico(false);
     setAnoLetivo(anoAtual);
     if (dreId) {
       obterDres();
