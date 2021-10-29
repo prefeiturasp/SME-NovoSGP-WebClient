@@ -33,8 +33,3 @@ export const setResetarTabela = payload => ({
   type: '@questionarioDinamico/setResetarTabela',
   payload,
 });
-
-export const setArquivoRemovido = payload => ({
-  type: '@questionarioDinamico/setArquivoRemovido',
-  payload,
-});
