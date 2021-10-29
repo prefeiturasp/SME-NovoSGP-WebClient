@@ -185,6 +185,10 @@ class ServicoSalvarFrequenciaPlanoAula {
       };
       dadosPlanoAula.auditoria = { ...auditoria };
       dadosPlanoAula.id = resposta.data.id;
+      dadosPlanoAula.descricao = resposta.data.descricao;
+      dadosPlanoAula.desenvolvimentoAula = resposta.data.desenvolvimentoAula;
+      dadosPlanoAula.recuperacaoAula = resposta.data.recuperacaoAula;
+      dadosPlanoAula.licaoCasa = resposta.data.licaoCasa;
       dispatch(setDadosPlanoAula(dadosPlanoAula));
 
       sucesso('Plano de aula salvo com sucesso.');

@@ -167,7 +167,6 @@ const BotoesAcoesPlanoAEE = props => {
       sucesso(mensagem);
 
       dispatch(setQuestionarioDinamicoEmEdicao(false));
-
       if (registroNovo) {
         history.push(`${RotasDto.RELATORIO_AEE_PLANO}`);
       } else {
@@ -219,7 +218,8 @@ const BotoesAcoesPlanoAEE = props => {
         hidden={
           planoAEEDados?.situacao !== situacaoPlanoAEE.ParecerCP &&
           planoAEEDados?.situacao !== situacaoPlanoAEE.AtribuicaoPAAI &&
-          planoAEEDados?.situacao !== situacaoPlanoAEE.ParecerPAAI
+          planoAEEDados?.situacao !== situacaoPlanoAEE.ParecerPAAI &&
+          planoAEEDados?.situacao !== situacaoPlanoAEE.Devolvido
         }
         disabled={
           (planoAEEDados?.situacao === situacaoPlanoAEE.ParecerPAAI &&

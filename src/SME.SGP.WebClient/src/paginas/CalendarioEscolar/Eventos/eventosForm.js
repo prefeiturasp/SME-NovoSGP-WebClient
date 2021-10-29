@@ -52,9 +52,11 @@ import AbrangenciaServico from '~/servicos/Abrangencia';
 import ServicoCalendarios from '~/servicos/Paginas/Calendario/ServicoCalendarios';
 import tipoEvento from '~/dtos/tipoEvento';
 import { OPCAO_TODOS } from '~/constantes/constantes';
+import perfisDto from '~/dtos/perfis';
 
 const EventosForm = ({ match }) => {
   const usuarioStore = useSelector(store => store.usuario);
+  const perfilStore = useSelector(store => store.perfil);  
 
   const permissoesTela = usuarioStore.permissoes[RotasDto.EVENTOS];
   const [somenteConsulta, setSomenteConsulta] = useState(false);
@@ -264,11 +266,13 @@ const EventosForm = ({ match }) => {
       ),
     };
 
-    if (usuarioStore.possuiPerfilDre) {
+    const codigoPerfilSelecionado = String(perfilStore.perfilSelecionado.codigoPerfil).toUpperCase();
+    if (codigoPerfilSelecionado === String(perfisDto.ADM_DRE)) {
       val.dreId = Yup.string().required('DRE obrigatória');
     }
-
-    if (!usuarioStore.possuiPerfilSmeOuDre) {
+    if (!(codigoPerfilSelecionado === String(perfisDto.ADM_DRE) ||
+          codigoPerfilSelecionado === String(perfisDto.ADM_SME) ||
+          codigoPerfilSelecionado === String(perfisDto.ADM_COTIC))) {
       val.dreId = Yup.string().required('DRE obrigatória');
       val.ueId = Yup.string().required('UE obrigatória');
     }
@@ -792,11 +796,17 @@ const EventosForm = ({ match }) => {
           form.setFieldValue('feriadoId', '');
         }
       }
+
+      let valorLetivo = 1;
+      let valorEvento = false;
+      let valorOpcaoLetivo = false;
+      let tipoUnico = false;
+
       if (
         tipoEventoSelecionado &&
         tipoEventoSelecionado.tipoData === eventoTipoData.Unico
       ) {
-        setTipoDataUnico(true);
+        tipoUnico = true;
         if (form) {
           form.setFieldValue('dataFim', '');
         }
@@ -804,29 +814,25 @@ const EventosForm = ({ match }) => {
         tipoEventoSelecionado &&
         tipoEventoSelecionado.tipoData === eventoTipoData.InicioFim
       ) {
-        setTipoDataUnico(false);
+        tipoUnico = false;
       }
 
       if (form && tipoEventoSelecionado && tipoEventoSelecionado.letivo) {
         if (tipoEventoSelecionado.letivo === eventoLetivo.Opcional) {
-          setDesabilitarOpcaoLetivo(false);
+          valorOpcaoLetivo = false;
         } else {
-          setDesabilitarOpcaoLetivo(true);
-          form.setFieldValue('letivo', tipoEventoSelecionado.letivo);
+          valorOpcaoLetivo = true;
+          valorLetivo = tipoEventoSelecionado.letivo;
         }
       }
 
-      let valorLetivo = 1;
-      let valorEvento = false;
-      let valorOpcaoLetivo = false;
-      let tipoUnico = false;
-
       if (tipoEventoSelecionado?.id === tipoEvento.LiberacaoBoletim) {
+        valorLetivo = 0;
         valorEvento = true;
         valorOpcaoLetivo = true;
-        valorLetivo = 0;
         tipoUnico = true;
       }
+
       if (form) {
         form.setFieldValue('letivo', valorLetivo);
       }

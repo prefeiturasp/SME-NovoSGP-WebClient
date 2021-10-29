@@ -11,6 +11,7 @@ const TotalEstudantesPresenciasRemotosAusentesPorDre = ({
   ueId,
   modalidade,
   semestre,
+  ehInfantil,
 }) => {
   const [exibir, setExibir] = useState(false);
 
@@ -20,11 +21,12 @@ const TotalEstudantesPresenciasRemotosAusentesPorDre = ({
   };
 
   const key = 'total-estudantes-presencias-remotos-ausentes-dre';
+  const tipoAluno = ehInfantil ? 'crianças' : 'estudantes';
 
   return (
     <div className="mt-3">
       <CardCollapse
-        titulo="Total de estudantes presenciais, remotos e ausentes por DRE"
+        titulo={`Total de ${tipoAluno} presenciais, remotos e ausentes por DRE`}
         key={`${key}-collapse-key`}
         indice={`${key}-collapse-indice`}
         alt={`${key}-alt`}
@@ -52,6 +54,7 @@ TotalEstudantesPresenciasRemotosAusentesPorDre.propTypes = {
   ueId: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   modalidade: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   semestre: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+  ehInfantil: PropTypes.bool,
 };
 
 TotalEstudantesPresenciasRemotosAusentesPorDre.defaultProps = {
@@ -60,6 +63,7 @@ TotalEstudantesPresenciasRemotosAusentesPorDre.defaultProps = {
   ueId: null,
   modalidade: null,
   semestre: null,
+  ehInfantil: false,
 };
 
 export default TotalEstudantesPresenciasRemotosAusentesPorDre;
