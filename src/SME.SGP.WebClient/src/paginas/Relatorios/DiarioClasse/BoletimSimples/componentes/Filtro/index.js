@@ -107,7 +107,6 @@ const Filtros = ({ onFiltrar, filtrou, setFiltrou, cancelou, setCancelou }) => {
 
   const onChangeConsideraHistorico = e => {
     setConsideraHistorico(e.target.checked);
-    setAnoLetivo(anoAtual);
     limparCampos();
     setDreCodigo();
     setDreId();
@@ -123,21 +122,9 @@ const Filtros = ({ onFiltrar, filtrou, setFiltrou, cancelou, setCancelou }) => {
 
   const obterAnosLetivos = useCallback(async () => {
     setCarregandoAnosLetivos(true);
-    let anosLetivos = [];
 
-    const anosLetivoComHistorico = await FiltroHelper.obterAnosLetivos({
-      consideraHistorico: true,
-    });
-    const anosLetivoSemHistorico = await FiltroHelper.obterAnosLetivos({
-      consideraHistorico: false,
-    });
-
-    anosLetivos = anosLetivos.concat(anosLetivoComHistorico);
-
-    anosLetivoSemHistorico.forEach(ano => {
-      if (!anosLetivoComHistorico.find(a => a.valor === ano.valor)) {
-        anosLetivos.push(ano);
-      }
+    let anosLetivos = await FiltroHelper.obterAnosLetivos({
+      consideraHistorico: consideraHistorico,
     });
 
     if (!anosLetivos.length) {
@@ -146,18 +133,11 @@ const Filtros = ({ onFiltrar, filtrou, setFiltrou, cancelou, setCancelou }) => {
         valor: anoAtual,
       });
     }
-
-    if (anosLetivos && anosLetivos.length) {
-      const temAnoAtualNaLista = anosLetivos.find(
-        item => String(item.valor) === String(anoAtual)
-      );
-      if (temAnoAtualNaLista) setAnoLetivo(anoAtual);
-      else setAnoLetivo(anosLetivos[0].valor);
-    }
+    setAnoLetivo(anosLetivos[0].valor);
 
     setListaAnosLetivo(anosLetivos);
     setCarregandoAnosLetivos(false);
-  }, [anoAtual]);
+  }, [anoAtual, consideraHistorico]);
 
   useEffect(() => {
     obterAnosLetivos();
@@ -201,7 +181,7 @@ const Filtros = ({ onFiltrar, filtrou, setFiltrou, cancelou, setCancelou }) => {
       setDreId(undefined);
       setListaDres([]);
     }
-  }, [anoLetivo, consideraHistorico]);
+  }, [anoLetivo]);
 
   useEffect(() => {
     if (anoLetivo && !listaDres.length) {
@@ -406,6 +386,7 @@ const Filtros = ({ onFiltrar, filtrou, setFiltrou, cancelou, setCancelou }) => {
 
   useEffect(() => {
     if (cancelou) {
+      setConsideraHistorico(false);
       limparCampos();
       setListaDres([]);
       setDreCodigo();
@@ -424,7 +405,6 @@ const Filtros = ({ onFiltrar, filtrou, setFiltrou, cancelou, setCancelou }) => {
             label="Exibir histórico?"
             onChangeCheckbox={onChangeConsideraHistorico}
             checked={consideraHistorico}
-            disabled={listaAnosLetivo.length === 1}
           />
         </div>
       </div>
