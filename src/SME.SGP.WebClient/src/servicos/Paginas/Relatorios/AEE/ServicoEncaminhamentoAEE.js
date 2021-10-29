@@ -141,7 +141,7 @@ class ServicoEncaminhamentoAEE {
       collapseLocalizarEstudante,
       encaminhamentoAEE,
     } = state;
-    const { formsQuestionarioDinamico, arquivoRemovido } = questionarioDinamico;
+    const { formsQuestionarioDinamico } = questionarioDinamico;
     const {
       listaSecoesEmEdicao,
       dadosSecoesPorEtapaDeEncaminhamentoAEE,
@@ -227,7 +227,6 @@ class ServicoEncaminhamentoAEE {
           alunoCodigo: dadosCollapseLocalizarEstudante.codigoAluno,
           situacao,
         };
-
         valoresParaSalvar.secoes = formsParaSalvar.map(item => {
           const form = item.form();
           const campos = form.state.values;
@@ -338,8 +337,7 @@ class ServicoEncaminhamentoAEE {
               }
 
               if (
-                ((!arquivoRemovido &&
-                  questao.tipoQuestao === tipoQuestao.Upload) ||
+                (questao.tipoQuestao === tipoQuestao.Upload ||
                   questao.tipoQuestao === tipoQuestao.ComboMultiplaEscolha) &&
                 !questao.resposta
               ) {
@@ -362,6 +360,7 @@ class ServicoEncaminhamentoAEE {
         valoresParaSalvar.secoes = valoresParaSalvar.secoes
           .filter(a => a)
           .filter(b => b.questoes?.length);
+
         if (valoresParaSalvar?.secoes?.length) {
           dispatch(setExibirLoaderEncaminhamentoAEE(true));
 
