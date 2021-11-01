@@ -39,8 +39,8 @@ import FechamentoBismestre from '~/paginas/Fechamento/FechamentoBimestre/fechame
 import PeriodoFechamentoAbertura from '~/paginas/CalendarioEscolar/PeriodoFechamentoAbertura/periodo-fechamento-abertura';
 import ResumosGraficosPAP from '~/paginas/Relatorios/PAP/ResumosGraficos';
 import PaginaComErro from '~/paginas/Erro/pagina-com-erro';
-import PeriodoFechamentoReaberturaLista from '~/paginas/CalendarioEscolar/PeriodoFechamentoReabertura/periodoFechamentoReaberturaLista';
-import PeriodoFechamentoReaberturaForm from '~/paginas/CalendarioEscolar/PeriodoFechamentoReabertura/periodoFechamentoReaberturaForm';
+import FechaReabLista from '~/paginas/CalendarioEscolar/PeriodoFechamentoReabertura/lista/fechaReabLista';
+import FechaReabCadastro from '~/paginas/CalendarioEscolar/PeriodoFechamentoReabertura/cadastro/fechaReabCadastro';
 import RelatorioPAPAcompanhamento from '~/paginas/Relatorios/PAP/Acompanhamento';
 import PendenciasFechamentoLista from '~/paginas/Fechamento/PendenciasFechamento/pendenciasFechamentoLista';
 import PendenciasFechamentoForm from '~/paginas/Fechamento/PendenciasFechamento/pendenciasFechamentoForm';
@@ -755,7 +755,17 @@ rotas.set(`${RotasDto.PERIODO_FECHAMENTO_REABERTURA}`, {
   breadcrumbName: 'Reabertura',
   menu: ['Calendário Escolar', 'Período de Fechamento'],
   parent: '/',
-  component: PeriodoFechamentoReaberturaLista,
+  component: FechaReabLista,
+  exact: true,
+  tipo: RotasTipo.EstruturadaAutenticada,
+  temPermissionamento: true,
+  chavePermissao: RotasDto.PERIODO_FECHAMENTO_REABERTURA,
+});
+
+rotas.set(`${RotasDto.PERIODO_FECHAMENTO_REABERTURA}/novo/`, {
+  breadcrumbName: 'Períodos',
+  parent: RotasDto.PERIODO_FECHAMENTO_REABERTURA,
+  component: FechaReabCadastro,
   exact: true,
   tipo: RotasTipo.EstruturadaAutenticada,
   temPermissionamento: true,
@@ -765,7 +775,7 @@ rotas.set(`${RotasDto.PERIODO_FECHAMENTO_REABERTURA}`, {
 rotas.set(`${RotasDto.PERIODO_FECHAMENTO_REABERTURA}/novo/:tipoCalendarioId`, {
   breadcrumbName: 'Períodos',
   parent: RotasDto.PERIODO_FECHAMENTO_REABERTURA,
-  component: PeriodoFechamentoReaberturaForm,
+  component: FechaReabCadastro,
   exact: true,
   tipo: RotasTipo.EstruturadaAutenticada,
   temPermissionamento: true,
@@ -775,7 +785,7 @@ rotas.set(`${RotasDto.PERIODO_FECHAMENTO_REABERTURA}/novo/:tipoCalendarioId`, {
 rotas.set(`${RotasDto.PERIODO_FECHAMENTO_REABERTURA}/editar/:id`, {
   breadcrumbName: 'Períodos',
   parent: RotasDto.PERIODO_FECHAMENTO_REABERTURA,
-  component: PeriodoFechamentoReaberturaForm,
+  component: FechaReabCadastro,
   exact: true,
   tipo: RotasTipo.EstruturadaAutenticada,
   temPermissionamento: true,
