@@ -104,6 +104,7 @@ import DashboardFechamento from '~/paginas/Dashboard/DashboardFechamento/dashboa
 import RelatorioAtaBimestral from '~/paginas/Relatorios/Atas/AtaBimestral/relatorioAtaBimestral';
 import EventosLista from '~/paginas/CalendarioEscolar/Eventos/lista/eventosLista';
 import EventosCadastro from '~/paginas/CalendarioEscolar/Eventos/cadastro/eventosCadastro';
+import RelatorioAcompanhamentoRegistros from '~/paginas/Relatorios/Gestao/AcompanhamentoRegistros/acompanhamentoRegistros';
 
 const rotas = new Map();
 
@@ -1443,6 +1444,17 @@ rotas.set(RotasDto.ATA_BIMESTRAL, {
   // tipo: RotasTipo.EstruturadaAutenticada,
   // temPermissionamento: true,
   chavePermissao: RotasDto.ATA_BIMESTRAL,
+});
+
+rotas.set(RotasDto.RELATORIO_ACOMPANHAMENTO_REGISTROS, {
+  breadcrumbName: 'Acompanhamento dos registros',
+  menu: ['Relatórios', 'Gestão'],
+  parent: '/',
+  component: RelatorioAcompanhamentoRegistros,
+  exact: true,
+  tipo: RotasTipo.EstruturadaAutenticada,
+  temPermissionamento: true,
+  chavePermissao: RotasDto.RELATORIO_ACOMPANHAMENTO_REGISTROS,
 });
 
 const rotasArray = [];
