@@ -1,7 +1,9 @@
 import PropTypes from 'prop-types';
 import React from 'react';
+import { useDispatch } from 'react-redux';
 import { Label } from '~/componentes';
 import UploadArquivos from '~/componentes-sgp/UploadArquivos/uploadArquivos';
+import { setArquivoRemovido } from '~/redux/modulos/questionarioDinamico/actions';
 import { erros, sucesso } from '~/servicos';
 
 const CampoDinamicoUploadArquivos = props => {
@@ -13,6 +15,7 @@ const CampoDinamicoUploadArquivos = props => {
     onChange,
   } = props;
   const { form, questaoAtual, label } = dados;
+  const dispatch = useDispatch();
 
   const onRemoveFile = async arquivo => {
     const codigoArquivo = arquivo.xhr;
@@ -33,6 +36,7 @@ const CampoDinamicoUploadArquivos = props => {
 
           form.setFieldValue(String(questaoAtual?.id), novoMap);
           form.setFieldTouched(String(questaoAtual?.id), true);
+          dispatch(setArquivoRemovido(true));
           sucesso(`Arquivo ${arquivo.name} removido com sucesso`);
         }
       }
@@ -45,6 +49,7 @@ const CampoDinamicoUploadArquivos = props => {
     ).catch(e => erros(e));
 
     if (resposta && resposta.status === 200) {
+      dispatch(setArquivoRemovido(true));
       sucesso(`Arquivo ${arquivo.name} removido com sucesso`);
       onChange();
       return true;
