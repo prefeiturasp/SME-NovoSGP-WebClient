@@ -141,7 +141,7 @@ class ServicoEncaminhamentoAEE {
       collapseLocalizarEstudante,
       encaminhamentoAEE,
     } = state;
-    const { formsQuestionarioDinamico, arquivoFoiRemovido } = questionarioDinamico;
+    const { formsQuestionarioDinamico, arquivoRemovido } = questionarioDinamico;
     const {
       listaSecoesEmEdicao,
       dadosSecoesPorEtapaDeEncaminhamentoAEE,
@@ -338,7 +338,7 @@ class ServicoEncaminhamentoAEE {
               }
 
               if (
-                ((!arquivoFoiRemovido &&
+                ((!arquivoRemovido &&
                   questao.tipoQuestao === tipoQuestao.Upload) ||
                   questao.tipoQuestao === tipoQuestao.ComboMultiplaEscolha) &&
                 !questao.resposta
