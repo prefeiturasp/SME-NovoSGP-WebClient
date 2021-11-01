@@ -18,6 +18,10 @@ const ListasNotasConceitos = props => {
 
   const dispatch = useDispatch();
 
+  const fechamentoPeriodoInicioFim = useSelector(
+    store => store.conselhoClasse.fechamentoPeriodoInicioFim
+  );
+
   const listaTiposConceitos = useSelector(
     store => store.conselhoClasse.listaTiposConceitos
   );
@@ -65,6 +69,28 @@ const ListasNotasConceitos = props => {
     return true;
   };
 
+  const estaNoPeriodoOuFechamento = () => {
+    const hoje = moment().format('MM-DD-YYYY');
+    const dataInicioPeriodo = moment(bimestreAtual.dataInicio).format('MM-DD-YYYY');
+    const dataFimPeriodo = moment(bimestreAtual.dataFim).format('MM-DD-YYYY');
+    const dentroDoPeriodo = hoje >= dataInicioPeriodo && hoje <= dataFimPeriodo;
+
+    if (fechamentoPeriodoInicioFim) {
+      const {
+        periodoFechamentoInicio,
+        periodoFechamentoFim,
+      } = fechamentoPeriodoInicioFim;
+
+      if (periodoFechamentoInicio && periodoFechamentoFim) {
+        const inicioF = moment(periodoFechamentoInicio).format('MM-DD-YYYY');
+        const finalF = moment(periodoFechamentoFim).format('MM-DD-YYYY');
+        const emFechamento = hoje >= inicioF && hoje <= finalF;
+        return dentroDoPeriodo || emFechamento;
+      }
+    }
+    return dentroDoPeriodo;
+  };
+
   const habilitaConselhoClasse = dados => {
     const { conselhoClasseAlunoId } = dadosPrincipaisConselhoClasse;
 
@@ -81,11 +107,13 @@ const ListasNotasConceitos = props => {
     );
 
     const alunoDentroDoPeriodoDoBimestre = alunoTransferidoAposFimDoBimestre();
+    const periodoAbertoOuEmFechamento = estaNoPeriodoOuFechamento();
 
     if (
       !conselhoClasseAlunoId &&
       notasFechamentosPreenchidas &&
-      alunoDentroDoPeriodoDoBimestre
+      alunoDentroDoPeriodoDoBimestre &&
+      periodoAbertoOuEmFechamento
     ) {
       dispatch(setConselhoClasseEmEdicao(true));
     }
@@ -102,11 +130,12 @@ const ListasNotasConceitos = props => {
         return componentesCurriculares;
       })
     );
-    if (notasPosConselhoPreenchidas) {
+    const periodoAbertoOuEmFechamento = estaNoPeriodoOuFechamento();
+    if (notasPosConselhoPreenchidas && periodoAbertoOuEmFechamento) {
       dispatch(setConselhoClasseEmEdicao(true));
     }
   }
-  };
+  };  
 
   const obterDadosLista = useCallback(async () => {
     setCarregando(true);
