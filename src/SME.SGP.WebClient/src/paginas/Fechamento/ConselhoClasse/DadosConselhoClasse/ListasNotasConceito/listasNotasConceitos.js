@@ -40,6 +40,10 @@ const ListasNotasConceitos = props => {
 
   const turmaStore = useSelector(state => state.usuario.turmaSelecionada);
 
+  const dentroPeriodo = useSelector(
+    store => store.conselhoClasse.dentroPeriodo
+  );
+
   const {
     fechamentoTurmaId,
     conselhoClasseId,
@@ -71,10 +75,6 @@ const ListasNotasConceitos = props => {
 
   const estaNoPeriodoOuFechamento = () => {
     const hoje = moment().format('MM-DD-YYYY');
-    const dataInicioPeriodo = moment(bimestreAtual.dataInicio).format('MM-DD-YYYY');
-    const dataFimPeriodo = moment(bimestreAtual.dataFim).format('MM-DD-YYYY');
-    const dentroDoPeriodo = hoje >= dataInicioPeriodo && hoje <= dataFimPeriodo;
-
     if (fechamentoPeriodoInicioFim) {
       const {
         periodoFechamentoInicio,
@@ -85,10 +85,10 @@ const ListasNotasConceitos = props => {
         const inicioF = moment(periodoFechamentoInicio).format('MM-DD-YYYY');
         const finalF = moment(periodoFechamentoFim).format('MM-DD-YYYY');
         const emFechamento = hoje >= inicioF && hoje <= finalF;
-        return dentroDoPeriodo || emFechamento;
+        return dentroPeriodo || emFechamento;
       }
     }
-    return dentroDoPeriodo;
+    return dentroPeriodo;
   };
 
   const habilitaConselhoClasse = dados => {
