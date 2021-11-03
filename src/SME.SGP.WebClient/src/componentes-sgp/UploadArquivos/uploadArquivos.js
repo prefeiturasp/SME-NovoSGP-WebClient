@@ -3,8 +3,10 @@ import { Upload } from 'antd';
 import { Field } from 'formik';
 import PropTypes from 'prop-types';
 import React, { useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
 import { Base } from '~/componentes/colors';
+import { setArquivoRemovido } from '~/redux/modulos/questionarioDinamico/actions';
 import { erro, erros, sucesso } from '~/servicos';
 import ServicoArmazenamento from '~/servicos/Componentes/ServicoArmazenamento';
 import { downloadBlob, permiteInserirFormato } from '~/utils/funcoes/gerais';
@@ -63,6 +65,7 @@ const UploadArquivos = props => {
   } = props;
 
   const [listaDeArquivos, setListaDeArquivos] = useState([...defaultFileList]);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     if (defaultFileList?.length) {
@@ -130,6 +133,7 @@ const UploadArquivos = props => {
 
     ServicoArmazenamento.fazerUploadArquivo(fmData, config, urlUpload)
       .then(resposta => {
+        dispatch(setArquivoRemovido(false));
         onSuccess(file, resposta.data);
       })
       .catch(e => {

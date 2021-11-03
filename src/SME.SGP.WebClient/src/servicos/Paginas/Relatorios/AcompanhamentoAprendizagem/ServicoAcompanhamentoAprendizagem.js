@@ -247,6 +247,8 @@ class ServicoAcompanhamentoAprendizagem {
         paramsApanhadoGeral.auditoria = retornoApanhadoGeral.data;
         paramsApanhadoGeral.acompanhamentoTurmaId =
           retornoApanhadoGeral.data.id;
+        paramsApanhadoGeral.apanhadoGeral =
+          retornoApanhadoGeral.data.apanhadoGeral;
         dispatch(setDadosApanhadoGeral(paramsApanhadoGeral));
 
         dispatch(setApanhadoGeralEmEdicao(false));

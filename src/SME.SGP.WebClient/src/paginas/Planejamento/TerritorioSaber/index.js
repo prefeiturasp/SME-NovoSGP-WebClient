@@ -167,6 +167,7 @@ function TerritorioSaber() {
       setModoEdicao(true);
     }
     dadosBimestre.territorioExperienciaId = territorioSelecionado;
+    setDados(dados);
   };
 
   const onClickCancelar = async () => {
