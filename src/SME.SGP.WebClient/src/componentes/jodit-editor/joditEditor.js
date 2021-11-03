@@ -66,7 +66,7 @@ const JoditEditor = forwardRef((props, ref) => {
   };
 
   const excedeuLimiteMaximo = arquivo => {
-    return Math.ceil(arquivo.size / 1048576) > TAMANHO_MAXIMO_UPLOAD_MB;    
+    return Math.ceil(arquivo.size / 1048576) > TAMANHO_MAXIMO_UPLOAD_MB;
   };
 
   const config = {
@@ -194,6 +194,7 @@ const JoditEditor = forwardRef((props, ref) => {
     buttonsXS: BOTOES_PADRAO,
     buttonsMD: BOTOES_PADRAO,
     buttonsSM: BOTOES_PADRAO,
+    enter: 'BR',
     placeholder: '',
     style: {
       font: '16px Arial',
