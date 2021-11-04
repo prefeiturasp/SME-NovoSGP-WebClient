@@ -44,6 +44,7 @@ const JoditEditor = forwardRef((props, ref) => {
     qtdMaxImg,
     imagensCentralizadas,
     valideClipboardHTML,
+    permiteGif,
   } = props;
 
   const textArea = useRef(null);
@@ -95,7 +96,7 @@ const JoditEditor = forwardRef((props, ref) => {
       },
     },
     askBeforePasteHTML: valideClipboardHTML,
-    disablePlugins: ['image-properties', 'inline-popup', disablePlugins],
+    disablePlugins: ['image-properties', disablePlugins],
     language: 'pt_br',
     height,
     readonly: readonly || desabilitar,
@@ -105,6 +106,9 @@ const JoditEditor = forwardRef((props, ref) => {
         return new Promise((resolve, reject) => {
           if (permiteInserirArquivo) {
             const arquivo = data.getAll('files[0]')[0];
+            const validaInserirTiposArquivos = arquivo.type.includes('gif')
+              ? permiteGif
+              : true;
 
             if (excedeuLimiteMaximo(arquivo)) {
               const msg = `Tamanho máximo ${TAMANHO_MAXIMO_UPLOAD_MB}MB.`;
@@ -113,13 +117,15 @@ const JoditEditor = forwardRef((props, ref) => {
             }
 
             if (
-              arquivo.type.substring(0, 5) === 'image' ||
-              (permiteVideo && arquivo.type.substring(0, 5) === 'video')
+              (arquivo.type.substring(0, 5) === 'image' ||
+                (permiteVideo && arquivo.type.substring(0, 5) === 'video')) &&
+              validaInserirTiposArquivos
             ) {
               if (arquivo.type.substring(0, 5) === 'image' && qtdMaxImg) {
                 const quantidadeTotalImagens = (
                   textArea?.current?.value?.match(/<img/g) || []
                 )?.length;
+
                 if (quantidadeTotalImagens < qtdMaxImg) {
                   resolve(data);
                 } else {
@@ -272,6 +278,29 @@ const JoditEditor = forwardRef((props, ref) => {
   };
 
   useEffect(() => {
+    const pegarElemento = elemento => document.getElementsByClassName(elemento);
+    const aplicarDisplayNone = elemento => {
+      if (elemento?.length) {
+        elemento[0].style.cssText = 'display: none !important';
+      }
+    };
+
+    const removerBotoes = () => {
+      const botaoEditarImagem = pegarElemento('jodit-toolbar-button_pencil');
+      const botaoSetas = pegarElemento('jodit-toolbar-button_valign');
+
+      aplicarDisplayNone(botaoEditarImagem);
+      aplicarDisplayNone(botaoSetas);
+    };
+
+    document.body.addEventListener('DOMSubtreeModified', removerBotoes);
+
+    return () => {
+      document.body.removeEventListener('DOMSubtreeModified', removerBotoes);
+    };
+  });
+
+  useEffect(() => {
     if (url) {
       const element = textArea.current || '';
       if (textArea?.current && config) {
@@ -402,6 +431,7 @@ JoditEditor.propTypes = {
   qtdMaxImg: PropTypes.number,
   imagensCentralizadas: PropTypes.bool,
   valideClipboardHTML: PropTypes.bool,
+  permiteGif: PropTypes.bool,
 };
 
 JoditEditor.defaultProps = {
@@ -426,6 +456,7 @@ JoditEditor.defaultProps = {
   qtdMaxImg: null,
   imagensCentralizadas: false,
   valideClipboardHTML: true,
+  permiteGif: true,
 };
 
 export default JoditEditor;

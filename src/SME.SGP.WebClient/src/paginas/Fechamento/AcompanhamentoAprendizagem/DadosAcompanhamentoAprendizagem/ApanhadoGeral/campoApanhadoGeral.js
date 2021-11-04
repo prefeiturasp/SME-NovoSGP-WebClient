@@ -53,6 +53,7 @@ const CampoApanhadoGeral = () => {
       permiteVideo={false}
       qtdMaxImg={qtdMaxImagensCampoPercursoColetivo}
       imagensCentralizadas
+      permiteGif={false}
     />
   );
 };
