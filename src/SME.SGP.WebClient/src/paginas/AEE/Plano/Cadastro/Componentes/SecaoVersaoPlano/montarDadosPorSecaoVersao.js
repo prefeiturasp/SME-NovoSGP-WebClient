@@ -31,20 +31,25 @@ const MontarDadosPorSecaoVersao = props => {
     }
   }, [exibir, dadosQuestionarioAtual, obterDadosPorVersaoId]);
 
-  return dadosQuestionarioAtual?.length ? (
-    <QuestionarioDinamico
-      codigoAluno={dadosCollapseLocalizarEstudante?.codigoAluno}
-      codigoTurma={dadosCollapseLocalizarEstudante?.codigoTurma}
-      anoLetivo={dadosCollapseLocalizarEstudante?.anoLetivo}
-      dados={dados}
-      dadosQuestionarioAtual={dadosQuestionarioAtual}
-      desabilitarCampos
-      funcaoRemoverArquivoCampoUpload={ServicoPlanoAEE.removerArquivo}
-      urlUpload="v1/plano-aee/upload"
-      turmaId={dadosCollapseLocalizarEstudante?.turmaId}
-    />
-  ) : (
-    ''
+  return (
+    <>
+      {dadosQuestionarioAtual?.length ? (
+        <QuestionarioDinamico
+          codigoAluno={dadosCollapseLocalizarEstudante?.codigoAluno}
+          codigoTurma={dadosCollapseLocalizarEstudante?.codigoTurma}
+          anoLetivo={dadosCollapseLocalizarEstudante?.anoLetivo}
+          dados={dados}
+          dadosQuestionarioAtual={dadosQuestionarioAtual}
+          desabilitarCampos
+          funcaoRemoverArquivoCampoUpload={ServicoPlanoAEE.removerArquivo}
+          urlUpload="v1/plano-aee/upload"
+          turmaId={dadosCollapseLocalizarEstudante?.turmaId}
+        />
+      ) : (
+        ''
+      )}
+      <h1>Teste auditoria</h1>
+    </>
   );
 };
 
