@@ -61,17 +61,6 @@ const UeReabertura = ({ form, onChangeCampos }) => {
         }
       }
 
-      if (usuario.possuiPerfilSmeOuDre && lista?.length > 1) {
-        lista.unshift(ueTodos);
-
-        if (!paramsRota?.id) {
-          if (dreCodigo && dreCodigo !== OPCAO_TODOS) {
-            form.setFieldValue(nomeCampo, OPCAO_TODOS);
-            form.initialValues.ueCodigo = OPCAO_TODOS;
-          }
-        }
-      }
-
       setListaUes(lista);
     } else {
       form.setFieldValue(nomeCampo, undefined);
