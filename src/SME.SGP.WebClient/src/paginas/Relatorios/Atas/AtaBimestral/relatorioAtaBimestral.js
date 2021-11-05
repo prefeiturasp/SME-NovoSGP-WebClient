@@ -504,9 +504,9 @@ const RelatorioAtaBimestral = () => {
       exibirHistorico: consideraHistorico,
     };
     if (turmaCodigo.find(item => item === OPCAO_TODOS)) {
-      params.turmasCodigo = listaTurmas.filter(
-        item => String(item.valor) !== OPCAO_TODOS
-      );
+      params.turmasCodigo = listaTurmas
+        .filter(item => String(item.valor) !== OPCAO_TODOS)
+        .map(item => item.valor);
     } else {
       params.turmasCodigo = turmaCodigo;
     }

@@ -7,7 +7,7 @@ import {
   setPlanoAnualEmEdicao,
   setTodosDadosBimestresPlanoAnual,
   setListaComponentesCheck,
-  setListaComponentesCurricularesPlanejamento
+  setListaComponentesCurricularesPlanejamento,
 } from '~/redux/modulos/anual/actions';
 import { confirmar, erros, sucesso } from '~/servicos/alertas';
 import ServicoPlanoAnual from '~/servicos/Paginas/ServicoPlanoAnual';
@@ -19,7 +19,7 @@ class ServicoSalvarPlanoAnual {
 
     const { planoAnual } = state;
 
-    const { planoAnualEmEdicao } = planoAnual;    
+    const { planoAnualEmEdicao } = planoAnual;
 
     let continuar = true;
     if (planoAnualEmEdicao) {
@@ -52,11 +52,11 @@ class ServicoSalvarPlanoAnual {
     }
 
     return ehInvalido;
-  };  
+  };
 
   validarSalvarPlanoAnual = async () => {
     const { dispatch } = store;
-    const state = store.getState();    
+    const state = store.getState();
 
     const { planoAnual, usuario } = state;
     const { turmaSelecionada } = usuario;
@@ -66,7 +66,7 @@ class ServicoSalvarPlanoAnual {
       listaComponentesCurricularesPlanejamento,
       planoAnualEmEdicao,
       componenteCurricular,
-      listaComponentesCheck      
+      listaComponentesCheck,
     } = planoAnual;
 
     const listaObjetivosSemDados = () => {
@@ -138,23 +138,32 @@ class ServicoSalvarPlanoAnual {
       return true;
     };
 
-    const atualizarListaComponentesCheck = async (params) =>{
-      let copiaListaComponentesCheck = listaComponentesCheck;
-      params.periodosEscolares.map(item =>{
-        const idBimestre = item.periodoEscolarId
-        item.componentes.map(c => {
-            const idC = c.componenteCurricularId
-            if(!copiaListaComponentesCheck.filter(cl => cl.componenteId == idC && cl.bimestreId == idBimestre).length){
-              const novoItem = { componenteId : idC, bimestreId: idBimestre}
-              copiaListaComponentesCheck.push(novoItem);
-            }            
-        })
+    const atualizarListaComponentesCheck = async params => {
+      const copiaListaComponentesCheck = listaComponentesCheck;
+      params.periodosEscolares.forEach(item => {
+        const idBimestre = item.periodoEscolarId;
+        item.componentes.forEach(c => {
+          const idC = c.componenteCurricularId;
+          if (
+            !copiaListaComponentesCheck.filter(
+              cl =>
+                String(cl.componenteId) === idC && cl.bimestreId === idBimestre
+            ).length
+          ) {
+            const novoItem = { componenteId: idC, bimestreId: idBimestre };
+            copiaListaComponentesCheck.push(novoItem);
+          }
+        });
       });
       const copiaListaComponentesCurricularesPlanejamento = listaComponentesCurricularesPlanejamento;
       dispatch(setListaComponentesCurricularesPlanejamento([]));
-      dispatch(setListaComponentesCurricularesPlanejamento(copiaListaComponentesCurricularesPlanejamento));
+      dispatch(
+        setListaComponentesCurricularesPlanejamento(
+          copiaListaComponentesCurricularesPlanejamento
+        )
+      );
       dispatch(setListaComponentesCheck(copiaListaComponentesCheck));
-    }
+    };
 
     const salvar = async () => {
       const listaNova = [...dadosBimestresPlanoAnual];
@@ -170,7 +179,7 @@ class ServicoSalvarPlanoAnual {
       const params = {
         periodosEscolares: listaParaSalvar,
       };
-      dispatch(setExibirLoaderPlanoAnual(true));      
+      dispatch(setExibirLoaderPlanoAnual(true));
 
       const retorno = await ServicoPlanoAnual.salvarEditarPlanoAnual(
         turmaSelecionada.id,
@@ -198,6 +207,7 @@ class ServicoSalvarPlanoAnual {
                   String(compSetarAudi.componenteCurricularId)
               );
               if (componenteComNovaAuditoria) {
+                compSetarAudi.descricao = componenteComNovaAuditoria.descricao;
                 compSetarAudi.auditoria = componenteComNovaAuditoria.auditoria;
                 compSetarAudi.emEdicao = false;
               }
