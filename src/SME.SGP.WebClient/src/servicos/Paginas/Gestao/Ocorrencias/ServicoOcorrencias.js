@@ -26,6 +26,10 @@ class ServicoOcorrencias {
   buscarOcorrencia = id => {
     return api.get(`v1/ocorrencias/${id}`);
   };
+
+  gerar = () => {
+    return Promise.resolve({ status: 200 });
+  };
 }
 
 export default new ServicoOcorrencias();

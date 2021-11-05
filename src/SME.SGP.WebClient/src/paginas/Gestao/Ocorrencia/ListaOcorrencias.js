@@ -170,6 +170,16 @@ const ListaOcorrencias = () => {
     );
   };
 
+  const onClickGerar = async () => {
+    const retorno = await ServicoOcorrencias.gerar().catch(e => erros(e));
+
+    if (retorno?.status === 200) {
+      sucesso(
+        'Solicitação de geração do relatório gerada com sucesso. Em breve você receberá uma notificação com o resultado.'
+      );
+    }
+  };
+
   return (
     <>
       {turmaSelecionada.turma ? <AlertaPermiteSomenteTurmaInfantil /> : ''}
@@ -268,6 +278,18 @@ const ListaOcorrencias = () => {
             valor={tituloOcorrencia}
             onChange={valor => setTituloOcorrencia(valor.currentTarget.value)}
             disabled={desabilitarCampos()}
+          />
+        </div>
+        <div className="col-sm-12 mt-4">
+          <Button
+            id="btn-imprimir-relatorio-ocorrencias"
+            className="btn-imprimir"
+            icon="print"
+            color={Colors.Azul}
+            semMargemDireita
+            border
+            onClick={onClickGerar}
+            disabled={desabilitarCampos() || !itenSelecionados?.length}
           />
         </div>
         <div className="col-md-12 pt-4">
