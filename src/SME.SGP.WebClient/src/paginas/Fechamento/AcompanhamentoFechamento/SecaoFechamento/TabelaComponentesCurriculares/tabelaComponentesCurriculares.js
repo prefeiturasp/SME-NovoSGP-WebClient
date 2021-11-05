@@ -11,7 +11,7 @@ import { Base, Button, Colors, DataTable, Loader } from '~/componentes';
 import { statusAcompanhamentoFechamento } from '~/dtos';
 import { erros, ServicoAcompanhamentoFechamento } from '~/servicos';
 
-import { RenderizarHtml } from '../RenderizarHtml';
+import { RenderizarHtml } from '~/utils';
 import {
   MarcadorTriangulo,
   TextoEstilizado,

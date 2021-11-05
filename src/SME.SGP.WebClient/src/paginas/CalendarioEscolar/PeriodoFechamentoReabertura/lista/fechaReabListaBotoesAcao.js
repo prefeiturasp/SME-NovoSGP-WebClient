@@ -4,6 +4,7 @@ import { useSelector } from 'react-redux';
 import { Button, Colors } from '~/componentes';
 import { URL_HOME } from '~/constantes';
 import { RotasDto } from '~/dtos';
+import { RenderizarHtml } from '~/utils';
 import {
   confirmar,
   erros,
@@ -53,7 +54,8 @@ const FechaReabListaBotoesAcao = () => {
           .finally(() => setExibirLoaderLista(false));
 
         if (resposta?.status === 200) {
-          sucesso(resposta.data);
+          const mensagem = <RenderizarHtml textoHtml={resposta.data} />;
+          sucesso(mensagem);
           setIdsReaberturasSelecionadas([]);
           seFiltrarNovaConsulta(true);
         }
