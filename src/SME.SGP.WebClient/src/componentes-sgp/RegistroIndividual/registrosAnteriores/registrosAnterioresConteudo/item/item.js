@@ -107,12 +107,12 @@ const Item = ({ dados, setCarregandoGeral, permissoesTela, podeEditar }) => {
       sucesso('Registro editado com sucesso.');
       const dadosPraSalvar = {
         id,
-        registro: registroAlterado,
+        registro: retorno.data.registro,
         auditoria: retorno.data,
       };
       dispatch(alterarRegistroAnterior(dadosPraSalvar));
-      setRegistroAlterado(registroAlterado);
-      resetarInfomacoes(registroAlterado);
+      setRegistroAlterado(retorno.data.registro);
+      resetarInfomacoes(retorno.data.registro);
     }
   };
 

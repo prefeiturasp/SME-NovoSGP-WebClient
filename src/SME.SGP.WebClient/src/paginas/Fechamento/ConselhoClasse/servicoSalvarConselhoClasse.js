@@ -2,7 +2,6 @@ import { store } from '~/redux';
 import { erros, sucesso, confirmar, erro } from '~/servicos/alertas';
 import ServicoConselhoClasse from '~/servicos/Paginas/ConselhoClasse/ServicoConselhoClasse';
 import {
-  setAuditoriaAnotacaoRecomendacao,
   setDadosPrincipaisConselhoClasse,
   setConselhoClasseEmEdicao,
   setExpandirLinha,
@@ -11,10 +10,32 @@ import {
   setGerandoParecerConclusivo,
   setExibirLoaderGeralConselhoClasse,
   setAtualizarEmAprovacao,
+  setBimestreAtual,
 } from '~/redux/modulos/conselhoClasse/actions';
 import notasConceitos from '~/dtos/notasConceitos';
 
 class ServicoSalvarConselhoClasse {
+  recarregarDados = () => {
+    const { dispatch } = store;
+    const state = store.getState();
+
+    const { conselhoClasse } = state;
+
+    const { bimestreAtual } = conselhoClasse;
+
+    dispatch(setConselhoClasseEmEdicao(false));
+    dispatch(
+      setBimestreAtual({
+        valor: bimestreAtual.valor,
+        dataInicio: bimestreAtual.dataInicio,
+        dataFim: bimestreAtual.dataFim,
+      })
+    );
+    dispatch(setExpandirLinha([]));
+    dispatch(setNotaConceitoPosConselhoAtual({}));
+    dispatch(setIdCamposNotasPosConselho({}));
+  };
+
   validarSalvarRecomendacoesAlunoFamilia = async (salvarSemValidar = false) => {
     const { dispatch } = store;
     const state = store.getState();
@@ -71,24 +92,7 @@ class ServicoSalvarConselhoClasse {
         });
 
       if (retorno && retorno.status === 200) {
-        if (!dadosPrincipaisConselhoClasse.conselhoClasseId) {
-          dadosPrincipaisConselhoClasse.conselhoClasseId =
-            retorno.data.conselhoClasseId;
-          dispatch(
-            setDadosPrincipaisConselhoClasse(dadosPrincipaisConselhoClasse)
-          );
-        }
-
-        const auditoria = {
-          criadoEm: retorno.data.criadoEm,
-          criadoPor: retorno.data.criadoPor,
-          criadoRF: retorno.data.criadoRF,
-          alteradoEm: retorno.data.alteradoEm,
-          alteradoPor: retorno.data.alteradoPor,
-          alteradoRF: retorno.data.alteradoRF,
-        };
-        dispatch(setAuditoriaAnotacaoRecomendacao(auditoria));
-        dispatch(setConselhoClasseEmEdicao(false));
+        this.recarregarDados();
         sucesso('Anotações e recomendações salvas com sucesso.');
         return true;
       }

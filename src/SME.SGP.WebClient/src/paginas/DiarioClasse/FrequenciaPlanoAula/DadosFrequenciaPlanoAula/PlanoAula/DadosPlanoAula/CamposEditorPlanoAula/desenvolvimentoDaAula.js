@@ -16,7 +16,7 @@ const DesenvolvimentoDaAula = () => {
   );
 
   const dadosPlanoAula = useSelector(
-    state => state.frequenciaPlanoAula.dadosPlanoAula
+    state => state.frequenciaPlanoAula?.dadosPlanoAula
   );
 
   const temPeriodoAberto = useSelector(
@@ -65,7 +65,7 @@ const DesenvolvimentoDaAula = () => {
             mensagemErro="Campo obrigatório"
             desabilitar={desabilitarCamposPlanoAula || !temPeriodoAberto}
             onChange={onChangeDesenvolvimentoAula}
-            value={dadosPlanoAula.desenvolvimentoAula}
+            value={dadosPlanoAula?.desenvolvimentoAula}
           />
         </fieldset>
       </CardCollapse>

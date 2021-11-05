@@ -13,7 +13,7 @@ const RecuperacaoContinua = () => {
   );
 
   const dadosPlanoAula = useSelector(
-    state => state.frequenciaPlanoAula.dadosPlanoAula
+    state => state.frequenciaPlanoAula?.dadosPlanoAula
   );
 
   const temPeriodoAberto = useSelector(
@@ -42,7 +42,7 @@ const RecuperacaoContinua = () => {
           <JoditEditor
             desabilitar={desabilitarCamposPlanoAula || !temPeriodoAberto}
             onChange={onChangeRecuperacaoContinua}
-            value={dadosPlanoAula.recuperacaoAula}
+            value={dadosPlanoAula?.recuperacaoAula}
           />
         </fieldset>
       </CardCollapse>
