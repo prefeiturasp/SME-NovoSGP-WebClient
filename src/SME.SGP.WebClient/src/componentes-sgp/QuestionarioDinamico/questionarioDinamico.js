@@ -55,7 +55,6 @@ const QuestionarioDinamico = props => {
 
   const montarValoresIniciais = useCallback(() => {
     const valores = {};
-
     const montarDados = questaoAtual => {
       const resposta = questaoAtual?.resposta;
 
