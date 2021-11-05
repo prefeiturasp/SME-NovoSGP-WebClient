@@ -58,12 +58,13 @@ const DadosConselhoClasse = props => {
   const [turmaAtual, setTurmaAtual] = useState(0);
 
   const validaAbaFinal = useCallback(
-    async (conselhoClasseId, fechamentoTurmaId, alunoCodigo, codigoTurma) => {
+    async (conselhoClasseId, fechamentoTurmaId, alunoCodigo, codigoTurma, consideraHistorico) => {
       const resposta = await ServicoConselhoClasse.acessarAbaFinalParecerConclusivo(
         conselhoClasseId,
         fechamentoTurmaId,
         alunoCodigo,
-        codigoTurma
+        codigoTurma,
+        consideraHistorico
       ).catch(e => erros(e));
       if (resposta && resposta.data) {
         ServicoConselhoClasse.setarParecerConclusivo(resposta.data);
@@ -153,7 +154,8 @@ const DadosConselhoClasse = props => {
             conselhoClasseId,
             fechamentoTurmaId,
             codigoEOL,
-            turmaCodigo
+            turmaCodigo,
+            usuario.turmaSelecionada.consideraHistorico
           ).catch(e => erros(e));
           podeAcessarAbaFinal = podeAcessar;
         }
@@ -234,6 +236,7 @@ const DadosConselhoClasse = props => {
       turmaCodigo,
       validaAbaFinal,
       validaPermissoes,
+      usuario,
     ]
   );
 
