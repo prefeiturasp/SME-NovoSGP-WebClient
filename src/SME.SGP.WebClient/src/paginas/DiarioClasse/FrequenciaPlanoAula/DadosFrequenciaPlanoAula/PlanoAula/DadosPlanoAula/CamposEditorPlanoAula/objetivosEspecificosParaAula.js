@@ -16,8 +16,8 @@ const ObjetivosEspecificosParaAula = () => {
     state => state.frequenciaPlanoAula.desabilitarCamposPlanoAula
   );
 
-  const descricao = useSelector(
-    state => state.frequenciaPlanoAula?.dadosPlanoAula?.descricao
+  const dadosPlanoAula = useSelector(
+    state => state.frequenciaPlanoAula?.dadosPlanoAula
   );
 
   const objetivosAprendizagemComponente = useSelector(
@@ -108,7 +108,7 @@ const ObjetivosEspecificosParaAula = () => {
               validarSeEhObrigatorio()
             }
             onChange={onChangeObjetivosEspecificosParaAula}
-            value={descricao}
+            value={dadosPlanoAula?.descricao}
           />
         </fieldset>
       </CardCollapse>
