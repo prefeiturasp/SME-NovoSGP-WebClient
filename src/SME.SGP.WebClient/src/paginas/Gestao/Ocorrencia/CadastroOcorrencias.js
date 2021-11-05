@@ -106,12 +106,10 @@ const CadastroOcorrencias = ({ match }) => {
           new Date(ocorrencia.data.dataOcorrencia)
         );
         const data = new Date(ocorrencia.data.dataOcorrencia);
-        const horaMin = ocorrencia.data.horaOcorrencia.split(":");
+        const horaMin = ocorrencia.data.horaOcorrencia.split(':');
         data.setHours(ocorrencia.data.horaOcorrencia ? horaMin[0] : '00');
-        data.setMinutes(ocorrencia.data.horaOcorrencia ? horaMin[1] : '00');                
-        ocorrencia.data.horaOcorrencia = window.moment(
-          new Date(data)
-        );
+        data.setMinutes(ocorrencia.data.horaOcorrencia ? horaMin[1] : '00');
+        ocorrencia.data.horaOcorrencia = window.moment(new Date(data));
         setValoresIniciais(ocorrencia.data);
         refForm.setFieldValue(
           'ocorrenciaTipoId',
@@ -336,6 +334,16 @@ const CadastroOcorrencias = ({ match }) => {
     );
   };
 
+  const onClickGerar = async () => {
+    const retorno = await ServicoOcorrencias.gerar().catch(e => erros(e));
+
+    if (retorno?.status === 200) {
+      sucesso(
+        'Solicitação de geração do relatório gerada com sucesso. Em breve você receberá uma notificação com o resultado.'
+      );
+    }
+  };
+
   return (
     <>
       <Cabecalho pagina="Cadastro de ocorrência" />
@@ -391,60 +399,73 @@ const CadastroOcorrencias = ({ match }) => {
           ref={refFormik => setRefForm(refFormik)}
         >
           {form => (
-            <Form className="col-md-12 mb-4">
-              <div className="col-md-12 d-flex justify-content-end pb-4">
-                <Button
-                  id={shortid.generate()}
-                  label="Voltar"
-                  icon="arrow-left"
-                  color={Colors.Azul}
-                  border
-                  className="mr-2"
-                  onClick={() => onClickVoltar(form)}
-                />
-                <Button
-                  id={shortid.generate()}
-                  label="Cancelar"
-                  color={Colors.Azul}
-                  border
-                  className="mr-2"
-                  onClick={onClickCancelar}
-                  disabled={
-                    !modoEdicao ||
-                    ehTurmaAnoAnterior() ||
-                    somenteConsulta ||
-                    naoPodeIncluirOuAlterar()
-                  }
-                />
-                {match?.params?.id ? (
+            <Form className="col-md-12 p-0 mb-4">
+              <div className="d-flex pb-4 justify-content-between">
+                <div className="">
+                  <Button
+                    id="btn-imprimir-relatorio-ocorrencias"
+                    className="btn-imprimir aling"
+                    icon="print"
+                    color={Colors.Azul}
+                    semMargemDireita
+                    border
+                    onClick={onClickGerar}
+                    disabled={!idOcorrencia}
+                  />
+                </div>
+                <div className="d-flex">
                   <Button
                     id={shortid.generate()}
-                    label="Excluir"
-                    color={Colors.Vermelho}
+                    label="Voltar"
+                    icon="arrow-left"
+                    color={Colors.Azul}
                     border
                     className="mr-2"
-                    onClick={onClickExcluir}
+                    onClick={() => onClickVoltar(form)}
+                  />
+                  <Button
+                    id={shortid.generate()}
+                    label="Cancelar"
+                    color={Colors.Azul}
+                    border
+                    className="mr-2"
+                    onClick={onClickCancelar}
                     disabled={
-                      ehTurmaAnoAnterior() || somenteConsulta || !podeExcluir
+                      !modoEdicao ||
+                      ehTurmaAnoAnterior() ||
+                      somenteConsulta ||
+                      naoPodeIncluirOuAlterar()
                     }
                   />
-                ) : null}
-                <Button
-                  id={shortid.generate()}
-                  label={idOcorrencia ? 'Alterar' : 'Cadastrar'}
-                  color={Colors.Roxo}
-                  border
-                  bold
-                  className="mr-2"
-                  onClick={() => validaAntesDoSubmit(form)}
-                  disabled={
-                    !modoEdicao ||
-                    !criancasSelecionadas?.length > 0 ||
-                    ehTurmaAnoAnterior() ||
-                    somenteConsulta ||
-                    naoPodeIncluirOuAlterar()
-                  }
-                />
+                  {match?.params?.id ? (
+                    <Button
+                      id={shortid.generate()}
+                      label="Excluir"
+                      color={Colors.Vermelho}
+                      border
+                      className="mr-2"
+                      onClick={onClickExcluir}
+                      disabled={
+                        ehTurmaAnoAnterior() || somenteConsulta || !podeExcluir
+                      }
+                    />
+                  ) : null}
+                  <Button
+                    id={shortid.generate()}
+                    label={idOcorrencia ? 'Alterar' : 'Cadastrar'}
+                    color={Colors.Roxo}
+                    border
+                    bold
+                    onClick={() => validaAntesDoSubmit(form)}
+                    disabled={
+                      !modoEdicao ||
+                      !criancasSelecionadas?.length > 0 ||
+                      ehTurmaAnoAnterior() ||
+                      somenteConsulta ||
+                      naoPodeIncluirOuAlterar()
+                    }
+                  />
+                </div>
               </div>
               <div className="p-0 col-12 mb-3 font-weight-bold">
                 <span>Crianças envolvidas na ocorrência</span>
