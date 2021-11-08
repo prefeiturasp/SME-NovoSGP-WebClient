@@ -72,15 +72,16 @@ const ModalImpressao = ({ dadosAlunos }) => {
 
   const onClickGerar = async () => {
     const bimestre = imprimirTodosBimestres ? OPCAO_TODOS : bimestreSelecionado;
-    const codigoCriancasSelecionadas = ehAlunosSelecionados
+    const alunosCodigos = ehAlunosSelecionados
       ? alunosSelecionados
-      : OPCAO_TODOS;
+      : [OPCAO_TODOS];
 
     const retorno = await ServicoAcompanhamentoFrequencia.gerar({
-      codigoCriancasSelecionadas,
-      codigoDre: turmaSelecionada?.dre,
-      codigoUe: turmaSelecionada?.unidadeEscolar,
+      alunosCodigos,
+      dreCodigo: turmaSelecionada?.dre,
+      ueCodigo: turmaSelecionada?.unidadeEscolar,
       bimestre,
+      turmaCodigo: turmaSelecionada?.turma,
     }).catch(e => erros(e));
     if (retorno?.status === 200) {
       sucesso(
