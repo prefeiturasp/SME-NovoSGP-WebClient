@@ -56,6 +56,30 @@ const DadosConselhoClasse = props => {
   const [carregando, setCarregando] = useState(false);
   const [turmaAtual, setTurmaAtual] = useState(0);
 
+  const validaAbaFinal = useCallback(
+    async (
+      conselhoClasseId,
+      fechamentoTurmaId,
+      alunoCodigo,
+      codigoTurma,
+      consideraHistorico
+    ) => {
+      const resposta = await ServicoConselhoClasse.acessarAbaFinalParecerConclusivo(
+        conselhoClasseId,
+        fechamentoTurmaId,
+        alunoCodigo,
+        codigoTurma,
+        consideraHistorico
+      ).catch(e => erros(e));
+      if (resposta && resposta.data) {
+        ServicoConselhoClasse.setarParecerConclusivo(resposta.data);
+        return true;
+      }
+      return false;
+    },
+    []
+  );
+
   const limparDadosNotaPosConselhoJustificativa = useCallback(() => {
     dispatch(setExpandirLinha([]));
     dispatch(setNotaConceitoPosConselhoAtual({}));
@@ -81,13 +105,6 @@ const DadosConselhoClasse = props => {
     },
     [dispatch, permissoesTela, turmaSelecionada, modalidadesFiltroPrincipal]
   );
-
-  const verificarExibicaoMarcador = () => {
-    return ServicoConselhoClasse.obterVisibilidadeMarcadorParecer(
-      turmaCodigo,
-      codigoEOL
-    );
-  };
 
   // Quando passa bimestre 0 o retorno vai trazer dados do bimestre corrente!
   const caregarInformacoes = useCallback(
@@ -139,13 +156,19 @@ const DadosConselhoClasse = props => {
         const novoRegistro = !conselhoClasseId;
         validaPermissoes(novoRegistro);
 
-        const resposta = await verificarExibicaoMarcador().catch(e => erros(e));
-
-        if (resposta?.data) {
-          ServicoConselhoClasse.setarParecerConclusivo(resposta.data);
+        let podeAcessarAbaFinal = true;
+        if (ehFinal) {
+          const podeAcessar = await validaAbaFinal(
+            conselhoClasseId,
+            fechamentoTurmaId,
+            codigoEOL,
+            turmaCodigo,
+            usuario.turmaSelecionada.consideraHistorico
+          ).catch(e => erros(e));
+          podeAcessarAbaFinal = podeAcessar;
         }
 
-        if (!resposta?.data) {
+        if (!podeAcessarAbaFinal) {
           dispatch(
             setBimestreAtual({
               valor: bimestreConsulta,
@@ -221,6 +244,7 @@ const DadosConselhoClasse = props => {
       limparDadosNotaPosConselhoJustificativa,
       turmaCodigo,
       validaPermissoes,
+      usuario,
     ]
   );
 
