@@ -17,6 +17,11 @@ const CampoPercursoIndividual = () => {
         .desabilitarCamposAcompanhamentoAprendizagem
   );
 
+  const qtdMaxImagensCampoPercursoIndividual = useSelector(
+    store =>
+      store.acompanhamentoAprendizagem?.qtdMaxImagensCampoPercursoIndividual
+  );
+
   const [percursoIndividual, setPercursoIndividual] = useState();
 
   useEffect(() => {
@@ -39,6 +44,9 @@ const CampoPercursoIndividual = () => {
       readonly={desabilitarCamposAcompanhamentoAprendizagem}
       mensagemErro="Campo obrigatório"
       validarSeTemErro={valorNovo => !valorNovo}
+      permiteVideo={false}
+      permiteGif={false}
+      qtdMaxImg={qtdMaxImagensCampoPercursoIndividual}
     />
   );
 };

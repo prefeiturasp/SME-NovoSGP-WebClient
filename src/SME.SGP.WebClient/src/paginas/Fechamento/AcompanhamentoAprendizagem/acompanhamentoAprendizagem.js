@@ -116,7 +116,7 @@ const AcompanhamentoAprendizagem = () => {
     ) {
       obterComponentesCurriculares();
       obterListaSemestres();
-      ServicoAcompanhamentoAprendizagem.obterQtdMaxImagensCampoPercursoColetivo(
+      ServicoAcompanhamentoAprendizagem.obterQtdMaxImagensCampos(
         turmaSelecionada?.anoLetivo
       );
     } else {
@@ -160,9 +160,12 @@ const AcompanhamentoAprendizagem = () => {
     return 0;
   };
 
-  const onChangeAlunoSelecionado = async (aluno, semestreSelecionado) => {
+  const onChangeAlunoSelecionado = async (aluno, semestreConsulta) => {
     resetarInfomacoes();
-    const frequenciaGeralAluno = await obterFrequenciaAluno(aluno.codigoEOL, semestreSelecionado);
+    const frequenciaGeralAluno = await obterFrequenciaAluno(
+      aluno.codigoEOL,
+      semestreConsulta
+    );
     const novoAluno = aluno;
     novoAluno.frequencia = frequenciaGeralAluno;
     dispatch(setDadosAlunoObjectCard(aluno));
@@ -312,10 +315,9 @@ const AcompanhamentoAprendizagem = () => {
                   </div>
                   <div className="col-md-12 mb-2">
                     <TabelaRetratilAcompanhamentoAprendizagem
-                      onChangeAlunoSelecionado={value => 
-                        { 
-                          onChangeAlunoSelecionado(value, semestreSelecionado); 
-                        }}
+                      onChangeAlunoSelecionado={value => {
+                        onChangeAlunoSelecionado(value, semestreSelecionado);
+                      }}
                       permiteOnChangeAluno={permiteOnChangeAluno}
                     >
                       <ObjectCardAcompanhamentoAprendizagem

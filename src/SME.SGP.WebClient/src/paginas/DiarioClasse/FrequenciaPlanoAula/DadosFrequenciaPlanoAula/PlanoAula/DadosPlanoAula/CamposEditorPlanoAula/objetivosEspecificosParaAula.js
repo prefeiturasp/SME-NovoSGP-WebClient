@@ -17,7 +17,7 @@ const ObjetivosEspecificosParaAula = () => {
   );
 
   const dadosPlanoAula = useSelector(
-    state => state.frequenciaPlanoAula.dadosPlanoAula
+    state => state.frequenciaPlanoAula?.dadosPlanoAula
   );
 
   const objetivosAprendizagemComponente = useSelector(
