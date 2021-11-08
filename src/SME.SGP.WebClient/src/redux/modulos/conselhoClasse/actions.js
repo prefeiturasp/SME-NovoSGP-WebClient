@@ -142,3 +142,8 @@ export const setSituacaoConselhoAluno = payload => ({
   type: '@conselhoClasse/setSituacaoConselhoAluno',
   payload,
 });
+
+export const setAtualizarEmAprovacao = payload => ({
+  type: '@conselhoClasse/setAtualizarEmAprovacao',
+  payload,
+});

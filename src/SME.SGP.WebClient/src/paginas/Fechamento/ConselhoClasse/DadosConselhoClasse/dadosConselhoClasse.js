@@ -23,7 +23,6 @@ import servicoSalvarConselhoClasse from '../servicoSalvarConselhoClasse';
 import AlertaDentroPeriodo from './AlertaDentroPeriodo/alertaDentroPeriodo';
 import AnotacoesRecomendacoes from './AnotacoesRecomendacoes/anotacoesRecomendacoes';
 import ListasNotasConceitos from './ListasNotasConceito/listasNotasConceitos';
-import MarcadorParecerConclusivo from './MarcadorParecerConclusivo/marcadorParecerConclusivo';
 import MarcadorPeriodoInicioFim from './MarcadorPeriodoInicioFim/marcadorPeriodoInicioFim';
 import Sintese from './Sintese/Sintese';
 import MarcadorSituacaoConselho from './MarcadorSituacaoConselho/marcadorSituacaoConselho';
@@ -58,7 +57,13 @@ const DadosConselhoClasse = props => {
   const [turmaAtual, setTurmaAtual] = useState(0);
 
   const validaAbaFinal = useCallback(
-    async (conselhoClasseId, fechamentoTurmaId, alunoCodigo, codigoTurma, consideraHistorico) => {
+    async (
+      conselhoClasseId,
+      fechamentoTurmaId,
+      alunoCodigo,
+      codigoTurma,
+      consideraHistorico
+    ) => {
       const resposta = await ServicoConselhoClasse.acessarAbaFinalParecerConclusivo(
         conselhoClasseId,
         fechamentoTurmaId,
@@ -118,18 +123,21 @@ const DadosConselhoClasse = props => {
         codigoEOL,
         ehFinal,
         usuario.turmaSelecionada.consideraHistorico
-      ).catch(e => {
-        erros(e);
-        dispatch(
-          setBimestreAtual({
-            valor: bimestreConsulta,
-            dataInicio: null,
-            dataFim: null,
-          })
-        );
-        dispatch(setDadosPrincipaisConselhoClasse({}));
-        setSemDados(true);
-      });
+      )
+        .catch(e => {
+          erros(e);
+          dispatch(
+            setBimestreAtual({
+              valor: bimestreConsulta,
+              dataInicio: null,
+              dataFim: null,
+            })
+          );
+          dispatch(setDadosPrincipaisConselhoClasse({}));
+          setSemDados(true);
+        })
+        .finally(() => setCarregando(false));
+
       if (retorno && retorno.data) {
         const {
           conselhoClasseId,
@@ -159,6 +167,7 @@ const DadosConselhoClasse = props => {
           ).catch(e => erros(e));
           podeAcessarAbaFinal = podeAcessar;
         }
+
         if (!podeAcessarAbaFinal) {
           dispatch(
             setBimestreAtual({
@@ -196,7 +205,7 @@ const DadosConselhoClasse = props => {
           );
         } else {
           ServicoConselhoClasse.carregarListaTiposConceito(
-            anoLetivo + '/12/31'
+            `${anoLetivo}/12/31`
           );
         }
 
@@ -234,7 +243,6 @@ const DadosConselhoClasse = props => {
       dispatch,
       limparDadosNotaPosConselhoJustificativa,
       turmaCodigo,
-      validaAbaFinal,
       validaPermissoes,
       usuario,
     ]
@@ -280,9 +288,6 @@ const DadosConselhoClasse = props => {
           <>
             <AlertaDentroPeriodo />
             <MarcadorSituacaoConselho />
-            {bimestreAtual.valor === 'final' ? (
-              <MarcadorParecerConclusivo />
-            ) : null}
             <MarcadorPeriodoInicioFim />
             <ListasNotasConceitos bimestreSelecionado={bimestreAtual} />
             <Sintese

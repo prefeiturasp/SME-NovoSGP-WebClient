@@ -3,22 +3,14 @@ import api from '~/servicos/api';
 const urlPadrao = `v1/fechamentos/reaberturas`;
 
 class ServicoFechamentoReabertura {
-  salvar = async (id, parametros, alteracaoHierarquicaConfirmacao) => {
-    let url = urlPadrao;
-    if (id) {
-      url = `${url}/${id}`;
+  salvar = parametros => {
+    if (parametros?.id) {
+      return api.put(`${urlPadrao}/${parametros?.id}`, parametros);
     }
-    if (alteracaoHierarquicaConfirmacao) {
-      url = `${url}/?alteracaoHierarquicaConfirmacao=${alteracaoHierarquicaConfirmacao}`;
-      return api.put(url, parametros);
-    }
-    const metodo = id ? 'put' : 'post';
-    return api[metodo](url, parametros);
+    return api.post(urlPadrao, parametros);
   };
 
-  obterPorId = async id => {
-    return api.get(`${urlPadrao}/${id}`);
-  };
+  obterPorId = id => api.get(`${urlPadrao}/${id}`);
 
   deletar = async ids => {
     const parametros = { data: ids };

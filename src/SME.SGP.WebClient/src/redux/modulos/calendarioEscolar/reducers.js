@@ -90,10 +90,11 @@ const inicial = {
   },
   diaSelecionado: undefined,
   eventoCalendarioEdicao: {},
-  filtroCalendarioEscolar: {
+  filtroListaEventos: {
     eventoCalendarioId: false,
-    dreId: '',
-    ueId: '',
+    codigoDre: '',
+    codigoUe: '',
+    calendarioSelecionado: null,
   },
 };
 
@@ -139,8 +140,8 @@ export default function calendarioEscolar(state = inicial, action) {
         draft.eventoCalendarioEdicao = action.payload;
         break;
       }
-      case '@calendarioEscolar/filtroCalendarioEscolar': {
-        draft.filtroCalendarioEscolar = action.payload;
+      case '@calendarioEscolar/setFiltroListaEventos': {
+        draft.filtroListaEventos = action.payload;
         break;
       }
       default:

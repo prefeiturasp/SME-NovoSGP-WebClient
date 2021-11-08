@@ -9,6 +9,7 @@ const Auditoria = ({
   criadoRf,
   alteradoRf,
   ignorarMarginTop,
+  className,
 }) => {
   const [criado, setCriado] = useState(window.moment());
 
@@ -26,7 +27,8 @@ const Auditoria = ({
     <Container ignorarMarginTop={ignorarMarginTop}>
       {criadoPor ? (
         <div
-          className={`col-xs-12 col-md-12 col-lg-12 d-flex justify-content-start ${
+          className={`${className ||
+            'col-md-12 d-flex justify-content-start'} ${
             ignorarMarginTop ? '' : 'mt-2'
           }`}
         >
@@ -38,7 +40,10 @@ const Auditoria = ({
         ''
       )}
       {alteradoPor ? (
-        <div className="col-xs-12 col-md-12 col-lg-12 d-flex justify-content-start mt-2">
+        <div
+          className={`${className ||
+            'col-xs-12 col-md-12 col-lg-12 d-flex justify-content-start'} mt-2`}
+        >
           ALTERADO por {alteradoPor}{' '}
           {alteradoRf && alteradoRf !== '0' && `(${alteradoRf})`} em{' '}
           {`${alterado.format('DD/MM/YYYY')}  às ${alterado.format('HH:mm')}`}

@@ -11,7 +11,13 @@ import { salvarDadosAulaFrequencia } from '~/redux/modulos/calendarioProfessor/a
 import { useSelector } from 'react-redux';
 
 // Estilos
-import { DiaCompletoWrapper, LinhaEvento, Pilula, Linha } from './styles';
+import {
+  DiaCompletoWrapper,
+  LinhaEvento,
+  Pilula,
+  Linha,
+  ContainerDetalhesIcon,
+} from './styles';
 
 // Componentes
 import { Loader, Base } from '~/componentes';
@@ -117,7 +123,11 @@ function DiaCompleto({
   return (
     <DiaCompletoWrapper className={`${deveExibir && `visivel`}`}>
       {deveExibir && (
-        <Loader loading={carregandoDia} tip="Carregando...">
+        <Loader
+          loading={carregandoDia}
+          tip="Carregando..."
+          style={{ width: 'inherit' }}
+        >
           <AlertaDentroPeriodo
             exibir={!!dadosDia?.dados?.mensagemPeriodoEncerrado}
           />
@@ -127,16 +137,24 @@ function DiaCompleto({
                   <LinhaEvento
                     className={`${!eventoAula.ehAula && `evento`}`}
                     onClick={() => onClickAula(eventoAula)}
+                    style={
+                      !eventoAula.ehAula
+                        ? {
+                            flexDirection: 'column',
+                            alignItems: 'flex-start',
+                          }
+                        : {}
+                    }
                   >
-                    <div className="labelEventoAula">
+                    <div
+                      className={`labelEventoAula ${
+                        !eventoAula.ehAula ? 'ml-2' : ''
+                      }`}
+                    >
                       <LabelAulaEvento dadosEvento={eventoAula} />
                     </div>
                     <div className="tituloEventoAula">
-                      <div>
-                        <Tooltip title={eventoAula.descricao}>
-                          {eventoAula.titulo}
-                        </Tooltip>
-                      </div>
+                      <div>{eventoAula.titulo}</div>
                       <div className="detalhesEvento">
                         {eventoAula.quantidade > 0 && (
                           <span>
@@ -144,7 +162,7 @@ function DiaCompleto({
                           </span>
                         )}
                         {eventoAula.estaAguardandoAprovacao && (
-                          <Pilula cor={Base.Branco} fundo={Base.AzulCalendario}>
+                          <Pilula cor={Base.Branco} fundo={Base.Roxo}>
                             Aguardando aprovação
                           </Pilula>
                         )}
@@ -155,6 +173,24 @@ function DiaCompleto({
                         )}
                         <DataInicioFim dadosAula={eventoAula} />
                       </div>
+                      {!eventoAula.ehAula && eventoAula.dre ? (
+                        <div className="detalhesEvento">
+                          <span>
+                            DRE: <strong>{eventoAula.dre}</strong>
+                          </span>
+                        </div>
+                      ) : (
+                        ''
+                      )}
+                      {!eventoAula.ehAula && eventoAula.ue ? (
+                        <div className="detalhesEvento">
+                          <span>
+                            UE: <strong>{eventoAula.ue}</strong>
+                          </span>
+                        </div>
+                      ) : (
+                        ''
+                      )}
                     </div>
                     {eventoAula.pendencias && eventoAula.pendencias.length ? (
                       <div
@@ -173,6 +209,16 @@ function DiaCompleto({
                       ''
                     )}
                   </LinhaEvento>
+                  {eventoAula.descricao ? (
+                    <ContainerDetalhesIcon>
+                      <Tooltip title={eventoAula.descricao}>
+                        <i className="fas fa-info-circle" />
+                        Detalhes
+                      </Tooltip>
+                    </ContainerDetalhesIcon>
+                  ) : (
+                    ''
+                  )}
                   <div className="botoesEventoAula">
                     {eventoAula?.ehAula && eventoAula?.mostrarBotaoFrequencia && (
                       <Tooltip title="Ir para frequência">
@@ -207,8 +253,7 @@ function DiaCompleto({
             podeCadastrarAvaliacao={
               dadosDia?.dados?.eventosAulas?.filter(
                 evento => evento.ehAula && evento.podeCadastrarAvaliacao
-              ).length > 0
-              && turmaSelecionada.modalidade > 1
+              ).length > 0 && turmaSelecionada.modalidade > 1
             }
             onClickNovaAula={() =>
               onClickNovaAulaHandler(window.moment(dia).format('YYYY-MM-DD'))

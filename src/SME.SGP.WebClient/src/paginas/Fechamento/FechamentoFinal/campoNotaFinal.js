@@ -48,6 +48,10 @@ const CampoNotaFinal = props => {
     [notaBimestre]
   );
 
+  const removerCaracteresInvalidos = texto => {
+    return texto.replace(/[^0-9,.]+/g, '');
+  };
+
   const validaSeEstaAbaixoDaMedia = useCallback(
     valorAtual => {
       valorAtual = removerCaracteresInvalidos(String(valorAtual));
@@ -79,10 +83,6 @@ const CampoNotaFinal = props => {
     }
   }, [notaBimestre, validaSeTeveAlteracao, validaSeEstaAbaixoDaMedia]);
 
-  const removerCaracteresInvalidos = texto => {
-    return texto.replace(/[^0-9,.]+/g, '');
-  };
-
   const editouCampo = (notaOriginal, notaNova) => {
     notaOriginal = removerCaracteresInvalidos(String(notaOriginal));
     notaNova = removerCaracteresInvalidos(String(notaNova));
@@ -112,7 +112,6 @@ const CampoNotaFinal = props => {
         }
         setCarregandoValorArredondamento(false);
       }
-
       validaSeEstaAbaixoDaMedia(notaArredondada);
       validaSeTeveAlteracao(notaArredondada);
       onChangeNotaConceitoFinal(notaBimestre, notaArredondada);
@@ -127,7 +126,7 @@ const CampoNotaFinal = props => {
 
   const apertarTecla = e => {
     const teclaEscolhida = converterAcaoTecla(e.keyCode);
-    if (teclaEscolhida === 0) {
+    if (teclaEscolhida === 0 && !notaAtual) {
       setarValorNovo(0);
     }
   };

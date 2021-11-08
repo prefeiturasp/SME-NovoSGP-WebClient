@@ -403,6 +403,9 @@ const FechamentoBismestre = () => {
                         turmaId={turmaSelecionada.turma}
                         anoLetivo={turmaSelecionada.anoLetivo}
                         registraFrequencia={registraFrequencia}
+                        desabilitarCampo={
+                          !podeIncluir || !podeAlterar || somenteConsulta
+                        }
                       />
                     ) : null}
                   </TabPane>
@@ -424,6 +427,9 @@ const FechamentoBismestre = () => {
                         turmaId={turmaSelecionada.turma}
                         anoLetivo={turmaSelecionada.anoLetivo}
                         registraFrequencia={registraFrequencia}
+                        desabilitarCampo={
+                          !podeIncluir || !podeAlterar || somenteConsulta
+                        }
                       />
                     ) : null}
                   </TabPane>
@@ -447,6 +453,9 @@ const FechamentoBismestre = () => {
                           turmaId={turmaSelecionada.turma}
                           anoLetivo={turmaSelecionada.anoLetivo}
                           registraFrequencia={registraFrequencia}
+                          desabilitarCampo={
+                            !podeIncluir || !podeAlterar || somenteConsulta
+                          }
                         />
                       ) : null}
                     </TabPane>
@@ -471,6 +480,9 @@ const FechamentoBismestre = () => {
                           turmaId={turmaSelecionada.turma}
                           anoLetivo={turmaSelecionada.anoLetivo}
                           registraFrequencia={registraFrequencia}
+                          desabilitarCampo={
+                            !podeIncluir || !podeAlterar || somenteConsulta
+                          }
                         />
                       ) : null}
                     </TabPane>

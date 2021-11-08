@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Loader } from '~/componentes';
 import Cabecalho from '~/componentes-sgp/cabecalho';
@@ -29,6 +29,7 @@ import AlertaModalidadeInfantil from '~/componentes-sgp/AlertaModalidadeInfantil
 import { ehTurmaInfantil } from '~/servicos/Validacoes/validacoesInfatil';
 import JoditEditor from '~/componentes/jodit-editor/joditEditor';
 import { IframeStyle } from './pendenciasFechamentoLista.css';
+import { ServicoPeriodoFechamento } from '~/servicos';
 
 const PendenciasFechamentoForm = ({ match }) => {
   const usuario = useSelector(store => store.usuario);
@@ -57,6 +58,7 @@ const PendenciasFechamentoForm = ({ match }) => {
   const [situacaoNome, setSituacaoNome] = useState('');
   const [descricao, setdescricao] = useState('');
   const [detalhamento, setDetalhamento] = useState('');
+  const [periodoAberto, setPeriodoAberto] = useState([]);
 
   const resetarTela = () => {
     setSituacaoId('');
@@ -122,6 +124,21 @@ const PendenciasFechamentoForm = ({ match }) => {
       resetarTela();
     }
   }, [turmaSelecionada, modalidadesFiltroPrincipal]);
+
+  const obterPeriodoAberto = useCallback(async () => {
+    const retorno = await ServicoPeriodoFechamento.verificarSePodeAlterarNoPeriodo(
+      turmaSelecionada.turma,
+      bimestre
+    ).catch(e => erros(e));
+
+    setPeriodoAberto(!!retorno.data);
+  }, [turmaSelecionada, bimestre]);
+
+  useEffect(() => {
+    if (bimestre && turmaSelecionada?.turma) {
+      obterPeriodoAberto();
+    }
+  }, [bimestre, turmaSelecionada, obterPeriodoAberto]);
 
   useEffect(() => {
     const consultaPorId = async () => {
@@ -243,6 +260,21 @@ const PendenciasFechamentoForm = ({ match }) => {
       ) : (
         ''
       )}
+      {bimestre && !periodoAberto ? (
+        <div className="col-md-12">
+          <Alert
+            alerta={{
+              tipo: 'warning',
+              mensagem:
+                'Apenas é possível consultar este registro pois o período não está em aberto.',
+              estiloTitulo: { fontSize: '18px' },
+            }}
+            className="mb-2"
+          />
+        </div>
+      ) : (
+        <></>
+      )}
       <AlertaModalidadeInfantil />
       <Cabecalho pagina="Análise de Pendências" />
       <Card>
@@ -265,6 +297,7 @@ const PendenciasFechamentoForm = ({ match }) => {
                 className="mr-2"
                 onClick={onClickAprovar}
                 disabled={
+                  !periodoAberto ||
                   ehTurmaInfantil(
                     modalidadesFiltroPrincipal,
                     turmaSelecionada

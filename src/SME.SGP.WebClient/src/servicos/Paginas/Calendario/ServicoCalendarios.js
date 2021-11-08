@@ -75,6 +75,14 @@ class ServicoCalendarios {
   obterBimestres = tipoCalendarioId => {
     return api.get(`v1/calendarios/tipos/${tipoCalendarioId}/bimestres`);
   };
+
+  obterTipoCalendarioPorId = tipoCalendarioId => {
+    return api.get(`v1/calendarios/tipos/${tipoCalendarioId}`);
+  };
+
+  obterFeriados = () => {
+    return api.post('v1/calendarios/feriados/listar', {});
+  };
 }
 
 export default new ServicoCalendarios();
