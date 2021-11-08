@@ -98,11 +98,12 @@ class ServicoConselhoClasse {
     conselhoClasseId,
     fechamentoTurmaId,
     alunoCodigo,
-    codigoTurma
+    codigoTurma,
+    consideraHistorico
   ) => {
     const url = `v1/conselhos-classe/${conselhoClasseId ||
       0}/fechamentos/${fechamentoTurmaId ||
-      0}/alunos/${alunoCodigo}/turmas/${codigoTurma}/parecer`;
+      0}/alunos/${alunoCodigo}/turmas/${codigoTurma}/parecer/consideraHistorico/${consideraHistorico}`;
     return api.get(url);
   };
 
