@@ -96,6 +96,8 @@ const JoditEditor = forwardRef((props, ref) => {
       },
     },
     askBeforePasteHTML: valideClipboardHTML,
+    askBeforePasteFromWord: false,
+    defaultActionOnPaste: 'insert_clear_html',
     disablePlugins: ['image-properties', disablePlugins],
     language: 'pt_br',
     height,
