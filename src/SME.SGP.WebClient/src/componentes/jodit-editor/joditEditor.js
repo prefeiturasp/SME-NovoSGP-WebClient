@@ -457,7 +457,7 @@ JoditEditor.defaultProps = {
   permiteVideo: true,
   qtdMaxImg: null,
   imagensCentralizadas: false,
-  valideClipboardHTML: true,
+  valideClipboardHTML: false,
   permiteGif: true,
 };
 
