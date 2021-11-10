@@ -350,7 +350,27 @@ const HistoricoNotificacoes = () => {
     obterDres();
   };
 
+  const temOpcaoTodos = dados => {
+    return dados.find(item => item === OPCAO_TODOS);
+  };
+
+  const todosOsIds = dados => {
+    return dados
+      .filter(item => item.id !== OPCAO_TODOS)
+      .map(item => item.id.toString());
+  };
+
   const onClickGerar = async () => {
+    const categoriasSelecionadas = temOpcaoTodos(categorias)
+      ? todosOsIds(listaCategorias)
+      : categorias;
+    const tiposSelecionadas = temOpcaoTodos(tipos)
+      ? todosOsIds(listaTipos)
+      : tipos;
+    const situacoesSelecionadas = temOpcaoTodos(situacoes)
+      ? todosOsIds(listaSituacao)
+      : situacoes;
+
     const params = {
       anoLetivo,
       dre: codigoDre,
@@ -359,9 +379,9 @@ const HistoricoNotificacoes = () => {
       semestre,
       turma: turmaId,
       usuarioBuscaRf: usuarioRf,
-      categorias: categorias,
-      tipos: tipos,
-      situacoes: situacoes,
+      categorias: categoriasSelecionadas,
+      tipos: tiposSelecionadas,
+      situacoes: situacoesSelecionadas,
       exibirDescricao,
       exibirNotificacoesExcluidas,
     };
