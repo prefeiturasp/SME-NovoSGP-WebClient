@@ -96,6 +96,8 @@ const JoditEditor = forwardRef((props, ref) => {
       },
     },
     askBeforePasteHTML: valideClipboardHTML,
+    askBeforePasteFromWord: false,
+    defaultActionOnPaste: 'insert_clear_html',
     disablePlugins: ['image-properties', disablePlugins],
     language: 'pt_br',
     height,
@@ -200,6 +202,7 @@ const JoditEditor = forwardRef((props, ref) => {
     buttonsXS: BOTOES_PADRAO,
     buttonsMD: BOTOES_PADRAO,
     buttonsSM: BOTOES_PADRAO,
+    enter: 'BR',
     placeholder: '',
     style: {
       font: '16px Arial',
@@ -454,7 +457,7 @@ JoditEditor.defaultProps = {
   permiteVideo: true,
   qtdMaxImg: null,
   imagensCentralizadas: false,
-  valideClipboardHTML: true,
+  valideClipboardHTML: false,
   permiteGif: true,
 };
 

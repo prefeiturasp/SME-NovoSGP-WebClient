@@ -7,6 +7,7 @@ const inicial = {
   questionarioDinamicoDadosModalAnotacao: null,
   questionarioDinamicoExibirModalAnotacao: false,
   resetarTabela: false,
+  arquivoRemovido: false,
 };
 
 export default function questionarioDinamico(state = inicial, action) {
@@ -56,6 +57,12 @@ export default function questionarioDinamico(state = inicial, action) {
         return {
           ...draft,
           resetarTabela: action.payload,
+        };
+      }
+      case '@questionarioDinamico/setArquivoRemovido': {
+        return {
+          ...draft,
+          arquivoRemovido: action.payload,
         };
       }
       default:
