@@ -202,7 +202,6 @@ const JoditEditor = forwardRef((props, ref) => {
     buttonsXS: BOTOES_PADRAO,
     buttonsMD: BOTOES_PADRAO,
     buttonsSM: BOTOES_PADRAO,
-    enter: 'BR',
     placeholder: '',
     style: {
       font: '16px Arial',
