@@ -10,6 +10,7 @@ const CampoMensagemInfantil = ({ mural, atividades }) => {
     if (!mural?.length) {
       return 'Sem dados';
     }
+
     return mural.map(item => (
       <div className="mb-3">
         <div>
