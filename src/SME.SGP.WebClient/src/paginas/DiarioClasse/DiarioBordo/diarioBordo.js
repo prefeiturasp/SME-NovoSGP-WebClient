@@ -697,13 +697,14 @@ const DiarioBordo = ({ match }) => {
                         <PainelCollapse>
                           <PainelCollapse.Painel
                             temBorda
-                            header="Mural do Google Sala de Aula"
+                            header="Registros GSA"
                             key="3"
                           >
                             {valoresIniciais?.aulaId && (
                               <DadosMuralGoogleSalaAula
                                 podeAlterar={!desabilitarCampos}
                                 aulaId={valoresIniciais?.aulaId}
+                                ehTurmaInfantil
                               />
                             )}
                           </PainelCollapse.Painel>

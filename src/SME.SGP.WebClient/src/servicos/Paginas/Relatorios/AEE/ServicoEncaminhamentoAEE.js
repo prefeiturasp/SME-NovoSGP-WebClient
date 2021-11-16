@@ -227,7 +227,6 @@ class ServicoEncaminhamentoAEE {
           alunoCodigo: dadosCollapseLocalizarEstudante.codigoAluno,
           situacao,
         };
-
         valoresParaSalvar.secoes = formsParaSalvar.map(item => {
           const form = item.form();
           const campos = form.state.values;
@@ -362,6 +361,7 @@ class ServicoEncaminhamentoAEE {
         valoresParaSalvar.secoes = valoresParaSalvar.secoes
           .filter(a => a)
           .filter(b => b.questoes?.length);
+
         if (valoresParaSalvar?.secoes?.length) {
           dispatch(setExibirLoaderEncaminhamentoAEE(true));
 
