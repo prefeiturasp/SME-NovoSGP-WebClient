@@ -86,7 +86,10 @@ const ListaAlunos = props => {
         <>
           {exibirModalAnotacao ? <ModalAnotacoes /> : ''}
           {exibirModalImpressao ? (
-            <ModalImpressao dadosAlunos={dadosBimestre?.frequenciaAlunos} />
+            <ModalImpressao
+              dadosAlunos={dadosBimestre?.frequenciaAlunos}
+              componenteCurricularId={componenteCurricularId}
+            />
           ) : (
             ''
           )}

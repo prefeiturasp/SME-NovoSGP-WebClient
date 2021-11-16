@@ -176,7 +176,7 @@ const ModalConteudoHtml = props => {
 };
 
 ModalConteudoHtml.propTypes = {
-  width: PropTypes.number,
+  width: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   desabilitarBotaoPrincipal: PropTypes.bool,
   fecharAoClicarFora: PropTypes.bool,
   fecharAoClicarEsc: PropTypes.bool,
