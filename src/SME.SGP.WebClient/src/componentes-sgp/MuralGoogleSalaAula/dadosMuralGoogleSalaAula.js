@@ -12,6 +12,7 @@ const DadosMuralGoogleSalaAula = props => {
 
   const [carregandoDados, setCarregandoDados] = useState(false);
   const [dados, setDados] = useState([]);
+  const [atividades, setAtividades] = useState();
 
   const obterDadosMuralGoogleSalaAula = useCallback(async () => {
     setCarregandoDados(true);
@@ -32,8 +33,31 @@ const DadosMuralGoogleSalaAula = props => {
     obterDadosMuralGoogleSalaAula();
   }, [aulaId, obterDadosMuralGoogleSalaAula]);
 
+  const obterDadosAtividadesGoogleSalaAula = useCallback(async () => {
+    setCarregandoDados(true);
+    const resposta = await ServicoMuralGoogleSalaAula.obterDadosAtividadesGoogleSalaAula(
+      aulaId
+    )
+      .catch(e => erros(e))
+      .finally(() => setCarregandoDados(false));
+
+    if (resposta?.data?.length) {
+      setAtividades(resposta.data);
+
+      return;
+    }
+    setAtividades([]);
+  }, [aulaId]);
+
+  useEffect(() => {
+    if (ehTurmaInfantil) {
+      obterDadosAtividadesGoogleSalaAula();
+    }
+  }, [aulaId, ehTurmaInfantil, obterDadosAtividadesGoogleSalaAula]);
+
   const montarDados = () => {
-    if (ehTurmaInfantil) return <CampoMensagemInfantil />;
+    if (ehTurmaInfantil)
+      return <CampoMensagemInfantil mural={dados} atividades={atividades} />;
 
     return dados.map(item => (
       <CampoMensagem
@@ -46,8 +70,7 @@ const DadosMuralGoogleSalaAula = props => {
 
   return (
     <Loader loading={carregandoDados}>
-      {!dados?.length ? (
-        // remover !
+      {dados?.length ? (
         montarDados()
       ) : (
         <div className={`text-center ${carregandoDados ? 'mb-5 mt-4' : ''}`}>
