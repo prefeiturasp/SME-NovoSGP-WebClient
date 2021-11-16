@@ -21,7 +21,7 @@ import ServicoAcompanhamentoFrequencia from '~/servicos/Paginas/DiarioClasse/Ser
 import { erros, sucesso } from '~/servicos';
 import { OPCAO_TODOS } from '~/constantes';
 
-const ModalImpressao = ({ dadosAlunos }) => {
+const ModalImpressao = ({ dadosAlunos, componenteCurricularId }) => {
   const [incluirAlunosImpressao, setIncluirAlunosImpressao] = useState(
     OPCAO_TODOS
   );
@@ -78,6 +78,7 @@ const ModalImpressao = ({ dadosAlunos }) => {
 
     const retorno = await ServicoAcompanhamentoFrequencia.gerar({
       alunosCodigos,
+      componenteCurricularId,
       dreCodigo: turmaSelecionada?.dre,
       ueCodigo: turmaSelecionada?.unidadeEscolar,
       bimestre,
@@ -179,10 +180,12 @@ const ModalImpressao = ({ dadosAlunos }) => {
 
 ModalImpressao.propTypes = {
   dadosAlunos: PropTypes.oneOfType([PropTypes.array]),
+  componenteCurricularId: PropTypes.string,
 };
 
 ModalImpressao.defaultProps = {
   dadosAlunos: [],
+  componenteCurricularId: '',
 };
 
 export default ModalImpressao;
