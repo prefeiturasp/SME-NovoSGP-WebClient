@@ -681,7 +681,7 @@ const DiarioBordo = ({ match }) => {
                               valideClipboardHTML={false}
                               form={form}
                               value={form.values.planejamento}
-                              name="planejamento"
+                              name="editor-planejamento"
                               id="editor-planejamento"
                               onChange={v => {
                                 if (valoresIniciais.planejamento !== v) {
