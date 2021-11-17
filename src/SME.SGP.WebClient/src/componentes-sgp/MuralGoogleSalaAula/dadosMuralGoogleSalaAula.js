@@ -43,7 +43,6 @@ const DadosMuralGoogleSalaAula = props => {
 
     if (resposta?.data?.length) {
       setAtividades(resposta.data);
-
       return;
     }
     setAtividades([]);
@@ -59,26 +58,24 @@ const DadosMuralGoogleSalaAula = props => {
     if (ehTurmaInfantil)
       return <CampoMensagemInfantil mural={dados} atividades={atividades} />;
 
-    return dados.map(item => (
-      <CampoMensagem
-        podeAlterar={podeAlterar}
-        item={item}
-        key={shortid.generate()}
-      />
-    ));
+    if (dados?.length) {
+      return dados.map(item => (
+        <CampoMensagem
+          podeAlterar={podeAlterar}
+          item={item}
+          key={shortid.generate()}
+        />
+      ));
+    }
+
+    return (
+      <div className={`text-center ${carregandoDados ? 'mb-5 mt-4' : ''}`}>
+        {!carregandoDados ? 'Sem dados' : ''}
+      </div>
+    );
   };
 
-  return (
-    <Loader loading={carregandoDados}>
-      {dados?.length ? (
-        montarDados()
-      ) : (
-        <div className={`text-center ${carregandoDados ? 'mb-5 mt-4' : ''}`}>
-          {!carregandoDados ? 'Sem dados' : ''}
-        </div>
-      )}
-    </Loader>
-  );
+  return <Loader loading={carregandoDados}>{montarDados()}</Loader>;
 };
 
 DadosMuralGoogleSalaAula.propTypes = {
