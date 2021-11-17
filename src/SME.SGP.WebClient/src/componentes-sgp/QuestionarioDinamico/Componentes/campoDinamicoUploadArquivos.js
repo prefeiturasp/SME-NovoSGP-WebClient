@@ -19,6 +19,7 @@ const CampoDinamicoUploadArquivos = props => {
 
   const onRemoveFile = async arquivo => {
     const codigoArquivo = arquivo.xhr;
+
     if (arquivo.arquivoId) {
       if (
         form &&
@@ -29,6 +30,7 @@ const CampoDinamicoUploadArquivos = props => {
         const indice = novoMap.findIndex(
           item => arquivo.arquivoId === item.arquivoId
         );
+
         if (indice !== -1) {
           novoMap.splice(indice, 1);
 

@@ -8,15 +8,21 @@ import BtnExpandirAusenciaEstudante from '~/componentes-sgp/ListaFrequenciaPorBi
 import ModalAnotacoes from '~/componentes-sgp/ListaFrequenciaPorBimestre/modalAnotacoes';
 import NomeEstudanteLista from '~/componentes-sgp/NomeEstudanteLista/nomeEstudanteLista';
 import Ordenacao from '~/componentes-sgp/Ordenacao/ordenacao';
-import { Base } from '~/componentes/colors';
-import { setExpandirLinhaFrequenciaAluno } from '~/redux/modulos/acompanhamentoFrequencia/actions';
+import { Base, Colors } from '~/componentes/colors';
+import { BIMESTRE_FINAL } from '~/constantes';
+import {
+  setExibirModalImpressao,
+  setExpandirLinhaFrequenciaAluno,
+} from '~/redux/modulos/acompanhamentoFrequencia/actions';
 import { erros } from '~/servicos';
 import ServicoAcompanhamentoFrequencia from '~/servicos/Paginas/DiarioClasse/ServicoAcompanhamentoFrequencia';
 import { ehTurmaInfantil } from '~/servicos/Validacoes/validacoesInfatil';
+import ModalImpressao from '../ModalImpressao/modalImpressao';
 import {
   MarcadorAulas,
   Marcadores,
   TabelaColunasFixas,
+  BotaoCustomizado,
 } from './listaAlunos.css';
 
 const ListaAlunos = props => {
@@ -32,7 +38,7 @@ const ListaAlunos = props => {
     store => store.listaFrequenciaPorBimestre.exibirModalAnotacao
   );
 
-  const { bimestreSelecionado } = useSelector(
+  const { bimestreSelecionado, exibirModalImpressao } = useSelector(
     store => store.acompanhamentoFrequencia
   );
 
@@ -79,9 +85,17 @@ const ListaAlunos = props => {
       {dadosBimestre ? (
         <>
           {exibirModalAnotacao ? <ModalAnotacoes /> : ''}
+          {exibirModalImpressao ? (
+            <ModalImpressao
+              dadosAlunos={dadosBimestre?.frequenciaAlunos}
+              componenteCurricularId={componenteCurricularId}
+            />
+          ) : (
+            ''
+          )}
           <TabelaColunasFixas>
             <div className="row">
-              <div className="col-md-6 col-sm-12">
+              <div className="col-md-6 col-sm-12 d-flex">
                 <Ordenacao
                   className="mb-2"
                   conteudoParaOrdenar={dadosBimestre?.frequenciaAlunos}
@@ -91,6 +105,16 @@ const ListaAlunos = props => {
                     onChangeOrdenacao(retorno);
                   }}
                 />
+                {String(bimestreSelecionado) !== BIMESTRE_FINAL && (
+                  <BotaoCustomizado
+                    icon="print"
+                    className="ml-2"
+                    color={Colors.Azul}
+                    border
+                    onClick={() => dispatch(setExibirModalImpressao(true))}
+                    id="btn-imprimir-frequencia"
+                  />
+                )}
               </div>
 
               <Marcadores className="col-md-6 col-sm-12 d-flex justify-content-end">
@@ -125,17 +149,17 @@ const ListaAlunos = props => {
                       <th className="col-linha-quatro" colSpan="2">
                         Nome
                       </th>
-                      <th className="col-linha-dois">Ausências no Bimestre</th>
+                      <th className="col-linha-dois">Ausências</th>
                       {!ehTurmaInfantil(
                         modalidadesFiltroPrincipal,
                         turmaSelecionada
                       ) ? (
-                        <th className="col-linha-dois">
-                          Compensações de ausência
-                        </th>
+                        <th className="col-linha-dois">Compensações</th>
                       ) : (
                         <></>
                       )}
+                      <th className="col-linha-dois">Presenças</th>
+                      <th className="col-linha-dois">Remoto</th>
                       <th className="col-linha-dois">Frequência</th>
                     </tr>
                   </thead>
@@ -215,6 +239,26 @@ const ListaAlunos = props => {
                             ) : (
                               <></>
                             )}
+                            <td
+                              className="col-valor-linha-dois"
+                              style={{
+                                borderRight: data?.marcadorFrequencia
+                                  ? `solid 1px ${Base.CinzaBotao}`
+                                  : `solid 1px ${Base.CinzaDesabilitado}`,
+                              }}
+                            >
+                              {data.presencas}
+                            </td>
+                            <td
+                              className="col-valor-linha-dois"
+                              style={{
+                                borderRight: data?.marcadorFrequencia
+                                  ? `solid 1px ${Base.CinzaBotao}`
+                                  : `solid 1px ${Base.CinzaDesabilitado}`,
+                              }}
+                            >
+                              {data.remotos}
+                            </td>
                             <td className="col-valor-linha-dois">
                               {data?.frequencia ? `${data.frequencia}%` : ''}
                               {data.ausencias > 0 &&

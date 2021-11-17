@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import { Button } from '~/componentes';
 
 import { Base } from '~/componentes/colors';
 
@@ -189,4 +190,10 @@ export const BtnVisualizarAnotacao = styled.div`
   height: 32px;
   width: 32px;
   text-align: center;
+`;
+
+export const BotaoCustomizado = styled(Button)`
+  i {
+    margin-right: 0 !important;
+  }
 `;
