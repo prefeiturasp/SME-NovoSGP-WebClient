@@ -42,7 +42,7 @@ function Calendario({
 }) {
   const [estado, disparar] = useReducer(Reducer, estadoInicial);
 
-  const estadoOrdenado = useMemo(() => ordenarPor(estado?.meses), []);
+  const estadoOrdenado = useMemo(() => ordenarPor(estado?.meses), [estado]);
 
   const onClickMesHandler = useCallback(
     mes => {
