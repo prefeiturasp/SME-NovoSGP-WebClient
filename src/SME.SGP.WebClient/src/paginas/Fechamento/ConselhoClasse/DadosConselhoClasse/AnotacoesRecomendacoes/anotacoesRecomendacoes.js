@@ -55,6 +55,8 @@ const AnotacoesRecomendacoes = props => {
   const [exibir, setExibir] = useState(false);
   const [carregando, setCarregando] = useState(false);
 
+  const [matriculaAtivaPeriodo, setMatriculaAtivaPeriodo] = useState(true);
+
   // TODO Validar a necessidade de chamar quando esta alterando um registro ou usar somente quando for carergar dados na tela!
   const onChangeAnotacoesRecomendacoes = useCallback(
     (valor, campo) => {
@@ -143,6 +145,9 @@ const AnotacoesRecomendacoes = props => {
     ).catch(e => erros(e));
 
     if (resposta && resposta.data) {
+
+      setMatriculaAtivaPeriodo(resposta.data.matriculaAtiva);
+
       if (!desabilitarEdicaoAluno()) {
         setarDentroDoPeriodo(!resposta.data.somenteLeitura);
       }
@@ -171,6 +176,7 @@ const AnotacoesRecomendacoes = props => {
     setarSituacaoConselho,
     alunoDesabilitado,
     bimestre,
+    matriculaAtivaPeriodo,
   ]);
 
   useEffect(() => {
@@ -188,8 +194,7 @@ const AnotacoesRecomendacoes = props => {
       'MM-DD-YYYY'
     );
     const dataFimBimestre = moment(bimestreAtual.dataFim).format('MM-DD-YYYY');
-
-    if (!alunoDesabilitado || dataSituacao >= dataFimBimestre) return false;
+    if (matriculaAtivaPeriodo && (!alunoDesabilitado || dataSituacao >= dataFimBimestre)) return false;
 
     return true;
   };
