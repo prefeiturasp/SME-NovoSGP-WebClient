@@ -787,9 +787,11 @@ const Notas = ({ match }) => {
 
     bimestreAtual = {
       ...dadosBimestreAtual,
-      mediaAprovacaoBimestre : bimestre.mediaAprovacaoBimestre, 
-      modoEdicao : bimestre.modoEdicao, 
-      listaTiposConceitos : bimestre.listaTiposConceitos ? bimestre.listaTiposConceitos : []
+      mediaAprovacaoBimestre: bimestre.mediaAprovacaoBimestre,
+      modoEdicao: bimestre.modoEdicao,
+      listaTiposConceitos: bimestre.listaTiposConceitos
+        ? bimestre.listaTiposConceitos
+        : [],
     };
     bimestreAtual.alunos = bimestre.alunos;
 
@@ -801,9 +803,7 @@ const Notas = ({ match }) => {
     );
   };
 
-  const bimestreEmModoEdicao = (
-    numeroBimestre
-    ) => {
+  const bimestreEmModoEdicao = numeroBimestre => {
     switch (Number(numeroBimestre)) {
       case 1:
         return primeiroBimestre.modoEdicao;
@@ -816,7 +816,7 @@ const Notas = ({ match }) => {
       default:
         return false;
     }
-  }
+  };
 
   const aposValidarJustificativaAntesDeSalvar = (
     numeroBimestre,
@@ -1163,7 +1163,8 @@ const Notas = ({ match }) => {
                     form={form}
                     value={form.values.descricao}
                     onChange={onChangeJustificativa}
-                    name="descricao"
+                    name="editor-descricao"
+                    id="editor-descricao"
                   />
                 </fieldset>
               </div>
