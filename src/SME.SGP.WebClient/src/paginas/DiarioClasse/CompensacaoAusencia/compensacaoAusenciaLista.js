@@ -134,7 +134,16 @@ const CompensacaoAusenciaLista = () => {
       ).catch(e => erros(e));
 
       if (disciplinas && disciplinas.data && disciplinas.data.length) {
-        setListaDisciplinas(disciplinas.data);
+        const disciplinasPreparadas = disciplinas.data.map(disciplina => {
+          return {
+            ...disciplina,
+            codigoSelecao: disciplina.territorioSaber
+              ? disciplina.id
+              : disciplina.codigoComponenteCurricular,
+          };
+        });
+
+        setListaDisciplinas(disciplinasPreparadas);
       } else {
         setListaDisciplinas([]);
       }
@@ -366,7 +375,7 @@ const CompensacaoAusenciaLista = () => {
                   id="disciplina"
                   name="disciplinaId"
                   lista={listaDisciplinas}
-                  valueOption="codigoComponenteCurricular"
+                  valueOption="codigoSelecao"
                   valueText="nome"
                   valueSelect={disciplinaIdSelecionada}
                   onChange={onChangeDisciplinas}
