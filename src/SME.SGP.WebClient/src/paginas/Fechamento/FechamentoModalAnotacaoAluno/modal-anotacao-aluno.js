@@ -1,12 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import shortid from 'shortid';
-import { ModalConteudoHtml, Colors, Auditoria, DetalhesAluno } from '~/componentes';
+import * as Yup from 'yup';
+import { Formik, Form } from 'formik';
+import {
+  ModalConteudoHtml,
+  Colors,
+  Auditoria,
+  DetalhesAluno,
+} from '~/componentes';
 import api from '~/servicos/api';
 import { erros, sucesso, erro, confirmar } from '~/servicos/alertas';
 import Button from '~/componentes/button';
-import * as Yup from 'yup';
-import { Formik, Form } from 'formik';
 import { DadosAlunoModal, EditorAnotacao } from './modal-anotacao-aluno.css';
 import JoditEditor from '~/componentes/jodit-editor/joditEditor';
 
@@ -168,7 +173,8 @@ const ModalAnotacaoAluno = props => {
                 <JoditEditor
                   form={form}
                   value={form.values.anotacao}
-                  name="anotacao"
+                  id="editor-anotacao"
+                  name="editor-anotacao"
                   onChange={onChangeCampos}
                 />
               </EditorAnotacao>

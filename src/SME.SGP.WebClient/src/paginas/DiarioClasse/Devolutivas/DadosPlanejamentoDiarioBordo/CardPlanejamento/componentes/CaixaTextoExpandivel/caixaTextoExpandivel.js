@@ -80,6 +80,7 @@ const CaixaTextoExpandivel = ({ item }) => {
             <FundoEditor>
               <JoditEditor
                 id="planejamento-diario-bordo-um"
+                name="planejamento-diario-bordo-um"
                 value={
                   totalRegistros === 1 || planejamentoExpandido
                     ? item.planejamento

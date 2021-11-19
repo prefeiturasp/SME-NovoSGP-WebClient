@@ -310,7 +310,8 @@ const ModalAnotacoesFrequencia = props => {
                 <JoditEditor
                   form={form}
                   value={form.values.anotacao}
-                  name="anotacao"
+                  id="editor-anotacao"
+                  name="editor-anotacao"
                   onChange={v => {
                     if (valoresIniciais.anotacao !== v) {
                       onChangeCampos();

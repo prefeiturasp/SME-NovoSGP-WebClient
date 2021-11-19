@@ -87,21 +87,31 @@ const DevolutivasForm = ({ match }) => {
       .min(200, 'Você precisa preencher com no mínimo 200 caracteres'),
   });
 
-  const obterPeriodoLetivoTurma = async() => {
+  const obterPeriodoLetivoTurma = async () => {
     if (turmaSelecionada && turmaSelecionada.turma) {
-      const periodoLetivoTurmaResponse = await ServicoPeriodoEscolar
-        .obterPeriodoLetivoTurma(turmaSelecionada.turma).catch(e => erros(e));
+      const periodoLetivoTurmaResponse = await ServicoPeriodoEscolar.obterPeriodoLetivoTurma(
+        turmaSelecionada.turma
+      ).catch(e => erros(e));
       if (periodoLetivoTurmaResponse?.data) {
-        var datas = [moment(periodoLetivoTurmaResponse.data.periodoInicio).format('YYYY-MM-DD')];
-        var qtdDias = moment(periodoLetivoTurmaResponse.data.periodoFim).diff(periodoLetivoTurmaResponse.data.periodoInicio, 'days');
+        const datas = [
+          moment(periodoLetivoTurmaResponse.data.periodoInicio).format(
+            'YYYY-MM-DD'
+          ),
+        ];
+        const qtdDias = moment(periodoLetivoTurmaResponse.data.periodoFim).diff(
+          periodoLetivoTurmaResponse.data.periodoInicio,
+          'days'
+        );
         for (let indice = 1; indice <= qtdDias; indice++) {
-          var novaData = moment(periodoLetivoTurmaResponse.data.periodoInicio).add(indice, 'days');
+          const novaData = moment(
+            periodoLetivoTurmaResponse.data.periodoInicio
+          ).add(indice, 'days');
           datas.push(novaData.format('YYYY-MM-DD'));
         }
         setPeriodoLetivo(datas);
       }
     }
-  }
+  };
 
   useEffect(() => {
     const naoSetarSomenteConsultaNoStore = !ehTurmaInfantil(
@@ -655,7 +665,7 @@ const DevolutivasForm = ({ match }) => {
                             label="Registre a sua devolutiva para este intervalo de datas"
                             form={form}
                             value={form.values.descricao}
-                            name="descricao"
+                            name="editor-devolutiva"
                             id="editor-devolutiva"
                             onChange={v => {
                               if (valoresIniciais.descricao !== v) {
