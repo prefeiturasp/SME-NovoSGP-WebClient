@@ -429,8 +429,18 @@ const CompensacaoAusenciaForm = ({ match }) => {
     const disciplinas = await ServicoDisciplina.obterDisciplinasPorTurma(
       turmaSelecionada.turma
     );
+
     if (disciplinas.data && disciplinas.data.length) {
-      setListaDisciplinas(disciplinas.data);
+      const disciplinasPreparadas = disciplinas.data.map(disciplina => {
+        return {
+          ...disciplina,
+          codigoSelecao: disciplina.territorioSaber
+            ? disciplina.id
+            : disciplina.codigoComponenteCurricular,
+        };
+      });
+
+      setListaDisciplinas(disciplinasPreparadas);
     } else {
       setListaDisciplinas([]);
     }
@@ -1010,7 +1020,7 @@ const CompensacaoAusenciaForm = ({ match }) => {
                         label="Componente Curricular"
                         name="disciplinaId"
                         lista={listaDisciplinas}
-                        valueOption="codigoComponenteCurricular"
+                        valueOption="codigoSelecao"
                         valueText="nome"
                         onChange={valor => onChangeDisciplina(valor, form)}
                         placeholder="Disciplina"
