@@ -27,8 +27,8 @@ class ServicoOcorrencias {
     return api.get(`v1/ocorrencias/${id}`);
   };
 
-  gerar = () => {
-    return Promise.resolve({ status: 200 });
+  gerar = params => {
+    return api.post('v1/relatorios/ocorrencias', params);
   };
 }
 
