@@ -171,7 +171,13 @@ const ListaOcorrencias = () => {
   };
 
   const onClickGerar = async () => {
-    const retorno = await ServicoOcorrencias.gerar().catch(e => erros(e));
+    const params = {
+      dreCodigo: turmaSelecionada?.dre,
+      ueCodigo: turmaSelecionada?.unidadeEscolar,
+      turmaId: turmaSelecionada?.id,
+      OcorrenciasIds: itenSelecionados,
+    };
+    const retorno = await ServicoOcorrencias.gerar(params).catch(e => erros(e));
 
     if (retorno?.status === 200) {
       sucesso(
