@@ -70,6 +70,16 @@ const JoditEditor = forwardRef((props, ref) => {
     return Math.ceil(arquivo.size / 1048576) > TAMANHO_MAXIMO_UPLOAD_MB;
   };
 
+  const exibirMsgMaximoImg = reject => {
+    const msg = `Você pode inserir apenas ${qtdMaxImg} ${
+      qtdMaxImg > 1 ? 'imagens' : 'imagem'
+    }`;
+    erro(msg);
+    if (reject) {
+      reject(new Error(msg));
+    }
+  };
+
   const config = {
     events: {
       afterRemoveNode: node => {
@@ -96,6 +106,8 @@ const JoditEditor = forwardRef((props, ref) => {
       },
     },
     askBeforePasteHTML: valideClipboardHTML,
+    askBeforePasteFromWord: false,
+    defaultActionOnPaste: 'insert_clear_html',
     disablePlugins: ['image-properties', disablePlugins],
     language: 'pt_br',
     height,
@@ -129,11 +141,7 @@ const JoditEditor = forwardRef((props, ref) => {
                 if (quantidadeTotalImagens < qtdMaxImg) {
                   resolve(data);
                 } else {
-                  const msg = `Você pode inserir apenas ${qtdMaxImg} ${
-                    qtdMaxImg > 1 ? 'imagens' : 'imagem'
-                  }`;
-                  erro(msg);
-                  reject(new Error(msg));
+                  exibirMsgMaximoImg(reject);
                 }
               } else {
                 resolve(data);
@@ -200,7 +208,6 @@ const JoditEditor = forwardRef((props, ref) => {
     buttonsXS: BOTOES_PADRAO,
     buttonsMD: BOTOES_PADRAO,
     buttonsSM: BOTOES_PADRAO,
-    enter: 'BR',
     placeholder: '',
     style: {
       font: '16px Arial',
@@ -324,6 +331,30 @@ const JoditEditor = forwardRef((props, ref) => {
               ref.current = textArea.current;
             }
           }
+
+          textArea.current.events.on('beforePaste', e => {
+            if (qtdMaxImg) {
+              const dadosColado = e?.clipboardData?.getData?.('text/html');
+              const qtdElementoImgNova = dadosColado?.match(/<img/g) || [];
+              const qtdElementoImgAtual = textArea?.current?.editorDocument?.querySelectorAll?.(
+                'img'
+              );
+
+              const totalImg =
+                qtdElementoImgNova?.length + qtdElementoImgAtual?.length;
+
+              if (totalImg > qtdMaxImg) {
+                if (e?.preventDefault) {
+                  e.preventDefault();
+                }
+                if (e?.preventDefault) {
+                  e.stopPropagation();
+                }
+                return false;
+              }
+            }
+            return true;
+          });
 
           textArea.current.events.on('change', () => {
             beforeOnChange();
@@ -455,7 +486,7 @@ JoditEditor.defaultProps = {
   permiteVideo: true,
   qtdMaxImg: null,
   imagensCentralizadas: false,
-  valideClipboardHTML: true,
+  valideClipboardHTML: false,
   permiteGif: true,
 };
 

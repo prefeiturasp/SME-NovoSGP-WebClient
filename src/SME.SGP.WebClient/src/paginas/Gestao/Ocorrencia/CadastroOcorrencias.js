@@ -106,12 +106,10 @@ const CadastroOcorrencias = ({ match }) => {
           new Date(ocorrencia.data.dataOcorrencia)
         );
         const data = new Date(ocorrencia.data.dataOcorrencia);
-        const horaMin = ocorrencia.data.horaOcorrencia.split(":");
+        const horaMin = ocorrencia.data.horaOcorrencia.split(':');
         data.setHours(ocorrencia.data.horaOcorrencia ? horaMin[0] : '00');
-        data.setMinutes(ocorrencia.data.horaOcorrencia ? horaMin[1] : '00');                
-        ocorrencia.data.horaOcorrencia = window.moment(
-          new Date(data)
-        );
+        data.setMinutes(ocorrencia.data.horaOcorrencia ? horaMin[1] : '00');
+        ocorrencia.data.horaOcorrencia = window.moment(new Date(data));
         setValoresIniciais(ocorrencia.data);
         refForm.setFieldValue(
           'ocorrenciaTipoId',
@@ -548,8 +546,8 @@ const CadastroOcorrencias = ({ match }) => {
                     label="Descrição"
                     form={form}
                     value={form.values.descricao}
-                    name="descricao"
-                    id="descricao"
+                    name="editor-descricao"
+                    id="editor-descricao"
                     permiteInserirArquivo
                     desabilitar={desabilitarCampos()}
                     onChange={() => setModoEdicao(true)}
