@@ -95,8 +95,8 @@ const Justificativa = props => {
                       <JoditEditor
                         form={form}
                         value={form.values.justificativa}
-                        name="justificativa"
-                        id="justificativa"
+                        name="editor-justificativa"
+                        id="editor-justificativa"
                         desabilitar={
                           (alunoDesabilitado && !podeEditarNota) ||
                           !podeEditarNota ||
