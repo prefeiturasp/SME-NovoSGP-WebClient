@@ -9,7 +9,7 @@ const ListaoBotoesAcao = () => {
 
   return (
     <Col span={24}>
-      <Row gutter={[16, 16]} style={{ justifyContent: 'end', display: 'flex' }}>
+      <Row gutter={[16, 16]} type="flex" justify="end">
         <Col>
           <Button
             // id="btn-voltar"
