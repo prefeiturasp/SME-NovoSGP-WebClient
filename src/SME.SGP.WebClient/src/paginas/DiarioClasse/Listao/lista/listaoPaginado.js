@@ -1,0 +1,186 @@
+import {
+  faCalendarDay,
+  faChalkboardTeacher,
+  faFileAlt,
+  faPencilRuler,
+  faSpellCheck,
+} from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Col } from 'antd';
+import React, { useCallback, useContext, useEffect, useState } from 'react';
+import { ListaPaginada, Base } from '~/componentes';
+import { BIMESTRE_FINAL } from '~/constantes';
+import { ModalidadeDTO } from '~/dtos';
+import ListaoContext from './listaoContext';
+
+const ListaoPaginado = () => {
+  const {
+    consideraHistorico,
+    anoLetivo,
+    codigoUe,
+    codigoDre,
+    modalidade,
+    semestre,
+    codigoTurma,
+    bimestre,
+  } = useContext(ListaoContext);
+
+  const [filtros, setFiltros] = useState({});
+  const [colunas, setColunas] = useState([]);
+
+  const temSemetraQuandoEja =
+    modalidade === String(ModalidadeDTO.EJA) ? !!semestre : true;
+
+  const valido = !!(
+    anoLetivo &&
+    codigoDre &&
+    codigoUe &&
+    modalidade &&
+    temSemetraQuandoEja &&
+    codigoTurma &&
+    bimestre
+  );
+  const filtroEhValido = valido;
+
+  const filtrar = useCallback(() => {
+    if (filtroEhValido) {
+      const params = {
+        consideraHistorico,
+        anoLetivo,
+        codigoDre,
+        codigoUe,
+        modalidade,
+        semestre,
+        codigoTurma,
+        bimestre,
+      };
+      setFiltros({ ...params });
+    } else {
+      setFiltros({});
+    }
+  }, [
+    consideraHistorico,
+    anoLetivo,
+    codigoDre,
+    codigoUe,
+    modalidade,
+    semestre,
+    codigoTurma,
+    bimestre,
+    filtroEhValido,
+  ]);
+
+  useEffect(() => {
+    filtrar();
+  }, [filtrar]);
+
+  const montarIcone = icon => {
+    return (
+      <FontAwesomeIcon
+        style={{
+          fontSize: '16px',
+          color: Base.Azul,
+          cursor: 'pointer',
+        }}
+        icon={icon}
+      />
+    );
+  };
+
+  const montarColunas = useCallback(() => {
+    const ehBimestreFinal = bimestre === String(BIMESTRE_FINAL);
+    const tamanhoColsTelas = '13%';
+
+    const confPadrao = {
+      align: 'center',
+      width: tamanhoColsTelas,
+      ellipsis: true,
+    };
+
+    const cols = [
+      {
+        title: 'Minhas turmas',
+        dataIndex: 'turmas',
+        width: '36%',
+      },
+      {
+        title: 'Turno',
+        dataIndex: 'turno',
+        width: '12%',
+      },
+    ];
+
+    if (modalidade === String(ModalidadeDTO.INFANTIL) && !ehBimestreFinal) {
+      cols.push(
+        {
+          title: 'Frequência',
+          ...confPadrao,
+          render: () => montarIcone(faCalendarDay),
+        },
+        {
+          title: 'Diário de bordo',
+          ...confPadrao,
+          render: () => montarIcone(faFileAlt),
+        }
+      );
+    }
+
+    if (modalidade !== String(ModalidadeDTO.INFANTIL) && !ehBimestreFinal) {
+      cols.push(
+        {
+          title: 'Frequência',
+          ...confPadrao,
+          render: () => montarIcone(faCalendarDay),
+        },
+        {
+          title: 'Plano de aula',
+          ...confPadrao,
+          render: () => montarIcone(faChalkboardTeacher),
+        },
+        {
+          title: 'Avaliações',
+          ...confPadrao,
+          render: () => montarIcone(faSpellCheck),
+        },
+        {
+          title: 'Fechamento',
+          ...confPadrao,
+          render: () => montarIcone(faPencilRuler),
+        }
+      );
+    }
+
+    if (ehBimestreFinal) {
+      cols.push({
+        title: 'Fechamento',
+        ...confPadrao,
+        render: () => montarIcone(faPencilRuler),
+      });
+    }
+
+    setColunas([...cols]);
+  }, [modalidade, bimestre]);
+
+  useEffect(() => {
+    montarColunas();
+  }, [montarColunas]);
+
+  return (
+    <Col span={24} style={{ marginTop: '20px' }}>
+      {filtros?.anoLetivo && codigoDre && codigoUe ? (
+        <ListaPaginada
+          url="v1/calendarios/eventos/tipos/listar"
+          id="lista-paginada-listao"
+          colunas={colunas}
+          filtro={filtros}
+          filtroEhValido={filtroEhValido}
+          semHover
+        />
+      ) : (
+        ''
+      )}
+    </Col>
+  );
+};
+
+export default ListaoPaginado;
