@@ -575,8 +575,8 @@ const CadastroOcorrencias = ({ match }) => {
                     label="Descrição"
                     form={form}
                     value={form.values.descricao}
-                    name="editor-descricao"
-                    id="editor-descricao"
+                    name="descricao"
+                    id="descricao"
                     permiteInserirArquivo
                     desabilitar={desabilitarCampos()}
                     onChange={() => setModoEdicao(true)}
