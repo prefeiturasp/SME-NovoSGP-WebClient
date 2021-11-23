@@ -110,7 +110,10 @@ const CadastroOcorrencias = ({ match }) => {
         data.setHours(ocorrencia.data.horaOcorrencia ? horaMin[0] : '00');
         data.setMinutes(ocorrencia.data.horaOcorrencia ? horaMin[1] : '00');
         ocorrencia.data.horaOcorrencia = window.moment(new Date(data));
-        setValoresIniciais(ocorrencia.data);
+        setValoresIniciais({
+          ...ocorrencia.data,
+          descricao: ocorrencia.data.descricao,
+        });
         refForm.setFieldValue(
           'ocorrenciaTipoId',
           ocorrencia.data.ocorrenciaTipoId
@@ -574,7 +577,7 @@ const CadastroOcorrencias = ({ match }) => {
                   <JoditEditor
                     label="Descrição"
                     form={form}
-                    value={form.values.descricao}
+                    value={valoresIniciais.descricao}
                     name="descricao"
                     id="descricao"
                     permiteInserirArquivo

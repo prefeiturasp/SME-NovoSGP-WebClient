@@ -680,9 +680,8 @@ const DiarioBordo = ({ match }) => {
                             <JoditEditor
                               valideClipboardHTML={false}
                               form={form}
-                              value={form.values.planejamento}
-                              name="editor-planejamento"
-                              id="editor-planejamento"
+                              value={valoresIniciais.planejamento}
+                              name="planejamento"
                               onChange={v => {
                                 if (valoresIniciais.planejamento !== v) {
                                   onChangeCampos();
@@ -720,9 +719,8 @@ const DiarioBordo = ({ match }) => {
                             <JoditEditor
                               valideClipboardHTML={false}
                               form={form}
-                              value={form.values.reflexoesReplanejamento}
-                              name="editor-reflexoes-replanejamentos"
-                              id="editor-reflexoes-replanejamentos"
+                              value={valoresIniciais.reflexoesReplanejamento}
+                              name="reflexoesReplanejamento"
                               onChange={v => {
                                 if (
                                   valoresIniciais.reflexoesReplanejamento !== v
@@ -743,9 +741,8 @@ const DiarioBordo = ({ match }) => {
                                 valideClipboardHTML={false}
                                 label="Somente leitura"
                                 form={form}
-                                value={form.values.devolutivas}
+                                value={valoresIniciais.devolutivas}
                                 name="devolutivas"
-                                id="editor-devolutivas"
                                 removerToolbar
                                 desabilitar
                               />
