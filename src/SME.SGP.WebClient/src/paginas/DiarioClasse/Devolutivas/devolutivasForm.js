@@ -664,8 +664,8 @@ const DevolutivasForm = ({ match }) => {
                           <JoditEditor
                             label="Registre a sua devolutiva para este intervalo de datas"
                             form={form}
-                            value={form.values.descricao}
-                            name="editor-devolutiva"
+                            value={valoresIniciais.descricao}
+                            name="descricao"
                             id="editor-devolutiva"
                             onChange={v => {
                               if (valoresIniciais.descricao !== v) {
