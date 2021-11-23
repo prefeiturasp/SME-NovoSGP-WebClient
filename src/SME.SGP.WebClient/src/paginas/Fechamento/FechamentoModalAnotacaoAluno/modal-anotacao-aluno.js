@@ -172,9 +172,8 @@ const ModalAnotacaoAluno = props => {
               <EditorAnotacao className="mt-3">
                 <JoditEditor
                   form={form}
-                  value={form.values.anotacao}
-                  id="editor-anotacao"
-                  name="editor-anotacao"
+                  value={valoresIniciais.anotacao}
+                  name="anotacao"
                   onChange={onChangeCampos}
                 />
               </EditorAnotacao>
