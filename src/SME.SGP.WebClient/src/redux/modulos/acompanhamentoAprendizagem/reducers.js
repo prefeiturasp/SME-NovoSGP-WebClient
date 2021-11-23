@@ -14,6 +14,7 @@ const inicial = {
   qtdMaxImagensCampoPercursoIndividual: null,
   errosAcompanhamentoAprendizagem: [],
   exibirModalErrosAcompanhamentoAprendizagem: false,
+  exibirLoaderAlunosAcompanhamentoAprendizagem: false,
 };
 
 export default function AcompanhamentoAprendizagem(state = inicial, action) {
@@ -107,6 +108,12 @@ export default function AcompanhamentoAprendizagem(state = inicial, action) {
         return {
           ...draft,
           exibirModalErrosAcompanhamentoAprendizagem: action.payload,
+        };
+      }
+      case '@acompanhamentoAprendizagem/setExibirLoaderAlunosAcompanhamentoAprendizagem': {
+        return {
+          ...draft,
+          exibirLoaderAlunosAcompanhamentoAprendizagem: action.payload,
         };
       }
 
