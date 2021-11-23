@@ -94,9 +94,9 @@ const Justificativa = props => {
                     <fieldset className="mt-3">
                       <JoditEditor
                         form={form}
-                        value={form.values.justificativa}
-                        name="editor-justificativa"
-                        id="editor-justificativa"
+                        value={valoresIniciais.justificativa}
+                        name="justificativa"
+                        id="justificativa"
                         desabilitar={
                           (alunoDesabilitado && !podeEditarNota) ||
                           !podeEditarNota ||

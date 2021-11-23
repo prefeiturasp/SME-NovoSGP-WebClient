@@ -1,18 +1,19 @@
 import PropTypes from 'prop-types';
-import React from 'react';
+import React, { useState } from 'react';
 import { JoditEditor } from '~/componentes';
 
 const DescricaoComunicados = ({ form, onChangeCampos, desabilitar }) => {
+  const [valoresIniciais] = useState({ descricao: form?.values?.descricao });
+
   return (
     <JoditEditor
       label="Descrição"
-      id="editor-descricao"
-      name="editor-descricao"
+      name="descricao"
       onChange={() => onChangeCampos()}
       permiteInserirArquivo={false}
       form={form}
       desabilitar={desabilitar}
-      value={form?.values?.descricao}
+      value={valoresIniciais.descricao}
     />
   );
 };
