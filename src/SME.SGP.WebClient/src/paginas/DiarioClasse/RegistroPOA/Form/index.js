@@ -353,9 +353,9 @@ function RegistroPOAForm({ match }) {
                         <JoditEditor
                           label="Registro das atividades realizadas junto aos professores ao longo do bimestre, considerando a análise e o acompanhamento do planejamento docente"
                           form={form}
-                          id="editor-descricao"
+                          id="descricao"
                           alt="Registro das atividades realizadas junto aos professores ao longo do bimestre, considerando a análise e o acompanhamento do planejamento docente"
-                          name="editor-descricao"
+                          name="descricao"
                           value={valoresIniciais.descricao}
                           desabilitado={somenteConsulta}
                         />
