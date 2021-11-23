@@ -1161,10 +1161,9 @@ const Notas = ({ match }) => {
                 <fieldset className="mt-3">
                   <JoditEditor
                     form={form}
-                    value={form.values.descricao}
+                    value={valoresIniciais.descricao}
                     onChange={onChangeJustificativa}
-                    name="editor-descricao"
-                    id="editor-descricao"
+                    name="descricao"
                   />
                 </fieldset>
               </div>
