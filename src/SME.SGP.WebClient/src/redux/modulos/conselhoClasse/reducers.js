@@ -221,6 +221,10 @@ export default function ConselhoClasse(state = inicial, action) {
         draft.situacaoConselho = action.payload;
         break;
       }
+      case '@conselhoClasse/setExibirLoaderGeralConselhoClasse': {
+        draft.exibirLoaderGeralConselhoClasse = action.payload;
+        break;
+      }
 
       default:
         return draft;
