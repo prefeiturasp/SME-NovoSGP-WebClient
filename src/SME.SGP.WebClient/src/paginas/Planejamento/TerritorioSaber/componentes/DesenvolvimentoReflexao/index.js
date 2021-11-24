@@ -39,6 +39,7 @@ function DesenvolvimentoReflexao({ dadosBimestre, onChange }) {
             label="Desenvolvimento das atividades"
             value={dadosBimestre.desenvolvimento}
             desabilitar={desabilitarCampos}
+            height="500px"
           />
         </Grid>
         <Grid cols={6}>
@@ -47,6 +48,7 @@ function DesenvolvimentoReflexao({ dadosBimestre, onChange }) {
             label="Reflexões sobre a participação dos estudantes, parcerias e avaliação"
             value={dadosBimestre.reflexao}
             desabilitar={desabilitarCampos}
+            height="500px"
           />
         </Grid>
       </Linha>
