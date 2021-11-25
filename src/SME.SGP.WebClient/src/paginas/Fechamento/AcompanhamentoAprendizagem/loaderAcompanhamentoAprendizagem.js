@@ -18,7 +18,7 @@ const LoaderAcompanhamentoAprendizagem = ({ children }) => {
   return (
     <Loader
       loading={
-        exibirLoaderGeralAcompanhamentoAprendizagem &&
+        exibirLoaderGeralAcompanhamentoAprendizagem ||
         exibirLoaderAlunosAcompanhamentoAprendizagem
       }
     >
