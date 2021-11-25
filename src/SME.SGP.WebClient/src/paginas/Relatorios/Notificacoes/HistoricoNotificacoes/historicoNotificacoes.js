@@ -107,16 +107,18 @@ const HistoricoNotificacoes = () => {
         erros(e);
         setCarregandoGeral(false);
       });
-      if (retorno && retorno.data) {
+      if (retorno?.data?.length) {
         const lista = retorno.data.map(item => ({
           desc: item.nome,
           valor: String(item.codigo),
         }));
 
-        if (lista && lista.length && lista.length === 1) {
-          setCodigoUe(lista[0].valor);
+        const novaLista = lista?.filter(item => item?.valor !== OPCAO_TODOS);
+
+        if (novaLista?.length === 1) {
+          setCodigoUe(novaLista[0].valor);
         }
-        setListaUes(lista);
+        setListaUes(novaLista);
       } else {
         setListaUes([]);
       }
@@ -146,11 +148,14 @@ const HistoricoNotificacoes = () => {
       erros(e);
       setCarregandoGeral(false);
     });
-    if (retorno && retorno.data && retorno.data.length) {
-      setListaDres(retorno.data);
+    if (retorno?.data?.length) {
+      const novaLista = retorno.data.filter(
+        item => item?.codigo !== OPCAO_TODOS
+      );
+      setListaDres(novaLista);
 
-      if (retorno && retorno.data.length && retorno.data.length === 1) {
-        setCodigoDre(retorno.data[0].codigo);
+      if (novaLista?.length === 1) {
+        setCodigoDre(novaLista[0].codigo);
       }
     } else {
       setListaDres([]);
@@ -186,12 +191,6 @@ const HistoricoNotificacoes = () => {
   };
 
   const obterTurmas = useCallback(async () => {
-    if (codigoUe === OPCAO_TODOS) {
-      setListaTurmas([{ valor: OPCAO_TODOS, descricao: 'Todas' }]);
-      setTurmaId(OPCAO_TODOS);
-      return;
-    }
-
     setCarregandoGeral(true);
     const resposta = await ServicoFiltroRelatorio.obterTurmasPorCodigoUeModalidadeSemestre(
       anoLetivo,
@@ -231,6 +230,7 @@ const HistoricoNotificacoes = () => {
       setModalidadeId(undefined);
       setListaModalidades([]);
     }
+    setUsuarioRf();
   }, [codigoUe]);
 
   useEffect(() => {
@@ -350,7 +350,27 @@ const HistoricoNotificacoes = () => {
     obterDres();
   };
 
+  const temOpcaoTodos = dados => {
+    return dados.find(item => item === OPCAO_TODOS);
+  };
+
+  const todosOsIds = dados => {
+    return dados
+      .filter(item => item.id !== OPCAO_TODOS)
+      .map(item => item.id.toString());
+  };
+
   const onClickGerar = async () => {
+    const categoriasSelecionadas = temOpcaoTodos(categorias)
+      ? todosOsIds(listaCategorias)
+      : categorias;
+    const tiposSelecionadas = temOpcaoTodos(tipos)
+      ? todosOsIds(listaTipos)
+      : tipos;
+    const situacoesSelecionadas = temOpcaoTodos(situacoes)
+      ? todosOsIds(listaSituacao)
+      : situacoes;
+
     const params = {
       anoLetivo,
       dre: codigoDre,
@@ -359,9 +379,9 @@ const HistoricoNotificacoes = () => {
       semestre,
       turma: turmaId,
       usuarioBuscaRf: usuarioRf,
-      categorias: categorias,
-      tipos: tipos,
-      situacoes: situacoes,
+      categorias: categoriasSelecionadas,
+      tipos: tiposSelecionadas,
+      situacoes: situacoesSelecionadas,
       exibirDescricao,
       exibirNotificacoesExcluidas,
     };
@@ -540,7 +560,9 @@ const HistoricoNotificacoes = () => {
                   valueText="descricao"
                   label="Turma"
                   disabled={
-                    !modalidadeId || (listaTurmas && listaTurmas.length === 1)
+                    !modalidadeId ||
+                    (listaTurmas && listaTurmas.length === 1) ||
+                    usuarioRf
                   }
                   valueSelect={turmaId}
                   onChange={setTurmaId}
@@ -551,19 +573,24 @@ const HistoricoNotificacoes = () => {
               <div className="col-md-12 mb-2">
                 <div className="row pr-3">
                   <Localizador
+                    dreId={codigoDre}
+                    ueId={codigoUe}
                     rfEdicao={usuarioRf}
                     buscandoDados={setCarregandoGeral}
-                    dreId={codigoDre}
                     anoLetivo={anoLetivo}
                     showLabel
                     onChange={valores => {
                       if (valores && valores.professorRf) {
                         setUsuarioRf(valores.professorRf);
+                        if (listaTurmas?.length > 1) {
+                          setTurmaId([OPCAO_TODOS]);
+                        }
                       } else {
                         setUsuarioRf();
                       }
                     }}
                     buscarOutrosCargos
+                    buscarPorAbrangencia
                   />
                 </div>
               </div>
