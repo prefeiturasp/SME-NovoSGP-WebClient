@@ -74,10 +74,11 @@ const ListasNotasConceitos = props => {
     );
     const dataFimBimestre = moment(bimestreAtual.dataFim).format('MM-DD-YYYY');
     const dataInicioPeriodoFechamento = pegueInicioPeriodoFechamento();
+
     return (
       dataSituacao >= dataFimBimestre ||
-      dataSituacao >= dataInicioPeriodoFechamento ||
-      dataInicioPeriodoFechamento == null
+      (dataInicioPeriodoFechamento &&
+        dataSituacao >= dataInicioPeriodoFechamento)
     );
   };
 
