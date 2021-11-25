@@ -73,6 +73,11 @@ const FechamentoBismestre = () => {
     setIdDisciplinaTerritorioSaber,
   ] = useState(undefined);
 
+  const ehModaliadeEJA =
+    Number(turmaSelecionada?.modalidade) !== ModalidadeDTO.EJA;
+
+  const ehIgualPeriodoAnual = periodoFechamento === periodo.Anual;
+
   const resetarTela = () => {
     setBimestreCorrente();
     setDadosBimestre1(undefined);
@@ -427,8 +432,7 @@ const FechamentoBismestre = () => {
                       />
                     ) : null}
                   </TabPane>
-                  {periodoFechamento === periodo.Anual &&
-                  turmaSelecionada?.modalidade !== ModalidadeDTO.EJA ? (
+                  {ehIgualPeriodoAnual && ehModaliadeEJA ? (
                     <TabPane
                       tab="3º Bimestre"
                       key="3"
@@ -451,8 +455,7 @@ const FechamentoBismestre = () => {
                       ) : null}
                     </TabPane>
                   ) : null}
-                  {periodoFechamento === periodo.Anual &&
-                  turmaSelecionada?.modalidade !== ModalidadeDTO.EJA ? (
+                  {ehIgualPeriodoAnual && ehModaliadeEJA ? (
                     <TabPane
                       tab="4º Bimestre"
                       key="4"
