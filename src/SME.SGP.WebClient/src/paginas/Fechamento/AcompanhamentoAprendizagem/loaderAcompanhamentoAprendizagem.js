@@ -9,9 +9,19 @@ const LoaderAcompanhamentoAprendizagem = ({ children }) => {
       store.acompanhamentoAprendizagem
         .exibirLoaderGeralAcompanhamentoAprendizagem
   );
+  const exibirLoaderAlunosAcompanhamentoAprendizagem = useSelector(
+    store =>
+      store.acompanhamentoAprendizagem
+        .exibirLoaderAlunosAcompanhamentoAprendizagem
+  );
 
   return (
-    <Loader loading={exibirLoaderGeralAcompanhamentoAprendizagem}>
+    <Loader
+      loading={
+        exibirLoaderGeralAcompanhamentoAprendizagem &&
+        exibirLoaderAlunosAcompanhamentoAprendizagem
+      }
+    >
       {children}
     </Loader>
   );
