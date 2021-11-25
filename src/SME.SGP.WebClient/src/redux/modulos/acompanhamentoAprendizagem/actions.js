@@ -70,3 +70,9 @@ export const setExibirModalErrosAcompanhamentoAprendizagem = payload => ({
     '@acompanhamentoAprendizagem/setExibirModalErrosAcompanhamentoAprendizagem',
   payload,
 });
+
+export const setExibirLoaderAlunosAcompanhamentoAprendizagem = payload => ({
+  type:
+    '@acompanhamentoAprendizagem/setExibirLoaderAlunosAcompanhamentoAprendizagem',
+  payload,
+});

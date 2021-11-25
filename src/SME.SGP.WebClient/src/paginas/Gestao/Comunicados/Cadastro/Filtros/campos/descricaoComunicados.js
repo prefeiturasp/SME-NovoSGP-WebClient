@@ -1,8 +1,10 @@
 import PropTypes from 'prop-types';
-import React from 'react';
+import React, { useState } from 'react';
 import { JoditEditor } from '~/componentes';
 
 const DescricaoComunicados = ({ form, onChangeCampos, desabilitar }) => {
+  const [valoresIniciais] = useState({ descricao: form?.values?.descricao });
+
   return (
     <JoditEditor
       label="Descrição"
@@ -11,7 +13,7 @@ const DescricaoComunicados = ({ form, onChangeCampos, desabilitar }) => {
       permiteInserirArquivo={false}
       form={form}
       desabilitar={desabilitar}
-      value={form?.values?.descricao}
+      value={valoresIniciais.descricao}
     />
   );
 };

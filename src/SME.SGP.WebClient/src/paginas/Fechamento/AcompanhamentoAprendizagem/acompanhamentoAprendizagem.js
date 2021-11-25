@@ -15,6 +15,7 @@ import {
   setDadosAlunoObjectCard,
   setDadosApanhadoGeral,
   setExibirLoaderGeralAcompanhamentoAprendizagem,
+  setExibirLoaderAlunosAcompanhamentoAprendizagem,
 } from '~/redux/modulos/acompanhamentoAprendizagem/actions';
 import {
   resetarDadosRegistroIndividual,
@@ -177,7 +178,7 @@ const AcompanhamentoAprendizagem = () => {
   const obterListaAlunos = useCallback(
     async semestreConsulta => {
       if (turma) {
-        dispatch(setExibirLoaderGeralAcompanhamentoAprendizagem(true));
+        dispatch(setExibirLoaderAlunosAcompanhamentoAprendizagem(true));
 
         const retorno = await ServicoAcompanhamentoAprendizagem.obterListaAlunos(
           turma,
@@ -186,7 +187,7 @@ const AcompanhamentoAprendizagem = () => {
         )
           .catch(e => erros(e))
           .finally(() =>
-            dispatch(setExibirLoaderGeralAcompanhamentoAprendizagem(false))
+            dispatch(setExibirLoaderAlunosAcompanhamentoAprendizagem(false))
           );
 
         if (retorno?.data) {
