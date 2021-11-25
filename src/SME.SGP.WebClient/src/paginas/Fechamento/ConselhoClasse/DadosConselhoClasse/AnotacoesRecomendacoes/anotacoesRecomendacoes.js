@@ -158,8 +158,8 @@ const AnotacoesRecomendacoes = props => {
       matriculaAtivaPeriodo &&
       (!alunoDesabilitado ||
         dataSituacao >= dataFimBimestre ||
-        dataSituacao >= dataInicioPeriodoFechamento ||
-        dataInicioPeriodoFechamento == null)
+        (dataInicioPeriodoFechamento &&
+          dataSituacao >= dataInicioPeriodoFechamento))
     ) {
       return false;
     }
