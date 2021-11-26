@@ -160,7 +160,7 @@ const AcompanhamentoFrequencia = () => {
           String(componenteCurricularIdSelecionado)
       );
       setPodeLancarFrequencia(componenteCurriular?.registraFrequencia);
-      if (turmaSelecionada.modalidade === String(modalidade.EJA)) {
+      if (Number(turmaSelecionada.modalidade) === modalidade.EJA) {
         setBimestres(listagemBimestresEJA);
       } else {
         setBimestres(listagemBimestres);
