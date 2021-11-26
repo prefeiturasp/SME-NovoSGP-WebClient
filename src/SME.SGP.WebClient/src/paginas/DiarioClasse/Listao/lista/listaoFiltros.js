@@ -5,7 +5,6 @@ import { FiltroHelper } from '~/componentes-sgp';
 import { OPCAO_TODOS } from '~/constantes';
 import { ModalidadeDTO } from '~/dtos';
 import { AbrangenciaServico, erros, ServicoFiltroRelatorio } from '~/servicos';
-import ServicoListao from '~/servicos/Paginas/DiarioClasse/ServicoListao';
 import ListaoContext from './listaoContext';
 
 const ListaoFiltros = () => {
@@ -205,13 +204,14 @@ const ListaoFiltros = () => {
   }, [obterSemestres, modalidade]);
 
   const obterTurmas = useCallback(async () => {
-    // TODO - Testar com novo endpotin!
     setCarregandoTurmas(true);
-    const retorno = await ServicoListao.obterTurmasPorModalidade(
+    const retorno = await AbrangenciaServico.buscarTurmas(
+      codigoUe,
+      modalidade,
+      '',
       anoLetivo,
       consideraHistorico,
-      codigoUe,
-      modalidade
+      false
     )
       .catch(e => erros(e))
       .finally(() => setCarregandoTurmas(false));
@@ -219,12 +219,12 @@ const ListaoFiltros = () => {
     if (retorno?.data?.length) {
       const lista = retorno?.data;
       if (lista.length > 1) {
-        lista.unshift({ valor: OPCAO_TODOS, descricao: 'Todas' });
+        lista.unshift({ codigo: OPCAO_TODOS, nomeFiltro: 'Todas' });
         setCodigoTurma(OPCAO_TODOS);
       }
       setListaTurmas(lista);
       if (lista.length === 1) {
-        setCodigoTurma([String(lista[0].valor)]);
+        setCodigoTurma([String(lista[0].codigo)]);
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -461,8 +461,8 @@ const ListaoFiltros = () => {
             <SelectComponent
               // id="turma"
               lista={listaTurmas}
-              valueOption="valor"
-              valueText="descricao"
+              valueOption="codigo"
+              valueText="nomeFiltro"
               label="Turma"
               modalidade
               disabled={!modalidade || listaTurmas?.length === 1}

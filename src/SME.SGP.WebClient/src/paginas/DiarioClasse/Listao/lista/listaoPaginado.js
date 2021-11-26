@@ -9,13 +9,12 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Col } from 'antd';
 import React, { useCallback, useContext, useEffect, useState } from 'react';
 import { ListaPaginada, Base } from '~/componentes';
-import { BIMESTRE_FINAL } from '~/constantes';
+import { BIMESTRE_FINAL, OPCAO_TODOS } from '~/constantes';
 import { ModalidadeDTO } from '~/dtos';
 import ListaoContext from './listaoContext';
 
 const ListaoPaginado = () => {
   const {
-    consideraHistorico,
     anoLetivo,
     codigoUe,
     codigoDre,
@@ -28,7 +27,7 @@ const ListaoPaginado = () => {
   const [filtros, setFiltros] = useState({});
   const [colunas, setColunas] = useState([]);
 
-  const temSemetraQuandoEja =
+  const temSemetreQuandoEja =
     modalidade === String(ModalidadeDTO.EJA) ? !!semestre : true;
 
   const valido = !!(
@@ -36,7 +35,7 @@ const ListaoPaginado = () => {
     codigoDre &&
     codigoUe &&
     modalidade &&
-    temSemetraQuandoEja &&
+    temSemetreQuandoEja &&
     codigoTurma &&
     bimestre
   );
@@ -45,13 +44,12 @@ const ListaoPaginado = () => {
   const filtrar = useCallback(() => {
     if (filtroEhValido) {
       const params = {
-        consideraHistorico,
         anoLetivo,
-        codigoDre,
-        codigoUe,
+        dreCodigo: codigoDre,
+        ueCodigo: codigoUe,
         modalidade,
+        turmaCodigo: codigoTurma === OPCAO_TODOS ? '' : codigoTurma,
         semestre,
-        codigoTurma,
         bimestre,
       };
       setFiltros({ ...params });
@@ -59,7 +57,6 @@ const ListaoPaginado = () => {
       setFiltros({});
     }
   }, [
-    consideraHistorico,
     anoLetivo,
     codigoDre,
     codigoUe,
@@ -169,7 +166,7 @@ const ListaoPaginado = () => {
     <Col span={24} style={{ marginTop: '20px' }}>
       {filtros?.anoLetivo && codigoDre && codigoUe ? (
         <ListaPaginada
-          url="v1/calendarios/eventos/tipos/listar"
+          url="v1/turmas/listagem-turmas"
           id="lista-paginada-listao"
           colunas={colunas}
           filtro={filtros}
