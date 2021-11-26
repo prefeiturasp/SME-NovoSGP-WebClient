@@ -33,6 +33,13 @@ import RotasDto from '~/dtos/rotasDto';
 import { RegistroMigrado } from '~/componentes-sgp/registro-migrado';
 import { ehTurmaInfantil } from '~/servicos/Validacoes/validacoesInfatil';
 import AlterarAula from './alterarAula';
+import {
+  SGP_DATA_AULA,
+  SGP_INPUT_NUMBER_QUANTIDADE_AULAS,
+  SGP_RADIO_RECORRENCIA,
+  SGP_RADIO_TIPO_AULA,
+  SGP_SELECT_COMPONENTE_CURRICULAR,
+} from '~/componentes-sgp/filtro/idsCampos';
 
 function CadastroDeAula({ match, location }) {
   const { id, tipoCalendarioId } = match.params;
@@ -661,7 +668,7 @@ function CadastroDeAula({ match, location }) {
                         label="Data da aula"
                         formatoData="DD/MM/YYYY"
                         name="dataAula"
-                        id="dataAula"
+                        id={SGP_DATA_AULA}
                         form={form}
                         onChange={onChangeDataAula}
                       />
@@ -727,7 +734,7 @@ function CadastroDeAula({ match, location }) {
                   <div className="row">
                     <div className="col-xs-12 col-md-3 col-lg-3">
                       <RadioGroupButton
-                        id="tipo-aula"
+                        id={SGP_RADIO_TIPO_AULA}
                         label="Tipo de aula"
                         opcoes={opcoesTipoAula}
                         name="tipoAula"
@@ -738,7 +745,7 @@ function CadastroDeAula({ match, location }) {
                     </div>
                     <div className="col-xs-12 col-md-6 col-lg-6">
                       <SelectComponent
-                        id="disciplinaId"
+                        id={SGP_SELECT_COMPONENTE_CURRICULAR}
                         name="disciplinaId"
                         lista={listaComponentes}
                         label="Componente Curricular"
@@ -755,7 +762,7 @@ function CadastroDeAula({ match, location }) {
                     <div className="col-xs-12 col-md-3 col-lg-3">
                       <CampoNumeroFormik
                         label="Quantidade de aulas"
-                        id="quantidade-aula"
+                        id={SGP_INPUT_NUMBER_QUANTIDADE_AULAS}
                         name="quantidade"
                         form={form}
                         min={1}
@@ -766,7 +773,7 @@ function CadastroDeAula({ match, location }) {
                     </div>
                     <div className="col-xs-12 col-md-6 col-lg-6">
                       <RadioGroupButton
-                        id="recorrencia-aula"
+                        id={SGP_RADIO_RECORRENCIA}
                         label="Recorrência"
                         opcoes={opcoesRecorrencia}
                         name="recorrenciaAula"

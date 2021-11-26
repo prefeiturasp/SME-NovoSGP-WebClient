@@ -68,6 +68,8 @@ const CampoNumeroFormik = React.forwardRef((props, ref) => {
                 step={step}
                 disabled={disabled}
                 onBlur={onBlur}
+                id={id}
+                name={id}
               />
             </div>
           </div>
