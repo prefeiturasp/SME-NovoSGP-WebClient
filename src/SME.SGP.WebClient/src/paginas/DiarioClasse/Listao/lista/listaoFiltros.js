@@ -2,6 +2,16 @@ import { Col, Row } from 'antd';
 import React, { useCallback, useContext, useEffect, useState } from 'react';
 import { CheckboxComponent, Loader, SelectComponent } from '~/componentes';
 import { FiltroHelper } from '~/componentes-sgp';
+import {
+  SGP_CHECKBOX_EXIBIR_HISTORICO,
+  SGP_SELECT_ANO_LETIVO,
+  SGP_SELECT_BIMESTRE,
+  SGP_SELECT_DRE,
+  SGP_SELECT_MODALIDADE,
+  SGP_SELECT_SEMESTRE,
+  SGP_SELECT_TURMA,
+  SGP_SELECT_UE,
+} from '~/componentes-sgp/filtro/idsCampos';
 import { OPCAO_TODOS } from '~/constantes';
 import { ModalidadeDTO } from '~/dtos';
 import { AbrangenciaServico, erros, ServicoFiltroRelatorio } from '~/servicos';
@@ -367,7 +377,7 @@ const ListaoFiltros = () => {
       <Row gutter={[16, 16]}>
         <Col md={24} xl={12}>
           <CheckboxComponent
-            // id=""
+            id={SGP_CHECKBOX_EXIBIR_HISTORICO}
             label="Exibir histórico?"
             onChangeCheckbox={onCheckedConsideraHistorico}
             checked={consideraHistorico}
@@ -378,7 +388,7 @@ const ListaoFiltros = () => {
         <Col sm={24} md={8} lg={4}>
           <Loader loading={carregandoAnosLetivos} ignorarTip>
             <SelectComponent
-              // id=""
+              id={SGP_SELECT_ANO_LETIVO}
               label="Ano letivo"
               placeholder="Ano letivo"
               lista={listaAnosLetivo}
@@ -393,7 +403,7 @@ const ListaoFiltros = () => {
         <Col sm={24} md={24} lg={10}>
           <Loader loading={carregandoDres} tip="">
             <SelectComponent
-              // id="dre"
+              id={SGP_SELECT_DRE}
               label="DRE"
               lista={listaDres || []}
               valueOption="codigo"
@@ -409,7 +419,7 @@ const ListaoFiltros = () => {
         <Col sm={24} md={24} lg={10}>
           <Loader loading={carregandoUes} ignorarTip>
             <SelectComponent
-              // id="ue"
+              id={SGP_SELECT_UE}
               label="Unidade Escolar (UE)"
               lista={listaUes || []}
               valueOption="codigo"
@@ -425,7 +435,7 @@ const ListaoFiltros = () => {
         <Col sm={24} md={12} lg={8}>
           <Loader loading={carregandoModalidades} ignorarTip>
             <SelectComponent
-              // id=""
+              id={SGP_SELECT_MODALIDADE}
               label="Modalidade"
               placeholder="Selecione a modalidade"
               lista={listaModalidades}
@@ -440,7 +450,7 @@ const ListaoFiltros = () => {
         <Col sm={24} md={12} lg={8}>
           <Loader loading={carregandoSemestres} ignorarTip>
             <SelectComponent
-              // id=""
+              id={SGP_SELECT_SEMESTRE}
               lista={listaSemestres}
               valueOption="valor"
               valueText="desc"
@@ -459,7 +469,7 @@ const ListaoFiltros = () => {
         <Col sm={24} md={12} lg={8}>
           <Loader loading={carregandoTurmas} ignorarTip>
             <SelectComponent
-              // id="turma"
+              id={SGP_SELECT_TURMA}
               lista={listaTurmas}
               valueOption="codigo"
               valueText="nomeFiltro"
@@ -475,7 +485,7 @@ const ListaoFiltros = () => {
         </Col>
         <Col sm={24} md={12} lg={8}>
           <SelectComponent
-            // id=""
+            id={SGP_SELECT_BIMESTRE}
             lista={listaBimestres}
             valueOption="valor"
             valueText="descricao"
