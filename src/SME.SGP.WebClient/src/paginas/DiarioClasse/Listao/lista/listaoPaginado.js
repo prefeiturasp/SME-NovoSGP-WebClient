@@ -74,6 +74,7 @@ const ListaoPaginado = () => {
   const montarIcone = icon => {
     return (
       <FontAwesomeIcon
+        className="cor-branco-hover"
         style={{
           fontSize: '16px',
           color: Base.Azul,

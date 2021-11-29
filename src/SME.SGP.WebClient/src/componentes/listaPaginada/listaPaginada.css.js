@@ -1,4 +1,4 @@
-import styled, { css } from 'styled-components';
+import styled from 'styled-components';
 import { Base } from '../colors';
 
 export const Container = styled.div`
@@ -146,22 +146,16 @@ export const Container = styled.div`
     a.cor-novo-registro-lista {
       color: ${Base.Branco} !important;
     }
+
+    .cor-branco-hover {
+      color: ${Base.Branco} !important;
+    }
   }
 
-  ${({ semHover }) =>
-    semHover
-      ? css`
-          .ant-table-tbody tr:hover td {
-            background: transparent !important;
-            cursor: default !important;
-          }
-        `
-      : css`
-          .ant-table-tbody tr:hover {
-            background: ${Base.Roxo} !important;
-            color: ${Base.Branco} !important;
-          }
-        `}
+  .ant-table-tbody tr:hover {
+    background: ${Base.Roxo} !important;
+    color: ${Base.Branco} !important;
+  }
 
   .ant-table-tbody tr.ant-table-row-selected > td {
     background: ${Base.Roxo};
