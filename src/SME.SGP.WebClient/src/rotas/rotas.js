@@ -1475,7 +1475,7 @@ rotas.set(`${RotasDto.LISTAO}`, {
   component: Listao,
   exact: true,
   tipo: RotasTipo.EstruturadaAutenticada,
-  temPermissionamento: false,
+  temPermissionamento: true,
   chavePermissao: RotasDto.LISTAO,
 });
 
