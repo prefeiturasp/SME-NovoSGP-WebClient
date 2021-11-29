@@ -1,6 +1,6 @@
 import { Tooltip } from 'antd';
 import PropTypes from 'prop-types';
-import React, { useEffect, useState, useCallback, useRef } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Loader } from '~/componentes';
 import AusenciasEstudante from '~/componentes-sgp/ListaFrequenciaPorBimestre/ausenciasEstudante';
