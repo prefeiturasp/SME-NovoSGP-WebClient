@@ -1,6 +1,6 @@
 import { Tooltip } from 'antd';
 import PropTypes from 'prop-types';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Loader } from '~/componentes';
 import AusenciasEstudante from '~/componentes-sgp/ListaFrequenciaPorBimestre/ausenciasEstudante';
@@ -29,7 +29,7 @@ const ListaAlunos = props => {
   const usuario = useSelector(store => store.usuario);
   const { turmaSelecionada } = usuario;
 
-  const { componenteCurricularId, bimestreLista } = props;
+  const { componenteCurricularId } = props;
   const modalidadesFiltroPrincipal = useSelector(
     store => store.filtro.modalidades
   );
@@ -38,8 +38,12 @@ const ListaAlunos = props => {
     store => store.listaFrequenciaPorBimestre.exibirModalAnotacao
   );
 
-  const { bimestreSelecionado, exibirModalImpressao } = useSelector(
-    store => store.acompanhamentoFrequencia
+  const bimestreSelecionado = useSelector(
+    store => store.acompanhamentoFrequencia.bimestreSelecionado
+  );
+
+  const exibirModalImpressao = useSelector(
+    store => store.acompanhamentoFrequencia.exibirModalImpressao
   );
 
   const { id: turmaId } = turmaSelecionada;
@@ -47,32 +51,36 @@ const ListaAlunos = props => {
   const dispatch = useDispatch();
 
   const [carregandoListaAlunos, setCarregandoListaAlunos] = useState(false);
-  const [dadosBimestre, setDadosBimestre] = useState(null);
+  const [dadosBimestre, setDadosBimestre] = useState([]);
+
+  const obterAlunos = useCallback(async () => {
+    setDadosBimestre([]);
+    setCarregandoListaAlunos(true);
+    const retorno = await ServicoAcompanhamentoFrequencia.obterAcompanhamentoFrequenciaPorBimestre(
+      turmaSelecionada?.id,
+      componenteCurricularId,
+      bimestreSelecionado
+    )
+      .catch(e => erros(e))
+      .finally(() => setCarregandoListaAlunos(false));
+
+    const dados = retorno?.data ? retorno?.data : [];
+    setDadosBimestre(dados);
+  }, [turmaSelecionada, componenteCurricularId, bimestreSelecionado]);
 
   useEffect(() => {
-    const obterAlunos = async () => {
-      setCarregandoListaAlunos(true);
-      const retorno = await ServicoAcompanhamentoFrequencia.obterAcompanhamentoFrequenciaPorBimestre(
-        turmaSelecionada?.id,
-        componenteCurricularId,
-        bimestreSelecionado
-      ).catch(e => erros(e));
-
-      if (retorno?.data) {
-        setDadosBimestre(retorno?.data);
-      }
-      setCarregandoListaAlunos(false);
-    };
-    if (
-      componenteCurricularId &&
-      turmaId &&
-      bimestreSelecionado &&
-      String(bimestreLista) === String(bimestreSelecionado)
-    ) {
+    if (componenteCurricularId && turmaId && bimestreSelecionado) {
       dispatch(setExpandirLinhaFrequenciaAluno([]));
-      obterAlunos();
+      setDadosBimestre([]);
+      obterAlunos(componenteCurricularId, bimestreSelecionado);
     }
-  }, [componenteCurricularId, turmaId, bimestreSelecionado]);
+  }, [
+    componenteCurricularId,
+    turmaId,
+    bimestreSelecionado,
+    dispatch,
+    obterAlunos,
+  ]);
 
   const onChangeOrdenacao = alunosOrdenados => {
     dispatch(setExpandirLinhaFrequenciaAluno([]));
@@ -294,12 +302,10 @@ const ListaAlunos = props => {
 
 ListaAlunos.propTypes = {
   componenteCurricularId: PropTypes.string,
-  bimestreLista: PropTypes.number,
 };
 
 ListaAlunos.defaultProps = {
   componenteCurricularId: PropTypes.string,
-  bimestreLista: '1',
 };
 
 export default ListaAlunos;
