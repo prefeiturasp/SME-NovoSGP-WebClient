@@ -57,18 +57,35 @@ const ListasNotasConceitos = props => {
   const [exibir, setExibir] = useState(false);
   const [carregando, setCarregando] = useState(false);
 
-  const alunoTransferidoAposFimDoBimestre = () => {
+  const pegueInicioPeriodoFechamento = () => {
+    if (fechamentoPeriodoInicioFim) {
+      const { periodoFechamentoInicio } = fechamentoPeriodoInicioFim;
+
+      if (periodoFechamentoInicio)
+        return moment(periodoFechamentoInicio).format('MM-DD-YYYY');
+    }
+
+    return null;
+  };
+
+  const alunoDentroDoPeriodoDoBimestreOuFechamento = () => {
     const dataSituacao = moment(dadosAlunoObjectCard.dataSituacao).format(
       'MM-DD-YYYY'
     );
+    const dataFimBimestre = moment(bimestreAtual.dataFim).format('MM-DD-YYYY');
+    const dataInicioPeriodoFechamento = pegueInicioPeriodoFechamento();
 
-    const dataFimPeriodo = moment(bimestreAtual.dataFim).format('MM-DD-YYYY');
-
-    return dataSituacao >= dataFimPeriodo;
+    return (
+      dataSituacao >= dataFimBimestre ||
+      (dataInicioPeriodoFechamento &&
+        dataSituacao >= dataInicioPeriodoFechamento)
+    );
   };
 
   const desabilitarEdicaoAluno = () => {
-    if (!alunoDesabilitado || alunoTransferidoAposFimDoBimestre()) return false;
+    if (!alunoDesabilitado || alunoDentroDoPeriodoDoBimestreOuFechamento()) {
+      return false;
+    }
 
     return true;
   };
@@ -106,7 +123,7 @@ const ListasNotasConceitos = props => {
       )
     );
 
-    const alunoDentroDoPeriodoDoBimestre = alunoTransferidoAposFimDoBimestre();
+    const alunoDentroDoPeriodoDoBimestre = alunoDentroDoPeriodoDoBimestreOuFechamento();
     const periodoAbertoOuEmFechamento = estaNoPeriodoOuFechamento();
 
     if (
@@ -122,20 +139,20 @@ const ListasNotasConceitos = props => {
   const habilitaConselhoClassePorNotasPosConselho = dados => {
     let notasPosConselhoPreenchidas = true;
     if (!dados.temConselhoClasseAluno) {
-    dados.notasConceitos.map(notasConceitos =>
-      notasConceitos.componentesCurriculares.map(componentesCurriculares => {
-        if (valorNuloOuVazio(componentesCurriculares.notaPosConselho.nota)) {
-          notasPosConselhoPreenchidas = false;
-        }
-        return componentesCurriculares;
-      })
-    );
-    const periodoAbertoOuEmFechamento = estaNoPeriodoOuFechamento();
-    if (notasPosConselhoPreenchidas && periodoAbertoOuEmFechamento) {
-      dispatch(setConselhoClasseEmEdicao(true));
+      dados.notasConceitos.map(notasConceitos =>
+        notasConceitos.componentesCurriculares.map(componentesCurriculares => {
+          if (valorNuloOuVazio(componentesCurriculares.notaPosConselho.nota)) {
+            notasPosConselhoPreenchidas = false;
+          }
+          return componentesCurriculares;
+        })
+      );
+      const periodoAbertoOuEmFechamento = estaNoPeriodoOuFechamento();
+      if (notasPosConselhoPreenchidas && periodoAbertoOuEmFechamento) {
+        dispatch(setConselhoClasseEmEdicao(true));
+      }
     }
-  }
-  };  
+  };
 
   const obterDadosLista = useCallback(async () => {
     setCarregando(true);
@@ -156,7 +173,7 @@ const ListasNotasConceitos = props => {
       setExibir(true);
       if (bimestreSelecionado?.valor !== 'final')
         habilitaConselhoClasse(resultado.data);
-        habilitaConselhoClassePorNotasPosConselho(resultado.data);
+      habilitaConselhoClassePorNotasPosConselho(resultado.data);
     } else {
       setExibir(false);
     }
