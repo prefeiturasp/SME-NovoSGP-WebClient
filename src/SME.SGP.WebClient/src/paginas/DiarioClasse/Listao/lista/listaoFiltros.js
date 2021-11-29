@@ -447,25 +447,25 @@ const ListaoFiltros = () => {
             />
           </Loader>
         </Col>
-        <Col sm={24} md={12} lg={8}>
-          <Loader loading={carregandoSemestres} ignorarTip>
-            <SelectComponent
-              id={SGP_SELECT_SEMESTRE}
-              lista={listaSemestres}
-              valueOption="valor"
-              valueText="desc"
-              label="Semestre"
-              placeholder="Selecione o semestre"
-              disabled={
-                !modalidade ||
-                Number(modalidade) !== ModalidadeDTO.EJA ||
-                listaSemestres?.length === 1
-              }
-              valueSelect={semestre}
-              onChange={onChangeSemestre}
-            />
-          </Loader>
-        </Col>
+        {Number(modalidade) === ModalidadeDTO.EJA ? (
+          <Col sm={24} md={12} lg={8}>
+            <Loader loading={carregandoSemestres} ignorarTip>
+              <SelectComponent
+                id={SGP_SELECT_SEMESTRE}
+                lista={listaSemestres}
+                valueOption="valor"
+                valueText="desc"
+                label="Semestre"
+                placeholder="Selecione o semestre"
+                disabled={!modalidade || listaSemestres?.length === 1}
+                valueSelect={semestre}
+                onChange={onChangeSemestre}
+              />
+            </Loader>
+          </Col>
+        ) : (
+          <></>
+        )}
         <Col sm={24} md={12} lg={8}>
           <Loader loading={carregandoTurmas} ignorarTip>
             <SelectComponent
