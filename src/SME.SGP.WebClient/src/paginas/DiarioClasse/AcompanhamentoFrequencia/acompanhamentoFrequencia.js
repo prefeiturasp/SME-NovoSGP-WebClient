@@ -161,9 +161,11 @@ const AcompanhamentoFrequencia = () => {
           String(item.codigoComponenteCurricular) ===
           String(componenteCurricularIdSelecionado)
       );
-      setPodeLancarFrequencia(componenteCurriular?.registraFrequencia);
+
+      setPodeLancarFrequencia(componenteCurriular?.registraFrequencia);      
       setTerritorioSaber(componenteCurriular?.territorioSaber);
-      if (turmaSelecionada.modalidade === String(modalidade.EJA)) {
+      
+      if (Number(turmaSelecionada.modalidade) === modalidade.EJA) {
         setBimestres(listagemBimestresEJA);
       } else {
         setBimestres(listagemBimestres);
