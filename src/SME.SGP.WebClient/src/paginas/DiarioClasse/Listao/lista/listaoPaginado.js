@@ -97,7 +97,7 @@ const ListaoPaginado = () => {
     const cols = [
       {
         title: 'Minhas turmas',
-        dataIndex: 'turmas',
+        dataIndex: 'nomeTurma',
         width: '36%',
       },
       {
@@ -175,7 +175,6 @@ const ListaoPaginado = () => {
           colunas={colunas}
           filtro={filtros}
           filtroEhValido={filtroEhValido}
-          semHover
         />
       ) : (
         ''
