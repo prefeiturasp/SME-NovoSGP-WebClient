@@ -164,7 +164,11 @@ const ListaoPaginado = () => {
 
   return (
     <Col span={24} style={{ marginTop: '20px' }}>
-      {filtros?.anoLetivo && codigoDre && codigoUe ? (
+      {filtros?.anoLetivo &&
+      filtros?.dreCodigo &&
+      filtros?.ueCodigo &&
+      filtros?.modalidade &&
+      filtros?.bimestre ? (
         <ListaPaginada
           url="v1/turmas/listagem-turmas"
           id="lista-paginada-listao"
