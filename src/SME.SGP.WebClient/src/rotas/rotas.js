@@ -105,6 +105,7 @@ import RelatorioAtaBimestral from '~/paginas/Relatorios/Atas/AtaBimestral/relato
 import EventosLista from '~/paginas/CalendarioEscolar/Eventos/lista/eventosLista';
 import EventosCadastro from '~/paginas/CalendarioEscolar/Eventos/cadastro/eventosCadastro';
 import RelatorioAcompanhamentoRegistros from '~/paginas/Relatorios/Gestao/AcompanhamentoRegistros/acompanhamentoRegistros';
+import Listao from '~/paginas/DiarioClasse/Listao/lista/listao';
 
 const rotas = new Map();
 
@@ -1465,6 +1466,17 @@ rotas.set(RotasDto.RELATORIO_ACOMPANHAMENTO_REGISTROS, {
   tipo: RotasTipo.EstruturadaAutenticada,
   temPermissionamento: true,
   chavePermissao: RotasDto.RELATORIO_ACOMPANHAMENTO_REGISTROS,
+});
+
+rotas.set(`${RotasDto.LISTAO}`, {
+  breadcrumbName: 'Listão',
+  menu: ['Diário de Classe'],
+  parent: '/',
+  component: Listao,
+  exact: true,
+  tipo: RotasTipo.EstruturadaAutenticada,
+  temPermissionamento: true,
+  chavePermissao: RotasDto.LISTAO,
 });
 
 const rotasArray = [];
