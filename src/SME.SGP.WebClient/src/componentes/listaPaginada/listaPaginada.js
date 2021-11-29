@@ -25,7 +25,6 @@ const ListaPaginada = props => {
     temPaginacao,
     setLista,
     showSizeChanger,
-    semHover,
   } = props;
 
   const [carregando, setCarregando] = useState(false);
@@ -154,7 +153,7 @@ const ListaPaginada = props => {
   };
 
   return (
-    <Container className="table-responsive" semHover={semHover}>
+    <Container className="table-responsive">
       <Table
         className={multiSelecao ? '' : 'ocultar-coluna-multi-selecao'}
         rowKey={colunaChave}
@@ -231,7 +230,6 @@ ListaPaginada.propTypes = {
   temPaginacao: PropTypes.oneOfType([PropTypes.bool]),
   setLista: PropTypes.oneOfType([PropTypes.func]),
   showSizeChanger: PropTypes.oneOfType([PropTypes.bool]),
-  semHover: PropTypes.oneOfType([PropTypes.bool]),
 };
 
 ListaPaginada.defaultProps = {
@@ -249,7 +247,6 @@ ListaPaginada.defaultProps = {
   temPaginacao: true,
   setLista: () => { },
   showSizeChanger: true,
-  semHover: false,
 };
 
 export default ListaPaginada;
