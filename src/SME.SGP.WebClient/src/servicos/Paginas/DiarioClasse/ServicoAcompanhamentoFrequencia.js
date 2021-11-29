@@ -6,10 +6,11 @@ class ServicoAcompanhamentoFrequencia {
   obterAcompanhamentoFrequenciaPorBimestre = async (
     turmaId,
     componenteCurricularId,
-    bimestre
+    bimestre,
+    territorioSaber
   ) => {
     return api.get(
-      `${urlPadrao}?turmaId=${turmaId}&componenteCurricularId=${componenteCurricularId}&bimestre=${bimestre}`
+      `${urlPadrao}?turmaId=${turmaId}&componenteCurricularId=${componenteCurricularId}&bimestre=${bimestre}&territorioSaber=${territorioSaber}`
     );
   };
 
