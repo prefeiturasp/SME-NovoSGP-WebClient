@@ -7,7 +7,7 @@ const DescricaoComunicados = ({ form, onChangeCampos, desabilitar }) => {
     <JoditEditor
       label="Descrição"
       id="editor-descricao"
-      name="editor-descricao"
+      name="descricao"
       onChange={() => onChangeCampos()}
       permiteInserirArquivo={false}
       form={form}
