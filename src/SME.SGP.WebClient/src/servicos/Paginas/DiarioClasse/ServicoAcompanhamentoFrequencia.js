@@ -10,7 +10,7 @@ class ServicoAcompanhamentoFrequencia {
     territorioSaber
   ) => {
     return api.get(
-      `${urlPadrao}?turmaId=${turmaId}&componenteCurricularId=${componenteCurricularId}&bimestre=${bimestre}&territorioSaber=${territorioSaber}`
+      `${urlPadrao}?turmaId=${turmaId}&componenteCurricularId=${componenteCurricularId}&bimestre=${bimestre}&possuiTerritorio=${territorioSaber}`
     );
   };
 
