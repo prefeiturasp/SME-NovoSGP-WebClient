@@ -68,17 +68,21 @@ const RadioGroupButton = ({
     return (
       <Field
         name={name}
-        id={id || name}
-        component={Radio.Group}
-        options={opcoes}
-        onChange={e => {
-          form.setFieldValue(name, e.target.value);
-          onChange(e);
-          form.setFieldTouched(name, true, true);
-        }}
-        defaultValue={valorInicial}
-        disabled={desabilitado}
-        value={form.values[name]}
+        component={() => (
+          <Radio.Group
+            name={id}
+            id={id || name}
+            options={opcoes}
+            onChange={e => {
+              form.setFieldValue(name, e.target.value);
+              onChange(e);
+              form.setFieldTouched(name, true, true);
+            }}
+            defaultValue={valorInicial}
+            disabled={desabilitado}
+            value={form.values[name]}
+          />
+        )}
       />
     );
   };
@@ -86,6 +90,7 @@ const RadioGroupButton = ({
   const campoSemValidacoes = () => {
     return (
       <Radio.Group
+        name={id}
         id={id}
         options={opcoes}
         onChange={onChange}

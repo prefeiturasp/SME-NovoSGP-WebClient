@@ -88,6 +88,7 @@ const RotasDto = {
   ATA_BIMESTRAL: '/relatorios/atas/ata-bimestral',
   RELATORIO_ACOMPANHAMENTO_REGISTROS:
     '/relatorios/gestao/acompanhamento-registros',
+  LISTAO: '/diario-classe/listao',
 };
 
 export default RotasDto;
