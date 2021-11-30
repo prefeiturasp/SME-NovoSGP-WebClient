@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
+import moment from 'moment';
 import { Loader } from '~/componentes';
 import {
   setAnotacoesAluno,
@@ -18,11 +19,14 @@ import AnotacoesAluno from './AnotacoesAluno/anotacoesAluno';
 import AnotacoesPedagogicas from './AnotacoesPedagogicas/anotacoesPedagogicas';
 import AuditoriaAnotacaoRecomendacao from './AuditoriaAnotacaoRecomendacao/auditoriaAnotacaoRecomendacao';
 import RecomendacaoAlunoFamilia from './RecomendacaoAlunoFamilia/recomendacaoAlunoFamilia';
-import moment from 'moment';
 
 const AnotacoesRecomendacoes = props => {
   const { codigoTurma, bimestre } = props;
   const dispatch = useDispatch();
+
+  const fechamentoPeriodoInicioFim = useSelector(
+    store => store.conselhoClasse.fechamentoPeriodoInicioFim
+  );
 
   const dadosPrincipaisConselhoClasse = useSelector(
     store => store.conselhoClasse.dadosPrincipaisConselhoClasse
@@ -54,6 +58,8 @@ const AnotacoesRecomendacoes = props => {
 
   const [exibir, setExibir] = useState(false);
   const [carregando, setCarregando] = useState(false);
+
+  const [matriculaAtivaPeriodo, setMatriculaAtivaPeriodo] = useState(true);
 
   // TODO Validar a necessidade de chamar quando esta alterando um registro ou usar somente quando for carergar dados na tela!
   const onChangeAnotacoesRecomendacoes = useCallback(
@@ -128,6 +134,37 @@ const AnotacoesRecomendacoes = props => {
     [dispatch]
   );
 
+  const pegueInicioPeriodoFechamento = () => {
+    if (fechamentoPeriodoInicioFim) {
+      const { periodoFechamentoInicio } = fechamentoPeriodoInicioFim;
+
+      if (periodoFechamentoInicio)
+        return moment(periodoFechamentoInicio).format('MM-DD-YYYY');
+    }
+
+    return null;
+  };
+
+  const desabilitarEdicaoAluno = () => {
+    const dataSituacao = moment(dadosAlunoObjectCard.dataSituacao).format(
+      'MM-DD-YYYY'
+    );
+    const dataFimBimestre = moment(bimestreAtual.dataFim).format('MM-DD-YYYY');
+    const dataInicioPeriodoFechamento = pegueInicioPeriodoFechamento();
+
+    if (
+      matriculaAtivaPeriodo &&
+      (!alunoDesabilitado ||
+        dataSituacao >= dataFimBimestre ||
+        (dataInicioPeriodoFechamento &&
+          dataSituacao >= dataInicioPeriodoFechamento))
+    ) {
+      return false;
+    }
+
+    return true;
+  };
+
   const obterAnotacoesRecomendacoes = useCallback(async () => {
     setCarregando(true);
 
@@ -141,6 +178,8 @@ const AnotacoesRecomendacoes = props => {
     ).catch(e => erros(e));
 
     if (resposta && resposta.data) {
+      setMatriculaAtivaPeriodo(resposta.data.matriculaAtiva);
+
       if (!desabilitarEdicaoAluno()) {
         setarDentroDoPeriodo(!resposta.data.somenteLeitura);
       }
@@ -169,6 +208,7 @@ const AnotacoesRecomendacoes = props => {
     setarSituacaoConselho,
     alunoDesabilitado,
     bimestre,
+    matriculaAtivaPeriodo,
   ]);
 
   useEffect(() => {
@@ -179,17 +219,6 @@ const AnotacoesRecomendacoes = props => {
 
   const setarConselhoClasseEmEdicao = emEdicao => {
     dispatch(setConselhoClasseEmEdicao(emEdicao));
-  };
-
-  const desabilitarEdicaoAluno = () => {
-    const dataSituacao = moment(dadosAlunoObjectCard.dataSituacao).format(
-      'MM-DD-YYYY'
-    );
-    const dataFimBimestre = moment(bimestreAtual.dataFim).format('MM-DD-YYYY');
-
-    if (!alunoDesabilitado || dataSituacao >= dataFimBimestre) return false;
-
-    return true;
   };
 
   return (

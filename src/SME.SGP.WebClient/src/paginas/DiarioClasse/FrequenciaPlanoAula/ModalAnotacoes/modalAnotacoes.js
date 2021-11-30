@@ -58,6 +58,7 @@ const ModalAnotacoesFrequencia = props => {
   const [modoEdicao, setModoEdicao] = useState(false);
   const [refForm, setRefForm] = useState({});
   const [valoresIniciais, setValoresIniciais] = useState(iniciar);
+  const [loaderSalvarEditar, setLoaderSalvarEditar] = useState(false);
 
   const [validacoes] = useState(
     Yup.object().shape(
@@ -88,6 +89,7 @@ const ModalAnotacoesFrequencia = props => {
     dispatch(setExibirModalAnotacaoFrequencia(false));
     setValoresIniciais(iniciar);
     setRefForm({});
+    setModoEdicao(false);
   };
 
   const obterAnotacao = useCallback(async () => {
@@ -101,6 +103,7 @@ const ModalAnotacoesFrequencia = props => {
         ? String(resultado.data.motivoAusenciaId)
         : undefined;
       setValoresIniciais(resultado.data);
+      setModoEdicao(false);
     }
   }, [aulaId, dadosModalAnotacaoFrequencia]);
 
@@ -165,9 +168,9 @@ const ModalAnotacoesFrequencia = props => {
       id,
       anotacao,
     };
-    const retorno = await ServicoAnotacaoFrequenciaAluno.alterarAnotacao(
-      params
-    ).catch(e => erros(e));
+    const retorno = await ServicoAnotacaoFrequenciaAluno.alterarAnotacao(params)
+      .catch(e => erros(e))
+      .finally(() => setLoaderSalvarEditar(false));
     if (retorno && retorno.status === 200) {
       sucesso('Anotação alterada com sucesso');
       fecharAposSalvarExcluir(true, false);
@@ -185,12 +188,12 @@ const ModalAnotacoesFrequencia = props => {
       codigoAluno,
       ehInfantil,
     };
-    const retorno = await ServicoAnotacaoFrequenciaAluno.salvarAnotacao(
-      params
-    ).catch(e => {
-      erros(e);
-      onCloseModal();
-    });
+    const retorno = await ServicoAnotacaoFrequenciaAluno.salvarAnotacao(params)
+      .catch(e => {
+        erros(e);
+        onCloseModal();
+      })
+      .finally(() => setLoaderSalvarEditar(false));
     if (retorno && retorno.status === 200) {
       sucesso('Anotação salva com sucesso');
       fecharAposSalvarExcluir(true, false);
@@ -205,7 +208,10 @@ const ModalAnotacoesFrequencia = props => {
       });
       form.validateForm().then(() => {
         if (form.isValid || Object.keys(form.errors).length === 0) {
-          form.handleSubmit(e => e);
+          setLoaderSalvarEditar(true);
+          setTimeout(() => {
+            form.handleSubmit(e => e);
+          }, 400);
         }
       });
     }
@@ -259,7 +265,7 @@ const ModalAnotacoesFrequencia = props => {
       key="inserir-anotacao"
       visivel={exibirModalAnotacaoFrequencia}
       titulo={`Anotações ${ehInfantil ? 'da criança' : 'do estudante'}`}
-      onClose={() => validaAntesDeFechar()}
+      onClose={() => (!loaderSalvarEditar ? validaAntesDeFechar() : null)}
       esconderBotaoPrincipal
       esconderBotaoSecundario
       width={750}
@@ -281,106 +287,110 @@ const ModalAnotacoesFrequencia = props => {
         validateOnBlur
       >
         {form => (
-          <Form>
-            <div className="col-md-12">
-              <DetalhesAluno
-                dados={dadosEstudanteOuCrianca}
-                exibirBotaoImprimir={false}
-                exibirFrequencia={false}
-                permiteAlterarImagem={false}
-              />
-            </div>
-            <div className="col-md-12 mt-2">
-              <Loader loading={carregandoMotivosAusencia} tip="">
-                <SelectComponent
-                  form={form}
-                  id="motivo-ausencia"
-                  name="motivoAusenciaId"
-                  lista={listaMotivoAusencia}
-                  valueOption="valor"
-                  valueText="descricao"
-                  onChange={onChangeCampos}
-                  placeholder="Selecione um motivo"
-                  disabled={desabilitarCampos}
+          <Loader loading={loaderSalvarEditar}>
+            <Form>
+              <div className="col-md-12">
+                <DetalhesAluno
+                  dados={dadosEstudanteOuCrianca}
+                  exibirBotaoImprimir={false}
+                  exibirFrequencia={false}
+                  permiteAlterarImagem={false}
                 />
-              </Loader>
-            </div>
-            <div className="col-md-12 mt-2">
-              <EditorAnotacao>
-                <JoditEditor
-                  form={form}
-                  value={form.values.anotacao}
-                  name="anotacao"
-                  onChange={v => {
-                    if (valoresIniciais.anotacao !== v) {
-                      onChangeCampos();
-                    }
-                  }}
-                  readonly={desabilitarCampos}
-                />
-              </EditorAnotacao>
-            </div>
-            <div className="row">
-              <div
-                className="col-md-12 d-flex justify-content-start"
-                style={{ marginTop: '-15px' }}
-              >
-                {valoresIniciais &&
-                valoresIniciais.auditoria &&
-                valoresIniciais.auditoria.criadoPor ? (
-                  <Auditoria
-                    criadoPor={valoresIniciais.auditoria.criadoPor}
-                    criadoEm={valoresIniciais.auditoria.criadoEm}
-                    alteradoPor={valoresIniciais.auditoria.alteradoPor}
-                    alteradoEm={valoresIniciais.auditoria.alteradoEm}
-                    alteradoRf={valoresIniciais.auditoria.alteradoRF}
-                    criadoRf={valoresIniciais.auditoria.criadoRF}
+              </div>
+              <div className="col-md-12 mt-2">
+                <Loader loading={carregandoMotivosAusencia} tip="">
+                  <SelectComponent
+                    form={form}
+                    id="motivo-ausencia"
+                    name="motivoAusenciaId"
+                    lista={listaMotivoAusencia}
+                    valueOption="valor"
+                    valueText="descricao"
+                    onChange={onChangeCampos}
+                    placeholder="Selecione um motivo"
+                    disabled={desabilitarCampos}
                   />
-                ) : (
-                  ''
-                )}
+                </Loader>
               </div>
-              <div className="col-md-12 d-flex justify-content-end">
-                <Button
-                  key="btn-voltar-anotacao"
-                  id="btn-voltar-anotacao"
-                  label="Voltar"
-                  icon="arrow-left"
-                  color={Colors.Azul}
-                  border
-                  onClick={validaAntesDeFechar}
-                  className="mr-3 mt-2 padding-btn-confirmacao"
-                />
-                <Button
-                  key="btn-excluir-anotacao"
-                  id="btn-excluir-anotacao"
-                  label="Excluir"
-                  color={Colors.Vermelho}
-                  bold
-                  border
-                  className="mr-3 mt-2 padding-btn-confirmacao"
-                  onClick={() => validaAntesDeExcluir(form.values.id)}
-                  disabled={
-                    desabilitarCampos ||
-                    !dadosModalAnotacaoFrequencia?.possuiAnotacao
-                  }
-                />
-                <Button
-                  id="btn-salvar-anotacao"
-                  key="btn-salvar-anotacao"
-                  label={
-                    valoresIniciais && valoresIniciais.id ? 'Alterar' : 'Salvar'
-                  }
-                  color={Colors.Roxo}
-                  bold
-                  border
-                  className="mr-3 mt-2 padding-btn-confirmacao"
-                  onClick={() => validaAntesDoSubmit(form)}
-                  disabled={!modoEdicao || desabilitarCampos}
-                />
+              <div className="col-md-12 mt-2">
+                <EditorAnotacao>
+                  <JoditEditor
+                    form={form}
+                    value={valoresIniciais.anotacao}
+                    name="anotacao"
+                    onChange={v => {
+                      if (valoresIniciais.anotacao !== v) {
+                        onChangeCampos();
+                      }
+                    }}
+                    readonly={desabilitarCampos}
+                  />
+                </EditorAnotacao>
               </div>
-            </div>
-          </Form>
+              <div className="row">
+                <div
+                  className="col-md-12 d-flex justify-content-start"
+                  style={{ marginTop: '-15px' }}
+                >
+                  {valoresIniciais &&
+                  valoresIniciais.auditoria &&
+                  valoresIniciais.auditoria.criadoPor ? (
+                    <Auditoria
+                      criadoPor={valoresIniciais.auditoria.criadoPor}
+                      criadoEm={valoresIniciais.auditoria.criadoEm}
+                      alteradoPor={valoresIniciais.auditoria.alteradoPor}
+                      alteradoEm={valoresIniciais.auditoria.alteradoEm}
+                      alteradoRf={valoresIniciais.auditoria.alteradoRF}
+                      criadoRf={valoresIniciais.auditoria.criadoRF}
+                    />
+                  ) : (
+                    ''
+                  )}
+                </div>
+                <div className="col-md-12 d-flex justify-content-end">
+                  <Button
+                    key="btn-voltar-anotacao"
+                    id="btn-voltar-anotacao"
+                    label="Voltar"
+                    icon="arrow-left"
+                    color={Colors.Azul}
+                    border
+                    onClick={validaAntesDeFechar}
+                    className="mr-3 mt-2 padding-btn-confirmacao"
+                  />
+                  <Button
+                    key="btn-excluir-anotacao"
+                    id="btn-excluir-anotacao"
+                    label="Excluir"
+                    color={Colors.Vermelho}
+                    bold
+                    border
+                    className="mr-3 mt-2 padding-btn-confirmacao"
+                    onClick={() => validaAntesDeExcluir(form.values.id)}
+                    disabled={
+                      desabilitarCampos ||
+                      !dadosModalAnotacaoFrequencia?.possuiAnotacao
+                    }
+                  />
+                  <Button
+                    id="btn-salvar-anotacao"
+                    key="btn-salvar-anotacao"
+                    label={
+                      valoresIniciais && valoresIniciais.id
+                        ? 'Alterar'
+                        : 'Salvar'
+                    }
+                    color={Colors.Roxo}
+                    bold
+                    border
+                    className="mr-3 mt-2 padding-btn-confirmacao"
+                    onClick={() => validaAntesDoSubmit(form)}
+                    disabled={!modoEdicao || desabilitarCampos}
+                  />
+                </div>
+              </div>
+            </Form>
+          </Loader>
         )}
       </Formik>
     </ModalConteudoHtml>

@@ -787,9 +787,11 @@ const Notas = ({ match }) => {
 
     bimestreAtual = {
       ...dadosBimestreAtual,
-      mediaAprovacaoBimestre : bimestre.mediaAprovacaoBimestre, 
-      modoEdicao : bimestre.modoEdicao, 
-      listaTiposConceitos : bimestre.listaTiposConceitos ? bimestre.listaTiposConceitos : []
+      mediaAprovacaoBimestre: bimestre.mediaAprovacaoBimestre,
+      modoEdicao: bimestre.modoEdicao,
+      listaTiposConceitos: bimestre.listaTiposConceitos
+        ? bimestre.listaTiposConceitos
+        : [],
     };
     bimestreAtual.alunos = bimestre.alunos;
 
@@ -801,9 +803,7 @@ const Notas = ({ match }) => {
     );
   };
 
-  const bimestreEmModoEdicao = (
-    numeroBimestre
-    ) => {
+  const bimestreEmModoEdicao = numeroBimestre => {
     switch (Number(numeroBimestre)) {
       case 1:
         return primeiroBimestre.modoEdicao;
@@ -816,7 +816,7 @@ const Notas = ({ match }) => {
       default:
         return false;
     }
-  }
+  };
 
   const aposValidarJustificativaAntesDeSalvar = (
     numeroBimestre,
@@ -1161,7 +1161,7 @@ const Notas = ({ match }) => {
                 <fieldset className="mt-3">
                   <JoditEditor
                     form={form}
-                    value={form.values.descricao}
+                    value={valoresIniciais.descricao}
                     onChange={onChangeJustificativa}
                     name="descricao"
                   />
