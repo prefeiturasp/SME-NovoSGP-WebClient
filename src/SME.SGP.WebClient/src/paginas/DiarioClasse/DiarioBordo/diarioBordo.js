@@ -1,5 +1,6 @@
 import { Form, Formik } from 'formik';
 import React, { useCallback, useEffect, useState } from 'react';
+import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
 import * as Yup from 'yup';
 import { Auditoria, CampoData, Loader, PainelCollapse } from '~/componentes';
@@ -41,8 +42,8 @@ const DiarioBordo = ({ match }) => {
   const turmaId = turmaSelecionada ? turmaSelecionada.turma : 0;
 
   const [
-    listaComponenteCurriculare,
-    setListaComponenteCurriculare,
+    listaComponenteCurriculares,
+    setListaComponenteCurriculares,
   ] = useState();
   const [
     componenteCurricularSelecionado,
@@ -67,14 +68,16 @@ const DiarioBordo = ({ match }) => {
   );
   const [desabilitarCampos, setDesabilitarCampos] = useState(false);
   const [somenteConsulta, setSomenteConsulta] = useState(false);
-  const [diarioBordoIdSelecionado, setDiarioBordoIdSelecionado] = useState();
   const dispatch = useDispatch();
+
+  const aulaId = match?.params?.aulaId;
 
   const inicial = {
     aulaId: 0,
     planejamento: '',
     reflexoesReplanejamento: '',
     devolutivas: '',
+    componenteCurricularId: '',
   };
   const [valoresIniciais, setValoresIniciais] = useState(inicial);
 
@@ -154,8 +157,8 @@ const DiarioBordo = ({ match }) => {
       turmaId
     ).catch(e => erros(e));
 
-    if (componentes.data && componentes.data.length) {
-      setListaComponenteCurriculare(componentes.data);
+    if (componentes?.data?.length) {
+      setListaComponenteCurriculares(componentes.data);
 
       if (componentes.data.length === 1) {
         const componente = componentes.data[0];
@@ -172,16 +175,11 @@ const DiarioBordo = ({ match }) => {
     if (turmaId && turmaInfantil) {
       obterComponentesCurriculares();
     } else {
-      setListaComponenteCurriculare([]);
+      setListaComponenteCurriculares([]);
       setComponenteCurricularSelecionado(undefined);
       resetarTela();
     }
   }, [turmaId, obterComponentesCurriculares, turmaInfantil]);
-
-  useEffect(() => {
-    if (match?.params?.aulaId)
-      setBreadcrumbManual(match?.url, 'Alterar', RotasDto.DIARIO_BORDO);
-  }, [match]);
 
   const obterDatasDeAulasDisponiveis = useCallback(async () => {
     setCarregandoGeral(true);
@@ -199,16 +197,15 @@ const DiarioBordo = ({ match }) => {
         setCarregandoData(false);
       });
 
-    if (datasDeAulas && datasDeAulas.data && datasDeAulas.data.length) {
+    if (datasDeAulas?.data?.length) {
       setListaDatasAulas(datasDeAulas.data);
       const habilitar = datasDeAulas.data.map(item => {
-        if (match?.params?.aulaId && !dataSelecionada && item.aulas) {
+        if (aulaId && !dataSelecionada && item.aulas) {
           const dataEncontrada = item.aulas.find(
-            a => a.aulaId.toString() === match?.params?.aulaId.toString()
+            a => a.aulaId.toString() === aulaId.toString()
           );
           if (dataEncontrada) {
             setDataSelecionada(window.moment(item.data));
-            obterDiarioBordo(match?.params?.aulaId);
           }
         }
         return window.moment(item.data).format('YYYY-MM-DD');
@@ -283,43 +280,60 @@ const DiarioBordo = ({ match }) => {
     [dispatch]
   );
 
-  const obterDiarioBordo = async aulaId => {
-    setCarregandoGeral(true);
-    const retorno = await ServicoDiarioBordo.obterDiarioBordo(aulaId).catch(e =>
-      erros(e)
-    );
-    setCarregandoGeral(false);
+  const obterDiarioBordo = useCallback(
+    async aulaIdEnviada => {
+      setCarregandoGeral(true);
+      const retorno = await ServicoDiarioBordo.obterDiarioBordo(aulaIdEnviada)
+        .catch(e => erros(e))
+        .finally(() => setCarregandoGeral(false));
 
-    if (retorno && retorno.data) {
-      const valInicial = {
-        aulaId: aulaId || 0,
-        planejamento: retorno.data.planejamento || '',
-        reflexoesReplanejamento: retorno.data.reflexoesReplanejamento || '',
-        devolutivas: retorno.data.devolutivas || '',
-      };
-      setTemPeriodoAberto(retorno.data.temPeriodoAberto);
-      setValoresIniciais(valInicial);
-      if (retorno?.data?.auditoria?.id) {
-        setDiarioBordoIdSelecionado(retorno.data.auditoria.id);
-        setAuditoria(retorno.data.auditoria);
-        obterDadosObservacoes(retorno.data.auditoria.id);
+      if (retorno && retorno.data) {
+        const compCurricularSelecionado = String(
+          retorno.data.componenteCurricularId
+        );
+
+        const valInicial = {
+          aulaId: aulaIdEnviada || 0,
+          planejamento: retorno.data.planejamento || '',
+          reflexoesReplanejamento: retorno.data.reflexoesReplanejamento || '',
+          devolutivas: retorno.data.devolutivas || '',
+          componenteCurricularId: compCurricularSelecionado,
+        };
+        setTemPeriodoAberto(retorno.data.temPeriodoAberto);
+        setValoresIniciais(valInicial);
+        setComponenteCurricularSelecionado(compCurricularSelecionado);
+        if (retorno?.data?.auditoria?.id) {
+          setAuditoria(retorno.data.auditoria);
+          obterDadosObservacoes(retorno.data.auditoria.id);
+        }
       }
+    },
+    [obterDadosObservacoes]
+  );
+
+  useEffect(() => {
+    if (aulaId) {
+      setBreadcrumbManual(match?.url, 'Alterar', RotasDto.DIARIO_BORDO);
+      obterDiarioBordo(aulaId);
     }
-  };
+  }, [match, obterDiarioBordo]);
+
   const salvarDiarioDeBordo = async (valores, form, clicouBtnSalvar) => {
     setCarregandoGeral(true);
-    let aulaId = aulaSelecionada?.aulaId;
+    let aulaIdSelecionada = aulaSelecionada?.aulaId;
     let voltarParaListagem = false;
-    if (!aulaId && match?.params?.aulaId) {
-      aulaId = match?.params?.aulaId;
+    if (!aulaIdSelecionada && aulaId) {
+      aulaIdSelecionada = aulaId;
       voltarParaListagem = true;
     }
 
     const params = {
-      aulaId,
+      aulaId: aulaIdSelecionada,
       planejamento: valores.planejamento,
       reflexoesReplanejamento: valores.reflexoesReplanejamento,
+      componenteCurricularId: valores.componenteCurricularId,
     };
+
     const retorno = await ServicoDiarioBordo.salvarDiarioBordo(
       params,
       auditoria ? auditoria.id : 0
@@ -634,16 +648,19 @@ const DiarioBordo = ({ match }) => {
                     <SelectComponent
                       id="disciplina"
                       name="disciplinaId"
-                      lista={listaComponenteCurriculare || []}
+                      lista={listaComponenteCurriculares || []}
                       valueOption="codigoComponenteCurricular"
                       valueText="nome"
-                      valueSelect={componenteCurricularSelecionado}
+                      valueSelect={
+                        valoresIniciais?.componenteCurricularId ||
+                        componenteCurricularSelecionado
+                      }
                       onChange={onChangeComponenteCurricular}
                       placeholder="Selecione um componente curricular"
                       disabled={
                         !turmaInfantil ||
-                        (listaComponenteCurriculare &&
-                          listaComponenteCurriculare.length === 1)
+                        listaComponenteCurriculares?.length === 1 ||
+                        aulaId
                       }
                     />
                   </div>
@@ -656,7 +673,7 @@ const DiarioBordo = ({ match }) => {
                         formatoData="DD/MM/YYYY"
                         desabilitado={
                           !turmaInfantil ||
-                          !listaComponenteCurriculare ||
+                          !listaComponenteCurriculares ||
                           !componenteCurricularSelecionado ||
                           !diasParaHabilitar
                         }
@@ -759,7 +776,7 @@ const DiarioBordo = ({ match }) => {
                   ) : (
                     ''
                   )}
-                  {auditoria ? (
+                  {dataSelecionada && auditoria ? (
                     <Auditoria
                       criadoEm={auditoria.criadoEm}
                       criadoPor={auditoria.criadoPor}
@@ -777,7 +794,7 @@ const DiarioBordo = ({ match }) => {
             )}
           </Formik>
         </div>
-        {auditoria && auditoria.id ? (
+        {dataSelecionada && auditoria?.id ? (
           <ObservacoesUsuario
             mostrarListaNotificacao
             salvarObservacao={obs => salvarEditarObservacao(obs)}
@@ -791,6 +808,14 @@ const DiarioBordo = ({ match }) => {
       </Card>
     </Loader>
   );
+};
+
+DiarioBordo.propTypes = {
+  match: PropTypes.oneOfType(PropTypes.object),
+};
+
+DiarioBordo.defaultProps = {
+  match: {},
 };
 
 export default DiarioBordo;

@@ -323,16 +323,16 @@ const ListaDiarioBordo = () => {
     history.push(`${RotasDto.DIARIO_BORDO}/novo`);
   };
 
-  useEffect(() => {
-    if (dataFinal) validarSetarDataFinal(dataFinal);
-  }, [dataInicial]);
-
   const validarSetarDataFinal = async data => {
     if (dataInicial && window.moment(data) < window.moment(dataInicial)) {
       erro('A data final deve ser maior ou igual a data inicial.');
       setDataFinal('');
     } else setDataFinal(data);
   };
+
+  useEffect(() => {
+    if (dataFinal) validarSetarDataFinal(dataFinal);
+  }, [dataInicial]);
 
   return (
     <Loader loading={carregandoGeral} className="w-100">
