@@ -106,7 +106,8 @@ import EventosLista from '~/paginas/CalendarioEscolar/Eventos/lista/eventosLista
 import EventosCadastro from '~/paginas/CalendarioEscolar/Eventos/cadastro/eventosCadastro';
 import RelatorioAcompanhamentoRegistros from '~/paginas/Relatorios/Gestao/AcompanhamentoRegistros/acompanhamentoRegistros';
 import { CONTEXT_LISTAO } from '~/constantes';
-import ListaoConteudo from '~/paginas/DiarioClasse/Listao/listaoConteudo';
+import ListaoOperacoes from '~/paginas/DiarioClasse/Listao/cadastro/listaoOperacoes';
+import Listao from '~/paginas/DiarioClasse/Listao/lista/listao';
 
 const rotas = new Map();
 
@@ -1473,7 +1474,7 @@ rotas.set(`${RotasDto.LISTAO}`, {
   breadcrumbName: 'Listão',
   menu: ['Diário de Classe'],
   parent: '/',
-  component: ListaoConteudo,
+  component: Listao,
   exact: true,
   tipo: RotasTipo.EstruturadaAutenticada,
   temPermissionamento: true,
@@ -1484,7 +1485,7 @@ rotas.set(`${RotasDto.LISTAO}`, {
 rotas.set(`${RotasDto.LISTAO_OPERACOES}`, {
   breadcrumbName: 'Operações',
   parent: RotasDto.LISTAO,
-  component: ListaoConteudo,
+  component: ListaoOperacoes,
   exact: true,
   tipo: RotasTipo.EstruturadaAutenticada,
   temPermissionamento: false,
