@@ -26,6 +26,7 @@ const inicial = {
   ehProfessorCjInfantil: false,
   ehProfessorInfantil: false,
   ehPerfilProfessor: false,
+  recarregarFiltroPrincipal: false,
 };
 
 export default function usuario(state = inicial, action) {
@@ -107,6 +108,9 @@ export default function usuario(state = inicial, action) {
         break;
       case '@usuario/setLogado':
         draft.logado = action.payload;
+        break;
+      case '@usuario/setRecarregarFiltroPrincipal':
+        draft.recarregarFiltroPrincipal = action.payload;
         break;
       default:
         break;

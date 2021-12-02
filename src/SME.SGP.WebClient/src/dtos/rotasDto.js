@@ -89,6 +89,7 @@ const RotasDto = {
   RELATORIO_ACOMPANHAMENTO_REGISTROS:
     '/relatorios/gestao/acompanhamento-registros',
   LISTAO: '/diario-classe/listao',
+  LISTAO_OPERACOES: '/diario-classe/area-operacoes',
 };
 
 export default RotasDto;

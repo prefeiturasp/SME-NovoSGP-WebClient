@@ -105,6 +105,8 @@ import RelatorioAtaBimestral from '~/paginas/Relatorios/Atas/AtaBimestral/relato
 import EventosLista from '~/paginas/CalendarioEscolar/Eventos/lista/eventosLista';
 import EventosCadastro from '~/paginas/CalendarioEscolar/Eventos/cadastro/eventosCadastro';
 import RelatorioAcompanhamentoRegistros from '~/paginas/Relatorios/Gestao/AcompanhamentoRegistros/acompanhamentoRegistros';
+import { CONTEXT_LISTAO } from '~/constantes';
+import ListaoOperacoes from '~/paginas/DiarioClasse/Listao/cadastro/listaoOperacoes';
 import Listao from '~/paginas/DiarioClasse/Listao/lista/listao';
 
 const rotas = new Map();
@@ -1477,6 +1479,18 @@ rotas.set(`${RotasDto.LISTAO}`, {
   tipo: RotasTipo.EstruturadaAutenticada,
   temPermissionamento: true,
   chavePermissao: RotasDto.LISTAO,
+  contextProviderName: CONTEXT_LISTAO,
+});
+
+rotas.set(`${RotasDto.LISTAO_OPERACOES}`, {
+  breadcrumbName: 'Operações',
+  parent: RotasDto.LISTAO,
+  component: ListaoOperacoes,
+  exact: true,
+  tipo: RotasTipo.EstruturadaAutenticada,
+  temPermissionamento: false,
+  chavePermissao: RotasDto.LISTAO,
+  contextProviderName: CONTEXT_LISTAO,
 });
 
 const rotasArray = [];
