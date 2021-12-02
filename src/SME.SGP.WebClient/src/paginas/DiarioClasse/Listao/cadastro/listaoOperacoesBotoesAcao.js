@@ -6,11 +6,11 @@ import {
   SGP_BUTTON_SALVAR,
   SGP_BUTTON_VOLTAR,
 } from '~/componentes-sgp/filtro/idsCampos';
-import { URL_HOME } from '~/constantes';
+import { RotasDto } from '~/dtos';
 import { history } from '~/servicos';
 
 const ListaoOperacoesBotoesAcao = () => {
-  const onClickVoltar = () => history.push(URL_HOME);
+  const onClickVoltar = () => history.push(RotasDto.LISTAO);
 
   return (
     <Col span={24}>
