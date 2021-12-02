@@ -6,7 +6,6 @@ import {
   selecionarTurma,
   turmasUsuario,
   removerTurma,
-  setarConsideraHistorico,
   setRecarregarFiltroPrincipal,
 } from '~/redux/modulos/usuario/actions';
 
@@ -46,13 +45,12 @@ import {
 import FiltroHelper from './helper';
 import { erro } from '~/servicos/alertas';
 import modalidade from '~/dtos/modalidade';
-import ServicoFiltro from '~/servicos/Componentes/ServicoFiltro';
 import { Loader } from '~/componentes';
 import { TOKEN_EXPIRADO } from '~/constantes';
+import { validarAcaoListao } from '~/paginas/DiarioClasse/Listao/cadastro/Validacoes/listaoValidacoes';
 
 const Filtro = () => {
   const dispatch = useDispatch();
-  const [alternarFocoCampo, setAlternarFocoCampo] = useState(false);
   const [alternarFocoBusca, setAlternarFocoBusca] = useState(false);
 
   const Seta = SetaFunction(alternarFocoBusca);
@@ -138,7 +136,7 @@ const Filtro = () => {
   );
 
   const aplicarFiltro = useCallback(
-    (
+    async (
       consideraHist,
       anoLetivo,
       mod,
@@ -150,6 +148,9 @@ const Filtro = () => {
       listaUes,
       periodo
     ) => {
+      const pararAcao = await validarAcaoListao();
+      if (pararAcao) return;
+
       if (anoLetivo && mod && dre && ue && turmaAtual) {
         const modalidadeDesc = listaModalidades.find(
           item => item.valor.toString() === `${mod}`
@@ -262,8 +263,6 @@ const Filtro = () => {
     setCampoUnidadeEscolarDesabilitado(false);
     setAplicouFiltro(false);
   };
-
-  const filtro = useSelector(state => state.filtro);
 
   useEffect(() => {
     setAnoLetivoSelecionado(turmaUsuarioSelecionada.anoLetivo || undefined);
@@ -815,42 +814,7 @@ const Filtro = () => {
 
   const mostrarEsconderBusca = () => {
     setAlternarFocoBusca(!alternarFocoBusca);
-    setAlternarFocoCampo(false);
   };
-
-  useEffect(() => {
-    const controlaClickFora = evento => {
-      if (
-        evento.target.nodeName !== 'svg' &&
-        evento.target.nodeName !== 'path' &&
-        !evento.target.classList.contains('fa-caret-down') &&
-        !evento.target.classList.contains('ant-select-dropdown-menu-item') &&
-        !evento.target.classList.contains(
-          'ant-select-dropdown-menu-item-active'
-        ) &&
-        !evento.target.classList.contains(
-          'ant-select-selection__placeholder'
-        ) &&
-        !evento.target.classList.contains(
-          'ant-select-selection-selected-value'
-        ) &&
-        !evento.target.classList.contains(
-          'ant-select-dropdown-menu-item-selected'
-        ) &&
-        divBuscaRef.current &&
-        !divBuscaRef.current.contains(evento.target)
-      ) {
-        setAlternarFocoBusca(!alternarFocoBusca);
-      }
-      setAlternarFocoCampo(false);
-    };
-
-    if (!turmaUsuarioSelecionada && !alternarFocoBusca && alternarFocoCampo)
-      campoBuscaRef.current.focus();
-    if (alternarFocoBusca)
-      document.addEventListener('click', controlaClickFora);
-    return () => document.removeEventListener('click', controlaClickFora);
-  }, [alternarFocoBusca, alternarFocoCampo, turmaUsuarioSelecionada]);
 
   useEffect(() => {
     if (!turmaUsuarioSelecionada) campoBuscaRef.current.focus();
@@ -959,7 +923,6 @@ const Filtro = () => {
   const aoFocarBusca = () => {
     if (alternarFocoBusca) {
       setAlternarFocoBusca(false);
-      setAlternarFocoCampo(true);
     }
   };
 
@@ -1022,7 +985,10 @@ const Filtro = () => {
     setTurmaSelecionada(turma);
   };
 
-  const removerTurmaSelecionada = () => {
+  const removerTurmaSelecionada = async () => {
+    const pararAcao = await validarAcaoListao();
+    if (pararAcao) return;
+
     dispatch(removerTurma());
     setModalidadeSelecionada();
     setPeriodoSelecionado();

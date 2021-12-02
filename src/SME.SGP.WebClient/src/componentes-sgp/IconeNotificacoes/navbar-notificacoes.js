@@ -9,6 +9,7 @@ import history from '~/servicos/history';
 import servicoNotificacao from '~/servicos/Paginas/ServicoNotificacao';
 import { erros } from '~/servicos/alertas';
 import { Tr, Lista, Count } from './navbar-notificacoes.css';
+import { validarAcaoListao } from '~/paginas/DiarioClasse/Listao/cadastro/Validacoes/listaoValidacoes';
 
 const NavbarNotificacoes = props => {
   const { Botao, Icone, Texto } = props;
@@ -54,14 +55,20 @@ const NavbarNotificacoes = props => {
     setMostraNotificacoes(antigo => !antigo);
   };
 
-  const onClickNotificacao = codigo => {
+  const onClickNotificacao = async codigo => {
+    const pararAcao = await validarAcaoListao();
+    if (pararAcao) return;
+
     if (codigo) {
       history.push(`/notificacoes/${codigo}`);
       setMostraNotificacoes(!mostraNotificacoes);
     }
   };
 
-  const onClickVerTudo = () => {
+  const onClickVerTudo = async () => {
+    const pararAcao = await validarAcaoListao();
+    if (pararAcao) return;
+
     history.push(`/notificacoes`);
     setMostraNotificacoes(!mostraNotificacoes);
   };
@@ -131,9 +138,9 @@ const NavbarNotificacoes = props => {
 };
 
 NavbarNotificacoes.propTypes = {
-  Botao: PropTypes.object.isRequired,
-  Icone: PropTypes.object.isRequired,
-  Texto: PropTypes.object.isRequired,
+  Botao: PropTypes.oneOfType(PropTypes.object).isRequired,
+  Icone: PropTypes.oneOfType(PropTypes.object).isRequired,
+  Texto: PropTypes.oneOfType(PropTypes.object).isRequired,
 };
 
 export default NavbarNotificacoes;

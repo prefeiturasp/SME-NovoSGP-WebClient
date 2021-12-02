@@ -17,6 +17,7 @@ import {
   menuSelecionado,
 } from '../redux/modulos/navegacao/actions';
 import { obterDescricaoNomeMenu } from '~/servicos/servico-navegacao';
+import { validarNavegacaoListao } from '~/paginas/DiarioClasse/Listao/cadastro/Validacoes/listaoValidacoes';
 
 const Sider = () => {
   const { Sider, Footer } = Layout;
@@ -133,7 +134,17 @@ const Sider = () => {
               item.descricao
             )}
           </span>
-          {item.url ? <Link to={item.url} id={`link-${item.codigo}`} /> : ''}
+          {item.url ? (
+            <Link
+              to={item.url}
+              id={`link-${item.codigo}`}
+              onClick={async e => {
+                await validarNavegacaoListao(e, item.url);
+              }}
+            />
+          ) : (
+            ''
+          )}
         </Menu.Item>
       );
     });
@@ -225,10 +236,6 @@ const Sider = () => {
           >
             <div className="circulo-perfil">
               <i className="fas fa-user-circle icone-perfil" />
-              {/* <img
-                id="imagem-perfil"
-                src={usuario.meusDados.foto}
-              /> */}
             </div>
             <div hidden={NavegacaoStore.retraido}>
               <Tooltip
@@ -245,7 +252,13 @@ const Sider = () => {
               className="perfil-edit"
               style={{ paddingTop: NavegacaoStore.retraido ? '0' : '12px' }}
             >
-              <Link id="perfil-edit" to="/meus-dados">
+              <Link
+                id="perfil-edit"
+                to="/meus-dados"
+                onClick={async e => {
+                  await validarNavegacaoListao(e, '/meus-dados');
+                }}
+              >
                 <i className="fas fa-user-edit" />
                 <span>Meus Dados</span>
               </Link>

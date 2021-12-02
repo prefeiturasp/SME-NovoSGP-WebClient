@@ -18,6 +18,7 @@ import { store } from '../redux';
 import { perfilSelecionado } from '../redux/modulos/perfil/actions';
 import history from '../servicos/history';
 import ServicoDashboard from '~/servicos/Paginas/Dashboard/ServicoDashboard';
+import { validarAcaoListao } from '~/paginas/DiarioClasse/Listao/cadastro/Validacoes/listaoValidacoes';
 
 const Perfil = props => {
   const { Botao, Icone, Texto } = props;
@@ -84,8 +85,8 @@ const Perfil = props => {
     justify-content: center !important;
     i {
       background: ${perfilStore.perfis.length > 1
-      ? Base.Roxo
-      : Base.CinzaDesabilitado} !important;
+        ? Base.Roxo
+        : Base.CinzaDesabilitado} !important;
     }
   `;
 
@@ -98,7 +99,10 @@ const Perfil = props => {
     api.CancelarRequisicoes('Cancelado pelo usuário');
   };
 
-  const gravarPerfilSelecionado = perfil => {
+  const gravarPerfilSelecionado = async perfil => {
+    const pararAcao = await validarAcaoListao();
+    if (pararAcao) return;
+
     if (perfil) {
       const perfilNovo = perfilStore.perfis.filter(
         item => item.codigoPerfil === perfil
@@ -177,7 +181,7 @@ const Perfil = props => {
     }
   };
 
-  const onClickPerfil = e => {
+  const onClickPerfil = async e => {
     cancelarRequisicoesPendentes();
     gravarPerfilSelecionado(e.currentTarget.accessKey);
   };
@@ -228,22 +232,19 @@ const Perfil = props => {
                 accessKey={item.codigoPerfil}
               >
                 <td style={{ width: '20px' }}>
-                  <i
-                    value={item.codigoPerfil}
-                    className="fas fa-user-circle"
-                  ></i>
+                  <i value={item.codigoPerfil} className="fas fa-user-circle" />
                 </td>
                 <td
                   style={{
                     width: '100%',
                     fontWeight:
                       item.codigoPerfil ===
-                        perfilStore.perfilSelecionado.codigoPerfil
+                      perfilStore.perfilSelecionado.codigoPerfil
                         ? 'bold'
                         : 'initial',
                   }}
                 >
-                  {item.nomePerfil + (item.sigla ? '(' + item.sigla + ')' : '')}
+                  {item.nomePerfil + (item.sigla ? `(${item.sigla})` : '')}
                 </td>
               </Item>
             ))}
