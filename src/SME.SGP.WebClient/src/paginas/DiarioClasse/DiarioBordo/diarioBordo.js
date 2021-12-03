@@ -294,7 +294,10 @@ const DiarioBordo = ({ match }) => {
   const obterDiarioBordo = useCallback(
     async aulaIdEnviada => {
       setCarregandoGeral(true);
-      const retorno = await ServicoDiarioBordo.obterDiarioBordo(aulaIdEnviada)
+      const retorno = await ServicoDiarioBordo.obterDiarioBordo(
+        aulaIdEnviada,
+        componenteCurricularSelecionado
+      )
         .catch(e => erros(e))
         .finally(() => setCarregandoGeral(false));
 
@@ -324,7 +327,7 @@ const DiarioBordo = ({ match }) => {
         }
       }
     },
-    [obterDadosObservacoes]
+    [obterDadosObservacoes, componenteCurricularSelecionado, codDisciplinaPai]
   );
 
   useEffect(() => {

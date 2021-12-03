@@ -67,8 +67,10 @@ class ServicoDiarioBordo {
     dispatch(setDadosObservacoesUsuario([...dadosObservacoes]));
   };
 
-  obterDiarioBordo = aulaId => {
-    return api.get(`${urlPadrao}/${aulaId}`);
+  obterDiarioBordo = (aulaId, componenteCurricularId) => {
+    return api.get(
+      `${urlPadrao}/${aulaId}?componenteCurricularId=${componenteCurricularId}`
+    );
   };
 
   salvarDiarioBordo = (params, idDiarioBordo) => {
