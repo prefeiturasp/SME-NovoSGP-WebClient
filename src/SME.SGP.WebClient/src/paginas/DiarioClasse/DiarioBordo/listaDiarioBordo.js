@@ -66,7 +66,8 @@ const ListaDiarioBordo = () => {
   const obterComponentesCurriculares = useCallback(async () => {
     setCarregandoGeral(true);
     const componentes = await ServicoDisciplina.obterDisciplinasPorTurma(
-      turma
+      turma,
+      true
     ).catch(e => erros(e));
 
     if (componentes?.data?.length) {
