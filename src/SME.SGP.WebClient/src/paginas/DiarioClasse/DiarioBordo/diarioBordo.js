@@ -650,7 +650,7 @@ const DiarioBordo = ({ match }) => {
                       name="disciplinaId"
                       lista={listaComponenteCurriculares || []}
                       valueOption="codigoComponenteCurricular"
-                      valueText="nome"
+                      valueText="nomeComponenteInfantil"
                       valueSelect={
                         valoresIniciais?.componenteCurricularId ||
                         componenteCurricularSelecionado
