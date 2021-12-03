@@ -56,14 +56,14 @@ const ObjetivosEspecificosParaAula = () => {
   const validarSeEhObrigatorio = () => {
     return exibirSwitchEscolhaObjetivos
       ? checkedExibirEscolhaObjetivos &&
-          componenteCurricular.possuiObjetivos &&
-          !ServicoPlanoAula.temPeloMenosUmObjetivoSelecionado(
-            objetivosAprendizagemComponente
-          )
+      componenteCurricular.possuiObjetivos &&
+      !ServicoPlanoAula.temPeloMenosUmObjetivoSelecionado(
+        objetivosAprendizagemComponente
+      )
       : componenteCurricular.possuiObjetivos &&
-          !ServicoPlanoAula.temPeloMenosUmObjetivoSelecionado(
-            objetivosAprendizagemComponente
-          );
+      !ServicoPlanoAula.temPeloMenosUmObjetivoSelecionado(
+        objetivosAprendizagemComponente
+      );
   };
 
   const objetivosEspecificosParaAulaValidaObrigatoriedade = () => {
@@ -82,7 +82,7 @@ const ObjetivosEspecificosParaAula = () => {
     <>
       <CardCollapse
         key="objetivos-especificos-para-aula"
-        titulo="Objetivos específicos para a aula"
+        titulo="Objetivos específicos e desenvolvimento da aula"
         indice="objetivos-especificos-para-aula"
         configCabecalho={configCabecalho}
         show
