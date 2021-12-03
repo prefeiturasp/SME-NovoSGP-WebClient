@@ -1,5 +1,5 @@
 import * as moment from 'moment';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import CardCollapse from '~/componentes/cardCollapse';
 import { setExibirCollapseVersao } from '~/redux/modulos/planoAEE/actions';
@@ -14,6 +14,17 @@ const SecaoVersaoPlanoCollapse = () => {
   );
 
   const { versoes, questionarioId, turma } = planoAEEDados;
+
+  const formateAuditoria = versao => {
+    return {
+      alteradoEm: versao.alteradoEm,
+      alteradoPor: versao.alteradoPor,
+      alteradoRF: versao.alteradoRF,
+      criadoEm: versao.criadoEm,
+      criadoPor: versao.criadoPor,
+      criadoRF: versao.criadoRF,
+    };
+  };
 
   return (
     <>
@@ -37,6 +48,7 @@ const SecaoVersaoPlanoCollapse = () => {
             dados={{
               questionarioId: plano.id,
             }}
+            auditoria={formateAuditoria(plano)}
             versao={plano.id}
             questionarioId={questionarioId}
             exibir={exibirCollapseVersao === plano.numero}
