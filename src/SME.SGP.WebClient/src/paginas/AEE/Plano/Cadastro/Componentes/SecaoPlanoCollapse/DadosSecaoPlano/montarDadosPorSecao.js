@@ -1,12 +1,13 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import { useSelector } from 'react-redux';
+import { Auditoria } from '~/componentes';
 import QuestionarioDinamico from '~/componentes-sgp/QuestionarioDinamico/questionarioDinamico';
 import situacaoPlanoAEE from '~/dtos/situacaoPlanoAEE';
 import ServicoPlanoAEE from '~/servicos/Paginas/Relatorios/AEE/ServicoPlanoAEE';
 
 const MontarDadosPorSecao = props => {
-  const { dados, dadosQuestionarioAtual, match } = props;
+  const { dados, dadosQuestionarioAtual, match, auditoria } = props;
 
   const dadosCollapseLocalizarEstudante = useSelector(
     store => store.collapseLocalizarEstudante.dadosCollapseLocalizarEstudante
@@ -47,13 +48,24 @@ const MontarDadosPorSecao = props => {
       ) : (
         ''
       )}
-      <h1>Teste auditoria</h1>
+
+      {auditoria && (
+        <Auditoria
+          criadoEm={auditoria.criadoEm}
+          criadoPor={auditoria.criadoPor}
+          criadoRf={auditoria.criadoRf}
+          alteradoPor={auditoria.alteradoPor}
+          alteradoEm={auditoria.alteradoEm}
+          alteradoRf={auditoria.alteradoRf}
+        />
+      )}
     </>
   );
 };
 
 MontarDadosPorSecao.propTypes = {
   dados: PropTypes.oneOfType([PropTypes.object]),
+  auditoria: PropTypes.oneOfType([PropTypes.object]),
   match: PropTypes.oneOfType([PropTypes.object]),
   dadosQuestionarioAtual: PropTypes.oneOfType([PropTypes.object]),
 };
@@ -61,6 +73,7 @@ MontarDadosPorSecao.propTypes = {
 MontarDadosPorSecao.defaultProps = {
   dados: {},
   match: {},
+  auditoria: {},
   dadosQuestionarioAtual: [],
 };
 
