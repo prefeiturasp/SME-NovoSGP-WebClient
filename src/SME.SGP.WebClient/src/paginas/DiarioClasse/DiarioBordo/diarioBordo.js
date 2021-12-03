@@ -179,7 +179,7 @@ const DiarioBordo = ({ match }) => {
   useEffect(() => {
     if (turmaId && turmaInfantil) {
       obterComponentesCurriculares();
-    } else {
+    } else {      
       setListaComponenteCurriculares([]);
       setComponenteCurricularSelecionado(undefined);
       setCodDisciplinaPai(undefined);
@@ -210,8 +210,10 @@ const DiarioBordo = ({ match }) => {
           const dataEncontrada = item.aulas.find(
             a => a.aulaId.toString() === aulaId.toString()
           );
+          
           if (dataEncontrada) {
             setDataSelecionada(window.moment(item.data));
+            obterDiarioBordo(aulaId, componenteCurricularSelecionado);
           }
         }
         return window.moment(item.data).format('YYYY-MM-DD');
@@ -292,11 +294,11 @@ const DiarioBordo = ({ match }) => {
   );
 
   const obterDiarioBordo = useCallback(
-    async aulaIdEnviada => {
+    async (aulaIdEnviada,componenteCurricular) => {
       setCarregandoGeral(true);
       const retorno = await ServicoDiarioBordo.obterDiarioBordo(
         aulaIdEnviada,
-        componenteCurricularSelecionado
+        componenteCurricular
       )
         .catch(e => erros(e))
         .finally(() => setCarregandoGeral(false));
@@ -319,7 +321,7 @@ const DiarioBordo = ({ match }) => {
         };
         setTemPeriodoAberto(retorno.data.temPeriodoAberto);
         setValoresIniciais(valInicial);
-        setComponenteCurricularSelecionado(compCurricularSelecionado);
+        //setComponenteCurricularSelecionado(compCurricularSelecionado);
         setCodDisciplinaPai(codDisciplinaPai);
         if (retorno?.data?.auditoria?.id) {
           setAuditoria(retorno.data.auditoria);
@@ -333,9 +335,9 @@ const DiarioBordo = ({ match }) => {
   useEffect(() => {
     if (aulaId) {
       setBreadcrumbManual(match?.url, 'Alterar', RotasDto.DIARIO_BORDO);
-      obterDiarioBordo(aulaId);
+      //obterDiarioBordo(aulaId, componenteCurricularSelecionado);
     }
-  }, [match, obterDiarioBordo]);
+  }, [match, obterDiarioBordo,aulaId]);
 
   const salvarDiarioDeBordo = async (valores, form, clicouBtnSalvar) => {
     setCarregandoGeral(true);
@@ -350,7 +352,7 @@ const DiarioBordo = ({ match }) => {
       aulaId: aulaIdSelecionada,
       planejamento: valores.planejamento,
       reflexoesReplanejamento: valores.reflexoesReplanejamento,
-      componenteCurricularId: valores.componenteCurricularId,
+      componenteCurricularId: componenteCurricularSelecionado,//valores.componenteCurricularId,
     };
 
     const retorno = await ServicoDiarioBordo.salvarDiarioBordo(
@@ -424,7 +426,7 @@ const DiarioBordo = ({ match }) => {
         const aulaDataSelecionada = aulasDataSelecionada.aulas[0];
         if (aulaDataSelecionada) {
           setAulaSelecionada(aulaDataSelecionada);
-          obterDiarioBordo(aulaDataSelecionada.aulaId);
+          obterDiarioBordo(aulaDataSelecionada.aulaId, componenteCurricularSelecionado);
         } else {
           resetarTela(form);
         }
@@ -573,7 +575,7 @@ const DiarioBordo = ({ match }) => {
     setExibirModalSelecionarAula(false);
     if (aula) {
       setAulaSelecionada(aula);
-      obterDiarioBordo(aula.aulaId);
+      obterDiarioBordo(aula.aulaId,componenteCurricularSelecionado);
     }
   };
 
@@ -671,7 +673,7 @@ const DiarioBordo = ({ match }) => {
                       valueOption="codigoComponenteCurricular"
                       valueText="nomeComponenteInfantil"
                       valueSelect={
-                        valoresIniciais?.componenteCurricularId ||
+                        //valoresIniciais?.componenteCurricularId ||
                         componenteCurricularSelecionado
                       }
                       onChange={onChangeComponenteCurricular}
