@@ -348,7 +348,7 @@ const ListaDiarioBordo = () => {
                 name="disciplinaId"
                 lista={listaComponenteCurriculares || []}
                 valueOption="codigoComponenteCurricular"
-                valueText="nome"
+                valueText="nomeComponenteInfantil"
                 valueSelect={componenteCurricularSelecionado}
                 onChange={onChangeComponenteCurricular}
                 placeholder="Selecione um componente curricular"
