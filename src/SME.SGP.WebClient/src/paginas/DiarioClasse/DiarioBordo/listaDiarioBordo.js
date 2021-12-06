@@ -212,7 +212,7 @@ const ListaDiarioBordo = () => {
     }
   };
 
-  const salvarEditarObservacao = async valor => {
+  const salvarEditarObservacao = async (valor, diarioBordoId) => {
     const params = {
       observacao: valor.observacao,
       usuariosIdNotificacao: [],
@@ -221,10 +221,11 @@ const ListaDiarioBordo = () => {
     let observacaoId = valor.id;
     let usuariosNotificacao = [];
 
-    if (observacaoId) {
+    if (observacaoId && diarioBordoId) {
       const retorno = await ServicoDiarioBordo.obterNofiticarUsuarios({
         turmaId,
         observacaoId,
+        diarioBordoId,
       }).catch(e => erros(e));
 
       usuariosNotificacao = retorno.data;
@@ -382,8 +383,7 @@ const ListaDiarioBordo = () => {
                 disabled={
                   !permissoesTela.podeIncluir ||
                   !turmaInfantil ||
-                  !listaComponenteCurriculares ||
-                  !componenteCurricularSelecionado
+                  !listaComponenteCurriculares
                 }
               />
             </div>
@@ -455,8 +455,12 @@ const ListaDiarioBordo = () => {
                         <ObservacoesUsuario
                           esconderLabel
                           mostrarListaNotificacao
-                          salvarObservacao={obs => salvarEditarObservacao(obs)}
-                          editarObservacao={obs => salvarEditarObservacao(obs)}
+                          salvarObservacao={obs =>
+                            salvarEditarObservacao(obs, id)
+                          }
+                          editarObservacao={obs =>
+                            salvarEditarObservacao(obs, id)
+                          }
                           excluirObservacao={obs => excluirObservacao(obs)}
                           permissoes={permissoesTela}
                           diarioBordoId={id}

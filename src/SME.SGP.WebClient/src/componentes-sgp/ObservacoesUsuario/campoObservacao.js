@@ -63,10 +63,12 @@ const CampoObservacao = props => {
     const retorno = await salvarObservacao({ observacao: novaObservacao });
     if (retorno?.status === 200) {
       dispatch(setNovaObservacao(''));
-      if (obterUsuariosNotificadosDiarioBordo) {
+      if (obterUsuariosNotificadosDiarioBordo && diarioBordoId) {
         const retornoUsuarios = await ServicoDiarioBordo.obterNofiticarUsuarios(
           {
             turmaId,
+            observacaoId: '',
+            diarioBordoId,
           }
         ).catch(e => erros(e));
 
@@ -78,8 +80,10 @@ const CampoObservacao = props => {
   };
 
   const obterNofiticarUsuarios = useCallback(async () => {
+    console.log('Aqui');
     const retorno = await ServicoDiarioBordo.obterNofiticarUsuarios({
       turmaId,
+      observacaoId: '',
       diarioBordoId,
     }).catch(e => erros(e));
 
@@ -95,7 +99,7 @@ const CampoObservacao = props => {
       obterUsuariosNotificadosDiarioBordo &&
       diarioBordoId
     ) {
-      obterNofiticarUsuarios();
+      // obterNofiticarUsuarios();
     }
   }, [
     turmaId,
