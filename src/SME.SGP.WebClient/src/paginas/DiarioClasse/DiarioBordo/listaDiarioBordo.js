@@ -67,7 +67,7 @@ const ListaDiarioBordo = () => {
     setCarregandoGeral(true);
     const componentes = await ServicoDisciplina.obterDisciplinasPorTurma(
       turma,
-      true
+      false
     ).catch(e => erros(e));
 
     if (componentes?.data?.length) {
@@ -120,7 +120,7 @@ const ListaDiarioBordo = () => {
   const onClickConsultarDiario = () => {
     dispatch(limparDadosObservacoesUsuario());
     history.push(
-      `${RotasDto.DIARIO_BORDO}/detalhes/${diarioBordoAtual?.aulaId}`
+      `${RotasDto.DIARIO_BORDO}/detalhes/${diarioBordoAtual?.aulaId}/${diarioBordoAtual?.id}/${componenteCurricularSelecionado}`
     );
   };
 
@@ -171,11 +171,12 @@ const ListaDiarioBordo = () => {
     setNumeroPagina(pagina);
   };
 
-  const obterUsuarioPorObservacao = dadosObservacoes => {
+  const obterUsuarioPorObservacao = (dadosObservacoes, diarioBordoId) => {
     const promises = dadosObservacoes.map(async observacao => {
       const retorno = await ServicoDiarioBordo.obterNofiticarUsuarios({
         turmaId,
         observacaoId: observacao.id,
+        diarioBordoId,
       }).catch(e => erros(e));
 
       if (retorno?.data) {
@@ -197,7 +198,10 @@ const ListaDiarioBordo = () => {
       if (dados?.data) {
         let observacoes = [];
         if (dados.data.observacoes.length) {
-          observacoes = await obterUsuarioPorObservacao(dados.data.observacoes);
+          observacoes = await obterUsuarioPorObservacao(
+            dados.data.observacoes,
+            id
+          );
           dispatch(setDadosObservacoesUsuario(observacoes));
         }
         setDiarioBordoAtual({
@@ -455,6 +459,7 @@ const ListaDiarioBordo = () => {
                           editarObservacao={obs => salvarEditarObservacao(obs)}
                           excluirObservacao={obs => excluirObservacao(obs)}
                           permissoes={permissoesTela}
+                          diarioBordoId={id}
                         />
                       </div>
                     </div>

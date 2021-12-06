@@ -11,13 +11,13 @@ import {
 
 import {
   SGP_BUTTON_FILTRO_PRINCIPAL_APLICAR,
-  SGP_SELECT_FILTRO_PRINCIPAL_ANOLETIVO ,
-  SGP_SELECT_FILTRO_PRINCIPAL_TURMA ,
+  SGP_SELECT_FILTRO_PRINCIPAL_ANOLETIVO,
+  SGP_SELECT_FILTRO_PRINCIPAL_TURMA,
   SGP_SELECT_FILTRO_PRINCIPAL_MODALIDADE,
   SGP_SELECT_FILTRO_PRINCIPAL_PERIODO,
   SGP_SELECT_FILTRO_PRINCIPAL_DRE,
   SGP_SELECT_FILTRO_PRINCIPAL_UE,
-  SGP_CAMPO_FILTRO_PRINCIPAL_PESQUISAR_TURMA
+  SGP_CAMPO_FILTRO_PRINCIPAL_PESQUISAR_TURMA,
 } from './idsCampos';
 
 import Grid from '~/componentes/grid';
@@ -1254,7 +1254,7 @@ const Filtro = () => {
               <Grid cols={9} className="form-group">
                 <Loader loading={carregandoTurmas} tip="">
                   <SelectComponent
-                  id={SGP_SELECT_FILTRO_PRINCIPAL_TURMA}
+                    id={SGP_SELECT_FILTRO_PRINCIPAL_TURMA}
                     className="fonte-14"
                     onChange={aoTrocarTurma}
                     lista={turmas}
