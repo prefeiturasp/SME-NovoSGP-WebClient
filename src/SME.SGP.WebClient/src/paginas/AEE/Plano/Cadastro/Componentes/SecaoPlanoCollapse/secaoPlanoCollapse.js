@@ -14,12 +14,12 @@ const SecaoPlanoCollapse = props => {
 
   const formateAuditoria = versao => {
     return {
-      alteradoEm: versao.alteradoEm,
-      alteradoPor: versao.alteradoPor,
-      alteradoRF: versao.alteradoRF,
-      criadoEm: versao.criadoEm,
-      criadoPor: versao.criadoPor,
-      criadoRF: versao.criadoRF,
+      alteradoEm: versao?.alteradoEm,
+      alteradoPor: versao?.alteradoPor,
+      alteradoRF: versao?.alteradoRF,
+      criadoEm: versao?.criadoEm,
+      criadoPor: versao?.criadoPor,
+      criadoRF: versao?.criadoRF,
     };
   };
 
