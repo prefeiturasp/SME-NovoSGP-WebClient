@@ -228,8 +228,23 @@ const DiarioBordo = ({ match }) => {
     [turmaId]
   );
 
+  const temValor = valor => {
+    return Number(valor) > 0;
+  };
+
   useEffect(() => {
-    const codigoDisciplina = codDisciplinaPai || componenteCurricularId;
+    const valorDisciplina = temValor(codDisciplinaPai) && codDisciplinaPai;
+    const valorComponenteCurricularSelecionado =
+      temValor(componenteCurricularSelecionado) &&
+      componenteCurricularSelecionado;
+    const valorComponenteCurricularId =
+      temValor(componenteCurricularId) && componenteCurricularId;
+
+    const codigoDisciplina =
+      valorDisciplina ||
+      valorComponenteCurricularSelecionado ||
+      valorComponenteCurricularId;
+
     if (turmaId && codigoDisciplina > 0) {
       obterDatasDeAulasDisponiveis(codigoDisciplina);
     }
@@ -237,6 +252,7 @@ const DiarioBordo = ({ match }) => {
     turmaId,
     codDisciplinaPai,
     componenteCurricularId,
+    componenteCurricularSelecionado,
     obterDatasDeAulasDisponiveis,
   ]);
 
