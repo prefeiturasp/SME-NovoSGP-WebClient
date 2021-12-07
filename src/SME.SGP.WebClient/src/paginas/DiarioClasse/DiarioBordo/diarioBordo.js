@@ -193,7 +193,6 @@ const DiarioBordo = ({ match }) => {
   const obterDatasDeAulasDisponiveis = useCallback(
     async codigoDisciplina => {
       setCarregandoGeral(true);
-      setCarregandoData(true);
       const datasDeAulas = await ServicoFrequencia.obterDatasDeAulasPorCalendarioTurmaEComponenteCurricular(
         turmaId,
         codigoDisciplina
@@ -204,7 +203,6 @@ const DiarioBordo = ({ match }) => {
         })
         .finally(() => {
           setCarregandoGeral(false);
-          setCarregandoData(false);
         });
 
       if (datasDeAulas?.data?.length && codigoDisciplina) {
@@ -232,7 +230,7 @@ const DiarioBordo = ({ match }) => {
 
   useEffect(() => {
     const codigoDisciplina = codDisciplinaPai || componenteCurricularId;
-    if (turmaId && codigoDisciplina) {
+    if (turmaId && codigoDisciplina > 0) {
       obterDatasDeAulasDisponiveis(codigoDisciplina);
     }
   }, [
