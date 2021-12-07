@@ -1124,8 +1124,8 @@ rotas.set(`${RotasDto.DOCUMENTOS_PLANOS_TRABALHO}/editar/:id`, {
 });
 
 rotas.set(RotasDto.RELATORIO_USUARIOS, {
-  breadcrumbName: 'usuários',
-  menu: ['Relatórios', 'Gestão', 'Usuários'],
+  breadcrumbName: 'Usuários',
+  menu: ['Relatórios', 'Gestão'],
   parent: '/',
   component: RelatorioUsuarios,
   exact: true,
