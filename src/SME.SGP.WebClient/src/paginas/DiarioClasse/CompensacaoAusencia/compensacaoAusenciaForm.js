@@ -17,7 +17,6 @@ import RotasDto from '~/dtos/rotasDto';
 import { confirmar, erro, erros, sucesso } from '~/servicos/alertas';
 import { setBreadcrumbManual } from '~/servicos/breadcrumb-services';
 import history from '~/servicos/history';
-import ServicoPeriodoFechamento from '~/servicos/Paginas/Calendario/ServicoPeriodoFechamento';
 import ServicoCompensacaoAusencia from '~/servicos/Paginas/DiarioClasse/ServicoCompensacaoAusencia';
 import ServicoDisciplina from '~/servicos/Paginas/ServicoDisciplina';
 import { verificaSomenteConsulta } from '~/servicos/servico-navegacao';
@@ -147,7 +146,7 @@ const CompensacaoAusenciaForm = ({ match }) => {
 
   const podeAlterarNoPeriodo = useCallback(
     async bimestre => {
-      const podeAlterar = await ServicoPeriodoFechamento.verificarSePodeAlterarNoPeriodo(
+      const podeAlterar = await ServicoCompensacaoAusencia.verificarSePodeAlterarNoPeriodo(
         turmaSelecionada.turma,
         bimestre
       ).catch(e => {
