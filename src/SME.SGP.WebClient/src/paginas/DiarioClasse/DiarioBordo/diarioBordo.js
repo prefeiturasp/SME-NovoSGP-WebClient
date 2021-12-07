@@ -192,7 +192,8 @@ const DiarioBordo = ({ match }) => {
 
   const obterDatasDeAulasDisponiveis = useCallback(
     async codigoDisciplina => {
-      setCarregandoGeral(true);
+      // setCarregandoGeral(true);
+      setCarregandoData(true);
       const datasDeAulas = await ServicoFrequencia.obterDatasDeAulasPorCalendarioTurmaEComponenteCurricular(
         turmaId,
         codigoDisciplina
@@ -202,10 +203,14 @@ const DiarioBordo = ({ match }) => {
           erros(e);
         })
         .finally(() => {
-          setCarregandoGeral(false);
+          // setCarregandoGeral(false);
+          setCarregandoData(false);
         });
 
-      if (datasDeAulas?.data?.length && codigoDisciplina) {
+      const codigoComponenteCurricular =
+        componenteCurricularId || codDisciplinaPai;
+
+      if (datasDeAulas?.data?.length && codigoComponenteCurricular) {
         setListaDatasAulas(datasDeAulas.data);
         const habilitar = datasDeAulas.data.map(item => {
           if (aulaId && !dataSelecionada && item.aulas) {
@@ -214,7 +219,7 @@ const DiarioBordo = ({ match }) => {
             );
             if (dataEncontrada) {
               setDataSelecionada(window.moment(item.data));
-              obterDiarioBordo(aulaId, codigoDisciplina);
+              obterDiarioBordo(aulaId, codigoComponenteCurricular);
             }
           }
           return window.moment(item.data).format('YYYY-MM-DD');
@@ -228,31 +233,15 @@ const DiarioBordo = ({ match }) => {
     [turmaId]
   );
 
-  const temValor = valor => {
-    return Number(valor) > 0;
-  };
-
   useEffect(() => {
-    const valorDisciplina = temValor(codDisciplinaPai) && codDisciplinaPai;
-    const valorComponenteCurricularSelecionado =
-      temValor(componenteCurricularSelecionado) &&
-      componenteCurricularSelecionado;
-    const valorComponenteCurricularId =
-      temValor(componenteCurricularId) && componenteCurricularId;
-
-    const codigoDisciplina =
-      valorDisciplina ||
-      valorComponenteCurricularSelecionado ||
-      valorComponenteCurricularId;
-
-    if (turmaId && codigoDisciplina > 0) {
+    const codigoDisciplina = codDisciplinaPai || componenteCurricularId;
+    if (turmaId && codigoDisciplina) {
       obterDatasDeAulasDisponiveis(codigoDisciplina);
     }
   }, [
     turmaId,
     codDisciplinaPai,
     componenteCurricularId,
-    componenteCurricularSelecionado,
     obterDatasDeAulasDisponiveis,
   ]);
 
@@ -331,7 +320,7 @@ const DiarioBordo = ({ match }) => {
       .catch(e => erros(e))
       .finally(() => setCarregandoGeral(false));
 
-    if (retorno && retorno.data) {
+    if (retorno?.data) {
       const compCurricularSelecionado = String(
         retorno.data.componenteCurricularId
       );
