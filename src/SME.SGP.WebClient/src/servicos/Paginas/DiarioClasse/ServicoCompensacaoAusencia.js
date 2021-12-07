@@ -45,6 +45,12 @@ class ServicoCompensacaoAusencia {
     const url = `v1/compensacoes/ausencia/copiar`;
     return api.post(url, parametros);
   };
+
+  verificarSePodeAlterarNoPeriodo = (turmaCodigo, bimestre) => {
+    return api.get(
+      `${urlPadrao}/turmas/${turmaCodigo}/bimestres/${bimestre}/aberto`
+    );
+  };
 }
 
 export default new ServicoCompensacaoAusencia();
