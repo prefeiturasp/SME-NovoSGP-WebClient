@@ -699,7 +699,7 @@ function CadastroDeAula({ match, location }) {
                         border
                         className="mr-2"
                         onClick={onClickExcluir}
-                        disabled={somenteConsulta || !id || somenteLeitura}
+                        disabled={somenteConsulta || !id || somenteLeitura || !aula.podeEditar}
                       />
 
                       <Button
@@ -726,7 +726,8 @@ function CadastroDeAula({ match, location }) {
                           !aula.disciplinaId ||
                           somenteLeitura ||
                           desabilitarBtnSalvar ||
-                          !modoEdicao
+                          !modoEdicao ||
+                          !aula.podeEditar
                         }
                       />
                     </div>
