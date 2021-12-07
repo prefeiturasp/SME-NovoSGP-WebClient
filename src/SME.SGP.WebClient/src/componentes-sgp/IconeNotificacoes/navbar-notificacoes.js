@@ -9,7 +9,7 @@ import history from '~/servicos/history';
 import servicoNotificacao from '~/servicos/Paginas/ServicoNotificacao';
 import { erros } from '~/servicos/alertas';
 import { Tr, Lista, Count } from './navbar-notificacoes.css';
-import { validarAcaoListao } from '~/paginas/DiarioClasse/Listao/cadastro/Validacoes/listaoValidacoes';
+import { validarAcaoTela } from '~/utils';
 
 const NavbarNotificacoes = props => {
   const { Botao, Icone, Texto } = props;
@@ -56,7 +56,7 @@ const NavbarNotificacoes = props => {
   };
 
   const onClickNotificacao = async codigo => {
-    const pararAcao = await validarAcaoListao();
+    const pararAcao = await validarAcaoTela();
     if (pararAcao) return;
 
     if (codigo) {
@@ -66,7 +66,7 @@ const NavbarNotificacoes = props => {
   };
 
   const onClickVerTudo = async () => {
-    const pararAcao = await validarAcaoListao();
+    const pararAcao = await validarAcaoTela();
     if (pararAcao) return;
 
     history.push(`/notificacoes`);

@@ -42,7 +42,7 @@ import dashboardDevolutivas from './dashboardDevolutivas/reducers';
 import dashboardDiarioBordo from './dashboardDiarioBordo/reducers';
 import comunicados from './comunicados/reducers';
 import dashboardFechamento from './dashboardFechamento/reducers';
-import listao from './listao/reducers';
+import geral from './geral/reducers';
 
 const reducers = combineReducers({
   navegacao,
@@ -87,7 +87,7 @@ const reducers = combineReducers({
   dashboardDiarioBordo,
   comunicados,
   dashboardFechamento,
-  listao,
+  geral,
 });
 
 const rootReducer = (state, action) => {

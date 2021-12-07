@@ -1,23 +1,17 @@
 import produce from 'immer';
 
 const inicial = {
-  listaoEmEdicao: true,
+  telaEmEdicao: true,
   salvarAcaoListao: '',
 };
 
 export default function Loader(state = inicial, action) {
   return produce(state, draft => {
     switch (action.type) {
-      case '@loader/setListaoEmEdicao': {
+      case '@loader/setTelaEmEdicao': {
         return {
           ...draft,
-          listaoEmEdicao: action.payload,
-        };
-      }
-      case '@loader/setSalvarAcaoListao': {
-        return {
-          ...draft,
-          salvarAcaoListao: action.payload,
+          telaEmEdicao: action.payload,
         };
       }
       default:

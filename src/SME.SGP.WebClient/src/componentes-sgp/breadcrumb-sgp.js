@@ -8,7 +8,7 @@ import { store } from '../redux';
 import { rotaAtiva } from '../redux/modulos/navegacao/actions';
 import { obterDescricaoNomeMenu } from '~/servicos/servico-navegacao';
 import RotasDto from '~/dtos/rotasDto';
-import { validarNavegacaoListao } from '~/paginas/DiarioClasse/Listao/cadastro/Validacoes/listaoValidacoes';
+import { validarNavegacaoTela } from '~/utils';
 
 const BreadcrumbBody = styled.div`
   padding: 10px 0 5px 15px !important;
@@ -191,7 +191,7 @@ const BreadcrumbSgp = () => {
             <Link
               hidden={item.ehEstatico}
               to={item.path}
-              onClick={e => validarNavegacaoListao(e, item.path)}
+              onClick={e => validarNavegacaoTela(e, item.path)}
             >
               <i className={item.icone} title={item.breadcrumbName} />
               <span hidden={item.path === '/'}>{item.breadcrumbName}</span>

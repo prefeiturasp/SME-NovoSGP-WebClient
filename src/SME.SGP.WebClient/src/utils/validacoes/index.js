@@ -1,11 +1,11 @@
 import { store } from '~/redux';
 import { confirmar, history } from '~/servicos';
 
-export const validarAcaoListao = async () => {
+export const validarAcaoTela = async () => {
   const state = store.getState();
-  const { listaoEmEdicao } = state.listao;
+  const { telaEmEdicao } = state.geral;
 
-  if (listaoEmEdicao) {
+  if (telaEmEdicao) {
     const cancelarAcao = await confirmar(
       'Atenção',
       'Você não salvou as informações preenchidas.',
@@ -16,9 +16,9 @@ export const validarAcaoListao = async () => {
   return false;
 };
 
-export const validarNavegacaoListao = async (e, urlDestino) => {
+export const validarNavegacaoTela = async (e, urlDestino) => {
   e.preventDefault();
-  const pararAcao = await validarAcaoListao();
+  const pararAcao = await validarAcaoTela();
   if (pararAcao) return;
   history.push(urlDestino);
 };

@@ -47,7 +47,7 @@ import { erro } from '~/servicos/alertas';
 import modalidade from '~/dtos/modalidade';
 import { Loader } from '~/componentes';
 import { TOKEN_EXPIRADO } from '~/constantes';
-import { validarAcaoListao } from '~/paginas/DiarioClasse/Listao/cadastro/Validacoes/listaoValidacoes';
+import { validarAcaoTela } from '~/utils';
 
 const Filtro = () => {
   const dispatch = useDispatch();
@@ -148,7 +148,7 @@ const Filtro = () => {
       listaUes,
       periodo
     ) => {
-      const pararAcao = await validarAcaoListao();
+      const pararAcao = await validarAcaoTela();
       if (pararAcao) return;
 
       if (anoLetivo && mod && dre && ue && turmaAtual) {
@@ -986,7 +986,7 @@ const Filtro = () => {
   };
 
   const removerTurmaSelecionada = async () => {
-    const pararAcao = await validarAcaoListao();
+    const pararAcao = await validarAcaoTela();
     if (pararAcao) return;
 
     dispatch(removerTurma());

@@ -18,7 +18,7 @@ import { store } from '../redux';
 import { perfilSelecionado } from '../redux/modulos/perfil/actions';
 import history from '../servicos/history';
 import ServicoDashboard from '~/servicos/Paginas/Dashboard/ServicoDashboard';
-import { validarAcaoListao } from '~/paginas/DiarioClasse/Listao/cadastro/Validacoes/listaoValidacoes';
+import { validarAcaoTela } from '~/utils';
 
 const Perfil = props => {
   const { Botao, Icone, Texto } = props;
@@ -100,7 +100,7 @@ const Perfil = props => {
   };
 
   const gravarPerfilSelecionado = async perfil => {
-    const pararAcao = await validarAcaoListao();
+    const pararAcao = await validarAcaoTela();
     if (pararAcao) return;
 
     if (perfil) {

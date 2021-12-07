@@ -17,7 +17,6 @@ import {
   menuSelecionado,
 } from '../redux/modulos/navegacao/actions';
 import { obterDescricaoNomeMenu } from '~/servicos/servico-navegacao';
-import { validarNavegacaoListao } from '~/paginas/DiarioClasse/Listao/cadastro/Validacoes/listaoValidacoes';
 
 const Sider = () => {
   const { Sider, Footer } = Layout;
@@ -134,17 +133,7 @@ const Sider = () => {
               item.descricao
             )}
           </span>
-          {item.url ? (
-            <Link
-              to={item.url}
-              id={`link-${item.codigo}`}
-              onClick={async e => {
-                await validarNavegacaoListao(e, item.url);
-              }}
-            />
-          ) : (
-            ''
-          )}
+          {item.url ? <Link to={item.url} id={`link-${item.codigo}`} /> : ''}
         </Menu.Item>
       );
     });
@@ -252,13 +241,7 @@ const Sider = () => {
               className="perfil-edit"
               style={{ paddingTop: NavegacaoStore.retraido ? '0' : '12px' }}
             >
-              <Link
-                id="perfil-edit"
-                to="/meus-dados"
-                onClick={async e => {
-                  await validarNavegacaoListao(e, '/meus-dados');
-                }}
-              >
+              <Link id="perfil-edit" to="/meus-dados">
                 <i className="fas fa-user-edit" />
                 <span>Meus Dados</span>
               </Link>
