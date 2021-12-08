@@ -2,13 +2,12 @@ import produce from 'immer';
 
 const inicial = {
   telaEmEdicao: true,
-  salvarAcaoListao: '',
 };
 
-export default function Loader(state = inicial, action) {
+export default function Geral(state = inicial, action) {
   return produce(state, draft => {
     switch (action.type) {
-      case '@loader/setTelaEmEdicao': {
+      case '@geral/setTelaEmEdicao': {
         return {
           ...draft,
           telaEmEdicao: action.payload,

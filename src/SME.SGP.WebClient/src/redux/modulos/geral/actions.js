@@ -1,4 +1,4 @@
 export const setTelaEmEdicao = payload => ({
-  type: '@loader/setTelaEmEdicao',
+  type: '@geral/setTelaEmEdicao',
   payload,
 });
