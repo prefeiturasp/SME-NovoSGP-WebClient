@@ -1,7 +1,7 @@
 import produce from 'immer';
 
 const inicial = {
-  telaEmEdicao: true,
+  telaEmEdicao: false,
 };
 
 export default function Geral(state = inicial, action) {
