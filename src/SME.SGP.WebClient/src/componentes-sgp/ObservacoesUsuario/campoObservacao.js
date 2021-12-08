@@ -80,7 +80,6 @@ const CampoObservacao = props => {
   };
 
   const obterNofiticarUsuarios = useCallback(async () => {
-    console.log('Aqui');
     const retorno = await ServicoDiarioBordo.obterNofiticarUsuarios({
       turmaId,
       observacaoId: '',
@@ -99,7 +98,7 @@ const CampoObservacao = props => {
       obterUsuariosNotificadosDiarioBordo &&
       diarioBordoId
     ) {
-      // obterNofiticarUsuarios();
+      obterNofiticarUsuarios();
     }
   }, [
     turmaId,

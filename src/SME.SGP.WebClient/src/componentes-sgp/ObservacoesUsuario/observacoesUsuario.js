@@ -62,13 +62,13 @@ ObservacoesUsuario.propTypes = {
   esconderLabel: PropTypes.bool,
   esconderCaixaExterna: PropTypes.bool,
   verificaProprietario: PropTypes.bool,
-  permissoes: PropTypes.objectOf(PropTypes.object),
+  permissoes: PropTypes.oneOfType([PropTypes.object]),
   mostrarListaNotificacao: PropTypes.bool,
   obterUsuariosNotificadosDiarioBordo: PropTypes.bool,
   usarLocalizadorFuncionario: PropTypes.bool,
-  parametrosLocalizadorFuncionario: PropTypes.objectOf(PropTypes.object),
+  parametrosLocalizadorFuncionario: PropTypes.oneOfType([PropTypes.object]),
   desabilitarBotaoNotificar: PropTypes.bool,
-  diarioBordoId: PropTypes.string,
+  diarioBordoId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
 };
 
 ObservacoesUsuario.defaultProps = {
