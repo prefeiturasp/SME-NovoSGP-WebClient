@@ -67,8 +67,10 @@ class ServicoDiarioBordo {
     dispatch(setDadosObservacoesUsuario([...dadosObservacoes]));
   };
 
-  obterDiarioBordo = aulaId => {
-    return api.get(`${urlPadrao}/${aulaId}`);
+  obterDiarioBordo = (aulaId, componenteCurricularId) => {
+    return api.get(
+      `${urlPadrao}/${aulaId}?componenteCurricularId=${componenteCurricularId}`
+    );
   };
 
   salvarDiarioBordo = (params, idDiarioBordo) => {
@@ -136,10 +138,14 @@ class ServicoDiarioBordo {
     return api.get(`${urlPadrao}/detalhes/${diarioBordoId}`);
   };
 
-  obterNofiticarUsuarios = ({ turmaId, observacaoId = '' }) => {
-    return api.get(
-      `${urlPadrao}/notificacoes/usuarios?turmaId=${turmaId}&observacaoId=${observacaoId}`
-    );
+  obterNofiticarUsuarios = ({ turmaId, observacaoId = '', diarioBordoId }) => {
+    return api.get(`${urlPadrao}/notificacoes/usuarios`, {
+      params: {
+        turmaId,
+        observacaoId,
+        diarioBordoId,
+      },
+    });
   };
 }
 
