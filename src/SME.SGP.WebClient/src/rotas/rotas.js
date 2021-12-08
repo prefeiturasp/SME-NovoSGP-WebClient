@@ -924,16 +924,19 @@ rotas.set(`${RotasDto.DIARIO_BORDO}/novo`, {
   chavePermissao: RotasDto.DIARIO_BORDO,
 });
 
-rotas.set(`${RotasDto.DIARIO_BORDO}/detalhes/:aulaId`, {
-  breadcrumbName: 'Diário de Bordo (Intencionalidade docente)',
-  menu: ['Diário de Classe'],
-  parent: '/',
-  component: DiarioBordo,
-  exact: true,
-  tipo: RotasTipo.EstruturadaAutenticada,
-  temPermissionamento: true,
-  chavePermissao: RotasDto.DIARIO_BORDO,
-});
+rotas.set(
+  `${RotasDto.DIARIO_BORDO}/detalhes/:aulaId/:diarioBordoId/:componenteCurricularId`,
+  {
+    breadcrumbName: 'Diário de Bordo (Intencionalidade docente)',
+    menu: ['Diário de Classe'],
+    parent: '/',
+    component: DiarioBordo,
+    exact: true,
+    tipo: RotasTipo.EstruturadaAutenticada,
+    temPermissionamento: true,
+    chavePermissao: RotasDto.DIARIO_BORDO,
+  }
+);
 
 rotas.set(RotasDto.RELATORIO_PENDENCIAS, {
   breadcrumbName: 'Pendências',
