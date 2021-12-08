@@ -192,7 +192,6 @@ const DiarioBordo = ({ match }) => {
 
   const obterDatasDeAulasDisponiveis = useCallback(
     async codigoDisciplina => {
-      // setCarregandoGeral(true);
       setCarregandoData(true);
       const datasDeAulas = await ServicoFrequencia.obterDatasDeAulasPorCalendarioTurmaEComponenteCurricular(
         turmaId,
@@ -203,12 +202,11 @@ const DiarioBordo = ({ match }) => {
           erros(e);
         })
         .finally(() => {
-          // setCarregandoGeral(false);
           setCarregandoData(false);
         });
 
       const codigoComponenteCurricular =
-        componenteCurricularId || codDisciplinaPai;
+        componenteCurricularId || codigoDisciplina;
 
       if (datasDeAulas?.data?.length && codigoComponenteCurricular) {
         setListaDatasAulas(datasDeAulas.data);
@@ -224,6 +222,7 @@ const DiarioBordo = ({ match }) => {
           }
           return window.moment(item.data).format('YYYY-MM-DD');
         });
+
         setDiasParaHabilitar(habilitar);
       } else {
         setListaDatasAulas();
