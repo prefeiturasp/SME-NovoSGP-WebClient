@@ -46,7 +46,7 @@ const CamposFiltrarDadosFrequenciaPlanoAula = () => {
     state => state.frequenciaPlanoAula.dataSelecionada
   );
 
-  const aulaId = useSelector(state => state.frequenciaPlanoAula.aulaId);  
+  const aulaId = useSelector(state => state.frequenciaPlanoAula.aulaId);
 
   const dadosAulaFrequencia = useSelector(
     state => state.calendarioProfessor.dadosAulaFrequencia
@@ -267,7 +267,7 @@ const CamposFiltrarDadosFrequenciaPlanoAula = () => {
       if (!veioCalendario && dadosAulaFrequencia?.aulaId) {
         // Quando usuário pode visualizar uma aula por data selecionada!
         dispatch(setAulaIdFrequenciaPlanoAula(dadosAulaFrequencia.aulaId));
-        dispatch(setAulaIdPodeEditar(dadosAulaFrequencia.podeEditar));
+        dispatch(setAulaIdPodeEditar(dadosAulaFrequencia.podeEditarAula));
         setVeioCalendario(true);
       } else {
         const aulaDataSelecionada = await obterAulaSelecionada(data);
@@ -276,7 +276,9 @@ const CamposFiltrarDadosFrequenciaPlanoAula = () => {
           dispatch(
             setAulaIdFrequenciaPlanoAula(aulaDataSelecionada.aulas[0].aulaId)
           );
-          dispatch(setAulaIdPodeEditar(dadosAulaFrequencia.podeEditar));
+          dispatch(
+            setAulaIdPodeEditar(aulaDataSelecionada?.aulas?.[0]?.podeEditar)
+          );
           // Após setar o id vai disparar evento para buscar lista de frequencia!
         } else if (
           aulaDataSelecionada &&

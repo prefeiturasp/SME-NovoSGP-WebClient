@@ -86,6 +86,7 @@ function CadastroDeAula({ match, location }) {
     ueId: turmaSelecionada.unidadeEscolar,
     tipoCalendarioId,
     quantidade: 1,
+    podeEditar: true,
   };
 
   const [recorrenciaAulaEmEdicao, setRecorrenciaAulaEmEdicao] = useState({
