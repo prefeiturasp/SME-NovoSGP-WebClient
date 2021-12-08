@@ -24,11 +24,10 @@ const ListaoOperacoesFiltros = () => {
     setBimestreOperacoes,
     setComponenteCurricular,
     componenteCurricular,
+    setListaComponenteCurricular,
+    listaComponenteCurricular,
   } = useContext(ListaoContext);
 
-  const [listaComponenteCurricular, setListaComponenteCurricular] = useState(
-    []
-  );
   const [listaBimestresOperacoe, setListaBimestresOperacoes] = useState(
     listaBimestres
   );
@@ -55,14 +54,13 @@ const ListaoOperacoesFiltros = () => {
     if (resposta?.data?.length) {
       setListaComponenteCurricular(resposta.data);
       if (resposta.data.length === 1) {
-        setComponenteCurricular(
-          String(resposta.data[0].codigoComponenteCurricular)
-        );
+        setComponenteCurricular({ ...resposta.data[0] });
       }
     } else {
       setListaComponenteCurricular([]);
       setComponenteCurricular();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [turma]);
 
   useEffect(() => {
@@ -119,7 +117,7 @@ const ListaoOperacoesFiltros = () => {
         item => item.codigoComponenteCurricular === componenteCurricularInicial
       );
       if (componenteNaLista) {
-        setComponenteCurricular(String(componenteCurricularInicial));
+        setComponenteCurricular(componenteNaLista);
       }
       setComponenteCurricularInicial();
     }
@@ -127,7 +125,27 @@ const ListaoOperacoesFiltros = () => {
   }, [componenteCurricularInicial, listaComponenteCurricular]);
 
   const onChangeBimestre = valor => setBimestreOperacoes(valor);
-  const onChangeComponenteCurricular = valor => setComponenteCurricular(valor);
+
+  const obterComponente = valor => {
+    if (valor && listaComponenteCurricular?.length) {
+      let componente = null;
+
+      componente = listaComponenteCurricular?.find(
+        item => Number(item?.codigoComponenteCurricular) === Number(valor)
+      );
+      return componente;
+    }
+    return null;
+  };
+
+  const onChangeComponenteCurricular = valor => {
+    const componenteAtual = obterComponente(valor);
+    if (componenteAtual) {
+      setComponenteCurricular({ ...componenteAtual });
+    } else {
+      setComponenteCurricular();
+    }
+  };
 
   return (
     <Col span={24}>
@@ -140,14 +158,18 @@ const ListaoOperacoesFiltros = () => {
               lista={listaComponenteCurricular}
               valueOption="codigoComponenteCurricular"
               valueText="nome"
-              valueSelect={componenteCurricular}
+              valueSelect={
+                componenteCurricular?.codigoComponenteCurricular
+                  ? String(componenteCurricular?.codigoComponenteCurricular)
+                  : undefined
+              }
               onChange={onChangeComponenteCurricular}
               placeholder="Selecione um componente curricular"
               showSearch
               disabled={
                 !turmaSelecionada.turma ||
-                listaComponenteCurricular.length === 1 ||
-                !listaComponenteCurricular.length
+                listaComponenteCurricular?.length === 1 ||
+                !listaComponenteCurricular?.length
               }
             />
           </Loader>

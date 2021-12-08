@@ -26,6 +26,9 @@ const ListaoContextProvider = ({ children }) => {
     componenteCurricularInicial,
     setComponenteCurricularInicial,
   ] = useState();
+  const [listaComponenteCurricular, setListaComponenteCurricular] = useState(
+    []
+  );
 
   const [bimestreOperacoes, setBimestreOperacoes] = useState();
 
@@ -92,6 +95,8 @@ const ListaoContextProvider = ({ children }) => {
         setComponenteCurricular,
         bimestreOperacoes,
         setBimestreOperacoes,
+        listaComponenteCurricular,
+        setListaComponenteCurricular,
         obterBimestres,
       }}
     >

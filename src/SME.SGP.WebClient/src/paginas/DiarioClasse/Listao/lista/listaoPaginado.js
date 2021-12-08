@@ -199,11 +199,14 @@ const ListaoPaginado = () => {
         title: 'Minhas turmas',
         dataIndex: 'nomeTurma',
         width: '36%',
+        ellipsis: true,
       },
       {
         title: 'Turno',
         dataIndex: 'turno',
         width: '12%',
+        align: 'center',
+        ellipsis: true,
       },
     ];
 
