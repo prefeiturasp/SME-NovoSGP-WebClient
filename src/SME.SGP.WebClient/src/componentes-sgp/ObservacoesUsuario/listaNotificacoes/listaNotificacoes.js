@@ -17,7 +17,7 @@ const ListaNotificacoes = ({ obs, somenteLeitura }) => {
 
   return (
     <>
-      {obs.usuariosNotificacao && (
+      {obs?.usuariosNotificacao?.length && (
         <Container
           temLinhaAlteradoPor={obs?.auditoria?.alteradoPor}
           listagemDiario={obs?.listagemDiario}
