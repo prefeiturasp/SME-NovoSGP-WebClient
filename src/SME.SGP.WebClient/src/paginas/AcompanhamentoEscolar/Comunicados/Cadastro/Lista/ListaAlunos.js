@@ -95,9 +95,6 @@ const ListaAlunos = props => {
     setModalAlunosVisivel(retorno);
   };
 
-  console.log('alunos', alunos);
-  console.log('linhasSelecionadas', linhasSelecionadas);
-
   return (
     <Linha className="row">
       <Grid cols={12}>

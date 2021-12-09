@@ -1,10 +1,8 @@
 import React from 'react';
-
-// Redux
 import { useSelector } from 'react-redux';
-
 import { Switch } from 'react-router-dom';
 import shortid from 'shortid';
+import { montarContextProviders } from '~/rotas/rotaMontarContextProviders';
 import rotasArray from '~/rotas/rotas';
 import RotaAutenticadaEstruturada from '../rotas/rotaAutenticadaEstruturada';
 import BreadcrumbSgp from './breadcrumb-sgp';
@@ -14,6 +12,27 @@ import TempoExpiracaoSessao from './tempoExpiracaoSessao/tempoExpiracaoSessao';
 
 const Conteudo = () => {
   const { versao } = useSelector(store => store.sistema);
+
+  const rotasSemContextProvider = rotasArray.filter(
+    r => !r?.contextProviderName
+  );
+  const rotasComContextProvider = rotasArray.filter(
+    r => !!r?.contextProviderName
+  );
+
+  const montarRota = r => {
+    return (
+      <RotaAutenticadaEstruturada
+        key={shortid.generate()}
+        path={r.path}
+        component={r.component}
+        temPermissionamento={r.temPermissionamento}
+        chavePermissao={r.chavePermissao}
+        exact={r.exact}
+      />
+    );
+  };
+
   return (
     <div className="secao-conteudo">
       <TempoExpiracaoSessao />
@@ -25,18 +44,13 @@ const Conteudo = () => {
         </main>
       </div>
       <Switch>
-        {rotasArray.map(rota => (
-          <RotaAutenticadaEstruturada
-            key={shortid.generate()}
-            path={rota.path}
-            component={rota.component}
-            temPermissionamento={rota.temPermissionamento}
-            chavePermissao={rota.chavePermissao}
-            exact={rota.exact}
-            temPermissionamento={rota.temPermissionamento}
-            chavePermissao={rota.chavePermissao}
-          />
-        ))}
+        {rotasSemContextProvider.map(rota => montarRota(rota))}
+
+        {rotasComContextProvider?.length ? (
+          montarContextProviders(rotasComContextProvider, montarRota)
+        ) : (
+          <></>
+        )}
       </Switch>
       <div
         className="row"

@@ -6,7 +6,7 @@ import {
   selecionarTurma,
   turmasUsuario,
   removerTurma,
-  setarConsideraHistorico,
+  setRecarregarFiltroPrincipal,
 } from '~/redux/modulos/usuario/actions';
 
 import {
@@ -45,13 +45,12 @@ import {
 import FiltroHelper from './helper';
 import { erro } from '~/servicos/alertas';
 import modalidade from '~/dtos/modalidade';
-import ServicoFiltro from '~/servicos/Componentes/ServicoFiltro';
 import { Loader } from '~/componentes';
 import { TOKEN_EXPIRADO } from '~/constantes';
+import { validarAcaoTela } from '~/utils';
 
 const Filtro = () => {
   const dispatch = useDispatch();
-  const [alternarFocoCampo, setAlternarFocoCampo] = useState(false);
   const [alternarFocoBusca, setAlternarFocoBusca] = useState(false);
 
   const Seta = SetaFunction(alternarFocoBusca);
@@ -68,6 +67,7 @@ const Filtro = () => {
   const usuarioStore = useSelector(state => state.usuario);
   const perfilStore = useSelector(state => state.perfil);
   const turmaUsuarioSelecionada = usuarioStore.turmaSelecionada;
+  const recarregarFiltroPrincipal = usuarioStore?.recarregarFiltroPrincipal;
   const [campoAnoLetivoDesabilitado, setCampoAnoLetivoDesabilitado] = useState(
     true
   );
@@ -135,77 +135,78 @@ const Filtro = () => {
     turmaUsuarioSelecionada && !!turmaUsuarioSelecionada.consideraHistorico
   );
 
-  const aplicarFiltro = useCallback(() => {
-    if (
-      anoLetivoSelecionado &&
-      modalidadeSelecionada &&
-      dreSelecionada &&
-      unidadeEscolarSelecionada &&
-      turmaSelecionada
-    ) {
-      const modalidadeDesc = modalidades.find(
-        item => item.valor.toString() === `${modalidadeSelecionada}`
-      );
+  const aplicarFiltro = useCallback(
+    async (
+      consideraHist,
+      anoLetivo,
+      mod,
+      dre,
+      ue,
+      turmaAtual,
+      listaModalidades,
+      listaTurmas,
+      listaUes,
+      periodo
+    ) => {
+      const pararAcao = await validarAcaoTela();
+      if (pararAcao) return;
 
-      const turmaAtual = turmas.find(turma => turma.valor === turmaSelecionada);
+      if (anoLetivo && mod && dre && ue && turmaAtual) {
+        const modalidadeDesc = listaModalidades.find(
+          item => item.valor.toString() === `${mod}`
+        );
 
-      const unidadeEscolarDesc = unidadesEscolares.find(
-        unidade => unidade.valor === unidadeEscolarSelecionada
-      );
+        const turmaSelecionadaCompleta = listaTurmas.find(
+          item => item?.valor?.toString() === turmaAtual
+        );
 
-      setTextoAutocomplete(
-        `${modalidadeDesc ? modalidadeDesc.desc : 'Modalidade'} - ${
-          turmaAtual ? turmaAtual.desc : 'Turma'
-        } - ${unidadeEscolarDesc ? unidadeEscolarDesc.desc : 'Unidade Escolar'}`
-      );
+        const unidadeEscolarDesc = listaUes.find(
+          unidade => unidade.valor === ue
+        );
 
-      setAlternarFocoBusca(false);
-      setAplicouFiltro(true);
+        setTextoAutocomplete(
+          `${modalidadeDesc ? modalidadeDesc.desc : 'Modalidade'} - ${
+            turmaSelecionadaCompleta ? turmaSelecionadaCompleta.desc : 'Turma'
+          } - ${
+            unidadeEscolarDesc ? unidadeEscolarDesc.desc : 'Unidade Escolar'
+          }`
+        );
 
-      const turmaSelecionadaCompleta = turmas.find(
-        item => item.valor.toString() === turmaSelecionada
-      );
-      if (!turmaSelecionadaCompleta) return;
-      const turma = {
-        anoLetivo: anoLetivoSelecionado,
-        modalidade: modalidadeSelecionada,
-        dre: dreSelecionada,
-        unidadeEscolar: unidadeEscolarSelecionada,
-        turma: turmaSelecionada,
-        ano: turmaSelecionadaCompleta.ano,
-        desc: `${anoLetivoSelecionado} - ${
-          turmaAtual && turmaAtual.modalidadeTurmaNome
-            ? turmaAtual.modalidadeTurmaNome
-            : ''
-        } - ${
-          unidadeEscolarDesc && unidadeEscolarDesc.desc
-            ? unidadeEscolarDesc.desc
-            : ''
-        }`,
-        periodo: periodoSelecionado || 0,
-        consideraHistorico,
-        ensinoEspecial: turmaAtual.ensinoEspecial,
-        id: turmaAtual.id,
-      };
+        setAlternarFocoBusca(false);
+        setAplicouFiltro(true);
 
-      dispatch(turmasUsuario(turmas));
-      dispatch(selecionarTurma(turma));
+        if (!turmaSelecionadaCompleta) return;
+        const turma = {
+          anoLetivo,
+          modalidade: mod,
+          dre,
+          unidadeEscolar: ue,
+          turma: turmaAtual,
+          ano: turmaSelecionadaCompleta.ano,
+          desc: `${anoLetivo} - ${
+            turmaSelecionadaCompleta &&
+            turmaSelecionadaCompleta.modalidadeTurmaNome
+              ? turmaSelecionadaCompleta.modalidadeTurmaNome
+              : ''
+          } - ${
+            unidadeEscolarDesc && unidadeEscolarDesc.desc
+              ? unidadeEscolarDesc.desc
+              : ''
+          }`,
+          periodo: periodo || 0,
+          consideraHistorico: consideraHist,
+          ensinoEspecial: turmaSelecionadaCompleta.ensinoEspecial,
+          id: turmaSelecionadaCompleta.id,
+        };
 
-      setTextoAutocomplete(turma.desc);
-    }
-  }, [
-    anoLetivoSelecionado,
-    consideraHistorico,
-    dispatch,
-    dreSelecionada,
-    modalidadeSelecionada,
-    modalidades,
-    periodoSelecionado,
-    turmaSelecionada,
-    turmas,
-    unidadeEscolarSelecionada,
-    unidadesEscolares,
-  ]);
+        dispatch(turmasUsuario(listaTurmas));
+        dispatch(selecionarTurma(turma));
+
+        setTextoAutocomplete(turma.desc);
+      }
+    },
+    [dispatch]
+  );
 
   const [podeRemoverTurma, setPodeRemoverTurma] = useState(true);
 
@@ -222,21 +223,35 @@ const Filtro = () => {
       turmas.length === 1 &&
       turmaSelecionada
     ) {
-      aplicarFiltro();
+      aplicarFiltro(
+        consideraHistorico,
+        anoLetivoSelecionado,
+        modalidadeSelecionada,
+        dreSelecionada,
+        unidadeEscolarSelecionada,
+        turmaSelecionada,
+        modalidades,
+        turmas,
+        unidadesEscolares,
+        periodoSelecionado
+      );
       setPodeRemoverTurma(false);
     }
   }, [
+    aplicarFiltro,
+    consideraHistorico,
+    modalidades,
+    periodoSelecionado,
     anoLetivoSelecionado,
     anosLetivos.length,
-    aplicarFiltro,
     dreSelecionada,
     dres.length,
     modalidadeSelecionada,
     modalidades.length,
     turmaSelecionada,
-    turmas.length,
+    turmas,
     unidadeEscolarSelecionada,
-    unidadesEscolares.length,
+    unidadesEscolares,
   ]);
 
   const reabilitarCampos = () => {
@@ -248,8 +263,6 @@ const Filtro = () => {
     setCampoUnidadeEscolarDesabilitado(false);
     setAplicouFiltro(false);
   };
-
-  const filtro = useSelector(state => state.filtro);
 
   useEffect(() => {
     setAnoLetivoSelecionado(turmaUsuarioSelecionada.anoLetivo || undefined);
@@ -801,42 +814,7 @@ const Filtro = () => {
 
   const mostrarEsconderBusca = () => {
     setAlternarFocoBusca(!alternarFocoBusca);
-    setAlternarFocoCampo(false);
   };
-
-  useEffect(() => {
-    const controlaClickFora = evento => {
-      if (
-        evento.target.nodeName !== 'svg' &&
-        evento.target.nodeName !== 'path' &&
-        !evento.target.classList.contains('fa-caret-down') &&
-        !evento.target.classList.contains('ant-select-dropdown-menu-item') &&
-        !evento.target.classList.contains(
-          'ant-select-dropdown-menu-item-active'
-        ) &&
-        !evento.target.classList.contains(
-          'ant-select-selection__placeholder'
-        ) &&
-        !evento.target.classList.contains(
-          'ant-select-selection-selected-value'
-        ) &&
-        !evento.target.classList.contains(
-          'ant-select-dropdown-menu-item-selected'
-        ) &&
-        divBuscaRef.current &&
-        !divBuscaRef.current.contains(evento.target)
-      ) {
-        setAlternarFocoBusca(!alternarFocoBusca);
-      }
-      setAlternarFocoCampo(false);
-    };
-
-    if (!turmaUsuarioSelecionada && !alternarFocoBusca && alternarFocoCampo)
-      campoBuscaRef.current.focus();
-    if (alternarFocoBusca)
-      document.addEventListener('click', controlaClickFora);
-    return () => document.removeEventListener('click', controlaClickFora);
-  }, [alternarFocoBusca, alternarFocoCampo, turmaUsuarioSelecionada]);
 
   useEffect(() => {
     if (!turmaUsuarioSelecionada) campoBuscaRef.current.focus();
@@ -945,7 +923,6 @@ const Filtro = () => {
   const aoFocarBusca = () => {
     if (alternarFocoBusca) {
       setAlternarFocoBusca(false);
-      setAlternarFocoCampo(true);
     }
   };
 
@@ -1008,7 +985,10 @@ const Filtro = () => {
     setTurmaSelecionada(turma);
   };
 
-  const removerTurmaSelecionada = () => {
+  const removerTurmaSelecionada = async () => {
+    const pararAcao = await validarAcaoTela();
+    if (pararAcao) return;
+
     dispatch(removerTurma());
     setModalidadeSelecionada();
     setPeriodoSelecionado();
@@ -1085,6 +1065,39 @@ const Filtro = () => {
     turmaUsuarioSelecionada.periodo,
     turmaUsuarioSelecionada.turma,
     turmaUsuarioSelecionada.unidadeEscolar,
+  ]);
+
+  useEffect(() => {
+    if (recarregarFiltroPrincipal) {
+      aplicarFiltro(
+        turmaUsuarioSelecionada.consideraHistorico,
+        turmaUsuarioSelecionada.anoLetivo,
+        turmaUsuarioSelecionada.modalidade,
+        turmaUsuarioSelecionada.dre,
+        turmaUsuarioSelecionada.unidadeEscolar,
+        turmaUsuarioSelecionada.turma,
+        modalidadesStore,
+        turmasStore,
+        unidadesEscolaresStore,
+        turmaUsuarioSelecionada.periodo
+      );
+
+      dispatch(setRecarregarFiltroPrincipal(false));
+    }
+  }, [
+    dispatch,
+    aplicarFiltro,
+    recarregarFiltroPrincipal,
+    turmaUsuarioSelecionada.consideraHistorico,
+    turmaUsuarioSelecionada.anoLetivo,
+    turmaUsuarioSelecionada.modalidade,
+    turmaUsuarioSelecionada.dre,
+    turmaUsuarioSelecionada.unidadeEscolar,
+    turmaUsuarioSelecionada.turma,
+    modalidadesStore,
+    turmasStore,
+    unidadesEscolaresStore,
+    turmaUsuarioSelecionada.periodo,
   ]);
 
   return (
@@ -1275,7 +1288,20 @@ const Filtro = () => {
                   color={Colors.Roxo}
                   className="ml-auto"
                   bold
-                  onClick={aplicarFiltro}
+                  onClick={() =>
+                    aplicarFiltro(
+                      consideraHistorico,
+                      anoLetivoSelecionado,
+                      modalidadeSelecionada,
+                      dreSelecionada,
+                      unidadeEscolarSelecionada,
+                      turmaSelecionada,
+                      modalidades,
+                      turmas,
+                      unidadesEscolares,
+                      periodoSelecionado
+                    )
+                  }
                 />
               </Grid>
             </div>
