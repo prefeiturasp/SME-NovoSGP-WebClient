@@ -320,7 +320,8 @@ const RelatorioFrequencia = () => {
         : turmasCodigo;
 
       return ServicoComponentesCurriculares.obterComponentesPorListaDeTurmas(
-        turmas
+        turmas,
+        true
       );
     }
     if (ehTurma) {
