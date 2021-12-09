@@ -87,7 +87,7 @@ const ListaoOperacoesFiltros = () => {
       setBimestreOperacoes();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [modalidade, turma, componenteCurricular]);
+  }, [modalidade, turma, componenteCurricular, listaComponenteCurricular]);
 
   useEffect(() => {
     if (
