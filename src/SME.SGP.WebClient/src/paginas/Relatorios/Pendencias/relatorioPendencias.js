@@ -392,7 +392,8 @@ const RelatorioPendencias = () => {
     (ueCodigo, turmas) => {
       if (ehInfantil) {
         return ServicoComponentesCurriculares.obterComponentesPorListaDeTurmas(
-          turmas
+          turmas,
+          true
         );
       }
 
