@@ -86,6 +86,7 @@ const RelatorioFrequencia = () => {
   };
   const OPCAO_TODOS_ESTUDANTES = '4';
   const ehTurma = tipoRelatorio === TIPO_RELATORIO.TURMA;
+  const ehInfantil = Number(modalidadeId) === ModalidadeDTO.INFANTIL;
 
   const opcoesListarTurmasDePrograma = [
     { label: 'Sim', value: true },
@@ -309,14 +310,28 @@ const RelatorioFrequencia = () => {
   }, [anosEscolares]);
 
   const escolherChamadaEndpointComponeteCurricular = useCallback(() => {
+    const ehOpcaoTodas = turmasCodigo.find(item => item === OPCAO_TODOS);
+
+    if (ehInfantil) {
+      const turmas = ehOpcaoTodas
+        ? listaTurmas
+            .filter(item => item.valor !== OPCAO_TODOS)
+            .map(item => item.valor)
+        : turmasCodigo;
+
+      return ServicoComponentesCurriculares.obterComponentesPorListaDeTurmas(
+        turmas
+      );
+    }
     if (ehTurma) {
-      const turmas =
-        turmasCodigo === OPCAO_TODOS ? [OPCAO_TODOS] : turmasCodigo;
+      const turmas = ehOpcaoTodas ? [OPCAO_TODOS] : turmasCodigo;
+
       return ServicoComponentesCurriculares.obterComponetensCuricularesPorTurma(
         codigoUe,
         turmas
       );
     }
+
     const codigoTodosAnosEscolares = obterCodigoTodosAnosEscolares();
     return ServicoComponentesCurriculares.obterComponetensCuriculares(
       codigoUe,
@@ -333,6 +348,8 @@ const RelatorioFrequencia = () => {
     ehTurma,
     obterCodigoTodosAnosEscolares,
     turmasCodigo,
+    ehInfantil,
+    listaTurmas,
   ]);
 
   const obterComponenteCurricular = useCallback(async () => {
@@ -342,8 +359,9 @@ const RelatorioFrequencia = () => {
         .catch(e => erros(e))
         .finally(() => setCarregandoComponentesCurriculares(false));
       if (retorno?.data?.length) {
+        const nomeParametro = ehInfantil ? 'nome' : 'descricao';
         const lista = retorno.data.map(item => ({
-          desc: item.descricao,
+          desc: item[nomeParametro],
           valor: String(item.codigo),
         }));
 
@@ -359,7 +377,12 @@ const RelatorioFrequencia = () => {
       }
       setListaComponenteCurricular([]);
     }
-  }, [anoLetivo, ehTurma, escolherChamadaEndpointComponeteCurricular]);
+  }, [
+    anoLetivo,
+    ehTurma,
+    ehInfantil,
+    escolherChamadaEndpointComponeteCurricular,
+  ]);
 
   useEffect(() => {
     const permiteChamadaEndpoint =
