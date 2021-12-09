@@ -440,7 +440,7 @@ const RelatorioPendencias = () => {
             return;
           }
           setListaComponentesCurriculares(listaDisciplinas);
-          setComponentesCurricularesId(String(disciplinas.data[0].codigo));
+          setComponentesCurricularesId(String(disciplinas?.data[0]?.codigo));
         }
         return;
       }
