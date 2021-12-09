@@ -7,7 +7,8 @@ const TabListaoFechamento = () => {
 
   return (
     <>
-      {!componenteCurricular?.lancaNota ? (
+      {componenteCurricular?.codigoComponenteCurricular &&
+      !componenteCurricular?.lancaNota ? (
         <Alert
           alerta={{
             tipo: 'warning',
