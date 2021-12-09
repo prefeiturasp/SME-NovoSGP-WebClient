@@ -17,7 +17,7 @@ function ListaCheckbox({ onChange, valores }) {
       />
       <CheckboxComponent
         className="mb-2"
-        label="Desenvolvimento da aula"
+        label="Objetivos específicos e desenvolvimento da aula"
         name="desenvolvimentoAula"
         onChangeCheckbox={target => onChange(target, 'desenvolvimentoAula')}
         disabled
