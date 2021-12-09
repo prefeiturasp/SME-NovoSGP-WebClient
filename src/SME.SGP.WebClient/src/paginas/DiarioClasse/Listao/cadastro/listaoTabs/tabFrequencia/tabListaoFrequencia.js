@@ -7,7 +7,8 @@ const TabListaoFrequencia = () => {
 
   return (
     <>
-      {!componenteCurricular?.registraFrequencia ? (
+      {componenteCurricular?.codigoComponenteCurricular &&
+      !componenteCurricular?.registraFrequencia ? (
         <Alert
           alerta={{
             tipo: 'warning',
