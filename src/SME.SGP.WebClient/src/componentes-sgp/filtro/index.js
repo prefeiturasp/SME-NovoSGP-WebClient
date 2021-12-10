@@ -51,6 +51,7 @@ import { validarAcaoTela } from '~/utils';
 
 const Filtro = () => {
   const dispatch = useDispatch();
+  const [alternarFocoCampo, setAlternarFocoCampo] = useState(false);
   const [alternarFocoBusca, setAlternarFocoBusca] = useState(false);
 
   const Seta = SetaFunction(alternarFocoBusca);
@@ -815,6 +816,40 @@ const Filtro = () => {
   const mostrarEsconderBusca = () => {
     setAlternarFocoBusca(!alternarFocoBusca);
   };
+
+  useEffect(() => {
+    const controlaClickFora = evento => {
+      if (
+        evento.target.nodeName !== 'svg' &&
+        evento.target.nodeName !== 'path' &&
+        !evento.target.classList.contains('fa-caret-down') &&
+        !evento.target.classList.contains('ant-select-dropdown-menu-item') &&
+        !evento.target.classList.contains(
+          'ant-select-dropdown-menu-item-active'
+        ) &&
+        !evento.target.classList.contains(
+          'ant-select-selection__placeholder'
+        ) &&
+        !evento.target.classList.contains(
+          'ant-select-selection-selected-value'
+        ) &&
+        !evento.target.classList.contains(
+          'ant-select-dropdown-menu-item-selected'
+        ) &&
+        divBuscaRef.current &&
+        !divBuscaRef.current.contains(evento.target)
+      ) {
+        setAlternarFocoBusca(!alternarFocoBusca);
+      }
+      setAlternarFocoCampo(false);
+    };
+
+    if (!turmaUsuarioSelecionada && !alternarFocoBusca && alternarFocoCampo)
+      campoBuscaRef.current.focus();
+    if (alternarFocoBusca)
+      document.addEventListener('click', controlaClickFora);
+    return () => document.removeEventListener('click', controlaClickFora);
+  }, [alternarFocoBusca, alternarFocoCampo, turmaUsuarioSelecionada]);
 
   useEffect(() => {
     if (!turmaUsuarioSelecionada) campoBuscaRef.current.focus();
