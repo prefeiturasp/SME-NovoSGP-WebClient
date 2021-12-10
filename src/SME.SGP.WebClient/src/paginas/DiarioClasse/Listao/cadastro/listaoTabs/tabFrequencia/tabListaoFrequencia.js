@@ -5,6 +5,7 @@ import { Alert, Loader, SelectComponent } from '~/componentes';
 import { SGP_SELECT_PERIODO_POR_COMPONENTE_CURRICULAR } from '~/componentes-sgp/filtro/idsCampos';
 import { erros } from '~/servicos';
 import ServicoPeriodoEscolar from '~/servicos/Paginas/Calendario/ServicoPeriodoEscolar';
+import ServicoFrequencia from '~/servicos/Paginas/DiarioClasse/ServicoFrequencia';
 import ListaoContext from '../../../listaoContext';
 
 const TabListaoFrequencia = () => {
@@ -17,6 +18,12 @@ const TabListaoFrequencia = () => {
   const [exibirLoaderPeriodo, setExibirLoaderPeriodo] = useState(false);
   const [listaPeriodos, setListaPeriodos] = useState([]);
   const [periodo, setPeriodo] = useState();
+
+  const [
+    exibirLoaderListaFrequencia,
+    setExibirLoaderListaFrequencia,
+  ] = useState(false);
+  const [listaFrequencia, setListaFrequencia] = useState([]);
 
   const desabilitarPeriodo =
     !turma ||
@@ -87,6 +94,44 @@ const TabListaoFrequencia = () => {
       setPeriodo();
     }
   };
+
+  const obterFrequenciasPorPeriodo = useCallback(async () => {
+    setExibirLoaderListaFrequencia(true);
+    const resposta = await ServicoFrequencia.obterFrequenciasPorPeriodo(
+      periodo?.dataInicio,
+      periodo?.dataFim,
+      turma,
+      componenteCurricular?.codigoComponenteCurricular
+    )
+      .catch(e => erros(e))
+      .finally(() => setExibirLoaderListaFrequencia(false));
+
+    if (resposta?.data?.length) {
+      setListaFrequencia(resposta.data);
+    } else {
+      setListaFrequencia([]);
+    }
+  }, [componenteCurricular, turma, periodo]);
+
+  useEffect(() => {
+    if (
+      periodo?.dataInicio &&
+      periodo?.dataFim &&
+      componenteCurricular?.codigoComponenteCurricular &&
+      turma &&
+      bimestreOperacoes
+    ) {
+      obterFrequenciasPorPeriodo();
+    } else {
+      setListaFrequencia([]);
+    }
+  }, [
+    periodo,
+    componenteCurricular,
+    turma,
+    bimestreOperacoes,
+    obterFrequenciasPorPeriodo,
+  ]);
 
   return (
     <>
