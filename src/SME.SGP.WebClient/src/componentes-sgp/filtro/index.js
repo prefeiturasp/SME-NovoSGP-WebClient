@@ -815,6 +815,7 @@ const Filtro = () => {
 
   const mostrarEsconderBusca = () => {
     setAlternarFocoBusca(!alternarFocoBusca);
+    setAlternarFocoCampo(false);
   };
 
   useEffect(() => {
@@ -958,6 +959,7 @@ const Filtro = () => {
   const aoFocarBusca = () => {
     if (alternarFocoBusca) {
       setAlternarFocoBusca(false);
+      setAlternarFocoCampo(false);
     }
   };
 
