@@ -58,9 +58,31 @@ const PendenciasGerais = () => {
     setCollapseExpandido();
   }, [codigoTurma, tipoPendenciaGrupo, titulo]);
 
+  const obterTurmas = useCallback(async () => {
+    setCarregandoTurmas(true);
+    const retorno = await ServicoPendencias.buscarTurmas(
+      codigoTurma
+    )
+      .catch(e => erros(e))
+      .finally(() => setCarregandoTurmas(false));
+
+    if (retorno?.data?.length) {
+      const lista = retorno?.data;
+      setListaTurmas(lista);
+      if (lista.length === 1) {
+        setCodigoTurma([String(lista[0].codigo)]);
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [codigoTurma]);
+
   useEffect(() => {
+    if (!tipoPendenciaGrupo && !codigoTurma)
+    {
+      obterTurmas();
+    }
     obterPendencias();
-  }, [obterPendencias]);
+  }, [obterPendencias, obterTurmas]);
 
   const titutoPersonalizado = item => {
     return (
@@ -107,34 +129,6 @@ const PendenciasGerais = () => {
   const onChangeTipoPendenciaGrupo = valor => {
     setTipoPendenciaGrupo(valor);
   };
-
-  const obterTurmas = useCallback(async () => {
-    setCarregandoTurmas(true);
-    const retorno = await ServicoPendencias.buscarTurmas(
-      codigoTurma
-    )
-      .catch(e => erros(e))
-      .finally(() => setCarregandoTurmas(false));
-
-    if (retorno?.data?.length) {
-      const lista = retorno?.data;
-      setListaTurmas(lista);
-      if (lista.length === 1) {
-        setCodigoTurma([String(lista[0].codigo)]);
-      }
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [codigoTurma]);
-
-  useEffect(() => {
-    if (tipoPendenciaGrupo) {
-      obterTurmas();
-    } else {
-      setCodigoTurma();
-      setListaTurmas([]);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [tipoPendenciaGrupo, obterTurmas]);
 
   const [
     carregandoTipoPendenciaGrupo,
@@ -205,7 +199,7 @@ const PendenciasGerais = () => {
                   valueSelect={codigoTurma}
                   onChange={onChangeTurma}
                   placeholder="Selecione a turma"
-                  disabled={!tipoPendenciaGrupo || listaTurmas?.length === 1}
+                  disabled={listaTurmas?.length === 1}
                   showSearch
                 />
               </Loader>
@@ -220,7 +214,6 @@ const PendenciasGerais = () => {
                 allowClear
                 onChange={onChangeTitulo}
                 value={titulo}
-                desabilitado={!tipoPendenciaGrupo || !codigoTurma}
               />
             </div>
           </div>
