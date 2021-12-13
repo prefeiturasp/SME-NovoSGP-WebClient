@@ -10,8 +10,11 @@ import { TOKEN_EXPIRADO } from '~/constantes';
 import { erros, ServicoRelatorioPendencias } from '~/servicos';
 import ServicoPendencias from '~/servicos/Paginas/ServicoPendencias';
 import { onchangeMultiSelect } from '~/utils/funcoes/gerais';
-import LocalizadorPadrao from '~/componentes/LocalizadorPadrao';
-import { Titulo } from '~/paginas/CalendarioEscolar/Calendario/index.css';
+import {
+  SGP_SELECT_TIPO_PENDENCIA,
+  SGP_SELECT_TURMA,
+  SGP_SELECT_NOME_TIPO_PENDENCIA,
+} from '~/componentes-sgp/filtro/idsCampos';
 
 const PendenciasGerais = () => {
   const [carregando, setCarregando] = useState(false);
@@ -172,7 +175,7 @@ const PendenciasGerais = () => {
             <div className="col-sm-12 col-md-4 col-lg-4 col-xl-2 mb-2">
               <Loader loading={carregandoTipoPendenciaGrupo} ignorarTip>
                 <SelectComponent
-                  id="tipo"
+                  id={SGP_SELECT_TIPO_PENDENCIA}
                   label="Tipo"
                   name="tipoId"
                   lista={listaTipoPendenciaGrupos}
@@ -180,7 +183,6 @@ const PendenciasGerais = () => {
                   valueText="descricao"
                   valueSelect={tipoPendenciaGrupo}
                   placeholder="Selecione o tipo"
-                  disabled=""
                   allowClear={false}
                   onChange={valores => {
                     onchangeMultiSelect(
@@ -195,7 +197,7 @@ const PendenciasGerais = () => {
             <div className="col-sm-12 col-md-4 col-lg-4 col-xl-2 mb-2">
               <Loader loading={carregandoTurmas} ignorarTip>
                 <SelectComponent
-                  id="turma"
+                  id={SGP_SELECT_TURMA}
                   lista={listaTurmas}
                   label="Turma"
                   name="turmaId"
@@ -212,7 +214,7 @@ const PendenciasGerais = () => {
             <div className="col-sm-12 col-md-4 col-lg-4 col-xl-6 mb-2">
               <CampoTexto
                 name="nomeTitulo"
-                id="nomeTitulo"
+                id={SGP_SELECT_NOME_TIPO_PENDENCIA}
                 label="Título"
                 placeholder="Nome do Título"
                 iconeBusca
