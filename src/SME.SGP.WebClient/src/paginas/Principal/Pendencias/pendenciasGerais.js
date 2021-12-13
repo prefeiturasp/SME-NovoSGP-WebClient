@@ -106,7 +106,6 @@ const PendenciasGerais = () => {
   
   const onChangeTipoPendenciaGrupo = valor => {
     setTipoPendenciaGrupo(valor);
-    //setClicouBotaoGerar(false);
   };
 
   const obterTurmas = useCallback(async () => {
