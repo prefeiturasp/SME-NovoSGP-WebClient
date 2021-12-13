@@ -7,6 +7,7 @@ import { erros } from '~/servicos';
 import ServicoPeriodoEscolar from '~/servicos/Paginas/Calendario/ServicoPeriodoEscolar';
 import ServicoFrequencia from '~/servicos/Paginas/DiarioClasse/ServicoFrequencia';
 import ListaoContext from '../../../listaoContext';
+import ListaoListaFrequencia from './lista/listaoListaFrequencia';
 
 const TabListaoFrequencia = () => {
   const usuario = useSelector(store => store.usuario);
@@ -23,7 +24,7 @@ const TabListaoFrequencia = () => {
     exibirLoaderListaFrequencia,
     setExibirLoaderListaFrequencia,
   ] = useState(false);
-  const [listaFrequencia, setListaFrequencia] = useState([]);
+  const [dadosFrequencia, setDadosFrequencia] = useState();
 
   const desabilitarPeriodo =
     !turma ||
@@ -106,12 +107,21 @@ const TabListaoFrequencia = () => {
       .catch(e => erros(e))
       .finally(() => setExibirLoaderListaFrequencia(false));
 
-    if (resposta?.data?.length) {
-      setListaFrequencia(resposta.data);
+    if (resposta?.data) {
+      const tiposFrequencia = await ServicoFrequencia.obterTipoFrequencia(
+        turmaSelecionada?.modalidade,
+        turmaSelecionada?.anoLetivo
+      ).catch(e => erros(e));
+
+      resposta.data.listaTiposFrequencia = tiposFrequencia?.data?.length
+        ? tiposFrequencia.data
+        : [];
+
+      setDadosFrequencia(resposta.data);
     } else {
-      setListaFrequencia([]);
+      setDadosFrequencia();
     }
-  }, [componenteCurricular, turma, periodo]);
+  }, [componenteCurricular, turma, turmaSelecionada, periodo]);
 
   useEffect(() => {
     if (
@@ -123,7 +133,7 @@ const TabListaoFrequencia = () => {
     ) {
       obterFrequenciasPorPeriodo();
     } else {
-      setListaFrequencia([]);
+      setDadosFrequencia();
     }
   }, [
     periodo,
@@ -169,7 +179,16 @@ const TabListaoFrequencia = () => {
           </Col>
         </Row>
       </Col>
-      Listão frequência
+      {dadosFrequencia?.listaFrequencia?.length ? (
+        <ListaoListaFrequencia
+          ehInfantil={false}
+          dataSource={dadosFrequencia?.listaFrequencia}
+          listaTiposFrequencia={dadosFrequencia?.listaTiposFrequencia}
+          periodo={periodo}
+        />
+      ) : (
+        <></>
+      )}
     </>
   );
 };
