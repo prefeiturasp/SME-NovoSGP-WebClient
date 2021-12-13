@@ -5,7 +5,7 @@ const urlPadrao = 'v1/pendencias';
 class ServicoPendencias {
   obterPendenciasListaPaginada = (codigoTurma, tipoPendenciaGrupo, titulo, numeroPagina, numeroRegistros) => {
     return api.get(
-      `${urlPadrao}/turma/${codigoTurma || "%20"}/tipo/${tipoPendenciaGrupo || 0}/titulo/${titulo || "%20"}`
+      `${urlPadrao}/turma/${codigoTurma || "%20"}/tipo/${tipoPendenciaGrupo || 0}/titulo/${titulo || "%20"}?numeroPagina=${numeroPagina || 1}&NumeroRegistros=${numeroRegistros || 10}`
     );
   };
   buscarTurmas() {

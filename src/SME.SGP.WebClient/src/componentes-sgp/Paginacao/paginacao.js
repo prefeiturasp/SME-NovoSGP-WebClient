@@ -61,7 +61,7 @@ Paginacao.defaultProps = {
   onChangePaginacao: () => {},
   mostrarNumeroLinhas: false,
   onChangeNumeroLinhas: () => {},
-  pageSize: 5,
+  pageSize: 10,
 };
 
 export default Paginacao;

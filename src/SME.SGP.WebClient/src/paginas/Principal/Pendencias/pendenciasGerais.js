@@ -23,7 +23,7 @@ const PendenciasGerais = () => {
   const [collapseExpandido, setCollapseExpandido] = useState();
   const [tipoPendenciaGrupo, setTipoPendenciaGrupo] = useState();
   const [codigoTurma, setCodigoTurma] = useState();
-  const [titulo, setTitulo] = useState();
+  const [titulo, setTitulo] = useState("");
   const [listaTipoPendenciaGrupos, setListaTipoPendenciaGrupos] = useState(
     true
   );
@@ -77,11 +77,12 @@ const PendenciasGerais = () => {
   }, [codigoTurma]);
 
   useEffect(() => {
-    if (!tipoPendenciaGrupo && !codigoTurma)
+    if (!codigoTurma)
     {
       obterTurmas();
     }
-    obterPendencias();
+    if (titulo.length === 0 || titulo.length >= 3)
+      obterPendencias();
   }, [obterPendencias, obterTurmas]);
 
   const titutoPersonalizado = item => {
