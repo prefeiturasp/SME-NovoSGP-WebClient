@@ -3,11 +3,13 @@ import api from '~/servicos/api';
 const urlPadrao = 'v1/pendencias';
 
 class ServicoPendencias {
-  obterPendenciasListaPaginada = (numeroPagina, numeroRegistros) => {
+  obterPendenciasListaPaginada = (codigoTurma, tipoPendenciaGrupo, titulo, numeroPagina, numeroRegistros) => {
     return api.get(
-      `${urlPadrao}?numeroPagina=${numeroPagina ||
-        1}&NumeroRegistros=${numeroRegistros || 5}`
+      `${urlPadrao}/turma/${codigoTurma || "%20"}/tipo/${tipoPendenciaGrupo || 0}/titulo/${titulo || "%20"}`
     );
+  };
+  buscarTurmas() {
+    return api.get(`v1/abrangencias/turmas/vigentes`);
   };
 }
 
