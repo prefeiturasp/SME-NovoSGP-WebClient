@@ -207,6 +207,20 @@ const BotoesAcoesPlanoAEE = props => {
         disabled={desabilitarBotaoSalvar}
       />
       <Button
+        id="btn-devolver-plano"
+        label="Devolver"
+        color={Colors.Roxo}
+        bold
+        className="ml-3"
+        onClick={onClickDevolver}
+        hidden={!planoAEEDados?.podeDevolverPlanoAEE}
+        disabled={
+          desabilitarCamposPlanoAEE ||
+          questionarioDinamicoEmEdicao ||
+          !permissoesTela?.podeAlterar
+        }
+      />
+      <Button
         id="btn-acao-aba-parecer"
         label={
           situacaoAtribuicaoPAAI ? 'Atribuir responsável' : 'Salvar parecer'
@@ -227,20 +241,6 @@ const BotoesAcoesPlanoAEE = props => {
           desabilitarCamposPlanoAEE ||
           questionarioDinamicoEmEdicao ||
           !parecerEmEdicao ||
-          !permissoesTela?.podeAlterar
-        }
-      />
-      <Button
-        id="btn-devolver-plano"
-        label="Devolver"
-        color={Colors.Roxo}
-        bold
-        className="ml-3"
-        onClick={onClickDevolver}
-        hidden={!planoAEEDados?.podeDevolverPlanoAEE}
-        disabled={
-          desabilitarCamposPlanoAEE ||
-          questionarioDinamicoEmEdicao ||
           !permissoesTela?.podeAlterar
         }
       />
