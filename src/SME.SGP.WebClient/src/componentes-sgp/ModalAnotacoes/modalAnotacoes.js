@@ -9,10 +9,6 @@ import DetalhesAluno from '~/componentes/Alunos/Detalhes';
 import Button from '~/componentes/button';
 import JoditEditor from '~/componentes/jodit-editor/joditEditor';
 import SelectComponent from '~/componentes/select';
-import {
-  setDadosModalAnotacaoFrequencia,
-  setExibirModalAnotacaoFrequencia,
-} from '~/redux/modulos/frequenciaPlanoAula/actions';
 import { confirmar, erros, sucesso } from '~/servicos/alertas';
 import ServicoAnotacaoFrequenciaAluno from '~/servicos/Paginas/DiarioClasse/ServicoAnotacaoFrequenciaAluno';
 import { EditorAnotacao } from './modalAnotacoes.css';
@@ -24,16 +20,18 @@ const ModalAnotacoesFrequencia = props => {
     aulaId,
     componenteCurricularId,
     desabilitarCampos,
+    setExibirModal,
+    setDadosModal,
   } = props;
 
   const dispatch = useDispatch();
 
   useEffect(() => {
     return () => {
-      dispatch(setDadosModalAnotacaoFrequencia({}));
-      dispatch(setExibirModalAnotacaoFrequencia(false));
+      dispatch(setDadosModal({}));
+      dispatch(setExibirModal(false));
     };
-  }, [dispatch]);
+  }, [dispatch, setExibirModal, setDadosModal]);
 
   const exibirModalAnotacaoFrequencia = useSelector(
     state => state.frequenciaPlanoAula.exibirModalAnotacaoFrequencia
@@ -85,8 +83,8 @@ const ModalAnotacoesFrequencia = props => {
   const [dadosEstudanteOuCrianca, setDadosEstudanteOuCrianca] = useState({});
 
   const onCloseModal = () => {
-    dispatch(setDadosModalAnotacaoFrequencia({}));
-    dispatch(setExibirModalAnotacaoFrequencia(false));
+    dispatch(setDadosModal({}));
+    dispatch(setExibirModal(false));
     setValoresIniciais(iniciar);
     setRefForm({});
     setModoEdicao(false);
@@ -219,7 +217,8 @@ const ModalAnotacoesFrequencia = props => {
 
   const validaAntesDeExcluir = async id => {
     if (!desabilitarCampos) {
-      dispatch(setExibirModalAnotacaoFrequencia(false));
+      dispatch(setExibirModal(false));
+      dispatch(setExibirModal(false));
       const confirmado = await confirmar(
         'Atenção',
         '',
@@ -228,14 +227,14 @@ const ModalAnotacoesFrequencia = props => {
       if (confirmado) {
         onClickExcluir(id);
       } else {
-        dispatch(setExibirModalAnotacaoFrequencia(true));
+        dispatch(setExibirModal(true));
       }
     }
   };
 
   const validaAntesDeFechar = async () => {
     if (modoEdicao && !desabilitarCampos) {
-      dispatch(setExibirModalAnotacaoFrequencia(false));
+      dispatch(setExibirModal(false));
       const confirmado = await confirmar(
         'Atenção',
         '',
@@ -405,6 +404,8 @@ ModalAnotacoesFrequencia.propTypes = {
   aulaId: PropTypes.oneOfType([PropTypes.any]),
   componenteCurricularId: PropTypes.oneOfType([PropTypes.any]),
   desabilitarCampos: PropTypes.bool,
+  setExibirModal: PropTypes.func,
+  setDadosModal: PropTypes.func,
 };
 
 ModalAnotacoesFrequencia.defaultProps = {
@@ -413,6 +414,8 @@ ModalAnotacoesFrequencia.defaultProps = {
   aulaId: '',
   componenteCurricularId: '',
   desabilitarCampos: false,
+  setExibirModal: () => {},
+  setDadosModal: () => {},
 };
 
 export default ModalAnotacoesFrequencia;

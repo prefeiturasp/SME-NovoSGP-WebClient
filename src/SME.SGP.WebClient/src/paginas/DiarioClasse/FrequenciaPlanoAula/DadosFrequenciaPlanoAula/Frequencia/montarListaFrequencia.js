@@ -5,7 +5,9 @@ import Ordenacao from '~/componentes-sgp/Ordenacao/ordenacao';
 import CardCollapse from '~/componentes/cardCollapse';
 import { RotasDto } from '~/dtos';
 import {
+  setDadosModalAnotacaoFrequencia,
   setExibirCardCollapseFrequencia,
+  setExibirModalAnotacaoFrequencia,
   setListaDadosFrequencia,
   setModoEdicaoFrequencia,
 } from '~/redux/modulos/frequenciaPlanoAula/actions';
@@ -118,6 +120,8 @@ const MontarListaFrequencia = () => {
                       componenteCurricular.codigoComponenteCurricular
                     }
                     setDataSource={atualizarValoresAlterados}
+                    setExibirModal={setExibirModalAnotacaoFrequencia}
+                    setDadosModal={setDadosModalAnotacaoFrequencia}
                   />
 
                   {listaDadosFrequencia?.criadoEm && <AuditoriaFrequencia />}

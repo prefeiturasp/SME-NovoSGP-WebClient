@@ -5,8 +5,8 @@ import { useSelector } from 'react-redux';
 import { DataTable } from '~/componentes';
 import tipoFrequencia from '~/dtos/tipoFrequencia';
 import tipoIndicativoFrequencia from '~/dtos/tipoIndicativoFrequencia';
-import ModalAnotacoesFrequencia from '~/paginas/DiarioClasse/FrequenciaPlanoAula/ModalAnotacoes/modalAnotacoes';
 import { verificaSomenteConsulta } from '~/servicos/servico-navegacao';
+import ModalAnotacoesFrequencia from '../ModalAnotacoes/modalAnotacoes';
 import SinalizacaoAEE from '../SinalizacaoAEE/sinalizacaoAEE';
 import BotaoAnotacao from './componentes/botaoAnotacao';
 import CampoPreDefinirFrequencia from './componentes/campoPreDefinirFrequencia';
@@ -30,6 +30,8 @@ const ListaFrequencia = props => {
     aulaId,
     componenteCurricularId,
     setDataSource,
+    setExibirModal,
+    setDadosModal,
   } = props;
 
   const dataSource = useSelector(
@@ -352,6 +354,8 @@ const ListaFrequencia = props => {
         aulaId={aulaId}
         componenteCurricularId={componenteCurricularId}
         desabilitarCampos={desabilitarCampos}
+        setExibirModal={setExibirModal}
+        setDadosModal={setDadosModal}
       />
 
       <ContainerListaFrequencia className="pt-2">
@@ -377,6 +381,8 @@ ListaFrequencia.propTypes = {
   aulaId: PropTypes.oneOfType([PropTypes.any]),
   componenteCurricularId: PropTypes.oneOfType([PropTypes.any]),
   setDataSource: PropTypes.oneOfType([PropTypes.func]),
+  setExibirModal: PropTypes.func,
+  setDadosModal: PropTypes.func,
 };
 
 ListaFrequencia.defaultProps = {
@@ -388,6 +394,8 @@ ListaFrequencia.defaultProps = {
   aulaId: '',
   componenteCurricularId: '',
   setDataSource: () => {},
+  setExibirModal: () => {},
+  setDadosModal: () => {},
 };
 
 export default ListaFrequencia;
