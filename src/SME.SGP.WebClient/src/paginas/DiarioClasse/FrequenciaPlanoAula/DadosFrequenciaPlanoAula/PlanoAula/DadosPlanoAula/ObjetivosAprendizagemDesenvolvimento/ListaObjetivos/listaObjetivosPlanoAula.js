@@ -32,6 +32,10 @@ const ListaObjetivosPlanoAula = React.memo(props => {
     store => store.frequenciaPlanoAula.somenteConsulta
   );
 
+  const aulaIdPodeEditar = useSelector(
+    state => state.frequenciaPlanoAula?.aulaIdPodeEditar
+  );
+
   const [dadosEsquerda, setDadosEsquerda] = useState([]);
   const [dadosDireita, setDadosDireita] = useState([]);
   const [idsSelecionadsEsquerda, setIdsSelecionadsEsquerda] = useState([]);
@@ -137,7 +141,8 @@ const ListaObjetivosPlanoAula = React.memo(props => {
     dataSource: dadosEsquerda,
     onSelectRow: setIdsSelecionadsEsquerda,
     selectedRowKeys: idsSelecionadsEsquerda,
-    selectMultipleRows: temPeriodoAberto && !somenteConsulta,
+    selectMultipleRows:
+      temPeriodoAberto && !somenteConsulta && aulaIdPodeEditar,
   };
 
   const parametrosListaDireita = {
@@ -161,7 +166,8 @@ const ListaObjetivosPlanoAula = React.memo(props => {
     dataSource: dadosDireita,
     onSelectRow: setIdsSelecionadsDireita,
     selectedRowKeys: idsSelecionadsDireita,
-    selectMultipleRows: temPeriodoAberto && !somenteConsulta,
+    selectMultipleRows:
+      temPeriodoAberto && !somenteConsulta && aulaIdPodeEditar,
   };
 
   const obterListaComIdsSelecionados = (list, ids) => {
@@ -244,7 +250,8 @@ const ListaObjetivosPlanoAula = React.memo(props => {
     if (
       idsSelecionadsEsquerda &&
       idsSelecionadsEsquerda.length &&
-      !somenteConsulta
+      !somenteConsulta &&
+      aulaIdPodeEditar
     ) {
       const novaListaDireita = obterListaComIdsSelecionados(
         dadosEsquerda,
@@ -271,7 +278,8 @@ const ListaObjetivosPlanoAula = React.memo(props => {
     if (
       idsSelecionadsDireita &&
       idsSelecionadsDireita.length &&
-      !somenteConsulta
+      !somenteConsulta &&
+      aulaIdPodeEditar
     ) {
       const novaListaEsquerda = obterListaComIdsSelecionados(
         dadosDireita,

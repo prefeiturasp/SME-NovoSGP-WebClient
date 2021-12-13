@@ -39,15 +39,24 @@ const DadosPlanoAula = props => {
   const componenteCurricular = useSelector(
     store => store.frequenciaPlanoAula.componenteCurricular
   );
+  
+  const aulaIdPodeEditar = useSelector(state => state.frequenciaPlanoAula?.aulaIdPodeEditar);
 
   useEffect(() => {
-    if (dadosPlanoAula && dadosPlanoAula.id > 0) {
-      const desabilitar = !permissoesTela.podeAlterar || somenteConsulta;
-      dispatch(setDesabilitarCamposPlanoAula(desabilitar));
-    } else {
-      const desabilitar = !permissoesTela.podeIncluir || somenteConsulta;
-      dispatch(setDesabilitarCamposPlanoAula(desabilitar));
+    let desabilitar =
+      dadosPlanoAula?.id > 0
+          ? somenteConsulta || !permissoesTela.podeAlterar
+          : somenteConsulta || !permissoesTela.podeIncluir;
+
+    if (desabilitar) {
+        dispatch(setDesabilitarCamposPlanoAula(desabilitar));
+        return;
     }
+    if (!aulaIdPodeEditar) {
+      desabilitar = true;
+    }
+    
+    dispatch(setDesabilitarCamposPlanoAula(desabilitar));
   }, [permissoesTela, somenteConsulta, dadosPlanoAula, dispatch]);
 
   useEffect(() => {
