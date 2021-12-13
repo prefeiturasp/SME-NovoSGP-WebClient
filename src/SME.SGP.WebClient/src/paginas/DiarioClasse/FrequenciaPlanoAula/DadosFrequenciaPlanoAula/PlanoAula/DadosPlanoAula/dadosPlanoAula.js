@@ -88,7 +88,6 @@ const DadosPlanoAula = props => {
           <CabecalhoDadosPlanoAula />
           <ObjetivosAprendizagemDesenvolvimento />
           <ObjetivosEspecificosParaAula />
-          <DesenvolvimentoDaAula />
           <div className="mt-3 mb-3">
             <MuralPlanoAula aulaId={aulaId} />
           </div>

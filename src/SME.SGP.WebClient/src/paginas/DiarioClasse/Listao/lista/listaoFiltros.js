@@ -15,7 +15,7 @@ import {
 import { OPCAO_TODOS } from '~/constantes';
 import { ModalidadeDTO } from '~/dtos';
 import { AbrangenciaServico, erros, ServicoFiltroRelatorio } from '~/servicos';
-import ListaoContext from './listaoContext';
+import ListaoContext from '../listaoContext';
 
 const ListaoFiltros = () => {
   const {
@@ -35,9 +35,26 @@ const ListaoFiltros = () => {
     codigoTurma,
     setBimestre,
     bimestre,
+    setCarregarFiltrosSalvos,
+    carregarFiltrosSalvos,
   } = useContext(ListaoContext);
 
-  const [anoAtual] = useState(window.moment().format('YYYY'));
+  const {
+    listaAnosLetivo,
+    setListaAnosLetivo,
+    listaDres,
+    setListaDres,
+    listaUes,
+    setListaUes,
+    listaModalidades,
+    setListaModalidades,
+    listaSemestres,
+    setListaSemestres,
+    listaTurmas,
+    setListaTurmas,
+    listaBimestres,
+    setListaBimestres,
+  } = useContext(ListaoContext);
 
   const [carregandoAnosLetivos, setCarregandoAnosLetivos] = useState(false);
   const [carregandoDres, setCarregandoDres] = useState(false);
@@ -46,21 +63,13 @@ const ListaoFiltros = () => {
   const [carregandoSemestres, setCarregandoSemestres] = useState(false);
   const [carregandoTurmas, setCarregandoTurmas] = useState(false);
 
-  const [listaAnosLetivo, setListaAnosLetivo] = useState([]);
-  const [listaDres, setListaDres] = useState([]);
-  const [listaUes, setListaUes] = useState([]);
-  const [listaModalidades, setListaModalidades] = useState([]);
-  const [listaSemestres, setListaSemestres] = useState([]);
-  const [listaTurmas, setListaTurmas] = useState([]);
-  const [listaBimestres, setListaBimestres] = useState([]);
-
   const obterAnosLetivos = useCallback(async () => {
     setCarregandoAnosLetivos(true);
     const anosLetivo = await FiltroHelper.obterAnosLetivos({
       consideraHistorico,
     }).catch(e => erros(e));
 
-    if (anosLetivo) {
+    if (anosLetivo?.length) {
       setListaAnosLetivo(anosLetivo);
       setAnoLetivo(anosLetivo[0].valor);
       setCodigoDre();
@@ -73,8 +82,17 @@ const ListaoFiltros = () => {
   }, [consideraHistorico]);
 
   useEffect(() => {
-    obterAnosLetivos(consideraHistorico);
-  }, [obterAnosLetivos, consideraHistorico]);
+    if (carregarFiltrosSalvos) return;
+
+    if (!listaAnosLetivo?.length) {
+      obterAnosLetivos(consideraHistorico);
+    }
+  }, [
+    obterAnosLetivos,
+    listaAnosLetivo,
+    consideraHistorico,
+    carregarFiltrosSalvos,
+  ]);
 
   const obterDres = useCallback(async () => {
     setCarregandoDres(true);
@@ -101,13 +119,13 @@ const ListaoFiltros = () => {
   }, [anoLetivo, consideraHistorico]);
 
   useEffect(() => {
-    if (anoLetivo) {
+    if (carregarFiltrosSalvos) return;
+
+    if (anoLetivo && !listaDres?.length) {
       obterDres();
-    } else {
-      setCodigoDre();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [obterDres, anoLetivo]);
+  }, [obterDres, anoLetivo, listaDres]);
 
   const obterUes = useCallback(async () => {
     setCarregandoUes(true);
@@ -136,14 +154,13 @@ const ListaoFiltros = () => {
   }, [codigoDre, anoLetivo, consideraHistorico]);
 
   useEffect(() => {
-    if (codigoDre) {
+    if (carregarFiltrosSalvos) return;
+
+    if (codigoDre && !listaUes?.length) {
       obterUes();
-    } else {
-      setListaUes([]);
-      setCodigoUe();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [codigoDre, obterUes]);
+  }, [codigoDre, obterUes, carregarFiltrosSalvos, listaUes]);
 
   const obterModalidades = useCallback(async () => {
     setCarregandoModalidades(true);
@@ -164,17 +181,16 @@ const ListaoFiltros = () => {
       setListaModalidades(lista);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [anoLetivo, codigoUe, consideraHistorico]);
+  }, [anoLetivo, codigoUe, consideraHistorico, carregarFiltrosSalvos]);
 
   useEffect(() => {
-    if (codigoUe) {
+    if (carregarFiltrosSalvos) return;
+
+    if (codigoUe && !listaModalidades?.length) {
       obterModalidades();
-    } else {
-      setModalidade();
-      setListaModalidades([]);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [codigoUe, obterModalidades]);
+  }, [codigoUe, obterModalidades, listaModalidades, carregarFiltrosSalvos]);
 
   const obterSemestres = useCallback(async () => {
     setCarregandoSemestres(true);
@@ -204,14 +220,17 @@ const ListaoFiltros = () => {
   }, [anoLetivo, modalidade, consideraHistorico, codigoDre, codigoUe]);
 
   useEffect(() => {
-    if (modalidade && String(modalidade) === String(ModalidadeDTO.EJA)) {
+    if (carregarFiltrosSalvos) return;
+
+    if (
+      modalidade &&
+      String(modalidade) === String(ModalidadeDTO.EJA) &&
+      !listaSemestres?.length
+    ) {
       obterSemestres();
-    } else {
-      setSemestre();
-      setListaSemestres([]);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [obterSemestres, modalidade]);
+  }, [obterSemestres, modalidade, carregarFiltrosSalvos]);
 
   const obterTurmas = useCallback(async () => {
     setCarregandoTurmas(true);
@@ -241,14 +260,13 @@ const ListaoFiltros = () => {
   }, [anoLetivo, consideraHistorico, codigoUe, modalidade]);
 
   useEffect(() => {
-    if (modalidade) {
+    if (carregarFiltrosSalvos) return;
+
+    if (modalidade && !listaTurmas?.length) {
       obterTurmas();
-    } else {
-      setCodigoTurma();
-      setListaTurmas([]);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [modalidade, obterTurmas]);
+  }, [modalidade, obterTurmas, carregarFiltrosSalvos, listaTurmas]);
 
   const obterBimestres = useCallback(() => {
     const bi = [];
@@ -264,20 +282,23 @@ const ListaoFiltros = () => {
     }
 
     setListaBimestres(bi);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [modalidade]);
 
   useEffect(() => {
-    if (modalidade) {
+    if (carregarFiltrosSalvos) return;
+
+    if (modalidade && !listaBimestres?.length) {
       obterBimestres();
-    } else {
-      setListaBimestres([]);
-      setBimestre(undefined);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [modalidade, obterBimestres]);
+  }, [modalidade, obterBimestres, carregarFiltrosSalvos, listaBimestres]);
 
   const onCheckedConsideraHistorico = e => {
-    setAnoLetivo(anoAtual);
+    setListaAnosLetivo([]);
+    setAnoLetivo();
+
+    setListaDres([]);
     setCodigoDre();
 
     setListaUes([]);
@@ -296,6 +317,8 @@ const ListaoFiltros = () => {
     setBimestre();
 
     setConsideraHistorico(e.target.checked);
+
+    setCarregarFiltrosSalvos(false);
   };
 
   const onChangeAnoLetivo = ano => {
@@ -318,6 +341,8 @@ const ListaoFiltros = () => {
     setBimestre();
 
     setAnoLetivo(ano);
+
+    setCarregarFiltrosSalvos(false);
   };
 
   const onChangeDre = dre => {
@@ -337,6 +362,8 @@ const ListaoFiltros = () => {
     setBimestre();
 
     setCodigoDre(dre);
+
+    setCarregarFiltrosSalvos(false);
   };
 
   const onChangeUe = ue => {
@@ -353,6 +380,8 @@ const ListaoFiltros = () => {
     setBimestre();
 
     setCodigoUe(ue);
+
+    setCarregarFiltrosSalvos(false);
   };
 
   const onChangeModalidade = novaModalidade => {
@@ -366,11 +395,22 @@ const ListaoFiltros = () => {
     setBimestre();
 
     setModalidade(novaModalidade);
+
+    setCarregarFiltrosSalvos(false);
   };
 
-  const onChangeSemestre = valor => setSemestre(valor);
-  const onChangeTurma = valor => setCodigoTurma(valor);
-  const onChangeBimestre = valor => setBimestre(valor);
+  const onChangeSemestre = valor => {
+    setSemestre(valor);
+    setCarregarFiltrosSalvos(false);
+  };
+  const onChangeTurma = valor => {
+    setCodigoTurma(valor);
+    setCarregarFiltrosSalvos(false);
+  };
+  const onChangeBimestre = valor => {
+    setBimestre(valor);
+    setCarregarFiltrosSalvos(false);
+  };
 
   return (
     <Col span={24}>
