@@ -25,6 +25,7 @@ const ListaPaginada = props => {
     temPaginacao,
     setLista,
     showSizeChanger,
+    naoFiltrarQuandoCarregando,
   } = props;
 
   const [carregando, setCarregando] = useState(false);
@@ -95,6 +96,7 @@ const ListaPaginada = props => {
   };
 
   const filtrar = () => {
+    if (naoFiltrarQuandoCarregando && carregando) return;
     selecionar([]);
     setCarregando(true);
     api
@@ -230,6 +232,7 @@ ListaPaginada.propTypes = {
   temPaginacao: PropTypes.oneOfType([PropTypes.bool]),
   setLista: PropTypes.oneOfType([PropTypes.func]),
   showSizeChanger: PropTypes.oneOfType([PropTypes.bool]),
+  naoFiltrarQuandoCarregando: PropTypes.oneOfType([PropTypes.bool]),
 };
 
 ListaPaginada.defaultProps = {
@@ -247,6 +250,7 @@ ListaPaginada.defaultProps = {
   temPaginacao: true,
   setLista: () => { },
   showSizeChanger: true,
+  naoFiltrarQuandoCarregando: true,
 };
 
 export default ListaPaginada;

@@ -86,6 +86,7 @@ function CadastroDeAula({ match, location }) {
     ueId: turmaSelecionada.unidadeEscolar,
     tipoCalendarioId,
     quantidade: 1,
+    podeEditar: true,
   };
 
   const [recorrenciaAulaEmEdicao, setRecorrenciaAulaEmEdicao] = useState({
@@ -699,7 +700,7 @@ function CadastroDeAula({ match, location }) {
                         border
                         className="mr-2"
                         onClick={onClickExcluir}
-                        disabled={somenteConsulta || !id || somenteLeitura}
+                        disabled={somenteConsulta || !id || somenteLeitura || !aula.podeEditar}
                       />
 
                       <Button
@@ -726,7 +727,8 @@ function CadastroDeAula({ match, location }) {
                           !aula.disciplinaId ||
                           somenteLeitura ||
                           desabilitarBtnSalvar ||
-                          !modoEdicao
+                          !modoEdicao ||
+                          !aula.podeEditar
                         }
                       />
                     </div>
