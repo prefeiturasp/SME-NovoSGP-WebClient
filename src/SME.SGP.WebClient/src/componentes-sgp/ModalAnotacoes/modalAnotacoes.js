@@ -20,7 +20,9 @@ const ModalAnotacoesFrequencia = props => {
     aulaId,
     componenteCurricularId,
     desabilitarCampos,
+    exibirModal,
     setExibirModal,
+    dadosModal,
     setDadosModal,
   } = props;
 
@@ -33,16 +35,8 @@ const ModalAnotacoesFrequencia = props => {
     };
   }, [dispatch, setExibirModal, setDadosModal]);
 
-  const exibirModalAnotacaoFrequencia = useSelector(
-    state => state.frequenciaPlanoAula.exibirModalAnotacaoFrequencia
-  );
-
-  const dadosModalAnotacaoFrequencia = useSelector(
-    state => state.frequenciaPlanoAula.dadosModalAnotacaoFrequencia
-  );
-
   const [carregandoMotivosAusencia, setCarregandoMotivosAusencia] = useState(
-    exibirModalAnotacaoFrequencia
+    exibirModal
   );
 
   const iniciar = {
@@ -92,7 +86,7 @@ const ModalAnotacoesFrequencia = props => {
 
   const obterAnotacao = useCallback(async () => {
     const resultado = await ServicoAnotacaoFrequenciaAluno.obterAnotacao(
-      dadosModalAnotacaoFrequencia.codigoAluno,
+      dadosModal?.codigoAluno,
       aulaId
     ).catch(e => erros(e));
 
@@ -103,7 +97,7 @@ const ModalAnotacoesFrequencia = props => {
       setValoresIniciais(resultado.data);
       setModoEdicao(false);
     }
-  }, [aulaId, dadosModalAnotacaoFrequencia]);
+  }, [aulaId, dadosModal]);
 
   const obterListaMotivosAusencia = async () => {
     const retorno = await ServicoAnotacaoFrequenciaAluno.obterMotivosAusencia().catch(
@@ -119,26 +113,26 @@ const ModalAnotacoesFrequencia = props => {
 
   const montarDadosAluno = useCallback(() => {
     const aluno = {
-      ...dadosModalAnotacaoFrequencia,
-      nome: dadosModalAnotacaoFrequencia?.nomeAluno,
-      numeroChamada: dadosModalAnotacaoFrequencia?.numeroAlunoChamada,
-      dataNascimento: dadosModalAnotacaoFrequencia?.dataNascimento,
-      codigoEOL: dadosModalAnotacaoFrequencia?.codigoAluno,
+      ...dadosModal,
+      nome: dadosModal?.nomeAluno,
+      numeroChamada: dadosModal?.numeroAlunoChamada,
+      dataNascimento: dadosModal?.dataNascimento,
+      codigoEOL: dadosModal?.codigoAluno,
     };
     setDadosEstudanteOuCrianca(aluno);
-  }, [dadosModalAnotacaoFrequencia]);
+  }, [dadosModal]);
 
   useEffect(() => {
-    if (dadosModalAnotacaoFrequencia?.codigoAluno) {
+    if (dadosModal?.codigoAluno) {
       obterAnotacao();
       montarDadosAluno();
       obterListaMotivosAusencia();
     }
-  }, [dadosModalAnotacaoFrequencia, obterAnotacao, montarDadosAluno]);
+  }, [dadosModal, obterAnotacao, montarDadosAluno]);
 
   const fecharAposSalvarExcluir = (salvou, excluiu) => {
     const linhaEditada = dadosListaFrequencia.find(
-      item => item.codigoAluno === dadosModalAnotacaoFrequencia.codigoAluno
+      item => item.codigoAluno === dadosModal.codigoAluno
     );
     const index = dadosListaFrequencia.indexOf(linhaEditada);
     if (salvou) {
@@ -176,7 +170,7 @@ const ModalAnotacoesFrequencia = props => {
   };
 
   const onClickSalvar = async valores => {
-    const { codigoAluno } = dadosModalAnotacaoFrequencia;
+    const { codigoAluno } = dadosModal;
     const { anotacao, motivoAusenciaId } = valores;
     const params = {
       motivoAusenciaId,
@@ -258,11 +252,11 @@ const ModalAnotacoesFrequencia = props => {
     }
   };
 
-  return exibirModalAnotacaoFrequencia && dadosEstudanteOuCrianca ? (
+  return exibirModal && dadosEstudanteOuCrianca ? (
     <ModalConteudoHtml
       id={shortid.generate()}
       key="inserir-anotacao"
-      visivel={exibirModalAnotacaoFrequencia}
+      visivel={exibirModal}
       titulo={`Anotações ${ehInfantil ? 'da criança' : 'do estudante'}`}
       onClose={() => (!loaderSalvarEditar ? validaAntesDeFechar() : null)}
       esconderBotaoPrincipal
@@ -366,10 +360,7 @@ const ModalAnotacoesFrequencia = props => {
                     border
                     className="mr-3 mt-2 padding-btn-confirmacao"
                     onClick={() => validaAntesDeExcluir(form.values.id)}
-                    disabled={
-                      desabilitarCampos ||
-                      !dadosModalAnotacaoFrequencia?.possuiAnotacao
-                    }
+                    disabled={desabilitarCampos || !dadosModal?.possuiAnotacao}
                   />
                   <Button
                     id="btn-salvar-anotacao"
@@ -404,7 +395,9 @@ ModalAnotacoesFrequencia.propTypes = {
   aulaId: PropTypes.oneOfType([PropTypes.any]),
   componenteCurricularId: PropTypes.oneOfType([PropTypes.any]),
   desabilitarCampos: PropTypes.bool,
+  exibirModal: PropTypes.bool,
   setExibirModal: PropTypes.func,
+  dadosModal: PropTypes.oneOfType([PropTypes.any]),
   setDadosModal: PropTypes.func,
 };
 
@@ -414,7 +407,9 @@ ModalAnotacoesFrequencia.defaultProps = {
   aulaId: '',
   componenteCurricularId: '',
   desabilitarCampos: false,
+  exibirModal: false,
   setExibirModal: () => {},
+  dadosModal: [],
   setDadosModal: () => {},
 };
 
