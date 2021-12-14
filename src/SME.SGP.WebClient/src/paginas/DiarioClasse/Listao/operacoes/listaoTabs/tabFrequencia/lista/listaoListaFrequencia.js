@@ -60,6 +60,7 @@ const ListaoListaFrequencia = props => {
     {
       title: montarTituloEstudante,
       dataIndex: 'nomeAluno',
+      width: '350px',
     },
   ];
 
@@ -159,32 +160,33 @@ const ListaoListaFrequencia = props => {
       dataIndex: 'dataAula',
       align: 'left',
       ellipsis: true,
-      width: 100,
       render: dataAula => window.moment(dataAula).format('DD/MM/YYYY'),
     },
     {
       title: 'Aula',
       dataIndex: 'numeroAula',
       align: 'center',
-      width: '150px',
+      width: '100px',
     },
     {
       title: '%',
       align: 'center',
-      width: '75px',
+      width: '70px',
       render: montarColunaFrequencia,
     },
   ];
 
+  console.log('dadosDetalheEstudante', dadosDetalheEstudante);
+
   return dataSource?.length ? (
-    <LinhaTabela className="col-md-12">
+    <LinhaTabela className="col-md-12 p-0">
       <DataTable
         idLinha="codigoAluno"
         columns={colunasEstudantes}
         dataSource={dataSource}
         pagination={false}
         semHover
-        expandIconColumnIndex={7}
+        expandIconColumnIndex={dataSource[0]?.aulas?.length + 3}
         expandedRowKeys={expandedRowKeys}
         onClickExpandir={onClickExpandir}
         rowClassName={(record, _) => {

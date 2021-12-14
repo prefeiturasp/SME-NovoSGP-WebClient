@@ -14,16 +14,16 @@ const TabListaoFrequencia = () => {
   const { turmaSelecionada } = usuario;
   const { turma } = turmaSelecionada;
 
-  const { componenteCurricular, bimestreOperacoes } = useContext(ListaoContext);
+  const {
+    componenteCurricular,
+    bimestreOperacoes,
+    setExibirLoaderGeral,
+  } = useContext(ListaoContext);
 
   const [exibirLoaderPeriodo, setExibirLoaderPeriodo] = useState(false);
   const [listaPeriodos, setListaPeriodos] = useState([]);
   const [periodo, setPeriodo] = useState();
 
-  const [
-    exibirLoaderListaFrequencia,
-    setExibirLoaderListaFrequencia,
-  ] = useState(false);
   const [dadosFrequencia, setDadosFrequencia] = useState();
 
   const desabilitarPeriodo =
@@ -97,7 +97,7 @@ const TabListaoFrequencia = () => {
   };
 
   const obterFrequenciasPorPeriodo = useCallback(async () => {
-    setExibirLoaderListaFrequencia(true);
+    setExibirLoaderGeral(true);
     const resposta = await ServicoFrequencia.obterFrequenciasPorPeriodo(
       periodo?.dataInicio,
       periodo?.dataFim,
@@ -105,7 +105,7 @@ const TabListaoFrequencia = () => {
       componenteCurricular?.codigoComponenteCurricular
     )
       .catch(e => erros(e))
-      .finally(() => setExibirLoaderListaFrequencia(false));
+      .finally(() => setExibirLoaderGeral(false));
 
     if (resposta?.data) {
       const tiposFrequencia = await ServicoFrequencia.obterTipoFrequencia(
@@ -121,7 +121,13 @@ const TabListaoFrequencia = () => {
     } else {
       setDadosFrequencia();
     }
-  }, [componenteCurricular, turma, turmaSelecionada, periodo]);
+  }, [
+    componenteCurricular,
+    turma,
+    turmaSelecionada,
+    periodo,
+    setExibirLoaderGeral,
+  ]);
 
   useEffect(() => {
     if (
@@ -160,9 +166,9 @@ const TabListaoFrequencia = () => {
         <></>
       )}
       <Col span={24}>
-        <Row gutter={[16, 16]}>
+        <Row gutter={[24, 24]}>
           <Col sm={24} md={12} lg={8}>
-            <Loader loading={exibirLoaderPeriodo} tip="">
+            <Loader loading={exibirLoaderPeriodo} ignorarTip>
               <SelectComponent
                 label="Período"
                 id={SGP_SELECT_PERIODO_POR_COMPONENTE_CURRICULAR}

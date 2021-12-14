@@ -36,6 +36,7 @@ const ListaoContextProvider = ({ children }) => {
 
   // Utilizado para carregar os filtros novamente quando voltar para a tela de listagem de componentes!
   const [carregarFiltrosSalvos, setCarregarFiltrosSalvos] = useState(false);
+  const [exibirLoaderGeral, setExibirLoaderGeral] = useState(false);
 
   const obterBimestres = mod => {
     const bi = [];
@@ -98,6 +99,8 @@ const ListaoContextProvider = ({ children }) => {
         listaComponenteCurricular,
         setListaComponenteCurricular,
         obterBimestres,
+        exibirLoaderGeral,
+        setExibirLoaderGeral,
       }}
     >
       {children}
