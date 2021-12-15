@@ -211,7 +211,9 @@ const PendenciasGerais = () => {
                   valueSelect={codigoTurma}
                   onChange={onChangeTurma}
                   placeholder="Selecione a turma"
-                  disabled={listaTurmas?.length === 1}
+                  disabled={
+                    listaTurmas?.length === 1 || listaTurmas?.length === 0
+                  }
                   showSearch
                 />
               </Loader>
@@ -221,7 +223,7 @@ const PendenciasGerais = () => {
                 name="nomeTitulo"
                 id={SGP_SELECT_NOME_TIPO_PENDENCIA}
                 label="Título"
-                placeholder="Nome do Título"
+                placeholder="Digite o título da pendência"
                 iconeBusca
                 allowClear
                 onChange={onChangeTitulo}
