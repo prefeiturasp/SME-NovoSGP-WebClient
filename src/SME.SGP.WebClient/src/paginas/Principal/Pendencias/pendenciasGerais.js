@@ -101,13 +101,13 @@ const PendenciasGerais = () => {
 
   const titutoPersonalizado = item => {
     let valorTitulo = item.titulo;
-    if (item.titulo.length > 80)
-      valorTitulo = `${item.titulo.substr(0, 80)}...`;
+    if (item.titulo.length > 35)
+      valorTitulo = `${item.titulo.substr(0, 35)}...`;
     return (
       <div className="row pl-2">
         {item.tipo ? (
           <>
-            <span style={{ color: Base.Roxo }}>Tipo:</span>
+            <span style={{ color: Base.Roxo }}>Tipo:&nbsp;</span>
             {item.tipo}
             <span className="mr-3 ml-3">|</span>
           </>
@@ -116,7 +116,7 @@ const PendenciasGerais = () => {
         )}
         {item.turma ? (
           <>
-            <span style={{ color: Base.Roxo }}>Turma:</span>
+            <span style={{ color: Base.Roxo }}>Turma:&nbsp;</span>
             {item.turma}
             <span className="mr-3 ml-3">|</span>
           </>
@@ -125,7 +125,7 @@ const PendenciasGerais = () => {
         )}
         {item.bimestre ? (
           <>
-            <span style={{ color: Base.Roxo }}>Bimestre:</span>
+            <span style={{ color: Base.Roxo }}>Bimestre:&nbsp;</span>
             {item.bimestre}
             <span className="mr-3 ml-3">|</span>
           </>
@@ -134,7 +134,7 @@ const PendenciasGerais = () => {
         )}
         {item.titulo ? (
           <>
-            <span style={{ color: Base.Roxo }}>Título:</span>
+            <span style={{ color: Base.Roxo }}>Título:&nbsp;</span>
             <Tooltip title={item.titulo}>{valorTitulo}</Tooltip>
           </>
         ) : (
