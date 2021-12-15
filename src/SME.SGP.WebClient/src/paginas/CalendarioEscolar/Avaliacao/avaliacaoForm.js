@@ -477,7 +477,6 @@ const AvaliacaoForm = ({ match, location }) => {
     );
     setDesabilitarCampos(turmaInfantil || !podeEditarAvaliacao);
 
-    console.log(podeEditarAvaliacao);
 
     if (turmaInfantil && refForm && refForm.resetForm) {
       refForm.resetForm();
