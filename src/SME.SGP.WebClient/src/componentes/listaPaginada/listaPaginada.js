@@ -129,7 +129,7 @@ const ListaPaginada = props => {
       })
       .finally(() => setCarregando(false));
   };
-  console.log(linhas);
+
   useEffect(() => {
     if (filtroEhValido) {
       filtrar();
