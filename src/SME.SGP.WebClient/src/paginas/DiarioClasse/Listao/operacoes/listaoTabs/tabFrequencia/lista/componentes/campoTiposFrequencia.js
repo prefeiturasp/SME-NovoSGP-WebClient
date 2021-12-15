@@ -1,18 +1,14 @@
 import { Button } from 'antd';
 import PropTypes from 'prop-types';
-import React, { useState } from 'react';
+import React from 'react';
 import { Base } from '~/componentes/colors';
 import tipoFrequenciaDto from '~/dtos/tipoFrequencia';
 
 const CampoTiposFrequencia = props => {
   const { onChange, desabilitar, listaTiposFrequencia, tipoFrequencia } = props;
 
-  const [tipoFrequenciaAtual, setTipoFrequenciaAtual] = useState(
-    tipoFrequencia
-  );
-
   const obterCorAtual = tipo => {
-    if (tipo.valor === tipoFrequenciaAtual) {
+    if (tipo.valor === tipoFrequencia) {
       return tipo.cor;
     }
 
@@ -25,7 +21,6 @@ const CampoTiposFrequencia = props => {
   const onClick = valor => {
     if (!desabilitar) {
       onChange(valor);
-      setTipoFrequenciaAtual(valor);
     }
   };
 

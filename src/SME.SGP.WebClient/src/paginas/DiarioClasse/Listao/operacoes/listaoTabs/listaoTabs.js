@@ -1,9 +1,10 @@
 import { Col, Tabs } from 'antd';
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { ContainerTabsCard } from '~/componentes/tabs/tabs.css';
 import { BIMESTRE_FINAL } from '~/constantes';
 import { ModalidadeDTO } from '~/dtos';
+import { ehTurmaInfantil } from '~/servicos';
 import {
   LISTAO_TAB_AVALIACOES,
   LISTAO_TAB_DIARIO_BORDO,
@@ -25,12 +26,25 @@ const ListaoTabs = () => {
   const { turmaSelecionada } = usuario;
   const { modalidade } = turmaSelecionada;
 
+  const modalidadesFiltroPrincipal = useSelector(
+    state => state.filtro.modalidades
+  );
+
   const {
     tabAtual,
     setTabAtual,
     bimestreOperacoes,
     componenteCurricular,
+    setListaoEhInfantil,
   } = useContext(ListaoContext);
+
+  useEffect(() => {
+    const ehInfantil = ehTurmaInfantil(
+      modalidadesFiltroPrincipal,
+      turmaSelecionada
+    );
+    setListaoEhInfantil(ehInfantil);
+  }, [modalidadesFiltroPrincipal, turmaSelecionada]);
 
   const desabilitarTabs = !componenteCurricular || !bimestreOperacoes;
 

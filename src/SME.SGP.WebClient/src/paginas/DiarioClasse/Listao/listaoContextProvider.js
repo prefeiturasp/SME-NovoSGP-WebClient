@@ -38,6 +38,13 @@ const ListaoContextProvider = ({ children }) => {
   const [carregarFiltrosSalvos, setCarregarFiltrosSalvos] = useState(false);
   const [exibirLoaderGeral, setExibirLoaderGeral] = useState(false);
 
+  // TAB FREQUÊNCIA
+  const [listaPeriodos, setListaPeriodos] = useState([]);
+  const [periodo, setPeriodo] = useState();
+  const [dadosFrequencia, setDadosFrequencia] = useState();
+
+  const [listaoEhInfantil, setListaoEhInfantil] = useState();
+
   const obterBimestres = mod => {
     const bi = [];
     bi.push({ descricao: '1º', valor: 1 });
@@ -101,6 +108,15 @@ const ListaoContextProvider = ({ children }) => {
         obterBimestres,
         exibirLoaderGeral,
         setExibirLoaderGeral,
+        listaoEhInfantil,
+        setListaoEhInfantil,
+        // TAB FREQUÊNCIA,
+        listaPeriodos,
+        setListaPeriodos,
+        periodo,
+        setPeriodo,
+        dadosFrequencia,
+        setDadosFrequencia,
       }}
     >
       {children}
