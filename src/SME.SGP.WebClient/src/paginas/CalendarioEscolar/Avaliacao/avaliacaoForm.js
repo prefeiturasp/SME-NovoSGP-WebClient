@@ -41,6 +41,7 @@ const AvaliacaoForm = ({ match, location }) => {
   const [refForm, setRefForm] = useState({});
 
   const [desabilitarCampos, setDesabilitarCampos] = useState(false);
+  const [podeEditarAvaliacao, setPodeEditarAvaliacao] = useState(true);
   const [importado, setImportado] = useState(false);
   const [modoEdicao, setModoEdicao] = useState(false);
   const [dentroPeriodo, setDentroPeriodo] = useState(true);
@@ -445,6 +446,7 @@ const AvaliacaoForm = ({ match, location }) => {
           criadoPor: `${avaliacao.data.criadoPor} (${avaliacao.data.criadoRF})`,
         });
         setDentroPeriodo(avaliacao.data.dentroPeriodo);
+        setPodeEditarAvaliacao(avaliacao.data.podeEditarAvaliacao);
         setAtividadesRegencia(avaliacao.data.atividadesRegencia);
         if (
           avaliacao.data.atividadesRegencia &&
@@ -473,14 +475,16 @@ const AvaliacaoForm = ({ match, location }) => {
       modalidadesFiltroPrincipal,
       turmaSelecionada
     );
-    setDesabilitarCampos(turmaInfantil);
+    setDesabilitarCampos(turmaInfantil || !podeEditarAvaliacao);
+
+    console.log(podeEditarAvaliacao);
 
     if (turmaInfantil && refForm && refForm.resetForm) {
       refForm.resetForm();
       setDescricao('');
       setModoEdicao(false);
     }
-  }, [turmaSelecionada, modalidadesFiltroPrincipal, refForm, inicial]);
+  }, [turmaSelecionada, modalidadesFiltroPrincipal, refForm, inicial, podeEditarAvaliacao]);
 
   const selecionarDisciplina = indice => {
     const disciplinas = [...listaDisciplinasRegencia];
