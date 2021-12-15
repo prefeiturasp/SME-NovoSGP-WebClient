@@ -21,7 +21,7 @@ const BreadcrumbBody = styled.div`
     text-decoration: underline;
   }
   .icone-seta {
-    margin-right: 10px;
+    margin-right: 0px;
     margin-left: 10px;
     color: ${Base.Roxo};
   }
@@ -186,7 +186,6 @@ const BreadcrumbSgp = () => {
           <Breadcrumb.Item
             key={item.path}
             separator=""
-            hidden={ocultarBreadcrumb()}
           >
             <Link
               hidden={item.ehEstatico}
@@ -207,7 +206,9 @@ const BreadcrumbSgp = () => {
               className={item.icone}
               title={item.dicaIcone}
             />
-            <span hidden={!item.ehEstatico || item.path === '/'}>
+            <span 
+              hidden={!item.ehEstatico}
+              style={{ marginLeft: 8 }}>
               {item.breadcrumbName}
             </span>
             <i

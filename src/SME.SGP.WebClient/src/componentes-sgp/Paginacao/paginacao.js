@@ -57,11 +57,11 @@ Paginacao.propTypes = {
 
 Paginacao.defaultProps = {
   numeroPagina: 1,
-  numeroRegistros: 0,
+  numeroRegistros: 10,
   onChangePaginacao: () => {},
   mostrarNumeroLinhas: false,
   onChangeNumeroLinhas: () => {},
-  pageSize: 5,
+  pageSize: 10,
 };
 
 export default Paginacao;
