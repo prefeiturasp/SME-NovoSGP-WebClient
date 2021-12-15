@@ -1,13 +1,10 @@
 import { faAngleDown, faAngleUp } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import PropTypes from 'prop-types';
 import React, { useContext, useState } from 'react';
-import { DataTable, Loader } from '~/componentes';
+import { DataTable } from '~/componentes';
 import { Base } from '~/componentes/colors';
 import tipoIndicativoFrequencia from '~/dtos/tipoIndicativoFrequencia';
 import ListaoContext from '~/paginas/DiarioClasse/Listao/listaoContext';
-import { erros } from '~/servicos';
-import ServicoFrequencia from '~/servicos/Paginas/DiarioClasse/ServicoFrequencia';
 import CampoTiposFrequencia from './componentes/campoTiposFrequencia';
 import {
   IndicativoAlerta,
@@ -16,34 +13,73 @@ import {
   TextoEstilizado,
 } from './listaFrequencia.css';
 
-const ListaoListaFrequencia = props => {
-  const { ehInfantil, dataSource, listaTiposFrequencia, periodo } = props;
+const ListaoListaFrequencia = () => {
+  const {
+    componenteCurricular,
+    dadosFrequencia,
+    setDadosFrequencia,
+    listaoEhInfantil,
+  } = useContext(ListaoContext);
 
-  const { componenteCurricular } = useContext(ListaoContext);
-  const [carregandoDetalhamento, setCarregandoDetalhamento] = useState(false);
   const [dadosDetalheEstudante, setDadosDetalheEstudante] = useState([]);
 
   const montarTituloEstudante = () => {
     return (
       <span className="fonte-16">
-        Nome {ehInfantil ? 'da criança' : 'do estudante'}
+        Nome {listaoEhInfantil ? 'da criança' : 'do estudante'}
       </span>
     );
   };
 
   const montarColunaFrequenciaDiaria = (
-    dadosDiaAula,
     indexEstudante,
-    indexAula
+    indexAula,
+    dataAula,
+    dadosDiaAula
   ) => {
     return (
       <CampoTiposFrequencia
         tipoFrequencia={dadosDiaAula.tipoFrequencia}
-        listaTiposFrequencia={listaTiposFrequencia}
+        listaTiposFrequencia={dadosFrequencia?.listaTiposFrequencia}
         onChange={valorNovo => {
-          const regAtual = { ...dadosDiaAula, tipoFrequencia: valorNovo };
-          dataSource[indexEstudante].aulas[indexAula] = { ...regAtual };
-          // TODO setar modo edição true para a tab de frequencia! Não setar valor assim, trocar para setar no useState e no context!
+          const dados = dadosFrequencia;
+          dados.listaFrequencia[indexEstudante].aulas[
+            indexAula
+          ].tipoFrequencia = valorNovo;
+
+          if (dados.listaFrequencia[indexEstudante]?.detalhesAulas?.length) {
+            const dataParaSetarFreq = dados.listaFrequencia[
+              indexEstudante
+            ].detalhesAulas.find(d => d.dataAula === dataAula);
+
+            if (dataParaSetarFreq) {
+              const indexData = dados.listaFrequencia[
+                indexEstudante
+              ].detalhesAulas.indexOf(dataParaSetarFreq);
+
+              const { aulas } = dados.listaFrequencia[
+                indexEstudante
+              ].detalhesAulas[indexData];
+
+              aulas.forEach(aula => {
+                aula.tipoFrequencia = valorNovo;
+              });
+            }
+          }
+          setDadosFrequencia({ ...dados });
+        }}
+      />
+    );
+  };
+
+  const montarColunaFrequenciaAula = dadosAula => {
+    return (
+      <CampoTiposFrequencia
+        tipoFrequencia={dadosAula.tipoFrequencia}
+        listaTiposFrequencia={dadosFrequencia?.listaTiposFrequencia}
+        onChange={valorNovo => {
+          dadosAula.tipoFrequencia = valorNovo;
+          setDadosFrequencia({ ...dadosFrequencia });
         }}
       />
     );
@@ -60,11 +96,15 @@ const ListaoListaFrequencia = props => {
     {
       title: montarTituloEstudante,
       dataIndex: 'nomeAluno',
+      width: '350px',
     },
   ];
 
-  if (dataSource[0]?.aulas?.length && componenteCurricular.registraFrequencia) {
-    dataSource[0].aulas.forEach((aula, indexAula) => {
+  if (
+    dadosFrequencia?.listaFrequencia?.[0]?.aulas?.length &&
+    componenteCurricular.registraFrequencia
+  ) {
+    dadosFrequencia.listaFrequencia[0].aulas.forEach((aula, indexAula) => {
       colunasEstudantes.push({
         title: () => (
           <span className="fonte-16">
@@ -75,11 +115,14 @@ const ListaoListaFrequencia = props => {
         dataIndex: `aulas.${indexAula}`,
         width: '150px',
         render: (dadosDiaAula, estudante) => {
-          const indexEstudante = dataSource.indexOf(estudante);
+          const indexEstudante = dadosFrequencia.listaFrequencia.indexOf(
+            estudante
+          );
           return montarColunaFrequenciaDiaria(
-            dadosDiaAula,
             indexEstudante,
-            indexAula
+            indexAula,
+            aula.dataAula,
+            dadosDiaAula
           );
         },
       });
@@ -94,27 +137,10 @@ const ListaoListaFrequencia = props => {
 
   const [expandedRowKeys, setExpandedRowKeys] = useState([]);
 
-  const obterDetalhamento = async dadosEstudante => {
-    setCarregandoDetalhamento(true);
-    const resultado = await ServicoFrequencia.obterFrequenciaDetalhadaAluno(
-      dadosEstudante.codigoAluno,
-      periodo?.dataInicio,
-      periodo?.dataFim
-    )
-      .catch(e => erros(e))
-      .finally(() => setCarregandoDetalhamento(false));
-
-    if (resultado?.data?.length) {
-      setDadosDetalheEstudante(resultado.data);
-    } else {
-      setDadosDetalheEstudante([]);
-    }
-  };
-
   const onClickExpandir = (expandir, dadosEstudante) => {
     if (expandir) {
       setExpandedRowKeys([dadosEstudante?.codigoAluno]);
-      obterDetalhamento(dadosEstudante);
+      setDadosDetalheEstudante(dadosEstudante.detalhesAulas);
     } else {
       setExpandedRowKeys([]);
     }
@@ -159,32 +185,57 @@ const ListaoListaFrequencia = props => {
       dataIndex: 'dataAula',
       align: 'left',
       ellipsis: true,
-      width: 100,
       render: dataAula => window.moment(dataAula).format('DD/MM/YYYY'),
-    },
-    {
-      title: 'Aula',
-      dataIndex: 'numeroAula',
-      align: 'center',
-      width: '150px',
-    },
-    {
-      title: '%',
-      align: 'center',
-      width: '75px',
-      render: montarColunaFrequencia,
     },
   ];
 
-  return dataSource?.length ? (
-    <LinhaTabela className="col-md-12">
+  if (dadosDetalheEstudante?.[0]?.aulas?.length) {
+    let indexDiaMaiorQtdAulas = 0;
+    let totalAulas = 0;
+    dadosDetalheEstudante.forEach((item, i) => {
+      if (item.aulas.length > totalAulas) {
+        totalAulas = item.aulas.length;
+        indexDiaMaiorQtdAulas = i;
+      }
+    });
+
+    dadosDetalheEstudante[indexDiaMaiorQtdAulas].aulas.forEach(
+      (aula, indexAula) => {
+        colunasDetalhamentoEstudante.push({
+          title: `Aula ${aula.numeroAula}`,
+          align: 'center',
+          dataIndex: `aulas.${indexAula}`,
+          width: '150px',
+          render: dadosAula => {
+            if (dadosAula?.numeroAula) {
+              return montarColunaFrequenciaAula(dadosAula);
+            }
+
+            return '-';
+          },
+        });
+      }
+    );
+  }
+
+  colunasDetalhamentoEstudante.push({
+    title: '%',
+    align: 'center',
+    width: '70px',
+    render: montarColunaFrequencia,
+  });
+
+  return dadosFrequencia?.listaFrequencia?.length ? (
+    <LinhaTabela className="col-md-12 p-0">
       <DataTable
         idLinha="codigoAluno"
         columns={colunasEstudantes}
-        dataSource={dataSource}
+        dataSource={dadosFrequencia.listaFrequencia}
         pagination={false}
         semHover
-        expandIconColumnIndex={7}
+        expandIconColumnIndex={
+          dadosFrequencia?.listaFrequencia?.[0]?.aulas?.length + 3 || null
+        }
         expandedRowKeys={expandedRowKeys}
         onClickExpandir={onClickExpandir}
         rowClassName={(record, _) => {
@@ -193,17 +244,15 @@ const ListaoListaFrequencia = props => {
           return nomeClasse;
         }}
         expandedRowRender={estudante => (
-          <Loader loading={carregandoDetalhamento}>
-            <DataTable
-              id={`tabela-aluno-${estudante?.codigoAluno}`}
-              idLinha="dataAula"
-              pagination={false}
-              columns={colunasDetalhamentoEstudante}
-              dataSource={dadosDetalheEstudante}
-              semHover
-              tableLayout="fixed"
-            />
-          </Loader>
+          <DataTable
+            id={`tabela-aluno-${estudante?.codigoAluno}`}
+            idLinha="dataAula"
+            pagination={false}
+            columns={colunasDetalhamentoEstudante}
+            dataSource={dadosDetalheEstudante}
+            semHover
+            tableLayout="fixed"
+          />
         )}
         expandIcon={({ expanded, onExpand, record }) =>
           expandIcon(expanded, onExpand, record)
@@ -213,20 +262,6 @@ const ListaoListaFrequencia = props => {
   ) : (
     <></>
   );
-};
-
-ListaoListaFrequencia.propTypes = {
-  dataSource: PropTypes.oneOfType([PropTypes.array]),
-  ehInfantil: PropTypes.oneOfType([PropTypes.bool]),
-  listaTiposFrequencia: PropTypes.oneOfType([PropTypes.array]),
-  periodo: PropTypes.oneOfType([PropTypes.any]),
-};
-
-ListaoListaFrequencia.defaultProps = {
-  dataSource: [],
-  ehInfantil: false,
-  listaTiposFrequencia: [],
-  periodo: null,
 };
 
 export default ListaoListaFrequencia;

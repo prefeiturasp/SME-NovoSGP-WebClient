@@ -36,6 +36,14 @@ const ListaoContextProvider = ({ children }) => {
 
   // Utilizado para carregar os filtros novamente quando voltar para a tela de listagem de componentes!
   const [carregarFiltrosSalvos, setCarregarFiltrosSalvos] = useState(false);
+  const [exibirLoaderGeral, setExibirLoaderGeral] = useState(false);
+
+  // TAB FREQUÊNCIA
+  const [listaPeriodos, setListaPeriodos] = useState([]);
+  const [periodo, setPeriodo] = useState();
+  const [dadosFrequencia, setDadosFrequencia] = useState();
+
+  const [listaoEhInfantil, setListaoEhInfantil] = useState();
 
   const obterBimestres = mod => {
     const bi = [];
@@ -98,6 +106,17 @@ const ListaoContextProvider = ({ children }) => {
         listaComponenteCurricular,
         setListaComponenteCurricular,
         obterBimestres,
+        exibirLoaderGeral,
+        setExibirLoaderGeral,
+        listaoEhInfantil,
+        setListaoEhInfantil,
+        // TAB FREQUÊNCIA,
+        listaPeriodos,
+        setListaPeriodos,
+        periodo,
+        setPeriodo,
+        dadosFrequencia,
+        setDadosFrequencia,
       }}
     >
       {children}

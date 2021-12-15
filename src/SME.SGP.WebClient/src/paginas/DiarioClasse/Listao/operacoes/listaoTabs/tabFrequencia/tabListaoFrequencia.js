@@ -14,17 +14,19 @@ const TabListaoFrequencia = () => {
   const { turmaSelecionada } = usuario;
   const { turma } = turmaSelecionada;
 
-  const { componenteCurricular, bimestreOperacoes } = useContext(ListaoContext);
+  const {
+    componenteCurricular,
+    bimestreOperacoes,
+    setExibirLoaderGeral,
+    listaPeriodos,
+    setListaPeriodos,
+    periodo,
+    setPeriodo,
+    dadosFrequencia,
+    setDadosFrequencia,
+  } = useContext(ListaoContext);
 
   const [exibirLoaderPeriodo, setExibirLoaderPeriodo] = useState(false);
-  const [listaPeriodos, setListaPeriodos] = useState([]);
-  const [periodo, setPeriodo] = useState();
-
-  const [
-    exibirLoaderListaFrequencia,
-    setExibirLoaderListaFrequencia,
-  ] = useState(false);
-  const [dadosFrequencia, setDadosFrequencia] = useState();
 
   const desabilitarPeriodo =
     !turma ||
@@ -97,7 +99,7 @@ const TabListaoFrequencia = () => {
   };
 
   const obterFrequenciasPorPeriodo = useCallback(async () => {
-    setExibirLoaderListaFrequencia(true);
+    setExibirLoaderGeral(true);
     const resposta = await ServicoFrequencia.obterFrequenciasPorPeriodo(
       periodo?.dataInicio,
       periodo?.dataFim,
@@ -105,7 +107,7 @@ const TabListaoFrequencia = () => {
       componenteCurricular?.codigoComponenteCurricular
     )
       .catch(e => erros(e))
-      .finally(() => setExibirLoaderListaFrequencia(false));
+      .finally(() => setExibirLoaderGeral(false));
 
     if (resposta?.data) {
       const tiposFrequencia = await ServicoFrequencia.obterTipoFrequencia(
@@ -117,11 +119,88 @@ const TabListaoFrequencia = () => {
         ? tiposFrequencia.data
         : [];
 
+      // TODO - Remover - início!
+      resposta.data.listaFrequencia.forEach(item => {
+        const detalheAluno = [
+          {
+            dataAula: '2021-12-07T00:00:00',
+            indicativoFrequencia: {
+              percentual: '100',
+              tipo: 3,
+            },
+            aulas: [
+              {
+                numeroAula: 1,
+                tipoFrequencia: 'C',
+              },
+              {
+                numeroAula: 2,
+                tipoFrequencia: 'C',
+              },
+            ],
+          },
+          {
+            dataAula: '2021-12-14T00:00:00',
+            indicativoFrequencia: {
+              percentual: '90',
+              tipo: 3,
+            },
+            aulas: [
+              {
+                numeroAula: 1,
+                tipoFrequencia: 'C',
+              },
+              {
+                numeroAula: 2,
+                tipoFrequencia: 'C',
+              },
+              {
+                numeroAula: 3,
+                tipoFrequencia: 'F',
+              },
+            ],
+          },
+          {
+            dataAula: '2021-12-08T00:00:00',
+            indicativoFrequencia: {
+              percentual: '90',
+              tipo: 3,
+            },
+            aulas: [
+              {
+                numeroAula: 1,
+                tipoFrequencia: 'C',
+              },
+              {
+                numeroAula: 2,
+                tipoFrequencia: 'C',
+              },
+              {
+                numeroAula: 3,
+                tipoFrequencia: 'C',
+              },
+              {
+                numeroAula: 4,
+                tipoFrequencia: 'C',
+              },
+            ],
+          },
+        ];
+        item.detalhesAulas = detalheAluno;
+      });
+      // TODO - Remover - fim!
+
       setDadosFrequencia(resposta.data);
     } else {
       setDadosFrequencia();
     }
-  }, [componenteCurricular, turma, turmaSelecionada, periodo]);
+  }, [
+    componenteCurricular,
+    turma,
+    turmaSelecionada,
+    periodo,
+    setExibirLoaderGeral,
+  ]);
 
   useEffect(() => {
     if (
@@ -159,33 +238,27 @@ const TabListaoFrequencia = () => {
       ) : (
         <></>
       )}
-      <Col span={24}>
-        <Row gutter={[16, 16]}>
-          <Col sm={24} md={12} lg={8}>
-            <Loader loading={exibirLoaderPeriodo} tip="">
-              <SelectComponent
-                label="Período"
-                id={SGP_SELECT_PERIODO_POR_COMPONENTE_CURRICULAR}
-                lista={listaPeriodos}
-                valueOption="id"
-                valueText="periodoEscolar"
-                valueSelect={periodo?.id}
-                onChange={onChangePeriodo}
-                placeholder="Selecione um Período"
-                showSearch
-                disabled={desabilitarPeriodo}
-              />
-            </Loader>
-          </Col>
-        </Row>
-      </Col>
+      <Row gutter={[24, 24]}>
+        <Col sm={24} md={12} lg={8}>
+          <Loader loading={exibirLoaderPeriodo} ignorarTip>
+            <SelectComponent
+              label="Período"
+              id={SGP_SELECT_PERIODO_POR_COMPONENTE_CURRICULAR}
+              lista={listaPeriodos}
+              valueOption="id"
+              valueText="periodoEscolar"
+              valueSelect={periodo?.id}
+              onChange={onChangePeriodo}
+              placeholder="Selecione um Período"
+              showSearch
+              disabled={desabilitarPeriodo}
+            />
+          </Loader>
+        </Col>
+      </Row>
+
       {dadosFrequencia?.listaFrequencia?.length ? (
-        <ListaoListaFrequencia
-          ehInfantil={false}
-          dataSource={dadosFrequencia?.listaFrequencia}
-          listaTiposFrequencia={dadosFrequencia?.listaTiposFrequencia}
-          periodo={periodo}
-        />
+        <ListaoListaFrequencia />
       ) : (
         <></>
       )}

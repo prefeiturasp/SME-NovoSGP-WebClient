@@ -1,5 +1,5 @@
 import { Col, Row } from 'antd';
-import React from 'react';
+import React, { useContext } from 'react';
 import { Button, Colors } from '~/componentes';
 import {
   SGP_BUTTON_CANCELAR,
@@ -8,8 +8,15 @@ import {
 } from '~/componentes-sgp/filtro/idsCampos';
 import { RotasDto } from '~/dtos';
 import { history } from '~/servicos';
+import ListaoContext from '../listaoContext';
 
 const ListaoOperacoesBotoesAcao = () => {
+  const { dadosFrequencia } = useContext(ListaoContext);
+
+  const onClickSalvar = () => {
+    // SALVAR!
+    console.log(dadosFrequencia);
+  };
   const onClickVoltar = () => history.push(RotasDto.LISTAO);
 
   return (
@@ -31,6 +38,7 @@ const ListaoOperacoesBotoesAcao = () => {
             label="Cancelar"
             color={Colors.Azul}
             border
+            onClick={onClickSalvar}
           />
         </Col>
         <Col>
