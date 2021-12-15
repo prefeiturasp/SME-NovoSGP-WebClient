@@ -156,28 +156,25 @@ const FechamentoFinal = forwardRef((props, ref) => {
   };
 
   const onChangeNotaAluno = (aluno, nota, disciplina) => {
-    if (nota !== null) {
-      const notas = notasEmEdicao;
-      const notaEmEdicao = notasEmEdicao.find(
-        c =>
-          c.alunoRf == aluno.codigo &&
-          c.componenteCurricularCodigo == disciplina
-      );
-      if (notaEmEdicao) {
-        notaEmEdicao.conceitoId = ehNota ? '' : Number(nota);
-        notaEmEdicao.nota = ehNota ? nota : '';
-      } else {
-        notas.push({
-          alunoRf: aluno.codigo,
-          componenteCurricularCodigo: disciplina,
-          conceitoId: ehNota ? '' : Number(nota),
-          nota: ehNota ? nota : '',
-        });
-      }
-
-      setNotasEmEdicao([...notas]);
-      onChange(notas);
+    const notas = notasEmEdicao;
+    const notaEmEdicao = notasEmEdicao.find(
+      c =>
+        c.alunoRf == aluno.codigo && c.componenteCurricularCodigo == disciplina
+    );
+    if (notaEmEdicao) {
+      notaEmEdicao.conceitoId = ehNota ? '' : Number(nota);
+      notaEmEdicao.nota = ehNota ? nota : '';
+    } else {
+      notas.push({
+        alunoRf: aluno.codigo,
+        componenteCurricularCodigo: disciplina,
+        conceitoId: ehNota ? '' : Number(nota),
+        nota: ehNota ? nota : '',
+      });
     }
+
+    setNotasEmEdicao([...notas]);
+    onChange(notas);
   };
   return (
     <>
