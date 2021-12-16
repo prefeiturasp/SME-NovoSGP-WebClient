@@ -1,11 +1,13 @@
 import { faAngleDown, faAngleUp } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React, { useContext, useState } from 'react';
+import { useDispatch } from 'react-redux';
 import { DataTable } from '~/componentes';
 import { Base } from '~/componentes/colors';
 import tipoIndicativoFrequencia from '~/dtos/tipoIndicativoFrequencia';
 import ListaoContext from '~/paginas/DiarioClasse/Listao/listaoContext';
 import CampoTiposFrequencia from './componentes/campoTiposFrequencia';
+import { setTelaEmEdicao } from '~/redux/modulos/geral/actions';
 import {
   IndicativoAlerta,
   IndicativoCritico,
@@ -20,6 +22,8 @@ const ListaoListaFrequencia = () => {
     setDadosFrequencia,
     listaoEhInfantil,
   } = useContext(ListaoContext);
+
+  const dispatch = useDispatch();
 
   const [dadosDetalheEstudante, setDadosDetalheEstudante] = useState([]);
 
@@ -66,6 +70,7 @@ const ListaoListaFrequencia = () => {
               });
             }
           }
+          dispatch(setTelaEmEdicao(true));
           setDadosFrequencia({ ...dados });
         }}
       />
@@ -79,6 +84,7 @@ const ListaoListaFrequencia = () => {
         listaTiposFrequencia={dadosFrequencia?.listaTiposFrequencia}
         onChange={valorNovo => {
           dadosAula.tipoFrequencia = valorNovo;
+          dispatch(setTelaEmEdicao(true));
           setDadosFrequencia({ ...dadosFrequencia });
         }}
       />
