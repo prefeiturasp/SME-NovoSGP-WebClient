@@ -30,6 +30,7 @@ const ListaoContextProvider = ({ children }) => {
     []
   );
 
+  const [permissaoTela, setPermissaoTela] = useState();
   const [bimestreOperacoes, setBimestreOperacoes] = useState();
 
   const [tabAtual, setTabAtual] = useState();
@@ -117,6 +118,8 @@ const ListaoContextProvider = ({ children }) => {
         setPeriodo,
         dadosFrequencia,
         setDadosFrequencia,
+        permissaoTela,
+        setPermissaoTela,
       }}
     >
       {children}
