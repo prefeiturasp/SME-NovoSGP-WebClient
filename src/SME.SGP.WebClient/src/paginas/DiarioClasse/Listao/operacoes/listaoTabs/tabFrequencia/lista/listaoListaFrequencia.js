@@ -50,6 +50,9 @@ const ListaoListaFrequencia = () => {
           dados.listaFrequencia[indexEstudante].aulas[
             indexAula
           ].tipoFrequencia = valorNovo;
+          dados.listaFrequencia[indexEstudante].aulas[
+            indexAula
+          ].alterado = true;
 
           if (dados.listaFrequencia[indexEstudante]?.detalhesAulas?.length) {
             const dataParaSetarFreq = dados.listaFrequencia[
@@ -85,6 +88,7 @@ const ListaoListaFrequencia = () => {
         onChange={valorNovo => {
           dadosAula.tipoFrequencia = valorNovo;
           dispatch(setTelaEmEdicao(true));
+          dadosAula.alterado = true;
           setDadosFrequencia({ ...dadosFrequencia });
         }}
       />
@@ -146,7 +150,7 @@ const ListaoListaFrequencia = () => {
   const onClickExpandir = (expandir, dadosEstudante) => {
     if (expandir) {
       setExpandedRowKeys([dadosEstudante?.codigoAluno]);
-      setDadosDetalheEstudante(dadosEstudante.detalhesAulas);
+      setDadosDetalheEstudante(dadosEstudante.aulasDetalhes);
     } else {
       setExpandedRowKeys([]);
     }
