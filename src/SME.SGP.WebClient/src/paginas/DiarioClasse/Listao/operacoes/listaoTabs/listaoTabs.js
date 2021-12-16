@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux';
 import { ContainerTabsCard } from '~/componentes/tabs/tabs.css';
 import { BIMESTRE_FINAL } from '~/constantes';
 import { ModalidadeDTO } from '~/dtos';
-import { ehTurmaInfantil } from '~/servicos';
+import { confirmar, ehTurmaInfantil } from '~/servicos';
 import {
   LISTAO_TAB_AVALIACOES,
   LISTAO_TAB_DIARIO_BORDO,
@@ -25,6 +25,15 @@ const ListaoTabs = () => {
   const usuario = useSelector(store => store.usuario);
   const { turmaSelecionada } = usuario;
   const { modalidade } = turmaSelecionada;
+  const emEdicao = useSelector(store => store.geral.telaEmEdicao);
+
+  const pergutarParaSalvar = () => {
+    return confirmar(
+      'Atenção',
+      '',
+      'Suas alterações não foram salvas, deseja salvar agora?'
+    );
+  };
 
   const modalidadesFiltroPrincipal = useSelector(
     state => state.filtro.modalidades
@@ -75,7 +84,21 @@ const ListaoTabs = () => {
     return <Col span={24}>{elementoAtual}</Col>;
   };
 
-  const onChangeTab = tabAtiva => setTabAtual(tabAtiva);
+  const onChangeTab = async tabAtiva => {
+    if (emEdicao) {
+      const confirmado = await pergutarParaSalvar();
+      if (confirmado) {
+        const salvou = true; //TODO mudar para função correta
+        if (salvou) {
+          setTabAtual(tabAtiva);
+        }
+      } else {
+        setTabAtual(tabAtiva);
+      }
+    } else {
+      setTabAtual(tabAtiva);
+    }
+  };
 
   const montarTabs = () => {
     const ehBimestreFinal = bimestreOperacoes === String(BIMESTRE_FINAL);

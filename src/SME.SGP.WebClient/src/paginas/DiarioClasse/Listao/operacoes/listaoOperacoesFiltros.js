@@ -6,13 +6,22 @@ import {
   SGP_SELECT_BIMESTRE,
   SGP_SELECT_COMPONENTE_CURRICULAR,
 } from '~/componentes-sgp/filtro/idsCampos';
-import { erros, ServicoDisciplina } from '~/servicos';
+import { confirmar, erros, ServicoDisciplina } from '~/servicos';
 import ListaoContext from '../listaoContext';
 
 const ListaoOperacoesFiltros = () => {
   const usuario = useSelector(store => store.usuario);
   const { turmaSelecionada } = usuario;
   const { modalidade, turma } = turmaSelecionada;
+  const emEdicao = useSelector(store => store.geral.telaEmEdicao);
+
+  const pergutarParaSalvar = () => {
+    return confirmar(
+      'Atenção',
+      '',
+      'Suas alterações não foram salvas, deseja salvar agora?'
+    );
+  };
 
   const {
     obterBimestres,
@@ -124,7 +133,21 @@ const ListaoOperacoesFiltros = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [componenteCurricularInicial, listaComponenteCurricular]);
 
-  const onChangeBimestre = valor => setBimestreOperacoes(valor);
+  const onChangeBimestre = async valor => {
+    if (emEdicao) {
+      const confirmado = await pergutarParaSalvar();
+      if (confirmado) {
+        const salvou = true; //TODO mudar para função correta
+        if (salvou) {
+          setBimestreOperacoes(valor);
+        }
+      } else {
+        setBimestreOperacoes(valor);
+      }
+    } else {
+      setBimestreOperacoes(valor);
+    }
+  };
 
   const obterComponente = valor => {
     if (valor && listaComponenteCurricular?.length) {
@@ -138,12 +161,28 @@ const ListaoOperacoesFiltros = () => {
     return null;
   };
 
-  const onChangeComponenteCurricular = valor => {
-    const componenteAtual = obterComponente(valor);
-    if (componenteAtual) {
-      setComponenteCurricular({ ...componenteAtual });
+  const onChangeComponenteCurricular = async valor => {
+    const aposValidarSalvar = () => {
+      const componenteAtual = obterComponente(valor);
+      if (componenteAtual) {
+        setComponenteCurricular({ ...componenteAtual });
+      } else {
+        setComponenteCurricular();
+      }
+    };
+
+    if (emEdicao) {
+      const confirmado = await pergutarParaSalvar();
+      if (confirmado) {
+        const salvou = true; //TODO mudar para função correta
+        if (salvou) {
+          aposValidarSalvar();
+        }
+      } else {
+        aposValidarSalvar();
+      }
     } else {
-      setComponenteCurricular();
+      aposValidarSalvar();
     }
   };
 

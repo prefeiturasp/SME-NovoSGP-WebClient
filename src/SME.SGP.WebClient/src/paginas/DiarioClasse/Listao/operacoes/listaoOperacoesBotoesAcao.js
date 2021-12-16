@@ -1,5 +1,7 @@
 import { Col, Row } from 'antd';
 import React, { useContext } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { setTelaEmEdicao } from '~/redux/modulos/geral/actions';
 import { Button, Colors } from '~/componentes';
 import {
   SGP_BUTTON_CANCELAR,
@@ -7,17 +9,41 @@ import {
   SGP_BUTTON_VOLTAR,
 } from '~/componentes-sgp/filtro/idsCampos';
 import { RotasDto } from '~/dtos';
-import { history } from '~/servicos';
+import { confirmar, history } from '~/servicos';
 import ListaoContext from '../listaoContext';
 
 const ListaoOperacoesBotoesAcao = () => {
+  const dispatch = useDispatch();
   const { dadosFrequencia } = useContext(ListaoContext);
+  const emEdicao = useSelector(store => store.geral.telaEmEdicao);
+  const pergutarParaSalvar = () => {
+    return confirmar(
+      'Atenção',
+      '',
+      'Suas alterações não foram salvas, deseja salvar agora?'
+    );
+  };
 
   const onClickSalvar = () => {
     // SALVAR!
-    console.log(dadosFrequencia);
+    dispatch(setTelaEmEdicao(false));
   };
-  const onClickVoltar = () => history.push(RotasDto.LISTAO);
+
+  const onClickVoltar = async () => {
+    if (emEdicao) {
+      const confirmado = await pergutarParaSalvar();
+      if (confirmado) {
+        const salvou = true; //TODO mudar para função correta
+        if (salvou) {
+          history.push(RotasDto.LISTAO);
+        }
+      } else {
+        history.push(RotasDto.LISTAO);
+      }
+    } else {
+      history.push(RotasDto.LISTAO);
+    }
+  };
 
   return (
     <Col span={24}>
@@ -48,6 +74,7 @@ const ListaoOperacoesBotoesAcao = () => {
             color={Colors.Roxo}
             border
             bold
+            onClick={onClickSalvar}
           />
         </Col>
       </Row>

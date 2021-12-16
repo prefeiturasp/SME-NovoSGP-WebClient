@@ -3,7 +3,7 @@ import React, { useCallback, useContext, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Alert, Loader, SelectComponent } from '~/componentes';
 import { SGP_SELECT_PERIODO_POR_COMPONENTE_CURRICULAR } from '~/componentes-sgp/filtro/idsCampos';
-import { erros } from '~/servicos';
+import { confirmar, erros } from '~/servicos';
 import ServicoPeriodoEscolar from '~/servicos/Paginas/Calendario/ServicoPeriodoEscolar';
 import ServicoFrequencia from '~/servicos/Paginas/DiarioClasse/ServicoFrequencia';
 import ListaoContext from '../../../listaoContext';
@@ -11,8 +11,17 @@ import ListaoListaFrequencia from './lista/listaoListaFrequencia';
 
 const TabListaoFrequencia = () => {
   const usuario = useSelector(store => store.usuario);
+  const emEdicao = useSelector(store => store.geral.telaEmEdicao);
   const { turmaSelecionada } = usuario;
   const { turma } = turmaSelecionada;
+
+  const pergutarParaSalvar = () => {
+    return confirmar(
+      'Atenção',
+      '',
+      'Suas alterações não foram salvas, deseja salvar agora?'
+    );
+  };
 
   const {
     componenteCurricular,
@@ -89,12 +98,28 @@ const TabListaoFrequencia = () => {
     return null;
   };
 
-  const onChangePeriodo = valor => {
-    const periodoSelecionado = obterPeriodoSelecionado(valor);
-    if (periodoSelecionado) {
-      setPeriodo({ ...periodoSelecionado });
+  const onChangePeriodo = async valor => {
+    const aposValidarSalvar = () => {
+      const periodoSelecionado = obterPeriodoSelecionado(valor);
+      if (periodoSelecionado) {
+        setPeriodo({ ...periodoSelecionado });
+      } else {
+        setPeriodo();
+      }
+    };
+
+    if (emEdicao) {
+      const confirmado = await pergutarParaSalvar();
+      if (confirmado) {
+        const salvou = true; //TODO mudar para função correta
+        if (salvou) {
+          aposValidarSalvar();
+        }
+      } else {
+        aposValidarSalvar();
+      }
     } else {
-      setPeriodo();
+      aposValidarSalvar();
     }
   };
 
