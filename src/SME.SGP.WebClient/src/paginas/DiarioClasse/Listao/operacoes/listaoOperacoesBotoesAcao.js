@@ -18,7 +18,7 @@ import ServicoFrequencia from '~/servicos/Paginas/DiarioClasse/ServicoFrequencia
 
 const ListaoOperacoesBotoesAcao = () => {
   const dispatch = useDispatch();
-  const { dadosFrequencia } = useContext(ListaoContext);
+  const { dadosFrequencia, permissaoTela } = useContext(ListaoContext);
 
   const telaEmEdicao = useSelector(store => store.geral.telaEmEdicao);
 
@@ -139,6 +139,7 @@ const ListaoOperacoesBotoesAcao = () => {
             border
             bold
             onClick={onClickSalvar}
+            disabled={!permissaoTela.podeIncluir && !permissaoTela.podeAlterar}
           />
         </Col>
       </Row>
