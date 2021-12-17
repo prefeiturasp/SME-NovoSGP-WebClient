@@ -106,7 +106,7 @@ import EventosLista from '~/paginas/CalendarioEscolar/Eventos/lista/eventosLista
 import EventosCadastro from '~/paginas/CalendarioEscolar/Eventos/cadastro/eventosCadastro';
 import RelatorioAcompanhamentoRegistros from '~/paginas/Relatorios/Gestao/AcompanhamentoRegistros/acompanhamentoRegistros';
 import { CONTEXT_LISTAO } from '~/constantes';
-import ListaoOperacoes from '~/paginas/DiarioClasse/Listao/cadastro/listaoOperacoes';
+import ListaoOperacoes from '~/paginas/DiarioClasse/Listao/operacoes/listaoOperacoes';
 import Listao from '~/paginas/DiarioClasse/Listao/lista/listao';
 
 const rotas = new Map();

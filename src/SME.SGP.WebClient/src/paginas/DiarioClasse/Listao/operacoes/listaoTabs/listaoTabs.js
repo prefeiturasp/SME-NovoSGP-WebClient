@@ -1,9 +1,10 @@
 import { Col, Tabs } from 'antd';
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { ContainerTabsCard } from '~/componentes/tabs/tabs.css';
 import { BIMESTRE_FINAL } from '~/constantes';
 import { ModalidadeDTO } from '~/dtos';
+import { confirmar, ehTurmaInfantil } from '~/servicos';
 import {
   LISTAO_TAB_AVALIACOES,
   LISTAO_TAB_DIARIO_BORDO,
@@ -24,13 +25,36 @@ const ListaoTabs = () => {
   const usuario = useSelector(store => store.usuario);
   const { turmaSelecionada } = usuario;
   const { modalidade } = turmaSelecionada;
+  const telaEmEdicao = useSelector(store => store.geral.telaEmEdicao);
+  const acaoTelaEmEdicao = useSelector(store => store.geral.acaoTelaEmEdicao);
+
+  const pergutarParaSalvar = () => {
+    return confirmar(
+      'Atenção',
+      '',
+      'Suas alterações não foram salvas, deseja salvar agora?'
+    );
+  };
+
+  const modalidadesFiltroPrincipal = useSelector(
+    state => state.filtro.modalidades
+  );
 
   const {
     tabAtual,
     setTabAtual,
     bimestreOperacoes,
     componenteCurricular,
+    setListaoEhInfantil,
   } = useContext(ListaoContext);
+
+  useEffect(() => {
+    const ehInfantil = ehTurmaInfantil(
+      modalidadesFiltroPrincipal,
+      turmaSelecionada
+    );
+    setListaoEhInfantil(ehInfantil);
+  }, [modalidadesFiltroPrincipal, turmaSelecionada]);
 
   const desabilitarTabs = !componenteCurricular || !bimestreOperacoes;
 
@@ -61,7 +85,16 @@ const ListaoTabs = () => {
     return <Col span={24}>{elementoAtual}</Col>;
   };
 
-  const onChangeTab = tabAtiva => setTabAtual(tabAtiva);
+  const onChangeTab = async tabAtiva => {
+    if (telaEmEdicao) {
+      const salvou = await acaoTelaEmEdicao();
+      if (salvou) {
+        setTabAtual(tabAtiva);
+      }
+    } else {
+      setTabAtual(tabAtiva);
+    }
+  };
 
   const montarTabs = () => {
     const ehBimestreFinal = bimestreOperacoes === String(BIMESTRE_FINAL);

@@ -5,8 +5,8 @@ import { useSelector } from 'react-redux';
 import { DataTable } from '~/componentes';
 import tipoFrequencia from '~/dtos/tipoFrequencia';
 import tipoIndicativoFrequencia from '~/dtos/tipoIndicativoFrequencia';
-import ModalAnotacoesFrequencia from '~/paginas/DiarioClasse/FrequenciaPlanoAula/ModalAnotacoes/modalAnotacoes';
 import { verificaSomenteConsulta } from '~/servicos/servico-navegacao';
+import ModalAnotacoesListaFrequencia from './componentes/modalAnotacoesListaFrequencia';
 import SinalizacaoAEE from '../SinalizacaoAEE/sinalizacaoAEE';
 import BotaoAnotacao from './componentes/botaoAnotacao';
 import CampoPreDefinirFrequencia from './componentes/campoPreDefinirFrequencia';
@@ -357,7 +357,7 @@ const ListaFrequencia = props => {
 
   return (
     <>
-      <ModalAnotacoesFrequencia
+      <ModalAnotacoesListaFrequencia
         dadosListaFrequencia={dataSource}
         ehInfantil={ehInfantil}
         aulaId={aulaId}

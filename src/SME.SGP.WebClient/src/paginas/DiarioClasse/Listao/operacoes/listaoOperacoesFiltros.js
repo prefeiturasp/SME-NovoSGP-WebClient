@@ -6,13 +6,15 @@ import {
   SGP_SELECT_BIMESTRE,
   SGP_SELECT_COMPONENTE_CURRICULAR,
 } from '~/componentes-sgp/filtro/idsCampos';
-import { erros, ServicoDisciplina } from '~/servicos';
+import { confirmar, erros, ServicoDisciplina } from '~/servicos';
 import ListaoContext from '../listaoContext';
 
 const ListaoOperacoesFiltros = () => {
   const usuario = useSelector(store => store.usuario);
   const { turmaSelecionada } = usuario;
   const { modalidade, turma } = turmaSelecionada;
+  const telaEmEdicao = useSelector(store => store.geral.telaEmEdicao);
+  const acaoTelaEmEdicao = useSelector(store => store.geral.acaoTelaEmEdicao);
 
   const {
     obterBimestres,
@@ -124,7 +126,16 @@ const ListaoOperacoesFiltros = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [componenteCurricularInicial, listaComponenteCurricular]);
 
-  const onChangeBimestre = valor => setBimestreOperacoes(valor);
+  const onChangeBimestre = async valor => {
+    if (telaEmEdicao) {
+      const salvou = await acaoTelaEmEdicao();
+      if (salvou) {
+        setBimestreOperacoes(valor);
+      }
+    } else {
+      setBimestreOperacoes(valor);
+    }
+  };
 
   const obterComponente = valor => {
     if (valor && listaComponenteCurricular?.length) {
@@ -138,7 +149,7 @@ const ListaoOperacoesFiltros = () => {
     return null;
   };
 
-  const onChangeComponenteCurricular = valor => {
+  const setarComponente = valor => {
     const componenteAtual = obterComponente(valor);
     if (componenteAtual) {
       setComponenteCurricular({ ...componenteAtual });
@@ -147,10 +158,21 @@ const ListaoOperacoesFiltros = () => {
     }
   };
 
+  const onChangeComponenteCurricular = async valor => {
+    if (telaEmEdicao) {
+      const salvou = await acaoTelaEmEdicao();
+      if (salvou) {
+        setarComponente(valor);
+      }
+    } else {
+      setarComponente(valor);
+    }
+  };
+
   return (
     <Col span={24}>
       <Row gutter={[16, 16]}>
-        <Col sm={24} md={24} lg={10}>
+        <Col sm={24} md={16} lg={10}>
           <Loader loading={exibirLoader} tip="">
             <SelectComponent
               label="Componente curricular"
