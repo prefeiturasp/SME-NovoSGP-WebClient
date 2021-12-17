@@ -129,7 +129,6 @@ const ListaoOperacoesBotoesAcao = () => {
             label="Cancelar"
             color={Colors.Azul}
             border
-            onClick={onClickSalvar}
           />
         </Col>
         <Col>
