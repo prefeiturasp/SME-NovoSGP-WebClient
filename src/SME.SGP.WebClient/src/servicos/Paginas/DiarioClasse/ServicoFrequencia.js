@@ -104,6 +104,9 @@ class ServicoFrequencia {
     const url = `${urlPadrao}/frequencias/detalhadas?codigoAluno=${codigoAluno}&dataInicio=${dataInicio}&dataFim=${dataFim}`;
     return api.get(url);
   };
+
+  salvarFrequenciaListao = params =>
+    api.post(`${urlPadrao}/frequencias/salvar`, params);
 }
 
 export default new ServicoFrequencia();

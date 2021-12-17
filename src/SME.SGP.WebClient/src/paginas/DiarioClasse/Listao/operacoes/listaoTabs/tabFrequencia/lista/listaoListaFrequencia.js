@@ -6,8 +6,8 @@ import { DataTable } from '~/componentes';
 import { Base } from '~/componentes/colors';
 import tipoIndicativoFrequencia from '~/dtos/tipoIndicativoFrequencia';
 import ListaoContext from '~/paginas/DiarioClasse/Listao/listaoContext';
-import CampoTiposFrequencia from './componentes/campoTiposFrequencia';
 import { setTelaEmEdicao } from '~/redux/modulos/geral/actions';
+import CampoTiposFrequencia from './componentes/campoTiposFrequencia';
 import {
   IndicativoAlerta,
   IndicativoCritico,
@@ -17,15 +17,13 @@ import {
 
 const ListaoListaFrequencia = () => {
   const {
-    componenteCurricular,
     dadosFrequencia,
     setDadosFrequencia,
     listaoEhInfantil,
+    listaTiposFrequencia,
   } = useContext(ListaoContext);
 
   const dispatch = useDispatch();
-
-  const [dadosDetalheEstudante, setDadosDetalheEstudante] = useState([]);
 
   const montarTituloEstudante = () => {
     return (
@@ -35,56 +33,35 @@ const ListaoListaFrequencia = () => {
     );
   };
 
-  const montarColunaFrequenciaDiaria = (
-    indexEstudante,
-    indexAula,
-    dataAula,
-    dadosDiaAula
-  ) => {
+  const montarColunaFrequenciaDiaria = dadosDiaAula => {
     return (
       <CampoTiposFrequencia
-        tipoFrequencia={dadosDiaAula.tipoFrequencia}
-        listaTiposFrequencia={dadosFrequencia?.listaTiposFrequencia}
+        tipoFrequencia={dadosDiaAula?.tipoFrequencia}
+        listaTiposFrequencia={listaTiposFrequencia}
         onChange={valorNovo => {
-          const dados = dadosFrequencia;
-          dados.listaFrequencia[indexEstudante].aulas[
-            indexAula
-          ].tipoFrequencia = valorNovo;
-
-          if (dados.listaFrequencia[indexEstudante]?.detalhesAulas?.length) {
-            const dataParaSetarFreq = dados.listaFrequencia[
-              indexEstudante
-            ].detalhesAulas.find(d => d.dataAula === dataAula);
-
-            if (dataParaSetarFreq) {
-              const indexData = dados.listaFrequencia[
-                indexEstudante
-              ].detalhesAulas.indexOf(dataParaSetarFreq);
-
-              const { aulas } = dados.listaFrequencia[
-                indexEstudante
-              ].detalhesAulas[indexData];
-
-              aulas.forEach(aula => {
-                aula.tipoFrequencia = valorNovo;
-              });
-            }
-          }
+          dadosDiaAula.alterado = true;
+          dadosDiaAula.tipoFrequencia = valorNovo;
+          dadosDiaAula.detalheFrequencia.forEach(item => {
+            item.tipoFrequencia = valorNovo;
+          });
           dispatch(setTelaEmEdicao(true));
-          setDadosFrequencia({ ...dados });
+          // TODO - Mover tabela para outro arquivo e renderizar ele para recarrecar somente a linha do aluno e não a tabela toda novamente!
+          setDadosFrequencia({ ...dadosFrequencia });
         }}
       />
     );
   };
 
-  const montarColunaFrequenciaAula = dadosAula => {
+  const montarColunaFrequenciaAula = (detalheFreq, dadosAula) => {
     return (
       <CampoTiposFrequencia
-        tipoFrequencia={dadosAula.tipoFrequencia}
-        listaTiposFrequencia={dadosFrequencia?.listaTiposFrequencia}
+        tipoFrequencia={detalheFreq.tipoFrequencia}
+        listaTiposFrequencia={listaTiposFrequencia}
         onChange={valorNovo => {
-          dadosAula.tipoFrequencia = valorNovo;
+          dadosAula.alterado = true;
+          detalheFreq.tipoFrequencia = valorNovo;
           dispatch(setTelaEmEdicao(true));
+          // TODO - Mover tabela para outro arquivo e renderizar ele para recarrecar somente a linha do aluno e não a tabela toda novamente!
           setDadosFrequencia({ ...dadosFrequencia });
         }}
       />
@@ -106,11 +83,9 @@ const ListaoListaFrequencia = () => {
     },
   ];
 
-  if (
-    dadosFrequencia?.listaFrequencia?.[0]?.aulas?.length &&
-    componenteCurricular.registraFrequencia
-  ) {
-    dadosFrequencia.listaFrequencia[0].aulas.forEach((aula, indexAula) => {
+  // TODO - Verificar a regra - componenteCurricular.registraFrequencia
+  if (dadosFrequencia?.aulas?.length) {
+    dadosFrequencia.aulas.forEach(aula => {
       colunasEstudantes.push({
         title: () => (
           <span className="fonte-16">
@@ -118,18 +93,16 @@ const ListaoListaFrequencia = () => {
           </span>
         ),
         align: 'center',
-        dataIndex: `aulas.${indexAula}`,
         width: '150px',
-        render: (dadosDiaAula, estudante) => {
-          const indexEstudante = dadosFrequencia.listaFrequencia.indexOf(
-            estudante
+        render: dadosAulas => {
+          const dadosDiaAula = dadosAulas.aulas.find(
+            item => item.aulaId === aula.aulaId
           );
-          return montarColunaFrequenciaDiaria(
-            indexEstudante,
-            indexAula,
-            aula.dataAula,
-            dadosDiaAula
-          );
+          if (dadosDiaAula) {
+            return montarColunaFrequenciaDiaria(dadosDiaAula);
+          }
+
+          return '-';
         },
       });
     });
@@ -146,7 +119,6 @@ const ListaoListaFrequencia = () => {
   const onClickExpandir = (expandir, dadosEstudante) => {
     if (expandir) {
       setExpandedRowKeys([dadosEstudante?.codigoAluno]);
-      setDadosDetalheEstudante(dadosEstudante.detalhesAulas);
     } else {
       setExpandedRowKeys([]);
     }
@@ -170,101 +142,136 @@ const ListaoListaFrequencia = () => {
     );
   };
 
-  const montarColunaFrequencia = aluno => {
-    const percentual = aluno?.indicativoFrequencia?.percentual
-      ? `${aluno.indicativoFrequencia.percentual}%`
-      : '';
+  const montarColunaFrequencia = (value, row, index) => {
+    if (expandedRowKeys?.length) {
+      const aluno = dadosFrequencia?.alunos.find(
+        item => item?.codigoAluno === expandedRowKeys[0]
+      );
 
-    switch (aluno?.indicativoFrequencia?.tipo) {
-      case tipoIndicativoFrequencia.Alerta:
-        return <IndicativoAlerta>{percentual}</IndicativoAlerta>;
-      case tipoIndicativoFrequencia.Critico:
-        return <IndicativoCritico>{percentual}</IndicativoCritico>;
-      default:
-        return percentual;
+      if (!aluno) {
+        return '';
+      }
+      let children = '';
+
+      const percentual = aluno?.indicativoFrequencia?.percentual
+        ? `${aluno.indicativoFrequencia.percentual}%`
+        : '';
+
+      switch (aluno?.indicativoFrequencia?.tipo) {
+        case tipoIndicativoFrequencia.Alerta:
+          children = <IndicativoAlerta>{percentual}</IndicativoAlerta>;
+          break;
+        case tipoIndicativoFrequencia.Critico:
+          children = <IndicativoCritico>{percentual}</IndicativoCritico>;
+          break;
+        default:
+          children = percentual;
+          break;
+      }
+
+      const obj = {
+        children,
+        props: {},
+      };
+      if (index === 0) {
+        obj.props.rowSpan = aluno?.aulas?.length || 0;
+      } else {
+        obj.props.rowSpan = 0;
+      }
+
+      return obj;
     }
+
+    return null;
   };
 
-  const colunasDetalhamentoEstudante = [
-    {
-      title: 'Datas',
-      dataIndex: 'dataAula',
-      align: 'left',
-      ellipsis: true,
-      render: dataAula => window.moment(dataAula).format('DD/MM/YYYY'),
-    },
-  ];
+  const montarColunasDetalhe = estudante => {
+    const colunasDetalhamentoEstudante = [
+      {
+        title: 'Datas',
+        dataIndex: 'aulaId',
+        align: 'left',
+        ellipsis: true,
+        render: aulaId => {
+          const aula = dadosFrequencia.aulas.find(
+            item => item.aulaId === aulaId
+          );
+          return window.moment(aula.dataAula).format('DD/MM/YYYY');
+        },
+      },
+    ];
 
-  if (dadosDetalheEstudante?.[0]?.aulas?.length) {
-    let indexDiaMaiorQtdAulas = 0;
-    let totalAulas = 0;
-    dadosDetalheEstudante.forEach((item, i) => {
-      if (item.aulas.length > totalAulas) {
-        totalAulas = item.aulas.length;
-        indexDiaMaiorQtdAulas = i;
-      }
-    });
+    if (estudante?.aulas?.length) {
+      const qtdColunasAulasDetalhe = Math.max.apply(
+        null,
+        dadosFrequencia.aulas.map(aula => aula?.numeroAulas)
+      );
 
-    dadosDetalheEstudante[indexDiaMaiorQtdAulas].aulas.forEach(
-      (aula, indexAula) => {
+      for (
+        let indiceAula = 0;
+        indiceAula < qtdColunasAulasDetalhe;
+        indiceAula++
+      ) {
         colunasDetalhamentoEstudante.push({
-          title: `Aula ${aula.numeroAula}`,
+          title: `Aula ${indiceAula + 1}`,
           align: 'center',
-          dataIndex: `aulas.${indexAula}`,
+          dataIndex: `detalheFrequencia[${indiceAula}]`,
           width: '150px',
-          render: dadosAula => {
-            if (dadosAula?.numeroAula) {
-              return montarColunaFrequenciaAula(dadosAula);
-            }
-
-            return '-';
-          },
+          render: (detalheFreq, dadosAula) =>
+            detalheFreq?.numeroAula
+              ? montarColunaFrequenciaAula(detalheFreq, dadosAula)
+              : '-',
         });
       }
-    );
-  }
+    }
 
-  colunasDetalhamentoEstudante.push({
-    title: '%',
-    align: 'center',
-    width: '70px',
-    render: montarColunaFrequencia,
-  });
+    colunasDetalhamentoEstudante.push({
+      title: '%',
+      align: 'center',
+      width: '70px',
+      render: montarColunaFrequencia,
+    });
 
-  return dadosFrequencia?.listaFrequencia?.length ? (
-    <LinhaTabela className="col-md-12 p-0">
-      <DataTable
-        idLinha="codigoAluno"
-        columns={colunasEstudantes}
-        dataSource={dadosFrequencia.listaFrequencia}
-        pagination={false}
-        semHover
-        expandIconColumnIndex={
-          dadosFrequencia?.listaFrequencia?.[0]?.aulas?.length + 3 || null
-        }
-        expandedRowKeys={expandedRowKeys}
-        onClickExpandir={onClickExpandir}
-        rowClassName={(record, _) => {
-          const ehLinhaExpandida = temLinhaExpandida(record?.codigoAluno);
-          const nomeClasse = ehLinhaExpandida.length ? 'linha-ativa' : '';
-          return nomeClasse;
-        }}
-        expandedRowRender={estudante => (
-          <DataTable
-            id={`tabela-aluno-${estudante?.codigoAluno}`}
-            idLinha="dataAula"
-            pagination={false}
-            columns={colunasDetalhamentoEstudante}
-            dataSource={dadosDetalheEstudante}
-            semHover
-            tableLayout="fixed"
-          />
-        )}
-        expandIcon={({ expanded, onExpand, record }) =>
-          expandIcon(expanded, onExpand, record)
-        }
-      />
-    </LinhaTabela>
+    return colunasDetalhamentoEstudante;
+  };
+
+  return dadosFrequencia?.alunos?.length ? (
+    <>
+      <LinhaTabela className="col-md-12 p-0">
+        <DataTable
+          idLinha="codigoAluno"
+          columns={colunasEstudantes}
+          dataSource={dadosFrequencia?.alunos}
+          pagination={false}
+          semHover
+          expandIconColumnIndex={dadosFrequencia?.aulas.length + 3 || null}
+          expandedRowKeys={expandedRowKeys}
+          onClickExpandir={onClickExpandir}
+          rowClassName={record => {
+            const ehLinhaExpandida = temLinhaExpandida(record?.codigoAluno);
+            const nomeClasse = ehLinhaExpandida.length ? 'linha-ativa' : '';
+            return nomeClasse;
+          }}
+          expandedRowRender={record => {
+            const colunasDetalhe = montarColunasDetalhe(record);
+            return (
+              <DataTable
+                id={`tabela-aluno-${record?.codigoAluno}`}
+                idLinha="aulaId"
+                pagination={false}
+                columns={colunasDetalhe}
+                dataSource={record?.aulas}
+                semHover
+                tableLayout="fixed"
+              />
+            );
+          }}
+          expandIcon={({ expanded, onExpand, record }) =>
+            expandIcon(expanded, onExpand, record)
+          }
+        />
+      </LinhaTabela>
+    </>
   ) : (
     <></>
   );

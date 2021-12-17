@@ -1,7 +1,10 @@
 import { Col, Row } from 'antd';
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { setTelaEmEdicao } from '~/redux/modulos/geral/actions';
+import {
+  setAcaoTelaEmEdicao,
+  setTelaEmEdicao,
+} from '~/redux/modulos/geral/actions';
 import { Button, Colors } from '~/componentes';
 import {
   SGP_BUTTON_CANCELAR,
@@ -9,35 +12,97 @@ import {
   SGP_BUTTON_VOLTAR,
 } from '~/componentes-sgp/filtro/idsCampos';
 import { RotasDto } from '~/dtos';
-import { confirmar, history } from '~/servicos';
+import { confirmar, erros, history, sucesso } from '~/servicos';
 import ListaoContext from '../listaoContext';
+import ServicoFrequencia from '~/servicos/Paginas/DiarioClasse/ServicoFrequencia';
 
 const ListaoOperacoesBotoesAcao = () => {
   const dispatch = useDispatch();
   const { dadosFrequencia } = useContext(ListaoContext);
-  const emEdicao = useSelector(store => store.geral.telaEmEdicao);
-  const pergutarParaSalvar = () => {
-    return confirmar(
+
+  const telaEmEdicao = useSelector(store => store.geral.telaEmEdicao);
+
+  const pergutarParaSalvar = () =>
+    confirmar(
       'Atenção',
       '',
       'Suas alterações não foram salvas, deseja salvar agora?'
     );
+
+  const onClickSalvar = async () => {
+    const paramsSalvar = dadosFrequencia.aulas
+      .map(aula => {
+        const alunos = dadosFrequencia?.alunos
+          ?.map(aluno => {
+            let aulasParaSalvar = [];
+            if (aula?.frequenciaId) {
+              aulasParaSalvar = aluno?.aulas?.filter(a => a?.alterado);
+            } else {
+              aulasParaSalvar = aluno?.aulas;
+            }
+            if (aulasParaSalvar?.length) {
+              const aulaAlunoPorIdAula = aulasParaSalvar.find(
+                aulaAluno => aulaAluno?.aulaId === aula?.aulaId
+              );
+
+              return {
+                codigoAluno: aluno?.codigoAluno,
+                frequencias: aulaAlunoPorIdAula?.detalheFrequencia,
+              };
+            }
+            return {};
+          })
+          ?.filter(a => a?.codigoAluno && a?.frequencias?.length);
+        return {
+          aulaId: aula.aulaId,
+          frequenciaId: aula?.frequenciaId,
+          alunos,
+        };
+      })
+      ?.filter(a => a?.alunos?.length);
+
+    // TODO - ADD LOADER
+    const resposta = await ServicoFrequencia.salvarFrequenciaListao(
+      paramsSalvar
+    ).catch(e => erros(e));
+
+    if (resposta?.data) {
+      dispatch(setTelaEmEdicao(false));
+      return true;
+    }
+
+    return false;
   };
 
-  const onClickSalvar = () => {
-    // SALVAR!
-    dispatch(setTelaEmEdicao(false));
-  };
-
-  const onClickVoltar = async () => {
-    if (emEdicao) {
+  const validarSalvar = async () => {
+    let salvou = true;
+    if (telaEmEdicao) {
       const confirmado = await pergutarParaSalvar();
+
       if (confirmado) {
-        const salvou = true; //TODO mudar para função correta
+        salvou = await onClickSalvar();
         if (salvou) {
-          history.push(RotasDto.LISTAO);
+          sucesso('Frequência realizada com sucesso.');
+        } else {
+          salvou = false;
         }
       } else {
+        dispatch(setTelaEmEdicao(false));
+      }
+    }
+    return salvou;
+  };
+
+  useEffect(() => {
+    if (telaEmEdicao) {
+      dispatch(setAcaoTelaEmEdicao(validarSalvar));
+    }
+  }, [dispatch, telaEmEdicao]);
+
+  const onClickVoltar = async () => {
+    if (telaEmEdicao) {
+      const salvou = await validarSalvar();
+      if (salvou) {
         history.push(RotasDto.LISTAO);
       }
     } else {
