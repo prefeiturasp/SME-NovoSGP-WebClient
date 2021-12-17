@@ -35,7 +35,7 @@ import { ehTurmaInfantil } from '~/servicos/Validacoes/validacoesInfatil';
 import AlterarAula from './alterarAula';
 
 function CadastroDeAula({ match, location }) {
-  const { id, tipoCalendarioId } = match.params;
+  const { id, tipoCalendarioId, somenteReposicao } = match.params;
   const permissoesTela = useSelector(state => state.usuario.permissoes);
   const somenteConsulta = verificaSomenteConsulta(
     permissoesTela[RotasDto.CALENDARIO_PROFESSOR]
@@ -79,6 +79,8 @@ function CadastroDeAula({ match, location }) {
     ueId: turmaSelecionada.unidadeEscolar,
     tipoCalendarioId,
     quantidade: 1,
+    tipoAula: somenteReposicao ? 2 : 1,
+    recorrenciaAula: 1,
   };
 
   const [recorrenciaAulaEmEdicao, setRecorrenciaAulaEmEdicao] = useState({
@@ -94,18 +96,24 @@ function CadastroDeAula({ match, location }) {
   const [listaComponentes, setListaComponentes] = useState([]);
   const [recorrenciaAulaOriginal, setRecorrenciaAulaOriginal] = useState();
 
+  const opcoesTipoAulaSomenteReposicao = [
+    { label: 'Reposição', value: 2 }
+  ];
+
   const opcoesTipoAula = [
     { label: 'Normal', value: 1 },
     { label: 'Reposição', value: 2 },
   ];
-
-  const [recorrenciaInicial, setRecorrenciaInicial] = useState(1);
 
   const recorrencia = {
     AULA_UNICA: 1,
     REPETIR_BIMESTRE_ATUAL: 2,
     REPETIR_TODOS_BIMESTRES: 3,
   };
+
+  const opcoesRecorrenciaSomenteReposicao = [
+    { label: 'Aula única', value: recorrencia.AULA_UNICA }
+  ];
 
   const opcoesRecorrencia = [
     { label: 'Aula única', value: recorrencia.AULA_UNICA },
@@ -729,7 +737,7 @@ function CadastroDeAula({ match, location }) {
                       <RadioGroupButton
                         id="tipo-aula"
                         label="Tipo de aula"
-                        opcoes={opcoesTipoAula}
+                        opcoes={somenteReposicao ? opcoesTipoAulaSomenteReposicao : opcoesTipoAula}
                         name="tipoAula"
                         form={form}
                         onChange={onChangeTipoAula}
@@ -768,7 +776,7 @@ function CadastroDeAula({ match, location }) {
                       <RadioGroupButton
                         id="recorrencia-aula"
                         label="Recorrência"
-                        opcoes={opcoesRecorrencia}
+                        opcoes={somenteReposicao ? opcoesRecorrenciaSomenteReposicao : opcoesRecorrencia}
                         name="recorrenciaAula"
                         form={form}
                         onChange={onChangeRecorrencia}
