@@ -123,6 +123,17 @@ const ListasNotasConceitos = props => {
       )
     );
 
+    dados.notasConceitos.map(notasConceitos =>
+      notasConceitos.componenteRegencia?.componentesCurriculares.map(cc => {
+          cc.notasFechamentos.map(nf => {
+            if (valorNuloOuVazio(nf.notaConceito)) {
+              notasFechamentosPreenchidas = false;
+            }
+            return nf;
+          });
+        })      
+    );
+
     const alunoDentroDoPeriodoDoBimestre = alunoDentroDoPeriodoDoBimestreOuFechamento();
     const periodoAbertoOuEmFechamento = estaNoPeriodoOuFechamento();
 
@@ -146,6 +157,14 @@ const ListasNotasConceitos = props => {
           }
           return componentesCurriculares;
         })
+      );
+      dados.notasConceitos.map(notasConceitos =>
+        notasConceitos.componenteRegencia?.componentesCurriculares.map(cc => {
+              if (valorNuloOuVazio(cc.notaPosConselho.nota)) {
+                notasPosConselhoPreenchidas = false;
+              }
+              return cc;            
+          })      
       );
       const periodoAbertoOuEmFechamento = estaNoPeriodoOuFechamento();
       if (notasPosConselhoPreenchidas && periodoAbertoOuEmFechamento) {
