@@ -105,9 +105,8 @@ class ServicoFrequencia {
     return api.get(url);
   };
 
-  salvarFrequenciaListao = params => {
-    return api.post(`${urlPadrao}/frequencias/salvar`, params);
-  };
+  salvarFrequenciaListao = params =>
+    api.post(`${urlPadrao}/frequencias/salvar`, params);
 }
 
 export default new ServicoFrequencia();

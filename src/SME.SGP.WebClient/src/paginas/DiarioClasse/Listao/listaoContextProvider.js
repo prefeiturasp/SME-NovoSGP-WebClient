@@ -41,6 +41,7 @@ const ListaoContextProvider = ({ children }) => {
 
   // TAB FREQUÊNCIA
   const [listaPeriodos, setListaPeriodos] = useState([]);
+  const [listaTiposFrequencia, setListaTiposFrequencia] = useState([]);
   const [periodo, setPeriodo] = useState();
   const [dadosFrequencia, setDadosFrequencia] = useState();
 
@@ -120,6 +121,8 @@ const ListaoContextProvider = ({ children }) => {
         setDadosFrequencia,
         permissaoTela,
         setPermissaoTela,
+        listaTiposFrequencia,
+        setListaTiposFrequencia,
       }}
     >
       {children}

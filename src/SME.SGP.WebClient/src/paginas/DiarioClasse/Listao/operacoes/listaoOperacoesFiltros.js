@@ -13,15 +13,8 @@ const ListaoOperacoesFiltros = () => {
   const usuario = useSelector(store => store.usuario);
   const { turmaSelecionada } = usuario;
   const { modalidade, turma } = turmaSelecionada;
-  const emEdicao = useSelector(store => store.geral.telaEmEdicao);
-
-  const pergutarParaSalvar = () => {
-    return confirmar(
-      'Atenção',
-      '',
-      'Suas alterações não foram salvas, deseja salvar agora?'
-    );
-  };
+  const telaEmEdicao = useSelector(store => store.geral.telaEmEdicao);
+  const acaoTelaEmEdicao = useSelector(store => store.geral.acaoTelaEmEdicao);
 
   const {
     obterBimestres,
@@ -134,14 +127,9 @@ const ListaoOperacoesFiltros = () => {
   }, [componenteCurricularInicial, listaComponenteCurricular]);
 
   const onChangeBimestre = async valor => {
-    if (emEdicao) {
-      const confirmado = await pergutarParaSalvar();
-      if (confirmado) {
-        const salvou = true; //TODO mudar para função correta
-        if (salvou) {
-          setBimestreOperacoes(valor);
-        }
-      } else {
+    if (telaEmEdicao) {
+      const salvou = await acaoTelaEmEdicao();
+      if (salvou) {
         setBimestreOperacoes(valor);
       }
     } else {
@@ -161,35 +149,30 @@ const ListaoOperacoesFiltros = () => {
     return null;
   };
 
-  const onChangeComponenteCurricular = async valor => {
-    const aposValidarSalvar = () => {
-      const componenteAtual = obterComponente(valor);
-      if (componenteAtual) {
-        setComponenteCurricular({ ...componenteAtual });
-      } else {
-        setComponenteCurricular();
-      }
-    };
+  const setarComponente = valor => {
+    const componenteAtual = obterComponente(valor);
+    if (componenteAtual) {
+      setComponenteCurricular({ ...componenteAtual });
+    } else {
+      setComponenteCurricular();
+    }
+  };
 
-    if (emEdicao) {
-      const confirmado = await pergutarParaSalvar();
-      if (confirmado) {
-        const salvou = true; //TODO mudar para função correta
-        if (salvou) {
-          aposValidarSalvar();
-        }
-      } else {
-        aposValidarSalvar();
+  const onChangeComponenteCurricular = async valor => {
+    if (telaEmEdicao) {
+      const salvou = await acaoTelaEmEdicao();
+      if (salvou) {
+        setarComponente(valor);
       }
     } else {
-      aposValidarSalvar();
+      setarComponente(valor);
     }
   };
 
   return (
     <Col span={24}>
       <Row gutter={[16, 16]}>
-        <Col sm={24} md={24} lg={10}>
+        <Col sm={24} md={16} lg={10}>
           <Loader loading={exibirLoader} tip="">
             <SelectComponent
               label="Componente curricular"

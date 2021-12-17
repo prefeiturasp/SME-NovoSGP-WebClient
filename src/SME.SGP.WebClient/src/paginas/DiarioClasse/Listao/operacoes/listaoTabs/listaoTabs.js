@@ -25,7 +25,8 @@ const ListaoTabs = () => {
   const usuario = useSelector(store => store.usuario);
   const { turmaSelecionada } = usuario;
   const { modalidade } = turmaSelecionada;
-  const emEdicao = useSelector(store => store.geral.telaEmEdicao);
+  const telaEmEdicao = useSelector(store => store.geral.telaEmEdicao);
+  const acaoTelaEmEdicao = useSelector(store => store.geral.acaoTelaEmEdicao);
 
   const pergutarParaSalvar = () => {
     return confirmar(
@@ -85,14 +86,9 @@ const ListaoTabs = () => {
   };
 
   const onChangeTab = async tabAtiva => {
-    if (emEdicao) {
-      const confirmado = await pergutarParaSalvar();
-      if (confirmado) {
-        const salvou = true; //TODO mudar para função correta
-        if (salvou) {
-          setTabAtual(tabAtiva);
-        }
-      } else {
+    if (telaEmEdicao) {
+      const salvou = await acaoTelaEmEdicao();
+      if (salvou) {
         setTabAtual(tabAtiva);
       }
     } else {
