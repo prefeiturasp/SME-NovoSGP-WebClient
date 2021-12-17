@@ -240,7 +240,7 @@ const ListaoFiltros = () => {
       '',
       anoLetivo,
       consideraHistorico,
-      false
+      true
     )
       .catch(e => erros(e))
       .finally(() => setCarregandoTurmas(false));

@@ -77,6 +77,7 @@ const ListaoPaginado = () => {
   const filtrar = useCallback(() => {
     if (filtroEhValido) {
       const params = {
+        consideraHistorico,
         anoLetivo,
         dreCodigo: codigoDre,
         ueCodigo: codigoUe,
@@ -90,6 +91,7 @@ const ListaoPaginado = () => {
       setFiltros({});
     }
   }, [
+    consideraHistorico,
     anoLetivo,
     codigoDre,
     codigoUe,
