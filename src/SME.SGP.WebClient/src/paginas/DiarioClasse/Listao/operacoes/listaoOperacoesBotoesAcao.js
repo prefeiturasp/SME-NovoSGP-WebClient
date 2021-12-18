@@ -1,10 +1,7 @@
 import { Col, Row } from 'antd';
+import _ from 'lodash';
 import React, { useContext, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import {
-  setAcaoTelaEmEdicao,
-  setTelaEmEdicao,
-} from '~/redux/modulos/geral/actions';
 import { Button, Colors } from '~/componentes';
 import {
   SGP_BUTTON_CANCELAR,
@@ -12,15 +9,37 @@ import {
   SGP_BUTTON_VOLTAR,
 } from '~/componentes-sgp/filtro/idsCampos';
 import { RotasDto } from '~/dtos';
+import {
+  setAcaoTelaEmEdicao,
+  setTelaEmEdicao,
+} from '~/redux/modulos/geral/actions';
 import { confirmar, erros, history, sucesso } from '~/servicos';
-import ListaoContext from '../listaoContext';
 import ServicoFrequencia from '~/servicos/Paginas/DiarioClasse/ServicoFrequencia';
+import {
+  LISTAO_TAB_AVALIACOES,
+  LISTAO_TAB_DIARIO_BORDO,
+  LISTAO_TAB_FECHAMENTO,
+  LISTAO_TAB_FREQUENCIA,
+  LISTAO_TAB_PLANO_AULA,
+} from '../listaoConstantes';
+import ListaoContext from '../listaoContext';
 
 const ListaoOperacoesBotoesAcao = () => {
   const dispatch = useDispatch();
-  const { dadosFrequencia } = useContext(ListaoContext);
+  const {
+    dadosFrequencia,
+    dadosIniciaisFrequencia,
+    tabAtual,
+    setDadosFrequencia,
+    setExibirLoaderGeral,
+    setDadosIniciaisFrequencia,
+    somenteConsultaListao,
+    periodoAbertoListao,
+  } = useContext(ListaoContext);
 
   const telaEmEdicao = useSelector(store => store.geral.telaEmEdicao);
+
+  const desabilitarBotoes = !periodoAbertoListao || somenteConsultaListao;
 
   const pergutarParaSalvar = () =>
     confirmar(
@@ -61,12 +80,21 @@ const ListaoOperacoesBotoesAcao = () => {
       })
       ?.filter(a => a?.alunos?.length);
 
-    // TODO - ADD LOADER
+    setExibirLoaderGeral(true);
     const resposta = await ServicoFrequencia.salvarFrequenciaListao(
       paramsSalvar
-    ).catch(e => erros(e));
+    )
+      .catch(e => erros(e))
+      .finally(() => setExibirLoaderGeral(false));
 
     if (resposta?.data) {
+      const auditoriaNova = resposta.data;
+      dadosFrequencia.auditoria = { ...auditoriaNova };
+      dadosIniciaisFrequencia.auditoria = { ...auditoriaNova };
+      setDadosFrequencia({ ...dadosFrequencia });
+      setDadosIniciaisFrequencia(dadosIniciaisFrequencia);
+
+      sucesso('Frequência realizada com sucesso.');
       dispatch(setTelaEmEdicao(false));
       return true;
     }
@@ -76,16 +104,11 @@ const ListaoOperacoesBotoesAcao = () => {
 
   const validarSalvar = async () => {
     let salvou = true;
-    if (telaEmEdicao) {
+    if (!desabilitarBotoes && telaEmEdicao) {
       const confirmado = await pergutarParaSalvar();
 
       if (confirmado) {
         salvou = await onClickSalvar();
-        if (salvou) {
-          sucesso('Frequência realizada com sucesso.');
-        } else {
-          salvou = false;
-        }
       } else {
         dispatch(setTelaEmEdicao(false));
       }
@@ -100,13 +123,61 @@ const ListaoOperacoesBotoesAcao = () => {
   }, [dispatch, telaEmEdicao]);
 
   const onClickVoltar = async () => {
-    if (telaEmEdicao) {
+    if (!desabilitarBotoes && telaEmEdicao) {
       const salvou = await validarSalvar();
       if (salvou) {
         history.push(RotasDto.LISTAO);
       }
     } else {
       history.push(RotasDto.LISTAO);
+    }
+  };
+
+  const limparDadosFrequencia = () => {
+    const dadosCarregar = _.cloneDeep(dadosIniciaisFrequencia);
+    setDadosFrequencia({ ...dadosCarregar });
+  };
+
+  const limparDadosPlanoAula = () => {};
+  const limparDadosAvaliacoes = () => {};
+  const limparDadosFechamento = () => {};
+  const limparDadosDiarioBordo = () => {};
+
+  const limparDadosTabSelecionada = () => {
+    switch (tabAtual) {
+      case LISTAO_TAB_FREQUENCIA:
+        limparDadosFrequencia();
+        break;
+      case LISTAO_TAB_PLANO_AULA:
+        limparDadosPlanoAula();
+        break;
+      case LISTAO_TAB_AVALIACOES:
+        limparDadosAvaliacoes();
+        break;
+      case LISTAO_TAB_FECHAMENTO:
+        limparDadosFechamento();
+        break;
+
+      case LISTAO_TAB_DIARIO_BORDO:
+        limparDadosDiarioBordo();
+        break;
+
+      default:
+        break;
+    }
+  };
+
+  const onClickCancelar = async () => {
+    if (telaEmEdicao) {
+      const confirmou = await confirmar(
+        'Atenção',
+        'Você não salvou as informações preenchidas.',
+        'Deseja realmente cancelar as alterações?'
+      );
+      if (confirmou) {
+        limparDadosTabSelecionada();
+        dispatch(setTelaEmEdicao(false));
+      }
     }
   };
 
@@ -129,6 +200,8 @@ const ListaoOperacoesBotoesAcao = () => {
             label="Cancelar"
             color={Colors.Azul}
             border
+            onClick={onClickCancelar}
+            disabled={desabilitarBotoes || !telaEmEdicao}
           />
         </Col>
         <Col>
@@ -139,6 +212,7 @@ const ListaoOperacoesBotoesAcao = () => {
             border
             bold
             onClick={onClickSalvar}
+            disabled={desabilitarBotoes || !telaEmEdicao}
           />
         </Col>
       </Row>

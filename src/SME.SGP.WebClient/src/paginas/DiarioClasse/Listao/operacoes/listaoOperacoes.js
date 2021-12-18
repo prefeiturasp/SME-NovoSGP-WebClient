@@ -1,39 +1,43 @@
-import React, { useContext, useEffect } from 'react';
 import { Col } from 'antd';
-
+import React, { useContext, useEffect } from 'react';
 import { useSelector } from 'react-redux';
-import { Card, Loader } from '~/componentes';
+import { Card } from '~/componentes';
 import { Cabecalho } from '~/componentes-sgp';
+import { RotasDto } from '~/dtos';
 import ListaoContext from '../listaoContext';
 import ListaoAlertaTurma from './listaoAlertaTurma';
 import ListaoOperacoesBotoesAcao from './listaoOperacoesBotoesAcao';
 import ListaoOperacoesFiltros from './listaoOperacoesFiltros';
 import ListaoTabs from './listaoTabs/listaoTabs';
-import { RotasDto } from '~/dtos';
+import ListaoLoaderGeral from './listaoLoaderGeral';
+import ListaoAlertaPeriodoAberto from './listaoAlertaPeriodoAberto';
+import { verificaSomenteConsulta } from '~/servicos';
 
 const ListaoOperacoes = () => {
-  const { exibirLoaderGeral, setPermissaoTela } = useContext(ListaoContext);
+  const { setSomenteConsultaListao } = useContext(ListaoContext);
 
   const permissoes = useSelector(state => state.usuario.permissoes);
   const permissoesTela = permissoes[RotasDto.LISTAO_OPERACOES];
 
   useEffect(() => {
     if (permissoesTela) {
-      setPermissaoTela(permissoesTela);
+      const soConsulta = verificaSomenteConsulta(permissoesTela);
+      setSomenteConsultaListao(soConsulta);
     }
-  }, [permissoesTela, setPermissaoTela]);
+  }, [permissoesTela, setSomenteConsultaListao]);
 
   return (
     <>
       <ListaoAlertaTurma />
+      <ListaoAlertaPeriodoAberto />
       <Cabecalho pagina="Operações" />
       <Card>
         <Col span={24}>
-          <Loader loading={exibirLoaderGeral} ignorarTip>
+          <ListaoLoaderGeral>
             <ListaoOperacoesBotoesAcao />
             <ListaoOperacoesFiltros />
             <ListaoTabs />
-          </Loader>
+          </ListaoLoaderGeral>
         </Col>
       </Card>
     </>

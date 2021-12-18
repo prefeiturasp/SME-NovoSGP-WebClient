@@ -1,4 +1,5 @@
 import { Col, Row } from 'antd';
+import _ from 'lodash';
 import React, { useCallback, useContext, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Alert, Loader, SelectComponent } from '~/componentes';
@@ -28,6 +29,7 @@ const TabListaoFrequencia = () => {
     dadosFrequencia,
     setDadosFrequencia,
     setListaTiposFrequencia,
+    setDadosIniciaisFrequencia,
   } = useContext(ListaoContext);
 
   const [exibirLoaderPeriodo, setExibirLoaderPeriodo] = useState(false);
@@ -39,7 +41,21 @@ const TabListaoFrequencia = () => {
     listaPeriodos?.length === 1 ||
     !listaPeriodos?.length;
 
+  const limparFrequencia = () => {
+    setDadosIniciaisFrequencia({});
+    setDadosFrequencia({});
+  };
+
+  useEffect(() => {
+    return () => {
+      limparFrequencia();
+      setPeriodo();
+      setListaPeriodos([]);
+    };
+  }, []);
+
   const obterPeriodoPorComponente = useCallback(async () => {
+    limparFrequencia();
     setExibirLoaderPeriodo(true);
     const resposta = await ServicoPeriodoEscolar.obterPeriodoPorComponente(
       turma,
@@ -64,15 +80,14 @@ const TabListaoFrequencia = () => {
   }, [componenteCurricular, turma, bimestreOperacoes]);
 
   useEffect(() => {
+    setPeriodo();
+    setListaPeriodos([]);
     if (
       componenteCurricular?.codigoComponenteCurricular &&
       turma &&
       bimestreOperacoes
     ) {
       obterPeriodoPorComponente();
-    } else {
-      setListaPeriodos([]);
-      setPeriodo();
     }
   }, [
     obterPeriodoPorComponente,
@@ -106,6 +121,7 @@ const TabListaoFrequencia = () => {
     if (telaEmEdicao) {
       const salvou = await acaoTelaEmEdicao();
       if (salvou) {
+        limparFrequencia();
         setarPeriodo(valor);
       }
     } else {
@@ -133,11 +149,12 @@ const TabListaoFrequencia = () => {
       const tiposFrequencia = retorno?.data?.length ? retorno.data : [];
       setListaTiposFrequencia(tiposFrequencia);
 
-      // TODO - REMOVER MOCK
-      // setDadosFrequencia(mockListao);
-      setDadosFrequencia(resposta.data);
+      const dadosCarregar = _.cloneDeep(resposta.data);
+      const dadosIniciais = _.cloneDeep(resposta.data);
+      setDadosFrequencia(dadosCarregar);
+      setDadosIniciaisFrequencia(dadosIniciais);
     } else {
-      setDadosFrequencia();
+      limparFrequencia();
     }
   }, [
     componenteCurricular,
@@ -148,6 +165,7 @@ const TabListaoFrequencia = () => {
   ]);
 
   useEffect(() => {
+    limparFrequencia();
     if (
       periodo?.dataInicio &&
       periodo?.dataFim &&
@@ -156,16 +174,8 @@ const TabListaoFrequencia = () => {
       bimestreOperacoes
     ) {
       obterFrequenciasPorPeriodo();
-    } else {
-      setDadosFrequencia();
     }
-  }, [
-    periodo,
-    componenteCurricular,
-    turma,
-    bimestreOperacoes,
-    obterFrequenciasPorPeriodo,
-  ]);
+  }, [periodo, obterFrequenciasPorPeriodo]);
 
   return (
     <>

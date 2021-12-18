@@ -1,3 +1,4 @@
+import { Tooltip } from 'antd';
 import { faAngleDown, faAngleUp } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React, { useContext, useState } from 'react';
@@ -8,12 +9,16 @@ import tipoIndicativoFrequencia from '~/dtos/tipoIndicativoFrequencia';
 import ListaoContext from '~/paginas/DiarioClasse/Listao/listaoContext';
 import { setTelaEmEdicao } from '~/redux/modulos/geral/actions';
 import CampoTiposFrequencia from './componentes/campoTiposFrequencia';
+import ListaoBotaoAnotacao from './componentes/listaoBotaoAnotacao';
+import ListaoModalAnotacoesFrequencia from './componentes/listaoModalAnotacaoFrequencia';
 import {
   IndicativoAlerta,
   IndicativoCritico,
   LinhaTabela,
   TextoEstilizado,
+  MarcadorSituacao,
 } from './listaFrequencia.css';
+import SinalizacaoAEE from '~/componentes-sgp/SinalizacaoAEE/sinalizacaoAEE';
 
 const ListaoListaFrequencia = () => {
   const {
@@ -21,7 +26,12 @@ const ListaoListaFrequencia = () => {
     setDadosFrequencia,
     listaoEhInfantil,
     listaTiposFrequencia,
+    componenteCurricular,
+    somenteConsultaListao,
+    periodoAbertoListao,
   } = useContext(ListaoContext);
+
+  const desabilitarCampos = somenteConsultaListao || !periodoAbertoListao;
 
   const dispatch = useDispatch();
 
@@ -31,6 +41,11 @@ const ListaoListaFrequencia = () => {
         Nome {listaoEhInfantil ? 'da criança' : 'do estudante'}
       </span>
     );
+  };
+
+  const atualizarDados = () => {
+    // TODO - Mover tabela para outro arquivo e renderizar ele para recarrecar somente a linha do aluno e não a tabela toda novamente!
+    setDadosFrequencia({ ...dadosFrequencia });
   };
 
   const montarColunaFrequenciaDiaria = dadosDiaAula => {
@@ -45,9 +60,9 @@ const ListaoListaFrequencia = () => {
             item.tipoFrequencia = valorNovo;
           });
           dispatch(setTelaEmEdicao(true));
-          // TODO - Mover tabela para outro arquivo e renderizar ele para recarrecar somente a linha do aluno e não a tabela toda novamente!
-          setDadosFrequencia({ ...dadosFrequencia });
+          atualizarDados();
         }}
+        desabilitar={desabilitarCampos}
       />
     );
   };
@@ -61,24 +76,61 @@ const ListaoListaFrequencia = () => {
           dadosAula.alterado = true;
           detalheFreq.tipoFrequencia = valorNovo;
           dispatch(setTelaEmEdicao(true));
-          // TODO - Mover tabela para outro arquivo e renderizar ele para recarrecar somente a linha do aluno e não a tabela toda novamente!
-          setDadosFrequencia({ ...dadosFrequencia });
+          atualizarDados();
         }}
+        desabilitar={desabilitarCampos}
       />
+    );
+  };
+  const montarColunaNumeroAula = aluno => {
+    return (
+      <span className="d-flex justify-content-center">
+        <span className={desabilitarCampos ? 'desabilitar' : ''}>
+          {aluno.numeroAlunoChamada}
+        </span>
+
+        {aluno?.marcador ? (
+          <Tooltip title={aluno?.marcador?.descricao} placement="top">
+            <MarcadorSituacao
+              className="fas fa-circle"
+              style={{ marginRight: '-10px' }}
+            />
+          </Tooltip>
+        ) : (
+          <></>
+        )}
+      </span>
+    );
+  };
+
+  const montarColunasEstudante = aluno => {
+    return (
+      <div className="d-flex justify-content-between">
+        <div
+          className={`d-flex justify-content-start ${
+            desabilitarCampos ? 'desabilitar' : ''
+          }`}
+        >
+          {aluno.nomeAluno}
+        </div>
+        <div className=" d-flex justify-content-end">
+          <SinalizacaoAEE exibirSinalizacao={aluno.ehAtendidoAEE} />
+        </div>
+      </div>
     );
   };
 
   const colunasEstudantes = [
     {
       title: 'Nº',
-      dataIndex: 'numeroAlunoChamada',
       align: 'center',
-      width: '45px',
+      width: '60px',
+      render: montarColunaNumeroAula,
     },
 
     {
       title: montarTituloEstudante,
-      dataIndex: 'nomeAluno',
+      render: montarColunasEstudante,
       width: '350px',
     },
   ];
@@ -88,7 +140,7 @@ const ListaoListaFrequencia = () => {
     dadosFrequencia.aulas.forEach(aula => {
       colunasEstudantes.push({
         title: () => (
-          <span className="fonte-16">
+          <span style={{ fontSize: 16 }}>
             {window.moment(aula?.dataAula).format('DD/MM/YYYY')}
           </span>
         ),
@@ -185,6 +237,30 @@ const ListaoListaFrequencia = () => {
     return null;
   };
 
+  const montarColunasDataAulaEstudante = (aluno, dataAula, aula, aulaId) => {
+    return (
+      <span className="d-flex justify-content-between align-items-center">
+        <span className={desabilitarCampos ? 'desabilitar' : ''}>
+          {window.moment(dataAula).format('DD/MM/YYYY')}
+        </span>
+
+        <ListaoBotaoAnotacao
+          desabilitar={desabilitarCampos || aula.desabilitado}
+          ehInfantil={listaoEhInfantil}
+          aluno={{
+            ...aluno,
+            aulaId,
+            permiteAnotacao: aula?.permiteAnotacao,
+            possuiAnotacao: aula?.possuiAnotacao,
+            aula,
+          }}
+          permiteAnotacao={aula?.permiteAnotacao}
+          possuiAnotacao={aula?.possuiAnotacao}
+        />
+      </span>
+    );
+  };
+
   const montarColunasDetalhe = estudante => {
     const colunasDetalhamentoEstudante = [
       {
@@ -192,11 +268,17 @@ const ListaoListaFrequencia = () => {
         dataIndex: 'aulaId',
         align: 'left',
         ellipsis: true,
-        render: aulaId => {
+        render: (aulaId, row) => {
           const aula = dadosFrequencia.aulas.find(
             item => item.aulaId === aulaId
           );
-          return window.moment(aula.dataAula).format('DD/MM/YYYY');
+
+          return montarColunasDataAulaEstudante(
+            estudante,
+            aula.dataAula,
+            row,
+            aulaId
+          );
         },
       },
     ];
@@ -252,18 +334,30 @@ const ListaoListaFrequencia = () => {
             const nomeClasse = ehLinhaExpandida.length ? 'linha-ativa' : '';
             return nomeClasse;
           }}
-          expandedRowRender={record => {
-            const colunasDetalhe = montarColunasDetalhe(record);
+          expandedRowRender={(record, indexAluno) => {
+            const colunasDetalhe = montarColunasDetalhe(record, indexAluno);
             return (
-              <DataTable
-                id={`tabela-aluno-${record?.codigoAluno}`}
-                idLinha="aulaId"
-                pagination={false}
-                columns={colunasDetalhe}
-                dataSource={record?.aulas}
-                semHover
-                tableLayout="fixed"
-              />
+              <>
+                <ListaoModalAnotacoesFrequencia
+                  dadosListaFrequencia={dadosFrequencia?.alunos}
+                  ehInfantil={listaoEhInfantil}
+                  componenteCurricularId={
+                    componenteCurricular.codigoComponenteCurricular
+                  }
+                  desabilitarCampos={desabilitarCampos}
+                  fechouModal={atualizarDados}
+                  indexAluno={indexAluno}
+                />
+                <DataTable
+                  id={`tabela-aluno-${record?.codigoAluno}`}
+                  idLinha="aulaId"
+                  pagination={false}
+                  columns={colunasDetalhe}
+                  dataSource={record?.aulas}
+                  semHover
+                  tableLayout="fixed"
+                />
+              </>
             );
           }}
           expandIcon={({ expanded, onExpand, record }) =>

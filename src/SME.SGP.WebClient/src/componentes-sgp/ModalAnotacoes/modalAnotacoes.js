@@ -1,7 +1,7 @@
 import { Form, Formik } from 'formik';
 import PropTypes from 'prop-types';
 import React, { useCallback, useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import shortid from 'shortid';
 import * as Yup from 'yup';
 import { Auditoria, Colors, Loader, ModalConteudoHtml } from '~/componentes';
@@ -24,6 +24,7 @@ const ModalAnotacoesFrequencia = props => {
     setExibirModal,
     dadosModal,
     setDadosModal,
+    fechouModal,
   } = props;
 
   const dispatch = useDispatch();
@@ -76,12 +77,13 @@ const ModalAnotacoesFrequencia = props => {
 
   const [dadosEstudanteOuCrianca, setDadosEstudanteOuCrianca] = useState({});
 
-  const onCloseModal = () => {
+  const onCloseModal = (salvou, excluiu) => {
     dispatch(setDadosModal({}));
     dispatch(setExibirModal(false));
     setValoresIniciais(iniciar);
     setRefForm({});
     setModoEdicao(false);
+    fechouModal(salvou, excluiu);
   };
 
   const obterAnotacao = useCallback(async () => {
@@ -140,7 +142,7 @@ const ModalAnotacoesFrequencia = props => {
     } else if (excluiu) {
       dadosListaFrequencia[index].possuiAnotacao = false;
     }
-    onCloseModal();
+    onCloseModal(salvou, excluiu);
   };
 
   const onClickExcluir = async id => {
@@ -399,6 +401,7 @@ ModalAnotacoesFrequencia.propTypes = {
   setExibirModal: PropTypes.func,
   dadosModal: PropTypes.oneOfType([PropTypes.any]),
   setDadosModal: PropTypes.func,
+  fechouModal: PropTypes.func,
 };
 
 ModalAnotacoesFrequencia.defaultProps = {
@@ -411,6 +414,7 @@ ModalAnotacoesFrequencia.defaultProps = {
   setExibirModal: () => {},
   dadosModal: [],
   setDadosModal: () => {},
+  fechouModal: () => {},
 };
 
 export default ModalAnotacoesFrequencia;

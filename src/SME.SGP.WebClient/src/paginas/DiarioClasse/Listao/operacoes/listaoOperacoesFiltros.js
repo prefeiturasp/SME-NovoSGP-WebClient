@@ -6,7 +6,9 @@ import {
   SGP_SELECT_BIMESTRE,
   SGP_SELECT_COMPONENTE_CURRICULAR,
 } from '~/componentes-sgp/filtro/idsCampos';
-import { confirmar, erros, ServicoDisciplina } from '~/servicos';
+import { ModalidadeDTO } from '~/dtos';
+import { erros, ServicoDisciplina } from '~/servicos';
+import ServicoPeriodoEscolar from '~/servicos/Paginas/Calendario/ServicoPeriodoEscolar';
 import ListaoContext from '../listaoContext';
 
 const ListaoOperacoesFiltros = () => {
@@ -17,7 +19,6 @@ const ListaoOperacoesFiltros = () => {
   const acaoTelaEmEdicao = useSelector(store => store.geral.acaoTelaEmEdicao);
 
   const {
-    obterBimestres,
     bimestre,
     listaBimestres,
     componenteCurricularInicial,
@@ -28,6 +29,7 @@ const ListaoOperacoesFiltros = () => {
     componenteCurricular,
     setListaComponenteCurricular,
     listaComponenteCurricular,
+    setPeriodoAbertoListao,
   } = useContext(ListaoContext);
 
   const [listaBimestresOperacoe, setListaBimestresOperacoes] = useState(
@@ -77,13 +79,53 @@ const ListaoOperacoesFiltros = () => {
   }, [turma, obterComponentesCurriculares]);
 
   useEffect(() => {
+    if (bimestreOperacoes && listaBimestresOperacoe?.length) {
+      const dadosBimestre = listaBimestresOperacoe.find(
+        item => item.valor === bimestreOperacoes
+      );
+      if (dadosBimestre) {
+        setPeriodoAbertoListao(dadosBimestre.periodoAberto);
+      } else {
+        setPeriodoAbertoListao(true);
+      }
+    } else {
+      setPeriodoAbertoListao(true);
+    }
+  }, [bimestreOperacoes, listaBimestresOperacoe]);
+
+  const obterBimestresAbertoFechado = async (
+    turmaConsulta,
+    modalidadeConsulta
+  ) => {
+    const retorno = await ServicoPeriodoEscolar.obterPeriodosAbertos(
+      turmaConsulta
+    ).catch(e => erros(e));
+    if (retorno?.data?.length) {
+      const lista = retorno.data.map(item => {
+        return {
+          valor: String(item.bimestre),
+          descricao: `${item.bimestre}º Bimestre`,
+          periodoAberto: item.aberto,
+        };
+      });
+
+      if (modalidadeConsulta !== String(ModalidadeDTO.INFANTIL)) {
+        lista.push({ descricao: 'Final', valor: '0' });
+      }
+      setListaBimestresOperacoes(lista);
+    } else {
+      setListaBimestresOperacoes([]);
+    }
+  };
+
+  useEffect(() => {
     if (
       modalidade &&
+      turma &&
       listaComponenteCurricular?.length &&
       componenteCurricular
     ) {
-      const bimestres = obterBimestres(modalidade);
-      setListaBimestresOperacoes(bimestres);
+      obterBimestresAbertoFechado(turma, modalidade);
     } else {
       setListaBimestresOperacoes([]);
       setBimestreOperacoes();
