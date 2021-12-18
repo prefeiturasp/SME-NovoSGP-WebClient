@@ -1,3 +1,4 @@
+import { Tooltip } from 'antd';
 import { faAngleDown, faAngleUp } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React, { useContext, useState } from 'react';
@@ -15,7 +16,9 @@ import {
   IndicativoCritico,
   LinhaTabela,
   TextoEstilizado,
+  MarcadorSituacao,
 } from './listaFrequencia.css';
+import SinalizacaoAEE from '~/componentes-sgp/SinalizacaoAEE/sinalizacaoAEE';
 
 const ListaoListaFrequencia = () => {
   const {
@@ -73,18 +76,57 @@ const ListaoListaFrequencia = () => {
       />
     );
   };
+  const montarColunaNumeroAula = aluno => {
+    return (
+      <span
+        className="d-flex"
+        style={{ marginLeft: '8px', marginRight: '-8px' }}
+      >
+        {aluno.numeroAlunoChamada}
+
+        {aluno?.marcador ? (
+          <Tooltip title={aluno?.marcador?.descricao} placement="top">
+            <MarcadorSituacao
+              className="fas fa-circle"
+              style={{ marginRight: '4px' }}
+            />
+          </Tooltip>
+        ) : (
+          <div className="mr-3" />
+        )}
+      </span>
+    );
+  };
+
+  const montarColunasEstudante = aluno => {
+    // TODO - REGRA DESABILITAR CAMPOS!
+    const desabilitarCampos = false;
+    const desabilitar = desabilitarCampos || aluno?.desabilitado;
+    return (
+      <div
+        className={`d-flex justify-content-between${
+          desabilitar ? 'desabilitar' : ''
+        }`}
+      >
+        <div className=" d-flex justify-content-start">{aluno.nomeAluno}</div>
+        <div className=" d-flex justify-content-end">
+          <SinalizacaoAEE exibirSinalizacao={aluno.ehAtendidoAEE} />
+        </div>
+      </div>
+    );
+  };
 
   const colunasEstudantes = [
     {
       title: 'Nº',
-      dataIndex: 'numeroAlunoChamada',
       align: 'center',
-      width: '45px',
+      width: '60px',
+      render: montarColunaNumeroAula,
     },
 
     {
       title: montarTituloEstudante,
-      dataIndex: 'nomeAluno',
+      render: montarColunasEstudante,
       width: '350px',
     },
   ];
@@ -191,7 +233,7 @@ const ListaoListaFrequencia = () => {
     return null;
   };
 
-  const montarColunasEstudante = (aluno, dataAula, aula, aulaId) => {
+  const montarColunasDataAulaEstudante = (aluno, dataAula, aula, aulaId) => {
     // TODO - REGRA DO DESABILITAR
 
     const desabilitar = false;
@@ -229,7 +271,12 @@ const ListaoListaFrequencia = () => {
             item => item.aulaId === aulaId
           );
 
-          return montarColunasEstudante(estudante, aula.dataAula, row, aulaId);
+          return montarColunasDataAulaEstudante(
+            estudante,
+            aula.dataAula,
+            row,
+            aulaId
+          );
         },
       },
     ];
