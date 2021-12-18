@@ -27,7 +27,11 @@ const ListaoListaFrequencia = () => {
     listaoEhInfantil,
     listaTiposFrequencia,
     componenteCurricular,
+    somenteConsultaListao,
+    periodoAbertoListao,
   } = useContext(ListaoContext);
+
+  const desabilitarCampos = somenteConsultaListao || !periodoAbertoListao;
 
   const dispatch = useDispatch();
 
@@ -58,6 +62,7 @@ const ListaoListaFrequencia = () => {
           dispatch(setTelaEmEdicao(true));
           atualizarDados();
         }}
+        desabilitar={desabilitarCampos}
       />
     );
   };
@@ -73,13 +78,16 @@ const ListaoListaFrequencia = () => {
           dispatch(setTelaEmEdicao(true));
           atualizarDados();
         }}
+        desabilitar={desabilitarCampos}
       />
     );
   };
   const montarColunaNumeroAula = aluno => {
     return (
       <span className="d-flex justify-content-center">
-        {aluno.numeroAlunoChamada}
+        <span className={desabilitarCampos ? 'desabilitar' : ''}>
+          {aluno.numeroAlunoChamada}
+        </span>
 
         {aluno?.marcador ? (
           <Tooltip title={aluno?.marcador?.descricao} placement="top">
@@ -96,16 +104,15 @@ const ListaoListaFrequencia = () => {
   };
 
   const montarColunasEstudante = aluno => {
-    // TODO - REGRA DESABILITAR CAMPOS!
-    const desabilitarCampos = false;
-    const desabilitar = desabilitarCampos || aluno?.desabilitado;
     return (
-      <div
-        className={`d-flex justify-content-between${
-          desabilitar ? 'desabilitar' : ''
-        }`}
-      >
-        <div className=" d-flex justify-content-start">{aluno.nomeAluno}</div>
+      <div className="d-flex justify-content-between">
+        <div
+          className={`d-flex justify-content-start ${
+            desabilitarCampos ? 'desabilitar' : ''
+          }`}
+        >
+          {aluno.nomeAluno}
+        </div>
         <div className=" d-flex justify-content-end">
           <SinalizacaoAEE exibirSinalizacao={aluno.ehAtendidoAEE} />
         </div>
@@ -133,7 +140,7 @@ const ListaoListaFrequencia = () => {
     dadosFrequencia.aulas.forEach(aula => {
       colunasEstudantes.push({
         title: () => (
-          <span className="fonte-16">
+          <span style={{ fontSize: 16 }}>
             {window.moment(aula?.dataAula).format('DD/MM/YYYY')}
           </span>
         ),
@@ -231,16 +238,14 @@ const ListaoListaFrequencia = () => {
   };
 
   const montarColunasDataAulaEstudante = (aluno, dataAula, aula, aulaId) => {
-    // TODO - REGRA DO DESABILITAR
-
-    const desabilitar = false;
-
     return (
       <span className="d-flex justify-content-between align-items-center">
-        {window.moment(dataAula).format('DD/MM/YYYY')}
+        <span className={desabilitarCampos ? 'desabilitar' : ''}>
+          {window.moment(dataAula).format('DD/MM/YYYY')}
+        </span>
 
         <ListaoBotaoAnotacao
-          desabilitar={desabilitar}
+          desabilitar={desabilitarCampos || aula.desabilitado}
           ehInfantil={listaoEhInfantil}
           aluno={{
             ...aluno,
@@ -339,7 +344,7 @@ const ListaoListaFrequencia = () => {
                   componenteCurricularId={
                     componenteCurricular.codigoComponenteCurricular
                   }
-                  desabilitarCampos={false}
+                  desabilitarCampos={desabilitarCampos}
                   fechouModal={atualizarDados}
                   indexAluno={indexAluno}
                 />

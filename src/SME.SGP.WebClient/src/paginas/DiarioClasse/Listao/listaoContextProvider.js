@@ -34,6 +34,8 @@ const ListaoContextProvider = ({ children }) => {
   const [bimestreOperacoes, setBimestreOperacoes] = useState();
 
   const [tabAtual, setTabAtual] = useState();
+  const [periodoAbertoListao, setPeriodoAbertoListao] = useState(true);
+  const [somenteConsultaListao, setSomenteConsultaListao] = useState(false);
 
   // Utilizado para carregar os filtros novamente quando voltar para a tela de listagem de componentes!
   const [carregarFiltrosSalvos, setCarregarFiltrosSalvos] = useState(false);
@@ -47,21 +49,6 @@ const ListaoContextProvider = ({ children }) => {
   const [dadosIniciaisFrequencia, setDadosIniciaisFrequencia] = useState();
 
   const [listaoEhInfantil, setListaoEhInfantil] = useState();
-
-  const obterBimestres = mod => {
-    const bi = [];
-    bi.push({ descricao: '1º', valor: 1 });
-    bi.push({ descricao: '2º', valor: 2 });
-
-    if (mod !== String(ModalidadeDTO.EJA)) {
-      bi.push({ descricao: '3º', valor: 3 });
-      bi.push({ descricao: '4º', valor: 4 });
-    }
-    if (mod !== String(ModalidadeDTO.INFANTIL)) {
-      bi.push({ descricao: 'Final', valor: 0 });
-    }
-    return bi;
-  };
 
   return (
     <ListaoContext.Provider
@@ -108,11 +95,14 @@ const ListaoContextProvider = ({ children }) => {
         setBimestreOperacoes,
         listaComponenteCurricular,
         setListaComponenteCurricular,
-        obterBimestres,
         exibirLoaderGeral,
         setExibirLoaderGeral,
         listaoEhInfantil,
         setListaoEhInfantil,
+        periodoAbertoListao,
+        setPeriodoAbertoListao,
+        somenteConsultaListao,
+        setSomenteConsultaListao,
         // TAB FREQUÊNCIA,
         listaPeriodos,
         setListaPeriodos,

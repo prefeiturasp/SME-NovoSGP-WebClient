@@ -269,6 +269,11 @@ export const TextoEstilizado = styled.div`
 `;
 
 export const LinhaTabela = styled.div`
+  .desabilitar {
+    opacity: 0.3 !important;
+    cursor: unset !important;
+  }
+
   table:first-child {
     border: 0 !important;
   }

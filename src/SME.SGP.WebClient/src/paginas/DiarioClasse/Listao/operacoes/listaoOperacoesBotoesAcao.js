@@ -33,9 +33,13 @@ const ListaoOperacoesBotoesAcao = () => {
     setDadosFrequencia,
     setExibirLoaderGeral,
     setDadosIniciaisFrequencia,
+    somenteConsultaListao,
+    periodoAbertoListao,
   } = useContext(ListaoContext);
 
   const telaEmEdicao = useSelector(store => store.geral.telaEmEdicao);
+
+  const desabilitarBotoes = !periodoAbertoListao || somenteConsultaListao;
 
   const pergutarParaSalvar = () =>
     confirmar(
@@ -100,7 +104,7 @@ const ListaoOperacoesBotoesAcao = () => {
 
   const validarSalvar = async () => {
     let salvou = true;
-    if (telaEmEdicao) {
+    if (!desabilitarBotoes && telaEmEdicao) {
       const confirmado = await pergutarParaSalvar();
 
       if (confirmado) {
@@ -119,7 +123,7 @@ const ListaoOperacoesBotoesAcao = () => {
   }, [dispatch, telaEmEdicao]);
 
   const onClickVoltar = async () => {
-    if (telaEmEdicao) {
+    if (!desabilitarBotoes && telaEmEdicao) {
       const salvou = await validarSalvar();
       if (salvou) {
         history.push(RotasDto.LISTAO);
@@ -197,7 +201,7 @@ const ListaoOperacoesBotoesAcao = () => {
             color={Colors.Azul}
             border
             onClick={onClickCancelar}
-            disabled={!telaEmEdicao}
+            disabled={desabilitarBotoes || !telaEmEdicao}
           />
         </Col>
         <Col>
@@ -208,7 +212,7 @@ const ListaoOperacoesBotoesAcao = () => {
             border
             bold
             onClick={onClickSalvar}
-            disabled={!telaEmEdicao}
+            disabled={desabilitarBotoes || !telaEmEdicao}
           />
         </Col>
       </Row>

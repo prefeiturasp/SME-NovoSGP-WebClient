@@ -27,6 +27,7 @@ const CampoTiposFrequencia = props => {
   const montarBotao = (background, valor) => {
     return (
       <Button
+        disabled={desabilitar}
         size="small"
         style={{
           background,
@@ -42,7 +43,10 @@ const CampoTiposFrequencia = props => {
   };
 
   return (
-    <div className="d-flex" style={{ justifyContent: 'space-evenly' }}>
+    <div
+      className={`d-flex ${desabilitar ? 'desabilitar' : ''}`}
+      style={{ justifyContent: 'space-evenly' }}
+    >
       {temTipoNaLista(tipoFrequenciaDto.Compareceu.valor) &&
         montarBotao(
           obterCorAtual(tipoFrequenciaDto.Compareceu),
