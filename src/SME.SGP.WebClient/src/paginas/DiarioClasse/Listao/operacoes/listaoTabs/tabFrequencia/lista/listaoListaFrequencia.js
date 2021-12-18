@@ -8,6 +8,8 @@ import tipoIndicativoFrequencia from '~/dtos/tipoIndicativoFrequencia';
 import ListaoContext from '~/paginas/DiarioClasse/Listao/listaoContext';
 import { setTelaEmEdicao } from '~/redux/modulos/geral/actions';
 import CampoTiposFrequencia from './componentes/campoTiposFrequencia';
+import ListaoBotaoAnotacao from './componentes/listaoBotaoAnotacao';
+import ListaoModalAnotacoesFrequencia from './componentes/listaoModalAnotacaoFrequencia';
 import {
   IndicativoAlerta,
   IndicativoCritico,
@@ -21,6 +23,7 @@ const ListaoListaFrequencia = () => {
     setDadosFrequencia,
     listaoEhInfantil,
     listaTiposFrequencia,
+    componenteCurricular,
   } = useContext(ListaoContext);
 
   const dispatch = useDispatch();
@@ -31,6 +34,11 @@ const ListaoListaFrequencia = () => {
         Nome {listaoEhInfantil ? 'da criança' : 'do estudante'}
       </span>
     );
+  };
+
+  const atualizarDados = () => {
+    // TODO - Mover tabela para outro arquivo e renderizar ele para recarrecar somente a linha do aluno e não a tabela toda novamente!
+    setDadosFrequencia({ ...dadosFrequencia });
   };
 
   const montarColunaFrequenciaDiaria = dadosDiaAula => {
@@ -45,8 +53,7 @@ const ListaoListaFrequencia = () => {
             item.tipoFrequencia = valorNovo;
           });
           dispatch(setTelaEmEdicao(true));
-          // TODO - Mover tabela para outro arquivo e renderizar ele para recarrecar somente a linha do aluno e não a tabela toda novamente!
-          setDadosFrequencia({ ...dadosFrequencia });
+          atualizarDados();
         }}
       />
     );
@@ -61,8 +68,7 @@ const ListaoListaFrequencia = () => {
           dadosAula.alterado = true;
           detalheFreq.tipoFrequencia = valorNovo;
           dispatch(setTelaEmEdicao(true));
-          // TODO - Mover tabela para outro arquivo e renderizar ele para recarrecar somente a linha do aluno e não a tabela toda novamente!
-          setDadosFrequencia({ ...dadosFrequencia });
+          atualizarDados();
         }}
       />
     );
@@ -185,6 +191,32 @@ const ListaoListaFrequencia = () => {
     return null;
   };
 
+  const montarColunasEstudante = (aluno, dataAula, aula, aulaId) => {
+    // TODO - REGRA DO DESABILITAR
+
+    const desabilitar = false;
+
+    return (
+      <span className="d-flex justify-content-between align-items-center">
+        {window.moment(dataAula).format('DD/MM/YYYY')}
+
+        <ListaoBotaoAnotacao
+          desabilitar={desabilitar}
+          ehInfantil={listaoEhInfantil}
+          aluno={{
+            ...aluno,
+            aulaId,
+            permiteAnotacao: aula?.permiteAnotacao,
+            possuiAnotacao: aula?.possuiAnotacao,
+            aula,
+          }}
+          permiteAnotacao={aula?.permiteAnotacao}
+          possuiAnotacao={aula?.possuiAnotacao}
+        />
+      </span>
+    );
+  };
+
   const montarColunasDetalhe = estudante => {
     const colunasDetalhamentoEstudante = [
       {
@@ -192,11 +224,12 @@ const ListaoListaFrequencia = () => {
         dataIndex: 'aulaId',
         align: 'left',
         ellipsis: true,
-        render: aulaId => {
+        render: (aulaId, row) => {
           const aula = dadosFrequencia.aulas.find(
             item => item.aulaId === aulaId
           );
-          return window.moment(aula.dataAula).format('DD/MM/YYYY');
+
+          return montarColunasEstudante(estudante, aula.dataAula, row, aulaId);
         },
       },
     ];
@@ -252,18 +285,29 @@ const ListaoListaFrequencia = () => {
             const nomeClasse = ehLinhaExpandida.length ? 'linha-ativa' : '';
             return nomeClasse;
           }}
-          expandedRowRender={record => {
-            const colunasDetalhe = montarColunasDetalhe(record);
+          expandedRowRender={(record, indexAluno) => {
+            const colunasDetalhe = montarColunasDetalhe(record, indexAluno);
             return (
-              <DataTable
-                id={`tabela-aluno-${record?.codigoAluno}`}
-                idLinha="aulaId"
-                pagination={false}
-                columns={colunasDetalhe}
-                dataSource={record?.aulas}
-                semHover
-                tableLayout="fixed"
-              />
+              <>
+                <ListaoModalAnotacoesFrequencia
+                  dadosListaFrequencia={dadosFrequencia?.alunos}
+                  ehInfantil={listaoEhInfantil}
+                  componenteCurricularId={
+                    componenteCurricular.codigoComponenteCurricular
+                  }
+                  desabilitarCampos={false}
+                  fechouModal={atualizarDados}
+                />
+                <DataTable
+                  id={`tabela-aluno-${record?.codigoAluno}`}
+                  idLinha="aulaId"
+                  pagination={false}
+                  columns={colunasDetalhe}
+                  dataSource={record?.aulas}
+                  semHover
+                  tableLayout="fixed"
+                />
+              </>
             );
           }}
           expandIcon={({ expanded, onExpand, record }) =>
