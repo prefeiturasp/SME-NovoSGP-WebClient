@@ -344,6 +344,7 @@ const ListaoListaFrequencia = () => {
                   }
                   desabilitarCampos={false}
                   fechouModal={atualizarDados}
+                  indexAluno={indexAluno}
                 />
                 <DataTable
                   id={`tabela-aluno-${record?.codigoAluno}`}

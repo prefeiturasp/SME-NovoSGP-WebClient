@@ -44,6 +44,7 @@ const ListaoContextProvider = ({ children }) => {
   const [listaTiposFrequencia, setListaTiposFrequencia] = useState([]);
   const [periodo, setPeriodo] = useState();
   const [dadosFrequencia, setDadosFrequencia] = useState();
+  const [dadosIniciaisFrequencia, setDadosIniciaisFrequencia] = useState();
 
   const [listaoEhInfantil, setListaoEhInfantil] = useState();
 
@@ -123,6 +124,8 @@ const ListaoContextProvider = ({ children }) => {
         setPermissaoTela,
         listaTiposFrequencia,
         setListaTiposFrequencia,
+        dadosIniciaisFrequencia,
+        setDadosIniciaisFrequencia,
       }}
     >
       {children}
