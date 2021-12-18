@@ -78,21 +78,18 @@ const ListaoListaFrequencia = () => {
   };
   const montarColunaNumeroAula = aluno => {
     return (
-      <span
-        className="d-flex"
-        style={{ marginLeft: '8px', marginRight: '-8px' }}
-      >
+      <span className="d-flex justify-content-center">
         {aluno.numeroAlunoChamada}
 
         {aluno?.marcador ? (
           <Tooltip title={aluno?.marcador?.descricao} placement="top">
             <MarcadorSituacao
               className="fas fa-circle"
-              style={{ marginRight: '4px' }}
+              style={{ marginRight: '-10px' }}
             />
           </Tooltip>
         ) : (
-          <div className="mr-3" />
+          <></>
         )}
       </span>
     );
