@@ -41,7 +41,21 @@ const TabListaoFrequencia = () => {
     listaPeriodos?.length === 1 ||
     !listaPeriodos?.length;
 
+  const limparFrequencia = () => {
+    setDadosIniciaisFrequencia({});
+    setDadosFrequencia({});
+  };
+
+  useEffect(() => {
+    return () => {
+      limparFrequencia();
+      setPeriodo();
+      setListaPeriodos([]);
+    };
+  }, []);
+
   const obterPeriodoPorComponente = useCallback(async () => {
+    limparFrequencia();
     setExibirLoaderPeriodo(true);
     const resposta = await ServicoPeriodoEscolar.obterPeriodoPorComponente(
       turma,
@@ -66,15 +80,14 @@ const TabListaoFrequencia = () => {
   }, [componenteCurricular, turma, bimestreOperacoes]);
 
   useEffect(() => {
+    setPeriodo();
+    setListaPeriodos([]);
     if (
       componenteCurricular?.codigoComponenteCurricular &&
       turma &&
       bimestreOperacoes
     ) {
       obterPeriodoPorComponente();
-    } else {
-      setListaPeriodos([]);
-      setPeriodo();
     }
   }, [
     obterPeriodoPorComponente,
@@ -108,6 +121,7 @@ const TabListaoFrequencia = () => {
     if (telaEmEdicao) {
       const salvou = await acaoTelaEmEdicao();
       if (salvou) {
+        limparFrequencia();
         setarPeriodo(valor);
       }
     } else {
@@ -140,7 +154,7 @@ const TabListaoFrequencia = () => {
       setDadosFrequencia(dadosCarregar);
       setDadosIniciaisFrequencia(dadosIniciais);
     } else {
-      setDadosFrequencia();
+      limparFrequencia();
     }
   }, [
     componenteCurricular,
@@ -151,6 +165,7 @@ const TabListaoFrequencia = () => {
   ]);
 
   useEffect(() => {
+    limparFrequencia();
     if (
       periodo?.dataInicio &&
       periodo?.dataFim &&
@@ -159,16 +174,8 @@ const TabListaoFrequencia = () => {
       bimestreOperacoes
     ) {
       obterFrequenciasPorPeriodo();
-    } else {
-      setDadosFrequencia();
     }
-  }, [
-    periodo,
-    componenteCurricular,
-    turma,
-    bimestreOperacoes,
-    obterFrequenciasPorPeriodo,
-  ]);
+  }, [periodo, obterFrequenciasPorPeriodo]);
 
   return (
     <>

@@ -31,6 +31,8 @@ const ListaoOperacoesBotoesAcao = () => {
     dadosIniciaisFrequencia,
     tabAtual,
     setDadosFrequencia,
+    setExibirLoaderGeral,
+    setDadosIniciaisFrequencia,
   } = useContext(ListaoContext);
 
   const telaEmEdicao = useSelector(store => store.geral.telaEmEdicao);
@@ -74,12 +76,21 @@ const ListaoOperacoesBotoesAcao = () => {
       })
       ?.filter(a => a?.alunos?.length);
 
-    // TODO - ADD LOADER
+    setExibirLoaderGeral(true);
     const resposta = await ServicoFrequencia.salvarFrequenciaListao(
       paramsSalvar
-    ).catch(e => erros(e));
+    )
+      .catch(e => erros(e))
+      .finally(() => setExibirLoaderGeral(false));
 
     if (resposta?.data) {
+      const auditoriaNova = resposta.data;
+      dadosFrequencia.auditoria = { ...auditoriaNova };
+      dadosIniciaisFrequencia.auditoria = { ...auditoriaNova };
+      setDadosFrequencia({ ...dadosFrequencia });
+      setDadosIniciaisFrequencia(dadosIniciaisFrequencia);
+
+      sucesso('Frequência realizada com sucesso.');
       dispatch(setTelaEmEdicao(false));
       return true;
     }
@@ -94,11 +105,6 @@ const ListaoOperacoesBotoesAcao = () => {
 
       if (confirmado) {
         salvou = await onClickSalvar();
-        if (salvou) {
-          sucesso('Frequência realizada com sucesso.');
-        } else {
-          salvou = false;
-        }
       } else {
         dispatch(setTelaEmEdicao(false));
       }
