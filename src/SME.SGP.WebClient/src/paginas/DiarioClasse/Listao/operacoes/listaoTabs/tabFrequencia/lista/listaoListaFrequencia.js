@@ -245,7 +245,7 @@ const ListaoListaFrequencia = () => {
         </span>
 
         <ListaoBotaoAnotacao
-          desabilitar={desabilitarCampos || aula.desabilitado}
+          desabilitarCampos={desabilitarCampos || aula.desabilitado}
           ehInfantil={listaoEhInfantil}
           aluno={{
             ...aluno,
