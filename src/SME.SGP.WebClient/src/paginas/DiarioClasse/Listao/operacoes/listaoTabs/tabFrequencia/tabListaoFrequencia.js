@@ -1,4 +1,5 @@
 import { Col, Row } from 'antd';
+import _ from 'lodash';
 import React, { useCallback, useContext, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Alert, Loader, SelectComponent } from '~/componentes';
@@ -28,6 +29,7 @@ const TabListaoFrequencia = () => {
     dadosFrequencia,
     setDadosFrequencia,
     setListaTiposFrequencia,
+    setDadosIniciaisFrequencia,
   } = useContext(ListaoContext);
 
   const [exibirLoaderPeriodo, setExibirLoaderPeriodo] = useState(false);
@@ -133,9 +135,10 @@ const TabListaoFrequencia = () => {
       const tiposFrequencia = retorno?.data?.length ? retorno.data : [];
       setListaTiposFrequencia(tiposFrequencia);
 
-      // TODO - REMOVER MOCK
-      // setDadosFrequencia(mockListao);
-      setDadosFrequencia(resposta.data);
+      const dadosCarregar = _.cloneDeep(resposta.data);
+      const dadosIniciais = _.cloneDeep(resposta.data);
+      setDadosFrequencia(dadosCarregar);
+      setDadosIniciaisFrequencia(dadosIniciais);
     } else {
       setDadosFrequencia();
     }

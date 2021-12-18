@@ -1,10 +1,7 @@
 import { Col, Row } from 'antd';
+import _ from 'lodash';
 import React, { useContext, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import {
-  setAcaoTelaEmEdicao,
-  setTelaEmEdicao,
-} from '~/redux/modulos/geral/actions';
 import { Button, Colors } from '~/componentes';
 import {
   SGP_BUTTON_CANCELAR,
@@ -12,13 +9,29 @@ import {
   SGP_BUTTON_VOLTAR,
 } from '~/componentes-sgp/filtro/idsCampos';
 import { RotasDto } from '~/dtos';
+import {
+  setAcaoTelaEmEdicao,
+  setTelaEmEdicao,
+} from '~/redux/modulos/geral/actions';
 import { confirmar, erros, history, sucesso } from '~/servicos';
-import ListaoContext from '../listaoContext';
 import ServicoFrequencia from '~/servicos/Paginas/DiarioClasse/ServicoFrequencia';
+import {
+  LISTAO_TAB_AVALIACOES,
+  LISTAO_TAB_DIARIO_BORDO,
+  LISTAO_TAB_FECHAMENTO,
+  LISTAO_TAB_FREQUENCIA,
+  LISTAO_TAB_PLANO_AULA,
+} from '../listaoConstantes';
+import ListaoContext from '../listaoContext';
 
 const ListaoOperacoesBotoesAcao = () => {
   const dispatch = useDispatch();
-  const { dadosFrequencia } = useContext(ListaoContext);
+  const {
+    dadosFrequencia,
+    dadosIniciaisFrequencia,
+    tabAtual,
+    setDadosFrequencia,
+  } = useContext(ListaoContext);
 
   const telaEmEdicao = useSelector(store => store.geral.telaEmEdicao);
 
@@ -110,6 +123,54 @@ const ListaoOperacoesBotoesAcao = () => {
     }
   };
 
+  const limparDadosFrequencia = () => {
+    const dadosCarregar = _.cloneDeep(dadosIniciaisFrequencia);
+    setDadosFrequencia({ ...dadosCarregar });
+  };
+
+  const limparDadosPlanoAula = () => {};
+  const limparDadosAvaliacoes = () => {};
+  const limparDadosFechamento = () => {};
+  const limparDadosDiarioBordo = () => {};
+
+  const limparDadosTabSelecionada = () => {
+    switch (tabAtual) {
+      case LISTAO_TAB_FREQUENCIA:
+        limparDadosFrequencia();
+        break;
+      case LISTAO_TAB_PLANO_AULA:
+        limparDadosPlanoAula();
+        break;
+      case LISTAO_TAB_AVALIACOES:
+        limparDadosAvaliacoes();
+        break;
+      case LISTAO_TAB_FECHAMENTO:
+        limparDadosFechamento();
+        break;
+
+      case LISTAO_TAB_DIARIO_BORDO:
+        limparDadosDiarioBordo();
+        break;
+
+      default:
+        break;
+    }
+  };
+
+  const onClickCancelar = async () => {
+    if (telaEmEdicao) {
+      const confirmou = await confirmar(
+        'Atenção',
+        'Você não salvou as informações preenchidas.',
+        'Deseja realmente cancelar as alterações?'
+      );
+      if (confirmou) {
+        limparDadosTabSelecionada();
+        dispatch(setTelaEmEdicao(false));
+      }
+    }
+  };
+
   return (
     <Col span={24}>
       <Row gutter={[16, 16]} type="flex" justify="end">
@@ -129,6 +190,8 @@ const ListaoOperacoesBotoesAcao = () => {
             label="Cancelar"
             color={Colors.Azul}
             border
+            onClick={onClickCancelar}
+            disabled={!telaEmEdicao}
           />
         </Col>
         <Col>
@@ -139,6 +202,7 @@ const ListaoOperacoesBotoesAcao = () => {
             border
             bold
             onClick={onClickSalvar}
+            disabled={!telaEmEdicao}
           />
         </Col>
       </Row>
