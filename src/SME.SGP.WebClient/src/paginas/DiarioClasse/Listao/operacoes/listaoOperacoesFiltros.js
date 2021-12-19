@@ -6,9 +6,10 @@ import {
   SGP_SELECT_BIMESTRE,
   SGP_SELECT_COMPONENTE_CURRICULAR,
 } from '~/componentes-sgp/filtro/idsCampos';
-import { ModalidadeDTO } from '~/dtos';
+import { ModalidadeDTO, RotasDto } from '~/dtos';
 import { setLimparModoEdicaoGeral } from '~/redux/modulos/geral/actions';
-import { erros, ServicoDisciplina } from '~/servicos';
+import { setSomenteConsulta } from '~/redux/modulos/navegacao/actions';
+import { erros, ServicoDisciplina, verificaSomenteConsulta } from '~/servicos';
 import ServicoPeriodoEscolar from '~/servicos/Paginas/Calendario/ServicoPeriodoEscolar';
 import ListaoContext from '../listaoContext';
 
@@ -20,6 +21,7 @@ const ListaoOperacoesFiltros = () => {
   const { modalidade, turma } = turmaSelecionada;
   const telaEmEdicao = useSelector(store => store.geral.telaEmEdicao);
   const acaoTelaEmEdicao = useSelector(store => store.geral.acaoTelaEmEdicao);
+  const permissoesTela = usuario.permissoes[RotasDto.LISTAO];
 
   const {
     bimestre,
@@ -34,6 +36,7 @@ const ListaoOperacoesFiltros = () => {
     listaComponenteCurricular,
     setPeriodoAbertoListao,
     limparTelaListao,
+    setSomenteConsultaListao,
   } = useContext(ListaoContext);
 
   const [listaBimestresOperacoe, setListaBimestresOperacoes] = useState(
@@ -43,6 +46,16 @@ const ListaoOperacoesFiltros = () => {
   const [bimestreInicial, setBimestreInicial] = useState(bimestre);
 
   const [exibirLoader, setExibirLoader] = useState(false);
+
+  useEffect(() => {
+    if (turma && permissoesTela) {
+      const soConsulta = verificaSomenteConsulta(permissoesTela);
+      setSomenteConsultaListao(soConsulta);
+    } else {
+      setSomenteConsultaListao(false);
+      dispatch(setSomenteConsulta(false));
+    }
+  }, [permissoesTela, turma, setSomenteConsultaListao, dispatch]);
 
   useEffect(() => {
     return () => {
