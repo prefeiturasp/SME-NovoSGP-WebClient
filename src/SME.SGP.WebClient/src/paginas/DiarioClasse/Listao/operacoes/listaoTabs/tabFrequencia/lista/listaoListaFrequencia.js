@@ -102,16 +102,6 @@ const ListaoListaFrequencia = () => {
   };
 
   const montarColunaFrequenciaDiaria = dadosDiaAula => {
-    const aulasDetalhe = dadosDiaAula.detalheFrequencia.map(
-      item => item.tipoFrequencia
-    );
-
-    const tipoFreqAluno = listaTiposFrequencia.find(tipo => {
-      const somenteEsteTipo = aulasDetalhe.every(c => c === tipo.valor);
-      return somenteEsteTipo;
-    });
-
-    dadosDiaAula.tipoFrequencia = tipoFreqAluno?.valor || '';
     return (
       <CampoTiposFrequencia
         tipoFrequencia={dadosDiaAula?.tipoFrequencia}
@@ -138,6 +128,18 @@ const ListaoListaFrequencia = () => {
         onChange={valorNovo => {
           dadosAula.alterado = true;
           detalheFreq.tipoFrequencia = valorNovo;
+
+          const aulasDetalhe = dadosAula.detalheFrequencia.map(
+            item => item.tipoFrequencia
+          );
+
+          const tipoFreqAluno = listaTiposFrequencia.find(tipo => {
+            const somenteEsteTipo = aulasDetalhe.every(c => c === tipo.valor);
+            return somenteEsteTipo;
+          });
+
+          dadosAula.tipoFrequencia = tipoFreqAluno?.valor || '';
+
           dispatch(setTelaEmEdicao(true));
           atualizarDados();
         }}
