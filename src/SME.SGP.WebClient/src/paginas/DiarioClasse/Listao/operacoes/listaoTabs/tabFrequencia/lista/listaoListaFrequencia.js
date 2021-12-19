@@ -1,9 +1,10 @@
-import { Tooltip } from 'antd';
 import { faAngleDown, faAngleUp } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Tooltip } from 'antd';
 import React, { useContext, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { DataTable } from '~/componentes';
+import SinalizacaoAEE from '~/componentes-sgp/SinalizacaoAEE/sinalizacaoAEE';
 import { Base } from '~/componentes/colors';
 import tipoIndicativoFrequencia from '~/dtos/tipoIndicativoFrequencia';
 import ListaoContext from '~/paginas/DiarioClasse/Listao/listaoContext';
@@ -11,14 +12,14 @@ import { setTelaEmEdicao } from '~/redux/modulos/geral/actions';
 import CampoTiposFrequencia from './componentes/campoTiposFrequencia';
 import ListaoBotaoAnotacao from './componentes/listaoBotaoAnotacao';
 import ListaoModalAnotacoesFrequencia from './componentes/listaoModalAnotacaoFrequencia';
+import ReposicaoLabel from './componentes/reposicaoLabel';
 import {
   IndicativoAlerta,
   IndicativoCritico,
   LinhaTabela,
-  TextoEstilizado,
   MarcadorSituacao,
+  TextoEstilizado,
 } from './listaFrequencia.css';
-import SinalizacaoAEE from '~/componentes-sgp/SinalizacaoAEE/sinalizacaoAEE';
 
 const ListaoListaFrequencia = () => {
   const {
@@ -170,7 +171,7 @@ const ListaoListaFrequencia = () => {
 
   const montarColunasEstudante = aluno => {
     return (
-      <div className="d-flex justify-content-between">
+      <div className="d-flex justify-content-between" style={{ width: 350 }}>
         <div
           className={`d-flex justify-content-start ${
             desabilitarCampos ? 'desabilitar' : ''
@@ -196,7 +197,6 @@ const ListaoListaFrequencia = () => {
     {
       title: montarTituloEstudante,
       render: montarColunasEstudante,
-      width: '350px',
     },
   ];
 
@@ -205,9 +205,12 @@ const ListaoListaFrequencia = () => {
     dadosFrequencia.aulas.forEach(aula => {
       colunasEstudantes.push({
         title: () => (
-          <span style={{ fontSize: 16 }}>
-            {window.moment(aula?.dataAula).format('DD/MM/YYYY')}
-          </span>
+          <div>
+            <div style={{ fontSize: 16, marginRight: 3 }}>
+              {window.moment(aula?.dataAula).format('DD/MM/YYYY')}
+            </div>
+            {aula?.ehReposicao ? <ReposicaoLabel /> : <></>}
+          </div>
         ),
         align: 'center',
         width: '150px',
@@ -310,10 +313,20 @@ const ListaoListaFrequencia = () => {
     return null;
   };
 
-  const montarColunasDataAulaEstudante = (aluno, dataAula, aula, aulaId) => {
+  const montarColunasDataAulaEstudante = (
+    aluno,
+    dataAula,
+    aula,
+    aulaId,
+    ehReposicao
+  ) => {
     return (
       <span className="d-flex justify-content-between align-items-center">
-        <span className={desabilitarCampos ? 'desabilitar' : ''}>
+        {ehReposicao ? <ReposicaoLabel linhaDetalhe /> : <></>}
+        <span
+          className={desabilitarCampos ? 'desabilitar' : ''}
+          style={{ marginLeft: 14 }}
+        >
           {window.moment(dataAula).format('DD/MM/YYYY')}
         </span>
 
@@ -350,7 +363,8 @@ const ListaoListaFrequencia = () => {
             estudante,
             aula.dataAula,
             row,
-            aulaId
+            aulaId,
+            aula?.ehReposicao
           );
         },
       },
