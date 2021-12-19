@@ -269,6 +269,11 @@ export const TextoEstilizado = styled.div`
 `;
 
 export const LinhaTabela = styled.div`
+  .posicao-marcar-todos-header {
+    .ant-table-header-column {
+      display: block !important;
+    }
+  }
   .desabilitar {
     opacity: 0.3 !important;
     cursor: unset !important;
@@ -325,11 +330,6 @@ export const LinhaTabela = styled.div`
         padding-left: 24px;
         overflow: hidden;
         white-space: break-spaces;
-
-        @supports (-moz-appearance: none) {
-          margin-top: -22px;
-          padding-left: 25px;
-        }
       }
 
       table {

@@ -1,4 +1,4 @@
-import { Button } from 'antd';
+import { Button, Tooltip } from 'antd';
 import PropTypes from 'prop-types';
 import React from 'react';
 import { Base } from '~/componentes/colors';
@@ -24,21 +24,22 @@ const CampoTiposFrequencia = props => {
     }
   };
 
-  const montarBotao = (background, valor) => {
+  const montarBotao = (background, valor, tituloTooltip) => {
     return (
-      <Button
-        disabled={desabilitar}
-        size="small"
-        style={{
-          background,
-          color: Base.Branco,
-          fontSize: '16px',
-        }}
-        shape="circle"
-        onClick={() => onClick(valor)}
-      >
-        {valor}
-      </Button>
+      <Tooltip title={tituloTooltip}>
+        <Button
+          disabled={desabilitar}
+          size="small"
+          style={{
+            background,
+            color: Base.Branco,
+          }}
+          shape="circle"
+          onClick={() => onClick(valor)}
+        >
+          {valor}
+        </Button>
+      </Tooltip>
     );
   };
 
@@ -50,17 +51,20 @@ const CampoTiposFrequencia = props => {
       {temTipoNaLista(tipoFrequenciaDto.Compareceu.valor) &&
         montarBotao(
           obterCorAtual(tipoFrequenciaDto.Compareceu),
-          tipoFrequenciaDto.Compareceu.valor
+          tipoFrequenciaDto.Compareceu.valor,
+          'Compareceu'
         )}
       {temTipoNaLista(tipoFrequenciaDto.Faltou.valor) &&
         montarBotao(
           obterCorAtual(tipoFrequenciaDto.Faltou),
-          tipoFrequenciaDto.Faltou.valor
+          tipoFrequenciaDto.Faltou.valor,
+          'Faltou'
         )}
       {temTipoNaLista(tipoFrequenciaDto.Remoto.valor) &&
         montarBotao(
           obterCorAtual(tipoFrequenciaDto.Remoto),
-          tipoFrequenciaDto.Remoto.valor
+          tipoFrequenciaDto.Remoto.valor,
+          'Remoto'
         )}
     </div>
   );

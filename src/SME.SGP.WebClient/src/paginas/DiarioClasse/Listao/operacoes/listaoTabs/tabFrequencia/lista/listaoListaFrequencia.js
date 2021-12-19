@@ -48,6 +48,59 @@ const ListaoListaFrequencia = () => {
     setDadosFrequencia({ ...dadosFrequencia });
   };
 
+  const montarColunaFrequenciaMarcarTodasAulas = aulaHeader => {
+    let tisposInseridos = [];
+
+    dadosFrequencia.alunos.forEach(a => {
+      const aulasPorAulaId = a.aulas.filter(
+        item => item.aulaId === aulaHeader.aulaId
+      );
+      if (aulasPorAulaId?.length) {
+        tisposInseridos = tisposInseridos.concat(
+          aulasPorAulaId.map(b => b.tipoFrequencia)
+        );
+      }
+    });
+
+    const tipoFreqTodos = listaTiposFrequencia.find(tipo => {
+      const somenteEsteTipo = tisposInseridos.every(c => c === tipo.valor);
+      return somenteEsteTipo;
+    });
+
+    return (
+      <CampoTiposFrequencia
+        tipoFrequencia={tipoFreqTodos?.valor || ''}
+        listaTiposFrequencia={listaTiposFrequencia}
+        onChange={valorNovo => {
+          if (!desabilitarCampos) {
+            let alterouFreq = false;
+            dadosFrequencia.alunos.forEach(aluno => {
+              aluno.aulas.forEach(diaAula => {
+                if (
+                  !diaAula.desabilitado &&
+                  aulaHeader.aulaId === diaAula.aulaId
+                ) {
+                  aulaHeader.tipoFrequencia = valorNovo;
+                  diaAula.tipoFrequencia = valorNovo;
+                  diaAula.alterado = true;
+                  alterouFreq = true;
+                  diaAula.detalheFrequencia.forEach(aula => {
+                    aula.tipoFrequencia = valorNovo;
+                  });
+                }
+              });
+            });
+            if (alterouFreq) {
+              dispatch(setTelaEmEdicao(true));
+              atualizarDados();
+            }
+          }
+        }}
+        desabilitar={desabilitarCampos}
+      />
+    );
+  };
+
   const montarColunaFrequenciaDiaria = dadosDiaAula => {
     return (
       <CampoTiposFrequencia
@@ -62,7 +115,7 @@ const ListaoListaFrequencia = () => {
           dispatch(setTelaEmEdicao(true));
           atualizarDados();
         }}
-        desabilitar={desabilitarCampos}
+        desabilitar={desabilitarCampos || dadosDiaAula?.desabilitado}
       />
     );
   };
@@ -75,10 +128,22 @@ const ListaoListaFrequencia = () => {
         onChange={valorNovo => {
           dadosAula.alterado = true;
           detalheFreq.tipoFrequencia = valorNovo;
+
+          const aulasDetalhe = dadosAula.detalheFrequencia.map(
+            item => item.tipoFrequencia
+          );
+
+          const tipoFreqAluno = listaTiposFrequencia.find(tipo => {
+            const somenteEsteTipo = aulasDetalhe.every(c => c === tipo.valor);
+            return somenteEsteTipo;
+          });
+
+          dadosAula.tipoFrequencia = tipoFreqAluno?.valor || '';
+
           dispatch(setTelaEmEdicao(true));
           atualizarDados();
         }}
-        desabilitar={desabilitarCampos}
+        desabilitar={desabilitarCampos || dadosAula?.desabilitado}
       />
     );
   };
@@ -146,16 +211,24 @@ const ListaoListaFrequencia = () => {
         ),
         align: 'center',
         width: '150px',
-        render: dadosAulas => {
-          const dadosDiaAula = dadosAulas.aulas.find(
-            item => item.aulaId === aula.aulaId
-          );
-          if (dadosDiaAula) {
-            return montarColunaFrequenciaDiaria(dadosDiaAula);
-          }
+        children: [
+          {
+            align: 'center',
+            width: '150px',
+            className: 'posicao-marcar-todos-header',
+            title: montarColunaFrequenciaMarcarTodasAulas(aula),
+            render: dadosAulas => {
+              const dadosDiaAula = dadosAulas.aulas.find(
+                item => item.aulaId === aula.aulaId
+              );
+              if (dadosDiaAula) {
+                return montarColunaFrequenciaDiaria(dadosDiaAula);
+              }
 
-          return '-';
-        },
+              return '-';
+            },
+          },
+        ],
       });
     });
   }
