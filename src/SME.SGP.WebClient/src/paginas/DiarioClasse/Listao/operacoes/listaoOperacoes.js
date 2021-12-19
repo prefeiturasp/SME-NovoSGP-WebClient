@@ -1,6 +1,6 @@
 import { Col } from 'antd';
 import React, { useContext, useEffect } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Card } from '~/componentes';
 import { Cabecalho } from '~/componentes-sgp';
 import { RotasDto } from '~/dtos';
@@ -12,9 +12,14 @@ import ListaoTabs from './listaoTabs/listaoTabs';
 import ListaoLoaderGeral from './listaoLoaderGeral';
 import ListaoAlertaPeriodoAberto from './listaoAlertaPeriodoAberto';
 import { verificaSomenteConsulta } from '~/servicos';
+import { setLimparModoEdicaoGeral } from '~/redux/modulos/geral/actions';
 
 const ListaoOperacoes = () => {
-  const { setSomenteConsultaListao } = useContext(ListaoContext);
+  const dispatch = useDispatch();
+
+  const { setSomenteConsultaListao, limparTelaListao } = useContext(
+    ListaoContext
+  );
 
   const permissoes = useSelector(state => state.usuario.permissoes);
   const permissoesTela = permissoes[RotasDto.LISTAO_OPERACOES];
@@ -25,6 +30,13 @@ const ListaoOperacoes = () => {
       setSomenteConsultaListao(soConsulta);
     }
   }, [permissoesTela, setSomenteConsultaListao]);
+
+  useEffect(() => {
+    return () => {
+      limparTelaListao();
+      dispatch(setLimparModoEdicaoGeral());
+    };
+  }, []);
 
   return (
     <>

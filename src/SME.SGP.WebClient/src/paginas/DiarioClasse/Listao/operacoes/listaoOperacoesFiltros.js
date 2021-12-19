@@ -1,17 +1,20 @@
 import { Col, Row } from 'antd';
 import React, { useCallback, useContext, useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Loader, SelectComponent } from '~/componentes';
 import {
   SGP_SELECT_BIMESTRE,
   SGP_SELECT_COMPONENTE_CURRICULAR,
 } from '~/componentes-sgp/filtro/idsCampos';
 import { ModalidadeDTO } from '~/dtos';
+import { setLimparModoEdicaoGeral } from '~/redux/modulos/geral/actions';
 import { erros, ServicoDisciplina } from '~/servicos';
 import ServicoPeriodoEscolar from '~/servicos/Paginas/Calendario/ServicoPeriodoEscolar';
 import ListaoContext from '../listaoContext';
 
 const ListaoOperacoesFiltros = () => {
+  const dispatch = useDispatch();
+
   const usuario = useSelector(store => store.usuario);
   const { turmaSelecionada } = usuario;
   const { modalidade, turma } = turmaSelecionada;
@@ -30,6 +33,7 @@ const ListaoOperacoesFiltros = () => {
     setListaComponenteCurricular,
     listaComponenteCurricular,
     setPeriodoAbertoListao,
+    limparTelaListao,
   } = useContext(ListaoContext);
 
   const [listaBimestresOperacoe, setListaBimestresOperacoes] = useState(
@@ -72,8 +76,12 @@ const ListaoOperacoesFiltros = () => {
     setComponenteCurricular();
     setListaBimestresOperacoes([]);
     setBimestreOperacoes();
+
     if (turma) {
       obterComponentesCurriculares();
+    } else {
+      limparTelaListao();
+      dispatch(setLimparModoEdicaoGeral());
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [turma, obterComponentesCurriculares]);
@@ -93,12 +101,9 @@ const ListaoOperacoesFiltros = () => {
     }
   }, [bimestreOperacoes, listaBimestresOperacoe]);
 
-  const obterBimestresAbertoFechado = async (
-    turmaConsulta,
-    modalidadeConsulta
-  ) => {
+  const obterBimestresAbertoFechado = useCallback(async () => {
     const retorno = await ServicoPeriodoEscolar.obterPeriodosAbertos(
-      turmaConsulta
+      turma
     ).catch(e => erros(e));
     if (retorno?.data?.length) {
       const lista = retorno.data.map(item => {
@@ -109,29 +114,24 @@ const ListaoOperacoesFiltros = () => {
         };
       });
 
-      if (modalidadeConsulta !== String(ModalidadeDTO.INFANTIL)) {
+      if (modalidade !== String(ModalidadeDTO.INFANTIL)) {
         lista.push({ descricao: 'Final', valor: '0' });
       }
       setListaBimestresOperacoes(lista);
     } else {
       setListaBimestresOperacoes([]);
     }
-  };
+  }, [turma, modalidade]);
 
   useEffect(() => {
-    if (
-      modalidade &&
-      turma &&
-      listaComponenteCurricular?.length &&
-      componenteCurricular
-    ) {
-      obterBimestresAbertoFechado(turma, modalidade);
+    if (turma && listaComponenteCurricular?.length && componenteCurricular) {
+      obterBimestresAbertoFechado();
     } else {
       setListaBimestresOperacoes([]);
       setBimestreOperacoes();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [modalidade, turma, componenteCurricular, listaComponenteCurricular]);
+  }, [turma, componenteCurricular, listaComponenteCurricular]);
 
   useEffect(() => {
     if (
@@ -192,6 +192,7 @@ const ListaoOperacoesFiltros = () => {
   };
 
   const setarComponente = valor => {
+    setBimestreOperacoes();
     const componenteAtual = obterComponente(valor);
     if (componenteAtual) {
       setComponenteCurricular({ ...componenteAtual });

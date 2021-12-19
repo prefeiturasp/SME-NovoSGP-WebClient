@@ -1,9 +1,10 @@
 import { Col, Row } from 'antd';
 import _ from 'lodash';
 import React, { useCallback, useContext, useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Alert, Loader, SelectComponent } from '~/componentes';
 import { SGP_SELECT_PERIODO_POR_COMPONENTE_CURRICULAR } from '~/componentes-sgp/filtro/idsCampos';
+import { setLimparModoEdicaoGeral } from '~/redux/modulos/geral/actions';
 import { erros } from '~/servicos';
 import ServicoPeriodoEscolar from '~/servicos/Paginas/Calendario/ServicoPeriodoEscolar';
 import ServicoFrequencia from '~/servicos/Paginas/DiarioClasse/ServicoFrequencia';
@@ -12,6 +13,8 @@ import ListaoAuditoria from './lista/componentes/listaoAuditoria';
 import ListaoListaFrequencia from './lista/listaoListaFrequencia';
 
 const TabListaoFrequencia = () => {
+  const dispatch = useDispatch();
+
   const usuario = useSelector(store => store.usuario);
   const telaEmEdicao = useSelector(store => store.geral.telaEmEdicao);
   const { turmaSelecionada } = usuario;
@@ -82,19 +85,12 @@ const TabListaoFrequencia = () => {
   useEffect(() => {
     setPeriodo();
     setListaPeriodos([]);
-    if (
-      componenteCurricular?.codigoComponenteCurricular &&
-      turma &&
-      bimestreOperacoes
-    ) {
+    if (componenteCurricular?.codigoComponenteCurricular && bimestreOperacoes) {
       obterPeriodoPorComponente();
+    } else {
+      limparFrequencia();
     }
-  }, [
-    obterPeriodoPorComponente,
-    bimestreOperacoes,
-    componenteCurricular,
-    turma,
-  ]);
+  }, [bimestreOperacoes]);
 
   const obterPeriodoSelecionado = id => {
     if (id && listaPeriodos?.length) {
@@ -175,7 +171,18 @@ const TabListaoFrequencia = () => {
     ) {
       obterFrequenciasPorPeriodo();
     }
-  }, [periodo, obterFrequenciasPorPeriodo]);
+  }, [periodo]);
+
+  useEffect(() => {
+    return () => {
+      setListaPeriodos([]);
+      setPeriodo();
+      setListaTiposFrequencia([]);
+      setDadosFrequencia();
+      setDadosIniciaisFrequencia();
+      dispatch(setLimparModoEdicaoGeral(false));
+    };
+  }, []);
 
   return (
     <>
@@ -212,7 +219,7 @@ const TabListaoFrequencia = () => {
         </Col>
       </Row>
 
-      {dadosFrequencia?.aulas?.length ? (
+      {dadosFrequencia?.aulas?.length && periodo && bimestreOperacoes ? (
         <>
           <ListaoListaFrequencia />
           <ListaoAuditoria />

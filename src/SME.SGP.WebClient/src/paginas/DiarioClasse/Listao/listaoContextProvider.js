@@ -30,7 +30,6 @@ const ListaoContextProvider = ({ children }) => {
     []
   );
 
-  const [permissaoTela, setPermissaoTela] = useState();
   const [bimestreOperacoes, setBimestreOperacoes] = useState();
 
   const [tabAtual, setTabAtual] = useState();
@@ -48,7 +47,22 @@ const ListaoContextProvider = ({ children }) => {
   const [dadosFrequencia, setDadosFrequencia] = useState();
   const [dadosIniciaisFrequencia, setDadosIniciaisFrequencia] = useState();
 
-  const [listaoEhInfantil, setListaoEhInfantil] = useState();
+  const [listaoEhInfantil, setListaoEhInfantil] = useState(false);
+
+  const limparTelaListao = () => {
+    setComponenteCurricular();
+    setBimestreOperacoes();
+    setListaComponenteCurricular([]);
+    setExibirLoaderGeral(false);
+    setListaoEhInfantil(false);
+    setPeriodoAbertoListao(true);
+    setSomenteConsultaListao(false);
+    setListaPeriodos([]);
+    setPeriodo();
+    setDadosFrequencia();
+    setListaTiposFrequencia([]);
+    setDadosIniciaisFrequencia();
+  };
 
   return (
     <ListaoContext.Provider
@@ -89,6 +103,7 @@ const ListaoContextProvider = ({ children }) => {
         setCarregarFiltrosSalvos,
         componenteCurricularInicial,
         setComponenteCurricularInicial,
+        // TELA LISTÃO
         componenteCurricular,
         setComponenteCurricular,
         bimestreOperacoes,
@@ -110,12 +125,11 @@ const ListaoContextProvider = ({ children }) => {
         setPeriodo,
         dadosFrequencia,
         setDadosFrequencia,
-        permissaoTela,
-        setPermissaoTela,
         listaTiposFrequencia,
         setListaTiposFrequencia,
         dadosIniciaisFrequencia,
         setDadosIniciaisFrequencia,
+        limparTelaListao,
       }}
     >
       {children}

@@ -11,6 +11,7 @@ import {
 import { RotasDto } from '~/dtos';
 import {
   setAcaoTelaEmEdicao,
+  setLimparModoEdicaoGeral,
   setTelaEmEdicao,
 } from '~/redux/modulos/geral/actions';
 import { confirmar, erros, history, sucesso } from '~/servicos';
@@ -119,6 +120,8 @@ const ListaoOperacoesBotoesAcao = () => {
   useEffect(() => {
     if (telaEmEdicao) {
       dispatch(setAcaoTelaEmEdicao(validarSalvar));
+    } else {
+      dispatch(setLimparModoEdicaoGeral());
     }
   }, [dispatch, telaEmEdicao]);
 
