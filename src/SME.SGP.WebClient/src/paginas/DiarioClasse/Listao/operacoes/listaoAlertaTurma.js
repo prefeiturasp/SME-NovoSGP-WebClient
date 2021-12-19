@@ -8,15 +8,17 @@ const ListaoAlertaTurma = () => {
   const { turma } = turmaSelecionada;
 
   return !turma ? (
-    <Alert
-      alerta={{
-        tipo: 'warning',
-        id: 'alertas-listao',
-        mensagem: 'Você precisa escolher uma turma',
-        estiloTitulo: { fontSize: '18px' },
-      }}
-      className="mb-2"
-    />
+    <div className="col-md-12">
+      <Alert
+        alerta={{
+          tipo: 'warning',
+          id: 'alertas-listao',
+          mensagem: 'Você precisa escolher uma turma',
+          estiloTitulo: { fontSize: '18px' },
+        }}
+        className="mb-2"
+      />
+    </div>
   ) : (
     <></>
   );
