@@ -4,7 +4,10 @@ import React, { useCallback, useContext, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Alert, Loader, SelectComponent } from '~/componentes';
 import { SGP_SELECT_PERIODO_POR_COMPONENTE_CURRICULAR } from '~/componentes-sgp/filtro/idsCampos';
-import { setLimparModoEdicaoGeral } from '~/redux/modulos/geral/actions';
+import {
+  setLimparModoEdicaoGeral,
+  setTelaEmEdicao,
+} from '~/redux/modulos/geral/actions';
 import { erros } from '~/servicos';
 import ServicoPeriodoEscolar from '~/servicos/Paginas/Calendario/ServicoPeriodoEscolar';
 import ServicoFrequencia from '~/servicos/Paginas/DiarioClasse/ServicoFrequencia';
@@ -33,6 +36,7 @@ const TabListaoFrequencia = () => {
     setDadosFrequencia,
     setListaTiposFrequencia,
     setDadosIniciaisFrequencia,
+    periodoAbertoListao,
   } = useContext(ListaoContext);
 
   const [exibirLoaderPeriodo, setExibirLoaderPeriodo] = useState(false);
@@ -149,10 +153,24 @@ const TabListaoFrequencia = () => {
       const dadosIniciais = _.cloneDeep(resposta.data);
       setDadosFrequencia(dadosCarregar);
       setDadosIniciaisFrequencia(dadosIniciais);
+
+      const aulaSemFrequenciaId = dadosCarregar?.aulas?.find(
+        item => !item?.frequenciaId
+      );
+
+      if (
+        periodoAbertoListao &&
+        dadosCarregar?.aulas?.length &&
+        aulaSemFrequenciaId
+      ) {
+        dispatch(setTelaEmEdicao(true));
+      }
     } else {
       limparFrequencia();
     }
   }, [
+    dispatch,
+    periodoAbertoListao,
     componenteCurricular,
     turma,
     turmaSelecionada,
