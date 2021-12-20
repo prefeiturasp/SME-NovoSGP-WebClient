@@ -135,7 +135,8 @@ const TabListaoFrequencia = () => {
       periodo?.dataInicio,
       periodo?.dataFim,
       turma,
-      componenteCurricular?.codigoComponenteCurricular
+      componenteCurricular?.codigoComponenteCurricular,
+      componenteCurricular?.id
     )
       .catch(e => erros(e))
       .finally(() => setExibirLoaderGeral(false));
