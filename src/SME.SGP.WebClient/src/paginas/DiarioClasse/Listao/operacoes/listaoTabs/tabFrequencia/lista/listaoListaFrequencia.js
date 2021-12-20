@@ -171,8 +171,9 @@ const ListaoListaFrequencia = () => {
 
   const montarColunasEstudante = aluno => {
     return (
-      <div className="d-flex justify-content-between" style={{ width: 350 }}>
+      <div className="d-flex justify-content-between">
         <div
+          style={{ width: 350 }}
           className={`d-flex justify-content-start ${
             desabilitarCampos ? 'desabilitar' : ''
           }`}
