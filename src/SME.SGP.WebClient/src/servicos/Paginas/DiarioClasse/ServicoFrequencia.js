@@ -89,6 +89,24 @@ class ServicoFrequencia {
       `${urlPadrao}/frequencias/tipos?modalidade=${modalidade}&anoLetivo=${anoLetivo}`
     );
   };
+
+  obterFrequenciasPorPeriodo = (
+    dataInicio,
+    dataFim,
+    turmaCodigo,
+    codigoComponenteCurricular
+  ) => {
+    const url = `${urlPadrao}/frequencias/por-periodo?dataInicio=${dataInicio}&dataFim=${dataFim}&turmaId=${turmaCodigo}&disciplinaId=${codigoComponenteCurricular}`;
+    return api.get(url);
+  };
+
+  obterFrequenciaDetalhadaAluno = (codigoAluno, dataInicio, dataFim) => {
+    const url = `${urlPadrao}/frequencias/detalhadas?codigoAluno=${codigoAluno}&dataInicio=${dataInicio}&dataFim=${dataFim}`;
+    return api.get(url);
+  };
+
+  salvarFrequenciaListao = params =>
+    api.post(`${urlPadrao}/frequencias/salvar`, params);
 }
 
 export default new ServicoFrequencia();

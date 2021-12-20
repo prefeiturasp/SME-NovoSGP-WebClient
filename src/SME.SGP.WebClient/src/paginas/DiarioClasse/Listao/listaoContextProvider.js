@@ -33,23 +33,35 @@ const ListaoContextProvider = ({ children }) => {
   const [bimestreOperacoes, setBimestreOperacoes] = useState();
 
   const [tabAtual, setTabAtual] = useState();
+  const [periodoAbertoListao, setPeriodoAbertoListao] = useState(true);
+  const [somenteConsultaListao, setSomenteConsultaListao] = useState(false);
 
   // Utilizado para carregar os filtros novamente quando voltar para a tela de listagem de componentes!
   const [carregarFiltrosSalvos, setCarregarFiltrosSalvos] = useState(false);
+  const [exibirLoaderGeral, setExibirLoaderGeral] = useState(false);
 
-  const obterBimestres = mod => {
-    const bi = [];
-    bi.push({ descricao: '1º', valor: 1 });
-    bi.push({ descricao: '2º', valor: 2 });
+  // TAB FREQUÊNCIA
+  const [listaPeriodos, setListaPeriodos] = useState([]);
+  const [listaTiposFrequencia, setListaTiposFrequencia] = useState([]);
+  const [periodo, setPeriodo] = useState();
+  const [dadosFrequencia, setDadosFrequencia] = useState();
+  const [dadosIniciaisFrequencia, setDadosIniciaisFrequencia] = useState();
 
-    if (mod !== String(ModalidadeDTO.EJA)) {
-      bi.push({ descricao: '3º', valor: 3 });
-      bi.push({ descricao: '4º', valor: 4 });
-    }
-    if (mod !== String(ModalidadeDTO.INFANTIL)) {
-      bi.push({ descricao: 'Final', valor: 0 });
-    }
-    return bi;
+  const [listaoEhInfantil, setListaoEhInfantil] = useState(false);
+
+  const limparTelaListao = () => {
+    setComponenteCurricular();
+    setBimestreOperacoes();
+    setListaComponenteCurricular([]);
+    setExibirLoaderGeral(false);
+    setListaoEhInfantil(false);
+    setPeriodoAbertoListao(true);
+    setSomenteConsultaListao(false);
+    setListaPeriodos([]);
+    setPeriodo();
+    setDadosFrequencia();
+    setListaTiposFrequencia([]);
+    setDadosIniciaisFrequencia();
   };
 
   return (
@@ -91,13 +103,33 @@ const ListaoContextProvider = ({ children }) => {
         setCarregarFiltrosSalvos,
         componenteCurricularInicial,
         setComponenteCurricularInicial,
+        // TELA LISTÃO
         componenteCurricular,
         setComponenteCurricular,
         bimestreOperacoes,
         setBimestreOperacoes,
         listaComponenteCurricular,
         setListaComponenteCurricular,
-        obterBimestres,
+        exibirLoaderGeral,
+        setExibirLoaderGeral,
+        listaoEhInfantil,
+        setListaoEhInfantil,
+        periodoAbertoListao,
+        setPeriodoAbertoListao,
+        somenteConsultaListao,
+        setSomenteConsultaListao,
+        // TAB FREQUÊNCIA,
+        listaPeriodos,
+        setListaPeriodos,
+        periodo,
+        setPeriodo,
+        dadosFrequencia,
+        setDadosFrequencia,
+        listaTiposFrequencia,
+        setListaTiposFrequencia,
+        dadosIniciaisFrequencia,
+        setDadosIniciaisFrequencia,
+        limparTelaListao,
       }}
     >
       {children}

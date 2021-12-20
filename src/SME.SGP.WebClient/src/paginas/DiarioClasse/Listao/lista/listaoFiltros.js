@@ -240,7 +240,7 @@ const ListaoFiltros = () => {
       '',
       anoLetivo,
       consideraHistorico,
-      false
+      true
     )
       .catch(e => erros(e))
       .finally(() => setCarregandoTurmas(false));
@@ -270,12 +270,12 @@ const ListaoFiltros = () => {
 
   const obterBimestres = useCallback(() => {
     const bi = [];
-    bi.push({ descricao: '1º', valor: 1 });
-    bi.push({ descricao: '2º', valor: 2 });
+    bi.push({ descricao: '1º Bimestre', valor: 1 });
+    bi.push({ descricao: '2º Bimestre', valor: 2 });
 
     if (modalidade !== String(ModalidadeDTO.EJA)) {
-      bi.push({ descricao: '3º', valor: 3 });
-      bi.push({ descricao: '4º', valor: 4 });
+      bi.push({ descricao: '3º Bimestre', valor: 3 });
+      bi.push({ descricao: '4º Bimestre', valor: 4 });
     }
     if (modalidade !== String(ModalidadeDTO.INFANTIL)) {
       bi.push({ descricao: 'Final', valor: 0 });
