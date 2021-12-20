@@ -1,3 +1,4 @@
+import moment from 'moment';
 import React, { useState, useEffect } from 'react';
 import { Container } from './auditoria.css';
 
@@ -20,7 +21,7 @@ const Auditoria = ({
   }, [criadoEm]);
 
   useEffect(() => {
-    if (alteradoEm) setAlterado(window.moment(alteradoEm));
+    if (alteradoEm) setAlterado(window.moment.utc(alteradoEm));
   }, [alteradoEm]);
 
   return (
