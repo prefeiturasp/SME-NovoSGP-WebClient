@@ -36,6 +36,8 @@ const ListaoListaFrequencia = () => {
 
   const dispatch = useDispatch();
 
+  const [expandedRowKeys, setExpandedRowKeys] = useState([]);
+
   const montarTituloEstudante = () => {
     return (
       <span className="fonte-16">
@@ -148,18 +150,24 @@ const ListaoListaFrequencia = () => {
       />
     );
   };
+
+  const temLinhaExpandida = dados =>
+    expandedRowKeys.filter(item => String(item) === String(dados));
+
   const montarColunaNumeroAula = aluno => {
+    const ehLinhaExpandida = temLinhaExpandida(aluno?.codigoAluno);
     return (
       <span className="d-flex justify-content-center">
-        <span className={desabilitarCampos ? 'desabilitar' : ''}>
-          {aluno.numeroAlunoChamada}
-        </span>
+        <span>{aluno.numeroAlunoChamada}</span>
 
         {aluno?.marcador ? (
           <Tooltip title={aluno?.marcador?.descricao} placement="top">
             <MarcadorSituacao
               className="fas fa-circle"
-              style={{ marginRight: '-10px' }}
+              style={{
+                marginRight: '-10px',
+                color: ehLinhaExpandida?.length ? Base.Branco : Base.Roxo,
+              }}
             />
           </Tooltip>
         ) : (
@@ -172,12 +180,7 @@ const ListaoListaFrequencia = () => {
   const montarColunasEstudante = aluno => {
     return (
       <div className="d-flex justify-content-between">
-        <div
-          style={{ width: 350 }}
-          className={`d-flex justify-content-start ${
-            desabilitarCampos ? 'desabilitar' : ''
-          }`}
-        >
+        <div style={{ width: 350 }} className="d-flex justify-content-start">
           {aluno.nomeAluno}
         </div>
         <div className=" d-flex justify-content-end">
@@ -243,8 +246,6 @@ const ListaoListaFrequencia = () => {
     width: '130px',
   });
 
-  const [expandedRowKeys, setExpandedRowKeys] = useState([]);
-
   const onClickExpandir = (expandir, dadosEstudante) => {
     if (expandir) {
       setExpandedRowKeys([dadosEstudante?.codigoAluno]);
@@ -252,9 +253,6 @@ const ListaoListaFrequencia = () => {
       setExpandedRowKeys([]);
     }
   };
-
-  const temLinhaExpandida = dados =>
-    expandedRowKeys.filter(item => String(item) === String(dados));
 
   const expandIcon = (expanded, onExpand, record) => {
     const ehLinhaExpandida = temLinhaExpandida(record.codigoAluno);
@@ -324,10 +322,7 @@ const ListaoListaFrequencia = () => {
     return (
       <span className="d-flex justify-content-between align-items-center">
         {ehReposicao ? <ReposicaoLabel linhaDetalhe /> : <></>}
-        <span
-          className={desabilitarCampos ? 'desabilitar' : ''}
-          style={{ marginLeft: 14 }}
-        >
+        <span style={{ marginLeft: 14 }}>
           {window.moment(dataAula).format('DD/MM/YYYY')}
         </span>
 
