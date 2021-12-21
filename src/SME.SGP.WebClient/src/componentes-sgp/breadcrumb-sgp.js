@@ -21,7 +21,7 @@ const BreadcrumbBody = styled.div`
     text-decoration: underline;
   }
   .icone-seta {
-    margin-right: 10px;
+    margin-right: 0px;
     margin-left: 10px;
     color: ${Base.Roxo};
   }
@@ -193,7 +193,9 @@ const BreadcrumbSgp = () => {
               onClick={e => validarNavegacaoTela(e, item.path)}
             >
               <i className={item.icone} title={item.breadcrumbName} />
-              <span hidden={item.path === '/'}>{item.breadcrumbName}</span>
+              <span hidden={item.path === '/'} style={{ marginLeft: 8 }}>
+                {item.breadcrumbName}
+              </span>
               <span
                 hidden={item.path !== '/' && item.icone !== 'fas fa-home'}
                 style={{ marginLeft: 8 }}
