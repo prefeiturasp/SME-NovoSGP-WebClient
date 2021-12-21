@@ -9,6 +9,7 @@ import {
   setExibirLoaderPlanoAEE,
 } from '~/redux/modulos/planoAEE/actions';
 import { erros, verificaSomenteConsulta } from '~/servicos';
+import { Base } from '~/componentes/colors';
 import ServicoPlanoAEE from '~/servicos/Paginas/Relatorios/AEE/ServicoPlanoAEE';
 import SecaoParecerPAAI from '../SecaoParecerPAAI/secaoParecerPAAI';
 import SecaoParecerResponsavel from '../SecaoParecerResponsavel/secaoParecerResponsavel';
@@ -58,6 +59,18 @@ const SecaoParecerPlanoCollapse = ({ match }) => {
         indice="secao-parecer-plano-collapse-indice"
         alt="secao-parecer-plano-alt"
       >
+        {dadosParecer?.responsavelNome ? (
+          <div className="col-md-4">
+            <p style={{ marginLeft: -15 }}>
+              Responsável: {dadosParecer?.responsavelNome}
+              <span
+                style={{ color: Base.CinzaDesabilitado, fontSize: '13px' }}
+              >{` (${dadosParecer?.responsavelRF})`}</span>
+            </p>
+          </div>
+        ) : (
+          ''
+        )}
         <SecaoParecerCoordenacao
           desabilitar={!dadosParecer?.podeEditarParecerCoordenacao}
         />
