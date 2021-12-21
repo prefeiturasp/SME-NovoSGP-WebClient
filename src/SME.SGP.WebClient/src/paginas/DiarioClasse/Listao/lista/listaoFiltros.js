@@ -230,7 +230,7 @@ const ListaoFiltros = () => {
       '',
       anoLetivo,
       consideraHistorico,
-      true
+      String(modalidade) === String(ModalidadeDTO.INFANTIL)
     )
       .catch(e => erros(e))
       .finally(() => setCarregandoTurmas(false));
