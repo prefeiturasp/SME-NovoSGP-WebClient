@@ -354,9 +354,10 @@ const Filtros = ({ onFiltrar, filtrou, setFiltrou, cancelou, setCancelou }) => {
             nomeFiltro: item.nomeFiltro,
           })
         );
-        setListaTurmas(lista);
+        
+        setListaTurmas(lista);        
         if (lista.length === 1) {
-          setTurmasId([String(lista[0].valor)]);
+          setTurmasId(lista[0].valor);          
         }
       }
     }
