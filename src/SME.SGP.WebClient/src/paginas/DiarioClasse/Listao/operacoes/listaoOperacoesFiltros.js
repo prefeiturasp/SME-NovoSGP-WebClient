@@ -127,7 +127,7 @@ const ListaoOperacoesFiltros = () => {
         };
       });
 
-      if (modalidade !== String(ModalidadeDTO.INFANTIL)) {
+      if (Number(modalidade) !== ModalidadeDTO.INFANTIL) {
         lista.push({ descricao: 'Final', valor: '0' });
       }
       setListaBimestresOperacoes(lista);
