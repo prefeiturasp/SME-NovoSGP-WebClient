@@ -117,7 +117,7 @@ const ListaoTabs = () => {
       );
     }
 
-    if (modalidade === String(ModalidadeDTO.INFANTIL)) {
+    if (Number(modalidade) === ModalidadeDTO.INFANTIL) {
       return (
         <ContainerTabsCard
           type="card"

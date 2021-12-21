@@ -10,11 +10,11 @@ const ListaoLoaderGeral = ({ children }) => {
 };
 
 ListaoLoaderGeral.propTypes = {
-  children: PropTypes.oneOfType([PropTypes.element, PropTypes.func]),
+  children: PropTypes.oneOfType([PropTypes.node]),
 };
 
 ListaoLoaderGeral.defaultProps = {
-  children: () => {},
+  children: <></>,
 };
 
 export default ListaoLoaderGeral;

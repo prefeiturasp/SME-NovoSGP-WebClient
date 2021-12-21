@@ -94,9 +94,10 @@ class ServicoFrequencia {
     dataInicio,
     dataFim,
     turmaCodigo,
-    codigoComponenteCurricular
+    codigoComponenteCurricular,
+    componenteCurricularId
   ) => {
-    const url = `${urlPadrao}/frequencias/por-periodo?dataInicio=${dataInicio}&dataFim=${dataFim}&turmaId=${turmaCodigo}&disciplinaId=${codigoComponenteCurricular}`;
+    const url = `${urlPadrao}/frequencias/por-periodo?dataInicio=${dataInicio}&dataFim=${dataFim}&turmaId=${turmaCodigo}&disciplinaId=${codigoComponenteCurricular}&componenteCurricularId=${componenteCurricularId}`;
     return api.get(url);
   };
 
