@@ -221,7 +221,6 @@ export const ContainerBtbAnotacao = styled.div`
 `;
 
 export const MarcadorSituacao = styled.i`
-  color: ${Base.Roxo} !important;
   font-size: 10px;
   margin-left: 2px;
   padding-top: 5px;

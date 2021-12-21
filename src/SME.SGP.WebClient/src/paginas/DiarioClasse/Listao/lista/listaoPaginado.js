@@ -284,6 +284,7 @@ const ListaoPaginado = () => {
         <ListaPaginada
           url="v1/turmas/listagem-turmas"
           id="lista-paginada-listao"
+          colunaChave="nomeTurma"
           colunas={colunas}
           filtro={filtros}
           filtroEhValido={filtroEhValido}
