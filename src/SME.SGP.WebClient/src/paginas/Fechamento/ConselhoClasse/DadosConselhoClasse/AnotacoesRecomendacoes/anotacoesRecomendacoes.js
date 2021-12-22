@@ -119,8 +119,9 @@ const AnotacoesRecomendacoes = props => {
   const setarAuditoria = useCallback(
     dados => {
       const { auditoria } = dados;
+      let auditoriaDto = null;
       if (auditoria) {
-        const auditoriaDto = {
+        auditoriaDto = {
           criadoEm: auditoria.criadoEm,
           criadoPor: auditoria.criadoPor,
           criadoRF: auditoria.criadoRF,
@@ -128,8 +129,8 @@ const AnotacoesRecomendacoes = props => {
           alteradoPor: auditoria.alteradoPor,
           alteradoRF: auditoria.alteradoRF,
         };
-        dispatch(setAuditoriaAnotacaoRecomendacao(auditoriaDto));
       }
+      dispatch(setAuditoriaAnotacaoRecomendacao(auditoriaDto));
     },
     [dispatch]
   );
@@ -175,7 +176,9 @@ const AnotacoesRecomendacoes = props => {
       codigoTurma,
       bimestre.valor,
       turmaStore?.consideraHistorico
-    ).catch(e => erros(e));
+    )
+      .catch(e => erros(e))
+      .finally(() => setCarregando(false));
 
     if (resposta && resposta.data) {
       setMatriculaAtivaPeriodo(resposta.data.matriculaAtiva);
@@ -191,10 +194,10 @@ const AnotacoesRecomendacoes = props => {
       setarSituacaoConselho(resposta.data.situacaoConselho);
       setarAuditoria(resposta.data);
       setExibir(true);
-    } else {
-      setExibir(false);
+      return;
     }
-    setCarregando(false);
+    setarAuditoria({});
+    setExibir(false);
   }, [
     alunoCodigo,
     conselhoClasseId,
