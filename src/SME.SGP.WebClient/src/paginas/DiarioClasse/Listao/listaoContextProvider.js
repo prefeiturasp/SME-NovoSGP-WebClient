@@ -1,6 +1,5 @@
 import PropTypes from 'prop-types';
 import React, { useState } from 'react';
-import { ModalidadeDTO } from '~/dtos';
 import ListaoContext from './listaoContext';
 
 const ListaoContextProvider = ({ children }) => {
@@ -47,6 +46,11 @@ const ListaoContextProvider = ({ children }) => {
   const [dadosFrequencia, setDadosFrequencia] = useState();
   const [dadosIniciaisFrequencia, setDadosIniciaisFrequencia] = useState();
 
+  const [
+    compCurricularTabDiarioBordo,
+    setCompCurricularTabDiarioBordo,
+  ] = useState();
+
   const [listaoEhInfantil, setListaoEhInfantil] = useState(false);
 
   const limparTelaListao = () => {
@@ -64,72 +68,88 @@ const ListaoContextProvider = ({ children }) => {
     setDadosIniciaisFrequencia();
   };
 
+  const FILTROS = {
+    consideraHistorico,
+    setConsideraHistorico,
+    anoLetivo,
+    setAnoLetivo,
+    codigoDre,
+    setCodigoDre,
+    codigoUe,
+    setCodigoUe,
+    modalidade,
+    setModalidade,
+    semestre,
+    setSemestre,
+    codigoTurma,
+    setCodigoTurma,
+    bimestre,
+    setBimestre,
+    listaAnosLetivo,
+    setListaAnosLetivo,
+    listaDres,
+    setListaDres,
+    listaUes,
+    setListaUes,
+    listaModalidades,
+    setListaModalidades,
+    listaSemestres,
+    setListaSemestres,
+    listaTurmas,
+    setListaTurmas,
+    listaBimestres,
+    setListaBimestres,
+    tabAtual,
+    setTabAtual,
+    carregarFiltrosSalvos,
+    setCarregarFiltrosSalvos,
+    componenteCurricularInicial,
+    setComponenteCurricularInicial,
+  };
+
+  const TELA_LISTAO = {
+    componenteCurricular,
+    setComponenteCurricular,
+    bimestreOperacoes,
+    setBimestreOperacoes,
+    listaComponenteCurricular,
+    setListaComponenteCurricular,
+    exibirLoaderGeral,
+    setExibirLoaderGeral,
+    listaoEhInfantil,
+    setListaoEhInfantil,
+    periodoAbertoListao,
+    setPeriodoAbertoListao,
+    somenteConsultaListao,
+    setSomenteConsultaListao,
+  };
+
+  const TAB_FREQUENCIA = {
+    listaPeriodos,
+    setListaPeriodos,
+    periodo,
+    setPeriodo,
+    dadosFrequencia,
+    setDadosFrequencia,
+    listaTiposFrequencia,
+    setListaTiposFrequencia,
+    dadosIniciaisFrequencia,
+    setDadosIniciaisFrequencia,
+    limparTelaListao,
+  };
+
+  const TAB_DIARIO_BORDO = {
+    compCurricularTabDiarioBordo,
+    setCompCurricularTabDiarioBordo,
+  };
+
   return (
     <ListaoContext.Provider
       value={{
-        consideraHistorico,
-        setConsideraHistorico,
-        anoLetivo,
-        setAnoLetivo,
-        codigoDre,
-        setCodigoDre,
-        codigoUe,
-        setCodigoUe,
-        modalidade,
-        setModalidade,
-        semestre,
-        setSemestre,
-        codigoTurma,
-        setCodigoTurma,
-        bimestre,
-        setBimestre,
-        listaAnosLetivo,
-        setListaAnosLetivo,
-        listaDres,
-        setListaDres,
-        listaUes,
-        setListaUes,
-        listaModalidades,
-        setListaModalidades,
-        listaSemestres,
-        setListaSemestres,
-        listaTurmas,
-        setListaTurmas,
-        listaBimestres,
-        setListaBimestres,
-        tabAtual,
-        setTabAtual,
-        carregarFiltrosSalvos,
-        setCarregarFiltrosSalvos,
-        componenteCurricularInicial,
-        setComponenteCurricularInicial,
-        // TELA LISTÃO
-        componenteCurricular,
-        setComponenteCurricular,
-        bimestreOperacoes,
-        setBimestreOperacoes,
-        listaComponenteCurricular,
-        setListaComponenteCurricular,
-        exibirLoaderGeral,
-        setExibirLoaderGeral,
-        listaoEhInfantil,
-        setListaoEhInfantil,
-        periodoAbertoListao,
-        setPeriodoAbertoListao,
-        somenteConsultaListao,
-        setSomenteConsultaListao,
-        // TAB FREQUÊNCIA,
-        listaPeriodos,
-        setListaPeriodos,
-        periodo,
-        setPeriodo,
-        dadosFrequencia,
-        setDadosFrequencia,
-        listaTiposFrequencia,
-        setListaTiposFrequencia,
-        dadosIniciaisFrequencia,
-        setDadosIniciaisFrequencia,
-        limparTelaListao,
+        ...FILTROS,
+        ...TELA_LISTAO,
+        ...TAB_FREQUENCIA,
+        ...TAB_DIARIO_BORDO,
       }}
     >
       {children}
