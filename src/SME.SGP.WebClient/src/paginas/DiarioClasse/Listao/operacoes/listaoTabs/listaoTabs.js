@@ -1,10 +1,10 @@
-import { Col, Tabs } from 'antd';
+import { Tabs } from 'antd';
 import React, { useContext, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { ContainerTabsCard } from '~/componentes/tabs/tabs.css';
 import { BIMESTRE_FINAL } from '~/constantes';
 import { ModalidadeDTO } from '~/dtos';
-import { confirmar, ehTurmaInfantil } from '~/servicos';
+import { ehTurmaInfantil } from '~/servicos';
 import {
   LISTAO_TAB_AVALIACOES,
   LISTAO_TAB_DIARIO_BORDO,
@@ -28,14 +28,6 @@ const ListaoTabs = () => {
   const telaEmEdicao = useSelector(store => store.geral.telaEmEdicao);
   const acaoTelaEmEdicao = useSelector(store => store.geral.acaoTelaEmEdicao);
 
-  const pergutarParaSalvar = () => {
-    return confirmar(
-      'Atenção',
-      '',
-      'Suas alterações não foram salvas, deseja salvar agora?'
-    );
-  };
-
   const modalidadesFiltroPrincipal = useSelector(
     state => state.filtro.modalidades
   );
@@ -57,33 +49,6 @@ const ListaoTabs = () => {
   }, [modalidadesFiltroPrincipal, turmaSelecionada]);
 
   const desabilitarTabs = !componenteCurricular || !bimestreOperacoes;
-
-  const montarDados = () => {
-    let elementoAtual = <></>;
-
-    switch (tabAtual) {
-      case LISTAO_TAB_FREQUENCIA:
-        elementoAtual = <TabListaoFrequencia />;
-        break;
-      case LISTAO_TAB_PLANO_AULA:
-        elementoAtual = <TabListaoPlanoAula />;
-        break;
-      case LISTAO_TAB_AVALIACOES:
-        elementoAtual = <TabListaoAvaliacoes />;
-        break;
-      case LISTAO_TAB_FECHAMENTO:
-        elementoAtual = <TabListaoFechamento />;
-        break;
-
-      case LISTAO_TAB_DIARIO_BORDO:
-        elementoAtual = <TabListaoDiarioBordo />;
-        break;
-
-      default:
-        break;
-    }
-    return <Col span={24}>{elementoAtual}</Col>;
-  };
 
   const onChangeTab = async tabAtiva => {
     if (telaEmEdicao) {
@@ -111,7 +76,11 @@ const ListaoTabs = () => {
             key={LISTAO_TAB_FECHAMENTO}
             disabled={desabilitarTabs}
           >
-            {montarDados()}
+            {tabAtual === LISTAO_TAB_FECHAMENTO ? (
+              <TabListaoFechamento />
+            ) : (
+              <></>
+            )}
           </TabPane>
         </ContainerTabsCard>
       );
@@ -129,14 +98,22 @@ const ListaoTabs = () => {
             key={LISTAO_TAB_FREQUENCIA}
             disabled={desabilitarTabs}
           >
-            {montarDados()}
+            {tabAtual === LISTAO_TAB_FREQUENCIA ? (
+              <TabListaoFrequencia />
+            ) : (
+              <></>
+            )}
           </TabPane>
           <TabPane
             tab="Diário de bordo"
             key={LISTAO_TAB_DIARIO_BORDO}
             disabled={desabilitarTabs}
           >
-            {montarDados()}
+            {tabAtual === LISTAO_TAB_DIARIO_BORDO ? (
+              <TabListaoDiarioBordo />
+            ) : (
+              <></>
+            )}
           </TabPane>
         </ContainerTabsCard>
       );
@@ -153,28 +130,28 @@ const ListaoTabs = () => {
           key={LISTAO_TAB_FREQUENCIA}
           disabled={desabilitarTabs}
         >
-          {montarDados()}
+          {tabAtual === LISTAO_TAB_FREQUENCIA ? <TabListaoFrequencia /> : <></>}
         </TabPane>
         <TabPane
           tab="Plano de aula"
           key={LISTAO_TAB_PLANO_AULA}
           disabled={desabilitarTabs}
         >
-          {montarDados()}
+          {tabAtual === LISTAO_TAB_PLANO_AULA ? <TabListaoPlanoAula /> : <></>}
         </TabPane>
         <TabPane
           tab="Avaliações"
           key={LISTAO_TAB_AVALIACOES}
           disabled={desabilitarTabs}
         >
-          {montarDados()}
+          {tabAtual === LISTAO_TAB_AVALIACOES ? <TabListaoAvaliacoes /> : <></>}
         </TabPane>
         <TabPane
           tab="Fechamento"
           key={LISTAO_TAB_FECHAMENTO}
           disabled={desabilitarTabs}
         >
-          {montarDados()}
+          {tabAtual === LISTAO_TAB_FECHAMENTO ? <TabListaoFechamento /> : <></>}
         </TabPane>
       </ContainerTabsCard>
     );
