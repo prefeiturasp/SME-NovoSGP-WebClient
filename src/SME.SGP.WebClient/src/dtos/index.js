@@ -9,3 +9,4 @@ export { default as statusAcompanhamentoFechamento } from './statusAcompanhament
 export { default as statusAcompanhamentoConselhoClasse } from './statusAcompanhamentoConselhoClasse';
 export { default as tipoGraficos } from './tipoGraficos';
 export { default as tipoPendenciasGruposDto } from './tipoPendenciasGrupos';
+export { default as statusParecerConclusivo } from './statusParecerConclusivo';

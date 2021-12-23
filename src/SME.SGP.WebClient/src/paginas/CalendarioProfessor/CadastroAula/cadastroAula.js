@@ -35,7 +35,8 @@ import { ehTurmaInfantil } from '~/servicos/Validacoes/validacoesInfatil';
 import AlterarAula from './alterarAula';
 
 function CadastroDeAula({ match, location }) {
-  const { id, tipoCalendarioId } = match.params;
+  const { id, tipoCalendarioId, somenteReposicao } = match.params;
+  const ehReposicao = somenteReposicao === 'true';
   const permissoesTela = useSelector(state => state.usuario.permissoes);
   const somenteConsulta = verificaSomenteConsulta(
     permissoesTela[RotasDto.CALENDARIO_PROFESSOR]
@@ -79,6 +80,8 @@ function CadastroDeAula({ match, location }) {
     ueId: turmaSelecionada.unidadeEscolar,
     tipoCalendarioId,
     quantidade: 1,
+    tipoAula: ehReposicao ? 2 : 1,
+    recorrenciaAula: 1,
   };
 
   const [recorrenciaAulaEmEdicao, setRecorrenciaAulaEmEdicao] = useState({
@@ -94,18 +97,24 @@ function CadastroDeAula({ match, location }) {
   const [listaComponentes, setListaComponentes] = useState([]);
   const [recorrenciaAulaOriginal, setRecorrenciaAulaOriginal] = useState();
 
+  const opcoesTipoAulaSomenteReposicao = [
+    { label: 'Reposição', value: 2 }
+  ];
+
   const opcoesTipoAula = [
     { label: 'Normal', value: 1 },
     { label: 'Reposição', value: 2 },
   ];
-
-  const [recorrenciaInicial, setRecorrenciaInicial] = useState(1);
 
   const recorrencia = {
     AULA_UNICA: 1,
     REPETIR_BIMESTRE_ATUAL: 2,
     REPETIR_TODOS_BIMESTRES: 3,
   };
+
+  const opcoesRecorrenciaSomenteReposicao = [
+    { label: 'Aula única', value: recorrencia.AULA_UNICA }
+  ];
 
   const opcoesRecorrencia = [
     { label: 'Aula única', value: recorrencia.AULA_UNICA },
@@ -185,12 +194,21 @@ function CadastroDeAula({ match, location }) {
             const componenteSelecionado = componentes.find(
               c => c.codigoComponenteCurricular == respostaAula.disciplinaId
             );
-            carregarGrade(
-              componenteSelecionado,
-              respostaAula.dataAula,
-              respostaAula.tipoAula,
-              respostaAula.tipoAula == 1
-            );
+            if (componenteSelecionado){
+              carregarGrade(
+                componenteSelecionado,
+                respostaAula.dataAula,
+                respostaAula.tipoAula,
+                respostaAula.tipoAula == 1
+              );
+            } else {
+              setAula({
+                ...respostaAula,
+                disciplinaId: null,
+              });
+              setSomenteLeitura(false);
+              setCarregandoDados(false);
+            }
           }
         })
         .catch(e => {
@@ -720,7 +738,11 @@ function CadastroDeAula({ match, location }) {
                       <RadioGroupButton
                         id="tipo-aula"
                         label="Tipo de aula"
-                        opcoes={opcoesTipoAula}
+                        opcoes={
+                          ehReposicao
+                            ? opcoesTipoAulaSomenteReposicao
+                            : opcoesTipoAula
+                        }
                         name="tipoAula"
                         form={form}
                         onChange={onChangeTipoAula}
@@ -737,7 +759,7 @@ function CadastroDeAula({ match, location }) {
                         valueText="nome"
                         placeholder="Selecione um componente curricular"
                         form={form}
-                        disabled={!!id || listaComponentes.length === 1}
+                        disabled={(!!id && aula?.disciplinaId) || (listaComponentes.length === 1 && !id)}
                         onChange={onChangeComponente}
                       />
                     </div>
@@ -759,7 +781,11 @@ function CadastroDeAula({ match, location }) {
                       <RadioGroupButton
                         id="recorrencia-aula"
                         label="Recorrência"
-                        opcoes={opcoesRecorrencia}
+                        opcoes={
+                          ehReposicao
+                            ? opcoesRecorrenciaSomenteReposicao
+                            : opcoesRecorrencia
+                        }
                         name="recorrenciaAula"
                         form={form}
                         onChange={onChangeRecorrencia}

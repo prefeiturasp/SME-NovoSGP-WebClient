@@ -61,7 +61,7 @@ function DiaCompleto({
   const onClickNovaAulaHandler = useCallback(
     diaSelecionado => {
       history.push(
-        `${RotasDTO.CADASTRO_DE_AULA}/novo/${tipoCalendarioId}?diaAula=${diaSelecionado}`
+        `${RotasDTO.CADASTRO_DE_AULA}/novo/${tipoCalendarioId}/${dadosDia.dados.somenteAulaReposicao}?diaAula=${diaSelecionado}`
       );
     },
     [tipoCalendarioId]
@@ -85,7 +85,7 @@ function DiaCompleto({
 
   const onClickAula = useCallback(item => {
     if (item.ehAula)
-      history.push(`${RotasDTO.CADASTRO_DE_AULA}/editar/${item.aulaId}`);
+      history.push(`${RotasDTO.CADASTRO_DE_AULA}/editar/${item.aulaId}/${dadosDia.dados.somenteAulaReposicao}`);
   }, []);
 
   const obterDescricoesPendencias = pendencias => {
