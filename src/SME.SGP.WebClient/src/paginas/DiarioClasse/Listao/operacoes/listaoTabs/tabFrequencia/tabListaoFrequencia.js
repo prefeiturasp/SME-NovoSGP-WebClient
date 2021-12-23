@@ -11,7 +11,7 @@ import { erros } from '~/servicos';
 import ServicoFrequencia from '~/servicos/Paginas/DiarioClasse/ServicoFrequencia';
 import ListaoContext from '../../../listaoContext';
 import PeriodoEscolarListao from '../componentes/periodoEscolarListao';
-import ListaoAuditoria from './lista/componentes/listaoAuditoria';
+import ListaoAuditoriaFrequencia from './lista/componentes/listaoAuditoriaFrequencia';
 import ListaoListaFrequencia from './lista/listaoListaFrequencia';
 
 const TabListaoFrequencia = () => {
@@ -132,7 +132,7 @@ const TabListaoFrequencia = () => {
       {dadosFrequencia?.aulas?.length && periodo && bimestreOperacoes ? (
         <>
           <ListaoListaFrequencia />
-          <ListaoAuditoria />
+          <ListaoAuditoriaFrequencia />
         </>
       ) : (
         <></>
