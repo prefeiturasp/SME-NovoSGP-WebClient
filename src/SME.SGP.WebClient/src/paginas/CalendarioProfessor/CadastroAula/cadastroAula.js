@@ -36,6 +36,7 @@ import AlterarAula from './alterarAula';
 
 function CadastroDeAula({ match, location }) {
   const { id, tipoCalendarioId, somenteReposicao } = match.params;
+  const ehReposicao = somenteReposicao === 'true';
   const permissoesTela = useSelector(state => state.usuario.permissoes);
   const somenteConsulta = verificaSomenteConsulta(
     permissoesTela[RotasDto.CALENDARIO_PROFESSOR]
@@ -79,7 +80,7 @@ function CadastroDeAula({ match, location }) {
     ueId: turmaSelecionada.unidadeEscolar,
     tipoCalendarioId,
     quantidade: 1,
-    tipoAula: somenteReposicao ? 2 : 1,
+    tipoAula: ehReposicao ? 2 : 1,
     recorrenciaAula: 1,
   };
 
@@ -737,7 +738,11 @@ function CadastroDeAula({ match, location }) {
                       <RadioGroupButton
                         id="tipo-aula"
                         label="Tipo de aula"
-                        opcoes={somenteReposicao ? opcoesTipoAulaSomenteReposicao : opcoesTipoAula}
+                        opcoes={
+                          ehReposicao
+                            ? opcoesTipoAulaSomenteReposicao
+                            : opcoesTipoAula
+                        }
                         name="tipoAula"
                         form={form}
                         onChange={onChangeTipoAula}
@@ -776,7 +781,11 @@ function CadastroDeAula({ match, location }) {
                       <RadioGroupButton
                         id="recorrencia-aula"
                         label="Recorrência"
-                        opcoes={somenteReposicao ? opcoesRecorrenciaSomenteReposicao : opcoesRecorrencia}
+                        opcoes={
+                          ehReposicao
+                            ? opcoesRecorrenciaSomenteReposicao
+                            : opcoesRecorrencia
+                        }
                         name="recorrenciaAula"
                         form={form}
                         onChange={onChangeRecorrencia}
