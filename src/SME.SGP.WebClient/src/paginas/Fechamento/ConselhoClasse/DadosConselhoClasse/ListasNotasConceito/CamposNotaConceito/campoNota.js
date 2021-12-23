@@ -24,7 +24,7 @@ const CampoNota = props => {
     name,
     clicarSetas,
     step,
-    podeEditar,
+    dadosNotaPosConselho,
   } = props;
 
   const fechamentoPeriodoInicioFim = useSelector(
@@ -104,9 +104,9 @@ const CampoNota = props => {
 
   const onChangeValor = async (valor, validarMedia) => {
     if (
-      notaConceitoPosConselhoAtual &&
-      notaConceitoPosConselhoAtual.idCampo &&
-      notaConceitoPosConselhoAtual.idCampo !== idCampo
+      notaConceitoPosConselhoAtual?.idCampo &&
+      notaConceitoPosConselhoAtual?.idCampo !== idCampo &&
+      notaConceitoPosConselhoAtual?.ehEdicao
     ) {
       return;
     }
@@ -127,6 +127,7 @@ const CampoNota = props => {
     mostrarJustificativa();
     setNotaPosConselho(valor, true);
     setNotaValorAtual(notaArredondada);
+    dadosNotaPosConselho.nota = notaArredondada;
   };
 
   const onClickMostrarJustificativa = async () => {
@@ -221,7 +222,6 @@ const CampoNota = props => {
 };
 
 CampoNota.propTypes = {
-  podeEditar: PropTypes.bool,
   id: PropTypes.oneOfType([PropTypes.any]),
   notaPosConselho: PropTypes.oneOfType([PropTypes.any]),
   idCampo: PropTypes.oneOfType([PropTypes.string]),
@@ -232,10 +232,10 @@ CampoNota.propTypes = {
   name: PropTypes.string,
   esconderSetas: PropTypes.bool,
   step: PropTypes.number,
+  dadosNotaPosConselho: PropTypes.oneOfType([PropTypes.any]),
 };
 
 CampoNota.defaultProps = {
-  podeEditar: true,
   id: 0,
   notaPosConselho: '',
   idCampo: '',
@@ -246,6 +246,7 @@ CampoNota.defaultProps = {
   name: '',
   esconderSetas: false,
   step: 0.5,
+  dadosNotaPosConselho: null,
 };
 
 export default CampoNota;

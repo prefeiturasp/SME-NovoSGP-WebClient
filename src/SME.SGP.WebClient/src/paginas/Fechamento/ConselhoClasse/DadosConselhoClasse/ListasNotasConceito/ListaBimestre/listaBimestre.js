@@ -35,11 +35,9 @@ const ListaBimestre = props => {
       : 0;
 
   const montaCampoPosConselho = (
-    id,
     notaPosConselho,
     idCampo,
-    codigoComponenteCurricular,
-    podeEditar
+    codigoComponenteCurricular
   ) => {
     switch (Number(tipoNota)) {
       case Number(notasConceitos.Notas):
@@ -47,23 +45,29 @@ const ListaBimestre = props => {
           <CampoNota
             esconderSetas
             step={0}
-            id={id}
-            notaPosConselho={notaPosConselho}
+            id={notaPosConselho?.id}
+            notaPosConselho={notaPosConselho?.nota}
             idCampo={idCampo}
             codigoComponenteCurricular={String(codigoComponenteCurricular)}
             mediaAprovacao={mediaAprovacao}
-            alunoDesabilitado={alunoDesabilitado || !podeEditar}
+            alunoDesabilitado={
+              alunoDesabilitado || !notaPosConselho?.podeEditar
+            }
+            dadosNotaPosConselho={notaPosConselho}
           />
         );
       case Number(notasConceitos.Conceitos):
         return (
           <CampoConceito
-            notaPosConselho={notaPosConselho}
+            notaPosConselho={notaPosConselho?.nota}
             listaTiposConceitos={listaTiposConceitos}
-            id={id}
+            id={notaPosConselho?.id}
             idCampo={idCampo}
             codigoComponenteCurricular={codigoComponenteCurricular}
-            alunoDesabilitado={alunoDesabilitado || !podeEditar}
+            alunoDesabilitado={
+              alunoDesabilitado || !notaPosConselho?.podeEditar
+            }
+            dadosNotaPosConselho={notaPosConselho}
           />
         );
       default:
@@ -141,11 +145,9 @@ const ListaBimestre = props => {
                       </td>
                       <td>
                         {montaCampoPosConselho(
-                          item.notaPosConselho.id,
-                          item.notaPosConselho.nota,
+                          item.notaPosConselho,
                           `${descricaoGrupoMatriz} ${index} componente`,
-                          item.codigoComponenteCurricular,
-                          item.notaPosConselho.podeEditar
+                          item.codigoComponenteCurricular
                         )}
                       </td>
                       <td>{item.quantidadeAulas}</td>
@@ -179,11 +181,9 @@ const ListaBimestre = props => {
                         <td>{montarValoresNotasConceitos(item)}</td>
                         <td>
                           {montaCampoPosConselho(
-                            item.notaPosConselho.id,
-                            item.notaPosConselho.nota,
+                            item.notaPosConselho,
                             `${descricaoGrupoMatriz} ${index} regencia`,
-                            item.codigoComponenteCurricular,
-                            item.notaPosConselho.podeEditar
+                            item.codigoComponenteCurricular
                           )}
                         </td>
                         {index === 0 ? (
