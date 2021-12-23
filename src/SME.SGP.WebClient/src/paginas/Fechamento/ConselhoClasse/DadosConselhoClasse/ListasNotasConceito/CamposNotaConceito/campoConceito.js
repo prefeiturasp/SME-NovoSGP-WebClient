@@ -26,6 +26,7 @@ const CampoConceito = props => {
     idCampo,
     codigoComponenteCurricular,
     alunoDesabilitado,
+    dadosNotaPosConselho,
   } = props;
 
   const idCamposNotasPosConselho = useSelector(
@@ -117,9 +118,9 @@ const CampoConceito = props => {
 
   const onChangeConceito = (valorNovo, validarMedia) => {
     if (
-      notaConceitoPosConselhoAtual &&
-      notaConceitoPosConselhoAtual.idCampo &&
-      notaConceitoPosConselhoAtual.idCampo !== idCampo
+      notaConceitoPosConselhoAtual?.idCampo &&
+      notaConceitoPosConselhoAtual?.idCampo !== idCampo &&
+      notaConceitoPosConselhoAtual?.ehEdicao
     ) {
       return;
     }
@@ -131,6 +132,7 @@ const CampoConceito = props => {
         validaSeEstaAbaixoDaMedia(valorNovo);
       }
       setNotaValorAtual(valorNovo);
+      dadosNotaPosConselho.nota = valorNovo;
     }
   };
 
@@ -193,6 +195,7 @@ CampoConceito.propTypes = {
   idCampo: PropTypes.oneOfType([PropTypes.string]),
   codigoComponenteCurricular: PropTypes.oneOfType([PropTypes.any]),
   alunoDesabilitado: PropTypes.bool,
+  dadosNotaPosConselho: PropTypes.oneOfType([PropTypes.any]),
 };
 
 CampoConceito.defaultProps = {
@@ -202,6 +205,7 @@ CampoConceito.defaultProps = {
   idCampo: '',
   codigoComponenteCurricular: '',
   alunoDesabilitado: false,
+  dadosNotaPosConselho: null,
 };
 
 export default CampoConceito;

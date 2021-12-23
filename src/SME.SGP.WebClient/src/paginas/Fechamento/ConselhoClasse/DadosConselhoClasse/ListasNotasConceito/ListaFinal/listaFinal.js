@@ -95,6 +95,7 @@ const ListaFinal = props => {
             mediaAprovacao={mediaAprovacao}
             alunoDesabilitado={alunoDesabilitado}
             podeEditar={podeEditar}
+            dadosNotaPosConselho={item}
           />
         );
       case Number(notasConceitos.Conceitos):
@@ -107,6 +108,7 @@ const ListaFinal = props => {
             codigoComponenteCurricular={codigoComponenteCurricular}
             alunoDesabilitado={alunoDesabilitado}
             podeEditar={notaPosConselho?.podeEditar}
+            dadosNotaPosConselho={item}
           />
         );
       default:
