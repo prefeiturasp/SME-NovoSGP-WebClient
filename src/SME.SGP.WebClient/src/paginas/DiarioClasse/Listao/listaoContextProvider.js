@@ -50,7 +50,10 @@ const ListaoContextProvider = ({ children }) => {
     compCurricularTabDiarioBordo,
     setCompCurricularTabDiarioBordo,
   ] = useState();
-
+  const [
+    listaComponenteCurriculares,
+    setListaComponenteCurriculares,
+  ] = useState();
   const [listaoEhInfantil, setListaoEhInfantil] = useState(false);
 
   const limparTelaListao = () => {
@@ -141,6 +144,8 @@ const ListaoContextProvider = ({ children }) => {
   const TAB_DIARIO_BORDO = {
     compCurricularTabDiarioBordo,
     setCompCurricularTabDiarioBordo,
+    listaComponenteCurriculares,
+    setListaComponenteCurriculares,
   };
 
   return (

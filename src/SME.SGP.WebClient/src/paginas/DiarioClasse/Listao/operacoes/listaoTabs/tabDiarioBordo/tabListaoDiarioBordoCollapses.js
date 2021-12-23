@@ -4,30 +4,22 @@ import { useSelector } from 'react-redux';
 
 import { Base, PainelCollapse } from '~/componentes';
 
-import { erros } from '~/servicos';
-import ServicoDiarioBordo from '~/servicos/Paginas/DiarioClasse/ServicoDiarioBordo';
+import { erros, ServicoDiarioBordo } from '~/servicos';
 
 import ListaoContext from '../../../listaoContext';
+import ConteudoCollapse from './conteudoCollapse';
 
 const TabListaoDiarioBordoCollapses = () => {
   const [diariosBordo, setDiariosBordo] = useState([]);
 
   const usuario = useSelector(store => store.usuario);
-  // const telaEmEdicao = useSelector(store => store.geral.telaEmEdicao);
   const { turmaSelecionada } = usuario;
   const { turma } = turmaSelecionada;
-  // const acaoTelaEmEdicao = useSelector(store => store.geral.acaoTelaEmEdicao);
 
   const {
-    // bimestreOperacoes,
     setExibirLoaderGeral,
-    // listaPeriodos,
-    // setListaPeriodos,
     periodo,
-    // setPeriodo,
-    // periodoAbertoListao,
     compCurricularTabDiarioBordo,
-    // setCompCurricularTabDiarioBordo,
   } = useContext(ListaoContext);
 
   const exibirDiarioBordoCollapses =
@@ -67,25 +59,30 @@ const TabListaoDiarioBordoCollapses = () => {
   return (
     <Row gutter={[24, 24]}>
       <Col sm={24}>
-        {exibirDiarioBordoCollapses &&
-          diariosBordo.map(({ id, titulo, pendente }) => {
+        {!!exibirDiarioBordoCollapses &&
+          diariosBordo.map(diarioBordo => {
+            const { id, titulo, pendente } = diarioBordo;
             const bordaCollapse = pendente
               ? Base.LaranjaStatus
               : Base.AzulBordaCollapse;
             const keyCollapse = id + titulo;
 
             return (
-              <PainelCollapse accordion onChange={onColapse}>
-                <PainelCollapse.Painel
-                  key={keyCollapse}
-                  accordion
-                  espacoPadrao
-                  corBorda={bordaCollapse}
-                  temBorda
-                  header={titulo}
-                  ehPendente={pendente}
-                />
-              </PainelCollapse>
+              <>
+                <PainelCollapse accordion onChange={onColapse}>
+                  <PainelCollapse.Painel
+                    key={keyCollapse}
+                    accordion
+                    espacoPadrao
+                    corBorda={bordaCollapse}
+                    temBorda
+                    header={titulo}
+                    ehPendente={pendente}
+                  >
+                    <ConteudoCollapse {...diarioBordo} />
+                  </PainelCollapse.Painel>
+                </PainelCollapse>
+              </>
             );
           })}
       </Col>

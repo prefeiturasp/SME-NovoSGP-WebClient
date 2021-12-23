@@ -5,35 +5,32 @@ import { useSelector } from 'react-redux';
 import { Loader, SelectComponent } from '~/componentes';
 import * as idsCampos from '~/componentes-sgp/filtro/idsCampos';
 
-import { erros, ServicoDisciplina } from '~/servicos';
-import ServicoPeriodoEscolar from '~/servicos/Paginas/Calendario/ServicoPeriodoEscolar';
+import { erros, ServicoDisciplina, ServicoPeriodoEscolar } from '~/servicos';
 
 import ListaoContext from '../../../listaoContext';
 
 const TabListaoDiarioBordoFiltros = () => {
   const [exibirLoaderPeriodo, setExibirLoaderPeriodo] = useState(false);
   const [
-    listaComponenteCurriculares,
-    setListaComponenteCurriculares,
-  ] = useState();
+    exibirLoaderComponenteCurricular,
+    setExibirLoaderComponenteCurricular,
+  ] = useState(false);
 
   const usuario = useSelector(store => store.usuario);
-  const telaEmEdicao = useSelector(store => store.geral.telaEmEdicao);
   const { turmaSelecionada } = usuario;
   const { turma } = turmaSelecionada;
-  const acaoTelaEmEdicao = useSelector(store => store.geral.acaoTelaEmEdicao);
 
   const {
     componenteCurricular,
     bimestreOperacoes,
-    // setExibirLoaderGeral,
     listaPeriodos,
     setListaPeriodos,
     periodo,
     setPeriodo,
-    // periodoAbertoListao,
     compCurricularTabDiarioBordo,
     setCompCurricularTabDiarioBordo,
+    listaComponenteCurriculares,
+    setListaComponenteCurriculares,
   } = useContext(ListaoContext);
 
   const desabilitarCampos =
@@ -76,6 +73,8 @@ const TabListaoDiarioBordoFiltros = () => {
     return () => {
       setPeriodo();
       setListaPeriodos([]);
+      setCompCurricularTabDiarioBordo();
+      setListaComponenteCurriculares([]);
     };
   }, [setListaPeriodos, setPeriodo]);
 
@@ -115,33 +114,21 @@ const TabListaoDiarioBordoFiltros = () => {
   };
 
   const onChangePeriodo = async valor => {
-    // if (telaEmEdicao) {
-    //   const salvou = await acaoTelaEmEdicao();
-    //   if (salvou) {
-    //     setarPeriodo(valor);
-    //   }
-    //   return;
-    // }
     setarPeriodo(valor);
   };
 
   const onChangeComponenteCurricular = async valor => {
-    if (telaEmEdicao) {
-      const salvou = await acaoTelaEmEdicao();
-      if (salvou) {
-        setCompCurricularTabDiarioBordo(valor);
-      }
-    }
     setCompCurricularTabDiarioBordo(valor);
   };
 
   const obterComponentesCurriculares = useCallback(async () => {
-    // setCarregandoGeral(true);
+    setExibirLoaderComponenteCurricular(true);
     const componentes = await ServicoDisciplina.obterDisciplinasPorTurma(
       turma,
       false
-    ).catch(e => erros(e));
-    // .finally(() => setCarregandoGeral(false))
+    )
+      .catch(e => erros(e))
+      .finally(() => setExibirLoaderComponenteCurricular(false));
 
     if (componentes?.data?.length) {
       setListaComponenteCurriculares(componentes.data);
@@ -153,21 +140,26 @@ const TabListaoDiarioBordoFiltros = () => {
         );
       }
     }
-  }, [turma]);
+  }, [turma, setCompCurricularTabDiarioBordo]);
 
   useEffect(() => {
-    if (turma) {
+    if (turma && bimestreOperacoes) {
       obterComponentesCurriculares();
       return;
     }
     setListaComponenteCurriculares([]);
     setCompCurricularTabDiarioBordo();
-  }, [turma, obterComponentesCurriculares, setCompCurricularTabDiarioBordo]);
+  }, [
+    turma,
+    obterComponentesCurriculares,
+    setCompCurricularTabDiarioBordo,
+    bimestreOperacoes,
+  ]);
 
   return (
     <Row gutter={[24, 24]}>
       <Col sm={24} md={12} lg={8}>
-        <Loader loading={exibirLoaderPeriodo} ignorarTip>
+        <Loader loading={exibirLoaderComponenteCurricular} ignorarTip>
           <SelectComponent
             label="Componente curricular"
             id={idsCampos.SGP_SELECT_COMPONENTE_CURRICULAR}
@@ -179,7 +171,9 @@ const TabListaoDiarioBordoFiltros = () => {
             placeholder="Selecione um componente curricular"
             showSearch
             disabled={
-              desabilitarCampos || listaComponenteCurriculares?.length === 1
+              desabilitarCampos ||
+              listaComponenteCurriculares?.length === 1 ||
+              !listaComponenteCurriculares?.length
             }
           />
         </Loader>
