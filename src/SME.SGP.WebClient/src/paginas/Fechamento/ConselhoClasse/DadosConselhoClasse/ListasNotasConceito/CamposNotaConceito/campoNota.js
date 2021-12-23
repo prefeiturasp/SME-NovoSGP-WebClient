@@ -51,6 +51,18 @@ const CampoNota = props => {
     store => store.conselhoClasse.dentroPeriodo
   );
 
+  const expandirLinha = useSelector(
+    store => store.conselhoClasse.expandirLinha
+  );
+
+  const temLinhaExpandida = expandirLinha && Object.keys(expandirLinha)?.length;
+
+  const desabilitarIconeExpandir =
+    temLinhaExpandida && notaConceitoPosConselhoAtual?.ehEdicao;
+
+  const desabilitarCampoQuandoExpandir =
+    desabilitarIconeExpandir && !expandirLinha[idCampo];
+
   const { periodoFechamentoFim } = fechamentoPeriodoInicioFim;
 
   const [notaValorAtual, setNotaValorAtual] = useState(notaPosConselho);
@@ -184,7 +196,8 @@ const CampoNota = props => {
           alunoDesabilitado ||
           !podeEditarNota ||
           desabilitarCampos ||
-          !dentroPeriodo
+          !dentroPeriodo ||
+          desabilitarCampoQuandoExpandir
         }
       />
     );
@@ -196,7 +209,12 @@ const CampoNota = props => {
         {idNotaPosConselho || idCamposNotasPosConselho ? (
           <CampoAlerta ehNota>
             {campoNotaPosConselho(false, false)}
-            <div className="icone" onClick={onClickMostrarJustificativa}>
+            <div
+              className="icone"
+              onClick={
+                desabilitarIconeExpandir ? null : onClickMostrarJustificativa
+              }
+            >
               <Tooltip
                 title="Ver Justificativa"
                 placement="bottom"

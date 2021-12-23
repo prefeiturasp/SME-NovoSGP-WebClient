@@ -49,6 +49,18 @@ const CampoConceito = props => {
     store => store.conselhoClasse.podeEditarNota
   );
 
+  const expandirLinha = useSelector(
+    store => store.conselhoClasse.expandirLinha
+  );
+
+  const temLinhaExpandida = expandirLinha && Object.keys(expandirLinha)?.length;
+
+  const desabilitarIconeExpandir =
+    temLinhaExpandida && notaConceitoPosConselhoAtual?.ehEdicao;
+
+  const desabilitarCampoQuandoExpandir =
+    desabilitarIconeExpandir && !expandirLinha[idCampo];
+
   const [notaValorAtual, setNotaValorAtual] = useState(notaPosConselho);
   const [abaixoDaMedia, setAbaixoDaMedia] = useState(false);
 
@@ -152,7 +164,8 @@ const CampoConceito = props => {
             alunoDesabilitado ||
             !podeEditarNota ||
             desabilitarCampos ||
-            !dentroPeriodo
+            !dentroPeriodo ||
+            desabilitarCampoQuandoExpandir
           }
           searchValue={false}
         />
@@ -171,7 +184,12 @@ const CampoConceito = props => {
               placement="bottom"
               overlayStyle={{ fontSize: '12px' }}
             >
-              <div className="icone" onClick={onClickMostrarJustificativa}>
+              <div
+                className="icone"
+                onClick={
+                  desabilitarIconeExpandir ? null : onClickMostrarJustificativa
+                }
+              >
                 <i className="fas fa-user-edit" />
               </div>
             </Tooltip>
