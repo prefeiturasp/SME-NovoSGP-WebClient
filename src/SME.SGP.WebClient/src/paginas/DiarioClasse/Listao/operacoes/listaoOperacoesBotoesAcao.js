@@ -36,6 +36,9 @@ const ListaoOperacoesBotoesAcao = () => {
     setDadosIniciaisFrequencia,
     somenteConsultaListao,
     periodoAbertoListao,
+    dadosPlanoAula,
+    dadosIniciaisPlanoAula,
+    setDadosPlanoAula,
   } = useContext(ListaoContext);
 
   const telaEmEdicao = useSelector(store => store.geral.telaEmEdicao);
@@ -49,7 +52,7 @@ const ListaoOperacoesBotoesAcao = () => {
       'Suas alterações não foram salvas, deseja salvar agora?'
     );
 
-  const onClickSalvar = async () => {
+  const salvarFrequencia = async () => {
     const paramsSalvar = dadosFrequencia.aulas
       .map(aula => {
         const alunos = dadosFrequencia?.alunos
@@ -103,13 +106,31 @@ const ListaoOperacoesBotoesAcao = () => {
     return false;
   };
 
+  const salvarPlanoAula = () => {
+    console.log(dadosPlanoAula);
+  };
+
+  const onClickSalvarTabAtiva = () => {
+    switch (tabAtual) {
+      case LISTAO_TAB_FREQUENCIA:
+        salvarFrequencia();
+        break;
+      case LISTAO_TAB_PLANO_AULA:
+        salvarPlanoAula();
+        break;
+
+      default:
+        break;
+    }
+  };
+
   const validarSalvar = async () => {
     let salvou = true;
     if (!desabilitarBotoes && telaEmEdicao) {
       const confirmado = await pergutarParaSalvar();
 
       if (confirmado) {
-        salvou = await onClickSalvar();
+        salvou = await onClickSalvarTabAtiva();
       } else {
         dispatch(setTelaEmEdicao(false));
       }
@@ -141,7 +162,10 @@ const ListaoOperacoesBotoesAcao = () => {
     setDadosFrequencia({ ...dadosCarregar });
   };
 
-  const limparDadosPlanoAula = () => {};
+  const limparDadosPlanoAula = () => {
+    const dadosCarregar = _.cloneDeep(dadosIniciaisPlanoAula);
+    setDadosPlanoAula({ ...dadosCarregar });
+  };
   const limparDadosAvaliacoes = () => {};
   const limparDadosFechamento = () => {};
   const limparDadosDiarioBordo = () => {};
@@ -214,7 +238,7 @@ const ListaoOperacoesBotoesAcao = () => {
             color={Colors.Roxo}
             border
             bold
-            onClick={onClickSalvar}
+            onClick={onClickSalvarTabAtiva}
             disabled={desabilitarBotoes || !telaEmEdicao}
           />
         </Col>

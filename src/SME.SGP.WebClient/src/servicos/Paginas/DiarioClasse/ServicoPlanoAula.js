@@ -219,6 +219,16 @@ class ServicoPlanoAula {
     }
     return false;
   };
+
+  obterPlanoAulaPorPeriodo = () => {
+    // TODO
+    const mock = { data: [{ id: 1 }] };
+    return new Promise(resolve => {
+      setTimeout(() => {
+        resolve(mock);
+      }, 2000);
+    });
+  };
 }
 
 export default new ServicoPlanoAula();
