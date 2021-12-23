@@ -71,6 +71,7 @@ function CadastroDeAula({ match, location }) {
   const [registroMigrado, setRegistroMigrado] = useState(false);
   const [emManutencao, setEmManutencao] = useState(false);
   const [desabilitarBtnSalvar, setDesabilitarBtnSalvar] = useState(false);
+  const [alterouCampo, setAlterouCampo] = useState(false);
 
   const { diaAula } = queryString.parse(location.search);
   const aulaInicial = {
@@ -97,9 +98,7 @@ function CadastroDeAula({ match, location }) {
   const [listaComponentes, setListaComponentes] = useState([]);
   const [recorrenciaAulaOriginal, setRecorrenciaAulaOriginal] = useState();
 
-  const opcoesTipoAulaSomenteReposicao = [
-    { label: 'Reposição', value: 2 }
-  ];
+  const opcoesTipoAulaSomenteReposicao = [{ label: 'Reposição', value: 2 }];
 
   const opcoesTipoAula = [
     { label: 'Normal', value: 1 },
@@ -113,7 +112,7 @@ function CadastroDeAula({ match, location }) {
   };
 
   const opcoesRecorrenciaSomenteReposicao = [
-    { label: 'Aula única', value: recorrencia.AULA_UNICA }
+    { label: 'Aula única', value: recorrencia.AULA_UNICA },
   ];
 
   const opcoesRecorrencia = [
@@ -194,7 +193,7 @@ function CadastroDeAula({ match, location }) {
             const componenteSelecionado = componentes.find(
               c => c.codigoComponenteCurricular == respostaAula.disciplinaId
             );
-            if (componenteSelecionado){
+            if (componenteSelecionado) {
               carregarGrade(
                 componenteSelecionado,
                 respostaAula.dataAula,
@@ -432,6 +431,7 @@ function CadastroDeAula({ match, location }) {
 
   const onChangeDataAula = data => {
     setModoEdicao(true);
+    setAlterouCampo(true);
     setAula(aulaState => {
       return { ...aulaState, dataAula: data };
     });
@@ -560,6 +560,12 @@ function CadastroDeAula({ match, location }) {
       setSomenteLeitura(true);
     }
   }, [carregandoDados, aula.somenteLeitura]);
+
+  useEffect(() => {
+    const ehEdicao = id ? alterouCampo : !id;
+    const desabilitar = aula?.dataAula && aula?.disciplinaId && ehEdicao;
+    setModoEdicao(desabilitar);
+  }, [aula, id, alterouCampo]);
 
   return (
     <Container>
@@ -759,7 +765,10 @@ function CadastroDeAula({ match, location }) {
                         valueText="nome"
                         placeholder="Selecione um componente curricular"
                         form={form}
-                        disabled={(!!id && aula?.disciplinaId) || (listaComponentes.length === 1 && !id)}
+                        disabled={
+                          (!!id && aula?.disciplinaId) ||
+                          (listaComponentes.length === 1 && !id)
+                        }
                         onChange={onChangeComponente}
                       />
                     </div>
