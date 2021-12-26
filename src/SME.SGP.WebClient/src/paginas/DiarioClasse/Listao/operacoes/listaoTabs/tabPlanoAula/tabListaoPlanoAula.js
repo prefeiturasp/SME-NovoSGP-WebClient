@@ -3,9 +3,8 @@ import _ from 'lodash';
 import React, { useCallback, useContext, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { setLimparModoEdicaoGeral } from '~/redux/modulos/geral/actions';
-import { erros, ServicoComponentesCurriculares } from '~/servicos';
+import { erros } from '~/servicos';
 import ServicoPlanoAula from '~/servicos/Paginas/DiarioClasse/ServicoPlanoAula';
-import ServicoPlanoAnual from '~/servicos/Paginas/ServicoPlanoAnual';
 import ListaoContext from '../../../listaoContext';
 import PeriodoEscolarListao from '../componentes/periodoEscolarListao';
 import ListaoPlanoAulaMontarDados from './listaoPlanoAulaMontarDados';
@@ -25,7 +24,7 @@ const TabListaoPlanoAula = () => {
     setDadosPlanoAula,
     setDadosIniciaisPlanoAula,
     periodoAbertoListao,
-    setListaComponentesModalObjetivosAprendizagem,
+    setListaObjetivosAprendizagem,
   } = useContext(ListaoContext);
 
   const limparDadosPlanoAula = () => {
@@ -40,35 +39,47 @@ const TabListaoPlanoAula = () => {
     };
   }, []);
 
-  const obterListaComponentesRegencia = async () => {
-    let lista = [];
-    const resposta = await ServicoComponentesCurriculares.obterComponetensCuricularesRegencia(
-      turmaSelecionada?.id
-    ).catch(e => {
-      erros(e);
-      setExibirLoaderGeral(false);
+  const montarListaObjetivos = dados => {
+    let listaObjetivos = [];
+
+    dados.forEach(item => {
+      const novoMap = item.objetivosAprendizagem.map(ob => {
+        return { ...ob, componenteCurricularId: item.componenteCurricularId };
+      });
+      listaObjetivos = listaObjetivos.concat(novoMap);
     });
-
-    if (resposta?.data?.length) {
-      lista = resposta.data;
-    }
-
-    return lista;
+    return listaObjetivos;
   };
 
-  const obterObjetivosPorAnoEComponenteCurricular = async () => {
-    const resposta = await ServicoPlanoAnual.obterListaObjetivosPorAnoEComponenteCurricular(
-      turmaSelecionada?.ano,
-      turmaSelecionada?.ensinoEspecial,
-      componenteCurricular?.codigoComponenteCurricular
+  const obterListaObjetivosPorTurmaAnoEComponenteCurricular = async () => {
+    const resposta = await ServicoPlanoAula.obterListaObjetivosPorTurmaAnoEComponenteCurricular(
+      turmaSelecionada?.id,
+      componenteCurricular?.codigoComponenteCurricular,
+      periodo?.dataInicio
     ).catch(e => {
       erros(e);
       setExibirLoaderGeral(false);
     });
 
     if (resposta?.data?.length) {
-      // TODO
+      const lista = montarListaObjetivos(resposta.data);
+      return lista;
     }
+
+    return [];
+  };
+
+  const montarIdsObjetivosSelecionados = planos => {
+    planos.forEach(plano => {
+      if (plano?.objetivosAprendizagemComponente?.length) {
+        let ids = [];
+        plano.objetivosAprendizagemComponente.forEach(objetivo => {
+          const idsObjetivo = objetivo.objetivosAprendizagem.map(ob => ob.id);
+          ids = ids.concat(idsObjetivo);
+        });
+        plano.idsObjetivosAprendizagemSelecionados = ids;
+      }
+    });
   };
 
   const obterPlanoAulaPorPeriodo = useCallback(async () => {
@@ -82,17 +93,17 @@ const TabListaoPlanoAula = () => {
     ).catch(e => erros(e));
 
     if (resposta?.data?.length) {
-      if (componenteCurricular?.regencia) {
-        const listaCompRegencia = await obterListaComponentesRegencia();
-        setListaComponentesModalObjetivosAprendizagem(listaCompRegencia);
-      } else {
-        setListaComponentesModalObjetivosAprendizagem([componenteCurricular]);
+      if (componenteCurricular?.possuiObjetivos) {
+        const listaObjetivos = await obterListaObjetivosPorTurmaAnoEComponenteCurricular();
+        setListaObjetivosAprendizagem(listaObjetivos);
       }
-      obterObjetivosPorAnoEComponenteCurricular();
 
       // const lista = resposta.data;
       // TODO - Remover mock!
       const lista = mockPlanoAulaListao;
+
+      montarIdsObjetivosSelecionados(lista);
+
       const dadosCarregar = _.cloneDeep(lista);
       const dadosIniciais = _.cloneDeep(lista);
       setDadosIniciaisPlanoAula(dadosIniciais);

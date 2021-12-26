@@ -1,20 +1,27 @@
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Col, Row } from 'antd';
-import React, { useState } from 'react';
+import PropTypes from 'prop-types';
+import React from 'react';
 import { Colors } from '~/componentes';
 import { SGP_BUTTON_ADD_OBJETIVOS_APRENDIZAGEM_DESENVOLVIMENTO } from '~/componentes-sgp/filtro/idsCampos';
 import Button from '~/componentes/button';
 import ModalObjetivosAprendizagem from './modalObjetivosAprendizagem';
 
-const AdicionarObjetivosAprendizagem = () => {
-  const [exibirModal, setExibirModal] = useState(false);
+const AdicionarObjetivosAprendizagem = props => {
+  const {
+    listaObjetivosAprendizagem,
+    idsObjetivosAprendizagemSelecionados,
+    onChange,
+    exibirModal,
+    setExibirModal,
+    onClickAdicionar,
+  } = props;
 
-  const onClickAdd = () => {
-    setExibirModal(true);
-  };
-
-  const onClose = () => {
+  const onClose = (idsSelecionados, aplicarDados) => {
+    if (aplicarDados) {
+      onChange(idsSelecionados);
+    }
     setExibirModal(false);
   };
 
@@ -38,13 +45,42 @@ const AdicionarObjetivosAprendizagem = () => {
             label={<LabelBtnAdd />}
             color={Colors.Azul}
             border
-            onClick={onClickAdd}
+            onClick={onClickAdicionar}
           />
         </Col>
       </Row>
-      <ModalObjetivosAprendizagem exibirModal={exibirModal} onClose={onClose} />
+      {exibirModal ? (
+        <ModalObjetivosAprendizagem
+          exibirModal={exibirModal}
+          onClose={onClose}
+          listaObjetivosAprendizagem={listaObjetivosAprendizagem}
+          idsObjetivosAprendizagemSelecionados={
+            idsObjetivosAprendizagemSelecionados
+          }
+        />
+      ) : (
+        <></>
+      )}
     </Col>
   );
+};
+
+AdicionarObjetivosAprendizagem.propTypes = {
+  listaObjetivosAprendizagem: PropTypes.oneOfType([PropTypes.array]),
+  idsObjetivosAprendizagemSelecionados: PropTypes.oneOfType([PropTypes.array]),
+  onChange: PropTypes.func,
+  exibirModal: PropTypes.bool,
+  setExibirModal: PropTypes.func,
+  onClickAdicionar: PropTypes.func,
+};
+
+AdicionarObjetivosAprendizagem.defaultProps = {
+  listaObjetivosAprendizagem: [],
+  idsObjetivosAprendizagemSelecionados: [],
+  onChange: () => null,
+  exibirModal: false,
+  setExibirModal: () => null,
+  onClickAdicionar: () => null,
 };
 
 export default AdicionarObjetivosAprendizagem;

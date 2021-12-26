@@ -5,8 +5,8 @@ import shortid from 'shortid';
 import { Auditoria, Base, CardCollapse } from '~/componentes';
 import { setTelaEmEdicao } from '~/redux/modulos/geral/actions';
 import ListaoContext from '../../../listaoContext';
+import ListaoObjetivosAprendizagem from './componentes/listaoObjetivosAprendizagem';
 import ObjetivosEspecificosDesenvolvimentoAula from './componentes/listaoPlanoAulaCampoEditor';
-import AdicionarObjetivosAprendizagem from './componentes/modalObjetivosAprendizagem/adicionarObjetivosAprendizagem';
 
 const ListaoPlanoAulaMontarDados = () => {
   const dispatch = useDispatch();
@@ -21,7 +21,7 @@ const ListaoPlanoAulaMontarDados = () => {
   // TODO - Permissão!
   const desabilitar = false;
 
-  const onChange = (novaDescricao, indexPlano) => {
+  const onChangeEditor = (novaDescricao, indexPlano) => {
     dadosPlanoAula[indexPlano].descricao = novaDescricao;
     setDadosPlanoAula(dadosPlanoAula);
     dispatch(setTelaEmEdicao(true));
@@ -39,13 +39,13 @@ const ListaoPlanoAulaMontarDados = () => {
         configCabecalho={configCabecalho}
       >
         <Row gutter={[24, 24]}>
-          <AdicionarObjetivosAprendizagem />
+          <ListaoObjetivosAprendizagem indexPlano={indexPlano} />
         </Row>
         <ObjetivosEspecificosDesenvolvimentoAula
           dados={plano}
           indexPlano={indexPlano}
           desabilitar={desabilitar}
-          onChange={novaDescricao => onChange(novaDescricao, indexPlano)}
+          onChange={novaDescricao => onChangeEditor(novaDescricao, indexPlano)}
         />
         <Row gutter={[24, 24]}>
           <Auditoria

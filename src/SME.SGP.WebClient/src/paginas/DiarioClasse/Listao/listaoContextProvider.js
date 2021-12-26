@@ -49,10 +49,9 @@ const ListaoContextProvider = ({ children }) => {
   // TAB PLANO AULA
   const [dadosPlanoAula, setDadosPlanoAula] = useState([]);
   const [dadosIniciaisPlanoAula, setDadosIniciaisPlanoAula] = useState([]);
-  const [
-    listaComponentesModalObjetivosAprendizagem,
-    setListaComponentesModalObjetivosAprendizagem,
-  ] = useState([]);
+  const [listaObjetivosAprendizagem, setListaObjetivosAprendizagem] = useState(
+    []
+  );
 
   const limparTelaListao = () => {
     setComponenteCurricular();
@@ -140,8 +139,8 @@ const ListaoContextProvider = ({ children }) => {
         setDadosPlanoAula,
         dadosIniciaisPlanoAula,
         setDadosIniciaisPlanoAula,
-        listaComponentesModalObjetivosAprendizagem,
-        setListaComponentesModalObjetivosAprendizagem,
+        listaObjetivosAprendizagem,
+        setListaObjetivosAprendizagem,
       }}
     >
       {children}
