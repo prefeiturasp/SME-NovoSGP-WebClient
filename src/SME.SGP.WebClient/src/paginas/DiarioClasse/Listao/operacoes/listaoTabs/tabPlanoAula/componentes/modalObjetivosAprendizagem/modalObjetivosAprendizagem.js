@@ -2,7 +2,12 @@ import { Col, Row } from 'antd';
 import PropTypes from 'prop-types';
 import React, { useState } from 'react';
 import shortid from 'shortid';
-import { Colors, DataTable, ModalConteudoHtml } from '~/componentes';
+import {
+  CampoTexto,
+  Colors,
+  DataTable,
+  ModalConteudoHtml,
+} from '~/componentes';
 import {
   SGP_BUTTON_SALVAR_MODAL,
   SGP_BUTTON_VOLTAR_MODAL,
@@ -23,6 +28,7 @@ const ModalObjetivosAprendizagem = props => {
   );
   const [emEdicao, setEmEdicao] = useState(false);
   const [emAcaoConfirmar, setEmAcaoConfirmar] = useState(false);
+  const [valorParaFiltrar, setValorParaFiltrar] = useState('');
 
   const validouAntesDeFechar = async () => {
     if (emEdicao) {
@@ -70,6 +76,28 @@ const ModalObjetivosAprendizagem = props => {
     },
   ];
 
+  const onChangeFiltro = e => {
+    const valor = e.target.value;
+    setValorParaFiltrar(valor);
+  };
+
+  const montarLista = () => {
+    if (valorParaFiltrar) {
+      const listaNova = listaObjetivosAprendizagem?.filter?.(objetivo => {
+        const dadosFiltrados = [objetivo?.codigo, objetivo?.descricao]
+          .toString()
+          ?.toLowerCase()
+          ?.includes?.(valorParaFiltrar?.toLowerCase());
+
+        return dadosFiltrados;
+      });
+
+      return listaNova;
+    }
+
+    return listaObjetivosAprendizagem;
+  };
+
   return exibirModal ? (
     <ModalConteudoHtml
       id={shortid.generate()}
@@ -84,11 +112,22 @@ const ModalObjetivosAprendizagem = props => {
     >
       <Row gutter={[16, 16]}>
         <Col>
+          <CampoTexto
+            placeholder="Informe o código ou o descrição do objetivo desejado"
+            onChange={onChangeFiltro}
+            value={valorParaFiltrar}
+            type="input"
+            icon
+          />
+        </Col>
+      </Row>
+      <Row gutter={[16, 16]}>
+        <Col>
           <DataTable
             id={shortid.generate()}
             onSelectRow={onSelectRow}
             columns={columns}
-            dataSource={listaObjetivosAprendizagem}
+            dataSource={montarLista()}
             pagination={false}
             selectedRowKeys={idsSelecionados}
             selectMultipleRows
