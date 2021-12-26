@@ -42,7 +42,7 @@ export const Container = styled.div`
   .ant-table-tbody tr td {
     border-right: solid 1px ${Base.CinzaDesabilitado};
     cursor: ${props => (props.temEventoOnClickRow ? 'pointer' : 'default')};
-    white-space: nowrap;
+    white-space: ${props => (props.tableResponsive ? 'nowrap' : 'unset')};
   }
 
   .ant-table-column-title {
@@ -235,7 +235,7 @@ export const Container = styled.div`
     margin: -8px;
   }
 
-  ::-webkit-scrollbar-track {
+  /* ::-webkit-scrollbar-track {
     background-color: #f4f4f4 !important;
   }
 
@@ -248,5 +248,5 @@ export const Container = styled.div`
   ::-webkit-scrollbar-thumb {
     background: #a8a8a8 !important;
     border-radius: 3px !important;
-  }
+  } */
 `;
