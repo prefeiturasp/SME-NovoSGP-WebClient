@@ -1,12 +1,28 @@
-import { faPlus } from '@fortawesome/free-solid-svg-icons';
+import { faPlus, faTimes } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Col, Row } from 'antd';
+import { Col, Row, Tag, Tooltip } from 'antd';
 import PropTypes from 'prop-types';
-import React from 'react';
-import { Colors } from '~/componentes';
+import React, { useState } from 'react';
+import styled from 'styled-components';
+import { Base, Colors } from '~/componentes';
 import { SGP_BUTTON_ADD_OBJETIVOS_APRENDIZAGEM_DESENVOLVIMENTO } from '~/componentes-sgp/filtro/idsCampos';
 import Button from '~/componentes/button';
 import ModalObjetivosAprendizagem from './modalObjetivosAprendizagem';
+
+export const ContainerTag = styled(Tag)`
+  font-size: 16px;
+  color: ${Base.CinzaMako};
+  background: ${Base.CinzaDesabilitado};
+  height: 32px;
+  display: inline-flex;
+  align-items: center;
+  margin: 6px 6px 6px 0px;
+
+  svg {
+    margin-left: 4px;
+    cursor: pointer;
+  }
+`;
 
 const AdicionarObjetivosAprendizagem = props => {
   const {
@@ -18,9 +34,14 @@ const AdicionarObjetivosAprendizagem = props => {
     onClickAdicionar,
   } = props;
 
+  const [idsObjetivos, setIdsObjetivos] = useState(
+    idsObjetivosAprendizagemSelecionados
+  );
+
   const onClose = (idsSelecionados, aplicarDados) => {
     if (aplicarDados) {
       onChange(idsSelecionados);
+      setIdsObjetivos(idsSelecionados);
     }
     setExibirModal(false);
   };
@@ -36,6 +57,46 @@ const AdicionarObjetivosAprendizagem = props => {
       </div>
     );
   };
+
+  const removerTag = item => {
+    const itemParaRemover = idsObjetivos.find(id => id === item.id);
+    if (itemParaRemover) {
+      const indexItemRemover = idsObjetivos.indexOf(itemParaRemover);
+      idsObjetivos.splice(indexItemRemover, 1);
+      onChange([...idsObjetivos]);
+      setIdsObjetivos([...idsObjetivos]);
+    }
+  };
+
+  const montarTags = () => {
+    const itensSelecionados = listaObjetivosAprendizagem.filter(item =>
+      idsObjetivos.find(id => id === item.id)
+    );
+
+    const listaComDescricao = itensSelecionados.map(item => {
+      const descricaoTag = `(${item.codigo}) ${item.descricao.substr(
+        0,
+        20
+      )}...`;
+      return { ...item, descricaoTag };
+    });
+
+    if (listaComDescricao?.length) {
+      return listaComDescricao.map(obj => (
+        <Tooltip title={`(${obj.codigo}) ${obj.descricao}`}>
+          <ContainerTag>
+            <>
+              {obj.descricaoTag}
+              <FontAwesomeIcon onClick={() => removerTag(obj)} icon={faTimes} />
+            </>
+          </ContainerTag>
+        </Tooltip>
+      ));
+    }
+
+    return <></>;
+  };
+
   return (
     <Col span={24}>
       <Row>
@@ -47,6 +108,7 @@ const AdicionarObjetivosAprendizagem = props => {
             border
             onClick={onClickAdicionar}
           />
+          {idsObjetivos?.length ? montarTags() : <></>}
         </Col>
       </Row>
       {exibirModal ? (
@@ -54,9 +116,7 @@ const AdicionarObjetivosAprendizagem = props => {
           exibirModal={exibirModal}
           onClose={onClose}
           listaObjetivosAprendizagem={listaObjetivosAprendizagem}
-          idsObjetivosAprendizagemSelecionados={
-            idsObjetivosAprendizagemSelecionados
-          }
+          idsObjetivosAprendizagemSelecionados={idsObjetivos}
         />
       ) : (
         <></>
