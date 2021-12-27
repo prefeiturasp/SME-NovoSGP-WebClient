@@ -193,14 +193,17 @@ const ListaDiarioBordo = () => {
 
   const onColapse = async id => {
     dispatch(limparDadosObservacoesUsuario());
-    if (id) {
-      const dados = await ServicoDiarioBordo.obterDiarioBordoDetalhes(id);
+    const idDiario = id.substr(0, id.indexOf('/'));
+    let dados = [];
+    let observacoes = [];
+    // eslint-disable-next-line eqeqeq
+    if (idDiario && idDiario != 0) {
+      dados = await ServicoDiarioBordo.obterDiarioBordoDetalhes(idDiario);
       if (dados?.data) {
-        let observacoes = [];
         if (dados.data.observacoes.length) {
           observacoes = await obterUsuarioPorObservacao(
             dados.data.observacoes,
-            id
+            idDiario
           );
           dispatch(setDadosObservacoesUsuario(observacoes));
         }
@@ -209,6 +212,11 @@ const ListaDiarioBordo = () => {
           observacoes,
         });
       }
+    } else {
+      setDiarioBordoAtual({
+        dados,
+        observacoes,
+      });
     }
   };
 
@@ -427,7 +435,7 @@ const ListaDiarioBordo = () => {
                   const bordaCollapse = pendente
                     ? Base.LaranjaStatus
                     : Base.AzulBordaCollapse;
-                  const keyCollapse = id + titulo;
+                  const keyCollapse = `${id}/${titulo}`;
                   return (
                     <PainelCollapse.Painel
                       key={keyCollapse}
@@ -449,6 +457,7 @@ const ListaDiarioBordo = () => {
                         </div>
                         <div className="col-sm-12 d-flex justify-content-end mb-4">
                           <Button
+                            disabled={pendente}
                             id={shortid.generate()}
                             label="Consultar diário completo"
                             icon="book"
@@ -459,8 +468,10 @@ const ListaDiarioBordo = () => {
                         </div>
                         <div className="col-sm-12 p-0 position-relative">
                           <ObservacoesUsuario
-                            esconderLabel
-                            mostrarListaNotificacao
+                            esconderLabel={pendente}
+                            esconderCaixaExterna={pendente}
+                            desabilitarBotaoNotificar={pendente}
+                            mostrarListaNotificacao={!pendente}
                             salvarObservacao={obs =>
                               salvarEditarObservacao(obs, id)
                             }
