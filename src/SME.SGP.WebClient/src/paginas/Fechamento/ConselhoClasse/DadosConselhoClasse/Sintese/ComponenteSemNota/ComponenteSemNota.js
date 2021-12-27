@@ -44,7 +44,7 @@ const ComponenteSemNota = props => {
                       width: '250px',
                     }}
                   >
-                    {item.totalFaltas || 0}
+                    {item.totalFaltas}
                   </td>
                   <td>{item.percentualFrequencia}</td>
                   {ehFinal ? <td>{item.parecerFinal || '--'}</td> : null}
