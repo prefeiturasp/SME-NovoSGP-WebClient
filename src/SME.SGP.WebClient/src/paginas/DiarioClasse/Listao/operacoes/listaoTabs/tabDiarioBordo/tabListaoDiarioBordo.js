@@ -1,7 +1,15 @@
 import React from 'react';
 
+import TabListaoDiarioBordoFiltros from './tabListaoDiarioBordoFiltros';
+import TabListaoDiarioBordoCollapses from './tabListaoDiarioBordoCollapses';
+
 const TabListaoDiarioBordo = () => {
-  return <>Listão Diário de Bordo</>;
+  return (
+    <>
+      <TabListaoDiarioBordoFiltros />
+      <TabListaoDiarioBordoCollapses />
+    </>
+  );
 };
 
 export default TabListaoDiarioBordo;

@@ -423,52 +423,59 @@ const ListaDiarioBordo = () => {
           <div className="row">
             <div className="col-sm-12 mb-3">
               <PainelCollapse accordion onChange={onColapse}>
-                {listaTitulos?.items?.map(({ id, titulo }) => (
-                  <PainelCollapse.Painel
-                    key={id}
-                    accordion
-                    espacoPadrao
-                    corBorda={Base.AzulBordaCollapse}
-                    temBorda
-                    header={titulo}
-                  >
-                    <div className="row ">
-                      <div className="col-sm-12 mb-3">
-                        <JoditEditor
-                          id={`${id}-editor-planejamento`}
-                          name="planejamento"
-                          value={diarioBordoAtual?.planejamento}
-                          desabilitar
-                        />
+                {listaTitulos?.items?.map(({ id, titulo, pendente }) => {
+                  const bordaCollapse = pendente
+                    ? Base.LaranjaStatus
+                    : Base.AzulBordaCollapse;
+                  const keyCollapse = id + titulo;
+                  return (
+                    <PainelCollapse.Painel
+                      key={keyCollapse}
+                      accordion
+                      espacoPadrao
+                      corBorda={bordaCollapse}
+                      temBorda
+                      header={titulo}
+                      ehPendente={pendente}
+                    >
+                      <div className="row ">
+                        <div className="col-sm-12 mb-3">
+                          <JoditEditor
+                            id={`${id}-editor-planejamento`}
+                            name="planejamento"
+                            value={diarioBordoAtual?.planejamento}
+                            desabilitar
+                          />
+                        </div>
+                        <div className="col-sm-12 d-flex justify-content-end mb-4">
+                          <Button
+                            id={shortid.generate()}
+                            label="Consultar diário completo"
+                            icon="book"
+                            color={Colors.Azul}
+                            border
+                            onClick={onClickConsultarDiario}
+                          />
+                        </div>
+                        <div className="col-sm-12 p-0 position-relative">
+                          <ObservacoesUsuario
+                            esconderLabel
+                            mostrarListaNotificacao
+                            salvarObservacao={obs =>
+                              salvarEditarObservacao(obs, id)
+                            }
+                            editarObservacao={obs =>
+                              salvarEditarObservacao(obs, id)
+                            }
+                            excluirObservacao={obs => excluirObservacao(obs)}
+                            permissoes={permissoesTela}
+                            diarioBordoId={id}
+                          />
+                        </div>
                       </div>
-                      <div className="col-sm-12 d-flex justify-content-end mb-4">
-                        <Button
-                          id={shortid.generate()}
-                          label="Consultar diário completo"
-                          icon="book"
-                          color={Colors.Azul}
-                          border
-                          onClick={onClickConsultarDiario}
-                        />
-                      </div>
-                      <div className="col-sm-12 p-0 position-relative">
-                        <ObservacoesUsuario
-                          esconderLabel
-                          mostrarListaNotificacao
-                          salvarObservacao={obs =>
-                            salvarEditarObservacao(obs, id)
-                          }
-                          editarObservacao={obs =>
-                            salvarEditarObservacao(obs, id)
-                          }
-                          excluirObservacao={obs => excluirObservacao(obs)}
-                          permissoes={permissoesTela}
-                          diarioBordoId={id}
-                        />
-                      </div>
-                    </div>
-                  </PainelCollapse.Painel>
-                ))}
+                    </PainelCollapse.Painel>
+                  );
+                })}
               </PainelCollapse>
             </div>
           </div>
