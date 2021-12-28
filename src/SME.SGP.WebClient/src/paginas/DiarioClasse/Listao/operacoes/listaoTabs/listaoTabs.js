@@ -13,6 +13,7 @@ import {
   LISTAO_TAB_PLANO_AULA,
 } from '../../listaoConstantes';
 import ListaoContext from '../../listaoContext';
+import { onChangeTabListao } from '../../listaoFuncoes';
 import TabListaoDiarioBordo from './tabDiarioBordo/tabListaoDiarioBordo';
 import TabListaoFechamento from './tabFechamento/tabListaoFechamento';
 import TabListaoFrequencia from './tabFrequencia/tabListaoFrequencia';
@@ -25,8 +26,6 @@ const ListaoTabs = () => {
   const usuario = useSelector(store => store.usuario);
   const { turmaSelecionada } = usuario;
   const { modalidade } = turmaSelecionada;
-  const telaEmEdicao = useSelector(store => store.geral.telaEmEdicao);
-  const acaoTelaEmEdicao = useSelector(store => store.geral.acaoTelaEmEdicao);
 
   const modalidadesFiltroPrincipal = useSelector(
     state => state.filtro.modalidades
@@ -50,16 +49,7 @@ const ListaoTabs = () => {
 
   const desabilitarTabs = !componenteCurricular || !bimestreOperacoes;
 
-  const onChangeTab = async tabAtiva => {
-    if (telaEmEdicao) {
-      const salvou = await acaoTelaEmEdicao();
-      if (salvou) {
-        setTabAtual(tabAtiva);
-      }
-    } else {
-      setTabAtual(tabAtiva);
-    }
-  };
+  const onChangeTab = tabAtiva => onChangeTabListao(tabAtiva, setTabAtual);
 
   const montarTabs = () => {
     const ehBimestreFinal = bimestreOperacoes === String(BIMESTRE_FINAL);

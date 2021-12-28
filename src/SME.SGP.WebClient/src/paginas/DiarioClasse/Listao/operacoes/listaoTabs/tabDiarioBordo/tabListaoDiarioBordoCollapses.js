@@ -1,17 +1,12 @@
-import React, { useCallback, useContext, useEffect, useState } from 'react';
 import { Col, Row } from 'antd';
+import React, { useContext, useEffect } from 'react';
 import { useSelector } from 'react-redux';
-
 import { Base, PainelCollapse } from '~/componentes';
-
-import { erros, ServicoDiarioBordo } from '~/servicos';
-
 import ListaoContext from '../../../listaoContext';
+import { obterDiarioBordoListao } from '../../../listaoFuncoes';
 import ConteudoCollapse from './conteudoCollapse';
 
 const TabListaoDiarioBordoCollapses = () => {
-  const [diariosBordo, setDiariosBordo] = useState([]);
-
   const usuario = useSelector(store => store.usuario);
   const { turmaSelecionada } = usuario;
   const { turma } = turmaSelecionada;
@@ -19,40 +14,27 @@ const TabListaoDiarioBordoCollapses = () => {
   const {
     setExibirLoaderGeral,
     periodo,
-    compCurricularTabDiarioBordo,
+    componenteCurricularDiarioBordo,
+    dadosDiarioBordo,
+    setDadosDiarioBordo,
+    setDadosIniciaisDiarioBordo,
   } = useContext(ListaoContext);
 
   const exibirDiarioBordoCollapses =
-    compCurricularTabDiarioBordo && periodo && diariosBordo?.length;
-
-  const obterDiarioBordoListao = useCallback(
-    async (
-      turmaSelec,
-      periodoSelecionado,
-      compCurricularTabDiarioBordoSelecionado
-    ) => {
-      setExibirLoaderGeral(true);
-      const retorno = await ServicoDiarioBordo.obterDiarioBordoListao(
-        turmaSelec,
-        periodoSelecionado?.dataInicio,
-        periodoSelecionado?.dataFim,
-        compCurricularTabDiarioBordoSelecionado
-      )
-        .catch(e => erros(e))
-        .finally(() => setExibirLoaderGeral(false));
-
-      if (retorno?.data) {
-        setDiariosBordo(retorno.data);
-      }
-    },
-    [setExibirLoaderGeral]
-  );
+    componenteCurricularDiarioBordo && periodo && dadosDiarioBordo?.length;
 
   useEffect(() => {
-    if (turma && periodo && compCurricularTabDiarioBordo) {
-      obterDiarioBordoListao(turma, periodo, compCurricularTabDiarioBordo);
+    if (turma && periodo && componenteCurricularDiarioBordo) {
+      obterDiarioBordoListao(
+        turma,
+        periodo,
+        componenteCurricularDiarioBordo,
+        setExibirLoaderGeral,
+        setDadosDiarioBordo,
+        setDadosIniciaisDiarioBordo
+      );
     }
-  }, [turma, periodo, compCurricularTabDiarioBordo, obterDiarioBordoListao]);
+  }, [periodo]);
 
   const onColapse = () => {};
 
@@ -60,29 +42,36 @@ const TabListaoDiarioBordoCollapses = () => {
     <Row gutter={[24, 24]}>
       <Col sm={24}>
         {!!exibirDiarioBordoCollapses &&
-          diariosBordo.map(diarioBordo => {
-            const { id, titulo, pendente } = diarioBordo;
+          dadosDiarioBordo.map((dados, indexDiarioBordo) => {
+            const { id, titulo, pendente } = dados;
             const bordaCollapse = pendente
               ? Base.LaranjaStatus
               : Base.AzulBordaCollapse;
             const keyCollapse = id + titulo;
 
             return (
-              <>
-                <PainelCollapse accordion onChange={onColapse}>
-                  <PainelCollapse.Painel
+              <PainelCollapse
+                accordion
+                onChange={onColapse}
+                key={keyCollapse}
+                defaultActiveKey={keyCollapse}
+              >
+                <PainelCollapse.Painel
+                  key={keyCollapse}
+                  accordion
+                  espacoPadrao
+                  corBorda={bordaCollapse}
+                  temBorda
+                  header={titulo}
+                  ehPendente={pendente}
+                >
+                  <ConteudoCollapse
+                    dados={dados}
+                    indexDiarioBordo={indexDiarioBordo}
                     key={keyCollapse}
-                    accordion
-                    espacoPadrao
-                    corBorda={bordaCollapse}
-                    temBorda
-                    header={titulo}
-                    ehPendente={pendente}
-                  >
-                    <ConteudoCollapse {...diarioBordo} />
-                  </PainelCollapse.Painel>
-                </PainelCollapse>
-              </>
+                  />
+                </PainelCollapse.Painel>
+              </PainelCollapse>
             );
           })}
       </Col>

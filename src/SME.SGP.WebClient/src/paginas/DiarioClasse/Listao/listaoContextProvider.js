@@ -47,14 +47,21 @@ const ListaoContextProvider = ({ children }) => {
   const [dadosIniciaisFrequencia, setDadosIniciaisFrequencia] = useState();
 
   const [
-    compCurricularTabDiarioBordo,
-    setCompCurricularTabDiarioBordo,
+    componenteCurricularDiarioBordo,
+    setComponenteCurricularDiarioBordo,
   ] = useState();
   const [
-    listaComponenteCurriculares,
-    setListaComponenteCurriculares,
+    listaComponentesCurricularesDiario,
+    setListaComponentesCurricularesDiario,
   ] = useState();
   const [listaoEhInfantil, setListaoEhInfantil] = useState(false);
+
+  const [dadosDiarioBordo, setDadosDiarioBordo] = useState([]);
+  const [dadosIniciaisDiarioBordo, setDadosIniciaisDiarioBordo] = useState([]);
+  const [dadosAlteradosDiarioBordo, setDadosAlteradosDiarioBordo] = useState(
+    []
+  );
+  const [errosDiarioBordoListao, setErrosDiarioBordoListao] = useState([]);
 
   const limparTelaListao = () => {
     setComponenteCurricular();
@@ -142,10 +149,18 @@ const ListaoContextProvider = ({ children }) => {
   };
 
   const TAB_DIARIO_BORDO = {
-    compCurricularTabDiarioBordo,
-    setCompCurricularTabDiarioBordo,
-    listaComponenteCurriculares,
-    setListaComponenteCurriculares,
+    componenteCurricularDiarioBordo,
+    setComponenteCurricularDiarioBordo,
+    listaComponentesCurricularesDiario,
+    setListaComponentesCurricularesDiario,
+    dadosDiarioBordo,
+    setDadosDiarioBordo,
+    dadosIniciaisDiarioBordo,
+    setDadosIniciaisDiarioBordo,
+    errosDiarioBordoListao,
+    setErrosDiarioBordoListao,
+    dadosAlteradosDiarioBordo,
+    setDadosAlteradosDiarioBordo,
   };
 
   return (

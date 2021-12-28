@@ -1,15 +1,15 @@
-import React, { useCallback, useContext, useEffect, useState } from 'react';
 import { Col, Row } from 'antd';
-
+import React, { useCallback, useContext, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Loader, SelectComponent } from '~/componentes';
 import * as idsCampos from '~/componentes-sgp/filtro/idsCampos';
-
 import { erros, ServicoDisciplina, ServicoPeriodoEscolar } from '~/servicos';
-
 import ListaoContext from '../../../listaoContext';
 
 const TabListaoDiarioBordoFiltros = () => {
+  const telaEmEdicao = useSelector(store => store.geral.telaEmEdicao);
+  const acaoTelaEmEdicao = useSelector(store => store.geral.acaoTelaEmEdicao);
+
   const [exibirLoaderPeriodo, setExibirLoaderPeriodo] = useState(false);
   const [
     exibirLoaderComponenteCurricular,
@@ -27,10 +27,12 @@ const TabListaoDiarioBordoFiltros = () => {
     setListaPeriodos,
     periodo,
     setPeriodo,
-    compCurricularTabDiarioBordo,
-    setCompCurricularTabDiarioBordo,
-    listaComponenteCurriculares,
-    setListaComponenteCurriculares,
+    componenteCurricularDiarioBordo,
+    setComponenteCurricularDiarioBordo,
+    listaComponentesCurricularesDiario,
+    setListaComponentesCurricularesDiario,
+    setDadosIniciaisDiarioBordo,
+    setDadosDiarioBordo,
   } = useContext(ListaoContext);
 
   const desabilitarCampos =
@@ -69,28 +71,37 @@ const TabListaoDiarioBordoFiltros = () => {
     setPeriodo,
   ]);
 
-  useEffect(() => {
-    return () => {
-      setPeriodo();
-      setListaPeriodos([]);
-      setCompCurricularTabDiarioBordo();
-      setListaComponenteCurriculares([]);
-    };
-  }, [setListaPeriodos, setPeriodo]);
+  const limparDadosDiarioBordo = () => {
+    setDadosIniciaisDiarioBordo([]);
+    setDadosDiarioBordo([]);
+  };
 
-  useEffect(() => {
+  const limparDadosPeriodo = () => {
     setPeriodo();
     setListaPeriodos([]);
+  };
+
+  const limparDadosComponenteCurricularDiarioBordo = () => {
+    setComponenteCurricularDiarioBordo();
+    setListaComponentesCurricularesDiario([]);
+  };
+
+  useEffect(() => {
+    return () => {
+      limparDadosPeriodo();
+      limparDadosComponenteCurricularDiarioBordo();
+      limparDadosDiarioBordo();
+    };
+  }, []);
+
+  useEffect(() => {
+    limparDadosPeriodo();
     if (componenteCurricular?.codigoComponenteCurricular && bimestreOperacoes) {
       obterPeriodoPorComponente();
+    } else {
+      limparDadosDiarioBordo();
     }
-  }, [
-    bimestreOperacoes,
-    componenteCurricular,
-    obterPeriodoPorComponente,
-    setListaPeriodos,
-    setPeriodo,
-  ]);
+  }, [bimestreOperacoes]);
 
   const obterPeriodoSelecionado = id => {
     if (id && listaPeriodos?.length) {
@@ -114,11 +125,28 @@ const TabListaoDiarioBordoFiltros = () => {
   };
 
   const onChangePeriodo = async valor => {
-    setarPeriodo(valor);
+    if (telaEmEdicao) {
+      const salvou = await acaoTelaEmEdicao();
+      if (salvou) {
+        setarPeriodo(valor);
+        limparDadosDiarioBordo();
+      }
+    } else {
+      setarPeriodo(valor);
+    }
   };
 
   const onChangeComponenteCurricular = async valor => {
-    setCompCurricularTabDiarioBordo(valor);
+    if (telaEmEdicao) {
+      const salvou = await acaoTelaEmEdicao();
+      if (salvou) {
+        limparDadosDiarioBordo();
+        limparDadosPeriodo();
+        setComponenteCurricularDiarioBordo(valor);
+      }
+    } else {
+      setComponenteCurricularDiarioBordo(valor);
+    }
   };
 
   const obterComponentesCurriculares = useCallback(async () => {
@@ -131,28 +159,28 @@ const TabListaoDiarioBordoFiltros = () => {
       .finally(() => setExibirLoaderComponenteCurricular(false));
 
     if (componentes?.data?.length) {
-      setListaComponenteCurriculares(componentes.data);
+      setListaComponentesCurricularesDiario(componentes.data);
 
       if (componentes.data.length === 1) {
         const componente = componentes.data[0];
-        setCompCurricularTabDiarioBordo(
+        setComponenteCurricularDiarioBordo(
           String(componente.codigoComponenteCurricular)
         );
       }
     }
-  }, [turma, setCompCurricularTabDiarioBordo]);
+  }, [turma, setComponenteCurricularDiarioBordo]);
 
   useEffect(() => {
     if (turma && bimestreOperacoes) {
       obterComponentesCurriculares();
       return;
     }
-    setListaComponenteCurriculares([]);
-    setCompCurricularTabDiarioBordo();
+    setListaComponentesCurricularesDiario([]);
+    setComponenteCurricularDiarioBordo();
   }, [
     turma,
     obterComponentesCurriculares,
-    setCompCurricularTabDiarioBordo,
+    setComponenteCurricularDiarioBordo,
     bimestreOperacoes,
   ]);
 
@@ -163,17 +191,17 @@ const TabListaoDiarioBordoFiltros = () => {
           <SelectComponent
             label="Componente curricular"
             id={idsCampos.SGP_SELECT_COMPONENTE_CURRICULAR}
-            lista={listaComponenteCurriculares}
+            lista={listaComponentesCurricularesDiario}
             valueOption="codigoComponenteCurricular"
             valueText="nomeComponenteInfantil"
-            valueSelect={compCurricularTabDiarioBordo}
+            valueSelect={componenteCurricularDiarioBordo}
             onChange={onChangeComponenteCurricular}
             placeholder="Selecione um componente curricular"
             showSearch
             disabled={
               desabilitarCampos ||
-              listaComponenteCurriculares?.length === 1 ||
-              !listaComponenteCurriculares?.length
+              listaComponentesCurricularesDiario?.length === 1 ||
+              !listaComponentesCurricularesDiario?.length
             }
           />
         </Loader>
