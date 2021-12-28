@@ -191,13 +191,16 @@ const ListaDiarioBordo = () => {
     return Promise.all(promises);
   };
 
-  const onColapse = async id => {
+  const onColapse = async aulaId => {
     dispatch(limparDadosObservacoesUsuario());
-    const idDiario = id.substr(0, id.indexOf('/'));
-    let dados = [];
+    const diario = listaTitulos?.items?.find(
+      item => item?.aulaId === Number(aulaId)
+    );
+    const idDiario = diario?.id;
+    let dados = {};
     let observacoes = [];
-    // eslint-disable-next-line eqeqeq
-    if (idDiario && idDiario != 0) {
+
+    if (idDiario) {
       dados = await ServicoDiarioBordo.obterDiarioBordoDetalhes(idDiario);
       if (dados?.data) {
         if (dados.data.observacoes.length) {
@@ -214,7 +217,7 @@ const ListaDiarioBordo = () => {
       }
     } else {
       setDiarioBordoAtual({
-        dados,
+        ...diario,
         observacoes,
       });
     }
@@ -431,14 +434,14 @@ const ListaDiarioBordo = () => {
           <div className="row">
             <div className="col-sm-12 mb-3">
               <PainelCollapse accordion onChange={onColapse}>
-                {listaTitulos?.items?.map(({ id, titulo, pendente }) => {
+                {listaTitulos?.items?.map(item => {
+                  const { id, titulo, pendente, aulaId } = item;
                   const bordaCollapse = pendente
                     ? Base.LaranjaStatus
                     : Base.AzulBordaCollapse;
-                  const keyCollapse = `${id}/${titulo}`;
                   return (
                     <PainelCollapse.Painel
-                      key={keyCollapse}
+                      key={aulaId}
                       accordion
                       espacoPadrao
                       corBorda={bordaCollapse}
@@ -457,9 +460,12 @@ const ListaDiarioBordo = () => {
                         </div>
                         <div className="col-sm-12 d-flex justify-content-end mb-4">
                           <Button
-                            disabled={pendente}
                             id={shortid.generate()}
-                            label="Consultar diário completo"
+                            label={
+                              id
+                                ? 'Consultar diário completo'
+                                : 'Inserir novo diário'
+                            }
                             icon="book"
                             color={Colors.Azul}
                             border
