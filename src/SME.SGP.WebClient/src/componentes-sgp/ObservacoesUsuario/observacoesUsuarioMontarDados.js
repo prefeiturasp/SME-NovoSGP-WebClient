@@ -48,8 +48,10 @@ const ObservacoesUsuarioMontarDados = props => {
           value={obs.observacao}
         />
         {obs.auditoria ? <>{auditoria(obs)}</> : ''}
-        {mostrarListaNotificacao && (
+        {mostrarListaNotificacao ? (
           <ListaNotificacoes obs={obs} somenteLeitura />
+        ) : (
+          <></>
         )}
       </div>
     );
@@ -69,7 +71,7 @@ const ObservacoesUsuarioMontarDados = props => {
             proprietario={obs.proprietario}
           >
             {obs.auditoria ? auditoria(obs) : ''}
-            {mostrarListaNotificacao && <ListaNotificacoes obs={obs} />}
+            {mostrarListaNotificacao ? <ListaNotificacoes obs={obs} /> : <></>}
           </LinhaObservacaoProprietario>
         </div>
       );
