@@ -6,6 +6,7 @@ import { setLimparModoEdicaoGeral } from '~/redux/modulos/geral/actions';
 import { erros } from '~/servicos';
 import ServicoPlanoAula from '~/servicos/Paginas/DiarioClasse/ServicoPlanoAula';
 import ListaoContext from '../../../listaoContext';
+import { montarIdsObjetivosSelecionadosListao } from '../../../listaoFuncoes';
 import PeriodoEscolarListao from '../componentes/periodoEscolarListao';
 import ListaoPlanoAulaMontarDados from './listaoPlanoAulaMontarDados';
 
@@ -68,19 +69,6 @@ const TabListaoPlanoAula = () => {
     return [];
   };
 
-  const montarIdsObjetivosSelecionados = planos => {
-    planos.forEach(plano => {
-      if (plano?.objetivosAprendizagemComponente?.length) {
-        let ids = [];
-        plano.objetivosAprendizagemComponente.forEach(objetivo => {
-          const idsObjetivo = objetivo.objetivosAprendizagem.map(ob => ob.id);
-          ids = ids.concat(idsObjetivo);
-        });
-        plano.idsObjetivosAprendizagemSelecionados = ids;
-      }
-    });
-  };
-
   const obterPlanoAulaPorPeriodo = useCallback(async () => {
     setExibirLoaderGeral(true);
     const resposta = await ServicoPlanoAula.obterPlanoAulaPorPeriodoListao(
@@ -97,7 +85,7 @@ const TabListaoPlanoAula = () => {
 
       const lista = resposta.data;
 
-      montarIdsObjetivosSelecionados(lista);
+      montarIdsObjetivosSelecionadosListao(lista);
 
       const dadosCarregar = _.cloneDeep(lista);
       const dadosIniciais = _.cloneDeep(lista);

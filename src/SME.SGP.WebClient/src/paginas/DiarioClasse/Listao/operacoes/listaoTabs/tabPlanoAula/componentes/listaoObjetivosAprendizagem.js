@@ -21,15 +21,14 @@ const ListaoObjetivosAprendizagem = props => {
   const idsObjetivosAprendizagemSelecionados =
     dadosPlanoAula?.[indexPlano]?.idsObjetivosAprendizagemSelecionados;
 
-  const onClickAdicionar = () => {
-    setExibirModal(true);
-  };
+  const onClickAdicionar = () => setExibirModal(true);
 
   const onChange = ids => {
     if (!desabilitarCampos) {
       dadosPlanoAula[indexPlano].idsObjetivosAprendizagemSelecionados = [
         ...ids,
       ];
+      dadosPlanoAula[indexPlano].alterado = true;
       setDadosPlanoAula(dadosPlanoAula);
       dispatch(setTelaEmEdicao(true));
     }

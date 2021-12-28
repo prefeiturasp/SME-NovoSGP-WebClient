@@ -14,4 +14,17 @@ const onChangeTabListao = async (tabAtiva, setTabAtual) => {
   }
 };
 
-export { onChangeTabListao };
+const montarIdsObjetivosSelecionadosListao = planos => {
+  planos.forEach(plano => {
+    if (plano?.objetivosAprendizagemComponente?.length) {
+      let ids = [];
+      plano.objetivosAprendizagemComponente.forEach(objetivo => {
+        const idsObjetivo = objetivo.objetivosAprendizagem.map(ob => ob.id);
+        ids = ids.concat(idsObjetivo);
+      });
+      plano.idsObjetivosAprendizagemSelecionados = ids;
+    }
+  });
+};
+
+export { onChangeTabListao, montarIdsObjetivosSelecionadosListao };

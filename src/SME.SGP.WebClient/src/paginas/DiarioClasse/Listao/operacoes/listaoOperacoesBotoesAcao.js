@@ -14,8 +14,9 @@ import {
   setLimparModoEdicaoGeral,
   setTelaEmEdicao,
 } from '~/redux/modulos/geral/actions';
-import { confirmar, erros, history, sucesso } from '~/servicos';
+import { confirmar, erro, erros, history, sucesso } from '~/servicos';
 import ServicoFrequencia from '~/servicos/Paginas/DiarioClasse/ServicoFrequencia';
+import ServicoPlanoAula from '~/servicos/Paginas/DiarioClasse/ServicoPlanoAula';
 import {
   LISTAO_TAB_AVALIACOES,
   LISTAO_TAB_DIARIO_BORDO,
@@ -24,9 +25,15 @@ import {
   LISTAO_TAB_PLANO_AULA,
 } from '../listaoConstantes';
 import ListaoContext from '../listaoContext';
+import { montarIdsObjetivosSelecionadosListao } from '../listaoFuncoes';
 
 const ListaoOperacoesBotoesAcao = () => {
   const dispatch = useDispatch();
+
+  const usuario = useSelector(store => store.usuario);
+  const { turmaSelecionada } = usuario;
+  const { consideraHistorico } = turmaSelecionada;
+
   const {
     dadosFrequencia,
     dadosIniciaisFrequencia,
@@ -39,6 +46,10 @@ const ListaoOperacoesBotoesAcao = () => {
     dadosPlanoAula,
     dadosIniciaisPlanoAula,
     setDadosPlanoAula,
+    componenteCurricular,
+    listaObjetivosAprendizagem,
+    setDadosIniciaisPlanoAula,
+    periodo,
   } = useContext(ListaoContext);
 
   const telaEmEdicao = useSelector(store => store.geral.telaEmEdicao);
@@ -107,7 +118,111 @@ const ListaoOperacoesBotoesAcao = () => {
   };
 
   const salvarPlanoAula = () => {
-    console.log(dadosPlanoAula);
+    const planosAlterados = dadosPlanoAula?.filter(item => item?.alterado);
+
+    setExibirLoaderGeral(true);
+
+    const planosParaSalvar = [];
+
+    planosAlterados.forEach(plano => {
+      const objetivosAprendizagemComponente = [];
+
+      if (plano?.idsObjetivosAprendizagemSelecionados?.length) {
+        plano.idsObjetivosAprendizagemSelecionados.forEach(id => {
+          const dadosObj = listaObjetivosAprendizagem.find(
+            item => item?.id === id
+          );
+          if (dadosObj) {
+            objetivosAprendizagemComponente.push({
+              componenteCurricularId: dadosObj.componenteCurricularId,
+              id: dadosObj.id,
+            });
+          }
+        });
+      }
+
+      const valorParaSalvar = {
+        descricao: plano?.descricao,
+        recuperacaoAula: plano?.recuperacaoAula,
+        licaoCasa: plano?.licaoCasa,
+        aulaId: plano?.aulaId,
+        objetivosAprendizagemComponente,
+        componenteCurricularId: componenteCurricular?.id,
+        consideraHistorico,
+      };
+
+      const paramsPromise = new Promise(resolve => {
+        ServicoPlanoAula.salvarPlanoAula(valorParaSalvar)
+          .then(resposta => {
+            resolve(resposta?.data);
+          })
+          .catch(listaErros => {
+            if (listaErros?.response?.data?.mensagens) {
+              listaErros.response.data.mensagens.forEach(mensagem => {
+                erro(
+                  `${window
+                    .moment(plano?.dataAula)
+                    .format('DD/MM/YYYY')} - ${mensagem}`
+                );
+              });
+            }
+            resolve(false);
+          });
+      });
+
+      planosParaSalvar.push(paramsPromise);
+    });
+
+    Promise.all(planosParaSalvar).then(async results => {
+      const planosSalvos = results.filter(item => !!item?.aulaId);
+
+      if (planosSalvos?.length) {
+        const resposta = await ServicoPlanoAula.obterPlanoAulaPorPeriodoListao(
+          turmaSelecionada?.turma,
+          componenteCurricular?.codigoComponenteCurricular,
+          periodo?.dataInicio,
+          periodo?.dataFim
+        ).catch(e => erros(e));
+
+        let msgSucesso = 'Plano(s) de aula salvo com sucesso.';
+        const datasAulas = [];
+
+        if (resposta?.data?.length) {
+          const lista = resposta.data;
+          montarIdsObjetivosSelecionadosListao(lista);
+
+          planosSalvos.forEach(plano => {
+            const planoAtual = dadosPlanoAula.find(
+              item => item.aulaId === plano.aulaId
+            );
+            const indexPlano = dadosPlanoAula.indexOf(planoAtual);
+            const planoAtualizado = lista.find(
+              p => p.aulaId === planoAtual.aulaId
+            );
+            dadosPlanoAula[indexPlano] = { ...planoAtualizado };
+
+            datasAulas.push(
+              ` ${window.moment(planoAtual?.dataAula).format('DD/MM/YYYY')}`
+            );
+          });
+
+          msgSucesso = `${datasAulas.toString()} - Plano(s) de aula salvo com sucesso.`;
+
+          const dadosCarregar = _.cloneDeep(dadosPlanoAula);
+          const dadosIniciais = _.cloneDeep(dadosPlanoAula);
+          setDadosIniciaisPlanoAula(dadosIniciais);
+          setDadosPlanoAula(dadosCarregar);
+
+          setExibirLoaderGeral(false);
+        } else {
+          setExibirLoaderGeral(false);
+        }
+
+        sucesso(msgSucesso);
+      } else {
+        setExibirLoaderGeral(false);
+      }
+    });
   };
 
   const onClickSalvarTabAtiva = () => {

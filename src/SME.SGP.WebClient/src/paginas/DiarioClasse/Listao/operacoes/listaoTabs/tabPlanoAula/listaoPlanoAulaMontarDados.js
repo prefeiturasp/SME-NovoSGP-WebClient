@@ -27,6 +27,7 @@ const ListaoPlanoAulaMontarDados = () => {
 
   const onChangeEditor = (novaDescricao, indexPlano) => {
     dadosPlanoAula[indexPlano].descricao = novaDescricao;
+    dadosPlanoAula[indexPlano].alterado = true;
     setDadosPlanoAula(dadosPlanoAula);
     dispatch(setTelaEmEdicao(true));
   };
@@ -44,6 +45,7 @@ const ListaoPlanoAulaMontarDados = () => {
         indice={indice}
         key={indice}
         configCabecalho={configCabecalho}
+        show
       >
         <Row gutter={[24, 24]}>
           <ListaoObjetivosAprendizagem
