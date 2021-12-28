@@ -1,4 +1,3 @@
-import { Col, Row } from 'antd';
 import PropTypes from 'prop-types';
 import React, { useCallback, useContext, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
@@ -9,7 +8,7 @@ import ServicoPeriodoEscolar from '~/servicos/Paginas/Calendario/ServicoPeriodoE
 import ListaoContext from '../../../listaoContext';
 
 const PeriodoEscolarListao = props => {
-  const { limparDadosTabSelecionada } = props;
+  const { limparDadosTabSelecionada, exibirDataFutura } = props;
 
   const usuario = useSelector(store => store.usuario);
   const telaEmEdicao = useSelector(store => store.geral.telaEmEdicao);
@@ -49,7 +48,8 @@ const PeriodoEscolarListao = props => {
       turma,
       componenteCurricular?.codigoComponenteCurricular,
       componenteCurricular?.regencia,
-      bimestreOperacoes
+      bimestreOperacoes,
+      exibirDataFutura
     )
       .catch(e => erros(e))
       .finally(() => setExibirLoaderPeriodo(false));
@@ -130,10 +130,12 @@ const PeriodoEscolarListao = props => {
 
 PeriodoEscolarListao.propTypes = {
   limparDadosTabSelecionada: PropTypes.func,
+  exibirDataFutura: PropTypes.bool,
 };
 
 PeriodoEscolarListao.defaultProps = {
   limparDadosTabSelecionada: () => {},
+  exibirDataFutura: false,
 };
 
 export default PeriodoEscolarListao;

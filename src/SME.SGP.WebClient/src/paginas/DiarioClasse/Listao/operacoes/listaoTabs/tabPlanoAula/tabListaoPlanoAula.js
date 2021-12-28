@@ -84,23 +84,19 @@ const TabListaoPlanoAula = () => {
 
   const obterPlanoAulaPorPeriodo = useCallback(async () => {
     setExibirLoaderGeral(true);
-    const resposta = await ServicoPlanoAula.obterPlanoAulaPorPeriodo(
-      periodo?.dataInicio,
-      periodo?.dataFim,
+    const resposta = await ServicoPlanoAula.obterPlanoAulaPorPeriodoListao(
       turmaSelecionada?.turma,
       componenteCurricular?.codigoComponenteCurricular,
-      componenteCurricular?.id
+      periodo?.dataInicio,
+      periodo?.dataFim
     ).catch(e => erros(e));
-
     if (resposta?.data?.length) {
       if (componenteCurricular?.possuiObjetivos) {
         const listaObjetivos = await obterListaObjetivosPorTurmaAnoEComponenteCurricular();
         setListaObjetivosAprendizagem(listaObjetivos);
       }
 
-      // const lista = resposta.data;
-      // TODO - Remover mock!
-      const lista = mockPlanoAulaListao;
+      const lista = resposta.data;
 
       montarIdsObjetivosSelecionados(lista);
 
@@ -111,7 +107,7 @@ const TabListaoPlanoAula = () => {
 
       setExibirLoaderGeral(false);
     } else {
-      // limparDadosPlanoAula();
+      limparDadosPlanoAula();
       setExibirLoaderGeral(false);
     }
   }, [
@@ -141,6 +137,7 @@ const TabListaoPlanoAula = () => {
         <Col sm={24} md={12} lg={8}>
           <PeriodoEscolarListao
             limparDadosTabSelecionada={limparDadosPlanoAula}
+            exibirDataFutura
           />
         </Col>
       </Row>

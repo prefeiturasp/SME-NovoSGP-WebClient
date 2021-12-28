@@ -234,14 +234,15 @@ class ServicoPlanoAula {
     return false;
   };
 
-  obterPlanoAulaPorPeriodo = () => {
-    // TODO
-    const mock = { data: [{ id: 1 }] };
-    return new Promise(resolve => {
-      setTimeout(() => {
-        resolve(mock);
-      }, 2000);
-    });
+  obterPlanoAulaPorPeriodoListao = (
+    turmaCodigo,
+    componenteCurricularCodigo,
+    aulaInicio,
+    aulaFim
+  ) => {
+    return api.get(
+      `v1/planos/aulas/turmas/${turmaCodigo}/componente/${componenteCurricularCodigo}?aulaInicio=${aulaInicio}&aulaFim=${aulaFim}`
+    );
   };
 }
 

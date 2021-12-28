@@ -28,12 +28,15 @@ const ListaoPlanoAulaMontarDados = () => {
   };
 
   const montar = (plano, indexPlano) => {
-    const { dataAula, qtdAulas, auditoria } = plano;
+    const { dataAula, qtdAulas } = plano;
 
     const indice = `plano-aula-collapse-${indexPlano}`;
+    const titulo = `${window
+      .moment(dataAula)
+      .format('DD/MM/YYYY')} - ${qtdAulas} Aula(s)`;
     return (
       <CardCollapse
-        titulo={`${dataAula.format('DD/MM/YYYY')} - ${qtdAulas} Aula(s)`}
+        titulo={titulo}
         indice={indice}
         key={indice}
         configCabecalho={configCabecalho}
@@ -48,14 +51,18 @@ const ListaoPlanoAulaMontarDados = () => {
           onChange={novaDescricao => onChangeEditor(novaDescricao, indexPlano)}
         />
         <Row gutter={[24, 24]}>
-          <Auditoria
-            criadoEm={auditoria?.criadoEm}
-            criadoPor={auditoria?.criadoPor}
-            alteradoPor={auditoria?.alteradoPor}
-            alteradoEm={auditoria?.alteradoEm}
-            alteradoRf={auditoria?.alteradoRF}
-            criadoRf={auditoria?.criadoRF}
-          />
+          {plano?.criadoEm ? (
+            <Auditoria
+              criadoEm={plano?.criadoEm}
+              criadoPor={plano?.criadoPor}
+              alteradoPor={plano?.alteradoPor}
+              alteradoEm={plano?.alteradoEm}
+              alteradoRf={plano?.alteradoRf}
+              criadoRf={plano?.criadoRf}
+            />
+          ) : (
+            <></>
+          )}
         </Row>
       </CardCollapse>
     );
