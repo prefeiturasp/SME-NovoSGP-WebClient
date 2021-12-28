@@ -159,6 +159,8 @@ class ServicoDiarioBordo {
         `/componentes-curriculares/${componenteCurricularId}`
     );
   };
+
+  salvarDiarioBordoListao = params => api.post(`${urlPadrao}/salvar`, params);
 }
 
 export default new ServicoDiarioBordo();
