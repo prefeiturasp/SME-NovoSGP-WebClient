@@ -323,7 +323,8 @@ const DevolutivasForm = ({ match }) => {
     setCarregandoGeral(true);
     dispatch(limparDadosPlanejamento());
     const componentes = await ServicoDisciplina.obterDisciplinasPorTurma(
-      turmaCodigo
+      turmaCodigo,
+      false
     ).catch(e => erros(e));
 
     if (componentes.data && componentes.data.length) {
@@ -599,7 +600,7 @@ const DevolutivasForm = ({ match }) => {
                       id="disciplina"
                       lista={listaComponenteCurriculare || []}
                       valueOption="codigoComponenteCurricular"
-                      valueText="nome"
+                      valueText="nomeComponenteInfantil"
                       placeholder="Selecione um componente curricular"
                       disabled={
                         !turmaInfantil ||
