@@ -32,6 +32,7 @@ const AdicionarObjetivosAprendizagem = props => {
     exibirModal,
     setExibirModal,
     onClickAdicionar,
+    desabilitar,
   } = props;
 
   const [idsObjetivos, setIdsObjetivos] = useState(
@@ -59,12 +60,14 @@ const AdicionarObjetivosAprendizagem = props => {
   };
 
   const removerTag = item => {
-    const itemParaRemover = idsObjetivos.find(id => id === item.id);
-    if (itemParaRemover) {
-      const indexItemRemover = idsObjetivos.indexOf(itemParaRemover);
-      idsObjetivos.splice(indexItemRemover, 1);
-      onChange([...idsObjetivos]);
-      setIdsObjetivos([...idsObjetivos]);
+    if (!desabilitar) {
+      const itemParaRemover = idsObjetivos.find(id => id === item.id);
+      if (itemParaRemover) {
+        const indexItemRemover = idsObjetivos.indexOf(itemParaRemover);
+        idsObjetivos.splice(indexItemRemover, 1);
+        onChange([...idsObjetivos]);
+        setIdsObjetivos([...idsObjetivos]);
+      }
     }
   };
 
@@ -87,7 +90,14 @@ const AdicionarObjetivosAprendizagem = props => {
           <ContainerTag>
             <>
               {obj.descricaoTag}
-              <FontAwesomeIcon onClick={() => removerTag(obj)} icon={faTimes} />
+              {!desabilitar ? (
+                <FontAwesomeIcon
+                  onClick={() => removerTag(obj)}
+                  icon={faTimes}
+                />
+              ) : (
+                <></>
+              )}
             </>
           </ContainerTag>
         </Tooltip>
@@ -117,6 +127,7 @@ const AdicionarObjetivosAprendizagem = props => {
           onClose={onClose}
           listaObjetivosAprendizagem={listaObjetivosAprendizagem}
           idsObjetivosAprendizagemSelecionados={idsObjetivos}
+          desabilitar={desabilitar}
         />
       ) : (
         <></>
@@ -132,6 +143,7 @@ AdicionarObjetivosAprendizagem.propTypes = {
   exibirModal: PropTypes.bool,
   setExibirModal: PropTypes.func,
   onClickAdicionar: PropTypes.func,
+  desabilitar: PropTypes.bool,
 };
 
 AdicionarObjetivosAprendizagem.defaultProps = {
@@ -141,6 +153,7 @@ AdicionarObjetivosAprendizagem.defaultProps = {
   exibirModal: false,
   setExibirModal: () => null,
   onClickAdicionar: () => null,
+  desabilitar: false,
 };
 
 export default AdicionarObjetivosAprendizagem;

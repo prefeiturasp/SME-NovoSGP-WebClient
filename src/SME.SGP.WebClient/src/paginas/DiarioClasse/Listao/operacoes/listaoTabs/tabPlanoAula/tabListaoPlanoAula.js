@@ -8,7 +8,6 @@ import ServicoPlanoAula from '~/servicos/Paginas/DiarioClasse/ServicoPlanoAula';
 import ListaoContext from '../../../listaoContext';
 import PeriodoEscolarListao from '../componentes/periodoEscolarListao';
 import ListaoPlanoAulaMontarDados from './listaoPlanoAulaMontarDados';
-import { mockPlanoAulaListao } from './mockPlanoAulaListao';
 
 const TabListaoPlanoAula = () => {
   const dispatch = useDispatch();

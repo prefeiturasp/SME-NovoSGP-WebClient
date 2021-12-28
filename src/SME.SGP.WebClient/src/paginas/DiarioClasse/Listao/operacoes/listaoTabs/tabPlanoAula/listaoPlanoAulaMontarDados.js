@@ -11,15 +11,19 @@ import ObjetivosEspecificosDesenvolvimentoAula from './componentes/listaoPlanoAu
 const ListaoPlanoAulaMontarDados = () => {
   const dispatch = useDispatch();
 
-  const { dadosPlanoAula, setDadosPlanoAula } = useContext(ListaoContext);
+  const {
+    dadosPlanoAula,
+    setDadosPlanoAula,
+    somenteConsultaListao,
+    periodoAbertoListao,
+  } = useContext(ListaoContext);
+
+  const desabilitarCampos = somenteConsultaListao || !periodoAbertoListao;
 
   const configCabecalho = {
     altura: '48px',
     corBorda: Base.AzulBordaCollapse,
   };
-
-  // TODO - Permissão!
-  const desabilitar = false;
 
   const onChangeEditor = (novaDescricao, indexPlano) => {
     dadosPlanoAula[indexPlano].descricao = novaDescricao;
@@ -42,12 +46,15 @@ const ListaoPlanoAulaMontarDados = () => {
         configCabecalho={configCabecalho}
       >
         <Row gutter={[24, 24]}>
-          <ListaoObjetivosAprendizagem indexPlano={indexPlano} />
+          <ListaoObjetivosAprendizagem
+            indexPlano={indexPlano}
+            desabilitarCampos={desabilitarCampos}
+          />
         </Row>
         <ObjetivosEspecificosDesenvolvimentoAula
           dados={plano}
           indexPlano={indexPlano}
-          desabilitar={desabilitar}
+          desabilitar={desabilitarCampos}
           onChange={novaDescricao => onChangeEditor(novaDescricao, indexPlano)}
         />
         <Row gutter={[24, 24]}>

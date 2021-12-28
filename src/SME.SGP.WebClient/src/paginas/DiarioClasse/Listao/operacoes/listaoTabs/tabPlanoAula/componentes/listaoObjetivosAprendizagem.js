@@ -8,7 +8,7 @@ import AdicionarObjetivosAprendizagem from './modalObjetivosAprendizagem/adicion
 const ListaoObjetivosAprendizagem = props => {
   const dispatch = useDispatch();
 
-  const { indexPlano } = props;
+  const { indexPlano, desabilitarCampos } = props;
 
   const {
     listaObjetivosAprendizagem,
@@ -26,9 +26,13 @@ const ListaoObjetivosAprendizagem = props => {
   };
 
   const onChange = ids => {
-    dadosPlanoAula[indexPlano].idsObjetivosAprendizagemSelecionados = [...ids];
-    setDadosPlanoAula(dadosPlanoAula);
-    dispatch(setTelaEmEdicao(true));
+    if (!desabilitarCampos) {
+      dadosPlanoAula[indexPlano].idsObjetivosAprendizagemSelecionados = [
+        ...ids,
+      ];
+      setDadosPlanoAula(dadosPlanoAula);
+      dispatch(setTelaEmEdicao(true));
+    }
   };
 
   return (
@@ -41,16 +45,19 @@ const ListaoObjetivosAprendizagem = props => {
       exibirModal={exibirModal}
       setExibirModal={setExibirModal}
       onClickAdicionar={onClickAdicionar}
+      desabilitar={desabilitarCampos}
     />
   );
 };
 
 ListaoObjetivosAprendizagem.propTypes = {
   indexPlano: PropTypes.number,
+  desabilitarCampos: PropTypes.bool,
 };
 
 ListaoObjetivosAprendizagem.defaultProps = {
   indexPlano: null,
+  desabilitarCampos: false,
 };
 
 export default ListaoObjetivosAprendizagem;

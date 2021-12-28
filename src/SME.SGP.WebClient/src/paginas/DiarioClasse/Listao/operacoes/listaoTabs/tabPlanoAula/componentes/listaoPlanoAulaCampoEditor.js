@@ -1,30 +1,24 @@
 import PropTypes from 'prop-types';
-import React, { useContext } from 'react';
+import React from 'react';
 import shortid from 'shortid';
 import JoditEditor from '~/componentes/jodit-editor/joditEditor';
-import ListaoContext from '~/paginas/DiarioClasse/Listao/listaoContext';
 
 const ObjetivosEspecificosDesenvolvimentoAula = props => {
   const { dados, desabilitar, onChange } = props;
-
-  const { periodoAbertoListao } = useContext(ListaoContext);
 
   const validarSeEhObrigatorio = () => {
     // TODO
     return false;
   };
 
-  const desabilitarEditor =
-    desabilitar || !periodoAbertoListao || validarSeEhObrigatorio();
+  const desabilitarEditor = desabilitar || validarSeEhObrigatorio();
 
   return (
     <fieldset className="mt-3">
       <JoditEditor
         id={shortid.generate()}
         label="Objetivos específicos e desenvolvimento da aula"
-        validarSeTemErro={valor =>
-          !valor && !desabilitar && periodoAbertoListao
-        }
+        validarSeTemErro={valor => !valor && !desabilitar}
         mensagemErro="Campo obrigatório"
         desabilitar={desabilitarEditor}
         readonly={desabilitarEditor}

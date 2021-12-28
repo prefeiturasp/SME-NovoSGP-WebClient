@@ -21,6 +21,7 @@ const ModalObjetivosAprendizagem = props => {
     onClose,
     listaObjetivosAprendizagem,
     idsObjetivosAprendizagemSelecionados,
+    desabilitar,
   } = props;
 
   const [idsSelecionados, setIdsSelecionados] = useState(
@@ -31,7 +32,7 @@ const ModalObjetivosAprendizagem = props => {
   const [valorParaFiltrar, setValorParaFiltrar] = useState('');
 
   const validouAntesDeFechar = async () => {
-    if (emEdicao) {
+    if (!desabilitar && emEdicao) {
       setEmAcaoConfirmar(true);
       const confirmou = await confirmar(
         'Atenção',
@@ -46,12 +47,14 @@ const ModalObjetivosAprendizagem = props => {
   };
 
   const onClickSalvarModal = aplicarDados => {
-    onClose(idsSelecionados, aplicarDados);
+    if (!desabilitar) {
+      onClose(idsSelecionados, aplicarDados);
+    }
   };
 
   const onCloseModal = async () => {
     const aplicarDados = await validouAntesDeFechar();
-    if (aplicarDados) {
+    if (!desabilitar && aplicarDados) {
       onClickSalvarModal(aplicarDados);
     } else {
       onClose([]);
@@ -61,8 +64,10 @@ const ModalObjetivosAprendizagem = props => {
   };
 
   const onSelectRow = ids => {
-    setIdsSelecionados(ids);
-    setEmEdicao(true);
+    if (!desabilitar) {
+      setIdsSelecionados(ids);
+      setEmEdicao(true);
+    }
   };
 
   const columns = [
@@ -155,6 +160,7 @@ const ModalObjetivosAprendizagem = props => {
             border
             bold
             onClick={onClickSalvarModal}
+            disabled={desabilitar}
           />
         </Col>
       </Row>
@@ -169,6 +175,7 @@ ModalObjetivosAprendizagem.propTypes = {
   onClose: PropTypes.func,
   listaObjetivosAprendizagem: PropTypes.oneOfType([PropTypes.array]),
   idsObjetivosAprendizagemSelecionados: PropTypes.oneOfType([PropTypes.array]),
+  desabilitar: PropTypes.bool,
 };
 
 ModalObjetivosAprendizagem.defaultProps = {
@@ -176,6 +183,7 @@ ModalObjetivosAprendizagem.defaultProps = {
   onClose: () => null,
   listaObjetivosAprendizagem: [],
   idsObjetivosAprendizagemSelecionados: [],
+  desabilitar: false,
 };
 
 export default ModalObjetivosAprendizagem;
