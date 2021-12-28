@@ -9,7 +9,14 @@ import ListaoContext from '../../../listaoContext';
 const ConteudoCollapse = props => {
   const dispatch = useDispatch();
 
-  const { dadosDiarioBordo, setDadosDiarioBordo } = useContext(ListaoContext);
+  const {
+    dadosDiarioBordo,
+    setDadosDiarioBordo,
+    somenteConsultaListao,
+    periodoAbertoListao,
+  } = useContext(ListaoContext);
+
+  const desabilitarCampos = somenteConsultaListao || !periodoAbertoListao;
 
   const { dados, indexDiarioBordo } = props;
   const { auditoria } = dados;
@@ -40,8 +47,11 @@ const ConteudoCollapse = props => {
             label="Planejamento"
             value={dados?.planejamento}
             onChange={valor => {
-              onChangePlanejamento(valor);
+              if (!desabilitarCampos) {
+                onChangePlanejamento(valor);
+              }
             }}
+            readonly={desabilitarCampos}
           />
         </Col>
       </Row>
@@ -54,8 +64,11 @@ const ConteudoCollapse = props => {
             label="Reflexões e replanejamentos"
             value={dados?.reflexoesReplanejamento}
             onChange={valor => {
-              onChangeReflexoesReplanejamento(valor);
+              if (!desabilitarCampos) {
+                onChangeReflexoesReplanejamento(valor);
+              }
             }}
+            readonly={desabilitarCampos}
           />
         </Col>
       </Row>
