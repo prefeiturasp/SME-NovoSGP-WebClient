@@ -13,6 +13,7 @@ import { erros } from '~/servicos/alertas';
 import ServicoFechamentoFinal from '~/servicos/Paginas/DiarioClasse/ServicoFechamentoFinal';
 import ServicoNotaConceito from '~/servicos/Paginas/DiarioClasse/ServicoNotaConceito';
 import ServicoDisciplina from '~/servicos/Paginas/ServicoDisciplina';
+import AlertaPeriodoEncerrado from '~/componentes-sgp/Calendario/componentes/MesCompleto/componentes/Dias/componentes/DiaCompleto/componentes/AlertaPeriodoEncerrado';
 
 import { ContainerAuditoria, Lista } from './fechamentoFinal.css';
 import LinhaAluno from './linhaAluno';
@@ -45,6 +46,7 @@ const FechamentoFinal = forwardRef((props, ref) => {
   const [auditoria, setAuditoria] = useState();
   const [alunos, setAlunos] = useState([]);
   const [dadosFechamentoFinal, setDadosFechamentoFinal] = useState();
+  const [periodoEncerrado, setPeriodoEncerrado] = useState(false);
 
   useEffect(() => {
     if (ehRegencia) {
@@ -87,6 +89,7 @@ const FechamentoFinal = forwardRef((props, ref) => {
     setEhSintese(false);
     setAuditoria({});
     setDisciplinaSelecionada();
+    setPeriodoEncerrado(false);
   };
 
   const obterFechamentoFinal = useCallback(() => {
@@ -114,6 +117,7 @@ const FechamentoFinal = forwardRef((props, ref) => {
             auditoriaAlteracao: resposta.data.auditoriaAlteracao,
             auditoriaInclusao: resposta.data.auditoriaInclusao,
           });
+          setPeriodoEncerrado(resposta.data.periodoEncerrado);
 
           if (!resposta.data.ehNota) {
             obterListaConceitos(resposta.data.eventoData);
@@ -178,6 +182,7 @@ const FechamentoFinal = forwardRef((props, ref) => {
   };
   return (
     <>
+      <AlertaPeriodoEncerrado exibir={periodoEncerrado} descricaoMensagem={"O período de fechamento já foi encerrado."} />
       <Lista>
         {alunos?.length && !ehSintese && ehRegencia ? (
           <div>
