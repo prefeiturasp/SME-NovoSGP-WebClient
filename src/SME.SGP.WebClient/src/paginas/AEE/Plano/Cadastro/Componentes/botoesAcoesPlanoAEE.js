@@ -41,6 +41,10 @@ const BotoesAcoesPlanoAEE = props => {
   const usuario = useSelector(store => store.usuario);
   const permissoesTela = usuario.permissoes[RotasDto.RELATORIO_AEE_PLANO];
 
+  const ehCP = !usuario.ehPerfilProfessor && !usuario.ehProfessor &&
+               !usuario.ehProfessorCj && !usuario.ehProfessorCjInfantil &&
+               !usuario.ehProfessorInfantil && !usuario.ehProfessorPoa;
+
   const parecerCP = planoAEEDados?.situacao === situacaoPlanoAEE.ParecerCP;
   const parecerPAAI =
     planoAEEDados?.situacao === situacaoPlanoAEE.ParecerPAAI &&
@@ -72,22 +76,22 @@ const BotoesAcoesPlanoAEE = props => {
 
   const escolherAcaoAbaParecer = async () => {
     let msg = '';
-    let resposta = [];
-    if (situacaoParecer) {
+    let resposta = [];    
+    if (ehCP || situacaoParecer) {
       dispatch(setExibirLoaderPlanoAEE(true));
       resposta = await ServicoPlanoAEE.salvarParecerCP()
         .catch(e => erros(e))
         .catch(() => dispatch(setExibirLoaderPlanoAEE(false)));
       msg = 'Parecer realizado com sucesso';
     }
-    if (situacaoAtribuicaoPAAI) {
+    if (!ehCP && situacaoAtribuicaoPAAI) {
       dispatch(setExibirLoaderPlanoAEE(true));
       resposta = await ServicoPlanoAEE.atribuirResponsavel()
         .catch(e => erros(e))
         .catch(() => dispatch(setExibirLoaderPlanoAEE(false)));
       msg = 'Atribuição do responsável realizada com sucesso';
     }
-    if (parecerPAAI) {
+    if (!ehCP && parecerPAAI) {
       dispatch(setExibirLoaderPlanoAEE(true));
       resposta = await ServicoPlanoAEE.salvarParecerPAAI()
         .catch(e => erros(e))
@@ -167,7 +171,6 @@ const BotoesAcoesPlanoAEE = props => {
       sucesso(mensagem);
 
       dispatch(setQuestionarioDinamicoEmEdicao(false));
-
       if (registroNovo) {
         history.push(`${RotasDto.RELATORIO_AEE_PLANO}`);
       } else {
@@ -224,7 +227,7 @@ const BotoesAcoesPlanoAEE = props => {
       <Button
         id="btn-acao-aba-parecer"
         label={
-          situacaoAtribuicaoPAAI ? 'Atribuir responsável' : 'Salvar parecer'
+          !ehCP && situacaoAtribuicaoPAAI ? 'Atribuir responsável' : 'Salvar parecer'
         }
         color={Colors.Roxo}
         bold
