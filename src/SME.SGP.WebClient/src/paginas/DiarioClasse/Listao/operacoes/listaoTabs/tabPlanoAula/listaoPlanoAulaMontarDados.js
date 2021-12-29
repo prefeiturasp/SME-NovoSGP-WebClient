@@ -1,21 +1,17 @@
 import { Col, Row } from 'antd';
 import React, { useContext } from 'react';
-import { useDispatch } from 'react-redux';
 import shortid from 'shortid';
 import { Auditoria, Base, CardCollapse } from '~/componentes';
-import { setTelaEmEdicao } from '~/redux/modulos/geral/actions';
 import ListaoContext from '../../../listaoContext';
 import ListaoObjetivosAprendizagem from './componentes/listaoObjetivosAprendizagem';
 import ObjetivosEspecificosDesenvolvimentoAula from './componentes/listaoPlanoAulaCampoEditor';
 
 const ListaoPlanoAulaMontarDados = () => {
-  const dispatch = useDispatch();
-
   const {
     dadosPlanoAula,
-    setDadosPlanoAula,
     somenteConsultaListao,
     periodoAbertoListao,
+    componenteCurricular,
   } = useContext(ListaoContext);
 
   const desabilitarCampos = somenteConsultaListao || !periodoAbertoListao;
@@ -25,20 +21,17 @@ const ListaoPlanoAulaMontarDados = () => {
     corBorda: Base.AzulBordaCollapse,
   };
 
-  const onChangeEditor = (novaDescricao, indexPlano) => {
-    dadosPlanoAula[indexPlano].descricao = novaDescricao;
-    dadosPlanoAula[indexPlano].alterado = true;
-    setDadosPlanoAula(dadosPlanoAula);
-    dispatch(setTelaEmEdicao(true));
-  };
-
   const montar = (plano, indexPlano) => {
-    const { dataAula, qtdAulas } = plano;
+    const { dataAula, qtdAulas, ehReposicao } = plano;
 
     const indice = `plano-aula-collapse-${indexPlano}`;
-    const titulo = `${window
+    let titulo = `${window
       .moment(dataAula)
       .format('DD/MM/YYYY')} - ${qtdAulas} Aula(s)`;
+
+    if (ehReposicao) {
+      titulo += ' - Reposição';
+    }
     return (
       <CardCollapse
         titulo={titulo}
@@ -47,18 +40,19 @@ const ListaoPlanoAulaMontarDados = () => {
         configCabecalho={configCabecalho}
         show
       >
-        <Row gutter={[24, 24]}>
+        {componenteCurricular?.possuiObjetivos ? (
           <ListaoObjetivosAprendizagem
             indexPlano={indexPlano}
             desabilitarCampos={desabilitarCampos}
+            plano={plano}
           />
-        </Row>
-        <ObjetivosEspecificosDesenvolvimentoAula
-          dados={plano}
-          indexPlano={indexPlano}
-          desabilitar={desabilitarCampos}
-          onChange={novaDescricao => onChangeEditor(novaDescricao, indexPlano)}
-        />
+        ) : (
+          <ObjetivosEspecificosDesenvolvimentoAula
+            dados={plano}
+            indexPlano={indexPlano}
+            desabilitar={desabilitarCampos}
+          />
+        )}
         <Row gutter={[24, 24]}>
           {plano?.criadoEm ? (
             <Auditoria

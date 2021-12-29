@@ -1,4 +1,5 @@
 import { Col, Row } from 'antd';
+import $ from 'jquery';
 import _ from 'lodash';
 import React, { useContext, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -50,6 +51,7 @@ const ListaoOperacoesBotoesAcao = () => {
     listaObjetivosAprendizagem,
     setDadosIniciaisPlanoAula,
     periodo,
+    setErrosPlanoAulaListao,
   } = useContext(ListaoContext);
 
   const telaEmEdicao = useSelector(store => store.geral.telaEmEdicao);
@@ -117,8 +119,36 @@ const ListaoOperacoesBotoesAcao = () => {
     return false;
   };
 
+  const validarCamposObrigatoriosPlanoAula = dadosAlterados => {
+    const errosPlanoAula = [];
+    dadosAlterados.forEach(item => {
+      const descricao = $(item?.descricao);
+
+      const textoAtualPlanoAula = descricao?.text();
+      if (!textoAtualPlanoAula) {
+        const dataAula = window.moment(item?.dataAula).format('DD/MM/YYYY');
+        errosPlanoAula.push(`${dataAula} - Descrição é obrigatória`);
+      }
+    });
+
+    return errosPlanoAula;
+  };
+
+  const salvarDiarioBordo = () => {};
+
   const salvarPlanoAula = () => {
     const planosAlterados = dadosPlanoAula?.filter(item => item?.alterado);
+
+    if (!planosAlterados?.length) {
+      return true;
+    }
+
+    const errosPlanoAula = validarCamposObrigatoriosPlanoAula(planosAlterados);
+
+    if (errosPlanoAula?.length) {
+      setErrosPlanoAulaListao(errosPlanoAula);
+      return false;
+    }
 
     setExibirLoaderGeral(true);
 
@@ -157,7 +187,7 @@ const ListaoOperacoesBotoesAcao = () => {
             resolve(resposta?.data);
           })
           .catch(listaErros => {
-            if (listaErros?.response?.data?.mensagens) {
+            if (listaErros?.response?.data?.mensagens?.length) {
               listaErros.response.data.mensagens.forEach(mensagem => {
                 erro(
                   `${window
@@ -165,6 +195,8 @@ const ListaoOperacoesBotoesAcao = () => {
                     .format('DD/MM/YYYY')} - ${mensagem}`
                 );
               });
+            } else {
+              erro('Ocorreu um erro interno.');
             }
             resolve(false);
           });
@@ -173,7 +205,7 @@ const ListaoOperacoesBotoesAcao = () => {
       planosParaSalvar.push(paramsPromise);
     });
 
-    Promise.all(planosParaSalvar).then(async results => {
+    return Promise.all(planosParaSalvar).then(async results => {
       const planosSalvos = results.filter(item => !!item?.aulaId);
 
       if (planosSalvos?.length) {
@@ -219,23 +251,25 @@ const ListaoOperacoesBotoesAcao = () => {
         }
 
         sucesso(msgSucesso);
-      } else {
-        setExibirLoaderGeral(false);
+        return true;
       }
+
+      setExibirLoaderGeral(false);
+      return false;
     });
   };
 
-  const onClickSalvarTabAtiva = () => {
+  const onClickSalvarTabAtiva = clicouNoBotao => {
     switch (tabAtual) {
       case LISTAO_TAB_FREQUENCIA:
-        salvarFrequencia();
-        break;
+        return salvarFrequencia();
       case LISTAO_TAB_PLANO_AULA:
-        salvarPlanoAula();
-        break;
+        return salvarPlanoAula();
+      case LISTAO_TAB_DIARIO_BORDO:
+        return salvarDiarioBordo(clicouNoBotao);
 
       default:
-        break;
+        return true;
     }
   };
 
@@ -353,7 +387,7 @@ const ListaoOperacoesBotoesAcao = () => {
             color={Colors.Roxo}
             border
             bold
-            onClick={onClickSalvarTabAtiva}
+            onClick={() => onClickSalvarTabAtiva(true)}
             disabled={desabilitarBotoes || !telaEmEdicao}
           />
         </Col>

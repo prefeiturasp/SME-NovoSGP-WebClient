@@ -2,7 +2,7 @@ import { faPlus, faTimes } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Col, Row, Tag, Tooltip } from 'antd';
 import PropTypes from 'prop-types';
-import React, { useState } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import { Base, Colors } from '~/componentes';
 import { SGP_BUTTON_ADD_OBJETIVOS_APRENDIZAGEM_DESENVOLVIMENTO } from '~/componentes-sgp/filtro/idsCampos';
@@ -35,14 +35,9 @@ const AdicionarObjetivosAprendizagem = props => {
     desabilitar,
   } = props;
 
-  const [idsObjetivos, setIdsObjetivos] = useState(
-    idsObjetivosAprendizagemSelecionados
-  );
-
   const onClose = (idsSelecionados, aplicarDados) => {
     if (aplicarDados) {
       onChange(idsSelecionados);
-      setIdsObjetivos(idsSelecionados);
     }
     setExibirModal(false);
   };
@@ -61,19 +56,22 @@ const AdicionarObjetivosAprendizagem = props => {
 
   const removerTag = item => {
     if (!desabilitar) {
-      const itemParaRemover = idsObjetivos.find(id => id === item.id);
+      const itemParaRemover = idsObjetivosAprendizagemSelecionados.find(
+        id => id === item.id
+      );
       if (itemParaRemover) {
-        const indexItemRemover = idsObjetivos.indexOf(itemParaRemover);
-        idsObjetivos.splice(indexItemRemover, 1);
-        onChange([...idsObjetivos]);
-        setIdsObjetivos([...idsObjetivos]);
+        const indexItemRemover = idsObjetivosAprendizagemSelecionados.indexOf(
+          itemParaRemover
+        );
+        idsObjetivosAprendizagemSelecionados.splice(indexItemRemover, 1);
+        onChange([...idsObjetivosAprendizagemSelecionados]);
       }
     }
   };
 
   const montarTags = () => {
     const itensSelecionados = listaObjetivosAprendizagem.filter(item =>
-      idsObjetivos.find(id => id === item.id)
+      idsObjetivosAprendizagemSelecionados.find(id => id === item.id)
     );
 
     const listaComDescricao = itensSelecionados.map(item => {
@@ -118,7 +116,7 @@ const AdicionarObjetivosAprendizagem = props => {
             border
             onClick={onClickAdicionar}
           />
-          {idsObjetivos?.length ? montarTags() : <></>}
+          {idsObjetivosAprendizagemSelecionados?.length ? montarTags() : <></>}
         </Col>
       </Row>
       {exibirModal ? (
@@ -126,7 +124,9 @@ const AdicionarObjetivosAprendizagem = props => {
           exibirModal={exibirModal}
           onClose={onClose}
           listaObjetivosAprendizagem={listaObjetivosAprendizagem}
-          idsObjetivosAprendizagemSelecionados={idsObjetivos}
+          idsObjetivosAprendizagemSelecionados={
+            idsObjetivosAprendizagemSelecionados
+          }
           desabilitar={desabilitar}
         />
       ) : (

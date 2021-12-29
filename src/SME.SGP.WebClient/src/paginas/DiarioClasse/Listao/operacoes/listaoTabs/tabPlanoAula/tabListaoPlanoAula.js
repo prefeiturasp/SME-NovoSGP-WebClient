@@ -8,6 +8,7 @@ import ServicoPlanoAula from '~/servicos/Paginas/DiarioClasse/ServicoPlanoAula';
 import ListaoContext from '../../../listaoContext';
 import { montarIdsObjetivosSelecionadosListao } from '../../../listaoFuncoes';
 import PeriodoEscolarListao from '../componentes/periodoEscolarListao';
+import ModalErrosPlanoAulaListao from './componentes/modalErrosPlanoAulaListao';
 import ListaoPlanoAulaMontarDados from './listaoPlanoAulaMontarDados';
 
 const TabListaoPlanoAula = () => {
@@ -136,6 +137,7 @@ const TabListaoPlanoAula = () => {
       ) : (
         <></>
       )}
+      <ModalErrosPlanoAulaListao />
     </>
   );
 };

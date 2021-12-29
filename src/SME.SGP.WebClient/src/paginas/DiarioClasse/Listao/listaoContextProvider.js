@@ -52,6 +52,7 @@ const ListaoContextProvider = ({ children }) => {
   const [listaObjetivosAprendizagem, setListaObjetivosAprendizagem] = useState(
     []
   );
+  const [errosPlanoAulaListao, setErrosPlanoAulaListao] = useState([]);
 
   const limparTelaListao = () => {
     setComponenteCurricular();
@@ -141,6 +142,8 @@ const ListaoContextProvider = ({ children }) => {
         setDadosIniciaisPlanoAula,
         listaObjetivosAprendizagem,
         setListaObjetivosAprendizagem,
+        errosPlanoAulaListao,
+        setErrosPlanoAulaListao,
       }}
     >
       {children}
