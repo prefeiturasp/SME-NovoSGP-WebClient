@@ -83,7 +83,7 @@ const CaixaTextoExpandivel = ({ item }) => {
                 value={
                   totalRegistros === 1 || planejamentoExpandido
                     ? item.planejamento
-                    : item.planejamentoSimples
+                    : item.descricao
                 }
                 removerToolbar
                 readonly
