@@ -37,6 +37,10 @@ const SecaoParecerResponsavel = () => {
       ) {
         dispatch(setParecerEmEdicao(true));
       }
+    } else {
+      dispatch(setDadosAtribuicaoResponsavel());
+      setResponsavelSelecionado();
+      dispatch(setParecerEmEdicao(true));
     }
   };
 
