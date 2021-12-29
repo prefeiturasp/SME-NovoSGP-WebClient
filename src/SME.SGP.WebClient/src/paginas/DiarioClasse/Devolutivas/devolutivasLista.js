@@ -139,7 +139,7 @@ const DevolutivasLista = () => {
       false
     ).catch(e => erros(e));
 
-    if (componentes.data && componentes.data.length) {
+    if (componentes?.data?.length) {
       setListaComponenteCurriculare(componentes.data);
 
       if (componentes.data.length === 1) {
