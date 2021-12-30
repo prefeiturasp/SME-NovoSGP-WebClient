@@ -21,6 +21,9 @@ const ListaoContextProvider = ({ children }) => {
   const [listaTurmas, setListaTurmas] = useState([]);
   const [listaBimestres, setListaBimestres] = useState([]);
 
+  // Utilizado para carregar os filtros novamente quando voltar para a tela de listagem de componentes!
+  const [carregarFiltrosSalvos, setCarregarFiltrosSalvos] = useState(false);
+
   const [componenteCurricular, setComponenteCurricular] = useState();
   const [
     componenteCurricularInicial,
@@ -29,15 +32,11 @@ const ListaoContextProvider = ({ children }) => {
   const [listaComponenteCurricular, setListaComponenteCurricular] = useState(
     []
   );
-
   const [bimestreOperacoes, setBimestreOperacoes] = useState();
-
   const [tabAtual, setTabAtual] = useState();
   const [periodoAbertoListao, setPeriodoAbertoListao] = useState(true);
   const [somenteConsultaListao, setSomenteConsultaListao] = useState(false);
-
-  // Utilizado para carregar os filtros novamente quando voltar para a tela de listagem de componentes!
-  const [carregarFiltrosSalvos, setCarregarFiltrosSalvos] = useState(false);
+  const [listaoEhInfantil, setListaoEhInfantil] = useState(false);
   const [exibirLoaderGeral, setExibirLoaderGeral] = useState(false);
 
   // TAB FREQUÊNCIA
@@ -47,7 +46,13 @@ const ListaoContextProvider = ({ children }) => {
   const [dadosFrequencia, setDadosFrequencia] = useState();
   const [dadosIniciaisFrequencia, setDadosIniciaisFrequencia] = useState();
 
-  const [listaoEhInfantil, setListaoEhInfantil] = useState(false);
+  // TAB PLANO AULA
+  const [dadosPlanoAula, setDadosPlanoAula] = useState([]);
+  const [dadosIniciaisPlanoAula, setDadosIniciaisPlanoAula] = useState([]);
+  const [listaObjetivosAprendizagem, setListaObjetivosAprendizagem] = useState(
+    []
+  );
+  const [errosPlanoAulaListao, setErrosPlanoAulaListao] = useState([]);
 
   const limparTelaListao = () => {
     setComponenteCurricular();
@@ -130,6 +135,15 @@ const ListaoContextProvider = ({ children }) => {
         dadosIniciaisFrequencia,
         setDadosIniciaisFrequencia,
         limparTelaListao,
+        // TAB PLANO AULA,
+        dadosPlanoAula,
+        setDadosPlanoAula,
+        dadosIniciaisPlanoAula,
+        setDadosIniciaisPlanoAula,
+        listaObjetivosAprendizagem,
+        setListaObjetivosAprendizagem,
+        errosPlanoAulaListao,
+        setErrosPlanoAulaListao,
       }}
     >
       {children}

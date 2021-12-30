@@ -26,6 +26,7 @@ const DataTable = props => {
     onClickExpandir,
     expandedRowKeys,
     expandIcon,
+    tableResponsive,
     ...rest
   } = props;
 
@@ -57,9 +58,10 @@ const DataTable = props => {
 
   return (
     <Container
-      className="table-responsive"
+      className={tableResponsive ? 'table-responsive' : ''}
       semHover={semHover}
       temEventoOnClickRow={!!onClickRow}
+      tableResponsive={tableResponsive}
     >
       <Table
         {...rest}
@@ -140,6 +142,7 @@ DataTable.propTypes = {
   onClickExpandir: PropTypes.func,
   expandedRowKeys: PropTypes.oneOfType(PropTypes.array),
   expandIcon: PropTypes.oneOfType(PropTypes.any),
+  tableResponsive: PropTypes.bool,
 };
 
 DataTable.defaultProps = {
@@ -159,6 +162,7 @@ DataTable.defaultProps = {
   onClickExpandir: null,
   expandedRowKeys: [],
   expandIcon: null,
+  tableResponsive: true,
 };
 
 export default DataTable;

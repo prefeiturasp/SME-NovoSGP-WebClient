@@ -14,8 +14,10 @@ import {
   setLimparModoEdicaoGeral,
   setTelaEmEdicao,
 } from '~/redux/modulos/geral/actions';
-import { confirmar, erros, history, sucesso } from '~/servicos';
+import { confirmar, erro, erros, history, sucesso } from '~/servicos';
 import ServicoFrequencia from '~/servicos/Paginas/DiarioClasse/ServicoFrequencia';
+import ServicoPlanoAula from '~/servicos/Paginas/DiarioClasse/ServicoPlanoAula';
+import { editorTemValor } from '~/utils';
 import {
   LISTAO_TAB_AVALIACOES,
   LISTAO_TAB_DIARIO_BORDO,
@@ -24,9 +26,15 @@ import {
   LISTAO_TAB_PLANO_AULA,
 } from '../listaoConstantes';
 import ListaoContext from '../listaoContext';
+import { montarIdsObjetivosSelecionadosListao } from '../listaoFuncoes';
 
 const ListaoOperacoesBotoesAcao = () => {
   const dispatch = useDispatch();
+
+  const usuario = useSelector(store => store.usuario);
+  const { turmaSelecionada } = usuario;
+  const { consideraHistorico } = turmaSelecionada;
+
   const {
     dadosFrequencia,
     dadosIniciaisFrequencia,
@@ -36,6 +44,14 @@ const ListaoOperacoesBotoesAcao = () => {
     setDadosIniciaisFrequencia,
     somenteConsultaListao,
     periodoAbertoListao,
+    dadosPlanoAula,
+    dadosIniciaisPlanoAula,
+    setDadosPlanoAula,
+    componenteCurricular,
+    listaObjetivosAprendizagem,
+    setDadosIniciaisPlanoAula,
+    periodo,
+    setErrosPlanoAulaListao,
   } = useContext(ListaoContext);
 
   const telaEmEdicao = useSelector(store => store.geral.telaEmEdicao);
@@ -49,7 +65,7 @@ const ListaoOperacoesBotoesAcao = () => {
       'Suas alterações não foram salvas, deseja salvar agora?'
     );
 
-  const onClickSalvar = async () => {
+  const salvarFrequencia = async () => {
     const paramsSalvar = dadosFrequencia.aulas
       .map(aula => {
         const alunos = dadosFrequencia?.alunos
@@ -103,13 +119,168 @@ const ListaoOperacoesBotoesAcao = () => {
     return false;
   };
 
+  const validarCamposObrigatoriosPlanoAula = dadosAlterados => {
+    const errosPlanoAula = [];
+    dadosAlterados.forEach(item => {
+      const temDescricao = editorTemValor(item?.descricao);
+      if (!temDescricao) {
+        const dataAula = window.moment(item?.dataAula).format('DD/MM/YYYY');
+        errosPlanoAula.push(`${dataAula} - Descrição é obrigatória`);
+      }
+    });
+
+    return errosPlanoAula;
+  };
+
+  const salvarDiarioBordo = () => {};
+
+  const salvarPlanoAula = () => {
+    const planosAlterados = dadosPlanoAula?.filter(item => item?.alterado);
+
+    if (!planosAlterados?.length) {
+      return true;
+    }
+
+    const errosPlanoAula = validarCamposObrigatoriosPlanoAula(planosAlterados);
+
+    if (errosPlanoAula?.length) {
+      setErrosPlanoAulaListao(errosPlanoAula);
+      return false;
+    }
+
+    setExibirLoaderGeral(true);
+
+    const planosParaSalvar = [];
+
+    planosAlterados.forEach(plano => {
+      const objetivosAprendizagemComponente = [];
+
+      if (plano?.idsObjetivosAprendizagemSelecionados?.length) {
+        plano.idsObjetivosAprendizagemSelecionados.forEach(id => {
+          const dadosObj = listaObjetivosAprendizagem.find(
+            item => item?.id === id
+          );
+          if (dadosObj) {
+            objetivosAprendizagemComponente.push({
+              componenteCurricularId: dadosObj.componenteCurricularId,
+              id: dadosObj.id,
+            });
+          }
+        });
+      }
+
+      const valorParaSalvar = {
+        descricao: plano?.descricao,
+        recuperacaoAula: plano?.recuperacaoAula,
+        licaoCasa: plano?.licaoCasa,
+        aulaId: plano?.aulaId,
+        objetivosAprendizagemComponente,
+        componenteCurricularId: componenteCurricular?.id,
+        consideraHistorico,
+      };
+
+      const paramsPromise = new Promise(resolve => {
+        ServicoPlanoAula.salvarPlanoAula(valorParaSalvar)
+          .then(resposta => {
+            resolve(resposta?.data);
+          })
+          .catch(listaErros => {
+            if (listaErros?.response?.data?.mensagens?.length) {
+              listaErros.response.data.mensagens.forEach(mensagem => {
+                erro(
+                  `${window
+                    .moment(plano?.dataAula)
+                    .format('DD/MM/YYYY')} - ${mensagem}`
+                );
+              });
+            } else {
+              erro('Ocorreu um erro interno.');
+            }
+            resolve(false);
+          });
+      });
+
+      planosParaSalvar.push(paramsPromise);
+    });
+
+    return Promise.all(planosParaSalvar).then(async results => {
+      const planosSalvos = results.filter(item => !!item?.aulaId);
+
+      if (planosSalvos?.length) {
+        const resposta = await ServicoPlanoAula.obterPlanoAulaPorPeriodoListao(
+          turmaSelecionada?.turma,
+          componenteCurricular?.codigoComponenteCurricular,
+          periodo?.dataInicio,
+          periodo?.dataFim
+        ).catch(e => erros(e));
+
+        let msgSucesso = 'Plano(s) de aula salvo com sucesso.';
+        const datasAulas = [];
+
+        if (resposta?.data?.length) {
+          const lista = resposta.data;
+          montarIdsObjetivosSelecionadosListao(lista);
+
+          planosSalvos.forEach(plano => {
+            const planoAtual = dadosPlanoAula.find(
+              item => item.aulaId === plano.aulaId
+            );
+            const indexPlano = dadosPlanoAula.indexOf(planoAtual);
+            const planoAtualizado = lista.find(
+              p => p.aulaId === planoAtual.aulaId
+            );
+            dadosPlanoAula[indexPlano] = { ...planoAtualizado };
+
+            datasAulas.push(
+              ` ${window.moment(planoAtual?.dataAula).format('DD/MM/YYYY')}`
+            );
+          });
+
+          msgSucesso = `${datasAulas.toString()} - Plano(s) de aula salvo com sucesso.`;
+
+          const dadosCarregar = _.cloneDeep(dadosPlanoAula);
+          const dadosIniciais = _.cloneDeep(dadosPlanoAula);
+          setDadosIniciaisPlanoAula(dadosIniciais);
+          setDadosPlanoAula(dadosCarregar);
+
+          setExibirLoaderGeral(false);
+        } else {
+          setExibirLoaderGeral(false);
+        }
+
+        sucesso(msgSucesso);
+        if (planosAlterados?.length === planosSalvos?.length) {
+          dispatch(setTelaEmEdicao(false));
+        }
+        return true;
+      }
+
+      setExibirLoaderGeral(false);
+      return false;
+    });
+  };
+
+  const onClickSalvarTabAtiva = clicouNoBotao => {
+    switch (tabAtual) {
+      case LISTAO_TAB_FREQUENCIA:
+        return salvarFrequencia();
+      case LISTAO_TAB_PLANO_AULA:
+        return salvarPlanoAula();
+      case LISTAO_TAB_DIARIO_BORDO:
+        return salvarDiarioBordo(clicouNoBotao);
+
+      default:
+        return true;
+    }
+  };
+
   const validarSalvar = async () => {
     let salvou = true;
     if (!desabilitarBotoes && telaEmEdicao) {
       const confirmado = await pergutarParaSalvar();
 
       if (confirmado) {
-        salvou = await onClickSalvar();
+        salvou = await onClickSalvarTabAtiva();
       } else {
         dispatch(setTelaEmEdicao(false));
       }
@@ -141,7 +312,11 @@ const ListaoOperacoesBotoesAcao = () => {
     setDadosFrequencia({ ...dadosCarregar });
   };
 
-  const limparDadosPlanoAula = () => {};
+  const limparDadosPlanoAula = () => {
+    const dadosCarregar = _.cloneDeep(dadosIniciaisPlanoAula);
+    setDadosPlanoAula([...dadosCarregar]);
+  };
+
   const limparDadosAvaliacoes = () => {};
   const limparDadosFechamento = () => {};
   const limparDadosDiarioBordo = () => {};
@@ -214,7 +389,7 @@ const ListaoOperacoesBotoesAcao = () => {
             color={Colors.Roxo}
             border
             bold
-            onClick={onClickSalvar}
+            onClick={() => onClickSalvarTabAtiva(true)}
             disabled={desabilitarBotoes || !telaEmEdicao}
           />
         </Col>
