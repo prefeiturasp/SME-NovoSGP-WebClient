@@ -235,7 +235,7 @@ export const Container = styled.div`
     margin: -8px;
   }
 
-  /* ::-webkit-scrollbar-track {
+  ::-webkit-scrollbar-track {
     background-color: #f4f4f4 !important;
   }
 
