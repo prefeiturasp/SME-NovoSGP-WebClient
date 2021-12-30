@@ -1,4 +1,6 @@
+import _ from 'lodash';
 import { store } from '~/redux';
+import { erros, ServicoDiarioBordo } from '~/servicos';
 
 const onChangeTabListao = async (
   tabAtiva,
@@ -33,4 +35,43 @@ const montarIdsObjetivosSelecionadosListao = planos => {
   });
 };
 
-export { onChangeTabListao, montarIdsObjetivosSelecionadosListao };
+const obterDiarioBordoListao = async (
+  turmaSelec,
+  periodoSelecionado,
+  componenteCurricularDiarioBordoSelecionado,
+  setExibirLoaderGeral,
+  setDadosDiarioBordo,
+  setDadosIniciaisDiarioBordo
+) => {
+  setExibirLoaderGeral(true);
+  setDadosDiarioBordo([]);
+  setDadosIniciaisDiarioBordo([]);
+  const retorno = await ServicoDiarioBordo.obterDiarioBordoListao(
+    turmaSelec,
+    periodoSelecionado?.dataInicio,
+    periodoSelecionado?.dataFim,
+    componenteCurricularDiarioBordoSelecionado
+  )
+    .catch(e => erros(e))
+    .finally(() => setExibirLoaderGeral(false));
+
+  if (retorno?.data?.length) {
+    const lista = retorno.data;
+
+    const dadosCarregar = _.cloneDeep(lista);
+    const dadosIniciais = _.cloneDeep(lista);
+    setDadosDiarioBordo([...dadosCarregar]);
+    setDadosIniciaisDiarioBordo([...dadosIniciais]);
+  } else {
+    setDadosDiarioBordo([]);
+    setDadosIniciaisDiarioBordo([]);
+  }
+
+  return true;
+};
+
+export {
+  onChangeTabListao,
+  montarIdsObjetivosSelecionadosListao,
+  obterDiarioBordoListao,
+};

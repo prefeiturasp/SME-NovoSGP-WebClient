@@ -7,10 +7,13 @@ import { Collapse } from 'antd';
 import { Base } from '~/componentes';
 
 export const IconeEstilizado = styled.i`
+  display: flex;
+  align-items: center;
+  justify-content: center;
   width: 24px;
   height: 24px;
   font-size: 18px !important;
-  color: #42474a !important;
+  color: ${({ color }) => color} !important;
 `;
 
 export const CollapseEstilizado = styled(Collapse)`
@@ -79,4 +82,17 @@ export const PainelEstilizado = styled(Collapse.Panel)`
         border-radius: 4px !important;
       `}
   }
+`;
+
+export const LabelPendente = styled.div`
+  padding: 4px 8px;
+  background: ${Base.LaranjaStatus};
+  border-radius: 4px;
+
+  font-weight: bold;
+  font-size: 12px;
+  line-height: 16px;
+  color: ${Base.Branco};
+
+  margin-right: 24px;
 `;
