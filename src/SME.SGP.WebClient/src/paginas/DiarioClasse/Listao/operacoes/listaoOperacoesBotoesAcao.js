@@ -251,6 +251,7 @@ const ListaoOperacoesBotoesAcao = () => {
         }
 
         sucesso(msgSucesso);
+        dispatch(setTelaEmEdicao(false));
         return true;
       }
 
