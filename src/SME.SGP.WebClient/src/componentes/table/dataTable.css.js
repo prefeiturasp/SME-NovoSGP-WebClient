@@ -42,7 +42,7 @@ export const Container = styled.div`
   .ant-table-tbody tr td {
     border-right: solid 1px ${Base.CinzaDesabilitado};
     cursor: ${props => (props.temEventoOnClickRow ? 'pointer' : 'default')};
-    white-space: nowrap;
+    white-space: ${props => (props.tableResponsive ? 'nowrap' : 'unset')};
   }
 
   .ant-table-column-title {

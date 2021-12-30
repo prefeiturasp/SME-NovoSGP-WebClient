@@ -11,6 +11,7 @@ import { setLimparModoEdicaoGeral } from '~/redux/modulos/geral/actions';
 import { setSomenteConsulta } from '~/redux/modulos/navegacao/actions';
 import { erros, ServicoDisciplina, verificaSomenteConsulta } from '~/servicos';
 import ServicoPeriodoEscolar from '~/servicos/Paginas/Calendario/ServicoPeriodoEscolar';
+import { ordenarPor } from '~/utils';
 import ListaoContext from '../listaoContext';
 
 const ListaoOperacoesFiltros = () => {
@@ -119,7 +120,9 @@ const ListaoOperacoesFiltros = () => {
       turma
     ).catch(e => erros(e));
     if (retorno?.data?.length) {
-      const lista = retorno.data.map(item => {
+      let lista = ordenarPor(retorno.data, 'bimestre');
+
+      lista = lista.map(item => {
         return {
           valor: String(item.bimestre),
           descricao: `${item.bimestre}º Bimestre`,

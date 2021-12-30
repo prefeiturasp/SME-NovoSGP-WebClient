@@ -134,6 +134,21 @@ class ServicoPlanoAula {
     dispatch(setDadosPlanoAula(dadosPlanoAula));
   };
 
+  obterListaObjetivosPorTurmaAnoEComponenteCurricular = (
+    turmaId,
+    codigoComponenteCurricular,
+    dataReferencia,
+    ehRegencia = false
+  ) => {
+    const dataRef = dataReferencia
+      ? window.moment(dataReferencia).format('YYYY-MM-DD')
+      : window.moment().format('YYYY-MM-DD');
+
+    return api.get(
+      `v1/objetivos-aprendizagem/objetivos/turmas/${turmaId}/componentes/${codigoComponenteCurricular}/disciplinas/0?dataReferencia=${dataRef}&ehRegencia=${ehRegencia}`
+    );
+  };
+
   obterListaObjetivosPorAnoEComponenteCurricular = async () => {
     const { dispatch } = store;
 
@@ -162,12 +177,11 @@ class ServicoPlanoAula {
 
     if (!dataSelecionada || !codigoComponenteCurricular) return objetivos;
 
-    objetivos = await api.get(
-      `v1/objetivos-aprendizagem/objetivos/turmas/${
-        turmaSelecionada.id
-      }/componentes/${codigoComponenteCurricular}/disciplinas/0?dataReferencia=${dataSelecionada.format(
-        'YYYY-MM-DD'
-      )}&regencia=${false}`
+    objetivos = await this.obterListaObjetivosPorTurmaAnoEComponenteCurricular(
+      turmaSelecionada.id,
+      codigoComponenteCurricular,
+      dataSelecionada,
+      false
     );
 
     if (objetivos?.data?.length) {
@@ -218,6 +232,17 @@ class ServicoPlanoAula {
       }
     }
     return false;
+  };
+
+  obterPlanoAulaPorPeriodoListao = (
+    turmaCodigo,
+    componenteCurricularCodigo,
+    aulaInicio,
+    aulaFim
+  ) => {
+    return api.get(
+      `v1/planos/aulas/turmas/${turmaCodigo}/componente/${componenteCurricularCodigo}?aulaInicio=${aulaInicio}&aulaFim=${aulaFim}`
+    );
   };
 }
 

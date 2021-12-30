@@ -1,3 +1,4 @@
+import $ from 'jquery';
 import { OPCAO_TODOS } from '~/constantes/constantes';
 
 /**
@@ -239,6 +240,14 @@ const primeiroMaisculo = valor => {
     .replace(/\b\S/g, caracter => caracter.toUpperCase());
 };
 
+const editorTemValor = descricao => {
+  const somenteDescricao = $(descricao);
+  const temTexto = somenteDescricao?.text()?.trim();
+  const temVideo = descricao?.includes?.('<video');
+  const temImagem = descricao?.includes?.('<img');
+  return !!(temTexto || temVideo || temImagem);
+};
+
 export {
   validaSeObjetoEhNuloOuVazio,
   valorNuloOuVazio,
@@ -259,4 +268,5 @@ export {
   obterTodosMeses,
   onchangeMultiSelect,
   primeiroMaisculo,
+  editorTemValor,
 };

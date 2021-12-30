@@ -37,6 +37,8 @@ const ListaoTabs = () => {
     bimestreOperacoes,
     componenteCurricular,
     setListaoEhInfantil,
+    setListaPeriodos,
+    setPeriodo,
   } = useContext(ListaoContext);
 
   useEffect(() => {
@@ -49,7 +51,13 @@ const ListaoTabs = () => {
 
   const desabilitarTabs = !componenteCurricular || !bimestreOperacoes;
 
-  const onChangeTab = tabAtiva => onChangeTabListao(tabAtiva, setTabAtual);
+  const acaoLimparTelaAntesTrocarAba = () => {
+    setListaPeriodos([]);
+    setPeriodo();
+  };
+
+  const onChangeTab = tabAtiva =>
+    onChangeTabListao(tabAtiva, setTabAtual, acaoLimparTelaAntesTrocarAba);
 
   const montarTabs = () => {
     const ehBimestreFinal = bimestreOperacoes === String(BIMESTRE_FINAL);
