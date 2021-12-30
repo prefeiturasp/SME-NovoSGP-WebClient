@@ -249,7 +249,9 @@ const ListaoOperacoesBotoesAcao = () => {
         }
 
         sucesso(msgSucesso);
-        dispatch(setTelaEmEdicao(false));
+        if (planosAlterados?.length === planosSalvos?.length) {
+          dispatch(setTelaEmEdicao(false));
+        }
         return true;
       }
 
@@ -312,8 +314,9 @@ const ListaoOperacoesBotoesAcao = () => {
 
   const limparDadosPlanoAula = () => {
     const dadosCarregar = _.cloneDeep(dadosIniciaisPlanoAula);
-    setDadosPlanoAula({ ...dadosCarregar });
+    setDadosPlanoAula([...dadosCarregar]);
   };
+
   const limparDadosAvaliacoes = () => {};
   const limparDadosFechamento = () => {};
   const limparDadosDiarioBordo = () => {};

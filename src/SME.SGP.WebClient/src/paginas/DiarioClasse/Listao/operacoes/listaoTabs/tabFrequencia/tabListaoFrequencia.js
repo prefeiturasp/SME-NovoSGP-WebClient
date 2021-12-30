@@ -53,9 +53,10 @@ const TabListaoFrequencia = () => {
       turmaSelecionada?.turma,
       componenteCurricular?.codigoComponenteCurricular,
       componenteCurricular?.id
-    )
-      .catch(e => erros(e))
-      .finally(() => setExibirLoaderGeral(false));
+    ).catch(e => {
+      erros(e);
+      setExibirLoaderGeral(false);
+    });
 
     if (resposta?.data) {
       const retorno = await ServicoFrequencia.obterTipoFrequencia(
@@ -84,6 +85,7 @@ const TabListaoFrequencia = () => {
       }
     } else {
       limparFrequencia();
+      setExibirLoaderGeral(false);
     }
   }, [
     dispatch,
