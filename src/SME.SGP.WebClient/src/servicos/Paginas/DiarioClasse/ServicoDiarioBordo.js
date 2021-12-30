@@ -147,6 +147,20 @@ class ServicoDiarioBordo {
       },
     });
   };
+
+  obterDiarioBordoListao = (
+    turmaCodigo,
+    dataInicio,
+    dataFim,
+    componenteCurricularId
+  ) => {
+    return api.get(
+      `${urlPadrao}/turmas/${turmaCodigo}/inicio/${dataInicio}/fim/${dataFim}` +
+        `/componentes-curriculares/${componenteCurricularId}`
+    );
+  };
+
+  salvarDiarioBordoListao = params => api.post(`${urlPadrao}/salvar`, params);
 }
 
 export default new ServicoDiarioBordo();

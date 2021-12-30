@@ -1,23 +1,30 @@
 import React from 'react';
-
-// Ant
-import { Icon } from 'antd';
-
-// Estilos
 import {
   CollapseEstilizado,
   PainelEstilizado,
   IconeEstilizado,
+  LabelPendente,
 } from './styles';
 
 function PainelCollapse({ children, ...props }) {
   const renderizarIcone = painelProps => {
     const direcaoSeta = painelProps.isActive ? 'up' : 'down';
     return (
-      <div>
+      <div className="d-flex">
+        {painelProps.ehPendente && (
+          <>
+            <IconeEstilizado
+              className="fas fa-exclamation-circle icone-pendente mr-2"
+              aria-hidden="true"
+              color="#c0630e"
+            />
+            <LabelPendente>Pendente</LabelPendente>
+          </>
+        )}
         <IconeEstilizado
           className={`fa fa-chevron-${direcaoSeta}`}
           aria-hidden="true"
+          color="#42474a"
         />
       </div>
     );
