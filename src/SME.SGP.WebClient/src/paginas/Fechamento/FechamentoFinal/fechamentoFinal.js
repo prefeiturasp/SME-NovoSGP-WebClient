@@ -173,7 +173,7 @@ const FechamentoFinal = forwardRef((props, ref) => {
       });
     }
 
-    setNotasEmEdicao([...notas]);
+    setNotasEmEdicao(notas);
     onChange(notas);
   };
   return (

@@ -24,6 +24,7 @@ import {
   ServicoRelatorioFrequencia,
   ServicoFiltroRelatorio,
   ServicoComponentesCurriculares,
+  ehTurmaInfantil,
 } from '~/servicos';
 
 const RelatorioFrequencia = () => {
@@ -342,7 +343,7 @@ const RelatorioFrequencia = () => {
         .catch(e => erros(e))
         .finally(() => setCarregandoComponentesCurriculares(false));
       if (retorno?.data?.length) {
-        const lista = retorno.data.map(item => ({
+        let lista = retorno.data.map(item => ({
           desc: item.descricao,
           valor: String(item.codigo),
         }));
@@ -351,6 +352,14 @@ const RelatorioFrequencia = () => {
           lista.unshift({ desc: 'Todos', valor: OPCAO_TODOS });
         }
 
+        //TODO: REVER HISTORIA.
+        if(ehTurmaInfantil){  
+          lista = lista.filter(e =>  e.valor === "512").map(element => {
+            element.desc = "Regência de classe infantil";
+            return element;
+          });         
+        }
+        
         setListaComponenteCurricular(lista);
         if (lista?.length === 1) {
           setComponentesCurriculares([lista[0].valor]);

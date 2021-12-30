@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import moment from 'moment';
 import PropTypes from 'prop-types';
 import React, { useCallback, useEffect, useState } from 'react';
@@ -5,6 +6,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Loader } from '~/componentes';
 import {
   setConselhoClasseEmEdicao,
+  setDadosIniciaisListasNotasConceitos,
   setDadosListasNotasConceitos,
   setPodeEditarNota,
 } from '~/redux/modulos/conselhoClasse/actions';
@@ -131,7 +133,7 @@ const ListasNotasConceitos = props => {
             }
             return nf;
           });
-        })      
+        })
     );
 
     const alunoDentroDoPeriodoDoBimestre = alunoDentroDoPeriodoDoBimestreOuFechamento();
@@ -163,8 +165,8 @@ const ListasNotasConceitos = props => {
               if (valorNuloOuVazio(cc.notaPosConselho.nota)) {
                 notasPosConselhoPreenchidas = false;
               }
-              return cc;            
-          })      
+              return cc;
+          })
       );
       const periodoAbertoOuEmFechamento = estaNoPeriodoOuFechamento();
       if (notasPosConselhoPreenchidas && periodoAbertoOuEmFechamento) {
@@ -184,7 +186,9 @@ const ListasNotasConceitos = props => {
       turmaStore?.consideraHistorico
     ).catch(e => erros(e));
 
-    if (resultado && resultado.data) {
+    if (resultado?.data) {
+      const dadosCarregar = _.cloneDeep(resultado.data.notasConceitos);
+      dispatch(setDadosIniciaisListasNotasConceitos([...dadosCarregar]));
       dispatch(setDadosListasNotasConceitos(resultado.data.notasConceitos));
       dispatch(setPodeEditarNota(resultado.data.podeEditarNota));
       setExibir(true);

@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import { store } from '~/redux';
 import { erros, sucesso, confirmar, erro } from '~/servicos/alertas';
 import ServicoConselhoClasse from '~/servicos/Paginas/ConselhoClasse/ServicoConselhoClasse';
@@ -10,6 +11,7 @@ import {
   setGerandoParecerConclusivo,
   setExibirLoaderGeralConselhoClasse,
   setBimestreAtual,
+  setDadosIniciaisListasNotasConceitos,
 } from '~/redux/modulos/conselhoClasse/actions';
 import notasConceitos from '~/dtos/notasConceitos';
 
@@ -153,6 +155,7 @@ class ServicoSalvarConselhoClasse {
       idCamposNotasPosConselho,
       desabilitarCampos,
       bimestreAtual,
+      dadosListasNotasConceitos,
     } = conselhoClasse;
 
     const {
@@ -250,6 +253,9 @@ class ServicoSalvarConselhoClasse {
       if (bimestreAtual && bimestreAtual.valor === 'final') {
         gerarParecerConclusivo();
       }
+
+      const dadosCarregar = _.cloneDeep(dadosListasNotasConceitos);
+      dispatch(setDadosIniciaisListasNotasConceitos([...dadosCarregar]));
 
       return true;
     }
