@@ -1,5 +1,4 @@
 import { Col, Row } from 'antd';
-import $ from 'jquery';
 import _ from 'lodash';
 import React, { useContext, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -18,6 +17,7 @@ import {
 import { confirmar, erro, erros, history, sucesso } from '~/servicos';
 import ServicoFrequencia from '~/servicos/Paginas/DiarioClasse/ServicoFrequencia';
 import ServicoPlanoAula from '~/servicos/Paginas/DiarioClasse/ServicoPlanoAula';
+import { editorTemValor } from '~/utils';
 import {
   LISTAO_TAB_AVALIACOES,
   LISTAO_TAB_DIARIO_BORDO,
@@ -122,10 +122,8 @@ const ListaoOperacoesBotoesAcao = () => {
   const validarCamposObrigatoriosPlanoAula = dadosAlterados => {
     const errosPlanoAula = [];
     dadosAlterados.forEach(item => {
-      const descricao = $(item?.descricao);
-
-      const textoAtualPlanoAula = descricao?.text();
-      if (!textoAtualPlanoAula) {
+      const temDescricao = editorTemValor(item?.descricao);
+      if (!temDescricao) {
         const dataAula = window.moment(item?.dataAula).format('DD/MM/YYYY');
         errosPlanoAula.push(`${dataAula} - Descrição é obrigatória`);
       }
