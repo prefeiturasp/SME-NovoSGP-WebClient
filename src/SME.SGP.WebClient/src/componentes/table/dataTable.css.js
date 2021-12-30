@@ -248,5 +248,5 @@ export const Container = styled.div`
   ::-webkit-scrollbar-thumb {
     background: #a8a8a8 !important;
     border-radius: 3px !important;
-  } */
+  }
 `;
