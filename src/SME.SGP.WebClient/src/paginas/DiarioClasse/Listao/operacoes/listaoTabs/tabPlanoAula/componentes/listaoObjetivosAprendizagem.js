@@ -3,10 +3,10 @@ import PropTypes from 'prop-types';
 import React, { useContext, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { Base } from '~/componentes';
+import AdicionarObjetivosAprendizagem from '~/componentes-sgp/modalObjetivosAprendizagem/adicionarObjetivosAprendizagem';
 import ListaoContext from '~/paginas/DiarioClasse/Listao/listaoContext';
 import { setTelaEmEdicao } from '~/redux/modulos/geral/actions';
 import ObjetivosEspecificosDesenvolvimentoAula from './listaoPlanoAulaCampoEditor';
-import AdicionarObjetivosAprendizagem from './modalObjetivosAprendizagem/adicionarObjetivosAprendizagem';
 
 const ListaoObjetivosAprendizagem = props => {
   const dispatch = useDispatch();
