@@ -37,6 +37,10 @@ const SecaoParecerResponsavel = () => {
       ) {
         dispatch(setParecerEmEdicao(true));
       }
+    } else {
+      dispatch(setDadosAtribuicaoResponsavel());
+      setResponsavelSelecionado();
+      dispatch(setParecerEmEdicao(true));
     }
   };
 
@@ -86,10 +90,7 @@ const SecaoParecerResponsavel = () => {
             codigoRF: responsavelSelecionado?.codigoRF,
             nome: responsavelSelecionado?.nomeServidor,
           }}
-          desabilitado={
-            responsavelSelecionado?.codigoRF ||
-            !dadosParecer?.podeAtribuirResponsavel
-          }
+          desabilitado={!dadosParecer?.podeAtribuirResponsavel}
         />
       </div>
       <div className="col-12 d-flex justify-content-end pb-4 mt-2 pr-0">
