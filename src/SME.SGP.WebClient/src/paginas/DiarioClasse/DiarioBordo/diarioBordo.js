@@ -3,7 +3,13 @@ import React, { useCallback, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
 import * as Yup from 'yup';
-import { Auditoria, CampoData, Loader, PainelCollapse } from '~/componentes';
+import {
+  Auditoria,
+  CampoData,
+  Loader,
+  MarcadorSituacao,
+  PainelCollapse,
+} from '~/componentes';
 import AlertaPermiteSomenteTurmaInfantil from '~/componentes-sgp/AlertaPermiteSomenteTurmaInfantil/alertaPermiteSomenteTurmaInfantil';
 import Cabecalho from '~/componentes-sgp/cabecalho';
 import AlertaPeriodoEncerrado from '~/componentes-sgp/Calendario/componentes/MesCompleto/componentes/Dias/componentes/DiaCompleto/componentes/AlertaPeriodoEncerrado';
@@ -70,6 +76,7 @@ const DiarioBordo = ({ match }) => {
   );
   const [desabilitarCampos, setDesabilitarCampos] = useState(false);
   const [somenteConsulta, setSomenteConsulta] = useState(false);
+  const [ehInseridoCJ, setEhInseridoCJ] = useState(false);
   const dispatch = useDispatch();
 
   const aulaId = match?.params?.aulaId;
@@ -135,6 +142,7 @@ const DiarioBordo = ({ match }) => {
       setModoEdicao(false);
       setAuditoria();
       setTemPeriodoAberto(true);
+      setEhInseridoCJ(false);
     },
     [inicial]
   );
@@ -334,6 +342,7 @@ const DiarioBordo = ({ match }) => {
         codDisciplinaPai: codDisciplinaPaiSelecionado,
       };
       setTemPeriodoAberto(retorno.data.temPeriodoAberto);
+      setEhInseridoCJ(retorno.data.inseridoCJ);
       setValoresIniciais(valInicial);
       setCodDisciplinaPai(codDisciplinaPai);
       if (retorno?.data?.auditoria?.id) {
@@ -725,18 +734,27 @@ const DiarioBordo = ({ match }) => {
                             header="Planejamento"
                             key="1"
                           >
-                            <JoditEditor
-                              valideClipboardHTML={false}
-                              form={form}
-                              value={valoresIniciais.planejamento}
-                              name="planejamento"
-                              onChange={v => {
-                                if (valoresIniciais.planejamento !== v) {
-                                  onChangeCampos();
-                                }
-                              }}
-                              desabilitar={desabilitarCampos}
-                            />
+                            <>
+                              {ehInseridoCJ && (
+                                <div className="d-flex justify-content-end mb-2">
+                                  <MarcadorSituacao>
+                                    Registro inserido pelo CJ
+                                  </MarcadorSituacao>
+                                </div>
+                              )}
+                              <JoditEditor
+                                valideClipboardHTML={false}
+                                form={form}
+                                value={valoresIniciais.planejamento}
+                                name="planejamento"
+                                onChange={v => {
+                                  if (valoresIniciais.planejamento !== v) {
+                                    onChangeCampos();
+                                  }
+                                }}
+                                desabilitar={desabilitarCampos}
+                              />
+                            </>
                           </PainelCollapse.Painel>
                         </PainelCollapse>
                       </div>
