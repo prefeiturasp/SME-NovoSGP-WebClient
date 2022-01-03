@@ -674,9 +674,7 @@ const RelatorioPlanejamentoDiario = () => {
                 valueText="desc"
                 label="Componente curricular"
                 disabled={
-                  !modalidadeId ||
-                  listaComponentesCurriculares?.length === 1 ||
-                  turmaId === OPCAO_TODOS
+                  !modalidadeId || listaComponentesCurriculares?.length === 1
                 }
                 valueSelect={componenteCurricularId}
                 onChange={onChangeComponenteCurricular}
