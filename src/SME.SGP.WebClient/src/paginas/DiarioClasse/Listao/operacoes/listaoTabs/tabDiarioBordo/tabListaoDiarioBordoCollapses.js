@@ -34,9 +34,7 @@ const TabListaoDiarioBordoCollapses = () => {
         setDadosIniciaisDiarioBordo
       );
     }
-  }, [periodo]);
-
-  const onColapse = () => {};
+  }, [periodo, componenteCurricularDiarioBordo]);
 
   return (
     <Row gutter={[24, 24]}>
@@ -52,7 +50,6 @@ const TabListaoDiarioBordoCollapses = () => {
             return (
               <PainelCollapse
                 accordion
-                onChange={onColapse}
                 key={keyCollapse}
                 defaultActiveKey={keyCollapse}
               >
