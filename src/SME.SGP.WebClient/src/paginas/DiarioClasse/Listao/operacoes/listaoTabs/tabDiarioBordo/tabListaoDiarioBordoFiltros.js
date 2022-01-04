@@ -76,9 +76,11 @@ const TabListaoDiarioBordoFiltros = () => {
     setDadosDiarioBordo([]);
   };
 
-  const limparDadosPeriodo = () => {
+  const limparDadosPeriodo = (limparLista = true) => {
     setPeriodo();
-    setListaPeriodos([]);
+    if (limparLista) {
+      setListaPeriodos([]);
+    }
   };
 
   const limparDadosComponenteCurricularDiarioBordo = () => {
@@ -141,7 +143,7 @@ const TabListaoDiarioBordoFiltros = () => {
       const salvou = await acaoTelaEmEdicao();
       if (salvou) {
         limparDadosDiarioBordo();
-        limparDadosPeriodo();
+        limparDadosPeriodo(false);
         setComponenteCurricularDiarioBordo(valor);
       }
     } else {
