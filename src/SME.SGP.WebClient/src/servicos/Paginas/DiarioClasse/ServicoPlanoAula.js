@@ -237,11 +237,12 @@ class ServicoPlanoAula {
   obterPlanoAulaPorPeriodoListao = (
     turmaCodigo,
     componenteCurricularCodigo,
+    componenteCurricularId,
     aulaInicio,
     aulaFim
   ) => {
     return api.get(
-      `v1/planos/aulas/turmas/${turmaCodigo}/componente/${componenteCurricularCodigo}?aulaInicio=${aulaInicio}&aulaFim=${aulaFim}`
+      `v1/planos/aulas/turmas/${turmaCodigo}/componente/${componenteCurricularCodigo}/componenteId/${componenteCurricularId}?aulaInicio=${aulaInicio}&aulaFim=${aulaFim}`
     );
   };
 }
