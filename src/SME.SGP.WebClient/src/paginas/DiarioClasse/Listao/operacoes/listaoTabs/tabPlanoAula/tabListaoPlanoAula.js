@@ -75,6 +75,7 @@ const TabListaoPlanoAula = () => {
     const resposta = await ServicoPlanoAula.obterPlanoAulaPorPeriodoListao(
       turmaSelecionada?.turma,
       componenteCurricular?.codigoComponenteCurricular,
+      componenteCurricular?.id,
       periodo?.dataInicio,
       periodo?.dataFim
     ).catch(e => erros(e));
