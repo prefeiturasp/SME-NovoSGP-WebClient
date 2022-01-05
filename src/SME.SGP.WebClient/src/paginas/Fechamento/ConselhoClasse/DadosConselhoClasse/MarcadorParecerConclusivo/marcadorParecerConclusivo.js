@@ -31,15 +31,7 @@ const MarcadorParecerConclusivo = () => {
   const [parecer, setParecer] = useState('');
 
   useEffect(() => {
-    if (marcadorParecerConclusivo) {
-      const { nome } = marcadorParecerConclusivo;
-
-      if (nome) {
-        setParecer(`Parecer conclusivo: ${nome}`);
-      } else {
-        setParecer('');
-      }
-    }
+    setParecer(`Parecer conclusivo: ${marcadorParecerConclusivo?.nome || ''}`);
   }, [marcadorParecerConclusivo]);
 
   const montarDescricao = () => {
@@ -72,34 +64,34 @@ const MarcadorParecerConclusivo = () => {
 
   return (
     <>
-      {parecer ? (
-        <div className="col-m-12 d-flex justify-content-end mb-2">
-          {marcadorParecerConclusivo?.emAprovacao ? (
-            <Tooltip title="Aguardando aprovação">
-              <LabelParecer>
-                <Loader loading={gerandoParecerConclusivo} tip="">
-                  <span>{montarDescricao()}</span>
-                </Loader>
-              </LabelParecer>
+      <div className="col-m-12 d-flex justify-content-end mb-2">
+        {exibirIconeSincronizar && (
+          <div className="mr-1 d-flex align-items-center">
+            <Tooltip title="Atualizar parecer conclusivo" placement="left">
+              <IconeEstilizado
+                icon={faSyncAlt}
+                onClick={sincronizar}
+                sincronizando={sincronizando}
+              />
             </Tooltip>
-          ) : (
+          </div>
+        )}
+        {marcadorParecerConclusivo?.emAprovacao ? (
+          <Tooltip title="Aguardando aprovação">
             <LabelParecer>
               <Loader loading={gerandoParecerConclusivo} tip="">
                 <span>{montarDescricao()}</span>
               </Loader>
             </LabelParecer>
-          )}
-          {exibirIconeSincronizar && (
-            <IconeEstilizado
-              icon={faSyncAlt}
-              onClick={sincronizar}
-              sincronizando={sincronizando}
-            />
-          )}
-        </div>
-      ) : (
-        ''
-      )}
+          </Tooltip>
+        ) : (
+          <LabelParecer>
+            <Loader loading={gerandoParecerConclusivo} tip="">
+              <span>{montarDescricao()}</span>
+            </Loader>
+          </LabelParecer>
+        )}
+      </div>
     </>
   );
 };
