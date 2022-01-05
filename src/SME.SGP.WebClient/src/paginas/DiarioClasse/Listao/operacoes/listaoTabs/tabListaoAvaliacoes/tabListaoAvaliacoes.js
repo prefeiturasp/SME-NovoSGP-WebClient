@@ -1,9 +1,109 @@
-import React, { useContext } from 'react';
+import _ from 'lodash';
+import React, { useCallback, useContext, useEffect } from 'react';
+import { useSelector } from 'react-redux';
 import { Alert } from '~/componentes';
+import { erros } from '~/servicos';
+import ServicoNotas from '~/servicos/ServicoNotas';
 import ListaoContext from '../../../listaoContext';
+import ListaoListaAvaliacoes from './listaoListaAvaliacoes';
+import { mockAvaliacao } from './mockAvaliacao';
 
 const TabListaoAvaliacoes = () => {
-  const { componenteCurricular } = useContext(ListaoContext);
+  const usuario = useSelector(store => store.usuario);
+  const { turmaSelecionada } = usuario;
+
+  const {
+    componenteCurricular,
+    bimestreOperacoes,
+    setDadosAvaliacao,
+    setDadosIniciaisAvaliacao,
+    dadosPeriodosAvaliacao,
+    setDadosPeriodosAvaliacao,
+    setExibirLoaderGeral,
+  } = useContext(ListaoContext);
+
+  const limparDadosAvaliacao = () => {
+    setDadosIniciaisAvaliacao();
+    setDadosAvaliacao();
+  };
+
+  const obterDadosPeriodos = useCallback(async () => {
+    const params = {
+      anoLetivo: turmaSelecionada.anoLetivo,
+      modalidade: turmaSelecionada.modalidade,
+      semestre: turmaSelecionada.periodo,
+    };
+    const resultado = await ServicoNotas.obterPeriodos({ params }).catch(e =>
+      erros(e)
+    );
+
+    if (resultado?.data?.length) {
+      setDadosPeriodosAvaliacao(resultado.data);
+    } else {
+      limparDadosAvaliacao();
+      setDadosPeriodosAvaliacao();
+    }
+  }, [turmaSelecionada]);
+
+  useEffect(() => {
+    limparDadosAvaliacao();
+    setDadosPeriodosAvaliacao();
+    if (
+      bimestreOperacoes &&
+      turmaSelecionada?.turma &&
+      componenteCurricular?.codigoComponenteCurricular
+    ) {
+      obterDadosPeriodos();
+    }
+  }, [componenteCurricular, turmaSelecionada, bimestreOperacoes]);
+
+  const obterListaAlunosAvaliacao = useCallback(async () => {
+    const dadosBimestreSelecionado = dadosPeriodosAvaliacao.find(
+      item => String(item.bimestre) === String(bimestreOperacoes)
+    );
+    const params = {
+      anoLetivo: turmaSelecionada.anoLetivo,
+      bimestre: bimestreOperacoes,
+      disciplinaCodigo: componenteCurricular.codigoComponenteCurricular,
+      modalidade: turmaSelecionada.modalidade,
+      turmaCodigo: turmaSelecionada.turma,
+      turmaId: turmaSelecionada.id,
+      turmaHistorico: turmaSelecionada.consideraHistorico,
+      semestre: turmaSelecionada.periodo,
+      periodoInicioTicks: dadosBimestreSelecionado?.periodoInicioTicks,
+      periodoFimTicks: dadosBimestreSelecionado?.periodoFimTicks,
+      periodoEscolarId: dadosBimestreSelecionado?.periodoEscolarId,
+    };
+    setExibirLoaderGeral(true);
+    const resposta = await ServicoNotas.obterDadosAvaliacoesListao({
+      params,
+    })
+      .catch(e => erros(e))
+      .finally(() => setExibirLoaderGeral(false));
+
+    if (resposta.data) {
+      // TODO - Remover mock!
+      resposta.data = mockAvaliacao;
+      // resposta.data = mockAvaliacaoRegente;
+      const dadosCarregar = _.cloneDeep(resposta.data);
+      const dadosIniciais = _.cloneDeep(resposta.data);
+      setDadosAvaliacao(dadosCarregar);
+      setDadosIniciaisAvaliacao(dadosIniciais);
+    } else {
+      limparDadosAvaliacao();
+    }
+  }, [componenteCurricular, turmaSelecionada, dadosPeriodosAvaliacao]);
+
+  useEffect(() => {
+    limparDadosAvaliacao();
+    if (
+      componenteCurricular?.codigoComponenteCurricular &&
+      bimestreOperacoes &&
+      dadosPeriodosAvaliacao?.length
+    ) {
+      obterListaAlunosAvaliacao();
+    }
+  }, [dadosPeriodosAvaliacao]);
 
   return (
     <>
@@ -21,7 +121,7 @@ const TabListaoAvaliacoes = () => {
       ) : (
         <></>
       )}
-      Listão Avaliações
+      <ListaoListaAvaliacoes />
     </>
   );
 };

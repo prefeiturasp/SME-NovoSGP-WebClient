@@ -65,6 +65,11 @@ const ListaoContextProvider = ({ children }) => {
   const [dadosIniciaisDiarioBordo, setDadosIniciaisDiarioBordo] = useState([]);
   const [errosDiarioBordoListao, setErrosDiarioBordoListao] = useState([]);
 
+  // TAB AVALIAÇÃO
+  const [dadosAvaliacao, setDadosAvaliacao] = useState();
+  const [dadosIniciaisAvaliacao, setDadosIniciaisAvaliacao] = useState();
+  const [dadosPeriodosAvaliacao, setDadosPeriodosAvaliacao] = useState();
+
   const limparTelaListao = () => {
     setComponenteCurricular();
     setBimestreOperacoes();
@@ -167,6 +172,13 @@ const ListaoContextProvider = ({ children }) => {
         setDadosIniciaisDiarioBordo,
         errosDiarioBordoListao,
         setErrosDiarioBordoListao,
+        // TAB AVALIAÇÃO
+        dadosAvaliacao,
+        setDadosAvaliacao,
+        dadosIniciaisAvaliacao,
+        setDadosIniciaisAvaliacao,
+        dadosPeriodosAvaliacao,
+        setDadosPeriodosAvaliacao,
       }}
     >
       {children}
