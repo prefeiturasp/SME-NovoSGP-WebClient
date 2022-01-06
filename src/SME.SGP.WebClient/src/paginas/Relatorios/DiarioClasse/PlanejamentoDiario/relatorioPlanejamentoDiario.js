@@ -387,8 +387,7 @@ const RelatorioPlanejamentoDiario = () => {
 
     setExibirLoader(true);
     const componentes = await ServicoComponentesCurriculares.obterComponentesPorListaDeTurmas(
-      turmas,
-      true
+      turmas
     )
       .catch(e => erros(e))
       .finally(() => setExibirLoader(false));
@@ -674,9 +673,7 @@ const RelatorioPlanejamentoDiario = () => {
                 valueText="desc"
                 label="Componente curricular"
                 disabled={
-                  !modalidadeId ||
-                  listaComponentesCurriculares?.length === 1 ||
-                  turmaId === OPCAO_TODOS
+                  !modalidadeId || listaComponentesCurriculares?.length === 1
                 }
                 valueSelect={componenteCurricularId}
                 onChange={onChangeComponenteCurricular}
