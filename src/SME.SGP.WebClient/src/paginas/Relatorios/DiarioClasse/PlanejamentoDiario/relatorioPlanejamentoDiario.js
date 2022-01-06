@@ -387,8 +387,7 @@ const RelatorioPlanejamentoDiario = () => {
 
     setExibirLoader(true);
     const componentes = await ServicoComponentesCurriculares.obterComponentesPorListaDeTurmas(
-      turmas,
-      true
+      turmas
     )
       .catch(e => erros(e))
       .finally(() => setExibirLoader(false));
