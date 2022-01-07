@@ -1,14 +1,25 @@
 import { Tooltip } from 'antd';
 import React, { useContext } from 'react';
+import { useSelector } from 'react-redux';
 import { DataTable } from '~/componentes';
 import SinalizacaoAEE from '~/componentes-sgp/SinalizacaoAEE/sinalizacaoAEE';
 import { Base } from '~/componentes/colors';
+import notasConceitos from '~/dtos/notasConceitos';
 import ListaoContext from '~/paginas/DiarioClasse/Listao/listaoContext';
 import { MarcadorSituacao } from '../tabFrequencia/lista/listaFrequencia.css';
+import LabelAusenteCellTable from './componentes/labelAusenteCellTable';
+import ListaoCampoConceito from './componentes/listaoCampoConceito';
+import ListaoCampoNota from './componentes/listaoCampoNota';
 import ListaoAuditoriaAvaliacoes from './listaoAuditoriaAvaliacoes';
 
 const ListaoListaAvaliacoes = () => {
+  const usuario = useSelector(store => store.usuario);
+  const { ehProfessorCj } = usuario;
+
   const { dadosAvaliacao } = useContext(ListaoContext);
+
+  // TODO
+  const desabilitarCampos = false;
 
   const montarColunaNumeroAula = aluno => {
     return (
@@ -47,7 +58,47 @@ const ListaoListaAvaliacoes = () => {
     const notaAvaliacao = dadosEstudante.notasAvaliacoes.find(
       item => item.atividadeAvaliativaId === avaliacao.id
     );
+
+    const desabilitarNota = ehProfessorCj ? !avaliacao?.ehCJ : avaliacao?.ehCJ;
+
     console.log(notaAvaliacao);
+
+    switch (Number(dadosAvaliacao?.notaTipo)) {
+      case Number(notasConceitos.Notas):
+        return (
+          <>
+            {notaAvaliacao?.ausente ? <LabelAusenteCellTable /> : <></>}
+            <ListaoCampoNota
+              name={`aluno${dadosEstudante.id}`}
+              nota={notaAvaliacao}
+              onChangeNotaConceito={valorNovo =>
+                console.log(`VALOR NOVO: ${valorNovo}`)
+              }
+              desabilitarCampo={
+                desabilitarCampos ||
+                desabilitarNota ||
+                !notaAvaliacao.podeEditar
+              }
+            />
+          </>
+        );
+      case Number(notasConceitos.Conceitos):
+        return (
+          <>
+            {notaAvaliacao?.ausente ? <LabelAusenteCellTable /> : <></>}
+            <ListaoCampoConceito
+              nota={notaAvaliacao}
+              onChangeNotaConceito={valorNovo =>
+                console.log(`VALOR NOVO: ${valorNovo}`)
+              }
+              desabilitarCampo={desabilitarCampos || !notaAvaliacao?.podeEditar}
+              listaTiposConceitos={dadosAvaliacao?.listaTiposConceitos}
+            />
+          </>
+        );
+      default:
+        return '';
+    }
   };
 
   const colunasEstudantes = [
@@ -55,14 +106,12 @@ const ListaoListaAvaliacoes = () => {
       title: 'Nº',
       align: 'center',
       width: '60px',
-      fixed: 'left',
       render: montarColunaNumeroAula,
     },
 
     {
       title: 'Nome do estudante',
       width: '350px',
-      fixed: 'left',
       render: montarColunaEstudante,
     },
   ];

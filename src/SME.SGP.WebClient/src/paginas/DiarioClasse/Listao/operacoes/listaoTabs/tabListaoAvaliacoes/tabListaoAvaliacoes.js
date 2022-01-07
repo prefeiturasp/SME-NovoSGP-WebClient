@@ -2,11 +2,14 @@ import _ from 'lodash';
 import React, { useCallback, useContext, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { Alert } from '~/componentes';
+import notasConceitos from '~/dtos/notasConceitos';
 import { erros } from '~/servicos';
+import ServicoNotaConceito from '~/servicos/Paginas/DiarioClasse/ServicoNotaConceito';
 import ServicoNotas from '~/servicos/ServicoNotas';
 import ListaoContext from '../../../listaoContext';
 import ListaoListaAvaliacoes from './listaoListaAvaliacoes';
 import { mockAvaliacao } from './mockAvaliacao';
+// import { mockAvaliacaoRegente } from './mockAvaliacaoRegente';
 
 const TabListaoAvaliacoes = () => {
   const usuario = useSelector(store => store.usuario);
@@ -57,6 +60,21 @@ const TabListaoAvaliacoes = () => {
     }
   }, [componenteCurricular, turmaSelecionada, bimestreOperacoes]);
 
+  const obterListaConceitos = async periodoFim => {
+    const resposta = await ServicoNotaConceito.obterTodosConceitos(
+      periodoFim
+    ).catch(e => erros(e));
+
+    if (resposta?.data?.length) {
+      const novaLista = resposta.data.map(item => {
+        item.id = String(item.id);
+        return item;
+      });
+      return novaLista;
+    }
+    return [];
+  };
+
   const obterListaAlunosAvaliacao = useCallback(async () => {
     const dadosBimestreSelecionado = dadosPeriodosAvaliacao.find(
       item => String(item.bimestre) === String(bimestreOperacoes)
@@ -85,6 +103,17 @@ const TabListaoAvaliacoes = () => {
       // TODO - Remover mock!
       resposta.data = mockAvaliacao;
       // resposta.data = mockAvaliacaoRegente;
+
+      let listaTiposConceitos = [];
+      const { notaTipo } = resposta.data;
+      const ehTipoConceito = notasConceitos.Conceitos === notaTipo;
+      const naoEhTipoNota = notasConceitos.Notas !== notaTipo;
+      if (ehTipoConceito || naoEhTipoNota) {
+        const { periodoFim } = resposta.data.bimestres[0];
+        listaTiposConceitos = await obterListaConceitos(periodoFim);
+      }
+      resposta.data.listaTiposConceitos = listaTiposConceitos;
+
       const dadosCarregar = _.cloneDeep(resposta.data);
       const dadosIniciais = _.cloneDeep(resposta.data);
       setDadosAvaliacao(dadosCarregar);
