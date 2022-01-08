@@ -2,7 +2,7 @@ import { Tooltip } from 'antd';
 import React, { useContext } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
-import { DataTable } from '~/componentes';
+import { DataTable, LabelSemDados } from '~/componentes';
 import SinalizacaoAEE from '~/componentes-sgp/SinalizacaoAEE/sinalizacaoAEE';
 import { Base } from '~/componentes/colors';
 import notasConceitos from '~/dtos/notasConceitos';
@@ -25,10 +25,14 @@ const ListaoListaAvaliacoes = () => {
   const usuario = useSelector(store => store.usuario);
   const { ehProfessorCj } = usuario;
 
-  const { dadosAvaliacao, setDadosAvaliacao } = useContext(ListaoContext);
+  const {
+    dadosAvaliacao,
+    setDadosAvaliacao,
+    somenteConsultaListao,
+    periodoAbertoListao,
+  } = useContext(ListaoContext);
 
-  // TODO
-  const desabilitarCampos = false;
+  const desabilitarCampos = somenteConsultaListao || !periodoAbertoListao;
 
   const montarColunaNumeroAula = aluno => {
     return (
@@ -207,7 +211,8 @@ const ListaoListaAvaliacoes = () => {
     });
   }
 
-  return dadosAvaliacao?.bimestres?.[0]?.alunos ? (
+  return dadosAvaliacao?.bimestres?.[0]?.alunos?.length &&
+    dadosAvaliacao?.bimestres?.[0]?.avaliacoes?.length ? (
     <>
       <ContainerTableAvaliacao className="col-md-12 p-0">
         <DataTable
@@ -222,7 +227,10 @@ const ListaoListaAvaliacoes = () => {
       <ListaoAuditoriaAvaliacoes />
     </>
   ) : (
-    <></>
+    <LabelSemDados
+      text="Bimestre selecionado não possui atividade avaliativa cadastrada"
+      center
+    />
   );
 };
 

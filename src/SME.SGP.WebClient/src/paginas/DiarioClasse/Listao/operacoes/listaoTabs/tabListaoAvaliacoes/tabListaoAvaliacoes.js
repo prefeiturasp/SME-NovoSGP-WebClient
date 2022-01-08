@@ -100,9 +100,8 @@ const TabListaoAvaliacoes = () => {
           className="mb-2"
         />
       ) : (
-        <></>
+        <ListaoListaAvaliacoes />
       )}
-      <ListaoListaAvaliacoes />
     </>
   );
 };
