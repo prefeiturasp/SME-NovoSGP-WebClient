@@ -1,6 +1,9 @@
 import _ from 'lodash';
+import notasConceitos from '~/dtos/notasConceitos';
 import { store } from '~/redux';
 import { erros, ServicoDiarioBordo } from '~/servicos';
+import ServicoNotaConceito from '~/servicos/Paginas/DiarioClasse/ServicoNotaConceito';
+import ServicoNotas from '~/servicos/ServicoNotas';
 
 const onChangeTabListao = async (
   tabAtiva,
@@ -70,8 +73,77 @@ const obterDiarioBordoListao = async (
   return true;
 };
 
+const obterListaConceitos = async periodoFim => {
+  const resposta = await ServicoNotaConceito.obterTodosConceitos(
+    periodoFim
+  ).catch(e => erros(e));
+
+  if (resposta?.data?.length) {
+    const novaLista = resposta.data.map(item => {
+      item.id = String(item.id);
+      return item;
+    });
+    return novaLista;
+  }
+  return [];
+};
+
+const obterListaAlunosAvaliacaoListao = async (
+  dadosPeriodosAvaliacao,
+  bimestreOperacoes,
+  turmaSelecionada,
+  componenteCurricular,
+  setExibirLoaderGeral,
+  setDadosAvaliacao,
+  setDadosIniciaisAvaliacao
+) => {
+  const dadosBimestreSelecionado = dadosPeriodosAvaliacao.find(
+    item => String(item.bimestre) === String(bimestreOperacoes)
+  );
+  const params = {
+    anoLetivo: turmaSelecionada.anoLetivo,
+    bimestre: bimestreOperacoes,
+    disciplinaCodigo: componenteCurricular.codigoComponenteCurricular,
+    modalidade: turmaSelecionada.modalidade,
+    turmaCodigo: turmaSelecionada.turma,
+    turmaId: turmaSelecionada.id,
+    turmaHistorico: turmaSelecionada.consideraHistorico,
+    semestre: turmaSelecionada.periodo,
+    periodoInicioTicks: dadosBimestreSelecionado?.periodoInicioTicks,
+    periodoFimTicks: dadosBimestreSelecionado?.periodoFimTicks,
+    periodoEscolarId: dadosBimestreSelecionado?.periodoEscolarId,
+  };
+  setExibirLoaderGeral(true);
+  const resposta = await ServicoNotas.obterDadosAvaliacoesListao({
+    params,
+  })
+    .catch(e => erros(e))
+    .finally(() => setExibirLoaderGeral(false));
+
+  if (resposta.data) {
+    let listaTiposConceitos = [];
+    const { notaTipo } = resposta.data;
+    const ehTipoConceito = notasConceitos.Conceitos === notaTipo;
+    const naoEhTipoNota = notasConceitos.Notas !== notaTipo;
+    if (ehTipoConceito || naoEhTipoNota) {
+      const { periodoFim } = resposta.data.bimestres[0];
+      listaTiposConceitos = await obterListaConceitos(periodoFim);
+    }
+    resposta.data.listaTiposConceitos = listaTiposConceitos;
+
+    const dadosCarregar = _.cloneDeep(resposta.data);
+    const dadosIniciais = _.cloneDeep(resposta.data);
+    setDadosAvaliacao(dadosCarregar);
+    setDadosIniciaisAvaliacao(dadosIniciais);
+  } else {
+    setDadosIniciaisAvaliacao();
+    setDadosAvaliacao();
+  }
+};
+
 export {
   onChangeTabListao,
   montarIdsObjetivosSelecionadosListao,
   obterDiarioBordoListao,
+  obterListaAlunosAvaliacaoListao,
 };

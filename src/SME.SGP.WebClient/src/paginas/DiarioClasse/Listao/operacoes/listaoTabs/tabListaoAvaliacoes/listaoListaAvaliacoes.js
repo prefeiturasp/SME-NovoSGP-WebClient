@@ -1,22 +1,31 @@
 import { Tooltip } from 'antd';
 import React, { useContext } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import styled from 'styled-components';
 import { DataTable } from '~/componentes';
 import SinalizacaoAEE from '~/componentes-sgp/SinalizacaoAEE/sinalizacaoAEE';
 import { Base } from '~/componentes/colors';
 import notasConceitos from '~/dtos/notasConceitos';
 import ListaoContext from '~/paginas/DiarioClasse/Listao/listaoContext';
+import { setTelaEmEdicao } from '~/redux/modulos/geral/actions';
 import { MarcadorSituacao } from '../tabFrequencia/lista/listaFrequencia.css';
 import LabelAusenteCellTable from './componentes/labelAusenteCellTable';
 import ListaoCampoConceito from './componentes/listaoCampoConceito';
 import ListaoCampoNota from './componentes/listaoCampoNota';
 import ListaoAuditoriaAvaliacoes from './listaoAuditoriaAvaliacoes';
 
+export const ContainerTableAvaliacao = styled.div`
+  tr {
+    position: relative;
+  }
+`;
+
 const ListaoListaAvaliacoes = () => {
+  const dispatch = useDispatch();
   const usuario = useSelector(store => store.usuario);
   const { ehProfessorCj } = usuario;
 
-  const { dadosAvaliacao } = useContext(ListaoContext);
+  const { dadosAvaliacao, setDadosAvaliacao } = useContext(ListaoContext);
 
   // TODO
   const desabilitarCampos = false;
@@ -54,14 +63,46 @@ const ListaoListaAvaliacoes = () => {
     );
   };
 
+  const onChangeNotaConceito = (
+    valorNovo,
+    alunoId,
+    podeEditar,
+    indexAvaliacao
+  ) => {
+    if (
+      !desabilitarCampos &&
+      podeEditar &&
+      dadosAvaliacao?.bimestres?.[0]?.alunos?.length
+    ) {
+      const { alunos } = dadosAvaliacao.bimestres[0];
+
+      const aluno = alunos.find?.(item => item?.id === alunoId);
+      if (aluno) {
+        const indexEstudante = alunos?.indexOf?.(aluno);
+        const novosDados = dadosAvaliacao;
+        novosDados.bimestres[0].alunos[indexEstudante].notasAvaliacoes[
+          indexAvaliacao
+        ].notaConceito = valorNovo;
+        novosDados.bimestres[0].alunos[indexEstudante].notasAvaliacoes[
+          indexAvaliacao
+        ].modoEdicao = true;
+
+        setDadosAvaliacao(dadosAvaliacao);
+        dispatch(setTelaEmEdicao(true));
+      }
+    }
+  };
+
   const montarCampoNotaConceito = (dadosEstudante, avaliacao) => {
     const notaAvaliacao = dadosEstudante.notasAvaliacoes.find(
       item => item.atividadeAvaliativaId === avaliacao.id
     );
 
-    const desabilitarNota = ehProfessorCj ? !avaliacao?.ehCJ : avaliacao?.ehCJ;
+    const indexAvaliacao = dadosEstudante.notasAvaliacoes.indexOf(
+      notaAvaliacao
+    );
 
-    console.log(notaAvaliacao);
+    const desabilitarNota = ehProfessorCj ? !avaliacao?.ehCJ : avaliacao?.ehCJ;
 
     switch (Number(dadosAvaliacao?.notaTipo)) {
       case Number(notasConceitos.Notas):
@@ -72,7 +113,12 @@ const ListaoListaAvaliacoes = () => {
               name={`aluno${dadosEstudante.id}`}
               nota={notaAvaliacao}
               onChangeNotaConceito={valorNovo =>
-                console.log(`VALOR NOVO: ${valorNovo}`)
+                onChangeNotaConceito(
+                  valorNovo,
+                  dadosEstudante.id,
+                  notaAvaliacao.podeEditar,
+                  indexAvaliacao
+                )
               }
               desabilitarCampo={
                 desabilitarCampos ||
@@ -89,7 +135,12 @@ const ListaoListaAvaliacoes = () => {
             <ListaoCampoConceito
               nota={notaAvaliacao}
               onChangeNotaConceito={valorNovo =>
-                console.log(`VALOR NOVO: ${valorNovo}`)
+                onChangeNotaConceito(
+                  valorNovo,
+                  dadosEstudante.id,
+                  notaAvaliacao.podeEditar,
+                  indexAvaliacao
+                )
               }
               desabilitarCampo={desabilitarCampos || !notaAvaliacao?.podeEditar}
               listaTiposConceitos={dadosAvaliacao?.listaTiposConceitos}
@@ -158,7 +209,7 @@ const ListaoListaAvaliacoes = () => {
 
   return dadosAvaliacao?.bimestres?.[0]?.alunos ? (
     <>
-      <div className="col-md-12 p-0">
+      <ContainerTableAvaliacao className="col-md-12 p-0">
         <DataTable
           scroll={{ x: 1000, y: 500 }}
           columns={colunasEstudantes}
@@ -167,7 +218,7 @@ const ListaoListaAvaliacoes = () => {
           semHover
           tableResponsive={false}
         />
-      </div>
+      </ContainerTableAvaliacao>
       <ListaoAuditoriaAvaliacoes />
     </>
   ) : (

@@ -17,16 +17,6 @@ const ListaoAuditoriaAvaliacoes = () => {
           </ContainerAuditoria>
         </div>
       </div>
-      <div className="row mt-2 mb-2 mt-2">
-        <div className="col-md-12">
-          <ContainerAuditoria style={{ float: 'left' }}>
-            <span>
-              <p>{dadosAvaliacao?.auditoriaBimestreInserido || ''}</p>
-              <p>{dadosAvaliacao?.auditoriaBimestreAlterado || ''}</p>
-            </span>
-          </ContainerAuditoria>
-        </div>
-      </div>
     </>
   ) : (
     <></>

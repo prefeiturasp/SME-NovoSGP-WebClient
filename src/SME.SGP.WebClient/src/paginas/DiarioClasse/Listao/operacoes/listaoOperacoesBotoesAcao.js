@@ -10,6 +10,7 @@ import {
   SGP_BUTTON_VOLTAR,
 } from '~/componentes-sgp/filtro/idsCampos';
 import { RotasDto } from '~/dtos';
+import notasConceitos from '~/dtos/notasConceitos';
 import {
   setAcaoTelaEmEdicao,
   setLimparModoEdicaoGeral,
@@ -17,6 +18,7 @@ import {
 } from '~/redux/modulos/geral/actions';
 
 import {
+  api,
   confirmar,
   erro,
   erros,
@@ -40,6 +42,7 @@ import ListaoContext from '../listaoContext';
 import {
   montarIdsObjetivosSelecionadosListao,
   obterDiarioBordoListao,
+  obterListaAlunosAvaliacaoListao,
 } from '../listaoFuncoes';
 
 const ListaoOperacoesBotoesAcao = () => {
@@ -72,6 +75,12 @@ const ListaoOperacoesBotoesAcao = () => {
     dadosDiarioBordo,
     componenteCurricularDiarioBordo,
     setErrosDiarioBordoListao,
+    dadosAvaliacao,
+    setDadosAvaliacao,
+    dadosIniciaisAvaliacao,
+    dadosPeriodosAvaliacao,
+    setDadosIniciaisAvaliacao,
+    bimestreOperacoes,
   } = useContext(ListaoContext);
 
   const telaEmEdicao = useSelector(store => store.geral.telaEmEdicao);
@@ -300,7 +309,7 @@ const ListaoOperacoesBotoesAcao = () => {
     return errosDiarioBordo;
   };
 
-  const salvarDiarioBordo = async clicouNoBotao => {
+  const salvarDiarioBordo = async clicouNoBotaoSalvar => {
     const dadosAlterados = dadosDiarioBordo.filter(item => item.alterado);
 
     if (!dadosAlterados?.length) {
@@ -334,7 +343,7 @@ const ListaoOperacoesBotoesAcao = () => {
       .finally(() => setExibirLoaderGeral(false));
 
     if (resposta.status === 200) {
-      if (clicouNoBotao) {
+      if (clicouNoBotaoSalvar) {
         await obterDiarioBordoListao(
           turma,
           periodo,
@@ -353,14 +362,81 @@ const ListaoOperacoesBotoesAcao = () => {
     return false;
   };
 
-  const onClickSalvarTabAtiva = clicouNoBotao => {
+  const montarBimestreParaSalvarAvaliacoes = () => {
+    const dadosSalvar = _.cloneDeep(dadosAvaliacao);
+
+    const bimestreParaMontar = dadosSalvar?.bimestres?.[0];
+    const valorParaSalvar = [];
+
+    const ehNota = dadosAvaliacao?.notaTipo === notasConceitos.Notas;
+    const ehConceito = dadosAvaliacao?.notaTipo === notasConceitos.Conceitos;
+
+    bimestreParaMontar.alunos.forEach(aluno => {
+      aluno.notasAvaliacoes.forEach(nota => {
+        if (nota.modoEdicao) {
+          const avaliacaoNota = bimestreParaMontar.avaliacoes.find(
+            a => a.id === nota.atividadeAvaliativaId
+          );
+          if (
+            window.moment(avaliacaoNota.data) > window.moment(new Date()) &&
+            !nota.notaConceito
+          )
+            return;
+          valorParaSalvar.push({
+            alunoId: aluno.id,
+            atividadeAvaliativaId: nota?.atividadeAvaliativaId,
+            conceito: ehConceito ? nota.notaConceito : null,
+            nota: ehNota ? nota.notaConceito : null,
+          });
+        }
+      });
+    });
+    return valorParaSalvar;
+  };
+
+  const salvarAvaliacoes = async clicouNoBotaoSalvar => {
+    const valoresBimestresSalvar = [];
+    valoresBimestresSalvar.push(...montarBimestreParaSalvarAvaliacoes());
+
+    setExibirLoaderGeral(true);
+    const resposta = await api
+      .post(`v1/avaliacoes/notas`, {
+        turmaId: turmaSelecionada.turma,
+        disciplinaId: componenteCurricular?.codigoComponenteCurricular,
+        notasConceitos: valoresBimestresSalvar,
+      })
+      .catch(e => erros(e))
+      .finally(() => setExibirLoaderGeral(false));
+
+    if (resposta.status === 200) {
+      if (clicouNoBotaoSalvar) {
+        await obterListaAlunosAvaliacaoListao(
+          dadosPeriodosAvaliacao,
+          bimestreOperacoes,
+          turmaSelecionada,
+          componenteCurricular,
+          setExibirLoaderGeral,
+          setDadosAvaliacao,
+          setDadosIniciaisAvaliacao
+        );
+      }
+      sucesso('Suas informações foram salvas com sucesso.');
+      dispatch(setTelaEmEdicao(false));
+      return true;
+    }
+    return false;
+  };
+
+  const onClickSalvarTabAtiva = clicouNoBotaoSalvar => {
     switch (tabAtual) {
       case LISTAO_TAB_FREQUENCIA:
         return salvarFrequencia();
       case LISTAO_TAB_PLANO_AULA:
         return salvarPlanoAula();
+      case LISTAO_TAB_AVALIACOES:
+        return salvarAvaliacoes(clicouNoBotaoSalvar);
       case LISTAO_TAB_DIARIO_BORDO:
-        return salvarDiarioBordo(clicouNoBotao);
+        return salvarDiarioBordo(clicouNoBotaoSalvar);
 
       default:
         return true;
@@ -387,7 +463,7 @@ const ListaoOperacoesBotoesAcao = () => {
     } else {
       dispatch(setLimparModoEdicaoGeral());
     }
-  }, [dispatch, telaEmEdicao]);
+  }, [telaEmEdicao]);
 
   const onClickVoltar = async () => {
     if (!desabilitarBotoes && telaEmEdicao) {
@@ -410,7 +486,11 @@ const ListaoOperacoesBotoesAcao = () => {
     setDadosPlanoAula([...dadosCarregar]);
   };
 
-  const limparDadosAvaliacoes = () => {};
+  const limparDadosAvaliacoes = () => {
+    const dadosCarregar = _.cloneDeep(dadosIniciaisAvaliacao);
+    setDadosAvaliacao({ ...dadosCarregar });
+  };
+
   const limparDadosFechamento = () => {};
 
   const limparDadosDiarioBordo = () => {
@@ -485,7 +565,9 @@ const ListaoOperacoesBotoesAcao = () => {
             color={Colors.Roxo}
             border
             bold
-            onClick={() => onClickSalvarTabAtiva(true)}
+            onClick={() => {
+              onClickSalvarTabAtiva(true);
+            }}
             disabled={desabilitarBotoes || !telaEmEdicao}
           />
         </Col>

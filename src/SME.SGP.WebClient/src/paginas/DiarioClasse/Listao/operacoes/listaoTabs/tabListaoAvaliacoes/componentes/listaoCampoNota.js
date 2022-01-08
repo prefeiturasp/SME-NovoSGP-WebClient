@@ -92,14 +92,14 @@ const ListaoCampoNota = props => {
 };
 
 ListaoCampoNota.defaultProps = {
-  nota: '',
+  nota: {},
   onChangeNotaConceito: () => {},
   desabilitarCampo: false,
   name: '',
 };
 
 ListaoCampoNota.propTypes = {
-  nota: PropTypes.string,
+  nota: PropTypes.oneOf(PropTypes.any),
   onChangeNotaConceito: PropTypes.func,
   desabilitarCampo: PropTypes.bool,
   name: PropTypes.string,

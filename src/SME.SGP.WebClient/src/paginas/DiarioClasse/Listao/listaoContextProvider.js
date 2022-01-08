@@ -70,6 +70,18 @@ const ListaoContextProvider = ({ children }) => {
   const [dadosIniciaisAvaliacao, setDadosIniciaisAvaliacao] = useState();
   const [dadosPeriodosAvaliacao, setDadosPeriodosAvaliacao] = useState();
 
+  const limparTabFrequencia = () => {
+    setDadosFrequencia();
+    setListaTiposFrequencia([]);
+    setDadosIniciaisFrequencia();
+  };
+
+  const limparTabAvaliacao = () => {
+    setDadosAvaliacao();
+    setDadosIniciaisAvaliacao();
+    setDadosPeriodosAvaliacao();
+  };
+
   const limparTelaListao = () => {
     setComponenteCurricular();
     setBimestreOperacoes();
@@ -80,9 +92,8 @@ const ListaoContextProvider = ({ children }) => {
     setSomenteConsultaListao(false);
     setListaPeriodos([]);
     setPeriodo();
-    setDadosFrequencia();
-    setListaTiposFrequencia([]);
-    setDadosIniciaisFrequencia();
+    limparTabFrequencia();
+    limparTabAvaliacao();
   };
 
   return (
