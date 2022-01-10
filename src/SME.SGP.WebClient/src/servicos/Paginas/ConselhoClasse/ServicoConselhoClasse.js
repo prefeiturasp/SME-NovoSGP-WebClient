@@ -145,10 +145,11 @@ class ServicoConselhoClasse {
   gerarParecerConclusivo = (
     conselhoClasseId,
     fechamentoTurmaId,
-    alunoCodigo
+    alunoCodigo,
+    consideraHistorico
   ) => {
     const url = `v1/conselhos-classe/${conselhoClasseId ||
-      0}/fechamentos/${fechamentoTurmaId || 0}/alunos/${alunoCodigo}/parecer`;
+      0}/fechamentos/${fechamentoTurmaId || 0}/alunos/${alunoCodigo}/parecer/consideraHistorico/${consideraHistorico}`;
     return api.post(url);
   };
 
