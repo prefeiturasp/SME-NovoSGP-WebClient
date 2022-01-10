@@ -353,6 +353,7 @@ const RelatorioFrequencia = () => {
         }
 
         //TODO: REVER HISTORIA.
+        let ehTurmaInfantil = modalidadeId === '1';
         if(ehTurmaInfantil){  
           lista = lista.filter(e =>  e.valor === "512").map(element => {
             element.desc = "Regência de classe infantil";
