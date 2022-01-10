@@ -27,8 +27,6 @@ const MarcadorParecerConclusivo = () => {
   const gerandoParecerConclusivo = useSelector(
     store => store.conselhoClasse.gerandoParecerConclusivo
   );
-  
-  const usuario = useSelector(store => store.usuario);
 
   const [parecer, setParecer] = useState('');
 
@@ -48,8 +46,7 @@ const MarcadorParecerConclusivo = () => {
     const retorno = await ServicoConselhoClasse.gerarParecerConclusivo(
       conselhoClasseId,
       fechamentoTurmaId,
-      alunoCodigo,
-      usuario.turmaSelecionada.consideraHistorico
+      alunoCodigo
     )
       .catch(e => erros(e))
       .finally(() => setSincronizando(false));
