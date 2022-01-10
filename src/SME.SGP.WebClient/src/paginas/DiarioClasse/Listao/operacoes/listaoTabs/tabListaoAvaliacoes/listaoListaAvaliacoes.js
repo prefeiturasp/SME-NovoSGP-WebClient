@@ -1,6 +1,7 @@
 import { Tooltip } from 'antd';
 import React, { useContext } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import shortid from 'shortid';
 import styled from 'styled-components';
 import { DataTable, LabelSemDados } from '~/componentes';
 import SinalizacaoAEE from '~/componentes-sgp/SinalizacaoAEE/sinalizacaoAEE';
@@ -106,16 +107,22 @@ const ListaoListaAvaliacoes = () => {
       notaAvaliacao
     );
 
-    const desabilitarNota = ehProfessorCj ? !avaliacao?.ehCJ : avaliacao?.ehCJ;
+    const professorNaoEditaNota = ehProfessorCj
+      ? !avaliacao?.ehCJ
+      : avaliacao?.ehCJ;
+
+    const desabilitarCampoNota =
+      desabilitarCampos || professorNaoEditaNota || !notaAvaliacao.podeEditar;
 
     switch (Number(dadosAvaliacao?.notaTipo)) {
       case Number(notasConceitos.Notas):
         return (
           <>
-            {notaAvaliacao?.ausente ? <LabelAusenteCellTable /> : <></>}
+            {notaAvaliacao?.ausente && <LabelAusenteCellTable />}
             <ListaoCampoNota
-              name={`aluno${dadosEstudante.id}`}
-              nota={notaAvaliacao}
+              dadosNota={notaAvaliacao}
+              idCampo={shortid.generate()}
+              desabilitar={desabilitarCampoNota}
               onChangeNotaConceito={valorNovo =>
                 onChangeNotaConceito(
                   valorNovo,
@@ -123,11 +130,6 @@ const ListaoListaAvaliacoes = () => {
                   notaAvaliacao.podeEditar,
                   indexAvaliacao
                 )
-              }
-              desabilitarCampo={
-                desabilitarCampos ||
-                desabilitarNota ||
-                !notaAvaliacao.podeEditar
               }
             />
           </>
@@ -137,7 +139,10 @@ const ListaoListaAvaliacoes = () => {
           <>
             {notaAvaliacao?.ausente ? <LabelAusenteCellTable /> : <></>}
             <ListaoCampoConceito
-              nota={notaAvaliacao}
+              dadosConceito={notaAvaliacao}
+              idCampo={shortid.generate()}
+              desabilitar={desabilitarCampos || !notaAvaliacao?.podeEditar}
+              listaTiposConceitos={dadosAvaliacao?.listaTiposConceitos}
               onChangeNotaConceito={valorNovo =>
                 onChangeNotaConceito(
                   valorNovo,
@@ -146,8 +151,6 @@ const ListaoListaAvaliacoes = () => {
                   indexAvaliacao
                 )
               }
-              desabilitarCampo={desabilitarCampos || !notaAvaliacao?.podeEditar}
-              listaTiposConceitos={dadosAvaliacao?.listaTiposConceitos}
             />
           </>
         );
@@ -226,11 +229,13 @@ const ListaoListaAvaliacoes = () => {
       </ContainerTableAvaliacao>
       <ListaoAuditoriaAvaliacoes />
     </>
-  ) : (
+  ) : dadosAvaliacao?.bimestres?.length ? (
     <LabelSemDados
       text="Bimestre selecionado não possui atividade avaliativa cadastrada"
       center
     />
+  ) : (
+    <></>
   );
 };
 
