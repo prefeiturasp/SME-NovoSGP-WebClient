@@ -5,6 +5,7 @@ import { useDispatch } from 'react-redux';
 import { Auditoria, JoditEditor } from '~/componentes';
 import { setTelaEmEdicao } from '~/redux/modulos/geral/actions';
 import ListaoContext from '../../../listaoContext';
+import MarcadorInseridoCJ from './componentes/MarcadorInseridoCJ/marcadorInseridoCJ';
 
 const ConteudoCollapse = props => {
   const dispatch = useDispatch();
@@ -40,6 +41,7 @@ const ConteudoCollapse = props => {
   return (
     <>
       <Row gutter={[24, 24]}>
+        {dados?.inseridoCJ && <MarcadorInseridoCJ />}
         <Col sm={24}>
           <JoditEditor
             id="editor-planejamento"
