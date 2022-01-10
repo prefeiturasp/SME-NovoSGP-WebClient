@@ -7,7 +7,13 @@ import { TabelaColunasFixas } from './listaFrequenciaPorBimestre.css';
 import ModalAnotacoes from './modalAnotacoes';
 
 const ListaFrequenciaPorBimestre = props => {
-  const { dados, turmaId, codigoAluno, componenteCurricularId } = props;
+  const {
+    dados,
+    turmaId,
+    codigoAluno,
+    componenteCurricularId,
+    esconderBimestre,
+  } = props;
 
   return (
     <>
@@ -21,7 +27,9 @@ const ListaFrequenciaPorBimestre = props => {
                   <table className="table">
                     <thead className="tabela-um-thead">
                       <tr>
-                        <th className="col-linha-dois">Bimestre</th>
+                        {!esconderBimestre && (
+                          <th className="col-linha-dois">Bimestre</th>
+                        )}
                         <th className="col-linha-dois">Quantidade de aulas</th>
                         <th className="col-linha-dois">
                           Quantidade de ausências
@@ -35,9 +43,11 @@ const ListaFrequenciaPorBimestre = props => {
                           return (
                             <>
                               <tr key={shortid.generate()}>
-                                <td className="col-valor-linha-dois">
-                                  {data.bimestre}°
-                                </td>
+                                {!esconderBimestre && (
+                                  <td className="col-valor-linha-dois">
+                                    {data.bimestre}°
+                                  </td>
+                                )}
                                 <td className="col-valor-linha-dois">
                                   {data.aulasRealizadas}
                                 </td>
@@ -52,8 +62,7 @@ const ListaFrequenciaPorBimestre = props => {
                                         indexLinha={index}
                                       />
                                     </>
-                                  ) 
-                                  : (
+                                  ) : (
                                     data.frequencia
                                   )}
                                 </td>
@@ -90,6 +99,7 @@ ListaFrequenciaPorBimestre.propTypes = {
   turmaId: PropTypes.oneOfType([PropTypes.any]),
   codigoAluno: PropTypes.oneOfType([PropTypes.any]),
   componenteCurricularId: PropTypes.oneOfType([PropTypes.any]),
+  esconderBimestre: PropTypes.bool,
 };
 
 ListaFrequenciaPorBimestre.defaultProps = {
@@ -97,6 +107,7 @@ ListaFrequenciaPorBimestre.defaultProps = {
   turmaId: '',
   codigoAluno: '',
   componenteCurricularId: 0,
+  esconderBimestre: false,
 };
 
 export default ListaFrequenciaPorBimestre;
