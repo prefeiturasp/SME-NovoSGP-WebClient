@@ -56,8 +56,9 @@ const ListaoTabs = () => {
     setPeriodo();
   };
 
-  const onChangeTab = tabAtiva =>
+  const onChangeTab = tabAtiva => {
     onChangeTabListao(tabAtiva, setTabAtual, acaoLimparTelaAntesTrocarAba);
+  };
 
   const montarTabs = () => {
     const ehBimestreFinal = bimestreOperacoes === String(BIMESTRE_FINAL);

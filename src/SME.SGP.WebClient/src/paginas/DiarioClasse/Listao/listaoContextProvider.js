@@ -65,6 +65,23 @@ const ListaoContextProvider = ({ children }) => {
   const [dadosIniciaisDiarioBordo, setDadosIniciaisDiarioBordo] = useState([]);
   const [errosDiarioBordoListao, setErrosDiarioBordoListao] = useState([]);
 
+  // TAB AVALIAÇÃO
+  const [dadosAvaliacao, setDadosAvaliacao] = useState();
+  const [dadosIniciaisAvaliacao, setDadosIniciaisAvaliacao] = useState();
+  const [dadosPeriodosAvaliacao, setDadosPeriodosAvaliacao] = useState();
+
+  const limparTabFrequencia = () => {
+    setDadosFrequencia();
+    setListaTiposFrequencia([]);
+    setDadosIniciaisFrequencia();
+  };
+
+  const limparTabAvaliacao = () => {
+    setDadosAvaliacao();
+    setDadosIniciaisAvaliacao();
+    setDadosPeriodosAvaliacao();
+  };
+
   const limparTelaListao = () => {
     setComponenteCurricular();
     setBimestreOperacoes();
@@ -75,9 +92,8 @@ const ListaoContextProvider = ({ children }) => {
     setSomenteConsultaListao(false);
     setListaPeriodos([]);
     setPeriodo();
-    setDadosFrequencia();
-    setListaTiposFrequencia([]);
-    setDadosIniciaisFrequencia();
+    limparTabFrequencia();
+    limparTabAvaliacao();
   };
 
   return (
@@ -167,6 +183,13 @@ const ListaoContextProvider = ({ children }) => {
         setDadosIniciaisDiarioBordo,
         errosDiarioBordoListao,
         setErrosDiarioBordoListao,
+        // TAB AVALIAÇÃO
+        dadosAvaliacao,
+        setDadosAvaliacao,
+        dadosIniciaisAvaliacao,
+        setDadosIniciaisAvaliacao,
+        dadosPeriodosAvaliacao,
+        setDadosPeriodosAvaliacao,
       }}
     >
       {children}
