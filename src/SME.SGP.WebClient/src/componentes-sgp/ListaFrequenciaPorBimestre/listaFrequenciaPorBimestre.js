@@ -70,6 +70,7 @@ const ListaFrequenciaPorBimestre = props => {
                               <AusenciasEstudante
                                 indexLinha={index}
                                 bimestre={data?.bimestre}
+                                semestre={data?.semestre}
                                 turmaId={turmaId}
                                 codigoAluno={codigoAluno}
                                 componenteCurricularId={componenteCurricularId}
