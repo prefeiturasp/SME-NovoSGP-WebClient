@@ -44,12 +44,20 @@ const CampoApanhadoGeral = () => {
     dispatch(setApanhadoGeralEmEdicao(true));
   };
 
+  const desabilitarCamposAcompanhamentoAprendizagem = useSelector(
+    store =>
+      store.acompanhamentoAprendizagem
+        .desabilitarCamposAcompanhamentoAprendizagem
+  );
+
   return (
     <JoditEditor
       id="percurso-coletivo-turma-editor"
       value={dadosApanhadoGeral?.apanhadoGeral}
       onChange={onChange}
-      readonly={desabilitarCampo}
+      readonly={
+        !desabilitarCamposAcompanhamentoAprendizagem || desabilitarCampo
+      }
       permiteVideo={false}
       qtdMaxImg={qtdMaxImagensCampoPercursoColetivo}
       imagensCentralizadas
