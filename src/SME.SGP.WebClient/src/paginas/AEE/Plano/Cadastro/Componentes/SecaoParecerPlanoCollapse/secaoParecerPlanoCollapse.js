@@ -9,6 +9,7 @@ import {
   setExibirLoaderPlanoAEE,
 } from '~/redux/modulos/planoAEE/actions';
 import { erros, verificaSomenteConsulta } from '~/servicos';
+import { Base } from '~/componentes/colors';
 import ServicoPlanoAEE from '~/servicos/Paginas/Relatorios/AEE/ServicoPlanoAEE';
 import SecaoParecerPAAI from '../SecaoParecerPAAI/secaoParecerPAAI';
 import SecaoParecerResponsavel from '../SecaoParecerResponsavel/secaoParecerResponsavel';
@@ -20,12 +21,11 @@ const SecaoParecerPlanoCollapse = ({ match }) => {
   const usuario = useSelector(store => store.usuario);
   const permissoesTela = usuario.permissoes[RotasDto.RELATORIO_AEE_PLANO];
   const atualizarDados = useSelector(store => store.planoAEE.atualizarDados);
-  const permissaoDeEditarPlanoAee = usuario.permissoes['/aee/plano'].podeAlterar;
 
   const dispatch = useDispatch();
 
   useEffect(() => {
-    verificaSomenteConsulta(permissoesTela);        
+    verificaSomenteConsulta(permissoesTela);
   }, [permissoesTela]);
 
   const obterParecer = useCallback(async () => {
@@ -59,8 +59,20 @@ const SecaoParecerPlanoCollapse = ({ match }) => {
         indice="secao-parecer-plano-collapse-indice"
         alt="secao-parecer-plano-alt"
       >
+        {dadosParecer?.responsavelNome ? (
+          <div className="col-md-4">
+            <p style={{ marginLeft: -15 }}>
+              Responsável: {dadosParecer?.responsavelNome}
+              <span
+                style={{ color: Base.CinzaDesabilitado, fontSize: '13px' }}
+              >{` (${dadosParecer?.responsavelRF})`}</span>
+            </p>
+          </div>
+        ) : (
+          ''
+        )}
         <SecaoParecerCoordenacao
-          desabilitar={!permissaoDeEditarPlanoAee && !dadosParecer?.podeEditarParecerCoordenacao}
+          desabilitar={!dadosParecer?.podeEditarParecerCoordenacao}
         />
         {dadosParecer?.podeAtribuirResponsavel ? (
           <SecaoParecerResponsavel />
@@ -72,7 +84,10 @@ const SecaoParecerPlanoCollapse = ({ match }) => {
           planoAEEDados?.situacao === situacaoPlanoAEE.ParecerPAAI ||
           planoAEEDados?.situacao === situacaoPlanoAEE.Encerrado ||
           planoAEEDados?.situacao ===
-            situacaoPlanoAEE.EncerradoAutomaticamento) && <SecaoParecerPAAI />}
+            situacaoPlanoAEE.EncerradoAutomaticamento ||
+          planoAEEDados?.situacao === situacaoPlanoAEE.Validado) && (
+          <SecaoParecerPAAI />
+        )}
       </CardCollapse>
     </>
   );
