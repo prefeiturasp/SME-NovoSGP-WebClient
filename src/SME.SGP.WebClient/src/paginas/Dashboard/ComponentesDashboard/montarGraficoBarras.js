@@ -52,7 +52,7 @@ const MontarGraficoBarras = props => {
         montarDadosGrafico(item, nomeValor, dadosMapeados, nomeIndiceDesc);
       });
 
-      setChavesGrafico(listaChaves);
+      setChavesGrafico(nomeValor ? [nomeValor] : listaChaves);
       const dadosComCores = adicionarCoresNosGraficos(dadosMapeados);
 
       setDadosGrafico(dadosComCores);
