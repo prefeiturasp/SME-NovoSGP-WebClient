@@ -16,6 +16,7 @@ const inicial = {
   notasJustificativas: { componentes: [], componentesRegencia: [] },
   expandirLinha: [],
   dadosListasNotasConceitos: {},
+  dadosIniciaisListasNotasConceitos: {},
   notaConceitoPosConselhoAtual: {},
   idCamposNotasPosConselho: {},
   marcadorParecerConclusivo: {},
@@ -91,6 +92,7 @@ export default function ConselhoClasse(state = inicial, action) {
           notasJustificativas: { componentes: [], componentesRegencia: [] },
           expandirLinha: [],
           dadosListasNotasConceitos: [],
+          dadosIniciaisListasNotasConceitos: [],
           notaConceitoPosConselhoAtual: {},
           idCamposNotasPosConselho: {},
           marcadorParecerConclusivo: {},
@@ -272,6 +274,10 @@ export default function ConselhoClasse(state = inicial, action) {
           ...draft,
           dadosListasNotasConceitos: novosDadosListasNotasConceitos,
         };
+      }
+      case '@conselhoClasse/setDadosIniciaisListasNotasConceitos': {
+        draft.dadosIniciaisListasNotasConceitos = action.payload;
+        break;
       }
 
       default:

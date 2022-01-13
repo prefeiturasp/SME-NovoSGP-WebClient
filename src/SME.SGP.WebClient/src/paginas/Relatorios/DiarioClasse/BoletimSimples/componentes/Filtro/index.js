@@ -120,11 +120,30 @@ const Filtros = ({ onFiltrar, filtrou, setFiltrou, cancelou, setCancelou }) => {
     setFiltrou(false);
   };
 
+  const validarValorPadraoAnoLetivo = lista => {
+    if (lista?.length) {
+      const temAnoAtualNaLista = lista.find(
+        item => String(item.valor) === String(anoAtual)
+      );
+      if (temAnoAtualNaLista) {
+        setAnoLetivo(anoAtual);
+      } else {
+        setAnoLetivo(lista[0].valor);
+      }
+    } else {
+      setAnoLetivo();
+    }
+  };
+
+  useEffect(() => {
+    validarValorPadraoAnoLetivo(listaAnosLetivo);
+  }, [consideraHistorico, listaAnosLetivo]);
+
   const obterAnosLetivos = useCallback(async () => {
     setCarregandoAnosLetivos(true);
 
-    let anosLetivos = await FiltroHelper.obterAnosLetivos({
-      consideraHistorico: consideraHistorico,
+    const anosLetivos = await FiltroHelper.obterAnosLetivos({
+      consideraHistorico,
     });
 
     if (!anosLetivos.length) {
@@ -133,7 +152,8 @@ const Filtros = ({ onFiltrar, filtrou, setFiltrou, cancelou, setCancelou }) => {
         valor: anoAtual,
       });
     }
-    setAnoLetivo(anosLetivos[0].valor);
+
+    validarValorPadraoAnoLetivo(anosLetivos);
 
     setListaAnosLetivo(anosLetivos);
     setCarregandoAnosLetivos(false);
@@ -141,7 +161,7 @@ const Filtros = ({ onFiltrar, filtrou, setFiltrou, cancelou, setCancelou }) => {
 
   useEffect(() => {
     obterAnosLetivos();
-  }, [obterAnosLetivos]);
+  }, [obterAnosLetivos, consideraHistorico]);
 
   const onChangeDre = dre => {
     const id = listaDres.find(d => d.valor === dre)?.id;
@@ -354,9 +374,10 @@ const Filtros = ({ onFiltrar, filtrou, setFiltrou, cancelou, setCancelou }) => {
             nomeFiltro: item.nomeFiltro,
           })
         );
+
         setListaTurmas(lista);
         if (lista.length === 1) {
-          setTurmasId([String(lista[0].valor)]);
+          setTurmasId(lista[0].valor);
         }
       }
     }
@@ -416,7 +437,7 @@ const Filtros = ({ onFiltrar, filtrou, setFiltrou, cancelou, setCancelou }) => {
               lista={listaAnosLetivo}
               valueOption="valor"
               valueText="desc"
-              disabled={!consideraHistorico || listaAnosLetivo?.length === 1}
+              disabled={listaAnosLetivo?.length === 1}
               onChange={onChangeAnoLetivo}
               valueSelect={anoLetivo}
               placeholder="Ano letivo"

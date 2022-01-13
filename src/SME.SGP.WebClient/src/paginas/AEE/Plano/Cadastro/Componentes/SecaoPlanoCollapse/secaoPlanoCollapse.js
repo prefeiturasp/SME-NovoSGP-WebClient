@@ -12,6 +12,17 @@ const SecaoPlanoCollapse = props => {
 
   const planoAEEDados = useSelector(store => store.planoAEE.planoAEEDados);
 
+  const formateAuditoria = versao => {
+    return {
+      alteradoEm: versao?.alteradoEm,
+      alteradoPor: versao?.alteradoPor,
+      alteradoRF: versao?.alteradoRF,
+      criadoEm: versao?.criadoEm,
+      criadoPor: versao?.criadoPor,
+      criadoRF: versao?.criadoRF,
+    };
+  };
+
   return (
     <>
       <ModalErrosPlano />
@@ -33,6 +44,7 @@ const SecaoPlanoCollapse = props => {
         >
           <MontarDadosPorSecao
             dados={{ questionarioId: 0 }}
+            auditoria={formateAuditoria(planoAEEDados?.ultimaVersao)}
             dadosQuestionarioAtual={planoAEEDados?.questoes}
             match={match}
           />

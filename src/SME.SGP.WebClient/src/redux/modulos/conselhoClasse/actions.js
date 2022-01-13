@@ -143,6 +143,11 @@ export const setSituacaoConselhoAluno = payload => ({
   payload,
 });
 
+export const setDadosIniciaisListasNotasConceitos = payload => ({
+  type: '@conselhoClasse/setDadosIniciaisListasNotasConceitos',
+  payload,
+});
+
 export const setAtualizarEmAprovacao = payload => ({
   type: '@conselhoClasse/setAtualizarEmAprovacao',
   payload,
