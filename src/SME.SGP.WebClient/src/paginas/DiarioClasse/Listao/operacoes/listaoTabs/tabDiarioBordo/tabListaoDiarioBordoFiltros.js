@@ -46,7 +46,8 @@ const TabListaoDiarioBordoFiltros = () => {
       turma,
       componenteCurricular?.codigoComponenteCurricular,
       componenteCurricular?.regencia,
-      bimestreOperacoes
+      bimestreOperacoes,
+      true
     )
       .catch(e => erros(e))
       .finally(() => setExibirLoaderPeriodo(false));
