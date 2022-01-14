@@ -242,7 +242,7 @@ class ServicoPlanoAula {
     aulaFim
   ) => {
     return api.get(
-      `v1/planos/aulas/turmas/${turmaCodigo}/componente/${componenteCurricularCodigo}/componenteId/${componenteCurricularCodigo}?aulaInicio=${aulaInicio}&aulaFim=${aulaFim}`
+      `v1/planos/aulas/turmas/${turmaCodigo}/componente/${componenteCurricularCodigo}/componenteId/${componenteCurricularId}?aulaInicio=${aulaInicio}&aulaFim=${aulaFim}`
     );
   };
 }
