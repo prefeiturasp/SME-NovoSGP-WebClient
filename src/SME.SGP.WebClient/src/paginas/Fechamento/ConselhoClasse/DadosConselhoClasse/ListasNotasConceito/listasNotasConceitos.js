@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import moment from 'moment';
 import PropTypes from 'prop-types';
 import React, { useCallback, useEffect, useState } from 'react';
@@ -5,6 +6,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Loader } from '~/componentes';
 import {
   setConselhoClasseEmEdicao,
+  setDadosIniciaisListasNotasConceitos,
   setDadosListasNotasConceitos,
   setPodeEditarNota,
 } from '~/redux/modulos/conselhoClasse/actions';
@@ -123,6 +125,17 @@ const ListasNotasConceitos = props => {
       )
     );
 
+    dados.notasConceitos.map(notasConceitos =>
+      notasConceitos.componenteRegencia?.componentesCurriculares.map(cc => {
+          cc.notasFechamentos.map(nf => {
+            if (valorNuloOuVazio(nf.notaConceito)) {
+              notasFechamentosPreenchidas = false;
+            }
+            return nf;
+          });
+        })
+    );
+
     const alunoDentroDoPeriodoDoBimestre = alunoDentroDoPeriodoDoBimestreOuFechamento();
     const periodoAbertoOuEmFechamento = estaNoPeriodoOuFechamento();
 
@@ -147,6 +160,14 @@ const ListasNotasConceitos = props => {
           return componentesCurriculares;
         })
       );
+      dados.notasConceitos.map(notasConceitos =>
+        notasConceitos.componenteRegencia?.componentesCurriculares.map(cc => {
+              if (valorNuloOuVazio(cc.notaPosConselho.nota)) {
+                notasPosConselhoPreenchidas = false;
+              }
+              return cc;
+          })
+      );
       const periodoAbertoOuEmFechamento = estaNoPeriodoOuFechamento();
       if (notasPosConselhoPreenchidas && periodoAbertoOuEmFechamento) {
         dispatch(setConselhoClasseEmEdicao(true));
@@ -167,7 +188,9 @@ const ListasNotasConceitos = props => {
       .catch(e => erros(e))
       .finally(() => setCarregando(false));
 
-    if (resultado && resultado.data) {
+    if (resultado?.data) {
+      const dadosCarregar = _.cloneDeep(resultado.data.notasConceitos);
+      dispatch(setDadosIniciaisListasNotasConceitos([...dadosCarregar]));
       dispatch(setDadosListasNotasConceitos(resultado.data.notasConceitos));
       dispatch(setPodeEditarNota(resultado.data.podeEditarNota));
       setExibir(true);

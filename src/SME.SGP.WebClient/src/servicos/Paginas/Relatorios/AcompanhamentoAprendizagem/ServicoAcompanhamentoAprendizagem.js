@@ -144,6 +144,7 @@ class ServicoAcompanhamentoAprendizagem {
         observacoes: dadosAcompanhamentoAprendizagem.observacoes || '',
         percursoIndividual:
           dadosAcompanhamentoAprendizagem.percursoIndividual || '',
+        textoSugerido: dadosAcompanhamentoAprendizagem.textoSugerido,
       };
 
       dispatch(setExibirLoaderGeralAcompanhamentoAprendizagem(true));

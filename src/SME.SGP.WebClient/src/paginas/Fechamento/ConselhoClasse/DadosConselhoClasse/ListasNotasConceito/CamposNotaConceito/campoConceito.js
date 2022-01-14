@@ -26,6 +26,7 @@ const CampoConceito = props => {
     idCampo,
     codigoComponenteCurricular,
     alunoDesabilitado,
+    dadosNotaPosConselho,
   } = props;
 
   const idCamposNotasPosConselho = useSelector(
@@ -47,6 +48,18 @@ const CampoConceito = props => {
   const podeEditarNota = useSelector(
     store => store.conselhoClasse.podeEditarNota
   );
+
+  const expandirLinha = useSelector(
+    store => store.conselhoClasse.expandirLinha
+  );
+
+  const temLinhaExpandida = expandirLinha && Object.keys(expandirLinha)?.length;
+
+  const desabilitarIconeExpandir =
+    temLinhaExpandida && notaConceitoPosConselhoAtual?.ehEdicao;
+
+  const desabilitarCampoQuandoExpandir =
+    desabilitarIconeExpandir && !expandirLinha[idCampo];
 
   const [notaValorAtual, setNotaValorAtual] = useState(notaPosConselho);
   const [abaixoDaMedia, setAbaixoDaMedia] = useState(false);
@@ -117,9 +130,9 @@ const CampoConceito = props => {
 
   const onChangeConceito = (valorNovo, validarMedia) => {
     if (
-      notaConceitoPosConselhoAtual &&
-      notaConceitoPosConselhoAtual.idCampo &&
-      notaConceitoPosConselhoAtual.idCampo !== idCampo
+      notaConceitoPosConselhoAtual?.idCampo &&
+      notaConceitoPosConselhoAtual?.idCampo !== idCampo &&
+      notaConceitoPosConselhoAtual?.ehEdicao
     ) {
       return;
     }
@@ -131,6 +144,7 @@ const CampoConceito = props => {
         validaSeEstaAbaixoDaMedia(valorNovo);
       }
       setNotaValorAtual(valorNovo);
+      dadosNotaPosConselho.nota = valorNovo;
     }
   };
 
@@ -150,7 +164,8 @@ const CampoConceito = props => {
             alunoDesabilitado ||
             !podeEditarNota ||
             desabilitarCampos ||
-            !dentroPeriodo
+            !dentroPeriodo ||
+            desabilitarCampoQuandoExpandir
           }
           searchValue={false}
         />
@@ -169,7 +184,12 @@ const CampoConceito = props => {
               placement="bottom"
               overlayStyle={{ fontSize: '12px' }}
             >
-              <div className="icone" onClick={onClickMostrarJustificativa}>
+              <div
+                className="icone"
+                onClick={
+                  desabilitarIconeExpandir ? null : onClickMostrarJustificativa
+                }
+              >
                 <i className="fas fa-user-edit" />
               </div>
             </Tooltip>
@@ -193,6 +213,7 @@ CampoConceito.propTypes = {
   idCampo: PropTypes.oneOfType([PropTypes.string]),
   codigoComponenteCurricular: PropTypes.oneOfType([PropTypes.any]),
   alunoDesabilitado: PropTypes.bool,
+  dadosNotaPosConselho: PropTypes.oneOfType([PropTypes.any]),
 };
 
 CampoConceito.defaultProps = {
@@ -202,6 +223,7 @@ CampoConceito.defaultProps = {
   idCampo: '',
   codigoComponenteCurricular: '',
   alunoDesabilitado: false,
+  dadosNotaPosConselho: null,
 };
 
 export default CampoConceito;

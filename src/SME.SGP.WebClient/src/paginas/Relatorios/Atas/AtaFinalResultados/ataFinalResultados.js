@@ -59,7 +59,7 @@ const AtaFinalResultados = () => {
     }).catch(e => erros(e));
     if (anosLetivo) {
       setListaAnosLetivo(anosLetivo);
-      setAnoLetivo(anosLetivo[0].valor);
+      setAnoLetivo(anosLetivo[0]?.valor);
       setDreId();
     } else {
       setListaAnosLetivo([]);
@@ -370,7 +370,7 @@ const AtaFinalResultados = () => {
     setListaAnosLetivo([]);
     setListaDres([]);
 
-    obterAnosLetivos();
+    obterAnosLetivos(consideraHistorico);
     obterDres();
 
     setFormato('PDF');
