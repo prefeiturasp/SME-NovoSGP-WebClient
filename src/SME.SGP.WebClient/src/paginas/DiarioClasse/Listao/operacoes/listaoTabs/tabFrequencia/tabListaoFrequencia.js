@@ -67,8 +67,16 @@ const TabListaoFrequencia = () => {
       const tiposFrequencia = retorno?.data?.length ? retorno.data : [];
       setListaTiposFrequencia(tiposFrequencia);
 
-      const dadosCarregar = _.cloneDeep(resposta.data);
-      const dadosIniciais = _.cloneDeep(resposta.data);
+      const aulas = resposta.data.aulas.map((item, index) => {
+        const podeEditar = index === 0;
+        return {
+          ...item,
+          podeEditar,
+        };
+      });
+      const lista = { ...resposta.data, aulas };
+      const dadosCarregar = _.cloneDeep(lista);
+      const dadosIniciais = _.cloneDeep(lista);
       setDadosFrequencia(dadosCarregar);
       setDadosIniciaisFrequencia(dadosIniciais);
 
