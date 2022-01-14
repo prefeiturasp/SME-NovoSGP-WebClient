@@ -76,7 +76,7 @@ const ComponenteCurricularPlanoAnual = () => {
       turmaSelecionada &&
       turmaSelecionada.turma &&
       !ehTurmaInfantil(modalidadesFiltroPrincipal, turmaSelecionada) &&
-      modalidadesFiltroPrincipal.length > 0
+      modalidadesFiltroPrincipal.length
     ) {
       obterListaComponenteCurricular();
     } else {
