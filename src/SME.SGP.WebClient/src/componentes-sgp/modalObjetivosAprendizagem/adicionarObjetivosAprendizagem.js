@@ -36,6 +36,7 @@ const AdicionarObjetivosAprendizagem = props => {
     onClickAdicionar,
     desabilitar,
     ehAulaCj,
+    possuiPlanoAnual,
   } = props;
 
   const { checkedExibirEscolhaObjetivos } = useContext(ListaoContext);
@@ -115,6 +116,8 @@ const AdicionarObjetivosAprendizagem = props => {
       <Row gutter={(24, 24)} type="flex" justify="end">
         <SwitchInformarObjetivosListao
           exibirSwitchEscolhaObjetivos={ehAulaCj}
+          possuiPlanoAnual={possuiPlanoAnual}
+          desabilitar={desabilitar}
         />
       </Row>
       <Row>
@@ -156,6 +159,7 @@ AdicionarObjetivosAprendizagem.propTypes = {
   onClickAdicionar: PropTypes.func,
   desabilitar: PropTypes.bool,
   ehAulaCj: PropTypes.bool,
+  possuiPlanoAnual: PropTypes.bool,
 };
 
 AdicionarObjetivosAprendizagem.defaultProps = {
@@ -167,6 +171,7 @@ AdicionarObjetivosAprendizagem.defaultProps = {
   onClickAdicionar: () => null,
   desabilitar: false,
   ehAulaCj: false,
+  possuiPlanoAnual: false,
 };
 
 export default AdicionarObjetivosAprendizagem;
