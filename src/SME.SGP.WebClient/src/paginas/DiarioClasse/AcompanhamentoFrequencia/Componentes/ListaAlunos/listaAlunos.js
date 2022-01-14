@@ -29,7 +29,6 @@ const ListaAlunos = props => {
   const usuario = useSelector(store => store.usuario);
   const { turmaSelecionada } = usuario;
 
-  const { componenteCurricularId, territorioSaber, bimestreLista } = props;
   const { componenteCurricularId } = props;
   const modalidadesFiltroPrincipal = useSelector(
     store => store.filtro.modalidades
