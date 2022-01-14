@@ -2,11 +2,13 @@ import { faPlus, faTimes } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Col, Row, Tag, Tooltip } from 'antd';
 import PropTypes from 'prop-types';
-import React from 'react';
+import React, { useContext } from 'react';
 import styled from 'styled-components';
 import { Base, Colors } from '~/componentes';
 import { SGP_BUTTON_ADD_OBJETIVOS_APRENDIZAGEM_DESENVOLVIMENTO } from '~/componentes-sgp/filtro/idsCampos';
 import Button from '~/componentes/button';
+import ListaoContext from '~/paginas/DiarioClasse/Listao/listaoContext';
+import SwitchInformarObjetivosListao from '~/paginas/DiarioClasse/Listao/operacoes/listaoTabs/tabPlanoAula/componentes/switchInformarObjetivosListao';
 import ModalObjetivosAprendizagem from './modalObjetivosAprendizagem';
 
 export const ContainerTag = styled(Tag)`
@@ -33,7 +35,10 @@ const AdicionarObjetivosAprendizagem = props => {
     setExibirModal,
     onClickAdicionar,
     desabilitar,
+    ehAulaCj,
   } = props;
+
+  const { checkedExibirEscolhaObjetivos } = useContext(ListaoContext);
 
   const onClose = (idsSelecionados, aplicarDados) => {
     if (aplicarDados) {
@@ -107,6 +112,11 @@ const AdicionarObjetivosAprendizagem = props => {
 
   return (
     <Col span={24}>
+      <Row gutter={(24, 24)} type="flex" justify="end">
+        <SwitchInformarObjetivosListao
+          exibirSwitchEscolhaObjetivos={ehAulaCj}
+        />
+      </Row>
       <Row>
         <Col>
           <Button
@@ -115,6 +125,7 @@ const AdicionarObjetivosAprendizagem = props => {
             color={Colors.Azul}
             border
             onClick={onClickAdicionar}
+            disabled={ehAulaCj && !checkedExibirEscolhaObjetivos}
           />
           {idsObjetivosAprendizagemSelecionados?.length ? montarTags() : <></>}
         </Col>
@@ -144,6 +155,7 @@ AdicionarObjetivosAprendizagem.propTypes = {
   setExibirModal: PropTypes.func,
   onClickAdicionar: PropTypes.func,
   desabilitar: PropTypes.bool,
+  ehAulaCj: PropTypes.bool,
 };
 
 AdicionarObjetivosAprendizagem.defaultProps = {
@@ -154,6 +166,7 @@ AdicionarObjetivosAprendizagem.defaultProps = {
   setExibirModal: () => null,
   onClickAdicionar: () => null,
   desabilitar: false,
+  ehAulaCj: false,
 };
 
 export default AdicionarObjetivosAprendizagem;
