@@ -36,6 +36,10 @@ const RelatorioPlanejamentoDiario = () => {
     listaComponentesCurriculares,
     setListaComponentesCurriculares,
   ] = useState([]);
+  const [
+    listaComponentesCurricularesDisponiveis,
+    setListaComponentesCurricularesDisponiveis,
+  ] = useState([]);
   const [listaBimestres, setListaBimestres] = useState([]);
   const [bimestres, setBimestres] = useState([]);
   const [anoLetivo, setAnoLetivo] = useState();
@@ -394,6 +398,7 @@ const RelatorioPlanejamentoDiario = () => {
 
     if (componentes?.data?.length) {
       const lista = [];
+      const listaTodos = [];
       if (turmaId === OPCAO_TODOS || componentes.data.length > 1) {
         lista.push({ valor: OPCAO_TODOS, desc: 'Todos' });
       }
@@ -404,7 +409,10 @@ const RelatorioPlanejamentoDiario = () => {
         })
       );
 
+      componentes.data.map(item => listaTodos.push(item.codigo));
+
       setListaComponentesCurriculares(lista);
+      setListaComponentesCurricularesDisponiveis(listaTodos);
       if (lista.length === 1) {
         setComponenteCurricularId(lista[0].valor);
       }
@@ -509,6 +517,7 @@ const RelatorioPlanejamentoDiario = () => {
       listarDataFutura,
       exibirDetalhamento,
       componenteCurricular: componenteCurricularId,
+      componentesCurricularesDisponiveis: listaComponentesCurricularesDisponiveis,
     };
 
     setExibirLoader(true);
