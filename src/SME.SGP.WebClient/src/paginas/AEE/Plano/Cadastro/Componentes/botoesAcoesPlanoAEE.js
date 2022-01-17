@@ -28,6 +28,10 @@ const BotoesAcoesPlanoAEE = props => {
     store => store.planoAEE.desabilitarCamposPlanoAEE
   );
 
+  const perfilSelecionado = useSelector(
+    store => store.perfil.perfilSelecionado.nomePerfil
+  );
+
   const dadosParecer = useSelector(store => store.planoAEE.dadosParecer);
 
   const parecerEmEdicao = useSelector(store => store.planoAEE.parecerEmEdicao);
@@ -41,9 +45,7 @@ const BotoesAcoesPlanoAEE = props => {
   const usuario = useSelector(store => store.usuario);
   const permissoesTela = usuario.permissoes[RotasDto.RELATORIO_AEE_PLANO];
 
-  const ehCP = !usuario.ehPerfilProfessor && !usuario.ehProfessor &&
-               !usuario.ehProfessorCj && !usuario.ehProfessorCjInfantil &&
-               !usuario.ehProfessorInfantil && !usuario.ehProfessorPoa;
+  const ehCP = perfilSelecionado === 'CP';
 
   const parecerCP = planoAEEDados?.situacao === situacaoPlanoAEE.ParecerCP;
   const parecerPAAI =
@@ -76,7 +78,8 @@ const BotoesAcoesPlanoAEE = props => {
 
   const escolherAcaoAbaParecer = async () => {
     let msg = '';
-    let resposta = [];    
+    let resposta = [];
+
     if (ehCP || situacaoParecer) {
       dispatch(setExibirLoaderPlanoAEE(true));
       resposta = await ServicoPlanoAEE.salvarParecerCP()
@@ -84,6 +87,7 @@ const BotoesAcoesPlanoAEE = props => {
         .catch(() => dispatch(setExibirLoaderPlanoAEE(false)));
       msg = 'Parecer realizado com sucesso';
     }
+
     if (!ehCP && situacaoAtribuicaoPAAI) {
       dispatch(setExibirLoaderPlanoAEE(true));
       resposta = await ServicoPlanoAEE.atribuirResponsavel()
@@ -91,6 +95,7 @@ const BotoesAcoesPlanoAEE = props => {
         .catch(() => dispatch(setExibirLoaderPlanoAEE(false)));
       msg = 'Atribuição do responsável realizada com sucesso';
     }
+
     if (!ehCP && parecerPAAI) {
       dispatch(setExibirLoaderPlanoAEE(true));
       resposta = await ServicoPlanoAEE.salvarParecerPAAI()
@@ -98,6 +103,7 @@ const BotoesAcoesPlanoAEE = props => {
         .catch(() => dispatch(setExibirLoaderPlanoAEE(false)));
       msg = 'Parecer realizado com sucesso';
     }
+
     if (resposta?.data) {
       sucesso(msg);
       limparParecer();
@@ -227,7 +233,9 @@ const BotoesAcoesPlanoAEE = props => {
       <Button
         id="btn-acao-aba-parecer"
         label={
-          !ehCP && situacaoAtribuicaoPAAI ? 'Atribuir responsável' : 'Salvar parecer'
+          !ehCP && situacaoAtribuicaoPAAI
+            ? 'Atribuir responsável'
+            : 'Salvar parecer'
         }
         color={Colors.Roxo}
         bold
