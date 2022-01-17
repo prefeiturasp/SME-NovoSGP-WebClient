@@ -316,9 +316,10 @@ class ServicoPlanoAEE {
 
   salvarParecerCP = () => {
     const { planoAEE } = store.getState();
-    const { planoAEEDados, parecerCoordenacao } = planoAEE;
+    const { planoAEEDados, dadosParecer } = planoAEE;
+
     return api.post(`${urlPadrao}/${planoAEEDados.id}/parecer/cp`, {
-      parecer: parecerCoordenacao,
+      parecer: dadosParecer.parecerCoordenacao,
     });
   };
 
