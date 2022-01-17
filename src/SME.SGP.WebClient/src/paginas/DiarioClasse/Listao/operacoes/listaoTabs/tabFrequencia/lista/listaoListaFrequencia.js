@@ -100,12 +100,16 @@ const ListaoListaFrequencia = () => {
             }
           }
         }}
-        desabilitar={desabilitarCampos}
+        desabilitar={desabilitarCampos || aulaHeader.podeEditar}
       />
     );
   };
 
+  const encontrarAulas = dadosAula =>
+    dadosFrequencia?.aulas.find(item => item.aulaId === dadosAula.aulaId);
+
   const montarColunaFrequenciaDiaria = dadosDiaAula => {
+    const aulasGerais = encontrarAulas(dadosDiaAula);
     return (
       <CampoTiposFrequencia
         tipoFrequencia={dadosDiaAula?.tipoFrequencia}
@@ -119,12 +123,17 @@ const ListaoListaFrequencia = () => {
           dispatch(setTelaEmEdicao(true));
           atualizarDados();
         }}
-        desabilitar={desabilitarCampos || dadosDiaAula?.desabilitado}
+        desabilitar={
+          desabilitarCampos ||
+          dadosDiaAula?.desabilitado ||
+          aulasGerais.podeEditar
+        }
       />
     );
   };
 
   const montarColunaFrequenciaAula = (detalheFreq, dadosAula) => {
+    const aulasGerais = encontrarAulas(dadosAula);
     return (
       <CampoTiposFrequencia
         tipoFrequencia={detalheFreq.tipoFrequencia}
@@ -147,7 +156,9 @@ const ListaoListaFrequencia = () => {
           dispatch(setTelaEmEdicao(true));
           atualizarDados();
         }}
-        desabilitar={desabilitarCampos || dadosAula?.desabilitado}
+        desabilitar={
+          desabilitarCampos || dadosAula?.desabilitado || aulasGerais.podeEditar
+        }
       />
     );
   };
