@@ -227,6 +227,10 @@ export default function ConselhoClasse(state = inicial, action) {
         draft.exibirLoaderGeralConselhoClasse = action.payload;
         break;
       }
+      case '@conselhoClasse/setDadosIniciaisListasNotasConceitos': {
+        draft.dadosIniciaisListasNotasConceitos = action.payload;
+        break;
+      }
       case '@conselhoClasse/setAtualizarEmAprovacao': {
         const novosDadosListasNotasConceitos = state.dadosListasNotasConceitos.map(
           dados => {
@@ -274,10 +278,6 @@ export default function ConselhoClasse(state = inicial, action) {
           ...draft,
           dadosListasNotasConceitos: novosDadosListasNotasConceitos,
         };
-      }
-      case '@conselhoClasse/setDadosIniciaisListasNotasConceitos': {
-        draft.dadosIniciaisListasNotasConceitos = action.payload;
-        break;
       }
 
       default:
