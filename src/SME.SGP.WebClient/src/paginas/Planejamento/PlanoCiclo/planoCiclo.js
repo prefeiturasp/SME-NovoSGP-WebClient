@@ -111,7 +111,7 @@ export default function PlanoCiclo() {
     );
     setEhModalidadeInfantil(ehInfantil);
 
-    if (turmaSelecionada && !ehInfantil) {
+    if (turmaSelecionada && !ehInfantil && modalidadesFiltroPrincipal.length) {
       setCarregando(true);
       carregarCiclos();
     } else {
