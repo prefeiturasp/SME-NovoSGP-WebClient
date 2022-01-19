@@ -40,6 +40,17 @@ const PendenciasGerais = () => {
     return dados?.indexOf(resposta) >= 0;
   };
 
+  const pegarErro = e => {
+    const message = e?.message;
+    const temErroIgual =
+      acharErro(message, TOKEN_EXPIRADO) ||
+      acharErro(message, CANCELADO_USUARIO);
+
+    if (temErroIgual) return;
+
+    erros(e);
+  };
+
   const obterPendencias = useCallback(
     async (paginaAtual, numeroPag) => {
       setCarregando(true);
@@ -50,15 +61,7 @@ const PendenciasGerais = () => {
         paginaAtual,
         numeroPag
       )
-        .catch(e => {
-          const message = e?.message;
-          const temErro =
-            acharErro(message, TOKEN_EXPIRADO) ||
-            acharErro(message, CANCELADO_USUARIO);
-
-          if (temErro) return;
-          erros(e);
-        })
+        .catch(pegarErro)
         .finally(() => setCarregando(false));
 
       if (resposta?.data?.items) {
@@ -85,7 +88,7 @@ const PendenciasGerais = () => {
   const obterTurmas = useCallback(async () => {
     setCarregandoTurmas(true);
     const retorno = await ServicoPendencias.buscarTurmas(codigoTurma)
-      .catch(e => erros(e))
+      .catch(pegarErro)
       .finally(() => setCarregandoTurmas(false));
 
     if (retorno?.data?.length) {
@@ -167,7 +170,7 @@ const PendenciasGerais = () => {
     const retorno = await ServicoRelatorioPendencias.obterTipoPendenciasGrupos({
       opcaoTodos: false,
     })
-      .catch(e => erros(e))
+      .catch(pegarErro)
       .finally(() => setCarregandoTipoPendenciaGrupo(false));
     const dados = retorno?.data?.length ? retorno?.data : [];
     setListaTipoPendenciaGrupos(dados);
