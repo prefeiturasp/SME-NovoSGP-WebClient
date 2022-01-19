@@ -2,16 +2,21 @@ import { Col, Row } from 'antd';
 import React, { useContext, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Base, PainelCollapse } from '~/componentes';
+import { setTelaEmEdicao } from '~/redux/modulos/geral/actions';
 import {
   limparDadosObservacoesUsuario,
   setDadosObservacoesUsuario,
 } from '~/redux/modulos/observacoesUsuario/actions';
-import { erros, ServicoDiarioBordo } from '~/servicos';
+import { confirmar, erros, ServicoDiarioBordo } from '~/servicos';
 import ListaoContext from '../../../listaoContext';
-import { obterDiarioBordoListao } from '../../../listaoFuncoes';
+import {
+  obterDiarioBordoListao,
+  salvarEditarObservacao,
+} from '../../../listaoFuncoes';
 import ConteudoCollapse from './conteudoCollapse';
 
 const TabListaoDiarioBordoCollapses = () => {
+  const telaEmEdicao = useSelector(store => store.geral.telaEmEdicao);
   const usuario = useSelector(store => store.usuario);
   const { turmaSelecionada } = usuario;
   const { turma, id: turmaId } = turmaSelecionada;
@@ -23,6 +28,8 @@ const TabListaoDiarioBordoCollapses = () => {
     dadosDiarioBordo,
     setDadosDiarioBordo,
     setDadosIniciaisDiarioBordo,
+    idDiarioBordoAtual,
+    setIdDiarioBordoAtual,
   } = useContext(ListaoContext);
 
   const exibirDiarioBordoCollapses =
@@ -63,8 +70,32 @@ const TabListaoDiarioBordoCollapses = () => {
     return Promise.all(promises);
   };
 
-  const onColapse = async aulaId => {
+  const perguntarSalvarObservacao = async () => {
+    if (telaEmEdicao && idDiarioBordoAtual) {
+      const confirmou = await confirmar(
+        'Atenção',
+        '',
+        'Suas observações não foram salvas, deseja salvar agora?'
+      );
+
+      if (confirmou) {
+        await salvarEditarObservacao(
+          null,
+          idDiarioBordoAtual,
+          setExibirLoaderGeral
+        );
+      }
+    }
+
+    setIdDiarioBordoAtual();
     dispatch(limparDadosObservacoesUsuario());
+    dispatch(setDadosObservacoesUsuario([]));
+    dispatch(setTelaEmEdicao(false));
+  };
+
+  const onColapse = async aulaId => {
+    await perguntarSalvarObservacao();
+
     const diario =
       dadosDiarioBordo &&
       dadosDiarioBordo.find(item => item?.aulaId === Number(aulaId));
@@ -110,7 +141,6 @@ const TabListaoDiarioBordoCollapses = () => {
                     dados={dados}
                     indexDiarioBordo={indexDiarioBordo}
                     key={aulaId}
-                    turmaId={turmaId}
                   />
                 </PainelCollapse.Painel>
               );

@@ -64,6 +64,7 @@ const ListaoContextProvider = ({ children }) => {
   const [dadosDiarioBordo, setDadosDiarioBordo] = useState([]);
   const [dadosIniciaisDiarioBordo, setDadosIniciaisDiarioBordo] = useState([]);
   const [errosDiarioBordoListao, setErrosDiarioBordoListao] = useState([]);
+  const [idDiarioBordoAtual, setIdDiarioBordoAtual] = useState();
 
   // TAB AVALIAÇÃO
   const [dadosAvaliacao, setDadosAvaliacao] = useState();
@@ -183,6 +184,8 @@ const ListaoContextProvider = ({ children }) => {
         setDadosIniciaisDiarioBordo,
         errosDiarioBordoListao,
         setErrosDiarioBordoListao,
+        idDiarioBordoAtual,
+        setIdDiarioBordoAtual,
         // TAB AVALIAÇÃO
         dadosAvaliacao,
         setDadosAvaliacao,

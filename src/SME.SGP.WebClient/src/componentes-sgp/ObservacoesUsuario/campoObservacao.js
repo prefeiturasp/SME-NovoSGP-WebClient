@@ -45,7 +45,7 @@ const CampoObservacao = props => {
   );
 
   const onChangeNovaObservacao = ({ target: { value } }) => {
-    mudarObservacao();
+    mudarObservacao(value);
     dispatch(setNovaObservacao(value));
   };
 

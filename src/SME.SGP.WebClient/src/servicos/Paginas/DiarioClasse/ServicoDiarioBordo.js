@@ -10,7 +10,7 @@ class ServicoDiarioBordo {
   };
 
   salvarEditarObservacao = (diarioBordoId, dados) => {
-    const observacaoId = dados.id;
+    const observacaoId = dados?.id;
     if (observacaoId) {
       const url = `${urlPadrao}/observacoes/${observacaoId}`;
       return api.put(url, dados);
@@ -27,7 +27,7 @@ class ServicoDiarioBordo {
     const { observacoesUsuario } = state;
     const { dadosObservacoes } = observacoesUsuario;
 
-    const observacaoId = dados.id;
+    const observacaoId = dados?.id;
 
     if (observacaoId) {
       const item = dadosObservacoes.find(e => e.id === dados.id);
