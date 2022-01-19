@@ -7,7 +7,7 @@ import Paginacao from '~/componentes-sgp/Paginacao/paginacao';
 import Card from '~/componentes/card';
 import CardCollapse from '~/componentes/cardCollapse';
 import SelectComponent from '~/componentes/select';
-import { TOKEN_EXPIRADO } from '~/constantes';
+import { CANCELADO_USUARIO, TOKEN_EXPIRADO } from '~/constantes';
 import { erros, ServicoRelatorioPendencias } from '~/servicos';
 import ServicoPendencias from '~/servicos/Paginas/ServicoPendencias';
 import {
@@ -36,6 +36,10 @@ const PendenciasGerais = () => {
     corBorda: Base.Roxo,
   };
 
+  const acharErro = (dados, resposta) => {
+    return dados?.indexOf(resposta) >= 0;
+  };
+
   const obterPendencias = useCallback(
     async (paginaAtual, numeroPag) => {
       setCarregando(true);
@@ -47,7 +51,12 @@ const PendenciasGerais = () => {
         numeroPag
       )
         .catch(e => {
-          if (e?.message.indexOf(TOKEN_EXPIRADO) >= 0) return;
+          const message = e?.message;
+          const temErro =
+            acharErro(message, TOKEN_EXPIRADO) ||
+            acharErro(message, CANCELADO_USUARIO);
+
+          if (temErro) return;
           erros(e);
         })
         .finally(() => setCarregando(false));
