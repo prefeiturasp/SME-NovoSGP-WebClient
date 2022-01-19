@@ -239,10 +239,12 @@ const ListaDiarioBordo = () => {
         diarioBordoId,
       }).catch(e => erros(e));
 
-      usuariosNotificacao = retorno.data;
-      params.usuariosIdNotificacao = retorno.data.map(u => {
-        return u.usuarioId;
-      });
+      if (retorno?.data?.length) {
+        usuariosNotificacao = retorno.data;
+        params.usuariosIdNotificacao = retorno.data.map(u => {
+          return u.usuarioId;
+        });
+      }
     }
 
     if (listaUsuarios?.length && !observacaoId) {
@@ -271,25 +273,25 @@ const ListaDiarioBordo = () => {
         resultado.data
       );
 
-      setDiarioBordoAtual(estadoAntigo => {
-        const observacoes = estadoAntigo.observacoes.map(estado => {
-          if (estado.id === observacaoId) {
-            return {
-              ...estado,
-              usuariosNotificacao,
-              listagemDiario: true,
-            };
-          }
-          return estado;
+      if (valor?.id) {
+        setDiarioBordoAtual(estadoAntigo => {
+          const observacoes = estadoAntigo.observacoes.map(estado => {
+            if (estado.id === observacaoId) {
+              return {
+                ...estado,
+                usuariosNotificacao,
+                listagemDiario: true,
+              };
+            }
+            return estado;
+          });
+
+          return {
+            ...estadoAntigo,
+            observacoes,
+          };
         });
-
-        dispatch(setDadosObservacoesUsuario(observacoes));
-
-        return {
-          ...estadoAntigo,
-          observacoes,
-        };
-      });
+      }
 
       setCarregandoGeral(false);
       return resultado;

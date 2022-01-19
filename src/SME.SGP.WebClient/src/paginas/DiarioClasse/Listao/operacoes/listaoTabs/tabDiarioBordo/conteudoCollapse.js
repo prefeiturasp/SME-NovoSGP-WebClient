@@ -1,6 +1,6 @@
 import { Col, Row } from 'antd';
 import PropTypes from 'prop-types';
-import React, { useContext, useEffect } from 'react';
+import React, { useContext } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Auditoria, JoditEditor } from '~/componentes';
 import { setTelaEmEdicao } from '~/redux/modulos/geral/actions';
@@ -9,10 +9,6 @@ import MarcadorInseridoCJ from './componentes/MarcadorInseridoCJ/marcadorInserid
 import ObservacoesUsuario from '~/componentes-sgp/ObservacoesUsuario/observacoesUsuario';
 import { confirmar, erros, ServicoDiarioBordo, sucesso } from '~/servicos';
 import ServicoObservacoesUsuario from '~/componentes-sgp/ObservacoesUsuario/ServicoObservacoesUsuario';
-import {
-  limparDadosObservacoesUsuario,
-  setDadosObservacoesUsuario,
-} from '~/redux/modulos/observacoesUsuario/actions';
 
 const ConteudoCollapse = props => {
   const dispatch = useDispatch();
@@ -27,7 +23,7 @@ const ConteudoCollapse = props => {
 
   const desabilitarCampos = somenteConsultaListao || !periodoAbertoListao;
 
-  const { dados, indexDiarioBordo } = props;
+  const { dados, indexDiarioBordo, turmaId } = props;
   const { auditoria, pendente, diarioBordoId } = dados;
 
   const listaUsuarios = useSelector(
@@ -50,6 +46,10 @@ const ConteudoCollapse = props => {
     setarDiarioAlterado();
   };
 
+  const mudarObservacao = () => {
+    dispatch(setTelaEmEdicao(true));
+  };
+
   const salvarEditarObservacao = async (valor, IdDiarioBordo) => {
     const params = {
       observacao: valor.observacao,
@@ -57,36 +57,15 @@ const ConteudoCollapse = props => {
       id: valor.id,
     };
     let observacaoId = valor.id;
-    let usuariosNotificacao = [];
 
-    if (observacaoId && IdDiarioBordo) {
-      const retorno = await ServicoDiarioBordo.obterNofiticarUsuarios({
-        turmaId: '',
-        observacaoId,
-        IdDiarioBordo,
-      }).catch(e => erros(e));
-
-      usuariosNotificacao = retorno.data;
-      params.usuariosIdNotificacao = retorno.data.map(u => {
-        return u.usuarioId;
-      });
-    }
-
-    if (listaUsuarios?.length && !observacaoId) {
-      usuariosNotificacao = listaUsuarios;
-      params.usuariosIdNotificacao = listaUsuarios.map(u => {
-        return u.usuarioId;
-      });
-    }
-
-    // setCarregandoGeral(true);
+    setExibirLoaderGeral(true);
     const resultado = await ServicoDiarioBordo.salvarEditarObservacao(
-      IdDiarioBordo?.id,
+      IdDiarioBordo,
       params
-    ).catch(e => {
-      erros(e);
-      // setCarregandoGeral(false);
-    });
+    )
+      .catch(e => erros(e))
+      .finally(() => setExibirLoaderGeral(false));
+
     if (resultado?.status === 200) {
       sucesso(`Observação ${valor.id ? 'alterada' : 'inserida'} com sucesso`);
       if (!observacaoId) {
@@ -98,30 +77,8 @@ const ConteudoCollapse = props => {
         resultado.data
       );
 
-      // setDiarioBordoAtual(estadoAntigo => {
-      //   const observacoes = estadoAntigo.observacoes.map(estado => {
-      //     if (estado.id === observacaoId) {
-      //       return {
-      //         ...estado,
-      //         usuariosNotificacao,
-      //         listagemDiario: true,
-      //       };
-      //     }
-      //     return estado;
-      //   });
-
-      //   dispatch(setDadosObservacoesUsuario(observacoes));
-
-      //   return {
-      //     ...estadoAntigo,
-      //     observacoes,
-      //   };
-      // });
-
-      // setCarregandoGeral(false);
       return resultado;
     }
-    // setCarregandoGeral(false);
   };
 
   const excluirObservacao = async obs => {
@@ -132,52 +89,15 @@ const ConteudoCollapse = props => {
     );
 
     if (confirmado) {
-      // setCarregandoGeral(true);
-      const resultado = await ServicoDiarioBordo.excluirObservacao(obs).catch(
-        e => {
-          erros(e);
-          // setCarregandoGeral(false);
-        }
-      );
+      setExibirLoaderGeral(true);
+      const resultado = await ServicoDiarioBordo.excluirObservacao(obs)
+        .catch(e => erros(e))
+        .finally(() => setExibirLoaderGeral(false));
+
       if (resultado?.status === 200) {
         sucesso('Registro excluído com sucesso');
         ServicoDiarioBordo.atualizarExcluirDadosObservacao(obs, resultado.data);
       }
-      // setCarregandoGeral(false);
-    }
-  };
-
-  const obterUsuarioPorObservacao = dadosObservacoes => {
-    const promises = dadosObservacoes.map(async observacao => {
-      const retorno = await ServicoDiarioBordo.obterNofiticarUsuarios({
-        // turmaId: turmaSelecionada?.id,
-        observacaoId: observacao.id,
-        // diarioBordoId,
-      }).catch(e => erros(e));
-
-      if (retorno?.data) {
-        return {
-          ...observacao,
-          usuariosNotificacao: retorno.data,
-        };
-      }
-      return observacao;
-    });
-    return Promise.all(promises);
-  };
-
-  const obterDadosObservacoes = async diarioBordoIdSel => {
-    dispatch(limparDadosObservacoesUsuario());
-    //  setCarregandoGeral(true);
-    const retorno = await ServicoDiarioBordo.obterDadosObservacoes(
-      diarioBordoIdSel
-    ).catch(e => erros(e));
-
-    if (retorno && retorno.data) {
-      const dadosObservacoes = await obterUsuarioPorObservacao(retorno.data);
-      dispatch(setDadosObservacoesUsuario([...dadosObservacoes]));
-    } else {
-      dispatch(setDadosObservacoesUsuario([]));
     }
   };
 
@@ -241,7 +161,7 @@ const ConteudoCollapse = props => {
           salvarObservacao={obs => salvarEditarObservacao(obs, diarioBordoId)}
           editarObservacao={obs => salvarEditarObservacao(obs, diarioBordoId)}
           excluirObservacao={obs => excluirObservacao(obs)}
-          // permissoes={permissoesTela}
+          mudarObservacao={mudarObservacao}
           diarioBordoId={diarioBordoId}
         />
       </Row>
@@ -252,11 +172,13 @@ const ConteudoCollapse = props => {
 ConteudoCollapse.propTypes = {
   dados: PropTypes.oneOfType([PropTypes.any]),
   indexDiarioBordo: PropTypes.number,
+  turmaId: PropTypes.number,
 };
 
 ConteudoCollapse.defaultProps = {
   dados: null,
   indexDiarioBordo: null,
+  turmaId: null,
 };
 
 export default ConteudoCollapse;
