@@ -1,6 +1,6 @@
 import { Col, Row } from 'antd';
 import PropTypes from 'prop-types';
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { Auditoria, JoditEditor } from '~/componentes';
 import { setTelaEmEdicao } from '~/redux/modulos/geral/actions';
@@ -13,6 +13,7 @@ import {
 } from '../../../listaoFuncoes';
 
 const ConteudoCollapse = props => {
+  const [temErro, setTemErro] = useState();
   const dispatch = useDispatch();
 
   const {
@@ -22,6 +23,7 @@ const ConteudoCollapse = props => {
     periodoAbertoListao,
     setExibirLoaderGeral,
     setIdDiarioBordoAtual,
+    permissaoLista,
   } = useContext(ListaoContext);
 
   const desabilitarCampos = somenteConsultaListao || !periodoAbertoListao;
@@ -36,6 +38,9 @@ const ConteudoCollapse = props => {
   };
 
   const onChangePlanejamento = valor => {
+    const erro = valor.length < 200;
+    setTemErro(erro);
+
     dados.planejamento = valor;
     setarDiarioAlterado();
   };
@@ -66,6 +71,8 @@ const ConteudoCollapse = props => {
               }
             }}
             readonly={desabilitarCampos}
+            temErro={temErro}
+            mensagemErro="Você precisa preencher o planejamento com no mínimo 200 caracteres"
           />
         </Col>
       </Row>
@@ -118,6 +125,7 @@ const ConteudoCollapse = props => {
           }
           mudarObservacao={mudarObservacao}
           diarioBordoId={diarioBordoId}
+          permissoes={permissaoLista}
         />
       </Row>
     </>

@@ -34,6 +34,7 @@ const ListaoContextProvider = ({ children }) => {
   const [tabAtual, setTabAtual] = useState();
   const [periodoAbertoListao, setPeriodoAbertoListao] = useState(true);
   const [somenteConsultaListao, setSomenteConsultaListao] = useState(false);
+  const [permissaoLista, setPermissaoLista] = useState();
   const [listaoEhInfantil, setListaoEhInfantil] = useState(false);
   const [exibirLoaderGeral, setExibirLoaderGeral] = useState(false);
 
@@ -153,6 +154,8 @@ const ListaoContextProvider = ({ children }) => {
         setListaoEhInfantil,
         exibirLoaderGeral,
         setExibirLoaderGeral,
+        permissaoLista,
+        setPermissaoLista,
         // TAB FREQUÊNCIA
         listaPeriodos,
         setListaPeriodos,
