@@ -37,7 +37,7 @@ const PendenciasGerais = () => {
   };
 
   const acharErro = (dados, resposta) => {
-    return dados && dados.indexOf(resposta) >= 0;
+    return dados?.indexOf(resposta) >= 0;
   };
 
   const obterPendencias = useCallback(
