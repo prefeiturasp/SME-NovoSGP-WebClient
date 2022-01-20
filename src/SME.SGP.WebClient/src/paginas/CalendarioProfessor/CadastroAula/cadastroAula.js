@@ -138,7 +138,6 @@ function CadastroDeAula({ match, location }) {
         id && (recorrenciaAulaOriginal === 2 || recorrenciaAulaOriginal === 1),
     },
   ];
-
   const obterComponenteSelecionadoPorId = useCallback(
     componenteCurricularId => {
       return listaComponentes.find(
@@ -473,6 +472,7 @@ function CadastroDeAula({ match, location }) {
 
   const onChangeQuantidadeAula = quantidade => {
     setModoEdicao(true);
+    setAlterouCampo(true);
     setAula(aulaState => {
       return {
         ...aulaState,
@@ -715,7 +715,12 @@ function CadastroDeAula({ match, location }) {
                         border
                         className="mr-2"
                         onClick={onClickExcluir}
-                        disabled={somenteConsulta || !id || somenteLeitura || !aula.podeEditar}
+                        disabled={
+                          somenteConsulta ||
+                          !id ||
+                          somenteLeitura ||
+                          !aula.podeEditar
+                        }
                       />
 
                       <Button
