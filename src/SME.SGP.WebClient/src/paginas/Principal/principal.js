@@ -30,9 +30,11 @@ const Principal = () => {
     validarFiltro();
   }, [usuario, validarFiltro]);
 
+  console.log(modalidades);
+
   return (
     <div className="col-md-12">
-      {modalidades &&
+      {!modalidades &&
       !modalidades.length &&
       !usuario.ehPerfilProfessor &&
       perfil &&
