@@ -52,18 +52,29 @@ const TipoEventoCadastroEventos = ({ form, onChangeCampos, desabilitar }) => {
         element.localOcorrencia === ListaLocalOcorrencia.TODOS
     );
 
+  const escolherFiltro = (dre, ue) => {
+    const ehTodasDre = dre === OPCAO_TODOS;
+    const ehTodasUe = ue === OPCAO_TODOS;
+    const eventosSME = ehTodasDre && ehTodasUe;
+    const eventosDRE = !ehTodasDre && ehTodasUe;
+    const eventosUE = !ehTodasDre && !ehTodasUe;
+
+    if (eventosSME) return filtraSomenteSME();
+    if (eventosUE) return filtraSomenteUE();
+    if (eventosDRE) return filtraSomenteDRE();
+    return [];
+  };
+
   const filtraTipoEvento = (dre, ue) => {
-    if (ue && ue !== OPCAO_TODOS) return setListaTipoEvento(filtraSomenteUE());
-    if (dre && dre !== OPCAO_TODOS)
-      return setListaTipoEvento(filtraSomenteDRE());
-    return setListaTipoEvento(filtraSomenteSME());
+    const eventosFiltrados = escolherFiltro(dre, ue);
+    setListaTipoEvento(eventosFiltrados);
   };
 
   useEffect(() => {
-    if (dreId || ueId) {
+    if (dreId && ueId && listaTipoEventoOrigem) {
       filtraTipoEvento(dreId, ueId);
     }
-  }, [dreId, ueId]);
+  }, [dreId, ueId, listaTipoEventoOrigem]);
 
   useEffect(() => {
     if (!tipoEventoId) {
