@@ -32,10 +32,7 @@ const MarcadorParecerConclusivo = () => {
 
   useEffect(() => {
     const { nome } = marcadorParecerConclusivo;
-    let nomeParecer = '';
-    if (nome) {
-      nomeParecer = `Parecer conclusivo: ${nome}`;
-    }
+    const nomeParecer = nome ? `Parecer conclusivo: ${nome}` : '';
     setParecer(nomeParecer);
   }, [marcadorParecerConclusivo]);
 
