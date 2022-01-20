@@ -29,7 +29,7 @@ const ListaAlunos = props => {
   const usuario = useSelector(store => store.usuario);
   const { turmaSelecionada } = usuario;
 
-  const { componenteCurricularId } = props;
+  const { componenteCurricularId, territorioSaber } = props;
   const modalidadesFiltroPrincipal = useSelector(
     store => store.filtro.modalidades
   );
@@ -59,7 +59,8 @@ const ListaAlunos = props => {
     const retorno = await ServicoAcompanhamentoFrequencia.obterAcompanhamentoFrequenciaPorBimestre(
       turmaSelecionada?.id,
       componenteCurricularId,
-      bimestreSelecionado
+      bimestreSelecionado,
+      territorioSaber
     )
       .catch(e => erros(e))
       .finally(() => setCarregandoListaAlunos(false));
@@ -302,10 +303,14 @@ const ListaAlunos = props => {
 
 ListaAlunos.propTypes = {
   componenteCurricularId: PropTypes.string,
+  territorioSaber: PropTypes.bool,
+  bimestreLista: PropTypes.number,
 };
 
 ListaAlunos.defaultProps = {
   componenteCurricularId: PropTypes.string,
+  territorioSaber: false,
+  bimestreLista: '1',
 };
 
 export default ListaAlunos;
