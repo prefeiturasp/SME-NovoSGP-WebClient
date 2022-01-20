@@ -58,7 +58,7 @@ const tooltipCustomizadoDashboard = item => {
           marginRight: '7px',
         }}
       />
-      {item.id} - <strong>{item.value}</strong>
+      {item.indexValue} - <strong>{item.data[item.indexValue]}</strong>
     </div>
   );
 };
@@ -169,6 +169,8 @@ const montarDadosGrafico = (
     novosDadosMap[descricaoColuna] = item[descricaoColuna];
     novosDadosMap[nomeCampo] = item[nomeCampo];
     novosDadosMap[item[descricaoColuna]] = formataMilhar(item[nomeCampo]);
+
+
     dadosMapeados.push(novosDadosMap);
   }
 };

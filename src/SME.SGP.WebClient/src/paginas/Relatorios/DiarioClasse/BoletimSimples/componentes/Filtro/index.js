@@ -8,6 +8,7 @@ import { ModalidadeDTO } from '~/dtos';
 import { AbrangenciaServico, erros, ServicoFiltroRelatorio } from '~/servicos';
 import { OPCAO_TODOS } from '~/constantes/constantes';
 import { AvisoBoletim } from './styles';
+import { ordenarDescPor } from '~/utils';
 
 const Filtros = ({ onFiltrar, filtrou, setFiltrou, cancelou, setCancelou }) => {
   const [anoAtual] = useState(window.moment().format('YYYY'));
@@ -120,11 +121,30 @@ const Filtros = ({ onFiltrar, filtrou, setFiltrou, cancelou, setCancelou }) => {
     setFiltrou(false);
   };
 
+  const validarValorPadraoAnoLetivo = lista => {
+    if (lista?.length) {
+      const temAnoAtualNaLista = lista.find(
+        item => String(item.valor) === String(anoAtual)
+      );
+      if (temAnoAtualNaLista) {
+        setAnoLetivo(anoAtual);
+      } else {
+        setAnoLetivo(lista[0].valor);
+      }
+    } else {
+      setAnoLetivo();
+    }
+  };
+
+  useEffect(() => {
+    validarValorPadraoAnoLetivo(listaAnosLetivo);
+  }, [consideraHistorico, listaAnosLetivo]);
+
   const obterAnosLetivos = useCallback(async () => {
     setCarregandoAnosLetivos(true);
 
-    let anosLetivos = await FiltroHelper.obterAnosLetivos({
-      consideraHistorico: consideraHistorico,
+    const anosLetivos = await FiltroHelper.obterAnosLetivos({
+      consideraHistorico,
     });
 
     if (!anosLetivos.length) {
@@ -133,15 +153,16 @@ const Filtros = ({ onFiltrar, filtrou, setFiltrou, cancelou, setCancelou }) => {
         valor: anoAtual,
       });
     }
-    setAnoLetivo(anosLetivos[0].valor);
+    const anosOrdenados = ordenarDescPor(anosLetivos, 'valor');
+    validarValorPadraoAnoLetivo(anosOrdenados);
 
-    setListaAnosLetivo(anosLetivos);
+    setListaAnosLetivo(anosOrdenados);
     setCarregandoAnosLetivos(false);
   }, [anoAtual, consideraHistorico]);
 
   useEffect(() => {
     obterAnosLetivos();
-  }, [obterAnosLetivos]);
+  }, [obterAnosLetivos, consideraHistorico]);
 
   const onChangeDre = dre => {
     const id = listaDres.find(d => d.valor === dre)?.id;
@@ -280,13 +301,17 @@ const Filtros = ({ onFiltrar, filtrou, setFiltrou, cancelou, setCancelou }) => {
 
   const obterSemestres = async (
     modalidadeSelecionada,
-    anoLetivoSelecionado
+    anoLetivoSelecionado,
+    dreSelecionada,
+    ueSelecionada
   ) => {
     setCarregandoSemestres(true);
     const retorno = await AbrangenciaServico.obterSemestres(
       consideraHistorico,
       anoLetivoSelecionado,
-      modalidadeSelecionada
+      modalidadeSelecionada,
+      dreSelecionada,
+      ueSelecionada
     )
       .catch(e => erros(e))
       .finally(() => setCarregandoSemestres(false));
@@ -307,14 +332,16 @@ const Filtros = ({ onFiltrar, filtrou, setFiltrou, cancelou, setCancelou }) => {
     if (
       modalidadeId &&
       anoLetivo &&
-      String(modalidadeId) === String(ModalidadeDTO.EJA)
+      String(modalidadeId) === String(ModalidadeDTO.EJA) &&
+      dreCodigo &&
+      ueCodigo
     ) {
-      obterSemestres(modalidadeId, anoLetivo);
+      obterSemestres(modalidadeId, anoLetivo, dreCodigo, ueCodigo);
       return;
     }
     setSemestre();
     setListaSemestres([]);
-  }, [obterAnosLetivos, modalidadeId, anoLetivo]);
+  }, [obterAnosLetivos, modalidadeId, anoLetivo, dreCodigo, ueCodigo]);
 
   const onChangeTurma = valor => {
     const temOpcaoTodas = String(valor) === OPCAO_TODOS;
@@ -354,9 +381,10 @@ const Filtros = ({ onFiltrar, filtrou, setFiltrou, cancelou, setCancelou }) => {
             nomeFiltro: item.nomeFiltro,
           })
         );
+
         setListaTurmas(lista);
         if (lista.length === 1) {
-          setTurmasId([String(lista[0].valor)]);
+          setTurmasId(lista[0].valor);
         }
       }
     }
@@ -416,7 +444,7 @@ const Filtros = ({ onFiltrar, filtrou, setFiltrou, cancelou, setCancelou }) => {
               lista={listaAnosLetivo}
               valueOption="valor"
               valueText="desc"
-              disabled={!consideraHistorico || listaAnosLetivo?.length === 1}
+              disabled={listaAnosLetivo?.length === 1}
               onChange={onChangeAnoLetivo}
               valueSelect={anoLetivo}
               placeholder="Ano letivo"

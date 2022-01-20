@@ -42,7 +42,8 @@ import {
 } from '~/componentes-sgp/filtro/idsCampos';
 
 function CadastroDeAula({ match, location }) {
-  const { id, tipoCalendarioId } = match.params;
+  const { id, tipoCalendarioId, somenteReposicao } = match.params;
+  const ehReposicao = somenteReposicao === 'true';
   const permissoesTela = useSelector(state => state.usuario.permissoes);
   const somenteConsulta = verificaSomenteConsulta(
     permissoesTela[RotasDto.CALENDARIO_PROFESSOR]
@@ -77,6 +78,7 @@ function CadastroDeAula({ match, location }) {
   const [registroMigrado, setRegistroMigrado] = useState(false);
   const [emManutencao, setEmManutencao] = useState(false);
   const [desabilitarBtnSalvar, setDesabilitarBtnSalvar] = useState(false);
+  const [alterouCampo, setAlterouCampo] = useState(false);
 
   const { diaAula } = queryString.parse(location.search);
   const aulaInicial = {
@@ -86,6 +88,8 @@ function CadastroDeAula({ match, location }) {
     ueId: turmaSelecionada.unidadeEscolar,
     tipoCalendarioId,
     quantidade: 1,
+    tipoAula: ehReposicao ? 2 : 1,
+    recorrenciaAula: 1,
     podeEditar: true,
   };
 
@@ -102,18 +106,22 @@ function CadastroDeAula({ match, location }) {
   const [listaComponentes, setListaComponentes] = useState([]);
   const [recorrenciaAulaOriginal, setRecorrenciaAulaOriginal] = useState();
 
+  const opcoesTipoAulaSomenteReposicao = [{ label: 'Reposição', value: 2 }];
+
   const opcoesTipoAula = [
     { label: 'Normal', value: 1 },
     { label: 'Reposição', value: 2 },
   ];
-
-  const [recorrenciaInicial, setRecorrenciaInicial] = useState(1);
 
   const recorrencia = {
     AULA_UNICA: 1,
     REPETIR_BIMESTRE_ATUAL: 2,
     REPETIR_TODOS_BIMESTRES: 3,
   };
+
+  const opcoesRecorrenciaSomenteReposicao = [
+    { label: 'Aula única', value: recorrencia.AULA_UNICA },
+  ];
 
   const opcoesRecorrencia = [
     { label: 'Aula única', value: recorrencia.AULA_UNICA },
@@ -193,7 +201,7 @@ function CadastroDeAula({ match, location }) {
             const componenteSelecionado = componentes.find(
               c => c.codigoComponenteCurricular == respostaAula.disciplinaId
             );
-            if (componenteSelecionado){
+            if (componenteSelecionado) {
               carregarGrade(
                 componenteSelecionado,
                 respostaAula.dataAula,
@@ -431,6 +439,7 @@ function CadastroDeAula({ match, location }) {
 
   const onChangeDataAula = data => {
     setModoEdicao(true);
+    setAlterouCampo(true);
     setAula(aulaState => {
       return { ...aulaState, dataAula: data };
     });
@@ -559,6 +568,12 @@ function CadastroDeAula({ match, location }) {
       setSomenteLeitura(true);
     }
   }, [carregandoDados, aula.somenteLeitura]);
+
+  useEffect(() => {
+    const ehEdicao = id ? alterouCampo : !id;
+    const desabilitar = aula?.dataAula && aula?.disciplinaId && ehEdicao;
+    setModoEdicao(desabilitar);
+  }, [aula, id, alterouCampo]);
 
   return (
     <Container>
@@ -738,7 +753,11 @@ function CadastroDeAula({ match, location }) {
                       <RadioGroupButton
                         id={SGP_RADIO_TIPO_AULA}
                         label="Tipo de aula"
-                        opcoes={opcoesTipoAula}
+                        opcoes={
+                          ehReposicao
+                            ? opcoesTipoAulaSomenteReposicao
+                            : opcoesTipoAula
+                        }
                         name="tipoAula"
                         form={form}
                         onChange={onChangeTipoAula}
@@ -755,7 +774,10 @@ function CadastroDeAula({ match, location }) {
                         valueText="nome"
                         placeholder="Selecione um componente curricular"
                         form={form}
-                        disabled={(!!id && aula?.disciplinaId) || (listaComponentes.length === 1 && !id)}
+                        disabled={
+                          (!!id && aula?.disciplinaId) ||
+                          (listaComponentes.length === 1 && !id)
+                        }
                         onChange={onChangeComponente}
                       />
                     </div>
@@ -777,7 +799,11 @@ function CadastroDeAula({ match, location }) {
                       <RadioGroupButton
                         id={SGP_RADIO_RECORRENCIA}
                         label="Recorrência"
-                        opcoes={opcoesRecorrencia}
+                        opcoes={
+                          ehReposicao
+                            ? opcoesRecorrenciaSomenteReposicao
+                            : opcoesRecorrencia
+                        }
                         name="recorrenciaAula"
                         form={form}
                         onChange={onChangeRecorrencia}

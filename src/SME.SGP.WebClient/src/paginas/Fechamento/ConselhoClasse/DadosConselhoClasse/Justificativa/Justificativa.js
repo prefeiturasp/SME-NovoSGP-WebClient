@@ -1,4 +1,5 @@
 import { Form, Formik } from 'formik';
+import _ from 'lodash';
 import PropTypes from 'prop-types';
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -7,9 +8,13 @@ import { Auditoria, Colors, Loader } from '~/componentes';
 import Button from '~/componentes/button';
 import JoditEditor from '~/componentes/jodit-editor/joditEditor';
 import {
+  setDadosListasNotasConceitos,
+  setExpandirLinha,
   setJustificativaAtual,
+  setNotaConceitoPosConselhoAtual,
   setSalvouJustificativa,
 } from '~/redux/modulos/conselhoClasse/actions';
+import { confirmar } from '~/servicos';
 import servicoSalvarConselhoClasse from '../../servicoSalvarConselhoClasse';
 
 const Justificativa = props => {
@@ -17,8 +22,10 @@ const Justificativa = props => {
 
   const dispatch = useDispatch();
 
+  const mensagemCampoObrigatorio = 'Campo justificativa é obrigatório';
+
   const validacoes = Yup.object({
-    justificativa: Yup.string().required('Campo justificativa é obrigatório'),
+    justificativa: Yup.string().required(mensagemCampoObrigatorio),
   });
 
   const notaConceitoPosConselhoAtual = useSelector(
@@ -39,7 +46,17 @@ const Justificativa = props => {
     store => store.conselhoClasse.podeEditarNota
   );
 
+  const dadosIniciaisListasNotasConceitos = useSelector(
+    store => store.conselhoClasse.dadosIniciaisListasNotasConceitos
+  );
+
   const { justificativa, auditoria, ehEdicao } = notaConceitoPosConselhoAtual;
+
+  const desabilitarBtnAcoes =
+    (alunoDesabilitado && !podeEditarNota) ||
+    !podeEditarNota ||
+    desabilitarCampos ||
+    !dentroPeriodo;
 
   const valoresIniciais = {
     justificativa: justificativa || '',
@@ -72,6 +89,25 @@ const Justificativa = props => {
     }
   };
 
+  const clicouBotaoCancelar = async () => {
+    if (!desabilitarBtnAcoes && ehEdicao) {
+      const confirmou = await confirmar(
+        'Atenção',
+        'Você não salvou as informações preenchidas.',
+        'Deseja realmente cancelar as alterações?'
+      );
+      if (confirmou) {
+        dispatch(setExpandirLinha([]));
+        dispatch(setNotaConceitoPosConselhoAtual({}));
+        const dadosCarregar = _.cloneDeep(dadosIniciaisListasNotasConceitos);
+        dispatch(setDadosListasNotasConceitos([...dadosCarregar]));
+      }
+    } else {
+      dispatch(setExpandirLinha([]));
+      dispatch(setNotaConceitoPosConselhoAtual({}));
+    }
+  };
+
   return (
     <>
       {notaConceitoPosConselhoAtual && notaConceitoPosConselhoAtual.idCampo ? (
@@ -91,8 +127,10 @@ const Justificativa = props => {
               >
                 {form => (
                   <Form>
-                    <fieldset className="mt-3">
+                    <fieldset className="mt-3 text-left">
                       <JoditEditor
+                        temErro={!form?.values?.justificativa}
+                        mensagemErro={mensagemCampoObrigatorio}
                         form={form}
                         value={valoresIniciais.justificativa}
                         name="justificativa"
@@ -123,18 +161,22 @@ const Justificativa = props => {
                           ''
                         )}
                         <Button
+                          label="Cancelar"
+                          color={Colors.Azul}
+                          onClick={() => {
+                            clicouBotaoCancelar(form);
+                          }}
+                          disabled={desabilitarBtnAcoes}
+                          border
+                          className="mr-3"
+                        />
+                        <Button
                           label="Salvar"
                           color={Colors.Roxo}
                           onClick={() => {
                             clicouBotaoSalvar(form);
                           }}
-                          disabled={
-                            (alunoDesabilitado && !podeEditarNota) ||
-                            !podeEditarNota ||
-                            desabilitarCampos ||
-                            !dentroPeriodo ||
-                            !ehEdicao
-                          }
+                          disabled={desabilitarBtnAcoes || !ehEdicao}
                           border
                         />
                       </div>

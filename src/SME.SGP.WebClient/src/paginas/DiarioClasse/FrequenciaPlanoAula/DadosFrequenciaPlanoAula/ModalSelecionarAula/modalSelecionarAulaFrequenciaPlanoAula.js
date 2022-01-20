@@ -97,7 +97,8 @@ const ModalSelecionarAulaFrequenciaPlanoAula = props => {
               <div className="col-md-12 mb-2">
                 <p>
                   Existe mais de uma aula para esta turma nesta data, selecione
-                  qual aula você deseja visualizar o diário de bordo.
+                  qual aula você deseja visualizar a frequência e/ou plano de
+                  aula.
                 </p>
               </div>
               <div className="col-md-12">

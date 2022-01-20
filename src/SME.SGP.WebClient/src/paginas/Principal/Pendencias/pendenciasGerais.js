@@ -7,7 +7,6 @@ import Paginacao from '~/componentes-sgp/Paginacao/paginacao';
 import Card from '~/componentes/card';
 import CardCollapse from '~/componentes/cardCollapse';
 import SelectComponent from '~/componentes/select';
-import { TOKEN_EXPIRADO } from '~/constantes';
 import { erros, ServicoRelatorioPendencias } from '~/servicos';
 import ServicoPendencias from '~/servicos/Paginas/ServicoPendencias';
 import {
@@ -46,10 +45,7 @@ const PendenciasGerais = () => {
         paginaAtual,
         numeroPag
       )
-        .catch(e => {
-          if (e?.message.indexOf(TOKEN_EXPIRADO) >= 0) return;
-          erros(e);
-        })
+        .catch(e => erros(e))
         .finally(() => setCarregando(false));
 
       if (resposta?.data?.items) {
