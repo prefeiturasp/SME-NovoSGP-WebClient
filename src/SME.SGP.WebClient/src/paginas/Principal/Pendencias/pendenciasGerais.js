@@ -7,7 +7,6 @@ import Paginacao from '~/componentes-sgp/Paginacao/paginacao';
 import Card from '~/componentes/card';
 import CardCollapse from '~/componentes/cardCollapse';
 import SelectComponent from '~/componentes/select';
-import { CANCELADO_USUARIO, TOKEN_EXPIRADO } from '~/constantes';
 import { erros, ServicoRelatorioPendencias } from '~/servicos';
 import ServicoPendencias from '~/servicos/Paginas/ServicoPendencias';
 import {
@@ -36,21 +35,6 @@ const PendenciasGerais = () => {
     corBorda: Base.Roxo,
   };
 
-  const acharErro = (dados, resposta) => {
-    return dados?.indexOf(resposta) >= 0;
-  };
-
-  const pegarErro = e => {
-    const message = e?.message;
-    const temErroIgual =
-      acharErro(message, TOKEN_EXPIRADO) ||
-      acharErro(message, CANCELADO_USUARIO);
-
-    if (temErroIgual) return;
-
-    erros(e);
-  };
-
   const obterPendencias = useCallback(
     async (paginaAtual, numeroPag) => {
       setCarregando(true);
@@ -61,7 +45,7 @@ const PendenciasGerais = () => {
         paginaAtual,
         numeroPag
       )
-        .catch(pegarErro)
+        .catch(e => erros(e))
         .finally(() => setCarregando(false));
 
       if (resposta?.data?.items) {
@@ -88,7 +72,7 @@ const PendenciasGerais = () => {
   const obterTurmas = useCallback(async () => {
     setCarregandoTurmas(true);
     const retorno = await ServicoPendencias.buscarTurmas(codigoTurma)
-      .catch(pegarErro)
+      .catch(e => erros(e))
       .finally(() => setCarregandoTurmas(false));
 
     if (retorno?.data?.length) {
@@ -170,7 +154,7 @@ const PendenciasGerais = () => {
     const retorno = await ServicoRelatorioPendencias.obterTipoPendenciasGrupos({
       opcaoTodos: false,
     })
-      .catch(pegarErro)
+      .catch(e => erros(e))
       .finally(() => setCarregandoTipoPendenciaGrupo(false));
     const dados = retorno?.data?.length ? retorno?.data : [];
     setListaTipoPendenciaGrupos(dados);
