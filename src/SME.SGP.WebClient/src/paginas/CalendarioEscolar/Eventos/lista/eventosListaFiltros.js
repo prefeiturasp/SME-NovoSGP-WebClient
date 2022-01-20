@@ -13,6 +13,7 @@ import {
 import { FiltroHelper } from '~/componentes-sgp';
 import { Base } from '~/componentes/colors';
 import { OPCAO_TODOS } from '~/constantes';
+import ListaLocalOcorrencia from '~/constantes/localOcorrencia';
 import { setFiltroListaEventos } from '~/redux/modulos/calendarioEscolar/actions';
 import {
   AbrangenciaServico,
@@ -52,6 +53,9 @@ const EventosListaFiltros = () => {
   const [listaUes, setListaUes] = useState([]);
   const [listaCalendarios, setListaCalendarios] = useState([]);
   const [listaTipoEventos, setListaTipoEventos] = useState([]);
+  const [listaTipoEventosFiltrados, setListaTipoEventosFiltrados] = useState(
+    []
+  );
 
   const [timeoutBuscarPorNome, setTimeoutBuscarPorNome] = useState('');
 
@@ -76,6 +80,59 @@ const EventosListaFiltros = () => {
     setTipoEventoSelecionado(tipo);
     seFiltrarNovaConsulta(true);
   };
+
+  const filtrarEventoPorLocalOcorrencia = useCallback(
+    listaLocalOcorrencia =>
+      listaTipoEventos.filter(evento =>
+        listaLocalOcorrencia.find(
+          tipoLocal => evento.localOcorrencia === tipoLocal
+        )
+      ),
+    [listaTipoEventos]
+  );
+
+  const escolherDadosParaFiltrar = (dre, ue) => {
+    const ehTodasDre = dre === OPCAO_TODOS;
+    const ehTodasUe = ue === OPCAO_TODOS;
+    const eventosSME = ehTodasDre && ehTodasUe;
+    const eventosDRE = !ehTodasDre && ehTodasUe;
+    const eventosUE = !ehTodasDre && !ehTodasUe;
+
+    let escolherDados = [];
+    if (eventosSME) {
+      escolherDados = [
+        ListaLocalOcorrencia.SME,
+        ListaLocalOcorrencia.SMEUE,
+        ListaLocalOcorrencia.TODOS,
+      ];
+    }
+    if (eventosDRE) {
+      escolherDados = [ListaLocalOcorrencia.DRE, ListaLocalOcorrencia.TODOS];
+    }
+    if (eventosUE) {
+      escolherDados = [
+        ListaLocalOcorrencia.UE,
+        ListaLocalOcorrencia.SMEUE,
+        ListaLocalOcorrencia.TODOS,
+      ];
+    }
+    return escolherDados;
+  };
+
+  const filtrarEventos = useCallback(
+    (dre, ue) => {
+      const dadosFiltro = escolherDadosParaFiltrar(dre, ue);
+      const eventosFiltrados = filtrarEventoPorLocalOcorrencia(dadosFiltro);
+      setListaTipoEventosFiltrados(eventosFiltrados);
+    },
+    [filtrarEventoPorLocalOcorrencia]
+  );
+
+  useEffect(() => {
+    if (codigoDre || codigoUe) {
+      filtrarEventos(codigoDre, codigoUe);
+    }
+  }, [filtrarEventos, codigoDre, codigoUe]);
 
   const obterListaEventos = useCallback(async () => {
     const resposta = await ServicoEvento.obterTiposEventos().catch(e =>
@@ -455,7 +512,7 @@ const EventosListaFiltros = () => {
           <SelectComponent
             label="Tipo de evento"
             id="select-tipo-evento"
-            lista={listaTipoEventos}
+            lista={listaTipoEventosFiltrados}
             valueOption="id"
             valueText="descricao"
             onChange={onChangeTipoEvento}
