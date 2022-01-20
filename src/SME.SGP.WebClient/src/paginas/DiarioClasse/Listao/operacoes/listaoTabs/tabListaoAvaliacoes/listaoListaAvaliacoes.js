@@ -159,6 +159,9 @@ const ListaoListaAvaliacoes = () => {
     }
   };
 
+  const temMaisDeCincoAvaliacoes =
+    dadosAvaliacao?.bimestres?.[0]?.avaliacoes?.length > 5;
+
   const colunasEstudantes = [
     {
       title: 'Nº',
@@ -169,7 +172,7 @@ const ListaoListaAvaliacoes = () => {
 
     {
       title: 'Nome do estudante',
-      width: '350px',
+      width: temMaisDeCincoAvaliacoes ? '400px' : '',
       render: montarColunaEstudante,
     },
   ];

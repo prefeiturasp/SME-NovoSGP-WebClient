@@ -120,7 +120,7 @@ const obterListaAlunosAvaliacaoListao = async (
     .catch(e => erros(e))
     .finally(() => setExibirLoaderGeral(false));
 
-  if (resposta.data) {
+  if (resposta?.data) {
     let listaTiposConceitos = [];
     const { notaTipo } = resposta.data;
     const ehTipoConceito = notasConceitos.Conceitos === notaTipo;
