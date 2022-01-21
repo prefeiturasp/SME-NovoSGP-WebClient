@@ -31,9 +31,12 @@ const MarcadorParecerConclusivo = () => {
   const [parecer, setParecer] = useState('');
 
   useEffect(() => {
+    const nomeConatenado = marcadorParecerConclusivo?.emAprovacao
+      ? `${marcadorParecerConclusivo?.nome} (Aguardando aprovação)`
+      : marcadorParecerConclusivo?.nome;
     const nomeParecer =
       Object.keys(marcadorParecerConclusivo).length &&
-      `Parecer conclusivo: ${marcadorParecerConclusivo?.nome || 'Sem parecer'}`;
+      `Parecer conclusivo: ${nomeConatenado || 'Sem parecer'}`;
 
     setParecer(nomeParecer);
   }, [marcadorParecerConclusivo]);
