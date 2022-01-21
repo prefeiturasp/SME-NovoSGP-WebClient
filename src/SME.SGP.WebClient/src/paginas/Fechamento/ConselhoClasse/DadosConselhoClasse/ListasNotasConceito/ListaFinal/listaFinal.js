@@ -14,6 +14,8 @@ import CampoConceito from '../CamposNotaConceito/campoConceito';
 import CampoNota from '../CamposNotaConceito/campoNota';
 import { BarraLateralLista, Lista } from '../listasNotasConceitos.css';
 import LinhaJustificativa from '../../Justificativa/LinhaJustificativa/LinhaJustificativa';
+import { MarcadorTriangulo } from '~/componentes';
+import { Tooltip } from 'antd';
 
 const ListaFinal = props => {
   const {
@@ -216,7 +218,7 @@ const ListaFinal = props => {
                       <td className="col-nota-conceito">
                         {montarValoresNotasConceitos(item.notasFechamentos)}
                       </td>
-                      <td>
+                      <td className="position-relative">
                         {montaCampoPosConselho(
                           item.notaPosConselho.id,
                           item.notaPosConselho.nota,
@@ -224,6 +226,11 @@ const ListaFinal = props => {
                           item.codigoComponenteCurricular,
                           item,
                           item.notaPosConselho.podeEditar
+                        )}
+                        {item.notaPosConselho.emAprovacao && (
+                          <Tooltip title="Aguardando aprovação">
+                            <MarcadorTriangulo />
+                          </Tooltip>
                         )}
                       </td>
                       <td>{item.faltas}</td>
@@ -256,13 +263,18 @@ const ListaFinal = props => {
                         <td>
                           {montarValoresNotasConceitos(item.notasFechamentos)}
                         </td>
-                        <td>
+                        <td className="position-relative">
                           {montaCampoPosConselho(
                             item.notaPosConselho.id,
                             item.notaPosConselho.nota,
                             `${descricaoGrupoMatriz} ${index} regencia`,
                             item.codigoComponenteCurricular,
                             item
+                          )}
+                          {item.notaPosConselho.emAprovacao && (
+                            <Tooltip title="Aguardando aprovação">
+                              <MarcadorTriangulo />
+                            </Tooltip>
                           )}
                         </td>
                         {index === 0 ? (

@@ -9,6 +9,7 @@ import { selecionaMes } from '~/redux/modulos/calendarioEscolar/actions';
 import api from '~/servicos/api';
 import Loader from '~/componentes/loader';
 import { erros } from '~/servicos';
+import { OPCAO_TODOS } from '~/constantes';
 
 const Div = styled.div``;
 
@@ -84,13 +85,16 @@ const MesCompleto = props => {
           await api
             .get(
               `v1/calendarios/eventos/meses/${mes}/tipos?EhEventoSme=${eventoSme}&${
-                dreSelecionada ? `DreId=${dreSelecionada}&` : ''
+                dreSelecionada && dreSelecionada !== OPCAO_TODOS
+                  ? `DreId=${dreSelecionada}&`
+                  : ''
               }${
                 tipoCalendarioSelecionado
                   ? `IdTipoCalendario=${tipoCalendarioSelecionado}&`
                   : ''
               }${
-                unidadeEscolarSelecionada
+                unidadeEscolarSelecionada &&
+                unidadeEscolarSelecionada !== OPCAO_TODOS
                   ? `UeId=${unidadeEscolarSelecionada}`
                   : ''
               }`

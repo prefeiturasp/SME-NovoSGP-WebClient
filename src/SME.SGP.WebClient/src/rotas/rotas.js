@@ -20,8 +20,6 @@ import TipoCalendarioEscolarForm from '~/paginas/CalendarioEscolar/TipoCalendari
 import TipoFeriadoLista from '~/paginas/CalendarioEscolar/TipoFeriado/tipoFeriadoLista';
 import TipoFeriadoForm from '~/paginas/CalendarioEscolar/TipoFeriado/tipoFeriadoForm';
 import CalendarioEscolar from '~/paginas/CalendarioEscolar/Calendario';
-import EventosLista from '~/paginas/CalendarioEscolar/Eventos/eventosLista';
-import EventosForm from '~/paginas/CalendarioEscolar/Eventos/eventosForm';
 import TipoEventosLista from '~/paginas/CalendarioEscolar/TipoEventos/tipoEventosLista';
 import TipoEventosForm from '~/paginas/CalendarioEscolar/TipoEventos/tipoEventosForm';
 import SemPermissao from '~/paginas/SemPermissao/sem-permissao';
@@ -41,8 +39,8 @@ import FechamentoBismestre from '~/paginas/Fechamento/FechamentoBimestre/fechame
 import PeriodoFechamentoAbertura from '~/paginas/CalendarioEscolar/PeriodoFechamentoAbertura/periodo-fechamento-abertura';
 import ResumosGraficosPAP from '~/paginas/Relatorios/PAP/ResumosGraficos';
 import PaginaComErro from '~/paginas/Erro/pagina-com-erro';
-import PeriodoFechamentoReaberturaLista from '~/paginas/CalendarioEscolar/PeriodoFechamentoReabertura/periodoFechamentoReaberturaLista';
-import PeriodoFechamentoReaberturaForm from '~/paginas/CalendarioEscolar/PeriodoFechamentoReabertura/periodoFechamentoReaberturaForm';
+import FechaReabLista from '~/paginas/CalendarioEscolar/PeriodoFechamentoReabertura/lista/fechaReabLista';
+import FechaReabCadastro from '~/paginas/CalendarioEscolar/PeriodoFechamentoReabertura/cadastro/fechaReabCadastro';
 import RelatorioPAPAcompanhamento from '~/paginas/Relatorios/PAP/Acompanhamento';
 import PendenciasFechamentoLista from '~/paginas/Fechamento/PendenciasFechamento/pendenciasFechamentoLista';
 import PendenciasFechamentoForm from '~/paginas/Fechamento/PendenciasFechamento/pendenciasFechamentoForm';
@@ -104,6 +102,12 @@ import RelatorioAcompanhamentoFechamento from '~/paginas/Relatorios/Fechamento/A
 import DashboardRelAcompanhamentoAprendizagem from '~/paginas/Dashboard/DashboardRelAcompAprend/dashboardRelAcompAprend';
 import DashboardFechamento from '~/paginas/Dashboard/DashboardFechamento/dashboardFechamento';
 import RelatorioAtaBimestral from '~/paginas/Relatorios/Atas/AtaBimestral/relatorioAtaBimestral';
+import EventosLista from '~/paginas/CalendarioEscolar/Eventos/lista/eventosLista';
+import EventosCadastro from '~/paginas/CalendarioEscolar/Eventos/cadastro/eventosCadastro';
+import RelatorioAcompanhamentoRegistros from '~/paginas/Relatorios/Gestao/AcompanhamentoRegistros/acompanhamentoRegistros';
+import { CONTEXT_LISTAO } from '~/constantes';
+import ListaoOperacoes from '~/paginas/DiarioClasse/Listao/operacoes/listaoOperacoes';
+import Listao from '~/paginas/DiarioClasse/Listao/lista/listao';
 
 const rotas = new Map();
 
@@ -429,6 +433,7 @@ rotas.set(RotasDto.PRINCIPAL, {
   dicaIcone: 'Página Inicial',
   tipo: RotasTipo.EstruturadaAutenticada,
   temPermissionamento: false,
+  breadcrumbName: 'Início',
 });
 
 rotas.set(RotasDto.TIPO_FERIADO, {
@@ -472,8 +477,8 @@ rotas.set(RotasDto.SEM_PERMISSAO, {
 });
 
 rotas.set(RotasDto.EVENTOS, {
-  breadcrumbName: 'Evento do Calendário Escolar',
-  menu: ['Calendário Escolar'],
+  breadcrumbName: 'Eventos do calendário escolar',
+  menu: ['Calendário escolar'],
   parent: '/',
   component: EventosLista,
   exact: true,
@@ -483,8 +488,8 @@ rotas.set(RotasDto.EVENTOS, {
 });
 
 rotas.set(`${RotasDto.EVENTOS}/:tipoCalendarioId`, {
-  breadcrumbName: 'Evento do Calendário Escolar',
-  menu: ['Calendário Escolar'],
+  breadcrumbName: 'Eventos do calendário escolar',
+  menu: ['Calendário escolar'],
   parent: '/',
   component: EventosLista,
   exact: true,
@@ -494,9 +499,9 @@ rotas.set(`${RotasDto.EVENTOS}/:tipoCalendarioId`, {
 });
 
 rotas.set('/calendario-escolar/eventos/novo/:tipoCalendarioId', {
-  breadcrumbName: 'Cadastro de Eventos no Calendário Escolar',
+  breadcrumbName: 'Cadastro de eventos do calendário escolar',
   parent: '/calendario-escolar/eventos',
-  component: EventosForm,
+  component: EventosCadastro,
   exact: true,
   tipo: RotasTipo.EstruturadaAutenticada,
   temPermissionamento: true,
@@ -504,9 +509,9 @@ rotas.set('/calendario-escolar/eventos/novo/:tipoCalendarioId', {
 });
 
 rotas.set('/calendario-escolar/eventos/editar/:id', {
-  breadcrumbName: 'Cadastro de Eventos no Calendário Escolar',
+  breadcrumbName: 'Cadastro de eventos do calendário escolar',
   parent: '/calendario-escolar/eventos',
-  component: EventosForm,
+  component: EventosCadastro,
   exact: true,
   tipo: RotasTipo.EstruturadaAutenticada,
   temPermissionamento: true,
@@ -514,9 +519,9 @@ rotas.set('/calendario-escolar/eventos/editar/:id', {
 });
 
 rotas.set('/calendario-escolar/eventos/editar/:id/:tipoCalendarioId', {
-  breadcrumbName: 'Cadastro de Eventos no Calendário Escolar',
+  breadcrumbName: 'Cadastro de Eventos do Calendário Escolar',
   parent: '/calendario-escolar/eventos',
-  component: EventosForm,
+  component: EventosCadastro,
   exact: true,
   tipo: RotasTipo.EstruturadaAutenticada,
   temPermissionamento: true,
@@ -753,7 +758,17 @@ rotas.set(`${RotasDto.PERIODO_FECHAMENTO_REABERTURA}`, {
   breadcrumbName: 'Reabertura',
   menu: ['Calendário Escolar', 'Período de Fechamento'],
   parent: '/',
-  component: PeriodoFechamentoReaberturaLista,
+  component: FechaReabLista,
+  exact: true,
+  tipo: RotasTipo.EstruturadaAutenticada,
+  temPermissionamento: true,
+  chavePermissao: RotasDto.PERIODO_FECHAMENTO_REABERTURA,
+});
+
+rotas.set(`${RotasDto.PERIODO_FECHAMENTO_REABERTURA}/novo/`, {
+  breadcrumbName: 'Períodos',
+  parent: RotasDto.PERIODO_FECHAMENTO_REABERTURA,
+  component: FechaReabCadastro,
   exact: true,
   tipo: RotasTipo.EstruturadaAutenticada,
   temPermissionamento: true,
@@ -763,7 +778,7 @@ rotas.set(`${RotasDto.PERIODO_FECHAMENTO_REABERTURA}`, {
 rotas.set(`${RotasDto.PERIODO_FECHAMENTO_REABERTURA}/novo/:tipoCalendarioId`, {
   breadcrumbName: 'Períodos',
   parent: RotasDto.PERIODO_FECHAMENTO_REABERTURA,
-  component: PeriodoFechamentoReaberturaForm,
+  component: FechaReabCadastro,
   exact: true,
   tipo: RotasTipo.EstruturadaAutenticada,
   temPermissionamento: true,
@@ -773,7 +788,7 @@ rotas.set(`${RotasDto.PERIODO_FECHAMENTO_REABERTURA}/novo/:tipoCalendarioId`, {
 rotas.set(`${RotasDto.PERIODO_FECHAMENTO_REABERTURA}/editar/:id`, {
   breadcrumbName: 'Períodos',
   parent: RotasDto.PERIODO_FECHAMENTO_REABERTURA,
-  component: PeriodoFechamentoReaberturaForm,
+  component: FechaReabCadastro,
   exact: true,
   tipo: RotasTipo.EstruturadaAutenticada,
   temPermissionamento: true,
@@ -911,16 +926,19 @@ rotas.set(`${RotasDto.DIARIO_BORDO}/novo`, {
   chavePermissao: RotasDto.DIARIO_BORDO,
 });
 
-rotas.set(`${RotasDto.DIARIO_BORDO}/detalhes/:aulaId`, {
-  breadcrumbName: 'Diário de Bordo (Intencionalidade docente)',
-  menu: ['Diário de Classe'],
-  parent: '/',
-  component: DiarioBordo,
-  exact: true,
-  tipo: RotasTipo.EstruturadaAutenticada,
-  temPermissionamento: true,
-  chavePermissao: RotasDto.DIARIO_BORDO,
-});
+rotas.set(
+  `${RotasDto.DIARIO_BORDO}/detalhes/:aulaId/:diarioBordoId/:componenteCurricularId`,
+  {
+    breadcrumbName: 'Diário de Bordo (Intencionalidade docente)',
+    menu: ['Diário de Classe'],
+    parent: '/',
+    component: DiarioBordo,
+    exact: true,
+    tipo: RotasTipo.EstruturadaAutenticada,
+    temPermissionamento: true,
+    chavePermissao: RotasDto.DIARIO_BORDO,
+  }
+);
 
 rotas.set(RotasDto.RELATORIO_PENDENCIAS, {
   breadcrumbName: 'Pendências',
@@ -1442,6 +1460,40 @@ rotas.set(RotasDto.ATA_BIMESTRAL, {
   // tipo: RotasTipo.EstruturadaAutenticada,
   // temPermissionamento: true,
   chavePermissao: RotasDto.ATA_BIMESTRAL,
+});
+
+rotas.set(RotasDto.RELATORIO_ACOMPANHAMENTO_REGISTROS, {
+  breadcrumbName: 'Acompanhamento dos registros',
+  menu: ['Relatórios', 'Gestão'],
+  parent: '/',
+  component: RelatorioAcompanhamentoRegistros,
+  exact: true,
+  tipo: RotasTipo.EstruturadaAutenticada,
+  temPermissionamento: true,
+  chavePermissao: RotasDto.RELATORIO_ACOMPANHAMENTO_REGISTROS,
+});
+
+rotas.set(`${RotasDto.LISTAO}`, {
+  breadcrumbName: 'Listão',
+  menu: ['Diário de Classe'],
+  parent: '/',
+  component: Listao,
+  exact: true,
+  tipo: RotasTipo.EstruturadaAutenticada,
+  temPermissionamento: true,
+  chavePermissao: RotasDto.LISTAO,
+  contextProviderName: CONTEXT_LISTAO,
+});
+
+rotas.set(`${RotasDto.LISTAO_OPERACOES}`, {
+  breadcrumbName: 'Operações',
+  parent: RotasDto.LISTAO,
+  component: ListaoOperacoes,
+  exact: true,
+  tipo: RotasTipo.EstruturadaAutenticada,
+  temPermissionamento: false,
+  chavePermissao: RotasDto.LISTAO,
+  contextProviderName: CONTEXT_LISTAO,
 });
 
 const rotasArray = [];

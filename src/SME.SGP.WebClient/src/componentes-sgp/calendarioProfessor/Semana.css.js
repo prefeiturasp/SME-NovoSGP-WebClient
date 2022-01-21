@@ -10,10 +10,10 @@ export const TipoEventosLista = styled(Div)`
 
 export const TipoEvento = styled(Div).attrs(props => ({
   className: 'd-block badge badge-pill text-white ml-auto mr-0',
-  cor: props.cor ? props.cor : Base.Roxo,
+  cor: props.cor ? props.cor : Base.AzulCalendario,
 }))`
   background: ${props => props.cor};
-  font-size: 10px;
+  font-size: 12px;
   margin-bottom: 2px;
   min-width: 60px;
   &:last-child {

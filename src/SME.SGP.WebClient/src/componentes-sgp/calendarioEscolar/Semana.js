@@ -9,21 +9,12 @@ import {
   selecionaDia,
   salvarEventoCalendarioEdicao,
 } from '~/redux/modulos/calendarioEscolar/actions';
+import { TipoEvento } from '../calendarioProfessor/Semana.css';
 
 const Div = styled.div``;
 const TipoEventosLista = styled(Div)`
   bottom: 5px;
   right: 10px;
-`;
-const TipoEvento = styled(Div)`
-  background-color: ${props => (props.cor ? props.cor : Base.Roxo)};
-  color: ${Base.Branco};
-  font-size: 10px;
-  margin-bottom: 2px;
-  width: 60px;
-  &:last-child {
-    margin-bottom: 0;
-  }
 `;
 
 const Dia = props => {
@@ -106,8 +97,7 @@ const Dia = props => {
               tipoEventosDiaLista.tiposEvento?.length ? (
                 <TipoEvento
                   key={shortid.generate()}
-                  className="d-block badge badge-pill ml-auto mr-0"
-                  cor={Base.RoxoEventoCalendario}
+                  cor={Base.AzulEventoCalendario}
                 >
                   Evento
                 </TipoEvento>

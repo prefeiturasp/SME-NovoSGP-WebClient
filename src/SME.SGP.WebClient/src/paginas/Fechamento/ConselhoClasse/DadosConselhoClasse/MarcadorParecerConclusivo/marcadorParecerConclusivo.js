@@ -31,7 +31,11 @@ const MarcadorParecerConclusivo = () => {
   const [parecer, setParecer] = useState('');
 
   useEffect(() => {
-    setParecer(`Parecer conclusivo: ${marcadorParecerConclusivo?.nome || ''}`);
+    const nomeParecer =
+      Object.keys(marcadorParecerConclusivo).length &&
+      `Parecer conclusivo: ${marcadorParecerConclusivo?.nome || 'Sem parecer'}`;
+
+    setParecer(nomeParecer);
   }, [marcadorParecerConclusivo]);
 
   const montarDescricao = () => {
@@ -64,34 +68,34 @@ const MarcadorParecerConclusivo = () => {
 
   return (
     <>
-      <div className="col-m-12 d-flex justify-content-end mb-2">
-        {exibirIconeSincronizar && (
-          <div className="mr-1 d-flex align-items-center">
-            <Tooltip title="Atualizar parecer conclusivo" placement="left">
-              <IconeEstilizado
-                icon={faSyncAlt}
-                onClick={sincronizar}
-                sincronizando={sincronizando}
-              />
+      {parecer ? (
+        <div className="col-m-12 d-flex ml-3 my-3">
+          {marcadorParecerConclusivo?.emAprovacao ? (
+            <Tooltip title="Aguardando aprovação">
+              <LabelParecer>
+                <Loader loading={gerandoParecerConclusivo} tip="">
+                  <span>{montarDescricao()}</span>
+                </Loader>
+              </LabelParecer>
             </Tooltip>
-          </div>
-        )}
-        {marcadorParecerConclusivo?.emAprovacao ? (
-          <Tooltip title="Aguardando aprovação">
+          ) : (
             <LabelParecer>
               <Loader loading={gerandoParecerConclusivo} tip="">
                 <span>{montarDescricao()}</span>
               </Loader>
             </LabelParecer>
-          </Tooltip>
-        ) : (
-          <LabelParecer>
-            <Loader loading={gerandoParecerConclusivo} tip="">
-              <span>{montarDescricao()}</span>
-            </Loader>
-          </LabelParecer>
-        )}
-      </div>
+          )}
+          {exibirIconeSincronizar && (
+            <IconeEstilizado
+              icon={faSyncAlt}
+              onClick={sincronizar}
+              sincronizando={sincronizando}
+            />
+          )}
+        </div>
+      ) : (
+        ''
+      )}
     </>
   );
 };

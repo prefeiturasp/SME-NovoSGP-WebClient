@@ -225,10 +225,6 @@ const Sider = () => {
           >
             <div className="circulo-perfil">
               <i className="fas fa-user-circle icone-perfil" />
-              {/* <img
-                id="imagem-perfil"
-                src={usuario.meusDados.foto}
-              /> */}
             </div>
             <div hidden={NavegacaoStore.retraido}>
               <Tooltip

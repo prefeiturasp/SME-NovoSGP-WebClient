@@ -28,6 +28,7 @@ const inicial = {
   atualizarDatas: false,
   exibirModalAnotacaoFrequencia: false,
   dadosModalAnotacaoFrequencia: {},
+  aulaIdPodeEditar: true,
 };
 
 export default function frequenciaPlanoAula(state = inicial, action) {
@@ -71,6 +72,7 @@ export default function frequenciaPlanoAula(state = inicial, action) {
           objetivosEspecificosParaAulaValidarObrigatoriedade: undefined,
           exibirModalAnotacaoFrequencia: false,
           dadosModalAnotacaoFrequencia: {},
+          aulaIdPodeEditar: true,
         };
       }
       case '@frequenciaPlanoAula/setListaDadosFrequencia': {
@@ -238,6 +240,12 @@ export default function frequenciaPlanoAula(state = inicial, action) {
         return {
           ...draft,
           dadosModalAnotacaoFrequencia: action.payload,
+        };
+      }
+      case '@frequenciaPlanoAula/setAulaIdPodeEditar': {
+        return {
+          ...draft,
+          aulaIdPodeEditar: action.payload,
         };
       }
 

@@ -33,6 +33,13 @@ import RotasDto from '~/dtos/rotasDto';
 import { RegistroMigrado } from '~/componentes-sgp/registro-migrado';
 import { ehTurmaInfantil } from '~/servicos/Validacoes/validacoesInfatil';
 import AlterarAula from './alterarAula';
+import {
+  SGP_DATA_AULA,
+  SGP_INPUT_NUMBER_QUANTIDADE_AULAS,
+  SGP_RADIO_RECORRENCIA,
+  SGP_RADIO_TIPO_AULA,
+  SGP_SELECT_COMPONENTE_CURRICULAR,
+} from '~/componentes-sgp/filtro/idsCampos';
 
 function CadastroDeAula({ match, location }) {
   const { id, tipoCalendarioId, somenteReposicao } = match.params;
@@ -83,6 +90,7 @@ function CadastroDeAula({ match, location }) {
     quantidade: 1,
     tipoAula: ehReposicao ? 2 : 1,
     recorrenciaAula: 1,
+    podeEditar: true,
   };
 
   const [recorrenciaAulaEmEdicao, setRecorrenciaAulaEmEdicao] = useState({
@@ -130,7 +138,6 @@ function CadastroDeAula({ match, location }) {
         id && (recorrenciaAulaOriginal === 2 || recorrenciaAulaOriginal === 1),
     },
   ];
-
   const obterComponenteSelecionadoPorId = useCallback(
     componenteCurricularId => {
       return listaComponentes.find(
@@ -465,6 +472,7 @@ function CadastroDeAula({ match, location }) {
 
   const onChangeQuantidadeAula = quantidade => {
     setModoEdicao(true);
+    setAlterouCampo(true);
     setAula(aulaState => {
       return {
         ...aulaState,
@@ -676,7 +684,7 @@ function CadastroDeAula({ match, location }) {
                         label="Data da aula"
                         formatoData="DD/MM/YYYY"
                         name="dataAula"
-                        id="dataAula"
+                        id={SGP_DATA_AULA}
                         form={form}
                         onChange={onChangeDataAula}
                       />
@@ -707,7 +715,12 @@ function CadastroDeAula({ match, location }) {
                         border
                         className="mr-2"
                         onClick={onClickExcluir}
-                        disabled={somenteConsulta || !id || somenteLeitura}
+                        disabled={
+                          somenteConsulta ||
+                          !id ||
+                          somenteLeitura ||
+                          !aula.podeEditar
+                        }
                       />
 
                       <Button
@@ -734,7 +747,8 @@ function CadastroDeAula({ match, location }) {
                           !aula.disciplinaId ||
                           somenteLeitura ||
                           desabilitarBtnSalvar ||
-                          !modoEdicao
+                          !modoEdicao ||
+                          !aula.podeEditar
                         }
                       />
                     </div>
@@ -742,7 +756,7 @@ function CadastroDeAula({ match, location }) {
                   <div className="row">
                     <div className="col-xs-12 col-md-3 col-lg-3">
                       <RadioGroupButton
-                        id="tipo-aula"
+                        id={SGP_RADIO_TIPO_AULA}
                         label="Tipo de aula"
                         opcoes={
                           ehReposicao
@@ -757,7 +771,7 @@ function CadastroDeAula({ match, location }) {
                     </div>
                     <div className="col-xs-12 col-md-6 col-lg-6">
                       <SelectComponent
-                        id="disciplinaId"
+                        id={SGP_SELECT_COMPONENTE_CURRICULAR}
                         name="disciplinaId"
                         lista={listaComponentes}
                         label="Componente Curricular"
@@ -777,7 +791,7 @@ function CadastroDeAula({ match, location }) {
                     <div className="col-xs-12 col-md-3 col-lg-3">
                       <CampoNumeroFormik
                         label="Quantidade de aulas"
-                        id="quantidade-aula"
+                        id={SGP_INPUT_NUMBER_QUANTIDADE_AULAS}
                         name="quantidade"
                         form={form}
                         min={1}
@@ -788,7 +802,7 @@ function CadastroDeAula({ match, location }) {
                     </div>
                     <div className="col-xs-12 col-md-6 col-lg-6">
                       <RadioGroupButton
-                        id="recorrencia-aula"
+                        id={SGP_RADIO_RECORRENCIA}
                         label="Recorrência"
                         opcoes={
                           ehReposicao

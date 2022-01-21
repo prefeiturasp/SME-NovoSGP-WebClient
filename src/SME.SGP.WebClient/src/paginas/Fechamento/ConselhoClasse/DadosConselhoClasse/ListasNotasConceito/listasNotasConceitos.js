@@ -127,13 +127,13 @@ const ListasNotasConceitos = props => {
 
     dados.notasConceitos.map(notasConceitos =>
       notasConceitos.componenteRegencia?.componentesCurriculares.map(cc => {
-          cc.notasFechamentos.map(nf => {
-            if (valorNuloOuVazio(nf.notaConceito)) {
-              notasFechamentosPreenchidas = false;
-            }
-            return nf;
-          });
-        })
+        cc.notasFechamentos.map(nf => {
+          if (valorNuloOuVazio(nf.notaConceito)) {
+            notasFechamentosPreenchidas = false;
+          }
+          return nf;
+        });
+      })
     );
 
     const alunoDentroDoPeriodoDoBimestre = alunoDentroDoPeriodoDoBimestreOuFechamento();
@@ -162,11 +162,11 @@ const ListasNotasConceitos = props => {
       );
       dados.notasConceitos.map(notasConceitos =>
         notasConceitos.componenteRegencia?.componentesCurriculares.map(cc => {
-              if (valorNuloOuVazio(cc.notaPosConselho.nota)) {
-                notasPosConselhoPreenchidas = false;
-              }
-              return cc;
-          })
+          if (valorNuloOuVazio(cc.notaPosConselho.nota)) {
+            notasPosConselhoPreenchidas = false;
+          }
+          return cc;
+        })
       );
       const periodoAbertoOuEmFechamento = estaNoPeriodoOuFechamento();
       if (notasPosConselhoPreenchidas && periodoAbertoOuEmFechamento) {
@@ -184,7 +184,9 @@ const ListasNotasConceitos = props => {
       turmaCodigo,
       bimestreSelecionado?.valor,
       turmaStore?.consideraHistorico
-    ).catch(e => erros(e));
+    )
+      .catch(e => erros(e))
+      .finally(() => setCarregando(false));
 
     if (resultado?.data) {
       const dadosCarregar = _.cloneDeep(resultado.data.notasConceitos);
@@ -198,7 +200,6 @@ const ListasNotasConceitos = props => {
     } else {
       setExibir(false);
     }
-    setCarregando(false);
   }, [
     alunoCodigo,
     conselhoClasseId,
