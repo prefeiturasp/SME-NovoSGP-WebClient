@@ -574,10 +574,8 @@ const RelatorioPendencias = () => {
       componentesCurricularesId ||
       bimestre;
 
-    const condicoes = usuarioRf ? !usuarioRf : condicoesParciais;
-
     const condicoesFinais =
-      condicoesParciaisPreenchidas && usuarioRf ? condicoesParciais : condicoes;
+      condicoesParciaisPreenchidas && usuarioRf && condicoesParciais;
 
     const desabilitar = condicoesComuns || condicoesFinais;
 
