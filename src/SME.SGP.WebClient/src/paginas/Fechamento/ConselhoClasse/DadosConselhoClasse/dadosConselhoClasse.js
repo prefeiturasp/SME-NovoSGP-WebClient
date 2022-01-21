@@ -119,15 +119,16 @@ const DadosConselhoClasse = props => {
       limparDadosNotaPosConselhoJustificativa();
       setCarregando(true);
       setSemDados(true);
+      const ehFinal = bimestreConsulta === 'final';
       const retorno = await ServicoConselhoClasse.obterInformacoesPrincipais(
         turmaCodigo,
         usuario.turmaSelecionada.consideraHistorico && bimestreConsulta === 0
           ? '1'
-          : mostrarParecer
+          : ehFinal
           ? '0'
           : bimestreConsulta,
         codigoEOL,
-        mostrarParecer,
+        ehFinal,
         usuario.turmaSelecionada.consideraHistorico
       )
         .catch(e => {
