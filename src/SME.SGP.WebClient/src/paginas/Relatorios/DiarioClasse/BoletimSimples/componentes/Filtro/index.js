@@ -90,22 +90,6 @@ const Filtros = ({ onFiltrar, filtrou, setFiltrou, cancelou, setCancelou }) => {
     modeloBoletimId,
   ]);
 
-  useEffect(() => {
-    const params = {
-      consideraHistorico,
-      anoLetivo,
-      dreCodigo,
-      ueCodigo,
-      modalidadeId,
-      semestre: semestre || 0,
-      turmasId,
-      opcaoEstudanteId,
-      modeloBoletimId,
-    };
-
-    onFiltrar(params, true);
-  }, [modeloBoletimId]);
-
   const onChangeConsideraHistorico = e => {
     setConsideraHistorico(e.target.checked);
     limparCampos();
