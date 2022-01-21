@@ -154,14 +154,7 @@ class ServicoConselhoClasse {
 
   setarParecerConclusivo = parecer => {
     const { dispatch } = store;
-    let parecerAtual = '';
-    if (parecer) {
-      const { nome, id } = parecer;
-      if (nome && id) {
-        parecerAtual = parecer;
-      }
-    }
-    dispatch(setMarcadorParecerConclusivo(parecerAtual));
+    dispatch(setMarcadorParecerConclusivo(parecer));
   };
 
   gerarConselhoClasseTurma = (conselhoClasseId, fechamentoTurmaId) => {
