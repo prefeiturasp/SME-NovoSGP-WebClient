@@ -151,6 +151,27 @@ class ServicoSalvarConselhoClasse {
     return true;
   };
 
+  validaParecerConclusivo = async (
+    conselhoClasseId,
+    fechamentoTurmaId,
+    alunoCodigo,
+    codigoTurma,
+    consideraHistorico
+  ) => {
+    const resposta = await ServicoConselhoClasse.acessarParecerConclusivo(
+      conselhoClasseId,
+      fechamentoTurmaId,
+      alunoCodigo,
+      codigoTurma,
+      consideraHistorico
+    ).catch(e => erros(e));
+    if (resposta?.data) {
+      ServicoConselhoClasse.setarParecerConclusivo(resposta.data);
+      return true;
+    }
+    return false;
+  };
+
   gerarParecerConclusivo = async (
     conselhoClasseId,
     fechamentoTurmaId,

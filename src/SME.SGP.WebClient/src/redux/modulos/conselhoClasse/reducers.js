@@ -28,7 +28,7 @@ const inicial = {
   dadosBimestresConselhoClasse: [],
   exibirLoaderGeralConselhoClasse: false,
   situacaoConselho: '',
-  carregouParecer: false,
+  podeAcessar: false,
 };
 
 export default function ConselhoClasse(state = inicial, action) {
@@ -281,8 +281,8 @@ export default function ConselhoClasse(state = inicial, action) {
           dadosListasNotasConceitos: novosDadosListasNotasConceitos,
         };
       }
-      case '@conselhoClasse/setCarregouParecer': {
-        draft.carregouParecer = action.payload;
+      case '@conselhoClasse/setPodeAcessar': {
+        draft.podeAcessar = action.payload;
         break;
       }
 
