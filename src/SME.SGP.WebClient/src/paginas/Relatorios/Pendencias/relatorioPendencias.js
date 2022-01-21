@@ -14,6 +14,7 @@ import { Cabecalho, FiltroHelper } from '~/componentes-sgp';
 import { OPCAO_TODOS } from '~/constantes';
 
 import { ModalidadeDTO, tipoPendenciasGruposDto } from '~/dtos';
+import usuario from '~/redux/modulos/usuario/reducers';
 import {
   api,
   history,
@@ -145,7 +146,8 @@ const RelatorioPendencias = () => {
   };
 
   const onChangeComponenteCurricular = valor => {
-    setComponentesCurricularesId([valor]);
+    const valorNovo = valor ? [valor] : '';
+    setComponentesCurricularesId(valorNovo);
     setBimestre();
     setTipoPendenciaGrupo();
     setClicouBotaoGerar(false);
@@ -445,7 +447,7 @@ const RelatorioPendencias = () => {
         }
         return;
       }
-      setComponentesCurricularesId(undefined);
+      setComponentesCurricularesId();
       setListaComponentesCurriculares([]);
     },
     [escolherChamadaEndpointComponeteCurricular, ehInfantil]
@@ -539,7 +541,7 @@ const RelatorioPendencias = () => {
     setListaUes([]);
 
     setModalidadeId();
-    setComponentesCurricularesId(undefined);
+    setComponentesCurricularesId();
 
     setTurmaId(undefined);
     setBimestre();
@@ -572,10 +574,10 @@ const RelatorioPendencias = () => {
       componentesCurricularesId ||
       bimestre;
 
-    const condicoes = usuarioRf ? !condicoesParciais : condicoesParciais;
+    const condicoes = usuarioRf ? !usuarioRf : condicoesParciais;
 
     const condicoesFinais =
-      condicoesParciaisPreenchidas && usuarioRf ? !usuarioRf : condicoes;
+      condicoesParciaisPreenchidas && usuarioRf ? condicoesParciais : condicoes;
 
     const desabilitar = condicoesComuns || condicoesFinais;
 
