@@ -33,7 +33,7 @@ const MarcadorParecerConclusivo = () => {
   useEffect(() => {
     const nomeParecer =
       Object.keys(marcadorParecerConclusivo).length &&
-      `Parecer conclusivo: ${marcadorParecerConclusivo?.nome || ''}`;
+      `Parecer conclusivo: ${marcadorParecerConclusivo?.nome || 'Sem parecer'}`;
 
     setParecer(nomeParecer);
   }, [marcadorParecerConclusivo]);
