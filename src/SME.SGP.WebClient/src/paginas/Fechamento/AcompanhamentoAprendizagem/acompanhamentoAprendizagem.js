@@ -150,11 +150,16 @@ const AcompanhamentoAprendizagem = () => {
   }, [turmaSelecionada, permissoesTela, modalidadesFiltroPrincipal]);
 
   const obterFrequenciaAluno = async (codigoAluno, semestre) => {
+    dispatch(setExibirLoaderAlunosAcompanhamentoAprendizagem(true));
     const retorno = await ServicoCalendarios.obterFrequenciaAlunoPorSemestre(
       codigoAluno,
       turma,
       semestre
-    ).catch(e => erros(e));
+    )
+      .catch(e => erros(e))
+      .finally(() =>
+        dispatch(setExibirLoaderAlunosAcompanhamentoAprendizagem(false))
+      );
     if (retorno && retorno.data) {
       return retorno.data;
     }
