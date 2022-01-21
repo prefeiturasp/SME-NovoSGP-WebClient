@@ -9,9 +9,11 @@ import RotasDto from '~/dtos/rotasDto';
 import {
   limparDadosConselhoClasse,
   setAlunosConselhoClasse,
+  setPodeAcessar,
   setDadosAlunoObjectCard,
   setDadosBimestresConselhoClasse,
   setExibirLoaderGeralConselhoClasse,
+  setDadosPrincipaisConselhoClasse,
 } from '~/redux/modulos/conselhoClasse/actions';
 import { erros } from '~/servicos/alertas';
 import ServicoConselhoClasse from '~/servicos/Paginas/ConselhoClasse/ServicoConselhoClasse';
@@ -120,11 +122,45 @@ const ConselhoClasse = () => {
     return 0;
   };
 
+  const verificarExibicaoMarcador = async codigoEOL => {
+    const resposta = await ServicoConselhoClasse.obterExibirMarcadorParecer(
+      turmaSelecionada.turma,
+      codigoEOL,
+      turmaSelecionada.consideraHistorico
+    );
+
+    if (resposta?.data) {
+      const {
+        conselhoClasseId,
+        fechamentoTurmaId,
+        conselhoClasseAlunoId,
+      } = resposta?.data;
+      const retorno = await servicoSalvarConselhoClasse.validaParecerConclusivo(
+        conselhoClasseId,
+        fechamentoTurmaId,
+        codigoEOL,
+        turmaSelecionada.turma,
+        usuario.turmaSelecionada.consideraHistorico
+      );
+
+      const valores = {
+        fechamentoTurmaId,
+        conselhoClasseId: conselhoClasseId || 0,
+        conselhoClasseAlunoId,
+        alunoCodigo: codigoEOL,
+      };
+
+      dispatch(setDadosPrincipaisConselhoClasse(valores));
+      dispatch(setPodeAcessar(retorno));
+    }
+  };
+
   const onChangeAlunoSelecionado = async aluno => {
     resetarInfomacoes();
     const frequenciaGeralAluno = await obterFrequenciaAluno(aluno.codigoEOL);
     const novoAluno = aluno;
     novoAluno.frequencia = frequenciaGeralAluno;
+    verificarExibicaoMarcador(aluno.codigoEOL);
     dispatch(setDadosAlunoObjectCard(aluno));
   };
 

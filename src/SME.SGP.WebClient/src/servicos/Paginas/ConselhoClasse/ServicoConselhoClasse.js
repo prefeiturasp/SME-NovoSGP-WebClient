@@ -182,6 +182,17 @@ class ServicoConselhoClasse {
       `/v1/conselhos-classe/turmas/${codigoTurma}/alunos/${alunoCodigo}/parecer`
     );
   };
+
+  obterExibirMarcadorParecer = (
+    turmaCodigo,
+    alunoCodigo,
+    consideraHistorico
+  ) => {
+    return api.get(
+      `/v1/conselhos-classe/turmas/${turmaCodigo}/alunos/${alunoCodigo}/consideraHistorico` +
+        `/${consideraHistorico}`
+    );
+  };
 }
 
 export default new ServicoConselhoClasse();

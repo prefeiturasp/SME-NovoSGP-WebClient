@@ -153,7 +153,7 @@ export const setAtualizarEmAprovacao = payload => ({
   payload,
 });
 
-export const setCarregouParecer = payload => ({
-  type: '@conselhoClasse/setCarregouParecer',
+export const setPodeAcessar = payload => ({
+  type: '@conselhoClasse/setPodeAcessar',
   payload,
 });

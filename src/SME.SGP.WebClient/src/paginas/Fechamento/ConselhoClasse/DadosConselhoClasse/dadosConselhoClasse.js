@@ -8,7 +8,6 @@ import modalidadeDto from '~/dtos/modalidade';
 import RotasDto from '~/dtos/rotasDto';
 import {
   setBimestreAtual,
-  setCarregouParecer,
   setDadosPrincipaisConselhoClasse,
   setDesabilitarCampos,
   setExpandirLinha,
@@ -47,9 +46,7 @@ const DadosConselhoClasse = props => {
     store => store.conselhoClasse.dadosAlunoObjectCard
   );
 
-  const carregouParecer = useSelector(
-    store => store.conselhoClasse.carregouParecer
-  );
+  const podeAcessar = useSelector(store => store.conselhoClasse.podeAcessar);
 
   const modalidadesFiltroPrincipal = useSelector(
     store => store.filtro.modalidades
@@ -60,32 +57,6 @@ const DadosConselhoClasse = props => {
   const [semDados, setSemDados] = useState(true);
   const [carregando, setCarregando] = useState(false);
   const [turmaAtual, setTurmaAtual] = useState(0);
-
-  const validaParecerConclusivo = useCallback(
-    async (
-      conselhoClasseId,
-      fechamentoTurmaId,
-      alunoCodigo,
-      codigoTurma,
-      consideraHistorico
-    ) => {
-      if (carregouParecer) return carregouParecer;
-
-      const resposta = await ServicoConselhoClasse.acessarParecerConclusivo(
-        conselhoClasseId,
-        fechamentoTurmaId,
-        alunoCodigo,
-        codigoTurma,
-        consideraHistorico
-      ).catch(e => erros(e));
-      if (resposta?.data) {
-        ServicoConselhoClasse.setarParecerConclusivo(resposta.data);
-        return true;
-      }
-      return false;
-    },
-    [carregouParecer, dispatch]
-  );
 
   const limparDadosNotaPosConselhoJustificativa = useCallback(() => {
     dispatch(setExpandirLinha([]));
@@ -115,7 +86,7 @@ const DadosConselhoClasse = props => {
 
   // Quando passa bimestre 0 o retorno vai trazer dados do bimestre corrente!
   const caregarInformacoes = useCallback(
-    async (bimestreConsulta = 0, mostrarParecer = false) => {
+    async (bimestreConsulta = 0) => {
       limparDadosNotaPosConselhoJustificativa();
       setCarregando(true);
       setSemDados(true);
@@ -163,21 +134,7 @@ const DadosConselhoClasse = props => {
         const novoRegistro = !conselhoClasseId;
         validaPermissoes(novoRegistro);
 
-        let podeAcessarAbaFinal = true;
-
-        if (mostrarParecer) {
-          const podeAcessar = await validaParecerConclusivo(
-            conselhoClasseId,
-            fechamentoTurmaId,
-            codigoEOL,
-            turmaCodigo,
-            usuario.turmaSelecionada.consideraHistorico
-          );
-          dispatch(setCarregouParecer(podeAcessar));
-          podeAcessarAbaFinal = podeAcessar;
-        }
-
-        if (!podeAcessarAbaFinal) {
+        if (!podeAcessar) {
           dispatch(
             setBimestreAtual({
               valor: bimestreConsulta,
@@ -218,7 +175,7 @@ const DadosConselhoClasse = props => {
           );
         }
 
-        if (mostrarParecer) {
+        if (ehFinal) {
           dispatch(
             setBimestreAtual({
               valor: bimestreConsulta,
@@ -252,16 +209,16 @@ const DadosConselhoClasse = props => {
       dispatch,
       limparDadosNotaPosConselhoJustificativa,
       turmaCodigo,
-      validaParecerConclusivo,
       validaPermissoes,
       usuario,
+      podeAcessar,
     ]
   );
 
   useEffect(() => {
     if (codigoEOL && turmaSelecionada.turma == turmaAtual) {
       if (bimestreAtual.valor) {
-        caregarInformacoes(bimestreAtual.valor, true);
+        caregarInformacoes(bimestreAtual.valor);
       }
     }
     if (turmaSelecionada.turma != turmaAtual) {
@@ -285,7 +242,7 @@ const DadosConselhoClasse = props => {
     }
 
     if (continuar) {
-      caregarInformacoes(numeroBimestre, true);
+      caregarInformacoes(numeroBimestre);
     }
   };
 
