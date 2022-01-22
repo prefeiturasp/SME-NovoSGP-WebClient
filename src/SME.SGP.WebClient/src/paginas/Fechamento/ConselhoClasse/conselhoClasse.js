@@ -47,6 +47,10 @@ const ConselhoClasse = () => {
     store => store.filtro.modalidades
   );
 
+  const dadosPrincipaisConselhoClasse = useSelector(
+    store => store.conselhoClasse.dadosPrincipaisConselhoClasse
+  );
+
   const obterListaAlunos = useCallback(async () => {
     dispatch(setExibirLoaderGeralConselhoClasse(true));
     const retorno = await ServicoConselhoClasse.obterListaAlunos(
@@ -149,8 +153,9 @@ const ConselhoClasse = () => {
         conselhoClasseAlunoId,
         alunoCodigo: codigoEOL,
       };
-
-      dispatch(setDadosPrincipaisConselhoClasse(valores));
+      if (!dadosPrincipaisConselhoClasse) {
+        dispatch(setDadosPrincipaisConselhoClasse(valores));
+      }
       dispatch(setPodeAcessar(retorno));
     }
   };
