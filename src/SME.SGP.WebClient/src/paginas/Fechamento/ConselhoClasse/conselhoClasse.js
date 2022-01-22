@@ -152,8 +152,9 @@ const ConselhoClasse = () => {
         conselhoClasseId: conselhoClasseId || 0,
         conselhoClasseAlunoId,
         alunoCodigo: codigoEOL,
+        ...dadosPrincipaisConselhoClasse,
       };
-      if (!dadosPrincipaisConselhoClasse) {
+      if (!Object.keys(dadosPrincipaisConselhoClasse).length) {
         dispatch(setDadosPrincipaisConselhoClasse(valores));
       }
       dispatch(setPodeAcessar(retorno));
