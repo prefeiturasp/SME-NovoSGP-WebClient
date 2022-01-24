@@ -28,7 +28,6 @@ import {
 } from '~/redux/modulos/usuario/actions';
 import { history } from '~/servicos';
 import {
-  ICONES_CORES,
   LISTAO_TAB_AVALIACOES,
   LISTAO_TAB_DIARIO_BORDO,
   LISTAO_TAB_FECHAMENTO,
