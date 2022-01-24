@@ -4,6 +4,8 @@ import {
   faFileAlt,
   faPencilRuler,
   faSpellCheck,
+  faCheck,
+  faExclamationTriangle,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Col } from 'antd';
@@ -26,11 +28,13 @@ import {
 } from '~/redux/modulos/usuario/actions';
 import { history } from '~/servicos';
 import {
+  ICONES_CORES,
   LISTAO_TAB_AVALIACOES,
   LISTAO_TAB_DIARIO_BORDO,
   LISTAO_TAB_FECHAMENTO,
   LISTAO_TAB_FREQUENCIA,
   LISTAO_TAB_PLANO_AULA,
+  PARAMETROS,
 } from '../listaoConstantes';
 import ListaoContext from '../listaoContext';
 
@@ -172,17 +176,33 @@ const ListaoPaginado = () => {
   };
 
   const montarIcone = (icon, tab, params) => {
+    const parametro = PARAMETROS[tab];
+    const temPendencia = params[parametro];
+    const iconePendencia = temPendencia ? faExclamationTriangle : faCheck;
+    const corPendencia = temPendencia ? 'LaranjaCalendario' : 'Verde';
+
     return (
-      <FontAwesomeIcon
-        className="cor-branco-hover"
-        style={{
-          fontSize: '16px',
-          color: Base.Azul,
-          cursor: 'pointer',
-        }}
-        icon={icon}
-        onClick={() => carregarFiltros(tab, params)}
-      />
+      <>
+        <FontAwesomeIcon
+          className="cor-branco-hover"
+          style={{
+            fontSize: '16px',
+            color: Base.Azul,
+            cursor: 'pointer',
+          }}
+          icon={icon}
+          onClick={() => carregarFiltros(tab, params)}
+        />
+        <FontAwesomeIcon
+          className="cor-branco-hover"
+          style={{
+            fontSize: '16px',
+            color: Base[corPendencia],
+            marginLeft: '12px',
+          }}
+          icon={iconePendencia}
+        />
+      </>
     );
   };
 
