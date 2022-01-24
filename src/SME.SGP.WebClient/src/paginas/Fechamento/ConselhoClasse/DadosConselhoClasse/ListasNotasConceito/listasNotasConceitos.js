@@ -139,14 +139,16 @@ const ListasNotasConceitos = props => {
     const alunoDentroDoPeriodoDoBimestre = alunoDentroDoPeriodoDoBimestreOuFechamento();
     const periodoAbertoOuEmFechamento = estaNoPeriodoOuFechamento();
 
+    let emEdicao = false;
     if (
       !conselhoClasseAlunoId &&
       notasFechamentosPreenchidas &&
       alunoDentroDoPeriodoDoBimestre &&
       periodoAbertoOuEmFechamento
     ) {
-      dispatch(setConselhoClasseEmEdicao(true));
+      emEdicao = true;
     }
+    dispatch(setConselhoClasseEmEdicao(emEdicao));
   };
 
   const habilitaConselhoClassePorNotasPosConselho = dados => {
