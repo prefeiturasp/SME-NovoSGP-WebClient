@@ -1,6 +1,8 @@
 import moment from 'moment';
 import api from '~/servicos/api';
 
+const urlPadrao = 'v1/periodo-escolar';
+
 class ServicoPeriodoEscolar {
   obterPeriodosAbertos = async (turma, dataReferencia = null) => {
     let url = `v1/periodo-escolar/turmas/${turma}/bimestres/aberto`;
@@ -24,8 +26,18 @@ class ServicoPeriodoEscolar {
     return api.get(`v1/periodo-escolar/turmas/${turmaId}/bimestres/atual`);
   };
 
-  obterPeriodoLetivoTurma = async (codigoTurma) => {
+  obterPeriodoLetivoTurma = async codigoTurma => {
     const url = `v1/periodo-escolar/turmas/${codigoTurma}/periodo-letivo`;
+    return api.get(url);
+  };
+
+  obterPeriodoPorComponente = (
+    turmaCodigo,
+    codigoComponenteCurricular,
+    ehRegencia,
+    bimestre
+  ) => {
+    const url = `${urlPadrao}/turmas/${turmaCodigo}/componentes-curriculares/${codigoComponenteCurricular}/regencia/${ehRegencia}/bimestres/${bimestre}`;
     return api.get(url);
   };
 }

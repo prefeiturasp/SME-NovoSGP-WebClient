@@ -23,6 +23,7 @@ const CampoObservacao = props => {
     usarLocalizadorFuncionario,
     parametrosLocalizadorFuncionario,
     desabilitarBotaoNotificar,
+    diarioBordoId,
   } = props;
   const [modalVisivel, setModalVisivel] = useState(false);
 
@@ -62,10 +63,12 @@ const CampoObservacao = props => {
     const retorno = await salvarObservacao({ observacao: novaObservacao });
     if (retorno?.status === 200) {
       dispatch(setNovaObservacao(''));
-      if (obterUsuariosNotificadosDiarioBordo) {
+      if (obterUsuariosNotificadosDiarioBordo && diarioBordoId) {
         const retornoUsuarios = await ServicoDiarioBordo.obterNofiticarUsuarios(
           {
             turmaId,
+            observacaoId: '',
+            diarioBordoId,
           }
         ).catch(e => erros(e));
 
@@ -79,18 +82,21 @@ const CampoObservacao = props => {
   const obterNofiticarUsuarios = useCallback(async () => {
     const retorno = await ServicoDiarioBordo.obterNofiticarUsuarios({
       turmaId,
+      observacaoId: '',
+      diarioBordoId,
     }).catch(e => erros(e));
 
     if (retorno?.status === 200) {
       dispatch(setListaUsuariosNotificacao(retorno.data));
     }
-  }, [turmaId]);
+  }, [turmaId, diarioBordoId, dispatch]);
 
   useEffect(() => {
     if (
       turmaId &&
       !listaUsuarios?.length &&
-      obterUsuariosNotificadosDiarioBordo
+      obterUsuariosNotificadosDiarioBordo &&
+      diarioBordoId
     ) {
       obterNofiticarUsuarios();
     }
@@ -99,6 +105,7 @@ const CampoObservacao = props => {
     obterNofiticarUsuarios,
     listaUsuarios,
     obterUsuariosNotificadosDiarioBordo,
+    diarioBordoId,
   ]);
 
   return (
@@ -178,6 +185,7 @@ CampoObservacao.propTypes = {
   usarLocalizadorFuncionario: PropTypes.bool,
   parametrosLocalizadorFuncionario: PropTypes.oneOfType(PropTypes.object),
   desabilitarBotaoNotificar: PropTypes.bool,
+  diarioBordoId: PropTypes.string,
 };
 
 CampoObservacao.defaultProps = {
@@ -188,6 +196,7 @@ CampoObservacao.defaultProps = {
   usarLocalizadorFuncionario: false,
   parametrosLocalizadorFuncionario: {},
   desabilitarBotaoNotificar: false,
+  diarioBordoId: '',
 };
 
 export default CampoObservacao;

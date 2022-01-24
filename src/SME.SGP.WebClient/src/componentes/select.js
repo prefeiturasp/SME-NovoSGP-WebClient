@@ -127,6 +127,8 @@ const SelectComponent = React.forwardRef((props, ref) => {
             key={shortid.generate()}
             value={`${item[valueOption]}`}
             title={`${item[valueText]}`}
+            id={`VALOR_${item[valueOption]}`}
+            name={`NOME_${item[valueText]?.toUpperCase?.()}`}
           >
             {`${item[valueText]}`}
           </Option>

@@ -6,7 +6,7 @@ const urlPadrao = 'v1/dashboard/registros_individuais';
 
 class ServicoDashboardRegistroIndividual {
   montarConsultaPadraoGraficos = params => {
-    const { rota, anoLetivo, dreId, ueId, modalidade } = params;
+    const { rota, anoLetivo, dreId, ueId, modalidade, anoEscolar } = params;
 
     let url = `${urlPadrao}/${rota}?anoLetivo=${anoLetivo}`;
 
@@ -18,6 +18,9 @@ class ServicoDashboardRegistroIndividual {
     }
     if (modalidade) {
       url += `&modalidade=${modalidade}`;
+    }
+    if (anoEscolar) {
+      url += `&ano=${anoEscolar}`;
     }
     return api.get(url);
   };
@@ -64,6 +67,14 @@ class ServicoDashboardRegistroIndividual {
       dreId,
       ueId,
       modalidade,
+    });
+  };
+
+  obterTotalRegistrosIndividuaisPorDRE = (anoLetivo, anoEscolar) => {
+    return this.montarConsultaPadraoGraficos({
+      rota: 'dre',
+      anoLetivo,
+      anoEscolar,
     });
   };
 

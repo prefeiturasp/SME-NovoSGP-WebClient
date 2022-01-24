@@ -3,7 +3,7 @@ import styled from 'styled-components';
 
 const CardEstilo = styled.div`
   padding: 16px !important;
-  border-radius: 0.25rem;
+  border-radius: 4px;
 `;
 
 const Card = props => {
@@ -11,7 +11,7 @@ const Card = props => {
 
   return (
     <CardEstilo
-      className={`row shadow ${!mx ? 'mx-2' : mx} ${mtop ||
+      className={`row shadow ${!mx ? 'mx-3' : mx} ${mtop ||
         ''} bg-white ${className || ''}`}
     >
       {children}

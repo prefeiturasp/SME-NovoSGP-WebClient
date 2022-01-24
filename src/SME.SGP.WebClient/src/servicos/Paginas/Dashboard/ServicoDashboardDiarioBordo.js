@@ -6,7 +6,7 @@ const urlPadrao = 'v1/dashboard/diario-bordo';
 
 class ServicoDashboardDiarioBordo {
   montarConsultaPadraoGraficos = params => {
-    const { rota, anoLetivo, dreId, ueId, modalidade } = params;
+    const { rota, anoLetivo, dreId, ueId, modalidade, anoEscolar } = params;
 
     let url = `${urlPadrao}/${rota}?anoLetivo=${anoLetivo}`;
 
@@ -18,6 +18,9 @@ class ServicoDashboardDiarioBordo {
     }
     if (modalidade) {
       url += `&modalidade=${modalidade}`;
+    }
+    if (anoEscolar) {
+      url += `&ano=${anoEscolar}`;
     }
     return api.get(url);
   };
@@ -45,6 +48,18 @@ class ServicoDashboardDiarioBordo {
       ueId,
       modalidade,
     });
+  };
+
+  obterTotalDiariosBordoPorDRE = (anoLetivo, anoEscolar) => {
+    return this.montarConsultaPadraoGraficos({
+      rota: 'quantidade-diarios-pendentes-dre',
+      anoLetivo,
+      anoEscolar,
+    });
+  };
+
+  obterUltimaConsolidacao = anoLetivo => {
+    return api.get(`${urlPadrao}/consolidacao?anoLetivo=${anoLetivo}`);
   };
 
   atualizarFiltros = (nomeParametro, valor) => {

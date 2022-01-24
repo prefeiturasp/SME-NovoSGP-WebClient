@@ -19,7 +19,7 @@ const QtdDiariosBordoCampoReflexoesReplanejamentoPreenchido = props => {
   return (
     <div className="mt-3">
       <CardCollapse
-        titulo={`Quantidade de diários de bordo com o campo "Reflexões e replanejamento" preenchido`}
+        titulo={`Total de diários de bordo com o campo "Reflexões e replanejamento" preenchido`}
         key={`${key}-collapse-key`}
         indice={`${key}-collapse-indice`}
         alt={`${key}-alt`}

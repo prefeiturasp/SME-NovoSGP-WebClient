@@ -1,10 +1,9 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import { useSelector } from 'react-redux';
-import { Form, Formik, FieldArray } from 'formik';
-import * as Yup from 'yup';
+import { FieldArray, Form, Formik } from 'formik';
 import moment from 'moment';
+import React, { useCallback, useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 import shortid from 'shortid';
-
+import * as Yup from 'yup';
 import {
   Auditoria,
   Button,
@@ -15,17 +14,9 @@ import {
   momentSchema,
   SelectAutocomplete,
 } from '~/componentes';
-import {
-  Cabecalho,
-  DreDropDown,
-  RegistroMigrado,
-  UeDropDown,
-} from '~/componentes-sgp';
-
+import { Cabecalho, RegistroMigrado } from '~/componentes-sgp';
 import { URL_HOME } from '~/constantes';
-
 import { periodo, RotasDto } from '~/dtos';
-
 import {
   confirmar,
   erros,
@@ -35,7 +26,6 @@ import {
   sucesso,
   verificaSomenteConsulta,
 } from '~/servicos';
-
 import {
   BoxTextoBimestre,
   CaixaBimestre,
@@ -49,8 +39,6 @@ const PeriodoFechamentoAbertura = () => {
   const [tipoCalendarioSelecionado, setTipoCalendarioSelecionado] = useState(
     ''
   );
-  const [dreSelecionada, setDreSelecionada] = useState('');
-  const [ueSelecionada, setUeSelecionada] = useState('');
 
   const [emProcessamento, setEmprocessamento] = useState(false);
   const [registroMigrado, setRegistroMigrado] = useState(false);
@@ -59,14 +47,9 @@ const PeriodoFechamentoAbertura = () => {
   const [desabilitarCampos, setDesabilitarCampos] = useState(false);
   const [idFechamentoAbertura, setIdFechamentoAbertura] = useState(0);
   const [ehRegistroExistente, setEhRegistroExistente] = useState(false);
-  const [modalidadeTurma, setModalidadeTurma] = useState('');
-
-  const [listaDres, setListaDres] = useState([]);
 
   const obtemPeriodosIniciais = () => {
     return {
-      dreId: null,
-      ueId: null,
       tipoCalendarioId: null,
       periodoEscolarId: null,
       migrado: false,
@@ -219,14 +202,9 @@ const PeriodoFechamentoAbertura = () => {
     setModoEdicao(false);
     if (tipoCalendarioSelecionado) {
       setEmprocessamento(true);
-      const ue = ueSelecionada === undefined ? '' : ueSelecionada;
-      ServicoPeriodoFechamento.obterPorTipoCalendarioDreEUe(
-        tipoCalendarioSelecionado,
-        dreSelecionada,
-        ue
-      )
+      ServicoPeriodoFechamento.obterPorTipoCalendario(tipoCalendarioSelecionado)
         .then(resposta => {
-          if (resposta.data && resposta.data.fechamentosBimestres) {
+          if (resposta?.data?.fechamentosBimestres) {
             const montarDataInicio = item => {
               return item.inicioDoFechamento
                 ? obterDataMoment(item.inicioDoFechamento)
@@ -303,17 +281,37 @@ const PeriodoFechamentoAbertura = () => {
     } else {
       setFechamento(obtemPeriodosIniciais());
     }
-  }, [dreSelecionada, tipoCalendarioSelecionado, ueSelecionada]);
+  }, [tipoCalendarioSelecionado]);
 
   useEffect(() => {
     carregaDados();
-  }, [dreSelecionada, carregaDados, tipoCalendarioSelecionado, ueSelecionada]);
+  }, [carregaDados, tipoCalendarioSelecionado]);
+
+  const touchedFields = form => {
+    const arrayCampos = Object.keys(fechamento);
+    arrayCampos.forEach(campo => {
+      form.setFieldTouched(campo, true, true);
+    });
+  };
 
   const onChangeCamposData = form => {
     if (!modoEdicao) {
       touchedFields(form);
       setModoEdicao(true);
     }
+  };
+
+  const validaAntesDoSubmit = form => {
+    touchedFields(form);
+    form.validateForm().then(() => {
+      if (
+        form.isValid ||
+        (Object.keys(form.errors).length === 0 &&
+          Object.keys(form.values).length > 0)
+      ) {
+        form.handleSubmit(e => e);
+      }
+    });
   };
 
   const onClickVoltar = async form => {
@@ -337,24 +335,11 @@ const PeriodoFechamentoAbertura = () => {
     }
   };
 
-  const touchedFields = form => {
-    const arrayCampos = Object.keys(fechamento);
-    arrayCampos.forEach(campo => {
-      form.setFieldTouched(campo, true, true);
-    });
-  };
-
-  const validaAntesDoSubmit = form => {
-    touchedFields(form);
-    form.validateForm().then(() => {
-      if (
-        form.isValid ||
-        (Object.keys(form.errors).length == 0 &&
-          Object.keys(form.values).length > 0)
-      ) {
-        form.handleSubmit(e => e);
-      }
-    });
+  const resetarTela = form => {
+    form.resetForm();
+    setModoEdicao(false);
+    setFechamento(obtemPeriodosIniciais());
+    carregaDados();
   };
 
   const onClickCancelar = async form => {
@@ -368,13 +353,6 @@ const PeriodoFechamentoAbertura = () => {
         resetarTela(form);
       }
     }
-  };
-
-  const resetarTela = form => {
-    form.resetForm();
-    setModoEdicao(false);
-    setFechamento(obtemPeriodosIniciais());
-    carregaDados();
   };
 
   const onSubmit = async (form, confirmou = false) => {
@@ -411,19 +389,7 @@ const PeriodoFechamentoAbertura = () => {
         carregaDados();
         setModoEdicao(false);
       })
-      .catch(async e => {
-        if (e && e.response && e.response.status === 602) {
-          if (e && e.response && e.response.data && e.response.data.mensagens) {
-            const confirmacao = await confirmar(
-              'Atenção',
-              e.response.data.mensagens[0]
-            );
-            if (confirmacao) {
-              onSubmit(form, true);
-            }
-          }
-        } else erros(e);
-      })
+      .catch(e => erros(e))
       .finally(() => setEmprocessamento(false));
   };
 
@@ -436,30 +402,6 @@ const PeriodoFechamentoAbertura = () => {
       diaInicial = diaInicial.clone().add(1, 'd');
     }
     return dias;
-  };
-
-  const setarModalidadeTurma = tipoSelecionado => {
-    if (tipoSelecionado && tipoSelecionado.modalidade) {
-      const modalidadeT = ServicoCalendarios.converterModalidade(
-        tipoSelecionado.modalidade
-      );
-      setModalidadeTurma(modalidadeT);
-    } else {
-      setModalidadeTurma('');
-    }
-  };
-
-  const onChangeDre = (dreId, form, dres) => {
-    setListaDres(dres);
-    if (dreId !== dreSelecionada) {
-      setDreSelecionada(dreId);
-      const ue = undefined;
-      setUeSelecionada(ue);
-      const tipoSelecionado = listaTipoCalendario.find(
-        item => item.id == form.values.tipoCalendarioId
-      );
-      setarModalidadeTurma(tipoSelecionado);
-    }
   };
 
   const criaBimestre = (
@@ -503,21 +445,14 @@ const PeriodoFechamentoAbertura = () => {
     );
   };
 
-  const selecionaTipoCalendario = (descricao, form) => {
-    const tipo = listaTipoCalendario?.find(t => t.descricao === descricao);
+  const selecionaTipoCalendario = descricao => {
+    const tipo = listaTipoCalendario?.find(t => t?.descricao === descricao);
     if (Number(tipo?.id) || !tipo?.id) {
       const isPeriodoAnual = tipo?.periodo === periodo?.Anual;
       setIsTipoCalendarioAnual(isPeriodoAnual);
       setValorTipoCalendario(descricao);
     }
     setTipoCalendarioSelecionado(tipo?.id);
-    setUeSelecionada('');
-    form.setFieldValue('ueId', '');
-    setarModalidadeTurma(tipo);
-    if (listaDres && listaDres.length > 1) {
-      setDreSelecionada('');
-      form.setFieldValue('dreId', '');
-    }
   };
 
   const handleSearch = descricao => {
@@ -593,49 +528,13 @@ const PeriodoFechamentoAbertura = () => {
                           lista={listaTipoCalendario}
                           valueField="id"
                           textField="descricao"
-                          onSelect={valor =>
-                            selecionaTipoCalendario(valor, form)
-                          }
-                          onChange={valor =>
-                            selecionaTipoCalendario(valor, form)
-                          }
+                          onSelect={valor => selecionaTipoCalendario(valor)}
+                          onChange={valor => selecionaTipoCalendario(valor)}
                           handleSearch={handleSearch}
                           value={valorTipoCalendario}
                         />
                       </div>
                     </Loader>
-                  </div>
-                  <br />
-                  <div className="col-md-6 pb-2">
-                    {tipoCalendarioSelecionado &&
-                      fechamento &&
-                      fechamento.fechamentosBimestres &&
-                      fechamento.fechamentosBimestres.length > 0 && (
-                        <DreDropDown
-                          label="Diretoria Regional de Educação (DRE)"
-                          form={form}
-                          onChange={(dreId, dres) =>
-                            onChangeDre(dreId, form, dres)
-                          }
-                          desabilitado={desabilitarCampos}
-                        />
-                      )}
-                  </div>
-                  <div className="col-md-6 pb-2">
-                    {tipoCalendarioSelecionado &&
-                      fechamento &&
-                      fechamento.fechamentosBimestres &&
-                      fechamento.fechamentosBimestres.length > 0 && (
-                        <UeDropDown
-                          dreId={form.values.dreId}
-                          label="Unidade Escolar (UE)"
-                          form={form}
-                          url=""
-                          onChange={ueId => setUeSelecionada(ueId)}
-                          desabilitado={desabilitarCampos}
-                          modalidade={modalidadeTurma}
-                        />
-                      )}
                   </div>
                 </div>
                 <FieldArray

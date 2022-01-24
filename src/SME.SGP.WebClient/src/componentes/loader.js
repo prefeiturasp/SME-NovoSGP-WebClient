@@ -11,7 +11,7 @@ import styled from 'styled-components';
 import { Base } from './colors';
 
 const LoaderWrapper = styled.div`
-  width: inherit;
+  width: auto;
   .ant-spin-text {
     color: ${Base.CinzaMako};
   }
@@ -19,9 +19,9 @@ const LoaderWrapper = styled.div`
 
 const icone = <Icon type="loading" style={{ fontWeight: 'bold' }} spin />;
 
-function Loader({ children, loading, tip, className, ignorarTip }) {
+function Loader({ children, loading, tip, className, ignorarTip, style }) {
   return (
-    <LoaderWrapper className={className}>
+    <LoaderWrapper className={className} style={style}>
       <Spin
         tip={!ignorarTip && tip}
         size="large"
@@ -44,6 +44,7 @@ Loader.propTypes = {
   tip: PropTypes.string,
   ignorarTip: PropTypes.bool,
   className: PropTypes.string,
+  style: PropTypes.oneOfType(PropTypes.object),
 };
 
 Loader.defaultProps = {
@@ -52,6 +53,7 @@ Loader.defaultProps = {
   tip: 'Carregando...',
   className: '',
   ignorarTip: false,
+  style: {},
 };
 
 export default Loader;

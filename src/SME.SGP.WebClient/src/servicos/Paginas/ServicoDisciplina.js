@@ -1,8 +1,11 @@
 import api from '~/servicos/api';
 
 class ServicoDisciplina {
-  obterDisciplinasPorTurma = turmaId => {
-    const url = `v1/professores/turmas/${turmaId}/disciplinas`;
+  obterDisciplinasPorTurma = (
+    turmaId,
+    realizarAgrupamentoComponente = true
+  ) => {
+    const url = `v1/professores/turmas/${turmaId}/disciplinas?realizarAgrupamentoComponente=${realizarAgrupamentoComponente}`;
     return api.get(url);
   };
 

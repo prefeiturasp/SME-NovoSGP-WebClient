@@ -25,8 +25,11 @@ class ServicoComponentesCurriculares {
     return api.get(`${urlPadrao}/turmas/${turmaId}/regencia/componentes`);
   };
 
-  obterComponentesPorListaDeTurmas = turmasId => {
-    const url = `v1/professores/disciplinas/turmas`;
+  obterComponentesPorListaDeTurmas = (
+    turmasId,
+    realizarAgrupamentoComponente = false
+  ) => {
+    const url = `v1/professores/disciplinas/turmas?realizarAgrupamentoComponente=${realizarAgrupamentoComponente}`;
     return api.post(url, turmasId);
   };
 

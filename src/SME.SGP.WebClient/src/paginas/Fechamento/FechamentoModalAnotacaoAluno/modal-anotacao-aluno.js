@@ -23,6 +23,7 @@ const ModalAnotacaoAluno = props => {
     codigoTurma,
     anoLetivo,
     dadosAlunoSelecionado,
+    desabilitar,
   } = props;
 
   const [showModal, setShowModal] = useState(exibirModal);
@@ -166,6 +167,7 @@ const ModalAnotacaoAluno = props => {
                 exibirBotaoImprimir={false}
                 exibirFrequencia={false}
                 dados={dadosAluno.aluno}
+                permiteAlterarImagem={!desabilitar}
               />
             </div>
             <div className="col-md-12">
@@ -175,6 +177,7 @@ const ModalAnotacaoAluno = props => {
                   value={valoresIniciais.anotacao}
                   name="anotacao"
                   onChange={onChangeCampos}
+                  desabilitar={desabilitar}
                 />
               </EditorAnotacao>
             </div>
@@ -202,7 +205,9 @@ const ModalAnotacaoAluno = props => {
                   className="mr-3 mt-2 padding-btn-confirmacao"
                   onClick={validaAntesDeExcluir}
                   disabled={
-                    dadosAlunoSelecionado && !dadosAlunoSelecionado.temAnotacao
+                    desabilitar ||
+                    (dadosAlunoSelecionado &&
+                      !dadosAlunoSelecionado?.temAnotacao)
                   }
                 />
                 <Button
@@ -213,6 +218,7 @@ const ModalAnotacaoAluno = props => {
                   border
                   className="mr-3 mt-2 padding-btn-confirmacao"
                   onClick={() => validaAntesDoSubmit(form)}
+                  disabled={desabilitar}
                 />
               </div>
             </div>
@@ -228,11 +234,13 @@ const ModalAnotacaoAluno = props => {
 ModalAnotacaoAluno.propTypes = {
   exibirModal: PropTypes.bool,
   onCloseModal: PropTypes.func,
+  desabilitar: PropTypes.bool,
 };
 
 ModalAnotacaoAluno.defaultProps = {
   exibirModal: false,
   onCloseModal: () => {},
+  desabilitar: false,
 };
 
 export default ModalAnotacaoAluno;

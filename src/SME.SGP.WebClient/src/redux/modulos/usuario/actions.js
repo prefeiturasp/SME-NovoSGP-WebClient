@@ -113,3 +113,10 @@ export function setLogado(logado) {
     payload: logado,
   };
 }
+
+export function setRecarregarFiltroPrincipal(recarregar) {
+  return {
+    type: '@usuario/setRecarregarFiltroPrincipal',
+    payload: recarregar,
+  };
+}

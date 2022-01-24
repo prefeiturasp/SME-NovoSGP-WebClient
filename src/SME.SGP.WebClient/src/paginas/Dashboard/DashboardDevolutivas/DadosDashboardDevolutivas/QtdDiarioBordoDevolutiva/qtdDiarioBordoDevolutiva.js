@@ -19,7 +19,7 @@ const QtdDiarioBordoDevolutiva = props => {
   return (
     <div className="mt-3">
       <CardCollapse
-        titulo="Quantidade total de diários de bordo com devolutiva e quantidade de diários de bordo com devolutiva pendente"
+        titulo="Total de diários de bordo com devolutiva comparado a quantidade de diários de bordo com devolutiva pendente"
         key={`${key}-collapse-key`}
         indice={`${key}-collapse-indice`}
         alt={`${key}-alt`}
