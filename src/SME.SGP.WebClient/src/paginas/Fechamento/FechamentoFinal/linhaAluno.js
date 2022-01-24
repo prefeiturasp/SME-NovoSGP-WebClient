@@ -207,7 +207,7 @@ const LinhaAluno = ({
             ) : (
               montarCampoNotaConceitoFinal(aluno)
             )}
-            {aluno.notasConceitoFinal.length &&
+            {aluno?.notasConceitoFinal?.length &&
               aluno.notasConceitoFinal[0].emAprovacao && (
                 <Tooltip title="Aguardando aprovação">
                   <MarcadorTriangulo />
