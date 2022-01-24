@@ -100,7 +100,7 @@ const ListaoListaFrequencia = () => {
             }
           }
         }}
-        desabilitar={desabilitarCampos || aulaHeader.podeEditar}
+        desabilitar={desabilitarCampos || !aulaHeader.podeEditar}
       />
     );
   };
@@ -126,7 +126,7 @@ const ListaoListaFrequencia = () => {
         desabilitar={
           desabilitarCampos ||
           dadosDiaAula?.desabilitado ||
-          aulasGerais.podeEditar
+          !aulasGerais.podeEditar
         }
       />
     );
@@ -157,7 +157,9 @@ const ListaoListaFrequencia = () => {
           atualizarDados();
         }}
         desabilitar={
-          desabilitarCampos || dadosAula?.desabilitado || aulasGerais.podeEditar
+          desabilitarCampos ||
+          dadosAula?.desabilitado ||
+          !aulasGerais.podeEditar
         }
       />
     );
