@@ -134,7 +134,7 @@ const DadosConselhoClasse = props => {
         const novoRegistro = !conselhoClasseId;
         validaPermissoes(novoRegistro);
 
-        if (!podeAcessar && ehFinal) {
+        if (!podeAcessar) {
           dispatch(
             setBimestreAtual({
               valor: bimestreConsulta,
