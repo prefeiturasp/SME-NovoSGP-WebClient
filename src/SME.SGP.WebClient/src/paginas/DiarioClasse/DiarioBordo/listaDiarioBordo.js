@@ -60,7 +60,6 @@ const ListaDiarioBordo = () => {
   const listaUsuarios = useSelector(
     store => store.observacoesUsuario.listaUsuariosNotificacao
   );
-  console.log('turmaSelecionada', turmaSelecionada);
 
   const dispatch = useDispatch();
 
