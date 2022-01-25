@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import shortid from 'shortid';
-import { LabelSemDados } from '~/componentes';
+import { LabelSemDados, MarcadorTriangulo } from '~/componentes';
 import notasConceitos from '~/dtos/notasConceitos';
 import {
   setExpandirLinha,
@@ -352,7 +352,7 @@ const Avaliacao = props => {
                                 return (
                                   <td
                                     key={shortid.generate()}
-                                    className={obterTamanhoColuna()}
+                                    className={`${obterTamanhoColuna()} position-relative`}
                                   >
                                     {montarCampoNotaConceito(nota, aluno)}
                                   </td>
@@ -364,6 +364,11 @@ const Avaliacao = props => {
                               <ColunaNotaFinalRegencia indexLinha={i} />
                             ) : (
                               montarCampoNotaConceitoFinal(aluno)
+                            )}
+                            {aluno?.notasBimestre[0]?.emAprovacao && (
+                              <Tooltip title="Aguardando aprovação">
+                                <MarcadorTriangulo />
+                              </Tooltip>
                             )}
                           </td>
 

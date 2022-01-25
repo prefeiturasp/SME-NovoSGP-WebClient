@@ -28,6 +28,7 @@ const inicial = {
   dadosBimestresConselhoClasse: [],
   exibirLoaderGeralConselhoClasse: false,
   situacaoConselho: '',
+  podeAcessar: false,
 };
 
 export default function ConselhoClasse(state = inicial, action) {
@@ -100,6 +101,7 @@ export default function ConselhoClasse(state = inicial, action) {
           desabilitarCampos: false,
           exibirModalImpressaoConselhoClasse: false,
           exibirLoaderGeralConselhoClasse: false,
+          carregouParecer: false,
         };
       }
       case '@conselhoClasse/setConselhoClasseEmEdicao': {
@@ -229,6 +231,58 @@ export default function ConselhoClasse(state = inicial, action) {
       }
       case '@conselhoClasse/setDadosIniciaisListasNotasConceitos': {
         draft.dadosIniciaisListasNotasConceitos = action.payload;
+        break;
+      }
+      case '@conselhoClasse/setAtualizarEmAprovacao': {
+        const novosDadosListasNotasConceitos = state.dadosListasNotasConceitos.map(
+          dados => {
+            const componenteEscolhido = action.payload.ehNota
+              ? dados.componentesCurriculares
+              : dados.componenteRegencia.componentesCurriculares;
+            const novaNota = action.payload.ehNota ? 'nota' : 'conceito';
+
+            const novosComponentes = componenteEscolhido.map(componentes => {
+              if (
+                componentes.codigoComponenteCurricular ===
+                Number(action.payload.codigoComponenteCurricular)
+              ) {
+                return {
+                  ...componentes,
+                  notaPosConselho: {
+                    ...componentes.notaPosConselho,
+                    emAprovacao: action.payload.emAprovacao,
+                    nota: action.payload[novaNota],
+                  },
+                };
+              }
+
+              return componentes;
+            });
+
+            if (action.payload.ehNota) {
+              return {
+                ...dados,
+                componentesCurriculares: novosComponentes,
+              };
+            }
+
+            return {
+              ...dados,
+              componenteRegencia: {
+                ...dados.componenteRegencia,
+                componentesCurriculares: novosComponentes,
+              },
+            };
+          }
+        );
+
+        return {
+          ...draft,
+          dadosListasNotasConceitos: novosDadosListasNotasConceitos,
+        };
+      }
+      case '@conselhoClasse/setPodeAcessar': {
+        draft.podeAcessar = action.payload;
         break;
       }
 

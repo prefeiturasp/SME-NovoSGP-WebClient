@@ -147,3 +147,13 @@ export const setDadosIniciaisListasNotasConceitos = payload => ({
   type: '@conselhoClasse/setDadosIniciaisListasNotasConceitos',
   payload,
 });
+
+export const setAtualizarEmAprovacao = payload => ({
+  type: '@conselhoClasse/setAtualizarEmAprovacao',
+  payload,
+});
+
+export const setPodeAcessar = payload => ({
+  type: '@conselhoClasse/setPodeAcessar',
+  payload,
+});

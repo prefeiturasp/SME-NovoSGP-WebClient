@@ -27,7 +27,7 @@ const QuantidadeCriancasSemRegistros = props => {
   return (
     <div className="mt-3">
       <CardCollapse
-        titulo={`Quantidade de crianças que estão sem registros a mais de ${diasSemRegistro ||
+        titulo={`Total de crianças que estão sem registros a mais de ${diasSemRegistro ||
           0} dias`}
         key={`${key}-collapse-key`}
         indice={`${key}-collapse-indice`}

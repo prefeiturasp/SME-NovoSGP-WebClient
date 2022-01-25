@@ -66,7 +66,8 @@ const ListaDiarioBordo = () => {
   const obterComponentesCurriculares = useCallback(async () => {
     setCarregandoGeral(true);
     const componentes = await ServicoDisciplina.obterDisciplinasPorTurma(
-      turma
+      turma,
+      false
     ).catch(e => erros(e));
 
     if (componentes?.data?.length) {
@@ -119,7 +120,7 @@ const ListaDiarioBordo = () => {
   const onClickConsultarDiario = () => {
     dispatch(limparDadosObservacoesUsuario());
     history.push(
-      `${RotasDto.DIARIO_BORDO}/detalhes/${diarioBordoAtual?.aulaId}`
+      `${RotasDto.DIARIO_BORDO}/detalhes/${diarioBordoAtual?.aulaId}/${diarioBordoAtual?.id}/${componenteCurricularSelecionado}`
     );
   };
 
@@ -170,11 +171,12 @@ const ListaDiarioBordo = () => {
     setNumeroPagina(pagina);
   };
 
-  const obterUsuarioPorObservacao = dadosObservacoes => {
+  const obterUsuarioPorObservacao = (dadosObservacoes, diarioBordoId) => {
     const promises = dadosObservacoes.map(async observacao => {
       const retorno = await ServicoDiarioBordo.obterNofiticarUsuarios({
         turmaId,
         observacaoId: observacao.id,
+        diarioBordoId,
       }).catch(e => erros(e));
 
       if (retorno?.data) {
@@ -196,7 +198,10 @@ const ListaDiarioBordo = () => {
       if (dados?.data) {
         let observacoes = [];
         if (dados.data.observacoes.length) {
-          observacoes = await obterUsuarioPorObservacao(dados.data.observacoes);
+          observacoes = await obterUsuarioPorObservacao(
+            dados.data.observacoes,
+            id
+          );
           dispatch(setDadosObservacoesUsuario(observacoes));
         }
         setDiarioBordoAtual({
@@ -207,7 +212,7 @@ const ListaDiarioBordo = () => {
     }
   };
 
-  const salvarEditarObservacao = async valor => {
+  const salvarEditarObservacao = async (valor, diarioBordoId) => {
     const params = {
       observacao: valor.observacao,
       usuariosIdNotificacao: [],
@@ -216,10 +221,11 @@ const ListaDiarioBordo = () => {
     let observacaoId = valor.id;
     let usuariosNotificacao = [];
 
-    if (observacaoId) {
+    if (observacaoId && diarioBordoId) {
       const retorno = await ServicoDiarioBordo.obterNofiticarUsuarios({
         turmaId,
         observacaoId,
+        diarioBordoId,
       }).catch(e => erros(e));
 
       usuariosNotificacao = retorno.data;
@@ -323,16 +329,16 @@ const ListaDiarioBordo = () => {
     history.push(`${RotasDto.DIARIO_BORDO}/novo`);
   };
 
-  useEffect(() => {
-    if (dataFinal) validarSetarDataFinal(dataFinal);
-  }, [dataInicial]);
-
   const validarSetarDataFinal = async data => {
     if (dataInicial && window.moment(data) < window.moment(dataInicial)) {
       erro('A data final deve ser maior ou igual a data inicial.');
       setDataFinal('');
     } else setDataFinal(data);
   };
+
+  useEffect(() => {
+    if (dataFinal) validarSetarDataFinal(dataFinal);
+  }, [dataInicial]);
 
   return (
     <Loader loading={carregandoGeral} className="w-100">
@@ -347,7 +353,7 @@ const ListaDiarioBordo = () => {
                 name="disciplinaId"
                 lista={listaComponenteCurriculares || []}
                 valueOption="codigoComponenteCurricular"
-                valueText="nome"
+                valueText="nomeComponenteInfantil"
                 valueSelect={componenteCurricularSelecionado}
                 onChange={onChangeComponenteCurricular}
                 placeholder="Selecione um componente curricular"
@@ -377,8 +383,7 @@ const ListaDiarioBordo = () => {
                 disabled={
                   !permissoesTela.podeIncluir ||
                   !turmaInfantil ||
-                  !listaComponenteCurriculares ||
-                  !componenteCurricularSelecionado
+                  !listaComponenteCurriculares
                 }
               />
             </div>
@@ -450,10 +455,15 @@ const ListaDiarioBordo = () => {
                         <ObservacoesUsuario
                           esconderLabel
                           mostrarListaNotificacao
-                          salvarObservacao={obs => salvarEditarObservacao(obs)}
-                          editarObservacao={obs => salvarEditarObservacao(obs)}
+                          salvarObservacao={obs =>
+                            salvarEditarObservacao(obs, id)
+                          }
+                          editarObservacao={obs =>
+                            salvarEditarObservacao(obs, id)
+                          }
                           excluirObservacao={obs => excluirObservacao(obs)}
                           permissoes={permissoesTela}
+                          diarioBordoId={id}
                         />
                       </div>
                     </div>

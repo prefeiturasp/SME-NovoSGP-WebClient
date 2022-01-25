@@ -1,4 +1,5 @@
 import { Modal, notification } from 'antd';
+import { CANCELADO_USUARIO, TOKEN_EXPIRADO } from '~/constantes';
 import { store } from '../redux';
 import {
   alertaConfirmar,
@@ -49,15 +50,22 @@ const aviso = mensagem => {
   exibirAlerta('warning', mensagem);
 };
 
+const acharErro = (dados, resposta) => {
+  return dados?.indexOf(resposta) >= 0;
+};
+
 const erros = listaErros => {
-  if (
-    listaErros &&
-    listaErros.response &&
-    listaErros.response.data &&
-    listaErros.response.data.mensagens
-  ) {
+  const temErroIgual =
+    acharErro(listaErros?.message, TOKEN_EXPIRADO) ||
+    acharErro(listaErros?.message, CANCELADO_USUARIO);
+  const state = store.getState();
+
+  if (!state?.usuario?.logado || temErroIgual) return;
+  if (listaErros?.response?.data?.mensagens) {
     listaErros.response.data.mensagens.forEach(mensagem => erro(mensagem));
-  } else erro('Ocorreu um erro interno.');
+    return;
+  }
+  erro('Ocorreu um erro interno.');
 };
 
 const confirmacao = (

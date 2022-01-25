@@ -17,11 +17,15 @@ import { LimparSessao } from '~/redux/modulos/sessao/actions';
 import ServicoNotificacao from '~/servicos/Paginas/ServicoNotificacao';
 import { erros } from '~/servicos/alertas';
 import { TOKEN_EXPIRADO } from '~/constantes';
+import { validarAcaoTela } from '~/utils';
 
 const Navbar = () => {
   const retraido = useSelector(state => state.navegacao.retraido);
 
-  const onClickSair = () => {
+  const onClickSair = async () => {
+    const pararAcao = await validarAcaoTela();
+    if (pararAcao) return;
+
     store.dispatch(limparDadosFiltro());
     store.dispatch(Deslogar());
     store.dispatch(LimparSessao());

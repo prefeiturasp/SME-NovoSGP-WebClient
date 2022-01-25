@@ -1,8 +1,49 @@
-export const SGP_BUTTON_FILTRO_PRINCIPAL_APLICAR = 'sgp-button-filtro-principal-aplicar';
-export const SGP_SELECT_FILTRO_PRINCIPAL_ANOLETIVO = 'sgp-select-filtro-principal-anoletivo';
-export const SGP_SELECT_FILTRO_PRINCIPAL_TURMA = 'sgp-select-filtro-principal-turma';
-export const SGP_SELECT_FILTRO_PRINCIPAL_MODALIDADE = 'sgp-select-filtro-principal-modalidade';
-export const SGP_SELECT_FILTRO_PRINCIPAL_PERIODO = 'sgp-select-filtro-principal-periodo';
-export const SGP_SELECT_FILTRO_PRINCIPAL_DRE = 'sgp-select-filtro-principal-dre';
+export const SGP_BUTTON_FILTRO_PRINCIPAL_APLICAR =
+  'sgp-button-filtro-principal-aplicar';
+export const SGP_SELECT_FILTRO_PRINCIPAL_ANOLETIVO =
+  'sgp-select-filtro-principal-anoletivo';
+export const SGP_SELECT_FILTRO_PRINCIPAL_TURMA =
+  'sgp-select-filtro-principal-turma';
+export const SGP_SELECT_FILTRO_PRINCIPAL_MODALIDADE =
+  'sgp-select-filtro-principal-modalidade';
+export const SGP_SELECT_FILTRO_PRINCIPAL_PERIODO =
+  'sgp-select-filtro-principal-periodo';
+export const SGP_SELECT_FILTRO_PRINCIPAL_DRE =
+  'sgp-select-filtro-principal-dre';
 export const SGP_SELECT_FILTRO_PRINCIPAL_UE = 'sgp-select-filtro-principal-ue';
-export const SGP_CAMPO_FILTRO_PRINCIPAL_PESQUISAR_TURMA = 'sgp-campo-filtro-principal-pesquisar-turma';
+export const SGP_CAMPO_FILTRO_PRINCIPAL_PESQUISAR_TURMA =
+  'sgp-campo-filtro-principal-pesquisar-turma';
+
+// BUTTON
+export const SGP_BUTTON_VOLTAR = 'SGP_BUTTON_VOLTAR';
+export const SGP_BUTTON_SALVAR = 'SGP_BUTTON_SALVAR';
+export const SGP_BUTTON_CANCELAR = 'SGP_BUTTON_CANCELAR';
+
+// DATA
+export const SGP_DATA_AULA = 'SGP_DATA_AULA';
+
+// CHECKBOX
+export const SGP_CHECKBOX_EXIBIR_HISTORICO = 'SGP_CHECKBOX_EXIBIR_HISTORICO';
+
+// SELECT
+export const SGP_SELECT_COMPONENTE_CURRICULAR =
+  'SGP_SELECT_COMPONENTE_CURRICULAR';
+export const SGP_SELECT_ANO_LETIVO = 'SGP_SELECT_ANO_LETIVO';
+export const SGP_SELECT_DRE = 'SGP_SELECT_DRE';
+export const SGP_SELECT_UE = 'SGP_SELECT_UE';
+export const SGP_SELECT_MODALIDADE = 'SGP_SELECT_MODALIDADE';
+export const SGP_SELECT_SEMESTRE = 'SGP_SELECT_SEMESTRE';
+export const SGP_SELECT_TURMA = 'SGP_SELECT_TURMA';
+export const SGP_SELECT_BIMESTRE = 'SGP_SELECT_BIMESTRE';
+export const SGP_SELECT_PERIODO_POR_COMPONENTE_CURRICULAR =
+  'SGP_SELECT_PERIODO_POR_COMPONENTE_CURRICULAR';
+export const SGP_SELECT_TIPO_PENDENCIA = 'SGP_SELECT_TIPO_PENDENCIA';
+export const SGP_SELECT_NOME_TIPO_PENDENCIA = 'SGP_SELECT_NOME_TIPO_PENDENCIA';
+
+// RADIO
+export const SGP_RADIO_TIPO_AULA = 'SGP_RADIO_TIPO_AULA';
+export const SGP_RADIO_RECORRENCIA = 'SGP_RADIO_RECORRENCIA';
+
+// INPUT NUMBER
+export const SGP_INPUT_NUMBER_QUANTIDADE_AULAS =
+  'SGP_INPUT_NUMBER_QUANTIDADE_AULAS';

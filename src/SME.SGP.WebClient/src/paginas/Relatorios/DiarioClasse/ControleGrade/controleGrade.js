@@ -320,7 +320,8 @@ const ControleGrade = () => {
 
     setExibirLoader(true);
     const componentes = await ServicoComponentesCurriculares.obterComponentesPorListaDeTurmas(
-      turmas
+      turmas,
+      true
     )
       .catch(e => erros(e))
       .finally(() => setExibirLoader(false));

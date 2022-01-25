@@ -146,6 +146,10 @@ export const Container = styled.div`
     a.cor-novo-registro-lista {
       color: ${Base.Branco} !important;
     }
+
+    .cor-branco-hover {
+      color: ${Base.Branco} !important;
+    }
   }
 
   .ant-table-tbody tr:hover {

@@ -203,7 +203,7 @@ const AcompanhamentoFrequencia = () => {
         )}
         <Cabecalho pagina="Acompanhamento de Frequência" />
         <Card>
-          <div className="col-md-12">
+          <div className="col-md-12 p-0">
             <div className="row">
               <div className="col-md-12 d-flex justify-content-end pb-4">
                 <Button
@@ -211,7 +211,6 @@ const AcompanhamentoFrequencia = () => {
                   icon="arrow-left"
                   color={Colors.Azul}
                   border
-                  className="mr-2"
                   onClick={onClickVoltar}
                 />
               </div>

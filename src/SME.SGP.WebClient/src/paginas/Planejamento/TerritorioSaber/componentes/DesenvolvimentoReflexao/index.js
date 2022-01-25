@@ -8,6 +8,7 @@ import { Linha } from '~/componentes/EstilosGlobais';
 import { verificaSomenteConsulta } from '~/servicos/servico-navegacao';
 import RotasDto from '~/dtos/rotasDto';
 import JoditEditor from '~/componentes/jodit-editor/joditEditor';
+import Alert from '~/componentes/alert';
 
 function DesenvolvimentoReflexao({ dadosBimestre, onChange }) {
   const usuario = useSelector(store => store.usuario);
@@ -32,13 +33,27 @@ function DesenvolvimentoReflexao({ dadosBimestre, onChange }) {
 
   return (
     <>
+      {!dadosBimestre?.periodoAberto ? (
+        <Alert
+          id={`alerta-bimestre-${dadosBimestre?.bimestre}`}
+          alerta={{
+            tipo: 'warning',
+            mensagem:
+              'Apenas é possível consultar este registro pois o período não está em aberto.',
+            estiloTitulo: { fontSize: '18px' },
+          }}
+          className="mb-2"
+        />
+      ) : (
+        <></>
+      )}
       <Linha className="row ml-1 mr-1">
         <Grid cols={6}>
           <JoditEditor
             onChange={valor => onChangeBimestre('desenvolvimento', valor)}
             label="Desenvolvimento das atividades"
             value={dadosBimestre.desenvolvimento}
-            desabilitar={desabilitarCampos}
+            desabilitar={desabilitarCampos || !dadosBimestre?.periodoAberto}
           />
         </Grid>
         <Grid cols={6}>
@@ -46,7 +61,7 @@ function DesenvolvimentoReflexao({ dadosBimestre, onChange }) {
             onChange={valor => onChangeBimestre('reflexao', valor)}
             label="Reflexões sobre a participação dos estudantes, parcerias e avaliação"
             value={dadosBimestre.reflexao}
-            desabilitar={desabilitarCampos}
+            desabilitar={desabilitarCampos || !dadosBimestre?.periodoAberto}
           />
         </Grid>
       </Linha>
@@ -63,13 +78,11 @@ function DesenvolvimentoReflexao({ dadosBimestre, onChange }) {
 }
 
 DesenvolvimentoReflexao.propTypes = {
-  bimestre: t.oneOfType([t.any]),
   dadosBimestre: t.oneOfType([t.any]),
   onChange: t.func,
 };
 
 DesenvolvimentoReflexao.defaultProps = {
-  bimestre: {},
   dadosBimestre: {},
   onChange: () => {},
 };

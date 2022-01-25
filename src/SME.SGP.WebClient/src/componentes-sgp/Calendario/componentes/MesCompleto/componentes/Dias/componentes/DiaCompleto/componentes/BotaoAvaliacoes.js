@@ -26,9 +26,10 @@ const Wrapper = styled.div`
 `;
 
 function BotaoAvaliacoes({ atividadesAvaliativas, permissaoTela }) {
+  
   const onClickAvaliacaoHandler = useCallback(
-    avaliacao => {
-      if (permissaoTela?.podeConsultar) {
+    avaliacao => {      
+      if (permissaoTela?.podeConsultar && avaliacao) {
         history.push(`${RotasDTO.CADASTRO_DE_AVALIACAO}/editar/${avaliacao}`);
       }
     },
@@ -47,6 +48,7 @@ function BotaoAvaliacoes({ atividadesAvaliativas, permissaoTela }) {
           valueOption="id"
           valueText="descricao"
           placeholder="Avaliação"
+          allowClear={false}
           size="small"
           border={Base.Roxo}
           color={Base.Roxo}

@@ -19,7 +19,7 @@ const QuantidadeTotalDiariosBordoPendentes = props => {
   return (
     <div className="mt-3">
       <CardCollapse
-        titulo="Quantidade total de diários de bordo pendentes"
+        titulo="Total de diários de bordo pendentes"
         key={`${key}-collapse-key`}
         indice={`${key}-collapse-indice`}
         alt={`${key}-alt`}

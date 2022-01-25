@@ -3,6 +3,7 @@ import produce from 'immer';
 const inicial = {
   dadosDashboardDevolutivas: {
     consideraHistorico: false,
+    dataUltimaConsolidacao: null,
   },
 };
 
@@ -20,6 +21,7 @@ export default function dashboardDevolutivas(state = inicial, action) {
           ...draft,
           dadosDashboardDevolutivas: {
             consideraHistorico: false,
+            dataUltimaConsolidacao: null,
           },
         };
       }

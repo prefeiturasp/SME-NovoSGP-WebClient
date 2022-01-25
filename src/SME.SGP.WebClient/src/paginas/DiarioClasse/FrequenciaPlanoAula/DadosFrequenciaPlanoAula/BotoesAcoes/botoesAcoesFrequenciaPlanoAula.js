@@ -32,6 +32,10 @@ const BotoesAcoesFrequenciaPlanoAula = () => {
     state => state.frequenciaPlanoAula.listaDadosFrequencia?.id
   );
 
+  const aulaIdPodeEditar = useSelector(
+    state => state.frequenciaPlanoAula?.aulaIdPodeEditar
+  );
+
   const onClickSalvar = async () => {
     servicoSalvarFrequenciaPlanoAula.validarSalvarFrequenciPlanoAula();
   };
@@ -49,7 +53,7 @@ const BotoesAcoesFrequenciaPlanoAula = () => {
   };
 
   const onClickVoltar = async () => {
-    if (modoEdicaoFrequencia || modoEdicaoPlanoAula) {
+    if ((modoEdicaoFrequencia || modoEdicaoPlanoAula) && aulaIdPodeEditar) {
       const confirmado = await pergutarParaSalvar();
       if (confirmado) {
         const salvou = await servicoSalvarFrequenciaPlanoAula.validarSalvarFrequenciPlanoAula();
@@ -65,7 +69,7 @@ const BotoesAcoesFrequenciaPlanoAula = () => {
   };
 
   const onClickCancelar = async () => {
-    if (modoEdicaoFrequencia || modoEdicaoPlanoAula) {
+    if ((modoEdicaoFrequencia || modoEdicaoPlanoAula) && aulaIdPodeEditar) {
       const confirmou = await confirmar(
         'Atenção',
         'Você não salvou as informações preenchidas.',
@@ -111,7 +115,9 @@ const BotoesAcoesFrequenciaPlanoAula = () => {
         bold
         onClick={onClickSalvar}
         disabled={
-          somenteConsulta || (!modoEdicaoFrequencia && !modoEdicaoPlanoAula)
+          somenteConsulta ||
+          (!modoEdicaoFrequencia && !modoEdicaoPlanoAula) ||
+          !aulaIdPodeEditar
         }
       />
     </>

@@ -8,6 +8,7 @@ import { ModalidadeDTO } from '~/dtos';
 import { AbrangenciaServico, erros, ServicoFiltroRelatorio } from '~/servicos';
 import { OPCAO_TODOS } from '~/constantes/constantes';
 import { AvisoBoletim } from './styles';
+import { ordenarDescPor } from '~/utils';
 
 const Filtros = ({ onFiltrar, filtrou, setFiltrou, cancelou, setCancelou }) => {
   const [anoAtual] = useState(window.moment().format('YYYY'));
@@ -89,22 +90,6 @@ const Filtros = ({ onFiltrar, filtrou, setFiltrou, cancelou, setCancelou }) => {
     modeloBoletimId,
   ]);
 
-  useEffect(() => {
-    const params = {
-      consideraHistorico,
-      anoLetivo,
-      dreCodigo,
-      ueCodigo,
-      modalidadeId,
-      semestre: semestre || 0,
-      turmasId,
-      opcaoEstudanteId,
-      modeloBoletimId,
-    };
-
-    onFiltrar(params, true);
-  }, [modeloBoletimId]);
-
   const onChangeConsideraHistorico = e => {
     setConsideraHistorico(e.target.checked);
     limparCampos();
@@ -152,10 +137,10 @@ const Filtros = ({ onFiltrar, filtrou, setFiltrou, cancelou, setCancelou }) => {
         valor: anoAtual,
       });
     }
+    const anosOrdenados = ordenarDescPor(anosLetivos, 'valor');
+    validarValorPadraoAnoLetivo(anosOrdenados);
 
-    validarValorPadraoAnoLetivo(anosLetivos);
-
-    setListaAnosLetivo(anosLetivos);
+    setListaAnosLetivo(anosOrdenados);
     setCarregandoAnosLetivos(false);
   }, [anoAtual, consideraHistorico]);
 
@@ -300,13 +285,17 @@ const Filtros = ({ onFiltrar, filtrou, setFiltrou, cancelou, setCancelou }) => {
 
   const obterSemestres = async (
     modalidadeSelecionada,
-    anoLetivoSelecionado
+    anoLetivoSelecionado,
+    dreSelecionada,
+    ueSelecionada
   ) => {
     setCarregandoSemestres(true);
     const retorno = await AbrangenciaServico.obterSemestres(
       consideraHistorico,
       anoLetivoSelecionado,
-      modalidadeSelecionada
+      modalidadeSelecionada,
+      dreSelecionada,
+      ueSelecionada
     )
       .catch(e => erros(e))
       .finally(() => setCarregandoSemestres(false));
@@ -327,14 +316,16 @@ const Filtros = ({ onFiltrar, filtrou, setFiltrou, cancelou, setCancelou }) => {
     if (
       modalidadeId &&
       anoLetivo &&
-      String(modalidadeId) === String(ModalidadeDTO.EJA)
+      String(modalidadeId) === String(ModalidadeDTO.EJA) &&
+      dreCodigo &&
+      ueCodigo
     ) {
-      obterSemestres(modalidadeId, anoLetivo);
+      obterSemestres(modalidadeId, anoLetivo, dreCodigo, ueCodigo);
       return;
     }
     setSemestre();
     setListaSemestres([]);
-  }, [obterAnosLetivos, modalidadeId, anoLetivo]);
+  }, [obterAnosLetivos, modalidadeId, anoLetivo, dreCodigo, ueCodigo]);
 
   const onChangeTurma = valor => {
     const temOpcaoTodas = String(valor) === OPCAO_TODOS;
