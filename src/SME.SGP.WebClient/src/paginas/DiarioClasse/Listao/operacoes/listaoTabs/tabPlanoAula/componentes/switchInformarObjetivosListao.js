@@ -7,7 +7,6 @@ import ListaoContext from '~/paginas/DiarioClasse/Listao/listaoContext';
 
 const SwitchInformarObjetivosListao = ({
   exibirSwitchEscolhaObjetivos,
-  possuiPlanoAnual,
   desabilitar,
 }) => {
   const {
@@ -29,7 +28,7 @@ const SwitchInformarObjetivosListao = ({
             checked={checkedExibirEscolhaObjetivos}
             size="default"
             className="ml-2 mr-2"
-            disabled={desabilitar || !possuiPlanoAnual}
+            disabled={desabilitar}
           />
         </>
       )}
@@ -39,13 +38,11 @@ const SwitchInformarObjetivosListao = ({
 
 SwitchInformarObjetivosListao.propTypes = {
   exibirSwitchEscolhaObjetivos: PropTypes.bool,
-  possuiPlanoAnual: PropTypes.bool,
   desabilitar: PropTypes.bool,
 };
 
 SwitchInformarObjetivosListao.defaultProps = {
   exibirSwitchEscolhaObjetivos: false,
-  possuiPlanoAnual: false,
   desabilitar: false,
 };
 

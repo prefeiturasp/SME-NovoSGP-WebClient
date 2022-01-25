@@ -26,7 +26,7 @@ const ListaoObjetivosAprendizagem = props => {
   const idsObjetivosAprendizagemSelecionados =
     dadosPlanoAula?.[indexPlano]?.idsObjetivosAprendizagemSelecionados;
 
-  const ehAulaCj = dadosPlanoAula?.[indexPlano]?.ehAulaCj;
+  const ehAulaCj = dadosPlanoAula?.[indexPlano]?.aulaCj;
 
   const [idsObjetivos, setIdsObjetivos] = useState(
     idsObjetivosAprendizagemSelecionados
