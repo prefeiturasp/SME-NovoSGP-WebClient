@@ -1,17 +1,21 @@
 import { Col, Row } from 'antd';
 import React, { useContext } from 'react';
 import shortid from 'shortid';
-import { Auditoria, Base, CardCollapse } from '~/componentes';
+import { Alert, Auditoria, Base, CardCollapse } from '~/componentes';
 import ListaoContext from '../../../listaoContext';
+import CopiarConteudoListaoPlanoAula from './componentes/copiarConteudoListaoPlanoAula';
 import ListaoObjetivosAprendizagem from './componentes/listaoObjetivosAprendizagem';
 import ObjetivosEspecificosDesenvolvimentoAula from './componentes/listaoPlanoAulaCampoEditor';
 
 const ListaoPlanoAulaMontarDados = () => {
   const {
     dadosPlanoAula,
+    setDadosPlanoAula,
     somenteConsultaListao,
     periodoAbertoListao,
     componenteCurricular,
+    setExibirLoaderGeral,
+    setExecutarObterPlanoAulaPorPeriodo,
   } = useContext(ListaoContext);
 
   const desabilitarCampos = somenteConsultaListao || !periodoAbertoListao;
@@ -32,6 +36,8 @@ const ListaoPlanoAulaMontarDados = () => {
     if (ehReposicao) {
       titulo += ' - Reposição';
     }
+
+    const desabilitar = plano?.bloquearParaCopia || desabilitarCampos;
     return (
       <CardCollapse
         titulo={titulo}
@@ -40,17 +46,28 @@ const ListaoPlanoAulaMontarDados = () => {
         configCabecalho={configCabecalho}
         show
       >
+        {plano.bloquearParaCopia && (
+          <Alert
+            alerta={{
+              tipo: 'warning',
+              id: 'bloquear-para-copia',
+              mensagem: 'Conteúdo será copiado de outra data',
+              estiloTitulo: { fontSize: '18px' },
+            }}
+            className="mb-2"
+          />
+        )}
         {componenteCurricular?.possuiObjetivos ? (
           <ListaoObjetivosAprendizagem
             indexPlano={indexPlano}
-            desabilitarCampos={desabilitarCampos}
+            desabilitarCampos={desabilitar}
             plano={plano}
           />
         ) : (
           <ObjetivosEspecificosDesenvolvimentoAula
             dados={plano}
             indexPlano={indexPlano}
-            desabilitar={desabilitarCampos}
+            desabilitar={desabilitar}
           />
         )}
         <Row gutter={[24, 24]}>
@@ -66,6 +83,24 @@ const ListaoPlanoAulaMontarDados = () => {
           ) : (
             <></>
           )}
+        </Row>
+        <Row gutter={[24, 24]}>
+          <Col sm={24}>
+            <CopiarConteudoListaoPlanoAula
+              desabilitar={desabilitar}
+              dadosPlanoAtual={plano}
+              codigoComponenteCurricular={
+                componenteCurricular?.codigoComponenteCurricular
+              }
+              setExibirLoaderGeral={setExibirLoaderGeral}
+              dadosPlanoAula={dadosPlanoAula}
+              setDadosPlanoAula={setDadosPlanoAula}
+              indexPlano={indexPlano}
+              setExecutarObterPlanoAulaPorPeriodo={
+                setExecutarObterPlanoAulaPorPeriodo
+              }
+            />
+          </Col>
         </Row>
       </CardCollapse>
     );
