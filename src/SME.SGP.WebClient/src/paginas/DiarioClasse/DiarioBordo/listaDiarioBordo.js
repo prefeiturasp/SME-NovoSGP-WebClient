@@ -60,6 +60,7 @@ const ListaDiarioBordo = () => {
   const listaUsuarios = useSelector(
     store => store.observacoesUsuario.listaUsuariosNotificacao
   );
+  console.log('turmaSelecionada', turmaSelecionada);
 
   const dispatch = useDispatch();
 
@@ -464,6 +465,8 @@ const ListaDiarioBordo = () => {
                           excluirObservacao={obs => excluirObservacao(obs)}
                           permissoes={permissoesTela}
                           diarioBordoId={id}
+                          dreId={turmaSelecionada.dre}
+                          ueId={turmaSelecionada.unidadeEscolar}
                         />
                       </div>
                     </div>

@@ -35,7 +35,6 @@ const DiarioBordo = ({ match }) => {
   const usuario = useSelector(state => state.usuario);
   const { turmaSelecionada } = usuario;
   const permissoesTela = usuario.permissoes[RotasDto.DIARIO_BORDO];
-
   const modalidadesFiltroPrincipal = useSelector(
     store => store.filtro.modalidades
   );
@@ -832,6 +831,8 @@ const DiarioBordo = ({ match }) => {
             editarObservacao={obs => salvarEditarObservacao(obs)}
             excluirObservacao={obs => excluirObservacao(obs)}
             permissoes={permissoesTela}
+            dreId={turmaSelecionada.dre}
+            ueId={turmaSelecionada.unidadeEscolar}
           />
         ) : (
           ''
