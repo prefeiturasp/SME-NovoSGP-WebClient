@@ -7,6 +7,7 @@ import AdicionarObjetivosAprendizagem from '~/componentes-sgp/modalObjetivosApre
 import ListaoContext from '~/paginas/DiarioClasse/Listao/listaoContext';
 import { setTelaEmEdicao } from '~/redux/modulos/geral/actions';
 import ObjetivosEspecificosDesenvolvimentoAula from './listaoPlanoAulaCampoEditor';
+import SwitchInformarObjetivosListao from './switchInformarObjetivosListao';
 
 const ListaoObjetivosAprendizagem = props => {
   const dispatch = useDispatch();
@@ -18,10 +19,14 @@ const ListaoObjetivosAprendizagem = props => {
     setDadosPlanoAula,
     dadosPlanoAula,
     componenteCurricular,
-    checkedExibirEscolhaObjetivos,
   } = useContext(ListaoContext);
 
   const [exibirModal, setExibirModal] = useState(false);
+
+  const [
+    checkedExibirEscolhaObjetivos,
+    setCheckedExibirEscolhaObjetivos,
+  ] = useState(false);
 
   const idsObjetivosAprendizagemSelecionados =
     dadosPlanoAula?.[indexPlano]?.idsObjetivosAprendizagemSelecionados;
@@ -57,6 +62,14 @@ const ListaoObjetivosAprendizagem = props => {
 
   return (
     <>
+      <Row gutter={(24, 24)} type="flex" justify="end">
+        <SwitchInformarObjetivosListao
+          exibirSwitchEscolhaObjetivos={ehAulaCj}
+          desabilitar={desabilitarCampos}
+          checkedExibirEscolhaObjetivos={checkedExibirEscolhaObjetivos}
+          setCheckedExibirEscolhaObjetivos={setCheckedExibirEscolhaObjetivos}
+        />
+      </Row>
       <Row gutter={[24, 24]}>
         <AdicionarObjetivosAprendizagem
           listaObjetivosAprendizagem={listaObjetivosAprendizagem}
@@ -67,6 +80,7 @@ const ListaoObjetivosAprendizagem = props => {
           onClickAdicionar={onClickAdicionar}
           desabilitar={desabilitarCampos}
           ehAulaCj={ehAulaCj}
+          checkedExibirEscolhaObjetivos={checkedExibirEscolhaObjetivos}
         />
       </Row>
       {necessarioSelecionarObjetivo() ? (
