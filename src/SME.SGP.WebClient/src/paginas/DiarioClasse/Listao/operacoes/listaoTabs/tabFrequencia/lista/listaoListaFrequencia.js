@@ -100,7 +100,7 @@ const ListaoListaFrequencia = () => {
             }
           }
         }}
-        desabilitar={desabilitarCampos || aulaHeader.podeEditar}
+        desabilitar={desabilitarCampos || !aulaHeader.podeEditar}
       />
     );
   };
@@ -126,7 +126,7 @@ const ListaoListaFrequencia = () => {
         desabilitar={
           desabilitarCampos ||
           dadosDiaAula?.desabilitado ||
-          aulasGerais.podeEditar
+          !aulasGerais.podeEditar
         }
       />
     );
@@ -157,7 +157,9 @@ const ListaoListaFrequencia = () => {
           atualizarDados();
         }}
         desabilitar={
-          desabilitarCampos || dadosAula?.desabilitado || aulasGerais.podeEditar
+          desabilitarCampos ||
+          dadosAula?.desabilitado ||
+          !aulasGerais.podeEditar
         }
       />
     );
@@ -219,21 +221,20 @@ const ListaoListaFrequencia = () => {
   // TODO - Verificar a regra - componenteCurricular.registraFrequencia
   if (dadosFrequencia?.aulas?.length) {
     dadosFrequencia.aulas.forEach(aula => {
+      const width = aula?.aulaCj ? '170px' : '150px';
       colunasEstudantes.push({
         title: () => (
           <div>
-            <div style={{ fontSize: 16, marginRight: 3 }}>
-              {window.moment(aula?.dataAula).format('DD/MM/YYYY')}
-            </div>
+            <div style={{ fontSize: 16, marginRight: 3 }}>{aula?.dataAula}</div>
             {aula?.ehReposicao ? <ReposicaoLabel /> : <></>}
           </div>
         ),
         align: 'center',
-        width: '150px',
+        width,
         children: [
           {
             align: 'center',
-            width: '150px',
+            width,
             className: 'posicao-marcar-todos-header',
             title: montarColunaFrequenciaMarcarTodasAulas(aula),
             render: dadosAulas => {
@@ -334,9 +335,7 @@ const ListaoListaFrequencia = () => {
     return (
       <span className="d-flex justify-content-between align-items-center">
         {ehReposicao ? <ReposicaoLabel linhaDetalhe /> : <></>}
-        <span style={{ marginLeft: 14 }}>
-          {window.moment(dataAula).format('DD/MM/YYYY')}
-        </span>
+        <span style={{ marginLeft: 14 }}>{dataAula}</span>
 
         <ListaoBotaoAnotacao
           desabilitarCampos={desabilitarCampos || aula.desabilitado}
