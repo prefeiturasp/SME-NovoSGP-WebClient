@@ -78,7 +78,9 @@ const TabListaoDiarioBordoFiltros = () => {
   };
 
   const limparDadosPeriodo = (limparLista = true) => {
-    setPeriodo();
+    if (listaPeriodos?.length !== 1) {
+      setPeriodo();
+    }
     if (limparLista) {
       setListaPeriodos([]);
     }
