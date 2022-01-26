@@ -26,6 +26,8 @@ const TabListaoPlanoAula = () => {
     setDadosIniciaisPlanoAula,
     periodoAbertoListao,
     setListaObjetivosAprendizagem,
+    executarObterPlanoAulaPorPeriodo,
+    setExecutarObterPlanoAulaPorPeriodo,
   } = useContext(ListaoContext);
 
   const limparDadosPlanoAula = () => {
@@ -95,10 +97,12 @@ const TabListaoPlanoAula = () => {
       setDadosPlanoAula(dadosCarregar);
 
       setExibirLoaderGeral(false);
-    } else {
-      limparDadosPlanoAula();
-      setExibirLoaderGeral(false);
+      return true;
     }
+
+    limparDadosPlanoAula();
+    setExibirLoaderGeral(false);
+    return false;
   }, [
     dispatch,
     periodoAbertoListao,
@@ -106,6 +110,17 @@ const TabListaoPlanoAula = () => {
     turmaSelecionada,
     periodo,
   ]);
+
+  const validaSeExecutaConsulta = useCallback(async () => {
+    if (executarObterPlanoAulaPorPeriodo) {
+      await obterPlanoAulaPorPeriodo();
+      setExecutarObterPlanoAulaPorPeriodo(false);
+    }
+  }, [executarObterPlanoAulaPorPeriodo, obterPlanoAulaPorPeriodo]);
+
+  useEffect(() => {
+    validaSeExecutaConsulta();
+  }, [executarObterPlanoAulaPorPeriodo, validaSeExecutaConsulta]);
 
   useEffect(() => {
     limparDadosPlanoAula();

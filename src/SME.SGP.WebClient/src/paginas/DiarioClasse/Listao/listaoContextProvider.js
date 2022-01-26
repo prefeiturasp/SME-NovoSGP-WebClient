@@ -54,6 +54,8 @@ const ListaoContextProvider = ({ children }) => {
   const [
     checkedExibirEscolhaObjetivos,
     setCheckedExibirEscolhaObjetivos,
+    executarObterPlanoAulaPorPeriodo,
+    setExecutarObterPlanoAulaPorPeriodo,
   ] = useState(false);
 
   // TAB DIÁRIO DE BORDO
@@ -178,6 +180,8 @@ const ListaoContextProvider = ({ children }) => {
         setErrosPlanoAulaListao,
         checkedExibirEscolhaObjetivos,
         setCheckedExibirEscolhaObjetivos,
+        executarObterPlanoAulaPorPeriodo,
+        setExecutarObterPlanoAulaPorPeriodo,
         // TAB DIÁRIO DE BORDO
         componenteCurricularDiarioBordo,
         setComponenteCurricularDiarioBordo,

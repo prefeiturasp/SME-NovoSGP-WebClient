@@ -14,6 +14,7 @@ const Principal = () => {
   const usuario = useSelector(state => state.usuario);
   const perfil = useSelector(state => state.perfil.perfilSelecionado);
   const modalidades = useSelector(state => state.filtro.modalidades);
+  const anosLetivo = useSelector(state => state.filtro.anosLetivos);
 
   const validarFiltro = useCallback(() => {
     if (!usuario.turmaSelecionada) {
@@ -34,6 +35,7 @@ const Principal = () => {
     <div className="col-md-12">
       {modalidades &&
       !modalidades.length &&
+      anosLetivo.length === 1 &&
       !usuario.ehPerfilProfessor &&
       perfil &&
       perfil.nomePerfil === 'Supervisor' ? (

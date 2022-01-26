@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { Loader } from '~/componentes';
 import AlertaModalidadeInfantil from '~/componentes-sgp/AlertaModalidadeInfantil/alertaModalidadeInfantil';
 import Cabecalho from '~/componentes-sgp/cabecalho';
 import Alert from '~/componentes/alert';
@@ -38,6 +39,7 @@ const ConselhoClasse = () => {
 
   const [exibirListas, setExibirListas] = useState(false);
   const [turmaAtual, setTurmaAtual] = useState(0);
+  const [carregandoFrequencia, setCarregandoFrequencia] = useState(false);
 
   const modalidadesFiltroPrincipal = useSelector(
     store => store.filtro.modalidades
@@ -105,10 +107,13 @@ const ConselhoClasse = () => {
   ]);
 
   const obterFrequenciaAluno = async codigoAluno => {
+    setCarregandoFrequencia(true);
     const retorno = await ServicoConselhoClasse.obterFrequenciaAluno(
       codigoAluno,
       turma
-    ).catch(e => erros(e));
+    )
+      .catch(e => erros(e))
+      .finally(() => setCarregandoFrequencia(false));
     if (retorno && retorno.data) {
       return retorno.data;
     }
@@ -180,14 +185,14 @@ const ConselhoClasse = () => {
                       onChangeAlunoSelecionado={onChangeAlunoSelecionado}
                       permiteOnChangeAluno={permiteOnChangeAluno}
                     >
-                      <>
+                      <Loader loading={carregandoFrequencia} ignorarTip>
                         <ObjectCardConselhoClasse />
                         <MarcadorParecerConclusivo />
                         <DadosConselhoClasse
                           turmaCodigo={turmaSelecionada.turma}
                           modalidade={turmaSelecionada.modalidade}
                         />
-                      </>
+                      </Loader>
                     </TabelaRetratilConselhoClasse>
                   </div>
                 </>

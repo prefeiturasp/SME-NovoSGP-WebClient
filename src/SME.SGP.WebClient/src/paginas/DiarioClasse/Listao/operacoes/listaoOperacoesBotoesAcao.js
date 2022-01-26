@@ -197,6 +197,7 @@ const ListaoOperacoesBotoesAcao = () => {
       }
 
       const valorParaSalvar = {
+        copiarConteudo: plano?.copiarConteudo,
         descricao: plano?.descricao,
         recuperacaoAula: plano?.recuperacaoAula,
         licaoCasa: plano?.licaoCasa,
@@ -209,6 +210,9 @@ const ListaoOperacoesBotoesAcao = () => {
       const paramsPromise = new Promise(resolve => {
         ServicoPlanoAula.salvarPlanoAula(valorParaSalvar)
           .then(resposta => {
+            if (resposta.data) {
+              resposta.data.planoTeveCopia = !!plano?.copiarConteudo;
+            }
             resolve(resposta?.data);
           })
           .catch(listaErros => {
@@ -242,8 +246,10 @@ const ListaoOperacoesBotoesAcao = () => {
           periodo?.dataFim
         ).catch(e => erros(e));
 
-        let msgSucesso = 'Plano(s) de aula salvo com sucesso.';
+        let msgSucesso = 'Plano(s) de aula salvo com sucesso';
+        let msgSucessoCopia = '';
         const datasAulas = [];
+        const datasAulasFezCopia = [];
 
         if (resposta?.data?.length) {
           const lista = resposta.data;
@@ -262,9 +268,18 @@ const ListaoOperacoesBotoesAcao = () => {
             datasAulas.push(
               ` ${window.moment(planoAtual?.dataAula).format('DD/MM/YYYY')}`
             );
+
+            if (plano?.planoTeveCopia) {
+              datasAulasFezCopia.push(
+                ` ${window.moment(planoAtual?.dataAula).format('DD/MM/YYYY')}`
+              );
+            }
           });
 
-          msgSucesso = `${datasAulas.toString()} - Plano(s) de aula salvo com sucesso.`;
+          msgSucesso = `${datasAulasFezCopia.toString()} - Plano(s) de aula salvo com sucesso`;
+          if (datasAulasFezCopia?.length) {
+            msgSucessoCopia = `${datasAulasFezCopia.toString()} - Plano(s) copiado com sucesso.`;
+          }
 
           const dadosCarregar = _.cloneDeep(dadosPlanoAula);
           const dadosIniciais = _.cloneDeep(dadosPlanoAula);
@@ -277,6 +292,9 @@ const ListaoOperacoesBotoesAcao = () => {
         }
 
         sucesso(msgSucesso);
+
+        if (msgSucessoCopia) sucesso(msgSucessoCopia);
+
         if (planosAlterados?.length === planosSalvos?.length) {
           dispatch(setTelaEmEdicao(false));
         }

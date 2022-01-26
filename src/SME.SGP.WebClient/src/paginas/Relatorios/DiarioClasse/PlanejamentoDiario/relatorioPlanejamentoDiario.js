@@ -587,11 +587,7 @@ const RelatorioPlanejamentoDiario = () => {
                 lista={listaAnosLetivo}
                 valueOption="valor"
                 valueText="desc"
-                disabled={
-                  !consideraHistorico ||
-                  !listaAnosLetivo?.length ||
-                  listaAnosLetivo?.length === 1
-                }
+                disabled={listaAnosLetivo?.length === 1}
                 onChange={onChangeAnoLetivo}
                 valueSelect={anoLetivo}
                 placeholder="Ano letivo"

@@ -76,6 +76,8 @@ const AcompanhamentoFrequencia = () => {
     listaComponentesCurriculares,
     setListaComponentesCurriculares,
   ] = useState([]);
+
+  const [territorioSaber, setTerritorioSaber] = useState(false);
   const [
     componenteCurricularIdSelecionado,
     setComponenteCurricularIdSelecionado,
@@ -159,25 +161,17 @@ const AcompanhamentoFrequencia = () => {
           String(item.codigoComponenteCurricular) ===
           String(componenteCurricularIdSelecionado)
       );
-      setPodeLancarFrequencia(componenteCurriular?.registraFrequencia);
-      if (turmaSelecionada.modalidade === String(modalidade.EJA)) {
+
+      setPodeLancarFrequencia(componenteCurriular?.registraFrequencia);      
+      setTerritorioSaber(componenteCurriular?.territorioSaber);
+      
+      if (Number(turmaSelecionada.modalidade) === modalidade.EJA) {
         setBimestres(listagemBimestresEJA);
       } else {
         setBimestres(listagemBimestres);
       }
     }
   }, [componenteCurricularIdSelecionado]);
-
-  const obterComponenteCurricularId = () => {
-    const componenteSelecionado = listaComponentesCurriculares.find(
-      c =>
-        String(c.codigoComponenteCurricular) ===
-        String(componenteCurricularIdSelecionado)
-    );
-    return componenteSelecionado.territorioSaber
-      ? componenteSelecionado.id
-      : componenteCurricularIdSelecionado;
-  };
 
   return (
     <>
@@ -245,7 +239,10 @@ const AcompanhamentoFrequencia = () => {
                   <div className="col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-2">
                     <ListaBimestres
                       bimestres={bimestres}
-                      componenteCurricularIdSelecionado={obterComponenteCurricularId()}
+                      componenteCurricularIdSelecionado={
+                        componenteCurricularIdSelecionado
+                      }
+                      territorioSaber={territorioSaber}
                     />
                   </div>
                 </div>
