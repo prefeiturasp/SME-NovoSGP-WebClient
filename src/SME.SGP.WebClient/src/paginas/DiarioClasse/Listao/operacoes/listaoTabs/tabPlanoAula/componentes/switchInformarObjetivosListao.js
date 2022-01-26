@@ -1,19 +1,15 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { Switch } from 'antd';
 import PropTypes from 'prop-types';
 
 import { Label } from '~/componentes';
-import ListaoContext from '~/paginas/DiarioClasse/Listao/listaoContext';
 
 const SwitchInformarObjetivosListao = ({
   exibirSwitchEscolhaObjetivos,
   desabilitar,
+  checkedExibirEscolhaObjetivos,
+  setCheckedExibirEscolhaObjetivos,
 }) => {
-  const {
-    checkedExibirEscolhaObjetivos,
-    setCheckedExibirEscolhaObjetivos,
-  } = useContext(ListaoContext);
-
   const onChangeSwitch = () => {
     setCheckedExibirEscolhaObjetivos(!checkedExibirEscolhaObjetivos);
   };
@@ -39,11 +35,15 @@ const SwitchInformarObjetivosListao = ({
 SwitchInformarObjetivosListao.propTypes = {
   exibirSwitchEscolhaObjetivos: PropTypes.bool,
   desabilitar: PropTypes.bool,
+  checkedExibirEscolhaObjetivos: PropTypes.bool,
+  setCheckedExibirEscolhaObjetivos: PropTypes.func,
 };
 
 SwitchInformarObjetivosListao.defaultProps = {
   exibirSwitchEscolhaObjetivos: false,
   desabilitar: false,
+  checkedExibirEscolhaObjetivos: false,
+  setCheckedExibirEscolhaObjetivos: () => {},
 };
 
 export default SwitchInformarObjetivosListao;
