@@ -1,9 +1,11 @@
 import PropTypes from 'prop-types';
 import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
 import shortid from 'shortid';
 import styled from 'styled-components';
 import { Base } from '~/componentes';
 import ModalCopiarConteudoPlanoAula from '~/componentes-sgp/ModalCopiarConteudo/modalCopiarConteudoPlanoAula';
+import { setTelaEmEdicao } from '~/redux/modulos/geral/actions';
 
 const BtnCopiarConteudo = styled.div`
   font-size: 14px;
@@ -23,6 +25,8 @@ const ContainerListaCopiar = styled.div`
 `;
 
 const CopiarConteudoListaoPlanoAula = props => {
+  const dispatch = useDispatch();
+
   const {
     desabilitar,
     dadosPlanoAtual,
@@ -70,12 +74,16 @@ const CopiarConteudoListaoPlanoAula = props => {
 
     const dados = dadosPlanoAula;
     dados[indexPlano].copiarConteudo = dadosCopiar;
+    dados[indexPlano].alterado = true;
     validarDataParaSobrescreverConteudo(dados, indexPlano);
     setDadosPlanoAula([...dados]);
+    dispatch(setTelaEmEdicao(true));
   };
 
-  const aposCopiarConteudo = () => setExecutarObterPlanoAulaPorPeriodo(true);
-
+  const aposCopiarConteudo = () => {
+    setExecutarObterPlanoAulaPorPeriodo(true);
+    dispatch(setTelaEmEdicao(false));
+  };
   const montarExibicaoCopiar = () => {
     return dadosPlanoAtual?.copiarConteudo?.idsPlanoTurmasDestino?.map?.(
       turma => {
