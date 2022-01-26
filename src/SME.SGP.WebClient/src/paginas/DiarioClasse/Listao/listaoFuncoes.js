@@ -1,7 +1,8 @@
 import _ from 'lodash';
+import ServicoObservacoesUsuario from '~/componentes-sgp/ObservacoesUsuario/ServicoObservacoesUsuario';
 import notasConceitos from '~/dtos/notasConceitos';
 import { store } from '~/redux';
-import { erros, ServicoDiarioBordo } from '~/servicos';
+import { confirmar, erros, ServicoDiarioBordo, sucesso } from '~/servicos';
 import ServicoNotaConceito from '~/servicos/Paginas/DiarioClasse/ServicoNotaConceito';
 import ServicoNotas from '~/servicos/ServicoNotas';
 
@@ -141,9 +142,73 @@ const obterListaAlunosAvaliacaoListao = async (
   }
 };
 
+const salvarEditarObservacao = async (
+  valor,
+  IdDiarioBordo,
+  setExibirLoaderGeral
+) => {
+  const { observacoesUsuario } = store.getState();
+  const { novaObservacao } = observacoesUsuario;
+
+  const observacao = valor?.observacao || novaObservacao;
+  const idObs = valor?.id;
+  const usuariosIdNotificacao = [];
+
+  let observacaoId = idObs;
+
+  const params = {
+    observacao,
+    usuariosIdNotificacao,
+    id: idObs,
+  };
+
+  setExibirLoaderGeral(true);
+  const resultado = await ServicoDiarioBordo.salvarEditarObservacao(
+    IdDiarioBordo,
+    params
+  )
+    .catch(e => erros(e))
+    .finally(() => setExibirLoaderGeral(false));
+
+  if (resultado?.status === 200) {
+    sucesso(`Observação ${idObs ? 'alterada' : 'inserida'} com sucesso`);
+    if (!observacaoId) {
+      observacaoId = resultado.data.id;
+    }
+
+    ServicoObservacoesUsuario.atualizarSalvarEditarDadosObservacao(
+      valor,
+      resultado.data
+    );
+  }
+  return resultado;
+};
+
+const excluirObservacao = async (obs, setExibirLoaderGeral) => {
+  const confirmado = await confirmar(
+    'Excluir',
+    '',
+    'Você tem certeza que deseja excluir este registro?'
+  );
+
+  if (confirmado) {
+    setExibirLoaderGeral(true);
+    const resultado = await ServicoDiarioBordo.excluirObservacao(obs)
+      .catch(e => erros(e))
+      .finally(() => setExibirLoaderGeral(false));
+
+    if (resultado?.status === 200) {
+      sucesso('Registro excluído com sucesso');
+      ServicoDiarioBordo.atualizarExcluirDadosObservacao(obs, resultado.data);
+    }
+  }
+};
+
 export {
   onChangeTabListao,
   montarIdsObjetivosSelecionadosListao,
   obterDiarioBordoListao,
   obterListaAlunosAvaliacaoListao,
+  salvarEditarObservacao,
+  excluirObservacao,
 };

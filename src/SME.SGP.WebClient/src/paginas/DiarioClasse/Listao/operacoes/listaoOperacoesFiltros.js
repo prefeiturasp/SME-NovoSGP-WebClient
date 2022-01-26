@@ -38,6 +38,7 @@ const ListaoOperacoesFiltros = () => {
     setPeriodoAbertoListao,
     limparTelaListao,
     setSomenteConsultaListao,
+    setPermissaoLista,
   } = useContext(ListaoContext);
 
   const [listaBimestresOperacoe, setListaBimestresOperacoes] = useState(
@@ -52,8 +53,10 @@ const ListaoOperacoesFiltros = () => {
     if (turma && permissoesTela) {
       const soConsulta = verificaSomenteConsulta(permissoesTela);
       setSomenteConsultaListao(soConsulta);
+      setPermissaoLista(permissoesTela);
     } else {
       setSomenteConsultaListao(false);
+      setPermissaoLista();
       dispatch(setSomenteConsulta(false));
     }
   }, [permissoesTela, turma, setSomenteConsultaListao, dispatch]);

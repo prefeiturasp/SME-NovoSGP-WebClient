@@ -16,6 +16,10 @@ import {
   setLimparModoEdicaoGeral,
   setTelaEmEdicao,
 } from '~/redux/modulos/geral/actions';
+import {
+  limparDadosObservacoesUsuario,
+  setDadosObservacoesUsuario,
+} from '~/redux/modulos/observacoesUsuario/actions';
 
 import {
   api,
@@ -43,6 +47,7 @@ import {
   montarIdsObjetivosSelecionadosListao,
   obterDiarioBordoListao,
   obterListaAlunosAvaliacaoListao,
+  salvarEditarObservacao,
 } from '../listaoFuncoes';
 
 const ListaoOperacoesBotoesAcao = () => {
@@ -81,6 +86,8 @@ const ListaoOperacoesBotoesAcao = () => {
     dadosPeriodosAvaliacao,
     setDadosIniciaisAvaliacao,
     bimestreOperacoes,
+    idDiarioBordoAtual,
+    setIdDiarioBordoAtual,
   } = useContext(ListaoContext);
 
   const telaEmEdicao = useSelector(store => store.geral.telaEmEdicao);
@@ -313,6 +320,18 @@ const ListaoOperacoesBotoesAcao = () => {
   const salvarDiarioBordo = async clicouNoBotaoSalvar => {
     const dadosAlterados = dadosDiarioBordo.filter(item => item.alterado);
 
+    if (idDiarioBordoAtual) {
+      await salvarEditarObservacao(
+        null,
+        idDiarioBordoAtual,
+        setExibirLoaderGeral
+      );
+
+      setIdDiarioBordoAtual();
+      dispatch(limparDadosObservacoesUsuario());
+      dispatch(setDadosObservacoesUsuario([]));
+    }
+
     if (!dadosAlterados?.length) {
       return true;
     }
@@ -496,6 +515,9 @@ const ListaoOperacoesBotoesAcao = () => {
 
   const limparDadosDiarioBordo = () => {
     setDadosDiarioBordo([]);
+    setIdDiarioBordoAtual();
+    dispatch(limparDadosObservacoesUsuario());
+    dispatch(setDadosObservacoesUsuario([]));
     const dadosCarregar = _.cloneDeep(dadosIniciaisDiarioBordo);
     setDadosDiarioBordo([...dadosCarregar]);
   };

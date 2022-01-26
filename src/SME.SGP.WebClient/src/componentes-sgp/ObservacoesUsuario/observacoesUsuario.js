@@ -20,6 +20,7 @@ const ObservacoesUsuario = props => {
     parametrosLocalizadorFuncionario,
     desabilitarBotaoNotificar,
     diarioBordoId,
+    mudarObservacao,
   } = props;
 
   const { podeIncluir, podeAlterar, podeExcluir } = permissoes;
@@ -40,6 +41,7 @@ const ObservacoesUsuario = props => {
             usarLocalizadorFuncionario={usarLocalizadorFuncionario}
             parametrosLocalizadorFuncionario={parametrosLocalizadorFuncionario}
             diarioBordoId={diarioBordoId}
+            mudarObservacao={mudarObservacao}
           />
           <ObservacoesUsuarioMontarDados
             onClickSalvarEdicao={editarObservacao}
@@ -59,6 +61,7 @@ ObservacoesUsuario.propTypes = {
   editarObservacao: PropTypes.func,
   salvarObservacao: PropTypes.func,
   excluirObservacao: PropTypes.func,
+  mudarObservacao: PropTypes.func,
   esconderLabel: PropTypes.bool,
   esconderCaixaExterna: PropTypes.bool,
   verificaProprietario: PropTypes.bool,
@@ -75,6 +78,7 @@ ObservacoesUsuario.defaultProps = {
   editarObservacao: () => {},
   salvarObservacao: () => {},
   excluirObservacao: () => {},
+  mudarObservacao: () => {},
   esconderLabel: false,
   esconderCaixaExterna: false,
   verificaProprietario: false,
