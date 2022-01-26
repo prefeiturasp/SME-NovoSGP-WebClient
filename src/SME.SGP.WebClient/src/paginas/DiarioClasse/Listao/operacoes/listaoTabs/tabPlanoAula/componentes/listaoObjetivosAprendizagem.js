@@ -18,12 +18,15 @@ const ListaoObjetivosAprendizagem = props => {
     setDadosPlanoAula,
     dadosPlanoAula,
     componenteCurricular,
+    checkedExibirEscolhaObjetivos,
   } = useContext(ListaoContext);
 
   const [exibirModal, setExibirModal] = useState(false);
 
   const idsObjetivosAprendizagemSelecionados =
     dadosPlanoAula?.[indexPlano]?.idsObjetivosAprendizagemSelecionados;
+
+  const ehAulaCj = dadosPlanoAula?.[indexPlano]?.aulaCj;
 
   const [idsObjetivos, setIdsObjetivos] = useState(
     idsObjetivosAprendizagemSelecionados
@@ -46,8 +49,11 @@ const ListaoObjetivosAprendizagem = props => {
   };
 
   const semObjetivoSelecionado = !idsObjetivos?.length;
-  const necessarioSelecionarObjetivo = () =>
-    componenteCurricular?.possuiObjetivos && semObjetivoSelecionado;
+  const necessarioSelecionarObjetivo = () => {
+    if (ehAulaCj && !checkedExibirEscolhaObjetivos) return false;
+
+    return componenteCurricular?.possuiObjetivos && semObjetivoSelecionado;
+  };
 
   return (
     <>
@@ -60,6 +66,7 @@ const ListaoObjetivosAprendizagem = props => {
           setExibirModal={setExibirModal}
           onClickAdicionar={onClickAdicionar}
           desabilitar={desabilitarCampos}
+          ehAulaCj={ehAulaCj}
         />
       </Row>
       {necessarioSelecionarObjetivo() ? (

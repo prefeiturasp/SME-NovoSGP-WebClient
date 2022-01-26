@@ -100,12 +100,16 @@ const ListaoListaFrequencia = () => {
             }
           }
         }}
-        desabilitar={desabilitarCampos}
+        desabilitar={desabilitarCampos || !aulaHeader.podeEditar}
       />
     );
   };
 
+  const encontrarAulas = dadosAula =>
+    dadosFrequencia?.aulas.find(item => item.aulaId === dadosAula.aulaId);
+
   const montarColunaFrequenciaDiaria = dadosDiaAula => {
+    const aulasGerais = encontrarAulas(dadosDiaAula);
     return (
       <CampoTiposFrequencia
         tipoFrequencia={dadosDiaAula?.tipoFrequencia}
@@ -119,12 +123,17 @@ const ListaoListaFrequencia = () => {
           dispatch(setTelaEmEdicao(true));
           atualizarDados();
         }}
-        desabilitar={desabilitarCampos || dadosDiaAula?.desabilitado}
+        desabilitar={
+          desabilitarCampos ||
+          dadosDiaAula?.desabilitado ||
+          !aulasGerais.podeEditar
+        }
       />
     );
   };
 
   const montarColunaFrequenciaAula = (detalheFreq, dadosAula) => {
+    const aulasGerais = encontrarAulas(dadosAula);
     return (
       <CampoTiposFrequencia
         tipoFrequencia={detalheFreq.tipoFrequencia}
@@ -147,7 +156,11 @@ const ListaoListaFrequencia = () => {
           dispatch(setTelaEmEdicao(true));
           atualizarDados();
         }}
-        desabilitar={desabilitarCampos || dadosAula?.desabilitado}
+        desabilitar={
+          desabilitarCampos ||
+          dadosAula?.desabilitado ||
+          !aulasGerais.podeEditar
+        }
       />
     );
   };
@@ -208,21 +221,20 @@ const ListaoListaFrequencia = () => {
   // TODO - Verificar a regra - componenteCurricular.registraFrequencia
   if (dadosFrequencia?.aulas?.length) {
     dadosFrequencia.aulas.forEach(aula => {
+      const width = aula?.aulaCj ? '170px' : '150px';
       colunasEstudantes.push({
         title: () => (
           <div>
-            <div style={{ fontSize: 16, marginRight: 3 }}>
-              {window.moment(aula?.dataAula).format('DD/MM/YYYY')}
-            </div>
+            <div style={{ fontSize: 16, marginRight: 3 }}>{aula?.dataAula}</div>
             {aula?.ehReposicao ? <ReposicaoLabel /> : <></>}
           </div>
         ),
         align: 'center',
-        width: '150px',
+        width,
         children: [
           {
             align: 'center',
-            width: '150px',
+            width,
             className: 'posicao-marcar-todos-header',
             title: montarColunaFrequenciaMarcarTodasAulas(aula),
             render: dadosAulas => {
@@ -323,9 +335,7 @@ const ListaoListaFrequencia = () => {
     return (
       <span className="d-flex justify-content-between align-items-center">
         {ehReposicao ? <ReposicaoLabel linhaDetalhe /> : <></>}
-        <span style={{ marginLeft: 14 }}>
-          {window.moment(dataAula).format('DD/MM/YYYY')}
-        </span>
+        <span style={{ marginLeft: 14 }}>{dataAula}</span>
 
         <ListaoBotaoAnotacao
           desabilitarCampos={desabilitarCampos || aula.desabilitado}

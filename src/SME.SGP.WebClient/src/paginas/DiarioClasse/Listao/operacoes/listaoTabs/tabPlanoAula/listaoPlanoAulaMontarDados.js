@@ -26,12 +26,13 @@ const ListaoPlanoAulaMontarDados = () => {
   };
 
   const montar = (plano, indexPlano) => {
-    const { dataAula, qtdAulas, ehReposicao } = plano;
+    const { dataAula, qtdAulas, ehReposicao, aulaCj } = plano;
 
     const indice = `plano-aula-collapse-${indexPlano}`;
+    const textoCj = aulaCj ? 'Aula CJ' : '';
     let titulo = `${window
       .moment(dataAula)
-      .format('DD/MM/YYYY')} - ${qtdAulas} Aula(s)`;
+      .format('DD/MM/YYYY')} ${textoCj} - ${qtdAulas} Aula(s)`;
 
     if (ehReposicao) {
       titulo += ' - Reposição';
