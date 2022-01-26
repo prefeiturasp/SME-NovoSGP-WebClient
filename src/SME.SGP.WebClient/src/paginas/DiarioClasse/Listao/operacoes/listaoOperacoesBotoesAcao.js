@@ -168,6 +168,15 @@ const ListaoOperacoesBotoesAcao = () => {
     return errosPlanoAula;
   };
 
+  const alterouAuditoriaPlanoAula = (dadosConsulta, dadosAtuais) => {
+    const igualAlteradoEm =
+      dadosConsulta?.alteradoEm === dadosAtuais?.alteradoEm;
+    const igualCriadoEm = dadosAtuais?.criadoEm === dadosConsulta?.criadoEm;
+
+    const naoTeveAlteracao = igualAlteradoEm && igualCriadoEm;
+    return !naoTeveAlteracao;
+  };
+
   const salvarPlanoAula = () => {
     const planosAlterados = dadosPlanoAula?.filter(item => item?.alterado);
 
@@ -283,7 +292,27 @@ const ListaoOperacoesBotoesAcao = () => {
             }
           });
 
-          msgSucesso = `${datasAulasFezCopia.toString()} - Plano(s) de aula salvo com sucesso`;
+          lista.forEach(planoConsulta => {
+            const planoAtualValidar = dadosPlanoAula.find(
+              d => d.aulaId === planoConsulta.aulaId
+            );
+
+            if (planoAtualValidar) {
+              const atualizarDados = alterouAuditoriaPlanoAula(
+                planoConsulta,
+                planoAtualValidar
+              );
+              if (atualizarDados) {
+                const indexPlano = dadosPlanoAula.indexOf(planoAtualValidar);
+                const planoAtualizado = lista.find(
+                  p => p.aulaId === planoAtualValidar.aulaId
+                );
+                dadosPlanoAula[indexPlano] = { ...planoAtualizado };
+              }
+            }
+          });
+
+          msgSucesso = `${datasAulas.toString()} - Plano(s) de aula salvo com sucesso.`;
           if (datasAulasFezCopia?.length) {
             msgSucessoCopia = `${datasAulasFezCopia.toString()} - Plano(s) copiado com sucesso.`;
           }

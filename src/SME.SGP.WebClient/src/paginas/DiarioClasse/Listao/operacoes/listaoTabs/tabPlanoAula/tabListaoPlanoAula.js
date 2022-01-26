@@ -93,8 +93,8 @@ const TabListaoPlanoAula = () => {
 
       const dadosCarregar = _.cloneDeep(lista);
       const dadosIniciais = _.cloneDeep(lista);
-      setDadosIniciaisPlanoAula(dadosIniciais);
-      setDadosPlanoAula(dadosCarregar);
+      setDadosIniciaisPlanoAula([...dadosIniciais]);
+      setDadosPlanoAula([...dadosCarregar]);
 
       setExibirLoaderGeral(false);
       return true;
