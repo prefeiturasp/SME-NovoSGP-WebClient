@@ -257,12 +257,14 @@ const ModalCopiarConteudoPlanoAula = props => {
 
   const validarAntesDeFechar = async () => {
     if (listaTurmas?.length) {
+      setExibirModal(false);
       const confirmadoSalvar = await confirmar(
         'Atenção',
         '',
         'Suas alterações não foram salvas, deseja salvar agora?'
       );
       if (confirmadoSalvar) {
+        setExibirModal(true);
         onClickSalvar();
       } else {
         onCloseModal();
