@@ -34,6 +34,7 @@ const ListaoContextProvider = ({ children }) => {
   const [tabAtual, setTabAtual] = useState();
   const [periodoAbertoListao, setPeriodoAbertoListao] = useState(true);
   const [somenteConsultaListao, setSomenteConsultaListao] = useState(false);
+  const [permissaoLista, setPermissaoLista] = useState();
   const [listaoEhInfantil, setListaoEhInfantil] = useState(false);
   const [exibirLoaderGeral, setExibirLoaderGeral] = useState(false);
 
@@ -70,6 +71,7 @@ const ListaoContextProvider = ({ children }) => {
   const [dadosDiarioBordo, setDadosDiarioBordo] = useState([]);
   const [dadosIniciaisDiarioBordo, setDadosIniciaisDiarioBordo] = useState([]);
   const [errosDiarioBordoListao, setErrosDiarioBordoListao] = useState([]);
+  const [idDiarioBordoAtual, setIdDiarioBordoAtual] = useState();
 
   // TAB AVALIAÇÃO
   const [dadosAvaliacao, setDadosAvaliacao] = useState();
@@ -158,6 +160,8 @@ const ListaoContextProvider = ({ children }) => {
         setListaoEhInfantil,
         exibirLoaderGeral,
         setExibirLoaderGeral,
+        permissaoLista,
+        setPermissaoLista,
         // TAB FREQUÊNCIA
         listaPeriodos,
         setListaPeriodos,
@@ -193,6 +197,8 @@ const ListaoContextProvider = ({ children }) => {
         setDadosIniciaisDiarioBordo,
         errosDiarioBordoListao,
         setErrosDiarioBordoListao,
+        idDiarioBordoAtual,
+        setIdDiarioBordoAtual,
         // TAB AVALIAÇÃO
         dadosAvaliacao,
         setDadosAvaliacao,
