@@ -24,6 +24,8 @@ const CampoObservacao = props => {
     parametrosLocalizadorFuncionario,
     desabilitarBotaoNotificar,
     diarioBordoId,
+    dreId,
+    ueId,
   } = props;
   const [modalVisivel, setModalVisivel] = useState(false);
 
@@ -171,6 +173,8 @@ const CampoObservacao = props => {
           desabilitado={!novaObservacao || !podeIncluir}
           usarLocalizadorFuncionario={usarLocalizadorFuncionario}
           parametrosLocalizadorFuncionario={parametrosLocalizadorFuncionario}
+          dreId={dreId}
+          ueId={ueId}
         />
       )}
     </>
@@ -186,6 +190,8 @@ CampoObservacao.propTypes = {
   parametrosLocalizadorFuncionario: PropTypes.oneOfType(PropTypes.object),
   desabilitarBotaoNotificar: PropTypes.bool,
   diarioBordoId: PropTypes.string,
+  dreId: PropTypes.string,
+  ueId: PropTypes.string,
 };
 
 CampoObservacao.defaultProps = {
@@ -197,6 +203,8 @@ CampoObservacao.defaultProps = {
   parametrosLocalizadorFuncionario: {},
   desabilitarBotaoNotificar: false,
   diarioBordoId: '',
+  dreId: '',
+  ueId: '',
 };
 
 export default CampoObservacao;

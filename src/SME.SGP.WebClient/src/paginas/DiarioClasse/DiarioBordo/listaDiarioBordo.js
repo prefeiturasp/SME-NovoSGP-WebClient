@@ -464,6 +464,8 @@ const ListaDiarioBordo = () => {
                           excluirObservacao={obs => excluirObservacao(obs)}
                           permissoes={permissoesTela}
                           diarioBordoId={id}
+                          dreId={turmaSelecionada.dre}
+                          ueId={turmaSelecionada.unidadeEscolar}
                         />
                       </div>
                     </div>

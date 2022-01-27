@@ -28,7 +28,7 @@ const inicial = {
   dadosBimestresConselhoClasse: [],
   exibirLoaderGeralConselhoClasse: false,
   situacaoConselho: '',
-  podeAcessar: false,
+  podeAcessar: true,
 };
 
 export default function ConselhoClasse(state = inicial, action) {
@@ -101,7 +101,7 @@ export default function ConselhoClasse(state = inicial, action) {
           desabilitarCampos: false,
           exibirModalImpressaoConselhoClasse: false,
           exibirLoaderGeralConselhoClasse: false,
-          carregouParecer: false,
+          podeAcessar: true,
         };
       }
       case '@conselhoClasse/setConselhoClasseEmEdicao': {
