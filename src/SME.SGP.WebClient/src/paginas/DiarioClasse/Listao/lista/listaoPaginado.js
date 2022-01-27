@@ -190,7 +190,6 @@ const ListaoPaginado = () => {
             cursor: 'pointer',
           }}
           icon={icon}
-          onClick={() => carregarFiltros(tab, params)}
         />
         <FontAwesomeIcon
           className="cor-branco-hover"
@@ -209,10 +208,15 @@ const ListaoPaginado = () => {
     const ehBimestreFinal = bimestre === String(BIMESTRE_FINAL);
     const tamanhoColsTelas = '13%';
 
-    const confPadrao = {
-      align: 'center',
-      width: tamanhoColsTelas,
-      ellipsis: true,
+    const confPadrao = tab => {
+      return {
+        align: 'center',
+        width: tamanhoColsTelas,
+        ellipsis: true,
+        onCell: params => ({
+          onClick: () => carregarFiltros(tab, params),
+        }),
+      };
     };
 
     const cols = [
@@ -235,13 +239,13 @@ const ListaoPaginado = () => {
       cols.push(
         {
           title: 'Frequência',
-          ...confPadrao,
+          ...confPadrao(LISTAO_TAB_FREQUENCIA),
           render: (_, params) =>
             montarIcone(faCalendarDay, LISTAO_TAB_FREQUENCIA, params),
         },
         {
           title: 'Diário de bordo',
-          ...confPadrao,
+          ...confPadrao(LISTAO_TAB_DIARIO_BORDO),
           render: (_, params) =>
             montarIcone(faFileAlt, LISTAO_TAB_DIARIO_BORDO, params),
         }
@@ -252,25 +256,25 @@ const ListaoPaginado = () => {
       cols.push(
         {
           title: 'Frequência',
-          ...confPadrao,
+          ...confPadrao(LISTAO_TAB_FREQUENCIA),
           render: (_, params) =>
             montarIcone(faCalendarDay, LISTAO_TAB_FREQUENCIA, params),
         },
         {
           title: 'Plano de aula',
-          ...confPadrao,
+          ...confPadrao(LISTAO_TAB_PLANO_AULA),
           render: (_, params) =>
             montarIcone(faChalkboardTeacher, LISTAO_TAB_PLANO_AULA, params),
         },
         {
           title: 'Avaliações',
-          ...confPadrao,
+          ...confPadrao(LISTAO_TAB_AVALIACOES),
           render: (_, params) =>
             montarIcone(faSpellCheck, LISTAO_TAB_AVALIACOES, params),
         },
         {
           title: 'Fechamento',
-          ...confPadrao,
+          ...confPadrao(LISTAO_TAB_FECHAMENTO),
           render: (_, params) =>
             montarIcone(faPencilRuler, LISTAO_TAB_FECHAMENTO, params),
         }
@@ -280,7 +284,7 @@ const ListaoPaginado = () => {
     if (ehBimestreFinal) {
       cols.push({
         title: 'Fechamento',
-        ...confPadrao,
+        ...confPadrao(LISTAO_TAB_FECHAMENTO),
         render: (_, params) =>
           montarIcone(faPencilRuler, LISTAO_TAB_FECHAMENTO, params),
       });
