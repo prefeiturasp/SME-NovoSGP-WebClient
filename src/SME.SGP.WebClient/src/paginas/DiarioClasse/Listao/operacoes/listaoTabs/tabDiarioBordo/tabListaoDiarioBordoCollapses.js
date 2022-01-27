@@ -2,6 +2,7 @@ import { Col, Row } from 'antd';
 import React, { useContext, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Base, PainelCollapse } from '~/componentes';
+import ServicoObservacoesUsuario from '~/componentes-sgp/ObservacoesUsuario/ServicoObservacoesUsuario';
 import { setTelaEmEdicao } from '~/redux/modulos/geral/actions';
 import {
   limparDadosObservacoesUsuario,
@@ -50,26 +51,6 @@ const TabListaoDiarioBordoCollapses = () => {
     }
   }, [periodo, componenteCurricularDiarioBordo]);
 
-  const obterUsuarioPorObservacao = (dadosObservacoes, diarioBordoId) => {
-    const promises = dadosObservacoes.map(async observacao => {
-      const retorno = await ServicoDiarioBordo.obterNofiticarUsuarios({
-        turmaId,
-        observacaoId: observacao.id,
-        diarioBordoId,
-      }).catch(e => erros(e));
-
-      if (retorno?.data) {
-        return {
-          ...observacao,
-          usuariosNotificacao: retorno.data,
-          listagemDiario: true,
-        };
-      }
-      return observacao;
-    });
-    return Promise.all(promises);
-  };
-
   const perguntarSalvarObservacao = async () => {
     if (telaEmEdicao && idDiarioBordoAtual) {
       const confirmou = await confirmar(
@@ -106,7 +87,7 @@ const TabListaoDiarioBordoCollapses = () => {
       const dados = await ServicoDiarioBordo.obterDiarioBordoDetalhes(idDiario);
       if (dados?.data) {
         if (dados.data.observacoes.length) {
-          observacoes = await obterUsuarioPorObservacao(
+          observacoes = ServicoObservacoesUsuario.obterUsuarioPorObservacao(
             dados.data.observacoes,
             idDiario
           );
@@ -141,6 +122,7 @@ const TabListaoDiarioBordoCollapses = () => {
                     dados={dados}
                     indexDiarioBordo={indexDiarioBordo}
                     key={aulaId}
+                    turmaSelecionada={turmaSelecionada}
                   />
                 </PainelCollapse.Painel>
               );

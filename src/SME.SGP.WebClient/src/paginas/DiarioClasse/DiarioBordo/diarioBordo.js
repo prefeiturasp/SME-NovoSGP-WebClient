@@ -46,6 +46,10 @@ const DiarioBordo = ({ match }) => {
   );
   const turmaId = turmaSelecionada ? turmaSelecionada.turma : 0;
 
+  const listaUsuarios = useSelector(
+    store => store.observacoesUsuario.listaUsuariosNotificacao
+  );
+
   const [
     listaComponenteCurriculares,
     setListaComponenteCurriculares,
@@ -272,25 +276,6 @@ const DiarioBordo = ({ match }) => {
     );
   };
 
-  const obterUsuarioPorObservacao = dadosObservacoes => {
-    const promises = dadosObservacoes.map(async observacao => {
-      const retorno = await ServicoDiarioBordo.obterNofiticarUsuarios({
-        turmaId: turmaSelecionada?.id,
-        observacaoId: observacao.id,
-        diarioBordoId,
-      }).catch(e => erros(e));
-
-      if (retorno?.data) {
-        return {
-          ...observacao,
-          usuariosNotificacao: retorno.data,
-        };
-      }
-      return observacao;
-    });
-    return Promise.all(promises);
-  };
-
   const obterDadosObservacoes = async diarioBordoIdSel => {
     dispatch(limparDadosObservacoesUsuario());
     setCarregandoGeral(true);
@@ -302,7 +287,9 @@ const DiarioBordo = ({ match }) => {
     });
 
     if (retorno && retorno.data) {
-      const dadosObservacoes = await obterUsuarioPorObservacao(retorno.data);
+      const dadosObservacoes = ServicoObservacoesUsuario.obterUsuarioPorObservacao(
+        retorno.data
+      );
       dispatch(setDadosObservacoesUsuario([...dadosObservacoes]));
     } else {
       dispatch(setDadosObservacoesUsuario([]));
@@ -526,9 +513,20 @@ const DiarioBordo = ({ match }) => {
   };
 
   const salvarEditarObservacao = async obs => {
+    const params = {
+      observacao: obs.observacao,
+      id: obs?.id,
+    };
+
+    if (listaUsuarios?.length && !obs?.id) {
+      params.usuariosIdNotificacao = listaUsuarios.map(u => {
+        return u.usuarioId;
+      });
+    }
+
     setCarregandoGeral(true);
     const diarioBordoIdSel = auditoria.id;
-    return ServicoDiarioBordo.salvarEditarObservacao(diarioBordoIdSel, obs)
+    return ServicoDiarioBordo.salvarEditarObservacao(diarioBordoIdSel, params)
       .then(resultado => {
         if (resultado && resultado.status === 200) {
           const msg = `Observação ${
