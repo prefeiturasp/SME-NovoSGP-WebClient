@@ -138,6 +138,7 @@ const ConselhoClasse = () => {
         conselhoClasseId,
         fechamentoTurmaId,
         conselhoClasseAlunoId,
+        tipoNota
       } = resposta?.data;
       const retorno = await servicoSalvarConselhoClasse.validaParecerConclusivo(
         conselhoClasseId,
@@ -153,6 +154,7 @@ const ConselhoClasse = () => {
         conselhoClasseAlunoId,
         alunoCodigo: codigoEOL,
         ...dadosPrincipaisConselhoClasse,
+        tipoNota      
       };
       if (!Object.keys(dadosPrincipaisConselhoClasse).length) {
         dispatch(setDadosPrincipaisConselhoClasse(valores));
