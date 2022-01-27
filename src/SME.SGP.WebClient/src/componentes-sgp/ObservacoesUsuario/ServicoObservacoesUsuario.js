@@ -23,9 +23,7 @@ class ServicoObservacoesUsuario {
     } else {
       const dadosObs = dadosObservacoes;
       const usuariosNotificacao = listaUsuariosNotificacao?.length
-        ? listaUsuariosNotificacao
-            .map(usuario => usuario.podeRemover)
-            .join(', ')
+        ? listaUsuariosNotificacao.map(usuario => usuario.nome).join(', ')
         : '';
 
       const params = {
