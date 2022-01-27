@@ -14,6 +14,7 @@ import {
   SGP_SELECT_TURMA,
   SGP_SELECT_NOME_TIPO_PENDENCIA,
 } from '~/componentes-sgp/filtro/idsCampos';
+import { Container, TextoTitulo } from './pendenciasGerais.css';
 
 const PendenciasGerais = () => {
   const [carregando, setCarregando] = useState(false);
@@ -96,47 +97,44 @@ const PendenciasGerais = () => {
   }, [obterPendencias, obterTurmas, codigoTurma, tipoPendenciaGrupo, titulo]);
 
   const titutoPersonalizado = item => {
-    let valorTitulo = item.titulo;
-    if (item.titulo.length > 35)
-      valorTitulo = `${item.titulo.substr(0, 35)}...`;
     return (
-      <div className="row pl-2">
+      <Container>
         {item.tipo ? (
-          <>
+          <div className="text-nowrap">
             <span style={{ color: Base.Roxo }}>Tipo:&nbsp;</span>
             {item.tipo}
             <span className="mr-3 ml-3">|</span>
-          </>
+          </div>
         ) : (
           ''
         )}
         {item.turma ? (
-          <>
+          <div className="text-nowrap">
             <span style={{ color: Base.Roxo }}>Turma:&nbsp;</span>
             {item.turma}
             <span className="mr-3 ml-3">|</span>
-          </>
+          </div>
         ) : (
           ''
         )}
         {item.bimestre ? (
-          <>
+          <div className="text-nowrap">
             <span style={{ color: Base.Roxo }}>Bimestre:&nbsp;</span>
             {item.bimestre}
             <span className="mr-3 ml-3">|</span>
-          </>
+          </div>
         ) : (
           ''
         )}
         {item.titulo ? (
-          <>
+          <TextoTitulo>
             <span style={{ color: Base.Roxo }}>Título:&nbsp;</span>
-            <Tooltip title={item.titulo}>{valorTitulo}</Tooltip>
-          </>
+            <Tooltip title={item.titulo}>{item.titulo}</Tooltip>
+          </TextoTitulo>
         ) : (
           ''
         )}
-      </div>
+      </Container>
     );
   };
 

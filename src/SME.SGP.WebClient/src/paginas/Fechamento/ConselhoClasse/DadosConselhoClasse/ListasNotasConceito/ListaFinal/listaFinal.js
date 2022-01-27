@@ -2,6 +2,7 @@ import PropTypes from 'prop-types';
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import shortid from 'shortid';
+import { Tooltip } from 'antd';
 import modalidadeDto from '~/dtos/modalidade';
 import notasConceitos from '~/dtos/notasConceitos';
 import {
@@ -15,7 +16,6 @@ import CampoNota from '../CamposNotaConceito/campoNota';
 import { BarraLateralLista, Lista } from '../listasNotasConceitos.css';
 import LinhaJustificativa from '../../Justificativa/LinhaJustificativa/LinhaJustificativa';
 import { MarcadorTriangulo } from '~/componentes';
-import { Tooltip } from 'antd';
 
 const ListaFinal = props => {
   const {

@@ -2,6 +2,7 @@ import { Tooltip } from 'antd';
 import PropTypes from 'prop-types';
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { MarcadorTriangulo } from '~/componentes';
 import NomeEstudanteLista from '~/componentes-sgp/NomeEstudanteLista/nomeEstudanteLista';
 
 import { setExpandirLinha } from '~/redux/modulos/notasConceitos/actions';
@@ -200,12 +201,18 @@ const LinhaAluno = ({
         {ehSintese ? (
           ''
         ) : (
-          <td className="col-conceito-final">
+          <td className="col-conceito-final position-relative">
             {ehRegencia ? (
               <ColunaNotaFinalRegencia indexLinha={indexAluno} />
             ) : (
               montarCampoNotaConceitoFinal(aluno)
             )}
+            {aluno?.notasConceitoFinal?.length &&
+              aluno.notasConceitoFinal[0].emAprovacao && (
+                <Tooltip title="Aguardando aprovação">
+                  <MarcadorTriangulo />
+                </Tooltip>
+              )}
           </td>
         )}
         <td>
@@ -229,12 +236,14 @@ LinhaAluno.propTypes = {
   onChange: PropTypes.func,
   desabilitarCampo: PropTypes.bool,
   ehSintese: PropTypes.bool,
+  aluno: PropTypes.oneOfType(PropTypes.any),
 };
 
 LinhaAluno.defaultProps = {
   onChange: () => {},
   desabilitarCampo: false,
   ehSintese: false,
+  aluno: [],
 };
 
 export default LinhaAluno;

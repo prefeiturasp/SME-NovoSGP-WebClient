@@ -28,6 +28,7 @@ const inicial = {
   dadosBimestresConselhoClasse: [],
   exibirLoaderGeralConselhoClasse: false,
   situacaoConselho: '',
+  podeAcessar: true,
 };
 
 export default function ConselhoClasse(state = inicial, action) {
@@ -100,6 +101,7 @@ export default function ConselhoClasse(state = inicial, action) {
           desabilitarCampos: false,
           exibirModalImpressaoConselhoClasse: false,
           exibirLoaderGeralConselhoClasse: false,
+          podeAcessar: true,
         };
       }
       case '@conselhoClasse/setConselhoClasseEmEdicao': {
@@ -278,6 +280,10 @@ export default function ConselhoClasse(state = inicial, action) {
           ...draft,
           dadosListasNotasConceitos: novosDadosListasNotasConceitos,
         };
+      }
+      case '@conselhoClasse/setPodeAcessar': {
+        draft.podeAcessar = action.payload;
+        break;
       }
 
       default:

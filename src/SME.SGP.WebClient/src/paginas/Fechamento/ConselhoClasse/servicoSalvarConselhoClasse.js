@@ -52,6 +52,7 @@ class ServicoSalvarConselhoClasse {
       recomendacaoFamilia,
       conselhoClasseEmEdicao,
       desabilitarCampos,
+      bimestreAtual,
     } = conselhoClasse;
 
     const perguntaDescartarRegistros = async () => {
@@ -96,6 +97,13 @@ class ServicoSalvarConselhoClasse {
       if (retorno && retorno.status === 200) {
         this.recarregarDados();
         sucesso('Anotações e recomendações salvas com sucesso.');
+        if (bimestreAtual?.valor === 'final') {
+          this.gerarParecerConclusivo(
+            dadosPrincipaisConselhoClasse.conselhoClasseId,
+            dadosPrincipaisConselhoClasse.fechamentoTurmaId,
+            dadosAlunoObjectCard.codigoEOL
+          );
+        }
         return true;
       }
       return false;
@@ -143,6 +151,46 @@ class ServicoSalvarConselhoClasse {
     return true;
   };
 
+  validaParecerConclusivo = async (
+    conselhoClasseId,
+    fechamentoTurmaId,
+    alunoCodigo,
+    codigoTurma,
+    consideraHistorico
+  ) => {
+    const resposta = await ServicoConselhoClasse.acessarParecerConclusivo(
+      conselhoClasseId,
+      fechamentoTurmaId,
+      alunoCodigo,
+      codigoTurma,
+      consideraHistorico
+    ).catch(e => erros(e));
+    if (resposta?.data) {
+      ServicoConselhoClasse.setarParecerConclusivo(resposta.data);
+      return true;
+    }
+    return false;
+  };
+
+  gerarParecerConclusivo = async (
+    conselhoClasseId,
+    fechamentoTurmaId,
+    alunoCodigo
+  ) => {
+    const { dispatch } = store;
+
+    dispatch(setGerandoParecerConclusivo(true));
+    const retorno = await ServicoConselhoClasse.gerarParecerConclusivo(
+      conselhoClasseId,
+      fechamentoTurmaId,
+      alunoCodigo
+    ).catch(e => erros(e));
+    if (retorno && retorno.data) {
+      ServicoConselhoClasse.setarParecerConclusivo(retorno.data);
+    }
+    dispatch(setGerandoParecerConclusivo(false));
+  };
+
   salvarNotaPosConselho = async codigoTurma => {
     const { dispatch } = store;
 
@@ -181,18 +229,11 @@ class ServicoSalvarConselhoClasse {
       dispatch(setNotaConceitoPosConselhoAtual({}));
     };
 
-    const gerarParecerConclusivo = async () => {
-      dispatch(setGerandoParecerConclusivo(true));
-      const retorno = await ServicoConselhoClasse.gerarParecerConclusivo(
-        conselhoClasseId,
-        fechamentoTurmaId,
-        alunoCodigo
-      ).catch(e => erros(e));
-      if (retorno && retorno.data) {
-        ServicoConselhoClasse.setarParecerConclusivo(retorno.data);
-      }
-      dispatch(setGerandoParecerConclusivo(false));
-    };
+    this.gerarParecerConclusivo(
+      conselhoClasseId,
+      fechamentoTurmaId,
+      alunoCodigo
+    );
 
     if (desabilitarCampos) {
       return false;
@@ -259,7 +300,11 @@ class ServicoSalvarConselhoClasse {
       );
 
       if (bimestreAtual && bimestreAtual.valor === 'final') {
-        gerarParecerConclusivo();
+        this.gerarParecerConclusivo(
+          conselhoClasseId,
+          fechamentoTurmaId,
+          alunoCodigo
+        );
       }
 
       const dadosCarregar = _.cloneDeep(dadosListasNotasConceitos);

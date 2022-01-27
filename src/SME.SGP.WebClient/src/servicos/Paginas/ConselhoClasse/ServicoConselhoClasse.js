@@ -154,14 +154,7 @@ class ServicoConselhoClasse {
 
   setarParecerConclusivo = parecer => {
     const { dispatch } = store;
-    let parecerAtual = '';
-    if (parecer) {
-      const { nome, id } = parecer;
-      if (nome && id) {
-        parecerAtual = parecer;
-      }
-    }
-    dispatch(setMarcadorParecerConclusivo(parecerAtual));
+    dispatch(setMarcadorParecerConclusivo(parecer));
   };
 
   gerarConselhoClasseTurma = (conselhoClasseId, fechamentoTurmaId) => {
@@ -187,6 +180,17 @@ class ServicoConselhoClasse {
   obterVisibilidadeMarcadorParecer = (codigoTurma, alunoCodigo) => {
     return api.get(
       `/v1/conselhos-classe/turmas/${codigoTurma}/alunos/${alunoCodigo}/parecer`
+    );
+  };
+
+  obterExibirMarcadorParecer = (
+    turmaCodigo,
+    alunoCodigo,
+    consideraHistorico
+  ) => {
+    return api.get(
+      `/v1/conselhos-classe/turmas/${turmaCodigo}/alunos/${alunoCodigo}/consideraHistorico` +
+        `/${consideraHistorico}`
     );
   };
 }
