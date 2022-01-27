@@ -2,6 +2,7 @@ import _ from 'lodash';
 import ServicoObservacoesUsuario from '~/componentes-sgp/ObservacoesUsuario/ServicoObservacoesUsuario';
 import notasConceitos from '~/dtos/notasConceitos';
 import { store } from '~/redux';
+import { setTelaEmEdicao } from '~/redux/modulos/geral/actions';
 import { confirmar, erros, ServicoDiarioBordo, sucesso } from '~/servicos';
 import ServicoNotaConceito from '~/servicos/Paginas/DiarioClasse/ServicoNotaConceito';
 import ServicoNotas from '~/servicos/ServicoNotas';
@@ -147,7 +148,8 @@ const salvarEditarObservacao = async (
   IdDiarioBordo,
   setExibirLoaderGeral
 ) => {
-  const { observacoesUsuario } = store.getState();
+  const { dispatch, getState } = store;
+  const { observacoesUsuario } = getState();
   const { novaObservacao } = observacoesUsuario;
 
   const observacao = valor?.observacao || novaObservacao;
@@ -180,6 +182,8 @@ const salvarEditarObservacao = async (
       valor,
       resultado.data
     );
+
+    dispatch(setTelaEmEdicao(false));
   }
   return resultado;
 };

@@ -28,7 +28,7 @@ const ConteudoCollapse = props => {
 
   const desabilitarCampos = somenteConsultaListao || !periodoAbertoListao;
 
-  const { dados, indexDiarioBordo } = props;
+  const { dados, indexDiarioBordo, turmaSelecionada } = props;
   const { auditoria, pendente, diarioBordoId } = dados;
 
   const setarDiarioAlterado = () => {
@@ -53,6 +53,10 @@ const ConteudoCollapse = props => {
   const mudarObservacao = () => {
     dispatch(setTelaEmEdicao(true));
     setIdDiarioBordoAtual(diarioBordoId);
+  };
+
+  const mudarObservacaoListagem = () => {
+    dispatch(setTelaEmEdicao(true));
   };
 
   return (
@@ -124,8 +128,11 @@ const ConteudoCollapse = props => {
             excluirObservacao(obs, setExibirLoaderGeral)
           }
           mudarObservacao={mudarObservacao}
+          mudarObservacaoListagem={mudarObservacaoListagem}
           diarioBordoId={diarioBordoId}
           permissoes={permissaoLista}
+          dreId={turmaSelecionada.dre}
+          ueId={turmaSelecionada.unidadeEscolar}
         />
       </Row>
     </>
@@ -135,11 +142,13 @@ const ConteudoCollapse = props => {
 ConteudoCollapse.propTypes = {
   dados: PropTypes.oneOfType([PropTypes.any]),
   indexDiarioBordo: PropTypes.number,
+  turmaSelecionada: PropTypes.oneOfType([PropTypes.any]),
 };
 
 ConteudoCollapse.defaultProps = {
   dados: null,
   indexDiarioBordo: null,
+  turmaSelecionada: {},
 };
 
 export default ConteudoCollapse;

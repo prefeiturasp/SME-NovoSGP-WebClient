@@ -171,26 +171,6 @@ const ListaDiarioBordo = () => {
     setNumeroPagina(pagina);
   };
 
-  const obterUsuarioPorObservacao = (dadosObservacoes, diarioBordoId) => {
-    const promises = dadosObservacoes.map(async observacao => {
-      const retorno = await ServicoDiarioBordo.obterNofiticarUsuarios({
-        turmaId,
-        observacaoId: observacao.id,
-        diarioBordoId,
-      }).catch(e => erros(e));
-
-      if (retorno?.data) {
-        return {
-          ...observacao,
-          usuariosNotificacao: retorno.data,
-          listagemDiario: true,
-        };
-      }
-      return observacao;
-    });
-    return Promise.all(promises);
-  };
-
   const onColapse = async aulaId => {
     dispatch(limparDadosObservacoesUsuario());
     const diario = listaTitulos?.items?.find(
@@ -204,9 +184,9 @@ const ListaDiarioBordo = () => {
       dados = await ServicoDiarioBordo.obterDiarioBordoDetalhes(idDiario);
       if (dados?.data) {
         if (dados.data.observacoes.length) {
-          observacoes = await obterUsuarioPorObservacao(
+          observacoes = ServicoObservacoesUsuario.obterUsuarioPorObservacao(
             dados.data.observacoes,
-            idDiario
+            true
           );
           dispatch(setDadosObservacoesUsuario(observacoes));
         }
@@ -223,29 +203,13 @@ const ListaDiarioBordo = () => {
     }
   };
 
-  const salvarEditarObservacao = async (valor, diarioBordoId) => {
+  const salvarEditarObservacao = async valor => {
     const params = {
       observacao: valor.observacao,
-      usuariosIdNotificacao: [],
       id: valor.id,
     };
     let observacaoId = valor.id;
     let usuariosNotificacao = [];
-
-    if (observacaoId && diarioBordoId) {
-      const retorno = await ServicoDiarioBordo.obterNofiticarUsuarios({
-        turmaId,
-        observacaoId,
-        diarioBordoId,
-      }).catch(e => erros(e));
-
-      if (retorno?.data?.length) {
-        usuariosNotificacao = retorno.data;
-        params.usuariosIdNotificacao = retorno.data.map(u => {
-          return u.usuarioId;
-        });
-      }
-    }
 
     if (listaUsuarios?.length && !observacaoId) {
       usuariosNotificacao = listaUsuarios;
@@ -481,14 +445,16 @@ const ListaDiarioBordo = () => {
                             desabilitarBotaoNotificar={pendente}
                             mostrarListaNotificacao={!pendente}
                             salvarObservacao={obs =>
-                              salvarEditarObservacao(obs, id)
+                              salvarEditarObservacao(obs)
                             }
                             editarObservacao={obs =>
-                              salvarEditarObservacao(obs, id)
+                              salvarEditarObservacao(obs)
                             }
                             excluirObservacao={obs => excluirObservacao(obs)}
                             permissoes={permissoesTela}
                             diarioBordoId={id}
+                            dreId={turmaSelecionada.dre}
+                            ueId={turmaSelecionada.unidadeEscolar}
                           />
                         </div>
                       </div>
