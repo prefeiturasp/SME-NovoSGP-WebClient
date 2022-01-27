@@ -332,6 +332,8 @@ const ListaoListaFrequencia = () => {
     aulaId,
     ehReposicao
   ) => {
+    const aulasGerais = encontrarAulas(aula);
+
     return (
       <span className="d-flex justify-content-between align-items-center">
         {ehReposicao ? <ReposicaoLabel linhaDetalhe /> : <></>}
@@ -347,7 +349,7 @@ const ListaoListaFrequencia = () => {
             possuiAnotacao: aula?.possuiAnotacao,
             aula,
           }}
-          permiteAnotacao={aula?.permiteAnotacao}
+          permiteAnotacao={aula?.permiteAnotacao && aulasGerais?.podeEditar}
           possuiAnotacao={aula?.possuiAnotacao}
         />
       </span>
