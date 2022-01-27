@@ -13,6 +13,8 @@ const ModalNotificarUsuarios = ({
   listaUsuarios,
   usarLocalizadorFuncionario,
   parametrosLocalizadorFuncionario,
+  dreId,
+  ueId,
 }) => {
   const [usuariosSelecionados, setUsuariosSelecionados] = useState(
     listaUsuarios
@@ -145,6 +147,8 @@ const ModalNotificarUsuarios = ({
                 limparCamposAposPesquisa
                 validaPerfilProfessor={false}
                 mensagemErroConsultaRF="Este usuário não consta na base do SGP e não será possível notificá-lo"
+                dreId={dreId}
+                ueId={ueId}
               />
             </div>
           </div>
@@ -181,6 +185,8 @@ ModalNotificarUsuarios.defaultProps = {
   setModalVisivel: () => {},
   usarLocalizadorFuncionario: false,
   parametrosLocalizadorFuncionario: {},
+  dreId: PropTypes.string,
+  ueId: PropTypes.string,
 };
 
 ModalNotificarUsuarios.propTypes = {
@@ -189,6 +195,8 @@ ModalNotificarUsuarios.propTypes = {
   setModalVisivel: PropTypes.func,
   usarLocalizadorFuncionario: PropTypes.bool,
   parametrosLocalizadorFuncionario: PropTypes.oneOfType([PropTypes.object]),
+  dreId: '',
+  ueId: '',
 };
 
 export default ModalNotificarUsuarios;
