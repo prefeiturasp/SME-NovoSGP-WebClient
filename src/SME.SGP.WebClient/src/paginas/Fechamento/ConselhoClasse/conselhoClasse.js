@@ -47,6 +47,10 @@ const ConselhoClasse = () => {
     store => store.filtro.modalidades
   );
 
+  const dadosPrincipaisConselhoClasse = useSelector(
+    store => store.conselhoClasse.dadosPrincipaisConselhoClasse
+  );
+
   const obterListaAlunos = useCallback(async () => {
     dispatch(setExibirLoaderGeralConselhoClasse(true));
     const retorno = await ServicoConselhoClasse.obterListaAlunos(
@@ -134,6 +138,7 @@ const ConselhoClasse = () => {
         conselhoClasseId,
         fechamentoTurmaId,
         conselhoClasseAlunoId,
+        tipoNota
       } = resposta?.data;
       const retorno = await servicoSalvarConselhoClasse.validaParecerConclusivo(
         conselhoClasseId,
@@ -148,9 +153,12 @@ const ConselhoClasse = () => {
         conselhoClasseId: conselhoClasseId || 0,
         conselhoClasseAlunoId,
         alunoCodigo: codigoEOL,
+        ...dadosPrincipaisConselhoClasse,
+        tipoNota      
       };
-
-      dispatch(setDadosPrincipaisConselhoClasse(valores));
+      if (!Object.keys(dadosPrincipaisConselhoClasse).length) {
+        dispatch(setDadosPrincipaisConselhoClasse(valores));
+      }
       dispatch(setPodeAcessar(retorno));
     }
   };
