@@ -115,6 +115,13 @@ export const TextoSimples = styled.div`
 `;
 
 export const FundoEditor = styled.div`
+  position: relative;
   height: 560px;
   background: ${Base.CinzaFundoEditor};
+`;
+
+export const MarcadorInseridoCJ = styled.div`
+  position: absolute;
+  top: 10px;
+  right: 12px;
 `;

@@ -4,6 +4,8 @@ import {
   faFileAlt,
   faPencilRuler,
   faSpellCheck,
+  faCheck,
+  faExclamationTriangle,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Col } from 'antd';
@@ -31,6 +33,7 @@ import {
   LISTAO_TAB_FECHAMENTO,
   LISTAO_TAB_FREQUENCIA,
   LISTAO_TAB_PLANO_AULA,
+  PARAMETROS,
 } from '../listaoConstantes';
 import ListaoContext from '../listaoContext';
 
@@ -172,17 +175,32 @@ const ListaoPaginado = () => {
   };
 
   const montarIcone = (icon, tab, params) => {
+    const parametro = PARAMETROS[tab];
+    const temPendencia = params[parametro];
+    const iconePendencia = temPendencia ? faExclamationTriangle : faCheck;
+    const corPendencia = temPendencia ? 'LaranjaCalendario' : 'Verde';
+
     return (
-      <FontAwesomeIcon
-        className="cor-branco-hover"
-        style={{
-          fontSize: '16px',
-          color: Base.Azul,
-          cursor: 'pointer',
-        }}
-        icon={icon}
-        onClick={() => carregarFiltros(tab, params)}
-      />
+      <>
+        <FontAwesomeIcon
+          className="cor-branco-hover"
+          style={{
+            fontSize: '16px',
+            color: Base.Azul,
+            cursor: 'pointer',
+          }}
+          icon={icon}
+        />
+        <FontAwesomeIcon
+          className="cor-branco-hover"
+          style={{
+            fontSize: '16px',
+            color: Base[corPendencia],
+            marginLeft: '12px',
+          }}
+          icon={iconePendencia}
+        />
+      </>
     );
   };
 
@@ -190,10 +208,15 @@ const ListaoPaginado = () => {
     const ehBimestreFinal = bimestre === String(BIMESTRE_FINAL);
     const tamanhoColsTelas = '13%';
 
-    const confPadrao = {
-      align: 'center',
-      width: tamanhoColsTelas,
-      ellipsis: true,
+    const confPadrao = tab => {
+      return {
+        align: 'center',
+        width: tamanhoColsTelas,
+        ellipsis: true,
+        onCell: params => ({
+          onClick: () => carregarFiltros(tab, params),
+        }),
+      };
     };
 
     const cols = [
@@ -216,13 +239,13 @@ const ListaoPaginado = () => {
       cols.push(
         {
           title: 'Frequência',
-          ...confPadrao,
+          ...confPadrao(LISTAO_TAB_FREQUENCIA),
           render: (_, params) =>
             montarIcone(faCalendarDay, LISTAO_TAB_FREQUENCIA, params),
         },
         {
           title: 'Diário de bordo',
-          ...confPadrao,
+          ...confPadrao(LISTAO_TAB_DIARIO_BORDO),
           render: (_, params) =>
             montarIcone(faFileAlt, LISTAO_TAB_DIARIO_BORDO, params),
         }
@@ -233,25 +256,25 @@ const ListaoPaginado = () => {
       cols.push(
         {
           title: 'Frequência',
-          ...confPadrao,
+          ...confPadrao(LISTAO_TAB_FREQUENCIA),
           render: (_, params) =>
             montarIcone(faCalendarDay, LISTAO_TAB_FREQUENCIA, params),
         },
         {
           title: 'Plano de aula',
-          ...confPadrao,
+          ...confPadrao(LISTAO_TAB_PLANO_AULA),
           render: (_, params) =>
             montarIcone(faChalkboardTeacher, LISTAO_TAB_PLANO_AULA, params),
         },
         {
           title: 'Avaliações',
-          ...confPadrao,
+          ...confPadrao(LISTAO_TAB_AVALIACOES),
           render: (_, params) =>
             montarIcone(faSpellCheck, LISTAO_TAB_AVALIACOES, params),
         },
         {
           title: 'Fechamento',
-          ...confPadrao,
+          ...confPadrao(LISTAO_TAB_FECHAMENTO),
           render: (_, params) =>
             montarIcone(faPencilRuler, LISTAO_TAB_FECHAMENTO, params),
         }
@@ -261,7 +284,7 @@ const ListaoPaginado = () => {
     if (ehBimestreFinal) {
       cols.push({
         title: 'Fechamento',
-        ...confPadrao,
+        ...confPadrao(LISTAO_TAB_FECHAMENTO),
         render: (_, params) =>
           montarIcone(faPencilRuler, LISTAO_TAB_FECHAMENTO, params),
       });

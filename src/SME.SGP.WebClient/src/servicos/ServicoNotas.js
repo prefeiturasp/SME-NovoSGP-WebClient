@@ -104,6 +104,11 @@ class ServicoNota {
     const url = `${urlPadrao}notas`;
     return api.get(url, params);
   };
+
+  obterDadosAvaliacoesListao = params => {
+    const url = `v1/avaliacoes/notas/avaliacoes-bimestre`;
+    return api.get(url, params);
+  };
 }
 
 export default new ServicoNota();

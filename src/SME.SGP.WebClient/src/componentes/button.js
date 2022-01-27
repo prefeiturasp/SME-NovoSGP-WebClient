@@ -123,7 +123,7 @@ Button.propTypes = {
   width: PropTypes.string,
   fontSize: PropTypes.string,
   indice: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-  label: PropTypes.string,
+  label: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
   hidden: PropTypes.bool,
   id: PropTypes.string,
   customRadius: PropTypes.string,

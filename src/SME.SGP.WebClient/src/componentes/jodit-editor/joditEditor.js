@@ -217,11 +217,17 @@ const JoditEditor = forwardRef((props, ref) => {
   };
 
   useEffect(() => {
+    let isMounted = true;
     if (!url) {
       urlBase().then(resposta => {
-        setUrl(resposta);
+        if (isMounted) {
+          setUrl(resposta);
+        }
       });
     }
+    return () => {
+      isMounted = false;
+    };
   }, [url]);
 
   const onChangePadrao = () => {
@@ -413,6 +419,7 @@ const JoditEditor = forwardRef((props, ref) => {
             id={id}
             hidden={!textArea?.current?.isJodit}
             value={value}
+            onChange={e => e}
           />
         </div>
       </Campo>

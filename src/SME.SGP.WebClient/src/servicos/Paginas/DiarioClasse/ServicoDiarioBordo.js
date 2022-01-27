@@ -10,7 +10,7 @@ class ServicoDiarioBordo {
   };
 
   salvarEditarObservacao = (diarioBordoId, dados) => {
-    const observacaoId = dados.id;
+    const observacaoId = dados?.id;
     if (observacaoId) {
       const url = `${urlPadrao}/observacoes/${observacaoId}`;
       return api.put(url, dados);
@@ -27,7 +27,7 @@ class ServicoDiarioBordo {
     const { observacoesUsuario } = state;
     const { dadosObservacoes } = observacoesUsuario;
 
-    const observacaoId = dados.id;
+    const observacaoId = dados?.id;
 
     if (observacaoId) {
       const item = dadosObservacoes.find(e => e.id === dados.id);
@@ -147,6 +147,20 @@ class ServicoDiarioBordo {
       },
     });
   };
+
+  obterDiarioBordoListao = (
+    turmaCodigo,
+    dataInicio,
+    dataFim,
+    componenteCurricularId
+  ) => {
+    return api.get(
+      `${urlPadrao}/turmas/${turmaCodigo}/inicio/${dataInicio}/fim/${dataFim}` +
+        `/componentes-curriculares/${componenteCurricularId}`
+    );
+  };
+
+  salvarDiarioBordoListao = params => api.post(`${urlPadrao}/salvar`, params);
 }
 
 export default new ServicoDiarioBordo();

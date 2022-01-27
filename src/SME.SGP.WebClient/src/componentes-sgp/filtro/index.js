@@ -965,6 +965,11 @@ const Filtro = () => {
 
     setAnoLetivoSelecionado(ano);
     setAplicouFiltro(false);
+    if (turmas) {
+      setTurmaSelecionada('');
+      setTurmas([]);
+      setCampoTurmaDesabilitado(true);
+    }
   };
 
   const aoTrocarModalidade = valor => {

@@ -9,11 +9,10 @@ import {
 } from '~/redux/modulos/frequenciaPlanoAula/actions';
 import AuditoriaPlanoAula from './auditoriaPlanoAula';
 import CabecalhoDadosPlanoAula from './CabecalhoDadosPlanoAula/cabecalhoDadosPlanoAula';
-import DesenvolvimentoDaAula from './CamposEditorPlanoAula/desenvolvimentoDaAula';
 import LicaoDeCasa from './CamposEditorPlanoAula/licaoDeCasa';
 import ObjetivosEspecificosParaAula from './CamposEditorPlanoAula/objetivosEspecificosParaAula';
 import RecuperacaoContinua from './CamposEditorPlanoAula/recuperacaoContinua';
-import ModalCopiarConteudoPlanoAula from './ModalCopiarConteudo/modalCopiarConteudoPlanoAula';
+import CopiarConteudoPlanoAula from './ModalCopiarConteudo/copiarConteudoPlanoAula';
 import ModalErrosPlanoAula from './ModalErros/modalErrosPlanoAula';
 import MuralPlanoAula from './muralPlanoAula';
 import ObjetivosAprendizagemDesenvolvimento from './ObjetivosAprendizagemDesenvolvimento/objetivosAprendizagemDesenvolvimento';
@@ -39,23 +38,25 @@ const DadosPlanoAula = props => {
   const componenteCurricular = useSelector(
     store => store.frequenciaPlanoAula.componenteCurricular
   );
-  
-  const aulaIdPodeEditar = useSelector(state => state.frequenciaPlanoAula?.aulaIdPodeEditar);
+
+  const aulaIdPodeEditar = useSelector(
+    state => state.frequenciaPlanoAula?.aulaIdPodeEditar
+  );
 
   useEffect(() => {
     let desabilitar =
       dadosPlanoAula?.id > 0
-          ? somenteConsulta || !permissoesTela.podeAlterar
-          : somenteConsulta || !permissoesTela.podeIncluir;
+        ? somenteConsulta || !permissoesTela.podeAlterar
+        : somenteConsulta || !permissoesTela.podeIncluir;
 
     if (desabilitar) {
-        dispatch(setDesabilitarCamposPlanoAula(desabilitar));
-        return;
+      dispatch(setDesabilitarCamposPlanoAula(desabilitar));
+      return;
     }
     if (!aulaIdPodeEditar) {
       desabilitar = true;
     }
-    
+
     dispatch(setDesabilitarCamposPlanoAula(desabilitar));
   }, [permissoesTela, somenteConsulta, dadosPlanoAula, dispatch]);
 
@@ -84,7 +85,7 @@ const DadosPlanoAula = props => {
       {dadosPlanoAula ? (
         <>
           <ModalErrosPlanoAula />
-          <ModalCopiarConteudoPlanoAula />
+          <CopiarConteudoPlanoAula />
           <CabecalhoDadosPlanoAula />
           <ObjetivosAprendizagemDesenvolvimento />
           <ObjetivosEspecificosParaAula />

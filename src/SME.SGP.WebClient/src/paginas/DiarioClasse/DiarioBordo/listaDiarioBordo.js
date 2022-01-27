@@ -191,16 +191,22 @@ const ListaDiarioBordo = () => {
     return Promise.all(promises);
   };
 
-  const onColapse = async id => {
+  const onColapse = async aulaId => {
     dispatch(limparDadosObservacoesUsuario());
-    if (id) {
-      const dados = await ServicoDiarioBordo.obterDiarioBordoDetalhes(id);
+    const diario = listaTitulos?.items?.find(
+      item => item?.aulaId === Number(aulaId)
+    );
+    const idDiario = diario?.id;
+    let dados = {};
+    let observacoes = [];
+
+    if (idDiario) {
+      dados = await ServicoDiarioBordo.obterDiarioBordoDetalhes(idDiario);
       if (dados?.data) {
-        let observacoes = [];
         if (dados.data.observacoes.length) {
           observacoes = await obterUsuarioPorObservacao(
             dados.data.observacoes,
-            id
+            idDiario
           );
           dispatch(setDadosObservacoesUsuario(observacoes));
         }
@@ -209,6 +215,11 @@ const ListaDiarioBordo = () => {
           observacoes,
         });
       }
+    } else {
+      setDiarioBordoAtual({
+        ...diario,
+        observacoes,
+      });
     }
   };
 
@@ -228,10 +239,12 @@ const ListaDiarioBordo = () => {
         diarioBordoId,
       }).catch(e => erros(e));
 
-      usuariosNotificacao = retorno.data;
-      params.usuariosIdNotificacao = retorno.data.map(u => {
-        return u.usuarioId;
-      });
+      if (retorno?.data?.length) {
+        usuariosNotificacao = retorno.data;
+        params.usuariosIdNotificacao = retorno.data.map(u => {
+          return u.usuarioId;
+        });
+      }
     }
 
     if (listaUsuarios?.length && !observacaoId) {
@@ -260,25 +273,25 @@ const ListaDiarioBordo = () => {
         resultado.data
       );
 
-      setDiarioBordoAtual(estadoAntigo => {
-        const observacoes = estadoAntigo.observacoes.map(estado => {
-          if (estado.id === observacaoId) {
-            return {
-              ...estado,
-              usuariosNotificacao,
-              listagemDiario: true,
-            };
-          }
-          return estado;
+      if (valor?.id) {
+        setDiarioBordoAtual(estadoAntigo => {
+          const observacoes = estadoAntigo.observacoes.map(estado => {
+            if (estado.id === observacaoId) {
+              return {
+                ...estado,
+                usuariosNotificacao,
+                listagemDiario: true,
+              };
+            }
+            return estado;
+          });
+
+          return {
+            ...estadoAntigo,
+            observacoes,
+          };
         });
-
-        dispatch(setDadosObservacoesUsuario(observacoes));
-
-        return {
-          ...estadoAntigo,
-          observacoes,
-        };
-      });
+      }
 
       setCarregandoGeral(false);
       return resultado;
@@ -423,54 +436,65 @@ const ListaDiarioBordo = () => {
           <div className="row">
             <div className="col-sm-12 mb-3">
               <PainelCollapse accordion onChange={onColapse}>
-                {listaTitulos?.items?.map(({ id, titulo }) => (
-                  <PainelCollapse.Painel
-                    key={id}
-                    accordion
-                    espacoPadrao
-                    corBorda={Base.AzulBordaCollapse}
-                    temBorda
-                    header={titulo}
-                  >
-                    <div className="row ">
-                      <div className="col-sm-12 mb-3">
-                        <JoditEditor
-                          id={`${id}-editor-planejamento`}
-                          name="planejamento"
-                          value={diarioBordoAtual?.planejamento}
-                          desabilitar
-                        />
+                {listaTitulos?.items?.map(item => {
+                  const { id, titulo, pendente, aulaId } = item;
+                  const bordaCollapse = pendente
+                    ? Base.LaranjaStatus
+                    : Base.AzulBordaCollapse;
+                  return (
+                    <PainelCollapse.Painel
+                      key={aulaId}
+                      accordion
+                      espacoPadrao
+                      corBorda={bordaCollapse}
+                      temBorda
+                      header={titulo}
+                      ehPendente={pendente}
+                    >
+                      <div className="row ">
+                        <div className="col-sm-12 mb-3">
+                          <JoditEditor
+                            id={`${id}-editor-planejamento`}
+                            name="planejamento"
+                            value={diarioBordoAtual?.planejamento}
+                            desabilitar
+                          />
+                        </div>
+                        <div className="col-sm-12 d-flex justify-content-end mb-4">
+                          <Button
+                            id={shortid.generate()}
+                            label={
+                              id
+                                ? 'Consultar diário completo'
+                                : 'Inserir novo diário'
+                            }
+                            icon="book"
+                            color={Colors.Azul}
+                            border
+                            onClick={onClickConsultarDiario}
+                          />
+                        </div>
+                        <div className="col-sm-12 p-0 position-relative">
+                          <ObservacoesUsuario
+                            esconderLabel={pendente}
+                            esconderCaixaExterna={pendente}
+                            desabilitarBotaoNotificar={pendente}
+                            mostrarListaNotificacao={!pendente}
+                            salvarObservacao={obs =>
+                              salvarEditarObservacao(obs, id)
+                            }
+                            editarObservacao={obs =>
+                              salvarEditarObservacao(obs, id)
+                            }
+                            excluirObservacao={obs => excluirObservacao(obs)}
+                            permissoes={permissoesTela}
+                            diarioBordoId={id}
+                          />
+                        </div>
                       </div>
-                      <div className="col-sm-12 d-flex justify-content-end mb-4">
-                        <Button
-                          id={shortid.generate()}
-                          label="Consultar diário completo"
-                          icon="book"
-                          color={Colors.Azul}
-                          border
-                          onClick={onClickConsultarDiario}
-                        />
-                      </div>
-                      <div className="col-sm-12 p-0 position-relative">
-                        <ObservacoesUsuario
-                          esconderLabel
-                          mostrarListaNotificacao
-                          salvarObservacao={obs =>
-                            salvarEditarObservacao(obs, id)
-                          }
-                          editarObservacao={obs =>
-                            salvarEditarObservacao(obs, id)
-                          }
-                          excluirObservacao={obs => excluirObservacao(obs)}
-                          permissoes={permissoesTela}
-                          diarioBordoId={id}
-                          dreId={turmaSelecionada.dre}
-                          ueId={turmaSelecionada.unidadeEscolar}
-                        />
-                      </div>
-                    </div>
-                  </PainelCollapse.Painel>
-                ))}
+                    </PainelCollapse.Painel>
+                  );
+                })}
               </PainelCollapse>
             </div>
           </div>
