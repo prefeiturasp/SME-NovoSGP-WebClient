@@ -256,18 +256,17 @@ const ModalCopiarConteudoPlanoAula = props => {
   };
 
   const validarAntesDeFechar = async () => {
-    if (listaTurmas?.length) {
+    if (turmas?.length) {
       setExibirModal(false);
-      const confirmadoSalvar = await confirmar(
+      const confirmadoDescartar = await confirmar(
         'Atenção',
         '',
-        'Suas alterações não foram salvas, deseja salvar agora?'
+        'Deseja realmente descartar as informações de Copiar conteúdo?'
       );
-      if (confirmadoSalvar) {
-        setExibirModal(true);
-        onClickSalvar();
-      } else {
+      if (confirmadoDescartar) {
         onCloseModal();
+      } else {
+        setExibirModal(true);
       }
     } else {
       onCloseModal();
