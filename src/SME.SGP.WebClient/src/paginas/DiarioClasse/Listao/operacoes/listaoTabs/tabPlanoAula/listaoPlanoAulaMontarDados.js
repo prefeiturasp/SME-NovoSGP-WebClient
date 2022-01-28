@@ -1,6 +1,7 @@
 import { Col, Row } from 'antd';
 import React, { useContext } from 'react';
 import shortid from 'shortid';
+import { useSelector } from 'react-redux';
 import { Alert, Auditoria, Base, CardCollapse } from '~/componentes';
 import ListaoContext from '../../../listaoContext';
 import CopiarConteudoListaoPlanoAula from './componentes/copiarConteudoListaoPlanoAula';
@@ -17,6 +18,10 @@ const ListaoPlanoAulaMontarDados = () => {
     setExibirLoaderGeral,
     setExecutarObterPlanoAulaPorPeriodo,
   } = useContext(ListaoContext);
+
+  const usuario = useSelector(store => store.usuario);
+
+  const { ehProfessorCj, ehPerfilProfessor } = usuario;
 
   const desabilitarCampos = somenteConsultaListao || !periodoAbertoListao;
 
@@ -38,7 +43,10 @@ const ListaoPlanoAulaMontarDados = () => {
       titulo += ' - Reposição';
     }
 
-    const desabilitar = plano?.bloquearParaCopia || desabilitarCampos;
+    const desabilitar =
+      plano?.bloquearParaCopia ||
+      desabilitarCampos ||
+      (aulaCj && !ehProfessorCj && ehPerfilProfessor);
     return (
       <CardCollapse
         titulo={titulo}
