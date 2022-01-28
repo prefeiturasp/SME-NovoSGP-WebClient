@@ -12,7 +12,7 @@ const Container = styled.div`
   border-left: ${props => (props.linhaDetalhe ? '35px' : '40px')} solid
     ${Base.RoxoClaro};
   top: 0;
-  margin-left: ${props => (props.linhaDetalhe ? '-13px' : '-30px')};
+  left: 0;
   div {
     position: absolute;
     right: ${props => (props.linhaDetalhe ? '32px' : '23px')};
