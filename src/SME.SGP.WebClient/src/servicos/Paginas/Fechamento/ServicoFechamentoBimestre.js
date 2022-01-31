@@ -1,4 +1,6 @@
 import api from '~/servicos/api';
+import { mockFechamentoConceito } from './mockFechamentoConceito';
+import { mockFechamentoNota } from './mockFechamentoNota';
 
 const ServicoFechamentoBimestre = {
   buscarDados(turmaCodigo, disciplinaCodigo, bimestre, periodo) {
@@ -20,6 +22,25 @@ const ServicoFechamentoBimestre = {
 
     const novoValor = Number(valor).toFixed(1);
     return isNaN(novoValor) ? valor : novoValor;
+  },
+
+  obterFechamentoPorBimestre(
+    turmaCodigo,
+    semestre,
+    bimestre,
+    disciplinaCodigo
+  ) {
+    console.log(`turmaCodigo: ${turmaCodigo}`);
+    console.log(`disciplinaCodigo: ${disciplinaCodigo}`);
+    console.log(`bimestre: ${bimestre}`);
+    console.log(`semestre: ${semestre}`);
+
+    return new Promise(resolve => {
+      setTimeout(() => {
+        // resolve({ data: mockFechamentoNota });
+        resolve({ data: mockFechamentoConceito });
+      }, 2000);
+    });
   },
 };
 

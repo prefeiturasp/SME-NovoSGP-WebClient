@@ -88,6 +88,9 @@ const ListaoOperacoesBotoesAcao = () => {
     bimestreOperacoes,
     idDiarioBordoAtual,
     setIdDiarioBordoAtual,
+    dadosFechamento,
+    setDadosFechamento,
+    dadosIniciaisFechamento,
   } = useContext(ListaoContext);
 
   const telaEmEdicao = useSelector(store => store.geral.telaEmEdicao);
@@ -494,6 +497,10 @@ const ListaoOperacoesBotoesAcao = () => {
     return false;
   };
 
+  const salvarFechamento = clicouNoBotaoSalvar => {
+    console.log(dadosFechamento);
+  };
+
   const onClickSalvarTabAtiva = clicouNoBotaoSalvar => {
     switch (tabAtual) {
       case LISTAO_TAB_FREQUENCIA:
@@ -504,6 +511,8 @@ const ListaoOperacoesBotoesAcao = () => {
         return salvarAvaliacoes(clicouNoBotaoSalvar);
       case LISTAO_TAB_DIARIO_BORDO:
         return salvarDiarioBordo(clicouNoBotaoSalvar);
+      case LISTAO_TAB_FECHAMENTO:
+        return salvarFechamento(clicouNoBotaoSalvar);
 
       default:
         return true;
@@ -558,7 +567,10 @@ const ListaoOperacoesBotoesAcao = () => {
     setDadosAvaliacao({ ...dadosCarregar });
   };
 
-  const limparDadosFechamento = () => {};
+  const limparDadosFechamento = () => {
+    const dadosCarregar = _.cloneDeep(dadosIniciaisFechamento);
+    setDadosFechamento({ ...dadosCarregar });
+  };
 
   const limparDadosDiarioBordo = () => {
     setDadosDiarioBordo([]);
