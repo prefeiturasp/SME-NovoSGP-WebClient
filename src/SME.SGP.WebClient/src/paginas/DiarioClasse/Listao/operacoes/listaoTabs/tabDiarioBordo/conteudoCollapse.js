@@ -1,6 +1,6 @@
 import { Col, Row } from 'antd';
 import PropTypes from 'prop-types';
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { Auditoria, JoditEditor } from '~/componentes';
 import { setTelaEmEdicao } from '~/redux/modulos/geral/actions';
@@ -13,7 +13,9 @@ import {
 } from '../../../listaoFuncoes';
 
 const ConteudoCollapse = props => {
+  const [dadosIniciasPlanejamento, setDadosIniciasPlanejamento] = useState();
   const [temErro, setTemErro] = useState();
+
   const dispatch = useDispatch();
 
   const {
@@ -59,6 +61,13 @@ const ConteudoCollapse = props => {
     dispatch(setTelaEmEdicao(true));
   };
 
+  useEffect(() => {
+    if (dados?.planejamento) {
+      setDadosIniciasPlanejamento(dados?.planejamento);
+    }
+    return () => setDadosIniciasPlanejamento();
+  }, [dados]);
+
   return (
     <>
       <Row gutter={[24, 24]}>
@@ -68,7 +77,7 @@ const ConteudoCollapse = props => {
             id="editor-planejamento"
             name="planejamento"
             label="Planejamento"
-            value={dados?.planejamento}
+            value={dadosIniciasPlanejamento}
             onChange={valor => {
               if (!desabilitarCampos) {
                 onChangePlanejamento(valor);
