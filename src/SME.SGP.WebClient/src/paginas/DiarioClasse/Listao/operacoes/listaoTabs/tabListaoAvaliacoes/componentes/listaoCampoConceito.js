@@ -13,7 +13,7 @@ const ContainerConceitoFinal = styled.div`
     border: solid 2px ${Base.Vermelho} !important;
     border-radius: 4px;
   }`
-      : ''}
+      : ''};
 `;
 
 const ListaoCampoConceito = props => {
@@ -114,22 +114,22 @@ const ListaoCampoConceito = props => {
   );
 
   return ehFechamento ? (
-    <Tooltip
-      placement="top"
-      title={estaAbaixoDaMedia(conceitoValorAtual) ? 'Abaixo da Média' : ''}
+    <ContainerConceitoFinal
+      abaixoDaMedia={estaAbaixoDaMedia(conceitoValorAtual)}
     >
-      <ContainerConceitoFinal
-        abaixoDaMedia={estaAbaixoDaMedia(conceitoValorAtual)}
+      <Tooltip
+        placement="top"
+        title={estaAbaixoDaMedia(conceitoValorAtual) ? 'Abaixo da Média' : ''}
       >
         {montarCampo()}
-      </ContainerConceitoFinal>
-    </Tooltip>
+      </Tooltip>
+    </ContainerConceitoFinal>
   ) : (
     montarCampo()
   );
 };
 
-ListaoCampoConceito.defaultProps = {
+ListaoCampoConceito.propTypes = {
   idCampo: PropTypes.oneOf(PropTypes.any),
   dadosConceito: PropTypes.oneOf(PropTypes.any),
   onChangeNotaConceito: PropTypes.func,
@@ -138,7 +138,7 @@ ListaoCampoConceito.defaultProps = {
   ehFechamento: PropTypes.bool,
 };
 
-ListaoCampoConceito.propTypes = {
+ListaoCampoConceito.defaultProps = {
   idCampo: 'campo-conceito-listao',
   dadosConceito: {},
   onChangeNotaConceito: () => {},

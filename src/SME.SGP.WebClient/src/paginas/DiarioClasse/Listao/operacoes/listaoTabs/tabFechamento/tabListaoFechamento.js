@@ -94,6 +94,8 @@ const TabListaoFechamento = () => {
     };
   }, []);
 
+  const ehEJA = !!Number(turmaSelecionada?.modalidade) === ModalidadeDTO.EJA;
+
   return (
     <>
       {componenteCurricular?.codigoComponenteCurricular &&
@@ -111,9 +113,7 @@ const TabListaoFechamento = () => {
 
       {/* TODO: Verificar se vai ser exibido a lista vazia com a informação 'Sem dados' */}
       {dadosFechamento?.alunos?.length && bimestreOperacoes ? (
-        <ListaoListaFechamento
-          ehEJA={Number(turmaSelecionada?.modalidade) === ModalidadeDTO.EJA}
-        />
+        <ListaoListaFechamento ehEJA={ehEJA} />
       ) : (
         <></>
       )}
