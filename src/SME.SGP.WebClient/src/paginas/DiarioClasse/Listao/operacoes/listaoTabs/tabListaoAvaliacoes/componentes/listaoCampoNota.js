@@ -1,5 +1,7 @@
+import { Tooltip } from 'antd';
 import PropTypes from 'prop-types';
 import React, { useEffect, useState } from 'react';
+import { Base } from '~/componentes';
 import InputNumberReadOnly from '~/componentes-sgp/camposSomenteLeitura/inputNumberReadOnly';
 import CampoNumero from '~/componentes/campoNumero';
 import { erros } from '~/servicos/alertas';
@@ -7,7 +9,15 @@ import api from '~/servicos/api';
 import { converterAcaoTecla } from '~/utils';
 
 const ListaoCampoNota = props => {
-  const { dadosNota, idCampo, desabilitar, onChangeNotaConceito } = props;
+  const {
+    dadosNota,
+    idCampo,
+    desabilitar,
+    onChangeNotaConceito,
+    ehFechamento,
+    periodoFim,
+    mediaAprovacaoBimestre,
+  } = props;
 
   const [exibir, setExibir] = useState(false);
   const [notaValorAtual, setNotaValorAtual] = useState();
@@ -25,26 +35,51 @@ const ListaoCampoNota = props => {
     return notaOriginal !== notaNova;
   };
 
+  const estaAbaixoDaMedia = valorAtual => {
+    if (!ehFechamento) return false;
+
+    valorAtual = removerCaracteresInvalidos(String(valorAtual));
+    return valorAtual && valorAtual < mediaAprovacaoBimestre;
+  };
+
   useEffect(() => {
     setNotaValorAtual(dadosNota.notaConceito);
-  }, [dadosNota.notaConceito, dadosNota.notaOriginal]);
+  }, [dadosNota.notaConceito]);
+
+  const arredondamentoNota = valorValidar =>
+    api.get(
+      `v1/avaliacoes/${dadosNota?.atividadeAvaliativaId}/notas/${Number(
+        valorValidar
+      )}/arredondamento`
+    );
+
+  const arredondamentoNotaFinal = valorValidar => {
+    return api.get(
+      `v1/avaliacoes/notas/${Number(
+        valorValidar
+      )}/arredondamento?data=${periodoFim}`
+    );
+  };
+
+  const validarArredondamento = valorValidar => {
+    if (ehFechamento) {
+      return arredondamentoNotaFinal(valorValidar);
+    }
+    return arredondamentoNota(valorValidar);
+  };
 
   const setarValorNovo = async valorNovo => {
-    if (!desabilitar && dadosNota.podeEditar) {
+    if (!desabilitar) {
       setNotaValorAtual(valorNovo);
       const resto = valorNovo % 0.5;
       let notaArredondada = valorNovo;
       if (resto) {
         setNotaValorAtual(valorNovo);
-        const retorno = await api
-          .get(
-            `v1/avaliacoes/${dadosNota.atividadeAvaliativaId}/notas/${Number(
-              valorNovo
-            )}/arredondamento`
-          )
-          .catch(e => erros(e));
+        const retorno = await validarArredondamento(valorNovo).catch(e =>
+          erros(e)
+        );
 
-        if (retorno && retorno.data) {
+        if (retorno?.data) {
           notaArredondada = retorno.data;
         }
       }
@@ -84,7 +119,13 @@ const ListaoCampoNota = props => {
 
   const formataNota = newValue => newValue?.toString?.()?.replace?.('.', ',');
 
-  return (
+  const styleCampo = {};
+
+  if (estaAbaixoDaMedia(notaValorAtual)) {
+    styleCampo.border = `solid 2px ${Base.Vermelho}`;
+  }
+
+  const montarCampo = () => (
     <div
       onFocus={() => validarExibir(true)}
       onMouseEnter={() => validarExibir(true)}
@@ -104,6 +145,7 @@ const ListaoCampoNota = props => {
           step={0}
           placeholder="Nota"
           disabled={desabilitar}
+          styleCampo={{ ...styleCampo }}
         />
       ) : (
         <InputNumberReadOnly
@@ -112,9 +154,21 @@ const ListaoCampoNota = props => {
           value={formataNota(notaValorAtual)}
           disabled={desabilitar}
           placeholder="Nota"
+          style={{ ...styleCampo }}
         />
       )}
     </div>
+  );
+
+  return ehFechamento ? (
+    <Tooltip
+      placement="top"
+      title={estaAbaixoDaMedia(notaValorAtual) ? 'Abaixo da Média' : ''}
+    >
+      {montarCampo()}
+    </Tooltip>
+  ) : (
+    montarCampo()
   );
 };
 
@@ -123,6 +177,9 @@ ListaoCampoNota.propTypes = {
   idCampo: PropTypes.oneOf(PropTypes.any),
   desabilitar: PropTypes.bool,
   onChangeNotaConceito: PropTypes.func,
+  ehFechamento: PropTypes.bool,
+  periodoFim: PropTypes.string,
+  mediaAprovacaoBimestre: PropTypes.number,
 };
 
 ListaoCampoNota.defaultProps = {
@@ -130,6 +187,9 @@ ListaoCampoNota.defaultProps = {
   idCampo: 'campo-nota-listao',
   desabilitar: false,
   onChangeNotaConceito: () => {},
+  ehFechamento: false,
+  periodoFim: '',
+  mediaAprovacaoBimestre: null,
 };
 
 export default ListaoCampoNota;
