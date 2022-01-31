@@ -10,7 +10,6 @@ const TabListaoDiarioBordoFiltros = () => {
   const telaEmEdicao = useSelector(store => store.geral.telaEmEdicao);
   const acaoTelaEmEdicao = useSelector(store => store.geral.acaoTelaEmEdicao);
 
-  const [exibirLoaderPeriodo, setExibirLoaderPeriodo] = useState(false);
   const [
     exibirLoaderComponenteCurricular,
     setExibirLoaderComponenteCurricular,
@@ -33,6 +32,8 @@ const TabListaoDiarioBordoFiltros = () => {
     setListaComponentesCurricularesDiario,
     setDadosIniciaisDiarioBordo,
     setDadosDiarioBordo,
+    exibirLoaderPeriodo,
+    setExibirLoaderPeriodo,
   } = useContext(ListaoContext);
 
   const desabilitarCampos =

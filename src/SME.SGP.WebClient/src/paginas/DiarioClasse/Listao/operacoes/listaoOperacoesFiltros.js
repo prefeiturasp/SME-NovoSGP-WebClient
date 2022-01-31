@@ -39,6 +39,7 @@ const ListaoOperacoesFiltros = () => {
     limparTelaListao,
     setSomenteConsultaListao,
     setPermissaoLista,
+    exibirLoaderPeriodo,
   } = useContext(ListaoContext);
 
   const [listaBimestresOperacoe, setListaBimestresOperacoes] = useState(
@@ -253,7 +254,8 @@ const ListaoOperacoesFiltros = () => {
               disabled={
                 !turmaSelecionada.turma ||
                 listaComponenteCurricular?.length === 1 ||
-                !listaComponenteCurricular?.length
+                !listaComponenteCurricular?.length ||
+                exibirLoaderPeriodo
               }
             />
           </Loader>
@@ -267,7 +269,8 @@ const ListaoOperacoesFiltros = () => {
             label="Bimestre"
             disabled={
               listaBimestresOperacoe?.length === 1 ||
-              !listaBimestresOperacoe?.length
+              !listaBimestresOperacoe?.length ||
+              exibirLoaderPeriodo
             }
             valueSelect={bimestreOperacoes}
             onChange={onChangeBimestre}

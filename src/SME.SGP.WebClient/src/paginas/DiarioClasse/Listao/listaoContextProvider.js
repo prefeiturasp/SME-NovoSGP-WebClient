@@ -44,6 +44,7 @@ const ListaoContextProvider = ({ children }) => {
   const [listaTiposFrequencia, setListaTiposFrequencia] = useState([]);
   const [dadosFrequencia, setDadosFrequencia] = useState();
   const [dadosIniciaisFrequencia, setDadosIniciaisFrequencia] = useState();
+  const [exibirLoaderPeriodo, setExibirLoaderPeriodo] = useState(false);
 
   // TAB PLANO AULA
   const [dadosPlanoAula, setDadosPlanoAula] = useState([]);
@@ -171,6 +172,8 @@ const ListaoContextProvider = ({ children }) => {
         setDadosFrequencia,
         dadosIniciaisFrequencia,
         setDadosIniciaisFrequencia,
+        exibirLoaderPeriodo,
+        setExibirLoaderPeriodo,
         // TAB PLANO AULA
         dadosPlanoAula,
         setDadosPlanoAula,

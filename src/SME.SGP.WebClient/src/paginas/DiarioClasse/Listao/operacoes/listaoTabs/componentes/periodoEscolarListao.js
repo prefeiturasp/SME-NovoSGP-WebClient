@@ -23,9 +23,9 @@ const PeriodoEscolarListao = props => {
     setListaPeriodos,
     periodo,
     setPeriodo,
+    exibirLoaderPeriodo,
+    setExibirLoaderPeriodo,
   } = useContext(ListaoContext);
-
-  const [exibirLoaderPeriodo, setExibirLoaderPeriodo] = useState(false);
 
   const desabilitarPeriodo =
     !turma ||
