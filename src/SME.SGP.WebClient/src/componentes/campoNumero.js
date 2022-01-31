@@ -54,6 +54,7 @@ const CampoNumero = React.forwardRef((props, ref) => {
     esconderSetas,
     onKeyUp,
     styleContainer,
+    styleCampo,
   } = props;
 
   const possuiErro = () => {
@@ -135,6 +136,7 @@ const CampoNumero = React.forwardRef((props, ref) => {
             formatter={v => validaFormatter(v)}
             parser={v => validaParser(v)}
             decimalSeparator={decimalSeparator}
+            style={styleCampo}
           />
         )}
       </Campo>
