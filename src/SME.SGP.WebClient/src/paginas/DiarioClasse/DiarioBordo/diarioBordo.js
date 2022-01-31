@@ -730,7 +730,7 @@ const DiarioBordo = ({ match }) => {
                         <PainelCollapse defaultActiveKey="1">
                           <PainelCollapse.Painel
                             temBorda
-                            header="Planejamento"
+                            header="Planejamento reflexivo a partir das escutas"
                             key="1"
                           >
                             <>
@@ -771,30 +771,6 @@ const DiarioBordo = ({ match }) => {
                                 ehTurmaInfantil
                               />
                             )}
-                          </PainelCollapse.Painel>
-                        </PainelCollapse>
-                      </div>
-                      <div className="col-md-12 mb-2">
-                        <PainelCollapse defaultActiveKey="2">
-                          <PainelCollapse.Painel
-                            temBorda
-                            header="Reflexões e Replanejamentos"
-                            key="2"
-                          >
-                            <JoditEditor
-                              valideClipboardHTML={false}
-                              form={form}
-                              value={valoresIniciais.reflexoesReplanejamento}
-                              name="reflexoesReplanejamento"
-                              onChange={v => {
-                                if (
-                                  valoresIniciais.reflexoesReplanejamento !== v
-                                ) {
-                                  onChangeCampos();
-                                }
-                              }}
-                              desabilitar={desabilitarCampos}
-                            />
                           </PainelCollapse.Painel>
                         </PainelCollapse>
                       </div>
