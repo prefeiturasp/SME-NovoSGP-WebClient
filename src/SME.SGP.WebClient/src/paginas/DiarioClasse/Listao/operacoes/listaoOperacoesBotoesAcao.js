@@ -170,7 +170,6 @@ const ListaoOperacoesBotoesAcao = () => {
             ` objetivos específicos para a aula é obrigatório.`
         );
       }
-      console.log('item', item);
       if (
         !item?.idsObjetivosAprendizagemSelecionados?.length &&
         objAprendObrigatorio
