@@ -227,13 +227,13 @@ const ListaoFiltros = () => {
 
   const obterTurmas = useCallback(async () => {
     setCarregandoTurmas(true);
+
     const retorno = await AbrangenciaServico.buscarTurmas(
       codigoUe,
       modalidade,
       '',
       anoLetivo,
-      consideraHistorico,
-      String(modalidade) === String(ModalidadeDTO.INFANTIL)
+      consideraHistorico
     )
       .catch(e => erros(e))
       .finally(() => setCarregandoTurmas(false));
