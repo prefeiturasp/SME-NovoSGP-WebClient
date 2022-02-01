@@ -137,7 +137,7 @@ const Filtro = () => {
   );
 
   const aplicarFiltro = useCallback(
-    (
+    async (
       consideraHist,
       anoLetivo,
       mod,
@@ -149,6 +149,9 @@ const Filtro = () => {
       listaUes,
       periodo
     ) => {
+      const pararAcao = await validarAcaoTela();
+      if (pararAcao) return;
+
       if (anoLetivo && mod && dre && ue && turmaAtual) {
         const modalidadeDesc = listaModalidades.find(
           item => item.valor.toString() === `${mod}`
