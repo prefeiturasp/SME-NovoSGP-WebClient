@@ -51,12 +51,6 @@ const GraficosDevolutivas = () => {
         ueId={ueId}
         modalidade={modalidade}
       />
-      <QtdDiariosBordoCampoReflexoesReplanejamentoPreenchido
-        anoLetivo={anoLetivo}
-        dreId={dreId}
-        ueId={ueId}
-        modalidade={modalidade}
-      />
     </>
   ) : (
     ''
