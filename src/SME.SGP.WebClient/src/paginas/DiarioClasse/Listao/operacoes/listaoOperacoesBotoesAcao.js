@@ -160,13 +160,21 @@ const ListaoOperacoesBotoesAcao = () => {
     dadosAlterados.forEach(item => {
       const temDescricao = editorTemValor(item?.descricao);
       const dataAula = window.moment(item?.dataAula).format('DD/MM/YYYY');
+      const ehAulaCj = item?.aulaCj;
+      const objAprendObrigatorio =
+        (ehAulaCj && item?.objetivosAprendizagemObrigatorios) || !ehAulaCj;
+
       if (!temDescricao) {
         errosPlanoAula.push(
           `${dataAula} - Meus objetivos e desenvolvimento da aula - O campo meus` +
             ` objetivos específicos para a aula é obrigatório.`
         );
       }
-      if (!item?.idsObjetivosAprendizagemSelecionados?.length) {
+      console.log('item', item);
+      if (
+        !item?.idsObjetivosAprendizagemSelecionados?.length &&
+        objAprendObrigatorio
+      ) {
         errosPlanoAula.push(
           `${dataAula} - Objetivos de aprendizagem - É obrigatório selecionar ao ` +
             `menos um objetivo de aprendizagem.`
