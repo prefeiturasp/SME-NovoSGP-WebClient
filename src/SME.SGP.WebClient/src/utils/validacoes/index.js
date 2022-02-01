@@ -19,6 +19,9 @@ export const validarAcaoTela = async () => {
 export const validarNavegacaoTela = async (e, urlDestino) => {
   e.preventDefault();
   const pararAcao = await validarAcaoTela();
-  if (pararAcao) return;
+  if (pararAcao) return true;
+
   history.push(urlDestino);
+
+  return false;
 };

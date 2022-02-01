@@ -17,7 +17,7 @@ import { LimparSessao } from '~/redux/modulos/sessao/actions';
 import ServicoNotificacao from '~/servicos/Paginas/ServicoNotificacao';
 import { erros } from '~/servicos/alertas';
 import { TOKEN_EXPIRADO } from '~/constantes';
-import { validarAcaoTela } from '~/utils';
+import { validarAcaoTela, validarNavegacaoTela } from '~/utils';
 
 const Navbar = () => {
   const retraido = useSelector(state => state.navegacao.retraido);
@@ -63,6 +63,9 @@ const Navbar = () => {
                 justifyContent: 'center',
               }}
               to={URL_HOME}
+              onClick={async e => {
+                await validarNavegacaoTela(e, URL_HOME);
+              }}
             >
               <Logo
                 src={LogoDoSgp}
