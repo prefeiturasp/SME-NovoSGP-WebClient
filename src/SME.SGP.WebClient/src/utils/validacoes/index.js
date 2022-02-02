@@ -1,4 +1,5 @@
 import { store } from '~/redux';
+import { setTelaEmEdicao } from '~/redux/modulos/geral/actions';
 import { confirmar, history } from '~/servicos';
 
 export const verificarTelaEdicao = () => {
@@ -9,7 +10,8 @@ export const verificarTelaEdicao = () => {
 };
 
 export const validarAcaoTela = async () => {
-  const telaEmEdicao = verificarTelaEdicao;
+  const { dispatch } = store;
+  const telaEmEdicao = verificarTelaEdicao();
 
   if (telaEmEdicao) {
     const cancelarAcao = await confirmar(
@@ -17,6 +19,7 @@ export const validarAcaoTela = async () => {
       'Você não salvou as informações preenchidas.',
       'Deseja realmente cancelar as alterações?'
     );
+    dispatch(setTelaEmEdicao(false));
     return !cancelarAcao;
   }
   return false;
