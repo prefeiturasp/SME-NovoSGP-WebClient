@@ -47,7 +47,7 @@ import { erro } from '~/servicos/alertas';
 import modalidade from '~/dtos/modalidade';
 import { Loader } from '~/componentes';
 import { TOKEN_EXPIRADO } from '~/constantes';
-import { validarAcaoTela } from '~/utils';
+import { ordenarDescPor, validarAcaoTela, verificarTelaEdicao } from '~/utils';
 
 const Filtro = () => {
   const dispatch = useDispatch();
@@ -149,8 +149,11 @@ const Filtro = () => {
       listaUes,
       periodo
     ) => {
-      const pararAcao = await validarAcaoTela();
-      if (pararAcao) return;
+      const emEdicao = verificarTelaEdicao();
+      if (emEdicao) {
+        const pararAcao = await validarAcaoTela();
+        if (pararAcao) return;
+      }
 
       if (anoLetivo && mod && dre && ue && turmaAtual) {
         const modalidadeDesc = listaModalidades.find(
@@ -322,8 +325,9 @@ const Filtro = () => {
         });
       }
 
-      dispatch(salvarAnosLetivos(anosLetivo));
-      setAnosLetivos(anosLetivo);
+      const anosOrdenados = ordenarDescPor(anosLetivo, 'valor');
+      dispatch(salvarAnosLetivos(anosOrdenados));
+      setAnosLetivos(anosOrdenados);
     },
     [consideraHistorico, dispatch]
   );
