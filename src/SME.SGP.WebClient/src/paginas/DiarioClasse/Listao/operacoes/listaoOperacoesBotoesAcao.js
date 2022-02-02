@@ -162,7 +162,8 @@ const ListaoOperacoesBotoesAcao = () => {
       const dataAula = window.moment(item?.dataAula).format('DD/MM/YYYY');
       const ehAulaCj = item?.aulaCj;
       const objAprendObrigatorio =
-        (ehAulaCj && item?.objetivosAprendizagemObrigatorios) || !ehAulaCj;
+        (ehAulaCj && item?.objetivosAprendizagemObrigatorios) ||
+        (!ehAulaCj && !item?.objetivosAprendizagemOpcionais);
 
       if (!temDescricao) {
         errosPlanoAula.push(
