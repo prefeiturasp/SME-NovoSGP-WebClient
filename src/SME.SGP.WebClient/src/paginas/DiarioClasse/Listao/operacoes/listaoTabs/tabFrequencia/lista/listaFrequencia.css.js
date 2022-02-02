@@ -358,9 +358,9 @@ export const LinhaTabela = styled.div`
       }
     }
 
-    div {
+    /* div {
       width: 100%;
-    }
+    } */
 
     thead {
       th {

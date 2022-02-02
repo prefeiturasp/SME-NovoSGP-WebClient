@@ -76,6 +76,15 @@ const ListaoContextProvider = ({ children }) => {
   const [dadosIniciaisAvaliacao, setDadosIniciaisAvaliacao] = useState();
   const [dadosPeriodosAvaliacao, setDadosPeriodosAvaliacao] = useState();
 
+  // TAB FECHAMENTO
+  const [dadosFechamento, setDadosFechamento] = useState();
+  const [dadosIniciaisFechamento, setDadosIniciaisFechamento] = useState();
+
+  const limparTabFechamento = () => {
+    setDadosFechamento();
+    setDadosIniciaisFechamento();
+  };
+
   const limparTabFrequencia = () => {
     setDadosFrequencia();
     setListaTiposFrequencia([]);
@@ -100,6 +109,7 @@ const ListaoContextProvider = ({ children }) => {
     setPeriodo();
     limparTabFrequencia();
     limparTabAvaliacao();
+    limparTabFechamento();
   };
 
   return (
@@ -202,6 +212,11 @@ const ListaoContextProvider = ({ children }) => {
         setDadosIniciaisAvaliacao,
         dadosPeriodosAvaliacao,
         setDadosPeriodosAvaliacao,
+        // TAB FECHAMENTO
+        dadosFechamento,
+        setDadosFechamento,
+        dadosIniciaisFechamento,
+        setDadosIniciaisFechamento,
       }}
     >
       {children}

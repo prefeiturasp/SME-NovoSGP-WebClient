@@ -211,8 +211,8 @@ const ListaoListaAvaliacoes = () => {
         ),
         align: 'center',
         width: '150px',
-        render: dadosEstudamte =>
-          montarCampoNotaConceito(dadosEstudamte, avaliacao),
+        render: dadosEstudante =>
+          montarCampoNotaConceito(dadosEstudante, avaliacao),
       });
     });
   }
