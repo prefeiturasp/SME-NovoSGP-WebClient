@@ -68,6 +68,7 @@ const ListaoObjetivosAprendizagem = props => {
           desabilitar={desabilitarCampos}
           checkedExibirEscolhaObjetivos={checkedExibirEscolhaObjetivos}
           setCheckedExibirEscolhaObjetivos={setCheckedExibirEscolhaObjetivos}
+          indexPlano={indexPlano}
         />
       </Row>
       <Row gutter={[24, 24]}>

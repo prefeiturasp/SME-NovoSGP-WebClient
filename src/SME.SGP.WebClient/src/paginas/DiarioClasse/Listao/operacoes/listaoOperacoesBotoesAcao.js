@@ -159,9 +159,25 @@ const ListaoOperacoesBotoesAcao = () => {
     const errosPlanoAula = [];
     dadosAlterados.forEach(item => {
       const temDescricao = editorTemValor(item?.descricao);
+      const dataAula = window.moment(item?.dataAula).format('DD/MM/YYYY');
+      const ehAulaCj = item?.aulaCj;
+      const objAprendObrigatorio =
+        (ehAulaCj && item?.objetivosAprendizagemObrigatorios) || !ehAulaCj;
+
       if (!temDescricao) {
-        const dataAula = window.moment(item?.dataAula).format('DD/MM/YYYY');
-        errosPlanoAula.push(`${dataAula} - Descrição é obrigatória`);
+        errosPlanoAula.push(
+          `${dataAula} - Meus objetivos e desenvolvimento da aula - O campo meus` +
+            ` objetivos específicos para a aula é obrigatório.`
+        );
+      }
+      if (
+        !item?.idsObjetivosAprendizagemSelecionados?.length &&
+        objAprendObrigatorio
+      ) {
+        errosPlanoAula.push(
+          `${dataAula} - Objetivos de aprendizagem - É obrigatório selecionar ao ` +
+            `menos um objetivo de aprendizagem.`
+        );
       }
     });
 
