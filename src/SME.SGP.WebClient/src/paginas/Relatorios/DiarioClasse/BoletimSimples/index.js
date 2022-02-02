@@ -44,7 +44,7 @@ const BoletimSimples = () => {
 
   const [selecionarAlunos, setSelecionarAlunos] = useState(false);
 
-  const onChangeFiltro = (valoresFiltro, naoLimparItensSelecionados) => {    
+  const onChangeFiltro = (valoresFiltro, naoLimparItensSelecionados) => {
     setFiltro({
       anoLetivo: valoresFiltro.anoLetivo,
       modalidade: valoresFiltro.modalidadeId,
