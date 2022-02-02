@@ -1,9 +1,15 @@
 import { store } from '~/redux';
 import { confirmar, history } from '~/servicos';
 
-export const validarAcaoTela = async () => {
+export const verificarTelaEdicao = () => {
   const state = store.getState();
   const { telaEmEdicao } = state.geral;
+
+  return telaEmEdicao;
+};
+
+export const validarAcaoTela = async () => {
+  const telaEmEdicao = verificarTelaEdicao;
 
   if (telaEmEdicao) {
     const cancelarAcao = await confirmar(
