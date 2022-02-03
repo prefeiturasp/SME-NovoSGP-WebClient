@@ -215,7 +215,7 @@ const AnotacoesRecomendacoes = props => {
   ]);
 
   useEffect(() => {
-    if (alunoCodigo) {
+    if (alunoCodigo && fechamentoTurmaId) {
       obterAnotacoesRecomendacoes();
     }
   }, [fechamentoTurmaId, alunoCodigo, obterAnotacoesRecomendacoes]);
