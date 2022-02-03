@@ -231,9 +231,12 @@ const ListaoPaginado = () => {
         onCell: params => {
           const desabilitarIcone = desabilitarIconeFechamento(tab, params);
           const cursor = escolherCursor(desabilitarIcone);
+          const onClick = desabilitarIcone
+            ? () => {}
+            : () => carregarFiltros(tab, params);
 
           return {
-            onClick: () => carregarFiltros(tab, params),
+            onClick,
             style: { cursor },
           };
         },
