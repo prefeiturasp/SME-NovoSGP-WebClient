@@ -393,6 +393,7 @@ const Filtros = ({ onFiltrar, filtrou, setFiltrou, cancelou, setCancelou }) => {
   };
 
   const onChangeModeloBoletim = valor => {
+    setFiltrou(false);
     setModeloBoletimId(valor);
   };
 
