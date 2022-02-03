@@ -13,30 +13,19 @@ import { BIMESTRE_FINAL } from '~/constantes/constantes';
 import notasConceitos from '~/dtos/notasConceitos';
 import ListaoContext from '~/paginas/DiarioClasse/Listao/listaoContext';
 import { setTelaEmEdicao } from '~/redux/modulos/geral/actions';
+import FiltroComponentesRegencia from '../componentes/filtroComponentesRegencia';
 import {
   LinhaTabela,
   MarcadorSituacao,
 } from '../tabFrequencia/lista/listaFrequencia.css';
 import ListaoCampoConceito from '../tabListaoAvaliacoes/componentes/listaoCampoConceito';
 import ListaoCampoNota from '../tabListaoAvaliacoes/componentes/listaoCampoNota';
+import ColunaNotaConceitoPorBimestre from './componentes/colunaNotaConceitoPorBimestre';
 
-// TODO - ADD EM OUTRO ARQUIVO!
 export const ContainerTableFechamento = styled.div`
   tr {
     position: relative;
   }
-`;
-
-// TODO - ADD EM OUTRO ARQUIVO!
-export const ContainerDescConceito = styled.div`
-  padding: 7px 7px 7px 7px;
-  border-radius: 3px;
-  border: solid 1px #ced4da;
-  background-color: #f5f6f8;
-  argin-left: 5px;
-  color: #a4a4a4;
-  width: 53px;
-  height: 37px;
 `;
 
 const ListaoListaFechamento = props => {
@@ -56,6 +45,8 @@ const ListaoListaFechamento = props => {
   const ehRegencia = componenteCurricular?.regencia;
 
   const desabilitarCampos = somenteConsultaListao || !periodoAbertoListao;
+
+  const ehFinal = bimestreOperacoes === BIMESTRE_FINAL;
 
   const montarColunaNumeroEstudante = aluno => {
     return (
@@ -132,7 +123,7 @@ const ListaoListaFechamento = props => {
             desabilitar={desabilitar}
             podeEditar={dadosEstudante?.podeEditar}
             ehFechamento
-            periodoFim={dadosFechamento?.periodoFim}
+            periodoFim={dadosFechamento?.dataFechamento}
             mediaAprovacaoBimestre={dadosFechamento?.mediaAprovacaoBimestre}
             onChangeNotaConceito={valorNovo =>
               onChangeNotaConceito(
@@ -169,20 +160,7 @@ const ListaoListaFechamento = props => {
     }
   };
 
-  const obterDescricaoConceito = valor => {
-    if (dadosFechamento?.listaTiposConceitos?.length) {
-      const conceito = dadosFechamento.listaTiposConceitos.find(
-        item => item.id === String(valor)
-      );
-      return conceito?.valor || '';
-    }
-    return '';
-  };
-
   const montarColunaNotaConceitoPorBimestre = () => {
-    // TODO - disciplinaId Quando for FINAL e for regente selecionar uma disciplina para filtrar as notas/conceitos do bimestre
-    const disciplinaId = 138;
-
     const bimestres = [1, 2];
     if (!ehEJA) {
       bimestres.push(3);
@@ -196,29 +174,16 @@ const ListaoListaFechamento = props => {
         width: '70px',
         key: `${bimestre}º`,
         render: dadosEstudante => {
-          const { notasConceitosBimestre } = dadosEstudante;
-
-          let notaBimestre = {};
-          if (ehRegencia) {
-            notaBimestre = notasConceitosBimestre.find(
-              item =>
-                item?.bimestre === bimestre &&
-                item?.disciplinaId === disciplinaId
-            );
-          } else {
-            notaBimestre = notasConceitosBimestre.find(
-              item => item?.bimestre === bimestre
-            );
-          }
-
-          let valorExibir = '';
-
-          if (Number(dadosFechamento?.notaTipo) === notasConceitos.Conceitos) {
-            valorExibir = obterDescricaoConceito(notaBimestre?.notaConceito);
-          } else {
-            valorExibir = notaBimestre?.notaConceito;
-          }
-          return <ContainerDescConceito>{valorExibir}</ContainerDescConceito>;
+          const { notasConceitoBimestre } = dadosEstudante;
+          return (
+            <ColunaNotaConceitoPorBimestre
+              ehRegencia={ehRegencia}
+              notaTipo={Number(dadosFechamento?.notaTipo)}
+              bimestre={bimestre}
+              notasConceitoBimestre={notasConceitoBimestre}
+              listaTiposConceitos={dadosFechamento?.listaTiposConceitos || []}
+            />
+          );
         },
       };
     });
@@ -239,7 +204,7 @@ const ListaoListaFechamento = props => {
     },
   ];
 
-  if (bimestreOperacoes === BIMESTRE_FINAL) {
+  if (ehFinal) {
     colunasEstudantes.push({
       title:
         Number(dadosFechamento?.notaTipo) === notasConceitos.Notas
@@ -264,13 +229,13 @@ const ListaoListaFechamento = props => {
         // Quando não for regência vai ter somente um(a) nota/conceito!
         const indexNotaFechamento = 0;
         const notaFechamento =
-          dadosEstudante.notasConceitosFinal[indexNotaFechamento];
+          dadosEstudante.notasConceitoFinal[indexNotaFechamento];
 
         return montarCampoNotaConceito(
           dadosEstudante,
           notaFechamento,
           indexNotaFechamento,
-          'notasConceitosFinal'
+          'notasConceitoFinal'
         );
       };
     }
@@ -289,13 +254,13 @@ const ListaoListaFechamento = props => {
         // Quando não for regência vai ter somente um(a) nota/conceito!
         const indexNotaFechamento = 0;
         const notaFechamento =
-          dadosEstudante.notasConceitosBimestre?.[indexNotaFechamento];
+          dadosEstudante.notasConceitoBimestre?.[indexNotaFechamento];
 
         return montarCampoNotaConceito(
           dadosEstudante,
           notaFechamento,
           indexNotaFechamento,
-          'notasConceitosBimestre'
+          'notasConceitoBimestre'
         );
       };
     }
@@ -306,7 +271,7 @@ const ListaoListaFechamento = props => {
     colunasEstudantes.push({
       title: 'Frequência',
       align: 'center',
-      dataIndex: 'percentualFrequencia',
+      dataIndex: 'frequencia',
       width: '110px',
       render: percentualFrequencia =>
         percentualFrequencia ? `${percentualFrequencia}%` : '',
@@ -345,9 +310,8 @@ const ListaoListaFechamento = props => {
         render: () => 'Componentes regência de classe',
       },
     ];
-    const ehFinal = bimestreOperacoes === BIMESTRE_FINAL;
 
-    const nomeRef = ehFinal ? 'notasConceitosFinal' : 'notasConceitosBimestre';
+    const nomeRef = ehFinal ? 'notasConceitoFinal' : 'notasConceitoBimestre';
 
     if (estudante?.[nomeRef]?.length) {
       estudante[nomeRef].forEach((item, index) => {
@@ -367,17 +331,24 @@ const ListaoListaFechamento = props => {
   };
 
   const getExpandIconColumnIndex = () => {
-    const ehFinal = bimestreOperacoes === BIMESTRE_FINAL;
-    let expandIconColumnIndex = 3;
+    let expandIconColumnIndex = 2;
     if (ehFinal) {
-      expandIconColumnIndex = 7;
+      expandIconColumnIndex = 6;
     }
     return expandIconColumnIndex;
   };
 
   const montarTabelaRegencia = () => (
     <LinhaTabela className="col-md-12 p-0">
+      {ehFinal && (
+        <FiltroComponentesRegencia
+          ehRegencia={ehRegencia}
+          ehSintese={!!dadosFechamento?.ehSintese}
+        />
+      )}
       <DataTable
+        fixExpandedRowResetColSpan
+        scroll={{ x: 1000, y: 500 }}
         columns={colunasEstudantes}
         dataSource={dadosFechamento?.alunos}
         pagination={false}
@@ -390,8 +361,6 @@ const ListaoListaFechamento = props => {
         rowClassName={record => {
           const ehLinhaExpandida = temLinhaExpandida(record?.codigoAluno);
           const nomeClasse = ehLinhaExpandida.length ? 'linha-ativa' : '';
-          // TODO - TESTAR PERFORMANCE QUANDO TIVER A LISTA DE ESTUDANTES COMPLETA!
-          // fecharLoaderMontouAlunos(i);
           return nomeClasse;
         }}
         expandedRowRender={(record, indexAluno) => {
@@ -407,7 +376,6 @@ const ListaoListaFechamento = props => {
               columns={colunasDetalhe}
               dataSource={[record]}
               semHover
-              tableLayout="fixed"
             />
           );
         }}
@@ -423,7 +391,7 @@ const ListaoListaFechamento = props => {
   ) : (
     <ContainerTableFechamento className="col-md-12 p-0">
       <DataTable
-        scroll={{ y: 500 }}
+        scroll={{ x: 1000, y: 500 }}
         columns={colunasEstudantes}
         dataSource={dadosFechamento?.alunos}
         pagination={false}

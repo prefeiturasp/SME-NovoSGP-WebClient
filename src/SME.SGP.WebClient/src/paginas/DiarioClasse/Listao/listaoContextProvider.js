@@ -79,10 +79,14 @@ const ListaoContextProvider = ({ children }) => {
   // TAB FECHAMENTO
   const [dadosFechamento, setDadosFechamento] = useState();
   const [dadosIniciaisFechamento, setDadosIniciaisFechamento] = useState();
+  const [componentesRegenciaListao, setComponentesRegenciaListao] = useState(
+    []
+  );
 
   const limparTabFechamento = () => {
     setDadosFechamento();
     setDadosIniciaisFechamento();
+    setComponentesRegenciaListao([]);
   };
 
   const limparTabFrequencia = () => {
@@ -217,6 +221,8 @@ const ListaoContextProvider = ({ children }) => {
         setDadosFechamento,
         dadosIniciaisFechamento,
         setDadosIniciaisFechamento,
+        componentesRegenciaListao,
+        setComponentesRegenciaListao,
       }}
     >
       {children}

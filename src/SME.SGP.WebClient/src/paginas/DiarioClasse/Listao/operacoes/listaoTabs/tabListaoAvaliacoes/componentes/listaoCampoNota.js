@@ -43,8 +43,13 @@ const ListaoCampoNota = props => {
   };
 
   useEffect(() => {
-    setNotaValorAtual(dadosNota.notaConceito);
-  }, [dadosNota.notaConceito]);
+    if (dadosNota?.notaConceito) {
+      const notaConceitoParseada = String(dadosNota.notaConceito);
+      const notaConceitoAlterada = notaConceitoParseada.replace(',', '.');
+      const nota = Number(notaConceitoAlterada);
+      setNotaValorAtual(nota);
+    }
+  }, [dadosNota]);
 
   const arredondamentoNota = valorValidar =>
     api.get(

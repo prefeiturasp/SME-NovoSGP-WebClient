@@ -1,6 +1,4 @@
 import api from '~/servicos/api';
-import { mockFechamentoConceito } from './mockFechamentoConceito';
-import { mockFechamentoNota } from './mockFechamentoNota';
 
 const ServicoFechamentoBimestre = {
   buscarDados(turmaCodigo, disciplinaCodigo, bimestre, periodo) {
@@ -28,19 +26,11 @@ const ServicoFechamentoBimestre = {
     turmaCodigo,
     semestre,
     bimestre,
-    disciplinaCodigo
+    componenteCurricularCodigo
   ) {
-    console.log(`turmaCodigo: ${turmaCodigo}`);
-    console.log(`disciplinaCodigo: ${disciplinaCodigo}`);
-    console.log(`bimestre: ${bimestre}`);
-    console.log(`semestre: ${semestre}`);
-
-    return new Promise(resolve => {
-      setTimeout(() => {
-        // resolve({ data: mockFechamentoNota });
-        resolve({ data: mockFechamentoConceito });
-      }, 2000);
-    });
+    return api.get(
+      `/v1/fechamentos/turmas/listar?turmaCodigo=${turmaCodigo}&componenteCurricularCodigo=${componenteCurricularCodigo}&bimestre=${bimestre}&semestre=${semestre}`
+    );
   },
 };
 

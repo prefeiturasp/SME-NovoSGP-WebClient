@@ -2,14 +2,14 @@ import _ from 'lodash';
 import React, { useCallback, useContext, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Alert } from '~/componentes';
+import { ModalidadeDTO } from '~/dtos';
 import notasConceitos from '~/dtos/notasConceitos';
 import { setLimparModoEdicaoGeral } from '~/redux/modulos/geral/actions';
 import { erros } from '~/servicos';
-import ServicoFechamentoBimestre from '~/servicos/Paginas/Fechamento/ServicoFechamentoBimestre';
 import ServicoNotaConceito from '~/servicos/Paginas/DiarioClasse/ServicoNotaConceito';
+import ServicoFechamentoBimestre from '~/servicos/Paginas/Fechamento/ServicoFechamentoBimestre';
 import ListaoContext from '../../../listaoContext';
 import ListaoListaFechamento from './listaoListaFechamento';
-import { ModalidadeDTO } from '~/dtos';
 
 const TabListaoFechamento = () => {
   const dispatch = useDispatch();
@@ -48,6 +48,7 @@ const TabListaoFechamento = () => {
 
   const obterFechamentoPorBimestre = useCallback(async () => {
     setExibirLoaderGeral(true);
+
     const resposta = await ServicoFechamentoBimestre.obterFechamentoPorBimestre(
       turmaSelecionada?.turma,
       turmaSelecionada?.periodo,
@@ -61,7 +62,7 @@ const TabListaoFechamento = () => {
       let listaTiposConceitos = [];
       if (notasConceitos.Conceitos === Number(resposta?.data?.notaTipo)) {
         listaTiposConceitos = await obterListaConceitos(
-          resposta?.data?.periodoFim
+          resposta?.data?.dataFechamento
         );
       }
       resposta.data.listaTiposConceitos = listaTiposConceitos;
