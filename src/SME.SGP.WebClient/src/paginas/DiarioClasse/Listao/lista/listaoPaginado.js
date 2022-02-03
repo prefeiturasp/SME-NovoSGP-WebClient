@@ -174,11 +174,25 @@ const ListaoPaginado = () => {
     }
   };
 
+  const desabilitarIconeFechamento = (tab, params) =>
+    tab === LISTAO_TAB_FECHAMENTO && !params?.periodoFechamentoIniciado;
+
+  const escolherCursor = desabilitarIcone =>
+    desabilitarIcone ? 'not-allowed' : 'pointer';
+
   const montarIcone = (icon, tab, params) => {
     const parametro = PARAMETROS[tab];
     const temPendencia = params[parametro];
     const iconePendencia = temPendencia ? faExclamationTriangle : faCheck;
     const corPendencia = temPendencia ? 'LaranjaCalendario' : 'Verde';
+
+    const desabilitarIcone = desabilitarIconeFechamento(tab, params);
+    const cursor = escolherCursor(desabilitarIcone);
+
+    const corIcone = desabilitarIcone ? Base.CinzaMako : Base.Azul;
+    const corIconePendencia = desabilitarIcone
+      ? Base.CinzaMako
+      : Base[corPendencia];
 
     return (
       <>
@@ -186,8 +200,8 @@ const ListaoPaginado = () => {
           className="cor-branco-hover"
           style={{
             fontSize: '16px',
-            color: Base.Azul,
-            cursor: 'pointer',
+            color: corIcone,
+            cursor,
           }}
           icon={icon}
         />
@@ -195,8 +209,9 @@ const ListaoPaginado = () => {
           className="cor-branco-hover"
           style={{
             fontSize: '16px',
-            color: Base[corPendencia],
+            color: corIconePendencia,
             marginLeft: '12px',
+            cursor,
           }}
           icon={iconePendencia}
         />
@@ -213,9 +228,18 @@ const ListaoPaginado = () => {
         align: 'center',
         width: tamanhoColsTelas,
         ellipsis: true,
-        onCell: params => ({
-          onClick: () => carregarFiltros(tab, params),
-        }),
+        onCell: params => {
+          const desabilitarIcone = desabilitarIconeFechamento(tab, params);
+          const cursor = escolherCursor(desabilitarIcone);
+          const onClick = desabilitarIcone
+            ? () => {}
+            : () => carregarFiltros(tab, params);
+
+          return {
+            onClick,
+            style: { cursor },
+          };
+        },
       };
     };
 

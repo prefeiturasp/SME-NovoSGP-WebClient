@@ -1,6 +1,6 @@
 import { Col, Row } from 'antd';
 import PropTypes from 'prop-types';
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { Auditoria, JoditEditor } from '~/componentes';
 import { setTelaEmEdicao } from '~/redux/modulos/geral/actions';
@@ -13,7 +13,9 @@ import {
 } from '../../../listaoFuncoes';
 
 const ConteudoCollapse = props => {
+  const [dadosIniciasPlanejamento, setDadosIniciasPlanejamento] = useState();
   const [temErro, setTemErro] = useState();
+
   const dispatch = useDispatch();
 
   const {
@@ -28,7 +30,7 @@ const ConteudoCollapse = props => {
 
   const desabilitarCampos = somenteConsultaListao || !periodoAbertoListao;
 
-  const { dados, indexDiarioBordo } = props;
+  const { dados, indexDiarioBordo, turmaSelecionada } = props;
   const { auditoria, pendente, diarioBordoId } = dados;
 
   const setarDiarioAlterado = () => {
@@ -50,6 +52,17 @@ const ConteudoCollapse = props => {
     setIdDiarioBordoAtual(diarioBordoId);
   };
 
+  const mudarObservacaoListagem = () => {
+    dispatch(setTelaEmEdicao(true));
+  };
+
+  useEffect(() => {
+    if (dados?.planejamento) {
+      setDadosIniciasPlanejamento(dados?.planejamento);
+    }
+    return () => setDadosIniciasPlanejamento();
+  }, [dados]);
+
   return (
     <>
       <Row gutter={[24, 24]}>
@@ -59,7 +72,7 @@ const ConteudoCollapse = props => {
             id="editor-planejamento"
             name="planejamento"
             label="Planejamento reflexivo a partir das escutas"
-            value={dados?.planejamento}
+            value={dadosIniciasPlanejamento}
             onChange={valor => {
               if (!desabilitarCampos) {
                 onChangePlanejamento(valor);
@@ -102,8 +115,11 @@ const ConteudoCollapse = props => {
             excluirObservacao(obs, setExibirLoaderGeral)
           }
           mudarObservacao={mudarObservacao}
+          mudarObservacaoListagem={mudarObservacaoListagem}
           diarioBordoId={diarioBordoId}
           permissoes={permissaoLista}
+          dreId={turmaSelecionada.dre}
+          ueId={turmaSelecionada.unidadeEscolar}
         />
       </Row>
     </>
@@ -113,11 +129,13 @@ const ConteudoCollapse = props => {
 ConteudoCollapse.propTypes = {
   dados: PropTypes.oneOfType([PropTypes.any]),
   indexDiarioBordo: PropTypes.number,
+  turmaSelecionada: PropTypes.oneOfType([PropTypes.any]),
 };
 
 ConteudoCollapse.defaultProps = {
   dados: null,
   indexDiarioBordo: null,
+  turmaSelecionada: {},
 };
 
 export default ConteudoCollapse;

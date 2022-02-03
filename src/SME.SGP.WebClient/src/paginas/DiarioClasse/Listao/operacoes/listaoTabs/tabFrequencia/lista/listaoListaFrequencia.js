@@ -221,16 +221,24 @@ const ListaoListaFrequencia = () => {
   // TODO - Verificar a regra - componenteCurricular.registraFrequencia
   if (dadosFrequencia?.aulas?.length) {
     dadosFrequencia.aulas.forEach(aula => {
-      const width = aula?.aulaCj ? '170px' : '150px';
+      const ehAulaCj = aula?.aulaCj;
+      const ehAulaReposicao = aula?.ehReposicao;
+      const widthCJReposicao = ehAulaCj && ehAulaReposicao ? '185px' : '170px';
+      const width = ehAulaCj ? widthCJReposicao : '150px';
+      const marginLeft = ehAulaCj && ehAulaReposicao ? 15 : '';
+
       colunasEstudantes.push({
         title: () => (
           <div>
-            <div style={{ fontSize: 16, marginRight: 3 }}>{aula?.dataAula}</div>
-            {aula?.ehReposicao ? <ReposicaoLabel /> : <></>}
+            <div style={{ fontSize: 16, marginRight: 3, marginLeft }}>
+              {aula?.dataAula}
+            </div>
+            {ehAulaReposicao ? <ReposicaoLabel /> : <></>}
           </div>
         ),
         align: 'center',
         width,
+        className: 'position-relative',
         children: [
           {
             align: 'center',
@@ -332,6 +340,8 @@ const ListaoListaFrequencia = () => {
     aulaId,
     ehReposicao
   ) => {
+    const aulasGerais = encontrarAulas(aula);
+
     return (
       <span className="d-flex justify-content-between align-items-center">
         {ehReposicao ? <ReposicaoLabel linhaDetalhe /> : <></>}
@@ -347,7 +357,7 @@ const ListaoListaFrequencia = () => {
             possuiAnotacao: aula?.possuiAnotacao,
             aula,
           }}
-          permiteAnotacao={aula?.permiteAnotacao}
+          permiteAnotacao={aula?.permiteAnotacao && aulasGerais?.podeEditar}
           possuiAnotacao={aula?.possuiAnotacao}
         />
       </span>
@@ -361,6 +371,7 @@ const ListaoListaFrequencia = () => {
         dataIndex: 'aulaId',
         align: 'left',
         ellipsis: true,
+        className: 'position-relative',
         render: (aulaId, row) => {
           const aula = dadosFrequencia.aulas.find(
             item => item.aulaId === aulaId

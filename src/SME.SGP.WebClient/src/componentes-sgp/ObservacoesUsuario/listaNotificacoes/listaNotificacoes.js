@@ -8,10 +8,7 @@ const ListaNotificacoes = ({ obs, somenteLeitura }) => {
 
   useEffect(() => {
     if (!usuariosNotificacao && obs.usuariosNotificacao) {
-      const usuariosNotificacaoConcatenado = obs.usuariosNotificacao
-        .map(usuario => usuario.nome)
-        .join(', ');
-      setUsuariosNotificacao(usuariosNotificacaoConcatenado);
+      setUsuariosNotificacao(obs.usuariosNotificacao);
     }
   }, [usuariosNotificacao, obs.usuariosNotificacao]);
 
@@ -23,7 +20,7 @@ const ListaNotificacoes = ({ obs, somenteLeitura }) => {
           listagemDiario={obs?.listagemDiario}
           somenteLeitura={somenteLeitura}
         >
-          <span>Usuários notificados: {usuariosNotificacao}</span>
+          <span>{`Usuários notificados: ${usuariosNotificacao}`}</span>
         </Container>
       ) : (
         <></>

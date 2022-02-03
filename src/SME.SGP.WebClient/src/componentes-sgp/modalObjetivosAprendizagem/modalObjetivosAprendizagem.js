@@ -160,7 +160,7 @@ const ModalObjetivosAprendizagem = props => {
             border
             bold
             onClick={onClickSalvarModal}
-            disabled={desabilitar}
+            disabled={desabilitar || !idsSelecionados.length}
           />
         </Col>
       </Row>
