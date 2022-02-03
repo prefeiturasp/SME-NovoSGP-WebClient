@@ -13,12 +13,14 @@ class ServicoCalendarios {
       .catch(() => []);
   };
 
-  converterModalidade = modalidadeCalendario => {
-    let modalidade = modalidadeDto.FUNDAMENTAL;
+  converterModalidade = modalidadeCalendario => {    
+    let modalidade = null;
     if (modalidadeCalendario === modalidadeTipoCalendario.EJA) {
       modalidade = modalidadeDto.EJA;
     } else if (modalidadeCalendario === modalidadeTipoCalendario.Infantil) {
       modalidade = modalidadeDto.INFANTIL;
+    }else if(modalidadeCalendario === modalidadeTipoCalendario.FUNDAMENTAL_MEDIO) {
+      modalidade = modalidadeDto.FUNDAMENTAL;
     }
     return modalidade;
   };
