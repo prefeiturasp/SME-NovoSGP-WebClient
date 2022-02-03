@@ -36,7 +36,7 @@ const Sintese = props => {
   const [dados, setDados] = useState([]);
 
   useEffect(() => {
-    if (turmaId && bimestreSelecionado && alunoCodigo) {
+    if (turmaId && bimestreSelecionado && alunoCodigo && fechamentoTurmaId) {
       ServicoConselhoClasse.obterSintese(
         conselhoClasseId,
         fechamentoTurmaId,
