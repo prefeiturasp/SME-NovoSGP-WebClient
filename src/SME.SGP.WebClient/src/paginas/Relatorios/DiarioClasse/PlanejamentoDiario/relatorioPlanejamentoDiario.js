@@ -504,6 +504,12 @@ const RelatorioPlanejamentoDiario = () => {
   };
 
   const gerar = async () => {
+    let componentesDisponiveis;
+    if (componenteCurricularId !== OPCAO_TODOS) {
+      componentesDisponiveis = [componenteCurricularId];
+    } else {
+      componentesDisponiveis = componentesCurricularesDisponiveis;
+    }
     const params = {
       modalidadeTurma: modalidadeId,
       codigoDre,
@@ -516,7 +522,7 @@ const RelatorioPlanejamentoDiario = () => {
       listarDataFutura,
       exibirDetalhamento,
       componenteCurricular: componenteCurricularId,
-      componentesCurricularesDisponiveis,
+      componentesCurricularesDisponiveis: componentesDisponiveis,
     };
 
     setExibirLoader(true);
