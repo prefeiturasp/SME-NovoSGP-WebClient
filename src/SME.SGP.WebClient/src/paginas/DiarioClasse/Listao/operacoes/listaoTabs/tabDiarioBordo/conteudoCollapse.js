@@ -47,11 +47,6 @@ const ConteudoCollapse = props => {
     setarDiarioAlterado();
   };
 
-  const onChangeReflexoesReplanejamento = valor => {
-    dados.reflexoesReplanejamento = valor;
-    setarDiarioAlterado();
-  };
-
   const mudarObservacao = () => {
     dispatch(setTelaEmEdicao(true));
     setIdDiarioBordoAtual(diarioBordoId);
@@ -76,7 +71,7 @@ const ConteudoCollapse = props => {
           <JoditEditor
             id="editor-planejamento"
             name="planejamento"
-            label="Planejamento"
+            label="Planejamento reflexivo a partir das escutas"
             value={dadosIniciasPlanejamento}
             onChange={valor => {
               if (!desabilitarCampos) {
@@ -86,23 +81,6 @@ const ConteudoCollapse = props => {
             readonly={desabilitarCampos}
             temErro={temErro}
             mensagemErro="Você precisa preencher o planejamento com no mínimo 200 caracteres"
-          />
-        </Col>
-      </Row>
-      <Row gutter={[24, 24]}>
-        <Col sm={24}>
-          <JoditEditor
-            valideClipboardHTML={false}
-            id="editor-reflexoesReplanejamento"
-            name="reflexoesReplanejamento"
-            label="Reflexões e replanejamentos"
-            value={dados?.reflexoesReplanejamento}
-            onChange={valor => {
-              if (!desabilitarCampos) {
-                onChangeReflexoesReplanejamento(valor);
-              }
-            }}
-            readonly={desabilitarCampos}
           />
         </Col>
       </Row>
