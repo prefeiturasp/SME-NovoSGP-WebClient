@@ -506,7 +506,7 @@ const RelatorioPlanejamentoDiario = () => {
   const gerar = async () => {
     let componentesDisponiveis;
     if (componenteCurricularId !== OPCAO_TODOS) {
-      componentesDisponiveis = componenteCurricularId;
+      componentesDisponiveis = [componenteCurricularId];
     } else {
       componentesDisponiveis = componentesCurricularesDisponiveis;
     }
@@ -522,7 +522,7 @@ const RelatorioPlanejamentoDiario = () => {
       listarDataFutura,
       exibirDetalhamento,
       componenteCurricular: componenteCurricularId,
-      componentesDisponiveis,
+      componentesCurricularesDisponiveis: componentesDisponiveis,
     };
 
     setExibirLoader(true);
