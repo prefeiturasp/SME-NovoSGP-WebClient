@@ -35,9 +35,13 @@ class ServicoPeriodoEscolar {
     turmaCodigo,
     codigoComponenteCurricular,
     ehRegencia,
-    bimestre
+    bimestre,
+    exibirDataFutura = false
   ) => {
-    const url = `${urlPadrao}/turmas/${turmaCodigo}/componentes-curriculares/${codigoComponenteCurricular}/regencia/${ehRegencia}/bimestres/${bimestre}`;
+    let url = `${urlPadrao}/turmas/${turmaCodigo}/componentes-curriculares/${codigoComponenteCurricular}/regencia/${ehRegencia}/bimestres/${bimestre}`;
+    if (exibirDataFutura) {
+      url += `?exibirDataFutura=${exibirDataFutura}`;
+    }
     return api.get(url);
   };
 }

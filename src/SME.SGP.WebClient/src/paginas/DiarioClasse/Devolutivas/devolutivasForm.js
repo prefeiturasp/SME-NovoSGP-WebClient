@@ -1,4 +1,5 @@
 import { Form, Formik } from 'formik';
+import $ from 'jquery';
 import * as moment from 'moment';
 import PropTypes from 'prop-types';
 import React, { useCallback, useEffect, useState } from 'react';
@@ -25,13 +26,13 @@ import {
 import { confirmar, erros, sucesso } from '~/servicos/alertas';
 import { setBreadcrumbManual } from '~/servicos/breadcrumb-services';
 import history from '~/servicos/history';
+import ServicoPeriodoEscolar from '~/servicos/Paginas/Calendario/ServicoPeriodoEscolar';
 import ServicoDevolutivas from '~/servicos/Paginas/DiarioClasse/ServicoDevolutivas';
 import ServicoDiarioBordo from '~/servicos/Paginas/DiarioClasse/ServicoDiarioBordo';
 import ServicoDisciplina from '~/servicos/Paginas/ServicoDisciplina';
 import { verificaSomenteConsulta } from '~/servicos/servico-navegacao';
 import { ehTurmaInfantil } from '~/servicos/Validacoes/validacoesInfatil';
 import DadosPlanejamentoDiarioBordo from './DadosPlanejamentoDiarioBordo/dadosPlanejamentoDiarioBordo';
-import ServicoPeriodoEscolar from '~/servicos/Paginas/Calendario/ServicoPeriodoEscolar';
 
 const DevolutivasForm = ({ match }) => {
   const dispatch = useDispatch();
@@ -54,6 +55,10 @@ const DevolutivasForm = ({ match }) => {
   ] = useState();
 
   const [carregandoGeral, setCarregandoGeral] = useState(false);
+  const [
+    codigoComponenteCurricular,
+    setCodigoComponenteCurricular,
+  ] = useState();
   const [turmaInfantil, setTurmaInfantil] = useState(false);
   const [modoEdicao, setModoEdicao] = useState(false);
   const [datasParaHabilitar, setDatasParaHabilitar] = useState();
@@ -242,12 +247,9 @@ const DevolutivasForm = ({ match }) => {
     [obterSugestaoDataInicio]
   );
 
-  const setarValoresIniciaisRegistroEdicao = (
-    dados,
-    codigoComponenteCurricular
-  ) => {
+  const setarValoresIniciaisRegistroEdicao = (dados, codigoComponente) => {
     const valores = {
-      codigoComponenteCurricular,
+      codigoComponenteCurricular: codigoComponente,
       periodoInicio: moment(dados.periodoInicio),
       periodoFim: moment(dados.periodoFim),
       descricao: dados.descricao,
@@ -256,20 +258,20 @@ const DevolutivasForm = ({ match }) => {
     setValoresIniciais({ ...valores });
   };
 
-  const obterDevolutiva = useCallback(
-    async (id, codigoComponenteCurricular) => {
-      const retorno = await ServicoDevolutivas.obterDevolutiva(id).catch(e =>
-        erros(e)
+  const obterDevolutiva = useCallback(async id => {
+    const retorno = await ServicoDevolutivas.obterDevolutiva(id).catch(e =>
+      erros(e)
+    );
+    if (retorno?.data) {
+      setarValoresIniciaisRegistroEdicao(
+        retorno.data,
+        String(retorno.data?.codigoComponenteCurricular)
       );
-      if (retorno && retorno.data) {
-        setarValoresIniciaisRegistroEdicao(
-          retorno.data,
-          codigoComponenteCurricular
-        );
-      }
-    },
-    []
-  );
+      setCodigoComponenteCurricular(
+        String(retorno.data?.codigoComponenteCurricular)
+      );
+    }
+  }, []);
 
   const obterPlanejamentosPorDevolutiva = useCallback(
     async (pagina, numero) => {
@@ -293,41 +295,64 @@ const DevolutivasForm = ({ match }) => {
   );
 
   useEffect(() => {
-    if (idDevolutiva || (idDevolutiva && numeroRegistros)) {
+    const temComponente =
+      listaComponenteCurriculare?.length && codigoComponenteCurricular;
+    if (temComponente && (idDevolutiva || (idDevolutiva && numeroRegistros))) {
       obterPlanejamentosPorDevolutiva();
-    }
-  }, [idDevolutiva, numeroRegistros, obterPlanejamentosPorDevolutiva]);
-
-  useEffect(() => {
-    if (listaComponenteCurriculare && listaComponenteCurriculare.length) {
-      if (listaComponenteCurriculare.length === 1) {
-        const componente = listaComponenteCurriculare[0];
-        const codigoComponenteCurricular = String(
-          componente.codigoComponenteCurricular
-        );
-        if (match && match.params && match.params.id) {
-          obterDevolutiva(match.params.id, codigoComponenteCurricular);
-        } else {
-          setarValoresIniciaisRegistroNovo(codigoComponenteCurricular);
-        }
-      }
+    } else {
+      setExibirCampoDescricao(false);
+      dispatch(limparDadosPlanejamento());
     }
   }, [
     listaComponenteCurriculare,
+    codigoComponenteCurricular,
+    idDevolutiva,
+    numeroRegistros,
+    obterPlanejamentosPorDevolutiva,
+    dispatch,
+  ]);
+
+  useEffect(() => {
+    if (listaComponenteCurriculare?.length && match?.params?.id) {
+      obterDevolutiva(match.params.id);
+    }
+  }, [listaComponenteCurriculare, match, obterDevolutiva]);
+
+  useEffect(() => {
+    if (match.params.id) return;
+
+    if (listaComponenteCurriculare?.length && codigoComponenteCurricular) {
+      setarValoresIniciaisRegistroNovo(codigoComponenteCurricular);
+    } else {
+      if (refForm?.resetForm) {
+        refForm.resetForm();
+      }
+      setValoresIniciais(inicial);
+    }
+  }, [
+    codigoComponenteCurricular,
+    listaComponenteCurriculare,
     setarValoresIniciaisRegistroNovo,
     match,
-    obterDevolutiva,
   ]);
 
   const obterComponentesCurriculares = useCallback(async () => {
     setCarregandoGeral(true);
     dispatch(limparDadosPlanejamento());
     const componentes = await ServicoDisciplina.obterDisciplinasPorTurma(
-      turmaCodigo
+      turmaCodigo,
+      false
     ).catch(e => erros(e));
 
-    if (componentes.data && componentes.data.length) {
+    if (componentes?.data?.length) {
       setListaComponenteCurriculare(componentes.data);
+      if (componentes.data.length === 1) {
+        setCodigoComponenteCurricular(
+          String(componentes.data[0].codigoComponenteCurricular)
+        );
+      }
+    } else {
+      setListaComponenteCurriculare([]);
     }
 
     setCarregandoGeral(false);
@@ -515,6 +540,27 @@ const DevolutivasForm = ({ match }) => {
     }
   };
 
+  const setarValorNovoComponenteCurricular = descricao => {
+    resetarTela();
+    setValoresIniciais({});
+    setCodigoComponenteCurricular(descricao);
+  };
+
+  const onChangeComponenteCurricular = async (form, descricao) => {
+    if (modoEdicao && turmaInfantil && !desabilitarCampos) {
+      const confirmado = await pergutarParaSalvar();
+      if (confirmado) {
+        const salvou = await validaAntesDoSubmit(form);
+        if (salvou) {
+          setarValorNovoComponenteCurricular(descricao);
+        }
+      } else {
+        setarValorNovoComponenteCurricular(descricao);
+      }
+    } else {
+      setarValorNovoComponenteCurricular(descricao);
+    }
+  };
   return (
     <Loader loading={carregandoGeral} className="w-100 my-2">
       {!turmaSelecionada.turma ? (
@@ -599,15 +645,18 @@ const DevolutivasForm = ({ match }) => {
                       id="disciplina"
                       lista={listaComponenteCurriculare || []}
                       valueOption="codigoComponenteCurricular"
-                      valueText="nome"
+                      valueText="nomeComponenteInfantil"
                       placeholder="Selecione um componente curricular"
                       disabled={
                         !turmaInfantil ||
                         !turmaSelecionada.turma ||
-                        (listaComponenteCurriculare &&
-                          listaComponenteCurriculare.length === 1) ||
-                        desabilitarCampos
+                        listaComponenteCurriculare?.length === 1 ||
+                        desabilitarCampos ||
+                        idDevolutiva
                       }
+                      onChange={descricao => {
+                        onChangeComponenteCurricular(form, descricao);
+                      }}
                       form={form}
                       name="codigoComponenteCurricular"
                     />
@@ -664,11 +713,15 @@ const DevolutivasForm = ({ match }) => {
                           <JoditEditor
                             label="Registre a sua devolutiva para este intervalo de datas"
                             form={form}
-                            value={valoresIniciais.descricao}
+                            value={form.values.descricao}
                             name="descricao"
                             id="editor-devolutiva"
                             onChange={v => {
-                              if (valoresIniciais.descricao !== v) {
+                              const campo = $(v);
+                              if (
+                                valoresIniciais?.descricao !== v &&
+                                valoresIniciais?.descricao !== campo?.text()
+                              ) {
                                 setModoEdicao(true);
                               }
                             }}

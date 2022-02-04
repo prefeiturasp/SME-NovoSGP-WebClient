@@ -46,7 +46,7 @@ const ListaAlunos = props => {
     store => store.acompanhamentoFrequencia.exibirModalImpressao
   );
 
-  const { id: turmaId } = turmaSelecionada;
+  const { id: turmaId, periodo: semestre } = turmaSelecionada;
 
   const dispatch = useDispatch();
 
@@ -284,6 +284,7 @@ const ListaAlunos = props => {
                             turmaId={turmaId}
                             codigoAluno={data.alunoRf}
                             componenteCurricularId={componenteCurricularId}
+                            semestre={semestre}
                           />
                         </>
                       );
@@ -304,13 +305,11 @@ const ListaAlunos = props => {
 ListaAlunos.propTypes = {
   componenteCurricularId: PropTypes.string,
   territorioSaber: PropTypes.bool,
-  bimestreLista: PropTypes.number,
 };
 
 ListaAlunos.defaultProps = {
   componenteCurricularId: PropTypes.string,
   territorioSaber: false,
-  bimestreLista: '1',
 };
 
 export default ListaAlunos;

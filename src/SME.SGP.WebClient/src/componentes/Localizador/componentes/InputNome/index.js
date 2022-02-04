@@ -35,7 +35,11 @@ function InputNome({
   const options =
     sugestoes &&
     sugestoes.map(item => (
-      <AutoComplete.Option key={item.professorRf} value={item.professorNome}>
+      <AutoComplete.Option
+        key={item.professorRf}
+        value={item.professorNome}
+        usuarioId={item?.usuarioId}
+      >
         {item.professorNome}
       </AutoComplete.Option>
     ));

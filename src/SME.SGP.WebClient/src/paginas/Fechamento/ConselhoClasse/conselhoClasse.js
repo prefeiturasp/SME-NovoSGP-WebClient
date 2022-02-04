@@ -140,26 +140,28 @@ const ConselhoClasse = () => {
         conselhoClasseAlunoId,
         tipoNota
       } = resposta?.data;
-      const retorno = await servicoSalvarConselhoClasse.validaParecerConclusivo(
-        conselhoClasseId,
-        fechamentoTurmaId,
-        codigoEOL,
-        turmaSelecionada.turma,
-        usuario.turmaSelecionada.consideraHistorico
-      );
+      if (fechamentoTurmaId !== 0) {
+        const retorno = await servicoSalvarConselhoClasse.validaParecerConclusivo(
+          conselhoClasseId,
+          fechamentoTurmaId,
+          codigoEOL,
+          turmaSelecionada.turma,
+          usuario.turmaSelecionada.consideraHistorico
+        );
 
-      const valores = {
-        fechamentoTurmaId,
-        conselhoClasseId: conselhoClasseId || 0,
-        conselhoClasseAlunoId,
-        alunoCodigo: codigoEOL,
-        ...dadosPrincipaisConselhoClasse,
+        const valores = {
+          fechamentoTurmaId,
+          conselhoClasseId: conselhoClasseId || 0,
+          conselhoClasseAlunoId,
+          alunoCodigo: codigoEOL,
+          ...dadosPrincipaisConselhoClasse,
         tipoNota      
       };
-      if (!Object.keys(dadosPrincipaisConselhoClasse).length) {
-        dispatch(setDadosPrincipaisConselhoClasse(valores));
+        if (!Object.keys(dadosPrincipaisConselhoClasse).length) {
+          dispatch(setDadosPrincipaisConselhoClasse(valores));
+        }
+        dispatch(setPodeAcessar(retorno));
       }
-      dispatch(setPodeAcessar(retorno));
     }
   };
 

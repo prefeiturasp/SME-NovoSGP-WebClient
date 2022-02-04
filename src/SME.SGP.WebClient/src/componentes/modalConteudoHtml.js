@@ -125,6 +125,7 @@ const ModalConteudoHtml = props => {
                         border
                         className="mr-2 padding-btn-confirmacao"
                         onClick={onConfirmacaoSecundaria}
+                        disabled={loader}
                       />
                       <Button
                         id={shortid.generate()}
@@ -134,7 +135,7 @@ const ModalConteudoHtml = props => {
                         bold
                         className="padding-btn-confirmacao"
                         onClick={onConfirmacaoPrincipal}
-                        disabled={desabilitarBotaoPrincipal}
+                        disabled={desabilitarBotaoPrincipal || loader}
                       />
                     </div>
                   </CardBody>
@@ -154,6 +155,7 @@ const ModalConteudoHtml = props => {
               className="mr-2 padding-btn-confirmacao"
               onClick={onConfirmacaoSecundaria}
               hidden={esconderBotaoSecundario}
+              disabled={loader}
             />
             <Button
               id={shortid.generate()}
@@ -163,7 +165,7 @@ const ModalConteudoHtml = props => {
               bold
               className="padding-btn-confirmacao"
               onClick={onConfirmacaoPrincipal}
-              disabled={desabilitarBotaoPrincipal}
+              disabled={desabilitarBotaoPrincipal || loader}
               hidden={esconderBotaoPrincipal}
             />
           </div>
