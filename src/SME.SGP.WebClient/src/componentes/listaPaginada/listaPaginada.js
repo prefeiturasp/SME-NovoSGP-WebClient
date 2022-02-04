@@ -5,9 +5,9 @@ import queryString from 'query-string';
 // Componentes
 import { Table } from 'antd';
 
+import { api, erros } from '~/servicos';
+
 import { Container } from './listaPaginada.css';
-import api from '~/servicos/api';
-import { erros } from '~/servicos';
 
 const ListaPaginada = props => {
   const {
@@ -20,7 +20,6 @@ const ListaPaginada = props => {
     onSelecionarLinhas,
     selecionarItems,
     filtroEhValido,
-    onErro,
     paramArrayFormat,
     temPaginacao,
     setLista,
@@ -217,7 +216,6 @@ ListaPaginada.propTypes = {
   colunaChave: PropTypes.string,
   filtro: PropTypes.oneOfType([PropTypes.object]),
   filtroEhValido: PropTypes.bool,
-  onErro: PropTypes.oneOfType([PropTypes.func]),
   paramArrayFormat: PropTypes.oneOfType([PropTypes.string]),
   temPaginacao: PropTypes.oneOfType([PropTypes.bool]),
   setLista: PropTypes.oneOfType([PropTypes.func]),
@@ -235,7 +233,6 @@ ListaPaginada.defaultProps = {
   colunaChave: 'id',
   filtro: null,
   filtroEhValido: true,
-  onErro: () => {},
   paramArrayFormat: 'brackets',
   temPaginacao: true,
   setLista: () => {},
