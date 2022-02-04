@@ -42,8 +42,8 @@ const sucesso = mensagem => {
   exibirAlerta('success', mensagem);
 };
 
-const erro = mensagem => {
-  exibirAlerta('error', mensagem);
+const erro = (mensagem, ehInformativo = false) => {
+  exibirAlerta(ehInformativo ? 'warning' : 'error', mensagem);
 };
 
 const aviso = mensagem => {

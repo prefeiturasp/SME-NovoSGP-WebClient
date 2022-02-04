@@ -36,8 +36,10 @@ const AtribuicaoSupervisorCadastro = ({ match }) => {
     usuario.permissoes[RotasDto.ATRIBUICAO_SUPERVISOR_LISTA];
 
   function exibeErro(erros) {
-    if (erros && erros.response && erros.response.data)
-      erros.response.data.mensagens.forEach(mensagem => erro(mensagem));
+    if (erros && erros.response && erros.response.data) {
+      const ehInformativo = erros.response.data.ehInformativo ?? false;
+      erros.response.data.mensagens.forEach(mensagem => erro(mensagem, ehInformativo));
+    }
   }
 
   useEffect(() => {
@@ -206,6 +208,7 @@ const AtribuicaoSupervisorCadastro = ({ match }) => {
       })
       .catch(erros => {
         exibeErro(erros);
+        history.push('/gestao/atribuicao-supervisor-lista');
       });
   }
 
