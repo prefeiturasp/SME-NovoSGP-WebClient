@@ -38,9 +38,6 @@ const ListaoFiltros = () => {
     bimestre,
     setCarregarFiltrosSalvos,
     carregarFiltrosSalvos,
-  } = useContext(ListaoContext);
-
-  const {
     listaAnosLetivo,
     setListaAnosLetivo,
     listaDres,

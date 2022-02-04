@@ -7,7 +7,7 @@ import { Table } from 'antd';
 
 import { Container } from './listaPaginada.css';
 import api from '~/servicos/api';
-import { erro } from '~/servicos/alertas';
+import { erros } from '~/servicos';
 
 const ListaPaginada = props => {
   const {
@@ -41,7 +41,7 @@ const ListaPaginada = props => {
     showSizeChanger,
     pageSizeOptions: ['10', '20', '50', '100'],
     locale: { items_per_page: 'Linhas' },
-    current: 1
+    current: 1,
   });
 
   const obterUrlBusca = pagina => {
@@ -118,17 +118,7 @@ const ListaPaginada = props => {
           setLista(resposta.data.items);
         }
       })
-      .catch(err => {
-        if (
-          err.response &&
-          err.response.data &&
-          err.response.data.mensagens &&
-          err.response.data.mensagens.length
-        ) {
-          if (onErro) onErro(err);
-          else erro(err.response.data.mensagens[0]);
-        }
-      })
+      .catch(e => erros(e))
       .finally(() => setCarregando(false));
   };
 
@@ -178,14 +168,14 @@ const ListaPaginada = props => {
         pagination={
           temPaginacao
             ? {
-              defaultPageSize: paginaAtual.defaultPageSize,
-              pageSize: paginaAtual.pageSize,
-              total,
-              showSizeChanger,
-              pageSizeOptions: ['10', '20', '50', '100'],
-              locale: { items_per_page: '' },
-              current: paginaAtual.current,
-            }
+                defaultPageSize: paginaAtual.defaultPageSize,
+                pageSize: paginaAtual.pageSize,
+                total,
+                showSizeChanger,
+                pageSizeOptions: ['10', '20', '50', '100'],
+                locale: { items_per_page: '' },
+                current: paginaAtual.current,
+              }
             : false
         }
         bordered
@@ -238,17 +228,17 @@ ListaPaginada.propTypes = {
 ListaPaginada.defaultProps = {
   colunas: [],
   multiSelecao: false,
-  onClick: () => { },
-  onSelecionarLinhas: () => { },
-  selecionarItems: () => { },
+  onClick: () => {},
+  onSelecionarLinhas: () => {},
+  selecionarItems: () => {},
   url: '',
   colunaChave: 'id',
   filtro: null,
   filtroEhValido: true,
-  onErro: () => { },
+  onErro: () => {},
   paramArrayFormat: 'brackets',
   temPaginacao: true,
-  setLista: () => { },
+  setLista: () => {},
   showSizeChanger: true,
   naoFiltrarQuandoCarregando: true,
 };
