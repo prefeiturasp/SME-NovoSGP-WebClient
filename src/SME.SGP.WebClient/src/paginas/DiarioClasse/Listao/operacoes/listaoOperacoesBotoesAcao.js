@@ -523,9 +523,7 @@ const ListaoOperacoesBotoesAcao = () => {
         setDadosIniciaisFechamento,
         limparFechamento
       );
-    } else {
-      limparFechamento();
-    }
+    } else if (salvouFechamento) limparFechamento();
 
     return salvouFechamento;
   };
