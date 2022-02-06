@@ -205,7 +205,7 @@ const ListaoPaginado = () => {
   };
 
   const montarColunas = useCallback(() => {
-    const ehBimestreFinal = bimestre === String(BIMESTRE_FINAL);
+    const ehBimestreFinal = String(bimestre) === BIMESTRE_FINAL;
     const tamanhoColsTelas = '13%';
 
     const confPadrao = tab => {

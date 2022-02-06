@@ -20,7 +20,6 @@ import {
   limparDadosObservacoesUsuario,
   setDadosObservacoesUsuario,
 } from '~/redux/modulos/observacoesUsuario/actions';
-
 import {
   api,
   confirmar,
@@ -30,7 +29,6 @@ import {
   ServicoDiarioBordo,
   sucesso,
 } from '~/servicos';
-
 import ServicoFrequencia from '~/servicos/Paginas/DiarioClasse/ServicoFrequencia';
 import ServicoPlanoAula from '~/servicos/Paginas/DiarioClasse/ServicoPlanoAula';
 import { editorTemValor } from '~/utils';
@@ -42,13 +40,13 @@ import {
   LISTAO_TAB_PLANO_AULA,
 } from '../listaoConstantes';
 import ListaoContext from '../listaoContext';
-
 import {
   montarIdsObjetivosSelecionadosListao,
+  obterDaodsFechamentoPorBimestreListao,
   obterDiarioBordoListao,
   obterListaAlunosAvaliacaoListao,
   salvarEditarObservacao,
-  salvarFechamentoListao,
+  validarSalvarFechamentoListao,
 } from '../listaoFuncoes';
 
 const ListaoOperacoesBotoesAcao = () => {
@@ -92,6 +90,7 @@ const ListaoOperacoesBotoesAcao = () => {
     dadosFechamento,
     setDadosFechamento,
     dadosIniciaisFechamento,
+    setDadosIniciaisFechamento,
     setExibirModalJustificativaFechamento,
   } = useContext(ListaoContext);
 
@@ -499,12 +498,36 @@ const ListaoOperacoesBotoesAcao = () => {
     return false;
   };
 
-  const salvarFechamento = clicouNoBotaoSalvar => {
-    salvarFechamentoListao(
-      clicouNoBotaoSalvar,
+  const salvarFechamento = async clicouNoBotaoSalvar => {
+    const salvouFechamento = await validarSalvarFechamentoListao(
+      turmaSelecionada.turma,
+      dadosFechamento,
+      bimestreOperacoes,
+      setExibirLoaderGeral,
       setExibirModalJustificativaFechamento,
-      dadosFechamento
+      componenteCurricular?.codigoComponenteCurricular
     );
+
+    const limparFechamento = () => {
+      setDadosIniciaisFechamento();
+      setDadosFechamento();
+    };
+
+    if (salvouFechamento && clicouNoBotaoSalvar) {
+      obterDaodsFechamentoPorBimestreListao(
+        setExibirLoaderGeral,
+        turmaSelecionada,
+        bimestreOperacoes,
+        componenteCurricular,
+        setDadosFechamento,
+        setDadosIniciaisFechamento,
+        limparFechamento
+      );
+    } else {
+      limparFechamento();
+    }
+
+    return salvouFechamento;
   };
 
   const onClickSalvarTabAtiva = clicouNoBotaoSalvar => {

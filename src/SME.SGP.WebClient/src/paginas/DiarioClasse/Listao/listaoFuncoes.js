@@ -1,9 +1,12 @@
 import _ from 'lodash';
 import ServicoObservacoesUsuario from '~/componentes-sgp/ObservacoesUsuario/ServicoObservacoesUsuario';
+import { BIMESTRE_FINAL } from '~/constantes';
 import notasConceitos from '~/dtos/notasConceitos';
 import { store } from '~/redux';
+import { setTelaEmEdicao } from '~/redux/modulos/geral/actions';
 import { confirmar, erros, ServicoDiarioBordo, sucesso } from '~/servicos';
 import ServicoNotaConceito from '~/servicos/Paginas/DiarioClasse/ServicoNotaConceito';
+import ServicoFechamentoBimestre from '~/servicos/Paginas/Fechamento/ServicoFechamentoBimestre';
 import ServicoNotas from '~/servicos/ServicoNotas';
 
 const onChangeTabListao = async (
@@ -204,13 +207,136 @@ const excluirObservacao = async (obs, setExibirLoaderGeral) => {
   }
 };
 
-const salvarFechamentoListao = (
-  clicouNoBotaoSalvar,
-  setExibirModalJustificativaFechamento,
-  dadosFechamento
+const obterDaodsFechamentoPorBimestreListao = async (
+  setExibirLoaderGeral,
+  turmaSelecionada,
+  bimestreOperacoes,
+  componenteCurricular,
+  setDadosFechamento,
+  setDadosIniciaisFechamento,
+  limparFechamento
 ) => {
-  const dadosValidar = _.cloneDeep(dadosFechamento);
+  setExibirLoaderGeral(true);
 
+  const resposta = await ServicoFechamentoBimestre.obterFechamentoPorBimestre(
+    turmaSelecionada?.turma,
+    turmaSelecionada?.periodo,
+    bimestreOperacoes,
+    componenteCurricular?.codigoComponenteCurricular
+  )
+    .catch(e => erros(e))
+    .finally(() => setExibirLoaderGeral(false));
+
+  if (resposta?.data) {
+    let listaTiposConceitos = [];
+    if (notasConceitos.Conceitos === Number(resposta?.data?.notaTipo)) {
+      listaTiposConceitos = await obterListaConceitos(
+        resposta?.data?.dataFechamento
+      );
+    }
+    resposta.data.listaTiposConceitos = listaTiposConceitos;
+
+    const dadosCarregar = _.cloneDeep({ ...resposta.data });
+    const dadosIniciais = _.cloneDeep({ ...resposta.data });
+    setDadosFechamento(dadosCarregar);
+    setDadosIniciaisFechamento(dadosIniciais);
+  } else {
+    limparFechamento();
+    setExibirLoaderGeral(false);
+  }
+};
+
+const salvarFechamentoListao = async (
+  turma,
+  ehBimestreFinal,
+  dadosFechamento,
+  bimestreOperacoes,
+  setExibirLoaderGeral,
+  codigoComponenteCurricularSelecionado
+) => {
+  const temAvaliacoesBimestraisPendentes = dadosFechamento?.observacoes?.length;
+  let continuarSalvar = true;
+
+  if (temAvaliacoesBimestraisPendentes) {
+    continuarSalvar = await confirmar(
+      'Atenção',
+      dadosFechamento.observacoes,
+      'Deseja continuar mesmo assim com o fechamento do(s) bimestre(s)?'
+    );
+  }
+
+  if (!continuarSalvar) return false;
+
+  const notaConceitoAlunos = [];
+  const ehNota = Number(dadosFechamento?.notaTipo) === notasConceitos.Notas;
+
+  const nomeRef = ehBimestreFinal
+    ? 'notasConceitoFinal'
+    : 'notasConceitoBimestre';
+
+  dadosFechamento.alunos.forEach(aluno => {
+    aluno[nomeRef].forEach(dadosNotaConceito => {
+      if (dadosNotaConceito.modoEdicao) {
+        notaConceitoAlunos.push({
+          codigoAluno: aluno.codigoAluno,
+          nota: ehNota ? dadosNotaConceito.notaConceito : null,
+          conceitoId: !ehNota ? dadosNotaConceito.notaConceito : null,
+          disciplinaId:
+            dadosNotaConceito.disciplinaCodigo ||
+            codigoComponenteCurricularSelecionado,
+        });
+      }
+    });
+  });
+
+  const dadosParaSalvar = {
+    id: dadosFechamento.fechamentoId,
+    turmaId: turma,
+    bimestre: bimestreOperacoes,
+    disciplinaId: codigoComponenteCurricularSelecionado,
+    notaConceitoAlunos,
+    justificativa: dadosFechamento?.justificativa || null,
+  };
+
+  setExibirLoaderGeral(true);
+  const resposta = await ServicoFechamentoBimestre.salvarFechamentoPorBimestre([
+    dadosParaSalvar,
+  ])
+    .catch(e => erros(e))
+    .finally(() => setExibirLoaderGeral(false));
+
+  if (resposta?.status === 200) {
+    sucesso(`${ehNota ? 'Notas' : 'Conceitos'} registrados com sucesso`);
+    const { dispatch } = store;
+
+    dispatch(setTelaEmEdicao(false));
+    return true;
+  }
+
+  return false;
+};
+
+const validarSalvarFechamentoListao = (
+  turma,
+  dadosFechamento,
+  bimestreOperacoes,
+  setExibirLoaderGeral,
+  setExibirModalJustificativaFechamento,
+  codigoComponenteCurricularSelecionado
+) => {
+  const ehBimestreFinal = String(bimestreOperacoes) === BIMESTRE_FINAL;
+
+  if (ehBimestreFinal)
+    return salvarFechamentoListao(
+      turma,
+      ehBimestreFinal,
+      dadosFechamento,
+      bimestreOperacoes,
+      setExibirLoaderGeral,
+      codigoComponenteCurricularSelecionado
+    );
+
+  const dadosValidar = _.cloneDeep(dadosFechamento);
   dadosValidar.alunos.map(aluno => {
     aluno.notasBimestre = aluno.notasConceitoBimestre;
     return aluno;
@@ -223,9 +349,17 @@ const salvarFechamentoListao = (
 
   if (!temPorcentagemAceitavel) {
     setExibirModalJustificativaFechamento(true);
-  } else {
-    // TODO - Salvar fechamento do listão!
+    return false;
   }
+
+  return salvarFechamentoListao(
+    turma,
+    ehBimestreFinal,
+    dadosFechamento,
+    bimestreOperacoes,
+    setExibirLoaderGeral,
+    codigoComponenteCurricularSelecionado
+  );
 };
 
 export {
@@ -235,5 +369,6 @@ export {
   obterListaAlunosAvaliacaoListao,
   salvarEditarObservacao,
   excluirObservacao,
-  salvarFechamentoListao,
+  obterDaodsFechamentoPorBimestreListao,
+  validarSalvarFechamentoListao,
 };

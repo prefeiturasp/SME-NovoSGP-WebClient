@@ -1,14 +1,10 @@
-import _ from 'lodash';
 import React, { useCallback, useContext, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Alert } from '~/componentes';
 import { ModalidadeDTO } from '~/dtos';
-import notasConceitos from '~/dtos/notasConceitos';
 import { setLimparModoEdicaoGeral } from '~/redux/modulos/geral/actions';
-import { erros } from '~/servicos';
-import ServicoNotaConceito from '~/servicos/Paginas/DiarioClasse/ServicoNotaConceito';
-import ServicoFechamentoBimestre from '~/servicos/Paginas/Fechamento/ServicoFechamentoBimestre';
 import ListaoContext from '../../../listaoContext';
+import { obterDaodsFechamentoPorBimestreListao } from '../../../listaoFuncoes';
 import ListaoListaFechamento from './listaoListaFechamento';
 
 const TabListaoFechamento = () => {
@@ -31,50 +27,16 @@ const TabListaoFechamento = () => {
     setDadosFechamento();
   };
 
-  const obterListaConceitos = async periodoFim => {
-    const resposta = await ServicoNotaConceito.obterTodosConceitos(
-      periodoFim
-    ).catch(e => erros(e));
-
-    if (resposta?.data?.length) {
-      const novaLista = resposta.data.map(item => {
-        item.id = String(item.id);
-        return item;
-      });
-      return novaLista;
-    }
-    return [];
-  };
-
   const obterFechamentoPorBimestre = useCallback(async () => {
-    setExibirLoaderGeral(true);
-
-    const resposta = await ServicoFechamentoBimestre.obterFechamentoPorBimestre(
-      turmaSelecionada?.turma,
-      turmaSelecionada?.periodo,
+    obterDaodsFechamentoPorBimestreListao(
+      setExibirLoaderGeral,
+      turmaSelecionada,
       bimestreOperacoes,
-      componenteCurricular?.codigoComponenteCurricular
-    )
-      .catch(e => erros(e))
-      .finally(() => setExibirLoaderGeral(false));
-
-    if (resposta?.data) {
-      let listaTiposConceitos = [];
-      if (notasConceitos.Conceitos === Number(resposta?.data?.notaTipo)) {
-        listaTiposConceitos = await obterListaConceitos(
-          resposta?.data?.dataFechamento
-        );
-      }
-      resposta.data.listaTiposConceitos = listaTiposConceitos;
-
-      const dadosCarregar = _.cloneDeep({ ...resposta.data });
-      const dadosIniciais = _.cloneDeep({ ...resposta.data });
-      setDadosFechamento(dadosCarregar);
-      setDadosIniciaisFechamento(dadosIniciais);
-    } else {
-      limparFechamento();
-      setExibirLoaderGeral(false);
-    }
+      componenteCurricular,
+      setDadosFechamento,
+      setDadosIniciaisFechamento,
+      limparFechamento
+    );
   }, [componenteCurricular, turmaSelecionada, bimestreOperacoes]);
 
   useEffect(() => {

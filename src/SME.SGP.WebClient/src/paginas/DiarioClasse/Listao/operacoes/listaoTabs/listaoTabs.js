@@ -61,7 +61,7 @@ const ListaoTabs = () => {
   };
 
   const montarTabs = () => {
-    const ehBimestreFinal = bimestreOperacoes === String(BIMESTRE_FINAL);
+    const ehBimestreFinal = String(bimestreOperacoes) === BIMESTRE_FINAL;
 
     if (ehBimestreFinal) {
       return (

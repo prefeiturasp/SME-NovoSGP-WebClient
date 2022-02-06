@@ -32,6 +32,9 @@ const ServicoFechamentoBimestre = {
       `/v1/fechamentos/turmas/listar?turmaCodigo=${turmaCodigo}&componenteCurricularCodigo=${componenteCurricularCodigo}&bimestre=${bimestre}&semestre=${semestre}`
     );
   },
+  salvarFechamentoPorBimestre(params) {
+    return api.post(`/v1/fechamentos/turmas`, params);
+  },
 };
 
 export default ServicoFechamentoBimestre;
