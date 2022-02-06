@@ -204,6 +204,30 @@ const excluirObservacao = async (obs, setExibirLoaderGeral) => {
   }
 };
 
+const salvarFechamentoListao = (
+  clicouNoBotaoSalvar,
+  setExibirModalJustificativaFechamento,
+  dadosFechamento
+) => {
+  const dadosValidar = _.cloneDeep(dadosFechamento);
+
+  dadosValidar.alunos.map(aluno => {
+    aluno.notasBimestre = aluno.notasConceitoBimestre;
+    return aluno;
+  });
+  const temPorcentagemAceitavel = ServicoNotas.temQuantidadeMinimaAprovada(
+    dadosValidar,
+    dadosFechamento?.percentualAlunosInsuficientes,
+    Number(dadosFechamento?.notaTipo)
+  );
+
+  if (!temPorcentagemAceitavel) {
+    setExibirModalJustificativaFechamento(true);
+  } else {
+    // TODO - Salvar fechamento do listão!
+  }
+};
+
 export {
   onChangeTabListao,
   montarIdsObjetivosSelecionadosListao,
@@ -211,4 +235,5 @@ export {
   obterListaAlunosAvaliacaoListao,
   salvarEditarObservacao,
   excluirObservacao,
+  salvarFechamentoListao,
 };

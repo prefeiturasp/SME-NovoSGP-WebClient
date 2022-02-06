@@ -12,8 +12,10 @@ import { Base } from '~/componentes/colors';
 import { BIMESTRE_FINAL } from '~/constantes/constantes';
 import notasConceitos from '~/dtos/notasConceitos';
 import ListaoContext from '~/paginas/DiarioClasse/Listao/listaoContext';
+import { ContainerAuditoria } from '~/paginas/Fechamento/FechamentoFinal/fechamentoFinal.css';
 import { setTelaEmEdicao } from '~/redux/modulos/geral/actions';
 import FiltroComponentesRegencia from '../componentes/filtroComponentesRegencia';
+import MarcadorAguardandoAprovacao from '../componentes/marcadorAguardandoAprovacao';
 import {
   LinhaTabela,
   MarcadorSituacao,
@@ -21,10 +23,15 @@ import {
 import ListaoCampoConceito from '../tabListaoAvaliacoes/componentes/listaoCampoConceito';
 import ListaoCampoNota from '../tabListaoAvaliacoes/componentes/listaoCampoNota';
 import ColunaNotaConceitoPorBimestre from './componentes/colunaNotaConceitoPorBimestre';
+import ModalJustificativaFechamento from './componentes/modalJustificativaFechamento';
 
 export const ContainerTableFechamento = styled.div`
   tr {
     position: relative;
+  }
+
+  td {
+    padding: 8px 12px !important;
   }
 `;
 
@@ -93,12 +100,28 @@ const ListaoListaFechamento = props => {
       if (aluno) {
         const indexEstudante = alunos?.indexOf?.(aluno);
         const novosDados = dadosFechamento;
-        novosDados.alunos[indexEstudante][refNomeParamOrigemDados][
-          indexNotaFechamento
-        ].notaConceito = valorNovo;
-        novosDados.alunos[indexEstudante][refNomeParamOrigemDados][
-          indexNotaFechamento
-        ].modoEdicao = true;
+        // novosDados.alunos[indexEstudante][refNomeParamOrigemDados][
+        //   indexNotaFechamento
+        // ].notaConceito = valorNovo;
+        // novosDados.alunos[indexEstudante][refNomeParamOrigemDados][
+        //   indexNotaFechamento
+        // ].modoEdicao = true;
+
+        // TODO - Validar para traser nos bimestre de 1 a 4 o objeto montado mesmo quando não tiver valor!
+        const dadosItemAtual =
+          novosDados.alunos[indexEstudante][refNomeParamOrigemDados];
+
+        if (dadosItemAtual[indexNotaFechamento]) {
+          dadosItemAtual[indexNotaFechamento].notaConceito = valorNovo;
+          dadosItemAtual[indexNotaFechamento].modoEdicao = true;
+        } else {
+          novosDados.alunos[indexEstudante][refNomeParamOrigemDados] = [
+            {
+              notaConceito: valorNovo,
+              modoEdicao: true,
+            },
+          ];
+        }
 
         setDadosFechamento(dadosFechamento);
         dispatch(setTelaEmEdicao(true));
@@ -249,18 +272,33 @@ const ListaoListaFechamento = props => {
       align: 'center',
       width: '110px',
     };
-    if (!ehRegencia) {
+
+    if (ehRegencia) {
+      paramsCol.render = dadosEstudante => {
+        const temNotaConceitoEmAprovacao = dadosEstudante?.notasConceitoBimestre?.find?.(
+          item => item?.emAprovacao
+        );
+        if (temNotaConceitoEmAprovacao) return <MarcadorAguardandoAprovacao />;
+
+        return <></>;
+      };
+    } else {
       paramsCol.render = dadosEstudante => {
         // Quando não for regência vai ter somente um(a) nota/conceito!
         const indexNotaFechamento = 0;
         const notaFechamento =
           dadosEstudante.notasConceitoBimestre?.[indexNotaFechamento];
 
-        return montarCampoNotaConceito(
-          dadosEstudante,
-          notaFechamento,
-          indexNotaFechamento,
-          'notasConceitoBimestre'
+        return (
+          <>
+            {montarCampoNotaConceito(
+              dadosEstudante,
+              notaFechamento,
+              indexNotaFechamento,
+              'notasConceitoBimestre'
+            )}
+            {notaFechamento?.emAprovacao && <MarcadorAguardandoAprovacao />}
+          </>
         );
       };
     }
@@ -320,9 +358,15 @@ const ListaoListaFechamento = props => {
           align: 'center',
           dataIndex: `${nomeRef}[${index}]`,
           key: `${nomeRef}[${index}]`,
-          width: '122px',
-          render: dados =>
-            montarCampoNotaConceito(estudante, dados, index, nomeRef),
+          width: '110px',
+          render: dados => {
+            return (
+              <>
+                {montarCampoNotaConceito(estudante, dados, index, nomeRef)}
+                {dados?.emAprovacao && <MarcadorAguardandoAprovacao />}
+              </>
+            );
+          },
         });
       });
     }
@@ -338,68 +382,88 @@ const ListaoListaFechamento = props => {
     return expandIconColumnIndex;
   };
 
+  const getAuditoria = () => (
+    <div className="row mt-2 mb-2 mt-2">
+      <div className="col-md-12">
+        <ContainerAuditoria style={{ float: 'left' }}>
+          <span>
+            <p>{dadosFechamento?.auditoriaInclusao || ''}</p>
+            <p>{dadosFechamento?.auditoriaAlteracao || ''}</p>
+          </span>
+        </ContainerAuditoria>
+      </div>
+    </div>
+  );
+
   const montarTabelaRegencia = () => (
-    <LinhaTabela className="col-md-12 p-0">
-      {ehFinal && (
-        <FiltroComponentesRegencia
-          ehRegencia={ehRegencia}
-          ehSintese={!!dadosFechamento?.ehSintese}
+    <>
+      <LinhaTabela className="col-md-12 p-0">
+        {ehFinal && (
+          <FiltroComponentesRegencia
+            ehRegencia={ehRegencia}
+            ehSintese={!!dadosFechamento?.ehSintese}
+          />
+        )}
+        <DataTable
+          fixExpandedRowResetColSpan
+          scroll={{ x: 1000, y: 500 }}
+          columns={colunasEstudantes}
+          dataSource={dadosFechamento?.alunos}
+          pagination={false}
+          semHover
+          tableResponsive={false}
+          idLinha="codigoAluno"
+          expandIconColumnIndex={getExpandIconColumnIndex()}
+          expandedRowKeys={expandedRowKeys}
+          onClickExpandir={onClickExpandir}
+          rowClassName={record => {
+            const ehLinhaExpandida = temLinhaExpandida(record?.codigoAluno);
+            const nomeClasse = ehLinhaExpandida.length ? 'linha-ativa' : '';
+            return nomeClasse;
+          }}
+          expandedRowRender={(record, indexAluno) => {
+            const colunasDetalhe = montarColunasNotasConceitosRegencia(
+              record,
+              indexAluno
+            );
+            return (
+              <DataTable
+                id={`tabela-aluno-${record?.codigoAluno}`}
+                idLinha="codigoAluno"
+                pagination={false}
+                columns={colunasDetalhe}
+                dataSource={[record]}
+                semHover
+              />
+            );
+          }}
+          expandIcon={({ expanded, onExpand, record }) =>
+            expandIcon(expanded, onExpand, record)
+          }
         />
-      )}
-      <DataTable
-        fixExpandedRowResetColSpan
-        scroll={{ x: 1000, y: 500 }}
-        columns={colunasEstudantes}
-        dataSource={dadosFechamento?.alunos}
-        pagination={false}
-        semHover
-        tableResponsive={false}
-        idLinha="codigoAluno"
-        expandIconColumnIndex={getExpandIconColumnIndex()}
-        expandedRowKeys={expandedRowKeys}
-        onClickExpandir={onClickExpandir}
-        rowClassName={record => {
-          const ehLinhaExpandida = temLinhaExpandida(record?.codigoAluno);
-          const nomeClasse = ehLinhaExpandida.length ? 'linha-ativa' : '';
-          return nomeClasse;
-        }}
-        expandedRowRender={(record, indexAluno) => {
-          const colunasDetalhe = montarColunasNotasConceitosRegencia(
-            record,
-            indexAluno
-          );
-          return (
-            <DataTable
-              id={`tabela-aluno-${record?.codigoAluno}`}
-              idLinha="codigoAluno"
-              pagination={false}
-              columns={colunasDetalhe}
-              dataSource={[record]}
-              semHover
-            />
-          );
-        }}
-        expandIcon={({ expanded, onExpand, record }) =>
-          expandIcon(expanded, onExpand, record)
-        }
-      />
-    </LinhaTabela>
+        {getAuditoria()}
+      </LinhaTabela>
+    </>
   );
 
   return ehRegencia ? (
     montarTabelaRegencia()
   ) : (
-    <ContainerTableFechamento className="col-md-12 p-0">
-      <DataTable
-        scroll={{ x: 1000, y: 500 }}
-        columns={colunasEstudantes}
-        dataSource={dadosFechamento?.alunos}
-        pagination={false}
-        semHover
-        tableResponsive={false}
-        idLinha="codigoAluno"
-      />
-    </ContainerTableFechamento>
+    <>
+      <ContainerTableFechamento className="col-md-12 p-0">
+        <DataTable
+          scroll={{ x: 1000, y: 500 }}
+          columns={colunasEstudantes}
+          dataSource={dadosFechamento?.alunos}
+          pagination={false}
+          semHover
+          tableResponsive={false}
+          idLinha="codigoAluno"
+        />
+      </ContainerTableFechamento>
+      {getAuditoria()}
+      <ModalJustificativaFechamento />
+    </>
   );
 };
 

@@ -48,6 +48,7 @@ import {
   obterDiarioBordoListao,
   obterListaAlunosAvaliacaoListao,
   salvarEditarObservacao,
+  salvarFechamentoListao,
 } from '../listaoFuncoes';
 
 const ListaoOperacoesBotoesAcao = () => {
@@ -91,6 +92,7 @@ const ListaoOperacoesBotoesAcao = () => {
     dadosFechamento,
     setDadosFechamento,
     dadosIniciaisFechamento,
+    setExibirModalJustificativaFechamento,
   } = useContext(ListaoContext);
 
   const telaEmEdicao = useSelector(store => store.geral.telaEmEdicao);
@@ -498,7 +500,11 @@ const ListaoOperacoesBotoesAcao = () => {
   };
 
   const salvarFechamento = clicouNoBotaoSalvar => {
-    console.log(dadosFechamento);
+    salvarFechamentoListao(
+      clicouNoBotaoSalvar,
+      setExibirModalJustificativaFechamento,
+      dadosFechamento
+    );
   };
 
   const onClickSalvarTabAtiva = clicouNoBotaoSalvar => {

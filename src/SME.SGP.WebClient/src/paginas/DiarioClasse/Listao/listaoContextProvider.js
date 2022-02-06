@@ -82,6 +82,10 @@ const ListaoContextProvider = ({ children }) => {
   const [componentesRegenciaListao, setComponentesRegenciaListao] = useState(
     []
   );
+  const [
+    exibirModalJustificativaFechamento,
+    setExibirModalJustificativaFechamento,
+  ] = useState(false);
 
   const limparTabFechamento = () => {
     setDadosFechamento();
@@ -223,6 +227,8 @@ const ListaoContextProvider = ({ children }) => {
         setDadosIniciaisFechamento,
         componentesRegenciaListao,
         setComponentesRegenciaListao,
+        exibirModalJustificativaFechamento,
+        setExibirModalJustificativaFechamento,
       }}
     >
       {children}
