@@ -107,7 +107,7 @@ const ListaoListaFechamento = props => {
         //   indexNotaFechamento
         // ].modoEdicao = true;
 
-        // TODO - Validar para traser nos bimestre de 1 a 4 o objeto montado mesmo quando não tiver valor!
+        // TODO - Validar nos bimestre de 1 a 4 trazer o objeto montado mesmo quando não tiver valor!
         const dadosItemAtual =
           novosDados.alunos[indexEstudante][refNomeParamOrigemDados];
 

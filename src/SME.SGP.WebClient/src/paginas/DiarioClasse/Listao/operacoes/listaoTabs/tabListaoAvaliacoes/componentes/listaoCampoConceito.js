@@ -24,6 +24,7 @@ const ListaoCampoConceito = props => {
     listaTiposConceitos,
     onChangeNotaConceito,
     ehFechamento,
+    styleContainer,
   } = props;
 
   const [exibir, setExibir] = useState(false);
@@ -76,7 +77,7 @@ const ListaoCampoConceito = props => {
 
   const montarCampo = () => (
     <div
-      style={{ paddingRight: 15, paddingLeft: 15 }}
+      style={{ ...styleContainer }}
       onFocus={() => validarExibir(true)}
       onMouseEnter={() => validarExibir(true)}
       onMouseLeave={() => validarExibir(false)}
@@ -136,6 +137,7 @@ ListaoCampoConceito.propTypes = {
   desabilitar: PropTypes.bool,
   listaTiposConceitos: PropTypes.oneOf(PropTypes.array),
   ehFechamento: PropTypes.bool,
+  styleContainer: PropTypes.oneOf(PropTypes.any),
 };
 
 ListaoCampoConceito.defaultProps = {
@@ -145,6 +147,7 @@ ListaoCampoConceito.defaultProps = {
   desabilitar: false,
   listaTiposConceitos: [],
   ehFechamento: false,
+  styleContainer: {},
 };
 
 export default ListaoCampoConceito;

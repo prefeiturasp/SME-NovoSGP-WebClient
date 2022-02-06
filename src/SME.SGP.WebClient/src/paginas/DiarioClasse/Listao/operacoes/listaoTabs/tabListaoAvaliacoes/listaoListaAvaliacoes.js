@@ -139,6 +139,7 @@ const ListaoListaAvaliacoes = () => {
           <>
             {notaAvaliacao?.ausente ? <LabelAusenteCellTable /> : <></>}
             <ListaoCampoConceito
+              styleContainer={{ paddingRight: 15, paddingLeft: 15 }}
               dadosConceito={notaAvaliacao}
               idCampo={shortid.generate()}
               desabilitar={desabilitarCampos || !notaAvaliacao?.podeEditar}
