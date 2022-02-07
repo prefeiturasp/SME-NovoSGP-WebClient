@@ -204,7 +204,9 @@ const ListaoOperacoesFiltros = () => {
 
   const onChangeBimestre = async valor => {
     if (telaEmEdicao) {
-      const salvou = await acaoTelaEmEdicao();
+      const salvou = await acaoTelaEmEdicao(() => {
+        setBimestreOperacoes(valor);
+      });
       if (salvou) {
         setBimestreOperacoes(valor);
       }
@@ -237,7 +239,9 @@ const ListaoOperacoesFiltros = () => {
 
   const onChangeComponenteCurricular = async valor => {
     if (telaEmEdicao) {
-      const salvou = await acaoTelaEmEdicao();
+      const salvou = await acaoTelaEmEdicao(() => {
+        setarComponente(valor);
+      });
       if (salvou) {
         setarComponente(valor);
       }

@@ -91,7 +91,7 @@ const ListaoOperacoesBotoesAcao = () => {
     setDadosFechamento,
     dadosIniciaisFechamento,
     setDadosIniciaisFechamento,
-    setExibirModalJustificativaFechamento,
+    setDadosModalJustificativaFechamento,
   } = useContext(ListaoContext);
 
   const telaEmEdicao = useSelector(store => store.geral.telaEmEdicao);
@@ -498,16 +498,7 @@ const ListaoOperacoesBotoesAcao = () => {
     return false;
   };
 
-  const salvarFechamento = async clicouNoBotaoSalvar => {
-    const salvouFechamento = await validarSalvarFechamentoListao(
-      turmaSelecionada.turma,
-      dadosFechamento,
-      bimestreOperacoes,
-      setExibirLoaderGeral,
-      setExibirModalJustificativaFechamento,
-      componenteCurricular
-    );
-
+  const acaoPosSalvarFechamento = (salvouFechamento, clicouNoBotaoSalvar) => {
     const limparFechamento = () => {
       setDadosIniciaisFechamento();
       setDadosFechamento();
@@ -528,7 +519,25 @@ const ListaoOperacoesBotoesAcao = () => {
     return salvouFechamento;
   };
 
-  const onClickSalvarTabAtiva = clicouNoBotaoSalvar => {
+  const salvarFechamento = async (clicouNoBotaoSalvar, acaoPosSalvar) => {
+    const posSalvar = clicouNoBotaoSalvar
+      ? salvou => acaoPosSalvarFechamento(salvou, clicouNoBotaoSalvar)
+      : acaoPosSalvar;
+
+    const salvouFechamento = await validarSalvarFechamentoListao(
+      turmaSelecionada.turma,
+      dadosFechamento,
+      bimestreOperacoes,
+      setExibirLoaderGeral,
+      setDadosModalJustificativaFechamento,
+      componenteCurricular,
+      posSalvar
+    );
+
+    return acaoPosSalvarFechamento(salvouFechamento, clicouNoBotaoSalvar);
+  };
+
+  const onClickSalvarTabAtiva = (clicouNoBotaoSalvar, acaoPosSalvar) => {
     switch (tabAtual) {
       case LISTAO_TAB_FREQUENCIA:
         return salvarFrequencia();
@@ -539,20 +548,20 @@ const ListaoOperacoesBotoesAcao = () => {
       case LISTAO_TAB_DIARIO_BORDO:
         return salvarDiarioBordo(clicouNoBotaoSalvar);
       case LISTAO_TAB_FECHAMENTO:
-        return salvarFechamento(clicouNoBotaoSalvar);
+        return salvarFechamento(clicouNoBotaoSalvar, acaoPosSalvar);
 
       default:
         return true;
     }
   };
 
-  const validarSalvar = async () => {
+  const validarSalvar = async acaoPosSalvar => {
     let salvou = true;
     if (!desabilitarBotoes && telaEmEdicao) {
       const confirmado = await pergutarParaSalvar();
 
       if (confirmado) {
-        salvou = await onClickSalvarTabAtiva();
+        salvou = await onClickSalvarTabAtiva(false, acaoPosSalvar);
       } else {
         dispatch(setTelaEmEdicao(false));
       }
@@ -562,7 +571,9 @@ const ListaoOperacoesBotoesAcao = () => {
 
   useEffect(() => {
     if (telaEmEdicao) {
-      dispatch(setAcaoTelaEmEdicao(validarSalvar));
+      dispatch(
+        setAcaoTelaEmEdicao(acaoPosSalvar => validarSalvar(acaoPosSalvar))
+      );
     } else {
       dispatch(setLimparModoEdicaoGeral());
     }
@@ -570,7 +581,9 @@ const ListaoOperacoesBotoesAcao = () => {
 
   const onClickVoltar = async () => {
     if (!desabilitarBotoes && telaEmEdicao) {
-      const salvou = await validarSalvar();
+      const salvou = await validarSalvar(() => {
+        history.push(RotasDto.LISTAO);
+      });
       if (salvou) {
         history.push(RotasDto.LISTAO);
       }

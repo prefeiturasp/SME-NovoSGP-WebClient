@@ -1,20 +1,29 @@
 import { Form, Formik } from 'formik';
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
+import { useSelector } from 'react-redux';
 import * as Yup from 'yup';
-import { Colors, ModalConteudoHtml } from '~/componentes';
+import { Colors, Loader, ModalConteudoHtml } from '~/componentes';
 import Alert from '~/componentes/alert';
 import Button from '~/componentes/button';
 import JoditEditor from '~/componentes/jodit-editor/joditEditor';
 import notasConceitos from '~/dtos/notasConceitos';
 import ListaoContext from '~/paginas/DiarioClasse/Listao/listaoContext';
+import { salvarFechamentoListao } from '~/paginas/DiarioClasse/Listao/listaoFuncoes';
 
 const ModalJustificativaFechamento = () => {
   const {
     dadosFechamento,
+    bimestreOperacoes,
     setDadosFechamento,
-    exibirModalJustificativaFechamento,
-    setExibirModalJustificativaFechamento,
+    componenteCurricular,
+    dadosModalJustificativaFechamento,
+    setDadosModalJustificativaFechamento,
   } = useContext(ListaoContext);
+
+  const usuario = useSelector(store => store.usuario);
+  const { turmaSelecionada } = usuario;
+
+  const [exibirLoader, setExibirLoader] = useState(false);
 
   const ehNota = Number(dadosFechamento?.notaTipo) === notasConceitos.Notas;
 
@@ -34,18 +43,34 @@ const ModalJustificativaFechamento = () => {
     setDadosFechamento(dadosFechamento);
   };
 
-  const onClickCancelar = form => {
+  const limparDadosModal = form => {
     form.setFieldValue('descricao', '');
     form.resetForm({ descricao: '' });
-    onChangeJustificativa('');
-    setExibirModalJustificativaFechamento(false);
+    setTimeout(() => {
+      setDadosModalJustificativaFechamento();
+    }, 500);
   };
 
-  const onConfirmarJustificativa = form => {
+  const onConfirmarJustificativa = async form => {
     onChangeJustificativa(form?.values?.descricao || '');
-    onClickCancelar(form);
-    setExibirModalJustificativaFechamento(false);
+
+    const salvou = await salvarFechamentoListao(
+      turmaSelecionada.turma,
+      false,
+      dadosFechamento,
+      bimestreOperacoes,
+      setExibirLoader,
+      componenteCurricular
+    );
+
+    if (salvou && dadosModalJustificativaFechamento.acaoPosSalvar) {
+      limparDadosModal(form);
+      dadosModalJustificativaFechamento.acaoPosSalvar(true);
+    } else {
+      limparDadosModal(form);
+    }
   };
+
   const validaAntesDoSubmit = form => {
     form.setFieldTouched('descricao', true, true);
     form.validateForm().then(() => {
@@ -55,27 +80,28 @@ const ModalJustificativaFechamento = () => {
     });
   };
 
-  return (
-    exibirModalJustificativaFechamento && (
-      <ModalConteudoHtml
-        key="inserirJutificativa"
-        visivel={exibirModalJustificativaFechamento}
-        titulo="Inserir justificativa"
-        esconderBotaoPrincipal
-        esconderBotaoSecundario
-        closable={false}
-        fecharAoClicarFora={false}
-        fecharAoClicarEsc={false}
-        width="650px"
+  return dadosModalJustificativaFechamento?.exibirModal ? (
+    <ModalConteudoHtml
+      key="inserirJutificativa"
+      visivel={dadosModalJustificativaFechamento?.exibirModal}
+      titulo="Inserir justificativa"
+      esconderBotaoPrincipal
+      esconderBotaoSecundario
+      closable={false}
+      fecharAoClicarFora={false}
+      fecharAoClicarEsc={false}
+      width="650px"
+      loader={exibirLoader}
+    >
+      <Formik
+        enableReinitialize
+        initialValues={{ descricao: '' }}
+        validationSchema={validacoes}
+        validateOnChange
+        validateOnBlur
       >
-        <Formik
-          enableReinitialize
-          initialValues={{ descricao: '' }}
-          validationSchema={validacoes}
-          validateOnChange
-          validateOnBlur
-        >
-          {form => (
+        {form => (
+          <Loader loading={exibirLoader} tip="Salvando Fechamento">
             <Form>
               <div className="col-md-12">
                 <Alert
@@ -109,7 +135,10 @@ const ModalJustificativaFechamento = () => {
                   bold
                   border
                   className="mr-3 mt-2 padding-btn-confirmacao"
-                  onClick={() => onClickCancelar(form)}
+                  onClick={() => {
+                    onChangeJustificativa('');
+                    limparDadosModal(form);
+                  }}
                 />
                 <Button
                   key="btn-sim-confirmacao-justificativa"
@@ -122,10 +151,12 @@ const ModalJustificativaFechamento = () => {
                 />
               </div>
             </Form>
-          )}
-        </Formik>
-      </ModalConteudoHtml>
-    )
+          </Loader>
+        )}
+      </Formik>
+    </ModalConteudoHtml>
+  ) : (
+    <></>
   );
 };
 
