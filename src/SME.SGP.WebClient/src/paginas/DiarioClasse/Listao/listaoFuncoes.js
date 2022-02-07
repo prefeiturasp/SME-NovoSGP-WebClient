@@ -252,7 +252,7 @@ const salvarFechamentoListao = async (
   dadosFechamento,
   bimestreOperacoes,
   setExibirLoaderGeral,
-  codigoComponenteCurricularSelecionado
+  componenteCurricular
 ) => {
   const temAvaliacoesBimestraisPendentes = dadosFechamento?.observacoes?.length;
   let continuarSalvar = true;
@@ -283,7 +283,7 @@ const salvarFechamentoListao = async (
           conceitoId: !ehNota ? dadosNotaConceito.notaConceito : null,
           disciplinaId:
             dadosNotaConceito.disciplinaCodigo ||
-            codigoComponenteCurricularSelecionado,
+            componenteCurricular?.codigoComponenteCurricular,
         });
       }
     });
@@ -293,15 +293,17 @@ const salvarFechamentoListao = async (
     id: dadosFechamento.fechamentoId,
     turmaId: turma,
     bimestre: bimestreOperacoes,
-    disciplinaId: codigoComponenteCurricularSelecionado,
+    disciplinaId: componenteCurricular?.codigoComponenteCurricular,
     notaConceitoAlunos,
     justificativa: dadosFechamento?.justificativa || null,
+    ehRegencia: componenteCurricular?.regencia,
+    ehFinal: ehBimestreFinal,
   };
 
   setExibirLoaderGeral(true);
-  const resposta = await ServicoFechamentoBimestre.salvarFechamentoPorBimestre([
-    dadosParaSalvar,
-  ])
+  const resposta = await ServicoFechamentoBimestre.salvarFechamentoPorBimestre(
+    dadosParaSalvar
+  )
     .catch(e => erros(e))
     .finally(() => setExibirLoaderGeral(false));
 
@@ -322,7 +324,7 @@ const validarSalvarFechamentoListao = (
   bimestreOperacoes,
   setExibirLoaderGeral,
   setExibirModalJustificativaFechamento,
-  codigoComponenteCurricularSelecionado
+  componenteCurricular
 ) => {
   const ehBimestreFinal = String(bimestreOperacoes) === BIMESTRE_FINAL;
 
@@ -333,7 +335,8 @@ const validarSalvarFechamentoListao = (
       dadosFechamento,
       bimestreOperacoes,
       setExibirLoaderGeral,
-      codigoComponenteCurricularSelecionado
+      componenteCurricular,
+      ehBimestreFinal
     );
 
   const dadosValidar = _.cloneDeep(dadosFechamento);
@@ -358,7 +361,8 @@ const validarSalvarFechamentoListao = (
     dadosFechamento,
     bimestreOperacoes,
     setExibirLoaderGeral,
-    codigoComponenteCurricularSelecionado
+    componenteCurricular,
+    ehBimestreFinal
   );
 };
 

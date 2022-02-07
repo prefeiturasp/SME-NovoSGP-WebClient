@@ -505,7 +505,7 @@ const ListaoOperacoesBotoesAcao = () => {
       bimestreOperacoes,
       setExibirLoaderGeral,
       setExibirModalJustificativaFechamento,
-      componenteCurricular?.codigoComponenteCurricular
+      componenteCurricular
     );
 
     const limparFechamento = () => {

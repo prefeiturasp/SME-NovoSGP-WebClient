@@ -33,7 +33,7 @@ const ServicoFechamentoBimestre = {
     );
   },
   salvarFechamentoPorBimestre(params) {
-    return api.post(`/v1/fechamentos/turmas`, params);
+    return api.post(`/v1/fechamentos/turmas/salvar-fechamento`, params);
   },
 };
 
