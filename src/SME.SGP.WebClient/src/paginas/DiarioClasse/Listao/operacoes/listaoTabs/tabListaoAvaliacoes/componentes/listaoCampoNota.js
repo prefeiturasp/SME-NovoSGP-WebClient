@@ -131,11 +131,7 @@ const ListaoCampoNota = props => {
   }
 
   const montarCampo = () => (
-    <div
-      onFocus={() => validarExibir(true)}
-      onMouseEnter={() => validarExibir(true)}
-      onMouseLeave={() => validarExibir(false)}
-    >
+    <div onFocus={() => validarExibir(true)}>
       {!desabilitar && exibir ? (
         <CampoNumero
           styleContainer={{ height: 38 }}
@@ -151,6 +147,8 @@ const ListaoCampoNota = props => {
           placeholder="Nota"
           disabled={desabilitar}
           styleCampo={{ ...styleCampo }}
+          maxlength={2}
+          autoFocus
         />
       ) : (
         <InputNumberReadOnly
