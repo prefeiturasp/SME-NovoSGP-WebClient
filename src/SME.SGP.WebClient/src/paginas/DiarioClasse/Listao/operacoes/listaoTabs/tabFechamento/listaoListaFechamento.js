@@ -393,7 +393,7 @@ const ListaoListaFechamento = props => {
 
   const montarTabelaRegencia = () => (
     <>
-      {ehFinal && <SituacaoFechamentoListao />}
+      {!ehFinal && <SituacaoFechamentoListao />}
       <LinhaTabela className="col-md-12 p-0">
         {ehFinal && (
           <FiltroComponentesRegencia
@@ -447,7 +447,7 @@ const ListaoListaFechamento = props => {
     montarTabelaRegencia()
   ) : (
     <>
-      {ehFinal && <SituacaoFechamentoListao />}
+      {!ehFinal && <SituacaoFechamentoListao />}
       <ContainerTableFechamento className="col-md-12 p-0">
         <DataTable
           scroll={{ x: 1000, y: 500 }}
