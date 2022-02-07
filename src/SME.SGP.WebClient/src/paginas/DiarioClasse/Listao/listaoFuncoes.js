@@ -18,7 +18,10 @@ const onChangeTabListao = async (
 
   const { geral } = state;
   if (geral?.telaEmEdicao && geral?.acaoTelaEmEdicao) {
-    const salvou = await geral.acaoTelaEmEdicao();
+    const salvou = await geral.acaoTelaEmEdicao(() => {
+      acaoLimparTelaAntesTrocarAba();
+      setTabAtual(tabAtiva);
+    });
     if (salvou) {
       acaoLimparTelaAntesTrocarAba();
       setTabAtual(tabAtiva);
@@ -236,6 +239,7 @@ const obterDaodsFechamentoPorBimestreListao = async (
     }
     resposta.data.listaTiposConceitos = listaTiposConceitos;
 
+    limparFechamento();
     const dadosCarregar = _.cloneDeep({ ...resposta.data });
     const dadosIniciais = _.cloneDeep({ ...resposta.data });
     setDadosFechamento(dadosCarregar);
@@ -324,7 +328,8 @@ const validarSalvarFechamentoListao = (
   bimestreOperacoes,
   setExibirLoaderGeral,
   setExibirModalJustificativaFechamento,
-  componenteCurricular
+  componenteCurricular,
+  acaoPosSalvar
 ) => {
   const ehBimestreFinal = String(bimestreOperacoes) === BIMESTRE_FINAL;
 
@@ -335,8 +340,7 @@ const validarSalvarFechamentoListao = (
       dadosFechamento,
       bimestreOperacoes,
       setExibirLoaderGeral,
-      componenteCurricular,
-      ehBimestreFinal
+      componenteCurricular
     );
 
   const dadosValidar = _.cloneDeep(dadosFechamento);
@@ -351,7 +355,10 @@ const validarSalvarFechamentoListao = (
   );
 
   if (!temPorcentagemAceitavel) {
-    setExibirModalJustificativaFechamento(true);
+    setExibirModalJustificativaFechamento({
+      acaoPosSalvar,
+      exibirModal: true,
+    });
     return false;
   }
 
@@ -361,8 +368,7 @@ const validarSalvarFechamentoListao = (
     dadosFechamento,
     bimestreOperacoes,
     setExibirLoaderGeral,
-    componenteCurricular,
-    ehBimestreFinal
+    componenteCurricular
   );
 };
 
@@ -375,4 +381,5 @@ export {
   excluirObservacao,
   obterDaodsFechamentoPorBimestreListao,
   validarSalvarFechamentoListao,
+  salvarFechamentoListao,
 };

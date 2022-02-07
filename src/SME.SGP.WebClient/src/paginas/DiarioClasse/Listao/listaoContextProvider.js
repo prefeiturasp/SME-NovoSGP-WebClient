@@ -83,14 +83,15 @@ const ListaoContextProvider = ({ children }) => {
     []
   );
   const [
-    exibirModalJustificativaFechamento,
-    setExibirModalJustificativaFechamento,
-  ] = useState(false);
+    dadosModalJustificativaFechamento,
+    setDadosModalJustificativaFechamento,
+  ] = useState();
 
   const limparTabFechamento = () => {
     setDadosFechamento();
     setDadosIniciaisFechamento();
     setComponentesRegenciaListao([]);
+    setDadosModalJustificativaFechamento();
   };
 
   const limparTabFrequencia = () => {
@@ -227,8 +228,8 @@ const ListaoContextProvider = ({ children }) => {
         setDadosIniciaisFechamento,
         componentesRegenciaListao,
         setComponentesRegenciaListao,
-        exibirModalJustificativaFechamento,
-        setExibirModalJustificativaFechamento,
+        dadosModalJustificativaFechamento,
+        setDadosModalJustificativaFechamento,
       }}
     >
       {children}
