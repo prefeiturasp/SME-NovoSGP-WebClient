@@ -24,6 +24,7 @@ import ListaoCampoConceito from '../tabListaoAvaliacoes/componentes/listaoCampoC
 import ListaoCampoNota from '../tabListaoAvaliacoes/componentes/listaoCampoNota';
 import ColunaNotaConceitoPorBimestre from './componentes/colunaNotaConceitoPorBimestre';
 import ModalJustificativaFechamento from './componentes/modalJustificativaFechamento';
+import SituacaoFechamentoListao from './componentes/situacaoFechamentoListao';
 
 export const ContainerTableFechamento = styled.div`
   tr {
@@ -140,43 +141,49 @@ const ListaoListaFechamento = props => {
     switch (Number(dadosFechamento?.notaTipo)) {
       case notasConceitos.Notas:
         return (
-          <ListaoCampoNota
-            dadosNota={notaFechamento}
-            idCampo={shortid.generate()}
-            desabilitar={desabilitar}
-            podeEditar={dadosEstudante?.podeEditar}
-            ehFechamento
-            periodoFim={dadosFechamento?.dataFechamento}
-            mediaAprovacaoBimestre={dadosFechamento?.mediaAprovacaoBimestre}
-            onChangeNotaConceito={valorNovo =>
-              onChangeNotaConceito(
-                valorNovo,
-                dadosEstudante?.codigoAluno,
-                dadosEstudante?.podeEditar,
-                indexNotaFechamento,
-                refNomeParamOrigemDados
-              )
-            }
-          />
+          <>
+            <ListaoCampoNota
+              dadosNota={notaFechamento}
+              idCampo={shortid.generate()}
+              desabilitar={desabilitar}
+              podeEditar={dadosEstudante?.podeEditar}
+              ehFechamento
+              periodoFim={dadosFechamento?.dataFechamento}
+              mediaAprovacaoBimestre={dadosFechamento?.mediaAprovacaoBimestre}
+              onChangeNotaConceito={valorNovo =>
+                onChangeNotaConceito(
+                  valorNovo,
+                  dadosEstudante?.codigoAluno,
+                  dadosEstudante?.podeEditar,
+                  indexNotaFechamento,
+                  refNomeParamOrigemDados
+                )
+              }
+            />
+            {notaFechamento?.emAprovacao && <MarcadorAguardandoAprovacao />}
+          </>
         );
       case notasConceitos.Conceitos:
         return (
-          <ListaoCampoConceito
-            dadosConceito={notaFechamento}
-            idCampo={shortid.generate()}
-            desabilitar={desabilitar}
-            listaTiposConceitos={dadosFechamento?.listaTiposConceitos}
-            ehFechamento
-            onChangeNotaConceito={valorNovo =>
-              onChangeNotaConceito(
-                valorNovo,
-                dadosEstudante?.codigoAluno,
-                dadosEstudante?.podeEditar,
-                indexNotaFechamento,
-                refNomeParamOrigemDados
-              )
-            }
-          />
+          <>
+            <ListaoCampoConceito
+              dadosConceito={notaFechamento}
+              idCampo={shortid.generate()}
+              desabilitar={desabilitar}
+              listaTiposConceitos={dadosFechamento?.listaTiposConceitos}
+              ehFechamento
+              onChangeNotaConceito={valorNovo =>
+                onChangeNotaConceito(
+                  valorNovo,
+                  dadosEstudante?.codigoAluno,
+                  dadosEstudante?.podeEditar,
+                  indexNotaFechamento,
+                  refNomeParamOrigemDados
+                )
+              }
+            />
+            {notaFechamento?.emAprovacao && <MarcadorAguardandoAprovacao />}
+          </>
         );
       default:
         return '';
@@ -289,16 +296,11 @@ const ListaoListaFechamento = props => {
         const notaFechamento =
           dadosEstudante.notasConceitoBimestre?.[indexNotaFechamento];
 
-        return (
-          <>
-            {montarCampoNotaConceito(
-              dadosEstudante,
-              notaFechamento,
-              indexNotaFechamento,
-              'notasConceitoBimestre'
-            )}
-            {notaFechamento?.emAprovacao && <MarcadorAguardandoAprovacao />}
-          </>
+        return montarCampoNotaConceito(
+          dadosEstudante,
+          notaFechamento,
+          indexNotaFechamento,
+          'notasConceitoBimestre'
         );
       };
     }
@@ -359,14 +361,8 @@ const ListaoListaFechamento = props => {
           dataIndex: `${nomeRef}[${index}]`,
           key: `${nomeRef}[${index}]`,
           width: '110px',
-          render: dados => {
-            return (
-              <>
-                {montarCampoNotaConceito(estudante, dados, index, nomeRef)}
-                {dados?.emAprovacao && <MarcadorAguardandoAprovacao />}
-              </>
-            );
-          },
+          render: dados =>
+            montarCampoNotaConceito(estudante, dados, index, nomeRef),
         });
       });
     }
@@ -397,6 +393,7 @@ const ListaoListaFechamento = props => {
 
   const montarTabelaRegencia = () => (
     <>
+      {!ehFinal && <SituacaoFechamentoListao />}
       <LinhaTabela className="col-md-12 p-0">
         {ehFinal && (
           <FiltroComponentesRegencia
@@ -450,6 +447,7 @@ const ListaoListaFechamento = props => {
     montarTabelaRegencia()
   ) : (
     <>
+      {!ehFinal && <SituacaoFechamentoListao />}
       <ContainerTableFechamento className="col-md-12 p-0">
         <DataTable
           scroll={{ x: 1000, y: 500 }}
