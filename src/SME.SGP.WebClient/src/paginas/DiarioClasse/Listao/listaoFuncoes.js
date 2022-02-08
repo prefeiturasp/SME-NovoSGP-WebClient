@@ -261,19 +261,6 @@ const salvarFechamentoListao = async (
   setExibirLoaderGeral,
   componenteCurricular
 ) => {
-  const temAvaliacoesBimestraisPendentes = dadosFechamento?.observacoes?.length;
-  let continuarSalvar = true;
-
-  if (temAvaliacoesBimestraisPendentes) {
-    continuarSalvar = await confirmar(
-      'Atenção',
-      dadosFechamento.observacoes,
-      'Deseja continuar mesmo assim com o fechamento do(s) bimestre(s)?'
-    );
-  }
-
-  if (!continuarSalvar) return false;
-
   const notaConceitoAlunos = [];
   const ehNota = Number(dadosFechamento?.notaTipo) === notasConceitos.Notas;
 
@@ -286,8 +273,8 @@ const salvarFechamentoListao = async (
       if (dadosNotaConceito.modoEdicao) {
         notaConceitoAlunos.push({
           codigoAluno: aluno.codigoAluno,
-          nota: ehNota ? dadosNotaConceito.notaConceito : null,
-          conceitoId: !ehNota ? dadosNotaConceito.notaConceito : null,
+          nota: ehNota ? dadosNotaConceito.notaConceito || '' : '',
+          conceitoId: !ehNota ? dadosNotaConceito.notaConceito || '' : '',
           disciplinaId:
             dadosNotaConceito.disciplinaCodigo ||
             componenteCurricular?.codigoComponenteCurricular,
@@ -325,7 +312,7 @@ const salvarFechamentoListao = async (
   return false;
 };
 
-const validarSalvarFechamentoListao = (
+const validarSalvarFechamentoListao = async (
   turma,
   dadosFechamento,
   bimestreOperacoes,
@@ -334,6 +321,19 @@ const validarSalvarFechamentoListao = (
   componenteCurricular,
   acaoPosSalvar
 ) => {
+  const temAvaliacoesBimestraisPendentes = dadosFechamento?.observacoes?.length;
+  let continuarSalvar = true;
+
+  if (temAvaliacoesBimestraisPendentes) {
+    continuarSalvar = await confirmar(
+      'Atenção',
+      dadosFechamento.observacoes,
+      'Deseja continuar mesmo assim com o fechamento do(s) bimestre(s)?'
+    );
+  }
+
+  if (!continuarSalvar) return false;
+
   const ehBimestreFinal = String(bimestreOperacoes) === BIMESTRE_FINAL;
 
   if (ehBimestreFinal)

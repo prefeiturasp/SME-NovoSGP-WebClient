@@ -147,7 +147,7 @@ const ListaoCampoNota = props => {
           placeholder="Nota"
           disabled={desabilitar}
           styleCampo={{ ...styleCampo }}
-          maxlength={2}
+          maxlength={3}
           autoFocus
         />
       ) : (
