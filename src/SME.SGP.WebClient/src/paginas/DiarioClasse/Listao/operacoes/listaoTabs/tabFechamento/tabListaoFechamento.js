@@ -57,7 +57,7 @@ const TabListaoFechamento = () => {
     };
   }, []);
 
-  const ehEJA = !!Number(turmaSelecionada?.modalidade) === ModalidadeDTO.EJA;
+  const ehEJA = Number(turmaSelecionada?.modalidade) === ModalidadeDTO.EJA;
 
   return (
     <>
