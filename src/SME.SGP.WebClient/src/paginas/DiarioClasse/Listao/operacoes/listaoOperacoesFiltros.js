@@ -9,7 +9,12 @@ import {
 import { ModalidadeDTO, RotasDto } from '~/dtos';
 import { setLimparModoEdicaoGeral } from '~/redux/modulos/geral/actions';
 import { setSomenteConsulta } from '~/redux/modulos/navegacao/actions';
-import { erros, ServicoDisciplina, verificaSomenteConsulta } from '~/servicos';
+import {
+  erros,
+  ServicoDisciplina,
+  ServicoPeriodoFechamento,
+  verificaSomenteConsulta,
+} from '~/servicos';
 import ServicoPeriodoEscolar from '~/servicos/Paginas/Calendario/ServicoPeriodoEscolar';
 import { ordenarPor } from '~/utils';
 import ListaoContext from '../listaoContext';
@@ -135,7 +140,17 @@ const ListaoOperacoesFiltros = () => {
       });
 
       if (Number(modalidade) !== ModalidadeDTO.INFANTIL) {
-        lista.push({ descricao: 'Final', valor: '0' });
+        const resultado = await ServicoPeriodoFechamento.verificarSePodeAlterarNoPeriodo(
+          turma,
+          0
+        ).catch(e => erros(e));
+
+        const finalAberto = !!resultado?.data;
+        lista.push({
+          descricao: 'Final',
+          valor: '0',
+          periodoAberto: finalAberto,
+        });
       }
       setListaBimestresOperacoes(lista);
     } else {
@@ -190,7 +205,9 @@ const ListaoOperacoesFiltros = () => {
 
   const onChangeBimestre = async valor => {
     if (telaEmEdicao) {
-      const salvou = await acaoTelaEmEdicao();
+      const salvou = await acaoTelaEmEdicao(() => {
+        setBimestreOperacoes(valor);
+      });
       if (salvou) {
         setBimestreOperacoes(valor);
       }
@@ -223,7 +240,9 @@ const ListaoOperacoesFiltros = () => {
 
   const onChangeComponenteCurricular = async valor => {
     if (telaEmEdicao) {
-      const salvou = await acaoTelaEmEdicao();
+      const salvou = await acaoTelaEmEdicao(() => {
+        setarComponente(valor);
+      });
       if (salvou) {
         setarComponente(valor);
       }
