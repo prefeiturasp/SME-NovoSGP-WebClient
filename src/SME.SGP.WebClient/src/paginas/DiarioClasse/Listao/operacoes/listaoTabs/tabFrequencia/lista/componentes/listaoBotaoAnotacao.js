@@ -3,33 +3,21 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Tooltip } from 'antd';
 import PropTypes from 'prop-types';
 import React from 'react';
-import { useDispatch } from 'react-redux';
 import { Base } from '~/componentes/colors';
 import { ContainerBtbAnotacao } from '~/paginas/DiarioClasse/Listao/operacoes/listaoTabs/tabFrequencia/lista/listaFrequencia.css';
-import {
-  setDadosModalAnotacaoFrequencia,
-  setExibirModalAnotacaoFrequencia,
-} from '~/redux/modulos/modalAnotacaoFrequencia/actions';
 
 const ListaoBotaoAnotacao = props => {
   const {
     desabilitarCampos,
     ehInfantil,
-    aluno,
     permiteAnotacao,
     possuiAnotacao,
+    onClickAnotacao,
   } = props;
-
-  const dispatch = useDispatch();
 
   const podeAbrirModal =
     (permiteAnotacao && !desabilitarCampos) ||
     (possuiAnotacao && desabilitarCampos);
-
-  const onClickAnotacao = () => {
-    dispatch(setDadosModalAnotacaoFrequencia(aluno));
-    dispatch(setExibirModalAnotacaoFrequencia(true));
-  };
 
   const cor = possuiAnotacao ? Base.Azul : Base.CinzaMako;
 
@@ -73,16 +61,16 @@ const ListaoBotaoAnotacao = props => {
 ListaoBotaoAnotacao.propTypes = {
   desabilitarCampos: PropTypes.bool,
   ehInfantil: PropTypes.bool,
-  aluno: PropTypes.oneOfType(PropTypes.any),
   permiteAnotacao: PropTypes.bool,
   possuiAnotacao: PropTypes.bool,
+  onClickAnotacao: PropTypes.func,
 };
 ListaoBotaoAnotacao.defaultProps = {
   desabilitarCampos: false,
   ehInfantil: false,
-  aluno: null,
   permiteAnotacao: true,
   possuiAnotacao: true,
+  onClickAnotacao: () => null,
 };
 
 export default ListaoBotaoAnotacao;

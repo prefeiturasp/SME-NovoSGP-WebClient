@@ -22,6 +22,7 @@ import {
 } from '../tabFrequencia/lista/listaFrequencia.css';
 import ListaoCampoConceito from '../tabListaoAvaliacoes/componentes/listaoCampoConceito';
 import ListaoCampoNota from '../tabListaoAvaliacoes/componentes/listaoCampoNota';
+import AnotacoesFechamentoLisao from './componentes/anotacoesFechamentoLisao';
 import ColunaNotaConceitoPorBimestre from './componentes/colunaNotaConceitoPorBimestre';
 import ModalJustificativaFechamento from './componentes/modalJustificativaFechamento';
 import SituacaoFechamentoListao from './componentes/situacaoFechamentoListao';
@@ -46,6 +47,7 @@ const ListaoListaFechamento = props => {
     somenteConsultaListao,
     periodoAbertoListao,
     bimestreOperacoes,
+    listaoEhInfantil,
   } = useContext(ListaoContext);
 
   const { ehEJA } = props;
@@ -56,36 +58,44 @@ const ListaoListaFechamento = props => {
 
   const ehFinal = bimestreOperacoes === BIMESTRE_FINAL;
 
-  const montarColunaNumeroEstudante = aluno => {
-    return (
-      <span className="d-flex justify-content-center">
-        <span>{aluno.numeroChamada}</span>
+  const montarColunaNumeroEstudante = aluno => (
+    <span className="d-flex justify-content-center">
+      <span>{aluno.numeroChamada}</span>
 
-        {aluno?.marcador && (
-          <Tooltip title={aluno?.marcador?.descricao} placement="top">
-            <MarcadorSituacao
-              className="fas fa-circle"
-              style={{
-                marginRight: '-10px',
-                color: Base.Roxo,
-              }}
-            />
-          </Tooltip>
-        )}
-      </span>
-    );
-  };
+      {aluno?.marcador && (
+        <Tooltip title={aluno?.marcador?.descricao} placement="top">
+          <MarcadorSituacao
+            className="fas fa-circle"
+            style={{
+              marginRight: '-10px',
+              color: Base.Roxo,
+            }}
+          />
+        </Tooltip>
+      )}
+    </span>
+  );
 
-  const montarColunaEstudante = aluno => {
-    return (
-      <div className="d-flex justify-content-between">
-        <div className="d-flex justify-content-start">{aluno.nome}</div>
-        <div className=" d-flex justify-content-end">
+  const montarColunaEstudante = aluno => (
+    <div className="d-flex justify-content-between">
+      <div className="d-flex justify-content-start">{aluno.nome}</div>
+      <div className=" d-flex justify-content-end">
+        <div className="mr-3">
           <SinalizacaoAEE exibirSinalizacao={aluno.ehAtendidoAEE} />
         </div>
+        {!ehFinal && (
+          <AnotacoesFechamentoLisao
+            desabilitar={desabilitarCampos}
+            ehInfantil={listaoEhInfantil}
+            aluno={aluno}
+            fechamentoId={dadosFechamento.fechamentoId}
+            dadosFechamento={dadosFechamento}
+            setDadosFechamento={setDadosFechamento}
+          />
+        )}
       </div>
-    );
-  };
+    </div>
+  );
 
   const onChangeNotaConceito = (
     valorNovo,
@@ -101,14 +111,6 @@ const ListaoListaFechamento = props => {
       if (aluno) {
         const indexEstudante = alunos?.indexOf?.(aluno);
         const novosDados = dadosFechamento;
-        // novosDados.alunos[indexEstudante][refNomeParamOrigemDados][
-        //   indexNotaFechamento
-        // ].notaConceito = valorNovo;
-        // novosDados.alunos[indexEstudante][refNomeParamOrigemDados][
-        //   indexNotaFechamento
-        // ].modoEdicao = true;
-
-        // TODO - Validar nos bimestre de 1 a 4 trazer o objeto montado mesmo quando não tiver valor!
         const dadosItemAtual =
           novosDados.alunos[indexEstudante][refNomeParamOrigemDados];
 

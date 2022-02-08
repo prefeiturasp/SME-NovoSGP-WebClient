@@ -64,7 +64,7 @@ const ModalAnotacaoAluno = props => {
       .catch(e => erros(e));
     if (resultado && resultado.status == 200) {
       if (resultado.data.sucesso) {
-        sucesso(`Anotação ${excluir ? 'excluída' : 'salva'} com sucesso`);
+        sucesso(`Anotação ${excluir ? 'excluída' : 'registrada'} com sucesso`);
         onClose(!excluir, excluir);
       } else {
         erro(resultado.data.mensagemConsistencia);
@@ -147,7 +147,7 @@ const ModalAnotacaoAluno = props => {
       onClose={() => validaAntesDeFechar()}
       esconderBotaoPrincipal
       esconderBotaoSecundario
-      width="650px"
+      width={750}
       closable
     >
       <Formik
@@ -196,6 +196,16 @@ const ModalAnotacaoAluno = props => {
                 />
               </div>
               <div className="col-md-4 d-flex justify-content-end">
+                <Button
+                  key="btn-voltar-anotacao"
+                  id="btn-voltar-anotacao"
+                  label="Voltar"
+                  icon="arrow-left"
+                  color={Colors.Azul}
+                  border
+                  onClick={validaAntesDeFechar}
+                  className="mr-3 mt-2 padding-btn-confirmacao"
+                />
                 <Button
                   key="btn-excluir-anotacao"
                   label="Excluir"
