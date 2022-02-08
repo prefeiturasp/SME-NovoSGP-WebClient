@@ -244,7 +244,7 @@ SelectComponent.propTypes = {
   valueText: PropTypes.string.isRequired,
   valueOption: PropTypes.string.isRequired,
   valueSelect: PropTypes.oneOfType([PropTypes.any]),
-  lista: PropTypes.array.isRequired,
+  lista: PropTypes.oneOfType([PropTypes.any]),
   placeholder: PropTypes.string,
   alt: PropTypes.string,
   multiple: PropTypes.bool,
@@ -262,6 +262,7 @@ SelectComponent.propTypes = {
 };
 
 SelectComponent.defaultProps = {
+  lista: [],
   allowClear: true,
   style: null,
   searchValue: true,

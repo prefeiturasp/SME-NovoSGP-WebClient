@@ -1,8 +1,9 @@
 import PropTypes from 'prop-types';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
 import ListaFrequenciaPorBimestre from '~/componentes-sgp/ListaFrequenciaPorBimestre/listaFrequenciaPorBimestre';
 import CardCollapse from '~/componentes/cardCollapse';
+import { ModalidadeDTO } from '~/dtos';
 import { erros } from '~/servicos';
 import ServicoAcompanhamentoFrequencia from '~/servicos/Paginas/DiarioClasse/ServicoAcompanhamentoFrequencia';
 
@@ -14,6 +15,10 @@ const FrequenciaCardCollapse = props => {
   const usuario = useSelector(store => store.usuario);
   const { turmaSelecionada } = usuario;
 
+  const ehInfantil = useMemo(
+    () => turmaSelecionada?.modalidade === ModalidadeDTO.INFANTIL,
+    [turmaSelecionada]
+  );
   const { codigoEOL } = dadosAlunoObjectCard;
 
   const { semestreSelecionado } = props;
@@ -67,6 +72,7 @@ const FrequenciaCardCollapse = props => {
             dados={dados}
             turmaId={turmaSelecionada?.id}
             codigoAluno={codigoEOL}
+            esconderBimestre={ehInfantil}
           />
         ) : (
           ''

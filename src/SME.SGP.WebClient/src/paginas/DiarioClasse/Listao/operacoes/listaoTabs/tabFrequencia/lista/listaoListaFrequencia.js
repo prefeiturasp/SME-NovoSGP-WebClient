@@ -30,6 +30,7 @@ const ListaoListaFrequencia = () => {
     componenteCurricular,
     somenteConsultaListao,
     periodoAbertoListao,
+    setExibirLoaderGeral,
   } = useContext(ListaoContext);
 
   const desabilitarCampos = somenteConsultaListao || !periodoAbertoListao;
@@ -99,12 +100,16 @@ const ListaoListaFrequencia = () => {
             }
           }
         }}
-        desabilitar={desabilitarCampos}
+        desabilitar={desabilitarCampos || !aulaHeader.podeEditar}
       />
     );
   };
 
+  const encontrarAulas = dadosAula =>
+    dadosFrequencia?.aulas.find(item => item.aulaId === dadosAula.aulaId);
+
   const montarColunaFrequenciaDiaria = dadosDiaAula => {
+    const aulasGerais = encontrarAulas(dadosDiaAula);
     return (
       <CampoTiposFrequencia
         tipoFrequencia={dadosDiaAula?.tipoFrequencia}
@@ -118,12 +123,17 @@ const ListaoListaFrequencia = () => {
           dispatch(setTelaEmEdicao(true));
           atualizarDados();
         }}
-        desabilitar={desabilitarCampos || dadosDiaAula?.desabilitado}
+        desabilitar={
+          desabilitarCampos ||
+          dadosDiaAula?.desabilitado ||
+          !aulasGerais.podeEditar
+        }
       />
     );
   };
 
   const montarColunaFrequenciaAula = (detalheFreq, dadosAula) => {
+    const aulasGerais = encontrarAulas(dadosAula);
     return (
       <CampoTiposFrequencia
         tipoFrequencia={detalheFreq.tipoFrequencia}
@@ -146,7 +156,11 @@ const ListaoListaFrequencia = () => {
           dispatch(setTelaEmEdicao(true));
           atualizarDados();
         }}
-        desabilitar={desabilitarCampos || dadosAula?.desabilitado}
+        desabilitar={
+          desabilitarCampos ||
+          dadosAula?.desabilitado ||
+          !aulasGerais.podeEditar
+        }
       />
     );
   };
@@ -207,21 +221,28 @@ const ListaoListaFrequencia = () => {
   // TODO - Verificar a regra - componenteCurricular.registraFrequencia
   if (dadosFrequencia?.aulas?.length) {
     dadosFrequencia.aulas.forEach(aula => {
+      const ehAulaCj = aula?.aulaCj;
+      const ehAulaReposicao = aula?.ehReposicao;
+      const widthCJReposicao = ehAulaCj && ehAulaReposicao ? '185px' : '170px';
+      const width = ehAulaCj ? widthCJReposicao : '150px';
+      const marginLeft = ehAulaCj && ehAulaReposicao ? 15 : '';
+
       colunasEstudantes.push({
         title: () => (
           <div>
-            <div style={{ fontSize: 16, marginRight: 3 }}>
-              {window.moment(aula?.dataAula).format('DD/MM/YYYY')}
+            <div style={{ fontSize: 16, marginRight: 3, marginLeft }}>
+              {aula?.dataAula}
             </div>
-            {aula?.ehReposicao ? <ReposicaoLabel /> : <></>}
+            {ehAulaReposicao ? <ReposicaoLabel /> : <></>}
           </div>
         ),
         align: 'center',
-        width: '150px',
+        width,
+        className: 'position-relative',
         children: [
           {
             align: 'center',
-            width: '150px',
+            width,
             className: 'posicao-marcar-todos-header',
             title: montarColunaFrequenciaMarcarTodasAulas(aula),
             render: dadosAulas => {
@@ -319,12 +340,12 @@ const ListaoListaFrequencia = () => {
     aulaId,
     ehReposicao
   ) => {
+    const aulasGerais = encontrarAulas(aula);
+
     return (
       <span className="d-flex justify-content-between align-items-center">
         {ehReposicao ? <ReposicaoLabel linhaDetalhe /> : <></>}
-        <span style={{ marginLeft: 14 }}>
-          {window.moment(dataAula).format('DD/MM/YYYY')}
-        </span>
+        <span style={{ marginLeft: 14 }}>{dataAula}</span>
 
         <ListaoBotaoAnotacao
           desabilitarCampos={desabilitarCampos || aula.desabilitado}
@@ -336,7 +357,7 @@ const ListaoListaFrequencia = () => {
             possuiAnotacao: aula?.possuiAnotacao,
             aula,
           }}
-          permiteAnotacao={aula?.permiteAnotacao}
+          permiteAnotacao={aula?.permiteAnotacao && aulasGerais?.podeEditar}
           possuiAnotacao={aula?.possuiAnotacao}
         />
       </span>
@@ -350,6 +371,7 @@ const ListaoListaFrequencia = () => {
         dataIndex: 'aulaId',
         align: 'left',
         ellipsis: true,
+        className: 'position-relative',
         render: (aulaId, row) => {
           const aula = dadosFrequencia.aulas.find(
             item => item.aulaId === aulaId
@@ -400,6 +422,12 @@ const ListaoListaFrequencia = () => {
     return colunasDetalhamentoEstudante;
   };
 
+  const fecharLoaderMontouAlunos = indexAluno => {
+    if (indexAluno + 1 === dadosFrequencia?.alunos?.length) {
+      setExibirLoaderGeral(false);
+    }
+  };
+
   return dadosFrequencia?.alunos?.length ? (
     <>
       <LinhaTabela className="col-md-12 p-0">
@@ -412,9 +440,10 @@ const ListaoListaFrequencia = () => {
           expandIconColumnIndex={dadosFrequencia?.aulas.length + 3 || null}
           expandedRowKeys={expandedRowKeys}
           onClickExpandir={onClickExpandir}
-          rowClassName={record => {
+          rowClassName={(record, i) => {
             const ehLinhaExpandida = temLinhaExpandida(record?.codigoAluno);
             const nomeClasse = ehLinhaExpandida.length ? 'linha-ativa' : '';
+            fecharLoaderMontouAlunos(i);
             return nomeClasse;
           }}
           expandedRowRender={(record, indexAluno) => {

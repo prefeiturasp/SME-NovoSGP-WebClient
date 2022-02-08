@@ -26,6 +26,7 @@ const CampoObservacao = props => {
     diarioBordoId,
     dreId,
     ueId,
+    mudarObservacao,
   } = props;
   const [modalVisivel, setModalVisivel] = useState(false);
 
@@ -46,6 +47,7 @@ const CampoObservacao = props => {
   );
 
   const onChangeNovaObservacao = ({ target: { value } }) => {
+    mudarObservacao(value);
     dispatch(setNovaObservacao(value));
   };
 
@@ -119,7 +121,7 @@ const CampoObservacao = props => {
           autoSize={{ minRows: 4 }}
           value={novaObservacao}
           onChange={onChangeNovaObservacao}
-          disabled={!!observacaoEmEdicao || !podeIncluir}
+          disabled={!!observacaoEmEdicao || !podeIncluir || !diarioBordoId}
         />
       </div>
       <div
@@ -189,7 +191,8 @@ CampoObservacao.propTypes = {
   usarLocalizadorFuncionario: PropTypes.bool,
   parametrosLocalizadorFuncionario: PropTypes.oneOfType(PropTypes.object),
   desabilitarBotaoNotificar: PropTypes.bool,
-  diarioBordoId: PropTypes.string,
+  diarioBordoId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+  mudarObservacao: PropTypes.func,
   dreId: PropTypes.string,
   ueId: PropTypes.string,
 };
@@ -203,6 +206,7 @@ CampoObservacao.defaultProps = {
   parametrosLocalizadorFuncionario: {},
   desabilitarBotaoNotificar: false,
   diarioBordoId: '',
+  mudarObservacao: () => {},
   dreId: '',
   ueId: '',
 };
