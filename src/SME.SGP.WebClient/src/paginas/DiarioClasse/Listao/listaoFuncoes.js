@@ -237,7 +237,7 @@ const obterDaodsFechamentoPorBimestreListao = async (
     let listaTiposConceitos = [];
     if (notasConceitos.Conceitos === Number(resposta?.data?.notaTipo)) {
       listaTiposConceitos = await obterListaConceitos(
-        resposta?.data?.dataFechamento
+        resposta?.data?.periodoFim
       );
     }
     resposta.data.listaTiposConceitos = listaTiposConceitos;
