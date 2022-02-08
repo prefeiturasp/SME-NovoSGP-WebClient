@@ -21,25 +21,25 @@ const SituacaoFechamentoListao = () => {
     descDataFechamento = `${dadosFechamento.situacaoNome} em ${data} às ${hora}`;
   }
 
-  return (
-    dadosFechamento?.situacaoNome && (
-      <div className="row">
-        {dadosFechamento?.fechamentoId && dadosFechamento?.dataFechamento ? (
-          <div className="col-md-12 d-flex justify-content-end">
-            <DataFechamentoProcessado>
-              <span>{descDataFechamento}</span>
-            </DataFechamentoProcessado>
-          </div>
-        ) : (
-          <></>
-        )}
-        <div className="col-sm-12 mb-2 d-flex justify-content-end">
-          <SituacaoProcessadoComPendencias>
-            <span>{dadosFechamento?.situacaoNome}</span>
-          </SituacaoProcessadoComPendencias>
+  return dadosFechamento?.situacaoNome ? (
+    <div className="row">
+      {dadosFechamento?.fechamentoId && dadosFechamento?.dataFechamento ? (
+        <div className="col-md-12 d-flex justify-content-end">
+          <DataFechamentoProcessado>
+            <span>{descDataFechamento}</span>
+          </DataFechamentoProcessado>
         </div>
+      ) : (
+        <></>
+      )}
+      <div className="col-sm-12 mb-2 d-flex justify-content-end">
+        <SituacaoProcessadoComPendencias>
+          <span>{dadosFechamento?.situacaoNome}</span>
+        </SituacaoProcessadoComPendencias>
       </div>
-    )
+    </div>
+  ) : (
+    <></>
   );
 };
 
