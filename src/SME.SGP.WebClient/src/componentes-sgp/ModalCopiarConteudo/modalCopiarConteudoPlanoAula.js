@@ -1,8 +1,7 @@
+import PropTypes from 'prop-types';
 import React, { useEffect, useState } from 'react';
-// Redux
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import shortid from 'shortid';
-// Componentes
 import {
   Button,
   CampoData,
@@ -12,35 +11,30 @@ import {
   ModalConteudoHtml,
 } from '~/componentes';
 import TurmasDropDown from '~/componentes-sgp/TurmasDropDown';
-import {
-  setExibirLoaderFrequenciaPlanoAula,
-  setExibirModalCopiarConteudoPlanoAula,
-} from '~/redux/modulos/frequenciaPlanoAula/actions';
 import AbrangenciaServico from '~/servicos/Abrangencia';
-import { erro, erros, sucesso } from '~/servicos/alertas';
-// Serviço
+import { confirmar, sucesso, erro, erros } from '~/servicos/alertas';
 import api from '~/servicos/api';
 import PlanoAulaServico from '~/servicos/Paginas/PlanoAula';
 import ListaCheckbox from './componentes/ListaCheckbox';
-// Styles
 import { Row } from './modalCopiarConteudoPlanoAula.css';
 
-function ModalCopiarConteudoPlanoAula() {
-  const componenteCurricular = useSelector(
-    state => state.frequenciaPlanoAula.componenteCurricular
-  );
-
-  const exibirModalCopiarConteudoPlanoAula = useSelector(
-    state => state.frequenciaPlanoAula.exibirModalCopiarConteudoPlanoAula
-  );
-
-  const dadosPlanoAula = useSelector(
-    state => state.frequenciaPlanoAula.dadosPlanoAula
-  );
+const ModalCopiarConteudoPlanoAula = props => {
+  const {
+    codigoComponenteCurricular,
+    exibirModal,
+    setExibirModal,
+    setExibirLoaderModal,
+    exibirLoaderModal,
+    copiar,
+    exibirListaCheckboxs,
+    executarCopiarPadrao,
+    onClickDescartar,
+    planoAulaId,
+    aposCopiarConteudo,
+  } = props;
 
   const filtro = useSelector(store => store.usuario.turmaSelecionada);
   const [carregando, setCarregando] = useState(false);
-  const dispatch = useDispatch();
   const [confirmado, setConfirmado] = useState(false);
   const [alerta, setAlerta] = useState(false);
   const [listaTurmas, setListaTurmas] = useState([]);
@@ -86,6 +80,7 @@ function ModalCopiarConteudoPlanoAula() {
         data: '',
         temErro: false,
         mensagemErro: 'Data já possui conteúdo',
+        nomeTurma: '',
       },
     ]);
   };
@@ -96,12 +91,12 @@ function ModalCopiarConteudoPlanoAula() {
 
   const { anoLetivo } = filtro;
 
-  const onChangeTurma = async (turma, linha) => {
+  const onChangeTurma = async (turma, nomeTurma, linha) => {
     if (turma)
       try {
         setCarregando(true);
         const { data, status } = await api.get(
-          `v1/calendarios/frequencias/aulas/datas/${anoLetivo}/turmas/${turma}/disciplinas/${componenteCurricular.codigoComponenteCurricular}`
+          `v1/calendarios/frequencias/aulas/datas/${anoLetivo}/turmas/${turma}/disciplinas/${codigoComponenteCurricular}`
         );
         setCarregando(false);
         if (data && status === 200) {
@@ -111,6 +106,7 @@ function ModalCopiarConteudoPlanoAula() {
                 ? {
                     ...linha,
                     turmaId: turma,
+                    nomeTurma,
                     diasParaHabilitar: data.map(y =>
                       window.moment(y.data).format('YYYY-MM-DD')
                     ),
@@ -145,7 +141,7 @@ function ModalCopiarConteudoPlanoAula() {
     });
   };
 
-  const onCloseModal = () => {
+  const onCloseModal = clicouEmDescartar => {
     if (!carregando) {
       setValoresCheckbox({
         objetivosAprendizagem: true,
@@ -156,13 +152,13 @@ function ModalCopiarConteudoPlanoAula() {
       setTurmas([]);
       setAlerta(false);
       setConfirmado(false);
-      dispatch(setExibirModalCopiarConteudoPlanoAula(false));
+      setExibirModal(false);
     }
+    if (clicouEmDescartar) onClickDescartar();
   };
 
-  const copiar = async () => {
-    dispatch(setExibirModalCopiarConteudoPlanoAula(false));
-    dispatch(setExibirLoaderFrequenciaPlanoAula(true));
+  const copiarPadrao = async () => {
+    setExibirLoaderModal(true);
     const {
       data: dados,
       status: resposta,
@@ -171,28 +167,56 @@ function ModalCopiarConteudoPlanoAula() {
         ...x,
         sobreescrever: true,
       })),
-      planoAulaId: dadosPlanoAula.id,
-      disciplinaId: componenteCurricular.codigoComponenteCurricular,
+      planoAulaId,
+      disciplinaId: codigoComponenteCurricular,
       migrarLicaoCasa: valoresCheckbox.licaoCasa,
       migrarRecuperacaoAula: valoresCheckbox.recuperacaoContinua,
       migrarObjetivos: valoresCheckbox.objetivosAprendizagem,
     });
+    setExibirLoaderModal(false);
     if (dados || resposta === 200) {
       sucesso('Plano de aula copiado com sucesso!');
-      onCloseModal();
+      setExibirModal(false);
+      return true;
     }
-    dispatch(setExibirLoaderFrequenciaPlanoAula(false));
+
+    return false;
+  };
+
+  const acaoCopiarConteudo = async () => {
+    let copiou = false;
+    if (executarCopiarPadrao) {
+      copiou = await copiarPadrao();
+    } else {
+      copiou = await copiar(turmas, valoresCheckbox);
+    }
+
+    if (copiou) {
+      onCloseModal();
+      aposCopiarConteudo();
+    }
+    return true;
   };
 
   const onClickSalvar = async () => {
     try {
+      const turmasValidas = turmas.filter(
+        item => !!item.data && !!item.turmaId
+      );
+
+      const dadosValidos = turmasValidas?.length === turmas?.length;
+
+      if (!dadosValidos) {
+        erro('Campo(s) obrigatório(s) não preenchido');
+        return;
+      }
       if (!confirmado) {
         setCarregando(true);
         const { data, status } = await PlanoAulaServico.verificarSeExiste({
           planoAulaTurmaDatas: turmas.map(x => ({
             data: x.data,
             turmaId: x.turmaId,
-            disciplinaId: componenteCurricular.codigoComponenteCurricular,
+            disciplinaId: codigoComponenteCurricular,
           })),
         });
         if (data && status === 200) {
@@ -212,30 +236,49 @@ function ModalCopiarConteudoPlanoAula() {
               );
             });
             setAlerta(true);
-          } else await copiar();
+          } else {
+            await acaoCopiarConteudo();
+          }
           setConfirmado(true);
           setCarregando(false);
         }
       }
 
       if (confirmado) {
-        await copiar();
+        await acaoCopiarConteudo();
       }
     } catch (error) {
       erros(error);
-      dispatch(setExibirLoaderFrequenciaPlanoAula(false));
-      dispatch(setExibirModalCopiarConteudoPlanoAula(true));
+      setExibirLoaderModal(false);
+      setExibirModal(true);
       setCarregando(false);
+    }
+  };
+
+  const validarAntesDeFechar = async () => {
+    if (turmas?.length) {
+      setExibirModal(false);
+      const confirmadoDescartar = await confirmar(
+        'Atenção',
+        '',
+        'Deseja realmente descartar as informações de Copiar conteúdo?'
+      );
+      if (confirmadoDescartar) {
+        onCloseModal();
+      } else {
+        setExibirModal(true);
+      }
+    } else {
+      onCloseModal();
     }
   };
 
   return (
     <ModalConteudoHtml
       titulo="Copiar conteúdo"
-      visivel={exibirModalCopiarConteudoPlanoAula}
-      closable
-      onClose={onCloseModal}
-      onConfirmacaoSecundaria={onCloseModal}
+      visivel={exibirModal}
+      onClose={validarAntesDeFechar}
+      onConfirmacaoSecundaria={validarAntesDeFechar}
       onConfirmacaoPrincipal={onClickSalvar}
       labelBotaoPrincipal="Confirmar"
       labelBotaoSecundario="Descartar"
@@ -249,8 +292,12 @@ function ModalCopiarConteudoPlanoAula() {
         (turmas.length && turmas.find(item => !item.data)) ||
         carregando
       }
+      loader={carregando || exibirLoaderModal}
+      fecharAoClicarFora={!carregando && !exibirLoaderModal}
+      fecharAoClicarEsc={!carregando && !exibirLoaderModal}
+      closable={!carregando && !exibirLoaderModal}
     >
-      <Loader loading={carregando}>
+      <Loader loading={carregando || exibirLoaderModal}>
         {turmas.map(linha => (
           <Row key={shortid.generate()} className="row">
             <Grid cols={5}>
@@ -258,7 +305,9 @@ function ModalCopiarConteudoPlanoAula() {
                 ueId={filtro.unidadeEscolar}
                 modalidadeId={filtro.modalidade}
                 valor={linha.turmaId}
-                onChange={turma => onChangeTurma(turma, linha)}
+                onChange={(codigoTurma, nomeTurma) =>
+                  onChangeTurma(codigoTurma, nomeTurma, linha)
+                }
                 dados={listaTurmas}
                 allowClear={false}
               />
@@ -297,15 +346,45 @@ function ModalCopiarConteudoPlanoAula() {
             onClick={adicionarTurma}
           />
         </div>
-        <div style={{ marginTop: '26px' }}>
-          <ListaCheckbox
-            valores={valoresCheckbox}
-            onChange={(evento, campo) => onChangeCheckbox(evento, campo)}
-          />
-        </div>
+        {exibirListaCheckboxs && (
+          <div style={{ marginTop: '26px' }}>
+            <ListaCheckbox
+              valores={valoresCheckbox}
+              onChange={(evento, campo) => onChangeCheckbox(evento, campo)}
+            />
+          </div>
+        )}
       </Loader>
     </ModalConteudoHtml>
   );
-}
+};
+
+ModalCopiarConteudoPlanoAula.propTypes = {
+  codigoComponenteCurricular: PropTypes.string,
+  exibirModal: PropTypes.bool,
+  copiar: PropTypes.func,
+  onClickDescartar: PropTypes.func,
+  exibirListaCheckboxs: PropTypes.bool,
+  setExibirModal: PropTypes.func,
+  setExibirLoaderModal: PropTypes.func,
+  exibirLoaderModal: PropTypes.bool,
+  executarCopiarPadrao: PropTypes.bool,
+  planoAulaId: PropTypes.oneOfType([PropTypes.any]),
+  aposCopiarConteudo: PropTypes.func,
+};
+
+ModalCopiarConteudoPlanoAula.defaultProps = {
+  codigoComponenteCurricular: '',
+  exibirModal: false,
+  copiar: () => null,
+  onClickDescartar: () => null,
+  exibirListaCheckboxs: false,
+  setExibirModal: () => null,
+  setExibirLoaderModal: () => null,
+  exibirLoaderModal: false,
+  executarCopiarPadrao: false,
+  planoAulaId: null,
+  aposCopiarConteudo: () => null,
+};
 
 export default ModalCopiarConteudoPlanoAula;

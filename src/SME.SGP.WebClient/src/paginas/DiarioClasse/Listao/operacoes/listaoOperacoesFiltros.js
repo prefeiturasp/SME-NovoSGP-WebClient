@@ -11,6 +11,7 @@ import { setLimparModoEdicaoGeral } from '~/redux/modulos/geral/actions';
 import { setSomenteConsulta } from '~/redux/modulos/navegacao/actions';
 import { erros, ServicoDisciplina, verificaSomenteConsulta } from '~/servicos';
 import ServicoPeriodoEscolar from '~/servicos/Paginas/Calendario/ServicoPeriodoEscolar';
+import { ordenarPor } from '~/utils';
 import ListaoContext from '../listaoContext';
 
 const ListaoOperacoesFiltros = () => {
@@ -37,6 +38,8 @@ const ListaoOperacoesFiltros = () => {
     setPeriodoAbertoListao,
     limparTelaListao,
     setSomenteConsultaListao,
+    setPermissaoLista,
+    exibirLoaderPeriodo,
   } = useContext(ListaoContext);
 
   const [listaBimestresOperacoe, setListaBimestresOperacoes] = useState(
@@ -51,8 +54,10 @@ const ListaoOperacoesFiltros = () => {
     if (turma && permissoesTela) {
       const soConsulta = verificaSomenteConsulta(permissoesTela);
       setSomenteConsultaListao(soConsulta);
+      setPermissaoLista(permissoesTela);
     } else {
       setSomenteConsultaListao(false);
+      setPermissaoLista();
       dispatch(setSomenteConsulta(false));
     }
   }, [permissoesTela, turma, setSomenteConsultaListao, dispatch]);
@@ -119,7 +124,9 @@ const ListaoOperacoesFiltros = () => {
       turma
     ).catch(e => erros(e));
     if (retorno?.data?.length) {
-      const lista = retorno.data.map(item => {
+      let lista = ordenarPor(retorno.data, 'bimestre');
+
+      lista = lista.map(item => {
         return {
           valor: String(item.bimestre),
           descricao: `${item.bimestre}º Bimestre`,
@@ -247,7 +254,8 @@ const ListaoOperacoesFiltros = () => {
               disabled={
                 !turmaSelecionada.turma ||
                 listaComponenteCurricular?.length === 1 ||
-                !listaComponenteCurricular?.length
+                !listaComponenteCurricular?.length ||
+                exibirLoaderPeriodo
               }
             />
           </Loader>
@@ -261,7 +269,8 @@ const ListaoOperacoesFiltros = () => {
             label="Bimestre"
             disabled={
               listaBimestresOperacoe?.length === 1 ||
-              !listaBimestresOperacoe?.length
+              !listaBimestresOperacoe?.length ||
+              exibirLoaderPeriodo
             }
             valueSelect={bimestreOperacoes}
             onChange={onChangeBimestre}

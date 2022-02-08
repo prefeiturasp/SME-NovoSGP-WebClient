@@ -23,7 +23,6 @@ const ModalNotificarUsuarios = ({
   const [modoEdicao, setModoEdicao] = useState(false);
 
   const dispatch = useDispatch();
-
   const mudarLocalizador = valores => {
     if (valores?.professorRf) {
       setUsuariosSelecionados(estadoAntigo => {

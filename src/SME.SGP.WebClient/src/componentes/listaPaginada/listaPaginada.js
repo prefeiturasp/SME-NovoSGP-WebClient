@@ -5,9 +5,9 @@ import queryString from 'query-string';
 // Componentes
 import { Table } from 'antd';
 
+import { api, erros } from '~/servicos';
+
 import { Container } from './listaPaginada.css';
-import api from '~/servicos/api';
-import { erro } from '~/servicos/alertas';
 
 const ListaPaginada = props => {
   const {
@@ -20,7 +20,6 @@ const ListaPaginada = props => {
     onSelecionarLinhas,
     selecionarItems,
     filtroEhValido,
-    onErro,
     paramArrayFormat,
     temPaginacao,
     setLista,
@@ -41,7 +40,7 @@ const ListaPaginada = props => {
     showSizeChanger,
     pageSizeOptions: ['10', '20', '50', '100'],
     locale: { items_per_page: 'Linhas' },
-    current: 1
+    current: 1,
   });
 
   const obterUrlBusca = pagina => {
@@ -118,17 +117,7 @@ const ListaPaginada = props => {
           setLista(resposta.data.items);
         }
       })
-      .catch(err => {
-        if (
-          err.response &&
-          err.response.data &&
-          err.response.data.mensagens &&
-          err.response.data.mensagens.length
-        ) {
-          if (onErro) onErro(err);
-          else erro(err.response.data.mensagens[0]);
-        }
-      })
+      .catch(e => erros(e))
       .finally(() => setCarregando(false));
   };
 
@@ -178,14 +167,14 @@ const ListaPaginada = props => {
         pagination={
           temPaginacao
             ? {
-              defaultPageSize: paginaAtual.defaultPageSize,
-              pageSize: paginaAtual.pageSize,
-              total,
-              showSizeChanger,
-              pageSizeOptions: ['10', '20', '50', '100'],
-              locale: { items_per_page: '' },
-              current: paginaAtual.current,
-            }
+                defaultPageSize: paginaAtual.defaultPageSize,
+                pageSize: paginaAtual.pageSize,
+                total,
+                showSizeChanger,
+                pageSizeOptions: ['10', '20', '50', '100'],
+                locale: { items_per_page: '' },
+                current: paginaAtual.current,
+              }
             : false
         }
         bordered
@@ -227,7 +216,6 @@ ListaPaginada.propTypes = {
   colunaChave: PropTypes.string,
   filtro: PropTypes.oneOfType([PropTypes.object]),
   filtroEhValido: PropTypes.bool,
-  onErro: PropTypes.oneOfType([PropTypes.func]),
   paramArrayFormat: PropTypes.oneOfType([PropTypes.string]),
   temPaginacao: PropTypes.oneOfType([PropTypes.bool]),
   setLista: PropTypes.oneOfType([PropTypes.func]),
@@ -238,17 +226,16 @@ ListaPaginada.propTypes = {
 ListaPaginada.defaultProps = {
   colunas: [],
   multiSelecao: false,
-  onClick: () => { },
-  onSelecionarLinhas: () => { },
-  selecionarItems: () => { },
+  onClick: () => {},
+  onSelecionarLinhas: () => {},
+  selecionarItems: () => {},
   url: '',
   colunaChave: 'id',
   filtro: null,
   filtroEhValido: true,
-  onErro: () => { },
   paramArrayFormat: 'brackets',
   temPaginacao: true,
-  setLista: () => { },
+  setLista: () => {},
   showSizeChanger: true,
   naoFiltrarQuandoCarregando: true,
 };

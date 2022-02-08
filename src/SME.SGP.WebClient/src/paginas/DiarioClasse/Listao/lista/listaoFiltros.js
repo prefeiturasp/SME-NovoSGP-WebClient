@@ -15,6 +15,7 @@ import {
 import { OPCAO_TODOS } from '~/constantes';
 import { ModalidadeDTO } from '~/dtos';
 import { AbrangenciaServico, erros, ServicoFiltroRelatorio } from '~/servicos';
+import { ordenarDescPor } from '~/utils';
 import ListaoContext from '../listaoContext';
 
 const ListaoFiltros = () => {
@@ -37,9 +38,6 @@ const ListaoFiltros = () => {
     bimestre,
     setCarregarFiltrosSalvos,
     carregarFiltrosSalvos,
-  } = useContext(ListaoContext);
-
-  const {
     listaAnosLetivo,
     setListaAnosLetivo,
     listaDres,
@@ -67,17 +65,19 @@ const ListaoFiltros = () => {
     setCarregandoAnosLetivos(true);
     const anosLetivo = await FiltroHelper.obterAnosLetivos({
       consideraHistorico,
-    }).catch(e => erros(e));
+    })
+      .catch(e => erros(e))
+      .finally(() => setCarregandoAnosLetivos(false));
 
     if (anosLetivo?.length) {
-      setListaAnosLetivo(anosLetivo);
+      const anosOrdenados = ordenarDescPor(anosLetivo, 'valor');
+      setListaAnosLetivo(anosOrdenados);
       setAnoLetivo(anosLetivo[0].valor);
       setCodigoDre();
-    } else {
-      setListaAnosLetivo([]);
-      setAnoLetivo();
+      return;
     }
-    setCarregandoAnosLetivos(false);
+    setListaAnosLetivo([]);
+    setAnoLetivo();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [consideraHistorico]);
 
@@ -224,13 +224,13 @@ const ListaoFiltros = () => {
 
   const obterTurmas = useCallback(async () => {
     setCarregandoTurmas(true);
+
     const retorno = await AbrangenciaServico.buscarTurmas(
       codigoUe,
       modalidade,
       '',
       anoLetivo,
-      consideraHistorico,
-      String(modalidade) === String(ModalidadeDTO.INFANTIL)
+      consideraHistorico
     )
       .catch(e => erros(e))
       .finally(() => setCarregandoTurmas(false));
@@ -285,8 +285,10 @@ const ListaoFiltros = () => {
   }, [modalidade, obterBimestres]);
 
   const onCheckedConsideraHistorico = e => {
+    const anoAutal = window.moment().format('YYYY');
+
     setListaAnosLetivo([]);
-    setAnoLetivo();
+    setAnoLetivo(anoAutal);
 
     setListaDres([]);
     setCodigoDre();

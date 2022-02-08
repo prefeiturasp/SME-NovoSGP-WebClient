@@ -36,6 +36,10 @@ const RelatorioPlanejamentoDiario = () => {
     listaComponentesCurriculares,
     setListaComponentesCurriculares,
   ] = useState([]);
+  const [
+    componentesCurricularesDisponiveis,
+    setComponentesCurricularesDisponiveis,
+  ] = useState([]);
   const [listaBimestres, setListaBimestres] = useState([]);
   const [bimestres, setBimestres] = useState([]);
   const [anoLetivo, setAnoLetivo] = useState();
@@ -387,8 +391,7 @@ const RelatorioPlanejamentoDiario = () => {
 
     setExibirLoader(true);
     const componentes = await ServicoComponentesCurriculares.obterComponentesPorListaDeTurmas(
-      turmas,
-      true
+      turmas
     )
       .catch(e => erros(e))
       .finally(() => setExibirLoader(false));
@@ -404,8 +407,11 @@ const RelatorioPlanejamentoDiario = () => {
           valor: item.codigo,
         })
       );
-
+      const listaComponentesDisponiveis = componentes.data.map(
+        item => item.codigo
+      );
       setListaComponentesCurriculares(lista);
+      setComponentesCurricularesDisponiveis(listaComponentesDisponiveis);
       if (lista.length === 1) {
         setComponenteCurricularId(lista[0].valor);
       }
@@ -498,6 +504,12 @@ const RelatorioPlanejamentoDiario = () => {
   };
 
   const gerar = async () => {
+    let componentesDisponiveis;
+    if (componenteCurricularId !== OPCAO_TODOS) {
+      componentesDisponiveis = [componenteCurricularId];
+    } else {
+      componentesDisponiveis = componentesCurricularesDisponiveis;
+    }
     const params = {
       modalidadeTurma: modalidadeId,
       codigoDre,
@@ -510,6 +522,7 @@ const RelatorioPlanejamentoDiario = () => {
       listarDataFutura,
       exibirDetalhamento,
       componenteCurricular: componenteCurricularId,
+      componentesCurricularesDisponiveis: componentesDisponiveis,
     };
 
     setExibirLoader(true);
@@ -674,9 +687,7 @@ const RelatorioPlanejamentoDiario = () => {
                 valueText="desc"
                 label="Componente curricular"
                 disabled={
-                  !modalidadeId ||
-                  listaComponentesCurriculares?.length === 1 ||
-                  turmaId === OPCAO_TODOS
+                  !modalidadeId || listaComponentesCurriculares?.length === 1
                 }
                 valueSelect={componenteCurricularId}
                 onChange={onChangeComponenteCurricular}

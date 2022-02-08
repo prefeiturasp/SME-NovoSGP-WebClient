@@ -53,6 +53,7 @@ const CampoNumero = React.forwardRef((props, ref) => {
     decimalSeparator,
     esconderSetas,
     onKeyUp,
+    styleContainer,
   } = props;
 
   const possuiErro = () => {
@@ -83,7 +84,11 @@ const CampoNumero = React.forwardRef((props, ref) => {
 
   return (
     <>
-      <Campo esconderSetas={esconderSetas} className={classNameCampo}>
+      <Campo
+        esconderSetas={esconderSetas}
+        className={classNameCampo}
+        style={styleContainer}
+      >
         {label ? <Label text={label} control={name || ''} /> : ''}
         {form ? (
           <>

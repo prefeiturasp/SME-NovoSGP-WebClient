@@ -17,6 +17,7 @@ const LinhaObservacaoProprietario = props => {
     podeAlterar,
     podeExcluir,
     proprietario,
+    mudarObservacaoListagem,
   } = props;
 
   const dispatch = useDispatch();
@@ -64,6 +65,7 @@ const LinhaObservacaoProprietario = props => {
     obs.observacao = value;
     setModoEdicao(true);
     dispatch(setObservacaoEmEdicao({ ...obs }));
+    mudarObservacaoListagem(obs);
   };
 
   const btnSalvarCancelar = () => {
@@ -187,6 +189,7 @@ LinhaObservacaoProprietario.propTypes = {
   dados: PropTypes.oneOfType([PropTypes.object]),
   onClickSalvarEdicao: PropTypes.func,
   onClickExcluir: PropTypes.func,
+  mudarObservacaoListagem: PropTypes.func,
   children: PropTypes.node,
   podeAlterar: PropTypes.bool,
   podeExcluir: PropTypes.bool,
@@ -198,6 +201,7 @@ LinhaObservacaoProprietario.defaultProps = {
   onClickSalvarEdicao: () => {},
   onClickExcluir: () => {},
   children: () => {},
+  mudarObservacaoListagem: () => {},
   podeAlterar: true,
   podeExcluir: true,
   proprietario: true,

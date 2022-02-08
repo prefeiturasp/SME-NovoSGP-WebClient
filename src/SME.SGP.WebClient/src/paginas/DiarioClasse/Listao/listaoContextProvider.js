@@ -1,9 +1,9 @@
 import PropTypes from 'prop-types';
 import React, { useState } from 'react';
-import { ModalidadeDTO } from '~/dtos';
 import ListaoContext from './listaoContext';
 
 const ListaoContextProvider = ({ children }) => {
+  // LISTÃO LISTAGEM FILTROS
   const [consideraHistorico, setConsideraHistorico] = useState(false);
   const [anoLetivo, setAnoLetivo] = useState();
   const [codigoDre, setCodigoDre] = useState();
@@ -12,7 +12,6 @@ const ListaoContextProvider = ({ children }) => {
   const [semestre, setSemestre] = useState();
   const [codigoTurma, setCodigoTurma] = useState();
   const [bimestre, setBimestre] = useState();
-
   const [listaAnosLetivo, setListaAnosLetivo] = useState([]);
   const [listaDres, setListaDres] = useState([]);
   const [listaUes, setListaUes] = useState([]);
@@ -20,34 +19,75 @@ const ListaoContextProvider = ({ children }) => {
   const [listaSemestres, setListaSemestres] = useState([]);
   const [listaTurmas, setListaTurmas] = useState([]);
   const [listaBimestres, setListaBimestres] = useState([]);
-
-  const [componenteCurricular, setComponenteCurricular] = useState();
+  const [carregarFiltrosSalvos, setCarregarFiltrosSalvos] = useState(false);
   const [
     componenteCurricularInicial,
     setComponenteCurricularInicial,
   ] = useState();
+
+  // LISTÃO OPERAÇÃO
+  const [componenteCurricular, setComponenteCurricular] = useState();
   const [listaComponenteCurricular, setListaComponenteCurricular] = useState(
     []
   );
-
   const [bimestreOperacoes, setBimestreOperacoes] = useState();
-
   const [tabAtual, setTabAtual] = useState();
   const [periodoAbertoListao, setPeriodoAbertoListao] = useState(true);
   const [somenteConsultaListao, setSomenteConsultaListao] = useState(false);
-
-  // Utilizado para carregar os filtros novamente quando voltar para a tela de listagem de componentes!
-  const [carregarFiltrosSalvos, setCarregarFiltrosSalvos] = useState(false);
+  const [permissaoLista, setPermissaoLista] = useState();
+  const [listaoEhInfantil, setListaoEhInfantil] = useState(false);
   const [exibirLoaderGeral, setExibirLoaderGeral] = useState(false);
 
   // TAB FREQUÊNCIA
   const [listaPeriodos, setListaPeriodos] = useState([]);
-  const [listaTiposFrequencia, setListaTiposFrequencia] = useState([]);
   const [periodo, setPeriodo] = useState();
+  const [listaTiposFrequencia, setListaTiposFrequencia] = useState([]);
   const [dadosFrequencia, setDadosFrequencia] = useState();
   const [dadosIniciaisFrequencia, setDadosIniciaisFrequencia] = useState();
+  const [exibirLoaderPeriodo, setExibirLoaderPeriodo] = useState(false);
 
-  const [listaoEhInfantil, setListaoEhInfantil] = useState(false);
+  // TAB PLANO AULA
+  const [dadosPlanoAula, setDadosPlanoAula] = useState([]);
+  const [dadosIniciaisPlanoAula, setDadosIniciaisPlanoAula] = useState([]);
+  const [listaObjetivosAprendizagem, setListaObjetivosAprendizagem] = useState(
+    []
+  );
+  const [errosPlanoAulaListao, setErrosPlanoAulaListao] = useState([]);
+  const [
+    executarObterPlanoAulaPorPeriodo,
+    setExecutarObterPlanoAulaPorPeriodo,
+  ] = useState(false);
+
+  // TAB DIÁRIO DE BORDO
+  const [
+    componenteCurricularDiarioBordo,
+    setComponenteCurricularDiarioBordo,
+  ] = useState();
+  const [
+    listaComponentesCurricularesDiario,
+    setListaComponentesCurricularesDiario,
+  ] = useState();
+  const [dadosDiarioBordo, setDadosDiarioBordo] = useState([]);
+  const [dadosIniciaisDiarioBordo, setDadosIniciaisDiarioBordo] = useState([]);
+  const [errosDiarioBordoListao, setErrosDiarioBordoListao] = useState([]);
+  const [idDiarioBordoAtual, setIdDiarioBordoAtual] = useState();
+
+  // TAB AVALIAÇÃO
+  const [dadosAvaliacao, setDadosAvaliacao] = useState();
+  const [dadosIniciaisAvaliacao, setDadosIniciaisAvaliacao] = useState();
+  const [dadosPeriodosAvaliacao, setDadosPeriodosAvaliacao] = useState();
+
+  const limparTabFrequencia = () => {
+    setDadosFrequencia();
+    setListaTiposFrequencia([]);
+    setDadosIniciaisFrequencia();
+  };
+
+  const limparTabAvaliacao = () => {
+    setDadosAvaliacao();
+    setDadosIniciaisAvaliacao();
+    setDadosPeriodosAvaliacao();
+  };
 
   const limparTelaListao = () => {
     setComponenteCurricular();
@@ -59,14 +99,14 @@ const ListaoContextProvider = ({ children }) => {
     setSomenteConsultaListao(false);
     setListaPeriodos([]);
     setPeriodo();
-    setDadosFrequencia();
-    setListaTiposFrequencia([]);
-    setDadosIniciaisFrequencia();
+    limparTabFrequencia();
+    limparTabAvaliacao();
   };
 
   return (
     <ListaoContext.Provider
       value={{
+        // LISTÃO LISTAGEM FILTROS
         consideraHistorico,
         setConsideraHistorico,
         anoLetivo,
@@ -97,39 +137,74 @@ const ListaoContextProvider = ({ children }) => {
         setListaTurmas,
         listaBimestres,
         setListaBimestres,
-        tabAtual,
-        setTabAtual,
         carregarFiltrosSalvos,
         setCarregarFiltrosSalvos,
         componenteCurricularInicial,
         setComponenteCurricularInicial,
-        // TELA LISTÃO
+        // LISTÃO OPERAÇÃO
+        limparTelaListao,
         componenteCurricular,
         setComponenteCurricular,
-        bimestreOperacoes,
-        setBimestreOperacoes,
         listaComponenteCurricular,
         setListaComponenteCurricular,
-        exibirLoaderGeral,
-        setExibirLoaderGeral,
-        listaoEhInfantil,
-        setListaoEhInfantil,
+        bimestreOperacoes,
+        setBimestreOperacoes,
+        tabAtual,
+        setTabAtual,
         periodoAbertoListao,
         setPeriodoAbertoListao,
         somenteConsultaListao,
         setSomenteConsultaListao,
-        // TAB FREQUÊNCIA,
+        listaoEhInfantil,
+        setListaoEhInfantil,
+        exibirLoaderGeral,
+        setExibirLoaderGeral,
+        permissaoLista,
+        setPermissaoLista,
+        // TAB FREQUÊNCIA
         listaPeriodos,
         setListaPeriodos,
         periodo,
         setPeriodo,
-        dadosFrequencia,
-        setDadosFrequencia,
         listaTiposFrequencia,
         setListaTiposFrequencia,
+        dadosFrequencia,
+        setDadosFrequencia,
         dadosIniciaisFrequencia,
         setDadosIniciaisFrequencia,
-        limparTelaListao,
+        exibirLoaderPeriodo,
+        setExibirLoaderPeriodo,
+        // TAB PLANO AULA
+        dadosPlanoAula,
+        setDadosPlanoAula,
+        dadosIniciaisPlanoAula,
+        setDadosIniciaisPlanoAula,
+        listaObjetivosAprendizagem,
+        setListaObjetivosAprendizagem,
+        errosPlanoAulaListao,
+        setErrosPlanoAulaListao,
+        executarObterPlanoAulaPorPeriodo,
+        setExecutarObterPlanoAulaPorPeriodo,
+        // TAB DIÁRIO DE BORDO
+        componenteCurricularDiarioBordo,
+        setComponenteCurricularDiarioBordo,
+        listaComponentesCurricularesDiario,
+        setListaComponentesCurricularesDiario,
+        dadosDiarioBordo,
+        setDadosDiarioBordo,
+        dadosIniciaisDiarioBordo,
+        setDadosIniciaisDiarioBordo,
+        errosDiarioBordoListao,
+        setErrosDiarioBordoListao,
+        idDiarioBordoAtual,
+        setIdDiarioBordoAtual,
+        // TAB AVALIAÇÃO
+        dadosAvaliacao,
+        setDadosAvaliacao,
+        dadosIniciaisAvaliacao,
+        setDadosIniciaisAvaliacao,
+        dadosPeriodosAvaliacao,
+        setDadosPeriodosAvaliacao,
       }}
     >
       {children}
