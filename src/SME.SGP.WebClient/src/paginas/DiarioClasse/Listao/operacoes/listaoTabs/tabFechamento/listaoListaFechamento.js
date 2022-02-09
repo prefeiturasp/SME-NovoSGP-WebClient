@@ -443,9 +443,7 @@ const ListaoListaFechamento = props => {
     </>
   );
 
-  return ehRegencia ? (
-    montarTabelaRegencia()
-  ) : (
+  const montarDados = () => (
     <>
       {!ehFinal && <SituacaoFechamentoListao />}
       <ContainerTableFechamento className="col-md-12 p-0">
@@ -460,6 +458,12 @@ const ListaoListaFechamento = props => {
         />
       </ContainerTableFechamento>
       {getAuditoria()}
+    </>
+  );
+
+  return (
+    <>
+      {ehRegencia ? montarTabelaRegencia() : montarDados()}
       <ModalJustificativaFechamento />
     </>
   );
