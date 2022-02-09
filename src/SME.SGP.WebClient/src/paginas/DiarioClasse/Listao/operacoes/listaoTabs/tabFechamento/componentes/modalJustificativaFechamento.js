@@ -117,9 +117,14 @@ const ModalJustificativaFechamento = () => {
     }
   };
 
+  console.log(
+    'dadosModalJustificativaFechamento',
+    dadosModalJustificativaFechamento
+  );
+
   useEffect(() => {
     setExibirModal(!!dadosModalJustificativaFechamento?.exibirModal);
-  }, [dadosModalJustificativaFechamento]);
+  }, [dadosModalJustificativaFechamento?.exibirModal]);
 
   return dadosModalJustificativaFechamento?.exibirModal ? (
     <ModalConteudoHtml
