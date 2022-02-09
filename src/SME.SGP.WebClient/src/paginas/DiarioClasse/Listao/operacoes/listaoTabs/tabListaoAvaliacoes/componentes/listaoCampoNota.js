@@ -135,7 +135,6 @@ const ListaoCampoNota = props => {
   if (estaAbaixoDaMedia(notaValorAtual)) {
     styleCampo.border = `solid 2px ${Base.Vermelho}`;
   }
-  console.log('notaValorAtual', notaValorAtual);
 
   const montarCampo = () => (
     <div onFocus={() => validarExibir(true)}>
