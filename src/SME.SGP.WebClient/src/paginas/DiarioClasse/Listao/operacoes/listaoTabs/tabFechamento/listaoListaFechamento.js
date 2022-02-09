@@ -148,7 +148,7 @@ const ListaoListaFechamento = props => {
               desabilitar={desabilitar}
               podeEditar={dadosEstudante?.podeEditar}
               ehFechamento
-              periodoFim={dadosFechamento?.dataFechamento}
+              periodoFim={dadosFechamento?.periodoFim}
               mediaAprovacaoBimestre={dadosFechamento?.mediaAprovacaoBimestre}
               onChangeNotaConceito={valorNovo =>
                 onChangeNotaConceito(
