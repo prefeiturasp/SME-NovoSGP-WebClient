@@ -168,6 +168,7 @@ const ModalJustificativaFechamento = () => {
                       setModoEdicao(true);
                     }}
                     name="descricao"
+                    permiteInserirArquivo={false}
                   />
                 </fieldset>
               </div>

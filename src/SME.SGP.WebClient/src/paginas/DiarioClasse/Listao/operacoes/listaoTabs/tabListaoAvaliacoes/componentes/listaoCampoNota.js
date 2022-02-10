@@ -42,11 +42,17 @@ const ListaoCampoNota = props => {
     return valorAtual && valorAtual < mediaAprovacaoBimestre;
   };
 
+  const notaAlterada = nota => {
+    if (nota === 0) return nota;
+    const notaConceitoParseada = String(nota);
+    const notaConceitoAlterada = notaConceitoParseada.replace(',', '.');
+    const notaModificada = Number(notaConceitoAlterada);
+    return notaModificada;
+  };
+
   useEffect(() => {
-    if (dadosNota?.notaConceito) {
-      const notaConceitoParseada = String(dadosNota.notaConceito);
-      const notaConceitoAlterada = notaConceitoParseada.replace(',', '.');
-      const nota = Number(notaConceitoAlterada);
+    if (dadosNota?.notaConceito || dadosNota?.notaConceito === 0) {
+      const nota = notaAlterada(dadosNota.notaConceito);
       setNotaValorAtual(nota);
     }
   }, [dadosNota]);
