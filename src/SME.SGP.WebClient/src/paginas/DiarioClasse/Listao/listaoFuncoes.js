@@ -246,6 +246,7 @@ const obterDaodsFechamentoPorBimestreListao = async (
 
     // TODO - Remover pois não vai ter o 'fechamentoId' na consulta, vai ser no endpoint chave!
     resposta.data.fechamentoTurmaId = resposta.data.fechamentoId;
+    delete resposta.data.fechamentoId;
 
     if (dadosChavesFechamento) {
       resposta.data.fechamentoTurmaId =

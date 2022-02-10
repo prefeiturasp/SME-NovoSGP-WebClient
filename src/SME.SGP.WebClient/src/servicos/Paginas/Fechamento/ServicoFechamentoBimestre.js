@@ -1,5 +1,7 @@
 import api from '~/servicos/api';
 
+const urlBase = '/v1/fechamentos/turmas';
+
 const ServicoFechamentoBimestre = {
   buscarDados(turmaCodigo, disciplinaCodigo, bimestre, periodo) {
     return api.get(
@@ -26,21 +28,26 @@ const ServicoFechamentoBimestre = {
     turmaCodigo,
     semestre,
     bimestre,
-    componenteCurricularCodigo
+    componenteCurricularCodigo,
+    fechamentoTurmaId
   ) {
+    // TODO - Alterar endpoint
+    // return api.get(
+    //   `${urlBase}/listar?turmaCodigo=${turmaCodigo}&componenteCurricularCodigo=${componenteCurricularCodigo}&bimestre=${bimestre}&semestre=${semestre}&fechamentoTurmaId=${fechamentoTurmaId}`
+    // );
     return api.get(
-      `/v1/fechamentos/turmas/listar?turmaCodigo=${turmaCodigo}&componenteCurricularCodigo=${componenteCurricularCodigo}&bimestre=${bimestre}&semestre=${semestre}`
+      `${urlBase}/listar?turmaCodigo=${turmaCodigo}&componenteCurricularCodigo=${componenteCurricularCodigo}&bimestre=${bimestre}&semestre=${semestre}`
     );
   },
   salvarFechamentoPorBimestre(params) {
-    return api.post(`/v1/fechamentos/turmas/salvar-fechamento`, params);
+    return api.post(`${urlBase}/salvar-fechamento`, params);
   },
   obterChavesFechamentoListao(turmaId, bimestre) {
     return new Promise(resolve =>
       setTimeout(() => {
         resolve({
           data: {
-            fechamentoTurmaId: 123,
+            fechamentoTurmaId: 70305826,
             periodoEscolarId: 321,
             possuiAvaliacao: true,
           },
@@ -49,7 +56,7 @@ const ServicoFechamentoBimestre = {
     );
     // TODO - Alterar endpoint
     // return api.get(
-    //   `/v1/fechamentos/turmas/chaves-fechamento?turmaId=${turmaId}&bimestre=${bimestre}`
+    //   `${urlBase}/chaves-fechamento?turmaId=${turmaId}&bimestre=${bimestre}`
     // );
   },
 };

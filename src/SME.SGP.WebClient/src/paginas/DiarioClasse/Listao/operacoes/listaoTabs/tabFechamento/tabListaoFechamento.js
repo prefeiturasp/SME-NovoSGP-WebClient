@@ -32,7 +32,7 @@ const TabListaoFechamento = () => {
   const obterFechamentoPorBimestre = useCallback(async () => {
     let dadosChavesFechamento = {};
     const respostaChaves = await ServicoFechamentoBimestre.obterChavesFechamentoListao(
-      turmaSelecionada.id,
+      turmaSelecionada?.id,
       bimestreOperacoes
     ).catch(e => erros(e));
 
