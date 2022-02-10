@@ -273,7 +273,7 @@ const salvarFechamentoListao = async (
       if (dadosNotaConceito.modoEdicao) {
         notaConceitoAlunos.push({
           codigoAluno: aluno.codigoAluno,
-          nota: ehNota ? dadosNotaConceito.notaConceito || '' : '',
+          nota: ehNota ? dadosNotaConceito.notaConceito ?? '' : '',
           conceitoId: !ehNota ? dadosNotaConceito.notaConceito || '' : '',
           disciplinaId:
             dadosNotaConceito.disciplinaCodigo ||
@@ -302,7 +302,9 @@ const salvarFechamentoListao = async (
     .finally(() => setExibirLoaderGeral(false));
 
   if (resposta?.status === 200) {
-    sucesso(`${ehNota ? 'Notas' : 'Conceitos'} registrados com sucesso`);
+    sucesso(
+      `${ehNota ? 'Notas registradas' : 'Conceitos registrados'} com sucesso`
+    );
     const { dispatch } = store;
 
     dispatch(setTelaEmEdicao(false));
