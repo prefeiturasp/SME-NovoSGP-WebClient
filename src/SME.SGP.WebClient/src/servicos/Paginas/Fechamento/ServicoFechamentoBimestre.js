@@ -35,6 +35,23 @@ const ServicoFechamentoBimestre = {
   salvarFechamentoPorBimestre(params) {
     return api.post(`/v1/fechamentos/turmas/salvar-fechamento`, params);
   },
+  obterChavesFechamentoListao(turmaId, bimestre) {
+    return new Promise(resolve =>
+      setTimeout(() => {
+        resolve({
+          data: {
+            fechamentoTurmaId: 123,
+            periodoEscolarId: 321,
+            possuiAvaliacao: true,
+          },
+        });
+      }, 2000)
+    );
+    // TODO - Alterar endpoint
+    // return api.get(
+    //   `/v1/fechamentos/turmas/chaves-fechamento?turmaId=${turmaId}&bimestre=${bimestre}`
+    // );
+  },
 };
 
 export default ServicoFechamentoBimestre;

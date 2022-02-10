@@ -88,7 +88,7 @@ const ListaoListaFechamento = props => {
             desabilitar={desabilitarCampos}
             ehInfantil={listaoEhInfantil}
             aluno={aluno}
-            fechamentoId={dadosFechamento.fechamentoId}
+            fechamentoTurmaId={dadosFechamento.fechamentoTurmaId}
             dadosFechamento={dadosFechamento}
             setDadosFechamento={setDadosFechamento}
           />

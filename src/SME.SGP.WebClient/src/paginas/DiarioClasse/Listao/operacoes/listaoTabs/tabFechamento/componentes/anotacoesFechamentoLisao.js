@@ -12,7 +12,7 @@ const AnotacoesFechamentoLisao = props => {
     desabilitar,
     ehInfantil,
     aluno,
-    fechamentoId,
+    fechamentoTurmaId,
     dadosFechamento,
     setDadosFechamento,
   } = props;
@@ -56,7 +56,7 @@ const AnotacoesFechamentoLisao = props => {
         <ModalAnotacaoAluno
           exibirModal={exibirModalAnotacao}
           onCloseModal={onCloseModalAnotacao}
-          fechamentoId={fechamentoId}
+          fechamentoId={fechamentoTurmaId}
           codigoTurma={turmaSelecionada.turma}
           anoLetivo={turmaSelecionada.anoLetivo}
           dadosAlunoSelecionado={aluno}
@@ -71,7 +71,7 @@ AnotacoesFechamentoLisao.propTypes = {
   desabilitar: PropTypes.bool,
   ehInfantil: PropTypes.bool,
   aluno: PropTypes.oneOfType(PropTypes.any),
-  fechamentoId: PropTypes.number,
+  fechamentoTurmaId: PropTypes.number,
   dadosFechamento: PropTypes.oneOfType(PropTypes.any),
   setDadosFechamento: PropTypes.func,
 };
@@ -80,7 +80,7 @@ AnotacoesFechamentoLisao.defaultProps = {
   desabilitar: false,
   ehInfantil: false,
   aluno: null,
-  fechamentoId: null,
+  fechamentoTurmaId: null,
   dadosFechamento: {},
   setDadosFechamento: () => null,
 };
