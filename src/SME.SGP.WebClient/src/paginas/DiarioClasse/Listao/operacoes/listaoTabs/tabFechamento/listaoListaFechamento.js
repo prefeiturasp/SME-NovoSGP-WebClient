@@ -373,7 +373,7 @@ const ListaoListaFechamento = props => {
   const getExpandIconColumnIndex = () => {
     let expandIconColumnIndex = 2;
     if (ehFinal) {
-      expandIconColumnIndex = 6;
+      expandIconColumnIndex = ehEJA ? 4 : 6;
     }
     return expandIconColumnIndex;
   };
