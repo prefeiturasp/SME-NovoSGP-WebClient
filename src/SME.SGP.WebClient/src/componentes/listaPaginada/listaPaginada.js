@@ -28,7 +28,6 @@ const ListaPaginada = props => {
   } = props;
 
   const [carregando, setCarregando] = useState(false);
-
   const [total, setTotal] = useState(0);
   const [linhas, setLinhas] = useState([]);
   const [linhasSelecionadas, setLinhasSelecionadas] = useState([]);
@@ -96,6 +95,7 @@ const ListaPaginada = props => {
 
   const filtrar = () => {
     if (naoFiltrarQuandoCarregando && carregando) return;
+    let statusCode = 0;
     selecionar([]);
     setCarregando(true);
     api
@@ -110,6 +110,7 @@ const ListaPaginada = props => {
         },
       })
       .then(resposta => {
+        statusCode = resposta.status;
         setLinhas([]);
         setTotal(resposta.data.totalRegistros);
         setLinhas([...resposta.data.items]);
@@ -117,7 +118,11 @@ const ListaPaginada = props => {
           setLista(resposta.data.items);
         }
       })
-      .catch(e => erros(e))
+      .catch(e => {
+        if (statusCode !== 204) {
+          erros(e);
+        }
+      })
       .finally(() => setCarregando(false));
   };
 
