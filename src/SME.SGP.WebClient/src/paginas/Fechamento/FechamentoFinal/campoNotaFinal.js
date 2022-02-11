@@ -5,7 +5,7 @@ import CampoNumero from '~/componentes/campoNumero';
 import { erros } from '~/servicos/alertas';
 import api from '~/servicos/api';
 import { Loader } from '~/componentes';
-import { converterAcaoTecla } from '~/utils';
+import { converterAcaoTecla, valorNuloOuVazio } from '~/utils';
 
 const CampoNotaFinal = props => {
   const {
@@ -73,12 +73,14 @@ const CampoNotaFinal = props => {
   }, [montaNotaFinal]);
 
   useEffect(() => {
-    if (notaBimestre) {
+    if (!valorNuloOuVazio(notaBimestre?.notaConceito)) {
       const notaConceitoParseada = String(notaBimestre.notaConceito);
       const notaConceitoAlterada = notaConceitoParseada.replace(',', '.');
       const nota = Number(notaConceitoAlterada);
+
       validaSeEstaAbaixoDaMedia(nota);
       validaSeTeveAlteracao(String(nota));
+
       setNotaValorAtual(nota);
     }
   }, [notaBimestre, validaSeTeveAlteracao, validaSeEstaAbaixoDaMedia]);
