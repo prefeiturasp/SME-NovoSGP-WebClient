@@ -22,11 +22,13 @@ const TabListaoFechamento = () => {
     dadosFechamento,
     setDadosFechamento,
     setDadosIniciaisFechamento,
+    setAvaliacoesTabelaFechamento,
   } = useContext(ListaoContext);
 
   const limparFechamento = () => {
     setDadosIniciaisFechamento();
     setDadosFechamento();
+    setAvaliacoesTabelaFechamento();
   };
 
   const obterFechamentoPorBimestre = useCallback(async () => {

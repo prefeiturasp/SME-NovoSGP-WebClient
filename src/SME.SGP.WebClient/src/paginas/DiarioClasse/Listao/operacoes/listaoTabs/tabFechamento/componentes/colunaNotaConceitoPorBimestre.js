@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import { Base } from '~/componentes';
 import notasConceitos from '~/dtos/notasConceitos';
 import ListaoContext from '~/paginas/DiarioClasse/Listao/listaoContext';
+import { obterDescricaoConceito } from '~/paginas/DiarioClasse/Listao/listaoFuncoes';
 
 export const ContainerDescConceito = styled.div`
   padding: 7px 7px 7px 7px;
@@ -29,16 +30,8 @@ const ColunaNotaConceitoPorBimestre = props => {
 
   const [valorExibir, setValorExibir] = useState('');
 
-  const obterDescricaoConceito = useCallback(
-    valor => {
-      if (listaTiposConceitos?.length) {
-        const conceito = listaTiposConceitos.find(
-          item => item.id === String(valor)
-        );
-        return conceito?.valor || '';
-      }
-      return '';
-    },
+  const obterDescricao = useCallback(
+    valor => obterDescricaoConceito(listaTiposConceitos, valor),
     [listaTiposConceitos]
   );
 
@@ -58,7 +51,7 @@ const ColunaNotaConceitoPorBimestre = props => {
     }
 
     if (Number(notaTipo) === notasConceitos.Conceitos) {
-      setValorExibir(obterDescricaoConceito(notaBimestre?.notaConceito));
+      setValorExibir(obterDescricao(notaBimestre?.notaConceito));
     } else {
       setValorExibir(notaBimestre?.notaConceito);
     }
