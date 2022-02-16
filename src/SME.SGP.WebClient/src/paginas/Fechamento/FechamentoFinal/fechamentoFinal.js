@@ -179,7 +179,7 @@ const FechamentoFinal = forwardRef((props, ref) => {
   };
   return (
     <>
-      {alunos?.length && dadosFechamentoFinal?.periodoEncerrado ? (
+      {alunos?.length && !dadosFechamentoFinal?.periodoAberdo ? (
         <div className="row">
           <div className="col-md-12">
             <Alert
@@ -283,7 +283,7 @@ const FechamentoFinal = forwardRef((props, ref) => {
                         indexAluno={i}
                         desabilitarCampo={
                           desabilitarCampo ||
-                          dadosFechamentoFinal?.periodoEncerrado
+                          !dadosFechamentoFinal?.periodoAberdo
                         }
                         ehSintese={ehSintese}
                         registraFrequencia={registraFrequencia}
