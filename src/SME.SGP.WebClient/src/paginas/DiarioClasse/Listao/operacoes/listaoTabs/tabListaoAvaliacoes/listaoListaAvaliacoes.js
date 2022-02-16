@@ -139,6 +139,7 @@ const ListaoListaAvaliacoes = () => {
           <>
             {notaAvaliacao?.ausente ? <LabelAusenteCellTable /> : <></>}
             <ListaoCampoConceito
+              styleContainer={{ paddingRight: 15, paddingLeft: 15 }}
               dadosConceito={notaAvaliacao}
               idCampo={shortid.generate()}
               desabilitar={desabilitarCampos || !notaAvaliacao?.podeEditar}
@@ -211,8 +212,8 @@ const ListaoListaAvaliacoes = () => {
         ),
         align: 'center',
         width: '150px',
-        render: dadosEstudamte =>
-          montarCampoNotaConceito(dadosEstudamte, avaliacao),
+        render: dadosEstudante =>
+          montarCampoNotaConceito(dadosEstudante, avaliacao),
       });
     });
   }
