@@ -20,7 +20,6 @@ import {
   limparDadosObservacoesUsuario,
   setDadosObservacoesUsuario,
 } from '~/redux/modulos/observacoesUsuario/actions';
-
 import {
   api,
   confirmar,
@@ -30,7 +29,6 @@ import {
   ServicoDiarioBordo,
   sucesso,
 } from '~/servicos';
-
 import ServicoFrequencia from '~/servicos/Paginas/DiarioClasse/ServicoFrequencia';
 import ServicoPlanoAula from '~/servicos/Paginas/DiarioClasse/ServicoPlanoAula';
 import { editorTemValor } from '~/utils';
@@ -42,12 +40,13 @@ import {
   LISTAO_TAB_PLANO_AULA,
 } from '../listaoConstantes';
 import ListaoContext from '../listaoContext';
-
 import {
   montarIdsObjetivosSelecionadosListao,
+  obterDaodsFechamentoPorBimestreListao,
   obterDiarioBordoListao,
   obterListaAlunosAvaliacaoListao,
   salvarEditarObservacao,
+  validarSalvarFechamentoListao,
 } from '../listaoFuncoes';
 
 const ListaoOperacoesBotoesAcao = () => {
@@ -88,6 +87,11 @@ const ListaoOperacoesBotoesAcao = () => {
     bimestreOperacoes,
     idDiarioBordoAtual,
     setIdDiarioBordoAtual,
+    dadosFechamento,
+    setDadosFechamento,
+    dadosIniciaisFechamento,
+    setDadosIniciaisFechamento,
+    setDadosModalJustificativaFechamento,
   } = useContext(ListaoContext);
 
   const telaEmEdicao = useSelector(store => store.geral.telaEmEdicao);
@@ -511,7 +515,46 @@ const ListaoOperacoesBotoesAcao = () => {
     return false;
   };
 
-  const onClickSalvarTabAtiva = clicouNoBotaoSalvar => {
+  const acaoPosSalvarFechamento = (salvouFechamento, clicouNoBotaoSalvar) => {
+    const limparFechamento = () => {
+      setDadosIniciaisFechamento();
+      setDadosFechamento();
+    };
+
+    if (salvouFechamento && clicouNoBotaoSalvar) {
+      obterDaodsFechamentoPorBimestreListao(
+        setExibirLoaderGeral,
+        turmaSelecionada,
+        bimestreOperacoes,
+        componenteCurricular,
+        setDadosFechamento,
+        setDadosIniciaisFechamento,
+        limparFechamento
+      );
+    } else if (salvouFechamento) limparFechamento();
+
+    return salvouFechamento;
+  };
+
+  const salvarFechamento = async (clicouNoBotaoSalvar, acaoPosSalvar) => {
+    const posSalvar = clicouNoBotaoSalvar
+      ? salvou => acaoPosSalvarFechamento(salvou, clicouNoBotaoSalvar)
+      : acaoPosSalvar;
+
+    const salvouFechamento = await validarSalvarFechamentoListao(
+      turmaSelecionada.turma,
+      dadosFechamento,
+      bimestreOperacoes,
+      setExibirLoaderGeral,
+      setDadosModalJustificativaFechamento,
+      componenteCurricular,
+      posSalvar
+    );
+
+    return acaoPosSalvarFechamento(salvouFechamento, clicouNoBotaoSalvar);
+  };
+
+  const onClickSalvarTabAtiva = (clicouNoBotaoSalvar, acaoPosSalvar) => {
     switch (tabAtual) {
       case LISTAO_TAB_FREQUENCIA:
         return salvarFrequencia();
@@ -521,19 +564,21 @@ const ListaoOperacoesBotoesAcao = () => {
         return salvarAvaliacoes(clicouNoBotaoSalvar);
       case LISTAO_TAB_DIARIO_BORDO:
         return salvarDiarioBordo(clicouNoBotaoSalvar);
+      case LISTAO_TAB_FECHAMENTO:
+        return salvarFechamento(clicouNoBotaoSalvar, acaoPosSalvar);
 
       default:
         return true;
     }
   };
 
-  const validarSalvar = async () => {
+  const validarSalvar = async acaoPosSalvar => {
     let salvou = true;
     if (!desabilitarBotoes && telaEmEdicao) {
       const confirmado = await pergutarParaSalvar();
 
       if (confirmado) {
-        salvou = await onClickSalvarTabAtiva();
+        salvou = await onClickSalvarTabAtiva(false, acaoPosSalvar);
       } else {
         dispatch(setTelaEmEdicao(false));
       }
@@ -543,7 +588,9 @@ const ListaoOperacoesBotoesAcao = () => {
 
   useEffect(() => {
     if (telaEmEdicao) {
-      dispatch(setAcaoTelaEmEdicao(validarSalvar));
+      dispatch(
+        setAcaoTelaEmEdicao(acaoPosSalvar => validarSalvar(acaoPosSalvar))
+      );
     } else {
       dispatch(setLimparModoEdicaoGeral());
     }
@@ -551,7 +598,9 @@ const ListaoOperacoesBotoesAcao = () => {
 
   const onClickVoltar = async () => {
     if (!desabilitarBotoes && telaEmEdicao) {
-      const salvou = await validarSalvar();
+      const salvou = await validarSalvar(() => {
+        history.push(RotasDto.LISTAO);
+      });
       if (salvou) {
         history.push(RotasDto.LISTAO);
       }
@@ -575,7 +624,10 @@ const ListaoOperacoesBotoesAcao = () => {
     setDadosAvaliacao({ ...dadosCarregar });
   };
 
-  const limparDadosFechamento = () => {};
+  const limparDadosFechamento = () => {
+    const dadosCarregar = _.cloneDeep(dadosIniciaisFechamento);
+    setDadosFechamento({ ...dadosCarregar });
+  };
 
   const limparDadosDiarioBordo = () => {
     setDadosDiarioBordo([]);
