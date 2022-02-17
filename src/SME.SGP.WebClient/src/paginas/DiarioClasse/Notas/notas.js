@@ -1164,6 +1164,7 @@ const Notas = ({ match }) => {
                     value={valoresIniciais.descricao}
                     onChange={onChangeJustificativa}
                     name="descricao"
+                    permiteInserirArquivo={false}
                   />
                 </fieldset>
               </div>

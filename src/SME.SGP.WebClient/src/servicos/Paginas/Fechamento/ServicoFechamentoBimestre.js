@@ -21,6 +21,20 @@ const ServicoFechamentoBimestre = {
     const novoValor = Number(valor).toFixed(1);
     return isNaN(novoValor) ? valor : novoValor;
   },
+
+  obterFechamentoPorBimestre(
+    turmaCodigo,
+    semestre,
+    bimestre,
+    componenteCurricularCodigo
+  ) {
+    return api.get(
+      `/v1/fechamentos/turmas/listar?turmaCodigo=${turmaCodigo}&componenteCurricularCodigo=${componenteCurricularCodigo}&bimestre=${bimestre}&semestre=${semestre}`
+    );
+  },
+  salvarFechamentoPorBimestre(params) {
+    return api.post(`/v1/fechamentos/turmas/salvar-fechamento`, params);
+  },
 };
 
 export default ServicoFechamentoBimestre;

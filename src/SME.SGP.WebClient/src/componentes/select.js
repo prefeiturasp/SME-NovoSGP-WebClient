@@ -8,6 +8,80 @@ import { Field } from 'formik';
 import { Base } from './colors';
 import Label from './label';
 
+const Container = styled.div`
+  ${({ size }) => size && size === 'small' && 'height: 24px;'}
+
+  .ant-select {
+    width: 100%;
+  }
+
+  .ant-select-arrow {
+    color: ${Base.CinzaMako};
+    margin-top: -9px;
+  }
+
+  .ant-select-selection {
+    ${({ border }) => border && `border-color: ${border};`}
+  }
+
+  .ant-select-selection__placeholder {
+    ${({ color }) => color && `color: ${color};`}
+    ${({ border, color }) => border && color && 'font-weight: bold !important;'}
+  }
+
+  .ant-select-selection--single {
+    align-items: center;
+    display: flex;
+    ${({ size }) => !size && 'height: 38px;'}
+    ${({ color }) => color && `color: ${color};`}
+  }
+
+  .ant-select-selection__rendered {
+    width: 98%;
+  }
+
+  .ant-select-selection__placeholder {
+    display: block;
+  }
+
+  .ant-select .ant-select-search__field {
+    display: block;
+    max-width: 100% !important;
+  }
+
+  .ant-select-selection-selected-value {
+    font-weight: bold;
+  }
+
+  .ant-select-selection--multiple {
+    min-height: 38px;
+    max-height: 39px;
+    overflow-x: hidden;
+
+    .ant-select-selection__placeholder {
+      line-height: 25px;
+    }
+
+    .ant-select-selection__rendered {
+      margin-top: 3px;
+    }
+  }
+
+  div[class*='is-invalid'] {
+    .ant-select-selection {
+      border-color: #dc3545 !important;
+    }
+  }
+
+  label {
+    font-weight: bold;
+  }
+`;
+
+const Erro = styled.span`
+  color: ${Base.Vermelho};
+`;
+
 const SelectComponent = React.forwardRef((props, ref) => {
   const {
     name,
@@ -36,80 +110,6 @@ const SelectComponent = React.forwardRef((props, ref) => {
     searchValue,
     setValueOnlyOnChange,
   } = props;
-
-  const Container = styled.div`
-    ${size && size === 'small' && 'height: 24px;'}
-
-    .ant-select {
-      width: 100%;
-    }
-
-    .ant-select-arrow {
-      color: ${Base.CinzaMako};
-      margin-top: -9px;
-    }
-
-    .ant-select-selection {
-      ${border && `border-color: ${border};`}
-    }
-
-    .ant-select-selection__placeholder {
-      ${color && `color: ${color};`}
-      ${border && color && 'font-weight: bold !important;'}
-    }
-
-    .ant-select-selection--single {
-      align-items: center;
-      display: flex;
-      ${!size && 'height: 38px;'}
-      ${color && `color: ${color};`}
-    }
-
-    .ant-select-selection__rendered {
-      width: 98%;
-    }
-
-    .ant-select-selection__placeholder {
-      display: block;
-    }
-
-    .ant-select .ant-select-search__field {
-      display: block;
-      max-width: 100% !important;
-    }
-
-    .ant-select-selection-selected-value {
-      font-weight: bold;
-    }
-
-    .ant-select-selection--multiple {
-      min-height: 38px;
-      max-height: 39px;
-      overflow-x: hidden;
-
-      .ant-select-selection__placeholder {
-        line-height: 25px;
-      }
-
-      .ant-select-selection__rendered {
-        margin-top: 3px;
-      }
-    }
-
-    div[class*='is-invalid'] {
-      .ant-select-selection {
-        border-color: #dc3545 !important;
-      }
-    }
-
-    label {
-      font-weight: bold;
-    }
-  `;
-
-  const Erro = styled.span`
-    color: ${Base.Vermelho};
-  `;
 
   const { Option } = Select;
 
@@ -226,7 +226,12 @@ const SelectComponent = React.forwardRef((props, ref) => {
     </Select>
   );
   return (
-    <Container className={classNameContainer || ''}>
+    <Container
+      className={classNameContainer || ''}
+      size={size}
+      border={border}
+      color={color}
+    >
       {label ? <Label text={label} control={name} /> : ''}
       {form ? campoComValidacoes() : campoSemValidacoes()}
       {form ? obterErros() : ''}
