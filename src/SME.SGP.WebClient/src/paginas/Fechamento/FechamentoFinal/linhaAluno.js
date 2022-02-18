@@ -9,7 +9,6 @@ import { setExpandirLinha } from '~/redux/modulos/notasConceitos/actions';
 import {
   acharItem,
   converterAcaoTecla,
-  esperarMiliSegundos,
   moverCursor,
   tratarString,
 } from '~/utils';
@@ -75,12 +74,16 @@ const LinhaAluno = ({
       ));
   };
 
-  const montaNotaFinal = (aluno, indexNotaConceito) => {
-    if (aluno && aluno.notasConceitoFinal && aluno.notasConceitoFinal.length) {
+  const montaNotaFinal = (alunoConceito, indexNotaConceito) => {
+    if (
+      alunoConceito &&
+      alunoConceito.notasConceitoFinal &&
+      alunoConceito.notasConceitoFinal.length
+    ) {
       if (ehRegencia) {
-        return aluno.notasConceitoFinal[indexNotaConceito];
+        return alunoConceito.notasConceitoFinal[indexNotaConceito];
       }
-      return aluno.notasConceitoFinal[0];
+      return alunoConceito.notasConceitoFinal[0];
     }
     return '';
   };
