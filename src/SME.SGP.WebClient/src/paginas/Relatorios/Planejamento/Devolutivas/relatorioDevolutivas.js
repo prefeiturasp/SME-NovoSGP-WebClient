@@ -15,7 +15,8 @@ import {
   Cabecalho,
   FiltroHelper,
 } from '~/componentes-sgp';
-import { OPCAO_TODOS } from '~/constantes/constantes';
+import { SGP_SELECT_COMPONENTE_CURRICULAR } from '~/componentes-sgp/filtro/idsCampos';
+import { OPCAO_TODOS, ANO_INICIO_INFANTIL } from '~/constantes/constantes';
 
 import { ModalidadeDTO } from '~/dtos';
 
@@ -24,6 +25,7 @@ import {
   ehTurmaInfantil,
   erros,
   history,
+  ServicoDisciplina,
   ServicoFiltroRelatorio,
   ServicoRelatorioDevolutivas,
   sucesso,
@@ -60,6 +62,13 @@ const RelatorioDevolutivas = () => {
   const [alterouCampos, setAlterouCampos] = useState(true);
   const [recarregar, setRecarregar] = useState(false);
 
+  const [carregandoComponentes, setCarregandoComponentes] = useState(false);
+  const [
+    listaComponenteCurriculares,
+    setListaComponenteCurriculares,
+  ] = useState();
+  const [componenteCurricular, setComponenteCurricular] = useState();
+
   const { turmaSelecionada } = useSelector(store => store.usuario);
 
   const opcoesRadioSimNao = [
@@ -67,14 +76,21 @@ const RelatorioDevolutivas = () => {
     { label: 'Sim', value: true },
   ];
 
-  const limparFiltrosSelecionados = () => {
+  const limparFiltrosSelecionados = naolimparTodos => {
     setRecarregar(true);
+    if (!naolimparTodos) {
+      setConsideraHistorico(false);
+      setAnoLetivo(anoAtual);
+    }
     setDreId();
     setListaDres([]);
     setUeId();
     setListaUes([]);
     setListaTurmas([]);
     setTurmaId();
+    setListaComponenteCurriculares([]);
+    setComponenteCurricular();
+
     setNaoEhInfantil(false);
   };
 
@@ -106,14 +122,20 @@ const RelatorioDevolutivas = () => {
       });
     }
 
-    const retorno = await ServicoRelatorioDevolutivas.gerar({
+    const params = {
       ano: anoLetivo,
       dreId,
       ueId: ue?.id,
-      bimestres,
       turmas: turmasParaConsulta,
       exibirDetalhes: exibirConteudoDevolutiva,
-    })
+      componenteCurricular,
+    };
+
+    if (Number(anoLetivo) <= ANO_INICIO_INFANTIL) {
+      params.bimestres = bimestres;
+    }
+
+    const retorno = await ServicoRelatorioDevolutivas.gerar(params)
       .catch(e => erros(e))
       .finally(setExibirLoaderGeral(false));
     if (retorno?.status === 200) {
@@ -124,14 +146,14 @@ const RelatorioDevolutivas = () => {
   };
 
   const onCheckedConsideraHistorico = () => {
-    limparFiltrosSelecionados();
+    limparFiltrosSelecionados(true);
     setConsideraHistorico(!consideraHistorico);
     setAnoLetivo(anoAtual);
   };
 
   const onChangeAnoLetivo = ano => {
     setAnoLetivo(ano);
-    limparFiltrosSelecionados();
+    limparFiltrosSelecionados(true);
   };
 
   const obterAnosLetivos = useCallback(async () => {
@@ -221,6 +243,9 @@ const RelatorioDevolutivas = () => {
 
     setListaTurmas([]);
     setTurmaId();
+
+    setListaComponenteCurriculares([]);
+    setComponenteCurricular();
   };
 
   const onChangeUe = ue => {
@@ -228,6 +253,9 @@ const RelatorioDevolutivas = () => {
 
     setListaTurmas([]);
     setTurmaId();
+
+    setListaComponenteCurriculares([]);
+    setComponenteCurricular();
     if (!ue) {
       setNaoEhInfantil(false);
     }
@@ -274,6 +302,9 @@ const RelatorioDevolutivas = () => {
   const onChangeModalidade = valor => {
     setTurmaId();
     setModalidadeId(valor);
+
+    setListaComponenteCurriculares([]);
+    setComponenteCurricular();
   };
 
   const verificarAbrangencia = data => {
@@ -327,6 +358,10 @@ const RelatorioDevolutivas = () => {
   const onChangeTurma = valor => {
     setTurmaId(valor);
     setBimestres([]);
+    if (!valor?.length) {
+      setListaComponenteCurriculares([]);
+      setComponenteCurricular();
+    }
   };
 
   const onchangeMultiSelect = (valores, valoreAtual, funSetarNovoValor) => {
@@ -387,6 +422,9 @@ const RelatorioDevolutivas = () => {
     }
     setTurmaId();
     setListaTurmas([]);
+
+    setListaComponenteCurriculares([]);
+    setComponenteCurricular();
   }, [ueId, obterTurmas, naoEhInfantil]);
 
   const onChangeBimestre = valor => setBimestres(valor);
@@ -429,10 +467,94 @@ const RelatorioDevolutivas = () => {
       !dreId ||
       !ueId ||
       !turmaId?.length ||
-      !bimestres?.length ||
+      !componenteCurricular ||
       !alterouCampos;
-    setDesabilitarGerar(desabilitar);
-  }, [anoLetivo, dreId, ueId, turmaId, bimestres, alterouCampos]);
+
+    if (Number(anoLetivo) <= ANO_INICIO_INFANTIL) {
+      setDesabilitarGerar(desabilitar || !bimestres?.length);
+    } else {
+      setDesabilitarGerar(desabilitar);
+    }
+  }, [
+    anoLetivo,
+    dreId,
+    ueId,
+    turmaId,
+    bimestres,
+    alterouCampos,
+    componenteCurricular,
+  ]);
+
+  const obterComponentesCurriculares = useCallback(async () => {
+    const turmasSelOpTodos = turmaId?.find(
+      codigoTurma => codigoTurma === OPCAO_TODOS
+    );
+
+    let codigosTurmas = turmaId;
+
+    if (turmasSelOpTodos) {
+      codigosTurmas = listaTurmas
+        ?.filter?.(turma => turma?.valor !== OPCAO_TODOS)
+        ?.map?.(t => t?.valor);
+    }
+
+    setCarregandoComponentes(true);
+    const respostas = await Promise.all(
+      codigosTurmas.map(codigoTurma =>
+        ServicoDisciplina.obterDisciplinasPorTurma(
+          codigoTurma,
+          Number(anoLetivo) <= ANO_INICIO_INFANTIL
+        )
+      )
+    );
+
+    const dados = respostas?.filter?.(item => item?.data?.length);
+
+    if (dados?.length) {
+      let componentesConcat = dados?.reduce?.(
+        (arrayConcat, resposta) => arrayConcat?.concat?.(resposta?.data),
+        []
+      );
+
+      if (componentesConcat?.length) {
+        componentesConcat = componentesConcat?.reduce?.(
+          (componentes, componente) =>
+            componentes?.find?.(c => c?.id === componente?.id)
+              ? componentes
+              : [...componentes, componente],
+          []
+        );
+      }
+
+      if (componentesConcat.length) {
+        if (componentesConcat?.length === 1) {
+          setComponenteCurricular(
+            String(componentesConcat[0].codigoComponenteCurricular)
+          );
+        }
+
+        if (componentesConcat?.length > 1) {
+          componentesConcat.unshift({
+            nomeComponenteInfantil: 'Todos',
+            valor: OPCAO_TODOS,
+          });
+        }
+
+        setListaComponenteCurriculares(componentesConcat);
+      } else {
+        setListaComponenteCurriculares([]);
+      }
+    }
+    setCarregandoComponentes(false);
+  }, [turmaId, listaTurmas]);
+
+  useEffect(() => {
+    if (turmaId?.length) {
+      obterComponentesCurriculares();
+    } else {
+      setListaComponenteCurriculares([]);
+    }
+  }, [turmaId]);
 
   return (
     <Loader loading={exibirLoaderGeral}>
@@ -579,22 +701,45 @@ const RelatorioDevolutivas = () => {
                 />
               </Loader>
             </div>
-            <div className="col-sm-12 col-md-4 mb-2">
-              <SelectComponent
-                lista={listaBimestre}
-                valueOption="valor"
-                valueText="desc"
-                label="Bimestre"
-                disabled={!modalidadeId || listaBimestre?.length === 1}
-                valueSelect={bimestres}
-                multiple
-                onChange={valores => {
-                  setAlterouCampos(true);
-                  onchangeMultiSelect(valores, bimestres, onChangeBimestre);
-                }}
-                placeholder="Selecione o bimestre"
-              />
+            <div className="col-sm-12 col-md-4 col-lg-4 col-xl-4 mb-2">
+              <Loader loading={carregandoComponentes} ignorarTip>
+                <SelectComponent
+                  label="Componente curricular"
+                  id={SGP_SELECT_COMPONENTE_CURRICULAR}
+                  lista={listaComponenteCurriculares}
+                  valueOption="codigoComponenteCurricular"
+                  valueText="nomeComponenteInfantil"
+                  valueSelect={componenteCurricular}
+                  onChange={valor => {
+                    setComponenteCurricular(valor);
+                    setAlterouCampos(true);
+                  }}
+                  placeholder="Selecione um componente curricular"
+                  disabled={
+                    !turmaId?.length ||
+                    listaComponenteCurriculares?.length === 1
+                  }
+                />
+              </Loader>
             </div>
+            {Number(anoLetivo) <= ANO_INICIO_INFANTIL && (
+              <div className="col-sm-12 col-md-4 mb-2">
+                <SelectComponent
+                  lista={listaBimestre}
+                  valueOption="valor"
+                  valueText="desc"
+                  label="Bimestre"
+                  disabled={!modalidadeId || listaBimestre?.length === 1}
+                  valueSelect={bimestres}
+                  multiple
+                  onChange={valores => {
+                    setAlterouCampos(true);
+                    onchangeMultiSelect(valores, bimestres, onChangeBimestre);
+                  }}
+                  placeholder="Selecione o bimestre"
+                />
+              </div>
+            )}
             <div className="col-sm-12 col-md-6 mb-2">
               <RadioGroupButton
                 label="Exibir conteúdo da devolutiva"
