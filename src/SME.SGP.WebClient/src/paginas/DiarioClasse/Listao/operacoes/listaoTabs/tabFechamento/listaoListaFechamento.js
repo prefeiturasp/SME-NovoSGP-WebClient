@@ -1,4 +1,9 @@
-import { faMinusCircle, faPlusCircle } from '@fortawesome/free-solid-svg-icons';
+import {
+  faChevronDown,
+  faChevronUp,
+  faMinusCircle,
+  faPlusCircle,
+} from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Tooltip } from 'antd';
 import PropTypes from 'prop-types';
@@ -22,9 +27,11 @@ import {
 } from '../tabFrequencia/lista/listaFrequencia.css';
 import ListaoCampoConceito from '../tabListaoAvaliacoes/componentes/listaoCampoConceito';
 import ListaoCampoNota from '../tabListaoAvaliacoes/componentes/listaoCampoNota';
+import AnotacoesFechamentoLisao from './componentes/anotacoesFechamentoLisao';
 import ColunaNotaConceitoPorBimestre from './componentes/colunaNotaConceitoPorBimestre';
 import ModalJustificativaFechamento from './componentes/modalJustificativaFechamento';
 import SituacaoFechamentoListao from './componentes/situacaoFechamentoListao';
+import TabelaAvaliacoesFechamento from './componentes/tabelaAvaliacoesFechamento';
 
 export const ContainerTableFechamento = styled.div`
   tr {
@@ -33,6 +40,14 @@ export const ContainerTableFechamento = styled.div`
 
   td {
     padding: 8px 12px !important;
+  }
+
+  .ant-table-expanded-row {
+    td {
+      .table-responsive {
+        overflow: auto !important;
+      }
+    }
   }
 `;
 
@@ -46,7 +61,10 @@ const ListaoListaFechamento = props => {
     somenteConsultaListao,
     periodoAbertoListao,
     bimestreOperacoes,
+    listaoEhInfantil,
   } = useContext(ListaoContext);
+
+  const [expandedRowKeys, setExpandedRowKeys] = useState();
 
   const { ehEJA } = props;
 
@@ -56,36 +74,44 @@ const ListaoListaFechamento = props => {
 
   const ehFinal = bimestreOperacoes === BIMESTRE_FINAL;
 
-  const montarColunaNumeroEstudante = aluno => {
-    return (
-      <span className="d-flex justify-content-center">
-        <span>{aluno.numeroChamada}</span>
+  const montarColunaNumeroEstudante = aluno => (
+    <span className="d-flex justify-content-center">
+      <span>{aluno.numeroChamada}</span>
 
-        {aluno?.marcador && (
-          <Tooltip title={aluno?.marcador?.descricao} placement="top">
-            <MarcadorSituacao
-              className="fas fa-circle"
-              style={{
-                marginRight: '-10px',
-                color: Base.Roxo,
-              }}
-            />
-          </Tooltip>
-        )}
-      </span>
-    );
-  };
+      {aluno?.marcador && (
+        <Tooltip title={aluno?.marcador?.descricao} placement="top">
+          <MarcadorSituacao
+            className="fas fa-circle"
+            style={{
+              marginRight: '-10px',
+              color: Base.Roxo,
+            }}
+          />
+        </Tooltip>
+      )}
+    </span>
+  );
 
-  const montarColunaEstudante = aluno => {
-    return (
-      <div className="d-flex justify-content-between">
-        <div className="d-flex justify-content-start">{aluno.nome}</div>
-        <div className=" d-flex justify-content-end">
+  const montarColunaEstudante = aluno => (
+    <div className="d-flex justify-content-between">
+      <div className="d-flex justify-content-start">{aluno.nome}</div>
+      <div className=" d-flex justify-content-end">
+        <div className="mr-3">
           <SinalizacaoAEE exibirSinalizacao={aluno.ehAtendidoAEE} />
         </div>
+        {!ehFinal && (
+          <AnotacoesFechamentoLisao
+            desabilitar={desabilitarCampos}
+            ehInfantil={listaoEhInfantil}
+            aluno={aluno}
+            fechamentoTurmaId={dadosFechamento.fechamentoTurmaId}
+            dadosFechamento={dadosFechamento}
+            setDadosFechamento={setDadosFechamento}
+          />
+        )}
       </div>
-    );
-  };
+    </div>
+  );
 
   const onChangeNotaConceito = (
     valorNovo,
@@ -101,14 +127,6 @@ const ListaoListaFechamento = props => {
       if (aluno) {
         const indexEstudante = alunos?.indexOf?.(aluno);
         const novosDados = dadosFechamento;
-        // novosDados.alunos[indexEstudante][refNomeParamOrigemDados][
-        //   indexNotaFechamento
-        // ].notaConceito = valorNovo;
-        // novosDados.alunos[indexEstudante][refNomeParamOrigemDados][
-        //   indexNotaFechamento
-        // ].modoEdicao = true;
-
-        // TODO - Validar nos bimestre de 1 a 4 trazer o objeto montado mesmo quando não tiver valor!
         const dadosItemAtual =
           novosDados.alunos[indexEstudante][refNomeParamOrigemDados];
 
@@ -221,6 +239,55 @@ const ListaoListaFechamento = props => {
     return mapColunas;
   };
 
+  const temLinhaExpandida = codigoAluno =>
+    expandedRowKeys?.codigoAluno === codigoAluno;
+
+  const onClickExpandir = (expandir, codigoAluno, expandirColunaRegencia) => {
+    if (expandir) {
+      setExpandedRowKeys({
+        codigoAluno,
+        expandirColunaRegencia,
+      });
+    } else {
+      setExpandedRowKeys();
+    }
+  };
+
+  const iconeExpandirLinha = (
+    alunoExpandido,
+    dadosEstudante,
+    expandirColunaRegencia
+  ) =>
+    expandirColunaRegencia ? (
+      <FontAwesomeIcon
+        style={{
+          fontSize: 18,
+          cursor: 'pointer',
+          color: alunoExpandido ? Base.Branco : Base.Roxo,
+        }}
+        icon={alunoExpandido ? faMinusCircle : faPlusCircle}
+        onClick={() =>
+          onClickExpandir(
+            !alunoExpandido,
+            dadosEstudante?.codigoAluno,
+            expandirColunaRegencia
+          )
+        }
+      />
+    ) : (
+      <FontAwesomeIcon
+        style={{
+          fontSize: 16,
+          cursor: 'pointer',
+          color: alunoExpandido ? Base.Branco : Base.CinzaMako,
+        }}
+        icon={alunoExpandido ? faChevronUp : faChevronDown}
+        onClick={() =>
+          onClickExpandir(!alunoExpandido, dadosEstudante?.codigoAluno)
+        }
+      />
+    );
+
   const colunasEstudantes = [
     {
       title: 'Nº',
@@ -287,7 +354,8 @@ const ListaoListaFechamento = props => {
         );
         if (temNotaConceitoEmAprovacao) return <MarcadorAguardandoAprovacao />;
 
-        return <></>;
+        const alunoExpandido = temLinhaExpandida(dadosEstudante?.codigoAluno);
+        return iconeExpandirLinha(alunoExpandido, dadosEstudante, true);
       };
     } else {
       paramsCol.render = dadosEstudante => {
@@ -318,30 +386,22 @@ const ListaoListaFechamento = props => {
     });
   }
 
-  const [expandedRowKeys, setExpandedRowKeys] = useState([]);
-
-  const temLinhaExpandida = dados =>
-    expandedRowKeys.filter(item => String(item) === String(dados));
-
-  const expandIcon = (expanded, onExpand, record) => (
-    <FontAwesomeIcon
-      style={{
-        fontSize: 18,
-        cursor: 'pointer',
-        color: expanded ? Base.Branco : Base.Roxo,
-      }}
-      icon={expanded ? faMinusCircle : faPlusCircle}
-      onClick={e => onExpand(record, e)}
-    />
-  );
-
-  const onClickExpandir = (expandir, dadosEstudante) => {
-    if (expandir) {
-      setExpandedRowKeys([dadosEstudante?.codigoAluno]);
-    } else {
-      setExpandedRowKeys([]);
-    }
-  };
+  if (dadosFechamento?.possuiAvaliacao) {
+    colunasEstudantes.push({
+      title: 'Informações adicionais',
+      align: 'center',
+      width: '115px',
+      render: dadosEstudante => {
+        const alunoExpandido = temLinhaExpandida(dadosEstudante?.codigoAluno);
+        return (
+          <div className="d-flex justify-content-center align-items-center">
+            <div style={{ marginRight: '4px' }}>Detalhar</div>
+            {iconeExpandirLinha(alunoExpandido, dadosEstudante, false)}
+          </div>
+        );
+      },
+    });
+  }
 
   const montarColunasNotasConceitosRegencia = estudante => {
     const colunasRegencia = [
@@ -411,11 +471,12 @@ const ListaoListaFechamento = props => {
           tableResponsive={false}
           idLinha="codigoAluno"
           expandIconColumnIndex={getExpandIconColumnIndex()}
-          expandedRowKeys={expandedRowKeys}
-          onClickExpandir={onClickExpandir}
+          expandedRowKeys={
+            expandedRowKeys?.codigoAluno ? [expandedRowKeys.codigoAluno] : []
+          }
           rowClassName={record => {
-            const ehLinhaExpandida = temLinhaExpandida(record?.codigoAluno);
-            const nomeClasse = ehLinhaExpandida.length ? 'linha-ativa' : '';
+            const alunoExpandido = temLinhaExpandida(record?.codigoAluno);
+            const nomeClasse = alunoExpandido ? 'linha-ativa' : '';
             return nomeClasse;
           }}
           expandedRowRender={(record, indexAluno) => {
@@ -423,20 +484,32 @@ const ListaoListaFechamento = props => {
               record,
               indexAluno
             );
+
+            if (expandedRowKeys?.expandirColunaRegencia) {
+              return (
+                <DataTable
+                  id={`tabela-aluno-${record?.codigoAluno}`}
+                  idLinha="codigoAluno"
+                  pagination={false}
+                  columns={colunasDetalhe}
+                  dataSource={[record]}
+                  semHover
+                />
+              );
+            }
+
             return (
-              <DataTable
-                id={`tabela-aluno-${record?.codigoAluno}`}
-                idLinha="codigoAluno"
-                pagination={false}
-                columns={colunasDetalhe}
-                dataSource={[record]}
-                semHover
+              <TabelaAvaliacoesFechamento
+                codigoAluno={record?.codigoAluno}
+                periodoEscolarId={dadosFechamento?.periodoEscolarId}
+                ehNota={
+                  Number(dadosFechamento?.notaTipo) === notasConceitos.Notas
+                }
+                listaTiposConceitos={dadosFechamento?.listaTiposConceitos}
               />
             );
           }}
-          expandIcon={({ expanded, onExpand, record }) =>
-            expandIcon(expanded, onExpand, record)
-          }
+          expandIcon={() => ''}
         />
         {getAuditoria()}
       </LinhaTabela>
@@ -446,24 +519,48 @@ const ListaoListaFechamento = props => {
   const montarDados = () => (
     <>
       {!ehFinal && <SituacaoFechamentoListao />}
-      <ContainerTableFechamento className="col-md-12 p-0">
+      <LinhaTabela className="col-md-12 p-0">
         <DataTable
+          fixExpandedRowResetColSpan
           scroll={{ x: 1000, y: 500 }}
           columns={colunasEstudantes}
           dataSource={dadosFechamento?.alunos}
           pagination={false}
           semHover
-          tableResponsive={false}
           idLinha="codigoAluno"
+          expandIconColumnIndex={getExpandIconColumnIndex()}
+          expandedRowKeys={
+            expandedRowKeys?.codigoAluno ? [expandedRowKeys.codigoAluno] : []
+          }
+          rowClassName={record => {
+            const alunoExpandido = temLinhaExpandida(record?.codigoAluno);
+            const nomeClasse = alunoExpandido ? 'linha-ativa' : '';
+            return nomeClasse;
+          }}
+          expandedRowRender={record => {
+            return (
+              <TabelaAvaliacoesFechamento
+                codigoAluno={record?.codigoAluno}
+                periodoEscolarId={dadosFechamento?.periodoEscolarId}
+                ehNota={
+                  Number(dadosFechamento?.notaTipo) === notasConceitos.Notas
+                }
+                listaTiposConceitos={dadosFechamento?.listaTiposConceitos}
+              />
+            );
+          }}
+          expandIcon={() => ''}
         />
-      </ContainerTableFechamento>
+      </LinhaTabela>
       {getAuditoria()}
     </>
   );
 
   return (
     <>
-      {ehRegencia ? montarTabelaRegencia() : montarDados()}
+      <ContainerTableFechamento>
+        {ehRegencia ? montarTabelaRegencia() : montarDados()}
+      </ContainerTableFechamento>
       <ModalJustificativaFechamento />
     </>
   );

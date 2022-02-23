@@ -36,5 +36,15 @@ class ServicoNotaConceito {
     const { modoEdicaoGeralNotaFinal } = notasConceitos;
     return modoEdicaoGeralNotaFinal;
   };
+
+  obterNotasAvaliacoesPorTurmaBimestreAluno = (
+    turmaId,
+    periodoEscolarId,
+    alunoCodigo
+  ) => {
+    return api.get(
+      `v1/avaliacoes/notas/turmas/${turmaId}/periodo-escolar/${periodoEscolarId}/alunos/${alunoCodigo}`
+    );
+  };
 }
 export default new ServicoNotaConceito();

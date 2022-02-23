@@ -9,6 +9,10 @@ import { Base } from '~/componentes/colors';
 import tipoIndicativoFrequencia from '~/dtos/tipoIndicativoFrequencia';
 import ListaoContext from '~/paginas/DiarioClasse/Listao/listaoContext';
 import { setTelaEmEdicao } from '~/redux/modulos/geral/actions';
+import {
+  setDadosModalAnotacaoFrequencia,
+  setExibirModalAnotacaoFrequencia,
+} from '~/redux/modulos/modalAnotacaoFrequencia/actions';
 import CampoTiposFrequencia from './componentes/campoTiposFrequencia';
 import ListaoBotaoAnotacao from './componentes/listaoBotaoAnotacao';
 import ListaoModalAnotacoesFrequencia from './componentes/listaoModalAnotacaoFrequencia';
@@ -350,15 +354,20 @@ const ListaoListaFrequencia = () => {
         <ListaoBotaoAnotacao
           desabilitarCampos={desabilitarCampos || aula.desabilitado}
           ehInfantil={listaoEhInfantil}
-          aluno={{
-            ...aluno,
-            aulaId,
-            permiteAnotacao: aula?.permiteAnotacao,
-            possuiAnotacao: aula?.possuiAnotacao,
-            aula,
-          }}
           permiteAnotacao={aula?.permiteAnotacao && aulasGerais?.podeEditar}
           possuiAnotacao={aula?.possuiAnotacao}
+          onClickAnotacao={() => {
+            dispatch(
+              setDadosModalAnotacaoFrequencia({
+                ...aluno,
+                aulaId,
+                permiteAnotacao: aula?.permiteAnotacao,
+                possuiAnotacao: aula?.possuiAnotacao,
+                aula,
+              })
+            );
+            dispatch(setExibirModalAnotacaoFrequencia(true));
+          }}
         />
       </span>
     );
