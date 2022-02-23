@@ -41,8 +41,6 @@ const AnotacoesFechamentoLisao = props => {
     setExibirModalAnotacao(false);
   };
 
-  // TODO - Ajustar o parametro possuiAnotacao ou temAnotacao e remover mock;
-  aluno.permiteAnotacao = true;
   return (
     <>
       <ListaoBotaoAnotacao

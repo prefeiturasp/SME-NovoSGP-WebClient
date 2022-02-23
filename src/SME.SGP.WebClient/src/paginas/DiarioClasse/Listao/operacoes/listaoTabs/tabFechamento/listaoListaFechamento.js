@@ -41,6 +41,14 @@ export const ContainerTableFechamento = styled.div`
   td {
     padding: 8px 12px !important;
   }
+
+  .ant-table-expanded-row {
+    td {
+      .table-responsive {
+        overflow: auto !important;
+      }
+    }
+  }
 `;
 
 const ListaoListaFechamento = props => {
@@ -511,24 +519,48 @@ const ListaoListaFechamento = props => {
   const montarDados = () => (
     <>
       {!ehFinal && <SituacaoFechamentoListao />}
-      <ContainerTableFechamento className="col-md-12 p-0">
+      <LinhaTabela className="col-md-12 p-0">
         <DataTable
+          fixExpandedRowResetColSpan
           scroll={{ x: 1000, y: 500 }}
           columns={colunasEstudantes}
           dataSource={dadosFechamento?.alunos}
           pagination={false}
           semHover
-          tableResponsive={false}
           idLinha="codigoAluno"
+          expandIconColumnIndex={getExpandIconColumnIndex()}
+          expandedRowKeys={
+            expandedRowKeys?.codigoAluno ? [expandedRowKeys.codigoAluno] : []
+          }
+          rowClassName={record => {
+            const alunoExpandido = temLinhaExpandida(record?.codigoAluno);
+            const nomeClasse = alunoExpandido ? 'linha-ativa' : '';
+            return nomeClasse;
+          }}
+          expandedRowRender={record => {
+            return (
+              <TabelaAvaliacoesFechamento
+                codigoAluno={record?.codigoAluno}
+                periodoEscolarId={dadosFechamento?.periodoEscolarId}
+                ehNota={
+                  Number(dadosFechamento?.notaTipo) === notasConceitos.Notas
+                }
+                listaTiposConceitos={dadosFechamento?.listaTiposConceitos}
+              />
+            );
+          }}
+          expandIcon={() => ''}
         />
-      </ContainerTableFechamento>
+      </LinhaTabela>
       {getAuditoria()}
     </>
   );
 
   return (
     <>
-      {ehRegencia ? montarTabelaRegencia() : montarDados()}
+      <ContainerTableFechamento>
+        {ehRegencia ? montarTabelaRegencia() : montarDados()}
+      </ContainerTableFechamento>
       <ModalJustificativaFechamento />
     </>
   );

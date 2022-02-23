@@ -1,18 +1,13 @@
+import { Tooltip } from 'antd';
 import PropTypes from 'prop-types';
-import React, { useCallback, useContext, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { DataTable, Loader } from '~/componentes';
-import ListaoContext from '~/paginas/DiarioClasse/Listao/listaoContext';
 import { obterDescricaoConceito } from '~/paginas/DiarioClasse/Listao/listaoFuncoes';
 import { erros } from '~/servicos';
-import ServicoFechamentoBimestre from '~/servicos/Paginas/Fechamento/ServicoFechamentoBimestre';
+import ServicoNotaConceito from '~/servicos/Paginas/DiarioClasse/ServicoNotaConceito';
 
 const TabelaAvaliacoesFechamento = props => {
-  const {
-    setAvaliacoesTabelaFechamento,
-    avaliacoesTabelaFechamento,
-  } = useContext(ListaoContext);
-
   const usuario = useSelector(store => store.usuario);
   const { turmaSelecionada } = usuario;
 
@@ -31,7 +26,8 @@ const TabelaAvaliacoesFechamento = props => {
           .format('DD/MM/YYYY')}`;
 
         cols.push({
-          title: titulo,
+          ellipsis: true,
+          title: <Tooltip title={titulo}>{titulo}</Tooltip>,
           align: 'center',
           width: '200px',
           dataIndex: `avaliacoes[${index}]`,
@@ -52,51 +48,33 @@ const TabelaAvaliacoesFechamento = props => {
 
   const obterAvaliacoesTabelaFechamento = useCallback(async () => {
     setCarregandoDados(true);
-    const resposta = await ServicoFechamentoBimestre.obterAvaliacoesTabelaFechamento(
+    const resposta = await ServicoNotaConceito.obterNotasAvaliacoesPorTurmaBimestreAluno(
       turmaSelecionada.id,
-      periodoEscolarId
+      periodoEscolarId,
+      codigoAluno
     )
       .catch(e => erros(e))
       .finally(() => setCarregandoDados(false));
 
     if (resposta?.data?.length) {
-      resposta.data = resposta.data.map(aluno => {
-        if (aluno?.avaliacoes?.length) {
-          aluno.avaliacoes = aluno.avaliacoes.map(avaliacao => {
-            return { ...avaliacao, codigoAluno: aluno.codigoAluno };
-          });
-        }
-        return aluno;
-      });
-      setAvaliacoesTabelaFechamento(resposta.data);
+      const avaliacoes = { codigoAluno, avaliacoes: resposta.data };
+      setDadosAlunoSelecionado(avaliacoes);
     } else {
-      setAvaliacoesTabelaFechamento([]);
       setDadosAlunoSelecionado();
     }
-  }, [turmaSelecionada, periodoEscolarId]);
+  }, [turmaSelecionada, periodoEscolarId, codigoAluno]);
 
   useEffect(() => {
     montarColunas(dadosAlunoSelecionado);
   }, [dadosAlunoSelecionado, montarColunas]);
 
   useEffect(() => {
-    if (codigoAluno && avaliacoesTabelaFechamento?.length) {
-      const dadosAluno = avaliacoesTabelaFechamento.find(
-        item => Number(item.codigoAluno) === Number(codigoAluno)
-      );
-      if (dadosAluno) {
-        setDadosAlunoSelecionado(dadosAluno);
-      } else {
-        setDadosAlunoSelecionado();
-      }
-    } else {
+    if (codigoAluno) {
       obterAvaliacoesTabelaFechamento();
+    } else {
+      setDadosAlunoSelecionado();
     }
-  }, [
-    avaliacoesTabelaFechamento,
-    codigoAluno,
-    obterAvaliacoesTabelaFechamento,
-  ]);
+  }, [codigoAluno, obterAvaliacoesTabelaFechamento]);
 
   return (
     <Loader loading={carregandoDados}>

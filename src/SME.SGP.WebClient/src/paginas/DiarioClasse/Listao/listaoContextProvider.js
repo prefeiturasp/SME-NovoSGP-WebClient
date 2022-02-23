@@ -80,9 +80,6 @@ const ListaoContextProvider = ({ children }) => {
   // TAB FECHAMENTO
   const [dadosFechamento, setDadosFechamento] = useState();
   const [dadosIniciaisFechamento, setDadosIniciaisFechamento] = useState();
-  const [avaliacoesTabelaFechamento, setAvaliacoesTabelaFechamento] = useState(
-    []
-  );
   const [componentesRegenciaListao, setComponentesRegenciaListao] = useState(
     []
   );
@@ -96,7 +93,6 @@ const ListaoContextProvider = ({ children }) => {
     setDadosIniciaisFechamento();
     setComponentesRegenciaListao([]);
     setDadosModalJustificativaFechamento();
-    setAvaliacoesTabelaFechamento();
   };
 
   const limparTabFrequencia = () => {
@@ -237,8 +233,6 @@ const ListaoContextProvider = ({ children }) => {
         setComponentesRegenciaListao,
         dadosModalJustificativaFechamento,
         setDadosModalJustificativaFechamento,
-        avaliacoesTabelaFechamento,
-        setAvaliacoesTabelaFechamento,
       }}
     >
       {children}
