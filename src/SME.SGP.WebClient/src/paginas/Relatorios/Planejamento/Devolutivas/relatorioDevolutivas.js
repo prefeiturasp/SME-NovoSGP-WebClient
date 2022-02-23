@@ -1,6 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-
 import {
   Button,
   Card,
@@ -16,16 +15,14 @@ import {
   FiltroHelper,
 } from '~/componentes-sgp';
 import { SGP_SELECT_COMPONENTE_CURRICULAR } from '~/componentes-sgp/filtro/idsCampos';
-import { OPCAO_TODOS, ANO_INICIO_INFANTIL } from '~/constantes/constantes';
-
+import { ANO_INICIO_INFANTIL, OPCAO_TODOS } from '~/constantes/constantes';
 import { ModalidadeDTO } from '~/dtos';
-
 import {
   AbrangenciaServico,
   ehTurmaInfantil,
   erros,
   history,
-  ServicoDisciplina,
+  ServicoComponentesCurriculares,
   ServicoFiltroRelatorio,
   ServicoRelatorioDevolutivas,
   sucesso,
@@ -499,59 +496,33 @@ const RelatorioDevolutivas = () => {
     }
 
     setCarregandoComponentes(true);
-    const respostas = await Promise.all(
-      codigosTurmas.map(codigoTurma =>
-        ServicoDisciplina.obterDisciplinasPorTurma(
-          codigoTurma,
-          Number(anoLetivo) <= ANO_INICIO_INFANTIL
-        )
-      )
-    );
+    const componentes = await ServicoComponentesCurriculares.obterComponentesPorListaDeTurmas(
+      codigosTurmas
+    )
+      .catch(e => erros(e))
+      .finally(() => setCarregandoComponentes(false));
 
-    const dados = respostas?.filter?.(item => item?.data?.length);
+    if (componentes?.data?.length) {
+      const lista = componentes.data;
 
-    if (dados?.length) {
-      let componentesConcat = dados?.reduce?.(
-        (arrayConcat, resposta) => arrayConcat?.concat?.(resposta?.data),
-        []
-      );
-
-      if (componentesConcat?.length) {
-        componentesConcat = componentesConcat?.reduce?.(
-          (componentes, componente) =>
-            componentes?.find?.(c => c?.id === componente?.id)
-              ? componentes
-              : [...componentes, componente],
-          []
-        );
+      if (lista.length > 1) {
+        lista.unshift({ codigo: OPCAO_TODOS, nome: 'Todos' });
       }
 
-      if (componentesConcat.length) {
-        if (componentesConcat?.length === 1) {
-          setComponenteCurricular(
-            String(componentesConcat[0].codigoComponenteCurricular)
-          );
-        }
-
-        if (componentesConcat?.length > 1) {
-          componentesConcat.unshift({
-            nomeComponenteInfantil: 'Todos',
-            valor: OPCAO_TODOS,
-          });
-        }
-
-        setListaComponenteCurriculares(componentesConcat);
-      } else {
-        setListaComponenteCurriculares([]);
+      setListaComponenteCurriculares(lista);
+      if (lista.length === 1) {
+        setComponenteCurricular(lista[0].codigo);
       }
+    } else {
+      setListaComponenteCurriculares([]);
     }
-    setCarregandoComponentes(false);
   }, [turmaId, listaTurmas]);
 
   useEffect(() => {
     if (turmaId?.length) {
       obterComponentesCurriculares();
     } else {
+      setComponenteCurricular();
       setListaComponenteCurriculares([]);
     }
   }, [turmaId]);
@@ -707,8 +678,8 @@ const RelatorioDevolutivas = () => {
                   label="Componente curricular"
                   id={SGP_SELECT_COMPONENTE_CURRICULAR}
                   lista={listaComponenteCurriculares}
-                  valueOption="codigoComponenteCurricular"
-                  valueText="nomeComponenteInfantil"
+                  valueOption="codigo"
+                  valueText="nome"
                   valueSelect={componenteCurricular}
                   onChange={valor => {
                     setComponenteCurricular(valor);
