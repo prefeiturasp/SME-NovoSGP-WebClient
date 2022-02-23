@@ -1,0 +1,88 @@
+import PropTypes from 'prop-types';
+import React, { useState } from 'react';
+import { useSelector } from 'react-redux';
+import ModalAnotacaoAluno from '~/paginas/Fechamento/FechamentoModalAnotacaoAluno/modal-anotacao-aluno';
+import ListaoBotaoAnotacao from '../../tabFrequencia/lista/componentes/listaoBotaoAnotacao';
+
+const AnotacoesFechamentoLisao = props => {
+  const usuario = useSelector(store => store.usuario);
+  const { turmaSelecionada } = usuario;
+
+  const {
+    desabilitar,
+    ehInfantil,
+    aluno,
+    fechamentoTurmaId,
+    dadosFechamento,
+    setDadosFechamento,
+  } = props;
+
+  const [exibirModalAnotacao, setExibirModalAnotacao] = useState(false);
+
+  const atualizarInfo = valorTemAnotacao => {
+    const alunoSelecionado = dadosFechamento?.alunos?.find?.(
+      item => item?.codigoAluno === aluno?.codigoAluno
+    );
+    if (alunoSelecionado) {
+      const indexAluno = dadosFechamento?.alunos?.indexOf(alunoSelecionado);
+      dadosFechamento.alunos[indexAluno].temAnotacao = valorTemAnotacao;
+      setDadosFechamento(dadosFechamento);
+      aluno.possuiAnotacao = valorTemAnotacao;
+      aluno.temAnotacao = valorTemAnotacao;
+    }
+  };
+
+  const onCloseModalAnotacao = (salvou, excluiu) => {
+    if (salvou) {
+      atualizarInfo(true);
+    } else if (excluiu) {
+      atualizarInfo(false);
+    }
+    setExibirModalAnotacao(false);
+  };
+
+  return (
+    <>
+      <ListaoBotaoAnotacao
+        desabilitarCampos={desabilitar}
+        ehInfantil={ehInfantil}
+        permiteAnotacao={aluno?.permiteAnotacao}
+        possuiAnotacao={!!(aluno?.possuiAnotacao || aluno?.temAnotacao)}
+        onClickAnotacao={() => {
+          setExibirModalAnotacao(true);
+        }}
+      />
+      {exibirModalAnotacao && (
+        <ModalAnotacaoAluno
+          exibirModal={exibirModalAnotacao}
+          onCloseModal={onCloseModalAnotacao}
+          fechamentoId={fechamentoTurmaId}
+          codigoTurma={turmaSelecionada.turma}
+          anoLetivo={turmaSelecionada.anoLetivo}
+          dadosAlunoSelecionado={aluno}
+          desabilitar={desabilitar}
+        />
+      )}
+    </>
+  );
+};
+
+AnotacoesFechamentoLisao.propTypes = {
+  desabilitar: PropTypes.bool,
+  ehInfantil: PropTypes.bool,
+  aluno: PropTypes.oneOfType(PropTypes.any),
+  fechamentoTurmaId: PropTypes.number,
+  dadosFechamento: PropTypes.oneOfType(PropTypes.any),
+  setDadosFechamento: PropTypes.func,
+};
+
+AnotacoesFechamentoLisao.defaultProps = {
+  desabilitar: false,
+  ehInfantil: false,
+  aluno: null,
+  fechamentoTurmaId: null,
+  dadosFechamento: {},
+  setDadosFechamento: () => null,
+};
+
+export default AnotacoesFechamentoLisao;

@@ -220,7 +220,8 @@ const obterDaodsFechamentoPorBimestreListao = async (
   componenteCurricular,
   setDadosFechamento,
   setDadosIniciaisFechamento,
-  limparFechamento
+  limparFechamento,
+  dadosChavesFechamento
 ) => {
   setExibirLoaderGeral(true);
 
@@ -228,7 +229,8 @@ const obterDaodsFechamentoPorBimestreListao = async (
     turmaSelecionada?.turma,
     turmaSelecionada?.periodo,
     bimestreOperacoes,
-    componenteCurricular?.codigoComponenteCurricular
+    componenteCurricular?.codigoComponenteCurricular,
+    dadosChavesFechamento?.fechamentoTurmaId || 0
   )
     .catch(e => erros(e))
     .finally(() => setExibirLoaderGeral(false));
@@ -241,6 +243,17 @@ const obterDaodsFechamentoPorBimestreListao = async (
       );
     }
     resposta.data.listaTiposConceitos = listaTiposConceitos;
+
+    // TODO - Remover pois não vai ter o 'fechamentoId' na consulta, vai ser no endpoint chave!
+    resposta.data.fechamentoTurmaId = resposta.data.fechamentoId;
+    delete resposta.data.fechamentoId;
+
+    if (dadosChavesFechamento) {
+      resposta.data.fechamentoTurmaId =
+        dadosChavesFechamento?.fechamentoTurmaId;
+      resposta.data.periodoEscolarId = dadosChavesFechamento?.periodoEscolarId;
+      resposta.data.possuiAvaliacao = dadosChavesFechamento?.possuiAvaliacao;
+    }
 
     limparFechamento();
     const dadosCarregar = _.cloneDeep({ ...resposta.data });
@@ -284,7 +297,7 @@ const salvarFechamentoListao = async (
   });
 
   const dadosParaSalvar = {
-    id: dadosFechamento.fechamentoId,
+    id: dadosFechamento.fechamentoTurmaId,
     turmaId: turma,
     bimestre: bimestreOperacoes,
     disciplinaId: componenteCurricular?.codigoComponenteCurricular,
@@ -308,7 +321,11 @@ const salvarFechamentoListao = async (
     const { dispatch } = store;
 
     dispatch(setTelaEmEdicao(false));
-    return true;
+    return {
+      fechamentoTurmaId: resposta.data.id,
+      periodoEscolarId: dadosFechamento.periodoEscolarId,
+      possuiAvaliacao: dadosFechamento.possuiAvaliacao,
+    };
   }
 
   return false;
@@ -377,6 +394,16 @@ const validarSalvarFechamentoListao = async (
   );
 };
 
+const obterDescricaoConceito = (listaTiposConceitos, valorConceito) => {
+  if (listaTiposConceitos?.length) {
+    const conceito = listaTiposConceitos.find(
+      item => item.id === String(valorConceito)
+    );
+    return conceito?.valor || '';
+  }
+  return '';
+};
+
 export {
   onChangeTabListao,
   montarIdsObjetivosSelecionadosListao,
@@ -387,4 +414,5 @@ export {
   obterDaodsFechamentoPorBimestreListao,
   validarSalvarFechamentoListao,
   salvarFechamentoListao,
+  obterDescricaoConceito,
 };
