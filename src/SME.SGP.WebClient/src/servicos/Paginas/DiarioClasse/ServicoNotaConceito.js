@@ -40,10 +40,11 @@ class ServicoNotaConceito {
   obterNotasAvaliacoesPorTurmaBimestreAluno = (
     turmaId,
     periodoEscolarId,
-    alunoCodigo
+    alunoCodigo,
+    codigoComponenteCurricular
   ) => {
     return api.get(
-      `v1/avaliacoes/notas/turmas/${turmaId}/periodo-escolar/${periodoEscolarId}/alunos/${alunoCodigo}`
+      `v1/avaliacoes/notas/turmas/${turmaId}/periodo-escolar/${periodoEscolarId}/alunos/${alunoCodigo}/componentes-curriculares=${codigoComponenteCurricular}`
     );
   };
 }

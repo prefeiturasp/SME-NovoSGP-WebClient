@@ -14,13 +14,17 @@ const ListaoBotaoAnotacao = props => {
     possuiAnotacao,
     onClickAnotacao,
     descricaoTooltip,
+    corIcone,
   } = props;
 
   const podeAbrirModal =
     (permiteAnotacao && !desabilitarCampos) ||
     (possuiAnotacao && desabilitarCampos);
 
-  const cor = possuiAnotacao ? Base.Azul : Base.CinzaMako;
+  let cor = corIcone;
+  if (!corIcone) {
+    cor = possuiAnotacao ? Base.Azul : Base.CinzaMako;
+  }
 
   const propsStyleIcon = {
     fontSize: '16px',
@@ -64,6 +68,7 @@ ListaoBotaoAnotacao.propTypes = {
   possuiAnotacao: PropTypes.bool,
   onClickAnotacao: PropTypes.func,
   descricaoTooltip: PropTypes.string,
+  corIcone: PropTypes.string,
 };
 ListaoBotaoAnotacao.defaultProps = {
   desabilitarCampos: false,
@@ -72,6 +77,7 @@ ListaoBotaoAnotacao.defaultProps = {
   possuiAnotacao: true,
   onClickAnotacao: () => null,
   descricaoTooltip: '',
+  corIcone: '',
 };
 
 export default ListaoBotaoAnotacao;

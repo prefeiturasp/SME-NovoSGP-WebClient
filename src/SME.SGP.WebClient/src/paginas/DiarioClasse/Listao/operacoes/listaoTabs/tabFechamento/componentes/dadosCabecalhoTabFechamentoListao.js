@@ -33,7 +33,7 @@ const DadosCabecalhoTabFechamentoListao = props => {
     descDataFechamento = `${situacaoNome} em ${data} às ${hora}`;
   }
 
-  const mensagempRrocessamento =
+  const alertaSucessoReprocessamento =
     'Solicitação de fechamento realizada com sucesso. Em breve você receberá uma notificação com o resultado do processo.';
 
   const onClickReprocessarNotasConceitos = async () => {
@@ -44,7 +44,7 @@ const DadosCabecalhoTabFechamentoListao = props => {
       setSituacao(situacaoFechamentoDto.EmProcessamento);
       setSituacaoNome('Em Processamento');
       setDataFechamento(window.moment());
-      sucesso(mensagempRrocessamento);
+      sucesso(alertaSucessoReprocessamento);
     }
   };
 
