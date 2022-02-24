@@ -43,7 +43,7 @@ const TabelaAvaliacoesFechamento = props => {
 
             if (ehNota) {
               notaConceito = notaConceito
-                ? notaConceito.toString().replace('.', ',')
+                ? notaConceito?.toString?.()?.replace?.('.', ',')
                 : '-';
               return notaConceito;
             }
