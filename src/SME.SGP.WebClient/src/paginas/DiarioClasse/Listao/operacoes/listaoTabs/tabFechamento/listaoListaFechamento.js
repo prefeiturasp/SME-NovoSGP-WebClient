@@ -101,10 +101,10 @@ const ListaoListaFechamento = props => {
         </div>
         {!ehFinal && (
           <AnotacoesFechamentoLisao
-            desabilitar={desabilitarCampos}
+            desabilitar={desabilitarCampos || !aluno?.podeEditar}
             ehInfantil={listaoEhInfantil}
             aluno={aluno}
-            fechamentoTurmaId={dadosFechamento.fechamentoTurmaId}
+            fechamentoId={dadosFechamento.fechamentoId}
             dadosFechamento={dadosFechamento}
             setDadosFechamento={setDadosFechamento}
           />

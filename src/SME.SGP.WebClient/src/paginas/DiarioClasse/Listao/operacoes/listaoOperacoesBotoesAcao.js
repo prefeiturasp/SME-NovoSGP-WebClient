@@ -515,16 +515,13 @@ const ListaoOperacoesBotoesAcao = () => {
     return false;
   };
 
-  const acaoPosSalvarFechamento = (
-    dadosSalvouFechamento,
-    clicouNoBotaoSalvar
-  ) => {
+  const acaoPosSalvarFechamento = (salvouFechamento, clicouNoBotaoSalvar) => {
     const limparFechamento = () => {
       setDadosIniciaisFechamento();
       setDadosFechamento();
     };
 
-    if (dadosSalvouFechamento && clicouNoBotaoSalvar) {
+    if (salvouFechamento && clicouNoBotaoSalvar) {
       obterDaodsFechamentoPorBimestreListao(
         setExibirLoaderGeral,
         turmaSelecionada,
@@ -532,12 +529,11 @@ const ListaoOperacoesBotoesAcao = () => {
         componenteCurricular,
         setDadosFechamento,
         setDadosIniciaisFechamento,
-        limparFechamento,
-        dadosSalvouFechamento
+        limparFechamento
       );
-    } else if (dadosSalvouFechamento) limparFechamento();
+    } else if (salvouFechamento) limparFechamento();
 
-    return dadosSalvouFechamento;
+    return salvouFechamento;
   };
 
   const salvarFechamento = async (clicouNoBotaoSalvar, acaoPosSalvar) => {
