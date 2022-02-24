@@ -12,7 +12,7 @@ const AnotacoesFechamentoLisao = props => {
     desabilitar,
     ehInfantil,
     aluno,
-    fechamentoTurmaId,
+    fechamentoId,
     dadosFechamento,
     setDadosFechamento,
   } = props;
@@ -25,10 +25,9 @@ const AnotacoesFechamentoLisao = props => {
     );
     if (alunoSelecionado) {
       const indexAluno = dadosFechamento?.alunos?.indexOf(alunoSelecionado);
-      dadosFechamento.alunos[indexAluno].temAnotacao = valorTemAnotacao;
+      dadosFechamento.alunos[indexAluno].possuiAnotacao = valorTemAnotacao;
       setDadosFechamento(dadosFechamento);
       aluno.possuiAnotacao = valorTemAnotacao;
-      aluno.temAnotacao = valorTemAnotacao;
     }
   };
 
@@ -41,25 +40,37 @@ const AnotacoesFechamentoLisao = props => {
     setExibirModalAnotacao(false);
   };
 
+  const descricaoTooltip = !dadosFechamento?.fechamentoId
+    ? dadosFechamento.situacaoNome
+    : '';
+
   return (
     <>
       <ListaoBotaoAnotacao
-        desabilitarCampos={desabilitar}
+        descricaoTooltip={descricaoTooltip}
+        desabilitarCampos={desabilitar || !dadosFechamento?.fechamentoId}
         ehInfantil={ehInfantil}
-        permiteAnotacao={aluno?.permiteAnotacao}
-        possuiAnotacao={!!(aluno?.possuiAnotacao || aluno?.temAnotacao)}
+        permiteAnotacao={
+          aluno?.permiteAnotacao && dadosFechamento?.fechamentoId
+        }
+        possuiAnotacao={aluno?.possuiAnotacao}
         onClickAnotacao={() => {
-          setExibirModalAnotacao(true);
+          if (dadosFechamento?.fechamentoId) {
+            setExibirModalAnotacao(true);
+          }
         }}
       />
       {exibirModalAnotacao && (
         <ModalAnotacaoAluno
           exibirModal={exibirModalAnotacao}
           onCloseModal={onCloseModalAnotacao}
-          fechamentoId={fechamentoTurmaId}
+          fechamentoId={fechamentoId}
           codigoTurma={turmaSelecionada.turma}
           anoLetivo={turmaSelecionada.anoLetivo}
-          dadosAlunoSelecionado={aluno}
+          dadosAlunoSelecionado={{
+            codigoAluno: aluno?.codigoAluno,
+            temAnotacao: aluno?.possuiAnotacao,
+          }}
           desabilitar={desabilitar}
         />
       )}
@@ -71,7 +82,7 @@ AnotacoesFechamentoLisao.propTypes = {
   desabilitar: PropTypes.bool,
   ehInfantil: PropTypes.bool,
   aluno: PropTypes.oneOfType(PropTypes.any),
-  fechamentoTurmaId: PropTypes.number,
+  fechamentoId: PropTypes.number,
   dadosFechamento: PropTypes.oneOfType(PropTypes.any),
   setDadosFechamento: PropTypes.func,
 };
@@ -80,7 +91,7 @@ AnotacoesFechamentoLisao.defaultProps = {
   desabilitar: false,
   ehInfantil: false,
   aluno: null,
-  fechamentoTurmaId: null,
+  fechamentoId: null,
   dadosFechamento: {},
   setDadosFechamento: () => null,
 };

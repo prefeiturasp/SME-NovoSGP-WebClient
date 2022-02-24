@@ -3,8 +3,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Alert } from '~/componentes';
 import { ModalidadeDTO } from '~/dtos';
 import { setLimparModoEdicaoGeral } from '~/redux/modulos/geral/actions';
-import { erros } from '~/servicos';
-import ServicoFechamentoBimestre from '~/servicos/Paginas/Fechamento/ServicoFechamentoBimestre';
 import ListaoContext from '../../../listaoContext';
 import { obterDaodsFechamentoPorBimestreListao } from '../../../listaoFuncoes';
 import ListaoListaFechamento from './listaoListaFechamento';
@@ -30,16 +28,6 @@ const TabListaoFechamento = () => {
   };
 
   const obterFechamentoPorBimestre = useCallback(async () => {
-    let dadosChavesFechamento = {};
-    const respostaChaves = await ServicoFechamentoBimestre.obterChavesFechamentoListao(
-      turmaSelecionada?.id,
-      bimestreOperacoes
-    ).catch(e => erros(e));
-
-    if (respostaChaves.data) {
-      dadosChavesFechamento = respostaChaves.data;
-    }
-
     obterDaodsFechamentoPorBimestreListao(
       setExibirLoaderGeral,
       turmaSelecionada,
@@ -47,8 +35,7 @@ const TabListaoFechamento = () => {
       componenteCurricular,
       setDadosFechamento,
       setDadosIniciaisFechamento,
-      limparFechamento,
-      dadosChavesFechamento
+      limparFechamento
     );
   }, [componenteCurricular, turmaSelecionada, bimestreOperacoes]);
 

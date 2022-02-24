@@ -220,8 +220,7 @@ const obterDaodsFechamentoPorBimestreListao = async (
   componenteCurricular,
   setDadosFechamento,
   setDadosIniciaisFechamento,
-  limparFechamento,
-  dadosChavesFechamento
+  limparFechamento
 ) => {
   setExibirLoaderGeral(true);
 
@@ -229,8 +228,7 @@ const obterDaodsFechamentoPorBimestreListao = async (
     turmaSelecionada?.turma,
     turmaSelecionada?.periodo,
     bimestreOperacoes,
-    componenteCurricular?.codigoComponenteCurricular,
-    dadosChavesFechamento?.fechamentoTurmaId || 0
+    componenteCurricular?.codigoComponenteCurricular
   )
     .catch(e => erros(e))
     .finally(() => setExibirLoaderGeral(false));
@@ -243,17 +241,6 @@ const obterDaodsFechamentoPorBimestreListao = async (
       );
     }
     resposta.data.listaTiposConceitos = listaTiposConceitos;
-
-    // TODO - Remover pois não vai ter o 'fechamentoId' na consulta, vai ser no endpoint chave!
-    resposta.data.fechamentoTurmaId = resposta.data.fechamentoId;
-    delete resposta.data.fechamentoId;
-
-    if (dadosChavesFechamento) {
-      resposta.data.fechamentoTurmaId =
-        dadosChavesFechamento?.fechamentoTurmaId;
-      resposta.data.periodoEscolarId = dadosChavesFechamento?.periodoEscolarId;
-      resposta.data.possuiAvaliacao = dadosChavesFechamento?.possuiAvaliacao;
-    }
 
     limparFechamento();
     const dadosCarregar = _.cloneDeep({ ...resposta.data });
@@ -297,7 +284,7 @@ const salvarFechamentoListao = async (
   });
 
   const dadosParaSalvar = {
-    id: dadosFechamento.fechamentoTurmaId,
+    id: dadosFechamento.fechamentoId,
     turmaId: turma,
     bimestre: bimestreOperacoes,
     disciplinaId: componenteCurricular?.codigoComponenteCurricular,
@@ -319,11 +306,7 @@ const salvarFechamentoListao = async (
     const { dispatch } = store;
 
     dispatch(setTelaEmEdicao(false));
-    return {
-      fechamentoTurmaId: resposta.data.id,
-      periodoEscolarId: dadosFechamento.periodoEscolarId,
-      possuiAvaliacao: dadosFechamento.possuiAvaliacao,
-    };
+    return true;
   }
 
   return false;
