@@ -515,6 +515,7 @@ const ListaoListaFechamento = props => {
                   Number(dadosFechamento?.notaTipo) === notasConceitos.Notas
                 }
                 listaTiposConceitos={dadosFechamento?.listaTiposConceitos}
+                componenteCurricular={componenteCurricular}
               />
             );
           }}
