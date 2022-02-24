@@ -39,12 +39,16 @@ const TabelaAvaliacoesFechamento = props => {
           dataIndex: `avaliacoes[${index}]`,
           key: `avaliacoes[${index}]`,
           render: dadosAvaliacao => {
-            if (ehNota) return dadosAvaliacao?.notaConceito;
+            let notaConceito = dadosAvaliacao?.notaConceito;
 
-            return obterDescricaoConceito(
-              listaTiposConceitos,
-              dadosAvaliacao?.notaConceito
-            );
+            if (ehNota) {
+              notaConceito = notaConceito
+                ? notaConceito.toString().replace('.', ',')
+                : '-';
+              return notaConceito;
+            }
+
+            return obterDescricaoConceito(listaTiposConceitos, notaConceito);
           },
         });
       });
