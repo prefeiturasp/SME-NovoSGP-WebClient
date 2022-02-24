@@ -29,8 +29,8 @@ import ListaoCampoConceito from '../tabListaoAvaliacoes/componentes/listaoCampoC
 import ListaoCampoNota from '../tabListaoAvaliacoes/componentes/listaoCampoNota';
 import AnotacoesFechamentoLisao from './componentes/anotacoesFechamentoLisao';
 import ColunaNotaConceitoPorBimestre from './componentes/colunaNotaConceitoPorBimestre';
+import DadosCabecalhoTabFechamentoListao from './componentes/dadosCabecalhoTabFechamentoListao';
 import ModalJustificativaFechamento from './componentes/modalJustificativaFechamento';
-import SituacaoFechamentoListao from './componentes/situacaoFechamentoListao';
 import TabelaAvaliacoesFechamento from './componentes/tabelaAvaliacoesFechamento';
 
 export const ContainerTableFechamento = styled.div`
@@ -453,7 +453,11 @@ const ListaoListaFechamento = props => {
 
   const montarTabelaRegencia = () => (
     <>
-      {!ehFinal && <SituacaoFechamentoListao />}
+      {!ehFinal && (
+        <DadosCabecalhoTabFechamentoListao
+          desabilitarCampos={desabilitarCampos}
+        />
+      )}
       <LinhaTabela className="col-md-12 p-0">
         {ehFinal && (
           <FiltroComponentesRegencia
@@ -518,7 +522,11 @@ const ListaoListaFechamento = props => {
 
   const montarDados = () => (
     <>
-      {!ehFinal && <SituacaoFechamentoListao />}
+      {!ehFinal && (
+        <DadosCabecalhoTabFechamentoListao
+          desabilitarCampos={desabilitarCampos}
+        />
+      )}
       <LinhaTabela className="col-md-12 p-0">
         <DataTable
           fixExpandedRowResetColSpan
