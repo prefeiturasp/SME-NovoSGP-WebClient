@@ -13,6 +13,7 @@ const ListaoBotaoAnotacao = props => {
     permiteAnotacao,
     possuiAnotacao,
     onClickAnotacao,
+    descricaoTooltip,
   } = props;
 
   const podeAbrirModal =
@@ -27,15 +28,13 @@ const ListaoBotaoAnotacao = props => {
     color: cor,
     margin: '6.5px',
   };
+
+  const descTooltip = possuiAnotacao
+    ? `${ehInfantil ? 'Criança' : 'Estudante'} com anotações`
+    : '';
+
   return (
-    <Tooltip
-      title={
-        possuiAnotacao
-          ? `${ehInfantil ? 'Criança' : 'Estudante'} com anotações`
-          : ''
-      }
-      placement="top"
-    >
+    <Tooltip title={descricaoTooltip || descTooltip} placement="top">
       <span className={!podeAbrirModal ? 'desabilitar' : ''}>
         <ContainerBtbAnotacao
           podeAbrirModal={podeAbrirModal}
@@ -64,6 +63,7 @@ ListaoBotaoAnotacao.propTypes = {
   permiteAnotacao: PropTypes.bool,
   possuiAnotacao: PropTypes.bool,
   onClickAnotacao: PropTypes.func,
+  descricaoTooltip: PropTypes.string,
 };
 ListaoBotaoAnotacao.defaultProps = {
   desabilitarCampos: false,
@@ -71,6 +71,7 @@ ListaoBotaoAnotacao.defaultProps = {
   permiteAnotacao: true,
   possuiAnotacao: true,
   onClickAnotacao: () => null,
+  descricaoTooltip: '',
 };
 
 export default ListaoBotaoAnotacao;

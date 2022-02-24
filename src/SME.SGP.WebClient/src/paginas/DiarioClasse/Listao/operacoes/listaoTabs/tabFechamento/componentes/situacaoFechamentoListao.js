@@ -12,7 +12,7 @@ const SituacaoFechamentoListao = () => {
 
   if (
     dadosFechamento?.situacaoNome &&
-    dadosFechamento?.fechamentoTurmaId &&
+    dadosFechamento?.fechamentoId &&
     dadosFechamento?.dataFechamento
   ) {
     const dataMoment = window.moment(dadosFechamento.dataFechamento);
@@ -23,7 +23,7 @@ const SituacaoFechamentoListao = () => {
 
   return dadosFechamento?.situacaoNome ? (
     <div className="row">
-      {dadosFechamento?.fechamentoTurmaId && dadosFechamento?.dataFechamento ? (
+      {dadosFechamento?.fechamentoId && dadosFechamento?.dataFechamento ? (
         <div className="col-md-12 d-flex justify-content-end">
           <DataFechamentoProcessado>
             <span>{descDataFechamento}</span>

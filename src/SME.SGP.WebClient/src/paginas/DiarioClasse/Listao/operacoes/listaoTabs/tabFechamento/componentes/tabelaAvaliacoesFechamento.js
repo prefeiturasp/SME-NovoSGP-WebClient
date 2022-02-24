@@ -78,14 +78,20 @@ const TabelaAvaliacoesFechamento = props => {
 
   return (
     <Loader loading={carregandoDados}>
-      <DataTable
-        id={`tabela-aluno-${codigoAluno}`}
-        idLinha="codigoAluno"
-        pagination={false}
-        columns={colunas}
-        dataSource={dadosAlunoSelecionado ? [dadosAlunoSelecionado] : []}
-        semHover
-      />
+      {dadosAlunoSelecionado ? (
+        <DataTable
+          id={`tabela-aluno-${codigoAluno}`}
+          idLinha="codigoAluno"
+          pagination={false}
+          columns={colunas}
+          dataSource={dadosAlunoSelecionado ? [dadosAlunoSelecionado] : []}
+          semHover
+        />
+      ) : !carregandoDados ? (
+        <div className="text-center">Sem dados</div>
+      ) : (
+        <></>
+      )}
     </Loader>
   );
 };

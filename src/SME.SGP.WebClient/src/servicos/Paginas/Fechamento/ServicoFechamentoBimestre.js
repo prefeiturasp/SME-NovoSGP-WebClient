@@ -28,22 +28,14 @@ const ServicoFechamentoBimestre = {
     turmaCodigo,
     semestre,
     bimestre,
-    componenteCurricularCodigo,
-    fechamentoTurmaId
+    componenteCurricularCodigo
   ) {
-    // TODO - Alterar endpoint
-    // return api.get(
-    //   `${urlBase}/listar?turmaCodigo=${turmaCodigo}&componenteCurricularCodigo=${componenteCurricularCodigo}&bimestre=${bimestre}&semestre=${semestre}&fechamentoTurmaId=${fechamentoTurmaId}`
-    // );
     return api.get(
       `${urlBase}/listar?turmaCodigo=${turmaCodigo}&componenteCurricularCodigo=${componenteCurricularCodigo}&bimestre=${bimestre}&semestre=${semestre}`
     );
   },
   salvarFechamentoPorBimestre(params) {
     return api.post(`${urlBase}/salvar-fechamento`, params);
-  },
-  obterChavesFechamentoListao(turmaId, bimestre) {
-    return api.get(`${urlBase}/${turmaId}/bimestres/${bimestre}`);
   },
 };
 
