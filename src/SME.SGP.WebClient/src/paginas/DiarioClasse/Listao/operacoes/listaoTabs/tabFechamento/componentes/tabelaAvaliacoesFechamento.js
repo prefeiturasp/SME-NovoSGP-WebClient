@@ -42,9 +42,10 @@ const TabelaAvaliacoesFechamento = props => {
             let notaConceito = dadosAvaliacao?.notaConceito;
 
             if (ehNota) {
-              notaConceito = notaConceito
-                ? notaConceito?.toString?.()?.replace?.('.', ',')
-                : '-';
+              notaConceito =
+                notaConceito === 0 || notaConceito > 0
+                  ? notaConceito?.toString?.()?.replace?.('.', ',')
+                  : '-';
               return notaConceito;
             }
 

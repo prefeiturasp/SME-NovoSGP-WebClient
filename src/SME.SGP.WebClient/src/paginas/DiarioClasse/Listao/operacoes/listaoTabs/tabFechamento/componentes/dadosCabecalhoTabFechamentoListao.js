@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import React, { useContext, useState } from 'react';
-import { Button, Colors } from '~/componentes';
+import { Button, Colors, Loader } from '~/componentes';
 import situacaoFechamentoDto from '~/dtos/situacaoFechamentoDto';
 import ListaoContext from '~/paginas/DiarioClasse/Listao/listaoContext';
 import {
@@ -20,6 +20,7 @@ const DadosCabecalhoTabFechamentoListao = props => {
   const [situacaoNome, setSituacaoNome] = useState(
     dadosFechamento?.situacaoNome
   );
+  const [exibirLoader, setExibirLoader] = useState(false);
 
   const [situacao, setSituacao] = useState(dadosFechamento?.situacao);
   const [dataFechamento, setDataFechamento] = useState(
@@ -37,6 +38,7 @@ const DadosCabecalhoTabFechamentoListao = props => {
     'Solicitação de fechamento realizada com sucesso. Em breve você receberá uma notificação com o resultado do processo.';
 
   const onClickReprocessarNotasConceitos = async () => {
+    setExibirLoader(true);
     const processando = await ServicoFechamentoBimestre.reprocessarNotasConceitos(
       dadosFechamento?.fechamentoId
     ).catch(e => erros(e));
@@ -46,6 +48,7 @@ const DadosCabecalhoTabFechamentoListao = props => {
       setDataFechamento(window.moment());
       sucesso(alertaSucessoReprocessamento);
     }
+    setExibirLoader(false);
   };
 
   return situacaoNome ? (
@@ -60,18 +63,20 @@ const DadosCabecalhoTabFechamentoListao = props => {
         <></>
       )}
       <div className="col-md-6 col-sm-12 d-flex justify-content-start mb-2">
-        <Button
-          id="btn-reprocessar"
-          label="Reprocessar"
-          color={Colors.Azul}
-          border
-          className="mr-2"
-          onClick={onClickReprocessarNotasConceitos}
-          disabled={
-            desabilitarCampos ||
-            situacao !== situacaoFechamentoDto.ProcessadoComPendencias
-          }
-        />
+        <Loader loading={exibirLoader} tip="">
+          <Button
+            id="btn-reprocessar"
+            label="Reprocessar"
+            color={Colors.Azul}
+            border
+            className="mr-2"
+            onClick={onClickReprocessarNotasConceitos}
+            disabled={
+              desabilitarCampos ||
+              situacao !== situacaoFechamentoDto.ProcessadoComPendencias
+            }
+          />
+        </Loader>
       </div>
       <div className="col-md-6 col-sm-12 d-flex justify-content-end">
         <SituacaoProcessadoComPendencias>
