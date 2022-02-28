@@ -119,14 +119,8 @@ const ListaDiarioBordo = () => {
 
   const onClickConsultarDiario = () => {
     dispatch(limparDadosObservacoesUsuario());
-    const componente = listaComponenteCurriculares?.find?.(
-      item =>
-        item?.codigoComponenteCurricular ===
-        Number(componenteCurricularSelecionado)
-    );
-
     history.push(
-      `${RotasDto.DIARIO_BORDO}/detalhes/${diarioBordoAtual?.aulaId}/${diarioBordoAtual?.id}/${componente?.codDisciplinaPai}`
+      `${RotasDto.DIARIO_BORDO}/detalhes/${diarioBordoAtual?.aulaId}/${diarioBordoAtual?.id}/${componenteCurricularSelecionado}`
     );
   };
 
