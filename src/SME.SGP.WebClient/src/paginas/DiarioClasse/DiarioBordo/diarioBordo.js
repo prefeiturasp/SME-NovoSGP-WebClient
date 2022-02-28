@@ -244,16 +244,10 @@ const DiarioBordo = ({ match }) => {
   );
 
   useEffect(() => {
-    const codigoDisciplina = codDisciplinaPai || componenteCurricularId;
-    if (turmaId && codigoDisciplina) {
-      obterDatasDeAulasDisponiveis(codigoDisciplina);
+    if (turmaId && codDisciplinaPai) {
+      obterDatasDeAulasDisponiveis(codDisciplinaPai);
     }
-  }, [
-    turmaId,
-    codDisciplinaPai,
-    componenteCurricularId,
-    obterDatasDeAulasDisponiveis,
-  ]);
+  }, [turmaId, codDisciplinaPai, obterDatasDeAulasDisponiveis]);
 
   const onChangeComponenteCurricular = valor => {
     if (!valor) {
@@ -299,10 +293,15 @@ const DiarioBordo = ({ match }) => {
   };
 
   useEffect(() => {
-    if (componenteCurricularId) {
+    if (componenteCurricularId && listaComponenteCurriculares?.length) {
+      const valorCodDisciplinaPai = listaComponenteCurriculares.find(
+        item =>
+          String(item.codigoComponenteCurricular) === componenteCurricularId
+      );
+      setCodDisciplinaPai(valorCodDisciplinaPai?.codDisciplinaPai);
       setComponenteCurricularSelecionado(componenteCurricularId);
     }
-  }, [componenteCurricularId]);
+  }, [componenteCurricularId, listaComponenteCurriculares]);
 
   const obterDiarioBordo = async (aulaIdEnviada, componenteCurricular) => {
     setCarregandoGeral(true);
