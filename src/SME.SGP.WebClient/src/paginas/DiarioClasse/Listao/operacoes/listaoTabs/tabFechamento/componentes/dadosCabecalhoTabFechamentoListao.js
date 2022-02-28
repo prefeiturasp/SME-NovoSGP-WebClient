@@ -41,7 +41,12 @@ const DadosCabecalhoTabFechamentoListao = props => {
     setExibirLoader(true);
     const processando = await ServicoFechamentoBimestre.reprocessarNotasConceitos(
       dadosFechamento?.fechamentoId
-    ).catch(e => erros(e));
+    ).catch(e => {
+      erros(e);
+      setSituacao(situacaoFechamentoDto.ProcessadoComErro);
+      setSituacaoNome('Processado com erro');
+      setDataFechamento(window.moment());
+    });
     if (processando?.status === 200) {
       setSituacao(situacaoFechamentoDto.EmProcessamento);
       setSituacaoNome('Em Processamento');
@@ -73,7 +78,8 @@ const DadosCabecalhoTabFechamentoListao = props => {
             onClick={onClickReprocessarNotasConceitos}
             disabled={
               desabilitarCampos ||
-              situacao !== situacaoFechamentoDto.ProcessadoComPendencias
+              (situacao !== situacaoFechamentoDto.ProcessadoComPendencias &&
+                situacao !== situacaoFechamentoDto.ProcessadoComErro)
             }
           />
         </Loader>

@@ -46,7 +46,7 @@ const TabelaAvaliacoesFechamento = props => {
                 notaConceito === 0 || notaConceito > 0
                   ? notaConceito?.toString?.()?.replace?.('.', ',')
                   : '-';
-              return notaConceito;
+              return notaConceito || '-';
             }
 
             return obterDescricaoConceito(listaTiposConceitos, notaConceito);
