@@ -34,7 +34,6 @@ const ListaoListaFrequencia = () => {
     componenteCurricular,
     somenteConsultaListao,
     periodoAbertoListao,
-    setExibirLoaderGeral,
   } = useContext(ListaoContext);
 
   const desabilitarCampos = somenteConsultaListao || !periodoAbertoListao;
@@ -431,12 +430,6 @@ const ListaoListaFrequencia = () => {
     return colunasDetalhamentoEstudante;
   };
 
-  const fecharLoaderMontouAlunos = indexAluno => {
-    if (indexAluno + 1 === dadosFrequencia?.alunos?.length) {
-      setExibirLoaderGeral(false);
-    }
-  };
-
   return dadosFrequencia?.alunos?.length ? (
     <>
       <LinhaTabela className="col-md-12 p-0">
@@ -452,7 +445,6 @@ const ListaoListaFrequencia = () => {
           rowClassName={(record, i) => {
             const ehLinhaExpandida = temLinhaExpandida(record?.codigoAluno);
             const nomeClasse = ehLinhaExpandida.length ? 'linha-ativa' : '';
-            fecharLoaderMontouAlunos(i);
             return nomeClasse;
           }}
           expandedRowRender={(record, indexAluno) => {
