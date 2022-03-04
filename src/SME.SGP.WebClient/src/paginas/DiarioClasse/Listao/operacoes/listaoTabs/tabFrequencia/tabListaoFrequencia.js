@@ -85,8 +85,8 @@ const TabListaoFrequencia = () => {
       }
     } else {
       limparFrequencia();
-      setExibirLoaderGeral(false);
     }
+    setExibirLoaderGeral(false);
   }, [
     dispatch,
     periodoAbertoListao,

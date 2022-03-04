@@ -177,11 +177,11 @@ const FechamentoBimestreLista = props => {
                 className="mr-2"
                 onClick={onClickReprocessarNotasConceitos}
                 disabled={
-                  !(
-                    podeProcessarReprocessar &&
-                    situacaoFechamento ===
-                      situacaoFechamentoDto.ProcessadoComPendencias
-                  )
+                  !podeProcessarReprocessar ||
+                  (situacaoFechamento !==
+                    situacaoFechamentoDto.ProcessadoComPendencias &&
+                    situacaoFechamento !==
+                      situacaoFechamentoDto.ProcessadoComErro)
                 }
               />
               <Button
