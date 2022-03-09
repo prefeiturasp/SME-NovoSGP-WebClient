@@ -14,6 +14,7 @@ import { Cabecalho, FiltroHelper } from '~/componentes-sgp';
 import { OPCAO_TODOS } from '~/constantes';
 
 import { ModalidadeDTO, tipoPendenciasGruposDto } from '~/dtos';
+import usuario from '~/redux/modulos/usuario/reducers';
 import {
   api,
   history,
@@ -145,7 +146,8 @@ const RelatorioPendencias = () => {
   };
 
   const onChangeComponenteCurricular = valor => {
-    setComponentesCurricularesId([valor]);
+    const valorNovo = valor ? [valor] : '';
+    setComponentesCurricularesId(valorNovo);
     setBimestre();
     setTipoPendenciaGrupo();
     setClicouBotaoGerar(false);
@@ -386,44 +388,69 @@ const RelatorioPendencias = () => {
     obterAnosLetivos();
   }, [obterAnosLetivos]);
 
+  const ehInfantil = Number(modalidadeId) === ModalidadeDTO.INFANTIL;
+
+  const escolherChamadaEndpointComponeteCurricular = useCallback(
+    (ueCodigo, turmas) => {
+      if (ehInfantil) {
+        return ServicoComponentesCurriculares.obterComponentesPorListaDeTurmas(
+          turmas,
+          true
+        );
+      }
+
+      return ServicoComponentesCurriculares.obterComponentesPorUeTurmas(
+        ueCodigo,
+        turmas
+      );
+    },
+    [ehInfantil]
+  );
+
   const obterComponentesCurriculares = useCallback(
     async (ueCodigo, idsTurma, lista) => {
       if (idsTurma?.length > 0) {
         setCarregandoComponentesCurriculares(true);
+        const ehOpcaoTodas = idsTurma.find(item => item === OPCAO_TODOS);
         const turmas = [].concat(
-          idsTurma[0] === '0'
-            ? lista.map(a => a.valor).filter(a => a !== '0')
+          ehOpcaoTodas
+            ? lista.map(a => a.valor).filter(item => item !== OPCAO_TODOS)
             : idsTurma
         );
-        const disciplinas = await ServicoComponentesCurriculares.obterComponentesPorUeTurmas(
+        const disciplinas = await escolherChamadaEndpointComponeteCurricular(
           ueCodigo,
           turmas
-        ).catch(e => erros(e));
-        let componentesCurriculares = [];
-        componentesCurriculares.push({
-          codigo: '0',
-          descricao: 'Todos',
-        });
+        )
+          .catch(e => erros(e))
+          .finally(() => setCarregandoComponentesCurriculares(false));
 
-        if (disciplinas && disciplinas.data && disciplinas.data.length) {
-          if (disciplinas.data.length > 1) {
-            componentesCurriculares = componentesCurriculares.concat(
-              disciplinas.data
-            );
-            setListaComponentesCurriculares(componentesCurriculares);
-          } else {
-            setListaComponentesCurriculares(disciplinas.data);
+        if (disciplinas?.data?.length) {
+          const nomeParametro = ehInfantil ? 'nome' : 'descricao';
+          const listaDisciplinas = disciplinas.data.map(item => ({
+            codigo: String(item.codigo),
+            descricao: item[nomeParametro],
+          }));
+
+          if (listaDisciplinas?.length > 1) {
+            listaDisciplinas.unshift({
+              descricao: 'Todos',
+              codigo: OPCAO_TODOS,
+            });
           }
-        } else {
-          setListaComponentesCurriculares([]);
+
+          if (disciplinas.data.length > 1) {
+            setListaComponentesCurriculares(listaDisciplinas);
+            return;
+          }
+          setListaComponentesCurriculares(listaDisciplinas);
+          setComponentesCurricularesId(String(disciplinas?.data[0]?.codigo));
         }
-        setCarregandoComponentesCurriculares(false);
-      } else {
-        setComponentesCurricularesId(undefined);
-        setListaComponentesCurriculares([]);
+        return;
       }
+      setComponentesCurricularesId();
+      setListaComponentesCurriculares([]);
     },
-    []
+    [escolherChamadaEndpointComponeteCurricular, ehInfantil]
   );
 
   useEffect(() => {
@@ -514,7 +541,7 @@ const RelatorioPendencias = () => {
     setListaUes([]);
 
     setModalidadeId();
-    setComponentesCurricularesId(undefined);
+    setComponentesCurricularesId();
 
     setTurmaId(undefined);
     setBimestre();
@@ -547,10 +574,8 @@ const RelatorioPendencias = () => {
       componentesCurricularesId ||
       bimestre;
 
-    const condicoes = usuarioRf ? !condicoesParciais : condicoesParciais;
-
     const condicoesFinais =
-      condicoesParciaisPreenchidas && usuarioRf ? !usuarioRf : condicoes;
+      condicoesParciaisPreenchidas && usuarioRf && condicoesParciais;
 
     const desabilitar = condicoesComuns || condicoesFinais;
 

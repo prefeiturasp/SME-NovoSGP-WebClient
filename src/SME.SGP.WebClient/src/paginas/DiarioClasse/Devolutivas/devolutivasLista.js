@@ -53,22 +53,32 @@ const DevolutivasLista = () => {
     obterPeriodoLetivoTurma();
   }, [turmaSelecionada, permissoesTela, modalidadesFiltroPrincipal]);
 
-  const obterPeriodoLetivoTurma = async() => {
+  const obterPeriodoLetivoTurma = async () => {
     if (turmaSelecionada && turmaSelecionada.turma) {
-      const periodoLetivoTurmaResponse = await ServicoPeriodoEscolar
-        .obterPeriodoLetivoTurma(turmaSelecionada.turma).catch(e => erros(e));
+      const periodoLetivoTurmaResponse = await ServicoPeriodoEscolar.obterPeriodoLetivoTurma(
+        turmaSelecionada.turma
+      ).catch(e => erros(e));
       if (periodoLetivoTurmaResponse?.data) {
-        var datas = [moment(periodoLetivoTurmaResponse.data.periodoInicio).format('YYYY-MM-DD')];
-        var qtdDias = moment(periodoLetivoTurmaResponse.data.periodoFim).diff(periodoLetivoTurmaResponse.data.periodoInicio, 'days');
+        const datas = [
+          moment(periodoLetivoTurmaResponse.data.periodoInicio).format(
+            'YYYY-MM-DD'
+          ),
+        ];
+        const qtdDias = moment(periodoLetivoTurmaResponse.data.periodoFim).diff(
+          periodoLetivoTurmaResponse.data.periodoInicio,
+          'days'
+        );
         for (let indice = 1; indice <= qtdDias; indice++) {
-          var novaData = moment(periodoLetivoTurmaResponse.data.periodoInicio).add(indice, 'days');
+          const novaData = moment(
+            periodoLetivoTurmaResponse.data.periodoInicio
+          ).add(indice, 'days');
           datas.push(novaData.format('YYYY-MM-DD'));
         }
         setPeriodoHabilitado(datas);
-      }      
+      }
     }
-  }
-  
+  };
+
   const colunas = [
     {
       title: 'Intervalo de Datas',
@@ -125,10 +135,11 @@ const DevolutivasLista = () => {
   const obterComponentesCurriculares = useCallback(async () => {
     setCarregandoGeral(true);
     const componentes = await ServicoDisciplina.obterDisciplinasPorTurma(
-      turmaCodigo
+      turmaCodigo,
+      false
     ).catch(e => erros(e));
 
-    if (componentes.data && componentes.data.length) {
+    if (componentes?.data?.length) {
       setListaComponenteCurriculare(componentes.data);
 
       if (componentes.data.length === 1) {
@@ -184,8 +195,8 @@ const DevolutivasLista = () => {
   const onClickNovo = () => {
     history.push(`${RotasDto.DEVOLUTIVAS}/novo`);
   };
-  const onClickEditar = item => {    
-      history.push(`${RotasDto.DEVOLUTIVAS}/editar/${item.id}`);
+  const onClickEditar = item => {
+    history.push(`${RotasDto.DEVOLUTIVAS}/editar/${item.id}`);
   };
 
   return (
@@ -237,7 +248,7 @@ const DevolutivasLista = () => {
                 id="disciplina"
                 lista={listaComponenteCurriculare || []}
                 valueOption="codigoComponenteCurricular"
-                valueText="nome"
+                valueText="nomeComponenteInfantil"
                 valueSelect={componenteCurricularSelecionado}
                 onChange={onChangeComponenteCurricular}
                 placeholder="Selecione um componente curricular"

@@ -1,12 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import shortid from 'shortid';
-import { ModalConteudoHtml, Colors, Auditoria, DetalhesAluno } from '~/componentes';
+import * as Yup from 'yup';
+import { Formik, Form } from 'formik';
+import {
+  ModalConteudoHtml,
+  Colors,
+  Auditoria,
+  DetalhesAluno,
+} from '~/componentes';
 import api from '~/servicos/api';
 import { erros, sucesso, erro, confirmar } from '~/servicos/alertas';
 import Button from '~/componentes/button';
-import * as Yup from 'yup';
-import { Formik, Form } from 'formik';
 import { DadosAlunoModal, EditorAnotacao } from './modal-anotacao-aluno.css';
 import JoditEditor from '~/componentes/jodit-editor/joditEditor';
 
@@ -18,6 +23,7 @@ const ModalAnotacaoAluno = props => {
     codigoTurma,
     anoLetivo,
     dadosAlunoSelecionado,
+    desabilitar,
   } = props;
 
   const [showModal, setShowModal] = useState(exibirModal);
@@ -161,15 +167,17 @@ const ModalAnotacaoAluno = props => {
                 exibirBotaoImprimir={false}
                 exibirFrequencia={false}
                 dados={dadosAluno.aluno}
+                permiteAlterarImagem={!desabilitar}
               />
             </div>
             <div className="col-md-12">
               <EditorAnotacao className="mt-3">
                 <JoditEditor
                   form={form}
-                  value={form.values.anotacao}
+                  value={valoresIniciais.anotacao}
                   name="anotacao"
                   onChange={onChangeCampos}
+                  desabilitar={desabilitar}
                 />
               </EditorAnotacao>
             </div>
@@ -197,7 +205,9 @@ const ModalAnotacaoAluno = props => {
                   className="mr-3 mt-2 padding-btn-confirmacao"
                   onClick={validaAntesDeExcluir}
                   disabled={
-                    dadosAlunoSelecionado && !dadosAlunoSelecionado.temAnotacao
+                    desabilitar ||
+                    (dadosAlunoSelecionado &&
+                      !dadosAlunoSelecionado?.temAnotacao)
                   }
                 />
                 <Button
@@ -208,6 +218,7 @@ const ModalAnotacaoAluno = props => {
                   border
                   className="mr-3 mt-2 padding-btn-confirmacao"
                   onClick={() => validaAntesDoSubmit(form)}
+                  disabled={desabilitar}
                 />
               </div>
             </div>
@@ -223,11 +234,13 @@ const ModalAnotacaoAluno = props => {
 ModalAnotacaoAluno.propTypes = {
   exibirModal: PropTypes.bool,
   onCloseModal: PropTypes.func,
+  desabilitar: PropTypes.bool,
 };
 
 ModalAnotacaoAluno.defaultProps = {
   exibirModal: false,
   onCloseModal: () => {},
+  desabilitar: false,
 };
 
 export default ModalAnotacaoAluno;

@@ -8,6 +8,7 @@ import { ModalidadeDTO } from '~/dtos';
 import { AbrangenciaServico, erros, ServicoFiltroRelatorio } from '~/servicos';
 import { OPCAO_TODOS } from '~/constantes/constantes';
 import { AvisoBoletim } from './styles';
+import { ordenarDescPor } from '~/utils';
 
 const Filtros = ({ onFiltrar, filtrou, setFiltrou, cancelou, setCancelou }) => {
   const [anoAtual] = useState(window.moment().format('YYYY'));
@@ -61,6 +62,7 @@ const Filtros = ({ onFiltrar, filtrou, setFiltrou, cancelou, setCancelou }) => {
 
   useEffect(() => {
     const params = {
+      consideraHistorico,
       anoLetivo,
       dreCodigo,
       ueCodigo,
@@ -75,6 +77,7 @@ const Filtros = ({ onFiltrar, filtrou, setFiltrou, cancelou, setCancelou }) => {
       onFiltrar(params);
     }
   }, [
+    consideraHistorico,
     anoLetivo,
     dreCodigo,
     ueCodigo,
@@ -87,28 +90,13 @@ const Filtros = ({ onFiltrar, filtrou, setFiltrou, cancelou, setCancelou }) => {
     modeloBoletimId,
   ]);
 
-  useEffect(() => {
-    const params = {
-      anoLetivo,
-      dreCodigo,
-      ueCodigo,
-      modalidadeId,
-      semestre: semestre || 0,
-      turmasId,
-      opcaoEstudanteId,
-      modeloBoletimId,
-    };
-
-    onFiltrar(params, true);
-  }, [modeloBoletimId]);
-
   const onChangeConsideraHistorico = e => {
     setConsideraHistorico(e.target.checked);
-    setAnoLetivo(anoAtual);
     limparCampos();
     setDreCodigo();
     setDreId();
     setFiltrou(false);
+    setListaDres([]);
   };
 
   const onChangeAnoLetivo = ano => {
@@ -117,23 +105,30 @@ const Filtros = ({ onFiltrar, filtrou, setFiltrou, cancelou, setCancelou }) => {
     setFiltrou(false);
   };
 
+  const validarValorPadraoAnoLetivo = lista => {
+    if (lista?.length) {
+      const temAnoAtualNaLista = lista.find(
+        item => String(item.valor) === String(anoAtual)
+      );
+      if (temAnoAtualNaLista) {
+        setAnoLetivo(anoAtual);
+      } else {
+        setAnoLetivo(lista[0].valor);
+      }
+    } else {
+      setAnoLetivo();
+    }
+  };
+
+  useEffect(() => {
+    validarValorPadraoAnoLetivo(listaAnosLetivo);
+  }, [consideraHistorico, listaAnosLetivo]);
+
   const obterAnosLetivos = useCallback(async () => {
     setCarregandoAnosLetivos(true);
-    let anosLetivos = [];
 
-    const anosLetivoComHistorico = await FiltroHelper.obterAnosLetivos({
-      consideraHistorico: true,
-    });
-    const anosLetivoSemHistorico = await FiltroHelper.obterAnosLetivos({
-      consideraHistorico: false,
-    });
-
-    anosLetivos = anosLetivos.concat(anosLetivoComHistorico);
-
-    anosLetivoSemHistorico.forEach(ano => {
-      if (!anosLetivoComHistorico.find(a => a.valor === ano.valor)) {
-        anosLetivos.push(ano);
-      }
+    const anosLetivos = await FiltroHelper.obterAnosLetivos({
+      consideraHistorico,
     });
 
     if (!anosLetivos.length) {
@@ -142,22 +137,16 @@ const Filtros = ({ onFiltrar, filtrou, setFiltrou, cancelou, setCancelou }) => {
         valor: anoAtual,
       });
     }
+    const anosOrdenados = ordenarDescPor(anosLetivos, 'valor');
+    validarValorPadraoAnoLetivo(anosOrdenados);
 
-    if (anosLetivos && anosLetivos.length) {
-      const temAnoAtualNaLista = anosLetivos.find(
-        item => String(item.valor) === String(anoAtual)
-      );
-      if (temAnoAtualNaLista) setAnoLetivo(anoAtual);
-      else setAnoLetivo(anosLetivos[0].valor);
-    }
-
-    setListaAnosLetivo(anosLetivos);
+    setListaAnosLetivo(anosOrdenados);
     setCarregandoAnosLetivos(false);
-  }, [anoAtual]);
+  }, [anoAtual, consideraHistorico]);
 
   useEffect(() => {
     obterAnosLetivos();
-  }, [obterAnosLetivos]);
+  }, [obterAnosLetivos, consideraHistorico]);
 
   const onChangeDre = dre => {
     const id = listaDres.find(d => d.valor === dre)?.id;
@@ -197,7 +186,7 @@ const Filtros = ({ onFiltrar, filtrou, setFiltrou, cancelou, setCancelou }) => {
       setDreId(undefined);
       setListaDres([]);
     }
-  }, [anoLetivo, consideraHistorico]);
+  }, [anoLetivo]);
 
   useEffect(() => {
     if (anoLetivo && !listaDres.length) {
@@ -296,13 +285,17 @@ const Filtros = ({ onFiltrar, filtrou, setFiltrou, cancelou, setCancelou }) => {
 
   const obterSemestres = async (
     modalidadeSelecionada,
-    anoLetivoSelecionado
+    anoLetivoSelecionado,
+    dreSelecionada,
+    ueSelecionada
   ) => {
     setCarregandoSemestres(true);
     const retorno = await AbrangenciaServico.obterSemestres(
       consideraHistorico,
       anoLetivoSelecionado,
-      modalidadeSelecionada
+      modalidadeSelecionada,
+      dreSelecionada,
+      ueSelecionada
     )
       .catch(e => erros(e))
       .finally(() => setCarregandoSemestres(false));
@@ -323,14 +316,16 @@ const Filtros = ({ onFiltrar, filtrou, setFiltrou, cancelou, setCancelou }) => {
     if (
       modalidadeId &&
       anoLetivo &&
-      String(modalidadeId) === String(ModalidadeDTO.EJA)
+      String(modalidadeId) === String(ModalidadeDTO.EJA) &&
+      dreCodigo &&
+      ueCodigo
     ) {
-      obterSemestres(modalidadeId, anoLetivo);
+      obterSemestres(modalidadeId, anoLetivo, dreCodigo, ueCodigo);
       return;
     }
     setSemestre();
     setListaSemestres([]);
-  }, [obterAnosLetivos, modalidadeId, anoLetivo]);
+  }, [obterAnosLetivos, modalidadeId, anoLetivo, dreCodigo, ueCodigo]);
 
   const onChangeTurma = valor => {
     const temOpcaoTodas = String(valor) === OPCAO_TODOS;
@@ -370,9 +365,10 @@ const Filtros = ({ onFiltrar, filtrou, setFiltrou, cancelou, setCancelou }) => {
             nomeFiltro: item.nomeFiltro,
           })
         );
+
         setListaTurmas(lista);
         if (lista.length === 1) {
-          setTurmasId([String(lista[0].valor)]);
+          setTurmasId(lista[0].valor);
         }
       }
     }
@@ -397,11 +393,13 @@ const Filtros = ({ onFiltrar, filtrou, setFiltrou, cancelou, setCancelou }) => {
   };
 
   const onChangeModeloBoletim = valor => {
+    setFiltrou(false);
     setModeloBoletimId(valor);
   };
 
   useEffect(() => {
     if (cancelou) {
+      setConsideraHistorico(false);
       limparCampos();
       setListaDres([]);
       setDreCodigo();
@@ -420,7 +418,6 @@ const Filtros = ({ onFiltrar, filtrou, setFiltrou, cancelou, setCancelou }) => {
             label="Exibir histórico?"
             onChangeCheckbox={onChangeConsideraHistorico}
             checked={consideraHistorico}
-            disabled={listaAnosLetivo.length === 1}
           />
         </div>
       </div>
@@ -432,7 +429,7 @@ const Filtros = ({ onFiltrar, filtrou, setFiltrou, cancelou, setCancelou }) => {
               lista={listaAnosLetivo}
               valueOption="valor"
               valueText="desc"
-              disabled={!consideraHistorico || listaAnosLetivo?.length === 1}
+              disabled={listaAnosLetivo?.length === 1}
               onChange={onChangeAnoLetivo}
               valueSelect={anoLetivo}
               placeholder="Ano letivo"

@@ -15,6 +15,7 @@ const ObservacoesUsuarioMontarDados = props => {
     podeAlterar,
     podeExcluir,
     mostrarListaNotificacao,
+    mudarObservacaoListagem,
   } = props;
 
   const dadosObservacoes = useSelector(
@@ -48,8 +49,10 @@ const ObservacoesUsuarioMontarDados = props => {
           value={obs.observacao}
         />
         {obs.auditoria ? <>{auditoria(obs)}</> : ''}
-        {mostrarListaNotificacao && (
+        {mostrarListaNotificacao ? (
           <ListaNotificacoes obs={obs} somenteLeitura />
+        ) : (
+          <></>
         )}
       </div>
     );
@@ -67,9 +70,10 @@ const ObservacoesUsuarioMontarDados = props => {
             podeAlterar={podeAlterar}
             podeExcluir={podeExcluir}
             proprietario={obs.proprietario}
+            mudarObservacaoListagem={mudarObservacaoListagem}
           >
             {obs.auditoria ? auditoria(obs) : ''}
-            {mostrarListaNotificacao && <ListaNotificacoes obs={obs} />}
+            {mostrarListaNotificacao ? <ListaNotificacoes obs={obs} /> : <></>}
           </LinhaObservacaoProprietario>
         </div>
       );
@@ -95,11 +99,13 @@ ObservacoesUsuarioMontarDados.propTypes = {
   podeAlterar: PropTypes.bool,
   podeExcluir: PropTypes.bool,
   mostrarListaNotificacao: PropTypes.bool,
+  mudarObservacaoListagem: PropTypes.func,
 };
 
 ObservacoesUsuarioMontarDados.defaultProps = {
   onClickSalvarEdicao: () => {},
   onClickExcluir: () => {},
+  mudarObservacaoListagem: () => {},
   verificaProprietario: false,
   podeAlterar: true,
   podeExcluir: true,

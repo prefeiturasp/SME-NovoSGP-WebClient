@@ -8,6 +8,7 @@ import { Base, DataTable, Loader } from '~/componentes';
 import { BIMESTRE_FINAL } from '~/constantes/constantes';
 import { statusAcompanhamentoConselhoClasse } from '~/dtos';
 import { erros, ServicoAcompanhamentoFechamento } from '~/servicos';
+import { valorNuloOuVazio } from '~/utils/funcoes/gerais';
 
 import {
   MarcadorTriangulo,
@@ -107,11 +108,13 @@ const TabelaAlunosConselho = props => {
     }
   );
 
-  const montarValorNota = nota => {
+  const montarValorNota = componenteCurricular => {
+    const nota = componenteCurricular?.notaFechamento;
+    const lancaNota = componenteCurricular?.lancaNota;
     return (
       <>
-        {nota || <span className="sem-nota">-</span>}
-        {!nota && (
+        {valorNuloOuVazio(nota) ? <span className="sem-nota">-</span> : nota}
+        {lancaNota && valorNuloOuVazio(nota) && (
           <Tooltip title="Sem nota atribuída">
             <MarcadorTriangulo
               cor={Base.LaranjaStatus}
@@ -127,10 +130,12 @@ const TabelaAlunosConselho = props => {
   const montarNotaPosConselho = componenteCurricular => {
     return (
       <>
-        {componenteCurricular?.notaPosConselho || (
+        {valorNuloOuVazio(componenteCurricular?.notaPosConselho) ? (
           <span className="sem-nota">-</span>
+        ) : (
+          componenteCurricular?.notaPosConselho
         )}
-        {!componenteCurricular?.notaPosConselho &&
+        {valorNuloOuVazio(componenteCurricular?.notaPosConselho) &&
         componenteCurricular?.lancaNota ? (
           <Tooltip title="Sem nota atribuída">
             <MarcadorTriangulo cor={Base.LaranjaStatus} marginTop="-34.8px" />
@@ -154,7 +159,8 @@ const TabelaAlunosConselho = props => {
       title: 'Nota do fechamento',
       dataIndex: 'notaFechamento',
       align: 'center',
-      render: valor => montarValorNota(valor),
+      render: (_, componenteCurricular) =>
+        montarValorNota(componenteCurricular),
     },
     {
       title: 'Nota pós conselho',

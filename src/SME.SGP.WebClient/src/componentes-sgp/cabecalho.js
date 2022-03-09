@@ -29,12 +29,14 @@ const Container = styled.div`
     color: #353535;
     margin-bottom: 0.3rem;
   }
+
+  padding-bottom: 8px;
 `;
 
 const Cabecalho = ({ titulo, pagina, children, classes }) => {
   return (
     <Container className={classes}>
-      <div className="col-xs-12 col-md-12 col-lg-12 p-l-10">
+      <div className="col-xs-12 col-md-12 col-lg-12">
         <span>{titulo}</span>
         <span className="titulo">{pagina}</span>
         {children}

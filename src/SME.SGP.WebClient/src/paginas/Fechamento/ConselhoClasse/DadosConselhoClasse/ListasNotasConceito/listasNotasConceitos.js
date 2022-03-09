@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import moment from 'moment';
 import PropTypes from 'prop-types';
 import React, { useCallback, useEffect, useState } from 'react';
@@ -5,6 +6,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Loader } from '~/componentes';
 import {
   setConselhoClasseEmEdicao,
+  setDadosIniciaisListasNotasConceitos,
   setDadosListasNotasConceitos,
   setPodeEditarNota,
 } from '~/redux/modulos/conselhoClasse/actions';
@@ -17,6 +19,10 @@ const ListasNotasConceitos = props => {
   const { bimestreSelecionado } = props;
 
   const dispatch = useDispatch();
+
+  const fechamentoPeriodoInicioFim = useSelector(
+    store => store.conselhoClasse.fechamentoPeriodoInicioFim
+  );
 
   const listaTiposConceitos = useSelector(
     store => store.conselhoClasse.listaTiposConceitos
@@ -36,6 +42,10 @@ const ListasNotasConceitos = props => {
 
   const turmaStore = useSelector(state => state.usuario.turmaSelecionada);
 
+  const dentroPeriodo = useSelector(
+    store => store.conselhoClasse.dentroPeriodo
+  );
+
   const {
     fechamentoTurmaId,
     conselhoClasseId,
@@ -49,20 +59,55 @@ const ListasNotasConceitos = props => {
   const [exibir, setExibir] = useState(false);
   const [carregando, setCarregando] = useState(false);
 
-  const alunoTransferidoAposFimDoBimestre = () => {
+  const pegueInicioPeriodoFechamento = () => {
+    if (fechamentoPeriodoInicioFim) {
+      const { periodoFechamentoInicio } = fechamentoPeriodoInicioFim;
+
+      if (periodoFechamentoInicio)
+        return moment(periodoFechamentoInicio).format('MM-DD-YYYY');
+    }
+
+    return null;
+  };
+
+  const alunoDentroDoPeriodoDoBimestreOuFechamento = () => {
     const dataSituacao = moment(dadosAlunoObjectCard.dataSituacao).format(
       'MM-DD-YYYY'
     );
+    const dataFimBimestre = moment(bimestreAtual.dataFim).format('MM-DD-YYYY');
+    const dataInicioPeriodoFechamento = pegueInicioPeriodoFechamento();
 
-    const dataFimPeriodo = moment(bimestreAtual.dataFim).format('MM-DD-YYYY');
-
-    return dataSituacao >= dataFimPeriodo;
+    return (
+      dataSituacao >= dataFimBimestre ||
+      (dataInicioPeriodoFechamento &&
+        dataSituacao >= dataInicioPeriodoFechamento)
+    );
   };
 
   const desabilitarEdicaoAluno = () => {
-    if (!alunoDesabilitado || alunoTransferidoAposFimDoBimestre()) return false;
+    if (!alunoDesabilitado || alunoDentroDoPeriodoDoBimestreOuFechamento()) {
+      return false;
+    }
 
     return true;
+  };
+
+  const estaNoPeriodoOuFechamento = () => {
+    const hoje = moment().format('MM-DD-YYYY');
+    if (fechamentoPeriodoInicioFim) {
+      const {
+        periodoFechamentoInicio,
+        periodoFechamentoFim,
+      } = fechamentoPeriodoInicioFim;
+
+      if (periodoFechamentoInicio && periodoFechamentoFim) {
+        const inicioF = moment(periodoFechamentoInicio).format('MM-DD-YYYY');
+        const finalF = moment(periodoFechamentoFim).format('MM-DD-YYYY');
+        const emFechamento = hoje >= inicioF && hoje <= finalF;
+        return dentroPeriodo || emFechamento;
+      }
+    }
+    return dentroPeriodo;
   };
 
   const habilitaConselhoClasse = dados => {
@@ -80,14 +125,55 @@ const ListasNotasConceitos = props => {
       )
     );
 
-    const alunoDentroDoPeriodoDoBimestre = alunoTransferidoAposFimDoBimestre();
+    dados.notasConceitos.map(notasConceitos =>
+      notasConceitos.componenteRegencia?.componentesCurriculares.map(cc => {
+        cc.notasFechamentos.map(nf => {
+          if (valorNuloOuVazio(nf.notaConceito)) {
+            notasFechamentosPreenchidas = false;
+          }
+          return nf;
+        });
+      })
+    );
 
+    const alunoDentroDoPeriodoDoBimestre = alunoDentroDoPeriodoDoBimestreOuFechamento();
+    const periodoAbertoOuEmFechamento = estaNoPeriodoOuFechamento();
+
+    let emEdicao = false;
     if (
       !conselhoClasseAlunoId &&
       notasFechamentosPreenchidas &&
-      alunoDentroDoPeriodoDoBimestre
+      alunoDentroDoPeriodoDoBimestre &&
+      periodoAbertoOuEmFechamento
     ) {
-      dispatch(setConselhoClasseEmEdicao(true));
+      emEdicao = true;
+    }
+    dispatch(setConselhoClasseEmEdicao(emEdicao));
+  };
+
+  const habilitaConselhoClassePorNotasPosConselho = dados => {
+    let notasPosConselhoPreenchidas = true;
+    if (!dados.temConselhoClasseAluno) {
+      dados.notasConceitos.map(notasConceitos =>
+        notasConceitos.componentesCurriculares.map(componentesCurriculares => {
+          if (valorNuloOuVazio(componentesCurriculares.notaPosConselho.nota)) {
+            notasPosConselhoPreenchidas = false;
+          }
+          return componentesCurriculares;
+        })
+      );
+      dados.notasConceitos.map(notasConceitos =>
+        notasConceitos.componenteRegencia?.componentesCurriculares.map(cc => {
+          if (valorNuloOuVazio(cc.notaPosConselho.nota)) {
+            notasPosConselhoPreenchidas = false;
+          }
+          return cc;
+        })
+      );
+      const periodoAbertoOuEmFechamento = estaNoPeriodoOuFechamento();
+      if (notasPosConselhoPreenchidas && periodoAbertoOuEmFechamento) {
+        dispatch(setConselhoClasseEmEdicao(true));
+      }
     }
   };
 
@@ -100,18 +186,22 @@ const ListasNotasConceitos = props => {
       turmaCodigo,
       bimestreSelecionado?.valor,
       turmaStore?.consideraHistorico
-    ).catch(e => erros(e));
+    )
+      .catch(e => erros(e))
+      .finally(() => setCarregando(false));
 
-    if (resultado && resultado.data) {
+    if (resultado?.data) {
+      const dadosCarregar = _.cloneDeep(resultado.data.notasConceitos);
+      dispatch(setDadosIniciaisListasNotasConceitos([...dadosCarregar]));
       dispatch(setDadosListasNotasConceitos(resultado.data.notasConceitos));
       dispatch(setPodeEditarNota(resultado.data.podeEditarNota));
       setExibir(true);
       if (bimestreSelecionado?.valor !== 'final')
         habilitaConselhoClasse(resultado.data);
+      habilitaConselhoClassePorNotasPosConselho(resultado.data);
     } else {
       setExibir(false);
     }
-    setCarregando(false);
   }, [
     alunoCodigo,
     conselhoClasseId,

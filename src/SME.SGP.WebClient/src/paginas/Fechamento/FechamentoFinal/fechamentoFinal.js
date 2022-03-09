@@ -17,6 +17,7 @@ import ServicoDisciplina from '~/servicos/Paginas/ServicoDisciplina';
 import { ContainerAuditoria, Lista } from './fechamentoFinal.css';
 import LinhaAluno from './linhaAluno';
 import { setExpandirLinha } from '~/redux/modulos/notasConceitos/actions';
+import Alert from '~/componentes/alert';
 
 const FechamentoFinal = forwardRef((props, ref) => {
   const {
@@ -156,31 +157,45 @@ const FechamentoFinal = forwardRef((props, ref) => {
   };
 
   const onChangeNotaAluno = (aluno, nota, disciplina) => {
-    if (nota !== null) {
-      const notas = notasEmEdicao;
-      const notaEmEdicao = notasEmEdicao.find(
-        c =>
-          c.alunoRf == aluno.codigo &&
-          c.componenteCurricularCodigo == disciplina
-      );
-      if (notaEmEdicao) {
-        notaEmEdicao.conceitoId = ehNota ? '' : Number(nota);
-        notaEmEdicao.nota = ehNota ? nota : '';
-      } else {
-        notas.push({
-          alunoRf: aluno.codigo,
-          componenteCurricularCodigo: disciplina,
-          conceitoId: ehNota ? '' : Number(nota),
-          nota: ehNota ? nota : '',
-        });
-      }
-
-      setNotasEmEdicao([...notas]);
-      onChange(notas);
+    const notas = notasEmEdicao;
+    const notaEmEdicao = notasEmEdicao.find(
+      c =>
+        c.alunoRf == aluno.codigo && c.componenteCurricularCodigo == disciplina
+    );
+    if (notaEmEdicao) {
+      notaEmEdicao.conceitoId = ehNota ? '' : Number(nota);
+      notaEmEdicao.nota = ehNota ? nota : '';
+    } else {
+      notas.push({
+        alunoRf: aluno.codigo,
+        componenteCurricularCodigo: disciplina,
+        conceitoId: ehNota ? '' : Number(nota),
+        nota: ehNota ? nota : '',
+      });
     }
+
+    setNotasEmEdicao(notas);
+    onChange(notas);
   };
   return (
     <>
+      {alunos?.length && !dadosFechamentoFinal?.periodoAberdo ? (
+        <div className="row">
+          <div className="col-md-12">
+            <Alert
+              alerta={{
+                tipo: 'warning',
+                mensagem:
+                  'Apenas é possível consultar este registro pois o período não está em aberto.',
+                estiloTitulo: { fontSize: '18px' },
+              }}
+              className="mb-2"
+            />
+          </div>
+        </div>
+      ) : (
+        <></>
+      )}
       <Lista>
         {alunos?.length && !ehSintese && ehRegencia ? (
           <div>
@@ -266,7 +281,10 @@ const FechamentoFinal = forwardRef((props, ref) => {
                         notaMedia={dadosFechamentoFinal.notaMedia}
                         frequenciaMedia={dadosFechamentoFinal.frequenciaMedia}
                         indexAluno={i}
-                        desabilitarCampo={desabilitarCampo}
+                        desabilitarCampo={
+                          desabilitarCampo ||
+                          !dadosFechamentoFinal?.periodoAberdo
+                        }
                         ehSintese={ehSintese}
                         registraFrequencia={registraFrequencia}
                       />

@@ -14,6 +14,10 @@ const CabecalhoDadosPlanoAula = () => {
     state => state.frequenciaPlanoAula.dadosPlanoAula
   );
 
+  const idPlanoAula = useSelector(
+    state => state.frequenciaPlanoAula.dadosPlanoAula?.id
+  );
+
   const desabilitarCamposPlanoAula = useSelector(
     state => state.frequenciaPlanoAula.desabilitarCamposPlanoAula
   );
@@ -35,9 +39,9 @@ const CabecalhoDadosPlanoAula = () => {
             onClick={() =>
               dispatch(setExibirModalCopiarConteudoPlanoAula(true))
             }
-            disabled={desabilitarCamposPlanoAula || !dadosPlanoAula.id}
+            disabled={desabilitarCamposPlanoAula || !idPlanoAula}
           />
-          <BotaoGerarRelatorioPlanoAula planoAulaId={dadosPlanoAula.id} />
+          <BotaoGerarRelatorioPlanoAula planoAulaId={idPlanoAula} />
           {dadosPlanoAula.migrado && (
             <RegistroMigrado className="align-self-center">
               Registro Migrado

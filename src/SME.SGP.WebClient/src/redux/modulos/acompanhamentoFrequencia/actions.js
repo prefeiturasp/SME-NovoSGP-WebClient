@@ -22,3 +22,7 @@ export const setBimestreSelecionado = payload => ({
   type: '@acompanhamentoFrequencia/setBimestreSelecionado',
   payload,
 });
+export const setExibirModalImpressao = payload => ({
+  type: '@acompanhamentoFrequencia/setExibirModalImpressao',
+  payload,
+});

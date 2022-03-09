@@ -4,6 +4,7 @@ import { OPCAO_TODOS } from '~/constantes/constantes';
 import { ModalidadeDTO } from '~/dtos';
 import QtdDiariosPreenchidosEQtdDiariosComDevolutiva from './QtdDiariosPreenchidosEQtdDiariosComDevolutiva/qtdDiariosPreenchidosEQtdDiariosComDevolutiva';
 import QuantidadeTotalDiariosBordoPendentes from './QuantidadeTotalDiariosBordoPendentes/quantidadeTotalDiariosBordoPendentes';
+import TotalDiariosBordoPorDRE from './TotalDiariosBordoPorDRE/totalDiariosBordoPorDRE';
 
 const GraficosDiarioBordo = () => {
   const anoLetivo = useSelector(
@@ -27,6 +28,16 @@ const GraficosDiarioBordo = () => {
 
   return anoLetivo && dre && ue && modalidade && !naoEhInfantil ? (
     <>
+      {dre?.codigo === OPCAO_TODOS ? (
+        <TotalDiariosBordoPorDRE
+          anoLetivo={anoLetivo}
+          dreId={dreId}
+          ueId={ueId}
+          modalidade={modalidade}
+        />
+      ) : (
+        <></>
+      )}
       <QtdDiariosPreenchidosEQtdDiariosComDevolutiva
         anoLetivo={anoLetivo}
         dreId={dreId}

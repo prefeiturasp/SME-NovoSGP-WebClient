@@ -14,7 +14,7 @@ function DataInicioFim({ dadosAula }) {
             {window.moment(dadosAula.dataInicio).format(`DD/MM/YYYY`)}
           </strong>
         </span>
-        &nbsp; &nbsp;
+        &nbsp;-&nbsp;
         <span>
           Data Fim: &nbsp;
           <strong>

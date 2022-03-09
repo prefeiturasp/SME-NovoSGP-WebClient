@@ -44,6 +44,12 @@ const CampoApanhadoGeral = () => {
     dispatch(setApanhadoGeralEmEdicao(true));
   };
 
+  const desabilitarCamposAcompanhamentoAprendizagem = useSelector(
+    store =>
+      store.acompanhamentoAprendizagem
+        .desabilitarCamposAcompanhamentoAprendizagem
+  );
+
   return (
     <JoditEditor
       id="percurso-coletivo-turma-editor"
@@ -53,6 +59,8 @@ const CampoApanhadoGeral = () => {
       permiteVideo={false}
       qtdMaxImg={qtdMaxImagensCampoPercursoColetivo}
       imagensCentralizadas
+      permiteGif={false}
+      desabilitar={desabilitarCamposAcompanhamentoAprendizagem}
     />
   );
 };

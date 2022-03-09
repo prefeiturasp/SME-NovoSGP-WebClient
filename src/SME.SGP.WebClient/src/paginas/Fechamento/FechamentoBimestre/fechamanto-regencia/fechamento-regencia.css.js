@@ -15,19 +15,22 @@ export const TdRegencia = styled.td`
   margin-left: 30px;
   max-width: 300px;
   overflow-x: auto;
-  padding-left: 0 !important;
-  padding-right: 0 !important;
+  padding: 0 !important;
 `;
 
 export const LinhaNotaRegencia = styled.div`
   display: flex;
 `;
 
-export const CampoNotaRegencia = styled.div`
+export const CampoNotaRegencia = styled.td`
   justify-items: center;
   align-items: center;
-  display: grid;
-  margin-left: 30px;
+  position: relative;
+
+  &::first-child {
+    margin-left: 30px;
+  }
+
   .disciplina {
     font-size: 11px;
     font-weight: bold;

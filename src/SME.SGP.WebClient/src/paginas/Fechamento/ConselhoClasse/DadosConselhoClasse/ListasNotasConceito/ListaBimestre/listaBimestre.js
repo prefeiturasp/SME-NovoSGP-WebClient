@@ -1,11 +1,13 @@
 import PropTypes from 'prop-types';
 import React from 'react';
+import { Tooltip } from 'antd';
 import shortid from 'shortid';
 import notasConceitos from '~/dtos/notasConceitos';
 import CampoConceito from '../CamposNotaConceito/campoConceito';
 import CampoNota from '../CamposNotaConceito/campoNota';
 import { BarraLateralLista, Lista } from '../listasNotasConceitos.css';
 import LinhaJustificativa from '../../Justificativa/LinhaJustificativa/LinhaJustificativa';
+import { MarcadorTriangulo } from '~/componentes';
 
 const ListaBimestre = props => {
   const {
@@ -35,11 +37,9 @@ const ListaBimestre = props => {
       : 0;
 
   const montaCampoPosConselho = (
-    id,
     notaPosConselho,
     idCampo,
-    codigoComponenteCurricular,
-    podeEditar
+    codigoComponenteCurricular
   ) => {
     switch (Number(tipoNota)) {
       case Number(notasConceitos.Notas):
@@ -47,23 +47,29 @@ const ListaBimestre = props => {
           <CampoNota
             esconderSetas
             step={0}
-            id={id}
-            notaPosConselho={notaPosConselho}
+            id={notaPosConselho?.id}
+            notaPosConselho={notaPosConselho?.nota}
             idCampo={idCampo}
             codigoComponenteCurricular={String(codigoComponenteCurricular)}
             mediaAprovacao={mediaAprovacao}
-            alunoDesabilitado={alunoDesabilitado || !podeEditar}
+            alunoDesabilitado={
+              alunoDesabilitado || !notaPosConselho?.podeEditar
+            }
+            dadosNotaPosConselho={notaPosConselho}
           />
         );
       case Number(notasConceitos.Conceitos):
         return (
           <CampoConceito
-            notaPosConselho={notaPosConselho}
+            notaPosConselho={notaPosConselho?.nota}
             listaTiposConceitos={listaTiposConceitos}
-            id={id}
+            id={notaPosConselho?.id}
             idCampo={idCampo}
             codigoComponenteCurricular={codigoComponenteCurricular}
-            alunoDesabilitado={alunoDesabilitado || !podeEditar}
+            alunoDesabilitado={
+              alunoDesabilitado || !notaPosConselho?.podeEditar
+            }
+            dadosNotaPosConselho={notaPosConselho}
           />
         );
       default:
@@ -139,13 +145,16 @@ const ListaBimestre = props => {
                       <td className="text-center">
                         {montarValoresNotasConceitos(item)}
                       </td>
-                      <td>
+                      <td className="position-relative">
                         {montaCampoPosConselho(
-                          item.notaPosConselho.id,
-                          item.notaPosConselho.nota,
+                          item.notaPosConselho,
                           `${descricaoGrupoMatriz} ${index} componente`,
-                          item.codigoComponenteCurricular,
-                          item.notaPosConselho.podeEditar
+                          item.codigoComponenteCurricular
+                        )}
+                        {item.notaPosConselho.emAprovacao && (
+                          <Tooltip title="Aguardando aprovação">
+                            <MarcadorTriangulo />
+                          </Tooltip>
                         )}
                       </td>
                       <td>{item.quantidadeAulas}</td>
@@ -177,13 +186,16 @@ const ListaBimestre = props => {
                           {item.nome}
                         </td>
                         <td>{montarValoresNotasConceitos(item)}</td>
-                        <td>
+                        <td className="position-relative">
                           {montaCampoPosConselho(
-                            item.notaPosConselho.id,
-                            item.notaPosConselho.nota,
+                            item.notaPosConselho,
                             `${descricaoGrupoMatriz} ${index} regencia`,
-                            item.codigoComponenteCurricular,
-                            item.notaPosConselho.podeEditar
+                            item.codigoComponenteCurricular
+                          )}
+                          {item.notaPosConselho.emAprovacao && (
+                            <Tooltip title="Aguardando aprovação">
+                              <MarcadorTriangulo />
+                            </Tooltip>
                           )}
                         </td>
                         {index === 0 ? (

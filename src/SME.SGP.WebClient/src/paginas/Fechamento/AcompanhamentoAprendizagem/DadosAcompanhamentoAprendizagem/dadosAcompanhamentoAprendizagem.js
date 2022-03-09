@@ -26,10 +26,6 @@ const DadosAcompanhamentoAprendizagem = props => {
 
   const { semestreSelecionado, componenteCurricularId } = props;
 
-  const componenteCurricularSelecionado = useSelector(
-    state => state.registroIndividual.componenteCurricularSelecionado
-  );
-
   const permissoesTela =
     usuario.permissoes[RotasDto.ACOMPANHAMENTO_APRENDIZAGEM];
 
@@ -96,14 +92,7 @@ const DadosAcompanhamentoAprendizagem = props => {
             )}
           </TabPane>
           <TabPane tab="Registros e fotos" key={TAB_REGISTROS_FOTOS}>
-            {tabAtual === TAB_REGISTROS_FOTOS ? (
-              <RegistrosFotos
-                semestreSelecionado={semestreSelecionado}
-                componenteCurricularId={componenteCurricularId}
-              />
-            ) : (
-              ''
-            )}
+            {tabAtual === TAB_REGISTROS_FOTOS ? <RegistrosFotos /> : ''}
           </TabPane>
           {exibirTabs ? (
             <TabPane tab="Observações" key={TAB_OBSERVACOES} disabled>

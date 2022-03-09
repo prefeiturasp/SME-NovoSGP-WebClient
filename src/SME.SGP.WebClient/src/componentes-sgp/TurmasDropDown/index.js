@@ -48,9 +48,20 @@ function TurmasDropDown({
   useEffect(() => {
     if (listaTurmas.length === 1 && form) {
       form.setFieldValue('turmaId', listaTurmas[0].valor);
-      onChange(listaTurmas[0].valor);
+      onChange(listaTurmas[0].valor, listaTurmas[0].desc);
     }
   }, [form, listaTurmas, onChange]);
+
+  const onChangeTurma = codigoTurma => {
+    const turmaAtual = listaTurmas?.find(
+      item => String(item?.valor) === String(codigoTurma)
+    );
+    let nomeTurma = '';
+    if (turmaAtual) {
+      nomeTurma = turmaAtual.desc;
+    }
+    onChange(codigoTurma, nomeTurma);
+  };
 
   return (
     <SelectComponent
@@ -58,7 +69,7 @@ function TurmasDropDown({
       name="turmaId"
       className="fonte-14"
       label={!label ? null : label}
-      onChange={onChange}
+      onChange={onChangeTurma}
       lista={listaTurmas}
       valueOption="valor"
       valueText="nomeFiltro"

@@ -50,7 +50,8 @@ const GraficoBarras = props => {
     columnStyle: {
       radius: [4, 4, 0, 0],
     },
-    label: {
+    label: labelVisible
+      ? {
       position: 'top',
       offset: 0,
       style: {
@@ -59,7 +60,21 @@ const GraficoBarras = props => {
         fontSize: 8.5,
         fontWeight: 600,
       },
-    },
+    } : null,
+=========
+    label: labelVisible
+      ? {
+          position: 'top',
+          offset: 0,
+          style: {
+            fill: Base.CinzaMako,
+            textAlign: 'center',
+            fontSize: 14,
+            fontWeight: 400,
+          },
+        }
+      : null,
+>>>>>>>>> Temporary merge branch 2
     legend: legendVisible
       ? {
           position: 'bottom',

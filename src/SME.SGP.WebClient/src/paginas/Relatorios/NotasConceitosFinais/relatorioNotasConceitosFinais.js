@@ -154,23 +154,25 @@ const RelatorioNotasConceitosFinais = () => {
     setAnosEscolares(undefined);
   };
 
-  const obterDres = async () => {
-    setCarregandoGeral(true);
-    const retorno = await ServicoFiltroRelatorio.obterDres().catch(e => {
-      erros(e);
-      setCarregandoGeral(false);
-    });
-    if (retorno && retorno.data && retorno.data.length) {
-      setListaDres(retorno.data);
+  const obterDres = useCallback(async () => {
+    if (anoLetivo) {
+      setCarregandoGeral(true);
+      const retorno = await ServicoFiltroRelatorio.obterDres().catch(e => {
+        erros(e);
+        setCarregandoGeral(false);
+      });
+      if (retorno && retorno.data && retorno.data.length) {
+        setListaDres(retorno.data);
 
-      if (retorno && retorno.data.length && retorno.data.length === 1) {
-        setCodigoDre(retorno.data[0].codigo);
+        if (retorno && retorno.data.length && retorno.data.length === 1) {
+          setCodigoDre(retorno.data[0].codigo);
+        }
+      } else {
+        setListaDres([]);
       }
-    } else {
-      setListaDres([]);
     }
     setCarregandoGeral(false);
-  };
+  }, [anoLetivo]);
 
   const obterSemestres = async (
     modalidadeSelecionada,
@@ -419,8 +421,11 @@ const RelatorioNotasConceitosFinais = () => {
   ]);
 
   useEffect(() => {
-    obterAnosLetivos();
     obterDres();
+  }, [obterDres]);
+
+  useEffect(() => {
+    obterAnosLetivos();
   }, [obterAnosLetivos]);
 
   const onClickVoltar = () => {
@@ -512,6 +517,9 @@ const RelatorioNotasConceitosFinais = () => {
 
     setListaAnosEscolares([]);
     setAnosEscolares(undefined);
+
+    setCodigoDre();
+    setCodigoUe();
   };
 
   const onChangeAnos = valor => {

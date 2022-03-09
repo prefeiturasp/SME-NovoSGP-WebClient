@@ -2,6 +2,7 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 
 import { OPCAO_TODOS } from '~/constantes/constantes';
+import { ModalidadeDTO } from '~/dtos';
 
 import FrequenciaGlobalPorAno from './FrequenciaGlobalPorAno/frequenciaGlobalPorAno';
 import FrequenciaGlobalPorDRE from './FrequenciaGlobalPorDRE/frequenciaGlobalPorDRE';
@@ -34,6 +35,8 @@ const GraficosFrequencia = () => {
 
   const exibirFrequenciaPorDRE = ehTodosDre && ue?.codigo === OPCAO_TODOS;
 
+  const ehInfantil = Number(modalidade) === ModalidadeDTO.INFANTIL;
+
   return (
     <>
       <FrequenciaGlobalPorAno
@@ -56,6 +59,7 @@ const GraficosFrequencia = () => {
         ueId={ueId}
         modalidade={modalidade}
         semestre={semestre}
+        ehInfantil={ehInfantil}
       />
       {exibirFrequenciaPorDRE && (
         <TotalEstudantesPresenciasRemotosAusentesPorDre
@@ -64,6 +68,7 @@ const GraficosFrequencia = () => {
           ueId={ueId}
           modalidade={modalidade}
           semestre={semestre}
+          ehInfantil={ehInfantil}
         />
       )}
       <QuantidadeAusenciasPossuemJustificativa

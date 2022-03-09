@@ -343,6 +343,8 @@ const CartaIntencoes = () => {
               editarObservacao={obs => salvarEditarObservacao(obs)}
               excluirObservacao={obs => excluirObservacao(obs)}
               verificaProprietario
+              dreId={turmaSelecionada.dre}
+              ueId={turmaSelecionada.unidadeEscolar}
             />
           ) : (
             ''

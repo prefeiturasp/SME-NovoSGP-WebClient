@@ -17,6 +17,7 @@ import {
   menuSelecionado,
 } from '../redux/modulos/navegacao/actions';
 import { obterDescricaoNomeMenu } from '~/servicos/servico-navegacao';
+import { validarNavegacaoTela } from '~/utils/validacoes';
 
 const Sider = () => {
   const { Sider, Footer } = Layout;
@@ -25,6 +26,7 @@ const Sider = () => {
   const [openKeys, setOpenKeys] = useState([]);
 
   const usuario = useSelector(state => state.usuario);
+  const telaEmdicao = useSelector(state => state.geral.telaEmEdicao);
 
   const modalidadesFiltroPrincipal = useSelector(
     state => state.filtro.modalidades
@@ -115,8 +117,10 @@ const Sider = () => {
     }
   };
 
-  const selecionarItem = item => {
-    store.dispatch(menuSelecionado([item.key]));
+  const selecionarItem = (item, alterar) => {
+    if (!telaEmdicao || alterar) {
+      store.dispatch(menuSelecionado([item.key]));
+    }
   };
 
   const criarItensMenu = menus => {
@@ -133,7 +137,19 @@ const Sider = () => {
               item.descricao
             )}
           </span>
-          {item.url ? <Link to={item.url} id={`link-${item.codigo}`} /> : ''}
+          {item.url ? (
+            <Link
+              to={item.url}
+              id={`link-${item.codigo}`}
+              onClick={async e => {
+                const pararAcao = await validarNavegacaoTela(e, item.url);
+                if (!pararAcao)
+                  selecionarItem({ key: item.codigo.toString() }, true);
+              }}
+            />
+          ) : (
+            ''
+          )}
         </Menu.Item>
       );
     });
@@ -225,10 +241,6 @@ const Sider = () => {
           >
             <div className="circulo-perfil">
               <i className="fas fa-user-circle icone-perfil" />
-              {/* <img
-                id="imagem-perfil"
-                src={usuario.meusDados.foto}
-              /> */}
             </div>
             <div hidden={NavegacaoStore.retraido}>
               <Tooltip
@@ -245,7 +257,13 @@ const Sider = () => {
               className="perfil-edit"
               style={{ paddingTop: NavegacaoStore.retraido ? '0' : '12px' }}
             >
-              <Link id="perfil-edit" to="/meus-dados">
+              <Link
+                id="perfil-edit"
+                to="/meus-dados"
+                onClick={async e => {
+                  await validarNavegacaoTela(e, '/meus-dados');
+                }}
+              >
                 <i className="fas fa-user-edit" />
                 <span>Meus Dados</span>
               </Link>

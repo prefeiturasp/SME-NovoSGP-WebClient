@@ -21,6 +21,7 @@ const AusenciasEstudante = props => {
   const {
     indexLinha,
     bimestre,
+    semestre,
     turmaId,
     codigoAluno,
     componenteCurricularId,
@@ -51,6 +52,7 @@ const AusenciasEstudante = props => {
         componenteCurricularId,
         codigoAluno,
         bimestre,
+        semestre,
         numeroPagina || 1,
         REGISTROS_POR_PAGINA
       )
@@ -63,7 +65,7 @@ const AusenciasEstudante = props => {
         setAusencias([]);
       }
     },
-    [bimestre, turmaId, componenteCurricularId, codigoAluno]
+    [bimestre, semestre, turmaId, componenteCurricularId, codigoAluno]
   );
 
   useEffect(() => {
@@ -182,6 +184,7 @@ const AusenciasEstudante = props => {
 AusenciasEstudante.defaultProps = {
   indexLinha: PropTypes.oneOfType([PropTypes.any]),
   bimestre: PropTypes.oneOfType([PropTypes.any]),
+  semestre: PropTypes.oneOfType([PropTypes.any]),
   turmaId: PropTypes.oneOfType([PropTypes.any]),
   codigoAluno: PropTypes.oneOfType([PropTypes.any]),
   componenteCurricularId: PropTypes.oneOfType([PropTypes.any]),
@@ -190,6 +193,7 @@ AusenciasEstudante.defaultProps = {
 AusenciasEstudante.propTypes = {
   indexLinha: null,
   bimestre: '',
+  semestre: '',
   turmaId: '',
   codigoAluno: '',
   componenteCurricularId: 0,

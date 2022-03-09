@@ -1,22 +1,27 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { Loader, SelectComponent } from '~/componentes';
+import { useSelector } from 'react-redux';
+import { CheckboxComponent, Loader, SelectComponent } from '~/componentes';
 import { Cabecalho } from '~/componentes-sgp';
+import AlertaModalidadeInfantil from '~/componentes-sgp/AlertaModalidadeInfantil/alertaModalidadeInfantil';
 import Button from '~/componentes/button';
 import Card from '~/componentes/card';
 import { Colors } from '~/componentes/colors';
+import { OPCAO_TODOS } from '~/constantes/constantes';
 import modalidade from '~/dtos/modalidade';
+import { AbrangenciaServico } from '~/servicos';
 import { erros, sucesso } from '~/servicos/alertas';
 import api from '~/servicos/api';
 import history from '~/servicos/history';
 import ServicoFiltroRelatorio from '~/servicos/Paginas/FiltroRelatorio/ServicoFiltroRelatorio';
 import ServicoRelatorioParecerConclusivo from '~/servicos/Paginas/Relatorios/ParecerConclusivo/ServicoRelatorioParecerConclusivo';
-import FiltroHelper from '~componentes-sgp/filtro/helper';
-import AlertaModalidadeInfantil from '~/componentes-sgp/AlertaModalidadeInfantil/alertaModalidadeInfantil';
-import { CorpoRelatorio } from './relatorioParecerConclusivo.css';
 import { ordenarListaMaiorParaMenor } from '~/utils/funcoes/gerais';
-import { OPCAO_TODOS } from '~/constantes/constantes';
+import FiltroHelper from '~componentes-sgp/filtro/helper';
+import { CorpoRelatorio } from './relatorioParecerConclusivo.css';
 
 const RelatorioParecerConclusivo = () => {
+  const usuario = useSelector(store => store.usuario);
+  const { possuiPerfilSme, possuiPerfilDre } = usuario;
+
   const [carregandoGerar, setCarregandoGerar] = useState(false);
   const [carregandoAnosLetivos, setCarregandoAnosLetivos] = useState(false);
   const [listaAnosLetivo, setListaAnosLetivo] = useState([]);
@@ -44,6 +49,7 @@ const RelatorioParecerConclusivo = () => {
     { valor: '4', desc: 'Excel' },
   ];
 
+  const [consideraHistorico, setConsideraHistorico] = useState(false);
   const [anoLetivo, setAnoLetivo] = useState(undefined);
   const [dreId, setDreId] = useState(undefined);
   const [ueId, setUeId] = useState(undefined);
@@ -56,8 +62,30 @@ const RelatorioParecerConclusivo = () => {
   const [clicouBotaoGerar, setClicouBotaoGerar] = useState(false);
   const [desabilitarBtnGerar, setDesabilitarBtnGerar] = useState(true);
 
+  const [anoAtual] = useState(window.moment().format('YYYY'));
+
+  const onChangeConsideraHistorico = e => {
+    setConsideraHistorico(e.target.checked);
+    setAnoLetivo(anoAtual);
+    setDreId();
+    setUeId();
+    setListaUes([]);
+    setModalidadeId();
+    setListaModalidades([]);
+    setSemestre();
+    setListaSemestres([]);
+  };
+
   const onChangeAnoLetivo = valor => {
     setAnoLetivo(valor);
+    setDreId();
+    setListaDres([]);
+    setUeId();
+    setListaUes([]);
+    setModalidadeId();
+    setListaModalidades([]);
+    setSemestre();
+    setListaSemestres([]);
   };
 
   const onChangeDre = valor => {
@@ -120,102 +148,116 @@ const RelatorioParecerConclusivo = () => {
     setClicouBotaoGerar(false);
   };
 
-  const [anoAtual] = useState(window.moment().format('YYYY'));
-
   const obterDres = useCallback(async () => {
     if (anoLetivo) {
       setCarregandoDres(true);
-      const response = await ServicoFiltroRelatorio.obterDres()
+      const response = await AbrangenciaServico.buscarDres(
+        `v1/abrangencias/${consideraHistorico}/dres?anoLetivo=${anoLetivo}`,
+        consideraHistorico
+      )
         .catch(e => erros(e))
-        .finally(() => {
-          setCarregandoDres(false);
-        });
+        .finally(() => setCarregandoDres(false));
+
       if (response?.data?.length) {
         const lista = response.data.map(item => ({
           desc: item.nome,
           valor: String(item.codigo),
           abrev: item.abreviacao,
         }));
+
+        if (lista?.length > 1 && possuiPerfilSme) {
+          lista.unshift({ valor: OPCAO_TODOS, desc: 'Todas' });
+        }
+
         setListaDres(lista);
 
-        if (lista && lista.length && lista.length === 1) {
+        if (lista?.length === 1) {
           setDreId(lista[0].valor);
         }
       } else {
         setListaDres([]);
         setDreId(undefined);
       }
-    } else {
-      setListaDres([]);
-      setDreId();
     }
-  }, [anoLetivo]);
+  }, [anoLetivo, consideraHistorico, possuiPerfilSme]);
 
   useEffect(() => {
     obterDres();
-  }, [obterDres]);
+  }, [obterDres, anoLetivo, consideraHistorico]);
 
-  const obterUes = useCallback(async dre => {
-    if (dre) {
-      setCarregandoUes(true);
-      const response = await ServicoFiltroRelatorio.obterUes(dre)
-        .catch(e => erros(e))
-        .finally(() => {
-          setCarregandoUes(false);
-        });
-      if (response?.data?.length) {
-        const lista = response.data.map(item => ({
-          desc: `${item.nome}`,
-          valor: String(item.codigo),
-        }));
-
-        if (lista && lista.length && lista.length === 1) {
-          setUeId(lista[0].valor);
-        }
-
-        setListaUes(lista);
-      } else {
-        setListaUes([]);
-      }
+  const obterUes = useCallback(async () => {
+    if (dreId === OPCAO_TODOS) {
+      setListaUes([{ valor: OPCAO_TODOS, desc: 'Todas' }]);
+      setUeId(OPCAO_TODOS);
+      return;
     }
-  }, []);
+
+    setCarregandoUes(true);
+    const resposta = await AbrangenciaServico.buscarUes(
+      dreId,
+      `v1/abrangencias/${consideraHistorico}/dres/${dreId}/ues?anoLetivo=${anoLetivo}`,
+      true
+    )
+      .catch(e => erros(e))
+      .finally(() => setCarregandoUes(false));
+
+    if (resposta?.data?.length) {
+      const lista = resposta.data.map(item => ({
+        desc: item.nome,
+        valor: String(item.codigo),
+      }));
+
+      if (lista?.length > 1 && (possuiPerfilSme || possuiPerfilDre)) {
+        lista.unshift({ valor: OPCAO_TODOS, desc: 'Todas' });
+      }
+
+      if (lista?.length === 1) {
+        setUeId(lista[0].valor);
+      }
+
+      setListaUes(lista);
+    } else {
+      setListaUes([]);
+      setUeId();
+    }
+  }, [consideraHistorico, anoLetivo, dreId, possuiPerfilDre, possuiPerfilSme]);
 
   useEffect(() => {
     if (dreId) {
-      obterUes(dreId);
+      obterUes();
     } else {
       setUeId();
       setListaUes([]);
     }
-  }, [dreId, obterUes]);
+  }, [dreId, anoLetivo, consideraHistorico, obterUes]);
 
-  const obterModalidades = async ue => {
-    if (ue) {
-      setCarregandoModalidades(true);
-      const {
-        data,
-      } = await ServicoFiltroRelatorio.obterModalidadesPorAbrangencia(ue)
-        .catch(e => erros(e))
-        .finally(() => {
-          setCarregandoModalidades(false);
-        });
-      if (data) {
-        if (data && data.length && data.length === 1) {
-          setModalidadeId(data[0].valor);
-        }
-        setListaModalidades(data);
+  const obterModalidades = useCallback(async () => {
+    setCarregandoModalidades(true);
+    const resposta = await ServicoFiltroRelatorio.obterModalidadesPorAbrangencia(
+      ueId
+    )
+      .catch(e => erros(e))
+      .finally(() => setCarregandoModalidades(false));
+
+    if (resposta?.data?.length) {
+      if (resposta?.data?.length === 1) {
+        setModalidadeId(resposta.data[0].valor);
       }
+      setListaModalidades(resposta.data);
+    } else {
+      setListaModalidades([]);
+      setModalidadeId();
     }
-  };
+  }, [ueId]);
 
   useEffect(() => {
     if (ueId) {
-      obterModalidades(ueId);
+      obterModalidades();
     } else {
       setModalidadeId();
       setListaModalidades([]);
     }
-  }, [ueId]);
+  }, [ueId, obterModalidades]);
 
   const obterAnosLetivos = useCallback(async () => {
     setCarregandoAnosLetivos(true);
@@ -259,31 +301,45 @@ const RelatorioParecerConclusivo = () => {
     obterAnosLetivos();
   }, [obterAnosLetivos]);
 
-  const obterSemestres = async (
-    modalidadeSelecionada,
-    anoLetivoSelecionado
-  ) => {
+  const obterSemestres = useCallback(async () => {
     setCarregandoSemestres(true);
     const retorno = await api
       .get(
-        `v1/abrangencias/false/semestres?anoLetivo=${anoLetivoSelecionado}&modalidade=${modalidadeSelecionada ||
+        `v1/abrangencias/${consideraHistorico}/semestres?anoLetivo=${anoLetivo}&modalidade=${modalidadeId ||
           0}`
       )
       .catch(e => erros(e))
       .finally(() => {
         setCarregandoSemestres(false);
       });
-    if (retorno && retorno.data) {
+    if (retorno?.data) {
       const lista = retorno.data.map(periodo => {
         return { desc: periodo, valor: periodo };
       });
 
-      if (lista && lista.length && lista.length === 1) {
+      if (lista?.length === 1) {
         setSemestre(lista[0].valor);
       }
       setListaSemestres(lista);
+    } else {
+      setListaSemestres();
+      setSemestre();
     }
-  };
+  }, [modalidadeId, anoLetivo, consideraHistorico]);
+
+  useEffect(() => {
+    if (
+      modalidadeId &&
+      anoLetivo &&
+      String(modalidadeId) === String(modalidade.EJA)
+    ) {
+      setSemestre();
+      obterSemestres();
+    } else {
+      setSemestre();
+      setListaSemestres([]);
+    }
+  }, [modalidadeId, anoLetivo, obterSemestres]);
 
   const obterCiclos = async (modalidadeSelecionada, codigoUe) => {
     if (
@@ -328,7 +384,8 @@ const RelatorioParecerConclusivo = () => {
       });
     if (retorno && retorno.data) {
       setParecerConclusivoId();
-      let lista = retorno.data.length > 1 ? [{ id: OPCAO_TODOS, nome: 'Todos' }] : [];
+      let lista =
+        retorno.data.length > 1 ? [{ id: OPCAO_TODOS, nome: 'Todos' }] : [];
       lista = lista.concat(retorno.data);
       setListaPareceresConclusivos(lista);
     }
@@ -372,23 +429,12 @@ const RelatorioParecerConclusivo = () => {
   };
 
   useEffect(() => {
-    if (
-      modalidadeId &&
-      anoLetivo &&
-      String(modalidadeId) === String(modalidade.EJA)
-    ) {
-      setSemestre();
-      obterSemestres(modalidadeId, anoLetivo);
-    } else {
-      setSemestre();
-      setListaSemestres([]);
-    }
-  }, [modalidadeId, anoLetivo]);
-
-  useEffect(() => {
     if (modalidadeId && ueId) {
       setCiclo();
       obterCiclos(modalidadeId, ueId);
+    } else {
+      setListaCiclos([]);
+      setCiclo();
     }
   }, [modalidadeId, ueId]);
 
@@ -513,6 +559,18 @@ const RelatorioParecerConclusivo = () => {
                 />
               </Loader>
             </div>
+          </div>
+          <div className="row mb-2">
+            <div className="col-12">
+              <CheckboxComponent
+                label="Exibir histórico?"
+                onChangeCheckbox={onChangeConsideraHistorico}
+                checked={consideraHistorico}
+                disabled={listaAnosLetivo.length === 1}
+              />
+            </div>
+          </div>
+          <div className="row">
             <div className="col-sm-12 col-md-6 col-lg-2 col-xl-2 mb-2">
               <Loader loading={carregandoAnosLetivos} tip="">
                 <SelectComponent
@@ -521,7 +579,9 @@ const RelatorioParecerConclusivo = () => {
                   lista={listaAnosLetivo}
                   valueOption="valor"
                   valueText="desc"
-                  disabled={listaAnosLetivo && listaAnosLetivo.length === 1}
+                  disabled={
+                    !consideraHistorico || listaAnosLetivo?.length === 1
+                  }
                   onChange={onChangeAnoLetivo}
                   valueSelect={anoLetivo}
                   placeholder="Ano letivo"

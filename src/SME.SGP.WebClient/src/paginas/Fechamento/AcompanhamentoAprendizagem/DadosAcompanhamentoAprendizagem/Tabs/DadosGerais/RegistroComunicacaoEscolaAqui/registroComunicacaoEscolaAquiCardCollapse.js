@@ -60,7 +60,7 @@ const RegistroComunicacaoEscolaAquiCardCollapse = props => {
         <div className="col-md-12 mb-2">
           {turmaSelecionada?.id && codigoEOL && semestreSelecionado ? (
             <ListaPaginada
-              url={`v1/comunicado/turmas/${turmaSelecionada?.id}/semestres/${semestreSelecionado}/alunos/${codigoEOL}`}
+              url={`v1/comunicados/turmas/${turmaSelecionada?.id}/semestres/${semestreSelecionado}/alunos/${codigoEOL}`}
               id="lista-ocorrencias-acompanhamento-aprendizagem"
               colunas={colunas}
               filtro={{}}

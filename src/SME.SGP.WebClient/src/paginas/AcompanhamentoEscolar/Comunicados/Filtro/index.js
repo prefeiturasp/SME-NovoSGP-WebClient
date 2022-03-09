@@ -64,7 +64,8 @@ function Filtro({ onFiltrar }) {
   const [modalidadeSelecionada, setModalidadeSelecionada] = useState(
     TODAS_MODALIDADES_ID
   );
-  const [anosModalidade, setAnosModalidade] = useState([]);
+  const [anosModalidade, setAnosModalidade] = useState(anosPorModalidadeDefault);
+  const [gruposSelecionados, setGruposSelecionados] = useState([]);
   const [timeoutCampoPesquisa, setTimeoutCampoPesquisa] = useState();
   const [
     bloquearCamposCalendarioEventos,
@@ -705,43 +706,45 @@ function Filtro({ onFiltrar }) {
                 control="CodigoDre"
                 text="Diretoria Regional de Educação (DRE)"
               />
-              <SelectComponent
-                form={form}
-                id="CodigoDre"
-                name="CodigoDre"
-                placeholder="Selecione uma Dre"
-                valueOption="id"
-                disabled={dreDesabilitada}
-                valueText="nome"
-                value={form.values.CodigoDre}
-                lista={dres}
-                allowClear={false}
-                onChange={x => {
-                  validarFiltro();
-                  onChangeDre(x);
-                }}
-                showSearch
-              />
+              <Loader loading={carregandoDres} tip="">
+                <SelectComponent
+                  form={form}
+                  id="CodigoDre"
+                  name="CodigoDre"
+                  placeholder="Selecione uma Dre"
+                  valueOption="id"
+                  disabled={dreDesabilitada}
+                  valueText="nome"
+                  value={form.values.CodigoDre}
+                  lista={dres}
+                  allowClear={false}
+                  onChange={x => {
+                    validarFiltro();
+                    onChangeDre(x);
+                  }}
+                />
+              </Loader>
             </Grid>
             <Grid cols={5}>
               <Label control="CodigoUe" text="Unidade Escolar (UE)" />
-              <SelectComponent
-                form={form}
-                id="CodigoUe"
-                name="CodigoUe"
-                placeholder="Selecione uma Ue"
-                disabled={ueDesabilitada}
-                valueOption="id"
-                valueText="nome"
-                value={form.values.CodigoUe}
-                lista={ues}
-                allowClear={false}
-                onChange={x => {
-                  validarFiltro();
-                  onChangeUe(x);
-                }}
-                showSearch
-              />
+              <Loader loading={carregandoUes} tip="">
+                <SelectComponent
+                  form={form}
+                  id="CodigoUe"
+                  name="CodigoUe"
+                  placeholder="Selecione uma Ue"
+                  disabled={ueDesabilitada}
+                  valueOption="id"
+                  valueText="nome"
+                  value={form.values.CodigoUe}
+                  lista={ues}
+                  allowClear={false}
+                  onChange={x => {
+                    validarFiltro();
+                    onChangeUe(x);
+                  }}
+                />
+              </Loader>
             </Grid>
           </Linha>
           <Linha className="row mb-2">

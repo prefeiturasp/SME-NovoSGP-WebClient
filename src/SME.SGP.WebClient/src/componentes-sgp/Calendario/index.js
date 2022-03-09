@@ -1,4 +1,4 @@
-import React, { useReducer, useCallback, useEffect } from 'react';
+import React, { useReducer, useCallback, useEffect, useMemo } from 'react';
 import t from 'prop-types';
 
 // Componentes
@@ -21,6 +21,8 @@ import {
   zeraCalendario,
 } from './reducer/actions';
 
+import { ordenarPor } from '~/utils';
+
 const obterMesesPermitidos = numeroMes => {
   if (numeroMes <= 4) return [1, 2, 3, 4];
   if (numeroMes > 4 && numeroMes <= 8) return [5, 6, 7, 8];
@@ -39,6 +41,8 @@ function Calendario({
   turmaSelecionada,
 }) {
   const [estado, disparar] = useReducer(Reducer, estadoInicial);
+
+  const estadoOrdenado = useMemo(() => ordenarPor(estado?.meses), []);
 
   const onClickMesHandler = useCallback(
     mes => {
@@ -63,7 +67,7 @@ function Calendario({
   return (
     <Loader loading={carregandoCalendario}>
       <FundoCinza>
-        {estado?.meses?.map(item => (
+        {estadoOrdenado.map(item => (
           <React.Fragment key={item.numeroMes}>
             <Mes
               tipoCalendarioId={tipoCalendarioId}

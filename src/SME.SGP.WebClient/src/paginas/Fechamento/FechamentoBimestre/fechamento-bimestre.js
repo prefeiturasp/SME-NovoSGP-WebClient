@@ -25,6 +25,8 @@ import { setExpandirLinha } from '~/redux/modulos/notasConceitos/actions';
 import AlertaModalidadeInfantil from '~/componentes-sgp/AlertaModalidadeInfantil/alertaModalidadeInfantil';
 import { ehTurmaInfantil } from '~/servicos/Validacoes/validacoesInfatil';
 import { ModalidadeDTO } from '~/dtos';
+import BtnAcoesFechamentoBimestre from './btnAcoesFechamentoBimestre';
+import { setModoEdicaoFechamentoBimestre } from '~/redux/modulos/fechamentoBimestre/actions';
 
 const FechamentoBismestre = () => {
   const dispatch = useDispatch();
@@ -38,6 +40,9 @@ const FechamentoBismestre = () => {
 
   const modalidadesFiltroPrincipal = useSelector(
     store => store.filtro.modalidades
+  );
+  const modoEdicaoFechamentoBimestre = useSelector(
+    store => store.fechamentoBimestre.modoEdicaoFechamentoBimestre
   );
 
   useEffect(() => {
@@ -57,7 +62,7 @@ const FechamentoBismestre = () => {
   const [desabilitarDisciplina, setDesabilitarDisciplina] = useState(
     listaDisciplinas && listaDisciplinas.length === 1
   );
-  const [modoEdicao, setModoEdicao] = useState(false);
+
   const [bimestreCorrente, setBimestreCorrente] = useState();
   const [dadosBimestre1, setDadosBimestre1] = useState(undefined);
   const [dadosBimestre2, setDadosBimestre2] = useState(undefined);
@@ -73,6 +78,16 @@ const FechamentoBismestre = () => {
     setIdDisciplinaTerritorioSaber,
   ] = useState(undefined);
 
+  const ehModaliadeEJA =
+    Number(turmaSelecionada?.modalidade) !== ModalidadeDTO.EJA;
+
+  const ehIgualPeriodoAnual = periodoFechamento === periodo.Anual;
+
+  const trocarEstadoEmEdicao = novoEstado => {
+    modoEdicaoFechamentoBimestre.emEdicao = novoEstado;
+    dispatch(setModoEdicaoFechamentoBimestre(modoEdicaoFechamentoBimestre));
+  };
+
   const resetarTela = () => {
     setBimestreCorrente();
     setDadosBimestre1(undefined);
@@ -84,7 +99,7 @@ const FechamentoBismestre = () => {
     setPeriodoFechamento(periodo.Anual);
     setSituacaoFechamento(0);
     setRegistraFrequencia(true);
-    setModoEdicao(false);
+    trocarEstadoEmEdicao(false);
     setDesabilitarDisciplina(false);
     setIdDisciplinaTerritorioSaber(undefined);
   };
@@ -107,7 +122,7 @@ const FechamentoBismestre = () => {
 
   const onClickVoltar = async () => {
     let confirmou = true;
-    if (modoEdicao) {
+    if (modoEdicaoFechamentoBimestre?.emEdicao) {
       confirmou = await confirmar(
         'Atenção',
         'Existem alterações pendetes, deseja realmente sair da tela de fechamento?'
@@ -126,7 +141,7 @@ const FechamentoBismestre = () => {
     );
     if (confirmou) {
       refFechamentoFinal.current.cancelar();
-      setModoEdicao(false);
+      trocarEstadoEmEdicao(false);
     }
   };
 
@@ -234,7 +249,7 @@ const FechamentoBismestre = () => {
   };
 
   const onChangeTab = async numeroBimestre => {
-    if (modoEdicao) {
+    if (modoEdicaoFechamentoBimestre?.emEdicao) {
       const confirmado = await confirmar(
         'Atenção',
         'Suas alterações não foram salvas, deseja salvar agora?'
@@ -243,12 +258,12 @@ const FechamentoBismestre = () => {
         const salvou = await salvarFechamentoFinal();
         if (salvou) {
           onConfirmouTrocarTab(numeroBimestre);
-          setModoEdicao(false);
+          trocarEstadoEmEdicao(false);
           dispatch(setExpandirLinha([]));
         }
       } else {
         onConfirmouTrocarTab(numeroBimestre);
-        setModoEdicao(false);
+        trocarEstadoEmEdicao(false);
         dispatch(setExpandirLinha([]));
       }
     } else {
@@ -283,7 +298,7 @@ const FechamentoBismestre = () => {
     const fechamentoFinalDto = fechamentoFinal;
     fechamentoFinalDto.itens = alunosAlterados;
     setFechamentoFinal(fechamentoFinalDto);
-    setModoEdicao(true);
+    trocarEstadoEmEdicao(true);
   };
   const salvarFechamentoFinal = () => {
     fechamentoFinal.turmaCodigo = turmaSelecionada.turma;
@@ -292,7 +307,7 @@ const FechamentoBismestre = () => {
     return ServicoFechamentoFinal.salvar(fechamentoFinal)
       .then(() => {
         sucesso('Fechamento final salvo com sucesso.');
-        setModoEdicao(false);
+        trocarEstadoEmEdicao(false);
         dispatch(setExpandirLinha([]));
         refFechamentoFinal.current.salvarFechamentoFinal();
       })
@@ -319,42 +334,13 @@ const FechamentoBismestre = () => {
       <Cabecalho pagina="Fechamento" />
       <Loader loading={carregandoBimestres}>
         <Card>
-          <div className="col-md-12">
-            <div className="row">
-              <div className="col-md-12 d-flex justify-content-end pb-4">
-                <Button
-                  id="btn-volta-fechamento-bimestre"
-                  label="Voltar"
-                  icon="arrow-left"
-                  color={Colors.Azul}
-                  border
-                  className="mr-2"
-                  onClick={onClickVoltar}
-                />
-                <Button
-                  id="btn-cancelar-fechamento-bimestre"
-                  label="Cancelar"
-                  color={Colors.Roxo}
-                  border
-                  className="mr-2"
-                  onClick={onClickCancelar}
-                  disabled={!modoEdicao || somenteConsulta}
-                  hidden={ehSintese}
-                />
-                <Button
-                  id="btn-salvar-fechamento-bimestre"
-                  label="Salvar"
-                  color={Colors.Roxo}
-                  border
-                  bold
-                  className="mr-2"
-                  onClick={salvarFechamentoFinal}
-                  disabled={!modoEdicao || somenteConsulta}
-                  hidden={ehSintese}
-                />
-              </div>
-            </div>
-          </div>
+          <BtnAcoesFechamentoBimestre
+            salvarFechamentoFinal={salvarFechamentoFinal}
+            onClickVoltar={onClickVoltar}
+            onClickCancelar={onClickCancelar}
+            somenteConsulta={somenteConsulta}
+            ehSintese={ehSintese}
+          />
           <div className="col-md-12">
             <div className="row">
               <div className="col-sm-12 col-md-4 col-lg-4 col-xl-4 mb-4">
@@ -403,6 +389,9 @@ const FechamentoBismestre = () => {
                         turmaId={turmaSelecionada.turma}
                         anoLetivo={turmaSelecionada.anoLetivo}
                         registraFrequencia={registraFrequencia}
+                        desabilitarCampo={
+                          !podeIncluir || !podeAlterar || somenteConsulta
+                        }
                       />
                     ) : null}
                   </TabPane>
@@ -424,11 +413,13 @@ const FechamentoBismestre = () => {
                         turmaId={turmaSelecionada.turma}
                         anoLetivo={turmaSelecionada.anoLetivo}
                         registraFrequencia={registraFrequencia}
+                        desabilitarCampo={
+                          !podeIncluir || !podeAlterar || somenteConsulta
+                        }
                       />
                     ) : null}
                   </TabPane>
-                  {periodoFechamento === periodo.Anual &&
-                  turmaSelecionada?.modalidade !== ModalidadeDTO.EJA ? (
+                  {ehIgualPeriodoAnual && ehModaliadeEJA ? (
                     <TabPane
                       tab="3º Bimestre"
                       key="3"
@@ -447,12 +438,14 @@ const FechamentoBismestre = () => {
                           turmaId={turmaSelecionada.turma}
                           anoLetivo={turmaSelecionada.anoLetivo}
                           registraFrequencia={registraFrequencia}
+                          desabilitarCampo={
+                            !podeIncluir || !podeAlterar || somenteConsulta
+                          }
                         />
                       ) : null}
                     </TabPane>
                   ) : null}
-                  {periodoFechamento === periodo.Anual &&
-                  turmaSelecionada?.modalidade !== ModalidadeDTO.EJA ? (
+                  {ehIgualPeriodoAnual && ehModaliadeEJA ? (
                     <TabPane
                       tab="4º Bimestre"
                       key="4"
@@ -471,6 +464,9 @@ const FechamentoBismestre = () => {
                           turmaId={turmaSelecionada.turma}
                           anoLetivo={turmaSelecionada.anoLetivo}
                           registraFrequencia={registraFrequencia}
+                          desabilitarCampo={
+                            !podeIncluir || !podeAlterar || somenteConsulta
+                          }
                         />
                       ) : null}
                     </TabPane>

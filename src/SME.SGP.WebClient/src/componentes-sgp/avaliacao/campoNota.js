@@ -89,7 +89,7 @@ const CampoNota = props => {
 
   const apertarTecla = e => {
     const teclaEscolhida = converterAcaoTecla(e.keyCode);
-    if (teclaEscolhida === 0) {
+    if (teclaEscolhida === 0 && !notaValorAtual) {
       setarValorNovo(0);
     }
   };
@@ -126,8 +126,8 @@ const CampoNota = props => {
         disabled={desabilitarCampo || !nota.podeEditar}
         className={`${notaAlterada ? 'border-registro-alterado' : ''}`}
       />
-      {nota?.ausente && <TooltipEstudanteAusente />}
-      {nota?.statusGsa && <TooltipStatusGsa />}
+      {nota?.ausente ? <TooltipEstudanteAusente /> : ''}
+      {nota?.statusGsa ? <TooltipStatusGsa /> : ''}
     </div>
   );
 };

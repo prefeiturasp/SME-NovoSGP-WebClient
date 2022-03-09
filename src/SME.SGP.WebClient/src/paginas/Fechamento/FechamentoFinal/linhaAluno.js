@@ -2,13 +2,13 @@ import { Tooltip } from 'antd';
 import PropTypes from 'prop-types';
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { MarcadorTriangulo } from '~/componentes';
 import NomeEstudanteLista from '~/componentes-sgp/NomeEstudanteLista/nomeEstudanteLista';
 
 import { setExpandirLinha } from '~/redux/modulos/notasConceitos/actions';
 import {
   acharItem,
   converterAcaoTecla,
-  esperarMiliSegundos,
   moverCursor,
   tratarString,
 } from '~/utils';
@@ -74,12 +74,16 @@ const LinhaAluno = ({
       ));
   };
 
-  const montaNotaFinal = (aluno, indexNotaConceito) => {
-    if (aluno && aluno.notasConceitoFinal && aluno.notasConceitoFinal.length) {
+  const montaNotaFinal = (alunoConceito, indexNotaConceito) => {
+    if (
+      alunoConceito &&
+      alunoConceito.notasConceitoFinal &&
+      alunoConceito.notasConceitoFinal.length
+    ) {
       if (ehRegencia) {
-        return aluno.notasConceitoFinal[indexNotaConceito];
+        return alunoConceito.notasConceitoFinal[indexNotaConceito];
       }
-      return aluno.notasConceitoFinal[0];
+      return alunoConceito.notasConceitoFinal[0];
     }
     return '';
   };
@@ -200,12 +204,18 @@ const LinhaAluno = ({
         {ehSintese ? (
           ''
         ) : (
-          <td className="col-conceito-final">
+          <td className="col-conceito-final position-relative">
             {ehRegencia ? (
               <ColunaNotaFinalRegencia indexLinha={indexAluno} />
             ) : (
               montarCampoNotaConceitoFinal(aluno)
             )}
+            {aluno?.notasConceitoFinal?.length &&
+              aluno.notasConceitoFinal[0].emAprovacao && (
+                <Tooltip title="Aguardando aprovação">
+                  <MarcadorTriangulo />
+                </Tooltip>
+              )}
           </td>
         )}
         <td>
@@ -229,12 +239,14 @@ LinhaAluno.propTypes = {
   onChange: PropTypes.func,
   desabilitarCampo: PropTypes.bool,
   ehSintese: PropTypes.bool,
+  aluno: PropTypes.oneOfType(PropTypes.any),
 };
 
 LinhaAluno.defaultProps = {
   onChange: () => {},
   desabilitarCampo: false,
   ehSintese: false,
+  aluno: [],
 };
 
 export default LinhaAluno;
