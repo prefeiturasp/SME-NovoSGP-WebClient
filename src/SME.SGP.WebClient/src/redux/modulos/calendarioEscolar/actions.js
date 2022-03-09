@@ -49,11 +49,9 @@ export function salvarEventoCalendarioEdicao(
   };
 }
 
-export function setFiltroCalendarioEscolar(filtroCalendarioEscolar) {
+export function setFiltroListaEventos(payload) {
   return {
-    type: '@calendarioEscolar/filtroCalendarioEscolar',
-    payload: {
-      filtroCalendarioEscolar,
-    },
+    type: '@calendarioEscolar/setFiltroListaEventos',
+    payload,
   };
 }

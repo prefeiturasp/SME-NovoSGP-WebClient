@@ -75,34 +75,32 @@ class ServicoSalvarRelatorioSemestral {
       return true;
     };
 
-    const atualizarValoresRelatorioSemestral = retorno => {
-      const { auditoria } = retorno.data;
+    const atualizarValoresRelatorioSemestral = async () => {
+      const resposta = await ServicoRelatorioSemestral.obterDadosCamposDescritivos(
+        alunoCodigo,
+        turmaCodigo,
+        semestreConsulta
+      ).catch(e => erros(e));
 
-      if (!relatorioSemestralId) {
-        dadosRelatorioSemestral.relatorioSemestralId =
-          retorno.data.relatorioSemestralId;
-      }
-      if (!relatorioSemestralAlunoId) {
-        dadosRelatorioSemestral.relatorioSemestralAlunoId =
-          retorno.data.relatorioSemestralAlunoId;
-      }
+      if (resposta?.data) {
+        const { auditoria, secoes } = resposta?.data;
 
-      if (
-        dadosParaSalvarRelatorioSemestral &&
-        dadosParaSalvarRelatorioSemestral.length
-      ) {
-        dadosParaSalvarRelatorioSemestral.forEach(element => {
-          const secao = dadosRelatorioSemestral.secoes.find(
-            item => item.id == element.id
-          );
-          if (secao != null) {
-            secao.valor = element.valor;
-          }
-        });
+        if (!relatorioSemestralId) {
+          dadosRelatorioSemestral.relatorioSemestralId =
+            resposta.data.relatorioSemestralId;
+          dadosRelatorioSemestral.relatorioSemestralId = relatorioSemestralId;
+        }
+        if (!relatorioSemestralAlunoId) {
+          dadosRelatorioSemestral.relatorioSemestralAlunoId =
+            resposta.data.relatorioSemestralAlunoId;
+        }
+
+        dadosRelatorioSemestral.auditoria = { ...auditoria };
+        dadosRelatorioSemestral.secoes = [...secoes];
+
+        dispatch(setAuditoriaRelatorioSemestral({ ...auditoria }));
+        dispatch(setDadosRelatorioSemestral({ ...dadosRelatorioSemestral }));
       }
-      dadosRelatorioSemestral.auditoria = auditoria;
-      dispatch(setAuditoriaRelatorioSemestral({ ...auditoria }));
-      dispatch(setDadosRelatorioSemestral({ ...dadosRelatorioSemestral }));
     };
 
     const salvar = async (limparTodosOsDados = false) => {
@@ -124,8 +122,8 @@ class ServicoSalvarRelatorioSemestral {
         params
       ).catch(e => erros(e));
 
-      if (retorno && retorno.status === 200) {
-        atualizarValoresRelatorioSemestral(retorno);
+      if (retorno?.status === 200) {
+        atualizarValoresRelatorioSemestral();
         dispatch(setRelatorioSemestralEmEdicao(false));
 
         if (limparTodosOsDados) {

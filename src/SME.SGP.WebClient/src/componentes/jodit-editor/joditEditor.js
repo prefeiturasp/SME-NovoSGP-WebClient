@@ -19,7 +19,7 @@ const Campo = styled.div`
 `;
 
 let CHANGE_DEBOUNCE_FLAG;
-const TAMANHO_MAXIMO_UPLOAD = 100;
+const TAMANHO_MAXIMO_UPLOAD_MB = 10;
 
 const JoditEditor = forwardRef((props, ref) => {
   const {
@@ -44,6 +44,7 @@ const JoditEditor = forwardRef((props, ref) => {
     qtdMaxImg,
     imagensCentralizadas,
     valideClipboardHTML,
+    permiteGif,
   } = props;
 
   const textArea = useRef(null);
@@ -66,8 +67,17 @@ const JoditEditor = forwardRef((props, ref) => {
   };
 
   const excedeuLimiteMaximo = arquivo => {
-    const tamanhoArquivo = arquivo.size / 103 / 103;
-    return tamanhoArquivo > TAMANHO_MAXIMO_UPLOAD;
+    return Math.ceil(arquivo.size / 1048576) > TAMANHO_MAXIMO_UPLOAD_MB;
+  };
+
+  const exibirMsgMaximoImg = reject => {
+    const msg = `Você pode inserir apenas ${qtdMaxImg} ${
+      qtdMaxImg > 1 ? 'imagens' : 'imagem'
+    }`;
+    erro(msg);
+    if (reject) {
+      reject(new Error(msg));
+    }
   };
 
   const config = {
@@ -96,7 +106,9 @@ const JoditEditor = forwardRef((props, ref) => {
       },
     },
     askBeforePasteHTML: valideClipboardHTML,
-    disablePlugins: ['image-properties', 'inline-popup', disablePlugins],
+    askBeforePasteFromWord: false,
+    defaultActionOnPaste: 'insert_clear_html',
+    disablePlugins: ['image-properties', disablePlugins],
     language: 'pt_br',
     height,
     readonly: readonly || desabilitar,
@@ -106,29 +118,30 @@ const JoditEditor = forwardRef((props, ref) => {
         return new Promise((resolve, reject) => {
           if (permiteInserirArquivo) {
             const arquivo = data.getAll('files[0]')[0];
+            const validaInserirTiposArquivos = arquivo.type.includes('gif')
+              ? permiteGif
+              : true;
 
             if (excedeuLimiteMaximo(arquivo)) {
-              const msg = 'Tamanho máximo 10mb';
+              const msg = `Tamanho máximo ${TAMANHO_MAXIMO_UPLOAD_MB}MB.`;
               erro(msg);
               reject(new Error(msg));
             }
 
             if (
-              arquivo.type.substring(0, 5) === 'image' ||
-              (permiteVideo && arquivo.type.substring(0, 5) === 'video')
+              (arquivo.type.substring(0, 5) === 'image' ||
+                (permiteVideo && arquivo.type.substring(0, 5) === 'video')) &&
+              validaInserirTiposArquivos
             ) {
               if (arquivo.type.substring(0, 5) === 'image' && qtdMaxImg) {
                 const quantidadeTotalImagens = (
                   textArea?.current?.value?.match(/<img/g) || []
                 )?.length;
+
                 if (quantidadeTotalImagens < qtdMaxImg) {
                   resolve(data);
                 } else {
-                  const msg = `Você pode inserir apenas ${qtdMaxImg} ${
-                    qtdMaxImg > 1 ? 'imagens' : 'imagem'
-                  }`;
-                  erro(msg);
-                  reject(new Error(msg));
+                  exibirMsgMaximoImg(reject);
                 }
               } else {
                 resolve(data);
@@ -204,11 +217,17 @@ const JoditEditor = forwardRef((props, ref) => {
   };
 
   useEffect(() => {
+    let isMounted = true;
     if (!url) {
       urlBase().then(resposta => {
-        setUrl(resposta);
+        if (isMounted) {
+          setUrl(resposta);
+        }
       });
     }
+    return () => {
+      isMounted = false;
+    };
   }, [url]);
 
   const onChangePadrao = () => {
@@ -272,6 +291,29 @@ const JoditEditor = forwardRef((props, ref) => {
   };
 
   useEffect(() => {
+    const pegarElemento = elemento => document.getElementsByClassName(elemento);
+    const aplicarDisplayNone = elemento => {
+      if (elemento?.length) {
+        elemento[0].style.cssText = 'display: none !important';
+      }
+    };
+
+    const removerBotoes = () => {
+      const botaoEditarImagem = pegarElemento('jodit-toolbar-button_pencil');
+      const botaoSetas = pegarElemento('jodit-toolbar-button_valign');
+
+      aplicarDisplayNone(botaoEditarImagem);
+      aplicarDisplayNone(botaoSetas);
+    };
+
+    document.body.addEventListener('DOMSubtreeModified', removerBotoes);
+
+    return () => {
+      document.body.removeEventListener('DOMSubtreeModified', removerBotoes);
+    };
+  });
+
+  useEffect(() => {
     if (url) {
       const element = textArea.current || '';
       if (textArea?.current && config) {
@@ -295,6 +337,30 @@ const JoditEditor = forwardRef((props, ref) => {
               ref.current = textArea.current;
             }
           }
+
+          textArea.current.events.on('beforePaste', e => {
+            if (qtdMaxImg) {
+              const dadosColado = e?.clipboardData?.getData?.('text/html');
+              const qtdElementoImgNova = dadosColado?.match(/<img/g) || [];
+              const qtdElementoImgAtual = textArea?.current?.editorDocument?.querySelectorAll?.(
+                'img'
+              );
+
+              const totalImg =
+                qtdElementoImgNova?.length + qtdElementoImgAtual?.length;
+
+              if (totalImg > qtdMaxImg) {
+                if (e?.preventDefault) {
+                  e.preventDefault();
+                }
+                if (e?.preventDefault) {
+                  e.stopPropagation();
+                }
+                return false;
+              }
+            }
+            return true;
+          });
 
           textArea.current.events.on('change', () => {
             beforeOnChange();
@@ -353,6 +419,7 @@ const JoditEditor = forwardRef((props, ref) => {
             id={id}
             hidden={!textArea?.current?.isJodit}
             value={value}
+            onChange={e => e}
           />
         </div>
       </Campo>
@@ -402,6 +469,7 @@ JoditEditor.propTypes = {
   qtdMaxImg: PropTypes.number,
   imagensCentralizadas: PropTypes.bool,
   valideClipboardHTML: PropTypes.bool,
+  permiteGif: PropTypes.bool,
 };
 
 JoditEditor.defaultProps = {
@@ -425,7 +493,8 @@ JoditEditor.defaultProps = {
   permiteVideo: true,
   qtdMaxImg: null,
   imagensCentralizadas: false,
-  valideClipboardHTML: true,
+  valideClipboardHTML: false,
+  permiteGif: true,
 };
 
 export default JoditEditor;

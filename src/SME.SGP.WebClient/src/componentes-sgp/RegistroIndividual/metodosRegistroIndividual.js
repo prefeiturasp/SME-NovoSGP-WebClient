@@ -117,15 +117,15 @@ class MetodosRegistroIndividual {
       const ehDataAnterior = window.moment(dataAtual).isAfter(data);
       this.resetarInfomacoes(ehDataAnterior);
       if (!ehDataAnterior && atualizarDados) {
-        this.dispatch(setAuditoriaNovoRegistro(retorno.data));
         this.dispatch(
           atualizaDadosRegistroAtual({
             id: retorno.data.id,
-            registro,
+            registro: retorno.data.registro,
             alunoCodigo,
             data,
           })
         );
+        this.dispatch(setAuditoriaNovoRegistro(retorno.data));
       }
       if (dadosAlunoObjectCard?.marcadorDiasSemRegistroExibir) {
         this.dispatch(atualizarMarcadorDiasSemRegistroExibir(alunoCodigo));
@@ -165,7 +165,7 @@ class MetodosRegistroIndividual {
         this.dispatch(
           atualizaDadosRegistroAtual({
             id: retorno.data.id,
-            registro,
+            registro: retorno.data.registro,
             alunoCodigo,
             data,
           })

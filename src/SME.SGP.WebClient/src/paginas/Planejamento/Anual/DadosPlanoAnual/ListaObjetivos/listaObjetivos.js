@@ -20,6 +20,10 @@ const ListaObjetivos = React.memo(props => {
   const usuario = useSelector(store => store.usuario);
   const { turmaSelecionada } = usuario;
 
+  const modalidadesFiltroPrincipal = useSelector(
+    store => store.filtro.modalidades
+  );
+
   const dadosBimestrePlanoAnual = useSelector(
     store => store.planoAnual.dadosBimestresPlanoAnual[bimestre]
   );
@@ -80,7 +84,8 @@ const ListaObjetivos = React.memo(props => {
   const obterObjetivosPorAnoEComponenteCurricular = useCallback(() => {
     if (
       tabAtualComponenteCurricular &&
-      tabAtualComponenteCurricular.codigoComponenteCurricular
+      tabAtualComponenteCurricular.codigoComponenteCurricular &&
+      modalidadesFiltroPrincipal.length
     ) {
       dispatch(setExibirLoaderPlanoAnual(true));
       ServicoPlanoAnual.obterListaObjetivosPorAnoEComponenteCurricular(

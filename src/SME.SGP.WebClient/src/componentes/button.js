@@ -29,6 +29,7 @@ const Button = React.forwardRef((props, ref) => {
     customRadius,
     iconType,
     corTextoHover,
+    semMargemDireita,
   } = props;
 
   const Icon = styled.i``;
@@ -88,7 +89,11 @@ const Button = React.forwardRef((props, ref) => {
       ref={ref}
     >
       {icon ? (
-        <Icon className={`${iconType || 'fa'} fa-${icon} mr-2 py-1`} />
+        <Icon
+          className={`${iconType || 'fa'} fa-${icon} ${
+            semMargemDireita ? '' : 'mr-2'
+          } py-1`}
+        />
       ) : null}
       {label}
       {remove ? (
@@ -118,12 +123,13 @@ Button.propTypes = {
   width: PropTypes.string,
   fontSize: PropTypes.string,
   indice: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-  label: PropTypes.string,
+  label: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
   hidden: PropTypes.bool,
   id: PropTypes.string,
   customRadius: PropTypes.string,
   iconType: PropTypes.string,
   corTextoHover: PropTypes.string,
+  semMargemDireita: PropTypes.bool,
 };
 
 Button.defaultProps = {
@@ -149,6 +155,7 @@ Button.defaultProps = {
   customRadius: '',
   iconType: '',
   corTextoHover: '',
+  semMargemDireita: false,
 };
 
 export default Button;

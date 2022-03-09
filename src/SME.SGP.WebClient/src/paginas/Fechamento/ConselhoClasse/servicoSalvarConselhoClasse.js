@@ -1,8 +1,8 @@
+import _ from 'lodash';
 import { store } from '~/redux';
 import { erros, sucesso, confirmar, erro } from '~/servicos/alertas';
 import ServicoConselhoClasse from '~/servicos/Paginas/ConselhoClasse/ServicoConselhoClasse';
 import {
-  setAuditoriaAnotacaoRecomendacao,
   setDadosPrincipaisConselhoClasse,
   setConselhoClasseEmEdicao,
   setExpandirLinha,
@@ -10,10 +10,34 @@ import {
   setNotaConceitoPosConselhoAtual,
   setGerandoParecerConclusivo,
   setExibirLoaderGeralConselhoClasse,
+  setAtualizarEmAprovacao,
+  setBimestreAtual,
+  setDadosIniciaisListasNotasConceitos,
 } from '~/redux/modulos/conselhoClasse/actions';
 import notasConceitos from '~/dtos/notasConceitos';
 
 class ServicoSalvarConselhoClasse {
+  recarregarDados = () => {
+    const { dispatch } = store;
+    const state = store.getState();
+
+    const { conselhoClasse } = state;
+
+    const { bimestreAtual } = conselhoClasse;
+
+    dispatch(setConselhoClasseEmEdicao(false));
+    dispatch(
+      setBimestreAtual({
+        valor: bimestreAtual.valor,
+        dataInicio: bimestreAtual.dataInicio,
+        dataFim: bimestreAtual.dataFim,
+      })
+    );
+    dispatch(setExpandirLinha([]));
+    dispatch(setNotaConceitoPosConselhoAtual({}));
+    dispatch(setIdCamposNotasPosConselho({}));
+  };
+
   validarSalvarRecomendacoesAlunoFamilia = async (salvarSemValidar = false) => {
     const { dispatch } = store;
     const state = store.getState();
@@ -28,6 +52,7 @@ class ServicoSalvarConselhoClasse {
       recomendacaoFamilia,
       conselhoClasseEmEdicao,
       desabilitarCampos,
+      bimestreAtual,
     } = conselhoClasse;
 
     const perguntaDescartarRegistros = async () => {
@@ -70,25 +95,15 @@ class ServicoSalvarConselhoClasse {
         });
 
       if (retorno && retorno.status === 200) {
-        if (!dadosPrincipaisConselhoClasse.conselhoClasseId) {
-          dadosPrincipaisConselhoClasse.conselhoClasseId =
-            retorno.data.conselhoClasseId;
-          dispatch(
-            setDadosPrincipaisConselhoClasse(dadosPrincipaisConselhoClasse)
+        this.recarregarDados();
+        sucesso('Anotações e recomendações salvas com sucesso.');
+        if (bimestreAtual?.valor === 'final') {
+          this.gerarParecerConclusivo(
+            dadosPrincipaisConselhoClasse.conselhoClasseId,
+            dadosPrincipaisConselhoClasse.fechamentoTurmaId,
+            dadosAlunoObjectCard.codigoEOL
           );
         }
-
-        const auditoria = {
-          criadoEm: retorno.data.criadoEm,
-          criadoPor: retorno.data.criadoPor,
-          criadoRF: retorno.data.criadoRF,
-          alteradoEm: retorno.data.alteradoEm,
-          alteradoPor: retorno.data.alteradoPor,
-          alteradoRF: retorno.data.alteradoRF,
-        };
-        dispatch(setAuditoriaAnotacaoRecomendacao(auditoria));
-        dispatch(setConselhoClasseEmEdicao(false));
-        sucesso('Anotações e recomendações salvas com sucesso.');
         return true;
       }
       return false;
@@ -130,10 +145,50 @@ class ServicoSalvarConselhoClasse {
       };
 
       // Tenta salvar os registros se estão válidos e continuar para executação a ação!
-      const perguntaAantesSalvar = await perguntarParaSalvar();
+      const perguntaAantesSalvar = true;
       if (perguntaAantesSalvar) return salvar();
     }
     return true;
+  };
+
+  validaParecerConclusivo = async (
+    conselhoClasseId,
+    fechamentoTurmaId,
+    alunoCodigo,
+    codigoTurma,
+    consideraHistorico
+  ) => {
+    const resposta = await ServicoConselhoClasse.acessarParecerConclusivo(
+      conselhoClasseId,
+      fechamentoTurmaId,
+      alunoCodigo,
+      codigoTurma,
+      consideraHistorico
+    ).catch(e => erros(e));
+    if (resposta?.data) {
+      ServicoConselhoClasse.setarParecerConclusivo(resposta.data);
+      return true;
+    }
+    return false;
+  };
+
+  gerarParecerConclusivo = async (
+    conselhoClasseId,
+    fechamentoTurmaId,
+    alunoCodigo
+  ) => {
+    const { dispatch } = store;
+
+    dispatch(setGerandoParecerConclusivo(true));
+    const retorno = await ServicoConselhoClasse.gerarParecerConclusivo(
+      conselhoClasseId,
+      fechamentoTurmaId,
+      alunoCodigo
+    ).catch(e => erros(e));
+    if (retorno && retorno.data) {
+      ServicoConselhoClasse.setarParecerConclusivo(retorno.data);
+    }
+    dispatch(setGerandoParecerConclusivo(false));
   };
 
   salvarNotaPosConselho = async codigoTurma => {
@@ -149,6 +204,7 @@ class ServicoSalvarConselhoClasse {
       idCamposNotasPosConselho,
       desabilitarCampos,
       bimestreAtual,
+      dadosListasNotasConceitos,
     } = conselhoClasse;
 
     const {
@@ -173,18 +229,11 @@ class ServicoSalvarConselhoClasse {
       dispatch(setNotaConceitoPosConselhoAtual({}));
     };
 
-    const gerarParecerConclusivo = async () => {
-      dispatch(setGerandoParecerConclusivo(true));
-      const retorno = await ServicoConselhoClasse.gerarParecerConclusivo(
-        conselhoClasseId,
-        fechamentoTurmaId,
-        alunoCodigo
-      ).catch(e => erros(e));
-      if (retorno && retorno.data) {
-        ServicoConselhoClasse.setarParecerConclusivo(retorno.data);
-      }
-      dispatch(setGerandoParecerConclusivo(false));
-    };
+    this.gerarParecerConclusivo(
+      conselhoClasseId,
+      fechamentoTurmaId,
+      alunoCodigo
+    );
 
     if (desabilitarCampos) {
       return false;
@@ -227,6 +276,13 @@ class ServicoSalvarConselhoClasse {
         retorno.data.conselhoClasseId;
       dadosPrincipaisConselhoClasse.fechamentoTurmaId =
         retorno.data.fechamentoTurmaId;
+      dispatch(
+        setAtualizarEmAprovacao({
+          ...retorno.data,
+          ...notaDto,
+          ehNota,
+        })
+      );
       dispatch(setDadosPrincipaisConselhoClasse(dadosPrincipaisConselhoClasse));
 
       const { auditoria } = retorno.data;
@@ -244,8 +300,15 @@ class ServicoSalvarConselhoClasse {
       );
 
       if (bimestreAtual && bimestreAtual.valor === 'final') {
-        gerarParecerConclusivo();
+        this.gerarParecerConclusivo(
+          conselhoClasseId,
+          fechamentoTurmaId,
+          alunoCodigo
+        );
       }
+
+      const dadosCarregar = _.cloneDeep(dadosListasNotasConceitos);
+      dispatch(setDadosIniciaisListasNotasConceitos([...dadosCarregar]));
 
       return true;
     }

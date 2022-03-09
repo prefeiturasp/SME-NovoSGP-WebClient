@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useContext } from 'react';
 import PropTypes from 'prop-types';
 
 // Form
@@ -17,6 +17,7 @@ import DropDownQuantidade from './components/DropDownQuantidade';
 import DropDownTipoRecorrencia from './components/DropDownTipoRecorrencia';
 import TextoDiasDaSemana from './components/TextoDiasDaSemana';
 import TextoInformativo from './components/TextoInformativo';
+import EventosCadastroContext from '../../cadastro/eventosCadastroContext';
 
 function ModalRecorrencia({
   show,
@@ -24,6 +25,9 @@ function ModalRecorrencia({
   onCloseRecorrencia,
   onSaveRecorrencia,
 }) {
+  const { limparRecorrencia, setLimparRecorrencia } = useContext(
+    EventosCadastroContext
+  );
   const [habilitaSalvar, setHabilitaSalvar] = useState(false);
 
   const [dataInicio, setDataInicio] = useState('');
@@ -53,6 +57,8 @@ function ModalRecorrencia({
   };
 
   const [valoresIniciais, setValoresIniciais] = useState(valoresDefault);
+  const [refForm, setRefForm] = useState();
+  const [validacoes, setValidacoes] = useState();
 
   /**
    * @description Verifica se o botao de salvar deve ser habilitado
@@ -129,32 +135,57 @@ function ModalRecorrencia({
 
   const constroiValidacoes = () => {
     const val = {
-      dataInicio: momentSchema.required('Data obrigatória'),
+      dataInicio: momentSchema
+        .required('Data obrigatória')
+        .test(
+          'validaInicio',
+          'Data inicial maior que final',
+          function validar() {
+            if (
+              this.parent.dataInicio &&
+              this.parent.dataTermino &&
+              this.parent.dataInicio.isAfter(this.parent.dataTermino, 'date')
+            )
+              return false;
+            return true;
+          }
+        ),
     };
 
-    if (tipoRecorrencia.value === '2') {
+    if (tipoRecorrencia?.value === '2') {
       val.padraoRecorrencia = Yup.string().required(
         'Padrão recorrência obrigatório'
       );
     }
 
-    if (padraoRecorrencia.value === '0') {
+    if (padraoRecorrencia?.value === '0') {
       val.diaSemana = Yup.string().required('Dia obrigatório');
     }
 
-    return Yup.object(val);
+    setValidacoes(Yup.object(val));
   };
+  useEffect(() => {
+    constroiValidacoes();
+  }, []);
 
   const onSubmitRecorrencia = () => {
-    onSaveRecorrencia({
-      dataInicio,
-      dataTermino,
-      diasSemana,
-      diaSemana,
-      diaNumero,
-      padraoRecorrencia,
-      quantidadeRecorrencia,
-      tipoRecorrencia,
+    const arrayCampos = Object.keys(valoresIniciais);
+    arrayCampos.forEach(campo => {
+      refForm.setFieldTouched(campo, true, true);
+    });
+    refForm.validateForm().then(() => {
+      if (Object.keys(refForm.state.errors).length === 0) {
+        onSaveRecorrencia({
+          dataInicio,
+          dataTermino,
+          diasSemana,
+          diaSemana,
+          diaNumero,
+          padraoRecorrencia,
+          quantidadeRecorrencia,
+          tipoRecorrencia,
+        });
+      }
     });
   };
 
@@ -164,9 +195,20 @@ function ModalRecorrencia({
     setDataTermino('');
     setDiasSemana([]);
     setValoresIniciais(valoresDefault);
-    onSaveRecorrencia(valoresDefault);
+    onSaveRecorrencia(null);
     onCloseRecorrencia();
+    if (refForm && refForm.resetForm) {
+      refForm.resetForm();
+    }
+    setQuantidadeRecorrencia(1);
   };
+
+  useEffect(() => {
+    if (limparRecorrencia) {
+      onCloseModal();
+      setLimparRecorrencia(false);
+    }
+  }, [limparRecorrencia]);
 
   const desabilitarData = current => {
     if (current) {
@@ -194,9 +236,10 @@ function ModalRecorrencia({
         <Formik
           enableReinitialize
           initialValues={valoresIniciais}
-          validationSchema={constroiValidacoes}
+          validationSchema={validacoes}
           validateOnChange
           validateOnBlur
+          ref={f => setRefForm(f)}
         >
           {form => (
             <Form>
@@ -215,6 +258,8 @@ function ModalRecorrencia({
                 </div>
                 <div className="col-lg-6">
                   <CampoData
+                    form={form}
+                    name="dataTermino"
                     label="Data fim"
                     valor={dataTermino}
                     onChange={onChangeDataTermino}

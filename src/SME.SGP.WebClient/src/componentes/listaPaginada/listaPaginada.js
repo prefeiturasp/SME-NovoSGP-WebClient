@@ -5,9 +5,9 @@ import queryString from 'query-string';
 // Componentes
 import { Table } from 'antd';
 
+import { api, erros } from '~/servicos';
+
 import { Container } from './listaPaginada.css';
-import api from '~/servicos/api';
-import { erro } from '~/servicos/alertas';
 
 const ListaPaginada = props => {
   const {
@@ -20,15 +20,14 @@ const ListaPaginada = props => {
     onSelecionarLinhas,
     selecionarItems,
     filtroEhValido,
-    onErro,
     paramArrayFormat,
     temPaginacao,
     setLista,
     showSizeChanger,
+    naoFiltrarQuandoCarregando,
   } = props;
 
   const [carregando, setCarregando] = useState(false);
-
   const [total, setTotal] = useState(0);
   const [linhas, setLinhas] = useState([]);
   const [linhasSelecionadas, setLinhasSelecionadas] = useState([]);
@@ -40,7 +39,7 @@ const ListaPaginada = props => {
     showSizeChanger,
     pageSizeOptions: ['10', '20', '50', '100'],
     locale: { items_per_page: 'Linhas' },
-    current: 1
+    current: 1,
   });
 
   const obterUrlBusca = pagina => {
@@ -95,6 +94,8 @@ const ListaPaginada = props => {
   };
 
   const filtrar = () => {
+    if (naoFiltrarQuandoCarregando && carregando) return;
+    let statusCode = 0;
     selecionar([]);
     setCarregando(true);
     api
@@ -109,6 +110,7 @@ const ListaPaginada = props => {
         },
       })
       .then(resposta => {
+        statusCode = resposta.status;
         setLinhas([]);
         setTotal(resposta.data.totalRegistros);
         setLinhas([...resposta.data.items]);
@@ -116,15 +118,9 @@ const ListaPaginada = props => {
           setLista(resposta.data.items);
         }
       })
-      .catch(err => {
-        if (
-          err.response &&
-          err.response.data &&
-          err.response.data.mensagens &&
-          err.response.data.mensagens.length
-        ) {
-          if (onErro) onErro(err);
-          else erro(err.response.data.mensagens[0]);
+      .catch(e => {
+        if (statusCode !== 204) {
+          erros(e);
         }
       })
       .finally(() => setCarregando(false));
@@ -176,14 +172,14 @@ const ListaPaginada = props => {
         pagination={
           temPaginacao
             ? {
-              defaultPageSize: paginaAtual.defaultPageSize,
-              pageSize: paginaAtual.pageSize,
-              total,
-              showSizeChanger,
-              pageSizeOptions: ['10', '20', '50', '100'],
-              locale: { items_per_page: '' },
-              current: paginaAtual.current,
-            }
+                defaultPageSize: paginaAtual.defaultPageSize,
+                pageSize: paginaAtual.pageSize,
+                total,
+                showSizeChanger,
+                pageSizeOptions: ['10', '20', '50', '100'],
+                locale: { items_per_page: '' },
+                current: paginaAtual.current,
+              }
             : false
         }
         bordered
@@ -225,28 +221,28 @@ ListaPaginada.propTypes = {
   colunaChave: PropTypes.string,
   filtro: PropTypes.oneOfType([PropTypes.object]),
   filtroEhValido: PropTypes.bool,
-  onErro: PropTypes.oneOfType([PropTypes.func]),
   paramArrayFormat: PropTypes.oneOfType([PropTypes.string]),
   temPaginacao: PropTypes.oneOfType([PropTypes.bool]),
   setLista: PropTypes.oneOfType([PropTypes.func]),
   showSizeChanger: PropTypes.oneOfType([PropTypes.bool]),
+  naoFiltrarQuandoCarregando: PropTypes.oneOfType([PropTypes.bool]),
 };
 
 ListaPaginada.defaultProps = {
   colunas: [],
   multiSelecao: false,
-  onClick: () => { },
-  onSelecionarLinhas: () => { },
-  selecionarItems: () => { },
+  onClick: () => {},
+  onSelecionarLinhas: () => {},
+  selecionarItems: () => {},
   url: '',
   colunaChave: 'id',
   filtro: null,
   filtroEhValido: true,
-  onErro: () => { },
   paramArrayFormat: 'brackets',
   temPaginacao: true,
-  setLista: () => { },
+  setLista: () => {},
   showSizeChanger: true,
+  naoFiltrarQuandoCarregando: true,
 };
 
 export default ListaPaginada;

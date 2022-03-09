@@ -1,16 +1,28 @@
 import PropTypes from 'prop-types';
 import React from 'react';
+import { OPCAO_TODOS } from '~/constantes';
 import TotalCriancasComRelAcompanhamentoAprendizagem from './CriancasComAcomp/criancasComAcomp';
+import TotalCriancasComAcompPorDRE from './CriancasComAcompPorDRE/totalCriancasComAcompPorDRE';
 
 const GraficosAcompanhamentoAprendizagem = props => {
   const { anoLetivo, dreId, ueId, dataUltimaConsolidacao } = props;
   return (
-    <TotalCriancasComRelAcompanhamentoAprendizagem
-      anoLetivo={anoLetivo}
-      dreId={dreId}
-      ueId={ueId}
-      dataUltimaConsolidacao={dataUltimaConsolidacao}
-    />
+    <>
+      <TotalCriancasComRelAcompanhamentoAprendizagem
+        anoLetivo={anoLetivo}
+        dreId={dreId}
+        ueId={ueId}
+        dataUltimaConsolidacao={dataUltimaConsolidacao}
+      />
+      {dreId === OPCAO_TODOS ? (
+        <TotalCriancasComAcompPorDRE
+          anoLetivo={anoLetivo}
+          dataUltimaConsolidacao={dataUltimaConsolidacao}
+        />
+      ) : (
+        <></>
+      )}
+    </>
   );
 };
 

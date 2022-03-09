@@ -12,7 +12,11 @@ const { TabPane } = Tabs;
 const ListaBimestres = props => {
   const dispatch = useDispatch();
 
-  const { bimestres, componenteCurricularIdSelecionado } = props;
+  const {
+    bimestres,
+    territorioSaber,
+    componenteCurricularIdSelecionado,
+  } = props;
 
   const { bimestreSelecionado } = useSelector(
     store => store.acompanhamentoFrequencia
@@ -38,7 +42,7 @@ const ListaBimestres = props => {
             <TabPane tab={bimestre.descricao} key={bimestre.id}>
               <ListaAlunos
                 componenteCurricularId={componenteCurricularIdSelecionado}
-                bimestreLista={bimestre.id}
+                territorioSaber={territorioSaber}
               />
             </TabPane>
           );
@@ -50,11 +54,13 @@ const ListaBimestres = props => {
 
 ListaBimestres.propTypes = {
   componenteCurricularIdSelecionado: PropTypes.string,
+  territorioSaber: PropTypes.bool,
   bimestres: PropTypes.oneOfType([PropTypes.array]),
 };
 
 ListaBimestres.defaultProps = {
   componenteCurricularIdSelecionado: PropTypes.string,
+  territorioSaber: false,
   bimestres: PropTypes.oneOfType([PropTypes.array]),
 };
 

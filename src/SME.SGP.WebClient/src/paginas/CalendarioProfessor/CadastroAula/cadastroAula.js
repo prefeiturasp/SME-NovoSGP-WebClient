@@ -33,9 +33,17 @@ import RotasDto from '~/dtos/rotasDto';
 import { RegistroMigrado } from '~/componentes-sgp/registro-migrado';
 import { ehTurmaInfantil } from '~/servicos/Validacoes/validacoesInfatil';
 import AlterarAula from './alterarAula';
+import {
+  SGP_DATA_AULA,
+  SGP_INPUT_NUMBER_QUANTIDADE_AULAS,
+  SGP_RADIO_RECORRENCIA,
+  SGP_RADIO_TIPO_AULA,
+  SGP_SELECT_COMPONENTE_CURRICULAR,
+} from '~/componentes-sgp/filtro/idsCampos';
 
 function CadastroDeAula({ match, location }) {
-  const { id, tipoCalendarioId } = match.params;
+  const { id, tipoCalendarioId, somenteReposicao } = match.params;
+  const ehReposicao = somenteReposicao === 'true';
   const permissoesTela = useSelector(state => state.usuario.permissoes);
   const somenteConsulta = verificaSomenteConsulta(
     permissoesTela[RotasDto.CALENDARIO_PROFESSOR]
@@ -70,6 +78,7 @@ function CadastroDeAula({ match, location }) {
   const [registroMigrado, setRegistroMigrado] = useState(false);
   const [emManutencao, setEmManutencao] = useState(false);
   const [desabilitarBtnSalvar, setDesabilitarBtnSalvar] = useState(false);
+  const [alterouCampo, setAlterouCampo] = useState(false);
 
   const { diaAula } = queryString.parse(location.search);
   const aulaInicial = {
@@ -79,6 +88,9 @@ function CadastroDeAula({ match, location }) {
     ueId: turmaSelecionada.unidadeEscolar,
     tipoCalendarioId,
     quantidade: 1,
+    tipoAula: ehReposicao ? 2 : 1,
+    recorrenciaAula: 1,
+    podeEditar: true,
   };
 
   const [recorrenciaAulaEmEdicao, setRecorrenciaAulaEmEdicao] = useState({
@@ -94,18 +106,22 @@ function CadastroDeAula({ match, location }) {
   const [listaComponentes, setListaComponentes] = useState([]);
   const [recorrenciaAulaOriginal, setRecorrenciaAulaOriginal] = useState();
 
+  const opcoesTipoAulaSomenteReposicao = [{ label: 'Reposição', value: 2 }];
+
   const opcoesTipoAula = [
     { label: 'Normal', value: 1 },
     { label: 'Reposição', value: 2 },
   ];
-
-  const [recorrenciaInicial, setRecorrenciaInicial] = useState(1);
 
   const recorrencia = {
     AULA_UNICA: 1,
     REPETIR_BIMESTRE_ATUAL: 2,
     REPETIR_TODOS_BIMESTRES: 3,
   };
+
+  const opcoesRecorrenciaSomenteReposicao = [
+    { label: 'Aula única', value: recorrencia.AULA_UNICA },
+  ];
 
   const opcoesRecorrencia = [
     { label: 'Aula única', value: recorrencia.AULA_UNICA },
@@ -122,7 +138,6 @@ function CadastroDeAula({ match, location }) {
         id && (recorrenciaAulaOriginal === 2 || recorrenciaAulaOriginal === 1),
     },
   ];
-
   const obterComponenteSelecionadoPorId = useCallback(
     componenteCurricularId => {
       return listaComponentes.find(
@@ -185,7 +200,7 @@ function CadastroDeAula({ match, location }) {
             const componenteSelecionado = componentes.find(
               c => c.codigoComponenteCurricular == respostaAula.disciplinaId
             );
-            if (componenteSelecionado){
+            if (componenteSelecionado) {
               carregarGrade(
                 componenteSelecionado,
                 respostaAula.dataAula,
@@ -423,6 +438,7 @@ function CadastroDeAula({ match, location }) {
 
   const onChangeDataAula = data => {
     setModoEdicao(true);
+    setAlterouCampo(true);
     setAula(aulaState => {
       return { ...aulaState, dataAula: data };
     });
@@ -456,6 +472,7 @@ function CadastroDeAula({ match, location }) {
 
   const onChangeQuantidadeAula = quantidade => {
     setModoEdicao(true);
+    setAlterouCampo(true);
     setAula(aulaState => {
       return {
         ...aulaState,
@@ -551,6 +568,12 @@ function CadastroDeAula({ match, location }) {
       setSomenteLeitura(true);
     }
   }, [carregandoDados, aula.somenteLeitura]);
+
+  useEffect(() => {
+    const ehEdicao = id ? alterouCampo : !id;
+    const desabilitar = aula?.dataAula && aula?.disciplinaId && ehEdicao;
+    setModoEdicao(desabilitar);
+  }, [aula, id, alterouCampo]);
 
   return (
     <Container>
@@ -661,7 +684,7 @@ function CadastroDeAula({ match, location }) {
                         label="Data da aula"
                         formatoData="DD/MM/YYYY"
                         name="dataAula"
-                        id="dataAula"
+                        id={SGP_DATA_AULA}
                         form={form}
                         onChange={onChangeDataAula}
                       />
@@ -692,7 +715,12 @@ function CadastroDeAula({ match, location }) {
                         border
                         className="mr-2"
                         onClick={onClickExcluir}
-                        disabled={somenteConsulta || !id || somenteLeitura}
+                        disabled={
+                          somenteConsulta ||
+                          !id ||
+                          somenteLeitura ||
+                          !aula.podeEditar
+                        }
                       />
 
                       <Button
@@ -719,7 +747,8 @@ function CadastroDeAula({ match, location }) {
                           !aula.disciplinaId ||
                           somenteLeitura ||
                           desabilitarBtnSalvar ||
-                          !modoEdicao
+                          !modoEdicao ||
+                          !aula.podeEditar
                         }
                       />
                     </div>
@@ -727,9 +756,13 @@ function CadastroDeAula({ match, location }) {
                   <div className="row">
                     <div className="col-xs-12 col-md-3 col-lg-3">
                       <RadioGroupButton
-                        id="tipo-aula"
+                        id={SGP_RADIO_TIPO_AULA}
                         label="Tipo de aula"
-                        opcoes={opcoesTipoAula}
+                        opcoes={
+                          ehReposicao
+                            ? opcoesTipoAulaSomenteReposicao
+                            : opcoesTipoAula
+                        }
                         name="tipoAula"
                         form={form}
                         onChange={onChangeTipoAula}
@@ -738,7 +771,7 @@ function CadastroDeAula({ match, location }) {
                     </div>
                     <div className="col-xs-12 col-md-6 col-lg-6">
                       <SelectComponent
-                        id="disciplinaId"
+                        id={SGP_SELECT_COMPONENTE_CURRICULAR}
                         name="disciplinaId"
                         lista={listaComponentes}
                         label="Componente Curricular"
@@ -746,7 +779,10 @@ function CadastroDeAula({ match, location }) {
                         valueText="nome"
                         placeholder="Selecione um componente curricular"
                         form={form}
-                        disabled={(!!id && aula?.disciplinaId) || (listaComponentes.length === 1 && !id)}
+                        disabled={
+                          (!!id && aula?.disciplinaId) ||
+                          (listaComponentes.length === 1 && !id)
+                        }
                         onChange={onChangeComponente}
                       />
                     </div>
@@ -755,7 +791,7 @@ function CadastroDeAula({ match, location }) {
                     <div className="col-xs-12 col-md-3 col-lg-3">
                       <CampoNumeroFormik
                         label="Quantidade de aulas"
-                        id="quantidade-aula"
+                        id={SGP_INPUT_NUMBER_QUANTIDADE_AULAS}
                         name="quantidade"
                         form={form}
                         min={1}
@@ -766,9 +802,13 @@ function CadastroDeAula({ match, location }) {
                     </div>
                     <div className="col-xs-12 col-md-6 col-lg-6">
                       <RadioGroupButton
-                        id="recorrencia-aula"
+                        id={SGP_RADIO_RECORRENCIA}
                         label="Recorrência"
-                        opcoes={opcoesRecorrencia}
+                        opcoes={
+                          ehReposicao
+                            ? opcoesRecorrenciaSomenteReposicao
+                            : opcoesRecorrencia
+                        }
                         name="recorrenciaAula"
                         form={form}
                         onChange={onChangeRecorrencia}

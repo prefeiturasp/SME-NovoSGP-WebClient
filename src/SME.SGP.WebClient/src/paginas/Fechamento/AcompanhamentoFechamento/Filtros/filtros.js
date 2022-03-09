@@ -382,7 +382,7 @@ const Filtros = ({ onChangeFiltros, ehInfantil }) => {
         anoLetivo,
         consideraHistorico,
         false,
-        [1, 2, 6, 7]
+        []
       )
         .catch(e => erros(e))
         .finally(() => setCarregandoTurmas(false));

@@ -8,6 +8,7 @@ import {
   setExibirLoaderGeralAcompanhamentoAprendizagem,
   setExibirModalErrosAcompanhamentoAprendizagem,
   setQtdMaxImagensCampoPercursoColetivo,
+  setQtdMaxImagensCampoPercursoIndividual,
 } from '~/redux/modulos/acompanhamentoAprendizagem/actions';
 import { limparDadosRegistroIndividual } from '~/redux/modulos/registroIndividual/actions';
 import { erros, sucesso } from '~/servicos/alertas';
@@ -143,6 +144,7 @@ class ServicoAcompanhamentoAprendizagem {
         observacoes: dadosAcompanhamentoAprendizagem.observacoes || '',
         percursoIndividual:
           dadosAcompanhamentoAprendizagem.percursoIndividual || '',
+        textoSugerido: dadosAcompanhamentoAprendizagem.textoSugerido,
       };
 
       dispatch(setExibirLoaderGeralAcompanhamentoAprendizagem(true));
@@ -247,6 +249,8 @@ class ServicoAcompanhamentoAprendizagem {
         paramsApanhadoGeral.auditoria = retornoApanhadoGeral.data;
         paramsApanhadoGeral.acompanhamentoTurmaId =
           retornoApanhadoGeral.data.id;
+        paramsApanhadoGeral.apanhadoGeral =
+          retornoApanhadoGeral.data.apanhadoGeral;
         dispatch(setDadosApanhadoGeral(paramsApanhadoGeral));
 
         dispatch(setApanhadoGeralEmEdicao(false));
@@ -289,15 +293,30 @@ class ServicoAcompanhamentoAprendizagem {
     return api.post(url, params);
   };
 
-  obterQtdMaxImagensCampoPercursoColetivo = async anoLetivo => {
+  obterQtdMaxImagensCampos = async anoLetivo => {
     const { dispatch } = store;
 
     const url = `v1/acompanhamento/turmas/quantidade-imagens?ano=${anoLetivo}`;
     const retorno = await api.get(url).catch(e => erros(e));
     if (retorno?.data) {
-      dispatch(setQtdMaxImagensCampoPercursoColetivo(retorno.data));
+      const {
+        quantidadeImagemPercursoColetivo,
+        quantidadeImagemPercursoIndividual,
+      } = retorno.data;
+
+      dispatch(
+        setQtdMaxImagensCampoPercursoColetivo(
+          quantidadeImagemPercursoColetivo || 0
+        )
+      );
+      dispatch(
+        setQtdMaxImagensCampoPercursoIndividual(
+          quantidadeImagemPercursoIndividual || 0
+        )
+      );
     } else {
       dispatch(setQtdMaxImagensCampoPercursoColetivo());
+      dispatch(setQtdMaxImagensCampoPercursoIndividual());
     }
   };
 }

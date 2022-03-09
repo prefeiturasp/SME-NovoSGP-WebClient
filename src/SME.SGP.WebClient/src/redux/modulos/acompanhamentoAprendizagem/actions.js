@@ -55,6 +55,11 @@ export const setQtdMaxImagensCampoPercursoColetivo = payload => ({
   payload,
 });
 
+export const setQtdMaxImagensCampoPercursoIndividual = payload => ({
+  type: '@acompanhamentoAprendizagem/setQtdMaxImagensCampoPercursoIndividual',
+  payload,
+});
+
 export const setErrosAcompanhamentoAprendizagem = payload => ({
   type: '@acompanhamentoAprendizagem/setErrosAcompanhamentoAprendizagem',
   payload,
@@ -63,5 +68,11 @@ export const setErrosAcompanhamentoAprendizagem = payload => ({
 export const setExibirModalErrosAcompanhamentoAprendizagem = payload => ({
   type:
     '@acompanhamentoAprendizagem/setExibirModalErrosAcompanhamentoAprendizagem',
+  payload,
+});
+
+export const setExibirLoaderAlunosAcompanhamentoAprendizagem = payload => ({
+  type:
+    '@acompanhamentoAprendizagem/setExibirLoaderAlunosAcompanhamentoAprendizagem',
   payload,
 });

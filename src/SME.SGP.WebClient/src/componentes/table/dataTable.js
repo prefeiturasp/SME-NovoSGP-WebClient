@@ -26,6 +26,8 @@ const DataTable = props => {
     onClickExpandir,
     expandedRowKeys,
     expandIcon,
+    tableResponsive,
+    fixExpandedRowResetColSpan,
     ...rest
   } = props;
 
@@ -57,9 +59,10 @@ const DataTable = props => {
 
   return (
     <Container
-      className="table-responsive"
+      className={tableResponsive ? 'table-responsive' : ''}
       semHover={semHover}
       temEventoOnClickRow={!!onClickRow}
+      tableResponsive={tableResponsive}
     >
       <Table
         {...rest}
@@ -67,7 +70,13 @@ const DataTable = props => {
         scroll={scroll}
         className={selectMultipleRows ? '' : 'ocultar-coluna-multi-selecao'}
         rowKey={idLinha}
-        rowSelection={rowSelection}
+        rowSelection={
+          fixExpandedRowResetColSpan
+            ? selectMultipleRows
+              ? rowSelection
+              : null
+            : rowSelection
+        }
         columns={columns}
         dataSource={dataSource}
         onRow={row => ({
@@ -140,6 +149,8 @@ DataTable.propTypes = {
   onClickExpandir: PropTypes.func,
   expandedRowKeys: PropTypes.oneOfType(PropTypes.array),
   expandIcon: PropTypes.oneOfType(PropTypes.any),
+  tableResponsive: PropTypes.bool,
+  fixExpandedRowResetColSpan: PropTypes.bool,
 };
 
 DataTable.defaultProps = {
@@ -159,6 +170,8 @@ DataTable.defaultProps = {
   onClickExpandir: null,
   expandedRowKeys: [],
   expandIcon: null,
+  tableResponsive: true,
+  fixExpandedRowResetColSpan: false,
 };
 
 export default DataTable;

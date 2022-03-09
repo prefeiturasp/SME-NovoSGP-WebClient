@@ -60,8 +60,8 @@ const CampoConceito = props => {
         searchValue={false}
         style={{ width: '86px' }}
       />
-      {nota?.ausente && <TooltipEstudanteAusente />}
-      {nota?.statusGsa && <TooltipStatusGsa />}
+      {nota?.ausente ? <TooltipEstudanteAusente /> : ''}
+      {nota?.statusGsa ? <TooltipStatusGsa /> : ''}
     </div>
   );
 };

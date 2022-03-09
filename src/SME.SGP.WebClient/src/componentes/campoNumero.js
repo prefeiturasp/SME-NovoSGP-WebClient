@@ -53,6 +53,9 @@ const CampoNumero = React.forwardRef((props, ref) => {
     decimalSeparator,
     esconderSetas,
     onKeyUp,
+    styleContainer,
+    styleCampo,
+    autoFocus,
   } = props;
 
   const possuiErro = () => {
@@ -83,7 +86,11 @@ const CampoNumero = React.forwardRef((props, ref) => {
 
   return (
     <>
-      <Campo esconderSetas={esconderSetas} className={classNameCampo}>
+      <Campo
+        esconderSetas={esconderSetas}
+        className={classNameCampo}
+        style={styleContainer}
+      >
         {label ? <Label text={label} control={name || ''} /> : ''}
         {form ? (
           <>
@@ -130,6 +137,9 @@ const CampoNumero = React.forwardRef((props, ref) => {
             formatter={v => validaFormatter(v)}
             parser={v => validaParser(v)}
             decimalSeparator={decimalSeparator}
+            style={styleCampo}
+            maxLength={maxlength}
+            autoFocus={autoFocus}
           />
         )}
       </Campo>
@@ -145,6 +155,7 @@ CampoNumero.propTypes = {
   decimalSeparator: PropTypes.string,
   esconderSetas: PropTypes.bool,
   onKeyUp: PropTypes.func,
+  autoFocus: PropTypes.bool,
 };
 
 CampoNumero.defaultProps = {
@@ -155,6 +166,7 @@ CampoNumero.defaultProps = {
   decimalSeparator: ',',
   esconderSetas: false,
   onKeyUp: () => {},
+  autoFocus: false,
 };
 
 export default CampoNumero;

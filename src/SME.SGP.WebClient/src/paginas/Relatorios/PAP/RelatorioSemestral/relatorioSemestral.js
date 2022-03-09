@@ -60,6 +60,10 @@ const RelatorioSemestral = () => {
           semestreConsulta
         ).catch(e => erros(e));
         if (retorno && retorno.data) {
+          retorno.data.forEach(alunoParaAtualizar => {
+            alunoParaAtualizar.desabilitado = false;
+          });
+
           dispatch(setAlunosRelatorioSemestral(retorno.data));
         } else {
           resetarInfomacoes();

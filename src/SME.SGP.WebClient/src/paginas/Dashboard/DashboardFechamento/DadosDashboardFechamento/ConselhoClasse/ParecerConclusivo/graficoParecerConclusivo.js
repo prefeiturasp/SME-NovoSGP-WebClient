@@ -51,7 +51,14 @@ const GraficoParecerConclusivo = props => {
           xField="grupo"
           xAxisVisible
           isGroup
-          colors={['#0288D1', '#F57C00', '#D32F2F', '#512DA8','#0097A7','#303F9F']}
+          colors={[
+            '#0288D1',
+            '#F57C00',
+            '#1CAC71',
+            '#512DA8',
+            '#AD5835',
+            '#303F9F',
+          ]}
           showTitle
         />
       ) : (

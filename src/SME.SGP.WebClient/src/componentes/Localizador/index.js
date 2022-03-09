@@ -160,6 +160,7 @@ function Localizador({
     setPessoaSelecionada({
       professorRf: parseInt(objeto.key, 10),
       professorNome: objeto.props.value,
+      usuarioId: objeto.props?.usuarioId,
     });
     setDesabilitarCampo(estado => ({
       ...estado,

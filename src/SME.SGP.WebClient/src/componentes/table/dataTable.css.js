@@ -35,6 +35,29 @@ export const Container = styled.div`
     cursor: pointer;
   }
 
+  .ant-table-thead
+    > tr.ant-table-row-hover:not(.ant-table-expanded-row):not(.ant-table-row-selected)
+    > td,
+  .ant-table-tbody
+    > tr.ant-table-row-hover:not(.ant-table-expanded-row):not(.ant-table-row-selected)
+    > td,
+  .ant-table-thead
+    > tr:hover:not(.ant-table-expanded-row):not(.ant-table-row-selected)
+    > td,
+  .ant-table-tbody
+    > tr:hover:not(.ant-table-expanded-row):not(.ant-table-row-selected)
+    > td {
+      ${({ semHover }) =>
+        semHover
+          ? css`
+                background: transparent !important;
+              }
+            `
+          : css`
+              background: ${Base.Roxo} !important;
+              color: ${Base.Branco} !important;
+            `}
+
   .ant-table-tbody tr:hover.ant-table-expanded-row > td {
     cursor: default !important;
   }
@@ -42,7 +65,7 @@ export const Container = styled.div`
   .ant-table-tbody tr td {
     border-right: solid 1px ${Base.CinzaDesabilitado};
     cursor: ${props => (props.temEventoOnClickRow ? 'pointer' : 'default')};
-    white-space: nowrap;
+    white-space: ${props => (props.tableResponsive ? 'nowrap' : 'unset')};
   }
 
   .ant-table-column-title {

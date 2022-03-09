@@ -36,7 +36,7 @@ const CardsDashboard = () => {
                     <CardLink
                       key={shortid.generate()}
                       cols={[4, 4, 4, 12]}
-                      iconSize="90px"
+                      iconSize="40px"
                       url={item.rota}
                       disabled={
                         !item.usuarioTemPermissao ||
@@ -44,7 +44,7 @@ const CardsDashboard = () => {
                       }
                       icone={item.icone}
                       label={item.descricao}
-                      minHeight="177px"
+                      minHeight="130px"
                     />
                   );
                 })

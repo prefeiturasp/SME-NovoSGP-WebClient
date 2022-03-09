@@ -16,6 +16,7 @@ const inicial = {
   notasJustificativas: { componentes: [], componentesRegencia: [] },
   expandirLinha: [],
   dadosListasNotasConceitos: {},
+  dadosIniciaisListasNotasConceitos: {},
   notaConceitoPosConselhoAtual: {},
   idCamposNotasPosConselho: {},
   marcadorParecerConclusivo: {},
@@ -27,6 +28,7 @@ const inicial = {
   dadosBimestresConselhoClasse: [],
   exibirLoaderGeralConselhoClasse: false,
   situacaoConselho: '',
+  podeAcessar: true,
 };
 
 export default function ConselhoClasse(state = inicial, action) {
@@ -91,6 +93,7 @@ export default function ConselhoClasse(state = inicial, action) {
           notasJustificativas: { componentes: [], componentesRegencia: [] },
           expandirLinha: [],
           dadosListasNotasConceitos: [],
+          dadosIniciaisListasNotasConceitos: [],
           notaConceitoPosConselhoAtual: {},
           idCamposNotasPosConselho: {},
           marcadorParecerConclusivo: {},
@@ -98,6 +101,7 @@ export default function ConselhoClasse(state = inicial, action) {
           desabilitarCampos: false,
           exibirModalImpressaoConselhoClasse: false,
           exibirLoaderGeralConselhoClasse: false,
+          podeAcessar: true,
         };
       }
       case '@conselhoClasse/setConselhoClasseEmEdicao': {
@@ -219,6 +223,66 @@ export default function ConselhoClasse(state = inicial, action) {
       }
       case '@conselhoClasse/setSituacaoConselhoAluno': {
         draft.situacaoConselho = action.payload;
+        break;
+      }
+      case '@conselhoClasse/setExibirLoaderGeralConselhoClasse': {
+        draft.exibirLoaderGeralConselhoClasse = action.payload;
+        break;
+      }
+      case '@conselhoClasse/setDadosIniciaisListasNotasConceitos': {
+        draft.dadosIniciaisListasNotasConceitos = action.payload;
+        break;
+      }
+      case '@conselhoClasse/setAtualizarEmAprovacao': {
+        const novosDadosListasNotasConceitos = state.dadosListasNotasConceitos.map(
+          dados => {
+            const componenteEscolhido = action.payload.ehNota
+              ? dados.componentesCurriculares
+              : dados.componenteRegencia.componentesCurriculares;
+            const novaNota = action.payload.ehNota ? 'nota' : 'conceito';
+
+            const novosComponentes = componenteEscolhido.map(componentes => {
+              if (
+                componentes.codigoComponenteCurricular ===
+                Number(action.payload.codigoComponenteCurricular)
+              ) {
+                return {
+                  ...componentes,
+                  notaPosConselho: {
+                    ...componentes.notaPosConselho,
+                    emAprovacao: action.payload.emAprovacao,
+                    nota: action.payload[novaNota],
+                  },
+                };
+              }
+
+              return componentes;
+            });
+
+            if (action.payload.ehNota) {
+              return {
+                ...dados,
+                componentesCurriculares: novosComponentes,
+              };
+            }
+
+            return {
+              ...dados,
+              componenteRegencia: {
+                ...dados.componenteRegencia,
+                componentesCurriculares: novosComponentes,
+              },
+            };
+          }
+        );
+
+        return {
+          ...draft,
+          dadosListasNotasConceitos: novosDadosListasNotasConceitos,
+        };
+      }
+      case '@conselhoClasse/setPodeAcessar': {
+        draft.podeAcessar = action.payload;
         break;
       }
 

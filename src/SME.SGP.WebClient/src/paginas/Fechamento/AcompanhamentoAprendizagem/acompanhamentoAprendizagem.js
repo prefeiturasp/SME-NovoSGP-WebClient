@@ -15,6 +15,7 @@ import {
   setDadosAlunoObjectCard,
   setDadosApanhadoGeral,
   setExibirLoaderGeralAcompanhamentoAprendizagem,
+  setExibirLoaderAlunosAcompanhamentoAprendizagem,
 } from '~/redux/modulos/acompanhamentoAprendizagem/actions';
 import {
   resetarDadosRegistroIndividual,
@@ -116,7 +117,7 @@ const AcompanhamentoAprendizagem = () => {
     ) {
       obterComponentesCurriculares();
       obterListaSemestres();
-      ServicoAcompanhamentoAprendizagem.obterQtdMaxImagensCampoPercursoColetivo(
+      ServicoAcompanhamentoAprendizagem.obterQtdMaxImagensCampos(
         turmaSelecionada?.anoLetivo
       );
     } else {
@@ -149,20 +150,28 @@ const AcompanhamentoAprendizagem = () => {
   }, [turmaSelecionada, permissoesTela, modalidadesFiltroPrincipal]);
 
   const obterFrequenciaAluno = async (codigoAluno, semestre) => {
+    dispatch(setExibirLoaderAlunosAcompanhamentoAprendizagem(true));
     const retorno = await ServicoCalendarios.obterFrequenciaAlunoPorSemestre(
       codigoAluno,
       turma,
       semestre
-    ).catch(e => erros(e));
+    )
+      .catch(e => erros(e))
+      .finally(() =>
+        dispatch(setExibirLoaderAlunosAcompanhamentoAprendizagem(false))
+      );
     if (retorno && retorno.data) {
       return retorno.data;
     }
     return 0;
   };
 
-  const onChangeAlunoSelecionado = async (aluno, semestreSelecionado) => {
+  const onChangeAlunoSelecionado = async (aluno, semestreConsulta) => {
     resetarInfomacoes();
-    const frequenciaGeralAluno = await obterFrequenciaAluno(aluno.codigoEOL, semestreSelecionado);
+    const frequenciaGeralAluno = await obterFrequenciaAluno(
+      aluno.codigoEOL,
+      semestreConsulta
+    );
     const novoAluno = aluno;
     novoAluno.frequencia = frequenciaGeralAluno;
     dispatch(setDadosAlunoObjectCard(aluno));
@@ -174,7 +183,7 @@ const AcompanhamentoAprendizagem = () => {
   const obterListaAlunos = useCallback(
     async semestreConsulta => {
       if (turma) {
-        dispatch(setExibirLoaderGeralAcompanhamentoAprendizagem(true));
+        dispatch(setExibirLoaderAlunosAcompanhamentoAprendizagem(true));
 
         const retorno = await ServicoAcompanhamentoAprendizagem.obterListaAlunos(
           turma,
@@ -183,7 +192,7 @@ const AcompanhamentoAprendizagem = () => {
         )
           .catch(e => erros(e))
           .finally(() =>
-            dispatch(setExibirLoaderGeralAcompanhamentoAprendizagem(false))
+            dispatch(setExibirLoaderAlunosAcompanhamentoAprendizagem(false))
           );
 
         if (retorno?.data) {
@@ -312,10 +321,9 @@ const AcompanhamentoAprendizagem = () => {
                   </div>
                   <div className="col-md-12 mb-2">
                     <TabelaRetratilAcompanhamentoAprendizagem
-                      onChangeAlunoSelecionado={value => 
-                        { 
-                          onChangeAlunoSelecionado(value, semestreSelecionado); 
-                        }}
+                      onChangeAlunoSelecionado={value => {
+                        onChangeAlunoSelecionado(value, semestreSelecionado);
+                      }}
                       permiteOnChangeAluno={permiteOnChangeAluno}
                     >
                       <ObjectCardAcompanhamentoAprendizagem

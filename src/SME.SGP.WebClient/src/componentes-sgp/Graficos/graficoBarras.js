@@ -50,7 +50,8 @@ const GraficoBarras = props => {
     columnStyle: {
       radius: [4, 4, 0, 0],
     },
-    label: {
+    label: labelVisible
+      ? {
       position: 'top',
       offset: 0,
       style: {
@@ -59,7 +60,7 @@ const GraficoBarras = props => {
         fontSize: 8.5,
         fontWeight: 600,
       },
-    },
+    } : null,
     legend: legendVisible
       ? {
           position: 'bottom',

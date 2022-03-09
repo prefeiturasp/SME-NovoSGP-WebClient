@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import moment from 'moment';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { JoditEditor } from '~/componentes';
+import { JoditEditor, MarcadorSituacao } from '~/componentes';
 
 import {
   setPlanejamentoExpandido,
@@ -16,6 +16,7 @@ import {
   EditorPlanejamento,
   FundoEditor,
   IframeStyle,
+  MarcadorInseridoCJ,
 } from './caixaTextoExpandivel.css';
 
 const CaixaTextoExpandivel = ({ item }) => {
@@ -78,6 +79,11 @@ const CaixaTextoExpandivel = ({ item }) => {
         <div className="card-body">
           <EditorPlanejamento>
             <FundoEditor>
+              {item?.inseridoCJ && (
+                <MarcadorInseridoCJ>
+                  <MarcadorSituacao>Registro inserido pelo CJ</MarcadorSituacao>
+                </MarcadorInseridoCJ>
+              )}
               <JoditEditor
                 id="planejamento-diario-bordo-um"
                 value={

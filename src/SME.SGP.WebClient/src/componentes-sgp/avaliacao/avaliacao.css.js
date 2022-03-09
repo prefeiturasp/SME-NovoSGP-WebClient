@@ -256,6 +256,7 @@ export const TabelaColunasFixas = styled.div`
     overflow: auto;
     position: relative;
     z-index: 3;
+    padding: 0;
 
     ::-webkit-scrollbar-track {
       background-color: #f4f4f4 !important;
@@ -276,8 +277,18 @@ export const TabelaColunasFixas = styled.div`
   .desc-linha-conceito-final {
     width: 400px;
     display: flex;
-    height: 65px;
     margin-left: 12%;
+
+    tr {
+      td {
+        position: relative;
+        border-top: 0;
+        border-bottom: 0;
+        &:first-child {
+          border-left: solid 1px #dadada;
+        }
+      }
+    }
   }
 
   .tamanho-conceito-final {

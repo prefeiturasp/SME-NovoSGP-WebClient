@@ -170,7 +170,8 @@ function AtribuicaoCJForm({ match, location }) {
       }
 
       const anoSelecionado = query.anoLetivo || anoAtual;
-      const historico = query.historico || consideraHistorico;
+      const historico = query.historico.indexOf('false') || consideraHistorico;
+
       setValoresIniciais({
         ...valoresIniciais,
         modalidadeId: query.modalidadeId,
@@ -363,10 +364,11 @@ function AtribuicaoCJForm({ match, location }) {
                       valueSelect={anoLetivo}
                       allowClear={false}
                       disabled={
-                        !consideraHistorico ||
-                        listaAnosLetivo?.length === 1 ||
-                        somenteConsulta ||
-                        ehEdicao
+                        !consideraHistorico
+                        // ||
+                        // listaAnosLetivo?.length === 1 ||
+                        // somenteConsulta ||
+                        // ehEdicao
                       }
                     />
                   </Grid>

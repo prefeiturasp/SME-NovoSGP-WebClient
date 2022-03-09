@@ -1,23 +1,14 @@
 import React from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 import Button from '~/componentes/button';
 import { Colors } from '~/componentes/colors';
+import { URL_HOME } from '~/constantes/url';
 import { confirmar } from '~/servicos/alertas';
 import history from '~/servicos/history';
-import { URL_HOME } from '~/constantes/url';
-import {
-  setBimestreAtual,
-  setConselhoClasseEmEdicao,
-  setExpandirLinha,
-  setNotaConceitoPosConselhoAtual,
-  setIdCamposNotasPosConselho,
-} from '~/redux/modulos/conselhoClasse/actions';
-import servicoSalvarConselhoClasse from '../../servicoSalvarConselhoClasse';
 import { ehTurmaInfantil } from '~/servicos/Validacoes/validacoesInfatil';
+import servicoSalvarConselhoClasse from '../../servicoSalvarConselhoClasse';
 
 const BotoesAcoesConselhoClasse = () => {
-  const dispatch = useDispatch();
-
   const alunosConselhoClasse = useSelector(
     store => store.conselhoClasse.alunosConselhoClasse
   );
@@ -72,7 +63,7 @@ const BotoesAcoesConselhoClasse = () => {
       !desabilitarCampos &&
       (conselhoClasseEmEdicao || notaConceitoPosConselhoAtual.ehEdicao)
     ) {
-      const confirmado = await perguntaAoSalvar();
+      const confirmado = true;
       if (confirmado) {
         const salvou = await onClickSalvar();
         if (salvou) {
@@ -86,21 +77,6 @@ const BotoesAcoesConselhoClasse = () => {
     }
   };
 
-  // Setar valor para renderizar a tela novamente!
-  const recarregarDados = () => {
-    dispatch(setConselhoClasseEmEdicao(false));
-    dispatch(
-      setBimestreAtual({
-        valor: bimestreAtual.valor,
-        dataInicio: bimestreAtual.dataInicio,
-        dataFim: bimestreAtual.dataFim,
-      })
-    );
-    dispatch(setExpandirLinha([]));
-    dispatch(setNotaConceitoPosConselhoAtual({}));
-    dispatch(setIdCamposNotasPosConselho({}));
-  };
-
   const onClickCancelar = async () => {
     if (conselhoClasseEmEdicao || notaConceitoPosConselhoAtual.ehEdicao) {
       const confirmou = await confirmar(
@@ -109,7 +85,7 @@ const BotoesAcoesConselhoClasse = () => {
         'Deseja realmente cancelar as alterações?'
       );
       if (confirmou) {
-        recarregarDados();
+        servicoSalvarConselhoClasse.recarregarDados();
       }
     }
   };

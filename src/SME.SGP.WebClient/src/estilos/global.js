@@ -311,10 +311,6 @@ export default createGlobalStyle`
     justify-content: flex-end !important;
   }
 
-  .ant-modal-title{
-    font-size: 24px !important;
-  }
-
   form{
     width:100%;
   }
