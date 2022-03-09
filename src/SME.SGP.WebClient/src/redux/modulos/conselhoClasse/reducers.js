@@ -238,7 +238,9 @@ export default function ConselhoClasse(state = inicial, action) {
           dados => {
             const componenteEscolhido = action.payload.ehNota
               ? dados.componentesCurriculares
-              : dados.componenteRegencia.componentesCurriculares;
+              : dados.componenteRegencia?.componentesCurriculares ||
+                dados.componentesCurriculares;
+
             const novaNota = action.payload.ehNota ? 'nota' : 'conceito';
 
             const novosComponentes = componenteEscolhido.map(componentes => {
