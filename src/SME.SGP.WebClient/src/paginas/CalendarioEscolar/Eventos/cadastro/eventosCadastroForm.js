@@ -215,7 +215,8 @@ const EventosCadastroForm = () => {
           valorOpcaoLetivo = false;
         } else {
           valorOpcaoLetivo = true;
-          valorLetivo = tipoEventoSelecionado.letivo;
+          const ehEventoLetivoDesativado = tipoEventoSelecionado.letivo === eventoLetivo.Desativado;
+          valorLetivo = ehEventoLetivoDesativado ? 0 : tipoEventoSelecionado.letivo;
         }
       }
 
