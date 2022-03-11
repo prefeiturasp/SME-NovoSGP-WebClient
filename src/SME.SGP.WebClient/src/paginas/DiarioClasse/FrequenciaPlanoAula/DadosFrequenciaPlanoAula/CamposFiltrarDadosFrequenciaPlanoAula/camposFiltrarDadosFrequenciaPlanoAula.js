@@ -80,11 +80,16 @@ const CamposFiltrarDadosFrequenciaPlanoAula = () => {
 
   const obterDatasDeAulasDisponiveis = useCallback(async () => {
     dispatch(setExibirLoaderFrequenciaPlanoAula(true));
+
+    const codComponenteCurricular =
+      componenteCurricular?.codDisciplinaPai ||
+      componenteCurricular?.codigoComponenteCurricular;
+
     const datasDeAulas =
       turmaSelecionada && turmaSelecionada.turma
         ? await ServicoFrequencia.obterDatasDeAulasPorCalendarioTurmaEComponenteCurricular(
             turmaSelecionada.turma,
-            codigoComponenteCurricular
+            codComponenteCurricular
           )
             .finally(() => dispatch(setExibirLoaderFrequenciaPlanoAula(false)))
             .catch(e => erros(e))
@@ -111,7 +116,7 @@ const CamposFiltrarDadosFrequenciaPlanoAula = () => {
       setDiasParaHabilitar();
       dispatch(setExibirLoaderFrequenciaPlanoAula(false));
     }
-  }, [codigoComponenteCurricular, dispatch]);
+  }, [codigoComponenteCurricular, componenteCurricular, dispatch]);
 
   const obterListaComponenteCurricular = useCallback(async () => {
     dispatch(setExibirLoaderFrequenciaPlanoAula(true));
@@ -156,7 +161,7 @@ const CamposFiltrarDadosFrequenciaPlanoAula = () => {
     if (codigoComponenteCurricular && turmaSelecionada?.turma) {
       obterDatasDeAulasDisponiveis();
     }
-  }, [codigoComponenteCurricular, obterDatasDeAulasDisponiveis]);
+  }, [codigoComponenteCurricular]);
 
   useEffect(() => {
     if (atualizarDatas) {
