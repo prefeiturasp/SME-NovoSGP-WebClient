@@ -80,11 +80,16 @@ const CamposFiltrarDadosFrequenciaPlanoAula = () => {
 
   const obterDatasDeAulasDisponiveis = useCallback(async () => {
     dispatch(setExibirLoaderFrequenciaPlanoAula(true));
+
+    const codComponenteCurricular =
+      componenteCurricular?.codDisciplinaPai ||
+      componenteCurricular?.codigoComponenteCurricular;
+
     const datasDeAulas =
       turmaSelecionada && turmaSelecionada.turma
         ? await ServicoFrequencia.obterDatasDeAulasPorCalendarioTurmaEComponenteCurricular(
             turmaSelecionada.turma,
-            componenteCurricular?.codDisciplinaPai
+            codComponenteCurricular
           )
             .finally(() => dispatch(setExibirLoaderFrequenciaPlanoAula(false)))
             .catch(e => erros(e))
