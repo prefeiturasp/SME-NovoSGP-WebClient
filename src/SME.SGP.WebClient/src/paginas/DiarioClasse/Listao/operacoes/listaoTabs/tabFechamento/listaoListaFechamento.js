@@ -92,26 +92,34 @@ const ListaoListaFechamento = props => {
     </span>
   );
 
-  const montarColunaEstudante = aluno => (
-    <div className="d-flex justify-content-between">
-      <div className="d-flex justify-content-start">{aluno.nome}</div>
-      <div className=" d-flex justify-content-end">
-        <div className="mr-3">
-          <SinalizacaoAEE exibirSinalizacao={aluno.ehAtendidoAEE} />
+  const temLinhaExpandida = codigoAluno =>
+    expandedRowKeys?.codigoAluno === codigoAluno;
+
+  const montarColunaEstudante = aluno => {
+    const alunoExpandido = temLinhaExpandida(aluno?.codigoAluno);
+
+    return (
+      <div className="d-flex justify-content-between">
+        <div className="d-flex justify-content-start">{aluno.nome}</div>
+        <div className=" d-flex justify-content-end">
+          <div className="mr-3">
+            <SinalizacaoAEE exibirSinalizacao={aluno.ehAtendidoAEE} />
+          </div>
+          {!ehFinal && (
+            <AnotacoesFechamentoLisao
+              desabilitar={desabilitarCampos || !aluno?.podeEditar}
+              ehInfantil={listaoEhInfantil}
+              aluno={aluno}
+              fechamentoId={dadosFechamento.fechamentoId}
+              dadosFechamento={dadosFechamento}
+              setDadosFechamento={setDadosFechamento}
+              alunoExpandido={alunoExpandido}
+            />
+          )}
         </div>
-        {!ehFinal && (
-          <AnotacoesFechamentoLisao
-            desabilitar={desabilitarCampos || !aluno?.podeEditar}
-            ehInfantil={listaoEhInfantil}
-            aluno={aluno}
-            fechamentoId={dadosFechamento.fechamentoId}
-            dadosFechamento={dadosFechamento}
-            setDadosFechamento={setDadosFechamento}
-          />
-        )}
       </div>
-    </div>
-  );
+    );
+  };
 
   const onChangeNotaConceito = (
     valorNovo,
@@ -238,9 +246,6 @@ const ListaoListaFechamento = props => {
 
     return mapColunas;
   };
-
-  const temLinhaExpandida = codigoAluno =>
-    expandedRowKeys?.codigoAluno === codigoAluno;
 
   const onClickExpandir = (expandir, codigoAluno, expandirColunaRegencia) => {
     if (expandir) {
@@ -433,7 +438,7 @@ const ListaoListaFechamento = props => {
   const getExpandIconColumnIndex = () => {
     let expandIconColumnIndex = 2;
     if (ehFinal) {
-      expandIconColumnIndex = 6;
+      expandIconColumnIndex = ehEJA ? 4 : 6;
     }
     return expandIconColumnIndex;
   };
@@ -510,6 +515,7 @@ const ListaoListaFechamento = props => {
                   Number(dadosFechamento?.notaTipo) === notasConceitos.Notas
                 }
                 listaTiposConceitos={dadosFechamento?.listaTiposConceitos}
+                componenteCurricular={componenteCurricular}
               />
             );
           }}
@@ -554,6 +560,7 @@ const ListaoListaFechamento = props => {
                   Number(dadosFechamento?.notaTipo) === notasConceitos.Notas
                 }
                 listaTiposConceitos={dadosFechamento?.listaTiposConceitos}
+                componenteCurricular={componenteCurricular}
               />
             );
           }}

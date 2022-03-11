@@ -14,13 +14,16 @@ class ServicoCalendarios {
   };
 
   converterModalidade = modalidadeCalendario => {
-    let modalidade = modalidadeDto.FUNDAMENTAL;
-    if (modalidadeCalendario === modalidadeTipoCalendario.EJA) {
-      modalidade = modalidadeDto.EJA;
-    } else if (modalidadeCalendario === modalidadeTipoCalendario.Infantil) {
-      modalidade = modalidadeDto.INFANTIL;
+    switch (modalidadeCalendario) {
+      case modalidadeTipoCalendario.EJA:
+        return modalidadeDto.EJA;
+      case modalidadeTipoCalendario.Infantil:
+        return modalidadeDto.INFANTIL;
+      case modalidadeTipoCalendario.FUNDAMENTAL_MEDIO:
+        return modalidadeDto.FUNDAMENTAL;
+      default:
+        return null;
     }
-    return modalidade;
   };
 
   gerarRelatorio = payload => {

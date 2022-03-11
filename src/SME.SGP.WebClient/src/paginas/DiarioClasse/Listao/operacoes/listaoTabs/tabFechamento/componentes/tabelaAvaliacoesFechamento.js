@@ -11,7 +11,13 @@ const TabelaAvaliacoesFechamento = props => {
   const usuario = useSelector(store => store.usuario);
   const { turmaSelecionada } = usuario;
 
-  const { codigoAluno, periodoEscolarId, ehNota, listaTiposConceitos } = props;
+  const {
+    codigoAluno,
+    periodoEscolarId,
+    ehNota,
+    listaTiposConceitos,
+    componenteCurricular,
+  } = props;
 
   const [dadosAlunoSelecionado, setDadosAlunoSelecionado] = useState();
   const [colunas, setColunas] = useState([]);
@@ -33,12 +39,19 @@ const TabelaAvaliacoesFechamento = props => {
           dataIndex: `avaliacoes[${index}]`,
           key: `avaliacoes[${index}]`,
           render: dadosAvaliacao => {
-            if (ehNota) return dadosAvaliacao?.notaConceito;
+            let notaConceito = dadosAvaliacao?.notaConceito;
 
-            return obterDescricaoConceito(
-              listaTiposConceitos,
-              dadosAvaliacao?.notaConceito
-            );
+            if (ehNota) {
+              notaConceito =
+                notaConceito === 0 || notaConceito > 0
+                  ? notaConceito?.toString?.()?.replace?.('.', ',')
+                  : '-';
+              return notaConceito;
+            }
+
+            return notaConceito
+              ? obterDescricaoConceito(listaTiposConceitos, notaConceito)
+              : '-';
           },
         });
       });
@@ -51,7 +64,8 @@ const TabelaAvaliacoesFechamento = props => {
     const resposta = await ServicoNotaConceito.obterNotasAvaliacoesPorTurmaBimestreAluno(
       turmaSelecionada.id,
       periodoEscolarId,
-      codigoAluno
+      codigoAluno,
+      componenteCurricular?.codigoComponenteCurricular
     )
       .catch(e => erros(e))
       .finally(() => setCarregandoDados(false));
@@ -62,7 +76,7 @@ const TabelaAvaliacoesFechamento = props => {
     } else {
       setDadosAlunoSelecionado();
     }
-  }, [turmaSelecionada, periodoEscolarId, codigoAluno]);
+  }, [turmaSelecionada, periodoEscolarId, codigoAluno, componenteCurricular]);
 
   useEffect(() => {
     montarColunas(dadosAlunoSelecionado);
@@ -101,6 +115,7 @@ TabelaAvaliacoesFechamento.propTypes = {
   periodoEscolarId: PropTypes.number,
   ehNota: PropTypes.bool,
   listaTiposConceitos: PropTypes.oneOfType(PropTypes.array),
+  componenteCurricular: PropTypes.oneOfType(PropTypes.any),
 };
 
 TabelaAvaliacoesFechamento.defaultProps = {
@@ -108,6 +123,7 @@ TabelaAvaliacoesFechamento.defaultProps = {
   periodoEscolarId: null,
   ehNota: true,
   listaTiposConceitos: [],
+  componenteCurricular: null,
 };
 
 export default TabelaAvaliacoesFechamento;
