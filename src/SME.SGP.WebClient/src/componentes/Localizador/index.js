@@ -71,6 +71,11 @@ function Localizador({
       }, 200);
     }
 
+    if (valor.length === 0){
+      setDataSource([]);
+      return
+    }
+
     if (valor.length < buscarCaracterPartir) return;
     setDataSource([]);
     setExibirLoader(true);
