@@ -84,7 +84,7 @@ class ServicoFiltro {
     return api
       .get(
         `v1/abrangencias/${consideraHistorico}/dres/ues/${unidadeEscolarSelecionada}/turmas?anoLetivo=${anoLetivoSelecionado}&modalidade=${modalidadeSelecionada ||
-          0}${periodoQuery}`
+          0}${periodoQuery}&consideraNovosAnosInfantil=true`
       )
       .then(resposta => resposta);
   };
