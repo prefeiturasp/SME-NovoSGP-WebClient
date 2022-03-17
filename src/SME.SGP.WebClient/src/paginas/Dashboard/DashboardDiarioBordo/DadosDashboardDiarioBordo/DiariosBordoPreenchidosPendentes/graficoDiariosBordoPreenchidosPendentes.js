@@ -6,7 +6,7 @@ import { OPCAO_TODOS } from '~/constantes/constantes';
 import { erros } from '~/servicos';
 import ServicoDashboardDiarioBordo from '~/servicos/Paginas/Dashboard/ServicoDashboardDiarioBordo';
 
-const GraficoQtdDiariosPreenchidosEQtdDiariosComDevolutiva = props => {
+const GraficoDiariosBordoPreenchidosPendentes = props => {
   const { anoLetivo, dreId, ueId, modalidade } = props;
 
   const [dadosGrafico, setDadosGrafico] = useState([]);
@@ -14,7 +14,7 @@ const GraficoQtdDiariosPreenchidosEQtdDiariosComDevolutiva = props => {
 
   const obterDadosGrafico = useCallback(async () => {
     setExibirLoader(true);
-    const retorno = await ServicoDashboardDiarioBordo.obterQuantidadeTotalDiariosBordos(
+    const retorno = await ServicoDashboardDiarioBordo.obterDiariosBordoPreenchidosPendentes(
       anoLetivo,
       dreId === OPCAO_TODOS ? '' : dreId,
       ueId === OPCAO_TODOS ? '' : ueId,
@@ -50,28 +50,29 @@ const GraficoQtdDiariosPreenchidosEQtdDiariosComDevolutiva = props => {
           xAxisVisible
           isGroup
           colors={['#0288D1', '#F57C00']}
+          showScrollbar
         />
       ) : !exibirLoader ? (
         <div className="text-center">Sem dados</div>
       ) : (
-        ''
+        <></>
       )}
     </Loader>
   );
 };
 
-GraficoQtdDiariosPreenchidosEQtdDiariosComDevolutiva.propTypes = {
+GraficoDiariosBordoPreenchidosPendentes.propTypes = {
   anoLetivo: PropTypes.oneOfType(PropTypes.any),
   dreId: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   ueId: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   modalidade: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
 };
 
-GraficoQtdDiariosPreenchidosEQtdDiariosComDevolutiva.defaultProps = {
+GraficoDiariosBordoPreenchidosPendentes.defaultProps = {
   anoLetivo: null,
   dreId: null,
   ueId: null,
   modalidade: null,
 };
 
-export default GraficoQtdDiariosPreenchidosEQtdDiariosComDevolutiva;
+export default GraficoDiariosBordoPreenchidosPendentes;
