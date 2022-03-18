@@ -271,6 +271,8 @@ const FechamentoBimestreLista = props => {
             {dadosLista && dadosLista.length > 0 ? (
               dadosLista.map((item, index) => {
                 const idLinhaRegencia = `fechamento-regencia-${index}`;
+                const refLinhaRegencia = React.createRef();
+
                 return (
                   <>
                     <tr>
@@ -337,7 +339,7 @@ const FechamentoBimestreLista = props => {
                         ) : ehRegencia && item.notas ? (
                           <BotaoExpandir
                             index={index}
-                            idLinhaRegencia={idLinhaRegencia}
+                            refElement={refLinhaRegencia}
                           />
                         ) : item.notas && item.notas.length > 0 ? (
                           item.notas[0].ehConceito ? (
@@ -385,7 +387,7 @@ const FechamentoBimestreLista = props => {
                     {!ehSintese && ehRegencia ? (
                       <FechamentoRegencia
                         dados={item.notas}
-                        idRegencia={`fechamento-regencia-${index}`}
+                        refElement={refLinhaRegencia}
                       />
                     ) : null}
                   </>
