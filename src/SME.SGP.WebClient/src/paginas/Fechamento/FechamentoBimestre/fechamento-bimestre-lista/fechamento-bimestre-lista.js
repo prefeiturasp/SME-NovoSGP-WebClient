@@ -385,7 +385,7 @@ const FechamentoBimestreLista = props => {
                         ''
                       )}
                     </tr>
-                    {true ? (
+                    {!ehSintese && ehRegencia ? (
                       <FechamentoRegencia
                         dados={item.notas}
                         idRegencia={`fechamento-regencia-${index}`}
