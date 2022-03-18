@@ -2,11 +2,11 @@ import PropTypes from 'prop-types';
 import React, { useCallback, useEffect, useState } from 'react';
 import { Loader } from '~/componentes';
 import GraficoBarras from '~/componentes-sgp/Graficos/graficoBarras';
-import { OPCAO_TODOS } from '~/constantes';
+import { OPCAO_TODOS } from '~/constantes/constantes';
 import { erros } from '~/servicos';
-import ServicoDashboardDevolutivas from '~/servicos/Paginas/Dashboard/ServicoDashboardDevolutivas';
+import ServicoDashboardDiarioBordo from '~/servicos/Paginas/Dashboard/ServicoDashboardDiarioBordo';
 
-const GraficoQtdDiariosBordoCampoReflexoesReplanejamentoPreenchido = props => {
+const GraficoDiariosBordoPreenchidosPendentes = props => {
   const { anoLetivo, dreId, ueId, modalidade } = props;
 
   const [dadosGrafico, setDadosGrafico] = useState([]);
@@ -14,7 +14,7 @@ const GraficoQtdDiariosBordoCampoReflexoesReplanejamentoPreenchido = props => {
 
   const obterDadosGrafico = useCallback(async () => {
     setExibirLoader(true);
-    const retorno = await ServicoDashboardDevolutivas.obtertdDiariosBordoCampoReflexoesReplanejamentoPreenchido(
+    const retorno = await ServicoDashboardDiarioBordo.obterDiariosBordoPreenchidosPendentes(
       anoLetivo,
       dreId === OPCAO_TODOS ? '' : dreId,
       ueId === OPCAO_TODOS ? '' : ueId,
@@ -31,12 +31,12 @@ const GraficoQtdDiariosBordoCampoReflexoesReplanejamentoPreenchido = props => {
   }, [anoLetivo, dreId, ueId, modalidade]);
 
   useEffect(() => {
-    if (modalidade && anoLetivo && dreId && ueId) {
+    if (anoLetivo && dreId && ueId && modalidade) {
       obterDadosGrafico();
     } else {
       setDadosGrafico([]);
     }
-  }, [modalidade, anoLetivo, dreId, ueId, obterDadosGrafico]);
+  }, [anoLetivo, dreId, ueId, modalidade, obterDadosGrafico]);
 
   return (
     <Loader
@@ -50,28 +50,29 @@ const GraficoQtdDiariosBordoCampoReflexoesReplanejamentoPreenchido = props => {
           xAxisVisible
           isGroup
           colors={['#0288D1', '#F57C00']}
+          showScrollbar
         />
       ) : !exibirLoader ? (
         <div className="text-center">Sem dados</div>
       ) : (
-        ''
+        <></>
       )}
     </Loader>
   );
 };
 
-GraficoQtdDiariosBordoCampoReflexoesReplanejamentoPreenchido.propTypes = {
+GraficoDiariosBordoPreenchidosPendentes.propTypes = {
   anoLetivo: PropTypes.oneOfType(PropTypes.any),
   dreId: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   ueId: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   modalidade: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
 };
 
-GraficoQtdDiariosBordoCampoReflexoesReplanejamentoPreenchido.defaultProps = {
+GraficoDiariosBordoPreenchidosPendentes.defaultProps = {
   anoLetivo: null,
   dreId: null,
   ueId: null,
   modalidade: null,
 };
 
-export default GraficoQtdDiariosBordoCampoReflexoesReplanejamentoPreenchido;
+export default GraficoDiariosBordoPreenchidosPendentes;
