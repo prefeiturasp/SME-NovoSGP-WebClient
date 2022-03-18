@@ -2,9 +2,9 @@ import PropTypes from 'prop-types';
 import React, { useState } from 'react';
 import { Base } from '~/componentes';
 import CardCollapse from '~/componentes/cardCollapse';
-import GraficoQtdDiariosBordoCampoReflexoesReplanejamentoPreenchido from './graficoQtdDiariosBordoCampoReflexoesReplanejamentoPreenchido';
+import GraficoUsuariosQueRegistraramDevolutivas from './graficoUsuariosQueRegistraramDevolutivas';
 
-const QtdDiariosBordoCampoReflexoesReplanejamentoPreenchido = props => {
+const UsuariosQueRegistraramDevolutivas = props => {
   const { anoLetivo, dreId, ueId, modalidade } = props;
 
   const configCabecalho = {
@@ -14,12 +14,12 @@ const QtdDiariosBordoCampoReflexoesReplanejamentoPreenchido = props => {
 
   const [exibir, setExibir] = useState(false);
 
-  const key = 'qtd-diarios-bordo-campo-reflexoes-replanejamento-preenchido';
+  const key = 'usuarios-registraram-devolutivas';
 
   return (
     <div className="mt-3">
       <CardCollapse
-        titulo={`Total de diários de bordo com o campo "Reflexões e replanejamento" preenchido`}
+        titulo="Usuários que registraram devolutivas"
         key={`${key}-collapse-key`}
         indice={`${key}-collapse-indice`}
         alt={`${key}-alt`}
@@ -30,32 +30,32 @@ const QtdDiariosBordoCampoReflexoesReplanejamentoPreenchido = props => {
         }}
       >
         {exibir ? (
-          <GraficoQtdDiariosBordoCampoReflexoesReplanejamentoPreenchido
+          <GraficoUsuariosQueRegistraramDevolutivas
             anoLetivo={anoLetivo}
             dreId={dreId}
             ueId={ueId}
             modalidade={modalidade}
           />
         ) : (
-          ''
+          <></>
         )}
       </CardCollapse>
     </div>
   );
 };
 
-QtdDiariosBordoCampoReflexoesReplanejamentoPreenchido.propTypes = {
+UsuariosQueRegistraramDevolutivas.propTypes = {
   anoLetivo: PropTypes.oneOfType(PropTypes.any),
   dreId: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   ueId: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   modalidade: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
 };
 
-QtdDiariosBordoCampoReflexoesReplanejamentoPreenchido.defaultProps = {
+UsuariosQueRegistraramDevolutivas.defaultProps = {
   anoLetivo: null,
   dreId: null,
   ueId: null,
   modalidade: null,
 };
 
-export default QtdDiariosBordoCampoReflexoesReplanejamentoPreenchido;
+export default UsuariosQueRegistraramDevolutivas;
