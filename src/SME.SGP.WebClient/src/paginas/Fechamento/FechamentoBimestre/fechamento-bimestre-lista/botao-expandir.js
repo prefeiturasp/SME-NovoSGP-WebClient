@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { MaisMenos } from './fechamento-bimestre-lista.css';
 
 const BotaoExpandir = props => {
-  const { index, idLinhaRegencia, refElement } = props;
+  const { index, refElement } = props;
   const [expandido, setExpandido] = useState(false);
 
   const clickExpandirRetrair = () => {

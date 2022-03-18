@@ -11,10 +11,10 @@ import ServicoFechamentoBimestre from '~/servicos/Paginas/Fechamento/ServicoFech
 import { MarcadorTriangulo } from '~/componentes';
 
 const FechamentoRegencia = props => {
-  const { idRegencia, dados, refElement } = props;
+  const { dados, refElement } = props;
 
   return (
-    <TrRegencia  ref={refElement} id={idRegencia} style={{ display: 'none' }}>
+    <TrRegencia  ref={refElement} style={{ display: 'none' }}>
       <td colSpan="2" className="destaque-label">
         Conceitos finais regência de classe
       </td>

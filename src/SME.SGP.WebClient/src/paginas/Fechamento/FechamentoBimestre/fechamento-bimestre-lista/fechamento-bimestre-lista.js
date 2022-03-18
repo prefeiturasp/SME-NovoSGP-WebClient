@@ -339,7 +339,6 @@ const FechamentoBimestreLista = props => {
                         ) : ehRegencia && item.notas ? (
                           <BotaoExpandir
                             index={index}
-                            idLinhaRegencia={idLinhaRegencia}
                             refElement={refLinhaRegencia}
                           />
                         ) : item.notas && item.notas.length > 0 ? (
@@ -388,7 +387,6 @@ const FechamentoBimestreLista = props => {
                     {!ehSintese && ehRegencia ? (
                       <FechamentoRegencia
                         dados={item.notas}
-                        idRegencia={`fechamento-regencia-${index}`}
                         refElement={refLinhaRegencia}
                       />
                     ) : null}
