@@ -16,11 +16,12 @@ const GraficoBarras = props => {
     labelVisible,
     radius,
     showTitle,
+    showScrollbar,
     ...rest
   } = props;
 
   const scrollConfig =
-    window.innerWidth <= 960 && data?.length > 62
+    showScrollbar || (window.innerWidth <= 960 && data?.length > 1)
       ? {
           type: 'horizontal',
         }
@@ -52,15 +53,16 @@ const GraficoBarras = props => {
     },
     label: labelVisible
       ? {
-      position: 'top',
-      offset: 0,
-      style: {
-        fill: Base.CinzaMako,
-        textAlign: 'center',
-        fontSize: 8.5,
-        fontWeight: 600,
-      },
-    } : null,
+          position: 'top',
+          offset: 0,
+          style: {
+            fill: Base.CinzaMako,
+            textAlign: 'center',
+            fontSize: 8.5,
+            fontWeight: 600,
+          },
+        }
+      : null,
     legend: legendVisible
       ? {
           position: 'bottom',
@@ -109,6 +111,7 @@ GraficoBarras.propTypes = {
   labelVisible: PropTypes.bool,
   radius: PropTypes.oneOfType(PropTypes.array),
   showTitle: PropTypes.bool,
+  showScrollbar: PropTypes.bool,
 };
 
 GraficoBarras.defaultProps = {
@@ -123,6 +126,7 @@ GraficoBarras.defaultProps = {
   labelVisible: true,
   radius: [4, 4, 0, 0],
   showTitle: false,
+  showScrollbar: false,
 };
 
 export default GraficoBarras;

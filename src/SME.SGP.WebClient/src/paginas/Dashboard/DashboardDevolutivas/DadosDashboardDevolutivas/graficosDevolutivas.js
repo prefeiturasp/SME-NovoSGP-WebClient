@@ -4,8 +4,8 @@ import { OPCAO_TODOS } from '~/constantes';
 import { ModalidadeDTO } from '~/dtos';
 import QtdDevolutivasRegistradasEstimada from './QtdDevolutivasRegistradasEstimada/qtdDevolutivasRegistradasEstimada';
 import QtdDiarioBordoDevolutiva from './QtdDiarioBordoDevolutiva/qtdDiarioBordoDevolutiva';
-import QtdDiariosBordoCampoReflexoesReplanejamentoPreenchido from './QtdDiariosBordoCampoReflexoesReplanejamentoPreenchido/qtdDiariosBordoCampoReflexoesReplanejamentoPreenchido';
 import TotalDevolutivasPorDRE from './TotalDevolutivasPorDRE/totalDevolutivasPorDRE';
+import UsuariosQueRegistraramDevolutivas from './UsuariosQueRegistraramDevolutivas/usuariosQueRegistraramDevolutivas';
 
 const GraficosDevolutivas = () => {
   const anoLetivo = useSelector(
@@ -51,6 +51,16 @@ const GraficosDevolutivas = () => {
         ueId={ueId}
         modalidade={modalidade}
       />
+      {OPCAO_TODOS === ue?.codigo ? (
+        <UsuariosQueRegistraramDevolutivas
+          anoLetivo={anoLetivo}
+          dreId={dreId}
+          ueId={ueId}
+          modalidade={modalidade}
+        />
+      ) : (
+        <></>
+      )}
     </>
   ) : (
     ''
