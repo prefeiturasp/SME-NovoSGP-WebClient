@@ -296,10 +296,14 @@ const FechamentoBismestre = () => {
 
   const onChangeFechamentoFinal = alunosAlterados => {
     const fechamentoFinalDto = fechamentoFinal;
-    fechamentoFinalDto.itens = alunosAlterados;
+    fechamentoFinalDto.itens = alunosAlterados.map(item => ({
+      ...item,
+      conceitoId: item?.conceitoId || null,
+    }));
     setFechamentoFinal(fechamentoFinalDto);
     trocarEstadoEmEdicao(true);
   };
+
   const salvarFechamentoFinal = () => {
     fechamentoFinal.turmaCodigo = turmaSelecionada.turma;
     fechamentoFinal.ehRegencia = ehRegencia;
