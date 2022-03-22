@@ -183,7 +183,7 @@ const DiarioBordo = ({ match }) => {
         setComponenteCurricularSelecionado(
           String(componente.codigoComponenteCurricular)
         );
-        setCodDisciplinaPai(String(componente.codDisciplinaPai));
+        setCodDisciplinaPai(String(componente.cdComponenteCurricularPai));
       }
     }
 
