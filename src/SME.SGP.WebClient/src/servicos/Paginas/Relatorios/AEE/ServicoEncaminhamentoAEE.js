@@ -33,7 +33,6 @@ class ServicoEncaminhamentoAEE {
   };
 
   obterAlunoSituacaoEncaminhamentoAEE = ({ estudanteCodigo, ueCodigo }) => {
-    debugger;
     return api.get(`${urlPadrao}/estudante/situacao`, {
       params: {
         estudanteCodigo,
