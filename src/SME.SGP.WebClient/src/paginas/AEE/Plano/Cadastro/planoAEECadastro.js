@@ -37,7 +37,6 @@ const PlanoAEECadastro = ({ match }) => {
 
   useEffect(() => {
     const planoId = match?.params?.id;
-    console.log(match)
     if (planoId) {
       setBreadcrumbManual(
         match.url,
