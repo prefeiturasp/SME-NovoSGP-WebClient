@@ -45,6 +45,10 @@ const BoletimSimples = () => {
   const [selecionarAlunos, setSelecionarAlunos] = useState(false);
 
   const onChangeFiltro = (valoresFiltro, naoLimparItensSelecionados) => {
+    const { imprimirEstudantesInativos } = valoresFiltro;
+    const consideraInativo =
+      imprimirEstudantesInativos && JSON.parse(imprimirEstudantesInativos);
+
     setFiltro({
       anoLetivo: valoresFiltro.anoLetivo,
       modalidade: valoresFiltro.modalidadeId,
@@ -59,6 +63,7 @@ const BoletimSimples = () => {
       opcaoEstudanteId: valoresFiltro.opcaoEstudanteId,
       modelo: valoresFiltro.modeloBoletimId,
       filtroEhValido: !naoLimparItensSelecionados,
+      consideraInativo,
     });
     if (!naoLimparItensSelecionados) {
       setItensSelecionados([]);
