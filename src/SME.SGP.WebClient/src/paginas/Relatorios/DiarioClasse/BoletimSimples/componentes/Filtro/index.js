@@ -1,7 +1,12 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 
-import { CheckboxComponent, Loader, SelectComponent } from '~/componentes';
+import {
+  CheckboxComponent,
+  Loader,
+  RadioGroupButton,
+  SelectComponent,
+} from '~/componentes';
 import { FiltroHelper } from '~/componentes-sgp';
 
 import { ModalidadeDTO } from '~/dtos';
@@ -55,8 +60,8 @@ const Filtros = ({ onFiltrar, filtrou, setFiltrou, cancelou, setCancelou }) => {
   ];
 
   const opcoesImprimirEstudantesInativos = [
-    { valor: true, desc: 'Sim' },
-    { valor: false, desc: 'Não' },
+    { value: true, label: 'Sim' },
+    { value: false, label: 'Não' },
   ];
 
   const limparCampos = () => {
@@ -351,7 +356,7 @@ const Filtros = ({ onFiltrar, filtrou, setFiltrou, cancelou, setCancelou }) => {
       setImprimirEstudantesInativos();
     }
     setDesabilitarCampoEstudantesInativos(valorEstudante);
-    setImprimirEstudantesInativos(String(valorEstudante));
+    setImprimirEstudantesInativos(valorEstudante);
   };
 
   const onChangeTurma = valor => {
@@ -585,15 +590,15 @@ const Filtros = ({ onFiltrar, filtrou, setFiltrou, cancelou, setCancelou }) => {
           </AvisoBoletim>
         </div>
         <div className="col-sm-12 col-md-4">
-          <SelectComponent
-            lista={opcoesImprimirEstudantesInativos}
-            valueOption="valor"
-            valueText="desc"
+          <RadioGroupButton
             label="Imprimir estudantes inativos"
-            disabled={desabilitarCampoEstudantesInativos}
-            valueSelect={imprimirEstudantesInativos}
-            onChange={onChangeImprimirEstudantesInativos}
-            placeholder="Imprimir estudantes inativos"
+            opcoes={opcoesImprimirEstudantesInativos}
+            valorInicial
+            onChange={e => {
+              onChangeImprimirEstudantesInativos(e.target.value);
+            }}
+            value={imprimirEstudantesInativos}
+            desabilitado={desabilitarCampoEstudantesInativos}
           />
         </div>
       </div>
