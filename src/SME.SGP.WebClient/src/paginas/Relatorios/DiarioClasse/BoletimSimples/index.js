@@ -81,32 +81,31 @@ const BoletimSimples = () => {
   };
 
   const onClickBotaoPrincipal = async () => {
-    console.log('filtro ==> ', filtro);
-    // let confirmou = false;
+    let confirmou = false;
 
-    // if (filtro.modelo === '2') {
-    //   confirmou = await confirmar(
-    //     'Modelo de boletim detalhado',
-    //     'O modelo de boletim detalhado vai gerar pelo menos uma página para cada estudante. Deseja continuar?',
-    //     '',
-    //     'Cancelar',
-    //     'Continuar'
-    //   );
-    // }
+    if (filtro.modelo === '2') {
+      confirmou = await confirmar(
+        'Modelo de boletim detalhado',
+        'O modelo de boletim detalhado vai gerar pelo menos uma página para cada estudante. Deseja continuar?',
+        '',
+        'Cancelar',
+        'Continuar'
+      );
+    }
 
-    // if (!confirmou) {
-    //   setClicouBotaoGerar(true);
-    //   const resultado = await ServicoBoletimSimples.imprimirBoletim({
-    //     ...filtro,
-    //     alunosCodigo: itensSelecionados,
-    //   });
-    //   if (resultado.erro)
-    //     erro('Não foi possível solicitar a impressão do Boletim');
-    //   else
-    //     sucesso(
-    //       'Solicitação de geração do relatório gerada com sucesso. Em breve você receberá uma notificação com o resultado.'
-    //     );
-    // }
+    if (!confirmou) {
+      setClicouBotaoGerar(true);
+      const resultado = await ServicoBoletimSimples.imprimirBoletim({
+        ...filtro,
+        alunosCodigo: itensSelecionados,
+      });
+      if (resultado.erro)
+        erro('Não foi possível solicitar a impressão do Boletim');
+      else
+        sucesso(
+          'Solicitação de geração do relatório gerada com sucesso. Em breve você receberá uma notificação com o resultado.'
+        );
+    }
   };
 
   const colunas = [
