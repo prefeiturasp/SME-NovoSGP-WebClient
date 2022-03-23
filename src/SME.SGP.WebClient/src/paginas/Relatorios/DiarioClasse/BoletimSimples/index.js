@@ -51,7 +51,7 @@ const BoletimSimples = () => {
 
     setFiltro({
       anoLetivo: valoresFiltro.anoLetivo,
-      modalidade: Number(valoresFiltro.modalidadeId),
+      modalidade: valoresFiltro.modalidadeId,
       dreCodigo: valoresFiltro.dreCodigo,
       ueCodigo: valoresFiltro.ueCodigo,
       turmaCodigo: valoresFiltro.turmasId,
@@ -61,7 +61,7 @@ const BoletimSimples = () => {
           : 0,
       consideraHistorico: valoresFiltro.consideraHistorico,
       opcaoEstudanteId: valoresFiltro.opcaoEstudanteId,
-      modelo: Number(valoresFiltro.modeloBoletimId),
+      modelo: valoresFiltro.modeloBoletimId,
       filtroEhValido: !naoLimparItensSelecionados,
       consideraInativo,
     });
