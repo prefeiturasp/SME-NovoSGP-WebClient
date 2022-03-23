@@ -43,7 +43,6 @@ const ListaBimestres = props => {
               <ListaAlunos
                 componenteCurricularId={componenteCurricularIdSelecionado}
                 territorioSaber={territorioSaber}
-                bimestreLista={bimestre.id}
               />
             </TabPane>
           );

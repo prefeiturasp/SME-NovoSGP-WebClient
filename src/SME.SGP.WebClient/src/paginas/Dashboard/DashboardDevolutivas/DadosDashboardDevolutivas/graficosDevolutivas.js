@@ -5,6 +5,7 @@ import { ModalidadeDTO } from '~/dtos';
 import QtdDevolutivasRegistradasEstimada from './QtdDevolutivasRegistradasEstimada/qtdDevolutivasRegistradasEstimada';
 import QtdDiarioBordoDevolutiva from './QtdDiarioBordoDevolutiva/qtdDiarioBordoDevolutiva';
 import QtdDiariosBordoCampoReflexoesReplanejamentoPreenchido from './QtdDiariosBordoCampoReflexoesReplanejamentoPreenchido/qtdDiariosBordoCampoReflexoesReplanejamentoPreenchido';
+import TotalDevolutivasPorDRE from './TotalDevolutivasPorDRE/totalDevolutivasPorDRE';
 
 const GraficosDevolutivas = () => {
   const anoLetivo = useSelector(
@@ -28,6 +29,16 @@ const GraficosDevolutivas = () => {
 
   return anoLetivo && dre && ue && modalidade && !naoEhInfantil ? (
     <>
+      {dre?.codigo === OPCAO_TODOS ? (
+        <TotalDevolutivasPorDRE
+          anoLetivo={anoLetivo}
+          dreId={dreId}
+          ueId={ueId}
+          modalidade={modalidade}
+        />
+      ) : (
+        <></>
+      )}
       <QtdDevolutivasRegistradasEstimada
         anoLetivo={anoLetivo}
         dreId={dreId}
@@ -35,12 +46,6 @@ const GraficosDevolutivas = () => {
         modalidade={modalidade}
       />
       <QtdDiarioBordoDevolutiva
-        anoLetivo={anoLetivo}
-        dreId={dreId}
-        ueId={ueId}
-        modalidade={modalidade}
-      />
-      <QtdDiariosBordoCampoReflexoesReplanejamentoPreenchido
         anoLetivo={anoLetivo}
         dreId={dreId}
         ueId={ueId}

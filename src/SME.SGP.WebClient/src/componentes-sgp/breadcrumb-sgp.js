@@ -2,13 +2,13 @@ import React, { useEffect, useState } from 'react';
 import { Breadcrumb } from 'antd';
 import { Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
+import styled from 'styled-components';
 import { Base } from '../componentes/colors';
 import { store } from '../redux';
-import styled from 'styled-components';
 import { rotaAtiva } from '../redux/modulos/navegacao/actions';
-import modalidade from '~/dtos/modalidade';
 import { obterDescricaoNomeMenu } from '~/servicos/servico-navegacao';
 import RotasDto from '~/dtos/rotasDto';
+import { validarNavegacaoTela } from '~/utils';
 
 const BreadcrumbBody = styled.div`
   padding: 10px 0 5px 15px !important;
@@ -21,7 +21,7 @@ const BreadcrumbBody = styled.div`
     text-decoration: underline;
   }
   .icone-seta {
-    margin-right: 10px;
+    margin-right: 0px;
     margin-left: 10px;
     color: ${Base.Roxo};
   }
@@ -36,7 +36,7 @@ const BreadcrumbSgp = () => {
     state => state.filtro.modalidades
   );
 
-  const rotas = NavegacaoStore.rotas;
+  const { rotas } = NavegacaoStore;
 
   const [itens, setItens] = useState([]);
 
@@ -145,7 +145,7 @@ const BreadcrumbSgp = () => {
         newItens.push(
           criarItemBreadcrumb(
             menu,
-            item.path + '-menu' + i,
+            `${item.path}-menu${i}`,
             true,
             false,
             item.icone,
@@ -168,7 +168,7 @@ const BreadcrumbSgp = () => {
   };
 
   const ocultarBreadcrumb = () => {
-    const path = itens[0].path;
+    const { path } = itens[0];
     if (itens.length === 1) {
       return (
         path === '/' ||
@@ -186,22 +186,31 @@ const BreadcrumbSgp = () => {
           <Breadcrumb.Item
             key={item.path}
             separator=""
-            hidden={ocultarBreadcrumb()}
           >
-            <Link hidden={item.ehEstatico} to={item.path}>
-              <i
-                className={item.icone}
-                title={item.breadcrumbName}
-                title={item.dicaIcone}
-              />
-              <span hidden={item.path === '/'}>{item.breadcrumbName}</span>
+            <Link
+              hidden={item.ehEstatico}
+              to={item.path}
+              onClick={e => validarNavegacaoTela(e, item.path)}
+            >
+              <i className={item.icone} title={item.breadcrumbName} />
+              <span hidden={item.path === '/'} style={{ marginLeft: 8 }}>
+                {item.breadcrumbName}
+              </span>
+              <span
+                hidden={item.path !== '/' && item.icone !== 'fas fa-home'}
+                style={{ marginLeft: 8 }}
+              >
+                {item.breadcrumbName}
+              </span>
             </Link>
             <i
               hidden={!item.ehEstatico}
               className={item.icone}
               title={item.dicaIcone}
             />
-            <span hidden={!item.ehEstatico || item.path === '/'}>
+            <span
+              hidden={!item.ehEstatico}
+              style={{ marginLeft: 8 }}>
               {item.breadcrumbName}
             </span>
             <i

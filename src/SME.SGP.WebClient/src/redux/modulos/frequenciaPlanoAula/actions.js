@@ -179,3 +179,8 @@ export const setDadosModalAnotacaoFrequencia = payload => ({
   type: '@frequenciaPlanoAula/setDadosModalAnotacaoFrequencia',
   payload,
 });
+
+export const setAulaIdPodeEditar = payload => ({
+  type: '@frequenciaPlanoAula/setAulaIdPodeEditar',
+  payload,
+});

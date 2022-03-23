@@ -48,6 +48,10 @@ class ServicoEvento {
         };
       });
   };
+
+  obterTiposEventos = () => {
+    return api.get('v1/calendarios/eventos/tipos/listar');
+  };
 }
 
 export default new ServicoEvento();

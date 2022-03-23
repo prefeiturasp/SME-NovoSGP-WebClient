@@ -10,7 +10,7 @@ class ServicoDiarioBordo {
   };
 
   salvarEditarObservacao = (diarioBordoId, dados) => {
-    const observacaoId = dados.id;
+    const observacaoId = dados?.id;
     if (observacaoId) {
       const url = `${urlPadrao}/observacoes/${observacaoId}`;
       return api.put(url, dados);
@@ -27,7 +27,7 @@ class ServicoDiarioBordo {
     const { observacoesUsuario } = state;
     const { dadosObservacoes } = observacoesUsuario;
 
-    const observacaoId = dados.id;
+    const observacaoId = dados?.id;
 
     if (observacaoId) {
       const item = dadosObservacoes.find(e => e.id === dados.id);
@@ -67,8 +67,10 @@ class ServicoDiarioBordo {
     dispatch(setDadosObservacoesUsuario([...dadosObservacoes]));
   };
 
-  obterDiarioBordo = aulaId => {
-    return api.get(`${urlPadrao}/${aulaId}`);
+  obterDiarioBordo = (aulaId, componenteCurricularId) => {
+    return api.get(
+      `${urlPadrao}/${aulaId}?componenteCurricularId=${componenteCurricularId}`
+    );
   };
 
   salvarDiarioBordo = (params, idDiarioBordo) => {
@@ -136,11 +138,29 @@ class ServicoDiarioBordo {
     return api.get(`${urlPadrao}/detalhes/${diarioBordoId}`);
   };
 
-  obterNofiticarUsuarios = ({ turmaId, observacaoId = '' }) => {
+  obterNofiticarUsuarios = ({ turmaId, observacaoId = '', diarioBordoId }) => {
+    return api.get(`${urlPadrao}/notificacoes/usuarios`, {
+      params: {
+        turmaId,
+        observacaoId,
+        diarioBordoId,
+      },
+    });
+  };
+
+  obterDiarioBordoListao = (
+    turmaCodigo,
+    dataInicio,
+    dataFim,
+    componenteCurricularId
+  ) => {
     return api.get(
-      `${urlPadrao}/notificacoes/usuarios?turmaId=${turmaId}&observacaoId=${observacaoId}`
+      `${urlPadrao}/turmas/${turmaCodigo}/inicio/${dataInicio}/fim/${dataFim}` +
+        `/componentes-curriculares/${componenteCurricularId}`
     );
   };
+
+  salvarDiarioBordoListao = params => api.post(`${urlPadrao}/salvar`, params);
 }
 
 export default new ServicoDiarioBordo();

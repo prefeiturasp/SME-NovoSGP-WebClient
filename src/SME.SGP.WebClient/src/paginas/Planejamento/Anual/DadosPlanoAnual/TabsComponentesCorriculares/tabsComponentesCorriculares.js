@@ -25,6 +25,10 @@ const TabsComponentesCorriculares = props => {
     store => store.planoAnual.listaComponentesCheck
   );
 
+  const modalidadesFiltroPrincipal = useSelector(
+    store => store.filtro.modalidades
+  );
+
   const usuario = useSelector(store => store.usuario);
   const { turmaSelecionada } = usuario;
 
@@ -79,13 +83,14 @@ const TabsComponentesCorriculares = props => {
           componente,
         })
       );
-
-      ServicoPlanoAnual.carregarDadosPlanoAnualPorComponenteCurricular(
-        turmaSelecionada.id,
-        codigoComponente,
-        dadosBimestre.id,
-        dadosBimestre.bimestre
-      );
+      if (modalidadesFiltroPrincipal.length) {
+        ServicoPlanoAnual.carregarDadosPlanoAnualPorComponenteCurricular(
+          turmaSelecionada.id,
+          codigoComponente,
+          dadosBimestre.id,
+          dadosBimestre.bimestre
+        );
+      }
     },
     [
       dispatch,
@@ -104,7 +109,10 @@ const TabsComponentesCorriculares = props => {
         if (mudouTurma) {
           dispatch(setListaComponentesCheck([]));
         }
-        if (listaComponentesCurricularesPlanejamento.length) {
+        if (
+          listaComponentesCurricularesPlanejamento.length &&
+          modalidadesFiltroPrincipal.length
+        ) {
           dispatch(setExibirLoaderPlanoAnual(true));
           listaComponentesCurricularesPlanejamento.map(async item => {
             if (

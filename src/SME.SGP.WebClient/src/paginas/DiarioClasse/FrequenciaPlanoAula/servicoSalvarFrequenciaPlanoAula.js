@@ -81,14 +81,6 @@ class ServicoSalvarFrequenciaPlanoAula {
         );
         objetivosEspecificosParaAulaValidarObrigatoriedade();
       }
-
-      if (!dadosPlanoAula.desenvolvimentoAula) {
-        errosValidacaoPlano.push(
-          'Desenvolvimento da aula - A sessão de desenvolvimento da aula deve ser preenchida'
-        );
-        desenvolvimentoDaAulaValidaObrigatoriedade();
-      }
-
       const perfil =
         perfis && perfis.perfis.find(item => item.nomePerfil === 'PAP');
       if (perfil && !dadosPlanoAula.objetivosAprendizagemComponente.length) {
@@ -98,14 +90,14 @@ class ServicoSalvarFrequenciaPlanoAula {
       if (
         exibirSwitchEscolhaObjetivos
           ? checkedExibirEscolhaObjetivos &&
-            componenteCurricular.possuiObjetivos &&
-            !ServicoPlanoAula.temPeloMenosUmObjetivoSelecionado(
-              dadosPlanoAula.objetivosAprendizagemComponente
-            )
+          componenteCurricular.possuiObjetivos &&
+          !ServicoPlanoAula.temPeloMenosUmObjetivoSelecionado(
+            dadosPlanoAula.objetivosAprendizagemComponente
+          )
           : componenteCurricular.possuiObjetivos &&
-            !ServicoPlanoAula.temPeloMenosUmObjetivoSelecionado(
-              dadosPlanoAula.objetivosAprendizagemComponente
-            )
+          !ServicoPlanoAula.temPeloMenosUmObjetivoSelecionado(
+            dadosPlanoAula.objetivosAprendizagemComponente
+          )
       ) {
         errosValidacaoPlano.push(
           'Objetivos de aprendizagem - É obrigatório selecionar ao menos um objetivo de aprendizagem'
@@ -159,7 +151,6 @@ class ServicoSalvarFrequenciaPlanoAula {
 
     const valorParaSalvar = {
       descricao: dadosPlanoAula.descricao,
-      desenvolvimentoAula: dadosPlanoAula.desenvolvimentoAula,
       recuperacaoAula: dadosPlanoAula.recuperacaoAula,
       licaoCasa: dadosPlanoAula.licaoCasa,
       aulaId,
@@ -186,7 +177,6 @@ class ServicoSalvarFrequenciaPlanoAula {
       dadosPlanoAula.auditoria = { ...auditoria };
       dadosPlanoAula.id = resposta.data.id;
       dadosPlanoAula.descricao = resposta.data.descricao;
-      dadosPlanoAula.desenvolvimentoAula = resposta.data.desenvolvimentoAula;
       dadosPlanoAula.recuperacaoAula = resposta.data.recuperacaoAula;
       dadosPlanoAula.licaoCasa = resposta.data.licaoCasa;
       dispatch(setDadosPlanoAula({ ...dadosPlanoAula }));

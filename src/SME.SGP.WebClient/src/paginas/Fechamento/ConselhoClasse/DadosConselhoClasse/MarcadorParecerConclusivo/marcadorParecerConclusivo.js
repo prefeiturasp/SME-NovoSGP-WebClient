@@ -31,15 +31,14 @@ const MarcadorParecerConclusivo = () => {
   const [parecer, setParecer] = useState('');
 
   useEffect(() => {
-    if (marcadorParecerConclusivo) {
-      const { nome } = marcadorParecerConclusivo;
+    const nomeConcatenado = marcadorParecerConclusivo?.emAprovacao
+      ? `${marcadorParecerConclusivo?.nome} (Aguardando aprovação)`
+      : marcadorParecerConclusivo?.nome;
+    const nomeParecer =
+      Object.keys(marcadorParecerConclusivo).length &&
+      `Parecer conclusivo: ${nomeConcatenado || 'Sem parecer'}`;
 
-      if (nome) {
-        setParecer(`Parecer conclusivo: ${nome}`);
-      } else {
-        setParecer('');
-      }
-    }
+    setParecer(nomeParecer);
   }, [marcadorParecerConclusivo]);
 
   const montarDescricao = () => {
@@ -73,7 +72,7 @@ const MarcadorParecerConclusivo = () => {
   return (
     <>
       {parecer ? (
-        <div className="col-m-12 d-flex justify-content-end mb-2">
+        <div className="col-m-12 d-flex ml-3 my-3">
           {marcadorParecerConclusivo?.emAprovacao ? (
             <Tooltip title="Aguardando aprovação">
               <LabelParecer>

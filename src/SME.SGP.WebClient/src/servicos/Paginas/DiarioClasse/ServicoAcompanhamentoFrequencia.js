@@ -21,7 +21,7 @@ class ServicoAcompanhamentoFrequencia {
     bimestre
   ) => {
     return api.get(
-      `${urlPadrao}/turmas/${turmaId}/componentes-curriculares/${componenteCurricularId}/alunos/${alunoCodigo}/bimestres/${bimestre}/justificativas`
+      `${urlPadrao}/turmas/${turmaId}/componentes-curriculares/${componenteCurricularId}/alunos/${alunoCodigo}/bimestres/${bimestre}/justificativas/`
     );
   };
 
@@ -30,11 +30,12 @@ class ServicoAcompanhamentoFrequencia {
     componenteCurricularId,
     alunoCodigo,
     bimestre,
+    semestre,
     numeroPagina,
     numeroRegistros
   ) => {
     const url = `${urlPadrao}/turmas/${turmaId}/componentes-curriculares/${componenteCurricularId ||
-      0}/alunos/${alunoCodigo}/bimestres/${bimestre}/justificativas?numeroPagina=${numeroPagina ||
+      0}/alunos/${alunoCodigo}/bimestres/${bimestre}/justificativas/semestre/${semestre}?numeroPagina=${numeroPagina ||
       1}&numeroRegistros=${numeroRegistros}`;
 
     return api.get(url);
@@ -50,6 +51,10 @@ class ServicoAcompanhamentoFrequencia {
     return api.get(url, {
       params: { componenteCurricularId },
     });
+  };
+
+  gerar = params => {
+    return api.post('/v1/relatorios/acompanhamento-frequencia', params);
   };
 }
 

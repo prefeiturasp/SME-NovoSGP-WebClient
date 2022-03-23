@@ -46,6 +46,10 @@ const MontarListaFrequencia = () => {
     state => state.frequenciaPlanoAula.exibirCardCollapseFrequencia
   );
 
+  const aulaIdPodeEditar = useSelector(
+    state => state.frequenciaPlanoAula?.aulaIdPodeEditar
+  );
+
   const onClickFrequencia = () => {
     const permiteRegistroFrequencia = !listaDadosFrequencia.desabilitado;
     const frequenciaId = listaDadosFrequencia.id;
@@ -55,7 +59,7 @@ const MontarListaFrequencia = () => {
         ? somenteConsulta || !permissoesTela.podeAlterar
         : somenteConsulta || !permissoesTela.podeIncluir;
 
-    if (!desabilitarCampos && permiteRegistroFrequencia) {
+    if (!desabilitarCampos && permiteRegistroFrequencia && aulaIdPodeEditar) {
       let temAulas = false;
       if (listaDadosFrequencia?.listaFrequencia?.length) {
         const aulas = listaDadosFrequencia.listaFrequencia.filter(
@@ -82,7 +86,7 @@ const MontarListaFrequencia = () => {
     <>
       {componenteCurricular?.codigoComponenteCurricular &&
         dataSelecionada &&
-        aulaId && (
+        aulaId ? (
           <div className="col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-2">
             <CardCollapse
               key="frequencia-collapse"
@@ -125,7 +129,7 @@ const MontarListaFrequencia = () => {
               )}
             </CardCollapse>
           </div>
-        )}
+        ) : <></>}
     </>
   );
 };

@@ -5,8 +5,8 @@ import { useSelector } from 'react-redux';
 import { DataTable } from '~/componentes';
 import tipoFrequencia from '~/dtos/tipoFrequencia';
 import tipoIndicativoFrequencia from '~/dtos/tipoIndicativoFrequencia';
-import ModalAnotacoesFrequencia from '~/paginas/DiarioClasse/FrequenciaPlanoAula/ModalAnotacoes/modalAnotacoes';
 import { verificaSomenteConsulta } from '~/servicos/servico-navegacao';
+import ModalAnotacoesListaFrequencia from './componentes/modalAnotacoesListaFrequencia';
 import SinalizacaoAEE from '../SinalizacaoAEE/sinalizacaoAEE';
 import BotaoAnotacao from './componentes/botaoAnotacao';
 import CampoPreDefinirFrequencia from './componentes/campoPreDefinirFrequencia';
@@ -46,15 +46,26 @@ const ListaFrequencia = props => {
   );
 
   const [desabilitarCampos, setDesabilitarCampos] = useState(false);
+  const aulaIdPodeEditar = useSelector(state => state.frequenciaPlanoAula?.aulaIdPodeEditar);
 
   useEffect(() => {
     const somenteConsulta = verificaSomenteConsulta(permissoesTela);
-    const desabilitar =
+    let desabilitar =
       frequenciaId > 0
         ? somenteConsulta || !permissoesTela.podeAlterar
         : somenteConsulta || !permissoesTela.podeIncluir;
-    setDesabilitarCampos(desabilitar);
-    if (!temPeriodoAberto) setDesabilitarCampos(!temPeriodoAberto);
+
+    if (desabilitar) {
+      setDesabilitarCampos(desabilitar);
+      return;
+    };
+    
+    if (!temPeriodoAberto || !aulaIdPodeEditar) {
+      desabilitar = true;
+    };
+    
+    setDesabilitarCampos(desabilitar); 
+        
   }, [frequenciaId, permissoesTela, temPeriodoAberto, componenteCurricular]);
 
   const marcaPresencaFaltaTodasAulas = (aluno, tipo) => {
@@ -346,7 +357,7 @@ const ListaFrequencia = props => {
 
   return (
     <>
-      <ModalAnotacoesFrequencia
+      <ModalAnotacoesListaFrequencia
         dadosListaFrequencia={dataSource}
         ehInfantil={ehInfantil}
         aulaId={aulaId}

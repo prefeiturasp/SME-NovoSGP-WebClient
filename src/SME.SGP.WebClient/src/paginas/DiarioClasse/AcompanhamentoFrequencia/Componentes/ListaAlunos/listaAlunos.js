@@ -1,6 +1,6 @@
 import { Tooltip } from 'antd';
 import PropTypes from 'prop-types';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Loader } from '~/componentes';
 import AusenciasEstudante from '~/componentes-sgp/ListaFrequenciaPorBimestre/ausenciasEstudante';
@@ -8,22 +8,28 @@ import BtnExpandirAusenciaEstudante from '~/componentes-sgp/ListaFrequenciaPorBi
 import ModalAnotacoes from '~/componentes-sgp/ListaFrequenciaPorBimestre/modalAnotacoes';
 import NomeEstudanteLista from '~/componentes-sgp/NomeEstudanteLista/nomeEstudanteLista';
 import Ordenacao from '~/componentes-sgp/Ordenacao/ordenacao';
-import { Base } from '~/componentes/colors';
-import { setExpandirLinhaFrequenciaAluno } from '~/redux/modulos/acompanhamentoFrequencia/actions';
+import { Base, Colors } from '~/componentes/colors';
+import { BIMESTRE_FINAL } from '~/constantes';
+import {
+  setExibirModalImpressao,
+  setExpandirLinhaFrequenciaAluno,
+} from '~/redux/modulos/acompanhamentoFrequencia/actions';
 import { erros } from '~/servicos';
 import ServicoAcompanhamentoFrequencia from '~/servicos/Paginas/DiarioClasse/ServicoAcompanhamentoFrequencia';
 import { ehTurmaInfantil } from '~/servicos/Validacoes/validacoesInfatil';
+import ModalImpressao from '../ModalImpressao/modalImpressao';
 import {
   MarcadorAulas,
   Marcadores,
   TabelaColunasFixas,
+  BotaoCustomizado,
 } from './listaAlunos.css';
 
 const ListaAlunos = props => {
   const usuario = useSelector(store => store.usuario);
   const { turmaSelecionada } = usuario;
 
-  const { componenteCurricularId, territorioSaber, bimestreLista } = props;
+  const { componenteCurricularId, territorioSaber } = props;
   const modalidadesFiltroPrincipal = useSelector(
     store => store.filtro.modalidades
   );
@@ -32,42 +38,50 @@ const ListaAlunos = props => {
     store => store.listaFrequenciaPorBimestre.exibirModalAnotacao
   );
 
-  const { bimestreSelecionado } = useSelector(
-    store => store.acompanhamentoFrequencia
+  const bimestreSelecionado = useSelector(
+    store => store.acompanhamentoFrequencia.bimestreSelecionado
   );
 
-  const { id: turmaId } = turmaSelecionada;
+  const exibirModalImpressao = useSelector(
+    store => store.acompanhamentoFrequencia.exibirModalImpressao
+  );
+
+  const { id: turmaId, periodo: semestre } = turmaSelecionada;
 
   const dispatch = useDispatch();
 
   const [carregandoListaAlunos, setCarregandoListaAlunos] = useState(false);
-  const [dadosBimestre, setDadosBimestre] = useState(null);
+  const [dadosBimestre, setDadosBimestre] = useState([]);
+
+  const obterAlunos = useCallback(async () => {
+    setDadosBimestre([]);
+    setCarregandoListaAlunos(true);
+    const retorno = await ServicoAcompanhamentoFrequencia.obterAcompanhamentoFrequenciaPorBimestre(
+      turmaSelecionada?.id,
+      componenteCurricularId,
+      bimestreSelecionado,
+      territorioSaber
+    )
+      .catch(e => erros(e))
+      .finally(() => setCarregandoListaAlunos(false));
+
+    const dados = retorno?.data ? retorno?.data : [];
+    setDadosBimestre(dados);
+  }, [turmaSelecionada, componenteCurricularId, bimestreSelecionado]);
 
   useEffect(() => {
-    const obterAlunos = async () => {
-      setCarregandoListaAlunos(true);
-      const retorno = await ServicoAcompanhamentoFrequencia.obterAcompanhamentoFrequenciaPorBimestre(
-        turmaSelecionada?.id,
-        componenteCurricularId,
-        bimestreSelecionado,
-        territorioSaber
-      ).catch(e => erros(e));
-
-      if (retorno?.data) {
-        setDadosBimestre(retorno?.data);
-      }
-      setCarregandoListaAlunos(false);
-    };
-    if (
-      componenteCurricularId &&
-      turmaId &&
-      bimestreSelecionado &&
-      String(bimestreLista) === String(bimestreSelecionado)
-    ) {
+    if (componenteCurricularId && turmaId && bimestreSelecionado) {
       dispatch(setExpandirLinhaFrequenciaAluno([]));
-      obterAlunos();
+      setDadosBimestre([]);
+      obterAlunos(componenteCurricularId, bimestreSelecionado);
     }
-  }, [componenteCurricularId, turmaId, bimestreSelecionado]);
+  }, [
+    componenteCurricularId,
+    turmaId,
+    bimestreSelecionado,
+    dispatch,
+    obterAlunos,
+  ]);
 
   const onChangeOrdenacao = alunosOrdenados => {
     dispatch(setExpandirLinhaFrequenciaAluno([]));
@@ -80,9 +94,17 @@ const ListaAlunos = props => {
       {dadosBimestre ? (
         <>
           {exibirModalAnotacao ? <ModalAnotacoes /> : ''}
+          {exibirModalImpressao ? (
+            <ModalImpressao
+              dadosAlunos={dadosBimestre?.frequenciaAlunos}
+              componenteCurricularId={componenteCurricularId}
+            />
+          ) : (
+            ''
+          )}
           <TabelaColunasFixas>
             <div className="row">
-              <div className="col-md-6 col-sm-12">
+              <div className="col-md-6 col-sm-12 d-flex">
                 <Ordenacao
                   className="mb-2"
                   conteudoParaOrdenar={dadosBimestre?.frequenciaAlunos}
@@ -92,6 +114,16 @@ const ListaAlunos = props => {
                     onChangeOrdenacao(retorno);
                   }}
                 />
+                {String(bimestreSelecionado) !== BIMESTRE_FINAL && (
+                  <BotaoCustomizado
+                    icon="print"
+                    className="ml-2"
+                    color={Colors.Azul}
+                    border
+                    onClick={() => dispatch(setExibirModalImpressao(true))}
+                    id="btn-imprimir-frequencia"
+                  />
+                )}
               </div>
 
               <Marcadores className="col-md-6 col-sm-12 d-flex justify-content-end">
@@ -126,17 +158,17 @@ const ListaAlunos = props => {
                       <th className="col-linha-quatro" colSpan="2">
                         Nome
                       </th>
-                      <th className="col-linha-dois">Ausências no Bimestre</th>
+                      <th className="col-linha-dois">Ausências</th>
                       {!ehTurmaInfantil(
                         modalidadesFiltroPrincipal,
                         turmaSelecionada
                       ) ? (
-                        <th className="col-linha-dois">
-                          Compensações de ausência
-                        </th>
+                        <th className="col-linha-dois">Compensações</th>
                       ) : (
                         <></>
                       )}
+                      <th className="col-linha-dois">Presenças</th>
+                      <th className="col-linha-dois">Remoto</th>
                       <th className="col-linha-dois">Frequência</th>
                     </tr>
                   </thead>
@@ -216,6 +248,26 @@ const ListaAlunos = props => {
                             ) : (
                               <></>
                             )}
+                            <td
+                              className="col-valor-linha-dois"
+                              style={{
+                                borderRight: data?.marcadorFrequencia
+                                  ? `solid 1px ${Base.CinzaBotao}`
+                                  : `solid 1px ${Base.CinzaDesabilitado}`,
+                              }}
+                            >
+                              {data.presencas}
+                            </td>
+                            <td
+                              className="col-valor-linha-dois"
+                              style={{
+                                borderRight: data?.marcadorFrequencia
+                                  ? `solid 1px ${Base.CinzaBotao}`
+                                  : `solid 1px ${Base.CinzaDesabilitado}`,
+                              }}
+                            >
+                              {data.remotos}
+                            </td>
                             <td className="col-valor-linha-dois">
                               {data?.frequencia ? `${data.frequencia}%` : ''}
                               {data.ausencias > 0 &&
@@ -232,6 +284,7 @@ const ListaAlunos = props => {
                             turmaId={turmaId}
                             codigoAluno={data.alunoRf}
                             componenteCurricularId={componenteCurricularId}
+                            semestre={semestre}
                           />
                         </>
                       );
@@ -252,13 +305,11 @@ const ListaAlunos = props => {
 ListaAlunos.propTypes = {
   componenteCurricularId: PropTypes.string,
   territorioSaber: PropTypes.bool,
-  bimestreLista: PropTypes.number,
 };
 
 ListaAlunos.defaultProps = {
   componenteCurricularId: PropTypes.string,
   territorioSaber: false,
-  bimestreLista: '1',
 };
 
 export default ListaAlunos;

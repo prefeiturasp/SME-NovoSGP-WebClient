@@ -29,6 +29,8 @@ const Container = styled(Modal)`
     color: #42474a;
     font-size: 25px;
     padding-bottom: 7px;
+    font-size: ${({ fontSizeTitulo }) => fontSizeTitulo}px !important;
+    font-weight: ${({ tipoFonte }) => tipoFonte};
   }
   .ant-modal-close-x {
     font-style: normal;
@@ -80,6 +82,8 @@ const ModalConteudoHtml = props => {
     paddingRight,
     colorBotaoSecundario,
     botoesRodape,
+    fontSizeTitulo,
+    tipoFonte,
   } = props;
   return (
     <Container
@@ -94,6 +98,8 @@ const ModalConteudoHtml = props => {
       width={width}
       paddingBottom={paddingBottom}
       paddingRight={paddingRight}
+      fontSizeTitulo={fontSizeTitulo}
+      tipoFonte={tipoFonte}
       footer={
         botoesRodape ||
         (tituloAtencao || perguntaAtencao ? (
@@ -119,6 +125,7 @@ const ModalConteudoHtml = props => {
                         border
                         className="mr-2 padding-btn-confirmacao"
                         onClick={onConfirmacaoSecundaria}
+                        disabled={loader}
                       />
                       <Button
                         id={shortid.generate()}
@@ -128,7 +135,7 @@ const ModalConteudoHtml = props => {
                         bold
                         className="padding-btn-confirmacao"
                         onClick={onConfirmacaoPrincipal}
-                        disabled={desabilitarBotaoPrincipal}
+                        disabled={desabilitarBotaoPrincipal || loader}
                       />
                     </div>
                   </CardBody>
@@ -148,6 +155,7 @@ const ModalConteudoHtml = props => {
               className="mr-2 padding-btn-confirmacao"
               onClick={onConfirmacaoSecundaria}
               hidden={esconderBotaoSecundario}
+              disabled={loader}
             />
             <Button
               id={shortid.generate()}
@@ -157,7 +165,7 @@ const ModalConteudoHtml = props => {
               bold
               className="padding-btn-confirmacao"
               onClick={onConfirmacaoPrincipal}
-              disabled={desabilitarBotaoPrincipal}
+              disabled={desabilitarBotaoPrincipal || loader}
               hidden={esconderBotaoPrincipal}
             />
           </div>
@@ -170,7 +178,7 @@ const ModalConteudoHtml = props => {
 };
 
 ModalConteudoHtml.propTypes = {
-  width: PropTypes.number,
+  width: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   desabilitarBotaoPrincipal: PropTypes.bool,
   fecharAoClicarFora: PropTypes.bool,
   fecharAoClicarEsc: PropTypes.bool,
@@ -180,6 +188,8 @@ ModalConteudoHtml.propTypes = {
   paddingRight: PropTypes.string,
   colorBotaoSecundario: PropTypes.string,
   botoesRodape: PropTypes.node,
+  fontSizeTitulo: PropTypes.string,
+  tipoFonte: PropTypes.string,
 };
 
 ModalConteudoHtml.defaultProps = {
@@ -194,6 +204,8 @@ ModalConteudoHtml.defaultProps = {
   paddingRight: '20',
   colorBotaoSecundario: 'Roxo',
   botoesRodape: null,
+  fontSizeTitulo: '24',
+  tipoFonte: '',
 };
 
 export default ModalConteudoHtml;
