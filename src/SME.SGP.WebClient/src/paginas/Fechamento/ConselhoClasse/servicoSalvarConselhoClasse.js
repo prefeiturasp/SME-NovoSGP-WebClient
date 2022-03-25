@@ -257,8 +257,8 @@ class ServicoSalvarConselhoClasse {
 
     const notaDto = {
       justificativa,
-      nota: ehNota ? nota : '',
-      conceito: !ehNota ? conceito : '',
+      nota: ehNota ? nota : null,
+      conceito: !ehNota ? conceito : null,
       codigoComponenteCurricular,
     };
 
