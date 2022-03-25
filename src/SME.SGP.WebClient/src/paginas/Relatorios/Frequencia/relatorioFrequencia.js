@@ -311,8 +311,8 @@ const RelatorioFrequencia = () => {
   }, [anosEscolares]);
 
   const escolherChamadaEndpointComponeteCurricular = useCallback(() => {
-    const ehOpcaoTodas = turmasCodigo === "-99" || turmasCodigo.find(item => item === OPCAO_TODOS);
-
+    const ehOpcaoTodas = turmasCodigo === "-99" || turmasCodigo?.find(item => item === OPCAO_TODOS) || turmasCodigo === undefined 
+    
     if (ehInfantil) {
       const turmas = ehOpcaoTodas
         ? listaTurmas
