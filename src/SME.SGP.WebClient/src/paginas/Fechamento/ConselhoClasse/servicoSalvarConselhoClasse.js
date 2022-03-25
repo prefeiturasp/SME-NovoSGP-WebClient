@@ -10,7 +10,6 @@ import {
   setNotaConceitoPosConselhoAtual,
   setGerandoParecerConclusivo,
   setExibirLoaderGeralConselhoClasse,
-  setAtualizarEmAprovacao,
   setBimestreAtual,
   setDadosIniciaisListasNotasConceitos,
 } from '~/redux/modulos/conselhoClasse/actions';
@@ -212,6 +211,7 @@ class ServicoSalvarConselhoClasse {
       fechamentoTurmaId,
       alunoCodigo,
       tipoNota,
+      turmaCodigo,
     } = dadosPrincipaisConselhoClasse;
 
     const {
@@ -276,13 +276,20 @@ class ServicoSalvarConselhoClasse {
         retorno.data.conselhoClasseId;
       dadosPrincipaisConselhoClasse.fechamentoTurmaId =
         retorno.data.fechamentoTurmaId;
-      dispatch(
-        setAtualizarEmAprovacao({
-          ...retorno.data,
-          ...notaDto,
-          ehNota,
-        })
+
+      const { consideraHistorico } = state.usuario.turmaSelecionada;
+      const bimestre =
+        bimestreAtual?.valor === 'final' ? 0 : bimestreAtual?.valor;
+
+      await ServicoConselhoClasse.obterNotasConceitosConselhoClasse(
+        conselhoClasseId,
+        fechamentoTurmaId,
+        alunoCodigo,
+        turmaCodigo,
+        bimestre,
+        consideraHistorico
       );
+
       dispatch(setDadosPrincipaisConselhoClasse(dadosPrincipaisConselhoClasse));
 
       const { auditoria } = retorno.data;
