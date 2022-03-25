@@ -380,6 +380,7 @@ const DiarioBordo = ({ match }) => {
   };
 
   const validaAntesDoSubmit = (form, clicouBtnSalvar) => {
+    setCarregandoGeral(true);
     const arrayCampos = Object.keys(valoresIniciais);
     arrayCampos.forEach(campo => {
       form.setFieldTouched(campo, true, true);
@@ -396,6 +397,7 @@ const DiarioBordo = ({ match }) => {
       if (form.isValid || Object.keys(form.errors).length === 0) {
         return salvarDiarioDeBordo(form.values, form, clicouBtnSalvar);
       }
+      setCarregandoGeral(false);
       return false;
     });
   };
