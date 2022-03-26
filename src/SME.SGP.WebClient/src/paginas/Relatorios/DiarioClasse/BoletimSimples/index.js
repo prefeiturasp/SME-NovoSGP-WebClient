@@ -59,6 +59,7 @@ const BoletimSimples = () => {
       opcaoEstudanteId: valoresFiltro.opcaoEstudanteId,
       modelo: valoresFiltro.modeloBoletimId,
       filtroEhValido: !naoLimparItensSelecionados,
+      consideraInativo: valoresFiltro?.imprimirEstudantesInativos,
     });
     if (!naoLimparItensSelecionados) {
       setItensSelecionados([]);

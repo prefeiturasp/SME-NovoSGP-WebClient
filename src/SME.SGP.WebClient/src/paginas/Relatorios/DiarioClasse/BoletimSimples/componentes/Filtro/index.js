@@ -1,7 +1,12 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 
-import { CheckboxComponent, Loader, SelectComponent } from '~/componentes';
+import {
+  CheckboxComponent,
+  Loader,
+  RadioGroupButton,
+  SelectComponent,
+} from '~/componentes';
 import { FiltroHelper } from '~/componentes-sgp';
 
 import { ModalidadeDTO } from '~/dtos';
@@ -35,6 +40,14 @@ const Filtros = ({ onFiltrar, filtrou, setFiltrou, cancelou, setCancelou }) => {
   const [opcaoEstudanteId, setOpcaoEstudanteId] = useState();
   const [turmasId, setTurmasId] = useState('');
   const [ueCodigo, setUeCodigo] = useState();
+  const [
+    imprimirEstudantesInativos,
+    setImprimirEstudantesInativos,
+  ] = useState();
+  const [
+    desabilitarCampoEstudantesInativos,
+    setDesabilitarCampoEstudantesInativos,
+  ] = useState(true);
 
   const opcoesEstudantes = [
     { desc: 'Todos', valor: '0' },
@@ -44,6 +57,11 @@ const Filtros = ({ onFiltrar, filtrou, setFiltrou, cancelou, setCancelou }) => {
   const opcoesModeloBoletim = [
     { valor: 1, desc: 'Simples' },
     { valor: 2, desc: 'Detalhado' },
+  ];
+
+  const opcoesImprimirEstudantesInativos = [
+    { value: true, label: 'Sim' },
+    { value: false, label: 'Não' },
   ];
 
   const limparCampos = () => {
@@ -71,6 +89,7 @@ const Filtros = ({ onFiltrar, filtrou, setFiltrou, cancelou, setCancelou }) => {
       turmasId,
       opcaoEstudanteId,
       modeloBoletimId,
+      imprimirEstudantesInativos,
     };
 
     if (!filtrou) {
@@ -88,6 +107,7 @@ const Filtros = ({ onFiltrar, filtrou, setFiltrou, cancelou, setCancelou }) => {
     onFiltrar,
     filtrou,
     modeloBoletimId,
+    imprimirEstudantesInativos,
   ]);
 
   const onChangeConsideraHistorico = e => {
@@ -327,14 +347,33 @@ const Filtros = ({ onFiltrar, filtrou, setFiltrou, cancelou, setCancelou }) => {
     setListaSemestres([]);
   }, [obterAnosLetivos, modalidadeId, anoLetivo, dreCodigo, ueCodigo]);
 
+  const verificarHabilitacaoEstudantes = campoEsdutanteId => {
+    const estudantesIgualTodos = '0';
+    let valorEstudante = false;
+
+    if (campoEsdutanteId !== estudantesIgualTodos) {
+      valorEstudante = true;
+      setImprimirEstudantesInativos();
+    }
+    setDesabilitarCampoEstudantesInativos(valorEstudante);
+    setImprimirEstudantesInativos(valorEstudante);
+  };
+
   const onChangeTurma = valor => {
     const temOpcaoTodas = String(valor) === OPCAO_TODOS;
+    const opcaoTodosEstudantes = '0';
 
     setTurmasId(valor);
-    setOpcaoEstudanteId('0');
+    setOpcaoEstudanteId(opcaoTodosEstudantes);
     setModeloBoletimId('1');
     setDesabilitarEstudante(temOpcaoTodas);
     setFiltrou(false);
+    verificarHabilitacaoEstudantes(opcaoTodosEstudantes);
+  };
+
+  const onChangeImprimirEstudantesInativos = valor => {
+    setFiltrou(false);
+    setImprimirEstudantesInativos(valor);
   };
 
   const obterTurmas = useCallback(async () => {
@@ -390,6 +429,8 @@ const Filtros = ({ onFiltrar, filtrou, setFiltrou, cancelou, setCancelou }) => {
     if (!modeloBoletimId) {
       setModeloBoletimId('1');
     }
+
+    verificarHabilitacaoEstudantes(valor);
   };
 
   const onChangeModeloBoletim = valor => {
@@ -547,6 +588,18 @@ const Filtros = ({ onFiltrar, filtrou, setFiltrou, cancelou, setCancelou }) => {
           <AvisoBoletim visivel={modeloBoletimId === '2'}>
             Neste modelo cada estudante ocupará no mínimo 1 página
           </AvisoBoletim>
+        </div>
+        <div className="col-sm-12 col-md-4">
+          <RadioGroupButton
+            label="Imprimir estudantes inativos"
+            opcoes={opcoesImprimirEstudantesInativos}
+            valorInicial
+            onChange={e => {
+              onChangeImprimirEstudantesInativos(e.target.value);
+            }}
+            value={imprimirEstudantesInativos}
+            desabilitado={desabilitarCampoEstudantesInativos}
+          />
         </div>
       </div>
     </div>
