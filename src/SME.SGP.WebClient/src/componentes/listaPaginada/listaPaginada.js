@@ -113,10 +113,16 @@ const ListaPaginada = props => {
         statusCode = resposta.status;
         setLinhas([]);
         setTotal(resposta.data.totalRegistros);
-        setLinhas([...resposta.data.items]);
-        if (setLista) {
-          setLista(resposta.data.items);
+        if (resposta?.data?.items?.length){
+          setLinhas([...resposta.data.items]);
+          if (setLista) {
+            setLista(resposta.data.items);
+          }
         }
+        else{
+          setLista([]);
+        }
+        
       })
       .catch(e => {
         if (statusCode !== 204) {
