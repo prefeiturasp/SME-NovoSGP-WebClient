@@ -10,7 +10,7 @@ const AbrangenciaServico = {
     url = '',
     temParametros = false,
     modalidade,
-    consideraHistorico = false
+    consideraHistorico = true
   ) {
     if (url && !temParametros)
       return api.get(`${url}/${dreId}/ues/atribuicoes`);

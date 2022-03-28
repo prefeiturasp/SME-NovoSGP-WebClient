@@ -204,8 +204,9 @@ const AtribuicaoSupervisorCadastro = ({ match }) => {
         sucesso('Atribuição realizada com sucesso.');
         history.push('/gestao/atribuicao-supervisor-lista');
       })
-      .catch(erros => {
+      .catch(erros => {        
         exibeErro(erros);
+        setTimeout(() => window.location.reload(), 3000);
       });
   }
 
