@@ -526,7 +526,8 @@ const PlanoAEELista = () => {
                       listaDres?.length &&
                       filtro.ueId &&
                       ueId &&
-                      listaUes?.length
+                      listaUes?.length &&
+                      (filtro?.turmaId || true)
                     )
                   }
                   temPaginacao
