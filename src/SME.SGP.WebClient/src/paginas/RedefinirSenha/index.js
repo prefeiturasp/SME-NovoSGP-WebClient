@@ -260,7 +260,7 @@ const RedefinirSenha = props => {
               className="mx-auto"
               style={{ marginBottom: '70px', maxWidth: '560px' }}
             >
-              {token && !tokenValidado ? (
+              {!validarToken(token) ? (
                 <>
                   <Titulo style={{ marginTop: '70px', marginBottom: '40px' }}>
                     Recuperação de Senha
