@@ -1,7 +1,6 @@
 import PropTypes from 'prop-types';
 import React, { useCallback, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import * as qs from 'query-string';
 import { setDadosCollapseLocalizarEstudante } from '~/redux/modulos/collapseLocalizarEstudante/actions';
 import { setDadosObjectCardEstudante } from '~/redux/modulos/objectCardEstudante/actions';
 import {
