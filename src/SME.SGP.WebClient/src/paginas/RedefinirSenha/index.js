@@ -51,7 +51,7 @@ const RedefinirSenha = props => {
   const [carregandoContinuar, setCarregandoContinuar] = useState(false);
 
   const { senha, confirmarSenha } = senhas;
-  const token = props.match && props.match.params && props.match.params.token;  
+  const token = useSelector(state => state.usuario.token);
 
   const [validacoes, setValidacoes] = useState({
     maiuscula: '',
