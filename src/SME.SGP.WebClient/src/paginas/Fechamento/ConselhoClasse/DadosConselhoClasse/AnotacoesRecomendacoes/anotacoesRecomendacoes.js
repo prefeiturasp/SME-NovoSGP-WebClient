@@ -9,6 +9,7 @@ import {
   setAuditoriaAnotacaoRecomendacao,
   setConselhoClasseEmEdicao,
   setDentroPeriodo,
+  setListaoRecomendacoesAlunoFamilia,
   setRecomendacaoAluno,
   setRecomendacaoFamilia,
   setSituacaoConselhoAluno,
@@ -135,6 +136,13 @@ const AnotacoesRecomendacoes = props => {
     [dispatch]
   );
 
+  const setarListaoRecomendacoes = useCallback(
+    valor => {
+      dispatch(setListaoRecomendacoesAlunoFamilia(valor));
+    },
+    [dispatch]
+  );
+
   const pegueInicioPeriodoFechamento = () => {
     if (fechamentoPeriodoInicioFim) {
       const { periodoFechamentoInicio } = fechamentoPeriodoInicioFim;
@@ -176,11 +184,17 @@ const AnotacoesRecomendacoes = props => {
       codigoTurma,
       bimestre.valor,
       turmaStore?.consideraHistorico
-    )
-      .catch(e => erros(e))
-      .finally(() => setCarregando(false));
+    ).catch(e => erros(e));
 
     if (resposta && resposta.data) {
+      const retornoRecomendacoes = await ServicoConselhoClasse.obterListaAnotacoesRecomendacoes().catch(
+        e => erros(e)
+      );
+
+      if (retornoRecomendacoes?.data) {
+        setarListaoRecomendacoes(retornoRecomendacoes.data);
+      }
+
       setMatriculaAtivaPeriodo(resposta.data.matriculaAtiva);
 
       if (!desabilitarEdicaoAluno()) {
@@ -194,10 +208,12 @@ const AnotacoesRecomendacoes = props => {
       setarSituacaoConselho(resposta.data.situacaoConselho);
       setarAuditoria(resposta.data);
       setExibir(true);
+      setCarregando(false);
       return;
     }
     setarAuditoria({});
     setExibir(false);
+    setCarregando(false);
   }, [
     alunoCodigo,
     conselhoClasseId,
@@ -264,7 +280,7 @@ const AnotacoesRecomendacoes = props => {
 
 AnotacoesRecomendacoes.propTypes = {
   codigoTurma: PropTypes.oneOfType([PropTypes.string]),
-  bimestre: PropTypes.oneOfType([PropTypes.number]),
+  bimestre: PropTypes.oneOfType([PropTypes.any]),
 };
 
 AnotacoesRecomendacoes.defaultProps = {

@@ -5,6 +5,10 @@ import {
 } from '~/redux/modulos/conselhoClasse/actions';
 import { erros } from '~/servicos/alertas';
 import api from '~/servicos/api';
+import {
+  mockRecomendacoesAluno,
+  mockRecomendacoesFamilia,
+} from './mockRecomendacoes';
 
 class ServicoConselhoClasse {
   obterListaAlunos = (turmaCodigo, anoLetivo, periodo) => {
@@ -191,6 +195,18 @@ class ServicoConselhoClasse {
     return api.get(
       `/v1/conselhos-classe/turmas/${turmaCodigo}/alunos/${alunoCodigo}/consideraHistorico` +
         `/${consideraHistorico}`
+    );
+  };
+
+  obterListaAnotacoesRecomendacoes = () => {
+    const mock = {
+      listaRecomendacoesAluno: mockRecomendacoesAluno,
+      listaRecomendacoesFamilia: mockRecomendacoesFamilia,
+    };
+    return new Promise(resolve =>
+      setTimeout(() => {
+        resolve({ data: mock });
+      }, 2000)
     );
   };
 }
