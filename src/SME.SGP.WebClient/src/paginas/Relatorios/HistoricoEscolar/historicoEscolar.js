@@ -315,11 +315,11 @@ const HistoricoEscolar = () => {
         : codigosAlunosSelecionados?.length;
 
     const desabilitarFiltros =
-      !anoLetivo || !dreId || !ueId || !modalidadeId || !turmaId;
+      !anoLetivo || !dreId || !ueId || !!modalidadeId || !turmaId;
 
     const desabilitar =
       (!alunoLocalizadorSelecionado && desabilitarFiltros) ||
-      desabiltarAlunosSelecionados ||
+      !desabiltarAlunosSelecionados ||
       clicouBotaoGerar;
 
     if (String(modalidadeId) === String(modalidade.EJA)) {
@@ -474,8 +474,8 @@ const HistoricoEscolar = () => {
   const onChangeLocalizadorEstudante = aluno => {
     if (aluno?.alunoCodigo && aluno?.alunoNome) {
       setAlunoLocalizadorSelecionado(aluno);
-      setModalidadeId();
-      setTurmaId();
+      obterModalidades(ueId, anoLetivo);
+      setTurmaId(aluno.turmaId);
       vaidaDesabilitarBtnGerar(false);
     } else {
       setAlunoLocalizadorSelecionado();
