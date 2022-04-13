@@ -399,10 +399,9 @@ class ServicoEncaminhamentoAEE {
     return api.delete(url);
   };
 
-  podeCadastrarEncaminhamentoEstudante = async codigoEstudante => {
-    const resultado = await api
-      .get(`${urlPadrao}/estudante/${codigoEstudante}/pode-cadastrar`)
-      .catch(e => erros(e));
+  podeCadastrarEncaminhamentoEstudante = async (codigoEstudante, codigoUe) => {
+    const urlendpoint = `${urlPadrao}/estudante/pode-cadastrar?EstudanteCodigo=${codigoEstudante}&UeCodigo=${codigoUe}`;
+    const resultado = await api.get(urlendpoint).catch(e => erros(e));
 
     if (resultado?.data) {
       return true;

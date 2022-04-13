@@ -216,7 +216,8 @@ const CollapseLocalizarEstudanteDados = props => {
     let continuar = true;
     if (validarSePermiteProximoPasso) {
       continuar = await validarSePermiteProximoPasso(
-        alunoLocalizadorSelecionado.codigoAluno
+        alunoLocalizadorSelecionado.codigoAluno,
+        codigoUe
       );
     }
 
