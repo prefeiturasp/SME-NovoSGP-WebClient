@@ -314,13 +314,19 @@ const HistoricoEscolar = () => {
         ? !alunosSelecionados?.length
         : codigosAlunosSelecionados?.length;
 
-    const desabilitarFiltros =
-      !anoLetivo || !dreId || !ueId || !!modalidadeId || !turmaId;
-
-    const desabilitar =
-      (!alunoLocalizadorSelecionado && desabilitarFiltros) ||
-      !desabiltarAlunosSelecionados ||
-      clicouBotaoGerar;
+    let desabilitar = true;
+    if (anoLetivo?.length > 0 || dreId?.length > 0 || ueId?.length > 0 || modalidadeId?.length > 0 )
+    {
+        if (turmaId?.length > 0 && String(estudanteOpt) === '0'){
+          desabilitar = false;
+        }
+        else if (String(estudanteOpt) === '1' && alunosSelecionados?.length > 0){
+          desabilitar = false;
+        }
+        else if (codigosAlunosSelecionados?.length > 0){
+          desabilitar = false;
+        }
+    }
 
     if (String(modalidadeId) === String(modalidade.EJA)) {
       vaidaDesabilitarBtnGerar(!semestre || desabilitar);
