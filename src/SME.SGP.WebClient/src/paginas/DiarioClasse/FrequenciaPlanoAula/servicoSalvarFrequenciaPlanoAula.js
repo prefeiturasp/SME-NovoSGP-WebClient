@@ -75,7 +75,7 @@ class ServicoSalvarFrequenciaPlanoAula {
     const validaSeTemErrosPlanoAula = () => {
       const errosValidacaoPlano = [];
 
-      if (!dadosPlanoAula.descricao) {
+      if (!dadosPlanoAula.descricao && exibirSwitchEscolhaObjetivos) {
         errosValidacaoPlano.push(
           'Meus objetivos - O campo meus objetivos específicos para a aula é obrigatório'
         );
