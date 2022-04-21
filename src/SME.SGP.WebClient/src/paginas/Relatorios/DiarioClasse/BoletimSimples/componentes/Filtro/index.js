@@ -1,6 +1,5 @@
-import React, { useCallback, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-
+import React, { useCallback, useEffect, useState } from 'react';
 import {
   CheckboxComponent,
   Loader,
@@ -8,12 +7,11 @@ import {
   SelectComponent,
 } from '~/componentes';
 import { FiltroHelper } from '~/componentes-sgp';
-
+import { OPCAO_TODOS } from '~/constantes/constantes';
 import { ModalidadeDTO } from '~/dtos';
 import { AbrangenciaServico, erros, ServicoFiltroRelatorio } from '~/servicos';
-import { OPCAO_TODOS } from '~/constantes/constantes';
-import { AvisoBoletim } from './styles';
 import { ordenarDescPor } from '~/utils';
+import { AvisoBoletim } from './styles';
 
 const Filtros = ({ onFiltrar, filtrou, setFiltrou, cancelou, setCancelou }) => {
   const [anoAtual] = useState(window.moment().format('YYYY'));
@@ -44,13 +42,10 @@ const Filtros = ({ onFiltrar, filtrou, setFiltrou, cancelou, setCancelou }) => {
     imprimirEstudantesInativos,
     setImprimirEstudantesInativos,
   ] = useState();
-  const [
-    desabilitarCampoEstudantesInativos,
-    setDesabilitarCampoEstudantesInativos,
-  ] = useState(true);
 
+  const OPCAO_TODOS_ESTUDANTES = '0';
   const opcoesEstudantes = [
-    { desc: 'Todos', valor: '0' },
+    { desc: 'Todos', valor: OPCAO_TODOS_ESTUDANTES },
     { desc: 'Selecionar Alunos', valor: '1' },
   ];
 
@@ -347,28 +342,14 @@ const Filtros = ({ onFiltrar, filtrou, setFiltrou, cancelou, setCancelou }) => {
     setListaSemestres([]);
   }, [obterAnosLetivos, modalidadeId, anoLetivo, dreCodigo, ueCodigo]);
 
-  const verificarHabilitacaoEstudantes = campoEsdutanteId => {
-    const estudantesIgualTodos = '0';
-    let valorEstudante = false;
-
-    if (campoEsdutanteId !== estudantesIgualTodos) {
-      valorEstudante = true;
-      setImprimirEstudantesInativos();
-    }
-    setDesabilitarCampoEstudantesInativos(valorEstudante);
-    setImprimirEstudantesInativos(valorEstudante);
-  };
-
   const onChangeTurma = valor => {
     const temOpcaoTodas = String(valor) === OPCAO_TODOS;
-    const opcaoTodosEstudantes = '0';
 
     setTurmasId(valor);
-    setOpcaoEstudanteId(opcaoTodosEstudantes);
+    setOpcaoEstudanteId(OPCAO_TODOS_ESTUDANTES);
     setModeloBoletimId('1');
     setDesabilitarEstudante(temOpcaoTodas);
     setFiltrou(false);
-    verificarHabilitacaoEstudantes(opcaoTodosEstudantes);
   };
 
   const onChangeImprimirEstudantesInativos = valor => {
@@ -429,8 +410,6 @@ const Filtros = ({ onFiltrar, filtrou, setFiltrou, cancelou, setCancelou }) => {
     if (!modeloBoletimId) {
       setModeloBoletimId('1');
     }
-
-    verificarHabilitacaoEstudantes(valor);
   };
 
   const onChangeModeloBoletim = valor => {
@@ -448,8 +427,16 @@ const Filtros = ({ onFiltrar, filtrou, setFiltrou, cancelou, setCancelou }) => {
       setAnoLetivo(anoAtual);
       setCancelou(false);
       setFiltrou(false);
+      setImprimirEstudantesInativos(false);
+      setOpcaoEstudanteId();
     }
   }, [cancelou, setFiltrou, setCancelou, anoAtual]);
+
+  useEffect(() => {
+    if (opcaoEstudanteId !== OPCAO_TODOS_ESTUDANTES) {
+      setImprimirEstudantesInativos(false);
+    }
+  }, [opcaoEstudanteId]);
 
   return (
     <div className="col-12 p-0">
@@ -598,7 +585,7 @@ const Filtros = ({ onFiltrar, filtrou, setFiltrou, cancelou, setCancelou }) => {
               onChangeImprimirEstudantesInativos(e.target.value);
             }}
             value={imprimirEstudantesInativos}
-            desabilitado={desabilitarCampoEstudantesInativos}
+            desabilitado={opcaoEstudanteId !== OPCAO_TODOS_ESTUDANTES}
           />
         </div>
       </div>

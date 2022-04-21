@@ -77,9 +77,10 @@ const EncaminhamentoAEECadastro = ({ match }) => {
     }
   }, [match]);
 
-  const validarSePermiteProximoPasso = codigoEstudante => {
+  const validarSePermiteProximoPasso = (codigoEstudante, codigoUe) => {
     return ServicoEncaminhamentoAEE.podeCadastrarEncaminhamentoEstudante(
-      codigoEstudante
+      codigoEstudante,
+      codigoUe
     );
   };
 
