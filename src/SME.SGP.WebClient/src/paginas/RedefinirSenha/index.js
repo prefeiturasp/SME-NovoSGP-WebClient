@@ -49,9 +49,10 @@ const RedefinirSenha = props => {
   const [erroGeral, setErroGeral] = useState('');
   const [tokenExpirado, setTokenExpirado] = useState(false);
   const [carregandoContinuar, setCarregandoContinuar] = useState(false);
+  const [finalizouCarregamento, setFinalizouCarregamento] = useState(false);
 
   const { senha, confirmarSenha } = senhas;
-  const token = useSelector(state => state.usuario.token);
+  const token = props?.match?.params?.token;
 
   const [validacoes, setValidacoes] = useState({
     maiuscula: '',
@@ -100,6 +101,9 @@ const RedefinirSenha = props => {
   useLayoutEffect(() => {
     if (!tokenValidado && !logado) validarToken();
     document.addEventListener('keydown', trataAcaoTeclado);
+    setTimeout(() => {
+      setFinalizouCarregamento(true);
+    }, 500);
     return () => {
       document.removeEventListener('keydown', trataAcaoTeclado);
     };
@@ -135,7 +139,7 @@ const RedefinirSenha = props => {
       espacoBranco: !espacoBranco,
       tamanho: !!tamanho,
       iguais: !!iguais,
-    });    
+    });
   };
 
   const aoMudarSenha = e => {
@@ -159,14 +163,14 @@ const RedefinirSenha = props => {
     if (modificarSenha){
       store.dispatch(Deslogar());
       store.dispatch(setModificarSenha(false));
-      store.dispatch(setLogado(false));      
-    }     
-    history.push(URL_LOGIN);    
+      store.dispatch(setLogado(false));
+    }
+    history.push(URL_LOGIN);
   };
 
   const alterarSenha = async () => {
     setCarregandoContinuar(true);
-    if (!logado) {      
+    if (!logado) {
       const requisicao = await RedefinirSenhaServico.redefinirSenha(
         {
           token,
@@ -193,7 +197,7 @@ const RedefinirSenha = props => {
       });
       if (requisicao.sucesso) {
         obterMeusDados();
-        setMenusPermissoes();        
+        setMenusPermissoes();
 
         store.dispatch(
           salvarDadosLogin({
@@ -225,9 +229,9 @@ const RedefinirSenha = props => {
         setErroGeral(requisicao.erro);
       }
     }
-  };  
+  };
 
-  const aoClicarContinuar = () => {        
+  const aoClicarContinuar = () => {
     realizarValidacoes(inputSenhaRef.current.value);
     setErroGeral('');
 
@@ -236,8 +240,8 @@ const RedefinirSenha = props => {
       return;
     }
 
-    if (!validarSeFormularioTemErro()) 
-      alterarSenha();    
+    if (!validarSeFormularioTemErro())
+      alterarSenha();
   };
 
   const aoClicarContinuarExpirado = () => {
@@ -260,7 +264,7 @@ const RedefinirSenha = props => {
               className="mx-auto"
               style={{ marginBottom: '70px', maxWidth: '560px' }}
             >
-              {!validarToken(token) ? (
+              {token && !tokenValidado && finalizouCarregamento && (
                 <>
                   <Titulo style={{ marginTop: '70px', marginBottom: '40px' }}>
                     Recuperação de Senha
@@ -274,7 +278,8 @@ const RedefinirSenha = props => {
                     bold
                   />
                 </>
-              ) : (
+              )}
+              {!(token && !tokenValidado) && finalizouCarregamento && (
                   <>
                     <Titulo style={{ marginTop: '70px', marginBottom: '40px' }}>
                       Nova Senha
