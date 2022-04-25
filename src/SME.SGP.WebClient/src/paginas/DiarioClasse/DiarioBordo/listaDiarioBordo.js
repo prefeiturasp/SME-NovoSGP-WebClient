@@ -111,6 +111,7 @@ const ListaDiarioBordo = () => {
       turmaSelecionada
     );
     setTurmaInfantil(infantil);
+    setListaTitulos();
   }, [turmaSelecionada, modalidadesFiltroPrincipal, turmaInfantil]);
 
   const onChangeComponenteCurricular = valor => {
