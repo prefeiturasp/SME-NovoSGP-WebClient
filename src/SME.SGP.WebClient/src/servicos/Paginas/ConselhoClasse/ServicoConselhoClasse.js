@@ -5,10 +5,6 @@ import {
 } from '~/redux/modulos/conselhoClasse/actions';
 import { erros } from '~/servicos/alertas';
 import api from '~/servicos/api';
-import {
-  mockRecomendacoesAluno,
-  mockRecomendacoesFamilia,
-} from './mockRecomendacoes';
 
 class ServicoConselhoClasse {
   obterListaAlunos = (turmaCodigo, anoLetivo, periodo) => {
