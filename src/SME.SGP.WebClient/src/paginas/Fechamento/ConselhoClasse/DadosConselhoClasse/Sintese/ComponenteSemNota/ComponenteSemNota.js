@@ -19,7 +19,9 @@ const ComponenteSemNota = props => {
               >
                 {nomeColunaComponente}
               </th>
+              <th>{ehFinal ? 'Total de aulas' : 'Aulas'}</th>
               <th>{ehFinal ? 'Total de faltas' : 'Faltas'}</th>
+              <th>Ausências Compensadas</th>
               <th>{ehFinal ? '%Total de freq.' : '%Freq.'}</th>
               {ehFinal ? <th>Parecer final</th> : null}
             </tr>
@@ -41,10 +43,24 @@ const ComponenteSemNota = props => {
                   </td>
                   <td
                     style={{
-                      width: '250px',
+                      width: '200px',
+                    }}
+                  >
+                    {item?.totalAulas}
+                  </td>
+                  <td
+                    style={{
+                      width: '200px',
                     }}
                   >
                     {item.totalFaltas}
+                  </td>
+                  <td
+                    style={{
+                      width: '200px',
+                    }}
+                  >
+                    {item?.totalAusenciasCompensadas}
                   </td>
                   <td>{item.percentualFrequencia}</td>
                   {ehFinal ? <td>{item.parecerFinal || '--'}</td> : null}

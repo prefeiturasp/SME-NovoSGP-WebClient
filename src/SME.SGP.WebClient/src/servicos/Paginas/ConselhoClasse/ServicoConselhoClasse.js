@@ -193,6 +193,9 @@ class ServicoConselhoClasse {
         `/${consideraHistorico}`
     );
   };
+
+  obterListaAnotacoesRecomendacoes = () =>
+    api.get('/v1/conselhos-classe/obter-recomendacoes');
 }
 
 export default new ServicoConselhoClasse();
