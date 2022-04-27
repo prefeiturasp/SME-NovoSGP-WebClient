@@ -28,7 +28,7 @@ class ServicoConselhoClasse {
     const url = `v1/conselhos-classe/${conselhoClasseId ||
       0}/fechamentos/${fechamentoTurmaId ||
       0}/alunos/${alunoCodigo}/turmas/${codigoTurma}/bimestres/${
-      bimestre !== 'final' ? bimestre : null
+      bimestre !== 'final' ? bimestre : 0
     }/recomendacoes?consideraHistorico=${consideraHistorico}`;
     return api.get(url);
   };
