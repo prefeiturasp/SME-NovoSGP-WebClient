@@ -198,17 +198,8 @@ class ServicoConselhoClasse {
     );
   };
 
-  obterListaAnotacoesRecomendacoes = () => {
-    const mock = {
-      listaRecomendacoesAluno: mockRecomendacoesAluno,
-      listaRecomendacoesFamilia: mockRecomendacoesFamilia,
-    };
-    return new Promise(resolve =>
-      setTimeout(() => {
-        resolve({ data: mock });
-      }, 2000)
-    );
-  };
+  obterListaAnotacoesRecomendacoes = () =>
+    api.get('/v1/conselhos-classe/obter-recomendacoes');
 }
 
 export default new ServicoConselhoClasse();

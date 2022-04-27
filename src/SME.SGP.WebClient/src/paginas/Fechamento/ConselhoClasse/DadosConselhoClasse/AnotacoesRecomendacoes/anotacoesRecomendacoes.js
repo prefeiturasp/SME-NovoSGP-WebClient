@@ -1,8 +1,9 @@
+import moment from 'moment';
+import PropTypes from 'prop-types';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import PropTypes from 'prop-types';
-import moment from 'moment';
 import { Loader } from '~/componentes';
+import { conselhoClasseRecomendacaoTipo } from '~/dtos';
 import {
   setAnotacoesAluno,
   setAnotacoesPedagogicas,
@@ -11,7 +12,9 @@ import {
   setDentroPeriodo,
   setListaoRecomendacoesAlunoFamilia,
   setRecomendacaoAluno,
+  setRecomendacaoAlunoSelecionados,
   setRecomendacaoFamilia,
+  setRecomendacaoFamiliaSelecionados,
   setSituacaoConselhoAluno,
 } from '~/redux/modulos/conselhoClasse/actions';
 import { erros } from '~/servicos/alertas';
@@ -136,9 +139,37 @@ const AnotacoesRecomendacoes = props => {
     [dispatch]
   );
 
-  const setarListaoRecomendacoes = useCallback(
-    valor => {
-      dispatch(setListaoRecomendacoesAlunoFamilia(valor));
+  const setarListaRecomendacoes = useCallback(
+    recomendacoes => {
+      const params = {
+        listaRecomendacoesAluno: recomendacoes.filter(
+          item => item.tipo === conselhoClasseRecomendacaoTipo.Aluno
+        ),
+        listaRecomendacoesFamilia: recomendacoes.filter(
+          item => item.tipo === conselhoClasseRecomendacaoTipo.Familia
+        ),
+      };
+
+      dispatch(setListaoRecomendacoesAlunoFamilia(params));
+    },
+    [dispatch]
+  );
+
+  const setarListaRecomendacoesSalvas = useCallback(
+    recomendacoesAlunoFamilia => {
+      const listaRecomendacoesAluno = recomendacoesAlunoFamilia?.filter(
+        item => item?.tipo === conselhoClasseRecomendacaoTipo.Aluno
+      );
+      const listaRecomendacoesFamilia = recomendacoesAlunoFamilia?.filter(
+        item => item?.tipo === conselhoClasseRecomendacaoTipo.Familia
+      );
+
+      if (listaRecomendacoesAluno?.length) {
+        dispatch(setRecomendacaoAlunoSelecionados(listaRecomendacoesAluno));
+      }
+      if (listaRecomendacoesFamilia?.length) {
+        dispatch(setRecomendacaoFamiliaSelecionados(listaRecomendacoesFamilia));
+      }
     },
     [dispatch]
   );
@@ -192,7 +223,11 @@ const AnotacoesRecomendacoes = props => {
       );
 
       if (retornoRecomendacoes?.data) {
-        setarListaoRecomendacoes(retornoRecomendacoes.data);
+        setarListaRecomendacoes(retornoRecomendacoes.data);
+      }
+
+      if (resposta?.data?.recomendacoesAlunoFamilia?.length) {
+        setarListaRecomendacoesSalvas(resposta.data.recomendacoesAlunoFamilia);
       }
 
       setMatriculaAtivaPeriodo(resposta.data.matriculaAtiva);
@@ -202,8 +237,8 @@ const AnotacoesRecomendacoes = props => {
       }
 
       onChangeAnotacoesPedagogicas(resposta.data.anotacoesPedagogicas);
-      onChangeRecomendacaoAluno(resposta.data.recomendacaoAluno);
-      onChangeRecomendacaoFamilia(resposta.data.recomendacaoFamilia);
+      onChangeRecomendacaoAluno(resposta.data.textoRecomendacaoAluno);
+      onChangeRecomendacaoFamilia(resposta.data.textoRecomendacaoFamilia);
       setarAnotacaoAluno(resposta.data.anotacoesAluno);
       setarSituacaoConselho(resposta.data.situacaoConselho);
       setarAuditoria(resposta.data);

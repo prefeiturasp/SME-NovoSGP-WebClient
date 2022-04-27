@@ -18,7 +18,7 @@ const ListaRecomendacoes = props => {
     columns: [
       {
         title: 'Descrição',
-        dataIndex: 'descricao',
+        dataIndex: 'recomendacao',
       },
     ],
     dataSource: dadosEsquerda,
@@ -32,7 +32,7 @@ const ListaRecomendacoes = props => {
     columns: [
       {
         title: 'Descrição',
-        dataIndex: 'descricao',
+        dataIndex: 'recomendacao',
         className: 'desc-descricao',
       },
     ],

@@ -30,7 +30,14 @@ const ListaRecomendacaoFamilia = () => {
   return (
     <ListaRecomendacoes
       dadosRecomendacao={
-        listaRecomendacoesFamilia?.length ? listaRecomendacoesFamilia : []
+        listaRecomendacoesFamilia?.length
+          ? listaRecomendacoesFamilia.filter(
+              item =>
+                !recomendacaoFamiliaSelecionados?.find?.(
+                  a => a?.id === item?.id
+                )
+            )
+          : []
       }
       titulo="Selecione recomendações a família"
       dadosDireita={recomendacaoFamiliaSelecionados}
