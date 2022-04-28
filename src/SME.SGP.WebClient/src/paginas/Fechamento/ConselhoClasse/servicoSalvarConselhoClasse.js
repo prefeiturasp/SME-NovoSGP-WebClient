@@ -13,6 +13,7 @@ import {
   setAtualizarEmAprovacao,
   setBimestreAtual,
   setDadosIniciaisListasNotasConceitos,
+  setAuditoriaAnotacaoRecomendacao
 } from '~/redux/modulos/conselhoClasse/actions';
 import notasConceitos from '~/dtos/notasConceitos';
 
@@ -286,6 +287,19 @@ class ServicoSalvarConselhoClasse {
       dispatch(setDadosPrincipaisConselhoClasse(dadosPrincipaisConselhoClasse));
 
       const { auditoria } = retorno.data;
+
+      let auditoriaDto = null;
+      if (auditoria) {
+        auditoriaDto = {
+          criadoEm: auditoria.criadoEm,
+          criadoPor: auditoria.criadoPor,
+          criadoRF: auditoria.criadoRF,
+          alteradoEm: auditoria.alteradoEm,
+          alteradoPor: auditoria.alteradoPor,
+          alteradoRF: auditoria.alteradoRF,
+        };
+      }
+      dispatch(setAuditoriaAnotacaoRecomendacao(auditoriaDto));
 
       const temJustificativasDto = idCamposNotasPosConselho;
       temJustificativasDto[idCampo] = auditoria.id;
