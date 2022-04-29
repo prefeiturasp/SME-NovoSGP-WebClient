@@ -32,8 +32,13 @@ class ServicoEncaminhamentoAEE {
     return api.get(`${urlPadrao}/situacoes`);
   };
 
-  obterAlunoSituacaoEncaminhamentoAEE = codigoAluno => {
-    return api.get(`${urlPadrao}/estudante/${codigoAluno}/situacao`);
+  obterAlunoSituacaoEncaminhamentoAEE = ({ estudanteCodigo, ueCodigo }) => {
+    return api.get(`${urlPadrao}/estudante/situacao`, {
+      params: {
+        estudanteCodigo,
+        ueCodigo,
+      },
+    });
   };
 
   obterAvisoModal = async () => {
@@ -399,9 +404,15 @@ class ServicoEncaminhamentoAEE {
     return api.delete(url);
   };
 
-  podeCadastrarEncaminhamentoEstudante = async (codigoEstudante, codigoUe) => {
-    const urlendpoint = `${urlPadrao}/estudante/pode-cadastrar?EstudanteCodigo=${codigoEstudante}&UeCodigo=${codigoUe}`;
-    const resultado = await api.get(urlendpoint).catch(e => erros(e));
+  podeCadastrarEncaminhamentoEstudante = async ({
+    estudanteCodigo,
+    ueCodigo,
+  }) => {
+    const resultado = await api
+      .get(`${urlPadrao}/estudante/pode-cadastrar`, {
+        params: { estudanteCodigo, ueCodigo },
+      })
+      .catch(e => erros(e));
 
     if (resultado?.data) {
       return true;

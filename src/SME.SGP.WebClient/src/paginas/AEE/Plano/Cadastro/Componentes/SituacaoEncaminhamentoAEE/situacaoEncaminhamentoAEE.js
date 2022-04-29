@@ -12,10 +12,15 @@ const SituacaoEncaminhamentoAEE = () => {
   const [situacao, setSituacao] = useState({});
 
   useEffect(() => {
+    const { codigoAluno, codigoUe } = dadosCollapseLocalizarEstudante;
+
     const obtemSituacaoEncaminhamento = async () => {
       dispatch(setPlanoAEESituacaoEncaminhamentoAEE());
       const retorno = await ServicoEncaminhamentoAEE.obterAlunoSituacaoEncaminhamentoAEE(
-        dadosCollapseLocalizarEstudante?.codigoAluno
+        {
+          estudanteCodigo: codigoAluno,
+          ueCodigo: codigoUe,
+        }
       );
 
       if (retorno?.data) {
@@ -23,8 +28,11 @@ const SituacaoEncaminhamentoAEE = () => {
         dispatch(setPlanoAEESituacaoEncaminhamentoAEE(retorno?.data));
       }
     };
-    obtemSituacaoEncaminhamento();
-  }, [dadosCollapseLocalizarEstudante]);
+
+    if (codigoAluno && codigoUe) {
+      obtemSituacaoEncaminhamento();
+    }
+  }, [dadosCollapseLocalizarEstudante, dispatch]);
 
   return situacao?.situacao ? (
     <>
