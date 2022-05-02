@@ -261,14 +261,12 @@ const Filtros = ({ onFiltrar, filtrou, setFiltrou, cancelou, setCancelou }) => {
     setFiltrou(false);
   };
 
-  const obterModalidades = useCallback(async ue => {
+  const obterModalidades = useCallback(async (ue, consideraHistorico) => {
     if (ue) {
       setCarregandoModalidade(true);
       const {
         data,
-      } = await ServicoFiltroRelatorio.obterModalidadesPorAbrangencia(
-        ue
-      ).finally(() => setCarregandoModalidade(false));
+      } = consideraHistorico ? await ServicoFiltroRelatorio.obterModalidadesPorAbrangenciaHistorica(ue, consideraHistorico).finally(() => setCarregandoModalidade(false)) : await ServicoFiltroRelatorio.obterModalidadesPorAbrangencia(ue).finally(() => setCarregandoModalidade(false));
 
       if (data?.length) {
         const lista = data.map(item => ({
@@ -286,12 +284,12 @@ const Filtros = ({ onFiltrar, filtrou, setFiltrou, cancelou, setCancelou }) => {
 
   useEffect(() => {
     if (anoLetivo && ueCodigo) {
-      obterModalidades(ueCodigo);
+      obterModalidades(ueCodigo, consideraHistorico);
       return;
     }
     setModalidadeId();
     setListaModalidades([]);
-  }, [obterModalidades, anoLetivo, ueCodigo]);
+  }, [obterModalidades, anoLetivo, ueCodigo, consideraHistorico]);
 
   const onChangeSemestre = valor => {
     setSemestre(valor);

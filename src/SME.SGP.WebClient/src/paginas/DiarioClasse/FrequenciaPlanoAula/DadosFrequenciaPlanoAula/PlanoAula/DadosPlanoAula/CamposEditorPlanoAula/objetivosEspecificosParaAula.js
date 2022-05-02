@@ -85,7 +85,7 @@ const ObjetivosEspecificosParaAula = () => {
         titulo="Objetivos específicos e desenvolvimento da aula"
         indice="objetivos-especificos-para-aula"
         configCabecalho={configCabecalho}
-        show
+        show={componenteCurricular.possuiObjetivos}
       >
         <fieldset className="mt-3">
           {validarSeEhObrigatorio() ? (
@@ -105,7 +105,7 @@ const ObjetivosEspecificosParaAula = () => {
             desabilitar={
               desabilitarCamposPlanoAula ||
               !temPeriodoAberto ||
-              validarSeEhObrigatorio()
+              (validarSeEhObrigatorio() && !componenteCurricular.possuiObjetivos)
             }
             onChange={onChangeObjetivosEspecificosParaAula}
             value={dadosPlanoAula?.descricao}

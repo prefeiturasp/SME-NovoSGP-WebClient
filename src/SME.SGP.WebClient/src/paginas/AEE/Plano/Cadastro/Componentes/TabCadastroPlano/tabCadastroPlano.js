@@ -70,6 +70,7 @@ const TabCadastroPlano = props => {
           codigoAluno: aluno.codigoAluno,
           codigoTurma: turma.codigo,
           turmaId: turma.id,
+          codigoUe: turma?.codigoUE,
         };
 
         dispatch(setDadosCollapseLocalizarEstudante(dadosLocalizarEstudante));
