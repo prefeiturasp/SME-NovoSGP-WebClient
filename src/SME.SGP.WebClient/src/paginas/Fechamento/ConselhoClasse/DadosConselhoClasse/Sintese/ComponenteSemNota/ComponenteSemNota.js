@@ -63,7 +63,7 @@ const ComponenteSemNota = props => {
                     {item?.totalAusenciasCompensadas}
                   </td>
                   <td>{item.percentualFrequencia}</td>
-                  {ehFinal ? <td>{item.parecerFinal || '--'}</td> : null}
+                  {ehFinal ? <td>{item.parecerFinal}</td> : null}
                 </tr>
               );
             })}
