@@ -23,7 +23,7 @@ class ServicoPlanoAEE {
 
   existePlanoAEEEstudante = async codigoEstudante => {
     const resultado = await api
-      .get(`${urlPadrao}/estudante/${codigoEstudante}/existe`)
+      .get(`${urlPadrao}/estudante/${codigoEstudante.estudanteCodigo}/existe`)
       .catch(e => erros(e));
 
     if (resultado?.data) {
