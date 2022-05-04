@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import React from 'react';
+import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Button from '~/componentes/button';
 import { Colors } from '~/componentes/colors';
@@ -37,6 +37,8 @@ const BotoesAcoesEncaminhamentoAEE = props => {
   const desabilitarCamposEncaminhamentoAEE = useSelector(
     store => store.encaminhamentoAEE.desabilitarCamposEncaminhamentoAEE
   );
+
+  const [desabilitarBtnAcao, setDesabilitarBtnAcao] = useState(false);
 
   const usuario = useSelector(store => store.usuario);
   const permissoesTela =
@@ -164,6 +166,7 @@ const BotoesAcoesEncaminhamentoAEE = props => {
 
   const onClickEncaminharAEE = async () => {
     if (!desabilitarCamposEncaminhamentoAEE) {
+      setDesabilitarBtnAcao(true);
       const encaminhamentoId = match?.params?.id;
       const salvou = await ServicoEncaminhamentoAEE.salvarEncaminhamento(
         encaminhamentoId,
@@ -183,6 +186,7 @@ const BotoesAcoesEncaminhamentoAEE = props => {
           history.push(RotasDto.RELATORIO_AEE_ENCAMINHAMENTO);
         }
       }
+      setDesabilitarBtnAcao(false);
     }
   };
 
@@ -306,7 +310,9 @@ const BotoesAcoesEncaminhamentoAEE = props => {
           dadosEncaminhamento?.situacao !== situacaoAEE.Encaminhado
         }
         disabled={
-          desabilitarCamposEncaminhamentoAEE || !dadosEncaminhamento?.podeEditar
+          desabilitarBtnAcao ||
+          desabilitarCamposEncaminhamentoAEE ||
+          !dadosEncaminhamento?.podeEditar
         }
       />
       <Button

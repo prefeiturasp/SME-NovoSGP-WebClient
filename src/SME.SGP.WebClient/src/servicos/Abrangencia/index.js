@@ -36,7 +36,7 @@ const AbrangenciaServico = {
     consideraHistorico = false,
     turmasRegulares = false,
     tipos = undefined,
-    consideraNovosAnosInfantil = false
+    consideraNovosAnosInfantil = true
   ) {
     let params = {};
     if (modalidade) {

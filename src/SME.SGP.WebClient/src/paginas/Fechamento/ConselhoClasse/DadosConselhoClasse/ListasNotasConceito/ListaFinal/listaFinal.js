@@ -192,6 +192,7 @@ const ListaFinal = props => {
               </th>
               <th>{descricaoTipoNota}</th>
               <th>{`${descricaoTipoNota} final`}</th>
+              <th style={{ width: '100px' }}>Total de aulas</th>
               <th style={{ width: '100px' }}>Total de faltas</th>
               <th style={{ width: '100px' }}>Ausências Compensadas</th>
               <th>% Total de freq.</th>
@@ -233,6 +234,7 @@ const ListaFinal = props => {
                           </Tooltip>
                         )}
                       </td>
+                      <td>{item?.aulas}</td>
                       <td>{item.faltas}</td>
                       <td>{item.ausenciasCompensadas}</td>
                       <td>{item.frequencia ? `${item.frequencia}%` : ''}</td>

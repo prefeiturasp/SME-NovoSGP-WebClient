@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import React from 'react';
+import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Colors } from '~/componentes';
 import QuestionarioDinamicoFuncoes from '~/componentes-sgp/QuestionarioDinamico/Funcoes/QuestionarioDinamicoFuncoes';
@@ -42,6 +42,8 @@ const BotoesAcoesPlanoAEE = props => {
     store => store.planoAEE.dadosAtribuicaoResponsavel
   );
 
+  const [desabilitarBtnAcao, setDesabilitarBtnAcao] = useState(false);
+
   const usuario = useSelector(store => store.usuario);
   const permissoesTela = usuario.permissoes[RotasDto.RELATORIO_AEE_PLANO];
 
@@ -77,6 +79,7 @@ const BotoesAcoesPlanoAEE = props => {
   };
 
   const escolherAcaoAbaParecer = async () => {
+    setDesabilitarBtnAcao(true);
     let msg = '';
     let resposta = [];
 
@@ -109,6 +112,7 @@ const BotoesAcoesPlanoAEE = props => {
       limparParecer();
       history.push(RotasDto.RELATORIO_AEE_PLANO);
     }
+    setDesabilitarBtnAcao(false);
   };
 
   const onClickVoltar = async () => {
@@ -248,6 +252,7 @@ const BotoesAcoesPlanoAEE = props => {
           planoAEEDados?.situacao !== situacaoPlanoAEE.Devolvido
         }
         disabled={
+          desabilitarBtnAcao ||
           (planoAEEDados?.situacao === situacaoPlanoAEE.ParecerPAAI &&
             !dadosParecer?.podeEditarParecerPAAI) ||
           desabilitarCamposPlanoAEE ||

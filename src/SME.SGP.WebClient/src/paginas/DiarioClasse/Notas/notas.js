@@ -70,7 +70,6 @@ const Notas = ({ match }) => {
   const [ehRegencia, setEhRegencia] = useState(false);
   const [percentualMinimoAprovados, setPercentualMinimoAprovados] = useState(0);
   const [exibeModalJustificativa, setExibeModalJustificativa] = useState(false);
-  const [valoresIniciais] = useState({ descricao: undefined });
   const [refForm, setRefForm] = useState({});
   const [carregandoGeral, setCarregandoGeral] = useState(false);
   const [dadosBimestreAtual, setDadosBimestreAtual] = useState();
@@ -93,6 +92,8 @@ const Notas = ({ match }) => {
   const [showMsgPeriodoFechamento, setShowMsgPeriodoFechamento] = useState(
     false
   );
+
+  const valoresIniciais = { descricao: '' };
 
   const validaSeDesabilitaCampos = useCallback(
     async bimestre => {
@@ -1110,7 +1111,10 @@ const Notas = ({ match }) => {
       clicouNoBotaoSalvar,
       ServicoNotaConceito.estaEmModoEdicaoGeralNotaFinal()
     );
+
     refForm.resetForm();
+    refForm.setFieldValue('descricao', '');
+
     aposValidarJustificativaAntesDeSalvar(
       proximoBimestre,
       clicouNoBotaoSalvar,
@@ -1161,7 +1165,7 @@ const Notas = ({ match }) => {
                 <fieldset className="mt-3">
                   <JoditEditor
                     form={form}
-                    value={valoresIniciais.descricao}
+                    value={form.values.descricao}
                     onChange={onChangeJustificativa}
                     name="descricao"
                     permiteInserirArquivo={false}

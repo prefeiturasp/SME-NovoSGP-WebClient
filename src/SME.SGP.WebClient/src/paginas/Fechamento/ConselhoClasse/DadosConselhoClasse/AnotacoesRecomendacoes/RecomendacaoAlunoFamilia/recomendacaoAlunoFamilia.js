@@ -1,8 +1,11 @@
+import { Divider } from 'antd';
 import PropTypes from 'prop-types';
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import CardCollapse from '~/componentes/cardCollapse';
 import JoditEditor from '~/componentes/jodit-editor/joditEditor';
+import ListaRecomendacaoAluno from './listaRecomendacaoAluno';
+import ListaRecomendacaoFamilia from './listaRecomendacaoFamilia';
 
 const RecomendacaoAlunoFamilia = props => {
   const {
@@ -41,9 +44,11 @@ const RecomendacaoAlunoFamilia = props => {
       >
         {exibirCardRecomendacao ? (
           <div className="row">
-            <div className="col-sm-12 col-md-12 col-lg-6 col-xl-6">
+            <div className="col-md-12">
+              <ListaRecomendacaoAluno />
+            </div>
+            <div className="col-md-12 mb-3 mt-3">
               <JoditEditor
-                label="Recomendações ao estudante"
                 id="recomendacao-aluno"
                 value={dadosIniciais.recomendacaoAluno}
                 onChange={onChangeAluno}
@@ -53,9 +58,12 @@ const RecomendacaoAlunoFamilia = props => {
                 height="300px"
               />
             </div>
-            <div className="col-sm-12 col-md-12 col-lg-6 col-xl-6">
+            <Divider />
+            <div className="col-md-12">
+              <ListaRecomendacaoFamilia />
+            </div>
+            <div className="col-md-12 mt-3">
               <JoditEditor
-                label="Recomendações a família "
                 id="recomendacao-familia"
                 value={dadosIniciais.recomendacaoFamilia}
                 onChange={onChangeFamilia}
