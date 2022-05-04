@@ -6,7 +6,7 @@ import {
   CheckboxComponent,
   Colors,
   Loader,
-  SelectComponent,
+  SelectComponent
 } from '~/componentes';
 import { Cabecalho, FiltroHelper } from '~/componentes-sgp';
 import {
@@ -16,7 +16,7 @@ import {
   SGP_SELECT_DRE,
   SGP_SELECT_MODALIDADE,
   SGP_SELECT_SEMESTRE,
-  SGP_SELECT_UE,
+  SGP_SELECT_UE
 } from '~/componentes-sgp/filtro/idsCampos';
 import { OPCAO_TODOS, URL_HOME } from '~/constantes';
 import { ModalidadeDTO } from '~/dtos';
@@ -24,14 +24,13 @@ import {
   AbrangenciaServico,
   erros,
   history,
-  ServicoFiltroRelatorio,
+  ServicoFiltroRelatorio
 } from '~/servicos';
 import api from '~/servicos/api';
 import { ordenarListaMaiorParaMenor } from '~/utils';
 import NAAPAContext from './naapaContext';
-import NAAPAContextProvider from './naapaContextProvider';
 
-const DashboardNAAPAConteudo = () => {
+const DashboardNAAPAFiltros = () => {
   const {
     setConsideraHistorico,
     consideraHistorico,
@@ -295,7 +294,7 @@ const DashboardNAAPAConteudo = () => {
   }, [modalidade, anoLetivo, obterSemestres]);
 
   return (
-    <NAAPAContextProvider>
+    <>
       <Cabecalho pagina="Dashboard  NAAPA" />
       <Card>
         <Col span={24}>
@@ -417,8 +416,8 @@ const DashboardNAAPAConteudo = () => {
           </Row>
         </Col>
       </Card>
-    </NAAPAContextProvider>
+    </>
   );
 };
 
-export default DashboardNAAPAConteudo;
+export default DashboardNAAPAFiltros;

@@ -1,11 +1,11 @@
 import React from 'react';
-import DashboardNAAPAConteudo from './dashboardNAAPAConteudo';
+import DashboardNAAPAFiltros from './dashboardNAAPAFiltros';
 import NAAPAContextProvider from './naapaContextProvider';
 
 const DashboardNAAPA = () => {
   return (
     <NAAPAContextProvider>
-      <DashboardNAAPAConteudo />
+      <DashboardNAAPAFiltros />
     </NAAPAContextProvider>
   );
 };
