@@ -9,6 +9,7 @@ const NAAPAContextProvider = ({ children }) => {
   const [ue, setUe] = useState();
   const [modalidade, setModalidade] = useState();
   const [semestre, setSemestre] = useState();
+  const [listaMesesReferencias, setListaMesesReferencias] = useState([]);
 
   return (
     <NAAPAContext.Provider
@@ -25,6 +26,8 @@ const NAAPAContextProvider = ({ children }) => {
         setModalidade,
         semestre,
         setSemestre,
+        listaMesesReferencias,
+        setListaMesesReferencias,
       }}
     >
       {children}

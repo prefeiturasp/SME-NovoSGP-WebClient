@@ -2,13 +2,12 @@ import { Col, Row } from 'antd';
 import React, { useCallback, useContext, useEffect, useState } from 'react';
 import {
   Button,
-  Card,
   CheckboxComponent,
   Colors,
   Loader,
-  SelectComponent
+  SelectComponent,
 } from '~/componentes';
-import { Cabecalho, FiltroHelper } from '~/componentes-sgp';
+import { FiltroHelper } from '~/componentes-sgp';
 import {
   SGP_BUTTON_VOLTAR,
   SGP_CHECKBOX_EXIBIR_HISTORICO,
@@ -16,7 +15,7 @@ import {
   SGP_SELECT_DRE,
   SGP_SELECT_MODALIDADE,
   SGP_SELECT_SEMESTRE,
-  SGP_SELECT_UE
+  SGP_SELECT_UE,
 } from '~/componentes-sgp/filtro/idsCampos';
 import { OPCAO_TODOS, URL_HOME } from '~/constantes';
 import { ModalidadeDTO } from '~/dtos';
@@ -24,10 +23,10 @@ import {
   AbrangenciaServico,
   erros,
   history,
-  ServicoFiltroRelatorio
+  ServicoFiltroRelatorio,
 } from '~/servicos';
 import api from '~/servicos/api';
-import { ordenarListaMaiorParaMenor } from '~/utils';
+import { obterTodosMeses, ordenarListaMaiorParaMenor } from '~/utils';
 import NAAPAContext from './naapaContext';
 
 const DashboardNAAPAFiltros = () => {
@@ -44,6 +43,7 @@ const DashboardNAAPAFiltros = () => {
     setModalidade,
     semestre,
     setSemestre,
+    setListaMesesReferencias,
   } = useContext(NAAPAContext);
 
   const [anoAtual] = useState(window.moment().format('YYYY'));
@@ -293,129 +293,137 @@ const DashboardNAAPAFiltros = () => {
     }
   }, [modalidade, anoLetivo, obterSemestres]);
 
+  const montarMeses = useCallback(() => {
+    const meses = obterTodosMeses();
+    delete meses[0];
+    meses.unshift({ numeroMes: OPCAO_TODOS, nome: 'Acumulado' });
+    setListaMesesReferencias(meses);
+  }, []);
+
+  useEffect(() => {
+    montarMeses();
+  }, [montarMeses]);
+
   return (
     <>
-      <Cabecalho pagina="Dashboard  NAAPA" />
-      <Card>
-        <Col span={24}>
-          <Row gutter={[16, 8]} type="flex" justify="end">
-            <Col>
-              <Button
-                id={SGP_BUTTON_VOLTAR}
-                label="Voltar"
-                icon="arrow-left"
-                color={Colors.Azul}
-                border
-                onClick={() => {
-                  history.push(URL_HOME);
-                }}
+      <Col span={24}>
+        <Row gutter={[16, 8]} type="flex" justify="end">
+          <Col>
+            <Button
+              id={SGP_BUTTON_VOLTAR}
+              label="Voltar"
+              icon="arrow-left"
+              color={Colors.Azul}
+              border
+              onClick={() => {
+                history.push(URL_HOME);
+              }}
+            />
+          </Col>
+        </Row>
+        <Row gutter={[16, 8]}>
+          <Col sm={24}>
+            <CheckboxComponent
+              id={SGP_CHECKBOX_EXIBIR_HISTORICO}
+              label="Exibir histórico?"
+              onChangeCheckbox={onChangeConsideraHistorico}
+              checked={consideraHistorico}
+              disabled={listaAnosLetivo.length === 1}
+            />
+          </Col>
+        </Row>
+        <Row gutter={[16, 16]}>
+          <Col sm={24} md={12} xl={4}>
+            <Loader loading={carregandoAnos} ignorarTip>
+              <SelectComponent
+                id={SGP_SELECT_ANO_LETIVO}
+                label="Ano Letivo"
+                lista={listaAnosLetivo}
+                valueOption="valor"
+                valueText="desc"
+                disabled={
+                  !consideraHistorico ||
+                  !listaAnosLetivo?.length ||
+                  listaAnosLetivo?.length === 1
+                }
+                onChange={onChangeAnoLetivo}
+                valueSelect={anoLetivo}
+                placeholder="Ano letivo"
               />
-            </Col>
-          </Row>
-          <Row gutter={[16, 8]}>
-            <Col sm={24}>
-              <CheckboxComponent
-                id={SGP_CHECKBOX_EXIBIR_HISTORICO}
-                label="Exibir histórico?"
-                onChangeCheckbox={onChangeConsideraHistorico}
-                checked={consideraHistorico}
-                disabled={listaAnosLetivo.length === 1}
+            </Loader>
+          </Col>
+          <Col sm={24} md={12} xl={10}>
+            <Loader loading={carregandoDres} ignorarTip>
+              <SelectComponent
+                id={SGP_SELECT_DRE}
+                label="Diretoria Regional de Educação (DRE)"
+                lista={listaDres}
+                valueOption="codigo"
+                valueText="nome"
+                disabled={
+                  !anoLetivo || listaDres?.length === 1 || !listaDres?.length
+                }
+                onChange={onChangeDre}
+                valueSelect={dre?.codigo}
+                placeholder="Diretoria Regional De Educação (DRE)"
+                showSearch
               />
-            </Col>
-          </Row>
-          <Row gutter={[16, 16]}>
-            <Col sm={24} md={12} xl={4}>
-              <Loader loading={carregandoAnos} ignorarTip>
-                <SelectComponent
-                  id={SGP_SELECT_ANO_LETIVO}
-                  label="Ano Letivo"
-                  lista={listaAnosLetivo}
-                  valueOption="valor"
-                  valueText="desc"
-                  disabled={
-                    !consideraHistorico ||
-                    !listaAnosLetivo?.length ||
-                    listaAnosLetivo?.length === 1
-                  }
-                  onChange={onChangeAnoLetivo}
-                  valueSelect={anoLetivo}
-                  placeholder="Ano letivo"
-                />
-              </Loader>
-            </Col>
-            <Col sm={24} md={12} xl={10}>
-              <Loader loading={carregandoDres} ignorarTip>
-                <SelectComponent
-                  id={SGP_SELECT_DRE}
-                  label="Diretoria Regional de Educação (DRE)"
-                  lista={listaDres}
-                  valueOption="codigo"
-                  valueText="nome"
-                  disabled={
-                    !anoLetivo || listaDres?.length === 1 || !listaDres?.length
-                  }
-                  onChange={onChangeDre}
-                  valueSelect={dre?.codigo}
-                  placeholder="Diretoria Regional De Educação (DRE)"
-                  showSearch
-                />
-              </Loader>
-            </Col>
-            <Col sm={24} md={12} xl={10}>
-              <Loader loading={carregandoUes} ignorarTip>
-                <SelectComponent
-                  id={SGP_SELECT_UE}
-                  label="Unidade Escolar (UE)"
-                  lista={listaUes}
-                  valueOption="codigo"
-                  valueText="nome"
-                  disabled={!dre?.codigo || listaUes?.length === 1}
-                  onChange={onChangeUe}
-                  valueSelect={ue?.codigo}
-                  placeholder="Unidade Escolar (UE)"
-                  showSearch
-                />
-              </Loader>
-            </Col>
-          </Row>
-          <Row gutter={[16, 16]}>
-            <Col sm={24} md={12} xl={8}>
-              <Loader loading={carregandoModalidades} ignorarTip>
-                <SelectComponent
-                  id={SGP_SELECT_MODALIDADE}
-                  label="Modalidade"
-                  lista={listaModalidades}
-                  valueOption="valor"
-                  valueText="desc"
-                  disabled={!ue?.codigo || listaModalidades?.length === 1}
-                  onChange={onChangeModalidade}
-                  valueSelect={modalidade}
-                  placeholder="Modalidade"
-                />
-              </Loader>
-            </Col>
-            <Col sm={24} md={12} xl={8}>
-              <Loader loading={carregandoSemestres} ignorarTip>
-                <SelectComponent
-                  id={SGP_SELECT_SEMESTRE}
-                  lista={listaSemestres}
-                  valueOption="valor"
-                  valueText="desc"
-                  label="Semestre"
-                  disabled={
-                    !modalidade ||
-                    listaSemestres?.length === 1 ||
-                    Number(modalidade) !== ModalidadeDTO.EJA
-                  }
-                  valueSelect={semestre}
-                  onChange={onChangeSemestre}
-                  placeholder="Semestre"
-                />
-              </Loader>
-            </Col>
-          </Row>
-        </Col>
-      </Card>
+            </Loader>
+          </Col>
+          <Col sm={24} md={12} xl={10}>
+            <Loader loading={carregandoUes} ignorarTip>
+              <SelectComponent
+                id={SGP_SELECT_UE}
+                label="Unidade Escolar (UE)"
+                lista={listaUes}
+                valueOption="codigo"
+                valueText="nome"
+                disabled={!dre?.codigo || listaUes?.length === 1}
+                onChange={onChangeUe}
+                valueSelect={ue?.codigo}
+                placeholder="Unidade Escolar (UE)"
+                showSearch
+              />
+            </Loader>
+          </Col>
+        </Row>
+        <Row gutter={[16, 16]}>
+          <Col sm={24} md={12} xl={8}>
+            <Loader loading={carregandoModalidades} ignorarTip>
+              <SelectComponent
+                id={SGP_SELECT_MODALIDADE}
+                label="Modalidade"
+                lista={listaModalidades}
+                valueOption="valor"
+                valueText="desc"
+                disabled={!ue?.codigo || listaModalidades?.length === 1}
+                onChange={onChangeModalidade}
+                valueSelect={modalidade}
+                placeholder="Modalidade"
+              />
+            </Loader>
+          </Col>
+          <Col sm={24} md={12} xl={8}>
+            <Loader loading={carregandoSemestres} ignorarTip>
+              <SelectComponent
+                id={SGP_SELECT_SEMESTRE}
+                lista={listaSemestres}
+                valueOption="valor"
+                valueText="desc"
+                label="Semestre"
+                disabled={
+                  !modalidade ||
+                  listaSemestres?.length === 1 ||
+                  Number(modalidade) !== ModalidadeDTO.EJA
+                }
+                valueSelect={semestre}
+                onChange={onChangeSemestre}
+                placeholder="Semestre"
+              />
+            </Loader>
+          </Col>
+        </Row>
+      </Col>
     </>
   );
 };
