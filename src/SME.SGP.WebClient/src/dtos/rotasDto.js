@@ -91,6 +91,7 @@ const RotasDto = {
   LISTAO: '/diario-classe/listao',
   LISTAO_OPERACOES: '/diario-classe/listao/operacoes',
   RELATORIO_FREQUENCIA_MENSAL: '/relatorios/frequencia/mensal',
+  DASHBOARD_NAAPA: '/dashboard/naapa',
 };
 
 export default RotasDto;
