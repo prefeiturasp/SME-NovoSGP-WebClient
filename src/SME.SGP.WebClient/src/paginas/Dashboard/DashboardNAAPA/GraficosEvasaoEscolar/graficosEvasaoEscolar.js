@@ -1,5 +1,5 @@
 import React from 'react';
-import QuantidadeFrequenciaInferior from './TotalDevolutivasPorDRE/quantidadeFrequenciaInferior';
+import QuantidadeFrequenciaInferior from './QuantidadeFrequenciaInferior/quantidadeFrequenciaInferior';
 
 const GraficosEvasaoEscolar = () => {
   return (
