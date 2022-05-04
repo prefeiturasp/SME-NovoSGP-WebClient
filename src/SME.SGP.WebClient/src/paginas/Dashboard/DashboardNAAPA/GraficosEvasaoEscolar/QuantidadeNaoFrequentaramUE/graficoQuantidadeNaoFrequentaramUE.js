@@ -7,7 +7,7 @@ import { erros } from '~/servicos';
 import ServicoDashboardNAAPA from '~/servicos/Paginas/Dashboard/ServicoDashboardNAAPA';
 import NAAPAContext from '../../naapaContext';
 
-const GraficoQuantidadeFrequenciaInferior = () => {
+const GraficoQuantidadeNaoFrequentaramUE = () => {
   const {
     consideraHistorico,
     anoLetivo,
@@ -27,7 +27,7 @@ const GraficoQuantidadeFrequenciaInferior = () => {
 
   const obterDadosGrafico = useCallback(async () => {
     setExibirLoader(true);
-    const retorno = await ServicoDashboardNAAPA.obterFrequenciaTurmaEvasaoAbaixo50Porcento(
+    const retorno = await ServicoDashboardNAAPA.obterFrequenciaTurmaEvasaoSemPresenca(
       consideraHistorico,
       anoLetivo,
       dre?.codigo,
@@ -115,4 +115,4 @@ const GraficoQuantidadeFrequenciaInferior = () => {
   );
 };
 
-export default GraficoQuantidadeFrequenciaInferior;
+export default GraficoQuantidadeNaoFrequentaramUE;
