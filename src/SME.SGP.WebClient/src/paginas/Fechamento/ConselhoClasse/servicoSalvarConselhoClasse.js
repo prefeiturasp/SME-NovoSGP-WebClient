@@ -111,6 +111,11 @@ class ServicoSalvarConselhoClasse {
             dadosAlunoObjectCard.codigoEOL
           );
         }
+
+        if (!params?.conselhoClasseId) {
+          dadosPrincipaisConselhoClasse.conselhoClasseId = retorno.data.conselhoClasseId;
+          dispatch(setDadosPrincipaisConselhoClasse(dadosPrincipaisConselhoClasse));
+        }
         return true;
       }
       return false;
