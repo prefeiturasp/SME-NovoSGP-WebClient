@@ -109,6 +109,7 @@ import { CONTEXT_LISTAO } from '~/constantes';
 import ListaoOperacoes from '~/paginas/DiarioClasse/Listao/operacoes/listaoOperacoes';
 import Listao from '~/paginas/DiarioClasse/Listao/lista/listao';
 import RelatorioFrequenciaMensal from '~/paginas/Relatorios/Frequencia/relatorioFrequenciaMensal';
+import DashboardNAAPA from '~/paginas/Dashboard/DashboardNAAPA/dashboardNAAPA';
 
 const rotas = new Map();
 
@@ -1509,6 +1510,17 @@ rotas.set(RotasDto.RELATORIO_FREQUENCIA_MENSAL, {
   tipo: RotasTipo.EstruturadaAutenticada,
   temPermissionamento: true,
   chavePermissao: RotasDto.RELATORIO_FREQUENCIA_MENSAL,
+});
+
+rotas.set(RotasDto.DASHBOARD_NAAPA, {
+  breadcrumbName: 'NAAPA',
+  menu: ['Dashboard'],
+  parent: '/',
+  component: DashboardNAAPA,
+  exact: true,
+  tipo: RotasTipo.EstruturadaAutenticada,
+  temPermissionamento: true,
+  chavePermissao: RotasDto.DASHBOARD_NAAPA,
 });
 
 const rotasArray = [];
