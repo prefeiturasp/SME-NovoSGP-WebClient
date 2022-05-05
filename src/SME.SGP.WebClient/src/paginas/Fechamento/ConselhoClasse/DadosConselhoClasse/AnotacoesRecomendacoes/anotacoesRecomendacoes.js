@@ -228,6 +228,9 @@ const AnotacoesRecomendacoes = props => {
 
       if (resposta?.data?.recomendacoesAlunoFamilia?.length) {
         setarListaRecomendacoesSalvas(resposta.data.recomendacoesAlunoFamilia);
+      } else {
+        dispatch(setRecomendacaoAlunoSelecionados([]));
+        dispatch(setRecomendacaoFamiliaSelecionados([]));        
       }
 
       setMatriculaAtivaPeriodo(resposta.data.matriculaAtiva);
