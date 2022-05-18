@@ -1,14 +1,16 @@
 import { Tabs } from 'antd';
+import { Form, Formik } from 'formik';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import * as Yup from 'yup';
-import { Formik, Form } from 'formik';
-import { Grid, Loader, ModalConteudoHtml, Colors } from '~/componentes';
-import Button from '~/componentes/button';
+import { Colors, Grid, Loader, ModalConteudoHtml } from '~/componentes';
+import AlertaModalidadeInfantil from '~/componentes-sgp/AlertaModalidadeInfantil/alertaModalidadeInfantil';
 import Avaliacao from '~/componentes-sgp/avaliacao/avaliacao';
 import Cabecalho from '~/componentes-sgp/cabecalho';
 import Alert from '~/componentes/alert';
+import Button from '~/componentes/button';
 import Card from '~/componentes/card';
+import JoditEditor from '~/componentes/jodit-editor/joditEditor';
 import Row from '~/componentes/row';
 import SelectComponent from '~/componentes/select';
 import { ContainerTabsCard } from '~/componentes/tabs/tabs.css';
@@ -23,15 +25,13 @@ import {
 import { confirmar, erros, sucesso } from '~/servicos/alertas';
 import api from '~/servicos/api';
 import history from '~/servicos/history';
+import ServicoPeriodoFechamento from '~/servicos/Paginas/Calendario/ServicoPeriodoFechamento';
+import ServicoNotaConceito from '~/servicos/Paginas/DiarioClasse/ServicoNotaConceito';
 import { verificaSomenteConsulta } from '~/servicos/servico-navegacao';
 import ServicoNotas from '~/servicos/ServicoNotas';
+import { ehTurmaInfantil } from '~/servicos/Validacoes/validacoesInfatil';
 import BotoesAcoessNotasConceitos from './botoesAcoes';
 import { Container, ContainerAuditoria } from './notas.css';
-import ServicoPeriodoFechamento from '~/servicos/Paginas/Calendario/ServicoPeriodoFechamento';
-import AlertaModalidadeInfantil from '~/componentes-sgp/AlertaModalidadeInfantil/alertaModalidadeInfantil';
-import { ehTurmaInfantil } from '~/servicos/Validacoes/validacoesInfatil';
-import ServicoNotaConceito from '~/servicos/Paginas/DiarioClasse/ServicoNotaConceito';
-import JoditEditor from '~/componentes/jodit-editor/joditEditor';
 
 const { TabPane } = Tabs;
 
@@ -453,11 +453,6 @@ const Notas = ({ match }) => {
     setQuartoBimestre(quartoBimestre);
   };
 
-  const aposSalvarNotas = () => {
-    // resetarBimestres();
-    obterDadosBimestres(disciplinaSelecionada, dadosBimestreAtual);
-  };
-
   const montarBimestreParaSalvar = bimestreParaMontar => {
     const valorParaSalvar = [];
     bimestreParaMontar.alunos.forEach(aluno => {
@@ -487,7 +482,6 @@ const Notas = ({ match }) => {
   const salvarNotasAvaliacoes = async (
     resolve,
     reject,
-    click,
     salvarNotasAvaliacao
   ) => {
     const valoresBimestresSalvar = [];
@@ -514,20 +508,41 @@ const Notas = ({ match }) => {
     }
     setCarregandoGeral(true);
     try {
-      const salvouNotas = await api.post(`v1/avaliacoes/notas`, {
-        turmaId: usuario.turmaSelecionada.turma,
-        disciplinaId: disciplinaSelecionada,
-        notasConceitos: valoresBimestresSalvar,
-      });
+      const paramsQueryString = {
+        anoLetivo: usuario.turmaSelecionada.anoLetivo,
+        bimestre: dadosBimestreAtual.numero,
+        disciplinaCodigo: disciplinaSelecionada,
+        modalidade: usuario.turmaSelecionada.modalidade,
+        turmaCodigo: usuario.turmaSelecionada.turma,
+        turmaId: usuario.turmaSelecionada.id,
+        turmaHistorico: usuario.turmaSelecionada.consideraHistorico,
+        semestre: usuario.turmaSelecionada.periodo,
+        periodoInicioTicks: dadosBimestreAtual.periodoInicioTicks,
+        periodoFimTicks: dadosBimestreAtual.periodoFimTicks,
+        periodoEscolarId: dadosBimestreAtual.periodoEscolarId,
+      };
+
+      const salvouNotas = await api.post(
+        `v1/avaliacoes/notas`,
+        {
+          turmaId: usuario.turmaSelecionada.turma,
+          disciplinaId: disciplinaSelecionada,
+          notasConceitos: valoresBimestresSalvar,
+        },
+        { params: paramsQueryString }
+      );
       setCarregandoGeral(false);
       if (salvouNotas && salvouNotas.status === 200) {
         sucesso('Suas informações foram salvas com sucesso.');
         dispatch(setModoEdicaoGeral(false));
         dispatch(setModoEdicaoGeralNotaFinal(false));
         dispatch(setExpandirLinha([]));
-        if (click) {
-          aposSalvarNotas();
-        }
+        setAuditoriaInfo({
+          auditoriaAlterado: salvouNotas?.data?.auditoriaAlterado,
+          auditoriaInserido:  salvouNotas?.data?.auditoriaInserido,
+          auditoriaBimestreAlterado:  salvouNotas?.data?.auditoriaBimestreAlterado,
+          auditoriaBimestreInserido:  salvouNotas?.data?.auditoriaBimestreInserido,
+        });
         resolve(true);
         return true;
       }
@@ -598,7 +613,6 @@ const Notas = ({ match }) => {
   const salvarNotasFinais = async (
     resolve,
     reject,
-    click,
     salvarNotaFinal,
     salvarNotasAvaliacao
   ) => {
@@ -669,8 +683,32 @@ const Notas = ({ match }) => {
               dispatch(setModoEdicaoGeral(false));
               dispatch(setModoEdicaoGeralNotaFinal(false));
               dispatch(setExpandirLinha([]));
-              if (click) {
-                aposSalvarNotas();
+              const auditoriaBimestre = salvouNotas?.data?.[0];
+              if (auditoriaBimestre) {
+                const auditoriaBimestreInserido = `Nota final do bimestre inserida por ${
+                  auditoriaBimestre?.criadoPor
+                }(${auditoriaBimestre?.criadoRF}) em ${window.moment
+                  .utc(auditoriaBimestre?.criadoEm)
+                  .format('DD/MM/YYYY')}, às ${window.moment
+                  .utc(auditoriaBimestre?.criadoEm)
+                  .format('HH:mm')}.`;
+                let auditoriaBimestreAlterado = '';
+                if (auditoriaBimestre?.alteradoPor) {
+                  auditoriaBimestreAlterado = `Nota final do bimestre alterada por ${
+                    auditoriaBimestre?.alteradoPor
+                  }(${auditoriaBimestre?.alteradoRF}) em ${window.moment
+                    .utc(auditoriaBimestre?.alteradoEm)
+                    .format('DD/MM/YYYY')}, às ${window.moment
+                    .utc(auditoriaBimestre?.alteradoEm)
+                    .format('HH:mm')}.`;
+                }
+                setAuditoriaInfo(current => {
+                  return {
+                    ...current,
+                    auditoriaBimestreInserido,
+                    auditoriaBimestreAlterado,
+                  };
+                });
               }
               return resolve(true);
             }
@@ -690,17 +728,16 @@ const Notas = ({ match }) => {
     }
   };
 
-  const onSalvarNotas = (click, salvarNotaFinal, salvarNotasAvaliacao) => {
+  const onSalvarNotas = (salvarNotaFinal, salvarNotasAvaliacao) => {
     return new Promise((resolve, reject) =>
       Promise.all([
         salvarNotasFinais(
           resolve,
           reject,
-          click,
           salvarNotaFinal,
           salvarNotasAvaliacao
         ),
-        salvarNotasAvaliacoes(resolve, reject, click, salvarNotasAvaliacao),
+        salvarNotasAvaliacoes(resolve, reject, salvarNotasAvaliacao),
       ])
     );
   };
@@ -864,7 +901,6 @@ const Notas = ({ match }) => {
             ? null
             : dadosBimestreAtual.justificativa;
           await onSalvarNotas(
-            clicouSalvar,
             estaEmModoEdicaoGeralNotaFinal,
             estaEmModoEdicaoGeral
           );
@@ -1109,7 +1145,8 @@ const Notas = ({ match }) => {
     setExibeModalJustificativa(false);
     await onSalvarNotas(
       clicouNoBotaoSalvar,
-      ServicoNotaConceito.estaEmModoEdicaoGeralNotaFinal()
+      ServicoNotaConceito.estaEmModoEdicaoGeralNotaFinal(),
+      ServicoNotaConceito.estaEmModoEdicaoGeral()
     );
 
     refForm.resetForm();
