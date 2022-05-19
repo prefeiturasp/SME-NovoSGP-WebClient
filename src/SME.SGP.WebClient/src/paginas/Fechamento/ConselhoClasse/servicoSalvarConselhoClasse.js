@@ -10,7 +10,6 @@ import {
   setNotaConceitoPosConselhoAtual,
   setGerandoParecerConclusivo,
   setExibirLoaderGeralConselhoClasse,
-  setAtualizarEmAprovacao,
   setBimestreAtual,
   setDadosIniciaisListasNotasConceitos,
   setAuditoriaAnotacaoRecomendacao
@@ -54,6 +53,8 @@ class ServicoSalvarConselhoClasse {
       conselhoClasseEmEdicao,
       desabilitarCampos,
       bimestreAtual,
+      recomendacaoFamiliaSelecionados,
+      recomendacaoAlunoSelecionados,
     } = conselhoClasse;
 
     const perguntaDescartarRegistros = async () => {
@@ -65,6 +66,16 @@ class ServicoSalvarConselhoClasse {
     };
 
     const salvar = async () => {
+      if (!recomendacaoAluno && !recomendacaoAlunoSelecionados?.length) {
+        erro('É obrigatório informar ou selecionar Recomendações ao estudante');
+        return false;
+      }
+
+      if (!recomendacaoFamilia && !recomendacaoFamiliaSelecionados?.length) {
+        erro('É obrigatório informar ou selecionar Recomendações a família ');
+        return false;
+      }
+
       const params = {
         conselhoClasseId: dadosPrincipaisConselhoClasse.conselhoClasseId,
         fechamentoTurmaId: dadosPrincipaisConselhoClasse.fechamentoTurmaId || 0,
@@ -72,17 +83,13 @@ class ServicoSalvarConselhoClasse {
         anotacoesPedagogicas,
         recomendacaoAluno,
         recomendacaoFamilia,
+        recomendacaoFamiliaIds: recomendacaoFamiliaSelecionados?.length
+          ? recomendacaoFamiliaSelecionados.map(item => item.id)
+          : [],
+        recomendacaoAlunoIds: recomendacaoAlunoSelecionados?.length
+          ? recomendacaoAlunoSelecionados.map(item => item.id)
+          : [],
       };
-
-      if (!recomendacaoAluno) {
-        erro('É obrigatório informar Recomendações ao estudante');
-        return false;
-      }
-
-      if (!recomendacaoFamilia) {
-        erro('É obrigatório informar Recomendações a família ');
-        return false;
-      }
       dispatch(setExibirLoaderGeralConselhoClasse(true));
       const retorno = await ServicoConselhoClasse.salvarRecomendacoesAlunoFamilia(
         params
@@ -104,6 +111,11 @@ class ServicoSalvarConselhoClasse {
             dadosPrincipaisConselhoClasse.fechamentoTurmaId,
             dadosAlunoObjectCard.codigoEOL
           );
+        }
+
+        if (!params?.conselhoClasseId) {
+          dadosPrincipaisConselhoClasse.conselhoClasseId = retorno.data.conselhoClasseId;
+          dispatch(setDadosPrincipaisConselhoClasse(dadosPrincipaisConselhoClasse));
         }
         return true;
       }
@@ -213,6 +225,7 @@ class ServicoSalvarConselhoClasse {
       fechamentoTurmaId,
       alunoCodigo,
       tipoNota,
+      turmaCodigo,
     } = dadosPrincipaisConselhoClasse;
 
     const {
@@ -258,8 +271,8 @@ class ServicoSalvarConselhoClasse {
 
     const notaDto = {
       justificativa,
-      nota: ehNota ? nota : '',
-      conceito: !ehNota ? conceito : '',
+      nota: ehNota ? nota : null,
+      conceito: !ehNota ? conceito : null,
       codigoComponenteCurricular,
     };
 
@@ -277,13 +290,20 @@ class ServicoSalvarConselhoClasse {
         retorno.data.conselhoClasseId;
       dadosPrincipaisConselhoClasse.fechamentoTurmaId =
         retorno.data.fechamentoTurmaId;
-      dispatch(
-        setAtualizarEmAprovacao({
-          ...retorno.data,
-          ...notaDto,
-          ehNota,
-        })
+
+      const { consideraHistorico } = state.usuario.turmaSelecionada;
+      const bimestre =
+        bimestreAtual?.valor === 'final' ? 0 : bimestreAtual?.valor;
+
+      await ServicoConselhoClasse.obterNotasConceitosConselhoClasse(
+        conselhoClasseId,
+        fechamentoTurmaId,
+        alunoCodigo,
+        turmaCodigo,
+        bimestre,
+        consideraHistorico
       );
+
       dispatch(setDadosPrincipaisConselhoClasse(dadosPrincipaisConselhoClasse));
 
       const { auditoria } = retorno.data;

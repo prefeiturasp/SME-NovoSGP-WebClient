@@ -29,6 +29,12 @@ const inicial = {
   exibirLoaderGeralConselhoClasse: false,
   situacaoConselho: '',
   podeAcessar: true,
+  listaoRecomendacoesAlunoFamilia: {
+    listaRecomendacoesAluno: [],
+    listaRecomendacoesFamilia: [],
+  },
+  recomendacaoFamiliaSelecionados: [],
+  recomendacaoAlunoSelecionados: [],
 };
 
 export default function ConselhoClasse(state = inicial, action) {
@@ -102,6 +108,12 @@ export default function ConselhoClasse(state = inicial, action) {
           exibirModalImpressaoConselhoClasse: false,
           exibirLoaderGeralConselhoClasse: false,
           podeAcessar: true,
+          listaoRecomendacoesAlunoFamilia: {
+            listaRecomendacoesAluno: [],
+            listaRecomendacoesFamilia: [],
+          },
+          recomendacaoFamiliaSelecionados: [],
+          recomendacaoAlunoSelecionados: [],
         };
       }
       case '@conselhoClasse/setConselhoClasseEmEdicao': {
@@ -285,6 +297,18 @@ export default function ConselhoClasse(state = inicial, action) {
       }
       case '@conselhoClasse/setPodeAcessar': {
         draft.podeAcessar = action.payload;
+        break;
+      }
+      case '@conselhoClasse/setListaoRecomendacoesAlunoFamilia': {
+        draft.listaoRecomendacoesAlunoFamilia = action.payload;
+        break;
+      }
+      case '@conselhoClasse/setRecomendacaoFamiliaSelecionados': {
+        draft.recomendacaoFamiliaSelecionados = action.payload;
+        break;
+      }
+      case '@conselhoClasse/setRecomendacaoAlunoSelecionados': {
+        draft.recomendacaoAlunoSelecionados = action.payload;
         break;
       }
 

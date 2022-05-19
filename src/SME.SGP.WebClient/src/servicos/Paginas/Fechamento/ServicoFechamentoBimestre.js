@@ -1,5 +1,7 @@
 import api from '~/servicos/api';
 
+const urlBase = '/v1/fechamentos/turmas';
+
 const ServicoFechamentoBimestre = {
   buscarDados(turmaCodigo, disciplinaCodigo, bimestre, periodo) {
     return api.get(
@@ -29,11 +31,11 @@ const ServicoFechamentoBimestre = {
     componenteCurricularCodigo
   ) {
     return api.get(
-      `/v1/fechamentos/turmas/listar?turmaCodigo=${turmaCodigo}&componenteCurricularCodigo=${componenteCurricularCodigo}&bimestre=${bimestre}&semestre=${semestre}`
+      `${urlBase}/listar?turmaCodigo=${turmaCodigo}&componenteCurricularCodigo=${componenteCurricularCodigo}&bimestre=${bimestre}&semestre=${semestre}`
     );
   },
   salvarFechamentoPorBimestre(params) {
-    return api.post(`/v1/fechamentos/turmas/salvar-fechamento`, params);
+    return api.post(`${urlBase}/salvar-fechamento`, params);
   },
 };
 

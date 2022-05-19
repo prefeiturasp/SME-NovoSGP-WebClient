@@ -157,3 +157,18 @@ export const setPodeAcessar = payload => ({
   type: '@conselhoClasse/setPodeAcessar',
   payload,
 });
+
+export const setListaoRecomendacoesAlunoFamilia = payload => ({
+  type: '@conselhoClasse/setListaoRecomendacoesAlunoFamilia',
+  payload,
+});
+
+export const setRecomendacaoFamiliaSelecionados = payload => ({
+  type: '@conselhoClasse/setRecomendacaoFamiliaSelecionados',
+  payload,
+});
+
+export const setRecomendacaoAlunoSelecionados = payload => ({
+  type: '@conselhoClasse/setRecomendacaoAlunoSelecionados',
+  payload,
+});
