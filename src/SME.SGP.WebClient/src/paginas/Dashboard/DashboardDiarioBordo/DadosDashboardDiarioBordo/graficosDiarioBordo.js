@@ -2,8 +2,7 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 import { OPCAO_TODOS } from '~/constantes/constantes';
 import { ModalidadeDTO } from '~/dtos';
-import QtdDiariosPreenchidosEQtdDiariosComDevolutiva from './QtdDiariosPreenchidosEQtdDiariosComDevolutiva/qtdDiariosPreenchidosEQtdDiariosComDevolutiva';
-import QuantidadeTotalDiariosBordoPendentes from './QuantidadeTotalDiariosBordoPendentes/quantidadeTotalDiariosBordoPendentes';
+import DiariosBordoPreenchidosPendentes from './DiariosBordoPreenchidosPendentes/diariosBordoPreenchidosPendentes';
 import TotalDiariosBordoPorDRE from './TotalDiariosBordoPorDRE/totalDiariosBordoPorDRE';
 
 const GraficosDiarioBordo = () => {
@@ -38,13 +37,7 @@ const GraficosDiarioBordo = () => {
       ) : (
         <></>
       )}
-      <QtdDiariosPreenchidosEQtdDiariosComDevolutiva
-        anoLetivo={anoLetivo}
-        dreId={dreId}
-        ueId={ueId}
-        modalidade={modalidade}
-      />
-      <QuantidadeTotalDiariosBordoPendentes
+      <DiariosBordoPreenchidosPendentes
         anoLetivo={anoLetivo}
         dreId={dreId}
         ueId={ueId}

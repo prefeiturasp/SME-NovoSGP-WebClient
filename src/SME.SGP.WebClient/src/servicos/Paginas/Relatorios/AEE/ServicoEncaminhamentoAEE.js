@@ -229,7 +229,7 @@ class ServicoEncaminhamentoAEE {
         const valoresParaSalvar = {
           id: encaminhamentoId || 0,
           turmaId: dadosCollapseLocalizarEstudante.turmaId,
-          alunoCodigo: dadosCollapseLocalizarEstudante.codigoAluno,
+          alunoCodigo: dadosCollapseLocalizarEstudante.codigoAluno.toString(),
           situacao,
         };
         valoresParaSalvar.secoes = formsParaSalvar.map(item => {
@@ -268,7 +268,7 @@ class ServicoEncaminhamentoAEE {
                 }
                 break;
               default:
-                questao.resposta = campos[key] || '';
+                questao.resposta = JSON.stringify(campos[key] || '');
                 break;
             }
 

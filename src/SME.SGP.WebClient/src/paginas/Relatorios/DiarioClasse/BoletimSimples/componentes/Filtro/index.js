@@ -1,14 +1,17 @@
-import React, { useCallback, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-
-import { CheckboxComponent, Loader, SelectComponent } from '~/componentes';
+import React, { useCallback, useEffect, useState } from 'react';
+import {
+  CheckboxComponent,
+  Loader,
+  RadioGroupButton,
+  SelectComponent,
+} from '~/componentes';
 import { FiltroHelper } from '~/componentes-sgp';
-
+import { OPCAO_TODOS } from '~/constantes/constantes';
 import { ModalidadeDTO } from '~/dtos';
 import { AbrangenciaServico, erros, ServicoFiltroRelatorio } from '~/servicos';
-import { OPCAO_TODOS } from '~/constantes/constantes';
-import { AvisoBoletim } from './styles';
 import { ordenarDescPor } from '~/utils';
+import { AvisoBoletim } from './styles';
 
 const Filtros = ({ onFiltrar, filtrou, setFiltrou, cancelou, setCancelou }) => {
   const [anoAtual] = useState(window.moment().format('YYYY'));
@@ -35,15 +38,25 @@ const Filtros = ({ onFiltrar, filtrou, setFiltrou, cancelou, setCancelou }) => {
   const [opcaoEstudanteId, setOpcaoEstudanteId] = useState();
   const [turmasId, setTurmasId] = useState('');
   const [ueCodigo, setUeCodigo] = useState();
+  const [
+    imprimirEstudantesInativos,
+    setImprimirEstudantesInativos,
+  ] = useState();
 
+  const OPCAO_TODOS_ESTUDANTES = '0';
   const opcoesEstudantes = [
-    { desc: 'Todos', valor: '0' },
+    { desc: 'Todos', valor: OPCAO_TODOS_ESTUDANTES },
     { desc: 'Selecionar Alunos', valor: '1' },
   ];
 
   const opcoesModeloBoletim = [
     { valor: 1, desc: 'Simples' },
     { valor: 2, desc: 'Detalhado' },
+  ];
+
+  const opcoesImprimirEstudantesInativos = [
+    { value: true, label: 'Sim' },
+    { value: false, label: 'Não' },
   ];
 
   const limparCampos = () => {
@@ -71,6 +84,7 @@ const Filtros = ({ onFiltrar, filtrou, setFiltrou, cancelou, setCancelou }) => {
       turmasId,
       opcaoEstudanteId,
       modeloBoletimId,
+      imprimirEstudantesInativos,
     };
 
     if (!filtrou) {
@@ -88,6 +102,7 @@ const Filtros = ({ onFiltrar, filtrou, setFiltrou, cancelou, setCancelou }) => {
     onFiltrar,
     filtrou,
     modeloBoletimId,
+    imprimirEstudantesInativos,
   ]);
 
   const onChangeConsideraHistorico = e => {
@@ -329,10 +344,15 @@ const Filtros = ({ onFiltrar, filtrou, setFiltrou, cancelou, setCancelou }) => {
     const temOpcaoTodas = String(valor) === OPCAO_TODOS;
 
     setTurmasId(valor);
-    setOpcaoEstudanteId('0');
+    setOpcaoEstudanteId(OPCAO_TODOS_ESTUDANTES);
     setModeloBoletimId('1');
     setDesabilitarEstudante(temOpcaoTodas);
     setFiltrou(false);
+  };
+
+  const onChangeImprimirEstudantesInativos = valor => {
+    setFiltrou(false);
+    setImprimirEstudantesInativos(valor);
   };
 
   const obterTurmas = useCallback(async () => {
@@ -405,8 +425,16 @@ const Filtros = ({ onFiltrar, filtrou, setFiltrou, cancelou, setCancelou }) => {
       setAnoLetivo(anoAtual);
       setCancelou(false);
       setFiltrou(false);
+      setImprimirEstudantesInativos(false);
+      setOpcaoEstudanteId();
     }
   }, [cancelou, setFiltrou, setCancelou, anoAtual]);
+
+  useEffect(() => {
+    if (opcaoEstudanteId !== OPCAO_TODOS_ESTUDANTES) {
+      setImprimirEstudantesInativos(false);
+    }
+  }, [opcaoEstudanteId]);
 
   return (
     <div className="col-12 p-0">
@@ -545,6 +573,18 @@ const Filtros = ({ onFiltrar, filtrou, setFiltrou, cancelou, setCancelou }) => {
           <AvisoBoletim visivel={modeloBoletimId === '2'}>
             Neste modelo cada estudante ocupará no mínimo 1 página
           </AvisoBoletim>
+        </div>
+        <div className="col-sm-12 col-md-4">
+          <RadioGroupButton
+            label="Imprimir estudantes inativos"
+            opcoes={opcoesImprimirEstudantesInativos}
+            valorInicial
+            onChange={e => {
+              onChangeImprimirEstudantesInativos(e.target.value);
+            }}
+            value={imprimirEstudantesInativos}
+            desabilitado={opcaoEstudanteId !== OPCAO_TODOS_ESTUDANTES}
+          />
         </div>
       </div>
     </div>

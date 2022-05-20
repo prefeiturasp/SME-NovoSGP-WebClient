@@ -50,7 +50,7 @@ const FechamentoBimestreLista = props => {
   const [alunoModalAnotacao, setAlunoModalAnotacao] = useState({});
   const [fechamentoId, setFechamentoId] = useState(0);
 
-  const mensagempRrocessamento =
+  const alertaSucessoReprocessamento =
     'Solicitação de fechamento realizada com sucesso. Em breve você receberá uma notificação com o resultado do processo.';
 
   const onClickReprocessarNotasConceitos = async () => {
@@ -60,7 +60,7 @@ const FechamentoBimestreLista = props => {
     if (processando && processando.status == 200) {
       setSituacaoFechamento(situacaoFechamentoDto.EmProcessamento);
       setSituacaosituacaoNomeFechamento('Em Processamento');
-      sucesso(mensagempRrocessamento);
+      sucesso(alertaSucessoReprocessamento);
     }
   };
 
@@ -87,7 +87,7 @@ const FechamentoBimestreLista = props => {
     if (processando && processando.status == 200) {
       setSituacaoFechamento(situacaoFechamentoDto.EmProcessamento);
       setSituacaosituacaoNomeFechamento('Em Processamento');
-      sucesso(mensagempRrocessamento);
+      sucesso(alertaSucessoReprocessamento);
     }
   };
 
@@ -177,11 +177,11 @@ const FechamentoBimestreLista = props => {
                 className="mr-2"
                 onClick={onClickReprocessarNotasConceitos}
                 disabled={
-                  !(
-                    podeProcessarReprocessar &&
-                    situacaoFechamento ===
-                      situacaoFechamentoDto.ProcessadoComPendencias
-                  )
+                  !podeProcessarReprocessar ||
+                  (situacaoFechamento !==
+                    situacaoFechamentoDto.ProcessadoComPendencias &&
+                    situacaoFechamento !==
+                      situacaoFechamentoDto.ProcessadoComErro)
                 }
               />
               <Button

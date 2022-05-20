@@ -9,6 +9,10 @@ import { Base } from '~/componentes/colors';
 import tipoIndicativoFrequencia from '~/dtos/tipoIndicativoFrequencia';
 import ListaoContext from '~/paginas/DiarioClasse/Listao/listaoContext';
 import { setTelaEmEdicao } from '~/redux/modulos/geral/actions';
+import {
+  setDadosModalAnotacaoFrequencia,
+  setExibirModalAnotacaoFrequencia,
+} from '~/redux/modulos/modalAnotacaoFrequencia/actions';
 import CampoTiposFrequencia from './componentes/campoTiposFrequencia';
 import ListaoBotaoAnotacao from './componentes/listaoBotaoAnotacao';
 import ListaoModalAnotacoesFrequencia from './componentes/listaoModalAnotacaoFrequencia';
@@ -30,7 +34,6 @@ const ListaoListaFrequencia = () => {
     componenteCurricular,
     somenteConsultaListao,
     periodoAbertoListao,
-    setExibirLoaderGeral,
   } = useContext(ListaoContext);
 
   const desabilitarCampos = somenteConsultaListao || !periodoAbertoListao;
@@ -350,15 +353,20 @@ const ListaoListaFrequencia = () => {
         <ListaoBotaoAnotacao
           desabilitarCampos={desabilitarCampos || aula.desabilitado}
           ehInfantil={listaoEhInfantil}
-          aluno={{
-            ...aluno,
-            aulaId,
-            permiteAnotacao: aula?.permiteAnotacao,
-            possuiAnotacao: aula?.possuiAnotacao,
-            aula,
-          }}
           permiteAnotacao={aula?.permiteAnotacao && aulasGerais?.podeEditar}
           possuiAnotacao={aula?.possuiAnotacao}
+          onClickAnotacao={() => {
+            dispatch(
+              setDadosModalAnotacaoFrequencia({
+                ...aluno,
+                aulaId,
+                permiteAnotacao: aula?.permiteAnotacao,
+                possuiAnotacao: aula?.possuiAnotacao,
+                aula,
+              })
+            );
+            dispatch(setExibirModalAnotacaoFrequencia(true));
+          }}
         />
       </span>
     );
@@ -422,12 +430,6 @@ const ListaoListaFrequencia = () => {
     return colunasDetalhamentoEstudante;
   };
 
-  const fecharLoaderMontouAlunos = indexAluno => {
-    if (indexAluno + 1 === dadosFrequencia?.alunos?.length) {
-      setExibirLoaderGeral(false);
-    }
-  };
-
   return dadosFrequencia?.alunos?.length ? (
     <>
       <LinhaTabela className="col-md-12 p-0">
@@ -443,7 +445,6 @@ const ListaoListaFrequencia = () => {
           rowClassName={(record, i) => {
             const ehLinhaExpandida = temLinhaExpandida(record?.codigoAluno);
             const nomeClasse = ehLinhaExpandida.length ? 'linha-ativa' : '';
-            fecharLoaderMontouAlunos(i);
             return nomeClasse;
           }}
           expandedRowRender={(record, indexAluno) => {

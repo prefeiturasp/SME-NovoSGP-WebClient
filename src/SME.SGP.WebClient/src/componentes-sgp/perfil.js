@@ -109,7 +109,7 @@ const Perfil = props => {
       );
 
       if (
-        perfilStore.perfilSelecionado.codigoPerfil !==
+        perfilStore?.perfilSelecionado?.codigoPerfil !==
         perfilNovo[0].codigoPerfil
       ) {
         store.dispatch(setLoaderGeral(true));
@@ -216,9 +216,9 @@ const Perfil = props => {
         <Texto
           className={`d-block mt-1 ${ocultaPerfis ? '' : ' font-weight-bold'}`}
         >
-          {perfilStore.perfilSelecionado.sigla
-            ? perfilStore.perfilSelecionado.sigla
-            : perfilStore.perfilSelecionado.nomePerfil}
+          {perfilStore?.perfilSelecionado?.sigla
+            ? perfilStore?.perfilSelecionado?.sigla
+            : perfilStore?.perfilSelecionado?.nomePerfil}
         </Texto>
       </Botao>
       {ocultaPerfis}
@@ -239,7 +239,7 @@ const Perfil = props => {
                     width: '100%',
                     fontWeight:
                       item.codigoPerfil ===
-                      perfilStore.perfilSelecionado.codigoPerfil
+                      perfilStore?.perfilSelecionado?.codigoPerfil
                         ? 'bold'
                         : 'initial',
                   }}
