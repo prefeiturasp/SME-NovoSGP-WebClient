@@ -36,7 +36,7 @@ export default function AtribuicaoSupervisorLista() {
 
   const usuario = useSelector(store => store.usuario);
   const permissoesTela =
-    usuario.permissoes[RotasDto.ATRIBUICAO_RESPONSAVEIS] || {};
+    usuario.permissoes[RotasDto.ATRIBUICAO_RESPONSAVEIS_LISTA] || {};
 
   useEffect(() => {
     if (usuario && usuario.turmaSelecionada) {

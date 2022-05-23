@@ -26,8 +26,7 @@ import ListaTransferenciaResponsaveis from './listaTransferenciaResponsaveis';
 
 const AtribuicaoResponsaveisCadastro = () => {
   const { usuario } = store.getState();
-  const permissoesTela =
-    usuario.permissoes[RotasDto.ATRIBUICAO_RESPONSAVEIS] || {};
+  const permissoesTela = usuario.permissoes[RotasDto.ATRIBUICAO_RESPONSAVEIS_LISTA];
 
   const routeMatch = useRouteMatch();
 
