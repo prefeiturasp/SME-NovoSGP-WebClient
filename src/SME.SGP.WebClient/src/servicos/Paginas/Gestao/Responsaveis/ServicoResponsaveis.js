@@ -17,7 +17,10 @@ class ServicoResponsaveis {
 
   salvarAtribuicao = dados => api.post(`${URL_PADRAO}/atribuir-ue`, dados);
 
-  obterResponsaveis = dre => api.get(`${URL_PADRAO}/dre/${dre}`);
+  obterResponsaveis = (dre, tipoResponsavelAtribuicao) =>
+    api.get(
+      `${URL_PADRAO}/dre/${dre}?tipoResponsavelAtribuicao=${tipoResponsavelAtribuicao}`
+    );
 
   obterUesSemAtribuicao = dre => api.get(`v1/dres/${dre}/ues/sem-atribuicao`);
 

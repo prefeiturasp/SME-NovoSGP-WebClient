@@ -26,7 +26,8 @@ import ListaTransferenciaResponsaveis from './listaTransferenciaResponsaveis';
 
 const AtribuicaoResponsaveisCadastro = () => {
   const { usuario } = store.getState();
-  const permissoesTela = usuario.permissoes[RotasDto.ATRIBUICAO_RESPONSAVEIS_LISTA];
+  const permissoesTela =
+    usuario.permissoes[RotasDto.ATRIBUICAO_RESPONSAVEIS_LISTA];
 
   const routeMatch = useRouteMatch();
 
@@ -191,7 +192,10 @@ const AtribuicaoResponsaveisCadastro = () => {
 
   const obterResponsaveis = useCallback(async () => {
     setCarregandoResponsavel(true);
-    const resposta = await ServicoResponsaveis.obterResponsaveis(dreId)
+    const resposta = await ServicoResponsaveis.obterResponsaveis(
+      dreId,
+      tipoResponsavel
+    )
       .catch(e => erros(e))
       .finally(() => setCarregandoResponsavel(false));
 
@@ -205,7 +209,7 @@ const AtribuicaoResponsaveisCadastro = () => {
     } else {
       setListaResponsavel([]);
     }
-  }, [dreId, routeMatch]);
+  }, [dreId, tipoResponsavel, routeMatch]);
 
   useEffect(() => {
     if (tipoResponsavel && dreId) {
