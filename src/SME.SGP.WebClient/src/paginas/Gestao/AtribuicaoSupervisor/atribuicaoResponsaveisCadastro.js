@@ -170,13 +170,15 @@ const AtribuicaoResponsaveisCadastro = () => {
     if (resposta?.data?.length) {
       if (resposta?.data?.length === 1) {
         setTipoResponsavel(resposta.data[0].codigo);
+      } else if (routeMatch.params?.tipoResponsavel) {
+        setTipoResponsavel(routeMatch.params.tipoResponsavel);
       }
 
       setListaTipoResponsavel(resposta.data);
     } else {
       setListaTipoResponsavel([]);
     }
-  }, []);
+  }, [routeMatch]);
 
   useEffect(() => {
     if (dreId) {
@@ -201,9 +203,11 @@ const AtribuicaoResponsaveisCadastro = () => {
       .finally(() => setCarregandoResponsavel(false));
 
     if (resposta?.data?.length) {
-
       const lista = resposta.data.map(item => {
-        return { ...item, descricaoCodigo: `${item?.supervisorNome} - ${item?.supervisorId}`}
+        return {
+          ...item,
+          descricaoCodigo: `${item?.supervisorNome} - ${item?.supervisorId}`,
+        };
       });
 
       if (lista?.length === 1) {

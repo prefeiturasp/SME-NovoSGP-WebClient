@@ -270,7 +270,20 @@ rotas.set(`${RotasDto.ATRIBUICAO_RESPONSAVEIS}/:dreId/`, {
   chavePermissao: RotasDto.ATRIBUICAO_RESPONSAVEIS_LISTA,
 });
 
-rotas.set(`${RotasDto.ATRIBUICAO_RESPONSAVEIS}/:dreId/:supervisorId`, {
+rotas.set(
+  `${RotasDto.ATRIBUICAO_RESPONSAVEIS}/:dreId/:supervisorId/:tipoResponsavel`,
+  {
+    breadcrumbName: 'Atribuição de responsáveis',
+    parent: RotasDto.ATRIBUICAO_RESPONSAVEIS_LISTA,
+    component: AtribuicaoResponsaveisCadastro,
+    exact: true,
+    tipo: RotasTipo.EstruturadaAutenticada,
+    temPermissionamento: true,
+    chavePermissao: RotasDto.ATRIBUICAO_RESPONSAVEIS_LISTA,
+  }
+);
+
+rotas.set(`${RotasDto.ATRIBUICAO_RESPONSAVEIS}/:dreId/tipo/:tipoResponsavel`, {
   breadcrumbName: 'Atribuição de responsáveis',
   parent: RotasDto.ATRIBUICAO_RESPONSAVEIS_LISTA,
   component: AtribuicaoResponsaveisCadastro,

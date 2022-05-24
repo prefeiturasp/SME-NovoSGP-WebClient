@@ -3,17 +3,7 @@ import api from '~/servicos/api';
 const URL_PADRAO = 'v1/supervisores';
 
 class ServicoResponsaveis {
-  obterTipoReponsavel = () => {
-    // TODO - MOCK
-    const lista = [
-      { codigo: 1, descricao: 'Supervisor Escolar' },
-      { codigo: 2, descricao: 'PAAI' },
-      { codigo: 3, descricao: 'Psicólogo Escolar' },
-      { codigo: 4, descricao: 'Psicopedagogo' },
-      { codigo: 5, descricao: 'Assistente Social' },
-    ];
-    return new Promise(resolve => resolve({ data: lista }));
-  };
+  obterTipoReponsavel = () => api.get(`${URL_PADRAO}/tipo-responsavel`);
 
   salvarAtribuicao = dados => api.post(`${URL_PADRAO}/atribuir-ue`, dados);
 
