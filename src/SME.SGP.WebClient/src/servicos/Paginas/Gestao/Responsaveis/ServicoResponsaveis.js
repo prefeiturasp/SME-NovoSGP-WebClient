@@ -3,7 +3,8 @@ import api from '~/servicos/api';
 const URL_PADRAO = 'v1/supervisores';
 
 class ServicoResponsaveis {
-  obterTipoReponsavel = () => api.get(`${URL_PADRAO}/tipo-responsavel`);
+  obterTipoReponsavel = (exibirTodos = true) =>
+    api.get(`${URL_PADRAO}/tipo-responsavel/${exibirTodos}`);
 
   salvarAtribuicao = dados => api.post(`${URL_PADRAO}/atribuir-ue`, dados);
 
