@@ -25,8 +25,8 @@ const AuditoriaAnotacaoRecomendacao = () => {
 
   useEffect(() => {
     if (auditoriaAnotacaoRecomendacao) {
-      setCriado(criadoEm ? window.moment(criadoEm) : window.moment());
-      setAlterado(alteradoEm ? window.moment(alteradoEm) : window.moment());
+      setCriado(criadoEm ? window.moment.utc(criadoEm) : window.moment.utc());
+      setAlterado(alteradoEm ? window.moment.utc(alteradoEm) : window.moment.utc());
     }
   }, [alteradoEm, auditoriaAnotacaoRecomendacao, criadoEm]);
 
