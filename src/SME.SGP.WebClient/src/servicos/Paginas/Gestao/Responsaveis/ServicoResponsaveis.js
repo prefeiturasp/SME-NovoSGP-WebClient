@@ -3,7 +3,7 @@ import api from '~/servicos/api';
 const URL_PADRAO = 'v1/supervisores';
 
 class ServicoResponsaveis {
-  obterTipoReponsavel = () => {
+  obterTipoReponsavel = (exibirTodos = true) => {
     // TODO - MOCK
     const lista = [
       { codigo: 1, descricao: 'Supervisor Escolar' },
