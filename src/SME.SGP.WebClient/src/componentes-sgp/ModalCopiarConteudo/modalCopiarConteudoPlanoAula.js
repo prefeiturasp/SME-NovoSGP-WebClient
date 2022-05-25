@@ -11,6 +11,7 @@ import {
   ModalConteudoHtml,
 } from '~/componentes';
 import TurmasDropDown from '~/componentes-sgp/TurmasDropDown';
+import filtro from '~/redux/modulos/filtro/reducers';
 import AbrangenciaServico from '~/servicos/Abrangencia';
 import { confirmar, sucesso, erro, erros } from '~/servicos/alertas';
 import api from '~/servicos/api';
