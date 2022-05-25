@@ -81,6 +81,7 @@ const AtribuicaoResponsaveisCadastro = () => {
       dreId,
       supervisorId: responsavel,
       uesIds: uesAtribuidas?.map?.(item => item?.codigo) || [],
+      tipoResponsavelAtribuicao: tipoResponsavel,
     };
     ServicoResponsaveis.salvarAtribuicao(atribuicao)
       .then(() => {
@@ -200,12 +201,17 @@ const AtribuicaoResponsaveisCadastro = () => {
       .finally(() => setCarregandoResponsavel(false));
 
     if (resposta?.data?.length) {
-      if (resposta?.data?.length === 1) {
-        setResponsavel(resposta.data[0].codigo);
+
+      const lista = resposta.data.map(item => {
+        return { ...item, descricaoCodigo: `${item?.supervisorNome} - ${item?.supervisorId}`}
+      });
+
+      if (lista?.length === 1) {
+        setResponsavel(lista[0].supervisorId);
       } else if (routeMatch.params?.supervisorId) {
         setResponsavel(routeMatch.params.supervisorId);
       }
-      setListaResponsavel(resposta.data);
+      setListaResponsavel(lista);
     } else {
       setListaResponsavel([]);
     }
@@ -370,7 +376,7 @@ const AtribuicaoResponsaveisCadastro = () => {
                   label="Responsável"
                   lista={listaResponsavel}
                   valueOption="supervisorId"
-                  valueText="supervisorNome"
+                  valueText="descricaoCodigo"
                   disabled={
                     !dreId ||
                     !tipoResponsavel ||
