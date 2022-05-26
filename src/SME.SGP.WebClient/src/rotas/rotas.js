@@ -15,6 +15,7 @@ import RotasTipo from '~/constantes/rotasTipo';
 import MeusDados from '~/paginas/Perfil/meusDados';
 import PeriodosEscolares from '~/paginas/CalendarioEscolar/PeriodosEscolares/PeriodosEscolares';
 import TabsReiniciarSenha from '~/paginas/Configuracoes/Usuarios/TabsReiniciarSenha';
+import TabsSuporte from '~/paginas/Configuracoes/Usuarios/TabsSuporte';
 import TipoCalendarioEscolarLista from '~/paginas/CalendarioEscolar/TipoCalendarioEscolar/tipoCalendarioEscolarLista';
 import TipoCalendarioEscolarForm from '~/paginas/CalendarioEscolar/TipoCalendarioEscolar/tipoCalendarioEscolarForm';
 import TipoFeriadoLista from '~/paginas/CalendarioEscolar/TipoFeriado/tipoFeriadoLista';
@@ -388,6 +389,17 @@ rotas.set(RotasDto.REINICIAR_SENHA, {
   menu: ['Configurações', 'Usuários'],
   parent: '/',
   component: TabsReiniciarSenha,
+  exact: true,
+  tipo: RotasTipo.EstruturadaAutenticada,
+  temPermissionamento: true,
+  chavePermissao: RotasDto.REINICIAR_SENHA,
+});
+
+rotas.set(RotasDto.SUPORTE, {
+  breadcrumbName: 'Suporte',
+  menu: ['Configurações', 'Usuários'],
+  parent: '/',
+  component: TabsSuporte,
   exact: true,
   tipo: RotasTipo.EstruturadaAutenticada,
   temPermissionamento: true,
