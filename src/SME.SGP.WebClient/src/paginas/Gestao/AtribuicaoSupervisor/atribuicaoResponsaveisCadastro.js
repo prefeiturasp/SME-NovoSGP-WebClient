@@ -163,7 +163,7 @@ const AtribuicaoResponsaveisCadastro = () => {
 
   const obterTipoResponsavel = useCallback(async () => {
     setCarregandoTipoResponsavel(true);
-    const resposta = await ServicoResponsaveis.obterTipoReponsavel()
+    const resposta = await ServicoResponsaveis.obterTipoReponsavel(false)
       .catch(e => erros(e))
       .finally(() => setCarregandoTipoResponsavel(false));
 
