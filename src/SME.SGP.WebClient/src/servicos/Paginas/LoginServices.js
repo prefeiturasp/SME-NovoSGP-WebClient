@@ -1,6 +1,8 @@
 import api from '../api';
 import { store } from '~/redux';
 import { perfilSelecionado, setarPerfis } from '~/redux/modulos/perfil/actions';
+import { limparDadosFiltro } from '~/redux/modulos/filtro/actions';
+import { Deslogar } from '~/redux/modulos/usuario/actions';
 
 class LoginService {
   autenticar = async (Login, acessoAdmin) => {
@@ -11,37 +13,52 @@ class LoginService {
           senha: Login.senha,
         });
 
-    return endpoint
-      .then(res => {
-        if (res.data && res.data.perfisUsuario) {
-          const { perfis } = res.data.perfisUsuario;
-          const selecionado = perfis.find(
-            perfil =>
-              perfil.codigoPerfil === res.data.perfisUsuario.perfilSelecionado
-          );
-          store.dispatch(setarPerfis(perfis));
-          store.dispatch(perfilSelecionado(selecionado));
-        }
-        return {
-          sucesso: true,
-          mensagem: 'Usuario logado com sucesso',
-          dados: res.data,
-        };
-      })
-      .catch(err => {
-        const status = err.response ? err.response.status : null;
+    const validarAutenticar = () =>
+      endpoint
+        .then(res => {
+          if (res.data && res.data.perfisUsuario) {
+            const { perfis } = res.data.perfisUsuario;
+            const selecionado = perfis.find(
+              perfil =>
+                perfil.codigoPerfil === res.data.perfisUsuario.perfilSelecionado
+            );
+            store.dispatch(setarPerfis(perfis));
+            store.dispatch(perfilSelecionado(selecionado));
+          }
+          return {
+            sucesso: true,
+            mensagem: 'Usuario logado com sucesso',
+            dados: res.data,
+          };
+        })
+        .catch(err => {
+          if (acessoAdmin) return { sucesso: false, erro: err };
 
-        if (status && status === 401)
-          return { sucesso: false, erroGeral: 'Usuário e/ou senha inválida' };
+          const status = err.response ? err.response.status : null;
 
-        return {
-          sucesso: false,
-          erroGeral:
-            err.response && err.response.data && err.response.data.mensagens
-              ? err.response.data.mensagens.join(',')
-              : 'Falha ao tentar autenticar no servidor',
-        };
+          if (status && status === 401)
+            return { sucesso: false, erroGeral: 'Usuário e/ou senha inválida' };
+
+          return {
+            sucesso: false,
+            erroGeral:
+              err.response && err.response.data && err.response.data.mensagens
+                ? err.response.data.mensagens.join(',')
+                : 'Falha ao tentar autenticar no servidor',
+          };
+        });
+
+    if (acessoAdmin) {
+      store.dispatch(limparDadosFiltro());
+      store.dispatch(Deslogar());
+      return new Promise(resolve => {
+        setTimeout(async () => {
+          resolve(validarAutenticar());
+        }, 300);
       });
+    }
+
+    return validarAutenticar();
   };
 
   obtenhaUrlAutenticacao = () => {
