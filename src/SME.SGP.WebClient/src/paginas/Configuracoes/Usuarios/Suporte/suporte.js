@@ -1,5 +1,6 @@
 import { Col, Row } from 'antd';
 import React, { useCallback, useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
 import {
   Base,
@@ -19,7 +20,10 @@ import {
 } from '~/componentes-sgp/filtro/idsCampos';
 import { OPCAO_TODOS, URL_HOME } from '~/constantes';
 import RotasDto from '~/dtos/rotasDto';
+import LoginHelper from '~/paginas/Login/loginHelper';
 import { store } from '~/redux';
+import { limparDadosFiltro } from '~/redux/modulos/filtro/actions';
+import { Deslogar } from '~/redux/modulos/usuario/actions';
 import {
   AbrangenciaServico,
   api,
@@ -34,7 +38,7 @@ const ButtonAcessar = styled(Button)`
   background-color: ${Base.Branco} !important;
 `;
 
-const Suporte = () => {
+const Suporte = ({ match }) => {
   const { usuario } = store.getState();
   const permissoesTela = usuario.permissoes[RotasDto.SUPORTE];
 
@@ -52,6 +56,12 @@ const Suporte = () => {
   const [carregando, setCarregando] = useState(false);
 
   const [listaUsuario, setListaUsuario] = useState([]);
+
+  const dispatch = useDispatch();
+
+  const redirect = match?.params?.redirect ? match.params.redirect : null;
+
+  const helper = new LoginHelper(dispatch, redirect);
 
   useEffect(() => {
     verificaSomenteConsulta(permissoesTela);
@@ -144,6 +154,22 @@ const Suporte = () => {
 
   const onChangeRf = rf => setRfSelecionado(rf.target.value);
 
+  const acessar = async linha => {
+    store.dispatch(limparDadosFiltro());
+    store.dispatch(Deslogar());
+    setTimeout(async () => {
+      setCarregando(true);
+      const resposta = await helper
+        .acessar({ usuario: linha.codigoRf }, true)
+        .catch(e => erros(e));
+
+      if (resposta?.sucesso) {
+        history.push(URL_HOME);
+      }
+      setCarregando(false);
+    }, 300);
+  };
+
   const onClickFiltrar = async () => {
     const todosDreOuUe = dreId === OPCAO_TODOS || ueId === OPCAO_TODOS;
     if (!rfSelecionado && todosDreOuUe) {
@@ -195,7 +221,7 @@ const Suporte = () => {
               label="Acessar"
               color={Colors.Roxo}
               border
-              onClick={() => console.log(linha)}
+              onClick={() => acessar(linha)}
             />
           </div>
         );
