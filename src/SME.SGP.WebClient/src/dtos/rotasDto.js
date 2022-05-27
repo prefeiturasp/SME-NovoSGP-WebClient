@@ -10,6 +10,7 @@ const RotasDto = {
   ATRIBUICAO_CJ_LISTA: '/gestao/atribuicao-cjs',
   ATRIBUICAO_CJ_FORM: '/gestao/atribuicao-cjs/editar',
   REINICIAR_SENHA: '/usuarios/reiniciar-senha',
+  SUPORTE: '/usuarios/suporte',
   TIPO_EVENTOS: '/calendario-escolar/tipo-eventos',
   PERIODOS_ESCOLARES: '/calendario-escolar/periodos-escolares',
   TIPO_CALENDARIO_ESCOLAR: '/calendario-escolar/tipo-calendario-escolar',
