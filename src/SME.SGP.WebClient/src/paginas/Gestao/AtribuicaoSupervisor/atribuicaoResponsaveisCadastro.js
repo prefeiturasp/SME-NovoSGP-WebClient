@@ -68,9 +68,7 @@ const AtribuicaoResponsaveisCadastro = () => {
   }, [routeMatch]);
 
   const limparTela = () => {
-    setDreId();
     setTipoResponsavel();
-    setListaTipoResponsavel([]);
     setResponsavel();
     setListaResponsavel([]);
     setModoEdicao(false);
