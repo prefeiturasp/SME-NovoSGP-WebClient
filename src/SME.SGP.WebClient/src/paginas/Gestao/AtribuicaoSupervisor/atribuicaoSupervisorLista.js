@@ -282,6 +282,8 @@ export default function AtribuicaoSupervisorLista() {
 
   const obterResponsaveis = useCallback(
     async dre => {
+      if (!dre || !tipoResponsavel) return;
+
       setCarregandoResponsavel(true);
       const resposta = await ServicoResponsaveis.obterResponsaveis(
         dre || dresSelecionadas,
@@ -367,6 +369,7 @@ export default function AtribuicaoSupervisorLista() {
             placeholder="Diretoria Regional de Educação (DRE)"
             disabled={listaDres?.length === 1 || !permissoesTela.podeConsultar}
             allowClear={false}
+            showSearch
           />
         </div>
         <div className="col-sm-12 col-md-6 pb-2">
