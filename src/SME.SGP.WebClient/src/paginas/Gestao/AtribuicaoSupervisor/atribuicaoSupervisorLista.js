@@ -262,7 +262,7 @@ export default function AtribuicaoSupervisorLista() {
 
     if (resposta?.data?.length) {
       if (resposta?.data?.length === 1) {
-        setTipoResponsavel(resposta.data[0].codigo);
+        setTipoResponsavel(resposta.data[0].descricao);
       }
 
       setListaTipoResponsavel(resposta.data);
