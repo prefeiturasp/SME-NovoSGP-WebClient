@@ -304,7 +304,7 @@ const Suporte = ({ match }) => {
                   id="SGP_BUTTON_FILTRAR"
                   label="Filtrar"
                   color={Colors.Azul}
-                  disabled={!dreId}
+                  disabled={!dreId || !ueId}
                   border
                   className="text-center d-block mt-4 float-right w-100"
                   onClick={() => onClickFiltrar()}
