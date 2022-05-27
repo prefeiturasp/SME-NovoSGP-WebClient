@@ -3,12 +3,15 @@ import { store } from '~/redux';
 import { perfilSelecionado, setarPerfis } from '~/redux/modulos/perfil/actions';
 
 class LoginService {
-  autenticar = async Login => {
-    return api
-      .post(this.obtenhaUrlAutenticacao(), {
-        login: Login.usuario,
-        senha: Login.senha,
-      })
+  autenticar = async (Login, acessoAdmin) => {
+    const endpoint = acessoAdmin
+      ? api.put(`v1/autenticacao/suporte/${Login.usuario}`)
+      : api.post(this.obtenhaUrlAutenticacao(), {
+          login: Login.usuario,
+          senha: Login.senha,
+        });
+
+    return endpoint
       .then(res => {
         if (res.data && res.data.perfisUsuario) {
           const { perfis } = res.data.perfisUsuario;
