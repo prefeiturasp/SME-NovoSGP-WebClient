@@ -400,7 +400,7 @@ export default function AtribuicaoSupervisorLista() {
               onChange={onChangeSupervisores}
               valueSelect={supervisoresSelecionados}
               multiple
-              placeholder="SELECIONE O SUPERVISOR"
+              placeholder="SELECIONE O RESPONSÁVEL"
               disabled={
                 !tipoResponsavel ||
                 desabilitarSupervisor ||
