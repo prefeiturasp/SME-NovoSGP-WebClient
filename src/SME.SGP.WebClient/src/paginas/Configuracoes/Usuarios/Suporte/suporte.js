@@ -1,9 +1,7 @@
 import { Col, Row } from 'antd';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import styled from 'styled-components';
 import {
-  Base,
   Button,
   CampoTexto,
   Card,
@@ -22,8 +20,6 @@ import { OPCAO_TODOS, URL_HOME } from '~/constantes';
 import RotasDto from '~/dtos/rotasDto';
 import LoginHelper from '~/paginas/Login/loginHelper';
 import { store } from '~/redux';
-import { limparDadosFiltro } from '~/redux/modulos/filtro/actions';
-import { Deslogar } from '~/redux/modulos/usuario/actions';
 import {
   AbrangenciaServico,
   api,
@@ -32,11 +28,6 @@ import {
   history,
   verificaSomenteConsulta,
 } from '~/servicos';
-
-const ButtonAcessar = styled(Button)`
-  background: ${Base.Branco} !important;
-  background-color: ${Base.Branco} !important;
-`;
 
 const Suporte = ({ match }) => {
   const { usuario } = store.getState();
@@ -155,19 +146,16 @@ const Suporte = ({ match }) => {
   const onChangeRf = rf => setRfSelecionado(rf.target.value);
 
   const acessar = async linha => {
-    store.dispatch(limparDadosFiltro());
-    store.dispatch(Deslogar());
-    setTimeout(async () => {
-      setCarregando(true);
-      const resposta = await helper
-        .acessar({ usuario: linha.codigoRf }, true)
-        .catch(e => erros(e));
+    setCarregando(true);
 
-      if (resposta?.sucesso) {
-        history.push(URL_HOME);
-      }
-      setCarregando(false);
-    }, 300);
+    const resposta = await helper.acessar({ usuario: linha.codigoRf }, true);
+
+    if (resposta?.sucesso) {
+      history.push(URL_HOME);
+    } else if (resposta.erro) {
+      erros(resposta.erro);
+    }
+    setCarregando(false);
   };
 
   const onClickFiltrar = async () => {
@@ -217,11 +205,12 @@ const Suporte = ({ match }) => {
       render: (_, linha) => {
         return (
           <div className="d-flex justify-content-center">
-            <ButtonAcessar
+            <Button
               label="Acessar"
               color={Colors.Roxo}
               border
               onClick={() => acessar(linha)}
+              disabled={!linha.codigoRf}
             />
           </div>
         );
