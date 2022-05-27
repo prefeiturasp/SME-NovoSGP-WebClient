@@ -4,7 +4,7 @@ import Principal from '../paginas/Principal/principal';
 import PlanoCiclo from '../paginas/Planejamento/PlanoCiclo/planoCiclo';
 import PlanoAnual from '../paginas/Planejamento/Anual/planoAnual';
 import AtribuicaoSupervisorLista from '../paginas/Gestao/AtribuicaoSupervisor/atribuicaoSupervisorLista';
-import AtribuicaoSupervisorCadastro from '../paginas/Gestao/AtribuicaoSupervisor/atribuicaoSupervisorCadastro';
+import AtribuicaoResponsaveisCadastro from '~/paginas/Gestao/AtribuicaoSupervisor/atribuicaoResponsaveisCadastro';
 import AtribuicaoEsporadicaLista from '../paginas/Gestao/AtribuicaoEsporadica/Lista';
 import AtribuicaoEsporadicaForm from '../paginas/Gestao/AtribuicaoEsporadica/Form';
 import AtribuicaoCJLista from '../paginas/Gestao/AtribuicaoCJ/Lista';
@@ -239,45 +239,45 @@ rotas.set(RotasDto.TERRITORIO_SABER, {
   chavePermissao: RotasDto.TERRITORIO_SABER,
 });
 
-rotas.set(RotasDto.ATRIBUICAO_SUPERVISOR_LISTA, {
-  breadcrumbName: 'Atribuição de Supervisor',
+rotas.set(RotasDto.ATRIBUICAO_RESPONSAVEIS_LISTA, {
+  breadcrumbName: 'Atribuição de responsáveis',
   menu: ['Gestão'],
   parent: '/',
   component: AtribuicaoSupervisorLista,
   exact: true,
   tipo: RotasTipo.EstruturadaAutenticada,
   temPermissionamento: true,
-  chavePermissao: RotasDto.ATRIBUICAO_SUPERVISOR_LISTA,
+  chavePermissao: RotasDto.ATRIBUICAO_RESPONSAVEIS_LISTA,
 });
 
-rotas.set('/gestao/atribuicao-supervisor', {
+rotas.set(RotasDto.ATRIBUICAO_RESPONSAVEIS, {
   breadcrumbName: 'Nova Atribuição',
-  parent: '/gestao/atribuicao-supervisor-lista',
-  component: AtribuicaoSupervisorCadastro,
+  parent: RotasDto.ATRIBUICAO_RESPONSAVEIS_LISTA,
+  component: AtribuicaoResponsaveisCadastro,
   exact: true,
   tipo: RotasTipo.EstruturadaAutenticada,
   temPermissionamento: true,
-  chavePermissao: RotasDto.ATRIBUICAO_SUPERVISOR_LISTA,
+  chavePermissao: RotasDto.ATRIBUICAO_RESPONSAVEIS_LISTA,
 });
 
-rotas.set('/gestao/atribuicao-supervisor/:dreId/', {
-  breadcrumbName: 'Atribuição de Supervisor',
-  parent: '/gestao/atribuicao-supervisor-lista',
-  component: AtribuicaoSupervisorCadastro,
+rotas.set(`${RotasDto.ATRIBUICAO_RESPONSAVEIS}/:dreId/`, {
+  breadcrumbName: 'Atribuição de responsáveis',
+  parent: RotasDto.ATRIBUICAO_RESPONSAVEIS_LISTA,
+  component: AtribuicaoResponsaveisCadastro,
   exact: true,
   tipo: RotasTipo.EstruturadaAutenticada,
   temPermissionamento: true,
-  chavePermissao: RotasDto.ATRIBUICAO_SUPERVISOR_LISTA,
+  chavePermissao: RotasDto.ATRIBUICAO_RESPONSAVEIS_LISTA,
 });
 
-rotas.set('/gestao/atribuicao-supervisor/:dreId/:supervisorId', {
-  breadcrumbName: 'Atribuição de Supervisor',
-  parent: '/gestao/atribuicao-supervisor-lista',
-  component: AtribuicaoSupervisorCadastro,
+rotas.set(`${RotasDto.ATRIBUICAO_RESPONSAVEIS}/:dreId/:supervisorId`, {
+  breadcrumbName: 'Atribuição de responsáveis',
+  parent: RotasDto.ATRIBUICAO_RESPONSAVEIS_LISTA,
+  component: AtribuicaoResponsaveisCadastro,
   exact: true,
   tipo: RotasTipo.EstruturadaAutenticada,
   temPermissionamento: true,
-  chavePermissao: RotasDto.ATRIBUICAO_SUPERVISOR_LISTA,
+  chavePermissao: RotasDto.ATRIBUICAO_RESPONSAVEIS_LISTA,
 });
 
 rotas.set('/gestao/atribuicao-esporadica', {

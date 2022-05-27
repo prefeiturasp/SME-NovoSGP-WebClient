@@ -36,7 +36,7 @@ export default function AtribuicaoSupervisorLista() {
 
   const usuario = useSelector(store => store.usuario);
   const permissoesTela =
-    usuario.permissoes[RotasDto.ATRIBUICAO_SUPERVISOR_LISTA];
+    usuario.permissoes[RotasDto.ATRIBUICAO_RESPONSAVEIS_LISTA] || {};
 
   useEffect(() => {
     if (usuario && usuario.turmaSelecionada) {
@@ -108,8 +108,9 @@ export default function AtribuicaoSupervisorLista() {
   function onClickEditar(supervisorId) {
     if (!permissoesTela.podeAlterar) return;
 
-    const path = `/gestao/atribuicao-supervisor/${dresSelecionadas}/${supervisorId ||
-      ''}`;
+    const path = `${
+      RotasDto.ATRIBUICAO_RESPONSAVEIS
+    }/${dresSelecionadas}/${supervisorId || ''}`;
     history.push(path);
   }
 
@@ -117,9 +118,9 @@ export default function AtribuicaoSupervisorLista() {
     if (!permissoesTela.podeIncluir) return;
 
     if (dresSelecionadas) {
-      history.push(`/gestao/atribuicao-supervisor/${dresSelecionadas}/`);
+      history.push(`${RotasDto.ATRIBUICAO_RESPONSAVEIS}/${dresSelecionadas}/`);
     } else {
-      history.push('/gestao/atribuicao-supervisor');
+      history.push(RotasDto.ATRIBUICAO_RESPONSAVEIS);
     }
   }
 
