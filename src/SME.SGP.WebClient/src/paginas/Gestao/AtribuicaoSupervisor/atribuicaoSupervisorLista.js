@@ -40,6 +40,7 @@ export default function AtribuicaoSupervisorLista() {
     if (retorno?.data?.length) {
       if (retorno.data.length === 1) {
         setDresSelecionadas(retorno.data[0].codigo);
+        carregarUes(retorno.data[0].codigo);
       }
 
       setListaDres(retorno.data);
@@ -86,6 +87,9 @@ export default function AtribuicaoSupervisorLista() {
       title: 'Tipo de responsável',
       dataIndex: 'tipoResponsavel',
       width: '20%',
+      render: text => {
+        return text || <a className="texto-vermelho-negrito">NÃO ATRIBUIDO</a>;
+      },
     },
     {
       title: 'Responsável',
@@ -154,9 +158,11 @@ export default function AtribuicaoSupervisorLista() {
     montarListaAtribuicao(novaLista, dre, true);
   }
 
-  const onChangeDre = useCallback(dre => {
-    setListaSupervisores([]);
-    setSupervisoresSelecionados([]);
+  const onChangeDre = useCallback((dre,changeUe) => {
+    if(!changeUe){
+      setListaSupervisores([]);
+      setSupervisoresSelecionados([]);
+    }
     setListaUes([]);
     setUeSelecionada('');
     if (dre) {
@@ -205,6 +211,7 @@ export default function AtribuicaoSupervisorLista() {
           escola: escola.nome,
           responsavel: item.responsavelId ? item.responsavel : '',
           responsavelId: item.responsavelId,
+          tipoResponsavel: item.tipoResponsavel,
         });
       });
       return dadosAtribuicao;
@@ -232,6 +239,8 @@ export default function AtribuicaoSupervisorLista() {
     } else {
       setSupervisoresSelecionados([]);
       setDesabilitarUe(false);
+      setUeSelecionada([]);
+      setListaFiltroAtribuicao([]);
     }
   }
 
@@ -247,7 +256,7 @@ export default function AtribuicaoSupervisorLista() {
     } else {
       setUeSelecionada('');
       setDesabilitarSupervisor(false);
-      onChangeDre(dresSelecionadas);
+      onChangeDre(dresSelecionadas,true);
     }
   }
 
@@ -312,7 +321,7 @@ export default function AtribuicaoSupervisorLista() {
 
   useEffect(() => {
     if (tipoResponsavel && dresSelecionadas) {
-      obterResponsaveis();
+      obterResponsaveis(dresSelecionadas);
     } else {
       setSupervisoresSelecionados();
       setListaSupervisores([]);
@@ -436,6 +445,7 @@ export default function AtribuicaoSupervisorLista() {
             onClickRow={permissoesTela.podeAlterar && onClickRow}
             columns={columns}
             dataSource={listaFiltroAtribuicao}
+            semHover
           />
         </div>
       </Card>
