@@ -1,8 +1,7 @@
 import { Col, Row } from 'antd';
 import React, { useCallback, useEffect, useState } from 'react';
-import styled from 'styled-components';
+import { useDispatch } from 'react-redux';
 import {
-  Base,
   Button,
   CampoTexto,
   Card,
@@ -19,6 +18,7 @@ import {
 } from '~/componentes-sgp/filtro/idsCampos';
 import { OPCAO_TODOS, URL_HOME } from '~/constantes';
 import RotasDto from '~/dtos/rotasDto';
+import LoginHelper from '~/paginas/Login/loginHelper';
 import { store } from '~/redux';
 import {
   AbrangenciaServico,
@@ -29,12 +29,7 @@ import {
   verificaSomenteConsulta,
 } from '~/servicos';
 
-const ButtonAcessar = styled(Button)`
-  background: ${Base.Branco} !important;
-  background-color: ${Base.Branco} !important;
-`;
-
-const Suporte = () => {
+const Suporte = ({ match }) => {
   const { usuario } = store.getState();
   const permissoesTela = usuario.permissoes[RotasDto.SUPORTE];
 
@@ -52,6 +47,12 @@ const Suporte = () => {
   const [carregando, setCarregando] = useState(false);
 
   const [listaUsuario, setListaUsuario] = useState([]);
+
+  const dispatch = useDispatch();
+
+  const redirect = match?.params?.redirect ? match.params.redirect : null;
+
+  const helper = new LoginHelper(dispatch, redirect);
 
   useEffect(() => {
     verificaSomenteConsulta(permissoesTela);
@@ -144,6 +145,19 @@ const Suporte = () => {
 
   const onChangeRf = rf => setRfSelecionado(rf.target.value);
 
+  const acessar = async linha => {
+    setCarregando(true);
+
+    const resposta = await helper.acessar({ usuario: linha.codigoRf }, true);
+
+    if (resposta?.sucesso) {
+      history.push(URL_HOME);
+    } else if (resposta.erro) {
+      erros(resposta.erro);
+    }
+    setCarregando(false);
+  };
+
   const onClickFiltrar = async () => {
     const todosDreOuUe = dreId === OPCAO_TODOS || ueId === OPCAO_TODOS;
     if (!rfSelecionado && todosDreOuUe) {
@@ -191,11 +205,12 @@ const Suporte = () => {
       render: (_, linha) => {
         return (
           <div className="d-flex justify-content-center">
-            <ButtonAcessar
+            <Button
               label="Acessar"
               color={Colors.Roxo}
               border
-              onClick={() => console.log(linha)}
+              onClick={() => acessar(linha)}
+              disabled={!linha.codigoRf}
             />
           </div>
         );
@@ -278,7 +293,7 @@ const Suporte = () => {
                   id="SGP_BUTTON_FILTRAR"
                   label="Filtrar"
                   color={Colors.Azul}
-                  disabled={!dreId}
+                  disabled={!dreId || !ueId}
                   border
                   className="text-center d-block mt-4 float-right w-100"
                   onClick={() => onClickFiltrar()}
