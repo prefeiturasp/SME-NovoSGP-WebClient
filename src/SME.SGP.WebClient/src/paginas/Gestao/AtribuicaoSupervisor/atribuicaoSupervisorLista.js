@@ -127,9 +127,17 @@ export default function AtribuicaoSupervisorLista() {
   function onClickEditar(responsavelId) {
     if (!permissoesTela.podeAlterar) return;
 
-    const path = `${
-      RotasDto.ATRIBUICAO_RESPONSAVEIS
-    }/${dresSelecionadas}/${responsavelId || ''}/${tipoResponsavel}`;
+    let path = RotasDto.ATRIBUICAO_RESPONSAVEIS;
+    if (dresSelecionadas) {
+      path = `${path}/${dresSelecionadas}`;
+      if (responsavelId && tipoResponsavel) {
+        path = `${path}/${responsavelId}/${tipoResponsavel}`;
+      }
+      if (!responsavelId && tipoResponsavel) {
+        path = `${path}/${tipoResponsavel}`;
+      }
+    }
+
     history.push(path);
   }
 
