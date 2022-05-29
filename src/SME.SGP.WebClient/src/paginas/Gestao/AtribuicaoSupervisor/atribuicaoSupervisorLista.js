@@ -127,7 +127,7 @@ export default function AtribuicaoSupervisorLista() {
       history.push(`${RotasDto.ATRIBUICAO_RESPONSAVEIS}/${dresSelecionadas}/`);
     } else if (dresSelecionadas && tipoResponsavel) {
       history.push(
-        `${RotasDto.ATRIBUICAO_RESPONSAVEIS}/${dresSelecionadas}/tipo/${tipoResponsavel}/`
+        `${RotasDto.ATRIBUICAO_RESPONSAVEIS}/${dresSelecionadas}/${tipoResponsavel}/`
       );
     } else {
       history.push(RotasDto.ATRIBUICAO_RESPONSAVEIS);
