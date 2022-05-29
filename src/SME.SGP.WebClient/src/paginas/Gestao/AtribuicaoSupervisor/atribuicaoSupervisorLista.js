@@ -39,6 +39,14 @@ export default function AtribuicaoSupervisorLista() {
 
     if (retorno?.data?.length) {
       if (retorno.data.length === 1) {
+        const vinculoEscolasDre = await api.get(
+          `v1/supervisores/dre/${retorno.data[0].codigo}/vinculo-escolas`
+        );
+        montarListaAtribuicao(
+          vinculoEscolasDre.data,
+          retorno.data[0].codigo,
+          true
+        );
         setDresSelecionadas(retorno.data[0].codigo);
         carregarUes(retorno.data[0].codigo);
       }
@@ -279,10 +287,17 @@ export default function AtribuicaoSupervisorLista() {
     setUeSelecionada();
     setListaFiltroAtribuicao([]);
     setTipoResponsavel(valor);
-    const vinculoUes = await api.get(
-      `/v1/supervisores/vinculo-lista?dreCodigo=${dresSelecionadas}&tipoCodigo=${valor}`
-    );
-    montarListaAtribuicao(vinculoUes.data, dresSelecionadas, false, listaDres);
+    if (valor) {
+      const vinculoUes = await api.get(
+        `/v1/supervisores/vinculo-lista?dreCodigo=${dresSelecionadas}&tipoCodigo=${valor}`
+      );
+      montarListaAtribuicao(vinculoUes.data, '', false);
+    } else {
+      const vinculoEscolasDre = await api.get(
+        `v1/supervisores/dre/${dresSelecionadas}/vinculo-escolas`
+      );
+      montarListaAtribuicao(vinculoEscolasDre.data, '', true);
+    }
   };
 
   const obterTipoResponsavel = useCallback(async () => {
@@ -415,7 +430,6 @@ export default function AtribuicaoSupervisorLista() {
             valueSelect={tipoResponsavel}
             placeholder="Tipo de responsável"
             showSearch
-            allowClear={false}
           />
         </div>
         <div className="col-md-12 pb-2">
