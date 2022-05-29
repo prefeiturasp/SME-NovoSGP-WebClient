@@ -75,8 +75,13 @@ export default function AtribuicaoSupervisorLista() {
   const columns = [
     {
       title: 'DRE',
-      dataIndex: 'dre',
       width: '10%',
+      render: () => {
+        const dreSelecionada = listaDres?.find?.(
+          d => d?.codigo === dresSelecionadas
+        );
+        return dreSelecionada?.abreviacao;
+      },
     },
     {
       title: 'Unidade Escolar',
@@ -155,11 +160,11 @@ export default function AtribuicaoSupervisorLista() {
         escolas: vinculoEscolasDreSemAtrib.data,
       },
     ];
-    montarListaAtribuicao(novaLista, dre, true);
+    montarListaAtribuicao(novaLista, dre, true, listaDres);
   }
 
-  const onChangeDre = useCallback((dre,changeUe) => {
-    if(!changeUe){
+  const onChangeDre = useCallback(async (dre, changeUe) => {
+    if (!changeUe) {
       setListaSupervisores([]);
       setSupervisoresSelecionados([]);
     }
@@ -169,10 +174,10 @@ export default function AtribuicaoSupervisorLista() {
       if (uesSemSupervisorCheck) {
         montaListaUesSemSup(dre);
       } else {
-        const vinculoEscolasDre = api.get(
+        const vinculoEscolasDre = await api.get(
           `v1/supervisores/dre/${dre}/vinculo-escolas`
         );
-        montarListaAtribuicao(vinculoEscolasDre.data, dre, true);
+        montarListaAtribuicao(vinculoEscolasDre.data, dre, true, listaDres);
       }
     } else {
       setListaFiltroAtribuicao([]);
@@ -202,12 +207,10 @@ export default function AtribuicaoSupervisorLista() {
     }
 
     function montarLista(item, dadosAtribuicao) {
-      const dreSelecionada = listaDres.find(d => d.codigo == dre);
       item.escolas.forEach(escola => {
         const contId = dadosAtribuicao.length + 1;
         dadosAtribuicao.push({
           id: contId,
-          dre: dreSelecionada.abreviacao,
           escola: escola.nome,
           responsavel: item.responsavelId ? item.responsavel : '',
           responsavelId: item.responsavelId,
@@ -232,7 +235,12 @@ export default function AtribuicaoSupervisorLista() {
       const vinculoSupervisores = await api.get(
         `/v1/supervisores/${sup.toString()}/dre/${dresSelecionadas}`
       );
-      montarListaAtribuicao(vinculoSupervisores.data, dresSelecionadas, true);
+      montarListaAtribuicao(
+        vinculoSupervisores.data,
+        dresSelecionadas,
+        true,
+        listaDres
+      );
       setDesabilitarUe(true);
       setUeSelecionada([]);
       setSupervisoresSelecionados(sup);
@@ -249,19 +257,32 @@ export default function AtribuicaoSupervisorLista() {
       const vinculoUes = await api.get(
         `/v1/supervisores/vinculo-lista?dreCodigo=${dresSelecionadas}&tipoCodigo=${tipoResponsavel}&ueCodigo=${ue}`
       );
-      montarListaAtribuicao(vinculoUes.data, dresSelecionadas, false);
+      montarListaAtribuicao(
+        vinculoUes.data,
+        dresSelecionadas,
+        false,
+        listaDres
+      );
       setDesabilitarSupervisor(true);
       setSupervisoresSelecionados([]);
       setUeSelecionada(ue);
     } else {
       setUeSelecionada('');
       setDesabilitarSupervisor(false);
-      onChangeDre(dresSelecionadas,true);
+      onChangeDre(dresSelecionadas, true);
     }
   }
 
-  const onChangeTipoResponsavel = valor => {
+  const onChangeTipoResponsavel = async valor => {
+    setSupervisoresSelecionados();
+    setListaSupervisores([]);
+    setUeSelecionada();
+    setListaFiltroAtribuicao([]);
     setTipoResponsavel(valor);
+    const vinculoUes = await api.get(
+      `/v1/supervisores/vinculo-lista?dreCodigo=${dresSelecionadas}&tipoCodigo=${valor}`
+    );
+    montarListaAtribuicao(vinculoUes.data, dresSelecionadas, false, listaDres);
   };
 
   const obterTipoResponsavel = useCallback(async () => {
