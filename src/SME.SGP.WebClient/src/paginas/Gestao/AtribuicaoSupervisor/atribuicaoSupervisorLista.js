@@ -329,9 +329,6 @@ export default function AtribuicaoSupervisorLista() {
             descricaoCodigo: `${item?.supervisorNome} - ${item?.supervisorId}`,
           };
         });
-        if (lista?.length === 1) {
-          setSupervisoresSelecionados(resposta.data[0].supervisorId);
-        }
         setListaSupervisores(lista);
       } else {
         setListaSupervisores([]);
