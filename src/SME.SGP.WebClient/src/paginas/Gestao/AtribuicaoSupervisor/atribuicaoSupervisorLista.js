@@ -166,7 +166,7 @@ export default function AtribuicaoSupervisorLista() {
     setDesabilitarSupervisor(true);
     setDesabilitarUe(true);
     const vinculoEscolasDreSemAtrib = await api.get(
-      `/v1/dres/${dre}/ues/sem-atribuicao`
+      `/v1/supervisores/vinculo-lista?dreCodigo=${dre}&tipoCodigo=0`
     );
     const novaLista = [
       {
@@ -241,7 +241,7 @@ export default function AtribuicaoSupervisorLista() {
   async function onChangeSupervisores(sup) {
     if (sup && sup.length) {
       const vinculoSupervisores = await api.get(
-        `/v1/supervisores/${sup.toString()}/dre/${dresSelecionadas}`
+        `/v1/supervisores/vinculo-lista?dreCodigo=${dresSelecionadas}&supervisorId=${sup.toString()}`
       );
       montarListaAtribuicao(vinculoSupervisores.data);
       setDesabilitarUe(true);
