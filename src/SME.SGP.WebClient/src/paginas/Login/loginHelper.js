@@ -12,8 +12,12 @@ class LoginHelper {
     this.redirect = redirect;
   }
 
-  acessar = async (login, acessoAdmin) => {
-    const autenticacao = await LoginService.autenticar(login, acessoAdmin);
+  acessar = async (login, acessoAdmin, deslogar) => {
+    const autenticacao = await LoginService.autenticar(
+      login,
+      acessoAdmin,
+      deslogar
+    );
 
     if (!autenticacao.sucesso) return autenticacao;
 
