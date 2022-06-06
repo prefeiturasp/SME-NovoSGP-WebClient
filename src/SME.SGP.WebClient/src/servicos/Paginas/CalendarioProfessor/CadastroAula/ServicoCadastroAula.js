@@ -40,14 +40,14 @@ class ServicoCadastroAula {
   };
 
   obterRecorrenciaPorIdAula = (id, tipoRecorrencia) => {
-    return api.get(`v1/calendarios/professores/aulas/${id}/recorrencias/serie/${tipoRecorrencia}`);
+    return api.get(
+      `v1/calendarios/professores/aulas/${id}/recorrencias/serie/${tipoRecorrencia}`
+    );
   };
 
   excluirAula = (id, tipoRecorrencia, nomeComponente) => {
     return api.delete(
-      `v1/calendarios/professores/aulas/${id}/recorrencias/${tipoRecorrencia}/disciplinaNome/${btoa(
-        nomeComponente
-      )}`
+      `v1/calendarios/professores/aulas/${id}/recorrencias/${tipoRecorrencia}`
     );
   };
 }
