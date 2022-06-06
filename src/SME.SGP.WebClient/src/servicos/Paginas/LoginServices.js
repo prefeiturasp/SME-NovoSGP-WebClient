@@ -61,6 +61,45 @@ class LoginService {
     return validarAutenticar();
   };
 
+  deslogarSuporte = async () => {
+    debugger;
+    const endpoint = api.put(`v1/autenticacao/suporte/deslogar`);
+
+    const validarAutenticar = () =>
+      endpoint
+        .then(res => {
+          if (res.data) {
+            const { perfis } = res.data.perfisUsuario;
+            const selecionado = perfis.find(
+              perfil =>
+                perfil.codigoPerfil === res.data.perfisUsuario.perfilSelecionado
+            );
+            store.dispatch(setarPerfis(perfis));
+            store.dispatch(perfilSelecionado(selecionado));
+          }
+          return {
+            sucesso: true,
+            mensagem: 'Usuario logado com sucesso',
+            dados: res.data,
+          };
+        })
+        .catch(err => {
+          const status = err.response ? err.response.status : null;
+
+          if (status && status === 401)
+            return { sucesso: false, erroGeral: 'Usuário e/ou senha inválida' };
+
+          return {
+            sucesso: false,
+            erroGeral:
+              err.response && err.response.data && err.response.data.mensagens
+                ? err.response.data.mensagens.join(',')
+                : 'Falha ao tentar autenticar no servidor',
+          };
+        });
+    return validarAutenticar();
+  };
+
   obtenhaUrlAutenticacao = () => {
     return 'v1/autenticacao';
   };

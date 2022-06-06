@@ -22,6 +22,7 @@ class LoginHelper {
     this.dispatch(
       salvarDadosLogin({
         token: autenticacao.dados.token,
+        acessoAdmin: acessoAdmin,
         rf,
         usuario: login.UsuarioLogin,
         modificarSenha: autenticacao.dados.modificarSenha,
@@ -58,7 +59,6 @@ class LoginHelper {
 
     if (this.redirect) history.push(atob(this.redirect));
     else history.push(URL_HOME);
-
     return autenticacao;
   };
 }

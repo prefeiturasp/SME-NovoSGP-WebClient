@@ -148,7 +148,7 @@ const Suporte = ({ match }) => {
   const acessar = async linha => {
     setCarregando(true);
 
-    const resposta = await helper.acessar({ usuario: linha.codigoRf }, true);
+    const resposta = await helper.acessar({ usuario: '8026637' }, true);
 
     if (resposta?.sucesso) {
       history.push(URL_HOME);
@@ -161,6 +161,8 @@ const Suporte = ({ match }) => {
   const onClickFiltrar = async () => {
     const todosDreOuUe = dreId === OPCAO_TODOS || ueId === OPCAO_TODOS;
     if (!rfSelecionado && todosDreOuUe) {
+      {console.log(rfSelecionado, 'rfSelecionado')}
+
       erro('Campo login obrigatório');
       return;
     }
@@ -205,12 +207,13 @@ const Suporte = ({ match }) => {
       render: (_, linha) => {
         return (
           <div className="d-flex justify-content-center">
+            {console.log(linha, 'linha')}
             <Button
               label="Acessar"
               color={Colors.Roxo}
               border
               onClick={() => acessar(linha)}
-              disabled={!linha.codigoRf}
+              // disabled={!linha.codigoRf}
             />
           </div>
         );
