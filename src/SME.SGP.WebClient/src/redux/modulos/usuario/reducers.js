@@ -3,6 +3,7 @@ import produce from 'immer';
 const inicial = {
   rf: '',
   token: '',
+  acessoAdmin: undefined,
   usuario: '',
   dataLogin: null,
   logado: false,
@@ -40,6 +41,7 @@ export default function usuario(state = inicial, action) {
         break;
       case '@usuario/salvarLogin':
         draft.rf = action.payload.rf.trim();
+        draft.acessoAdmin = action.payload.acessoAdmin;
         draft.token = action.payload.token;
         draft.dataLogin = new Date();
         draft.logado = true;
