@@ -47,12 +47,11 @@ const AusenciasEstudante = props => {
   const obterAusenciaMotivoPorAlunoTurmaBimestreAno = useCallback(
     async numeroPagina => {
       setExibirLoader(true);
-      const retorno = await ServicoAcompanhamentoFrequencia.obterJustificativaAcompanhamentoFrequenciaPaginacaoManual(
+      const retorno = await ServicoAcompanhamentoFrequencia.obterFrequenciaDiariaAluno(
         turmaId,
         componenteCurricularId,
         codigoAluno,
         bimestre,
-        semestre,
         numeroPagina || 1,
         REGISTROS_POR_PAGINA
       )
@@ -99,7 +98,7 @@ const AusenciasEstudante = props => {
         <BtnVisualizarAnotacao
           className={item.id > 0 ? 'btn-com-anotacao' : ''}
           onClick={() => {
-            if (item.motivo) {
+            if (item?.motivo.length > 0) {
               onClickAnotacao(item);
             }
           }}
@@ -125,8 +124,11 @@ const AusenciasEstudante = props => {
                       <thead className="tabela-dois-thead">
                         <tr>
                           <th className="col-linha-um">Data</th>
-                          <th className="col-linha-um">Registrado por</th>
-                          <th className="col-linha-um">Motivo da ausência</th>
+                          <th className="col-linha-um">Aulas</th>
+                          <th className="col-linha-um">Presenças</th>
+                          <th className="col-linha-um">Remoto</th>
+                          <th className="col-linha-um">Ausências</th>
+                          <th className="col-linha-um">Justificativa</th>
                         </tr>
                       </thead>
                       <tbody className="tabela-dois-tbody">
@@ -135,12 +137,21 @@ const AusenciasEstudante = props => {
                             return (
                               <tr key={shortid.generate()}>
                                 <td className="col-valor-linha-um">
-                                  {moment(item.dataAusencia).format(
+                                  {moment(item.dataAula).format(
                                     'DD/MM/YYYY'
                                   )}
                                 </td>
                                 <td className="col-valor-linha-um">
-                                  {item.registradoPor}
+                                  {item.quantidadeAulas}
+                                </td>
+                                <td className="col-valor-linha-um">
+                                  {item.quantidadePresenca}
+                                </td>
+                                <td className="col-valor-linha-um">
+                                  {item.quantidadeRemoto}
+                                </td>
+                                <td className="col-valor-linha-um">
+                                  {item.quantidadeAusencia}
                                 </td>
                                 <td className="col-valor-linha-um">
                                   {visualizarAnotacao(item)}
