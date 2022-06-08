@@ -52,6 +52,7 @@ class ServicoAcompanhamentoFrequencia {
                   0}/aluno/${alunoCodigo}/bimestre/${bimestre}?numeroPagina=${numeroPagina ||
                   1}&numeroRegistros=${numeroRegistros}`;
     return api.get(url);
+
   };
 
   obterInformacoesDeFrequenciaAlunoPorSemestre = (

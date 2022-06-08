@@ -123,8 +123,8 @@ const AusenciasEstudante = props => {
                     <table className="table">
                       <thead className="tabela-dois-thead">
                         <tr>
-                          <th className="col-linha-um">Data</th>
-                          <th className="col-linha-um">Aulas</th>
+                          <th className="col-linha-um">Data da Aula</th>
+                          <th className="col-linha-um">Aulas Dadas</th>
                           <th className="col-linha-um">Presenças</th>
                           <th className="col-linha-um">Remoto</th>
                           <th className="col-linha-um">Ausências</th>
