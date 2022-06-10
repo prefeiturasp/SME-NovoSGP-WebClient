@@ -42,10 +42,6 @@ export default function AtribuicaoSupervisorLista() {
     if (retorno?.data?.length) {
       if (retorno.data.length === 1) {
         const dre = retorno.data[0].codigo;
-        // const vinculoUes = await api.get(
-        //   `/v1/supervisores/vinculo-lista?dreCodigo=${dre}&uesemresponsavel=${uesSemSupervisorCheck}`
-        // );
-        //montarListaAtribuicao(vinculoUes.data);
         setDresSelecionadas(dre);
         carregarUes(dre);
         consultarApi(dre,tipoResponsavel,ueSelecionada,supervisoresSelecionados);
