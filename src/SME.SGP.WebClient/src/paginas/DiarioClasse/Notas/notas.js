@@ -521,6 +521,7 @@ const Notas = ({ match }) => {
         periodoFimTicks: dadosBimestreAtual.periodoFimTicks,
         periodoEscolarId: dadosBimestreAtual.periodoEscolarId,
       };
+      
       if(valoresBimestresSalvar.length > 0){
         const salvouNotas = await api.post(
           `v1/avaliacoes/notas`,
@@ -542,6 +543,7 @@ const Notas = ({ match }) => {
             auditoriaInserido:  salvouNotas?.data?.auditoriaInserido,
             auditoriaBimestreAlterado:  salvouNotas?.data?.auditoriaBimestreAlterado,
             auditoriaBimestreInserido:  salvouNotas?.data?.auditoriaBimestreInserido,
+
           });
           resolve(true);
           return true;
@@ -678,13 +680,14 @@ const Notas = ({ match }) => {
           .then(salvouNotas => {
             setCarregandoGeral(false);
             if (salvouNotas && salvouNotas.status === 200) {
-              if (salvarNotasAvaliacao) {
-                sucesso('Suas informações foram salvas com sucesso.');
+              const auditoriaBimestre = salvouNotas?.data?.[0];
+              if (!salvarNotasAvaliacao) {
+                   sucesso(auditoriaBimestre.mensagemConsistencia);
               }
               dispatch(setModoEdicaoGeral(false));
               dispatch(setModoEdicaoGeralNotaFinal(false));
               dispatch(setExpandirLinha([]));
-              const auditoriaBimestre = salvouNotas?.data?.[0];
+              
               if (auditoriaBimestre) {
                 const auditoriaBimestreInserido = `Nota final do bimestre inserida por ${
                   auditoriaBimestre?.criadoPor
