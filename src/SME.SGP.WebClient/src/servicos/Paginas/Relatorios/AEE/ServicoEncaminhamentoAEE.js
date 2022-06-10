@@ -308,6 +308,8 @@ class ServicoEncaminhamentoAEE {
                 questao.tipoQuestao === tipoQuestao.Checkbox) &&
               questao?.resposta?.length
             ) {
+              if (!Array.isArray(questao?.resposta))
+                questao.resposta = questao.resposta.replace('[', '').replace(']', '').split(',').map(Number);
               questao.resposta.forEach(valorSelecionado => {
                 if (valorSelecionado) {
                   if (questaoAtual?.resposta?.length) {

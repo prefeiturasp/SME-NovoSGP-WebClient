@@ -4,7 +4,7 @@ import { Base } from '../componentes/colors';
 export const MenuBody = styled.div`
   background: ${Base.Roxo};
   padding: 0 !important;
-  position: fixed;
+  position: ${props => (props.position ? 'absolute' : 'fixed')};
   left: 0%;
   height: 100%;
   width: ${props => (props.retraido ? `115px` : `250px`)};

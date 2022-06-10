@@ -284,7 +284,7 @@ rotas.set(
   }
 );
 
-rotas.set(`${RotasDto.ATRIBUICAO_RESPONSAVEIS}/:dreId/tipo/:tipoResponsavel`, {
+rotas.set(`${RotasDto.ATRIBUICAO_RESPONSAVEIS}/:dreId/:tipoResponsavel`, {
   breadcrumbName: 'Atribuição de responsáveis',
   parent: RotasDto.ATRIBUICAO_RESPONSAVEIS_LISTA,
   component: AtribuicaoResponsaveisCadastro,

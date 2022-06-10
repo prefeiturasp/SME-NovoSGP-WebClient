@@ -521,31 +521,34 @@ const Notas = ({ match }) => {
         periodoFimTicks: dadosBimestreAtual.periodoFimTicks,
         periodoEscolarId: dadosBimestreAtual.periodoEscolarId,
       };
+      
+      if(valoresBimestresSalvar.length > 0){
+        const salvouNotas = await api.post(
+          `v1/avaliacoes/notas`,
+          {
+            turmaId: usuario.turmaSelecionada.turma,
+            disciplinaId: disciplinaSelecionada,
+            notasConceitos: valoresBimestresSalvar,
+          },
+          { params: paramsQueryString }
+        );
+        setCarregandoGeral(false);
+        if (salvouNotas && salvouNotas.status === 200) {
+          sucesso('Suas informações foram salvas com sucesso.');
+          dispatch(setModoEdicaoGeral(false));
+          dispatch(setModoEdicaoGeralNotaFinal(false));
+          dispatch(setExpandirLinha([]));
+          setAuditoriaInfo({
+            auditoriaAlterado: salvouNotas?.data?.auditoriaAlterado,
+            auditoriaInserido:  salvouNotas?.data?.auditoriaInserido,
+            auditoriaBimestreAlterado:  salvouNotas?.data?.auditoriaBimestreAlterado,
+            auditoriaBimestreInserido:  salvouNotas?.data?.auditoriaBimestreInserido,
 
-      const salvouNotas = await api.post(
-        `v1/avaliacoes/notas`,
-        {
-          turmaId: usuario.turmaSelecionada.turma,
-          disciplinaId: disciplinaSelecionada,
-          notasConceitos: valoresBimestresSalvar,
-        },
-        { params: paramsQueryString }
-      );
-      setCarregandoGeral(false);
-      if (salvouNotas && salvouNotas.status === 200) {
-        sucesso('Suas informações foram salvas com sucesso.');
-        dispatch(setModoEdicaoGeral(false));
-        dispatch(setModoEdicaoGeralNotaFinal(false));
-        dispatch(setExpandirLinha([]));
-        setAuditoriaInfo({
-          auditoriaAlterado: salvouNotas?.data?.auditoriaAlterado,
-          auditoriaInserido:  salvouNotas?.data?.auditoriaInserido,
-          auditoriaBimestreAlterado:  salvouNotas?.data?.auditoriaBimestreAlterado,
-          auditoriaBimestreInserido:  salvouNotas?.data?.auditoriaBimestreInserido,
-        });
-        resolve(true);
-        return true;
-      }
+          });
+          resolve(true);
+          return true;
+        }
+      }        
       resolve(false);
       return false;
     } catch (e) {
@@ -677,13 +680,14 @@ const Notas = ({ match }) => {
           .then(salvouNotas => {
             setCarregandoGeral(false);
             if (salvouNotas && salvouNotas.status === 200) {
+              const auditoriaBimestre = salvouNotas?.data?.[0];
               if (!salvarNotasAvaliacao) {
-                sucesso('Suas informações foram salvas com sucesso.');
+                   sucesso(auditoriaBimestre.mensagemConsistencia);
               }
               dispatch(setModoEdicaoGeral(false));
               dispatch(setModoEdicaoGeralNotaFinal(false));
               dispatch(setExpandirLinha([]));
-              const auditoriaBimestre = salvouNotas?.data?.[0];
+              
               if (auditoriaBimestre) {
                 const auditoriaBimestreInserido = `Nota final do bimestre inserida por ${
                   auditoriaBimestre?.criadoPor

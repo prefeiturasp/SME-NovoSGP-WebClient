@@ -302,9 +302,7 @@ const salvarFechamentoListao = async (
     .finally(() => setExibirLoaderGeral(false));
 
   if (resposta?.status === 200) {
-    sucesso(
-      `${ehNota ? 'Notas registradas' : 'Conceitos registrados'} com sucesso`
-    );
+    sucesso(resposta.data.mensagemConsistencia);
     const { dispatch } = store;
 
     dispatch(setTelaEmEdicao(false));

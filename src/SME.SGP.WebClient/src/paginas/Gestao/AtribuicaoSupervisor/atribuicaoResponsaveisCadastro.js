@@ -68,11 +68,14 @@ const AtribuicaoResponsaveisCadastro = () => {
   }, [routeMatch]);
 
   const limparTela = () => {
-    setDreId();
-    setTipoResponsavel();
-    setListaTipoResponsavel([]);
-    setResponsavel();
+    if (listaTipoResponsavel?.length > 1) {
+      setTipoResponsavel();
+    }
+    if (listaDres?.length > 1) {
+      setDreId();
+    }
     setListaResponsavel([]);
+    setResponsavel();
     setModoEdicao(false);
   };
 
@@ -169,7 +172,7 @@ const AtribuicaoResponsaveisCadastro = () => {
 
     if (resposta?.data?.length) {
       if (resposta?.data?.length === 1) {
-        setTipoResponsavel(resposta.data[0].codigo);
+        setTipoResponsavel(resposta.data[0].descricao);
       } else if (routeMatch.params?.tipoResponsavel) {
         setTipoResponsavel(routeMatch.params.tipoResponsavel);
       }

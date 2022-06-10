@@ -70,7 +70,7 @@ function ExcluirAula({
         <Formik
           enableReinitialize
           initialValues={{ tipoRecorrenciaExclusao: 1 }}
-          onSubmit={() => { }}
+          onSubmit={() => {}}
           validateOnChange
           validateOnBlur
         >
@@ -84,11 +84,13 @@ function ExcluirAula({
                   <p>{`Existem ${recorrencia.quantidadeAulasRecorrentes} ocorrências desta aula a partir desta data.`}</p>
                   <p>
                     {recorrencia.existeFrequenciaOuPlanoAula
-                      ? ` Esta aula ou sua recorrência possui frequência ou ${infantil ? 'diário de bordo' : 'plano de aula'} registrado, ao excluí-la estará excluindo ${
-                      recorrencia.quantidadeAulasRecorrentes == 1
-                        ? 'esse registro'
-                        : 'estes registros'
-                      } também.`
+                      ? ` Esta aula ou sua recorrência possui frequência ou ${
+                          infantil ? 'diário de bordo' : 'plano de aula'
+                        } registrado, ao excluí-la estará excluindo ${
+                          recorrencia.quantidadeAulasRecorrentes == 1
+                            ? 'esse registro'
+                            : 'estes registros'
+                        } também.`
                       : ''}
                   </p>
                   <p>Qual opção de exclusão você deseja realizar?</p>

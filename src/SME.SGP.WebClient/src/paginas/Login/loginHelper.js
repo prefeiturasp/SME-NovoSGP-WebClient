@@ -12,8 +12,12 @@ class LoginHelper {
     this.redirect = redirect;
   }
 
-  acessar = async (login, acessoAdmin) => {
-    const autenticacao = await LoginService.autenticar(login, acessoAdmin);
+  acessar = async (login, acessoAdmin, deslogar) => {
+    const autenticacao = await LoginService.autenticar(
+      login,
+      acessoAdmin,
+      deslogar
+    );
 
     if (!autenticacao.sucesso) return autenticacao;
 
@@ -22,6 +26,7 @@ class LoginHelper {
     this.dispatch(
       salvarDadosLogin({
         token: autenticacao.dados.token,
+        acessoAdmin: acessoAdmin,
         rf,
         usuario: login.UsuarioLogin,
         modificarSenha: autenticacao.dados.modificarSenha,
@@ -58,7 +63,6 @@ class LoginHelper {
 
     if (this.redirect) history.push(atob(this.redirect));
     else history.push(URL_HOME);
-
     return autenticacao;
   };
 }
