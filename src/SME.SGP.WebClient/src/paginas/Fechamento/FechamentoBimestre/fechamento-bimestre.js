@@ -308,14 +308,16 @@ const FechamentoBismestre = () => {
     fechamentoFinal.turmaCodigo = turmaSelecionada.turma;
     fechamentoFinal.ehRegencia = ehRegencia;
     fechamentoFinal.disciplinaId = disciplinaIdSelecionada;
-    return ServicoFechamentoFinal.salvar(fechamentoFinal)
+    const acaoSalvar = ServicoFechamentoFinal.salvar(fechamentoFinal)
       .then(() => {
-        sucesso('Fechamento final salvo com sucesso.');
+        sucesso(acaoSalvar.data.mensagemConsistencia);
         trocarEstadoEmEdicao(false);
         dispatch(setExpandirLinha([]));
         refFechamentoFinal.current.salvarFechamentoFinal();
       })
       .catch(e => erros(e));
+
+      return acaoSalvar;
   };
 
   return (
