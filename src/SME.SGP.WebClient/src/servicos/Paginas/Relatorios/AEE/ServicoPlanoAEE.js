@@ -73,7 +73,7 @@ class ServicoPlanoAEE {
     const { formsQuestionarioDinamico } = questionarioDinamico;
 
     const { dadosCollapseLocalizarEstudante } = collapseLocalizarEstudante;
-    const { planoAEEDados } = planoAEE;
+    const { planoAEEDados, dadosAtribuicaoResponsavel } = planoAEE;
 
     let contadorFormsValidos = 0;
 
@@ -218,7 +218,7 @@ class ServicoPlanoAEE {
           });
           return questoes;
         });
-
+        
         questoesSalvar = questoesSalvar.filter(q => q !== null);
         const valoresParaSalvar = {
           id: planoAEEDados?.id ? planoAEEDados?.id : 0,
@@ -227,6 +227,7 @@ class ServicoPlanoAEE {
           alunoCodigo: dadosCollapseLocalizarEstudante.codigoAluno,
           situacao: planoAEEDados?.situacao,
           questoes: questoesSalvar[0],
+          responsavelRF: dadosAtribuicaoResponsavel.codigoRF,
         };
 
         dispatch(setExibirLoaderPlanoAEE(true));

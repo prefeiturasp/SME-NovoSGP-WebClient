@@ -1,24 +1,40 @@
 import { Tabs } from 'antd';
 import PropTypes from 'prop-types';
-import React from 'react';
-import { useSelector } from 'react-redux';
+import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { ContainerTabsCard } from '~/componentes/tabs/tabs.css';
 import { situacaoPlanoAEE } from '~/dtos';
 import ServicoPlanoAEE from '~/servicos/Paginas/Relatorios/AEE/ServicoPlanoAEE';
 import SecaoParecerPlanoCollapse from '../SecaoParecerPlanoCollapse/secaoParecerPlanoCollapse';
 import SecaoPlanoCollapse from '../SecaoPlanoCollapse/secaoPlanoCollapse';
 import SecaoReestruturacaoPlano from '../SecaoReestruturacaoPlano/secaoReestruturacaoPlano';
+import LocalizadorFuncionario from '~/componentes-sgp/LocalizadorFuncionario';
+import { setDadosAtribuicaoResponsavel } from '~/redux/modulos/planoAEE/actions';
+import { setQuestionarioDinamicoEmEdicao } from '~/redux/modulos/questionarioDinamico/actions';
 
 const { TabPane } = Tabs;
 
 const MontarDadosTabs = props => {
+  const [limparCampos, setLimparCampos] = useState(false);
+  const [responsavelSelecionado, setResponsavelSelecionado] = useState();
+
   const { match } = props;
   const temId = match?.params?.id;
+
+  const planoAEEDados = useSelector(store => store.planoAEE.planoAEEDados);
+
+  useEffect(() => {
+    if (planoAEEDados?.responsavel) {
+      setResponsavelSelecionado({
+        codigoRF: planoAEEDados?.responsavel?.responsavelRF,
+        nomeServidor: planoAEEDados?.responsavel?.responsavelNome,
+      });
+    }
+  }, [planoAEEDados]);
 
   const dadosCollapseLocalizarEstudante = useSelector(
     store => store.collapseLocalizarEstudante.dadosCollapseLocalizarEstudante
   );
-  const planoAEEDados = useSelector(store => store.planoAEE.planoAEEDados);
 
   // Seção pode voltar no futuro!
   const exibirTabReestruturacao = false;
@@ -27,9 +43,42 @@ const MontarDadosTabs = props => {
     ServicoPlanoAEE.cliqueTabPlanoAEE(key, temId);
   };
 
+  const dispatch = useDispatch();
+
+  const onChangeLocalizador = funcionario => {
+    setLimparCampos(false);
+    if (funcionario?.codigoRF && funcionario?.nomeServidor) {
+      const params = {
+        codigoRF: funcionario?.codigoRF,
+        nomeServidor: funcionario?.nomeServidor,
+      };
+      dispatch(setDadosAtribuicaoResponsavel(params));
+      dispatch(setQuestionarioDinamicoEmEdicao(true));
+      setResponsavelSelecionado(params);
+    } else {
+      dispatch(setDadosAtribuicaoResponsavel());
+      dispatch(setQuestionarioDinamicoEmEdicao(false));
+      setResponsavelSelecionado();
+    }
+  };
+
   return dadosCollapseLocalizarEstudante?.codigoAluno ? (
     <ContainerTabsCard type="card" width="20%" onTabClick={cliqueTab}>
       <TabPane tab="Cadastro do Plano" key="1">
+        <p>Atribuir responsável:</p>
+        <div className="row mb-4">
+          <LocalizadorFuncionario
+            id="funcionarioResponsavel"
+            onChange={onChangeLocalizador}
+            codigoTurma={dadosCollapseLocalizarEstudante?.codigoTurma}
+            limparCampos={limparCampos}
+            url="v1/encaminhamento-aee/responsavel-plano/pesquisa"
+            valorInicial={{
+              codigoRF: responsavelSelecionado?.codigoRF,
+              nome: responsavelSelecionado?.nomeServidor,
+            }}
+          />
+        </div>
         <SecaoPlanoCollapse match={match} />
       </TabPane>
       {temId && exibirTabReestruturacao && (
