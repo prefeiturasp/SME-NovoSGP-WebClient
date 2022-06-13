@@ -198,9 +198,10 @@ const AtribuicaoResponsaveisCadastro = () => {
 
   const obterResponsaveis = useCallback(async () => {
     setCarregandoResponsavel(true);
+    var reponsavelTipo = tipoResponsavel ?? 0;
     const resposta = await ServicoResponsaveis.obterResponsaveis(
       dreId,
-      tipoResponsavel
+      reponsavelTipo
     )
       .catch(e => erros(e))
       .finally(() => setCarregandoResponsavel(false));
@@ -225,7 +226,7 @@ const AtribuicaoResponsaveisCadastro = () => {
   }, [dreId, tipoResponsavel, routeMatch]);
 
   useEffect(() => {
-    if (tipoResponsavel && dreId) {
+    if (dreId) {
       obterResponsaveis();
     } else {
       setResponsavel();
@@ -386,8 +387,8 @@ const AtribuicaoResponsaveisCadastro = () => {
                   valueText="descricaoCodigo"
                   disabled={
                     !dreId ||
-                    !tipoResponsavel ||
-                    listaResponsavel?.length === 1 ||
+                     !tipoResponsavel ||
+                     listaResponsavel?.length === 1 ||
                     !permissoesTela.podeConsultar
                   }
                   onChange={onChangeResponsavel}

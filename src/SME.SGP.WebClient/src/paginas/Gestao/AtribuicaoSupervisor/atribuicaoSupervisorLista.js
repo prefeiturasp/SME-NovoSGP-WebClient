@@ -36,7 +36,7 @@ export default function AtribuicaoSupervisorLista() {
     usuario.permissoes[RotasDto.ATRIBUICAO_RESPONSAVEIS_LISTA];
 
   const obterDres = useCallback(async () => {
-    setCarregandoLista(true);
+    
     const retorno = await AbrangenciaServico.buscarDres().catch(e => erros(e));
 
     if (retorno?.data?.length) {
@@ -46,14 +46,12 @@ export default function AtribuicaoSupervisorLista() {
         carregarUes(dre);
         consultarApi(dre,tipoResponsavel,ueSelecionada,supervisoresSelecionados);
       }
-
+      
       setListaDres(retorno.data);
     } else {
       setListaDres([]);
       setDresSelecionadas();
-      setCarregandoLista(false);
     }
-    setCarregandoLista(false);
   }, []);
 
   useEffect(() => {
@@ -115,24 +113,25 @@ export default function AtribuicaoSupervisorLista() {
   function onClickRow(row) {
     if (!permissoesTela.podeAlterar) return;
 
-    onClickEditar(row.responsavelId);
+    onClickEditar(row.responsavelId,row.tipoResponsavelId);
   }
 
   function onClickVoltar() {
     history.push('/');
   }
 
-  function onClickEditar(responsavelId) {
+  function onClickEditar(responsavelId,tipoResponsavelId) {
     if (!permissoesTela.podeAlterar) return;
 
+    var tipoResp = tipoResponsavel ?? tipoResponsavelId;
     let path = RotasDto.ATRIBUICAO_RESPONSAVEIS;
     if (dresSelecionadas) {
       path = `${path}/${dresSelecionadas}`;
-      if (responsavelId && tipoResponsavel) {
-        path = `${path}/${responsavelId}/${tipoResponsavel}`;
+      if (responsavelId && tipoResp) {
+        path = `${path}/${responsavelId}/${tipoResp}`;
       }
-      if (!responsavelId && tipoResponsavel) {
-        path = `${path}/${tipoResponsavel}`;
+      if (!responsavelId && tipoResp) {
+        path = `${path}/${tipoResp}`;
       }
     }
 
@@ -161,7 +160,7 @@ export default function AtribuicaoSupervisorLista() {
     }
   }
   async function montaListaUesSemSup(dre) {
-    setCarregandoLista(true);
+    
     setSupervisoresSelecionados([]);
     setUeSelecionada('');
     setDesabilitarSupervisor(true);
@@ -170,7 +169,7 @@ export default function AtribuicaoSupervisorLista() {
   }
 
   const onChangeDre = useCallback(async (dre, changeUe,chamarApi) => {
-    setCarregandoLista(true);
+    
     if (!changeUe) {
       setListaSupervisores([]);
       setSupervisoresSelecionados([]);
@@ -179,7 +178,7 @@ export default function AtribuicaoSupervisorLista() {
     setUeSelecionada('');
     if (dre) {
       if(chamarApi)
-         consultarApi(dre,tipoResponsavel,ueSelecionada,supervisoresSelecionados);
+        consultarApi(dre,tipoResponsavel,ueSelecionada,supervisoresSelecionados);
     } else {
       setListaFiltroAtribuicao([]);
       setUesSemSupervisorCheck(false);
@@ -193,35 +192,39 @@ export default function AtribuicaoSupervisorLista() {
 
   }, []);
 
-  function montarListaAtribuicao(lista) {
-    setCarregandoLista(true);
+function montarListaAtribuicao(lista) {
+    
     if (lista?.length) {
       const dadosAtribuicao = [];           
       lista.forEach(item => {
-        montarLista(item, dadosAtribuicao);
+       
+       montarLista(item, dadosAtribuicao);
       });        
       setListaFiltroAtribuicao(dadosAtribuicao);      
     } else {
       setListaFiltroAtribuicao([]);
     }
+  }
 
-    function montarLista(item, dadosAtribuicao) {
-      setCarregandoLista(true);
-      item.escolas.forEach(escola => {
-        const contId = dadosAtribuicao.length + 1;
-        dadosAtribuicao.push({
-          id: contId,
-          escola: escola.nome,
-          responsavel: item.responsavelId ? item.responsavel : '',
-          responsavelId: item.responsavelId,
-          tipoResponsavel: item.tipoResponsavel,
-        });
+ function montarLista(item, dadosAtribuicao){
+    
+    item.escolas.forEach(escola => {
+      
+      const contId = dadosAtribuicao.length + 1;
+      dadosAtribuicao.push({
+        id: contId,
+        escola: escola.nome,
+        responsavel: item.responsavelId ? item.responsavel : '',
+        responsavelId: item.responsavelId,
+        tipoResponsavel: item.tipoResponsavel,
+        tipoResponsavelId: item.tipoResponsavelId,
+        ueid : item.codigo
       });
-    }
-    setCarregandoLista(false)
+    });
   }
 
   async function carregarUes(dre) {
+    
     const ues = await api.get(`/v1/abrangencias/false/dres/${dre}/ues`);
     if (ues.data) {
       setListaUes(ues.data);
@@ -231,6 +234,7 @@ export default function AtribuicaoSupervisorLista() {
   }
 
   async function onChangeSupervisores(sup) {
+    
     setUesSemSupervisorCheck(false);
     if (sup && sup.length) {
       setDesabilitarUe(true);
@@ -243,10 +247,10 @@ export default function AtribuicaoSupervisorLista() {
       setListaFiltroAtribuicao([]);
     }
     consultarApi(dresSelecionadas,tipoResponsavel,ueSelecionada,sup.toString(),uesSemSupervisorCheck);
-    setCarregandoLista(false);
   }
 
   async function onChangeUes(ue) {
+    
     if (ue) {
       setDesabilitarSupervisor(true);
       setSupervisoresSelecionados([]);
@@ -260,21 +264,20 @@ export default function AtribuicaoSupervisorLista() {
   }
 
   const onChangeTipoResponsavel = async valor => {
+    
     if(valor==null){
       setUesSemSupervisorCheck(false);
     }
-    setCarregandoLista(true)
     setSupervisoresSelecionados();
     setListaSupervisores([]);
     setListaFiltroAtribuicao([]);
     setTipoResponsavel(valor);
     consultarApi(dresSelecionadas,valor,ueSelecionada,supervisoresSelecionados,uesSemSupervisorCheck);  
-    setCarregandoLista(false);
   };
 
   async function consultarApi(dre,codigoTipo,ue,supervisor){
-    setCarregandoLista(true);
-    const consulaApi = await api.get('/v1/supervisores/vinculo-lista', {
+    setCarregandoLista(true);  
+    await api.get('/v1/supervisores/vinculo-lista', {
       params: {
         dreCodigo: dre,
         tipoCodigo: codigoTipo,
@@ -282,12 +285,13 @@ export default function AtribuicaoSupervisorLista() {
         supervisorId: supervisor,
         ueSemResponsavel: uesSemSupervisorCheck
       },
+    }).then(dados => {
+      montarListaAtribuicao(dados.data);
+      setCarregandoLista(false);  
     });
-    montarListaAtribuicao(consulaApi.data);  
-    setCarregandoLista(false);
   }
   const obterTipoResponsavel = useCallback(async () => {
-    setCarregandoLista(true);
+    
     const resposta = await ServicoResponsaveis.obterTipoReponsavel().catch(e =>
       erros(e)
     );
@@ -301,7 +305,6 @@ export default function AtribuicaoSupervisorLista() {
     } else {
       setListaTipoResponsavel([]);
     }
-    setCarregandoLista(false);
   }, []);
 
   useEffect(() => {
@@ -315,6 +318,7 @@ export default function AtribuicaoSupervisorLista() {
 
   const obterResponsaveis = useCallback(
     async dre => {
+      
       if (!dre || !tipoResponsavel) return;
 
       setCarregandoResponsavel(true);
@@ -325,7 +329,6 @@ export default function AtribuicaoSupervisorLista() {
         .catch(e => erros(e))
         .finally(() =>{
           setCarregandoResponsavel(false);
-          setCarregandoLista(false);
         });
 
       if (resposta?.data?.length) {
@@ -344,6 +347,7 @@ export default function AtribuicaoSupervisorLista() {
   );
 
   useEffect(() => {
+    
     if (tipoResponsavel && dresSelecionadas) {
       obterResponsaveis(dresSelecionadas);
     } else {
@@ -401,7 +405,7 @@ export default function AtribuicaoSupervisorLista() {
             onChange={onChangeDre}
             valueSelect={dresSelecionadas}
             placeholder="Diretoria Regional de Educação (DRE)"
-            disabled={listaDres?.length === 1 || !permissoesTela.podeConsultar}
+            disabled={carregandoLista || listaDres?.length === 1 || !permissoesTela.podeConsultar}
             allowClear={false}
             showSearch
           />
@@ -414,6 +418,7 @@ export default function AtribuicaoSupervisorLista() {
             valueOption="codigo"
             valueText="descricao"
             disabled={
+              carregandoLista ||
               !dresSelecionadas ||
               listaTipoResponsavel?.length === 1 ||
               !permissoesTela?.podeConsultar
@@ -438,6 +443,7 @@ export default function AtribuicaoSupervisorLista() {
               multiple
               placeholder="SELECIONE O RESPONSÁVEL"
               disabled={
+                carregandoLista ||
                 !tipoResponsavel ||
                 desabilitarSupervisor ||
                 !permissoesTela.podeConsultar
@@ -459,13 +465,13 @@ export default function AtribuicaoSupervisorLista() {
             valueSelect={ueSelecionada || []}
             placeholder="Unidade Escolar (UE)"
             disabled={
-              !dresSelecionadas || !permissoesTela.podeConsultar
+              carregandoLista || !dresSelecionadas || !permissoesTela.podeConsultar
             }
           />
         </div>
 
         <div className="col-md-12 pt-4">
-          <Loader loading={carregandoLista} ignorarTip>
+          <Loader loading={carregandoLista}>
           <DataTable
             onClickRow={permissoesTela.podeAlterar && onClickRow}
             columns={columns}
