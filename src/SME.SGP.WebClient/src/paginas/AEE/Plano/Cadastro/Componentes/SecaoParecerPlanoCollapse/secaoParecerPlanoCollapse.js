@@ -62,7 +62,7 @@ const SecaoParecerPlanoCollapse = ({ match }) => {
         {dadosParecer?.responsavelNome ? (
           <div className="col-md-4">
             <p style={{ marginLeft: -15 }}>
-              Responsável: {dadosParecer?.responsavelNome}
+              PAAI responsável: {dadosParecer?.responsavelNome}
               <span
                 style={{ color: Base.CinzaDesabilitado, fontSize: '13px' }}
               >{` (${dadosParecer?.responsavelRF})`}</span>

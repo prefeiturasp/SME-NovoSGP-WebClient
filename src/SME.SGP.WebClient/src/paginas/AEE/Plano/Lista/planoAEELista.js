@@ -94,6 +94,30 @@ const PlanoAEELista = () => {
       title: 'Versão',
       dataIndex: 'versao',
     },
+    {
+      title: 'Responsável',
+      dataIndex: 'responsavel',
+      render: (_, record) => (
+        <span>
+          {record.nomeReponsavel} - {record.rfReponsavel}
+        </span>
+      ),
+    },
+    {
+      title: 'PAAI responsável',
+      dataIndex: 'paaiResponsavel',
+      render: (_, record) => (
+        <>
+          {record?.nomePaaiReponsavel ? (
+            <span>
+              {record.nomePaaiReponsavel} - {record.rfPaaiReponsavel}
+            </span>
+          ) : (
+            ''
+          )}
+        </>
+      ),
+    },
   ];
 
   const obterUes = useCallback(async () => {

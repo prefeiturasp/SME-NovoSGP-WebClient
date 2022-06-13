@@ -78,7 +78,7 @@ const SecaoParecerResponsavel = () => {
 
   return (
     <>
-      <Label text="Responsável" className="mb-3" />
+      <Label text="PAAI responsável" className="mb-3" />
       <div className="row">
         <LocalizadorFuncionario
           id="funcionario"
