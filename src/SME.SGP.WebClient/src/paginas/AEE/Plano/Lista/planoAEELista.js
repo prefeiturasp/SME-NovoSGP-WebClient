@@ -95,7 +95,7 @@ const PlanoAEELista = () => {
       dataIndex: 'versao',
     },
     {
-      title: 'Resposável',
+      title: 'Responsável',
       dataIndex: 'responsavel',
       render: (_, record) => (
         <span>
