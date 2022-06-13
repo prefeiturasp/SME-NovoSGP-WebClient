@@ -90,21 +90,22 @@ const AusenciasEstudante = props => {
         className="d-flex"
         style={{ alignItems: 'center', justifyContent: 'space-between' }}
       >
-        <div>
-          {item?.motivo?.substr(0, 100)}
-          {item?.motivo?.length > 100 ? '...' : ''}
-        </div>
+          <div
+            style={{ padding: '8px' }}>
+            {item?.motivo?.substr(0, 100)}
+            {item?.motivo?.length > 100 ? '...' : ''}
+          </div>
 
-        <BtnVisualizarAnotacao
-          className={item.id > 0 ? 'btn-com-anotacao' : ''}
-          onClick={() => {
-            if (item?.motivo.length > 0) {
-              onClickAnotacao(item);
-            }
-          }}
-        >
-          <i className="fas fa-eye" style={{ marginTop: '9px' }} />
-        </BtnVisualizarAnotacao>
+          <BtnVisualizarAnotacao
+            className={item.id > 0 ? 'btn-com-anotacao' : ''}
+            onClick={() => {
+              if (item?.motivo.length > 0) {
+                onClickAnotacao(item);
+              }
+            }}
+          >
+            <i className="fas fa-eye" style={{ marginTop: '9px' }} />
+          </BtnVisualizarAnotacao>
       </div>
     );
   };
