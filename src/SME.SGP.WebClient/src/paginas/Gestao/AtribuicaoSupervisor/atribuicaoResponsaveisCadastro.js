@@ -198,10 +198,14 @@ const AtribuicaoResponsaveisCadastro = () => {
 
   const obterResponsaveis = useCallback(async () => {
     setCarregandoResponsavel(true);
-    var reponsavelTipo = tipoResponsavel ?? 0;
+    if(tipoResponsavel ==undefined){
+      setListaResponsavel([]);
+      setCarregandoResponsavel(false);
+      return;
+    }
     const resposta = await ServicoResponsaveis.obterResponsaveis(
       dreId,
-      reponsavelTipo
+      tipoResponsavel
     )
       .catch(e => erros(e))
       .finally(() => setCarregandoResponsavel(false));
