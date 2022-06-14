@@ -113,14 +113,14 @@ export default function AtribuicaoSupervisorLista() {
   function onClickRow(row) {
     if (!permissoesTela.podeAlterar) return;
 
-    onClickEditar(row.responsavelId,row.tipoResponsavelId);
+    onClickEditar(row.responsavelId,row.tipoResponsavelId,row.codigo);
   }
 
   function onClickVoltar() {
     history.push('/');
   }
 
-  function onClickEditar(responsavelId,tipoResponsavelId) {
+  function onClickEditar(responsavelId,tipoResponsavelId,codigoUe) {
     if (!permissoesTela.podeAlterar) return;
 
     var tipoResp = tipoResponsavel ?? tipoResponsavelId;
