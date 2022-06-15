@@ -79,18 +79,19 @@ const AvaliacaoForm = ({ match, location }) => {
   const aoTrocarCampos = () => {
     if (!modoEdicao) {
       setModoEdicao(true);
-    }
+    }    
   };
 
   const onChangeDisciplina = disciplinaId => {
     aoTrocarCampos();
-    if (disciplinaId) {
+    if (disciplinaId && disciplinaId.length == 1 && !Array.isArray(disciplinaId)) {
       const componenteSelecionado = listaDisciplinas.find(
         item => item.codigoComponenteCurricular == disciplinaId
       );
-      setPodeLancaNota(componenteSelecionado?.lancaNota);
+      setPodeLancaNota(componenteSelecionado == undefined ? true : componenteSelecionado?.lancaNota);
     } else {
       setPodeLancaNota(true);
+      setDesabilitarBotaoCadastrar(!disciplinaId.length > 1 || disciplinaId.length == 0 || (Array.isArray(disciplinaId) && disciplinaId.length == 1));
     }
   };
 
@@ -513,11 +514,11 @@ const AvaliacaoForm = ({ match, location }) => {
     const regenciaSelecionada = listaDisciplinasRegencia.filter(
       item => item.selecionada
     );
-    const desbilitar =
+    const desabilitar =
       disciplinaEncontrada?.regencia && !regenciaSelecionada?.length;
 
     setMostrarDisciplinaRegencia(disciplinaEncontrada?.regencia);
-    setDesabilitarBotaoCadastrar(desbilitar);
+    setDesabilitarBotaoCadastrar(desabilitar != undefined ? desabilitar : true);
   }, [disciplinaSelecionada, listaDisciplinas, listaDisciplinasRegencia]);
 
   useEffect(() => {
@@ -676,6 +677,7 @@ const AvaliacaoForm = ({ match, location }) => {
                           resetDisciplinasSelecionadas(form);
                           montaValidacoes(e.target.value);
                           validaInterdisciplinar(e.target.value);
+                          setDesabilitarBotaoCadastrar(true);
                         }}
                         desabilitado={desabilitarCampos || !dentroPeriodo}
                       />
@@ -699,10 +701,10 @@ const AvaliacaoForm = ({ match, location }) => {
                             listaDisciplinas?.length === 1
                           }
                           placeholder="Selecione um componente curricular"
-                          valueSelect={listaDisciplinasSelecionadas}
                           form={form}
                           multiple
                           onChange={onChangeDisciplina}
+                          valueSelect={listaDisciplinasSelecionadas}
                         />
                       ) : (
                         <SelectComponent
