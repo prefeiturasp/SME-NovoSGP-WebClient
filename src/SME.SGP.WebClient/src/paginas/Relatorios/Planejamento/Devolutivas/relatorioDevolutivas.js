@@ -75,7 +75,6 @@ const RelatorioDevolutivas = () => {
 
   const limparFiltrosSelecionados = naolimparFiltroInicial => {
     setRecarregar(true);
-
     if (!naolimparFiltroInicial) {
       setConsideraHistorico(false);
       setAnoLetivo(anoAtual);
