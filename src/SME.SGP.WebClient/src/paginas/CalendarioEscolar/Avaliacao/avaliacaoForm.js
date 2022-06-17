@@ -79,7 +79,7 @@ const AvaliacaoForm = ({ match, location }) => {
   const aoTrocarCampos = () => {
     if (!modoEdicao) {
       setModoEdicao(true);
-    }
+    }    
   };
 
   const onChangeDisciplina = disciplinaId => {
@@ -346,8 +346,9 @@ const AvaliacaoForm = ({ match, location }) => {
   const obterDisciplinasRegencia = async () => {
     try {
       setCarregandoTela(true);
+      setTemRegencia(true);
       const { data, status } = await ServicoAvaliacao.listarDisciplinasRegencia(
-        turmaId
+        turmaId, temRegencia
       );
       if (data && status === 200) {
         setListaDisciplinasRegencia(data);
@@ -700,7 +701,7 @@ const AvaliacaoForm = ({ match, location }) => {
                             !dentroPeriodo ||
                             listaDisciplinas?.length === 1
                           }
-                          placeholder="Selecione um componente curricular"                          
+                          placeholder="Selecione um componente curricular"
                           form={form}
                           multiple
                           onChange={onChangeDisciplina}
