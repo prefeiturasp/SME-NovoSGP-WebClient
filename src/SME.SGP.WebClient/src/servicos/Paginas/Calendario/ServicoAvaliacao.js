@@ -5,8 +5,8 @@ class ServicoAvaliacao {
     return api.get(`v1/professores/turmas/${turma}/disciplinas`);
   };
 
-  listarDisciplinasRegencia = async turma => {
-    return api.get(`v1/professores/turmas/${turma}/disciplinas/planejamento`);
+  listarDisciplinasRegencia = async (turma, temRegencia) => {
+    return api.get(`v1/professores/turmas/${turma}/disciplinas/planejamento/regencia/${temRegencia}`);
   };
 
   listarTipos = async () => {
