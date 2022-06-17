@@ -167,7 +167,7 @@ export default function AtribuicaoSupervisorLista() {
     consultarApi(dre,tipoResponsavel,ueSelecionada,supervisoresSelecionados);
   }
 
-  const onChangeDre = useCallback(async (dre, changeUe,chamarApi) => {
+  const onChangeDre = useCallback(async (dre, changeUe,chamarApi=true) => {
     
     if (!changeUe) {
       setListaSupervisores([]);
@@ -196,30 +196,19 @@ function montarListaAtribuicao(lista) {
     if (lista?.length) {
       const dadosAtribuicao = [];           
       lista.forEach(item => {
-       
-       montarLista(item, dadosAtribuicao);
+       dadosAtribuicao.push({
+        id : item.id,
+        escola: item.ueNome,
+        responsavel: item.responsavelId ? item.responsavel : '',
+        tipoResponsavel: item.tipoResponsavel,
+        tipoResponsavelId: item.tipoResponsavelId,
+        ueid : item.codigo
+      });
       });        
       setListaFiltroAtribuicao(dadosAtribuicao);      
     } else {
       setListaFiltroAtribuicao([]);
     }
-  }
-
- function montarLista(item, dadosAtribuicao){
-    
-    item.escolas.forEach(escola => {
-      
-      const contId = dadosAtribuicao.length + 1;
-      dadosAtribuicao.push({
-        id: contId,
-        escola: escola.nome,
-        responsavel: item.responsavelId ? item.responsavel : '',
-        responsavelId: item.responsavelId,
-        tipoResponsavel: item.tipoResponsavel,
-        tipoResponsavelId: item.tipoResponsavelId,
-        ueid : item.codigo
-      });
-    });
   }
 
   async function carregarUes(dre) {
@@ -385,6 +374,7 @@ function montarListaAtribuicao(lista) {
             label="Exibir apenas UEs sem responsável"
             onChangeCheckbox={onChangeUesSemSup}
             disabled={
+              carregandoLista || carregandoResponsavel ||
               !dresSelecionadas ||
               !tipoResponsavel ||
               !permissoesTela?.podeConsultar ||
@@ -404,7 +394,7 @@ function montarListaAtribuicao(lista) {
             onChange={onChangeDre}
             valueSelect={dresSelecionadas}
             placeholder="Diretoria Regional de Educação (DRE)"
-            disabled={carregandoLista || listaDres?.length === 1 || !permissoesTela.podeConsultar}
+            disabled={carregandoLista || carregandoResponsavel || listaDres?.length === 1 || !permissoesTela.podeConsultar}
             allowClear={false}
             showSearch
           />
@@ -418,6 +408,7 @@ function montarListaAtribuicao(lista) {
             valueText="descricao"
             disabled={
               carregandoLista ||
+              carregandoResponsavel ||
               !dresSelecionadas ||
               listaTipoResponsavel?.length === 1 ||
               !permissoesTela?.podeConsultar
@@ -443,6 +434,7 @@ function montarListaAtribuicao(lista) {
               placeholder="SELECIONE O RESPONSÁVEL"
               disabled={
                 carregandoLista ||
+                carregandoResponsavel ||
                 !tipoResponsavel ||
                 desabilitarSupervisor ||
                 !permissoesTela.podeConsultar
@@ -464,7 +456,7 @@ function montarListaAtribuicao(lista) {
             valueSelect={ueSelecionada || []}
             placeholder="Unidade Escolar (UE)"
             disabled={
-              carregandoLista || !dresSelecionadas || !permissoesTela.podeConsultar
+              carregandoLista || carregandoResponsavel ||  !dresSelecionadas || !permissoesTela.podeConsultar
             }
           />
         </div>
