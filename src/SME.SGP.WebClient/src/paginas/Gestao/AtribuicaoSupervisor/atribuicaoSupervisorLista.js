@@ -197,8 +197,6 @@ function montarListaAtribuicao(lista) {
     if (lista?.length) {
       const dadosAtribuicao = [];           
       lista.forEach(item => {
-       
-       //montarLista(item, dadosAtribuicao);
        dadosAtribuicao.push({
         id : item.id,
         escola: item.ueNome,
