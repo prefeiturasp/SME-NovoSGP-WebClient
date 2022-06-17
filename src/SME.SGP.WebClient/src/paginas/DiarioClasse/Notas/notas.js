@@ -678,7 +678,7 @@ const Notas = ({ match }) => {
           .then(salvouNotas => {
             setCarregandoGeral(false);
             if (salvouNotas && salvouNotas.status === 200) {
-              if (salvarNotasAvaliacao) {
+              if (salvarNotasAvaliacao || salvarAvaliacaoFinal) {
                 sucesso('Suas informações foram salvas com sucesso.');
               }
               dispatch(setModoEdicaoGeral(false));
