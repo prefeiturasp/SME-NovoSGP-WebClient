@@ -346,9 +346,8 @@ const AvaliacaoForm = ({ match, location }) => {
   const obterDisciplinasRegencia = async () => {
     try {
       setCarregandoTela(true);
-      setTemRegencia(true);
       const { data, status } = await ServicoAvaliacao.listarDisciplinasRegencia(
-        turmaId, temRegencia
+        turmaId, true
       );
       if (data && status === 200) {
         setListaDisciplinasRegencia(data);
