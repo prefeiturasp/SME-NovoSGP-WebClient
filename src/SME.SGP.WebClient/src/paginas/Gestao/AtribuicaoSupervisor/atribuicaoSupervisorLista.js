@@ -138,7 +138,6 @@ export default function AtribuicaoSupervisorLista() {
         path = `${path}/${tipoResp}/${codigoUe}`;
       }
     }
-
     history.push(path);
   }
 
