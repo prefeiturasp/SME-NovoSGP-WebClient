@@ -113,7 +113,8 @@ export default function AtribuicaoSupervisorLista() {
   function onClickRow(row) {
     if (!permissoesTela.podeAlterar) return;
 
-    onClickEditar(row.responsavelId,row.tipoResponsavelId,row.codigo);
+    console.table(row);     
+    onClickEditar(row.responsavelId,row.tipoResponsavelId,row.ueid);
   }
 
   function onClickVoltar() {
@@ -127,11 +128,14 @@ export default function AtribuicaoSupervisorLista() {
     let path = RotasDto.ATRIBUICAO_RESPONSAVEIS;
     if (dresSelecionadas) {
       path = `${path}/${dresSelecionadas}`;
-      if (responsavelId && tipoResp) {
-        path = `${path}/${responsavelId}/${tipoResp}`;
+      if (responsavelId && tipoResp && codigoUe) {
+        path = `${path}/${responsavelId}/${tipoResp}/${codigoUe}`;
       }
-      if (!responsavelId && tipoResp) {
+      else if (!responsavelId && tipoResp && !codigoUe) {
         path = `${path}/${tipoResp}`;
+      }
+      else if(!responsavelId && tipoResp && codigoUe){
+        path = `${path}/${tipoResp}/${codigoUe}`;
       }
     }
 
@@ -193,7 +197,7 @@ export default function AtribuicaoSupervisorLista() {
   }, []);
 
 function montarListaAtribuicao(lista) {
-    
+  console.table(lista);        
     if (lista?.length) {
       const dadosAtribuicao = [];           
       lista.forEach(item => {
@@ -203,9 +207,10 @@ function montarListaAtribuicao(lista) {
         responsavel: item.responsavelId ? item.responsavel : '',
         tipoResponsavel: item.tipoResponsavel,
         tipoResponsavelId: item.tipoResponsavelId,
-        ueid : item.codigo
+        ueid : item.ueid
       });
-      });        
+      });
+      console.table(dadosAtribuicao);        
       setListaFiltroAtribuicao(dadosAtribuicao);      
     } else {
       setListaFiltroAtribuicao([]);
