@@ -113,7 +113,6 @@ export default function AtribuicaoSupervisorLista() {
   function onClickRow(row) {
     if (!permissoesTela.podeAlterar) return;
 
-    console.table(row);     
     onClickEditar(row.responsavelId,row.tipoResponsavelId,row.ueid);
   }
 
@@ -135,7 +134,7 @@ export default function AtribuicaoSupervisorLista() {
         path = `${path}/${tipoResp}`;
       }
       else if(!responsavelId && tipoResp && codigoUe){
-        path = `${path}/${tipoResp}/${codigoUe}`;
+        path = `${path}/0/${tipoResp}/${codigoUe}`;
       }
     }
     history.push(path);
@@ -196,7 +195,7 @@ export default function AtribuicaoSupervisorLista() {
   }, []);
 
 function montarListaAtribuicao(lista) {
-  console.table(lista);        
+  setListaFiltroAtribuicao([]);
     if (lista?.length) {
       const dadosAtribuicao = [];           
       lista.forEach(item => {
@@ -204,16 +203,15 @@ function montarListaAtribuicao(lista) {
         id : item.id,
         escola: item.ueNome,
         responsavel: item.responsavelId ? item.responsavel : '',
+        responsavelId: item.responsavelId,
         tipoResponsavel: item.tipoResponsavel,
         tipoResponsavelId: item.tipoResponsavelId,
-        ueid : item.ueid
+        ueid : item.ueId
       });
       });
-      console.table(dadosAtribuicao);        
+      console.log(dadosAtribuicao);
       setListaFiltroAtribuicao(dadosAtribuicao);      
-    } else {
-      setListaFiltroAtribuicao([]);
-    }
+    } 
   }
 
   async function carregarUes(dre) {
@@ -263,7 +261,6 @@ function montarListaAtribuicao(lista) {
     }
     setSupervisoresSelecionados();
     setListaSupervisores([]);
-    setListaFiltroAtribuicao([]);
     setTipoResponsavel(valor);
     consultarApi(dresSelecionadas,valor,ueSelecionada,supervisoresSelecionados,uesSemSupervisorCheck);  
   };
