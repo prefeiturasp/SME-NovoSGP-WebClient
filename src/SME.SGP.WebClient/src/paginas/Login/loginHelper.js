@@ -27,6 +27,7 @@ class LoginHelper {
       salvarDadosLogin({
         token: autenticacao.dados.token,
         acessoAdmin: acessoAdmin,
+        administradorSuporte: autenticacao.dados.administradorSuporte,
         rf,
         usuario: login.UsuarioLogin,
         modificarSenha: autenticacao.dados.modificarSenha,
