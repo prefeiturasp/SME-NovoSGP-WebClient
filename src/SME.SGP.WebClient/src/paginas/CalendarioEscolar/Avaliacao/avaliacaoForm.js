@@ -347,7 +347,7 @@ const AvaliacaoForm = ({ match, location }) => {
     try {
       setCarregandoTela(true);
       const { data, status } = await ServicoAvaliacao.listarDisciplinasRegencia(
-        turmaId
+        turmaId, true
       );
       if (data && status === 200) {
         setListaDisciplinasRegencia(data);
