@@ -4,6 +4,7 @@ const inicial = {
   rf: '',
   token: '',
   acessoAdmin: undefined,
+  administradorSuporte: {},
   usuario: '',
   dataLogin: null,
   logado: false,
@@ -42,6 +43,7 @@ export default function usuario(state = inicial, action) {
       case '@usuario/salvarLogin':
         draft.rf = action.payload.rf.trim();
         draft.acessoAdmin = action.payload.acessoAdmin;
+        draft.administradorSuporte = action.payload.administradorSuporte;
         draft.token = action.payload.token;
         draft.dataLogin = new Date();
         draft.logado = true;

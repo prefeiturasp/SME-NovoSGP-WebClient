@@ -76,7 +76,7 @@ const Navbar = () => {
             alerta={{
               tipo: 'warning',
               id: 'plano-ciclo-selecione-turma',
-              mensagem: `Atenção: Você está acessando o sistema via suporte - Usuário ${usuarioStore.meusDados.nome} ${usuarioStore.meusDados.rf}. `,
+              mensagem: `Atenção: Você está acessando o sistema via suporte - Usuário ${usuarioStore.administradorSuporte.nome} ${usuarioStore.administradorSuporte.login}. `,
               mensagemClick: 'ENCERRAR SUPORTE',
               estiloTitulo: { fontSize: '15px' },
               marginBottom: '0px',
