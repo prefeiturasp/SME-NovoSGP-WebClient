@@ -29,7 +29,7 @@ pipeline {
          //       sh 'dotnet-sonarscanner begin /k:"SME-NovoSGP-API-EOL"'
          //       sh 'dotnet build SME.Pedagogico.API.sln'
          //       sh 'dotnet-sonarscanner'
-         //   }
+         ///   }
          // }
        // }
 
