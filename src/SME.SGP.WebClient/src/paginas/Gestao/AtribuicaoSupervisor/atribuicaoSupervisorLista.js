@@ -195,12 +195,13 @@ export default function AtribuicaoSupervisorLista() {
   }, []);
 
 function montarListaAtribuicao(lista) {
-  setListaFiltroAtribuicao([]);
     if (lista?.length) {
       const dadosAtribuicao = [];           
       lista.forEach(item => {
+        const contId = dadosAtribuicao.length + 1;
        dadosAtribuicao.push({
-        id : item.id,
+        id : contId,
+        atribuicaoId :item.id,
         escola: item.ueNome,
         responsavel: item.responsavelId ? item.responsavel : '',
         responsavelId: item.responsavelId,
@@ -209,7 +210,6 @@ function montarListaAtribuicao(lista) {
         ueid : item.ueId
       });
       });
-      console.log(dadosAtribuicao);
       setListaFiltroAtribuicao(dadosAtribuicao);      
     } 
   }

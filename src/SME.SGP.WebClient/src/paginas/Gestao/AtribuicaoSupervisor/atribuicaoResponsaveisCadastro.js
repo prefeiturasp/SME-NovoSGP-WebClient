@@ -18,7 +18,7 @@ import {
   erros,
   history,
   setBreadcrumbManual,
-  sucesso,
+  sucesso,erro,
   verificaSomenteConsulta,
 } from '~/servicos';
 import ServicoResponsaveis from '~/servicos/Paginas/Gestao/Responsaveis/ServicoResponsaveis';
@@ -81,7 +81,7 @@ const AtribuicaoResponsaveisCadastro = () => {
     setModoEdicao(false);
   };
 
-  const salvarAtribuicao = () => {
+  const salvarAtribuicao = async () => {
     const atribuicao = {
       dreId,
       responsavelId: responsavel,
@@ -89,11 +89,17 @@ const AtribuicaoResponsaveisCadastro = () => {
       tipoResponsavelAtribuicao: tipoResponsavel,
     };
     ServicoResponsaveis.salvarAtribuicao(atribuicao)
-      .then(() => {
+      .then(result => {
         sucesso('Atribuição realizada com sucesso.');
         history.push(RotasDto.ATRIBUICAO_RESPONSAVEIS_LISTA);
       })
-      .catch(e => erros(e));
+      .catch(e => {
+        if(e.response.status === 601){
+          erro(e.response.data.mensagem);
+        }else{
+         erros(e);
+        }
+      });
   };
 
   const onClickVoltar = async () => {
