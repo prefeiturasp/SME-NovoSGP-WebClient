@@ -60,11 +60,17 @@ const SecaoParecerPlanoCollapse = ({ match }) => {
         alt="secao-parecer-plano-alt"
       >
         {dadosParecer?.responsavelNome ? (
-          <div className="col-md-4">
-            <p style={{ marginLeft: -15 }}>
+          <div className="col-md-12">
+            <p
+              style={{
+                marginLeft: -15,
+                width: '100%',
+                display: 'flex',
+              }}
+            >
               PAAI responsável: {dadosParecer?.responsavelNome}
               <span
-                style={{ color: Base.CinzaDesabilitado, fontSize: '13px' }}
+                style={{ color: Base.CinzaDesabilitado, fontSize: '13px', marginLeft: 9, }}
               >{` (${dadosParecer?.responsavelRF})`}</span>
             </p>
           </div>
