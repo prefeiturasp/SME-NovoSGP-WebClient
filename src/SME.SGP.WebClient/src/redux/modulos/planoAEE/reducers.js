@@ -6,6 +6,7 @@ const inicial = {
   planoAEEEmEdicao: false,
   exibirLoaderPlanoAEE: false,
   planoAEESituacaoEncaminhamentoAEE: {},
+  setIsAtribuirResponsavel: false,
   planoAEEDadosSecoesPorEtapa: [],
   exibirModalErrosPlano: false,
   reestruturacaoDados: [],
@@ -46,6 +47,12 @@ export default function PlanoAEE(state = inicial, action) {
         return {
           ...draft,
           planoAEESituacaoEncaminhamentoAEE: action.payload,
+        };
+      }
+      case '@planoAEE/setIsAtribuirResponsavel': {
+        return {
+          ...draft,
+          setIsAtribuirResponsavel: action.payload,
         };
       }
       case '@planoAEE/setDesabilitarCamposPlanoAEE': {

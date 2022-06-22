@@ -34,6 +34,10 @@ const BotoesAcoesPlanoAEE = props => {
 
   const dadosParecer = useSelector(store => store.planoAEE.dadosParecer);
 
+  const isAtribuirResponsavel = useSelector(
+    store => store.planoAEE.isAtribuirResponsavel
+  );
+
   const parecerEmEdicao = useSelector(store => store.planoAEE.parecerEmEdicao);
 
   const planoAEEDados = useSelector(store => store.planoAEE.planoAEEDados);
@@ -63,8 +67,7 @@ const BotoesAcoesPlanoAEE = props => {
   const planoAeeId = match?.params?.id;
   const labelBotaoSalvar = !planoAeeId ? 'Salvar plano' : 'Alterar plano';
 
-  const desabilitarBotaoSalvar =
-    desabilitarCamposPlanoAEE || !questionarioDinamicoEmEdicao;
+  const desabilitarBotaoSalvar = !isAtribuirResponsavel ? desabilitarCamposPlanoAEE || !questionarioDinamicoEmEdicao : isAtribuirResponsavel;
 
   const desabilitarBotaoCancelar =
     situacaoParecer || parecerPAAI

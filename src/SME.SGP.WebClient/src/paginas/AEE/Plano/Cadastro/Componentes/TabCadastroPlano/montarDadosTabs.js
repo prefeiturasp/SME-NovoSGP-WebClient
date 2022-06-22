@@ -9,7 +9,7 @@ import SecaoParecerPlanoCollapse from '../SecaoParecerPlanoCollapse/secaoParecer
 import SecaoPlanoCollapse from '../SecaoPlanoCollapse/secaoPlanoCollapse';
 import SecaoReestruturacaoPlano from '../SecaoReestruturacaoPlano/secaoReestruturacaoPlano';
 import LocalizadorFuncionario from '~/componentes-sgp/LocalizadorFuncionario';
-import { setDadosAtribuicaoResponsavel } from '~/redux/modulos/planoAEE/actions';
+import { setDadosAtribuicaoResponsavel, setIsAtribuirResponsavel } from '~/redux/modulos/planoAEE/actions';
 import { setQuestionarioDinamicoEmEdicao } from '~/redux/modulos/questionarioDinamico/actions';
 
 const { TabPane } = Tabs;
@@ -53,10 +53,12 @@ const MontarDadosTabs = props => {
         nomeServidor: funcionario?.nomeServidor,
       };
       dispatch(setDadosAtribuicaoResponsavel(params));
+      dispatch(setIsAtribuirResponsavel(true));
       dispatch(setQuestionarioDinamicoEmEdicao(true));
       setResponsavelSelecionado(params);
     } else {
       dispatch(setDadosAtribuicaoResponsavel());
+      dispatch(setIsAtribuirResponsavel(false));
       dispatch(setQuestionarioDinamicoEmEdicao(false));
       setResponsavelSelecionado();
     }

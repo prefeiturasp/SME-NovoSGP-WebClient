@@ -13,6 +13,11 @@ export const setPlanoAEESituacaoEncaminhamentoAEE = payload => ({
   payload,
 });
 
+export const setIsAtribuirResponsavel = payload => ({
+  type: '@planoAEE/setIsAtribuirResponsavel',
+  payload,
+});
+
 export const setExibirLoaderPlanoAEE = payload => ({
   type: '@planoAEE/setExibirLoaderPlanoAEE',
   payload,
