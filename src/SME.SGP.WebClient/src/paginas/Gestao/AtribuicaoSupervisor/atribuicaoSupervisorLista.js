@@ -113,7 +113,7 @@ export default function AtribuicaoSupervisorLista() {
   function onClickRow(row) {
     if (!permissoesTela.podeAlterar) return;
 
-    onClickEditar(row.responsavelId,row.tipoResponsavelId,row.codigo);
+    onClickEditar(row.responsavelId,row.tipoResponsavelId,row.ueid);
   }
 
   function onClickVoltar() {
@@ -127,11 +127,14 @@ export default function AtribuicaoSupervisorLista() {
     let path = RotasDto.ATRIBUICAO_RESPONSAVEIS;
     if (dresSelecionadas) {
       path = `${path}/${dresSelecionadas}`;
-      if (responsavelId && tipoResp) {
-        path = `${path}/${responsavelId}/${tipoResp}`;
+      if (responsavelId && tipoResp && codigoUe) {
+        path = `${path}/${responsavelId}/${tipoResp}/${codigoUe}`;
       }
-      if (!responsavelId && tipoResp) {
+      else if (!responsavelId && tipoResp && !codigoUe) {
         path = `${path}/${tipoResp}`;
+      }
+      else if(!responsavelId && tipoResp && codigoUe){
+        path = `${path}/0/${tipoResp}/${codigoUe}`;
       }
     }
     history.push(path);
@@ -192,23 +195,23 @@ export default function AtribuicaoSupervisorLista() {
   }, []);
 
 function montarListaAtribuicao(lista) {
-    
     if (lista?.length) {
       const dadosAtribuicao = [];           
       lista.forEach(item => {
+        const contId = dadosAtribuicao.length + 1;
        dadosAtribuicao.push({
-        id : item.id,
+        id : contId,
+        atribuicaoId :item.id,
         escola: item.ueNome,
         responsavel: item.responsavelId ? item.responsavel : '',
+        responsavelId: item.responsavelId,
         tipoResponsavel: item.tipoResponsavel,
         tipoResponsavelId: item.tipoResponsavelId,
-        ueid : item.codigo
+        ueid : item.ueId
       });
-      });        
+      });
       setListaFiltroAtribuicao(dadosAtribuicao);      
-    } else {
-      setListaFiltroAtribuicao([]);
-    }
+    } 
   }
 
   async function carregarUes(dre) {
@@ -258,7 +261,6 @@ function montarListaAtribuicao(lista) {
     }
     setSupervisoresSelecionados();
     setListaSupervisores([]);
-    setListaFiltroAtribuicao([]);
     setTipoResponsavel(valor);
     consultarApi(dresSelecionadas,valor,ueSelecionada,supervisoresSelecionados,uesSemSupervisorCheck);  
   };
