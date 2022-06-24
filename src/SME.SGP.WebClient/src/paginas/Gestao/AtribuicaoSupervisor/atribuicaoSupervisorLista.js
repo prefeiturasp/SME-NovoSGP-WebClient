@@ -216,7 +216,7 @@ function montarListaAtribuicao(lista) {
 
   async function carregarUes(dre) {
     
-    const ues = await api.get(`/v1/abrangencias/false/dres/${dre}/ues`);
+    const ues = await api.get(`/v1/supervisores/lista-ues/${dre}`);
     if (ues.data) {
       setListaUes(ues.data);
     } else {
