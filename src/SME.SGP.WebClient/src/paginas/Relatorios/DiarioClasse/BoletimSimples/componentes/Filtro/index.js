@@ -44,6 +44,7 @@ const Filtros = ({ onFiltrar, filtrou, setFiltrou, cancelou, setCancelou }) => {
   ] = useState();
 
   const OPCAO_TODOS_ESTUDANTES = '0';
+  const OPCAO_SELECIONAR_ALUNOS = '1';
   const opcoesEstudantes = [
     { desc: 'Todos', valor: OPCAO_TODOS_ESTUDANTES },
     { desc: 'Selecionar Alunos', valor: '1' },
@@ -404,7 +405,6 @@ const Filtros = ({ onFiltrar, filtrou, setFiltrou, cancelou, setCancelou }) => {
   const onChangeOpcaoEstudante = valor => {
     setFiltrou(false);
     setOpcaoEstudanteId(valor);
-
     if (!modeloBoletimId) {
       setModeloBoletimId('1');
     }
@@ -433,6 +433,11 @@ const Filtros = ({ onFiltrar, filtrou, setFiltrou, cancelou, setCancelou }) => {
   useEffect(() => {
     if (opcaoEstudanteId !== OPCAO_TODOS_ESTUDANTES) {
       setImprimirEstudantesInativos(false);
+    }
+    
+    if(opcaoEstudanteId === OPCAO_SELECIONAR_ALUNOS){
+      setFiltrou(false);
+      setImprimirEstudantesInativos(true);
     }
   }, [opcaoEstudanteId]);
 
