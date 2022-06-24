@@ -170,7 +170,6 @@ const montarDadosGrafico = (
     novosDadosMap[nomeCampo] = item[nomeCampo];
     novosDadosMap[item[descricaoColuna]] = formataMilhar(item[nomeCampo]);
 
-
     dadosMapeados.push(novosDadosMap);
   }
 };
