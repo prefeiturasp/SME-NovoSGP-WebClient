@@ -286,7 +286,7 @@ const LocalizadorFuncionario = props => {
             onSelect={validaAntesBuscarPorCodigo}
             onChange={onChangeCodigo}
             name="codigoRF"
-            desabilitado={desabilitado || desabilitarCampo.codigoRF}
+            desabilitado={desabilitado}
             exibirLoader={exibirLoader}
           />
         </div>
