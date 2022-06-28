@@ -2,6 +2,9 @@ import { Tabs } from 'antd';
 import PropTypes from 'prop-types';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { Button, Colors } from '~/componentes';
+import { erros, sucesso } from '~/servicos';
+
 import { ContainerTabsCard } from '~/componentes/tabs/tabs.css';
 import { situacaoPlanoAEE } from '~/dtos';
 import ServicoPlanoAEE from '~/servicos/Paginas/Relatorios/AEE/ServicoPlanoAEE';
@@ -62,6 +65,20 @@ const MontarDadosTabs = props => {
     }
   };
 
+  const onClickAtribuirResponsavel = async () => {
+    const resposta = await ServicoPlanoAEE.atribuirResponsavelPlano().catch(e =>
+      erros(e)
+    );
+    if (resposta?.data) {
+      sucesso('Atribuição do responsável realizada com sucesso');
+    }
+  };
+
+  const onClickCancelar = () => {
+    dispatch(setDadosAtribuicaoResponsavel({}));
+    setLimparCampos(true);
+  };
+
   return dadosCollapseLocalizarEstudante?.codigoAluno ? (
     <ContainerTabsCard type="card" width="20%" onTabClick={cliqueTab}>
       <TabPane tab="Cadastro do Plano" key="1">
@@ -77,6 +94,26 @@ const MontarDadosTabs = props => {
               codigoRF: responsavelSelecionado?.codigoRF,
               nome: responsavelSelecionado?.nomeServidor,
             }}
+          />
+        </div>
+        <div className="col-12 d-flex justify-content-end pb-4 mt-2 pr-0">
+          <Button
+            id="btn-cancelar"
+            label="Cancelar"
+            color={Colors.Roxo}
+            border
+            className="mr-3"
+            onClick={onClickCancelar}
+            disabled={!responsavelSelecionado?.codigoRF}
+          />
+          <Button
+            id="btn-atribuir"
+            label="Atribuir responsável"
+            color={Colors.Roxo}
+            border
+            bold
+            onClick={onClickAtribuirResponsavel}
+            disabled={!responsavelSelecionado?.codigoRF}
           />
         </div>
         <SecaoPlanoCollapse match={match} />
