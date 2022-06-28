@@ -20,10 +20,12 @@ class ServicoResponsaveis {
     }
   };
 
-  obterUesSemAtribuicao = dre => api.get(`v1/dres/${dre}/ues/sem-atribuicao`);
+  obterUesSemAtribuicao = async (dre,responsavel) => {
+    return api.get(`v1/dres/${dre}/ues/sem-atribuicao/${responsavel}`);
+  }
 
-  obterUesAtribuidas = (responsavel, dre) =>
-    api.get(`${URL_PADRAO}/${responsavel}/dre/${dre}`);
+  obterUesAtribuidas = (responsavel, dre,tipoResponsavel) =>
+    api.get(`${URL_PADRAO}/${responsavel}/dre/${dre}/${tipoResponsavel}`);
 }
 
 export default new ServicoResponsaveis();
