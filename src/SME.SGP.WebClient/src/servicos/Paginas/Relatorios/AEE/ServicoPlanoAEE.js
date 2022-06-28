@@ -341,6 +341,15 @@ class ServicoPlanoAEE {
     });
   };
 
+  atribuirResponsavelPlano = () => {
+    const { planoAEE } = store.getState();
+    const { planoAEEDados, dadosAtribuicaoResponsavel } = planoAEE;
+    return api.post(`${urlPadrao}/atribuir-responsavel-plano`, {
+      planoAEEId: planoAEEDados.id,
+      responsavelRF: dadosAtribuicaoResponsavel.codigoRF,
+    });
+  };
+
   escolherAcao = async () => {
     const { dispatch, getState } = store;
     const { planoAEE } = getState();
