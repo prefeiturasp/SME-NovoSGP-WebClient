@@ -7,7 +7,6 @@ import { SelectComponent } from '~/componentes';
 // Servicos
 import AbrangenciaServico from '~/servicos/Abrangencia';
 
-import tipoEscolaDTO from '~/dtos/tipoEscolaDto';
 import Loader from '~/componentes/loader';
 
 function UeDropDown({
