@@ -237,7 +237,10 @@ const AtribuicaoResponsaveisCadastro = () => {
 
       if (lista?.length === 1) {
         setResponsavel(lista[0].supervisorId);
-      } 
+      } else if (routeMatch.params?.supervisorId) {
+        if(routeMatch.params.supervisorId > 0 && routeMatch.params.tipoResponsavel == tipoResponsavel)
+           setResponsavel(routeMatch.params.supervisorId);
+      }
       setListaResponsavel(lista);
     } else {
       setListaResponsavel([]);
