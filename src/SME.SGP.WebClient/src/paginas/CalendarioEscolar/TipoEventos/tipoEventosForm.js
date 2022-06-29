@@ -43,6 +43,7 @@ const TipoEventosForm = ({ match }) => {
     { valor: 1, descricao: 'Sim' },
     { valor: 2, descricao: 'Não' },
     { valor: 3, descricao: 'Opcional' },
+    { valor: 4, descricao: 'Desativado' }
   ];
 
   const listaLocalOcorrencia = [

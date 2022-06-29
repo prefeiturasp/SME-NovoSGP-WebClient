@@ -45,8 +45,8 @@ const EventosListaPaginada = () => {
         ehTodasUes: codigoUe === OPCAO_TODOS,
         tipoEventoId: tipoEventoSelecionado,
         nomeEvento,
-        dataInicio: dataInicio ? moment(dataInicio).format('DD-MM-YYYY') : '',
-        dataFim: dataFim ? moment(dataFim).format('DD-MM-YYYY') : '',
+        dataInicio: dataInicio ? moment(dataInicio).format('YYYY-MM-DD') : '',
+        dataFim: dataFim ? moment(dataFim).format('YYYY-MM-DD') : '',
         ehEventosTodaRede,
       };
       setFiltros({ ...params });

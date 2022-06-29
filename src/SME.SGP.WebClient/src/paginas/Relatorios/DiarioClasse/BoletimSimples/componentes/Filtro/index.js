@@ -405,7 +405,6 @@ const Filtros = ({ onFiltrar, filtrou, setFiltrou, cancelou, setCancelou }) => {
   const onChangeOpcaoEstudante = valor => {
     setFiltrou(false);
     setOpcaoEstudanteId(valor);
-
     if (!modeloBoletimId) {
       setModeloBoletimId('1');
     }
