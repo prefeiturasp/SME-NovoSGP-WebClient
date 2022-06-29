@@ -86,6 +86,7 @@ const MontarDadosTabs = props => {
         <div className="row mb-4">
           <LocalizadorFuncionario
             id="funcionarioResponsavel"
+            dasativaCampoRf={match?.params?.dasativaCampoRf}
             onChange={onChangeLocalizador}
             codigoTurma={dadosCollapseLocalizarEstudante?.codigoTurma}
             limparCampos={limparCampos}

@@ -21,6 +21,7 @@ const LocalizadorFuncionario = props => {
     limparCampos,
     mensagemErroConsultaRF,
     limparCamposAposPesquisa,
+    dasativaCampoRf,
   } = props;
 
   const [dataSource, setDataSource] = useState([]);
@@ -286,7 +287,7 @@ const LocalizadorFuncionario = props => {
             onSelect={validaAntesBuscarPorCodigo}
             onChange={onChangeCodigo}
             name="codigoRF"
-            desabilitado={desabilitado}
+            desabilitado={desabilitado || dasativaCampoRf}
             exibirLoader={exibirLoader}
           />
         </div>
@@ -310,6 +311,7 @@ LocalizadorFuncionario.propTypes = {
   limparCampos: PropTypes.bool,
   mensagemErroConsultaRF: PropTypes.string,
   limparCamposAposPesquisa: PropTypes.bool,
+  dasativaCampoRf: PropTypes.bool,
 };
 
 LocalizadorFuncionario.defaultProps = {
@@ -325,6 +327,7 @@ LocalizadorFuncionario.defaultProps = {
   limparCampos: false,
   mensagemErroConsultaRF: '',
   limparCamposAposPesquisa: false,
+  dasativaCampoRf: false,
 };
 
 export default LocalizadorFuncionario;
