@@ -434,7 +434,7 @@ const Filtros = ({ onFiltrar, filtrou, setFiltrou, cancelou, setCancelou }) => {
     if (opcaoEstudanteId !== OPCAO_TODOS_ESTUDANTES) {
       setImprimirEstudantesInativos(false);
     }
-    
+
     if(opcaoEstudanteId === OPCAO_SELECIONAR_ALUNOS){
       setFiltrou(false);
       setImprimirEstudantesInativos(true);
