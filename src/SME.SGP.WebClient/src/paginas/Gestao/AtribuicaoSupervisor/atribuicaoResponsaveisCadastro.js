@@ -54,6 +54,7 @@ const AtribuicaoResponsaveisCadastro = () => {
 
   const [auditoria, setAuditoria] = useState({});
 
+
   useEffect(() => {
     verificaSomenteConsulta(permissoesTela);
   }, [permissoesTela]);
@@ -76,7 +77,8 @@ const AtribuicaoResponsaveisCadastro = () => {
       setDreId();
     }
     setListaResponsavel([]);
-    setResponsavel();
+    setUesAtribuidas([]);
+    setResponsavel("");
     setCodigoUeSelecionadoGrid("0");
     setModoEdicao(false);
   };
@@ -142,6 +144,7 @@ const AtribuicaoResponsaveisCadastro = () => {
     setCodigoUeSelecionadoGrid("0");
     obterListaUES();
     setDreId(valor);
+    setUesAtribuidas([]);
   };
 
   const obterDres = useCallback(async () => {
@@ -169,8 +172,6 @@ const AtribuicaoResponsaveisCadastro = () => {
   }, [obterDres]);
 
   const onChangeTipoResponsavel = valor => {
-    setResponsavel();
-    setListaResponsavel([]);
     setTipoResponsavel(valor);
   };
 
@@ -196,9 +197,12 @@ const AtribuicaoResponsaveisCadastro = () => {
   useEffect(() => {
     if (dreId) {
       obterTipoResponsavel();
-      obterListaUES();
+      if(dreId && responsavel != undefined){
+        obterListaUES();
+      }
     } else {
       setTipoResponsavel();
+      setResponsavel();
       setListaTipoResponsavel([]);
     }
   }, [dreId, obterTipoResponsavel]);
@@ -208,7 +212,9 @@ const AtribuicaoResponsaveisCadastro = () => {
   };
 
   const obterResponsaveis = useCallback(async () => {
+    setResponsavel(undefined);
     setCarregandoResponsavel(true);
+    setListaResponsavel([]);
     if(tipoResponsavel ==undefined){
       setListaResponsavel([]);
       setCarregandoResponsavel(false);
@@ -231,30 +237,32 @@ const AtribuicaoResponsaveisCadastro = () => {
 
       if (lista?.length === 1) {
         setResponsavel(lista[0].supervisorId);
-      } else if (routeMatch.params?.supervisorId) {
-        if(routeMatch.params.supervisorId > 0)
-           setResponsavel(routeMatch.params.supervisorId);
-      }
+      } 
       setListaResponsavel(lista);
     } else {
       setListaResponsavel([]);
     }
     setCarregandoResponsavel(false);
+    
   }, [dreId, tipoResponsavel, routeMatch]);
 
   useEffect(() => {
-    if (dreId) {
+    if (dreId && tipoResponsavel != undefined) {
       obterResponsaveis();
     } else {
       setResponsavel();
       setListaResponsavel([]);
+      setUesAtribuidas([]);
     }
   }, [dreId, tipoResponsavel, obterResponsaveis]);
 
-  const obterListaUesAtribuidas = useCallback(async () => {
+  const obterListaUesAtribuidas = useCallback(async (tipoRes) => {
+    if(responsavel == undefined)
+      return;
     const resposta = await ServicoResponsaveis.obterUesAtribuidas(
       responsavel,
-      dreId
+      dreId,
+      tipoRes
     ).catch(e => erros(e));
 
     if (resposta?.data?.[0]?.criadoEm) {
@@ -283,10 +291,17 @@ const AtribuicaoResponsaveisCadastro = () => {
     return true;
   }, [dreId, responsavel]);
 
-  const obterListaUES = useCallback(async () => {
+  const obterListaUES = useCallback(async (tipoResp) => {
     setCarregandoUes(true);
+    let tipo = tipoResp ?? tipoResponsavel
+    if(dreId && (tipo == undefined)){
+      setCarregandoUes(false);
+      return false;
+    }
+
     const resposta = await ServicoResponsaveis.obterUesSemAtribuicao(
-      dreId
+      dreId,
+      tipo
     ).catch(e => erros(e));
 
     if (resposta?.data?.length) {
@@ -297,18 +312,19 @@ const AtribuicaoResponsaveisCadastro = () => {
     } else {
       setUesSemAtribuicao([]);
     }
-    if (dreId && responsavel) {
-      await obterListaUesAtribuidas();
+    if (dreId && tipo != undefined) {
+      await obterListaUesAtribuidas(tipo);
     }
 
     setCarregandoUes(false);
   }, [dreId, responsavel, obterListaUesAtribuidas]);
 
   useEffect(() => {
-    if (dreId && responsavel) {
+    if (dreId && responsavel != undefined) {
       obterListaUES();
     } else {
       setUesSemAtribuicao([]);
+      setResponsavel();
       setUesAtribuidas([]);
     }
   }, [dreId, responsavel, obterListaUES]);
@@ -423,10 +439,7 @@ const AtribuicaoResponsaveisCadastro = () => {
                   dadosEsquerda={
                     !carregandoUes
                       ? uesSemAtribuicao?.length
-                        ? uesSemAtribuicao.filter(
-                            item =>
-                              !uesAtribuidas?.find?.(a => a?.id === item?.id)
-                          )
+                      ? uesSemAtribuicao
                         : []
                       : []
                   }
