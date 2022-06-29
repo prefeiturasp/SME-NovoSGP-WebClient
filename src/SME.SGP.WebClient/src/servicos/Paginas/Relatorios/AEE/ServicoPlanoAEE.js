@@ -347,6 +347,7 @@ class ServicoPlanoAEE {
     return api.post(`${urlPadrao}/atribuir-responsavel-plano`, {
       planoAEEId: planoAEEDados.id,
       responsavelRF: dadosAtribuicaoResponsavel.codigoRF,
+      responsavelNome: dadosAtribuicaoResponsavel.nomeServidor,
     });
   };
 
