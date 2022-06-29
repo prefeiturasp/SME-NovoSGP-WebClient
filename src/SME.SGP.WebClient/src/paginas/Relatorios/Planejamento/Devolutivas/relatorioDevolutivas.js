@@ -69,8 +69,6 @@ const RelatorioDevolutivas = () => {
 
   const limparFiltrosSelecionados = () => {
     setRecarregar(true);
-    setConsideraHistorico(false);
-    setAnoLetivo(anoAtual);
     setDreId();
     setListaDres([]);
     setUeId();

@@ -13,9 +13,9 @@ class ServicoDisciplina {
     codigoDisciplina,
     turmaId,
     turmaPrograma,
-    regencia
+    temRegencia
   ) => {
-    const url = `v1/professores/turmas/${turmaId}/disciplinas/planejamento?codigoDisciplina=${codigoDisciplina}&turmaPrograma=${!!turmaPrograma}&regencia=${!!regencia}`;
+    const url = `v1/professores/turmas/${turmaId}/disciplinas/planejamento/regencia/${!!temRegencia}?codigoDisciplina=${codigoDisciplina}&turmaPrograma=${!!turmaPrograma}`;
     return api.get(url);
   };
 }
