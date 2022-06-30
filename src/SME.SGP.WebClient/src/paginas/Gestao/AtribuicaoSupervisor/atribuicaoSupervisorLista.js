@@ -267,11 +267,10 @@ function montarListaAtribuicao(lista) {
 
   async function consultarApi(dre,codigoTipo,ue,supervisor){
     setCarregandoLista(true);  
-    var tipoSelecionado = codigoTipo ?? tipoResponsavel;
     await api.get('/v1/supervisores/vinculo-lista', {
       params: {
         dreCodigo: dre,
-        tipoCodigo: tipoSelecionado,
+        tipoCodigo: codigoTipo,
         ueCodigo: ue,
         supervisorId: supervisor,
         ueSemResponsavel: uesSemSupervisorCheck
