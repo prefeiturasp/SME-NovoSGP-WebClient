@@ -188,7 +188,7 @@ export default function AtribuicaoSupervisorLista() {
 
     setDresSelecionadas(dre);
     if (dre) {
-      obterResponsaveis(dre);
+      obterResponsaveis(dre,tipoRes);
       carregarUes(dre);
     }
 
@@ -307,14 +307,16 @@ function montarListaAtribuicao(lista) {
   }, [dresSelecionadas, obterTipoResponsavel]);
 
   const obterResponsaveis = useCallback(
-    async dre => {
+    async (dre,tipoResp) => {
+
+      var tipoSelecionado = tipoResp ?? tipoResponsavel;
       
-      if (!dre || !tipoResponsavel) return;
+      if (!dre || !tipoSelecionado) return;
 
       setCarregandoResponsavel(true);
       const resposta = await ServicoResponsaveis.obterResponsaveis(
         dre || dresSelecionadas,
-        tipoResponsavel
+        tipoSelecionado
       )
         .catch(e => erros(e))
         .finally(() =>{
