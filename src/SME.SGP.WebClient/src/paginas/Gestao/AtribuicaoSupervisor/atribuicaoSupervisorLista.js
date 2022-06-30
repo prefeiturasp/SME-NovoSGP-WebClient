@@ -72,7 +72,7 @@ export default function AtribuicaoSupervisorLista() {
       setUeSelecionada('');
       setDesabilitarSupervisor(false);
       setDesabilitarUe(false);
-      onChangeDre(dresSelecionadas);
+      onChangeDre(dresSelecionadas,null,true,tipoResponsavel);
     }
   }, [uesSemSupervisorCheck]);
 
@@ -170,7 +170,7 @@ export default function AtribuicaoSupervisorLista() {
     consultarApi(dre,tipoResponsavel,ueSelecionada,supervisoresSelecionados);
   }
 
-  const onChangeDre = useCallback(async (dre, changeUe,chamarApi=true) => {
+  const onChangeDre = useCallback(async (dre, changeUe,chamarApi=true,tipoRes) => {
     
     if (!changeUe) {
       setListaSupervisores([]);
@@ -180,7 +180,7 @@ export default function AtribuicaoSupervisorLista() {
     setUeSelecionada('');
     if (dre) {
       if(chamarApi)
-        consultarApi(dre,tipoResponsavel,ueSelecionada,supervisoresSelecionados);
+        consultarApi(dre,tipoRes,ueSelecionada,supervisoresSelecionados);
     } else {
       setListaFiltroAtribuicao([]);
       setUesSemSupervisorCheck(false);
