@@ -9,7 +9,6 @@ class ServicoLocalizadorFuncionario {
   };
 
   buscarPorCodigo = async (params, url) => {
-    debugger;
     if (url) {
       return api.post(url, params);
     }
