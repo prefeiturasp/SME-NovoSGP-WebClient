@@ -249,7 +249,10 @@ const LocalizadorFuncionario = props => {
       !funcionarioSelecionado?.codigoRF &&
       !dataSource?.length
     ) {
-      validaAntesBuscarPorCodigo(valorInicial.codigoRF);
+      setFuncionarioSelecionado({
+        codigoRF: valorInicial?.codigoRF,
+        nomeServidor: valorInicial?.nomeServidor,
+      });
     }
   }, [valorInicial, dataSource, funcionarioSelecionado]);
 
