@@ -215,7 +215,8 @@ const EventosCadastroForm = () => {
           valorOpcaoLetivo = false;
         } else {
           valorOpcaoLetivo = true;
-          valorLetivo = tipoEventoSelecionado.letivo;
+          const ehEventoLetivoDesativado = tipoEventoSelecionado.letivo === eventoLetivo.Desativado;
+          valorLetivo = ehEventoLetivoDesativado ? 0 : tipoEventoSelecionado.letivo;
         }
       }
 
@@ -315,8 +316,8 @@ const EventosCadastroForm = () => {
     const tiposCalendario = await api
       .get(
         usuarioStore && turmaSelecionada?.anoLetivo
-          ? `v1/calendarios/tipos/anos/letivos/${turmaSelecionada.anoLetivo}?modalidade=${modalidadeConsulta}`
-          : `v1/calendarios/tipos/anos/letivos/${anoAtual}?modalidade=${modalidadeConsulta}`
+          ? `v1/calendarios/tipos/anos/letivos/${turmaSelecionada.anoLetivo}`
+          : `v1/calendarios/tipos/anos/letivos/${anoAtual}`
       )
       .catch(e => erros(e));
 

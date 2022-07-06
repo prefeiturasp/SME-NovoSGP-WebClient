@@ -66,7 +66,7 @@ const ModalAnotacoes = () => {
       onClose={onClose}
       esconderBotaoPrincipal
       esconderBotaoSecundario
-      width={750}
+      width={850}
       closable
     >
       <div className="row">

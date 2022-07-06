@@ -1,10 +1,10 @@
-import LoginService from '~/servicos/Paginas/LoginServices';
+import { URL_HOME, URL_REDEFINIRSENHA } from '~/constantes/url';
 import { salvarDadosLogin } from '~/redux/modulos/usuario/actions';
 import history from '~/servicos/history';
-import { URL_HOME, URL_REDEFINIRSENHA } from '~/constantes/url';
+import ServicoDashboard from '~/servicos/Paginas/Dashboard/ServicoDashboard';
+import LoginService from '~/servicos/Paginas/LoginServices';
 import { obterMeusDados } from '~/servicos/Paginas/ServicoUsuario';
 import { setMenusPermissoes } from '~/servicos/servico-navegacao';
-import ServicoDashboard from '~/servicos/Paginas/Dashboard/ServicoDashboard';
 
 class LoginHelper {
   constructor(dispatch, redirect) {
@@ -12,8 +12,8 @@ class LoginHelper {
     this.redirect = redirect;
   }
 
-  acessar = async login => {
-    const autenticacao = await LoginService.autenticar(login);
+  acessar = async (login, acessoAdmin) => {
+    const autenticacao = await LoginService.autenticar(login, acessoAdmin);
 
     if (!autenticacao.sucesso) return autenticacao;
 

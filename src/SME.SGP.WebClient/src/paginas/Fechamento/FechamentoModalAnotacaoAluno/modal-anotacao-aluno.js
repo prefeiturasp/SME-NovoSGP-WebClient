@@ -151,7 +151,7 @@ const ModalAnotacaoAluno = props => {
       onClose={() => validaAntesDeFechar()}
       esconderBotaoPrincipal
       esconderBotaoSecundario
-      width={750}
+      width={850}
       closable={!exibirLoader}
       loader={exibirLoader}
       fecharAoClicarFora={!exibirLoader}
