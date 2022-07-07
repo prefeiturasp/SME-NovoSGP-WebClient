@@ -18,6 +18,7 @@ const inicial = {
   exibirCollapseVersao: null,
   dadosModalReestruturacao: {},
   exibirModalDevolverPlanoAEE: false,
+  typePlanoAEECadastro: false,
 };
 
 export default function PlanoAEE(state = inicial, action) {
@@ -36,6 +37,9 @@ export default function PlanoAEE(state = inicial, action) {
           exibirLoaderPlanoAEE: action.payload,
         };
       }
+      case '@planoAEE/setTypePlanoAEECadastro':
+        draft.typePlanoAEECadastro = action.payload;
+        break;
       case '@planoAEE/setPlanoAEEDados': {
         return {
           ...draft,
