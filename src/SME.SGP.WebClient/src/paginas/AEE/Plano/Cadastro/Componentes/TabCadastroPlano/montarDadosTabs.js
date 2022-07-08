@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Button, Colors } from '~/componentes';
 import { erros, sucesso } from '~/servicos';
+import { RotasDto } from '~/dtos';
 
 import { ContainerTabsCard } from '~/componentes/tabs/tabs.css';
 import { situacaoPlanoAEE } from '~/dtos';
@@ -34,7 +35,7 @@ const MontarDadosTabs = props => {
   const typePlanoAEECadastro = useSelector(store => store.planoAEE.typePlanoAEECadastro);
 
   useEffect(() => {
-    if (match.url === '/aee/plano/novo') {
+    if (match.url === `${RotasDto.RELATORIO_AEE_PLANO}/novo`) {
       dispatch(setTypePlanoAEECadastro(true));
     } else {
       dispatch(setTypePlanoAEECadastro(false));
