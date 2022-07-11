@@ -16,6 +16,8 @@ import LocalizadorEstudante from '~/componentes/LocalizadorEstudante';
 import { URL_HOME } from '~/constantes/url';
 import { RotasDto } from '~/dtos';
 import { setDadosIniciaisLocalizarEstudante } from '~/redux/modulos/collapseLocalizarEstudante/actions';
+import { setTypePlanoAEECadastro } from '~/redux/modulos/planoAEE/actions';
+
 import { erros, verificaSomenteConsulta } from '~/servicos';
 import history from '~/servicos/history';
 import ServicoPlanoAEE from '~/servicos/Paginas/Relatorios/AEE/ServicoPlanoAEE';
@@ -195,6 +197,7 @@ const PlanoAEELista = () => {
 
   const onClickNovo = () => {
     if (!somenteConsulta && permissoesTela.podeIncluir) {
+      dispatch(setTypePlanoAEECadastro(true));
       history.push(`${RotasDto.RELATORIO_AEE_PLANO}/novo`);
     }
   };

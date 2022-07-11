@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Button, Colors } from '~/componentes';
 import { erros, sucesso } from '~/servicos';
+import { RotasDto } from '~/dtos';
 
 import { ContainerTabsCard } from '~/componentes/tabs/tabs.css';
 import { situacaoPlanoAEE } from '~/dtos';
@@ -12,7 +13,10 @@ import SecaoParecerPlanoCollapse from '../SecaoParecerPlanoCollapse/secaoParecer
 import SecaoPlanoCollapse from '../SecaoPlanoCollapse/secaoPlanoCollapse';
 import SecaoReestruturacaoPlano from '../SecaoReestruturacaoPlano/secaoReestruturacaoPlano';
 import LocalizadorFuncionario from '~/componentes-sgp/LocalizadorFuncionario';
-import { setDadosAtribuicaoResponsavel } from '~/redux/modulos/planoAEE/actions';
+import {
+  setDadosAtribuicaoResponsavel,
+  setTypePlanoAEECadastro,
+} from '~/redux/modulos/planoAEE/actions';
 import { setQuestionarioDinamicoEmEdicao } from '~/redux/modulos/questionarioDinamico/actions';
 
 const { TabPane } = Tabs;
@@ -24,7 +28,19 @@ const MontarDadosTabs = props => {
   const { match } = props;
   const temId = match?.params?.id;
 
+  const dispatch = useDispatch();
+
   const planoAEEDados = useSelector(store => store.planoAEE.planoAEEDados);
+
+  const typePlanoAEECadastro = useSelector(store => store.planoAEE.typePlanoAEECadastro);
+
+  useEffect(() => {
+    if (match.url === `${RotasDto.RELATORIO_AEE_PLANO}/novo`) {
+      dispatch(setTypePlanoAEECadastro(true));
+    } else {
+      dispatch(setTypePlanoAEECadastro(false));
+    }
+  }, [planoAEEDados]);
 
   useEffect(() => {
     if (planoAEEDados?.responsavel) {
@@ -46,7 +62,6 @@ const MontarDadosTabs = props => {
     ServicoPlanoAEE.cliqueTabPlanoAEE(key, temId);
   };
 
-  const dispatch = useDispatch();
 
   const onChangeLocalizador = funcionario => {
     setLimparCampos(false);
@@ -105,7 +120,7 @@ const MontarDadosTabs = props => {
             border
             className="mr-3"
             onClick={onClickCancelar}
-            disabled={!responsavelSelecionado?.codigoRF}
+            disabled={!responsavelSelecionado?.codigoRF || typePlanoAEECadastro}
           />
           <Button
             id="btn-atribuir"
@@ -114,7 +129,7 @@ const MontarDadosTabs = props => {
             border
             bold
             onClick={onClickAtribuirResponsavel}
-            disabled={!responsavelSelecionado?.codigoRF}
+            disabled={!responsavelSelecionado?.codigoRF || typePlanoAEECadastro}
           />
         </div>
         <SecaoPlanoCollapse match={match} />
