@@ -243,7 +243,12 @@ const LocalizadorFuncionario = props => {
   };
 
   useEffect(() => {
-    if (
+    if (valorInicial && valorInicial?.codigoRF && valorInicial?.nomeServidor) {
+      setFuncionarioSelecionado({
+        codigoRF: valorInicial?.codigoRF,
+        nomeServidor: valorInicial?.nomeServidor,
+      });
+    } else if (
       valorInicial &&
       valorInicial?.codigoRF &&
       !funcionarioSelecionado?.codigoRF &&
