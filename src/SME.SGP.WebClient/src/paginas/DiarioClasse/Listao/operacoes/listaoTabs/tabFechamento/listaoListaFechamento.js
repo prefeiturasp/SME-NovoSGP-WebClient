@@ -357,10 +357,23 @@ const ListaoListaFechamento = props => {
         const temNotaConceitoEmAprovacao = dadosEstudante?.notasConceitoBimestre?.find?.(
           item => item?.emAprovacao
         );
-        if (temNotaConceitoEmAprovacao) return <MarcadorAguardandoAprovacao />;
 
         const alunoExpandido = temLinhaExpandida(dadosEstudante?.codigoAluno);
-        return iconeExpandirLinha(alunoExpandido, dadosEstudante, true);
+        const iconeExpandir = iconeExpandirLinha(
+          alunoExpandido,
+          dadosEstudante,
+          true
+        );
+
+        if (temNotaConceitoEmAprovacao)
+          return (
+            <>
+              {iconeExpandir}
+              <MarcadorAguardandoAprovacao />
+            </>
+          );
+
+        return iconeExpandir;
       };
     } else {
       paramsCol.render = dadosEstudante => {
