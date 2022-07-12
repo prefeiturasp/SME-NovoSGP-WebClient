@@ -111,7 +111,7 @@ const ListaoCampoNota = props => {
         valorEnviado = valorNovo;
       }
     }
-    const valorCampo = valorNovo > 0 ? valorNovo : null;
+    const valorCampo = valorNovo >= 0 ? valorNovo : null;
     setarValorNovo(valorEnviado || valorCampo);
   };
 
