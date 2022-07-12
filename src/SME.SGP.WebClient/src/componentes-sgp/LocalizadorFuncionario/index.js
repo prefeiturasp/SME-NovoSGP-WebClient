@@ -246,18 +246,20 @@ const LocalizadorFuncionario = props => {
   };
 
   useEffect(() => {
-    if (valorInicial && valorInicial?.codigoRF && valorInicial?.nomeServidor) {
-      setFuncionarioSelecionado({
-        codigoRF: valorInicial?.codigoRF,
-        nomeServidor: valorInicial?.nomeServidor,
-      });
-    } else if (
+    if (
       valorInicial &&
       valorInicial?.codigoRF &&
       !funcionarioSelecionado?.codigoRF &&
       !dataSource?.length
     ) {
-      validaAntesBuscarPorCodigo(valorInicial.codigoRF, false);
+      if (valorInicial?.nomeServidor) {
+        setFuncionarioSelecionado({
+          codigoRF: valorInicial?.codigoRF,
+          nomeServidor: valorInicial?.nomeServidor,
+        });
+      } else {
+        validaAntesBuscarPorCodigo(valorInicial.codigoRF);
+      }
     }
   }, [valorInicial, dataSource, funcionarioSelecionado]);
 
