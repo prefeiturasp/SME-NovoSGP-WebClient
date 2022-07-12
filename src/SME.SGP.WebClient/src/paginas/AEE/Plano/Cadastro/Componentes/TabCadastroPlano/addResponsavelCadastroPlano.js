@@ -9,7 +9,6 @@ import {
   setDadosAtribuicaoResponsavel,
   setPlanoAEEDados,
 } from '~/redux/modulos/planoAEE/actions';
-import { setQuestionarioDinamicoEmEdicao } from '~/redux/modulos/questionarioDinamico/actions';
 import ServicoPlanoAEE from '~/servicos/Paginas/Relatorios/AEE/ServicoPlanoAEE';
 
 const AddResponsavelCadastroPlano = props => {
@@ -52,12 +51,9 @@ const AddResponsavelCadastroPlano = props => {
         nomeServidor: funcionario?.nomeServidor,
       };
       dispatch(setDadosAtribuicaoResponsavel(params));
-      if (!desabilitarCamposPlanoAEE)
-        dispatch(setQuestionarioDinamicoEmEdicao(true));
-      setResponsavelSelecionado(params);
+      if (!desabilitarCamposPlanoAEE) setResponsavelSelecionado(params);
     } else {
       dispatch(setDadosAtribuicaoResponsavel());
-      dispatch(setQuestionarioDinamicoEmEdicao(false));
       setResponsavelSelecionado();
     }
 
