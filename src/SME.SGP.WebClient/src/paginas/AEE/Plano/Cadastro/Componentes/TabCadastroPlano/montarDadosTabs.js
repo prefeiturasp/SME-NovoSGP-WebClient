@@ -1,32 +1,19 @@
 import { Tabs } from 'antd';
 import PropTypes from 'prop-types';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Button, Colors } from '~/componentes';
-import { erros, sucesso } from '~/servicos';
-import { RotasDto } from '~/dtos';
-
 import { ContainerTabsCard } from '~/componentes/tabs/tabs.css';
-import { situacaoPlanoAEE } from '~/dtos';
+import { RotasDto, situacaoPlanoAEE } from '~/dtos';
+import { setTypePlanoAEECadastro } from '~/redux/modulos/planoAEE/actions';
 import ServicoPlanoAEE from '~/servicos/Paginas/Relatorios/AEE/ServicoPlanoAEE';
 import SecaoParecerPlanoCollapse from '../SecaoParecerPlanoCollapse/secaoParecerPlanoCollapse';
 import SecaoPlanoCollapse from '../SecaoPlanoCollapse/secaoPlanoCollapse';
 import SecaoReestruturacaoPlano from '../SecaoReestruturacaoPlano/secaoReestruturacaoPlano';
-import LocalizadorFuncionario from '~/componentes-sgp/LocalizadorFuncionario';
-import {
-  setDadosAtribuicaoResponsavel,
-  setPlanoAEEDados,
-  setTypePlanoAEECadastro,
-} from '~/redux/modulos/planoAEE/actions';
-import { setQuestionarioDinamicoEmEdicao } from '~/redux/modulos/questionarioDinamico/actions';
+import AddResponsavelCadastroPlano from './addResponsavelCadastroPlano';
 
 const { TabPane } = Tabs;
 
 const MontarDadosTabs = props => {
-  const [limparCampos, setLimparCampos] = useState(false);
-  const [responsavelSelecionado, setResponsavelSelecionado] = useState();
-  const [responsavelAlterado, setResponsavelAlterado] = useState(false);
-
   const { match } = props;
   const temId = match?.params?.id;
 
@@ -34,24 +21,11 @@ const MontarDadosTabs = props => {
 
   const planoAEEDados = useSelector(store => store.planoAEE.planoAEEDados);
 
-  const typePlanoAEECadastro = useSelector(
-    store => store.planoAEE.typePlanoAEECadastro
-  );
-
   useEffect(() => {
     if (match.url === `${RotasDto.RELATORIO_AEE_PLANO}/novo`) {
       dispatch(setTypePlanoAEECadastro(true));
     } else {
       dispatch(setTypePlanoAEECadastro(false));
-    }
-  }, [planoAEEDados]);
-
-  useEffect(() => {
-    if (planoAEEDados?.responsavel) {
-      setResponsavelSelecionado({
-        codigoRF: planoAEEDados?.responsavel?.responsavelRF,
-        nomeServidor: planoAEEDados?.responsavel?.responsavelNome,
-      });
     }
   }, [planoAEEDados]);
 
@@ -66,97 +40,12 @@ const MontarDadosTabs = props => {
     ServicoPlanoAEE.cliqueTabPlanoAEE(key, temId);
   };
 
-  const onChangeLocalizador = (funcionario, isOnChangeManual) => {
-    setLimparCampos(false);
-    if (funcionario?.codigoRF && funcionario?.nomeServidor) {
-      const params = {
-        codigoRF: funcionario?.codigoRF,
-        nomeServidor: funcionario?.nomeServidor,
-      };
-      dispatch(setDadosAtribuicaoResponsavel(params));
-      dispatch(setQuestionarioDinamicoEmEdicao(true));
-      setResponsavelSelecionado(params);
-    } else {
-      dispatch(setDadosAtribuicaoResponsavel());
-      dispatch(setQuestionarioDinamicoEmEdicao(false));
-      setResponsavelSelecionado();
-    }
-    setResponsavelAlterado(!!isOnChangeManual);
-  };
-
-  const onClickAtribuirResponsavel = async () => {
-    const resposta = await ServicoPlanoAEE.atribuirResponsavelPlano().catch(e =>
-      erros(e)
-    );
-    if (resposta?.data) {
-      sucesso('Atribuição do responsável realizada com sucesso');
-      planoAEEDados.responsavel = {
-        ...planoAEEDados.responsavel,
-        responsavelRF: responsavelSelecionado?.codigoRF,
-        responsavelNome: responsavelSelecionado?.nomeServidor,
-      };
-      dispatch(setPlanoAEEDados(planoAEEDados));
-      setResponsavelAlterado(false);
-    }
-  };
-
-  const onClickCancelar = () => {
-    setLimparCampos(true);
-    dispatch(setDadosAtribuicaoResponsavel({}));
-    setResponsavelAlterado(false);
-    setTimeout(() => {
-      if (planoAEEDados?.responsavel) {
-        setResponsavelSelecionado({
-          codigoRF: planoAEEDados?.responsavel?.responsavelRF,
-          nomeServidor: planoAEEDados?.responsavel?.responsavelNome,
-        });
-      }
-    }, 500);
-  };
-
   return dadosCollapseLocalizarEstudante?.codigoAluno ? (
     <ContainerTabsCard type="card" width="20%" onTabClick={cliqueTab}>
       <TabPane tab="Cadastro do Plano" key="1">
-        <p>Atribuir responsável:</p>
-        <div className="row mb-4">
-          <LocalizadorFuncionario
-            id="funcionarioResponsavel"
-            dasativaCampoRf={match?.params?.dasativaCampoRf}
-            onChange={onChangeLocalizador}
-            codigoTurma={dadosCollapseLocalizarEstudante?.codigoTurma}
-            limparCampos={limparCampos}
-            url="v1/encaminhamento-aee/responsavel-plano/pesquisa"
-            valorInicial={{
-              codigoRF: responsavelSelecionado?.codigoRF,
-              nome: responsavelSelecionado?.nomeServidor,
-            }}
-          />
-        </div>
-        <div className="col-12 d-flex justify-content-end pb-4 mt-2 pr-0">
-          <Button
-            id="btn-cancelar"
-            label="Cancelar"
-            color={Colors.Roxo}
-            border
-            className="mr-3"
-            onClick={onClickCancelar}
-            disabled={!responsavelAlterado || typePlanoAEECadastro}
-          />
-          <Button
-            id="btn-atribuir"
-            label="Atribuir responsável"
-            color={Colors.Roxo}
-            border
-            bold
-            onClick={onClickAtribuirResponsavel}
-            disabled={
-              !responsavelAlterado ||
-              (responsavelAlterado && !responsavelSelecionado?.codigoRF) ||
-              !responsavelSelecionado?.codigoRF ||
-              typePlanoAEECadastro
-            }
-          />
-        </div>
+        <AddResponsavelCadastroPlano
+          dasativaCampoRf={!!match?.params?.dasativaCampoRf}
+        />
         <SecaoPlanoCollapse match={match} />
       </TabPane>
       {temId && exibirTabReestruturacao && (
