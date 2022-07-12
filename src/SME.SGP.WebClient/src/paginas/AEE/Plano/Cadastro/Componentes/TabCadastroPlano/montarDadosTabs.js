@@ -15,6 +15,7 @@ import SecaoReestruturacaoPlano from '../SecaoReestruturacaoPlano/secaoReestrutu
 import LocalizadorFuncionario from '~/componentes-sgp/LocalizadorFuncionario';
 import {
   setDadosAtribuicaoResponsavel,
+  setPlanoAEEDados,
   setTypePlanoAEECadastro,
 } from '~/redux/modulos/planoAEE/actions';
 import { setQuestionarioDinamicoEmEdicao } from '~/redux/modulos/questionarioDinamico/actions';
@@ -24,6 +25,7 @@ const { TabPane } = Tabs;
 const MontarDadosTabs = props => {
   const [limparCampos, setLimparCampos] = useState(false);
   const [responsavelSelecionado, setResponsavelSelecionado] = useState();
+  const [responsavelAlterado, setResponsavelAlterado] = useState(false);
 
   const { match } = props;
   const temId = match?.params?.id;
@@ -32,7 +34,9 @@ const MontarDadosTabs = props => {
 
   const planoAEEDados = useSelector(store => store.planoAEE.planoAEEDados);
 
-  const typePlanoAEECadastro = useSelector(store => store.planoAEE.typePlanoAEECadastro);
+  const typePlanoAEECadastro = useSelector(
+    store => store.planoAEE.typePlanoAEECadastro
+  );
 
   useEffect(() => {
     if (match.url === `${RotasDto.RELATORIO_AEE_PLANO}/novo`) {
@@ -62,8 +66,7 @@ const MontarDadosTabs = props => {
     ServicoPlanoAEE.cliqueTabPlanoAEE(key, temId);
   };
 
-
-  const onChangeLocalizador = funcionario => {
+  const onChangeLocalizador = (funcionario, isOnChangeManual) => {
     setLimparCampos(false);
     if (funcionario?.codigoRF && funcionario?.nomeServidor) {
       const params = {
@@ -78,6 +81,7 @@ const MontarDadosTabs = props => {
       dispatch(setQuestionarioDinamicoEmEdicao(false));
       setResponsavelSelecionado();
     }
+    setResponsavelAlterado(!!isOnChangeManual);
   };
 
   const onClickAtribuirResponsavel = async () => {
@@ -86,12 +90,28 @@ const MontarDadosTabs = props => {
     );
     if (resposta?.data) {
       sucesso('Atribuição do responsável realizada com sucesso');
+      planoAEEDados.responsavel = {
+        ...planoAEEDados.responsavel,
+        responsavelRF: responsavelSelecionado?.codigoRF,
+        responsavelNome: responsavelSelecionado?.nomeServidor,
+      };
+      dispatch(setPlanoAEEDados(planoAEEDados));
+      setResponsavelAlterado(false);
     }
   };
 
   const onClickCancelar = () => {
-    dispatch(setDadosAtribuicaoResponsavel({}));
     setLimparCampos(true);
+    dispatch(setDadosAtribuicaoResponsavel({}));
+    setResponsavelAlterado(false);
+    setTimeout(() => {
+      if (planoAEEDados?.responsavel) {
+        setResponsavelSelecionado({
+          codigoRF: planoAEEDados?.responsavel?.responsavelRF,
+          nomeServidor: planoAEEDados?.responsavel?.responsavelNome,
+        });
+      }
+    }, 500);
   };
 
   return dadosCollapseLocalizarEstudante?.codigoAluno ? (
@@ -120,7 +140,7 @@ const MontarDadosTabs = props => {
             border
             className="mr-3"
             onClick={onClickCancelar}
-            disabled={!responsavelSelecionado?.codigoRF || typePlanoAEECadastro}
+            disabled={!responsavelAlterado || typePlanoAEECadastro}
           />
           <Button
             id="btn-atribuir"
@@ -129,7 +149,12 @@ const MontarDadosTabs = props => {
             border
             bold
             onClick={onClickAtribuirResponsavel}
-            disabled={!responsavelSelecionado?.codigoRF || typePlanoAEECadastro}
+            disabled={
+              !responsavelAlterado ||
+              (responsavelAlterado && !responsavelSelecionado?.codigoRF) ||
+              !responsavelSelecionado?.codigoRF ||
+              typePlanoAEECadastro
+            }
           />
         </div>
         <SecaoPlanoCollapse match={match} />
