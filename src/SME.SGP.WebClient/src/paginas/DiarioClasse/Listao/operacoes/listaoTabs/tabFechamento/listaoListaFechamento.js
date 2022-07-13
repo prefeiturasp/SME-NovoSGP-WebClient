@@ -326,7 +326,30 @@ const ListaoListaFechamento = props => {
       width: '110px',
     };
 
-    if (!ehRegencia) {
+    if (ehRegencia) {
+      paramsColFinal.render = dadosEstudante => {
+        const temNotaConceitoEmAprovacao = dadosEstudante?.notasConceitoFinal?.find?.(
+          item => item?.emAprovacao
+        );
+
+        const alunoExpandido = temLinhaExpandida(dadosEstudante?.codigoAluno);
+        const iconeExpandir = iconeExpandirLinha(
+          alunoExpandido,
+          dadosEstudante,
+          true
+        );
+
+        if (temNotaConceitoEmAprovacao)
+          return (
+            <>
+              {iconeExpandir}
+              <MarcadorAguardandoAprovacao />
+            </>
+          );
+
+        return iconeExpandir;
+      };
+    } else {
       paramsColFinal.render = dadosEstudante => {
         // Quando não for regência vai ter somente um(a) nota/conceito!
         const indexNotaFechamento = 0;
