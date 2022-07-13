@@ -251,11 +251,13 @@ class ServicoSalvarConselhoClasse {
       dispatch(setNotaConceitoPosConselhoAtual({}));
     };
 
-    this.gerarParecerConclusivo(
-      conselhoClasseId,
-      fechamentoTurmaId,
-      alunoCodigo
-    );
+    if (bimestreAtual?.valor === 'final') {
+      this.gerarParecerConclusivo(
+        conselhoClasseId,
+        fechamentoTurmaId,
+        alunoCodigo
+      );
+    }
 
     if (desabilitarCampos) {
       return false;
