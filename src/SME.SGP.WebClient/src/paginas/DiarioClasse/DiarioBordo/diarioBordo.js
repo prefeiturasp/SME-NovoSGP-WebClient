@@ -183,7 +183,8 @@ const DiarioBordo = ({ match }) => {
         setComponenteCurricularSelecionado(
           String(componente.codigoComponenteCurricular)
         );
-        setCodDisciplinaPai(String(componente.codDisciplinaPai));
+        const codDisciplina = componente?.codDisciplinaPai || componente?.id;
+        setCodDisciplinaPai(String(codDisciplina));
       }
     }
 
@@ -298,7 +299,9 @@ const DiarioBordo = ({ match }) => {
         item =>
           String(item.codigoComponenteCurricular) === componenteCurricularId
       );
-      setCodDisciplinaPai(valorCodDisciplinaPai?.codDisciplinaPai);
+      const codDisciplina =
+        valorCodDisciplinaPai?.codDisciplinaPai || valorCodDisciplinaPai?.id;
+      setCodDisciplinaPai(String(codDisciplina));
       setComponenteCurricularSelecionado(componenteCurricularId);
     }
   }, [componenteCurricularId, listaComponenteCurriculares]);

@@ -79,7 +79,7 @@ const AvaliacaoForm = ({ match, location }) => {
   const aoTrocarCampos = () => {
     if (!modoEdicao) {
       setModoEdicao(true);
-    }
+    }    
   };
 
   const onChangeDisciplina = disciplinaId => {
@@ -700,7 +700,7 @@ const AvaliacaoForm = ({ match, location }) => {
                             !dentroPeriodo ||
                             listaDisciplinas?.length === 1
                           }
-                          placeholder="Selecione um componente curricular"                          
+                          placeholder="Selecione um componente curricular"
                           form={form}
                           multiple
                           onChange={onChangeDisciplina}

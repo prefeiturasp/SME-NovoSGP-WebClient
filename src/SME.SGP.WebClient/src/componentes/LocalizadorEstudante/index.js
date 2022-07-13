@@ -23,6 +23,7 @@ const LocalizadorEstudante = props => {
     semMargin,
     limparCamposAposPesquisa,
     labelAlunoNome,
+    historico = false
   } = props;
 
   const classeNome = semMargin
@@ -99,6 +100,7 @@ const LocalizadorEstudante = props => {
       nome: valor,
       codigoUe: ueId,
       anoLetivo,
+      historico
     };
 
     if (codigoTurma) {
