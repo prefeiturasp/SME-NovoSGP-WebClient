@@ -142,7 +142,6 @@ const AtribuicaoResponsaveisCadastro = () => {
     setResponsavel();
     setTipoResponsavel();
     setCodigoUeSelecionadoGrid("0");
-    obterListaUES();
     setDreId(valor);
     setUesAtribuidas([]);
   };
@@ -246,7 +245,7 @@ const AtribuicaoResponsaveisCadastro = () => {
       setListaResponsavel([]);
     }
     setCarregandoResponsavel(false);
-    
+
   }, [dreId, tipoResponsavel, routeMatch]);
 
   useEffect(() => {
