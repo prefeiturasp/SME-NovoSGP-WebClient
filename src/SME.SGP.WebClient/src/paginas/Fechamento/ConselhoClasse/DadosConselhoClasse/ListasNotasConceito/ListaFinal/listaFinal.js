@@ -281,6 +281,11 @@ const ListaFinal = props => {
                         </td>
                         {index === 0 ? (
                           <td rowSpan={alturaLinhaMesclada}>
+                            {dadosLista.componenteRegencia?.quantidadeAulas}
+                          </td>
+                        ) : null}
+                        {index === 0 ? (
+                          <td rowSpan={alturaLinhaMesclada}>
                             {dadosLista.componenteRegencia.faltas}
                           </td>
                         ) : null}

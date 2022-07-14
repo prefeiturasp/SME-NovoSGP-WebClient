@@ -24,7 +24,6 @@ import {
   ServicoRelatorioFrequencia,
   ServicoFiltroRelatorio,
   ServicoComponentesCurriculares,
-  ehTurmaInfantil,
 } from '~/servicos';
 
 const RelatorioFrequencia = () => {
@@ -311,7 +310,10 @@ const RelatorioFrequencia = () => {
   }, [anosEscolares]);
 
   const escolherChamadaEndpointComponeteCurricular = useCallback(() => {
-    const ehOpcaoTodas = turmasCodigo === "-99" || turmasCodigo?.find(item => item === OPCAO_TODOS) || turmasCodigo === undefined 
+    const ehOpcaoTodas =
+      turmasCodigo === '-99' ||
+      turmasCodigo?.find(item => item === OPCAO_TODOS) ||
+      turmasCodigo === undefined;
     
     if (ehInfantil) {
       const turmas = ehOpcaoTodas
@@ -362,7 +364,7 @@ const RelatorioFrequencia = () => {
         .finally(() => setCarregandoComponentesCurriculares(false));
       if (retorno?.data?.length) {
         const nomeParametro = ehInfantil ? 'nome' : 'descricao';
-        let lista = retorno.data.map(item => ({
+        const lista = retorno.data.map(item => ({
           desc: item[nomeParametro],
           valor: String(item.codigo),
         }));
@@ -370,16 +372,7 @@ const RelatorioFrequencia = () => {
         if (ehTurma && lista.length > 1) {
           lista.unshift({ desc: 'Todos', valor: OPCAO_TODOS });
         }
-
-        //TODO: REVER HISTORIA.
-        let ehTurmaInfantil = modalidadeId === '1';
-        if(ehTurmaInfantil){  
-          lista = lista.filter(e =>  e.valor === "512").map(element => {
-            element.desc = "Regência de classe infantil";
-            return element;
-          });         
-        }
-        
+ 
         setListaComponenteCurricular(lista);
         if (lista?.length === 1) {
           setComponentesCurriculares([lista[0].valor]);

@@ -131,11 +131,15 @@ class ServicoSalvarConselhoClasse {
     }
 
     if (conselhoClasseEmEdicao) {
-      const temRegistrosInvalidos = !recomendacaoAluno || !recomendacaoFamilia;
-
+      const temRegistrosInvalidosDigitados = !recomendacaoAluno || !recomendacaoFamilia;
+      const contemRecomendacoesFamiliaAlunoSelecionados =
+        recomendacaoFamiliaSelecionados?.length > 0 ||
+        recomendacaoAlunoSelecionados?.length > 0;
       let descartarRegistros = false;
-      if (temRegistrosInvalidos) {
-        descartarRegistros = await perguntaDescartarRegistros();
+
+      if (temRegistrosInvalidosDigitados) {
+        if (!contemRecomendacoesFamiliaAlunoSelecionados)
+          descartarRegistros = await perguntaDescartarRegistros();
       }
 
       // Voltar para a tela continua e executa a ação!
@@ -145,7 +149,11 @@ class ServicoSalvarConselhoClasse {
       }
 
       // Voltar para a tela e não executa a ação!
-      if (!descartarRegistros && temRegistrosInvalidos) {
+      if (
+        !descartarRegistros &&
+        temRegistrosInvalidosDigitados &&
+        !contemRecomendacoesFamiliaAlunoSelecionados
+      ) {
         return false;
       }
 
@@ -243,11 +251,13 @@ class ServicoSalvarConselhoClasse {
       dispatch(setNotaConceitoPosConselhoAtual({}));
     };
 
-    this.gerarParecerConclusivo(
-      conselhoClasseId,
-      fechamentoTurmaId,
-      alunoCodigo
-    );
+    if (bimestreAtual?.valor === 'final') {
+      this.gerarParecerConclusivo(
+        conselhoClasseId,
+        fechamentoTurmaId,
+        alunoCodigo
+      );
+    }
 
     if (desabilitarCampos) {
       return false;
