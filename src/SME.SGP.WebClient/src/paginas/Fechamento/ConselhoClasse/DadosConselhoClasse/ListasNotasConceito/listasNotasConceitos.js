@@ -141,7 +141,7 @@ const ListasNotasConceitos = props => {
 
     let emEdicao = false;
     if (
-      !conselhoClasseAlunoId &&
+      (!conselhoClasseAlunoId && conselhoClasseAlunoId !== null) &&
       notasFechamentosPreenchidas &&
       alunoDentroDoPeriodoDoBimestre &&
       periodoAbertoOuEmFechamento
@@ -170,10 +170,6 @@ const ListasNotasConceitos = props => {
           return cc;
         })
       );
-      const periodoAbertoOuEmFechamento = estaNoPeriodoOuFechamento();
-      if (notasPosConselhoPreenchidas && periodoAbertoOuEmFechamento) {
-        dispatch(setConselhoClasseEmEdicao(true));
-      }
     }
   };
 
