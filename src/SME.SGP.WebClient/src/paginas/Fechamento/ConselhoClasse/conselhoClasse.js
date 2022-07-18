@@ -120,10 +120,8 @@ const ConselhoClasse = () => {
     )
       .catch(e => erros(e))
       .finally(() => setCarregandoFrequencia(false));
-    if (retorno && retorno.data) {
-      return retorno.data;
-    }
-    return 0;
+
+    return retorno?.data;
   };
 
   const verificarExibicaoMarcador = async codigoEOL => {
@@ -155,7 +153,7 @@ const ConselhoClasse = () => {
           conselhoClasseAlunoId,
           alunoCodigo: codigoEOL,
           ...dadosPrincipaisConselhoClasse,
-        tipoNota      
+        tipoNota
       };
         if (!Object.keys(dadosPrincipaisConselhoClasse).length) {
           dispatch(setDadosPrincipaisConselhoClasse(valores));
