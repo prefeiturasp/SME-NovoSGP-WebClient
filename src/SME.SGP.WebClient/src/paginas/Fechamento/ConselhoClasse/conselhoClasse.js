@@ -120,10 +120,8 @@ const ConselhoClasse = () => {
     )
       .catch(e => erros(e))
       .finally(() => setCarregandoFrequencia(false));
-    if (retorno?.data >= 0) {
-      return retorno.data;
-    }
-    return '';
+
+    return retorno?.data;
   };
 
   const verificarExibicaoMarcador = async codigoEOL => {
