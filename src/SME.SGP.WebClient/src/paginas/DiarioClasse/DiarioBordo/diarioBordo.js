@@ -202,11 +202,11 @@ const DiarioBordo = ({ match }) => {
   }, [turmaId, obterComponentesCurriculares, turmaInfantil]);
 
   const obterDatasDeAulasDisponiveis = useCallback(
-    async codigoDisciplina => {
+    async codDisciplinaPai => {
       setCarregandoData(true);
       const datasDeAulas = await ServicoFrequencia.obterDatasDeAulasPorCalendarioTurmaEComponenteCurricular(
         turmaId,
-        codigoDisciplina
+        codDisciplinaPai
       )
         .catch(e => {
           setCarregandoGeral(false);
@@ -217,7 +217,7 @@ const DiarioBordo = ({ match }) => {
         });
 
       const codigoComponenteCurricular =
-        componenteCurricularId || codigoDisciplina;
+        componenteCurricularId || codDisciplinaPai;
 
       if (datasDeAulas?.data?.length && codigoComponenteCurricular) {
         setListaDatasAulas(datasDeAulas.data);
@@ -329,7 +329,7 @@ const DiarioBordo = ({ match }) => {
       setTemPeriodoAberto(retorno.data.temPeriodoAberto);
       setEhInseridoCJ(retorno.data.inseridoCJ);
       setValoresIniciais(valInicial);
-      setCodDisciplinaPai(codDisciplinaPai);
+      setCodDisciplinaPai(componenteCurricular);
       if (retorno?.data?.auditoria?.id) {
         setAuditoria(retorno.data.auditoria);
         obterDadosObservacoes(retorno.data.auditoria.id);
