@@ -125,7 +125,7 @@ const BotoesAcoesConselhoClasse = () => {
         disabled={
           ehTurmaInfantil(modalidadesFiltroPrincipal, turmaSelecionada) ||
           desabilitarCampos ||
-          !conselhoClasseEmEdicao
+          (!conselhoClasseEmEdicao && !notaConceitoPosConselhoAtual.ehEdicao)
         }
       />
     </>
