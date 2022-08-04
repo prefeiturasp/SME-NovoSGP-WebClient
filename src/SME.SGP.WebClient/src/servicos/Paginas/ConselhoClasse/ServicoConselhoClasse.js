@@ -183,15 +183,22 @@ class ServicoConselhoClasse {
     );
   };
 
-  obterExibirMarcadorParecer = (
+  obterConselhoClasseTurmaFinal = (
     turmaCodigo,
     alunoCodigo,
     consideraHistorico
   ) => {
-    return api.get(
-      `/v1/conselhos-classe/turmas/${turmaCodigo}/alunos/${alunoCodigo}/consideraHistorico` +
-        `/${consideraHistorico}`
-    );
+    const state = store.getState();
+    const { conselhoClasse } = state;
+    const bimestreAtual = conselhoClasse?.bimestreAtual;
+
+    if (bimestreAtual?.valor !== 'final') {
+      return api.get(
+        `/v1/conselhos-classe/turmas/${turmaCodigo}/alunos/${alunoCodigo}/consideraHistorico` +
+          `/${consideraHistorico}`
+      );
+    }
+    return null;
   };
 
   obterListaAnotacoesRecomendacoes = () =>

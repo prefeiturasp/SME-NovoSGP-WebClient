@@ -127,7 +127,8 @@ const ConselhoClasse = () => {
   };
 
   const verificarExibicaoMarcador = async codigoEOL => {
-    const resposta = await ServicoConselhoClasse.obterExibirMarcadorParecer(
+    // Somente quando for bimestre diferente de final vai ter retorno com valor!
+    const resposta = await ServicoConselhoClasse.obterConselhoClasseTurmaFinal(
       turmaSelecionada.turma,
       codigoEOL,
       turmaSelecionada.consideraHistorico
@@ -155,8 +156,8 @@ const ConselhoClasse = () => {
           conselhoClasseAlunoId,
           alunoCodigo: codigoEOL,
           ...dadosPrincipaisConselhoClasse,
-        tipoNota      
-      };
+          tipoNota
+        };
         if (!Object.keys(dadosPrincipaisConselhoClasse).length) {
           dispatch(setDadosPrincipaisConselhoClasse(valores));
         }
