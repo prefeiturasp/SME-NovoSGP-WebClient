@@ -70,13 +70,13 @@ const Navbar = () => {
   };
   return (
     <>
-      <Loader loading={carregando}>
-        {usuarioStore.acessoAdmin && (
+      <Loader loading={carregando} className="sticky-top">
+        {usuarioStore?.acessoAdmin && (
           <Alert
             alerta={{
               tipo: 'warning',
               id: 'plano-ciclo-selecione-turma',
-              mensagem: `Atenção: Você está acessando o sistema via suporte - Usuário ${usuarioStore.administradorSuporte.nome} ${usuarioStore.administradorSuporte.login}. `,
+              mensagem: `Atenção: Você está acessando o sistema via suporte - Usuário ${usuarioStore?.administradorSuporte?.nome} ${usuarioStore?.administradorSuporte?.login}. `,
               mensagemClick: 'ENCERRAR SUPORTE',
               estiloTitulo: { fontSize: '15px' },
               marginBottom: '0px',
