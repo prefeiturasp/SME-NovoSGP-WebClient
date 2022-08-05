@@ -43,9 +43,7 @@ const MontarDadosTabs = props => {
   return dadosCollapseLocalizarEstudante?.codigoAluno ? (
     <ContainerTabsCard type="card" width="20%" onTabClick={cliqueTab}>
       <TabPane tab="Cadastro do Plano" key="1">
-        <AddResponsavelCadastroPlano
-          dasativaCampoRf={!!match?.params?.dasativaCampoRf}
-        />
+        <AddResponsavelCadastroPlano />
         <SecaoPlanoCollapse match={match} />
       </TabPane>
       {temId && exibirTabReestruturacao && (
