@@ -29,10 +29,6 @@ const TabCadastroPlano = props => {
 
     let turmaCodigo = 0;
 
-    if(planoId == 0){
-      match.params.dasativaCampoRf = true;
-    }
-
     if (!planoId) {
       turmaCodigo = dadosCollapseLocalizarEstudante?.codigoTurma;
     }

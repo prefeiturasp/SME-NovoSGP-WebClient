@@ -58,7 +58,7 @@ const CollapseLocalizarEstudanteDados = props => {
   const [carregandoUes, setCarregandoUes] = useState(false);
 
   const obterUes = useCallback(async () => {
-    if (codigoDre) {
+    if (codigoDre && anoAtual) {
       setCarregandoUes(true);
       const resposta = await AbrangenciaServico.buscarUes(
         codigoDre,
@@ -92,7 +92,7 @@ const CollapseLocalizarEstudanteDados = props => {
       setCodigoUe();
       setListaUes([]);
     }
-  }, [codigoDre, obterUes]);
+  }, [codigoDre, anoAtual, obterUes]);
 
   useEffect(() => {
     return () => dispatch(setLimparDadosLocalizarEstudante({}));

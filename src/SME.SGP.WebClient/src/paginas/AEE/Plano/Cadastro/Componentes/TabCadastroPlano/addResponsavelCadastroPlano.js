@@ -1,9 +1,8 @@
-import PropTypes from 'prop-types';
 import React, { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { Button, Colors } from '~/componentes';
 import { erros, sucesso } from '~/servicos';
-
 import LocalizadorFuncionario from '~/componentes-sgp/LocalizadorFuncionario';
 import {
   setDadosAtribuicaoResponsavel,
@@ -11,8 +10,8 @@ import {
 } from '~/redux/modulos/planoAEE/actions';
 import ServicoPlanoAEE from '~/servicos/Paginas/Relatorios/AEE/ServicoPlanoAEE';
 
-const AddResponsavelCadastroPlano = props => {
-  const { dasativaCampoRf } = props;
+const AddResponsavelCadastroPlano = () => {
+  const paramsRota = useParams();
 
   const [limparCampos, setLimparCampos] = useState(false);
   const [responsavelSelecionado, setResponsavelSelecionado] = useState();
@@ -95,16 +94,15 @@ const AddResponsavelCadastroPlano = props => {
       <p>Atribuir responsável:</p>
       <div className="row mb-4">
         <LocalizadorFuncionario
-          desabilitado={desabilitarCamposPlanoAEE}
+          desabilitado={desabilitarCamposPlanoAEE || !paramsRota?.id}
           id="funcionarioResponsavel"
-          dasativaCampoRf={!!dasativaCampoRf}
           onChange={onChangeLocalizador}
           codigoTurma={dadosCollapseLocalizarEstudante?.codigoTurma}
           limparCampos={limparCampos}
           url="v1/encaminhamento-aee/responsavel-plano/pesquisa"
           valorInicial={{
             codigoRF: responsavelSelecionado?.codigoRF,
-            nome: responsavelSelecionado?.nomeServidor,
+            nomeServidor: responsavelSelecionado?.nomeServidor,
           }}
         />
       </div>
@@ -140,14 +138,6 @@ const AddResponsavelCadastroPlano = props => {
       </div>
     </>
   );
-};
-
-AddResponsavelCadastroPlano.propTypes = {
-  dasativaCampoRf: PropTypes.bool,
-};
-
-AddResponsavelCadastroPlano.defaultProps = {
-  dasativaCampoRf: false,
 };
 
 export default AddResponsavelCadastroPlano;

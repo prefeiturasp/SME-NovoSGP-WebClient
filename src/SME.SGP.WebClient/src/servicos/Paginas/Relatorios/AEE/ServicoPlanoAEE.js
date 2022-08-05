@@ -218,7 +218,7 @@ class ServicoPlanoAEE {
           });
           return questoes;
         });
-        
+
         questoesSalvar = questoesSalvar.filter(q => q !== null);
         const valoresParaSalvar = {
           id: planoAEEDados?.id ? planoAEEDados?.id : 0,
@@ -227,7 +227,9 @@ class ServicoPlanoAEE {
           alunoCodigo: dadosCollapseLocalizarEstudante.codigoAluno,
           situacao: planoAEEDados?.situacao,
           questoes: questoesSalvar[0],
-          responsavelRF: dadosAtribuicaoResponsavel.codigoRF,
+          responsavelRF:
+            dadosAtribuicaoResponsavel.codigoRF ||
+            planoAEEDados?.responsavel?.responsavelRF,
         };
 
         dispatch(setExibirLoaderPlanoAEE(true));

@@ -88,7 +88,7 @@ const SecaoParecerResponsavel = () => {
           url="v1/encaminhamento-aee/responsavel/pesquisa"
           valorInicial={{
             codigoRF: responsavelSelecionado?.codigoRF,
-            nome: responsavelSelecionado?.nomeServidor,
+            nomeServidor: responsavelSelecionado?.nomeServidor,
           }}
           desabilitado={!dadosParecer?.podeAtribuirResponsavel}
         />
