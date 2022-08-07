@@ -101,14 +101,7 @@ const ConselhoClasse = () => {
     ) {
       obterDadosBimestresConselhoClasse();
     }
-  }, [
-    obterDadosBimestresConselhoClasse,
-    turma,
-    turmaAtual,
-    turmaSelecionada,
-    resetarInfomacoes,
-    modalidadesFiltroPrincipal,
-  ]);
+  }, [turmaAtual, turmaSelecionada]);
 
   const verificarExibicaoMarcador = async codigoEOL => {
     // Somente quando for bimestre diferente de final vai ter retorno com valor!
@@ -123,7 +116,7 @@ const ConselhoClasse = () => {
         conselhoClasseId,
         fechamentoTurmaId,
         conselhoClasseAlunoId,
-        tipoNota
+        tipoNota,
       } = resposta?.data;
       if (fechamentoTurmaId !== 0 && conselhoClasseId != 0) {
         const retorno = await servicoSalvarConselhoClasse.validaParecerConclusivo(
@@ -140,7 +133,7 @@ const ConselhoClasse = () => {
           conselhoClasseAlunoId,
           alunoCodigo: codigoEOL,
           ...dadosPrincipaisConselhoClasse,
-          tipoNota
+          tipoNota,
         };
         if (!Object.keys(dadosPrincipaisConselhoClasse).length) {
           dispatch(setDadosPrincipaisConselhoClasse(valores));
