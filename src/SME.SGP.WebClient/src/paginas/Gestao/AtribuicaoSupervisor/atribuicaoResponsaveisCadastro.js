@@ -331,6 +331,10 @@ const AtribuicaoResponsaveisCadastro = () => {
     }
   }, [dreId, responsavel, obterListaUES]);
 
+  useEffect(() => {
+    if (!responsavel) setAuditoria({});
+  }, [responsavel]);
+
   return (
     <>
       <Cabecalho pagina="Atribuição de responsáveis" />
