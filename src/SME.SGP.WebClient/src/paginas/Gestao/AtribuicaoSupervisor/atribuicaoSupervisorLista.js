@@ -211,6 +211,8 @@ function montarListaAtribuicao(lista) {
       });
       });
       setListaFiltroAtribuicao(dadosAtribuicao);
+    } else {
+      setListaFiltroAtribuicao([]);
     }
   }
 
