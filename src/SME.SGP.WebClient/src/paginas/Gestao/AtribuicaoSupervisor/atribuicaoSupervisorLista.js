@@ -30,6 +30,7 @@ export default function AtribuicaoSupervisorLista() {
   const [listaTipoResponsavel, setListaTipoResponsavel] = useState([]);
   const [carregandoResponsavel, setCarregandoResponsavel] = useState(false);
   const [carregandoLista, setCarregandoLista] = useState(false);
+  const [paginaAtual, setPaginaAtual] = useState(1);
 
   const usuario = useSelector(store => store.usuario);
   const permissoesTela =
@@ -183,6 +184,7 @@ export default function AtribuicaoSupervisorLista() {
         consultarApi(dre,tipoRes || tipoResponsavel,ueSelecionada,supervisoresSelecionados);
     } else {
       setListaFiltroAtribuicao([]);
+      setPaginaAtual(1);
       setUesSemSupervisorCheck(false);
     }
 
@@ -211,8 +213,10 @@ function montarListaAtribuicao(lista) {
       });
       });
       setListaFiltroAtribuicao(dadosAtribuicao);
+      setPaginaAtual(1);
     } else {
       setListaFiltroAtribuicao([]);
+      setPaginaAtual(1);
     }
   }
 
@@ -238,6 +242,7 @@ function montarListaAtribuicao(lista) {
       setDesabilitarUe(false);
       setUeSelecionada([]);
       setListaFiltroAtribuicao([]);
+      setPaginaAtual(1);
     }
     consultarApi(dresSelecionadas,tipoResponsavel,ueSelecionada,sup.toString(),uesSemSupervisorCheck);
   }
@@ -474,6 +479,13 @@ function montarListaAtribuicao(lista) {
             columns={columns}
             dataSource={listaFiltroAtribuicao}
             semHover
+            pagination={{
+              pageSize: 10,
+              total: listaFiltroAtribuicao?.length,
+              defaultCurrent: 1,
+              current: paginaAtual,
+              onChange: p => setPaginaAtual(p),
+            }}
           />
           </Loader>
         </div>
