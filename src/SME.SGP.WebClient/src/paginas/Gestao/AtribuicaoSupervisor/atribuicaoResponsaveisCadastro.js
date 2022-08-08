@@ -195,7 +195,6 @@ const AtribuicaoResponsaveisCadastro = () => {
   }, [routeMatch]);
   useEffect(() => {
     if (dreId) {
-      obterTipoResponsavel();
       if(dreId && responsavel != undefined){
         obterListaUES();
       }
@@ -204,7 +203,11 @@ const AtribuicaoResponsaveisCadastro = () => {
       setResponsavel();
       setListaTipoResponsavel([]);
     }
-  }, [dreId, obterTipoResponsavel]);
+  }, [dreId]);
+
+  useEffect(() => {
+    obterTipoResponsavel();
+  }, [obterTipoResponsavel]);
 
   const onChangeResponsavel = valor => {
     setResponsavel(valor);
@@ -335,6 +338,10 @@ const AtribuicaoResponsaveisCadastro = () => {
     if (!responsavel) setAuditoria({});
   }, [responsavel]);
 
+  useEffect(() => {
+    if (!responsavel) setAuditoria({});
+  }, [responsavel]);
+
   return (
     <>
       <Cabecalho pagina="Atribuição de responsáveis" />
@@ -405,7 +412,7 @@ const AtribuicaoResponsaveisCadastro = () => {
                   valueText="descricao"
                   disabled={
                     !dreId ||
-                    listaTipoResponsavel?.length === 1 ||
+                    (tipoResponsavel && listaTipoResponsavel?.length === 1) ||
                     !permissoesTela.podeConsultar
                   }
                   onChange={onChangeTipoResponsavel}
