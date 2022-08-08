@@ -414,7 +414,7 @@ function montarListaAtribuicao(lista) {
               carregandoLista ||
               carregandoResponsavel ||
               !dresSelecionadas ||
-              listaTipoResponsavel?.length < 1 ||
+              listaTipoResponsavel?.length === 1 ||
               !permissoesTela?.podeConsultar
             }
             onChange={onChangeTipoResponsavel}
