@@ -9,7 +9,7 @@ class ServicoResponsaveis {
   salvarAtribuicao = dados => api.post(`${URL_PADRAO}/atribuir-ue`, dados);
 
   obterResponsaveis = async (dre, tipoResponsavelAtribuicao) =>{
-    if(tipoResponsavelAtribuicao >0){
+    if(tipoResponsavelAtribuicao){
       return await api.get(
         `${URL_PADRAO}/dre/${dre}?tipoResponsavelAtribuicao=${tipoResponsavelAtribuicao}`
       );

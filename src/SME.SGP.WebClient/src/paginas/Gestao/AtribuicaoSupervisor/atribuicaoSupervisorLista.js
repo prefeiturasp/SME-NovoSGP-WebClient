@@ -289,6 +289,7 @@ function montarListaAtribuicao(lista) {
     if (resposta?.data?.length) {
       if (resposta?.data?.length === 1) {
         setTipoResponsavel(resposta.data[0].descricao);
+        return;
       }
 
       setListaTipoResponsavel(resposta.data);
@@ -301,7 +302,7 @@ function montarListaAtribuicao(lista) {
     if (dresSelecionadas) {
       obterTipoResponsavel();
     } else {
-     setTipoResponsavel();
+      setTipoResponsavel();
       setListaTipoResponsavel([]);
     }
   }, [dresSelecionadas, obterTipoResponsavel]);
@@ -414,7 +415,7 @@ function montarListaAtribuicao(lista) {
               carregandoLista ||
               carregandoResponsavel ||
               !dresSelecionadas ||
-              listaTipoResponsavel?.length === 1 ||
+              listaTipoResponsavel?.length < 1 ||
               !permissoesTela?.podeConsultar
             }
             onChange={onChangeTipoResponsavel}
