@@ -303,7 +303,7 @@ function montarListaAtribuicao(lista) {
     if (dresSelecionadas) {
       obterTipoResponsavel();
     } else {
-     setTipoResponsavel();
+      setTipoResponsavel();
       setListaTipoResponsavel([]);
     }
   }, [dresSelecionadas, obterTipoResponsavel]);
