@@ -194,7 +194,7 @@ export default function AtribuicaoSupervisorLista() {
       carregarUes(dre);
     }
 
-  }, [tipoResponsavel]);
+  }, [tipoResponsavel, uesSemSupervisorCheck]);
 
 function montarListaAtribuicao(lista) {
     if (lista?.length) {
