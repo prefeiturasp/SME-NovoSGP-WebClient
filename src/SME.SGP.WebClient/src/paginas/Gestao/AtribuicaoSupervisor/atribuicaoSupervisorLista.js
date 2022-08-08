@@ -289,7 +289,6 @@ function montarListaAtribuicao(lista) {
     if (resposta?.data?.length) {
       if (resposta?.data?.length === 1) {
         setTipoResponsavel(resposta.data[0].descricao);
-        return;
       }
 
       setListaTipoResponsavel(resposta.data);
