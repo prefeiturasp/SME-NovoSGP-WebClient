@@ -43,8 +43,6 @@ export default function AtribuicaoSupervisorLista() {
       if (retorno.data.length === 1) {
         const dre = retorno.data[0].codigo;
         setDresSelecionadas(dre);
-        // carregarUes(dre);
-        // consultarApi(dre,tipoResponsavel,ueSelecionada,supervisoresSelecionados);
       }
 
       setListaDres(retorno.data);
