@@ -31,13 +31,14 @@ export default function AtribuicaoSupervisorLista() {
   const [listaTipoResponsavel, setListaTipoResponsavel] = useState([]);
   const [carregandoResponsavel, setCarregandoResponsavel] = useState(false);
   const [carregandoLista, setCarregandoLista] = useState(false);
-  
+  const [paginaAtual, setPaginaAtual] = useState(1);
+
   const usuario = useSelector(store => store.usuario);
   const permissoesTela =
     usuario.permissoes[RotasDto.ATRIBUICAO_RESPONSAVEIS_LISTA];
 
   const obterDres = useCallback(async () => {
-    
+
     const retorno = await AbrangenciaServico.buscarDres().catch(e => erros(e));
 
     if (retorno?.data?.length) {
@@ -47,7 +48,7 @@ export default function AtribuicaoSupervisorLista() {
         carregarUes(dre);
         consultarApi(dre,tipoResponsavel,ueSelecionada,supervisoresSelecionados);
       }
-      
+
       setListaDres(retorno.data);
     } else {
       setListaDres([]);
@@ -163,7 +164,7 @@ export default function AtribuicaoSupervisorLista() {
     }
   }
   async function montaListaUesSemSup(dre) {
-    
+
     setSupervisoresSelecionados([]);
     setUeSelecionada('');
     setDesabilitarSupervisor(true);
@@ -172,7 +173,7 @@ export default function AtribuicaoSupervisorLista() {
   }
 
   const onChangeDre = useCallback(async (dre, changeUe,chamarApi=true,tipoRes) => {
-    
+
     if (!changeUe) {
       setListaSupervisores([]);
       setSupervisoresSelecionados([]);
@@ -181,9 +182,10 @@ export default function AtribuicaoSupervisorLista() {
     setUeSelecionada('');
     if (dre) {
       if(chamarApi)
-        consultarApi(dre,tipoRes,ueSelecionada,supervisoresSelecionados);
+        consultarApi(dre,tipoRes || tipoResponsavel,ueSelecionada,supervisoresSelecionados);
     } else {
       setListaFiltroAtribuicao([]);
+      setPaginaAtual(1);
       setUesSemSupervisorCheck(false);
     }
 
@@ -193,11 +195,11 @@ export default function AtribuicaoSupervisorLista() {
       carregarUes(dre);
     }
 
-  }, []);
+  }, [tipoResponsavel, uesSemSupervisorCheck]);
 
 function montarListaAtribuicao(lista) {
     if (lista?.length) {
-      const dadosAtribuicao = [];           
+      const dadosAtribuicao = [];
       lista.forEach(item => {
         const contId = dadosAtribuicao.length + 1;
        dadosAtribuicao.push({
@@ -211,12 +213,16 @@ function montarListaAtribuicao(lista) {
         ueid : item.ueId
       });
       });
-      setListaFiltroAtribuicao(dadosAtribuicao);      
-    } 
+      setListaFiltroAtribuicao(dadosAtribuicao);
+      setPaginaAtual(1);
+    } else {
+      setListaFiltroAtribuicao([]);
+      setPaginaAtual(1);
+    }
   }
 
   async function carregarUes(dre) {
-    
+
     const ues = await api.get(`/v1/supervisores/lista-ues/${dre}`);
     if (ues.data) {
       setListaUes(ues.data);
@@ -226,7 +232,7 @@ function montarListaAtribuicao(lista) {
   }
 
   async function onChangeSupervisores(sup) {
-    
+
     setUesSemSupervisorCheck(false);
     if (sup && sup.length) {
       setDesabilitarUe(true);
@@ -237,12 +243,13 @@ function montarListaAtribuicao(lista) {
       setDesabilitarUe(false);
       setUeSelecionada([]);
       setListaFiltroAtribuicao([]);
+      setPaginaAtual(1);
     }
     consultarApi(dresSelecionadas,codigoTipoResponsavel,ueSelecionada,sup.toString(),uesSemSupervisorCheck);
   }
 
   async function onChangeUes(ue) {
-    
+
     if (ue) {
       setDesabilitarSupervisor(true);
       setSupervisoresSelecionados([]);
@@ -256,18 +263,18 @@ function montarListaAtribuicao(lista) {
   }
 
   const onChangeTipoResponsavel = async valor => {
-    
+
     if(valor==null){
       setUesSemSupervisorCheck(false);
     }
     setSupervisoresSelecionados();
     setListaSupervisores([]);
     setTipoResponsavel(valor);
-    consultarApi(dresSelecionadas,valor,ueSelecionada,supervisoresSelecionados,uesSemSupervisorCheck);  
+    consultarApi(dresSelecionadas,valor,ueSelecionada,supervisoresSelecionados,uesSemSupervisorCheck);
   };
 
   async function consultarApi(dre,codigoTipo,ue,supervisor){
-    setCarregandoLista(true);  
+    setCarregandoLista(true);
     await api.get('/v1/supervisores/vinculo-lista', {
       params: {
         dreCodigo: dre,
@@ -278,11 +285,11 @@ function montarListaAtribuicao(lista) {
       },
     }).then(dados => {
       montarListaAtribuicao(dados.data);
-      setCarregandoLista(false);  
+      setCarregandoLista(false);
     });
   }
   const obterTipoResponsavel = useCallback(async () => {
-    
+
     const resposta = await ServicoResponsaveis.obterTipoReponsavel().catch(e =>
       erros(e)
     );
@@ -291,7 +298,6 @@ function montarListaAtribuicao(lista) {
       if (resposta?.data?.length === 1) {
         setTipoResponsavel(resposta.data[0].descricao);
         setCodigoTipoResponsavel(resposta.data[0].codigo);
-        return;
       }
 
       setListaTipoResponsavel(resposta.data);
@@ -314,7 +320,7 @@ function montarListaAtribuicao(lista) {
     async (dre,tipoResp) => {
 
       var tipoSelecionado = tipoResp ?? tipoResponsavel;
-      
+
       if (!dre || !tipoSelecionado) return;
 
       setCarregandoResponsavel(true);
@@ -343,7 +349,7 @@ function montarListaAtribuicao(lista) {
   );
 
   useEffect(() => {
-    
+
     if (tipoResponsavel && dresSelecionadas) {
       obterResponsaveis(dresSelecionadas);
     } else {
@@ -418,7 +424,7 @@ function montarListaAtribuicao(lista) {
               carregandoLista ||
               carregandoResponsavel ||
               !dresSelecionadas ||
-              listaTipoResponsavel?.length < 1 ||
+              listaTipoResponsavel?.length === 1 ||
               !permissoesTela?.podeConsultar
             }
             onChange={onChangeTipoResponsavel}
@@ -476,6 +482,13 @@ function montarListaAtribuicao(lista) {
             columns={columns}
             dataSource={listaFiltroAtribuicao}
             semHover
+            pagination={{
+              pageSize: 10,
+              total: listaFiltroAtribuicao?.length,
+              defaultCurrent: 1,
+              current: paginaAtual,
+              onChange: p => setPaginaAtual(p),
+            }}
           />
           </Loader>
         </div>
