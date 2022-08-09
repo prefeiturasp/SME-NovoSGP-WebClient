@@ -163,8 +163,8 @@ export default function AtribuicaoSupervisorLista() {
     setSupervisoresSelecionados([]);
     setUeSelecionada('');
     setDesabilitarSupervisor(true);
-    consultarApi(dre,tipoResponsavel,ueSelecionada,supervisoresSelecionados);
-  }, [tipoResponsavel]);
+    consultarApi(dre,tipoResponsavel,ueSelecionada,supervisoresSelecionados, uesSemSupervisorCheck);
+  }, [tipoResponsavel, uesSemSupervisorCheck]);
 
   const onChangeDre = useCallback(async (dre, changeUe,chamarApi=true,tipoRes) => {
 
@@ -265,7 +265,7 @@ function montarListaAtribuicao(lista) {
     consultarApi(dresSelecionadas,valor,ueSelecionada,supervisoresSelecionados,uesSemSupervisorCheck);
   };
 
-  async function consultarApi(dre,codigoTipo,ue,supervisor){
+  async function consultarApi(dre,codigoTipo,ue,supervisor, check){
     setCarregandoLista(true);
     await api.get('/v1/supervisores/vinculo-lista', {
       params: {
@@ -273,7 +273,7 @@ function montarListaAtribuicao(lista) {
         tipoCodigo: codigoTipo || tipoResponsavel,
         ueCodigo: ue,
         supervisorId: supervisor,
-        ueSemResponsavel: uesSemSupervisorCheck
+        ueSemResponsavel: check || uesSemSupervisorCheck
       },
     }).then(dados => {
       montarListaAtribuicao(dados.data);
