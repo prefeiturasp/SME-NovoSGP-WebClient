@@ -25,9 +25,7 @@ export default function AtribuicaoSupervisorLista() {
   const [ueSelecionada, setUeSelecionada] = useState([]);
   const [listaFiltroAtribuicao, setListaFiltroAtribuicao] = useState([]);
   const [desabilitarSupervisor, setDesabilitarSupervisor] = useState(false);
-  const [desabilitarUe, setDesabilitarUe] = useState(false);
   const [tipoResponsavel, setTipoResponsavel] = useState();
-  const [codigoTipoResponsavel, setCodigoTipoResponsavel] = useState();
   const [listaTipoResponsavel, setListaTipoResponsavel] = useState([]);
   const [carregandoResponsavel, setCarregandoResponsavel] = useState(false);
   const [carregandoLista, setCarregandoLista] = useState(false);
@@ -45,8 +43,6 @@ export default function AtribuicaoSupervisorLista() {
       if (retorno.data.length === 1) {
         const dre = retorno.data[0].codigo;
         setDresSelecionadas(dre);
-        carregarUes(dre);
-        consultarApi(dre,tipoResponsavel,ueSelecionada,supervisoresSelecionados);
       }
 
       setListaDres(retorno.data);
@@ -54,7 +50,7 @@ export default function AtribuicaoSupervisorLista() {
       setListaDres([]);
       setDresSelecionadas();
     }
-  }, []);
+  }, [tipoResponsavel]);
 
   useEffect(() => {
     obterDres();
@@ -73,10 +69,9 @@ export default function AtribuicaoSupervisorLista() {
       setSupervisoresSelecionados([]);
       setUeSelecionada('');
       setDesabilitarSupervisor(false);
-      setDesabilitarUe(false);
       onChangeDre(dresSelecionadas,null,true,tipoResponsavel);
     }
-  }, [uesSemSupervisorCheck]);
+  }, [uesSemSupervisorCheck, tipoResponsavel]);
 
   const columns = [
     {
@@ -163,14 +158,13 @@ export default function AtribuicaoSupervisorLista() {
       setUesSemSupervisorCheck(false);
     }
   }
-  async function montaListaUesSemSup(dre) {
+  const montaListaUesSemSup = useCallback((dre) => {
 
     setSupervisoresSelecionados([]);
     setUeSelecionada('');
     setDesabilitarSupervisor(true);
-    setDesabilitarUe(true);
     consultarApi(dre,tipoResponsavel,ueSelecionada,supervisoresSelecionados);
-  }
+  }, [tipoResponsavel]);
 
   const onChangeDre = useCallback(async (dre, changeUe,chamarApi=true,tipoRes) => {
 
@@ -191,7 +185,7 @@ export default function AtribuicaoSupervisorLista() {
 
     setDresSelecionadas(dre);
     if (dre) {
-      obterResponsaveis(dre,tipoRes);
+      obterResponsaveis(dre,tipoRes || tipoResponsavel);
       carregarUes(dre);
     }
 
@@ -235,17 +229,15 @@ function montarListaAtribuicao(lista) {
 
     setUesSemSupervisorCheck(false);
     if (sup && sup.length) {
-      setDesabilitarUe(true);
       setUeSelecionada([]);
       setSupervisoresSelecionados(sup);
     } else {
       setSupervisoresSelecionados([]);
-      setDesabilitarUe(false);
       setUeSelecionada([]);
       setListaFiltroAtribuicao([]);
       setPaginaAtual(1);
     }
-    consultarApi(dresSelecionadas,codigoTipoResponsavel,ueSelecionada,sup.toString(),uesSemSupervisorCheck);
+    consultarApi(dresSelecionadas,tipoResponsavel,ueSelecionada,sup.toString(),uesSemSupervisorCheck);
   }
 
   async function onChangeUes(ue) {
@@ -278,7 +270,7 @@ function montarListaAtribuicao(lista) {
     await api.get('/v1/supervisores/vinculo-lista', {
       params: {
         dreCodigo: dre,
-        tipoCodigo: codigoTipo,
+        tipoCodigo: codigoTipo || tipoResponsavel,
         ueCodigo: ue,
         supervisorId: supervisor,
         ueSemResponsavel: uesSemSupervisorCheck
@@ -295,12 +287,10 @@ function montarListaAtribuicao(lista) {
     );
 
     if (resposta?.data?.length) {
-      if (resposta?.data?.length === 1) {
-        setTipoResponsavel(resposta.data[0].descricao);
-        setCodigoTipoResponsavel(resposta.data[0].codigo);
-      }
-
       setListaTipoResponsavel(resposta.data);
+      if (resposta?.data?.length === 1) {
+        setTipoResponsavel(resposta.data[0]?.codigo?.toString());
+      }
     } else {
       setListaTipoResponsavel([]);
     }
@@ -311,7 +301,6 @@ function montarListaAtribuicao(lista) {
       obterTipoResponsavel();
     } else {
       setTipoResponsavel();
-      setCodigoTipoResponsavel();
       setListaTipoResponsavel([]);
     }
   }, [dresSelecionadas, obterTipoResponsavel]);
@@ -319,7 +308,7 @@ function montarListaAtribuicao(lista) {
   const obterResponsaveis = useCallback(
     async (dre,tipoResp) => {
 
-      var tipoSelecionado = tipoResp ?? tipoResponsavel;
+      const tipoSelecionado = tipoResp || tipoResponsavel;
 
       if (!dre || !tipoSelecionado) return;
 
