@@ -290,20 +290,19 @@ function montarListaAtribuicao(lista) {
       setListaTipoResponsavel(resposta.data);
       if (resposta?.data?.length === 1) {
         setTipoResponsavel(resposta.data[0]?.codigo?.toString());
+      } else {
+        consultarApi(dresSelecionadas,null,ueSelecionada,supervisoresSelecionados,uesSemSupervisorCheck);
       }
     } else {
       setListaTipoResponsavel([]);
     }
-  }, []);
+  }, [dresSelecionadas, ueSelecionada, supervisoresSelecionados, uesSemSupervisorCheck]);
 
   useEffect(() => {
-    if (dresSelecionadas) {
+    if (dresSelecionadas && !listaTipoResponsavel?.length) {
       obterTipoResponsavel();
-    } else {
-      setTipoResponsavel();
-      setListaTipoResponsavel([]);
     }
-  }, [dresSelecionadas, obterTipoResponsavel]);
+  }, [dresSelecionadas, listaTipoResponsavel, obterTipoResponsavel]);
 
   const obterResponsaveis = useCallback(
     async (dre,tipoResp) => {
