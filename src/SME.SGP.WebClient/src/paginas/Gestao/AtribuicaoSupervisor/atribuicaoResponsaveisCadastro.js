@@ -397,6 +397,7 @@ const AtribuicaoResponsaveisCadastro = () => {
                   valueSelect={dreId}
                   placeholder="Diretoria Regional De Educação (DRE)"
                   showSearch
+                  allowClear={false}
                 />
               </Loader>
             </Col>
