@@ -27,6 +27,7 @@ export default function AtribuicaoSupervisorLista() {
   const [desabilitarSupervisor, setDesabilitarSupervisor] = useState(false);
   const [desabilitarUe, setDesabilitarUe] = useState(false);
   const [tipoResponsavel, setTipoResponsavel] = useState();
+  const [codigoTipoResponsavel, setCodigoTipoResponsavel] = useState();
   const [listaTipoResponsavel, setListaTipoResponsavel] = useState([]);
   const [carregandoResponsavel, setCarregandoResponsavel] = useState(false);
   const [carregandoLista, setCarregandoLista] = useState(false);
@@ -237,7 +238,7 @@ function montarListaAtribuicao(lista) {
       setUeSelecionada([]);
       setListaFiltroAtribuicao([]);
     }
-    consultarApi(dresSelecionadas,tipoResponsavel,ueSelecionada,sup.toString(),uesSemSupervisorCheck);
+    consultarApi(dresSelecionadas,codigoTipoResponsavel,ueSelecionada,sup.toString(),uesSemSupervisorCheck);
   }
 
   async function onChangeUes(ue) {
@@ -289,6 +290,7 @@ function montarListaAtribuicao(lista) {
     if (resposta?.data?.length) {
       if (resposta?.data?.length === 1) {
         setTipoResponsavel(resposta.data[0].descricao);
+        setCodigoTipoResponsavel(resposta.data[0].codigo);
         return;
       }
 
@@ -303,6 +305,7 @@ function montarListaAtribuicao(lista) {
       obterTipoResponsavel();
     } else {
       setTipoResponsavel();
+      setCodigoTipoResponsavel();
       setListaTipoResponsavel([]);
     }
   }, [dresSelecionadas, obterTipoResponsavel]);
