@@ -268,7 +268,7 @@ class ServicoEncaminhamentoAEE {
                 }
                 break;
               default:
-                questao.resposta = JSON.stringify(campos[key] || '');
+                questao.resposta = JSON.parse(JSON.stringify(campos[key] || ''));
                 break;
             }
 
