@@ -272,7 +272,7 @@ class ServicoSalvarConselhoClasse {
       return false;
     }
 
-    if ((nota === null || typeof nota === 'undefined') && !conceito) {
+    if ((nota === null || typeof nota === 'undefined') && !conceito && !justificativa) {
       erro(
         `É obrigatório informar ${ehNota ? 'nota' : 'conceito'} pós-conselho`
       );
