@@ -158,6 +158,7 @@ const ListaAlunos = props => {
                       <th className="col-linha-quatro" colSpan="2">
                         Nome
                       </th>
+                      <th className="col-linha-dois">Aulas</th>
                       <th className="col-linha-dois">Ausências</th>
                       {!ehTurmaInfantil(
                         modalidadesFiltroPrincipal,
@@ -229,6 +230,16 @@ const ListaAlunos = props => {
                                   : `solid 1px ${Base.CinzaDesabilitado}`,
                               }}
                             >
+                              {data.totalAulas}
+                            </td>
+                            <td
+                              className="col-valor-linha-dois"
+                              style={{
+                                borderRight: data?.marcadorFrequencia
+                                  ? `solid 1px ${Base.CinzaBotao}`
+                                  : `solid 1px ${Base.CinzaDesabilitado}`,
+                              }}
+                            >
                               {data.ausencias}
                             </td>
                             {!ehTurmaInfantil(
@@ -270,7 +281,7 @@ const ListaAlunos = props => {
                             </td>
                             <td className="col-valor-linha-dois">
                               {data?.frequencia ? `${data.frequencia}%` : ''}
-                              {data.ausencias > 0 &&
+                              {data?.totalAulas > 0 &&
                                 bimestreSelecionado > 0 && (
                                   <BtnExpandirAusenciaEstudante
                                     indexLinha={index}

@@ -87,8 +87,9 @@ const CollapseAtribuicaoResponsavelDados = props => {
             url={url}
             valorInicial={{
               codigoRF: dadosCollapseAtribuicaoResponsavel?.codigoRF,
+              nomeServidor: dadosCollapseAtribuicaoResponsavel?.nomeServidor,
             }}
-            desabilitado={!!dadosCollapseAtribuicaoResponsavel?.codigoRF}
+            desabilitado={!!dadosCollapseAtribuicaoResponsavel?.podeEditar}
           />
         </div>
       </div>
