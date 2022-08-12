@@ -89,11 +89,13 @@ const MarcadorParecerConclusivo = () => {
             </LabelParecer>
           )}
           {exibirIconeSincronizar && (
-            <IconeEstilizado
-              icon={faSyncAlt}
-              onClick={sincronizar}
-              sincronizando={sincronizando}
-            />
+            <Tooltip title="Gerar Parecer Conclusivo">
+              <IconeEstilizado
+                icon={faSyncAlt}
+                onClick={sincronizar}
+                sincronizando={sincronizando}
+              />
+            </Tooltip>
           )}
         </div>
       ) : (

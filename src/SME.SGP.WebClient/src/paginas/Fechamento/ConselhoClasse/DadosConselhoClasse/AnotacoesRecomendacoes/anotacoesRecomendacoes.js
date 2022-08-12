@@ -139,22 +139,6 @@ const AnotacoesRecomendacoes = props => {
     [dispatch]
   );
 
-  const setarListaRecomendacoes = useCallback(
-    recomendacoes => {
-      const params = {
-        listaRecomendacoesAluno: recomendacoes.filter(
-          item => item.tipo === conselhoClasseRecomendacaoTipo.Aluno
-        ),
-        listaRecomendacoesFamilia: recomendacoes.filter(
-          item => item.tipo === conselhoClasseRecomendacaoTipo.Familia
-        ),
-      };
-
-      dispatch(setListaoRecomendacoesAlunoFamilia(params));
-    },
-    [dispatch]
-  );
-
   const setarListaRecomendacoesSalvas = useCallback(
     recomendacoesAlunoFamilia => {
       const listaRecomendacoesAluno = recomendacoesAlunoFamilia?.filter(
@@ -218,19 +202,15 @@ const AnotacoesRecomendacoes = props => {
     ).catch(e => erros(e));
 
     if (resposta && resposta.data) {
-      const retornoRecomendacoes = await ServicoConselhoClasse.obterListaAnotacoesRecomendacoes().catch(
-        e => erros(e)
+      await ServicoConselhoClasse.obterListaAnotacoesRecomendacoes().catch(e =>
+        erros(e)
       );
-
-      if (retornoRecomendacoes?.data) {
-        setarListaRecomendacoes(retornoRecomendacoes.data);
-      }
 
       if (resposta?.data?.recomendacoesAlunoFamilia?.length) {
         setarListaRecomendacoesSalvas(resposta.data.recomendacoesAlunoFamilia);
       } else {
         dispatch(setRecomendacaoAlunoSelecionados([]));
-        dispatch(setRecomendacaoFamiliaSelecionados([]));        
+        dispatch(setRecomendacaoFamiliaSelecionados([]));
       }
 
       setMatriculaAtivaPeriodo(resposta.data.matriculaAtiva);
