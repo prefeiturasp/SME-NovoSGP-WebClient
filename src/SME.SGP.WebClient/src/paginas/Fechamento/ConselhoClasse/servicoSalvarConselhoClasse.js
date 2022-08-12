@@ -12,7 +12,8 @@ import {
   setExibirLoaderGeralConselhoClasse,
   setBimestreAtual,
   setDadosIniciaisListasNotasConceitos,
-  setAuditoriaAnotacaoRecomendacao
+  setAuditoriaAnotacaoRecomendacao,
+  setDadosListasNotasConceitos,
 } from '~/redux/modulos/conselhoClasse/actions';
 import notasConceitos from '~/dtos/notasConceitos';
 
@@ -375,6 +376,7 @@ class ServicoSalvarConselhoClasse {
       notaConceitoPosConselhoAtual,
       dadosPrincipaisConselhoClasse,
       desabilitarCampos,
+      dadosIniciaisListasNotasConceitos,
     } = conselhoClasse;
 
     if (desabilitarCampos) {
@@ -403,6 +405,8 @@ class ServicoSalvarConselhoClasse {
       // Voltar para a tela continua e executa a ação!
       if (descartarRegistros) {
         limparDadosNotaPosConselhoJustificativa();
+        const dadosCarregar = _.cloneDeep(dadosIniciaisListasNotasConceitos);
+        dispatch(setDadosListasNotasConceitos([...dadosCarregar]));
         return true;
       }
 
