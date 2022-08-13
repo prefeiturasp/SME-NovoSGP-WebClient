@@ -10,7 +10,6 @@ import {
   setAlunosConselhoClasse,
   setPodeAcessar,
   setDadosAlunoObjectCard,
-  setDadosBimestresConselhoClasse,
   setExibirLoaderGeralConselhoClasse,
   setDadosPrincipaisConselhoClasse,
 } from '~/redux/modulos/conselhoClasse/actions';
@@ -63,19 +62,6 @@ const ConselhoClasse = () => {
     dispatch(setExibirLoaderGeralConselhoClasse(false));
   }, [anoLetivo, dispatch, turma, periodo]);
 
-  const obterDadosBimestresConselhoClasse = useCallback(async () => {
-    dispatch(setExibirLoaderGeralConselhoClasse(true));
-    const retorno = await ServicoConselhoClasse.obterDadosBimestres(
-      turmaSelecionada.id
-    )
-      .catch(e => erros(e))
-      .finally(() => setExibirLoaderGeralConselhoClasse(false));
-    if (retorno && retorno.data) {
-      dispatch(setDadosBimestresConselhoClasse(retorno.data));
-      obterListaAlunos();
-    }
-  }, [dispatch, turmaSelecionada, obterListaAlunos]);
-
   const resetarInfomacoes = useCallback(() => {
     dispatch(limparDadosConselhoClasse());
   }, [dispatch]);
@@ -99,7 +85,7 @@ const ConselhoClasse = () => {
       turmaSelecionada.turma === turmaAtual &&
       !ehTurmaInfantil(modalidadesFiltroPrincipal, turmaSelecionada)
     ) {
-      obterDadosBimestresConselhoClasse();
+      obterListaAlunos();
     }
   }, [turmaAtual, turmaSelecionada]);
 
