@@ -1,33 +1,32 @@
 import axios from 'axios';
 
-const urlBase = () =>
-  axios
-    .get('/../../../configuracoes/variaveis.json')
-    .then(response => {
-      return response.data.API_URL;
-    })
-    .catch(() => {
-      window.location.href = '/erro';
-    });
+const URL = '/../../../configuracoes/variaveis.json';
+
+let promiseObterVariaveis;
+
+const obterVariaveis = () => axios.get(URL).then(resp => resp);
+
+const configVariaveis = async () => {
+  if (!promiseObterVariaveis) {
+    promiseObterVariaveis = obterVariaveis()
+      .then(resposta => {
+        promiseObterVariaveis = null;
+        return resposta?.data;
+      })
+      .catch(() => {
+        window.location.href = '/erro';
+      });
+  }
+
+  return promiseObterVariaveis.then(dados => dados);
+};
+
+const urlBase = () => configVariaveis().then(response => response?.API_URL);
 
 const obterTrackingID = () =>
-  axios
-    .get('/../../../configuracoes/variaveis.json')
-    .then(response => {
-      return response.data.TRACKING_ID;
-    })
-    .catch(() => {
-      window.location.href = '/erro';
-    });
+  configVariaveis().then(response => response?.TRACKING_ID);
 
 const obterUrlSondagem = () =>
-  axios
-    .get('/../../../configuracoes/variaveis.json')
-    .then(response => {
-      return response.data.URL_SONDAGEM;
-    })
-    .catch(() => {
-      window.location.href = '/erro';
-    });
+  configVariaveis().then(response => response?.URL_SONDAGEM);
 
 export { urlBase, obterTrackingID, obterUrlSondagem };
