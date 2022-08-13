@@ -16,10 +16,6 @@ const BotaoGerarRelatorioConselhoClasseTurma = () => {
 
   const dispatch = useDispatch();
 
-  const dadosBimestresConselhoClasse = useSelector(
-    store => store.conselhoClasse.dadosBimestresConselhoClasse
-  );
-
   const obterDadosBimestresConselhoClasse = useCallback(async () => {
     let dados = [];
     if (turmaSelecionada?.id) {
@@ -33,23 +29,23 @@ const BotaoGerarRelatorioConselhoClasseTurma = () => {
       if (retorno?.data?.length) {
         dispatch(setDadosBimestresConselhoClasse([...retorno.data]));
         dados = retorno.data;
+      } else {
+        dispatch(setDadosBimestresConselhoClasse([]));
       }
+    } else {
+      dispatch(setDadosBimestresConselhoClasse([]));
     }
     return dados;
   }, [dispatch, turmaSelecionada]);
 
   const onClickImprimir = async () => {
-    if (dadosBimestresConselhoClasse?.length) {
+    const retorno = await obterDadosBimestresConselhoClasse();
+    if (retorno?.length) {
       dispatch(setExibirModalImpressaoConselhoClasse(true));
     } else {
-      const retorno = await obterDadosBimestresConselhoClasse();
-      if (retorno?.length) {
-        dispatch(setExibirModalImpressaoConselhoClasse(true));
-      } else {
-        erro(
-          'Não foi encontrado nenhum registro de conselho de classe para a turma selecionada.'
-        );
-      }
+      erro(
+        'Não foi encontrado nenhum registro de conselho de classe para a turma selecionada.'
+      );
     }
   };
 
