@@ -71,7 +71,7 @@ const ConselhoClasse = () => {
       turmaSelecionada.id
     )
       .catch(e => erros(e))
-      .finally(() => setExibirLoaderGeralConselhoClasse(false));
+      .finally(() => dispatch(setExibirLoaderGeralConselhoClasse(false)));
     if (retorno && retorno.data) {
       dispatch(setDadosBimestresConselhoClasse(retorno.data));
       obterListaAlunos();
@@ -155,7 +155,7 @@ const ConselhoClasse = () => {
           conselhoClasseAlunoId,
           alunoCodigo: codigoEOL,
           ...dadosPrincipaisConselhoClasse,
-        tipoNota      
+        tipoNota
       };
         if (!Object.keys(dadosPrincipaisConselhoClasse).length) {
           dispatch(setDadosPrincipaisConselhoClasse(valores));
