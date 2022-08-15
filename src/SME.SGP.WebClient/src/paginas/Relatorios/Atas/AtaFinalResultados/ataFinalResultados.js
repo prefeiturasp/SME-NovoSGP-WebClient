@@ -383,6 +383,7 @@ const AtaFinalResultados = () => {
         anoLetivo,
         tipoFormatoRelatorio: formato,
         visualizacao,
+        semestre: semestre,
       };
       if (turmaId.find(t => t === OPCAO_TODOS)) {
         params.turmasCodigos = listaTurmas.map(item => String(item.valor));
