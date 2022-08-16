@@ -120,3 +120,10 @@ export function setRecarregarFiltroPrincipal(recarregar) {
     payload: recarregar,
   };
 }
+
+export function setLoginAcessoAdmin(recarregar) {
+  return {
+    type: '@usuario/setLoginAcessoAdmin',
+    payload: recarregar,
+  };
+}

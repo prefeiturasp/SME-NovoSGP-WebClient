@@ -273,7 +273,7 @@ const salvarFechamentoListao = async (
       if (dadosNotaConceito.modoEdicao) {
         notaConceitoAlunos.push({
           codigoAluno: aluno.codigoAluno,
-          nota: ehNota ? dadosNotaConceito.notaConceito || null : null,
+          nota: ehNota ? dadosNotaConceito.notaConceito ?? null : null,
           conceitoId: !ehNota ? dadosNotaConceito.notaConceito || null : null,
           disciplinaId:
             dadosNotaConceito.disciplinaCodigo ||

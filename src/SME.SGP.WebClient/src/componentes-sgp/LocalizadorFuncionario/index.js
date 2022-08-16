@@ -43,26 +43,29 @@ const LocalizadorFuncionario = props => {
     setDataSource([]);
   }, [codigoDre, codigoUe, codigoTurma]);
 
-  const limparDados = useCallback(() => {
-    onChange();
-    setDataSource([]);
-    setFuncionarioSelecionado({
-      nomeServidor: '',
-      codigoRF: '',
-      usuarioId: null,
-    });
-    setTimeout(() => {
-      setDesabilitarCampo(() => ({
-        codigoRF: false,
-        nomeServidor: false,
-      }));
-    }, 200);
-  }, [onChange]);
+  const limparDados = useCallback(
+    isOnChangeManual => {
+      onChange(null, isOnChangeManual);
+      setDataSource([]);
+      setFuncionarioSelecionado({
+        nomeServidor: '',
+        codigoRF: '',
+        usuarioId: null,
+      });
+      setTimeout(() => {
+        setDesabilitarCampo(() => ({
+          codigoRF: false,
+          nomeServidor: false,
+        }));
+      }, 200);
+    },
+    [onChange]
+  );
 
-  const onChangeNome = async valor => {
+  const onChangeNome = async (valor, isOnChangeManual) => {
     valor = removerNumeros(valor);
     if (valor.length === 0) {
-      limparDados();
+      limparDados(isOnChangeManual);
       return;
     }
 
@@ -88,7 +91,7 @@ const LocalizadorFuncionario = props => {
     )
       .catch(e => {
         erros(e);
-        limparDados();
+        limparDados(isOnChangeManual);
       })
       .finally(() => setExibirLoader(false));
 
@@ -115,9 +118,9 @@ const LocalizadorFuncionario = props => {
   };
 
   const onBuscarPorCodigo = useCallback(
-    async valor => {
+    async (valor, isOnChangeManual) => {
       if (!valor) {
-        limparDados();
+        limparDados(isOnChangeManual);
         return;
       }
       const params = {
@@ -145,7 +148,7 @@ const LocalizadorFuncionario = props => {
           } else {
             erros(e);
           }
-          limparDados();
+          limparDados(isOnChangeManual);
         })
         .finally(() => setExibirLoader(false));
 
@@ -169,9 +172,9 @@ const LocalizadorFuncionario = props => {
           ...estado,
           nomeServidor: true,
         }));
-        onChange(funcionarioRetorno);
+        onChange(funcionarioRetorno, isOnChangeManual);
         if (limparCamposAposPesquisa) {
-          limparDados();
+          limparDados(isOnChangeManual);
         }
       } else {
         if (!mensagemErroConsultaRF) {
@@ -192,13 +195,13 @@ const LocalizadorFuncionario = props => {
   );
 
   const validaAntesBuscarPorCodigo = useCallback(
-    valor => {
+    (valor, isOnChangeManual) => {
       if (timeoutBuscarPorCodigoNome) {
         clearTimeout(timeoutBuscarPorCodigoNome);
       }
 
       const timeout = setTimeout(() => {
-        onBuscarPorCodigo(valor);
+        onBuscarPorCodigo(valor, isOnChangeManual);
       }, 500);
 
       setTimeoutBuscarPorCodigoNome(timeout);
@@ -206,38 +209,38 @@ const LocalizadorFuncionario = props => {
     [onBuscarPorCodigo, timeoutBuscarPorCodigoNome]
   );
 
-  const validaAntesBuscarPorNome = valor => {
+  const validaAntesBuscarPorNome = (valor, isOnChangeManual) => {
     if (timeoutBuscarPorCodigoNome) {
       clearTimeout(timeoutBuscarPorCodigoNome);
     }
 
     const timeout = setTimeout(() => {
-      onChangeNome(valor);
+      onChangeNome(valor, isOnChangeManual);
     }, 500);
 
     setTimeoutBuscarPorCodigoNome(timeout);
   };
 
-  const onChangeCodigo = valor => {
+  const onChangeCodigo = (valor, isOnChangeManual) => {
     if (valor.length === 0) {
-      limparDados();
+      limparDados(isOnChangeManual);
     }
   };
 
-  const onSelectFuncionario = objeto => {
+  const onSelectFuncionario = (objeto, isOnChangeManual) => {
     const funcionario = {
       codigoRF: objeto.key,
       nomeServidor: objeto.props.value,
       usuarioId: objeto.props.usuarioId,
     };
     setFuncionarioSelecionado(funcionario);
-    onChange(funcionario);
+    onChange(funcionario, isOnChangeManual);
     setDesabilitarCampo(estado => ({
       ...estado,
       codigoRF: true,
     }));
     if (limparCamposAposPesquisa) {
-      limparDados();
+      limparDados(isOnChangeManual);
     }
   };
 
@@ -248,13 +251,20 @@ const LocalizadorFuncionario = props => {
       !funcionarioSelecionado?.codigoRF &&
       !dataSource?.length
     ) {
-      validaAntesBuscarPorCodigo(valorInicial.codigoRF);
+      if (valorInicial?.nomeServidor) {
+        setFuncionarioSelecionado({
+          codigoRF: valorInicial?.codigoRF,
+          nomeServidor: valorInicial?.nomeServidor,
+        });
+      } else {
+        validaAntesBuscarPorCodigo(valorInicial.codigoRF);
+      }
     }
   }, [valorInicial, dataSource, funcionarioSelecionado]);
 
   useEffect(() => {
     if (limparCampos) {
-      limparDados();
+      limparDados(true);
     }
   }, [limparCampos, limparDados]);
 
@@ -269,8 +279,8 @@ const LocalizadorFuncionario = props => {
         <InputNome
           placeholder={placeholder}
           dataSource={dataSource}
-          onSelect={onSelectFuncionario}
-          onChange={validaAntesBuscarPorNome}
+          onSelect={valor => onSelectFuncionario(valor, true)}
+          onChange={valor => validaAntesBuscarPorNome(valor, true)}
           funcionarioSelecionado={funcionarioSelecionado}
           name="nomeServidor"
           desabilitado={desabilitado || desabilitarCampo.nomeServidor}
@@ -283,10 +293,10 @@ const LocalizadorFuncionario = props => {
           <Label text="RF" />
           <InputCodigo
             funcionarioSelecionado={funcionarioSelecionado}
-            onSelect={validaAntesBuscarPorCodigo}
-            onChange={onChangeCodigo}
+            onSelect={valor => validaAntesBuscarPorCodigo(valor, true)}
+            onChange={valor => onChangeCodigo(valor, true)}
             name="codigoRF"
-            desabilitado={desabilitado || desabilitarCampo.codigoRF}
+            desabilitado={desabilitado}
             exibirLoader={exibirLoader}
           />
         </div>

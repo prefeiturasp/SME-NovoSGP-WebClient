@@ -284,6 +284,20 @@ rotas.set(
   }
 );
 
+rotas.set(
+  `${RotasDto.ATRIBUICAO_RESPONSAVEIS}/:dreId/:supervisorId/:tipoResponsavel/:codigoUe`,
+  {
+    breadcrumbName: 'Atribuição de responsáveis',
+    parent: RotasDto.ATRIBUICAO_RESPONSAVEIS_LISTA,
+    component: AtribuicaoResponsaveisCadastro,
+    exact: true,
+    tipo: RotasTipo.EstruturadaAutenticada,
+    temPermissionamento: true,
+    chavePermissao: RotasDto.ATRIBUICAO_RESPONSAVEIS_LISTA,
+  }
+);
+
+
 rotas.set(`${RotasDto.ATRIBUICAO_RESPONSAVEIS}/:dreId/:tipoResponsavel`, {
   breadcrumbName: 'Atribuição de responsáveis',
   parent: RotasDto.ATRIBUICAO_RESPONSAVEIS_LISTA,

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Formik, Form } from 'formik';
-import { ModalConteudoHtml, RadioGroupButton, Loader } from '~/componentes';
+import { ModalConteudoHtml, Loader } from '~/componentes';
 
 function AlterarAula({
     visivel,
@@ -11,7 +11,6 @@ function AlterarAula({
     onFecharModal,
     onCancelar,
 }) {
-
     const tipoRecorrencia = {
         AULA_UNICA: 1,
         REPETIR_BIMESTRE_ATUAL: 2,
@@ -27,9 +26,7 @@ function AlterarAula({
     };
 
     useEffect(() => {
-        if (visivel) {
-
-        }
+        setCarregando(false);
     }, [visivel]);
 
     return (

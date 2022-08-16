@@ -2,7 +2,7 @@ import api from '../api';
 import { store } from '~/redux';
 import { perfilSelecionado, setarPerfis } from '~/redux/modulos/perfil/actions';
 import { limparDadosFiltro } from '~/redux/modulos/filtro/actions';
-import { Deslogar } from '~/redux/modulos/usuario/actions';
+import { Deslogar, removerTurma } from '~/redux/modulos/usuario/actions';
 
 class LoginService {
   autenticar = async (Login, acessoAdmin, deslogar) => {
@@ -50,9 +50,11 @@ class LoginService {
           };
         });
 
-    if (acessoAdmin) {
+    if (acessoAdmin || deslogar) {
+      localStorage.clear();
       store.dispatch(limparDadosFiltro());
       store.dispatch(Deslogar());
+      store.dispatch(removerTurma());
       return new Promise(resolve => {
         setTimeout(async () => {
           resolve(validarAutenticar());

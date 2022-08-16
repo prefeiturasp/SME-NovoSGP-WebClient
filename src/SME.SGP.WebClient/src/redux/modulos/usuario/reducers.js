@@ -4,6 +4,7 @@ const inicial = {
   rf: '',
   token: '',
   acessoAdmin: undefined,
+  administradorSuporte: {},
   usuario: '',
   dataLogin: null,
   logado: false,
@@ -41,7 +42,6 @@ export default function usuario(state = inicial, action) {
         break;
       case '@usuario/salvarLogin':
         draft.rf = action.payload.rf.trim();
-        draft.acessoAdmin = action.payload.acessoAdmin;
         draft.token = action.payload.token;
         draft.dataLogin = new Date();
         draft.logado = true;
@@ -113,6 +113,10 @@ export default function usuario(state = inicial, action) {
         break;
       case '@usuario/setRecarregarFiltroPrincipal':
         draft.recarregarFiltroPrincipal = action.payload;
+        break;
+      case '@usuario/setLoginAcessoAdmin':
+        draft.acessoAdmin = action.payload.acessoAdmin;
+        draft.administradorSuporte = action.payload.administradorSuporte;
         break;
       default:
         break;

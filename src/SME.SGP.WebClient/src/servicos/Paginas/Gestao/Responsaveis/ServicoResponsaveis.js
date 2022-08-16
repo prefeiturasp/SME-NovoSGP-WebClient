@@ -8,15 +8,24 @@ class ServicoResponsaveis {
 
   salvarAtribuicao = dados => api.post(`${URL_PADRAO}/atribuir-ue`, dados);
 
-  obterResponsaveis = (dre, tipoResponsavelAtribuicao) =>
-    api.get(
-      `${URL_PADRAO}/dre/${dre}?tipoResponsavelAtribuicao=${tipoResponsavelAtribuicao}`
-    );
+  obterResponsaveis = async (dre, tipoResponsavelAtribuicao) =>{
+    if(tipoResponsavelAtribuicao){
+      return await api.get(
+        `${URL_PADRAO}/dre/${dre}?tipoResponsavelAtribuicao=${tipoResponsavelAtribuicao}`
+      );
+    }else{
+      return await api.get(
+        `${URL_PADRAO}/dre/${dre}`
+      );
+    }
+  };
 
-  obterUesSemAtribuicao = dre => api.get(`v1/dres/${dre}/ues/sem-atribuicao`);
+  obterUesSemAtribuicao = async (dre,responsavel) => {
+    return api.get(`v1/dres/${dre}/ues/sem-atribuicao/${responsavel}`);
+  }
 
-  obterUesAtribuidas = (responsavel, dre) =>
-    api.get(`${URL_PADRAO}/${responsavel}/dre/${dre}`);
+  obterUesAtribuidas = (responsavel, dre,tipoResponsavel) =>
+    api.get(`${URL_PADRAO}/${responsavel}/dre/${dre}/${tipoResponsavel}`);
 }
 
 export default new ServicoResponsaveis();

@@ -108,10 +108,6 @@ export default function ConselhoClasse(state = inicial, action) {
           exibirModalImpressaoConselhoClasse: false,
           exibirLoaderGeralConselhoClasse: false,
           podeAcessar: true,
-          listaoRecomendacoesAlunoFamilia: {
-            listaRecomendacoesAluno: [],
-            listaRecomendacoesFamilia: [],
-          },
           recomendacaoFamiliaSelecionados: [],
           recomendacaoAlunoSelecionados: [],
         };

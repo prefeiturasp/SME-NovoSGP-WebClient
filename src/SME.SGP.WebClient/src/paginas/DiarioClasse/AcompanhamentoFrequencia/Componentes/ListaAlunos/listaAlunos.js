@@ -281,7 +281,7 @@ const ListaAlunos = props => {
                             </td>
                             <td className="col-valor-linha-dois">
                               {data?.frequencia ? `${data.frequencia}%` : ''}
-                              {data.ausencias > 0 &&
+                              {data?.totalAulas > 0 &&
                                 bimestreSelecionado > 0 && (
                                   <BtnExpandirAusenciaEstudante
                                     indexLinha={index}

@@ -153,6 +153,7 @@ export const MenuScope = styled.div`
   width: 100%;
   overflow-y: auto;
   height: calc(100vh - 270px);
+  background: ${Base.Roxo};
 
   ::-webkit-scrollbar {
     width: 10px;
