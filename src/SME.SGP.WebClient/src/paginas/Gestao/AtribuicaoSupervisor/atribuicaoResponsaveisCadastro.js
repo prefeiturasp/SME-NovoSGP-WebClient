@@ -18,7 +18,7 @@ import {
   erros,
   history,
   setBreadcrumbManual,
-  sucesso,
+  sucesso,erro,
   verificaSomenteConsulta,
 } from '~/servicos';
 import ServicoResponsaveis from '~/servicos/Paginas/Gestao/Responsaveis/ServicoResponsaveis';
@@ -42,6 +42,7 @@ const AtribuicaoResponsaveisCadastro = () => {
   );
 
   const [responsavel, setResponsavel] = useState();
+  const [codigoUeSelecionadoGrid, setCodigoUeSelecionadoGrid] = useState("0");
   const [listaResponsavel, setListaResponsavel] = useState([]);
   const [carregandoResponsavel, setCarregandoResponsavel] = useState(false);
 
@@ -52,6 +53,7 @@ const AtribuicaoResponsaveisCadastro = () => {
   const [modoEdicao, setModoEdicao] = useState(false);
 
   const [auditoria, setAuditoria] = useState({});
+
 
   useEffect(() => {
     verificaSomenteConsulta(permissoesTela);
@@ -75,23 +77,31 @@ const AtribuicaoResponsaveisCadastro = () => {
       setDreId();
     }
     setListaResponsavel([]);
-    setResponsavel();
+    setUesAtribuidas([]);
+    setResponsavel("");
+    setCodigoUeSelecionadoGrid("0");
     setModoEdicao(false);
   };
 
-  const salvarAtribuicao = () => {
+  const salvarAtribuicao = async () => {
     const atribuicao = {
       dreId,
-      supervisorId: responsavel,
+      responsavelId: responsavel,
       uesIds: uesAtribuidas?.map?.(item => item?.codigo) || [],
       tipoResponsavelAtribuicao: tipoResponsavel,
     };
     ServicoResponsaveis.salvarAtribuicao(atribuicao)
-      .then(() => {
+      .then(result => {
         sucesso('Atribuição realizada com sucesso.');
         history.push(RotasDto.ATRIBUICAO_RESPONSAVEIS_LISTA);
       })
-      .catch(e => erros(e));
+      .catch(e => {
+        if(e.response.status === 601){
+          erro(e.response.data.mensagem);
+        }else{
+         erros(e);
+        }
+      });
   };
 
   const onClickVoltar = async () => {
@@ -131,7 +141,9 @@ const AtribuicaoResponsaveisCadastro = () => {
     setListaResponsavel([]);
     setResponsavel();
     setTipoResponsavel();
+    setCodigoUeSelecionadoGrid("0");
     setDreId(valor);
+    setUesAtribuidas([]);
   };
 
   const obterDres = useCallback(async () => {
@@ -159,8 +171,6 @@ const AtribuicaoResponsaveisCadastro = () => {
   }, [obterDres]);
 
   const onChangeTipoResponsavel = valor => {
-    setResponsavel();
-    setListaResponsavel([]);
     setTipoResponsavel(valor);
   };
 
@@ -171,33 +181,46 @@ const AtribuicaoResponsaveisCadastro = () => {
       .finally(() => setCarregandoTipoResponsavel(false));
 
     if (resposta?.data?.length) {
+      setListaTipoResponsavel(resposta.data);
       if (resposta?.data?.length === 1) {
-        setTipoResponsavel(resposta.data[0].descricao);
+        setTipoResponsavel(resposta.data[0]?.codigo?.toString());
       } else if (routeMatch.params?.tipoResponsavel) {
         setTipoResponsavel(routeMatch.params.tipoResponsavel);
+        setCodigoUeSelecionadoGrid(routeMatch.params?.codigoUe);
       }
-
-      setListaTipoResponsavel(resposta.data);
     } else {
       setListaTipoResponsavel([]);
     }
   }, [routeMatch]);
-
   useEffect(() => {
     if (dreId) {
-      obterTipoResponsavel();
+      if(dreId && responsavel != undefined){
+        obterListaUES();
+      }
     } else {
       setTipoResponsavel();
+      setResponsavel();
       setListaTipoResponsavel([]);
     }
-  }, [dreId, obterTipoResponsavel]);
+  }, [dreId]);
+
+  useEffect(() => {
+    obterTipoResponsavel();
+  }, [obterTipoResponsavel]);
 
   const onChangeResponsavel = valor => {
     setResponsavel(valor);
   };
 
   const obterResponsaveis = useCallback(async () => {
+    setResponsavel(undefined);
     setCarregandoResponsavel(true);
+    setListaResponsavel([]);
+    if(tipoResponsavel ==undefined){
+      setListaResponsavel([]);
+      setCarregandoResponsavel(false);
+      return;
+    }
     const resposta = await ServicoResponsaveis.obterResponsaveis(
       dreId,
       tipoResponsavel
@@ -216,40 +239,46 @@ const AtribuicaoResponsaveisCadastro = () => {
       if (lista?.length === 1) {
         setResponsavel(lista[0].supervisorId);
       } else if (routeMatch.params?.supervisorId) {
-        setResponsavel(routeMatch.params.supervisorId);
+        if(routeMatch.params.supervisorId > 0 && routeMatch.params.tipoResponsavel == tipoResponsavel)
+           setResponsavel(routeMatch.params.supervisorId);
       }
       setListaResponsavel(lista);
     } else {
       setListaResponsavel([]);
     }
+    setCarregandoResponsavel(false);
+
   }, [dreId, tipoResponsavel, routeMatch]);
 
   useEffect(() => {
-    if (tipoResponsavel && dreId) {
+    if (dreId && tipoResponsavel != undefined) {
       obterResponsaveis();
     } else {
       setResponsavel();
       setListaResponsavel([]);
+      setUesAtribuidas([]);
     }
   }, [dreId, tipoResponsavel, obterResponsaveis]);
 
-  const obterListaUesAtribuidas = useCallback(async () => {
+  const obterListaUesAtribuidas = useCallback(async (tipoRes) => {
+    if(responsavel == undefined)
+      return;
     const resposta = await ServicoResponsaveis.obterUesAtribuidas(
       responsavel,
-      dreId
+      dreId,
+      tipoRes
     ).catch(e => erros(e));
 
     if (resposta?.data?.[0]?.criadoEm) {
       let lista = [];
 
-      if (resposta.data[0].escolas?.length) {
-        lista = resposta.data[0].escolas.map(item => {
+      if (resposta.data?.length) {
+        lista = resposta.data.map(item => {
           return { ...item, id: item.codigo };
         });
       } else {
         setUesAtribuidas([]);
       }
-
       setAuditoria({
         criadoPor: resposta.data[0].criadoPor,
         criadoEm: resposta.data[0].criadoEm,
@@ -266,10 +295,16 @@ const AtribuicaoResponsaveisCadastro = () => {
     return true;
   }, [dreId, responsavel]);
 
-  const obterListaUES = useCallback(async () => {
+  const obterListaUES = useCallback(async (tipoResp) => {
     setCarregandoUes(true);
+    if(dreId && !tipoResp){
+      setCarregandoUes(false);
+      return false;
+    }
+
     const resposta = await ServicoResponsaveis.obterUesSemAtribuicao(
-      dreId
+      dreId,
+      tipoResponsavel
     ).catch(e => erros(e));
 
     if (resposta?.data?.length) {
@@ -280,21 +315,30 @@ const AtribuicaoResponsaveisCadastro = () => {
     } else {
       setUesSemAtribuicao([]);
     }
-    if (dreId && responsavel) {
-      await obterListaUesAtribuidas();
+    if (dreId && tipoResponsavel) {
+      await obterListaUesAtribuidas(tipoResponsavel);
     }
 
     setCarregandoUes(false);
   }, [dreId, responsavel, obterListaUesAtribuidas]);
 
   useEffect(() => {
-    if (dreId && responsavel) {
-      obterListaUES();
+    if (dreId && responsavel != undefined) {
+      obterListaUES(tipoResponsavel);
     } else {
       setUesSemAtribuicao([]);
+      setResponsavel();
       setUesAtribuidas([]);
     }
   }, [dreId, responsavel, obterListaUES]);
+
+  useEffect(() => {
+    if (!responsavel) setAuditoria({});
+  }, [responsavel]);
+
+  useEffect(() => {
+    if (!responsavel) setAuditoria({});
+  }, [responsavel]);
 
   return (
     <>
@@ -353,6 +397,7 @@ const AtribuicaoResponsaveisCadastro = () => {
                   valueSelect={dreId}
                   placeholder="Diretoria Regional De Educação (DRE)"
                   showSearch
+                  allowClear={false}
                 />
               </Loader>
             </Col>
@@ -366,7 +411,7 @@ const AtribuicaoResponsaveisCadastro = () => {
                   valueText="descricao"
                   disabled={
                     !dreId ||
-                    listaTipoResponsavel?.length === 1 ||
+                    (tipoResponsavel && listaTipoResponsavel?.length === 1) ||
                     !permissoesTela.podeConsultar
                   }
                   onChange={onChangeTipoResponsavel}
@@ -386,8 +431,8 @@ const AtribuicaoResponsaveisCadastro = () => {
                   valueText="descricaoCodigo"
                   disabled={
                     !dreId ||
-                    !tipoResponsavel ||
-                    listaResponsavel?.length === 1 ||
+                     !tipoResponsavel ||
+                     listaResponsavel?.length === 1 ||
                     !permissoesTela.podeConsultar
                   }
                   onChange={onChangeResponsavel}
@@ -400,14 +445,13 @@ const AtribuicaoResponsaveisCadastro = () => {
             <Col sm={24}>
               <Loader loading={carregandoUes} ignorarTip>
                 <ListaTransferenciaResponsaveis
+                  ueSelecionaGrid = {codigoUeSelecionadoGrid}
+                  temResponsavel = {responsavel != undefined}
                   podeConsultar={permissoesTela.podeConsultar}
                   dadosEsquerda={
                     !carregandoUes
                       ? uesSemAtribuicao?.length
-                        ? uesSemAtribuicao.filter(
-                            item =>
-                              !uesAtribuidas?.find?.(a => a?.id === item?.id)
-                          )
+                      ? uesSemAtribuicao
                         : []
                       : []
                   }

@@ -1,23 +1,30 @@
 import React from 'react';
-import PropTypes from 'prop-types';
-import styled from 'styled-components';
 import { useDispatch } from 'react-redux';
-import { Base, Active, Hover } from './colors';
 import { removerAlerta } from '../redux/modulos/alertas/actions';
+import { MessageClick } from './alert.css';
 
 const Alert = props => {
-  const { tipo, id, mensagem, estiloTitulo } = props.alerta;
-  const { closable } = props;
-  const { className } = props;
+  const {
+    tipo,
+    id,
+    mensagem,
+    estiloTitulo,
+    mensagemClick,
+    marginBottom,
+  } = props.alerta;
+  const { closable, className, onClickMessage } = props;
 
   const dispatch = useDispatch();
-
   return (
     <div
       className={`alert alert-${tipo} alert-dismissible fade show text-center ${className}`}
       role="alert"
+      style={marginBottom ? { marginBottom: marginBottom } : {}}
     >
-      <b style={estiloTitulo}>{mensagem}</b>
+      <b style={estiloTitulo}>
+        {mensagem}
+        <MessageClick onClick={onClickMessage}>{mensagemClick}</MessageClick>
+      </b>
       {closable ? (
         <button
           type="button"

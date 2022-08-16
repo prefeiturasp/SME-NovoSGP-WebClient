@@ -2,12 +2,14 @@ import api from '../api';
 import { store } from '~/redux';
 import { perfilSelecionado, setarPerfis } from '~/redux/modulos/perfil/actions';
 import { limparDadosFiltro } from '~/redux/modulos/filtro/actions';
-import { Deslogar } from '~/redux/modulos/usuario/actions';
+import { Deslogar, removerTurma } from '~/redux/modulos/usuario/actions';
 
 class LoginService {
-  autenticar = async (Login, acessoAdmin) => {
+  autenticar = async (Login, acessoAdmin, deslogar) => {
     const endpoint = acessoAdmin
       ? api.put(`v1/autenticacao/suporte/${Login.usuario}`)
+      : deslogar
+      ? api.put(`v1/autenticacao/suporte/deslogar`)
       : api.post(this.obtenhaUrlAutenticacao(), {
           login: Login.usuario,
           senha: Login.senha,
@@ -48,9 +50,11 @@ class LoginService {
           };
         });
 
-    if (acessoAdmin) {
+    if (acessoAdmin || deslogar) {
+      localStorage.clear();
       store.dispatch(limparDadosFiltro());
       store.dispatch(Deslogar());
+      store.dispatch(removerTurma());
       return new Promise(resolve => {
         setTimeout(async () => {
           resolve(validarAutenticar());

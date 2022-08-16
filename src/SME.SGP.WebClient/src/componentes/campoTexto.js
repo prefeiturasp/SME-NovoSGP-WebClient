@@ -46,6 +46,7 @@ const CampoTexto = React.forwardRef((props, ref) => {
     allowClear,
     minRowsTextArea,
     height,
+    onBlur,
   } = props;
 
   const possuiErro = () => {
@@ -103,6 +104,7 @@ const CampoTexto = React.forwardRef((props, ref) => {
           ref={ref}
           placeholder={placeholder}
           onChange={onChange}
+          onBlur={onBlur}
           disabled={desabilitado}
           onKeyDown={onKeyDown}
           value={value}
@@ -135,6 +137,7 @@ CampoTexto.propTypes = {
   allowClear: PropTypes.bool,
   minRowsTextArea: PropTypes.string,
   height: PropTypes.string,
+  onBlur: PropTypes.oneOfType([PropTypes.func]),
 };
 
 CampoTexto.defaultProps = {
@@ -158,6 +161,7 @@ CampoTexto.defaultProps = {
   allowClear: true,
   minRowsTextArea: '2',
   height: '38',
+  onBlur: () => {},
 };
 
 export default CampoTexto;

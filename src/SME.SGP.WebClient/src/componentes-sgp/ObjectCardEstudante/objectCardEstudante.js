@@ -11,6 +11,7 @@ const ObjectCardEstudante = props => {
   const {
     codigoAluno,
     anoLetivo,
+    codigoTurma,
     exibirBotaoImprimir,
     exibirFrequencia,
     permiteAlterarImagem,
@@ -28,7 +29,8 @@ const ObjectCardEstudante = props => {
     setExibirLoader(true);
     const resultado = await ServicoEstudante.obterDadosEstudante(
       codigoAluno,
-      anoLetivo
+      anoLetivo,
+      codigoTurma
     )
       .catch(e => erros(e))
       .finally(() => setExibirLoader(false));
@@ -42,7 +44,7 @@ const ObjectCardEstudante = props => {
       };
       dispatch(setDadosObjectCardEstudante(aluno));
     }
-  }, [dispatch, codigoAluno, anoLetivo]);
+  }, [dispatch, codigoAluno, anoLetivo, codigoTurma]);
 
   useEffect(() => {
     if (!dadosObjectCardEstudante?.codigoEOL) {
@@ -56,6 +58,7 @@ const ObjectCardEstudante = props => {
     dispatch,
     codigoAluno,
     anoLetivo,
+    codigoTurma,
     dadosObjectCardEstudante,
     obterDadosEstudante,
   ]);
@@ -79,6 +82,7 @@ const ObjectCardEstudante = props => {
 ObjectCardEstudante.propTypes = {
   codigoAluno: PropTypes.oneOfType([PropTypes.any]),
   anoLetivo: PropTypes.oneOfType([PropTypes.any]),
+  codigoTurma: PropTypes.oneOfType([PropTypes.any]),
   exibirBotaoImprimir: PropTypes.bool,
   exibirFrequencia: PropTypes.bool,
   permiteAlterarImagem: PropTypes.bool,
@@ -87,6 +91,7 @@ ObjectCardEstudante.propTypes = {
 ObjectCardEstudante.defaultProps = {
   codigoAluno: '',
   anoLetivo: '',
+  codigoTurma: null,
   exibirBotaoImprimir: true,
   exibirFrequencia: true,
   permiteAlterarImagem: true,

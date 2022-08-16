@@ -1,5 +1,8 @@
 import { URL_HOME, URL_REDEFINIRSENHA } from '~/constantes/url';
-import { salvarDadosLogin } from '~/redux/modulos/usuario/actions';
+import {
+  salvarDadosLogin,
+  setLoginAcessoAdmin,
+} from '~/redux/modulos/usuario/actions';
 import history from '~/servicos/history';
 import ServicoDashboard from '~/servicos/Paginas/Dashboard/ServicoDashboard';
 import LoginService from '~/servicos/Paginas/LoginServices';
@@ -12,13 +15,23 @@ class LoginHelper {
     this.redirect = redirect;
   }
 
-  acessar = async (login, acessoAdmin) => {
-    const autenticacao = await LoginService.autenticar(login, acessoAdmin);
+  acessar = async (login, acessoAdmin, deslogar) => {
+    const autenticacao = await LoginService.autenticar(
+      login,
+      acessoAdmin,
+      deslogar
+    );
 
     if (!autenticacao.sucesso) return autenticacao;
 
     const rf = Number.isInteger(login.usuario * 1) ? login.usuario : '';
 
+    this.dispatch(
+      setLoginAcessoAdmin({
+        acessoAdmin,
+        administradorSuporte: autenticacao.dados.administradorSuporte,
+      })
+    );
     this.dispatch(
       salvarDadosLogin({
         token: autenticacao.dados.token,
@@ -58,7 +71,6 @@ class LoginHelper {
 
     if (this.redirect) history.push(atob(this.redirect));
     else history.push(URL_HOME);
-
     return autenticacao;
   };
 }
