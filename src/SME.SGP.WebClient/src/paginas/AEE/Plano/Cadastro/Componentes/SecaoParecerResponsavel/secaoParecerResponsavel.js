@@ -78,7 +78,7 @@ const SecaoParecerResponsavel = () => {
 
   return (
     <>
-      <Label text="Responsável" className="mb-3" />
+      <Label text="PAAI responsável" className="mb-3" />
       <div className="row">
         <LocalizadorFuncionario
           id="funcionario"
@@ -88,7 +88,7 @@ const SecaoParecerResponsavel = () => {
           url="v1/encaminhamento-aee/responsavel/pesquisa"
           valorInicial={{
             codigoRF: responsavelSelecionado?.codigoRF,
-            nome: responsavelSelecionado?.nomeServidor,
+            nomeServidor: responsavelSelecionado?.nomeServidor,
           }}
           desabilitado={!dadosParecer?.podeAtribuirResponsavel}
         />

@@ -1,13 +1,15 @@
 import { Tabs } from 'antd';
 import PropTypes from 'prop-types';
-import React from 'react';
-import { useSelector } from 'react-redux';
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { ContainerTabsCard } from '~/componentes/tabs/tabs.css';
-import { situacaoPlanoAEE } from '~/dtos';
+import { RotasDto, situacaoPlanoAEE } from '~/dtos';
+import { setTypePlanoAEECadastro } from '~/redux/modulos/planoAEE/actions';
 import ServicoPlanoAEE from '~/servicos/Paginas/Relatorios/AEE/ServicoPlanoAEE';
 import SecaoParecerPlanoCollapse from '../SecaoParecerPlanoCollapse/secaoParecerPlanoCollapse';
 import SecaoPlanoCollapse from '../SecaoPlanoCollapse/secaoPlanoCollapse';
 import SecaoReestruturacaoPlano from '../SecaoReestruturacaoPlano/secaoReestruturacaoPlano';
+import AddResponsavelCadastroPlano from './addResponsavelCadastroPlano';
 
 const { TabPane } = Tabs;
 
@@ -15,10 +17,21 @@ const MontarDadosTabs = props => {
   const { match } = props;
   const temId = match?.params?.id;
 
+  const dispatch = useDispatch();
+
+  const planoAEEDados = useSelector(store => store.planoAEE.planoAEEDados);
+
+  useEffect(() => {
+    if (match.url === `${RotasDto.RELATORIO_AEE_PLANO}/novo`) {
+      dispatch(setTypePlanoAEECadastro(true));
+    } else {
+      dispatch(setTypePlanoAEECadastro(false));
+    }
+  }, [planoAEEDados]);
+
   const dadosCollapseLocalizarEstudante = useSelector(
     store => store.collapseLocalizarEstudante.dadosCollapseLocalizarEstudante
   );
-  const planoAEEDados = useSelector(store => store.planoAEE.planoAEEDados);
 
   // Seção pode voltar no futuro!
   const exibirTabReestruturacao = false;
@@ -30,6 +43,7 @@ const MontarDadosTabs = props => {
   return dadosCollapseLocalizarEstudante?.codigoAluno ? (
     <ContainerTabsCard type="card" width="20%" onTabClick={cliqueTab}>
       <TabPane tab="Cadastro do Plano" key="1">
+        <AddResponsavelCadastroPlano />
         <SecaoPlanoCollapse match={match} />
       </TabPane>
       {temId && exibirTabReestruturacao && (

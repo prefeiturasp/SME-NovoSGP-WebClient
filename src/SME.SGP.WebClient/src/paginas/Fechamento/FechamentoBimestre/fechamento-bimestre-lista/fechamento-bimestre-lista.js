@@ -12,7 +12,7 @@ import {
   SituacaoProcessadoComPendencias,
   DataFechamentoProcessado,
 } from './fechamento-bimestre-lista.css';
-import { Colors, MarcadorTriangulo } from '~/componentes';
+import { Colors, MarcadorTriangulo, Loader } from '~/componentes';
 import Button from '~/componentes/button';
 import situacaoFechamentoDto from '~/dtos/situacaoFechamentoDto';
 import ServicoFechamentoBimestre from '~/servicos/Paginas/Fechamento/ServicoFechamentoBimestre';
@@ -39,6 +39,7 @@ const FechamentoBimestreLista = props => {
     dados ? dados.alunos : undefined
   );
   const [situacaoFechamento, setSituacaoFechamento] = useState(dados.situacao);
+  const [carregandoProcesso, setCarregandoProcesso] = useState(false);
   const [podeProcessarReprocessar] = useState(dados.podeProcessarReprocessar);
   const [
     situacaosituacaoNomeFechamento,
@@ -65,6 +66,7 @@ const FechamentoBimestreLista = props => {
   };
 
   const onClickProcessarReprocessarSintese = async () => {
+    setCarregandoProcesso(true);
     const { alunos, fechamentoId, bimestre } = dados;
 
     const alunosParaProcessar = alunos.map(aluno => {
@@ -84,6 +86,7 @@ const FechamentoBimestreLista = props => {
     const processando = await ServicoFechamentoBimestre.processarReprocessarSintese(
       [params]
     ).catch(e => erros(e));
+    setCarregandoProcesso(false);
     if (processando && processando.status == 200) {
       setSituacaoFechamento(situacaoFechamentoDto.EmProcessamento);
       setSituacaosituacaoNomeFechamento('Em Processamento');
@@ -203,19 +206,21 @@ const FechamentoBimestreLista = props => {
             <></>
           )}
           {ehSintese ? (
-            <Button
-              label={dados?.fechamentoId ? 'Reprocessar' : 'Processar'}
-              color={Colors.Azul}
-              border
-              className="mr-2"
-              onClick={onClickProcessarReprocessarSintese}
-              disabled={
-                !(
-                  podeProcessarReprocessar &&
-                  situacaoFechamento !== situacaoFechamentoDto.EmProcessamento
-                )
-              }
-            />
+            <Loader loading={carregandoProcesso} tip="">
+              <Button
+                label={dados?.fechamentoId ? 'Reprocessar' : 'Processar'}
+                color={Colors.Azul}
+                border
+                className="mr-2"
+                onClick={onClickProcessarReprocessarSintese}
+                disabled={
+                  !(
+                    podeProcessarReprocessar &&
+                    situacaoFechamento !== situacaoFechamentoDto.EmProcessamento
+                  )
+                }
+              />
+            </Loader>
           ) : (
             <></>
           )}
