@@ -216,7 +216,6 @@ const DiarioBordo = ({ match }) => {
         .finally(() => {
           setCarregandoData(false);
         });
-
       const codigoComponenteCurricular =
         componenteCurricularId || codDisciplinaPai;
 
@@ -237,7 +236,6 @@ const DiarioBordo = ({ match }) => {
 
         setDiasParaHabilitar(habilitar);
       } else {
-        setListaDatasAulas();
         setDiasParaHabilitar();
       }
     },
