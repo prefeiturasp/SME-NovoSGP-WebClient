@@ -1163,7 +1163,7 @@ const Filtro = () => {
             onChange={onChangeAutocomplete}
             onKeyDown={aoPressionarTeclaBaixoAutocomplete}
             readOnly={!!turmaUsuarioSelecionada.turma}
-            value={textoAutocomplete}
+            value={textoAutocomplete || ''}
           />
           {!!turmaUsuarioSelecionada.turma && podeRemoverTurma && (
             <Fechar
