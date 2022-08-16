@@ -239,7 +239,7 @@ LinhaAluno.propTypes = {
   onChange: PropTypes.func,
   desabilitarCampo: PropTypes.bool,
   ehSintese: PropTypes.bool,
-  aluno: PropTypes.oneOfType(PropTypes.any),
+  aluno: PropTypes.oneOfType([PropTypes.any]),
 };
 
 LinhaAluno.defaultProps = {

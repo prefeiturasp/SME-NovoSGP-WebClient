@@ -43,8 +43,8 @@ const TotalCriancasComAcompPorDRE = props => {
 };
 
 TotalCriancasComAcompPorDRE.propTypes = {
-  anoLetivo: PropTypes.oneOfType(PropTypes.any),
-  dataUltimaConsolidacao: PropTypes.oneOfType(PropTypes.any),
+  anoLetivo: PropTypes.oneOfType([PropTypes.any]),
+  dataUltimaConsolidacao: PropTypes.oneOfType([PropTypes.any]),
 };
 
 TotalCriancasComAcompPorDRE.defaultProps = {

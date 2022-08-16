@@ -69,10 +69,10 @@ const CampoTipoFrequencia = props => {
 };
 
 CampoTipoFrequencia.propTypes = {
-  onChange: PropTypes.oneOfType(PropTypes.func),
-  indexAluno: PropTypes.oneOfType(PropTypes.number),
-  indexAula: PropTypes.oneOfType(PropTypes.number),
-  numeroAula: PropTypes.oneOfType(PropTypes.number),
+  onChange: PropTypes.oneOfType([PropTypes.func]),
+  indexAluno: PropTypes.oneOfType([PropTypes.number]),
+  indexAula: PropTypes.oneOfType([PropTypes.number]),
+  numeroAula: PropTypes.oneOfType([PropTypes.number]),
   desabilitar: PropTypes.bool,
 };
 

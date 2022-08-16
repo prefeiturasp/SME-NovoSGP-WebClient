@@ -840,7 +840,7 @@ const DiarioBordo = ({ match }) => {
 };
 
 DiarioBordo.propTypes = {
-  match: PropTypes.oneOfType(PropTypes.object),
+  match: PropTypes.oneOfType([PropTypes.object]),
 };
 
 DiarioBordo.defaultProps = {

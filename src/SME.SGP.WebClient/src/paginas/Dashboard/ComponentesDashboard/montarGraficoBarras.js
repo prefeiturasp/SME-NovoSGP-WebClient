@@ -200,7 +200,7 @@ const MontarGraficoBarras = props => {
 };
 
 MontarGraficoBarras.propTypes = {
-  anoLetivo: PropTypes.oneOfType(PropTypes.any),
+  anoLetivo: PropTypes.oneOfType([PropTypes.any]),
   dreId: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   ueId: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   modalidade: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
@@ -209,7 +209,7 @@ MontarGraficoBarras.propTypes = {
   nomeIndiceDesc: PropTypes.string,
   nomeValor: PropTypes.string,
   ServicoObterValoresGrafico: PropTypes.func,
-  chavesGraficoAgrupado: PropTypes.oneOfType(PropTypes.array),
+  chavesGraficoAgrupado: PropTypes.oneOfType([PropTypes.array]),
   dreCodigo: PropTypes.string,
   ueCodigo: PropTypes.string,
   exibirLegenda: PropTypes.bool,

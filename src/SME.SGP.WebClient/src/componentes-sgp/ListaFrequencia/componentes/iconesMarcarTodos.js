@@ -86,7 +86,7 @@ const IconesMarcarTodos = props => {
 };
 
 IconesMarcarTodos.propTypes = {
-  marcaPresencaFaltaTodasAulas: PropTypes.oneOfType(PropTypes.func),
+  marcaPresencaFaltaTodasAulas: PropTypes.oneOfType([PropTypes.func]),
   indexAluno: PropTypes.number,
   desabilitar: PropTypes.bool,
 };

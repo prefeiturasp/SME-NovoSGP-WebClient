@@ -100,16 +100,16 @@ const GraficoBarras = props => {
 };
 
 GraficoBarras.propTypes = {
-  data: PropTypes.oneOfType(PropTypes.array),
+  data: PropTypes.oneOfType([PropTypes.array]),
   xAxisVisible: PropTypes.bool,
   legendVisible: PropTypes.bool,
   isGroup: PropTypes.bool,
   xField: PropTypes.string,
   yField: PropTypes.string,
   seriesField: PropTypes.string,
-  colors: PropTypes.oneOfType(PropTypes.array),
+  colors: PropTypes.oneOfType([PropTypes.array]),
   labelVisible: PropTypes.bool,
-  radius: PropTypes.oneOfType(PropTypes.array),
+  radius: PropTypes.oneOfType([PropTypes.array]),
   showTitle: PropTypes.bool,
   showScrollbar: PropTypes.bool,
 };
