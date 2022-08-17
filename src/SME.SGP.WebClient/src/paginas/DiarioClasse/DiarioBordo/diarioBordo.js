@@ -715,8 +715,7 @@ const DiarioBordo = ({ match }) => {
                         desabilitado={
                           !turmaInfantil ||
                           !listaComponenteCurriculares?.length ||
-                          !componenteCurricularSelecionado ||
-                          !diasParaHabilitar
+                          !componenteCurricularSelecionado
                         }
                         diasParaHabilitar={diasParaHabilitar}
                       />
