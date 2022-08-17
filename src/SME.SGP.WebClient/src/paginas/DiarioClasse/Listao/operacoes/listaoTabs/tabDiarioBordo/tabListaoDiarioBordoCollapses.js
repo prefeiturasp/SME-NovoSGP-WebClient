@@ -16,6 +16,15 @@ import {
 } from '../../../listaoFuncoes';
 import ConteudoCollapse from './conteudoCollapse';
 
+const PainelCollapseContainer = styled(PainelCollapse)`
+  .ant-collapse-item {
+    margin-bottom: 16px !important;
+  }
+  .ant-collapse-content {
+    border: 1px solid #d9d9d9;
+  }
+`;
+
 const TabListaoDiarioBordoCollapses = () => {
   const telaEmEdicao = useSelector(store => store.geral.telaEmEdicao);
   const usuario = useSelector(store => store.usuario);
@@ -97,12 +106,17 @@ const TabListaoDiarioBordoCollapses = () => {
     }
   };
 
-  const itens = dadosDiarioBordo.map((d, index) => index);
-  return (
+  const defaultActiveKeyDados = dadosDiarioBordo.map(dados => dados?.aulaId);
+
+    return (
     <Row gutter={[24, 24]}>
       <Col sm={24}>
         {!!exibirDiarioBordoCollapses && (
-          <PainelCollapse defaultActiveKey={itens} onChange={onColapse}>
+          <PainelCollapseContainer
+            bordered={false}
+            defaultActiveKey={defaultActiveKeyDados}
+            onChange={onColapse}
+          >
             {dadosDiarioBordo.map((dados, indexDiarioBordo) => {
               const { aulaId, titulo, pendente } = dados;
               const bordaCollapse = pendente
