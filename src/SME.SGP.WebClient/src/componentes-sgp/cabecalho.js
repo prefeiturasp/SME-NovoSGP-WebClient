@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
+import { Affix } from 'antd';
 
 const Container = styled.div`
   span {
@@ -30,17 +31,34 @@ const Container = styled.div`
     margin-bottom: 0.3rem;
   }
 
+  .background-row {
+    background: #f5f6f8 !important;
+  }
+
+  .ant-affix .background-row {
+    box-shadow: 0 1.5rem 1rem -18px rgb(0 0 0 / 15%);
+  }
   padding-bottom: 8px;
 `;
 
 const Cabecalho = ({ titulo, pagina, children, classes }) => {
   return (
     <Container className={classes}>
-      <div className="col-xs-12 col-md-12 col-lg-12">
-        <span>{titulo}</span>
-        <span className="titulo">{pagina}</span>
-        {children}
-      </div>
+      <Affix offsetTop={70}>
+        <div
+          className="col-md-12 d-flex background-row pt-3 pb-2"
+          style={{
+            justifyContent: 'space-between',
+            flexWrap: 'wrap',
+          }}
+        >
+          <div>
+            <span>{titulo}</span>
+            <span className="titulo">{pagina}</span>
+          </div>
+          <div>{children}</div>
+        </div>
+      </Affix>
     </Container>
   );
 };
