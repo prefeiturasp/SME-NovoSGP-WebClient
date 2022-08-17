@@ -97,20 +97,20 @@ const TabListaoDiarioBordoCollapses = () => {
     }
   };
 
+  const itens = dadosDiarioBordo.map((d, index) => index);
   return (
     <Row gutter={[24, 24]}>
       <Col sm={24}>
         {!!exibirDiarioBordoCollapses && (
-          <PainelCollapse accordion onChange={onColapse}>
+          <PainelCollapse defaultActiveKey={itens} onChange={onColapse}>
             {dadosDiarioBordo.map((dados, indexDiarioBordo) => {
               const { aulaId, titulo, pendente } = dados;
               const bordaCollapse = pendente
                 ? Base.LaranjaStatus
                 : Base.AzulBordaCollapse;
-
               return (
                 <PainelCollapse.Painel
-                  key={aulaId}
+                  key={indexDiarioBordo}
                   accordion
                   espacoPadrao
                   corBorda={bordaCollapse}
