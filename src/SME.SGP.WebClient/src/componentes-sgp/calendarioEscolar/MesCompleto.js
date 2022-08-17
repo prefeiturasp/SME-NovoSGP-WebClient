@@ -38,6 +38,7 @@ const MesCompleto = props => {
     eventoSme,
     dreSelecionada,
     unidadeEscolarSelecionada,
+    anoLetivo,
   } = filtros;
 
   const mesesLista = meses.split(',');
@@ -120,9 +121,8 @@ const MesCompleto = props => {
   );
 
   useEffect(() => {
-    if (mesSelecionado > 0) {
-      const dataAtual = new Date();
-      const data = new Date(dataAtual.getFullYear(), mesSelecionado - 1, 1);
+    if (mesSelecionado > 0 && anoLetivo) {
+      const data = new Date(anoLetivo, mesSelecionado - 1, 1);
       data.setDate(data.getDate() - data.getDay() - 1);
 
       const diasDaSemanaLista = [];
