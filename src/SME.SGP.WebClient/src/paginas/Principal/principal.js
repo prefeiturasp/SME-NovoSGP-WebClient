@@ -56,7 +56,7 @@ const Principal = () => {
       ) : null}
       {!turmaSelecionada ? (
         <Row className="mb-0 pb-0">
-          <Grid cols={12} className="mb-0 pb-0">
+          <Grid cols={12} className="card-body m-r-0 m-l-0 p-l-0 p-r-0 m-t-0">
             <Container>
               <Alert
                 alerta={{

@@ -18,26 +18,28 @@ const AlertaDentroPeriodoFrequenciaPlanoAula = () => {
   const { turmaSelecionada } = useSelector(store => store.usuario);
 
   return (
-    <div className="col-md-12">
+    <>
       {turmaSelecionada &&
       turmaSelecionada.turma &&
       componenteCurricular &&
       dataSelecionada &&
       !temPeriodoAberto ? (
-        <Alert
-          alerta={{
-            tipo: 'warning',
-            id: 'alerta-perido-fechamento',
-            mensagem:
-              'Apenas é possível consultar este registro pois o período não está em aberto.',
-            estiloTitulo: { fontSize: '18px' },
-          }}
-          className="mb-2"
-        />
+        <div className="col-md-12">
+          <Alert
+            alerta={{
+              tipo: 'warning',
+              id: 'alerta-perido-fechamento',
+              mensagem:
+                'Apenas é possível consultar este registro pois o período não está em aberto.',
+              estiloTitulo: { fontSize: '18px' },
+            }}
+            className="mb-2"
+          />
+        </div>
       ) : (
-        ''
+        <></>
       )}
-    </div>
+    </>
   );
 };
 
