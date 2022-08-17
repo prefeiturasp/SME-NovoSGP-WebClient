@@ -333,7 +333,7 @@ class ServicoSalvarConselhoClasse {
       dispatch(setAuditoriaAnotacaoRecomendacao(auditoriaDto));
 
       const temJustificativasDto = idCamposNotasPosConselho;
-      temJustificativasDto[idCampo] = auditoria.id;
+      temJustificativasDto[idCampo] = auditoria?.id;
       dispatch(setIdCamposNotasPosConselho(temJustificativasDto));
 
       limparDadosNotaPosConselhoJustificativa();
