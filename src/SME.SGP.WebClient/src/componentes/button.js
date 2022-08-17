@@ -47,7 +47,7 @@ const Button = React.forwardRef((props, ref) => {
   const Btn = styled.button`
     display: flex;
     position: relative;
-    background: ${border ? 'transparent' : Active[color]} !important;
+    background: ${border ? '#fff' : Active[color]} !important;
     text-align: center;
     ${
       border
