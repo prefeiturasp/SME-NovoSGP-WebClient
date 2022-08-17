@@ -1,5 +1,6 @@
 import { Col, Row } from 'antd';
 import React, { useContext, useEffect } from 'react';
+import styled from 'styled-components';
 import { useDispatch, useSelector } from 'react-redux';
 import { Base, PainelCollapse } from '~/componentes';
 import ServicoObservacoesUsuario from '~/componentes-sgp/ObservacoesUsuario/ServicoObservacoesUsuario';
@@ -8,7 +9,7 @@ import {
   limparDadosObservacoesUsuario,
   setDadosObservacoesUsuario,
 } from '~/redux/modulos/observacoesUsuario/actions';
-import { confirmar, erros, ServicoDiarioBordo } from '~/servicos';
+import { confirmar, ServicoDiarioBordo } from '~/servicos';
 import ListaoContext from '../../../listaoContext';
 import {
   obterDiarioBordoListao,
@@ -29,7 +30,7 @@ const TabListaoDiarioBordoCollapses = () => {
   const telaEmEdicao = useSelector(store => store.geral.telaEmEdicao);
   const usuario = useSelector(store => store.usuario);
   const { turmaSelecionada } = usuario;
-  const { turma, id: turmaId } = turmaSelecionada;
+  const { turma } = turmaSelecionada;
 
   const {
     setExibirLoaderGeral,
@@ -108,7 +109,7 @@ const TabListaoDiarioBordoCollapses = () => {
 
   const defaultActiveKeyDados = dadosDiarioBordo.map(dados => dados?.aulaId);
 
-    return (
+  return (
     <Row gutter={[24, 24]}>
       <Col sm={24}>
         {!!exibirDiarioBordoCollapses && (
@@ -124,7 +125,7 @@ const TabListaoDiarioBordoCollapses = () => {
                 : Base.AzulBordaCollapse;
               return (
                 <PainelCollapse.Painel
-                  key={indexDiarioBordo}
+                  key={aulaId}
                   accordion
                   espacoPadrao
                   corBorda={bordaCollapse}
@@ -141,7 +142,7 @@ const TabListaoDiarioBordoCollapses = () => {
                 </PainelCollapse.Painel>
               );
             })}
-          </PainelCollapse>
+          </PainelCollapseContainer>
         )}
       </Col>
     </Row>
