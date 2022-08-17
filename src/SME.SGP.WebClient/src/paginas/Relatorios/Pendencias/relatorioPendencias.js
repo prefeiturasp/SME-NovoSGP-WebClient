@@ -1,5 +1,4 @@
 import React, { useCallback, useEffect, useState } from 'react';
-
 import {
   Button,
   Card,
@@ -12,7 +11,6 @@ import {
 } from '~/componentes';
 import { Cabecalho, FiltroHelper } from '~/componentes-sgp';
 import { OPCAO_TODOS } from '~/constantes';
-
 import { ModalidadeDTO, tipoPendenciasGruposDto } from '~/dtos';
 import usuario from '~/redux/modulos/usuario/reducers';
 import {
@@ -25,7 +23,6 @@ import {
   ServicoComponentesCurriculares,
   ServicoFiltroRelatorio,
 } from '~/servicos';
-
 import {
   onchangeMultiSelect,
   ordenarListaMaiorParaMenor,
@@ -85,12 +82,10 @@ const RelatorioPendencias = () => {
     setDesabilitarExibirPendenciasResolvidas,
   ] = useState(true);
   const [consideraHistorico, setConsideraHistorico] = useState(false);
-
   const opcaoExibirPendenciasResolvidas = [
     { value: false, label: 'Não' },
     { value: true, label: 'Sim' },
   ];
-
   const limparCampos = () => {
     setModalidadeId();
     setTurmaId();
@@ -99,7 +94,6 @@ const RelatorioPendencias = () => {
     setTipoPendenciaGrupo();
     setClicouBotaoGerar(false);
   };
-
   const onChangeConsideraHistorico = e => {
     setConsideraHistorico(e.target.checked);
     setAnoLetivo(anoAtual);
@@ -107,36 +101,30 @@ const RelatorioPendencias = () => {
     setUeId();
     setUsuarioRf();
   };
-
   const onChangeAnoLetivo = async valor => {
     setDreId();
     setUeId();
     setAnoLetivo(valor);
     limparCampos();
   };
-
   const onChangeDre = valor => {
     setDreId(valor);
     setUeId();
     setUeId(undefined);
     limparCampos();
   };
-
   const onChangeUe = valor => {
     setUeId(valor);
     limparCampos();
   };
-
   const onChangeModalidade = valor => {
     limparCampos();
     setModalidadeId(valor);
   };
-
   const onChangeSemestre = valor => {
     setSemestre(valor);
     setClicouBotaoGerar(false);
   };
-
   const onChangeTurma = valor => {
     setTurmaId(valor);
     setComponentesCurricularesId();
@@ -144,31 +132,25 @@ const RelatorioPendencias = () => {
     setTipoPendenciaGrupo();
     setClicouBotaoGerar(false);
   };
-
   const onChangeComponenteCurricular = valor => {
-    const valorNovo = valor ? [valor] : '';
-    setComponentesCurricularesId(valorNovo);
+    setComponentesCurricularesId(valor);
     setBimestre();
     setTipoPendenciaGrupo();
     setClicouBotaoGerar(false);
   };
-
   const onChangeBimestre = valor => {
     setBimestre(valor);
     setTipoPendenciaGrupo();
     setClicouBotaoGerar(false);
   };
-
   const onChangeTipoPendenciaGrupo = valor => {
     setTipoPendenciaGrupo(valor);
     setClicouBotaoGerar(false);
   };
-
   const onChangeLocalizador = valores => {
     setUsuarioRf(valores?.professorRf);
     setClicouBotaoGerar(false);
   };
-
   const obterDres = useCallback(async () => {
     setCarregandoDres(true);
     const retorno = await AbrangenciaServico.buscarDres(
@@ -185,7 +167,6 @@ const RelatorioPendencias = () => {
         }))
         .sort(FiltroHelper.ordenarLista('desc'));
       setListaDres(lista);
-
       if (lista?.length === 1) {
         setDreId(lista[0].valor);
       }
@@ -194,13 +175,11 @@ const RelatorioPendencias = () => {
     setListaDres([]);
     setDreId(undefined);
   }, [anoLetivo, consideraHistorico]);
-
   useEffect(() => {
     if (anoLetivo) {
       obterDres();
     }
   }, [obterDres, anoLetivo]);
-
   const obterUes = useCallback(
     async (dre, ano) => {
       if (dre) {
@@ -217,11 +196,9 @@ const RelatorioPendencias = () => {
             desc: item.nome,
             valor: String(item.codigo),
           }));
-
           if (lista?.length === 1) {
             setUeId(lista[0].valor);
           }
-
           setListaUes(lista);
           return;
         }
@@ -230,7 +207,6 @@ const RelatorioPendencias = () => {
     },
     [consideraHistorico]
   );
-
   useEffect(() => {
     if (dreId) {
       obterUes(dreId, anoLetivo);
@@ -239,7 +215,6 @@ const RelatorioPendencias = () => {
     setUeId();
     setListaUes([]);
   }, [dreId, anoLetivo, obterUes]);
-
   const obterModalidades = async (ue, ano) => {
     if (ue && ano) {
       setCarregandoModalidades(true);
@@ -248,13 +223,11 @@ const RelatorioPendencias = () => {
       } = await ServicoFiltroRelatorio.obterModalidadesPorAbrangencia(ue)
         .catch(e => erros(e))
         .finally(() => setCarregandoModalidades(false));
-
       if (data) {
         const lista = data.map(item => ({
           desc: item.descricao,
           valor: String(item.valor),
         }));
-
         if (lista?.length === 1) {
           setModalidadeId(lista[0].valor);
         }
@@ -262,7 +235,6 @@ const RelatorioPendencias = () => {
       }
     }
   };
-
   useEffect(() => {
     if (anoLetivo && ueId) {
       obterModalidades(ueId, anoLetivo);
@@ -271,7 +243,6 @@ const RelatorioPendencias = () => {
     setModalidadeId();
     setListaModalidades([]);
   }, [anoLetivo, ueId]);
-
   const obterTurmas = useCallback(
     async (modalidadeSelecionada, ue, ano) => {
       if (ue && modalidadeSelecionada) {
@@ -285,7 +256,6 @@ const RelatorioPendencias = () => {
         )
           .catch(e => erros(e))
           .finally(() => setCarregandoTurmas(false));
-
         if (data) {
           const lista = [];
           if (data.length > 1) {
@@ -307,7 +277,6 @@ const RelatorioPendencias = () => {
     },
     [consideraHistorico]
   );
-
   useEffect(() => {
     if (modalidadeId && ueId) {
       obterTurmas(modalidadeId, ueId, anoLetivo);
@@ -316,7 +285,6 @@ const RelatorioPendencias = () => {
     setTurmaId();
     setListaTurmas([]);
   }, [modalidadeId, ueId, anoLetivo, obterTurmas]);
-
   const obterBimestres = useCallback(async () => {
     setCarregandoBimestres(true);
     const retorno = await ServicoFiltroRelatorio.obterBimestres({
@@ -325,7 +293,6 @@ const RelatorioPendencias = () => {
     })
       .catch(e => erros(e))
       .finally(setCarregandoBimestres(false));
-
     const lista = retorno?.data
       ? retorno.data.map(item => ({
           desc: item.descricao,
@@ -334,7 +301,6 @@ const RelatorioPendencias = () => {
       : [];
     setListaBimestres(lista);
   }, [modalidadeId]);
-
   useEffect(() => {
     if (modalidadeId) {
       obterBimestres();
@@ -343,11 +309,9 @@ const RelatorioPendencias = () => {
     setListaBimestres([]);
     setBimestre(undefined);
   }, [modalidadeId, obterBimestres]);
-
   const obterAnosLetivos = useCallback(async () => {
     setCarregandoAnos(true);
     let anosLetivos = [];
-
     const [anosLetivoComHistorico, anosLetivoSemHistorico] = await Promise.all([
       FiltroHelper.obterAnosLetivos({
         consideraHistorico: true,
@@ -359,20 +323,17 @@ const RelatorioPendencias = () => {
       .catch(e => erros(e))
       .finally(() => setCarregandoAnos(false));
     anosLetivos = anosLetivos.concat(anosLetivoComHistorico);
-
     anosLetivoSemHistorico.forEach(ano => {
       if (!anosLetivoComHistorico.find(a => a.valor === ano.valor)) {
         anosLetivos.push(ano);
       }
     });
-
     if (!anosLetivos.length) {
       anosLetivos.push({
         desc: anoAtual,
         valor: anoAtual,
       });
     }
-
     if (anosLetivos?.length) {
       const temAnoAtualNaLista = anosLetivos.find(
         item => String(item.valor) === String(anoAtual)
@@ -380,16 +341,12 @@ const RelatorioPendencias = () => {
       if (temAnoAtualNaLista) setAnoLetivo(anoAtual);
       else setAnoLetivo(anosLetivos[0].valor);
     }
-
     setListaAnosLetivo(ordenarListaMaiorParaMenor(anosLetivos, 'valor'));
   }, [anoAtual]);
-
   useEffect(() => {
     obterAnosLetivos();
   }, [obterAnosLetivos]);
-
   const ehInfantil = Number(modalidadeId) === ModalidadeDTO.INFANTIL;
-
   const escolherChamadaEndpointComponeteCurricular = useCallback(
     (ueCodigo, turmas) => {
       if (ehInfantil) {
@@ -398,7 +355,6 @@ const RelatorioPendencias = () => {
           true
         );
       }
-
       return ServicoComponentesCurriculares.obterComponentesPorUeTurmas(
         ueCodigo,
         turmas
@@ -406,7 +362,6 @@ const RelatorioPendencias = () => {
     },
     [ehInfantil]
   );
-
   const obterComponentesCurriculares = useCallback(
     async (ueCodigo, idsTurma, lista) => {
       if (idsTurma?.length > 0) {
@@ -423,21 +378,18 @@ const RelatorioPendencias = () => {
         )
           .catch(e => erros(e))
           .finally(() => setCarregandoComponentesCurriculares(false));
-
         if (disciplinas?.data?.length) {
           const nomeParametro = ehInfantil ? 'nome' : 'descricao';
           const listaDisciplinas = disciplinas.data.map(item => ({
             codigo: String(item.codigo),
             descricao: item[nomeParametro],
           }));
-
           if (listaDisciplinas?.length > 1) {
             listaDisciplinas.unshift({
               descricao: 'Todos',
               codigo: OPCAO_TODOS,
             });
           }
-
           if (disciplinas.data.length > 1) {
             setListaComponentesCurriculares(listaDisciplinas);
             return;
@@ -452,13 +404,11 @@ const RelatorioPendencias = () => {
     },
     [escolherChamadaEndpointComponeteCurricular, ehInfantil]
   );
-
   useEffect(() => {
     if (ueId && turmaId && listaTurmas) {
       obterComponentesCurriculares(ueId, turmaId, listaTurmas);
     }
   }, [ueId, turmaId, listaTurmas, obterComponentesCurriculares]);
-
   const obterSemestres = useCallback(
     async (modalidadeSelecionada, anoLetivoSelecionado) => {
       setCarregandoSemestres(true);
@@ -470,7 +420,6 @@ const RelatorioPendencias = () => {
         const lista = retorno.data.map(periodo => {
           return { desc: periodo, valor: periodo };
         });
-
         if (lista && lista.length && lista.length === 1) {
           setSemestre(lista[0].valor);
         }
@@ -480,7 +429,6 @@ const RelatorioPendencias = () => {
     },
     [consideraHistorico]
   );
-
   useEffect(() => {
     if (
       modalidadeId &&
@@ -493,7 +441,6 @@ const RelatorioPendencias = () => {
     setSemestre();
     setListaSemestres([]);
   }, [obterSemestres, modalidadeId, anoLetivo]);
-
   const obterTipoPendenciaGrupo = useCallback(async () => {
     setCarregandoTipoPendenciaGrupo(true);
     const retorno = await ServicoRelatorioPendencias.obterTipoPendenciasGrupos({
@@ -504,7 +451,6 @@ const RelatorioPendencias = () => {
     const dados = retorno?.data?.length ? retorno?.data : [];
     setListaTipoPendenciaGrupos(dados);
   }, []);
-
   useEffect(() => {
     if (dreId && ueId) {
       obterTipoPendenciaGrupo();
@@ -513,7 +459,6 @@ const RelatorioPendencias = () => {
     setTipoPendenciaGrupo();
     setListaTipoPendenciaGrupos([]);
   }, [obterTipoPendenciaGrupo, dreId, ueId]);
-
   useEffect(() => {
     const ehTodosTipoPendenciaGrupos = tipoPendenciaGrupo?.find(
       item => item === OPCAO_TODOS
@@ -528,7 +473,6 @@ const RelatorioPendencias = () => {
     setDesabilitarExibirPendenciasResolvidas(true);
     setExibirPendenciasResolvidas(false);
   }, [tipoPendenciaGrupo]);
-
   const cancelar = () => {
     setAnoLetivo(anoAtual);
     if (dreId) {
@@ -536,19 +480,15 @@ const RelatorioPendencias = () => {
       setDreId();
       setListaDres([]);
     }
-
     setUeId();
     setListaUes([]);
-
     setModalidadeId();
     setComponentesCurricularesId();
-
     setTurmaId(undefined);
     setBimestre();
     setTipoPendenciaGrupo();
     setUsuarioRf();
   };
-
   useEffect(() => {
     const condicoesComuns =
       !anoLetivo ||
@@ -556,29 +496,23 @@ const RelatorioPendencias = () => {
       !ueId ||
       !tipoPendenciaGrupo?.length ||
       clicouBotaoGerar;
-
     const temModalidadeEja = String(modalidadeId) === String(ModalidadeDTO.EJA);
     const consideraSemestre = temModalidadeEja && !semestre;
-
     const condicoesParciais =
       !modalidadeId ||
       consideraSemestre ||
       !turmaId?.length ||
       !componentesCurricularesId ||
       !bimestre;
-
     const condicoesParciaisPreenchidas =
       modalidadeId ||
       consideraSemestre ||
       turmaId?.length ||
       componentesCurricularesId ||
       bimestre;
-
     const condicoesFinais =
       condicoesParciaisPreenchidas && usuarioRf && condicoesParciais;
-
     const desabilitar = condicoesComuns || condicoesFinais;
-
     setDesabilitarBtnGerar(desabilitar);
   }, [
     anoLetivo,
@@ -593,11 +527,17 @@ const RelatorioPendencias = () => {
     usuarioRf,
     clicouBotaoGerar,
   ]);
-
   const gerar = async () => {
     setCarregandoGerar(true);
     setClicouBotaoGerar(true);
-
+    let componentesCurriculares = [];
+    if (
+      componentesCurricularesId ||
+      componentesCurricularesId === 0 ||
+      componentesCurricularesId === '0'
+    ) {
+      componentesCurriculares = [componentesCurricularesId];
+    }
     const params = {
       exibirHistorico: consideraHistorico,
       anoLetivo,
@@ -606,17 +546,12 @@ const RelatorioPendencias = () => {
       modalidade: modalidadeId,
       turmasCodigo: turmaId === OPCAO_TODOS ? [] : [].concat(turmaId),
       bimestre,
-      componentesCurriculares:
-        componentesCurricularesId?.length === 1 &&
-        componentesCurricularesId[0] === '0'
-          ? []
-          : componentesCurricularesId,
+      componentesCurriculares,
       semestre,
       usuarioRf,
       exibirPendenciasResolvidas,
       tipoPendenciaGrupo,
     };
-
     await ServicoRelatorioPendencias.gerar(params)
       .then(() => {
         sucesso(
@@ -626,7 +561,6 @@ const RelatorioPendencias = () => {
       .catch(e => erros(e))
       .finally(setCarregandoGerar(false));
   };
-
   return (
     <>
       <Cabecalho pagina="Relatório de pendências" classes="mb-2" />
@@ -884,5 +818,4 @@ const RelatorioPendencias = () => {
     </>
   );
 };
-
 export default RelatorioPendencias;
