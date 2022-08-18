@@ -344,7 +344,7 @@ function AtribuicaoCJForm({ match, location }) {
                     onChangeCheckbox={onChangeConsideraHistorico}
                     checked={consideraHistorico}
                     disabled={
-                      listaAnosLetivo.length === 1 ||
+                      listaAnosLetivo.length === 0 ||
                       somenteConsulta ||
                       ehEdicao
                     }
