@@ -1,18 +1,33 @@
-import React, { useState, useEffect, useLayoutEffect, useRef } from 'react';
-import PropTypes from 'prop-types';
-import shortid from 'shortid';
-import { useSelector } from 'react-redux';
+import {
+  HttpTransportType,
+  HubConnectionBuilder,
+  LogLevel,
+} from '@microsoft/signalr';
 import * as moment from 'moment';
-import { Colors } from '~/componentes/colors';
+import PropTypes from 'prop-types';
+import React, {
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
+} from 'react';
+import { useSelector } from 'react-redux';
+import shortid from 'shortid';
 import Button from '~/componentes/button';
+import { Colors } from '~/componentes/colors';
+import { erros } from '~/servicos/alertas';
 import history from '~/servicos/history';
 import servicoNotificacao from '~/servicos/Paginas/ServicoNotificacao';
-import { erros } from '~/servicos/alertas';
-import { Tr, Lista, Count } from './navbar-notificacoes.css';
+import { obterUrlSignalR } from '~/servicos/variaveis';
 import { validarAcaoTela } from '~/utils';
+import { Count, Lista, Tr } from './navbar-notificacoes.css';
 
 const NavbarNotificacoes = props => {
   const { Botao, Icone, Texto } = props;
+
+  const usuario = useSelector(store => store.usuario);
+  const usuarioRf = usuario?.rf;
 
   const listaRef = useRef();
 
@@ -22,6 +37,85 @@ const NavbarNotificacoes = props => {
   const notificacoes = useSelector(state => state.notificacoes);
   const { loaderGeral } = useSelector(state => state.loader);
 
+  const [connection, setConnection] = useState(null);
+  const [
+    iniciarIntervalNotificacoes,
+    setIniciarIntervalNotificacoes,
+  ] = useState(false);
+  const [urlConnection, setUrlConnection] = useState('');
+
+  const conectarSignalR = useCallback(async () => {
+    if (urlConnection) {
+      const hubConnection = new HubConnectionBuilder()
+        .withUrl(`${urlConnection}/notificacao?usuarioRf=${usuarioRf}`, {
+          skipNegotiation: true,
+          transport: HttpTransportType.WebSockets,
+        })
+        .withAutomaticReconnect({
+          nextRetryDelayInMilliseconds: () => 60000,
+        })
+        .configureLogging(LogLevel.Information)
+        .build();
+
+      setConnection(hubConnection);
+    } else {
+      setConnection(null);
+      setIniciarIntervalNotificacoes(true);
+    }
+  }, [urlConnection, usuarioRf]);
+
+  useEffect(() => {
+    conectarSignalR();
+  }, [urlConnection, conectarSignalR]);
+
+  useEffect(() => {
+    obterUrlSignalR()
+      .then(url => {
+        setUrlConnection(url);
+      })
+      .catch(() => {
+        setUrlConnection('');
+        setIniciarIntervalNotificacoes(true);
+      });
+  }, []);
+
+  const startConnection = useCallback(() => {
+    if (connection) {
+      connection
+        .start()
+        .then(() => {
+          // TODO
+          // connection.on('ReceiveMessage', message => {
+          //   console.log(message);
+          // });
+          setIniciarIntervalNotificacoes(false);
+        })
+        .catch(() => {
+          setIniciarIntervalNotificacoes(true);
+          setTimeout(() => {
+            startConnection();
+          }, 60000);
+        });
+
+      connection.onclose(() => {
+        setIniciarIntervalNotificacoes(true);
+        setTimeout(() => {
+          startConnection();
+        }, 60000);
+      });
+      connection.onreconnecting(() => {
+        setIniciarIntervalNotificacoes(true);
+      });
+      connection.onreconnected(() => {
+        setIniciarIntervalNotificacoes(false);
+      });
+    }
+  }, [connection]);
+
+  useEffect(() => {
+    if (connection) startConnection();
+  }, [connection, startConnection]);
+
   useEffect(() => {
     const interval = setInterval(() => {
       if (!loaderGeral) {
@@ -30,8 +124,13 @@ const NavbarNotificacoes = props => {
           .catch(e => erros(e));
       }
     }, 60000);
+
+    if (!iniciarIntervalNotificacoes) {
+      clearInterval(interval);
+    }
+
     return () => clearInterval(interval);
-  }, [loaderGeral]);
+  }, [loaderGeral, iniciarIntervalNotificacoes]);
 
   useLayoutEffect(() => {
     const handleClickFora = event => {
