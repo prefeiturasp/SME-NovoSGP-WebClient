@@ -12,10 +12,15 @@ import React, {
   useRef,
   useState,
 } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import shortid from 'shortid';
 import Button from '~/componentes/button';
 import { Colors } from '~/componentes/colors';
+import {
+  decrementarNaoLidas,
+  incrementarNaoLidas,
+  setIniciarNotificacoesSemWebSocket,
+} from '~/redux/modulos/notificacoes/actions';
 import { erros } from '~/servicos/alertas';
 import history from '~/servicos/history';
 import servicoNotificacao from '~/servicos/Paginas/ServicoNotificacao';
@@ -26,6 +31,8 @@ import { Count, Lista, Tr } from './navbar-notificacoes.css';
 const NavbarNotificacoes = props => {
   const { Botao, Icone, Texto } = props;
 
+  const dispatch = useDispatch();
+
   const usuario = useSelector(store => store.usuario);
   const usuarioRf = usuario?.rf;
 
@@ -35,14 +42,15 @@ const NavbarNotificacoes = props => {
   const statusLista = ['', 'Não lida', 'Lida', 'Aceita', 'Recusada'];
 
   const notificacoes = useSelector(state => state.notificacoes);
+  const { iniciarNotificacoesSemWebSocket } = notificacoes;
   const { loaderGeral } = useSelector(state => state.loader);
 
   const [connection, setConnection] = useState(null);
-  const [
-    iniciarIntervalNotificacoes,
-    setIniciarIntervalNotificacoes,
-  ] = useState(false);
   const [urlConnection, setUrlConnection] = useState('');
+
+  const obterListaNotificacoes = () => {
+    servicoNotificacao.obterUltimasNotificacoesNaoLidas().catch(e => erros(e));
+  };
 
   const conectarSignalR = useCallback(async () => {
     if (urlConnection) {
@@ -60,7 +68,7 @@ const NavbarNotificacoes = props => {
       setConnection(hubConnection);
     } else {
       setConnection(null);
-      setIniciarIntervalNotificacoes(true);
+      dispatch(setIniciarNotificacoesSemWebSocket(true));
     }
   }, [urlConnection, usuarioRf]);
 
@@ -75,62 +83,80 @@ const NavbarNotificacoes = props => {
       })
       .catch(() => {
         setUrlConnection('');
-        setIniciarIntervalNotificacoes(true);
+        dispatch(setIniciarNotificacoesSemWebSocket(true));
       });
   }, []);
 
-  const startConnection = useCallback(() => {
+  const startConnection = useCallback(async () => {
     if (connection) {
+      await connection.stop();
       connection
         .start()
         .then(() => {
-          // TODO
-          // connection.on('ReceiveMessage', message => {
-          //   console.log(message);
-          // });
-          setIniciarIntervalNotificacoes(false);
+          connection.on('NotificacaoCriada', (codigo, data, titulo, id) => {
+            const params = {
+              codigo,
+              data,
+              titulo,
+              id,
+            };
+            dispatch(incrementarNaoLidas(params));
+          });
+          connection.on('NotificacaoLida', id => {
+            dispatch(decrementarNaoLidas(id));
+          });
+          dispatch(setIniciarNotificacoesSemWebSocket(false));
         })
-        .catch(() => {
-          setIniciarIntervalNotificacoes(true);
+        .catch(async () => {
+          dispatch(setIniciarNotificacoesSemWebSocket(true));
+          await connection.stop();
           setTimeout(() => {
             startConnection();
           }, 60000);
         });
 
-      connection.onclose(() => {
-        setIniciarIntervalNotificacoes(true);
-        setTimeout(() => {
-          startConnection();
-        }, 60000);
+      connection.onclose(async () => {
+        dispatch(setIniciarNotificacoesSemWebSocket(true));
       });
       connection.onreconnecting(() => {
-        setIniciarIntervalNotificacoes(true);
+        dispatch(setIniciarNotificacoesSemWebSocket(true));
       });
       connection.onreconnected(() => {
-        setIniciarIntervalNotificacoes(false);
+        dispatch(setIniciarNotificacoesSemWebSocket(false));
       });
     }
   }, [connection]);
 
   useEffect(() => {
     if (connection) startConnection();
+    return () => {
+      if (connection) connection.stop();
+    };
   }, [connection, startConnection]);
+
+  const obterQtdNaoLidas = () => {
+    servicoNotificacao
+      .obterQuantidadeNotificacoesNaoLidas()
+      .catch(e => erros(e));
+  };
+
+  useEffect(() => {
+    obterQtdNaoLidas();
+  }, []);
 
   useEffect(() => {
     const interval = setInterval(() => {
       if (!loaderGeral) {
-        servicoNotificacao
-          .obterQuantidadeNotificacoesNaoLidas()
-          .catch(e => erros(e));
+        obterQtdNaoLidas();
       }
     }, 60000);
 
-    if (!iniciarIntervalNotificacoes) {
+    if (!iniciarNotificacoesSemWebSocket) {
       clearInterval(interval);
     }
 
     return () => clearInterval(interval);
-  }, [loaderGeral, iniciarIntervalNotificacoes]);
+  }, [loaderGeral, iniciarNotificacoesSemWebSocket]);
 
   useLayoutEffect(() => {
     const handleClickFora = event => {
@@ -143,10 +169,8 @@ const NavbarNotificacoes = props => {
   }, [mostraNotificacoes]);
 
   useEffect(() => {
-    if (mostraNotificacoes) {
-      servicoNotificacao
-        .obterUltimasNotificacoesNaoLidas()
-        .catch(e => erros(e));
+    if (mostraNotificacoes && !notificacoes?.notificacoes?.length) {
+      obterListaNotificacoes();
     }
   }, [mostraNotificacoes]);
 
