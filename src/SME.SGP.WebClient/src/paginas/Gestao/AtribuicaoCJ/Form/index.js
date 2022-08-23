@@ -170,7 +170,7 @@ function AtribuicaoCJForm({ match, location }) {
       }
 
       const anoSelecionado = query.anoLetivo || anoAtual;
-      const historico = query.historico.indexOf('false') || consideraHistorico;
+      const historico = query.historico || consideraHistorico;
 
       setValoresIniciais({
         ...valoresIniciais,
