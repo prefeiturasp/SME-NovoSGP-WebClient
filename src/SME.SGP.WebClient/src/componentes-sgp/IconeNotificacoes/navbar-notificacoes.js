@@ -17,9 +17,9 @@ import shortid from 'shortid';
 import Button from '~/componentes/button';
 import { Colors } from '~/componentes/colors';
 import {
-  decrementarExcluida,
-  decrementarNaoLidas,
-  incrementarNaoLidas,
+  webSocketNotificacaoExcluida,
+  webSocketNotificacaoLida,
+  webSocketNotificacaoCriada,
   setIniciarNotificacoesSemWebSocket,
 } from '~/redux/modulos/notificacoes/actions';
 import { erros } from '~/servicos/alertas';
@@ -101,10 +101,10 @@ const NavbarNotificacoes = props => {
               titulo,
               id,
             };
-            dispatch(incrementarNaoLidas(params));
+            dispatch(webSocketNotificacaoCriada(params));
           });
           connection.on('NotificacaoLida', codigo => {
-            dispatch(decrementarNaoLidas(codigo));
+            dispatch(webSocketNotificacaoLida(codigo));
           });
           connection.on('NotificacaoExcluida', (codigo, status) => {
             const params = {
@@ -112,7 +112,7 @@ const NavbarNotificacoes = props => {
               status,
               obterListaNotificacoes,
             };
-            dispatch(decrementarExcluida(params));
+            dispatch(webSocketNotificacaoExcluida(params));
           });
           dispatch(setIniciarNotificacoesSemWebSocket(false));
         })

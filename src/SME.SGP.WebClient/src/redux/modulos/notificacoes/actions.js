@@ -12,23 +12,23 @@ export function naoLidas(quantidade) {
   };
 }
 
-export function incrementarNaoLidas(payload) {
+export function webSocketNotificacaoCriada(payload) {
   return {
-    type: '@notificacoes/incrementarNaoLidas',
+    type: '@notificacoes/webSocketNotificacaoCriada',
     payload,
   };
 }
 
-export function decrementarNaoLidas(payload) {
+export function webSocketNotificacaoLida(payload) {
   return {
-    type: '@notificacoes/decrementarNaoLidas',
+    type: '@notificacoes/webSocketNotificacaoLida',
     payload,
   };
 }
 
-export function decrementarExcluida(payload) {
+export function webSocketNotificacaoExcluida(payload) {
   return {
-    type: '@notificacoes/decrementarExcluida',
+    type: '@notificacoes/webSocketNotificacaoExcluida',
     payload,
   };
 }
