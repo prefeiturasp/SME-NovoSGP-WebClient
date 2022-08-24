@@ -30,7 +30,7 @@ export default function notificacoes(state = inicial, action) {
         );
         const naoLida = estaNaLista?.status === notificacaoStatus.Pendente;
         if (estaNaLista && naoLida) {
-          const index = draft.notificacoes.findIndex(n => n.id === codigo);
+          const index = draft.notificacoes.findIndex(n => n.codigo === codigo);
           draft.notificacoes[index].status = notificacaoStatus.Lida;
         }
         if (draft.notificacoes.length > 0 && naoLida) draft.quantidade -= 1;
