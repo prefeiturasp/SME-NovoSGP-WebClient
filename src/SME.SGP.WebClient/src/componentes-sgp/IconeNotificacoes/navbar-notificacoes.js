@@ -17,6 +17,7 @@ import shortid from 'shortid';
 import Button from '~/componentes/button';
 import { Colors } from '~/componentes/colors';
 import {
+  decrementarExcluida,
   decrementarNaoLidas,
   incrementarNaoLidas,
   setIniciarNotificacoesSemWebSocket,
@@ -102,8 +103,15 @@ const NavbarNotificacoes = props => {
             };
             dispatch(incrementarNaoLidas(params));
           });
-          connection.on('NotificacaoLida', id => {
-            dispatch(decrementarNaoLidas(id));
+          connection.on('NotificacaoLida', codigo => {
+            dispatch(decrementarNaoLidas(codigo));
+          });
+          connection.on('NotificacaoExcluida', codigo => {
+            const params = {
+              codigo,
+              obterListaNotificacoes,
+            };
+            dispatch(decrementarExcluida(params));
           });
           dispatch(setIniciarNotificacoesSemWebSocket(false));
         })
@@ -169,8 +177,12 @@ const NavbarNotificacoes = props => {
   }, [mostraNotificacoes]);
 
   useEffect(() => {
-    if (mostraNotificacoes && !notificacoes?.notificacoes?.length) {
-      obterListaNotificacoes();
+    if (mostraNotificacoes) {
+      if (iniciarNotificacoesSemWebSocket) {
+        obterListaNotificacoes();
+      } else if (!notificacoes?.notificacoes?.length) {
+        obterListaNotificacoes();
+      }
     }
   }, [mostraNotificacoes]);
 

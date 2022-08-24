@@ -26,6 +26,13 @@ export function decrementarNaoLidas(payload) {
   };
 }
 
+export function decrementarExcluida(payload) {
+  return {
+    type: '@notificacoes/decrementarExcluida',
+    payload,
+  };
+}
+
 export function setIniciarNotificacoesSemWebSocket(payload) {
   return {
     type: '@notificacoes/setIniciarNotificacoesSemWebSocket',

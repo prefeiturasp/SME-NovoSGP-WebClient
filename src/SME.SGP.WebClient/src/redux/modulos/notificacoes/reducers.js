@@ -24,11 +24,13 @@ export default function notificacoes(state = inicial, action) {
         break;
       }
       case '@notificacoes/decrementarNaoLidas': {
-        const id = action.payload;
-        const estaNaLista = draft.notificacoes?.find?.(n => n?.id === id);
+        const codigo = action.payload;
+        const estaNaLista = draft.notificacoes?.find?.(
+          n => n?.codigo === codigo
+        );
         const naoLida = estaNaLista?.status === notificacaoStatus.Pendente;
         if (estaNaLista && naoLida) {
-          const index = draft.notificacoes.findIndex(n => n.id === id);
+          const index = draft.notificacoes.findIndex(n => n.id === codigo);
           draft.notificacoes[index].status = notificacaoStatus.Lida;
         }
         if (draft.notificacoes.length > 0 && naoLida) draft.quantidade -= 1;
@@ -50,6 +52,17 @@ export default function notificacoes(state = inicial, action) {
           });
           draft.quantidade += 1;
         }
+        break;
+      }
+      case '@notificacoes/decrementarExcluida': {
+        const { codigo, obterListaNotificacoes } = action.payload;
+        const estaNaLista = draft.notificacoes?.find?.(
+          n => n?.codigo === codigo
+        );
+        if (estaNaLista && obterListaNotificacoes) {
+          obterListaNotificacoes();
+        }
+        if (draft.notificacoes.length > 0) draft.quantidade -= 1;
         break;
       }
       default:
