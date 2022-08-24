@@ -252,7 +252,6 @@ const DadosConselhoClasse = props => {
         {!semDados && turmaSelecionada.turma == turmaAtual ? (
           <>
             <AlertaDentroPeriodo />
-            <MarcadorSituacaoConselho />
             <MarcadorPeriodoInicioFim />
             <ListasNotasConceitos bimestreSelecionado={bimestreAtual} />
             <Sintese
