@@ -104,7 +104,11 @@ const NavbarNotificacoes = props => {
             dispatch(webSocketNotificacaoCriada(params));
           });
           connection.on('NotificacaoLida', codigo => {
-            dispatch(webSocketNotificacaoLida(codigo));
+            const params = {
+              codigo,
+              obterListaNotificacoes,
+            };
+            dispatch(webSocketNotificacaoLida(params));
           });
           connection.on('NotificacaoExcluida', (codigo, status) => {
             const params = {
