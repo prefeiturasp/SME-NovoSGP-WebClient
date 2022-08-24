@@ -106,9 +106,10 @@ const NavbarNotificacoes = props => {
           connection.on('NotificacaoLida', codigo => {
             dispatch(decrementarNaoLidas(codigo));
           });
-          connection.on('NotificacaoExcluida', codigo => {
+          connection.on('NotificacaoExcluida', (codigo, status) => {
             const params = {
               codigo,
+              status,
               obterListaNotificacoes,
             };
             dispatch(decrementarExcluida(params));

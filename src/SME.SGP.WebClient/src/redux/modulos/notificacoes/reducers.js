@@ -24,16 +24,21 @@ export default function notificacoes(state = inicial, action) {
         break;
       }
       case '@notificacoes/decrementarNaoLidas': {
-        const codigo = action.payload;
+        const { codigo, obterListaNotificacoes } = action.payload;
         const estaNaLista = draft.notificacoes?.find?.(
           n => n?.codigo === codigo
         );
+        const maisQueCincoNotificacoes = draft.notificacoes?.quantidade > 5;
         const naoLida = estaNaLista?.status === notificacaoStatus.Pendente;
-        if (estaNaLista && naoLida) {
+
+        if (maisQueCincoNotificacoes && estaNaLista) {
+          obterListaNotificacoes();
+        } else if (estaNaLista && naoLida) {
           const index = draft.notificacoes.findIndex(n => n.codigo === codigo);
           draft.notificacoes[index].status = notificacaoStatus.Lida;
         }
-        if (draft.notificacoes.length > 0 && naoLida) draft.quantidade -= 1;
+
+        if (draft.notificacoes.length > 0) draft.quantidade -= 1;
         break;
       }
       case '@notificacoes/incrementarNaoLidas': {
@@ -55,14 +60,19 @@ export default function notificacoes(state = inicial, action) {
         break;
       }
       case '@notificacoes/decrementarExcluida': {
-        const { codigo, obterListaNotificacoes } = action.payload;
+        const { codigo, status, obterListaNotificacoes } = action.payload;
         const estaNaLista = draft.notificacoes?.find?.(
           n => n?.codigo === codigo
         );
         if (estaNaLista && obterListaNotificacoes) {
           obterListaNotificacoes();
         }
-        if (draft.notificacoes.length > 0) draft.quantidade -= 1;
+        if (
+          draft.notificacoes.length > 0 &&
+          status === notificacaoStatus.Pendente
+        ) {
+          draft.quantidade -= 1;
+        }
         break;
       }
       default:
