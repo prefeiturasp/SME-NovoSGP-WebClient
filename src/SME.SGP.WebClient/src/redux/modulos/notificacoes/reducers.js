@@ -38,7 +38,7 @@ export default function notificacoes(state = inicial, action) {
           draft.notificacoes[index].status = notificacaoStatus.Lida;
         }
 
-        if (draft.notificacoes.length > 0) draft.quantidade -= 1;
+        draft.quantidade -= 1;
         break;
       }
       case '@notificacoes/webSocketNotificacaoCriada': {
@@ -67,10 +67,7 @@ export default function notificacoes(state = inicial, action) {
         if (estaNaLista && obterListaNotificacoes) {
           obterListaNotificacoes();
         }
-        if (
-          draft.notificacoes.length > 0 &&
-          status === notificacaoStatus.Pendente
-        ) {
+        if (status === notificacaoStatus.Pendente) {
           draft.quantidade -= 1;
         }
         break;
