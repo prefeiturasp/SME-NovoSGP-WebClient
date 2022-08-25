@@ -29,4 +29,7 @@ const obterTrackingID = () =>
 const obterUrlSondagem = () =>
   configVariaveis().then(response => response?.URL_SONDAGEM);
 
-export { urlBase, obterTrackingID, obterUrlSondagem };
+const obterUrlSignalR = () =>
+  configVariaveis().then(response => response?.URL_SIGNALR);
+
+export { urlBase, obterTrackingID, obterUrlSondagem, obterUrlSignalR };
