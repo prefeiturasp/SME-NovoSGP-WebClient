@@ -25,7 +25,7 @@ const CamposFiltrarDadosFrequenciaPlanoAula = () => {
   const dispatch = useDispatch();
 
   const [bloquearProximo, setBloquearProximo] = useState(true);
-  const [veioCalendario, setVeioCalendario] = useState(false);
+  const [veioCalendario, setVeioCalendario] = useState(true);
 
   const usuario = useSelector(store => store.usuario);
   const { turmaSelecionada } = usuario;
