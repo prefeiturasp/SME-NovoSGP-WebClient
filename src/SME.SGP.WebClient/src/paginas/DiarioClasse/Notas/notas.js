@@ -521,7 +521,7 @@ const Notas = ({ match }) => {
         periodoFimTicks: dadosBimestreAtual.periodoFimTicks,
         periodoEscolarId: dadosBimestreAtual.periodoEscolarId,
       };
-      
+
       if(valoresBimestresSalvar.length > 0){
         const salvouNotas = await api.post(
           `v1/avaliacoes/notas`,
@@ -548,7 +548,7 @@ const Notas = ({ match }) => {
           resolve(true);
           return true;
         }
-      }        
+      }
       resolve(false);
       return false;
     } catch (e) {
@@ -687,7 +687,7 @@ const Notas = ({ match }) => {
               dispatch(setModoEdicaoGeral(false));
               dispatch(setModoEdicaoGeralNotaFinal(false));
               dispatch(setExpandirLinha([]));
-              
+
               if (auditoriaBimestre) {
                 const auditoriaBimestreInserido = `Nota final do bimestre inserida por ${
                   auditoriaBimestre?.criadoPor
@@ -1295,7 +1295,16 @@ const Notas = ({ match }) => {
         </Row>
       ) : null}
       <AlertaModalidadeInfantil />
-      <Cabecalho pagina={tituloNotasConceitos} />
+      <Cabecalho pagina={tituloNotasConceitos}>
+        <div className="col-md-12 d-flex justify-content-end">
+          <BotoesAcoessNotasConceitos
+            onClickVoltar={onClickVoltar}
+            onClickCancelar={onClickCancelar}
+            onClickSalvar={onClickSalvar}
+            desabilitarBotao={desabilitarCampos}
+          />
+        </div>
+      </Cabecalho>
       <Loader
         loading={
           (carregandoListaBimestres || carregandoGeral) &&
@@ -1304,16 +1313,6 @@ const Notas = ({ match }) => {
       >
         <Card>
           <div className="col-md-12">
-            <div className="row">
-              <div className="col-md-12 d-flex justify-content-end pb-4">
-                <BotoesAcoessNotasConceitos
-                  onClickVoltar={onClickVoltar}
-                  onClickCancelar={onClickCancelar}
-                  onClickSalvar={onClickSalvar}
-                  desabilitarBotao={desabilitarCampos}
-                />
-              </div>
-            </div>
             <div className="row">
               <div className="col-sm-12 col-md-4 col-lg-4 col-xl-4 mb-2">
                 <SelectComponent

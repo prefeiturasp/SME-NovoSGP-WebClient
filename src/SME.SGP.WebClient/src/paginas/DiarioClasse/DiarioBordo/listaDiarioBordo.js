@@ -32,6 +32,10 @@ import {
 import ServicoDiarioBordo from '~/servicos/Paginas/DiarioClasse/ServicoDiarioBordo';
 import { Mensagens } from './componentes';
 import { erro } from '~/servicos/alertas';
+import {
+  SGP_BUTTON_NOVO,
+  SGP_BUTTON_VOLTAR,
+} from '~/componentes-sgp/filtro/idsCampos';
 
 const ListaDiarioBordo = () => {
   const [carregandoGeral, setCarregandoGeral] = useState(false);
@@ -321,7 +325,31 @@ const ListaDiarioBordo = () => {
   return (
     <Loader loading={carregandoGeral} className="w-100">
       <Mensagens />
-      <Cabecalho pagina="Diário de bordo (Intencionalidade docente)" />
+      <Cabecalho pagina="Diário de bordo (Intencionalidade docente)">
+        <div className="col-md-12 d-flex justify-content-end">
+          <Button
+            id={SGP_BUTTON_VOLTAR}
+            label="Voltar"
+            icon="arrow-left"
+            color={Colors.Azul}
+            border
+            className="mr-2"
+            onClick={onClickVoltar}
+          />
+          <Button
+            id={SGP_BUTTON_NOVO}
+            label="Novo"
+            color={Colors.Roxo}
+            bold
+            onClick={onClickNovo}
+            disabled={
+              !permissoesTela.podeIncluir ||
+              !turmaInfantil ||
+              !listaComponenteCurriculares
+            }
+          />
+        </div>
+      </Cabecalho>
       <Card>
         <div className="col-md-12 p-0">
           <div className="row">
@@ -340,28 +368,6 @@ const ListaDiarioBordo = () => {
                   !turmaInfantil ||
                   (listaComponenteCurriculares &&
                     listaComponenteCurriculares.length === 1)
-                }
-              />
-            </div>
-            <div className="col-sm-12 col-lg-8 col-md-8 d-flex justify-content-end pb-4">
-              <Button
-                label="Voltar"
-                icon="arrow-left"
-                color={Colors.Azul}
-                border
-                className="mr-2"
-                onClick={onClickVoltar}
-              />
-              <Button
-                label="Novo"
-                color={Colors.Roxo}
-                bold
-                className="mr-2"
-                onClick={onClickNovo}
-                disabled={
-                  !permissoesTela.podeIncluir ||
-                  !turmaInfantil ||
-                  !listaComponenteCurriculares
                 }
               />
             </div>

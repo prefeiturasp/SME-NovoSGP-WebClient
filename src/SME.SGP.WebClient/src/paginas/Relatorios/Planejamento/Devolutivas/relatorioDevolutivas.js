@@ -436,10 +436,7 @@ const RelatorioDevolutivas = () => {
   return (
     <Loader loading={exibirLoaderGeral}>
       {naoEhInfantil && (
-        <AlertaPermiteSomenteTurmaInfantil
-          marginBottom={3}
-          exibir={naoEhInfantil}
-        />
+        <AlertaPermiteSomenteTurmaInfantil exibir={naoEhInfantil} />
       )}
       <Cabecalho pagina="Relatório de devolutivas" />
       <Card>

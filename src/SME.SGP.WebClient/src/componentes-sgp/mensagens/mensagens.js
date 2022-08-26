@@ -9,7 +9,7 @@ const Mensagens = () => {
   const somenteConsulta = useSelector(store => store.navegacao.somenteConsulta);
   const alertas = useSelector(state => state.alertas);
   return alertas.alertas?.length || somenteConsulta ? (
-    <div className="card-body m-r-0 m-l-0 p-l-0 p-r-0 m-t-0">
+    <div className="mt-2 mb-2">
       {alertas.alertas.map(alerta => (
         <Row key={shortid.generate()}>
           <Grid cols={12}>

@@ -655,185 +655,191 @@ const DiarioBordo = ({ match }) => {
         onClickFecharModal={onClickFecharModal}
         onClickSelecionarAula={onClickSelecionarAula}
       />
-      <Cabecalho pagina="Diário de bordo (Intencionalidade docente)" />
-      <Card>
-        <div className="col-md-12 mb-3">
-          <Formik
-            enableReinitialize
-            onSubmit={(v, form) => {
-              salvarDiarioDeBordo(v, form);
-            }}
-            validationSchema={
-              valoresIniciais && valoresIniciais.aulaId ? validacoes : {}
-            }
-            initialValues={valoresIniciais}
-            validateOnBlur
-            validateOnChange
-            ref={refFormik => setRefForm(refFormik)}
-          >
-            {form => (
+      <Formik
+        enableReinitialize
+        onSubmit={(v, form) => {
+          salvarDiarioDeBordo(v, form);
+        }}
+        validationSchema={
+          valoresIniciais && valoresIniciais.aulaId ? validacoes : {}
+        }
+        initialValues={valoresIniciais}
+        validateOnBlur
+        validateOnChange
+        ref={refFormik => setRefForm(refFormik)}
+      >
+        {form => (
+          <>
+            <Cabecalho pagina="Diário de bordo (Intencionalidade docente)">
+              <div className="col-md-12 d-flex justify-content-end">
+                <BotoesAcoesDiarioBordo
+                  onClickVoltar={(observacaoEmEdicao, novaObservacao) =>
+                    onClickVoltar(form, observacaoEmEdicao, novaObservacao)
+                  }
+                  onClickCancelar={() => onClickCancelar(form)}
+                  validaAntesDoSubmit={() => validaAntesDoSubmit(form, true)}
+                  modoEdicao={modoEdicao}
+                  desabilitarCampos={desabilitarCampos}
+                  turmaInfantil={turmaInfantil}
+                />
+              </div>
+            </Cabecalho>
+            <Card>
               <Form>
-                <div className="row">
-                  <div className="col-md-12 d-flex justify-content-end pb-4">
-                    <BotoesAcoesDiarioBordo
-                      onClickVoltar={(observacaoEmEdicao, novaObservacao) =>
-                        onClickVoltar(form, observacaoEmEdicao, novaObservacao)
-                      }
-                      onClickCancelar={() => onClickCancelar(form)}
-                      validaAntesDoSubmit={() =>
-                        validaAntesDoSubmit(form, true)
-                      }
-                      modoEdicao={modoEdicao}
-                      desabilitarCampos={desabilitarCampos}
-                      turmaInfantil={turmaInfantil}
-                    />
-                  </div>
-                  <div className="col-sm-12 col-md-4 col-lg-4 col-xl-4 mb-2">
-                    <SelectComponent
-                      id="disciplina"
-                      name="disciplinaId"
-                      lista={listaComponenteCurriculares || []}
-                      valueOption="codigoComponenteCurricular"
-                      valueText="nomeComponenteInfantil"
-                      valueSelect={componenteCurricularSelecionado}
-                      onChange={onChangeComponenteCurricular}
-                      placeholder="Selecione um componente curricular"
-                      disabled={
-                        !turmaInfantil ||
-                        listaComponenteCurriculares?.length === 1 ||
-                        aulaId
-                      }
-                    />
-                  </div>
-                  <div className="col-sm-12 col-md-4 col-lg-3 col-xl-3 mb-3">
-                    <Loader loading={carregandoData}>
-                      <CampoData
-                        valor={dataSelecionada}
-                        onChange={data => onChangeData(data, form)}
-                        placeholder="DD/MM/AAAA"
-                        formatoData="DD/MM/YYYY"
-                        desabilitado={
+                <div className="col-md-12 mb-3">
+                  <div className="row">
+                    <div className="col-sm-12 col-md-4 col-lg-4 col-xl-4 mb-2">
+                      <SelectComponent
+                        id="disciplina"
+                        name="disciplinaId"
+                        lista={listaComponenteCurriculares || []}
+                        valueOption="codigoComponenteCurricular"
+                        valueText="nomeComponenteInfantil"
+                        valueSelect={componenteCurricularSelecionado}
+                        onChange={onChangeComponenteCurricular}
+                        placeholder="Selecione um componente curricular"
+                        disabled={
                           !turmaInfantil ||
-                          !listaComponenteCurriculares?.length ||
-                          !componenteCurricularSelecionado
+                          listaComponenteCurriculares?.length === 1 ||
+                          aulaId
                         }
-                        diasParaHabilitar={diasParaHabilitar}
                       />
-                    </Loader>
+                    </div>
+                    <div className="col-sm-12 col-md-4 col-lg-3 col-xl-3 mb-3">
+                      <Loader loading={carregandoData}>
+                        <CampoData
+                          valor={dataSelecionada}
+                          onChange={data => onChangeData(data, form)}
+                          placeholder="DD/MM/AAAA"
+                          formatoData="DD/MM/YYYY"
+                          desabilitado={
+                            !turmaInfantil ||
+                            !listaComponenteCurriculares?.length ||
+                            !componenteCurricularSelecionado
+                          }
+                          diasParaHabilitar={diasParaHabilitar}
+                        />
+                      </Loader>
+                    </div>
                   </div>
-                </div>
-                <div className="row">
-                  {turmaInfantil &&
-                  componenteCurricularSelecionado &&
-                  dataSelecionada ? (
-                    <>
-                      <div className="col-md-12 mb-2">
-                        <PainelCollapse defaultActiveKey="1">
-                          <PainelCollapse.Painel
-                            temBorda
-                            header="Planejamento reflexivo a partir das escutas"
-                            key="1"
-                          >
-                            <>
-                              {ehInseridoCJ && (
-                                <div className="d-flex justify-content-end mb-2">
-                                  <MarcadorSituacao>
-                                    Registro inserido pelo CJ
-                                  </MarcadorSituacao>
+                  <div className="row">
+                    {turmaInfantil &&
+                    componenteCurricularSelecionado &&
+                    dataSelecionada ? (
+                      <>
+                        <div className="col-md-12 mb-2">
+                          <PainelCollapse defaultActiveKey="1">
+                            <PainelCollapse.Painel
+                              temBorda
+                              header="Planejamento reflexivo a partir das escutas"
+                              key="1"
+                            >
+                              <>
+                                {ehInseridoCJ && (
+                                  <div className="d-flex justify-content-end mb-2">
+                                    <MarcadorSituacao>
+                                      Registro inserido pelo CJ
+                                    </MarcadorSituacao>
+                                  </div>
+                                )}
+                                <JoditEditor
+                                  valideClipboardHTML={false}
+                                  form={form}
+                                  value={valoresIniciais.planejamento}
+                                  name="planejamento"
+                                  onChange={v => {
+                                    if (valoresIniciais.planejamento !== v) {
+                                      onChangeCampos();
+                                    }
+                                  }}
+                                  desabilitar={desabilitarCampos}
+                                />
+                              </>
+                            </PainelCollapse.Painel>
+                          </PainelCollapse>
+                        </div>
+                        <div className="col-md-12 mb-2">
+                          <PainelCollapse>
+                            <PainelCollapse.Painel
+                              temBorda
+                              header="Registros GSA"
+                              key="3"
+                            >
+                              {valoresIniciais?.aulaId && (
+                                <DadosMuralGoogleSalaAula
+                                  podeAlterar={!desabilitarCampos}
+                                  aulaId={valoresIniciais?.aulaId}
+                                  ehTurmaInfantil
+                                />
+                              )}
+                            </PainelCollapse.Painel>
+                          </PainelCollapse>
+                        </div>
+                        <div className="col-md-12 mb-2">
+                          <PainelCollapse>
+                            <PainelCollapse.Painel
+                              temBorda
+                              header="Devolutivas"
+                            >
+                              {form &&
+                              form.values &&
+                              form.values.devolutivas ? (
+                                <JoditEditor
+                                  valideClipboardHTML={false}
+                                  label="Somente leitura"
+                                  form={form}
+                                  value={valoresIniciais.devolutivas}
+                                  name="devolutivas"
+                                  removerToolbar
+                                  desabilitar
+                                />
+                              ) : (
+                                <div className="text-center p-2">
+                                  Não há devolutiva registrada para este diário
+                                  de bordo
                                 </div>
                               )}
-                              <JoditEditor
-                                valideClipboardHTML={false}
-                                form={form}
-                                value={valoresIniciais.planejamento}
-                                name="planejamento"
-                                onChange={v => {
-                                  if (valoresIniciais.planejamento !== v) {
-                                    onChangeCampos();
-                                  }
-                                }}
-                                desabilitar={desabilitarCampos}
-                              />
-                            </>
-                          </PainelCollapse.Painel>
-                        </PainelCollapse>
-                      </div>
-                      <div className="col-md-12 mb-2">
-                        <PainelCollapse>
-                          <PainelCollapse.Painel
-                            temBorda
-                            header="Registros GSA"
-                            key="3"
-                          >
-                            {valoresIniciais?.aulaId && (
-                              <DadosMuralGoogleSalaAula
-                                podeAlterar={!desabilitarCampos}
-                                aulaId={valoresIniciais?.aulaId}
-                                ehTurmaInfantil
-                              />
-                            )}
-                          </PainelCollapse.Painel>
-                        </PainelCollapse>
-                      </div>
-                      <div className="col-md-12 mb-2">
-                        <PainelCollapse>
-                          <PainelCollapse.Painel temBorda header="Devolutivas">
-                            {form && form.values && form.values.devolutivas ? (
-                              <JoditEditor
-                                valideClipboardHTML={false}
-                                label="Somente leitura"
-                                form={form}
-                                value={valoresIniciais.devolutivas}
-                                name="devolutivas"
-                                removerToolbar
-                                desabilitar
-                              />
-                            ) : (
-                              <div className="text-center p-2">
-                                Não há devolutiva registrada para este diário de
-                                bordo
-                              </div>
-                            )}
-                          </PainelCollapse.Painel>
-                        </PainelCollapse>
-                      </div>
-                    </>
-                  ) : (
-                    ''
-                  )}
-                  {dataSelecionada && auditoria ? (
-                    <Auditoria
-                      criadoEm={auditoria.criadoEm}
-                      criadoPor={auditoria.criadoPor}
-                      criadoRf={auditoria.criadoRF}
-                      alteradoPor={auditoria.alteradoPor}
-                      alteradoEm={auditoria.alteradoEm}
-                      alteradoRf={auditoria.alteradoRF}
-                      ignorarMarginTop
-                    />
-                  ) : (
-                    ''
-                  )}
+                            </PainelCollapse.Painel>
+                          </PainelCollapse>
+                        </div>
+                      </>
+                    ) : (
+                      ''
+                    )}
+                    {dataSelecionada && auditoria ? (
+                      <Auditoria
+                        criadoEm={auditoria.criadoEm}
+                        criadoPor={auditoria.criadoPor}
+                        criadoRf={auditoria.criadoRF}
+                        alteradoPor={auditoria.alteradoPor}
+                        alteradoEm={auditoria.alteradoEm}
+                        alteradoRf={auditoria.alteradoRF}
+                        ignorarMarginTop
+                      />
+                    ) : (
+                      ''
+                    )}
+                  </div>
                 </div>
               </Form>
-            )}
-          </Formik>
-        </div>
-        {dataSelecionada && auditoria?.id ? (
-          <ObservacoesUsuario
-            mostrarListaNotificacao
-            salvarObservacao={obs => salvarEditarObservacao(obs)}
-            editarObservacao={obs => salvarEditarObservacao(obs)}
-            excluirObservacao={obs => excluirObservacao(obs)}
-            permissoes={permissoesTela}
-            diarioBordoId={diarioBordoId}
-            dreId={turmaSelecionada.dre}
-            ueId={turmaSelecionada.unidadeEscolar}
-          />
-        ) : (
-          ''
+              {dataSelecionada && auditoria?.id ? (
+                <ObservacoesUsuario
+                  mostrarListaNotificacao
+                  salvarObservacao={obs => salvarEditarObservacao(obs)}
+                  editarObservacao={obs => salvarEditarObservacao(obs)}
+                  excluirObservacao={obs => excluirObservacao(obs)}
+                  permissoes={permissoesTela}
+                  diarioBordoId={diarioBordoId}
+                  dreId={turmaSelecionada.dre}
+                  ueId={turmaSelecionada.unidadeEscolar}
+                />
+              ) : (
+                ''
+              )}
+            </Card>
+          </>
         )}
-      </Card>
+      </Formik>
     </Loader>
   );
 };

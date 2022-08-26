@@ -1,5 +1,10 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import {
+  SGP_BUTTON_ALTERAR_CADASTRAR,
+  SGP_BUTTON_CANCELAR,
+  SGP_BUTTON_VOLTAR,
+} from '~/componentes-sgp/filtro/idsCampos';
 import Button from '~/componentes/button';
 import { Colors } from '~/componentes/colors';
 import { URL_HOME } from '~/constantes';
@@ -88,7 +93,7 @@ const BotoesAcoesFrequenciaPlanoAula = () => {
   return (
     <>
       <Button
-        id="btn-voltar"
+        id={SGP_BUTTON_VOLTAR}
         label="Voltar"
         icon="arrow-left"
         color={Colors.Azul}
@@ -97,7 +102,7 @@ const BotoesAcoesFrequenciaPlanoAula = () => {
         onClick={onClickVoltar}
       />
       <Button
-        id="btn-cancelar"
+        id={SGP_BUTTON_CANCELAR}
         label="Cancelar"
         color={Colors.Roxo}
         border
@@ -108,7 +113,7 @@ const BotoesAcoesFrequenciaPlanoAula = () => {
         }
       />
       <Button
-        id="btn-salvar"
+        id={SGP_BUTTON_ALTERAR_CADASTRAR}
         label={idFrequencia ? 'Alterar' : 'Cadastrar'}
         color={Colors.Roxo}
         border

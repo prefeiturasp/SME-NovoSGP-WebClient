@@ -46,10 +46,11 @@ const Cabecalho = ({ titulo, pagina, children, classes }) => {
     <Container className={classes}>
       <Affix offsetTop={70}>
         <div
-          className="col-md-12 d-flex background-row pt-3 pb-2"
+          className="col-md-12 d-flex background-row pt-3"
           style={{
             justifyContent: 'space-between',
             flexWrap: 'wrap',
+            alignItems: 'flex-end',
           }}
         >
           <div>
