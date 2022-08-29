@@ -8,6 +8,12 @@ import * as Yup from 'yup';
 import { Auditoria, CampoData, Loader, momentSchema } from '~/componentes';
 import AlertaPermiteSomenteTurmaInfantil from '~/componentes-sgp/AlertaPermiteSomenteTurmaInfantil/alertaPermiteSomenteTurmaInfantil';
 import Cabecalho from '~/componentes-sgp/cabecalho';
+import {
+  SGP_BUTTON_CANCELAR,
+  SGP_BUTTON_EXCLUIR,
+  SGP_BUTTON_SALVAR_ALTERAR,
+  SGP_BUTTON_VOLTAR,
+} from '~/componentes-sgp/filtro/idsCampos';
 import Alert from '~/componentes/alert';
 import Button from '~/componentes/button';
 import Card from '~/componentes/card';
@@ -576,69 +582,68 @@ const DevolutivasForm = ({ match }) => {
         ''
       )}
       {turmaSelecionada.turma ? <AlertaPermiteSomenteTurmaInfantil /> : ''}
-      <Cabecalho pagina="Devolutivas" />
-      <Card>
-        <div className="col-md-12">
-          <Formik
-            enableReinitialize
-            validationSchema={
-              idDevolutiva ? validacoesRegistroEdicao : validacoesRegistroNovo
-            }
-            initialValues={valoresIniciais}
-            validateOnBlur
-            validateOnChange
-            ref={refFormik => setRefForm(refFormik)}
-          >
-            {form => (
-              <Form>
+
+      <Formik
+        enableReinitialize
+        validationSchema={
+          idDevolutiva ? validacoesRegistroEdicao : validacoesRegistroNovo
+        }
+        initialValues={valoresIniciais}
+        validateOnBlur
+        validateOnChange
+        ref={refFormik => setRefForm(refFormik)}
+      >
+        {form => (
+          <Form>
+            <Cabecalho pagina="Devolutivas">
+              <div className="col-md-12 d-flex justify-content-end">
+                <Button
+                  id={SGP_BUTTON_VOLTAR}
+                  label="Voltar"
+                  icon="arrow-left"
+                  color={Colors.Azul}
+                  border
+                  className="mr-3"
+                  onClick={() => onClickVoltar(form)}
+                />
+                <Button
+                  id={SGP_BUTTON_CANCELAR}
+                  label="Cancelar"
+                  color={Colors.Roxo}
+                  onClick={() => onClickCancelar(form)}
+                  border
+                  bold
+                  className="mr-3"
+                  disabled={!turmaInfantil || !modoEdicao || desabilitarCampos}
+                />
+                <Button
+                  id={SGP_BUTTON_EXCLUIR}
+                  label="Excluir"
+                  color={Colors.Vermelho}
+                  border
+                  className="mr-3"
+                  disabled={!idDevolutiva || !permissoesTela.podeExcluir}
+                  onClick={onClickExcluir}
+                />
+                <Button
+                  id={SGP_BUTTON_SALVAR_ALTERAR}
+                  label={idDevolutiva ? 'Alterar' : 'Salvar'}
+                  color={Colors.Roxo}
+                  border
+                  bold
+                  onClick={async () => {
+                    const salvou = await validaAntesDoSubmit(form, true);
+                    if (salvou) {
+                      history.push(RotasDto.DEVOLUTIVAS);
+                    }
+                  }}
+                  disabled={!turmaInfantil || !modoEdicao || desabilitarCampos}
+                />
+              </div>
+            </Cabecalho>
+            <Card>
+              <div className="col-md-12">
                 <div className="row">
-                  <div className="col-md-12 d-flex justify-content-end pb-4">
-                    <Button
-                      id="btn-voltar-devolutivas"
-                      label="Voltar"
-                      icon="arrow-left"
-                      color={Colors.Azul}
-                      border
-                      className="mr-3"
-                      onClick={() => onClickVoltar(form)}
-                    />
-                    <Button
-                      id="btn-cancelar-devolutivas"
-                      label="Cancelar"
-                      color={Colors.Roxo}
-                      onClick={() => onClickCancelar(form)}
-                      border
-                      bold
-                      className="mr-3"
-                      disabled={
-                        !turmaInfantil || !modoEdicao || desabilitarCampos
-                      }
-                    />
-                    <Button
-                      label="Excluir"
-                      color={Colors.Vermelho}
-                      border
-                      className="mr-3"
-                      disabled={!idDevolutiva || !permissoesTela.podeExcluir}
-                      onClick={onClickExcluir}
-                    />
-                    <Button
-                      id="btn-salvar-devolutivas"
-                      label={idDevolutiva ? 'Alterar' : 'Salvar'}
-                      color={Colors.Roxo}
-                      border
-                      bold
-                      onClick={async () => {
-                        const salvou = await validaAntesDoSubmit(form, true);
-                        if (salvou) {
-                          history.push(RotasDto.DEVOLUTIVAS);
-                        }
-                      }}
-                      disabled={
-                        !turmaInfantil || !modoEdicao || desabilitarCampos
-                      }
-                    />
-                  </div>
                   <div className="col-sm-12 col-md-12 col-lg-6 col-xl-4 mb-2">
                     <SelectComponent
                       label="Componente curricular"
@@ -748,11 +753,11 @@ const DevolutivasForm = ({ match }) => {
                     ''
                   )}
                 </div>
-              </Form>
-            )}
-          </Formik>
-        </div>
-      </Card>
+              </div>
+            </Card>
+          </Form>
+        )}
+      </Formik>
     </Loader>
   );
 };

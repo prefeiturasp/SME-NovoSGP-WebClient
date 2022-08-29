@@ -17,6 +17,10 @@ import { ehTurmaInfantil } from '~/servicos/Validacoes/validacoesInfatil';
 import RotasDto from '~/dtos/rotasDto';
 import { verificaSomenteConsulta } from '~/servicos/servico-navegacao';
 import ServicoPeriodoEscolar from '~/servicos/Paginas/Calendario/ServicoPeriodoEscolar';
+import {
+  SGP_BUTTON_NOVO,
+  SGP_BUTTON_VOLTAR,
+} from '~/componentes-sgp/filtro/idsCampos';
 
 const DevolutivasLista = () => {
   const usuario = useSelector(state => state.usuario);
@@ -214,35 +218,36 @@ const DevolutivasLista = () => {
         ''
       )}
       {turmaSelecionada.turma ? <AlertaPermiteSomenteTurmaInfantil /> : ''}
-      <Cabecalho pagina="Devolutivas" />
+      <Cabecalho pagina="Devolutivas">
+        <div className="col-md-12 d-flex justify-content-end">
+          <Button
+            id={SGP_BUTTON_VOLTAR}
+            label="Voltar"
+            icon="arrow-left"
+            color={Colors.Azul}
+            border
+            className="mr-3"
+            onClick={onClickVoltar}
+          />
+          <Button
+            id={SGP_BUTTON_NOVO}
+            label="Nova"
+            color={Colors.Roxo}
+            border
+            bold
+            onClick={onClickNovo}
+            disabled={
+              !turmaInfantil ||
+              somenteConsulta ||
+              !permissoesTela.podeIncluir ||
+              !turmaSelecionada.turma
+            }
+          />
+        </div>
+      </Cabecalho>
       <Card>
         <div className="col-md-12">
           <div className="row">
-            <div className="col-md-12 d-flex justify-content-end pb-4">
-              <Button
-                id="btn-voltar-devolutivas"
-                label="Voltar"
-                icon="arrow-left"
-                color={Colors.Azul}
-                border
-                className="mr-3"
-                onClick={onClickVoltar}
-              />
-              <Button
-                id="btn-nova-devolutivas"
-                label="Nova"
-                color={Colors.Roxo}
-                border
-                bold
-                onClick={onClickNovo}
-                disabled={
-                  !turmaInfantil ||
-                  somenteConsulta ||
-                  !permissoesTela.podeIncluir ||
-                  !turmaSelecionada.turma
-                }
-              />
-            </div>
             <div className="col-sm-12 col-md-4 col-lg-4 col-xl-4 mb-2">
               <SelectComponent
                 id="disciplina"

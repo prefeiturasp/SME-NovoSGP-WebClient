@@ -37,6 +37,7 @@ const Container = styled.div`
 
   .ant-affix .background-row {
     box-shadow: 0 1.5rem 1rem -18px rgb(0 0 0 / 15%);
+    padding-bottom: 0.5rem !important;
   }
   padding-bottom: 8px;
 `;
@@ -46,7 +47,7 @@ const Cabecalho = ({ titulo, pagina, children, classes }) => {
     <Container className={classes}>
       <Affix offsetTop={70}>
         <div
-          className="col-md-12 d-flex background-row pt-3"
+          className="col-md-12 d-flex background-row pt-2"
           style={{
             justifyContent: 'space-between',
             flexWrap: 'wrap',
