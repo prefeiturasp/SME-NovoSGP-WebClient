@@ -223,10 +223,8 @@ class ServicoSalvarConselhoClasse {
     const {
       dadosPrincipaisConselhoClasse,
       notaConceitoPosConselhoAtual,
-      idCamposNotasPosConselho,
       desabilitarCampos,
       bimestreAtual,
-      dadosListasNotasConceitos,
     } = conselhoClasse;
 
     const {
@@ -331,10 +329,6 @@ class ServicoSalvarConselhoClasse {
         };
       }
       dispatch(setAuditoriaAnotacaoRecomendacao(auditoriaDto));
-
-      const temJustificativasDto = idCamposNotasPosConselho;
-      temJustificativasDto[idCampo] = auditoria?.id;
-      dispatch(setIdCamposNotasPosConselho(temJustificativasDto));
 
       limparDadosNotaPosConselhoJustificativa();
 
