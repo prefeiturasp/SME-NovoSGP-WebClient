@@ -306,7 +306,7 @@ class ServicoSalvarConselhoClasse {
       const bimestre =
         bimestreAtual?.valor === 'final' ? 0 : bimestreAtual?.valor;
 
-      await ServicoConselhoClasse.obterNotasConceitosConselhoClasse(
+      const resultado = await ServicoConselhoClasse.obterNotasConceitosConselhoClasse(
         conselhoClasseId,
         fechamentoTurmaId,
         alunoCodigo,
@@ -352,8 +352,9 @@ class ServicoSalvarConselhoClasse {
         );
       }
 
-      const dadosCarregar = _.cloneDeep(dadosListasNotasConceitos);
+      const dadosCarregar = _.cloneDeep(resultado.data.notasConceitos);
       dispatch(setDadosIniciaisListasNotasConceitos([...dadosCarregar]));
+      dispatch(setDadosListasNotasConceitos(resultado.data.notasConceitos));
 
       return true;
     }
