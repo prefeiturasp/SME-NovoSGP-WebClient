@@ -1,5 +1,6 @@
 {
   "API_URL": "https://localhost:5001/api",
   "TRACKING_ID": "",
-  "URL_SONDAGEM": "http://localhost:61540"
+  "URL_SONDAGEM": "http://localhost:61540",
+  "URL_SIGNALR": "https://localhost:5041"
 }

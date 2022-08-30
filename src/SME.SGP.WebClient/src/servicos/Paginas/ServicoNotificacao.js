@@ -99,6 +99,15 @@ class ServicoNotificacao {
       }
     });
   };
+
+  validarBuscaNotificacoesPorAnoRf = (ano, rf) => {
+    const state = store.getState();
+    const { notificacoes } = state;
+    const { iniciarNotificacoesSemWebSocket } = notificacoes;
+    if (iniciarNotificacoesSemWebSocket) {
+      this.buscaNotificacoesPorAnoRf(ano, rf);
+    }
+  };
 }
 
 export default new ServicoNotificacao();
