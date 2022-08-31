@@ -223,10 +223,8 @@ class ServicoSalvarConselhoClasse {
     const {
       dadosPrincipaisConselhoClasse,
       notaConceitoPosConselhoAtual,
-      idCamposNotasPosConselho,
       desabilitarCampos,
       bimestreAtual,
-      dadosListasNotasConceitos,
     } = conselhoClasse;
 
     const {
@@ -306,7 +304,7 @@ class ServicoSalvarConselhoClasse {
       const bimestre =
         bimestreAtual?.valor === 'final' ? 0 : bimestreAtual?.valor;
 
-      await ServicoConselhoClasse.obterNotasConceitosConselhoClasse(
+      const resultado = await ServicoConselhoClasse.obterNotasConceitosConselhoClasse(
         conselhoClasseId,
         fechamentoTurmaId,
         alunoCodigo,
@@ -332,10 +330,6 @@ class ServicoSalvarConselhoClasse {
       }
       dispatch(setAuditoriaAnotacaoRecomendacao(auditoriaDto));
 
-      const temJustificativasDto = idCamposNotasPosConselho;
-      temJustificativasDto[idCampo] = auditoria?.id;
-      dispatch(setIdCamposNotasPosConselho(temJustificativasDto));
-
       limparDadosNotaPosConselhoJustificativa();
 
       sucesso(
@@ -352,8 +346,9 @@ class ServicoSalvarConselhoClasse {
         );
       }
 
-      const dadosCarregar = _.cloneDeep(dadosListasNotasConceitos);
+      const dadosCarregar = _.cloneDeep(resultado.data.notasConceitos);
       dispatch(setDadosIniciaisListasNotasConceitos([...dadosCarregar]));
+      dispatch(setDadosListasNotasConceitos(resultado.data.notasConceitos));
 
       return true;
     }
