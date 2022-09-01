@@ -31,6 +31,12 @@ import {
 } from './styles';
 import AlertaModalidadeInfantil from '~/componentes-sgp/AlertaModalidadeInfantil/alertaModalidadeInfantil';
 import { ehTurmaInfantil } from '~/servicos/Validacoes/validacoesInfatil';
+import {
+  SGP_BUTTON_ALTERAR_CADASTRAR,
+  SGP_BUTTON_CANCELAR,
+  SGP_BUTTON_EXCLUIR,
+  SGP_BUTTON_VOLTAR,
+} from '~/componentes-sgp/filtro/idsCampos';
 
 const CompensacaoAusenciaForm = ({ match }) => {
   const usuario = useSelector(store => store.usuario);
@@ -939,26 +945,25 @@ const CompensacaoAusenciaForm = ({ match }) => {
         ''
       )}
       <AlertaModalidadeInfantil />
-      <Cabecalho pagina="Cadastrar Compensação de Ausência" />
-      <Card>
-        <Loader
-          loading={carregandoDados || carregandoListaAlunosFrequencia}
-          tip=""
+      <Loader
+        loading={carregandoDados || carregandoListaAlunosFrequencia}
+        tip=""
+      >
+        <Formik
+          enableReinitialize
+          ref={refF => setRefForm(refF)}
+          initialValues={valoresIniciais}
+          validationSchema={validacoes}
+          onSubmit={onClickCadastrar}
+          validateOnChange
+          validateOnBlur
         >
-          <Formik
-            enableReinitialize
-            ref={refF => setRefForm(refF)}
-            initialValues={valoresIniciais}
-            validationSchema={validacoes}
-            onSubmit={onClickCadastrar}
-            validateOnChange
-            validateOnBlur
-          >
-            {form => (
-              <Form className="col-md-12 mb-4">
-                <div className="d-flex justify-content-end pb-4">
+          {form => (
+            <Form className="col-md-12">
+              <Cabecalho pagina="Cadastrar Compensação de Ausência">
+                <div className="d-flex justify-content-end">
                   <Button
-                    id="btn-voltar"
+                    id={SGP_BUTTON_VOLTAR}
                     label="Voltar"
                     icon="arrow-left"
                     color={Colors.Azul}
@@ -967,7 +972,7 @@ const CompensacaoAusenciaForm = ({ match }) => {
                     onClick={() => onClickVoltar(form)}
                   />
                   <Button
-                    id="btn-cancelar"
+                    id={SGP_BUTTON_CANCELAR}
                     label="Cancelar"
                     color={Colors.Roxo}
                     border
@@ -976,7 +981,7 @@ const CompensacaoAusenciaForm = ({ match }) => {
                     disabled={!modoEdicao}
                   />
                   <Button
-                    id="btn-excluir"
+                    id={SGP_BUTTON_EXCLUIR}
                     label="Excluir"
                     color={Colors.Vermelho}
                     border
@@ -990,7 +995,7 @@ const CompensacaoAusenciaForm = ({ match }) => {
                     onClick={onClickExcluir}
                   />
                   <Button
-                    id="btn-salvar"
+                    id={SGP_BUTTON_ALTERAR_CADASTRAR}
                     label={`${
                       idCompensacaoAusencia > 0 ? 'Alterar' : 'Cadastrar'
                     }`}
@@ -1009,7 +1014,8 @@ const CompensacaoAusenciaForm = ({ match }) => {
                     }
                   />
                 </div>
-
+              </Cabecalho>
+              <Card>
                 <div className="row">
                   <div className="col-sm-12 col-md-8 col-lg-4 col-xl-4 mb-2">
                     <Loader loading={carregandoDisciplinas} tip="">
@@ -1185,11 +1191,11 @@ const CompensacaoAusenciaForm = ({ match }) => {
                     )}
                   </div>
                 </div>
-              </Form>
-            )}
-          </Formik>
-        </Loader>
-      </Card>
+              </Card>
+            </Form>
+          )}
+        </Formik>
+      </Loader>
     </Loader>
   );
 };
