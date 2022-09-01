@@ -14,6 +14,7 @@ import { erros } from '~/servicos/alertas';
 import ServicoConselhoClasse from '~/servicos/Paginas/ConselhoClasse/ServicoConselhoClasse';
 import ListasCarregar from './listasCarregar';
 import { valorNuloOuVazio } from '~/utils/funcoes/gerais';
+import situacaoMatriculaAluno from '~/dtos/situacaoMatriculaAluno';
 
 const ListasNotasConceitos = props => {
   const { bimestreSelecionado } = props;
@@ -136,12 +137,30 @@ const ListasNotasConceitos = props => {
       })
     );
 
-    const alunoDentroDoPeriodoDoBimestre = alunoDentroDoPeriodoDoBimestreOuFechamento();
+    let validarDataSituacao = false;
+    if (dadosAlunoObjectCard?.situacaoCodigo) {
+      switch (dadosAlunoObjectCard?.situacaoCodigo) {
+        case situacaoMatriculaAluno.Ativo:
+        case situacaoMatriculaAluno.PendenteRematricula:
+        case situacaoMatriculaAluno.Rematriculado:
+        case situacaoMatriculaAluno.SemContinuidade:
+          validarDataSituacao = false;
+          break;
+        default:
+          validarDataSituacao = true;
+          break;
+      }
+    }
+
+    let alunoDentroDoPeriodoDoBimestre = true;
+    if (validarDataSituacao) {
+      alunoDentroDoPeriodoDoBimestre = alunoDentroDoPeriodoDoBimestreOuFechamento();
+    }
     const periodoAbertoOuEmFechamento = estaNoPeriodoOuFechamento();
 
     let emEdicao = false;
     if (
-      (!conselhoClasseAlunoId && conselhoClasseAlunoId !== null) &&
+      !conselhoClasseAlunoId &&
       notasFechamentosPreenchidas &&
       alunoDentroDoPeriodoDoBimestre &&
       periodoAbertoOuEmFechamento
