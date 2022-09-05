@@ -41,6 +41,7 @@ import { validaSeObjetoEhNuloOuVazio } from '~/utils/funcoes/gerais';
 import AlertaModalidadeInfantil from '~/componentes-sgp/AlertaModalidadeInfantil/alertaModalidadeInfantil';
 import { ehTurmaInfantil } from '~/servicos/Validacoes/validacoesInfatil';
 import JoditEditor from '~/componentes/jodit-editor/joditEditor';
+import { SGP_BUTTON_ALTERAR_CADASTRAR } from '~/componentes-sgp/filtro/idsCampos';
 
 function RegistroPOAForm({ match }) {
   const dispatch = useDispatch();
@@ -260,25 +261,25 @@ function RegistroPOAForm({ match }) {
   return (
     <>
       <AlertaModalidadeInfantil />
-      <Cabecalho pagina="Registro" />
       <Loader loading={carregando}>
-        <Card>
-          <Formik
-            enableReinitialize
-            initialValues={valoresIniciais}
-            validationSchema={validacoes}
-            onSubmit={valores => onSubmitFormulario(valores)}
-            validate={valores => validaFormulario(valores)}
-            ref={refFormik => setRefForm(refFormik)}
-            validateOnBlur
-            validateOnChange
-          >
-            {form => (
-              <Form>
+        <Formik
+          enableReinitialize
+          initialValues={valoresIniciais}
+          validationSchema={validacoes}
+          onSubmit={valores => onSubmitFormulario(valores)}
+          validate={valores => validaFormulario(valores)}
+          ref={refFormik => setRefForm(refFormik)}
+          validateOnBlur
+          validateOnChange
+        >
+          {form => (
+            <>
+              <Cabecalho pagina="Registro">
                 <ButtonGroup
                   form={form}
                   permissoesTela={permissoesTela[RotasDto.REGISTRO_POA]}
                   novoRegistro={novoRegistro}
+                  idBotaoPrincipal={SGP_BUTTON_ALTERAR_CADASTRAR}
                   labelBotaoPrincipal={
                     ehEdicaoRegistro ? 'Alterar' : 'Cadastrar'
                   }
@@ -292,96 +293,106 @@ function RegistroPOAForm({ match }) {
                     turmaSelecionada
                   )}
                 />
-                {!ehTurmaInfantil(
-                  modalidadesFiltroPrincipal,
-                  turmaSelecionada
-                ) ? (
-                  <>
-                    <Row className="row mb-2">
-                      <Grid cols={6}>
-                        <DreDropDown
-                          url="v1/dres/atribuicoes"
-                          label="Diretoria Regional de Educação (DRE)"
-                          form={form}
-                          onChange={() => null}
-                          desabilitado={somenteConsulta}
-                        />
-                      </Grid>
-                      <Grid cols={6}>
-                        <UeDropDown
+              </Cabecalho>
+              <Card>
+                <Form>
+                  {!ehTurmaInfantil(
+                    modalidadesFiltroPrincipal,
+                    turmaSelecionada
+                  ) ? (
+                    <>
+                      <Row className="row mb-2">
+                        <Grid cols={6}>
+                          <DreDropDown
+                            url="v1/dres/atribuicoes"
+                            label="Diretoria Regional de Educação (DRE)"
+                            form={form}
+                            onChange={() => null}
+                            desabilitado={somenteConsulta}
+                          />
+                        </Grid>
+                        <Grid cols={6}>
+                          <UeDropDown
+                            dreId={form.values.dreId}
+                            label="Unidade Escolar (UE)"
+                            form={form}
+                            url="v1/dres"
+                            onChange={() => null}
+                            desabilitado={somenteConsulta}
+                          />
+                        </Grid>
+                      </Row>
+                      <Row className="row mb-2">
+                        <Localizador
                           dreId={form.values.dreId}
-                          label="Unidade Escolar (UE)"
+                          anoLetivo={anoLetivo}
                           form={form}
-                          url="v1/dres"
                           onChange={() => null}
+                          showLabel
                           desabilitado={somenteConsulta}
                         />
-                      </Grid>
-                    </Row>
-                    <Row className="row mb-2">
-                      <Localizador
-                        dreId={form.values.dreId}
-                        anoLetivo={anoLetivo}
-                        form={form}
-                        onChange={() => null}
-                        showLabel
-                        desabilitado={somenteConsulta}
+                      </Row>
+                      <Row className="row">
+                        <Grid cols={2}>
+                          <MesesDropDown
+                            label="Bimestre"
+                            name="bimestre"
+                            form={form}
+                            desabilitado={somenteConsulta}
+                          />
+                        </Grid>
+                        <Grid cols={10}>
+                          <CampoTexto
+                            name="titulo"
+                            id="titulo"
+                            label="Título"
+                            placeholder="Digite o título do registro"
+                            form={form}
+                            desabilitado={somenteConsulta}
+                          />
+                        </Grid>
+                      </Row>
+                      <Row className="row">
+                        <Grid cols={12}>
+                          <JoditEditor
+                            label="Registro das atividades realizadas junto aos professores ao longo do bimestre, considerando a análise e o acompanhamento do planejamento docente"
+                            form={form}
+                            id="descricao"
+                            alt="Registro das atividades realizadas junto aos professores ao longo do bimestre, considerando a análise e o acompanhamento do planejamento docente"
+                            name="descricao"
+                            value={valoresIniciais.descricao}
+                            desabilitado={somenteConsulta}
+                          />
+                        </Grid>
+                      </Row>
+                    </>
+                  ) : (
+                    ''
+                  )}
+                  {auditoria &&
+                  !ehTurmaInfantil(
+                    modalidadesFiltroPrincipal,
+                    turmaSelecionada
+                  ) ? (
+                    <div className="row">
+                      <Auditoria
+                        criadoEm={auditoria.criadoEm}
+                        criadoPor={auditoria.criadoPor}
+                        criadoRf={auditoria.criadoRf}
+                        alteradoPor={auditoria.alteradoPor}
+                        alteradoEm={auditoria.alteradoEm}
+                        alteradoRf={auditoria.alteradoRf}
+                        ignorarMarginTop
                       />
-                    </Row>
-                    <Row className="row">
-                      <Grid cols={2}>
-                        <MesesDropDown
-                          label="Bimestre"
-                          name="bimestre"
-                          form={form}
-                          desabilitado={somenteConsulta}
-                        />
-                      </Grid>
-                      <Grid cols={10}>
-                        <CampoTexto
-                          name="titulo"
-                          id="titulo"
-                          label="Título"
-                          placeholder="Digite o título do registro"
-                          form={form}
-                          desabilitado={somenteConsulta}
-                        />
-                      </Grid>
-                    </Row>
-                    <Row className="row">
-                      <Grid cols={12}>
-                        <JoditEditor
-                          label="Registro das atividades realizadas junto aos professores ao longo do bimestre, considerando a análise e o acompanhamento do planejamento docente"
-                          form={form}
-                          id="descricao"
-                          alt="Registro das atividades realizadas junto aos professores ao longo do bimestre, considerando a análise e o acompanhamento do planejamento docente"
-                          name="descricao"
-                          value={valoresIniciais.descricao}
-                          desabilitado={somenteConsulta}
-                        />
-                      </Grid>
-                    </Row>
-                  </>
-                ) : (
-                  ''
-                )}
-              </Form>
-            )}
-          </Formik>
-          {auditoria &&
-          !ehTurmaInfantil(modalidadesFiltroPrincipal, turmaSelecionada) ? (
-            <Auditoria
-              criadoEm={auditoria.criadoEm}
-              criadoPor={auditoria.criadoPor}
-              criadoRf={auditoria.criadoRf}
-              alteradoPor={auditoria.alteradoPor}
-              alteradoEm={auditoria.alteradoEm}
-              alteradoRf={auditoria.alteradoRf}
-            />
-          ) : (
-            ''
+                    </div>
+                  ) : (
+                    <></>
+                  )}
+                </Form>
+              </Card>
+            </>
           )}
-        </Card>
+        </Formik>
       </Loader>
     </>
   );

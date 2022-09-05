@@ -19,6 +19,7 @@ import { Loader, Card, ButtonGroup, ListaPaginada } from '~/componentes';
 import Filtro from './componentes/Filtro';
 import AlertaModalidadeInfantil from '~/componentes-sgp/AlertaModalidadeInfantil/alertaModalidadeInfantil';
 import { ehTurmaInfantil } from '~/servicos/Validacoes/validacoesInfatil';
+import { SGP_BUTTON_NOVO } from '~/componentes-sgp/filtro/idsCampos';
 
 function RegistroPOALista() {
   const [itensSelecionados, setItensSelecionados] = useState([]);
@@ -166,9 +167,8 @@ function RegistroPOALista() {
   return (
     <>
       <AlertaModalidadeInfantil />
-      <Cabecalho pagina="Registro do professor orientador de área" />
       <Loader loading={loaderSecao}>
-        <Card mx="mx-0">
+        <Cabecalho pagina="Registro do professor orientador de área">
           <ButtonGroup
             somenteConsulta={somenteConsulta}
             permissoesTela={permissoesTela[RotasDto.REGISTRO_POA]}
@@ -178,12 +178,15 @@ function RegistroPOALista() {
             onClickExcluir={onClickExcluir}
             onClickVoltar={onClickVoltar}
             onClickBotaoPrincipal={onClickBotaoPrincipal}
+            idBotaoPrincipal={SGP_BUTTON_NOVO}
             labelBotaoPrincipal="Novo"
             desabilitarBotaoPrincipal={
               ehTurmaInfantil(modalidadesFiltroPrincipal, turmaSelecionada) ||
               (!!filtro.dreId === false && !!filtro.ueId === false)
             }
           />
+        </Cabecalho>
+        <Card>
           {!ehTurmaInfantil(modalidadesFiltroPrincipal, turmaSelecionada) ? (
             <>
               <Filtro onFiltrar={onChangeFiltro} />
