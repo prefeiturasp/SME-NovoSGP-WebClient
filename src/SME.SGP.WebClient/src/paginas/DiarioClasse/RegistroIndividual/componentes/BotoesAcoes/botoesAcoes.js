@@ -11,6 +11,11 @@ import { setDadosAlunoObjectCard } from '~/redux/modulos/conselhoClasse/actions'
 import { limparDadosRegistroIndividual } from '~/redux/modulos/registroIndividual/actions';
 
 import MetodosRegistroIndividual from '~/componentes-sgp/RegistroIndividual/metodosRegistroIndividual';
+import {
+  SGP_BUTTON_CADASTRAR,
+  SGP_BUTTON_CANCELAR,
+  SGP_BUTTON_VOLTAR,
+} from '~/componentes-sgp/filtro/idsCampos';
 
 const BotoesAcoes = ({ turmaInfantil }) => {
   const registroIndividualEmEdicao = useSelector(
@@ -46,6 +51,7 @@ const BotoesAcoes = ({ turmaInfantil }) => {
   return (
     <>
       <Button
+        id={SGP_BUTTON_VOLTAR}
         label="Voltar"
         icon="arrow-left"
         color={Colors.Azul}
@@ -54,6 +60,7 @@ const BotoesAcoes = ({ turmaInfantil }) => {
         onClick={onClickVoltar}
       />
       <Button
+        id={SGP_BUTTON_CANCELAR}
         label="Cancelar"
         color={Colors.Roxo}
         border
@@ -64,10 +71,10 @@ const BotoesAcoes = ({ turmaInfantil }) => {
         }
       />
       <Button
+        id={SGP_BUTTON_CADASTRAR}
         label="Cadastrar"
         color={Colors.Roxo}
         bold
-        className="mr-2"
         onClick={onClickCadastrar}
         disabled={
           !registroIndividualEmEdicao || !turmaInfantil || !desabilitarCampos

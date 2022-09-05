@@ -159,7 +159,11 @@ const RegistroIndividual = () => {
     <Loader loading={exibirLoaderGeralRegistroIndividual} className="w-100">
       <Mensagens />
       <ModalImpressaoRegistroIndividual />
-      <Cabecalho pagina="Registro individual" />
+      <Cabecalho pagina="Registro individual">
+        <div className="col-md-12 d-flex justify-content-end">
+          <BotoesAcoes turmaInfantil={turmaInfantil} />
+        </div>
+      </Cabecalho>
       <Card>
         <div className="col-md-12 p-0">
           <div className="row">
@@ -177,9 +181,6 @@ const RegistroIndividual = () => {
                   !turmaInfantil || listaComponenteCurricular?.length === 1
                 }
               />
-            </div>
-            <div className="col-sm-12 col-lg-8 col-md-8 d-flex justify-content-end pb-4">
-              <BotoesAcoes turmaInfantil={turmaInfantil} />
             </div>
           </div>
           <div className="row">
