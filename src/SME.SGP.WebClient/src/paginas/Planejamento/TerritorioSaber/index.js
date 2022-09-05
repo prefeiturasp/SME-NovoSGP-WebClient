@@ -226,40 +226,40 @@ function TerritorioSaber() {
       </div>
       <AlertaModalidadeInfantil />
       <AlertaSelecionarTurma />
-      <Cabecalho pagina="Planejamento anual do Território do Saber">
-        <ButtonGroup
-          idBotaoPrincipal={SGP_BUTTON_SALVAR}
-          permissoesTela={permissoesTela[RotasDto.TERRITORIO_SABER]}
-          onClickVoltar={onClickVoltar}
-          onClickBotaoPrincipal={() => salvarPlanejamento()}
-          onClickCancelar={onClickCancelar}
-          labelBotaoPrincipal="Salvar"
-          somenteConsulta={somenteConsulta}
-          desabilitarBotaoPrincipal={
-            ehTurmaInfantil(modalidadesFiltroPrincipal, turmaSelecionada) ||
-            !territorioSelecionado ||
-            !modoEdicao
-          }
-          modoEdicao={modoEdicao}
-        />
-      </Cabecalho>
-      <Card>
-        <Grid cols={12}>
-          <Linha className="row mb-0">
-            <Grid cols={12}>
-              <DropDownTerritorios
-                onBuscarTerritorios={onBuscarTerritorios}
-                territorioSelecionado={territorioSelecionado}
-                onChangeTerritorio={useCallback(
-                  valor => setTerritorioSelecionado(valor || ''),
-                  []
-                )}
-              />
-            </Grid>
-          </Linha>
-        </Grid>
-        <Grid className="p-0 m-0 mt-4" cols={12}>
-          <Loader loading={carregando} tip="Carregando...">
+      <Loader loading={carregando} tip="Carregando...">
+        <Cabecalho pagina="Planejamento anual do Território do Saber">
+          <ButtonGroup
+            idBotaoPrincipal={SGP_BUTTON_SALVAR}
+            permissoesTela={permissoesTela[RotasDto.TERRITORIO_SABER]}
+            onClickVoltar={onClickVoltar}
+            onClickBotaoPrincipal={() => salvarPlanejamento()}
+            onClickCancelar={onClickCancelar}
+            labelBotaoPrincipal="Salvar"
+            somenteConsulta={somenteConsulta}
+            desabilitarBotaoPrincipal={
+              ehTurmaInfantil(modalidadesFiltroPrincipal, turmaSelecionada) ||
+              !territorioSelecionado ||
+              !modoEdicao
+            }
+            modoEdicao={modoEdicao}
+          />
+        </Cabecalho>
+        <Card>
+          <Grid cols={12}>
+            <Linha className="row mb-0">
+              <Grid cols={12}>
+                <DropDownTerritorios
+                  onBuscarTerritorios={onBuscarTerritorios}
+                  territorioSelecionado={territorioSelecionado}
+                  onChangeTerritorio={useCallback(
+                    valor => setTerritorioSelecionado(valor || ''),
+                    []
+                  )}
+                />
+              </Grid>
+            </Linha>
+          </Grid>
+          <Grid className="p-0 m-0 mt-4" cols={12}>
             <PainelCollapse
               onChange={painel => setBimestreAberto(painel)}
               activeKey={habilitaCollapse && bimestreAberto}
@@ -345,9 +345,9 @@ function TerritorioSaber() {
                 )}
               </PainelCollapse.Painel>
             </PainelCollapse>
-          </Loader>
-        </Grid>
-      </Card>
+          </Grid>
+        </Card>
+      </Loader>
     </>
   );
 }
