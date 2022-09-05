@@ -261,19 +261,16 @@ const AcompanhamentoAprendizagem = () => {
       )}
       {turmaSelecionada.turma ? <AlertaPermiteSomenteTurmaInfantil /> : ''}
       <ModalErrosAcompanhamentoAprendizagem />
-      <Cabecalho pagina="Relatório do Acompanhamento da Aprendizagem" />
       <LoaderAcompanhamentoAprendizagem>
-        <Card>
-          <div className="col-md-12">
-            <div className="row">
-              <div className="col-md-12 d-flex justify-content-end pb-4">
-                <BotoesAcoesAcompanhamentoAprendizagem
-                  semestreSelecionado={semestreSelecionado}
-                  componenteCurricularId={componenteCurricularSelecionado}
-                />
-              </div>
-            </div>
+        <Cabecalho pagina="Relatório do Acompanhamento da Aprendizagem">
+          <div className="d-flex justify-content-end">
+            <BotoesAcoesAcompanhamentoAprendizagem
+              semestreSelecionado={semestreSelecionado}
+              componenteCurricularId={componenteCurricularSelecionado}
+            />
           </div>
+        </Cabecalho>
+        <Card>
           {turmaSelecionada?.turma &&
           ehTurmaInfantil(modalidadesFiltroPrincipal, turmaSelecionada) ? (
             <>
