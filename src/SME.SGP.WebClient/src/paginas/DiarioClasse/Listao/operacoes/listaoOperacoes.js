@@ -28,16 +28,17 @@ const ListaoOperacoes = () => {
     <>
       <ListaoAlertaTurma />
       <ListaoAlertaPeriodoAberto />
-      <Cabecalho pagina="Operações" />
-      <Card>
-        <Col span={24}>
-          <ListaoLoaderGeral>
-            <ListaoOperacoesBotoesAcao />
+      <ListaoLoaderGeral>
+        <Cabecalho pagina="Operações">
+          <ListaoOperacoesBotoesAcao />
+        </Cabecalho>
+        <Card>
+          <Col span={24}>
             <ListaoOperacoesFiltros />
             <ListaoTabs />
-          </ListaoLoaderGeral>
-        </Col>
-      </Card>
+          </Col>
+        </Card>
+      </ListaoLoaderGeral>
     </>
   );
 };
