@@ -275,30 +275,24 @@ const CartaIntencoes = () => {
       )}
       {turmaSelecionada.turma ? <AlertaPermiteSomenteTurmaInfantil /> : ''}
       <ModalErrosCartaIntencoes />
-      <Cabecalho pagina="Carta de Intenções" />
       <LoaderCartaIntencoes>
+        <Cabecalho pagina="Carta de Intenções">
+          <div className="col-md-12 d-flex justify-content-end">
+            <BotoesAcoesCartaIntencoes
+              onClickCancelar={recaregarDados}
+              onClickSalvar={recaregarDados}
+              componenteCurricularId={componenteCurricular}
+              codigoTurma={turma}
+              ehTurmaInfantil={ehTurmaInfantil(
+                modalidadesFiltroPrincipal,
+                turmaSelecionada
+              )}
+              somenteConsulta={somenteConsulta}
+              salvarEditarObservacao={salvarEditarObservacao}
+            />
+          </div>
+        </Cabecalho>
         <Card>
-          <>
-            <div className="col-md-12">
-              <div className="row">
-                <div className="col-md-12 d-flex justify-content-end pb-4">
-                  <BotoesAcoesCartaIntencoes
-                    onClickCancelar={recaregarDados}
-                    onClickSalvar={recaregarDados}
-                    componenteCurricularId={componenteCurricular}
-                    codigoTurma={turma}
-                    ehTurmaInfantil={ehTurmaInfantil(
-                      modalidadesFiltroPrincipal,
-                      turmaSelecionada
-                    )}
-                    somenteConsulta={somenteConsulta}
-                    salvarEditarObservacao={salvarEditarObservacao}
-                  />
-                </div>
-              </div>
-            </div>
-          </>
-
           <div className="col-md-12">
             <div className="row">
               <div className="col-sm-12 col-md-12 col-lg-6 col-xl-4 mb-2">
