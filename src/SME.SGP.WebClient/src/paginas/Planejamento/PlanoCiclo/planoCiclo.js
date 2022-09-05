@@ -2,7 +2,6 @@ import * as moment from 'moment';
 import React, { useEffect, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 
-import shortid from 'shortid';
 import Alert from '../../../componentes/alert';
 import Button from '../../../componentes/button';
 import Card from '../../../componentes/card';
@@ -17,8 +16,7 @@ import {
   InseridoAlterado,
   IframeStyle,
   ListaItens,
-  Titulo,
-  TituloAno,
+  ContainerCampoTipoCiclo,
 } from './planoCiclo.css';
 import modalidade from '~/dtos/modalidade';
 import RotasDto from '~/dtos/rotasDto';
@@ -32,6 +30,12 @@ import { RegistroMigrado } from '~/componentes-sgp/registro-migrado';
 import AlertaModalidadeInfantil from '~/componentes-sgp/AlertaModalidadeInfantil/alertaModalidadeInfantil';
 import { ehTurmaInfantil } from '~/servicos/Validacoes/validacoesInfatil';
 import JoditEditor from '~/componentes/jodit-editor/joditEditor';
+import { Cabecalho } from '~/componentes-sgp';
+import {
+  SGP_BUTTON_CANCELAR,
+  SGP_BUTTON_SALVAR,
+  SGP_BUTTON_VOLTAR,
+} from '~/componentes-sgp/filtro/idsCampos';
 
 export default function PlanoCiclo() {
   const urlPrefeitura = 'https://curriculo.sme.prefeitura.sp.gov.br';
@@ -484,8 +488,6 @@ export default function PlanoCiclo() {
     return true;
   };
 
-  const anoAtual = window.moment().format('YYYY');
-
   return (
     <>
       <div className="col-md-12">
@@ -505,30 +507,53 @@ export default function PlanoCiclo() {
         )}
       </div>
       <AlertaModalidadeInfantil />
-      <div className="col-md-12 mt-1">
-        <Titulo>
-          {obterDescricaoNomeMenu(
-            RotasDto.PLANO_CICLO,
-            modalidadesFiltroPrincipal,
-            turmaSelecionada
-          )}
-          <TituloAno>
-            {` / ${anoAtual} `}
-            <i className="fas fa-retweet" />
-          </TituloAno>
-          {registroMigrado ? (
-            <RegistroMigrado className="float-right">
-              Registro Migrado
-            </RegistroMigrado>
-          ) : (
-            ''
-          )}
-        </Titulo>
-      </div>
+      <Cabecalho
+        pagina={obterDescricaoNomeMenu(
+          RotasDto.PLANO_CICLO,
+          modalidadesFiltroPrincipal,
+          turmaSelecionada
+        )}
+      >
+        <div className="col-md-12 d-flex justify-content-end">
+          <Button
+            id={SGP_BUTTON_VOLTAR}
+            label="Voltar"
+            icon="arrow-left"
+            color={Colors.Azul}
+            border
+            className="mr-2"
+            onClick={onClickVoltar}
+          />
+          <Button
+            id={SGP_BUTTON_CANCELAR}
+            label="Cancelar"
+            color={Colors.Roxo}
+            border
+            bold
+            className="mr-2"
+            onClick={onClickCancelar}
+            disabled={desabilitaCamposEdicao()}
+          />
+          <Loader loading={carregandoSalvar} tip="">
+            <Button
+              id={SGP_BUTTON_SALVAR}
+              label="Salvar"
+              color={Colors.Roxo}
+              border
+              bold
+              onClick={() => salvarPlanoCiclo(false)}
+              disabled={
+                ehTurmaInfantil(modalidadesFiltroPrincipal, turmaSelecionada) ||
+                desabilitaCamposEdicao()
+              }
+            />
+          </Loader>
+        </div>
+      </Cabecalho>
       <Card>
         <div className="col-md-12">
-          <div className="row mb-3">
-            <div className="col-md-6">
+          <ContainerCampoTipoCiclo className="row mb-3 align-items-center">
+            <div className="col-sm-12 col-md-8">
               <div className="row">
                 <div className="col-md-6">
                   <Loader
@@ -555,44 +580,14 @@ export default function PlanoCiclo() {
                 </div>
               </div>
             </div>
-            <div className="col-md-6 d-flex justify-content-end">
-              <Button
-                id={shortid.generate()}
-                label="Voltar"
-                icon="arrow-left"
-                color={Colors.Azul}
-                border
-                className="mr-3"
-                onClick={onClickVoltar}
-              />
-              <Button
-                id={shortid.generate()}
-                label="Cancelar"
-                color={Colors.Roxo}
-                border
-                bold
-                className="mr-3"
-                onClick={onClickCancelar}
-                hidden={desabilitaCamposEdicao()}
-              />
-              <Loader loading={carregandoSalvar} tip="">
-                <Button
-                  id={shortid.generate()}
-                  label="Salvar"
-                  color={Colors.Roxo}
-                  border
-                  bold
-                  onClick={() => salvarPlanoCiclo(false)}
-                  disabled={
-                    ehTurmaInfantil(
-                      modalidadesFiltroPrincipal,
-                      turmaSelecionada
-                    ) || desabilitaCamposEdicao()
-                  }
-                />
-              </Loader>
+            <div className="col-sm-12 col-md-4 pt-2 pb-2 d-flex justify-content-end">
+              {registroMigrado ? (
+                <RegistroMigrado>Registro Migrado</RegistroMigrado>
+              ) : (
+                <></>
+              )}
             </div>
-          </div>
+          </ContainerCampoTipoCiclo>
           {usuario && turmaSelecionada.turma && !ehModalidadeInfantil && (
             <Loader loading={carregando}>
               <div className="row mb-3">
