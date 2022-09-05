@@ -41,7 +41,7 @@ function ButtonGroup({
   };
 
   return (
-    <ButtonGroupEstilo className="col-md-12 d-flex justify-content-end">
+    <ButtonGroupEstilo className="d-flex justify-content-end">
       <Button
         id={SGP_BUTTON_VOLTAR}
         label="Voltar"
