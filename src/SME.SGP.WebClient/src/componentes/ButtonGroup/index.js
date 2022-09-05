@@ -1,12 +1,16 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import shortid from 'shortid';
 
 // Componentes
 import { Button, Colors } from '~/componentes';
 
 // Styles
 import { ButtonGroupEstilo } from './styles';
+import {
+  SGP_BUTTON_CANCELAR,
+  SGP_BUTTON_EXCLUIR,
+  SGP_BUTTON_VOLTAR,
+} from '~/componentes-sgp/filtro/idsCampos';
 
 function ButtonGroup({
   form,
@@ -22,7 +26,7 @@ function ButtonGroup({
   onClickCancelar,
   somenteConsulta,
   botoesEstadoVariavel,
-  paddingBottom,
+  idBotaoPrincipal,
 }) {
   const desabilitarExcluir = () => {
     const { podeExcluir } = permissoesTela;
@@ -37,12 +41,9 @@ function ButtonGroup({
   };
 
   return (
-    <ButtonGroupEstilo
-      className="col-md-12 d-flex justify-content-end p-0"
-      paddingBottom={paddingBottom}
-    >
+    <ButtonGroupEstilo className="col-md-12 d-flex justify-content-end">
       <Button
-        id={shortid.generate()}
+        id={SGP_BUTTON_VOLTAR}
         label="Voltar"
         icon="arrow-left"
         color={Colors.Azul}
@@ -52,7 +53,7 @@ function ButtonGroup({
       />
       {typeof onClickCancelar === 'function' && (
         <Button
-          id={shortid.generate()}
+          id={SGP_BUTTON_CANCELAR}
           label="Cancelar"
           color={Colors.Roxo}
           border
@@ -69,7 +70,7 @@ function ButtonGroup({
       )}
       {typeof onClickExcluir === 'function' && (
         <Button
-          id={shortid.generate()}
+          id={SGP_BUTTON_EXCLUIR}
           label="Excluir"
           color={Colors.Roxo}
           border
@@ -80,7 +81,7 @@ function ButtonGroup({
       )}
       {typeof onClickBotaoPrincipal === 'function' && (
         <Button
-          id={shortid.generate()}
+          id={idBotaoPrincipal}
           label={labelBotaoPrincipal}
           color={Colors.Roxo}
           border
@@ -113,7 +114,7 @@ ButtonGroup.propTypes = {
   onClickBotaoPrincipal: PropTypes.func,
   somenteConsulta: PropTypes.bool,
   botoesEstadoVariavel: PropTypes.bool,
-  paddingBottom: PropTypes.string,
+  idBotaoPrincipal: PropTypes.string,
 };
 
 ButtonGroup.defaultProps = {
@@ -130,7 +131,7 @@ ButtonGroup.defaultProps = {
   onClickBotaoPrincipal: null,
   somenteConsulta: false,
   botoesEstadoVariavel: false,
-  paddingBottom: '48px',
+  idBotaoPrincipal: '',
 };
 
 export default ButtonGroup;
