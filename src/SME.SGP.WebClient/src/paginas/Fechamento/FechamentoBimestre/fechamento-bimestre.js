@@ -338,9 +338,8 @@ const FechamentoBismestre = () => {
         </Grid>
       ) : null}{' '}
       <AlertaModalidadeInfantil />
-      <Cabecalho pagina="Fechamento" />
       <Loader loading={carregandoBimestres}>
-        <Card>
+        <Cabecalho pagina="Fechamento">
           <BtnAcoesFechamentoBimestre
             salvarFechamentoFinal={salvarFechamentoFinal}
             onClickVoltar={onClickVoltar}
@@ -348,6 +347,8 @@ const FechamentoBismestre = () => {
             somenteConsulta={somenteConsulta}
             ehSintese={ehSintese}
           />
+        </Cabecalho>
+        <Card>
           <div className="col-md-12">
             <div className="row">
               <div className="col-sm-12 col-md-4 col-lg-4 col-xl-4 mb-4">
