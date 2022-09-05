@@ -32,6 +32,7 @@ import {
 import { Filtros } from './Filtros';
 import { SecaoFechamento } from './SecaoFechamento';
 import { SecaoConselhoClasse } from './SecaoConselhoClasse';
+import { SGP_BUTTON_VOLTAR } from '~/componentes-sgp/filtro/idsCampos';
 
 const AcompanhamentoFechamento = () => {
   const [ehInfantil, setEhInfantil] = useState(false);
@@ -151,22 +152,19 @@ const AcompanhamentoFechamento = () => {
         exibir={escolheuModalidadeInfantil}
         validarModalidadeFiltroPrincipal={false}
       />
-      <Cabecalho pagina="Acompanhamento do fechamento" classes="mb-2" />
       <Loader loading={carregandoAcompanhamentoFechamento} ignorarTip>
+        <Cabecalho pagina="Acompanhamento do fechamento">
+          <Button
+            id={SGP_BUTTON_VOLTAR}
+            label="Voltar"
+            icon="arrow-left"
+            color={Colors.Azul}
+            onClick={aoClicarBotaoVoltar}
+            border
+          />
+        </Cabecalho>
         <Card>
           <div className="col-md-12 p-0">
-            <div className="row mb-2">
-              <div className="col-sm-12 d-flex justify-content-end">
-                <Button
-                  id="botao-voltar"
-                  label="Voltar"
-                  icon="arrow-left"
-                  color={Colors.Azul}
-                  onClick={aoClicarBotaoVoltar}
-                  border
-                />
-              </div>
-            </div>
             <div className="mb-4">
               <Filtros
                 onChangeFiltros={onChangeFiltros}
