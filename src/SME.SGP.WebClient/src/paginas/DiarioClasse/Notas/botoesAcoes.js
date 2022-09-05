@@ -1,6 +1,11 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import { useSelector } from 'react-redux';
+import {
+  SGP_BUTTON_CANCELAR,
+  SGP_BUTTON_SALVAR,
+  SGP_BUTTON_VOLTAR,
+} from '~/componentes-sgp/filtro/idsCampos';
 import Button from '~/componentes/button';
 import { Colors } from '~/componentes/colors';
 import { confirmar } from '~/servicos/alertas';
@@ -38,6 +43,7 @@ const BotoesAcoessNotasConceitos = props => {
   return (
     <>
       <Button
+        id={SGP_BUTTON_VOLTAR}
         label="Voltar"
         icon="arrow-left"
         color={Colors.Azul}
@@ -46,6 +52,7 @@ const BotoesAcoessNotasConceitos = props => {
         onClick={onClickVoltar}
       />
       <Button
+        id={SGP_BUTTON_CANCELAR}
         label="Cancelar"
         color={Colors.Roxo}
         border
@@ -54,11 +61,11 @@ const BotoesAcoessNotasConceitos = props => {
         disabled={!modoEdicaoGeral && !modoEdicaoGeralNotaFinal}
       />
       <Button
+        id={SGP_BUTTON_SALVAR}
         label="Salvar"
         color={Colors.Roxo}
         border
         bold
-        className="mr-2"
         onClick={onClickSalvar}
         disabled={
           desabilitarBotao || (!modoEdicaoGeral && !modoEdicaoGeralNotaFinal)

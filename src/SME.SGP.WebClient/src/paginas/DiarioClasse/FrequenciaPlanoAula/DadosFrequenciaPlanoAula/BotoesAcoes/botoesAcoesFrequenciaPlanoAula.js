@@ -98,7 +98,7 @@ const BotoesAcoesFrequenciaPlanoAula = () => {
         icon="arrow-left"
         color={Colors.Azul}
         border
-        className="mr-3"
+        className="mr-2"
         onClick={onClickVoltar}
       />
       <Button
@@ -106,7 +106,7 @@ const BotoesAcoesFrequenciaPlanoAula = () => {
         label="Cancelar"
         color={Colors.Roxo}
         border
-        className="mr-3"
+        className="mr-2"
         onClick={onClickCancelar}
         disabled={
           somenteConsulta || (!modoEdicaoFrequencia && !modoEdicaoPlanoAula)

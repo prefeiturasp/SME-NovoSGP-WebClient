@@ -1295,22 +1295,22 @@ const Notas = ({ match }) => {
         </Row>
       ) : null}
       <AlertaModalidadeInfantil />
-      <Cabecalho pagina={tituloNotasConceitos}>
-        <div className="col-md-12 d-flex justify-content-end">
-          <BotoesAcoessNotasConceitos
-            onClickVoltar={onClickVoltar}
-            onClickCancelar={onClickCancelar}
-            onClickSalvar={onClickSalvar}
-            desabilitarBotao={desabilitarCampos}
-          />
-        </div>
-      </Cabecalho>
       <Loader
         loading={
           (carregandoListaBimestres || carregandoGeral) &&
           usuario.turmaSelecionada.turma
         }
       >
+        <Cabecalho pagina={tituloNotasConceitos}>
+          <div className="col-md-12 d-flex justify-content-end">
+            <BotoesAcoessNotasConceitos
+              onClickVoltar={onClickVoltar}
+              onClickCancelar={onClickCancelar}
+              onClickSalvar={onClickSalvar}
+              desabilitarBotao={desabilitarCampos}
+            />
+          </div>
+        </Cabecalho>
         <Card>
           <div className="col-md-12">
             <div className="row">
