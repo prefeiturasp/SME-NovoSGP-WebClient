@@ -17,6 +17,7 @@ import ListaBimestres from './Componentes/listaBimestres';
 import modalidade from '~/dtos/modalidade';
 import { setBimestreSelecionado } from '~/redux/modulos/acompanhamentoFrequencia/actions';
 import ServicoConselhoClasse from '~/servicos/Paginas/ConselhoClasse/ServicoConselhoClasse';
+import { SGP_BUTTON_VOLTAR } from '~/componentes-sgp/filtro/idsCampos';
 
 const AcompanhamentoFrequencia = () => {
   const usuario = useSelector(store => store.usuario);
@@ -162,9 +163,9 @@ const AcompanhamentoFrequencia = () => {
           String(componenteCurricularIdSelecionado)
       );
 
-      setPodeLancarFrequencia(componenteCurriular?.registraFrequencia);      
+      setPodeLancarFrequencia(componenteCurriular?.registraFrequencia);
       setTerritorioSaber(componenteCurriular?.territorioSaber);
-      
+
       if (Number(turmaSelecionada.modalidade) === modalidade.EJA) {
         setBimestres(listagemBimestresEJA);
       } else {
@@ -201,20 +202,20 @@ const AcompanhamentoFrequencia = () => {
             className="mb-2"
           />
         )}
-        <Cabecalho pagina="Acompanhamento de Frequência" />
+        <Cabecalho pagina="Acompanhamento de Frequência">
+          <div className="col-md-12 d-flex justify-content-end">
+            <Button
+              id={SGP_BUTTON_VOLTAR}
+              label="Voltar"
+              icon="arrow-left"
+              color={Colors.Azul}
+              border
+              onClick={onClickVoltar}
+            />
+          </div>
+        </Cabecalho>
         <Card>
           <div className="col-md-12 p-0">
-            <div className="row">
-              <div className="col-md-12 d-flex justify-content-end pb-4">
-                <Button
-                  label="Voltar"
-                  icon="arrow-left"
-                  color={Colors.Azul}
-                  border
-                  onClick={onClickVoltar}
-                />
-              </div>
-            </div>
             <div className="row">
               <div className="col-sm-12 col-md-3 col-lg-3 col-xl-3 mb-2">
                 <Loader loading={carregandoComponentesCurriculares} tip="">
