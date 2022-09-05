@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { Form, Formik } from 'formik';
 import * as Yup from 'yup';
 import { useSelector } from 'react-redux';
-import shortid from 'shortid';
 
 import {
   Button,
@@ -13,7 +12,7 @@ import {
   Loader,
   momentSchema,
   SelectAutocomplete,
-  Auditoria
+  Auditoria,
 } from '~/componentes';
 import { Cabecalho } from '~/componentes-sgp';
 
@@ -32,6 +31,11 @@ import {
 } from '~/servicos';
 
 import { BoxTextoBimetre, CaixaBimestre } from './PeriodosEscoladres.css';
+import {
+  SGP_BUTTON_ALTERAR_CADASTRAR,
+  SGP_BUTTON_CANCELAR,
+  SGP_BUTTON_VOLTAR,
+} from '~/componentes-sgp/filtro/idsCampos';
 
 const PeriodosEscolares = () => {
   const [
@@ -519,18 +523,49 @@ const PeriodosEscolares = () => {
   }, [pesquisaTipoCalendario]);
 
   return (
-    <>
-      <Cabecalho pagina="Cadastro do período escolar" />
-      <Card>
-        <Formik
-          enableReinitialize
-          initialValues={valoresIniciais}
-          validationSchema={validacoes}
-          onSubmit={values => onSubmit(values)}
-          validateOnChange
-          validateOnBlur
-        >
-          {form => (
+    <Formik
+      enableReinitialize
+      initialValues={valoresIniciais}
+      validationSchema={validacoes}
+      onSubmit={values => onSubmit(values)}
+      validateOnChange
+      validateOnBlur
+    >
+      {form => (
+        <>
+          <Cabecalho pagina="Cadastro do período escolar">
+            <div className="d-flex justify-content-end">
+              <Button
+                id={SGP_BUTTON_VOLTAR}
+                label="Voltar"
+                icon="arrow-left"
+                color={Colors.Azul}
+                border
+                className="mr-2"
+                onClick={onClickVoltar}
+              />
+              <Button
+                id={SGP_BUTTON_CANCELAR}
+                label="Cancelar"
+                color={Colors.Roxo}
+                border
+                bold
+                className="mr-2"
+                onClick={() => onClickCancelar(form)}
+                disabled={!modoEdicao || desabilitaCampos}
+              />
+              <Button
+                id={SGP_BUTTON_ALTERAR_CADASTRAR}
+                label={labelBotaoCadastrar}
+                color={Colors.Roxo}
+                border
+                bold
+                onClick={() => validaAntesDoSubmit(form)}
+                disabled={!calendarioEscolarSelecionado || desabilitaCampos}
+              />
+            </div>
+          </Cabecalho>
+          <Card>
             <Form className="col-md-12">
               <div className="row">
                 <div className="col-sm-12 col-md-5 col-lg-4 col-xl-4 mb-4">
@@ -553,36 +588,6 @@ const PeriodosEscolares = () => {
                     />
                   </Loader>
                 </div>
-                <div className="col-sm-12 col-md-7 col-lg-8 col-xl-8 d-flex justify-content-end mb-4">
-                  <Button
-                    id={shortid.generate()}
-                    label="Voltar"
-                    icon="arrow-left"
-                    color={Colors.Azul}
-                    border
-                    className="mr-3"
-                    onClick={onClickVoltar}
-                  />
-                  <Button
-                    id={shortid.generate()}
-                    label="Cancelar"
-                    color={Colors.Roxo}
-                    border
-                    bold
-                    className="mr-3"
-                    onClick={() => onClickCancelar(form)}
-                    disabled={!modoEdicao || desabilitaCampos}
-                  />
-                  <Button
-                    id={shortid.generate()}
-                    label={labelBotaoCadastrar}
-                    color={Colors.Roxo}
-                    border
-                    bold
-                    onClick={() => validaAntesDoSubmit(form)}
-                    disabled={!calendarioEscolarSelecionado || desabilitaCampos}
-                  />
-                </div>
               </div>
               {listaTipoCalendario &&
               listaTipoCalendario.length &&
@@ -597,16 +602,14 @@ const PeriodosEscolares = () => {
                       {quartoBimestre(form)}
                     </>
                   ) : (
-                    ''
+                    <></>
                   )}
                 </>
               ) : (
-                ''
+                <></>
               )}
             </Form>
-          )}
-        </Formik>
-        <div className="col-md-6 d-flex justify-content-start">
+
             {valorTipoCalendario &&
             valorTipoCalendario !== '' &&
             ehRegistroExistente &&
@@ -621,11 +624,12 @@ const PeriodosEscolares = () => {
                 alteradoRf={auditoria.alteradoRf}
               />
             ) : (
-              ''
+              <></>
             )}
-          </div>
-      </Card>
-    </>
+          </Card>
+        </>
+      )}
+    </Formik>
   );
 };
 
