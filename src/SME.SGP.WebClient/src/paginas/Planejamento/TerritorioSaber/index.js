@@ -36,6 +36,7 @@ import RotasDto from '~/dtos/rotasDto';
 import { URL_HOME } from '~/constantes/url';
 import AlertaModalidadeInfantil from '~/componentes-sgp/AlertaModalidadeInfantil/alertaModalidadeInfantil';
 import { ehTurmaInfantil } from '~/servicos/Validacoes/validacoesInfatil';
+import { SGP_BUTTON_SALVAR } from '~/componentes-sgp/filtro/idsCampos';
 
 // Componentes internos
 const DesenvolvimentoReflexao = React.lazy(() =>
@@ -225,9 +226,9 @@ function TerritorioSaber() {
       </div>
       <AlertaModalidadeInfantil />
       <AlertaSelecionarTurma />
-      <Cabecalho pagina="Planejamento anual do Território do Saber" />
-      <Card>
+      <Cabecalho pagina="Planejamento anual do Território do Saber">
         <ButtonGroup
+          idBotaoPrincipal={SGP_BUTTON_SALVAR}
           permissoesTela={permissoesTela[RotasDto.TERRITORIO_SABER]}
           onClickVoltar={onClickVoltar}
           onClickBotaoPrincipal={() => salvarPlanejamento()}
@@ -241,6 +242,8 @@ function TerritorioSaber() {
           }
           modoEdicao={modoEdicao}
         />
+      </Cabecalho>
+      <Card>
         <Grid cols={12}>
           <Linha className="row mb-0">
             <Grid cols={12}>
