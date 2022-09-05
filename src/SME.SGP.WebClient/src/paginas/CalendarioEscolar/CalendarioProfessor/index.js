@@ -4,7 +4,7 @@ import React, { useEffect, useState, useCallback, useReducer } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
 // Componentes
-import { Loader, Card, Grid, ButtonGroup } from '~/componentes';
+import { Loader, Card, Grid, Button, Colors } from '~/componentes';
 
 // Componentes Internos
 import DropDownTipoCalendario from './componentes/DropDownTipoCalendario';
@@ -22,7 +22,7 @@ import {
 // Serviços
 import CalendarioProfessorServico from '~/servicos/Paginas/CalendarioProfessor';
 import { erro } from '~/servicos/alertas';
-import history from '~/servicos/history';
+import { history } from '~/servicos';
 
 // Reducer
 import Reducer, { estadoInicial } from './reducer';
@@ -36,6 +36,7 @@ import {
 // DTOs
 import RotasDTO from '~/dtos/rotasDto';
 import { selecionaDia } from '~/redux/modulos/calendarioProfessor/actions';
+import { SGP_BUTTON_VOLTAR } from '~/componentes-sgp/filtro/idsCampos';
 
 function CalendarioProfessor() {
   const dispatch = useDispatch();
@@ -107,7 +108,7 @@ function CalendarioProfessor() {
             tipoCalendarioId,
             dre: turmaSelecionada.dre,
             dreId: turmaSelecionada.dreId,
-            ue: turmaSelecionada.unidadeEscolar,            
+            ue: turmaSelecionada.unidadeEscolar,
             turma: turmaSelecionada.turma,
             anoLetivo: turmaSelecionada.anoLetivo,
           });
@@ -165,10 +166,22 @@ function CalendarioProfessor() {
   return (
     <>
       <AlertaSelecionarTurma />
-      <Cabecalho pagina="Calendário do professor" />
       <Loader loading={false}>
+        <Cabecalho pagina="Calendário do professor">
+          <div className="d-flex justify-content-end">
+            <Button
+              id={SGP_BUTTON_VOLTAR}
+              label="Voltar"
+              icon="arrow-left"
+              color={Colors.Azul}
+              onClick={() => {
+                history.push('/');
+              }}
+              border
+            />
+          </div>
+        </Cabecalho>
         <Card>
-          <ButtonGroup onClickVoltar={() => history.push('/')} />
           <Grid cols={4} className="p-0 m-0">
             <DropDownTipoCalendario
               turmaSelecionada={turmaSelecionada.turma}
