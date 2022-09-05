@@ -29,6 +29,12 @@ import {
   sucesso,
   verificaSomenteConsulta,
 } from '~/servicos';
+import {
+  SGP_BUTTON_ALTERAR_CADASTRAR,
+  SGP_BUTTON_CANCELAR,
+  SGP_BUTTON_EXCLUIR,
+  SGP_BUTTON_VOLTAR,
+} from '~/componentes-sgp/filtro/idsCampos';
 
 const TipoCalendarioEscolarForm = ({ match }) => {
   const usuario = useSelector(store => store.usuario);
@@ -184,11 +190,13 @@ const TipoCalendarioEscolarForm = ({ match }) => {
     let url = 'v1/calendarios/tipos';
     if (idTipoCalendario) url += `/${idTipoCalendario}`;
 
+    setCarregandoBotoesAcao(true);
     const cadastrado = await api[metodo](url, valoresForm).catch(e => erros(e));
     if (cadastrado) {
       sucesso('Suas informações foram salvas com sucesso.');
       history.push('/calendario-escolar/tipo-calendario-escolar');
     }
+    setCarregandoBotoesAcao(false);
   };
 
   const onChangeCampos = () => {
@@ -220,7 +228,6 @@ const TipoCalendarioEscolarForm = ({ match }) => {
   };
 
   const validaAntesDoSubmit = form => {
-    setCarregandoBotoesAcao(true);
     const arrayCampos = Object.keys(valoresIniciaisForm);
     arrayCampos.forEach(campo => {
       form.setFieldTouched(campo, true, true);
@@ -230,7 +237,6 @@ const TipoCalendarioEscolarForm = ({ match }) => {
         form.handleSubmit(e => e);
       }
     });
-    setCarregandoBotoesAcao(true);
   };
 
   const onChangeAnoLetivo = async valor => {
@@ -260,145 +266,152 @@ const TipoCalendarioEscolarForm = ({ match }) => {
   }, [obterAnosLetivos]);
 
   return (
-    <>
-      <Cabecalho
-        pagina={`${
-          idTipoCalendario > 0 ? 'Alterar' : 'Cadastro do'
-        } Tipo de Calendário Escolar`}
-      />
-      <Card>
-        <Formik
-          enableReinitialize
-          initialValues={valoresIniciais}
-          validationSchema={validacoes}
-          onSubmit={valores => onClickCadastrar(valores)}
-          validateOnChange
-          validateOnBlur
-        >
-          {form => (
-            <Form className="col-md-12 mb-4">
-              <Loader loading={carregandoBotoesAcao} tooltip="">
-                <div className="col-md-12 d-flex justify-content-end pb-4">
-                  <Button
-                    label="Voltar"
-                    icon="arrow-left"
-                    color={Colors.Azul}
-                    border
-                    className="mr-2"
-                    onClick={onClickVoltar}
-                  />
-                  <Button
-                    label="Cancelar"
-                    color={Colors.Roxo}
-                    border
-                    className="mr-2"
-                    onClick={() => onClickCancelar(form)}
-                    disabled={!modoEdicao}
-                  />
-                  <Button
-                    label="Excluir"
-                    color={Colors.Vermelho}
-                    border
-                    className="mr-2"
-                    disabled={
-                      somenteConsulta ||
-                      !permissoesTela.podeExcluir ||
-                      novoRegistro ||
-                      possuiEventos
-                    }
-                    onClick={onClickExcluir}
-                  />
-                  <Button
-                    label={idTipoCalendario > 0 ? 'Alterar' : 'Cadastrar'}
-                    color={Colors.Roxo}
-                    border
-                    bold
-                    className="mr-2"
-                    onClick={() => validaAntesDoSubmit(form)}
-                    disabled={desabilitarCampos}
-                  />
-                </div>
-              </Loader>
-              <div className="row">
-                <div className="col-sm-4 col-md-2 col-lg-2 col-xl-2 mb-2">
-                  <Loader loading={carregandoAnos} tip="">
-                    <SelectComponent
-                      id="drop-ano-letivo-rel-pendencias"
-                      label="Ano"
-                      lista={listaAnosLetivo}
-                      valueOption="valor"
-                      valueText="desc"
-                      disabled={listaAnosLetivo && listaAnosLetivo.length === 1}
-                      onChange={onChangeAnoLetivo}
-                      valueSelect={anoLetivo}
-                      placeholder="Ano"
-                    />
-                  </Loader>
-                </div>
-
-                <div className="col-sm-12 col-md-10 col-lg-10 col-xl-7 mb-2">
-                  <CampoTexto
-                    form={form}
-                    label="Nome do calendário"
-                    placeholder="Nome do calendário"
-                    name="nome"
-                    onChange={onChangeCampos}
-                    desabilitado={desabilitarCampos}
-                  />
-                </div>
-                <div className="col-sm-12 col-md-6 col-lg-3 col-xl-3 mb-2">
-                  <RadioGroupButton
-                    label="Situação"
-                    form={form}
-                    opcoes={opcoesSituacao}
-                    name="situacao"
-                    valorInicial
-                    onChange={onChangeCampos}
-                    desabilitado={desabilitarCampos}
-                  />
-                </div>
-                <div className="col-sm-12 col-md-6 col-lg-3 col-xl-4 mb-2">
-                  <RadioGroupButton
-                    label="Período"
-                    form={form}
-                    opcoes={opcoesPeriodo}
-                    name="periodo"
-                    onChange={onChangeCampos}
-                    desabilitado={desabilitarCampos || possuiEventos}
-                  />
-                </div>
-                <div className="col-sm-12  col-md-12 col-lg-6 col-xl-5 mb-2">
-                  <SelectComponent
-                    id="modalidade"
-                    name="modalidade"
-                    lista={opcoesModalidade}
-                    label="Modalidade"
-                    valueOption="value"
-                    valueText="label"
-                    placeholder="Selecione uma modalidade"
-                    form={form}
-                    onChange={onChangeCampos}
-                    disabled={desabilitarCampos || possuiEventos}
-                  />
-                </div>
+    <Loader loading={carregandoBotoesAcao} tooltip="">
+      <Formik
+        enableReinitialize
+        initialValues={valoresIniciais}
+        validationSchema={validacoes}
+        onSubmit={valores => onClickCadastrar(valores)}
+        validateOnChange
+        validateOnBlur
+      >
+        {form => (
+          <>
+            <Cabecalho
+              pagina={`${
+                idTipoCalendario > 0 ? 'Alterar' : 'Cadastro do'
+              } Tipo de Calendário Escolar`}
+            >
+              <div className="d-flex justify-content-end">
+                <Button
+                  id={SGP_BUTTON_VOLTAR}
+                  label="Voltar"
+                  icon="arrow-left"
+                  color={Colors.Azul}
+                  border
+                  className="mr-2"
+                  onClick={onClickVoltar}
+                />
+                <Button
+                  id={SGP_BUTTON_CANCELAR}
+                  label="Cancelar"
+                  color={Colors.Roxo}
+                  border
+                  className="mr-2"
+                  onClick={() => onClickCancelar(form)}
+                  disabled={!modoEdicao}
+                />
+                <Button
+                  id={SGP_BUTTON_EXCLUIR}
+                  label="Excluir"
+                  color={Colors.Vermelho}
+                  border
+                  className="mr-2"
+                  disabled={
+                    somenteConsulta ||
+                    !permissoesTela.podeExcluir ||
+                    novoRegistro ||
+                    possuiEventos
+                  }
+                  onClick={onClickExcluir}
+                />
+                <Button
+                  id={SGP_BUTTON_ALTERAR_CADASTRAR}
+                  label={idTipoCalendario > 0 ? 'Alterar' : 'Cadastrar'}
+                  color={Colors.Roxo}
+                  border
+                  bold
+                  onClick={() => validaAntesDoSubmit(form)}
+                  disabled={desabilitarCampos}
+                />
               </div>
-            </Form>
-          )}
-        </Formik>
-        {exibirAuditoria ? (
-          <Auditoria
-            criadoEm={auditoria.criadoEm}
-            criadoPor={auditoria.criadoPor}
-            criadoRf={auditoria.criadoRf}
-            alteradoPor={auditoria.alteradoPor}
-            alteradoEm={auditoria.alteradoEm}
-            alteradoRf={auditoria.alteradoRf}
-          />
-        ) : (
-          ''
+            </Cabecalho>
+
+            <Card>
+              <Form className="col-md-12 mb-4">
+                <div className="row">
+                  <div className="col-sm-4 col-md-2 col-lg-2 col-xl-2 mb-2">
+                    <Loader loading={carregandoAnos} tip="">
+                      <SelectComponent
+                        id="drop-ano-letivo-rel-pendencias"
+                        label="Ano"
+                        lista={listaAnosLetivo}
+                        valueOption="valor"
+                        valueText="desc"
+                        disabled={
+                          listaAnosLetivo && listaAnosLetivo.length === 1
+                        }
+                        onChange={onChangeAnoLetivo}
+                        valueSelect={anoLetivo}
+                        placeholder="Ano"
+                      />
+                    </Loader>
+                  </div>
+
+                  <div className="col-sm-12 col-md-10 col-lg-10 col-xl-7 mb-2">
+                    <CampoTexto
+                      form={form}
+                      label="Nome do calendário"
+                      placeholder="Nome do calendário"
+                      name="nome"
+                      onChange={onChangeCampos}
+                      desabilitado={desabilitarCampos}
+                    />
+                  </div>
+                  <div className="col-sm-12 col-md-6 col-lg-3 col-xl-3 mb-2">
+                    <RadioGroupButton
+                      label="Situação"
+                      form={form}
+                      opcoes={opcoesSituacao}
+                      name="situacao"
+                      valorInicial
+                      onChange={onChangeCampos}
+                      desabilitado={desabilitarCampos}
+                    />
+                  </div>
+                  <div className="col-sm-12 col-md-6 col-lg-3 col-xl-4 mb-2">
+                    <RadioGroupButton
+                      label="Período"
+                      form={form}
+                      opcoes={opcoesPeriodo}
+                      name="periodo"
+                      onChange={onChangeCampos}
+                      desabilitado={desabilitarCampos || possuiEventos}
+                    />
+                  </div>
+                  <div className="col-sm-12  col-md-12 col-lg-6 col-xl-5 mb-2">
+                    <SelectComponent
+                      id="modalidade"
+                      name="modalidade"
+                      lista={opcoesModalidade}
+                      label="Modalidade"
+                      valueOption="value"
+                      valueText="label"
+                      placeholder="Selecione uma modalidade"
+                      form={form}
+                      onChange={onChangeCampos}
+                      disabled={desabilitarCampos || possuiEventos}
+                    />
+                  </div>
+                </div>
+              </Form>
+              {exibirAuditoria ? (
+                <Auditoria
+                  criadoEm={auditoria.criadoEm}
+                  criadoPor={auditoria.criadoPor}
+                  criadoRf={auditoria.criadoRf}
+                  alteradoPor={auditoria.alteradoPor}
+                  alteradoEm={auditoria.alteradoEm}
+                  alteradoRf={auditoria.alteradoRf}
+                />
+              ) : (
+                <></>
+              )}
+            </Card>
+          </>
         )}
-      </Card>
-    </>
+      </Formik>
+    </Loader>
   );
 };
 

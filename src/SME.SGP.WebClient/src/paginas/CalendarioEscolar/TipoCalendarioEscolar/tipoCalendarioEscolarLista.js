@@ -1,6 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import Cabecalho from '~/componentes-sgp/cabecalho';
+import {
+  SGP_BUTTON_EXCLUIR,
+  SGP_BUTTON_NOVO,
+  SGP_BUTTON_VOLTAR,
+} from '~/componentes-sgp/filtro/idsCampos';
 import Button from '~/componentes/button';
 import Card from '~/componentes/card';
 import { Colors } from '~/componentes/colors';
@@ -108,11 +113,10 @@ const TipoCalendarioEscolarLista = () => {
 
   return (
     <>
-      <Cabecalho pagina="Tipo de calendário escolar" />
-
-      <Card>
-        <div className="col-md-12 d-flex justify-content-end pb-4">
+      <Cabecalho pagina="Tipo de calendário escolar">
+        <div className="d-flex justify-content-end">
           <Button
+            id={SGP_BUTTON_VOLTAR}
             label="Voltar"
             icon="arrow-left"
             color={Colors.Azul}
@@ -121,6 +125,7 @@ const TipoCalendarioEscolarLista = () => {
             onClick={onClickVoltar}
           />
           <Button
+            id={SGP_BUTTON_EXCLUIR}
             label="Excluir"
             color={Colors.Vermelho}
             border
@@ -132,16 +137,17 @@ const TipoCalendarioEscolarLista = () => {
             onClick={onClickExcluir}
           />
           <Button
+            id={SGP_BUTTON_NOVO}
             label="Novo"
             color={Colors.Roxo}
             border
             bold
-            className="mr-2"
             onClick={onClickNovo}
             disabled={somenteConsulta || !permissoesTela.podeIncluir}
           />
         </div>
-
+      </Cabecalho>
+      <Card>
         <div className="col-md-12 pt-2">
           <DataTable
             id="lista-tipo-calendario"
