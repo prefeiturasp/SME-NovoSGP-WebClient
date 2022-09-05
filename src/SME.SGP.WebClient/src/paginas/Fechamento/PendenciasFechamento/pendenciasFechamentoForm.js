@@ -30,6 +30,10 @@ import { ehTurmaInfantil } from '~/servicos/Validacoes/validacoesInfatil';
 import JoditEditor from '~/componentes/jodit-editor/joditEditor';
 import { IframeStyle } from './pendenciasFechamentoLista.css';
 import { ServicoPeriodoFechamento } from '~/servicos';
+import {
+  SGP_BUTTON_APROVAR,
+  SGP_BUTTON_VOLTAR,
+} from '~/componentes-sgp/filtro/idsCampos';
 
 const PendenciasFechamentoForm = ({ match }) => {
   const usuario = useSelector(store => store.usuario);
@@ -276,40 +280,37 @@ const PendenciasFechamentoForm = ({ match }) => {
         <></>
       )}
       <AlertaModalidadeInfantil />
-      <Cabecalho pagina="Análise de Pendências" />
+      <Cabecalho pagina="Análise de Pendências">
+        <div className="d-flex justify-content-end">
+          <Button
+            id={SGP_BUTTON_VOLTAR}
+            label="Voltar"
+            icon="arrow-left"
+            color={Colors.Azul}
+            border
+            className="mr-2"
+            onClick={onClickVoltar}
+          />
+          <Button
+            id={SGP_BUTTON_APROVAR}
+            label="Aprovar"
+            color={Colors.Roxo}
+            border
+            bold
+            onClick={onClickAprovar}
+            disabled={
+              !periodoAberto ||
+              ehTurmaInfantil(modalidadesFiltroPrincipal, turmaSelecionada) ||
+              somenteConsulta ||
+              !permissoesTela.podeAlterar ||
+              !situacaoId ||
+              situacaoId == situacaoPendenciaDto.Aprovada
+            }
+          />
+        </div>
+      </Cabecalho>
       <Card>
         <div className="col-md-12">
-          <div className="row">
-            <div className="col-md-12 d-flex justify-content-end pb-4">
-              <Button
-                label="Voltar"
-                icon="arrow-left"
-                color={Colors.Azul}
-                border
-                className="mr-2"
-                onClick={onClickVoltar}
-              />
-              <Button
-                label="Aprovar"
-                color={Colors.Roxo}
-                border
-                bold
-                className="mr-2"
-                onClick={onClickAprovar}
-                disabled={
-                  !periodoAberto ||
-                  ehTurmaInfantil(
-                    modalidadesFiltroPrincipal,
-                    turmaSelecionada
-                  ) ||
-                  somenteConsulta ||
-                  !permissoesTela.podeAlterar ||
-                  !situacaoId ||
-                  situacaoId == situacaoPendenciaDto.Aprovada
-                }
-              />
-            </div>
-          </div>
           <div className="row">
             <div className="col-sm-12 col-md-6 col-lg-4 col-xl-3 mb-2">
               <SelectComponent
