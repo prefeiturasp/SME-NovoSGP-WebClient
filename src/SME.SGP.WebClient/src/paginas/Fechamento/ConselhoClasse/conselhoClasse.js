@@ -166,18 +166,13 @@ const ConselhoClasse = () => {
       )}
       <ModalImpressaoBimestre />
       <AlertaModalidadeInfantil />
-      <Cabecalho pagina="Conselho de classe" />
       <LoaderConselhoClasse>
+        <Cabecalho pagina="Conselho de classe">
+          <div className="d-flex justify-content-end">
+            <BotoesAcoesConselhoClasse />
+          </div>
+        </Cabecalho>
         <Card>
-          <>
-            <div className="col-md-12">
-              <div className="row">
-                <div className="col-md-12 d-flex justify-content-end pb-4">
-                  <BotoesAcoesConselhoClasse />
-                </div>
-              </div>
-            </div>
-          </>
           {turmaSelecionada.turma &&
           !ehTurmaInfantil(modalidadesFiltroPrincipal, turmaSelecionada) ? (
             <>

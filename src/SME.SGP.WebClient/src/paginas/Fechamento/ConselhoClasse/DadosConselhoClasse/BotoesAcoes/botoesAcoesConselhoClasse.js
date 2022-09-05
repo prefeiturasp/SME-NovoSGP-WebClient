@@ -1,5 +1,10 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
+import {
+  SGP_BUTTON_CANCELAR,
+  SGP_BUTTON_SALVAR,
+  SGP_BUTTON_VOLTAR,
+} from '~/componentes-sgp/filtro/idsCampos';
 import Button from '~/componentes/button';
 import { Colors } from '~/componentes/colors';
 import { URL_HOME } from '~/constantes/url';
@@ -92,7 +97,7 @@ const BotoesAcoesConselhoClasse = () => {
   return (
     <>
       <Button
-        id="btn-voltar-conselho-classe"
+        id={SGP_BUTTON_VOLTAR}
         label="Voltar"
         icon="arrow-left"
         color={Colors.Azul}
@@ -101,7 +106,7 @@ const BotoesAcoesConselhoClasse = () => {
         onClick={onClickVoltar}
       />
       <Button
-        id="btn-cancelar-conselho-classe"
+        id={SGP_BUTTON_CANCELAR}
         label="Cancelar"
         color={Colors.Roxo}
         border
@@ -115,12 +120,11 @@ const BotoesAcoesConselhoClasse = () => {
         }
       />
       <Button
-        id="btn-salvar-conselho-classe"
+        id={SGP_BUTTON_SALVAR}
         label="Salvar"
         color={Colors.Roxo}
         border
         bold
-        className="mr-2"
         onClick={onClickSalvar}
         disabled={
           ehTurmaInfantil(modalidadesFiltroPrincipal, turmaSelecionada) ||
