@@ -3,6 +3,11 @@ import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Button, Card, Colors, ListaPaginada, Loader } from '~/componentes';
 import { Cabecalho } from '~/componentes-sgp';
+import {
+  SGP_BUTTON_EXCLUIR,
+  SGP_BUTTON_NOVO,
+  SGP_BUTTON_VOLTAR,
+} from '~/componentes-sgp/filtro/idsCampos';
 import { ModalidadeDTO, RotasDto } from '~/dtos';
 import {
   confirmar,
@@ -129,43 +134,42 @@ const ListaComunicados = () => {
 
   return (
     <>
-      <Cabecalho pagina="Comunicação com pais ou responsáveis" classes="mb-2" />
+      <Cabecalho pagina="Comunicação com pais ou responsáveis">
+        <div className="d-flex justify-content-end">
+          <Button
+            id={SGP_BUTTON_VOLTAR}
+            label="Voltar"
+            icon="arrow-left"
+            color={Colors.Azul}
+            onClick={aoClicarBotaoVoltar}
+            border
+            className="mr-2"
+          />
+          <Button
+            id={SGP_BUTTON_EXCLUIR}
+            label="Excluir"
+            color={Colors.Vermelho}
+            onClick={aoClicarBotaoExcluir}
+            border
+            className="mr-2"
+            disabled={
+              somenteConsulta ||
+              itensSelecionados?.length < 1 ||
+              !permissoesTela.podeExcluir
+            }
+          />
+          <Button
+            id={SGP_BUTTON_NOVO}
+            label="Novo"
+            color={Colors.Roxo}
+            onClick={aoClicarBotaoNovo}
+            disabled={somenteConsulta || !permissoesTela.podeIncluir}
+          />
+        </div>
+      </Cabecalho>
       <Loader loading={exibirLoader}>
         <Card>
           <div className="col-md-12 p-0">
-            <div className="row mb-2">
-              <div className="col-sm-12 d-flex justify-content-end">
-                <Button
-                  id="botao-voltar"
-                  label="Voltar"
-                  icon="arrow-left"
-                  color={Colors.Azul}
-                  onClick={aoClicarBotaoVoltar}
-                  border
-                  className="mr-3"
-                />
-                <Button
-                  id="botao-excluir"
-                  label="Excluir"
-                  color={Colors.Vermelho}
-                  onClick={aoClicarBotaoExcluir}
-                  border
-                  className="mr-3"
-                  disabled={
-                    somenteConsulta ||
-                    itensSelecionados?.length < 1 ||
-                    !permissoesTela.podeExcluir
-                  }
-                />
-                <Button
-                  id="botao-novo"
-                  label="Novo"
-                  color={Colors.Roxo}
-                  onClick={aoClicarBotaoNovo}
-                  disabled={somenteConsulta || !permissoesTela.podeIncluir}
-                />
-              </div>
-            </div>
             <Filtros
               onChangeFiltros={onChangeFiltros}
               temModalidadeEja={temModalidadeEja}

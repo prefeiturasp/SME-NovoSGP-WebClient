@@ -31,15 +31,15 @@ const CadastroComunicados = ({ match }) => {
 
   return (
     <>
-      <Cabecalho pagina="Cadastro de comunicados" classes="mb-2" />
       <LoaderGeralComunicados>
+        <Cabecalho pagina="Cadastro de comunicados">
+          <BotoesAcoesCadastroComunicados
+            comunicadoId={match?.params?.id}
+            somenteConsulta={somenteConsulta}
+          />
+        </Cabecalho>
         <Card>
           <div className="col-md-12 p-0">
-            <BotoesAcoesCadastroComunicados
-              comunicadoId={match?.params?.id}
-              somenteConsulta={somenteConsulta}
-            />
-
             <FormCadastroComunicados
               comunicadoId={match?.params?.id}
               somenteConsulta={somenteConsulta}
