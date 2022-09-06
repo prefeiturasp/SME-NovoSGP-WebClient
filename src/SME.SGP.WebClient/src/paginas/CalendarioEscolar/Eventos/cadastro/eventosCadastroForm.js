@@ -21,6 +21,7 @@ import entidadeStatusDto from '~/dtos/entidadeStatusDto';
 import eventoLetivo from '~/dtos/eventoLetivo';
 import eventoTipoData from '~/dtos/eventoTipoData';
 import tipoEvento from '~/dtos/tipoEvento';
+import { ContainerColumnReverse } from '~/paginas/Planejamento/Anual/planoAnual.css';
 import {
   api,
   confirmar,
@@ -33,7 +34,7 @@ import {
 } from '~/servicos';
 import { parseScreenObject } from '~/utils/parsers/eventRecurrence';
 import ModalRecorrencia from '../components/ModalRecorrencia';
-import { ListaCopiarEventos } from '../eventos.css';
+import { LabelAguardandoAprovacao, ListaCopiarEventos } from '../eventos.css';
 import BimestreCadastroEventos from './campos/bimestreCadastroEventos';
 import CalendarioCadastroEventos from './campos/calendarioCadastroEventos';
 import DreCadastroEventos from './campos/dreCadastroEventos';
@@ -682,14 +683,38 @@ const EventosCadastroForm = () => {
               <Form>
                 <Col span={24}>
                   <Row gutter={[16, 16]}>
-                    <Col sm={24} md={12} xl={8}>
-                      <CalendarioCadastroEventos
-                        form={form}
-                        eventoId={eventoId}
-                        tipoCalendarioIdRota={tipoCalendarioId}
-                        montarTipoCalendarioPorId={montarTipoCalendarioPorId}
-                      />
-                    </Col>
+                    <ContainerColumnReverse
+                      style={{ display: 'flex', alignItems: 'center' }}
+                    >
+                      <Col sm={24} md={16} lg={12} xl={8}>
+                        <CalendarioCadastroEventos
+                          form={form}
+                          eventoId={eventoId}
+                          tipoCalendarioIdRota={tipoCalendarioId}
+                          montarTipoCalendarioPorId={montarTipoCalendarioPorId}
+                        />
+                      </Col>
+                      <Col
+                        sm={24}
+                        md={8}
+                        lg={12}
+                        xl={16}
+                        style={{
+                          display: 'flex',
+                          justifyContent: 'flex-end',
+                          paddingBottom: '8px',
+                          paddingTop: '8px',
+                        }}
+                      >
+                        {aguardandoAprovacao ? (
+                          <LabelAguardandoAprovacao>
+                            Aguardando aprovação
+                          </LabelAguardandoAprovacao>
+                        ) : (
+                          <></>
+                        )}
+                      </Col>
+                    </ContainerColumnReverse>
                   </Row>
                   <Row gutter={[16, 16]}>
                     <Col md={24} xl={12}>

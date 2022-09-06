@@ -2,6 +2,11 @@ import { Col, Row } from 'antd';
 import React, { useContext, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Button, Colors } from '~/componentes';
+import {
+  SGP_BUTTON_EXCLUIR,
+  SGP_BUTTON_NOVO,
+  SGP_BUTTON_VOLTAR,
+} from '~/componentes-sgp/filtro/idsCampos';
 import { URL_HOME } from '~/constantes';
 import { RotasDto } from '~/dtos';
 import { setFiltroListaEventos } from '~/redux/modulos/calendarioEscolar/actions';
@@ -104,10 +109,10 @@ const EventosListaBotoesAcao = () => {
 
   return (
     <Col span={24}>
-      <Row gutter={[16, 16]} style={{ justifyContent: 'end', display: 'flex' }}>
+      <Row gutter={[8, 8]} style={{ justifyContent: 'end', display: 'flex' }}>
         <Col>
           <Button
-            id="btn-voltar"
+            id={SGP_BUTTON_VOLTAR}
             label="Voltar"
             icon="arrow-left"
             color={Colors.Azul}
@@ -117,7 +122,7 @@ const EventosListaBotoesAcao = () => {
         </Col>
         <Col>
           <Button
-            id="btn-excluir"
+            id={SGP_BUTTON_EXCLUIR}
             label="Excluir"
             color={Colors.Vermelho}
             border
@@ -132,7 +137,7 @@ const EventosListaBotoesAcao = () => {
         </Col>
         <Col>
           <Button
-            id="btn-novo"
+            id={SGP_BUTTON_NOVO}
             label="Novo"
             color={Colors.Roxo}
             border

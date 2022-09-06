@@ -12,10 +12,11 @@ const EventosLista = () => {
   return (
     <EventosListaContextProvider>
       <AlertaCalendarioObrigatorio />
-      <Cabecalho pagina="Eventos do calendário escolar" />
       <EventosListaLoader>
-        <Card>
+        <Cabecalho pagina="Eventos do calendário escolar">
           <EventosListaBotoesAcao />
+        </Cabecalho>
+        <Card>
           <EventosListaFiltros />
           <EventosListaPaginada />
         </Card>

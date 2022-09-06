@@ -1,6 +1,6 @@
 import React from 'react';
 import { Card } from '~/componentes';
-import EventoCadastroCabecalho from './eventoCadastroCabecalho';
+import { Cabecalho } from '~/componentes-sgp';
 import EventosCadastroBotoesAcao from './eventosCadastroBotoesAcao';
 import EventosCadastroContextProvider from './eventosCadastroContextProvider';
 import EventosCadastroForm from './eventosCadastroForm';
@@ -9,10 +9,11 @@ import EventosCadastroLoader from './eventosCadastroLoader';
 const EventosCadastro = () => {
   return (
     <EventosCadastroContextProvider>
-      <EventoCadastroCabecalho />
       <EventosCadastroLoader>
-        <Card>
+        <Cabecalho pagina="Cadastro de eventos do calendário escolar">
           <EventosCadastroBotoesAcao />
+        </Cabecalho>
+        <Card>
           <EventosCadastroForm />
         </Card>
       </EventosCadastroLoader>
