@@ -12,6 +12,11 @@ import {
 } from '~/componentes';
 import { Cabecalho } from '~/componentes-sgp';
 import AlertaPermiteSomenteTurmaInfantil from '~/componentes-sgp/AlertaPermiteSomenteTurmaInfantil/alertaPermiteSomenteTurmaInfantil';
+import {
+  SGP_BUTTON_EXCLUIR,
+  SGP_BUTTON_NOVO,
+  SGP_BUTTON_VOLTAR,
+} from '~/componentes-sgp/filtro/idsCampos';
 import { RotasDto } from '~/dtos';
 import modalidade from '~/dtos/modalidade';
 import {
@@ -202,11 +207,10 @@ const ListaOcorrencias = () => {
           className="mb-0"
         />
       )}
-      <Cabecalho pagina="Ocorrências" />
-      <Card>
-        <div className="col-md-12 d-flex justify-content-end pb-4">
+      <Cabecalho pagina="Ocorrências">
+        <div className="d-flex justify-content-end">
           <Button
-            id={shortid.generate()}
+            id={SGP_BUTTON_VOLTAR}
             label="Voltar"
             icon="arrow-left"
             color={Colors.Azul}
@@ -215,7 +219,7 @@ const ListaOcorrencias = () => {
             onClick={onClickVoltar}
           />
           <Button
-            id={shortid.generate()}
+            id={SGP_BUTTON_EXCLUIR}
             label="Excluir"
             color={Colors.Vermelho}
             border
@@ -229,7 +233,7 @@ const ListaOcorrencias = () => {
             }
           />
           <Button
-            id={shortid.generate()}
+            id={SGP_BUTTON_NOVO}
             label="Nova"
             color={Colors.Roxo}
             border
@@ -241,10 +245,11 @@ const ListaOcorrencias = () => {
               somenteConsulta ||
               !podeIncluir
             }
-            className="mr-2"
             onClick={onClickNovo}
           />
         </div>
+      </Cabecalho>
+      <Card>
         <div className="col-sm-12 col-md-3">
           <CampoData
             label="Data da ocorrência"
