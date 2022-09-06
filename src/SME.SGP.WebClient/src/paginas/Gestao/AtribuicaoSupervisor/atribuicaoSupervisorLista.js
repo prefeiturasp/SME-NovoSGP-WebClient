@@ -2,6 +2,10 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Loader } from '~/componentes';
 import Cabecalho from '~/componentes-sgp/cabecalho';
+import {
+  SGP_BUTTON_NOVO,
+  SGP_BUTTON_VOLTAR,
+} from '~/componentes-sgp/filtro/idsCampos';
 import RotasDto from '~/dtos/rotasDto';
 import { AbrangenciaServico, erros } from '~/servicos';
 import ServicoResponsaveis from '~/servicos/Paginas/Gestao/Responsaveis/ServicoResponsaveis';
@@ -348,10 +352,10 @@ function montarListaAtribuicao(lista) {
 
   return (
     <>
-      <Cabecalho pagina="Atribuição de responsáveis" />
-      <Card>
-        <div className="col-md-12 d-flex justify-content-end pb-4">
+      <Cabecalho pagina="Atribuição de responsáveis">
+        <div className="d-flex justify-content-end">
           <Button
+            id={SGP_BUTTON_VOLTAR}
             label="Voltar"
             icon="arrow-left"
             color={Colors.Azul}
@@ -360,16 +364,17 @@ function montarListaAtribuicao(lista) {
             onClick={onClickVoltar}
           />
           <Button
+            id={SGP_BUTTON_NOVO}
             label="Nova Atribuição"
             color={Colors.Roxo}
             border
             bold
             disabled={!permissoesTela?.podeIncluir}
-            className="mr-2"
             onClick={onClickNovaAtribuicao}
           />
         </div>
-
+      </Cabecalho>
+      <Card>
         <div className="col-md-12 pb-2">
           <CheckboxComponent
             className="mb-2"

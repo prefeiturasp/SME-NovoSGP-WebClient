@@ -342,45 +342,45 @@ const AtribuicaoResponsaveisCadastro = () => {
 
   return (
     <>
-      <Cabecalho pagina="Atribuição de responsáveis" />
+      <Cabecalho pagina="Atribuição de responsáveis">
+        <Row gutter={[8, 8]} type="flex" justify="end">
+          <Col>
+            <Button
+              id={SGP_BUTTON_VOLTAR}
+              label="Voltar"
+              icon="arrow-left"
+              color={Colors.Azul}
+              border
+              onClick={onClickVoltar}
+            />
+          </Col>
+          <Col>
+            <Button
+              id={SGP_BUTTON_CANCELAR}
+              label="Cancelar"
+              color={Colors.Azul}
+              border
+              bold
+              onClick={() => onClickCancelar()}
+              disabled={!dreId || !modoEdicao}
+            />
+          </Col>
+          <Col>
+            <Button
+              id={SGP_BUTTON_SALVAR}
+              label="Salvar"
+              color={Colors.Roxo}
+              bold
+              onClick={() => salvarAtribuicao()}
+              disabled={
+                !permissoesTela.podeIncluir && !permissoesTela.podeAlterar
+              }
+            />
+          </Col>
+        </Row>
+      </Cabecalho>
       <Card>
         <Col span={24}>
-          <Row gutter={[16, 8]} type="flex" justify="end">
-            <Col>
-              <Button
-                id={SGP_BUTTON_VOLTAR}
-                label="Voltar"
-                icon="arrow-left"
-                color={Colors.Azul}
-                border
-                onClick={onClickVoltar}
-              />
-            </Col>
-            <Col>
-              <Button
-                id={SGP_BUTTON_CANCELAR}
-                label="Cancelar"
-                color={Colors.Azul}
-                border
-                bold
-                onClick={() => onClickCancelar()}
-                disabled={!dreId || !modoEdicao}
-              />
-            </Col>
-            <Col>
-              <Button
-                id={SGP_BUTTON_SALVAR}
-                label="Salvar"
-                color={Colors.Roxo}
-                bold
-                onClick={() => salvarAtribuicao()}
-                disabled={
-                  !permissoesTela.podeIncluir && !permissoesTela.podeAlterar
-                }
-              />
-            </Col>
-          </Row>
-
           <Row gutter={[16, 16]}>
             <Col sm={24} md={12}>
               <Loader loading={carregandoDres} ignorarTip>
