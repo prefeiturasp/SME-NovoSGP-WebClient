@@ -14,6 +14,7 @@ import ReiniciarSenha from '../reiniciarSenha';
 import ReiniciarSenhaEA from '../ReiniciarSenhaEA';
 
 import { ContainerTabs } from './style';
+import { SGP_BUTTON_VOLTAR } from '~/componentes-sgp/filtro/idsCampos';
 
 const { TabPane } = Tabs;
 
@@ -42,19 +43,19 @@ export default function TabsReiniciarSenha() {
           />
         </Grid>
       </Row>
-      <Cabecalho pagina="Reiniciar senha" />
-      <Card>
-        <div className="col-md-12 d-flex justify-content-end pb-4">
+      <Cabecalho pagina="Reiniciar senha">
+        <div className="d-flex justify-content-end">
           <Button
+            id={SGP_BUTTON_VOLTAR}
             label="Voltar"
             icon="arrow-left"
             color={Colors.Azul}
             border
-            className="mr-2"
             onClick={onClickVoltar}
           />
         </div>
-
+      </Cabecalho>
+      <Card>
         <div className="col-sm-12 col-md-12 col-lg-12 col-xl-12">
           <ContainerTabs type="card" defaultActiveKey="1">
             <TabPane tab="SGP" key="1">
