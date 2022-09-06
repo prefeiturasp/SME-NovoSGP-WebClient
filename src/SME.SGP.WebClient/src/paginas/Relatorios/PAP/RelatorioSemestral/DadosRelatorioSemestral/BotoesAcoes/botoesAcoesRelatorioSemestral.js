@@ -12,6 +12,11 @@ import { confirmar } from '~/servicos/alertas';
 import history from '~/servicos/history';
 import servicoSalvarRelatorioSemestral from '../../servicoSalvarRelatorioSemestral';
 import { ehTurmaInfantil } from '~/servicos/Validacoes/validacoesInfatil';
+import {
+  SGP_BUTTON_CANCELAR,
+  SGP_BUTTON_SALVAR,
+  SGP_BUTTON_VOLTAR,
+} from '~/componentes-sgp/filtro/idsCampos';
 
 const BotoesAcoesRelatorioSemestral = () => {
   const dispatch = useDispatch();
@@ -91,7 +96,7 @@ const BotoesAcoesRelatorioSemestral = () => {
   return (
     <>
       <Button
-        id="btn-voltar-relatorio-semestral"
+        id={SGP_BUTTON_VOLTAR}
         label="Voltar"
         icon="arrow-left"
         color={Colors.Azul}
@@ -100,7 +105,7 @@ const BotoesAcoesRelatorioSemestral = () => {
         onClick={onClickVoltar}
       />
       <Button
-        id="btn-cancelar-relatorio-semestral"
+        id={SGP_BUTTON_CANCELAR}
         label="Cancelar"
         color={Colors.Roxo}
         border
@@ -115,12 +120,11 @@ const BotoesAcoesRelatorioSemestral = () => {
         }
       />
       <Button
-        id="btn-salvar-relatorio-semestral"
+        id={SGP_BUTTON_SALVAR}
         label="Salvar"
         color={Colors.Roxo}
         border
         bold
-        className="mr-2"
         onClick={onClickSalvar}
         disabled={
           ehTurmaInfantil(modalidadesFiltroPrincipal, turmaSelecionada)||

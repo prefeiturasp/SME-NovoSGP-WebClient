@@ -107,14 +107,15 @@ const ResumosGraficosPAP = () => {
   return (
     <>
       <AlertaModalidadeInfantil />
-      <Cabecalho pagina="Resumos e gráficos PAP" />
-      <Card>
+      <Cabecalho pagina="Resumos e gráficos PAP">
         <ButtonGroup
           somenteConsulta={somenteConsulta}
           permissoesTela={permissoesTela[RotasDto.PAP]}
           onClickVoltar={onClickVoltar}
           desabilitarBotaoPrincipal
         />
+      </Cabecalho>
+      <Card>
         {!ehTurmaInfantil(modalidadesFiltroPrincipal, turmaSelecionada) ? (
           <>
             <Filtro onFiltrar={filtroAtual => setFiltro(filtroAtual)} />

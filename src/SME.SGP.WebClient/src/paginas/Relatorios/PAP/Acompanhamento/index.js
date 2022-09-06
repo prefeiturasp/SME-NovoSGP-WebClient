@@ -46,7 +46,7 @@ import { valorNuloOuVazio } from '~/utils/funcoes/gerais';
 import AlertaModalidadeInfantil from '~/componentes-sgp/AlertaModalidadeInfantil/alertaModalidadeInfantil';
 import { ehTurmaInfantil } from '~/servicos/Validacoes/validacoesInfatil';
 import { verificaSomenteConsulta } from '~/servicos';
-import { constant } from 'lodash';
+import { SGP_BUTTON_SALVAR } from '~/componentes-sgp/filtro/idsCampos';
 
 function RelatorioPAPAcompanhamento() {
   const usuario = useSelector(store => store.usuario);
@@ -341,9 +341,8 @@ function RelatorioPAPAcompanhamento() {
           />
         )}
       <AlertaModalidadeInfantil />
-      <Cabecalho pagina="Relatório de encaminhamento e acompanhamento do PAP" />
       <Loader loading={carregando}>
-        <Card mx="mx-0">
+        <Cabecalho pagina="Relatório de encaminhamento e acompanhamento do PAP">
           <ButtonGroup
             somenteConsulta={somenteLeitura}
             permissoesTela={
@@ -355,6 +354,7 @@ function RelatorioPAPAcompanhamento() {
             onClickBotaoPrincipal={() => salvarAlteracoes(estado.ObjetivoAtivo, true)}
             onClickCancelar={() => onClickCancelarHandler()}
             labelBotaoPrincipal="Salvar"
+            idBotaoPrincipal={SGP_BUTTON_SALVAR}
             desabilitarBotaoPrincipal={
               ehTurmaInfantil(modalidadesFiltroPrincipal, turmaSelecionada) ||
               somenteLeitura ||
@@ -362,6 +362,8 @@ function RelatorioPAPAcompanhamento() {
               !periodo
             }
           />
+        </Cabecalho>
+        <Card>
           <Grid className="p-0" cols={12}>
             <Linha className="row m-0">
               <Grid cols={3}>

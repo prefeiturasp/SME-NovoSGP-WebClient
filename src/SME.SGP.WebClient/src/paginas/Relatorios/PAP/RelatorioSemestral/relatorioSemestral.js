@@ -195,18 +195,13 @@ const RelatorioSemestral = () => {
         )}
       <AlertaDentroPeriodoPAP />
       <AlertaModalidadeInfantil />
-      <Cabecalho pagina="Relatório semestral" />
       <Loader loading={carregandoGeral}>
+        <Cabecalho pagina="Relatório semestral">
+          <div className="d-flex justify-content-end">
+            <BotoesAcoesRelatorioSemestral />
+          </div>
+        </Cabecalho>
         <Card>
-          <>
-            <div className="col-md-12">
-              <div className="row">
-                <div className="col-md-12 d-flex justify-content-end pb-4">
-                  <BotoesAcoesRelatorioSemestral />
-                </div>
-              </div>
-            </div>
-          </>
           {turmaSelecionada.turma ? (
             <>
               <div className="col-md-12">
