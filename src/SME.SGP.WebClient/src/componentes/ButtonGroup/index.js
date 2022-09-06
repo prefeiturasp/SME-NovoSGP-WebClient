@@ -72,7 +72,7 @@ function ButtonGroup({
         <Button
           id={SGP_BUTTON_EXCLUIR}
           label="Excluir"
-          color={Colors.Roxo}
+          color={Colors.Vermelho}
           border
           className="btnGroupItem"
           disabled={somenteConsulta || desabilitarExcluir()}
