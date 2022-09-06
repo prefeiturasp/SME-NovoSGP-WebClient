@@ -220,23 +220,23 @@ const Suporte = ({ match }) => {
 
   return (
     <>
-      <Cabecalho pagina="Suporte" />
+      <Cabecalho pagina="Suporte">
+        <Row type="flex" justify="end">
+          <Col>
+            <Button
+              id={SGP_BUTTON_VOLTAR}
+              label="Voltar"
+              icon="arrow-left"
+              color={Colors.Azul}
+              border
+              onClick={onClickVoltar}
+            />
+          </Col>
+        </Row>
+      </Cabecalho>
       <Card>
         <Col span={24}>
           <Loader loading={carregando}>
-            <Row gutter={[16, 8]} type="flex" justify="end">
-              <Col>
-                <Button
-                  id={SGP_BUTTON_VOLTAR}
-                  label="Voltar"
-                  icon="arrow-left"
-                  color={Colors.Azul}
-                  border
-                  onClick={onClickVoltar}
-                />
-              </Col>
-            </Row>
-
             <Row gutter={[16, 16]}>
               <Col sm={24} md={12}>
                 <Loader loading={carregandoDres} ignorarTip>
