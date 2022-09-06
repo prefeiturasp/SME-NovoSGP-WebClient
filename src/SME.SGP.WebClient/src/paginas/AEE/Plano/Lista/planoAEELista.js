@@ -22,6 +22,10 @@ import { erros, verificaSomenteConsulta } from '~/servicos';
 import history from '~/servicos/history';
 import ServicoPlanoAEE from '~/servicos/Paginas/Relatorios/AEE/ServicoPlanoAEE';
 import FiltroHelper from '~componentes-sgp/filtro/helper';
+import {
+  SGP_BUTTON_NOVO,
+  SGP_BUTTON_VOLTAR,
+} from '~/componentes-sgp/filtro/idsCampos';
 
 const PlanoAEELista = () => {
   const dispatch = useDispatch();
@@ -408,30 +412,31 @@ const PlanoAEELista = () => {
 
   return (
     <>
-      <Cabecalho pagina="Plano AEE" />
+      <Cabecalho pagina="Plano AEE">
+        <div className="d-flex justify-content-end">
+          <Button
+            id={SGP_BUTTON_VOLTAR}
+            label="Voltar"
+            icon="arrow-left"
+            color={Colors.Azul}
+            border
+            className="mr-2"
+            onClick={onClickVoltar}
+          />
+          <Button
+            id={SGP_BUTTON_NOVO}
+            label="Novo"
+            color={Colors.Roxo}
+            border
+            bold
+            onClick={onClickNovo}
+            disabled={somenteConsulta || !permissoesTela.podeIncluir}
+          />
+        </div>
+      </Cabecalho>
       <Card>
         <div className="col-md-12">
           <div className="row">
-            <div className="col-md-12 d-flex justify-content-end pb-4 justify-itens-end">
-              <Button
-                id="btn-voltar"
-                label="Voltar"
-                icon="arrow-left"
-                color={Colors.Azul}
-                border
-                className="mr-2"
-                onClick={onClickVoltar}
-              />
-              <Button
-                id="btn-novo"
-                label="Novo"
-                color={Colors.Roxo}
-                border
-                bold
-                onClick={onClickNovo}
-                disabled={somenteConsulta || !permissoesTela.podeIncluir}
-              />
-            </div>
             <div className="col-sm-12 mb-4">
               <CheckboxComponent
                 id="exibir-historico"
