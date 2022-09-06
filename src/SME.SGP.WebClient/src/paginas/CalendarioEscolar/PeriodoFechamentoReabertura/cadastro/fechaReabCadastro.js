@@ -9,10 +9,11 @@ import FechaReabCadastroLoader from './fechaReabCadastroLoader';
 const FechaReabCadastro = () => {
   return (
     <FechaReabCadastroContextProvider>
-      <Cabecalho pagina="Período de Fechamento (Reabertura)" />
       <FechaReabCadastroLoader>
-        <Card>
+        <Cabecalho pagina="Período de Fechamento (Reabertura)">
           <FechaReabCadastroBotoesAcao />
+        </Cabecalho>
+        <Card>
           <FechaReabCadastroForm />
         </Card>
       </FechaReabCadastroLoader>

@@ -3,6 +3,12 @@ import React, { useContext, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { Button, Colors } from '~/componentes';
+import {
+  SGP_BUTTON_ALTERAR_CADASTRAR,
+  SGP_BUTTON_CANCELAR,
+  SGP_BUTTON_EXCLUIR,
+  SGP_BUTTON_VOLTAR,
+} from '~/componentes-sgp/filtro/idsCampos';
 import { RotasDto } from '~/dtos';
 import {
   confirmar,
@@ -123,10 +129,10 @@ const FechaReabCadastroBotoesAcao = () => {
 
   return (
     <Col span={24}>
-      <Row gutter={[16, 16]} style={{ justifyContent: 'end', display: 'flex' }}>
+      <Row gutter={[8, 8]} style={{ justifyContent: 'end', display: 'flex' }}>
         <Col>
           <Button
-            id="btn-voltar"
+            id={SGP_BUTTON_VOLTAR}
             label="Voltar"
             icon="arrow-left"
             color={Colors.Azul}
@@ -136,7 +142,7 @@ const FechaReabCadastroBotoesAcao = () => {
         </Col>
         <Col>
           <Button
-            id="btn-cancelar"
+            id={SGP_BUTTON_CANCELAR}
             label="Cancelar"
             color={Colors.Roxo}
             border
@@ -147,7 +153,7 @@ const FechaReabCadastroBotoesAcao = () => {
         {!novoRegistro ? (
           <Col>
             <Button
-              id="btn-excluir"
+              id={SGP_BUTTON_EXCLUIR}
               label="Excluir"
               color={Colors.Vermelho}
               border
@@ -163,7 +169,7 @@ const FechaReabCadastroBotoesAcao = () => {
         )}
         <Col>
           <Button
-            id={novoRegistro ? 'btn-cadastrar' : 'btn-alterar'}
+            id={SGP_BUTTON_ALTERAR_CADASTRAR}
             label={novoRegistro ? 'Cadastrar' : 'Alterar'}
             color={Colors.Roxo}
             border
