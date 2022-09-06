@@ -12,6 +12,10 @@ import {
   SelectComponent,
 } from '~/componentes';
 import { Cabecalho, FiltroHelper } from '~/componentes-sgp';
+import {
+  SGP_BUTTON_NOVO,
+  SGP_BUTTON_VOLTAR,
+} from '~/componentes-sgp/filtro/idsCampos';
 import LocalizadorPadrao from '~/componentes/LocalizadorPadrao';
 import { URL_HOME } from '~/constantes';
 import { RotasDto } from '~/dtos';
@@ -435,28 +439,29 @@ const RegistroItineranciaAEELista = () => {
 
   return (
     <>
-      <Cabecalho pagina="Registro de itinerância" />
+      <Cabecalho pagina="Registro de itinerância">
+        <div className="d-flex justify-content-end">
+          <Button
+            id={SGP_BUTTON_VOLTAR}
+            label="Voltar"
+            icon="arrow-left"
+            color={Colors.Azul}
+            border
+            className="mr-2"
+            onClick={onClickVoltar}
+          />
+          <Button
+            id={SGP_BUTTON_NOVO}
+            label="Novo"
+            color={Colors.Roxo}
+            bold
+            onClick={onClickNovo}
+            disabled={!permissoesTela.podeIncluir}
+          />
+        </div>
+      </Cabecalho>
       <Card>
         <div className="col-md-12 p-0">
-          <div className="row mb-4">
-            <div className="col-sm-12 d-flex justify-content-end">
-              <Button
-                label="Voltar"
-                icon="arrow-left"
-                color={Colors.Azul}
-                border
-                className="mr-2"
-                onClick={onClickVoltar}
-              />
-              <Button
-                label="Novo"
-                color={Colors.Roxo}
-                bold
-                onClick={onClickNovo}
-                disabled={!permissoesTela.podeIncluir}
-              />
-            </div>
-          </div>
           <div className="row mb-4">
             <div className="col-sm-12">
               <CheckboxComponent

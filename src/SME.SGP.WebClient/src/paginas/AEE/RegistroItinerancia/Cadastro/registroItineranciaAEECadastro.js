@@ -17,6 +17,11 @@ import {
   SelectComponent,
 } from '~/componentes';
 import { Cabecalho, Paginacao } from '~/componentes-sgp';
+import {
+  SGP_BUTTON_CANCELAR,
+  SGP_BUTTON_SALVAR,
+  SGP_BUTTON_VOLTAR,
+} from '~/componentes-sgp/filtro/idsCampos';
 import { RotasDto } from '~/dtos';
 import {
   confirmar,
@@ -673,42 +678,41 @@ const RegistroItineranciaAEECadastro = ({ match }) => {
 
   return (
     <>
-      <Cabecalho pagina="Registro de itinerância" />
+      <Cabecalho pagina="Registro de itinerância">
+        <div className="d-flex justify-content-end">
+          <Button
+            id={SGP_BUTTON_VOLTAR}
+            label="Voltar"
+            icon="arrow-left"
+            color={Colors.Azul}
+            border
+            className="mr-2"
+            onClick={onClickVoltar}
+          />
+          <Button
+            id={SGP_BUTTON_CANCELAR}
+            label="Cancelar"
+            color={Colors.Roxo}
+            border
+            bold
+            className="mr-2"
+            onClick={onClickCancelar}
+            disabled={!modoEdicao}
+          />
+          <Button
+            id={SGP_BUTTON_SALVAR}
+            label="Salvar"
+            color={Colors.Roxo}
+            border
+            bold
+            onClick={() => onClickSalvar()}
+            disabled={!modoEdicao || somenteConsulta}
+          />
+        </div>
+      </Cabecalho>
       <Loader loading={carregandoGeral}>
         <Card>
           <div className="col-12 p-0">
-            <div className="row mb-5">
-              <div className="col-md-12 d-flex justify-content-end">
-                <Button
-                  id="btn-voltar-ata-diario-bordo"
-                  label="Voltar"
-                  icon="arrow-left"
-                  color={Colors.Azul}
-                  border
-                  className="mr-3"
-                  onClick={onClickVoltar}
-                />
-                <Button
-                  id="btn-cancelar-ata-diario-bordo"
-                  label="Cancelar"
-                  color={Colors.Roxo}
-                  border
-                  bold
-                  className="mr-3"
-                  onClick={onClickCancelar}
-                  disabled={!modoEdicao}
-                />
-                <Button
-                  id="btn-gerar-ata-diario-bordo"
-                  label="Salvar"
-                  color={Colors.Roxo}
-                  border
-                  bold
-                  onClick={() => onClickSalvar()}
-                  disabled={!modoEdicao || somenteConsulta}
-                />
-              </div>
-            </div>
             {itineranciaId && (
               <div className="row mb-4">
                 <div className="col-sm-12 d-flex justify-content-between align-items-center">
