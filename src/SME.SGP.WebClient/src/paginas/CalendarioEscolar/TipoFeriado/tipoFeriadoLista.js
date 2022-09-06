@@ -13,6 +13,11 @@ import history from '~/servicos/history';
 import { store } from '~/redux';
 import RotasDto from '~/dtos/rotasDto';
 import { verificaSomenteConsulta } from '~/servicos/servico-navegacao';
+import {
+  SGP_BUTTON_EXCLUIR,
+  SGP_BUTTON_NOVO,
+  SGP_BUTTON_VOLTAR,
+} from '~/componentes-sgp/filtro/idsCampos';
 
 const TipoFeriadoLista = () => {
   const [idsTipoFeriadoSelecionado, setIdsTipoFeriadoSelecionado] = useState(
@@ -154,10 +159,10 @@ const TipoFeriadoLista = () => {
 
   return (
     <>
-      <Cabecalho pagina="Lista de tipo de feriado" />
-      <Card>
-        <div className="col-md-12 d-flex justify-content-end pb-4">
+      <Cabecalho pagina="Lista de tipo de feriado">
+        <div className="d-flex justify-content-end">
           <Button
+            id={SGP_BUTTON_VOLTAR}
             label="Voltar"
             icon="arrow-left"
             color={Colors.Azul}
@@ -166,6 +171,7 @@ const TipoFeriadoLista = () => {
             onClick={onClickVoltar}
           />
           <Button
+            id={SGP_BUTTON_EXCLUIR}
             label="Excluir"
             color={Colors.Vermelho}
             border
@@ -178,16 +184,17 @@ const TipoFeriadoLista = () => {
             onClick={onClickExcluir}
           />
           <Button
+            id={SGP_BUTTON_NOVO}
             label="Novo"
             color={Colors.Roxo}
             border
             bold
             disabled={!permissoesTela.podeIncluir}
-            className="mr-2"
             onClick={onClickNovo}
           />
         </div>
-
+      </Cabecalho>
+      <Card>
         <div className="col-md-4 pb-2">
           <SelectComponent
             label="Abrangência"

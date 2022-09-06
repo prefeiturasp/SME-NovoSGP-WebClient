@@ -18,6 +18,12 @@ import tipoFeriado from '~/dtos/tipoFeriado';
 import { store } from '~/redux';
 import RotasDto from '~/dtos/rotasDto';
 import { verificaSomenteConsulta } from '~/servicos/servico-navegacao';
+import {
+  SGP_BUTTON_ALTERAR_CADASTRAR,
+  SGP_BUTTON_CANCELAR,
+  SGP_BUTTON_EXCLUIR,
+  SGP_BUTTON_VOLTAR,
+} from '~/componentes-sgp/filtro/idsCampos';
 
 const TipoFeriadoForm = ({ match }) => {
   const [auditoria, setAuditoria] = useState([]);
@@ -242,24 +248,24 @@ const TipoFeriadoForm = ({ match }) => {
 
   return (
     <>
-      <Cabecalho
-        pagina={`${
-          idTipoFeriadoEdicao > 0 ? 'Alterar' : 'Cadastro de'
-        } Tipo de Feriado`}
-      />
-      <Card>
-        <Formik
-          enableReinitialize
-          initialValues={valoresIniciais}
-          validationSchema={validacoes}
-          onSubmit={valores => onClickCadastrar(valores)}
-          validateOnChange
-          validateOnBlur
-        >
-          {form => (
-            <Form className="col-md-12 mb-4">
-              <div className="col-md-12 d-flex justify-content-end pb-4">
+      <Formik
+        enableReinitialize
+        initialValues={valoresIniciais}
+        validationSchema={validacoes}
+        onSubmit={valores => onClickCadastrar(valores)}
+        validateOnChange
+        validateOnBlur
+      >
+        {form => (
+          <>
+            <Cabecalho
+              pagina={`${
+                idTipoFeriadoEdicao > 0 ? 'Alterar' : 'Cadastro de'
+              } Tipo de Feriado`}
+            >
+              <div className="d-flex justify-content-end">
                 <Button
+                  id={SGP_BUTTON_VOLTAR}
                   label="Voltar"
                   icon="arrow-left"
                   color={Colors.Azul}
@@ -268,6 +274,7 @@ const TipoFeriadoForm = ({ match }) => {
                   onClick={onClickVoltar}
                 />
                 <Button
+                  id={SGP_BUTTON_CANCELAR}
                   label="Cancelar"
                   color={Colors.Roxo}
                   border
@@ -276,6 +283,7 @@ const TipoFeriadoForm = ({ match }) => {
                   disabled={!modoEdicao}
                 />
                 <Button
+                  id={SGP_BUTTON_EXCLUIR}
                   label="Excluir"
                   color={Colors.Vermelho}
                   border
@@ -286,6 +294,7 @@ const TipoFeriadoForm = ({ match }) => {
                   onClick={onClickExcluir}
                 />
                 <Button
+                  id={SGP_BUTTON_ALTERAR_CADASTRAR}
                   label={`${idTipoFeriadoEdicao > 0 ? 'Alterar' : 'Cadastrar'}`}
                   color={Colors.Roxo}
                   border
@@ -294,90 +303,92 @@ const TipoFeriadoForm = ({ match }) => {
                     (novoRegistro && !permissoesTela.podeIncluir) ||
                     (!novoRegistro && !permissoesTela.podeAlterar)
                   }
-                  className="mr-2"
                   onClick={() => validaAntesDoSubmit(form)}
                 />
               </div>
+            </Cabecalho>
+            <Card>
+              <Form className="col-md-12 mb-4">
+                <div className="row">
+                  <div className="col-sm-12 col-md-8 col-lg-8 col-xl-8 mb-2">
+                    <CampoTexto
+                      form={form}
+                      label="Nome do feriado"
+                      placeholder="Meu novo feriado"
+                      name="nome"
+                      onChange={onChangeCampos}
+                      desabilitado={
+                        isTipoMovel ||
+                        (novoRegistro && !permissoesTela.podeIncluir) ||
+                        (!novoRegistro && !permissoesTela.podeAlterar) ||
+                        possuiEventos
+                      }
+                    />
+                  </div>
 
-              <div className="row">
-                <div className="col-sm-12 col-md-8 col-lg-8 col-xl-8 mb-2">
-                  <CampoTexto
-                    form={form}
-                    label="Nome do feriado"
-                    placeholder="Meu novo feriado"
-                    name="nome"
-                    onChange={onChangeCampos}
-                    desabilitado={
-                      isTipoMovel ||
-                      ((novoRegistro && !permissoesTela.podeIncluir) ||
-                        (!novoRegistro && !permissoesTela.podeAlterar)) ||
-                      possuiEventos
-                    }
-                  />
-                </div>
+                  <div className="col-sm-12 col-md-4 col-lg-4 col-xl-4 mb-2">
+                    <SelectComponent
+                      form={form}
+                      label="Abrangência"
+                      name="abrangencia"
+                      lista={listaDropdownAbrangencia}
+                      valueOption="id"
+                      valueText="nome"
+                      onChange={onChangeCampos}
+                      placeholder="Abrangência do feriado"
+                      disabled={
+                        isTipoMovel ||
+                        (novoRegistro && !permissoesTela.podeIncluir) ||
+                        (!novoRegistro && !permissoesTela.podeAlterar) ||
+                        possuiEventos
+                      }
+                    />
+                  </div>
 
-                <div className="col-sm-12 col-md-4 col-lg-4 col-xl-4 mb-2">
-                  <SelectComponent
-                    form={form}
-                    label="Abrangência"
-                    name="abrangencia"
-                    lista={listaDropdownAbrangencia}
-                    valueOption="id"
-                    valueText="nome"
-                    onChange={onChangeCampos}
-                    placeholder="Abrangência do feriado"
-                    disabled={
-                      isTipoMovel ||
-                      (novoRegistro && !permissoesTela.podeIncluir) ||
-                      (!novoRegistro && !permissoesTela.podeAlterar) ||
-                      possuiEventos
-                    }
-                  />
-                </div>
+                  <div className="col-sm-12 col-md-4 col-lg-3 col-xl-2 mb-2">
+                    <RadioGroupButton
+                      label="Tipo"
+                      form={form}
+                      opcoes={opcoesTipo}
+                      name="tipo"
+                      desabilitado
+                    />
+                  </div>
 
-                <div className="col-sm-12 col-md-4 col-lg-3 col-xl-2 mb-2">
-                  <RadioGroupButton
-                    label="Tipo"
-                    form={form}
-                    opcoes={opcoesTipo}
-                    name="tipo"
-                    desabilitado
-                  />
-                </div>
+                  <div className="col-sm-12 col-md-4 col-lg-4 col-xl-3">
+                    {tipoCampoDataFeriado(form)}
+                  </div>
 
-                <div className="col-sm-12 col-md-4 col-lg-4 col-xl-3">
-                  {tipoCampoDataFeriado(form)}
+                  <div className="col-sm-12 col-md-3 col-lg-3 col-xl-3 mb-2">
+                    <RadioGroupButton
+                      label="Situação"
+                      form={form}
+                      opcoes={opcoesSituacao}
+                      name="situacao"
+                      valorInicial
+                      desabilitado={
+                        (novoRegistro && !permissoesTela.podeIncluir) ||
+                        (!novoRegistro && !permissoesTela.podeAlterar)
+                      }
+                      onChange={onChangeCampos}
+                    />
+                  </div>
                 </div>
-
-                <div className="col-sm-12 col-md-3 col-lg-3 col-xl-3 mb-2">
-                  <RadioGroupButton
-                    label="Situação"
-                    form={form}
-                    opcoes={opcoesSituacao}
-                    name="situacao"
-                    valorInicial
-                    desabilitado={
-                      (novoRegistro && !permissoesTela.podeIncluir) ||
-                      (!novoRegistro && !permissoesTela.podeAlterar)
-                    }
-                    onChange={onChangeCampos}
-                  />
-                </div>
-              </div>
-            </Form>
-          )}
-        </Formik>
-        {exibirAuditoria ? (
-          <Auditoria
-            criadoEm={auditoria.criadoEm}
-            criadoPor={auditoria.criadoPor}
-            alteradoPor={auditoria.alteradoPor}
-            alteradoEm={auditoria.alteradoEm}
-          />
-        ) : (
-          ''
+              </Form>
+              {exibirAuditoria ? (
+                <Auditoria
+                  criadoEm={auditoria.criadoEm}
+                  criadoPor={auditoria.criadoPor}
+                  alteradoPor={auditoria.alteradoPor}
+                  alteradoEm={auditoria.alteradoEm}
+                />
+              ) : (
+                <></>
+              )}
+            </Card>
+          </>
         )}
-      </Card>
+      </Formik>
     </>
   );
 };
