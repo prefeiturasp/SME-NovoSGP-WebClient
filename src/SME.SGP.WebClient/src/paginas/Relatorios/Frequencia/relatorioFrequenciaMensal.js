@@ -472,46 +472,47 @@ const RelatorioFrequenciaMensal = () => {
 
   return (
     <>
-      <Cabecalho pagina="Relatório de frequência mensal" />
+      <Cabecalho pagina="Relatório de frequência mensal">
+        <Row gutter={[8, 8]} type="flex">
+          <Col>
+            <Button
+              id={SGP_BUTTON_VOLTAR}
+              label="Voltar"
+              icon="arrow-left"
+              color={Colors.Azul}
+              border
+              onClick={() => {
+                history.push(URL_HOME);
+              }}
+            />
+          </Col>
+          <Col>
+            <Button
+              id={SGP_BUTTON_CANCELAR}
+              label="Cancelar"
+              color={Colors.Azul}
+              border
+              bold
+              onClick={cancelar}
+            />
+          </Col>
+          <Col>
+            <Loader loading={carregandoGerar} ignorarTip>
+              <Button
+                id={SGP_BUTTON_GERAR}
+                icon="print"
+                label="Gerar"
+                color={Colors.Roxo}
+                bold
+                onClick={gerar}
+                disabled={desabilitarBtnGerar}
+              />
+            </Loader>
+          </Col>
+        </Row>
+      </Cabecalho>
       <Card>
         <Col span={24}>
-          <Row gutter={[16, 8]} type="flex" justify="end">
-            <Col>
-              <Button
-                id={SGP_BUTTON_VOLTAR}
-                label="Voltar"
-                icon="arrow-left"
-                color={Colors.Azul}
-                border
-                onClick={() => {
-                  history.push(URL_HOME);
-                }}
-              />
-            </Col>
-            <Col>
-              <Button
-                id={SGP_BUTTON_CANCELAR}
-                label="Cancelar"
-                color={Colors.Azul}
-                border
-                bold
-                onClick={cancelar}
-              />
-            </Col>
-            <Col>
-              <Loader loading={carregandoGerar} ignorarTip>
-                <Button
-                  id={SGP_BUTTON_GERAR}
-                  icon="print"
-                  label="Gerar"
-                  color={Colors.Roxo}
-                  bold
-                  onClick={gerar}
-                  disabled={desabilitarBtnGerar}
-                />
-              </Loader>
-            </Col>
-          </Row>
           <Row gutter={[16, 8]}>
             <Col sm={24}>
               <CheckboxComponent
