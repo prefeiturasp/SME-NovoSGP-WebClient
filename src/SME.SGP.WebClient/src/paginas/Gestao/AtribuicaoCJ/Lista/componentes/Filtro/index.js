@@ -98,7 +98,7 @@ function Filtro({ onFiltrar }) {
               label="Exibir histórico?"
               onChangeCheckbox={onChangeConsideraHistorico}
               checked={consideraHistorico}
-              disabled={listaAnosLetivo.length === 1}
+              disabled={listaAnosLetivo.length === 0}
             />
           </Linha>
           <Linha className="row mb-2">

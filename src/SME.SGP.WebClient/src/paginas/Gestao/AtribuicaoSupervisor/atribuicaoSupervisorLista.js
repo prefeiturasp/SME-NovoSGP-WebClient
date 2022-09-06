@@ -462,6 +462,7 @@ function montarListaAtribuicao(lista) {
             onChange={onChangeUes}
             valueSelect={ueSelecionada || []}
             placeholder="Unidade Escolar (UE)"
+            showSearch
             disabled={
               carregandoLista || carregandoResponsavel ||  !dresSelecionadas || !permissoesTela.podeConsultar
             }

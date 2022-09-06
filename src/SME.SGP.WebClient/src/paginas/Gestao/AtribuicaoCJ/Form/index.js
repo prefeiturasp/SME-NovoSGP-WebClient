@@ -171,7 +171,7 @@ function AtribuicaoCJForm({ match, location }) {
       }
 
       const anoSelecionado = query.anoLetivo || anoAtual;
-      const historico = query.historico.indexOf('false') || consideraHistorico;
+      const historico = query.historico || consideraHistorico;
 
       setValoresIniciais({
         ...valoresIniciais,
@@ -348,7 +348,7 @@ function AtribuicaoCJForm({ match, location }) {
                       onChangeCheckbox={onChangeConsideraHistorico}
                       checked={consideraHistorico}
                       disabled={
-                        listaAnosLetivo.length === 1 ||
+                        listaAnosLetivo.length === 0 ||
                         somenteConsulta ||
                         ehEdicao
                       }
