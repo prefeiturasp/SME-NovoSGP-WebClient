@@ -41,6 +41,7 @@ import {
   objetoEstaTodoPreenchido,
   ordenarDescPor,
 } from '~/utils/funcoes/gerais';
+import { SGP_BUTTON_SALVAR } from '~/componentes-sgp/filtro/idsCampos';
 
 function AtribuicaoCJForm({ match, location }) {
   const anoAtual = window.moment().format('YYYY');
@@ -311,159 +312,159 @@ function AtribuicaoCJForm({ match, location }) {
 
   return (
     <>
-      <Cabecalho pagina="Atribuição" classes="mb-2" />
       <Loader loading={carregando}>
-        <Card>
-          <Formik
-            enableReinitialize
-            initialValues={valoresIniciais}
-            validationSchema={validacoes}
-            ref={refFormik => setRefForm(refFormik)}
-            onSubmit={valores => onSubmitFormulario(valores)}
-            validate={valores => validaFormulario(valores)}
-            validateOnBlur
-            validateOnChange
-          >
-            {form => (
-              <Form>
+        <Formik
+          enableReinitialize
+          initialValues={valoresIniciais}
+          validationSchema={validacoes}
+          ref={refFormik => setRefForm(refFormik)}
+          onSubmit={valores => onSubmitFormulario(valores)}
+          validate={valores => validaFormulario(valores)}
+          validateOnBlur
+          validateOnChange
+        >
+          {form => (
+            <>
+              <Cabecalho pagina="Atribuição">
                 <ButtonGroup
                   form={form}
                   permissoesTela={permissoesTela[RotasDto.ATRIBUICAO_CJ_LISTA]}
                   novoRegistro={novoRegistro}
                   labelBotaoPrincipal="Salvar"
+                  idBotaoPrincipal={SGP_BUTTON_SALVAR}
                   onClickBotaoPrincipal={() => onClickBotaoPrincipal(form)}
                   onClickVoltar={() => onClickVoltar()}
                   desabilitarBotaoPrincipal={desabilitarBotaoPrincipal()}
                   modoEdicao={modoEdicao}
                 />
-                <Row className="row">
-                  <CheckboxComponent
-                    name="exibirHistorico"
-                    form={form}
-                    label="Exibir histórico?"
-                    onChangeCheckbox={onChangeConsideraHistorico}
-                    checked={consideraHistorico}
-                    disabled={
-                      listaAnosLetivo.length === 1 ||
-                      somenteConsulta ||
-                      ehEdicao
-                    }
-                  />
-                </Row>
-                <Row className="row">
-                  <Grid cols={2}>
-                    <SelectComponent
-                      name="anoLetivo"
-                      placeholder="Ano letivo"
-                      label="Ano letivo"
-                      lista={listaAnosLetivo}
-                      valueText="desc"
-                      valueOption="valor"
+              </Cabecalho>
+              <Card>
+                <Form>
+                  <Row className="row">
+                    <CheckboxComponent
+                      name="exibirHistorico"
                       form={form}
-                      onChange={onChangeAnoLetivo}
-                      valueSelect={anoLetivo}
-                      allowClear={false}
+                      label="Exibir histórico?"
+                      onChangeCheckbox={onChangeConsideraHistorico}
+                      checked={consideraHistorico}
                       disabled={
-                        !consideraHistorico
-                        // ||
-                        // listaAnosLetivo?.length === 1 ||
-                        // somenteConsulta ||
-                        // ehEdicao
+                        listaAnosLetivo.length === 1 ||
+                        somenteConsulta ||
+                        ehEdicao
                       }
                     />
-                  </Grid>
-                  <Grid cols={5}>
-                    <DreDropDown
-                      url={`v1/dres/atribuicoes?anoLetivo=${anoLetivo}`}
-                      label="Diretoria Regional de Educação (DRE)"
-                      form={form}
-                      onChange={valor => setDreId(valor)}
-                      desabilitado={somenteConsulta}
-                    />
-                  </Grid>
-                  <Grid cols={5}>
-                    <UeDropDown
-                      temParametros
-                      url={`v1/dres/${form.values.dreId}/ues/atribuicoes?anoLetivo=${anoLetivo}`}
-                      label="Unidade Escolar (UE)"
-                      dreId={dreId}
-                      form={form}
-                      onChange={() => {}}
-                      desabilitado={somenteConsulta}
-                    />
-                  </Grid>
-                </Row>
-                <Row className="row">
-                  <Grid cols={7}>
-                    <Row className="row">
-                      <Localizador
-                        dreId={form.values.dreId}
-                        anoLetivo={anoLetivo}
-                        showLabel
+                  </Row>
+                  <Row className="row">
+                    <Grid cols={2}>
+                      <SelectComponent
+                        name="anoLetivo"
+                        placeholder="Ano letivo"
+                        label="Ano letivo"
+                        lista={listaAnosLetivo}
+                        valueText="desc"
+                        valueOption="valor"
+                        form={form}
+                        onChange={onChangeAnoLetivo}
+                        valueSelect={anoLetivo}
+                        allowClear={false}
+                        disabled={!consideraHistorico}
+                      />
+                    </Grid>
+                    <Grid cols={5}>
+                      <DreDropDown
+                        url={`v1/dres/atribuicoes?anoLetivo=${anoLetivo}`}
+                        label="Diretoria Regional de Educação (DRE)"
+                        form={form}
+                        onChange={valor => setDreId(valor)}
+                        desabilitado={somenteConsulta}
+                      />
+                    </Grid>
+                    <Grid cols={5}>
+                      <UeDropDown
+                        temParametros
+                        url={`v1/dres/${form.values.dreId}/ues/atribuicoes?anoLetivo=${anoLetivo}`}
+                        label="Unidade Escolar (UE)"
+                        dreId={dreId}
                         form={form}
                         onChange={() => {}}
                         desabilitado={somenteConsulta}
                       />
-                    </Row>
-                  </Grid>
-                  <Grid cols={3}>
-                    <ModalidadesDropDown
-                      label="Modalidade"
-                      form={form}
-                      disabled={
-                        valoresIniciais?.modalidadeId || somenteConsulta
-                      }
-                      onChange={value => {
-                        if (
-                          value !== undefined &&
-                          valoresIniciais.modalidadeId !== value
-                        ) {
-                          form.setFieldValue('turmaId', undefined);
-                          setValoresIniciais({
-                            ...valoresIniciais,
-                            turmaId: undefined,
-                          });
-                          setListaProfessores([]);
+                    </Grid>
+                  </Row>
+                  <Row className="row">
+                    <Grid cols={7}>
+                      <Row className="row">
+                        <Localizador
+                          dreId={form.values.dreId}
+                          anoLetivo={anoLetivo}
+                          showLabel
+                          form={form}
+                          onChange={() => {}}
+                          desabilitado={somenteConsulta}
+                        />
+                      </Row>
+                    </Grid>
+                    <Grid cols={3}>
+                      <ModalidadesDropDown
+                        label="Modalidade"
+                        form={form}
+                        disabled={
+                          valoresIniciais?.modalidadeId || somenteConsulta
                         }
-                      }}
+                        onChange={value => {
+                          if (
+                            value !== undefined &&
+                            valoresIniciais.modalidadeId !== value
+                          ) {
+                            form.setFieldValue('turmaId', undefined);
+                            setValoresIniciais({
+                              ...valoresIniciais,
+                              turmaId: undefined,
+                            });
+                            setListaProfessores([]);
+                          }
+                        }}
+                      />
+                    </Grid>
+                    <Grid cols={2}>
+                      <TurmasDropDown
+                        label="Turma"
+                        form={form}
+                        onChange={value => {
+                          if (valoresIniciais.turmaId == undefined) {
+                            setValoresForm({
+                              ...valoresForm,
+                              turmaId: value,
+                            });
+                          }
+                        }}
+                        desabilitado={somenteConsulta}
+                        consideraHistorico={consideraHistorico}
+                      />
+                    </Grid>
+                  </Row>
+                </Form>
+                <Tabela
+                  carregando={carregandoTabela}
+                  lista={listaProfessores}
+                  onChangeSubstituir={onChangeSubstituir}
+                />
+                {auditoria && (
+                  <div className="row">
+                    <Auditoria
+                      criadoEm={auditoria.criadoEm}
+                      criadoPor={auditoria.criadoPor}
+                      criadoRf={auditoria.criadoRf}
+                      alteradoPor={auditoria.alteradoPor}
+                      alteradoEm={auditoria.alteradoEm}
+                      alteradoRf={auditoria.alteradoRf}
                     />
-                  </Grid>
-                  <Grid cols={2}>
-                    <TurmasDropDown
-                      label="Turma"
-                      form={form}
-                      onChange={value => {
-                        if (valoresIniciais.turmaId == undefined) {
-                          setValoresForm({
-                            ...valoresForm,
-                            turmaId: value,
-                          });
-                        }
-                      }}
-                      desabilitado={somenteConsulta}
-                      consideraHistorico={consideraHistorico}
-                    />
-                  </Grid>
-                </Row>
-              </Form>
-            )}
-          </Formik>
-          <Tabela
-            carregando={carregandoTabela}
-            lista={listaProfessores}
-            onChangeSubstituir={onChangeSubstituir}
-          />
-          {auditoria && (
-            <Auditoria
-              criadoEm={auditoria.criadoEm}
-              criadoPor={auditoria.criadoPor}
-              criadoRf={auditoria.criadoRf}
-              alteradoPor={auditoria.alteradoPor}
-              alteradoEm={auditoria.alteradoEm}
-              alteradoRf={auditoria.alteradoRf}
-            />
+                  </div>
+                )}
+              </Card>
+            </>
           )}
-        </Card>
+        </Formik>
       </Loader>
     </>
   );
