@@ -7,6 +7,10 @@ import {
   SelectComponent,
 } from '~/componentes';
 import { Cabecalho, NomeEstudanteLista } from '~/componentes-sgp';
+import {
+  SGP_BUTTON_NOVO,
+  SGP_BUTTON_VOLTAR,
+} from '~/componentes-sgp/filtro/idsCampos';
 import Button from '~/componentes/button';
 import Card from '~/componentes/card';
 import { Colors } from '~/componentes/colors';
@@ -485,29 +489,30 @@ const EncaminhamentoAEELista = () => {
   return (
     <>
       <ModalAvisoNovoEncaminhamentoAEE />
-      <Cabecalho pagina="Encaminhamento AEE" />
+      <Cabecalho pagina="Encaminhamento AEE">
+        <div className="d-flex justify-content-end">
+          <BtnVoltarExcluirEncaminhamentoAEE
+            id={SGP_BUTTON_VOLTAR}
+            icon="arrow-left"
+            color={Colors.Azul}
+            border
+            className="mr-2"
+            onClick={onClickVoltar}
+          />
+          <Button
+            id={SGP_BUTTON_NOVO}
+            label="Novo Encaminhamento"
+            color={Colors.Roxo}
+            border
+            bold
+            onClick={onClickNovo}
+            disabled={somenteConsulta || !permissoesTela.podeIncluir}
+          />
+        </div>
+      </Cabecalho>
       <Card>
         <div className="col-md-12">
           <div className="row">
-            <div className="col-md-12 d-flex justify-content-end pb-4 justify-itens-end">
-              <BtnVoltarExcluirEncaminhamentoAEE
-                id="btn-voltar"
-                icon="arrow-left"
-                color={Colors.Azul}
-                border
-                className="mr-2"
-                onClick={onClickVoltar}
-              />
-              <Button
-                id="btn-novo-encaminhamento"
-                label="Novo Encaminhamento"
-                color={Colors.Roxo}
-                border
-                bold
-                onClick={onClickNovo}
-                disabled={somenteConsulta || !permissoesTela.podeIncluir}
-              />
-            </div>
             <div className="col-sm-12 mb-4">
               <CheckboxComponent
                 id="exibir-historico"
