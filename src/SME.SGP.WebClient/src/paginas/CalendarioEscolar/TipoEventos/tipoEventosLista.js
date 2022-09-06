@@ -1,5 +1,11 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
+import { Cabecalho } from '~/componentes-sgp';
+import {
+  SGP_BUTTON_EXCLUIR,
+  SGP_BUTTON_NOVO,
+  SGP_BUTTON_VOLTAR,
+} from '~/componentes-sgp/filtro/idsCampos';
 import Button from '~/componentes/button';
 import Card from '~/componentes/card';
 import { Colors } from '~/componentes/colors';
@@ -12,7 +18,7 @@ import api from '~/servicos/api';
 import history from '~/servicos/history';
 import { verificaSomenteConsulta } from '~/servicos/servico-navegacao';
 
-import { Busca, CampoTexto, Div, Titulo } from './tipoEventos.css';
+import { Busca, CampoTexto, Div } from './tipoEventos.css';
 
 const TipoEventosLista = () => {
   const usuario = useSelector(store => store.usuario);
@@ -98,15 +104,15 @@ const TipoEventosLista = () => {
       dataIndex: 'localOcorrencia',
       className: 'text-left px-4',
       render: localOcorrencia =>
-        listaLocalOcorrencia.filter(l => l.valor === localOcorrencia)[0]
-          .descricao,
+        listaLocalOcorrencia?.filter?.(l => l?.valor === localOcorrencia)[0]
+          ?.descricao,
     },
     {
       title: 'Letivo',
       dataIndex: 'letivo',
       className: 'text-left px-4',
       render: letivo =>
-        listaLetivo.filter(l => l.valor === letivo - 1)[0].descricao,
+        listaLetivo?.filter?.(l => l?.valor === letivo - 1)[0]?.descricao,
     },
   ];
 
@@ -145,41 +151,41 @@ const TipoEventosLista = () => {
   };
 
   return (
-    <Div className="col-12">
-      <Grid cols={12} className="mb-1 p-0">
-        <Titulo className="font-weight-bold">Tipo de eventos</Titulo>
-      </Grid>
-      <Card className="rounded" mx="mx-auto">
-        <Div className="row w-100 mx-auto mb-5">
-          <Div className="col-12 d-flex justify-content-end">
-            <Button
-              label="Voltar"
-              Icone="arrow-left"
-              color={Colors.Azul}
-              onClick={clicouBotaoVoltar}
-              border
-              className="mr-3"
-            />
-            <Button
-              label="Excluir"
-              color={Colors.Vermelho}
-              border
-              className="mr-3"
-              onClick={clicouBotaoExcluir}
-              disabled={
-                !permissoesTela.podeExcluir ||
-                (tipoEventoSelecionados && tipoEventoSelecionados.length < 1)
-              }
-            />
-            <Button
-              label="Novo"
-              color={Colors.Roxo}
-              onClick={clicouBotaoNovo}
-              disabled={!permissoesTela.podeIncluir}
-              bold
-            />
-          </Div>
-        </Div>
+    <>
+      <Cabecalho pagina="Tipo de eventos">
+        <div className="d-flex justify-content-end">
+          <Button
+            id={SGP_BUTTON_VOLTAR}
+            label="Voltar"
+            Icone="arrow-left"
+            color={Colors.Azul}
+            onClick={clicouBotaoVoltar}
+            border
+            className="mr-2"
+          />
+          <Button
+            id={SGP_BUTTON_EXCLUIR}
+            label="Excluir"
+            color={Colors.Vermelho}
+            border
+            className="mr-2"
+            onClick={clicouBotaoExcluir}
+            disabled={
+              !permissoesTela.podeExcluir ||
+              (tipoEventoSelecionados && tipoEventoSelecionados.length < 1)
+            }
+          />
+          <Button
+            id={SGP_BUTTON_NOVO}
+            label="Novo"
+            color={Colors.Roxo}
+            onClick={clicouBotaoNovo}
+            disabled={!permissoesTela.podeIncluir}
+            bold
+          />
+        </div>
+      </Cabecalho>
+      <Card>
         <Div className="row mb-3 w-100 mx-auto">
           <Div className="col-4">
             <SelectComponent
@@ -226,7 +232,7 @@ const TipoEventosLista = () => {
           />
         </Grid>
       </Card>
-    </Div>
+    </>
   );
 };
 

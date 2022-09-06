@@ -13,6 +13,13 @@ import api from '~/servicos/api';
 import CampoTexto from '~/componentes/campoTexto';
 import { sucesso, erro, confirmar, erros } from '~/servicos/alertas';
 import servicoEvento from '~/servicos/Paginas/Calendario/ServicoTipoEvento';
+import { Cabecalho } from '~/componentes-sgp';
+import {
+  SGP_BUTTON_ALTERAR_CADASTRAR,
+  SGP_BUTTON_CANCELAR,
+  SGP_BUTTON_EXCLUIR,
+  SGP_BUTTON_VOLTAR,
+} from '~/componentes-sgp/filtro/idsCampos';
 
 const TipoEventosForm = ({ match }) => {
   const botaoCadastrarRef = useRef();
@@ -252,218 +259,221 @@ const TipoEventosForm = ({ match }) => {
   };
 
   return (
-    <Div className="col-12">
-      <Grid cols={12} className="mb-1 p-0">
-        <Titulo className="font-weight-bold">
-          {idTipoEvento ? 'Alteração' : 'Cadastro'} de Tipo de Eventos
-        </Titulo>
-      </Grid>
-      <Card className="rounded" mx="mx-auto">
-        <Formik
-          enableReinitialize
-          initialValues={{
-            descricao: dadosTipoEvento.descricao,
-            letivo: dadosTipoEvento.letivo,
-            localOcorrencia: dadosTipoEvento.localOcorrencia,
-            concomitancia: dadosTipoEvento.concomitancia,
-            tipoData: dadosTipoEvento.tipoData,
-            dependencia: dadosTipoEvento.dependencia,
-            ativo: dadosTipoEvento.ativo,
-          }}
-          onSubmit={dados => cadastrarTipoEvento(dados)}
-          validationSchema={validacoes}
-          validateOnBlur={false}
-          validateOnChange={false}
-        >
-          {form => (
-            <Div className="w-100">
-              <Grid cols={12} className="d-flex justify-content-end mb-3">
-                <Button
-                  label="Voltar"
-                  icon="arrow-left"
-                  color={Colors.Azul}
-                  onClick={clicouBotaoVoltar}
-                  border
-                  className="mr-3"
-                />
-                <Button
-                  label="Cancelar"
-                  color={Colors.Roxo}
-                  onClick={clicouBotaoCancelar}
-                  border
-                  bold
-                  disabled={idTipoEvento}
-                  className="mr-3"
-                />
-                <Button
-                  label="Excluir"
-                  color={Colors.Vermelho}
-                  border
-                  className="mr-3"
-                  disabled={possuiEventos}
-                  onClick={clicouBotaoExcluir}
-                />
-                <Button
-                  label={idTipoEvento ? 'Alterar' : 'Cadastrar'}
-                  color={Colors.Roxo}
-                  onClick={e => clicouBotaoCadastrar(form, e)}
-                  border
-                  bold
-                  disabled={desabilitarBotaoCadastrar}
-                  ref={botaoCadastrarRef}
-                />
-              </Grid>
-              <Grid cols={12}>
-                <Form>
-                  <Div className="row mb-4">
-                    <Div className="col-6">
-                      <Rotulo>Nome do tipo de evento</Rotulo>
-                      <CampoTexto
-                        form={form}
-                        ref={campoDescricaoRef}
-                        name="descricao"
-                        id="descricao"
-                        maxlength={100}
-                        placeholder="Nome do evento"
-                        type="input"
-                        onChange={aoDigitarDescricao}
-                        desabilitado={possuiEventos}
-                        icon
-                      />
-                    </Div>
-                    <Div className="col-4">
-                      <Rotulo>Local de ocorrência</Rotulo>
-                      <SelectComponent
-                        form={form}
-                        name="localOcorrencia"
-                        id="localOcorrencia"
-                        placeholder="Local de ocorrência"
-                        valueOption="valor"
-                        valueText="descricao"
-                        lista={listaLocalOcorrencia}
-                        onChange={aoSelecionarLocalOcorrencia}
-                        disabled={possuiEventos}
-                      />
-                    </Div>
-                    <Div className="col-2">
-                      <Rotulo>Letivo</Rotulo>
-                      <SelectComponent
-                        form={form}
-                        name="letivo"
-                        id="letivo"
-                        placeholder="Tipo"
-                        valueOption="valor"
-                        valueText="descricao"
-                        lista={listaLetivo}
-                        onChange={aoSelecionarLetivo}
-                        disabled={possuiEventos}
-                      />
-                    </Div>
-                  </Div>
-                  <Div className="row">
-                    <Div className="col-3">
-                      <Rotulo>Permite concomitância</Rotulo>
-                    </Div>
-                    <Div className="col-3">
-                      <Rotulo>Tipo de data</Rotulo>
-                    </Div>
-                    <Div className="col-3">
-                      <Rotulo>Dependência</Rotulo>
-                    </Div>
-                    <Div className="col-3">
-                      <Rotulo>Situação</Rotulo>
-                    </Div>
-                  </Div>
-                  <Div className="row">
-                    <Div className="col-3">
-                      <Radio.Group
-                        form={form}
-                        value={dadosTipoEvento.concomitancia}
-                        onChange={aoSelecionarConcomitancia}
-                        disabled={possuiEventos}
-                      >
-                        <Div className="form-check form-check-inline">
-                          <Radio value>Sim</Radio>
-                        </Div>
-                        <Div className="form-check form-check-inline">
-                          <Radio value={false}>Não</Radio>
-                        </Div>
-                      </Radio.Group>
-                    </Div>
-                    <Div className="col-3">
-                      <Radio.Group
-                        form={form}
-                        value={dadosTipoEvento.tipoData}
-                        onChange={aoSelecionarTipoData}
-                        disabled={possuiEventos}
-                      >
-                        <Div className="form-check form-check-inline">
-                          <Radio value={1}>Única</Radio>
-                        </Div>
-                        <Div className="form-check form-check-inline">
-                          <Radio value={2}>Início e fim</Radio>
-                        </Div>
-                      </Radio.Group>
-                    </Div>
-                    <Div className="col-3">
-                      <Radio.Group
-                        form={form}
-                        value={dadosTipoEvento.dependencia}
-                        onChange={aoSelecionarDependencia}
-                        disabled={possuiEventos}
-                      >
-                        <Div className="form-check form-check-inline">
-                          <Radio value>Sim</Radio>
-                        </Div>
-                        <Div className="form-check form-check-inline">
-                          <Radio value={false}>Não</Radio>
-                        </Div>
-                      </Radio.Group>
-                    </Div>
-                    <Div className="col-3">
-                      <Radio.Group
-                        form={form}
-                        value={dadosTipoEvento.ativo}
-                        onChange={aoSelecionarSituacao}
-                      >
-                        <Div className="form-check form-check-inline">
-                          <Radio value>Ativo</Radio>
-                        </Div>
-                        <Div className="form-check form-check-inline">
-                          <Radio value={false}>Inativo</Radio>
-                        </Div>
-                      </Radio.Group>
-                    </Div>
-                  </Div>
-                </Form>
-              </Grid>
-              <Grid cols={12}>
-                <InseridoAlterado className="mt-4">
-                  {inseridoAlterado.criadoPor && inseridoAlterado.criadoEm ? (
-                    <p className="pt-2">
-                      INSERIDO por {inseridoAlterado.criadoPor} em
-                      {inseridoAlterado.criadoEm}
-                    </p>
-                  ) : (
-                    ''
-                  )}
+    <Formik
+      enableReinitialize
+      initialValues={{
+        descricao: dadosTipoEvento.descricao,
+        letivo: dadosTipoEvento.letivo,
+        localOcorrencia: dadosTipoEvento.localOcorrencia,
+        concomitancia: dadosTipoEvento.concomitancia,
+        tipoData: dadosTipoEvento.tipoData,
+        dependencia: dadosTipoEvento.dependencia,
+        ativo: dadosTipoEvento.ativo,
+      }}
+      onSubmit={dados => cadastrarTipoEvento(dados)}
+      validationSchema={validacoes}
+      validateOnBlur={false}
+      validateOnChange={false}
+    >
+      {form => (
+        <>
+          <Cabecalho
+            pagina={`${
+              idTipoEvento ? 'Alteração' : 'Cadastro'
+            } de Tipo de Eventos`}
+          >
+            <div className="d-flex justify-content-end">
+              <Button
+                id={SGP_BUTTON_VOLTAR}
+                label="Voltar"
+                icon="arrow-left"
+                color={Colors.Azul}
+                onClick={clicouBotaoVoltar}
+                border
+                className="mr-2"
+              />
+              <Button
+                id={SGP_BUTTON_CANCELAR}
+                label="Cancelar"
+                color={Colors.Roxo}
+                onClick={clicouBotaoCancelar}
+                border
+                bold
+                disabled={idTipoEvento}
+                className="mr-2"
+              />
+              <Button
+                id={SGP_BUTTON_EXCLUIR}
+                label="Excluir"
+                color={Colors.Vermelho}
+                border
+                className="mr-2"
+                disabled={possuiEventos}
+                onClick={clicouBotaoExcluir}
+              />
+              <Button
+                id={SGP_BUTTON_ALTERAR_CADASTRAR}
+                label={idTipoEvento ? 'Alterar' : 'Cadastrar'}
+                color={Colors.Roxo}
+                onClick={e => clicouBotaoCadastrar(form, e)}
+                border
+                bold
+                disabled={desabilitarBotaoCadastrar}
+                ref={botaoCadastrarRef}
+              />
+            </div>
+          </Cabecalho>
 
-                  {inseridoAlterado.alteradoPor &&
-                  inseridoAlterado.alteradoEm ? (
-                    <p>
-                      ALTERADO por {inseridoAlterado.alteradoPor} em{' '}
-                      {inseridoAlterado.alteradoEm}
-                    </p>
-                  ) : (
-                    ''
-                  )}
-                </InseridoAlterado>
-              </Grid>
-            </Div>
-          )}
-        </Formik>
-      </Card>
-    </Div>
+          <Card>
+            <Grid cols={12}>
+              <Form>
+                <Div className="row mb-4">
+                  <Div className="col-6">
+                    <Rotulo>Nome do tipo de evento</Rotulo>
+                    <CampoTexto
+                      form={form}
+                      ref={campoDescricaoRef}
+                      name="descricao"
+                      id="descricao"
+                      maxlength={100}
+                      placeholder="Nome do evento"
+                      type="input"
+                      onChange={aoDigitarDescricao}
+                      desabilitado={possuiEventos}
+                      icon
+                    />
+                  </Div>
+                  <Div className="col-4">
+                    <Rotulo>Local de ocorrência</Rotulo>
+                    <SelectComponent
+                      form={form}
+                      name="localOcorrencia"
+                      id="localOcorrencia"
+                      placeholder="Local de ocorrência"
+                      valueOption="valor"
+                      valueText="descricao"
+                      lista={listaLocalOcorrencia}
+                      onChange={aoSelecionarLocalOcorrencia}
+                      disabled={possuiEventos}
+                    />
+                  </Div>
+                  <Div className="col-2">
+                    <Rotulo>Letivo</Rotulo>
+                    <SelectComponent
+                      form={form}
+                      name="letivo"
+                      id="letivo"
+                      placeholder="Tipo"
+                      valueOption="valor"
+                      valueText="descricao"
+                      lista={listaLetivo}
+                      onChange={aoSelecionarLetivo}
+                      disabled={possuiEventos}
+                    />
+                  </Div>
+                </Div>
+                <Div className="row">
+                  <Div className="col-3">
+                    <Rotulo>Permite concomitância</Rotulo>
+                  </Div>
+                  <Div className="col-3">
+                    <Rotulo>Tipo de data</Rotulo>
+                  </Div>
+                  <Div className="col-3">
+                    <Rotulo>Dependência</Rotulo>
+                  </Div>
+                  <Div className="col-3">
+                    <Rotulo>Situação</Rotulo>
+                  </Div>
+                </Div>
+                <Div className="row">
+                  <Div className="col-3">
+                    <Radio.Group
+                      form={form}
+                      value={dadosTipoEvento.concomitancia}
+                      onChange={aoSelecionarConcomitancia}
+                      disabled={possuiEventos}
+                    >
+                      <Div className="form-check form-check-inline">
+                        <Radio value>Sim</Radio>
+                      </Div>
+                      <Div className="form-check form-check-inline">
+                        <Radio value={false}>Não</Radio>
+                      </Div>
+                    </Radio.Group>
+                  </Div>
+                  <Div className="col-3">
+                    <Radio.Group
+                      form={form}
+                      value={dadosTipoEvento.tipoData}
+                      onChange={aoSelecionarTipoData}
+                      disabled={possuiEventos}
+                    >
+                      <Div className="form-check form-check-inline">
+                        <Radio value={1}>Única</Radio>
+                      </Div>
+                      <Div className="form-check form-check-inline">
+                        <Radio value={2}>Início e fim</Radio>
+                      </Div>
+                    </Radio.Group>
+                  </Div>
+                  <Div className="col-3">
+                    <Radio.Group
+                      form={form}
+                      value={dadosTipoEvento.dependencia}
+                      onChange={aoSelecionarDependencia}
+                      disabled={possuiEventos}
+                    >
+                      <Div className="form-check form-check-inline">
+                        <Radio value>Sim</Radio>
+                      </Div>
+                      <Div className="form-check form-check-inline">
+                        <Radio value={false}>Não</Radio>
+                      </Div>
+                    </Radio.Group>
+                  </Div>
+                  <Div className="col-3">
+                    <Radio.Group
+                      form={form}
+                      value={dadosTipoEvento.ativo}
+                      onChange={aoSelecionarSituacao}
+                    >
+                      <Div className="form-check form-check-inline">
+                        <Radio value>Ativo</Radio>
+                      </Div>
+                      <Div className="form-check form-check-inline">
+                        <Radio value={false}>Inativo</Radio>
+                      </Div>
+                    </Radio.Group>
+                  </Div>
+                </Div>
+              </Form>
+            </Grid>
+            <Grid cols={12}>
+              <InseridoAlterado className="mt-4">
+                {inseridoAlterado.criadoPor && inseridoAlterado.criadoEm ? (
+                  <p className="pt-2">
+                    INSERIDO por {inseridoAlterado.criadoPor} em
+                    {inseridoAlterado.criadoEm}
+                  </p>
+                ) : (
+                  ''
+                )}
+
+                {inseridoAlterado.alteradoPor && inseridoAlterado.alteradoEm ? (
+                  <p>
+                    ALTERADO por {inseridoAlterado.alteradoPor} em{' '}
+                    {inseridoAlterado.alteradoEm}
+                  </p>
+                ) : (
+                  ''
+                )}
+              </InseridoAlterado>
+            </Grid>
+          </Card>
+        </>
+      )}
+    </Formik>
   );
 };
 
