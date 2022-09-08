@@ -40,6 +40,7 @@ import {
   SGP_RADIO_TIPO_AULA,
   SGP_SELECT_COMPONENTE_CURRICULAR,
 } from '~/componentes-sgp/filtro/idsCampos';
+import { ContainerColumnReverse } from '~/paginas/Planejamento/Anual/planoAnual.css';
 
 function CadastroDeAula({ match, location }) {
   const { id, tipoCalendarioId, somenteReposicao } = match.params;
@@ -644,13 +645,6 @@ function CadastroDeAula({ match, location }) {
             />
           )}
         </div>
-        <Cabecalho pagina={`Cadastro de Aula - ${obterDataFormatada()} `}>
-          {registroMigrado && (
-            <div className="col-md-2 float-right">
-              <RegistroMigrado>Registro Migrado</RegistroMigrado>
-            </div>
-          )}
-        </Cabecalho>
         <div className="col-md-12">
           {emManutencao && (
             <Alert
@@ -664,172 +658,188 @@ function CadastroDeAula({ match, location }) {
             />
           )}
         </div>
-        <Card>
-          <div className="col-xs-12 col-md-12 col-lg-12">
-            <Formik
-              enableReinitialize
-              initialValues={aula}
-              validationSchema={Yup.object(validacoes)}
-              onSubmit={salvar}
-              validateOnChange
-              validateOnBlur
-              ref={refForm}
-            >
-              {form => (
-                <Form className="col-md-12 mb-8">
-                  <div className="row">
-                    <div className="col-md-3 pb-2 d-flex justify-content-start">
-                      <CampoData
-                        placeholder="Data da aula"
-                        label="Data da aula"
-                        formatoData="DD/MM/YYYY"
-                        name="dataAula"
-                        id={SGP_DATA_AULA}
-                        form={form}
-                        onChange={onChangeDataAula}
-                      />
-                    </div>
-                    <div className="col-md-9 pb-2 d-flex justify-content-end">
-                      <Button
-                        id={shortid.generate()}
-                        label="Voltar"
-                        icon="arrow-left"
-                        color={Colors.Azul}
-                        border
-                        className="mr-2"
-                        onClick={onClickVoltar}
-                      />
-                      <Button
-                        id={shortid.generate()}
-                        label="Cancelar"
-                        color={Colors.Roxo}
-                        border
-                        className="mr-2"
-                        onClick={onClickCancelar}
-                        disabled={somenteConsulta || !modoEdicao}
-                      />
-                      <Button
-                        id={shortid.generate()}
-                        label="Excluir"
-                        color={Colors.Vermelho}
-                        border
-                        className="mr-2"
-                        onClick={onClickExcluir}
-                        disabled={
-                          somenteConsulta ||
-                          !id ||
-                          somenteLeitura ||
-                          !aula.podeEditar
-                        }
-                      />
+        <div className="col-xs-12 col-md-12 col-lg-12">
+          <Formik
+            enableReinitialize
+            initialValues={aula}
+            validationSchema={Yup.object(validacoes)}
+            onSubmit={salvar}
+            validateOnChange
+            validateOnBlur
+            ref={refForm}
+          >
+            {form => (
+              <>
+                <Cabecalho
+                  pagina={`Cadastro de Aula - ${obterDataFormatada()} `}
+                >
+                  <div className="d-flex">
+                    <Button
+                      id={shortid.generate()}
+                      label="Voltar"
+                      icon="arrow-left"
+                      color={Colors.Azul}
+                      border
+                      className="mr-2"
+                      onClick={onClickVoltar}
+                    />
+                    <Button
+                      id={shortid.generate()}
+                      label="Cancelar"
+                      color={Colors.Roxo}
+                      border
+                      className="mr-2"
+                      onClick={onClickCancelar}
+                      disabled={somenteConsulta || !modoEdicao}
+                    />
+                    <Button
+                      id={shortid.generate()}
+                      label="Excluir"
+                      color={Colors.Vermelho}
+                      border
+                      className="mr-2"
+                      onClick={onClickExcluir}
+                      disabled={
+                        somenteConsulta ||
+                        !id ||
+                        somenteLeitura ||
+                        !aula.podeEditar
+                      }
+                    />
 
-                      <Button
-                        id={shortid.generate()}
-                        label={id ? 'Salvar' : 'Cadastrar'}
-                        color={Colors.Roxo}
-                        border
-                        bold
-                        className="mr-2"
-                        onClick={() => {
-                          if (
-                            !id ||
-                            (aula.recorrenciaAula == recorrencia.AULA_UNICA &&
-                              !recorrenciaAulaEmEdicao.existeFrequenciaOuPlanoAula)
-                          ) {
-                            form.handleSubmit();
-                          } else {
-                            setExibirModalAlteracao(true);
+                    <Button
+                      id={shortid.generate()}
+                      label={id ? 'Salvar' : 'Cadastrar'}
+                      color={Colors.Roxo}
+                      border
+                      bold
+                      className="mr-2"
+                      onClick={() => {
+                        if (
+                          !id ||
+                          (aula.recorrenciaAula == recorrencia.AULA_UNICA &&
+                            !recorrenciaAulaEmEdicao.existeFrequenciaOuPlanoAula)
+                        ) {
+                          form.handleSubmit();
+                        } else {
+                          setExibirModalAlteracao(true);
+                        }
+                      }}
+                      disabled={
+                        somenteConsulta ||
+                        (controlaGrade && gradeAtingida && !id) ||
+                        !aula.disciplinaId ||
+                        somenteLeitura ||
+                        desabilitarBtnSalvar ||
+                        !modoEdicao ||
+                        !aula.podeEditar
+                      }
+                    />
+                  </div>
+                </Cabecalho>
+                <Card>
+                  <Form className="col-md-12">
+                    <div className="row">
+                      <div className="col-md-12">
+                        <ContainerColumnReverse className="row">
+                          <div className="col-md-3 pb-2">
+                            <CampoData
+                              placeholder="Data da aula"
+                              label="Data da aula"
+                              formatoData="DD/MM/YYYY"
+                              name="dataAula"
+                              id={SGP_DATA_AULA}
+                              form={form}
+                              onChange={onChangeDataAula}
+                            />
+                          </div>
+                          <div className="col-md-9 pt-2 pb-2 d-flex justify-content-end">
+                            {registroMigrado && (
+                              <RegistroMigrado>
+                                Registro Migrado
+                              </RegistroMigrado>
+                            )}
+                          </div>
+                        </ContainerColumnReverse>
+                      </div>
+                    </div>
+                    <div className="row">
+                      <div className="col-md-12 col-lg-3">
+                        <RadioGroupButton
+                          id={SGP_RADIO_TIPO_AULA}
+                          label="Tipo de aula"
+                          opcoes={
+                            ehReposicao
+                              ? opcoesTipoAulaSomenteReposicao
+                              : opcoesTipoAula
                           }
-                        }}
-                        disabled={
-                          somenteConsulta ||
-                          (controlaGrade && gradeAtingida && !id) ||
-                          !aula.disciplinaId ||
-                          somenteLeitura ||
-                          desabilitarBtnSalvar ||
-                          !modoEdicao ||
-                          !aula.podeEditar
-                        }
-                      />
+                          name="tipoAula"
+                          form={form}
+                          onChange={onChangeTipoAula}
+                          desabilitado={!!id}
+                        />
+                      </div>
+                      <div className="col-md-12 col-lg-9">
+                        <SelectComponent
+                          id={SGP_SELECT_COMPONENTE_CURRICULAR}
+                          name="disciplinaId"
+                          lista={listaComponentes}
+                          label="Componente Curricular"
+                          valueOption="codigoComponenteCurricular"
+                          valueText="nome"
+                          placeholder="Selecione um componente curricular"
+                          form={form}
+                          disabled={
+                            (!!id && aula?.disciplinaId) ||
+                            (listaComponentes.length === 1 && !id)
+                          }
+                          onChange={onChangeComponente}
+                        />
+                      </div>
                     </div>
-                  </div>
-                  <div className="row">
-                    <div className="col-xs-12 col-md-3 col-lg-3">
-                      <RadioGroupButton
-                        id={SGP_RADIO_TIPO_AULA}
-                        label="Tipo de aula"
-                        opcoes={
-                          ehReposicao
-                            ? opcoesTipoAulaSomenteReposicao
-                            : opcoesTipoAula
-                        }
-                        name="tipoAula"
-                        form={form}
-                        onChange={onChangeTipoAula}
-                        desabilitado={!!id}
-                      />
+                    <div className="row">
+                      <div className="col-xs-12 col-md-3 mb-3">
+                        <CampoNumeroFormik
+                          label="Quantidade de aulas"
+                          id={SGP_INPUT_NUMBER_QUANTIDADE_AULAS}
+                          name="quantidade"
+                          form={form}
+                          min={1}
+                          onChange={onChangeQuantidadeAula}
+                          disabled={quantidadeBloqueada}
+                        />
+                      </div>
+                      <div className="col-xs-12 col-md-9 mb-3">
+                        <RadioGroupButton
+                          id={SGP_RADIO_RECORRENCIA}
+                          label="Recorrência"
+                          opcoes={
+                            ehReposicao
+                              ? opcoesRecorrenciaSomenteReposicao
+                              : opcoesRecorrencia
+                          }
+                          name="recorrenciaAula"
+                          form={form}
+                          onChange={onChangeRecorrencia}
+                          desabilitado={aula.tipoAula === 2}
+                        />
+                      </div>
                     </div>
-                    <div className="col-xs-12 col-md-6 col-lg-6">
-                      <SelectComponent
-                        id={SGP_SELECT_COMPONENTE_CURRICULAR}
-                        name="disciplinaId"
-                        lista={listaComponentes}
-                        label="Componente Curricular"
-                        valueOption="codigoComponenteCurricular"
-                        valueText="nome"
-                        placeholder="Selecione um componente curricular"
-                        form={form}
-                        disabled={
-                          (!!id && aula?.disciplinaId) ||
-                          (listaComponentes.length === 1 && !id)
-                        }
-                        onChange={onChangeComponente}
-                      />
-                    </div>
-                  </div>
-                  <div className="row">
-                    <div className="col-xs-12 col-md-3 col-lg-3">
-                      <CampoNumeroFormik
-                        label="Quantidade de aulas"
-                        id={SGP_INPUT_NUMBER_QUANTIDADE_AULAS}
-                        name="quantidade"
-                        form={form}
-                        min={1}
-                        onChange={onChangeQuantidadeAula}
-                        disabled={quantidadeBloqueada}
-                        // ehDecimal={false}
-                      />
-                    </div>
-                    <div className="col-xs-12 col-md-6 col-lg-6">
-                      <RadioGroupButton
-                        id={SGP_RADIO_RECORRENCIA}
-                        label="Recorrência"
-                        opcoes={
-                          ehReposicao
-                            ? opcoesRecorrenciaSomenteReposicao
-                            : opcoesRecorrencia
-                        }
-                        name="recorrenciaAula"
-                        form={form}
-                        onChange={onChangeRecorrencia}
-                        desabilitado={aula.tipoAula === 2}
-                      />
-                    </div>
-                  </div>
-                </Form>
-              )}
-            </Formik>
-          </div>
-          <Auditoria
-            alteradoEm={aula.alteradoEm}
-            alteradoPor={aula.alteradoPor}
-            alteradoRf={aula.alteradoRF}
-            criadoEm={aula.criadoEm}
-            criadoPor={aula.criadoPor}
-            criadoRf={aula.criadoRF}
-            ignorarMarginTop
-          />
-        </Card>
+                  </Form>
+                  <Auditoria
+                    alteradoEm={aula.alteradoEm}
+                    alteradoPor={aula.alteradoPor}
+                    alteradoRf={aula.alteradoRF}
+                    criadoEm={aula.criadoEm}
+                    criadoPor={aula.criadoPor}
+                    criadoRf={aula.criadoRF}
+                    ignorarMarginTop
+                  />
+                </Card>
+              </>
+            )}
+          </Formik>
+        </div>
       </Loader>
     </Container>
   );
