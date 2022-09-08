@@ -5,8 +5,6 @@ import { useSelector } from 'react-redux';
 import {
   Loader,
   Card,
-  Button,
-  Colors,
   CheckboxComponent,
   SelectComponent,
   RadioGroupButton,
@@ -35,6 +33,7 @@ import {
   ServicoFiltroRelatorio,
   sucesso,
 } from '~/servicos';
+import BotoesAcaoRelatorio from '~/componentes-sgp/botoesAcaoRelatorio';
 
 const AcompanhamentoFechamento = () => {
   const [anoAtual] = useState(window.moment().format('YYYY'));
@@ -727,46 +726,17 @@ const AcompanhamentoFechamento = () => {
         exibir={escolheuModalidadeInfantil}
         validarModalidadeFiltroPrincipal={false}
       />
-      <Cabecalho
-        pagina="Relatório de acompanhamento do fechamento"
-        classes="mb-2"
-      />
+      <Cabecalho pagina="Relatório de acompanhamento do fechamento">
+        <BotoesAcaoRelatorio
+          onClickVoltar={onClickVoltar}
+          onClickCancelar={onClickCancelar}
+          onClickGerar={gerar}
+          desabilitarBtnGerar={desabilitarCampos || desabilitarGerar}
+        />
+      </Cabecalho>
       <Loader loading={carregandoGeral} ignorarTip>
         <Card>
           <div className="col-md-12 p-0">
-            <div className="row mb-2">
-              <div className="col-sm-12 d-flex justify-content-end">
-                <Button
-                  id="botao-voltar"
-                  label="Voltar"
-                  icon="arrow-left"
-                  color={Colors.Azul}
-                  onClick={onClickVoltar}
-                  border
-                  className="mr-3"
-                />
-                <Button
-                  id="btn-cancelar"
-                  label="Cancelar"
-                  color={Colors.Azul}
-                  border
-                  bold
-                  className="mr-3"
-                  onClick={onClickCancelar}
-                  disabled={desabilitarCampos || !dreCodigo}
-                />
-                <Button
-                  id="btn-gerar"
-                  icon="print"
-                  label="Gerar"
-                  color={Colors.Roxo}
-                  bold
-                  className="mr-0"
-                  onClick={gerar}
-                  disabled={desabilitarCampos || desabilitarGerar}
-                />
-              </div>
-            </div>
             <div className="row mb-2">
               <div className="col-12">
                 <CheckboxComponent

@@ -1,10 +1,10 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { CheckboxComponent, Loader, SelectComponent } from '~/componentes';
 import { Cabecalho } from '~/componentes-sgp';
+import BotoesAcaoRelatorio from '~/componentes-sgp/botoesAcaoRelatorio';
 import Alert from '~/componentes/alert';
-import Button from '~/componentes/button';
 import Card from '~/componentes/card';
-import { Colors } from '~/componentes/colors';
+import { URL_HOME } from '~/constantes';
 import { OPCAO_TODOS } from '~/constantes/constantes';
 import modalidade from '~/dtos/modalidade';
 import AbrangenciaServico from '~/servicos/Abrangencia';
@@ -512,50 +512,21 @@ const RelatorioHistoricoAlteracoesNotas = () => {
       ) : (
         ''
       )}
-      <Cabecalho pagina="Relatório de alteração de notas" />
+      <Cabecalho pagina="Relatório de alteração de notas">
+        <BotoesAcaoRelatorio
+          onClickVoltar={() => {
+            history.push(URL_HOME);
+          }}
+          onClickCancelar={cancelar}
+          onClickGerar={gerar}
+          desabilitarBtnGerar={
+            desabilitarBtnGerar ||
+            String(modalidadeId) === String(modalidade.INFANTIL)
+          }
+        />
+      </Cabecalho>
       <Card>
         <div className="col-md-12">
-          <div className="row">
-            <div className="col-md-12 d-flex justify-content-end pb-4 justify-itens-end">
-              <Button
-                id="btn-voltar"
-                label="Voltar"
-                icon="arrow-left"
-                color={Colors.Azul}
-                border
-                className="mr-2"
-                onClick={() => {
-                  history.push('/');
-                }}
-              />
-              <Button
-                id="btn-cancelar"
-                label="Cancelar"
-                color={Colors.Roxo}
-                border
-                bold
-                className="mr-2"
-                onClick={() => {
-                  cancelar();
-                }}
-              />
-
-              <Button
-                id="btn-gerar"
-                icon="print"
-                label="Gerar"
-                color={Colors.Azul}
-                border
-                bold
-                className="mr-0"
-                onClick={gerar}
-                disabled={
-                  desabilitarBtnGerar ||
-                  String(modalidadeId) === String(modalidade.INFANTIL)
-                }
-              />
-            </div>
-          </div>
           <div className="row">
             <div className="col-sm-12 col-md-6 col-lg-4 col-xl-4 mb-2">
               <CheckboxComponent
