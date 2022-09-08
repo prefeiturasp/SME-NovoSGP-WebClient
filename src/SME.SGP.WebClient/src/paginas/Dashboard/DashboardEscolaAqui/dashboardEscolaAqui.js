@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { Loader, SelectComponent } from '~/componentes';
 import { Cabecalho } from '~/componentes-sgp';
+import { SGP_BUTTON_VOLTAR } from '~/componentes-sgp/filtro/idsCampos';
 import Button from '~/componentes/button';
 import Card from '~/componentes/card';
 import { Colors } from '~/componentes/colors';
@@ -93,23 +94,21 @@ const DashboardEscolaAqui = () => {
 
   return (
     <>
-      <Cabecalho pagina="Dashboard escola aqui" classes="mb-2" />
+      <Cabecalho pagina="Dashboard escola aqui">
+        <Button
+          id={SGP_BUTTON_VOLTAR}
+          label="Voltar"
+          icon="arrow-left"
+          color={Colors.Azul}
+          border
+          onClick={() => onClickVoltar()}
+        />
+      </Cabecalho>
       <Loader loading={carregandoGeral}>
         <Card>
           <div className="col-md-12 p-0">
             <div className="row mb-4">
-              <div className="col-md-12 d-flex justify-content-end mb-4">
-                <Button
-                  id="btn-voltar"
-                  label="Voltar"
-                  icon="arrow-left"
-                  color={Colors.Azul}
-                  border
-                  className="mr-0"
-                  onClick={onClickVoltar}
-                />
-              </div>
-              <div className="col-sm-12 col-md-12 col-lg-6 col-xl-6 mb-2 mt-3 pr-0">
+              <div className="col-sm-12 col-md-12 col-lg-6 col-xl-6 mb-2 mt-3">
                 <SelectComponent
                   id="select-component-dre"
                   label="Diretoria Regional de Educação (DRE)"

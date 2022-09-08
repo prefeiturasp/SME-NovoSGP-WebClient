@@ -12,6 +12,7 @@ import { limparDadosDashboardFechamento } from '~/redux/modulos/dashboardFechame
 import DashboardFechamentoAlertaInfantil from './dashboardDevolutivasAlertaInfantil';
 import DashboardFechamentoFiltros from './DashboardFechamentoFiltros/dashboardFechamentoFiltros';
 import TabsDashboardFechamento from './TabsDashboardFechamento/tabsDashboardFechamento';
+import { SGP_BUTTON_VOLTAR } from '~/componentes-sgp/filtro/idsCampos';
 
 const DashboardFechamento = () => {
   const dispatch = useDispatch();
@@ -29,22 +30,18 @@ const DashboardFechamento = () => {
   return (
     <>
       <DashboardFechamentoAlertaInfantil />
-      <Cabecalho pagina="Dashboard fechamento" classes="mb-2" />
+      <Cabecalho pagina="Dashboard fechamento">
+        <Button
+          id={SGP_BUTTON_VOLTAR}
+          label="Voltar"
+          icon="arrow-left"
+          color={Colors.Azul}
+          border
+          onClick={() => onClickVoltar()}
+        />
+      </Cabecalho>
       <Card>
         <div className="col-md-12 p-0">
-          <div className="row">
-            <div className="col-md-12 d-flex justify-content-end pb-2">
-              <Button
-                id="btn-voltar"
-                label="Voltar"
-                icon="arrow-left"
-                color={Colors.Azul}
-                border
-                onClick={onClickVoltar}
-              />
-            </div>
-          </div>
-
           <DashboardFechamentoFiltros />
           <div className="row">
             <div className="col-md-12 mt-3">

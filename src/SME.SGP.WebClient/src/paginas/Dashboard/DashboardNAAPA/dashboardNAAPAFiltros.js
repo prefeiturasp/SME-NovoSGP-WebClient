@@ -1,15 +1,8 @@
 import { Col, Row } from 'antd';
 import React, { useCallback, useContext, useEffect, useState } from 'react';
-import {
-  Button,
-  CheckboxComponent,
-  Colors,
-  Loader,
-  SelectComponent,
-} from '~/componentes';
+import { CheckboxComponent, Loader, SelectComponent } from '~/componentes';
 import { FiltroHelper } from '~/componentes-sgp';
 import {
-  SGP_BUTTON_VOLTAR,
   SGP_CHECKBOX_EXIBIR_HISTORICO,
   SGP_SELECT_ANO_LETIVO,
   SGP_SELECT_DRE,
@@ -17,14 +10,9 @@ import {
   SGP_SELECT_SEMESTRE,
   SGP_SELECT_UE,
 } from '~/componentes-sgp/filtro/idsCampos';
-import { OPCAO_TODOS, URL_HOME } from '~/constantes';
+import { OPCAO_TODOS } from '~/constantes';
 import { ModalidadeDTO } from '~/dtos';
-import {
-  AbrangenciaServico,
-  erros,
-  history,
-  ServicoFiltroRelatorio,
-} from '~/servicos';
+import { AbrangenciaServico, erros, ServicoFiltroRelatorio } from '~/servicos';
 import api from '~/servicos/api';
 import { obterTodosMeses, ordenarListaMaiorParaMenor } from '~/utils';
 import NAAPAContext from './naapaContext';
@@ -307,20 +295,6 @@ const DashboardNAAPAFiltros = () => {
   return (
     <>
       <Col span={24}>
-        <Row gutter={[16, 8]} type="flex" justify="end">
-          <Col>
-            <Button
-              id={SGP_BUTTON_VOLTAR}
-              label="Voltar"
-              icon="arrow-left"
-              color={Colors.Azul}
-              border
-              onClick={() => {
-                history.push(URL_HOME);
-              }}
-            />
-          </Col>
-        </Row>
         <Row gutter={[16, 8]}>
           <Col sm={24}>
             <CheckboxComponent

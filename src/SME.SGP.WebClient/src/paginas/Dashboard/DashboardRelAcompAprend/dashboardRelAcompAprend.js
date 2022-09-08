@@ -7,6 +7,7 @@ import {
   Cabecalho,
   FiltroHelper,
 } from '~/componentes-sgp';
+import { SGP_BUTTON_VOLTAR } from '~/componentes-sgp/filtro/idsCampos';
 import Button from '~/componentes/button';
 import Card from '~/componentes/card';
 import { Colors } from '~/componentes/colors';
@@ -210,21 +211,18 @@ const DashboardRelAcompanhamentoAprendizagem = () => {
         exibir={ue && ue?.codigo !== OPCAO_TODOS && !ue?.ehInfantil}
         validarModalidadeFiltroPrincipal={false}
       />
-      <Cabecalho pagina="Dashboard Relatório do Acompanhamento da Aprendizagem" />
+      <Cabecalho pagina="Dashboard Relatório do Acompanhamento da Aprendizagem">
+        <Button
+          id={SGP_BUTTON_VOLTAR}
+          label="Voltar"
+          icon="arrow-left"
+          color={Colors.Azul}
+          border
+          onClick={() => onClickVoltar()}
+        />
+      </Cabecalho>
       <Card>
         <div className="col-md-12">
-          <div className="row">
-            <div className="col-md-12 d-flex justify-content-end pb-4">
-              <Button
-                id="btn-voltar"
-                label="Voltar"
-                icon="arrow-left"
-                color={Colors.Azul}
-                border
-                onClick={onClickVoltar}
-              />
-            </div>
-          </div>
           <div className="row">
             <div className="col-sm-12 col-md-6 col-lg-4 col-xl-4 mb-2">
               <CheckboxComponent

@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { Cabecalho } from '~/componentes-sgp';
+import { SGP_BUTTON_VOLTAR } from '~/componentes-sgp/filtro/idsCampos';
 import Button from '~/componentes/button';
 import Card from '~/componentes/card';
 import { Colors } from '~/componentes/colors';
@@ -25,21 +26,18 @@ const DashboardDiarioBordo = () => {
   return (
     <>
       <DashboardDiarioBordoAlertaInfantil />
-      <Cabecalho pagina="Dashboard diário de bordo" />
+      <Cabecalho pagina="Dashboard diário de bordo">
+        <Button
+          id={SGP_BUTTON_VOLTAR}
+          label="Voltar"
+          icon="arrow-left"
+          color={Colors.Azul}
+          border
+          onClick={() => onClickVoltar()}
+        />
+      </Cabecalho>
       <Card>
         <div className="col-md-12">
-          <div className="row">
-            <div className="col-md-12 d-flex justify-content-end pb-4">
-              <Button
-                id="btn-voltar"
-                label="Voltar"
-                icon="arrow-left"
-                color={Colors.Azul}
-                border
-                onClick={onClickVoltar}
-              />
-            </div>
-          </div>
           <DashboardDiarioBordoFiltros />
           <div className="row">
             <div className="col-md-12 mt-2">

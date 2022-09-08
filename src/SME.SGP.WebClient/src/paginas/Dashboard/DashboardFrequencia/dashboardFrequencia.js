@@ -11,6 +11,7 @@ import { limparDadosDashboardFrequencia } from '~/redux/modulos/dashboardFrequen
 
 import DashboardFrequenciaFiltros from './DashboardFrequenciaFiltros/dashboardFrequenciaFiltros';
 import TabsDashboardFrequencia from './TabsDashboardFrequencia/tabsDashboardFrequencia';
+import { SGP_BUTTON_VOLTAR } from '~/componentes-sgp/filtro/idsCampos';
 
 const DashboardFrequencia = () => {
   const dispatch = useDispatch();
@@ -27,21 +28,18 @@ const DashboardFrequencia = () => {
 
   return (
     <>
-      <Cabecalho pagina="Dashboard frequência" classes="mb-2" />
+      <Cabecalho pagina="Dashboard frequência">
+        <Button
+          id={SGP_BUTTON_VOLTAR}
+          label="Voltar"
+          icon="arrow-left"
+          color={Colors.Azul}
+          border
+          onClick={() => onClickVoltar()}
+        />
+      </Cabecalho>
       <Card>
         <div className="col-md-12 p-0">
-          <div className="row">
-            <div className="col-md-12 d-flex justify-content-end pb-2">
-              <Button
-                id="btn-voltar"
-                label="Voltar"
-                icon="arrow-left"
-                color={Colors.Azul}
-                border
-                onClick={onClickVoltar}
-              />
-            </div>
-          </div>
           <DashboardFrequenciaFiltros />
           <div className="row">
             <div className="col-md-12 mt-3">

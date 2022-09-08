@@ -2,6 +2,7 @@ import * as moment from 'moment';
 import React, { useCallback, useEffect, useState } from 'react';
 import { Loader, SelectComponent } from '~/componentes';
 import { Cabecalho } from '~/componentes-sgp';
+import { SGP_BUTTON_VOLTAR } from '~/componentes-sgp/filtro/idsCampos';
 import Button from '~/componentes/button';
 import Card from '~/componentes/card';
 import { Colors } from '~/componentes/colors';
@@ -137,21 +138,19 @@ const DashboardAEE = () => {
 
   return (
     <>
-      <Cabecalho pagina="Dashboard AEE" />
-
+      <Cabecalho pagina="Dashboard AEE">
+        <Button
+          id={SGP_BUTTON_VOLTAR}
+          label="Voltar"
+          icon="arrow-left"
+          color={Colors.Azul}
+          border
+          onClick={() => onClickVoltar()}
+        />
+      </Cabecalho>
       <Card>
         <div className="col-md-12">
           <div className="row">
-            <div className="col-md-12 d-flex justify-content-end pb-4">
-              <Button
-                id="btn-voltar"
-                label="Voltar"
-                icon="arrow-left"
-                color={Colors.Azul}
-                border
-                onClick={onClickVoltar}
-              />
-            </div>
             <div className="col-sm-12 col-md-6 col-lg-3 col-xl-2 mb-2">
               <Loader loading={carregandoAnosLetivos}>
                 <SelectComponent
