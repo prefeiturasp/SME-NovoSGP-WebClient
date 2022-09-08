@@ -2,9 +2,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { SelectComponent, CheckboxComponent, Loader } from '~/componentes';
 import { Cabecalho } from '~/componentes-sgp';
-import Button from '~/componentes/button';
 import Card from '~/componentes/card';
-import { Colors } from '~/componentes/colors';
 import { URL_HOME } from '~/constantes/url';
 import modalidade from '~/dtos/modalidade';
 import RotasDto from '~/dtos/rotasDto';
@@ -16,6 +14,7 @@ import ServicoConselhoAtaFinal from '~/servicos/Paginas/ConselhoAtaFinal/Servico
 import FiltroHelper from '~componentes-sgp/filtro/helper';
 import AlertaModalidadeInfantil from '~/componentes-sgp/AlertaModalidadeInfantil/alertaModalidadeInfantil';
 import { OPCAO_TODOS } from '~/constantes/constantes';
+import BotoesAcaoRelatorio from '~/componentes-sgp/botoesAcaoRelatorio';
 
 const AtaFinalResultados = () => {
   const usuarioStore = useSelector(store => store.usuario);
@@ -483,43 +482,21 @@ const AtaFinalResultados = () => {
         exibir={String(modalidadeId) === String(modalidade.INFANTIL)}
         validarModalidadeFiltroPrincipal={false}
       />
-      <Cabecalho pagina="Ata de resultados finais" classes="mb-2" />
+      <Cabecalho pagina="Ata de resultados finais">
+        <BotoesAcaoRelatorio
+          onClickVoltar={onClickVoltar}
+          onClickCancelar={onClickCancelar}
+          onClickGerar={onClickGerar}
+          desabilitarBtnGerar={
+            String(modalidadeId) === String(modalidade.INFANTIL) ||
+            desabilitarBtnGerar ||
+            !permissoesTela.podeConsultar
+          }
+        />
+      </Cabecalho>
       <Card>
         <div className="col-md-12 p-0">
           <div className="row">
-            <div className="col-md-12 d-flex justify-content-end pb-2">
-              <Button
-                id="btn-voltar-ata-final-resultado"
-                label="Voltar"
-                icon="arrow-left"
-                color={Colors.Azul}
-                border
-                className="mr-3"
-                onClick={onClickVoltar}
-              />
-              <Button
-                id="btn-cancelar-ata-final-resultado"
-                label="Cancelar"
-                color={Colors.Azul}
-                border
-                bold
-                className="mr-3"
-                onClick={() => onClickCancelar()}
-              />
-              <Button
-                id="btn-gerar-ata-final-resultado"
-                icon="print"
-                label="Gerar"
-                color={Colors.Roxo}
-                bold
-                onClick={() => onClickGerar()}
-                disabled={
-                  String(modalidadeId) === String(modalidade.INFANTIL) ||
-                  desabilitarBtnGerar ||
-                  !permissoesTela.podeConsultar
-                }
-              />
-            </div>
             <div className="col-sm-12 mb-2">
               <CheckboxComponent
                 label="Exibir histórico?"
@@ -527,7 +504,7 @@ const AtaFinalResultados = () => {
                 checked={consideraHistorico}
               />
             </div>
-            <div className="col-sm-12 col-md-4 col-lg-2 col-xl-2 mb-3 pr-0">
+            <div className="col-sm-12 col-md-4 col-lg-2 col-xl-2 mb-3">
               <Loader loading={carregandoAnosLetivos} tip="">
                 <SelectComponent
                   label="Ano Letivo"
@@ -543,7 +520,7 @@ const AtaFinalResultados = () => {
                 />
               </Loader>
             </div>
-            <div className="col-sm-12 col-md-12 col-lg-5 col-xl-5 mb-3 pr-0">
+            <div className="col-sm-12 col-md-12 col-lg-5 col-xl-5 mb-3">
               <Loader loading={carregandoDres} tip="">
                 <SelectComponent
                   label="Diretoria Regional de Educação (DRE)"
@@ -579,7 +556,7 @@ const AtaFinalResultados = () => {
                 />
               </Loader>
             </div>
-            <div className="col-sm-12 col-md-8 col-lg-4 col-xl-4 mb-3 pr-0">
+            <div className="col-sm-12 col-md-8 col-lg-4 col-xl-4 mb-3">
               <SelectComponent
                 label="Modalidade"
                 lista={listaModalidades}
@@ -594,7 +571,7 @@ const AtaFinalResultados = () => {
                 valueSelect={modalidadeId}
               />
             </div>
-            <div className="col-sm-12 col-md-4 col-lg-2 col-xl-2 mb-3 pr-0">
+            <div className="col-sm-12 col-md-4 col-lg-2 col-xl-2 mb-3">
               <SelectComponent
                 lista={listaSemestre}
                 valueOption="valor"
@@ -627,7 +604,7 @@ const AtaFinalResultados = () => {
                 showSearch
               />
             </div>
-            <div className="col-sm-12 col-md-3 col-lg-5 col-xl-3 mb-3 pr-0">
+            <div className="col-sm-12 col-md-3 col-lg-5 col-xl-3 mb-3">
               <SelectComponent
                 label="Visualização"
                 lista={listaVisualizacao}
