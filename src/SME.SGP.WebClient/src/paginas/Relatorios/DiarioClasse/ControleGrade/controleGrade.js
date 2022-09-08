@@ -1,9 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { Loader, SelectComponent } from '~/componentes';
 import { Cabecalho } from '~/componentes-sgp';
-import Button from '~/componentes/button';
 import Card from '~/componentes/card';
-import { Colors } from '~/componentes/colors';
 import modalidade from '~/dtos/modalidade';
 import AbrangenciaServico from '~/servicos/Abrangencia';
 import { erros, sucesso } from '~/servicos/alertas';
@@ -14,6 +12,8 @@ import ServicoRelatorioControleGrade from '~/servicos/Paginas/Relatorios/DiarioC
 import ServicoComponentesCurriculares from '~/servicos/Paginas/ComponentesCurriculares/ServicoComponentesCurriculares';
 import FiltroHelper from '~componentes-sgp/filtro/helper';
 import { ordenarListaMaiorParaMenor } from '~/utils/funcoes/gerais';
+import BotoesAcaoRelatorio from '~/componentes-sgp/botoesAcaoRelatorio';
+import { URL_HOME } from '~/constantes';
 
 const ControleGrade = () => {
   const [exibirLoader, setExibirLoader] = useState(false);
@@ -486,47 +486,20 @@ const ControleGrade = () => {
 
   return (
     <>
-      <Cabecalho pagina="Relatório controle de grade" />
+      <Cabecalho pagina="Relatório controle de grade">
+        <BotoesAcaoRelatorio
+          onClick={() => {
+            history.push(URL_HOME);
+          }}
+          onClickCancelar={cancelar}
+          onClickGerar={gerar}
+          desabilitarBtnGerar={desabilitarBtnGerar}
+        />
+      </Cabecalho>
       <Card>
         <Loader loading={exibirLoader}>
           <div className="col-md-12">
             <div className="row">
-              <div className="col-md-12 d-flex justify-content-end pb-4 justify-itens-end">
-                <Button
-                  id="btn-voltar"
-                  label="Voltar"
-                  icon="arrow-left"
-                  color={Colors.Azul}
-                  border
-                  className="mr-2"
-                  onClick={() => {
-                    history.push('/');
-                  }}
-                />
-                <Button
-                  id="btn-cancelar"
-                  label="Cancelar"
-                  color={Colors.Roxo}
-                  border
-                  bold
-                  className="mr-2"
-                  onClick={() => {
-                    cancelar();
-                  }}
-                />
-
-                <Button
-                  id="btn-gerar"
-                  icon="print"
-                  label="Gerar"
-                  color={Colors.Azul}
-                  border
-                  bold
-                  className="mr-0"
-                  onClick={gerar}
-                  disabled={desabilitarBtnGerar}
-                />
-              </div>
               <div className="col-sm-12 col-md-6 col-lg-2 col-xl-2 mb-2">
                 <SelectComponent
                   id="drop-ano-letivo"
