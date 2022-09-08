@@ -7,9 +7,7 @@ import {
   CheckboxComponent,
 } from '~/componentes';
 import { Cabecalho } from '~/componentes-sgp';
-import Button from '~/componentes/button';
 import Card from '~/componentes/card';
-import { Colors } from '~/componentes/colors';
 import { URL_HOME } from '~/constantes/url';
 import modalidade from '~/dtos/modalidade';
 import AbrangenciaServico from '~/servicos/Abrangencia';
@@ -20,6 +18,7 @@ import { sucesso } from '~/servicos/alertas';
 import LocalizadorEstudante from '~/componentes/LocalizadorEstudante';
 import ServicoHistoricoEscolar from '~/servicos/Paginas/HistoricoEscolar/ServicoHistoricoEscolar';
 import AlertaModalidadeInfantil from '~/componentes-sgp/AlertaModalidadeInfantil/alertaModalidadeInfantil';
+import BotoesAcaoRelatorio from '~/componentes-sgp/botoesAcaoRelatorio';
 
 const HistoricoEscolar = () => {
   const codigosAlunosSelecionados = useSelector(
@@ -506,47 +505,19 @@ const HistoricoEscolar = () => {
         exibir={String(modalidadeId) === String(modalidade.INFANTIL)}
         validarModalidadeFiltroPrincipal={false}
       />
-      <Cabecalho pagina="Histórico Escolar" />
+      <Cabecalho pagina="Histórico Escolar">
+        <BotoesAcaoRelatorio
+          onClickVoltar={onClickVoltar}
+          onClickCancelar={onClickCancelar}
+          onClickGerar={onClickGerar}
+          desabilitarBtnGerar={desabilitarBtnGerar}
+          carregandoGerar={carregandoGerar}
+          temLoaderBtnGerar
+        />
+      </Cabecalho>
       <Card>
         <div className="col-md-12">
           <div className="row">
-            <div className="col-md-12 d-flex justify-content-end pb-4 justify-itens-end">
-              <Button
-                id="btn-voltar-historico-escolar"
-                label="Voltar"
-                icon="arrow-left"
-                color={Colors.Azul}
-                border
-                className="mr-2"
-                onClick={onClickVoltar}
-              />
-              <Button
-                id="btn-cancelar-historico-escolar"
-                label="Cancelar"
-                color={Colors.Roxo}
-                border
-                bold
-                className="mr-2"
-                onClick={() => onClickCancelar()}
-              />
-              <Loader
-                loading={carregandoGerar}
-                className="d-flex w-auto"
-                tip=""
-              >
-                <Button
-                  id="btn-gerar-historico-escolar"
-                  icon="print"
-                  label="Gerar"
-                  color={Colors.Azul}
-                  border
-                  bold
-                  className="mr-0"
-                  onClick={() => onClickGerar()}
-                  disabled={desabilitarBtnGerar}
-                />
-              </Loader>
-            </div>
             <div className="col-sm-12 mb-4">
               <CheckboxComponent
                 label="Exibir histórico?"
