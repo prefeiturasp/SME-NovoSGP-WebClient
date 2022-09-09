@@ -55,6 +55,7 @@ const ListasNotasConceitos = props => {
     tipoNota,
     media,
     alunoDesabilitado,
+    conselhoClasseAlunoId,
   } = dadosPrincipaisConselhoClasse;
 
   const [exibir, setExibir] = useState(false);
@@ -112,7 +113,6 @@ const ListasNotasConceitos = props => {
   };
 
   const habilitaConselhoClasse = dados => {
-    const { conselhoClasseAlunoId } = dadosPrincipaisConselhoClasse;
 
     let notasFechamentosPreenchidas = true;
     dados.notasConceitos.map(notasConceitos =>
