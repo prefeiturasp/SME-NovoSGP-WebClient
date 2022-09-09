@@ -104,7 +104,6 @@ class ServicoSalvarConselhoClasse {
         });
 
       if (retorno && retorno.status === 200) {
-        this.recarregarDados();
         sucesso('Anotações e recomendações salvas com sucesso.');
         if (bimestreAtual?.valor === 'final') {
           this.gerarParecerConclusivo(
@@ -113,11 +112,18 @@ class ServicoSalvarConselhoClasse {
             dadosAlunoObjectCard.codigoEOL
           );
         }
-
-        if (!params?.conselhoClasseId) {
-          dadosPrincipaisConselhoClasse.conselhoClasseId = retorno.data.conselhoClasseId;
-          dispatch(setDadosPrincipaisConselhoClasse(dadosPrincipaisConselhoClasse));
+        if (
+          !params?.conselhoClasseId ||
+          !dadosPrincipaisConselhoClasse.conselhoClasseAlunoId
+        ) {
+          dadosPrincipaisConselhoClasse.conselhoClasseId =
+            retorno.data.conselhoClasseId;
+          dadosPrincipaisConselhoClasse.conselhoClasseAlunoId = retorno.data.id;
+          dispatch(
+            setDadosPrincipaisConselhoClasse(dadosPrincipaisConselhoClasse)
+          );
         }
+        this.recarregarDados();
         return true;
       }
       return false;
