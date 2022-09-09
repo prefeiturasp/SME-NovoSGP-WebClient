@@ -761,6 +761,7 @@ const RelatorioPendencias = () => {
                   }}
                   placeholder="Turma"
                   showSearch
+                  maxHeightMultiple="78px"
                 />
               </Loader>
             </div>

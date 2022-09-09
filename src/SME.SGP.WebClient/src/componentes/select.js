@@ -55,7 +55,8 @@ const Container = styled.div`
 
   .ant-select-selection--multiple {
     min-height: 38px;
-    max-height: 39px;
+    ${({ maxHeightMultiple }) =>
+      maxHeightMultiple && `max-height: ${maxHeightMultiple};`}
     overflow-x: hidden;
 
     .ant-select-selection__placeholder {
@@ -109,6 +110,7 @@ const SelectComponent = React.forwardRef((props, ref) => {
     style,
     searchValue,
     setValueOnlyOnChange,
+    maxHeightMultiple,
   } = props;
 
   const { Option } = Select;
@@ -231,6 +233,7 @@ const SelectComponent = React.forwardRef((props, ref) => {
       size={size}
       border={border}
       color={color}
+      maxHeightMultiple={maxHeightMultiple}
     >
       {label ? <Label text={label} control={name} /> : ''}
       {form ? campoComValidacoes() : campoSemValidacoes()}
@@ -264,6 +267,7 @@ SelectComponent.propTypes = {
   style: PropTypes.oneOfType([PropTypes.object]),
   searchValue: PropTypes.bool,
   setValueOnlyOnChange: PropTypes.bool,
+  maxHeightMultiple: PropTypes.string,
 };
 
 SelectComponent.defaultProps = {
@@ -272,6 +276,7 @@ SelectComponent.defaultProps = {
   style: null,
   searchValue: true,
   setValueOnlyOnChange: false,
+  maxHeightMultiple: '39px',
 };
 
 export default SelectComponent;
