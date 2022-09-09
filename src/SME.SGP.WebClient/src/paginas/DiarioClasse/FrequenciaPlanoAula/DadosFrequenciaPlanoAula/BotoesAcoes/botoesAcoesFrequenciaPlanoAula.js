@@ -1,5 +1,6 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { useLocation } from 'react-router-dom';
 import {
   SGP_BUTTON_ALTERAR_CADASTRAR,
   SGP_BUTTON_CANCELAR,
@@ -20,6 +21,7 @@ import servicoSalvarFrequenciaPlanoAula from '../../servicoSalvarFrequenciaPlano
 
 const BotoesAcoesFrequenciaPlanoAula = () => {
   const dispatch = useDispatch();
+  const location = useLocation();
 
   const modoEdicaoFrequencia = useSelector(
     state => state.frequenciaPlanoAula.modoEdicaoFrequencia
@@ -54,7 +56,11 @@ const BotoesAcoesFrequenciaPlanoAula = () => {
   };
 
   const irParaHome = () => {
-    history.push(URL_HOME);
+    if (location?.state?.rotaOrigem) {
+      history.push(location.state.rotaOrigem);
+    } else {
+      history.push(URL_HOME);
+    }
   };
 
   const onClickVoltar = async () => {

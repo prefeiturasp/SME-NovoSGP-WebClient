@@ -203,7 +203,7 @@ const PendenciasFechamentoForm = ({ match }) => {
     }
   }, [modalidadesFiltroPrincipal, turmaSelecionada, match]);
 
-  const onClickVoltar = () => history.push(`${RotasDto.PENDENCIAS_FECHAMENTO}`);
+  const onClickVoltar = () => history.goBack();
 
   const onClickAprovar = async () => {
     const retorno = await ServicoPendenciasFechamento.aprovar([

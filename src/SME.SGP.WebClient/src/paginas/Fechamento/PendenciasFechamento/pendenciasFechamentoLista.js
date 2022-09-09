@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
+import { useLocation } from 'react-router-dom';
 import { Loader } from '~/componentes';
 import Cabecalho from '~/componentes-sgp/cabecalho';
 import Alert from '~/componentes/alert';
@@ -41,7 +42,7 @@ const PendenciasFechamentoLista = ({ match }) => {
   const modalidadesFiltroPrincipal = useSelector(
     store => store.filtro.modalidades
   );
-
+  const location = useLocation();
   const permissoesTela = usuario.permissoes[RotasDto.PENDENCIAS_FECHAMENTO];
   const [somenteConsulta, setSomenteConsulta] = useState(false);
   const [lista, setLista] = useState([]);
@@ -269,7 +270,11 @@ const PendenciasFechamentoLista = ({ match }) => {
   };
 
   const onClickVoltar = () => {
-    history.push(URL_HOME);
+    if (location?.state?.rotaOrigem) {
+      history.push(location.state.rotaOrigem);
+    } else {
+      history.push(URL_HOME);
+    }
   };
 
   const onSelecionarItems = items => {

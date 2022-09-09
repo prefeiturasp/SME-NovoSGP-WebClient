@@ -1,6 +1,7 @@
 import React, { useMemo, useCallback } from 'react';
 import shortid from 'shortid';
 import t from 'prop-types';
+import { useLocation } from 'react-router-dom';
 
 // Ant
 import { Tooltip } from 'antd';
@@ -63,6 +64,7 @@ function DiaCompleto({
 
   const usuario = useSelector(state => state.usuario);
   const { turmaSelecionada } = usuario;
+  const location = useLocation();
 
   const onClickNovaAulaHandler = useCallback(
     diaSelecionado => {
@@ -89,7 +91,10 @@ function DiaCompleto({
           podeEditarAula
         )
       );
-      history.push(`${RotasDTO.FREQUENCIA_PLANO_AULA}`);
+      history.push({
+        pathname: `${RotasDTO.FREQUENCIA_PLANO_AULA}`,
+        state: { rotaOrigem: location?.pathname },
+      });
     },
     []
   );
