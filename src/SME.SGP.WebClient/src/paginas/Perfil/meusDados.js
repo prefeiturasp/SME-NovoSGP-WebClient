@@ -112,7 +112,7 @@ const MeusDados = () => {
 
   return (
     <div>
-      <Cabecalho pagina="Meus Dados" />
+      <Cabecalho pagina="Meus Dados" removeAffix />
       <Card>
         <ModalConteudoHtml
           key="trocarFoto"

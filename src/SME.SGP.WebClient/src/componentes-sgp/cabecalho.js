@@ -32,7 +32,7 @@ const Container = styled.div`
   }
 
   .background-row {
-    background: #f5f6f8 !important;
+    background: #f5f6f8;
   }
 
   .ant-affix .background-row {
@@ -42,25 +42,39 @@ const Container = styled.div`
   padding-bottom: 8px;
 `;
 
-const Cabecalho = ({ titulo, pagina, children, classes }) => {
+const Cabecalho = ({
+  titulo,
+  pagina,
+  children,
+  classes,
+  removeAffix,
+  style,
+}) => {
+  const componentePadrao = (
+    <div
+      className="col-md-12 d-flex background-row pt-2"
+      style={{
+        justifyContent: 'space-between',
+        flexWrap: 'wrap',
+        alignItems: 'flex-end',
+        ...style,
+      }}
+    >
+      <div>
+        <span>{titulo}</span>
+        <span className="titulo">{pagina}</span>
+      </div>
+      <div>{children}</div>
+    </div>
+  );
+
   return (
     <Container className={classes}>
-      <Affix offsetTop={70}>
-        <div
-          className="col-md-12 d-flex background-row pt-2"
-          style={{
-            justifyContent: 'space-between',
-            flexWrap: 'wrap',
-            alignItems: 'flex-end',
-          }}
-        >
-          <div>
-            <span>{titulo}</span>
-            <span className="titulo">{pagina}</span>
-          </div>
-          <div>{children}</div>
-        </div>
-      </Affix>
+      {removeAffix ? (
+        componentePadrao
+      ) : (
+        <Affix offsetTop={70}>{componentePadrao}</Affix>
+      )}
     </Container>
   );
 };
@@ -70,6 +84,8 @@ Cabecalho.defaultProps = {
   pagina: '',
   children: '',
   classes: '',
+  removeAffix: false,
+  style: {},
 };
 
 Cabecalho.propTypes = {
@@ -77,5 +93,7 @@ Cabecalho.propTypes = {
   pagina: PropTypes.string,
   children: PropTypes.oneOfType([PropTypes.node, PropTypes.string]),
   classes: PropTypes.string,
+  removeAffix: PropTypes.bool,
+  style: PropTypes.oneOfType([PropTypes.any]),
 };
 export default Cabecalho;
