@@ -2,6 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
 import { Affix } from 'antd';
+import { Base } from '~/componentes/colors';
 
 const Container = styled.div`
   span {
@@ -27,7 +28,7 @@ const Container = styled.div`
     font-stretch: normal;
     line-height: normal;
     letter-spacing: normal;
-    color: #353535;
+    color: ${Base.CinzaMako};
     margin-bottom: 0.3rem;
   }
 
@@ -39,7 +40,10 @@ const Container = styled.div`
     box-shadow: 0 1.5rem 1rem -18px rgb(0 0 0 / 15%);
     padding-bottom: 0.5rem !important;
   }
+
   padding-bottom: 8px;
+  margin-right: -32px;
+  margin-left: -32px;
 `;
 
 const Cabecalho = ({
@@ -52,19 +56,21 @@ const Cabecalho = ({
 }) => {
   const componentePadrao = (
     <div
-      className="col-md-12 d-flex background-row pt-2"
+      className="d-flex background-row pt-2"
       style={{
         justifyContent: 'space-between',
-        flexWrap: 'wrap',
-        alignItems: 'flex-end',
+        flexWrap: 'wrap-reverse',
+        alignItems: 'end',
+        paddingLeft: '32px',
+        paddingRight: '32px',
         ...style,
       }}
     >
-      <div>
+      <div className="pt-3">
         <span>{titulo}</span>
         <span className="titulo">{pagina}</span>
       </div>
-      <div>{children}</div>
+      <div className="d-flex">{children}</div>
     </div>
   );
 

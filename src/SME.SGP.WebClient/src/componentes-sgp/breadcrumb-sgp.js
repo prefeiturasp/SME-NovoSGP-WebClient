@@ -11,7 +11,10 @@ import RotasDto from '~/dtos/rotasDto';
 import { validarNavegacaoTela } from '~/utils';
 
 const BreadcrumbBody = styled.div`
-  padding: 10px 0 5px 15px !important;
+  height: 24px;
+  padding-bottom: 32px;
+  display: flex;
+  align-items: center;
   font-size: 12px;
   a,
   a:hover {

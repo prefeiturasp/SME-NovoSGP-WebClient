@@ -70,7 +70,6 @@ const FrequenciaPlanoAula = () => {
               mensagem: 'Você precisa escolher uma turma.',
               estiloTitulo: { fontSize: '18px' },
             }}
-            className="mb-2"
           />
         ) : null}
         <AlertaDentroPeriodoFrequenciaPlanoAula />
@@ -81,9 +80,7 @@ const FrequenciaPlanoAula = () => {
             turmaSelecionada
           )}
         >
-          <div className="col-md-12 d-flex justify-content-end">
-            <BotoesAcoesFrequenciaPlanoAula />
-          </div>
+          <BotoesAcoesFrequenciaPlanoAula />
         </Cabecalho>
         <Card>
           <div className="col-md-12">

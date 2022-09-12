@@ -1,10 +1,11 @@
+import { Col, Row } from 'antd';
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useLocation } from 'react-router-dom';
+import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
 import {
   SGP_BUTTON_ALTERAR_CADASTRAR,
   SGP_BUTTON_CANCELAR,
-  SGP_BUTTON_VOLTAR,
 } from '~/componentes-sgp/filtro/idsCampos';
 import Button from '~/componentes/button';
 import { Colors } from '~/componentes/colors';
@@ -97,41 +98,50 @@ const BotoesAcoesFrequenciaPlanoAula = () => {
   };
 
   return (
-    <>
-      <Button
-        id={SGP_BUTTON_VOLTAR}
-        label="Voltar"
-        icon="arrow-left"
-        color={Colors.Azul}
-        border
-        className="mr-2"
-        onClick={onClickVoltar}
-      />
-      <Button
-        id={SGP_BUTTON_CANCELAR}
-        label="Cancelar"
-        color={Colors.Roxo}
-        border
-        className="mr-2"
-        onClick={onClickCancelar}
-        disabled={
-          somenteConsulta || (!modoEdicaoFrequencia && !modoEdicaoPlanoAula)
-        }
-      />
-      <Button
-        id={SGP_BUTTON_ALTERAR_CADASTRAR}
-        label={idFrequencia ? 'Alterar' : 'Cadastrar'}
-        color={Colors.Roxo}
-        border
-        bold
-        onClick={onClickSalvar}
-        disabled={
-          somenteConsulta ||
-          (!modoEdicaoFrequencia && !modoEdicaoPlanoAula) ||
-          !aulaIdPodeEditar
-        }
-      />
-    </>
+    <Row gutter={[8, 8]} type="flex">
+      <Col>
+        <BotaoVoltarPadrao onClick={() => onClickVoltar()} />
+      </Col>
+      <Col>
+        <Button
+          id={SGP_BUTTON_CANCELAR}
+          label="Cancelar"
+          color={Colors.Roxo}
+          border
+          onClick={onClickCancelar}
+          disabled={
+            somenteConsulta || (!modoEdicaoFrequencia && !modoEdicaoPlanoAula)
+          }
+        />
+      </Col>
+      <Col>
+        <Button
+          id={SGP_BUTTON_CANCELAR}
+          label="Cancelar"
+          color={Colors.Roxo}
+          border
+          onClick={onClickCancelar}
+          disabled={
+            somenteConsulta || (!modoEdicaoFrequencia && !modoEdicaoPlanoAula)
+          }
+        />
+      </Col>
+      <Col>
+        <Button
+          id={SGP_BUTTON_ALTERAR_CADASTRAR}
+          label={idFrequencia ? 'Alterar' : 'Cadastrar'}
+          color={Colors.Roxo}
+          border
+          bold
+          onClick={onClickSalvar}
+          disabled={
+            somenteConsulta ||
+            (!modoEdicaoFrequencia && !modoEdicaoPlanoAula) ||
+            !aulaIdPodeEditar
+          }
+        />
+      </Col>
+    </Row>
   );
 };
 

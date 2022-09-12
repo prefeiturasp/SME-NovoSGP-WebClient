@@ -9,8 +9,8 @@ import { ButtonGroupEstilo } from './styles';
 import {
   SGP_BUTTON_CANCELAR,
   SGP_BUTTON_EXCLUIR,
-  SGP_BUTTON_VOLTAR,
 } from '~/componentes-sgp/filtro/idsCampos';
+import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
 
 function ButtonGroup({
   form,
@@ -42,14 +42,9 @@ function ButtonGroup({
 
   return (
     <ButtonGroupEstilo className="d-flex justify-content-end">
-      <Button
-        id={SGP_BUTTON_VOLTAR}
-        label="Voltar"
-        icon="arrow-left"
-        color={Colors.Azul}
-        border
+      <BotaoVoltarPadrao
         className="btnGroupItem"
-        onClick={onClickVoltar}
+        onClick={() => onClickVoltar()}
       />
       {typeof onClickCancelar === 'function' && (
         <Button
