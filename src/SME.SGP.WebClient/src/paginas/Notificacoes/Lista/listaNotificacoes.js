@@ -1,18 +1,18 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { useSelector } from 'react-redux';
 import * as moment from 'moment';
+import { Col, Row } from 'antd';
 import Cabecalho from '~/componentes-sgp/cabecalho';
 import Button from '~/componentes/button';
 import CampoTexto from '~/componentes/campoTexto';
 import { Colors } from '~/componentes/colors';
 import SelectComponent from '~/componentes/select';
 import ListaPaginada from '~/componentes/listaPaginada/listaPaginada';
-import { confirmar, erro, sucesso, erros } from '~/servicos/alertas';
+import { confirmar, erro, sucesso } from '~/servicos/alertas';
 import api from '~/servicos/api';
 import history from '~/servicos/history';
 import servicoNotificacao from '~/servicos/Paginas/ServicoNotificacao';
 
-import { EstiloLista } from './estiloLista';
 import notificacaoStatus from '~/dtos/notificacaoStatus';
 import CampoTextoBusca from '~/componentes/campoTextoBusca';
 import { URL_HOME } from '~/constantes/url';
@@ -20,7 +20,12 @@ import RotasDto from '~/dtos/rotasDto';
 import { verificaSomenteConsulta } from '~/servicos/servico-navegacao';
 import { validaSeObjetoEhNuloOuVazio } from '~/utils/funcoes/gerais';
 
-import { Loader } from '~/componentes';
+import { Card, Loader } from '~/componentes';
+import {
+  SGP_BUTTON_EXCLUIR,
+  SGP_BUTTON_LIDA,
+  SGP_BUTTON_VOLTAR,
+} from '~/componentes-sgp/filtro/idsCampos';
 
 export default function NotificacoesLista() {
   const [idNotificacoesSelecionadas, setIdNotificacoesSelecionadas] = useState(
@@ -328,9 +333,50 @@ export default function NotificacoesLista() {
 
   return (
     <>
-      <Cabecalho pagina="Notificações" />
       <Loader loading={carregandoTela} tip="Carregando...">
-        <EstiloLista>
+        <Cabecalho pagina="Notificações">
+          <Row gutter={[8, 8]} type="flex">
+            <Col>
+              <Button
+                id={SGP_BUTTON_VOLTAR}
+                label="Voltar"
+                color={Colors.Azul}
+                icon="arrow-left"
+                border
+                type="button"
+                onClick={quandoClicarVoltar}
+              />
+            </Col>
+            <Col>
+              <Button
+                id={SGP_BUTTON_EXCLUIR}
+                label="Excluir"
+                color={Colors.Vermelho}
+                border
+                onClick={excluir}
+                disabled={
+                  (idNotificacoesSelecionadas &&
+                    idNotificacoesSelecionadas.length < 1) ||
+                  !permissoesTela.podeExcluir ||
+                  desabilitarBotaoExcluir
+                }
+              />
+            </Col>
+            <Col>
+              <Button
+                id={SGP_BUTTON_LIDA}
+                label="Marcar como lida"
+                color={Colors.Azul}
+                border
+                onClick={marcarComoLida}
+                disabled={
+                  desabilitarBotaoMarcarLido || !permissoesTela.podeAlterar
+                }
+              />
+            </Col>
+          </Row>
+        </Cabecalho>
+        <Card>
           <div className="col-md-6 pb-3">
             <CampoTexto
               placeholder="Título"
@@ -403,38 +449,6 @@ export default function NotificacoesLista() {
               placeholder="Tipo"
             />
           </div>
-          <div className="col-md-12 ">
-            <Button
-              label="Excluir"
-              color={Colors.Vermelho}
-              border
-              className="mb-2 ml-2 float-right"
-              onClick={excluir}
-              disabled={
-                (idNotificacoesSelecionadas &&
-                  idNotificacoesSelecionadas.length < 1) ||
-                !permissoesTela.podeExcluir ||
-                desabilitarBotaoExcluir
-              }
-            />
-            <Button
-              label="Marcar como lida"
-              color={Colors.Azul}
-              border
-              className="mb-2 ml-2 float-right"
-              onClick={marcarComoLida}
-              disabled={
-                desabilitarBotaoMarcarLido || !permissoesTela.podeAlterar
-              }
-            />
-            <Button
-              label="Voltar"
-              color={Colors.Azul}
-              border
-              className="mb-2 float-right"
-              onClick={quandoClicarVoltar}
-            />
-          </div>
           <div className="col-md-12 pt-2">
             {colunasTabela && colunasTabela.length && (
               <ListaPaginada
@@ -449,7 +463,7 @@ export default function NotificacoesLista() {
               />
             )}
           </div>
-        </EstiloLista>
+        </Card>
       </Loader>
     </>
   );
