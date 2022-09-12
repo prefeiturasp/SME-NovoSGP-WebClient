@@ -480,7 +480,7 @@ function montarListaAtribuicao(lista) {
             }}
           />
           </Loader>
-        </div>
+\        </div>
       </Card>
     </>
   );
