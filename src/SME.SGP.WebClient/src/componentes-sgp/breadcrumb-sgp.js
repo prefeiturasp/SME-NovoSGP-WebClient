@@ -12,7 +12,7 @@ import { validarNavegacaoTela } from '~/utils';
 
 const BreadcrumbBody = styled.div`
   height: 24px;
-  padding-bottom: 32px;
+  margin-bottom: 32px;
   display: flex;
   align-items: center;
   font-size: 12px;
