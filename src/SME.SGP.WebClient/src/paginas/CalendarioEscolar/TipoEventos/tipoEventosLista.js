@@ -106,7 +106,7 @@ const TipoEventosLista = () => {
       dataIndex: 'letivo',
       className: 'text-left px-4',
       render: letivo =>
-        listaLetivo.filter(l => l.valor === letivo - 1)[0].descricao,
+        listaLetivo.filter(l => l.valor === letivo)[0]?.descricao,
     },
   ];
 
