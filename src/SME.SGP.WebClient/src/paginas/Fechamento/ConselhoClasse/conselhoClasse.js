@@ -87,26 +87,7 @@ const ConselhoClasse = () => {
     ) {
       obterListaAlunos();
     }
-  }, [
-    obterDadosBimestresConselhoClasse,
-    turma,
-    turmaAtual,
-    turmaSelecionada,
-    resetarInfomacoes,
-    modalidadesFiltroPrincipal,
-  ]);
-
-  const obterFrequenciaAluno = async codigoAluno => {
-    setCarregandoFrequencia(true);
-    const retorno = await ServicoConselhoClasse.obterFrequenciaAluno(
-      codigoAluno,
-      turma
-    )
-      .catch(e => erros(e))
-      .finally(() => setCarregandoFrequencia(false));
-
-    return retorno?.data;
-  };
+  }, [turmaAtual, turmaSelecionada]);
 
   const verificarExibicaoMarcador = async codigoEOL => {
     // Somente quando for bimestre diferente de final vai ter retorno com valor!
