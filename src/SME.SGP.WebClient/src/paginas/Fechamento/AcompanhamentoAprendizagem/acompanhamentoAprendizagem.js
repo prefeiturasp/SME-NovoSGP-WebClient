@@ -245,30 +245,24 @@ const AcompanhamentoAprendizagem = () => {
   return (
     <Container>
       {!turmaSelecionada.turma ? (
-        <div className="col-md-12">
-          <Alert
-            alerta={{
-              tipo: 'warning',
-              id: 'alerta-sem-turma',
-              mensagem: 'Você precisa escolher uma turma.',
-              estiloTitulo: { fontSize: '18px' },
-            }}
-            className="mb-2"
-          />
-        </div>
+        <Alert
+          alerta={{
+            tipo: 'warning',
+            id: 'alerta-sem-turma',
+            mensagem: 'Você precisa escolher uma turma.',
+          }}
+        />
       ) : (
-        ''
+        <></>
       )}
       {turmaSelecionada.turma ? <AlertaPermiteSomenteTurmaInfantil /> : ''}
       <ModalErrosAcompanhamentoAprendizagem />
       <LoaderAcompanhamentoAprendizagem>
         <Cabecalho pagina="Relatório do Acompanhamento da Aprendizagem">
-          <div className="d-flex justify-content-end">
-            <BotoesAcoesAcompanhamentoAprendizagem
-              semestreSelecionado={semestreSelecionado}
-              componenteCurricularId={componenteCurricularSelecionado}
-            />
-          </div>
+          <BotoesAcoesAcompanhamentoAprendizagem
+            semestreSelecionado={semestreSelecionado}
+            componenteCurricularId={componenteCurricularSelecionado}
+          />
         </Cabecalho>
         <Card>
           {turmaSelecionada?.turma &&

@@ -325,18 +325,16 @@ const FechamentoBismestre = () => {
     <>
       {!turmaSelecionada.turma &&
       !ehTurmaInfantil(modalidadesFiltroPrincipal, usuario.turmaSelecionada) ? (
-        <Grid cols={12} className="p-0">
-          <Alert
-            alerta={{
-              tipo: 'warning',
-              id: 'AlertaTurmaFechamentoBimestre',
-              mensagem: 'Você precisa escolher uma turma.',
-              estiloTitulo: { fontSize: '18px' },
-            }}
-            className="mb-2"
-          />
-        </Grid>
-      ) : null}{' '}
+        <Alert
+          alerta={{
+            tipo: 'warning',
+            id: 'AlertaTurmaFechamentoBimestre',
+            mensagem: 'Você precisa escolher uma turma.',
+          }}
+        />
+      ) : (
+        <></>
+      )}
       <AlertaModalidadeInfantil />
       <Loader loading={carregandoBimestres}>
         <Cabecalho pagina="Fechamento">

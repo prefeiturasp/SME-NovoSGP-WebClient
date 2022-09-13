@@ -5,7 +5,6 @@ import _ from 'lodash';
 import {
   SGP_BUTTON_CANCELAR,
   SGP_BUTTON_SALVAR,
-  SGP_BUTTON_VOLTAR,
 } from '~/componentes-sgp/filtro/idsCampos';
 import Button from '~/componentes/button';
 import { Colors } from '~/componentes/colors';
@@ -16,6 +15,7 @@ import { ehTurmaInfantil } from '~/servicos/Validacoes/validacoesInfatil';
 import servicoSalvarConselhoClasse from '../../servicoSalvarConselhoClasse';
 
 import { setDadosListasNotasConceitos } from '~/redux/modulos/conselhoClasse/actions';
+import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
 
 const BotoesAcoesConselhoClasse = () => {
   const dispatch = useDispatch();
@@ -96,15 +96,7 @@ const BotoesAcoesConselhoClasse = () => {
   };
   return (
     <>
-      <Button
-        id={SGP_BUTTON_VOLTAR}
-        label="Voltar"
-        icon="arrow-left"
-        color={Colors.Azul}
-        border
-        className="mr-2"
-        onClick={onClickVoltar}
-      />
+      <BotaoVoltarPadrao className="mr-2" onClick={() => onClickVoltar()} />
       <Button
         id={SGP_BUTTON_CANCELAR}
         label="Cancelar"

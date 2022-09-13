@@ -150,27 +150,21 @@ const ConselhoClasse = () => {
     <Container>
       {!turmaSelecionada.turma &&
       !ehTurmaInfantil(modalidadesFiltroPrincipal, turmaSelecionada) ? (
-        <div className="col-md-12">
-          <Alert
-            alerta={{
-              tipo: 'warning',
-              id: 'alerta-sem-turma-conselho-classe',
-              mensagem: 'Você precisa escolher uma turma.',
-              estiloTitulo: { fontSize: '18px' },
-            }}
-            className="mb-2"
-          />
-        </div>
+        <Alert
+          alerta={{
+            tipo: 'warning',
+            id: 'alerta-sem-turma-conselho-classe',
+            mensagem: 'Você precisa escolher uma turma.',
+          }}
+        />
       ) : (
-        ''
+        <></>
       )}
       <ModalImpressaoBimestre />
       <AlertaModalidadeInfantil />
       <LoaderConselhoClasse>
         <Cabecalho pagina="Conselho de classe">
-          <div className="d-flex justify-content-end">
-            <BotoesAcoesConselhoClasse />
-          </div>
+          <BotoesAcoesConselhoClasse />
         </Cabecalho>
         <Card>
           {turmaSelecionada.turma &&

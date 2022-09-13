@@ -30,10 +30,8 @@ import { ehTurmaInfantil } from '~/servicos/Validacoes/validacoesInfatil';
 import JoditEditor from '~/componentes/jodit-editor/joditEditor';
 import { IframeStyle } from './pendenciasFechamentoLista.css';
 import { ServicoPeriodoFechamento } from '~/servicos';
-import {
-  SGP_BUTTON_APROVAR,
-  SGP_BUTTON_VOLTAR,
-} from '~/componentes-sgp/filtro/idsCampos';
+import { SGP_BUTTON_APROVAR } from '~/componentes-sgp/filtro/idsCampos';
+import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
 
 const PendenciasFechamentoForm = ({ match }) => {
   const usuario = useSelector(store => store.usuario);
@@ -257,40 +255,26 @@ const PendenciasFechamentoForm = ({ match }) => {
             tipo: 'warning',
             id: 'pendencias-selecione-turma',
             mensagem: 'Você precisa escolher uma turma.',
-            estiloTitulo: { fontSize: '18px' },
           }}
-          className="mb-2"
         />
       ) : (
-        ''
+        <></>
       )}
       {bimestre && !periodoAberto ? (
-        <div className="col-md-12">
-          <Alert
-            alerta={{
-              tipo: 'warning',
-              mensagem:
-                'Apenas é possível consultar este registro pois o período não está em aberto.',
-              estiloTitulo: { fontSize: '18px' },
-            }}
-            className="mb-2"
-          />
-        </div>
+        <Alert
+          alerta={{
+            tipo: 'warning',
+            mensagem:
+              'Apenas é possível consultar este registro pois o período não está em aberto.',
+          }}
+        />
       ) : (
         <></>
       )}
       <AlertaModalidadeInfantil />
       <Cabecalho pagina="Análise de Pendências">
-        <div className="d-flex justify-content-end">
-          <Button
-            id={SGP_BUTTON_VOLTAR}
-            label="Voltar"
-            icon="arrow-left"
-            color={Colors.Azul}
-            border
-            className="mr-2"
-            onClick={onClickVoltar}
-          />
+        <>
+          <BotaoVoltarPadrao className="mr-2" onClick={() => onClickVoltar()} />
           <Button
             id={SGP_BUTTON_APROVAR}
             label="Aprovar"
@@ -307,7 +291,7 @@ const PendenciasFechamentoForm = ({ match }) => {
               situacaoId == situacaoPendenciaDto.Aprovada
             }
           />
-        </div>
+        </>
       </Cabecalho>
       <Card>
         <div className="col-md-12">

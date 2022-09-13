@@ -32,8 +32,8 @@ import ServicoPeriodoEscolar from '~/servicos/Paginas/Calendario/ServicoPeriodoE
 import {
   SGP_BUTTON_APROVAR,
   SGP_BUTTON_IMPRIMIR,
-  SGP_BUTTON_VOLTAR,
 } from '~/componentes-sgp/filtro/idsCampos';
+import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
 
 const PendenciasFechamentoLista = ({ match }) => {
   const usuario = useSelector(store => store.usuario);
@@ -367,7 +367,7 @@ const PendenciasFechamentoLista = ({ match }) => {
       )}
       <AlertaModalidadeInfantil />
       <Cabecalho pagina="Análise de Pendências">
-        <div className="d-flex justify-content-end">
+        <>
           <BotaoImprimir className="d-flex mr-2">
             <Loader loading={imprimindo}>
               <Button
@@ -381,15 +381,7 @@ const PendenciasFechamentoLista = ({ match }) => {
               />
             </Loader>
           </BotaoImprimir>
-          <Button
-            id={SGP_BUTTON_VOLTAR}
-            label="Voltar"
-            icon="arrow-left"
-            color={Colors.Azul}
-            border
-            className="mr-2"
-            onClick={onClickVoltar}
-          />
+          <BotaoVoltarPadrao className="mr-2" onClick={() => onClickVoltar()} />
           <Button
             id={SGP_BUTTON_APROVAR}
             label="Aprovar"
@@ -411,7 +403,7 @@ const PendenciasFechamentoLista = ({ match }) => {
               ).length > 0
             }
           />
-        </div>
+        </>
       </Cabecalho>
       <Card>
         <div className="col-md-12">

@@ -51,7 +51,6 @@ const AlertaModalidadeInfantil = props => {
             ? 'não está disponível'
             : 'só pode ser utilizada'
         } para turmas da educação infantil`,
-        estiloTitulo: { fontSize: '18px' },
       }}
     />
   ) : (

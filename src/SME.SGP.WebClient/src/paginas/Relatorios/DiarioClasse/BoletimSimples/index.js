@@ -179,7 +179,7 @@ const BoletimSimples = () => {
             setCancelou={setCancelou}
           />
           {!!filtro?.turmaCodigo?.length && selecionarAlunos && (
-            <div className="col-md-12 pt-4 py-0 px-0">
+            <div className="col-md-12 pt-4">
               <ListaPaginada
                 id="lista-alunos"
                 url="v1/boletim/alunos"

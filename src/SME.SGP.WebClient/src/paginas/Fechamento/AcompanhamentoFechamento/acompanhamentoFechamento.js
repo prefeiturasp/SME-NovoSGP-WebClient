@@ -2,15 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Divider } from 'antd';
 
-import {
-  Base,
-  Button,
-  Card,
-  Colors,
-  Label,
-  Loader,
-  PainelCollapse,
-} from '~/componentes';
+import { Base, Card, Label, Loader, PainelCollapse } from '~/componentes';
 import {
   Cabecalho,
   Paginacao,
@@ -32,7 +24,7 @@ import {
 import { Filtros } from './Filtros';
 import { SecaoFechamento } from './SecaoFechamento';
 import { SecaoConselhoClasse } from './SecaoConselhoClasse';
-import { SGP_BUTTON_VOLTAR } from '~/componentes-sgp/filtro/idsCampos';
+import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
 
 const AcompanhamentoFechamento = () => {
   const [ehInfantil, setEhInfantil] = useState(false);
@@ -154,17 +146,10 @@ const AcompanhamentoFechamento = () => {
       />
       <Loader loading={carregandoAcompanhamentoFechamento} ignorarTip>
         <Cabecalho pagina="Acompanhamento do fechamento">
-          <Button
-            id={SGP_BUTTON_VOLTAR}
-            label="Voltar"
-            icon="arrow-left"
-            color={Colors.Azul}
-            onClick={aoClicarBotaoVoltar}
-            border
-          />
+          <BotaoVoltarPadrao onClick={() => aoClicarBotaoVoltar()} />
         </Cabecalho>
         <Card>
-          <div className="col-md-12 p-0">
+          <div className="col-md-12">
             <div className="mb-4">
               <Filtros
                 onChangeFiltros={onChangeFiltros}

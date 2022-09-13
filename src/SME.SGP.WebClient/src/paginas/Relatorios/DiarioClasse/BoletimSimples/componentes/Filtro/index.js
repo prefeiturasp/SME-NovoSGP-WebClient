@@ -443,7 +443,7 @@ const Filtros = ({ onFiltrar, filtrou, setFiltrou, cancelou, setCancelou }) => {
   }, [opcaoEstudanteId]);
 
   return (
-    <div className="col-12 p-0">
+    <div className="col-12">
       <div className="row mb-2">
         <div className="col-12">
           <CheckboxComponent
@@ -454,7 +454,7 @@ const Filtros = ({ onFiltrar, filtrou, setFiltrou, cancelou, setCancelou }) => {
         </div>
       </div>
       <div className="row mb-2">
-        <div className="col-sm-12 col-md-2 col-lg-2 col-xl-2 pr-0">
+        <div className="col-sm-12 col-md-2 col-lg-2 col-xl-2">
           <Loader loading={carregandoAnosLetivos} ignorarTip>
             <SelectComponent
               label="Ano Letivo"
@@ -468,7 +468,7 @@ const Filtros = ({ onFiltrar, filtrou, setFiltrou, cancelou, setCancelou }) => {
             />
           </Loader>
         </div>
-        <div className="col-sm-12 col-md-5 col-lg-5 col-xl-5 pr-0">
+        <div className="col-sm-12 col-md-5 col-lg-5 col-xl-5">
           <Loader loading={carregandoDres} ignorarTip>
             <SelectComponent
               label="Diretoria Regional de Educação (DRE)"
@@ -501,7 +501,7 @@ const Filtros = ({ onFiltrar, filtrou, setFiltrou, cancelou, setCancelou }) => {
         </div>
       </div>
       <div className="row mb-3">
-        <div className="col-sm-12 col-md-4 pr-0">
+        <div className="col-sm-12 col-md-4">
           <Loader loading={carregandoModalidade} ignorarTip>
             <SelectComponent
               id="drop-modalidade"
@@ -516,7 +516,7 @@ const Filtros = ({ onFiltrar, filtrou, setFiltrou, cancelou, setCancelou }) => {
             />
           </Loader>
         </div>
-        <div className="col-sm-12 col-md-4 pr-0">
+        <div className="col-sm-12 col-md-4">
           <Loader loading={carregandoSemestres} ignorarTip>
             <SelectComponent
               id="drop-semestre"
@@ -553,7 +553,7 @@ const Filtros = ({ onFiltrar, filtrou, setFiltrou, cancelou, setCancelou }) => {
         </div>
       </div>
       <div className="row">
-        <div className="col-sm-12 col-md-4 pr-0">
+        <div className="col-sm-12 col-md-4">
           <SelectComponent
             lista={opcoesEstudantes}
             valueOption="valor"
@@ -565,7 +565,7 @@ const Filtros = ({ onFiltrar, filtrou, setFiltrou, cancelou, setCancelou }) => {
             placeholder="Estudante(s)"
           />
         </div>
-        <div className="col-sm-12 col-md-4 pr-0">
+        <div className="col-sm-12 col-md-4">
           <SelectComponent
             lista={opcoesModeloBoletim}
             valueOption="valor"
