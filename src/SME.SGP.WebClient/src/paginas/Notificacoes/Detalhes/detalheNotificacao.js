@@ -26,8 +26,8 @@ import {
   SGP_BUTTON_EXCLUIR,
   SGP_BUTTON_LIDA,
   SGP_BUTTON_RECUSAR,
-  SGP_BUTTON_VOLTAR,
 } from '~/componentes-sgp/filtro/idsCampos';
+import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
 
 const urlTelaNotificacoes = '/notificacoes';
 
@@ -259,13 +259,7 @@ const DetalheNotificacao = ({ match }) => {
               <Cabecalho pagina="Notificações">
                 <Row gutter={[8, 8]} type="flex">
                   <Col>
-                    <Button
-                      id={SGP_BUTTON_VOLTAR}
-                      label="Voltar"
-                      color={cores.Colors.Azul}
-                      icon="arrow-left"
-                      border
-                      type="button"
+                    <BotaoVoltarPadrao
                       onClick={() => history.push(urlTelaNotificacoes)}
                     />
                   </Col>

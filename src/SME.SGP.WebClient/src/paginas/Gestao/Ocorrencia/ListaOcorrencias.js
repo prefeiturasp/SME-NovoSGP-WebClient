@@ -193,22 +193,20 @@ const ListaOcorrencias = () => {
 
   return (
     <>
-      {turmaSelecionada.turma ? <AlertaPermiteSomenteTurmaInfantil /> : ''}
+      {turmaSelecionada.turma ? <AlertaPermiteSomenteTurmaInfantil /> : <></>}
       {turmaSelecionada?.turma ? (
-        ''
+        <></>
       ) : (
         <Alert
           alerta={{
             tipo: 'warning',
             id: 'plano-ciclo-selecione-turma',
             mensagem: 'Você precisa escolher uma turma.',
-            estiloTitulo: { fontSize: '18px' },
           }}
-          className="mb-0"
         />
       )}
       <Cabecalho pagina="Ocorrências">
-        <div className="d-flex justify-content-end">
+        <>
           <Button
             id={SGP_BUTTON_VOLTAR}
             label="Voltar"
@@ -247,77 +245,85 @@ const ListaOcorrencias = () => {
             }
             onClick={onClickNovo}
           />
-        </div>
+        </>
       </Cabecalho>
       <Card>
-        <div className="col-sm-12 col-md-3">
-          <CampoData
-            label="Data da ocorrência"
-            valor={dataInicial}
-            onChange={onChangeDataInicial}
-            placeholder="Data inicial"
-            formatoData="DD/MM/YYYY"
-            desabilitado={desabilitarCampos()}
-          />
-        </div>
-        <div className="col-sm-12 col-md-3" style={{ marginTop: '25px' }}>
-          <CampoData
-            valor={dataFinal}
-            onChange={onChangeDataFinal}
-            placeholder="Data final"
-            formatoData="DD/MM/YYYY"
-            desabilitado={desabilitarCampos()}
-          />
-        </div>
-        <div className="col-sm-12 col-md-6">
-          <InputBusca
-            placeholder="Procure pelo nome da criança"
-            label="Criança"
-            onPressEnter={onSetFiltro}
-            onClick={onSetFiltro}
-            valor={nomeCrianca}
-            onChange={valor => setNomeCrianca(valor.currentTarget.value)}
-            disabled={desabilitarCampos()}
-          />
-        </div>
-        <div className="col-sm-12 col-md-6 mt-2">
-          <InputBusca
-            placeholder="Procure pelo título da ocorrência"
-            label="Título da ocorrência"
-            onPressEnter={onSetFiltro}
-            onClick={onSetFiltro}
-            valor={tituloOcorrencia}
-            onChange={valor => setTituloOcorrencia(valor.currentTarget.value)}
-            disabled={desabilitarCampos()}
-          />
-        </div>
-        <div className="col-sm-12 mt-4">
-          <Button
-            id="btn-imprimir-relatorio-ocorrencias"
-            className="btn-imprimir"
-            icon="print"
-            color={Colors.Azul}
-            semMargemDireita
-            border
-            onClick={onClickGerar}
-            disabled={desabilitarCampos() || !itenSelecionados?.length}
-          />
-        </div>
-        <div className="col-md-12 pt-4">
-          <ListaPaginada
-            url="v1/ocorrencias"
-            id="lista-ocorrencias"
-            colunaChave="id"
-            colunas={colunas}
-            filtro={filtro}
-            onClick={ocorrencia =>
-              history.push(`${RotasDto.OCORRENCIAS}/editar/${ocorrencia.id}`)
-            }
-            multiSelecao
-            selecionarItems={onSelecionarItems}
-            filtroEhValido={ehFiltroValido}
-            desabilitado={desabilitarCampos()}
-          />
+        <div className="col-md-12">
+          <div className="row">
+            <div className="col-sm-12 col-md-3">
+              <CampoData
+                label="Data da ocorrência"
+                valor={dataInicial}
+                onChange={onChangeDataInicial}
+                placeholder="Data inicial"
+                formatoData="DD/MM/YYYY"
+                desabilitado={desabilitarCampos()}
+              />
+            </div>
+            <div className="col-sm-12 col-md-3" style={{ marginTop: '25px' }}>
+              <CampoData
+                valor={dataFinal}
+                onChange={onChangeDataFinal}
+                placeholder="Data final"
+                formatoData="DD/MM/YYYY"
+                desabilitado={desabilitarCampos()}
+              />
+            </div>
+            <div className="col-sm-12 col-md-6">
+              <InputBusca
+                placeholder="Procure pelo nome da criança"
+                label="Criança"
+                onPressEnter={onSetFiltro}
+                onClick={onSetFiltro}
+                valor={nomeCrianca}
+                onChange={valor => setNomeCrianca(valor.currentTarget.value)}
+                disabled={desabilitarCampos()}
+              />
+            </div>
+            <div className="col-sm-12 col-md-6 mt-2">
+              <InputBusca
+                placeholder="Procure pelo título da ocorrência"
+                label="Título da ocorrência"
+                onPressEnter={onSetFiltro}
+                onClick={onSetFiltro}
+                valor={tituloOcorrencia}
+                onChange={valor =>
+                  setTituloOcorrencia(valor.currentTarget.value)
+                }
+                disabled={desabilitarCampos()}
+              />
+            </div>
+            <div className="col-sm-12 mt-4">
+              <Button
+                id="btn-imprimir-relatorio-ocorrencias"
+                className="btn-imprimir"
+                icon="print"
+                color={Colors.Azul}
+                semMargemDireita
+                border
+                onClick={onClickGerar}
+                disabled={desabilitarCampos() || !itenSelecionados?.length}
+              />
+            </div>
+            <div className="col-md-12 pt-4">
+              <ListaPaginada
+                url="v1/ocorrencias"
+                id="lista-ocorrencias"
+                colunaChave="id"
+                colunas={colunas}
+                filtro={filtro}
+                onClick={ocorrencia =>
+                  history.push(
+                    `${RotasDto.OCORRENCIAS}/editar/${ocorrencia.id}`
+                  )
+                }
+                multiSelecao
+                selecionarItems={onSelecionarItems}
+                filtroEhValido={ehFiltroValido}
+                desabilitado={desabilitarCampos()}
+              />
+            </div>
+          </div>
         </div>
       </Card>
     </>

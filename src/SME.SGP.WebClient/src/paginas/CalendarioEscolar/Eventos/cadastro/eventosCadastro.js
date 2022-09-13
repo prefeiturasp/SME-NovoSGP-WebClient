@@ -13,7 +13,7 @@ const EventosCadastro = () => {
         <Cabecalho pagina="Cadastro de eventos do calendário escolar">
           <EventosCadastroBotoesAcao />
         </Cabecalho>
-        <Card>
+        <Card padding="24px 24px">
           <EventosCadastroForm />
         </Card>
       </EventosCadastroLoader>

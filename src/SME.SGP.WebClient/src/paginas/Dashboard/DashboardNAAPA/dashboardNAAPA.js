@@ -23,7 +23,7 @@ const DashboardNAAPA = () => {
           }}
         />
       </Cabecalho>
-      <Card>
+      <Card padding="24px 24px">
         <DashboardNAAPAFiltros />
         <DashboardNAAPATabs />
       </Card>

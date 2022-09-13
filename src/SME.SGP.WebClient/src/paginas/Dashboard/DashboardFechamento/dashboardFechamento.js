@@ -41,7 +41,7 @@ const DashboardFechamento = () => {
         />
       </Cabecalho>
       <Card>
-        <div className="col-md-12 p-0">
+        <div className="col-md-12">
           <DashboardFechamentoFiltros />
           <div className="row">
             <div className="col-md-12 mt-3">

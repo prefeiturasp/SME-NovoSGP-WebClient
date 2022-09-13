@@ -343,7 +343,7 @@ const AtribuicaoResponsaveisCadastro = () => {
   return (
     <>
       <Cabecalho pagina="Atribuição de responsáveis">
-        <Row gutter={[8, 8]} type="flex" justify="end">
+        <Row gutter={[8, 8]} type="flex">
           <Col>
             <Button
               id={SGP_BUTTON_VOLTAR}
@@ -379,7 +379,7 @@ const AtribuicaoResponsaveisCadastro = () => {
           </Col>
         </Row>
       </Cabecalho>
-      <Card>
+      <Card padding="24px 24px">
         <Col span={24}>
           <Row gutter={[16, 16]}>
             <Col sm={24} md={12}>

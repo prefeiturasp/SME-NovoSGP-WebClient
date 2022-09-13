@@ -644,7 +644,7 @@ const RelatorioPendencias = () => {
         />
       </Cabecalho>
       <Card>
-        <div className="col-md-12 p-0">
+        <div className="col-md-12">
           <div className="row mb-2">
             <div className="col-12">
               <CheckboxComponent

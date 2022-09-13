@@ -31,23 +31,17 @@ const AlertaPermiteSomenteTurmaInfantil = props => {
     modalidadesFiltroPrincipal,
   ]);
 
-  return (
-    <div className="col-md-12">
-      {exibirMsg ? (
-        <Alert
-          alerta={{
-            tipo: 'warning',
-            id: 'alerta-modalidade-infantil',
-            mensagem:
-              'Esta interface só pode ser utilizada para turmas da educação infantil',
-            estiloTitulo: { fontSize: '18px' },
-          }}
-          className="mt-2 mb-2"
-        />
-      ) : (
-        ''
-      )}
-    </div>
+  return exibirMsg ? (
+    <Alert
+      alerta={{
+        tipo: 'warning',
+        id: 'alerta-modalidade-infantil',
+        mensagem:
+          'Esta interface só pode ser utilizada para turmas da educação infantil',
+      }}
+    />
+  ) : (
+    <></>
   );
 };
 

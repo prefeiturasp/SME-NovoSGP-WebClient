@@ -73,7 +73,7 @@ export default function AtribuicaoSupervisorLista() {
       setSupervisoresSelecionados([]);
       setUeSelecionada('');
       setDesabilitarSupervisor(false);
-      onChangeDre(dresSelecionadas,null,true,tipoResponsavel);
+       onChangeDre(dresSelecionadas,null,true,tipoResponsavel);
     }
   }, [uesSemSupervisorCheck, tipoResponsavel]);
 
@@ -353,7 +353,7 @@ function montarListaAtribuicao(lista) {
   return (
     <>
       <Cabecalho pagina="Atribuição de responsáveis">
-        <div className="d-flex justify-content-end">
+        <>
           <Button
             id={SGP_BUTTON_VOLTAR}
             label="Voltar"
@@ -372,119 +372,132 @@ function montarListaAtribuicao(lista) {
             disabled={!permissoesTela?.podeIncluir}
             onClick={onClickNovaAtribuicao}
           />
-        </div>
+        </>
       </Cabecalho>
       <Card>
-        <div className="col-md-12 pb-2">
-          <CheckboxComponent
-            className="mb-2"
-            label="Exibir apenas UEs sem responsável"
-            onChangeCheckbox={onChangeUesSemSup}
-            disabled={
-              carregandoLista || carregandoResponsavel ||
-              !dresSelecionadas ||
-              !tipoResponsavel ||
-              !permissoesTela?.podeConsultar ||
-              supervisoresSelecionados?.length > 0
-            }
-            checked={uesSemSupervisorCheck}
-          />
-        </div>
-        <div className="col-sm-12 col-md-6 pb-2">
-          <SelectComponent
-            label="Diretoria Regional de Educação (DRE)"
-            name="dres-atribuicao-sup"
-            id="dres-atribuicao-sup"
-            lista={listaDres}
-            valueOption="codigo"
-            valueText="nome"
-            onChange={onChangeDre}
-            valueSelect={dresSelecionadas}
-            placeholder="Diretoria Regional de Educação (DRE)"
-            disabled={carregandoLista || carregandoResponsavel || listaDres?.length === 1 || !permissoesTela.podeConsultar}
-            allowClear={false}
-            showSearch
-          />
-        </div>
-        <div className="col-sm-12 col-md-6 pb-2">
-          <SelectComponent
-            id="SGP_SELECT_TIPO_RESPONSAVEL"
-            label="Tipo de responsável"
-            lista={listaTipoResponsavel}
-            valueOption="codigo"
-            valueText="descricao"
-            disabled={
-              carregandoLista ||
-              carregandoResponsavel ||
-              !dresSelecionadas ||
-              listaTipoResponsavel?.length === 1 ||
-              !permissoesTela?.podeConsultar
-            }
-            onChange={onChangeTipoResponsavel}
-            valueSelect={tipoResponsavel}
-            placeholder="Tipo de responsável"
-            showSearch
-          />
-        </div>
-        <div className="col-md-12 pb-2">
-          <Loader loading={carregandoResponsavel} ignorarTip>
-            <SelectComponent
-              label="Responsável"
-              name="supervisores-list"
-              id="supervisores-list"
-              lista={listaSupervisores}
-              valueOption="supervisorId"
-              valueText="descricaoCodigo"
-              onChange={onChangeSupervisores}
-              valueSelect={supervisoresSelecionados}
-              multiple
-              placeholder="SELECIONE O RESPONSÁVEL"
-              disabled={
-                carregandoLista ||
-                carregandoResponsavel ||
-                !tipoResponsavel ||
-                desabilitarSupervisor ||
-                !permissoesTela.podeConsultar
-              }
-              showSearch
-            />
-          </Loader>
-        </div>
-        <div className="col-sm-12 col-md-6 pb-2">
-          <SelectComponent
-            label="Unidade Escolar (UE)"
-            className="col-md-12"
-            name="ues-list"
-            id="ues-list"
-            lista={listaUes}
-            valueOption="codigo"
-            valueText="nome"
-            onChange={onChangeUes}
-            valueSelect={ueSelecionada || []}
-            placeholder="Unidade Escolar (UE)"
-            showSearch
-            disabled={
-              carregandoLista || carregandoResponsavel ||  !dresSelecionadas || !permissoesTela.podeConsultar
-            }
-          />
-        </div>
+        <div className="col-md-12">
+          <div className="row">
+            <div className="col-md-12 pb-2">
+              <CheckboxComponent
+                className="mb-2"
+                label="Exibir apenas UEs sem responsável"
+                onChangeCheckbox={onChangeUesSemSup}
+                disabled={
+                  carregandoLista ||
+                  carregandoResponsavel ||
+                  !dresSelecionadas ||
+                  !tipoResponsavel ||
+                  !permissoesTela?.podeConsultar ||
+                  supervisoresSelecionados?.length > 0
+                }
+                checked={uesSemSupervisorCheck}
+              />
+            </div>
+            <div className="col-sm-12 col-md-6 pb-2">
+              <SelectComponent
+                label="Diretoria Regional de Educação (DRE)"
+                name="dres-atribuicao-sup"
+                id="dres-atribuicao-sup"
+                lista={listaDres}
+                valueOption="codigo"
+                valueText="nome"
+                onChange={onChangeDre}
+                valueSelect={dresSelecionadas}
+                placeholder="Diretoria Regional de Educação (DRE)"
+                disabled={
+                  carregandoLista ||
+                  carregandoResponsavel ||
+                  listaDres?.length === 1 ||
+                  !permissoesTela.podeConsultar
+                }
+                allowClear={false}
+                showSearch
+              />
+            </div>
+            <div className="col-sm-12 col-md-6 pb-2">
+              <SelectComponent
+                id="SGP_SELECT_TIPO_RESPONSAVEL"
+                label="Tipo de responsável"
+                lista={listaTipoResponsavel}
+                valueOption="codigo"
+                valueText="descricao"
+                disabled={
+                  carregandoLista ||
+                  carregandoResponsavel ||
+                  !dresSelecionadas ||
+                  listaTipoResponsavel?.length === 1 ||
+                  !permissoesTela?.podeConsultar
+                }
+                onChange={onChangeTipoResponsavel}
+                valueSelect={tipoResponsavel}
+                placeholder="Tipo de responsável"
+                showSearch
+              />
+            </div>
+            <div className="col-md-12 pb-2">
+              <Loader loading={carregandoResponsavel} ignorarTip>
+                <SelectComponent
+                  label="Responsável"
+                  name="supervisores-list"
+                  id="supervisores-list"
+                  lista={listaSupervisores}
+                  valueOption="supervisorId"
+                  valueText="descricaoCodigo"
+                  onChange={onChangeSupervisores}
+                  valueSelect={supervisoresSelecionados}
+                  multiple
+                  placeholder="SELECIONE O RESPONSÁVEL"
+                  disabled={
+                    carregandoLista ||
+                    carregandoResponsavel ||
+                    !tipoResponsavel ||
+                    desabilitarSupervisor ||
+                    !permissoesTela.podeConsultar
+                  }
+                  showSearch
+                />
+              </Loader>
+            </div>
+            <div className="col-sm-12 col-md-6 pb-2">
+              <SelectComponent
+                label="Unidade Escolar (UE)"
+                className="col-md-12"
+                name="ues-list"
+                id="ues-list"
+                lista={listaUes}
+                valueOption="codigo"
+                valueText="nome"
+                onChange={onChangeUes}
+                valueSelect={ueSelecionada || []}
+                placeholder="Unidade Escolar (UE)"
+                showSearch
+                disabled={
+                  carregandoLista ||
+                  carregandoResponsavel ||
+                  !dresSelecionadas ||
+                  !permissoesTela.podeConsultar
+                }
+              />
+            </div>
 
-        <div className="col-md-12 pt-4">
-          <Loader loading={carregandoLista}>
-          <DataTable
-            onClickRow={permissoesTela.podeAlterar && onClickRow}
-            columns={columns}
-            dataSource={listaFiltroAtribuicao}
-            semHover
-            pagination={{
-              pageSize: 10,
-              total: listaFiltroAtribuicao?.length,
-              defaultCurrent: 1,
-              current: paginaAtual,
-              onChange: p => setPaginaAtual(p),
-            }}
-          />
-          </Loader>
+            <div className="col-md-12 pt-4">
+              <Loader loading={carregandoLista}>
+                <DataTable
+                  onClickRow={permissoesTela.podeAlterar && onClickRow}
+                  columns={columns}
+                  dataSource={listaFiltroAtribuicao}
+                  semHover
+                  pagination={{
+                    pageSize: 10,
+                    total: listaFiltroAtribuicao?.length,
+                    defaultCurrent: 1,
+                    current: paginaAtual,
+                    onChange: p => setPaginaAtual(p),
+                  }}
+                />
+              </Loader>
+            </div>
+          </div>
         </div>
       </Card>
     </>

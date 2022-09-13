@@ -511,7 +511,7 @@ const RelatorioFrequenciaMensal = () => {
           </Col>
         </Row>
       </Cabecalho>
-      <Card>
+      <Card padding="24px 24px">
         <Col span={24}>
           <Row gutter={[16, 8]}>
             <Col sm={24}>

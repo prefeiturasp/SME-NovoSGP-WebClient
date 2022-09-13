@@ -41,6 +41,7 @@ import {
   SGP_SELECT_COMPONENTE_CURRICULAR,
 } from '~/componentes-sgp/filtro/idsCampos';
 import { ContainerColumnReverse } from '~/paginas/Planejamento/Anual/planoAnual.css';
+import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
 
 function CadastroDeAula({ match, location }) {
   const { id, tipoCalendarioId, somenteReposicao } = match.params;
@@ -673,13 +674,8 @@ function CadastroDeAula({ match, location }) {
                 <Cabecalho
                   pagina={`Cadastro de Aula - ${obterDataFormatada()} `}
                 >
-                  <div className="d-flex">
-                    <Button
-                      id={shortid.generate()}
-                      label="Voltar"
-                      icon="arrow-left"
-                      color={Colors.Azul}
-                      border
+                  <>
+                    <BotaoVoltarPadrao
                       className="mr-2"
                       onClick={onClickVoltar}
                     />
@@ -713,7 +709,6 @@ function CadastroDeAula({ match, location }) {
                       color={Colors.Roxo}
                       border
                       bold
-                      className="mr-2"
                       onClick={() => {
                         if (
                           !id ||
@@ -735,7 +730,7 @@ function CadastroDeAula({ match, location }) {
                         !aula.podeEditar
                       }
                     />
-                  </div>
+                  </>
                 </Cabecalho>
                 <Card>
                   <Form className="col-md-12">

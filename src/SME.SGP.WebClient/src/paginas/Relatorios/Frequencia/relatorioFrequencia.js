@@ -746,7 +746,7 @@ const RelatorioFrequencia = () => {
           </Row>
         </Cabecalho>
         <Card>
-          <div className="col-md-12 p-0">
+          <div className="col-md-12">
             <div className="row my-3">
               <div className="col-sm-12 col-md-6 col-lg-3 col-xl-2">
                 <Loader loading={carregandoAnosLetivos} ignorarTip>

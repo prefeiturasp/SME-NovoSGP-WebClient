@@ -339,7 +339,7 @@ function AtribuicaoCJForm({ match, location }) {
                 />
               </Cabecalho>
               <Card>
-                <Form>
+                <Form className="col-md-12">
                   <Row className="row">
                     <CheckboxComponent
                       name="exibirHistorico"

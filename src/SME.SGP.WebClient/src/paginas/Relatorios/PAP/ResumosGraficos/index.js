@@ -117,7 +117,7 @@ const ResumosGraficosPAP = () => {
       </Cabecalho>
       <Card>
         {!ehTurmaInfantil(modalidadesFiltroPrincipal, turmaSelecionada) ? (
-          <>
+          <div className="col-md-12">
             <Filtro onFiltrar={filtroAtual => setFiltro(filtroAtual)} />
             {filtroTela.DreId &&
             filtroTela.UeId &&
@@ -179,7 +179,7 @@ const ResumosGraficosPAP = () => {
                 </Tabs.TabPane>
               </ContainerTabs>
             ) : null}
-          </>
+          </div>
         ) : (
           ''
         )}

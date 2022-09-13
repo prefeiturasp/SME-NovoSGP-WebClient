@@ -182,7 +182,7 @@ function CalendarioProfessor() {
           </div>
         </Cabecalho>
         <Card>
-          <Grid cols={4} className="p-0 m-0">
+          <Grid cols={4} className="m-0">
             <DropDownTipoCalendario
               turmaSelecionada={turmaSelecionada.turma}
               onChange={valor => onChangeTipoCalendarioIdHandler(valor)}
@@ -190,20 +190,18 @@ function CalendarioProfessor() {
             />
           </Grid>
           <Grid cols={12}>
-            <Linha className="row pt-2">
-              <Grid cols={12}>
-                <Calendario
-                  eventos={estado.eventos}
-                  onClickMes={mes => onClickMesHandler(mes)}
-                  onClickDia={dia => onClickDiaHandler(dia)}
-                  carregandoCalendario={estado.carregandoCalendario}
-                  carregandoMes={estado.carregandoMes}
-                  carregandoDia={estado.carregandoDia}
-                  permissaoTela={permissaoTela}
-                  tipoCalendarioId={tipoCalendarioId}
-                  turmaSelecionada={turmaSelecionada}
-                />
-              </Grid>
+            <Linha className="pt-2">
+              <Calendario
+                eventos={estado.eventos}
+                onClickMes={mes => onClickMesHandler(mes)}
+                onClickDia={dia => onClickDiaHandler(dia)}
+                carregandoCalendario={estado.carregandoCalendario}
+                carregandoMes={estado.carregandoMes}
+                carregandoDia={estado.carregandoDia}
+                permissaoTela={permissaoTela}
+                tipoCalendarioId={tipoCalendarioId}
+                turmaSelecionada={turmaSelecionada}
+              />
             </Linha>
           </Grid>
         </Card>

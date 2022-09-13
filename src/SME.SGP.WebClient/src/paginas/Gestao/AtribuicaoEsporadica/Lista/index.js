@@ -136,8 +136,8 @@ function AtribuicaoEsporadicaLista() {
           />
         </Cabecalho>
         <Card>
-          <Filtro onFiltrar={onChangeFiltro} />
-          <div className="col-md-12 pt-2 py-0 px-0">
+          <div className="col-md-12">
+            <Filtro onFiltrar={onChangeFiltro} />
             <ListaPaginada
               url="v1/atribuicao/esporadica/listar"
               id="lista-atribuicoes-esporadica"

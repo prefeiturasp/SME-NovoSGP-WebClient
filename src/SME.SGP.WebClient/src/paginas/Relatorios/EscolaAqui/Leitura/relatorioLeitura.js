@@ -645,7 +645,7 @@ const RelatorioLeitura = () => {
         />
       </Cabecalho>
       <Card>
-        <div className="col-md-12 p-0">
+        <div className="col-md-12">
           <div className="row">
             <div className="col-sm-12 col-md-6 col-lg-4 col-xl-4 mb-2">
               <CheckboxComponent

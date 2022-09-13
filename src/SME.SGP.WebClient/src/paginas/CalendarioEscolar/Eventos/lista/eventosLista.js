@@ -16,7 +16,7 @@ const EventosLista = () => {
         <Cabecalho pagina="Eventos do calendário escolar">
           <EventosListaBotoesAcao />
         </Cabecalho>
-        <Card>
+        <Card padding="24px 24px">
           <EventosListaFiltros />
           <EventosListaPaginada />
         </Card>

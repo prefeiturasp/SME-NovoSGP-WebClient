@@ -24,8 +24,8 @@ import { Card, Loader } from '~/componentes';
 import {
   SGP_BUTTON_EXCLUIR,
   SGP_BUTTON_LIDA,
-  SGP_BUTTON_VOLTAR,
 } from '~/componentes-sgp/filtro/idsCampos';
+import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
 
 export default function NotificacoesLista() {
   const [idNotificacoesSelecionadas, setIdNotificacoesSelecionadas] = useState(
@@ -337,15 +337,7 @@ export default function NotificacoesLista() {
         <Cabecalho pagina="Notificações">
           <Row gutter={[8, 8]} type="flex">
             <Col>
-              <Button
-                id={SGP_BUTTON_VOLTAR}
-                label="Voltar"
-                color={Colors.Azul}
-                icon="arrow-left"
-                border
-                type="button"
-                onClick={quandoClicarVoltar}
-              />
+              <BotaoVoltarPadrao onClick={() => quandoClicarVoltar()} />
             </Col>
             <Col>
               <Button
@@ -377,91 +369,95 @@ export default function NotificacoesLista() {
           </Row>
         </Cabecalho>
         <Card>
-          <div className="col-md-6 pb-3">
-            <CampoTexto
-              placeholder="Título"
-              onChange={onChangeTitulo}
-              value={tituloSelecionado}
-              desabilitado={!permissoesTela.podeConsultar}
-            />
-          </div>
-          <div className="col-md-6 pb-3">
-            <CampoTextoBusca
-              placeholder="Código"
-              onSearch={onSearchCodigo}
-              onChange={onChangeCodigo}
-              value={codigoSelecionado}
-              desabilitado={!permissoesTela.podeConsultar}
-              onKeyDown={quandoTeclaParaBaixoPesquisaCodigo}
-              type="number"
-              minValue="0"
-            />
-          </div>
-          <div className="col-md-3 pb-3">
-            <SelectComponent
-              name="turma-noti"
-              id="turma-noti"
-              lista={listaSelectTurma}
-              valueOption="id"
-              valueText="descricao"
-              onChange={onChangeTurma}
-              valueSelect={dropdownTurmaSelecionada || []}
-              placeholder="Turma"
-              disabled={desabilitarTurma || !permissoesTela.podeConsultar}
-            />
-          </div>
-          <div className="col-md-3 pb-3">
-            <SelectComponent
-              name="status-noti"
-              id="status-noti"
-              lista={listaStatus}
-              valueOption="id"
-              disabled={!permissoesTela.podeConsultar}
-              valueText="descricao"
-              onChange={onChangeStatus}
-              valueSelect={statusSelecionado || []}
-              placeholder="Filtrar por"
-            />
-          </div>
-          <div className="col-md-3 pb-3">
-            <SelectComponent
-              name="categoria-noti"
-              id="categoria-noti"
-              lista={listaCategorias}
-              valueOption="id"
-              disabled={!permissoesTela.podeConsultar}
-              valueText="descricao"
-              onChange={onChangeCategoria}
-              valueSelect={categoriaSelecionada || []}
-              placeholder="Categoria"
-            />
-          </div>
-          <div className="col-md-3 pb-3">
-            <SelectComponent
-              name="tipo-noti"
-              id="tipo-noti"
-              lista={listaTipos}
-              valueOption="id"
-              valueText="descricao"
-              disabled={!permissoesTela.podeConsultar}
-              onChange={onChangeTipo}
-              valueSelect={tipoSelecionado || []}
-              placeholder="Tipo"
-            />
-          </div>
-          <div className="col-md-12 pt-2">
-            {colunasTabela && colunasTabela.length && (
-              <ListaPaginada
-                url="v1/notificacoes/"
-                id="lista-notificacoes"
-                colunas={colunasTabela}
-                filtro={filtro}
-                onClick={permissoesTela.podeAlterar && onClickEditar}
-                multiSelecao
-                selecionarItems={onSelecionarItems}
-                filtroEhValido={validarFiltro()}
-              />
-            )}
+          <div className="col-md-12">
+            <div className="row">
+              <div className="col-md-6 pb-3">
+                <CampoTexto
+                  placeholder="Título"
+                  onChange={onChangeTitulo}
+                  value={tituloSelecionado}
+                  desabilitado={!permissoesTela.podeConsultar}
+                />
+              </div>
+              <div className="col-md-6 pb-3">
+                <CampoTextoBusca
+                  placeholder="Código"
+                  onSearch={onSearchCodigo}
+                  onChange={onChangeCodigo}
+                  value={codigoSelecionado}
+                  desabilitado={!permissoesTela.podeConsultar}
+                  onKeyDown={quandoTeclaParaBaixoPesquisaCodigo}
+                  type="number"
+                  minValue="0"
+                />
+              </div>
+              <div className="col-md-3 pb-3">
+                <SelectComponent
+                  name="turma-noti"
+                  id="turma-noti"
+                  lista={listaSelectTurma}
+                  valueOption="id"
+                  valueText="descricao"
+                  onChange={onChangeTurma}
+                  valueSelect={dropdownTurmaSelecionada || []}
+                  placeholder="Turma"
+                  disabled={desabilitarTurma || !permissoesTela.podeConsultar}
+                />
+              </div>
+              <div className="col-md-3 pb-3">
+                <SelectComponent
+                  name="status-noti"
+                  id="status-noti"
+                  lista={listaStatus}
+                  valueOption="id"
+                  disabled={!permissoesTela.podeConsultar}
+                  valueText="descricao"
+                  onChange={onChangeStatus}
+                  valueSelect={statusSelecionado || []}
+                  placeholder="Filtrar por"
+                />
+              </div>
+              <div className="col-md-3 pb-3">
+                <SelectComponent
+                  name="categoria-noti"
+                  id="categoria-noti"
+                  lista={listaCategorias}
+                  valueOption="id"
+                  disabled={!permissoesTela.podeConsultar}
+                  valueText="descricao"
+                  onChange={onChangeCategoria}
+                  valueSelect={categoriaSelecionada || []}
+                  placeholder="Categoria"
+                />
+              </div>
+              <div className="col-md-3 pb-3">
+                <SelectComponent
+                  name="tipo-noti"
+                  id="tipo-noti"
+                  lista={listaTipos}
+                  valueOption="id"
+                  valueText="descricao"
+                  disabled={!permissoesTela.podeConsultar}
+                  onChange={onChangeTipo}
+                  valueSelect={tipoSelecionado || []}
+                  placeholder="Tipo"
+                />
+              </div>
+              <div className="col-md-12 pt-2">
+                {colunasTabela && colunasTabela.length && (
+                  <ListaPaginada
+                    url="v1/notificacoes/"
+                    id="lista-notificacoes"
+                    colunas={colunasTabela}
+                    filtro={filtro}
+                    onClick={permissoesTela.podeAlterar && onClickEditar}
+                    multiSelecao
+                    selecionarItems={onSelecionarItems}
+                    filtroEhValido={validarFiltro()}
+                  />
+                )}
+              </div>
+            </div>
           </div>
         </Card>
       </Loader>

@@ -30,8 +30,8 @@ import {
   SGP_BUTTON_ALTERAR_CADASTRAR,
   SGP_BUTTON_CANCELAR,
   SGP_BUTTON_EXCLUIR,
-  SGP_BUTTON_VOLTAR,
 } from '~/componentes-sgp/filtro/idsCampos';
+import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
 
 const AvaliacaoForm = ({ match, location }) => {
   const [
@@ -557,7 +557,7 @@ const AvaliacaoForm = ({ match, location }) => {
 
   return (
     <>
-      <div className="col-md-12">
+      <Div className="col-12">
         {!podeLancaNota ? (
           <Alert
             alerta={{
@@ -565,29 +565,23 @@ const AvaliacaoForm = ({ match, location }) => {
               id: 'cadastro-aula-nao-lanca-nota',
               mensagem:
                 'Este componente curricular não permite cadastrar avaliação.',
-              estiloTitulo: { fontSize: '18px' },
             }}
-            className="mb-2"
           />
-        ) : null}
-      </div>
-      <Div className="col-12">
-        <div className="col-md-12">
-          {!dentroPeriodo ? (
-            <Alert
-              alerta={{
-                tipo: 'warning',
-                id: 'alerta-perido-fechamento',
-                mensagem:
-                  'Apenas é possível consultar este registro pois o período não está em aberto.',
-                estiloTitulo: { fontSize: '18px' },
-              }}
-              className="mb-2"
-            />
-          ) : (
-            ''
-          )}
-        </div>
+        ) : (
+          <></>
+        )}
+        {!dentroPeriodo ? (
+          <Alert
+            alerta={{
+              tipo: 'warning',
+              id: 'alerta-perido-fechamento',
+              mensagem:
+                'Apenas é possível consultar este registro pois o período não está em aberto.',
+            }}
+          />
+        ) : (
+          <></>
+        )}
         {mostrarModalCopiarAvaliacao ? (
           <ModalCopiarAvaliacao
             show={mostrarModalCopiarAvaliacao}
@@ -619,14 +613,7 @@ const AvaliacaoForm = ({ match, location }) => {
                 >
                   <Row gutter={[8, 8]} type="flex">
                     <Col>
-                      <Button
-                        id={SGP_BUTTON_VOLTAR}
-                        label="Voltar"
-                        icon="arrow-left"
-                        color={Colors.Azul}
-                        border
-                        onClick={clicouBotaoVoltar}
-                      />
+                      <BotaoVoltarPadrao onClick={() => clicouBotaoVoltar()} />
                     </Col>
                     <Col>
                       <Button
@@ -680,7 +667,7 @@ const AvaliacaoForm = ({ match, location }) => {
                   </Row>
                 </Cabecalho>
                 <Card>
-                  <Form>
+                  <Form className="col-md-12">
                     <Div className="row">
                       <Grid cols={12} className="mb-4">
                         <RadioGroupButton

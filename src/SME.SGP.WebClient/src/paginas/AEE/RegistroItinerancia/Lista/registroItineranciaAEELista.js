@@ -440,7 +440,7 @@ const RegistroItineranciaAEELista = () => {
   return (
     <>
       <Cabecalho pagina="Registro de itinerância">
-        <div className="d-flex justify-content-end">
+        <>
           <Button
             id={SGP_BUTTON_VOLTAR}
             label="Voltar"
@@ -458,10 +458,10 @@ const RegistroItineranciaAEELista = () => {
             onClick={onClickNovo}
             disabled={!permissoesTela.podeIncluir}
           />
-        </div>
+        </>
       </Cabecalho>
       <Card>
-        <div className="col-md-12 p-0">
+        <div className="col-md-12">
           <div className="row mb-4">
             <div className="col-sm-12">
               <CheckboxComponent

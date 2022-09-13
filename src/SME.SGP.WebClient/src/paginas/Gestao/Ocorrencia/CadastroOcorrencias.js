@@ -415,7 +415,7 @@ const CadastroOcorrencias = ({ match }) => {
         {form => (
           <>
             <Cabecalho pagina="Cadastro de ocorrência">
-              <div className="d-flex justify-content-end">
+              <>
                 <Button
                   id={SGP_BUTTON_IMPRIMIR}
                   className="mr-2"
@@ -479,10 +479,10 @@ const CadastroOcorrencias = ({ match }) => {
                     naoPodeIncluirOuAlterar()
                   }
                 />
-              </div>
+              </>
             </Cabecalho>
             <Card>
-              <Form className="col-md-12 p-0 mb-4">
+              <Form className="col-md-12 mb-4">
                 <div className="p-0 col-12 mb-3 font-weight-bold">
                   <span>Crianças envolvidas na ocorrência</span>
                 </div>

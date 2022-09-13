@@ -364,7 +364,7 @@ function RelatorioPAPAcompanhamento() {
           />
         </Cabecalho>
         <Card>
-          <Grid className="p-0" cols={12}>
+          <Grid cols={12}>
             <Linha className="row m-0">
               <Grid cols={3}>
                 <PeriodosDropDown
@@ -381,14 +381,14 @@ function RelatorioPAPAcompanhamento() {
               </Grid>
             </Linha>
           </Grid>
-          <Grid className="p-0 mt-4" cols={12}>
+          <Grid className="mt-4" cols={12}>
             <BarraNavegacao
               objetivos={objetivosCorrentes}
               objetivoAtivo={estado.ObjetivoAtivo}
               onChangeObjetivo={objetivo => onChangeObjetivoHandler(objetivo)}
             />
           </Grid>
-          <Grid className="p-0 mt-2" cols={12}>
+          <Grid className="mt-2" cols={12}>
             <EixoObjetivo
               eixo={
                 estado.ObjetivoAtivo &&
@@ -399,7 +399,7 @@ function RelatorioPAPAcompanhamento() {
               objetivo={estado.ObjetivoAtivo}
             />
           </Grid>
-          <Grid className="p-0 mt-2" cols={12}>
+          <Grid className="mt-2" cols={12}>
             <Ordenacao
               retornoOrdenado={retorno => disparar(carregarAlunos(retorno))}
               ordenarColunaNumero="numeroChamada"
@@ -410,7 +410,7 @@ function RelatorioPAPAcompanhamento() {
             />
           </Grid>
 
-          <Grid className="p-0 mt-2" cols={12}>
+          <Grid className="mt-2" cols={12}>
             <TabelaAlunos
               alunos={estado.Alunos}
               objetivoAtivo={estado.ObjetivoAtivo}

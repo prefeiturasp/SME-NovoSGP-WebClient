@@ -32,44 +32,34 @@ const Principal = () => {
   }, [usuario, validarFiltro]);
 
   return (
-    <div className="col-md-12">
+    <div>
       {modalidades &&
       !modalidades.length &&
       anosLetivo.length === 1 &&
       !usuario.ehPerfilProfessor &&
       perfil &&
       perfil.nomePerfil === 'Supervisor' ? (
-        <Row className="mb-0 pb-0">
-          <Grid cols={12} className="mb-0 pb-0">
-            <Container>
-              <Alert
-                alerta={{
-                  tipo: 'warning',
-                  id: 'AlertaPrincipal',
-                  mensagem: `Não foi possível obter as escolas atribuídas ao supervisor ${usuario.rf}`,
-                  estiloTitulo: { fontSize: '18px' },
-                }}
-              />
-            </Container>
-          </Grid>
-        </Row>
-      ) : null}
+        <Alert
+          alerta={{
+            tipo: 'warning',
+            id: 'AlertaPrincipal',
+            mensagem: `Não foi possível obter as escolas atribuídas ao supervisor ${usuario.rf}`,
+          }}
+        />
+      ) : (
+        <></>
+      )}
       {!turmaSelecionada ? (
-        <Row className="mb-0 pb-0">
-          <Grid cols={12} className="card-body m-r-0 m-l-0 p-l-0 p-r-0 m-t-0">
-            <Container>
-              <Alert
-                alerta={{
-                  tipo: 'warning',
-                  id: 'AlertaPrincipal',
-                  mensagem: 'Você precisa escolher uma turma',
-                  estiloTitulo: { fontSize: '18px' },
-                }}
-              />
-            </Container>
-          </Grid>
-        </Row>
-      ) : null}
+        <Alert
+          alerta={{
+            tipo: 'warning',
+            id: 'AlertaPrincipal',
+            mensagem: 'Você precisa escolher uma turma',
+          }}
+        />
+      ) : (
+        <></>
+      )}
       <CardsDashboard />
       <PendenciasGerais />
     </div>

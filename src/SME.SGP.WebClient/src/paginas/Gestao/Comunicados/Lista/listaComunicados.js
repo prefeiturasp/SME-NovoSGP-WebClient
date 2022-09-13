@@ -135,7 +135,7 @@ const ListaComunicados = () => {
   return (
     <>
       <Cabecalho pagina="Comunicação com pais ou responsáveis">
-        <div className="d-flex justify-content-end">
+        <>
           <Button
             id={SGP_BUTTON_VOLTAR}
             label="Voltar"
@@ -165,18 +165,18 @@ const ListaComunicados = () => {
             onClick={aoClicarBotaoNovo}
             disabled={somenteConsulta || !permissoesTela.podeIncluir}
           />
-        </div>
+        </>
       </Cabecalho>
       <Loader loading={exibirLoader}>
         <Card>
-          <div className="col-md-12 p-0">
+          <div className="col-md-12">
             <Filtros
               onChangeFiltros={onChangeFiltros}
               temModalidadeEja={temModalidadeEja}
             />
 
             {filtroEhValido && (
-              <div className="col-md-12 px-0" style={{ paddingTop: 38 }}>
+              <div className="col-md-12" style={{ paddingTop: 38 }}>
                 <ListaPaginada
                   id="lista-comunicados"
                   url="v1/comunicados"

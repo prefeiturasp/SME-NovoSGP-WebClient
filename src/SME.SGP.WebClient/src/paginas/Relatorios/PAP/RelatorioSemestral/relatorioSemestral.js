@@ -166,19 +166,15 @@ const RelatorioSemestral = () => {
       <ModalErrosRalSemestralPAP />
       {!turmaSelecionada.turma &&
       !ehTurmaInfantil(modalidadesFiltroPrincipal, turmaSelecionada) ? (
-        <div className="col-md-12">
-          <Alert
-            alerta={{
-              tipo: 'warning',
-              id: 'alerta-sem-turma-relatorio-semestral',
-              mensagem: 'Você precisa escolher uma turma.',
-              estiloTitulo: { fontSize: '18px' },
-            }}
-            className="mb-2"
-          />
-        </div>
+        <Alert
+          alerta={{
+            tipo: 'warning',
+            id: 'alerta-sem-turma-relatorio-semestral',
+            mensagem: 'Você precisa escolher uma turma.',
+          }}
+        />
       ) : (
-        ''
+        <></>
       )}
       {!listaSemestres.length &&
         !ehTurmaInfantil(modalidadesFiltroPrincipal, turmaSelecionada) && (
@@ -188,18 +184,14 @@ const RelatorioSemestral = () => {
               id: 'sem-turma-pap',
               mensagem:
                 'Somente é possivel realizar o preenchimento do PAP para turmas PAP',
-              estiloTitulo: { fontSize: '18px' },
             }}
-            className="mb-4"
           />
         )}
       <AlertaDentroPeriodoPAP />
       <AlertaModalidadeInfantil />
       <Loader loading={carregandoGeral}>
         <Cabecalho pagina="Relatório semestral">
-          <div className="d-flex justify-content-end">
-            <BotoesAcoesRelatorioSemestral />
-          </div>
+          <BotoesAcoesRelatorioSemestral />
         </Cabecalho>
         <Card>
           {turmaSelecionada.turma ? (

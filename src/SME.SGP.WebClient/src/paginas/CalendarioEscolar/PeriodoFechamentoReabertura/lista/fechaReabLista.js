@@ -14,7 +14,7 @@ const FechaReabLista = () => {
         <Cabecalho pagina="Período de Fechamento (Reabertura)">
           <FechaReabListaBotoesAcao />
         </Cabecalho>
-        <Card>
+        <Card padding="24px 24px">
           <FechaReabListaFiltros />
           <FechaReabListaPaginada />
         </Card>

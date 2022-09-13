@@ -366,7 +366,7 @@ function AtribuicaoEsporadicaForm({ match }) {
                 />
               </Cabecalho>
               <Card>
-                <Form>
+                <Form className="col-md-12">
                   <Row className="row mb-2">
                     <CheckboxComponent
                       name="exibirHistorico"

@@ -13,7 +13,7 @@ const FechaReabCadastro = () => {
         <Cabecalho pagina="Período de Fechamento (Reabertura)">
           <FechaReabCadastroBotoesAcao />
         </Cabecalho>
-        <Card>
+        <Card padding="24px 24px">
           <FechaReabCadastroForm />
         </Card>
       </FechaReabCadastroLoader>

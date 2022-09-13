@@ -679,7 +679,7 @@ const RegistroItineranciaAEECadastro = ({ match }) => {
   return (
     <>
       <Cabecalho pagina="Registro de itinerância">
-        <div className="d-flex justify-content-end">
+        <>
           <Button
             id={SGP_BUTTON_VOLTAR}
             label="Voltar"
@@ -708,11 +708,11 @@ const RegistroItineranciaAEECadastro = ({ match }) => {
             onClick={() => onClickSalvar()}
             disabled={!modoEdicao || somenteConsulta}
           />
-        </div>
+        </>
       </Cabecalho>
       <Loader loading={carregandoGeral}>
         <Card>
-          <div className="col-12 p-0">
+          <div className="col-12">
             {itineranciaId && (
               <div className="row mb-4">
                 <div className="col-sm-12 d-flex justify-content-between align-items-center">

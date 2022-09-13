@@ -106,7 +106,7 @@ const DashboardEscolaAqui = () => {
       </Cabecalho>
       <Loader loading={carregandoGeral}>
         <Card>
-          <div className="col-md-12 p-0">
+          <div className="col-md-12">
             <div className="row mb-4">
               <div className="col-sm-12 col-md-12 col-lg-6 col-xl-6 mb-2 mt-3">
                 <SelectComponent
