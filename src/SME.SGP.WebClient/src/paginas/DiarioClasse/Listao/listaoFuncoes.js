@@ -309,21 +309,13 @@ const salvarFechamentoListao = async (
 
     dispatch(setTelaEmEdicao(false));
     const dadosComAuditoriaAtualizada = { ...dadosFechamento };
-
-    if (resposta?.data?.criadoEm) {
-      const criadoEm = window.moment.utc(resposta.data.criadoEm);
-      const { criadoPor, criadoRF } = resposta.data;
-      dadosComAuditoriaAtualizada.auditoriaInclusao = `Notas finais incluídas por ${criadoPor}(${criadoRF}) em ${criadoEm.format(
-        'DD/MM/YYYY'
-      )}, às ${criadoEm.format('HH:mm')}`;
-    }
-    if (resposta?.data?.alteradoEm) {
-      const alteradoEm = window.moment.utc(resposta.data.alteradoEm);
-      const { alteradoPor, alteradoRF } = resposta.data;
-      dadosComAuditoriaAtualizada.auditoriaAlteracao = `Notas finais alteradas por ${alteradoPor}(${alteradoRF}) em ${alteradoEm.format(
-        'DD/MM/YYYY'
-      )}, às ${alteradoEm.format('HH:mm')}`;
-    }
+    dadosComAuditoriaAtualizada.auditoriaAlteracao =
+      resposta.data.auditoriaAlteracao;
+    dadosComAuditoriaAtualizada.auditoriaInclusao =
+      resposta.data.auditoriaInclusao;
+    dadosComAuditoriaAtualizada.situacao = resposta.data.situacao;
+    dadosComAuditoriaAtualizada.dataFechamento = resposta.data.dataFechamento;
+    dadosComAuditoriaAtualizada.situacaoNome = resposta.data.situacaoNome;
     const dadosCarregar = _.cloneDeep({ ...dadosComAuditoriaAtualizada });
     const dadosIniciais = _.cloneDeep({ ...dadosComAuditoriaAtualizada });
     setDadosFechamento(dadosCarregar);
