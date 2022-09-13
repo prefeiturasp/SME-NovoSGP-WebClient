@@ -1302,14 +1302,12 @@ const Notas = ({ match }) => {
         }
       >
         <Cabecalho pagina={tituloNotasConceitos}>
-          <div className="col-md-12 d-flex justify-content-end">
-            <BotoesAcoessNotasConceitos
-              onClickVoltar={onClickVoltar}
-              onClickCancelar={onClickCancelar}
-              onClickSalvar={onClickSalvar}
-              desabilitarBotao={desabilitarCampos}
-            />
-          </div>
+          <BotoesAcoessNotasConceitos
+            onClickVoltar={onClickVoltar}
+            onClickCancelar={onClickCancelar}
+            onClickSalvar={onClickSalvar}
+            desabilitarBotao={desabilitarCampos}
+          />
         </Cabecalho>
         <Card>
           <div className="col-md-12">

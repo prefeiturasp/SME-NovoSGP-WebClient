@@ -24,8 +24,8 @@ import CompensacaoAusenciaListaCamposDebounce from './compensacaoAusenciaListaCa
 import {
   SGP_BUTTON_EXCLUIR,
   SGP_BUTTON_NOVO,
-  SGP_BUTTON_VOLTAR,
 } from '~/componentes-sgp/filtro/idsCampos';
+import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
 
 const CompensacaoAusenciaLista = () => {
   const usuario = useSelector(store => store.usuario);
@@ -321,16 +321,8 @@ const CompensacaoAusenciaLista = () => {
       )}
       <AlertaModalidadeInfantil />
       <Cabecalho pagina="Compensação de Ausência">
-        <div className="col-md-12 d-flex justify-content-end">
-          <Button
-            id={SGP_BUTTON_VOLTAR}
-            label="Voltar"
-            icon="arrow-left"
-            color={Colors.Azul}
-            border
-            className="mr-2"
-            onClick={onClickVoltar}
-          />
+        <>
+          <BotaoVoltarPadrao className="mr-2" onClick={() => onClickVoltar()} />
           <Button
             id={SGP_BUTTON_EXCLUIR}
             label="Excluir"
@@ -359,7 +351,7 @@ const CompensacaoAusenciaLista = () => {
               (turmaSelecionada.turma && listaDisciplinas.length < 1)
             }
           />
-        </div>
+        </>
       </Cabecalho>
       <Card>
         <div className="col-md-12">

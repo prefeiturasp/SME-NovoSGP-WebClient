@@ -4,10 +4,10 @@ import _ from 'lodash';
 import React, { useContext, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Button, Colors } from '~/componentes';
+import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
 import {
   SGP_BUTTON_CANCELAR,
   SGP_BUTTON_SALVAR,
-  SGP_BUTTON_VOLTAR,
 } from '~/componentes-sgp/filtro/idsCampos';
 import { RotasDto } from '~/dtos';
 import notasConceitos from '~/dtos/notasConceitos';
@@ -676,16 +676,9 @@ const ListaoOperacoesBotoesAcao = () => {
 
   return (
     <Col span={24}>
-      <Row gutter={[16, 16]} type="flex" justify="end">
+      <Row gutter={[8, 8]} type="flex">
         <Col>
-          <Button
-            id={SGP_BUTTON_VOLTAR}
-            label="Voltar"
-            icon="arrow-left"
-            color={Colors.Azul}
-            border
-            onClick={onClickVoltar}
-          />
+          <BotaoVoltarPadrao onClick={() => onClickVoltar()} />
         </Col>
         <Col>
           <Button

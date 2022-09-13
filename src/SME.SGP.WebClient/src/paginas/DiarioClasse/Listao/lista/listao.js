@@ -11,7 +11,7 @@ const Listao = () => {
       <Cabecalho pagina="Listão">
         <ListaoBotoesAcao />
       </Cabecalho>
-      <Card>
+      <Card padding="24px 24px">
         <ListaoFiltros />
         <ListaoPaginado />
       </Card>

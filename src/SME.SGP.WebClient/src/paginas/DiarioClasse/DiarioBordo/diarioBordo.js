@@ -671,18 +671,16 @@ const DiarioBordo = ({ match }) => {
         {form => (
           <>
             <Cabecalho pagina="Diário de bordo (Intencionalidade docente)">
-              <div className="col-md-12 d-flex justify-content-end">
-                <BotoesAcoesDiarioBordo
-                  onClickVoltar={(observacaoEmEdicao, novaObservacao) =>
-                    onClickVoltar(form, observacaoEmEdicao, novaObservacao)
-                  }
-                  onClickCancelar={() => onClickCancelar(form)}
-                  validaAntesDoSubmit={() => validaAntesDoSubmit(form, true)}
-                  modoEdicao={modoEdicao}
-                  desabilitarCampos={desabilitarCampos}
-                  turmaInfantil={turmaInfantil}
-                />
-              </div>
+              <BotoesAcoesDiarioBordo
+                onClickVoltar={(observacaoEmEdicao, novaObservacao) =>
+                  onClickVoltar(form, observacaoEmEdicao, novaObservacao)
+                }
+                onClickCancelar={() => onClickCancelar(form)}
+                validaAntesDoSubmit={() => validaAntesDoSubmit(form, true)}
+                modoEdicao={modoEdicao}
+                desabilitarCampos={desabilitarCampos}
+                turmaInfantil={turmaInfantil}
+              />
             </Cabecalho>
             <Card>
               <Form>

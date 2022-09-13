@@ -35,8 +35,8 @@ import {
   SGP_BUTTON_ALTERAR_CADASTRAR,
   SGP_BUTTON_CANCELAR,
   SGP_BUTTON_EXCLUIR,
-  SGP_BUTTON_VOLTAR,
 } from '~/componentes-sgp/filtro/idsCampos';
+import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
 
 const CompensacaoAusenciaForm = ({ match }) => {
   const usuario = useSelector(store => store.usuario);
@@ -964,15 +964,10 @@ const CompensacaoAusenciaForm = ({ match }) => {
           validateOnBlur
         >
           {form => (
-            <Form className="col-md-12">
+            <Form>
               <Cabecalho pagina="Cadastrar Compensação de Ausência">
-                <div className="d-flex justify-content-end">
-                  <Button
-                    id={SGP_BUTTON_VOLTAR}
-                    label="Voltar"
-                    icon="arrow-left"
-                    color={Colors.Azul}
-                    border
+                <>
+                  <BotaoVoltarPadrao
                     className="mr-2"
                     onClick={() => onClickVoltar(form)}
                   />
@@ -1007,7 +1002,6 @@ const CompensacaoAusenciaForm = ({ match }) => {
                     color={Colors.Roxo}
                     border
                     bold
-                    className="mr-2"
                     onClick={() => validaAntesDoSubmit(form)}
                     disabled={
                       ehTurmaInfantil(
@@ -1018,7 +1012,7 @@ const CompensacaoAusenciaForm = ({ match }) => {
                       !modoEdicao
                     }
                   />
-                </div>
+                </>
               </Cabecalho>
               <Card>
                 <div className="col-md-12">

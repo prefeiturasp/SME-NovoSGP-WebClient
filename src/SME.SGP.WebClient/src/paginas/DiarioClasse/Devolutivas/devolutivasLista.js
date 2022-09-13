@@ -17,10 +17,8 @@ import { ehTurmaInfantil } from '~/servicos/Validacoes/validacoesInfatil';
 import RotasDto from '~/dtos/rotasDto';
 import { verificaSomenteConsulta } from '~/servicos/servico-navegacao';
 import ServicoPeriodoEscolar from '~/servicos/Paginas/Calendario/ServicoPeriodoEscolar';
-import {
-  SGP_BUTTON_NOVO,
-  SGP_BUTTON_VOLTAR,
-} from '~/componentes-sgp/filtro/idsCampos';
+import { SGP_BUTTON_NOVO } from '~/componentes-sgp/filtro/idsCampos';
+import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
 
 const DevolutivasLista = () => {
   const usuario = useSelector(state => state.usuario);
@@ -204,7 +202,7 @@ const DevolutivasLista = () => {
   };
 
   return (
-    <Loader loading={carregandoGeral} className="w-100 my-2">
+    <Loader loading={carregandoGeral}>
       {!turmaSelecionada.turma ? (
         <Alert
           alerta={{
@@ -219,16 +217,8 @@ const DevolutivasLista = () => {
       )}
       {turmaSelecionada.turma ? <AlertaPermiteSomenteTurmaInfantil /> : ''}
       <Cabecalho pagina="Devolutivas">
-        <div className="col-md-12 d-flex justify-content-end">
-          <Button
-            id={SGP_BUTTON_VOLTAR}
-            label="Voltar"
-            icon="arrow-left"
-            color={Colors.Azul}
-            border
-            className="mr-3"
-            onClick={onClickVoltar}
-          />
+        <>
+          <BotaoVoltarPadrao onClick={() => onClickVoltar()} className="mr-2" />
           <Button
             id={SGP_BUTTON_NOVO}
             label="Nova"
@@ -243,7 +233,7 @@ const DevolutivasLista = () => {
               !turmaSelecionada.turma
             }
           />
-        </div>
+        </>
       </Cabecalho>
       <Card>
         <div className="col-md-12">

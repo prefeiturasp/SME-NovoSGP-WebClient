@@ -32,7 +32,7 @@ const ListaoOperacoes = () => {
         <Cabecalho pagina="Operações">
           <ListaoOperacoesBotoesAcao />
         </Cabecalho>
-        <Card>
+        <Card padding="24px 24px">
           <Col span={24}>
             <ListaoOperacoesFiltros />
             <ListaoTabs />

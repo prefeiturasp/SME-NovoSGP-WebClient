@@ -6,8 +6,6 @@ import { URL_HOME } from '~/constantes/url';
 import Alert from '~/componentes/alert';
 import Cabecalho from '~/componentes-sgp/cabecalho';
 import Card from '~/componentes/card';
-import Button from '~/componentes/button';
-import { Colors } from '~/componentes/colors';
 import { Loader } from '~/componentes';
 import SelectComponent from '~/componentes/select';
 
@@ -17,7 +15,7 @@ import ListaBimestres from './Componentes/listaBimestres';
 import modalidade from '~/dtos/modalidade';
 import { setBimestreSelecionado } from '~/redux/modulos/acompanhamentoFrequencia/actions';
 import ServicoConselhoClasse from '~/servicos/Paginas/ConselhoClasse/ServicoConselhoClasse';
-import { SGP_BUTTON_VOLTAR } from '~/componentes-sgp/filtro/idsCampos';
+import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
 
 const AcompanhamentoFrequencia = () => {
   const usuario = useSelector(store => store.usuario);
@@ -176,7 +174,7 @@ const AcompanhamentoFrequencia = () => {
 
   return (
     <>
-      <div className="col-12">
+      <>
         {!turmaSelecionada.turma ? (
           <Alert
             alerta={{
@@ -203,19 +201,10 @@ const AcompanhamentoFrequencia = () => {
           />
         )}
         <Cabecalho pagina="Acompanhamento de Frequência">
-          <div className="col-md-12 d-flex justify-content-end">
-            <Button
-              id={SGP_BUTTON_VOLTAR}
-              label="Voltar"
-              icon="arrow-left"
-              color={Colors.Azul}
-              border
-              onClick={onClickVoltar}
-            />
-          </div>
+          <BotaoVoltarPadrao onClick={() => onClickVoltar()} />
         </Cabecalho>
         <Card>
-          <div className="col-md-12 p-0">
+          <div className="col-md-12">
             <div className="row">
               <div className="col-sm-12 col-md-3 col-lg-3 col-xl-3 mb-2">
                 <Loader loading={carregandoComponentesCurriculares} tip="">
@@ -253,7 +242,7 @@ const AcompanhamentoFrequencia = () => {
             )}
           </div>
         </Card>
-      </div>
+      </>
     </>
   );
 };

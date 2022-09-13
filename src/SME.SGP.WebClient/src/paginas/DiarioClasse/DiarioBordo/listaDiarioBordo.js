@@ -32,10 +32,8 @@ import {
 import ServicoDiarioBordo from '~/servicos/Paginas/DiarioClasse/ServicoDiarioBordo';
 import { Mensagens } from './componentes';
 import { erro } from '~/servicos/alertas';
-import {
-  SGP_BUTTON_NOVO,
-  SGP_BUTTON_VOLTAR,
-} from '~/componentes-sgp/filtro/idsCampos';
+import { SGP_BUTTON_NOVO } from '~/componentes-sgp/filtro/idsCampos';
+import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
 
 const ListaDiarioBordo = () => {
   const [carregandoGeral, setCarregandoGeral] = useState(false);
@@ -326,16 +324,8 @@ const ListaDiarioBordo = () => {
     <Loader loading={carregandoGeral} className="w-100">
       <Mensagens />
       <Cabecalho pagina="Diário de bordo (Intencionalidade docente)">
-        <div className="col-md-12 d-flex justify-content-end">
-          <Button
-            id={SGP_BUTTON_VOLTAR}
-            label="Voltar"
-            icon="arrow-left"
-            color={Colors.Azul}
-            border
-            className="mr-2"
-            onClick={onClickVoltar}
-          />
+        <>
+          <BotaoVoltarPadrao className="mr-2" onClick={onClickVoltar} />
           <Button
             id={SGP_BUTTON_NOVO}
             label="Novo"
@@ -348,10 +338,10 @@ const ListaDiarioBordo = () => {
               !listaComponenteCurriculares
             }
           />
-        </div>
+        </>
       </Cabecalho>
       <Card>
-        <div className="col-md-12 p-0">
+        <div className="col-md-12">
           <div className="row">
             <div className="col-sm-12 col-md-4 col-lg-4 col-xl-4 mb-4">
               <SelectComponent
@@ -373,7 +363,7 @@ const ListaDiarioBordo = () => {
             </div>
           </div>
           <div className="row">
-            <div className="col-sm-12 col-md-4 col-lg-3 col-xl-3 mb-4 pr-0">
+            <div className="col-sm-12 col-md-4 col-lg-3 col-xl-3 mb-4">
               <CampoData
                 valor={dataInicial}
                 onChange={data => setDataInicial(data)}

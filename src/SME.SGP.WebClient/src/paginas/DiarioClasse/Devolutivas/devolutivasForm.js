@@ -7,12 +7,12 @@ import { useDispatch, useSelector } from 'react-redux';
 import * as Yup from 'yup';
 import { Auditoria, CampoData, Loader, momentSchema } from '~/componentes';
 import AlertaPermiteSomenteTurmaInfantil from '~/componentes-sgp/AlertaPermiteSomenteTurmaInfantil/alertaPermiteSomenteTurmaInfantil';
+import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
 import Cabecalho from '~/componentes-sgp/cabecalho';
 import {
   SGP_BUTTON_CANCELAR,
   SGP_BUTTON_EXCLUIR,
   SGP_BUTTON_SALVAR_ALTERAR,
-  SGP_BUTTON_VOLTAR,
 } from '~/componentes-sgp/filtro/idsCampos';
 import Alert from '~/componentes/alert';
 import Button from '~/componentes/button';
@@ -596,14 +596,9 @@ const DevolutivasForm = ({ match }) => {
         {form => (
           <Form>
             <Cabecalho pagina="Devolutivas">
-              <div className="col-md-12 d-flex justify-content-end">
-                <Button
-                  id={SGP_BUTTON_VOLTAR}
-                  label="Voltar"
-                  icon="arrow-left"
-                  color={Colors.Azul}
-                  border
-                  className="mr-3"
+              <>
+                <BotaoVoltarPadrao
+                  className="mr-2"
                   onClick={() => onClickVoltar(form)}
                 />
                 <Button
@@ -613,7 +608,7 @@ const DevolutivasForm = ({ match }) => {
                   onClick={() => onClickCancelar(form)}
                   border
                   bold
-                  className="mr-3"
+                  className="mr-2"
                   disabled={!turmaInfantil || !modoEdicao || desabilitarCampos}
                 />
                 <Button
@@ -621,7 +616,7 @@ const DevolutivasForm = ({ match }) => {
                   label="Excluir"
                   color={Colors.Vermelho}
                   border
-                  className="mr-3"
+                  className="mr-2"
                   disabled={!idDevolutiva || !permissoesTela.podeExcluir}
                   onClick={onClickExcluir}
                 />
@@ -639,7 +634,7 @@ const DevolutivasForm = ({ match }) => {
                   }}
                   disabled={!turmaInfantil || !modoEdicao || desabilitarCampos}
                 />
-              </div>
+              </>
             </Cabecalho>
             <Card>
               <div className="col-md-12">

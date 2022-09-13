@@ -22,7 +22,6 @@ const BotaoVoltarPadrao = props => {
           icon="arrow-left"
           color={Colors.Azul}
           border
-          className={className}
           onClick={onClick}
         />
       </span>

@@ -14,8 +14,8 @@ import MetodosRegistroIndividual from '~/componentes-sgp/RegistroIndividual/meto
 import {
   SGP_BUTTON_CADASTRAR,
   SGP_BUTTON_CANCELAR,
-  SGP_BUTTON_VOLTAR,
 } from '~/componentes-sgp/filtro/idsCampos';
+import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
 
 const BotoesAcoes = ({ turmaInfantil }) => {
   const registroIndividualEmEdicao = useSelector(
@@ -50,15 +50,7 @@ const BotoesAcoes = ({ turmaInfantil }) => {
 
   return (
     <>
-      <Button
-        id={SGP_BUTTON_VOLTAR}
-        label="Voltar"
-        icon="arrow-left"
-        color={Colors.Azul}
-        border
-        className="mr-2"
-        onClick={onClickVoltar}
-      />
+      <BotaoVoltarPadrao className="mr-2" onClick={() => onClickVoltar()} />
       <Button
         id={SGP_BUTTON_CANCELAR}
         label="Cancelar"

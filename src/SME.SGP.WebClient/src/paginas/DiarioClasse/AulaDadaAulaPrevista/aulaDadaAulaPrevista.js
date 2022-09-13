@@ -3,10 +3,10 @@ import { useSelector } from 'react-redux';
 import { Auditoria, Colors, Loader } from '~/componentes';
 import { Cabecalho } from '~/componentes-sgp';
 import AlertaModalidadeInfantil from '~/componentes-sgp/AlertaModalidadeInfantil/alertaModalidadeInfantil';
+import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
 import {
   SGP_BUTTON_CANCELAR,
   SGP_BUTTON_SALVAR,
-  SGP_BUTTON_VOLTAR,
 } from '~/componentes-sgp/filtro/idsCampos';
 import Alert from '~/componentes/alert';
 import Button from '~/componentes/button';
@@ -272,16 +272,8 @@ const AulaDadaAulaPrevista = () => {
       ) : null}
       <AlertaModalidadeInfantil />
       <Cabecalho pagina="Aula prevista X Aula dada">
-        <div className="col-md-12 d-flex justify-content-end">
-          <Button
-            id={SGP_BUTTON_VOLTAR}
-            label="Voltar"
-            icon="arrow-left"
-            color={Colors.Azul}
-            border
-            className="mr-2"
-            onClick={onClickVoltar}
-          />
+        <>
+          <BotaoVoltarPadrao className="mr-2" onClick={() => onClickVoltar()} />
           <Button
             id={SGP_BUTTON_CANCELAR}
             label="Cancelar"
@@ -300,7 +292,7 @@ const AulaDadaAulaPrevista = () => {
             onClick={onClickSalvar}
             disabled={!modoEdicao || somenteConsulta}
           />
-        </div>
+        </>
       </Cabecalho>
       <Card>
         <div className="col-md-12">
