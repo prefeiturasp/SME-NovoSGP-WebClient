@@ -42,7 +42,6 @@ import {
 import ListaoContext from '../listaoContext';
 import {
   montarIdsObjetivosSelecionadosListao,
-  obterDaodsFechamentoPorBimestreListao,
   obterDiarioBordoListao,
   obterListaAlunosAvaliacaoListao,
   salvarEditarObservacao,
@@ -247,7 +246,7 @@ const ListaoOperacoesBotoesAcao = () => {
       const paramsPromise = new Promise(resolve => {
         ServicoPlanoAula.salvarPlanoAula(valorParaSalvar)
           .then(resposta => {
-            if (resposta.data) {
+            if (resposta?.data) {
               resposta.data.planoTeveCopia = !!plano?.copiarConteudo;
             }
             resolve(resposta?.data);
@@ -430,7 +429,7 @@ const ListaoOperacoesBotoesAcao = () => {
       .catch(e => erros(e))
       .finally(() => setExibirLoaderGeral(false));
 
-    if (resposta.status === 200) {
+    if (resposta?.status === 200) {
       if (clicouNoBotaoSalvar) {
         await obterDiarioBordoListao(
           turma,
@@ -496,7 +495,7 @@ const ListaoOperacoesBotoesAcao = () => {
       .catch(e => erros(e))
       .finally(() => setExibirLoaderGeral(false));
 
-    if (resposta.status === 200) {
+    if (resposta?.status === 200) {
       if (clicouNoBotaoSalvar) {
         await obterListaAlunosAvaliacaoListao(
           dadosPeriodosAvaliacao,
@@ -521,17 +520,9 @@ const ListaoOperacoesBotoesAcao = () => {
       setDadosFechamento();
     };
 
-    if (salvouFechamento && clicouNoBotaoSalvar) {
-      obterDaodsFechamentoPorBimestreListao(
-        setExibirLoaderGeral,
-        turmaSelecionada,
-        bimestreOperacoes,
-        componenteCurricular,
-        setDadosFechamento,
-        setDadosIniciaisFechamento,
-        limparFechamento
-      );
-    } else if (salvouFechamento) limparFechamento();
+    if (salvouFechamento && !clicouNoBotaoSalvar) {
+      limparFechamento();
+    }
 
     return salvouFechamento;
   };
@@ -548,7 +539,9 @@ const ListaoOperacoesBotoesAcao = () => {
       setExibirLoaderGeral,
       setDadosModalJustificativaFechamento,
       componenteCurricular,
-      posSalvar
+      posSalvar,
+      setDadosFechamento,
+      setDadosIniciaisFechamento
     );
 
     return acaoPosSalvarFechamento(salvouFechamento, clicouNoBotaoSalvar);

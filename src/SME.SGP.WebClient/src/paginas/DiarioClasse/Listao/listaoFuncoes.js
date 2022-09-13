@@ -259,7 +259,9 @@ const salvarFechamentoListao = async (
   dadosFechamento,
   bimestreOperacoes,
   setExibirLoaderGeral,
-  componenteCurricular
+  componenteCurricular,
+  setDadosFechamento,
+  setDadosIniciaisFechamento
 ) => {
   const notaConceitoAlunos = [];
   const ehNota = Number(dadosFechamento?.notaTipo) === notasConceitos.Notas;
@@ -306,6 +308,26 @@ const salvarFechamentoListao = async (
     const { dispatch } = store;
 
     dispatch(setTelaEmEdicao(false));
+    const dadosComAuditoriaAtualizada = { ...dadosFechamento };
+
+    if (resposta?.data?.criadoEm) {
+      const criadoEm = window.moment.utc(resposta.data.criadoEm);
+      const { criadoPor, criadoRF } = resposta.data;
+      dadosComAuditoriaAtualizada.auditoriaInclusao = `Notas finais incluídas por ${criadoPor}(${criadoRF}) em ${criadoEm.format(
+        'DD/MM/YYYY'
+      )}, às ${criadoEm.format('HH:mm')}`;
+    }
+    if (resposta?.data?.alteradoEm) {
+      const alteradoEm = window.moment.utc(resposta.data.alteradoEm);
+      const { alteradoPor, alteradoRF } = resposta.data;
+      dadosComAuditoriaAtualizada.auditoriaAlteracao = `Notas finais alteradas por ${alteradoPor}(${alteradoRF}) em ${alteradoEm.format(
+        'DD/MM/YYYY'
+      )}, às ${alteradoEm.format('HH:mm')}`;
+    }
+    const dadosCarregar = _.cloneDeep({ ...dadosComAuditoriaAtualizada });
+    const dadosIniciais = _.cloneDeep({ ...dadosComAuditoriaAtualizada });
+    setDadosFechamento(dadosCarregar);
+    setDadosIniciaisFechamento(dadosIniciais);
     return true;
   }
 
@@ -319,7 +341,9 @@ const validarSalvarFechamentoListao = async (
   setExibirLoaderGeral,
   setExibirModalJustificativaFechamento,
   componenteCurricular,
-  acaoPosSalvar
+  acaoPosSalvar,
+  setDadosFechamento,
+  setDadosIniciaisFechamento
 ) => {
   const temAvaliacoesBimestraisPendentes = dadosFechamento?.observacoes?.length;
   let continuarSalvar = true;
@@ -343,7 +367,9 @@ const validarSalvarFechamentoListao = async (
       dadosFechamento,
       bimestreOperacoes,
       setExibirLoaderGeral,
-      componenteCurricular
+      componenteCurricular,
+      setDadosFechamento,
+      setDadosIniciaisFechamento
     );
 
   const dadosValidar = _.cloneDeep(dadosFechamento);
@@ -371,7 +397,9 @@ const validarSalvarFechamentoListao = async (
     dadosFechamento,
     bimestreOperacoes,
     setExibirLoaderGeral,
-    componenteCurricular
+    componenteCurricular,
+    setDadosFechamento,
+    setDadosIniciaisFechamento
   );
 };
 
