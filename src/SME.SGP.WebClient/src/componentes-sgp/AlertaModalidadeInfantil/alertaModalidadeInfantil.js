@@ -53,7 +53,6 @@ const AlertaModalidadeInfantil = props => {
         } para turmas da educação infantil`,
         estiloTitulo: { fontSize: '18px' },
       }}
-      className="mb-2"
     />
   ) : (
     <></>

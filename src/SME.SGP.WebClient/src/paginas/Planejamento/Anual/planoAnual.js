@@ -92,7 +92,6 @@ const PlanoAnual = () => {
             mensagem: 'Você precisa escolher uma turma.',
             estiloTitulo: { fontSize: '18px' },
           }}
-          className="mb-2"
         />
       ) : null}
       <AlertaNaoPermiteTurmaInfantil />
@@ -106,9 +105,7 @@ const PlanoAnual = () => {
             turmaSelecionada
           )}
         >
-          <div className="col-md-12 d-flex justify-content-end">
-            <BotoesAcoesPlanoAnual />
-          </div>
+          <BotoesAcoesPlanoAnual />
         </Cabecalho>
         <Card>
           <div className="col-md-12">

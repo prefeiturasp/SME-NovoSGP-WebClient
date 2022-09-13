@@ -34,8 +34,8 @@ import { Cabecalho } from '~/componentes-sgp';
 import {
   SGP_BUTTON_CANCELAR,
   SGP_BUTTON_SALVAR,
-  SGP_BUTTON_VOLTAR,
 } from '~/componentes-sgp/filtro/idsCampos';
+import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
 
 export default function PlanoCiclo() {
   const urlPrefeitura = 'https://curriculo.sme.prefeitura.sp.gov.br';
@@ -490,22 +490,19 @@ export default function PlanoCiclo() {
 
   return (
     <>
-      <div className="col-md-12">
-        {!turmaSelecionada.turma &&
-        !ehTurmaInfantil(modalidadesFiltroPrincipal, turmaSelecionada) ? (
-          <Alert
-            alerta={{
-              tipo: 'warning',
-              id: 'plano-ciclo-selecione-turma',
-              mensagem: 'Você precisa escolher uma turma.',
-              estiloTitulo: { fontSize: '18px' },
-            }}
-            className="mb-0"
-          />
-        ) : (
-          ''
-        )}
-      </div>
+      {!turmaSelecionada.turma &&
+      !ehTurmaInfantil(modalidadesFiltroPrincipal, turmaSelecionada) ? (
+        <Alert
+          alerta={{
+            tipo: 'warning',
+            id: 'plano-ciclo-selecione-turma',
+            mensagem: 'Você precisa escolher uma turma.',
+            estiloTitulo: { fontSize: '18px' },
+          }}
+        />
+      ) : (
+        <></>
+      )}
       <AlertaModalidadeInfantil />
       <Cabecalho
         pagina={obterDescricaoNomeMenu(
@@ -514,16 +511,8 @@ export default function PlanoCiclo() {
           turmaSelecionada
         )}
       >
-        <div className="col-md-12 d-flex justify-content-end">
-          <Button
-            id={SGP_BUTTON_VOLTAR}
-            label="Voltar"
-            icon="arrow-left"
-            color={Colors.Azul}
-            border
-            className="mr-2"
-            onClick={onClickVoltar}
-          />
+        <>
+          <BotaoVoltarPadrao className="mr-2" onClick={() => onClickVoltar()} />
           <Button
             id={SGP_BUTTON_CANCELAR}
             label="Cancelar"
@@ -548,7 +537,7 @@ export default function PlanoCiclo() {
               }
             />
           </Loader>
-        </div>
+        </>
       </Cabecalho>
       <Card>
         <div className="col-md-12">

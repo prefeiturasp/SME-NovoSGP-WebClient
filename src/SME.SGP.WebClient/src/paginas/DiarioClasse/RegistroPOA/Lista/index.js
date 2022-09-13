@@ -188,26 +188,24 @@ function RegistroPOALista() {
         </Cabecalho>
         <Card>
           {!ehTurmaInfantil(modalidadesFiltroPrincipal, turmaSelecionada) ? (
-            <>
+            <div className="col-md-12">
               <Filtro onFiltrar={onChangeFiltro} />
-              <div className="col-md-12 pt-2 py-0 px-0">
-                <ListaPaginada
-                  id="lista-atribuicoes-cj"
-                  url="v1/atribuicao/poa/listar"
-                  idLinha="id"
-                  colunaChave="id"
-                  colunas={colunas}
-                  onClick={onClickEditar}
-                  multiSelecao
-                  filtro={filtro}
-                  selecionarItems={onSelecionarItems}
-                  filtroEhValido={filtroValido}
-                  onErro={err => erro(JSON.stringify(err))}
-                />
-              </div>
-            </>
+              <ListaPaginada
+                id="lista-atribuicoes-cj"
+                url="v1/atribuicao/poa/listar"
+                idLinha="id"
+                colunaChave="id"
+                colunas={colunas}
+                onClick={onClickEditar}
+                multiSelecao
+                filtro={filtro}
+                selecionarItems={onSelecionarItems}
+                filtroEhValido={filtroValido}
+                onErro={err => erro(JSON.stringify(err))}
+              />
+            </div>
           ) : (
-            ''
+            <></>
           )}
         </Card>
       </Loader>

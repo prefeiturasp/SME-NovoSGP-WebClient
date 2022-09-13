@@ -259,38 +259,33 @@ const CartaIntencoes = () => {
   return (
     <Container>
       {!turmaSelecionada.turma ? (
-        <div className="col-md-12">
-          <Alert
-            alerta={{
-              tipo: 'warning',
-              id: 'alerta-sem-turma-relatorio-semestral',
-              mensagem: 'Você precisa escolher uma turma.',
-              estiloTitulo: { fontSize: '18px' },
-            }}
-            className="mb-2"
-          />
-        </div>
+        <Alert
+          alerta={{
+            tipo: 'warning',
+            id: 'alerta-sem-turma-relatorio-semestral',
+            mensagem: 'Você precisa escolher uma turma.',
+            estiloTitulo: { fontSize: '18px' },
+          }}
+        />
       ) : (
-        ''
+        <></>
       )}
       {turmaSelecionada.turma ? <AlertaPermiteSomenteTurmaInfantil /> : ''}
       <ModalErrosCartaIntencoes />
       <LoaderCartaIntencoes>
         <Cabecalho pagina="Carta de Intenções">
-          <div className="col-md-12 d-flex justify-content-end">
-            <BotoesAcoesCartaIntencoes
-              onClickCancelar={recaregarDados}
-              onClickSalvar={recaregarDados}
-              componenteCurricularId={componenteCurricular}
-              codigoTurma={turma}
-              ehTurmaInfantil={ehTurmaInfantil(
-                modalidadesFiltroPrincipal,
-                turmaSelecionada
-              )}
-              somenteConsulta={somenteConsulta}
-              salvarEditarObservacao={salvarEditarObservacao}
-            />
-          </div>
+          <BotoesAcoesCartaIntencoes
+            onClickCancelar={recaregarDados}
+            onClickSalvar={recaregarDados}
+            componenteCurricularId={componenteCurricular}
+            codigoTurma={turma}
+            ehTurmaInfantil={ehTurmaInfantil(
+              modalidadesFiltroPrincipal,
+              turmaSelecionada
+            )}
+            somenteConsulta={somenteConsulta}
+            salvarEditarObservacao={salvarEditarObservacao}
+          />
         </Cabecalho>
         <Card>
           <div className="col-md-12">

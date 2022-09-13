@@ -19,9 +19,6 @@ import Alert from '~/componentes/alert';
 import AlertaSelecionarTurma from './componentes/AlertaSelecionarTurma';
 import DropDownTerritorios from './componentes/DropDownTerritorios';
 
-// Estilos
-import { Linha } from '~/componentes/EstilosGlobais';
-
 // Serviços
 import { erro, sucesso, confirmar, erros } from '~/servicos/alertas';
 import TerritorioSaberServico from '~/servicos/Paginas/TerritorioSaber';
@@ -208,7 +205,7 @@ function TerritorioSaber() {
 
   return (
     <>
-      <div className="col-md-12">
+      <>
         {mostraMensagemSemTerritorios &&
         turmaSelecionada &&
         !ehTurmaInfantil(modalidadesFiltroPrincipal, turmaSelecionada) ? (
@@ -220,10 +217,9 @@ function TerritorioSaber() {
                 'Apenas é possível realizar este planejamento para componentes de territórios do saber.',
               estiloTitulo: { fontSize: '18px' },
             }}
-            className="mb-2"
           />
         ) : null}
-      </div>
+      </>
       <AlertaModalidadeInfantil />
       <AlertaSelecionarTurma />
       <Loader loading={carregando} tip="Carregando...">
@@ -246,20 +242,16 @@ function TerritorioSaber() {
         </Cabecalho>
         <Card>
           <Grid cols={12}>
-            <Linha className="row mb-0">
-              <Grid cols={12}>
-                <DropDownTerritorios
-                  onBuscarTerritorios={onBuscarTerritorios}
-                  territorioSelecionado={territorioSelecionado}
-                  onChangeTerritorio={useCallback(
-                    valor => setTerritorioSelecionado(valor || ''),
-                    []
-                  )}
-                />
-              </Grid>
-            </Linha>
+            <DropDownTerritorios
+              onBuscarTerritorios={onBuscarTerritorios}
+              territorioSelecionado={territorioSelecionado}
+              onChangeTerritorio={useCallback(
+                valor => setTerritorioSelecionado(valor || ''),
+                []
+              )}
+            />
           </Grid>
-          <Grid className="p-0 m-0 mt-4" cols={12}>
+          <Grid className="mt-4" cols={12}>
             <PainelCollapse
               onChange={painel => setBimestreAberto(painel)}
               activeKey={habilitaCollapse && bimestreAberto}
