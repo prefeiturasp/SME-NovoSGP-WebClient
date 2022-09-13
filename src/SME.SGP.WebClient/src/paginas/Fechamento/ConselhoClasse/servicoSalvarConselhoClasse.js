@@ -12,7 +12,8 @@ import {
   setExibirLoaderGeralConselhoClasse,
   setBimestreAtual,
   setDadosIniciaisListasNotasConceitos,
-  setAuditoriaAnotacaoRecomendacao
+  setAuditoriaAnotacaoRecomendacao,
+  setDadosListasNotasConceitos,
 } from '~/redux/modulos/conselhoClasse/actions';
 import notasConceitos from '~/dtos/notasConceitos';
 
@@ -103,7 +104,6 @@ class ServicoSalvarConselhoClasse {
         });
 
       if (retorno && retorno.status === 200) {
-        this.recarregarDados();
         sucesso('Anotações e recomendações salvas com sucesso.');
         if (bimestreAtual?.valor === 'final') {
           this.gerarParecerConclusivo(
@@ -112,11 +112,18 @@ class ServicoSalvarConselhoClasse {
             dadosAlunoObjectCard.codigoEOL
           );
         }
-
-        if (!params?.conselhoClasseId) {
-          dadosPrincipaisConselhoClasse.conselhoClasseId = retorno.data.conselhoClasseId;
-          dispatch(setDadosPrincipaisConselhoClasse(dadosPrincipaisConselhoClasse));
+        if (
+          !params?.conselhoClasseId ||
+          !dadosPrincipaisConselhoClasse.conselhoClasseAlunoId
+        ) {
+          dadosPrincipaisConselhoClasse.conselhoClasseId =
+            retorno.data.conselhoClasseId;
+          dadosPrincipaisConselhoClasse.conselhoClasseAlunoId = retorno.data.id;
+          dispatch(
+            setDadosPrincipaisConselhoClasse(dadosPrincipaisConselhoClasse)
+          );
         }
+        this.recarregarDados();
         return true;
       }
       return false;
@@ -222,10 +229,8 @@ class ServicoSalvarConselhoClasse {
     const {
       dadosPrincipaisConselhoClasse,
       notaConceitoPosConselhoAtual,
-      idCamposNotasPosConselho,
       desabilitarCampos,
       bimestreAtual,
-      dadosListasNotasConceitos,
     } = conselhoClasse;
 
     const {
@@ -305,7 +310,7 @@ class ServicoSalvarConselhoClasse {
       const bimestre =
         bimestreAtual?.valor === 'final' ? 0 : bimestreAtual?.valor;
 
-      await ServicoConselhoClasse.obterNotasConceitosConselhoClasse(
+      const resultado = await ServicoConselhoClasse.obterNotasConceitosConselhoClasse(
         conselhoClasseId,
         fechamentoTurmaId,
         alunoCodigo,
@@ -331,10 +336,6 @@ class ServicoSalvarConselhoClasse {
       }
       dispatch(setAuditoriaAnotacaoRecomendacao(auditoriaDto));
 
-      const temJustificativasDto = idCamposNotasPosConselho;
-      temJustificativasDto[idCampo] = auditoria.id;
-      dispatch(setIdCamposNotasPosConselho(temJustificativasDto));
-
       limparDadosNotaPosConselhoJustificativa();
 
       sucesso(
@@ -351,8 +352,9 @@ class ServicoSalvarConselhoClasse {
         );
       }
 
-      const dadosCarregar = _.cloneDeep(dadosListasNotasConceitos);
+      const dadosCarregar = _.cloneDeep(resultado.data.notasConceitos);
       dispatch(setDadosIniciaisListasNotasConceitos([...dadosCarregar]));
+      dispatch(setDadosListasNotasConceitos(resultado.data.notasConceitos));
 
       return true;
     }
@@ -375,6 +377,7 @@ class ServicoSalvarConselhoClasse {
       notaConceitoPosConselhoAtual,
       dadosPrincipaisConselhoClasse,
       desabilitarCampos,
+      dadosIniciaisListasNotasConceitos,
     } = conselhoClasse;
 
     if (desabilitarCampos) {
@@ -403,6 +406,8 @@ class ServicoSalvarConselhoClasse {
       // Voltar para a tela continua e executa a ação!
       if (descartarRegistros) {
         limparDadosNotaPosConselhoJustificativa();
+        const dadosCarregar = _.cloneDeep(dadosIniciaisListasNotasConceitos);
+        dispatch(setDadosListasNotasConceitos([...dadosCarregar]));
         return true;
       }
 
