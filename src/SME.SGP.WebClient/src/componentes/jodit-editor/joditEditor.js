@@ -317,6 +317,14 @@ const JoditEditor = forwardRef((props, ref) => {
   });
 
   useEffect(() => {
+    return () => {
+      if (textArea?.current?.destruct) {
+        textArea.current.destruct();
+      }
+    };
+  }, [textArea]);
+
+  useEffect(() => {
     if (url) {
       const element = textArea.current || '';
       if (textArea?.current && config) {
@@ -421,7 +429,7 @@ const JoditEditor = forwardRef((props, ref) => {
             ref={textArea}
             id={id}
             hidden={!textArea?.current?.isJodit}
-            value={value}
+            value={value || undefined}
             onChange={e => e}
           />
         </div>

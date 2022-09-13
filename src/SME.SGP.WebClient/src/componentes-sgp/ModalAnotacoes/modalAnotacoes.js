@@ -25,6 +25,7 @@ const ModalAnotacoesFrequencia = props => {
     dadosModal,
     setDadosModal,
     fechouModal,
+    listaPadraoMotivoAusencia,
   } = props;
 
   const dispatch = useDispatch();
@@ -125,10 +126,22 @@ const ModalAnotacoesFrequencia = props => {
   }, [dadosModal]);
 
   useEffect(() => {
+    if (listaPadraoMotivoAusencia?.length)
+      setListaMotivoAusencia(listaPadraoMotivoAusencia);
+  }, [listaPadraoMotivoAusencia]);
+
+  useEffect(() => {
+    if (!listaPadraoMotivoAusencia?.length && dadosModal?.codigoAluno) {
+      obterListaMotivosAusencia();
+    } else {
+      setCarregandoMotivosAusencia(false);
+    }
+  }, [listaPadraoMotivoAusencia, dadosModal]);
+
+  useEffect(() => {
     if (dadosModal?.codigoAluno) {
       obterAnotacao();
       montarDadosAluno();
-      obterListaMotivosAusencia();
     }
   }, [dadosModal, obterAnotacao, montarDadosAluno]);
 
@@ -254,7 +267,7 @@ const ModalAnotacoesFrequencia = props => {
     }
   };
 
-  return exibirModal && dadosEstudanteOuCrianca ? (
+  return (
     <ModalConteudoHtml
       id={shortid.generate()}
       key="inserir-anotacao"
@@ -386,8 +399,6 @@ const ModalAnotacoesFrequencia = props => {
         )}
       </Formik>
     </ModalConteudoHtml>
-  ) : (
-    ''
   );
 };
 
@@ -402,6 +413,7 @@ ModalAnotacoesFrequencia.propTypes = {
   dadosModal: PropTypes.oneOfType([PropTypes.any]),
   setDadosModal: PropTypes.func,
   fechouModal: PropTypes.func,
+  listaPadraoMotivoAusencia: PropTypes.oneOfType([PropTypes.array]),
 };
 
 ModalAnotacoesFrequencia.defaultProps = {
@@ -415,6 +427,7 @@ ModalAnotacoesFrequencia.defaultProps = {
   dadosModal: [],
   setDadosModal: () => {},
   fechouModal: () => {},
+  listaPadraoMotivoAusencia: [],
 };
 
 export default ModalAnotacoesFrequencia;
