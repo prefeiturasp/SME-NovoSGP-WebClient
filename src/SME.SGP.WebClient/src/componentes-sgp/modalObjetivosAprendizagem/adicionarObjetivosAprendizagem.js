@@ -86,7 +86,7 @@ const AdicionarObjetivosAprendizagem = props => {
 
     if (listaComDescricao?.length) {
       return listaComDescricao.map(obj => (
-        <Tooltip title={`(${obj.codigo}) ${obj.descricao}`}>
+        <Tooltip title={`(${obj.codigo}) ${obj.descricao}`} key={obj.codigo}>
           <ContainerTag>
             <>
               {obj.descricaoTag}
