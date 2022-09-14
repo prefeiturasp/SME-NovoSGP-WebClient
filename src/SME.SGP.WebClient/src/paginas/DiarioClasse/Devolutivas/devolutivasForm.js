@@ -7,11 +7,11 @@ import { useDispatch, useSelector } from 'react-redux';
 import * as Yup from 'yup';
 import { Auditoria, CampoData, Loader, momentSchema } from '~/componentes';
 import AlertaPermiteSomenteTurmaInfantil from '~/componentes-sgp/AlertaPermiteSomenteTurmaInfantil/alertaPermiteSomenteTurmaInfantil';
+import BotaoExcluirPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoExcluirPadrao';
 import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
 import Cabecalho from '~/componentes-sgp/cabecalho';
 import {
   SGP_BUTTON_CANCELAR,
-  SGP_BUTTON_EXCLUIR,
   SGP_BUTTON_SALVAR_ALTERAR,
 } from '~/componentes-sgp/filtro/idsCampos';
 import Alert from '~/componentes/alert';
@@ -611,12 +611,7 @@ const DevolutivasForm = ({ match }) => {
                   className="mr-2"
                   disabled={!turmaInfantil || !modoEdicao || desabilitarCampos}
                 />
-                <Button
-                  id={SGP_BUTTON_EXCLUIR}
-                  label="Excluir"
-                  color={Colors.Vermelho}
-                  border
-                  className="mr-2"
+                <BotaoExcluirPadrao
                   disabled={!idDevolutiva || !permissoesTela.podeExcluir}
                   onClick={onClickExcluir}
                 />
