@@ -218,6 +218,15 @@ const Filtro = () => {
 
   useEffect(() => {
     if (
+      modalidadeSelecionada === '' &&
+      perfilStore.perfilSelecionado.nomePerfil === 'CP'
+    ) {
+      setCampoTurmaDesabilitado(true);
+    }
+  }, [modalidadeSelecionada]);
+
+  useEffect(() => {
+    if (
       anosLetivos.length === 1 &&
       anoLetivoSelecionado &&
       modalidades.length === 1 &&
