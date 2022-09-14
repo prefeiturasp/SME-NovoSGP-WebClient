@@ -29,7 +29,7 @@ const DadosCabecalhoTabFechamentoListao = props => {
   }, [dadosFechamento]);
 
   if (situacaoNome && dadosFechamento?.fechamentoId && dataFechamento) {
-    const dataMoment = window.moment(dataFechamento);
+    const dataMoment = window.moment.utc(dataFechamento);
     const data = dataMoment.format('L');
     const hora = dataMoment.format('LT');
     descDataFechamento = `${situacaoNome} em ${data} às ${hora}`;
