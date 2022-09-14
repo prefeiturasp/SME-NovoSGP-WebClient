@@ -2,6 +2,7 @@ import { faAngleDown, faAngleUp } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Tooltip } from 'antd';
 import React, { useContext, useState } from 'react';
+import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { DataTable } from '~/componentes';
 import SinalizacaoAEE from '~/componentes-sgp/SinalizacaoAEE/sinalizacaoAEE';
@@ -13,6 +14,7 @@ import {
   setDadosModalAnotacaoFrequencia,
   setExibirModalAnotacaoFrequencia,
 } from '~/redux/modulos/modalAnotacaoFrequencia/actions';
+import ServicoAnotacaoFrequenciaAluno from '~/servicos/Paginas/DiarioClasse/ServicoAnotacaoFrequenciaAluno';
 import CampoTiposFrequencia from './componentes/campoTiposFrequencia';
 import ListaoBotaoAnotacao from './componentes/listaoBotaoAnotacao';
 import ListaoModalAnotacoesFrequencia from './componentes/listaoModalAnotacaoFrequencia';
@@ -178,7 +180,11 @@ const ListaoListaFrequencia = () => {
         <span>{aluno.numeroAlunoChamada}</span>
 
         {aluno?.marcador ? (
-          <Tooltip title={aluno?.marcador?.descricao} placement="top">
+          <Tooltip
+            title={aluno?.marcador?.descricao}
+            placement="top"
+            destroyTooltipOnHide
+          >
             <MarcadorSituacao
               className="fas fa-circle"
               style={{
@@ -430,8 +436,19 @@ const ListaoListaFrequencia = () => {
     return colunasDetalhamentoEstudante;
   };
 
+  useEffect(() => {
+    ServicoAnotacaoFrequenciaAluno.obterMotivosAusenciaRedux();
+  }, []);
+
   return dadosFrequencia?.alunos?.length ? (
     <>
+      <ListaoModalAnotacoesFrequencia
+        dadosListaFrequencia={dadosFrequencia?.alunos}
+        ehInfantil={listaoEhInfantil}
+        componenteCurricularId={componenteCurricular.codigoComponenteCurricular}
+        desabilitarCampos={desabilitarCampos}
+        fechouModal={atualizarDados}
+      />
       <LinhaTabela className="col-md-12 p-0">
         <DataTable
           idLinha="codigoAluno"
@@ -450,27 +467,15 @@ const ListaoListaFrequencia = () => {
           expandedRowRender={(record, indexAluno) => {
             const colunasDetalhe = montarColunasDetalhe(record, indexAluno);
             return (
-              <>
-                <ListaoModalAnotacoesFrequencia
-                  dadosListaFrequencia={dadosFrequencia?.alunos}
-                  ehInfantil={listaoEhInfantil}
-                  componenteCurricularId={
-                    componenteCurricular.codigoComponenteCurricular
-                  }
-                  desabilitarCampos={desabilitarCampos}
-                  fechouModal={atualizarDados}
-                  indexAluno={indexAluno}
-                />
-                <DataTable
-                  id={`tabela-aluno-${record?.codigoAluno}`}
-                  idLinha="aulaId"
-                  pagination={false}
-                  columns={colunasDetalhe}
-                  dataSource={record?.aulas}
-                  semHover
-                  tableLayout="fixed"
-                />
-              </>
+              <DataTable
+                id={`tabela-aluno-${record?.codigoAluno}`}
+                idLinha="aulaId"
+                pagination={false}
+                columns={colunasDetalhe}
+                dataSource={record?.aulas}
+                semHover
+                tableLayout="fixed"
+              />
             );
           }}
           expandIcon={({ expanded, onExpand, record }) =>

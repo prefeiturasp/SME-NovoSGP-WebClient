@@ -16,6 +16,9 @@ const Campo = styled.div`
       border-color: #dc3545 !important;
     }
   }
+  .jodit-status-bar :nth-child(2) {
+    display: none;
+  }
 `;
 
 let CHANGE_DEBOUNCE_FLAG;

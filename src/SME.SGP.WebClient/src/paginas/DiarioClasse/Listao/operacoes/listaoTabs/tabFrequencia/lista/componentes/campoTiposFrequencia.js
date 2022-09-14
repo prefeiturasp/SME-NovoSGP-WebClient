@@ -26,7 +26,7 @@ const CampoTiposFrequencia = props => {
 
   const montarBotao = (background, valor, tituloTooltip) => {
     return (
-      <Tooltip title={tituloTooltip}>
+      <Tooltip title={tituloTooltip} destroyTooltipOnHide>
         <Button
           disabled={desabilitar}
           size="small"

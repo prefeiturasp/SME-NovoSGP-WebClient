@@ -14,7 +14,6 @@ const ListaoModalAnotacaoFrequencia = ({
   componenteCurricularId,
   desabilitarCampos,
   fechouModal,
-  indexAluno,
 }) => {
   const exibirModalAnotacaoFrequencia = useSelector(
     state => state.modalAnotacaoFrequencia.exibirModalAnotacaoFrequencia
@@ -24,12 +23,20 @@ const ListaoModalAnotacaoFrequencia = ({
     state => state.modalAnotacaoFrequencia.dadosModalAnotacaoFrequencia
   );
 
+  const listaPadraoMotivoAusencia = useSelector(
+    state => state.modalAnotacaoFrequencia.listaPadraoMotivoAusencia
+  );
+
   const { dadosIniciaisFrequencia, setDadosIniciaisFrequencia } = useContext(
     ListaoContext
   );
 
   const atualizarSePossuiAnotacao = valor => {
-    const aulasAluno = dadosIniciaisFrequencia.alunos[indexAluno].aulas;
+    const { codigoAluno } = dadosModalAnotacaoFrequencia;
+
+    const aulasAluno = dadosIniciaisFrequencia?.alunos?.find?.(
+      aluno => aluno?.codigoAluno === codigoAluno
+    )?.aulas;
     const aulaAtual = aulasAluno.find(
       item => item.aulaId === dadosModalAnotacaoFrequencia?.aulaId
     );
@@ -50,6 +57,7 @@ const ListaoModalAnotacaoFrequencia = ({
       setExibirModal={setExibirModalAnotacaoFrequencia}
       dadosModal={dadosModalAnotacaoFrequencia}
       setDadosModal={setDadosModalAnotacaoFrequencia}
+      listaPadraoMotivoAusencia={listaPadraoMotivoAusencia}
       fechouModal={(salvou, excluiu) => {
         if (salvou) {
           atualizarSePossuiAnotacao(true);
@@ -68,7 +76,6 @@ ListaoModalAnotacaoFrequencia.propTypes = {
   componenteCurricularId: PropTypes.oneOfType([PropTypes.any]),
   desabilitarCampos: PropTypes.bool,
   fechouModal: PropTypes.func,
-  indexAluno: PropTypes.number,
 };
 
 ListaoModalAnotacaoFrequencia.defaultProps = {
@@ -77,7 +84,6 @@ ListaoModalAnotacaoFrequencia.defaultProps = {
   componenteCurricularId: '',
   desabilitarCampos: false,
   fechouModal: () => {},
-  indexAluno: null,
 };
 
 export default ListaoModalAnotacaoFrequencia;

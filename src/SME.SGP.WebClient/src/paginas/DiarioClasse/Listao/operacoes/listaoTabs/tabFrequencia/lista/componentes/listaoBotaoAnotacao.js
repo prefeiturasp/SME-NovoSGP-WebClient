@@ -38,7 +38,11 @@ const ListaoBotaoAnotacao = props => {
     : '';
 
   return (
-    <Tooltip title={descricaoTooltip || descTooltip} placement="top">
+    <Tooltip
+      title={descricaoTooltip || descTooltip}
+      placement="top"
+      destroyTooltipOnHide
+    >
       <span className={!podeAbrirModal ? 'desabilitar' : ''}>
         <ContainerBtbAnotacao
           podeAbrirModal={podeAbrirModal}
