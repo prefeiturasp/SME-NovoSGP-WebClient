@@ -4,11 +4,11 @@ import React from 'react';
 import {
   SGP_BUTTON_CANCELAR,
   SGP_BUTTON_GERAR,
-  SGP_BUTTON_VOLTAR,
 } from '~/componentes-sgp/filtro/idsCampos';
 import Button from '~/componentes/button';
 import { Colors } from '~/componentes/colors';
 import Loader from '~/componentes/loader';
+import BotaoVoltarPadrao from './BotoesAcaoPadrao/botaoVoltarPadrao';
 
 const BotoesAcaoRelatorio = props => {
   const {
@@ -23,14 +23,7 @@ const BotoesAcaoRelatorio = props => {
   return (
     <Row gutter={[8, 8]} type="flex">
       <Col>
-        <Button
-          id={SGP_BUTTON_VOLTAR}
-          label="Voltar"
-          icon="arrow-left"
-          color={Colors.Azul}
-          border
-          onClick={() => onClickVoltar && onClickVoltar()}
-        />
+        <BotaoVoltarPadrao onClick={() => onClickVoltar && onClickVoltar()} />
       </Col>
       <Col>
         <Button

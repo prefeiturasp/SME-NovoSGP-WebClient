@@ -19,8 +19,9 @@ import { ordenarListaMaiorParaMenor } from '~/utils/funcoes/gerais';
 import {
   SGP_BUTTON_CANCELAR,
   SGP_BUTTON_GERAR,
-  SGP_BUTTON_VOLTAR,
 } from '~/componentes-sgp/filtro/idsCampos';
+import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
+import { URL_HOME } from '~/constantes';
 
 const RelatorioCompensacaoAusencia = () => {
   const [carregandoGerar, setCarregandoGerar] = useState(false);
@@ -445,16 +446,7 @@ const RelatorioCompensacaoAusencia = () => {
       <Cabecalho pagina="Relatório de compensação de ausência">
         <Row gutter={[8, 8]} type="flex">
           <Col>
-            <Button
-              id={SGP_BUTTON_VOLTAR}
-              label="Voltar"
-              icon="arrow-left"
-              color={Colors.Azul}
-              border
-              onClick={() => {
-                history.push('/');
-              }}
-            />
+            <BotaoVoltarPadrao onClick={() => history.push(URL_HOME)} />
           </Col>
           <Col>
             <Button

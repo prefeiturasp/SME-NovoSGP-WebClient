@@ -1,3 +1,4 @@
+import { Col, Row } from 'antd';
 import { Form, Formik } from 'formik';
 import PropTypes from 'prop-types';
 import React, { useCallback, useEffect, useState } from 'react';
@@ -5,12 +6,12 @@ import { useSelector } from 'react-redux';
 import * as Yup from 'yup';
 import { Auditoria, Loader, Localizador, SelectComponent } from '~/componentes';
 import { Cabecalho } from '~/componentes-sgp';
+import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
 import DreDropDown from '~/componentes-sgp/DreDropDown/';
 import {
   SGP_BUTTON_ALTERAR_CADASTRAR,
   SGP_BUTTON_CANCELAR,
   SGP_BUTTON_EXCLUIR,
-  SGP_BUTTON_VOLTAR,
 } from '~/componentes-sgp/filtro/idsCampos';
 import UeDropDown from '~/componentes-sgp/UeDropDown/';
 import UploadArquivos from '~/componentes-sgp/UploadArquivos/uploadArquivos';
@@ -478,46 +479,47 @@ const DocumentosPlanosTrabalhoCadastro = ({ match }) => {
           {form => (
             <>
               <Cabecalho pagina="Upload de documentos e planos de trabalho">
-                <div className="d-flex justify-content-end">
-                  <Button
-                    id={SGP_BUTTON_VOLTAR}
-                    label="Voltar"
-                    icon="arrow-left"
-                    color={Colors.Azul}
-                    border
-                    className="mr-2"
-                    onClick={onClickVoltar}
-                  />
-                  <Button
-                    id={SGP_BUTTON_CANCELAR}
-                    label="Cancelar"
-                    color={Colors.Roxo}
-                    border
-                    className="mr-2"
-                    onClick={() => onClickCancelar(form)}
-                    disabled={!modoEdicao}
-                  />
-                  <Button
-                    id={SGP_BUTTON_EXCLUIR}
-                    label="Excluir"
-                    color={Colors.Vermelho}
-                    border
-                    className="mr-2"
-                    disabled={
-                      !idDocumentosPlanoTrabalho || !permissoesTela.podeExcluir
-                    }
-                    onClick={onClickExcluir}
-                  />
-                  <Button
-                    id={SGP_BUTTON_ALTERAR_CADASTRAR}
-                    label={idDocumentosPlanoTrabalho ? 'Alterar' : 'Cadastrar'}
-                    color={Colors.Roxo}
-                    border
-                    bold
-                    onClick={() => validaAntesDoSubmit(form)}
-                    disabled={!modoEdicao || desabilitarCampos}
-                  />
-                </div>
+                <Row gutter={[8, 8]} type="flex">
+                  <Col>
+                    <BotaoVoltarPadrao onClick={() => onClickVoltar()} />
+                  </Col>
+                  <Col>
+                    <Button
+                      id={SGP_BUTTON_CANCELAR}
+                      label="Cancelar"
+                      color={Colors.Roxo}
+                      border
+                      onClick={() => onClickCancelar(form)}
+                      disabled={!modoEdicao}
+                    />
+                  </Col>
+                  <Col>
+                    <Button
+                      id={SGP_BUTTON_EXCLUIR}
+                      label="Excluir"
+                      color={Colors.Vermelho}
+                      border
+                      disabled={
+                        !idDocumentosPlanoTrabalho ||
+                        !permissoesTela.podeExcluir
+                      }
+                      onClick={onClickExcluir}
+                    />
+                  </Col>
+                  <Col>
+                    <Button
+                      id={SGP_BUTTON_ALTERAR_CADASTRAR}
+                      label={
+                        idDocumentosPlanoTrabalho ? 'Alterar' : 'Cadastrar'
+                      }
+                      color={Colors.Roxo}
+                      border
+                      bold
+                      onClick={() => validaAntesDoSubmit(form)}
+                      disabled={!modoEdicao || desabilitarCampos}
+                    />
+                  </Col>
+                </Row>
               </Cabecalho>
               <Card>
                 <Form>

@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
+import { Col, Row } from 'antd';
 import { Loader } from '~/componentes';
 import Cabecalho from '~/componentes-sgp/cabecalho';
 import Alert from '~/componentes/alert';
@@ -321,37 +322,43 @@ const CompensacaoAusenciaLista = () => {
       )}
       <AlertaModalidadeInfantil />
       <Cabecalho pagina="Compensação de Ausência">
-        <>
-          <BotaoVoltarPadrao className="mr-2" onClick={() => onClickVoltar()} />
-          <Button
-            id={SGP_BUTTON_EXCLUIR}
-            label="Excluir"
-            color={Colors.Vermelho}
-            border
-            className="mr-2"
-            onClick={onClickExcluir}
-            disabled={
-              !permissoesTela.podeExcluir ||
-              (compensacoesSelecionadas && compensacoesSelecionadas.length < 1)
-            }
-          />
-          <Button
-            id={SGP_BUTTON_NOVO}
-            label="Novo"
-            color={Colors.Roxo}
-            border
-            bold
-            onClick={onClickNovo}
-            disabled={
-              ehTurmaInfantil(modalidadesFiltroPrincipal, turmaSelecionada) ||
-              somenteConsulta ||
-              componenteSemFrequencia ||
-              !permissoesTela.podeIncluir ||
-              !turmaSelecionada.turma ||
-              (turmaSelecionada.turma && listaDisciplinas.length < 1)
-            }
-          />
-        </>
+        <Row gutter={[8, 8]} type="flex">
+          <Col>
+            <BotaoVoltarPadrao onClick={() => onClickVoltar()} />
+          </Col>
+          <Col>
+            <Button
+              id={SGP_BUTTON_EXCLUIR}
+              label="Excluir"
+              color={Colors.Vermelho}
+              border
+              onClick={onClickExcluir}
+              disabled={
+                !permissoesTela.podeExcluir ||
+                (compensacoesSelecionadas &&
+                  compensacoesSelecionadas.length < 1)
+              }
+            />
+          </Col>
+          <Col>
+            <Button
+              id={SGP_BUTTON_NOVO}
+              label="Novo"
+              color={Colors.Roxo}
+              border
+              bold
+              onClick={onClickNovo}
+              disabled={
+                ehTurmaInfantil(modalidadesFiltroPrincipal, turmaSelecionada) ||
+                somenteConsulta ||
+                componenteSemFrequencia ||
+                !permissoesTela.podeIncluir ||
+                !turmaSelecionada.turma ||
+                (turmaSelecionada.turma && listaDisciplinas.length < 1)
+              }
+            />
+          </Col>
+        </Row>
       </Cabecalho>
       <Card>
         <div className="col-md-12">

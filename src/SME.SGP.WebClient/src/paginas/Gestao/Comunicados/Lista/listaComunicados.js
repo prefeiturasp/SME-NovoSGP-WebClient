@@ -1,12 +1,13 @@
+import { Col, Row } from 'antd';
 import moment from 'moment';
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Button, Card, Colors, ListaPaginada, Loader } from '~/componentes';
 import { Cabecalho } from '~/componentes-sgp';
+import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
 import {
   SGP_BUTTON_EXCLUIR,
   SGP_BUTTON_NOVO,
-  SGP_BUTTON_VOLTAR,
 } from '~/componentes-sgp/filtro/idsCampos';
 import { ModalidadeDTO, RotasDto } from '~/dtos';
 import {
@@ -135,37 +136,34 @@ const ListaComunicados = () => {
   return (
     <>
       <Cabecalho pagina="Comunicação com pais ou responsáveis">
-        <>
-          <Button
-            id={SGP_BUTTON_VOLTAR}
-            label="Voltar"
-            icon="arrow-left"
-            color={Colors.Azul}
-            onClick={aoClicarBotaoVoltar}
-            border
-            className="mr-2"
-          />
-          <Button
-            id={SGP_BUTTON_EXCLUIR}
-            label="Excluir"
-            color={Colors.Vermelho}
-            onClick={aoClicarBotaoExcluir}
-            border
-            className="mr-2"
-            disabled={
-              somenteConsulta ||
-              itensSelecionados?.length < 1 ||
-              !permissoesTela.podeExcluir
-            }
-          />
-          <Button
-            id={SGP_BUTTON_NOVO}
-            label="Novo"
-            color={Colors.Roxo}
-            onClick={aoClicarBotaoNovo}
-            disabled={somenteConsulta || !permissoesTela.podeIncluir}
-          />
-        </>
+        <Row gutter={[8, 8]} type="flex">
+          <Col>
+            <BotaoVoltarPadrao onClick={() => aoClicarBotaoVoltar()} />
+          </Col>
+          <Col>
+            <Button
+              id={SGP_BUTTON_EXCLUIR}
+              label="Excluir"
+              color={Colors.Vermelho}
+              onClick={aoClicarBotaoExcluir}
+              border
+              disabled={
+                somenteConsulta ||
+                itensSelecionados?.length < 1 ||
+                !permissoesTela.podeExcluir
+              }
+            />
+          </Col>
+          <Col>
+            <Button
+              id={SGP_BUTTON_NOVO}
+              label="Novo"
+              color={Colors.Roxo}
+              onClick={aoClicarBotaoNovo}
+              disabled={somenteConsulta || !permissoesTela.podeIncluir}
+            />
+          </Col>
+        </Row>
       </Cabecalho>
       <Loader loading={exibirLoader}>
         <Card>

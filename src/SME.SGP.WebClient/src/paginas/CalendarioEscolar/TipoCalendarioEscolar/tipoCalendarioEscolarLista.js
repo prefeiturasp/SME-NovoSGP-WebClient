@@ -1,5 +1,7 @@
+import { Col, Row } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
+import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
 import Cabecalho from '~/componentes-sgp/cabecalho';
 import {
   SGP_BUTTON_EXCLUIR,
@@ -114,38 +116,35 @@ const TipoCalendarioEscolarLista = () => {
   return (
     <>
       <Cabecalho pagina="Tipo de calendário escolar">
-        <div className="d-flex justify-content-end">
-          <Button
-            id={SGP_BUTTON_VOLTAR}
-            label="Voltar"
-            icon="arrow-left"
-            color={Colors.Azul}
-            border
-            className="mr-2"
-            onClick={onClickVoltar}
-          />
-          <Button
-            id={SGP_BUTTON_EXCLUIR}
-            label="Excluir"
-            color={Colors.Vermelho}
-            border
-            className="mr-2"
-            disabled={
-              !permissoesTela.podeExcluir ||
-              (idTiposSelecionados && idTiposSelecionados.length < 1)
-            }
-            onClick={onClickExcluir}
-          />
-          <Button
-            id={SGP_BUTTON_NOVO}
-            label="Novo"
-            color={Colors.Roxo}
-            border
-            bold
-            onClick={onClickNovo}
-            disabled={somenteConsulta || !permissoesTela.podeIncluir}
-          />
-        </div>
+        <Row gutter={[8, 8]} type="flex">
+          <Col>
+            <BotaoVoltarPadrao onClick={() => onClickVoltar()} />
+          </Col>
+          <Col>
+            <Button
+              id={SGP_BUTTON_EXCLUIR}
+              label="Excluir"
+              color={Colors.Vermelho}
+              border
+              disabled={
+                !permissoesTela.podeExcluir ||
+                (idTiposSelecionados && idTiposSelecionados.length < 1)
+              }
+              onClick={onClickExcluir}
+            />
+          </Col>
+          <Col>
+            <Button
+              id={SGP_BUTTON_NOVO}
+              label="Novo"
+              color={Colors.Roxo}
+              border
+              bold
+              onClick={onClickNovo}
+              disabled={somenteConsulta || !permissoesTela.podeIncluir}
+            />
+          </Col>
+        </Row>
       </Cabecalho>
       <Card>
         <div className="col-md-12 pt-2">

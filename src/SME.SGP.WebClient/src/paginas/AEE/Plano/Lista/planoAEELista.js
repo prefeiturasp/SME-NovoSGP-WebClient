@@ -1,6 +1,7 @@
 import * as moment from 'moment';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { Col, Row } from 'antd';
 import { Cabecalho, NomeEstudanteLista } from '~/componentes-sgp';
 import AbrangenciaServico from '~/servicos/Abrangencia';
 import {
@@ -22,10 +23,8 @@ import { erros, verificaSomenteConsulta } from '~/servicos';
 import history from '~/servicos/history';
 import ServicoPlanoAEE from '~/servicos/Paginas/Relatorios/AEE/ServicoPlanoAEE';
 import FiltroHelper from '~componentes-sgp/filtro/helper';
-import {
-  SGP_BUTTON_NOVO,
-  SGP_BUTTON_VOLTAR,
-} from '~/componentes-sgp/filtro/idsCampos';
+import { SGP_BUTTON_NOVO } from '~/componentes-sgp/filtro/idsCampos';
+import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
 
 const PlanoAEELista = () => {
   const dispatch = useDispatch();
@@ -413,26 +412,22 @@ const PlanoAEELista = () => {
   return (
     <>
       <Cabecalho pagina="Plano AEE">
-        <div className="d-flex justify-content-end">
-          <Button
-            id={SGP_BUTTON_VOLTAR}
-            label="Voltar"
-            icon="arrow-left"
-            color={Colors.Azul}
-            border
-            className="mr-2"
-            onClick={onClickVoltar}
-          />
-          <Button
-            id={SGP_BUTTON_NOVO}
-            label="Novo"
-            color={Colors.Roxo}
-            border
-            bold
-            onClick={onClickNovo}
-            disabled={somenteConsulta || !permissoesTela.podeIncluir}
-          />
-        </div>
+        <Row gutter={[8, 8]} type="flex">
+          <Col>
+            <BotaoVoltarPadrao onClick={() => onClickVoltar()} />
+          </Col>
+          <Col>
+            <Button
+              id={SGP_BUTTON_NOVO}
+              label="Novo"
+              color={Colors.Roxo}
+              border
+              bold
+              onClick={onClickNovo}
+              disabled={somenteConsulta || !permissoesTela.podeIncluir}
+            />
+          </Col>
+        </Row>
       </Cabecalho>
       <Card>
         <div className="col-md-12">

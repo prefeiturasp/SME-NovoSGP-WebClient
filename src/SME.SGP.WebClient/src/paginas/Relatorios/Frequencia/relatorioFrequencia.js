@@ -29,8 +29,8 @@ import {
 import {
   SGP_BUTTON_CANCELAR,
   SGP_BUTTON_GERAR,
-  SGP_BUTTON_VOLTAR,
 } from '~/componentes-sgp/filtro/idsCampos';
+import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
 
 const RelatorioFrequencia = () => {
   const [anoLetivo, setAnoLetivo] = useState(undefined);
@@ -712,14 +712,7 @@ const RelatorioFrequencia = () => {
         <Cabecalho pagina="Frequência">
           <Row gutter={[8, 8]} type="flex">
             <Col>
-              <Button
-                id={SGP_BUTTON_VOLTAR}
-                label="Voltar"
-                icon="arrow-left"
-                color={Colors.Azul}
-                border
-                onClick={onClickVoltar}
-              />
+              <BotaoVoltarPadrao onClick={() => onClickVoltar()} />
             </Col>
             <Col>
               <Button

@@ -1,3 +1,4 @@
+import { Col, Row } from 'antd';
 import { Form, Formik } from 'formik';
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
@@ -17,12 +18,12 @@ import {
   SelectComponent,
 } from '~/componentes';
 import { Cabecalho } from '~/componentes-sgp';
+import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
 import {
   SGP_BUTTON_ALTERAR_CADASTRAR,
   SGP_BUTTON_CANCELAR,
   SGP_BUTTON_EXCLUIR,
   SGP_BUTTON_IMPRIMIR,
-  SGP_BUTTON_VOLTAR,
 } from '~/componentes-sgp/filtro/idsCampos';
 import JoditEditor from '~/componentes/jodit-editor/joditEditor';
 import { RotasDto } from '~/dtos';
@@ -415,71 +416,70 @@ const CadastroOcorrencias = ({ match }) => {
         {form => (
           <>
             <Cabecalho pagina="Cadastro de ocorrência">
-              <>
-                <Button
-                  id={SGP_BUTTON_IMPRIMIR}
-                  className="mr-2"
-                  icon="print"
-                  color={Colors.Azul}
-                  semMargemDireita
-                  border
-                  onClick={onClickGerar}
-                  disabled={!idOcorrencia}
-                />
-                <Button
-                  id={SGP_BUTTON_VOLTAR}
-                  label="Voltar"
-                  icon="arrow-left"
-                  color={Colors.Azul}
-                  border
-                  className="mr-2"
-                  onClick={() => onClickVoltar(form)}
-                />
-                <Button
-                  id={SGP_BUTTON_CANCELAR}
-                  label="Cancelar"
-                  color={Colors.Azul}
-                  border
-                  className="mr-2"
-                  onClick={onClickCancelar}
-                  disabled={
-                    !modoEdicao ||
-                    ehTurmaAnoAnterior() ||
-                    somenteConsulta ||
-                    naoPodeIncluirOuAlterar()
-                  }
-                />
-                {match?.params?.id ? (
+              <Row gutter={[8, 8]} type="flex">
+                <Col>
+                  <BotaoVoltarPadrao onClick={() => onClickVoltar(form)} />
+                </Col>
+                <Col>
                   <Button
-                    id={SGP_BUTTON_EXCLUIR}
-                    label="Excluir"
-                    color={Colors.Vermelho}
+                    id={SGP_BUTTON_IMPRIMIR}
+                    icon="print"
+                    color={Colors.Azul}
+                    semMargemDireita
                     border
-                    className="mr-2"
-                    onClick={onClickExcluir}
+                    onClick={onClickGerar}
+                    disabled={!idOcorrencia}
+                  />
+                </Col>
+                <Col>
+                  <Button
+                    id={SGP_BUTTON_CANCELAR}
+                    label="Cancelar"
+                    color={Colors.Azul}
+                    border
+                    onClick={onClickCancelar}
                     disabled={
-                      ehTurmaAnoAnterior() || somenteConsulta || !podeExcluir
+                      !modoEdicao ||
+                      ehTurmaAnoAnterior() ||
+                      somenteConsulta ||
+                      naoPodeIncluirOuAlterar()
                     }
                   />
+                </Col>
+                {match?.params?.id ? (
+                  <Col>
+                    <Button
+                      id={SGP_BUTTON_EXCLUIR}
+                      label="Excluir"
+                      color={Colors.Vermelho}
+                      border
+                      onClick={onClickExcluir}
+                      disabled={
+                        ehTurmaAnoAnterior() || somenteConsulta || !podeExcluir
+                      }
+                    />
+                  </Col>
                 ) : (
                   <></>
                 )}
-                <Button
-                  id={SGP_BUTTON_ALTERAR_CADASTRAR}
-                  label={idOcorrencia ? 'Alterar' : 'Cadastrar'}
-                  color={Colors.Roxo}
-                  border
-                  bold
-                  onClick={() => validaAntesDoSubmit(form)}
-                  disabled={
-                    !modoEdicao ||
-                    !criancasSelecionadas?.length > 0 ||
-                    ehTurmaAnoAnterior() ||
-                    somenteConsulta ||
-                    naoPodeIncluirOuAlterar()
-                  }
-                />
-              </>
+                <Col>
+                  <Button
+                    id={SGP_BUTTON_ALTERAR_CADASTRAR}
+                    label={idOcorrencia ? 'Alterar' : 'Cadastrar'}
+                    color={Colors.Roxo}
+                    border
+                    bold
+                    onClick={() => validaAntesDoSubmit(form)}
+                    disabled={
+                      !modoEdicao ||
+                      !criancasSelecionadas?.length > 0 ||
+                      ehTurmaAnoAnterior() ||
+                      somenteConsulta ||
+                      naoPodeIncluirOuAlterar()
+                    }
+                  />
+                </Col>
+              </Row>
             </Cabecalho>
             <Card>
               <Form className="col-md-12 mb-4">

@@ -1,6 +1,6 @@
+import { Col, Row } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import shortid from 'shortid';
 import {
   Button,
   CampoData,
@@ -12,10 +12,10 @@ import {
 } from '~/componentes';
 import { Cabecalho } from '~/componentes-sgp';
 import AlertaPermiteSomenteTurmaInfantil from '~/componentes-sgp/AlertaPermiteSomenteTurmaInfantil/alertaPermiteSomenteTurmaInfantil';
+import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
 import {
   SGP_BUTTON_EXCLUIR,
   SGP_BUTTON_NOVO,
-  SGP_BUTTON_VOLTAR,
 } from '~/componentes-sgp/filtro/idsCampos';
 import { RotasDto } from '~/dtos';
 import modalidade from '~/dtos/modalidade';
@@ -206,46 +206,43 @@ const ListaOcorrencias = () => {
         />
       )}
       <Cabecalho pagina="Ocorrências">
-        <>
-          <Button
-            id={SGP_BUTTON_VOLTAR}
-            label="Voltar"
-            icon="arrow-left"
-            color={Colors.Azul}
-            border
-            className="mr-2"
-            onClick={onClickVoltar}
-          />
-          <Button
-            id={SGP_BUTTON_EXCLUIR}
-            label="Excluir"
-            color={Colors.Vermelho}
-            border
-            className="mr-2"
-            onClick={onClickExcluir}
-            disabled={
-              !itenSelecionados?.length ||
-              ehTurmaAnoAnterior() ||
-              somenteConsulta ||
-              !podeExcluir
-            }
-          />
-          <Button
-            id={SGP_BUTTON_NOVO}
-            label="Nova"
-            color={Colors.Roxo}
-            border
-            bold
-            disabled={
-              !turmaSelecionada?.turma ||
-              !ehModalidadeInfantil() ||
-              ehTurmaAnoAnterior() ||
-              somenteConsulta ||
-              !podeIncluir
-            }
-            onClick={onClickNovo}
-          />
-        </>
+        <Row gutter={[8, 8]} type="flex">
+          <Col>
+            <BotaoVoltarPadrao onClick={() => onClickVoltar()} />
+          </Col>
+          <Col>
+            <Button
+              id={SGP_BUTTON_EXCLUIR}
+              label="Excluir"
+              color={Colors.Vermelho}
+              border
+              onClick={onClickExcluir}
+              disabled={
+                !itenSelecionados?.length ||
+                ehTurmaAnoAnterior() ||
+                somenteConsulta ||
+                !podeExcluir
+              }
+            />
+          </Col>
+          <Col>
+            <Button
+              id={SGP_BUTTON_NOVO}
+              label="Nova"
+              color={Colors.Roxo}
+              border
+              bold
+              disabled={
+                !turmaSelecionada?.turma ||
+                !ehModalidadeInfantil() ||
+                ehTurmaAnoAnterior() ||
+                somenteConsulta ||
+                !podeIncluir
+              }
+              onClick={onClickNovo}
+            />
+          </Col>
+        </Row>
       </Cabecalho>
       <Card>
         <div className="col-md-12">

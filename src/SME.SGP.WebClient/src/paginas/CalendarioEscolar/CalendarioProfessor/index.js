@@ -36,7 +36,7 @@ import {
 // DTOs
 import RotasDTO from '~/dtos/rotasDto';
 import { selecionaDia } from '~/redux/modulos/calendarioProfessor/actions';
-import { SGP_BUTTON_VOLTAR } from '~/componentes-sgp/filtro/idsCampos';
+import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
 
 function CalendarioProfessor() {
   const dispatch = useDispatch();
@@ -168,18 +168,11 @@ function CalendarioProfessor() {
       <AlertaSelecionarTurma />
       <Loader loading={false}>
         <Cabecalho pagina="Calendário do professor">
-          <div className="d-flex justify-content-end">
-            <Button
-              id={SGP_BUTTON_VOLTAR}
-              label="Voltar"
-              icon="arrow-left"
-              color={Colors.Azul}
-              onClick={() => {
-                history.push('/');
-              }}
-              border
-            />
-          </div>
+          <BotaoVoltarPadrao
+            onClick={() => {
+              history.push('/');
+            }}
+          />
         </Cabecalho>
         <Card>
           <Grid cols={4} className="m-0">

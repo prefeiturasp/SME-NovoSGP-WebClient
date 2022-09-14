@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import styled from 'styled-components';
 import * as Yup from 'yup';
 import { Formik, Form } from 'formik';
-import { Radio } from 'antd';
+import { Col, Radio, Row } from 'antd';
 import Card from '~/componentes/card';
 import Grid from '~/componentes/grid';
 import Button from '~/componentes/button';
@@ -18,8 +18,8 @@ import {
   SGP_BUTTON_ALTERAR_CADASTRAR,
   SGP_BUTTON_CANCELAR,
   SGP_BUTTON_EXCLUIR,
-  SGP_BUTTON_VOLTAR,
 } from '~/componentes-sgp/filtro/idsCampos';
+import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
 
 const TipoEventosForm = ({ match }) => {
   const botaoCadastrarRef = useRef();
@@ -282,46 +282,44 @@ const TipoEventosForm = ({ match }) => {
               idTipoEvento ? 'Alteração' : 'Cadastro'
             } de Tipo de Eventos`}
           >
-            <div className="d-flex justify-content-end">
-              <Button
-                id={SGP_BUTTON_VOLTAR}
-                label="Voltar"
-                icon="arrow-left"
-                color={Colors.Azul}
-                onClick={clicouBotaoVoltar}
-                border
-                className="mr-2"
-              />
-              <Button
-                id={SGP_BUTTON_CANCELAR}
-                label="Cancelar"
-                color={Colors.Roxo}
-                onClick={clicouBotaoCancelar}
-                border
-                bold
-                disabled={idTipoEvento}
-                className="mr-2"
-              />
-              <Button
-                id={SGP_BUTTON_EXCLUIR}
-                label="Excluir"
-                color={Colors.Vermelho}
-                border
-                className="mr-2"
-                disabled={possuiEventos}
-                onClick={clicouBotaoExcluir}
-              />
-              <Button
-                id={SGP_BUTTON_ALTERAR_CADASTRAR}
-                label={idTipoEvento ? 'Alterar' : 'Cadastrar'}
-                color={Colors.Roxo}
-                onClick={e => clicouBotaoCadastrar(form, e)}
-                border
-                bold
-                disabled={desabilitarBotaoCadastrar}
-                ref={botaoCadastrarRef}
-              />
-            </div>
+            <Row gutter={[8, 8]} type="flex">
+              <Col>
+                <BotaoVoltarPadrao onClick={() => clicouBotaoVoltar()} />
+              </Col>
+              <Col>
+                <Button
+                  id={SGP_BUTTON_CANCELAR}
+                  label="Cancelar"
+                  color={Colors.Roxo}
+                  onClick={clicouBotaoCancelar}
+                  border
+                  bold
+                  disabled={idTipoEvento}
+                />
+              </Col>
+              <Col>
+                <Button
+                  id={SGP_BUTTON_EXCLUIR}
+                  label="Excluir"
+                  color={Colors.Vermelho}
+                  border
+                  disabled={possuiEventos}
+                  onClick={clicouBotaoExcluir}
+                />
+              </Col>
+              <Col>
+                <Button
+                  id={SGP_BUTTON_ALTERAR_CADASTRAR}
+                  label={idTipoEvento ? 'Alterar' : 'Cadastrar'}
+                  color={Colors.Roxo}
+                  onClick={e => clicouBotaoCadastrar(form, e)}
+                  border
+                  bold
+                  disabled={desabilitarBotaoCadastrar}
+                  ref={botaoCadastrarRef}
+                />
+              </Col>
+            </Row>
           </Cabecalho>
 
           <Card>

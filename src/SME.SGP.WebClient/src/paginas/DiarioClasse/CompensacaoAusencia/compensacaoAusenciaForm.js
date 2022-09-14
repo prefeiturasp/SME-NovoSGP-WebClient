@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import { useSelector } from 'react-redux';
 import shortid from 'shortid';
 import * as Yup from 'yup';
+import { Col, Row } from 'antd';
 import { CampoTexto, Colors, Label, Loader } from '~/componentes';
 import Cabecalho from '~/componentes-sgp/cabecalho';
 import Alert from '~/componentes/alert';
@@ -966,53 +967,56 @@ const CompensacaoAusenciaForm = ({ match }) => {
           {form => (
             <Form>
               <Cabecalho pagina="Cadastrar Compensação de Ausência">
-                <>
-                  <BotaoVoltarPadrao
-                    className="mr-2"
-                    onClick={() => onClickVoltar(form)}
-                  />
-                  <Button
-                    id={SGP_BUTTON_CANCELAR}
-                    label="Cancelar"
-                    color={Colors.Roxo}
-                    border
-                    className="mr-2"
-                    onClick={() => onClickCancelar(form)}
-                    disabled={!modoEdicao}
-                  />
-                  <Button
-                    id={SGP_BUTTON_EXCLUIR}
-                    label="Excluir"
-                    color={Colors.Vermelho}
-                    border
-                    className="mr-2"
-                    disabled={
-                      somenteConsulta ||
-                      !permissoesTela.podeExcluir ||
-                      novoRegistro ||
-                      foraDoPeriodo
-                    }
-                    onClick={onClickExcluir}
-                  />
-                  <Button
-                    id={SGP_BUTTON_ALTERAR_CADASTRAR}
-                    label={`${
-                      idCompensacaoAusencia > 0 ? 'Alterar' : 'Cadastrar'
-                    }`}
-                    color={Colors.Roxo}
-                    border
-                    bold
-                    onClick={() => validaAntesDoSubmit(form)}
-                    disabled={
-                      ehTurmaInfantil(
-                        modalidadesFiltroPrincipal,
-                        turmaSelecionada
-                      ) ||
-                      desabilitarCampos ||
-                      !modoEdicao
-                    }
-                  />
-                </>
+                <Row gutter={[8, 8]} type="flex">
+                  <Col>
+                    <BotaoVoltarPadrao onClick={() => onClickVoltar(form)} />
+                  </Col>
+                  <Col>
+                    <Button
+                      id={SGP_BUTTON_CANCELAR}
+                      label="Cancelar"
+                      color={Colors.Roxo}
+                      border
+                      onClick={() => onClickCancelar(form)}
+                      disabled={!modoEdicao}
+                    />
+                  </Col>
+                  <Col>
+                    <Button
+                      id={SGP_BUTTON_EXCLUIR}
+                      label="Excluir"
+                      color={Colors.Vermelho}
+                      border
+                      disabled={
+                        somenteConsulta ||
+                        !permissoesTela.podeExcluir ||
+                        novoRegistro ||
+                        foraDoPeriodo
+                      }
+                      onClick={onClickExcluir}
+                    />
+                  </Col>
+                  <Col>
+                    <Button
+                      id={SGP_BUTTON_ALTERAR_CADASTRAR}
+                      label={`${
+                        idCompensacaoAusencia > 0 ? 'Alterar' : 'Cadastrar'
+                      }`}
+                      color={Colors.Roxo}
+                      border
+                      bold
+                      onClick={() => validaAntesDoSubmit(form)}
+                      disabled={
+                        ehTurmaInfantil(
+                          modalidadesFiltroPrincipal,
+                          turmaSelecionada
+                        ) ||
+                        desabilitarCampos ||
+                        !modoEdicao
+                      }
+                    />
+                  </Col>
+                </Row>
               </Cabecalho>
               <Card>
                 <div className="col-md-12">

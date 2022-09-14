@@ -1,3 +1,4 @@
+import { Col, Row } from 'antd';
 import { FieldArray, Form, Formik } from 'formik';
 import moment from 'moment';
 import React, { useCallback, useEffect, useState } from 'react';
@@ -15,10 +16,10 @@ import {
   SelectAutocomplete,
 } from '~/componentes';
 import { Cabecalho, RegistroMigrado } from '~/componentes-sgp';
+import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
 import {
   SGP_BUTTON_ALTERAR_CADASTRAR,
   SGP_BUTTON_CANCELAR,
-  SGP_BUTTON_VOLTAR,
 } from '~/componentes-sgp/filtro/idsCampos';
 import { URL_HOME } from '~/constantes';
 import { periodo, RotasDto } from '~/dtos';
@@ -481,36 +482,33 @@ const PeriodoFechamentoAbertura = () => {
         {form => (
           <>
             <Cabecalho pagina="Período de Fechamento (Abertura)">
-              <div className="d-flex justify-content-end">
-                <Button
-                  id={SGP_BUTTON_VOLTAR}
-                  label="Voltar"
-                  icon="arrow-left"
-                  color={Colors.Azul}
-                  border
-                  className="mr-2"
-                  onClick={() => onClickVoltar(form)}
-                />
-                <Button
-                  id={SGP_BUTTON_CANCELAR}
-                  label="Cancelar"
-                  color={Colors.Roxo}
-                  border
-                  bold
-                  className="mr-2"
-                  disabled={desabilitarCampos || !modoEdicao}
-                  onClick={() => onClickCancelar(form)}
-                />
-                <Button
-                  id={SGP_BUTTON_ALTERAR_CADASTRAR}
-                  label={ehRegistroExistente ? 'Alterar' : 'Cadastrar'}
-                  color={Colors.Roxo}
-                  border
-                  bold
-                  disabled={desabilitarCampos}
-                  onClick={() => validaAntesDoSubmit(form)}
-                />
-              </div>
+              <Row gutter={[8, 8]} type="flex">
+                <Col>
+                  <BotaoVoltarPadrao onClick={() => onClickVoltar(form)} />
+                </Col>
+                <Col>
+                  <Button
+                    id={SGP_BUTTON_CANCELAR}
+                    label="Cancelar"
+                    color={Colors.Roxo}
+                    border
+                    bold
+                    disabled={desabilitarCampos || !modoEdicao}
+                    onClick={() => onClickCancelar(form)}
+                  />
+                </Col>
+                <Col>
+                  <Button
+                    id={SGP_BUTTON_ALTERAR_CADASTRAR}
+                    label={ehRegistroExistente ? 'Alterar' : 'Cadastrar'}
+                    color={Colors.Roxo}
+                    border
+                    bold
+                    disabled={desabilitarCampos}
+                    onClick={() => validaAntesDoSubmit(form)}
+                  />
+                </Col>
+              </Row>
             </Cabecalho>
             <Card>
               <Form className="col-md-12">

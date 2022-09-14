@@ -2,12 +2,12 @@ import PropTypes from 'prop-types';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Colors } from '~/componentes';
+import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
 import {
   SGP_BUTTON_ATRIBUIR,
   SGP_BUTTON_CANCELAR,
   SGP_BUTTON_DEVOLVER,
   SGP_BUTTON_SALVAR,
-  SGP_BUTTON_VOLTAR,
 } from '~/componentes-sgp/filtro/idsCampos';
 import QuestionarioDinamicoFuncoes from '~/componentes-sgp/QuestionarioDinamico/Funcoes/QuestionarioDinamicoFuncoes';
 import Button from '~/componentes/button';
@@ -217,15 +217,7 @@ const BotoesAcoesPlanoAEE = props => {
 
   return (
     <>
-      <Button
-        id={SGP_BUTTON_VOLTAR}
-        label="Voltar"
-        icon="arrow-left"
-        color={Colors.Azul}
-        border
-        className="mr-2"
-        onClick={onClickVoltar}
-      />
+      <BotaoVoltarPadrao className="mr-2" onClick={() => onClickVoltar()} />
       <Button
         id={SGP_BUTTON_CANCELAR}
         label="Cancelar"

@@ -1,7 +1,7 @@
 import React from 'react';
-import { Button, Card, Colors } from '~/componentes';
+import { Card } from '~/componentes';
 import { Cabecalho } from '~/componentes-sgp';
-import { SGP_BUTTON_VOLTAR } from '~/componentes-sgp/filtro/idsCampos';
+import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
 import { URL_HOME } from '~/constantes';
 import { history } from '~/servicos';
 import DashboardNAAPAFiltros from './dashboardNAAPAFiltros';
@@ -12,16 +12,7 @@ const DashboardNAAPA = () => {
   return (
     <NAAPAContextProvider>
       <Cabecalho pagina="Dashboard NAAPA">
-        <Button
-          id={SGP_BUTTON_VOLTAR}
-          label="Voltar"
-          icon="arrow-left"
-          color={Colors.Azul}
-          border
-          onClick={() => {
-            history.push(URL_HOME);
-          }}
-        />
+        <BotaoVoltarPadrao onClick={() => history.push(URL_HOME)} />
       </Cabecalho>
       <Card padding="24px 24px">
         <DashboardNAAPAFiltros />

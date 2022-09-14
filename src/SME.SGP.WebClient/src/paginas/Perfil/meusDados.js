@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Progress } from 'antd';
 import Cabecalho from '~/componentes-sgp/cabecalho';
 import AlertaBalao from '~/componentes/alertaBalao';
@@ -12,18 +12,16 @@ import api from '~/servicos/api';
 import { erros } from '~/servicos/alertas';
 import { meusDados } from '~/redux/modulos/usuario/actions';
 import {
-  Botao,
   Conteudo,
   DadosPerfil,
-  Icone,
   MensagemAlerta,
   Perfil,
   SelecionarFoto,
-  Topo,
   BarraProgresso,
 } from './meusDados.css';
-import { store } from '~/redux';
 import DadosEmail from './dadosEmail';
+import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
+import { URL_HOME } from '~/constantes';
 
 const MeusDados = () => {
   const usuarioStore = useSelector(store => store.usuario);
@@ -37,8 +35,9 @@ const MeusDados = () => {
   const [ocultarProgresso, setOcultarProgresso] = useState(true);
   const [progresso, setProgresso] = useState(0);
 
+  const dispatch = useDispatch();
   const irParaDashboard = () => {
-    history.push('/');
+    history.push(URL_HOME);
   };
 
   const ocultarModal = () => {
@@ -60,7 +59,7 @@ const MeusDados = () => {
       if (arquivo.size <= 2000000) {
         const img = new Image();
         img.src = window.URL.createObjectURL(arquivo);
-        img.onload = e => {
+        img.onload = () => {
           if (img.naturalHeight > 180 && img.naturalWidth > 180) {
             const fileReader = new FileReader();
             fileReader.readAsDataURL(arquivo);
@@ -102,7 +101,7 @@ const MeusDados = () => {
       .then(resp => {
         const novosDados = usuarioStore.meusDados;
         novosDados.foto = resp.data;
-        store.dispatch(meusDados(novosDados));
+        dispatch(meusDados(novosDados));
         ocultarModal();
       })
       .catch(erro => {
@@ -112,7 +111,9 @@ const MeusDados = () => {
 
   return (
     <div>
-      <Cabecalho pagina="Meus Dados" removeAffix />
+      <Cabecalho pagina="Meus Dados">
+        <BotaoVoltarPadrao onClick={() => irParaDashboard()} />
+      </Cabecalho>
       <Card>
         <ModalConteudoHtml
           key="trocarFoto"
@@ -132,7 +133,7 @@ const MeusDados = () => {
             hidden={!ocultarAlteracoesNaoSalvas || !ocultarProgresso}
           >
             <DadosPerfil className="col-12">
-              <img className="img-edit" id="foto-perfil" src={foto} />
+              <img alt="" className="img-edit" id="foto-perfil" src={foto} />
             </DadosPerfil>
             <DadosPerfil className="col-12">
               <SelecionarFoto
@@ -192,42 +193,30 @@ const MeusDados = () => {
             />
           </BarraProgresso>
         </ModalConteudoHtml>
-        <Topo className="col-12 d-flex justify-content-end">
-          <Button
-            label="Voltar"
-            icon="arrow-left"
-            color={Colors.Azul}
-            border
-            className="mr-3"
-            onClick={irParaDashboard}
-          />
-        </Topo>
-        <Perfil className="col-4">
-          <DadosPerfil className="col-12">
-            {/* <img id="foto-perfil" className="img-profile" src={usuarioStore.meusDados.foto} />
-            <Botao className="text-center" onClick={ocultarModal}>
-              <Icone>
-                <i className="fas fa-camera" />
-              </Icone>
-            </Botao> */}
-            <i className="fas fa-user-circle icone-perfil"></i>
-          </DadosPerfil>
-          <DadosPerfil className="text-center">
-            <span className="nome">{usuarioStore.meusDados.nome}</span>
-            <span hidden={!usuarioStore.meusDados.rf}>
-              RF: {usuarioStore.meusDados.rf}
-            </span>
-            <span hidden={!usuarioStore.meusDados.cpf}>
-              CPF: {usuarioStore.meusDados.cpf}
-            </span>
-            <span hidden={!usuarioStore.meusDados.empresa}>
-              Empresa: {usuarioStore.meusDados.empresa}
-            </span>
-          </DadosPerfil>
-        </Perfil>
-        <Conteudo className="col-8">
-          <DadosEmail />
-        </Conteudo>
+        <div className="col-12">
+          <div className="row">
+            <Perfil className="col-md-4">
+              <DadosPerfil className="col-md-12">
+                <i className="fas fa-user-circle icone-perfil" />
+              </DadosPerfil>
+              <DadosPerfil className="text-center">
+                <span className="nome">{usuarioStore.meusDados.nome}</span>
+                <span hidden={!usuarioStore.meusDados.rf}>
+                  RF: {usuarioStore.meusDados.rf}
+                </span>
+                <span hidden={!usuarioStore.meusDados.cpf}>
+                  CPF: {usuarioStore.meusDados.cpf}
+                </span>
+                <span hidden={!usuarioStore.meusDados.empresa}>
+                  Empresa: {usuarioStore.meusDados.empresa}
+                </span>
+              </DadosPerfil>
+            </Perfil>
+            <Conteudo className="col-md-8">
+              <DadosEmail />
+            </Conteudo>
+          </div>
+        </div>
       </Card>
     </div>
   );

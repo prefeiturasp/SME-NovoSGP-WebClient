@@ -2,10 +2,10 @@ import { Col, Row } from 'antd';
 import React, { useContext, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Button, Colors } from '~/componentes';
+import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
 import {
   SGP_BUTTON_EXCLUIR,
   SGP_BUTTON_NOVO,
-  SGP_BUTTON_VOLTAR,
 } from '~/componentes-sgp/filtro/idsCampos';
 import { URL_HOME } from '~/constantes';
 import { RotasDto } from '~/dtos';
@@ -109,16 +109,9 @@ const EventosListaBotoesAcao = () => {
 
   return (
     <Col span={24}>
-      <Row gutter={[8, 8]} style={{ justifyContent: 'end', display: 'flex' }}>
+      <Row gutter={[8, 8]} type="flex">
         <Col>
-          <Button
-            id={SGP_BUTTON_VOLTAR}
-            label="Voltar"
-            icon="arrow-left"
-            color={Colors.Azul}
-            border
-            onClick={onClickVoltar}
-          />
+          <BotaoVoltarPadrao onClick={() => onClickVoltar()} />
         </Col>
         <Col>
           <Button

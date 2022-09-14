@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 
 import { Cabecalho } from '~/componentes-sgp';
-import { Button, Card, Colors } from '~/componentes';
+import { Card } from '~/componentes';
 
 import { URL_HOME } from '~/constantes';
 import { history } from '~/servicos';
@@ -11,7 +11,7 @@ import { limparDadosDashboardFrequencia } from '~/redux/modulos/dashboardFrequen
 
 import DashboardFrequenciaFiltros from './DashboardFrequenciaFiltros/dashboardFrequenciaFiltros';
 import TabsDashboardFrequencia from './TabsDashboardFrequencia/tabsDashboardFrequencia';
-import { SGP_BUTTON_VOLTAR } from '~/componentes-sgp/filtro/idsCampos';
+import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
 
 const DashboardFrequencia = () => {
   const dispatch = useDispatch();
@@ -29,14 +29,7 @@ const DashboardFrequencia = () => {
   return (
     <>
       <Cabecalho pagina="Dashboard frequência">
-        <Button
-          id={SGP_BUTTON_VOLTAR}
-          label="Voltar"
-          icon="arrow-left"
-          color={Colors.Azul}
-          border
-          onClick={() => onClickVoltar()}
-        />
+        <BotaoVoltarPadrao onClick={() => onClickVoltar()} />
       </Cabecalho>
       <Card>
         <div className="col-md-12">

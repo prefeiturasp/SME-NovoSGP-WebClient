@@ -1,6 +1,7 @@
 import { Form, Formik } from 'formik';
 import React, { useEffect, useState } from 'react';
 import * as Yup from 'yup';
+import { Col, Row } from 'antd';
 import Cabecalho from '~/componentes-sgp/cabecalho';
 import Auditoria from '~/componentes/auditoria';
 import Button from '~/componentes/button';
@@ -22,8 +23,8 @@ import {
   SGP_BUTTON_ALTERAR_CADASTRAR,
   SGP_BUTTON_CANCELAR,
   SGP_BUTTON_EXCLUIR,
-  SGP_BUTTON_VOLTAR,
 } from '~/componentes-sgp/filtro/idsCampos';
+import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
 
 const TipoFeriadoForm = ({ match }) => {
   const [auditoria, setAuditoria] = useState([]);
@@ -263,49 +264,51 @@ const TipoFeriadoForm = ({ match }) => {
                 idTipoFeriadoEdicao > 0 ? 'Alterar' : 'Cadastro de'
               } Tipo de Feriado`}
             >
-              <div className="d-flex justify-content-end">
-                <Button
-                  id={SGP_BUTTON_VOLTAR}
-                  label="Voltar"
-                  icon="arrow-left"
-                  color={Colors.Azul}
-                  border
-                  className="mr-2"
-                  onClick={onClickVoltar}
-                />
-                <Button
-                  id={SGP_BUTTON_CANCELAR}
-                  label="Cancelar"
-                  color={Colors.Roxo}
-                  border
-                  className="mr-2"
-                  onClick={() => onClickCancelar(form)}
-                  disabled={!modoEdicao}
-                />
-                <Button
-                  id={SGP_BUTTON_EXCLUIR}
-                  label="Excluir"
-                  color={Colors.Vermelho}
-                  border
-                  className="mr-2"
-                  disabled={
-                    novoRegistro || !permissoesTela.podeExcluir || possuiEventos
-                  }
-                  onClick={onClickExcluir}
-                />
-                <Button
-                  id={SGP_BUTTON_ALTERAR_CADASTRAR}
-                  label={`${idTipoFeriadoEdicao > 0 ? 'Alterar' : 'Cadastrar'}`}
-                  color={Colors.Roxo}
-                  border
-                  bold
-                  disabled={
-                    (novoRegistro && !permissoesTela.podeIncluir) ||
-                    (!novoRegistro && !permissoesTela.podeAlterar)
-                  }
-                  onClick={() => validaAntesDoSubmit(form)}
-                />
-              </div>
+              <Row gutter={[8, 8]} type="flex">
+                <Col>
+                  <BotaoVoltarPadrao onClick={() => onClickVoltar()} />
+                </Col>
+                <Col>
+                  <Button
+                    id={SGP_BUTTON_CANCELAR}
+                    label="Cancelar"
+                    color={Colors.Roxo}
+                    border
+                    onClick={() => onClickCancelar(form)}
+                    disabled={!modoEdicao}
+                  />
+                </Col>
+                <Col>
+                  <Button
+                    id={SGP_BUTTON_EXCLUIR}
+                    label="Excluir"
+                    color={Colors.Vermelho}
+                    border
+                    disabled={
+                      novoRegistro ||
+                      !permissoesTela.podeExcluir ||
+                      possuiEventos
+                    }
+                    onClick={onClickExcluir}
+                  />
+                </Col>
+                <Col>
+                  <Button
+                    id={SGP_BUTTON_ALTERAR_CADASTRAR}
+                    label={`${
+                      idTipoFeriadoEdicao > 0 ? 'Alterar' : 'Cadastrar'
+                    }`}
+                    color={Colors.Roxo}
+                    border
+                    bold
+                    disabled={
+                      (novoRegistro && !permissoesTela.podeIncluir) ||
+                      (!novoRegistro && !permissoesTela.podeAlterar)
+                    }
+                    onClick={() => validaAntesDoSubmit(form)}
+                  />
+                </Col>
+              </Row>
             </Cabecalho>
             <Card>
               <Form className="col-md-12 mb-4">

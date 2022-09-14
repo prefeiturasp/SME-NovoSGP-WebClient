@@ -3,11 +3,11 @@ import React, { useContext, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { Button, Colors } from '~/componentes';
+import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
 import {
   SGP_BUTTON_ALTERAR_CADASTRAR,
   SGP_BUTTON_CANCELAR,
   SGP_BUTTON_EXCLUIR,
-  SGP_BUTTON_VOLTAR,
 } from '~/componentes-sgp/filtro/idsCampos';
 import { RotasDto } from '~/dtos';
 import {
@@ -129,16 +129,9 @@ const FechaReabCadastroBotoesAcao = () => {
 
   return (
     <Col span={24}>
-      <Row gutter={[8, 8]} style={{ justifyContent: 'end', display: 'flex' }}>
+      <Row gutter={[8, 8]} type="flex">
         <Col>
-          <Button
-            id={SGP_BUTTON_VOLTAR}
-            label="Voltar"
-            icon="arrow-left"
-            color={Colors.Azul}
-            border
-            onClick={onClickVoltar}
-          />
+          <BotaoVoltarPadrao onClick={() => onClickVoltar()} />
         </Col>
         <Col>
           <Button

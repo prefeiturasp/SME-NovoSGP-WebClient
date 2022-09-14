@@ -24,7 +24,7 @@ import {
 import { erro, sucesso } from '~/servicos/alertas';
 import { Div } from './index.css';
 import { OPCAO_TODOS } from '~/constantes';
-import { SGP_BUTTON_VOLTAR } from '~/componentes-sgp/filtro/idsCampos';
+import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
 
 export const ContainerLabelDiasLetivos = styled.div`
   font-style: normal;
@@ -371,16 +371,7 @@ const CalendarioEscolar = () => {
   return (
     <>
       <Cabecalho pagina="Calendário escolar">
-        <div className="d-flex justify-content-end">
-          <Button
-            id={SGP_BUTTON_VOLTAR}
-            label="Voltar"
-            icon="arrow-left"
-            color={Colors.Azul}
-            onClick={aoClicarBotaoVoltar}
-            border
-          />
-        </div>
+        <BotaoVoltarPadrao onClick={() => aoClicarBotaoVoltar()} />
       </Cabecalho>
       <Card>
         <Grid cols={12}>

@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { Col, Row } from 'antd';
 import Cabecalho from '~/componentes-sgp/cabecalho';
 import Button from '~/componentes/button';
 import CampoTexto from '~/componentes/campoTexto';
@@ -16,8 +17,8 @@ import { verificaSomenteConsulta } from '~/servicos/servico-navegacao';
 import {
   SGP_BUTTON_EXCLUIR,
   SGP_BUTTON_NOVO,
-  SGP_BUTTON_VOLTAR,
 } from '~/componentes-sgp/filtro/idsCampos';
+import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
 
 const TipoFeriadoLista = () => {
   const [idsTipoFeriadoSelecionado, setIdsTipoFeriadoSelecionado] = useState(
@@ -160,90 +161,91 @@ const TipoFeriadoLista = () => {
   return (
     <>
       <Cabecalho pagina="Lista de tipo de feriado">
-        <div className="d-flex justify-content-end">
-          <Button
-            id={SGP_BUTTON_VOLTAR}
-            label="Voltar"
-            icon="arrow-left"
-            color={Colors.Azul}
-            border
-            className="mr-2"
-            onClick={onClickVoltar}
-          />
-          <Button
-            id={SGP_BUTTON_EXCLUIR}
-            label="Excluir"
-            color={Colors.Vermelho}
-            border
-            className="mr-2"
-            disabled={
-              !permissoesTela.podeExcluir ||
-              (idsTipoFeriadoSelecionado &&
-                idsTipoFeriadoSelecionado.length < 1)
-            }
-            onClick={onClickExcluir}
-          />
-          <Button
-            id={SGP_BUTTON_NOVO}
-            label="Novo"
-            color={Colors.Roxo}
-            border
-            bold
-            disabled={!permissoesTela.podeIncluir}
-            onClick={onClickNovo}
-          />
-        </div>
+        <Row gutter={[8, 8]} type="flex">
+          <Col>
+            <BotaoVoltarPadrao onClick={() => onClickVoltar()} />
+          </Col>
+          <Col>
+            <Button
+              id={SGP_BUTTON_EXCLUIR}
+              label="Excluir"
+              color={Colors.Vermelho}
+              border
+              disabled={
+                !permissoesTela.podeExcluir ||
+                (idsTipoFeriadoSelecionado &&
+                  idsTipoFeriadoSelecionado.length < 1)
+              }
+              onClick={onClickExcluir}
+            />
+          </Col>
+          <Col>
+            <Button
+              id={SGP_BUTTON_NOVO}
+              label="Novo"
+              color={Colors.Roxo}
+              border
+              bold
+              disabled={!permissoesTela.podeIncluir}
+              onClick={onClickNovo}
+            />
+          </Col>
+        </Row>
       </Cabecalho>
       <Card>
-        <div className="col-md-4 pb-2">
-          <SelectComponent
-            label="Abrangência"
-            name="select-abrangencia"
-            id="select-abrangencia"
-            lista={listaDropdownAbrangencia}
-            valueOption="id"
-            disabled={!permissoesTela.podeConsultar}
-            valueText="nome"
-            onChange={onChangeDropdownAbrangencia}
-            valueSelect={dropdownAbrangenciaSelecionada || []}
-            placeholder="SELECIONE UMA ABRANGÊNCIA"
-          />
-        </div>
-        <div className="col-md-3 pb-2">
-          <SelectComponent
-            label="Tipo"
-            name="select-tipo-feiado"
-            id="select-tipo-friado"
-            lista={listaDropdownTipoFeriado}
-            disabled={!permissoesTela.podeConsultar}
-            valueOption="id"
-            valueText="nome"
-            onChange={onChangeDropdownTipoFeriado}
-            valueSelect={dropdownTipoFeriadoSelecionado || []}
-            placeholder="SELECIONE UM TIPO"
-          />
-        </div>
+        <div className="col-md-12">
+          <div className="row">
+            <div className="col-md-4 pb-2">
+              <SelectComponent
+                label="Abrangência"
+                name="select-abrangencia"
+                id="select-abrangencia"
+                lista={listaDropdownAbrangencia}
+                valueOption="id"
+                disabled={!permissoesTela.podeConsultar}
+                valueText="nome"
+                onChange={onChangeDropdownAbrangencia}
+                valueSelect={dropdownAbrangenciaSelecionada || []}
+                placeholder="SELECIONE UMA ABRANGÊNCIA"
+              />
+            </div>
+            <div className="col-md-3 pb-2">
+              <SelectComponent
+                label="Tipo"
+                name="select-tipo-feiado"
+                id="select-tipo-friado"
+                lista={listaDropdownTipoFeriado}
+                disabled={!permissoesTela.podeConsultar}
+                valueOption="id"
+                valueText="nome"
+                onChange={onChangeDropdownTipoFeriado}
+                valueSelect={dropdownTipoFeriadoSelecionado || []}
+                placeholder="SELECIONE UM TIPO"
+              />
+            </div>
 
-        <div className="col-md-5 pb-2">
-          <CampoTexto
-            label="Nome do tipo de feriado"
-            desabilitado={!permissoesTela.podeConsultar}
-            placeholder="DIGITE O NOME DO TIPO DE FERIADO"
-            onChange={onChangeNomeTipoFeriado}
-            value={nomeTipoFeriado}
-          />
-        </div>
+            <div className="col-md-5 pb-2">
+              <CampoTexto
+                label="Nome do tipo de feriado"
+                desabilitado={!permissoesTela.podeConsultar}
+                placeholder="DIGITE O NOME DO TIPO DE FERIADO"
+                onChange={onChangeNomeTipoFeriado}
+                value={nomeTipoFeriado}
+              />
+            </div>
 
-        <div className="col-md-12 pt-2">
-          <DataTable
-            id="lista-tipo-calendario"
-            selectedRowKeys={idsTipoFeriadoSelecionado}
-            onSelectRow={onSelectRow}
-            onClickRow={permissoesTela.podeAlterar && onClickRow}
-            columns={colunas}
-            dataSource={listaTipoFeriado}
-            selectMultipleRows
-          />
+            <div className="col-md-12 pt-2">
+              <DataTable
+                id="lista-tipo-calendario"
+                selectedRowKeys={idsTipoFeriadoSelecionado}
+                onSelectRow={onSelectRow}
+                onClickRow={permissoesTela.podeAlterar && onClickRow}
+                columns={colunas}
+                dataSource={listaTipoFeriado}
+                selectMultipleRows
+              />
+            </div>
+          </div>
         </div>
       </Card>
     </>

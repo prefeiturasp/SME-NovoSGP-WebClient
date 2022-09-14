@@ -1,11 +1,10 @@
+import { Col, Row } from 'antd';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Loader } from '~/componentes';
+import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
 import Cabecalho from '~/componentes-sgp/cabecalho';
-import {
-  SGP_BUTTON_NOVO,
-  SGP_BUTTON_VOLTAR,
-} from '~/componentes-sgp/filtro/idsCampos';
+import { SGP_BUTTON_NOVO } from '~/componentes-sgp/filtro/idsCampos';
 import RotasDto from '~/dtos/rotasDto';
 import { AbrangenciaServico, erros } from '~/servicos';
 import ServicoResponsaveis from '~/servicos/Paginas/Gestao/Responsaveis/ServicoResponsaveis';
@@ -353,26 +352,22 @@ function montarListaAtribuicao(lista) {
   return (
     <>
       <Cabecalho pagina="Atribuição de responsáveis">
-        <>
-          <Button
-            id={SGP_BUTTON_VOLTAR}
-            label="Voltar"
-            icon="arrow-left"
-            color={Colors.Azul}
-            border
-            className="mr-2"
-            onClick={onClickVoltar}
-          />
-          <Button
-            id={SGP_BUTTON_NOVO}
-            label="Nova Atribuição"
-            color={Colors.Roxo}
-            border
-            bold
-            disabled={!permissoesTela?.podeIncluir}
-            onClick={onClickNovaAtribuicao}
-          />
-        </>
+        <Row gutter={[8, 8]} type="flex">
+          <Col>
+            <BotaoVoltarPadrao onClick={() => onClickVoltar()} />
+          </Col>
+          <Col>
+            <Button
+              id={SGP_BUTTON_NOVO}
+              label="Nova Atribuição"
+              color={Colors.Roxo}
+              border
+              bold
+              disabled={!permissoesTela?.podeIncluir}
+              onClick={onClickNovaAtribuicao}
+            />
+          </Col>
+        </Row>
       </Cabecalho>
       <Card>
         <div className="col-md-12">

@@ -1,10 +1,11 @@
+import { Col, Row } from 'antd';
 import React, { useEffect, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Cabecalho } from '~/componentes-sgp';
+import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
 import {
   SGP_BUTTON_EXCLUIR,
   SGP_BUTTON_NOVO,
-  SGP_BUTTON_VOLTAR,
 } from '~/componentes-sgp/filtro/idsCampos';
 import Button from '~/componentes/button';
 import Card from '~/componentes/card';
@@ -153,37 +154,34 @@ const TipoEventosLista = () => {
   return (
     <>
       <Cabecalho pagina="Tipo de eventos">
-        <div className="d-flex justify-content-end">
-          <Button
-            id={SGP_BUTTON_VOLTAR}
-            label="Voltar"
-            Icone="arrow-left"
-            color={Colors.Azul}
-            onClick={clicouBotaoVoltar}
-            border
-            className="mr-2"
-          />
-          <Button
-            id={SGP_BUTTON_EXCLUIR}
-            label="Excluir"
-            color={Colors.Vermelho}
-            border
-            className="mr-2"
-            onClick={clicouBotaoExcluir}
-            disabled={
-              !permissoesTela.podeExcluir ||
-              (tipoEventoSelecionados && tipoEventoSelecionados.length < 1)
-            }
-          />
-          <Button
-            id={SGP_BUTTON_NOVO}
-            label="Novo"
-            color={Colors.Roxo}
-            onClick={clicouBotaoNovo}
-            disabled={!permissoesTela.podeIncluir}
-            bold
-          />
-        </div>
+        <Row gutter={[8, 8]} type="flex">
+          <Col>
+            <BotaoVoltarPadrao onClick={() => clicouBotaoVoltar()} />
+          </Col>
+          <Col>
+            <Button
+              id={SGP_BUTTON_EXCLUIR}
+              label="Excluir"
+              color={Colors.Vermelho}
+              border
+              onClick={clicouBotaoExcluir}
+              disabled={
+                !permissoesTela.podeExcluir ||
+                (tipoEventoSelecionados && tipoEventoSelecionados.length < 1)
+              }
+            />
+          </Col>
+          <Col>
+            <Button
+              id={SGP_BUTTON_NOVO}
+              label="Novo"
+              color={Colors.Roxo}
+              onClick={clicouBotaoNovo}
+              disabled={!permissoesTela.podeIncluir}
+              bold
+            />
+          </Col>
+        </Row>
       </Cabecalho>
       <Card>
         <Div className="row mb-3 w-100 mx-auto">

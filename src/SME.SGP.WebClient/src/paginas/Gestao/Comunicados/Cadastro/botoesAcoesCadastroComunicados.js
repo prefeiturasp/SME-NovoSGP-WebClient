@@ -1,14 +1,15 @@
+import { Col, Row } from 'antd';
 import * as moment from 'moment';
 import PropTypes from 'prop-types';
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Button, Colors } from '~/componentes';
+import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
 import {
   SGP_BUTTON_ALTERAR,
   SGP_BUTTON_CADASTRAR,
   SGP_BUTTON_CANCELAR,
   SGP_BUTTON_EXCLUIR,
-  SGP_BUTTON_VOLTAR,
 } from '~/componentes-sgp/filtro/idsCampos';
 import { OPCAO_TODOS } from '~/constantes';
 import { RotasDto } from '~/dtos';
@@ -181,63 +182,62 @@ const BotoesAcoesCadastroComunicados = props => {
   };
 
   return (
-    <div className="d-flex justify-content-end">
-      <Button
-        id={SGP_BUTTON_VOLTAR}
-        label="Voltar"
-        icon="arrow-left"
-        color={Colors.Azul}
-        onClick={aoClicarBotaoVoltar}
-        border
-        className="mr-2"
-      />
-      <Button
-        id={SGP_BUTTON_CANCELAR}
-        label="Cancelar"
-        color={Colors.Azul}
-        onClick={() => onClickCancelar()}
-        border
-        className="mr-2"
-        disabled={
-          somenteConsulta ||
-          !modoEdicao ||
-          !permissoesTela.podeIncluir ||
-          !permissoesTela.podeAlterar
-        }
-      />
-      <Button
-        id={SGP_BUTTON_EXCLUIR}
-        label="Excluir"
-        color={Colors.Vermelho}
-        onClick={aoClicarBotaoExcluir}
-        border
-        className="mr-2"
-        disabled={
-          somenteConsulta || !comunicadoId || !permissoesTela.podeExcluir
-        }
-      />
-      {comunicadoId ? (
+    <Row gutter={[8, 8]} type="flex">
+      <Col>
+        <BotaoVoltarPadrao onClick={() => aoClicarBotaoVoltar()} />
+      </Col>
+      <Col>
         <Button
-          id={SGP_BUTTON_ALTERAR}
-          label="Alterar"
-          color={Colors.Roxo}
-          onClick={() => validaAntesDoSubmit()}
+          id={SGP_BUTTON_CANCELAR}
+          label="Cancelar"
+          color={Colors.Azul}
+          onClick={() => onClickCancelar()}
+          border
           disabled={
-            !modoEdicao || somenteConsulta || !permissoesTela.podeAlterar
+            somenteConsulta ||
+            !modoEdicao ||
+            !permissoesTela.podeIncluir ||
+            !permissoesTela.podeAlterar
           }
         />
-      ) : (
+      </Col>
+      <Col>
         <Button
-          id={SGP_BUTTON_CADASTRAR}
-          label="Cadastrar"
-          color={Colors.Roxo}
-          onClick={() => validaAntesDoSubmit()}
+          id={SGP_BUTTON_EXCLUIR}
+          label="Excluir"
+          color={Colors.Vermelho}
+          onClick={aoClicarBotaoExcluir}
+          border
+          className="mr-2"
           disabled={
-            !modoEdicao || somenteConsulta || !permissoesTela.podeIncluir
+            somenteConsulta || !comunicadoId || !permissoesTela.podeExcluir
           }
         />
-      )}
-    </div>
+      </Col>
+      <Col>
+        {comunicadoId ? (
+          <Button
+            id={SGP_BUTTON_ALTERAR}
+            label="Alterar"
+            color={Colors.Roxo}
+            onClick={() => validaAntesDoSubmit()}
+            disabled={
+              !modoEdicao || somenteConsulta || !permissoesTela.podeAlterar
+            }
+          />
+        ) : (
+          <Button
+            id={SGP_BUTTON_CADASTRAR}
+            label="Cadastrar"
+            color={Colors.Roxo}
+            onClick={() => validaAntesDoSubmit()}
+            disabled={
+              !modoEdicao || somenteConsulta || !permissoesTela.podeIncluir
+            }
+          />
+        )}
+      </Col>
+    </Row>
   );
 };
 

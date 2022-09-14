@@ -1,10 +1,8 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { Loader, SelectComponent } from '~/componentes';
 import { Cabecalho } from '~/componentes-sgp';
-import { SGP_BUTTON_VOLTAR } from '~/componentes-sgp/filtro/idsCampos';
-import Button from '~/componentes/button';
+import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
 import Card from '~/componentes/card';
-import { Colors } from '~/componentes/colors';
 import { URL_HOME } from '~/constantes/url';
 import { erros } from '~/servicos/alertas';
 import history from '~/servicos/history';
@@ -95,14 +93,7 @@ const DashboardEscolaAqui = () => {
   return (
     <>
       <Cabecalho pagina="Dashboard escola aqui">
-        <Button
-          id={SGP_BUTTON_VOLTAR}
-          label="Voltar"
-          icon="arrow-left"
-          color={Colors.Azul}
-          border
-          onClick={() => onClickVoltar()}
-        />
+        <BotaoVoltarPadrao onClick={() => onClickVoltar()} />
       </Cabecalho>
       <Loader loading={carregandoGeral}>
         <Card>

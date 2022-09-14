@@ -13,7 +13,6 @@ import { Cabecalho, FiltroHelper } from '~/componentes-sgp';
 import {
   SGP_BUTTON_CANCELAR,
   SGP_BUTTON_GERAR,
-  SGP_BUTTON_VOLTAR,
   SGP_CHECKBOX_EXIBIR_HISTORICO,
   SGP_SELECT_ANO_LETIVO,
   SGP_SELECT_DRE,
@@ -38,6 +37,7 @@ import {
   obterTodosMeses,
 } from '~/utils';
 import api from '~/servicos/api';
+import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
 
 const RelatorioFrequenciaMensal = () => {
   const [anoAtual] = useState(window.moment().format('YYYY'));
@@ -475,16 +475,7 @@ const RelatorioFrequenciaMensal = () => {
       <Cabecalho pagina="Relatório de frequência mensal">
         <Row gutter={[8, 8]} type="flex">
           <Col>
-            <Button
-              id={SGP_BUTTON_VOLTAR}
-              label="Voltar"
-              icon="arrow-left"
-              color={Colors.Azul}
-              border
-              onClick={() => {
-                history.push(URL_HOME);
-              }}
-            />
+            <BotaoVoltarPadrao onClick={() => history.push(URL_HOME)} />
           </Col>
           <Col>
             <Button

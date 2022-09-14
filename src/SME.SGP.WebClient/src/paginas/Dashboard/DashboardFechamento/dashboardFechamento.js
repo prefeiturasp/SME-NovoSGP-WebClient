@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 
-import { Card, Button, Colors } from '~/componentes';
+import { Card } from '~/componentes';
 import { Cabecalho } from '~/componentes-sgp';
 
 import { URL_HOME } from '~/constantes';
@@ -12,7 +12,7 @@ import { limparDadosDashboardFechamento } from '~/redux/modulos/dashboardFechame
 import DashboardFechamentoAlertaInfantil from './dashboardDevolutivasAlertaInfantil';
 import DashboardFechamentoFiltros from './DashboardFechamentoFiltros/dashboardFechamentoFiltros';
 import TabsDashboardFechamento from './TabsDashboardFechamento/tabsDashboardFechamento';
-import { SGP_BUTTON_VOLTAR } from '~/componentes-sgp/filtro/idsCampos';
+import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
 
 const DashboardFechamento = () => {
   const dispatch = useDispatch();
@@ -31,14 +31,7 @@ const DashboardFechamento = () => {
     <>
       <DashboardFechamentoAlertaInfantil />
       <Cabecalho pagina="Dashboard fechamento">
-        <Button
-          id={SGP_BUTTON_VOLTAR}
-          label="Voltar"
-          icon="arrow-left"
-          color={Colors.Azul}
-          border
-          onClick={() => onClickVoltar()}
-        />
+        <BotaoVoltarPadrao onClick={() => onClickVoltar()} />
       </Cabecalho>
       <Card>
         <div className="col-md-12">

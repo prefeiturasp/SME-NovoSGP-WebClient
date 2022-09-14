@@ -1,3 +1,4 @@
+import { Col, Row } from 'antd';
 import moment from 'moment';
 import PropTypes from 'prop-types';
 import React, { useCallback, useEffect, useState } from 'react';
@@ -17,10 +18,10 @@ import {
   SelectComponent,
 } from '~/componentes';
 import { Cabecalho, Paginacao } from '~/componentes-sgp';
+import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
 import {
   SGP_BUTTON_CANCELAR,
   SGP_BUTTON_SALVAR,
-  SGP_BUTTON_VOLTAR,
 } from '~/componentes-sgp/filtro/idsCampos';
 import { RotasDto } from '~/dtos';
 import {
@@ -679,36 +680,33 @@ const RegistroItineranciaAEECadastro = ({ match }) => {
   return (
     <>
       <Cabecalho pagina="Registro de itinerância">
-        <>
-          <Button
-            id={SGP_BUTTON_VOLTAR}
-            label="Voltar"
-            icon="arrow-left"
-            color={Colors.Azul}
-            border
-            className="mr-2"
-            onClick={onClickVoltar}
-          />
-          <Button
-            id={SGP_BUTTON_CANCELAR}
-            label="Cancelar"
-            color={Colors.Roxo}
-            border
-            bold
-            className="mr-2"
-            onClick={onClickCancelar}
-            disabled={!modoEdicao}
-          />
-          <Button
-            id={SGP_BUTTON_SALVAR}
-            label="Salvar"
-            color={Colors.Roxo}
-            border
-            bold
-            onClick={() => onClickSalvar()}
-            disabled={!modoEdicao || somenteConsulta}
-          />
-        </>
+        <Row gutter={[8, 8]} type="flex">
+          <Col>
+            <BotaoVoltarPadrao onClick={() => onClickVoltar()} />
+          </Col>
+          <Col>
+            <Button
+              id={SGP_BUTTON_CANCELAR}
+              label="Cancelar"
+              color={Colors.Roxo}
+              border
+              bold
+              onClick={onClickCancelar}
+              disabled={!modoEdicao}
+            />
+          </Col>
+          <Col>
+            <Button
+              id={SGP_BUTTON_SALVAR}
+              label="Salvar"
+              color={Colors.Roxo}
+              border
+              bold
+              onClick={() => onClickSalvar()}
+              disabled={!modoEdicao || somenteConsulta}
+            />
+          </Col>
+        </Row>
       </Cabecalho>
       <Loader loading={carregandoGeral}>
         <Card>

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Form, Formik } from 'formik';
 import * as Yup from 'yup';
 import { useSelector } from 'react-redux';
-
+import { Col, Row } from 'antd';
 import {
   Button,
   CampoData,
@@ -34,8 +34,8 @@ import { BoxTextoBimetre, CaixaBimestre } from './PeriodosEscoladres.css';
 import {
   SGP_BUTTON_ALTERAR_CADASTRAR,
   SGP_BUTTON_CANCELAR,
-  SGP_BUTTON_VOLTAR,
 } from '~/componentes-sgp/filtro/idsCampos';
+import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
 
 const PeriodosEscolares = () => {
   const [
@@ -534,36 +534,33 @@ const PeriodosEscolares = () => {
       {form => (
         <>
           <Cabecalho pagina="Cadastro do período escolar">
-            <div className="d-flex justify-content-end">
-              <Button
-                id={SGP_BUTTON_VOLTAR}
-                label="Voltar"
-                icon="arrow-left"
-                color={Colors.Azul}
-                border
-                className="mr-2"
-                onClick={onClickVoltar}
-              />
-              <Button
-                id={SGP_BUTTON_CANCELAR}
-                label="Cancelar"
-                color={Colors.Roxo}
-                border
-                bold
-                className="mr-2"
-                onClick={() => onClickCancelar(form)}
-                disabled={!modoEdicao || desabilitaCampos}
-              />
-              <Button
-                id={SGP_BUTTON_ALTERAR_CADASTRAR}
-                label={labelBotaoCadastrar}
-                color={Colors.Roxo}
-                border
-                bold
-                onClick={() => validaAntesDoSubmit(form)}
-                disabled={!calendarioEscolarSelecionado || desabilitaCampos}
-              />
-            </div>
+            <Row gutter={[8, 8]} type="flex">
+              <Col>
+                <BotaoVoltarPadrao onClick={() => onClickVoltar()} />
+              </Col>
+              <Col>
+                <Button
+                  id={SGP_BUTTON_CANCELAR}
+                  label="Cancelar"
+                  color={Colors.Roxo}
+                  border
+                  bold
+                  onClick={() => onClickCancelar(form)}
+                  disabled={!modoEdicao || desabilitaCampos}
+                />
+              </Col>
+              <Col>
+                <Button
+                  id={SGP_BUTTON_ALTERAR_CADASTRAR}
+                  label={labelBotaoCadastrar}
+                  color={Colors.Roxo}
+                  border
+                  bold
+                  onClick={() => validaAntesDoSubmit(form)}
+                  disabled={!calendarioEscolarSelecionado || desabilitaCampos}
+                />
+              </Col>
+            </Row>
           </Cabecalho>
           <Card>
             <Form className="col-md-12">

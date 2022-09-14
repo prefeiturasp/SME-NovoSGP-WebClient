@@ -3,10 +3,10 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { useRouteMatch } from 'react-router-dom';
 import { Button, Card, Colors, Loader, SelectComponent } from '~/componentes';
 import { Cabecalho } from '~/componentes-sgp';
+import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
 import {
   SGP_BUTTON_CANCELAR,
   SGP_BUTTON_SALVAR,
-  SGP_BUTTON_VOLTAR,
   SGP_SELECT_DRE,
 } from '~/componentes-sgp/filtro/idsCampos';
 import Auditoria from '~/componentes/auditoria';
@@ -18,7 +18,8 @@ import {
   erros,
   history,
   setBreadcrumbManual,
-  sucesso,erro,
+  sucesso,
+  erro,
   verificaSomenteConsulta,
 } from '~/servicos';
 import ServicoResponsaveis from '~/servicos/Paginas/Gestao/Responsaveis/ServicoResponsaveis';
@@ -345,14 +346,7 @@ const AtribuicaoResponsaveisCadastro = () => {
       <Cabecalho pagina="Atribuição de responsáveis">
         <Row gutter={[8, 8]} type="flex">
           <Col>
-            <Button
-              id={SGP_BUTTON_VOLTAR}
-              label="Voltar"
-              icon="arrow-left"
-              color={Colors.Azul}
-              border
-              onClick={onClickVoltar}
-            />
+            <BotaoVoltarPadrao onClick={() => onClickVoltar()} />
           </Col>
           <Col>
             <Button

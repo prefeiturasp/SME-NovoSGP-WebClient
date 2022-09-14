@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Form, Formik } from 'formik';
 import { useSelector } from 'react-redux';
 import * as Yup from 'yup';
-
+import { Col, Row } from 'antd';
 import {
   Auditoria,
   Button,
@@ -33,8 +33,8 @@ import {
   SGP_BUTTON_ALTERAR_CADASTRAR,
   SGP_BUTTON_CANCELAR,
   SGP_BUTTON_EXCLUIR,
-  SGP_BUTTON_VOLTAR,
 } from '~/componentes-sgp/filtro/idsCampos';
+import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
 
 const TipoCalendarioEscolarForm = ({ match }) => {
   const usuario = useSelector(store => store.usuario);
@@ -282,49 +282,47 @@ const TipoCalendarioEscolarForm = ({ match }) => {
                 idTipoCalendario > 0 ? 'Alterar' : 'Cadastro do'
               } Tipo de Calendário Escolar`}
             >
-              <div className="d-flex justify-content-end">
-                <Button
-                  id={SGP_BUTTON_VOLTAR}
-                  label="Voltar"
-                  icon="arrow-left"
-                  color={Colors.Azul}
-                  border
-                  className="mr-2"
-                  onClick={onClickVoltar}
-                />
-                <Button
-                  id={SGP_BUTTON_CANCELAR}
-                  label="Cancelar"
-                  color={Colors.Roxo}
-                  border
-                  className="mr-2"
-                  onClick={() => onClickCancelar(form)}
-                  disabled={!modoEdicao}
-                />
-                <Button
-                  id={SGP_BUTTON_EXCLUIR}
-                  label="Excluir"
-                  color={Colors.Vermelho}
-                  border
-                  className="mr-2"
-                  disabled={
-                    somenteConsulta ||
-                    !permissoesTela.podeExcluir ||
-                    novoRegistro ||
-                    possuiEventos
-                  }
-                  onClick={onClickExcluir}
-                />
-                <Button
-                  id={SGP_BUTTON_ALTERAR_CADASTRAR}
-                  label={idTipoCalendario > 0 ? 'Alterar' : 'Cadastrar'}
-                  color={Colors.Roxo}
-                  border
-                  bold
-                  onClick={() => validaAntesDoSubmit(form)}
-                  disabled={desabilitarCampos}
-                />
-              </div>
+              <Row gutter={[8, 8]} type="flex">
+                <Col>
+                  <BotaoVoltarPadrao onClick={() => onClickVoltar()} />
+                </Col>
+                <Col>
+                  <Button
+                    id={SGP_BUTTON_CANCELAR}
+                    label="Cancelar"
+                    color={Colors.Roxo}
+                    border
+                    onClick={() => onClickCancelar(form)}
+                    disabled={!modoEdicao}
+                  />
+                </Col>
+                <Col>
+                  <Button
+                    id={SGP_BUTTON_EXCLUIR}
+                    label="Excluir"
+                    color={Colors.Vermelho}
+                    border
+                    disabled={
+                      somenteConsulta ||
+                      !permissoesTela.podeExcluir ||
+                      novoRegistro ||
+                      possuiEventos
+                    }
+                    onClick={onClickExcluir}
+                  />
+                </Col>
+                <Col>
+                  <Button
+                    id={SGP_BUTTON_ALTERAR_CADASTRAR}
+                    label={idTipoCalendario > 0 ? 'Alterar' : 'Cadastrar'}
+                    color={Colors.Roxo}
+                    border
+                    bold
+                    onClick={() => validaAntesDoSubmit(form)}
+                    disabled={desabilitarCampos}
+                  />
+                </Col>
+              </Row>
             </Cabecalho>
 
             <Card>
