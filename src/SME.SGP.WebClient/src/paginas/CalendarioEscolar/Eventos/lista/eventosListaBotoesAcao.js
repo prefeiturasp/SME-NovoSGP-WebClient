@@ -2,11 +2,9 @@ import { Col, Row } from 'antd';
 import React, { useContext, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Button, Colors } from '~/componentes';
+import BotaoExcluirPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoExcluirPadrao';
 import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
-import {
-  SGP_BUTTON_EXCLUIR,
-  SGP_BUTTON_NOVO,
-} from '~/componentes-sgp/filtro/idsCampos';
+import { SGP_BUTTON_NOVO } from '~/componentes-sgp/filtro/idsCampos';
 import { URL_HOME } from '~/constantes';
 import { RotasDto } from '~/dtos';
 import { setFiltroListaEventos } from '~/redux/modulos/calendarioEscolar/actions';
@@ -114,11 +112,7 @@ const EventosListaBotoesAcao = () => {
           <BotaoVoltarPadrao onClick={() => onClickVoltar()} />
         </Col>
         <Col>
-          <Button
-            id={SGP_BUTTON_EXCLUIR}
-            label="Excluir"
-            color={Colors.Vermelho}
-            border
+          <BotaoExcluirPadrao
             onClick={onClickExcluir}
             disabled={
               !permissoesTela.podeExcluir ||

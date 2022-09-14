@@ -1,16 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-
-// Componentes
+import { Col, Row } from 'antd';
 import { Button, Colors } from '~/componentes';
-
-// Styles
-import { ButtonGroupEstilo } from './styles';
-import {
-  SGP_BUTTON_CANCELAR,
-  SGP_BUTTON_EXCLUIR,
-} from '~/componentes-sgp/filtro/idsCampos';
+import { SGP_BUTTON_CANCELAR } from '~/componentes-sgp/filtro/idsCampos';
 import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
+import BotaoExcluirPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoExcluirPadrao';
 
 function ButtonGroup({
   form,
@@ -41,57 +35,55 @@ function ButtonGroup({
   };
 
   return (
-    <ButtonGroupEstilo className="d-flex justify-content-end">
-      <BotaoVoltarPadrao
-        className="btnGroupItem"
-        onClick={() => onClickVoltar()}
-      />
+    <Row gutter={[8, 8]} type="flex">
+      <Col>
+        <BotaoVoltarPadrao onClick={() => onClickVoltar()} />
+      </Col>
       {typeof onClickCancelar === 'function' && (
-        <Button
-          id={SGP_BUTTON_CANCELAR}
-          label="Cancelar"
-          color={Colors.Roxo}
-          border
-          className="btnGroupItem"
-          onClick={() => onClickCancelar(form)}
-          disabled={
-            botoesEstadoVariavel ||
-            somenteConsulta ||
-            !modoEdicao ||
-            !permissoesTela.podeIncluir ||
-            !permissoesTela.podeAlterar
-          }
-        />
+        <Col>
+          <Button
+            id={SGP_BUTTON_CANCELAR}
+            label="Cancelar"
+            color={Colors.Roxo}
+            border
+            onClick={() => onClickCancelar(form)}
+            disabled={
+              botoesEstadoVariavel ||
+              somenteConsulta ||
+              !modoEdicao ||
+              !permissoesTela.podeIncluir ||
+              !permissoesTela.podeAlterar
+            }
+          />
+        </Col>
       )}
       {typeof onClickExcluir === 'function' && (
-        <Button
-          id={SGP_BUTTON_EXCLUIR}
-          label="Excluir"
-          color={Colors.Vermelho}
-          border
-          className="btnGroupItem"
-          disabled={somenteConsulta || desabilitarExcluir()}
-          onClick={onClickExcluir}
-        />
+        <Col>
+          <BotaoExcluirPadrao
+            disabled={somenteConsulta || desabilitarExcluir()}
+            onClick={() => onClickExcluir()}
+          />
+        </Col>
       )}
       {typeof onClickBotaoPrincipal === 'function' && (
-        <Button
-          id={idBotaoPrincipal}
-          label={labelBotaoPrincipal}
-          color={Colors.Roxo}
-          border
-          bold
-          className="btnGroupItem"
-          onClick={onClickBotaoPrincipal}
-          disabled={
-            botoesEstadoVariavel ||
-            desabilitarBotaoPrincipal ||
-            somenteConsulta ||
-            !permissoesTela.podeIncluir
-          }
-        />
+        <Col>
+          <Button
+            id={idBotaoPrincipal}
+            label={labelBotaoPrincipal}
+            color={Colors.Roxo}
+            border
+            bold
+            onClick={onClickBotaoPrincipal}
+            disabled={
+              botoesEstadoVariavel ||
+              desabilitarBotaoPrincipal ||
+              somenteConsulta ||
+              !permissoesTela.podeIncluir
+            }
+          />
+        </Col>
       )}
-    </ButtonGroupEstilo>
+    </Row>
   );
 }
 

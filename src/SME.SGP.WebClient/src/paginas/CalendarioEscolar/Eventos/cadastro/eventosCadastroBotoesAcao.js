@@ -3,11 +3,11 @@ import React, { useContext, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { Button, Colors } from '~/componentes';
+import BotaoExcluirPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoExcluirPadrao';
 import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
 import {
   SGP_BUTTON_ALTERAR_CADASTRAR,
   SGP_BUTTON_CANCELAR,
-  SGP_BUTTON_EXCLUIR,
 } from '~/componentes-sgp/filtro/idsCampos';
 import { RotasDto } from '~/dtos';
 import {
@@ -145,11 +145,7 @@ const EventosCadastroBotoesAcao = () => {
         </Col>
         {!novoRegistro ? (
           <Col>
-            <Button
-              id={SGP_BUTTON_EXCLUIR}
-              label="Excluir"
-              color={Colors.Vermelho}
-              border
+            <BotaoExcluirPadrao
               hidden={novoRegistro}
               onClick={onClickExcluir}
               disabled={

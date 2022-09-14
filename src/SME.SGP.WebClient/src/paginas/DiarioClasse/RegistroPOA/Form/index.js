@@ -300,7 +300,7 @@ function RegistroPOAForm({ match }) {
                     modalidadesFiltroPrincipal,
                     turmaSelecionada
                   ) ? (
-                    <>
+                    <div className="col-md-12">
                       <Row className="row mb-2">
                         <Grid cols={6}>
                           <DreDropDown
@@ -365,7 +365,7 @@ function RegistroPOAForm({ match }) {
                           />
                         </Grid>
                       </Row>
-                    </>
+                    </div>
                   ) : (
                     ''
                   )}
@@ -374,16 +374,18 @@ function RegistroPOAForm({ match }) {
                     modalidadesFiltroPrincipal,
                     turmaSelecionada
                   ) ? (
-                    <div className="row">
-                      <Auditoria
-                        criadoEm={auditoria.criadoEm}
-                        criadoPor={auditoria.criadoPor}
-                        criadoRf={auditoria.criadoRf}
-                        alteradoPor={auditoria.alteradoPor}
-                        alteradoEm={auditoria.alteradoEm}
-                        alteradoRf={auditoria.alteradoRf}
-                        ignorarMarginTop
-                      />
+                    <div className="col-md-12">
+                      <div className="row">
+                        <Auditoria
+                          criadoEm={auditoria.criadoEm}
+                          criadoPor={auditoria.criadoPor}
+                          criadoRf={auditoria.criadoRf}
+                          alteradoPor={auditoria.alteradoPor}
+                          alteradoEm={auditoria.alteradoEm}
+                          alteradoRf={auditoria.alteradoRf}
+                          ignorarMarginTop
+                        />
+                      </div>
                     </div>
                   ) : (
                     <></>

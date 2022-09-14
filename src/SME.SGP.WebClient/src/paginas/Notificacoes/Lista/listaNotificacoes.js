@@ -21,11 +21,9 @@ import { verificaSomenteConsulta } from '~/servicos/servico-navegacao';
 import { validaSeObjetoEhNuloOuVazio } from '~/utils/funcoes/gerais';
 
 import { Card, Loader } from '~/componentes';
-import {
-  SGP_BUTTON_EXCLUIR,
-  SGP_BUTTON_LIDA,
-} from '~/componentes-sgp/filtro/idsCampos';
+import { SGP_BUTTON_LIDA } from '~/componentes-sgp/filtro/idsCampos';
 import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
+import BotaoExcluirPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoExcluirPadrao';
 
 export default function NotificacoesLista() {
   const [idNotificacoesSelecionadas, setIdNotificacoesSelecionadas] = useState(
@@ -340,11 +338,7 @@ export default function NotificacoesLista() {
               <BotaoVoltarPadrao onClick={() => quandoClicarVoltar()} />
             </Col>
             <Col>
-              <Button
-                id={SGP_BUTTON_EXCLUIR}
-                label="Excluir"
-                color={Colors.Vermelho}
-                border
+              <BotaoExcluirPadrao
                 onClick={excluir}
                 disabled={
                   (idNotificacoesSelecionadas &&

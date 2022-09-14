@@ -4,11 +4,9 @@ import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Button, Card, Colors, ListaPaginada, Loader } from '~/componentes';
 import { Cabecalho } from '~/componentes-sgp';
+import BotaoExcluirPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoExcluirPadrao';
 import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
-import {
-  SGP_BUTTON_EXCLUIR,
-  SGP_BUTTON_NOVO,
-} from '~/componentes-sgp/filtro/idsCampos';
+import { SGP_BUTTON_NOVO } from '~/componentes-sgp/filtro/idsCampos';
 import { ModalidadeDTO, RotasDto } from '~/dtos';
 import {
   confirmar,
@@ -141,12 +139,8 @@ const ListaComunicados = () => {
             <BotaoVoltarPadrao onClick={() => aoClicarBotaoVoltar()} />
           </Col>
           <Col>
-            <Button
-              id={SGP_BUTTON_EXCLUIR}
-              label="Excluir"
-              color={Colors.Vermelho}
+            <BotaoExcluirPadrao
               onClick={aoClicarBotaoExcluir}
-              border
               disabled={
                 somenteConsulta ||
                 itensSelecionados?.length < 1 ||

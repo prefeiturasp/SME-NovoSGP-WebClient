@@ -6,12 +6,12 @@ import { useSelector } from 'react-redux';
 import * as Yup from 'yup';
 import { Auditoria, Loader, Localizador, SelectComponent } from '~/componentes';
 import { Cabecalho } from '~/componentes-sgp';
+import BotaoExcluirPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoExcluirPadrao';
 import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
 import DreDropDown from '~/componentes-sgp/DreDropDown/';
 import {
   SGP_BUTTON_ALTERAR_CADASTRAR,
   SGP_BUTTON_CANCELAR,
-  SGP_BUTTON_EXCLUIR,
 } from '~/componentes-sgp/filtro/idsCampos';
 import UeDropDown from '~/componentes-sgp/UeDropDown/';
 import UploadArquivos from '~/componentes-sgp/UploadArquivos/uploadArquivos';
@@ -494,11 +494,7 @@ const DocumentosPlanosTrabalhoCadastro = ({ match }) => {
                     />
                   </Col>
                   <Col>
-                    <Button
-                      id={SGP_BUTTON_EXCLUIR}
-                      label="Excluir"
-                      color={Colors.Vermelho}
-                      border
+                    <BotaoExcluirPadrao
                       disabled={
                         !idDocumentosPlanoTrabalho ||
                         !permissoesTela.podeExcluir

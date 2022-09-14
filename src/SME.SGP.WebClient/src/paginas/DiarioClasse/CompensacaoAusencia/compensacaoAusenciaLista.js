@@ -22,11 +22,9 @@ import { AlunosCompensacao } from './styles';
 import AlertaModalidadeInfantil from '~/componentes-sgp/AlertaModalidadeInfantil/alertaModalidadeInfantil';
 import { ehTurmaInfantil } from '~/servicos/Validacoes/validacoesInfatil';
 import CompensacaoAusenciaListaCamposDebounce from './compensacaoAusenciaListaCamposDebounce';
-import {
-  SGP_BUTTON_EXCLUIR,
-  SGP_BUTTON_NOVO,
-} from '~/componentes-sgp/filtro/idsCampos';
+import { SGP_BUTTON_NOVO } from '~/componentes-sgp/filtro/idsCampos';
 import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
+import BotaoExcluirPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoExcluirPadrao';
 
 const CompensacaoAusenciaLista = () => {
   const usuario = useSelector(store => store.usuario);
@@ -327,11 +325,7 @@ const CompensacaoAusenciaLista = () => {
             <BotaoVoltarPadrao onClick={() => onClickVoltar()} />
           </Col>
           <Col>
-            <Button
-              id={SGP_BUTTON_EXCLUIR}
-              label="Excluir"
-              color={Colors.Vermelho}
-              border
+            <BotaoExcluirPadrao
               onClick={onClickExcluir}
               disabled={
                 !permissoesTela.podeExcluir ||

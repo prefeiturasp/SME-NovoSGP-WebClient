@@ -1,13 +1,10 @@
 import { Col, Row } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
+import BotaoExcluirPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoExcluirPadrao';
 import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
 import Cabecalho from '~/componentes-sgp/cabecalho';
-import {
-  SGP_BUTTON_EXCLUIR,
-  SGP_BUTTON_NOVO,
-  SGP_BUTTON_VOLTAR,
-} from '~/componentes-sgp/filtro/idsCampos';
+import { SGP_BUTTON_NOVO } from '~/componentes-sgp/filtro/idsCampos';
 import Button from '~/componentes/button';
 import Card from '~/componentes/card';
 import { Colors } from '~/componentes/colors';
@@ -121,11 +118,7 @@ const TipoCalendarioEscolarLista = () => {
             <BotaoVoltarPadrao onClick={() => onClickVoltar()} />
           </Col>
           <Col>
-            <Button
-              id={SGP_BUTTON_EXCLUIR}
-              label="Excluir"
-              color={Colors.Vermelho}
-              border
+            <BotaoExcluirPadrao
               disabled={
                 !permissoesTela.podeExcluir ||
                 (idTiposSelecionados && idTiposSelecionados.length < 1)

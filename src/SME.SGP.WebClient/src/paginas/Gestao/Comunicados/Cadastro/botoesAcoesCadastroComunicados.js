@@ -4,12 +4,12 @@ import PropTypes from 'prop-types';
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Button, Colors } from '~/componentes';
+import BotaoExcluirPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoExcluirPadrao';
 import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
 import {
   SGP_BUTTON_ALTERAR,
   SGP_BUTTON_CADASTRAR,
   SGP_BUTTON_CANCELAR,
-  SGP_BUTTON_EXCLUIR,
 } from '~/componentes-sgp/filtro/idsCampos';
 import { OPCAO_TODOS } from '~/constantes';
 import { RotasDto } from '~/dtos';
@@ -202,13 +202,8 @@ const BotoesAcoesCadastroComunicados = props => {
         />
       </Col>
       <Col>
-        <Button
-          id={SGP_BUTTON_EXCLUIR}
-          label="Excluir"
-          color={Colors.Vermelho}
+        <BotaoExcluirPadrao
           onClick={aoClicarBotaoExcluir}
-          border
-          className="mr-2"
           disabled={
             somenteConsulta || !comunicadoId || !permissoesTela.podeExcluir
           }

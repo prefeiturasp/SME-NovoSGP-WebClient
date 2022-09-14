@@ -22,9 +22,9 @@ import { verificaSomenteConsulta } from '~/servicos/servico-navegacao';
 import {
   SGP_BUTTON_ALTERAR_CADASTRAR,
   SGP_BUTTON_CANCELAR,
-  SGP_BUTTON_EXCLUIR,
 } from '~/componentes-sgp/filtro/idsCampos';
 import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
+import BotaoExcluirPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoExcluirPadrao';
 
 const TipoFeriadoForm = ({ match }) => {
   const [auditoria, setAuditoria] = useState([]);
@@ -279,11 +279,7 @@ const TipoFeriadoForm = ({ match }) => {
                   />
                 </Col>
                 <Col>
-                  <Button
-                    id={SGP_BUTTON_EXCLUIR}
-                    label="Excluir"
-                    color={Colors.Vermelho}
-                    border
+                  <BotaoExcluirPadrao
                     disabled={
                       novoRegistro ||
                       !permissoesTela.podeExcluir ||

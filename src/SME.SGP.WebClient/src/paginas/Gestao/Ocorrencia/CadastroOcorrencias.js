@@ -18,11 +18,11 @@ import {
   SelectComponent,
 } from '~/componentes';
 import { Cabecalho } from '~/componentes-sgp';
+import BotaoExcluirPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoExcluirPadrao';
 import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
 import {
   SGP_BUTTON_ALTERAR_CADASTRAR,
   SGP_BUTTON_CANCELAR,
-  SGP_BUTTON_EXCLUIR,
   SGP_BUTTON_IMPRIMIR,
 } from '~/componentes-sgp/filtro/idsCampos';
 import JoditEditor from '~/componentes/jodit-editor/joditEditor';
@@ -448,11 +448,7 @@ const CadastroOcorrencias = ({ match }) => {
                 </Col>
                 {match?.params?.id ? (
                   <Col>
-                    <Button
-                      id={SGP_BUTTON_EXCLUIR}
-                      label="Excluir"
-                      color={Colors.Vermelho}
-                      border
+                    <BotaoExcluirPadrao
                       onClick={onClickExcluir}
                       disabled={
                         ehTurmaAnoAnterior() || somenteConsulta || !podeExcluir

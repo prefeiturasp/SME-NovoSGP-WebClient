@@ -12,11 +12,9 @@ import {
 } from '~/componentes';
 import { Cabecalho } from '~/componentes-sgp';
 import AlertaPermiteSomenteTurmaInfantil from '~/componentes-sgp/AlertaPermiteSomenteTurmaInfantil/alertaPermiteSomenteTurmaInfantil';
+import BotaoExcluirPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoExcluirPadrao';
 import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
-import {
-  SGP_BUTTON_EXCLUIR,
-  SGP_BUTTON_NOVO,
-} from '~/componentes-sgp/filtro/idsCampos';
+import { SGP_BUTTON_NOVO } from '~/componentes-sgp/filtro/idsCampos';
 import { RotasDto } from '~/dtos';
 import modalidade from '~/dtos/modalidade';
 import {
@@ -211,11 +209,7 @@ const ListaOcorrencias = () => {
             <BotaoVoltarPadrao onClick={() => onClickVoltar()} />
           </Col>
           <Col>
-            <Button
-              id={SGP_BUTTON_EXCLUIR}
-              label="Excluir"
-              color={Colors.Vermelho}
-              border
+            <BotaoExcluirPadrao
               onClick={onClickExcluir}
               disabled={
                 !itenSelecionados?.length ||

@@ -4,6 +4,7 @@ import shortid from 'shortid';
 import { Form, Formik } from 'formik';
 import queryString from 'query-string';
 import * as Yup from 'yup';
+import { Col, Row } from 'antd';
 import Alert from '~/componentes/alert';
 import { Cabecalho } from '~/componentes-sgp';
 import history from '~/servicos/history';
@@ -25,7 +26,6 @@ import servicoDisciplina from '~/servicos/Paginas/ServicoDisciplina';
 import CampoNumeroFormik from '~/componentes/campoNumeroFormik/campoNumeroFormik';
 import { aulaDto } from '~/dtos/aulaDto';
 
-import { Container } from './cadastroAula.css';
 import modalidade from '~/dtos/modalidade';
 import ExcluirAula from './excluirAula';
 import { setBreadcrumbManual } from '~/servicos/breadcrumb-services';
@@ -34,6 +34,8 @@ import { RegistroMigrado } from '~/componentes-sgp/registro-migrado';
 import { ehTurmaInfantil } from '~/servicos/Validacoes/validacoesInfatil';
 import AlterarAula from './alterarAula';
 import {
+  SGP_BUTTON_ALTERAR_CADASTRAR,
+  SGP_BUTTON_CANCELAR,
   SGP_DATA_AULA,
   SGP_INPUT_NUMBER_QUANTIDADE_AULAS,
   SGP_RADIO_RECORRENCIA,
@@ -42,6 +44,7 @@ import {
 } from '~/componentes-sgp/filtro/idsCampos';
 import { ContainerColumnReverse } from '~/paginas/Planejamento/Anual/planoAnual.css';
 import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
+import BotaoExcluirPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoExcluirPadrao';
 
 function CadastroDeAula({ match, location }) {
   const { id, tipoCalendarioId, somenteReposicao } = match.params;
@@ -578,7 +581,7 @@ function CadastroDeAula({ match, location }) {
   }, [aula, id, alterouCampo]);
 
   return (
-    <Container>
+    <>
       <Loader loading={carregandoDados}>
         <ExcluirAula
           idAula={id}
@@ -619,47 +622,35 @@ function CadastroDeAula({ match, location }) {
           onCancelar={() => setExibirModalAlteracao(false)}
         />
 
-        <div className="col-md-12">
-          {controlaGrade && gradeAtingida && !id && (
-            <Alert
-              alerta={{
-                tipo: 'warning',
-                id: 'cadastro-aula-quantidade-maxima',
-                mensagem:
-                  'Não é possível criar aula normal porque o limite da grade curricular foi atingido',
-                estiloTitulo: { fontSize: '18px' },
-              }}
-              className="mb-2"
-            />
-          )}
-        </div>
-        <div className="col-md-12">
-          {somenteLeitura && (
-            <Alert
-              alerta={{
-                tipo: 'warning',
-                id: 'somente-leitura',
-                mensagem: 'Você possui permissão somente de leitura nesta aula',
-                estiloTitulo: { fontSize: '18px' },
-              }}
-              className="mb-2"
-            />
-          )}
-        </div>
-        <div className="col-md-12">
-          {emManutencao && (
-            <Alert
-              alerta={{
-                tipo: 'warning',
-                id: 'em-manutencao',
-                mensagem: 'Registro em manutenção',
-                estiloTitulo: { fontSize: '18px' },
-              }}
-              className="mb-2"
-            />
-          )}
-        </div>
-        <div className="col-xs-12 col-md-12 col-lg-12">
+        {controlaGrade && gradeAtingida && !id && (
+          <Alert
+            alerta={{
+              tipo: 'warning',
+              id: 'cadastro-aula-quantidade-maxima',
+              mensagem:
+                'Não é possível criar aula normal porque o limite da grade curricular foi atingido',
+            }}
+          />
+        )}
+        {somenteLeitura && (
+          <Alert
+            alerta={{
+              tipo: 'warning',
+              id: 'somente-leitura',
+              mensagem: 'Você possui permissão somente de leitura nesta aula',
+            }}
+          />
+        )}
+        {emManutencao && (
+          <Alert
+            alerta={{
+              tipo: 'warning',
+              id: 'em-manutencao',
+              mensagem: 'Registro em manutenção',
+            }}
+          />
+        )}
+        <div>
           <Formik
             enableReinitialize
             initialValues={aula}
@@ -674,63 +665,61 @@ function CadastroDeAula({ match, location }) {
                 <Cabecalho
                   pagina={`Cadastro de Aula - ${obterDataFormatada()} `}
                 >
-                  <>
-                    <BotaoVoltarPadrao
-                      className="mr-2"
-                      onClick={onClickVoltar}
-                    />
-                    <Button
-                      id={shortid.generate()}
-                      label="Cancelar"
-                      color={Colors.Roxo}
-                      border
-                      className="mr-2"
-                      onClick={onClickCancelar}
-                      disabled={somenteConsulta || !modoEdicao}
-                    />
-                    <Button
-                      id={shortid.generate()}
-                      label="Excluir"
-                      color={Colors.Vermelho}
-                      border
-                      className="mr-2"
-                      onClick={onClickExcluir}
-                      disabled={
-                        somenteConsulta ||
-                        !id ||
-                        somenteLeitura ||
-                        !aula.podeEditar
-                      }
-                    />
-
-                    <Button
-                      id={shortid.generate()}
-                      label={id ? 'Salvar' : 'Cadastrar'}
-                      color={Colors.Roxo}
-                      border
-                      bold
-                      onClick={() => {
-                        if (
+                  <Row gutter={[8, 8]} type="flex">
+                    <Col>
+                      <BotaoVoltarPadrao onClick={onClickVoltar} />
+                    </Col>
+                    <Col>
+                      <Button
+                        id={SGP_BUTTON_CANCELAR}
+                        label="Cancelar"
+                        color={Colors.Roxo}
+                        border
+                        onClick={onClickCancelar}
+                        disabled={somenteConsulta || !modoEdicao}
+                      />
+                    </Col>
+                    <Col>
+                      <BotaoExcluirPadrao
+                        onClick={onClickExcluir}
+                        disabled={
+                          somenteConsulta ||
                           !id ||
-                          (aula.recorrenciaAula == recorrencia.AULA_UNICA &&
-                            !recorrenciaAulaEmEdicao.existeFrequenciaOuPlanoAula)
-                        ) {
-                          form.handleSubmit();
-                        } else {
-                          setExibirModalAlteracao(true);
+                          somenteLeitura ||
+                          !aula.podeEditar
                         }
-                      }}
-                      disabled={
-                        somenteConsulta ||
-                        (controlaGrade && gradeAtingida && !id) ||
-                        !aula.disciplinaId ||
-                        somenteLeitura ||
-                        desabilitarBtnSalvar ||
-                        !modoEdicao ||
-                        !aula.podeEditar
-                      }
-                    />
-                  </>
+                      />
+                    </Col>
+                    <Col>
+                      <Button
+                        id={SGP_BUTTON_ALTERAR_CADASTRAR}
+                        label={id ? 'Salvar' : 'Cadastrar'}
+                        color={Colors.Roxo}
+                        border
+                        bold
+                        onClick={() => {
+                          if (
+                            !id ||
+                            (aula.recorrenciaAula == recorrencia.AULA_UNICA &&
+                              !recorrenciaAulaEmEdicao.existeFrequenciaOuPlanoAula)
+                          ) {
+                            form.handleSubmit();
+                          } else {
+                            setExibirModalAlteracao(true);
+                          }
+                        }}
+                        disabled={
+                          somenteConsulta ||
+                          (controlaGrade && gradeAtingida && !id) ||
+                          !aula.disciplinaId ||
+                          somenteLeitura ||
+                          desabilitarBtnSalvar ||
+                          !modoEdicao ||
+                          !aula.podeEditar
+                        }
+                      />
+                    </Col>
+                  </Row>
                 </Cabecalho>
                 <Card>
                   <Form className="col-md-12">
@@ -836,7 +825,7 @@ function CadastroDeAula({ match, location }) {
           </Formik>
         </div>
       </Loader>
-    </Container>
+    </>
   );
 }
 

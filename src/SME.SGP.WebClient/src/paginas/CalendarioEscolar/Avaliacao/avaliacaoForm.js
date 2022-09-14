@@ -29,9 +29,9 @@ import { Cabecalho } from '~/componentes-sgp';
 import {
   SGP_BUTTON_ALTERAR_CADASTRAR,
   SGP_BUTTON_CANCELAR,
-  SGP_BUTTON_EXCLUIR,
 } from '~/componentes-sgp/filtro/idsCampos';
 import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
+import BotaoExcluirPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoExcluirPadrao';
 
 const AvaliacaoForm = ({ match, location }) => {
   const [
@@ -629,11 +629,7 @@ const AvaliacaoForm = ({ match, location }) => {
                       />
                     </Col>
                     <Col>
-                      <Button
-                        id={SGP_BUTTON_EXCLUIR}
-                        label="Excluir"
-                        color={Colors.Vermelho}
-                        border
+                      <BotaoExcluirPadrao
                         disabled={
                           desabilitarCampos ||
                           !idAvaliacao ||

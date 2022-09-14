@@ -14,11 +14,9 @@ import history from '~/servicos/history';
 import { store } from '~/redux';
 import RotasDto from '~/dtos/rotasDto';
 import { verificaSomenteConsulta } from '~/servicos/servico-navegacao';
-import {
-  SGP_BUTTON_EXCLUIR,
-  SGP_BUTTON_NOVO,
-} from '~/componentes-sgp/filtro/idsCampos';
+import { SGP_BUTTON_NOVO } from '~/componentes-sgp/filtro/idsCampos';
 import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
+import BotaoExcluirPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoExcluirPadrao';
 
 const TipoFeriadoLista = () => {
   const [idsTipoFeriadoSelecionado, setIdsTipoFeriadoSelecionado] = useState(
@@ -166,11 +164,7 @@ const TipoFeriadoLista = () => {
             <BotaoVoltarPadrao onClick={() => onClickVoltar()} />
           </Col>
           <Col>
-            <Button
-              id={SGP_BUTTON_EXCLUIR}
-              label="Excluir"
-              color={Colors.Vermelho}
-              border
+            <BotaoExcluirPadrao
               disabled={
                 !permissoesTela.podeExcluir ||
                 (idsTipoFeriadoSelecionado &&
