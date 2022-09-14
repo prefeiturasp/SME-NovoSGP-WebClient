@@ -79,12 +79,16 @@ const ModalAnotacoesFrequencia = props => {
   const [dadosEstudanteOuCrianca, setDadosEstudanteOuCrianca] = useState({});
 
   const onCloseModal = (salvou, excluiu) => {
+    refForm.resetForm({});
+    refForm.setFieldValue('anotacao', null);
+    setValoresIniciais({});
+    setValoresIniciais({ ...iniciar });
+    setRefForm({});
     dispatch(setDadosModal({}));
     dispatch(setExibirModal(false));
-    setValoresIniciais(iniciar);
-    setRefForm({});
     setModoEdicao(false);
     fechouModal(salvou, excluiu);
+    setDadosEstudanteOuCrianca({});
   };
 
   const obterAnotacao = useCallback(async () => {
@@ -324,7 +328,7 @@ const ModalAnotacoesFrequencia = props => {
                 <EditorAnotacao>
                   <JoditEditor
                     form={form}
-                    value={valoresIniciais.anotacao}
+                    value={refForm?.state?.values?.anotacao}
                     name="anotacao"
                     onChange={v => {
                       if (valoresIniciais.anotacao !== v) {
