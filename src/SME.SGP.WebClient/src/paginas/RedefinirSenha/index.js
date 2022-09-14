@@ -58,7 +58,7 @@ const RedefinirSenha = props => {
 
   const { senha, confirmarSenha } = senhas;
   const token = props?.match?.params?.token;
-  console.log(props?.match?.params, ' props?.match?.params?');
+
   const [validacoes, setValidacoes] = useState({
     maiuscula: '',
     minuscula: '',
@@ -93,7 +93,7 @@ const RedefinirSenha = props => {
 
   const validarToken = async () => {
     let tokenValido = true;
-    if (!token) history.push(URL_LOGIN);
+    // if (token) history.push(URL_LOGIN);
     if (token) tokenValido = await RedefinirSenhaServico.validarToken(token);
 
     if (!tokenValido) {
@@ -229,7 +229,7 @@ const RedefinirSenha = props => {
         );
         ServicoDashboard.obterDadosDashboard();
         setCarregandoContinuar(false);
-        history.push(URL_HOME);
+        // history.push(URL_HOME);
       } else {
         setCarregandoContinuar(false);
         setErroGeral(requisicao.erro);
