@@ -696,11 +696,16 @@ const CompensacaoAusenciaForm = ({ match }) => {
   };
 
   const onClickCadastrar = async valoresForm => {
+    if (!alunosAusenciaCompensada?.length) {
+      erro(
+        'É necessário selecionar um estudante para realizar a compensação de ausência'
+      );
+      return;
+    }
     setCarregandoGeral(true);
     const paramas = valoresForm;
     paramas.id = idCompensacaoAusencia;
     paramas.turmaId = turmaSelecionada.turma;
-
     paramas.disciplinasRegenciaIds = [];
     if (temRegencia) {
       const somenteSelecionados = listaDisciplinasRegencia.filter(
