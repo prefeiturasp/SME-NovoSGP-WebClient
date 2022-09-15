@@ -1,3 +1,4 @@
+import { Col, Row } from 'antd';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import {
@@ -7,10 +8,8 @@ import {
   SelectComponent,
 } from '~/componentes';
 import { Cabecalho, NomeEstudanteLista } from '~/componentes-sgp';
-import {
-  SGP_BUTTON_NOVO,
-  SGP_BUTTON_VOLTAR,
-} from '~/componentes-sgp/filtro/idsCampos';
+import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
+import { SGP_BUTTON_NOVO } from '~/componentes-sgp/filtro/idsCampos';
 import Button from '~/componentes/button';
 import Card from '~/componentes/card';
 import { Colors } from '~/componentes/colors';
@@ -24,7 +23,6 @@ import { erros } from '~/servicos/alertas';
 import history from '~/servicos/history';
 import ServicoEncaminhamentoAEE from '~/servicos/Paginas/Relatorios/AEE/ServicoEncaminhamentoAEE';
 import FiltroHelper from '~componentes-sgp/filtro/helper';
-import { BtnVoltarExcluirEncaminhamentoAEE } from '../Cadastro/encaminhamentoAEECadastro.css';
 import ModalAvisoNovoEncaminhamentoAEE from './Componentes/AvisoCadastro/modalAvisoCadastro';
 
 const EncaminhamentoAEELista = () => {
@@ -490,25 +488,22 @@ const EncaminhamentoAEELista = () => {
     <>
       <ModalAvisoNovoEncaminhamentoAEE />
       <Cabecalho pagina="Encaminhamento AEE">
-        <div className="d-flex justify-content-end">
-          <BtnVoltarExcluirEncaminhamentoAEE
-            id={SGP_BUTTON_VOLTAR}
-            icon="arrow-left"
-            color={Colors.Azul}
-            border
-            className="mr-2"
-            onClick={onClickVoltar}
-          />
-          <Button
-            id={SGP_BUTTON_NOVO}
-            label="Novo Encaminhamento"
-            color={Colors.Roxo}
-            border
-            bold
-            onClick={onClickNovo}
-            disabled={somenteConsulta || !permissoesTela.podeIncluir}
-          />
-        </div>
+        <Row gutter={[8, 8]} type="flex">
+          <Col>
+            <BotaoVoltarPadrao onClick={() => onClickVoltar()} />
+          </Col>
+          <Col>
+            <Button
+              id={SGP_BUTTON_NOVO}
+              label="Novo Encaminhamento"
+              color={Colors.Roxo}
+              border
+              bold
+              onClick={onClickNovo}
+              disabled={somenteConsulta || !permissoesTela.podeIncluir}
+            />
+          </Col>
+        </Row>
       </Cabecalho>
       <Card>
         <div className="col-md-12">

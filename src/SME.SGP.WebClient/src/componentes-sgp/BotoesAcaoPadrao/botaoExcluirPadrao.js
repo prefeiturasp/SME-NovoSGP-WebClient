@@ -6,20 +6,24 @@ import { SGP_BUTTON_EXCLUIR } from '../filtro/idsCampos';
 import { Colors } from '~/componentes/colors';
 
 const BotaoExcluirPadrao = props => {
-  const { onClick, disabled, hidden } = props;
+  const { onClick, disabled } = props;
 
   return (
-    <Tooltip title="Excluir" mouseEnterDelay={0}>
+    <Tooltip
+      title="Excluir"
+      placement="bottom"
+      mouseEnterDelay={0}
+      getTooltipContainer={trigger => trigger.parentNode}
+    >
       <span>
         <Button
           semMargemDireita
           id={SGP_BUTTON_EXCLUIR}
-          icon="trash"
+          icon="trash-alt"
           color={Colors.Vermelho}
           border
           onClick={onClick}
           disabled={disabled}
-          hidden={hidden}
         />
       </span>
     </Tooltip>
@@ -29,13 +33,11 @@ const BotaoExcluirPadrao = props => {
 BotaoExcluirPadrao.propTypes = {
   onClick: PropTypes.func,
   disabled: PropTypes.bool,
-  hidden: PropTypes.bool,
 };
 
 BotaoExcluirPadrao.defaultProps = {
   onClick: () => {},
   disabled: false,
-  hidden: false,
 };
 
 export default BotaoExcluirPadrao;

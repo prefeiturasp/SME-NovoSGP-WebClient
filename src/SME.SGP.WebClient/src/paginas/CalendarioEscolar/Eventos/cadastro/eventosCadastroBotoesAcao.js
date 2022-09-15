@@ -146,7 +146,6 @@ const EventosCadastroBotoesAcao = () => {
         {!novoRegistro ? (
           <Col>
             <BotaoExcluirPadrao
-              hidden={novoRegistro}
               onClick={onClickExcluir}
               disabled={
                 somenteConsulta ||

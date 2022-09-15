@@ -14,6 +14,7 @@ const BotaoVoltarPadrao = props => {
       placement="left"
       mouseEnterDelay={0}
       className={className}
+      getTooltipContainer={trigger => trigger.parentNode}
     >
       <span>
         <Button

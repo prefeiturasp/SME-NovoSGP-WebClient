@@ -86,9 +86,7 @@ const EncaminhamentoAEECadastro = ({ match }) => {
   return (
     <LoaderEncaminhamento>
       <Cabecalho pagina="Encaminhamento AEE">
-        <div className="d-flex justify-content-end">
-          <BotoesAcoesEncaminhamentoAEE match={match} />
-        </div>
+        <BotoesAcoesEncaminhamentoAEE match={match} />
       </Cabecalho>
       <Card>
         <div className="col-md-12">
