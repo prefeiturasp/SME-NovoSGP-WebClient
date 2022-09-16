@@ -93,7 +93,7 @@ const RedefinirSenha = props => {
 
   const validarToken = async () => {
     let tokenValido = true;
-    // if (token) history.push(URL_LOGIN);
+    if (!token) history.push(URL_LOGIN);
     if (token) tokenValido = await RedefinirSenhaServico.validarToken(token);
 
     if (!tokenValido) {
@@ -105,13 +105,13 @@ const RedefinirSenha = props => {
 
   useLayoutEffect(() => {
     if (!tokenValidado && !logado) validarToken();
-    // document.addEventListener('keydown', trataAcaoTeclado);
+    document.addEventListener('keydown', trataAcaoTeclado);
     setTimeout(() => {
       setFinalizouCarregamento(true);
     }, 500);
-    // return () => {
-    //   document.removeEventListener('keydown', trataAcaoTeclado);
-    // };
+    return () => {
+      document.removeEventListener('keydown', trataAcaoTeclado);
+    };
   }, []);
 
   useEffect(() => {
@@ -229,7 +229,7 @@ const RedefinirSenha = props => {
         );
         ServicoDashboard.obterDadosDashboard();
         setCarregandoContinuar(false);
-        // history.push(URL_HOME);
+        history.push(URL_HOME);
       } else {
         setCarregandoContinuar(false);
         setErroGeral(requisicao.erro);
