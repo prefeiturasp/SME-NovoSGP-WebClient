@@ -20,6 +20,7 @@ const ModalJustificativaFechamento = () => {
     setExibirLoaderGeral,
     dadosModalJustificativaFechamento,
     setDadosModalJustificativaFechamento,
+    setDadosIniciaisFechamento,
   } = useContext(ListaoContext);
 
   const usuario = useSelector(store => store.usuario);
@@ -67,7 +68,9 @@ const ModalJustificativaFechamento = () => {
       dadosFechamento,
       bimestreOperacoes,
       loaderGeral ? setExibirLoaderGeral : setExibirLoader,
-      componenteCurricular
+      componenteCurricular,
+      setDadosFechamento,
+      setDadosIniciaisFechamento
     );
 
     if (salvou && dadosModalJustificativaFechamento.acaoPosSalvar) {
