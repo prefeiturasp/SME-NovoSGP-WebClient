@@ -301,8 +301,8 @@ export const TabelaColunasFixas = styled.div`
 export const CaixaMarcadores = styled.span`
   border: 1.6px solid ${Base.Roxo};
   border-radius: 9px;
-  padding-left: 10px;
-  padding-right: 10px;
+  padding-left: 6px;
+  padding-right: 6px;
   font-weight: bold;
   color: ${Base.Roxo};
 `;
