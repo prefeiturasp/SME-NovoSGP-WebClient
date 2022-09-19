@@ -207,8 +207,12 @@ const QuestionarioDinamico = props => {
     );
   };
 
-  const labelPersonalizado = (textolabel, observacaoText) => (
-    <Label text={textolabel} observacaoText={observacaoText} />
+  const labelPersonalizado = (textolabel, observacaoText, obrigatorio) => (
+    <Label
+      text={textolabel}
+      observacaoText={observacaoText}
+      isRequired={obrigatorio}
+    />
   );
 
   const montarCampos = (questaoAtual, form, ordemAnterior, ordemSequencial) => {
@@ -232,7 +236,11 @@ const QuestionarioDinamico = props => {
       : questaoAtual.ordem;
 
     const textoLabel = `${ordemLabel} - ${questaoAtual.nome}`;
-    const label = labelPersonalizado(textoLabel, questaoAtual?.observacao);
+    const label = labelPersonalizado(
+      textoLabel,
+      questaoAtual?.observacao,
+      questaoAtual?.obrigatorio
+    );
 
     const valorAtualSelecionado = form.values[questaoAtual.id];
 

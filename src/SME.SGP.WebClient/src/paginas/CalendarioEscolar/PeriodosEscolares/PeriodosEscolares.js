@@ -465,6 +465,7 @@ const PeriodosEscolares = () => {
   };
 
   const validaAntesDoSubmit = form => {
+    setModoEdicao(true);
     touchedFields(form);
     form.validateForm().then(() => {
       if (
@@ -557,7 +558,7 @@ const PeriodosEscolares = () => {
                   border
                   bold
                   onClick={() => validaAntesDoSubmit(form)}
-                  disabled={!calendarioEscolarSelecionado || desabilitaCampos}
+                  disabled={desabilitaCampos}
                 />
               </Col>
             </Row>
@@ -568,7 +569,6 @@ const PeriodosEscolares = () => {
                 <div className="col-sm-12 col-md-5 col-lg-4 col-xl-4 mb-4">
                   <Loader loading={carregandoTipos} tip="">
                     <SelectAutocomplete
-                      hideLabel
                       showList
                       isHandleSearch
                       placeholder="Selecione um tipo de calendário"
@@ -582,6 +582,10 @@ const PeriodosEscolares = () => {
                       onChange={id => selecionaTipoCalendario(id, form)}
                       handleSearch={handleSearch}
                       value={valorTipoCalendario}
+                      label="Calendário"
+                      temErro={modoEdicao && !calendarioEscolarSelecionado}
+                      mensagemErro="Campo obrigatório"
+                      labelRequired
                     />
                   </Loader>
                 </div>

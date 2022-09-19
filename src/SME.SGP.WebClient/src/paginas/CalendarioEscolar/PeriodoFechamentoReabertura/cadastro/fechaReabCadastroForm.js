@@ -216,7 +216,7 @@ const FechaReabCadastroForm = () => {
           }
         ),
       dataFim: momentSchema.required(textCampoObrigatorio),
-      bimestres: Yup.array().of(Yup.string()).required(textCampoObrigatorio),      
+      bimestres: Yup.array().of(Yup.string()).required(textCampoObrigatorio),
       dreCodigo: Yup.string().required(textCampoObrigatorio),
       ueCodigo: Yup.string().required(textCampoObrigatorio),
     };
@@ -355,6 +355,7 @@ const FechaReabCadastroForm = () => {
                         form={form}
                         onChange={onChangeCampos}
                         desabilitado={desabilitarCampos}
+                        labelRequired
                       />
                     </Col>
                   </Row>
@@ -368,6 +369,7 @@ const FechaReabCadastroForm = () => {
                         formatoData="DD/MM/YYYY"
                         onChange={onChangeCampos}
                         desabilitado={desabilitarCampos}
+                        labelRequired
                       />
                     </Col>
                     <Col sm={24} md={12} lg={6}>
@@ -379,6 +381,7 @@ const FechaReabCadastroForm = () => {
                         formatoData="DD/MM/YYYY"
                         onChange={onChangeCampos}
                         desabilitado={desabilitarCampos}
+                        labelRequired
                       />
                     </Col>
                     <Col sm={24} md={12} lg={12}>

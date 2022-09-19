@@ -72,6 +72,7 @@ const DreComunicados = ({
         showSearch
         name={nomeCampo}
         form={form}
+        labelRequired
         onChange={() => {
           onChangeCampos();
           form.setFieldValue('codigoUe', undefined);

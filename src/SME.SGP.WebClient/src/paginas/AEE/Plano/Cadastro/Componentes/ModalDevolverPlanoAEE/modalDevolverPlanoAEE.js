@@ -125,6 +125,7 @@ const ModalDevolverPlanoAEE = props => {
                   onChange={() => {
                     setModoEdicao(true);
                   }}
+                  labelRequired
                 />
               </div>
 

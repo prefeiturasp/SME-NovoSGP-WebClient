@@ -271,13 +271,15 @@ const AvaliacaoForm = ({ match, location }) => {
         'Selecione o tipo de atividade avaliativa'
       ),
       nome: Yup.string().required('Preencha o nome da atividade avaliativa'),
-      descricao: Yup.string().test(
-        'len',
-        'A descrição não deve ter mais de 500 caracteres',
-        texto => {
-          return texto === undefined || validaTamanhoCaracteres();
-        }
-      ),
+      descricao: Yup.string()
+        .required('Campo obrigatório')
+        .test(
+          'len',
+          'A descrição não deve ter mais de 500 caracteres',
+          texto => {
+            return texto === undefined || validaTamanhoCaracteres();
+          }
+        ),
     };
     setValidacoes(Yup.object(val));
   };
@@ -314,6 +316,7 @@ const AvaliacaoForm = ({ match, location }) => {
     nome: '',
     tipoAvaliacaoId: undefined,
     importado: false,
+    descricao: '',
   };
 
   const clicouBotaoCancelar = form => {
@@ -652,7 +655,6 @@ const AvaliacaoForm = ({ match, location }) => {
                             (!permissaoTela.podeIncluir ||
                               !permissaoTela.podeAlterar)) ||
                           !dentroPeriodo ||
-                          !modoEdicao ||
                           !podeLancaNota ||
                           desabilitarBotaoCadastrar
                         }
@@ -680,6 +682,7 @@ const AvaliacaoForm = ({ match, location }) => {
                             setDesabilitarBotaoCadastrar(true);
                           }}
                           desabilitado={desabilitarCampos || !dentroPeriodo}
+                          labelRequired
                         />
                       </Grid>
                     </Div>
@@ -705,6 +708,7 @@ const AvaliacaoForm = ({ match, location }) => {
                             multiple
                             onChange={onChangeDisciplina}
                             valueSelect={listaDisciplinasSelecionadas}
+                            labelRequired
                           />
                         ) : (
                           <SelectComponent
@@ -726,6 +730,7 @@ const AvaliacaoForm = ({ match, location }) => {
                               onChangeDisciplina(valor);
                             }}
                             valueSelect={disciplinaSelecionada}
+                            labelRequired
                           />
                         )}
                       </Grid>
@@ -741,11 +746,12 @@ const AvaliacaoForm = ({ match, location }) => {
                           form={form}
                           onChange={aoTrocarCampos}
                           disabled={desabilitarCampos || !dentroPeriodo}
+                          labelRequired
                         />
                       </Grid>
                       <Grid cols={4} className="mb-4">
-                        <Label text="Nome da atividade avaliativa" />
                         <CampoTexto
+                          label="Nome da atividade avaliativa"
                           name="nome"
                           id="nome"
                           maxlength={50}
@@ -758,6 +764,7 @@ const AvaliacaoForm = ({ match, location }) => {
                             aoTrocarCampos();
                           }}
                           desabilitado={desabilitarCampos || !dentroPeriodo}
+                          labelRequired
                         />
                       </Grid>
                     </Div>
@@ -800,6 +807,7 @@ const AvaliacaoForm = ({ match, location }) => {
                           onChange={aoTrocarTextEditor}
                           desabilitar={desabilitarCampos || !dentroPeriodo}
                           permiteInserirArquivo={false}
+                          labelRequired
                         />
                       </Grid>
                     </Div>

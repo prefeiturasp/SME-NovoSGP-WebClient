@@ -155,6 +155,7 @@ const FormularioSenha = () => {
                         form={form}
                         maskType="password"
                         maxlength="50"
+                        labelRequired
                       />
                     </div>
                   </div>
@@ -171,6 +172,7 @@ const FormularioSenha = () => {
                         maxlength="12"
                         maskType="password"
                         semMensagem
+                        labelRequired
                       />
                     </div>
                   </div>
@@ -182,6 +184,7 @@ const FormularioSenha = () => {
                         form={form}
                         maskType="password"
                         maxlength="12"
+                        labelRequired
                       />
                     </div>
                   </div>
@@ -246,6 +249,7 @@ const FormularioSenha = () => {
           placeholder="************"
           onChange={() => {}}
           type="password"
+          labelRequired
         />
       </div>
       <div className="col-md-2 botao">

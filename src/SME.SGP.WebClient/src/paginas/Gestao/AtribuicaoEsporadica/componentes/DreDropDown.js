@@ -11,7 +11,7 @@ import AtribuicaoEsporadicaServico from '~/servicos/Paginas/AtribuicaoEsporadica
 import { valorNuloOuVazio } from '~/utils/funcoes/gerais';
 import FiltroHelper from '~/componentes-sgp/filtro/helper';
 
-function DreDropDown({ form, onChange, label, desabilitado }) {
+function DreDropDown({ form, onChange, label, desabilitado, labelRequired }) {
   const [listaDres, setListaDres] = useState([]);
 
   useEffect(() => {
@@ -65,6 +65,7 @@ function DreDropDown({ form, onChange, label, desabilitado }) {
         (typeof desabilitado === 'boolean' && desabilitado === true)
       }
       showSearch
+      labelRequired={labelRequired}
     />
   );
 }
@@ -77,6 +78,7 @@ DreDropDown.propTypes = {
   onChange: PropTypes.func,
   label: PropTypes.string,
   desabilitado: PropTypes.bool,
+  labelRequired: PropTypes.bool,
 };
 
 DreDropDown.defaultProps = {
@@ -84,6 +86,7 @@ DreDropDown.defaultProps = {
   onChange: () => {},
   label: null,
   desabilitado: null,
+  labelRequired: false,
 };
 
 export default DreDropDown;

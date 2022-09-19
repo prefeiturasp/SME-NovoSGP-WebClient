@@ -20,6 +20,7 @@ function DreDropDown({
   desabilitado,
   opcaoTodas,
   temModalidade,
+  labelRequired,
 }) {
   const [carregando, setCarregando] = useState(false);
   const [listaDres, setListaDres] = useState([]);
@@ -73,6 +74,7 @@ function DreDropDown({
         placeholder="Diretoria Regional De Educação (DRE)"
         disabled={!listaDres.length || listaDres.length === 1 || desabilitado}
         showSearch
+        labelRequired={labelRequired}
       />
     </Loader>
   );
@@ -89,6 +91,7 @@ DreDropDown.propTypes = {
   desabilitado: PropTypes.bool,
   opcaoTodas: PropTypes.bool,
   temModalidade: PropTypes.bool,
+  labelRequired: PropTypes.bool,
 };
 
 DreDropDown.defaultProps = {
@@ -99,6 +102,7 @@ DreDropDown.defaultProps = {
   desabilitado: false,
   opcaoTodas: false,
   temModalidade: true,
+  labelRequired: false,
 };
 
 export default DreDropDown;

@@ -132,7 +132,7 @@ class QuestionarioDinamicoFuncoes {
       camposDuplicados
     );
 
-    if (camposNaoDuplicados?.length) {
+    if (camposNaoDuplicados?.length && valoresCamposComplemetares?.length) {
       camposNaoDuplicados.forEach(a => {
         const valorCampoRemovido = valoresCamposComplemetares.find(
           valorCampo => valorCampo?.id === a?.id

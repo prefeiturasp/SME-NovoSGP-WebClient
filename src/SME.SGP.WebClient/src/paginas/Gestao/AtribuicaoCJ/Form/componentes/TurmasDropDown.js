@@ -16,6 +16,7 @@ function TurmasDropDown({
   label,
   desabilitado,
   consideraHistorico,
+  labelRequired,
 }) {
   const [listaTurmas, setListaTurmas] = useState([]);
   const [carregandoLista, setCarregandoLista] = useState(false);
@@ -75,6 +76,7 @@ function TurmasDropDown({
         placeholder="Turma"
         showSearch
         disabled={desabilitado}
+        labelRequired={labelRequired}
       />
     </Loader>
   );
@@ -90,6 +92,7 @@ TurmasDropDown.propTypes = {
   desabilitado: PropTypes.bool,
   anoLetivo: PropTypes.string,
   consideraHistorico: PropTypes.bool,
+  labelRequired: PropTypes.bool,
 };
 
 TurmasDropDown.defaultProps = {
@@ -99,6 +102,7 @@ TurmasDropDown.defaultProps = {
   desabilitado: false,
   consideraHistorico: false,
   anoLetivo: '',
+  labelRequired: false,
 };
 
 export default TurmasDropDown;

@@ -26,6 +26,7 @@ const CampoNumeroFormik = React.forwardRef((props, ref) => {
     step,
     disabled,
     onBlur,
+    labelRequired,
   } = props;
 
   const possuiErro = () => {
@@ -41,7 +42,11 @@ const CampoNumeroFormik = React.forwardRef((props, ref) => {
 
   return (
     <Campo>
-      {label ? <Label text={label} control={name || ''} /> : ''}
+      {label ? (
+        <Label text={label} control={name || ''} isRequired={labelRequired} />
+      ) : (
+        ''
+      )}
       <Field name={name} id={name}>
         {({
           field: { value },
@@ -85,6 +90,7 @@ CampoNumeroFormik.propTypes = {
   onBlur: PropTypes.func,
   semMensagem: PropTypes.bool,
   type: PropTypes.string,
+  labelRequired: PropTypes.bool,
 };
 
 CampoNumeroFormik.defaultProps = {
@@ -92,6 +98,7 @@ CampoNumeroFormik.defaultProps = {
   onBlur: () => {},
   semMensagem: false,
   type: 'number',
+  labelRequired: '',
 };
 
 export default CampoNumeroFormik;

@@ -338,6 +338,8 @@ const TipoCalendarioEscolarForm = ({ match }) => {
                         onChange={onChangeAnoLetivo}
                         valueSelect={anoLetivo}
                         placeholder="Ano"
+                        allowClear={false}
+                        labelRequired
                       />
                     </Loader>
                   </div>
@@ -350,6 +352,7 @@ const TipoCalendarioEscolarForm = ({ match }) => {
                       name="nome"
                       onChange={onChangeCampos}
                       desabilitado={desabilitarCampos}
+                      labelRequired
                     />
                   </div>
                   <div className="col-sm-12 col-md-6 col-lg-3 col-xl-3 mb-2">
@@ -361,6 +364,7 @@ const TipoCalendarioEscolarForm = ({ match }) => {
                       valorInicial
                       onChange={onChangeCampos}
                       desabilitado={desabilitarCampos}
+                      labelRequired
                     />
                   </div>
                   <div className="col-sm-12 col-md-6 col-lg-3 col-xl-4 mb-2">
@@ -371,6 +375,7 @@ const TipoCalendarioEscolarForm = ({ match }) => {
                       name="periodo"
                       onChange={onChangeCampos}
                       desabilitado={desabilitarCampos || possuiEventos}
+                      labelRequired
                     />
                   </div>
                   <div className="col-sm-12  col-md-12 col-lg-6 col-xl-5 mb-2">
@@ -385,6 +390,7 @@ const TipoCalendarioEscolarForm = ({ match }) => {
                       form={form}
                       onChange={onChangeCampos}
                       disabled={desabilitarCampos || possuiEventos}
+                      labelRequired
                     />
                   </div>
                 </div>

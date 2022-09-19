@@ -13,6 +13,7 @@ import {
   Card,
   Colors,
   DataTable,
+  Label,
   ModalConteudoHtml,
   momentSchema,
   SelectComponent,
@@ -467,8 +468,6 @@ const CadastroOcorrencias = ({ match }) => {
                     bold
                     onClick={() => validaAntesDoSubmit(form)}
                     disabled={
-                      !modoEdicao ||
-                      !criancasSelecionadas?.length > 0 ||
                       ehTurmaAnoAnterior() ||
                       somenteConsulta ||
                       naoPodeIncluirOuAlterar()
@@ -479,8 +478,8 @@ const CadastroOcorrencias = ({ match }) => {
             </Cabecalho>
             <Card>
               <Form className="col-md-12 mb-4">
-                <div className="p-0 col-12 mb-3 font-weight-bold">
-                  <span>Crianças envolvidas na ocorrência</span>
+                <div className="p-0 col-12 font-weight-bold">
+                  <Label text="Crianças envolvidas na ocorrência" isRequired />
                 </div>
                 <div className="p-0 col-12">
                   {criancasSelecionadas.slice(0, 3).map((crianca, index) => {
@@ -504,7 +503,7 @@ const CadastroOcorrencias = ({ match }) => {
                 ) : (
                   ''
                 )}
-                <div className="p-0 col-12 mt-3">
+                <div className="p-0 col-12 mt-2">
                   <Button
                     id={shortid.generate()}
                     label={
@@ -533,6 +532,7 @@ const CadastroOcorrencias = ({ match }) => {
                       formatoData="DD/MM/YYYY"
                       desabilitarData={desabilitarData}
                       desabilitado={desabilitarCampos()}
+                      labelRequired
                     />
                   </div>
                   <div className="col-md-3 col-sm-12 col-lg-3">
@@ -562,6 +562,7 @@ const CadastroOcorrencias = ({ match }) => {
                       value={form.values.ocorrenciaTipoId}
                       onChange={() => setModoEdicao(true)}
                       disabled={desabilitarCampos()}
+                      labelRequired
                     />
                   </div>
                   <div className="col-md-6 col-sm-12 col-lg-6 mt-2">
@@ -574,6 +575,7 @@ const CadastroOcorrencias = ({ match }) => {
                       maxLength={50}
                       desabilitado={desabilitarCampos()}
                       onChange={() => setModoEdicao(true)}
+                      labelRequired
                     />
                   </div>
                   <div className="col-12 mt-2">
@@ -586,6 +588,7 @@ const CadastroOcorrencias = ({ match }) => {
                       permiteInserirArquivo
                       desabilitar={desabilitarCampos()}
                       onChange={() => setModoEdicao(true)}
+                      labelRequired
                     />
                   </div>
                 </div>

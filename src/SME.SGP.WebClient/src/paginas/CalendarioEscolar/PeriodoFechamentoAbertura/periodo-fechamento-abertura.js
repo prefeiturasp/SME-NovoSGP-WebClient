@@ -309,6 +309,7 @@ const PeriodoFechamentoAbertura = () => {
   };
 
   const validaAntesDoSubmit = form => {
+    setModoEdicao(true);
     touchedFields(form);
     form.validateForm().then(() => {
       if (
@@ -516,7 +517,6 @@ const PeriodoFechamentoAbertura = () => {
                   <div className="col-sm-12 col-md-8 col-lg-6 col-xl-4 mb-2">
                     <Loader loading={carregandoTipos} tip="">
                       <SelectAutocomplete
-                        hideLabel
                         showList
                         isHandleSearch
                         placeholder="Selecione um tipo de calendário"
@@ -530,6 +530,10 @@ const PeriodoFechamentoAbertura = () => {
                         onChange={valor => selecionaTipoCalendario(valor)}
                         handleSearch={handleSearch}
                         value={valorTipoCalendario}
+                        label="Calendário"
+                        labelRequired
+                        temErro={modoEdicao && !valorTipoCalendario}
+                        mensagemErro="Campo obrigatório"
                       />
                     </Loader>
                   </div>

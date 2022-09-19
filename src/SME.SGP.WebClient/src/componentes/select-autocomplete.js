@@ -62,6 +62,7 @@ const SelectAutocomplete = ({
   form,
   temErro,
   mensagemErro,
+  labelRequired,
 }) => {
   const [itensFiltrados, setItensFiltrados] = useState(lista);
 
@@ -166,7 +167,9 @@ const SelectAutocomplete = ({
 
   return (
     <Container>
-      {!hideLabel && <Label text={label} control={name} />}
+      {!hideLabel && (
+        <Label text={label} control={name} isRequired={labelRequired} />
+      )}
       {form ? campoComValidacoes() : campoSemValidacoes()}
       {obterErros()}
     </Container>
@@ -194,6 +197,7 @@ SelectAutocomplete.defaultProps = {
   disabled: false,
   temErro: false,
   mensagemErro: '',
+  labelRequired: false,
 };
 
 SelectAutocomplete.propTypes = {
@@ -216,6 +220,7 @@ SelectAutocomplete.propTypes = {
   valueField: PropTypes.string,
   temErro: PropTypes.bool,
   mensagemErro: PropTypes.string,
+  labelRequired: PropTypes.bool,
 };
 
 export default SelectAutocomplete;

@@ -188,6 +188,7 @@ const ModalAnotacaoAluno = props => {
                     name="anotacao"
                     onChange={onChangeCampos}
                     desabilitar={desabilitar}
+                    labelRequired
                   />
                 </EditorAnotacao>
               </div>

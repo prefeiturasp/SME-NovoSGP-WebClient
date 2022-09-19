@@ -1,3 +1,4 @@
+import { Col, Row } from 'antd';
 import { Form, Formik } from 'formik';
 import $ from 'jquery';
 import * as moment from 'moment';
@@ -76,7 +77,7 @@ const DevolutivasForm = ({ match }) => {
   const [periodoLetivo, setPeriodoLetivo] = useState();
 
   const inicial = {
-    codigoComponenteCurricular: 0,
+    codigoComponenteCurricular: '',
     periodoInicio: '',
     periodoFim: '',
     descricao: '',
@@ -85,16 +86,17 @@ const DevolutivasForm = ({ match }) => {
   const [valoresIniciais, setValoresIniciais] = useState(inicial);
 
   const validacoesRegistroNovo = Yup.object({
-    periodoInicio: momentSchema.required('Data início obrigatória'),
-    periodoFim: momentSchema.required('Data fim obrigatória'),
+    codigoComponenteCurricular: Yup.string().required('Campo obrigatório'),
+    periodoInicio: momentSchema.required('Campo obrigatório'),
+    periodoFim: momentSchema.required('Campo obrigatório'),
     descricao: Yup.string()
-      .required('Campo devolutiva obrigatório')
+      .required('Campo obrigatório')
       .min(200, 'Você precisa preencher com no mínimo 200 caracteres'),
   });
 
   const validacoesRegistroEdicao = Yup.object({
     descricao: Yup.string()
-      .required('Campo devolutiva obrigatório')
+      .required('Campo obrigatório')
       .min(200, 'Você precisa preencher com no mínimo 200 caracteres'),
   });
 
@@ -492,11 +494,14 @@ const DevolutivasForm = ({ match }) => {
   const validaAntesDoSubmit = (form, clicouBtnSalvar) => {
     const arrayCampos = Object.keys(valoresIniciais);
     arrayCampos.forEach(campo => {
-      form.setFieldTouched(campo, true, true);
+      refForm.setFieldTouched(campo, true, true);
     });
-    return form.validateForm().then(() => {
-      if (form.isValid || Object.keys(form.errors).length === 0) {
-        return salvarDevolutivas(form.values, clicouBtnSalvar);
+    return refForm.validateForm().then(() => {
+      if (
+        refForm.getFormikContext().isValid ||
+        Object.keys(refForm.getFormikContext().errors).length === 0
+      ) {
+        return salvarDevolutivas(refForm?.state?.values, clicouBtnSalvar);
       }
       return false;
     });
@@ -596,40 +601,46 @@ const DevolutivasForm = ({ match }) => {
         {form => (
           <Form>
             <Cabecalho pagina="Devolutivas">
-              <>
-                <BotaoVoltarPadrao
-                  className="mr-2"
-                  onClick={() => onClickVoltar(form)}
-                />
-                <Button
-                  id={SGP_BUTTON_CANCELAR}
-                  label="Cancelar"
-                  color={Colors.Roxo}
-                  onClick={() => onClickCancelar(form)}
-                  border
-                  bold
-                  className="mr-2"
-                  disabled={!turmaInfantil || !modoEdicao || desabilitarCampos}
-                />
-                <BotaoExcluirPadrao
-                  disabled={!idDevolutiva || !permissoesTela.podeExcluir}
-                  onClick={onClickExcluir}
-                />
-                <Button
-                  id={SGP_BUTTON_SALVAR_ALTERAR}
-                  label={idDevolutiva ? 'Alterar' : 'Salvar'}
-                  color={Colors.Roxo}
-                  border
-                  bold
-                  onClick={async () => {
-                    const salvou = await validaAntesDoSubmit(form, true);
-                    if (salvou) {
-                      history.push(RotasDto.DEVOLUTIVAS);
+              <Row gutter={[8, 8]} type="flex">
+                <Col>
+                  <BotaoVoltarPadrao onClick={() => onClickVoltar(form)} />
+                </Col>
+                <Col>
+                  <Button
+                    id={SGP_BUTTON_CANCELAR}
+                    label="Cancelar"
+                    color={Colors.Roxo}
+                    onClick={() => onClickCancelar(form)}
+                    border
+                    bold
+                    disabled={
+                      !turmaInfantil || !modoEdicao || desabilitarCampos
                     }
-                  }}
-                  disabled={!turmaInfantil || !modoEdicao || desabilitarCampos}
-                />
-              </>
+                  />
+                </Col>
+                <Col>
+                  <BotaoExcluirPadrao
+                    disabled={!idDevolutiva || !permissoesTela.podeExcluir}
+                    onClick={onClickExcluir}
+                  />
+                </Col>
+                <Col>
+                  <Button
+                    id={SGP_BUTTON_SALVAR_ALTERAR}
+                    label={idDevolutiva ? 'Alterar' : 'Salvar'}
+                    color={Colors.Roxo}
+                    border
+                    bold
+                    onClick={async () => {
+                      const salvou = await validaAntesDoSubmit(form, true);
+                      if (salvou) {
+                        history.push(RotasDto.DEVOLUTIVAS);
+                      }
+                    }}
+                    disabled={!turmaInfantil || desabilitarCampos}
+                  />
+                </Col>
+              </Row>
             </Cabecalho>
             <Card>
               <div className="col-md-12">
@@ -654,6 +665,7 @@ const DevolutivasForm = ({ match }) => {
                       }}
                       form={form}
                       name="codigoComponenteCurricular"
+                      labelRequired
                     />
                   </div>
                   <div className="col-sm-12 col-md-6 col-lg-3 col-xl-2 mb-2">
@@ -674,6 +686,7 @@ const DevolutivasForm = ({ match }) => {
                         desabilitarCampos
                       }
                       diasParaHabilitar={periodoLetivo}
+                      labelRequired
                     />
                   </div>
                   <div className="col-sm-12 col-md-6 col-lg-3 col-xl-2 mb-5">
@@ -692,6 +705,7 @@ const DevolutivasForm = ({ match }) => {
                         desabilitarCampos
                       }
                       diasParaHabilitar={datasParaHabilitar}
+                      labelRequired
                     />
                   </div>
 
@@ -721,6 +735,7 @@ const DevolutivasForm = ({ match }) => {
                               }
                             }}
                             desabilitar={desabilitarCampos}
+                            labelRequired
                           />
                         </div>
                       ) : (

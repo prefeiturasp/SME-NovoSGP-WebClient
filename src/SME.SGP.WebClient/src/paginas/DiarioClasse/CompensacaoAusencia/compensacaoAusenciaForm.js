@@ -1006,9 +1006,7 @@ const CompensacaoAusenciaForm = ({ match }) => {
                         ehTurmaInfantil(
                           modalidadesFiltroPrincipal,
                           turmaSelecionada
-                        ) ||
-                        desabilitarCampos ||
-                        !modoEdicao
+                        ) || desabilitarCampos
                       }
                     />
                   </Col>
@@ -1035,6 +1033,7 @@ const CompensacaoAusenciaForm = ({ match }) => {
                             !novoRegistro
                           }
                           allowClear={false}
+                          labelRequired
                         />
                       </Loader>
                     </div>
@@ -1051,6 +1050,7 @@ const CompensacaoAusenciaForm = ({ match }) => {
                         placeholder="Bimestre"
                         disabled={!novoRegistro}
                         allowClear={false}
+                        labelRequired
                       />
                     </div>
                     <div className="col-sm-12 col-md-12 col-lg-6 col-xl-6 mb-2">
@@ -1063,6 +1063,7 @@ const CompensacaoAusenciaForm = ({ match }) => {
                         type="input"
                         maxLength="250"
                         desabilitado={desabilitarCampos}
+                        labelRequired
                       />
                     </div>
                     {temRegencia && listaDisciplinasRegencia && (
@@ -1099,6 +1100,7 @@ const CompensacaoAusenciaForm = ({ match }) => {
                           label="Detalhamento da atividade"
                           desabilitar={desabilitarCampos}
                           value={form.values.descricao}
+                          labelRequired
                         />
                       ) : (
                         ''

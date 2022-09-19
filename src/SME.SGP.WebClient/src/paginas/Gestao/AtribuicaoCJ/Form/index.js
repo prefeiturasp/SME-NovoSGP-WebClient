@@ -98,6 +98,9 @@ function AtribuicaoCJForm({ match, location }) {
   };
 
   const onSubmitFormulario = async valores => {
+    if (novoRegistro && !listaProfessores.some(x => x.substituir === true)) {
+      return erro('Selecione um professor para substituir.');
+    }
     try {
       setCarregando(true);
       const { data, status } = await AtribuicaoCJServico.salvarAtribuicoes({
@@ -158,9 +161,6 @@ function AtribuicaoCJForm({ match, location }) {
       })
     );
   };
-
-  const desabilitarBotaoPrincipal = () =>
-    novoRegistro && !listaProfessores.some(x => x.substituir === true);
 
   useEffect(() => {
     if (location && location.search) {
@@ -334,7 +334,6 @@ function AtribuicaoCJForm({ match, location }) {
                   idBotaoPrincipal={SGP_BUTTON_SALVAR}
                   onClickBotaoPrincipal={() => onClickBotaoPrincipal(form)}
                   onClickVoltar={() => onClickVoltar()}
-                  desabilitarBotaoPrincipal={desabilitarBotaoPrincipal()}
                   modoEdicao={modoEdicao}
                 />
               </Cabecalho>
@@ -368,6 +367,7 @@ function AtribuicaoCJForm({ match, location }) {
                         valueSelect={anoLetivo}
                         allowClear={false}
                         disabled={!consideraHistorico}
+                        labelRequired
                       />
                     </Grid>
                     <Grid cols={5}>
@@ -377,6 +377,7 @@ function AtribuicaoCJForm({ match, location }) {
                         form={form}
                         onChange={valor => setDreId(valor)}
                         desabilitado={somenteConsulta}
+                        labelRequired
                       />
                     </Grid>
                     <Grid cols={5}>
@@ -388,6 +389,7 @@ function AtribuicaoCJForm({ match, location }) {
                         form={form}
                         onChange={() => {}}
                         desabilitado={somenteConsulta}
+                        labelRequired
                       />
                     </Grid>
                   </Row>
@@ -401,6 +403,7 @@ function AtribuicaoCJForm({ match, location }) {
                           form={form}
                           onChange={() => {}}
                           desabilitado={somenteConsulta}
+                          labelRequired
                         />
                       </Row>
                     </Grid>
@@ -424,6 +427,7 @@ function AtribuicaoCJForm({ match, location }) {
                             setListaProfessores([]);
                           }
                         }}
+                        labelRequired
                       />
                     </Grid>
                     <Grid cols={2}>
@@ -440,27 +444,30 @@ function AtribuicaoCJForm({ match, location }) {
                         }}
                         desabilitado={somenteConsulta}
                         consideraHistorico={consideraHistorico}
+                        labelRequired
                       />
                     </Grid>
                   </Row>
                 </Form>
-                <Tabela
-                  carregando={carregandoTabela}
-                  lista={listaProfessores}
-                  onChangeSubstituir={onChangeSubstituir}
-                />
-                {auditoria && (
-                  <div className="row">
-                    <Auditoria
-                      criadoEm={auditoria.criadoEm}
-                      criadoPor={auditoria.criadoPor}
-                      criadoRf={auditoria.criadoRf}
-                      alteradoPor={auditoria.alteradoPor}
-                      alteradoEm={auditoria.alteradoEm}
-                      alteradoRf={auditoria.alteradoRf}
-                    />
-                  </div>
-                )}
+                <div className="col-md-12">
+                  <Tabela
+                    carregando={carregandoTabela}
+                    lista={listaProfessores}
+                    onChangeSubstituir={onChangeSubstituir}
+                  />
+                  {auditoria && (
+                    <div className="row">
+                      <Auditoria
+                        criadoEm={auditoria.criadoEm}
+                        criadoPor={auditoria.criadoPor}
+                        criadoRf={auditoria.criadoRf}
+                        alteradoPor={auditoria.alteradoPor}
+                        alteradoEm={auditoria.alteradoEm}
+                        alteradoRf={auditoria.alteradoRf}
+                      />
+                    </div>
+                  )}
+                </div>
               </Card>
             </>
           )}

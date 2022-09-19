@@ -48,6 +48,7 @@ const JoditEditor = forwardRef((props, ref) => {
     imagensCentralizadas,
     valideClipboardHTML,
     permiteGif,
+    labelRequired,
   } = props;
 
   const textArea = useRef(null);
@@ -451,7 +452,7 @@ const JoditEditor = forwardRef((props, ref) => {
 
   return (
     <>
-      {label ? <Label text={label} /> : ''}
+      {label ? <Label text={label} isRequired={labelRequired} /> : ''}
       {form ? editorComValidacoes() : editorSemValidacoes()}
       {obterErros()}
     </>
@@ -481,6 +482,7 @@ JoditEditor.propTypes = {
   imagensCentralizadas: PropTypes.bool,
   valideClipboardHTML: PropTypes.bool,
   permiteGif: PropTypes.bool,
+  labelRequired: PropTypes.bool,
 };
 
 JoditEditor.defaultProps = {
@@ -506,6 +508,7 @@ JoditEditor.defaultProps = {
   imagensCentralizadas: false,
   valideClipboardHTML: false,
   permiteGif: true,
+  labelRequired: false,
 };
 
 export default JoditEditor;

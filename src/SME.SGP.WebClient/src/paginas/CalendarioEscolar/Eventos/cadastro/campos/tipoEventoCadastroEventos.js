@@ -94,6 +94,7 @@ const TipoEventoCadastroEventos = ({ form, onChangeCampos, desabilitar }) => {
       label="Tipo evento"
       placeholder="Selecione um tipo"
       disabled={listaTipoEvento?.length === 1 || desabilitar}
+      labelRequired
     />
   );
 };

@@ -118,6 +118,7 @@ const TurmasComunicados = ({ form, onChangeCampos, desabilitar }) => {
         name={nomeCampo}
         form={form}
         setValueOnlyOnChange
+        labelRequired
         onChange={valores => {
           onchangeMultiSelect(valores, turmas, onChangeAnosEscolares);
           onChangeCampos();

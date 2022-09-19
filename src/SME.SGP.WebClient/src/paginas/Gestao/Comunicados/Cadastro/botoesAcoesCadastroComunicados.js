@@ -216,9 +216,7 @@ const BotoesAcoesCadastroComunicados = props => {
             label="Alterar"
             color={Colors.Roxo}
             onClick={() => validaAntesDoSubmit()}
-            disabled={
-              !modoEdicao || somenteConsulta || !permissoesTela.podeAlterar
-            }
+            disabled={somenteConsulta || !permissoesTela.podeAlterar}
           />
         ) : (
           <Button
@@ -226,9 +224,7 @@ const BotoesAcoesCadastroComunicados = props => {
             label="Cadastrar"
             color={Colors.Roxo}
             onClick={() => validaAntesDoSubmit()}
-            disabled={
-              !modoEdicao || somenteConsulta || !permissoesTela.podeIncluir
-            }
+            disabled={somenteConsulta || !permissoesTela.podeIncluir}
           />
         )}
       </Col>

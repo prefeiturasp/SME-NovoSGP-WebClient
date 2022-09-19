@@ -90,6 +90,7 @@ const CriancasEstudantesComunicados = ({
               form.setFieldValue('alunos', []);
               dispatch(setAlunosComunicados([]));
             }}
+            labelRequired={alunoEspecifico && alunoEspecifico !== OPCAO_TODOS}
           />
         </Loader>
       </div>

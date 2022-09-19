@@ -80,6 +80,7 @@ const BimestreReabertura = ({ form, onChangeCampos }) => {
         onchangeMultiSelect(valores, bimestres, onChangeBimestre);
         onChangeCampos();
       }}
+      labelRequired
     />
   );
 };

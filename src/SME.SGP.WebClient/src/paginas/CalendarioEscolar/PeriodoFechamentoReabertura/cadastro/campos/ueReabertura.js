@@ -106,6 +106,7 @@ const UeReabertura = ({ form, onChangeCampos }) => {
         onChange={() => {
           onChangeCampos();
         }}
+        labelRequired
       />
     </Loader>
   );

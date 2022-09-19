@@ -241,6 +241,7 @@ const TipoAvaliacaoForm = ({ match }) => {
                         placeholder="Digite a descrição da avaliação"
                         type="input"
                         desabilitado={valoresIniciais.possuiAvaliacao}
+                        labelRequired
                       />
                     </div>
                     <div className="col-md-4">
@@ -251,6 +252,7 @@ const TipoAvaliacaoForm = ({ match }) => {
                         label="Situação"
                         form={form}
                         opcoes={listaSituacao}
+                        labelRequired
                       />
                     </div>
                   </div>

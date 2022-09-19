@@ -714,7 +714,6 @@ function CadastroDeAula({ match, location }) {
                           !aula.disciplinaId ||
                           somenteLeitura ||
                           desabilitarBtnSalvar ||
-                          !modoEdicao ||
                           !aula.podeEditar
                         }
                       />
@@ -735,6 +734,7 @@ function CadastroDeAula({ match, location }) {
                               id={SGP_DATA_AULA}
                               form={form}
                               onChange={onChangeDataAula}
+                              labelRequired
                             />
                           </div>
                           <div className="col-md-9 pt-2 pb-2 d-flex justify-content-end">
@@ -761,6 +761,7 @@ function CadastroDeAula({ match, location }) {
                           form={form}
                           onChange={onChangeTipoAula}
                           desabilitado={!!id}
+                          labelRequired
                         />
                       </div>
                       <div className="col-md-12 col-lg-9">
@@ -778,6 +779,7 @@ function CadastroDeAula({ match, location }) {
                             (listaComponentes.length === 1 && !id)
                           }
                           onChange={onChangeComponente}
+                          labelRequired
                         />
                       </div>
                     </div>
@@ -791,9 +793,10 @@ function CadastroDeAula({ match, location }) {
                           min={1}
                           onChange={onChangeQuantidadeAula}
                           disabled={quantidadeBloqueada}
+                          labelRequired
                         />
                       </div>
-                      <div className="col-xs-12 col-md-9 mb-3">
+                      <div className="col-xs-12 col-md-9 mb-4">
                         <RadioGroupButton
                           id={SGP_RADIO_RECORRENCIA}
                           label="Recorrência"
@@ -806,6 +809,7 @@ function CadastroDeAula({ match, location }) {
                           form={form}
                           onChange={onChangeRecorrencia}
                           desabilitado={aula.tipoAula === 2}
+                          labelRequired
                         />
                       </div>
                     </div>
@@ -817,7 +821,6 @@ function CadastroDeAula({ match, location }) {
                     criadoEm={aula.criadoEm}
                     criadoPor={aula.criadoPor}
                     criadoRf={aula.criadoRF}
-                    ignorarMarginTop
                   />
                 </Card>
               </>

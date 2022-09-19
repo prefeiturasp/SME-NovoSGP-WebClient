@@ -102,6 +102,7 @@ const UeCadastroEventos = ({ form, onChangeCampos, desabilitar, eventoId }) => {
         onChange={ue => {
           onChangeCampos(ue);
         }}
+        labelRequired
       />
     </Loader>
   );

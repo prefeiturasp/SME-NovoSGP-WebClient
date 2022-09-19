@@ -20,6 +20,7 @@ function UeDropDown({
   temParametros,
   modalidade,
   onChangeListaUes,
+  labelRequired,
 }) {
   const [carregando, setCarregando] = useState(false);
   const [listaUes, setListaUes] = useState([]);
@@ -97,6 +98,7 @@ function UeDropDown({
             : listaUes.length === 0 || listaUes.length === 1 || desabilitado
         }
         showSearch
+        labelRequired={labelRequired}
       />
     </Loader>
   );
@@ -116,6 +118,7 @@ UeDropDown.propTypes = {
   temParametros: PropTypes.bool,
   modalidade: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   onChangeListaUes: PropTypes.func,
+  labelRequired: PropTypes.bool,
 };
 
 UeDropDown.defaultProps = {
@@ -129,6 +132,7 @@ UeDropDown.defaultProps = {
   temParametros: false,
   modalidade: '',
   onChangeListaUes: () => {},
+  labelRequired: false,
 };
 
 export default UeDropDown;

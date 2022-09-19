@@ -78,6 +78,7 @@ const SemestreComunicados = ({ form, onChangeCampos, desabilitar }) => {
         showSearch
         name={nomeCampo}
         form={form}
+        labelRequired={temModalidadeEja}
         onChange={() => {
           onChangeCampos();
           form.setFieldValue('turmas', []);

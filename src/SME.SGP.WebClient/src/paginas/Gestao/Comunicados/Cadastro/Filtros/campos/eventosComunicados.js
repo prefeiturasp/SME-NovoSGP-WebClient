@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
 import React, { useCallback, useEffect, useState } from 'react';
 import { Loader, SelectComponent } from '~/componentes';
+import { OPCAO_TODOS } from '~/constantes';
 import { erros } from '~/servicos';
 import ServicoComunicadoEvento from '~/servicos/Paginas/AcompanhamentoEscolar/ComunicadoEvento/ServicoComunicadoEvento';
 
@@ -76,6 +77,7 @@ const EventosComunicados = ({ form, onChangeCampos, desabilitar }) => {
         onChange={() => {
           onChangeCampos();
         }}
+        labelRequired={codigoUe && codigoUe !== OPCAO_TODOS}
       />
     </Loader>
   );

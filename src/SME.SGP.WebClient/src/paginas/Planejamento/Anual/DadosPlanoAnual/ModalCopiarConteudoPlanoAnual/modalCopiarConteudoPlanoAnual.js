@@ -71,7 +71,7 @@ const ModalCopiarConteudoPlanoAnual = () => {
   const resetarDadosModal = form => {
     setConfirmacaoTurmasComPlano('');
     form.resetForm();
-  };  
+  };
 
   const fecharCopiarConteudo = form => {
     dispatch(setExibirModalCopiarConteudo(false));
@@ -118,10 +118,10 @@ const ModalCopiarConteudoPlanoAnual = () => {
     if (listaTurmasParaCopiar){
       const lstTurma = listaTurmasParaCopiar.map(item => {
         return ({nomeTurma :item.nomeTurma ,codTurma :item.codTurma});
-      });    
+      });
       setListaTurmasParaCopiarAgrupada(agruparListaTurmas(lstTurma));
-    }    
-  },[listaTurmasParaCopiar]); 
+    }
+  },[listaTurmasParaCopiar]);
 
   const onChangeTurmasSelecionadas = turmas => {};
 
@@ -142,7 +142,7 @@ const ModalCopiarConteudoPlanoAnual = () => {
     const _form = refForm?.state?.values;
     const turmas = _form.turmas;
 
-    const bimestresSelecionados = listaBimestres.filter( bt => bimestres.includes(bt.valor.toString()));    
+    const bimestresSelecionados = listaBimestres.filter( bt => bimestres.includes(bt.valor.toString()));
 
     let turmasComPlano = listaTurmasParaCopiar.filter(
       c => turmas.includes(c.codTurma.toString()) &&
@@ -152,8 +152,8 @@ const ModalCopiarConteudoPlanoAnual = () => {
            bimestresSelecionados.length > 0 &&
            (bimestresSelecionados.filter(b => b.bimestre == c.bimestre).length > 0 ||
             bimestresSelecionados[0].valor === '0')
-    );      
-    
+    );
+
     if (turmasComPlano && turmasComPlano.length > 0) {
       setConfirmacaoTurmasComPlano(
         `As turmas: ${agruparListaTurmas(turmasComPlano)
@@ -216,6 +216,7 @@ const ModalCopiarConteudoPlanoAnual = () => {
                 placeholder="Selecione uma ou mais turmas"
                 onChange={onChangeTurmasSelecionadas}
                 form={form}
+                labelRequired
               />
               <SelectComponent
                 label="Copiar para o(s) bimestre(s)"
@@ -228,6 +229,7 @@ const ModalCopiarConteudoPlanoAnual = () => {
                 placeholder="Selecione um ou mais bimestres"
                 onChange={valores => onChangeBimestre(valores, form)}
                 form={form}
+                labelRequired
               />
             </Loader>
           </ModalConteudoHtml>

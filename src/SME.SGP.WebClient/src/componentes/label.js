@@ -39,6 +39,7 @@ const Label = ({
   observacaoText,
   tamanhoFonte,
   altura,
+  isRequired,
 }) => {
   return (
     <Container
@@ -46,6 +47,17 @@ const Label = ({
       tamanhoFonte={tamanhoFonte}
       altura={altura}
     >
+      {isRequired && (
+        <span
+          style={{
+            marginLeft: '-11px',
+            color: Base.Vermelho,
+            marginRight: '4px',
+          }}
+        >
+          *
+        </span>
+      )}
       <label htmlFor={control} id={text} className={className}>
         {text}
         {observacaoText ? <span> {` ${observacaoText}`}</span> : ''}
@@ -67,6 +79,7 @@ Label.propTypes = {
   observacaoText: PropTypes.string,
   tamanhoFonte: PropTypes.string,
   altura: PropTypes.string,
+  isRequired: PropTypes.bool,
 };
 
 Label.defaultProps = {
@@ -78,6 +91,7 @@ Label.defaultProps = {
   observacaoText: '',
   tamanhoFonte: '14',
   altura: '17',
+  isRequired: false,
 };
 
 export default Label;

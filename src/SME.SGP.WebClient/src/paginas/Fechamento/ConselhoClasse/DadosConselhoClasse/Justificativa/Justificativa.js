@@ -143,6 +143,7 @@ const Justificativa = props => {
                           !ehEdicao
                         }
                         onChange={onChange}
+                        labelRequired
                       />
                       <div className="d-flex justify-content-end pt-2">
                         {notaConceitoPosConselhoAtual &&

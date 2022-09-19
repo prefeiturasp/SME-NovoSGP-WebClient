@@ -85,6 +85,8 @@ function AtribuicaoEsporadicaForm({ match }) {
   const labelBotaoPrincipal = match?.params?.id ? 'Alterar' : 'Cadastrar';
   const validacoes = () => {
     return Yup.object({
+      ueId: momentSchema.required('Campo obrigatório'),
+      dreId: momentSchema.required('Campo obrigatório'),
       dataInicio: momentSchema.required('Campo obrigatório'),
       dataFim: momentSchema.required('Campo obrigatório'),
       professorRf: Yup.number()
@@ -392,6 +394,7 @@ function AtribuicaoEsporadicaForm({ match }) {
                         onChange={onChangeAnoLetivo}
                         valueSelect={anoLetivo}
                         placeholder="Ano letivo"
+                        labelRequired
                       />
                     </Grid>
                     <Grid cols={5}>
@@ -405,6 +408,7 @@ function AtribuicaoEsporadicaForm({ match }) {
                           form.setFieldValue('ueId', '');
                         }}
                         desabilitado={somenteConsulta}
+                        labelRequired
                       />
                     </Grid>
                     <Grid cols={5}>
@@ -419,6 +423,7 @@ function AtribuicaoEsporadicaForm({ match }) {
                         }}
                         desabilitado={somenteConsulta}
                         preencherLista={setListaUes}
+                        labelRequired
                       />
                     </Grid>
                   </Row>
@@ -432,6 +437,7 @@ function AtribuicaoEsporadicaForm({ match }) {
                           form={form}
                           onChange={() => null}
                           desabilitado={somenteConsulta || valoresIniciais.id}
+                          labelRequired
                         />
                       </Row>
                     </Grid>
@@ -445,6 +451,7 @@ function AtribuicaoEsporadicaForm({ match }) {
                         desabilitado={somenteConsulta}
                         desabilitarData={desabilitarData}
                         valorPadrao={valorPadrao}
+                        labelRequired
                       />
                     </Grid>
                     <Grid cols={2}>
@@ -457,6 +464,7 @@ function AtribuicaoEsporadicaForm({ match }) {
                         desabilitado={somenteConsulta}
                         desabilitarData={desabilitarData}
                         valorPadrao={valorPadrao}
+                        labelRequired
                       />
                     </Grid>
                   </Row>

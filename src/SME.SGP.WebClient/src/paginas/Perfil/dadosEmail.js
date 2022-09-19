@@ -156,6 +156,7 @@ const DadosEmail = () => {
                   name="emailUsuario"
                   form={form}
                   maxlength="50"
+                  labelRequired
                 />
                 <div className={`${(!email || erroEmail !== '') && 'd-none'}`}>
                   <AlertaBalao
@@ -189,6 +190,7 @@ const DadosEmail = () => {
             placeholder="Clique em editar para inserir um e-mail"
             onChange={() => {}}
             type="email"
+            labelRequired
           />
         </div>
         <div className="col-md-2 botao">

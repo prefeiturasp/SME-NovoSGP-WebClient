@@ -54,26 +54,24 @@ const ModalAnotacoesFrequencia = props => {
   const [valoresIniciais, setValoresIniciais] = useState(iniciar);
   const [loaderSalvarEditar, setLoaderSalvarEditar] = useState(false);
 
-  const [validacoes] = useState(
-    Yup.object().shape(
-      {
-        anotacao: Yup.string()
-          .nullable()
-          .when('motivoAusenciaId', (motivoAusenciaId, schema) => {
-            return motivoAusenciaId
-              ? schema.notRequired()
-              : schema.required('Anotação obrigatória');
-          }),
-        motivoAusenciaId: Yup.string()
-          .nullable()
-          .when('anotacao', (anotacao, schema) => {
-            return anotacao
-              ? schema.notRequired()
-              : schema.required('Motivo ausência obrigatório');
-          }),
-      },
-      ['motivoAusenciaId', 'anotacao']
-    )
+  const validacoes = Yup.object().shape(
+    {
+      anotacao: Yup.string()
+        .nullable()
+        .when('motivoAusenciaId', (motivoAusenciaId, schema) => {
+          return motivoAusenciaId
+            ? schema.notRequired()
+            : schema.required('Anotação obrigatória');
+        }),
+      motivoAusenciaId: Yup.string()
+        .nullable()
+        .when('anotacao', (anotacao, schema) => {
+          return anotacao
+            ? schema.notRequired()
+            : schema.required('Motivo ausência obrigatório');
+        }),
+    },
+    ['motivoAusenciaId', 'anotacao']
   );
 
   const [dadosEstudanteOuCrianca, setDadosEstudanteOuCrianca] = useState({});
@@ -211,17 +209,20 @@ const ModalAnotacoesFrequencia = props => {
     }
   };
 
-  const validaAntesDoSubmit = form => {
+  const validaAntesDoSubmit = () => {
     if (!desabilitarCampos) {
       const arrayCampos = Object.keys(valoresIniciais);
       arrayCampos.forEach(campo => {
-        form.setFieldTouched(campo, true, true);
+        refForm.setFieldTouched(campo, true, true);
       });
-      form.validateForm().then(() => {
-        if (form.isValid || Object.keys(form.errors).length === 0) {
+      refForm.validateForm().then(() => {
+        if (
+          refForm.getFormikContext().isValid ||
+          Object.keys(refForm.getFormikContext().errors).length === 0
+        ) {
           setLoaderSalvarEditar(true);
           setTimeout(() => {
-            form.handleSubmit(e => e);
+            refForm.handleSubmit(e => e);
           }, 400);
         }
       });
@@ -255,7 +256,7 @@ const ModalAnotacoesFrequencia = props => {
       );
       if (confirmado) {
         if (refForm) {
-          validaAntesDoSubmit(refForm.getFormikContext());
+          validaAntesDoSubmit();
         }
       } else {
         onCloseModal();
@@ -312,6 +313,7 @@ const ModalAnotacoesFrequencia = props => {
               <div className="col-md-12 mt-2">
                 <Loader loading={carregandoMotivosAusencia} tip="">
                   <SelectComponent
+                    label="Motivo de ausência"
                     form={form}
                     id="motivo-ausencia"
                     name="motivoAusenciaId"
@@ -321,12 +323,19 @@ const ModalAnotacoesFrequencia = props => {
                     onChange={onChangeCampos}
                     placeholder="Selecione um motivo"
                     disabled={desabilitarCampos}
+                    labelRequired={
+                      !form?.values?.anotacao ||
+                      !!(
+                        form?.values?.anotacao && form?.values?.motivoAusenciaId
+                      )
+                    }
                   />
                 </Loader>
               </div>
               <div className="col-md-12 mt-2">
                 <EditorAnotacao>
                   <JoditEditor
+                    label="Anotação"
                     form={form}
                     value={refForm?.state?.values?.anotacao}
                     name="anotacao"
@@ -336,6 +345,12 @@ const ModalAnotacoesFrequencia = props => {
                       }
                     }}
                     readonly={desabilitarCampos}
+                    labelRequired={
+                      !form?.values?.motivoAusenciaId ||
+                      !!(
+                        form?.values?.anotacao && form?.values?.motivoAusenciaId
+                      )
+                    }
                   />
                 </EditorAnotacao>
               </div>
@@ -394,7 +409,7 @@ const ModalAnotacoesFrequencia = props => {
                     border
                     className="mr-3 mt-2 padding-btn-confirmacao"
                     onClick={() => validaAntesDoSubmit(form)}
-                    disabled={!modoEdicao || desabilitarCampos}
+                    disabled={desabilitarCampos}
                   />
                 </div>
               </div>

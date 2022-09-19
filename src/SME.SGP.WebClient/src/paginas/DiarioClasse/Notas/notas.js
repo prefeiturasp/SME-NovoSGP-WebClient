@@ -1210,6 +1210,7 @@ const Notas = ({ match }) => {
                     onChange={onChangeJustificativa}
                     name="descricao"
                     permiteInserirArquivo={false}
+                    labelRequired
                   />
                 </fieldset>
               </div>

@@ -64,6 +64,7 @@ const TipoCalendarioReabertura = ({
         temErro={emEdicao && !calendarioSelecionado?.id}
         mensagemErro="Campo obrigatório"
         disabled={desabilitarCampos || !novoRegistro}
+        labelRequired
       />
     </Loader>
   );

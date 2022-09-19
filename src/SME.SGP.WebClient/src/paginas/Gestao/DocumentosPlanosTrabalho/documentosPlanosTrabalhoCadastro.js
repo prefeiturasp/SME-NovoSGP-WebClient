@@ -512,7 +512,7 @@ const DocumentosPlanosTrabalhoCadastro = ({ match }) => {
                       border
                       bold
                       onClick={() => validaAntesDoSubmit(form)}
-                      disabled={!modoEdicao || desabilitarCampos}
+                      disabled={desabilitarCampos}
                     />
                   </Col>
                 </Row>
@@ -538,6 +538,7 @@ const DocumentosPlanosTrabalhoCadastro = ({ match }) => {
                           form={form}
                           name="anoLetivo"
                           allowClear={false}
+                          labelRequired
                         />
                       </div>
                     </div>
@@ -556,6 +557,7 @@ const DocumentosPlanosTrabalhoCadastro = ({ match }) => {
                           desabilitado={
                             !!idDocumentosPlanoTrabalho || desabilitarCampos
                           }
+                          labelRequired
                         />
                       </div>
                       <div className="col-sm-12 col-md-12 col-lg-6 col-xl-6 mb-2">
@@ -577,6 +579,7 @@ const DocumentosPlanosTrabalhoCadastro = ({ match }) => {
                           desabilitado={
                             !!idDocumentosPlanoTrabalho || desabilitarCampos
                           }
+                          labelRequired
                         />
                       </div>
 
@@ -596,6 +599,7 @@ const DocumentosPlanosTrabalhoCadastro = ({ match }) => {
                             !!idDocumentosPlanoTrabalho ||
                             desabilitarCampos
                           }
+                          labelRequired
                         />
                       </div>
                       <div className="col-sm-12 col-md-6 col-lg-6 col-xl- mb-2">
@@ -614,6 +618,7 @@ const DocumentosPlanosTrabalhoCadastro = ({ match }) => {
                             !!idDocumentosPlanoTrabalho ||
                             desabilitarCampos
                           }
+                          labelRequired
                         />
                       </div>
                       <div className="col-md-12 mb-2">
@@ -647,6 +652,7 @@ const DocumentosPlanosTrabalhoCadastro = ({ match }) => {
                               form.values.tipoDocumentoId ===
                               TIPO_DOCUMENTO.DOCUMENTOS
                             }
+                            labelRequired
                           />
                         </div>
                       </div>
@@ -662,6 +668,8 @@ const DocumentosPlanosTrabalhoCadastro = ({ match }) => {
                           onRemove={onRemoveFile}
                           urlUpload="v1/armazenamento/documentos/upload"
                           defaultFileList={defaultFileList}
+                          label="Arquivo"
+                          labelRequired
                           onChangeListaArquivos={lista => {
                             setListaDeArquivos(lista);
                             setModoEdicao(true);

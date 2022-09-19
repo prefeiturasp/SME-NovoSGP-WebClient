@@ -32,6 +32,7 @@ import {
   setBreadcrumbManual,
   sucesso,
 } from '~/servicos';
+import { isFieldRequired } from '~/utils';
 import { parseScreenObject } from '~/utils/parsers/eventRecurrence';
 import ModalRecorrencia from '../components/ModalRecorrencia';
 import { LabelAguardandoAprovacao, ListaCopiarEventos } from '../eventos.css';
@@ -477,6 +478,15 @@ const EventosCadastroForm = () => {
     });
   };
 
+  const campoDescricaoEhObrigatorio = () =>
+    !refFormEventos?.state?.values?.descricao &&
+    (String(refFormEventos?.state?.values?.tipoEventoId) ===
+      String(tipoEvento.ReuniaoPedagogica) ||
+      String(refFormEventos?.state?.values?.tipoEventoId) ===
+        String(tipoEvento.ReuniaoAPM) ||
+      String(refFormEventos?.state?.values?.tipoEventoId) ===
+        String(tipoEvento.ReuniaoConselhoEscola));
+
   const montaValidacoes = useCallback(() => {
     const val = {
       dreId: Yup.string().required(textCampoObrigatorio),
@@ -752,6 +762,7 @@ const EventosCadastroForm = () => {
                         onChange={onChangeCampos}
                         name="nome"
                         desabilitado={desabilitarCampos || !podeAlterarEvento}
+                        labelRequired
                       />
                     </Col>
                     <Col
@@ -785,6 +796,7 @@ const EventosCadastroForm = () => {
                           onChange={onChangeCampos}
                           placeholder="Selecione o feriado"
                           disabled={desabilitarCampos || !podeAlterarEvento}
+                          labelRequired
                         />
                       </Col>
                     ) : (
@@ -815,6 +827,10 @@ const EventosCadastroForm = () => {
                         onChange={onChangeCampos}
                         desabilitarData={desabilitarData}
                         desabilitado={desabilitarCampos || !podeAlterarEvento}
+                        labelRequired={isFieldRequired(
+                          'dataInicio',
+                          validacoes
+                        )}
                       />
                     </Col>
                     {!tipoDataUnico ? (
@@ -827,6 +843,7 @@ const EventosCadastroForm = () => {
                           name="dataFim"
                           onChange={onChangeCampos}
                           desabilitado={desabilitarCampos || !podeAlterarEvento}
+                          labelRequired
                         />
                       </Col>
                     ) : (
@@ -876,6 +893,7 @@ const EventosCadastroForm = () => {
                         name="descricao"
                         type="textarea"
                         desabilitado={desabilitarCampos || !podeAlterarEvento}
+                        labelRequired={campoDescricaoEhObrigatorio()}
                       />
                     </Col>
                   </Row>

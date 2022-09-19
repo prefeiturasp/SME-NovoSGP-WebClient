@@ -62,7 +62,8 @@ const CopiarCompensacao = ({
   };
 
   const validacoes = Yup.object({
-    bimestre: Yup.string().required('Selecione um bimestre.'),
+    turmas: Yup.string().required('Campo obrigatório'),
+    bimestre: Yup.string().required('Campo obrigatório'),
   });
 
   return (
@@ -105,6 +106,7 @@ const CopiarCompensacao = ({
                 multiple
                 placeholder="Selecione uma ou mais turmas"
                 form={form}
+                labelRequired
               />
               <SelectComponent
                 form={form}
@@ -115,6 +117,7 @@ const CopiarCompensacao = ({
                 valueOption="valor"
                 valueText="descricao"
                 placeholder="Selecione um bimestre"
+                labelRequired
               />
             </div>
           </ModalConteudoHtml>

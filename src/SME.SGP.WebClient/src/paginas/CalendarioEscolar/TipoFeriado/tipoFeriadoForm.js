@@ -231,6 +231,7 @@ const TipoFeriadoForm = ({ match }) => {
           (!novoRegistro && !permissoesTela.podeAlterar) ||
           possuiEventos
         }
+        labelRequired
       />
     );
   };
@@ -322,6 +323,7 @@ const TipoFeriadoForm = ({ match }) => {
                         (!novoRegistro && !permissoesTela.podeAlterar) ||
                         possuiEventos
                       }
+                      labelRequired
                     />
                   </div>
 
@@ -341,6 +343,7 @@ const TipoFeriadoForm = ({ match }) => {
                         (!novoRegistro && !permissoesTela.podeAlterar) ||
                         possuiEventos
                       }
+                      labelRequired
                     />
                   </div>
 
@@ -351,6 +354,7 @@ const TipoFeriadoForm = ({ match }) => {
                       opcoes={opcoesTipo}
                       name="tipo"
                       desabilitado
+                      labelRequired
                     />
                   </div>
 
@@ -370,6 +374,7 @@ const TipoFeriadoForm = ({ match }) => {
                         (!novoRegistro && !permissoesTela.podeAlterar)
                       }
                       onChange={onChangeCampos}
+                      labelRequired
                     />
                   </div>
                 </div>

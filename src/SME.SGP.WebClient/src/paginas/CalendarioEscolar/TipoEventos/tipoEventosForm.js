@@ -20,6 +20,7 @@ import {
 } from '~/componentes-sgp/filtro/idsCampos';
 import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
 import BotaoExcluirPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoExcluirPadrao';
+import { Label } from '~/componentes';
 
 const TipoEventosForm = ({ match }) => {
   const botaoCadastrarRef = useRef();
@@ -35,9 +36,6 @@ const TipoEventosForm = ({ match }) => {
     dependencia: true,
     ativo: true,
   });
-  const [desabilitarBotaoCadastrar, setDesabilitarBotaoCadastrar] = useState(
-    true
-  );
   const [modoEdicao, setModoEdicao] = useState(false);
   const [inseridoAlterado, setInseridoAlterado] = useState({
     alteradoEm: '',
@@ -67,17 +65,6 @@ const TipoEventosForm = ({ match }) => {
     .ant-radio-inner::after {
       background-color: ${Base.Roxo};
     }
-  `;
-
-  const Titulo = styled(Div)`
-    color: ${Base.CinzaMako};
-    font-size: 24px;
-  `;
-
-  const Rotulo = styled.label`
-    color: ${Base.CinzaMako};
-    font-size: 14px;
-    font-weight: bold;
   `;
 
   const InseridoAlterado = styled(Div)`
@@ -137,7 +124,6 @@ const TipoEventosForm = ({ match }) => {
       dependencia: true,
       ativo: true,
     });
-    setDesabilitarBotaoCadastrar(true);
   };
 
   const clicouBotaoExcluir = async () => {
@@ -199,18 +185,12 @@ const TipoEventosForm = ({ match }) => {
     campoDescricaoRef.current.value = e.target.value;
   };
 
-  useEffect(() => {
-    if (dadosTipoEvento.descricao.length > 0)
-      setDesabilitarBotaoCadastrar(false);
-  }, [dadosTipoEvento.descricao]);
-
   const aoSelecionarLocalOcorrencia = local => {
     setDadosTipoEvento({
       ...dadosTipoEvento,
       localOcorrencia: local,
       descricao: campoDescricaoRef.current.value,
     });
-    setDesabilitarBotaoCadastrar(false);
   };
 
   const aoSelecionarLetivo = letivo => {
@@ -219,7 +199,6 @@ const TipoEventosForm = ({ match }) => {
       letivo,
       descricao: campoDescricaoRef.current.value,
     });
-    setDesabilitarBotaoCadastrar(false);
   };
 
   const aoSelecionarConcomitancia = concomitancia => {
@@ -228,7 +207,6 @@ const TipoEventosForm = ({ match }) => {
       concomitancia: concomitancia.target.value,
       descricao: campoDescricaoRef.current.value,
     });
-    setDesabilitarBotaoCadastrar(false);
   };
 
   const aoSelecionarTipoData = tipoData => {
@@ -237,7 +215,6 @@ const TipoEventosForm = ({ match }) => {
       tipoData: tipoData.target.value,
       descricao: campoDescricaoRef.current.value,
     });
-    setDesabilitarBotaoCadastrar(false);
   };
 
   const aoSelecionarDependencia = dependencia => {
@@ -246,7 +223,6 @@ const TipoEventosForm = ({ match }) => {
       dependencia: dependencia.target.value,
       descricao: campoDescricaoRef.current.value,
     });
-    setDesabilitarBotaoCadastrar(false);
   };
 
   const aoSelecionarSituacao = situacao => {
@@ -255,7 +231,6 @@ const TipoEventosForm = ({ match }) => {
       ativo: situacao.target.value,
       descricao: campoDescricaoRef.current.value,
     });
-    setDesabilitarBotaoCadastrar(false);
   };
 
   return (
@@ -311,7 +286,6 @@ const TipoEventosForm = ({ match }) => {
                   onClick={e => clicouBotaoCadastrar(form, e)}
                   border
                   bold
-                  disabled={desabilitarBotaoCadastrar}
                   ref={botaoCadastrarRef}
                 />
               </Col>
@@ -323,7 +297,6 @@ const TipoEventosForm = ({ match }) => {
               <Form>
                 <Div className="row mb-4">
                   <Div className="col-6">
-                    <Rotulo>Nome do tipo de evento</Rotulo>
                     <CampoTexto
                       form={form}
                       ref={campoDescricaoRef}
@@ -335,10 +308,11 @@ const TipoEventosForm = ({ match }) => {
                       onChange={aoDigitarDescricao}
                       desabilitado={possuiEventos}
                       icon
+                      label="Nome do tipo de evento"
+                      labelRequired
                     />
                   </Div>
                   <Div className="col-4">
-                    <Rotulo>Local de ocorrência</Rotulo>
                     <SelectComponent
                       form={form}
                       name="localOcorrencia"
@@ -349,10 +323,11 @@ const TipoEventosForm = ({ match }) => {
                       lista={listaLocalOcorrencia}
                       onChange={aoSelecionarLocalOcorrencia}
                       disabled={possuiEventos}
+                      label="Local de ocorrência"
+                      labelRequired
                     />
                   </Div>
                   <Div className="col-2">
-                    <Rotulo>Letivo</Rotulo>
                     <SelectComponent
                       form={form}
                       name="letivo"
@@ -363,21 +338,23 @@ const TipoEventosForm = ({ match }) => {
                       lista={listaLetivo}
                       onChange={aoSelecionarLetivo}
                       disabled={possuiEventos}
+                      label="Letivo"
+                      labelRequired
                     />
                   </Div>
                 </Div>
                 <Div className="row">
                   <Div className="col-3">
-                    <Rotulo>Permite concomitância</Rotulo>
+                    <Label isRequired text="Permite concomitância" />
                   </Div>
                   <Div className="col-3">
-                    <Rotulo>Tipo de data</Rotulo>
+                    <Label isRequired text="Tipo de data" />
                   </Div>
                   <Div className="col-3">
-                    <Rotulo>Dependência</Rotulo>
+                    <Label isRequired text="Dependência" />
                   </Div>
                   <Div className="col-3">
-                    <Rotulo>Situação</Rotulo>
+                    <Label isRequired text="Situação" />
                   </Div>
                 </Div>
                 <Div className="row">

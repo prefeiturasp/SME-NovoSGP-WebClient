@@ -22,6 +22,7 @@ import FechaReabCadastroContext from './fechaReabCadastroContext';
 
 const FechaReabCadastroBotoesAcao = () => {
   const {
+    setEmEdicao,
     emEdicao,
     setExecutaResetarTela,
     refForm,
@@ -30,7 +31,6 @@ const FechaReabCadastroBotoesAcao = () => {
     desabilitarCampos,
     setDesabilitarCampos,
     setSomenteConsulta,
-    calendarioSelecionado,
     setExibirLoaderReabertura,
   } = useContext(FechaReabCadastroContext);
 
@@ -65,6 +65,7 @@ const FechaReabCadastroBotoesAcao = () => {
   };
 
   const validaAntesDoSubmit = () => {
+    setEmEdicao(true);
     const arrayCampos = Object.keys(valoresIniciaisPadrao);
     arrayCampos.forEach(campo => {
       refForm.setFieldTouched(campo, true, true);
@@ -163,7 +164,7 @@ const FechaReabCadastroBotoesAcao = () => {
             border
             bold
             onClick={() => validaAntesDoSubmit()}
-            disabled={desabilitarCampos || !calendarioSelecionado?.id}
+            disabled={desabilitarCampos}
           />
         </Col>
       </Row>

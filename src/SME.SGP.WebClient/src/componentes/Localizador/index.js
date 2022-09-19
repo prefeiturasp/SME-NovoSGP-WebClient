@@ -41,6 +41,7 @@ function Localizador({
   buscarCaracterPartir,
   ueId,
   buscarPorAbrangencia,
+  labelRequired,
 }) {
   const usuario = useSelector(store => store.usuario);
   const [dataSource, setDataSource] = useState([]);
@@ -236,7 +237,13 @@ function Localizador({
   return (
     <>
       <Grid cols={4} className={classesRF}>
-        {showLabel && <Label text={labelRF} control="professorRf" />}
+        {showLabel && (
+          <Label
+            text={labelRF}
+            control="professorRf"
+            isRequired={labelRequired}
+          />
+        )}
         <InputRF
           pessoaSelecionada={pessoaSelecionada}
           onSelect={onBuscarPorRF}
@@ -253,7 +260,13 @@ function Localizador({
         />
       </Grid>
       <Grid className="pr-0" cols={colunasNome}>
-        {showLabel && <Label text={labelNome} control="professorNome" />}
+        {showLabel && (
+          <Label
+            text={labelNome}
+            control="professorNome"
+            isRequired={labelRequired}
+          />
+        )}
         <InputNome
           dataSource={dataSource}
           onSelect={onSelectPessoa}
@@ -299,6 +312,7 @@ Localizador.propTypes = {
   buscarCaracterPartir: PropTypes.number,
   ueId: PropTypes.string,
   buscarPorAbrangencia: PropTypes.bool,
+  labelRequired: PropTypes.bool,
 };
 
 Localizador.defaultProps = {
@@ -323,6 +337,7 @@ Localizador.defaultProps = {
   buscarCaracterPartir: 3,
   ueId: null,
   buscarPorAbrangencia: false,
+  labelRequired: false,
 };
 
 export default Localizador;

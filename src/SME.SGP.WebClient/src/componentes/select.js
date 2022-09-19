@@ -111,6 +111,7 @@ const SelectComponent = React.forwardRef((props, ref) => {
     searchValue,
     setValueOnlyOnChange,
     maxHeightMultiple,
+    labelRequired,
   } = props;
 
   const { Option } = Select;
@@ -235,7 +236,11 @@ const SelectComponent = React.forwardRef((props, ref) => {
       color={color}
       maxHeightMultiple={maxHeightMultiple}
     >
-      {label ? <Label text={label} control={name} /> : ''}
+      {label ? (
+        <Label text={label} control={name} isRequired={labelRequired} />
+      ) : (
+        <></>
+      )}
       {form ? campoComValidacoes() : campoSemValidacoes()}
       {form ? obterErros() : ''}
     </Container>
@@ -268,6 +273,7 @@ SelectComponent.propTypes = {
   searchValue: PropTypes.bool,
   setValueOnlyOnChange: PropTypes.bool,
   maxHeightMultiple: PropTypes.string,
+  labelRequired: PropTypes.bool,
 };
 
 SelectComponent.defaultProps = {
@@ -277,6 +283,7 @@ SelectComponent.defaultProps = {
   searchValue: true,
   setValueOnlyOnChange: false,
   maxHeightMultiple: '78px',
+  labelRequired: false,
 };
 
 export default SelectComponent;

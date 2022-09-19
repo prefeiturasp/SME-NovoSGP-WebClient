@@ -50,7 +50,7 @@ const BotoesAcoesDiarioBordo = props => {
         border
         bold
         onClick={validaAntesDoSubmit}
-        disabled={!modoEdicao || !turmaInfantil || desabilitarCampos}
+        disabled={!turmaInfantil || desabilitarCampos}
       />
     </>
   );

@@ -74,6 +74,7 @@ const UeComunicados = ({ form, onChangeCampos, desabilitar }) => {
         showSearch
         name={nomeCampo}
         form={form}
+        labelRequired
         onChange={() => {
           onChangeCampos();
           form.setFieldValue('modalidades', []);

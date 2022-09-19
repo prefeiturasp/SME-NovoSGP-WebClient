@@ -91,12 +91,14 @@ function RegistroPOAForm({ match }) {
 
   const validacoes = () => {
     return Yup.object({
-      descricao: Yup.string().required('Campo obrigatório!'),
-      bimestre: Yup.number().required('Campo obrigatório!'),
-      titulo: Yup.string().required('O campo "Título" é obrigatório!'),
+      dreId: Yup.string().required('Campo obrigatório'),
+      ueId: Yup.string().required('Campo obrigatório'),
+      descricao: Yup.string().required('Campo obrigatório'),
+      bimestre: Yup.number().required('Campo obrigatório'),
+      titulo: Yup.string().required('Campo obrigatório'),
       professorRf: Yup.number()
         .typeError('Informar um número inteiro!')
-        .required('Campo obrigatório!'),
+        .required('Campo obrigatório'),
     });
   };
 
@@ -309,6 +311,7 @@ function RegistroPOAForm({ match }) {
                             form={form}
                             onChange={() => null}
                             desabilitado={somenteConsulta}
+                            labelRequired
                           />
                         </Grid>
                         <Grid cols={6}>
@@ -319,6 +322,7 @@ function RegistroPOAForm({ match }) {
                             url="v1/dres"
                             onChange={() => null}
                             desabilitado={somenteConsulta}
+                            labelRequired
                           />
                         </Grid>
                       </Row>
@@ -330,6 +334,7 @@ function RegistroPOAForm({ match }) {
                           onChange={() => null}
                           showLabel
                           desabilitado={somenteConsulta}
+                          labelRequired
                         />
                       </Row>
                       <Row className="row">
@@ -349,6 +354,7 @@ function RegistroPOAForm({ match }) {
                             placeholder="Digite o título do registro"
                             form={form}
                             desabilitado={somenteConsulta}
+                            labelRequired
                           />
                         </Grid>
                       </Row>
@@ -362,6 +368,7 @@ function RegistroPOAForm({ match }) {
                             name="descricao"
                             value={valoresIniciais.descricao}
                             desabilitado={somenteConsulta}
+                            labelRequired
                           />
                         </Grid>
                       </Row>

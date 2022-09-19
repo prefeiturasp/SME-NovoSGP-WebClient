@@ -48,6 +48,7 @@ const AnoLetivoComunicados = ({ form, comunicadoId, onChangeCampos }) => {
         name="anoLetivo"
         form={form}
         onChange={() => onChangeCampos()}
+        labelRequired
       />
     </Loader>
   );
