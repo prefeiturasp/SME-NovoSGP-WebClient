@@ -1,4 +1,4 @@
-import moment from 'moment-with-locales-es6';
+import moment from 'moment';
 
 moment.locale('pt-br');
 window.moment = moment;
