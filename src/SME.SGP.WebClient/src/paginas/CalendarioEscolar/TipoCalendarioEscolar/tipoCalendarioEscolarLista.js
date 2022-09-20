@@ -52,6 +52,7 @@ const TipoCalendarioEscolarLista = () => {
   useEffect(() => {
     onFiltrar();
     setSomenteConsulta(verificaSomenteConsulta(permissoesTela));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const onSelectRow = ids => {
@@ -78,7 +79,7 @@ const TipoCalendarioEscolarLista = () => {
     const listaParaExcluir = [];
     idTiposSelecionados.forEach(id => {
       const tipoParaExcluir = listaTiposCalendarioEscolar.find(
-        tipo => id == tipo.id
+        tipo => Number(id) === Number(tipo.id)
       );
       if (tipoParaExcluir) {
         listaParaExcluir.push(tipoParaExcluir);

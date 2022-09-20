@@ -99,7 +99,8 @@ function AtribuicaoCJForm({ match, location }) {
 
   const onSubmitFormulario = async valores => {
     if (novoRegistro && !listaProfessores.some(x => x.substituir === true)) {
-      return erro('Selecione um professor para substituir.');
+      erro('Selecione um professor para substituir.');
+      return;
     }
     try {
       setCarregando(true);
@@ -184,6 +185,7 @@ function AtribuicaoCJForm({ match, location }) {
       setConsideraHistorico(historico);
       setAnoLetivo(anoSelecionado);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [location, match.url]);
 
   useEffect(() => {
@@ -216,7 +218,7 @@ function AtribuicaoCJForm({ match, location }) {
             setNovoRegistro(false);
           }
         }
-        if (status == 204) {
+        if (status === 204) {
           setListaProfessores([]);
           setAuditoria(null);
         }
@@ -239,6 +241,7 @@ function AtribuicaoCJForm({ match, location }) {
     ) {
       buscaAtribs(valoresForm);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [refForm, valoresForm]);
 
   const limparCampos = () => {
@@ -435,7 +438,7 @@ function AtribuicaoCJForm({ match, location }) {
                         label="Turma"
                         form={form}
                         onChange={value => {
-                          if (valoresIniciais.turmaId == undefined) {
+                          if (!valoresIniciais.turmaId) {
                             setValoresForm({
                               ...valoresForm,
                               turmaId: value,

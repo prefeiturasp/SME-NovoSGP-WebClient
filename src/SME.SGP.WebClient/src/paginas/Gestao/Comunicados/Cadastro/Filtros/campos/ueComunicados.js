@@ -50,6 +50,7 @@ const UeComunicados = ({ form, onChangeCampos, desabilitar }) => {
       form.initialValues[nomeCampo] = undefined;
       setListaUes([]);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [anoLetivo, codigoDre]);
 
   useEffect(() => {
@@ -59,6 +60,7 @@ const UeComunicados = ({ form, onChangeCampos, desabilitar }) => {
       form.setFieldValue(nomeCampo, undefined);
       setListaUes([]);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [codigoDre, obterUes]);
 
   return (

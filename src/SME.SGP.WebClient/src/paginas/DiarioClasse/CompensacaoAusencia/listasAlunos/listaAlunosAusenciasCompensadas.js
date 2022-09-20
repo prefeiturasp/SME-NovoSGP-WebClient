@@ -2,7 +2,6 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import { DataTable, Label } from '~/componentes';
 import SelectComponent from '~/componentes/select';
-import { confirmar } from '~/servicos/alertas';
 
 import { CardTabelaAlunos } from '../styles';
 
@@ -37,7 +36,7 @@ const ListaAlunosAusenciasCompensadas = props => {
         onChange={qt => {
           if (!desabilitarCampos) {
             const aluno = listaAusenciaCompensada.find(
-              item => item.id == dadosAluno.id
+              item => Number(item.id) === Number(dadosAluno.id)
             );
             let indexAluno = null;
             if (aluno) {

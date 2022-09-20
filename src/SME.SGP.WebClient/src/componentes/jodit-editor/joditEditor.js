@@ -1,5 +1,7 @@
 import { Field } from 'formik';
+// eslint-disable-next-line import/no-extraneous-dependencies
 import { Jodit } from 'jodit';
+// eslint-disable-next-line import/no-extraneous-dependencies
 import 'jodit/build/jodit.min.css';
 import PropTypes from 'prop-types';
 import React, { forwardRef, useEffect, useRef, useState } from 'react';
@@ -382,6 +384,7 @@ const JoditEditor = forwardRef((props, ref) => {
         }
       }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [url]);
 
   useEffect(() => {
@@ -394,6 +397,7 @@ const JoditEditor = forwardRef((props, ref) => {
     if (config && textArea?.current && textArea?.current?.type !== 'textarea') {
       textArea.current.setReadOnly(desabilitar);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [desabilitar]);
 
   const possuiErro = () => {

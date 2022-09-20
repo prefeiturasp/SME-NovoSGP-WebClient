@@ -53,12 +53,14 @@ const DreCadastroEventos = ({
       form.setFieldValue('dreId', undefined);
       setListaDres([]);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [eventoId, usuario.possuiPerfilSme]);
 
   useEffect(() => {
     if (!eventoId || (eventoId && dreId)) {
       obterDres();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [obterDres]);
 
   return (

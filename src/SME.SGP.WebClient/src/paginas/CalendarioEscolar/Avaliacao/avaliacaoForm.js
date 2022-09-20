@@ -249,7 +249,8 @@ const AvaliacaoForm = ({ match, location }) => {
           } else {
             setCarregandoTela(false);
             sucesso(
-              `Avaliação ${idAvaliacao ? 'atualizada' : 'cadastrada'
+              `Avaliação ${
+                idAvaliacao ? 'atualizada' : 'cadastrada'
               } com sucesso.`
             );
           }
@@ -347,7 +348,7 @@ const AvaliacaoForm = ({ match, location }) => {
       if (data) {
         setListaDisciplinas(data);
         if (data.length > 1) {
-          listaCategorias.map(categoria => {
+          listaCategorias.forEach(categoria => {
             if (categoria.value === categorias.INTERDISCIPLINAR) {
               categoria.disabled = false;
             }
@@ -368,7 +369,8 @@ const AvaliacaoForm = ({ match, location }) => {
     try {
       setCarregandoTela(true);
       const { data, status } = await ServicoAvaliacao.listarDisciplinasRegencia(
-        turmaId, true
+        turmaId,
+        true
       );
       if (data && status === 200) {
         setListaDisciplinasRegencia(data);
@@ -502,13 +504,18 @@ const AvaliacaoForm = ({ match, location }) => {
     );
     setDesabilitarCampos(turmaInfantil || !podeEditarAvaliacao);
 
-
     if (turmaInfantil && refForm && refForm.resetForm) {
       refForm.resetForm();
       setDescricao('');
       setModoEdicao(false);
     }
-  }, [turmaSelecionada, modalidadesFiltroPrincipal, refForm, inicial, podeEditarAvaliacao]);
+  }, [
+    turmaSelecionada,
+    modalidadesFiltroPrincipal,
+    refForm,
+    inicial,
+    podeEditarAvaliacao,
+  ]);
 
   const selecionarDisciplina = indice => {
     const disciplinas = [...listaDisciplinasRegencia];
@@ -617,7 +624,7 @@ const AvaliacaoForm = ({ match, location }) => {
         <Loader loading={carregandoTela} tip="Carregando...">
           <Formik
             enableReinitialize
-            ref={refForm => setRefForm(refForm)}
+            ref={r => setRefForm(r)}
             initialValues={dadosAvaliacao}
             onSubmit={dados => cadastrarAvaliacao(dados)}
             validationSchema={validacoes}
@@ -704,7 +711,7 @@ const AvaliacaoForm = ({ match, location }) => {
                     <Div className="row">
                       <Grid cols={4} className="mb-4">
                         {listaDisciplinas?.length > 1 &&
-                          form.values.categoriaId ===
+                        form.values.categoriaId ===
                           categorias.INTERDISCIPLINAR ? (
                           <SelectComponent
                             id="disciplinasId"
@@ -799,7 +806,9 @@ const AvaliacaoForm = ({ match, location }) => {
                                       e.preventDefault();
                                       selecionarDisciplina(indice);
                                     }}
-                                    aria-pressed={disciplina.selecionada && true}
+                                    aria-pressed={
+                                      disciplina.selecionada && true
+                                    }
                                     alt={disciplina.nome}
                                     className="badge badge-pill border text-dark bg-white font-weight-light px-2 py-1 mr-2"
                                   >
@@ -828,7 +837,10 @@ const AvaliacaoForm = ({ match, location }) => {
                     </Div>
                     <Div className="row" style={{ marginTop: '14px' }}>
                       <Grid
-                        style={{ display: 'flex', justifyContent: 'flex-start' }}
+                        style={{
+                          display: 'flex',
+                          justifyContent: 'flex-start',
+                        }}
                         cols={12}
                       >
                         <Button
@@ -866,7 +878,7 @@ const AvaliacaoForm = ({ match, location }) => {
                     <Grid cols={12}>
                       <InseridoAlterado className="mt-4">
                         {inseridoAlterado.criadoPor &&
-                          inseridoAlterado.criadoEm ? (
+                        inseridoAlterado.criadoEm ? (
                           <p className="pt-2">
                             INSERIDO por {inseridoAlterado.criadoPor} em{' '}
                             {window.moment(inseridoAlterado.criadoEm).format()}
@@ -876,10 +888,12 @@ const AvaliacaoForm = ({ match, location }) => {
                         )}
 
                         {inseridoAlterado.alteradoPor &&
-                          inseridoAlterado.alteradoEm ? (
+                        inseridoAlterado.alteradoEm ? (
                           <p>
                             ALTERADO por {inseridoAlterado.alteradoPor} em{' '}
-                            {window.moment(inseridoAlterado.alteradoEm).format()}
+                            {window
+                              .moment(inseridoAlterado.alteradoEm)
+                              .format()}
                           </p>
                         ) : (
                           ''

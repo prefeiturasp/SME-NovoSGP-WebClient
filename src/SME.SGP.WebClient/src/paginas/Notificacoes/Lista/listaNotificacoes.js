@@ -130,30 +130,8 @@ export default function NotificacoesLista() {
     verificaSomenteConsulta(permissoesTela);
     setDesabilitarBotaoExcluir(permissoesTela.podeExcluir);
     carregarListas();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
-  useEffect(() => {
-    if (usuario && turmaSelecionada) {
-      setDesabilitarTurma(false);
-    } else {
-      setDesabilitarTurma(true);
-      setTurmaSelecionada('');
-    }
-    onClickFiltrar();
-  }, [turmaSelecionada]);
-
-  useEffect(() => {
-    onClickFiltrar(statusSelecionado,
-                   categoriaSelecionada,
-                   tipoSelecionado,
-                   tituloSelecionado);
-  }, [
-    statusSelecionado,
-    dropdownTurmaSelecionada,
-    categoriaSelecionada,
-    tipoSelecionado,
-    tituloSelecionado,
-  ]);
 
   const listaSelectTurma = [
     { id: 1, descricao: 'Todas as turmas' },
@@ -207,9 +185,9 @@ export default function NotificacoesLista() {
       tipo: tipoSelecionado,
       titulo: tituloSelecionado || null,
       usuarioRf: usuario.rf || null,
-      anoLetivo: usuario.filtroAtual.anoLetivo
+      anoLetivo: usuario.filtroAtual.anoLetivo,
     };
-    if (dropdownTurmaSelecionada && dropdownTurmaSelecionada == '2') {
+    if (dropdownTurmaSelecionada && dropdownTurmaSelecionada === '2') {
       if (turmaSelecionada) {
         paramsQuery.ano = turmaSelecionada.ano;
         paramsQuery.dreId = turmaSelecionada.dre;
@@ -230,6 +208,33 @@ export default function NotificacoesLista() {
     dropdownTurmaSelecionada,
     turmaSelecionada,
     desabilitarTurma,
+  ]);
+
+  useEffect(() => {
+    if (usuario && turmaSelecionada) {
+      setDesabilitarTurma(false);
+    } else {
+      setDesabilitarTurma(true);
+      setTurmaSelecionada('');
+    }
+    onClickFiltrar();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [turmaSelecionada]);
+
+  useEffect(() => {
+    onClickFiltrar(
+      statusSelecionado,
+      categoriaSelecionada,
+      tipoSelecionado,
+      tituloSelecionado
+    );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [
+    statusSelecionado,
+    dropdownTurmaSelecionada,
+    categoriaSelecionada,
+    tipoSelecionado,
+    tituloSelecionado,
   ]);
 
   function onSearchCodigo() {

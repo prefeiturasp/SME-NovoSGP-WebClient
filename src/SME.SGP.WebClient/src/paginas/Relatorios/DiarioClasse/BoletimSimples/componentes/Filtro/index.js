@@ -138,6 +138,7 @@ const Filtros = ({ onFiltrar, filtrou, setFiltrou, cancelou, setCancelou }) => {
 
   useEffect(() => {
     validarValorPadraoAnoLetivo(listaAnosLetivo);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [consideraHistorico, listaAnosLetivo]);
 
   const obterAnosLetivos = useCallback(async () => {
@@ -158,6 +159,7 @@ const Filtros = ({ onFiltrar, filtrou, setFiltrou, cancelou, setCancelou }) => {
 
     setListaAnosLetivo(anosOrdenados);
     setCarregandoAnosLetivos(false);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [anoAtual, consideraHistorico]);
 
   useEffect(() => {
@@ -202,6 +204,7 @@ const Filtros = ({ onFiltrar, filtrou, setFiltrou, cancelou, setCancelou }) => {
       setDreId(undefined);
       setListaDres([]);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [anoLetivo]);
 
   useEffect(() => {
@@ -246,6 +249,7 @@ const Filtros = ({ onFiltrar, filtrou, setFiltrou, cancelou, setCancelou }) => {
       }
       setListaUes([]);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dreId, anoLetivo, consideraHistorico]);
 
   useEffect(() => {
@@ -262,12 +266,17 @@ const Filtros = ({ onFiltrar, filtrou, setFiltrou, cancelou, setCancelou }) => {
     setFiltrou(false);
   };
 
-  const obterModalidades = useCallback(async (ue, consideraHistorico) => {
+  const obterModalidades = useCallback(async (ue, considHistorico) => {
     if (ue) {
       setCarregandoModalidade(true);
-      const {
-        data,
-      } = consideraHistorico ? await ServicoFiltroRelatorio.obterModalidadesPorAbrangenciaHistorica(ue, consideraHistorico).finally(() => setCarregandoModalidade(false)) : await ServicoFiltroRelatorio.obterModalidadesPorAbrangencia(ue).finally(() => setCarregandoModalidade(false));
+      const { data } = considHistorico
+        ? await ServicoFiltroRelatorio.obterModalidadesPorAbrangenciaHistorica(
+            ue,
+            considHistorico
+          ).finally(() => setCarregandoModalidade(false))
+        : await ServicoFiltroRelatorio.obterModalidadesPorAbrangencia(
+            ue
+          ).finally(() => setCarregandoModalidade(false));
 
       if (data?.length) {
         const lista = data.map(item => ({
@@ -339,6 +348,7 @@ const Filtros = ({ onFiltrar, filtrou, setFiltrou, cancelou, setCancelou }) => {
     }
     setSemestre();
     setListaSemestres([]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [obterAnosLetivos, modalidadeId, anoLetivo, dreCodigo, ueCodigo]);
 
   const onChangeTurma = valor => {
@@ -391,6 +401,7 @@ const Filtros = ({ onFiltrar, filtrou, setFiltrou, cancelou, setCancelou }) => {
         }
       }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [ueCodigo, dreId, consideraHistorico, anoLetivo, modalidadeId]);
 
   useEffect(() => {
@@ -436,10 +447,11 @@ const Filtros = ({ onFiltrar, filtrou, setFiltrou, cancelou, setCancelou }) => {
       setImprimirEstudantesInativos(false);
     }
 
-    if(opcaoEstudanteId === OPCAO_SELECIONAR_ALUNOS){
+    if (opcaoEstudanteId === OPCAO_SELECIONAR_ALUNOS) {
       setFiltrou(false);
       setImprimirEstudantesInativos(true);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [opcaoEstudanteId]);
 
   return (

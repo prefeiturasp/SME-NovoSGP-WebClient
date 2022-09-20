@@ -111,6 +111,7 @@ const SelectAutocomplete = ({
     } else {
       filtrar(value);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [value]);
 
   const campoComValidacoes = () => (
@@ -198,6 +199,7 @@ SelectAutocomplete.defaultProps = {
   temErro: false,
   mensagemErro: '',
   labelRequired: false,
+  form: null,
 };
 
 SelectAutocomplete.propTypes = {
@@ -218,9 +220,11 @@ SelectAutocomplete.propTypes = {
   showList: PropTypes.bool,
   value: PropTypes.string,
   valueField: PropTypes.string,
+  disabled: PropTypes.bool,
   temErro: PropTypes.bool,
   mensagemErro: PropTypes.string,
   labelRequired: PropTypes.bool,
+  form: PropTypes.oneOfType([PropTypes.any]),
 };
 
 export default SelectAutocomplete;

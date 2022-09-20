@@ -1,6 +1,5 @@
 import PropTypes from 'prop-types';
 import React, { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
 import SelectComponent from '~/componentes/select';
 import TooltipEstudanteAusente from './tooltipEstudanteAusente';
 import TooltipStatusGsa from './tooltipStatusGsa';
@@ -16,13 +15,9 @@ const CampoConceito = props => {
   const [conceitoValorAtual, setConceitoValorAtual] = useState();
   const [conceitoAlterado, setConceitoAlterado] = useState(false);
 
-  const modoEdicaoGeralNotaFinal = useSelector(
-    store => store.notasConceitos.modoEdicaoGeralNotaFinal
-  );
-
   const validaSeTeveAlteracao = (valorNovo, notaOriginal) => {
     if (notaOriginal) {
-      setConceitoAlterado(valorNovo != notaOriginal);
+      setConceitoAlterado(String(valorNovo) !== String(notaOriginal));
     }
   };
 
@@ -49,7 +44,9 @@ const CampoConceito = props => {
         valueOption="id"
         valueText="valor"
         lista={listaTiposConceitos}
-        valueSelect={conceitoValorAtual ? String(conceitoValorAtual) : undefined}
+        valueSelect={
+          conceitoValorAtual ? String(conceitoValorAtual) : undefined
+        }
         showSearch
         placeholder="Conceito"
         className={`select-conceitos ${
@@ -66,16 +63,18 @@ const CampoConceito = props => {
   );
 };
 
-CampoConceito.defaultProps = {
+CampoConceito.propTypes = {
   nota: {},
   onChangeNotaConceito: PropTypes.func,
   desabilitarCampo: PropTypes.bool,
+  listaTiposConceitos: PropTypes.oneOfType([PropTypes.any]),
 };
 
-CampoConceito.propTypes = {
+CampoConceito.defaultProps = {
   nota: {},
   onChangeNotaConceito: () => {},
   desabilitarCampo: false,
+  listaTiposConceitos: [],
 };
 
 export default CampoConceito;

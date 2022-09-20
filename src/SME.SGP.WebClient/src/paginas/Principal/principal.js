@@ -2,11 +2,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import CardsDashboard from '~/componentes-sgp/cardsDashboard/cardsDashboard';
 import Alert from '../../componentes/alert';
-import Card from '../../componentes/card';
-import Grid from '../../componentes/grid';
-import Row from '../../componentes/row';
 import PendenciasGerais from './Pendencias/pendenciasGerais';
-import { Container, Label } from './principal.css';
 
 const Principal = () => {
   const [turmaSelecionada, setTurmaSelecionada] = useState(false);

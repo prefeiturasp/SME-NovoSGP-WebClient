@@ -74,10 +74,12 @@ const BreadcrumbSgp = () => {
 
   useEffect(() => {
     carregaBreadcrumbs();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [NavegacaoStore.rotaAtiva]);
 
   useEffect(() => {
     carregaBreadcrumbs();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [UsuarioStrore.turmaSelecionada]);
 
   useEffect(
@@ -168,18 +170,6 @@ const BreadcrumbSgp = () => {
     dicaIcone
   ) => {
     return { breadcrumbName, path, ehEstatico, ehRotaAtual, icone, dicaIcone };
-  };
-
-  const ocultarBreadcrumb = () => {
-    const { path } = itens[0];
-    if (itens.length === 1) {
-      return (
-        path === '/' ||
-        (itemRotaAtual && itemRotaAtual.path !== path) ||
-        (itemRotaDinamica && itemRotaDinamica.path !== path)
-      );
-    }
-    return false;
   };
 
   return (

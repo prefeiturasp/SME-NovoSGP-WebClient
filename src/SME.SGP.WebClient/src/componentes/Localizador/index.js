@@ -50,7 +50,8 @@ function Localizador({
     rf: false,
     nome: false,
   });
-  const { ehPerfilProfessor, rf } = usuario;
+  const { ehPerfilProfessor } = usuario;
+  const usuarioRf = usuario?.rf;
   const [exibirLoader, setExibirLoader] = useState(false);
 
   const validacaoDesabilitaPerfilProfessor = () => {
@@ -72,9 +73,9 @@ function Localizador({
       }, 200);
     }
 
-    if (valor.length === 0){
+    if (valor.length === 0) {
       setDataSource([]);
-      return
+      return;
     }
 
     if (valor.length < buscarCaracterPartir) return;
@@ -145,6 +146,7 @@ function Localizador({
         });
       }
     },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [anoLetivo, buscarOutrosCargos, mensagemErroConsultaRF, dreId, ueId]
   );
 
@@ -184,6 +186,7 @@ function Localizador({
         usuarioId: '',
       });
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [rfEdicao]);
 
   useEffect(() => {
@@ -194,6 +197,7 @@ function Localizador({
         ...pessoaSelecionada,
       });
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pessoaSelecionada]);
 
   useEffect(() => {
@@ -203,13 +207,15 @@ function Localizador({
         setPessoaSelecionada(form.initialValues);
       }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [form?.initialValues]);
 
   useEffect(() => {
     if (dreId && validacaoDesabilitaPerfilProfessor()) {
-      onBuscarPorRF({ rf });
+      onBuscarPorRF({ rf: usuarioRf });
     }
-  }, [dreId, ehPerfilProfessor, rf, onBuscarPorRF]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [dreId, ehPerfilProfessor, usuarioRf, onBuscarPorRF]);
 
   useEffect(() => {
     if (form) {
@@ -222,6 +228,7 @@ function Localizador({
         });
       }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [form?.values]);
 
   useEffect(() => {
@@ -316,7 +323,7 @@ Localizador.propTypes = {
 };
 
 Localizador.defaultProps = {
-  onChange: PropTypes.func,
+  onChange: () => {},
   form: null,
   showLabel: false,
   dreId: null,

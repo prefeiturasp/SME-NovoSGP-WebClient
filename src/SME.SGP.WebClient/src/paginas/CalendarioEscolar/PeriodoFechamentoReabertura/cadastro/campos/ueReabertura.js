@@ -1,6 +1,5 @@
 import PropTypes from 'prop-types';
 import React, { useCallback, useContext, useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { Loader, SelectComponent } from '~/componentes';
 import { OPCAO_TODOS } from '~/constantes';
@@ -17,7 +16,6 @@ const UeReabertura = ({ form, onChangeCampos }) => {
 
   const paramsRota = useParams();
 
-  const usuario = useSelector(store => store.usuario);
   const [exibirLoader, setExibirLoader] = useState(false);
 
   const { dreCodigo } = form.values;

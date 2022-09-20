@@ -33,7 +33,7 @@ const TipoFeriadoLista = () => {
     setDropdownTipoFeriadoSelecionado,
   ] = useState(0);
 
-  const usuario = store.getState().usuario;
+  const { usuario } = store.getState();
   const permissoesTela = usuario.permissoes[RotasDto.TIPO_FERIADO];
 
   const listaDropdownAbrangencia = [
@@ -64,15 +64,8 @@ const TipoFeriadoLista = () => {
 
   useEffect(() => {
     verificaSomenteConsulta(permissoesTela);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
-  useEffect(() => {
-    onFiltrar();
-  }, [
-    nomeTipoFeriado,
-    dropdownAbrangenciaSelecionada,
-    dropdownTipoFeriadoSelecionado,
-  ]);
 
   const onFiltrar = async () => {
     setIdsTipoFeriadoSelecionado([]);
@@ -85,14 +78,17 @@ const TipoFeriadoLista = () => {
     setListaTipoFeriado(tipos.data);
   };
 
+  useEffect(() => {
+    onFiltrar();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [
+    nomeTipoFeriado,
+    dropdownAbrangenciaSelecionada,
+    dropdownTipoFeriadoSelecionado,
+  ]);
+
   const onSelectRow = ids => {
     setIdsTipoFeriadoSelecionado(ids);
-  };
-
-  const onClickRow = row => {
-    if (!permissoesTela.podeAlterar) return;
-
-    onClickEditar(row.id);
   };
 
   const onClickVoltar = () => {
@@ -107,13 +103,21 @@ const TipoFeriadoLista = () => {
     history.push(`/calendario-escolar/tipo-feriado/editar/${id}`);
   };
 
+  const onClickRow = row => {
+    if (!permissoesTela.podeAlterar) return;
+
+    onClickEditar(row.id);
+  };
+
   const onClickExcluir = async () => {
     if (!permissoesTela.podeExcluir) return;
 
     const listaParaExcluir = [];
 
     idsTipoFeriadoSelecionado.forEach(id => {
-      const achou = listaTipoFeriado.find(tipo => id == tipo.id);
+      const achou = listaTipoFeriado.find(
+        tipo => Number(id) === Number(tipo.id)
+      );
       if (achou) {
         listaParaExcluir.push(achou);
       }
@@ -134,7 +138,7 @@ const TipoFeriadoLista = () => {
       const excluir = await api
         .delete('v1/calendarios/feriados', parametrosDelete)
         .catch(e => erros(e));
-      if (excluir && excluir.status == 200) {
+      if (excluir?.status === 200) {
         const mensagemSucesso = `${
           idsTipoFeriadoSelecionado.length > 1 ? 'Tipos' : 'Tipo'
         } de feriado excluído com sucesso.`;

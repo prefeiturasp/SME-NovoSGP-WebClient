@@ -1,6 +1,5 @@
 import { groupBy } from 'lodash';
 import { store } from '~/redux';
-import { setListaSecoesEmEdicao } from '~/redux/modulos/encaminhamentoAEE/actions';
 import {
   setFormsQuestionarioDinamico,
   setQuestionarioDinamicoEmEdicao,

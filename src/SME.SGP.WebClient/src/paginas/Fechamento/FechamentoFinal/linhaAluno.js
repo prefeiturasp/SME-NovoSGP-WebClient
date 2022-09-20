@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import { Tooltip } from 'antd';
 import PropTypes from 'prop-types';
 import React from 'react';
@@ -29,7 +30,6 @@ const LinhaAluno = ({
   onChange,
   eventoData,
   notaMedia,
-  frequenciaMedia,
   indexAluno,
   desabilitarCampo,
   ehSintese,
@@ -42,7 +42,9 @@ const LinhaAluno = ({
 
   const obterValorConceito = valor => {
     if (listaConceitos && listaConceitos.length) {
-      const conceito = listaConceitos.find(item => item.id == valor);
+      const conceito = listaConceitos.find(
+        item => Number(item.id) === Number(valor)
+      );
       return conceito ? conceito.valor : '';
     }
     return '';
@@ -51,7 +53,9 @@ const LinhaAluno = ({
   const montaLinhaNotasConceitos = () => {
     if (ehNota && ehRegencia) {
       return aluno.notasConceitoBimestre
-        .filter(n => n.disciplinaCodigo == disciplinaSelecionada)
+        .filter(
+          n => String(n.disciplinaCodigo) === String(disciplinaSelecionada)
+        )
         .map(c => <div className="input-notas">{c.notaConceito}</div>);
     }
 
@@ -68,7 +72,7 @@ const LinhaAluno = ({
     }
 
     return aluno.notasConceitoBimestre
-      .filter(n => n.disciplinaCodigo == disciplinaSelecionada)
+      .filter(n => String(n.disciplinaCodigo) === String(disciplinaSelecionada))
       .map(c => (
         <div className="input-notas">{obterValorConceito(c.notaConceito)}</div>
       ));

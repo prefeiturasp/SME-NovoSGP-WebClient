@@ -51,6 +51,7 @@ const QuestionarioDinamico = props => {
         dados?.id
       );
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [refForm]);
 
   const montarValoresIniciais = useCallback(() => {

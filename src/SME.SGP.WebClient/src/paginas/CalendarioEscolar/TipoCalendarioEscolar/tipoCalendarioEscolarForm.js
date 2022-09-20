@@ -94,22 +94,6 @@ const TipoCalendarioEscolarForm = ({ match }) => {
   ];
 
   useEffect(() => {
-    if (match && match.params && match.params.id) {
-      setBreadcrumbManual(
-        match.url,
-        'Alterar Tipo de Calendário Escolar',
-        '/calendario-escolar/tipo-calendario-escolar'
-      );
-      setIdTipoCalendario(match.params.id);
-      consultaPorId(match.params.id);
-    } else if (usuario.turmaSelecionada && usuario.turmaSelecionada.anoLetivo) {
-      setAnoLetivo(usuario.turmaSelecionada.anoLetivo);
-    }
-    setSomenteConsulta(verificaSomenteConsulta(permissoesTela));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  useEffect(() => {
     const desabilitar = novoRegistro
       ? somenteConsulta || !permissoesTela.podeIncluir
       : somenteConsulta || !permissoesTela.podeAlterar;
@@ -150,6 +134,22 @@ const TipoCalendarioEscolarForm = ({ match }) => {
     }
   };
 
+  useEffect(() => {
+    if (match && match.params && match.params.id) {
+      setBreadcrumbManual(
+        match.url,
+        'Alterar Tipo de Calendário Escolar',
+        '/calendario-escolar/tipo-calendario-escolar'
+      );
+      setIdTipoCalendario(match.params.id);
+      consultaPorId(match.params.id);
+    } else if (usuario.turmaSelecionada && usuario.turmaSelecionada.anoLetivo) {
+      setAnoLetivo(usuario.turmaSelecionada.anoLetivo);
+    }
+    setSomenteConsulta(verificaSomenteConsulta(permissoesTela));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   const onClickVoltar = async () => {
     if (modoEdicao) {
       const confirmado = await confirmar(
@@ -165,6 +165,11 @@ const TipoCalendarioEscolarForm = ({ match }) => {
     }
   };
 
+  const resetarTela = form => {
+    form.resetForm();
+    setModoEdicao(false);
+  };
+
   const onClickCancelar = async form => {
     if (modoEdicao) {
       const confirmou = await confirmar(
@@ -176,11 +181,6 @@ const TipoCalendarioEscolarForm = ({ match }) => {
         resetarTela(form);
       }
     }
-  };
-
-  const resetarTela = form => {
-    form.resetForm();
-    setModoEdicao(false);
   };
 
   const onClickCadastrar = async valoresForm => {
@@ -233,7 +233,7 @@ const TipoCalendarioEscolarForm = ({ match }) => {
       form.setFieldTouched(campo, true, true);
     });
     form.validateForm().then(() => {
-      if (form.isValid || Object.keys(form.errors).length == 0) {
+      if (form.isValid || Object.keys(form.errors).length === 0) {
         form.handleSubmit(e => e);
       }
     });

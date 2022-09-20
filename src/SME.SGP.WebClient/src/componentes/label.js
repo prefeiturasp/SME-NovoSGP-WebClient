@@ -83,7 +83,7 @@ Label.propTypes = {
 };
 
 Label.defaultProps = {
-  text: PropTypes.string,
+  text: '',
   control: null,
   center: false,
   className: '',

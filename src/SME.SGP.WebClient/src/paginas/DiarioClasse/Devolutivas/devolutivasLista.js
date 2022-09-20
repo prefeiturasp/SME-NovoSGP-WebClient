@@ -44,17 +44,6 @@ const DevolutivasLista = () => {
   const [somenteConsulta, setSomenteConsulta] = useState(false);
   const [periodoHabilitado, setPeriodoHabilitado] = useState();
 
-  useEffect(() => {
-    const naoSetarSomenteConsultaNoStore = !ehTurmaInfantil(
-      modalidadesFiltroPrincipal,
-      turmaSelecionada
-    );
-    setSomenteConsulta(
-      verificaSomenteConsulta(permissoesTela, naoSetarSomenteConsultaNoStore)
-    );
-    obterPeriodoLetivoTurma();
-  }, [turmaSelecionada, permissoesTela, modalidadesFiltroPrincipal]);
-
   const obterPeriodoLetivoTurma = async () => {
     if (turmaSelecionada && turmaSelecionada.turma) {
       const periodoLetivoTurmaResponse = await ServicoPeriodoEscolar.obterPeriodoLetivoTurma(
@@ -80,6 +69,18 @@ const DevolutivasLista = () => {
       }
     }
   };
+
+  useEffect(() => {
+    const naoSetarSomenteConsultaNoStore = !ehTurmaInfantil(
+      modalidadesFiltroPrincipal,
+      turmaSelecionada
+    );
+    setSomenteConsulta(
+      verificaSomenteConsulta(permissoesTela, naoSetarSomenteConsultaNoStore)
+    );
+    obterPeriodoLetivoTurma();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [turmaSelecionada, permissoesTela, modalidadesFiltroPrincipal]);
 
   const colunas = [
     {

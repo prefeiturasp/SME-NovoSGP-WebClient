@@ -60,8 +60,8 @@ export default function PlanoCiclo() {
     criadoEm: '',
     criadoPor: '',
   });
-  let [listaMatrizSelecionda, setListaMatrizSelecionda] = useState([]);
-  let [listaODSSelecionado, setListaODSSelecionado] = useState([]);
+  const [listaMatrizSelecionda, setListaMatrizSelecionda] = useState([]);
+  const [listaODSSelecionado, setListaODSSelecionado] = useState([]);
   const [anosTurmasUsuario, setAnosTurmasUsuario] = useState([]);
   const [planoCicloId, setPlanoCicloId] = useState(0);
   const [modalidadeEja, setModalidadeEja] = useState(false);
@@ -98,34 +98,93 @@ export default function PlanoCiclo() {
   }, []);
 
   useEffect(() => {
-    let anosTurmasUsuario = usuario.turmasUsuario.map(item => item.ano);
-    anosTurmasUsuario = anosTurmasUsuario.filter(
-      (elem, pos) => anosTurmasUsuario.indexOf(elem) == pos
+    let anosTurmUsuario = usuario.turmasUsuario.map(item => item.ano);
+    anosTurmUsuario = anosTurmUsuario.filter(
+      (elem, pos) => anosTurmUsuario.indexOf(elem) === Number(pos)
     );
-    setAnosTurmasUsuario(anosTurmasUsuario);
+    setAnosTurmasUsuario(anosTurmUsuario);
   }, [usuario.turmasUsuario]);
 
   const [carregando, setCarregando] = useState(false);
   const [carregandoSalvar, setCarregandoSalvar] = useState(false);
 
-  useEffect(() => {
-    const ehInfantil = ehTurmaInfantil(
-      modalidadesFiltroPrincipal,
-      turmaSelecionada
-    );
-    setEhModalidadeInfantil(ehInfantil);
+  function resetListas() {
+    listaMatriz.forEach(item => {
+      const target = document.getElementById(`matriz-${item.id}`);
+      const estaSelecionado =
+        target.getAttribute('opcao-selecionada') === 'true';
+      if (estaSelecionado) {
+        target.setAttribute('opcao-selecionada', 'false');
+      }
+    });
+    listaODS.forEach(item => {
+      const target = document.getElementById(`ods-${item.id}`);
+      const estaSelecionado =
+        target.getAttribute('opcao-selecionada') === 'true';
+      if (estaSelecionado) {
+        target.setAttribute('opcao-selecionada', 'false');
+      }
+    });
+    setListaMatrizSelecionda([]);
+    setListaODSSelecionado([]);
+    setDescricaoCiclo('');
+    setPronto(false);
+  }
 
-    if (turmaSelecionada && !ehInfantil && modalidadesFiltroPrincipal.length) {
-      setCarregando(true);
-      carregarCiclos();
-    } else {
-      setCarregandoCiclos(false);
-      setCicloSelecionado();
-      setListaCiclos([]);
+  function configuraValoresPlanoCiclo(ciclo) {
+    if (ciclo.data.idsMatrizesSaber && ciclo.data.idsMatrizesSaber.length) {
+      ciclo.data.idsMatrizesSaber.forEach(id => {
+        const matriz = document.querySelector(
+          `#matriz-${id}:not([opcao-selecionada='true'])`
+        );
+        if (matriz) matriz.click();
+      });
     }
+    if (
+      ciclo.data.idsObjetivosDesenvolvimentoSustentavel &&
+      ciclo.data.idsObjetivosDesenvolvimentoSustentavel.length
+    ) {
+      ciclo.data.idsObjetivosDesenvolvimentoSustentavel.forEach(id => {
+        const objetivo = document.querySelector(
+          `#ods-${id}:not([opcao-selecionada='true'])`
+        );
+        if (objetivo) objetivo.click();
+      });
+    }
+    setDescricaoCiclo(ciclo.data.descricao);
+    setCicloSelecionado(String(ciclo.data.cicloId));
+    if (ciclo.data.migrado) {
+      setRegistroMigrado(ciclo.data.migrado);
+    }
+  }
 
-    if (!Object.entries(turmaSelecionada).length) setCicloSelecionado();
-  }, [turmaSelecionada, modalidadesFiltroPrincipal]);
+  async function obterCicloExistente(ano, escolaId, cicloId) {
+    resetListas();
+    const ciclo = await api.get(
+      `v1/planos/ciclo/${ano}/${cicloId}/${escolaId}`
+    );
+
+    setPlanoCicloId(ciclo.data.id);
+
+    if (ciclo && ciclo.data) {
+      const alteradoEm = moment(ciclo.data.alteradoEm).format(
+        'DD/MM/YYYY HH:mm:ss'
+      );
+      const criadoEm = moment(ciclo.data.criadoEm).format(
+        'DD/MM/YYYY HH:mm:ss'
+      );
+      setInseridoAlterado({
+        alteradoEm,
+        alteradoPor: ciclo.data.alteradoPor,
+        criadoEm,
+        criadoPor: ciclo.data.criadoPor,
+      });
+      configuraValoresPlanoCiclo(ciclo);
+      setPronto(true);
+    } else {
+      setPronto(true);
+    }
+  }
 
   const carregarCiclos = async () => {
     if (usuario && turmaSelecionada.turma) {
@@ -148,7 +207,7 @@ export default function PlanoCiclo() {
         anosTurmasUsuario.length < 1
       ) {
         anos = usuario.turmasUsuario.map(item => item.ano);
-        anos = anos.filter((elem, pos) => anos.indexOf(elem) == pos);
+        anos = anos.filter((elem, pos) => anos.indexOf(elem) === Number(pos));
       }
       if (anosTurmasUsuario.length < 1 && anos.length > 0) {
         setAnosTurmasUsuario(anos);
@@ -183,7 +242,7 @@ export default function PlanoCiclo() {
         const anoLetivo = String(turmaSelecionada.anoLetivo);
         const codEscola = String(turmaSelecionada.unidadeEscolar);
 
-        if (turmaSelecionada.modalidade == modalidade.EJA) {
+        if (Number(turmaSelecionada.modalidade) === modalidade.EJA) {
           setModalidadeEja(true);
         } else {
           setModalidadeEja(false);
@@ -198,83 +257,25 @@ export default function PlanoCiclo() {
     setCarregando(false);
   };
 
-  function resetListas() {
-    listaMatriz.forEach(item => {
-      const target = document.getElementById(`matriz-${item.id}`);
-      const estaSelecionado =
-        target.getAttribute('opcao-selecionada') === 'true';
-      if (estaSelecionado) {
-        target.setAttribute('opcao-selecionada', 'false');
-      }
-    });
-    listaODS.forEach(item => {
-      const target = document.getElementById(`ods-${item.id}`);
-      const estaSelecionado =
-        target.getAttribute('opcao-selecionada') === 'true';
-      if (estaSelecionado) {
-        target.setAttribute('opcao-selecionada', 'false');
-      }
-    });
-    setListaMatrizSelecionda([]);
-    setListaODSSelecionado([]);
-    setDescricaoCiclo('');
-    setPronto(false);
-  }
-
-  async function obterCicloExistente(ano, escolaId, cicloId) {
-    resetListas();
-    const ciclo = await api.get(
-      `v1/planos/ciclo/${ano}/${cicloId}/${escolaId}`
+  useEffect(() => {
+    const ehInfantil = ehTurmaInfantil(
+      modalidadesFiltroPrincipal,
+      turmaSelecionada
     );
+    setEhModalidadeInfantil(ehInfantil);
 
-    setPlanoCicloId(ciclo.data.id);
-
-    if (ciclo && ciclo.data) {
-      const alteradoEm = moment(ciclo.data.alteradoEm).format(
-        'DD/MM/YYYY HH:mm:ss'
-      );
-      const criadoEm = moment(ciclo.data.criadoEm).format(
-        'DD/MM/YYYY HH:mm:ss'
-      );
-      setInseridoAlterado({
-        alteradoEm,
-        alteradoPor: ciclo.data.alteradoPor,
-        criadoEm,
-        criadoPor: ciclo.data.criadoPor,
-      });
-      configuraValoresPlanoCiclo(ciclo);
-      setPronto(true);
+    if (turmaSelecionada && !ehInfantil && modalidadesFiltroPrincipal.length) {
+      setCarregando(true);
+      carregarCiclos();
     } else {
-      setPronto(true);
+      setCarregandoCiclos(false);
+      setCicloSelecionado();
+      setListaCiclos([]);
     }
-  }
 
-  function configuraValoresPlanoCiclo(ciclo) {
-    if (ciclo.data.idsMatrizesSaber && ciclo.data.idsMatrizesSaber.length) {
-      ciclo.data.idsMatrizesSaber.forEach(id => {
-        const matriz = document.querySelector(
-          `#matriz-${id}:not([opcao-selecionada='true'])`
-        );
-        if (matriz) matriz.click();
-      });
-    }
-    if (
-      ciclo.data.idsObjetivosDesenvolvimentoSustentavel &&
-      ciclo.data.idsObjetivosDesenvolvimentoSustentavel.length
-    ) {
-      ciclo.data.idsObjetivosDesenvolvimentoSustentavel.forEach(id => {
-        const objetivo = document.querySelector(
-          `#ods-${id}:not([opcao-selecionada='true'])`
-        );
-        if (objetivo) objetivo.click();
-      });
-    }
-    setDescricaoCiclo(ciclo.data.descricao);
-    setCicloSelecionado(String(ciclo.data.cicloId));
-    if (ciclo.data.migrado) {
-      setRegistroMigrado(ciclo.data.migrado);
-    }
-  }
+    if (!Object.entries(turmaSelecionada).length) setCicloSelecionado();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [turmaSelecionada, modalidadesFiltroPrincipal]);
 
   function addRemoverMatriz(event, matrizSelecionada) {
     const estaSelecionado =
@@ -284,14 +285,15 @@ export default function PlanoCiclo() {
       estaSelecionado ? 'false' : 'true'
     );
 
+    let lista = listaMatrizSelecionda;
     if (estaSelecionado) {
-      listaMatrizSelecionda = listaMatrizSelecionda.filter(
+      lista = listaMatrizSelecionda.filter(
         item => item.id !== matrizSelecionada.id
       );
     } else {
-      listaMatrizSelecionda.push(matrizSelecionada);
+      lista.push(matrizSelecionada);
     }
-    setListaMatrizSelecionda(listaMatrizSelecionda);
+    setListaMatrizSelecionda(lista);
     if (pronto) {
       setModoEdicao(true);
     }
@@ -305,14 +307,13 @@ export default function PlanoCiclo() {
       estaSelecionado ? 'false' : 'true'
     );
 
+    let lista = listaODSSelecionado;
     if (estaSelecionado) {
-      listaODSSelecionado = listaODSSelecionado.filter(
-        item => item.id !== odsSelecionado.id
-      );
+      lista = listaODSSelecionado.filter(item => item.id !== odsSelecionado.id);
     } else {
-      listaODSSelecionado.push(odsSelecionado);
+      lista.push(odsSelecionado);
     }
-    setListaODSSelecionado(listaODSSelecionado);
+    setListaODSSelecionado(lista);
     if (pronto) {
       setModoEdicao(true);
     }

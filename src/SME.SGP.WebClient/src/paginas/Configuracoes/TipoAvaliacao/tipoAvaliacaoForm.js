@@ -165,14 +165,6 @@ const TipoAvaliacaoForm = ({ match }) => {
     }
   };
 
-  useEffect(() => {
-    if (match && match.params && match.params.id) {
-      setNovoRegistro(false);
-      setBreadcrumbManual(match.url, 'Atribuição', RotasDto.TIPO_AVALIACAO);
-      buscarPorId(match.params.id);
-    }
-  }, []);
-
   const buscarPorId = async id => {
     try {
       setExibirLoader(true);
@@ -201,6 +193,15 @@ const TipoAvaliacaoForm = ({ match }) => {
       setExibirLoader(false);
     }
   };
+
+  useEffect(() => {
+    if (match && match.params && match.params.id) {
+      setNovoRegistro(false);
+      setBreadcrumbManual(match.url, 'Atribuição', RotasDto.TIPO_AVALIACAO);
+      buscarPorId(match.params.id);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <Loader loading={exibirLoader}>

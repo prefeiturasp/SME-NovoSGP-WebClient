@@ -113,7 +113,6 @@ const ListasNotasConceitos = props => {
   };
 
   const habilitaConselhoClasse = dados => {
-
     let notasFechamentosPreenchidas = true;
     dados.notasConceitos.map(notasConceitos =>
       notasConceitos.componentesCurriculares.map(componentesCurriculares =>
@@ -170,28 +169,6 @@ const ListasNotasConceitos = props => {
     dispatch(setConselhoClasseEmEdicao(emEdicao));
   };
 
-  const habilitaConselhoClassePorNotasPosConselho = dados => {
-    let notasPosConselhoPreenchidas = true;
-    if (!dados.temConselhoClasseAluno) {
-      dados.notasConceitos.map(notasConceitos =>
-        notasConceitos.componentesCurriculares.map(componentesCurriculares => {
-          if (valorNuloOuVazio(componentesCurriculares.notaPosConselho.nota)) {
-            notasPosConselhoPreenchidas = false;
-          }
-          return componentesCurriculares;
-        })
-      );
-      dados.notasConceitos.map(notasConceitos =>
-        notasConceitos.componenteRegencia?.componentesCurriculares.map(cc => {
-          if (valorNuloOuVazio(cc.notaPosConselho.nota)) {
-            notasPosConselhoPreenchidas = false;
-          }
-          return cc;
-        })
-      );
-    }
-  };
-
   const obterDadosLista = useCallback(async () => {
     setCarregando(true);
     const resultado = await ServicoConselhoClasse.obterNotasConceitosConselhoClasse(
@@ -213,10 +190,10 @@ const ListasNotasConceitos = props => {
       setExibir(true);
       if (bimestreSelecionado?.valor !== 'final')
         habilitaConselhoClasse(resultado.data);
-      habilitaConselhoClassePorNotasPosConselho(resultado.data);
     } else {
       setExibir(false);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     alunoCodigo,
     conselhoClasseId,

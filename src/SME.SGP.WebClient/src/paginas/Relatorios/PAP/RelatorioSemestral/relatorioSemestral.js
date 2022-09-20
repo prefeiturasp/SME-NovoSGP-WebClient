@@ -155,7 +155,9 @@ const RelatorioSemestral = () => {
 
     let dentroPeriodo = true;
     if (valor) {
-      const semestreNovo = listaSemestres.find(item => item.semestre == valor);
+      const semestreNovo = listaSemestres.find(
+        item => String(item.semestre) === String(valor)
+      );
       dentroPeriodo = semestreNovo.podeEditar;
     }
     dispatch(setDentroPeriodo(dentroPeriodo));

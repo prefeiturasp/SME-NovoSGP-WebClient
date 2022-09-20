@@ -78,6 +78,7 @@ const AulaDadaAulaPrevista = () => {
       setDisciplinaIdSelecionada(undefined);
       setListaDisciplinas([]);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [turmaSelecionada, modalidade, modalidadesFiltroPrincipal]);
 
   const perguntaAoSalvar = async () => {

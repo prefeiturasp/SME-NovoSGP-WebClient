@@ -1,4 +1,6 @@
+/* eslint-disable react/prop-types */
 import React, { useState, useEffect } from 'react';
+import { Tooltip } from 'antd';
 import {
   Corpo,
   CampoDesabilitado,
@@ -7,7 +9,6 @@ import {
   CampoCentralizado,
 } from './ListaAulasPorBimestre.css';
 import CampoNumero from '~/componentes/campoNumero';
-import { Tooltip } from 'antd';
 
 const ListaAulasPorBimestre = props => {
   const { dados, setModoEdicao, permissoesTela, somenteConsulta } = props;
@@ -23,6 +24,7 @@ const ListaAulasPorBimestre = props => {
   useEffect(() => {
     setBimestres([...dados.bimestres]);
     setTotalPrevistas(dados.totalPrevistas);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dados.bimestres]);
 
   const formatarData = data => {
@@ -56,7 +58,7 @@ const ListaAulasPorBimestre = props => {
       <table className="table mb-0">
         <thead className="tabela-frequencia-thead" key="thead">
           <tr>
-            <th rowSpan="2" className="width-60 bc-w-i" scope="col"></th>
+            <th rowSpan="2" className="width-60 bc-w-i" scope="col" />
             <th rowSpan="2" className="text-center fundo-cinza">
               Previstas
             </th>
@@ -82,48 +84,48 @@ const ListaAulasPorBimestre = props => {
         </thead>
         {bimestres
           ? bimestres.map((item, index) => {
-            return (
-              <tbody key={`lista-${item.bimestre}`}>
-                <tr
-                  className={
-                    item.ehBimestreAtual ? 'bimestre-selecionado' : ''
-                  }
-                >
-                  <td className="fundo-cinza-i">
-                    <span className="negrito">{`${item.bimestre}º Bimestre`}</span>
-                    <span>{` - ${formatarData(item.inicio)} à ${formatarData(
-                      item.fim
-                    )}`}</span>
-                  </td>
-                  <td>
-                    {item.previstas.temDivergencia ? (
-                      <CampoCentralizado className="p-l-16">
-                        <CampoAlerta>
-                          <CampoNumero
-                            value={item.previstas.quantidade}
-                            onChange={e => {
-                              alterarValorPrevisto(index, e);
-                            }}
-                            onKeyDown={e => {
-                              alterarValorPrevisto(index, e);
-                            }}
-                            step={1}
-                            min={0}
-                            max={999}
-                            disabled={desabilitaCampos() || !item.podeEditar}
-                          />
-                          <div className="icone">
-                            <Tooltip
-                              title={item.previstas.mensagens[0]}
-                              placement="bottom"
-                              overlayStyle={{ fontSize: '12px' }}
-                            >
-                              <i className="fas fa-exclamation-triangle"></i>
-                            </Tooltip>
-                          </div>
-                        </CampoAlerta>
-                      </CampoCentralizado>
-                    ) : (
+              return (
+                <tbody key={`lista-${item.bimestre}`}>
+                  <tr
+                    className={
+                      item.ehBimestreAtual ? 'bimestre-selecionado' : ''
+                    }
+                  >
+                    <td className="fundo-cinza-i">
+                      <span className="negrito">{`${item.bimestre}º Bimestre`}</span>
+                      <span>{` - ${formatarData(item.inicio)} à ${formatarData(
+                        item.fim
+                      )}`}</span>
+                    </td>
+                    <td>
+                      {item.previstas.temDivergencia ? (
+                        <CampoCentralizado className="p-l-16">
+                          <CampoAlerta>
+                            <CampoNumero
+                              value={item.previstas.quantidade}
+                              onChange={e => {
+                                alterarValorPrevisto(index, e);
+                              }}
+                              onKeyDown={e => {
+                                alterarValorPrevisto(index, e);
+                              }}
+                              step={1}
+                              min={0}
+                              max={999}
+                              disabled={desabilitaCampos() || !item.podeEditar}
+                            />
+                            <div className="icone">
+                              <Tooltip
+                                title={item.previstas.mensagens[0]}
+                                placement="bottom"
+                                overlayStyle={{ fontSize: '12px' }}
+                              >
+                                <i className="fas fa-exclamation-triangle" />
+                              </Tooltip>
+                            </div>
+                          </CampoAlerta>
+                        </CampoCentralizado>
+                      ) : (
                         <CampoEditavel>
                           <CampoNumero
                             value={item.previstas.quantidade}
@@ -140,33 +142,33 @@ const ListaAulasPorBimestre = props => {
                           />
                         </CampoEditavel>
                       )}
-                  </td>
-                  <td>
-                    <CampoDesabilitado>
-                      <span>{item.criadas.quantidadeTitular}</span>
-                    </CampoDesabilitado>
-                  </td>
-                  {temProfessorCj ? (
+                    </td>
                     <td>
                       <CampoDesabilitado>
-                        <span>{item.criadas.quantidadeCJ}</span>
+                        <span>{item.criadas.quantidadeTitular}</span>
                       </CampoDesabilitado>
                     </td>
-                  ) : null}
-                  <td>
-                    <CampoDesabilitado>
-                      <span>{item.dadas}</span>
-                    </CampoDesabilitado>
-                  </td>
-                  <td>
-                    <CampoDesabilitado>
-                      <span>{item.reposicoes}</span>
-                    </CampoDesabilitado>
-                  </td>
-                </tr>
-              </tbody>
-            );
-          })
+                    {temProfessorCj ? (
+                      <td>
+                        <CampoDesabilitado>
+                          <span>{item.criadas.quantidadeCJ}</span>
+                        </CampoDesabilitado>
+                      </td>
+                    ) : null}
+                    <td>
+                      <CampoDesabilitado>
+                        <span>{item.dadas}</span>
+                      </CampoDesabilitado>
+                    </td>
+                    <td>
+                      <CampoDesabilitado>
+                        <span>{item.reposicoes}</span>
+                      </CampoDesabilitado>
+                    </td>
+                  </tr>
+                </tbody>
+              );
+            })
           : null}
         <tbody key="coluna-lateral">
           <tr className="fundo-cinza-i">

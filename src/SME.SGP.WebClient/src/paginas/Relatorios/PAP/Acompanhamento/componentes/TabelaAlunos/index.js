@@ -1,4 +1,5 @@
-import React, { useEffect } from 'react';
+/* eslint-disable react/prop-types */
+import React from 'react';
 import t from 'prop-types';
 import shortid from 'shortid';
 
@@ -60,7 +61,8 @@ function TabelaAlunos({
                       bloquearLimpar={
                         somenteConsulta ||
                         (objetivoAtivo &&
-                          (objetivoAtivo.id == 1 || objetivoAtivo.id == 2))
+                          (Number(objetivoAtivo?.id) === 1 ||
+                            Number(objetivoAtivo?.id) === 2))
                       }
                     />
                   </div>

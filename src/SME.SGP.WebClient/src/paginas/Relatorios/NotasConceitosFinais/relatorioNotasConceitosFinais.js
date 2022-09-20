@@ -54,7 +54,7 @@ const RelatorioNotasConceitosFinais = () => {
   const [condicao, setCondicao] = useState(undefined);
   const [clicouBotaoGerar, setClicouBotaoGerar] = useState(false);
   const [desabilitarBtnGerar, setDesabilitarBtnGerar] = useState(true);
-  const [anoAtual, setAnoAtual] = useState(new Date().getFullYear());
+  const anoAtual = window.moment().format('YYYY');
   const [consideraHistorico, setConsideraHistorico] = useState(false);
 
   const listaFormatos = [
@@ -201,6 +201,7 @@ const RelatorioNotasConceitosFinais = () => {
 
   useEffect(() => {
     setConsideraHistorico(anoLetivo < anoAtual);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [anoLetivo]);
 
   useEffect(() => {
@@ -210,6 +211,7 @@ const RelatorioNotasConceitosFinais = () => {
       setModalidadeId(undefined);
       setListaModalidades([]);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [codigoUe]);
 
   useEffect(() => {
@@ -228,7 +230,6 @@ const RelatorioNotasConceitosFinais = () => {
         setAnosEscolares([OPCAO_TODOS]);
       } else {
         setCarregandoGeral(true);
-        const anoAtual = window.moment().format('YYYY');
         const respota = await AbrangenciaServico.buscarAnosEscolares(
           ue,
           mod,
@@ -256,6 +257,7 @@ const RelatorioNotasConceitosFinais = () => {
         setCarregandoGeral(false);
       }
     },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     []
   );
 
@@ -306,6 +308,7 @@ const RelatorioNotasConceitosFinais = () => {
       }
       setCarregandoGeral(false);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [modalidadeId, anoLetivo, obterCodigoTodosAnosEscolares]);
 
   useEffect(() => {
@@ -353,6 +356,7 @@ const RelatorioNotasConceitosFinais = () => {
       setSemestre(undefined);
       setListaSemestre([]);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [modalidadeId, anoLetivo]);
 
   const obterConceitos = async anoLetivoSelecionado => {

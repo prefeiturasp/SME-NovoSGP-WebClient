@@ -1,12 +1,10 @@
 import { Tabs } from 'antd';
 import React, { useEffect, useState, useRef } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { Colors, Loader } from '~/componentes';
+import { Loader } from '~/componentes';
 import Cabecalho from '~/componentes-sgp/cabecalho';
 import Alert from '~/componentes/alert';
-import Button from '~/componentes/button';
 import Card from '~/componentes/card';
-import Grid from '~/componentes/grid';
 import SelectComponent from '~/componentes/select';
 import { ContainerTabsCard } from '~/componentes/tabs/tabs.css';
 import { URL_HOME } from '~/constantes/url';
@@ -82,6 +80,13 @@ const FechamentoBismestre = () => {
     Number(turmaSelecionada?.modalidade) !== ModalidadeDTO.EJA;
 
   const ehIgualPeriodoAnual = periodoFechamento === periodo.Anual;
+
+  const refFechamentoFinal = useRef();
+  const [fechamentoFinal, setFechamentoFinal] = useState({
+    ehRegencia,
+    turmaCodigo: turmaSelecionada.turma,
+    itens: [],
+  });
 
   const trocarEstadoEmEdicao = novoEstado => {
     modoEdicaoFechamentoBimestre.emEdicao = novoEstado;
@@ -180,7 +185,31 @@ const FechamentoBismestre = () => {
     setListaDisciplinas([]);
     resetarTela();
     obterDisciplinas();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [turmaSelecionada, modalidadesFiltroPrincipal]);
+
+  const setDadosBimestre = (bimestre, dados) => {
+    switch (bimestre) {
+      case 1:
+        setDadosBimestre1(undefined);
+        setDadosBimestre1(dados);
+        break;
+      case 2:
+        setDadosBimestre2(undefined);
+        setDadosBimestre2(dados);
+        break;
+      case 3:
+        setDadosBimestre3(undefined);
+        setDadosBimestre3(dados);
+        break;
+      case 4:
+        setDadosBimestre4(undefined);
+        setDadosBimestre4(dados);
+        break;
+      default:
+        break;
+    }
+  };
 
   const obterDados = async (bimestre = 0) => {
     if (disciplinaIdSelecionada) {
@@ -206,34 +235,12 @@ const FechamentoBismestre = () => {
     }
   };
 
-  const setDadosBimestre = (bimestre, dados) => {
-    switch (bimestre) {
-      case 1:
-        setDadosBimestre1(undefined);
-        setDadosBimestre1(dados);
-        break;
-      case 2:
-        setDadosBimestre2(undefined);
-        setDadosBimestre2(dados);
-        break;
-      case 3:
-        setDadosBimestre3(undefined);
-        setDadosBimestre3(dados);
-        break;
-      case 4:
-        setDadosBimestre4(undefined);
-        setDadosBimestre4(dados);
-        break;
-      default:
-        break;
-    }
-  };
-
   useEffect(() => {
     if (disciplinaIdSelecionada) {
       const disciplina = listaDisciplinas.find(
         item =>
-          String(item.codigoComponenteCurricular) == disciplinaIdSelecionada
+          String(item.codigoComponenteCurricular) ===
+          String(disciplinaIdSelecionada)
       );
       if (disciplina) {
         setRegistraFrequencia(disciplina.registraFrequencia);
@@ -246,6 +253,21 @@ const FechamentoBismestre = () => {
     if (numeroBimestre !== 'final') {
       obterDados(numeroBimestre);
     }
+  };
+
+  const salvarFechamentoFinal = async () => {
+    fechamentoFinal.turmaCodigo = turmaSelecionada.turma;
+    fechamentoFinal.ehRegencia = ehRegencia;
+    fechamentoFinal.disciplinaId = disciplinaIdSelecionada;
+    ServicoFechamentoFinal.salvar(fechamentoFinal)
+      .then(result => {
+        sucesso(result.data.mensagemConsistencia);
+        trocarEstadoEmEdicao(false);
+        dispatch(setExpandirLinha([]));
+        refFechamentoFinal.current.salvarFechamentoFinal();
+        return result.data;
+      })
+      .catch(e => erros(e));
   };
 
   const onChangeTab = async numeroBimestre => {
@@ -271,7 +293,6 @@ const FechamentoBismestre = () => {
     }
   };
 
-  const refFechamentoFinal = useRef();
   const [turmaPrograma, setTurmaPrograma] = useState(false);
 
   useEffect(() => {
@@ -282,17 +303,11 @@ const FechamentoBismestre = () => {
   useEffect(() => {
     if (listaDisciplinas && listaDisciplinas.length > 0) {
       const disciplina = listaDisciplinas.find(
-        c => c.disciplinaId == disciplinaIdSelecionada
+        c => String(c.disciplinaId) === String(disciplinaIdSelecionada)
       );
       if (disciplina) setEhRegencia(disciplina.regencia);
     }
   }, [disciplinaIdSelecionada, listaDisciplinas]);
-
-  const [fechamentoFinal, setFechamentoFinal] = useState({
-    ehRegencia,
-    turmaCodigo: turmaSelecionada.turma,
-    itens: [],
-  });
 
   const onChangeFechamentoFinal = alunosAlterados => {
     const fechamentoFinalDto = fechamentoFinal;
@@ -302,23 +317,6 @@ const FechamentoBismestre = () => {
     }));
     setFechamentoFinal(fechamentoFinalDto);
     trocarEstadoEmEdicao(true);
-  };
-
-  const salvarFechamentoFinal = async () => {
-    fechamentoFinal.turmaCodigo = turmaSelecionada.turma;
-    fechamentoFinal.ehRegencia = ehRegencia;
-    fechamentoFinal.disciplinaId = disciplinaIdSelecionada;
-    ServicoFechamentoFinal.salvar(fechamentoFinal)
-      .then(result => {
-        sucesso(result.data.mensagemConsistencia);
-        trocarEstadoEmEdicao(false);
-        dispatch(setExpandirLinha([]));
-        refFechamentoFinal.current.salvarFechamentoFinal();
-        return result.data;
-      })
-      .catch(e => {
-        erros(e)
-      });
   };
 
   return (

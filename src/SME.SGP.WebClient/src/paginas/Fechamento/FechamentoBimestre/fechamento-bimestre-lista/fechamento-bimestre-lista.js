@@ -61,7 +61,7 @@ const FechamentoBimestreLista = props => {
     const processando = await ServicoFechamentoBimestre.reprocessarNotasConceitos(
       dados.fechamentoId
     ).catch(e => erros(e));
-    if (processando && processando.status == 200) {
+    if (processando?.status === 200) {
       setSituacaoFechamento(situacaoFechamentoDto.EmProcessamento);
       setSituacaosituacaoNomeFechamento('Em Processamento');
       sucesso(alertaSucessoReprocessamento);
@@ -90,7 +90,7 @@ const FechamentoBimestreLista = props => {
       [params]
     ).catch(e => erros(e));
     setCarregandoProcesso(false);
-    if (processando && processando.status == 200) {
+    if (processando?.status === 200) {
       setSituacaoFechamento(situacaoFechamentoDto.EmProcessamento);
       setSituacaosituacaoNomeFechamento('Em Processamento');
       sucesso(alertaSucessoReprocessamento);

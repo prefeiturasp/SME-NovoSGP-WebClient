@@ -153,14 +153,17 @@ const ListaOcorrencias = () => {
     if (!dataInicial && !dataFinal) {
       onSetFiltro();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dataInicial, dataFinal]);
 
   useEffect(() => {
     onSetFiltro();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
     onSetFiltro();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [turmaSelecionada]);
 
   const desabilitarCampos = () => {

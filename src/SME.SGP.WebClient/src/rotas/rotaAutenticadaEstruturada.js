@@ -10,7 +10,6 @@ const RotaAutenticadaEstruturada = memo(
     component: Component,
     temPermissionamento,
     chavePermissao,
-    location,
     ...propriedades
   }) => {
     const dispatch = useDispatch();
@@ -23,7 +22,7 @@ const RotaAutenticadaEstruturada = memo(
     dispatch(setSomenteConsulta(false));
 
     if (!logado) {
-      return <Redirect to={`/login`} />;
+      return <Redirect to="/login" />;
     }
 
     if (primeiroAcesso) {
@@ -49,14 +48,12 @@ RotaAutenticadaEstruturada.propTypes = {
   component: t.oneOfType([t.any]),
   temPermissionamento: t.bool,
   chavePermissao: t.string,
-  location: t.oneOfType([t.any]),
 };
 
 RotaAutenticadaEstruturada.defaultProps = {
   component: null,
   temPermissionamento: null,
   chavePermissao: null,
-  location: null,
 };
 
 export default RotaAutenticadaEstruturada;

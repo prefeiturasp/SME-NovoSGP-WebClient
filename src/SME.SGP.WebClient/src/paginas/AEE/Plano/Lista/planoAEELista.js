@@ -227,6 +227,7 @@ const PlanoAEELista = () => {
 
   useEffect(() => {
     validarValorPadraoAnoLetivo(listaAnosLetivo);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [consideraHistorico, listaAnosLetivo]);
 
   const obterAnosLetivos = useCallback(async () => {
@@ -247,6 +248,7 @@ const PlanoAEELista = () => {
 
     setListaAnosLetivo(anosLetivos);
     setCarregandoAnos(false);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [anoAtual, consideraHistorico]);
 
   useEffect(() => {
@@ -357,6 +359,7 @@ const PlanoAEELista = () => {
         }
       }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [anoLetivo, ueId]);
 
   useEffect(() => {
@@ -396,6 +399,7 @@ const PlanoAEELista = () => {
     if (dreId && ueId && listaDres?.length && listaUes?.length) {
       filtrar(dreId, ueId, turmaId, alunoLocalizadorSelecionado, situacao);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     ueId,
     listaDres,

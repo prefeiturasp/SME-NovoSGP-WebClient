@@ -58,6 +58,7 @@ const AnoEscolarComunicados = ({ form, onChangeCampos, desabilitar }) => {
       setListaAnosEscolares([]);
       form.setFieldValue(nomeCampo, []);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [modalidades, codigoUe, ehTodasModalidade]);
 
   useEffect(() => {
@@ -67,6 +68,7 @@ const AnoEscolarComunicados = ({ form, onChangeCampos, desabilitar }) => {
       setListaAnosEscolares([]);
       form.setFieldValue(nomeCampo, []);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [obterAnosEscolares, modalidades]);
 
   const onChangeAnosEscolares = novosValores => {

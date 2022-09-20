@@ -243,7 +243,7 @@ const HistoricoNotificacoes = () => {
 
   useEffect(() => {
     if (modalidadeId && anoLetivo) {
-      if (modalidadeId == modalidade.EJA) {
+      if (Number(modalidadeId) === modalidade.EJA) {
         obterSemestres(modalidadeId, anoLetivo);
       } else {
         setSemestre(undefined);
@@ -258,7 +258,7 @@ const HistoricoNotificacoes = () => {
   useEffect(() => {
     const desabilitar = !anoLetivo || !codigoDre || !codigoUe;
 
-    if (modalidadeId == modalidade.EJA) {
+    if (Number(modalidadeId) === modalidade.EJA) {
       setDesabilitarBtnGerar(!semestre || desabilitar);
     } else {
       setDesabilitarBtnGerar(desabilitar);
@@ -519,7 +519,7 @@ const HistoricoNotificacoes = () => {
                   label="Semestre"
                   disabled={
                     !modalidadeId ||
-                    modalidadeId != modalidade.EJA ||
+                    Number(modalidadeId) !== modalidade.EJA ||
                     (listaSemestre && listaSemestre.length === 1)
                   }
                   valueSelect={semestre}

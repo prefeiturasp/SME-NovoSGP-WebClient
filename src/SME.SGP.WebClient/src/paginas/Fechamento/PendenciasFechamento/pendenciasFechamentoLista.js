@@ -35,6 +35,7 @@ import {
 } from '~/componentes-sgp/filtro/idsCampos';
 import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
 
+// eslint-disable-next-line react/prop-types
 const PendenciasFechamentoLista = ({ match }) => {
   const usuario = useSelector(store => store.usuario);
   const { turmaSelecionada } = usuario;
@@ -59,6 +60,12 @@ const PendenciasFechamentoLista = ({ match }) => {
   const [filtrouValoresRota, setFiltrouValoresRota] = useState(false);
   const [imprimindo, setImprimido] = useState(false);
   const [bimestresAbertoFechado, setBimestresAbertoFechado] = useState([]);
+
+  const resetarFiltro = () => {
+    setListaDisciplinas([]);
+    setDisciplinaIdSelecionada(undefined);
+    setBimestreSelecionado(undefined);
+  };
 
   useEffect(() => {
     const naoSetarSomenteConsultaNoStore = ehTurmaInfantil(
@@ -129,16 +136,10 @@ const PendenciasFechamentoLista = ({ match }) => {
     setFiltro({ ...paramsFiltrar });
   }, [disciplinaIdSelecionada, bimestreSelecionado, turmaSelecionada.turma]);
 
-  const resetarFiltro = () => {
-    setListaDisciplinas([]);
-    setDisciplinaIdSelecionada(undefined);
-    setBimestreSelecionado(undefined);
-  };
-
   useEffect(() => {
     const montaBimestres = async () => {
       let listaBi = [];
-      if (turmaSelecionada.modalidade == modalidade.EJA) {
+      if (Number(turmaSelecionada.modalidade) === modalidade.EJA) {
         listaBi = [
           { valor: 1, descricao: 'Primeiro bimestre' },
           { valor: 2, descricao: 'Segundo bimestre' },
@@ -153,24 +154,22 @@ const PendenciasFechamentoLista = ({ match }) => {
       }
       setListaBimestres(listaBi);
 
-      if (
-        !filtrouValoresRota &&
-        match &&
-        match.params &&
-        match.params.bimestre
-      ) {
-        const { bimestre } = match.params;
-        const temBimestreNaLista = listaBi.find(item => item.valor == bimestre);
+      if (!filtrouValoresRota && match?.params?.bimestre) {
+        const { bimestre } = match?.params;
+        const temBimestreNaLista = listaBi.find(
+          item => Number(item.valor) === Number(bimestre)
+        );
         if (temBimestreNaLista) {
           setBimestreSelecionado(String(bimestre));
         }
         setBreadcrumbManual(
-          `${match.url}`,
+          `${match?.url}`,
           '',
           `${RotasDto.PENDENCIAS_FECHAMENTO}`
         );
         return true;
       }
+      return false;
     };
 
     const obterBimestresAbertoFechado = async () => {
@@ -208,15 +207,12 @@ const PendenciasFechamentoLista = ({ match }) => {
         );
       }
 
-      if (
-        !filtrouValoresRota &&
-        match &&
-        match.params &&
-        match.params.codigoComponenteCurricular
-      ) {
-        const { codigoComponenteCurricular } = match.params;
+      if (!filtrouValoresRota && match?.params?.codigoComponenteCurricular) {
+        const { codigoComponenteCurricular } = match?.params;
         const temNaLista = disciplinas.data.find(
-          item => item.codigoComponenteCurricular == codigoComponenteCurricular
+          item =>
+            String(item.codigoComponenteCurricular) ===
+            String(codigoComponenteCurricular)
         );
         if (temNaLista) {
           setDisciplinaIdSelecionada(String(codigoComponenteCurricular));
@@ -239,6 +235,7 @@ const PendenciasFechamentoLista = ({ match }) => {
     } else {
       resetarFiltro();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [turmaSelecionada, modalidadesFiltroPrincipal]);
 
   useEffect(() => {
@@ -399,7 +396,7 @@ const PendenciasFechamentoLista = ({ match }) => {
               (turmaSelecionada.turma && listaDisciplinas.length < 1) ||
               (pendenciasSelecionadas && pendenciasSelecionadas.length < 1) ||
               pendenciasSelecionadas.filter(
-                item => item.situacao == situacaoPendenciaDto.Aprovada
+                item => Number(item?.situacao) === situacaoPendenciaDto.Aprovada
               ).length > 0
             }
           />

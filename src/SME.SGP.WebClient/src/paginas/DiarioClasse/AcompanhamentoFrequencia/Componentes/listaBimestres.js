@@ -59,9 +59,9 @@ ListaBimestres.propTypes = {
 };
 
 ListaBimestres.defaultProps = {
-  componenteCurricularIdSelecionado: PropTypes.string,
+  componenteCurricularIdSelecionado: '',
   territorioSaber: false,
-  bimestres: PropTypes.oneOfType([PropTypes.array]),
+  bimestres: [],
 };
 
 export default ListaBimestres;

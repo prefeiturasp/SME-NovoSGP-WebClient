@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 
 import { Loader, SelectComponent } from '~/componentes';
-import { GraficoBarras, TagGrafico } from '~/componentes-sgp';
+import { GraficoBarras } from '~/componentes-sgp';
 
 import {
   erros,

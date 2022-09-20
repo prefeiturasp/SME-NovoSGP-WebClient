@@ -16,7 +16,7 @@ class ServicoPrimeiroAcesso {
           };
         }
 
-        if (erro.response.status == 403) {
+        if (erro?.response?.status === 403) {
           return {
             sucesso: false,
             erro:

@@ -45,6 +45,7 @@ function ModalidadesDropDown({
       form.setFieldValue('modalidadeId', listaModalidades[0].valor);
       onChange(listaModalidades[0].valor);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [listaModalidades]);
 
   useEffect(() => {
@@ -52,6 +53,7 @@ function ModalidadesDropDown({
     if (!valorNuloOuVazio(modalidadeId)) {
       onChange(modalidadeId);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [modalidadeId]);
 
   return (

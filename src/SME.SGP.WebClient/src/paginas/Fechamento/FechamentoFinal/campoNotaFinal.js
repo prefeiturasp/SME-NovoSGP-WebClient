@@ -34,7 +34,7 @@ const CampoNotaFinal = props => {
   const validaSeTeveAlteracao = useCallback(
     notaArredondada => {
       if (
-        notaBimestre.notaConceitoAtual != undefined &&
+        notaBimestre.notaConceitoAtual !== undefined &&
         notaBimestre.notaConceitoAtual != null &&
         notaBimestre.notaConceitoAtual.trim() !== ''
       ) {
@@ -173,7 +173,7 @@ const CampoNotaFinal = props => {
   );
 };
 
-CampoNotaFinal.defaultProps = {
+CampoNotaFinal.propTypes = {
   onChangeNotaConceitoFinal: PropTypes.func,
   montaNotaFinal: PropTypes.func,
   desabilitarCampo: PropTypes.bool,
@@ -184,9 +184,10 @@ CampoNotaFinal.defaultProps = {
   name: PropTypes.string,
   esconderSetas: PropTypes.bool,
   step: PropTypes.number,
+  label: PropTypes.string,
 };
 
-CampoNotaFinal.propTypes = {
+CampoNotaFinal.defaultProps = {
   onChangeNotaConceitoFinal: () => {},
   montaNotaFinal: () => {},
   desabilitarCampo: false,
@@ -197,6 +198,7 @@ CampoNotaFinal.propTypes = {
   name: '',
   esconderSetas: false,
   step: 0.5,
+  label: '',
 };
 
 export default CampoNotaFinal;

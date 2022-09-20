@@ -265,6 +265,7 @@ const RelatorioCompensacaoAusencia = () => {
       setListaBimestres(bimestresFundMedio);
     }
     setBimestre();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [modalidadeId]);
 
   const obterAnosLetivos = useCallback(async () => {

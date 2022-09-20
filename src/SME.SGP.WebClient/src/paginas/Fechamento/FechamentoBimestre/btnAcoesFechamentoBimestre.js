@@ -58,7 +58,7 @@ const BtnAcoesFechamentoBimestre = props => {
   );
 };
 
-BtnAcoesFechamentoBimestre.defaultProps = {
+BtnAcoesFechamentoBimestre.propTypes = {
   salvarFechamentoFinal: PropTypes.func,
   onClickVoltar: PropTypes.func,
   onClickCancelar: PropTypes.func,
@@ -66,7 +66,7 @@ BtnAcoesFechamentoBimestre.defaultProps = {
   ehSintese: PropTypes.bool,
 };
 
-BtnAcoesFechamentoBimestre.propTypes = {
+BtnAcoesFechamentoBimestre.defaultProps = {
   salvarFechamentoFinal: () => {},
   onClickVoltar: () => {},
   onClickCancelar: () => {},

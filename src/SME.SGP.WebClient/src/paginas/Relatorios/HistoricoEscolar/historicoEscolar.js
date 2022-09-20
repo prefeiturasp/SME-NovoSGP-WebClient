@@ -110,6 +110,7 @@ const HistoricoEscolar = () => {
     setAlunosSelecionados([]);
     setEstudanteOpt('0');
     setCarregandoAnos(false);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [anoAtual, consideraHistorico]);
 
   useEffect(() => {
@@ -139,12 +140,12 @@ const HistoricoEscolar = () => {
 
   const [carregandoUes, setCarregandoUes] = useState(false);
 
-  const obterUes = useCallback(async (dre, ano, consideraHistorico = false) => {
+  const obterUes = useCallback(async (dre, ano, considHistorico = false) => {
     if (dre) {
       setCarregandoUes(true);
       const { data } = await AbrangenciaServico.buscarUes(
         dre,
-        `v1/abrangencias/${consideraHistorico}/dres/${dre}/ues?anoLetivo=${ano}`,
+        `v1/abrangencias/${considHistorico}/dres/${dre}/ues?anoLetivo=${ano}`,
         true
       );
       if (data) {
@@ -208,12 +209,13 @@ const HistoricoEscolar = () => {
       }
       setCarregandoDres(false);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [anoLetivo]);
 
   const [carregandoTurmas, setCarregandoTurmas] = useState(false);
 
   const obterTurmas = useCallback(
-    async (modalidadeSelecionada, ue, ano, consideraHistorico = false) => {
+    async (modalidadeSelecionada, ue, ano, considHistorico = false) => {
       if (ue && modalidadeSelecionada) {
         setCarregandoTurmas(true);
         const { data } = await AbrangenciaServico.buscarTurmas(
@@ -221,7 +223,7 @@ const HistoricoEscolar = () => {
           modalidadeSelecionada,
           '',
           ano,
-          consideraHistorico,
+          considHistorico,
           true
         );
         if (data) {
@@ -282,6 +284,7 @@ const HistoricoEscolar = () => {
       setUeId();
       setListaUes([]);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dreId, anoLetivo, obterUes]);
 
   useEffect(() => {
@@ -291,11 +294,12 @@ const HistoricoEscolar = () => {
       setTurmaId();
       setListaTurmas([]);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [modalidadeId, ueId, anoLetivo, obterTurmas]);
 
   useEffect(() => {
     if (modalidadeId && anoLetivo) {
-      if (String(modalidadeId) === String(modalidade.EJA)) {
+      if (Number(modalidadeId) === modalidade.EJA) {
         obterSemestres(modalidadeId, anoLetivo);
       } else {
         setSemestre();
@@ -305,29 +309,30 @@ const HistoricoEscolar = () => {
       setSemestre();
       setListaSemestre([]);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [modalidadeId, anoLetivo, obterTurmas]);
 
   useEffect(() => {
-    const desabiltarAlunosSelecionados =
-      String(estudanteOpt) === '1'
-        ? !alunosSelecionados?.length
-        : codigosAlunosSelecionados?.length;
-
     let desabilitar = true;
-    if (anoLetivo?.length > 0 || dreId?.length > 0 || ueId?.length > 0 || modalidadeId?.length > 0 )
-    {
-        if (turmaId?.length > 0 && String(estudanteOpt) === '0'){
-          desabilitar = false;
-        }
-        else if (String(estudanteOpt) === '1' && alunosSelecionados?.length > 0){
-          desabilitar = false;
-        }
-        else if (codigosAlunosSelecionados?.length > 0){
-          desabilitar = false;
-        }
+    if (
+      anoLetivo?.length > 0 ||
+      dreId?.length > 0 ||
+      ueId?.length > 0 ||
+      modalidadeId?.length > 0
+    ) {
+      if (turmaId?.length > 0 && String(estudanteOpt) === '0') {
+        desabilitar = false;
+      } else if (
+        String(estudanteOpt) === '1' &&
+        alunosSelecionados?.length > 0
+      ) {
+        desabilitar = false;
+      } else if (codigosAlunosSelecionados?.length > 0) {
+        desabilitar = false;
+      }
     }
 
-    if (String(modalidadeId) === String(modalidade.EJA)) {
+    if (Number(modalidadeId) === modalidade.EJA) {
       vaidaDesabilitarBtnGerar(!semestre || desabilitar);
     } else {
       vaidaDesabilitarBtnGerar(desabilitar);

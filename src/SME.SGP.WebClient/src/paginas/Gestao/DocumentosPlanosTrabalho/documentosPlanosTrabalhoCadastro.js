@@ -236,6 +236,7 @@ const DocumentosPlanosTrabalhoCadastro = ({ match }) => {
       }
     }
     setCarregouTiposDocumento(true);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [atualizaValoresIniciais]);
 
   useEffect(() => {

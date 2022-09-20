@@ -106,6 +106,7 @@ const DashboardRegistroItinerancia = () => {
         setListaUes([]);
       }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [consideraHistorico, anoLetivo, dre, usuario.possuiPerfilSme]);
 
   useEffect(() => {

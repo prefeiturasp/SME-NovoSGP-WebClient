@@ -51,10 +51,10 @@ const AtaFinalResultados = () => {
     { valor: '4', desc: 'EXCEL' },
   ];
 
-  const obterAnosLetivos = useCallback(async consideraHistorico => {
+  const obterAnosLetivos = useCallback(async considHistorico => {
     setCarregandoAnosLetivos(true);
     const anosLetivo = await FiltroHelper.obterAnosLetivos({
-      consideraHistorico,
+      considHistorico,
     }).catch(e => erros(e));
     if (anosLetivo) {
       setListaAnosLetivo(anosLetivo);
@@ -272,6 +272,7 @@ const AtaFinalResultados = () => {
       setSemestre(undefined);
       setListaSemestre([]);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [modalidadeId, anoLetivo, obterTurmas]);
 
   useEffect(() => {
@@ -388,7 +389,7 @@ const AtaFinalResultados = () => {
         anoLetivo,
         tipoFormatoRelatorio: formato,
         visualizacao,
-        semestre: semestre,
+        semestre,
       };
       if (turmaId.find(t => t === OPCAO_TODOS)) {
         params.turmasCodigos = listaTurmas.map(item => String(item.valor));

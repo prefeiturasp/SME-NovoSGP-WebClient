@@ -142,6 +142,7 @@ const DevolutivasForm = ({ match }) => {
         : soConsulta || !permissoesTela.podeIncluir;
     setDesabilitarCampos(desabilitar);
     obterPeriodoLetivoTurma();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     idDevolutiva,
     permissoesTela,
@@ -197,10 +198,10 @@ const DevolutivasForm = ({ match }) => {
   }, [turmaSelecionada.turma, resetarTela]);
 
   const obterSugestaoDataInicio = useCallback(
-    async codigoComponenteCurricular => {
+    async codigoCompCurricular => {
       const retorno = await ServicoDevolutivas.obterSugestaoDataInicio(
         turmaCodigo,
-        codigoComponenteCurricular
+        codigoCompCurricular
       ).catch(e => erros(e));
       if (retorno && retorno.data) {
         return moment(retorno.data);
@@ -232,7 +233,7 @@ const DevolutivasForm = ({ match }) => {
   };
 
   const setarValoresIniciaisRegistroNovo = useCallback(
-    async codigoComponenteCurricular => {
+    async codigoCompCurricular => {
       const valores = {
         codigoComponenteCurricular: 0,
         periodoInicio: '',
@@ -240,9 +241,9 @@ const DevolutivasForm = ({ match }) => {
         descricao: '',
         auditoria: null,
       };
-      valores.codigoComponenteCurricular = codigoComponenteCurricular;
+      valores.codigoComponenteCurricular = codigoCompCurricular;
       valores.periodoInicio = await obterSugestaoDataInicio(
-        codigoComponenteCurricular
+        codigoCompCurricular
       );
       if (valores.periodoInicio) {
         const paraHabilitar = await obterDatasFimParaHabilitar(
@@ -252,6 +253,7 @@ const DevolutivasForm = ({ match }) => {
       }
       setValoresIniciais(valores);
     },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [obterSugestaoDataInicio]
   );
 
@@ -337,6 +339,7 @@ const DevolutivasForm = ({ match }) => {
       }
       setValoresIniciais(inicial);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     codigoComponenteCurricular,
     listaComponenteCurriculare,
@@ -386,12 +389,12 @@ const DevolutivasForm = ({ match }) => {
 
   const obterDadosPlanejamento = useCallback(
     async (periodoFim, form, pagina, numero) => {
-      const { periodoInicio, codigoComponenteCurricular } = form.values;
+      const { periodoInicio } = form.values;
       setCarregandoGeral(true);
       const numeroEscolhido = numero || numeroRegistros || 4;
       const retorno = await ServicoDiarioBordo.obterPlanejamentosPorIntervalo(
         turmaCodigo,
-        codigoComponenteCurricular,
+        form?.values?.codigoComponenteCurricular,
         periodoInicio.format('YYYY-MM-DD'),
         periodoFim.format('YYYY-MM-DD'),
         pagina || 1,

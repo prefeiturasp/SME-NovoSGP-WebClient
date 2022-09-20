@@ -160,12 +160,14 @@ const DiarioBordo = ({ match }) => {
     if (!turmaInfantil) {
       resetarTela(refForm);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [turmaSelecionada, modalidadesFiltroPrincipal, turmaInfantil]);
 
   useEffect(() => {
     setListaDatasAulas();
     setDiasParaHabilitar();
     resetarTela(refForm);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [turmaSelecionada.turma]);
 
   const obterComponentesCurriculares = useCallback(async () => {
@@ -200,76 +202,8 @@ const DiarioBordo = ({ match }) => {
       setCodDisciplinaPai(undefined);
       resetarTela();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [turmaId, obterComponentesCurriculares, turmaInfantil]);
-
-  const obterDatasDeAulasDisponiveis = useCallback(
-    async codDisciplinaPai => {
-      setCarregandoData(true);
-      const datasDeAulas = await ServicoFrequencia.obterDatasDeAulasPorCalendarioTurmaEComponenteCurricular(
-        turmaId,
-        codDisciplinaPai
-      )
-        .catch(e => {
-          setCarregandoGeral(false);
-          erros(e);
-        })
-        .finally(() => {
-          setCarregandoData(false);
-        });
-
-      const codigoComponenteCurricular =
-        componenteCurricularId || codDisciplinaPai;
-
-      if (datasDeAulas?.data?.length && codigoComponenteCurricular) {
-        setListaDatasAulas(datasDeAulas.data);
-        const habilitar = datasDeAulas.data.map(item => {
-          if (aulaId && !dataSelecionada && item.aulas) {
-            const dataEncontrada = item.aulas.find(
-              a => a.aulaId.toString() === aulaId.toString()
-            );
-            if (dataEncontrada) {
-              setDataSelecionada(window.moment(item.data));
-              obterDiarioBordo(aulaId, codigoComponenteCurricular);
-            }
-          }
-          return window.moment(item.data).format('YYYY-MM-DD');
-        });
-
-        setDiasParaHabilitar(habilitar);
-      } else {
-        setListaDatasAulas();
-        setDiasParaHabilitar();
-      }
-    },
-    [turmaId]
-  );
-
-  useEffect(() => {
-    if (turmaId && codDisciplinaPai) {
-      obterDatasDeAulasDisponiveis(codDisciplinaPai);
-    }
-  }, [turmaId, codDisciplinaPai, obterDatasDeAulasDisponiveis]);
-
-  const onChangeComponenteCurricular = valor => {
-    if (!valor) {
-      setDiasParaHabilitar([]);
-    }
-    setDataSelecionada('');
-    setComponenteCurricularSelecionado(valor);
-
-    const valorCodDisciplinaPai = listaComponenteCurriculares.find(
-      item => String(item.codigoComponenteCurricular) === valor
-    );
-    setCodDisciplinaPai(valorCodDisciplinaPai?.codDisciplinaPai);
-  };
-
-  const pergutarParaSalvar = () => {
-    return confirmar(
-      'Atenção',
-      '',
-      'Suas alterações não foram salvas, deseja salvar agora?'
-    );
-  };
 
   const obterDadosObservacoes = async diarioBordoIdSel => {
     dispatch(limparDadosObservacoesUsuario());
@@ -292,19 +226,6 @@ const DiarioBordo = ({ match }) => {
 
     setCarregandoGeral(false);
   };
-
-  useEffect(() => {
-    if (componenteCurricularId && listaComponenteCurriculares?.length) {
-      const valorCodDisciplinaPai = listaComponenteCurriculares.find(
-        item =>
-          String(item.codigoComponenteCurricular) === componenteCurricularId
-      );
-      const codDisciplina =
-        valorCodDisciplinaPai?.codDisciplinaPai || valorCodDisciplinaPai?.id;
-      setCodDisciplinaPai(String(codDisciplina));
-      setComponenteCurricularSelecionado(componenteCurricularId);
-    }
-  }, [componenteCurricularId, listaComponenteCurriculares]);
 
   const obterDiarioBordo = async (aulaIdEnviada, componenteCurricular) => {
     setCarregandoGeral(true);
@@ -339,6 +260,88 @@ const DiarioBordo = ({ match }) => {
       }
     }
   };
+
+  const obterDatasDeAulasDisponiveis = useCallback(
+    async codDiscipPai => {
+      setCarregandoData(true);
+      const datasDeAulas = await ServicoFrequencia.obterDatasDeAulasPorCalendarioTurmaEComponenteCurricular(
+        turmaId,
+        codDiscipPai
+      )
+        .catch(e => {
+          setCarregandoGeral(false);
+          erros(e);
+        })
+        .finally(() => {
+          setCarregandoData(false);
+        });
+
+      const codigoComponenteCurricular = componenteCurricularId || codDiscipPai;
+
+      if (datasDeAulas?.data?.length && codigoComponenteCurricular) {
+        setListaDatasAulas(datasDeAulas.data);
+        const habilitar = datasDeAulas.data.map(item => {
+          if (aulaId && !dataSelecionada && item.aulas) {
+            const dataEncontrada = item.aulas.find(
+              a => a.aulaId.toString() === aulaId.toString()
+            );
+            if (dataEncontrada) {
+              setDataSelecionada(window.moment(item.data));
+              obterDiarioBordo(aulaId, codigoComponenteCurricular);
+            }
+          }
+          return window.moment(item.data).format('YYYY-MM-DD');
+        });
+
+        setDiasParaHabilitar(habilitar);
+      } else {
+        setListaDatasAulas();
+        setDiasParaHabilitar();
+      }
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [turmaId]
+  );
+
+  useEffect(() => {
+    if (turmaId && codDisciplinaPai) {
+      obterDatasDeAulasDisponiveis(codDisciplinaPai);
+    }
+  }, [turmaId, codDisciplinaPai, obterDatasDeAulasDisponiveis]);
+
+  const onChangeComponenteCurricular = valor => {
+    if (!valor) {
+      setDiasParaHabilitar([]);
+    }
+    setDataSelecionada('');
+    setComponenteCurricularSelecionado(valor);
+
+    const valorCodDisciplinaPai = listaComponenteCurriculares.find(
+      item => String(item.codigoComponenteCurricular) === valor
+    );
+    setCodDisciplinaPai(valorCodDisciplinaPai?.codDisciplinaPai);
+  };
+
+  const pergutarParaSalvar = () => {
+    return confirmar(
+      'Atenção',
+      '',
+      'Suas alterações não foram salvas, deseja salvar agora?'
+    );
+  };
+
+  useEffect(() => {
+    if (componenteCurricularId && listaComponenteCurriculares?.length) {
+      const valorCodDisciplinaPai = listaComponenteCurriculares.find(
+        item =>
+          String(item.codigoComponenteCurricular) === componenteCurricularId
+      );
+      const codDisciplina =
+        valorCodDisciplinaPai?.codDisciplinaPai || valorCodDisciplinaPai?.id;
+      setCodDisciplinaPai(String(codDisciplina));
+      setComponenteCurricularSelecionado(componenteCurricularId);
+    }
+  }, [componenteCurricularId, listaComponenteCurriculares]);
 
   useEffect(() => {
     if (aulaId) {
@@ -453,6 +456,7 @@ const DiarioBordo = ({ match }) => {
         resetarTela(form);
       }
     },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [obterAulasDataSelecionada]
   );
 

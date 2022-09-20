@@ -13,7 +13,7 @@ const CopiarCompensacao = ({
   onCloseCopiarCompensacao,
   onCopiarCompensacoes,
   compensacoesParaCopiar,
-  bimestreSugerido
+  bimestreSugerido,
 }) => {
   const [listaTurmas, setListaTurmas] = useState([]);
   const [loader, setLoader] = useState(false);
@@ -55,7 +55,7 @@ const CopiarCompensacao = ({
 
   const copiar = valores => {
     const dadosTurmas = listaTurmas.filter(turma =>
-      valores.turmas.find(codigo => codigo == turma.codigo)
+      valores.turmas.find(codigo => String(codigo) === String(turma.codigo))
     );
     onCopiarCompensacoes(valores, dadosTurmas);
     fecharCopiarCompensacao();
@@ -91,7 +91,7 @@ const CopiarCompensacao = ({
             labelBotaoPrincipal="Selecionar"
             labelBotaoSecundario="Cancelar"
             titulo="Copiar Compensação"
-            closable={true}
+            closable
             loader={loader}
             desabilitarBotaoPrincipal={false}
           >
@@ -137,15 +137,17 @@ CopiarCompensacao.propTypes = {
     PropTypes.array,
     PropTypes.object,
   ]),
+  bimestreSugerido: PropTypes.oneOfType([PropTypes.any]),
 };
 
 CopiarCompensacao.defaultProps = {
   visivel: false,
   turmaId: '',
   listaBimestres: [],
-  onCloseCopiarCompensacao: () => { },
-  onCopiarCompensacoes: () => { },
+  onCloseCopiarCompensacao: () => {},
+  onCopiarCompensacoes: () => {},
   compensacoesParaCopiar: [],
+  bimestreSugerido: '',
 };
 
 export default CopiarCompensacao;

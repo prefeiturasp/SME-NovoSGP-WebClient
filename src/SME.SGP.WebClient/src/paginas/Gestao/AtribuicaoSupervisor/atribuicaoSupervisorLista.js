@@ -39,7 +39,6 @@ export default function AtribuicaoSupervisorLista() {
     usuario.permissoes[RotasDto.ATRIBUICAO_RESPONSAVEIS_LISTA];
 
   const obterDres = useCallback(async () => {
-
     const retorno = await AbrangenciaServico.buscarDres().catch(e => erros(e));
 
     if (retorno?.data?.length) {
@@ -53,6 +52,7 @@ export default function AtribuicaoSupervisorLista() {
       setListaDres([]);
       setDresSelecionadas();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tipoResponsavel]);
 
   useEffect(() => {
@@ -63,18 +63,8 @@ export default function AtribuicaoSupervisorLista() {
     if (permissoesTela) {
       verificaSomenteConsulta(permissoesTela);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
-  useEffect(() => {
-    if (uesSemSupervisorCheck) {
-      montaListaUesSemSup(dresSelecionadas);
-    } else {
-      setSupervisoresSelecionados([]);
-      setUeSelecionada('');
-      setDesabilitarSupervisor(false);
-       onChangeDre(dresSelecionadas,null,true,tipoResponsavel);
-    }
-  }, [uesSemSupervisorCheck, tipoResponsavel]);
 
   const columns = [
     {
@@ -97,7 +87,9 @@ export default function AtribuicaoSupervisorLista() {
       dataIndex: 'tipoResponsavel',
       width: '20%',
       render: text => {
-        return text || <a className="texto-vermelho-negrito">NÃO ATRIBUIDO</a>;
+        return (
+          text || <span className="texto-vermelho-negrito">NÃO ATRIBUIDO</span>
+        );
       },
     },
     {
@@ -105,39 +97,39 @@ export default function AtribuicaoSupervisorLista() {
       dataIndex: 'responsavel',
       width: '35%',
       render: text => {
-        return text || <a className="texto-vermelho-negrito">NÃO ATRIBUIDO</a>;
+        return (
+          text || <span className="texto-vermelho-negrito">NÃO ATRIBUIDO</span>
+        );
       },
     },
   ];
-
-  function onClickRow(row) {
-    if (!permissoesTela.podeAlterar) return;
-
-    onClickEditar(row.responsavelId,row.tipoResponsavelId,row.ueid);
-  }
 
   function onClickVoltar() {
     history.push('/');
   }
 
-  function onClickEditar(responsavelId,tipoResponsavelId,codigoUe) {
+  function onClickEditar(responsavelId, tipoResponsavelId, codigoUe) {
     if (!permissoesTela.podeAlterar) return;
 
-    var tipoResp = tipoResponsavel ?? tipoResponsavelId;
+    const tipoResp = tipoResponsavel ?? tipoResponsavelId;
     let path = RotasDto.ATRIBUICAO_RESPONSAVEIS;
     if (dresSelecionadas) {
       path = `${path}/${dresSelecionadas}`;
       if (responsavelId && tipoResp && codigoUe) {
         path = `${path}/${responsavelId}/${tipoResp}/${codigoUe}`;
-      }
-      else if (!responsavelId && tipoResp && !codigoUe) {
+      } else if (!responsavelId && tipoResp && !codigoUe) {
         path = `${path}/${tipoResp}`;
-      }
-      else if(!responsavelId && tipoResp && codigoUe){
+      } else if (!responsavelId && tipoResp && codigoUe) {
         path = `${path}/0/${tipoResp}/${codigoUe}`;
       }
     }
     history.push(path);
+  }
+
+  function onClickRow(row) {
+    if (!permissoesTela.podeAlterar) return;
+
+    onClickEditar(row.responsavelId, row.tipoResponsavelId, row.ueid);
   }
 
   function onClickNovaAtribuicao() {
@@ -161,54 +153,22 @@ export default function AtribuicaoSupervisorLista() {
       setUesSemSupervisorCheck(false);
     }
   }
-  const montaListaUesSemSup = useCallback((dre) => {
 
-    setSupervisoresSelecionados([]);
-    setUeSelecionada('');
-    setDesabilitarSupervisor(true);
-    consultarApi(dre,tipoResponsavel,ueSelecionada,supervisoresSelecionados, uesSemSupervisorCheck);
-  }, [tipoResponsavel, uesSemSupervisorCheck]);
-
-  const onChangeDre = useCallback(async (dre, changeUe,chamarApi=true,tipoRes) => {
-
-    if (!changeUe) {
-      setListaSupervisores([]);
-      setSupervisoresSelecionados([]);
-    }
-    setListaUes([]);
-    setUeSelecionada('');
-    if (dre) {
-      if(chamarApi)
-        consultarApi(dre,tipoRes || tipoResponsavel,ueSelecionada,supervisoresSelecionados);
-    } else {
-      setListaFiltroAtribuicao([]);
-      setPaginaAtual(1);
-      setUesSemSupervisorCheck(false);
-    }
-
-    setDresSelecionadas(dre);
-    if (dre) {
-      obterResponsaveis(dre,tipoRes || tipoResponsavel);
-      carregarUes(dre);
-    }
-
-  }, [tipoResponsavel, uesSemSupervisorCheck]);
-
-function montarListaAtribuicao(lista) {
+  function montarListaAtribuicao(lista) {
     if (lista?.length) {
       const dadosAtribuicao = [];
       lista.forEach(item => {
         const contId = dadosAtribuicao.length + 1;
-       dadosAtribuicao.push({
-        id : contId,
-        atribuicaoId :item.id,
-        escola: item.ueNome,
-        responsavel: item.responsavelId ? item.responsavel : '',
-        responsavelId: item.responsavelId,
-        tipoResponsavel: item.tipoResponsavel,
-        tipoResponsavelId: item.tipoResponsavelId,
-        ueid : item.ueId
-      });
+        dadosAtribuicao.push({
+          id: contId,
+          atribuicaoId: item.id,
+          escola: item.ueNome,
+          responsavel: item.responsavelId ? item.responsavel : '',
+          responsavelId: item.responsavelId,
+          tipoResponsavel: item.tipoResponsavel,
+          tipoResponsavelId: item.tipoResponsavelId,
+          ueid: item.ueId,
+        });
       });
       setListaFiltroAtribuicao(dadosAtribuicao);
       setPaginaAtual(1);
@@ -218,98 +178,43 @@ function montarListaAtribuicao(lista) {
     }
   }
 
-  async function carregarUes(dre) {
-
-    const ues = await api.get(`/v1/supervisores/lista-ues/${dre}`);
-    if (ues.data) {
-      setListaUes(ues.data);
-    } else {
-      setListaUes([]);
-    }
-  }
-
-  async function onChangeSupervisores(sup) {
-
-    setUesSemSupervisorCheck(false);
-    if (sup && sup.length) {
-      setUeSelecionada([]);
-      setSupervisoresSelecionados(sup);
-    } else {
-      setSupervisoresSelecionados([]);
-      setUeSelecionada([]);
-      setListaFiltroAtribuicao([]);
-      setPaginaAtual(1);
-    }
-    consultarApi(dresSelecionadas,tipoResponsavel,ueSelecionada,sup.toString(),uesSemSupervisorCheck);
-  }
-
-  async function onChangeUes(ue) {
-
-    if (ue) {
-      setDesabilitarSupervisor(true);
-      setSupervisoresSelecionados([]);
-      setUeSelecionada(ue);
-    } else {
-      setUeSelecionada('');
-      setDesabilitarSupervisor(false);
-      onChangeDre(dresSelecionadas, true,false);
-    }
-    consultarApi(dresSelecionadas,tipoResponsavel,ue,supervisoresSelecionados,uesSemSupervisorCheck);
-  }
-
-  const onChangeTipoResponsavel = async valor => {
-
-    if(valor==null){
-      setUesSemSupervisorCheck(false);
-    }
-    setSupervisoresSelecionados();
-    setListaSupervisores([]);
-    setTipoResponsavel(valor);
-    consultarApi(dresSelecionadas,valor,ueSelecionada,supervisoresSelecionados,uesSemSupervisorCheck);
-  };
-
-  async function consultarApi(dre,codigoTipo,ue,supervisor, check){
+  async function consultarApi(dre, codigoTipo, ue, supervisor, check) {
     setCarregandoLista(true);
-    await api.get('/v1/supervisores/vinculo-lista', {
-      params: {
-        dreCodigo: dre,
-        tipoCodigo: codigoTipo || tipoResponsavel,
-        ueCodigo: ue,
-        supervisorId: supervisor,
-        ueSemResponsavel: check || uesSemSupervisorCheck
-      },
-    }).then(dados => {
-      montarListaAtribuicao(dados.data);
-      setCarregandoLista(false);
-    });
+    await api
+      .get('/v1/supervisores/vinculo-lista', {
+        params: {
+          dreCodigo: dre,
+          tipoCodigo: codigoTipo || tipoResponsavel,
+          ueCodigo: ue,
+          supervisorId: supervisor,
+          ueSemResponsavel: check || uesSemSupervisorCheck,
+        },
+      })
+      .then(dados => {
+        montarListaAtribuicao(dados.data);
+        setCarregandoLista(false);
+      });
   }
-  const obterTipoResponsavel = useCallback(async () => {
 
-    const resposta = await ServicoResponsaveis.obterTipoReponsavel().catch(e =>
-      erros(e)
-    );
-
-    if (resposta?.data?.length) {
-      setListaTipoResponsavel(resposta.data);
-      if (resposta?.data?.length === 1) {
-        setTipoResponsavel(resposta.data[0]?.codigo?.toString());
-      } else {
-        consultarApi(dresSelecionadas,null,ueSelecionada,supervisoresSelecionados,uesSemSupervisorCheck);
-      }
-    } else {
-      setListaTipoResponsavel([]);
-    }
-  }, [dresSelecionadas, ueSelecionada, supervisoresSelecionados, uesSemSupervisorCheck]);
-
-  useEffect(() => {
-    if (dresSelecionadas && !listaTipoResponsavel?.length) {
-      obterTipoResponsavel();
-    }
-  }, [dresSelecionadas, listaTipoResponsavel, obterTipoResponsavel]);
+  const montaListaUesSemSup = useCallback(
+    dre => {
+      setSupervisoresSelecionados([]);
+      setUeSelecionada('');
+      setDesabilitarSupervisor(true);
+      consultarApi(
+        dre,
+        tipoResponsavel,
+        ueSelecionada,
+        supervisoresSelecionados,
+        uesSemSupervisorCheck
+      );
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [tipoResponsavel, uesSemSupervisorCheck]
+  );
 
   const obterResponsaveis = useCallback(
-    async (dre,tipoResp) => {
-
+    async (dre, tipoResp) => {
       const tipoSelecionado = tipoResp || tipoResponsavel;
 
       if (!dre || !tipoSelecionado) return;
@@ -320,7 +225,7 @@ function montarListaAtribuicao(lista) {
         tipoSelecionado
       )
         .catch(e => erros(e))
-        .finally(() =>{
+        .finally(() => {
           setCarregandoResponsavel(false);
         });
 
@@ -339,8 +244,150 @@ function montarListaAtribuicao(lista) {
     [dresSelecionadas, tipoResponsavel]
   );
 
-  useEffect(() => {
+  async function carregarUes(dre) {
+    const ues = await api.get(`/v1/supervisores/lista-ues/${dre}`);
+    if (ues.data) {
+      setListaUes(ues.data);
+    } else {
+      setListaUes([]);
+    }
+  }
 
+  const onChangeDre = useCallback(
+    async (dre, changeUe, chamarApi = true, tipoRes) => {
+      if (!changeUe) {
+        setListaSupervisores([]);
+        setSupervisoresSelecionados([]);
+      }
+      setListaUes([]);
+      setUeSelecionada('');
+      if (dre) {
+        if (chamarApi)
+          consultarApi(
+            dre,
+            tipoRes || tipoResponsavel,
+            ueSelecionada,
+            supervisoresSelecionados
+          );
+      } else {
+        setListaFiltroAtribuicao([]);
+        setPaginaAtual(1);
+        setUesSemSupervisorCheck(false);
+      }
+
+      setDresSelecionadas(dre);
+      if (dre) {
+        obterResponsaveis(dre, tipoRes || tipoResponsavel);
+        carregarUes(dre);
+      }
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [tipoResponsavel, uesSemSupervisorCheck]
+  );
+
+  useEffect(() => {
+    if (uesSemSupervisorCheck) {
+      montaListaUesSemSup(dresSelecionadas);
+    } else {
+      setSupervisoresSelecionados([]);
+      setUeSelecionada('');
+      setDesabilitarSupervisor(false);
+      onChangeDre(dresSelecionadas, null, true, tipoResponsavel);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [uesSemSupervisorCheck, tipoResponsavel]);
+
+  async function onChangeSupervisores(sup) {
+    setUesSemSupervisorCheck(false);
+    if (sup && sup.length) {
+      setUeSelecionada([]);
+      setSupervisoresSelecionados(sup);
+    } else {
+      setSupervisoresSelecionados([]);
+      setUeSelecionada([]);
+      setListaFiltroAtribuicao([]);
+      setPaginaAtual(1);
+    }
+    consultarApi(
+      dresSelecionadas,
+      tipoResponsavel,
+      ueSelecionada,
+      sup.toString(),
+      uesSemSupervisorCheck
+    );
+  }
+
+  async function onChangeUes(ue) {
+    if (ue) {
+      setDesabilitarSupervisor(true);
+      setSupervisoresSelecionados([]);
+      setUeSelecionada(ue);
+    } else {
+      setUeSelecionada('');
+      setDesabilitarSupervisor(false);
+      onChangeDre(dresSelecionadas, true, false);
+    }
+    consultarApi(
+      dresSelecionadas,
+      tipoResponsavel,
+      ue,
+      supervisoresSelecionados,
+      uesSemSupervisorCheck
+    );
+  }
+
+  const onChangeTipoResponsavel = async valor => {
+    if (valor == null) {
+      setUesSemSupervisorCheck(false);
+    }
+    setSupervisoresSelecionados();
+    setListaSupervisores([]);
+    setTipoResponsavel(valor);
+    consultarApi(
+      dresSelecionadas,
+      valor,
+      ueSelecionada,
+      supervisoresSelecionados,
+      uesSemSupervisorCheck
+    );
+  };
+
+  const obterTipoResponsavel = useCallback(async () => {
+    const resposta = await ServicoResponsaveis.obterTipoReponsavel().catch(e =>
+      erros(e)
+    );
+
+    if (resposta?.data?.length) {
+      setListaTipoResponsavel(resposta.data);
+      if (resposta?.data?.length === 1) {
+        setTipoResponsavel(resposta.data[0]?.codigo?.toString());
+      } else {
+        consultarApi(
+          dresSelecionadas,
+          null,
+          ueSelecionada,
+          supervisoresSelecionados,
+          uesSemSupervisorCheck
+        );
+      }
+    } else {
+      setListaTipoResponsavel([]);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [
+    dresSelecionadas,
+    ueSelecionada,
+    supervisoresSelecionados,
+    uesSemSupervisorCheck,
+  ]);
+
+  useEffect(() => {
+    if (dresSelecionadas && !listaTipoResponsavel?.length) {
+      obterTipoResponsavel();
+    }
+  }, [dresSelecionadas, listaTipoResponsavel, obterTipoResponsavel]);
+
+  useEffect(() => {
     if (tipoResponsavel && dresSelecionadas) {
       obterResponsaveis(dresSelecionadas);
     } else {

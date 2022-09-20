@@ -365,6 +365,7 @@ const RegistroItineranciaAEECadastro = ({ match }) => {
     } else {
       obterQuestoes();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [itineranciaId]);
 
   const perguntarAntesDeRemoverAluno = async () => {
@@ -525,6 +526,7 @@ const RegistroItineranciaAEECadastro = ({ match }) => {
       setEventoId();
       setListaEvento([]);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tipoCalendarioSelecionado, listaUes, itineranciaId]);
 
   const selecionaEvento = evento => {

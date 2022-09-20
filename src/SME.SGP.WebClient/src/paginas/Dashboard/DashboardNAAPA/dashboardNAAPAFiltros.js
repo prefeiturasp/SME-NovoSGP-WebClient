@@ -101,6 +101,7 @@ const DashboardNAAPAFiltros = () => {
     }
 
     setListaAnosLetivo(ordenarListaMaiorParaMenor(anosLetivos, 'valor'));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [anoAtual]);
 
   useEffect(() => {
@@ -146,6 +147,7 @@ const DashboardNAAPAFiltros = () => {
     }
     setListaDres([]);
     setDre();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [anoLetivo, consideraHistorico]);
 
   useEffect(() => {
@@ -202,6 +204,7 @@ const DashboardNAAPAFiltros = () => {
       }
       setListaUes([]);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [consideraHistorico, anoLetivo, dre]);
 
   useEffect(() => {
@@ -210,6 +213,7 @@ const DashboardNAAPAFiltros = () => {
     if (dre?.codigo) {
       obterUes(anoLetivo);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dre, anoLetivo, obterUes]);
 
   const onChangeModalidade = valor => setModalidade(valor);
@@ -233,6 +237,7 @@ const DashboardNAAPAFiltros = () => {
       }
       setListaModalidades(lista);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [ue]);
 
   useEffect(() => {
@@ -241,6 +246,7 @@ const DashboardNAAPAFiltros = () => {
     if (anoLetivo && ue?.codigo) {
       obterModalidades();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [anoLetivo, ue, obterModalidades]);
 
   const onChangeSemestre = valor => setSemestre(valor);
@@ -269,6 +275,7 @@ const DashboardNAAPAFiltros = () => {
       setListaSemestres();
       setSemestre();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [modalidade, anoLetivo, consideraHistorico]);
 
   useEffect(() => {
@@ -279,6 +286,7 @@ const DashboardNAAPAFiltros = () => {
       setSemestre();
       setListaSemestres([]);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [modalidade, anoLetivo, obterSemestres]);
 
   const montarMeses = useCallback(() => {
@@ -286,6 +294,7 @@ const DashboardNAAPAFiltros = () => {
     delete meses[0];
     meses.unshift({ numeroMes: OPCAO_TODOS, nome: 'Acumulado' });
     setListaMesesReferencias(meses);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {

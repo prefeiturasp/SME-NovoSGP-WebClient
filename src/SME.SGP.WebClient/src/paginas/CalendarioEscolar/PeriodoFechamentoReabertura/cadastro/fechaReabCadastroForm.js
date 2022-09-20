@@ -190,6 +190,7 @@ const FechaReabCadastroForm = () => {
     } else {
       resetarTela();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [paramsRota, listaTipoCalendarioEscolar]);
 
   useEffect(() => {
@@ -216,7 +217,9 @@ const FechaReabCadastroForm = () => {
           }
         ),
       dataFim: momentSchema.required(textCampoObrigatorio),
-      bimestres: Yup.array().of(Yup.string()).required(textCampoObrigatorio),
+      bimestres: Yup.array()
+        .of(Yup.string())
+        .required(textCampoObrigatorio),
       dreCodigo: Yup.string().required(textCampoObrigatorio),
       ueCodigo: Yup.string().required(textCampoObrigatorio),
     };

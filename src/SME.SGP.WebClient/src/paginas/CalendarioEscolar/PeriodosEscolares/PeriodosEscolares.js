@@ -180,12 +180,12 @@ const PeriodosEscolares = () => {
       const editado = await api
         .post('v1/periodo-escolar', periodoEscolarEdicao)
         .catch(e => erros(e));
-      if (editado && editado.status == 200) {
+      if (editado?.status === 200) {
         sucesso('Suas informações foram editadas com sucesso.');
       }
     } else {
       const calendarioParaCadastrar = listaTipoCalendario.find(item => {
-        return item.id == calendarioEscolarSelecionado;
+        return String(item.id) === String(calendarioEscolarSelecionado);
       });
       const paramsCadastrar = {
         periodos: [
@@ -225,7 +225,7 @@ const PeriodosEscolares = () => {
       const cadastrado = await api
         .post('v1/periodo-escolar', paramsCadastrar)
         .catch(e => erros(e));
-      if (cadastrado && cadastrado.status == 200) {
+      if (cadastrado?.status === 200) {
         sucesso('Suas informações foram salvas com sucesso.');
       }
     }
@@ -317,6 +317,13 @@ const PeriodosEscolares = () => {
     });
     setPeriodoEscolarEdicao(periodoAtual.data);
     setValoresIniciais(bimestresValorInicial);
+  };
+
+  const touchedFields = form => {
+    const arrayCampos = Object.keys(valoresFormInicial);
+    arrayCampos.forEach(campo => {
+      form.setFieldTouched(campo, true, true);
+    });
   };
 
   const onChangeCamposData = form => {
@@ -455,13 +462,6 @@ const PeriodosEscolares = () => {
         </div>
       </div>
     );
-  };
-
-  const touchedFields = form => {
-    const arrayCampos = Object.keys(valoresFormInicial);
-    arrayCampos.forEach(campo => {
-      form.setFieldTouched(campo, true, true);
-    });
   };
 
   const validaAntesDoSubmit = form => {

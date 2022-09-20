@@ -44,7 +44,6 @@ InputNumberReadOnly.defaultProps = {
   value: '',
   style: {},
   disabled: false,
-  isDecimal: true,
   placeholder: '',
 };
 

@@ -67,14 +67,14 @@ const BotoesAcoessNotasConceitos = props => {
   );
 };
 
-BotoesAcoessNotasConceitos.defaultProps = {
+BotoesAcoessNotasConceitos.propTypes = {
   onClickVoltar: PropTypes.func,
   onClickCancelar: PropTypes.func,
   onClickSalvar: PropTypes.func,
-  desabilitarBotao: PropTypes.bold,
+  desabilitarBotao: PropTypes.bool,
 };
 
-BotoesAcoessNotasConceitos.propTypes = {
+BotoesAcoessNotasConceitos.defaultProps = {
   onClickVoltar: () => {},
   onClickCancelar: () => {},
   onClickSalvar: () => {},

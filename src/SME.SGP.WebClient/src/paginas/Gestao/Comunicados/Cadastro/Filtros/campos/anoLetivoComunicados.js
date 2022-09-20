@@ -29,6 +29,7 @@ const AnoLetivoComunicados = ({ form, comunicadoId, onChangeCampos }) => {
     }
 
     setListaAnosLetivos(listaAnos);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [anoAtual, comunicadoId]);
 
   useEffect(() => {

@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { Select } from 'antd';
-import Icon from 'antd/es/icon';
 import shortid from 'shortid';
 import { Field } from 'formik';
 import { Base } from './colors';

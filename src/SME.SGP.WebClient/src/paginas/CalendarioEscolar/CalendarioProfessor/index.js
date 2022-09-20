@@ -4,7 +4,7 @@ import React, { useEffect, useState, useCallback, useReducer } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
 // Componentes
-import { Loader, Card, Grid, Button, Colors } from '~/componentes';
+import { Loader, Card, Grid } from '~/componentes';
 
 // Componentes Internos
 import DropDownTipoCalendario from './componentes/DropDownTipoCalendario';
@@ -144,6 +144,7 @@ function CalendarioProfessor() {
       }
       buscarEventosDias();
     },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [
       tipoCalendarioId,
       turmaSelecionada.anoLetivo,

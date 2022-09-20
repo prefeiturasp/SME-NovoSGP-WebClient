@@ -1,21 +1,20 @@
 import React, { useState, useEffect } from 'react';
+import styled from 'styled-components';
+import { Formik, Form } from 'formik';
+import * as Yup from 'yup';
+import { useSelector } from 'react-redux';
 import CampoTexto from '~/componentes/campoTexto';
 import Button from '~/componentes/button';
 import { Colors } from '~/componentes/colors';
 import ModalConteudoHtml from '~/componentes/modalConteudoHtml';
 import AlertaBalao from '~/componentes/alertaBalao';
-import { Formik, Form } from 'formik';
-import * as Yup from 'yup';
 import api from '~/servicos/api';
 import { sucesso, confirmar } from '~/servicos/alertas';
-import { useSelector } from 'react-redux';
 import { store } from '~/redux';
 import { meusDadosSalvarEmail } from '~/redux/modulos/usuario/actions';
-import styled from 'styled-components';
 import FormularioSenha from './FormularioSenha/formularioSenha';
 import RotasDto from '~/dtos/rotasDto';
 import { verificaSomenteConsulta } from '~/servicos/servico-navegacao';
-import { Redirect } from 'react-router-dom';
 
 const Campos = styled.div`
   margin-right: 10px;
@@ -67,7 +66,7 @@ const DadosEmail = () => {
       .put('v1/usuarios/autenticado/email', {
         novoEmail: novoEmail.emailUsuario,
       })
-      .then(resp => {
+      .then(() => {
         setEmail(novoEmail.emailUsuario);
         setEmailEdicao('');
         setErroEmail('');
@@ -107,7 +106,7 @@ const DadosEmail = () => {
       );
       if (confirmado) {
         setEmailEdicao(novoEmail);
-        form.validateForm().then(err => {
+        form.validateForm().then(() => {
           form.handleSubmit(e => e);
         });
       } else {

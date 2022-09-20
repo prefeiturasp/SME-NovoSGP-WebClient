@@ -37,6 +37,7 @@ function DreDropDown({ form, onChange, label, desabilitado, labelRequired }) {
       form.setFieldValue('dreId', listaDres[0].valor);
       onChange(listaDres[0].valor, listaDres);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [listaDres]);
 
   useEffect(() => {
@@ -44,6 +45,7 @@ function DreDropDown({ form, onChange, label, desabilitado, labelRequired }) {
     if (!valorNuloOuVazio(form.values.dreId)) {
       onChange(form.values.dreId, listaDres);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [form.values.dreId]);
 
   return (

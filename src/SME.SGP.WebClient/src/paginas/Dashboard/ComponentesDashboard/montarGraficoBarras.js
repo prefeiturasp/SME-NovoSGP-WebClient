@@ -128,6 +128,7 @@ const MontarGraficoBarras = props => {
     } else {
       setDadosGrafico([]);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     anoLetivo,
     dreId,

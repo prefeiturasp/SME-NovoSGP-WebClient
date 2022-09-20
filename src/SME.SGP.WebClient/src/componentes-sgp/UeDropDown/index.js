@@ -65,6 +65,7 @@ function UeDropDown({
     } else {
       setListaUes([]);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dreId, opcaoTodas, url, modalidade]);
 
   useEffect(() => {
@@ -78,6 +79,7 @@ function UeDropDown({
       form.setFieldValue('ueId', listaUes[0].valor);
       onChange(listaUes[0].valor, listaUes);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [listaUes]);
 
   return (

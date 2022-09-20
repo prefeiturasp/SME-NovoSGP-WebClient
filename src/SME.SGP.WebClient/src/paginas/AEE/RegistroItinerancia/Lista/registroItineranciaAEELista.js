@@ -305,6 +305,7 @@ const RegistroItineranciaAEELista = () => {
         dataFinal,
         criador
       );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     anoLetivo,
     dreId,

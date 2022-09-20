@@ -48,9 +48,6 @@ const GraficoBarras = props => {
         },
       },
     },
-    columnStyle: {
-      radius: [4, 4, 0, 0],
-    },
     label: labelVisible
       ? {
           position: 'top',

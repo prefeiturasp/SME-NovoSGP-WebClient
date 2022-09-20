@@ -71,6 +71,7 @@ const TurmasComunicados = ({ form, onChangeCampos, desabilitar }) => {
       setListaTurmas([]);
       form.setFieldValue(nomeCampo, []);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     anoLetivo,
     codigoUe,
@@ -88,6 +89,7 @@ const TurmasComunicados = ({ form, onChangeCampos, desabilitar }) => {
       setListaTurmas([]);
       form.setFieldValue(nomeCampo, []);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [anosEscolares, obterTurmas]);
 
   const onChangeAnosEscolares = novosValores => {

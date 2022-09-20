@@ -3,7 +3,6 @@ import { useSelector } from 'react-redux';
 import shortid from 'shortid';
 import styled from 'styled-components';
 import CardLink from '../../componentes/cardlink';
-import Grid from '../../componentes/grid';
 import Row from '../../componentes/row';
 import LaderCardsDashboard from './laderCardsDashboard';
 

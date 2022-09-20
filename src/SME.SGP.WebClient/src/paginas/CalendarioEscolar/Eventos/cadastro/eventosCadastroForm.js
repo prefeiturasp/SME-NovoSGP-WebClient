@@ -304,15 +304,7 @@ const EventosCadastroForm = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [recorrencia]);
 
-  const onClickCopiarEvento = async form => {
-    let modalidadeConsulta = '';
-    if (form?.values?.ueId && form?.values?.ueId !== OPCAO_TODOS) {
-      const calendarioSelecionado = listaCalendarios?.find(
-        item => item?.id === form?.values?.tipoCalendarioId
-      );
-      modalidadeConsulta = calendarioSelecionado?.modalidade;
-    }
-
+  const onClickCopiarEvento = async () => {
     const anoAtual = window.moment().format('YYYY');
     const tiposCalendario = await api
       .get(

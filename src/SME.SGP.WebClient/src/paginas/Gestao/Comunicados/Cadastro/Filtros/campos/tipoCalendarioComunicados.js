@@ -52,6 +52,7 @@ const TipoCalendarioComunicados = ({ form, onChangeCampos, desabilitar }) => {
       form.setFieldValue(nomeCampo, undefined);
       setListaCalendario([]);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [anoLetivo, modalidades, listaModalidadesComunicados, semestre]);
 
   useEffect(() => {

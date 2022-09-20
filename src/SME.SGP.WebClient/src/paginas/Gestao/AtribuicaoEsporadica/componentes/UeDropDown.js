@@ -51,6 +51,7 @@ function UeDropDown({
       setListaUes([]);
       form.setFieldValue('ueId', undefined);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dreId]);
 
   return (
