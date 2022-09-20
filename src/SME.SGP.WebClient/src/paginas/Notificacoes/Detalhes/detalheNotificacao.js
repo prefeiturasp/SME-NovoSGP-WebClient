@@ -87,6 +87,7 @@ const DetalheNotificacao = ({ match }) => {
   useEffect(() => {
     setBreadcrumbManual(match.url, 'Detalhes', '/notificacoes');
     verificaSomenteConsulta(permissoesTela);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -139,6 +140,7 @@ const DetalheNotificacao = ({ match }) => {
           usuario.rf
         );
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [notificacao]);
 
   const marcarComoLida = async () => {

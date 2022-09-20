@@ -93,7 +93,7 @@ const TipoFeriadoForm = ({ match }) => {
           .catch(e => erros(e));
 
         if (cadastrado && cadastrado.data) {
-          setIsTipoMovel(cadastrado.data.tipo == tipoFeriado.Movel);
+          setIsTipoMovel(Number(cadastrado.data.tipo) === tipoFeriado.Movel);
           setValoresIniciais({
             abrangencia: String(cadastrado.data.abrangencia),
             nome: cadastrado.data.nome,
@@ -117,6 +117,7 @@ const TipoFeriadoForm = ({ match }) => {
     };
 
     consultaPorId();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const onClickVoltar = async () => {
@@ -170,7 +171,7 @@ const TipoFeriadoForm = ({ match }) => {
       .post('v1/calendarios/feriados', paramas)
       .catch(e => erros(e));
 
-    if (cadastrado && cadastrado.status == 200) {
+    if (cadastrado?.status === 200) {
       if (idTipoFeriadoEdicao) {
         sucesso('Tipo de feriado alterado com sucesso.');
       } else {
@@ -204,7 +205,7 @@ const TipoFeriadoForm = ({ match }) => {
           .delete('v1/calendarios/feriados', parametrosDelete)
           .catch(e => erros(e));
 
-        if (excluir && excluir.status == 200) {
+        if (excluir?.status === 200) {
           sucesso('Tipo de feriado excluído com sucesso.');
           history.push('/calendario-escolar/tipo-feriado');
         }
@@ -214,7 +215,7 @@ const TipoFeriadoForm = ({ match }) => {
 
   const tipoCampoDataFeriado = form => {
     let formato = 'DD/MM/YYYY';
-    if (form.values.tipo == tipoFeriado.Fixo) {
+    if (Number(form.values.tipo) === tipoFeriado.Fixo) {
       formato = 'DD/MM';
     }
     return (
@@ -242,7 +243,7 @@ const TipoFeriadoForm = ({ match }) => {
       form.setFieldTouched(campo, true, true);
     });
     form.validateForm().then(() => {
-      if (form.isValid || Object.keys(form.errors).length == 0) {
+      if (form.isValid || Object.keys(form.errors).length === 0) {
         form.handleSubmit(e => e);
       }
     });

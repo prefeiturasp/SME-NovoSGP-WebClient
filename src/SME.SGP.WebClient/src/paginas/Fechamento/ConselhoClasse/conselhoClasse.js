@@ -87,6 +87,7 @@ const ConselhoClasse = () => {
     ) {
       obterListaAlunos();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [turmaAtual, turmaSelecionada]);
 
   const verificarExibicaoMarcador = async codigoEOL => {
@@ -104,7 +105,7 @@ const ConselhoClasse = () => {
         conselhoClasseAlunoId,
         tipoNota,
       } = resposta?.data;
-      if (fechamentoTurmaId !== 0 && conselhoClasseId != 0) {
+      if (fechamentoTurmaId !== 0 && conselhoClasseId !== 0) {
         const retorno = await servicoSalvarConselhoClasse.validaParecerConclusivo(
           conselhoClasseId,
           fechamentoTurmaId,

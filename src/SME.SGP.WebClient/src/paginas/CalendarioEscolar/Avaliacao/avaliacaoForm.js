@@ -60,6 +60,9 @@ const AvaliacaoForm = ({ match, location }) => {
   const [desabilitarBotaoCadastrar, setDesabilitarBotaoCadastrar] = useState(
     false
   );
+  const [listaDisciplinas, setListaDisciplinas] = useState([]);
+  const [carregandoTela, setCarregandoTela] = useState(false);
+
   const clicouBotaoVoltar = async () => {
     if (dentroPeriodo && modoEdicao) {
       const confirmado = await confirmar(
@@ -92,14 +95,24 @@ const AvaliacaoForm = ({ match, location }) => {
 
   const onChangeDisciplina = disciplinaId => {
     aoTrocarCampos();
-    if (disciplinaId && disciplinaId.length == 1 && !Array.isArray(disciplinaId)) {
+    if (
+      disciplinaId &&
+      disciplinaId.length === 1 &&
+      !Array.isArray(disciplinaId)
+    ) {
       const componenteSelecionado = listaDisciplinas.find(
-        item => item.codigoComponenteCurricular == disciplinaId
+        item => String(item.codigoComponenteCurricular) === String(disciplinaId)
       );
-      setPodeLancaNota(componenteSelecionado == undefined ? true : componenteSelecionado?.lancaNota);
+      setPodeLancaNota(
+        !componenteSelecionado ? true : componenteSelecionado?.lancaNota
+      );
     } else {
       setPodeLancaNota(true);
-      setDesabilitarBotaoCadastrar(!disciplinaId.length > 1 || disciplinaId.length == 0 || (Array.isArray(disciplinaId) && disciplinaId.length == 1));
+      setDesabilitarBotaoCadastrar(
+        !disciplinaId.length > 1 ||
+          disciplinaId.length === 0 ||
+          (Array.isArray(disciplinaId) && disciplinaId.length === 1)
+      );
     }
   };
 
@@ -137,7 +150,6 @@ const AvaliacaoForm = ({ match, location }) => {
 
   const [descricao, setDescricao] = useState('');
   const [copias, setCopias] = useState([]);
-  const [carregandoTela, setCarregandoTela] = useState(false);
   const [listaDisciplinasRegencia, setListaDisciplinasRegencia] = useState([]);
   const [
     listaDisciplinasSelecionadas,
@@ -157,6 +169,16 @@ const AvaliacaoForm = ({ match, location }) => {
   const [dataAvaliacao, setDataAvaliacao] = useState();
 
   const removerTagsHtml = texto => texto?.replace(/<\/?[^>]+(>|$)/g, '');
+
+  const tamanhoTextoDescricao = textoComHtml => {
+    const textoLimpo = removerTagsHtml(textoComHtml);
+    const textoComEspacos = textoLimpo?.replaceAll('&nbsp;', ' ');
+    return textoComEspacos.length + 1 - textoComEspacos.split(' ').length;
+  };
+
+  const validaTamanhoCaracteres = () => {
+    return importado ? true : tamanhoTextoDescricao(descricao) <= 500;
+  };
 
   const cadastrarAvaliacao = async dados => {
     const avaliacao = {};
@@ -247,10 +269,6 @@ const AvaliacaoForm = ({ match, location }) => {
     }
   };
 
-  const validaTamanhoCaracteres = () => {
-    return importado ? true : (tamanhoTextoDescricao(descricao) <= 500);
-  };
-
   const categorias = { NORMAL: 1, INTERDISCIPLINAR: 2 };
   const [validacoes, setValidacoes] = useState(undefined);
 
@@ -283,14 +301,6 @@ const AvaliacaoForm = ({ match, location }) => {
     };
     setValidacoes(Yup.object(val));
   };
-
-  const tamanhoTextoDescricao = textoComHtml => {
-    const textoLimpo = removerTagsHtml(textoComHtml);
-    const textoComEspacos = textoLimpo?.replaceAll('&nbsp;', ' ');
-    return (textoComEspacos.length + 1) - textoComEspacos.split(' ').length;
-  }
-
-  const [listaDisciplinas, setListaDisciplinas] = useState([]);
 
   const [listaCategorias, setListaCategorias] = useState([
     { label: 'Normal', value: categorias.NORMAL },
@@ -384,6 +394,7 @@ const AvaliacaoForm = ({ match, location }) => {
       setTemRegencia(true);
       obterDisciplinasRegencia();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [listaDisciplinas, mostrarDisciplinaRegencia]);
 
   const [listaTiposAvaliacao, setListaTiposAvaliacao] = useState([]);
@@ -427,10 +438,11 @@ const AvaliacaoForm = ({ match, location }) => {
     } else {
       validaF5();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const validaInterdisciplinar = categoriaSelecionada => {
-    if (categoriaSelecionada == categorias.INTERDISCIPLINAR) {
+    if (Number(categoriaSelecionada) === categorias.INTERDISCIPLINAR) {
       setCopias([]);
       setDesabilitarCopiarAvaliacao(true);
     } else {
@@ -480,6 +492,7 @@ const AvaliacaoForm = ({ match, location }) => {
       !ehTurmaInfantil(modalidadesFiltroPrincipal, turmaSelecionada)
     )
       obterAvaliacao();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [idAvaliacao]);
 
   useEffect(() => {
@@ -525,11 +538,12 @@ const AvaliacaoForm = ({ match, location }) => {
     const regenciaSelecionada = listaDisciplinasRegencia.filter(
       item => item.selecionada
     );
-    const desabilitar =
-      disciplinaEncontrada?.regencia && !regenciaSelecionada?.length;
+    const desabilitar = !!(
+      disciplinaEncontrada?.regencia && !regenciaSelecionada?.length
+    );
 
     setMostrarDisciplinaRegencia(disciplinaEncontrada?.regencia);
-    setDesabilitarBotaoCadastrar(desabilitar != undefined ? desabilitar : true);
+    setDesabilitarBotaoCadastrar(desabilitar);
   }, [disciplinaSelecionada, listaDisciplinas, listaDisciplinasRegencia]);
 
   useEffect(() => {
@@ -556,6 +570,7 @@ const AvaliacaoForm = ({ match, location }) => {
         );
       });
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [atividadesRegencia, listaDisciplinasRegencia, desabilitarBotaoCadastrar]);
 
   return (

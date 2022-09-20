@@ -90,6 +90,7 @@ const CadastroOcorrencias = ({ match }) => {
         setListaCriancas(resp.data);
       }
     });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -100,6 +101,7 @@ const CadastroOcorrencias = ({ match }) => {
 
   useEffect(() => {
     if (criancasSelecionadas) setModoEdicao(modificouCriancasSelecionadas());
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [criancasSelecionadas]);
 
   useEffect(() => {
@@ -141,6 +143,7 @@ const CadastroOcorrencias = ({ match }) => {
     if (idOcorrencia) {
       obterPorId(idOcorrencia);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [idOcorrencia]);
 
   const validacoes = Yup.object({

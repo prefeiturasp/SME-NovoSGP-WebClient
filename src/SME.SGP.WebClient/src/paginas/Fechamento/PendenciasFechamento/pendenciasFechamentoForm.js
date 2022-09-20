@@ -86,7 +86,7 @@ const PendenciasFechamentoForm = ({ match }) => {
   useEffect(() => {
     const montaBimestre = () => {
       let listaBi = [];
-      if (turmaSelecionada.modalidade == modalidade.EJA) {
+      if (Number(turmaSelecionada.modalidade) === modalidade.EJA) {
         listaBi = [
           { valor: 1, descricao: 'Primeiro bimestre' },
           { valor: 2, descricao: 'Segundo bimestre' },
@@ -288,7 +288,7 @@ const PendenciasFechamentoForm = ({ match }) => {
               somenteConsulta ||
               !permissoesTela.podeAlterar ||
               !situacaoId ||
-              situacaoId == situacaoPendenciaDto.Aprovada
+              Number(situacaoId) === situacaoPendenciaDto.Aprovada
             }
           />
         </>

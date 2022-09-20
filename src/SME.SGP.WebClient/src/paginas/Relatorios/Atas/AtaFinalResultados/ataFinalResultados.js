@@ -83,6 +83,7 @@ const AtaFinalResultados = () => {
         }
       }
     },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [ueId]
   );
 
@@ -127,6 +128,7 @@ const AtaFinalResultados = () => {
       }
       setCarregandoUes(false);
     },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [dreId]
   );
 
@@ -171,6 +173,7 @@ const AtaFinalResultados = () => {
       }
       setCarregandoDres(false);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [anoLetivo]);
 
   const obterTurmas = useCallback(
@@ -205,6 +208,7 @@ const AtaFinalResultados = () => {
         }
       }
     },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [modalidadeId]
   );
 
@@ -235,6 +239,7 @@ const AtaFinalResultados = () => {
       setModalidadeId(undefined);
       setListaModalidades([]);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [ueId]);
 
   useEffect(() => {
@@ -357,6 +362,7 @@ const AtaFinalResultados = () => {
       !turmaId.length ||
       turmaExcecao;
     setDesabilitaVisualizacao(desabilita);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [turmaId, modalidadeId, listaTurmasCompletas]);
 
   const onClickVoltar = () => {
@@ -420,7 +426,7 @@ const AtaFinalResultados = () => {
     setListaSemestre([]);
     setSemestre(undefined);
 
-    if (novaModalidade == modalidade.EJA)
+    if (Number(novaModalidade) === modalidade.EJA)
       obterSemestres(novaModalidade, anoLetivo);
 
     setListaTurmas([]);
@@ -580,7 +586,7 @@ const AtaFinalResultados = () => {
                 disabled={
                   !permissoesTela.podeConsultar ||
                   !modalidadeId ||
-                  modalidadeId != modalidade.EJA ||
+                  Number(modalidadeId) !== modalidade.EJA ||
                   (listaSemestre && listaSemestre.length === 1)
                 }
                 valueSelect={semestre}

@@ -80,6 +80,7 @@ const TipoEventosForm = ({ match }) => {
     if (match && match.params && match.params.id) {
       setIdTipoEvento(match.params.id);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const [possuiEventos, setPossuiEventos] = useState(false);
