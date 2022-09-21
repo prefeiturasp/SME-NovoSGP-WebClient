@@ -85,6 +85,8 @@ const Button = React.forwardRef((props, ref) => {
     }
   `;
 
+  const propsTabIndex = disabled ? { tabIndex: -1 } : {};
+
   return (
     <Btn
       hidden={hidden}
@@ -98,6 +100,7 @@ const Button = React.forwardRef((props, ref) => {
       data-indice={indice}
       id={id}
       ref={ref}
+      {...propsTabIndex}
     >
       {icon ? (
         <Icon
