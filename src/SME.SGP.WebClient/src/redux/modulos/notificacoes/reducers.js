@@ -29,7 +29,7 @@ export default function notificacoes(state = inicial, action) {
         const estaNaLista = draft.notificacoes?.find?.(
           n => n?.codigo === codigo
         );
-        const maisQueCincoNotificacoes = draft.notificacoes?.quantidade > 5;
+        const maisQueCincoNotificacoes = draft?.quantidade > 5;
         const naoLida = estaNaLista?.status === notificacaoStatus.Pendente;
 
         if (maisQueCincoNotificacoes && estaNaLista) {
