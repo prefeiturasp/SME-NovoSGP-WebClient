@@ -411,7 +411,7 @@ const CompensacaoAusenciaForm = ({ match }) => {
     onChangeCampos();
   };
 
-  const onChangeDisciplina = (codigoDisciplina, form) => {
+  const onChangeDisciplina = async (codigoDisciplina, form) => {
     setDisciplinaSelecionada(codigoDisciplina);
     setAlunosAusenciaTurma([]);
     setAlunosAusenciaTurmaOriginal([]);
@@ -420,7 +420,9 @@ const CompensacaoAusenciaForm = ({ match }) => {
     setIdsAlunos([]);
     obterDisciplinasRegencia(codigoDisciplina, listaDisciplinas);
     onChangeCampos();
-    form.setFieldValue('bimestre', '');
+
+    if(form.values.bimestre > 0)
+      await onChangeBimestre(form.values.bimestre,form,codigoDisciplina);
   };
 
   const obterDisciplinas = useCallback(async () => {
@@ -524,16 +526,18 @@ const CompensacaoAusenciaForm = ({ match }) => {
     setAlunosAusenciaTurmaOriginal([]);
   };
 
-  const onChangeBimestre = async (bimestre, form) => {
+  const onChangeBimestre = async (bimestre, form, disciplina = 0) => {
     limparListas();
     const dentroPeriodo = await podeAlterarNoPeriodo(String(bimestre));
     setForaDoPeriodo(!dentroPeriodo);
 
-    if (dentroPeriodo) {
+    if (dentroPeriodo && (disciplina > 0 || form.values.disciplinaId)) {
       let podeEditar = false;
+      let valorDisciplina = disciplina > 0 ? disciplina : form.values.disciplinaId;
+
       const exucutandoCalculoFrequencia = await ServicoCompensacaoAusencia.obterStatusCalculoFrequencia(
         turmaSelecionada.turma,
-        form.values.disciplinaId,
+        valorDisciplina,
         bimestre
       ).catch(e => {
         erros(e);
@@ -555,8 +559,8 @@ const CompensacaoAusenciaForm = ({ match }) => {
           setAlunosAusenciaCompensada([]);
           setIdsAlunosAusenciaCompensadas([]);
           setIdsAlunos([]);
-          if (bimestre && form && form.values.disciplinaId) {
-            obterAlunosComAusencia(form.values.disciplinaId, bimestre);
+          if (bimestre && form && valorDisciplina) {
+            obterAlunosComAusencia(valorDisciplina, bimestre);
           } else {
             setAlunosAusenciaTurma([]);
             setAlunosAusenciaTurmaOriginal([]);
@@ -698,12 +702,6 @@ const CompensacaoAusenciaForm = ({ match }) => {
   };
 
   const onClickCadastrar = async valoresForm => {
-    if (!alunosAusenciaCompensada?.length) {
-      erro(
-        'É necessário selecionar um estudante para realizar a compensação de ausência'
-      );
-      return;
-    }
     setCarregandoGeral(true);
     const paramas = valoresForm;
     paramas.id = idCompensacaoAusencia;
