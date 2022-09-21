@@ -42,6 +42,7 @@ function Calendario({
 }) {
   const [estado, disparar] = useReducer(Reducer, estadoInicial);
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const estadoOrdenado = useMemo(() => ordenarPor(estado?.meses), []);
 
   const onClickMesHandler = useCallback(

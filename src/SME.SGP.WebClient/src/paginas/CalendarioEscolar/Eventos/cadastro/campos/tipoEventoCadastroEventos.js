@@ -27,6 +27,7 @@ const TipoEventoCadastroEventos = ({ form, onChangeCampos, desabilitar }) => {
         form.setFieldValue('letivo', 0);
       }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [listaTipoEvento, ueId]);
 
   const filtraSomenteUE = () =>
@@ -74,6 +75,7 @@ const TipoEventoCadastroEventos = ({ form, onChangeCampos, desabilitar }) => {
     if (dreId && ueId && listaTipoEventoOrigem) {
       filtraTipoEvento(dreId, ueId);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dreId, ueId, listaTipoEventoOrigem]);
 
   useEffect(() => {
@@ -81,6 +83,7 @@ const TipoEventoCadastroEventos = ({ form, onChangeCampos, desabilitar }) => {
       form.setFieldValue('feriadoId', '');
       form.setFieldValue('bimestre', []);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tipoEventoId]);
 
   return (
@@ -94,6 +97,7 @@ const TipoEventoCadastroEventos = ({ form, onChangeCampos, desabilitar }) => {
       label="Tipo evento"
       placeholder="Selecione um tipo"
       disabled={listaTipoEvento?.length === 1 || desabilitar}
+      labelRequired
     />
   );
 };

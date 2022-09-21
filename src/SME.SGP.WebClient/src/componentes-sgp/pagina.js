@@ -7,7 +7,7 @@ const Pagina = () => {
   return (
     <>
       <Navbar />
-      <div className="container-fluid h-100">
+      <div className="h-100" style={{ padding: '0px 32px 0px 32px' }}>
         <Sider />
         <Conteudo />
       </div>

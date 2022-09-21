@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
+import { Col, Row } from 'antd';
 import { aviso, erros, erro, sucesso, confirmar } from '~/servicos/alertas';
 import Card from '~/componentes/card';
 import { EstiloDetalhe } from './detalheNotificacao.css';
@@ -20,6 +21,13 @@ import RotasDto from '~/dtos/rotasDto';
 import { verificaSomenteConsulta } from '~/servicos/servico-navegacao';
 import { setBreadcrumbManual } from '~/servicos/breadcrumb-services';
 import { Loader } from '~/componentes';
+import {
+  SGP_BUTTON_ACEITAR,
+  SGP_BUTTON_LIDA,
+  SGP_BUTTON_RECUSAR,
+} from '~/componentes-sgp/filtro/idsCampos';
+import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
+import BotaoExcluirPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoExcluirPadrao';
 
 const urlTelaNotificacoes = '/notificacoes';
 
@@ -79,6 +87,7 @@ const DetalheNotificacao = ({ match }) => {
   useEffect(() => {
     setBreadcrumbManual(match.url, 'Detalhes', '/notificacoes');
     verificaSomenteConsulta(permissoesTela);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -131,6 +140,7 @@ const DetalheNotificacao = ({ match }) => {
           usuario.rf
         );
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [notificacao]);
 
   const marcarComoLida = async () => {
@@ -235,7 +245,6 @@ const DetalheNotificacao = ({ match }) => {
 
   return (
     <>
-      <Cabecalho pagina="Notificações" />
       <Formik
         enableReinitialize
         initialValues={{
@@ -249,28 +258,22 @@ const DetalheNotificacao = ({ match }) => {
         {form => (
           <Form>
             <Loader loading={carregandoTela} tip="Carregando...">
-              <Card mtop="mt-2">
-                <div className="col-md-2">
-                  <Button
-                    label="Voltar"
-                    color={cores.Colors.Azul}
-                    className="mr-2 float-left"
-                    icon="arrow-left"
-                    border
-                    type="button"
-                    onClick={() => history.push(urlTelaNotificacoes)}
-                  />
-                </div>
-                <div className="col-md-10 d-flex justify-content-end pb-3">
-                  <>
+              <Cabecalho pagina="Notificações">
+                <Row gutter={[8, 8]} type="flex">
+                  <Col>
+                    <BotaoVoltarPadrao
+                      onClick={() => history.push(urlTelaNotificacoes)}
+                    />
+                  </Col>
+                  <Col>
                     <Button
+                      id={SGP_BUTTON_ACEITAR}
                       label="Aceitar"
                       color={cores.Colors.Roxo}
                       disabled={
                         !notificacao.mostrarBotoesDeAprovacao ||
                         !permissoesTela.podeAlterar
                       }
-                      className="mr-2"
                       border={!notificacao.mostrarBotoesDeAprovacao}
                       type="button"
                       onClick={async e => {
@@ -288,7 +291,10 @@ const DetalheNotificacao = ({ match }) => {
                         form.validateForm().then(() => form.handleSubmit(e));
                       }}
                     />
+                  </Col>
+                  <Col>
                     <Button
+                      id={SGP_BUTTON_RECUSAR}
                       label="Recusar"
                       color={cores.Colors.Roxo}
                       border
@@ -296,7 +302,6 @@ const DetalheNotificacao = ({ match }) => {
                         !notificacao.mostrarBotoesDeAprovacao ||
                         !permissoesTela.podeAlterar
                       }
-                      className="mr-2"
                       type="button"
                       onClick={async e => {
                         setValidacoes(
@@ -313,30 +318,32 @@ const DetalheNotificacao = ({ match }) => {
                         form.validateForm().then(() => form.handleSubmit(e));
                       }}
                     />
-                  </>
-                  <Button
-                    label="Marcar como lida"
-                    color={cores.Colors.Azul}
-                    border
-                    className="mr-2"
-                    disabled={
-                      !notificacao.mostrarBotaoMarcarComoLido ||
-                      !permissoesTela.podeAlterar
-                    }
-                    onClick={marcarComoLida}
-                  />
-                  <Button
-                    label="Excluir"
-                    color={cores.Colors.Vermelho}
-                    border
-                    className="mr-2"
-                    disabled={
-                      !notificacao.mostrarBotaoRemover ||
-                      !permissoesTela.podeExcluir
-                    }
-                    onClick={excluir}
-                  />
-                </div>
+                  </Col>
+                  <Col>
+                    <Button
+                      id={SGP_BUTTON_LIDA}
+                      label="Marcar como lida"
+                      color={cores.Colors.Azul}
+                      border
+                      disabled={
+                        !notificacao.mostrarBotaoMarcarComoLido ||
+                        !permissoesTela.podeAlterar
+                      }
+                      onClick={marcarComoLida}
+                    />
+                  </Col>
+                  <Col>
+                    <BotaoExcluirPadrao
+                      disabled={
+                        !notificacao.mostrarBotaoRemover ||
+                        !permissoesTela.podeExcluir
+                      }
+                      onClick={excluir}
+                    />
+                  </Col>
+                </Row>
+              </Cabecalho>
+              <Card>
                 <EstiloDetalhe>
                   <div className="col-xs-12 col-md-12 col-lg-12">
                     <div className="row mg-bottom">

@@ -1,4 +1,4 @@
-import moment from 'moment';
+/* eslint-disable react/prop-types */
 import React, { useState, useEffect } from 'react';
 import { Container } from './auditoria.css';
 

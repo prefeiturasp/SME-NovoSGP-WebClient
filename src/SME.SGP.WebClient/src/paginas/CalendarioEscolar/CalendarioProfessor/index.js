@@ -4,7 +4,7 @@ import React, { useEffect, useState, useCallback, useReducer } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
 // Componentes
-import { Loader, Card, Grid, ButtonGroup } from '~/componentes';
+import { Loader, Card, Grid } from '~/componentes';
 
 // Componentes Internos
 import DropDownTipoCalendario from './componentes/DropDownTipoCalendario';
@@ -22,7 +22,7 @@ import {
 // Serviços
 import CalendarioProfessorServico from '~/servicos/Paginas/CalendarioProfessor';
 import { erro } from '~/servicos/alertas';
-import history from '~/servicos/history';
+import { history } from '~/servicos';
 
 // Reducer
 import Reducer, { estadoInicial } from './reducer';
@@ -36,6 +36,7 @@ import {
 // DTOs
 import RotasDTO from '~/dtos/rotasDto';
 import { selecionaDia } from '~/redux/modulos/calendarioProfessor/actions';
+import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
 
 function CalendarioProfessor() {
   const dispatch = useDispatch();
@@ -107,7 +108,7 @@ function CalendarioProfessor() {
             tipoCalendarioId,
             dre: turmaSelecionada.dre,
             dreId: turmaSelecionada.dreId,
-            ue: turmaSelecionada.unidadeEscolar,            
+            ue: turmaSelecionada.unidadeEscolar,
             turma: turmaSelecionada.turma,
             anoLetivo: turmaSelecionada.anoLetivo,
           });
@@ -143,6 +144,7 @@ function CalendarioProfessor() {
       }
       buscarEventosDias();
     },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [
       tipoCalendarioId,
       turmaSelecionada.anoLetivo,
@@ -165,11 +167,16 @@ function CalendarioProfessor() {
   return (
     <>
       <AlertaSelecionarTurma />
-      <Cabecalho pagina="Calendário do professor" />
       <Loader loading={false}>
+        <Cabecalho pagina="Calendário do professor">
+          <BotaoVoltarPadrao
+            onClick={() => {
+              history.push('/');
+            }}
+          />
+        </Cabecalho>
         <Card>
-          <ButtonGroup onClickVoltar={() => history.push('/')} />
-          <Grid cols={4} className="p-0 m-0">
+          <Grid cols={4} className="m-0">
             <DropDownTipoCalendario
               turmaSelecionada={turmaSelecionada.turma}
               onChange={valor => onChangeTipoCalendarioIdHandler(valor)}
@@ -177,20 +184,18 @@ function CalendarioProfessor() {
             />
           </Grid>
           <Grid cols={12}>
-            <Linha className="row pt-2">
-              <Grid cols={12}>
-                <Calendario
-                  eventos={estado.eventos}
-                  onClickMes={mes => onClickMesHandler(mes)}
-                  onClickDia={dia => onClickDiaHandler(dia)}
-                  carregandoCalendario={estado.carregandoCalendario}
-                  carregandoMes={estado.carregandoMes}
-                  carregandoDia={estado.carregandoDia}
-                  permissaoTela={permissaoTela}
-                  tipoCalendarioId={tipoCalendarioId}
-                  turmaSelecionada={turmaSelecionada}
-                />
-              </Grid>
+            <Linha className="pt-2">
+              <Calendario
+                eventos={estado.eventos}
+                onClickMes={mes => onClickMesHandler(mes)}
+                onClickDia={dia => onClickDiaHandler(dia)}
+                carregandoCalendario={estado.carregandoCalendario}
+                carregandoMes={estado.carregandoMes}
+                carregandoDia={estado.carregandoDia}
+                permissaoTela={permissaoTela}
+                tipoCalendarioId={tipoCalendarioId}
+                turmaSelecionada={turmaSelecionada}
+              />
             </Linha>
           </Grid>
         </Card>

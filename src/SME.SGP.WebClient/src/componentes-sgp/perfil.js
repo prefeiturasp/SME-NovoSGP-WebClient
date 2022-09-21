@@ -1,4 +1,3 @@
-import PropTypes from 'prop-types';
 import React, { useLayoutEffect, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 import styled from 'styled-components';
@@ -21,6 +20,7 @@ import ServicoDashboard from '~/servicos/Paginas/Dashboard/ServicoDashboard';
 import { validarAcaoTela } from '~/utils';
 
 const Perfil = props => {
+  // eslint-disable-next-line react/prop-types
   const { Botao, Icone, Texto } = props;
   const [ocultaPerfis, setarOcultaPerfis] = useState(true);
   const perfilStore = useSelector(e => e.perfil);
@@ -226,6 +226,7 @@ const Perfil = props => {
         <table>
           <tbody>
             {perfilStore.perfis.map(item => (
+              // eslint-disable-next-line jsx-a11y/no-access-key
               <Item
                 key={item.codigoPerfil}
                 onClick={onClickPerfil}
@@ -253,12 +254,6 @@ const Perfil = props => {
       </ItensPerfil>
     </div>
   );
-};
-
-Perfil.propTypes = {
-  Botao: PropTypes.object.isRequired,
-  Icone: PropTypes.object.isRequired,
-  Texto: PropTypes.object.isRequired,
 };
 
 export default Perfil;

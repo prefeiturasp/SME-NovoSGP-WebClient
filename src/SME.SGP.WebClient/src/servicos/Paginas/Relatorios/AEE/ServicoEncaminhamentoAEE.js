@@ -268,7 +268,9 @@ class ServicoEncaminhamentoAEE {
                 }
                 break;
               default:
-                questao.resposta = JSON.parse(JSON.stringify(campos[key] || ''));
+                questao.resposta = JSON.parse(
+                  JSON.stringify(campos[key] || '')
+                );
                 break;
             }
 
@@ -309,7 +311,11 @@ class ServicoEncaminhamentoAEE {
               questao?.resposta?.length
             ) {
               if (!Array.isArray(questao?.resposta))
-                questao.resposta = questao.resposta.replace('[', '').replace(']', '').split(',').map(Number);
+                questao.resposta = questao.resposta
+                  .replace('[', '')
+                  .replace(']', '')
+                  .split(',')
+                  .map(Number);
               questao.resposta.forEach(valorSelecionado => {
                 if (valorSelecionado) {
                   if (questaoAtual?.resposta?.length) {

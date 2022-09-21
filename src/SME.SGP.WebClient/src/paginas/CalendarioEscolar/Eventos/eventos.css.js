@@ -56,11 +56,4 @@ export const LabelAguardandoAprovacao = styled.span`
   color: ${Base.Branco};
   font-weight: bold;
   padding: 0px 5px 0px 5px;
-  margin-right: 16px;
-`;
-
-export const ContainerCabecalhoCadastroEvento = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: baseline;
 `;

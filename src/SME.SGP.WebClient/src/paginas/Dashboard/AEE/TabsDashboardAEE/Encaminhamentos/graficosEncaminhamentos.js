@@ -30,7 +30,7 @@ const GraficosEncaminhamentos = props => {
 };
 
 GraficosEncaminhamentos.propTypes = {
-  anoLetivo: PropTypes.oneOfType(PropTypes.any),
+  anoLetivo: PropTypes.oneOfType([PropTypes.any]),
   dreId: PropTypes.string,
   ueId: PropTypes.string,
   dreCodigo: PropTypes.string,

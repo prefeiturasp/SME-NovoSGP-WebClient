@@ -92,6 +92,7 @@ const TabsComponentesCorriculares = props => {
         );
       }
     },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [
       dispatch,
       dadosBimestre,
@@ -118,8 +119,9 @@ const TabsComponentesCorriculares = props => {
             if (
               !listaComponentesCheck?.filter(
                 f =>
-                  f.componenteId == item.codigoComponenteCurricular &&
-                  f.bimestreId == dadosBimestre.id
+                  String(f.componenteId) ===
+                    String(item.codigoComponenteCurricular) &&
+                  Number(f.bimestreId) === Number(dadosBimestre.id)
               ).length
             ) {
               const {
@@ -146,9 +148,12 @@ const TabsComponentesCorriculares = props => {
           });
           dispatch(setExibirLoaderPlanoAnual(false));
         }
-      } catch (error) {}
+      } catch (error) {
+        console.log(error);
+      }
     }
     verificarComponentesComObjetivos();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     listaComponentesCurricularesPlanejamento,
     dadosBimestre,
@@ -177,8 +182,8 @@ const TabsComponentesCorriculares = props => {
       if (
         listaComponentesCheck.filter(
           item =>
-            item.componenteId == codigoComponenteCurricular &&
-            item.bimestreId == dadosBimestre.id
+            String(item.componenteId) === String(codigoComponenteCurricular) &&
+            Number(item.bimestreId) === Number(dadosBimestre.id)
         ).length
       ) {
         return (

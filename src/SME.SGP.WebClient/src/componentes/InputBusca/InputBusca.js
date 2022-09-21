@@ -1,11 +1,18 @@
-import React, { useState } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { Input, Button } from 'antd';
 import { InputEstilo } from './estilo';
 import { Label } from '~/componentes';
 
-const InputBusca = ({ label, placeholder, onClick, onPressEnter, valor, onChange, disabled }) => {
-
+const InputBusca = ({
+  label,
+  placeholder,
+  onClick,
+  onPressEnter,
+  valor,
+  onChange,
+  disabled,
+}) => {
   return (
     <InputEstilo>
       <Label text={label} />

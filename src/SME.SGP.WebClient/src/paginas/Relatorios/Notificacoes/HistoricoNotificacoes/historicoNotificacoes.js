@@ -6,9 +6,8 @@ import {
   SelectComponent,
 } from '~/componentes';
 import { Cabecalho } from '~/componentes-sgp';
-import Button from '~/componentes/button';
+import BotoesAcaoRelatorio from '~/componentes-sgp/botoesAcaoRelatorio';
 import Card from '~/componentes/card';
-import { Colors } from '~/componentes/colors';
 import { OPCAO_TODOS } from '~/constantes/constantes';
 import { URL_HOME } from '~/constantes/url';
 import modalidade from '~/dtos/modalidade';
@@ -244,7 +243,7 @@ const HistoricoNotificacoes = () => {
 
   useEffect(() => {
     if (modalidadeId && anoLetivo) {
-      if (modalidadeId == modalidade.EJA) {
+      if (Number(modalidadeId) === modalidade.EJA) {
         obterSemestres(modalidadeId, anoLetivo);
       } else {
         setSemestre(undefined);
@@ -259,7 +258,7 @@ const HistoricoNotificacoes = () => {
   useEffect(() => {
     const desabilitar = !anoLetivo || !codigoDre || !codigoUe;
 
-    if (modalidadeId == modalidade.EJA) {
+    if (Number(modalidadeId) === modalidade.EJA) {
       setDesabilitarBtnGerar(!semestre || desabilitar);
     } else {
       setDesabilitarBtnGerar(desabilitar);
@@ -450,42 +449,18 @@ const HistoricoNotificacoes = () => {
 
   return (
     <>
-      <Cabecalho pagina="Relatório de notificações" />
+      <Cabecalho pagina="Relatório de notificações">
+        <BotoesAcaoRelatorio
+          onClickVoltar={onClickVoltar}
+          onClickCancelar={onClickCancelar}
+          onClickGerar={onClickGerar}
+          desabilitarBtnGerar={desabilitarBtnGerar}
+        />
+      </Cabecalho>
       <Loader loading={carregandoGeral}>
         <Card>
           <div className="col-md-12">
             <div className="row">
-              <div className="col-md-12 d-flex justify-content-end pb-4">
-                <Button
-                  id="btn-voltar"
-                  label="Voltar"
-                  icon="arrow-left"
-                  color={Colors.Azul}
-                  border
-                  className="mr-2"
-                  onClick={onClickVoltar}
-                />
-                <Button
-                  id="btn-cancelar"
-                  label="Cancelar"
-                  color={Colors.Roxo}
-                  border
-                  bold
-                  className="mr-3"
-                  onClick={() => onClickCancelar()}
-                />
-                <Button
-                  id="btn-gerar"
-                  icon="print"
-                  label="Gerar"
-                  color={Colors.Azul}
-                  border
-                  bold
-                  className="mr-2"
-                  onClick={() => onClickGerar()}
-                  disabled={desabilitarBtnGerar}
-                />
-              </div>
               <div className="col-sm-12 col-md-6 col-lg-3 col-xl-2 mb-2">
                 <SelectComponent
                   label="Ano Letivo"
@@ -544,7 +519,7 @@ const HistoricoNotificacoes = () => {
                   label="Semestre"
                   disabled={
                     !modalidadeId ||
-                    modalidadeId != modalidade.EJA ||
+                    Number(modalidadeId) !== modalidade.EJA ||
                     (listaSemestre && listaSemestre.length === 1)
                   }
                   valueSelect={semestre}

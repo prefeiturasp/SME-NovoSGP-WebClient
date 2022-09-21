@@ -3,9 +3,8 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { CheckboxComponent, Loader, SelectComponent } from '~/componentes';
 import { Cabecalho, FiltroHelper } from '~/componentes-sgp';
-import Button from '~/componentes/button';
+import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
 import Card from '~/componentes/card';
-import { Colors } from '~/componentes/colors';
 import { ANO_INICIO_INFANTIL, OPCAO_TODOS } from '~/constantes/constantes';
 import { URL_HOME } from '~/constantes/url';
 import AbrangenciaServico from '~/servicos/Abrangencia';
@@ -107,6 +106,7 @@ const DashboardRegistroItinerancia = () => {
         setListaUes([]);
       }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [consideraHistorico, anoLetivo, dre, usuario.possuiPerfilSme]);
 
   useEffect(() => {
@@ -206,22 +206,12 @@ const DashboardRegistroItinerancia = () => {
 
   return (
     <>
-      <Cabecalho pagina="Dashboard registro de itinerância" />
+      <Cabecalho pagina="Dashboard registro de itinerância">
+        <BotaoVoltarPadrao onClick={() => onClickVoltar()} />
+      </Cabecalho>
 
       <Card>
         <div className="col-md-12">
-          <div className="row">
-            <div className="col-md-12 d-flex justify-content-end pb-4">
-              <Button
-                id="btn-voltar"
-                label="Voltar"
-                icon="arrow-left"
-                color={Colors.Azul}
-                border
-                onClick={onClickVoltar}
-              />
-            </div>
-          </div>
           <div className="row">
             <div className="col-sm-12 col-md-6 col-lg-4 col-xl-4 mb-2">
               <CheckboxComponent

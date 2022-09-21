@@ -1,6 +1,7 @@
 import React, { useMemo, useCallback } from 'react';
 import shortid from 'shortid';
 import t from 'prop-types';
+import { useLocation } from 'react-router-dom';
 
 // Ant
 import { Tooltip } from 'antd';
@@ -63,6 +64,7 @@ function DiaCompleto({
 
   const usuario = useSelector(state => state.usuario);
   const { turmaSelecionada } = usuario;
+  const location = useLocation();
 
   const onClickNovaAulaHandler = useCallback(
     diaSelecionado => {
@@ -70,6 +72,7 @@ function DiaCompleto({
         `${RotasDTO.CADASTRO_DE_AULA}/novo/${tipoCalendarioId}/${dadosDia.dados.somenteAulaReposicao}?diaAula=${diaSelecionado}`
       );
     },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [tipoCalendarioId]
   );
 
@@ -89,14 +92,19 @@ function DiaCompleto({
           podeEditarAula
         )
       );
-      history.push(`${RotasDTO.FREQUENCIA_PLANO_AULA}`);
+      history.push({
+        pathname: `${RotasDTO.FREQUENCIA_PLANO_AULA}`,
+        state: { rotaOrigem: location?.pathname },
+      });
     },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     []
   );
 
   const onClickAula = useCallback(item => {
     if (item.ehAula)
       history.push(`${RotasDTO.CADASTRO_DE_AULA}/editar/${item.aulaId}/${dadosDia.dados.somenteAulaReposicao}`);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const obterDescricoesPendencias = pendencias => {

@@ -186,10 +186,10 @@ const CampoObservacao = props => {
 CampoObservacao.propTypes = {
   salvarObservacao: PropTypes.func,
   esconderCaixaExterna: PropTypes.bool,
-  podeIncluir: PropTypes.oneOfType(PropTypes.object),
+  podeIncluir: PropTypes.oneOfType([PropTypes.object]),
   obterUsuariosNotificadosDiarioBordo: PropTypes.bool,
   usarLocalizadorFuncionario: PropTypes.bool,
-  parametrosLocalizadorFuncionario: PropTypes.oneOfType(PropTypes.object),
+  parametrosLocalizadorFuncionario: PropTypes.oneOfType([PropTypes.object]),
   desabilitarBotaoNotificar: PropTypes.bool,
   diarioBordoId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   mudarObservacao: PropTypes.func,

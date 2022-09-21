@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
+import { Col, Row } from 'antd';
 import {
   Button,
   CampoNumero,
@@ -25,6 +26,11 @@ import {
   ServicoFiltroRelatorio,
   ServicoComponentesCurriculares,
 } from '~/servicos';
+import {
+  SGP_BUTTON_CANCELAR,
+  SGP_BUTTON_GERAR,
+} from '~/componentes-sgp/filtro/idsCampos';
+import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
 
 const RelatorioFrequencia = () => {
   const [anoLetivo, setAnoLetivo] = useState(undefined);
@@ -307,6 +313,7 @@ const RelatorioFrequencia = () => {
       todosAnosEscolares = listaAnosEscolares.map(item => item.valor);
     }
     return todosAnosEscolares;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [anosEscolares]);
 
   const escolherChamadaEndpointComponeteCurricular = useCallback(() => {
@@ -314,7 +321,7 @@ const RelatorioFrequencia = () => {
       turmasCodigo === '-99' ||
       turmasCodigo?.find(item => item === OPCAO_TODOS) ||
       turmasCodigo === undefined;
-    
+
     if (ehInfantil) {
       const turmas = ehOpcaoTodas
         ? listaTurmas
@@ -372,7 +379,7 @@ const RelatorioFrequencia = () => {
         if (ehTurma && lista.length > 1) {
           lista.unshift({ desc: 'Todos', valor: OPCAO_TODOS });
         }
- 
+
         setListaComponenteCurricular(lista);
         if (lista?.length === 1) {
           setComponentesCurriculares([lista[0].valor]);
@@ -702,44 +709,40 @@ const RelatorioFrequencia = () => {
 
   return (
     <>
-      <Cabecalho pagina="Frequência" classes="mb-2" />
       <Loader loading={carregandoGeral}>
+        <Cabecalho pagina="Frequência">
+          <Row gutter={[8, 8]} type="flex">
+            <Col>
+              <BotaoVoltarPadrao onClick={() => onClickVoltar()} />
+            </Col>
+            <Col>
+              <Button
+                id={SGP_BUTTON_CANCELAR}
+                label="Cancelar"
+                color={Colors.Azul}
+                border
+                bold
+                onClick={() => onClickCancelar()}
+              />
+            </Col>
+            <Col>
+              <Button
+                id={SGP_BUTTON_GERAR}
+                icon="print"
+                label="Gerar"
+                color={Colors.Roxo}
+                border
+                bold
+                onClick={() => onClickGerar()}
+                disabled={desabilitarBtnGerar}
+              />
+            </Col>
+          </Row>
+        </Cabecalho>
         <Card>
-          <div className="col-md-12 p-0">
-            <div className="row">
-              <div className="col-md-12 d-flex justify-content-end pb-4">
-                <Button
-                  id="btn-voltar-frequencia"
-                  label="Voltar"
-                  icon="arrow-left"
-                  color={Colors.Azul}
-                  border
-                  className="mr-2"
-                  onClick={onClickVoltar}
-                />
-                <Button
-                  id="btn-cancelar-frequencia"
-                  label="Cancelar"
-                  color={Colors.Azul}
-                  border
-                  bold
-                  className="mr-3"
-                  onClick={() => onClickCancelar()}
-                />
-                <Button
-                  id="btn-gerar-frequencia"
-                  icon="print"
-                  label="Gerar"
-                  color={Colors.Roxo}
-                  border
-                  bold
-                  onClick={() => onClickGerar()}
-                  disabled={desabilitarBtnGerar}
-                />
-              </div>
-            </div>
+          <div className="col-md-12">
             <div className="row my-3">
-              <div className="col-sm-12 col-md-6 col-lg-3 col-xl-2 pr-0">
+              <div className="col-sm-12 col-md-6 col-lg-3 col-xl-2">
                 <Loader loading={carregandoAnosLetivos} ignorarTip>
                   <SelectComponent
                     label="Ano Letivo"
@@ -753,7 +756,7 @@ const RelatorioFrequencia = () => {
                   />
                 </Loader>
               </div>
-              <div className="col-sm-12 col-md-6 col-lg-9 col-xl-5 pr-0">
+              <div className="col-sm-12 col-md-6 col-lg-9 col-xl-5">
                 <Loader loading={carregandoDres} ignorarTip>
                   <SelectComponent
                     label="DRE"
@@ -785,7 +788,7 @@ const RelatorioFrequencia = () => {
               </div>
             </div>
             <div className="row mb-3">
-              <div className="col-sm-12 col-md-4 pr-0">
+              <div className="col-sm-12 col-md-4">
                 <Loader loading={carregandoModalidade} ignorarTip>
                   <SelectComponent
                     label="Modalidade"
@@ -799,7 +802,7 @@ const RelatorioFrequencia = () => {
                   />
                 </Loader>
               </div>
-              <div className="col-sm-12 col-md-4 pr-0">
+              <div className="col-sm-12 col-md-4">
                 <Loader loading={carregandoSemestres} ignorarTip>
                   <SelectComponent
                     lista={listaSemestre}
@@ -836,7 +839,7 @@ const RelatorioFrequencia = () => {
               </div>
             </div>
             <div className="row mb-3">
-              <div className="col-sm-12 col-md-4 pr-0">
+              <div className="col-sm-12 col-md-4">
                 <Loader loading={carregandoAnosEscolares} ignorarTip>
                   <SelectComponent
                     lista={listaAnosEscolares}
@@ -861,7 +864,7 @@ const RelatorioFrequencia = () => {
                   />
                 </Loader>
               </div>
-              <div className="col-sm-12 col-md-4 pr-0">
+              <div className="col-sm-12 col-md-4">
                 <RadioGroupButton
                   label="Listar turmas de programa"
                   opcoes={opcoesListarTurmasDePrograma}
@@ -899,7 +902,7 @@ const RelatorioFrequencia = () => {
             </div>
 
             <div className="row mb-3">
-              <div className="col-sm-12 col-md-4 pr-0">
+              <div className="col-sm-12 col-md-4">
                 <Loader loading={carregandoComponentesCurriculares} ignorarTip>
                   <SelectComponent
                     lista={listaComponenteCurricular}
@@ -920,7 +923,7 @@ const RelatorioFrequencia = () => {
                   />
                 </Loader>
               </div>
-              <div className="col-sm-12 col-md-4 pr-0">
+              <div className="col-sm-12 col-md-4">
                 <Loader loading={carregandoBimestres} ignorarTip>
                   <SelectComponent
                     lista={listaBimestre}
@@ -948,7 +951,7 @@ const RelatorioFrequencia = () => {
               </div>
             </div>
             <div className="row mb-3">
-              <div className="col-sm-12 col-md-4 pr-0">
+              <div className="col-sm-12 col-md-4">
                 <CampoNumero
                   onChange={onChangeComparacao}
                   value={valorCondicao}
@@ -960,7 +963,7 @@ const RelatorioFrequencia = () => {
                   disabled={condicao === OPCAO_TODOS_ESTUDANTES}
                 />
               </div>
-              <div className="col-sm-12 col-md-4 pr-0">
+              <div className="col-sm-12 col-md-4">
                 <RadioGroupButton
                   label="Formato"
                   opcoes={opcoesListaFormatos}

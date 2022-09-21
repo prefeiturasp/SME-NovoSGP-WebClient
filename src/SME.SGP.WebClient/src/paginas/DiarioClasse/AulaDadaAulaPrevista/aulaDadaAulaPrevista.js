@@ -1,7 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Auditoria, Colors, Loader } from '~/componentes';
+import { Cabecalho } from '~/componentes-sgp';
 import AlertaModalidadeInfantil from '~/componentes-sgp/AlertaModalidadeInfantil/alertaModalidadeInfantil';
+import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
+import {
+  SGP_BUTTON_CANCELAR,
+  SGP_BUTTON_SALVAR,
+} from '~/componentes-sgp/filtro/idsCampos';
 import Alert from '~/componentes/alert';
 import Button from '~/componentes/button';
 import Card from '~/componentes/card';
@@ -15,7 +21,6 @@ import history from '~/servicos/history';
 import ServicoDisciplina from '~/servicos/Paginas/ServicoDisciplina';
 import { verificaSomenteConsulta } from '~/servicos/servico-navegacao';
 import { ehTurmaInfantil } from '~/servicos/Validacoes/validacoesInfatil';
-import { Titulo, TituloAno } from './aulaDadaAulaPrevista.css';
 import ListaAulasPorBimestre from './ListaAulasPorBimestre/ListaAulasPorBimestre';
 
 const AulaDadaAulaPrevista = () => {
@@ -24,10 +29,8 @@ const AulaDadaAulaPrevista = () => {
   const turmaId = turmaSelecionada ? turmaSelecionada.turma : 0;
   const periodo = turmaSelecionada ? turmaSelecionada.periodo : 0;
   const { modalidade } = turmaSelecionada;
-  const anoLetivo = turmaSelecionada ? turmaSelecionada.anoLetivo : 0;
   const [desabilitarDisciplina, setDesabilitarDisciplina] = useState(false);
   const [listaDisciplinas, setListaDisciplinas] = useState([]);
-  const [disciplinaSelecionada, setDisciplinaSelecionada] = useState(undefined);
   const [modoEdicao, setModoEdicao] = useState(false);
   const [disciplinaIdSelecionada, setDisciplinaIdSelecionada] = useState(
     undefined
@@ -60,7 +63,6 @@ const AulaDadaAulaPrevista = () => {
       setListaDisciplinas(disciplinas.data);
       if (disciplinas.data && disciplinas.data.length === 1) {
         const disciplina = disciplinas.data[0];
-        setDisciplinaSelecionada(disciplina);
         onChangeDisciplinas(disciplina.codigoComponenteCurricular);
         setDesabilitarDisciplina(true);
       }
@@ -76,6 +78,7 @@ const AulaDadaAulaPrevista = () => {
       setDisciplinaIdSelecionada(undefined);
       setListaDisciplinas([]);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [turmaSelecionada, modalidade, modalidadesFiltroPrincipal]);
 
   const perguntaAoSalvar = async () => {
@@ -269,15 +272,29 @@ const AulaDadaAulaPrevista = () => {
         </Grid>
       ) : null}
       <AlertaModalidadeInfantil />
-      <Grid cols={12} className="p-0">
-        <Titulo>
-          Aula prevista X Aula dada
-          <TituloAno>
-            {' '}
-            {` / ${anoLetivo || new Date().getFullYear()}`}{' '}
-          </TituloAno>{' '}
-        </Titulo>{' '}
-      </Grid>{' '}
+      <Cabecalho pagina="Aula prevista X Aula dada">
+        <>
+          <BotaoVoltarPadrao className="mr-2" onClick={() => onClickVoltar()} />
+          <Button
+            id={SGP_BUTTON_CANCELAR}
+            label="Cancelar"
+            color={Colors.Roxo}
+            border
+            className="mr-2"
+            onClick={onClickCancelar}
+            disabled={!modoEdicao || somenteConsulta}
+          />
+          <Button
+            id={SGP_BUTTON_SALVAR}
+            label="Salvar"
+            color={Colors.Roxo}
+            border
+            bold
+            onClick={onClickSalvar}
+            disabled={!modoEdicao || somenteConsulta}
+          />
+        </>
+      </Cabecalho>
       <Card>
         <div className="col-md-12">
           <div className="row">
@@ -292,33 +309,6 @@ const AulaDadaAulaPrevista = () => {
                 onChange={onChangeDisciplinas}
                 placeholder="Selecione um componente curricular"
                 disabled={desabilitarDisciplina || !turmaSelecionada.turma}
-              />
-            </div>
-            <div className="col-sm-12 col-lg-8 col-md-8 d-flex justify-content-end pb-4">
-              <Button
-                label="Voltar"
-                icon="arrow-left"
-                color={Colors.Azul}
-                border
-                className="mr-2"
-                onClick={onClickVoltar}
-              />
-              <Button
-                label="Cancelar"
-                color={Colors.Roxo}
-                border
-                className="mr-2"
-                onClick={onClickCancelar}
-                disabled={!modoEdicao || somenteConsulta}
-              />
-              <Button
-                label="Salvar"
-                color={Colors.Roxo}
-                border
-                bold
-                className="mr-2"
-                onClick={onClickSalvar}
-                disabled={!modoEdicao || somenteConsulta}
               />
             </div>
             <div className="col-md-12">

@@ -2,10 +2,8 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 
 import {
-  Button,
   Card,
   CheckboxComponent,
-  Colors,
   Loader,
   RadioGroupButton,
   SelectComponent,
@@ -15,6 +13,7 @@ import {
   Cabecalho,
   FiltroHelper,
 } from '~/componentes-sgp';
+import BotoesAcaoRelatorio from '~/componentes-sgp/botoesAcaoRelatorio';
 import { OPCAO_TODOS } from '~/constantes/constantes';
 
 import { ModalidadeDTO } from '~/dtos';
@@ -436,47 +435,18 @@ const RelatorioDevolutivas = () => {
   return (
     <Loader loading={exibirLoaderGeral}>
       {naoEhInfantil && (
-        <AlertaPermiteSomenteTurmaInfantil
-          marginBottom={3}
-          exibir={naoEhInfantil}
-        />
+        <AlertaPermiteSomenteTurmaInfantil exibir={naoEhInfantil} />
       )}
-      <Cabecalho pagina="Relatório de devolutivas" />
+      <Cabecalho pagina="Relatório de devolutivas">
+        <BotoesAcaoRelatorio
+          onClickVoltar={onClickVoltar}
+          onClickCancelar={onClickCancelar}
+          onClickGerar={gerar}
+          desabilitarBtnGerar={desabilitarGerar}
+        />
+      </Cabecalho>
       <Card>
-        <div className="col-md-12 p-0">
-          <div className="row mb-5">
-            <div className="col-sm-12 d-flex justify-content-end">
-              <Button
-                id="btn-voltar"
-                label="Voltar"
-                icon="arrow-left"
-                color={Colors.Azul}
-                border
-                className="mr-2"
-                onClick={onClickVoltar}
-              />
-              <Button
-                id="btn-cancelar"
-                label="Cancelar"
-                color={Colors.Roxo}
-                border
-                bold
-                className="mr-2"
-                onClick={onClickCancelar}
-              />
-              <Button
-                id="btn-gerar"
-                icon="print"
-                label="Gerar"
-                color={Colors.Azul}
-                border
-                bold
-                className="mr-0"
-                onClick={gerar}
-                disabled={desabilitarGerar}
-              />
-            </div>
-          </div>
+        <div className="col-md-12">
           <div className="row mb-2">
             <div className="col-sm-12">
               <CheckboxComponent

@@ -53,7 +53,7 @@ CampoTipoFreqSomenteLeitura.propTypes = {
   id: PropTypes.string,
   valor: PropTypes.string,
   className: PropTypes.string,
-  style: PropTypes.oneOfType(PropTypes.object),
+  style: PropTypes.oneOfType([PropTypes.object]),
   desabilitar: PropTypes.bool,
 };
 

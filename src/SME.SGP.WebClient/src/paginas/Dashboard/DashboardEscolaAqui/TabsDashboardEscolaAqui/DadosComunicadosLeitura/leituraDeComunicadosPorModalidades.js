@@ -91,6 +91,7 @@ const LeituraDeComunicadosPorModalidades = props => {
         obterDadosDeLeituraDeComunicadosAgrupadosPorModalidade(dadosComunicado);
       }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [comunicado, modoVisualizacao, listaComunicado]);
 
   return dadosDeLeituraDeComunicadosAgrupadosPorModalidade?.length ? (

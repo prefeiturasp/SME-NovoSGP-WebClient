@@ -132,14 +132,14 @@ const AusenciasEstudante = props => {
   );
 };
 
-AusenciasEstudante.defaultProps = {
+AusenciasEstudante.propTypes = {
   indexLinha: PropTypes.number,
   dados: PropTypes.oneOfType([PropTypes.array]),
   codigoTurma: PropTypes.oneOfType([PropTypes.any]),
   anoLetivo: PropTypes.oneOfType([PropTypes.any]),
 };
 
-AusenciasEstudante.propTypes = {
+AusenciasEstudante.defaultProps = {
   indexLinha: null,
   dados: [],
   codigoTurma: '',

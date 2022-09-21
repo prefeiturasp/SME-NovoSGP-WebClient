@@ -278,7 +278,7 @@ const TabelaAlunosConselho = props => {
 };
 
 TabelaAlunosConselho.propTypes = {
-  dadosAlunos: PropTypes.oneOfType(PropTypes.array),
+  dadosAlunos: PropTypes.oneOfType([PropTypes.array]),
   turmaId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   bimestre: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
 };

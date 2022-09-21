@@ -28,6 +28,7 @@ function UeDropDown({ form, onChange, dreId }) {
     } else {
       setListaUes([]);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dreId]);
 
   useEffect(() => {
@@ -35,6 +36,7 @@ function UeDropDown({ form, onChange, dreId }) {
       form.setFieldValue('ueId', listaUes[0].valor);
       onChange(listaUes[0].valor);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [listaUes]);
 
   return (

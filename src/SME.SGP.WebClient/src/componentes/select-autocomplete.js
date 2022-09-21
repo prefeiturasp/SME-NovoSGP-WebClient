@@ -62,6 +62,7 @@ const SelectAutocomplete = ({
   form,
   temErro,
   mensagemErro,
+  labelRequired,
 }) => {
   const [itensFiltrados, setItensFiltrados] = useState(lista);
 
@@ -110,6 +111,7 @@ const SelectAutocomplete = ({
     } else {
       filtrar(value);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [value]);
 
   const campoComValidacoes = () => (
@@ -166,7 +168,9 @@ const SelectAutocomplete = ({
 
   return (
     <Container>
-      {!hideLabel && <Label text={label} control={name} />}
+      {!hideLabel && (
+        <Label text={label} control={name} isRequired={labelRequired} />
+      )}
       {form ? campoComValidacoes() : campoSemValidacoes()}
       {obterErros()}
     </Container>
@@ -194,6 +198,8 @@ SelectAutocomplete.defaultProps = {
   disabled: false,
   temErro: false,
   mensagemErro: '',
+  labelRequired: false,
+  form: null,
 };
 
 SelectAutocomplete.propTypes = {
@@ -214,8 +220,11 @@ SelectAutocomplete.propTypes = {
   showList: PropTypes.bool,
   value: PropTypes.string,
   valueField: PropTypes.string,
+  disabled: PropTypes.bool,
   temErro: PropTypes.bool,
   mensagemErro: PropTypes.string,
+  labelRequired: PropTypes.bool,
+  form: PropTypes.oneOfType([PropTypes.any]),
 };
 
 export default SelectAutocomplete;

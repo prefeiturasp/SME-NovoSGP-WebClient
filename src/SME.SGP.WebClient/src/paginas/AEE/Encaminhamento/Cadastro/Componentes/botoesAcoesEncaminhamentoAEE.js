@@ -1,6 +1,17 @@
+import { Col, Row } from 'antd';
 import PropTypes from 'prop-types';
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import BotaoExcluirPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoExcluirPadrao';
+import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
+import {
+  SGP_BUTTON_CONCLUIR_PARECER,
+  SGP_BUTTON_DEVOLVER,
+  SGP_BUTTON_ENCAMINHAR,
+  SGP_BUTTON_ENVIAR,
+  SGP_BUTTON_INDEFERIR,
+  SGP_BUTTON_SALVAR_RASCUNHO,
+} from '~/componentes-sgp/filtro/idsCampos';
 import Button from '~/componentes/button';
 import { Colors } from '~/componentes/colors';
 import { RotasDto } from '~/dtos';
@@ -15,7 +26,6 @@ import { setQuestionarioDinamicoEmEdicao } from '~/redux/modulos/questionarioDin
 import { confirmar, erros, sucesso } from '~/servicos';
 import history from '~/servicos/history';
 import ServicoEncaminhamentoAEE from '~/servicos/Paginas/Relatorios/AEE/ServicoEncaminhamentoAEE';
-import { BtnVoltarExcluirEncaminhamentoAEE } from '../encaminhamentoAEECadastro.css';
 
 const BotoesAcoesEncaminhamentoAEE = props => {
   const { match } = props;
@@ -214,124 +224,138 @@ const BotoesAcoesEncaminhamentoAEE = props => {
     }
   };
 
+  const ocultarBtnExcluir =
+    (dadosEncaminhamento?.situacao !== situacaoAEE.Encaminhado &&
+      dadosEncaminhamento?.situacao !== situacaoAEE.Rascunho) ||
+    !(permissoesTela.podeExcluir && dadosEncaminhamento?.podeEditar);
+
+  const ocultarBtnEnviar =
+    dadosEncaminhamento?.situacao &&
+    dadosEncaminhamento?.situacao !== situacaoAEE.Rascunho &&
+    dadosEncaminhamento?.situacao !== situacaoAEE.Devolvido;
+
+  const ocultarBtnDevolver =
+    dadosEncaminhamento?.situacao !== situacaoAEE.Encaminhado;
+
+  const ocultarBtnIndeferir =
+    !dadosEncaminhamento?.situacao ||
+    dadosEncaminhamento?.situacao !== situacaoAEE.Encaminhado;
+
+  const ocultarBtnEncaminhar =
+    !dadosEncaminhamento?.situacao ||
+    dadosEncaminhamento?.situacao !== situacaoAEE.Encaminhado;
+
+  const ocultarBtnConcluirParecer =
+    !dadosEncaminhamento?.situacao ||
+    dadosEncaminhamento?.situacao !== situacaoAEE.Analise;
+
   return (
-    <>
-      <BtnVoltarExcluirEncaminhamentoAEE
-        id="btn-voltar"
-        icon="arrow-left"
-        color={Colors.Azul}
-        border
-        className="mr-3"
-        onClick={onClickVoltar}
-      />
-      <BtnVoltarExcluirEncaminhamentoAEE
-        id="btn-excluir"
-        icon="trash-alt"
-        color={Colors.Azul}
-        border
-        className="mr-3"
-        onClick={onClickExcluir}
-        hidden={
-          (dadosEncaminhamento?.situacao !== situacaoAEE.Encaminhado &&
-            dadosEncaminhamento?.situacao !== situacaoAEE.Rascunho) ||
-          !(permissoesTela.podeExcluir && dadosEncaminhamento?.podeEditar)
-        }
-      />
-      <Button
-        id="btn-salvar-rascunho"
-        label="Salvar rascunho"
-        color={Colors.Azul}
-        border
-        bold
-        onClick={onClickSalvar}
-        disabled={
-          desabilitarCamposEncaminhamentoAEE ||
-          !questionarioDinamicoEmEdicao ||
-          (match?.params?.id && !dadosEncaminhamento?.podeEditar)
-        }
-      />
-      <Button
-        id="btn-enviar"
-        label="Enviar"
-        color={Colors.Roxo}
-        border
-        bold
-        className="ml-3"
-        onClick={onClickEnviar}
-        hidden={
-          dadosEncaminhamento?.situacao &&
-          dadosEncaminhamento?.situacao !== situacaoAEE.Rascunho &&
-          dadosEncaminhamento?.situacao !== situacaoAEE.Devolvido
-        }
-        disabled={
-          !dadosCollapseLocalizarEstudante?.codigoAluno ||
-          desabilitarCamposEncaminhamentoAEE
-        }
-      />
-      <Button
-        id="btn-devolver"
-        label="Devolver"
-        color={Colors.Azul}
-        border
-        bold
-        className="ml-3"
-        onClick={onClickDevolver}
-        hidden={dadosEncaminhamento?.situacao !== situacaoAEE.Encaminhado}
-        disabled={
-          desabilitarCamposEncaminhamentoAEE || !dadosEncaminhamento?.podeEditar
-        }
-      />
-      <Button
-        id="btn-indeferir"
-        label="Indeferir"
-        color={Colors.Azul}
-        border
-        bold
-        className="ml-3"
-        onClick={onClickEncerrar}
-        hidden={
-          !dadosEncaminhamento?.situacao ||
-          dadosEncaminhamento?.situacao !== situacaoAEE.Encaminhado
-        }
-        disabled={
-          desabilitarCamposEncaminhamentoAEE || !dadosEncaminhamento?.podeEditar
-        }
-      />
-      <Button
-        id="btn-encaminhar-aee"
-        label="Encaminhar AEE"
-        color={Colors.Roxo}
-        border
-        bold
-        className="ml-3"
-        onClick={onClickEncaminharAEE}
-        hidden={
-          !dadosEncaminhamento?.situacao ||
-          dadosEncaminhamento?.situacao !== situacaoAEE.Encaminhado
-        }
-        disabled={
-          desabilitarBtnAcao ||
-          desabilitarCamposEncaminhamentoAEE ||
-          !dadosEncaminhamento?.podeEditar
-        }
-      />
-      <Button
-        id="btn-concluir-parecer"
-        label="Concluir parecer"
-        color={Colors.Roxo}
-        border
-        bold
-        className="ml-3"
-        onClick={onClickConcluirParecer}
-        hidden={
-          !dadosEncaminhamento?.situacao ||
-          dadosEncaminhamento?.situacao !== situacaoAEE.Analise
-        }
-        disabled={
-          desabilitarCamposEncaminhamentoAEE || !dadosEncaminhamento?.podeEditar
-        }
-      />
-    </>
+    <Row gutter={[8, 8]} type="flex">
+      <Col>
+        <BotaoVoltarPadrao onClick={() => onClickVoltar()} />
+      </Col>
+      {!ocultarBtnExcluir && (
+        <Col>
+          <BotaoExcluirPadrao onClick={onClickExcluir} />
+        </Col>
+      )}
+      <Col>
+        <Button
+          id={SGP_BUTTON_SALVAR_RASCUNHO}
+          label="Salvar rascunho"
+          color={Colors.Azul}
+          border
+          bold
+          onClick={onClickSalvar}
+          disabled={
+            desabilitarCamposEncaminhamentoAEE ||
+            !questionarioDinamicoEmEdicao ||
+            (match?.params?.id && !dadosEncaminhamento?.podeEditar)
+          }
+        />
+      </Col>
+      {!ocultarBtnEnviar && (
+        <Col>
+          <Button
+            id={SGP_BUTTON_ENVIAR}
+            label="Enviar"
+            color={Colors.Roxo}
+            border
+            bold
+            onClick={onClickEnviar}
+            disabled={
+              !dadosCollapseLocalizarEstudante?.codigoAluno ||
+              desabilitarCamposEncaminhamentoAEE
+            }
+          />
+        </Col>
+      )}
+      {!ocultarBtnDevolver && (
+        <Col>
+          <Button
+            id={SGP_BUTTON_DEVOLVER}
+            label="Devolver"
+            color={Colors.Azul}
+            border
+            bold
+            onClick={onClickDevolver}
+            disabled={
+              desabilitarCamposEncaminhamentoAEE ||
+              !dadosEncaminhamento?.podeEditar
+            }
+          />
+        </Col>
+      )}
+      {!ocultarBtnIndeferir && (
+        <Col>
+          <Button
+            id={SGP_BUTTON_INDEFERIR}
+            label="Indeferir"
+            color={Colors.Azul}
+            border
+            bold
+            onClick={onClickEncerrar}
+            disabled={
+              desabilitarCamposEncaminhamentoAEE ||
+              !dadosEncaminhamento?.podeEditar
+            }
+          />
+        </Col>
+      )}
+      {!ocultarBtnEncaminhar && (
+        <Col>
+          <Button
+            id={SGP_BUTTON_ENCAMINHAR}
+            label="Encaminhar AEE"
+            color={Colors.Roxo}
+            border
+            bold
+            onClick={onClickEncaminharAEE}
+            disabled={
+              desabilitarBtnAcao ||
+              desabilitarCamposEncaminhamentoAEE ||
+              !dadosEncaminhamento?.podeEditar
+            }
+          />
+        </Col>
+      )}
+      {!ocultarBtnConcluirParecer && (
+        <Col>
+          <Button
+            id={SGP_BUTTON_CONCLUIR_PARECER}
+            label="Concluir parecer"
+            color={Colors.Roxo}
+            border
+            bold
+            onClick={onClickConcluirParecer}
+            disabled={
+              desabilitarCamposEncaminhamentoAEE ||
+              !dadosEncaminhamento?.podeEditar
+            }
+          />
+        </Col>
+      )}
+    </Row>
   );
 };
 

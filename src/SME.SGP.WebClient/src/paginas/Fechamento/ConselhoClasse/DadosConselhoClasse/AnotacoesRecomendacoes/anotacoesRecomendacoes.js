@@ -10,7 +10,6 @@ import {
   setAuditoriaAnotacaoRecomendacao,
   setConselhoClasseEmEdicao,
   setDentroPeriodo,
-  setListaoRecomendacoesAlunoFamilia,
   setRecomendacaoAluno,
   setRecomendacaoAlunoSelecionados,
   setRecomendacaoFamilia,
@@ -232,6 +231,7 @@ const AnotacoesRecomendacoes = props => {
     setarAuditoria({});
     setExibir(false);
     setCarregando(false);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     alunoCodigo,
     conselhoClasseId,

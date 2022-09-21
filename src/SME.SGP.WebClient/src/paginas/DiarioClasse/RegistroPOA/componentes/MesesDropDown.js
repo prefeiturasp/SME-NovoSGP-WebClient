@@ -35,6 +35,7 @@ function MesesDropDown({ form, label, desabilitado, name }) {
       placeholder="Bimestre"
       className="select-mes"
       disabled={desabilitado}
+      labelRequired
     />
   );
 }

@@ -7,10 +7,9 @@ import { useSelector } from 'react-redux';
 const RotaAutenticadaDesestruturada = props => {
   const { component: Componente, ...propriedades } = props;
   const logado = useSelector(state => state.usuario.logado);
-  const primeiroAcesso = useSelector(state => state.usuario.modificarSenha);
 
   if (!logado) {
-    return <Redirect to={`/login`} />;
+    return <Redirect to="/login" />;
   }
 
   return (

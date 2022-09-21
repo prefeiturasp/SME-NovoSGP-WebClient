@@ -1,6 +1,10 @@
+import { Col, Row } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
+import BotaoExcluirPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoExcluirPadrao';
+import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
 import Cabecalho from '~/componentes-sgp/cabecalho';
+import { SGP_BUTTON_NOVO } from '~/componentes-sgp/filtro/idsCampos';
 import Button from '~/componentes/button';
 import Card from '~/componentes/card';
 import { Colors } from '~/componentes/colors';
@@ -48,6 +52,7 @@ const TipoCalendarioEscolarLista = () => {
   useEffect(() => {
     onFiltrar();
     setSomenteConsulta(verificaSomenteConsulta(permissoesTela));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const onSelectRow = ids => {
@@ -74,7 +79,7 @@ const TipoCalendarioEscolarLista = () => {
     const listaParaExcluir = [];
     idTiposSelecionados.forEach(id => {
       const tipoParaExcluir = listaTiposCalendarioEscolar.find(
-        tipo => id == tipo.id
+        tipo => Number(id) === Number(tipo.id)
       );
       if (tipoParaExcluir) {
         listaParaExcluir.push(tipoParaExcluir);
@@ -108,40 +113,34 @@ const TipoCalendarioEscolarLista = () => {
 
   return (
     <>
-      <Cabecalho pagina="Tipo de calendário escolar" />
-
+      <Cabecalho pagina="Tipo de calendário escolar">
+        <Row gutter={[8, 8]} type="flex">
+          <Col>
+            <BotaoVoltarPadrao onClick={() => onClickVoltar()} />
+          </Col>
+          <Col>
+            <BotaoExcluirPadrao
+              disabled={
+                !permissoesTela.podeExcluir ||
+                (idTiposSelecionados && idTiposSelecionados.length < 1)
+              }
+              onClick={onClickExcluir}
+            />
+          </Col>
+          <Col>
+            <Button
+              id={SGP_BUTTON_NOVO}
+              label="Novo"
+              color={Colors.Roxo}
+              border
+              bold
+              onClick={onClickNovo}
+              disabled={somenteConsulta || !permissoesTela.podeIncluir}
+            />
+          </Col>
+        </Row>
+      </Cabecalho>
       <Card>
-        <div className="col-md-12 d-flex justify-content-end pb-4">
-          <Button
-            label="Voltar"
-            icon="arrow-left"
-            color={Colors.Azul}
-            border
-            className="mr-2"
-            onClick={onClickVoltar}
-          />
-          <Button
-            label="Excluir"
-            color={Colors.Vermelho}
-            border
-            className="mr-2"
-            disabled={
-              !permissoesTela.podeExcluir ||
-              (idTiposSelecionados && idTiposSelecionados.length < 1)
-            }
-            onClick={onClickExcluir}
-          />
-          <Button
-            label="Novo"
-            color={Colors.Roxo}
-            border
-            bold
-            className="mr-2"
-            onClick={onClickNovo}
-            disabled={somenteConsulta || !permissoesTela.podeIncluir}
-          />
-        </div>
-
         <div className="col-md-12 pt-2">
           <DataTable
             id="lista-tipo-calendario"

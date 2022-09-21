@@ -10,7 +10,13 @@ import AtribuicaoCJServico from '~/servicos/Paginas/AtribuicaoCJ';
 // Funções
 import { valorNuloOuVazio } from '~/utils/funcoes/gerais';
 
-function ModalidadesDropDown({ label, form, onChange, disabled }) {
+function ModalidadesDropDown({
+  label,
+  form,
+  onChange,
+  disabled,
+  labelRequired,
+}) {
   const [listaModalidades, setListaModalidades] = useState([]);
 
   const { ueId, anoLetivo, modalidadeId } = form.values;
@@ -39,6 +45,7 @@ function ModalidadesDropDown({ label, form, onChange, disabled }) {
       form.setFieldValue('modalidadeId', listaModalidades[0].valor);
       onChange(listaModalidades[0].valor);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [listaModalidades]);
 
   useEffect(() => {
@@ -46,6 +53,7 @@ function ModalidadesDropDown({ label, form, onChange, disabled }) {
     if (!valorNuloOuVazio(modalidadeId)) {
       onChange(modalidadeId);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [modalidadeId]);
 
   return (
@@ -60,6 +68,7 @@ function ModalidadesDropDown({ label, form, onChange, disabled }) {
       valueText="desc"
       placeholder="Modalidade"
       disabled={disabled}
+      labelRequired={labelRequired}
     />
   );
 }
@@ -70,6 +79,7 @@ ModalidadesDropDown.propTypes = {
   label: t.string,
   disabled: t.bool,
   anoLetivo: t.string,
+  labelRequired: t.bool,
 };
 
 ModalidadesDropDown.defaultProps = {
@@ -78,6 +88,7 @@ ModalidadesDropDown.defaultProps = {
   label: null,
   disabled: false,
   anoLetivo: '',
+  labelRequired: false,
 };
 
 export default ModalidadesDropDown;

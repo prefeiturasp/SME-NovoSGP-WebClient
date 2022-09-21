@@ -83,6 +83,7 @@ const DreReabertura = ({ form, onChangeCampos }) => {
         onChange={dre => {
           onChangeCampos(dre);
         }}
+        labelRequired
       />
     </Loader>
   );

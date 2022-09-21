@@ -10,7 +10,7 @@ const TipoCalendarioComunicados = ({ form, onChangeCampos, desabilitar }) => {
   const [exibirLoader, setExibirLoader] = useState(false);
   const [listaCalendario, setListaCalendario] = useState([]);
 
-  const { anoLetivo, modalidades, semestre } = form.values;
+  const { anoLetivo, codigoUe, modalidades, semestre } = form.values;
 
   const listaModalidadesComunicados = useSelector(
     store => store.comunicados?.listaModalidadesComunicados
@@ -52,6 +52,7 @@ const TipoCalendarioComunicados = ({ form, onChangeCampos, desabilitar }) => {
       form.setFieldValue(nomeCampo, undefined);
       setListaCalendario([]);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [anoLetivo, modalidades, listaModalidadesComunicados, semestre]);
 
   useEffect(() => {
@@ -92,6 +93,7 @@ const TipoCalendarioComunicados = ({ form, onChangeCampos, desabilitar }) => {
           onChangeCampos();
           form.setFieldValue('eventoId', undefined);
         }}
+        labelRequired={codigoUe && codigoUe !== OPCAO_TODOS}
       />
     </Loader>
   );

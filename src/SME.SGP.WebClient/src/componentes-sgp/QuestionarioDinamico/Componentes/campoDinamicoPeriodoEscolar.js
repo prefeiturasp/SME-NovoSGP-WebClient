@@ -49,6 +49,7 @@ const CampoDinamicoPeriodoEscolar = props => {
     } else {
       form.setFieldValue(String(questaoAtual.id), '');
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [turmaId, form, questaoAtual]);
 
   useEffect(() => {
@@ -60,6 +61,7 @@ const CampoDinamicoPeriodoEscolar = props => {
     } else {
       setLista([]);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [turmaId, obterBimestres, desabilitado]);
 
   return (

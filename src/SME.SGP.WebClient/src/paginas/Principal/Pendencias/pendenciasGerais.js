@@ -173,8 +173,12 @@ const PendenciasGerais = () => {
     <Loader loading={carregando}>
       <Card className="mb-4 mt-4">
         <div className="col-md-12">
-          <div className="col-md-12 pl-1 mb-3">
-            <Cabecalho pagina="Pendências" />
+          <div className="col-md-12 mb-3">
+            <Cabecalho
+              pagina="Pendências"
+              style={{ background: '#fff' }}
+              removeAffix
+            />
           </div>
           <div className="row justify-content-left px-3">
             <div className="col-sm-12 col-md-4 col-lg-4 col-xl-2 mb-2">

@@ -10,12 +10,12 @@ import ServicoDashboard from './Dashboard/ServicoDashboard';
 
 class ServicoRedefinirSenha {
   redefinirSenha = async (redefinirSenhaDto, dispatch) => {
-    let formData = new FormData();
+    const formData = new FormData();
 
     formData.set('token', redefinirSenhaDto.token);
     formData.set('novaSenha', redefinirSenhaDto.novaSenha);
 
-    return Api.post(this._obtenhaUrlSolicitarRecuperacao(), formData)
+    return Api.post(this.obtenhaUrlSolicitarRecuperacao(), formData)
       .then(res => {
         dispatch(
           salvarDadosLogin({
@@ -85,16 +85,16 @@ class ServicoRedefinirSenha {
   };
 
   validarToken = async token => {
-    const requisicao = await Api.get(this._obtenhaUrlValidarToken(token));
+    const requisicao = await Api.get(this.obtenhaUrlValidarToken(token));
 
     return requisicao.data;
   };
 
-  _obtenhaUrlSolicitarRecuperacao = () => {
+  obtenhaUrlSolicitarRecuperacao = () => {
     return 'v1/autenticacao/recuperar-senha';
   };
 
-  _obtenhaUrlValidarToken = token => {
+  obtenhaUrlValidarToken = token => {
     return `v1/autenticacao/valida-token-recuperacao-senha/${token}`;
   };
 }

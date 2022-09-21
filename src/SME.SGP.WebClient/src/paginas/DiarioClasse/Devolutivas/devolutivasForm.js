@@ -1,3 +1,4 @@
+import { Col, Row } from 'antd';
 import { Form, Formik } from 'formik';
 import $ from 'jquery';
 import * as moment from 'moment';
@@ -7,7 +8,13 @@ import { useDispatch, useSelector } from 'react-redux';
 import * as Yup from 'yup';
 import { Auditoria, CampoData, Loader, momentSchema } from '~/componentes';
 import AlertaPermiteSomenteTurmaInfantil from '~/componentes-sgp/AlertaPermiteSomenteTurmaInfantil/alertaPermiteSomenteTurmaInfantil';
+import BotaoExcluirPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoExcluirPadrao';
+import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
 import Cabecalho from '~/componentes-sgp/cabecalho';
+import {
+  SGP_BUTTON_CANCELAR,
+  SGP_BUTTON_SALVAR_ALTERAR,
+} from '~/componentes-sgp/filtro/idsCampos';
 import Alert from '~/componentes/alert';
 import Button from '~/componentes/button';
 import Card from '~/componentes/card';
@@ -70,7 +77,7 @@ const DevolutivasForm = ({ match }) => {
   const [periodoLetivo, setPeriodoLetivo] = useState();
 
   const inicial = {
-    codigoComponenteCurricular: 0,
+    codigoComponenteCurricular: '',
     periodoInicio: '',
     periodoFim: '',
     descricao: '',
@@ -79,16 +86,17 @@ const DevolutivasForm = ({ match }) => {
   const [valoresIniciais, setValoresIniciais] = useState(inicial);
 
   const validacoesRegistroNovo = Yup.object({
-    periodoInicio: momentSchema.required('Data início obrigatória'),
-    periodoFim: momentSchema.required('Data fim obrigatória'),
+    codigoComponenteCurricular: Yup.string().required('Campo obrigatório'),
+    periodoInicio: momentSchema.required('Campo obrigatório'),
+    periodoFim: momentSchema.required('Campo obrigatório'),
     descricao: Yup.string()
-      .required('Campo devolutiva obrigatório')
+      .required('Campo obrigatório')
       .min(200, 'Você precisa preencher com no mínimo 200 caracteres'),
   });
 
   const validacoesRegistroEdicao = Yup.object({
     descricao: Yup.string()
-      .required('Campo devolutiva obrigatório')
+      .required('Campo obrigatório')
       .min(200, 'Você precisa preencher com no mínimo 200 caracteres'),
   });
 
@@ -134,6 +142,7 @@ const DevolutivasForm = ({ match }) => {
         : soConsulta || !permissoesTela.podeIncluir;
     setDesabilitarCampos(desabilitar);
     obterPeriodoLetivoTurma();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     idDevolutiva,
     permissoesTela,
@@ -189,10 +198,10 @@ const DevolutivasForm = ({ match }) => {
   }, [turmaSelecionada.turma, resetarTela]);
 
   const obterSugestaoDataInicio = useCallback(
-    async codigoComponenteCurricular => {
+    async codigoCompCurricular => {
       const retorno = await ServicoDevolutivas.obterSugestaoDataInicio(
         turmaCodigo,
-        codigoComponenteCurricular
+        codigoCompCurricular
       ).catch(e => erros(e));
       if (retorno && retorno.data) {
         return moment(retorno.data);
@@ -224,7 +233,7 @@ const DevolutivasForm = ({ match }) => {
   };
 
   const setarValoresIniciaisRegistroNovo = useCallback(
-    async codigoComponenteCurricular => {
+    async codigoCompCurricular => {
       const valores = {
         codigoComponenteCurricular: 0,
         periodoInicio: '',
@@ -232,9 +241,9 @@ const DevolutivasForm = ({ match }) => {
         descricao: '',
         auditoria: null,
       };
-      valores.codigoComponenteCurricular = codigoComponenteCurricular;
+      valores.codigoComponenteCurricular = codigoCompCurricular;
       valores.periodoInicio = await obterSugestaoDataInicio(
-        codigoComponenteCurricular
+        codigoCompCurricular
       );
       if (valores.periodoInicio) {
         const paraHabilitar = await obterDatasFimParaHabilitar(
@@ -244,6 +253,7 @@ const DevolutivasForm = ({ match }) => {
       }
       setValoresIniciais(valores);
     },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [obterSugestaoDataInicio]
   );
 
@@ -329,6 +339,7 @@ const DevolutivasForm = ({ match }) => {
       }
       setValoresIniciais(inicial);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     codigoComponenteCurricular,
     listaComponenteCurriculare,
@@ -378,12 +389,12 @@ const DevolutivasForm = ({ match }) => {
 
   const obterDadosPlanejamento = useCallback(
     async (periodoFim, form, pagina, numero) => {
-      const { periodoInicio, codigoComponenteCurricular } = form.values;
+      const { periodoInicio } = form.values;
       setCarregandoGeral(true);
       const numeroEscolhido = numero || numeroRegistros || 4;
       const retorno = await ServicoDiarioBordo.obterPlanejamentosPorIntervalo(
         turmaCodigo,
-        codigoComponenteCurricular,
+        form?.values?.codigoComponenteCurricular,
         periodoInicio.format('YYYY-MM-DD'),
         periodoFim.format('YYYY-MM-DD'),
         pagina || 1,
@@ -486,11 +497,14 @@ const DevolutivasForm = ({ match }) => {
   const validaAntesDoSubmit = (form, clicouBtnSalvar) => {
     const arrayCampos = Object.keys(valoresIniciais);
     arrayCampos.forEach(campo => {
-      form.setFieldTouched(campo, true, true);
+      refForm.setFieldTouched(campo, true, true);
     });
-    return form.validateForm().then(() => {
-      if (form.isValid || Object.keys(form.errors).length === 0) {
-        return salvarDevolutivas(form.values, clicouBtnSalvar);
+    return refForm.validateForm().then(() => {
+      if (
+        refForm.getFormikContext().isValid ||
+        Object.keys(refForm.getFormikContext().errors).length === 0
+      ) {
+        return salvarDevolutivas(refForm?.state?.values, clicouBtnSalvar);
       }
       return false;
     });
@@ -576,69 +590,64 @@ const DevolutivasForm = ({ match }) => {
         ''
       )}
       {turmaSelecionada.turma ? <AlertaPermiteSomenteTurmaInfantil /> : ''}
-      <Cabecalho pagina="Devolutivas" />
-      <Card>
-        <div className="col-md-12">
-          <Formik
-            enableReinitialize
-            validationSchema={
-              idDevolutiva ? validacoesRegistroEdicao : validacoesRegistroNovo
-            }
-            initialValues={valoresIniciais}
-            validateOnBlur
-            validateOnChange
-            ref={refFormik => setRefForm(refFormik)}
-          >
-            {form => (
-              <Form>
+
+      <Formik
+        enableReinitialize
+        validationSchema={
+          idDevolutiva ? validacoesRegistroEdicao : validacoesRegistroNovo
+        }
+        initialValues={valoresIniciais}
+        validateOnBlur
+        validateOnChange
+        ref={refFormik => setRefForm(refFormik)}
+      >
+        {form => (
+          <Form>
+            <Cabecalho pagina="Devolutivas">
+              <Row gutter={[8, 8]} type="flex">
+                <Col>
+                  <BotaoVoltarPadrao onClick={() => onClickVoltar(form)} />
+                </Col>
+                <Col>
+                  <Button
+                    id={SGP_BUTTON_CANCELAR}
+                    label="Cancelar"
+                    color={Colors.Roxo}
+                    onClick={() => onClickCancelar(form)}
+                    border
+                    bold
+                    disabled={
+                      !turmaInfantil || !modoEdicao || desabilitarCampos
+                    }
+                  />
+                </Col>
+                <Col>
+                  <BotaoExcluirPadrao
+                    disabled={!idDevolutiva || !permissoesTela.podeExcluir}
+                    onClick={onClickExcluir}
+                  />
+                </Col>
+                <Col>
+                  <Button
+                    id={SGP_BUTTON_SALVAR_ALTERAR}
+                    label={idDevolutiva ? 'Alterar' : 'Salvar'}
+                    color={Colors.Roxo}
+                    border
+                    bold
+                    onClick={async () => {
+                      const salvou = await validaAntesDoSubmit(form, true);
+                      if (salvou) {
+                        history.push(RotasDto.DEVOLUTIVAS);
+                      }
+                    }}
+                    disabled={!turmaInfantil || desabilitarCampos}
+                  />
+                </Col>
+              </Row>
+            </Cabecalho>
+            <Card>
+              <div className="col-md-12">
                 <div className="row">
-                  <div className="col-md-12 d-flex justify-content-end pb-4">
-                    <Button
-                      id="btn-voltar-devolutivas"
-                      label="Voltar"
-                      icon="arrow-left"
-                      color={Colors.Azul}
-                      border
-                      className="mr-3"
-                      onClick={() => onClickVoltar(form)}
-                    />
-                    <Button
-                      id="btn-cancelar-devolutivas"
-                      label="Cancelar"
-                      color={Colors.Roxo}
-                      onClick={() => onClickCancelar(form)}
-                      border
-                      bold
-                      className="mr-3"
-                      disabled={
-                        !turmaInfantil || !modoEdicao || desabilitarCampos
-                      }
-                    />
-                    <Button
-                      label="Excluir"
-                      color={Colors.Vermelho}
-                      border
-                      className="mr-3"
-                      disabled={!idDevolutiva || !permissoesTela.podeExcluir}
-                      onClick={onClickExcluir}
-                    />
-                    <Button
-                      id="btn-salvar-devolutivas"
-                      label={idDevolutiva ? 'Alterar' : 'Salvar'}
-                      color={Colors.Roxo}
-                      border
-                      bold
-                      onClick={async () => {
-                        const salvou = await validaAntesDoSubmit(form, true);
-                        if (salvou) {
-                          history.push(RotasDto.DEVOLUTIVAS);
-                        }
-                      }}
-                      disabled={
-                        !turmaInfantil || !modoEdicao || desabilitarCampos
-                      }
-                    />
-                  </div>
                   <div className="col-sm-12 col-md-12 col-lg-6 col-xl-4 mb-2">
                     <SelectComponent
                       label="Componente curricular"
@@ -659,6 +668,7 @@ const DevolutivasForm = ({ match }) => {
                       }}
                       form={form}
                       name="codigoComponenteCurricular"
+                      labelRequired
                     />
                   </div>
                   <div className="col-sm-12 col-md-6 col-lg-3 col-xl-2 mb-2">
@@ -679,6 +689,7 @@ const DevolutivasForm = ({ match }) => {
                         desabilitarCampos
                       }
                       diasParaHabilitar={periodoLetivo}
+                      labelRequired
                     />
                   </div>
                   <div className="col-sm-12 col-md-6 col-lg-3 col-xl-2 mb-5">
@@ -697,6 +708,7 @@ const DevolutivasForm = ({ match }) => {
                         desabilitarCampos
                       }
                       diasParaHabilitar={datasParaHabilitar}
+                      labelRequired
                     />
                   </div>
 
@@ -726,6 +738,7 @@ const DevolutivasForm = ({ match }) => {
                               }
                             }}
                             desabilitar={desabilitarCampos}
+                            labelRequired
                           />
                         </div>
                       ) : (
@@ -748,11 +761,11 @@ const DevolutivasForm = ({ match }) => {
                     ''
                   )}
                 </div>
-              </Form>
-            )}
-          </Formik>
-        </div>
-      </Card>
+              </div>
+            </Card>
+          </Form>
+        )}
+      </Formik>
     </Loader>
   );
 };

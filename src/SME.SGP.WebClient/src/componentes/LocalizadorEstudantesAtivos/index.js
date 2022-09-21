@@ -274,6 +274,7 @@ const LocalizadorEstudantesAtivos = props => {
     ) {
       validaAntesBuscarPorCodigo({ codigo: valorInicialAlunoCodigo });
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [valorInicialAlunoCodigo, dataSource, pessoaSelecionada]);
 
   return (

@@ -195,14 +195,15 @@ const DadosComunicadosLeitura = props => {
   useEffect(() => {
     if (
       modalidadeId &&
-      (modalidadeId == ModalidadeDTO.ENSINO_MEDIO ||
-        modalidadeId == ModalidadeDTO.FUNDAMENTAL)
+      (Number(modalidadeId) === ModalidadeDTO.ENSINO_MEDIO ||
+        Number(modalidadeId) === ModalidadeDTO.FUNDAMENTAL)
     ) {
       obterAnosEscolaresPorModalidade();
     } else {
       setAnosEscolares();
       setListaAnosEscolares([]);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [modalidadeId]);
 
   const obterSemestres = useCallback(async () => {
@@ -274,6 +275,7 @@ const DadosComunicadosLeitura = props => {
       }
       setCarregandoTurmas(false);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [modalidadeId]);
 
   const filterTurmasAnoSelecionado = useCallback(() => {
@@ -292,6 +294,7 @@ const DadosComunicadosLeitura = props => {
     } else {
       setListaTurmas(listaTurmasOriginal);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [anosEscolares, listaTurmasOriginal]);
 
   useEffect(() => {
@@ -302,6 +305,7 @@ const DadosComunicadosLeitura = props => {
       setListaTurmas([]);
       setListaTurmasOriginal([]);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [modalidadeId]);
 
   useEffect(() => {
@@ -460,6 +464,7 @@ const DadosComunicadosLeitura = props => {
     } else {
       setDadosDeLeituraDeComunicados([]);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [visualizacao, comunicado, listaComunicado]);
 
   useEffect(() => {

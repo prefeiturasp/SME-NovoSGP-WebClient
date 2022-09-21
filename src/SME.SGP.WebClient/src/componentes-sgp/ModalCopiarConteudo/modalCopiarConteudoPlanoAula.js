@@ -11,7 +11,6 @@ import {
   ModalConteudoHtml,
 } from '~/componentes';
 import TurmasDropDown from '~/componentes-sgp/TurmasDropDown';
-import filtro from '~/redux/modulos/filtro/reducers';
 import AbrangenciaServico from '~/servicos/Abrangencia';
 import { confirmar, sucesso, erro, erros } from '~/servicos/alertas';
 import api from '~/servicos/api';
@@ -70,6 +69,7 @@ const ModalCopiarConteudoPlanoAula = props => {
       }
     }
     buscaTurmas();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [filtro.unidadeEscolar, filtro.modalidade, filtro.ano]);
 
   const adicionarTurma = () => {

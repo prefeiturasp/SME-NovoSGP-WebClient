@@ -87,6 +87,7 @@ const ConselhoClasse = () => {
     ) {
       obterListaAlunos();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [turmaAtual, turmaSelecionada]);
 
   const verificarExibicaoMarcador = async codigoEOL => {
@@ -104,7 +105,7 @@ const ConselhoClasse = () => {
         conselhoClasseAlunoId,
         tipoNota,
       } = resposta?.data;
-      if (fechamentoTurmaId !== 0 && conselhoClasseId != 0) {
+      if (fechamentoTurmaId !== 0 && conselhoClasseId !== 0) {
         const retorno = await servicoSalvarConselhoClasse.validaParecerConclusivo(
           conselhoClasseId,
           fechamentoTurmaId,
@@ -150,34 +151,23 @@ const ConselhoClasse = () => {
     <Container>
       {!turmaSelecionada.turma &&
       !ehTurmaInfantil(modalidadesFiltroPrincipal, turmaSelecionada) ? (
-        <div className="col-md-12">
-          <Alert
-            alerta={{
-              tipo: 'warning',
-              id: 'alerta-sem-turma-conselho-classe',
-              mensagem: 'Você precisa escolher uma turma.',
-              estiloTitulo: { fontSize: '18px' },
-            }}
-            className="mb-2"
-          />
-        </div>
+        <Alert
+          alerta={{
+            tipo: 'warning',
+            id: 'alerta-sem-turma-conselho-classe',
+            mensagem: 'Você precisa escolher uma turma.',
+          }}
+        />
       ) : (
-        ''
+        <></>
       )}
       <ModalImpressaoBimestre />
       <AlertaModalidadeInfantil />
-      <Cabecalho pagina="Conselho de classe" />
       <LoaderConselhoClasse>
+        <Cabecalho pagina="Conselho de classe">
+          <BotoesAcoesConselhoClasse />
+        </Cabecalho>
         <Card>
-          <>
-            <div className="col-md-12">
-              <div className="row">
-                <div className="col-md-12 d-flex justify-content-end pb-4">
-                  <BotoesAcoesConselhoClasse />
-                </div>
-              </div>
-            </div>
-          </>
           {turmaSelecionada.turma &&
           !ehTurmaInfantil(modalidadesFiltroPrincipal, turmaSelecionada) ? (
             <>

@@ -191,6 +191,7 @@ const LocalizadorFuncionario = props => {
         });
       }
     },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [codigoDre, codigoTurma, codigoUe, limparDados, onChange]
   );
 
@@ -260,6 +261,7 @@ const LocalizadorFuncionario = props => {
         validaAntesBuscarPorCodigo(valorInicial.codigoRF);
       }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [valorInicial, dataSource, funcionarioSelecionado]);
 
   useEffect(() => {

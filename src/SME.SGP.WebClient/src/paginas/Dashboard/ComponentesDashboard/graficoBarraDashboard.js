@@ -83,7 +83,7 @@ GraficoBarraDashboard.propTypes = {
   removeLegends: PropTypes.bool,
   customPropsColors: PropTypes.oneOfType([PropTypes.any]),
   dadosLegendaCustomizada: PropTypes.oneOfType([PropTypes.array]),
-  margemPersonalizada: PropTypes.oneOfType(PropTypes.any),
+  margemPersonalizada: PropTypes.oneOfType([PropTypes.any]),
   showAxisBottom: PropTypes.bool,
 };
 

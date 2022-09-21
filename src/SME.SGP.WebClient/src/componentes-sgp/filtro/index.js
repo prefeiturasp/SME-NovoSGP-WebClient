@@ -504,6 +504,7 @@ const Filtro = () => {
       setCarregandoTurmas(false);
       return listaTurmas;
     },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [
       anoLetivoSelecionado,
       consideraHistorico,
@@ -813,6 +814,7 @@ const Filtro = () => {
     ) {
       limparFiltro();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [perfilStore]);
 
   useEffect(() => {
@@ -926,11 +928,6 @@ const Filtro = () => {
     }
   };
 
-  const aoSubmeterAutocomplete = evento => {
-    evento.preventDefault();
-    Filtrar();
-  };
-
   const Filtrar = () => {
     if (resultadosFiltro) {
       if (resultadosFiltro.length === 1) {
@@ -960,6 +957,11 @@ const Filtro = () => {
         }
       }
     }
+  };
+
+  const aoSubmeterAutocomplete = evento => {
+    evento.preventDefault();
+    Filtrar();
   };
 
   const aoFocarBusca = () => {
@@ -1059,28 +1061,30 @@ const Filtro = () => {
       if (
         turmaUsuarioSelecionada.anoLetivo &&
         anoLetivoSelecionado &&
-        turmaUsuarioSelecionada.anoLetivo != anoLetivoSelecionado
+        String(turmaUsuarioSelecionada.anoLetivo) !==
+          String(anoLetivoSelecionado)
       )
         setAnoLetivoSelecionado(turmaUsuarioSelecionada.anoLetivo);
 
       if (
         turmaUsuarioSelecionada.modalidade &&
         modalidadeSelecionada &&
-        turmaUsuarioSelecionada.modalidade != modalidadeSelecionada
+        String(turmaUsuarioSelecionada.modalidade) !==
+          String(modalidadeSelecionada)
       )
         setModalidadeSelecionada(turmaUsuarioSelecionada.modalidade);
 
       if (
         turmaUsuarioSelecionada.periodo &&
         periodoSelecionado &&
-        turmaUsuarioSelecionada.periodo != periodoSelecionado
+        String(turmaUsuarioSelecionada.periodo) !== String(periodoSelecionado)
       )
         setPeriodoSelecionado(turmaUsuarioSelecionada.periodo || undefined);
 
       if (
         turmaUsuarioSelecionada.dre &&
         dreSelecionada &&
-        turmaUsuarioSelecionada.dre != dreSelecionada
+        String(turmaUsuarioSelecionada.dre) !== String(dreSelecionada)
       )
         setDreSelecionada(turmaUsuarioSelecionada.dre);
 
@@ -1095,13 +1099,14 @@ const Filtro = () => {
       if (
         turmaUsuarioSelecionada.turma &&
         turmaSelecionada &&
-        turmaUsuarioSelecionada.turma != turmaSelecionada
+        String(turmaUsuarioSelecionada.turma) !== String(turmaSelecionada)
       )
         setTurmaSelecionada(turmaUsuarioSelecionada.turma);
 
       setTextoAutocomplete(turmaUsuarioSelecionada.desc);
       setConsideraHistorico(!!turmaUsuarioSelecionada.consideraHistorico);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     alternarFocoBusca,
     turmaUsuarioSelecionada.anoLetivo,
@@ -1163,7 +1168,7 @@ const Filtro = () => {
             onChange={onChangeAutocomplete}
             onKeyDown={aoPressionarTeclaBaixoAutocomplete}
             readOnly={!!turmaUsuarioSelecionada.turma}
-            value={textoAutocomplete}
+            value={textoAutocomplete || ''}
           />
           {!!turmaUsuarioSelecionada.turma && podeRemoverTurma && (
             <Fechar

@@ -6,7 +6,7 @@ import * as Yup from 'yup';
 import { Tooltip } from 'antd';
 import { Formik, Form } from 'formik';
 import shortid from 'shortid';
-import { BrowserView, MobileView, isBrowser } from 'react-device-detect';
+import { isBrowser } from 'react-device-detect';
 import LoginHelper from './loginHelper';
 import Row from '~/componentes/row';
 import LogoDoSgp from '~/recursos/LogoSgpTexto.svg';
@@ -35,8 +35,6 @@ import { URL_RECUPERARSENHA } from '~/constantes/url';
 import history from '~/servicos/history';
 import { Loader } from '~/componentes';
 import { setExibirMensagemSessaoExpirou } from '~/redux/modulos/mensagens/actions';
-import ServicoNotificacao from '~/servicos/Paginas/ServicoNotificacao';
-import { erros } from '~/servicos/alertas';
 
 const Login = props => {
   const dispatch = useDispatch();

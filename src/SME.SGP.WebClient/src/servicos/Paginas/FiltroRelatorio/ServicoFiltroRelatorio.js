@@ -30,7 +30,7 @@ class ServicoFiltroRelatorio {
     const url = `${urlPadrao}/ues/${codigoUe}/modalidades/abrangencias?consideraNovasModalidades=${consideraNovasModalidades}`;
     return api.get(url);
   };
-  
+
   obterModalidadesPorAbrangenciaHistorica = (
     codigoUe,
     consideraNovasModalidades = false,
@@ -39,7 +39,6 @@ class ServicoFiltroRelatorio {
     const url = `${urlPadrao}/ues/${codigoUe}/modalidades/abrangencias?consideraNovasModalidades=${consideraNovasModalidades}&consideraHistorico=${consideraHistorico}`;
     return api.get(url);
   };
-
 
   obterAnosEscolares = (codigoUe, modalidade) => {
     const url = `${urlPadrao}/ues/${codigoUe}/modalidades/${modalidade}/anos-escolares`;

@@ -58,10 +58,12 @@ export default function RelatorioSemestralPAP(state = inicial, action) {
       case '@relatorioSemestralPAP/setDadosParaSalvarRelatorioSemestral': {
         const dados = state.dadosParaSalvarRelatorioSemestral;
         if (dados.length > 0) {
-          const valor = dados.find(item => item.id == action.payload.id);
+          const valor = dados.find(
+            item => Number(item.id) === Number(action.payload.id)
+          );
           if (valor) {
             const indexItem = dados.findIndex(
-              item => item.id == action.payload.id
+              item => Number(item.id) === Number(action.payload.id)
             );
             draft.dadosParaSalvarRelatorioSemestral[indexItem] = action.payload;
           } else {
@@ -70,7 +72,7 @@ export default function RelatorioSemestralPAP(state = inicial, action) {
         } else {
           draft.dadosParaSalvarRelatorioSemestral.push(action.payload);
         }
-        break;
+        return draft;
       }
 
       case '@relatorioSemestralPAP/limparDadosParaSalvarRelatorioSemestral': {

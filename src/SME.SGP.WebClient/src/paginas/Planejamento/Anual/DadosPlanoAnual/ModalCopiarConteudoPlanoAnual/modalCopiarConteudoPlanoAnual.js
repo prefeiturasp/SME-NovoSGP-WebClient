@@ -27,7 +27,10 @@ const ModalCopiarConteudoPlanoAnual = () => {
   );
 
   const [refForm, setRefForm] = useState({});
-  const[listaTurmasParaCopiarAgrupada, setListaTurmasParaCopiarAgrupada] = useState([]);
+  const [
+    listaTurmasParaCopiarAgrupada,
+    setListaTurmasParaCopiarAgrupada,
+  ] = useState([]);
   const [listaBimestres, setListaBimestres] = useState([]);
   const [exibirLoader, setExibirLoader] = useState(false);
   const [confirmacaoTurmasComPlano, setConfirmacaoTurmasComPlano] = useState(
@@ -71,7 +74,7 @@ const ModalCopiarConteudoPlanoAnual = () => {
   const resetarDadosModal = form => {
     setConfirmacaoTurmasComPlano('');
     form.resetForm();
-  };  
+  };
 
   const fecharCopiarConteudo = form => {
     dispatch(setExibirModalCopiarConteudo(false));
@@ -106,24 +109,25 @@ const ModalCopiarConteudoPlanoAnual = () => {
   };
 
   const agruparListaTurmas = turmas => {
-    let listRet = [];
-    turmas.map(item => {
-      if(listRet.filter(it => it.codTurma == item.codTurma).length == 0)
+    const listRet = [];
+    turmas.forEach(item => {
+      if (
+        listRet?.filter?.(it => String(it.codTurma) === String(item.codTurma))
+          ?.length === 0
+      )
         listRet.push(item);
     });
     return listRet;
   };
 
-  useEffect(() =>{
-    if (listaTurmasParaCopiar){
+  useEffect(() => {
+    if (listaTurmasParaCopiar) {
       const lstTurma = listaTurmasParaCopiar.map(item => {
-        return ({nomeTurma :item.nomeTurma ,codTurma :item.codTurma});
-      });    
+        return { nomeTurma: item.nomeTurma, codTurma: item.codTurma };
+      });
       setListaTurmasParaCopiarAgrupada(agruparListaTurmas(lstTurma));
-    }    
-  },[listaTurmasParaCopiar]); 
-
-  const onChangeTurmasSelecionadas = turmas => {};
+    }
+  }, [listaTurmasParaCopiar]);
 
   const validacoes = Yup.object({
     turmas: Yup.string().required('Selecione ao menos uma turma.'),
@@ -139,21 +143,26 @@ const ModalCopiarConteudoPlanoAnual = () => {
       form.setFieldValue('bimestres', ['0']);
     }
 
-    const _form = refForm?.state?.values;
-    const turmas = _form.turmas;
+    const turmas = refForm?.state?.values;
 
-    const bimestresSelecionados = listaBimestres.filter( bt => bimestres.includes(bt.valor.toString()));    
+    const bimestresSelecionados = listaBimestres.filter(bt =>
+      bimestres.includes(bt.valor.toString())
+    );
 
-    let turmasComPlano = listaTurmasParaCopiar.filter(
-      c => turmas.includes(c.codTurma.toString()) &&
-           c.codigoComponenteCurricular === componenteCurricular.codigoComponenteCurricular &&
-           c.possuiPlano &&
-           bimestresSelecionados &&
-           bimestresSelecionados.length > 0 &&
-           (bimestresSelecionados.filter(b => b.bimestre == c.bimestre).length > 0 ||
-            bimestresSelecionados[0].valor === '0')
-    );      
-    
+    const turmasComPlano = listaTurmasParaCopiar.filter(
+      c =>
+        turmas.includes(c.codTurma.toString()) &&
+        c.codigoComponenteCurricular ===
+          componenteCurricular.codigoComponenteCurricular &&
+        c.possuiPlano &&
+        bimestresSelecionados &&
+        bimestresSelecionados.length > 0 &&
+        (bimestresSelecionados.filter(
+          b => String(b.bimestre) === String(c.bimestre)
+        ).length > 0 ||
+          bimestresSelecionados[0].valor === '0')
+    );
+
     if (turmasComPlano && turmasComPlano.length > 0) {
       setConfirmacaoTurmasComPlano(
         `As turmas: ${agruparListaTurmas(turmasComPlano)
@@ -214,8 +223,8 @@ const ModalCopiarConteudoPlanoAnual = () => {
                 valueText="nomeTurma"
                 multiple
                 placeholder="Selecione uma ou mais turmas"
-                onChange={onChangeTurmasSelecionadas}
                 form={form}
+                labelRequired
               />
               <SelectComponent
                 label="Copiar para o(s) bimestre(s)"
@@ -228,6 +237,7 @@ const ModalCopiarConteudoPlanoAnual = () => {
                 placeholder="Selecione um ou mais bimestres"
                 onChange={valores => onChangeBimestre(valores, form)}
                 form={form}
+                labelRequired
               />
             </Loader>
           </ModalConteudoHtml>

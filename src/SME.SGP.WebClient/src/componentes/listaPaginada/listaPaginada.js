@@ -113,16 +113,14 @@ const ListaPaginada = props => {
         statusCode = resposta.status;
         setLinhas([]);
         setTotal(resposta.data.totalRegistros);
-        if (resposta?.data?.items?.length){
+        if (resposta?.data?.items?.length) {
           setLinhas([...resposta.data.items]);
           if (setLista) {
             setLista(resposta.data.items);
           }
-        }
-        else{
+        } else {
           setLista([]);
         }
-        
       })
       .catch(e => {
         if (statusCode !== 204) {
@@ -136,6 +134,7 @@ const ListaPaginada = props => {
     if (filtroEhValido) {
       filtrar();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [filtroEhValido, paginaAtual]);
 
   useEffect(() => {
@@ -143,6 +142,7 @@ const ListaPaginada = props => {
     novaPagina.current = 1;
     setPaginaAtual(novaPagina);
     defineUrlBusca(novaPagina);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [filtro]);
 
   const executaPaginacao = pagina => {

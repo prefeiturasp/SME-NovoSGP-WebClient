@@ -1,3 +1,4 @@
+import { Col, Row } from 'antd';
 import moment from 'moment';
 import PropTypes from 'prop-types';
 import React, { useCallback, useEffect, useState } from 'react';
@@ -17,6 +18,11 @@ import {
   SelectComponent,
 } from '~/componentes';
 import { Cabecalho, Paginacao } from '~/componentes-sgp';
+import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
+import {
+  SGP_BUTTON_CANCELAR,
+  SGP_BUTTON_SALVAR,
+} from '~/componentes-sgp/filtro/idsCampos';
 import { RotasDto } from '~/dtos';
 import {
   confirmar,
@@ -359,6 +365,7 @@ const RegistroItineranciaAEECadastro = ({ match }) => {
     } else {
       obterQuestoes();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [itineranciaId]);
 
   const perguntarAntesDeRemoverAluno = async () => {
@@ -519,6 +526,7 @@ const RegistroItineranciaAEECadastro = ({ match }) => {
       setEventoId();
       setListaEvento([]);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tipoCalendarioSelecionado, listaUes, itineranciaId]);
 
   const selecionaEvento = evento => {
@@ -673,42 +681,38 @@ const RegistroItineranciaAEECadastro = ({ match }) => {
 
   return (
     <>
-      <Cabecalho pagina="Registro de itinerância" />
+      <Cabecalho pagina="Registro de itinerância">
+        <Row gutter={[8, 8]} type="flex">
+          <Col>
+            <BotaoVoltarPadrao onClick={() => onClickVoltar()} />
+          </Col>
+          <Col>
+            <Button
+              id={SGP_BUTTON_CANCELAR}
+              label="Cancelar"
+              color={Colors.Roxo}
+              border
+              bold
+              onClick={onClickCancelar}
+              disabled={!modoEdicao}
+            />
+          </Col>
+          <Col>
+            <Button
+              id={SGP_BUTTON_SALVAR}
+              label="Salvar"
+              color={Colors.Roxo}
+              border
+              bold
+              onClick={() => onClickSalvar()}
+              disabled={!modoEdicao || somenteConsulta}
+            />
+          </Col>
+        </Row>
+      </Cabecalho>
       <Loader loading={carregandoGeral}>
         <Card>
-          <div className="col-12 p-0">
-            <div className="row mb-5">
-              <div className="col-md-12 d-flex justify-content-end">
-                <Button
-                  id="btn-voltar-ata-diario-bordo"
-                  label="Voltar"
-                  icon="arrow-left"
-                  color={Colors.Azul}
-                  border
-                  className="mr-3"
-                  onClick={onClickVoltar}
-                />
-                <Button
-                  id="btn-cancelar-ata-diario-bordo"
-                  label="Cancelar"
-                  color={Colors.Roxo}
-                  border
-                  bold
-                  className="mr-3"
-                  onClick={onClickCancelar}
-                  disabled={!modoEdicao}
-                />
-                <Button
-                  id="btn-gerar-ata-diario-bordo"
-                  label="Salvar"
-                  color={Colors.Roxo}
-                  border
-                  bold
-                  onClick={() => onClickSalvar()}
-                  disabled={!modoEdicao || somenteConsulta}
-                />
-              </div>
-            </div>
+          <div className="col-12">
             {itineranciaId && (
               <div className="row mb-4">
                 <div className="col-sm-12 d-flex justify-content-between align-items-center">

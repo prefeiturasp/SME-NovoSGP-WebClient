@@ -125,6 +125,7 @@ const ModalDevolverAEE = props => {
                   onChange={() => {
                     setModoEdicao(true);
                   }}
+                  labelRequired
                 />
               </div>
 

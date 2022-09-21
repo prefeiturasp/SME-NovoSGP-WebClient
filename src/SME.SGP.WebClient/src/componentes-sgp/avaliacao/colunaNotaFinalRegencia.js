@@ -38,11 +38,11 @@ const ColunaNotaFinalRegencia = props => {
   );
 };
 
-ColunaNotaFinalRegencia.defaultProps = {
+ColunaNotaFinalRegencia.propTypes = {
   indexLinha: PropTypes.number,
 };
 
-ColunaNotaFinalRegencia.propTypes = {
+ColunaNotaFinalRegencia.defaultProps = {
   indexLinha: null,
 };
 

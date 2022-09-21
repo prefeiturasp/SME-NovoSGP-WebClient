@@ -156,12 +156,14 @@ const RegistroIndividual = () => {
   }, [turmaSelecionada, resetarTela]);
 
   return (
-    <Loader loading={exibirLoaderGeralRegistroIndividual} className="w-100">
+    <Loader loading={exibirLoaderGeralRegistroIndividual}>
       <Mensagens />
       <ModalImpressaoRegistroIndividual />
-      <Cabecalho pagina="Registro individual" />
+      <Cabecalho pagina="Registro individual">
+        <BotoesAcoes turmaInfantil={turmaInfantil} />
+      </Cabecalho>
       <Card>
-        <div className="col-md-12 p-0">
+        <div className="col-md-12">
           <div className="row">
             <div className="col-sm-12 col-md-4 col-lg-4 col-xl-4 mb-4">
               <SelectComponent
@@ -177,9 +179,6 @@ const RegistroIndividual = () => {
                   !turmaInfantil || listaComponenteCurricular?.length === 1
                 }
               />
-            </div>
-            <div className="col-sm-12 col-lg-8 col-md-8 d-flex justify-content-end pb-4">
-              <BotoesAcoes turmaInfantil={turmaInfantil} />
             </div>
           </div>
           <div className="row">

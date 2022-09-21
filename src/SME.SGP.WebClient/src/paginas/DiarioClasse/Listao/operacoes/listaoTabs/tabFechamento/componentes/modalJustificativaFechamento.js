@@ -172,6 +172,7 @@ const ModalJustificativaFechamento = () => {
                     }}
                     name="descricao"
                     permiteInserirArquivo={false}
+                    labelRequired
                   />
                 </fieldset>
               </div>
@@ -194,7 +195,6 @@ const ModalJustificativaFechamento = () => {
                   bold
                   border
                   className="mr-3 mt-2 padding-btn-confirmacao"
-                  disabled={!modoEdicao}
                   onClick={() => {
                     validaAntesDoSubmit(false);
                     setModoEdicao(true);

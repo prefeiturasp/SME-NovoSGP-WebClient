@@ -2,6 +2,10 @@ import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import _ from 'lodash';
 
+import {
+  SGP_BUTTON_CANCELAR,
+  SGP_BUTTON_SALVAR,
+} from '~/componentes-sgp/filtro/idsCampos';
 import Button from '~/componentes/button';
 import { Colors } from '~/componentes/colors';
 import { URL_HOME } from '~/constantes/url';
@@ -11,6 +15,7 @@ import { ehTurmaInfantil } from '~/servicos/Validacoes/validacoesInfatil';
 import servicoSalvarConselhoClasse from '../../servicoSalvarConselhoClasse';
 
 import { setDadosListasNotasConceitos } from '~/redux/modulos/conselhoClasse/actions';
+import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
 
 const BotoesAcoesConselhoClasse = () => {
   const dispatch = useDispatch();
@@ -91,17 +96,9 @@ const BotoesAcoesConselhoClasse = () => {
   };
   return (
     <>
+      <BotaoVoltarPadrao className="mr-2" onClick={() => onClickVoltar()} />
       <Button
-        id="btn-voltar-conselho-classe"
-        label="Voltar"
-        icon="arrow-left"
-        color={Colors.Azul}
-        border
-        className="mr-2"
-        onClick={onClickVoltar}
-      />
-      <Button
-        id="btn-cancelar-conselho-classe"
+        id={SGP_BUTTON_CANCELAR}
         label="Cancelar"
         color={Colors.Roxo}
         border
@@ -115,12 +112,11 @@ const BotoesAcoesConselhoClasse = () => {
         }
       />
       <Button
-        id="btn-salvar-conselho-classe"
+        id={SGP_BUTTON_SALVAR}
         label="Salvar"
         color={Colors.Roxo}
         border
         bold
-        className="mr-2"
         onClick={onClickSalvar}
         disabled={
           ehTurmaInfantil(modalidadesFiltroPrincipal, turmaSelecionada) ||

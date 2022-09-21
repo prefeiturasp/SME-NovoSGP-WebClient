@@ -1,6 +1,7 @@
 import { Tooltip } from 'antd';
 import React, { useState } from 'react';
 import * as moment from 'moment';
+import { useLocation } from 'react-router-dom';
 import Ordenacao from '~/componentes-sgp/Ordenacao/ordenacao';
 import FechamentoRegencia from '../fechamanto-regencia/fechamento-regencia';
 import BotaoExpandir from './botao-expandir';
@@ -51,6 +52,8 @@ const FechamentoBimestreLista = props => {
   const [alunoModalAnotacao, setAlunoModalAnotacao] = useState({});
   const [fechamentoId, setFechamentoId] = useState(0);
 
+  const location = useLocation();
+
   const alertaSucessoReprocessamento =
     'Solicitação de fechamento realizada com sucesso. Em breve você receberá uma notificação com o resultado do processo.';
 
@@ -58,7 +61,7 @@ const FechamentoBimestreLista = props => {
     const processando = await ServicoFechamentoBimestre.reprocessarNotasConceitos(
       dados.fechamentoId
     ).catch(e => erros(e));
-    if (processando && processando.status == 200) {
+    if (processando?.status === 200) {
       setSituacaoFechamento(situacaoFechamentoDto.EmProcessamento);
       setSituacaosituacaoNomeFechamento('Em Processamento');
       sucesso(alertaSucessoReprocessamento);
@@ -87,7 +90,7 @@ const FechamentoBimestreLista = props => {
       [params]
     ).catch(e => erros(e));
     setCarregandoProcesso(false);
-    if (processando && processando.status == 200) {
+    if (processando?.status === 200) {
       setSituacaoFechamento(situacaoFechamentoDto.EmProcessamento);
       setSituacaosituacaoNomeFechamento('Em Processamento');
       sucesso(alertaSucessoReprocessamento);
@@ -96,9 +99,10 @@ const FechamentoBimestreLista = props => {
 
   const onClickVerPendecias = async () => {
     const { bimestre } = dados;
-    history.push(
-      `${RotasDto.PENDENCIAS_FECHAMENTO}/${bimestre}/${codigoComponenteCurricular}`
-    );
+    history.push({
+      pathname: `${RotasDto.PENDENCIAS_FECHAMENTO}/${bimestre}/${codigoComponenteCurricular}`,
+      state: { rotaOrigem: location.pathname },
+    });
   };
 
   const onClickAnotacao = aluno => {

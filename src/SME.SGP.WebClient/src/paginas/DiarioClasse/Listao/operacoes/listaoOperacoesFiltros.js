@@ -65,6 +65,7 @@ const ListaoOperacoesFiltros = () => {
       setPermissaoLista();
       dispatch(setSomenteConsulta(false));
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [permissoesTela, turma, setSomenteConsultaListao, dispatch]);
 
   useEffect(() => {
@@ -122,6 +123,7 @@ const ListaoOperacoesFiltros = () => {
     } else {
       setPeriodoAbertoListao(true);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [bimestreOperacoes, listaBimestresOperacoe]);
 
   const obterBimestresAbertoFechado = useCallback(async () => {
