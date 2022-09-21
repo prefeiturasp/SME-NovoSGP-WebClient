@@ -116,18 +116,6 @@ const BotoesAcoesFrequenciaPlanoAula = () => {
       </Col>
       <Col>
         <Button
-          id={SGP_BUTTON_CANCELAR}
-          label="Cancelar"
-          color={Colors.Roxo}
-          border
-          onClick={onClickCancelar}
-          disabled={
-            somenteConsulta || (!modoEdicaoFrequencia && !modoEdicaoPlanoAula)
-          }
-        />
-      </Col>
-      <Col>
-        <Button
           id={SGP_BUTTON_ALTERAR_CADASTRAR}
           label={idFrequencia ? 'Alterar' : 'Cadastrar'}
           color={Colors.Roxo}
