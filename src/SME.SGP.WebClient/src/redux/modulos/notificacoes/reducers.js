@@ -1,5 +1,6 @@
 import produce from 'immer';
 import notificacaoStatus from '~/dtos/notificacaoStatus';
+import { ordenarNotificoesNavBar } from '~/utils/funcoes/gerais';
 
 const inicial = {
   notificacoes: [],
@@ -36,6 +37,7 @@ export default function notificacoes(state = inicial, action) {
         } else if (estaNaLista && naoLida) {
           const index = draft.notificacoes.findIndex(n => n.codigo === codigo);
           draft.notificacoes[index].status = notificacaoStatus.Lida;
+          draft.notificacoes = ordenarNotificoesNavBar(draft.notificacoes);
         }
 
         draft.quantidade -= 1;
@@ -56,6 +58,7 @@ export default function notificacoes(state = inicial, action) {
             status: notificacaoStatus.Pendente,
           });
           draft.quantidade += 1;
+          draft.notificacoes = ordenarNotificoesNavBar(draft.notificacoes);
         }
         break;
       }
