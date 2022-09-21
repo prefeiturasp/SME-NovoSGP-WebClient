@@ -30,6 +30,10 @@ const PendenciasGerais = () => {
   );
   const [listaTurmas, setListaTurmas] = useState([]);
   const [carregandoTurmas, setCarregandoTurmas] = useState(false);
+  const [
+    carregandoTipoPendenciaGrupo,
+    setCarregandoTipoPendenciaGrupo,
+  ] = useState(false);
 
   const configCabecalho = {
     altura: '45px',
@@ -70,9 +74,9 @@ const PendenciasGerais = () => {
     obterPendencias(paginaAtual, numeroLinhas);
   };
 
-  const obterTurmas = useCallback(async () => {
+  const obterTurmas = async () => {
     setCarregandoTurmas(true);
-    const retorno = await ServicoPendencias.buscarTurmas(codigoTurma)
+    const retorno = await ServicoPendencias.buscarTurmas()
       .catch(e => erros(e))
       .finally(() => setCarregandoTurmas(false));
 
@@ -83,18 +87,37 @@ const PendenciasGerais = () => {
         setCodigoTurma([String(lista[0].codigo)]);
       }
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [codigoTurma]);
+  };
 
   useEffect(() => {
-    if (!codigoTurma) {
-      obterTurmas();
-    }
-  }, [obterTurmas, codigoTurma]);
+    obterTurmas();
+  }, []);
 
   useEffect(() => {
     if (titulo.length >= 3 || titulo.length === 0) obterPendencias();
-  }, [obterPendencias, obterTurmas, codigoTurma, tipoPendenciaGrupo, titulo]);
+  }, [obterPendencias, titulo]);
+
+  const obterTipoPendenciaGrupo = async () => {
+    setCarregandoTipoPendenciaGrupo(true);
+    const retorno = await ServicoRelatorioPendencias.obterTipoPendenciasGrupos({
+      opcaoTodos: false,
+    })
+      .catch(e => erros(e))
+      .finally(() => setCarregandoTipoPendenciaGrupo(false));
+    const dados = retorno?.data?.length ? retorno?.data : [];
+    setListaTipoPendenciaGrupos(dados);
+  };
+
+  useEffect(() => {
+    obterTipoPendenciaGrupo();
+    setTipoPendenciaGrupo();
+    setListaTipoPendenciaGrupos([]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const onChangeTurma = valor => setCodigoTurma(valor);
+  const onChangeTitulo = valor => setTitulo(valor.target.value);
+  const onChangeTipoPendenciaGrupo = valor => setTipoPendenciaGrupo(valor);
 
   const titutoPersonalizado = item => {
     return (
@@ -136,37 +159,6 @@ const PendenciasGerais = () => {
         )}
       </Container>
     );
-  };
-
-  const onChangeTipoPendenciaGrupo = valor => {
-    setTipoPendenciaGrupo(valor);
-  };
-
-  const [
-    carregandoTipoPendenciaGrupo,
-    setCarregandoTipoPendenciaGrupo,
-  ] = useState(false);
-
-  const obterTipoPendenciaGrupo = useCallback(async () => {
-    setCarregandoTipoPendenciaGrupo(true);
-    const retorno = await ServicoRelatorioPendencias.obterTipoPendenciasGrupos({
-      opcaoTodos: false,
-    })
-      .catch(e => erros(e))
-      .finally(() => setCarregandoTipoPendenciaGrupo(false));
-    const dados = retorno?.data?.length ? retorno?.data : [];
-    setListaTipoPendenciaGrupos(dados);
-  }, []);
-
-  useEffect(() => {
-    obterTipoPendenciaGrupo();
-    setTipoPendenciaGrupo();
-    setListaTipoPendenciaGrupos([]);
-  }, [obterTipoPendenciaGrupo]);
-
-  const onChangeTurma = valor => setCodigoTurma(valor);
-  const onChangeTitulo = valor => {
-    setTitulo(valor.target.value);
   };
 
   return (
@@ -247,6 +239,7 @@ const PendenciasGerais = () => {
                       }}
                     >
                       <span
+                        // eslint-disable-next-line react/no-danger
                         dangerouslySetInnerHTML={{
                           __html: item.detalhe,
                         }}

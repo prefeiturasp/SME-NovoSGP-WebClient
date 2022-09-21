@@ -1,9 +1,10 @@
 import React, { memo } from 'react';
 import t from 'prop-types';
-import { Route, Redirect } from 'react-router-dom';
+import { Redirect } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { setSomenteConsulta } from '~/redux/modulos/navegacao/actions';
 import { Loader } from '~/componentes';
+import RotaAutenticadaEstruturadaDefault from './rotaAutenticadaEstruturadaDefault';
 
 const RotaAutenticadaEstruturada = memo(
   ({
@@ -35,9 +36,9 @@ const RotaAutenticadaEstruturada = memo(
 
     return (
       <Loader loading={loaderGeral || !carregandoPerfil}>
-        <Route
+        <RotaAutenticadaEstruturadaDefault
           {...propriedades}
-          render={propriedade => <Component {...propriedade} />}
+          Component={Component}
         />
       </Loader>
     );
