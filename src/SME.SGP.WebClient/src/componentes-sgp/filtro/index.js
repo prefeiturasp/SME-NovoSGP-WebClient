@@ -48,6 +48,7 @@ import modalidade from '~/dtos/modalidade';
 import { Loader } from '~/componentes';
 import { TOKEN_EXPIRADO } from '~/constantes';
 import { ordenarDescPor, validarAcaoTela, verificarTelaEdicao } from '~/utils';
+import { setTrocouPerfil } from '~/redux/modulos/perfil/actions';
 
 const Filtro = () => {
   const dispatch = useDispatch();
@@ -66,7 +67,7 @@ const Filtro = () => {
   const [carregandoTurmas, setCarregandoTurmas] = useState(false);
 
   const usuarioStore = useSelector(state => state.usuario);
-  const perfilStore = useSelector(state => state.perfil);
+  const trocouPerfil = useSelector(state => state.perfil)?.trocouPerfil;
   const turmaUsuarioSelecionada = usuarioStore.turmaSelecionada;
   const recarregarFiltroPrincipal = usuarioStore?.recarregarFiltroPrincipal;
   const [campoAnoLetivoDesabilitado, setCampoAnoLetivoDesabilitado] = useState(
@@ -815,11 +816,15 @@ const Filtro = () => {
       limparFiltro();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [perfilStore]);
+  });
 
   useEffect(() => {
-    recarregarFiltro();
-  }, [perfilStore, recarregarFiltro]);
+    if (trocouPerfil) {
+      recarregarFiltro();
+      dispatch(setTrocouPerfil(false));
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [trocouPerfil, recarregarFiltro]);
 
   const mostrarEsconderBusca = () => {
     setAlternarFocoBusca(!alternarFocoBusca);

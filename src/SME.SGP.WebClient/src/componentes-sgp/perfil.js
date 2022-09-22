@@ -14,7 +14,10 @@ import { setMenusPermissoes } from '~/servicos/servico-navegacao';
 
 import { Base } from '../componentes/colors';
 import { store } from '../redux';
-import { perfilSelecionado } from '../redux/modulos/perfil/actions';
+import {
+  perfilSelecionado,
+  setTrocouPerfil,
+} from '../redux/modulos/perfil/actions';
 import history from '../servicos/history';
 import ServicoDashboard from '~/servicos/Paginas/Dashboard/ServicoDashboard';
 import { validarAcaoTela } from '~/utils';
@@ -161,6 +164,7 @@ const Perfil = props => {
             setMenusPermissoes();
             limparFiltro();
             store.dispatch(perfilSelecionado(perfilNovo[0]));
+            store.dispatch(setTrocouPerfil(true));
             setTimeout(() => {
               store.dispatch(setLoaderGeral(false));
             }, 1000);
@@ -174,6 +178,7 @@ const Perfil = props => {
         history.push('/');
       } else {
         store.dispatch(perfilSelecionado(perfilNovo[0]));
+        store.dispatch(setTrocouPerfil(true));
         limparFiltro();
       }
     } else {
