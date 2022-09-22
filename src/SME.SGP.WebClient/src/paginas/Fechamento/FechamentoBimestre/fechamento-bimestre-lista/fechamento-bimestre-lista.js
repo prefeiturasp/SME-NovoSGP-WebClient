@@ -321,7 +321,9 @@ const FechamentoBimestreLista = props => {
                                 }
                                 placement="top"
                               >
-                                <div className="d-flex justify-content-end ml-3">
+                              {
+                                situacaoFechamento !== situacaoFechamentoDto.NaoProcessado ?                  
+                                <div className="d-flex justify-content-end ml-3">                   
                                   <BtbAnotacao
                                     className={
                                       item.temAnotacao ? 'btn-com-anotacao' : ''
@@ -331,6 +333,8 @@ const FechamentoBimestreLista = props => {
                                     <i className="fas fa-pen" />
                                   </BtbAnotacao>
                                 </div>
+                                : ''
+                              }
                               </Tooltip>
                             ) : (
                               ''
