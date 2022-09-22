@@ -684,6 +684,11 @@ const DiarioBordo = ({ match }) => {
                 modoEdicao={modoEdicao}
                 desabilitarCampos={desabilitarCampos}
                 turmaInfantil={turmaInfantil}
+                componenteCurricularSelecionado={
+                  componenteCurricularSelecionado
+                }
+                dataSelecionada={dataSelecionada}
+                id={auditoria?.id}
               />
             </Cabecalho>
             <Card>
@@ -747,7 +752,7 @@ const DiarioBordo = ({ match }) => {
                                 <JoditEditor
                                   valideClipboardHTML={false}
                                   form={form}
-                                  value={valoresIniciais.planejamento}
+                                  value={form?.values?.planejamento}
                                   name="planejamento"
                                   onChange={v => {
                                     if (valoresIniciais.planejamento !== v) {
