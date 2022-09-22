@@ -164,7 +164,7 @@ const FechaReabCadastroBotoesAcao = () => {
             border
             bold
             onClick={() => validaAntesDoSubmit()}
-            disabled={desabilitarCampos}
+            disabled={desabilitarCampos || (!novoRegistro && !emEdicao)}
           />
         </Col>
       </Row>
