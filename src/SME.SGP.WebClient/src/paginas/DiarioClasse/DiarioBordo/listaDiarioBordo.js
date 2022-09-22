@@ -402,13 +402,13 @@ const ListaDiarioBordo = () => {
             <div className="col-sm-12 mb-3">
               <PainelCollapse accordion onChange={onColapse}>
                 {listaTitulos?.items?.map(item => {
-                  const { id, titulo, pendente, aulaId } = item;
+                  const { id, titulo, pendente } = item;
                   const bordaCollapse = pendente
                     ? Base.LaranjaStatus
                     : Base.AzulBordaCollapse;
                   return (
                     <PainelCollapse.Painel
-                      key={aulaId}
+                      key={id}
                       accordion
                       espacoPadrao
                       corBorda={bordaCollapse}
