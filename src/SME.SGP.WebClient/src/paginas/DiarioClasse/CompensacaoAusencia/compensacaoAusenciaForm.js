@@ -1006,7 +1006,9 @@ const CompensacaoAusenciaForm = ({ match }) => {
                         ehTurmaInfantil(
                           modalidadesFiltroPrincipal,
                           turmaSelecionada
-                        ) || desabilitarCampos
+                        ) ||
+                        desabilitarCampos ||
+                        (match.params.id && !modoEdicao)
                       }
                     />
                   </Col>

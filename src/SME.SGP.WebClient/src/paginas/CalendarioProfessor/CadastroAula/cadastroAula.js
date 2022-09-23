@@ -82,7 +82,6 @@ function CadastroDeAula({ match, location }) {
   const [registroMigrado, setRegistroMigrado] = useState(false);
   const [emManutencao, setEmManutencao] = useState(false);
   const [desabilitarBtnSalvar, setDesabilitarBtnSalvar] = useState(false);
-  const [alterouCampo, setAlterouCampo] = useState(false);
 
   const { diaAula } = queryString.parse(location.search);
   const aulaInicial = {
@@ -426,15 +425,14 @@ function CadastroDeAula({ match, location }) {
       );
 
       if (confirmou) {
-        obterAula();
         setModoEdicao(false);
+        obterAula();
       }
     }
   };
 
   const onChangeDataAula = data => {
     setModoEdicao(true);
-    setAlterouCampo(true);
     setAula(aulaState => {
       return { ...aulaState, dataAula: data };
     });
@@ -468,7 +466,6 @@ function CadastroDeAula({ match, location }) {
 
   const onChangeQuantidadeAula = quantidade => {
     setModoEdicao(true);
-    setAlterouCampo(true);
     setAula(aulaState => {
       return {
         ...aulaState,
@@ -564,12 +561,6 @@ function CadastroDeAula({ match, location }) {
       setSomenteLeitura(true);
     }
   }, [carregandoDados, aula.somenteLeitura]);
-
-  useEffect(() => {
-    const ehEdicao = id ? alterouCampo : !id;
-    const desabilitar = aula?.dataAula && aula?.disciplinaId && ehEdicao;
-    setModoEdicao(desabilitar);
-  }, [aula, id, alterouCampo]);
 
   return (
     <>
@@ -684,7 +675,7 @@ function CadastroDeAula({ match, location }) {
                     <Col>
                       <Button
                         id={SGP_BUTTON_ALTERAR_CADASTRAR}
-                        label={id ? 'Salvar' : 'Cadastrar'}
+                        label={id ? 'Alterar' : 'Cadastrar'}
                         color={Colors.Roxo}
                         border
                         bold
@@ -706,6 +697,7 @@ function CadastroDeAula({ match, location }) {
                           !aula.disciplinaId ||
                           somenteLeitura ||
                           desabilitarBtnSalvar ||
+                          (id && !modoEdicao) ||
                           !aula.podeEditar
                         }
                       />

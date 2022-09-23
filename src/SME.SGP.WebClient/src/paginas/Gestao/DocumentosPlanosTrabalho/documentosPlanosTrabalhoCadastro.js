@@ -513,7 +513,10 @@ const DocumentosPlanosTrabalhoCadastro = ({ match }) => {
                       border
                       bold
                       onClick={() => validaAntesDoSubmit(form)}
-                      disabled={desabilitarCampos}
+                      disabled={
+                        desabilitarCampos ||
+                        (idDocumentosPlanoTrabalho && !modoEdicao)
+                      }
                     />
                   </Col>
                 </Row>

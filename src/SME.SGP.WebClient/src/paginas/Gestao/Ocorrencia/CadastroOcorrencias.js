@@ -473,7 +473,8 @@ const CadastroOcorrencias = ({ match }) => {
                     disabled={
                       ehTurmaAnoAnterior() ||
                       somenteConsulta ||
-                      naoPodeIncluirOuAlterar()
+                      naoPodeIncluirOuAlterar() ||
+                      (match?.params?.id && !modoEdicao)
                     }
                   />
                 </Col>

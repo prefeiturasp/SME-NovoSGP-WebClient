@@ -68,9 +68,8 @@ const PeriodosEscolares = () => {
   const [carregandoTipos, setCarregandoTipos] = useState(false);
   const [auditoria, setAuditoria] = useState({});
 
-  const temValorInicial = Object.keys(valoresIniciais).length;
   const labelBotaoCadastrar =
-    temValorInicial && modoEdicao ? 'Alterar' : 'Cadastrar';
+    ehRegistroExistente || auditoria?.criadoEm ? 'Alterar' : 'Cadastrar';
 
   const validacaoPrimeiroBim = {
     primeiroBimestreDataInicial: momentSchema.required(
@@ -558,7 +557,11 @@ const PeriodosEscolares = () => {
                   border
                   bold
                   onClick={() => validaAntesDoSubmit(form)}
-                  disabled={desabilitaCampos}
+                  disabled={
+                    !calendarioEscolarSelecionado ||
+                    desabilitaCampos ||
+                    (auditoria?.criadoEm && !modoEdicao)
+                  }
                 />
               </Col>
             </Row>

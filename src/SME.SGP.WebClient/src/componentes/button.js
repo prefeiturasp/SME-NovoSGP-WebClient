@@ -78,7 +78,8 @@ const Button = React.forwardRef((props, ref) => {
           ? `background: transparent !important;
       border: 1px solid ${Base.CinzaDesabilitado} !important;
       color: ${Base.CinzaDesabilitado} !important;
-      cursor: not-allowed !important;`
+      cursor: not-allowed !important;
+      pointer-events: none !important;`
           : ''
       }
 
