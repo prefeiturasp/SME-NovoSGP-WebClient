@@ -60,7 +60,11 @@ const Navbar = () => {
   const clickEncerrar = async () => {
     setCarregando(true);
     const deslogar = true;
-    const resposta = await helper.acessar(false, false, deslogar);
+    const resposta = await helper.acessar(
+      usuarioStore.administradorSuporte,
+      false,
+      deslogar
+    );
     if (resposta?.sucesso) {
       history.push(URL_HOME);
     } else if (resposta.erro) {
