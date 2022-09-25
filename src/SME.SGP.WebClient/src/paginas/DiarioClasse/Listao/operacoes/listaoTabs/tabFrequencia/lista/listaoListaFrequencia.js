@@ -288,12 +288,15 @@ const ListaoListaFrequencia = () => {
     const ehLinhaExpandida = temLinhaExpandida(record.codigoAluno);
     const corTexto = ehLinhaExpandida.length ? Base.Branco : record?.cor;
     return (
-      <TextoEstilizado cor={corTexto}>
+      <TextoEstilizado
+        cor={corTexto}
+        style={{ cursor: 'pointer' }}
+        onClick={() => onExpand(record)}
+      >
         Detalhar
         <FontAwesomeIcon
           style={{ fontSize: 24, marginLeft: 5, cursor: 'pointer' }}
           icon={expanded ? faAngleUp : faAngleDown}
-          onClick={e => onExpand(record, e)}
         />
       </TextoEstilizado>
     );

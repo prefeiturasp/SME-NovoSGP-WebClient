@@ -258,40 +258,19 @@ const ListaoListaFechamento = props => {
     }
   };
 
-  const iconeExpandirLinha = (
-    alunoExpandido,
-    dadosEstudante,
-    expandirColunaRegencia
-  ) =>
-    expandirColunaRegencia ? (
-      <FontAwesomeIcon
-        style={{
-          fontSize: 18,
-          cursor: 'pointer',
-          color: alunoExpandido ? Base.Branco : Base.Roxo,
-        }}
-        icon={alunoExpandido ? faMinusCircle : faPlusCircle}
-        onClick={() =>
-          onClickExpandir(
-            !alunoExpandido,
-            dadosEstudante?.codigoAluno,
-            expandirColunaRegencia
-          )
-        }
-      />
-    ) : (
-      <FontAwesomeIcon
-        style={{
-          fontSize: 16,
-          cursor: 'pointer',
-          color: alunoExpandido ? Base.Branco : Base.CinzaMako,
-        }}
-        icon={alunoExpandido ? faChevronUp : faChevronDown}
-        onClick={() =>
-          onClickExpandir(!alunoExpandido, dadosEstudante?.codigoAluno)
-        }
-      />
-    );
+  const iconeExpandirLinhaRegencia = (alunoExpandido, dadosEstudante) => (
+    <FontAwesomeIcon
+      style={{
+        fontSize: 18,
+        cursor: 'pointer',
+        color: alunoExpandido ? Base.Branco : Base.Roxo,
+      }}
+      icon={alunoExpandido ? faMinusCircle : faPlusCircle}
+      onClick={() =>
+        onClickExpandir(!alunoExpandido, dadosEstudante?.codigoAluno, true)
+      }
+    />
+  );
 
   const colunasEstudantes = [
     {
@@ -333,10 +312,9 @@ const ListaoListaFechamento = props => {
         );
 
         const alunoExpandido = temLinhaExpandida(dadosEstudante?.codigoAluno);
-        const iconeExpandir = iconeExpandirLinha(
+        const iconeExpandir = iconeExpandirLinhaRegencia(
           alunoExpandido,
-          dadosEstudante,
-          true
+          dadosEstudante
         );
 
         if (temNotaConceitoEmAprovacao)
@@ -382,10 +360,9 @@ const ListaoListaFechamento = props => {
         );
 
         const alunoExpandido = temLinhaExpandida(dadosEstudante?.codigoAluno);
-        const iconeExpandir = iconeExpandirLinha(
+        const iconeExpandir = iconeExpandirLinhaRegencia(
           alunoExpandido,
-          dadosEstudante,
-          true
+          dadosEstudante
         );
 
         if (temNotaConceitoEmAprovacao)
@@ -435,9 +412,23 @@ const ListaoListaFechamento = props => {
       render: dadosEstudante => {
         const alunoExpandido = temLinhaExpandida(dadosEstudante?.codigoAluno);
         return (
-          <div className="d-flex justify-content-center align-items-center">
+          // eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions
+          <div
+            className="d-flex justify-content-center align-items-center"
+            style={{ cursor: 'pointer' }}
+            onClick={() =>
+              onClickExpandir(!alunoExpandido, dadosEstudante?.codigoAluno)
+            }
+          >
             <div style={{ marginRight: '4px' }}>Detalhar</div>
-            {iconeExpandirLinha(alunoExpandido, dadosEstudante, false)}
+            <FontAwesomeIcon
+              style={{
+                fontSize: 16,
+                cursor: 'pointer',
+                color: alunoExpandido ? Base.Branco : Base.CinzaMako,
+              }}
+              icon={alunoExpandido ? faChevronUp : faChevronDown}
+            />
           </div>
         );
       },
