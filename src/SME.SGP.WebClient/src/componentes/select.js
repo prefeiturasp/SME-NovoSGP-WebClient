@@ -67,6 +67,10 @@ const Container = styled.div`
     }
   }
 
+  .ant-select-selection__clear {
+    top: auto !important;
+  }
+
   div[class*='is-invalid'] {
     .ant-select-selection {
       border-color: #dc3545 !important;
