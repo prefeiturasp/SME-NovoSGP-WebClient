@@ -677,6 +677,7 @@ const AvaliacaoForm = ({ match, location }) => {
                             (!permissaoTela.podeIncluir ||
                               !permissaoTela.podeAlterar)) ||
                           !dentroPeriodo ||
+                          (idAvaliacao && !modoEdicao) ||
                           !podeLancaNota ||
                           desabilitarBotaoCadastrar
                         }

@@ -41,7 +41,7 @@ import {
   objetoEstaTodoPreenchido,
   ordenarDescPor,
 } from '~/utils/funcoes/gerais';
-import { SGP_BUTTON_SALVAR } from '~/componentes-sgp/filtro/idsCampos';
+import { SGP_BUTTON_SALVAR_ALTERAR } from '~/componentes-sgp/filtro/idsCampos';
 
 function AtribuicaoCJForm({ match, location }) {
   const anoAtual = window.moment().format('YYYY');
@@ -51,7 +51,7 @@ function AtribuicaoCJForm({ match, location }) {
   const usuario = useSelector(store => store.usuario);
   const [dreId, setDreId] = useState('');
   const [novoRegistro, setNovoRegistro] = useState(true);
-  const [modoEdicao] = useState(false);
+  const [modoEdicao, setModoEdicao] = useState(false);
   const [auditoria, setAuditoria] = useState({});
   const [refForm, setRefForm] = useState(null);
   const [listaProfessores, setListaProfessores] = useState([]);
@@ -150,6 +150,7 @@ function AtribuicaoCJForm({ match, location }) {
   };
 
   const onChangeSubstituir = item => {
+    setModoEdicao(true);
     setListaProfessores(
       listaProfessores.map(x => {
         if (item.disciplinaId === x.disciplinaId) {
@@ -251,6 +252,7 @@ function AtribuicaoCJForm({ match, location }) {
     refForm.setFieldValue('turmaId', undefined);
     setListaProfessores([]);
     setAuditoria({});
+    setModoEdicao(false);
   };
 
   const onChangeConsideraHistorico = e => {
@@ -333,11 +335,12 @@ function AtribuicaoCJForm({ match, location }) {
                   form={form}
                   permissoesTela={permissoesTela[RotasDto.ATRIBUICAO_CJ_LISTA]}
                   novoRegistro={novoRegistro}
-                  labelBotaoPrincipal="Salvar"
-                  idBotaoPrincipal={SGP_BUTTON_SALVAR}
+                  labelBotaoPrincipal={novoRegistro ? 'Salvar' : 'Alterar'}
+                  idBotaoPrincipal={SGP_BUTTON_SALVAR_ALTERAR}
                   onClickBotaoPrincipal={() => onClickBotaoPrincipal(form)}
                   onClickVoltar={() => onClickVoltar()}
                   modoEdicao={modoEdicao}
+                  desabilitarBotaoPrincipal={!novoRegistro && !modoEdicao}
                 />
               </Cabecalho>
               <Card>

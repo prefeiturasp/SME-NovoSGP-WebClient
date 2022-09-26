@@ -640,7 +640,11 @@ const DevolutivasForm = ({ match }) => {
                         history.push(RotasDto.DEVOLUTIVAS);
                       }
                     }}
-                    disabled={!turmaInfantil || desabilitarCampos}
+                    disabled={
+                      !turmaInfantil ||
+                      desabilitarCampos ||
+                      (idDevolutiva && !modoEdicao)
+                    }
                   />
                 </Col>
               </Row>
