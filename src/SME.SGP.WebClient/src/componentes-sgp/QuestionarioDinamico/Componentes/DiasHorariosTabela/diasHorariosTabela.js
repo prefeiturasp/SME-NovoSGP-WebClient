@@ -179,7 +179,7 @@ const DiasHorariosTabela = props => {
         exibirModal={exibirModal}
         dadosIniciais={dadosIniciais}
       />
-      <Label text={label} />
+      {label}
       <div className={possuiErro() ? 'tabela-invalida' : ''}>
         <DataTable
           columns={colunas}
@@ -216,7 +216,7 @@ const DiasHorariosTabela = props => {
 DiasHorariosTabela.propTypes = {
   questaoAtual: PropTypes.oneOfType([PropTypes.any]),
   form: PropTypes.oneOfType([PropTypes.any]),
-  label: PropTypes.string,
+  label: PropTypes.oneOfType([PropTypes.any]),
   desabilitado: PropTypes.bool,
   onChange: PropTypes.func,
 };

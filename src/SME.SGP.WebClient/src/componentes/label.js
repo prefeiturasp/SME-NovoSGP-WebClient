@@ -4,7 +4,8 @@ import PropTypes from 'prop-types';
 import { Base } from './colors';
 
 const Container = styled.div`
-  label {
+  label,
+  div {
     font-family: Roboto;
     height: ${({ altura }) => `${altura}px`};
     font-size: ${({ tamanhoFonte }) => `${tamanhoFonte}px`};
@@ -40,6 +41,7 @@ const Label = ({
   tamanhoFonte,
   altura,
   isRequired,
+  withDiv,
 }) => {
   return (
     <Container
@@ -58,15 +60,33 @@ const Label = ({
           *
         </span>
       )}
-      <label htmlFor={control} id={text} className={className}>
-        {text}
-        {observacaoText ? <span> {` ${observacaoText}`}</span> : ''}
-      </label>
-      {campoOpcional ? (
-        <label htmlFor={control} id={text} className="campoOpcional">
-          (opcional)
-        </label>
-      ) : null}
+      {withDiv ? (
+        <>
+          <div htmlFor={control} id={text} className={className}>
+            {text}
+            {observacaoText ? <span> {` ${observacaoText}`}</span> : ''}
+          </div>
+          {campoOpcional ? (
+            <span htmlFor={control} id={text} className="campoOpcional">
+              (opcional)
+            </span>
+          ) : null}
+        </>
+      ) : (
+        <>
+          {/* eslint-disable-next-line jsx-a11y/label-has-for */}
+          <label htmlFor={control} id={text} className={className}>
+            {text}
+            {observacaoText ? <span> {` ${observacaoText}`}</span> : ''}
+          </label>
+          {campoOpcional ? (
+            // eslint-disable-next-line jsx-a11y/label-has-associated-control, jsx-a11y/label-has-for
+            <label htmlFor={control} id={text} className="campoOpcional">
+              (opcional)
+            </label>
+          ) : null}
+        </>
+      )}
     </Container>
   );
 };
@@ -80,6 +100,7 @@ Label.propTypes = {
   tamanhoFonte: PropTypes.string,
   altura: PropTypes.string,
   isRequired: PropTypes.bool,
+  withDiv: PropTypes.bool,
 };
 
 Label.defaultProps = {
@@ -92,6 +113,7 @@ Label.defaultProps = {
   tamanhoFonte: '14',
   altura: '17',
   isRequired: false,
+  withDiv: false,
 };
 
 export default Label;
