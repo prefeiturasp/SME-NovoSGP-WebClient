@@ -44,6 +44,7 @@ const DesenvolvimentoReflexao = React.lazy(() =>
 
 function TerritorioSaber() {
   const [modoEdicao, setModoEdicao] = useState(false);
+  const [desabilitarBotaoSalvar, setDesabilitarBotaoSalvar] = useState(false);
   const [carregando, setCarregando] = useState(false);
   const [bimestreAberto, setBimestreAberto] = useState(false);
   const [somenteConsulta, setSomenteConsulta] = useState(false);
@@ -166,6 +167,11 @@ function TerritorioSaber() {
     if (!modoEdicao) {
       setModoEdicao(true);
     }
+    if (dadosBimestre.desenvolvimento === '' && dadosBimestre.reflexao === '') {
+      setDesabilitarBotaoSalvar(true);
+    } else {
+      setDesabilitarBotaoSalvar(false);
+    }
     dadosBimestre.territorioExperienciaId = territorioSelecionado;
     setDados(dados);
   };
@@ -237,7 +243,8 @@ function TerritorioSaber() {
           desabilitarBotaoPrincipal={
             ehTurmaInfantil(modalidadesFiltroPrincipal, turmaSelecionada) ||
             !territorioSelecionado ||
-            !modoEdicao
+            !modoEdicao ||
+            desabilitarBotaoSalvar
           }
           modoEdicao={modoEdicao}
         />
