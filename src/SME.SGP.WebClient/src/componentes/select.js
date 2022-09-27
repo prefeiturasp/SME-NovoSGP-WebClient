@@ -68,7 +68,7 @@ const Container = styled.div`
   }
 
   .ant-select-selection__clear {
-    top: auto !important;
+    top: 50% !important;
   }
 
   div[class*='is-invalid'] {
