@@ -78,7 +78,7 @@ class ServicoFiltroRelatorio {
     }
   };
 
-  obterComponetensCuriculares = (
+  obterComponetensCurriculares = (
     codigoUe,
     modalidade,
     anoLetivo,

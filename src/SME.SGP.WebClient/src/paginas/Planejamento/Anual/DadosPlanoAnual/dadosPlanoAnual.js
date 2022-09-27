@@ -41,7 +41,7 @@ const DadosPlanoAnual = () => {
   // Carrega lista de componentes para montar as TABS!
   const obterListaComponentesCurricularesPlanejamento = useCallback(() => {
     dispatch(setExibirLoaderPlanoAnual(true));
-    ServicoComponentesCurriculares.obterComponetensCuricularesRegencia(
+    ServicoComponentesCurriculares.obterComponetensCurricularesRegencia(
       turmaSelecionada.id
     )
       .then(resposta => {

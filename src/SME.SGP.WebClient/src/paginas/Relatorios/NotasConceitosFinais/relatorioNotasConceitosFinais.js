@@ -285,7 +285,7 @@ const RelatorioNotasConceitosFinais = () => {
     const codigoTodosAnosEscolares = obterCodigoTodosAnosEscolares();
     if (anoLetivo) {
       setCarregandoGeral(true);
-      const retorno = await ServicoFiltroRelatorio.obterComponetensCuriculares(
+      const retorno = await ServicoFiltroRelatorio.obterComponetensCurriculares(
         codigoUe,
         modalidadeId,
         anoLetivo,

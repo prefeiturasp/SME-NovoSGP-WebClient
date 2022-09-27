@@ -337,14 +337,14 @@ const RelatorioFrequencia = () => {
     if (ehTurma) {
       const turmas = ehOpcaoTodas ? [OPCAO_TODOS] : turmasCodigo;
 
-      return ServicoComponentesCurriculares.obterComponetensCuricularesPorTurma(
+      return ServicoComponentesCurriculares.obterComponetensCurricularesPorTurma(
         codigoUe,
         turmas
       );
     }
 
     const codigoTodosAnosEscolares = obterCodigoTodosAnosEscolares();
-    return ServicoComponentesCurriculares.obterComponetensCuriculares(
+    return ServicoComponentesCurriculares.obterComponetensCurriculares(
       codigoUe,
       modalidadeId,
       anoLetivo,
