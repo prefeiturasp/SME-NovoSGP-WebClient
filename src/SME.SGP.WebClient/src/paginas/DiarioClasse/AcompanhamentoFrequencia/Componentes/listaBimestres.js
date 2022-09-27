@@ -40,10 +40,14 @@ const ListaBimestres = props => {
         {bimestres.map(bimestre => {
           return (
             <TabPane tab={bimestre.descricao} key={bimestre.id}>
-              <ListaAlunos
-                componenteCurricularId={componenteCurricularIdSelecionado}
-                territorioSaber={territorioSaber}
-              />
+              {Number(bimestreSelecionado) === bimestre.id ? (
+                <ListaAlunos
+                  componenteCurricularId={componenteCurricularIdSelecionado}
+                  territorioSaber={territorioSaber}
+                />
+              ) : (
+                <></>
+              )}
             </TabPane>
           );
         })}
