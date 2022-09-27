@@ -142,7 +142,6 @@ const Filtros = ({ onFiltrar, filtrou, setFiltrou, cancelou, setCancelou }) => {
 
   const obterAnosLetivos = useCallback(async () => {
     setCarregandoAnosLetivos(true);
-
     const anosLetivos = await FiltroHelper.obterAnosLetivos({
       consideraHistorico,
     });
@@ -205,10 +204,10 @@ const Filtros = ({ onFiltrar, filtrou, setFiltrou, cancelou, setCancelou }) => {
   }, [anoLetivo]);
 
   useEffect(() => {
-    if (anoLetivo && !listaDres.length) {
+    if (anoLetivo) {
       obterDres();
     }
-  }, [anoLetivo, listaDres, obterDres]);
+  }, [anoLetivo]);
 
   const onChangeUe = ue => {
     setUeCodigo(ue);
@@ -265,9 +264,14 @@ const Filtros = ({ onFiltrar, filtrou, setFiltrou, cancelou, setCancelou }) => {
   const obterModalidades = useCallback(async (ue, consideraHistorico) => {
     if (ue) {
       setCarregandoModalidade(true);
-      const {
-        data,
-      } = consideraHistorico ? await ServicoFiltroRelatorio.obterModalidadesPorAbrangenciaHistorica(ue, consideraHistorico).finally(() => setCarregandoModalidade(false)) : await ServicoFiltroRelatorio.obterModalidadesPorAbrangencia(ue).finally(() => setCarregandoModalidade(false));
+      const { data } = consideraHistorico
+        ? await ServicoFiltroRelatorio.obterModalidadesPorAbrangenciaHistorica(
+            ue,
+            consideraHistorico
+          ).finally(() => setCarregandoModalidade(false))
+        : await ServicoFiltroRelatorio.obterModalidadesPorAbrangencia(
+            ue
+          ).finally(() => setCarregandoModalidade(false));
 
       if (data?.length) {
         const lista = data.map(item => ({
@@ -436,7 +440,7 @@ const Filtros = ({ onFiltrar, filtrou, setFiltrou, cancelou, setCancelou }) => {
       setImprimirEstudantesInativos(false);
     }
 
-    if(opcaoEstudanteId === OPCAO_SELECIONAR_ALUNOS){
+    if (opcaoEstudanteId === OPCAO_SELECIONAR_ALUNOS) {
       setFiltrou(false);
       setImprimirEstudantesInativos(true);
     }
@@ -475,7 +479,7 @@ const Filtros = ({ onFiltrar, filtrou, setFiltrou, cancelou, setCancelou }) => {
               lista={listaDres}
               valueOption="valor"
               valueText="desc"
-              disabled={!anoLetivo || listaDres?.length === 1}
+              disabled={!anoLetivo || !dreCodigo || listaDres?.length === 1}
               onChange={onChangeDre}
               valueSelect={dreCodigo}
               placeholder="Diretoria Regional De Educação (DRE)"
