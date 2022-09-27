@@ -344,7 +344,7 @@ const FechamentoBimestreLista = props => {
                         }`}
                       >
                         {ehSintese ? (
-                          item.sintese
+                          item.sintese 
                         ) : ehRegencia && item.notas ? (
                           <BotaoExpandir
                             index={index}
@@ -360,11 +360,15 @@ const FechamentoBimestreLista = props => {
                             )
                           )
                         ) : null}
-                        {item?.notas?.length && item.notas[0].emAprovacao && (
-                          <Tooltip title="Aguardando aprovação">
-                            <MarcadorTriangulo />
-                          </Tooltip>
-                        )}
+
+                        {!ehSintese ? (
+                          item?.notas?.length && item.notas[0]?.emAprovacao && (
+                            <Tooltip title="Aguardando aprovação">
+                              <MarcadorTriangulo />
+                            </Tooltip>
+                          )) : ''
+                        }
+                        
                       </td>
                       <td
                         className={`text-center ${
