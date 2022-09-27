@@ -199,7 +199,7 @@ const Login = props => {
                                 onClick={e => aoClicarBotaoAutenticar(form, e)}
                               />
                             </Loader>
-                            <Centralizar className="mt-1">
+                            <Centralizar className="mt-3">
                               <LabelLink onClick={navegarParaRecuperarSenha}>
                                 Esqueci minha senha
                               </LabelLink>

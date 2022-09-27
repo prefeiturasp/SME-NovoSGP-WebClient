@@ -6,7 +6,7 @@ import AlertaModalidadeInfantil from '~/componentes-sgp/AlertaModalidadeInfantil
 import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
 import {
   SGP_BUTTON_CANCELAR,
-  SGP_BUTTON_SALVAR,
+  SGP_BUTTON_SALVAR_ALTERAR,
 } from '~/componentes-sgp/filtro/idsCampos';
 import Alert from '~/componentes/alert';
 import Button from '~/componentes/button';
@@ -39,7 +39,7 @@ const AulaDadaAulaPrevista = () => {
   const [auditoria, setAuditoria] = useState(undefined);
   const permissoesTela = usuario.permissoes[RotasDto.AULA_DADA_AULA_PREVISTA];
   const [somenteConsulta, setSomenteConsulta] = useState(false);
-  const [carregamento, setCarregamento] = useState(false);
+  const [exibirLoader, setExibirLoader] = useState(false);
 
   const modalidadesFiltroPrincipal = useSelector(
     store => store.filtro.modalidades
@@ -55,32 +55,6 @@ const AulaDadaAulaPrevista = () => {
     );
   }, [turmaSelecionada, permissoesTela, modalidadesFiltroPrincipal]);
 
-  useEffect(() => {
-    const obterDisciplinas = async () => {
-      const disciplinas = await ServicoDisciplina.obterDisciplinasPorTurma(
-        turmaId
-      );
-      setListaDisciplinas(disciplinas.data);
-      if (disciplinas.data && disciplinas.data.length === 1) {
-        const disciplina = disciplinas.data[0];
-        onChangeDisciplinas(disciplina.codigoComponenteCurricular);
-        setDesabilitarDisciplina(true);
-      }
-    };
-    if (
-      turmaId &&
-      !ehTurmaInfantil(modalidadesFiltroPrincipal, turmaSelecionada)
-    ) {
-      obterDisciplinas();
-    } else {
-      setDadosLista([]);
-      setModoEdicao(false);
-      setDisciplinaIdSelecionada(undefined);
-      setListaDisciplinas([]);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [turmaSelecionada, modalidade, modalidadesFiltroPrincipal]);
-
   const perguntaAoSalvar = async () => {
     return confirmar(
       'Atenção',
@@ -88,8 +62,6 @@ const AulaDadaAulaPrevista = () => {
       'Suas alterações não foram salvas, deseja salvar agora?'
     );
   };
-
-  const [carregandoDados, setCarregandoDados] = useState(false);
 
   const verificarBimestreAtual = (dataInicio, dataFim) => {
     const dataAtual = window.moment(new Date());
@@ -100,7 +72,7 @@ const AulaDadaAulaPrevista = () => {
   };
 
   const buscarDados = async disciplinaId => {
-    setCarregandoDados(true);
+    setExibirLoader(true);
     const resposta = await api.get(
       `v1/aula-prevista/modalidades/${modalidade}/turmas/${turmaId}/disciplinas/${disciplinaId}/semestres/${periodo}`
     );
@@ -156,7 +128,7 @@ const AulaDadaAulaPrevista = () => {
       }
       setAuditoria(aud);
     }
-    setCarregandoDados(false);
+    setExibirLoader(false);
   };
 
   const resetarTela = () => {
@@ -165,11 +137,11 @@ const AulaDadaAulaPrevista = () => {
   };
 
   const salvar = async () => {
-    setCarregamento(true);
+    setExibirLoader(true);
 
     const bimestresQuantidade = [];
     dadoslista.bimestres.forEach(item => {
-      if (item?.previstas?.quantidade && item?.previstas?.quantidade > 0) {
+      if (item?.previstas?.quantidade > 0) {
         const dados = {
           bimestre: item.bimestre,
           quantidade: item.previstas.quantidade,
@@ -183,36 +155,24 @@ const AulaDadaAulaPrevista = () => {
       modalidade,
       turmaId,
     };
-    if (dadoslista.id) {
-      await api
-        .put(`v1/aula-prevista/${dadoslista.id}`, dados)
-        .then(res => {
-          if (res.status === 200)
-            sucesso('Suas informações foram salvas com sucesso');
-          setModoEdicao(false);
-        })
-        .then(() => {
-          buscarDados();
+
+    const apiUrl = dadoslista?.id
+      ? api.put(`v1/aula-prevista/${dadoslista?.id}`, dados)
+      : api.post(`v1/aula-prevista`, dados);
+
+    apiUrl
+      .then(res => {
+        if (res?.status === 200) {
+          sucesso(
+            `Suas informações foram ${
+              dadoslista.id ? 'alteradas' : 'salvas'
+            } com sucesso`
+          );
           resetarTela();
-          setCarregamento(false);
-        })
-        .catch(e => erros(e));
-    } else {
-      await api
-        .post(`v1/aula-prevista`, dados)
-        .then(res => {
-          if (res.status === 200)
-            sucesso('Suas informações foram salvas com sucesso');
-          buscarDados();
-          resetarTela();
-        })
-        .then(() => {
-          buscarDados();
-          resetarTela();
-          setCarregamento(false);
-        })
-        .catch(e => erros(e));
-    }
+          setExibirLoader(false);
+        }
+      })
+      .catch(e => erros(e));
   };
 
   const onChangeDisciplinas = async disciplinaId => {
@@ -225,6 +185,32 @@ const AulaDadaAulaPrevista = () => {
     setDisciplinaIdSelecionada(String(disciplinaId));
     await buscarDados(disciplinaId);
   };
+
+  useEffect(() => {
+    const obterDisciplinas = async () => {
+      const disciplinas = await ServicoDisciplina.obterDisciplinasPorTurma(
+        turmaId
+      );
+      setListaDisciplinas(disciplinas.data);
+      if (disciplinas?.data?.length === 1) {
+        const disciplina = disciplinas.data[0];
+        onChangeDisciplinas(disciplina.codigoComponenteCurricular);
+        setDesabilitarDisciplina(true);
+      }
+    };
+    if (
+      turmaId &&
+      !ehTurmaInfantil(modalidadesFiltroPrincipal, turmaSelecionada)
+    ) {
+      obterDisciplinas();
+    } else {
+      setDadosLista([]);
+      setModoEdicao(false);
+      setDisciplinaIdSelecionada(undefined);
+      setListaDisciplinas([]);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [turmaSelecionada, modalidade, modalidadesFiltroPrincipal]);
 
   const onClickVoltar = async () => {
     if (modoEdicao) {
@@ -256,7 +242,7 @@ const AulaDadaAulaPrevista = () => {
   };
 
   return (
-    <Loader loading={carregamento} tip="Carregando...">
+    <Loader loading={exibirLoader} tip="Carregando...">
       {!turmaSelecionada.turma &&
       !ehTurmaInfantil(modalidadesFiltroPrincipal, turmaSelecionada) ? (
         <Grid cols={12} className="p-0">
@@ -285,8 +271,8 @@ const AulaDadaAulaPrevista = () => {
             disabled={!modoEdicao || somenteConsulta}
           />
           <Button
-            id={SGP_BUTTON_SALVAR}
-            label="Salvar"
+            id={SGP_BUTTON_SALVAR_ALTERAR}
+            label={dadoslista?.id ? 'Alterar' : 'Salvar'}
             color={Colors.Roxo}
             border
             bold
@@ -312,21 +298,16 @@ const AulaDadaAulaPrevista = () => {
               />
             </div>
             <div className="col-md-12">
-              <Loader
-                loading={disciplinaIdSelecionada && carregandoDados}
-                className={`w-100 ${disciplinaIdSelecionada &&
-                  carregandoDados &&
-                  'p-3 text-center'}`}
-              >
-                {dadoslista && dadoslista.bimestres ? (
-                  <ListaAulasPorBimestre
-                    dados={dadoslista}
-                    setModoEdicao={e => setModoEdicao(e)}
-                    permissoesTela={permissoesTela}
-                    somenteConsulta={somenteConsulta}
-                  />
-                ) : null}
-              </Loader>
+              {dadoslista?.bimestres ? (
+                <ListaAulasPorBimestre
+                  dados={dadoslista}
+                  setModoEdicao={e => setModoEdicao(e)}
+                  permissoesTela={permissoesTela}
+                  somenteConsulta={somenteConsulta}
+                />
+              ) : (
+                <></>
+              )}
             </div>
             <div className="col-md-6 d-flex justify-content-start">
               {auditoria ? (
@@ -339,7 +320,7 @@ const AulaDadaAulaPrevista = () => {
                   alteradoRf={auditoria.alteradoRf}
                 />
               ) : (
-                ''
+                <></>
               )}
             </div>
           </div>

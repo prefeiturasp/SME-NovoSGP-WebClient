@@ -94,8 +94,9 @@ function CalendarioProfessor() {
   );
 
   const onClickDiaHandler = useCallback(
-    dia => {
+    (dia, fechando) => {
       dispatch(selecionaDia(dia));
+      if (fechando) return;
       async function buscarEventosDias() {
         try {
           disparar(setarCarregandoDia(true));
@@ -188,7 +189,7 @@ function CalendarioProfessor() {
               <Calendario
                 eventos={estado.eventos}
                 onClickMes={mes => onClickMesHandler(mes)}
-                onClickDia={dia => onClickDiaHandler(dia)}
+                onClickDia={(dia, fechando) => onClickDiaHandler(dia, fechando)}
                 carregandoCalendario={estado.carregandoCalendario}
                 carregandoMes={estado.carregandoMes}
                 carregandoDia={estado.carregandoDia}

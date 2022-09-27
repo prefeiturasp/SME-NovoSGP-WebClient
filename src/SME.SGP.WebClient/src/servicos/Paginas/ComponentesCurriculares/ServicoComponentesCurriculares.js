@@ -3,7 +3,7 @@ import api from '~/servicos/api';
 const urlPadrao = `v1/componentes-curriculares`;
 
 class ServicoComponentesCurriculares {
-  obterComponetensCuriculares = (
+  obterComponetensCurriculares = (
     codigoUe,
     modalidade,
     anoLetivo,
@@ -17,11 +17,11 @@ class ServicoComponentesCurriculares {
     return api.get(url);
   };
 
-  obterComponetensCuricularesPorTurma = (codigoUe, turmas) => {
+  obterComponetensCurricularesPorTurma = (codigoUe, turmas) => {
     return api.post(`${urlPadrao}/ues/${codigoUe}/turmas`, turmas);
   };
 
-  obterComponetensCuricularesRegencia = turmaId => {
+  obterComponetensCurricularesRegencia = turmaId => {
     return api.get(`${urlPadrao}/turmas/${turmaId}/regencia/componentes`);
   };
 

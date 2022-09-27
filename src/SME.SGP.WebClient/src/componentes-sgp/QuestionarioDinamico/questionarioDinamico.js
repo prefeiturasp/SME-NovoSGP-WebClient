@@ -479,10 +479,10 @@ const QuestionarioDinamico = props => {
     }
 
     return (
-      <>
+      <React.Fragment key={`campo-${questaoAtual?.id}`}>
         {campoAtual || ''}
         {campoQuestaoComplementar?.length ? campoQuestaoComplementar : ''}
-      </>
+      </React.Fragment>
     );
   };
 

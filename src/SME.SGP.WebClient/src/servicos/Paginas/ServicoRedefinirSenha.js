@@ -4,7 +4,11 @@ import history from '~/servicos/history';
 import { URL_HOME } from '~/constantes/url';
 import { obterMeusDados } from '~/servicos/Paginas/ServicoUsuario';
 import { setMenusPermissoes } from '~/servicos/servico-navegacao';
-import { perfilSelecionado, setarPerfis } from '~/redux/modulos/perfil/actions';
+import {
+  perfilSelecionado,
+  setarPerfis,
+  setTrocouPerfil,
+} from '~/redux/modulos/perfil/actions';
 import { store } from '~/redux';
 import ServicoDashboard from './Dashboard/ServicoDashboard';
 
@@ -46,6 +50,7 @@ class ServicoRedefinirSenha {
         );
         store.dispatch(setarPerfis(perfis));
         store.dispatch(perfilSelecionado(selecionado));
+        store.dispatch(setTrocouPerfil(true));
         obterMeusDados();
         setMenusPermissoes();
 

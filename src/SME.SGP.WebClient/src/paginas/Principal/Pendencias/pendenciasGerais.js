@@ -25,6 +25,7 @@ const PendenciasGerais = () => {
   const [tipoPendenciaGrupo, setTipoPendenciaGrupo] = useState();
   const [codigoTurma, setCodigoTurma] = useState();
   const [titulo, setTitulo] = useState('');
+  const [tituloExibicao, setTituloExibicao] = useState('');
   const [listaTipoPendenciaGrupos, setListaTipoPendenciaGrupos] = useState(
     true
   );
@@ -34,6 +35,7 @@ const PendenciasGerais = () => {
     carregandoTipoPendenciaGrupo,
     setCarregandoTipoPendenciaGrupo,
   ] = useState(false);
+  const [timeoutTitulo, setTimeoutTitulo] = useState();
 
   const configCabecalho = {
     altura: '45px',
@@ -89,14 +91,6 @@ const PendenciasGerais = () => {
     }
   };
 
-  useEffect(() => {
-    obterTurmas();
-  }, []);
-
-  useEffect(() => {
-    if (titulo.length >= 3 || titulo.length === 0) obterPendencias();
-  }, [obterPendencias, titulo]);
-
   const obterTipoPendenciaGrupo = async () => {
     setCarregandoTipoPendenciaGrupo(true);
     const retorno = await ServicoRelatorioPendencias.obterTipoPendenciasGrupos({
@@ -109,6 +103,7 @@ const PendenciasGerais = () => {
   };
 
   useEffect(() => {
+    obterTurmas();
     obterTipoPendenciaGrupo();
     setTipoPendenciaGrupo();
     setListaTipoPendenciaGrupos([]);
@@ -116,8 +111,36 @@ const PendenciasGerais = () => {
   }, []);
 
   const onChangeTurma = valor => setCodigoTurma(valor);
-  const onChangeTitulo = valor => setTitulo(valor.target.value);
   const onChangeTipoPendenciaGrupo = valor => setTipoPendenciaGrupo(valor);
+
+  useEffect(() => {
+    if (titulo.length >= 3 || titulo.length === 0) obterPendencias();
+  }, [obterPendencias, titulo]);
+
+  const validarObterPendenciasDebounce = useCallback(
+    (texto, onChangeFiltros) => {
+      if (timeoutTitulo) {
+        clearTimeout(timeoutTitulo);
+      }
+      const timeout = setTimeout(() => {
+        onChangeFiltros(texto);
+      }, 700);
+
+      setTimeoutTitulo(timeout);
+    },
+    [timeoutTitulo]
+  );
+
+  const onChangeDebounce = (text, setValue) => {
+    if (text?.length >= 3 || !text) {
+      validarObterPendenciasDebounce(text, setValue);
+    }
+  };
+
+  const onChangeTitulo = valor => {
+    setTituloExibicao(valor.target.value);
+    onChangeDebounce(valor.target.value, setTitulo);
+  };
 
   const titutoPersonalizado = item => {
     return (
@@ -217,7 +240,7 @@ const PendenciasGerais = () => {
                 iconeBusca
                 allowClear
                 onChange={onChangeTitulo}
-                value={titulo}
+                value={tituloExibicao}
               />
             </div>
           </div>

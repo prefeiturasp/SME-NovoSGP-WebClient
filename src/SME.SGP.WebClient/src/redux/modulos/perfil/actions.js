@@ -11,3 +11,10 @@ export function setarPerfis(perfis) {
     payload: perfis,
   };
 }
+
+export function setTrocouPerfil(payload) {
+  return {
+    type: '@perfil/setTrocouPerfil',
+    payload,
+  };
+}
