@@ -91,10 +91,6 @@ const PendenciasGerais = () => {
     }
   };
 
-  useEffect(() => {
-    obterTurmas();
-  }, []);
-
   const obterTipoPendenciaGrupo = async () => {
     setCarregandoTipoPendenciaGrupo(true);
     const retorno = await ServicoRelatorioPendencias.obterTipoPendenciasGrupos({
@@ -107,6 +103,7 @@ const PendenciasGerais = () => {
   };
 
   useEffect(() => {
+    obterTurmas();
     obterTipoPendenciaGrupo();
     setTipoPendenciaGrupo();
     setListaTipoPendenciaGrupos([]);
