@@ -84,10 +84,10 @@ class ServicoFiltroRelatorio {
     anoLetivo,
     anosEscolares
   ) => {
-    const url = `${urlPadrao}/componentes-curriculares/anos-letivos/${anoLetivo}/ues/${codigoUe}/modalidades/${modalidade}/?anos=${anosEscolares.join(
-      '&anos=',
-      anosEscolares
-    )}`;
+    const paramsAnosEscolares = anosEscolares?.length
+      ? `/?anos=${anosEscolares.join('&anos=', anosEscolares)}`
+      : '';
+    const url = `${urlPadrao}/componentes-curriculares/anos-letivos/${anoLetivo}/ues/${codigoUe}/modalidades/${modalidade}${paramsAnosEscolares}`;
     return api.get(url);
   };
 
