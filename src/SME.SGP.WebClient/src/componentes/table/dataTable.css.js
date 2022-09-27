@@ -47,16 +47,13 @@ export const Container = styled.div`
   .ant-table-tbody
     > tr:hover:not(.ant-table-expanded-row):not(.ant-table-row-selected)
     > td {
-      ${({ semHover }) =>
-        semHover
-          ? css`
-                background: transparent !important;
-              }
-            `
-          : css`
-              background: ${Base.Roxo} !important;
-              color: ${Base.Branco} !important;
+    ${({ semHover }) =>
+      semHover
+        ? 'background: transparent !important;'
+        : `background: ${Base.Roxo} !important;
+             color: ${Base.Branco} !important;
             `}
+  }
 
   .ant-table-tbody tr:hover.ant-table-expanded-row > td {
     cursor: default !important;
