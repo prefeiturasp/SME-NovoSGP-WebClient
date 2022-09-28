@@ -2,6 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
 import { Affix } from 'antd';
+import { useSelector } from 'react-redux';
 import { Base } from '~/componentes/colors';
 
 const Container = styled.div`
@@ -54,6 +55,8 @@ const Cabecalho = ({
   removeAffix,
   style,
 }) => {
+  const usuario = useSelector(state => state.usuario);
+
   const componentePadrao = (
     <div
       className="d-flex background-row pt-2"
@@ -73,13 +76,14 @@ const Cabecalho = ({
       <div className="d-flex">{children}</div>
     </div>
   );
+  const offsetTop = usuario?.acessoAdmin ? 114.15 : 70;
 
   return (
     <Container className={classes}>
       {removeAffix ? (
         componentePadrao
       ) : (
-        <Affix offsetTop={70}>{componentePadrao}</Affix>
+        <Affix offsetTop={offsetTop}>{componentePadrao}</Affix>
       )}
     </Container>
   );
