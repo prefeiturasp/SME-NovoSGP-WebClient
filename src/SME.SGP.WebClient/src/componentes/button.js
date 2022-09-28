@@ -90,6 +90,7 @@ const Button = React.forwardRef((props, ref) => {
 
   return (
     <Btn
+      disabled={disabled}
       hidden={hidden}
       type={type}
       className={`btn btn-${style} ${className} position-relative d-flex justify-content-center align-items-center ${

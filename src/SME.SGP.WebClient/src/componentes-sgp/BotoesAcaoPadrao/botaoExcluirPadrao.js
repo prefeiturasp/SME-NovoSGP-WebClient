@@ -17,13 +17,13 @@ const BotaoExcluirPadrao = props => {
     >
       <span>
         <Button
+          disabled={disabled}
           semMargemDireita
           id={SGP_BUTTON_EXCLUIR}
           icon="trash-alt"
           color={Colors.Vermelho}
           border
           onClick={onClick}
-          disabled={disabled}
         />
       </span>
     </Tooltip>
