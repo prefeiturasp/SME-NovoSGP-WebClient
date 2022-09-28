@@ -60,6 +60,7 @@ const AvaliacaoForm = ({ match, location }) => {
   );
   const [listaDisciplinas, setListaDisciplinas] = useState([]);
   const [carregandoTela, setCarregandoTela] = useState(false);
+  const [temRegencia, setTemRegencia] = useState(false);
 
   const clicouBotaoVoltar = async () => {
     if (dentroPeriodo && modoEdicao) {
@@ -190,20 +191,22 @@ const AvaliacaoForm = ({ match, location }) => {
       avaliacao.ueId = turmaSelecionada.unidadeEscolar;
     }
 
-    const disciplinas = [];
-    listaDisciplinasRegenciaSelecionadas.forEach(disciplina => {
-      if (
-        !disciplinas.includes(disciplina.codigoComponenteCurricular) &&
-        disciplina.selecionada
-      )
-        disciplinas.push(`${disciplina.codigoComponenteCurricular}`);
-    });
-    if (disciplinas?.length) {
-      avaliacao.disciplinaContidaRegenciaId = disciplinas;
-    } else {
-      erro('É necessário informar as disciplinas da regência');
-      setCarregandoTela(false);
-      return;
+    if (mostrarDisciplinaRegencia && temRegencia) {
+      const disciplinas = [];
+      listaDisciplinasRegenciaSelecionadas.forEach(disciplina => {
+        if (
+          !disciplinas.includes(disciplina.codigoComponenteCurricular) &&
+          disciplina.selecionada
+        )
+          disciplinas.push(`${disciplina.codigoComponenteCurricular}`);
+      });
+      if (disciplinas?.length) {
+        avaliacao.disciplinaContidaRegenciaId = disciplinas;
+      } else {
+        erro('É necessário informar as disciplinas da regência');
+        setCarregandoTela(false);
+        return;
+      }
     }
 
     avaliacao.dataAvaliacao = window.moment(dataAvaliacao).format();
@@ -357,8 +360,6 @@ const AvaliacaoForm = ({ match, location }) => {
       erro(`Não foi possível obter o componente curricular do EOL.`);
     }
   };
-
-  const [temRegencia, setTemRegencia] = useState(false);
 
   const montarListaDisciplinasRegenciaExibicao = useCallback(
     (listaDisciplinasReg, atividadesReg) => {
