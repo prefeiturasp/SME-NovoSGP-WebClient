@@ -4,6 +4,7 @@ import { useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 import * as Yup from 'yup';
 import { Formik, Form } from 'formik';
+import _ from 'lodash';
 import { Col, Row } from 'antd';
 import Card from '~/componentes/card';
 import Grid from '~/componentes/grid';
@@ -57,9 +58,6 @@ const AvaliacaoForm = ({ match, location }) => {
   const [mostrarDisciplinaRegencia, setMostrarDisciplinaRegencia] = useState(
     false
   );
-  const [desabilitarBotaoCadastrar, setDesabilitarBotaoCadastrar] = useState(
-    false
-  );
   const [listaDisciplinas, setListaDisciplinas] = useState([]);
   const [carregandoTela, setCarregandoTela] = useState(false);
 
@@ -108,11 +106,6 @@ const AvaliacaoForm = ({ match, location }) => {
       );
     } else {
       setPodeLancaNota(true);
-      setDesabilitarBotaoCadastrar(
-        !disciplinaId.length > 1 ||
-          disciplinaId.length === 0 ||
-          (Array.isArray(disciplinaId) && disciplinaId.length === 1)
-      );
     }
   };
 
@@ -151,6 +144,10 @@ const AvaliacaoForm = ({ match, location }) => {
   const [descricao, setDescricao] = useState('');
   const [copias, setCopias] = useState([]);
   const [listaDisciplinasRegencia, setListaDisciplinasRegencia] = useState([]);
+  const [
+    listaDisciplinasRegenciaSelecionadas,
+    setListaDisciplinasRegenciaSelecionadas,
+  ] = useState([]);
   const [
     listaDisciplinasSelecionadas,
     setListaDisciplinasSelecionadas,
@@ -194,14 +191,20 @@ const AvaliacaoForm = ({ match, location }) => {
     }
 
     const disciplinas = [];
-    listaDisciplinasRegencia.forEach(disciplina => {
+    listaDisciplinasRegenciaSelecionadas.forEach(disciplina => {
       if (
         !disciplinas.includes(disciplina.codigoComponenteCurricular) &&
         disciplina.selecionada
       )
         disciplinas.push(`${disciplina.codigoComponenteCurricular}`);
     });
-    avaliacao.disciplinaContidaRegenciaId = disciplinas;
+    if (disciplinas?.length) {
+      avaliacao.disciplinaContidaRegenciaId = disciplinas;
+    } else {
+      erro('É necessário informar as disciplinas da regência');
+      setCarregandoTela(false);
+      return;
+    }
 
     avaliacao.dataAvaliacao = window.moment(dataAvaliacao).format();
     avaliacao.descricao = descricao;
@@ -330,14 +333,6 @@ const AvaliacaoForm = ({ match, location }) => {
     descricao: '',
   };
 
-  const clicouBotaoCancelar = form => {
-    if (!idAvaliacao) {
-      form.resetForm();
-      setDadosAvaliacao(inicial);
-      aoTrocarTextEditor('');
-    }
-  };
-
   const obterDisciplinas = async () => {
     try {
       setCarregandoTela(true);
@@ -365,6 +360,40 @@ const AvaliacaoForm = ({ match, location }) => {
 
   const [temRegencia, setTemRegencia] = useState(false);
 
+  const montarListaDisciplinasRegenciaExibicao = useCallback(
+    (listaDisciplinasReg, atividadesReg) => {
+      if (mostrarDisciplinaRegencia) {
+        atividadesReg.forEach(atividade => {
+          listaDisciplinasReg.forEach(disciplina => {
+            if (
+              Number(atividade.disciplinaContidaRegenciaId) ===
+              Number(disciplina.codigoComponenteCurricular)
+            ) {
+              disciplina.selecionada = true;
+            }
+          });
+          setListaDisciplinasRegenciaSelecionadas([...listaDisciplinasReg]);
+        });
+      }
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    },
+    [mostrarDisciplinaRegencia]
+  );
+
+  useEffect(() => {
+    if (listaDisciplinasRegencia?.length && atividadesRegencia?.length) {
+      montarListaDisciplinasRegenciaExibicao(
+        _.cloneDeep(listaDisciplinasRegencia),
+        atividadesRegencia
+      );
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [
+    montarListaDisciplinasRegenciaExibicao,
+    atividadesRegencia,
+    listaDisciplinasRegencia,
+  ]);
+
   const obterDisciplinasRegencia = async () => {
     try {
       setCarregandoTela(true);
@@ -373,7 +402,8 @@ const AvaliacaoForm = ({ match, location }) => {
         true
       );
       if (data && status === 200) {
-        setListaDisciplinasRegencia(data);
+        setListaDisciplinasRegenciaSelecionadas(_.cloneDeep(data));
+        setListaDisciplinasRegencia(_.cloneDeep(data));
         setTemRegencia(true);
         setCarregandoTela(false);
       }
@@ -518,9 +548,9 @@ const AvaliacaoForm = ({ match, location }) => {
   ]);
 
   const selecionarDisciplina = indice => {
-    const disciplinas = [...listaDisciplinasRegencia];
+    const disciplinas = _.cloneDeep(listaDisciplinasRegenciaSelecionadas);
     disciplinas[indice].selecionada = !disciplinas[indice].selecionada;
-    setListaDisciplinasRegencia(disciplinas);
+    setListaDisciplinasRegenciaSelecionadas([...disciplinas]);
     aoTrocarCampos();
   };
 
@@ -542,43 +572,34 @@ const AvaliacaoForm = ({ match, location }) => {
         Number(item.codigoComponenteCurricular) ===
         Number(disciplinaSelecionada)
     );
-    const regenciaSelecionada = listaDisciplinasRegencia.filter(
-      item => item.selecionada
-    );
-    const desabilitar = !!(
-      disciplinaEncontrada?.regencia && !regenciaSelecionada?.length
-    );
 
     setMostrarDisciplinaRegencia(disciplinaEncontrada?.regencia);
-    setDesabilitarBotaoCadastrar(desabilitar);
-  }, [disciplinaSelecionada, listaDisciplinas, listaDisciplinasRegencia]);
+  }, [disciplinaSelecionada, listaDisciplinas]);
 
-  useEffect(() => {
-    if (
-      listaDisciplinasRegencia?.length &&
-      atividadesRegencia?.length &&
-      desabilitarBotaoCadastrar &&
-      mostrarDisciplinaRegencia
-    ) {
-      atividadesRegencia.forEach(atividade => {
-        setListaDisciplinasRegencia(estadoAntigo =>
-          estadoAntigo.map(disciplina => {
-            if (
-              Number(atividade.disciplinaContidaRegenciaId) ===
-              Number(disciplina.codigoComponenteCurricular)
-            ) {
-              return {
-                ...disciplina,
-                selecionada: true,
-              };
-            }
-            return disciplina;
-          })
-        );
-      });
+  const clicouBotaoCancelar = async form => {
+    if (modoEdicao) {
+      const confirmou = await confirmar(
+        'Atenção',
+        'Você não salvou as informações preenchidas.',
+        'Deseja realmente cancelar as alterações?'
+      );
+      if (confirmou) {
+        form.resetForm();
+        aoTrocarTextEditor('');
+        setModoEdicao(false);
+        if (idAvaliacao) {
+          montarListaDisciplinasRegenciaExibicao(
+            _.cloneDeep(listaDisciplinasRegencia),
+            atividadesRegencia
+          );
+        } else {
+          setListaDisciplinasRegenciaSelecionadas(
+            _.cloneDeep(listaDisciplinasRegencia)
+          );
+        }
+      }
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [atividadesRegencia, listaDisciplinasRegencia, desabilitarBotaoCadastrar]);
+  };
 
   return (
     <>
@@ -678,8 +699,7 @@ const AvaliacaoForm = ({ match, location }) => {
                               !permissaoTela.podeAlterar)) ||
                           !dentroPeriodo ||
                           (idAvaliacao && !modoEdicao) ||
-                          !podeLancaNota ||
-                          desabilitarBotaoCadastrar
+                          !podeLancaNota
                         }
                         border
                         bold
@@ -702,7 +722,6 @@ const AvaliacaoForm = ({ match, location }) => {
                             resetDisciplinasSelecionadas(form);
                             montaValidacoes(e.target.value);
                             validaInterdisciplinar(e.target.value);
-                            setDesabilitarBotaoCadastrar(true);
                           }}
                           desabilitado={desabilitarCampos || !dentroPeriodo}
                           labelRequired
@@ -792,12 +811,12 @@ const AvaliacaoForm = ({ match, location }) => {
                       </Grid>
                     </Div>
                     {temRegencia &&
-                      listaDisciplinasRegencia &&
+                      listaDisciplinasRegenciaSelecionadas &&
                       mostrarDisciplinaRegencia && (
                         <Div className="row">
                           <Grid cols={12} className="mb-4">
-                            <Label text="Componentes da regência" />
-                            {listaDisciplinasRegencia.map(
+                            <Label isRequired text="Componentes da regência" />
+                            {listaDisciplinasRegenciaSelecionadas.map(
                               (disciplina, indice) => {
                                 return (
                                   <Badge
