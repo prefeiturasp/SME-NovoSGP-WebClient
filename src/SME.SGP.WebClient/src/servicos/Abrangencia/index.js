@@ -60,6 +60,39 @@ const AbrangenciaServico = {
       }
     );
   },
+  /**
+   * @param {String} ue Ue selecionada
+   * @param {String} modalidade Modalidade Selecionada
+   * @param {String} periodo Periodo (opcional)
+   * @param {String} componenteCurricular Componente selecionado
+   */
+   buscarTurmasMesmoComponenteCurricular(
+    ue,
+    modalidade = 0,
+    periodo = '',
+    anoLetivo = '',
+    consideraHistorico = false,
+    consideraNovosAnosInfantil = true,
+    componente
+  ) {
+    let params = {};
+    if (modalidade) {
+      params = { modalidade };
+    }
+
+    if (periodo) {
+      params = { ...params, periodo };
+    }
+
+    return api.get(
+      `v1/abrangencias/${consideraHistorico}/dres/ues/${ue}/turmas/disciplina/${componente}?consideraNovosAnosInfantil=${consideraNovosAnosInfantil}${
+        anoLetivo ? `&anoLetivo=${anoLetivo}` : ''
+      }`,
+      {
+        params,
+      }
+    );
+  },
   buscarDisciplinas(codigoTurma, params) {
     return api.get(`v1/professores/turmas/${codigoTurma}/disciplinas`, {
       params,
