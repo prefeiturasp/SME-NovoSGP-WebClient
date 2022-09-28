@@ -8,17 +8,7 @@ import { Colors } from '~/componentes/colors';
 const BotaoExcluirPadrao = props => {
   const { onClick, disabled } = props;
 
-  return disabled ? (
-    <Button
-      semMargemDireita
-      id={SGP_BUTTON_EXCLUIR}
-      icon="trash-alt"
-      color={Colors.Vermelho}
-      border
-      onClick={onClick}
-      disabled={disabled}
-    />
-  ) : (
+  return (
     <Tooltip
       title="Excluir"
       placement="bottom"
@@ -27,6 +17,7 @@ const BotaoExcluirPadrao = props => {
     >
       <span>
         <Button
+          disabled={disabled}
           semMargemDireita
           id={SGP_BUTTON_EXCLUIR}
           icon="trash-alt"
