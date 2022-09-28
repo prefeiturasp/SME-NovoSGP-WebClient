@@ -239,7 +239,7 @@ const Notas = ({ match }) => {
       });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [usuario.turmaSelecionada]);
 
   const obterBimestres = useCallback(
     async (disciplinaId, dadosBimestre) => {
