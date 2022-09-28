@@ -54,7 +54,7 @@ const AtaFinalResultados = () => {
   const obterAnosLetivos = useCallback(async considHistorico => {
     setCarregandoAnosLetivos(true);
     const anosLetivo = await FiltroHelper.obterAnosLetivos({
-      considHistorico,
+      consideraHistorico: considHistorico,
     }).catch(e => erros(e));
     if (anosLetivo) {
       setListaAnosLetivo(anosLetivo);
