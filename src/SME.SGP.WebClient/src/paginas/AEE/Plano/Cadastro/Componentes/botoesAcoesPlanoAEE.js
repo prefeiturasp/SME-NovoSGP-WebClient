@@ -82,9 +82,8 @@ const BotoesAcoesPlanoAEE = props => {
     (desabilitarCamposPlanoAEE || !questionarioDinamicoEmEdicao);
 
   const desabilitarBotaoCancelar =
-    situacaoParecer || parecerPAAI
-      ? !parecerEmEdicao
-      : desabilitarCamposPlanoAEE || !questionarioDinamicoEmEdicao;
+    desabilitarCamposPlanoAEE ||
+    !(questionarioDinamicoEmEdicao || parecerEmEdicao);
 
   const dispatch = useDispatch();
 
