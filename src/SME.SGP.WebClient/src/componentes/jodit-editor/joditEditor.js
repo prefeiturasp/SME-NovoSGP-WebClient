@@ -251,7 +251,7 @@ const JoditEditor = forwardRef((props, ref) => {
       } else if (texto) {
         valorParaValidar = texto;
       }
-      setValidacaoComErro(validarSeTemErro(valorParaValidar));
+      setValidacaoComErro(validarSeTemErro(valorParaValidar, texto));
     }
 
     if (

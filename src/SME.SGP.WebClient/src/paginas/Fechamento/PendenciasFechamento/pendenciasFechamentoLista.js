@@ -365,6 +365,7 @@ const PendenciasFechamentoLista = ({ match }) => {
       <AlertaModalidadeInfantil />
       <Cabecalho pagina="Análise de Pendências">
         <>
+          <BotaoVoltarPadrao className="mr-2" onClick={() => onClickVoltar()} />
           <BotaoImprimir className="d-flex mr-2">
             <Loader loading={imprimindo}>
               <Button
@@ -373,12 +374,11 @@ const PendenciasFechamentoLista = ({ match }) => {
                 color={Colors.Azul}
                 border
                 onClick={() => gerarRelatorio()}
-                disabled={lista.length === 0}
+                disabled={lista.length === 0 || !bimestreSelecionado}
                 id={SGP_BUTTON_IMPRIMIR}
               />
             </Loader>
           </BotaoImprimir>
-          <BotaoVoltarPadrao className="mr-2" onClick={() => onClickVoltar()} />
           <Button
             id={SGP_BUTTON_APROVAR}
             label="Aprovar"
