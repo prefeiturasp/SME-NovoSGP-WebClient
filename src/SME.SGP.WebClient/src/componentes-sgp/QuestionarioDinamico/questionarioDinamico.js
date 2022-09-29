@@ -471,6 +471,7 @@ const QuestionarioDinamico = props => {
               onChangeQuestionario();
             }}
             turmaId={turmaId}
+            questionarioId={dados?.questionarioId}
           />
         );
         break;
