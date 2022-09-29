@@ -200,7 +200,6 @@ const AtribuicaoResponsaveisCadastro = () => {
     } else {
       setTipoResponsavel();
       setResponsavel();
-      setListaTipoResponsavel([]);
     }
   }, [dreId]);
 
