@@ -12,6 +12,9 @@ const CampoApanhadoGeral = () => {
   const dadosApanhadoGeral = useSelector(
     store => store.acompanhamentoAprendizagem.dadosApanhadoGeral
   );
+  const valorApanhadoGeral = useSelector(
+    store => store.acompanhamentoAprendizagem.dadosApanhadoGeral?.apanhadoGeral
+  );
 
   const qtdMaxImagensCampoPercursoColetivo = useSelector(
     store =>
@@ -50,10 +53,14 @@ const CampoApanhadoGeral = () => {
         .desabilitarCamposAcompanhamentoAprendizagem
   );
 
+  const validarSeTemErro = (valorHtml, texto) => {
+    return !valorHtml || !texto;
+  };
+
   return (
     <JoditEditor
       id="percurso-coletivo-turma-editor"
-      value={dadosApanhadoGeral?.apanhadoGeral}
+      value={valorApanhadoGeral}
       onChange={onChange}
       readonly={desabilitarCampo}
       permiteVideo={false}
@@ -61,6 +68,8 @@ const CampoApanhadoGeral = () => {
       imagensCentralizadas
       permiteGif={false}
       desabilitar={desabilitarCamposAcompanhamentoAprendizagem}
+      validarSeTemErro={validarSeTemErro}
+      mensagemErro="Campo obrigatório"
     />
   );
 };

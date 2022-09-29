@@ -61,12 +61,20 @@ const BotoesAcoesConselhoClasse = () => {
     return false;
   };
 
+  const perguntaAoSalvar = async () => {
+    return confirmar(
+      'Atenção',
+      '',
+      'Suas alterações não foram salvas, deseja salvar agora?'
+    );
+  };
+
   const onClickVoltar = async () => {
     if (
       !desabilitarCampos &&
       (conselhoClasseEmEdicao || notaConceitoPosConselhoAtual.ehEdicao)
     ) {
-      const confirmado = true;
+      const confirmado = await perguntaAoSalvar();
       if (confirmado) {
         const salvou = await onClickSalvar();
         if (salvou) {
