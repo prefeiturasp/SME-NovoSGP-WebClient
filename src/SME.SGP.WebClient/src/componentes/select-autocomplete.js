@@ -38,6 +38,10 @@ const Container = styled.div`
       border-color: ${Base.Vermelho} !important;
     }
   }
+
+  .ant-select-selection__clear {
+    font-size: 15px;
+  }
 `;
 
 const SelectAutocomplete = ({

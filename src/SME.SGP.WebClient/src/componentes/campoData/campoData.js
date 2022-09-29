@@ -47,6 +47,7 @@ const CampoData = ({
   diasParaSinalizar,
   intervaloDatas,
   labelRequired,
+  allowClear,
 }) => {
   const habilitarDatas = dataAtual => {
     let retorno = true;
@@ -190,6 +191,7 @@ const CampoData = ({
         showToday={false}
         defaultPickerValue={valorPadrao}
         dateRender={dataRender}
+        allowClear={allowClear}
       />
     );
   };
@@ -329,6 +331,7 @@ CampoData.propTypes = {
   diasParaSinalizar: PropTypes.oneOfType([PropTypes.array]),
   intervaloDatas: PropTypes.bool,
   labelRequired: PropTypes.bool,
+  allowClear: PropTypes.bool,
 };
 
 CampoData.defaultProps = {
@@ -354,6 +357,7 @@ CampoData.defaultProps = {
   diasParaSinalizar: [],
   intervaloDatas: false,
   labelRequired: false,
+  allowClear: true,
 };
 
 const momentSchema = new MomentSchema();

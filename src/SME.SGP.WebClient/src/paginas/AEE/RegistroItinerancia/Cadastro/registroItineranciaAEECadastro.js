@@ -1,4 +1,5 @@
 import { Col, Row } from 'antd';
+import _ from 'lodash';
 import moment from 'moment';
 import PropTypes from 'prop-types';
 import React, { useCallback, useEffect, useState } from 'react';
@@ -298,27 +299,44 @@ const RegistroItineranciaAEECadastro = ({ match }) => {
         objetivoBase = objetivo;
         objetivoBase.checked = true;
       });
+    } else {
+      setObjetivosSelecionados([]);
     }
 
     if (itinerancia?.ueId) {
       setUeId(String(itinerancia.ueId));
+    } else if (listaUes?.length > 1) {
+      setUeId();
     }
+
     if (itinerancia?.dreId) {
       setDreId(String(itinerancia.dreId));
+    } else if (listaDres?.length > 1) {
+      setDreId();
     }
+
     if (itinerancia.questoes?.length) {
       setQuestoesItinerancia(itinerancia.questoes);
+    } else {
+      setQuestoesItinerancia([]);
     }
+
     if (itinerancia.alunos?.length) {
       setAlunosSelecionados(itinerancia.alunos);
+    } else {
+      setAlunosSelecionados([]);
     }
 
     if (itinerancia.tipoCalendarioId) {
       setTipoCalendarioSelecionado(String(itinerancia.tipoCalendarioId));
+    } else if (listaCalendario?.length > 1) {
+      setTipoCalendarioSelecionado();
     }
 
     if (itinerancia.eventoId) {
       setEventoId(String(itinerancia.eventoId));
+    } else if (listaEvento?.length > 1) {
+      setEventoId();
     }
   };
 
@@ -335,7 +353,7 @@ const RegistroItineranciaAEECadastro = ({ match }) => {
       const ehParaCancelar = await perguntarAntesDeCancelar();
       if (ehParaCancelar) {
         if (itineranciaId) {
-          construirItineranciaAlteracao(itineranciaAlteracao);
+          construirItineranciaAlteracao(_.cloneDeep(itineranciaAlteracao));
         } else {
           resetTela();
         }
@@ -352,8 +370,8 @@ const RegistroItineranciaAEECadastro = ({ match }) => {
       ).catch(e => erros(e));
       if (result?.data && result?.status === 200) {
         const itinerancia = result.data;
-        setItineranciaAlteracao(itinerancia);
-        construirItineranciaAlteracao(itinerancia);
+        setItineranciaAlteracao(_.cloneDeep(itinerancia));
+        construirItineranciaAlteracao(_.cloneDeep(itinerancia));
         setSomenteConsulta(itinerancia.criadoRF !== usuario.rf);
         setSomenteConsultaManual(itinerancia.criadoRF !== usuario.rf);
         setAuditoria(itinerancia.auditoria);
@@ -700,12 +718,12 @@ const RegistroItineranciaAEECadastro = ({ match }) => {
           <Col>
             <Button
               id={SGP_BUTTON_SALVAR}
-              label="Salvar"
+              label={match?.params?.id ? 'Alterar' : 'Salvar'}
               color={Colors.Roxo}
               border
               bold
               onClick={() => onClickSalvar()}
-              disabled={!modoEdicao || somenteConsulta}
+              disabled={somenteConsulta || (match?.params?.id && !modoEdicao)}
             />
           </Col>
         </Row>
@@ -750,6 +768,7 @@ const RegistroItineranciaAEECadastro = ({ match }) => {
                   onChange={onChangeDataVisita}
                   desabilitarData={desabilitarDataVisita}
                   desabilitado={desabilitarCamposPorPermissao()}
+                  allowClear={false}
                 />
               </div>
             </div>
@@ -762,7 +781,9 @@ const RegistroItineranciaAEECadastro = ({ match }) => {
                     lista={listaDres}
                     valueOption="id"
                     valueText="nome"
-                    disabled={listaDres?.length === 1}
+                    disabled={
+                      listaDres?.length === 1 || desabilitarCamposPorPermissao()
+                    }
                     onChange={onChangeDre}
                     valueSelect={dreId}
                     placeholder="Diretoria Regional De Educação (DRE)"
@@ -778,7 +799,9 @@ const RegistroItineranciaAEECadastro = ({ match }) => {
                     lista={listaUes}
                     valueOption="id"
                     valueText="nome"
-                    disabled={listaUes?.length === 1}
+                    disabled={
+                      listaUes?.length === 1 || desabilitarCamposPorPermissao()
+                    }
                     onChange={onChangeUe}
                     valueSelect={ueId}
                     placeholder="Unidade Escolar (UE)"
@@ -799,6 +822,7 @@ const RegistroItineranciaAEECadastro = ({ match }) => {
                     placeholder="Selecione um calendário"
                     showSearch
                     searchValue={false}
+                    disabled={desabilitarCamposPorPermissao()}
                   />
                 </Loader>
               </div>
@@ -815,6 +839,7 @@ const RegistroItineranciaAEECadastro = ({ match }) => {
                     placeholder="Selecione um evento"
                     showSearch
                     searchValue={false}
+                    disabled={desabilitarCamposPorPermissao()}
                   />
                 </Loader>
               </div>
