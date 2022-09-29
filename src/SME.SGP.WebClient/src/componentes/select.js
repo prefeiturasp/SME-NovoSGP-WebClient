@@ -69,6 +69,7 @@ const Container = styled.div`
 
   .ant-select-selection__clear {
     top: 50% !important;
+    font-size: 15px !important;
   }
 
   div[class*='is-invalid'] {
