@@ -16,7 +16,7 @@ import {
   limparDadosDashboardEscolaAqui,
   setDadosDeLeituraDeComunicadosAgrupadosPorModalidade,
 } from '~/redux/modulos/dashboardEscolaAqui/actions';
-import { AbrangenciaServico, api, erros } from '~/servicos';
+import { AbrangenciaServico, api, erros, ServicoComunicados } from '~/servicos';
 import ServicoFiltroRelatorio from '~/servicos/Paginas/FiltroRelatorio/ServicoFiltroRelatorio';
 import ServicoDashboardEscolaAqui from '~/servicos/Paginas/Dashboard/ServicoDashboardEscolaAqui';
 import {
@@ -30,7 +30,6 @@ import LeituraDeComunicadosPorAlunos from './leituraDeComunicadosPorAlunos';
 import LeituraDeComunicadosPorModalidades from './leituraDeComunicadosPorModalidades';
 import LeituraDeComunicadosPorModalidadesETurmas from './leituraDeComunicadosPorModalidadesETurmas';
 import LeituraDeComunicadosPorTurmas from './leituraDeComunicadosPorTurmas';
-import ServicoComunicados from '~/servicos/Paginas/AcompanhamentoEscolar/Comunicados/ServicoComunicados';
 import { ordenarListaMaiorParaMenor } from '~/utils/funcoes/gerais';
 import { OPCAO_TODOS } from '~/constantes/constantes';
 
@@ -178,12 +177,11 @@ const DadosComunicadosLeitura = props => {
     )
       .catch(e => erros(e))
       .finally(() => setCarregandoAnosEscolares(false));
-
-    if (resposta.data?.length) {
+    if (resposta?.data?.length) {
       const dadosMap = resposta.data.map(item => {
         return {
           valor: item.ano,
-          descricao: item.ano,
+          descricao: item.descricao,
         };
       });
       setListaAnosEscolares(dadosMap);
