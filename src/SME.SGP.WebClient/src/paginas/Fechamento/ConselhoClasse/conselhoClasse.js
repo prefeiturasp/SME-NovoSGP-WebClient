@@ -1,6 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Loader } from '~/componentes';
 import AlertaModalidadeInfantil from '~/componentes-sgp/AlertaModalidadeInfantil/alertaModalidadeInfantil';
 import Cabecalho from '~/componentes-sgp/cabecalho';
 import Alert from '~/componentes/alert';
@@ -11,7 +10,6 @@ import {
   setAlunosConselhoClasse,
   setPodeAcessar,
   setDadosAlunoObjectCard,
-  setDadosBimestresConselhoClasse,
   setExibirLoaderGeralConselhoClasse,
   setDadosPrincipaisConselhoClasse,
 } from '~/redux/modulos/conselhoClasse/actions';
@@ -41,7 +39,6 @@ const ConselhoClasse = () => {
 
   const [exibirListas, setExibirListas] = useState(false);
   const [turmaAtual, setTurmaAtual] = useState(0);
-  const [carregandoFrequencia, setCarregandoFrequencia] = useState(false);
 
   const modalidadesFiltroPrincipal = useSelector(
     store => store.filtro.modalidades
@@ -64,19 +61,6 @@ const ConselhoClasse = () => {
     }
     dispatch(setExibirLoaderGeralConselhoClasse(false));
   }, [anoLetivo, dispatch, turma, periodo]);
-
-  const obterDadosBimestresConselhoClasse = useCallback(async () => {
-    dispatch(setExibirLoaderGeralConselhoClasse(true));
-    const retorno = await ServicoConselhoClasse.obterDadosBimestres(
-      turmaSelecionada.id
-    )
-      .catch(e => erros(e))
-      .finally(() => setExibirLoaderGeralConselhoClasse(false));
-    if (retorno && retorno.data) {
-      dispatch(setDadosBimestresConselhoClasse(retorno.data));
-      obterListaAlunos();
-    }
-  }, [dispatch, turmaSelecionada, obterListaAlunos]);
 
   const resetarInfomacoes = useCallback(() => {
     dispatch(limparDadosConselhoClasse());
@@ -101,31 +85,13 @@ const ConselhoClasse = () => {
       turmaSelecionada.turma === turmaAtual &&
       !ehTurmaInfantil(modalidadesFiltroPrincipal, turmaSelecionada)
     ) {
-      obterDadosBimestresConselhoClasse();
+      obterListaAlunos();
     }
-  }, [
-    obterDadosBimestresConselhoClasse,
-    turma,
-    turmaAtual,
-    turmaSelecionada,
-    resetarInfomacoes,
-    modalidadesFiltroPrincipal,
-  ]);
-
-  const obterFrequenciaAluno = async codigoAluno => {
-    setCarregandoFrequencia(true);
-    const retorno = await ServicoConselhoClasse.obterFrequenciaAluno(
-      codigoAluno,
-      turma
-    )
-      .catch(e => erros(e))
-      .finally(() => setCarregandoFrequencia(false));
-
-    return retorno?.data;
-  };
+  }, [turmaAtual, turmaSelecionada]);
 
   const verificarExibicaoMarcador = async codigoEOL => {
-    const resposta = await ServicoConselhoClasse.obterExibirMarcadorParecer(
+    // Somente quando for bimestre diferente de final vai ter retorno com valor!
+    const resposta = await ServicoConselhoClasse.obterConselhoClasseTurmaFinal(
       turmaSelecionada.turma,
       codigoEOL,
       turmaSelecionada.consideraHistorico
@@ -136,7 +102,7 @@ const ConselhoClasse = () => {
         conselhoClasseId,
         fechamentoTurmaId,
         conselhoClasseAlunoId,
-        tipoNota
+        tipoNota,
       } = resposta?.data;
       if (fechamentoTurmaId !== 0 && conselhoClasseId != 0) {
         const retorno = await servicoSalvarConselhoClasse.validaParecerConclusivo(
@@ -153,8 +119,8 @@ const ConselhoClasse = () => {
           conselhoClasseAlunoId,
           alunoCodigo: codigoEOL,
           ...dadosPrincipaisConselhoClasse,
-        tipoNota
-      };
+          tipoNota,
+        };
         if (!Object.keys(dadosPrincipaisConselhoClasse).length) {
           dispatch(setDadosPrincipaisConselhoClasse(valores));
         }
@@ -165,9 +131,6 @@ const ConselhoClasse = () => {
 
   const onChangeAlunoSelecionado = async aluno => {
     resetarInfomacoes();
-    const frequenciaGeralAluno = await obterFrequenciaAluno(aluno.codigoEOL);
-    const novoAluno = aluno;
-    novoAluno.frequencia = frequenciaGeralAluno;
     verificarExibicaoMarcador(aluno.codigoEOL);
     dispatch(setDadosAlunoObjectCard(aluno));
   };
@@ -229,14 +192,12 @@ const ConselhoClasse = () => {
                       onChangeAlunoSelecionado={onChangeAlunoSelecionado}
                       permiteOnChangeAluno={permiteOnChangeAluno}
                     >
-                      <Loader loading={carregandoFrequencia} ignorarTip>
-                        <ObjectCardConselhoClasse />
-                        <MarcadorParecerConclusivo />
-                        <DadosConselhoClasse
-                          turmaCodigo={turmaSelecionada.turma}
-                          modalidade={turmaSelecionada.modalidade}
-                        />
-                      </Loader>
+                      <ObjectCardConselhoClasse />
+                      <MarcadorParecerConclusivo />
+                      <DadosConselhoClasse
+                        turmaCodigo={turmaSelecionada.turma}
+                        modalidade={turmaSelecionada.modalidade}
+                      />
                     </TabelaRetratilConselhoClasse>
                   </div>
                 </>

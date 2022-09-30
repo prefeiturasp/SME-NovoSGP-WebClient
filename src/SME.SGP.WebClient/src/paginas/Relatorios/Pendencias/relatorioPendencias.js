@@ -146,8 +146,7 @@ const RelatorioPendencias = () => {
   };
 
   const onChangeComponenteCurricular = valor => {
-    const valorNovo = valor ? [valor] : '';
-    setComponentesCurricularesId(valorNovo);
+    setComponentesCurricularesId(valor);
     setBimestre();
     setTipoPendenciaGrupo();
     setClicouBotaoGerar(false);
@@ -598,6 +597,15 @@ const RelatorioPendencias = () => {
     setCarregandoGerar(true);
     setClicouBotaoGerar(true);
 
+    let componentesCurriculares = [];
+    if (
+      componentesCurricularesId ||
+      componentesCurricularesId === 0 ||
+      componentesCurricularesId === '0'
+    ) {
+      componentesCurriculares = [componentesCurricularesId];
+    }
+
     const params = {
       exibirHistorico: consideraHistorico,
       anoLetivo,
@@ -606,11 +614,7 @@ const RelatorioPendencias = () => {
       modalidade: modalidadeId,
       turmasCodigo: turmaId === OPCAO_TODOS ? [] : [].concat(turmaId),
       bimestre,
-      componentesCurriculares:
-        componentesCurricularesId?.length === 1 &&
-        componentesCurricularesId[0] === '0'
-          ? []
-          : componentesCurricularesId,
+      componentesCurriculares,
       semestre,
       usuarioRf,
       exibirPendenciasResolvidas,

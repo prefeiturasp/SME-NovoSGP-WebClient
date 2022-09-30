@@ -49,6 +49,10 @@ const HistoricoNotificacoes = () => {
 
   const [carregandoGeral, setCarregandoGeral] = useState(false);
   const [desabilitarBtnGerar, setDesabilitarBtnGerar] = useState(true);
+  const [
+    desabilitarDescricaoNotificacoes,
+    setDesabilitarDescricaoNotificacoes,
+  ] = useState(false);
 
   const opcoesExibirDescricao = [
     { label: 'Sim', value: true },
@@ -448,6 +452,17 @@ const HistoricoNotificacoes = () => {
     }
   };
 
+  const onChangeTurma = valor => {
+    setTurmaId(valor);
+    let desabilitar = false;
+    if (valor === OPCAO_TODOS && !usuarioRf) {
+      desabilitar = true;
+      setExibirDescricao(false);
+      setExibirNotificacoesExcluidas(false);
+    }
+    setDesabilitarDescricaoNotificacoes(desabilitar);
+  };
+
   return (
     <>
       <Cabecalho pagina="Relatório de notificações" />
@@ -565,7 +580,7 @@ const HistoricoNotificacoes = () => {
                     usuarioRf
                   }
                   valueSelect={turmaId}
-                  onChange={setTurmaId}
+                  onChange={onChangeTurma}
                   placeholder="Turma"
                   showSearch
                 />
@@ -585,9 +600,11 @@ const HistoricoNotificacoes = () => {
                         if (listaTurmas?.length > 1) {
                           setTurmaId([OPCAO_TODOS]);
                         }
-                      } else {
-                        setUsuarioRf();
+                        setDesabilitarDescricaoNotificacoes(false);
+                        return;
                       }
+                      setUsuarioRf();
+                      setTurmaId();
                     }}
                     buscarOutrosCargos
                     buscarPorAbrangencia
@@ -648,6 +665,7 @@ const HistoricoNotificacoes = () => {
                     setExibirDescricao(e.target.value);
                   }}
                   value={exibirDescricao}
+                  desabilitado={desabilitarDescricaoNotificacoes}
                 />
               </div>
               <div className="col-sm-12 col-md-6 col-lg-3 col-xl-3 mb-2">
@@ -659,6 +677,7 @@ const HistoricoNotificacoes = () => {
                     setExibirNotificacoesExcluidas(e.target.value);
                   }}
                   value={exibirNotificacoesExcluidas}
+                  desabilitado={desabilitarDescricaoNotificacoes}
                 />
               </div>
             </div>

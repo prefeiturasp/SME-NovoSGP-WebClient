@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Colors } from '~/componentes';
 import QuestionarioDinamicoFuncoes from '~/componentes-sgp/QuestionarioDinamico/Funcoes/QuestionarioDinamicoFuncoes';
@@ -9,12 +9,19 @@ import {
   limparDadosParecer,
   setAtualizarDados,
   setAtualizarPlanoAEEDados,
+  setDesabilitarCamposPlanoAEE,
   setExibirLoaderPlanoAEE,
   setExibirModalDevolverPlanoAEE,
   setParecerEmEdicao,
 } from '~/redux/modulos/planoAEE/actions';
 import { setQuestionarioDinamicoEmEdicao } from '~/redux/modulos/questionarioDinamico/actions';
-import { confirmar, erros, history, sucesso } from '~/servicos';
+import {
+  confirmar,
+  erros,
+  history,
+  sucesso,
+  verificaSomenteConsulta,
+} from '~/servicos';
 import ServicoPlanoAEE from '~/servicos/Paginas/Relatorios/AEE/ServicoPlanoAEE';
 
 const BotoesAcoesPlanoAEE = props => {
@@ -60,11 +67,11 @@ const BotoesAcoesPlanoAEE = props => {
     parecerCP ||
     (situacaoAtribuicaoPAAI && !dadosAtribuicaoResponsavel?.codigoRF);
 
-  const planoAeeId = match?.params?.id;
+  const planoAeeId = match?.params?.id || 0;
   const labelBotaoSalvar = !planoAeeId ? 'Salvar plano' : 'Alterar plano';
 
   const desabilitarBotaoSalvar =
-    desabilitarCamposPlanoAEE || !questionarioDinamicoEmEdicao;
+  planoAEEDados?.situacao !== situacaoPlanoAEE.Expirado && (desabilitarCamposPlanoAEE || !questionarioDinamicoEmEdicao);
 
   const desabilitarBotaoCancelar =
     situacaoParecer || parecerPAAI
@@ -72,6 +79,15 @@ const BotoesAcoesPlanoAEE = props => {
       : desabilitarCamposPlanoAEE || !questionarioDinamicoEmEdicao;
 
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    const soConsulta = verificaSomenteConsulta(permissoesTela);
+    const desabilitar =
+      planoAeeId > 0
+        ? soConsulta || !permissoesTela.podeAlterar
+        : soConsulta || !permissoesTela.podeIncluir;
+    dispatch(setDesabilitarCamposPlanoAEE(desabilitar));
+  }, [planoAeeId, permissoesTela, dispatch]);
 
   const limparParecer = () => {
     dispatch(limparDadosParecer());

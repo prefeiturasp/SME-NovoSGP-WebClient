@@ -43,6 +43,7 @@ const SecaoEncaminhamentoCollapse = props => {
           <ObjectCardEstudante
             codigoAluno={dadosCollapseLocalizarEstudante?.codigoAluno}
             anoLetivo={dadosCollapseLocalizarEstudante?.anoLetivo}
+            codigoTurma={dadosCollapseLocalizarEstudante?.codigoTurma}
             exibirBotaoImprimir={false}
             exibirFrequencia={false}
             permiteAlterarImagem={!desabilitarCamposEncaminhamentoAEE}

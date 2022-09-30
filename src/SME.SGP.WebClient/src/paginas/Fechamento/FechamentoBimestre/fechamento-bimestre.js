@@ -304,18 +304,21 @@ const FechamentoBismestre = () => {
     trocarEstadoEmEdicao(true);
   };
 
-  const salvarFechamentoFinal = () => {
+  const salvarFechamentoFinal = async () => {
     fechamentoFinal.turmaCodigo = turmaSelecionada.turma;
     fechamentoFinal.ehRegencia = ehRegencia;
     fechamentoFinal.disciplinaId = disciplinaIdSelecionada;
-    return ServicoFechamentoFinal.salvar(fechamentoFinal)
-      .then(() => {
-        sucesso('Fechamento final salvo com sucesso.');
+    ServicoFechamentoFinal.salvar(fechamentoFinal)
+      .then(result => {
+        sucesso(result.data.mensagemConsistencia);
         trocarEstadoEmEdicao(false);
         dispatch(setExpandirLinha([]));
         refFechamentoFinal.current.salvarFechamentoFinal();
+        return result.data;
       })
-      .catch(e => erros(e));
+      .catch(e => {
+        erros(e)
+      });
   };
 
   return (
