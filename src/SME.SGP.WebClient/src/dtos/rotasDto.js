@@ -4,11 +4,13 @@ const RotasDto = {
   NOTIFICACOES: '/notificacoes',
   PLANO_CICLO: '/planejamento/plano-ciclo',
   PLANO_ANUAL: '/planejamento/plano-anual',
-  ATRIBUICAO_SUPERVISOR_LISTA: '/gestao/atribuicao-supervisor-lista',
+  ATRIBUICAO_RESPONSAVEIS_LISTA: '/gestao/atribuicao-responsaveis/lista',
+  ATRIBUICAO_RESPONSAVEIS: '/gestao/atribuicao-responsaveis',
   ATRIBUICAO_ESPORADICA_LISTA: '/gestao/atribuicao-esporadica',
   ATRIBUICAO_CJ_LISTA: '/gestao/atribuicao-cjs',
   ATRIBUICAO_CJ_FORM: '/gestao/atribuicao-cjs/editar',
   REINICIAR_SENHA: '/usuarios/reiniciar-senha',
+  SUPORTE: '/usuarios/suporte',
   TIPO_EVENTOS: '/calendario-escolar/tipo-eventos',
   PERIODOS_ESCOLARES: '/calendario-escolar/periodos-escolares',
   TIPO_CALENDARIO_ESCOLAR: '/calendario-escolar/tipo-calendario-escolar',
@@ -90,6 +92,8 @@ const RotasDto = {
     '/relatorios/gestao/acompanhamento-registros',
   LISTAO: '/diario-classe/listao',
   LISTAO_OPERACOES: '/diario-classe/listao/operacoes',
+  RELATORIO_FREQUENCIA_MENSAL: '/relatorios/frequencia/mensal',
+  DASHBOARD_NAAPA: '/dashboard/naapa',
 };
 
 export default RotasDto;

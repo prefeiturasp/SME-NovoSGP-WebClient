@@ -126,7 +126,10 @@ const DetalheNotificacao = ({ match }) => {
     }
     if (notificacao.categoriaId === notificacaoCategoria.Aviso) {
       if (usuario.rf.length > 0)
-        servicoNotificacao.buscaNotificacoesPorAnoRf(anoAtual, usuario.rf);
+        servicoNotificacao.validarBuscaNotificacoesPorAnoRf(
+          anoAtual,
+          usuario.rf
+        );
     }
   }, [notificacao]);
 
@@ -148,7 +151,10 @@ const DetalheNotificacao = ({ match }) => {
 
         history.push(urlTelaNotificacoes);
         if (usuario.rf.length > 0)
-          servicoNotificacao.buscaNotificacoesPorAnoRf(anoAtual, usuario.rf);
+          servicoNotificacao.validarBuscaNotificacoesPorAnoRf(
+            anoAtual,
+            usuario.rf
+          );
 
         setCarregandoTela(false);
       }
@@ -181,7 +187,10 @@ const DetalheNotificacao = ({ match }) => {
 
           history.push(urlTelaNotificacoes);
           if (usuario.rf.length > 0) {
-            servicoNotificacao.buscaNotificacoesPorAnoRf(anoAtual, usuario.rf);
+            servicoNotificacao.validarBuscaNotificacoesPorAnoRf(
+              anoAtual,
+              usuario.rf
+            );
           }
 
           setCarregandoTela(false);
@@ -272,7 +281,7 @@ const DetalheNotificacao = ({ match }) => {
                         );
                         setAprovar(true);
                         if (usuario.rf.length > 0)
-                          servicoNotificacao.buscaNotificacoesPorAnoRf(
+                          servicoNotificacao.validarBuscaNotificacoesPorAnoRf(
                             anoAtual,
                             usuario.rf
                           );

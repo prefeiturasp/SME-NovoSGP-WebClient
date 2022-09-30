@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Colors } from '~/componentes';
 import QuestionarioDinamicoFuncoes from '~/componentes-sgp/QuestionarioDinamico/Funcoes/QuestionarioDinamicoFuncoes';
@@ -9,12 +9,19 @@ import {
   limparDadosParecer,
   setAtualizarDados,
   setAtualizarPlanoAEEDados,
+  setDesabilitarCamposPlanoAEE,
   setExibirLoaderPlanoAEE,
   setExibirModalDevolverPlanoAEE,
   setParecerEmEdicao,
 } from '~/redux/modulos/planoAEE/actions';
 import { setQuestionarioDinamicoEmEdicao } from '~/redux/modulos/questionarioDinamico/actions';
-import { confirmar, erros, history, sucesso } from '~/servicos';
+import {
+  confirmar,
+  erros,
+  history,
+  sucesso,
+  verificaSomenteConsulta,
+} from '~/servicos';
 import ServicoPlanoAEE from '~/servicos/Paginas/Relatorios/AEE/ServicoPlanoAEE';
 
 const BotoesAcoesPlanoAEE = props => {
@@ -42,6 +49,8 @@ const BotoesAcoesPlanoAEE = props => {
     store => store.planoAEE.dadosAtribuicaoResponsavel
   );
 
+  const [desabilitarBtnAcao, setDesabilitarBtnAcao] = useState(false);
+
   const usuario = useSelector(store => store.usuario);
   const permissoesTela = usuario.permissoes[RotasDto.RELATORIO_AEE_PLANO];
 
@@ -58,11 +67,11 @@ const BotoesAcoesPlanoAEE = props => {
     parecerCP ||
     (situacaoAtribuicaoPAAI && !dadosAtribuicaoResponsavel?.codigoRF);
 
-  const planoAeeId = match?.params?.id;
+  const planoAeeId = match?.params?.id || 0;
   const labelBotaoSalvar = !planoAeeId ? 'Salvar plano' : 'Alterar plano';
 
   const desabilitarBotaoSalvar =
-    desabilitarCamposPlanoAEE || !questionarioDinamicoEmEdicao;
+  planoAEEDados?.situacao !== situacaoPlanoAEE.Expirado && (desabilitarCamposPlanoAEE || !questionarioDinamicoEmEdicao);
 
   const desabilitarBotaoCancelar =
     situacaoParecer || parecerPAAI
@@ -71,12 +80,22 @@ const BotoesAcoesPlanoAEE = props => {
 
   const dispatch = useDispatch();
 
+  useEffect(() => {
+    const soConsulta = verificaSomenteConsulta(permissoesTela);
+    const desabilitar =
+      planoAeeId > 0
+        ? soConsulta || !permissoesTela.podeAlterar
+        : soConsulta || !permissoesTela.podeIncluir;
+    dispatch(setDesabilitarCamposPlanoAEE(desabilitar));
+  }, [planoAeeId, permissoesTela, dispatch]);
+
   const limparParecer = () => {
     dispatch(limparDadosParecer());
     dispatch(setParecerEmEdicao(false));
   };
 
   const escolherAcaoAbaParecer = async () => {
+    setDesabilitarBtnAcao(true);
     let msg = '';
     let resposta = [];
 
@@ -109,6 +128,7 @@ const BotoesAcoesPlanoAEE = props => {
       limparParecer();
       history.push(RotasDto.RELATORIO_AEE_PLANO);
     }
+    setDesabilitarBtnAcao(false);
   };
 
   const onClickVoltar = async () => {
@@ -248,6 +268,7 @@ const BotoesAcoesPlanoAEE = props => {
           planoAEEDados?.situacao !== situacaoPlanoAEE.Devolvido
         }
         disabled={
+          desabilitarBtnAcao ||
           (planoAEEDados?.situacao === situacaoPlanoAEE.ParecerPAAI &&
             !dadosParecer?.podeEditarParecerPAAI) ||
           desabilitarCamposPlanoAEE ||

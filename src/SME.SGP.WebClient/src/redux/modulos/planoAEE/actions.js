@@ -8,6 +8,13 @@ export const setPlanoAEEDados = payload => ({
   payload,
 });
 
+export function setTypePlanoAEECadastro(type) {
+  return {
+    type: '@planoAEE/setTypePlanoAEECadastro',
+    payload: type,
+  };
+}
+
 export const setPlanoAEESituacaoEncaminhamentoAEE = payload => ({
   type: '@planoAEE/setPlanoAEESituacaoEncaminhamentoAEE',
   payload,

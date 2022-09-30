@@ -6,7 +6,15 @@ const urlPadrao = 'v1/dashboard/devolutivas';
 
 class ServicoDashboardDevolutivas {
   montarConsultaPadraoGraficos = params => {
-    const { rota, anoLetivo, dreId, ueId, modalidade, anoEscolar } = params;
+    const {
+      rota,
+      anoLetivo,
+      dreId,
+      ueId,
+      modalidade,
+      anoEscolar,
+      mes,
+    } = params;
 
     let url = `${urlPadrao}/${rota}?anoLetivo=${anoLetivo}`;
 
@@ -21,6 +29,9 @@ class ServicoDashboardDevolutivas {
     }
     if (anoEscolar) {
       url += `&ano=${anoEscolar}`;
+    }
+    if (mes) {
+      url += `&mes=${mes}`;
     }
     return api.get(url);
   };
@@ -50,18 +61,12 @@ class ServicoDashboardDevolutivas {
     });
   };
 
-  obtertdDiariosBordoCampoReflexoesReplanejamentoPreenchido = (
-    anoLetivo,
-    dreId,
-    ueId,
-    modalidade
-  ) => {
+  obterUsuariosQueRegistraramDevolutivas = (anoLetivo, dreId, mes) => {
     return this.montarConsultaPadraoGraficos({
-      rota: 'diarios-bordo/reflexoes-replanejamentos/turma-ano',
+      rota: 'quantidade-devolutivas-por-ano',
       anoLetivo,
       dreId,
-      ueId,
-      modalidade,
+      mes,
     });
   };
 

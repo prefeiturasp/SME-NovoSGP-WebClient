@@ -121,7 +121,7 @@ const CampoObservacao = props => {
           autoSize={{ minRows: 4 }}
           value={novaObservacao}
           onChange={onChangeNovaObservacao}
-          disabled={!!observacaoEmEdicao || !podeIncluir || !diarioBordoId}
+          disabled={!!observacaoEmEdicao || !podeIncluir}
         />
       </div>
       <div

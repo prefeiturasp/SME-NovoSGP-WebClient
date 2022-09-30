@@ -25,24 +25,14 @@ class ServicoDashboardDiarioBordo {
     return api.get(url);
   };
 
-  obterQuantidadeTotalDiariosBordos = (anoLetivo, dreId, ueId, modalidade) => {
-    return this.montarConsultaPadraoGraficos({
-      rota: 'quantidade-total-diarios-e-turmas',
-      anoLetivo,
-      dreId,
-      ueId,
-      modalidade,
-    });
-  };
-
-  obterQuantidadeTotalDiariosBordoPendentes = (
+  obterDiariosBordoPreenchidosPendentes = (
     anoLetivo,
     dreId,
     ueId,
     modalidade
   ) => {
     return this.montarConsultaPadraoGraficos({
-      rota: 'quantidade-diarios-pendentes',
+      rota: 'quantidade-preenchidos-pendentes',
       anoLetivo,
       dreId,
       ueId,

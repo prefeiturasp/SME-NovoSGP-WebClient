@@ -189,6 +189,8 @@ const AulaDadaAulaPrevista = () => {
           setModoEdicao(false);
         })
         .then(() => {
+          buscarDados();
+          resetarTela();
           setCarregamento(false);
         })
         .catch(e => erros(e));
@@ -202,6 +204,8 @@ const AulaDadaAulaPrevista = () => {
           resetarTela();
         })
         .then(() => {
+          buscarDados();
+          resetarTela();
           setCarregamento(false);
         })
         .catch(e => erros(e));

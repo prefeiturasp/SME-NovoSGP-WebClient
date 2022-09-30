@@ -10,9 +10,10 @@ import {
   setNotaConceitoPosConselhoAtual,
   setGerandoParecerConclusivo,
   setExibirLoaderGeralConselhoClasse,
-  setAtualizarEmAprovacao,
   setBimestreAtual,
   setDadosIniciaisListasNotasConceitos,
+  setAuditoriaAnotacaoRecomendacao,
+  setDadosListasNotasConceitos,
 } from '~/redux/modulos/conselhoClasse/actions';
 import notasConceitos from '~/dtos/notasConceitos';
 
@@ -53,6 +54,8 @@ class ServicoSalvarConselhoClasse {
       conselhoClasseEmEdicao,
       desabilitarCampos,
       bimestreAtual,
+      recomendacaoFamiliaSelecionados,
+      recomendacaoAlunoSelecionados,
     } = conselhoClasse;
 
     const perguntaDescartarRegistros = async () => {
@@ -64,6 +67,16 @@ class ServicoSalvarConselhoClasse {
     };
 
     const salvar = async () => {
+      if (!recomendacaoAluno && !recomendacaoAlunoSelecionados?.length) {
+        erro('É obrigatório informar ou selecionar Recomendações ao estudante');
+        return false;
+      }
+
+      if (!recomendacaoFamilia && !recomendacaoFamiliaSelecionados?.length) {
+        erro('É obrigatório informar ou selecionar Recomendações a família ');
+        return false;
+      }
+
       const params = {
         conselhoClasseId: dadosPrincipaisConselhoClasse.conselhoClasseId,
         fechamentoTurmaId: dadosPrincipaisConselhoClasse.fechamentoTurmaId || 0,
@@ -71,17 +84,13 @@ class ServicoSalvarConselhoClasse {
         anotacoesPedagogicas,
         recomendacaoAluno,
         recomendacaoFamilia,
+        recomendacaoFamiliaIds: recomendacaoFamiliaSelecionados?.length
+          ? recomendacaoFamiliaSelecionados.map(item => item.id)
+          : [],
+        recomendacaoAlunoIds: recomendacaoAlunoSelecionados?.length
+          ? recomendacaoAlunoSelecionados.map(item => item.id)
+          : [],
       };
-
-      if (!recomendacaoAluno) {
-        erro('É obrigatório informar Recomendações ao estudante');
-        return false;
-      }
-
-      if (!recomendacaoFamilia) {
-        erro('É obrigatório informar Recomendações a família ');
-        return false;
-      }
       dispatch(setExibirLoaderGeralConselhoClasse(true));
       const retorno = await ServicoConselhoClasse.salvarRecomendacoesAlunoFamilia(
         params
@@ -95,7 +104,6 @@ class ServicoSalvarConselhoClasse {
         });
 
       if (retorno && retorno.status === 200) {
-        this.recarregarDados();
         sucesso('Anotações e recomendações salvas com sucesso.');
         if (bimestreAtual?.valor === 'final') {
           this.gerarParecerConclusivo(
@@ -104,6 +112,18 @@ class ServicoSalvarConselhoClasse {
             dadosAlunoObjectCard.codigoEOL
           );
         }
+        if (
+          !params?.conselhoClasseId ||
+          !dadosPrincipaisConselhoClasse.conselhoClasseAlunoId
+        ) {
+          dadosPrincipaisConselhoClasse.conselhoClasseId =
+            retorno.data.conselhoClasseId;
+          dadosPrincipaisConselhoClasse.conselhoClasseAlunoId = retorno.data.id;
+          dispatch(
+            setDadosPrincipaisConselhoClasse(dadosPrincipaisConselhoClasse)
+          );
+        }
+        this.recarregarDados();
         return true;
       }
       return false;
@@ -118,11 +138,15 @@ class ServicoSalvarConselhoClasse {
     }
 
     if (conselhoClasseEmEdicao) {
-      const temRegistrosInvalidos = !recomendacaoAluno || !recomendacaoFamilia;
-
+      const temRegistrosInvalidosDigitados = !recomendacaoAluno || !recomendacaoFamilia;
+      const contemRecomendacoesFamiliaAlunoSelecionados =
+        recomendacaoFamiliaSelecionados?.length > 0 ||
+        recomendacaoAlunoSelecionados?.length > 0;
       let descartarRegistros = false;
-      if (temRegistrosInvalidos) {
-        descartarRegistros = await perguntaDescartarRegistros();
+
+      if (temRegistrosInvalidosDigitados) {
+        if (!contemRecomendacoesFamiliaAlunoSelecionados)
+          descartarRegistros = await perguntaDescartarRegistros();
       }
 
       // Voltar para a tela continua e executa a ação!
@@ -132,7 +156,11 @@ class ServicoSalvarConselhoClasse {
       }
 
       // Voltar para a tela e não executa a ação!
-      if (!descartarRegistros && temRegistrosInvalidos) {
+      if (
+        !descartarRegistros &&
+        temRegistrosInvalidosDigitados &&
+        !contemRecomendacoesFamiliaAlunoSelecionados
+      ) {
         return false;
       }
 
@@ -201,10 +229,8 @@ class ServicoSalvarConselhoClasse {
     const {
       dadosPrincipaisConselhoClasse,
       notaConceitoPosConselhoAtual,
-      idCamposNotasPosConselho,
       desabilitarCampos,
       bimestreAtual,
-      dadosListasNotasConceitos,
     } = conselhoClasse;
 
     const {
@@ -212,6 +238,7 @@ class ServicoSalvarConselhoClasse {
       fechamentoTurmaId,
       alunoCodigo,
       tipoNota,
+      turmaCodigo,
     } = dadosPrincipaisConselhoClasse;
 
     const {
@@ -229,11 +256,13 @@ class ServicoSalvarConselhoClasse {
       dispatch(setNotaConceitoPosConselhoAtual({}));
     };
 
-    this.gerarParecerConclusivo(
-      conselhoClasseId,
-      fechamentoTurmaId,
-      alunoCodigo
-    );
+    if (bimestreAtual?.valor === 'final') {
+      this.gerarParecerConclusivo(
+        conselhoClasseId,
+        fechamentoTurmaId,
+        alunoCodigo
+      );
+    }
 
     if (desabilitarCampos) {
       return false;
@@ -248,7 +277,7 @@ class ServicoSalvarConselhoClasse {
       return false;
     }
 
-    if ((nota === null || typeof nota === 'undefined') && !conceito) {
+    if ((nota === null || typeof nota === 'undefined') && !conceito && !justificativa) {
       erro(
         `É obrigatório informar ${ehNota ? 'nota' : 'conceito'} pós-conselho`
       );
@@ -257,8 +286,8 @@ class ServicoSalvarConselhoClasse {
 
     const notaDto = {
       justificativa,
-      nota: ehNota ? nota : '',
-      conceito: !ehNota ? conceito : '',
+      nota: ehNota ? nota : null,
+      conceito: !ehNota ? conceito : null,
       codigoComponenteCurricular,
     };
 
@@ -276,20 +305,36 @@ class ServicoSalvarConselhoClasse {
         retorno.data.conselhoClasseId;
       dadosPrincipaisConselhoClasse.fechamentoTurmaId =
         retorno.data.fechamentoTurmaId;
-      dispatch(
-        setAtualizarEmAprovacao({
-          ...retorno.data,
-          ...notaDto,
-          ehNota,
-        })
+
+      const { consideraHistorico } = state.usuario.turmaSelecionada;
+      const bimestre =
+        bimestreAtual?.valor === 'final' ? 0 : bimestreAtual?.valor;
+
+      const resultado = await ServicoConselhoClasse.obterNotasConceitosConselhoClasse(
+        conselhoClasseId,
+        fechamentoTurmaId,
+        alunoCodigo,
+        turmaCodigo,
+        bimestre,
+        consideraHistorico
       );
+
       dispatch(setDadosPrincipaisConselhoClasse(dadosPrincipaisConselhoClasse));
 
       const { auditoria } = retorno.data;
 
-      const temJustificativasDto = idCamposNotasPosConselho;
-      temJustificativasDto[idCampo] = auditoria.id;
-      dispatch(setIdCamposNotasPosConselho(temJustificativasDto));
+      let auditoriaDto = null;
+      if (auditoria) {
+        auditoriaDto = {
+          criadoEm: auditoria.criadoEm,
+          criadoPor: auditoria.criadoPor,
+          criadoRF: auditoria.criadoRF,
+          alteradoEm: auditoria.alteradoEm,
+          alteradoPor: auditoria.alteradoPor,
+          alteradoRF: auditoria.alteradoRF,
+        };
+      }
+      dispatch(setAuditoriaAnotacaoRecomendacao(auditoriaDto));
 
       limparDadosNotaPosConselhoJustificativa();
 
@@ -307,8 +352,9 @@ class ServicoSalvarConselhoClasse {
         );
       }
 
-      const dadosCarregar = _.cloneDeep(dadosListasNotasConceitos);
+      const dadosCarregar = _.cloneDeep(resultado.data.notasConceitos);
       dispatch(setDadosIniciaisListasNotasConceitos([...dadosCarregar]));
+      dispatch(setDadosListasNotasConceitos(resultado.data.notasConceitos));
 
       return true;
     }
@@ -331,6 +377,7 @@ class ServicoSalvarConselhoClasse {
       notaConceitoPosConselhoAtual,
       dadosPrincipaisConselhoClasse,
       desabilitarCampos,
+      dadosIniciaisListasNotasConceitos,
     } = conselhoClasse;
 
     if (desabilitarCampos) {
@@ -359,6 +406,8 @@ class ServicoSalvarConselhoClasse {
       // Voltar para a tela continua e executa a ação!
       if (descartarRegistros) {
         limparDadosNotaPosConselhoJustificativa();
+        const dadosCarregar = _.cloneDeep(dadosIniciaisListasNotasConceitos);
+        dispatch(setDadosListasNotasConceitos([...dadosCarregar]));
         return true;
       }
 

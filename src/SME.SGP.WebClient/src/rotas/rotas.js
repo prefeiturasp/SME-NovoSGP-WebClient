@@ -4,7 +4,7 @@ import Principal from '../paginas/Principal/principal';
 import PlanoCiclo from '../paginas/Planejamento/PlanoCiclo/planoCiclo';
 import PlanoAnual from '../paginas/Planejamento/Anual/planoAnual';
 import AtribuicaoSupervisorLista from '../paginas/Gestao/AtribuicaoSupervisor/atribuicaoSupervisorLista';
-import AtribuicaoSupervisorCadastro from '../paginas/Gestao/AtribuicaoSupervisor/atribuicaoSupervisorCadastro';
+import AtribuicaoResponsaveisCadastro from '~/paginas/Gestao/AtribuicaoSupervisor/atribuicaoResponsaveisCadastro';
 import AtribuicaoEsporadicaLista from '../paginas/Gestao/AtribuicaoEsporadica/Lista';
 import AtribuicaoEsporadicaForm from '../paginas/Gestao/AtribuicaoEsporadica/Form';
 import AtribuicaoCJLista from '../paginas/Gestao/AtribuicaoCJ/Lista';
@@ -108,6 +108,9 @@ import RelatorioAcompanhamentoRegistros from '~/paginas/Relatorios/Gestao/Acompa
 import { CONTEXT_LISTAO } from '~/constantes';
 import ListaoOperacoes from '~/paginas/DiarioClasse/Listao/operacoes/listaoOperacoes';
 import Listao from '~/paginas/DiarioClasse/Listao/lista/listao';
+import RelatorioFrequenciaMensal from '~/paginas/Relatorios/Frequencia/relatorioFrequenciaMensal';
+import DashboardNAAPA from '~/paginas/Dashboard/DashboardNAAPA/dashboardNAAPA';
+import Suporte from '~/paginas/Configuracoes/Usuarios/Suporte/suporte';
 
 const rotas = new Map();
 
@@ -237,45 +240,72 @@ rotas.set(RotasDto.TERRITORIO_SABER, {
   chavePermissao: RotasDto.TERRITORIO_SABER,
 });
 
-rotas.set(RotasDto.ATRIBUICAO_SUPERVISOR_LISTA, {
-  breadcrumbName: 'Atribuição de Supervisor',
+rotas.set(RotasDto.ATRIBUICAO_RESPONSAVEIS_LISTA, {
+  breadcrumbName: 'Atribuição de responsáveis',
   menu: ['Gestão'],
   parent: '/',
   component: AtribuicaoSupervisorLista,
   exact: true,
   tipo: RotasTipo.EstruturadaAutenticada,
   temPermissionamento: true,
-  chavePermissao: RotasDto.ATRIBUICAO_SUPERVISOR_LISTA,
+  chavePermissao: RotasDto.ATRIBUICAO_RESPONSAVEIS_LISTA,
 });
 
-rotas.set('/gestao/atribuicao-supervisor', {
+rotas.set(RotasDto.ATRIBUICAO_RESPONSAVEIS, {
   breadcrumbName: 'Nova Atribuição',
-  parent: '/gestao/atribuicao-supervisor-lista',
-  component: AtribuicaoSupervisorCadastro,
+  parent: RotasDto.ATRIBUICAO_RESPONSAVEIS_LISTA,
+  component: AtribuicaoResponsaveisCadastro,
   exact: true,
   tipo: RotasTipo.EstruturadaAutenticada,
   temPermissionamento: true,
-  chavePermissao: RotasDto.ATRIBUICAO_SUPERVISOR_LISTA,
+  chavePermissao: RotasDto.ATRIBUICAO_RESPONSAVEIS_LISTA,
 });
 
-rotas.set('/gestao/atribuicao-supervisor/:dreId/', {
-  breadcrumbName: 'Atribuição de Supervisor',
-  parent: '/gestao/atribuicao-supervisor-lista',
-  component: AtribuicaoSupervisorCadastro,
+rotas.set(`${RotasDto.ATRIBUICAO_RESPONSAVEIS}/:dreId/`, {
+  breadcrumbName: 'Atribuição de responsáveis',
+  parent: RotasDto.ATRIBUICAO_RESPONSAVEIS_LISTA,
+  component: AtribuicaoResponsaveisCadastro,
   exact: true,
   tipo: RotasTipo.EstruturadaAutenticada,
   temPermissionamento: true,
-  chavePermissao: RotasDto.ATRIBUICAO_SUPERVISOR_LISTA,
+  chavePermissao: RotasDto.ATRIBUICAO_RESPONSAVEIS_LISTA,
 });
 
-rotas.set('/gestao/atribuicao-supervisor/:dreId/:supervisorId', {
-  breadcrumbName: 'Atribuição de Supervisor',
-  parent: '/gestao/atribuicao-supervisor-lista',
-  component: AtribuicaoSupervisorCadastro,
+rotas.set(
+  `${RotasDto.ATRIBUICAO_RESPONSAVEIS}/:dreId/:supervisorId/:tipoResponsavel`,
+  {
+    breadcrumbName: 'Atribuição de responsáveis',
+    parent: RotasDto.ATRIBUICAO_RESPONSAVEIS_LISTA,
+    component: AtribuicaoResponsaveisCadastro,
+    exact: true,
+    tipo: RotasTipo.EstruturadaAutenticada,
+    temPermissionamento: true,
+    chavePermissao: RotasDto.ATRIBUICAO_RESPONSAVEIS_LISTA,
+  }
+);
+
+rotas.set(
+  `${RotasDto.ATRIBUICAO_RESPONSAVEIS}/:dreId/:supervisorId/:tipoResponsavel/:codigoUe`,
+  {
+    breadcrumbName: 'Atribuição de responsáveis',
+    parent: RotasDto.ATRIBUICAO_RESPONSAVEIS_LISTA,
+    component: AtribuicaoResponsaveisCadastro,
+    exact: true,
+    tipo: RotasTipo.EstruturadaAutenticada,
+    temPermissionamento: true,
+    chavePermissao: RotasDto.ATRIBUICAO_RESPONSAVEIS_LISTA,
+  }
+);
+
+
+rotas.set(`${RotasDto.ATRIBUICAO_RESPONSAVEIS}/:dreId/:tipoResponsavel`, {
+  breadcrumbName: 'Atribuição de responsáveis',
+  parent: RotasDto.ATRIBUICAO_RESPONSAVEIS_LISTA,
+  component: AtribuicaoResponsaveisCadastro,
   exact: true,
   tipo: RotasTipo.EstruturadaAutenticada,
   temPermissionamento: true,
-  chavePermissao: RotasDto.ATRIBUICAO_SUPERVISOR_LISTA,
+  chavePermissao: RotasDto.ATRIBUICAO_RESPONSAVEIS_LISTA,
 });
 
 rotas.set('/gestao/atribuicao-esporadica', {
@@ -390,6 +420,17 @@ rotas.set(RotasDto.REINICIAR_SENHA, {
   tipo: RotasTipo.EstruturadaAutenticada,
   temPermissionamento: true,
   chavePermissao: RotasDto.REINICIAR_SENHA,
+});
+
+rotas.set(RotasDto.SUPORTE, {
+  breadcrumbName: 'Suporte',
+  menu: ['Configurações', 'Usuários'],
+  parent: '/',
+  component: Suporte,
+  exact: true,
+  tipo: RotasTipo.EstruturadaAutenticada,
+  temPermissionamento: true,
+  chavePermissao: RotasDto.SUPORTE,
 });
 
 rotas.set(RotasDto.TIPO_CALENDARIO_ESCOLAR, {
@@ -549,15 +590,18 @@ rotas.set(RotasDto.CADASTRO_DE_AULA, {
   chavePermissao: RotasDto.CALENDARIO_PROFESSOR,
 });
 
-rotas.set(`${RotasDto.CADASTRO_DE_AULA}/novo/:tipoCalendarioId/:somenteReposicao`, {
-  breadcrumbName: 'Cadastro de Aula',
-  parent: RotasDto.CADASTRO_DE_AULA,
-  component: CadastroAula,
-  exact: false,
-  tipo: RotasTipo.EstruturadaAutenticada,
-  temPermissionamento: true,
-  chavePermissao: RotasDto.CALENDARIO_PROFESSOR,
-});
+rotas.set(
+  `${RotasDto.CADASTRO_DE_AULA}/novo/:tipoCalendarioId/:somenteReposicao`,
+  {
+    breadcrumbName: 'Cadastro de Aula',
+    parent: RotasDto.CADASTRO_DE_AULA,
+    component: CadastroAula,
+    exact: false,
+    tipo: RotasTipo.EstruturadaAutenticada,
+    temPermissionamento: true,
+    chavePermissao: RotasDto.CALENDARIO_PROFESSOR,
+  }
+);
 
 rotas.set(`${RotasDto.CADASTRO_DE_AULA}/editar/:id/:somenteReposicao`, {
   breadcrumbName: 'Cadastro de Aula',
@@ -1494,6 +1538,28 @@ rotas.set(`${RotasDto.LISTAO_OPERACOES}`, {
   temPermissionamento: false,
   chavePermissao: RotasDto.LISTAO,
   contextProviderName: CONTEXT_LISTAO,
+});
+
+rotas.set(RotasDto.RELATORIO_FREQUENCIA_MENSAL, {
+  breadcrumbName: 'Frequência mensal',
+  menu: ['Relatórios', 'Frequência'],
+  parent: '/',
+  component: RelatorioFrequenciaMensal,
+  exact: true,
+  tipo: RotasTipo.EstruturadaAutenticada,
+  temPermissionamento: true,
+  chavePermissao: RotasDto.RELATORIO_FREQUENCIA_MENSAL,
+});
+
+rotas.set(RotasDto.DASHBOARD_NAAPA, {
+  breadcrumbName: 'NAAPA',
+  menu: ['Dashboard'],
+  parent: '/',
+  component: DashboardNAAPA,
+  exact: true,
+  tipo: RotasTipo.EstruturadaAutenticada,
+  temPermissionamento: true,
+  chavePermissao: RotasDto.DASHBOARD_NAAPA,
 });
 
 const rotasArray = [];

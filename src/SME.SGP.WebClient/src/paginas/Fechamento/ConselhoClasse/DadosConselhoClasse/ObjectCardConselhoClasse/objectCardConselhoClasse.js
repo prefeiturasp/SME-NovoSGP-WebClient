@@ -1,12 +1,19 @@
-import React, { useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import DetalhesAluno from '~/componentes/Alunos/Detalhes';
 import ServicoConselhoClasse from '~/servicos/Paginas/ConselhoClasse/ServicoConselhoClasse';
-import { erro, sucesso } from '~/servicos/alertas';
+import { erro, erros, sucesso } from '~/servicos/alertas';
 import { Loader } from '~/componentes';
 
 const ObjectCardConselhoClasse = () => {
+  const usuario = useSelector(store => store.usuario);
+  const { turmaSelecionada } = usuario;
+  const { turma } = turmaSelecionada;
+
   const [gerandoConselhoClasse, setGerandoConselhoClasse] = useState(false);
+  const [carregandoFrequencia, setCarregandoFrequencia] = useState(false);
+  const [frequencia, setFrequencia] = useState();
+
   const dadosAlunoObjectCard = useSelector(
     store => store.conselhoClasse.dadosAlunoObjectCard
   );
@@ -33,6 +40,25 @@ const ObjectCardConselhoClasse = () => {
     store => store.conselhoClasse.desabilitarCampos
   );
 
+  const obterFrequenciaAluno = useCallback(async () => {
+    setCarregandoFrequencia(true);
+
+    const retorno = await ServicoConselhoClasse.obterFrequenciaAluno(
+      dadosAlunoObjectCard.codigoEOL,
+      turma
+    )
+      .catch(e => erros(e))
+      .finally(() => setCarregandoFrequencia(false));
+
+    setFrequencia(retorno?.data);
+  }, [turma, dadosAlunoObjectCard.codigoEOL]);
+
+  useEffect(() => {
+    if (dadosAlunoObjectCard.codigoEOL && turma) {
+      obterFrequenciaAluno();
+    }
+  }, [dadosAlunoObjectCard.codigoEOL, turma, obterFrequenciaAluno]);
+
   const gerarConselhoClasseAluno = async () => {
     setGerandoConselhoClasse(true);
     await ServicoConselhoClasse.gerarConselhoClasseAluno(
@@ -50,9 +76,9 @@ const ObjectCardConselhoClasse = () => {
   };
 
   return (
-    <Loader loading={gerandoConselhoClasse}>
+    <Loader loading={gerandoConselhoClasse || carregandoFrequencia}>
       <DetalhesAluno
-        dados={dadosAlunoObjectCard}
+        dados={{ ...dadosAlunoObjectCard, frequencia }}
         desabilitarImprimir={!salvouJustificativa && !conselhoClasseAlunoId}
         onClickImprimir={gerarConselhoClasseAluno}
         permiteAlterarImagem={!desabilitarCampos}

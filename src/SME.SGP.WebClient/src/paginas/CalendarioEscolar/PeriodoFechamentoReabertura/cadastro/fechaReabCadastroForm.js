@@ -216,7 +216,7 @@ const FechaReabCadastroForm = () => {
           }
         ),
       dataFim: momentSchema.required(textCampoObrigatorio),
-      bimestres: Yup.string().required(textCampoObrigatorio),
+      bimestres: Yup.array().of(Yup.string()).required(textCampoObrigatorio),      
       dreCodigo: Yup.string().required(textCampoObrigatorio),
       ueCodigo: Yup.string().required(textCampoObrigatorio),
     };

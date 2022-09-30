@@ -82,8 +82,8 @@ const Sintese = props => {
 
 Sintese.propTypes = {
   ehFinal: PropTypes.oneOfType([PropTypes.bool]),
-  turmaId: PropTypes.oneOfType([PropTypes.number]),
-  bimestreSelecionado: PropTypes.oneOfType([PropTypes.number]),
+  turmaId: PropTypes.oneOfType([PropTypes.any]),
+  bimestreSelecionado: PropTypes.oneOfType([PropTypes.any]),
 };
 
 Sintese.defaultProps = {

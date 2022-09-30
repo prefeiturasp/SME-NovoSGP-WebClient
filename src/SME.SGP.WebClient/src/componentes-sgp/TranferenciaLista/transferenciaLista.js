@@ -32,8 +32,8 @@ const TransferenciaLista = props => {
     <>
       <div className="mt-2" style={{ flexGrow: 1, display: 'flex' }}>
         <div>
-          <div style={{ height: '50px' }}>
-            <Label text={listaEsquerda.title} />
+          <div style={{ height: listaEsquerda?.titleHeight || '50px' }}>
+            <Label text={listaEsquerda?.title || ''} />
           </div>
           <CardLista>
             <DataTable
@@ -62,8 +62,8 @@ const TransferenciaLista = props => {
           </BotaoLista>
         </ColunaBotaoLista>
         <div>
-          <div style={{ height: '50px' }}>
-            <Label text={listaDireita.title} />
+          <div style={{ height: listaDireita?.titleHeight || '50px' }}>
+            <Label text={listaDireita?.title || ''} />
           </div>
           <CardLista>
             <DataTable

@@ -32,8 +32,13 @@ class ServicoEncaminhamentoAEE {
     return api.get(`${urlPadrao}/situacoes`);
   };
 
-  obterAlunoSituacaoEncaminhamentoAEE = codigoAluno => {
-    return api.get(`${urlPadrao}/estudante/${codigoAluno}/situacao`);
+  obterAlunoSituacaoEncaminhamentoAEE = ({ estudanteCodigo, ueCodigo }) => {
+    return api.get(`${urlPadrao}/estudante/situacao`, {
+      params: {
+        estudanteCodigo,
+        ueCodigo,
+      },
+    });
   };
 
   obterAvisoModal = async () => {
@@ -224,7 +229,7 @@ class ServicoEncaminhamentoAEE {
         const valoresParaSalvar = {
           id: encaminhamentoId || 0,
           turmaId: dadosCollapseLocalizarEstudante.turmaId,
-          alunoCodigo: dadosCollapseLocalizarEstudante.codigoAluno,
+          alunoCodigo: dadosCollapseLocalizarEstudante.codigoAluno.toString(),
           situacao,
         };
         valoresParaSalvar.secoes = formsParaSalvar.map(item => {
@@ -263,7 +268,7 @@ class ServicoEncaminhamentoAEE {
                 }
                 break;
               default:
-                questao.resposta = campos[key] || '';
+                questao.resposta = JSON.parse(JSON.stringify(campos[key] || ''));
                 break;
             }
 
@@ -303,6 +308,8 @@ class ServicoEncaminhamentoAEE {
                 questao.tipoQuestao === tipoQuestao.Checkbox) &&
               questao?.resposta?.length
             ) {
+              if (!Array.isArray(questao?.resposta))
+                questao.resposta = questao.resposta.replace('[', '').replace(']', '').split(',').map(Number);
               questao.resposta.forEach(valorSelecionado => {
                 if (valorSelecionado) {
                   if (questaoAtual?.resposta?.length) {
@@ -399,9 +406,14 @@ class ServicoEncaminhamentoAEE {
     return api.delete(url);
   };
 
-  podeCadastrarEncaminhamentoEstudante = async codigoEstudante => {
+  podeCadastrarEncaminhamentoEstudante = async ({
+    estudanteCodigo,
+    ueCodigo,
+  }) => {
     const resultado = await api
-      .get(`${urlPadrao}/estudante/${codigoEstudante}/pode-cadastrar`)
+      .get(`${urlPadrao}/estudante/pode-cadastrar`, {
+        params: { estudanteCodigo, ueCodigo },
+      })
       .catch(e => erros(e));
 
     if (resultado?.data) {

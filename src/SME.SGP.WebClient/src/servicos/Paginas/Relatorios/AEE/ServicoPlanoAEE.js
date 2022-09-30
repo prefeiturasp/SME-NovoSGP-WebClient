@@ -23,7 +23,7 @@ class ServicoPlanoAEE {
 
   existePlanoAEEEstudante = async codigoEstudante => {
     const resultado = await api
-      .get(`${urlPadrao}/estudante/${codigoEstudante}/existe`)
+      .get(`${urlPadrao}/estudante/${codigoEstudante.estudanteCodigo}/existe`)
       .catch(e => erros(e));
 
     if (resultado?.data) {
@@ -73,7 +73,7 @@ class ServicoPlanoAEE {
     const { formsQuestionarioDinamico } = questionarioDinamico;
 
     const { dadosCollapseLocalizarEstudante } = collapseLocalizarEstudante;
-    const { planoAEEDados } = planoAEE;
+    const { planoAEEDados, dadosAtribuicaoResponsavel } = planoAEE;
 
     let contadorFormsValidos = 0;
 
@@ -227,6 +227,9 @@ class ServicoPlanoAEE {
           alunoCodigo: dadosCollapseLocalizarEstudante.codigoAluno,
           situacao: planoAEEDados?.situacao,
           questoes: questoesSalvar[0],
+          responsavelRF:
+            dadosAtribuicaoResponsavel.codigoRF ||
+            planoAEEDados?.responsavel?.responsavelRF,
         };
 
         dispatch(setExibirLoaderPlanoAEE(true));
@@ -337,6 +340,16 @@ class ServicoPlanoAEE {
     return api.post(`${urlPadrao}/atribuir-responsavel`, {
       planoAEEId: planoAEEDados.id,
       responsavelRF: dadosAtribuicaoResponsavel.codigoRF,
+    });
+  };
+
+  atribuirResponsavelPlano = () => {
+    const { planoAEE } = store.getState();
+    const { planoAEEDados, dadosAtribuicaoResponsavel } = planoAEE;
+    return api.post(`${urlPadrao}/atribuir-responsavel-plano`, {
+      planoAEEId: planoAEEDados.id,
+      responsavelRF: dadosAtribuicaoResponsavel.codigoRF,
+      responsavelNome: dadosAtribuicaoResponsavel.nomeServidor,
     });
   };
 

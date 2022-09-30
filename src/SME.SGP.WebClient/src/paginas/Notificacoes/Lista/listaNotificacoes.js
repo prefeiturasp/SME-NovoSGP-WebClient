@@ -86,6 +86,7 @@ export default function NotificacoesLista() {
 
   const usuario = useSelector(store => store.usuario);
   const turmaSelecionada = useSelector(store => store.usuario.turmaSelecionada);
+  const anoAtual = window.moment().format('YYYY');
 
   const [listaCategorias, setListaCategorias] = useState([]);
   const [listaStatus, setListaStatus] = useState([]);
@@ -250,13 +251,6 @@ export default function NotificacoesLista() {
     return !validaSeObjetoEhNuloOuVazio(filtro);
   };
 
-  const carregarNotificacoes = () => {
-    servicoNotificacao.obterUltimasNotificacoesNaoLidas().catch(e => erros(e));
-    servicoNotificacao
-      .obterQuantidadeNotificacoesNaoLidas()
-      .catch(e => erros(e));
-  };
-
   async function marcarComoLida() {
     if (!permissoesTela.podeAlterar) return;
 
@@ -266,7 +260,10 @@ export default function NotificacoesLista() {
         idNotificacoesSelecionadas
       );
       if (data && status === 200) {
-        carregarNotificacoes();
+        servicoNotificacao.validarBuscaNotificacoesPorAnoRf(
+          anoAtual,
+          usuario?.rf
+        );
 
         data.forEach(resultado => {
           if (resultado.sucesso) {
@@ -301,7 +298,10 @@ export default function NotificacoesLista() {
           data.forEach(resultado => {
             if (resultado.sucesso) {
               sucesso(resultado.mensagem);
-              carregarNotificacoes();
+              servicoNotificacao.validarBuscaNotificacoesPorAnoRf(
+                anoAtual,
+                usuario?.rf
+              );
             } else {
               erro(resultado.mensagem);
             }

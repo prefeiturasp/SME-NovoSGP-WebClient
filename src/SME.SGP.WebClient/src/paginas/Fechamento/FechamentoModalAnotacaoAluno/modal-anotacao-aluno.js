@@ -8,11 +8,12 @@ import {
   Colors,
   Auditoria,
   DetalhesAluno,
+  Loader,
 } from '~/componentes';
 import api from '~/servicos/api';
 import { erros, sucesso, erro, confirmar } from '~/servicos/alertas';
 import Button from '~/componentes/button';
-import { DadosAlunoModal, EditorAnotacao } from './modal-anotacao-aluno.css';
+import { EditorAnotacao } from './modal-anotacao-aluno.css';
 import JoditEditor from '~/componentes/jodit-editor/joditEditor';
 
 const ModalAnotacaoAluno = props => {
@@ -29,6 +30,7 @@ const ModalAnotacaoAluno = props => {
   const [showModal, setShowModal] = useState(exibirModal);
   const [dadosAluno, setDadosAluno] = useState();
   const [modoEdicao, setModoEdicao] = useState(false);
+  const [exibirLoader, setExibirLoader] = useState(false);
   const [refForm, setRefForm] = useState({});
 
   const [valoresIniciais, setValoresIniciais] = useState({ anotacao: '' });
@@ -59,17 +61,19 @@ const ModalAnotacaoAluno = props => {
       codigoAluno,
       anotacao: excluir ? '' : anotacao,
     };
+    setExibirLoader(true);
     const resultado = await api
       .post('/v1/fechamentos/turmas/anotacoes/alunos', params)
       .catch(e => erros(e));
-    if (resultado && resultado.status == 200) {
+    if (resultado?.status === 200) {
       if (resultado.data.sucesso) {
-        sucesso(`Anotação ${excluir ? 'excluída' : 'salva'} com sucesso`);
+        sucesso(`Anotação ${excluir ? 'excluída' : 'registrada'} com sucesso`);
         onClose(!excluir, excluir);
       } else {
         erro(resultado.data.mensagemConsistencia);
       }
     }
+    setExibirLoader(false);
   };
 
   const obterAnotacaoAluno = async dados => {
@@ -147,82 +151,99 @@ const ModalAnotacaoAluno = props => {
       onClose={() => validaAntesDeFechar()}
       esconderBotaoPrincipal
       esconderBotaoSecundario
-      width="650px"
-      closable
+      width={850}
+      closable={!exibirLoader}
+      loader={exibirLoader}
+      fecharAoClicarFora={!exibirLoader}
+      fecharAoClicarEsc={!exibirLoader}
     >
       <Formik
         ref={refForm => setRefForm(refForm)}
         enableReinitialize
         initialValues={valoresIniciais}
         validationSchema={validacoes}
-        onSubmit={texto => onClickSalvarExcluir(false, texto)}
+        onSubmit={texto =>
+          !exibirLoader ? onClickSalvarExcluir(false, texto) : null
+        }
         validateOnChange
         validateOnBlur
       >
         {form => (
-          <Form>
-            <div className="col-md-12">
-              <DetalhesAluno
-                exibirResponsavel
-                exibirBotaoImprimir={false}
-                exibirFrequencia={false}
-                dados={dadosAluno.aluno}
-                permiteAlterarImagem={!desabilitar}
-              />
-            </div>
-            <div className="col-md-12">
-              <EditorAnotacao className="mt-3">
-                <JoditEditor
-                  form={form}
-                  value={valoresIniciais.anotacao}
-                  name="anotacao"
-                  onChange={onChangeCampos}
-                  desabilitar={desabilitar}
-                />
-              </EditorAnotacao>
-            </div>
-            <div className="row">
-              <div
-                className="col-md-8 d-flex justify-content-start"
-                style={{ marginTop: '-15px' }}
-              >
-                <Auditoria
-                  criadoPor={dadosAluno.criadoPor}
-                  criadoEm={dadosAluno.criadoEm}
-                  alteradoPor={dadosAluno.alteradoPor}
-                  alteradoEm={dadosAluno.alteradoEm}
-                  alteradoRf={dadosAluno.alteradoRF}
-                  criadoRf={dadosAluno.criadoRF}
+          <Loader loading={exibirLoader}>
+            <Form>
+              <div className="col-md-12">
+                <DetalhesAluno
+                  exibirResponsavel
+                  exibirBotaoImprimir={false}
+                  exibirFrequencia={false}
+                  dados={dadosAluno.aluno}
+                  permiteAlterarImagem={!desabilitar}
                 />
               </div>
-              <div className="col-md-4 d-flex justify-content-end">
-                <Button
-                  key="btn-excluir-anotacao"
-                  label="Excluir"
-                  color={Colors.Roxo}
-                  bold
-                  border
-                  className="mr-3 mt-2 padding-btn-confirmacao"
-                  onClick={validaAntesDeExcluir}
-                  disabled={
-                    desabilitar ||
-                    (dadosAlunoSelecionado &&
-                      !dadosAlunoSelecionado?.temAnotacao)
-                  }
-                />
-                <Button
-                  key="btn-sim-confirmacao-anotacao"
-                  label="Salvar"
-                  color={Colors.Roxo}
-                  bold
-                  border
-                  className="mr-3 mt-2 padding-btn-confirmacao"
-                  onClick={() => validaAntesDoSubmit(form)}
-                  disabled={desabilitar}
-                />
+              <div className="col-md-12">
+                <EditorAnotacao className="mt-3">
+                  <JoditEditor
+                    form={form}
+                    value={valoresIniciais.anotacao}
+                    name="anotacao"
+                    onChange={onChangeCampos}
+                    desabilitar={desabilitar}
+                  />
+                </EditorAnotacao>
               </div>
-            </div>
-          </Form>
+              <div className="row">
+                <div
+                  className="col-md-8 d-flex justify-content-start"
+                  style={{ marginTop: '-15px' }}
+                >
+                  <Auditoria
+                    criadoPor={dadosAluno.criadoPor}
+                    criadoEm={dadosAluno.criadoEm}
+                    alteradoPor={dadosAluno.alteradoPor}
+                    alteradoEm={dadosAluno.alteradoEm}
+                    alteradoRf={dadosAluno.alteradoRF}
+                    criadoRf={dadosAluno.criadoRF}
+                  />
+                </div>
+                <div className="col-md-4 d-flex justify-content-end">
+                  <Button
+                    key="btn-voltar-anotacao"
+                    id="btn-voltar-anotacao"
+                    label="Voltar"
+                    icon="arrow-left"
+                    color={Colors.Azul}
+                    border
+                    onClick={validaAntesDeFechar}
+                    className="mr-3 mt-2 padding-btn-confirmacao"
+                  />
+                  <Button
+                    key="btn-excluir-anotacao"
+                    label="Excluir"
+                    color={Colors.Roxo}
+                    bold
+                    border
+                    className="mr-3 mt-2 padding-btn-confirmacao"
+                    onClick={validaAntesDeExcluir}
+                    disabled={
+                      desabilitar ||
+                      (dadosAlunoSelecionado &&
+                        !dadosAlunoSelecionado?.temAnotacao)
+                    }
+                  />
+                  <Button
+                    key="btn-sim-confirmacao-anotacao"
+                    label="Salvar"
+                    color={Colors.Roxo}
+                    bold
+                    border
+                    className="mr-3 mt-2 padding-btn-confirmacao"
+                    onClick={() => validaAntesDoSubmit(form)}
+                    disabled={desabilitar}
+                  />
+                </div>
+              </div>
+            </Form>
+          </Loader>
         )}
       </Formik>
     </ModalConteudoHtml>

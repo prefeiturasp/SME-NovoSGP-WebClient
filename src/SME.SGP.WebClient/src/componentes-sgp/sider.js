@@ -31,6 +31,7 @@ const Sider = () => {
   const modalidadesFiltroPrincipal = useSelector(
     state => state.filtro.modalidades
   );
+  const usuarioStore = useSelector(e => e.usuario);
 
   const [subMenusPrincipais, setSubMenusPrincipais] = useState([]);
 
@@ -213,7 +214,11 @@ const Sider = () => {
   };
 
   return (
-    <MenuBody id="main" retraido={NavegacaoStore.retraido}>
+    <MenuBody
+      id="main"
+      retraido={NavegacaoStore.retraido}
+      position={usuarioStore.acessoAdmin}
+    >
       <Sider
         style={{ background: Base.Roxo, height: '100%' }}
         collapsed={NavegacaoStore.retraido}

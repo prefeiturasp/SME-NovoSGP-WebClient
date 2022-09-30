@@ -47,12 +47,11 @@ const AusenciasEstudante = props => {
   const obterAusenciaMotivoPorAlunoTurmaBimestreAno = useCallback(
     async numeroPagina => {
       setExibirLoader(true);
-      const retorno = await ServicoAcompanhamentoFrequencia.obterJustificativaAcompanhamentoFrequenciaPaginacaoManual(
+      const retorno = await ServicoAcompanhamentoFrequencia.obterFrequenciaDiariaAluno(
         turmaId,
         componenteCurricularId,
         codigoAluno,
         bimestre,
-        semestre,
         numeroPagina || 1,
         REGISTROS_POR_PAGINA
       )
@@ -91,21 +90,22 @@ const AusenciasEstudante = props => {
         className="d-flex"
         style={{ alignItems: 'center', justifyContent: 'space-between' }}
       >
-        <div>
-          {item?.motivo?.substr(0, 100)}
-          {item?.motivo?.length > 100 ? '...' : ''}
-        </div>
+          <div
+            style={{ padding: '9px' }}>
+            {item?.motivo?.substr(0, 100)}
+            {item?.motivo?.length > 100 ? '...' : ''}
+          </div>
 
-        <BtnVisualizarAnotacao
-          className={item.id > 0 ? 'btn-com-anotacao' : ''}
-          onClick={() => {
-            if (item.motivo) {
-              onClickAnotacao(item);
-            }
-          }}
-        >
-          <i className="fas fa-eye" style={{ marginTop: '9px' }} />
-        </BtnVisualizarAnotacao>
+          <BtnVisualizarAnotacao
+            className={item.id > 0 ? 'btn-com-anotacao' : ''}
+            onClick={() => {
+              if (item?.motivo.length > 0) {
+                onClickAnotacao(item);
+              }
+            }}
+          >
+            <i className="fas fa-eye" style={{ marginTop: '9px' }} />
+          </BtnVisualizarAnotacao>
       </div>
     );
   };
@@ -124,9 +124,12 @@ const AusenciasEstudante = props => {
                     <table className="table">
                       <thead className="tabela-dois-thead">
                         <tr>
-                          <th className="col-linha-um">Data</th>
-                          <th className="col-linha-um">Registrado por</th>
-                          <th className="col-linha-um">Motivo da ausência</th>
+                          <th className='col-linha-dados'>Data da Aula</th>
+                          <th className='col-linha-dados'>Aulas Dadas</th>
+                          <th className='col-linha-dados'>Presenças</th>
+                          <th className='col-linha-dados'>Remoto</th>
+                          <th className='col-linha-dados'>Ausências</th>
+                          <th className='campo-justificativa'>Justificativa</th>
                         </tr>
                       </thead>
                       <tbody className="tabela-dois-tbody">
@@ -134,15 +137,24 @@ const AusenciasEstudante = props => {
                           ausencias?.items?.map(item => {
                             return (
                               <tr key={shortid.generate()}>
-                                <td className="col-valor-linha-um">
-                                  {moment(item.dataAusencia).format(
+                                <td>
+                                  {moment(item.dataAula).format(
                                     'DD/MM/YYYY'
                                   )}
                                 </td>
-                                <td className="col-valor-linha-um">
-                                  {item.registradoPor}
+                                <td className='col-linha-dados'>
+                                  {item.quantidadeAulas}
                                 </td>
-                                <td className="col-valor-linha-um">
+                                <td className='col-linha-dados'>
+                                  {item.quantidadePresenca}
+                                </td>
+                                <td className='col-linha-dados'>
+                                  {item.quantidadeRemoto}
+                                </td>
+                                <td className='col-linha-dados'>
+                                  {item.quantidadeAusencia}
+                                </td>
+                                <td className='campo-justificativa'>
                                   {visualizarAnotacao(item)}
                                 </td>
                               </tr>

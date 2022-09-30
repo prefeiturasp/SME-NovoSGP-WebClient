@@ -2,9 +2,9 @@ import PropTypes from 'prop-types';
 import React, { useState } from 'react';
 import { Base } from '~/componentes';
 import CardCollapse from '~/componentes/cardCollapse';
-import GraficoQtdDiariosPreenchidosEQtdDiariosComDevolutiva from './graficoQtdDiariosPreenchidosEQtdDiariosComDevolutiva';
+import GraficoUsuariosQueRegistraramDevolutivas from './graficoUsuariosQueRegistraramDevolutivas';
 
-const QtdDiariosPreenchidosEQtdDiariosComDevolutiva = props => {
+const UsuariosQueRegistraramDevolutivas = props => {
   const { anoLetivo, dreId, ueId, modalidade } = props;
 
   const configCabecalho = {
@@ -14,12 +14,12 @@ const QtdDiariosPreenchidosEQtdDiariosComDevolutiva = props => {
 
   const [exibir, setExibir] = useState(false);
 
-  const key = 'quantidade-total-diarios-bordos';
+  const key = 'usuarios-registraram-devolutivas';
 
   return (
     <div className="mt-3">
       <CardCollapse
-        titulo="Total de diários de bordos preenchidos e diários com devolutiva"
+        titulo="Usuários que registraram devolutivas"
         key={`${key}-collapse-key`}
         indice={`${key}-collapse-indice`}
         alt={`${key}-alt`}
@@ -30,32 +30,32 @@ const QtdDiariosPreenchidosEQtdDiariosComDevolutiva = props => {
         }}
       >
         {exibir ? (
-          <GraficoQtdDiariosPreenchidosEQtdDiariosComDevolutiva
+          <GraficoUsuariosQueRegistraramDevolutivas
             anoLetivo={anoLetivo}
             dreId={dreId}
             ueId={ueId}
             modalidade={modalidade}
           />
         ) : (
-          ''
+          <></>
         )}
       </CardCollapse>
     </div>
   );
 };
 
-QtdDiariosPreenchidosEQtdDiariosComDevolutiva.propTypes = {
+UsuariosQueRegistraramDevolutivas.propTypes = {
   anoLetivo: PropTypes.oneOfType(PropTypes.any),
   dreId: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   ueId: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   modalidade: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
 };
 
-QtdDiariosPreenchidosEQtdDiariosComDevolutiva.defaultProps = {
+UsuariosQueRegistraramDevolutivas.defaultProps = {
   anoLetivo: null,
   dreId: null,
   ueId: null,
   modalidade: null,
 };
 
-export default QtdDiariosPreenchidosEQtdDiariosComDevolutiva;
+export default UsuariosQueRegistraramDevolutivas;

@@ -11,3 +11,31 @@ export function naoLidas(quantidade) {
     payload: quantidade,
   };
 }
+
+export function webSocketNotificacaoCriada(payload) {
+  return {
+    type: '@notificacoes/webSocketNotificacaoCriada',
+    payload,
+  };
+}
+
+export function webSocketNotificacaoLida(payload) {
+  return {
+    type: '@notificacoes/webSocketNotificacaoLida',
+    payload,
+  };
+}
+
+export function webSocketNotificacaoExcluida(payload) {
+  return {
+    type: '@notificacoes/webSocketNotificacaoExcluida',
+    payload,
+  };
+}
+
+export function setIniciarNotificacoesSemWebSocket(payload) {
+  return {
+    type: '@notificacoes/setIniciarNotificacoesSemWebSocket',
+    payload,
+  };
+}

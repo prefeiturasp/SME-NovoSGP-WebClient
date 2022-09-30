@@ -273,8 +273,8 @@ const salvarFechamentoListao = async (
       if (dadosNotaConceito.modoEdicao) {
         notaConceitoAlunos.push({
           codigoAluno: aluno.codigoAluno,
-          nota: ehNota ? dadosNotaConceito.notaConceito ?? '' : '',
-          conceitoId: !ehNota ? dadosNotaConceito.notaConceito || '' : '',
+          nota: ehNota ? dadosNotaConceito.notaConceito ?? null : null,
+          conceitoId: !ehNota ? dadosNotaConceito.notaConceito || null : null,
           disciplinaId:
             dadosNotaConceito.disciplinaCodigo ||
             componenteCurricular?.codigoComponenteCurricular,
@@ -302,9 +302,7 @@ const salvarFechamentoListao = async (
     .finally(() => setExibirLoaderGeral(false));
 
   if (resposta?.status === 200) {
-    sucesso(
-      `${ehNota ? 'Notas registradas' : 'Conceitos registrados'} com sucesso`
-    );
+    sucesso(resposta.data.mensagemConsistencia);
     const { dispatch } = store;
 
     dispatch(setTelaEmEdicao(false));
@@ -377,6 +375,16 @@ const validarSalvarFechamentoListao = async (
   );
 };
 
+const obterDescricaoConceito = (listaTiposConceitos, valorConceito) => {
+  if (listaTiposConceitos?.length) {
+    const conceito = listaTiposConceitos.find(
+      item => item.id === String(valorConceito)
+    );
+    return conceito?.valor || '';
+  }
+  return '';
+};
+
 export {
   onChangeTabListao,
   montarIdsObjetivosSelecionadosListao,
@@ -387,4 +395,5 @@ export {
   obterDaodsFechamentoPorBimestreListao,
   validarSalvarFechamentoListao,
   salvarFechamentoListao,
+  obterDescricaoConceito,
 };

@@ -10,7 +10,7 @@ const AbrangenciaServico = {
     url = '',
     temParametros = false,
     modalidade,
-    consideraHistorico = false
+    consideraHistorico = true
   ) {
     if (url && !temParametros)
       return api.get(`${url}/${dreId}/ues/atribuicoes`);
@@ -36,7 +36,7 @@ const AbrangenciaServico = {
     consideraHistorico = false,
     turmasRegulares = false,
     tipos = undefined,
-    consideraNovosAnosInfantil = false
+    consideraNovosAnosInfantil = true
   ) {
     let params = {};
     if (modalidade) {

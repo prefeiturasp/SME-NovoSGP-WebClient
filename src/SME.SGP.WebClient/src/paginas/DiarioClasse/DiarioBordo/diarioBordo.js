@@ -183,7 +183,8 @@ const DiarioBordo = ({ match }) => {
         setComponenteCurricularSelecionado(
           String(componente.codigoComponenteCurricular)
         );
-        setCodDisciplinaPai(String(componente.codDisciplinaPai));
+        const codDisciplina = componente?.codDisciplinaPai || componente?.id;
+        setCodDisciplinaPai(String(codDisciplina));
       }
     }
 
@@ -202,11 +203,11 @@ const DiarioBordo = ({ match }) => {
   }, [turmaId, obterComponentesCurriculares, turmaInfantil]);
 
   const obterDatasDeAulasDisponiveis = useCallback(
-    async codigoDisciplina => {
+    async codDisciplinaPai => {
       setCarregandoData(true);
       const datasDeAulas = await ServicoFrequencia.obterDatasDeAulasPorCalendarioTurmaEComponenteCurricular(
         turmaId,
-        codigoDisciplina
+        codDisciplinaPai
       )
         .catch(e => {
           setCarregandoGeral(false);
@@ -217,7 +218,7 @@ const DiarioBordo = ({ match }) => {
         });
 
       const codigoComponenteCurricular =
-        componenteCurricularId || codigoDisciplina;
+        componenteCurricularId || codDisciplinaPai;
 
       if (datasDeAulas?.data?.length && codigoComponenteCurricular) {
         setListaDatasAulas(datasDeAulas.data);
@@ -244,16 +245,10 @@ const DiarioBordo = ({ match }) => {
   );
 
   useEffect(() => {
-    const codigoDisciplina = codDisciplinaPai || componenteCurricularId;
-    if (turmaId && codigoDisciplina) {
-      obterDatasDeAulasDisponiveis(codigoDisciplina);
+    if (turmaId && codDisciplinaPai) {
+      obterDatasDeAulasDisponiveis(codDisciplinaPai);
     }
-  }, [
-    turmaId,
-    codDisciplinaPai,
-    componenteCurricularId,
-    obterDatasDeAulasDisponiveis,
-  ]);
+  }, [turmaId, codDisciplinaPai, obterDatasDeAulasDisponiveis]);
 
   const onChangeComponenteCurricular = valor => {
     if (!valor) {
@@ -299,10 +294,17 @@ const DiarioBordo = ({ match }) => {
   };
 
   useEffect(() => {
-    if (componenteCurricularId) {
+    if (componenteCurricularId && listaComponenteCurriculares?.length) {
+      const valorCodDisciplinaPai = listaComponenteCurriculares.find(
+        item =>
+          String(item.codigoComponenteCurricular) === componenteCurricularId
+      );
+      const codDisciplina =
+        valorCodDisciplinaPai?.codDisciplinaPai || valorCodDisciplinaPai?.id;
+      setCodDisciplinaPai(String(codDisciplina));
       setComponenteCurricularSelecionado(componenteCurricularId);
     }
-  }, [componenteCurricularId]);
+  }, [componenteCurricularId, listaComponenteCurriculares]);
 
   const obterDiarioBordo = async (aulaIdEnviada, componenteCurricular) => {
     setCarregandoGeral(true);
@@ -330,7 +332,7 @@ const DiarioBordo = ({ match }) => {
       setTemPeriodoAberto(retorno.data.temPeriodoAberto);
       setEhInseridoCJ(retorno.data.inseridoCJ);
       setValoresIniciais(valInicial);
-      setCodDisciplinaPai(codDisciplinaPai);
+      setCodDisciplinaPai(componenteCurricular);
       if (retorno?.data?.auditoria?.id) {
         setAuditoria(retorno.data.auditoria);
         obterDadosObservacoes(retorno.data.auditoria.id);
@@ -381,6 +383,7 @@ const DiarioBordo = ({ match }) => {
   };
 
   const validaAntesDoSubmit = (form, clicouBtnSalvar) => {
+    setCarregandoGeral(true);
     const arrayCampos = Object.keys(valoresIniciais);
     arrayCampos.forEach(campo => {
       form.setFieldTouched(campo, true, true);
@@ -397,6 +400,7 @@ const DiarioBordo = ({ match }) => {
       if (form.isValid || Object.keys(form.errors).length === 0) {
         return salvarDiarioDeBordo(form.values, form, clicouBtnSalvar);
       }
+      setCarregandoGeral(false);
       return false;
     });
   };
@@ -711,8 +715,7 @@ const DiarioBordo = ({ match }) => {
                         desabilitado={
                           !turmaInfantil ||
                           !listaComponenteCurriculares?.length ||
-                          !componenteCurricularSelecionado ||
-                          !diasParaHabilitar
+                          !componenteCurricularSelecionado
                         }
                         diasParaHabilitar={diasParaHabilitar}
                       />

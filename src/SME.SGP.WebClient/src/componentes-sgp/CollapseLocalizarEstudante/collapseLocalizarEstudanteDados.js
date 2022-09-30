@@ -24,7 +24,9 @@ const CollapseLocalizarEstudanteDados = props => {
   } = props;
   const dispatch = useDispatch();
 
-  const usuario = useSelector(store => store.usuario);
+  const ehProfessor = useSelector(store => store.usuario)?.ehProfessor;
+  const ehProfessorInfantil = useSelector(store => store.usuario)
+    ?.ehProfessorInfantil;
 
   const dadosIniciais = useSelector(
     store => store.collapseLocalizarEstudante.dadosIniciaisLocalizarEstudante
@@ -58,7 +60,7 @@ const CollapseLocalizarEstudanteDados = props => {
   const [carregandoUes, setCarregandoUes] = useState(false);
 
   const obterUes = useCallback(async () => {
-    if (codigoDre) {
+    if (codigoDre && anoAtual) {
       setCarregandoUes(true);
       const resposta = await AbrangenciaServico.buscarUes(
         codigoDre,
@@ -92,7 +94,7 @@ const CollapseLocalizarEstudanteDados = props => {
       setCodigoUe();
       setListaUes([]);
     }
-  }, [codigoDre, obterUes]);
+  }, [codigoDre, anoAtual, obterUes]);
 
   useEffect(() => {
     return () => dispatch(setLimparDadosLocalizarEstudante({}));
@@ -215,9 +217,10 @@ const CollapseLocalizarEstudanteDados = props => {
   const onClickProximoPasso = async () => {
     let continuar = true;
     if (validarSePermiteProximoPasso) {
-      continuar = await validarSePermiteProximoPasso(
-        alunoLocalizadorSelecionado.codigoAluno
-      );
+      continuar = await validarSePermiteProximoPasso({
+        estudanteCodigo: alunoLocalizadorSelecionado.codigoAluno,
+        ueCodigo: codigoUe,
+      });
     }
 
     if (continuar) {
@@ -324,8 +327,7 @@ const CollapseLocalizarEstudanteDados = props => {
             anoLetivo={anoAtual}
             desabilitado={
               !codigoUe ||
-              ((usuario?.ehProfessor || usuario?.ehProfessorInfantil) &&
-                !codigoTurma)
+              ((ehProfessor || ehProfessorInfantil) && !codigoTurma)
             }
             codigoTurma={codigoDre ? codigoTurma : ''}
             valorInicialAlunoCodigo={alunoLocalizadorSelecionado?.codigoAluno}
@@ -350,8 +352,7 @@ const CollapseLocalizarEstudanteDados = props => {
           onClick={onClickProximoPasso}
           disabled={
             !alunoLocalizadorSelecionado?.codigoAluno ||
-            ((usuario?.ehProfessor || usuario?.ehProfessorInfantil) &&
-              !codigoTurma)
+            ((ehProfessor || ehProfessorInfantil) && !codigoTurma)
           }
         />
       </div>

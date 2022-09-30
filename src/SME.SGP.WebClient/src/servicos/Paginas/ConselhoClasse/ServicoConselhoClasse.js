@@ -1,5 +1,7 @@
+import { conselhoClasseRecomendacaoTipo } from '~/dtos';
 import { store } from '~/redux';
 import {
+  setListaoRecomendacoesAlunoFamilia,
   setListaTiposConceitos,
   setMarcadorParecerConclusivo,
 } from '~/redux/modulos/conselhoClasse/actions';
@@ -183,15 +185,51 @@ class ServicoConselhoClasse {
     );
   };
 
-  obterExibirMarcadorParecer = (
+  obterConselhoClasseTurmaFinal = (
     turmaCodigo,
     alunoCodigo,
     consideraHistorico
   ) => {
-    return api.get(
-      `/v1/conselhos-classe/turmas/${turmaCodigo}/alunos/${alunoCodigo}/consideraHistorico` +
-        `/${consideraHistorico}`
-    );
+    const state = store.getState();
+    const { conselhoClasse } = state;
+    const bimestreAtual = conselhoClasse?.bimestreAtual;
+
+    if (bimestreAtual?.valor !== 'final') {
+      return api.get(
+        `/v1/conselhos-classe/turmas/${turmaCodigo}/alunos/${alunoCodigo}/consideraHistorico` +
+          `/${consideraHistorico}`
+      );
+    }
+    return null;
+  };
+
+  obterListaAnotacoesRecomendacoes = async () => {
+    const state = store.getState();
+
+    const { dispatch } = store;
+    const { conselhoClasse } = state;
+    const listaoRecomendacoesAlunoFamilia =
+      conselhoClasse?.listaoRecomendacoesAlunoFamilia;
+
+    const aluno = listaoRecomendacoesAlunoFamilia?.listaRecomendacoesAluno;
+    const familia = listaoRecomendacoesAlunoFamilia?.listaRecomendacoesFamilia;
+    if (!aluno?.length || !familia?.length) {
+      const retorno = await api.get('/v1/conselhos-classe/obter-recomendacoes');
+
+      const recomendacoes = retorno?.data;
+      if (recomendacoes.length) {
+        const params = {
+          listaRecomendacoesAluno: recomendacoes.filter(
+            item => item.tipo === conselhoClasseRecomendacaoTipo.Aluno
+          ),
+          listaRecomendacoesFamilia: recomendacoes.filter(
+            item => item.tipo === conselhoClasseRecomendacaoTipo.Familia
+          ),
+        };
+
+        dispatch(setListaoRecomendacoesAlunoFamilia(params));
+      }
+    }
   };
 }
 

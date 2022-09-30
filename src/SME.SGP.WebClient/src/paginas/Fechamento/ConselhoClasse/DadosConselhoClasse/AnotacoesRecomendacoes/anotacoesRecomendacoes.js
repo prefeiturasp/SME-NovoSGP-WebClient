@@ -1,16 +1,20 @@
+import moment from 'moment';
+import PropTypes from 'prop-types';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import PropTypes from 'prop-types';
-import moment from 'moment';
 import { Loader } from '~/componentes';
+import { conselhoClasseRecomendacaoTipo } from '~/dtos';
 import {
   setAnotacoesAluno,
   setAnotacoesPedagogicas,
   setAuditoriaAnotacaoRecomendacao,
   setConselhoClasseEmEdicao,
   setDentroPeriodo,
+  setListaoRecomendacoesAlunoFamilia,
   setRecomendacaoAluno,
+  setRecomendacaoAlunoSelecionados,
   setRecomendacaoFamilia,
+  setRecomendacaoFamiliaSelecionados,
   setSituacaoConselhoAluno,
 } from '~/redux/modulos/conselhoClasse/actions';
 import { erros } from '~/servicos/alertas';
@@ -135,6 +139,25 @@ const AnotacoesRecomendacoes = props => {
     [dispatch]
   );
 
+  const setarListaRecomendacoesSalvas = useCallback(
+    recomendacoesAlunoFamilia => {
+      const listaRecomendacoesAluno = recomendacoesAlunoFamilia?.filter(
+        item => item?.tipo === conselhoClasseRecomendacaoTipo.Aluno
+      );
+      const listaRecomendacoesFamilia = recomendacoesAlunoFamilia?.filter(
+        item => item?.tipo === conselhoClasseRecomendacaoTipo.Familia
+      );
+
+      if (listaRecomendacoesAluno?.length) {
+        dispatch(setRecomendacaoAlunoSelecionados(listaRecomendacoesAluno));
+      }
+      if (listaRecomendacoesFamilia?.length) {
+        dispatch(setRecomendacaoFamiliaSelecionados(listaRecomendacoesFamilia));
+      }
+    },
+    [dispatch]
+  );
+
   const pegueInicioPeriodoFechamento = () => {
     if (fechamentoPeriodoInicioFim) {
       const { periodoFechamentoInicio } = fechamentoPeriodoInicioFim;
@@ -176,11 +199,20 @@ const AnotacoesRecomendacoes = props => {
       codigoTurma,
       bimestre.valor,
       turmaStore?.consideraHistorico
-    )
-      .catch(e => erros(e))
-      .finally(() => setCarregando(false));
+    ).catch(e => erros(e));
 
     if (resposta && resposta.data) {
+      await ServicoConselhoClasse.obterListaAnotacoesRecomendacoes().catch(e =>
+        erros(e)
+      );
+
+      if (resposta?.data?.recomendacoesAlunoFamilia?.length) {
+        setarListaRecomendacoesSalvas(resposta.data.recomendacoesAlunoFamilia);
+      } else {
+        dispatch(setRecomendacaoAlunoSelecionados([]));
+        dispatch(setRecomendacaoFamiliaSelecionados([]));
+      }
+
       setMatriculaAtivaPeriodo(resposta.data.matriculaAtiva);
 
       if (!desabilitarEdicaoAluno()) {
@@ -188,16 +220,18 @@ const AnotacoesRecomendacoes = props => {
       }
 
       onChangeAnotacoesPedagogicas(resposta.data.anotacoesPedagogicas);
-      onChangeRecomendacaoAluno(resposta.data.recomendacaoAluno);
-      onChangeRecomendacaoFamilia(resposta.data.recomendacaoFamilia);
+      onChangeRecomendacaoAluno(resposta.data.textoRecomendacaoAluno);
+      onChangeRecomendacaoFamilia(resposta.data.textoRecomendacaoFamilia);
       setarAnotacaoAluno(resposta.data.anotacoesAluno);
       setarSituacaoConselho(resposta.data.situacaoConselho);
       setarAuditoria(resposta.data);
       setExibir(true);
+      setCarregando(false);
       return;
     }
     setarAuditoria({});
     setExibir(false);
+    setCarregando(false);
   }, [
     alunoCodigo,
     conselhoClasseId,
@@ -264,7 +298,7 @@ const AnotacoesRecomendacoes = props => {
 
 AnotacoesRecomendacoes.propTypes = {
   codigoTurma: PropTypes.oneOfType([PropTypes.string]),
-  bimestre: PropTypes.oneOfType([PropTypes.number]),
+  bimestre: PropTypes.oneOfType([PropTypes.any]),
 };
 
 AnotacoesRecomendacoes.defaultProps = {
