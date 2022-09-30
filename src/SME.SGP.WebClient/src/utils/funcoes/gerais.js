@@ -1,5 +1,6 @@
 import $ from 'jquery';
 import { OPCAO_TODOS } from '~/constantes/constantes';
+import notificacaoStatus from '~/dtos/notificacaoStatus';
 
 /**
  * @description Verifica se o objeto está inteiro vazio ou nulo
@@ -248,6 +249,33 @@ const editorTemValor = descricao => {
   return !!(temTexto || temVideo || temImagem);
 };
 
+const ordenarDataMoment = (a, b) => {
+  const dataA = window.moment(a.data);
+  const dataB = window.moment(b.data);
+  return dataB.diff(dataA);
+};
+
+const ordenarNotificoesNavBar = listaNotificacoes => {
+  const listaAgrupada = listaNotificacoes.reduce(
+    (acc, item) => {
+      if (item.status === notificacaoStatus.Pendente) {
+        acc.pendente.push(item);
+      } else {
+        acc.outros.push(item);
+      }
+      return acc;
+    },
+    { pendente: [], outros: [] }
+  );
+
+  const listaOrdenada = [
+    ...listaAgrupada.pendente.sort(ordenarDataMoment),
+    ...listaAgrupada.outros.sort(ordenarDataMoment),
+  ];
+
+  return listaOrdenada;
+};
+
 export {
   validaSeObjetoEhNuloOuVazio,
   valorNuloOuVazio,
@@ -269,4 +297,5 @@ export {
   onchangeMultiSelect,
   primeiroMaisculo,
   editorTemValor,
+  ordenarNotificoesNavBar,
 };
