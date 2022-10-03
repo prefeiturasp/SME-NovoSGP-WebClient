@@ -672,7 +672,7 @@ const RelatorioDevolutivas = () => {
                 />
               </Loader>
             </div>
-            <div className="col-sm-12 col-md-4 col-lg-4 col-xl-4 mb-2">
+            <div className="col-sm-12 col-md-4 mb-2">
               <Loader loading={carregandoComponentes} ignorarTip>
                 <SelectComponent
                   label="Componente curricular"
@@ -711,7 +711,7 @@ const RelatorioDevolutivas = () => {
                 />
               </div>
             )}
-            <div className="col-sm-12 col-md-6 mb-2">
+            <div className="col-sm-12 col-md-4 mb-2">
               <RadioGroupButton
                 label="Exibir conteúdo da devolutiva"
                 opcoes={opcoesRadioSimNao}
