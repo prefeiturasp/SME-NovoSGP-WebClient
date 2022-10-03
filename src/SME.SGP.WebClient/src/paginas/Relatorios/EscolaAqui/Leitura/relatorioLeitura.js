@@ -113,6 +113,7 @@ const RelatorioLeitura = () => {
 
   const onChangeAno = valor => {
     setAnosEscolares(valor);
+    setTurmaId();
   };
 
   const onChangeTurma = valor => {
