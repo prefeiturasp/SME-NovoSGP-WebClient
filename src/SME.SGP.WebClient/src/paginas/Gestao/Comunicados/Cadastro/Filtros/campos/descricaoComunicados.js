@@ -15,6 +15,7 @@ const DescricaoComunicados = ({ form, onChangeCampos, desabilitar }) => {
       form={form}
       desabilitar={desabilitar}
       value={valoresIniciais.descricao}
+      labelRequired
     />
   );
 };

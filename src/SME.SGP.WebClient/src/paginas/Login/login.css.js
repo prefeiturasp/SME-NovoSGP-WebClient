@@ -96,7 +96,7 @@ export const Link = styled(LinkRouter)`
 
 export const LabelLink = styled.label`
   font-family: Roboto;
-  font-size: 12px;
+  font-size: 13px;
   font-weight: normal;
   font-style: normal;
   font-stretch: normal;

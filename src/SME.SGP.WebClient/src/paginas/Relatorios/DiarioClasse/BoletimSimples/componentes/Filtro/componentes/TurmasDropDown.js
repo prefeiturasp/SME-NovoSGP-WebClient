@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 
 // Componentes
@@ -8,7 +7,13 @@ import { SelectComponent } from '~/componentes';
 // Servicos
 import AbrangenciaServico from '~/servicos/Abrangencia';
 
-function TurmasDropDown({ form, onChange, label, consideraHistorico, anoLetivo }) {
+function TurmasDropDown({
+  form,
+  onChange,
+  label,
+  consideraHistorico,
+  anoLetivo,
+}) {
   const [listaTurmas, setListaTurmas] = useState([]);
   const { ueId, modalidadeId } = form.values;
 
@@ -39,6 +44,7 @@ function TurmasDropDown({ form, onChange, label, consideraHistorico, anoLetivo }
     } else {
       setListaTurmas([]);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [ueId, modalidadeId]);
 
   useEffect(() => {
@@ -46,6 +52,7 @@ function TurmasDropDown({ form, onChange, label, consideraHistorico, anoLetivo }
       form.setFieldValue('turmaId', listaTurmas[0].valor);
       onChange(listaTurmas[0].valor);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [listaTurmas]);
 
   return (
@@ -73,7 +80,7 @@ TurmasDropDown.propTypes = {
   onChange: PropTypes.func,
   label: PropTypes.string,
   consideraHistorico: PropTypes.bool,
-  anoLetivo: PropTypes.string
+  anoLetivo: PropTypes.string,
 };
 
 TurmasDropDown.defaultProps = {
@@ -81,7 +88,7 @@ TurmasDropDown.defaultProps = {
   onChange: () => {},
   label: null,
   consideraHistorico: false,
-  anoLetivo: ''
+  anoLetivo: '',
 };
 
 export default TurmasDropDown;

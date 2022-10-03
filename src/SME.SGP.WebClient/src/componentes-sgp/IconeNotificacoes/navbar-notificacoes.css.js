@@ -24,7 +24,7 @@ const Count = styled(Badge)`
 `;
 
 const Lista = styled.div`
-  font-size: 9px !important;
+  font-size: 12px !important;
   margin-top: 5px !important;
   min-width: 360px !important;
   right: 0 !important;

@@ -46,7 +46,9 @@ const ListaFrequencia = props => {
   );
 
   const [desabilitarCampos, setDesabilitarCampos] = useState(false);
-  const aulaIdPodeEditar = useSelector(state => state.frequenciaPlanoAula?.aulaIdPodeEditar);
+  const aulaIdPodeEditar = useSelector(
+    state => state.frequenciaPlanoAula?.aulaIdPodeEditar
+  );
 
   useEffect(() => {
     const somenteConsulta = verificaSomenteConsulta(permissoesTela);
@@ -58,14 +60,15 @@ const ListaFrequencia = props => {
     if (desabilitar) {
       setDesabilitarCampos(desabilitar);
       return;
-    };
-    
+    }
+
     if (!temPeriodoAberto || !aulaIdPodeEditar) {
       desabilitar = true;
-    };
-    
-    setDesabilitarCampos(desabilitar); 
-        
+    }
+
+    setDesabilitarCampos(desabilitar);
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [frequenciaId, permissoesTela, temPeriodoAberto, componenteCurricular]);
 
   const marcaPresencaFaltaTodasAulas = (aluno, tipo) => {

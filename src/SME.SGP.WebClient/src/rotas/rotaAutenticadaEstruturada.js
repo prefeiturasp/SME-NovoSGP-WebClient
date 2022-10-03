@@ -1,16 +1,16 @@
 import React, { memo } from 'react';
 import t from 'prop-types';
-import { Route, Redirect } from 'react-router-dom';
+import { Redirect } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { setSomenteConsulta } from '~/redux/modulos/navegacao/actions';
 import { Loader } from '~/componentes';
+import RotaAutenticadaEstruturadaDefault from './rotaAutenticadaEstruturadaDefault';
 
 const RotaAutenticadaEstruturada = memo(
   ({
     component: Component,
     temPermissionamento,
     chavePermissao,
-    location,
     ...propriedades
   }) => {
     const dispatch = useDispatch();
@@ -23,7 +23,7 @@ const RotaAutenticadaEstruturada = memo(
     dispatch(setSomenteConsulta(false));
 
     if (!logado) {
-      return <Redirect to={`/login`} />;
+      return <Redirect to="/login" />;
     }
 
     if (primeiroAcesso) {
@@ -36,9 +36,9 @@ const RotaAutenticadaEstruturada = memo(
 
     return (
       <Loader loading={loaderGeral || !carregandoPerfil}>
-        <Route
+        <RotaAutenticadaEstruturadaDefault
           {...propriedades}
-          render={propriedade => <Component {...propriedade} />}
+          Component={Component}
         />
       </Loader>
     );
@@ -49,14 +49,12 @@ RotaAutenticadaEstruturada.propTypes = {
   component: t.oneOfType([t.any]),
   temPermissionamento: t.bool,
   chavePermissao: t.string,
-  location: t.oneOfType([t.any]),
 };
 
 RotaAutenticadaEstruturada.defaultProps = {
   component: null,
   temPermissionamento: null,
   chavePermissao: null,
-  location: null,
 };
 
 export default RotaAutenticadaEstruturada;

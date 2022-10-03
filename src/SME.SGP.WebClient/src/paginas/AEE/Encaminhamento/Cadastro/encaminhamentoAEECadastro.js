@@ -85,13 +85,12 @@ const EncaminhamentoAEECadastro = ({ match }) => {
 
   return (
     <LoaderEncaminhamento>
-      <Cabecalho pagina="Encaminhamento AEE" />
+      <Cabecalho pagina="Encaminhamento AEE">
+        <BotoesAcoesEncaminhamentoAEE match={match} />
+      </Cabecalho>
       <Card>
         <div className="col-md-12">
           <div className="row">
-            <div className="col-md-12 d-flex justify-content-end mb-3">
-              <BotoesAcoesEncaminhamentoAEE match={match} />
-            </div>
             {match?.params?.id ? (
               ''
             ) : (

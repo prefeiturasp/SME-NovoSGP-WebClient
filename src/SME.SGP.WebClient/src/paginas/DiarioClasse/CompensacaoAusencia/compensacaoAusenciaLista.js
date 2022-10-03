@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
+import { Col, Row } from 'antd';
 import { Loader } from '~/componentes';
 import Cabecalho from '~/componentes-sgp/cabecalho';
 import Alert from '~/componentes/alert';
@@ -21,6 +22,9 @@ import { AlunosCompensacao } from './styles';
 import AlertaModalidadeInfantil from '~/componentes-sgp/AlertaModalidadeInfantil/alertaModalidadeInfantil';
 import { ehTurmaInfantil } from '~/servicos/Validacoes/validacoesInfatil';
 import CompensacaoAusenciaListaCamposDebounce from './compensacaoAusenciaListaCamposDebounce';
+import { SGP_BUTTON_NOVO } from '~/componentes-sgp/filtro/idsCampos';
+import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
+import BotaoExcluirPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoExcluirPadrao';
 
 const CompensacaoAusenciaLista = () => {
   const usuario = useSelector(store => store.usuario);
@@ -315,52 +319,43 @@ const CompensacaoAusenciaLista = () => {
         />
       )}
       <AlertaModalidadeInfantil />
-      <Cabecalho pagina="Compensação de Ausência" />
+      <Cabecalho pagina="Compensação de Ausência">
+        <Row gutter={[8, 8]} type="flex">
+          <Col>
+            <BotaoVoltarPadrao onClick={() => onClickVoltar()} />
+          </Col>
+          <Col>
+            <BotaoExcluirPadrao
+              onClick={onClickExcluir}
+              disabled={
+                !permissoesTela.podeExcluir ||
+                (compensacoesSelecionadas &&
+                  compensacoesSelecionadas.length < 1)
+              }
+            />
+          </Col>
+          <Col>
+            <Button
+              id={SGP_BUTTON_NOVO}
+              label="Novo"
+              color={Colors.Roxo}
+              border
+              bold
+              onClick={onClickNovo}
+              disabled={
+                ehTurmaInfantil(modalidadesFiltroPrincipal, turmaSelecionada) ||
+                somenteConsulta ||
+                componenteSemFrequencia ||
+                !permissoesTela.podeIncluir ||
+                !turmaSelecionada.turma ||
+                (turmaSelecionada.turma && listaDisciplinas.length < 1)
+              }
+            />
+          </Col>
+        </Row>
+      </Cabecalho>
       <Card>
         <div className="col-md-12">
-          <div className="row">
-            <div className="col-md-12 d-flex justify-content-end pb-4">
-              <Button
-                label="Voltar"
-                icon="arrow-left"
-                color={Colors.Azul}
-                border
-                className="mr-2"
-                onClick={onClickVoltar}
-              />
-              <Button
-                label="Excluir"
-                color={Colors.Vermelho}
-                border
-                className="mr-2"
-                onClick={onClickExcluir}
-                disabled={
-                  !permissoesTela.podeExcluir ||
-                  (compensacoesSelecionadas &&
-                    compensacoesSelecionadas.length < 1)
-                }
-              />
-              <Button
-                label="Novo"
-                color={Colors.Roxo}
-                border
-                bold
-                className="mr-2"
-                onClick={onClickNovo}
-                disabled={
-                  ehTurmaInfantil(
-                    modalidadesFiltroPrincipal,
-                    turmaSelecionada
-                  ) ||
-                  somenteConsulta ||
-                  componenteSemFrequencia ||
-                  !permissoesTela.podeIncluir ||
-                  !turmaSelecionada.turma ||
-                  (turmaSelecionada.turma && listaDisciplinas.length < 1)
-                }
-              />
-            </div>
-          </div>
           <div className="row">
             <div className="col-sm-12 col-md-3 col-lg-3 col-xl-3 mb-2">
               <Loader loading={carregandoDisciplinas} tip="">

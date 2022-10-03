@@ -24,11 +24,11 @@ const GraficoPizza = props => {
 };
 
 GraficoPizza.propTypes = {
-  data: PropTypes.oneOfType(PropTypes.array),
+  data: PropTypes.oneOfType([PropTypes.array]),
   angleField: PropTypes.string,
   colorField: PropTypes.string,
   percentage: PropTypes.bool,
-  colors: PropTypes.oneOfType(PropTypes.array),
+  colors: PropTypes.oneOfType([PropTypes.array]),
 };
 
 GraficoPizza.defaultProps = {

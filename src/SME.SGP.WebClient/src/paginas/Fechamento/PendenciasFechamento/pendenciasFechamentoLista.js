@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
+import { useLocation } from 'react-router-dom';
 import { Loader } from '~/componentes';
 import Cabecalho from '~/componentes-sgp/cabecalho';
 import Alert from '~/componentes/alert';
@@ -20,7 +21,6 @@ import {
   PendenteList,
   ResolvidoList,
 } from './situacaoFechamento.css';
-import api from '~/servicos/api';
 import RotasDto from '~/dtos/rotasDto';
 import { setBreadcrumbManual } from '~/servicos/breadcrumb-services';
 import { verificaSomenteConsulta } from '~/servicos/servico-navegacao';
@@ -29,7 +29,13 @@ import { ehTurmaInfantil } from '~/servicos/Validacoes/validacoesInfatil';
 import { BotaoImprimir } from './pendenciasFechamentoLista.css';
 import ServicoRelatorioPendencias from '~/servicos/Paginas/Relatorios/Pendencias/ServicoRelatorioPendencias';
 import ServicoPeriodoEscolar from '~/servicos/Paginas/Calendario/ServicoPeriodoEscolar';
+import {
+  SGP_BUTTON_APROVAR,
+  SGP_BUTTON_IMPRIMIR,
+} from '~/componentes-sgp/filtro/idsCampos';
+import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
 
+// eslint-disable-next-line react/prop-types
 const PendenciasFechamentoLista = ({ match }) => {
   const usuario = useSelector(store => store.usuario);
   const { turmaSelecionada } = usuario;
@@ -37,7 +43,7 @@ const PendenciasFechamentoLista = ({ match }) => {
   const modalidadesFiltroPrincipal = useSelector(
     store => store.filtro.modalidades
   );
-
+  const location = useLocation();
   const permissoesTela = usuario.permissoes[RotasDto.PENDENCIAS_FECHAMENTO];
   const [somenteConsulta, setSomenteConsulta] = useState(false);
   const [lista, setLista] = useState([]);
@@ -54,6 +60,12 @@ const PendenciasFechamentoLista = ({ match }) => {
   const [filtrouValoresRota, setFiltrouValoresRota] = useState(false);
   const [imprimindo, setImprimido] = useState(false);
   const [bimestresAbertoFechado, setBimestresAbertoFechado] = useState([]);
+
+  const resetarFiltro = () => {
+    setListaDisciplinas([]);
+    setDisciplinaIdSelecionada(undefined);
+    setBimestreSelecionado(undefined);
+  };
 
   useEffect(() => {
     const naoSetarSomenteConsultaNoStore = ehTurmaInfantil(
@@ -124,16 +136,10 @@ const PendenciasFechamentoLista = ({ match }) => {
     setFiltro({ ...paramsFiltrar });
   }, [disciplinaIdSelecionada, bimestreSelecionado, turmaSelecionada.turma]);
 
-  const resetarFiltro = () => {
-    setListaDisciplinas([]);
-    setDisciplinaIdSelecionada(undefined);
-    setBimestreSelecionado(undefined);
-  };
-
   useEffect(() => {
     const montaBimestres = async () => {
       let listaBi = [];
-      if (turmaSelecionada.modalidade == modalidade.EJA) {
+      if (Number(turmaSelecionada.modalidade) === modalidade.EJA) {
         listaBi = [
           { valor: 1, descricao: 'Primeiro bimestre' },
           { valor: 2, descricao: 'Segundo bimestre' },
@@ -148,24 +154,22 @@ const PendenciasFechamentoLista = ({ match }) => {
       }
       setListaBimestres(listaBi);
 
-      if (
-        !filtrouValoresRota &&
-        match &&
-        match.params &&
-        match.params.bimestre
-      ) {
-        const { bimestre } = match.params;
-        const temBimestreNaLista = listaBi.find(item => item.valor == bimestre);
+      if (!filtrouValoresRota && match?.params?.bimestre) {
+        const { bimestre } = match?.params;
+        const temBimestreNaLista = listaBi.find(
+          item => Number(item.valor) === Number(bimestre)
+        );
         if (temBimestreNaLista) {
           setBimestreSelecionado(String(bimestre));
         }
         setBreadcrumbManual(
-          `${match.url}`,
+          `${match?.url}`,
           '',
           `${RotasDto.PENDENCIAS_FECHAMENTO}`
         );
         return true;
       }
+      return false;
     };
 
     const obterBimestresAbertoFechado = async () => {
@@ -203,15 +207,12 @@ const PendenciasFechamentoLista = ({ match }) => {
         );
       }
 
-      if (
-        !filtrouValoresRota &&
-        match &&
-        match.params &&
-        match.params.codigoComponenteCurricular
-      ) {
-        const { codigoComponenteCurricular } = match.params;
+      if (!filtrouValoresRota && match?.params?.codigoComponenteCurricular) {
+        const { codigoComponenteCurricular } = match?.params;
         const temNaLista = disciplinas.data.find(
-          item => item.codigoComponenteCurricular == codigoComponenteCurricular
+          item =>
+            String(item.codigoComponenteCurricular) ===
+            String(codigoComponenteCurricular)
         );
         if (temNaLista) {
           setDisciplinaIdSelecionada(String(codigoComponenteCurricular));
@@ -234,6 +235,7 @@ const PendenciasFechamentoLista = ({ match }) => {
     } else {
       resetarFiltro();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [turmaSelecionada, modalidadesFiltroPrincipal]);
 
   useEffect(() => {
@@ -265,7 +267,11 @@ const PendenciasFechamentoLista = ({ match }) => {
   };
 
   const onClickVoltar = () => {
-    history.push(URL_HOME);
+    if (location?.state?.rotaOrigem) {
+      history.push(location.state.rotaOrigem);
+    } else {
+      history.push(URL_HOME);
+    }
   };
 
   const onSelecionarItems = items => {
@@ -357,58 +363,47 @@ const PendenciasFechamentoLista = ({ match }) => {
         ''
       )}
       <AlertaModalidadeInfantil />
-      <Cabecalho pagina="Análise de Pendências" />
-      <Card>
-        <div className="col-md-12">
-          <div className="row">
-            <div className="col-md-12 d-flex justify-content-end pb-4">
-              <BotaoImprimir className="d-flex mr-2">
-                <Loader loading={imprimindo}>
-                  <Button
-                    className="btn-imprimir"
-                    icon="print"
-                    color={Colors.Azul}
-                    border
-                    onClick={() => gerarRelatorio()}
-                    disabled={lista.length === 0}
-                    id="btn-imprimir-conselho-classe"
-                  />
-                </Loader>
-              </BotaoImprimir>
+      <Cabecalho pagina="Análise de Pendências">
+        <>
+          <BotaoVoltarPadrao className="mr-2" onClick={() => onClickVoltar()} />
+          <BotaoImprimir className="d-flex mr-2">
+            <Loader loading={imprimindo}>
               <Button
-                label="Voltar"
-                icon="arrow-left"
+                className="btn-imprimir"
+                icon="print"
                 color={Colors.Azul}
                 border
-                className="mr-2"
-                onClick={onClickVoltar}
+                onClick={() => gerarRelatorio()}
+                disabled={lista.length === 0 || !bimestreSelecionado}
+                id={SGP_BUTTON_IMPRIMIR}
               />
-              <Button
-                label="Aprovar"
-                color={Colors.Roxo}
-                border
-                bold
-                className="mr-2"
-                onClick={onClickAprovar}
-                disabled={
-                  !periodoAberto ||
-                  ehTurmaInfantil(
-                    modalidadesFiltroPrincipal,
-                    turmaSelecionada
-                  ) ||
-                  !turmaSelecionada.turma ||
-                  somenteConsulta ||
-                  !permissoesTela.podeAlterar ||
-                  (turmaSelecionada.turma && listaDisciplinas.length < 1) ||
-                  (pendenciasSelecionadas &&
-                    pendenciasSelecionadas.length < 1) ||
-                  pendenciasSelecionadas.filter(
-                    item => item.situacao == situacaoPendenciaDto.Aprovada
-                  ).length > 0
-                }
-              />
-            </div>
-          </div>
+            </Loader>
+          </BotaoImprimir>
+          <Button
+            id={SGP_BUTTON_APROVAR}
+            label="Aprovar"
+            color={Colors.Roxo}
+            border
+            bold
+            className="mr-2"
+            onClick={onClickAprovar}
+            disabled={
+              !periodoAberto ||
+              ehTurmaInfantil(modalidadesFiltroPrincipal, turmaSelecionada) ||
+              !turmaSelecionada.turma ||
+              somenteConsulta ||
+              !permissoesTela.podeAlterar ||
+              (turmaSelecionada.turma && listaDisciplinas.length < 1) ||
+              (pendenciasSelecionadas && pendenciasSelecionadas.length < 1) ||
+              pendenciasSelecionadas.filter(
+                item => Number(item?.situacao) === situacaoPendenciaDto.Aprovada
+              ).length > 0
+            }
+          />
+        </>
+      </Cabecalho>
+      <Card>
+        <div className="col-md-12">
           <div className="row">
             <div className="col-sm-12 col-md-6 col-lg-4 col-xl-3 mb-2">
               <SelectComponent

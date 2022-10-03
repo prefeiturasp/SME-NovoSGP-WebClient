@@ -16,12 +16,12 @@ const Mensagens = () => {
           mensagem: 'Você precisa escolher uma turma.',
           estiloTitulo: { fontSize: '18px' },
         }}
-        className="mb-3"
+        className="mb-2 mt-2"
       />
     );
   }
 
-  return <AlertaPermiteSomenteTurmaInfantil marginBottom={3} />;
+  return <AlertaPermiteSomenteTurmaInfantil />;
 };
 
 export default Mensagens;

@@ -1,7 +1,6 @@
 import { Tooltip } from 'antd';
 import PropTypes from 'prop-types';
 import React, { useCallback, useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
 import CampoNumero from '~/componentes/campoNumero';
 import { erros } from '~/servicos/alertas';
 import api from '~/servicos/api';
@@ -23,10 +22,6 @@ const CampoNotaFinal = props => {
     step,
   } = props;
 
-  const modoEdicaoGeral = useSelector(
-    store => store.notasConceitos.modoEdicaoGeral
-  );
-
   const [notaBimestre, setNotaBimestre] = useState();
   const [notaValorAtual, setNotaValorAtual] = useState(0);
   const [notaAlterada, setNotaAlterada] = useState(false);
@@ -35,7 +30,7 @@ const CampoNotaFinal = props => {
   const validaSeTeveAlteracao = useCallback(
     notaArredondada => {
       if (
-        notaBimestre.notaOriginal != undefined &&
+        notaBimestre.notaOriginal !== undefined &&
         notaBimestre.notaOriginal != null &&
         notaBimestre.notaOriginal !== ''
       ) {
@@ -48,6 +43,10 @@ const CampoNotaFinal = props => {
     },
     [notaBimestre]
   );
+
+  const removerCaracteresInvalidos = texto => {
+    return texto.replace(/[^0-9,.]+/g, '');
+  };
 
   const validaSeEstaAbaixoDaMedia = useCallback(
     valorAtual => {
@@ -74,10 +73,6 @@ const CampoNotaFinal = props => {
       setNotaValorAtual(notaBimestre.notaConceito);
     }
   }, [notaBimestre, validaSeTeveAlteracao, validaSeEstaAbaixoDaMedia]);
-
-  const removerCaracteresInvalidos = texto => {
-    return texto.replace(/[^0-9,.]+/g, '');
-  };
 
   const editouCampo = (notaOriginal, notaNova) => {
     notaOriginal = removerCaracteresInvalidos(String(notaOriginal));
@@ -165,7 +160,7 @@ const CampoNotaFinal = props => {
   );
 };
 
-CampoNotaFinal.defaultProps = {
+CampoNotaFinal.propTypes = {
   onChangeNotaConceitoFinal: PropTypes.func,
   montaNotaFinal: PropTypes.func,
   desabilitarCampo: PropTypes.bool,
@@ -176,9 +171,11 @@ CampoNotaFinal.defaultProps = {
   name: PropTypes.string,
   esconderSetas: PropTypes.bool,
   step: PropTypes.bool,
+  label: PropTypes.string,
+  podeLancarNotaFinal: PropTypes.bool,
 };
 
-CampoNotaFinal.propTypes = {
+CampoNotaFinal.defaultProps = {
   onChangeNotaConceitoFinal: () => {},
   montaNotaFinal: () => {},
   desabilitarCampo: false,
@@ -189,6 +186,8 @@ CampoNotaFinal.propTypes = {
   name: '',
   esconderSetas: false,
   step: 0.5,
+  label: '',
+  podeLancarNotaFinal: false,
 };
 
 export default CampoNotaFinal;

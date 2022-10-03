@@ -29,7 +29,7 @@ const DadosPlanoAnual = () => {
 
   const exibirModalCopiarConteudo = useSelector(
     store => store.planoAnual.exibirModalCopiarConteudo
-  ); 
+  );
 
   // Seta o componente curricular selecionado no SelectComponent quando não é REGENCIA!
   const montarListaComponenteCurricularesPlanejamento = useCallback(() => {
@@ -41,7 +41,7 @@ const DadosPlanoAnual = () => {
   // Carrega lista de componentes para montar as TABS!
   const obterListaComponentesCurricularesPlanejamento = useCallback(() => {
     dispatch(setExibirLoaderPlanoAnual(true));
-    ServicoComponentesCurriculares.obterComponetensCuricularesRegencia(
+    ServicoComponentesCurriculares.obterComponetensCurricularesRegencia(
       turmaSelecionada.id
     )
       .then(resposta => {
@@ -77,7 +77,7 @@ const DadosPlanoAnual = () => {
     ServicoPlanoAnual.obterTurmasParaCopia(
       turmaSelecionada.turma,
       componenteCurricular.codigoComponenteCurricular,
-      turmaSelecionada.ensinoEspecial, 
+      turmaSelecionada.ensinoEspecial,
       turmaSelecionada.consideraHistorico
     )
       .then(resposta => {
@@ -93,12 +93,13 @@ const DadosPlanoAnual = () => {
     if (componenteCurricular && !exibirModalCopiarConteudo) {
       obterTurmasParaCopiarConteudo();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [exibirModalCopiarConteudo])
 
   /**
    * carrega a lista de bimestres com os dados dos planos
    */
-  useEffect(() => {  
+  useEffect(() => {
     if (
       !ehTurmaInfantil(modalidadesFiltroPrincipal, turmaSelecionada) &&
       componenteCurricular &&
@@ -125,6 +126,7 @@ const DadosPlanoAnual = () => {
         }
       });
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [componenteCurricular]);
 
   return (

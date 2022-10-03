@@ -54,7 +54,7 @@ const TabsDashboardAEE = props => {
 };
 
 TabsDashboardAEE.propTypes = {
-  anoLetivo: PropTypes.oneOfType(PropTypes.any),
+  anoLetivo: PropTypes.oneOfType([PropTypes.any]),
   ueId: PropTypes.string,
   dreId: PropTypes.string,
   dreCodigo: PropTypes.string,

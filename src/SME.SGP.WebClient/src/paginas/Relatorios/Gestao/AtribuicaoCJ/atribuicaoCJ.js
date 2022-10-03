@@ -2,9 +2,7 @@ import React, { useCallback, useState, useEffect } from 'react';
 
 import {
   Loader,
-  Button,
   Card,
-  Colors,
   SelectComponent,
   Localizador,
   RadioGroupButton,
@@ -26,6 +24,7 @@ import { ModalidadeDTO } from '~/dtos';
 
 import { URL_HOME } from '~/constantes';
 import { OPCAO_TODOS } from '~/constantes/constantes';
+import BotoesAcaoRelatorio from '~/componentes-sgp/botoesAcaoRelatorio';
 
 const AtribuicaoCJ = () => {
   const [listaAnosLetivo, setListaAnosLetivo] = useState([]);
@@ -374,43 +373,17 @@ const AtribuicaoCJ = () => {
 
   return (
     <>
-      <Cabecalho pagina="Relatório de atribuição CJ" />
+      <Cabecalho pagina="Relatório de atribuição CJ">
+        <BotoesAcaoRelatorio
+          onClickVoltar={onClickVoltar}
+          onClickCancelar={onClickCancelar}
+          onClickGerar={onClickGerar}
+          desabilitarBtnGerar={desabilitarBtnGerar}
+        />
+      </Cabecalho>
       <Loader loading={carregandoGeral}>
         <Card>
           <div className="col-md-12 ">
-            <div className="row mb-5">
-              <div className="col-md-12 d-flex justify-content-end">
-                <Button
-                  id="btn-voltar"
-                  label="Voltar"
-                  icon="arrow-left"
-                  color={Colors.Azul}
-                  border
-                  className="mr-3"
-                  onClick={onClickVoltar}
-                />
-                <Button
-                  id="btn-cancelar"
-                  label="Cancelar"
-                  color={Colors.Roxo}
-                  border
-                  bold
-                  className="mr-3"
-                  onClick={onClickCancelar}
-                />
-                <Button
-                  id="btn-gerar"
-                  icon="print"
-                  label="Gerar"
-                  color={Colors.Azul}
-                  border
-                  bold
-                  onClick={onClickGerar}
-                  disabled={desabilitarBtnGerar}
-                />
-              </div>
-            </div>
-
             <div className="row mb-4">
               <div className="col-sm-12 col-md-6 col-lg-2 col-xl-2 mb-2">
                 <SelectComponent

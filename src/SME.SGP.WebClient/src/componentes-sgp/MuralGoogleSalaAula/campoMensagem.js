@@ -155,7 +155,7 @@ const CampoMensagem = props => {
 };
 
 CampoMensagem.propTypes = {
-  item: PropTypes.oneOfType(PropTypes.object),
+  item: PropTypes.oneOfType([PropTypes.object]),
   podeAlterar: PropTypes.bool,
 };
 

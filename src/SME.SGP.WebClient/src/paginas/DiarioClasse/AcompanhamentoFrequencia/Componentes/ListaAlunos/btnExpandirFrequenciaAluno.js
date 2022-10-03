@@ -45,12 +45,12 @@ const BtnExpandirFrequenciaAluno = props => {
 };
 
 BtnExpandirFrequenciaAluno.defaultProps = {
-  indexLinha: PropTypes.number,
-  codigoAluno: PropTypes.string,
+  indexLinha: null,
+  codigoAluno: '',
 };
 
 BtnExpandirFrequenciaAluno.propTypes = {
-  indexLinha: null,
+  indexLinha: PropTypes.number,
   codigoAluno: PropTypes.string,
 };
 

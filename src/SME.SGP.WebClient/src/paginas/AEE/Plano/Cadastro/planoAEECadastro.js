@@ -52,13 +52,14 @@ const PlanoAEECadastro = ({ match }) => {
 
   return (
     <LoaderPlano>
-      <Cabecalho pagina="Plano AEE" />
+      <Cabecalho pagina="Plano AEE">
+        <div className="d-flex justify-content-end">
+          <BotoesAcoesPlanoAEE match={match} />
+        </div>
+      </Cabecalho>
       <Card>
         <div className="col-md-12">
           <div className="row">
-            <div className="col-md-12 d-flex justify-content-end pb-4">
-              <BotoesAcoesPlanoAEE match={match} />
-            </div>
             <div className="col-md-12 mb-2 d-flex justify-content-end">
               <MarcadorSituacaoPlanoAEE />
             </div>

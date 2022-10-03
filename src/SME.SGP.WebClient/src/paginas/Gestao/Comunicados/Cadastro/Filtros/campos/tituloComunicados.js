@@ -11,6 +11,7 @@ const TituloComunicados = ({ form, onChangeCampos, desabilitar }) => {
       onChange={() => onChangeCampos()}
       form={form}
       desabilitado={desabilitar}
+      labelRequired
     />
   );
 };

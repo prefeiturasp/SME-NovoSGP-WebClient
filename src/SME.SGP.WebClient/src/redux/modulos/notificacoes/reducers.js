@@ -1,5 +1,6 @@
 import produce from 'immer';
 import notificacaoStatus from '~/dtos/notificacaoStatus';
+import { ordenarNotificoesNavBar } from '~/utils/funcoes/gerais';
 
 const inicial = {
   notificacoes: [],
@@ -28,7 +29,7 @@ export default function notificacoes(state = inicial, action) {
         const estaNaLista = draft.notificacoes?.find?.(
           n => n?.codigo === codigo
         );
-        const maisQueCincoNotificacoes = draft.notificacoes?.quantidade > 5;
+        const maisQueCincoNotificacoes = draft?.quantidade > 5;
         const naoLida = estaNaLista?.status === notificacaoStatus.Pendente;
 
         if (maisQueCincoNotificacoes && estaNaLista) {
@@ -36,6 +37,7 @@ export default function notificacoes(state = inicial, action) {
         } else if (estaNaLista && naoLida) {
           const index = draft.notificacoes.findIndex(n => n.codigo === codigo);
           draft.notificacoes[index].status = notificacaoStatus.Lida;
+          draft.notificacoes = ordenarNotificoesNavBar(draft.notificacoes);
         }
 
         draft.quantidade -= 1;
@@ -56,6 +58,7 @@ export default function notificacoes(state = inicial, action) {
             status: notificacaoStatus.Pendente,
           });
           draft.quantidade += 1;
+          draft.notificacoes = ordenarNotificoesNavBar(draft.notificacoes);
         }
         break;
       }

@@ -1,16 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { store } from '~/redux';
 import Filtro from '../filtro';
 import LogoDoSgp from '~/recursos/LogoDoSgp.svg';
 import NavbarNotificacoes from '../IconeNotificacoes/navbar-notificacoes';
 import { Nav, Botao, Botoes, Logo, Icone, Texto, Div } from './navbar.css';
-import { useDispatch } from 'react-redux';
 
 import Perfil from '../perfil';
 import { Deslogar } from '~/redux/modulos/usuario/actions';
-import LoginService from '~/servicos/Paginas/LoginServices';
 import history from '~/servicos/history';
 import { URL_LOGIN, URL_HOME } from '~/constantes/url';
 import { limparDadosFiltro } from '~/redux/modulos/filtro/actions';
@@ -60,7 +58,11 @@ const Navbar = () => {
   const clickEncerrar = async () => {
     setCarregando(true);
     const deslogar = true;
-    const resposta = await helper.acessar(false, false, deslogar);
+    const resposta = await helper.acessar(
+      usuarioStore.administradorSuporte,
+      false,
+      deslogar
+    );
     if (resposta?.sucesso) {
       history.push(URL_HOME);
     } else if (resposta.erro) {

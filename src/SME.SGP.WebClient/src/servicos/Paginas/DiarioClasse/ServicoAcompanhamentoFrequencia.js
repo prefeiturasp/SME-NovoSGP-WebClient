@@ -40,19 +40,18 @@ class ServicoAcompanhamentoFrequencia {
     return api.get(url);
   };
 
-  obterFrequenciaDiariaAluno =(
+  obterFrequenciaDiariaAluno = (
     turmaId,
     componenteCurricularId,
     alunoCodigo,
     bimestre,
     numeroPagina,
     numeroRegistros
-  ) =>{
-    const url  =`${urlPadrao}/turma/${turmaId}/componente-curricular/${componenteCurricularId || 
-                  0}/aluno/${alunoCodigo}/bimestre/${bimestre}?numeroPagina=${numeroPagina ||
-                  1}&numeroRegistros=${numeroRegistros}`;
+  ) => {
+    const url = `${urlPadrao}/turma/${turmaId}/componente-curricular/${componenteCurricularId ||
+      0}/aluno/${alunoCodigo}/bimestre/${bimestre}?numeroPagina=${numeroPagina ||
+      1}&numeroRegistros=${numeroRegistros}`;
     return api.get(url);
-
   };
 
   obterInformacoesDeFrequenciaAlunoPorSemestre = (

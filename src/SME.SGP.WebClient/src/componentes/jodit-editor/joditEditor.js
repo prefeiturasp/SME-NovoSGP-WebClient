@@ -1,5 +1,7 @@
 import { Field } from 'formik';
+// eslint-disable-next-line import/no-extraneous-dependencies
 import { Jodit } from 'jodit';
+// eslint-disable-next-line import/no-extraneous-dependencies
 import 'jodit/build/jodit.min.css';
 import PropTypes from 'prop-types';
 import React, { forwardRef, useEffect, useRef, useState } from 'react';
@@ -15,6 +17,9 @@ const Campo = styled.div`
     .jodit-container {
       border-color: #dc3545 !important;
     }
+  }
+  .jodit-status-bar :nth-child(2) {
+    display: none;
   }
 `;
 
@@ -45,6 +50,7 @@ const JoditEditor = forwardRef((props, ref) => {
     imagensCentralizadas,
     valideClipboardHTML,
     permiteGif,
+    labelRequired,
   } = props;
 
   const textArea = useRef(null);
@@ -245,7 +251,7 @@ const JoditEditor = forwardRef((props, ref) => {
       } else if (texto) {
         valorParaValidar = texto;
       }
-      setValidacaoComErro(validarSeTemErro(valorParaValidar));
+      setValidacaoComErro(validarSeTemErro(valorParaValidar, texto));
     }
 
     if (
@@ -314,6 +320,14 @@ const JoditEditor = forwardRef((props, ref) => {
   });
 
   useEffect(() => {
+    return () => {
+      if (textArea?.current?.destruct) {
+        textArea.current.destruct();
+      }
+    };
+  }, [textArea]);
+
+  useEffect(() => {
     if (url) {
       const element = textArea.current || '';
       if (textArea?.current && config) {
@@ -370,6 +384,7 @@ const JoditEditor = forwardRef((props, ref) => {
         }
       }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [url]);
 
   useEffect(() => {
@@ -382,6 +397,7 @@ const JoditEditor = forwardRef((props, ref) => {
     if (config && textArea?.current && textArea?.current?.type !== 'textarea') {
       textArea.current.setReadOnly(desabilitar);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [desabilitar]);
 
   const possuiErro = () => {
@@ -418,7 +434,7 @@ const JoditEditor = forwardRef((props, ref) => {
             ref={textArea}
             id={id}
             hidden={!textArea?.current?.isJodit}
-            value={value}
+            value={value || undefined}
             onChange={e => e}
           />
         </div>
@@ -440,7 +456,7 @@ const JoditEditor = forwardRef((props, ref) => {
 
   return (
     <>
-      {label ? <Label text={label} /> : ''}
+      {label ? <Label text={label} isRequired={labelRequired} /> : ''}
       {form ? editorComValidacoes() : editorSemValidacoes()}
       {obterErros()}
     </>
@@ -470,6 +486,7 @@ JoditEditor.propTypes = {
   imagensCentralizadas: PropTypes.bool,
   valideClipboardHTML: PropTypes.bool,
   permiteGif: PropTypes.bool,
+  labelRequired: PropTypes.bool,
 };
 
 JoditEditor.defaultProps = {
@@ -495,6 +512,7 @@ JoditEditor.defaultProps = {
   imagensCentralizadas: false,
   valideClipboardHTML: false,
   permiteGif: true,
+  labelRequired: false,
 };
 
 export default JoditEditor;

@@ -20,6 +20,7 @@ const CalendarioCadastroEventos = ({
     if (!eventoId && tipoCalendarioIdRota) {
       montarTipoCalendarioPorId(tipoCalendarioIdRota, form);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [eventoId, tipoCalendarioIdRota]);
 
   useEffect(() => {
@@ -27,6 +28,7 @@ const CalendarioCadastroEventos = ({
     if (eventoId && tipoCalendarioId) {
       montarTipoCalendarioPorId(tipoCalendarioId, form);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [eventoId, tipoCalendarioId]);
 
   return (

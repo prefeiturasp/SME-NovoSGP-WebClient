@@ -1,10 +1,9 @@
 import styled from 'styled-components';
 
 export const EstiloDetalhe = styled.div`
-  width: 100%;
   border: 1px solid #dadada;
   border-radius: 4px;
-  margin: 0px 15px 27px 15px;
+  margin: 0px 16px;
   padding: 20px;
 
   .bg-id {

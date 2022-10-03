@@ -65,6 +65,7 @@ const ModalTrocarImagem = props => {
     if (exibirModal && dadosImagem?.uid) {
       obterImagem(dadosImagem.uid);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dadosImagem, exibirModal]);
 
   const afterSuccessUpload = codigo => {

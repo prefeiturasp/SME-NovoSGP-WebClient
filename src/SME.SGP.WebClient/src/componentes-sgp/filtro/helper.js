@@ -1,5 +1,4 @@
 import ServicoFiltro from '~/servicos/Componentes/ServicoFiltro';
-import tipoEscolaDTO from '~/dtos/tipoEscolaDto';
 import { TOKEN_EXPIRADO } from '~/constantes';
 
 class FiltroHelper {

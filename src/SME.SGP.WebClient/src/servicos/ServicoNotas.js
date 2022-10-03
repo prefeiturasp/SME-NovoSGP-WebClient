@@ -16,7 +16,7 @@ class ServicoNota {
 
       let quantidadeTotalNotasNaoAprovado = 0;
 
-      const mediaAprovacaoBimestre = dados.mediaAprovacaoBimestre;
+      const mediaAprovacaoBimestre = dados?.mediaAprovacaoBimestre;
 
       alunos.forEach(aluno => {
         const notasDoAluno = aluno.notasBimestre.filter(
@@ -43,7 +43,7 @@ class ServicoNota {
       let quantidadeTotalNotas = 0;
       let quantidadeTotalNotasNaoAprovado = 0;
 
-      const listaTiposConceitos = dados.listaTiposConceitos;
+      const listaTiposConceitos = dados?.listaTiposConceitos;
       const tipoNaoAprovado = listaTiposConceitos.find(tipo => !tipo.aprovado);
       const codigoTipoNaoAprovado = tipoNaoAprovado.id;
 
@@ -56,7 +56,7 @@ class ServicoNota {
         );
 
         const totalNaoAprovado = notasDoAluno.filter(nota => {
-          return Number(nota.notaConceito) == Number(codigoTipoNaoAprovado);
+          return Number(nota.notaConceito) === Number(codigoTipoNaoAprovado);
         });
 
         quantidadeTotalNotas += notasDoAluno.length;
@@ -65,7 +65,8 @@ class ServicoNota {
 
       if (quantidadeTotalNotas === 0) return true;
 
-      const percentualAbaixoMedia = (quantidadeTotalNotasNaoAprovado / quantidadeTotalNotas) * 100;
+      const percentualAbaixoMedia =
+        (quantidadeTotalNotasNaoAprovado / quantidadeTotalNotas) * 100;
       const ehPorcentagemAceitavel =
         percentualAbaixoMedia <= percentualMinimoAprovados;
 

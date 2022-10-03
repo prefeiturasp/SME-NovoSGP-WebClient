@@ -26,7 +26,6 @@ import AnotacoesRecomendacoes from './AnotacoesRecomendacoes/anotacoesRecomendac
 import ListasNotasConceitos from './ListasNotasConceito/listasNotasConceitos';
 import MarcadorPeriodoInicioFim from './MarcadorPeriodoInicioFim/marcadorPeriodoInicioFim';
 import Sintese from './Sintese/Sintese';
-import MarcadorSituacaoConselho from './MarcadorSituacaoConselho/marcadorSituacaoConselho';
 
 const { TabPane } = Tabs;
 
@@ -234,17 +233,18 @@ const DadosConselhoClasse = props => {
   );
 
   useEffect(() => {
-    if (codigoEOL && turmaSelecionada.turma == turmaAtual) {
+    if (codigoEOL && String(turmaSelecionada.turma) === String(turmaAtual)) {
       if (bimestreAtual.valor) {
         caregarInformacoes(bimestreAtual.valor);
       }
     }
-    if (turmaSelecionada.turma != turmaAtual) {
+    if (String(turmaSelecionada.turma) !== String(turmaAtual)) {
       dispatch(
         setBimestreAtual({ valor: '', dataInicio: null, dataFim: null })
       );
       setTurmaAtual(turmaSelecionada.turma);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [codigoEOL, turmaSelecionada, turmaAtual]);
 
   const onChangeTab = async numeroBimestre => {
@@ -267,10 +267,9 @@ const DadosConselhoClasse = props => {
   const montarDados = () => {
     return (
       <Loader loading={carregando} className={carregando ? 'text-center' : ''}>
-        {!semDados && turmaSelecionada.turma == turmaAtual ? (
+        {!semDados && String(turmaSelecionada.turma) === String(turmaAtual) ? (
           <>
             <AlertaDentroPeriodo />
-            <MarcadorSituacaoConselho />
             <MarcadorPeriodoInicioFim />
             <ListasNotasConceitos bimestreSelecionado={bimestreAtual} />
             <Sintese

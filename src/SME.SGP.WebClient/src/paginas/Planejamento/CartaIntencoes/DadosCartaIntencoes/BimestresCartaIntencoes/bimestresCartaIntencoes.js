@@ -38,6 +38,7 @@ const BimestresCartaIntencoes = props => {
     } else {
       setDesabilitarCampo(desabilitar);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [permissoesTela, id, periodoAberto, somenteConsulta]);
 
   const onChange = useCallback(
@@ -92,8 +93,8 @@ const BimestresCartaIntencoes = props => {
             />
           </div>
         ) : (
-            ''
-          )}
+          <></>
+        )}
       </>
     </CardCollapse>
   );

@@ -2,6 +2,13 @@ import PropTypes from 'prop-types';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Colors } from '~/componentes';
+import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
+import {
+  SGP_BUTTON_ATRIBUIR,
+  SGP_BUTTON_CANCELAR,
+  SGP_BUTTON_DEVOLVER,
+  SGP_BUTTON_SALVAR,
+} from '~/componentes-sgp/filtro/idsCampos';
 import QuestionarioDinamicoFuncoes from '~/componentes-sgp/QuestionarioDinamico/Funcoes/QuestionarioDinamicoFuncoes';
 import Button from '~/componentes/button';
 import { RotasDto, situacaoPlanoAEE } from '~/dtos';
@@ -71,12 +78,14 @@ const BotoesAcoesPlanoAEE = props => {
   const labelBotaoSalvar = !planoAeeId ? 'Salvar plano' : 'Alterar plano';
 
   const desabilitarBotaoSalvar =
-    desabilitarCamposPlanoAEE || !questionarioDinamicoEmEdicao;
+    planoAEEDados?.situacao !== situacaoPlanoAEE.Expirado &&
+    (desabilitarCamposPlanoAEE ||
+      !planoAEEDados?.questionarioId ||
+      (planoAeeId && !questionarioDinamicoEmEdicao));
 
   const desabilitarBotaoCancelar =
-    situacaoParecer || parecerPAAI
-      ? !parecerEmEdicao
-      : desabilitarCamposPlanoAEE || !questionarioDinamicoEmEdicao;
+    desabilitarCamposPlanoAEE ||
+    !(questionarioDinamicoEmEdicao || parecerEmEdicao);
 
   const dispatch = useDispatch();
 
@@ -209,26 +218,18 @@ const BotoesAcoesPlanoAEE = props => {
 
   return (
     <>
+      <BotaoVoltarPadrao className="mr-2" onClick={() => onClickVoltar()} />
       <Button
-        id="btn-voltar"
-        label="Voltar"
-        icon="arrow-left"
-        color={Colors.Azul}
-        border
-        className="mr-2"
-        onClick={onClickVoltar}
-      />
-      <Button
-        id="btn-cancelar"
+        id={SGP_BUTTON_CANCELAR}
         label="Cancelar"
         color={Colors.Roxo}
         border
-        className="mr-3"
+        className="mr-2"
         onClick={onClickCancelar}
         disabled={desabilitarBotaoCancelar}
       />
       <Button
-        id="btn-salvar"
+        id={SGP_BUTTON_SALVAR}
         label={labelBotaoSalvar}
         color={Colors.Azul}
         border
@@ -237,11 +238,11 @@ const BotoesAcoesPlanoAEE = props => {
         disabled={desabilitarBotaoSalvar}
       />
       <Button
-        id="btn-devolver-plano"
+        id={SGP_BUTTON_DEVOLVER}
         label="Devolver"
         color={Colors.Roxo}
         bold
-        className="ml-3"
+        className="ml-2"
         onClick={onClickDevolver}
         hidden={!planoAEEDados?.podeDevolverPlanoAEE}
         disabled={
@@ -251,7 +252,11 @@ const BotoesAcoesPlanoAEE = props => {
         }
       />
       <Button
-        id="btn-acao-aba-parecer"
+        id={
+          !ehCP && situacaoAtribuicaoPAAI
+            ? SGP_BUTTON_ATRIBUIR
+            : SGP_BUTTON_SALVAR
+        }
         label={
           !ehCP && situacaoAtribuicaoPAAI
             ? 'Atribuir responsável'
@@ -259,7 +264,7 @@ const BotoesAcoesPlanoAEE = props => {
         }
         color={Colors.Roxo}
         bold
-        className="ml-3"
+        className="ml-2"
         onClick={escolherAcaoAbaParecer}
         hidden={
           planoAEEDados?.situacao !== situacaoPlanoAEE.ParecerCP &&

@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import React, { useEffect, useState } from 'react';
 import { Formik, Form } from 'formik';
 import { ModalConteudoHtml, RadioGroupButton, Loader } from '~/componentes';
@@ -43,7 +44,7 @@ function ExcluirAula({
     if (visivel) {
       let opcaoAIncluir = { label: 'Bimestre atual', value: 2 };
 
-      if (recorrencia.recorrenciaAula == 3)
+      if (Number(recorrencia?.recorrenciaAula) === 3)
         opcaoAIncluir = { label: 'Todos os bimestres', value: 3 };
 
       setOpcoesExcluirRecorrencia(opcoes => {
@@ -52,6 +53,7 @@ function ExcluirAula({
     } else {
       setOpcoesExcluirRecorrencia(listRecorrenciaInicial);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [visivel]);
 
   return (
@@ -81,13 +83,13 @@ function ExcluirAula({
                   className="col-sm-12 col-md-12"
                   style={{ paddingTop: '10px' }}
                 >
-                  <p>{`Existem ${recorrencia.quantidadeAulasRecorrentes} ocorrências desta aula a partir desta data.`}</p>
+                  <p>{`Existem ${recorrencia?.quantidadeAulasRecorrentes} ocorrências desta aula a partir desta data.`}</p>
                   <p>
-                    {recorrencia.existeFrequenciaOuPlanoAula
+                    {recorrencia?.existeFrequenciaOuPlanoAula
                       ? ` Esta aula ou sua recorrência possui frequência ou ${
                           infantil ? 'diário de bordo' : 'plano de aula'
                         } registrado, ao excluí-la estará excluindo ${
-                          recorrencia.quantidadeAulasRecorrentes == 1
+                          Number(recorrencia?.quantidadeAulasRecorrentes) === 1
                             ? 'esse registro'
                             : 'estes registros'
                         } também.`

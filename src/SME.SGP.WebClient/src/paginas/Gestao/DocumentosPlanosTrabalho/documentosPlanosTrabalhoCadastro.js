@@ -1,3 +1,4 @@
+import { Col, Row } from 'antd';
 import { Form, Formik } from 'formik';
 import PropTypes from 'prop-types';
 import React, { useCallback, useEffect, useState } from 'react';
@@ -5,7 +6,13 @@ import { useSelector } from 'react-redux';
 import * as Yup from 'yup';
 import { Auditoria, Loader, Localizador, SelectComponent } from '~/componentes';
 import { Cabecalho } from '~/componentes-sgp';
+import BotaoExcluirPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoExcluirPadrao';
+import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
 import DreDropDown from '~/componentes-sgp/DreDropDown/';
+import {
+  SGP_BUTTON_ALTERAR_CADASTRAR,
+  SGP_BUTTON_CANCELAR,
+} from '~/componentes-sgp/filtro/idsCampos';
 import UeDropDown from '~/componentes-sgp/UeDropDown/';
 import UploadArquivos from '~/componentes-sgp/UploadArquivos/uploadArquivos';
 import Button from '~/componentes/button';
@@ -229,6 +236,7 @@ const DocumentosPlanosTrabalhoCadastro = ({ match }) => {
       }
     }
     setCarregouTiposDocumento(true);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [atualizaValoresIniciais]);
 
   useEffect(() => {
@@ -454,232 +462,239 @@ const DocumentosPlanosTrabalhoCadastro = ({ match }) => {
 
   return (
     <Loader loading={exibirLoader}>
-      <Cabecalho pagina="Upload de documentos e planos de trabalho" />
       {carregouAnosLetivos &&
       carregouTiposDocumento &&
       valoresIniciais.anoLetivo ? (
-        <Card>
-          <Formik
-            enableReinitialize
-            initialValues={valoresIniciais}
-            validationSchema={validacoes}
-            onSubmit={valores => {
-              if (!desabilitarCampos) {
-                onSubmitFormulario(valores);
-              }
-            }}
-            validateOnBlur
-            validateOnChange
-          >
-            {form => (
-              <Form>
-                <div className="col-md-12">
-                  <div className="row">
-                    <div className="col-md-12 d-flex justify-content-end pb-4 justify-itens-end">
-                      <Button
-                        id="btn-voltar"
-                        label="Voltar"
-                        icon="arrow-left"
-                        color={Colors.Azul}
-                        border
-                        className="mr-2"
-                        onClick={onClickVoltar}
-                      />
-                      <Button
-                        id="btn-cancelar"
-                        label="Cancelar"
-                        color={Colors.Roxo}
-                        border
-                        className="mr-2"
-                        onClick={() => onClickCancelar(form)}
-                        disabled={!modoEdicao}
-                      />
-                      <Button
-                        label="Excluir"
-                        color={Colors.Vermelho}
-                        border
-                        className="mr-2"
-                        disabled={
-                          !idDocumentosPlanoTrabalho ||
-                          !permissoesTela.podeExcluir
-                        }
-                        onClick={onClickExcluir}
-                      />
-                      <Button
-                        id="btn-novo"
-                        label={
-                          idDocumentosPlanoTrabalho ? 'Alterar' : 'Cadastrar'
-                        }
-                        color={Colors.Roxo}
-                        border
-                        bold
-                        onClick={() => validaAntesDoSubmit(form)}
-                        disabled={!modoEdicao || desabilitarCampos}
-                      />
-                    </div>
-                  </div>
-                  <div className="row">
-                    <div className="col-sm-12 col-md-6 col-lg-3 col-xl-2 mb-2">
-                      <SelectComponent
-                        id="select-ano-letivo"
-                        label="Ano Letivo"
-                        lista={listaAnosLetivo}
-                        valueOption="valor"
-                        valueText="desc"
-                        disabled={
-                          (listaAnosLetivo && listaAnosLetivo.length === 1) ||
-                          !!idDocumentosPlanoTrabalho ||
-                          desabilitarCampos
-                        }
-                        onChange={valor => onChangeAnoLetivo(valor, form)}
-                        placeholder="Ano letivo"
-                        form={form}
-                        name="anoLetivo"
-                        allowClear={false}
-                      />
-                    </div>
-                  </div>
-                  <div className="row">
-                    <div className="col-sm-12 col-md-12 col-lg-6 col-xl-6 mb-2">
-                      <DreDropDown
-                        id="select-dre"
-                        label="Diretoria Regional de Educação (DRE)"
-                        url={urlBuscarDres}
-                        form={form}
-                        onChange={(valor, lista, changeManual) => {
-                          if (changeManual) {
-                            setModoEdicao(true);
-                          }
-                        }}
-                        desabilitado={
-                          !!idDocumentosPlanoTrabalho || desabilitarCampos
-                        }
-                      />
-                    </div>
-                    <div className="col-sm-12 col-md-12 col-lg-6 col-xl-6 mb-2">
-                      <UeDropDown
-                        id="select-ue"
-                        label="Unidade Escolar (UE)"
-                        dreId={form.values.dreId}
-                        form={form}
-                        url={`v1/abrangencias/false/dres/${form.values.dreId}/ues?anoLetivo=${form.values.anoLetivo}`}
-                        temParametros
-                        onChange={(_, lista, changeManual) => {
-                          if (changeManual) {
-                            setModoEdicao(true);
-                          }
-                        }}
-                        onChangeListaUes={lista => {
-                          setListaUes(lista);
-                        }}
-                        desabilitado={
-                          !!idDocumentosPlanoTrabalho || desabilitarCampos
-                        }
-                      />
-                    </div>
-
-                    <div className="col-sm-12 col-md-6 col-lg-6 col-xl-6 mb-2">
-                      <SelectComponent
-                        id="select-tipos-documento"
-                        label="Tipo de documento"
-                        lista={listaTipoDocumento}
-                        valueOption="id"
-                        valueText="tipoDocumento"
-                        onChange={valor => onChangeTipoDocumento(valor, form)}
-                        placeholder="Tipo de documento"
-                        form={form}
-                        name="tipoDocumentoId"
-                        disabled={
-                          listaTipoDocumento?.length === 1 ||
-                          !!idDocumentosPlanoTrabalho ||
-                          desabilitarCampos
-                        }
-                      />
-                    </div>
-                    <div className="col-sm-12 col-md-6 col-lg-6 col-xl- mb-2">
-                      <SelectComponent
-                        id="select-classificacao-documento"
-                        label="Classificação"
-                        lista={listaClassificacao}
-                        valueOption="id"
-                        valueText="classificacao"
-                        onChange={() => setModoEdicao(true)}
-                        placeholder="Classificação do documento"
-                        form={form}
-                        name="classificacaoId"
-                        disabled={
-                          listaClassificacao?.length === 1 ||
-                          !!idDocumentosPlanoTrabalho ||
-                          desabilitarCampos
-                        }
-                      />
-                    </div>
-                    <div className="col-md-12 mb-2">
-                      <div className="row pr-3">
-                        <Localizador
-                          desabilitado={
-                            !form.values.tipoDocumentoId ||
-                            form.values.tipoDocumentoId ===
-                              TIPO_DOCUMENTO.DOCUMENTOS ||
+        <Formik
+          enableReinitialize
+          initialValues={valoresIniciais}
+          validationSchema={validacoes}
+          onSubmit={valores => {
+            if (!desabilitarCampos) {
+              onSubmitFormulario(valores);
+            }
+          }}
+          validateOnBlur
+          validateOnChange
+        >
+          {form => (
+            <>
+              <Cabecalho pagina="Upload de documentos e planos de trabalho">
+                <Row gutter={[8, 8]} type="flex">
+                  <Col>
+                    <BotaoVoltarPadrao onClick={() => onClickVoltar()} />
+                  </Col>
+                  <Col>
+                    <Button
+                      id={SGP_BUTTON_CANCELAR}
+                      label="Cancelar"
+                      color={Colors.Roxo}
+                      border
+                      onClick={() => onClickCancelar(form)}
+                      disabled={!modoEdicao}
+                    />
+                  </Col>
+                  <Col>
+                    <BotaoExcluirPadrao
+                      disabled={
+                        !idDocumentosPlanoTrabalho ||
+                        !permissoesTela.podeExcluir
+                      }
+                      onClick={onClickExcluir}
+                    />
+                  </Col>
+                  <Col>
+                    <Button
+                      id={SGP_BUTTON_ALTERAR_CADASTRAR}
+                      label={
+                        idDocumentosPlanoTrabalho ? 'Alterar' : 'Cadastrar'
+                      }
+                      color={Colors.Roxo}
+                      border
+                      bold
+                      onClick={() => validaAntesDoSubmit(form)}
+                      disabled={
+                        desabilitarCampos ||
+                        (idDocumentosPlanoTrabalho && !modoEdicao)
+                      }
+                    />
+                  </Col>
+                </Row>
+              </Cabecalho>
+              <Card>
+                <Form>
+                  <div className="col-md-12">
+                    <div className="row">
+                      <div className="col-sm-12 col-md-6 col-lg-3 col-xl-2 mb-2">
+                        <SelectComponent
+                          id="select-ano-letivo"
+                          label="Ano Letivo"
+                          lista={listaAnosLetivo}
+                          valueOption="valor"
+                          valueText="desc"
+                          disabled={
+                            (listaAnosLetivo && listaAnosLetivo.length === 1) ||
                             !!idDocumentosPlanoTrabalho ||
                             desabilitarCampos
                           }
-                          dreId={form.values.dreId}
-                          anoLetivo={form.values.anoLetivo}
-                          rfEdicao={form.values.professorRf}
-                          showLabel
+                          onChange={valor => onChangeAnoLetivo(valor, form)}
+                          placeholder="Ano letivo"
                           form={form}
-                          onChange={valor => {
-                            const campos = Object.keys(valor);
-                            const onChangeManual = campos.find(
-                              item => item === 'professorNome'
-                            );
-                            if (
-                              !idDocumentosPlanoTrabalho &&
-                              onChangeManual === 'professorNome'
-                            ) {
-                              setModoEdicao(true);
-                            }
-                          }}
-                          buscarOutrosCargos={
-                            form.values.tipoDocumentoId ===
-                            TIPO_DOCUMENTO.DOCUMENTOS
-                          }
+                          name="anoLetivo"
+                          allowClear={false}
+                          labelRequired
                         />
                       </div>
                     </div>
-                    <div className="col-md-12 mt-2">
-                      <UploadArquivos
-                        form={form}
-                        name="listaArquivos"
-                        id="lista-arquivos"
-                        desabilitarGeral={desabilitarCampos}
-                        desabilitarUpload={listaDeArquivos.length > 0}
-                        textoFormatoUpload="Permitido somente um arquivo. Tipo permitido PDF"
-                        tiposArquivosPermitidos=".pdf"
-                        onRemove={onRemoveFile}
-                        urlUpload="v1/armazenamento/documentos/upload"
-                        defaultFileList={defaultFileList}
-                        onChangeListaArquivos={lista => {
-                          setListaDeArquivos(lista);
-                          setModoEdicao(true);
-                        }}
+                    <div className="row">
+                      <div className="col-sm-12 col-md-12 col-lg-6 col-xl-6 mb-2">
+                        <DreDropDown
+                          id="select-dre"
+                          label="Diretoria Regional de Educação (DRE)"
+                          url={urlBuscarDres}
+                          form={form}
+                          onChange={(valor, lista, changeManual) => {
+                            if (changeManual) {
+                              setModoEdicao(true);
+                            }
+                          }}
+                          desabilitado={
+                            !!idDocumentosPlanoTrabalho || desabilitarCampos
+                          }
+                          labelRequired
+                        />
+                      </div>
+                      <div className="col-sm-12 col-md-12 col-lg-6 col-xl-6 mb-2">
+                        <UeDropDown
+                          id="select-ue"
+                          label="Unidade Escolar (UE)"
+                          dreId={form.values.dreId}
+                          form={form}
+                          url={`v1/abrangencias/false/dres/${form.values.dreId}/ues?anoLetivo=${form.values.anoLetivo}`}
+                          temParametros
+                          onChange={(_, lista, changeManual) => {
+                            if (changeManual) {
+                              setModoEdicao(true);
+                            }
+                          }}
+                          onChangeListaUes={lista => {
+                            setListaUes(lista);
+                          }}
+                          desabilitado={
+                            !!idDocumentosPlanoTrabalho || desabilitarCampos
+                          }
+                          labelRequired
+                        />
+                      </div>
+
+                      <div className="col-sm-12 col-md-6 col-lg-6 col-xl-6 mb-2">
+                        <SelectComponent
+                          id="select-tipos-documento"
+                          label="Tipo de documento"
+                          lista={listaTipoDocumento}
+                          valueOption="id"
+                          valueText="tipoDocumento"
+                          onChange={valor => onChangeTipoDocumento(valor, form)}
+                          placeholder="Tipo de documento"
+                          form={form}
+                          name="tipoDocumentoId"
+                          disabled={
+                            listaTipoDocumento?.length === 1 ||
+                            !!idDocumentosPlanoTrabalho ||
+                            desabilitarCampos
+                          }
+                          labelRequired
+                        />
+                      </div>
+                      <div className="col-sm-12 col-md-6 col-lg-6 col-xl- mb-2">
+                        <SelectComponent
+                          id="select-classificacao-documento"
+                          label="Classificação"
+                          lista={listaClassificacao}
+                          valueOption="id"
+                          valueText="classificacao"
+                          onChange={() => setModoEdicao(true)}
+                          placeholder="Classificação do documento"
+                          form={form}
+                          name="classificacaoId"
+                          disabled={
+                            listaClassificacao?.length === 1 ||
+                            !!idDocumentosPlanoTrabalho ||
+                            desabilitarCampos
+                          }
+                          labelRequired
+                        />
+                      </div>
+                      <div className="col-md-12 mb-2">
+                        <div className="row pr-3">
+                          <Localizador
+                            desabilitado={
+                              !form.values.tipoDocumentoId ||
+                              form.values.tipoDocumentoId ===
+                                TIPO_DOCUMENTO.DOCUMENTOS ||
+                              !!idDocumentosPlanoTrabalho ||
+                              desabilitarCampos
+                            }
+                            dreId={form.values.dreId}
+                            anoLetivo={form.values.anoLetivo}
+                            rfEdicao={form.values.professorRf}
+                            showLabel
+                            form={form}
+                            onChange={valor => {
+                              const campos = Object.keys(valor);
+                              const onChangeManual = campos.find(
+                                item => item === 'professorNome'
+                              );
+                              if (
+                                !idDocumentosPlanoTrabalho &&
+                                onChangeManual === 'professorNome'
+                              ) {
+                                setModoEdicao(true);
+                              }
+                            }}
+                            buscarOutrosCargos={
+                              form.values.tipoDocumentoId ===
+                              TIPO_DOCUMENTO.DOCUMENTOS
+                            }
+                            labelRequired
+                          />
+                        </div>
+                      </div>
+                      <div className="col-md-12 mt-2">
+                        <UploadArquivos
+                          form={form}
+                          name="listaArquivos"
+                          id="lista-arquivos"
+                          desabilitarGeral={desabilitarCampos}
+                          desabilitarUpload={listaDeArquivos.length > 0}
+                          textoFormatoUpload="Permitido somente um arquivo. Tipo permitido PDF"
+                          tiposArquivosPermitidos=".pdf"
+                          onRemove={onRemoveFile}
+                          urlUpload="v1/armazenamento/documentos/upload"
+                          defaultFileList={defaultFileList}
+                          label="Arquivo"
+                          labelRequired
+                          onChangeListaArquivos={lista => {
+                            setListaDeArquivos(lista);
+                            setModoEdicao(true);
+                          }}
+                        />
+                      </div>
+                      <Auditoria
+                        criadoEm={valoresIniciais?.criadoEm}
+                        criadoPor={valoresIniciais?.criadoPor}
+                        criadoRf={valoresIniciais?.criadoRF}
+                        alteradoPor={valoresIniciais?.alteradoPor}
+                        alteradoEm={valoresIniciais?.alteradoEm}
+                        alteradoRf={valoresIniciais?.alteradoRF}
                       />
                     </div>
-                    <Auditoria
-                      criadoEm={valoresIniciais?.criadoEm}
-                      criadoPor={valoresIniciais?.criadoPor}
-                      criadoRf={valoresIniciais?.criadoRF}
-                      alteradoPor={valoresIniciais?.alteradoPor}
-                      alteradoEm={valoresIniciais?.alteradoEm}
-                      alteradoRf={valoresIniciais?.alteradoRF}
-                    />
                   </div>
-                </div>
-              </Form>
-            )}
-          </Formik>
-        </Card>
+                </Form>
+              </Card>
+            </>
+          )}
+        </Formik>
       ) : (
         ''
       )}

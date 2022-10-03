@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
+import { Col, Row } from 'antd';
 import { Loader, SelectComponent } from '~/componentes';
 import { Cabecalho } from '~/componentes-sgp';
 import Button from '~/componentes/button';
@@ -9,13 +10,18 @@ import AbrangenciaServico from '~/servicos/Abrangencia';
 import { erros, sucesso } from '~/servicos/alertas';
 import api from '~/servicos/api';
 import history from '~/servicos/history';
-import ServicoRelatorioPendencias from '~/servicos/Paginas/Relatorios/Pendencias/ServicoRelatorioPendencias';
 import { ServicoComponentesCurriculares } from '~/servicos';
 import FiltroHelper from '~componentes-sgp/filtro/helper';
 import ServicoFiltroRelatorio from '~/servicos/Paginas/FiltroRelatorio/ServicoFiltroRelatorio';
 import AlertaModalidadeInfantil from '~/componentes-sgp/AlertaModalidadeInfantil/alertaModalidadeInfantil';
 import ServicoRelatorioCompensacaoAusencia from '~/servicos/Paginas/Relatorios/CompensacaoAusencia/ServicoRelatorioCompensacaoAusencia';
 import { ordenarListaMaiorParaMenor } from '~/utils/funcoes/gerais';
+import {
+  SGP_BUTTON_CANCELAR,
+  SGP_BUTTON_GERAR,
+} from '~/componentes-sgp/filtro/idsCampos';
+import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
+import { URL_HOME } from '~/constantes';
 
 const RelatorioCompensacaoAusencia = () => {
   const [carregandoGerar, setCarregandoGerar] = useState(false);
@@ -259,6 +265,7 @@ const RelatorioCompensacaoAusencia = () => {
       setListaBimestres(bimestresFundMedio);
     }
     setBimestre();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [modalidadeId]);
 
   const obterAnosLetivos = useCallback(async () => {
@@ -437,51 +444,42 @@ const RelatorioCompensacaoAusencia = () => {
         exibir={String(modalidadeId) === String(modalidade.INFANTIL)}
         validarModalidadeFiltroPrincipal={false}
       />
-      <Cabecalho pagina="Relatório de compensação de ausência" />
+      <Cabecalho pagina="Relatório de compensação de ausência">
+        <Row gutter={[8, 8]} type="flex">
+          <Col>
+            <BotaoVoltarPadrao onClick={() => history.push(URL_HOME)} />
+          </Col>
+          <Col>
+            <Button
+              id={SGP_BUTTON_CANCELAR}
+              label="Cancelar"
+              color={Colors.Roxo}
+              border
+              bold
+              onClick={() => {
+                cancelar();
+              }}
+            />
+          </Col>
+          <Col>
+            <Loader loading={carregandoGerar} className="d-flex w-auto" tip="">
+              <Button
+                id={SGP_BUTTON_GERAR}
+                icon="print"
+                label="Gerar"
+                color={Colors.Azul}
+                border
+                bold
+                onClick={gerar}
+                disabled={desabilitarGerar}
+              />
+            </Loader>
+          </Col>
+        </Row>
+      </Cabecalho>
       <Card>
         <div className="col-md-12">
           <div className="row">
-            <div className="col-md-12 d-flex justify-content-end pb-4 justify-itens-end">
-              <Button
-                id="btn-voltar-rel-pendencias"
-                label="Voltar"
-                icon="arrow-left"
-                color={Colors.Azul}
-                border
-                className="mr-2"
-                onClick={() => {
-                  history.push('/');
-                }}
-              />
-              <Button
-                id="btn-cancelar-rel-pendencias"
-                label="Cancelar"
-                color={Colors.Roxo}
-                border
-                bold
-                className="mr-2"
-                onClick={() => {
-                  cancelar();
-                }}
-              />
-              <Loader
-                loading={carregandoGerar}
-                className="d-flex w-auto"
-                tip=""
-              >
-                <Button
-                  id="btn-gerar-rel-pendencias"
-                  icon="print"
-                  label="Gerar"
-                  color={Colors.Azul}
-                  border
-                  bold
-                  className="mr-0"
-                  onClick={gerar}
-                  disabled={desabilitarGerar}
-                />
-              </Loader>
-            </div>
             <div className="col-sm-12 col-md-6 col-lg-2 col-xl-2 mb-2">
               <Loader loading={carregandoAnos} tip="">
                 <SelectComponent

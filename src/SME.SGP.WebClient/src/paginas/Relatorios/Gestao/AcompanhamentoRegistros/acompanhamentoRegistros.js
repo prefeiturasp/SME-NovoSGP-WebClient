@@ -2,10 +2,8 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { Col, Row } from 'antd';
 
 import {
-  Button,
   Card,
   CheckboxComponent,
-  Colors,
   Loader,
   Localizador,
   SelectComponent,
@@ -24,6 +22,7 @@ import {
 import { ModalidadeDTO } from '~/dtos';
 import { onchangeMultiSelect, ordenarListaMaiorParaMenor } from '~/utils';
 import { OPCAO_TODOS } from '~/constantes';
+import BotoesAcaoRelatorio from '~/componentes-sgp/botoesAcaoRelatorio';
 
 const AcompanhamentoRegistros = () => {
   const [anoAtual] = useState(window.moment().format('YYYY'));
@@ -535,46 +534,20 @@ const AcompanhamentoRegistros = () => {
 
   return (
     <>
-      <Cabecalho pagina="Relatório de acompanhamento dos registros pedagógicos" />
-      <Card>
+      <Cabecalho pagina="Relatório de acompanhamento dos registros pedagógicos">
+        <BotoesAcaoRelatorio
+          onClickVoltar={() => {
+            history.push('/');
+          }}
+          onClickCancelar={cancelar}
+          onClickGerar={gerar}
+          desabilitarBtnGerar={desabilitarBtnGerar}
+          carregandoGerar={carregandoGerar}
+          temLoaderBtnGerar
+        />
+      </Cabecalho>
+      <Card padding="24px 24px">
         <Col span={24}>
-          <Row gutter={[16, 8]} type="flex" justify="end">
-            <Col>
-              <Button
-                id="btn-voltar-rel-acompanhamento-registros"
-                label="Voltar"
-                icon="arrow-left"
-                color={Colors.Azul}
-                border
-                onClick={() => {
-                  history.push('/');
-                }}
-              />
-            </Col>
-            <Col>
-              <Button
-                id="btn-cancelar-rel-acompanhamento-registros"
-                label="Cancelar"
-                color={Colors.Azul}
-                border
-                bold
-                onClick={cancelar}
-              />
-            </Col>
-            <Col>
-              <Loader loading={carregandoGerar} ignorarTip>
-                <Button
-                  id="btn-gerar-rel-acompanhamento-registros"
-                  icon="print"
-                  label="Gerar"
-                  color={Colors.Roxo}
-                  bold
-                  onClick={gerar}
-                  disabled={desabilitarBtnGerar}
-                />
-              </Loader>
-            </Col>
-          </Row>
           <Row gutter={[16, 8]}>
             <Col sm={24}>
               <CheckboxComponent

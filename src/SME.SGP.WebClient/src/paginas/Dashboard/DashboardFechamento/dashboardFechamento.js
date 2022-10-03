@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 
-import { Card, Button, Colors } from '~/componentes';
+import { Card } from '~/componentes';
 import { Cabecalho } from '~/componentes-sgp';
 
 import { URL_HOME } from '~/constantes';
@@ -12,6 +12,7 @@ import { limparDadosDashboardFechamento } from '~/redux/modulos/dashboardFechame
 import DashboardFechamentoAlertaInfantil from './dashboardDevolutivasAlertaInfantil';
 import DashboardFechamentoFiltros from './DashboardFechamentoFiltros/dashboardFechamentoFiltros';
 import TabsDashboardFechamento from './TabsDashboardFechamento/tabsDashboardFechamento';
+import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
 
 const DashboardFechamento = () => {
   const dispatch = useDispatch();
@@ -29,22 +30,11 @@ const DashboardFechamento = () => {
   return (
     <>
       <DashboardFechamentoAlertaInfantil />
-      <Cabecalho pagina="Dashboard fechamento" classes="mb-2" />
+      <Cabecalho pagina="Dashboard fechamento">
+        <BotaoVoltarPadrao onClick={() => onClickVoltar()} />
+      </Cabecalho>
       <Card>
-        <div className="col-md-12 p-0">
-          <div className="row">
-            <div className="col-md-12 d-flex justify-content-end pb-2">
-              <Button
-                id="btn-voltar"
-                label="Voltar"
-                icon="arrow-left"
-                color={Colors.Azul}
-                border
-                onClick={onClickVoltar}
-              />
-            </div>
-          </div>
-
+        <div className="col-md-12">
           <DashboardFechamentoFiltros />
           <div className="row">
             <div className="col-md-12 mt-3">

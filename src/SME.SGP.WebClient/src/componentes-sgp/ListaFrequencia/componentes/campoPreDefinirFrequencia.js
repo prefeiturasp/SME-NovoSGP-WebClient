@@ -68,7 +68,7 @@ const CampoPreDefinirFrequencia = props => {
 };
 
 CampoPreDefinirFrequencia.propTypes = {
-  indexAluno: PropTypes.oneOfType(PropTypes.any),
+  indexAluno: PropTypes.oneOfType([PropTypes.any]),
   onChange: PropTypes.func,
   desabilitar: PropTypes.bool,
 };

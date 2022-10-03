@@ -160,10 +160,7 @@ const AcompanhamentoAprendizagem = () => {
       .finally(() =>
         dispatch(setExibirLoaderAlunosAcompanhamentoAprendizagem(false))
       );
-    if (retorno && retorno.data) {
-      return retorno.data;
-    }
-    return 0;
+    return retorno?.data;
   };
 
   const onChangeAlunoSelecionado = async (aluno, semestreConsulta) => {
@@ -209,6 +206,7 @@ const AcompanhamentoAprendizagem = () => {
         }
       }
     },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [anoLetivo, dispatch, turma, resetarInfomacoes]
   );
 
@@ -245,35 +243,26 @@ const AcompanhamentoAprendizagem = () => {
   return (
     <Container>
       {!turmaSelecionada.turma ? (
-        <div className="col-md-12">
-          <Alert
-            alerta={{
-              tipo: 'warning',
-              id: 'alerta-sem-turma',
-              mensagem: 'Você precisa escolher uma turma.',
-              estiloTitulo: { fontSize: '18px' },
-            }}
-            className="mb-2"
-          />
-        </div>
+        <Alert
+          alerta={{
+            tipo: 'warning',
+            id: 'alerta-sem-turma',
+            mensagem: 'Você precisa escolher uma turma.',
+          }}
+        />
       ) : (
-        ''
+        <></>
       )}
       {turmaSelecionada.turma ? <AlertaPermiteSomenteTurmaInfantil /> : ''}
       <ModalErrosAcompanhamentoAprendizagem />
-      <Cabecalho pagina="Relatório do Acompanhamento da Aprendizagem" />
       <LoaderAcompanhamentoAprendizagem>
+        <Cabecalho pagina="Relatório do Acompanhamento da Aprendizagem">
+          <BotoesAcoesAcompanhamentoAprendizagem
+            semestreSelecionado={semestreSelecionado}
+            componenteCurricularId={componenteCurricularSelecionado}
+          />
+        </Cabecalho>
         <Card>
-          <div className="col-md-12">
-            <div className="row">
-              <div className="col-md-12 d-flex justify-content-end pb-4">
-                <BotoesAcoesAcompanhamentoAprendizagem
-                  semestreSelecionado={semestreSelecionado}
-                  componenteCurricularId={componenteCurricularSelecionado}
-                />
-              </div>
-            </div>
-          </div>
           {turmaSelecionada?.turma &&
           ehTurmaInfantil(modalidadesFiltroPrincipal, turmaSelecionada) ? (
             <>

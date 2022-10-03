@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import { useSelector } from 'react-redux';
 import shortid from 'shortid';
 import * as Yup from 'yup';
+import { Col, Row } from 'antd';
 import { CampoTexto, Colors, Label, Loader } from '~/componentes';
 import Cabecalho from '~/componentes-sgp/cabecalho';
 import Alert from '~/componentes/alert';
@@ -31,6 +32,12 @@ import {
 } from './styles';
 import AlertaModalidadeInfantil from '~/componentes-sgp/AlertaModalidadeInfantil/alertaModalidadeInfantil';
 import { ehTurmaInfantil } from '~/servicos/Validacoes/validacoesInfatil';
+import {
+  SGP_BUTTON_ALTERAR_CADASTRAR,
+  SGP_BUTTON_CANCELAR,
+} from '~/componentes-sgp/filtro/idsCampos';
+import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
+import BotaoExcluirPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoExcluirPadrao';
 
 const CompensacaoAusenciaForm = ({ match }) => {
   const usuario = useSelector(store => store.usuario);
@@ -411,7 +418,7 @@ const CompensacaoAusenciaForm = ({ match }) => {
     onChangeCampos();
   };
 
-  const onChangeDisciplina = (codigoDisciplina, form) => {
+  const onChangeDisciplina = async (codigoDisciplina, form) => {
     setDisciplinaSelecionada(codigoDisciplina);
     setAlunosAusenciaTurma([]);
     setAlunosAusenciaTurmaOriginal([]);
@@ -420,7 +427,9 @@ const CompensacaoAusenciaForm = ({ match }) => {
     setIdsAlunos([]);
     obterDisciplinasRegencia(codigoDisciplina, listaDisciplinas);
     onChangeCampos();
-    form.setFieldValue('bimestre', '');
+
+    if(form.values.bimestre > 0)
+      await onChangeBimestre(form.values.bimestre,form,codigoDisciplina);
   };
 
   const obterDisciplinas = useCallback(async () => {
@@ -522,16 +531,18 @@ const CompensacaoAusenciaForm = ({ match }) => {
     setAlunosAusenciaTurmaOriginal([]);
   };
 
-  const onChangeBimestre = async (bimestre, form) => {
+  const onChangeBimestre = async (bimestre, form, disciplina = 0) => {
     limparListas();
     const dentroPeriodo = await podeAlterarNoPeriodo(String(bimestre));
     setForaDoPeriodo(!dentroPeriodo);
 
-    if (dentroPeriodo) {
+    if (dentroPeriodo && (disciplina > 0 || form.values.disciplinaId)) {
       let podeEditar = false;
+      let valorDisciplina = disciplina > 0 ? disciplina : form.values.disciplinaId;
+
       const exucutandoCalculoFrequencia = await ServicoCompensacaoAusencia.obterStatusCalculoFrequencia(
         turmaSelecionada.turma,
-        form.values.disciplinaId,
+        valorDisciplina,
         bimestre
       ).catch(e => {
         erros(e);
@@ -553,8 +564,8 @@ const CompensacaoAusenciaForm = ({ match }) => {
           setAlunosAusenciaCompensada([]);
           setIdsAlunosAusenciaCompensadas([]);
           setIdsAlunos([]);
-          if (bimestre && form && form.values.disciplinaId) {
-            obterAlunosComAusencia(form.values.disciplinaId, bimestre);
+          if (bimestre && form && valorDisciplina) {
+            obterAlunosComAusencia(valorDisciplina, bimestre);
           } else {
             setAlunosAusenciaTurma([]);
             setAlunosAusenciaTurmaOriginal([]);
@@ -700,7 +711,6 @@ const CompensacaoAusenciaForm = ({ match }) => {
     const paramas = valoresForm;
     paramas.id = idCompensacaoAusencia;
     paramas.turmaId = turmaSelecionada.turma;
-
     paramas.disciplinasRegenciaIds = [];
     if (temRegencia) {
       const somenteSelecionados = listaDisciplinasRegencia.filter(
@@ -939,257 +949,259 @@ const CompensacaoAusenciaForm = ({ match }) => {
         ''
       )}
       <AlertaModalidadeInfantil />
-      <Cabecalho pagina="Cadastrar Compensação de Ausência" />
-      <Card>
-        <Loader
-          loading={carregandoDados || carregandoListaAlunosFrequencia}
-          tip=""
+      <Loader
+        loading={carregandoDados || carregandoListaAlunosFrequencia}
+        tip=""
+      >
+        <Formik
+          enableReinitialize
+          ref={refF => setRefForm(refF)}
+          initialValues={valoresIniciais}
+          validationSchema={validacoes}
+          onSubmit={onClickCadastrar}
+          validateOnChange
+          validateOnBlur
         >
-          <Formik
-            enableReinitialize
-            ref={refF => setRefForm(refF)}
-            initialValues={valoresIniciais}
-            validationSchema={validacoes}
-            onSubmit={onClickCadastrar}
-            validateOnChange
-            validateOnBlur
-          >
-            {form => (
-              <Form className="col-md-12 mb-4">
-                <div className="d-flex justify-content-end pb-4">
-                  <Button
-                    id="btn-voltar"
-                    label="Voltar"
-                    icon="arrow-left"
-                    color={Colors.Azul}
-                    border
-                    className="mr-2"
-                    onClick={() => onClickVoltar(form)}
-                  />
-                  <Button
-                    id="btn-cancelar"
-                    label="Cancelar"
-                    color={Colors.Roxo}
-                    border
-                    className="mr-2"
-                    onClick={() => onClickCancelar(form)}
-                    disabled={!modoEdicao}
-                  />
-                  <Button
-                    id="btn-excluir"
-                    label="Excluir"
-                    color={Colors.Vermelho}
-                    border
-                    className="mr-2"
-                    disabled={
-                      somenteConsulta ||
-                      !permissoesTela.podeExcluir ||
-                      novoRegistro ||
-                      foraDoPeriodo
-                    }
-                    onClick={onClickExcluir}
-                  />
-                  <Button
-                    id="btn-salvar"
-                    label={`${
-                      idCompensacaoAusencia > 0 ? 'Alterar' : 'Cadastrar'
-                    }`}
-                    color={Colors.Roxo}
-                    border
-                    bold
-                    className="mr-2"
-                    onClick={() => validaAntesDoSubmit(form)}
-                    disabled={
-                      ehTurmaInfantil(
-                        modalidadesFiltroPrincipal,
-                        turmaSelecionada
-                      ) ||
-                      desabilitarCampos ||
-                      !modoEdicao
-                    }
-                  />
-                </div>
-
-                <div className="row">
-                  <div className="col-sm-12 col-md-8 col-lg-4 col-xl-4 mb-2">
-                    <Loader loading={carregandoDisciplinas} tip="">
+          {form => (
+            <Form>
+              <Cabecalho pagina="Cadastrar Compensação de Ausência">
+                <Row gutter={[8, 8]} type="flex">
+                  <Col>
+                    <BotaoVoltarPadrao onClick={() => onClickVoltar(form)} />
+                  </Col>
+                  <Col>
+                    <Button
+                      id={SGP_BUTTON_CANCELAR}
+                      label="Cancelar"
+                      color={Colors.Roxo}
+                      border
+                      onClick={() => onClickCancelar(form)}
+                      disabled={!modoEdicao}
+                    />
+                  </Col>
+                  <Col>
+                    <BotaoExcluirPadrao
+                      disabled={
+                        somenteConsulta ||
+                        !permissoesTela.podeExcluir ||
+                        novoRegistro ||
+                        foraDoPeriodo
+                      }
+                      onClick={onClickExcluir}
+                    />
+                  </Col>
+                  <Col>
+                    <Button
+                      id={SGP_BUTTON_ALTERAR_CADASTRAR}
+                      label={`${
+                        idCompensacaoAusencia > 0 ? 'Alterar' : 'Cadastrar'
+                      }`}
+                      color={Colors.Roxo}
+                      border
+                      bold
+                      onClick={() => validaAntesDoSubmit(form)}
+                      disabled={
+                        ehTurmaInfantil(
+                          modalidadesFiltroPrincipal,
+                          turmaSelecionada
+                        ) ||
+                        desabilitarCampos ||
+                        (match.params.id && !modoEdicao)
+                      }
+                    />
+                  </Col>
+                </Row>
+              </Cabecalho>
+              <Card>
+                <div className="col-md-12">
+                  <div className="row">
+                    <div className="col-sm-12 col-md-8 col-lg-4 col-xl-4 mb-2">
+                      <Loader loading={carregandoDisciplinas} tip="">
+                        <SelectComponent
+                          form={form}
+                          id="disciplina"
+                          label="Componente Curricular"
+                          name="disciplinaId"
+                          lista={listaDisciplinas}
+                          valueOption="codigoSelecao"
+                          valueText="nome"
+                          onChange={valor => onChangeDisciplina(valor, form)}
+                          placeholder="Disciplina"
+                          disabled={
+                            desabilitarCampos ||
+                            desabilitarDisciplina ||
+                            !novoRegistro
+                          }
+                          allowClear={false}
+                          labelRequired
+                        />
+                      </Loader>
+                    </div>
+                    <div className="col-sm-12 col-md-4 col-lg-2 col-xl-2 mb-2">
                       <SelectComponent
                         form={form}
-                        id="disciplina"
-                        label="Componente Curricular"
-                        name="disciplinaId"
-                        lista={listaDisciplinas}
-                        valueOption="codigoSelecao"
-                        valueText="nome"
-                        onChange={valor => onChangeDisciplina(valor, form)}
-                        placeholder="Disciplina"
-                        disabled={
-                          desabilitarCampos ||
-                          desabilitarDisciplina ||
-                          !novoRegistro
-                        }
+                        id="bimestre"
+                        label="Bimestre"
+                        name="bimestre"
+                        lista={listaBimestres}
+                        valueOption="valor"
+                        valueText="descricao"
+                        onChange={bi => onChangeBimestre(bi, form)}
+                        placeholder="Bimestre"
+                        disabled={!novoRegistro}
                         allowClear={false}
+                        labelRequired
                       />
-                    </Loader>
-                  </div>
-                  <div className="col-sm-12 col-md-4 col-lg-2 col-xl-2 mb-2">
-                    <SelectComponent
-                      form={form}
-                      id="bimestre"
-                      label="Bimestre"
-                      name="bimestre"
-                      lista={listaBimestres}
-                      valueOption="valor"
-                      valueText="descricao"
-                      onChange={bi => onChangeBimestre(bi, form)}
-                      placeholder="Bimestre"
-                      disabled={!novoRegistro}
-                      allowClear={false}
-                    />
-                  </div>
-                  <div className="col-sm-12 col-md-12 col-lg-6 col-xl-6 mb-2">
-                    <CampoTexto
-                      form={form}
-                      label="Atividade"
-                      placeholder="Atividade"
-                      name="atividade"
-                      onChange={onChangeCampos}
-                      type="input"
-                      maxLength="250"
-                      desabilitado={desabilitarCampos}
-                    />
-                  </div>
-                  {temRegencia && listaDisciplinasRegencia && (
-                    <div className="col-sm-12 col-md-12 col-lg-5 col-xl-5 mb-2">
-                      <Label text="Componente curricular" />
-                      {listaDisciplinasRegencia.map((disciplina, indice) => {
-                        return (
-                          <Badge
-                            key={disciplina.codigoComponenteCurricular}
-                            role="button"
-                            onClick={e => {
-                              e.preventDefault();
-                              if (!desabilitarCampos) {
-                                selecionarDisciplina(indice);
-                              }
-                            }}
-                            aria-pressed={disciplina.selecionada && true}
-                            alt={disciplina.nome}
-                            className="badge badge-pill border text-dark bg-white font-weight-light px-2 py-1 mr-2"
-                          >
-                            {disciplina.nome}
-                          </Badge>
-                        );
-                      })}
                     </div>
-                  )}
-
-                  <div className="col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-2">
-                    {carregouInformacoes ? (
-                      <JoditEditor
+                    <div className="col-sm-12 col-md-12 col-lg-6 col-xl-6 mb-2">
+                      <CampoTexto
                         form={form}
-                        name="descricao"
+                        label="Atividade"
+                        placeholder="Atividade"
+                        name="atividade"
                         onChange={onChangeCampos}
-                        label="Detalhamento da atividade"
-                        desabilitar={desabilitarCampos}
-                        value={form.values.descricao}
+                        type="input"
+                        maxLength="250"
+                        desabilitado={desabilitarCampos}
+                        labelRequired
                       />
-                    ) : (
-                      ''
+                    </div>
+                    {temRegencia && listaDisciplinasRegencia && (
+                      <div className="col-sm-12 col-md-12 col-lg-5 col-xl-5 mb-2">
+                        <Label text="Componente curricular" />
+                        {listaDisciplinasRegencia.map((disciplina, indice) => {
+                          return (
+                            <Badge
+                              key={disciplina.codigoComponenteCurricular}
+                              role="button"
+                              onClick={e => {
+                                e.preventDefault();
+                                if (!desabilitarCampos) {
+                                  selecionarDisciplina(indice);
+                                }
+                              }}
+                              aria-pressed={disciplina.selecionada && true}
+                              alt={disciplina.nome}
+                              className="badge badge-pill border text-dark bg-white font-weight-light px-2 py-1 mr-2"
+                            >
+                              {disciplina.nome}
+                            </Badge>
+                          );
+                        })}
+                      </div>
                     )}
+
+                    <div className="col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-2">
+                      {carregouInformacoes ? (
+                        <JoditEditor
+                          form={form}
+                          name="descricao"
+                          onChange={onChangeCampos}
+                          label="Detalhamento da atividade"
+                          desabilitar={desabilitarCampos}
+                          value={form.values.descricao}
+                          labelRequired
+                        />
+                      ) : (
+                        ''
+                      )}
+                    </div>
+                  </div>
+                  <div className="row">
+                    <div className="col-sm-5 col-md-5 col-lg-5 col-xl-5 mb-2">
+                      <CampoTexto
+                        label="Seleção dos estudantes"
+                        placeholder="Digite o nome do estudante"
+                        onChange={onChangeSelecaoAluno}
+                        value={selecaoAlunoSelecionado}
+                        type="input"
+                        icon
+                      />
+                    </div>
+                  </div>
+                  <div
+                    className="mt-2"
+                    style={{ flexGrow: 1, display: 'flex' }}
+                  >
+                    <div>
+                      <ListaAlunos
+                        lista={alunosAusenciaTurma}
+                        onSelectRow={onSelectRowAlunos}
+                        idsAlunos={idsAlunos}
+                      />
+                    </div>
+                    <ColunaBotaoListaAlunos style={{ margin: '15px' }}>
+                      <BotaoListaAlunos
+                        className="mb-2"
+                        onClick={onClickAdicionarAlunos}
+                      >
+                        <i className="fas fa-chevron-right" />
+                      </BotaoListaAlunos>
+                      <BotaoListaAlunos onClick={onClickRemoverAlunos}>
+                        <i className="fas fa-chevron-left" />
+                      </BotaoListaAlunos>
+                    </ColunaBotaoListaAlunos>
+                    <div>
+                      <ListaAlunosAusenciasCompensadas
+                        listaAusenciaCompensada={alunosAusenciaCompensada}
+                        onSelectRow={onSelectRowAlunosAusenciaCompensada}
+                        idsAlunosAusenciaCompensadas={
+                          idsAlunosAusenciaCompensadas
+                        }
+                        atualizarValoresListaCompensacao={
+                          atualizarValoresListaCompensacao
+                        }
+                        desabilitarCampos={desabilitarCampos}
+                      />
+                    </div>
+                  </div>
+                  {exibirAuditoria ? (
+                    <Auditoria
+                      criadoEm={auditoria.criadoEm}
+                      criadoPor={auditoria.criadoPor}
+                      alteradoPor={auditoria.alteradoPor}
+                      alteradoEm={auditoria.alteradoEm}
+                    />
+                  ) : (
+                    ''
+                  )}
+                  <div className="row mt-3">
+                    <div className="col-md-12">
+                      <Button
+                        label="Copiar Compensação"
+                        icon="share-square"
+                        color={Colors.Azul}
+                        className="mr-3"
+                        border
+                        onClick={abrirCopiarCompensacao}
+                        disabled={novoRegistro || desabilitarCampos}
+                      />
+                      {compensacoesParaCopiar &&
+                      compensacoesParaCopiar.compensacaoOrigemId &&
+                      compensacoesParaCopiar.dadosTurmas.length ? (
+                        <ListaCopiarCompensacoes>
+                          <div className="mb-1">
+                            Compensação será copiada para:
+                          </div>
+                          <div
+                            className="font-weight-bold"
+                            key={`bimestre-${shortid.generate()}`}
+                          >
+                            - Bimestre {compensacoesParaCopiar.bimestre}
+                          </div>
+                          {montarExibicaoCompensacoesCopiar()}
+                        </ListaCopiarCompensacoes>
+                      ) : (
+                        ''
+                      )}
+                    </div>
                   </div>
                 </div>
-                <div className="row">
-                  <div className="col-sm-5 col-md-5 col-lg-5 col-xl-5 mb-2">
-                    <CampoTexto
-                      label="Seleção dos estudantes"
-                      placeholder="Digite o nome do estudante"
-                      onChange={onChangeSelecaoAluno}
-                      value={selecaoAlunoSelecionado}
-                      type="input"
-                      icon
-                    />
-                  </div>
-                </div>
-                <div className="mt-2" style={{ flexGrow: 1, display: 'flex' }}>
-                  <div>
-                    <ListaAlunos
-                      lista={alunosAusenciaTurma}
-                      onSelectRow={onSelectRowAlunos}
-                      idsAlunos={idsAlunos}
-                    />
-                  </div>
-                  <ColunaBotaoListaAlunos style={{ margin: '15px' }}>
-                    <BotaoListaAlunos
-                      className="mb-2"
-                      onClick={onClickAdicionarAlunos}
-                    >
-                      <i className="fas fa-chevron-right" />
-                    </BotaoListaAlunos>
-                    <BotaoListaAlunos onClick={onClickRemoverAlunos}>
-                      <i className="fas fa-chevron-left" />
-                    </BotaoListaAlunos>
-                  </ColunaBotaoListaAlunos>
-                  <div>
-                    <ListaAlunosAusenciasCompensadas
-                      listaAusenciaCompensada={alunosAusenciaCompensada}
-                      onSelectRow={onSelectRowAlunosAusenciaCompensada}
-                      idsAlunosAusenciaCompensadas={
-                        idsAlunosAusenciaCompensadas
-                      }
-                      atualizarValoresListaCompensacao={
-                        atualizarValoresListaCompensacao
-                      }
-                      desabilitarCampos={desabilitarCampos}
-                    />
-                  </div>
-                </div>
-                {exibirAuditoria ? (
-                  <Auditoria
-                    criadoEm={auditoria.criadoEm}
-                    criadoPor={auditoria.criadoPor}
-                    alteradoPor={auditoria.alteradoPor}
-                    alteradoEm={auditoria.alteradoEm}
-                  />
-                ) : (
-                  ''
-                )}
-                <div className="row mt-3">
-                  <div className="col-md-12">
-                    <Button
-                      label="Copiar Compensação"
-                      icon="share-square"
-                      color={Colors.Azul}
-                      className="mr-3"
-                      border
-                      onClick={abrirCopiarCompensacao}
-                      disabled={novoRegistro || desabilitarCampos}
-                    />
-                    {compensacoesParaCopiar &&
-                    compensacoesParaCopiar.compensacaoOrigemId &&
-                    compensacoesParaCopiar.dadosTurmas.length ? (
-                      <ListaCopiarCompensacoes>
-                        <div className="mb-1">
-                          Compensação será copiada para:
-                        </div>
-                        <div
-                          className="font-weight-bold"
-                          key={`bimestre-${shortid.generate()}`}
-                        >
-                          - Bimestre {compensacoesParaCopiar.bimestre}
-                        </div>
-                        {montarExibicaoCompensacoesCopiar()}
-                      </ListaCopiarCompensacoes>
-                    ) : (
-                      ''
-                    )}
-                  </div>
-                </div>
-              </Form>
-            )}
-          </Formik>
-        </Loader>
-      </Card>
+              </Card>
+            </Form>
+          )}
+        </Formik>
+      </Loader>
     </Loader>
   );
 };

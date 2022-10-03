@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import { InputNumber } from 'antd';
 import { Field } from 'formik';
 import PropTypes from 'prop-types';
@@ -34,7 +35,6 @@ const CampoNumero = React.forwardRef((props, ref) => {
     form,
     className,
     classNameCampo,
-    type,
     maskType,
     placeholder,
     onChange,
@@ -109,10 +109,10 @@ const CampoNumero = React.forwardRef((props, ref) => {
               innerRef={ref}
               onKeyDown={onKeyDown}
               onKeyUp={onKeyUp}
-              onChange={value => {
-                form.setFieldValue(name, value);
+              onChange={v => {
+                form.setFieldValue(name, v);
                 form.setFieldTouched(name, true);
-                onChange(value);
+                onChange(v);
               }}
               disabled={disabled}
             />
@@ -156,6 +156,7 @@ CampoNumero.propTypes = {
   esconderSetas: PropTypes.bool,
   onKeyUp: PropTypes.func,
   autoFocus: PropTypes.bool,
+  label: PropTypes.string,
 };
 
 CampoNumero.defaultProps = {
@@ -167,6 +168,7 @@ CampoNumero.defaultProps = {
   esconderSetas: false,
   onKeyUp: () => {},
   autoFocus: false,
+  label: '',
 };
 
 export default CampoNumero;

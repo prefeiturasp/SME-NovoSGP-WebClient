@@ -7,7 +7,6 @@ import * as Yup from 'yup';
 import {
   CampoData,
   Colors,
-  Label,
   ModalConteudoHtml,
   momentSchema,
   SelectComponent,
@@ -20,7 +19,11 @@ const ModalCadastroDiasHorario = props => {
   const { onClose, exibirModal, dadosIniciais } = props;
 
   const [refForm, setRefForm] = useState({});
-  const [valoresIniciais, setValoresIniciais] = useState({});
+  const [valoresIniciais, setValoresIniciais] = useState({
+    diaSemana: '',
+    horarioInicio: '',
+    horarioTermino: '',
+  });
 
   const [emEdicao, setEmEdicao] = useState(false);
 
@@ -121,13 +124,11 @@ const ModalCadastroDiasHorario = props => {
                 form={form}
                 name="diaSemana"
                 onChange={() => setEmEdicao(true)}
+                labelRequired
               />
             </div>
             <div className="col-md-12 mb-2">
               <div className="row">
-                <div className="col-md-12 mt-2">
-                  <Label text="Horário" />
-                </div>
                 <div className="col-md-6 mb-2">
                   <CampoData
                     form={form}
@@ -136,10 +137,11 @@ const ModalCadastroDiasHorario = props => {
                     formatoData="HH:mm"
                     somenteHora
                     onChange={() => setEmEdicao(true)}
-                    label=""
+                    label="Horário"
+                    labelRequired
                   />
                 </div>
-                <div className="col-md-6 mb-2">
+                <div className="col-md-6 mb-2 mt-4">
                   <CampoData
                     form={form}
                     name="horarioTermino"
@@ -147,7 +149,6 @@ const ModalCadastroDiasHorario = props => {
                     formatoData="HH:mm"
                     somenteHora
                     onChange={() => setEmEdicao(true)}
-                    label=""
                   />
                 </div>
               </div>
@@ -168,7 +169,6 @@ const ModalCadastroDiasHorario = props => {
                 label={dadosIniciais?.id ? 'Alterar' : 'Adicionar'}
                 color={Colors.Roxo}
                 border
-                disabled={!emEdicao}
                 onClick={() => validaAntesDoSubmit(form)}
                 className="mt-2"
               />

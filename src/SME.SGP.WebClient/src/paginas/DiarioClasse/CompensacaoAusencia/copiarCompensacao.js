@@ -13,7 +13,7 @@ const CopiarCompensacao = ({
   onCloseCopiarCompensacao,
   onCopiarCompensacoes,
   compensacoesParaCopiar,
-  bimestreSugerido
+  bimestreSugerido,
 }) => {
   const [listaTurmas, setListaTurmas] = useState([]);
   const [loader, setLoader] = useState(false);
@@ -55,14 +55,15 @@ const CopiarCompensacao = ({
 
   const copiar = valores => {
     const dadosTurmas = listaTurmas.filter(turma =>
-      valores.turmas.find(codigo => codigo == turma.codigo)
+      valores.turmas.find(codigo => String(codigo) === String(turma.codigo))
     );
     onCopiarCompensacoes(valores, dadosTurmas);
     fecharCopiarCompensacao();
   };
 
   const validacoes = Yup.object({
-    bimestre: Yup.string().required('Selecione um bimestre.'),
+    turmas: Yup.string().required('Campo obrigatório'),
+    bimestre: Yup.string().required('Campo obrigatório'),
   });
 
   return (
@@ -90,7 +91,7 @@ const CopiarCompensacao = ({
             labelBotaoPrincipal="Selecionar"
             labelBotaoSecundario="Cancelar"
             titulo="Copiar Compensação"
-            closable={true}
+            closable
             loader={loader}
             desabilitarBotaoPrincipal={false}
           >
@@ -105,6 +106,7 @@ const CopiarCompensacao = ({
                 multiple
                 placeholder="Selecione uma ou mais turmas"
                 form={form}
+                labelRequired
               />
               <SelectComponent
                 form={form}
@@ -115,6 +117,7 @@ const CopiarCompensacao = ({
                 valueOption="valor"
                 valueText="descricao"
                 placeholder="Selecione um bimestre"
+                labelRequired
               />
             </div>
           </ModalConteudoHtml>
@@ -134,15 +137,17 @@ CopiarCompensacao.propTypes = {
     PropTypes.array,
     PropTypes.object,
   ]),
+  bimestreSugerido: PropTypes.oneOfType([PropTypes.any]),
 };
 
 CopiarCompensacao.defaultProps = {
   visivel: false,
   turmaId: '',
   listaBimestres: [],
-  onCloseCopiarCompensacao: () => { },
-  onCopiarCompensacoes: () => { },
+  onCloseCopiarCompensacao: () => {},
+  onCopiarCompensacoes: () => {},
   compensacoesParaCopiar: [],
+  bimestreSugerido: '',
 };
 
 export default CopiarCompensacao;

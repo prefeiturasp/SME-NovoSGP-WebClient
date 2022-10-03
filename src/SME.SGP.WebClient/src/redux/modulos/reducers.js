@@ -7,7 +7,7 @@ import notificacoes from './notificacoes/reducers';
 import perfil from './perfil/reducers';
 import calendarioEscolar from './calendarioEscolar/reducers';
 import calendarioProfessor from './calendarioProfessor/reducers';
-import bimestres from './planoAnual/reducers';
+// import bimestres from './planoAnual/reducers';
 import filtro from './filtro/reducers';
 import atribuicaoEsporadica from './atribuicaoEsporadica/reducers';
 import loader from './loader/reducer';
@@ -53,7 +53,7 @@ const reducers = combineReducers({
   perfil,
   calendarioEscolar,
   notificacoes,
-  bimestres,
+  // bimestres,
   filtro,
   calendarioProfessor,
   atribuicaoEsporadica,

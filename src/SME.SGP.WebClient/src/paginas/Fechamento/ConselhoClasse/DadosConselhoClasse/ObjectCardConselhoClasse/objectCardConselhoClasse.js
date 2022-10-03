@@ -42,7 +42,6 @@ const ObjectCardConselhoClasse = () => {
 
   const obterFrequenciaAluno = useCallback(async () => {
     setCarregandoFrequencia(true);
-    let frequenciaGeralAluno = 0;
 
     const retorno = await ServicoConselhoClasse.obterFrequenciaAluno(
       dadosAlunoObjectCard.codigoEOL,
@@ -50,10 +49,8 @@ const ObjectCardConselhoClasse = () => {
     )
       .catch(e => erros(e))
       .finally(() => setCarregandoFrequencia(false));
-    if (retorno?.data) {
-      frequenciaGeralAluno = retorno.data;
-    }
-    setFrequencia(frequenciaGeralAluno);
+
+    setFrequencia(retorno?.data);
   }, [turma, dadosAlunoObjectCard.codigoEOL]);
 
   useEffect(() => {

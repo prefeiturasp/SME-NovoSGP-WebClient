@@ -7,9 +7,7 @@ import {
   CheckboxComponent,
 } from '~/componentes';
 import { Cabecalho } from '~/componentes-sgp';
-import Button from '~/componentes/button';
 import Card from '~/componentes/card';
-import { Colors } from '~/componentes/colors';
 import { URL_HOME } from '~/constantes/url';
 import modalidade from '~/dtos/modalidade';
 import AbrangenciaServico from '~/servicos/Abrangencia';
@@ -20,6 +18,7 @@ import { sucesso } from '~/servicos/alertas';
 import LocalizadorEstudante from '~/componentes/LocalizadorEstudante';
 import ServicoHistoricoEscolar from '~/servicos/Paginas/HistoricoEscolar/ServicoHistoricoEscolar';
 import AlertaModalidadeInfantil from '~/componentes-sgp/AlertaModalidadeInfantil/alertaModalidadeInfantil';
+import BotoesAcaoRelatorio from '~/componentes-sgp/botoesAcaoRelatorio';
 
 const HistoricoEscolar = () => {
   const codigosAlunosSelecionados = useSelector(
@@ -111,6 +110,7 @@ const HistoricoEscolar = () => {
     setAlunosSelecionados([]);
     setEstudanteOpt('0');
     setCarregandoAnos(false);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [anoAtual, consideraHistorico]);
 
   useEffect(() => {
@@ -140,12 +140,12 @@ const HistoricoEscolar = () => {
 
   const [carregandoUes, setCarregandoUes] = useState(false);
 
-  const obterUes = useCallback(async (dre, ano, consideraHistorico = false) => {
+  const obterUes = useCallback(async (dre, ano, considHistorico = false) => {
     if (dre) {
       setCarregandoUes(true);
       const { data } = await AbrangenciaServico.buscarUes(
         dre,
-        `v1/abrangencias/${consideraHistorico}/dres/${dre}/ues?anoLetivo=${ano}`,
+        `v1/abrangencias/${considHistorico}/dres/${dre}/ues?anoLetivo=${ano}`,
         true
       );
       if (data) {
@@ -209,12 +209,13 @@ const HistoricoEscolar = () => {
       }
       setCarregandoDres(false);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [anoLetivo]);
 
   const [carregandoTurmas, setCarregandoTurmas] = useState(false);
 
   const obterTurmas = useCallback(
-    async (modalidadeSelecionada, ue, ano, consideraHistorico = false) => {
+    async (modalidadeSelecionada, ue, ano, considHistorico = false) => {
       if (ue && modalidadeSelecionada) {
         setCarregandoTurmas(true);
         const { data } = await AbrangenciaServico.buscarTurmas(
@@ -222,7 +223,7 @@ const HistoricoEscolar = () => {
           modalidadeSelecionada,
           '',
           ano,
-          consideraHistorico,
+          considHistorico,
           true
         );
         if (data) {
@@ -283,6 +284,7 @@ const HistoricoEscolar = () => {
       setUeId();
       setListaUes([]);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dreId, anoLetivo, obterUes]);
 
   useEffect(() => {
@@ -292,11 +294,12 @@ const HistoricoEscolar = () => {
       setTurmaId();
       setListaTurmas([]);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [modalidadeId, ueId, anoLetivo, obterTurmas]);
 
   useEffect(() => {
     if (modalidadeId && anoLetivo) {
-      if (String(modalidadeId) === String(modalidade.EJA)) {
+      if (Number(modalidadeId) === modalidade.EJA) {
         obterSemestres(modalidadeId, anoLetivo);
       } else {
         setSemestre();
@@ -306,29 +309,30 @@ const HistoricoEscolar = () => {
       setSemestre();
       setListaSemestre([]);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [modalidadeId, anoLetivo, obterTurmas]);
 
   useEffect(() => {
-    const desabiltarAlunosSelecionados =
-      String(estudanteOpt) === '1'
-        ? !alunosSelecionados?.length
-        : codigosAlunosSelecionados?.length;
-
     let desabilitar = true;
-    if (anoLetivo?.length > 0 || dreId?.length > 0 || ueId?.length > 0 || modalidadeId?.length > 0 )
-    {
-        if (turmaId?.length > 0 && String(estudanteOpt) === '0'){
-          desabilitar = false;
-        }
-        else if (String(estudanteOpt) === '1' && alunosSelecionados?.length > 0){
-          desabilitar = false;
-        }
-        else if (codigosAlunosSelecionados?.length > 0){
-          desabilitar = false;
-        }
+    if (
+      anoLetivo?.length > 0 ||
+      dreId?.length > 0 ||
+      ueId?.length > 0 ||
+      modalidadeId?.length > 0
+    ) {
+      if (turmaId?.length > 0 && String(estudanteOpt) === '0') {
+        desabilitar = false;
+      } else if (
+        String(estudanteOpt) === '1' &&
+        alunosSelecionados?.length > 0
+      ) {
+        desabilitar = false;
+      } else if (codigosAlunosSelecionados?.length > 0) {
+        desabilitar = false;
+      }
     }
 
-    if (String(modalidadeId) === String(modalidade.EJA)) {
+    if (Number(modalidadeId) === modalidade.EJA) {
       vaidaDesabilitarBtnGerar(!semestre || desabilitar);
     } else {
       vaidaDesabilitarBtnGerar(desabilitar);
@@ -506,47 +510,19 @@ const HistoricoEscolar = () => {
         exibir={String(modalidadeId) === String(modalidade.INFANTIL)}
         validarModalidadeFiltroPrincipal={false}
       />
-      <Cabecalho pagina="Histórico Escolar" />
+      <Cabecalho pagina="Histórico Escolar">
+        <BotoesAcaoRelatorio
+          onClickVoltar={onClickVoltar}
+          onClickCancelar={onClickCancelar}
+          onClickGerar={onClickGerar}
+          desabilitarBtnGerar={desabilitarBtnGerar}
+          carregandoGerar={carregandoGerar}
+          temLoaderBtnGerar
+        />
+      </Cabecalho>
       <Card>
         <div className="col-md-12">
           <div className="row">
-            <div className="col-md-12 d-flex justify-content-end pb-4 justify-itens-end">
-              <Button
-                id="btn-voltar-historico-escolar"
-                label="Voltar"
-                icon="arrow-left"
-                color={Colors.Azul}
-                border
-                className="mr-2"
-                onClick={onClickVoltar}
-              />
-              <Button
-                id="btn-cancelar-historico-escolar"
-                label="Cancelar"
-                color={Colors.Roxo}
-                border
-                bold
-                className="mr-2"
-                onClick={() => onClickCancelar()}
-              />
-              <Loader
-                loading={carregandoGerar}
-                className="d-flex w-auto"
-                tip=""
-              >
-                <Button
-                  id="btn-gerar-historico-escolar"
-                  icon="print"
-                  label="Gerar"
-                  color={Colors.Azul}
-                  border
-                  bold
-                  className="mr-0"
-                  onClick={() => onClickGerar()}
-                  disabled={desabilitarBtnGerar}
-                />
-              </Loader>
-            </div>
             <div className="col-sm-12 mb-4">
               <CheckboxComponent
                 label="Exibir histórico?"

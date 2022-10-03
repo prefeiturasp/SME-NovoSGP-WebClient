@@ -48,6 +48,7 @@ const DreComunicados = ({
       form.setFieldValue(nomeCampo, undefined);
       setListaDres([]);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [anoLetivo]);
 
   useEffect(() => {
@@ -57,6 +58,7 @@ const DreComunicados = ({
       form.setFieldValue(nomeCampo, undefined);
       setListaDres([]);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [anoLetivo, obterDres]);
 
   return (
@@ -72,6 +74,7 @@ const DreComunicados = ({
         showSearch
         name={nomeCampo}
         form={form}
+        labelRequired
         onChange={() => {
           onChangeCampos();
           form.setFieldValue('codigoUe', undefined);

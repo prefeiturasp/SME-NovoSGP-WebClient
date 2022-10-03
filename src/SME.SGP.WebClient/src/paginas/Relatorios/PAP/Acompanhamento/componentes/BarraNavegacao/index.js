@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import t from 'prop-types';
 import shortid from 'shortid';
 
@@ -88,6 +88,7 @@ BarraNavegacao.propTypes = {
   objetivoAtivo: t.oneOfType([t.any]),
   onChangeObjetivo: t.func,
   id: t.number,
+  somenteConsulta: t.bool,
 };
 
 BarraNavegacao.defaultProps = {
@@ -95,6 +96,7 @@ BarraNavegacao.defaultProps = {
   objetivoAtivo: {},
   onChangeObjetivo: () => {},
   id: 0,
+  somenteConsulta: false,
 };
 
 export default BarraNavegacao;

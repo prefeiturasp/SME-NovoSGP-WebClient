@@ -1,4 +1,4 @@
-import React, { useReducer, useCallback, useEffect, useMemo } from 'react';
+import React, { useReducer, useCallback, useEffect } from 'react';
 import t from 'prop-types';
 
 // Componentes
@@ -42,7 +42,7 @@ function Calendario({
 }) {
   const [estado, disparar] = useReducer(Reducer, estadoInicial);
 
-  const estadoOrdenado = useMemo(() => ordenarPor(estado?.meses), []);
+  const estadoOrdenado = ordenarPor(estado?.meses);
 
   const onClickMesHandler = useCallback(
     mes => {
@@ -55,9 +55,11 @@ function Calendario({
   const onClickDiaHandler = useCallback(
     dia => {
       disparar(selecionarDia({ diaSelecionado: dia }));
-      onClickDia(dia);
+      const fechando =
+        estado?.diaSelecionado?.toString?.() === dia?.toString?.();
+      onClickDia(dia, fechando);
     },
-    [onClickDia]
+    [onClickDia, estado]
   );
 
   useEffect(() => {

@@ -28,7 +28,7 @@ const GraficosPlanos = props => {
 };
 
 GraficosPlanos.propTypes = {
-  anoLetivo: PropTypes.oneOfType(PropTypes.any),
+  anoLetivo: PropTypes.oneOfType([PropTypes.any]),
   dreId: PropTypes.string,
   ueId: PropTypes.string,
 };

@@ -151,19 +151,19 @@ const AusenciasAluno = props => {
 };
 
 AusenciasAluno.defaultProps = {
-  componenteCurricularId: PropTypes.string,
-  turmaId: PropTypes.string,
-  codigoAluno: PropTypes.string,
-  indexLinha: PropTypes.number,
-  bimestre: PropTypes.number,
+  componenteCurricularId: '',
+  turmaId: '',
+  codigoAluno: '',
+  indexLinha: null,
+  bimestre: null,
 };
 
 AusenciasAluno.propTypes = {
   componenteCurricularId: PropTypes.string,
   turmaId: PropTypes.string,
   codigoAluno: PropTypes.string,
-  indexLinha: null,
-  bimestre: null,
+  indexLinha: PropTypes.number,
+  bimestre: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
 };
 
 export default AusenciasAluno;

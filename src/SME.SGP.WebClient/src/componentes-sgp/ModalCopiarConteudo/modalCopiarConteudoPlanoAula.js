@@ -11,7 +11,6 @@ import {
   ModalConteudoHtml,
 } from '~/componentes';
 import TurmasDropDown from '~/componentes-sgp/TurmasDropDown';
-import filtro from '~/redux/modulos/filtro/reducers';
 import AbrangenciaServico from '~/servicos/Abrangencia';
 import { confirmar, sucesso, erro, erros } from '~/servicos/alertas';
 import api from '~/servicos/api';
@@ -70,6 +69,7 @@ const ModalCopiarConteudoPlanoAula = props => {
       }
     }
     buscaTurmas();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [filtro.unidadeEscolar, filtro.modalidade, filtro.ano]);
 
   const adicionarTurma = () => {
@@ -289,9 +289,11 @@ const ModalCopiarConteudoPlanoAula = props => {
       }
       tituloAtencao={alerta && 'Atenção'}
       desabilitarBotaoPrincipal={
-        turmas.length < 1 ||
-        (turmas.length && turmas.find(item => !item.data)) ||
-        carregando
+        !!(
+          turmas.length < 1 ||
+          (turmas.length && turmas.find(item => !item.data)) ||
+          carregando
+        )
       }
       loader={carregando || exibirLoaderModal}
       fecharAoClicarFora={!carregando && !exibirLoaderModal}
@@ -361,7 +363,10 @@ const ModalCopiarConteudoPlanoAula = props => {
 };
 
 ModalCopiarConteudoPlanoAula.propTypes = {
-  codigoComponenteCurricular: PropTypes.string,
+  codigoComponenteCurricular: PropTypes.oneOfType([
+    PropTypes.number,
+    PropTypes.string,
+  ]),
   exibirModal: PropTypes.bool,
   copiar: PropTypes.func,
   onClickDescartar: PropTypes.func,

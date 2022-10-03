@@ -10,9 +10,7 @@ import {
   SelectComponent,
 } from '~/componentes';
 import { Cabecalho } from '~/componentes-sgp';
-import Button from '~/componentes/button';
 import Card from '~/componentes/card';
-import { Colors } from '~/componentes/colors';
 import { ModalidadeDTO } from '~/dtos';
 import AbrangenciaServico from '~/servicos/Abrangencia';
 import { erros, sucesso } from '~/servicos/alertas';
@@ -24,6 +22,8 @@ import ServicoDashboardEscolaAqui from '~/servicos/Paginas/Dashboard/ServicoDash
 import ServicoRelatorioLeitura from '~/servicos/Paginas/Relatorios/EscolaAqui/Leitura/ServicoRelatorioLeitura';
 import FiltroHelper from '~componentes-sgp/filtro/helper';
 import { OPCAO_TODOS } from '~/constantes/constantes';
+import BotoesAcaoRelatorio from '~/componentes-sgp/botoesAcaoRelatorio';
+import { URL_HOME } from '~/constantes';
 
 const RelatorioLeitura = () => {
   const usuario = useSelector(store => store.usuario);
@@ -335,6 +335,7 @@ const RelatorioLeitura = () => {
       }
       setCarregandoTurma(false);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [modalidadeId]);
 
   const filterTurmasAnoSelecionado = useCallback(() => {
@@ -351,6 +352,7 @@ const RelatorioLeitura = () => {
     } else {
       setListaTurmas(listaTurmasOriginal);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [anosEscolares, listaTurmasOriginal]);
 
   useEffect(() => {
@@ -361,6 +363,7 @@ const RelatorioLeitura = () => {
       setListaTurmas([]);
       setListaTurmasOriginal([]);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [modalidadeId]);
 
   const obterAnosLetivos = useCallback(async () => {
@@ -462,14 +465,15 @@ const RelatorioLeitura = () => {
   useEffect(() => {
     if (
       modalidadeId &&
-      (modalidadeId == ModalidadeDTO.ENSINO_MEDIO ||
-        modalidadeId == ModalidadeDTO.FUNDAMENTAL)
+      (Number(modalidadeId) === ModalidadeDTO.ENSINO_MEDIO ||
+        Number(modalidadeId) === ModalidadeDTO.FUNDAMENTAL)
     ) {
       obterAnosEscolaresPorModalidade();
     } else {
       setAnosEscolares();
       setListaAnosEscolares([]);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [modalidadeId]);
 
   const cancelar = async () => {
@@ -634,46 +638,18 @@ const RelatorioLeitura = () => {
 
   return (
     <Loader loading={exibirLoaderGeral}>
-      <Cabecalho pagina="Relatório de leitura" classes="mb-2" />
+      <Cabecalho pagina="Relatório de leitura">
+        <BotoesAcaoRelatorio
+          onClickVoltar={() => {
+            history.push(URL_HOME);
+          }}
+          onClickCancelar={cancelar}
+          onClickGerar={gerar}
+          desabilitarBtnGerar={desabilitarGerar}
+        />
+      </Cabecalho>
       <Card>
-        <div className="col-md-12 p-0">
-          <div className="row">
-            <div className="col-md-12 d-flex justify-content-end pb-4 justify-itens-end">
-              <Button
-                id="btn-voltar"
-                label="Voltar"
-                icon="arrow-left"
-                color={Colors.Azul}
-                border
-                className="mr-3"
-                onClick={() => {
-                  history.push('/');
-                }}
-              />
-              <Button
-                id="btn-cancelar"
-                label="Cancelar"
-                color={Colors.Azul}
-                border
-                bold
-                className="mr-3"
-                onClick={() => {
-                  cancelar();
-                }}
-              />
-              <Button
-                id="btn-gerar"
-                icon="print"
-                label="Gerar"
-                color={Colors.Azul}
-                border
-                bold
-                className="mr-0"
-                onClick={gerar}
-                disabled={desabilitarGerar}
-              />
-            </div>
-          </div>
+        <div className="col-md-12">
           <div className="row">
             <div className="col-sm-12 col-md-6 col-lg-4 col-xl-4 mb-2">
               <CheckboxComponent
@@ -690,7 +666,7 @@ const RelatorioLeitura = () => {
             </div>
           </div>
           <div className="row">
-            <div className="col-sm-12 col-md-4 col-lg-2 col-xl-2 mb-3 pr-0">
+            <div className="col-sm-12 col-md-4 col-lg-2 col-xl-2 mb-3">
               <Loader loading={carregandoAnosLetivos}>
                 <SelectComponent
                   id="drop-ano-letivo"
@@ -707,7 +683,7 @@ const RelatorioLeitura = () => {
                 />
               </Loader>
             </div>
-            <div className="col-sm-12 col-md-12 col-lg-5 col-xl-5 mb-3 pr-0">
+            <div className="col-sm-12 col-md-12 col-lg-5 col-xl-5 mb-3">
               <Loader loading={carregandoDres}>
                 <SelectComponent
                   id="drop-dre"
@@ -739,7 +715,7 @@ const RelatorioLeitura = () => {
                 />
               </Loader>
             </div>
-            <div className="col-sm-12 col-md-6 col-lg-4 col-xl-4 mb-3 pr-0">
+            <div className="col-sm-12 col-md-6 col-lg-4 col-xl-4 mb-3">
               <Loader loading={carregandoModalidade}>
                 <SelectComponent
                   id="drop-modalidade"
@@ -754,7 +730,7 @@ const RelatorioLeitura = () => {
                 />
               </Loader>
             </div>
-            <div className="col-sm-12 col-md-4 mb-3 pr-0">
+            <div className="col-sm-12 col-md-4 mb-3">
               <SelectComponent
                 id="drop-semestre"
                 lista={listaSemestres}
@@ -786,7 +762,7 @@ const RelatorioLeitura = () => {
                 />
               </Loader>
             </div>
-            <div className="col-sm-12 col-md-4 mb-3 pr-0">
+            <div className="col-sm-12 col-md-4 mb-3">
               <Loader loading={carregandoTurma}>
                 <SelectComponent
                   id="drop-turma"
@@ -806,7 +782,7 @@ const RelatorioLeitura = () => {
                 />
               </Loader>
             </div>
-            <div className="col-sm-12 col-md-4 mb-3 pr-0">
+            <div className="col-sm-12 col-md-4 mb-3">
               <CampoData
                 className="intervalo-datas"
                 label="Data de envio"
@@ -839,7 +815,7 @@ const RelatorioLeitura = () => {
                 />
               </Loader>
             </div>
-            <div className="col-sm-12 col-md-6 col-lg-3 col-xl-3 mb-3 pr-0">
+            <div className="col-sm-12 col-md-6 col-lg-3 col-xl-3 mb-3">
               <RadioGroupButton
                 label="Listar responsáveis/estudantes"
                 opcoes={opcoesRadioSimNao}

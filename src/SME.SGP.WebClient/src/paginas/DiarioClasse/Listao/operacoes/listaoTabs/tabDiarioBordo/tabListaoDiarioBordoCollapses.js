@@ -1,5 +1,6 @@
 import { Col, Row } from 'antd';
 import React, { useContext, useEffect } from 'react';
+import styled from 'styled-components';
 import { useDispatch, useSelector } from 'react-redux';
 import { Base, PainelCollapse } from '~/componentes';
 import ServicoObservacoesUsuario from '~/componentes-sgp/ObservacoesUsuario/ServicoObservacoesUsuario';
@@ -8,7 +9,7 @@ import {
   limparDadosObservacoesUsuario,
   setDadosObservacoesUsuario,
 } from '~/redux/modulos/observacoesUsuario/actions';
-import { confirmar, erros, ServicoDiarioBordo } from '~/servicos';
+import { confirmar, ServicoDiarioBordo } from '~/servicos';
 import ListaoContext from '../../../listaoContext';
 import {
   obterDiarioBordoListao,
@@ -16,11 +17,20 @@ import {
 } from '../../../listaoFuncoes';
 import ConteudoCollapse from './conteudoCollapse';
 
+const PainelCollapseContainer = styled(PainelCollapse)`
+  .ant-collapse-item {
+    margin-bottom: 16px !important;
+  }
+  .ant-collapse-content {
+    border: 1px solid #d9d9d9;
+  }
+`;
+
 const TabListaoDiarioBordoCollapses = () => {
   const telaEmEdicao = useSelector(store => store.geral.telaEmEdicao);
   const usuario = useSelector(store => store.usuario);
   const { turmaSelecionada } = usuario;
-  const { turma, id: turmaId } = turmaSelecionada;
+  const { turma } = turmaSelecionada;
 
   const {
     setExibirLoaderGeral,
@@ -49,6 +59,7 @@ const TabListaoDiarioBordoCollapses = () => {
         setDadosIniciaisDiarioBordo
       );
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [periodo, componenteCurricularDiarioBordo]);
 
   const perguntarSalvarObservacao = async () => {
@@ -97,17 +108,22 @@ const TabListaoDiarioBordoCollapses = () => {
     }
   };
 
+  const defaultActiveKeyDados = dadosDiarioBordo.map(dados => dados?.aulaId);
+
   return (
     <Row gutter={[24, 24]}>
       <Col sm={24}>
         {!!exibirDiarioBordoCollapses && (
-          <PainelCollapse accordion onChange={onColapse}>
+          <PainelCollapseContainer
+            bordered={false}
+            defaultActiveKey={defaultActiveKeyDados}
+            onChange={onColapse}
+          >
             {dadosDiarioBordo.map((dados, indexDiarioBordo) => {
               const { aulaId, titulo, pendente } = dados;
               const bordaCollapse = pendente
                 ? Base.LaranjaStatus
                 : Base.AzulBordaCollapse;
-
               return (
                 <PainelCollapse.Painel
                   key={aulaId}
@@ -127,7 +143,7 @@ const TabListaoDiarioBordoCollapses = () => {
                 </PainelCollapse.Painel>
               );
             })}
-          </PainelCollapse>
+          </PainelCollapseContainer>
         )}
       </Col>
     </Row>

@@ -46,7 +46,7 @@ const DataUltimaAtualizacaoDashboardInformacoesEscolares = props => {
 };
 
 DataUltimaAtualizacaoDashboardInformacoesEscolares.propTypes = {
-  anoLetivo: PropTypes.oneOfType(PropTypes.any),
+  anoLetivo: PropTypes.oneOfType([PropTypes.any]),
 };
 
 DataUltimaAtualizacaoDashboardInformacoesEscolares.defaultProps = {

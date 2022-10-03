@@ -1,3 +1,4 @@
+import { Col, Row } from 'antd';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import {
@@ -7,6 +8,8 @@ import {
   SelectComponent,
 } from '~/componentes';
 import { Cabecalho, NomeEstudanteLista } from '~/componentes-sgp';
+import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
+import { SGP_BUTTON_NOVO } from '~/componentes-sgp/filtro/idsCampos';
 import Button from '~/componentes/button';
 import Card from '~/componentes/card';
 import { Colors } from '~/componentes/colors';
@@ -20,7 +23,6 @@ import { erros } from '~/servicos/alertas';
 import history from '~/servicos/history';
 import ServicoEncaminhamentoAEE from '~/servicos/Paginas/Relatorios/AEE/ServicoEncaminhamentoAEE';
 import FiltroHelper from '~componentes-sgp/filtro/helper';
-import { BtnVoltarExcluirEncaminhamentoAEE } from '../Cadastro/encaminhamentoAEECadastro.css';
 import ModalAvisoNovoEncaminhamentoAEE from './Componentes/AvisoCadastro/modalAvisoCadastro';
 
 const EncaminhamentoAEELista = () => {
@@ -137,6 +139,7 @@ const EncaminhamentoAEELista = () => {
 
   useEffect(() => {
     validarValorPadraoAnoLetivo(listaAnosLetivo);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [consideraHistorico, listaAnosLetivo]);
 
   const obterAnosLetivos = useCallback(async () => {
@@ -157,6 +160,7 @@ const EncaminhamentoAEELista = () => {
 
     setListaAnosLetivo(anosLetivos);
     setCarregandoAnos(false);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [anoAtual, consideraHistorico]);
 
   useEffect(() => {
@@ -247,6 +251,7 @@ const EncaminhamentoAEELista = () => {
         setListaUes([]);
       }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dre, anoLetivo, consideraHistorico]);
 
   useEffect(() => {
@@ -347,6 +352,7 @@ const EncaminhamentoAEELista = () => {
         setListaTurmas([]);
       }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [anoLetivo, ue]);
 
   useEffect(() => {
@@ -485,29 +491,27 @@ const EncaminhamentoAEELista = () => {
   return (
     <>
       <ModalAvisoNovoEncaminhamentoAEE />
-      <Cabecalho pagina="Encaminhamento AEE" />
+      <Cabecalho pagina="Encaminhamento AEE">
+        <Row gutter={[8, 8]} type="flex">
+          <Col>
+            <BotaoVoltarPadrao onClick={() => onClickVoltar()} />
+          </Col>
+          <Col>
+            <Button
+              id={SGP_BUTTON_NOVO}
+              label="Novo Encaminhamento"
+              color={Colors.Roxo}
+              border
+              bold
+              onClick={onClickNovo}
+              disabled={somenteConsulta || !permissoesTela.podeIncluir}
+            />
+          </Col>
+        </Row>
+      </Cabecalho>
       <Card>
         <div className="col-md-12">
           <div className="row">
-            <div className="col-md-12 d-flex justify-content-end pb-4 justify-itens-end">
-              <BtnVoltarExcluirEncaminhamentoAEE
-                id="btn-voltar"
-                icon="arrow-left"
-                color={Colors.Azul}
-                border
-                className="mr-2"
-                onClick={onClickVoltar}
-              />
-              <Button
-                id="btn-novo-encaminhamento"
-                label="Novo Encaminhamento"
-                color={Colors.Roxo}
-                border
-                bold
-                onClick={onClickNovo}
-                disabled={somenteConsulta || !permissoesTela.podeIncluir}
-              />
-            </div>
             <div className="col-sm-12 mb-4">
               <CheckboxComponent
                 id="exibir-historico"

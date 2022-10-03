@@ -34,7 +34,7 @@ const InputNumberReadOnly = props => {
 InputNumberReadOnly.propTypes = {
   id: PropTypes.string,
   value: PropTypes.string,
-  style: PropTypes.oneOfType(PropTypes.object),
+  style: PropTypes.oneOfType([PropTypes.object]),
   disabled: PropTypes.bool,
   placeholder: PropTypes.string,
 };
@@ -44,7 +44,6 @@ InputNumberReadOnly.defaultProps = {
   value: '',
   style: {},
   disabled: false,
-  isDecimal: true,
   placeholder: '',
 };
 

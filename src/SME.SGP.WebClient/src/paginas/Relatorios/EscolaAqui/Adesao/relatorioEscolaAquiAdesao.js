@@ -1,13 +1,6 @@
-import React, { useState, useEffect, useCallback, useMemo } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 
-import {
-  Card,
-  Loader,
-  Button,
-  Colors,
-  SelectComponent,
-  RadioGroupButton,
-} from '~/componentes';
+import { Card, Loader, SelectComponent, RadioGroupButton } from '~/componentes';
 import { Cabecalho } from '~/componentes-sgp';
 
 import {
@@ -20,6 +13,7 @@ import {
 
 import { URL_HOME } from '~/constantes';
 import { OPCAO_TODOS } from '~/constantes/constantes';
+import BotoesAcaoRelatorio from '~/componentes-sgp/botoesAcaoRelatorio';
 
 const RelatorioEscolaAquiAdesao = () => {
   const [exibirLoader, setExibirLoader] = useState(false);
@@ -160,47 +154,19 @@ const RelatorioEscolaAquiAdesao = () => {
 
   return (
     <Loader loading={exibirLoader}>
-      <Cabecalho pagina="Relatório de adesão" />
+      <Cabecalho pagina="Relatório de adesão">
+        <BotoesAcaoRelatorio
+          onClickVoltar={voltar}
+          onClickCancelar={cancelar}
+          onClickGerar={gerar}
+          desabilitarBtnGerar={desabilitarBtnGerar}
+        />
+      </Cabecalho>
 
       <Card>
         <div className="col-md-12 pr-0">
-          <div className="row">
-            <div className="col-md-12 d-flex justify-content-end pb-4 justify-itens-end">
-              <Button
-                id="btn-voltar"
-                label="Voltar"
-                icon="arrow-left"
-                color={Colors.Azul}
-                border
-                className="mr-2"
-                onClick={voltar}
-              />
-              <Button
-                id="btn-cancelar"
-                label="Cancelar"
-                color={Colors.Roxo}
-                border
-                bold
-                className="mr-2"
-                onClick={cancelar}
-              />
-
-              <Button
-                id="btn-gerar"
-                icon="print"
-                label="Gerar"
-                color={Colors.Azul}
-                border
-                bold
-                className="mr-0"
-                onClick={gerar}
-                disabled={desabilitarBtnGerar}
-              />
-            </div>
-          </div>
-
           <div className="row pb-3">
-            <div className="col-sm-12 col-md-12 col-lg-6 col-xl-6 mb-2 pl-0">
+            <div className="col-sm-12 col-md-12 col-lg-6 col-xl-6 mb-2">
               <SelectComponent
                 label="DRE"
                 lista={listaDres}
@@ -213,7 +179,7 @@ const RelatorioEscolaAquiAdesao = () => {
                 showSearch
               />
             </div>
-            <div className="col-sm-12 col-md-12 col-lg-6 col-xl-6 mb-2 pl-0">
+            <div className="col-sm-12 col-md-12 col-lg-6 col-xl-6 mb-2">
               <SelectComponent
                 id="drop-ue"
                 label="Unidade Escolar (UE)"
@@ -230,7 +196,7 @@ const RelatorioEscolaAquiAdesao = () => {
           </div>
 
           <div className="row">
-            <div className="col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-2 pl-0">
+            <div className="col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-2">
               <RadioGroupButton
                 label="Listar usuários"
                 opcoes={opcoesListarUsuarios}

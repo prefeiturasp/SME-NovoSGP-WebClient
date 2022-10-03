@@ -36,6 +36,7 @@ const CriancasEstudantesComunicados = ({
     const valorAlunoEspecifico = validacaoTurma ? OPCAO_TODOS : undefined;
 
     form.setFieldValue(nomeCampo, valorAlunoEspecifico);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [turmas]);
 
   useEffect(() => {
@@ -58,6 +59,7 @@ const CriancasEstudantesComunicados = ({
       }
       dispatch(setExibirModalAlunos(true));
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [turmas, anoLetivo, dispatch]);
 
   useEffect(() => {
@@ -90,6 +92,7 @@ const CriancasEstudantesComunicados = ({
               form.setFieldValue('alunos', []);
               dispatch(setAlunosComunicados([]));
             }}
+            labelRequired={alunoEspecifico && alunoEspecifico !== OPCAO_TODOS}
           />
         </Loader>
       </div>

@@ -5,11 +5,14 @@ const setBreadcrumbManual = (path, breadcrumbName, parent) => {
   const rota = {
     path,
     breadcrumbName,
-    parent
-  }
+    parent,
+  };
   store.dispatch(setRotas(rota));
   store.dispatch(rotaAtiva({ path, breadcrumbName, parent }));
-  localStorage.setItem('rota-dinamica', `{"path":"${path}","breadcrumbName":"${breadcrumbName}", "parent": "${parent}" }`);
-}
+  localStorage.setItem(
+    'rota-dinamica',
+    `{"path":"${path}","breadcrumbName":"${breadcrumbName}", "parent": "${parent}" }`
+  );
+};
 
 export { setBreadcrumbManual };

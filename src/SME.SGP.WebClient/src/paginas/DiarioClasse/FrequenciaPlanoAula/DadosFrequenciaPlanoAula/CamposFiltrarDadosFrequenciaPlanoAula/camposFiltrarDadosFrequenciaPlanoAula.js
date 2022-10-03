@@ -25,7 +25,6 @@ const CamposFiltrarDadosFrequenciaPlanoAula = () => {
   const dispatch = useDispatch();
 
   const [bloquearProximo, setBloquearProximo] = useState(true);
-  const [veioCalendario, setVeioCalendario] = useState(true);
 
   const usuario = useSelector(store => store.usuario);
   const { turmaSelecionada } = usuario;
@@ -74,7 +73,7 @@ const CamposFiltrarDadosFrequenciaPlanoAula = () => {
   const valorPadrao = useMemo(() => {
     const ano = turmaSelecionada.anoLetivo;
     const dataParcial = moment().format('MM-DD');
-    const dataInteira = moment(`${dataParcial}-${ano}`);
+    const dataInteira = moment(`${dataParcial}-${ano}`, 'MM-DD-YYYY');
     return dataInteira;
   }, [turmaSelecionada.anoLetivo]);
 
@@ -116,6 +115,7 @@ const CamposFiltrarDadosFrequenciaPlanoAula = () => {
       setDiasParaHabilitar();
       dispatch(setExibirLoaderFrequenciaPlanoAula(false));
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [codigoComponenteCurricular, componenteCurricular, dispatch]);
 
   const obterListaComponenteCurricular = useCallback(async () => {
@@ -161,12 +161,14 @@ const CamposFiltrarDadosFrequenciaPlanoAula = () => {
     if (codigoComponenteCurricular && turmaSelecionada?.turma) {
       obterDatasDeAulasDisponiveis();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [codigoComponenteCurricular]);
 
   useEffect(() => {
     if (atualizarDatas) {
       obterDatasDeAulasDisponiveis();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [atualizarDatas]);
 
   // Quando tem valor do componente curricular no redux vai setar o id no componente select!
@@ -268,12 +270,11 @@ const CamposFiltrarDadosFrequenciaPlanoAula = () => {
   }, [aulaId]);
 
   const validaSeTemIdAula = useCallback(
-    async data => {
-      if (!veioCalendario && dadosAulaFrequencia?.aulaId) {
+    async (data, dadosAulaCalendario) => {
+      if (dadosAulaCalendario) {
         // Quando usuário pode visualizar uma aula por data selecionada!
-        dispatch(setAulaIdFrequenciaPlanoAula(dadosAulaFrequencia.aulaId));
-        dispatch(setAulaIdPodeEditar(dadosAulaFrequencia.podeEditarAula));
-        setVeioCalendario(true);
+        dispatch(setAulaIdFrequenciaPlanoAula(dadosAulaCalendario?.aulaId));
+        dispatch(setAulaIdPodeEditar(dadosAulaCalendario?.podeEditarAula));
       } else {
         const aulaDataSelecionada = await obterAulaSelecionada(data);
         if (aulaDataSelecionada && aulaDataSelecionada.aulas.length === 1) {
@@ -295,11 +296,11 @@ const CamposFiltrarDadosFrequenciaPlanoAula = () => {
         }
       }
     },
-    [obterAulaSelecionada, dispatch, dadosAulaFrequencia, veioCalendario]
+    [obterAulaSelecionada, dispatch]
   );
 
   const onChangeData = useCallback(
-    async data => {
+    async (data, dadosAulaCalendario) => {
       let salvou = true;
       if (modoEdicaoFrequencia || modoEdicaoPlanoAula) {
         const confirmarParaSalvar = await pergutarParaSalvar();
@@ -310,7 +311,7 @@ const CamposFiltrarDadosFrequenciaPlanoAula = () => {
 
       if (salvou) {
         resetarInfomacoes();
-        await validaSeTemIdAula(data);
+        await validaSeTemIdAula(data, dadosAulaCalendario);
         dispatch(setDataSelecionadaFrequenciaPlanoAula(data));
       }
     },
@@ -344,8 +345,7 @@ const CamposFiltrarDadosFrequenciaPlanoAula = () => {
       dadosAulaFrequencia.disciplinaId &&
       listaComponenteCurricular &&
       listaComponenteCurricular.length &&
-      !codigoComponenteCurricular &&
-      !veioCalendario
+      !codigoComponenteCurricular
     ) {
       onChangeComponenteCurricular(String(dadosAulaFrequencia.disciplinaId));
     }
@@ -355,11 +355,14 @@ const CamposFiltrarDadosFrequenciaPlanoAula = () => {
       dadosAulaFrequencia.dia &&
       diasParaHabilitar &&
       diasParaHabilitar.length &&
-      !dataSelecionada &&
-      !veioCalendario
+      !dataSelecionada
     ) {
-      onChangeData(window.moment(dadosAulaFrequencia.dia));
+      onChangeData(window.moment(dadosAulaFrequencia.dia), {
+        ...dadosAulaFrequencia,
+      });
+      dispatch(salvarDadosAulaFrequencia());
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     dadosAulaFrequencia,
     listaComponenteCurricular,
@@ -368,7 +371,6 @@ const CamposFiltrarDadosFrequenciaPlanoAula = () => {
     onChangeComponenteCurricular,
     onChangeData,
     codigoComponenteCurricular,
-    veioCalendario,
   ]);
 
   const onClickProximaAula = async () => {

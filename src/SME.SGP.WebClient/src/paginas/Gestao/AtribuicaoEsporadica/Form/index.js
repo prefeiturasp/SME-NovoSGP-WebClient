@@ -37,6 +37,7 @@ import {
 import { validaSeObjetoEhNuloOuVazio } from '~/utils';
 
 import { Row } from './styles';
+import { SGP_BUTTON_ALTERAR_CADASTRAR } from '~/componentes-sgp/filtro/idsCampos';
 
 function AtribuicaoEsporadicaForm({ match }) {
   const [carregando, setCarregando] = useState(false);
@@ -84,6 +85,8 @@ function AtribuicaoEsporadicaForm({ match }) {
   const labelBotaoPrincipal = match?.params?.id ? 'Alterar' : 'Cadastrar';
   const validacoes = () => {
     return Yup.object({
+      ueId: momentSchema.required('Campo obrigatório'),
+      dreId: momentSchema.required('Campo obrigatório'),
       dataInicio: momentSchema.required('Campo obrigatório'),
       dataFim: momentSchema.required('Campo obrigatório'),
       professorRf: Yup.number()
@@ -335,21 +338,20 @@ function AtribuicaoEsporadicaForm({ match }) {
 
   return (
     <>
-      <Cabecalho pagina="Atribuição" />
       <Loader loading={carregando}>
-        <Card>
-          <Formik
-            enableReinitialize
-            initialValues={valoresIniciais}
-            validationSchema={validacoes}
-            onSubmit={valores => onSubmitFormulario(valores)}
-            validate={valores => validaFormulario(valores)}
-            ref={refFormik => setRefForm(refFormik)}
-            validateOnBlur
-            validateOnChange
-          >
-            {form => (
-              <Form>
+        <Formik
+          enableReinitialize
+          initialValues={valoresIniciais}
+          validationSchema={validacoes}
+          onSubmit={valores => onSubmitFormulario(valores)}
+          validate={valores => validaFormulario(valores)}
+          ref={refFormik => setRefForm(refFormik)}
+          validateOnBlur
+          validateOnChange
+        >
+          {form => (
+            <>
+              <Cabecalho pagina="Atribuição">
                 <ButtonGroup
                   form={form}
                   permissoesTela={
@@ -362,116 +364,127 @@ function AtribuicaoEsporadicaForm({ match }) {
                   onClickVoltar={() => onClickVoltar()}
                   onClickExcluir={() => onClickExcluir(form)}
                   modoEdicao={modoEdicao}
+                  idBotaoPrincipal={SGP_BUTTON_ALTERAR_CADASTRAR}
                 />
-                <Row className="row mb-2">
-                  <CheckboxComponent
-                    name="exibirHistorico"
-                    form={form}
-                    label="Exibir histórico?"
-                    onChangeCheckbox={onChangeConsideraHistorico}
-                    checked={consideraHistorico}
-                    disabled={listaAnosLetivo.length === 1}
-                  />
-                </Row>
-                <Row className="row">
-                  <Grid cols={2}>
-                    <SelectComponent
-                      name="anoLetivo"
-                      label="Ano Letivo"
+              </Cabecalho>
+              <Card>
+                <Form className="col-md-12">
+                  <Row className="row mb-2">
+                    <CheckboxComponent
+                      name="exibirHistorico"
                       form={form}
-                      lista={listaAnosLetivo}
-                      valueOption="valor"
-                      valueText="desc"
-                      disabled={
-                        !consideraHistorico || listaAnosLetivo?.length === 1
-                      }
-                      onChange={onChangeAnoLetivo}
-                      valueSelect={anoLetivo}
-                      placeholder="Ano letivo"
+                      label="Exibir histórico?"
+                      onChangeCheckbox={onChangeConsideraHistorico}
+                      checked={consideraHistorico}
+                      disabled={listaAnosLetivo.length === 1}
                     />
-                  </Grid>
-                  <Grid cols={5}>
-                    <DreDropDown
-                      label="Diretoria Regional de Educação (DRE)"
-                      form={form}
-                      onChange={(valor, lista) => {
-                        setDreId(valor);
-                        setListaDres(lista);
-                        setUeCodigo('');
-                        form.setFieldValue('ueId', '');
-                      }}
-                      desabilitado={somenteConsulta}
-                    />
-                  </Grid>
-                  <Grid cols={5}>
-                    <UeDropDown
-                      label="Unidade Escolar (UE)"
-                      dreId={dreId}
-                      form={form}
-                      onChange={(codigo, infantil, lista) => {
-                        setUeCodigo(codigo);
-                        setEhInfantil(infantil);
-                        setListaUes(lista);
-                      }}
-                      desabilitado={somenteConsulta}
-                      preencherLista={setListaUes}
-                    />
-                  </Grid>
-                </Row>
-                <Row className="row">
-                  <Grid cols={8}>
-                    <Row className="row">
-                      <Localizador
-                        dreId={form.values.dreId}
-                        anoLetivo={form.values.anoLetivo}
-                        showLabel
+                  </Row>
+                  <Row className="row">
+                    <Grid cols={2}>
+                      <SelectComponent
+                        name="anoLetivo"
+                        label="Ano Letivo"
                         form={form}
-                        onChange={() => null}
-                        desabilitado={somenteConsulta || valoresIniciais.id}
+                        lista={listaAnosLetivo}
+                        valueOption="valor"
+                        valueText="desc"
+                        disabled={
+                          !consideraHistorico || listaAnosLetivo?.length === 1
+                        }
+                        onChange={onChangeAnoLetivo}
+                        valueSelect={anoLetivo}
+                        placeholder="Ano letivo"
+                        labelRequired
                       />
-                    </Row>
-                  </Grid>
-                  <Grid cols={2}>
-                    <CampoData
-                      placeholder="Selecione"
-                      label="Data Início"
-                      form={form}
-                      name="dataInicio"
-                      formatoData="DD/MM/YYYY"
-                      desabilitado={somenteConsulta}
-                      desabilitarData={desabilitarData}
-                      valorPadrao={valorPadrao}
-                    />
-                  </Grid>
-                  <Grid cols={2}>
-                    <CampoData
-                      placeholder="Selecione"
-                      label="Data Fim"
-                      form={form}
-                      name="dataFim"
-                      formatoData="DD/MM/YYYY"
-                      desabilitado={somenteConsulta}
-                      desabilitarData={desabilitarData}
-                      valorPadrao={valorPadrao}
-                    />
-                  </Grid>
-                </Row>
-              </Form>
-            )}
-          </Formik>
-          {auditoria && (
-            <div className="ml-n3">
-              <Auditoria
-                criadoEm={auditoria.criadoEm}
-                criadoPor={auditoria.criadoPor}
-                criadoRf={auditoria.criadoRf}
-                alteradoPor={auditoria.alteradoPor}
-                alteradoEm={auditoria.alteradoEm}
-                alteradoRf={auditoria.alteradoRf}
-              />
-            </div>
+                    </Grid>
+                    <Grid cols={5}>
+                      <DreDropDown
+                        label="Diretoria Regional de Educação (DRE)"
+                        form={form}
+                        onChange={(valor, lista) => {
+                          setDreId(valor);
+                          setListaDres(lista);
+                          setUeCodigo('');
+                          form.setFieldValue('ueId', '');
+                        }}
+                        desabilitado={somenteConsulta}
+                        labelRequired
+                      />
+                    </Grid>
+                    <Grid cols={5}>
+                      <UeDropDown
+                        label="Unidade Escolar (UE)"
+                        dreId={dreId}
+                        form={form}
+                        onChange={(codigo, infantil, lista) => {
+                          setUeCodigo(codigo);
+                          setEhInfantil(infantil);
+                          setListaUes(lista);
+                        }}
+                        desabilitado={somenteConsulta}
+                        preencherLista={setListaUes}
+                        labelRequired
+                      />
+                    </Grid>
+                  </Row>
+                  <Row className="row">
+                    <Grid cols={8}>
+                      <Row className="row">
+                        <Localizador
+                          dreId={form.values.dreId}
+                          anoLetivo={form.values.anoLetivo}
+                          showLabel
+                          form={form}
+                          onChange={() => null}
+                          desabilitado={somenteConsulta || valoresIniciais.id}
+                          labelRequired
+                        />
+                      </Row>
+                    </Grid>
+                    <Grid cols={2}>
+                      <CampoData
+                        placeholder="Selecione"
+                        label="Data Início"
+                        form={form}
+                        name="dataInicio"
+                        formatoData="DD/MM/YYYY"
+                        desabilitado={somenteConsulta}
+                        desabilitarData={desabilitarData}
+                        valorPadrao={valorPadrao}
+                        labelRequired
+                      />
+                    </Grid>
+                    <Grid cols={2}>
+                      <CampoData
+                        placeholder="Selecione"
+                        label="Data Fim"
+                        form={form}
+                        name="dataFim"
+                        formatoData="DD/MM/YYYY"
+                        desabilitado={somenteConsulta}
+                        desabilitarData={desabilitarData}
+                        valorPadrao={valorPadrao}
+                        labelRequired
+                      />
+                    </Grid>
+                  </Row>
+                  {auditoria && (
+                    <div className="row">
+                      <Auditoria
+                        criadoEm={auditoria.criadoEm}
+                        criadoPor={auditoria.criadoPor}
+                        criadoRf={auditoria.criadoRf}
+                        alteradoPor={auditoria.alteradoPor}
+                        alteradoEm={auditoria.alteradoEm}
+                        alteradoRf={auditoria.alteradoRf}
+                      />
+                    </div>
+                  )}
+                </Form>
+              </Card>
+            </>
           )}
-        </Card>
+        </Formik>
       </Loader>
     </>
   );

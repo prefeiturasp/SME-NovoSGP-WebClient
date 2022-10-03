@@ -14,6 +14,7 @@ import { erros } from '~/servicos/alertas';
 import ServicoConselhoClasse from '~/servicos/Paginas/ConselhoClasse/ServicoConselhoClasse';
 import ListasCarregar from './listasCarregar';
 import { valorNuloOuVazio } from '~/utils/funcoes/gerais';
+import situacaoMatriculaAluno from '~/dtos/situacaoMatriculaAluno';
 
 const ListasNotasConceitos = props => {
   const { bimestreSelecionado } = props;
@@ -54,6 +55,7 @@ const ListasNotasConceitos = props => {
     tipoNota,
     media,
     alunoDesabilitado,
+    conselhoClasseAlunoId,
   } = dadosPrincipaisConselhoClasse;
 
   const [exibir, setExibir] = useState(false);
@@ -111,8 +113,6 @@ const ListasNotasConceitos = props => {
   };
 
   const habilitaConselhoClasse = dados => {
-    const { conselhoClasseAlunoId } = dadosPrincipaisConselhoClasse;
-
     let notasFechamentosPreenchidas = true;
     dados.notasConceitos.map(notasConceitos =>
       notasConceitos.componentesCurriculares.map(componentesCurriculares =>
@@ -136,12 +136,30 @@ const ListasNotasConceitos = props => {
       })
     );
 
-    const alunoDentroDoPeriodoDoBimestre = alunoDentroDoPeriodoDoBimestreOuFechamento();
+    let validarDataSituacao = false;
+    if (dadosAlunoObjectCard?.situacaoCodigo) {
+      switch (dadosAlunoObjectCard?.situacaoCodigo) {
+        case situacaoMatriculaAluno.Ativo:
+        case situacaoMatriculaAluno.PendenteRematricula:
+        case situacaoMatriculaAluno.Rematriculado:
+        case situacaoMatriculaAluno.SemContinuidade:
+          validarDataSituacao = false;
+          break;
+        default:
+          validarDataSituacao = true;
+          break;
+      }
+    }
+
+    let alunoDentroDoPeriodoDoBimestre = true;
+    if (validarDataSituacao) {
+      alunoDentroDoPeriodoDoBimestre = alunoDentroDoPeriodoDoBimestreOuFechamento();
+    }
     const periodoAbertoOuEmFechamento = estaNoPeriodoOuFechamento();
 
     let emEdicao = false;
     if (
-      (!conselhoClasseAlunoId && conselhoClasseAlunoId !== null) &&
+      !conselhoClasseAlunoId &&
       notasFechamentosPreenchidas &&
       alunoDentroDoPeriodoDoBimestre &&
       periodoAbertoOuEmFechamento
@@ -149,28 +167,6 @@ const ListasNotasConceitos = props => {
       emEdicao = true;
     }
     dispatch(setConselhoClasseEmEdicao(emEdicao));
-  };
-
-  const habilitaConselhoClassePorNotasPosConselho = dados => {
-    let notasPosConselhoPreenchidas = true;
-    if (!dados.temConselhoClasseAluno) {
-      dados.notasConceitos.map(notasConceitos =>
-        notasConceitos.componentesCurriculares.map(componentesCurriculares => {
-          if (valorNuloOuVazio(componentesCurriculares.notaPosConselho.nota)) {
-            notasPosConselhoPreenchidas = false;
-          }
-          return componentesCurriculares;
-        })
-      );
-      dados.notasConceitos.map(notasConceitos =>
-        notasConceitos.componenteRegencia?.componentesCurriculares.map(cc => {
-          if (valorNuloOuVazio(cc.notaPosConselho.nota)) {
-            notasPosConselhoPreenchidas = false;
-          }
-          return cc;
-        })
-      );
-    }
   };
 
   const obterDadosLista = useCallback(async () => {
@@ -194,10 +190,10 @@ const ListasNotasConceitos = props => {
       setExibir(true);
       if (bimestreSelecionado?.valor !== 'final')
         habilitaConselhoClasse(resultado.data);
-      habilitaConselhoClassePorNotasPosConselho(resultado.data);
     } else {
       setExibir(false);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     alunoCodigo,
     conselhoClasseId,

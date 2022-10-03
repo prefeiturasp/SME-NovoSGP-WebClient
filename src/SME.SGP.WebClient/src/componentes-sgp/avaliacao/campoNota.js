@@ -1,6 +1,5 @@
 import PropTypes from 'prop-types';
 import React, { useCallback, useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
 import CampoNumero from '~/componentes/campoNumero';
 import { erros } from '~/servicos/alertas';
 import api from '~/servicos/api';
@@ -19,16 +18,12 @@ const CampoNota = props => {
     step,
   } = props;
 
-  const modoEdicaoGeralNotaFinal = useSelector(
-    store => store.notasConceitos.modoEdicaoGeralNotaFinal
-  );
-
   const [notaValorAtual, setNotaValorAtual] = useState();
   const [notaAlterada, setNotaAlterada] = useState(false);
 
   const validaSeTeveAlteracao = useCallback((notaOriginal, notaNova) => {
     if (
-      notaOriginal != undefined &&
+      notaOriginal !== undefined &&
       notaOriginal != null &&
       notaOriginal.trim() !== ''
     ) {

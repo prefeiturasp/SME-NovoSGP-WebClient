@@ -6,10 +6,9 @@ import {
   SelectComponent,
 } from '~/componentes';
 import { Cabecalho } from '~/componentes-sgp';
-import Button from '~/componentes/button';
+import BotoesAcaoRelatorio from '~/componentes-sgp/botoesAcaoRelatorio';
 import CampoNumero from '~/componentes/campoNumero';
 import Card from '~/componentes/card';
-import { Colors } from '~/componentes/colors';
 import { OPCAO_TODOS } from '~/constantes/constantes';
 import { URL_HOME } from '~/constantes/url';
 import { erros, sucesso } from '~/servicos/alertas';
@@ -218,43 +217,17 @@ const RelatorioUsuarios = () => {
 
   return (
     <>
-      <Cabecalho pagina="Relatório de usuários" />
       <Loader loading={carregandoGeral}>
+        <Cabecalho pagina="Relatório de usuários">
+          <BotoesAcaoRelatorio
+            onClickVoltar={onClickVoltar}
+            onClickCancelar={onClickCancelar}
+            onClickGerar={onClickGerar}
+            desabilitarBtnGerar={desabilitarBtnGerar}
+          />
+        </Cabecalho>
         <Card>
           <div className="col-md-12">
-            <div className="row">
-              <div className="col-md-12 d-flex justify-content-end pb-4">
-                <Button
-                  id="btn-voltar"
-                  label="Voltar"
-                  icon="arrow-left"
-                  color={Colors.Azul}
-                  border
-                  className="mr-2"
-                  onClick={onClickVoltar}
-                />
-                <Button
-                  id="btn-cancelar"
-                  label="Cancelar"
-                  color={Colors.Roxo}
-                  border
-                  bold
-                  className="mr-3"
-                  onClick={onClickCancelar}
-                />
-                <Button
-                  id="btn-gerar"
-                  icon="print"
-                  label="Gerar"
-                  color={Colors.Azul}
-                  border
-                  bold
-                  className="mr-2"
-                  onClick={onClickGerar}
-                  disabled={desabilitarBtnGerar}
-                />
-              </div>
-            </div>
             <div className="row">
               <div className="col-sm-12 col-md-12 col-lg-6 col-xl-6 mb-2">
                 <SelectComponent

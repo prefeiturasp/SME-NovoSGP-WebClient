@@ -121,14 +121,16 @@ const ListaFinal = props => {
   const obterValorNotaConceito = valor => {
     const ehNota = Number(notasConceitos.Notas) === tipoNota;
     if (valor && !ehNota && listaTiposConceitos && listaTiposConceitos.length) {
-      const conceito = listaTiposConceitos.find(item => item.id == valor);
+      const conceito = listaTiposConceitos.find(
+        item => String(item.id) === String(valor)
+      );
       return conceito ? conceito.valor : '';
     }
     return valor;
   };
 
   const montarValoresNotasConceitos = notasFechamentos => {
-    const ehEja = modalidade === modalidadeDto.EJA;
+    const ehEja = Number(modalidade) === modalidadeDto.EJA;
 
     const primeiroBimestre = notasFechamentos.find(item => item.bimestre === 1);
     const segundoBimestre = notasFechamentos.find(item => item.bimestre === 2);
