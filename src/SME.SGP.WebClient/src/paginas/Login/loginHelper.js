@@ -24,7 +24,7 @@ class LoginHelper {
 
     if (!autenticacao.sucesso) return autenticacao;
 
-    const rf = login.usuario;
+    const rf = login.usuario || login.login;
 
     this.dispatch(
       setLoginAcessoAdmin({
