@@ -79,7 +79,9 @@ const BotoesAcoesPlanoAEE = props => {
 
   const desabilitarBotaoSalvar =
     planoAEEDados?.situacao !== situacaoPlanoAEE.Expirado &&
-    (desabilitarCamposPlanoAEE || !questionarioDinamicoEmEdicao);
+    (desabilitarCamposPlanoAEE ||
+      !planoAEEDados?.questionarioId ||
+      (planoAeeId && !questionarioDinamicoEmEdicao));
 
   const desabilitarBotaoCancelar =
     desabilitarCamposPlanoAEE ||
