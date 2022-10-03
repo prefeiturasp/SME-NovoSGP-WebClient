@@ -4,14 +4,14 @@ import t from 'prop-types';
 // Componentes
 import { Alert } from '~/componentes';
 
-function AlertaPeriodoEncerrado({ exibir }) {
+function AlertaPeriodoEncerrado({ exibir, descricaoMensagem }) {
   return (
     exibir && (
       <Alert
         alerta={{
           tipo: 'warning',
           id: 'alerta-perido-fechamento',
-          mensagem:
+          mensagem: descricaoMensagem ||
             'Apenas é possível consultar este registro pois o período não está em aberto.',
           estiloTitulo: { fontSize: '18px' },
         }}
