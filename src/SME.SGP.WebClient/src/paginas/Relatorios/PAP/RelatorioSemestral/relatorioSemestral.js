@@ -123,10 +123,8 @@ const RelatorioSemestral = () => {
       codigoAluno,
       turma
     ).catch(e => erros(e));
-    if (retorno && retorno.data) {
-      return retorno.data;
-    }
-    return 0;
+
+    return retorno?.data;
   };
 
   const onChangeAlunoSelecionado = async aluno => {

@@ -101,7 +101,9 @@ const Filtro = () => {
   const periodosStore = useSelector(state => state.filtro.periodos);
   const [periodos, setPeriodos] = useState(periodosStore);
   const [periodoSelecionado, setPeriodoSelecionado] = useState(
-    turmaUsuarioSelecionada ? turmaUsuarioSelecionada.periodo : ''
+    turmaUsuarioSelecionada
+      ? turmaUsuarioSelecionada.periodo || undefined
+      : undefined
   );
 
   const dresStore = useSelector(state => state.filtro.dres);
@@ -561,7 +563,7 @@ const Filtro = () => {
     };
 
     if (!anoLetivoSelecionado || !modalidadeSelecionada) {
-      setPeriodoSelecionado();
+      setPeriodoSelecionado(undefined);
       setDreSelecionada();
       setCampoPeriodoDesabilitado(true);
       setCampoDreDesabilitado(true);
@@ -586,7 +588,7 @@ const Filtro = () => {
     };
 
     if (!anoLetivoSelecionado || !modalidadeSelecionada) {
-      setPeriodoSelecionado();
+      setPeriodoSelecionado(undefined);
       setDreSelecionada();
       setCampoPeriodoDesabilitado(true);
       setCampoDreDesabilitado(true);
@@ -673,7 +675,7 @@ const Filtro = () => {
 
   useEffect(() => {
     if (periodos && periodos.length === 1)
-      setPeriodoSelecionado(periodos[0].valor);
+      setPeriodoSelecionado(periodos[0].valor || undefined);
   }, [periodos]);
 
   useEffect(() => {
@@ -701,7 +703,7 @@ const Filtro = () => {
     setAnoLetivoSelecionado('');
     setModalidadeSelecionada('');
     setDreSelecionada('');
-    setPeriodoSelecionado('');
+    setPeriodoSelecionado(undefined);
     setUnidadeEscolarSelecionada('');
     setTurmaSelecionada('');
     setAplicouFiltro(false);
@@ -991,7 +993,7 @@ const Filtro = () => {
   const aoTrocarModalidade = valor => {
     if (valor !== modalidadeSelecionada) {
       setDreSelecionada();
-      setPeriodoSelecionado();
+      setPeriodoSelecionado(undefined);
       setAplicouFiltro(false);
       if (turmas) {
         setTurmaSelecionada('');
@@ -1009,7 +1011,7 @@ const Filtro = () => {
       setAplicouFiltro(false);
     }
 
-    setPeriodoSelecionado(periodo);
+    setPeriodoSelecionado(periodo || undefined);
   };
 
   const aoTrocarDre = dre => {
@@ -1046,7 +1048,7 @@ const Filtro = () => {
 
     dispatch(removerTurma());
     setModalidadeSelecionada();
-    setPeriodoSelecionado();
+    setPeriodoSelecionado(undefined);
     setDreSelecionada();
     setUnidadeEscolarSelecionada();
     setTurmaSelecionada();
@@ -1082,7 +1084,7 @@ const Filtro = () => {
         periodoSelecionado &&
         turmaUsuarioSelecionada.periodo != periodoSelecionado
       )
-        setPeriodoSelecionado(turmaUsuarioSelecionada.periodo);
+        setPeriodoSelecionado(turmaUsuarioSelecionada.periodo || undefined);
 
       if (
         turmaUsuarioSelecionada.dre &&

@@ -1,5 +1,4 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
 import { Switch } from 'react-router-dom';
 import shortid from 'shortid';
 import { montarContextProviders } from '~/rotas/rotaMontarContextProviders';
@@ -9,10 +8,9 @@ import BreadcrumbSgp from './breadcrumb-sgp';
 import Mensagens from './mensagens/mensagens';
 import ModalConfirmacao from './modalConfirmacao';
 import TempoExpiracaoSessao from './tempoExpiracaoSessao/tempoExpiracaoSessao';
+import Versao from './versao';
 
 const Conteudo = () => {
-  const { versao } = useSelector(store => store.sistema);
-
   const rotasSemContextProvider = rotasArray.filter(
     r => !r?.contextProviderName
   );
@@ -57,8 +55,7 @@ const Conteudo = () => {
         style={{ bottom: 0, position: 'relative', padding: '1rem 1rem' }}
       >
         <div className="col-md-12">
-          {!versao ? '' : <strong>{versao}&nbsp;</strong>} - Sistema homologado
-          para navegadores: Google Chrome e Firefox
+          <Versao />
         </div>
       </div>
     </div>

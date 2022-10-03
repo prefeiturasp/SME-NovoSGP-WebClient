@@ -41,7 +41,7 @@ export default function usuario(state = inicial, action) {
         draft.turmasUsuario = action.payload;
         break;
       case '@usuario/salvarLogin':
-        draft.rf = action.payload.rf.trim();
+        draft.rf = action.payload.rf.trim() || draft.rf;
         draft.token = action.payload.token;
         draft.dataLogin = new Date();
         draft.logado = true;

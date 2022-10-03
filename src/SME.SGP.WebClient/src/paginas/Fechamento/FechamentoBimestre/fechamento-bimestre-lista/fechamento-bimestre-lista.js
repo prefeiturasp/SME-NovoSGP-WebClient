@@ -317,7 +317,9 @@ const FechamentoBimestreLista = props => {
                                 }
                                 placement="top"
                               >
-                                <div className="d-flex justify-content-end ml-3">
+                              {
+                                situacaoFechamento !== situacaoFechamentoDto.NaoProcessado ?                  
+                                <div className="d-flex justify-content-end ml-3">                   
                                   <BtbAnotacao
                                     className={
                                       item.temAnotacao ? 'btn-com-anotacao' : ''
@@ -327,6 +329,8 @@ const FechamentoBimestreLista = props => {
                                     <i className="fas fa-pen" />
                                   </BtbAnotacao>
                                 </div>
+                                : ''
+                              }
                               </Tooltip>
                             ) : (
                               ''
@@ -340,7 +344,7 @@ const FechamentoBimestreLista = props => {
                         }`}
                       >
                         {ehSintese ? (
-                          item.sintese
+                          item.sintese 
                         ) : ehRegencia && item.notas ? (
                           <BotaoExpandir
                             index={index}
@@ -356,11 +360,15 @@ const FechamentoBimestreLista = props => {
                             )
                           )
                         ) : null}
-                        {item?.notas?.length && item.notas[0].emAprovacao && (
-                          <Tooltip title="Aguardando aprovação">
-                            <MarcadorTriangulo />
-                          </Tooltip>
-                        )}
+
+                        {!ehSintese ? (
+                          item?.notas?.length && item.notas[0]?.emAprovacao && (
+                            <Tooltip title="Aguardando aprovação">
+                              <MarcadorTriangulo />
+                            </Tooltip>
+                          )) : ''
+                        }
+                        
                       </td>
                       <td
                         className={`text-center ${
