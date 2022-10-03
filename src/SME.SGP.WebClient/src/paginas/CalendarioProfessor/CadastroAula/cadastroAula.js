@@ -341,7 +341,6 @@ function CadastroDeAula({ match, location }) {
           )
           .then(respostaGrade => {
             setDesabilitarBtnSalvar(false);
-            console.log(respostaGrade.data, 'respostaGrade.data');
             if (respostaGrade.status === 200) {
               const { grade } = respostaGrade.data;
               if (grade) {
