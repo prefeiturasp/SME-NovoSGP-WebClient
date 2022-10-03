@@ -446,7 +446,6 @@ const RelatorioParecerConclusivo = () => {
     await setCiclo();
     await setAno();
     await setParecerConclusivoId();
-    await setAnoLetivo(null);
     await setAnoLetivo(anoAtual);
     await setFormato('1');
   };
