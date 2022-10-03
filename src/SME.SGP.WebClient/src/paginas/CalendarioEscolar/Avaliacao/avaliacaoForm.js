@@ -12,9 +12,9 @@ import Button from '~/componentes/button';
 import RadioGroupButton from '~/componentes/radioGroupButton';
 import CampoTexto from '~/componentes/campoTexto';
 import SelectComponent from '~/componentes/select';
-import { Colors, Label, Loader } from '~/componentes';
+import { Auditoria, Colors, Label, Loader } from '~/componentes';
 import history from '~/servicos/history';
-import { Div, Badge, InseridoAlterado } from './avaliacao.css';
+import { Div, Badge } from './avaliacao.css';
 import RotasDTO from '~/dtos/rotasDto';
 import ServicoAvaliacao from '~/servicos/Paginas/Calendario/ServicoAvaliacao';
 import { erro, sucesso, confirmar } from '~/servicos/alertas';
@@ -79,12 +79,7 @@ const AvaliacaoForm = ({ match, location }) => {
   };
 
   const [idAvaliacao, setIdAvaliacao] = useState('');
-  const [inseridoAlterado, setInseridoAlterado] = useState({
-    alteradoEm: '',
-    alteradoPor: '',
-    criadoEm: '',
-    criadoPor: '',
-  });
+  const [auditoriaAvaliacao, setAuditoriaAvaliacao] = useState({});
 
   const aoTrocarCampos = () => {
     if (!modoEdicao) {
@@ -496,12 +491,7 @@ const AvaliacaoForm = ({ match, location }) => {
         setImportado(avaliacao.data.importado);
         setDadosAvaliacao({ ...avaliacao.data, tipoAvaliacaoId, importado });
         setDescricao(avaliacao.data.descricao);
-        setInseridoAlterado({
-          alteradoEm: avaliacao.data.alteradoEm,
-          alteradoPor: `${avaliacao.data.alteradoPor} (${avaliacao.data.alteradoRF})`,
-          criadoEm: avaliacao.data.criadoEm,
-          criadoPor: `${avaliacao.data.criadoPor} (${avaliacao.data.criadoRF})`,
-        });
+        setAuditoriaAvaliacao(avaliacao.data);
         setDentroPeriodo(avaliacao.data.dentroPeriodo);
         setPodeEditarAvaliacao(avaliacao.data.podeEditarAvaliacao);
         setAtividadesRegencia(avaliacao.data.atividadesRegencia);
@@ -650,8 +640,8 @@ const AvaliacaoForm = ({ match, location }) => {
             initialValues={dadosAvaliacao}
             onSubmit={dados => cadastrarAvaliacao(dados)}
             validationSchema={validacoes}
-            validateOnBlur={false}
-            validateOnChange={false}
+            validateOnBlur
+            validateOnChange
           >
             {form => (
               <>
@@ -897,29 +887,14 @@ const AvaliacaoForm = ({ match, location }) => {
                   </Form>
                   <Div className="row">
                     <Grid cols={12}>
-                      <InseridoAlterado className="mt-4">
-                        {inseridoAlterado.criadoPor &&
-                        inseridoAlterado.criadoEm ? (
-                          <p className="pt-2">
-                            INSERIDO por {inseridoAlterado.criadoPor} em{' '}
-                            {window.moment(inseridoAlterado.criadoEm).format()}
-                          </p>
-                        ) : (
-                          ''
-                        )}
-
-                        {inseridoAlterado.alteradoPor &&
-                        inseridoAlterado.alteradoEm ? (
-                          <p>
-                            ALTERADO por {inseridoAlterado.alteradoPor} em{' '}
-                            {window
-                              .moment(inseridoAlterado.alteradoEm)
-                              .format()}
-                          </p>
-                        ) : (
-                          ''
-                        )}
-                      </InseridoAlterado>
+                      <Auditoria
+                        criadoPor={auditoriaAvaliacao?.criadoPor}
+                        criadoEm={auditoriaAvaliacao?.criadoEm}
+                        alteradoPor={auditoriaAvaliacao?.alteradoPor}
+                        alteradoEm={auditoriaAvaliacao?.alteradoEm}
+                        alteradoRf={auditoriaAvaliacao?.alteradoRF}
+                        criadoRf={auditoriaAvaliacao?.criadoRF}
+                      />
                     </Grid>
                   </Div>
                 </Card>
