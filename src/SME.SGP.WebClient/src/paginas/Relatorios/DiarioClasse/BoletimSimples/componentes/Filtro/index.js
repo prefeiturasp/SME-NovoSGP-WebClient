@@ -143,7 +143,6 @@ const Filtros = ({ onFiltrar, filtrou, setFiltrou, cancelou, setCancelou }) => {
 
   const obterAnosLetivos = useCallback(async () => {
     setCarregandoAnosLetivos(true);
-
     const anosLetivos = await FiltroHelper.obterAnosLetivos({
       consideraHistorico,
     });
@@ -208,10 +207,11 @@ const Filtros = ({ onFiltrar, filtrou, setFiltrou, cancelou, setCancelou }) => {
   }, [anoLetivo]);
 
   useEffect(() => {
-    if (anoLetivo && !listaDres.length) {
+    if (anoLetivo) {
       obterDres();
     }
-  }, [anoLetivo, listaDres, obterDres]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [anoLetivo]);
 
   const onChangeUe = ue => {
     setUeCodigo(ue);
@@ -487,7 +487,7 @@ const Filtros = ({ onFiltrar, filtrou, setFiltrou, cancelou, setCancelou }) => {
               lista={listaDres}
               valueOption="valor"
               valueText="desc"
-              disabled={!anoLetivo || listaDres?.length === 1}
+              disabled={!anoLetivo || !dreCodigo || listaDres?.length === 1}
               onChange={onChangeDre}
               valueSelect={dreCodigo}
               placeholder="Diretoria Regional De Educação (DRE)"
