@@ -71,6 +71,7 @@ const RegistroIndividual = () => {
       turmaId,
     }).catch(e => erros(e));
     if (retorno?.data) {
+      dispatch(setExibirLoaderGeralRegistroIndividual(false));
       dispatch(setAlunosRegistroIndividual(retorno.data));
       setExibirListas(true);
     }
@@ -101,7 +102,7 @@ const RegistroIndividual = () => {
     dispatch(setExibirLoaderGeralRegistroIndividual(true));
     const resposta = await ServicoDisciplina.obterDisciplinasPorTurma(turma)
       .catch(e => erros(e))
-      .finally(() => dispatch(setExibirLoaderGeralRegistroIndividual(false)));
+      .finally();
 
     if (resposta?.data?.length) {
       setListaComponenteCurricular(resposta?.data);

@@ -97,6 +97,7 @@ const RelatorioDevolutivas = () => {
 
   const onClickCancelar = () => {
     setAnoLetivo(anoAtual);
+    setConsideraHistorico(false);
     limparFiltrosSelecionados();
   };
 

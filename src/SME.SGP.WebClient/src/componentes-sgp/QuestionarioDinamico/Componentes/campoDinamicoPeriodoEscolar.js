@@ -46,8 +46,6 @@ const CampoDinamicoPeriodoEscolar = props => {
     if (retorno?.data) {
       habilitaEdicaoSeMudarBimestreAtual(questaoAtual, retorno.data.id);
       form.setFieldValue(String(questaoAtual.id), String(retorno.data.id));
-    } else {
-      form.setFieldValue(String(questaoAtual.id), '');
     }
   }, [turmaId, form, questaoAtual]);
 

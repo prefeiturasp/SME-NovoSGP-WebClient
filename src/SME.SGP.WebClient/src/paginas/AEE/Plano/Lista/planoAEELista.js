@@ -386,7 +386,7 @@ const PlanoAEELista = () => {
   };
 
   const onClickEditar = item => {
-    history.push(`${RotasDto.RELATORIO_AEE_PLANO}/editar/${item.id}`);
+    history.push(`${RotasDto.RELATORIO_AEE_PLANO}/editar/${item.id}?historico=${consideraHistorico}`);
   };
 
   useEffect(() => {
@@ -515,6 +515,7 @@ const PlanoAEELista = () => {
                   exibirCodigoEOL={false}
                   codigoTurma={turmaId}
                   placeholder="Procure pelo nome da Criança/Estudante"
+                  historico = {consideraHistorico}
                 />
               </div>
             </div>
@@ -552,7 +553,8 @@ const PlanoAEELista = () => {
                       listaDres?.length &&
                       filtro.ueId &&
                       ueId &&
-                      listaUes?.length
+                      listaUes?.length &&
+                      (filtro?.turmaId || true)
                     )
                   }
                   temPaginacao

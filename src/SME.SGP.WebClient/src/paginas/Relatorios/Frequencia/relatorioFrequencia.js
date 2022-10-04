@@ -314,7 +314,7 @@ const RelatorioFrequencia = () => {
       turmasCodigo === '-99' ||
       turmasCodigo?.find(item => item === OPCAO_TODOS) ||
       turmasCodigo === undefined;
-    
+
     if (ehInfantil) {
       const turmas = ehOpcaoTodas
         ? listaTurmas
@@ -372,7 +372,7 @@ const RelatorioFrequencia = () => {
         if (ehTurma && lista.length > 1) {
           lista.unshift({ desc: 'Todos', valor: OPCAO_TODOS });
         }
- 
+
         setListaComponenteCurricular(lista);
         if (lista?.length === 1) {
           setComponentesCurriculares([lista[0].valor]);

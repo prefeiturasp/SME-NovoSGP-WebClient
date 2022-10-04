@@ -37,6 +37,7 @@ const TabListaoFechamento = () => {
       setDadosIniciaisFechamento,
       limparFechamento
     );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [componenteCurricular, turmaSelecionada, bimestreOperacoes]);
 
   useEffect(() => {
@@ -48,6 +49,7 @@ const TabListaoFechamento = () => {
     ) {
       obterFechamentoPorBimestre();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [bimestreOperacoes]);
 
   useEffect(() => {
@@ -55,27 +57,28 @@ const TabListaoFechamento = () => {
       limparFechamento();
       dispatch(setLimparModoEdicaoGeral(false));
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const ehEJA = Number(turmaSelecionada?.modalidade) === ModalidadeDTO.EJA;
-
+  const naoLancaNota =
+    componenteCurricular?.codigoComponenteCurricular &&
+    !componenteCurricular?.lancaNota;
   return (
     <>
-      {componenteCurricular?.codigoComponenteCurricular &&
-        !componenteCurricular?.lancaNota && (
-          <Alert
-            alerta={{
-              tipo: 'warning',
-              id: 'alertas-listao',
-              mensagem: 'Componente selecionado não lança nota',
-              estiloTitulo: { fontSize: '18px' },
-            }}
-            className="mb-2"
-          />
-        )}
+      {naoLancaNota && (
+        <Alert
+          alerta={{
+            tipo: 'warning',
+            id: 'alertas-listao',
+            mensagem: 'Componente selecionado não lança nota',
+            estiloTitulo: { fontSize: '18px' },
+          }}
+          className="mb-2"
+        />
+      )}
 
-      {/* TODO: Verificar se vai ser exibido a lista vazia com a informação 'Sem dados' */}
-      {dadosFechamento?.alunos?.length && bimestreOperacoes ? (
+      {!naoLancaNota && dadosFechamento?.alunos?.length && bimestreOperacoes ? (
         <ListaoListaFechamento ehEJA={ehEJA} />
       ) : (
         <></>
