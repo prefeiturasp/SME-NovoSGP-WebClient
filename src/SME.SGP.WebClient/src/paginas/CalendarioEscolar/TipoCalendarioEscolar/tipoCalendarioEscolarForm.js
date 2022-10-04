@@ -42,7 +42,6 @@ const TipoCalendarioEscolarForm = ({ match }) => {
 
   const [somenteConsulta, setSomenteConsulta] = useState(false);
   const [desabilitarCampos, setDesabilitarCampos] = useState(false);
-
   const [auditoria, setAuditoria] = useState([]);
   const [modoEdicao, setModoEdicao] = useState(false);
   const [novoRegistro, setNovoRegistro] = useState(true);
@@ -237,6 +236,7 @@ const TipoCalendarioEscolarForm = ({ match }) => {
         form.handleSubmit(e => e);
       }
     });
+    setCarregandoBotoesAcao(false);
   };
 
   const onChangeAnoLetivo = async valor => {
@@ -315,7 +315,6 @@ const TipoCalendarioEscolarForm = ({ match }) => {
                     border
                     bold
                     onClick={() => validaAntesDoSubmit(form)}
-                    disabled={desabilitarCampos}
                   />
                 </Col>
               </Row>

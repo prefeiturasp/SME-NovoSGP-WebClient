@@ -1334,7 +1334,9 @@ const Filtro = () => {
                     containerVinculoId="containerFiltro"
                     valueSelect={turmaSelecionada && `${turmaSelecionada}`}
                     placeholder="Turma"
-                    disabled={campoTurmaDesabilitado}
+                    disabled={
+                      !unidadeEscolarSelecionada || campoTurmaDesabilitado
+                    }
                     showSearch
                   />
                 </Loader>

@@ -270,7 +270,10 @@ const BotoesAcoesEncaminhamentoAEE = props => {
           disabled={
             desabilitarCamposEncaminhamentoAEE ||
             !questionarioDinamicoEmEdicao ||
-            (match?.params?.id && !dadosEncaminhamento?.podeEditar)
+            (match?.params?.id && !dadosEncaminhamento?.podeEditar) ||
+            (match?.params?.id &&
+              dadosEncaminhamento?.situacao !== situacaoAEE.Rascunho &&
+              dadosEncaminhamento?.situacao !== situacaoAEE.Deferido)
           }
         />
       </Col>

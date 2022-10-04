@@ -48,12 +48,14 @@ const ModalCopiarConteudoPlanoAula = props => {
 
   useEffect(() => {
     async function buscaTurmas() {
-      const { data } = await AbrangenciaServico.buscarTurmas(
+      const { data } = await AbrangenciaServico.buscarTurmasMesmoComponenteCurricular(
         filtro.unidadeEscolar,
         filtro.modalidade,
         '',
         filtro.anoLetivo,
-        filtro.consideraHistorico
+        filtro.consideraHistorico,
+        true,
+        codigoComponenteCurricular
       );
 
       if (data) {
