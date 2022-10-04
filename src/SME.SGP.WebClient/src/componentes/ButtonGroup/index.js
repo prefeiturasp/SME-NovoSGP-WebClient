@@ -19,7 +19,6 @@ function ButtonGroup({
   onClickBotaoPrincipal,
   onClickCancelar,
   somenteConsulta,
-  botoesEstadoVariavel,
   idBotaoPrincipal,
 }) {
   const desabilitarExcluir = () => {
@@ -47,13 +46,7 @@ function ButtonGroup({
             color={Colors.Roxo}
             border
             onClick={() => onClickCancelar(form)}
-            disabled={
-              botoesEstadoVariavel ||
-              somenteConsulta ||
-              !modoEdicao ||
-              !permissoesTela.podeIncluir ||
-              !permissoesTela.podeAlterar
-            }
+            disabled={somenteConsulta || !modoEdicao}
           />
         </Col>
       )}
@@ -75,7 +68,6 @@ function ButtonGroup({
             bold
             onClick={onClickBotaoPrincipal}
             disabled={
-              botoesEstadoVariavel ||
               desabilitarBotaoPrincipal ||
               somenteConsulta ||
               !permissoesTela.podeIncluir
@@ -100,7 +92,6 @@ ButtonGroup.propTypes = {
   onClickCancelar: PropTypes.func,
   onClickBotaoPrincipal: PropTypes.func,
   somenteConsulta: PropTypes.bool,
-  botoesEstadoVariavel: PropTypes.bool,
   idBotaoPrincipal: PropTypes.string,
 };
 
@@ -117,7 +108,6 @@ ButtonGroup.defaultProps = {
   onClickCancelar: null,
   onClickBotaoPrincipal: null,
   somenteConsulta: false,
-  botoesEstadoVariavel: false,
   idBotaoPrincipal: '',
 };
 

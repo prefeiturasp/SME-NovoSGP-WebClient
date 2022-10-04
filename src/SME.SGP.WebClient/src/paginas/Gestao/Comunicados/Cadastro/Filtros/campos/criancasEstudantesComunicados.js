@@ -70,7 +70,7 @@ const CriancasEstudantesComunicados = ({
 
   return (
     <>
-      <div className="col-sm-12 col-md-8 col-lg-4 col-xl-4 mb-2">
+      <div className="col-sm-12 col-md-8 col-lg-8 col-xl-4 mb-2">
         <Loader loading={alunosLoader}>
           <SelectComponent
             label="Crianças/Estudantes"
@@ -96,7 +96,7 @@ const CriancasEstudantesComunicados = ({
           />
         </Loader>
       </div>
-      <div className="col-sm-12 col-md-4 col-lg-4 col-xl-2 mb-2 mt-4">
+      <div className="col-sm-12 col-md-4 col-lg-4 col-xl-3 mb-2 mt-4">
         <Loader loading={alunosLoader}>
           <Button
             id="botao-criancas-estudantes"
