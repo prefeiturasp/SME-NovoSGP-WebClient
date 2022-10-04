@@ -105,7 +105,7 @@ const ObjetivosEspecificosParaAula = () => {
             desabilitar={
               desabilitarCamposPlanoAula ||
               !temPeriodoAberto ||
-              (validarSeEhObrigatorio() && !componenteCurricular.possuiObjetivos)
+              (validarSeEhObrigatorio() && componenteCurricular.possuiObjetivos)
             }
             onChange={onChangeObjetivosEspecificosParaAula}
             value={dadosPlanoAula?.descricao}
