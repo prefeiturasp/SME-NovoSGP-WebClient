@@ -71,6 +71,7 @@ const NavbarNotificacoes = props => {
       setConnection(null);
       dispatch(setIniciarNotificacoesSemWebSocket(true));
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [urlConnection, usuarioRf]);
 
   useEffect(() => {
@@ -86,6 +87,7 @@ const NavbarNotificacoes = props => {
         setUrlConnection('');
         dispatch(setIniciarNotificacoesSemWebSocket(true));
       });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const startConnection = useCallback(async () => {
@@ -103,21 +105,26 @@ const NavbarNotificacoes = props => {
             };
             dispatch(webSocketNotificacaoCriada(params));
           });
-          connection.on('NotificacaoLida', codigo => {
+          connection.on('NotificacaoLida', (codigo, isAnoAnterior) => {
             const params = {
               codigo,
+              isAnoAnterior,
               obterListaNotificacoes,
             };
             dispatch(webSocketNotificacaoLida(params));
           });
-          connection.on('NotificacaoExcluida', (codigo, status) => {
-            const params = {
-              codigo,
-              status,
-              obterListaNotificacoes,
-            };
-            dispatch(webSocketNotificacaoExcluida(params));
-          });
+          connection.on(
+            'NotificacaoExcluida',
+            (codigo, status, isAnoAnterior) => {
+              const params = {
+                codigo,
+                status,
+                isAnoAnterior,
+                obterListaNotificacoes,
+              };
+              dispatch(webSocketNotificacaoExcluida(params));
+            }
+          );
           dispatch(setIniciarNotificacoesSemWebSocket(false));
         })
         .catch(async () => {
@@ -138,6 +145,7 @@ const NavbarNotificacoes = props => {
         dispatch(setIniciarNotificacoesSemWebSocket(false));
       });
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [connection]);
 
   useEffect(() => {
@@ -189,6 +197,7 @@ const NavbarNotificacoes = props => {
         obterListaNotificacoes();
       }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [mostraNotificacoes]);
 
   const onClickBotao = () => {
