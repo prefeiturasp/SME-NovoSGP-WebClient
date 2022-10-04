@@ -56,10 +56,21 @@ const TransferenciaLista = props => {
           </CardLista>
         </div>
         <ColunaBotaoLista style={{ margin: '15px' }}>
-          <BotaoLista className="mb-2" onClick={onClickAdicionar} desabilitado={!dentroPeriodo}>
+          <BotaoLista
+            className="mb-2"
+            onClick={() => {
+              if (listaEsquerda.selectMultipleRows) onClickAdicionar();
+            }}
+            disabled={listaEsquerda.selectMultipleRows}
+          >
             <i className="fas fa-chevron-right" />
           </BotaoLista>
-          <BotaoLista onClick={onClickRemover} desabilitado={!dentroPeriodo}>
+          <BotaoLista
+            onClick={() => {
+              if (listaDireita.selectMultipleRows) onClickRemover();
+            }}
+            disabled={listaDireita.selectMultipleRows}
+          >
             <i className="fas fa-chevron-left" />
           </BotaoLista>
         </ColunaBotaoLista>

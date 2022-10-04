@@ -10,12 +10,11 @@ export const BotaoLista = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  cursor: ${props => (props.desabilitado ? '' : 'pointer')};
+  cursor: ${props => (props.disabled ? 'pointer' : '')};
 
   :hover {
-    background-color: ${props =>
-      props.desabilitado ? '' : Base.Roxo}!important;
-    color: ${props => (props.desabilitado ? '' : 'white')};
+    background-color: ${props => (props.disabled ? Base.Roxo : '')}!important;
+    color: ${props => (props.disabled ? 'white' : '')};
   }
 
   i {
