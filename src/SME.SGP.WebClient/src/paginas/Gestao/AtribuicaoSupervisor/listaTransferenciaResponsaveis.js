@@ -9,6 +9,8 @@ const ListaTransferenciaResponsaveis = props => {
     setDadosDireita,
     dadosDireita,
     podeConsultar,
+    ueSelecionaGrid = [],
+    temResponsavel = false
   } = props;
 
   const [idsSelecionadosEsquerda, setIdsSelecionadosEsquerda] = useState([]);
@@ -96,6 +98,10 @@ const ListaTransferenciaResponsaveis = props => {
     }
   };
 
+  if(!temResponsavel)
+      parametrosListaEsquerda.selectedRowKeys.push(ueSelecionaGrid);
+
+  parametrosListaDireita.selectedRowKeys.push(ueSelecionaGrid);
   return (
     <TransferenciaLista
       listaEsquerda={parametrosListaEsquerda}

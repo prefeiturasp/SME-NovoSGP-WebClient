@@ -160,10 +160,7 @@ const AcompanhamentoAprendizagem = () => {
       .finally(() =>
         dispatch(setExibirLoaderAlunosAcompanhamentoAprendizagem(false))
       );
-    if (retorno && retorno.data) {
-      return retorno.data;
-    }
-    return 0;
+    return retorno?.data;
   };
 
   const onChangeAlunoSelecionado = async (aluno, semestreConsulta) => {

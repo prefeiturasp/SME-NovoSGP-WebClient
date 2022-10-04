@@ -1,17 +1,14 @@
 import PropTypes from 'prop-types';
 import React, { useCallback, useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { Cabecalho } from '~/componentes-sgp';
 import CollapseLocalizarEstudante from '~/componentes-sgp/CollapseLocalizarEstudante/collapseLocalizarEstudante';
 import Card from '~/componentes/card';
 import { RotasDto } from '~/dtos';
 import { setLimparDadosLocalizarEstudante } from '~/redux/modulos/collapseLocalizarEstudante/actions';
-import {
-  setDesabilitarCamposPlanoAEE,
-  setPlanoAEELimparDados,
-} from '~/redux/modulos/planoAEE/actions';
+import { setPlanoAEELimparDados } from '~/redux/modulos/planoAEE/actions';
 import { setLimparDadosQuestionarioDinamico } from '~/redux/modulos/questionarioDinamico/actions';
-import { setBreadcrumbManual, verificaSomenteConsulta } from '~/servicos';
+import { setBreadcrumbManual } from '~/servicos';
 import ServicoPlanoAEE from '~/servicos/Paginas/Relatorios/AEE/ServicoPlanoAEE';
 import BotaoVerSituacaoEncaminhamentoAEE from './Componentes/BotaoVerSituacaoEncaminhamentoAEE/botaoVerSituacaoEncaminhamentoAEE';
 import BotoesAcoesPlanoAEE from './Componentes/botoesAcoesPlanoAEE';
@@ -45,20 +42,6 @@ const PlanoAEECadastro = ({ match }) => {
       );
     }
   }, [match]);
-
-  const usuario = useSelector(store => store.usuario);
-  const permissoesTela = usuario.permissoes[RotasDto.RELATORIO_AEE_PLANO];
-
-  useEffect(() => {
-    const planoId = match?.params?.id || 0;
-
-    const soConsulta = verificaSomenteConsulta(permissoesTela);
-    const desabilitar =
-      planoId > 0
-        ? soConsulta || !permissoesTela.podeAlterar
-        : soConsulta || !permissoesTela.podeIncluir;
-    dispatch(setDesabilitarCamposPlanoAEE(desabilitar));
-  }, [match, permissoesTela, dispatch]);
 
   useEffect(() => {
     return () => {

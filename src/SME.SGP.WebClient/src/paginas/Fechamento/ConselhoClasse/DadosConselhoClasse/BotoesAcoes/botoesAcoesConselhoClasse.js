@@ -1,5 +1,7 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+import _ from 'lodash';
+
 import Button from '~/componentes/button';
 import { Colors } from '~/componentes/colors';
 import { URL_HOME } from '~/constantes/url';
@@ -8,17 +10,17 @@ import history from '~/servicos/history';
 import { ehTurmaInfantil } from '~/servicos/Validacoes/validacoesInfatil';
 import servicoSalvarConselhoClasse from '../../servicoSalvarConselhoClasse';
 
+import { setDadosListasNotasConceitos } from '~/redux/modulos/conselhoClasse/actions';
+
 const BotoesAcoesConselhoClasse = () => {
+  const dispatch = useDispatch();
+
   const alunosConselhoClasse = useSelector(
     store => store.conselhoClasse.alunosConselhoClasse
   );
 
   const conselhoClasseEmEdicao = useSelector(
     store => store.conselhoClasse.conselhoClasseEmEdicao
-  );
-
-  const bimestreAtual = useSelector(
-    store => store.conselhoClasse.bimestreAtual
   );
 
   const notaConceitoPosConselhoAtual = useSelector(
@@ -31,6 +33,10 @@ const BotoesAcoesConselhoClasse = () => {
 
   const modalidadesFiltroPrincipal = useSelector(
     store => store.filtro.modalidades
+  );
+
+  const dadosIniciaisListasNotasConceitos = useSelector(
+    store => store.conselhoClasse.dadosIniciaisListasNotasConceitos
   );
 
   const usuario = useSelector(store => store.usuario);
@@ -48,14 +54,6 @@ const BotoesAcoesConselhoClasse = () => {
     }
 
     return false;
-  };
-
-  const perguntaAoSalvar = async () => {
-    return confirmar(
-      'Atenção',
-      '',
-      'Suas alterações não foram salvas, deseja salvar agora?'
-    );
   };
 
   const onClickVoltar = async () => {
@@ -86,6 +84,8 @@ const BotoesAcoesConselhoClasse = () => {
       );
       if (confirmou) {
         servicoSalvarConselhoClasse.recarregarDados();
+        const dadosCarregar = _.cloneDeep(dadosIniciaisListasNotasConceitos);
+        dispatch(setDadosListasNotasConceitos([...dadosCarregar]));
       }
     }
   };
@@ -125,7 +125,7 @@ const BotoesAcoesConselhoClasse = () => {
         disabled={
           ehTurmaInfantil(modalidadesFiltroPrincipal, turmaSelecionada) ||
           desabilitarCampos ||
-          !conselhoClasseEmEdicao
+          (!conselhoClasseEmEdicao && !notaConceitoPosConselhoAtual.ehEdicao)
         }
       />
     </>

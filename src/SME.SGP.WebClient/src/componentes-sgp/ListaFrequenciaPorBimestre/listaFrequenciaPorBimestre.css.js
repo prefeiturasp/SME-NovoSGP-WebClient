@@ -58,6 +58,16 @@ export const TabelaColunasFixas = styled.div`
     left: 0px;
     z-index: 2;
   }
+  .campo-justificativa{
+    width: 50%;
+    left: 0px;
+    z-index: 2;
+  }
+  .col-linha-dados {
+    width: 10%;
+    left: 0px;
+    z-index: 2;
+  }
   .col-valor-linha-um {
     width: 30%;
     z-index: 2;

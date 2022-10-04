@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { CampoTexto, Loader } from '~/componentes';
+import { Loader } from '~/componentes';
 import Cabecalho from '~/componentes-sgp/cabecalho';
 import Alert from '~/componentes/alert';
 import Button from '~/componentes/button';
@@ -20,6 +20,7 @@ import { verificaSomenteConsulta } from '~/servicos/servico-navegacao';
 import { AlunosCompensacao } from './styles';
 import AlertaModalidadeInfantil from '~/componentes-sgp/AlertaModalidadeInfantil/alertaModalidadeInfantil';
 import { ehTurmaInfantil } from '~/servicos/Validacoes/validacoesInfatil';
+import CompensacaoAusenciaListaCamposDebounce from './compensacaoAusenciaListaCamposDebounce';
 
 const CompensacaoAusenciaLista = () => {
   const usuario = useSelector(store => store.usuario);
@@ -200,14 +201,6 @@ const CompensacaoAusenciaLista = () => {
       setBimestreSelecionado(undefined);
     }
     setDisciplinaIdSelecionada(disciplinaId);
-  };
-
-  const onChangeNomeAtividade = e => {
-    setNomeAtividade(e.target.value);
-  };
-
-  const onChangeNomeAluno = e => {
-    setNomeAluno(e.target.value);
   };
 
   const onChangeBimestre = bimestre => {
@@ -397,30 +390,13 @@ const CompensacaoAusenciaLista = () => {
                 disabled={!disciplinaIdSelecionada}
               />
             </div>
-            <div className="col-sm-12 col-md-3 col-lg-3 col-xl-3 mb-2">
-              <CampoTexto
-                name="nomeAtividade"
-                id="nomeAtividade"
-                placeholder="Nome da Atividade"
-                iconeBusca
-                allowClear
-                onChange={onChangeNomeAtividade}
-                value={nomeAtividade}
-                desabilitado={!disciplinaIdSelecionada}
-              />
-            </div>
-            <div className="col-sm-12 col-md-3 col-lg-3 col-xl-3 mb-2">
-              <CampoTexto
-                name="nomeAtividade"
-                id="nomeAtividade"
-                placeholder="Nome do Estudante"
-                iconeBusca
-                allowClear
-                onChange={onChangeNomeAluno}
-                value={nomeAluno}
-                desabilitado={!disciplinaIdSelecionada}
-              />
-            </div>
+            <CompensacaoAusenciaListaCamposDebounce
+              disciplinaIdSelecionada={disciplinaIdSelecionada}
+              setNomeAtividade={setNomeAtividade}
+              setNomeAluno={setNomeAluno}
+              nomeAtividade={nomeAtividade}
+              nomeAluno={nomeAluno}
+            />
           </div>
         </div>
         {exibirLista ? (

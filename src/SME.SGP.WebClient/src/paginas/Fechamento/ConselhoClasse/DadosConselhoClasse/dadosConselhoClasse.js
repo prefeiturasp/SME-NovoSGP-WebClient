@@ -14,6 +14,7 @@ import {
   setFechamentoPeriodoInicioFim,
   setIdCamposNotasPosConselho,
   setNotaConceitoPosConselhoAtual,
+  setPodeAcessar,
 } from '~/redux/modulos/conselhoClasse/actions';
 import { erros } from '~/servicos/alertas';
 import ServicoConselhoClasse from '~/servicos/Paginas/ConselhoClasse/ServicoConselhoClasse';
@@ -134,7 +135,23 @@ const DadosConselhoClasse = props => {
         const novoRegistro = !conselhoClasseId;
         validaPermissoes(novoRegistro);
 
-        if (!podeAcessar) {
+        let validouPodeAcessar = podeAcessar;
+        if (
+          fechamentoTurmaId &&
+          conselhoClasseId &&
+          bimestreConsulta === 'final'
+        ) {
+          validouPodeAcessar = await servicoSalvarConselhoClasse.validaParecerConclusivo(
+            conselhoClasseId,
+            fechamentoTurmaId,
+            codigoEOL,
+            turmaCodigo,
+            turmaSelecionada?.consideraHistorico
+          );
+          dispatch(setPodeAcessar(validouPodeAcessar));
+        }
+
+        if (!validouPodeAcessar) {
           dispatch(
             setBimestreAtual({
               valor: bimestreConsulta,
@@ -212,6 +229,7 @@ const DadosConselhoClasse = props => {
       validaPermissoes,
       usuario,
       podeAcessar,
+      turmaSelecionada,
     ]
   );
 
@@ -252,7 +270,6 @@ const DadosConselhoClasse = props => {
         {!semDados && turmaSelecionada.turma == turmaAtual ? (
           <>
             <AlertaDentroPeriodo />
-            <MarcadorSituacaoConselho />
             <MarcadorPeriodoInicioFim />
             <ListasNotasConceitos bimestreSelecionado={bimestreAtual} />
             <Sintese

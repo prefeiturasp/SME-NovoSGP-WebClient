@@ -16,7 +16,7 @@ const FrequenciaCardCollapse = props => {
   const { turmaSelecionada } = usuario;
 
   const ehInfantil = useMemo(
-    () => turmaSelecionada?.modalidade === ModalidadeDTO.INFANTIL,
+    () => Number(turmaSelecionada?.modalidade) === ModalidadeDTO.INFANTIL,
     [turmaSelecionada]
   );
   const { codigoEOL } = dadosAlunoObjectCard;

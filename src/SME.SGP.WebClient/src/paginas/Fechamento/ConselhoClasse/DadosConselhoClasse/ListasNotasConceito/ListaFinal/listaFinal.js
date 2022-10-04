@@ -128,7 +128,7 @@ const ListaFinal = props => {
   };
 
   const montarValoresNotasConceitos = notasFechamentos => {
-    const ehEja = modalidade === modalidadeDto.EJA;
+    const ehEja = Number(modalidade) === modalidadeDto.EJA;
 
     const primeiroBimestre = notasFechamentos.find(item => item.bimestre === 1);
     const segundoBimestre = notasFechamentos.find(item => item.bimestre === 2);
@@ -279,6 +279,11 @@ const ListaFinal = props => {
                             </Tooltip>
                           )}
                         </td>
+                        {index === 0 ? (
+                          <td rowSpan={alturaLinhaMesclada}>
+                            {dadosLista.componenteRegencia?.quantidadeAulas}
+                          </td>
+                        ) : null}
                         {index === 0 ? (
                           <td rowSpan={alturaLinhaMesclada}>
                             {dadosLista.componenteRegencia.faltas}

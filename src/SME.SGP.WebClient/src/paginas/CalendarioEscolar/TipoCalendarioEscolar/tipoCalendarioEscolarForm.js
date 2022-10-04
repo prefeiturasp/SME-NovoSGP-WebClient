@@ -36,7 +36,9 @@ const TipoCalendarioEscolarForm = ({ match }) => {
 
   const [somenteConsulta, setSomenteConsulta] = useState(false);
   const [desabilitarCampos, setDesabilitarCampos] = useState(false);
-
+  const [desabilitarCampoCadastrar, setDesabilitarCampoCadastrar] = useState(
+    false
+  );
   const [auditoria, setAuditoria] = useState([]);
   const [modoEdicao, setModoEdicao] = useState(false);
   const [novoRegistro, setNovoRegistro] = useState(true);
@@ -110,6 +112,11 @@ const TipoCalendarioEscolarForm = ({ match }) => {
     setDesabilitarCampos(desabilitar);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [somenteConsulta, novoRegistro]);
+
+  useEffect(() => {
+    if (anoLetivo === undefined) return setDesabilitarCampoCadastrar(true);
+    setDesabilitarCampoCadastrar(false);
+  }, [anoLetivo]);
 
   const [possuiEventos, setPossuiEventos] = useState(false);
 
@@ -191,7 +198,7 @@ const TipoCalendarioEscolarForm = ({ match }) => {
     }
   };
 
-  const onChangeCampos = () => {
+  const onChangeCampos = form => {
     if (!modoEdicao) {
       setModoEdicao(true);
     }
@@ -230,7 +237,7 @@ const TipoCalendarioEscolarForm = ({ match }) => {
         form.handleSubmit(e => e);
       }
     });
-    setCarregandoBotoesAcao(true);
+    setCarregandoBotoesAcao(false);
   };
 
   const onChangeAnoLetivo = async valor => {
@@ -315,7 +322,7 @@ const TipoCalendarioEscolarForm = ({ match }) => {
                     bold
                     className="mr-2"
                     onClick={() => validaAntesDoSubmit(form)}
-                    disabled={desabilitarCampos}
+                    disabled={desabilitarCampoCadastrar}
                   />
                 </div>
               </Loader>

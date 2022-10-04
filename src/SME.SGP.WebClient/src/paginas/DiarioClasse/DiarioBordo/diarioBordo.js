@@ -183,7 +183,8 @@ const DiarioBordo = ({ match }) => {
         setComponenteCurricularSelecionado(
           String(componente.codigoComponenteCurricular)
         );
-        setCodDisciplinaPai(String(componente.codDisciplinaPai));
+        const codDisciplina = componente?.codDisciplinaPai || componente?.id;
+        setCodDisciplinaPai(String(codDisciplina));
       }
     }
 
@@ -202,11 +203,11 @@ const DiarioBordo = ({ match }) => {
   }, [turmaId, obterComponentesCurriculares, turmaInfantil]);
 
   const obterDatasDeAulasDisponiveis = useCallback(
-    async codigoDisciplina => {
+    async codDisciplinaPai => {
       setCarregandoData(true);
       const datasDeAulas = await ServicoFrequencia.obterDatasDeAulasPorCalendarioTurmaEComponenteCurricular(
         turmaId,
-        codigoDisciplina
+        codDisciplinaPai
       )
         .catch(e => {
           setCarregandoGeral(false);
@@ -215,9 +216,8 @@ const DiarioBordo = ({ match }) => {
         .finally(() => {
           setCarregandoData(false);
         });
-
       const codigoComponenteCurricular =
-        componenteCurricularId || codigoDisciplina;
+        componenteCurricularId || codDisciplinaPai;
 
       if (datasDeAulas?.data?.length && codigoComponenteCurricular) {
         setListaDatasAulas(datasDeAulas.data);
@@ -236,7 +236,6 @@ const DiarioBordo = ({ match }) => {
 
         setDiasParaHabilitar(habilitar);
       } else {
-        setListaDatasAulas();
         setDiasParaHabilitar();
       }
     },
@@ -298,7 +297,9 @@ const DiarioBordo = ({ match }) => {
         item =>
           String(item.codigoComponenteCurricular) === componenteCurricularId
       );
-      setCodDisciplinaPai(valorCodDisciplinaPai?.codDisciplinaPai);
+      const codDisciplina =
+        valorCodDisciplinaPai?.codDisciplinaPai || valorCodDisciplinaPai?.id;
+      setCodDisciplinaPai(String(codDisciplina));
       setComponenteCurricularSelecionado(componenteCurricularId);
     }
   }, [componenteCurricularId, listaComponenteCurriculares]);
@@ -329,7 +330,7 @@ const DiarioBordo = ({ match }) => {
       setTemPeriodoAberto(retorno.data.temPeriodoAberto);
       setEhInseridoCJ(retorno.data.inseridoCJ);
       setValoresIniciais(valInicial);
-      setCodDisciplinaPai(codDisciplinaPai);
+      setCodDisciplinaPai(componenteCurricular);
       if (retorno?.data?.auditoria?.id) {
         setAuditoria(retorno.data.auditoria);
         obterDadosObservacoes(retorno.data.auditoria.id);
@@ -712,8 +713,7 @@ const DiarioBordo = ({ match }) => {
                         desabilitado={
                           !turmaInfantil ||
                           !listaComponenteCurriculares?.length ||
-                          !componenteCurricularSelecionado ||
-                          !diasParaHabilitar
+                          !componenteCurricularSelecionado
                         }
                         diasParaHabilitar={diasParaHabilitar}
                       />
