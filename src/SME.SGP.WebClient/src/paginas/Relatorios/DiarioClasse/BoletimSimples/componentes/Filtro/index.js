@@ -487,7 +487,7 @@ const Filtros = ({ onFiltrar, filtrou, setFiltrou, cancelou, setCancelou }) => {
               lista={listaDres}
               valueOption="valor"
               valueText="desc"
-              disabled={!anoLetivo || !dreCodigo || listaDres?.length === 1}
+              disabled={!anoLetivo  || listaDres?.length <= 1}
               onChange={onChangeDre}
               valueSelect={dreCodigo}
               placeholder="Diretoria Regional De Educação (DRE)"
