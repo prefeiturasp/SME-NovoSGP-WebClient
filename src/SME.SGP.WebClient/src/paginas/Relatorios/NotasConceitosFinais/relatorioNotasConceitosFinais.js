@@ -56,6 +56,7 @@ const RelatorioNotasConceitosFinais = () => {
   const [desabilitarBtnGerar, setDesabilitarBtnGerar] = useState(true);
   const anoAtual = window.moment().format('YYYY');
   const [consideraHistorico, setConsideraHistorico] = useState(false);
+  const [modoEdicao, setModoEdicao] = useState(false);
 
   const listaFormatos = [
     { valor: '1', desc: 'PDF' },
@@ -151,6 +152,8 @@ const RelatorioNotasConceitosFinais = () => {
 
     setListaAnosEscolares([]);
     setAnosEscolares(undefined);
+
+    setModoEdicao(true);
   };
 
   const obterDres = useCallback(async () => {
@@ -448,6 +451,7 @@ const RelatorioNotasConceitosFinais = () => {
     obterDres();
 
     setFormato('PDF');
+    setModoEdicao(false);
   };
 
   const onClickGerar = async () => {
@@ -498,6 +502,8 @@ const RelatorioNotasConceitosFinais = () => {
 
     setListaAnosEscolares([]);
     setAnosEscolares(undefined);
+
+    setModoEdicao(true);
   };
 
   const onChangeModalidade = novaModalidade => {
@@ -508,6 +514,8 @@ const RelatorioNotasConceitosFinais = () => {
 
     setListaAnosEscolares([]);
     setAnosEscolares(undefined);
+
+    setModoEdicao(true);
   };
 
   const onChangeAnoLetivo = ano => {
@@ -523,6 +531,8 @@ const RelatorioNotasConceitosFinais = () => {
 
     setCodigoDre();
     setCodigoUe();
+
+    setModoEdicao(true);
   };
 
   const onChangeAnos = valor => {
@@ -530,21 +540,25 @@ const RelatorioNotasConceitosFinais = () => {
 
     setListaComponenteCurricular([]);
     setComponentesCurriculares(undefined);
+    setModoEdicao(true);
   };
 
   const onChangeSemestre = valor => {
     setSemestre(valor);
     setClicouBotaoGerar(false);
+    setModoEdicao(true);
   };
 
   const onChangeComponenteCurricular = valor => {
     setComponentesCurriculares(valor);
     setClicouBotaoGerar(false);
+    setModoEdicao(true);
   };
 
   const onChangeBimestre = valor => {
     setBimestres(valor);
     setClicouBotaoGerar(false);
+    setModoEdicao(true);
   };
 
   const onChangeCondicao = valor => {
@@ -553,11 +567,13 @@ const RelatorioNotasConceitosFinais = () => {
     }
     setCondicao(valor);
     setClicouBotaoGerar(false);
+    setModoEdicao(true);
   };
 
   const onChangeComparacao = valor => {
     setValorCondicao(valor);
     setClicouBotaoGerar(false);
+    setModoEdicao(true);
   };
 
   const onChangeTipoNota = valor => {
@@ -596,11 +612,13 @@ const RelatorioNotasConceitosFinais = () => {
     setTipoNotaSelecionada(valor);
     setCampoBloqueado(bloqueado);
     setClicouBotaoGerar(false);
+    setModoEdicao(true);
   };
 
   const onChangeFormato = valor => {
     setFormato(valor);
     setClicouBotaoGerar(false);
+    setModoEdicao(true);
   };
 
   const removeAdicionaOpcaoTodos = (
@@ -651,6 +669,7 @@ const RelatorioNotasConceitosFinais = () => {
           onClickCancelar={onClickCancelar}
           onClickGerar={onClickGerar}
           desabilitarBtnGerar={desabilitarBtnGerar}
+          modoEdicao={modoEdicao}
         />
       </Cabecalho>
       <Loader loading={carregandoGeral}>

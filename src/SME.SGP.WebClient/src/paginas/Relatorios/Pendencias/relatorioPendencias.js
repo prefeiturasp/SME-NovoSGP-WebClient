@@ -83,6 +83,7 @@ const RelatorioPendencias = () => {
     setDesabilitarExibirPendenciasResolvidas,
   ] = useState(true);
   const [consideraHistorico, setConsideraHistorico] = useState(false);
+  const [modoEdicao, setModoEdicao] = useState(false);
 
   const opcaoExibirPendenciasResolvidas = [
     { value: false, label: 'Não' },
@@ -104,6 +105,7 @@ const RelatorioPendencias = () => {
     setDreId();
     setUeId();
     setUsuarioRf();
+    setModoEdicao(true);
   };
 
   const onChangeAnoLetivo = async valor => {
@@ -111,6 +113,7 @@ const RelatorioPendencias = () => {
     setUeId();
     setAnoLetivo(valor);
     limparCampos();
+    setModoEdicao(true);
   };
 
   const onChangeDre = valor => {
@@ -118,21 +121,25 @@ const RelatorioPendencias = () => {
     setUeId();
     setUeId(undefined);
     limparCampos();
+    setModoEdicao(true);
   };
 
   const onChangeUe = valor => {
     setUeId(valor);
     limparCampos();
+    setModoEdicao(true);
   };
 
   const onChangeModalidade = valor => {
     limparCampos();
     setModalidadeId(valor);
+    setModoEdicao(true);
   };
 
   const onChangeSemestre = valor => {
     setSemestre(valor);
     setClicouBotaoGerar(false);
+    setModoEdicao(true);
   };
 
   const onChangeTurma = valor => {
@@ -141,6 +148,7 @@ const RelatorioPendencias = () => {
     setBimestre();
     setTipoPendenciaGrupo();
     setClicouBotaoGerar(false);
+    setModoEdicao(true);
   };
 
   const onChangeComponenteCurricular = valor => {
@@ -148,17 +156,20 @@ const RelatorioPendencias = () => {
     setBimestre();
     setTipoPendenciaGrupo();
     setClicouBotaoGerar(false);
+    setModoEdicao(true);
   };
 
   const onChangeBimestre = valor => {
     setBimestre(valor);
     setTipoPendenciaGrupo();
     setClicouBotaoGerar(false);
+    setModoEdicao(true);
   };
 
   const onChangeTipoPendenciaGrupo = valor => {
     setTipoPendenciaGrupo(valor);
     setClicouBotaoGerar(false);
+    setModoEdicao(true);
   };
 
   const onChangeLocalizador = valores => {
@@ -544,6 +555,7 @@ const RelatorioPendencias = () => {
     setBimestre();
     setTipoPendenciaGrupo();
     setUsuarioRf();
+    setModoEdicao(false);
   };
 
   useEffect(() => {
@@ -641,6 +653,7 @@ const RelatorioPendencias = () => {
           desabilitarBtnGerar={desabilitarBtnGerar}
           carregandoGerar={carregandoGerar}
           temLoaderBtnGerar
+          modoEdicao={modoEdicao}
         />
       </Cabecalho>
       <Card>
@@ -846,6 +859,7 @@ const RelatorioPendencias = () => {
                 onChange={e => {
                   setExibirPendenciasResolvidas(e.target.value);
                   setClicouBotaoGerar(false);
+                  setModoEdicao(true);
                 }}
                 value={exibirPendenciasResolvidas}
                 desabilitado={desabilitarExibirPendenciasResolvidas}

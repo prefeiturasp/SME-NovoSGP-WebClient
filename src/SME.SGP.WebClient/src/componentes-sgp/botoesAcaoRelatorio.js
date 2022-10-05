@@ -9,6 +9,7 @@ import Button from '~/componentes/button';
 import { Colors } from '~/componentes/colors';
 import Loader from '~/componentes/loader';
 import BotaoVoltarPadrao from './BotoesAcaoPadrao/botaoVoltarPadrao';
+import { confirmar } from '~/servicos';
 
 const BotoesAcaoRelatorio = props => {
   const {
@@ -18,8 +19,21 @@ const BotoesAcaoRelatorio = props => {
     temLoaderBtnGerar,
     desabilitarBtnGerar,
     carregandoGerar,
+    modoEdicao,
   } = props;
 
+  const validarCancelar = async () => {
+    if (modoEdicao) {
+      const confirmou = await confirmar(
+        'Atenção',
+        '',
+        'Deseja realmente cancelar as alterações?'
+      );
+      if (confirmou && onClickCancelar) {
+        onClickCancelar();
+      }
+    }
+  };
   return (
     <Row gutter={[8, 8]} type="flex">
       <Col>
@@ -32,7 +46,8 @@ const BotoesAcaoRelatorio = props => {
           color={Colors.Roxo}
           border
           bold
-          onClick={() => onClickCancelar && onClickCancelar()}
+          onClick={() => validarCancelar()}
+          disabled={!modoEdicao}
         />
       </Col>
       <Col>
@@ -73,6 +88,7 @@ BotoesAcaoRelatorio.propTypes = {
   temLoaderBtnGerar: PropTypes.bool,
   desabilitarBtnGerar: PropTypes.bool,
   carregandoGerar: PropTypes.bool,
+  modoEdicao: PropTypes.bool,
 };
 
 BotoesAcaoRelatorio.defaultProps = {
@@ -82,6 +98,7 @@ BotoesAcaoRelatorio.defaultProps = {
   temLoaderBtnGerar: false,
   desabilitarBtnGerar: false,
   carregandoGerar: false,
+  modoEdicao: false,
 };
 
 export default BotoesAcaoRelatorio;
