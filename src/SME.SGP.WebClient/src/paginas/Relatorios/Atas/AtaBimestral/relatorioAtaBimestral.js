@@ -56,6 +56,8 @@ const RelatorioAtaBimestral = () => {
 
   const [desabilitarBtnGerar, setDesabilitarBtnGerar] = useState(true);
 
+  const [modoEdicao, setModoEdicao] = useState(false);
+
   const usuarioStore = useSelector(store => store.usuario);
   const permissoesTela = usuarioStore.permissoes[RotasDto.ATA_BIMESTRAL];
 
@@ -73,11 +75,13 @@ const RelatorioAtaBimestral = () => {
     setBimestre();
     setListaTurmasPorSemestre({});
     setDesabilitarBtnGerar(true);
+    setModoEdicao(false);
   };
 
   const onCheckedConsideraHistorico = e => {
     setAnoLetivo(anoAtual);
     setConsideraHistorico(e.target.checked);
+    setModoEdicao(true);
   };
 
   const obterAnosLetivos = useCallback(async () => {
@@ -112,6 +116,8 @@ const RelatorioAtaBimestral = () => {
     setListaTurmas([]);
     setListaTurmasPorSemestre({});
     setTurmaCodigo();
+
+    setModoEdicao(true);
   };
 
   const obterDres = useCallback(async () => {
@@ -165,6 +171,8 @@ const RelatorioAtaBimestral = () => {
     setListaTurmas([]);
     setListaTurmasPorSemestre({});
     setTurmaCodigo();
+
+    setModoEdicao(true);
   };
 
   const obterUes = useCallback(
@@ -221,6 +229,8 @@ const RelatorioAtaBimestral = () => {
     setListaTurmas([]);
     setListaTurmasPorSemestre({});
     setTurmaCodigo();
+
+    setModoEdicao(true);
   };
 
   const obterModalidades = useCallback(
@@ -271,6 +281,8 @@ const RelatorioAtaBimestral = () => {
 
     setListaBimestres([]);
     setBimestre();
+
+    setModoEdicao(true);
   };
 
   const obterSemestres = useCallback(
@@ -336,7 +348,10 @@ const RelatorioAtaBimestral = () => {
     setListaSemestres([]);
   }, [obterAnosLetivos, obterSemestres, modalidadeId, ueCodigo, anoLetivo]);
 
-  const onChangeSemestre = valor => setSemestre(valor);
+  const onChangeSemestre = valor => {
+    setSemestre(valor);
+    setModoEdicao(true);
+  };
 
   const obterTurmas = useCallback(
     async (modalidadeSelecionada, ue) => {
@@ -434,6 +449,7 @@ const RelatorioAtaBimestral = () => {
     const todos = valor.find(a => a === OPCAO_TODOS && !todosSetado);
     const novoValor = todosSetado && valor.length === 2 ? [valor[1]] : valor;
     setTurmaCodigo(todos ? [todos] : novoValor);
+    setModoEdicao(true);
   };
 
   const obterBimestres = useCallback(async () => {
@@ -464,6 +480,7 @@ const RelatorioAtaBimestral = () => {
 
   const onChangeBimestre = valor => {
     setBimestre(valor);
+    setModoEdicao(true);
   };
 
   useEffect(() => {
@@ -537,6 +554,7 @@ const RelatorioAtaBimestral = () => {
             desabilitarBtnGerar ||
             !permissoesTela?.podeConsultar
           }
+          modoEdicao={modoEdicao}
         />
       </Cabecalho>
       <Card>

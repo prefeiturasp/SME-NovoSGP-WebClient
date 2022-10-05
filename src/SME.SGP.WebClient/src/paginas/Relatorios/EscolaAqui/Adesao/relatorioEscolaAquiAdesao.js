@@ -31,6 +31,8 @@ const RelatorioEscolaAquiAdesao = () => {
   ] = useState(true);
   const [clicouBotaoGerar, setClicouBotaoGerar] = useState(false);
 
+  const [modoEdicao, setModoEdicao] = useState(false);
+
   const opcoesListarUsuarios = [
     { label: 'Não', value: 1 },
     { label: 'Válidos', value: 2 },
@@ -46,6 +48,7 @@ const RelatorioEscolaAquiAdesao = () => {
     setDreCodigo();
     setUeCodigo();
     setOpcaoListaUsuarios(1);
+    setModoEdicao(false);
   };
 
   const gerar = async () => {
@@ -72,6 +75,7 @@ const RelatorioEscolaAquiAdesao = () => {
     setUeCodigo(undefined);
     setOpcaoListaUsuarios(1);
     setClicouBotaoGerar(false);
+    setModoEdicao(true);
   };
 
   const onChangeUe = valor => {
@@ -80,6 +84,7 @@ const RelatorioEscolaAquiAdesao = () => {
       setOpcaoListaUsuarios(1);
     }
     setClicouBotaoGerar(false);
+    setModoEdicao(true);
   };
 
   const obterDres = async () => {
@@ -160,6 +165,7 @@ const RelatorioEscolaAquiAdesao = () => {
           onClickCancelar={cancelar}
           onClickGerar={gerar}
           desabilitarBtnGerar={desabilitarBtnGerar}
+          modoEdicao={modoEdicao}
         />
       </Cabecalho>
 
@@ -204,6 +210,7 @@ const RelatorioEscolaAquiAdesao = () => {
                 onChange={e => {
                   setOpcaoListaUsuarios(e.target.value);
                   setClicouBotaoGerar(false);
+                  setModoEdicao(true);
                 }}
                 value={opcaoListaUsuarios}
                 desabilitado={desabilitarRadioListarUsuario}

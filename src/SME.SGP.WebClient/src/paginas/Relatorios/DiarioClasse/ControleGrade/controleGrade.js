@@ -61,6 +61,7 @@ const ControleGrade = () => {
   const [tipoRelatorio, setTipoRelatorio] = useState(undefined);
   const [clicouBotaoGerar, setClicouBotaoGerar] = useState(false);
   const [desabilitarBtnGerar, setDesabilitarBtnGerar] = useState(true);
+  const [modoEdicao, setModoEdicao] = useState(false);
 
   const onChangeAnoLetivo = async valor => {
     setDreId();
@@ -69,6 +70,7 @@ const ControleGrade = () => {
     setTurmaId();
     setComponentesCurricularesId();
     setAnoLetivo(valor);
+    setModoEdicao(true);
   };
 
   const onChangeDre = valor => {
@@ -78,6 +80,7 @@ const ControleGrade = () => {
     setTurmaId();
     setComponentesCurricularesId();
     setUeId(undefined);
+    setModoEdicao(true);
   };
 
   const onChangeUe = valor => {
@@ -85,38 +88,45 @@ const ControleGrade = () => {
     setTurmaId();
     setComponentesCurricularesId();
     setUeId(valor);
+    setModoEdicao(true);
   };
 
   const onChangeModalidade = valor => {
     setTurmaId();
     setComponentesCurricularesId();
     setModalidadeId(valor);
+    setModoEdicao(true);
   };
 
   const onChangeSemestre = valor => {
     setSemestre(valor);
     setClicouBotaoGerar(false);
+    setModoEdicao(true);
   };
 
   const onChangeTurma = valor => {
     setComponentesCurricularesId();
     setTurmaId(valor);
     setClicouBotaoGerar(false);
+    setModoEdicao(true);
   };
 
   const onChangeComponenteCurricular = valor => {
     setComponentesCurricularesId(valor);
     setClicouBotaoGerar(false);
+    setModoEdicao(true);
   };
 
   const onChangeBimestre = valor => {
     setBimestre(valor);
     setClicouBotaoGerar(false);
+    setModoEdicao(true);
   };
 
   const onChangeTipoRelatorio = valor => {
     setTipoRelatorio(valor);
     setClicouBotaoGerar(false);
+    setModoEdicao(true);
   };
 
   const [anoAtual] = useState(window.moment().format('YYYY'));
@@ -408,6 +418,7 @@ const ControleGrade = () => {
     await setAnoLetivo();
     await setAnoLetivo(anoAtual);
     await setTipoRelatorio();
+    setModoEdicao(false);
   };
 
   useEffect(() => {
@@ -495,6 +506,7 @@ const ControleGrade = () => {
           onClickCancelar={cancelar}
           onClickGerar={gerar}
           desabilitarBtnGerar={desabilitarBtnGerar}
+          modoEdicao={modoEdicao}
         />
       </Cabecalho>
       <Card>

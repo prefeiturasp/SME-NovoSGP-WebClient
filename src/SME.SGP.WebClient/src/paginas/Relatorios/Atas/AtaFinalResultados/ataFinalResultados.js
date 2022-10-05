@@ -45,6 +45,7 @@ const AtaFinalResultados = () => {
   const [desabilitaVisualizacao, setDesabilitaVisualizacao] = useState(true);
   const [visualizacao, setVisualizacao] = useState('');
   const [listaTurmasCompletas, setListaTurmasCompletas] = useState([]);
+  const [modoEdicao, setModoEdicao] = useState(false);
 
   const listaFormatos = [
     { valor: '1', desc: 'PDF' },
@@ -146,6 +147,8 @@ const AtaFinalResultados = () => {
 
     setListaTurmas([]);
     setTurmaId(undefined);
+
+    setModoEdicao(true);
   };
 
   const obterDres = useCallback(async () => {
@@ -371,6 +374,7 @@ const AtaFinalResultados = () => {
   };
 
   const onClickCancelar = () => {
+    setConsideraHistorico(false);
     setAnoLetivo(undefined);
     setDreId(undefined);
     setListaAnosLetivo([]);
@@ -380,6 +384,8 @@ const AtaFinalResultados = () => {
     obterDres();
 
     setFormato('PDF');
+
+    setModoEdicao(false);
   };
 
   const onClickGerar = async () => {
@@ -419,6 +425,8 @@ const AtaFinalResultados = () => {
 
     setListaTurmas([]);
     setTurmaId(undefined);
+
+    setModoEdicao(true);
   };
 
   const onChangeModalidade = novaModalidade => {
@@ -433,6 +441,8 @@ const AtaFinalResultados = () => {
     setListaTurmas([]);
     setTurmaId(undefined);
     setVisualizacao('');
+
+    setModoEdicao(true);
   };
 
   const onChangeAnoLetivo = ano => {
@@ -447,6 +457,8 @@ const AtaFinalResultados = () => {
 
     setListaTurmas([]);
     setTurmaId(undefined);
+
+    setModoEdicao(true);
   };
 
   const resetFormato = valor => {
@@ -462,7 +474,10 @@ const AtaFinalResultados = () => {
     resetFormato(ehDesabilitado);
   };
 
-  const onChangeSemestre = valor => setSemestre(valor);
+  const onChangeSemestre = valor => {
+    setSemestre(valor);
+    setModoEdicao(true);
+  };
 
   const onChangeTurma = valor => {
     const todosSetado = turmaId?.find(a => a === OPCAO_TODOS);
@@ -471,16 +486,22 @@ const AtaFinalResultados = () => {
     setTurmaId(todos ? [todos] : novoValor);
     habilitarSelecaoFormato(valor);
     setVisualizacao('');
+    setModoEdicao(true);
   };
-  const onChangeFormato = valor => setFormato(valor);
+  const onChangeFormato = valor => {
+    setFormato(valor);
+    setModoEdicao(true);
+  };
 
   const onChangeVisualizacao = valor => {
     if (visualizacao !== valor) setVisualizacao(valor);
+    setModoEdicao(true);
   };
 
   function onCheckedConsideraHistorico(e) {
     setAnoLetivo(undefined);
     setConsideraHistorico(e.target.checked);
+    setModoEdicao(true);
   }
 
   return (
@@ -499,6 +520,7 @@ const AtaFinalResultados = () => {
             desabilitarBtnGerar ||
             !permissoesTela.podeConsultar
           }
+          modoEdicao={modoEdicao}
         />
       </Cabecalho>
       <Card>

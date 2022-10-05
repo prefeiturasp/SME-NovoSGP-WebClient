@@ -58,6 +58,8 @@ const RelatorioPlanejamentoDiario = () => {
   const [clicouBotaoGerar, setClicouBotaoGerar] = useState(false);
   const [desabilitarGerar, setDesabilitarGerar] = useState(true);
 
+  const [modoEdicao, setModoEdicao] = useState(false);
+
   const opcoesRadioSimNao = [
     { label: 'Não', value: false },
     { label: 'Sim', value: true },
@@ -71,6 +73,7 @@ const RelatorioPlanejamentoDiario = () => {
     setAnoLetivo(valor);
     setListarDataFutura(false);
     setExibirDetalhamento(false);
+    setModoEdicao(true);
   };
 
   const onChangeDre = valor => {
@@ -81,6 +84,7 @@ const RelatorioPlanejamentoDiario = () => {
     setCodigoUe(undefined);
     setListarDataFutura(false);
     setExibirDetalhamento(false);
+    setModoEdicao(true);
   };
 
   const onChangeUe = valor => {
@@ -89,6 +93,7 @@ const RelatorioPlanejamentoDiario = () => {
     setCodigoUe(valor);
     setListarDataFutura(false);
     setExibirDetalhamento(false);
+    setModoEdicao(true);
   };
 
   const onChangeModalidade = valor => {
@@ -96,21 +101,25 @@ const RelatorioPlanejamentoDiario = () => {
     setModalidadeId(valor);
     setListarDataFutura(false);
     setExibirDetalhamento(false);
+    setModoEdicao(true);
   };
 
   const onChangeComponenteCurricular = valor => {
     setComponenteCurricularId(valor);
     setClicouBotaoGerar(false);
+    setModoEdicao(true);
   };
 
   const onChangeBimestre = valor => {
     setBimestre(valor);
     setClicouBotaoGerar(false);
+    setModoEdicao(true);
   };
 
   const onChangeSemestre = valor => {
     setSemestre(valor);
     setClicouBotaoGerar(false);
+    setModoEdicao(true);
   };
 
   const onChangeTurma = valor => {
@@ -118,6 +127,7 @@ const RelatorioPlanejamentoDiario = () => {
     setListarDataFutura(false);
     setExibirDetalhamento(false);
     setClicouBotaoGerar(false);
+    setModoEdicao(true);
   };
 
   const [anoAtual] = useState(moment().format('YYYY'));
@@ -497,17 +507,20 @@ const RelatorioPlanejamentoDiario = () => {
   }, [obterAnosLetivos, modalidadeId, anoLetivo, consideraHistorico]);
 
   const cancelar = async () => {
-    await setCodigoUe();
-    await setCodigoDre();
-    await setTurmaId();
-    await setSemestre();
-    await setModalidadeId();
-    await setTurmaId();
-    await setComponenteCurricularId();
-    await setBimestre();
-    await setListarDataFutura(false);
-    await setExibirDetalhamento(false);
+    setConsideraHistorico(false);
+    setAnoLetivo(anoAtual);
+    setCodigoUe();
+    setCodigoDre();
+    setTurmaId();
+    setSemestre();
+    setModalidadeId();
+    setTurmaId();
+    setComponenteCurricularId();
+    setBimestre();
+    setListarDataFutura(false);
+    setExibirDetalhamento(false);
     validarValorPadraoAnoLetivo(listaAnosLetivo);
+    setModoEdicao(false);
   };
 
   const gerar = async () => {
@@ -555,6 +568,7 @@ const RelatorioPlanejamentoDiario = () => {
           onClickCancelar={cancelar}
           onClickGerar={gerar}
           desabilitarBtnGerar={desabilitarGerar}
+          modoEdicao={modoEdicao}
         />
       </Cabecalho>
       <Card>
@@ -567,6 +581,7 @@ const RelatorioPlanejamentoDiario = () => {
                   setAnoLetivo();
                   setCodigoDre();
                   setConsideraHistorico(e.target.checked);
+                  setModoEdicao(true);
                 }}
                 checked={consideraHistorico}
               />
@@ -695,6 +710,7 @@ const RelatorioPlanejamentoDiario = () => {
                 onChange={e => {
                   setListarDataFutura(e.target.value);
                   setClicouBotaoGerar(false);
+                  setModoEdicao(true);
                 }}
                 desabilitado={
                   !turmaId ||
@@ -714,6 +730,7 @@ const RelatorioPlanejamentoDiario = () => {
                 onChange={e => {
                   setExibirDetalhamento(e.target.value);
                   setClicouBotaoGerar(false);
+                  setModoEdicao(true);
                 }}
                 value={exibirDetalhamento}
                 desabilitado={!turmaId || turmaId === OPCAO_TODOS}

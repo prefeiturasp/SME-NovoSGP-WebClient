@@ -53,6 +53,8 @@ const HistoricoNotificacoes = () => {
     setDesabilitarDescricaoNotificacoes,
   ] = useState(false);
 
+  const [modoEdicao, setModoEdicao] = useState(false);
+
   const opcoesExibirDescricao = [
     { label: 'Sim', value: true },
     { label: 'Não', value: false },
@@ -143,6 +145,8 @@ const HistoricoNotificacoes = () => {
 
     setListaTurmas([]);
     setTurmaId();
+
+    setModoEdicao(true);
   };
 
   const obterDres = async () => {
@@ -351,6 +355,8 @@ const HistoricoNotificacoes = () => {
 
     obterAnosLetivos();
     obterDres();
+
+    setModoEdicao(false);
   };
 
   const temOpcaoTodos = dados => {
@@ -413,6 +419,8 @@ const HistoricoNotificacoes = () => {
 
     setListaTurmas([]);
     setTurmaId();
+
+    setModoEdicao(true);
   };
 
   const onChangeModalidade = novaModalidade => {
@@ -423,6 +431,8 @@ const HistoricoNotificacoes = () => {
 
     setListaTurmas([]);
     setTurmaId();
+
+    setModoEdicao(true);
   };
 
   const onChangeAnoLetivo = ano => {
@@ -433,9 +443,14 @@ const HistoricoNotificacoes = () => {
 
     setListaTurmas([]);
     setTurmaId();
+
+    setModoEdicao(true);
   };
 
-  const onChangeSemestre = valor => setSemestre(valor);
+  const onChangeSemestre = valor => {
+    setSemestre(valor);
+    setModoEdicao(true);
+  };
 
   const onchangeMultiSelect = (valores, valoreAtual, funSetarNovoValor) => {
     const opcaoTodosJaSelecionado = valoreAtual
@@ -460,6 +475,7 @@ const HistoricoNotificacoes = () => {
       setExibirNotificacoesExcluidas(false);
     }
     setDesabilitarDescricaoNotificacoes(desabilitar);
+    setModoEdicao(true);
   };
 
   return (
@@ -470,6 +486,7 @@ const HistoricoNotificacoes = () => {
           onClickCancelar={onClickCancelar}
           onClickGerar={onClickGerar}
           desabilitarBtnGerar={desabilitarBtnGerar}
+          modoEdicao={modoEdicao}
         />
       </Cabecalho>
       <Loader loading={carregandoGeral}>
@@ -520,7 +537,7 @@ const HistoricoNotificacoes = () => {
                   lista={listaModalidades}
                   valueOption="valor"
                   valueText="descricao"
-                  disabled={listaModalidades && listaModalidades.length === 1}
+                  disabled={listaModalidades?.length === 1 || !codigoUe}
                   onChange={onChangeModalidade}
                   valueSelect={modalidadeId}
                   placeholder="Selecione uma modalidade"
@@ -563,6 +580,7 @@ const HistoricoNotificacoes = () => {
               <div className="col-md-12 mb-2">
                 <div className="row pr-3">
                   <Localizador
+                    desabilitado={!codigoUe}
                     dreId={codigoDre}
                     ueId={codigoUe}
                     rfEdicao={usuarioRf}
@@ -576,6 +594,7 @@ const HistoricoNotificacoes = () => {
                           setTurmaId([OPCAO_TODOS]);
                         }
                         setDesabilitarDescricaoNotificacoes(false);
+                        setModoEdicao(true);
                         return;
                       }
                       setUsuarioRf();
@@ -595,6 +614,7 @@ const HistoricoNotificacoes = () => {
                   valueText="descricao"
                   onChange={valores => {
                     onchangeMultiSelect(valores, categorias, setCategorias);
+                    setModoEdicao(true);
                   }}
                   valueSelect={categorias}
                   placeholder="Categoria"
@@ -610,6 +630,7 @@ const HistoricoNotificacoes = () => {
                   valueText="descricao"
                   onChange={valores => {
                     onchangeMultiSelect(valores, tipos, setTipos);
+                    setModoEdicao(true);
                   }}
                   valueSelect={tipos}
                   placeholder="Tipo"
@@ -625,6 +646,7 @@ const HistoricoNotificacoes = () => {
                   valueText="descricao"
                   onChange={valores => {
                     onchangeMultiSelect(valores, situacoes, setSituacoes);
+                    setModoEdicao(true);
                   }}
                   valueSelect={situacoes}
                   placeholder="Situação"
@@ -638,6 +660,7 @@ const HistoricoNotificacoes = () => {
                   valorInicial
                   onChange={e => {
                     setExibirDescricao(e.target.value);
+                    setModoEdicao(true);
                   }}
                   value={exibirDescricao}
                   desabilitado={desabilitarDescricaoNotificacoes}
@@ -650,6 +673,7 @@ const HistoricoNotificacoes = () => {
                   valorInicial
                   onChange={e => {
                     setExibirNotificacoesExcluidas(e.target.value);
+                    setModoEdicao(true);
                   }}
                   value={exibirNotificacoesExcluidas}
                   desabilitado={desabilitarDescricaoNotificacoes}
