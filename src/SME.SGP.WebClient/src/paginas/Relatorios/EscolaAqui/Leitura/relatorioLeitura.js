@@ -340,8 +340,9 @@ const RelatorioLeitura = () => {
 
   const filterTurmasAnoSelecionado = useCallback(() => {
     const turmas = listaTurmasOriginal.filter(a => a.ano === anosEscolares);
+    
     if (turmas?.length > 1) {
-      turmas.unshift({ valor: OPCAO_TODOS, desc: 'Todas' });
+      turmas.unshift({ valor: OPCAO_TODOS, desc: 'Todas', nomeFiltro: 'Todas' });
     }
     setListaTurmas(turmas);
   }, [anosEscolares, listaTurmasOriginal]);

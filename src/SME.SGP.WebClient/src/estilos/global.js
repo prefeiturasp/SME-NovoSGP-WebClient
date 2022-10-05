@@ -346,10 +346,7 @@ export default createGlobalStyle`
     }
   }
 
-  .ant-pagination-item-active a{
-    color:white
-  }
-  .ant-pagination-item-active a:hover{
+ ination-item-active a:hover{
     color:#1890ff
   }
 
