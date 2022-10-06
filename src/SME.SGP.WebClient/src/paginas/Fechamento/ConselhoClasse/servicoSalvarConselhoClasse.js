@@ -138,7 +138,8 @@ class ServicoSalvarConselhoClasse {
     }
 
     if (conselhoClasseEmEdicao) {
-      const temRegistrosInvalidosDigitados = !recomendacaoAluno || !recomendacaoFamilia;
+      const temRegistrosInvalidosDigitados =
+        !recomendacaoAluno || !recomendacaoFamilia;
       const contemRecomendacoesFamiliaAlunoSelecionados =
         recomendacaoFamiliaSelecionados?.length > 0 ||
         recomendacaoAlunoSelecionados?.length > 0;
@@ -163,14 +164,6 @@ class ServicoSalvarConselhoClasse {
       ) {
         return false;
       }
-
-      const perguntarParaSalvar = async () => {
-        return confirmar(
-          'Atenção',
-          '',
-          'Suas alterações não foram salvas, deseja salvar agora?'
-        );
-      };
 
       // Tenta salvar os registros se estão válidos e continuar para executação a ação!
       const perguntaAantesSalvar = true;
@@ -246,7 +239,6 @@ class ServicoSalvarConselhoClasse {
       nota,
       conceito,
       codigoComponenteCurricular,
-      idCampo,
     } = notaConceitoPosConselhoAtual;
 
     const ehNota = Number(tipoNota) === notasConceitos.Notas;
@@ -277,7 +269,11 @@ class ServicoSalvarConselhoClasse {
       return false;
     }
 
-    if ((nota === null || typeof nota === 'undefined') && !conceito && !justificativa) {
+    if (
+      (nota === null || typeof nota === 'undefined') &&
+      !conceito &&
+      !justificativa
+    ) {
       erro(
         `É obrigatório informar ${ehNota ? 'nota' : 'conceito'} pós-conselho`
       );

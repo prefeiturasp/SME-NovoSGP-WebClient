@@ -2,9 +2,7 @@ import React, { useCallback, useState, useEffect } from 'react';
 
 import {
   Loader,
-  Button,
   Card,
-  Colors,
   SelectComponent,
   Localizador,
   RadioGroupButton,
@@ -26,6 +24,7 @@ import { ModalidadeDTO } from '~/dtos';
 
 import { URL_HOME } from '~/constantes';
 import { OPCAO_TODOS } from '~/constantes/constantes';
+import BotoesAcaoRelatorio from '~/componentes-sgp/botoesAcaoRelatorio';
 
 const AtribuicaoCJ = () => {
   const [listaAnosLetivo, setListaAnosLetivo] = useState([]);
@@ -54,6 +53,8 @@ const AtribuicaoCJ = () => {
   const [carregandoGeral, setCarregandoGeral] = useState(false);
   const [clicouBotaoGerar, setClicouBotaoGerar] = useState(false);
 
+  const [modoEdicao, setModoEdicao] = useState(false);
+
   const opcoesExibir = [
     { label: 'Não', value: false },
     { label: 'Sim', value: true },
@@ -80,6 +81,7 @@ const AtribuicaoCJ = () => {
     setExibirAulas(false);
     setExibirAtribuicoesExporadicas(false);
     setTipoVisualizacao(1);
+    setModoEdicao(false);
   };
 
   const onClickGerar = async () => {
@@ -124,6 +126,7 @@ const AtribuicaoCJ = () => {
     setModalidadeId();
     setTurmaId([]);
     setAnoLetivo(valor);
+    setModoEdicao(true);
   };
 
   const onChangeDre = valor => {
@@ -133,28 +136,33 @@ const AtribuicaoCJ = () => {
     setTurmaId([]);
     setUeCodigo(undefined);
     setClicouBotaoGerar(false);
+    setModoEdicao(true);
   };
 
   const onChangeUe = valor => {
     setModalidadeId();
     setTurmaId([]);
     setUeCodigo(valor);
+    setModoEdicao(true);
   };
 
   const onChangeModalidade = valor => {
     setTurmaId([]);
     setModalidadeId(valor);
     setClicouBotaoGerar(false);
+    setModoEdicao(true);
   };
 
   const onChangeSemestre = valor => {
     setSemestre(valor);
     setClicouBotaoGerar(false);
+    setModoEdicao(true);
   };
 
   const onChangeTurma = valor => {
     setTurmaId(valor);
     setClicouBotaoGerar(false);
+    setModoEdicao(true);
   };
 
   const obterAnosLetivos = useCallback(async () => {
@@ -374,43 +382,18 @@ const AtribuicaoCJ = () => {
 
   return (
     <>
-      <Cabecalho pagina="Relatório de atribuição CJ" />
+      <Cabecalho pagina="Relatório de atribuição CJ">
+        <BotoesAcaoRelatorio
+          onClickVoltar={onClickVoltar}
+          onClickCancelar={onClickCancelar}
+          onClickGerar={onClickGerar}
+          desabilitarBtnGerar={desabilitarBtnGerar}
+          modoEdicao={modoEdicao}
+        />
+      </Cabecalho>
       <Loader loading={carregandoGeral}>
         <Card>
           <div className="col-md-12 ">
-            <div className="row mb-5">
-              <div className="col-md-12 d-flex justify-content-end">
-                <Button
-                  id="btn-voltar"
-                  label="Voltar"
-                  icon="arrow-left"
-                  color={Colors.Azul}
-                  border
-                  className="mr-3"
-                  onClick={onClickVoltar}
-                />
-                <Button
-                  id="btn-cancelar"
-                  label="Cancelar"
-                  color={Colors.Roxo}
-                  border
-                  bold
-                  className="mr-3"
-                  onClick={onClickCancelar}
-                />
-                <Button
-                  id="btn-gerar"
-                  icon="print"
-                  label="Gerar"
-                  color={Colors.Azul}
-                  border
-                  bold
-                  onClick={onClickGerar}
-                  disabled={desabilitarBtnGerar}
-                />
-              </div>
-            </div>
-
             <div className="row mb-4">
               <div className="col-sm-12 col-md-6 col-lg-2 col-xl-2 mb-2">
                 <SelectComponent
@@ -524,6 +507,7 @@ const AtribuicaoCJ = () => {
                 onChange={valores => {
                   if (valores && valores.professorRf) {
                     setUsuarioRf(valores.professorRf);
+                    setModoEdicao(true);
                   } else {
                     setUsuarioRf(undefined);
                   }
@@ -543,6 +527,7 @@ const AtribuicaoCJ = () => {
                   onChange={e => {
                     setExibirAulas(e.target.value);
                     setClicouBotaoGerar(false);
+                    setModoEdicao(true);
                   }}
                   value={exibirAulas}
                 />
@@ -555,6 +540,7 @@ const AtribuicaoCJ = () => {
                   onChange={e => {
                     setExibirAtribuicoesExporadicas(e.target.value);
                     setClicouBotaoGerar(false);
+                    setModoEdicao(true);
                   }}
                   value={exibirAtribuicoesExporadicas}
                 />
@@ -567,6 +553,7 @@ const AtribuicaoCJ = () => {
                   onChange={e => {
                     setTipoVisualizacao(e.target.value);
                     setClicouBotaoGerar(false);
+                    setModoEdicao(true);
                   }}
                   value={tipoVisualizacao}
                 />

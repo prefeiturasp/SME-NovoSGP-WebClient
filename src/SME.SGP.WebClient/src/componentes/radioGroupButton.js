@@ -49,6 +49,7 @@ const RadioGroupButton = ({
   label,
   opcoes,
   value,
+  labelRequired,
 }) => {
   const obterErros = () => {
     return form && form.touched[name] && form.errors[name] ? (
@@ -103,7 +104,12 @@ const RadioGroupButton = ({
   return (
     <>
       <Campo className={className} invalido={possuiErro()}>
-        {label ? <Label text={label} control={name || ''} /> : ''}
+        {label ? (
+          <Label text={label} control={name || ''} isRequired={labelRequired} />
+        ) : (
+          <></>
+        )}
+
         {
           <>
             {form ? campoComValidacoes() : campoSemValidacoes()}
@@ -120,6 +126,7 @@ RadioGroupButton.propTypes = {
   label: PropTypes.string,
   desabilitado: PropTypes.bool,
   onChange: PropTypes.func,
+  labelRequired: PropTypes.bool,
 };
 
 RadioGroupButton.defaultProps = {
@@ -127,6 +134,7 @@ RadioGroupButton.defaultProps = {
   label: '',
   desabilitado: false,
   onChange: () => {},
+  labelRequired: false,
 };
 
 export default RadioGroupButton;

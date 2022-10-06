@@ -121,7 +121,9 @@ const ListaFinal = props => {
   const obterValorNotaConceito = valor => {
     const ehNota = Number(notasConceitos.Notas) === tipoNota;
     if (valor && !ehNota && listaTiposConceitos && listaTiposConceitos.length) {
-      const conceito = listaTiposConceitos.find(item => item.id == valor);
+      const conceito = listaTiposConceitos.find(
+        item => String(item.id) === String(valor)
+      );
       return conceito ? conceito.valor : '';
     }
     return valor;

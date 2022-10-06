@@ -87,7 +87,7 @@ TurmasDropDown.propTypes = {
   form: t.oneOfType([t.objectOf(t.object), t.any]),
   label: t.string,
   ueId: t.string,
-  modalidadeId: t.string,
+  modalidadeId: t.oneOfType([t.string, t.number]),
   valor: t.string,
   dados: t.oneOfType([t.object, t.array]),
   allowClear: t.bool,

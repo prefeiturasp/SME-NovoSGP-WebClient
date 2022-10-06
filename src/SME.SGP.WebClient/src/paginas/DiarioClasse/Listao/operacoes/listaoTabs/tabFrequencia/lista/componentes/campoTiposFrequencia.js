@@ -26,7 +26,7 @@ const CampoTiposFrequencia = props => {
 
   const montarBotao = (background, valor, tituloTooltip) => {
     return (
-      <Tooltip title={tituloTooltip}>
+      <Tooltip title={tituloTooltip} destroyTooltipOnHide>
         <Button
           disabled={desabilitar}
           size="small"
@@ -71,9 +71,9 @@ const CampoTiposFrequencia = props => {
 };
 
 CampoTiposFrequencia.propTypes = {
-  onChange: PropTypes.oneOfType(PropTypes.func),
+  onChange: PropTypes.oneOfType([PropTypes.func]),
   desabilitar: PropTypes.bool,
-  listaTiposFrequencia: PropTypes.oneOfType(PropTypes.array),
+  listaTiposFrequencia: PropTypes.oneOfType([PropTypes.array]),
   tipoFrequencia: PropTypes.string,
 };
 

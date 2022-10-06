@@ -10,10 +10,11 @@ import FechaReabListaPaginada from './fechaReabListaPaginada';
 const FechaReabLista = () => {
   return (
     <FechaReabListaContextProvider>
-      <Cabecalho pagina="Período de Fechamento (Reabertura)" />
       <FechaReabListaLoader>
-        <Card>
+        <Cabecalho pagina="Período de Fechamento (Reabertura)">
           <FechaReabListaBotoesAcao />
+        </Cabecalho>
+        <Card padding="24px 24px">
           <FechaReabListaFiltros />
           <FechaReabListaPaginada />
         </Card>

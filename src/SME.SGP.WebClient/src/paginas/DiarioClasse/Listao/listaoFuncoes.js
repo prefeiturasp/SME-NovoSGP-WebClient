@@ -259,7 +259,9 @@ const salvarFechamentoListao = async (
   dadosFechamento,
   bimestreOperacoes,
   setExibirLoaderGeral,
-  componenteCurricular
+  componenteCurricular,
+  setDadosFechamento,
+  setDadosIniciaisFechamento
 ) => {
   const notaConceitoAlunos = [];
   const ehNota = Number(dadosFechamento?.notaTipo) === notasConceitos.Notas;
@@ -306,6 +308,18 @@ const salvarFechamentoListao = async (
     const { dispatch } = store;
 
     dispatch(setTelaEmEdicao(false));
+    const dadosComAuditoriaAtualizada = { ...dadosFechamento };
+    dadosComAuditoriaAtualizada.auditoriaAlteracao =
+      resposta.data.auditoriaAlteracao;
+    dadosComAuditoriaAtualizada.auditoriaInclusao =
+      resposta.data.auditoriaInclusao;
+    dadosComAuditoriaAtualizada.situacao = resposta.data.situacao;
+    dadosComAuditoriaAtualizada.dataFechamento = resposta.data.dataFechamento;
+    dadosComAuditoriaAtualizada.situacaoNome = resposta.data.situacaoNome;
+    const dadosCarregar = _.cloneDeep({ ...dadosComAuditoriaAtualizada });
+    const dadosIniciais = _.cloneDeep({ ...dadosComAuditoriaAtualizada });
+    setDadosFechamento(dadosCarregar);
+    setDadosIniciaisFechamento(dadosIniciais);
     return true;
   }
 
@@ -319,7 +333,9 @@ const validarSalvarFechamentoListao = async (
   setExibirLoaderGeral,
   setExibirModalJustificativaFechamento,
   componenteCurricular,
-  acaoPosSalvar
+  acaoPosSalvar,
+  setDadosFechamento,
+  setDadosIniciaisFechamento
 ) => {
   const temAvaliacoesBimestraisPendentes = dadosFechamento?.observacoes?.length;
   let continuarSalvar = true;
@@ -343,7 +359,9 @@ const validarSalvarFechamentoListao = async (
       dadosFechamento,
       bimestreOperacoes,
       setExibirLoaderGeral,
-      componenteCurricular
+      componenteCurricular,
+      setDadosFechamento,
+      setDadosIniciaisFechamento
     );
 
   const dadosValidar = _.cloneDeep(dadosFechamento);
@@ -371,7 +389,9 @@ const validarSalvarFechamentoListao = async (
     dadosFechamento,
     bimestreOperacoes,
     setExibirLoaderGeral,
-    componenteCurricular
+    componenteCurricular,
+    setDadosFechamento,
+    setDadosIniciaisFechamento
   );
 };
 

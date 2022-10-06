@@ -2,8 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Form, Formik } from 'formik';
 import * as Yup from 'yup';
 import { useSelector } from 'react-redux';
-import shortid from 'shortid';
-
+import { Col, Row } from 'antd';
 import {
   Button,
   CampoData,
@@ -13,7 +12,7 @@ import {
   Loader,
   momentSchema,
   SelectAutocomplete,
-  Auditoria
+  Auditoria,
 } from '~/componentes';
 import { Cabecalho } from '~/componentes-sgp';
 
@@ -32,6 +31,11 @@ import {
 } from '~/servicos';
 
 import { BoxTextoBimetre, CaixaBimestre } from './PeriodosEscoladres.css';
+import {
+  SGP_BUTTON_ALTERAR_CADASTRAR,
+  SGP_BUTTON_CANCELAR,
+} from '~/componentes-sgp/filtro/idsCampos';
+import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
 
 const PeriodosEscolares = () => {
   const [
@@ -64,9 +68,8 @@ const PeriodosEscolares = () => {
   const [carregandoTipos, setCarregandoTipos] = useState(false);
   const [auditoria, setAuditoria] = useState({});
 
-  const temValorInicial = Object.keys(valoresIniciais).length;
   const labelBotaoCadastrar =
-    temValorInicial && modoEdicao ? 'Alterar' : 'Cadastrar';
+    ehRegistroExistente || auditoria?.criadoEm ? 'Alterar' : 'Cadastrar';
 
   const validacaoPrimeiroBim = {
     primeiroBimestreDataInicial: momentSchema.required(
@@ -176,12 +179,12 @@ const PeriodosEscolares = () => {
       const editado = await api
         .post('v1/periodo-escolar', periodoEscolarEdicao)
         .catch(e => erros(e));
-      if (editado && editado.status == 200) {
+      if (editado?.status === 200) {
         sucesso('Suas informações foram editadas com sucesso.');
       }
     } else {
       const calendarioParaCadastrar = listaTipoCalendario.find(item => {
-        return item.id == calendarioEscolarSelecionado;
+        return String(item.id) === String(calendarioEscolarSelecionado);
       });
       const paramsCadastrar = {
         periodos: [
@@ -221,7 +224,7 @@ const PeriodosEscolares = () => {
       const cadastrado = await api
         .post('v1/periodo-escolar', paramsCadastrar)
         .catch(e => erros(e));
-      if (cadastrado && cadastrado.status == 200) {
+      if (cadastrado?.status === 200) {
         sucesso('Suas informações foram salvas com sucesso.');
       }
     }
@@ -313,6 +316,13 @@ const PeriodosEscolares = () => {
     });
     setPeriodoEscolarEdicao(periodoAtual.data);
     setValoresIniciais(bimestresValorInicial);
+  };
+
+  const touchedFields = form => {
+    const arrayCampos = Object.keys(valoresFormInicial);
+    arrayCampos.forEach(campo => {
+      form.setFieldTouched(campo, true, true);
+    });
   };
 
   const onChangeCamposData = form => {
@@ -453,14 +463,8 @@ const PeriodosEscolares = () => {
     );
   };
 
-  const touchedFields = form => {
-    const arrayCampos = Object.keys(valoresFormInicial);
-    arrayCampos.forEach(campo => {
-      form.setFieldTouched(campo, true, true);
-    });
-  };
-
   const validaAntesDoSubmit = form => {
+    setModoEdicao(true);
     touchedFields(form);
     form.validateForm().then(() => {
       if (
@@ -519,24 +523,55 @@ const PeriodosEscolares = () => {
   }, [pesquisaTipoCalendario]);
 
   return (
-    <>
-      <Cabecalho pagina="Cadastro do período escolar" />
-      <Card>
-        <Formik
-          enableReinitialize
-          initialValues={valoresIniciais}
-          validationSchema={validacoes}
-          onSubmit={values => onSubmit(values)}
-          validateOnChange
-          validateOnBlur
-        >
-          {form => (
+    <Formik
+      enableReinitialize
+      initialValues={valoresIniciais}
+      validationSchema={validacoes}
+      onSubmit={values => onSubmit(values)}
+      validateOnChange
+      validateOnBlur
+    >
+      {form => (
+        <>
+          <Cabecalho pagina="Cadastro do período escolar">
+            <Row gutter={[8, 8]} type="flex">
+              <Col>
+                <BotaoVoltarPadrao onClick={() => onClickVoltar()} />
+              </Col>
+              <Col>
+                <Button
+                  id={SGP_BUTTON_CANCELAR}
+                  label="Cancelar"
+                  color={Colors.Roxo}
+                  border
+                  bold
+                  onClick={() => onClickCancelar(form)}
+                  disabled={!modoEdicao || desabilitaCampos}
+                />
+              </Col>
+              <Col>
+                <Button
+                  id={SGP_BUTTON_ALTERAR_CADASTRAR}
+                  label={labelBotaoCadastrar}
+                  color={Colors.Roxo}
+                  border
+                  bold
+                  onClick={() => validaAntesDoSubmit(form)}
+                  disabled={
+                    !calendarioEscolarSelecionado ||
+                    desabilitaCampos ||
+                    (auditoria?.criadoEm && !modoEdicao)
+                  }
+                />
+              </Col>
+            </Row>
+          </Cabecalho>
+          <Card>
             <Form className="col-md-12">
               <div className="row">
                 <div className="col-sm-12 col-md-5 col-lg-4 col-xl-4 mb-4">
                   <Loader loading={carregandoTipos} tip="">
                     <SelectAutocomplete
-                      hideLabel
                       showList
                       isHandleSearch
                       placeholder="Selecione um tipo de calendário"
@@ -550,38 +585,12 @@ const PeriodosEscolares = () => {
                       onChange={id => selecionaTipoCalendario(id, form)}
                       handleSearch={handleSearch}
                       value={valorTipoCalendario}
+                      label="Calendário"
+                      temErro={modoEdicao && !calendarioEscolarSelecionado}
+                      mensagemErro="Campo obrigatório"
+                      labelRequired
                     />
                   </Loader>
-                </div>
-                <div className="col-sm-12 col-md-7 col-lg-8 col-xl-8 d-flex justify-content-end mb-4">
-                  <Button
-                    id={shortid.generate()}
-                    label="Voltar"
-                    icon="arrow-left"
-                    color={Colors.Azul}
-                    border
-                    className="mr-3"
-                    onClick={onClickVoltar}
-                  />
-                  <Button
-                    id={shortid.generate()}
-                    label="Cancelar"
-                    color={Colors.Roxo}
-                    border
-                    bold
-                    className="mr-3"
-                    onClick={() => onClickCancelar(form)}
-                    disabled={!modoEdicao || desabilitaCampos}
-                  />
-                  <Button
-                    id={shortid.generate()}
-                    label={labelBotaoCadastrar}
-                    color={Colors.Roxo}
-                    border
-                    bold
-                    onClick={() => validaAntesDoSubmit(form)}
-                    disabled={!calendarioEscolarSelecionado || desabilitaCampos}
-                  />
                 </div>
               </div>
               {listaTipoCalendario &&
@@ -597,16 +606,14 @@ const PeriodosEscolares = () => {
                       {quartoBimestre(form)}
                     </>
                   ) : (
-                    ''
+                    <></>
                   )}
                 </>
               ) : (
-                ''
+                <></>
               )}
             </Form>
-          )}
-        </Formik>
-        <div className="col-md-6 d-flex justify-content-start">
+
             {valorTipoCalendario &&
             valorTipoCalendario !== '' &&
             ehRegistroExistente &&
@@ -621,11 +628,12 @@ const PeriodosEscolares = () => {
                 alteradoRf={auditoria.alteradoRf}
               />
             ) : (
-              ''
+              <></>
             )}
-          </div>
-      </Card>
-    </>
+          </Card>
+        </>
+      )}
+    </Formik>
   );
 };
 

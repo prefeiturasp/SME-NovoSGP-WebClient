@@ -39,7 +39,7 @@ export default function PlanoAEE(state = inicial, action) {
       }
       case '@planoAEE/setTypePlanoAEECadastro':
         draft.typePlanoAEECadastro = action.payload;
-        break;
+        return draft;
       case '@planoAEE/setPlanoAEEDados': {
         return {
           ...draft,

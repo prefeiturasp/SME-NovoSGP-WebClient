@@ -67,6 +67,7 @@ const RecuperarSenha = props => {
         setRf(props.location.state.rf);
       }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useLayoutEffect(() => {

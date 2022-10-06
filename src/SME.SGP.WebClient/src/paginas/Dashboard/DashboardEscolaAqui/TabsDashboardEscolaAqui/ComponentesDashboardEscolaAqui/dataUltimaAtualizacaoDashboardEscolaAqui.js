@@ -22,6 +22,7 @@ const DataUltimaAtualizacaoDashboardEscolaAqui = props => {
 
   useEffect(() => {
     obterDataUltimaAtualizacao();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return ultimaAtualizacao ? (

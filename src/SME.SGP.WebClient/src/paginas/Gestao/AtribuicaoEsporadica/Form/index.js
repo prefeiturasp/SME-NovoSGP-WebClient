@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import PropTypes from 'prop-types';
-import _ from 'lodash';
 import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
 import { useSelector } from 'react-redux';
@@ -37,6 +36,7 @@ import {
 import { validaSeObjetoEhNuloOuVazio } from '~/utils';
 
 import { Row } from './styles';
+import { SGP_BUTTON_ALTERAR_CADASTRAR } from '~/componentes-sgp/filtro/idsCampos';
 
 function AtribuicaoEsporadicaForm({ match }) {
   const [carregando, setCarregando] = useState(false);
@@ -66,16 +66,20 @@ function AtribuicaoEsporadicaForm({ match }) {
   const [periodos, setPeriodos] = useState();
 
   const valorPadrao = useMemo(() => {
-    const dataParcial = moment().format('MM-DD');
-    const dataInteira = moment(`${dataParcial}-${anoLetivo}`);
-    return dataInteira;
-  }, [anoLetivo]);
+    const anoValidar = anoLetivo || anoAtual;
+    if (anoValidar) {
+      const dataParcial = moment().format('MM-DD');
+      const dataInteira = moment(`${dataParcial}-${anoValidar}`);
+      return dataInteira;
+    }
+    return '';
+  }, [anoLetivo, anoAtual]);
 
   const [valoresIniciais, setValoresIniciais] = useState({
     professorRf: '',
     professorNome: '',
-    dataInicio: '',
-    dataFim: '',
+    dataInicio: valorPadrao,
+    dataFim: valorPadrao,
     ueId: '',
     dreId: '',
     anoLetivo: anoAtual,
@@ -84,6 +88,8 @@ function AtribuicaoEsporadicaForm({ match }) {
   const labelBotaoPrincipal = match?.params?.id ? 'Alterar' : 'Cadastrar';
   const validacoes = () => {
     return Yup.object({
+      ueId: momentSchema.required('Campo obrigatório'),
+      dreId: momentSchema.required('Campo obrigatório'),
       dataInicio: momentSchema.required('Campo obrigatório'),
       dataFim: momentSchema.required('Campo obrigatório'),
       professorRf: Yup.number()
@@ -120,8 +126,12 @@ function AtribuicaoEsporadicaForm({ match }) {
       );
       if (cadastrado && cadastrado.status === 200) {
         setCarregando(false);
-        sucesso('Atribuição esporádica salva com sucesso.');
-        history.push('/gestao/atribuicao-esporadica');
+        sucesso(
+          `Atribuição esporádica ${
+            match?.params?.id ? 'alterada' : 'salva'
+          } com sucesso.`
+        );
+        history.push(RotasDto.ATRIBUICAO_ESPORADICA_LISTA);
       }
     } catch (err) {
       if (err) {
@@ -131,18 +141,20 @@ function AtribuicaoEsporadicaForm({ match }) {
     }
   };
 
-  const onClickVoltar = async () => {
+  const onClickVoltar = async form => {
     if (modoEdicao) {
       const confirmou = await confirmar(
         'Atenção',
-        'Você não salvou as informações preenchidas.',
-        'Deseja realmente cancelar as alterações?'
+        '',
+        'Suas alterações não foram salvas, deseja salvar agora?'
       );
       if (confirmou) {
-        history.push('/gestao/atribuicao-esporadica');
+        validaAntesDoSubmit(form);
+      } else {
+        history.push(RotasDto.ATRIBUICAO_ESPORADICA_LISTA);
       }
     } else {
-      history.push('/gestao/atribuicao-esporadica');
+      history.push(RotasDto.ATRIBUICAO_ESPORADICA_LISTA);
     }
   };
 
@@ -154,18 +166,32 @@ function AtribuicaoEsporadicaForm({ match }) {
       'Deseja realmente cancelar as alterações?'
     );
     if (confirmou) {
+      setModoEdicao(false);
+      const nextValues = {
+        professorRf: valoresIniciais?.professorRf,
+        professorNome: valoresIniciais?.professorNome,
+        dataInicio: valoresIniciais?.dataInicio,
+        dataFim: valoresIniciais?.dataFim,
+        anoLetivo: valoresIniciais?.anoLetivo,
+      };
       if (listaDres?.length > 1) {
         form.setFieldValue('dreId', valoresIniciais?.dreId);
+        nextValues.dreId = valoresIniciais?.dreId;
+      } else {
+        nextValues.dreId = form?.values?.dreId;
       }
       if (listaUes?.length > 1) {
         form.setFieldValue('ueId', valoresIniciais?.ueId);
+        nextValues.ueId = valoresIniciais?.ueId;
+      } else {
+        nextValues.ueId = form?.values?.ueId;
       }
       form.setFieldValue('professorRf', valoresIniciais?.professorRf);
       form.setFieldValue('professorNome', valoresIniciais?.professorNome);
       form.setFieldValue('dataInicio', valoresIniciais?.dataInicio);
       form.setFieldValue('dataFim', valoresIniciais?.dataFim);
       form.setFieldValue('anoLetivo', valoresIniciais?.anoLetivo);
-      setModoEdicao(false);
+      form.resetForm(nextValues);
     }
   };
 
@@ -185,7 +211,7 @@ function AtribuicaoEsporadicaForm({ match }) {
       ).catch(e => erros(e));
       if (excluir) {
         sucesso(`Atribuição excluida com sucesso!`);
-        history.push('/gestao/atribuicao-esporadica');
+        history.push(RotasDto.ATRIBUICAO_ESPORADICA_LISTA);
       }
     }
   };
@@ -211,31 +237,19 @@ function AtribuicaoEsporadicaForm({ match }) {
             registro.data.alteradoRF > 0 ? registro.data.alteradoRF : '',
           alteradoEm: registro.data.alteradoEm,
         });
+
         setValoresCarregados(true);
         setCarregando(false);
       }
     } catch (err) {
+      setValoresCarregados(true);
       setCarregando(false);
       erros(err);
     }
   };
 
-  const validaFormulario = valores => {
-    if (validaSeObjetoEhNuloOuVazio(valores)) return;
-    if (
-      (!modoEdicao &&
-        valoresCarregados &&
-        !_.isEqual(
-          refForm.getFormikContext().initialValues,
-          refForm.getFormikContext().values
-        )) ||
-      (!modoEdicao &&
-        novoRegistro &&
-        !_.isEqual(
-          refForm.getFormikContext().initialValues,
-          refForm.getFormikContext().values
-        ))
-    ) {
+  const onChangeCampos = () => {
+    if (valoresCarregados) {
       setModoEdicao(true);
     }
   };
@@ -246,9 +260,13 @@ function AtribuicaoEsporadicaForm({ match }) {
       setBreadcrumbManual(
         match.url,
         'Atribuição',
-        '/gestao/atribuicao-esporadica'
+        RotasDto.ATRIBUICAO_ESPORADICA_LISTA
       );
       buscarPorId(match.params.id);
+    } else {
+      setTimeout(() => {
+        setValoresCarregados(true);
+      }, 1500);
     }
   }, [match]);
 
@@ -256,6 +274,7 @@ function AtribuicaoEsporadicaForm({ match }) {
     setConsideraHistorico(e.target.checked);
     setAnoLetivo(anoAtual);
     refForm.setFieldValue('anoLetivo', anoAtual);
+    onChangeCampos();
   };
 
   const obterAnosLetivos = useCallback(async () => {
@@ -300,6 +319,7 @@ function AtribuicaoEsporadicaForm({ match }) {
 
   const onChangeAnoLetivo = ano => {
     setAnoLetivo(ano);
+    onChangeCampos();
   };
 
   const obterPeriodos = useCallback(
@@ -335,21 +355,19 @@ function AtribuicaoEsporadicaForm({ match }) {
 
   return (
     <>
-      <Cabecalho pagina="Atribuição" />
-      <Loader loading={carregando}>
-        <Card>
-          <Formik
-            enableReinitialize
-            initialValues={valoresIniciais}
-            validationSchema={validacoes}
-            onSubmit={valores => onSubmitFormulario(valores)}
-            validate={valores => validaFormulario(valores)}
-            ref={refFormik => setRefForm(refFormik)}
-            validateOnBlur
-            validateOnChange
-          >
-            {form => (
-              <Form>
+      <Loader loading={carregando || !valoresCarregados}>
+        <Formik
+          enableReinitialize
+          initialValues={valoresIniciais}
+          validationSchema={validacoes}
+          onSubmit={valores => onSubmitFormulario(valores)}
+          ref={refFormik => setRefForm(refFormik)}
+          validateOnBlur
+          validateOnChange
+        >
+          {form => (
+            <>
+              <Cabecalho pagina="Atribuição">
                 <ButtonGroup
                   form={form}
                   permissoesTela={
@@ -359,119 +377,146 @@ function AtribuicaoEsporadicaForm({ match }) {
                   labelBotaoPrincipal={labelBotaoPrincipal}
                   onClickBotaoPrincipal={() => onClickBotaoPrincipal(form)}
                   onClickCancelar={formulario => onClickCancelar(formulario)}
-                  onClickVoltar={() => onClickVoltar()}
+                  onClickVoltar={() => onClickVoltar(form)}
                   onClickExcluir={() => onClickExcluir(form)}
                   modoEdicao={modoEdicao}
+                  idBotaoPrincipal={SGP_BUTTON_ALTERAR_CADASTRAR}
+                  desabilitarBotaoPrincipal={match?.params?.id && !modoEdicao}
                 />
-                <Row className="row mb-2">
-                  <CheckboxComponent
-                    name="exibirHistorico"
-                    form={form}
-                    label="Exibir histórico?"
-                    onChangeCheckbox={onChangeConsideraHistorico}
-                    checked={consideraHistorico}
-                    disabled={listaAnosLetivo.length === 1}
-                  />
-                </Row>
-                <Row className="row">
-                  <Grid cols={2}>
-                    <SelectComponent
-                      name="anoLetivo"
-                      label="Ano Letivo"
+              </Cabecalho>
+              <Card>
+                <Form className="col-md-12">
+                  <Row className="row mb-2">
+                    <CheckboxComponent
+                      name="exibirHistorico"
                       form={form}
-                      lista={listaAnosLetivo}
-                      valueOption="valor"
-                      valueText="desc"
-                      disabled={
-                        !consideraHistorico || listaAnosLetivo?.length === 1
-                      }
-                      onChange={onChangeAnoLetivo}
-                      valueSelect={anoLetivo}
-                      placeholder="Ano letivo"
+                      label="Exibir histórico?"
+                      onChangeCheckbox={onChangeConsideraHistorico}
+                      checked={consideraHistorico}
+                      disabled={listaAnosLetivo.length === 1}
                     />
-                  </Grid>
-                  <Grid cols={5}>
-                    <DreDropDown
-                      label="Diretoria Regional de Educação (DRE)"
-                      form={form}
-                      onChange={(valor, lista) => {
-                        setDreId(valor);
-                        setListaDres(lista);
-                        setUeCodigo('');
-                        form.setFieldValue('ueId', '');
-                      }}
-                      desabilitado={somenteConsulta}
-                    />
-                  </Grid>
-                  <Grid cols={5}>
-                    <UeDropDown
-                      label="Unidade Escolar (UE)"
-                      dreId={dreId}
-                      form={form}
-                      onChange={(codigo, infantil, lista) => {
-                        setUeCodigo(codigo);
-                        setEhInfantil(infantil);
-                        setListaUes(lista);
-                      }}
-                      desabilitado={somenteConsulta}
-                      preencherLista={setListaUes}
-                    />
-                  </Grid>
-                </Row>
-                <Row className="row">
-                  <Grid cols={8}>
-                    <Row className="row">
-                      <Localizador
-                        dreId={form.values.dreId}
-                        anoLetivo={form.values.anoLetivo}
-                        showLabel
+                  </Row>
+                  <Row className="row">
+                    <Grid cols={2}>
+                      <SelectComponent
+                        name="anoLetivo"
+                        label="Ano Letivo"
                         form={form}
-                        onChange={() => null}
-                        desabilitado={somenteConsulta || valoresIniciais.id}
+                        lista={listaAnosLetivo}
+                        valueOption="valor"
+                        valueText="desc"
+                        disabled={
+                          !consideraHistorico || listaAnosLetivo?.length === 1
+                        }
+                        onChange={onChangeAnoLetivo}
+                        valueSelect={anoLetivo}
+                        placeholder="Ano letivo"
+                        labelRequired
                       />
-                    </Row>
-                  </Grid>
-                  <Grid cols={2}>
-                    <CampoData
-                      placeholder="Selecione"
-                      label="Data Início"
-                      form={form}
-                      name="dataInicio"
-                      formatoData="DD/MM/YYYY"
-                      desabilitado={somenteConsulta}
-                      desabilitarData={desabilitarData}
-                      valorPadrao={valorPadrao}
-                    />
-                  </Grid>
-                  <Grid cols={2}>
-                    <CampoData
-                      placeholder="Selecione"
-                      label="Data Fim"
-                      form={form}
-                      name="dataFim"
-                      formatoData="DD/MM/YYYY"
-                      desabilitado={somenteConsulta}
-                      desabilitarData={desabilitarData}
-                      valorPadrao={valorPadrao}
-                    />
-                  </Grid>
-                </Row>
-              </Form>
-            )}
-          </Formik>
-          {auditoria && (
-            <div className="ml-n3">
-              <Auditoria
-                criadoEm={auditoria.criadoEm}
-                criadoPor={auditoria.criadoPor}
-                criadoRf={auditoria.criadoRf}
-                alteradoPor={auditoria.alteradoPor}
-                alteradoEm={auditoria.alteradoEm}
-                alteradoRf={auditoria.alteradoRf}
-              />
-            </div>
+                    </Grid>
+                    <Grid cols={5}>
+                      <DreDropDown
+                        label="Diretoria Regional de Educação (DRE)"
+                        form={form}
+                        onChange={(valor, lista) => {
+                          setDreId(valor);
+                          setListaDres(lista);
+                          setUeCodigo('');
+                          form.setFieldValue('ueId', '');
+                          onChangeCampos();
+                        }}
+                        desabilitado={somenteConsulta}
+                        labelRequired
+                      />
+                    </Grid>
+                    <Grid cols={5}>
+                      <UeDropDown
+                        label="Unidade Escolar (UE)"
+                        dreId={dreId}
+                        form={form}
+                        onChange={(codigo, infantil, lista) => {
+                          setUeCodigo(codigo);
+                          setEhInfantil(infantil);
+                          setListaUes(lista);
+                          onChangeCampos();
+                        }}
+                        desabilitado={somenteConsulta}
+                        preencherLista={setListaUes}
+                        labelRequired
+                      />
+                    </Grid>
+                  </Row>
+                  <Row className="row">
+                    <Grid cols={8}>
+                      <Row className="row">
+                        <Localizador
+                          dreId={form.values.dreId}
+                          anoLetivo={form.values.anoLetivo}
+                          showLabel
+                          form={form}
+                          onChange={valorLocalizador => {
+                            if (
+                              valorLocalizador?.professorRf !==
+                              valoresIniciais?.professorRf
+                            ) {
+                              onChangeCampos();
+                            }
+                          }}
+                          desabilitado={somenteConsulta || valoresIniciais.id}
+                          labelRequired
+                        />
+                      </Row>
+                    </Grid>
+                    <Grid cols={2}>
+                      <CampoData
+                        placeholder="Selecione"
+                        label="Data Início"
+                        form={form}
+                        name="dataInicio"
+                        formatoData="DD/MM/YYYY"
+                        desabilitado={somenteConsulta}
+                        desabilitarData={desabilitarData}
+                        valorPadrao={valorPadrao}
+                        labelRequired
+                        onChange={() => {
+                          onChangeCampos();
+                        }}
+                      />
+                    </Grid>
+                    <Grid cols={2}>
+                      <CampoData
+                        placeholder="Selecione"
+                        label="Data Fim"
+                        form={form}
+                        name="dataFim"
+                        formatoData="DD/MM/YYYY"
+                        desabilitado={somenteConsulta}
+                        desabilitarData={desabilitarData}
+                        valorPadrao={valorPadrao}
+                        labelRequired
+                        onChange={() => {
+                          onChangeCampos();
+                        }}
+                      />
+                    </Grid>
+                  </Row>
+                  {auditoria && (
+                    <div className="row">
+                      <Auditoria
+                        criadoEm={auditoria.criadoEm}
+                        criadoPor={auditoria.criadoPor}
+                        criadoRf={auditoria.criadoRf}
+                        alteradoPor={auditoria.alteradoPor}
+                        alteradoEm={auditoria.alteradoEm}
+                        alteradoRf={auditoria.alteradoRf}
+                      />
+                    </div>
+                  )}
+                </Form>
+              </Card>
+            </>
           )}
-        </Card>
+        </Formik>
       </Loader>
     </>
   );

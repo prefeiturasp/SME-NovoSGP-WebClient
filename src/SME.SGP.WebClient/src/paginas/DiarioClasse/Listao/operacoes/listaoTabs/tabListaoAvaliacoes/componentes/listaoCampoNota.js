@@ -182,8 +182,8 @@ const ListaoCampoNota = props => {
 };
 
 ListaoCampoNota.propTypes = {
-  dadosNota: PropTypes.oneOf(PropTypes.any),
-  idCampo: PropTypes.oneOf(PropTypes.any),
+  dadosNota: PropTypes.oneOf([PropTypes.any]),
+  idCampo: PropTypes.oneOf([PropTypes.any]),
   desabilitar: PropTypes.bool,
   onChangeNotaConceito: PropTypes.func,
   ehFechamento: PropTypes.bool,

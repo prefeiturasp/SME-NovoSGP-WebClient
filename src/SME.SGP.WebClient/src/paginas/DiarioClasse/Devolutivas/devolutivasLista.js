@@ -17,6 +17,8 @@ import { ehTurmaInfantil } from '~/servicos/Validacoes/validacoesInfatil';
 import RotasDto from '~/dtos/rotasDto';
 import { verificaSomenteConsulta } from '~/servicos/servico-navegacao';
 import ServicoPeriodoEscolar from '~/servicos/Paginas/Calendario/ServicoPeriodoEscolar';
+import { SGP_BUTTON_NOVO } from '~/componentes-sgp/filtro/idsCampos';
+import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
 
 const DevolutivasLista = () => {
   const usuario = useSelector(state => state.usuario);
@@ -41,17 +43,6 @@ const DevolutivasLista = () => {
   const permissoesTela = usuario.permissoes[RotasDto.DEVOLUTIVAS];
   const [somenteConsulta, setSomenteConsulta] = useState(false);
   const [periodoHabilitado, setPeriodoHabilitado] = useState();
-
-  useEffect(() => {
-    const naoSetarSomenteConsultaNoStore = !ehTurmaInfantil(
-      modalidadesFiltroPrincipal,
-      turmaSelecionada
-    );
-    setSomenteConsulta(
-      verificaSomenteConsulta(permissoesTela, naoSetarSomenteConsultaNoStore)
-    );
-    obterPeriodoLetivoTurma();
-  }, [turmaSelecionada, permissoesTela, modalidadesFiltroPrincipal]);
 
   const obterPeriodoLetivoTurma = async () => {
     if (turmaSelecionada && turmaSelecionada.turma) {
@@ -78,6 +69,18 @@ const DevolutivasLista = () => {
       }
     }
   };
+
+  useEffect(() => {
+    const naoSetarSomenteConsultaNoStore = !ehTurmaInfantil(
+      modalidadesFiltroPrincipal,
+      turmaSelecionada
+    );
+    setSomenteConsulta(
+      verificaSomenteConsulta(permissoesTela, naoSetarSomenteConsultaNoStore)
+    );
+    obterPeriodoLetivoTurma();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [turmaSelecionada, permissoesTela, modalidadesFiltroPrincipal]);
 
   const colunas = [
     {
@@ -200,7 +203,7 @@ const DevolutivasLista = () => {
   };
 
   return (
-    <Loader loading={carregandoGeral} className="w-100 my-2">
+    <Loader loading={carregandoGeral}>
       {!turmaSelecionada.turma ? (
         <Alert
           alerta={{
@@ -214,35 +217,28 @@ const DevolutivasLista = () => {
         ''
       )}
       {turmaSelecionada.turma ? <AlertaPermiteSomenteTurmaInfantil /> : ''}
-      <Cabecalho pagina="Devolutivas" />
+      <Cabecalho pagina="Devolutivas">
+        <>
+          <BotaoVoltarPadrao onClick={() => onClickVoltar()} className="mr-2" />
+          <Button
+            id={SGP_BUTTON_NOVO}
+            label="Nova"
+            color={Colors.Roxo}
+            border
+            bold
+            onClick={onClickNovo}
+            disabled={
+              !turmaInfantil ||
+              somenteConsulta ||
+              !permissoesTela.podeIncluir ||
+              !turmaSelecionada.turma
+            }
+          />
+        </>
+      </Cabecalho>
       <Card>
         <div className="col-md-12">
           <div className="row">
-            <div className="col-md-12 d-flex justify-content-end pb-4">
-              <Button
-                id="btn-voltar-devolutivas"
-                label="Voltar"
-                icon="arrow-left"
-                color={Colors.Azul}
-                border
-                className="mr-3"
-                onClick={onClickVoltar}
-              />
-              <Button
-                id="btn-nova-devolutivas"
-                label="Nova"
-                color={Colors.Roxo}
-                border
-                bold
-                onClick={onClickNovo}
-                disabled={
-                  !turmaInfantil ||
-                  somenteConsulta ||
-                  !permissoesTela.podeIncluir ||
-                  !turmaSelecionada.turma
-                }
-              />
-            </div>
             <div className="col-sm-12 col-md-4 col-lg-4 col-xl-4 mb-2">
               <SelectComponent
                 id="disciplina"

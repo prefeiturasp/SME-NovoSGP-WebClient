@@ -11,7 +11,7 @@ const RotaNaoAutenticadaDesestruturada = props => {
   if (!logado) {
     return <Route component={Componente} {...propriedades} />;
   }
-  return <Redirect to="/" />;
+  return <Redirect to="/login" />;
 };
 
 RotaNaoAutenticadaDesestruturada.propTypes = {

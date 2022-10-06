@@ -64,6 +64,7 @@ const AusenciasEstudante = props => {
         setAusencias([]);
       }
     },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [bimestre, semestre, turmaId, componenteCurricularId, codigoAluno]
   );
 
@@ -90,22 +91,21 @@ const AusenciasEstudante = props => {
         className="d-flex"
         style={{ alignItems: 'center', justifyContent: 'space-between' }}
       >
-          <div
-            style={{ padding: '9px' }}>
-            {item?.motivo?.substr(0, 100)}
-            {item?.motivo?.length > 100 ? '...' : ''}
-          </div>
+        <div style={{ padding: '9px' }}>
+          {item?.motivo?.substr(0, 100)}
+          {item?.motivo?.length > 100 ? '...' : ''}
+        </div>
 
-          <BtnVisualizarAnotacao
-            className={item.id > 0 ? 'btn-com-anotacao' : ''}
-            onClick={() => {
-              if (item?.motivo.length > 0) {
-                onClickAnotacao(item);
-              }
-            }}
-          >
-            <i className="fas fa-eye" style={{ marginTop: '9px' }} />
-          </BtnVisualizarAnotacao>
+        <BtnVisualizarAnotacao
+          className={item.id > 0 ? 'btn-com-anotacao' : ''}
+          onClick={() => {
+            if (item?.motivo.length > 0) {
+              onClickAnotacao(item);
+            }
+          }}
+        >
+          <i className="fas fa-eye" style={{ marginTop: '9px' }} />
+        </BtnVisualizarAnotacao>
       </div>
     );
   };
@@ -124,12 +124,12 @@ const AusenciasEstudante = props => {
                     <table className="table">
                       <thead className="tabela-dois-thead">
                         <tr>
-                          <th className='col-linha-dados'>Data da Aula</th>
-                          <th className='col-linha-dados'>Aulas Dadas</th>
-                          <th className='col-linha-dados'>Presenças</th>
-                          <th className='col-linha-dados'>Remoto</th>
-                          <th className='col-linha-dados'>Ausências</th>
-                          <th className='campo-justificativa'>Justificativa</th>
+                          <th className="col-linha-dados">Data da Aula</th>
+                          <th className="col-linha-dados">Aulas Dadas</th>
+                          <th className="col-linha-dados">Presenças</th>
+                          <th className="col-linha-dados">Remoto</th>
+                          <th className="col-linha-dados">Ausências</th>
+                          <th className="campo-justificativa">Justificativa</th>
                         </tr>
                       </thead>
                       <tbody className="tabela-dois-tbody">
@@ -138,23 +138,21 @@ const AusenciasEstudante = props => {
                             return (
                               <tr key={shortid.generate()}>
                                 <td>
-                                  {moment(item.dataAula).format(
-                                    'DD/MM/YYYY'
-                                  )}
+                                  {moment(item.dataAula).format('DD/MM/YYYY')}
                                 </td>
-                                <td className='col-linha-dados'>
+                                <td className="col-linha-dados">
                                   {item.quantidadeAulas}
                                 </td>
-                                <td className='col-linha-dados'>
+                                <td className="col-linha-dados">
                                   {item.quantidadePresenca}
                                 </td>
-                                <td className='col-linha-dados'>
+                                <td className="col-linha-dados">
                                   {item.quantidadeRemoto}
                                 </td>
-                                <td className='col-linha-dados'>
+                                <td className="col-linha-dados">
                                   {item.quantidadeAusencia}
                                 </td>
-                                <td className='campo-justificativa'>
+                                <td className="campo-justificativa">
                                   {visualizarAnotacao(item)}
                                 </td>
                               </tr>
@@ -193,7 +191,7 @@ const AusenciasEstudante = props => {
   );
 };
 
-AusenciasEstudante.defaultProps = {
+AusenciasEstudante.propTypes = {
   indexLinha: PropTypes.oneOfType([PropTypes.any]),
   bimestre: PropTypes.oneOfType([PropTypes.any]),
   semestre: PropTypes.oneOfType([PropTypes.any]),
@@ -202,7 +200,7 @@ AusenciasEstudante.defaultProps = {
   componenteCurricularId: PropTypes.oneOfType([PropTypes.any]),
 };
 
-AusenciasEstudante.propTypes = {
+AusenciasEstudante.defaultProps = {
   indexLinha: null,
   bimestre: '',
   semestre: '',

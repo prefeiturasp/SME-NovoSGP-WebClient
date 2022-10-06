@@ -42,18 +42,12 @@ const ModalAnotacaoAluno = props => {
     })
   );
 
-  useEffect(() => {
-    if (dadosAlunoSelecionado) {
-      obterAnotacaoAluno(dadosAlunoSelecionado);
-    }
-  }, [dadosAlunoSelecionado]);
-
   const onClose = (salvou = false, excluiu = false) => {
     onCloseModal(salvou, excluiu);
   };
 
   const onClickSalvarExcluir = async (excluir = false, form = {}) => {
-    const { codigoAluno } = dadosAlunoSelecionado;
+    const codigoAluno = dadosAlunoSelecionado?.codigoAluno;
     const { anotacao } = form;
 
     const params = {
@@ -89,6 +83,13 @@ const ModalAnotacaoAluno = props => {
       setDadosAluno(resultado.data);
     }
   };
+
+  useEffect(() => {
+    if (dadosAlunoSelecionado) {
+      obterAnotacaoAluno(dadosAlunoSelecionado);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [dadosAlunoSelecionado]);
 
   const validaAntesDoSubmit = form => {
     const arrayCampos = Object.keys(valoresIniciais);
@@ -158,7 +159,7 @@ const ModalAnotacaoAluno = props => {
       fecharAoClicarEsc={!exibirLoader}
     >
       <Formik
-        ref={refForm => setRefForm(refForm)}
+        ref={r => setRefForm(r)}
         enableReinitialize
         initialValues={valoresIniciais}
         validationSchema={validacoes}
@@ -188,6 +189,7 @@ const ModalAnotacaoAluno = props => {
                     name="anotacao"
                     onChange={onChangeCampos}
                     desabilitar={desabilitar}
+                    labelRequired
                   />
                 </EditorAnotacao>
               </div>
@@ -256,12 +258,20 @@ ModalAnotacaoAluno.propTypes = {
   exibirModal: PropTypes.bool,
   onCloseModal: PropTypes.func,
   desabilitar: PropTypes.bool,
+  fechamentoId: PropTypes.oneOfType([PropTypes.any]),
+  codigoTurma: PropTypes.oneOfType([PropTypes.any]),
+  anoLetivo: PropTypes.oneOfType([PropTypes.any]),
+  dadosAlunoSelecionado: PropTypes.oneOfType([PropTypes.any]),
 };
 
 ModalAnotacaoAluno.defaultProps = {
   exibirModal: false,
   onCloseModal: () => {},
   desabilitar: false,
+  fechamentoId: 0,
+  codigoTurma: '',
+  anoLetivo: 0,
+  dadosAlunoSelecionado: null,
 };
 
 export default ModalAnotacaoAluno;

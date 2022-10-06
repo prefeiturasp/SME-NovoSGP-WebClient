@@ -47,7 +47,7 @@ const Button = React.forwardRef((props, ref) => {
   const Btn = styled.button`
     display: flex;
     position: relative;
-    background: ${border ? 'transparent' : Active[color]} !important;
+    background: ${border ? '#fff' : Active[color]} !important;
     text-align: center;
     ${
       border
@@ -62,31 +62,47 @@ const Button = React.forwardRef((props, ref) => {
     height: ${height} !important;
     ${lineHeight && `line-height: ${lineHeight}`}
     &:hover {
-      background: ${border ? Active[color] : Hover[color]} !important;
-      color: ${
-        !steady ? Active[corTextoHover] || Base.Branco : 'initial'
-      } !important;
+      ${
+        disabled
+          ? ''
+          : `background: ${border ? Active[color] : Hover[color]} !important;
+             color: ${
+               !steady ? Active[corTextoHover] || Base.Branco : 'initial'
+             } !important;`
+      }
+
     }
-    &[disabled] {
-      background: transparent !important;
+    & {
+      ${
+        disabled
+          ? `background: transparent !important;
       border: 1px solid ${Base.CinzaDesabilitado} !important;
       color: ${Base.CinzaDesabilitado} !important;
-      cursor: unset !important;
+      cursor: not-allowed !important;
+      pointer-events: none !important;`
+          : ''
+      }
+
     }
   `;
 
+  const propsTabIndex = disabled ? { tabIndex: -1 } : {};
+
   return (
     <Btn
+      disabled={disabled}
       hidden={hidden}
       type={type}
       className={`btn btn-${style} ${className} position-relative d-flex justify-content-center align-items-center ${
         padding ? '' : 'py-2 px-3'
       } ${fontSize ? '' : 'fonte-14'}`}
-      onClick={onClick}
-      disabled={disabled}
+      onClick={e => {
+        if (!disabled) onClick(e);
+      }}
       data-indice={indice}
       id={id}
       ref={ref}
+      {...propsTabIndex}
     >
       {icon ? (
         <Icon

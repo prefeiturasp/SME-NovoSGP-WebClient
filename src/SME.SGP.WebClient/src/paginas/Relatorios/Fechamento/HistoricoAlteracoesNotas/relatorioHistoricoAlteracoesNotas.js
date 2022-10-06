@@ -1,10 +1,10 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { CheckboxComponent, Loader, SelectComponent } from '~/componentes';
 import { Cabecalho } from '~/componentes-sgp';
+import BotoesAcaoRelatorio from '~/componentes-sgp/botoesAcaoRelatorio';
 import Alert from '~/componentes/alert';
-import Button from '~/componentes/button';
 import Card from '~/componentes/card';
-import { Colors } from '~/componentes/colors';
+import { URL_HOME } from '~/constantes';
 import { OPCAO_TODOS } from '~/constantes/constantes';
 import modalidade from '~/dtos/modalidade';
 import AbrangenciaServico from '~/servicos/Abrangencia';
@@ -50,6 +50,7 @@ const RelatorioHistoricoAlteracoesNotas = () => {
   const [consideraHistorico, setConsideraHistorico] = useState(false);
   const [clicouBotaoGerar, setClicouBotaoGerar] = useState(false);
   const [desabilitarBtnGerar, setDesabilitarBtnGerar] = useState(true);
+  const [modoEdicao, setModoEdicao] = useState(false);
 
   const onChangeAnoLetivo = async valor => {
     setDreId();
@@ -58,6 +59,7 @@ const RelatorioHistoricoAlteracoesNotas = () => {
     setTurmaId();
     setComponentesCurricularesId();
     setAnoLetivo(valor);
+    setModoEdicao(true);
   };
 
   const onChangeDre = valor => {
@@ -67,6 +69,7 @@ const RelatorioHistoricoAlteracoesNotas = () => {
     setTurmaId();
     setComponentesCurricularesId();
     setUeId(undefined);
+    setModoEdicao(true);
   };
 
   const onChangeUe = valor => {
@@ -74,38 +77,45 @@ const RelatorioHistoricoAlteracoesNotas = () => {
     setTurmaId();
     setComponentesCurricularesId();
     setUeId(valor);
+    setModoEdicao(true);
   };
 
   const onChangeModalidade = valor => {
     setTurmaId();
     setComponentesCurricularesId();
     setModalidadeId(valor);
+    setModoEdicao(true);
   };
 
   const onChangeSemestre = valor => {
     setSemestre(valor);
     setClicouBotaoGerar(false);
+    setModoEdicao(true);
   };
 
   const onChangeTurma = valor => {
     setComponentesCurricularesId();
     setTurmaId(valor);
     setClicouBotaoGerar(false);
+    setModoEdicao(true);
   };
 
   const onChangeComponenteCurricular = valor => {
     setComponentesCurricularesId(valor);
     setClicouBotaoGerar(false);
+    setModoEdicao(true);
   };
 
   const onChangeBimestre = valor => {
     setBimestre(valor);
     setClicouBotaoGerar(false);
+    setModoEdicao(true);
   };
 
   const onChangeTipoNota = valor => {
     setTipoDeNota(valor);
     setClicouBotaoGerar(false);
+    setModoEdicao(true);
   };
 
   const [anoAtual] = useState(window.moment().format('YYYY'));
@@ -406,15 +416,16 @@ const RelatorioHistoricoAlteracoesNotas = () => {
   }, [obterAnosLetivos, modalidadeId, anoLetivo, consideraHistorico]);
 
   const cancelar = async () => {
-    await setDreId();
-    await setUeId();
-    await setModalidadeId();
-    await setComponentesCurricularesId(undefined);
-    await setBimestre();
-    await setTurmaId(undefined);
-    await setAnoLetivo();
-    await setAnoLetivo(anoAtual);
-    await setTipoDeNota('1');
+    setConsideraHistorico(false);
+    setAnoLetivo(anoAtual);
+    setDreId();
+    setUeId();
+    setModalidadeId();
+    setComponentesCurricularesId(undefined);
+    setBimestre();
+    setTurmaId(undefined);
+    setTipoDeNota('1');
+    setModoEdicao(false);
   };
 
   useEffect(() => {
@@ -512,50 +523,22 @@ const RelatorioHistoricoAlteracoesNotas = () => {
       ) : (
         ''
       )}
-      <Cabecalho pagina="Relatório de alteração de notas" />
+      <Cabecalho pagina="Relatório de alteração de notas">
+        <BotoesAcaoRelatorio
+          onClickVoltar={() => {
+            history.push(URL_HOME);
+          }}
+          onClickCancelar={cancelar}
+          onClickGerar={gerar}
+          desabilitarBtnGerar={
+            desabilitarBtnGerar ||
+            String(modalidadeId) === String(modalidade.INFANTIL)
+          }
+          modoEdicao={modoEdicao}
+        />
+      </Cabecalho>
       <Card>
         <div className="col-md-12">
-          <div className="row">
-            <div className="col-md-12 d-flex justify-content-end pb-4 justify-itens-end">
-              <Button
-                id="btn-voltar"
-                label="Voltar"
-                icon="arrow-left"
-                color={Colors.Azul}
-                border
-                className="mr-2"
-                onClick={() => {
-                  history.push('/');
-                }}
-              />
-              <Button
-                id="btn-cancelar"
-                label="Cancelar"
-                color={Colors.Roxo}
-                border
-                bold
-                className="mr-2"
-                onClick={() => {
-                  cancelar();
-                }}
-              />
-
-              <Button
-                id="btn-gerar"
-                icon="print"
-                label="Gerar"
-                color={Colors.Azul}
-                border
-                bold
-                className="mr-0"
-                onClick={gerar}
-                disabled={
-                  desabilitarBtnGerar ||
-                  String(modalidadeId) === String(modalidade.INFANTIL)
-                }
-              />
-            </div>
-          </div>
           <div className="row">
             <div className="col-sm-12 col-md-6 col-lg-4 col-xl-4 mb-2">
               <CheckboxComponent
@@ -564,6 +547,7 @@ const RelatorioHistoricoAlteracoesNotas = () => {
                   setAnoLetivo();
                   setDreId();
                   setConsideraHistorico(e.target.checked);
+                  setModoEdicao(true);
                 }}
                 checked={consideraHistorico}
               />

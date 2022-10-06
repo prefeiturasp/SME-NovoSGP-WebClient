@@ -6,21 +6,20 @@ import React, { useState, useRef, useEffect } from 'react';
 import Cabecalho from '~/componentes-sgp/cabecalho';
 import TextEditor from '~/componentes/textEditor';
 import RadioGroupButton from '~/componentes/radioGroupButton';
-import { Row } from './styles';
 
 import {
   CampoTexto,
   Label,
   ButtonGroup,
   Card,
-  Grid,
   momentSchema,
   Auditoria,
+  Loader,
 } from '~/componentes';
 import RotasDto from '~/dtos/rotasDto';
 import history from '~/servicos/history';
 import { erros, sucesso, confirmar, erro } from '~/servicos/alertas';
-import servicoTipoAvaliaco from '~/servicos/Paginas/TipoAvaliacao'; // Redux
+import servicoTipoAvaliaco from '~/servicos/Paginas/TipoAvaliacao';
 import { setBreadcrumbManual } from '~/servicos/breadcrumb-services';
 
 import { validaSeObjetoEhNuloOuVazio } from '~/utils/funcoes/gerais';
@@ -41,7 +40,6 @@ const TipoAvaliacaoForm = ({ match }) => {
   const [novoRegistro, setNovoRegistro] = useState(true);
   const [modoEdicao, setModoEdicao] = useState(false);
   const [auditoria, setAuditoria] = useState({});
-  const [valoresCarregados, setValoresCarregados] = useState(null);
   const [valoresIniciais, setValoresIniciais] = useState({
     nome: '',
     descricao: '',
@@ -50,6 +48,7 @@ const TipoAvaliacaoForm = ({ match }) => {
   });
 
   const [idTipoAvaliacao, setIdTipoAvaliacao] = useState('');
+  const [exibirLoader, setExibirLoader] = useState(false);
 
   const textEditorRef = useRef(null);
 
@@ -78,7 +77,7 @@ const TipoAvaliacaoForm = ({ match }) => {
       ]);
       if (excluir && excluir.status === 200) {
         sucesso(`Tipo Avaliação excluido com sucesso!`);
-        history.push('/configuracoes/tipo-avaliacao');
+        history.push(RotasDto.TIPO_AVALIACAO);
       } else {
         erro(excluir);
       }
@@ -86,7 +85,6 @@ const TipoAvaliacaoForm = ({ match }) => {
   };
 
   const onClickCancelar = async form => {
-    // if (!modoEdicao) return;
     const confirmou = await confirmar(
       'Atenção',
       'Você não salvou as informações preenchidas.',
@@ -106,10 +104,10 @@ const TipoAvaliacaoForm = ({ match }) => {
         'Deseja realmente cancelar as alterações?'
       );
       if (confirmou) {
-        history.push('/configuracoes/tipo-avaliacao');
+        history.push(RotasDto.TIPO_AVALIACAO);
       }
     } else {
-      history.push('/configuracoes/tipo-avaliacao');
+      history.push(RotasDto.TIPO_AVALIACAO);
     }
   };
   const validaAntesDoSubmit = form => {
@@ -131,7 +129,6 @@ const TipoAvaliacaoForm = ({ match }) => {
   const validacoes = () => {
     return Yup.object({
       nome: momentSchema.required('Nome obrigatório'),
-      // descricao: momentSchema.required('Descrição obrigatório'),
       situacao: Yup.bool()
         .typeError('Informar um booleano')
         .required('Campo obrigatório'),
@@ -159,7 +156,7 @@ const TipoAvaliacaoForm = ({ match }) => {
 
       if (cadastrado && cadastrado.status === 200) {
         sucesso('Tipo de avaliação salvo com sucesso.');
-        history.push('/configuracoes/tipo-avaliacao');
+        history.push(RotasDto.TIPO_AVALIACAO);
       }
     } catch (err) {
       if (err) {
@@ -168,20 +165,9 @@ const TipoAvaliacaoForm = ({ match }) => {
     }
   };
 
-  useEffect(() => {
-    if (match && match.params && match.params.id) {
-      setNovoRegistro(false);
-      setBreadcrumbManual(
-        match.url,
-        'Atribuição',
-        '/configuracoes/tipo-avaliacao'
-      );
-      buscarPorId(match.params.id);
-    }
-  }, []);
-
   const buscarPorId = async id => {
     try {
+      setExibirLoader(true);
       const registro = await servicoTipoAvaliaco.buscarTipoAvaliacaoPorId(id);
       if (registro && registro.data) {
         setValoresIniciais({
@@ -199,30 +185,38 @@ const TipoAvaliacaoForm = ({ match }) => {
             registro.data.alteradoRF > 0 ? registro.data.alteradoRF : '',
           alteradoEm: registro.data.alteradoEm,
         });
-        setValoresCarregados(true);
         setPodeCancelar(false);
-        //  dispatch(setLoaderSecao(false));
       }
+      setExibirLoader(false);
     } catch (err) {
       erros(err);
+      setExibirLoader(false);
     }
   };
 
+  useEffect(() => {
+    if (match && match.params && match.params.id) {
+      setNovoRegistro(false);
+      setBreadcrumbManual(match.url, 'Atribuição', RotasDto.TIPO_AVALIACAO);
+      buscarPorId(match.params.id);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   return (
-    <>
-      <Cabecalho pagina="Tipo de Avaliação" />
-      <Card>
-        <Formik
-          enableReinitialize
-          initialValues={valoresIniciais}
-          validationSchema={validacoes}
-          onSubmit={valores => onSubmitFormulario(valores)}
-          validate={valores => validaFormulario(valores)}
-          validateOnBlur
-          validateOnChange
-        >
-          {form => (
-            <Form className="col-md-12 mb-4">
+    <Loader loading={exibirLoader}>
+      <Formik
+        enableReinitialize
+        initialValues={valoresIniciais}
+        validationSchema={validacoes}
+        onSubmit={valores => onSubmitFormulario(valores)}
+        validate={valores => validaFormulario(valores)}
+        validateOnBlur
+        validateOnChange
+      >
+        {form => (
+          <>
+            <Cabecalho pagina="Tipo de Avaliação">
               <ButtonGroup
                 form={form}
                 permissoesTela={permissoesTela[RotasDto.TIPO_AVALIACAO]}
@@ -234,70 +228,68 @@ const TipoAvaliacaoForm = ({ match }) => {
                 onClickExcluir={() => onClickExcluir(form)}
                 modoEdicao={modoEdicao || podeCancelar}
               />
-              <Row className="row">
-                <Grid cols={8}>
-                  <CampoTexto
-                    form={form}
-                    label="Nome da Atividade"
-                    name="nome"
-                    maxlength={100}
-                    placeholder="Digite a descrição da avaliação"
-                    type="input"
-                    desabilitado={valoresIniciais.possuiAvaliacao}
-                  />
-                </Grid>
-                <Grid cols={4}>
-                  <RadioGroupButton
-                    desabilitado={false}
-                    id="situacao"
-                    name="situacao"
-                    label="Situação"
-                    form={form}
-                    opcoes={listaSituacao}
-                    // onChange={e => {
-                    //   setEhReposicao(e.target.value === 2);
-                    //   setValoresIniciais({
-                    //     ...valoresIniciais,
-                    //     tipoAula: e.target.value,
-                    //     recorrenciaAula: e.target.value === 2 ? 1 : '',
-                    //   });
-                    //   onChangeCampos();
-                    //   montaValidacoes(0, e.target.value, form);
-                    // }}
-                  />
-                </Grid>
-              </Row>
-              <Row className="row">
-                <Grid cols={12}>
-                  <Label text="Descrição" />
-                  <TextEditor
-                    className="form-control w-100"
-                    ref={textEditorRef}
-                    id="descricao"
-                    alt="Descrição"
-                    onBlur={aoTrocarTextEditor}
-                    value={descricao}
-                    maxlength={500}
-                    toolbar={false}
-                    disabled={valoresIniciais.possuiAvaliacao}
-                  />
-                </Grid>
-              </Row>
-            </Form>
-          )}
-        </Formik>
-        {auditoria && (
-          <Auditoria
-            criadoEm={auditoria.criadoEm}
-            criadoPor={auditoria.criadoPor}
-            criadoRf={auditoria.criadoRf}
-            alteradoPor={auditoria.alteradoPor}
-            alteradoEm={auditoria.alteradoEm}
-            alteradoRf={auditoria.alteradoRf}
-          />
+            </Cabecalho>
+            <Card>
+              <Form>
+                <div className="col-md-12">
+                  <div className="row">
+                    <div className="col-md-8">
+                      <CampoTexto
+                        form={form}
+                        label="Nome da Atividade"
+                        name="nome"
+                        maxlength={100}
+                        placeholder="Digite a descrição da avaliação"
+                        type="input"
+                        desabilitado={valoresIniciais.possuiAvaliacao}
+                        labelRequired
+                      />
+                    </div>
+                    <div className="col-md-4">
+                      <RadioGroupButton
+                        desabilitado={false}
+                        id="situacao"
+                        name="situacao"
+                        label="Situação"
+                        form={form}
+                        opcoes={listaSituacao}
+                        labelRequired
+                      />
+                    </div>
+                  </div>
+                  <div className="row">
+                    <div className="col-md-12">
+                      <Label text="Descrição" />
+                      <TextEditor
+                        className="form-control w-100"
+                        ref={textEditorRef}
+                        id="descricao"
+                        alt="Descrição"
+                        onBlur={aoTrocarTextEditor}
+                        value={descricao}
+                        maxlength={500}
+                        toolbar={false}
+                        disabled={valoresIniciais.possuiAvaliacao}
+                      />
+                    </div>
+                  </div>
+                  {auditoria && (
+                    <Auditoria
+                      criadoEm={auditoria.criadoEm}
+                      criadoPor={auditoria.criadoPor}
+                      criadoRf={auditoria.criadoRf}
+                      alteradoPor={auditoria.alteradoPor}
+                      alteradoEm={auditoria.alteradoEm}
+                      alteradoRf={auditoria.alteradoRf}
+                    />
+                  )}
+                </div>
+              </Form>
+            </Card>
+          </>
         )}
-      </Card>
-    </>
+      </Formik>
+    </Loader>
   );
 };
 

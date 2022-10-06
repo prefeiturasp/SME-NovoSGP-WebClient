@@ -153,7 +153,9 @@ const RelatorioSemestral = () => {
 
     let dentroPeriodo = true;
     if (valor) {
-      const semestreNovo = listaSemestres.find(item => item.semestre == valor);
+      const semestreNovo = listaSemestres.find(
+        item => String(item.semestre) === String(valor)
+      );
       dentroPeriodo = semestreNovo.podeEditar;
     }
     dispatch(setDentroPeriodo(dentroPeriodo));
@@ -164,19 +166,15 @@ const RelatorioSemestral = () => {
       <ModalErrosRalSemestralPAP />
       {!turmaSelecionada.turma &&
       !ehTurmaInfantil(modalidadesFiltroPrincipal, turmaSelecionada) ? (
-        <div className="col-md-12">
-          <Alert
-            alerta={{
-              tipo: 'warning',
-              id: 'alerta-sem-turma-relatorio-semestral',
-              mensagem: 'Você precisa escolher uma turma.',
-              estiloTitulo: { fontSize: '18px' },
-            }}
-            className="mb-2"
-          />
-        </div>
+        <Alert
+          alerta={{
+            tipo: 'warning',
+            id: 'alerta-sem-turma-relatorio-semestral',
+            mensagem: 'Você precisa escolher uma turma.',
+          }}
+        />
       ) : (
-        ''
+        <></>
       )}
       {!listaSemestres.length &&
         !ehTurmaInfantil(modalidadesFiltroPrincipal, turmaSelecionada) && (
@@ -186,25 +184,16 @@ const RelatorioSemestral = () => {
               id: 'sem-turma-pap',
               mensagem:
                 'Somente é possivel realizar o preenchimento do PAP para turmas PAP',
-              estiloTitulo: { fontSize: '18px' },
             }}
-            className="mb-4"
           />
         )}
       <AlertaDentroPeriodoPAP />
       <AlertaModalidadeInfantil />
-      <Cabecalho pagina="Relatório semestral" />
       <Loader loading={carregandoGeral}>
+        <Cabecalho pagina="Relatório semestral">
+          <BotoesAcoesRelatorioSemestral />
+        </Cabecalho>
         <Card>
-          <>
-            <div className="col-md-12">
-              <div className="row">
-                <div className="col-md-12 d-flex justify-content-end pb-4">
-                  <BotoesAcoesRelatorioSemestral />
-                </div>
-              </div>
-            </div>
-          </>
           {turmaSelecionada.turma ? (
             <>
               <div className="col-md-12">

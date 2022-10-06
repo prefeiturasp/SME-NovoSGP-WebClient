@@ -71,6 +71,7 @@ const NavbarNotificacoes = props => {
       setConnection(null);
       dispatch(setIniciarNotificacoesSemWebSocket(true));
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [urlConnection, usuarioRf]);
 
   useEffect(() => {
@@ -86,6 +87,7 @@ const NavbarNotificacoes = props => {
         setUrlConnection('');
         dispatch(setIniciarNotificacoesSemWebSocket(true));
       });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const startConnection = useCallback(async () => {
@@ -138,6 +140,7 @@ const NavbarNotificacoes = props => {
         dispatch(setIniciarNotificacoesSemWebSocket(false));
       });
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [connection]);
 
   useEffect(() => {
@@ -189,6 +192,7 @@ const NavbarNotificacoes = props => {
         obterListaNotificacoes();
       }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [mostraNotificacoes]);
 
   const onClickBotao = () => {
@@ -278,9 +282,9 @@ const NavbarNotificacoes = props => {
 };
 
 NavbarNotificacoes.propTypes = {
-  Botao: PropTypes.oneOfType(PropTypes.object).isRequired,
-  Icone: PropTypes.oneOfType(PropTypes.object).isRequired,
-  Texto: PropTypes.oneOfType(PropTypes.object).isRequired,
+  Botao: PropTypes.oneOfType([PropTypes.object]).isRequired,
+  Icone: PropTypes.oneOfType([PropTypes.object]).isRequired,
+  Texto: PropTypes.oneOfType([PropTypes.object]).isRequired,
 };
 
 export default NavbarNotificacoes;

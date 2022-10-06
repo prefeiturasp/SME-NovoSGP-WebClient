@@ -79,6 +79,7 @@ const FormCadastroComunicados = props => {
     if (refForm) {
       dispatch(setFormComunicados(() => obterForm()));
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [refForm]);
 
   const tratarValores = valores => {
@@ -141,6 +142,7 @@ const FormCadastroComunicados = props => {
       const valoresTratados = tratarValores(resposta.data);
       setInitialValues(valoresTratados);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [comunicadoId]);
 
   useEffect(() => {
@@ -277,7 +279,7 @@ const FormCadastroComunicados = props => {
         >
           {form => (
             <Form>
-              <div className="row py-3">
+              <div className="row">
                 <div className="col-sm-4 col-md-3 col-lg-3 col-xl-2 mb-2">
                   <AnoLetivoComunicados
                     form={form}
@@ -329,7 +331,7 @@ const FormCadastroComunicados = props => {
                     desabilitar={desabilitarCampos || !!comunicadoId}
                   />
                 </div>
-                <div className="col-sm-12 col-md-12 col-lg-8 col-xl-6 mb-2">
+                <div className="col-sm-12 col-md-12 col-lg-12 col-xl-5 mb-2">
                   <TurmasComunicados
                     form={form}
                     onChangeCampos={onChangeCampos}

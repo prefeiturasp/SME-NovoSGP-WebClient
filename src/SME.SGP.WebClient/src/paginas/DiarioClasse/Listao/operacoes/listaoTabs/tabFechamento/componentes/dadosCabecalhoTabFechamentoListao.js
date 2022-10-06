@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { Button, Colors, Loader } from '~/componentes';
 import situacaoFechamentoDto from '~/dtos/situacaoFechamentoDto';
 import ListaoContext from '~/paginas/DiarioClasse/Listao/listaoContext';
@@ -17,18 +17,19 @@ const DadosCabecalhoTabFechamentoListao = props => {
 
   let descDataFechamento = '';
 
-  const [situacaoNome, setSituacaoNome] = useState(
-    dadosFechamento?.situacaoNome
-  );
   const [exibirLoader, setExibirLoader] = useState(false);
+  const [situacaoNome, setSituacaoNome] = useState();
+  const [situacao, setSituacao] = useState();
+  const [dataFechamento, setDataFechamento] = useState();
 
-  const [situacao, setSituacao] = useState(dadosFechamento?.situacao);
-  const [dataFechamento, setDataFechamento] = useState(
-    dadosFechamento?.dataFechamento
-  );
+  useEffect(() => {
+    setSituacaoNome(dadosFechamento?.situacaoNome);
+    setSituacao(dadosFechamento?.situacao);
+    setDataFechamento(dadosFechamento?.dataFechamento);
+  }, [dadosFechamento]);
 
   if (situacaoNome && dadosFechamento?.fechamentoId && dataFechamento) {
-    const dataMoment = window.moment(dataFechamento);
+    const dataMoment = window.moment.utc(dataFechamento);
     const data = dataMoment.format('L');
     const hora = dataMoment.format('LT');
     descDataFechamento = `${situacaoNome} em ${data} às ${hora}`;

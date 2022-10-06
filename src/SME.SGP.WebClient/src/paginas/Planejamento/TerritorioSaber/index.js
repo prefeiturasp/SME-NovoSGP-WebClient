@@ -19,9 +19,6 @@ import Alert from '~/componentes/alert';
 import AlertaSelecionarTurma from './componentes/AlertaSelecionarTurma';
 import DropDownTerritorios from './componentes/DropDownTerritorios';
 
-// Estilos
-import { Linha } from '~/componentes/EstilosGlobais';
-
 // Serviços
 import { erro, sucesso, confirmar, erros } from '~/servicos/alertas';
 import TerritorioSaberServico from '~/servicos/Paginas/TerritorioSaber';
@@ -36,6 +33,7 @@ import RotasDto from '~/dtos/rotasDto';
 import { URL_HOME } from '~/constantes/url';
 import AlertaModalidadeInfantil from '~/componentes-sgp/AlertaModalidadeInfantil/alertaModalidadeInfantil';
 import { ehTurmaInfantil } from '~/servicos/Validacoes/validacoesInfatil';
+import { SGP_BUTTON_SALVAR } from '~/componentes-sgp/filtro/idsCampos';
 
 // Componentes internos
 const DesenvolvimentoReflexao = React.lazy(() =>
@@ -44,7 +42,6 @@ const DesenvolvimentoReflexao = React.lazy(() =>
 
 function TerritorioSaber() {
   const [modoEdicao, setModoEdicao] = useState(false);
-  const [desabilitarBotaoSalvar, setDesabilitarBotaoSalvar] = useState(false);
   const [carregando, setCarregando] = useState(false);
   const [bimestreAberto, setBimestreAberto] = useState(false);
   const [somenteConsulta, setSomenteConsulta] = useState(false);
@@ -167,11 +164,6 @@ function TerritorioSaber() {
     if (!modoEdicao) {
       setModoEdicao(true);
     }
-    if (dadosBimestre.desenvolvimento === '' && dadosBimestre.reflexao === '') {
-      setDesabilitarBotaoSalvar(true);
-    } else {
-      setDesabilitarBotaoSalvar(false);
-    }
     dadosBimestre.territorioExperienciaId = territorioSelecionado;
     setDados(dados);
   };
@@ -213,7 +205,7 @@ function TerritorioSaber() {
 
   return (
     <>
-      <div className="col-md-12">
+      <>
         {mostraMensagemSemTerritorios &&
         turmaSelecionada &&
         !ehTurmaInfantil(modalidadesFiltroPrincipal, turmaSelecionada) ? (
@@ -225,45 +217,41 @@ function TerritorioSaber() {
                 'Apenas é possível realizar este planejamento para componentes de territórios do saber.',
               estiloTitulo: { fontSize: '18px' },
             }}
-            className="mb-2"
           />
         ) : null}
-      </div>
+      </>
       <AlertaModalidadeInfantil />
       <AlertaSelecionarTurma />
-      <Cabecalho pagina="Planejamento anual do Território do Saber" />
-      <Card>
-        <ButtonGroup
-          permissoesTela={permissoesTela[RotasDto.TERRITORIO_SABER]}
-          onClickVoltar={onClickVoltar}
-          onClickBotaoPrincipal={() => salvarPlanejamento()}
-          onClickCancelar={onClickCancelar}
-          labelBotaoPrincipal="Salvar"
-          somenteConsulta={somenteConsulta}
-          desabilitarBotaoPrincipal={
-            ehTurmaInfantil(modalidadesFiltroPrincipal, turmaSelecionada) ||
-            !territorioSelecionado ||
-            !modoEdicao ||
-            desabilitarBotaoSalvar
-          }
-          modoEdicao={modoEdicao}
-        />
-        <Grid cols={12}>
-          <Linha className="row mb-0">
-            <Grid cols={12}>
-              <DropDownTerritorios
-                onBuscarTerritorios={onBuscarTerritorios}
-                territorioSelecionado={territorioSelecionado}
-                onChangeTerritorio={useCallback(
-                  valor => setTerritorioSelecionado(valor || ''),
-                  []
-                )}
-              />
-            </Grid>
-          </Linha>
-        </Grid>
-        <Grid className="p-0 m-0 mt-4" cols={12}>
-          <Loader loading={carregando} tip="Carregando...">
+      <Loader loading={carregando} tip="Carregando...">
+        <Cabecalho pagina="Planejamento anual do Território do Saber">
+          <ButtonGroup
+            idBotaoPrincipal={SGP_BUTTON_SALVAR}
+            permissoesTela={permissoesTela[RotasDto.TERRITORIO_SABER]}
+            onClickVoltar={onClickVoltar}
+            onClickBotaoPrincipal={() => salvarPlanejamento()}
+            onClickCancelar={onClickCancelar}
+            labelBotaoPrincipal="Salvar"
+            somenteConsulta={somenteConsulta}
+            desabilitarBotaoPrincipal={
+              ehTurmaInfantil(modalidadesFiltroPrincipal, turmaSelecionada) ||
+              !territorioSelecionado ||
+              !modoEdicao
+            }
+            modoEdicao={modoEdicao}
+          />
+        </Cabecalho>
+        <Card>
+          <Grid cols={12}>
+            <DropDownTerritorios
+              onBuscarTerritorios={onBuscarTerritorios}
+              territorioSelecionado={territorioSelecionado}
+              onChangeTerritorio={useCallback(
+                valor => setTerritorioSelecionado(valor || ''),
+                []
+              )}
+            />
+          </Grid>
+          <Grid className="mt-4" cols={12}>
             <PainelCollapse
               onChange={painel => setBimestreAberto(painel)}
               activeKey={habilitaCollapse && bimestreAberto}
@@ -349,9 +337,9 @@ function TerritorioSaber() {
                 )}
               </PainelCollapse.Painel>
             </PainelCollapse>
-          </Loader>
-        </Grid>
-      </Card>
+          </Grid>
+        </Card>
+      </Loader>
     </>
   );
 }

@@ -21,7 +21,7 @@ const Alert = props => {
       role="alert"
       style={marginBottom ? { marginBottom: marginBottom } : {}}
     >
-      <b style={estiloTitulo}>
+      <b style={estiloTitulo || { fontSize: '18px' }}>
         {mensagem}
         <MessageClick onClick={onClickMessage}>{mensagemClick}</MessageClick>
       </b>

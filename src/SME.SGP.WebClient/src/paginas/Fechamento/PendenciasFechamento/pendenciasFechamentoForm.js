@@ -30,6 +30,8 @@ import { ehTurmaInfantil } from '~/servicos/Validacoes/validacoesInfatil';
 import JoditEditor from '~/componentes/jodit-editor/joditEditor';
 import { IframeStyle } from './pendenciasFechamentoLista.css';
 import { ServicoPeriodoFechamento } from '~/servicos';
+import { SGP_BUTTON_APROVAR } from '~/componentes-sgp/filtro/idsCampos';
+import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
 
 const PendenciasFechamentoForm = ({ match }) => {
   const usuario = useSelector(store => store.usuario);
@@ -84,7 +86,7 @@ const PendenciasFechamentoForm = ({ match }) => {
   useEffect(() => {
     const montaBimestre = () => {
       let listaBi = [];
-      if (turmaSelecionada.modalidade == modalidade.EJA) {
+      if (Number(turmaSelecionada.modalidade) === modalidade.EJA) {
         listaBi = [
           { valor: 1, descricao: 'Primeiro bimestre' },
           { valor: 2, descricao: 'Segundo bimestre' },
@@ -199,7 +201,7 @@ const PendenciasFechamentoForm = ({ match }) => {
     }
   }, [modalidadesFiltroPrincipal, turmaSelecionada, match]);
 
-  const onClickVoltar = () => history.push(`${RotasDto.PENDENCIAS_FECHAMENTO}`);
+  const onClickVoltar = () => history.goBack();
 
   const onClickAprovar = async () => {
     const retorno = await ServicoPendenciasFechamento.aprovar([
@@ -253,63 +255,46 @@ const PendenciasFechamentoForm = ({ match }) => {
             tipo: 'warning',
             id: 'pendencias-selecione-turma',
             mensagem: 'Você precisa escolher uma turma.',
-            estiloTitulo: { fontSize: '18px' },
           }}
-          className="mb-2"
         />
       ) : (
-        ''
+        <></>
       )}
       {bimestre && !periodoAberto ? (
-        <div className="col-md-12">
-          <Alert
-            alerta={{
-              tipo: 'warning',
-              mensagem:
-                'Apenas é possível consultar este registro pois o período não está em aberto.',
-              estiloTitulo: { fontSize: '18px' },
-            }}
-            className="mb-2"
-          />
-        </div>
+        <Alert
+          alerta={{
+            tipo: 'warning',
+            mensagem:
+              'Apenas é possível consultar este registro pois o período não está em aberto.',
+          }}
+        />
       ) : (
         <></>
       )}
       <AlertaModalidadeInfantil />
-      <Cabecalho pagina="Análise de Pendências" />
+      <Cabecalho pagina="Análise de Pendências">
+        <>
+          <BotaoVoltarPadrao className="mr-2" onClick={() => onClickVoltar()} />
+          <Button
+            id={SGP_BUTTON_APROVAR}
+            label="Aprovar"
+            color={Colors.Roxo}
+            border
+            bold
+            onClick={onClickAprovar}
+            disabled={
+              !periodoAberto ||
+              ehTurmaInfantil(modalidadesFiltroPrincipal, turmaSelecionada) ||
+              somenteConsulta ||
+              !permissoesTela.podeAlterar ||
+              !situacaoId ||
+              Number(situacaoId) === situacaoPendenciaDto.Aprovada
+            }
+          />
+        </>
+      </Cabecalho>
       <Card>
         <div className="col-md-12">
-          <div className="row">
-            <div className="col-md-12 d-flex justify-content-end pb-4">
-              <Button
-                label="Voltar"
-                icon="arrow-left"
-                color={Colors.Azul}
-                border
-                className="mr-2"
-                onClick={onClickVoltar}
-              />
-              <Button
-                label="Aprovar"
-                color={Colors.Roxo}
-                border
-                bold
-                className="mr-2"
-                onClick={onClickAprovar}
-                disabled={
-                  !periodoAberto ||
-                  ehTurmaInfantil(
-                    modalidadesFiltroPrincipal,
-                    turmaSelecionada
-                  ) ||
-                  somenteConsulta ||
-                  !permissoesTela.podeAlterar ||
-                  !situacaoId ||
-                  situacaoId == situacaoPendenciaDto.Aprovada
-                }
-              />
-            </div>
-          </div>
           <div className="row">
             <div className="col-sm-12 col-md-6 col-lg-4 col-xl-3 mb-2">
               <SelectComponent

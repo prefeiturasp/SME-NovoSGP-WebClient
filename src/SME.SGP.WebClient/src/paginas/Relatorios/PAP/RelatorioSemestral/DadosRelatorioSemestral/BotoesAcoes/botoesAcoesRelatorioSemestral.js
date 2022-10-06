@@ -1,5 +1,6 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { Col, Row } from 'antd';
 import Button from '~/componentes/button';
 import { Colors } from '~/componentes/colors';
 import { URL_HOME } from '~/constantes/url';
@@ -12,6 +13,11 @@ import { confirmar } from '~/servicos/alertas';
 import history from '~/servicos/history';
 import servicoSalvarRelatorioSemestral from '../../servicoSalvarRelatorioSemestral';
 import { ehTurmaInfantil } from '~/servicos/Validacoes/validacoesInfatil';
+import {
+  SGP_BUTTON_CANCELAR,
+  SGP_BUTTON_SALVAR,
+} from '~/componentes-sgp/filtro/idsCampos';
+import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
 
 const BotoesAcoesRelatorioSemestral = () => {
   const dispatch = useDispatch();
@@ -89,46 +95,42 @@ const BotoesAcoesRelatorioSemestral = () => {
     }
   };
   return (
-    <>
-      <Button
-        id="btn-voltar-relatorio-semestral"
-        label="Voltar"
-        icon="arrow-left"
-        color={Colors.Azul}
-        border
-        className="mr-2"
-        onClick={onClickVoltar}
-      />
-      <Button
-        id="btn-cancelar-relatorio-semestral"
-        label="Cancelar"
-        color={Colors.Roxo}
-        border
-        className="mr-2"
-        onClick={onClickCancelar}
-        disabled={
-          desabilitarCampos ||
-          !relatorioSemestralEmEdicao ||
-          !alunosRelatorioSemestral ||
-          alunosRelatorioSemestral.length < 1 ||
-          !alunosRelatorioSemestral
-        }
-      />
-      <Button
-        id="btn-salvar-relatorio-semestral"
-        label="Salvar"
-        color={Colors.Roxo}
-        border
-        bold
-        className="mr-2"
-        onClick={onClickSalvar}
-        disabled={
-          ehTurmaInfantil(modalidadesFiltroPrincipal, turmaSelecionada)||
-          desabilitarCampos ||
-          !relatorioSemestralEmEdicao
-        }
-      />
-    </>
+    <Row gutter={[8, 8]} type="flex">
+      <Col>
+        <BotaoVoltarPadrao onClick={() => onClickVoltar && onClickVoltar()} />
+      </Col>
+      <Col>
+        <Button
+          id={SGP_BUTTON_CANCELAR}
+          label="Cancelar"
+          color={Colors.Roxo}
+          border
+          onClick={onClickCancelar}
+          disabled={
+            desabilitarCampos ||
+            !relatorioSemestralEmEdicao ||
+            !alunosRelatorioSemestral ||
+            alunosRelatorioSemestral.length < 1 ||
+            !alunosRelatorioSemestral
+          }
+        />
+      </Col>
+      <Col>
+        <Button
+          id={SGP_BUTTON_SALVAR}
+          label="Salvar"
+          color={Colors.Roxo}
+          border
+          bold
+          onClick={onClickSalvar}
+          disabled={
+            ehTurmaInfantil(modalidadesFiltroPrincipal, turmaSelecionada) ||
+            desabilitarCampos ||
+            !relatorioSemestralEmEdicao
+          }
+        />
+      </Col>
+    </Row>
   );
 };
 

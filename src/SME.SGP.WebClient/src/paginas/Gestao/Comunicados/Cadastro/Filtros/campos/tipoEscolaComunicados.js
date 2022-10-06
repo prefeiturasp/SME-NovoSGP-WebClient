@@ -64,6 +64,7 @@ const TipoEscolaComunicados = ({
       form.setFieldValue(nomeCampo, []);
       setListaTipoEscola([]);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [codigoDre, codigoUe, modalidades]);
 
   useEffect(() => {
@@ -73,6 +74,7 @@ const TipoEscolaComunicados = ({
       form.setFieldValue(nomeCampo, []);
       setListaTipoEscola([]);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [codigoUe, obterTiposEscola]);
 
   const onChangeTipoEscola = novosValores => {
@@ -99,6 +101,7 @@ const TipoEscolaComunicados = ({
         name={nomeCampo}
         form={form}
         setValueOnlyOnChange
+        labelRequired
         onChange={valores => {
           onchangeMultiSelect(valores, tipoEscola, onChangeTipoEscola);
           onChangeCampos();

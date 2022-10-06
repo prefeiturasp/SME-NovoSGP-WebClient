@@ -2,9 +2,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { SelectComponent, CheckboxComponent, Loader } from '~/componentes';
 import { Cabecalho } from '~/componentes-sgp';
-import Button from '~/componentes/button';
 import Card from '~/componentes/card';
-import { Colors } from '~/componentes/colors';
 import { URL_HOME } from '~/constantes/url';
 import modalidade from '~/dtos/modalidade';
 import RotasDto from '~/dtos/rotasDto';
@@ -16,6 +14,7 @@ import ServicoConselhoAtaFinal from '~/servicos/Paginas/ConselhoAtaFinal/Servico
 import FiltroHelper from '~componentes-sgp/filtro/helper';
 import AlertaModalidadeInfantil from '~/componentes-sgp/AlertaModalidadeInfantil/alertaModalidadeInfantil';
 import { OPCAO_TODOS } from '~/constantes/constantes';
+import BotoesAcaoRelatorio from '~/componentes-sgp/botoesAcaoRelatorio';
 
 const AtaFinalResultados = () => {
   const usuarioStore = useSelector(store => store.usuario);
@@ -46,16 +45,17 @@ const AtaFinalResultados = () => {
   const [desabilitaVisualizacao, setDesabilitaVisualizacao] = useState(true);
   const [visualizacao, setVisualizacao] = useState('');
   const [listaTurmasCompletas, setListaTurmasCompletas] = useState([]);
+  const [modoEdicao, setModoEdicao] = useState(false);
 
   const listaFormatos = [
     { valor: '1', desc: 'PDF' },
     { valor: '4', desc: 'EXCEL' },
   ];
 
-  const obterAnosLetivos = useCallback(async consideraHistorico => {
+  const obterAnosLetivos = useCallback(async considHistorico => {
     setCarregandoAnosLetivos(true);
     const anosLetivo = await FiltroHelper.obterAnosLetivos({
-      consideraHistorico,
+      consideraHistorico: considHistorico,
     }).catch(e => erros(e));
     if (anosLetivo) {
       setListaAnosLetivo(anosLetivo);
@@ -84,6 +84,7 @@ const AtaFinalResultados = () => {
         }
       }
     },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [ueId]
   );
 
@@ -128,6 +129,7 @@ const AtaFinalResultados = () => {
       }
       setCarregandoUes(false);
     },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [dreId]
   );
 
@@ -145,6 +147,8 @@ const AtaFinalResultados = () => {
 
     setListaTurmas([]);
     setTurmaId(undefined);
+
+    setModoEdicao(true);
   };
 
   const obterDres = useCallback(async () => {
@@ -172,6 +176,7 @@ const AtaFinalResultados = () => {
       }
       setCarregandoDres(false);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [anoLetivo]);
 
   const obterTurmas = useCallback(
@@ -206,6 +211,7 @@ const AtaFinalResultados = () => {
         }
       }
     },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [modalidadeId]
   );
 
@@ -236,6 +242,7 @@ const AtaFinalResultados = () => {
       setModalidadeId(undefined);
       setListaModalidades([]);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [ueId]);
 
   useEffect(() => {
@@ -268,6 +275,7 @@ const AtaFinalResultados = () => {
       setSemestre(undefined);
       setListaSemestre([]);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [modalidadeId, anoLetivo, obterTurmas]);
 
   useEffect(() => {
@@ -358,6 +366,7 @@ const AtaFinalResultados = () => {
       !turmaId.length ||
       turmaExcecao;
     setDesabilitaVisualizacao(desabilita);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [turmaId, modalidadeId, listaTurmasCompletas]);
 
   const onClickVoltar = () => {
@@ -365,6 +374,7 @@ const AtaFinalResultados = () => {
   };
 
   const onClickCancelar = () => {
+    setConsideraHistorico(false);
     setAnoLetivo(undefined);
     setDreId(undefined);
     setListaAnosLetivo([]);
@@ -374,6 +384,8 @@ const AtaFinalResultados = () => {
     obterDres();
 
     setFormato('PDF');
+
+    setModoEdicao(false);
   };
 
   const onClickGerar = async () => {
@@ -383,7 +395,7 @@ const AtaFinalResultados = () => {
         anoLetivo,
         tipoFormatoRelatorio: formato,
         visualizacao,
-        semestre: semestre,
+        semestre,
       };
       if (turmaId.find(t => t === OPCAO_TODOS)) {
         params.turmasCodigos = listaTurmas.map(item => String(item.valor));
@@ -413,6 +425,8 @@ const AtaFinalResultados = () => {
 
     setListaTurmas([]);
     setTurmaId(undefined);
+
+    setModoEdicao(true);
   };
 
   const onChangeModalidade = novaModalidade => {
@@ -421,12 +435,14 @@ const AtaFinalResultados = () => {
     setListaSemestre([]);
     setSemestre(undefined);
 
-    if (novaModalidade == modalidade.EJA)
+    if (Number(novaModalidade) === modalidade.EJA)
       obterSemestres(novaModalidade, anoLetivo);
 
     setListaTurmas([]);
     setTurmaId(undefined);
     setVisualizacao('');
+
+    setModoEdicao(true);
   };
 
   const onChangeAnoLetivo = ano => {
@@ -441,6 +457,8 @@ const AtaFinalResultados = () => {
 
     setListaTurmas([]);
     setTurmaId(undefined);
+
+    setModoEdicao(true);
   };
 
   const resetFormato = valor => {
@@ -456,7 +474,10 @@ const AtaFinalResultados = () => {
     resetFormato(ehDesabilitado);
   };
 
-  const onChangeSemestre = valor => setSemestre(valor);
+  const onChangeSemestre = valor => {
+    setSemestre(valor);
+    setModoEdicao(true);
+  };
 
   const onChangeTurma = valor => {
     const todosSetado = turmaId?.find(a => a === OPCAO_TODOS);
@@ -465,16 +486,22 @@ const AtaFinalResultados = () => {
     setTurmaId(todos ? [todos] : novoValor);
     habilitarSelecaoFormato(valor);
     setVisualizacao('');
+    setModoEdicao(true);
   };
-  const onChangeFormato = valor => setFormato(valor);
+  const onChangeFormato = valor => {
+    setFormato(valor);
+    setModoEdicao(true);
+  };
 
   const onChangeVisualizacao = valor => {
     if (visualizacao !== valor) setVisualizacao(valor);
+    setModoEdicao(true);
   };
 
   function onCheckedConsideraHistorico(e) {
     setAnoLetivo(undefined);
     setConsideraHistorico(e.target.checked);
+    setModoEdicao(true);
   }
 
   return (
@@ -483,43 +510,22 @@ const AtaFinalResultados = () => {
         exibir={String(modalidadeId) === String(modalidade.INFANTIL)}
         validarModalidadeFiltroPrincipal={false}
       />
-      <Cabecalho pagina="Ata de resultados finais" classes="mb-2" />
+      <Cabecalho pagina="Ata de resultados finais">
+        <BotoesAcaoRelatorio
+          onClickVoltar={onClickVoltar}
+          onClickCancelar={onClickCancelar}
+          onClickGerar={onClickGerar}
+          desabilitarBtnGerar={
+            String(modalidadeId) === String(modalidade.INFANTIL) ||
+            desabilitarBtnGerar ||
+            !permissoesTela.podeConsultar
+          }
+          modoEdicao={modoEdicao}
+        />
+      </Cabecalho>
       <Card>
-        <div className="col-md-12 p-0">
+        <div className="col-md-12">
           <div className="row">
-            <div className="col-md-12 d-flex justify-content-end pb-2">
-              <Button
-                id="btn-voltar-ata-final-resultado"
-                label="Voltar"
-                icon="arrow-left"
-                color={Colors.Azul}
-                border
-                className="mr-3"
-                onClick={onClickVoltar}
-              />
-              <Button
-                id="btn-cancelar-ata-final-resultado"
-                label="Cancelar"
-                color={Colors.Azul}
-                border
-                bold
-                className="mr-3"
-                onClick={() => onClickCancelar()}
-              />
-              <Button
-                id="btn-gerar-ata-final-resultado"
-                icon="print"
-                label="Gerar"
-                color={Colors.Roxo}
-                bold
-                onClick={() => onClickGerar()}
-                disabled={
-                  String(modalidadeId) === String(modalidade.INFANTIL) ||
-                  desabilitarBtnGerar ||
-                  !permissoesTela.podeConsultar
-                }
-              />
-            </div>
             <div className="col-sm-12 mb-2">
               <CheckboxComponent
                 label="Exibir histórico?"
@@ -527,7 +533,7 @@ const AtaFinalResultados = () => {
                 checked={consideraHistorico}
               />
             </div>
-            <div className="col-sm-12 col-md-4 col-lg-2 col-xl-2 mb-3 pr-0">
+            <div className="col-sm-12 col-md-4 col-lg-2 col-xl-2 mb-3">
               <Loader loading={carregandoAnosLetivos} tip="">
                 <SelectComponent
                   label="Ano Letivo"
@@ -543,7 +549,7 @@ const AtaFinalResultados = () => {
                 />
               </Loader>
             </div>
-            <div className="col-sm-12 col-md-12 col-lg-5 col-xl-5 mb-3 pr-0">
+            <div className="col-sm-12 col-md-12 col-lg-5 col-xl-5 mb-3">
               <Loader loading={carregandoDres} tip="">
                 <SelectComponent
                   label="Diretoria Regional de Educação (DRE)"
@@ -579,7 +585,7 @@ const AtaFinalResultados = () => {
                 />
               </Loader>
             </div>
-            <div className="col-sm-12 col-md-8 col-lg-4 col-xl-4 mb-3 pr-0">
+            <div className="col-sm-12 col-md-8 col-lg-4 col-xl-4 mb-3">
               <SelectComponent
                 label="Modalidade"
                 lista={listaModalidades}
@@ -594,7 +600,7 @@ const AtaFinalResultados = () => {
                 valueSelect={modalidadeId}
               />
             </div>
-            <div className="col-sm-12 col-md-4 col-lg-2 col-xl-2 mb-3 pr-0">
+            <div className="col-sm-12 col-md-4 col-lg-2 col-xl-2 mb-3">
               <SelectComponent
                 lista={listaSemestre}
                 valueOption="valor"
@@ -603,7 +609,7 @@ const AtaFinalResultados = () => {
                 disabled={
                   !permissoesTela.podeConsultar ||
                   !modalidadeId ||
-                  modalidadeId != modalidade.EJA ||
+                  Number(modalidadeId) !== modalidade.EJA ||
                   (listaSemestre && listaSemestre.length === 1)
                 }
                 valueSelect={semestre}
@@ -627,7 +633,7 @@ const AtaFinalResultados = () => {
                 showSearch
               />
             </div>
-            <div className="col-sm-12 col-md-3 col-lg-5 col-xl-3 mb-3 pr-0">
+            <div className="col-sm-12 col-md-3 col-lg-5 col-xl-3 mb-3">
               <SelectComponent
                 label="Visualização"
                 lista={listaVisualizacao}

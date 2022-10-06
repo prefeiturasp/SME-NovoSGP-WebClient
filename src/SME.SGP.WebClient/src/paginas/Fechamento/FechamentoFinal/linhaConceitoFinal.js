@@ -46,11 +46,11 @@ const LinhaConceitoFinal = props => {
   );
 };
 
-LinhaConceitoFinal.defaultProps = {
+LinhaConceitoFinal.propTypes = {
   indexLinha: PropTypes.number,
 };
 
-LinhaConceitoFinal.propTypes = {
+LinhaConceitoFinal.defaultProps = {
   indexLinha: null,
 };
 

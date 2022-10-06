@@ -6,10 +6,9 @@ import {
   SelectComponent,
 } from '~/componentes';
 import { Cabecalho } from '~/componentes-sgp';
-import Button from '~/componentes/button';
+import BotoesAcaoRelatorio from '~/componentes-sgp/botoesAcaoRelatorio';
 import CampoNumero from '~/componentes/campoNumero';
 import Card from '~/componentes/card';
-import { Colors } from '~/componentes/colors';
 import { OPCAO_TODOS } from '~/constantes/constantes';
 import { URL_HOME } from '~/constantes/url';
 import { erros, sucesso } from '~/servicos/alertas';
@@ -45,6 +44,8 @@ const RelatorioUsuarios = () => {
 
   const [anoAtual] = useState(window.moment().format('YYYY'));
 
+  const [modoEdicao, setModoEdicao] = useState(false);
+
   const obterUes = useCallback(async dre => {
     if (dre) {
       setCarregandoGeral(true);
@@ -72,6 +73,7 @@ const RelatorioUsuarios = () => {
 
     setListaUes([]);
     setCodigoUe(undefined);
+    setModoEdicao(true);
   };
 
   const obterDres = async () => {
@@ -170,6 +172,8 @@ const RelatorioUsuarios = () => {
     setListaUes([]);
 
     obterDres();
+
+    setModoEdicao(false);
   };
 
   const onClickGerar = async () => {
@@ -214,47 +218,23 @@ const RelatorioUsuarios = () => {
 
   const onChangeUe = ue => {
     setCodigoUe(ue);
+    setModoEdicao(true);
   };
 
   return (
     <>
-      <Cabecalho pagina="Relatório de usuários" />
       <Loader loading={carregandoGeral}>
+        <Cabecalho pagina="Relatório de usuários">
+          <BotoesAcaoRelatorio
+            onClickVoltar={onClickVoltar}
+            onClickCancelar={onClickCancelar}
+            onClickGerar={onClickGerar}
+            desabilitarBtnGerar={desabilitarBtnGerar}
+            modoEdicao={modoEdicao}
+          />
+        </Cabecalho>
         <Card>
           <div className="col-md-12">
-            <div className="row">
-              <div className="col-md-12 d-flex justify-content-end pb-4">
-                <Button
-                  id="btn-voltar"
-                  label="Voltar"
-                  icon="arrow-left"
-                  color={Colors.Azul}
-                  border
-                  className="mr-2"
-                  onClick={onClickVoltar}
-                />
-                <Button
-                  id="btn-cancelar"
-                  label="Cancelar"
-                  color={Colors.Roxo}
-                  border
-                  bold
-                  className="mr-3"
-                  onClick={onClickCancelar}
-                />
-                <Button
-                  id="btn-gerar"
-                  icon="print"
-                  label="Gerar"
-                  color={Colors.Azul}
-                  border
-                  bold
-                  className="mr-2"
-                  onClick={onClickGerar}
-                  disabled={desabilitarBtnGerar}
-                />
-              </div>
-            </div>
             <div className="row">
               <div className="col-sm-12 col-md-12 col-lg-6 col-xl-6 mb-2">
                 <SelectComponent
@@ -293,6 +273,7 @@ const RelatorioUsuarios = () => {
                     onChange={valores => {
                       if (valores && valores.professorRf) {
                         setUsuarioRf(valores.professorRf);
+                        setModoEdicao(true);
                       }
                     }}
                     buscarOutrosCargos
@@ -322,6 +303,7 @@ const RelatorioUsuarios = () => {
                     } else {
                       setPerfisSelecionados(valores);
                     }
+                    setModoEdicao(true);
                   }}
                   placeholder="Perfil"
                   disabled={listaPerfis?.length === 1}
@@ -350,13 +332,17 @@ const RelatorioUsuarios = () => {
                     } else {
                       setSituacoesSelecionadas(valores);
                     }
+                    setModoEdicao(true);
                   }}
                   placeholder="Situação"
                 />
               </div>
               <div className="col-sm-12 col-md-6 col-lg-6 col-xl-3 mb-2">
                 <CampoNumero
-                  onChange={setDiasSemAcesso}
+                  onChange={v => {
+                    setDiasSemAcesso(v);
+                    setModoEdicao(true);
+                  }}
                   value={diasSemAcesso}
                   min={0}
                   label="Não acessa a mais de (dias)"
@@ -371,6 +357,7 @@ const RelatorioUsuarios = () => {
                   valorInicial
                   onChange={e => {
                     setExibirHistorico(e.target.value);
+                    setModoEdicao(true);
                   }}
                   value={exibirHistorico}
                 />

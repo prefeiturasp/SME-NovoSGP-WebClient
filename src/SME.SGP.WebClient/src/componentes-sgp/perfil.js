@@ -1,4 +1,3 @@
-import PropTypes from 'prop-types';
 import React, { useLayoutEffect, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 import styled from 'styled-components';
@@ -15,12 +14,16 @@ import { setMenusPermissoes } from '~/servicos/servico-navegacao';
 
 import { Base } from '../componentes/colors';
 import { store } from '../redux';
-import { perfilSelecionado } from '../redux/modulos/perfil/actions';
+import {
+  perfilSelecionado,
+  setTrocouPerfil,
+} from '../redux/modulos/perfil/actions';
 import history from '../servicos/history';
 import ServicoDashboard from '~/servicos/Paginas/Dashboard/ServicoDashboard';
 import { validarAcaoTela } from '~/utils';
 
 const Perfil = props => {
+  // eslint-disable-next-line react/prop-types
   const { Botao, Icone, Texto } = props;
   const [ocultaPerfis, setarOcultaPerfis] = useState(true);
   const perfilStore = useSelector(e => e.perfil);
@@ -161,6 +164,7 @@ const Perfil = props => {
             setMenusPermissoes();
             limparFiltro();
             store.dispatch(perfilSelecionado(perfilNovo[0]));
+            store.dispatch(setTrocouPerfil(true));
             setTimeout(() => {
               store.dispatch(setLoaderGeral(false));
             }, 1000);
@@ -174,6 +178,7 @@ const Perfil = props => {
         history.push('/');
       } else {
         store.dispatch(perfilSelecionado(perfilNovo[0]));
+        store.dispatch(setTrocouPerfil(true));
         limparFiltro();
       }
     } else {
@@ -226,6 +231,7 @@ const Perfil = props => {
         <table>
           <tbody>
             {perfilStore.perfis.map(item => (
+              // eslint-disable-next-line jsx-a11y/no-access-key
               <Item
                 key={item.codigoPerfil}
                 onClick={onClickPerfil}
@@ -253,12 +259,6 @@ const Perfil = props => {
       </ItensPerfil>
     </div>
   );
-};
-
-Perfil.propTypes = {
-  Botao: PropTypes.object.isRequired,
-  Icone: PropTypes.object.isRequired,
-  Texto: PropTypes.object.isRequired,
 };
 
 export default Perfil;

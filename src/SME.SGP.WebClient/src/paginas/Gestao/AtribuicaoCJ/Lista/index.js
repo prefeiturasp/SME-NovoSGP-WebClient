@@ -13,6 +13,7 @@ import { Card, DataTable, ButtonGroup, Loader } from '~/componentes';
 import Filtro from './componentes/Filtro';
 
 import { PilulaEstilo } from './styles';
+import { SGP_BUTTON_NOVO } from '~/componentes-sgp/filtro/idsCampos';
 
 function AtribuicaoCJLista() {
   const [itensSelecionados, setItensSelecionados] = useState([]);
@@ -106,9 +107,8 @@ function AtribuicaoCJLista() {
 
   return (
     <>
-      <Cabecalho pagina="Atribuição de CJ" />
       <Loader loading={carregandoLista}>
-        <Card mx="mx-0">
+        <Cabecalho pagina="Atribuição de CJ">
           <ButtonGroup
             somenteConsulta={somenteConsulta}
             permissoesTela={permissoesTela[RotasDto.ATRIBUICAO_CJ_LISTA]}
@@ -118,12 +118,15 @@ function AtribuicaoCJLista() {
             onClickVoltar={onClickVoltar}
             onClickBotaoPrincipal={onClickBotaoPrincipal}
             labelBotaoPrincipal="Novo"
+            idBotaoPrincipal={SGP_BUTTON_NOVO}
             desabilitarBotaoPrincipal={
               !!filtro.DreId === false && !!filtro.UeId === false
             }
           />
-          <Filtro onFiltrar={onChangeFiltro} />
-          <div className="col-md-12 pt-2 py-0 px-0">
+        </Cabecalho>
+        <Card>
+          <div className="col-md-12">
+            <Filtro onFiltrar={onChangeFiltro} />
             <DataTable
               id="lista-atribuicoes-cj"
               idLinha="key"

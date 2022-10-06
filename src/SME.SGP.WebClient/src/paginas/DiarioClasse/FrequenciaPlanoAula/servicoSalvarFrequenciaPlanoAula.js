@@ -2,7 +2,6 @@ import { store } from '~/redux';
 import {
   setAtualizarDatas,
   setDadosPlanoAula,
-  setDataSelecionadaFrequenciaPlanoAula,
   setErrosPlanoAula,
   setExibirLoaderFrequenciaPlanoAula,
   setExibirModalErrosPlanoAula,
@@ -68,7 +67,6 @@ class ServicoSalvarFrequenciaPlanoAula {
       checkedExibirEscolhaObjetivos,
       dadosOriginaisPlanoAula,
       componenteCurricular,
-      desenvolvimentoDaAulaValidaObrigatoriedade,
       objetivosEspecificosParaAulaValidarObrigatoriedade,
     } = frequenciaPlanoAula;
 
@@ -90,14 +88,14 @@ class ServicoSalvarFrequenciaPlanoAula {
       if (
         exibirSwitchEscolhaObjetivos
           ? checkedExibirEscolhaObjetivos &&
-          componenteCurricular.possuiObjetivos &&
-          !ServicoPlanoAula.temPeloMenosUmObjetivoSelecionado(
-            dadosPlanoAula.objetivosAprendizagemComponente
-          )
+            componenteCurricular.possuiObjetivos &&
+            !ServicoPlanoAula.temPeloMenosUmObjetivoSelecionado(
+              dadosPlanoAula.objetivosAprendizagemComponente
+            )
           : componenteCurricular.possuiObjetivos &&
-          !ServicoPlanoAula.temPeloMenosUmObjetivoSelecionado(
-            dadosPlanoAula.objetivosAprendizagemComponente
-          )
+            !ServicoPlanoAula.temPeloMenosUmObjetivoSelecionado(
+              dadosPlanoAula.objetivosAprendizagemComponente
+            )
       ) {
         errosValidacaoPlano.push(
           'Objetivos de aprendizagem - É obrigatório selecionar ao menos um objetivo de aprendizagem'

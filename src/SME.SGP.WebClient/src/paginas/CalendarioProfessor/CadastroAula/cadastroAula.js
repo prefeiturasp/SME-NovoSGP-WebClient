@@ -1,9 +1,10 @@
+/* eslint-disable react/prop-types */
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { useSelector } from 'react-redux';
-import shortid from 'shortid';
 import { Form, Formik } from 'formik';
 import queryString from 'query-string';
 import * as Yup from 'yup';
+import { Col, Row } from 'antd';
 import Alert from '~/componentes/alert';
 import { Cabecalho } from '~/componentes-sgp';
 import history from '~/servicos/history';
@@ -25,8 +26,6 @@ import servicoDisciplina from '~/servicos/Paginas/ServicoDisciplina';
 import CampoNumeroFormik from '~/componentes/campoNumeroFormik/campoNumeroFormik';
 import { aulaDto } from '~/dtos/aulaDto';
 
-import { Container } from './cadastroAula.css';
-import modalidade from '~/dtos/modalidade';
 import ExcluirAula from './excluirAula';
 import { setBreadcrumbManual } from '~/servicos/breadcrumb-services';
 import RotasDto from '~/dtos/rotasDto';
@@ -34,12 +33,17 @@ import { RegistroMigrado } from '~/componentes-sgp/registro-migrado';
 import { ehTurmaInfantil } from '~/servicos/Validacoes/validacoesInfatil';
 import AlterarAula from './alterarAula';
 import {
+  SGP_BUTTON_ALTERAR_CADASTRAR,
+  SGP_BUTTON_CANCELAR,
   SGP_DATA_AULA,
   SGP_INPUT_NUMBER_QUANTIDADE_AULAS,
   SGP_RADIO_RECORRENCIA,
   SGP_RADIO_TIPO_AULA,
   SGP_SELECT_COMPONENTE_CURRICULAR,
 } from '~/componentes-sgp/filtro/idsCampos';
+import { ContainerColumnReverse } from '~/paginas/Planejamento/Anual/planoAnual.css';
+import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
+import BotaoExcluirPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoExcluirPadrao';
 
 function CadastroDeAula({ match, location }) {
   const { id, tipoCalendarioId, somenteReposicao } = match.params;
@@ -78,7 +82,6 @@ function CadastroDeAula({ match, location }) {
   const [registroMigrado, setRegistroMigrado] = useState(false);
   const [emManutencao, setEmManutencao] = useState(false);
   const [desabilitarBtnSalvar, setDesabilitarBtnSalvar] = useState(false);
-  const [alterouCampo, setAlterouCampo] = useState(false);
 
   const { diaAula } = queryString.parse(location.search);
   const aulaInicial = {
@@ -147,95 +150,25 @@ function CadastroDeAula({ match, location }) {
     [listaComponentes]
   );
 
-  const ehRegenciaEja = useCallback(
-    componenteSelecionado => {
-      return (
-        componenteSelecionado != null &&
-        componenteSelecionado.regencia &&
-        turmaSelecionada != null &&
-        turmaSelecionada.modalidade == modalidade.EJA
-      );
-    },
-    [turmaSelecionada]
-  );
-
   const navegarParaCalendarioProfessor = () => {
     history.push('/calendario-escolar/calendario-professor');
   };
 
-  const obterAula = useCallback(async () => {
-    const carregarComponentesCurriculares = async idTurma => {
-      setCarregandoDados(true);
-      const respostaComponentes = await servicoDisciplina
-        .obterDisciplinasPorTurma(idTurma)
-        .catch(e => erros(e))
-        .finally(() => setCarregandoDados(false));
-
-      if (respostaComponentes && respostaComponentes.status == 200) {
-        setListaComponentes(respostaComponentes.data);
-        return respostaComponentes.data;
-      }
-    };
-    const componentes = await carregarComponentesCurriculares(
-      turmaSelecionada.turma
-    );
-    if (id) {
-      setCarregandoDados(true);
-      servicoCadastroAula
-        .obterPorId(id)
-        .then(resposta => {
-          const respostaAula = resposta.data;
-          respostaAula.dataAula = window.moment(respostaAula.dataAula);
-          setRecorrenciaAulaOriginal(respostaAula.recorrenciaAula);
-          setAula(respostaAula);
-          setRegistroMigrado(respostaAula.migrado);
-          setEmManutencao(respostaAula.emManutencao);
-          servicoCadastroAula
-            .obterRecorrenciaPorIdAula(id, respostaAula.recorrenciaAula)
-            .then(resposta => {
-              setRecorrenciaAulaEmEdicao(resposta.data);
-            })
-            .catch(e => erros(e));
-          if (componentes) {
-            const componenteSelecionado = componentes.find(
-              c => c.codigoComponenteCurricular == respostaAula.disciplinaId
-            );
-            if (componenteSelecionado) {
-              carregarGrade(
-                componenteSelecionado,
-                respostaAula.dataAula,
-                respostaAula.tipoAula,
-                respostaAula.tipoAula == 1
-              );
-            } else {
-              setAula({
-                ...respostaAula,
-                disciplinaId: null,
-              });
-              setSomenteLeitura(false);
-              setCarregandoDados(false);
-            }
-          }
-        })
-        .catch(e => {
-          erros(e);
-          navegarParaCalendarioProfessor();
-          setCarregandoDados(false);
-        });
-    } else if (componentes && componentes.length == 1) {
-      setAula({
-        ...aulaInicial,
-        disciplinaId: String(componentes[0].codigoComponenteCurricular),
-      });
-
-      carregarGrade(
-        componentes[0],
-        aulaInicial.dataAula,
-        aulaInicial.tipoAula,
-        aulaInicial.tipoAula == 1
-      );
-    }
-  }, [id, turmaSelecionada.turma]);
+  const removeGrade = () => {
+    refForm.current.handleReset();
+    setControlaGrade(false);
+    setQuantidadeBloqueada(false);
+    setValidacoes(validacoesState => {
+      return {
+        ...validacoesState,
+        quantidade: Yup.number()
+          .integer('O valor informado deve ser um número inteiro')
+          .typeError('O valor informado deve ser um número')
+          .nullable()
+          .required('Informe a quantidade de aulas'),
+      };
+    });
+  };
 
   const defineGradeRegistroNovoComValidacoes = quantidadeAulasRestante => {
     setValidacoes(validacoesState => {
@@ -253,7 +186,7 @@ function CadastroDeAula({ match, location }) {
       };
     });
 
-    if (quantidadeAulasRestante == 0) {
+    if (Number(quantidadeAulasRestante) === 0) {
       setQuantidadeBloqueada(true);
       setGradeAtingida(true);
       setControlaGrade(true);
@@ -277,28 +210,12 @@ function CadastroDeAula({ match, location }) {
     });
   };
 
-  const removeGrade = () => {
-    refForm.current.handleReset();
-    setControlaGrade(false);
-    setQuantidadeBloqueada(false);
-    setValidacoes(validacoesState => {
-      return {
-        ...validacoesState,
-        quantidade: Yup.number()
-          .integer('O valor informado deve ser um número inteiro')
-          .typeError('O valor informado deve ser um número')
-          .nullable()
-          .required('Informe a quantidade de aulas'),
-      };
-    });
-  };
-
   const defineGrade = useCallback(
     (dadosGrade, tipoAula, aplicarGrade) => {
       refForm.current.handleReset();
       const { quantidadeAulasRestante, podeEditar } = dadosGrade;
-      setGradeAtingida(quantidadeAulasRestante == 0);
-      if (tipoAula == 1) {
+      setGradeAtingida(Number(quantidadeAulasRestante) === 0);
+      if (Number(tipoAula) === 1) {
         if (aplicarGrade) {
           setQuantidadeBloqueada(!podeEditar);
           if (!id) {
@@ -369,11 +286,89 @@ function CadastroDeAula({ match, location }) {
     [turmaSelecionada.turma, defineGrade, id]
   );
 
+  const obterAula = useCallback(async () => {
+    const carregarComponentesCurriculares = async idTurma => {
+      setCarregandoDados(true);
+      const respostaComponentes = await servicoDisciplina
+        .obterDisciplinasPorTurma(idTurma)
+        .catch(e => erros(e))
+        .finally(() => setCarregandoDados(false));
+
+      if (respostaComponentes?.status === 200) {
+        setListaComponentes(respostaComponentes.data);
+        return respostaComponentes.data;
+      }
+      return [];
+    };
+    const componentes = await carregarComponentesCurriculares(
+      turmaSelecionada.turma
+    );
+    if (id) {
+      setCarregandoDados(true);
+      servicoCadastroAula
+        .obterPorId(id)
+        .then(resposta => {
+          const respostaAula = resposta.data;
+          respostaAula.dataAula = window.moment(respostaAula.dataAula);
+          setRecorrenciaAulaOriginal(respostaAula.recorrenciaAula);
+          setAula(respostaAula);
+          setRegistroMigrado(respostaAula.migrado);
+          setEmManutencao(respostaAula.emManutencao);
+          servicoCadastroAula
+            .obterRecorrenciaPorIdAula(id, respostaAula.recorrenciaAula)
+            .then(resp => {
+              setRecorrenciaAulaEmEdicao(resp.data);
+            })
+            .catch(e => erros(e));
+          if (componentes) {
+            const componenteSelecionado = componentes.find(
+              c =>
+                String(c.codigoComponenteCurricular) ===
+                String(respostaAula.disciplinaId)
+            );
+            if (componenteSelecionado) {
+              carregarGrade(
+                componenteSelecionado,
+                respostaAula.dataAula,
+                respostaAula.tipoAula,
+                respostaAula.tipoAula === 1
+              );
+            } else {
+              setAula({
+                ...respostaAula,
+                disciplinaId: null,
+              });
+              setSomenteLeitura(false);
+              setCarregandoDados(false);
+            }
+          }
+        })
+        .catch(e => {
+          erros(e);
+          navegarParaCalendarioProfessor();
+          setCarregandoDados(false);
+        });
+    } else if (componentes?.length === 1) {
+      setAula({
+        ...aulaInicial,
+        disciplinaId: String(componentes[0].codigoComponenteCurricular),
+      });
+
+      carregarGrade(
+        componentes[0],
+        aulaInicial.dataAula,
+        aulaInicial.tipoAula,
+        Number(aulaInicial.tipoAula) === 1
+      );
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [id, turmaSelecionada.turma]);
+
   const salvar = async valoresForm => {
     const componente = obterComponenteSelecionadoPorId(
       valoresForm.disciplinaId
     );
-    if (valoresForm.quantidade == 0) valoresForm.quantidade = 1;
+    if (Number(valoresForm.quantidade) === 0) valoresForm.quantidade = 1;
 
     if (componente) valoresForm.disciplinaNome = componente.nome;
     setCarregandoDados(true);
@@ -417,7 +412,7 @@ function CadastroDeAula({ match, location }) {
       componenteSelecionado,
       aula.dataAula,
       aula.tipoAula,
-      aula.tipoAula == 1
+      Number(aula.tipoAula) === 1
     );
   };
 
@@ -430,15 +425,14 @@ function CadastroDeAula({ match, location }) {
       );
 
       if (confirmou) {
-        obterAula();
         setModoEdicao(false);
+        obterAula();
       }
     }
   };
 
   const onChangeDataAula = data => {
     setModoEdicao(true);
-    setAlterouCampo(true);
     setAula(aulaState => {
       return { ...aulaState, dataAula: data };
     });
@@ -472,7 +466,6 @@ function CadastroDeAula({ match, location }) {
 
   const onChangeQuantidadeAula = quantidade => {
     setModoEdicao(true);
-    setAlterouCampo(true);
     setAula(aulaState => {
       return {
         ...aulaState,
@@ -495,7 +488,7 @@ function CadastroDeAula({ match, location }) {
         .then(resposta => {
           setRecorrenciaAulaEmEdicao(resposta.data);
         })
-        .catch(e => erros(e));
+        .catch(er => erros(er));
     }
   };
 
@@ -515,7 +508,7 @@ function CadastroDeAula({ match, location }) {
   };
 
   const onClickExcluir = async () => {
-    if (recorrenciaAulaEmEdicao.recorrenciaAula == 1) {
+    if (Number(recorrenciaAulaEmEdicao.recorrenciaAula) === 1) {
       let mensagem = 'Você tem certeza que deseja excluir esta aula?';
       if (recorrenciaAulaEmEdicao.existeFrequenciaOuPlanoAula) {
         const infantil = ehTurmaInfantil(
@@ -569,14 +562,8 @@ function CadastroDeAula({ match, location }) {
     }
   }, [carregandoDados, aula.somenteLeitura]);
 
-  useEffect(() => {
-    const ehEdicao = id ? alterouCampo : !id;
-    const desabilitar = aula?.dataAula && aula?.disciplinaId && ehEdicao;
-    setModoEdicao(desabilitar);
-  }, [aula, id, alterouCampo]);
-
   return (
-    <Container>
+    <>
       <Loader loading={carregandoDados}>
         <ExcluirAula
           idAula={id}
@@ -608,112 +595,74 @@ function CadastroDeAula({ match, location }) {
           }}
           recorrencia={recorrenciaAulaEmEdicao}
           recorrenciaSelecionada={aula.recorrenciaAula}
-          onFecharModal={salvar => {
+          onFecharModal={acaoSubmit => {
             setExibirModalAlteracao(false);
-            if (salvar) {
+            if (acaoSubmit) {
               refForm.current.handleSubmit();
             }
           }}
           onCancelar={() => setExibirModalAlteracao(false)}
         />
 
-        <div className="col-md-12">
-          {controlaGrade && gradeAtingida && !id && (
-            <Alert
-              alerta={{
-                tipo: 'warning',
-                id: 'cadastro-aula-quantidade-maxima',
-                mensagem:
-                  'Não é possível criar aula normal porque o limite da grade curricular foi atingido',
-                estiloTitulo: { fontSize: '18px' },
-              }}
-              className="mb-2"
-            />
-          )}
-        </div>
-        <div className="col-md-12">
-          {somenteLeitura && (
-            <Alert
-              alerta={{
-                tipo: 'warning',
-                id: 'somente-leitura',
-                mensagem: 'Você possui permissão somente de leitura nesta aula',
-                estiloTitulo: { fontSize: '18px' },
-              }}
-              className="mb-2"
-            />
-          )}
-        </div>
-        <Cabecalho pagina={`Cadastro de Aula - ${obterDataFormatada()} `}>
-          {registroMigrado && (
-            <div className="col-md-2 float-right">
-              <RegistroMigrado>Registro Migrado</RegistroMigrado>
-            </div>
-          )}
-        </Cabecalho>
-        <div className="col-md-12">
-          {emManutencao && (
-            <Alert
-              alerta={{
-                tipo: 'warning',
-                id: 'em-manutencao',
-                mensagem: 'Registro em manutenção',
-                estiloTitulo: { fontSize: '18px' },
-              }}
-              className="mb-2"
-            />
-          )}
-        </div>
-        <Card>
-          <div className="col-xs-12 col-md-12 col-lg-12">
-            <Formik
-              enableReinitialize
-              initialValues={aula}
-              validationSchema={Yup.object(validacoes)}
-              onSubmit={salvar}
-              validateOnChange
-              validateOnBlur
-              ref={refForm}
-            >
-              {form => (
-                <Form className="col-md-12 mb-8">
-                  <div className="row">
-                    <div className="col-md-3 pb-2 d-flex justify-content-start">
-                      <CampoData
-                        placeholder="Data da aula"
-                        label="Data da aula"
-                        formatoData="DD/MM/YYYY"
-                        name="dataAula"
-                        id={SGP_DATA_AULA}
-                        form={form}
-                        onChange={onChangeDataAula}
-                      />
-                    </div>
-                    <div className="col-md-9 pb-2 d-flex justify-content-end">
+        {controlaGrade && gradeAtingida && !id && (
+          <Alert
+            alerta={{
+              tipo: 'warning',
+              id: 'cadastro-aula-quantidade-maxima',
+              mensagem:
+                'Não é possível criar aula normal porque o limite da grade curricular foi atingido',
+            }}
+          />
+        )}
+        {somenteLeitura && (
+          <Alert
+            alerta={{
+              tipo: 'warning',
+              id: 'somente-leitura',
+              mensagem: 'Você possui permissão somente de leitura nesta aula',
+            }}
+          />
+        )}
+        {emManutencao && (
+          <Alert
+            alerta={{
+              tipo: 'warning',
+              id: 'em-manutencao',
+              mensagem: 'Registro em manutenção',
+            }}
+          />
+        )}
+        <div>
+          <Formik
+            enableReinitialize
+            initialValues={aula}
+            validationSchema={Yup.object(validacoes)}
+            onSubmit={salvar}
+            validateOnChange
+            validateOnBlur
+            ref={refForm}
+          >
+            {form => (
+              <>
+                <Cabecalho
+                  pagina={`Cadastro de Aula - ${obterDataFormatada()} `}
+                >
+                  <Row gutter={[8, 8]} type="flex">
+                    <Col>
+                      <BotaoVoltarPadrao onClick={onClickVoltar} />
+                    </Col>
+                    <Col>
                       <Button
-                        id={shortid.generate()}
-                        label="Voltar"
-                        icon="arrow-left"
-                        color={Colors.Azul}
-                        border
-                        className="mr-2"
-                        onClick={onClickVoltar}
-                      />
-                      <Button
-                        id={shortid.generate()}
+                        id={SGP_BUTTON_CANCELAR}
                         label="Cancelar"
                         color={Colors.Roxo}
                         border
-                        className="mr-2"
                         onClick={onClickCancelar}
                         disabled={somenteConsulta || !modoEdicao}
                       />
-                      <Button
-                        id={shortid.generate()}
-                        label="Excluir"
-                        color={Colors.Vermelho}
-                        border
-                        className="mr-2"
+                    </Col>
+                    <Col>
+                      <BotaoExcluirPadrao
                         onClick={onClickExcluir}
                         disabled={
                           somenteConsulta ||
@@ -722,18 +671,19 @@ function CadastroDeAula({ match, location }) {
                           !aula.podeEditar
                         }
                       />
-
+                    </Col>
+                    <Col>
                       <Button
-                        id={shortid.generate()}
-                        label={id ? 'Salvar' : 'Cadastrar'}
+                        id={SGP_BUTTON_ALTERAR_CADASTRAR}
+                        label={id ? 'Alterar' : 'Cadastrar'}
                         color={Colors.Roxo}
                         border
                         bold
-                        className="mr-2"
                         onClick={() => {
                           if (
                             !id ||
-                            (aula.recorrenciaAula == recorrencia.AULA_UNICA &&
+                            (Number(aula.recorrenciaAula) ===
+                              recorrencia.AULA_UNICA &&
                               !recorrenciaAulaEmEdicao.existeFrequenciaOuPlanoAula)
                           ) {
                             form.handleSubmit();
@@ -747,91 +697,122 @@ function CadastroDeAula({ match, location }) {
                           !aula.disciplinaId ||
                           somenteLeitura ||
                           desabilitarBtnSalvar ||
-                          !modoEdicao ||
+                          (id && !modoEdicao) ||
                           !aula.podeEditar
                         }
                       />
+                    </Col>
+                  </Row>
+                </Cabecalho>
+                <Card>
+                  <Form className="col-md-12">
+                    <div className="row">
+                      <div className="col-md-12">
+                        <ContainerColumnReverse className="row">
+                          <div className="col-md-3 pb-2">
+                            <CampoData
+                              placeholder="Data da aula"
+                              label="Data da aula"
+                              formatoData="DD/MM/YYYY"
+                              name="dataAula"
+                              id={SGP_DATA_AULA}
+                              form={form}
+                              onChange={onChangeDataAula}
+                              labelRequired
+                            />
+                          </div>
+                          <div className="col-md-9 pt-2 pb-2 d-flex justify-content-end">
+                            {registroMigrado && (
+                              <RegistroMigrado>
+                                Registro Migrado
+                              </RegistroMigrado>
+                            )}
+                          </div>
+                        </ContainerColumnReverse>
+                      </div>
                     </div>
-                  </div>
-                  <div className="row">
-                    <div className="col-xs-12 col-md-3 col-lg-3">
-                      <RadioGroupButton
-                        id={SGP_RADIO_TIPO_AULA}
-                        label="Tipo de aula"
-                        opcoes={
-                          ehReposicao
-                            ? opcoesTipoAulaSomenteReposicao
-                            : opcoesTipoAula
-                        }
-                        name="tipoAula"
-                        form={form}
-                        onChange={onChangeTipoAula}
-                        desabilitado={!!id}
-                      />
+                    <div className="row">
+                      <div className="col-md-12 col-lg-3">
+                        <RadioGroupButton
+                          id={SGP_RADIO_TIPO_AULA}
+                          label="Tipo de aula"
+                          opcoes={
+                            ehReposicao
+                              ? opcoesTipoAulaSomenteReposicao
+                              : opcoesTipoAula
+                          }
+                          name="tipoAula"
+                          form={form}
+                          onChange={onChangeTipoAula}
+                          desabilitado={!!id}
+                          labelRequired
+                        />
+                      </div>
+                      <div className="col-md-12 col-lg-9">
+                        <SelectComponent
+                          id={SGP_SELECT_COMPONENTE_CURRICULAR}
+                          name="disciplinaId"
+                          lista={listaComponentes}
+                          label="Componente Curricular"
+                          valueOption="codigoComponenteCurricular"
+                          valueText="nome"
+                          placeholder="Selecione um componente curricular"
+                          form={form}
+                          disabled={
+                            (!!id && aula?.disciplinaId) ||
+                            (listaComponentes.length === 1 && !id)
+                          }
+                          onChange={onChangeComponente}
+                          labelRequired
+                        />
+                      </div>
                     </div>
-                    <div className="col-xs-12 col-md-6 col-lg-6">
-                      <SelectComponent
-                        id={SGP_SELECT_COMPONENTE_CURRICULAR}
-                        name="disciplinaId"
-                        lista={listaComponentes}
-                        label="Componente Curricular"
-                        valueOption="codigoComponenteCurricular"
-                        valueText="nome"
-                        placeholder="Selecione um componente curricular"
-                        form={form}
-                        disabled={
-                          (!!id && aula?.disciplinaId) ||
-                          (listaComponentes.length === 1 && !id)
-                        }
-                        onChange={onChangeComponente}
-                      />
+                    <div className="row">
+                      <div className="col-xs-12 col-md-3 mb-3">
+                        <CampoNumeroFormik
+                          label="Quantidade de aulas"
+                          id={SGP_INPUT_NUMBER_QUANTIDADE_AULAS}
+                          name="quantidade"
+                          form={form}
+                          min={1}
+                          onChange={onChangeQuantidadeAula}
+                          disabled={quantidadeBloqueada}
+                          labelRequired
+                        />
+                      </div>
+                      <div className="col-xs-12 col-md-9 mb-4">
+                        <RadioGroupButton
+                          id={SGP_RADIO_RECORRENCIA}
+                          label="Recorrência"
+                          opcoes={
+                            ehReposicao
+                              ? opcoesRecorrenciaSomenteReposicao
+                              : opcoesRecorrencia
+                          }
+                          name="recorrenciaAula"
+                          form={form}
+                          onChange={onChangeRecorrencia}
+                          desabilitado={aula.tipoAula === 2}
+                          labelRequired
+                        />
+                      </div>
                     </div>
-                  </div>
-                  <div className="row">
-                    <div className="col-xs-12 col-md-3 col-lg-3">
-                      <CampoNumeroFormik
-                        label="Quantidade de aulas"
-                        id={SGP_INPUT_NUMBER_QUANTIDADE_AULAS}
-                        name="quantidade"
-                        form={form}
-                        min={1}
-                        onChange={onChangeQuantidadeAula}
-                        disabled={quantidadeBloqueada}
-                        // ehDecimal={false}
-                      />
-                    </div>
-                    <div className="col-xs-12 col-md-6 col-lg-6">
-                      <RadioGroupButton
-                        id={SGP_RADIO_RECORRENCIA}
-                        label="Recorrência"
-                        opcoes={
-                          ehReposicao
-                            ? opcoesRecorrenciaSomenteReposicao
-                            : opcoesRecorrencia
-                        }
-                        name="recorrenciaAula"
-                        form={form}
-                        onChange={onChangeRecorrencia}
-                        desabilitado={aula.tipoAula === 2}
-                      />
-                    </div>
-                  </div>
-                </Form>
-              )}
-            </Formik>
-          </div>
-          <Auditoria
-            alteradoEm={aula.alteradoEm}
-            alteradoPor={aula.alteradoPor}
-            alteradoRf={aula.alteradoRF}
-            criadoEm={aula.criadoEm}
-            criadoPor={aula.criadoPor}
-            criadoRf={aula.criadoRF}
-            ignorarMarginTop
-          />
-        </Card>
+                  </Form>
+                  <Auditoria
+                    alteradoEm={aula.alteradoEm}
+                    alteradoPor={aula.alteradoPor}
+                    alteradoRf={aula.alteradoRF}
+                    criadoEm={aula.criadoEm}
+                    criadoPor={aula.criadoPor}
+                    criadoRf={aula.criadoRF}
+                  />
+                </Card>
+              </>
+            )}
+          </Formik>
+        </div>
       </Loader>
-    </Container>
+    </>
   );
 }
 

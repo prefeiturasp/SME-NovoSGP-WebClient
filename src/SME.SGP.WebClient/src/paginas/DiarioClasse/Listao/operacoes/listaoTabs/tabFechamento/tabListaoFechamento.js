@@ -37,6 +37,7 @@ const TabListaoFechamento = () => {
       setDadosIniciaisFechamento,
       limparFechamento
     );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [componenteCurricular, turmaSelecionada, bimestreOperacoes]);
 
   useEffect(() => {
@@ -48,6 +49,7 @@ const TabListaoFechamento = () => {
     ) {
       obterFechamentoPorBimestre();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [bimestreOperacoes]);
 
   useEffect(() => {
@@ -55,6 +57,7 @@ const TabListaoFechamento = () => {
       limparFechamento();
       dispatch(setLimparModoEdicaoGeral(false));
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const ehEJA = Number(turmaSelecionada?.modalidade) === ModalidadeDTO.EJA;

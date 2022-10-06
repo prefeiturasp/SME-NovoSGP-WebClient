@@ -1,6 +1,10 @@
 import api from '../api';
 import { store } from '~/redux';
-import { perfilSelecionado, setarPerfis } from '~/redux/modulos/perfil/actions';
+import {
+  perfilSelecionado,
+  setarPerfis,
+  setTrocouPerfil,
+} from '~/redux/modulos/perfil/actions';
 import { limparDadosFiltro } from '~/redux/modulos/filtro/actions';
 import { Deslogar, removerTurma } from '~/redux/modulos/usuario/actions';
 
@@ -26,6 +30,7 @@ class LoginService {
             );
             store.dispatch(setarPerfis(perfis));
             store.dispatch(perfilSelecionado(selecionado));
+            store.dispatch(setTrocouPerfil(true));
           }
           return {
             sucesso: true,

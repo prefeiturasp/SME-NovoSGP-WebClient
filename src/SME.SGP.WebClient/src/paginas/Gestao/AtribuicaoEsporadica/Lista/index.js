@@ -11,6 +11,7 @@ import { verificaSomenteConsulta } from '~/servicos/servico-navegacao';
 import { confirmar, sucesso } from '~/servicos/alertas';
 
 import Filtro from './componentes/Filtro';
+import { SGP_BUTTON_NOVO } from '~/componentes-sgp/filtro/idsCampos';
 
 function AtribuicaoEsporadicaLista() {
   const [itensSelecionados, setItensSelecionados] = useState([]);
@@ -119,9 +120,8 @@ function AtribuicaoEsporadicaLista() {
 
   return (
     <>
-      <Cabecalho pagina="Atribuição esporádica" classes="mb-2" />
       <Loader loading={false}>
-        <Card mx="mx-0">
+        <Cabecalho pagina="Atribuição esporádica">
           <ButtonGroup
             somenteConsulta={somenteConsulta}
             permissoesTela={permissoesTela}
@@ -132,9 +132,12 @@ function AtribuicaoEsporadicaLista() {
             onClickExcluir={onClickExcluir}
             onClickBotaoPrincipal={onClickBotaoPrincipal}
             labelBotaoPrincipal="Novo"
+            idBotaoPrincipal={SGP_BUTTON_NOVO}
           />
-          <Filtro onFiltrar={onChangeFiltro} />
-          <div className="col-md-12 pt-2 py-0 px-0">
+        </Cabecalho>
+        <Card>
+          <div className="col-md-12">
+            <Filtro onFiltrar={onChangeFiltro} />
             <ListaPaginada
               url="v1/atribuicao/esporadica/listar"
               id="lista-atribuicoes-esporadica"

@@ -41,26 +41,20 @@ const AlertaModalidadeInfantil = props => {
     naoPermiteTurmaInfantil,
   ]);
 
-  return (
-    <div className="col-md-12">
-      {exibirMsg ? (
-        <Alert
-          alerta={{
-            tipo: 'warning',
-            id: 'alerta-modalidade-infantil',
-            mensagem: `Esta interface ${
-              naoPermiteTurmaInfantil
-                ? 'não está disponível'
-                : 'só pode ser utilizada'
-            } para turmas da educação infantil`,
-            estiloTitulo: { fontSize: '18px' },
-          }}
-          className="mb-2"
-        />
-      ) : (
-        ''
-      )}
-    </div>
+  return exibirMsg ? (
+    <Alert
+      alerta={{
+        tipo: 'warning',
+        id: 'alerta-modalidade-infantil',
+        mensagem: `Esta interface ${
+          naoPermiteTurmaInfantil
+            ? 'não está disponível'
+            : 'só pode ser utilizada'
+        } para turmas da educação infantil`,
+      }}
+    />
+  ) : (
+    <></>
   );
 };
 

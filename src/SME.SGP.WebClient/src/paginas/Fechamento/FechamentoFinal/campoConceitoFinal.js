@@ -20,7 +20,8 @@ const CampoConceitoFinal = props => {
     notaConceito => {
       if (notaConceitoBimestre.notaConceitoAtual) {
         notaConceitoBimestre.conceitoAlterado =
-          notaConceito != notaConceitoBimestre.notaConceitoAtual;
+          String(notaConceito) !==
+          String(notaConceitoBimestre?.notaConceitoAtual);
       }
     },
     [notaConceitoBimestre]
@@ -29,7 +30,7 @@ const CampoConceitoFinal = props => {
   const validaSeEstaAbaixoDaMedia = useCallback(
     valorAtual => {
       const tipoConceito = listaTiposConceitos.find(
-        item => item.id == valorAtual
+        item => Number(item.id) === Number(valorAtual)
       );
 
       if (tipoConceito && !tipoConceito.aprovado) {
@@ -103,20 +104,22 @@ const CampoConceitoFinal = props => {
   );
 };
 
-CampoConceitoFinal.defaultProps = {
+CampoConceitoFinal.propTypes = {
   onChangeNotaConceitoFinal: PropTypes.func,
   montaNotaConceitoFinal: PropTypes.func,
   desabilitarCampo: PropTypes.bool,
   podeEditar: PropTypes.bool,
-  listaTiposConceitos: PropTypes.array,
+  listaTiposConceitos: PropTypes.oneOfType([PropTypes.array]),
+  label: PropTypes.string,
 };
 
-CampoConceitoFinal.propTypes = {
+CampoConceitoFinal.defaultProps = {
   onChangeNotaConceitoFinal: () => {},
   montaNotaConceitoFinal: () => {},
   desabilitarCampo: false,
   podeEditar: true,
   listaTiposConceitos: [],
+  label: '',
 };
 
 export default CampoConceitoFinal;

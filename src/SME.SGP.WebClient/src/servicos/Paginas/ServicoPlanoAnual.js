@@ -30,7 +30,12 @@ class ServicoPlanoAnual {
     return api.post('v1/planos/anual', planoAnual);
   };
 
-  obterTurmasParaCopia = (turmaId, componenteCurricularId, ensinoEspecial, consideraHistorico = false) => {
+  obterTurmasParaCopia = (
+    turmaId,
+    componenteCurricularId,
+    ensinoEspecial,
+    consideraHistorico = false
+  ) => {
     return api.get(
       `v1/planejamento/anual/turmas/copia?turmaId=${turmaId}&componenteCurricular=${componenteCurricularId}&ensinoEspecial=${ensinoEspecial}&consideraHistorico=${consideraHistorico}`
     );
@@ -51,7 +56,7 @@ class ServicoPlanoAnual {
   ) => {
     const url = `v1/objetivos-aprendizagem/${ano}/${componenteCurricularId}?ensinoEspecial=${ensinoEspecial}`;
     return api.get(url);
-  };  
+  };
 
   carregarDadosPlanoAnualPorComponenteCurricular = async (
     turmaId,
@@ -120,10 +125,11 @@ class ServicoPlanoAnual {
               componenteCurricularJaPesquisado
             );
             if (resultado.data.periodoEscolarId) {
-              dadosBimestre.componentes[index] = resultado.data.componentes[0];
+              dadosBimestre.componentes[index] =
+                resultado?.data?.componentes?.[0];
             } else {
               dadosBimestre.componentes[index] =
-                paramsIniciaisComponente.componentes[0];
+                paramsIniciaisComponente?.componentes?.[0];
             }
             dispatch(setDadosBimestresPlanoAnual(dadosBimestre));
           } else if (resultado.data.periodoEscolarId) {
@@ -148,7 +154,7 @@ class ServicoPlanoAnual {
     ano,
     ensinoEspecial,
     codigoComponenteCurricular
-  ) => {    
+  ) => {
     const { dispatch } = store;
     const state = store.getState();
     const { planoAnual } = state;
@@ -230,21 +236,21 @@ class ServicoPlanoAnual {
     return false;
   };
 
-  verificarDadosPlanoPorComponenteCurricular = async(
+  verificarDadosPlanoPorComponenteCurricular = async (
     turmaId,
     componenteCurricularId,
-    periodoEscolarId    
-  )=>{
+    periodoEscolarId
+  ) => {
     const obterDados = () => {
       const url = `v1/planejamento/anual/turmas/${turmaId}/componentes-curriculares/${componenteCurricularId}/periodos-escolares/${periodoEscolarId}`;
       return api.get(url);
     };
 
     const resultado = await obterDados()
-        .catch(e => erros(e))
-        .finally(() => {});
-    
-    return resultado?.data;    
+      .catch(e => erros(e))
+      .finally(() => {});
+
+    return resultado?.data;
   };
 }
 

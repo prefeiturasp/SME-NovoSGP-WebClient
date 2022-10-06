@@ -117,7 +117,7 @@ const GraficoFrequenciaGlobalPorDRE = props => {
 };
 
 GraficoFrequenciaGlobalPorDRE.propTypes = {
-  anoLetivo: PropTypes.oneOfType(PropTypes.any),
+  anoLetivo: PropTypes.oneOfType([PropTypes.any]),
   modalidade: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   semestre: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
 };

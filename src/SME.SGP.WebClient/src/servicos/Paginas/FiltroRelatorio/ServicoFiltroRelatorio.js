@@ -30,7 +30,7 @@ class ServicoFiltroRelatorio {
     const url = `${urlPadrao}/ues/${codigoUe}/modalidades/abrangencias?consideraNovasModalidades=${consideraNovasModalidades}`;
     return api.get(url);
   };
-  
+
   obterModalidadesPorAbrangenciaHistorica = (
     codigoUe,
     consideraNovasModalidades = false,
@@ -39,7 +39,6 @@ class ServicoFiltroRelatorio {
     const url = `${urlPadrao}/ues/${codigoUe}/modalidades/abrangencias?consideraNovasModalidades=${consideraNovasModalidades}&consideraHistorico=${consideraHistorico}`;
     return api.get(url);
   };
-
 
   obterAnosEscolares = (codigoUe, modalidade) => {
     const url = `${urlPadrao}/ues/${codigoUe}/modalidades/${modalidade}/anos-escolares`;
@@ -79,16 +78,16 @@ class ServicoFiltroRelatorio {
     }
   };
 
-  obterComponetensCuriculares = (
+  obterComponetensCurriculares = (
     codigoUe,
     modalidade,
     anoLetivo,
     anosEscolares
   ) => {
-    const url = `${urlPadrao}/componentes-curriculares/anos-letivos/${anoLetivo}/ues/${codigoUe}/modalidades/${modalidade}/?anos=${anosEscolares.join(
-      '&anos=',
-      anosEscolares
-    )}`;
+    const paramsAnosEscolares = anosEscolares?.length
+      ? `/?anos=${anosEscolares.join('&anos=', anosEscolares)}`
+      : '';
+    const url = `${urlPadrao}/componentes-curriculares/anos-letivos/${anoLetivo}/ues/${codigoUe}/modalidades/${modalidade}${paramsAnosEscolares}`;
     return api.get(url);
   };
 

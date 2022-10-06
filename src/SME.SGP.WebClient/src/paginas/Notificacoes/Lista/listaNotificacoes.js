@@ -1,18 +1,18 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { useSelector } from 'react-redux';
 import * as moment from 'moment';
+import { Col, Row } from 'antd';
 import Cabecalho from '~/componentes-sgp/cabecalho';
 import Button from '~/componentes/button';
 import CampoTexto from '~/componentes/campoTexto';
 import { Colors } from '~/componentes/colors';
 import SelectComponent from '~/componentes/select';
 import ListaPaginada from '~/componentes/listaPaginada/listaPaginada';
-import { confirmar, erro, sucesso, erros } from '~/servicos/alertas';
+import { confirmar, erro, sucesso } from '~/servicos/alertas';
 import api from '~/servicos/api';
 import history from '~/servicos/history';
 import servicoNotificacao from '~/servicos/Paginas/ServicoNotificacao';
 
-import { EstiloLista } from './estiloLista';
 import notificacaoStatus from '~/dtos/notificacaoStatus';
 import CampoTextoBusca from '~/componentes/campoTextoBusca';
 import { URL_HOME } from '~/constantes/url';
@@ -20,7 +20,10 @@ import RotasDto from '~/dtos/rotasDto';
 import { verificaSomenteConsulta } from '~/servicos/servico-navegacao';
 import { validaSeObjetoEhNuloOuVazio } from '~/utils/funcoes/gerais';
 
-import { Loader } from '~/componentes';
+import { Card, Loader } from '~/componentes';
+import { SGP_BUTTON_LIDA } from '~/componentes-sgp/filtro/idsCampos';
+import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
+import BotaoExcluirPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoExcluirPadrao';
 
 export default function NotificacoesLista() {
   const [idNotificacoesSelecionadas, setIdNotificacoesSelecionadas] = useState(
@@ -127,30 +130,8 @@ export default function NotificacoesLista() {
     verificaSomenteConsulta(permissoesTela);
     setDesabilitarBotaoExcluir(permissoesTela.podeExcluir);
     carregarListas();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
-  useEffect(() => {
-    if (usuario && turmaSelecionada) {
-      setDesabilitarTurma(false);
-    } else {
-      setDesabilitarTurma(true);
-      setTurmaSelecionada('');
-    }
-    onClickFiltrar();
-  }, [turmaSelecionada]);
-
-  useEffect(() => {
-    onClickFiltrar(statusSelecionado,
-                   categoriaSelecionada,
-                   tipoSelecionado,
-                   tituloSelecionado);
-  }, [
-    statusSelecionado,
-    dropdownTurmaSelecionada,
-    categoriaSelecionada,
-    tipoSelecionado,
-    tituloSelecionado,
-  ]);
 
   const listaSelectTurma = [
     { id: 1, descricao: 'Todas as turmas' },
@@ -204,9 +185,9 @@ export default function NotificacoesLista() {
       tipo: tipoSelecionado,
       titulo: tituloSelecionado || null,
       usuarioRf: usuario.rf || null,
-      anoLetivo: usuario.filtroAtual.anoLetivo
+      anoLetivo: usuario.filtroAtual.anoLetivo,
     };
-    if (dropdownTurmaSelecionada && dropdownTurmaSelecionada == '2') {
+    if (dropdownTurmaSelecionada && dropdownTurmaSelecionada === '2') {
       if (turmaSelecionada) {
         paramsQuery.ano = turmaSelecionada.ano;
         paramsQuery.dreId = turmaSelecionada.dre;
@@ -227,6 +208,33 @@ export default function NotificacoesLista() {
     dropdownTurmaSelecionada,
     turmaSelecionada,
     desabilitarTurma,
+  ]);
+
+  useEffect(() => {
+    if (usuario && turmaSelecionada) {
+      setDesabilitarTurma(false);
+    } else {
+      setDesabilitarTurma(true);
+      setTurmaSelecionada('');
+    }
+    onClickFiltrar();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [turmaSelecionada]);
+
+  useEffect(() => {
+    onClickFiltrar(
+      statusSelecionado,
+      categoriaSelecionada,
+      tipoSelecionado,
+      tituloSelecionado
+    );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [
+    statusSelecionado,
+    dropdownTurmaSelecionada,
+    categoriaSelecionada,
+    tipoSelecionado,
+    tituloSelecionado,
   ]);
 
   function onSearchCodigo() {
@@ -328,128 +336,129 @@ export default function NotificacoesLista() {
 
   return (
     <>
-      <Cabecalho pagina="Notificações" />
       <Loader loading={carregandoTela} tip="Carregando...">
-        <EstiloLista>
-          <div className="col-md-6 pb-3">
-            <CampoTexto
-              placeholder="Título"
-              onChange={onChangeTitulo}
-              value={tituloSelecionado}
-              desabilitado={!permissoesTela.podeConsultar}
-            />
-          </div>
-          <div className="col-md-6 pb-3">
-            <CampoTextoBusca
-              placeholder="Código"
-              onSearch={onSearchCodigo}
-              onChange={onChangeCodigo}
-              value={codigoSelecionado}
-              desabilitado={!permissoesTela.podeConsultar}
-              onKeyDown={quandoTeclaParaBaixoPesquisaCodigo}
-              type="number"
-              minValue="0"
-            />
-          </div>
-          <div className="col-md-3 pb-3">
-            <SelectComponent
-              name="turma-noti"
-              id="turma-noti"
-              lista={listaSelectTurma}
-              valueOption="id"
-              valueText="descricao"
-              onChange={onChangeTurma}
-              valueSelect={dropdownTurmaSelecionada || []}
-              placeholder="Turma"
-              disabled={desabilitarTurma || !permissoesTela.podeConsultar}
-            />
-          </div>
-          <div className="col-md-3 pb-3">
-            <SelectComponent
-              name="status-noti"
-              id="status-noti"
-              lista={listaStatus}
-              valueOption="id"
-              disabled={!permissoesTela.podeConsultar}
-              valueText="descricao"
-              onChange={onChangeStatus}
-              valueSelect={statusSelecionado || []}
-              placeholder="Filtrar por"
-            />
-          </div>
-          <div className="col-md-3 pb-3">
-            <SelectComponent
-              name="categoria-noti"
-              id="categoria-noti"
-              lista={listaCategorias}
-              valueOption="id"
-              disabled={!permissoesTela.podeConsultar}
-              valueText="descricao"
-              onChange={onChangeCategoria}
-              valueSelect={categoriaSelecionada || []}
-              placeholder="Categoria"
-            />
-          </div>
-          <div className="col-md-3 pb-3">
-            <SelectComponent
-              name="tipo-noti"
-              id="tipo-noti"
-              lista={listaTipos}
-              valueOption="id"
-              valueText="descricao"
-              disabled={!permissoesTela.podeConsultar}
-              onChange={onChangeTipo}
-              valueSelect={tipoSelecionado || []}
-              placeholder="Tipo"
-            />
-          </div>
-          <div className="col-md-12 ">
-            <Button
-              label="Excluir"
-              color={Colors.Vermelho}
-              border
-              className="mb-2 ml-2 float-right"
-              onClick={excluir}
-              disabled={
-                (idNotificacoesSelecionadas &&
-                  idNotificacoesSelecionadas.length < 1) ||
-                !permissoesTela.podeExcluir ||
-                desabilitarBotaoExcluir
-              }
-            />
-            <Button
-              label="Marcar como lida"
-              color={Colors.Azul}
-              border
-              className="mb-2 ml-2 float-right"
-              onClick={marcarComoLida}
-              disabled={
-                desabilitarBotaoMarcarLido || !permissoesTela.podeAlterar
-              }
-            />
-            <Button
-              label="Voltar"
-              color={Colors.Azul}
-              border
-              className="mb-2 float-right"
-              onClick={quandoClicarVoltar}
-            />
-          </div>
-          <div className="col-md-12 pt-2">
-            {colunasTabela && colunasTabela.length && (
-              <ListaPaginada
-                url="v1/notificacoes/"
-                id="lista-notificacoes"
-                colunas={colunasTabela}
-                filtro={filtro}
-                onClick={permissoesTela.podeAlterar && onClickEditar}
-                multiSelecao
-                selecionarItems={onSelecionarItems}
-                filtroEhValido={validarFiltro()}
+        <Cabecalho pagina="Notificações">
+          <Row gutter={[8, 8]} type="flex">
+            <Col>
+              <BotaoVoltarPadrao onClick={() => quandoClicarVoltar()} />
+            </Col>
+            <Col>
+              <BotaoExcluirPadrao
+                onClick={excluir}
+                disabled={
+                  (idNotificacoesSelecionadas &&
+                    idNotificacoesSelecionadas.length < 1) ||
+                  !permissoesTela.podeExcluir ||
+                  desabilitarBotaoExcluir
+                }
               />
-            )}
+            </Col>
+            <Col>
+              <Button
+                id={SGP_BUTTON_LIDA}
+                label="Marcar como lida"
+                color={Colors.Azul}
+                border
+                onClick={marcarComoLida}
+                disabled={
+                  desabilitarBotaoMarcarLido || !permissoesTela.podeAlterar
+                }
+              />
+            </Col>
+          </Row>
+        </Cabecalho>
+        <Card>
+          <div className="col-md-12">
+            <div className="row">
+              <div className="col-md-6 pb-3">
+                <CampoTexto
+                  placeholder="Título"
+                  onChange={onChangeTitulo}
+                  value={tituloSelecionado}
+                  desabilitado={!permissoesTela.podeConsultar}
+                />
+              </div>
+              <div className="col-md-6 pb-3">
+                <CampoTextoBusca
+                  placeholder="Código"
+                  onSearch={onSearchCodigo}
+                  onChange={onChangeCodigo}
+                  value={codigoSelecionado}
+                  desabilitado={!permissoesTela.podeConsultar}
+                  onKeyDown={quandoTeclaParaBaixoPesquisaCodigo}
+                  type="number"
+                  minValue="0"
+                />
+              </div>
+              <div className="col-md-3 pb-3">
+                <SelectComponent
+                  name="turma-noti"
+                  id="turma-noti"
+                  lista={listaSelectTurma}
+                  valueOption="id"
+                  valueText="descricao"
+                  onChange={onChangeTurma}
+                  valueSelect={dropdownTurmaSelecionada || []}
+                  placeholder="Turma"
+                  disabled={desabilitarTurma || !permissoesTela.podeConsultar}
+                />
+              </div>
+              <div className="col-md-3 pb-3">
+                <SelectComponent
+                  name="status-noti"
+                  id="status-noti"
+                  lista={listaStatus}
+                  valueOption="id"
+                  disabled={!permissoesTela.podeConsultar}
+                  valueText="descricao"
+                  onChange={onChangeStatus}
+                  valueSelect={statusSelecionado || []}
+                  placeholder="Filtrar por"
+                />
+              </div>
+              <div className="col-md-3 pb-3">
+                <SelectComponent
+                  name="categoria-noti"
+                  id="categoria-noti"
+                  lista={listaCategorias}
+                  valueOption="id"
+                  disabled={!permissoesTela.podeConsultar}
+                  valueText="descricao"
+                  onChange={onChangeCategoria}
+                  valueSelect={categoriaSelecionada || []}
+                  placeholder="Categoria"
+                />
+              </div>
+              <div className="col-md-3 pb-3">
+                <SelectComponent
+                  name="tipo-noti"
+                  id="tipo-noti"
+                  lista={listaTipos}
+                  valueOption="id"
+                  valueText="descricao"
+                  disabled={!permissoesTela.podeConsultar}
+                  onChange={onChangeTipo}
+                  valueSelect={tipoSelecionado || []}
+                  placeholder="Tipo"
+                />
+              </div>
+              <div className="col-md-12 pt-2">
+                {colunasTabela && colunasTabela.length && (
+                  <ListaPaginada
+                    url="v1/notificacoes/"
+                    id="lista-notificacoes"
+                    colunas={colunasTabela}
+                    filtro={filtro}
+                    onClick={permissoesTela.podeAlterar && onClickEditar}
+                    multiSelecao
+                    selecionarItems={onSelecionarItems}
+                    filtroEhValido={validarFiltro()}
+                  />
+                )}
+              </div>
+            </div>
           </div>
-        </EstiloLista>
+        </Card>
       </Loader>
     </>
   );
