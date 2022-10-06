@@ -21,6 +21,7 @@ const ServicoFechamentoBimestre = {
     if (valor == null) return valor;
 
     const novoValor = Number(valor).toFixed(1);
+    // eslint-disable-next-line no-restricted-globals
     return isNaN(novoValor) ? valor : novoValor;
   },
 

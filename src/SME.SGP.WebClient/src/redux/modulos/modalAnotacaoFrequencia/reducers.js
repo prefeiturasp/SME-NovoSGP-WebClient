@@ -3,6 +3,7 @@ import produce from 'immer';
 const inicial = {
   exibirModalAnotacaoFrequencia: false,
   dadosModalAnotacaoFrequencia: {},
+  listaPadraoMotivoAusencia: [],
 };
 
 export default function modalAnotacaoFrequencia(state = inicial, action) {
@@ -18,6 +19,12 @@ export default function modalAnotacaoFrequencia(state = inicial, action) {
         return {
           ...draft,
           dadosModalAnotacaoFrequencia: action.payload,
+        };
+      }
+      case '@modalAnotacaoFrequencia/setListaPadraoMotivoAusencia': {
+        return {
+          ...draft,
+          listaPadraoMotivoAusencia: action.payload,
         };
       }
 

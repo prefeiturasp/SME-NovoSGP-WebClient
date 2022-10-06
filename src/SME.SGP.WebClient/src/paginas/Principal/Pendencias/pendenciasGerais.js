@@ -25,11 +25,17 @@ const PendenciasGerais = () => {
   const [tipoPendenciaGrupo, setTipoPendenciaGrupo] = useState();
   const [codigoTurma, setCodigoTurma] = useState();
   const [titulo, setTitulo] = useState('');
+  const [tituloExibicao, setTituloExibicao] = useState('');
   const [listaTipoPendenciaGrupos, setListaTipoPendenciaGrupos] = useState(
     true
   );
   const [listaTurmas, setListaTurmas] = useState([]);
   const [carregandoTurmas, setCarregandoTurmas] = useState(false);
+  const [
+    carregandoTipoPendenciaGrupo,
+    setCarregandoTipoPendenciaGrupo,
+  ] = useState(false);
+  const [timeoutTitulo, setTimeoutTitulo] = useState();
 
   const configCabecalho = {
     altura: '45px',
@@ -70,9 +76,9 @@ const PendenciasGerais = () => {
     obterPendencias(paginaAtual, numeroLinhas);
   };
 
-  const obterTurmas = useCallback(async () => {
+  const obterTurmas = async () => {
     setCarregandoTurmas(true);
-    const retorno = await ServicoPendencias.buscarTurmas(codigoTurma)
+    const retorno = await ServicoPendencias.buscarTurmas()
       .catch(e => erros(e))
       .finally(() => setCarregandoTurmas(false));
 
@@ -83,18 +89,58 @@ const PendenciasGerais = () => {
         setCodigoTurma([String(lista[0].codigo)]);
       }
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [codigoTurma]);
+  };
+
+  const obterTipoPendenciaGrupo = async () => {
+    setCarregandoTipoPendenciaGrupo(true);
+    const retorno = await ServicoRelatorioPendencias.obterTipoPendenciasGrupos({
+      opcaoTodos: false,
+    })
+      .catch(e => erros(e))
+      .finally(() => setCarregandoTipoPendenciaGrupo(false));
+    const dados = retorno?.data?.length ? retorno?.data : [];
+    setListaTipoPendenciaGrupos(dados);
+  };
 
   useEffect(() => {
-    if (!codigoTurma) {
-      obterTurmas();
-    }
-  }, [obterTurmas, codigoTurma]);
+    obterTurmas();
+    obterTipoPendenciaGrupo();
+    setTipoPendenciaGrupo();
+    setListaTipoPendenciaGrupos([]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const onChangeTurma = valor => setCodigoTurma(valor);
+  const onChangeTipoPendenciaGrupo = valor => setTipoPendenciaGrupo(valor);
 
   useEffect(() => {
     if (titulo.length >= 3 || titulo.length === 0) obterPendencias();
-  }, [obterPendencias, obterTurmas, codigoTurma, tipoPendenciaGrupo, titulo]);
+  }, [obterPendencias, titulo]);
+
+  const validarObterPendenciasDebounce = useCallback(
+    (texto, onChangeFiltros) => {
+      if (timeoutTitulo) {
+        clearTimeout(timeoutTitulo);
+      }
+      const timeout = setTimeout(() => {
+        onChangeFiltros(texto);
+      }, 700);
+
+      setTimeoutTitulo(timeout);
+    },
+    [timeoutTitulo]
+  );
+
+  const onChangeDebounce = (text, setValue) => {
+    if (text?.length >= 3 || !text) {
+      validarObterPendenciasDebounce(text, setValue);
+    }
+  };
+
+  const onChangeTitulo = valor => {
+    setTituloExibicao(valor.target.value);
+    onChangeDebounce(valor.target.value, setTitulo);
+  };
 
   const titutoPersonalizado = item => {
     return (
@@ -138,43 +184,16 @@ const PendenciasGerais = () => {
     );
   };
 
-  const onChangeTipoPendenciaGrupo = valor => {
-    setTipoPendenciaGrupo(valor);
-  };
-
-  const [
-    carregandoTipoPendenciaGrupo,
-    setCarregandoTipoPendenciaGrupo,
-  ] = useState(false);
-
-  const obterTipoPendenciaGrupo = useCallback(async () => {
-    setCarregandoTipoPendenciaGrupo(true);
-    const retorno = await ServicoRelatorioPendencias.obterTipoPendenciasGrupos({
-      opcaoTodos: false,
-    })
-      .catch(e => erros(e))
-      .finally(() => setCarregandoTipoPendenciaGrupo(false));
-    const dados = retorno?.data?.length ? retorno?.data : [];
-    setListaTipoPendenciaGrupos(dados);
-  }, []);
-
-  useEffect(() => {
-    obterTipoPendenciaGrupo();
-    setTipoPendenciaGrupo();
-    setListaTipoPendenciaGrupos([]);
-  }, [obterTipoPendenciaGrupo]);
-
-  const onChangeTurma = valor => setCodigoTurma(valor);
-  const onChangeTitulo = valor => {
-    setTitulo(valor.target.value);
-  };
-
   return (
     <Loader loading={carregando}>
       <Card className="mb-4 mt-4">
         <div className="col-md-12">
-          <div className="col-md-12 pl-1 mb-3">
-            <Cabecalho pagina="Pendências" />
+          <div className="col-md-12 mb-3">
+            <Cabecalho
+              pagina="Pendências"
+              style={{ background: '#fff' }}
+              removeAffix
+            />
           </div>
           <div className="row justify-content-left px-3">
             <div className="col-sm-12 col-md-4 col-lg-4 col-xl-2 mb-2">
@@ -221,7 +240,7 @@ const PendenciasGerais = () => {
                 iconeBusca
                 allowClear
                 onChange={onChangeTitulo}
-                value={titulo}
+                value={tituloExibicao}
               />
             </div>
           </div>
@@ -243,6 +262,7 @@ const PendenciasGerais = () => {
                       }}
                     >
                       <span
+                        // eslint-disable-next-line react/no-danger
                         dangerouslySetInnerHTML={{
                           __html: item.detalhe,
                         }}

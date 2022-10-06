@@ -4,18 +4,22 @@ import history from '~/servicos/history';
 import { URL_HOME } from '~/constantes/url';
 import { obterMeusDados } from '~/servicos/Paginas/ServicoUsuario';
 import { setMenusPermissoes } from '~/servicos/servico-navegacao';
-import { perfilSelecionado, setarPerfis } from '~/redux/modulos/perfil/actions';
+import {
+  perfilSelecionado,
+  setarPerfis,
+  setTrocouPerfil,
+} from '~/redux/modulos/perfil/actions';
 import { store } from '~/redux';
 import ServicoDashboard from './Dashboard/ServicoDashboard';
 
 class ServicoRedefinirSenha {
   redefinirSenha = async (redefinirSenhaDto, dispatch) => {
-    let formData = new FormData();
+    const formData = new FormData();
 
     formData.set('token', redefinirSenhaDto.token);
     formData.set('novaSenha', redefinirSenhaDto.novaSenha);
 
-    return Api.post(this._obtenhaUrlSolicitarRecuperacao(), formData)
+    return Api.post(this.obtenhaUrlSolicitarRecuperacao(), formData)
       .then(res => {
         dispatch(
           salvarDadosLogin({
@@ -46,6 +50,7 @@ class ServicoRedefinirSenha {
         );
         store.dispatch(setarPerfis(perfis));
         store.dispatch(perfilSelecionado(selecionado));
+        store.dispatch(setTrocouPerfil(true));
         obterMeusDados();
         setMenusPermissoes();
 
@@ -85,16 +90,16 @@ class ServicoRedefinirSenha {
   };
 
   validarToken = async token => {
-    const requisicao = await Api.get(this._obtenhaUrlValidarToken(token));
+    const requisicao = await Api.get(this.obtenhaUrlValidarToken(token));
 
     return requisicao.data;
   };
 
-  _obtenhaUrlSolicitarRecuperacao = () => {
+  obtenhaUrlSolicitarRecuperacao = () => {
     return 'v1/autenticacao/recuperar-senha';
   };
 
-  _obtenhaUrlValidarToken = token => {
+  obtenhaUrlValidarToken = token => {
     return `v1/autenticacao/valida-token-recuperacao-senha/${token}`;
   };
 }

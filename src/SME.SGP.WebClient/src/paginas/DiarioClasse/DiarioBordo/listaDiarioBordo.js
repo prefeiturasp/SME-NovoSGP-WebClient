@@ -32,6 +32,8 @@ import {
 import ServicoDiarioBordo from '~/servicos/Paginas/DiarioClasse/ServicoDiarioBordo';
 import { Mensagens } from './componentes';
 import { erro } from '~/servicos/alertas';
+import { SGP_BUTTON_NOVO } from '~/componentes-sgp/filtro/idsCampos';
+import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
 
 const ListaDiarioBordo = () => {
   const [carregandoGeral, setCarregandoGeral] = useState(false);
@@ -90,6 +92,7 @@ const ListaDiarioBordo = () => {
       turmaSelecionada
     );
     verificaSomenteConsulta(permissoesTela, naoSetarSomenteConsultaNoStore);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [permissoesTela, turmaSelecionada]);
 
   const numeroRegistros = 10;
@@ -316,14 +319,31 @@ const ListaDiarioBordo = () => {
 
   useEffect(() => {
     if (dataFinal) validarSetarDataFinal(dataFinal);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dataInicial]);
 
   return (
     <Loader loading={carregandoGeral} className="w-100">
       <Mensagens />
-      <Cabecalho pagina="Diário de bordo (Intencionalidade docente)" />
+      <Cabecalho pagina="Diário de bordo (Intencionalidade docente)">
+        <>
+          <BotaoVoltarPadrao className="mr-2" onClick={onClickVoltar} />
+          <Button
+            id={SGP_BUTTON_NOVO}
+            label="Novo"
+            color={Colors.Roxo}
+            bold
+            onClick={onClickNovo}
+            disabled={
+              !permissoesTela.podeIncluir ||
+              !turmaInfantil ||
+              !listaComponenteCurriculares
+            }
+          />
+        </>
+      </Cabecalho>
       <Card>
-        <div className="col-md-12 p-0">
+        <div className="col-md-12">
           <div className="row">
             <div className="col-sm-12 col-md-4 col-lg-4 col-xl-4 mb-4">
               <SelectComponent
@@ -343,31 +363,9 @@ const ListaDiarioBordo = () => {
                 }
               />
             </div>
-            <div className="col-sm-12 col-lg-8 col-md-8 d-flex justify-content-end pb-4">
-              <Button
-                label="Voltar"
-                icon="arrow-left"
-                color={Colors.Azul}
-                border
-                className="mr-2"
-                onClick={onClickVoltar}
-              />
-              <Button
-                label="Novo"
-                color={Colors.Roxo}
-                bold
-                className="mr-2"
-                onClick={onClickNovo}
-                disabled={
-                  !permissoesTela.podeIncluir ||
-                  !turmaInfantil ||
-                  !listaComponenteCurriculares
-                }
-              />
-            </div>
           </div>
           <div className="row">
-            <div className="col-sm-12 col-md-4 col-lg-3 col-xl-3 mb-4 pr-0">
+            <div className="col-sm-12 col-md-4 col-lg-3 col-xl-3 mb-4">
               <CampoData
                 valor={dataInicial}
                 onChange={data => setDataInicial(data)}

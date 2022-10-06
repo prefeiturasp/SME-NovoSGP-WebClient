@@ -1,6 +1,5 @@
 import { groupBy } from 'lodash';
 import { store } from '~/redux';
-import { setListaSecoesEmEdicao } from '~/redux/modulos/encaminhamentoAEE/actions';
 import {
   setFormsQuestionarioDinamico,
   setQuestionarioDinamicoEmEdicao,
@@ -132,7 +131,7 @@ class QuestionarioDinamicoFuncoes {
       camposDuplicados
     );
 
-    if (camposNaoDuplicados?.length) {
+    if (camposNaoDuplicados?.length && valoresCamposComplemetares?.length) {
       camposNaoDuplicados.forEach(a => {
         const valorCampoRemovido = valoresCamposComplemetares.find(
           valorCampo => valorCampo?.id === a?.id

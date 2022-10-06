@@ -11,7 +11,7 @@ const AlertaPermiteSomenteTurmaInfantil = props => {
     store => store.filtro.modalidades
   );
 
-  const { exibir, validarModalidadeFiltroPrincipal, marginBottom } = props;
+  const { exibir, validarModalidadeFiltroPrincipal } = props;
 
   const [exibirMsg, setExibirMsg] = useState(exibir);
 
@@ -31,36 +31,28 @@ const AlertaPermiteSomenteTurmaInfantil = props => {
     modalidadesFiltroPrincipal,
   ]);
 
-  return (
-    <div className="col-md-12">
-      {exibirMsg ? (
-        <Alert
-          alerta={{
-            tipo: 'warning',
-            id: 'alerta-modalidade-infantil',
-            mensagem:
-              'Esta interface só pode ser utilizada para turmas da educação infantil',
-            estiloTitulo: { fontSize: '18px' },
-          }}
-          className={`mb-${marginBottom}`}
-        />
-      ) : (
-        ''
-      )}
-    </div>
+  return exibirMsg ? (
+    <Alert
+      alerta={{
+        tipo: 'warning',
+        id: 'alerta-modalidade-infantil',
+        mensagem:
+          'Esta interface só pode ser utilizada para turmas da educação infantil',
+      }}
+    />
+  ) : (
+    <></>
   );
 };
 
 AlertaPermiteSomenteTurmaInfantil.propTypes = {
   exibir: PropTypes.bool,
   validarModalidadeFiltroPrincipal: PropTypes.bool,
-  marginBottom: PropTypes.number,
 };
 
 AlertaPermiteSomenteTurmaInfantil.defaultProps = {
   exibir: false,
   validarModalidadeFiltroPrincipal: true,
-  marginBottom: 2,
 };
 
 export default AlertaPermiteSomenteTurmaInfantil;

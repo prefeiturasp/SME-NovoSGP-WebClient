@@ -22,6 +22,13 @@ const Campo = styled.div`
   .ant-input-affix-wrapper .ant-input:not(:first-child) {
     padding-left: 40px;
   }
+
+  .form-control.is-invalid,
+  .was-validated .form-control:invalid {
+    background-repeat: no-repeat !important;
+    background-position: right calc(0.375em + 0.1875rem) center !important;
+    border-color: #dc3545 !important;
+  }
 `;
 
 const CampoTexto = React.forwardRef((props, ref) => {
@@ -47,6 +54,7 @@ const CampoTexto = React.forwardRef((props, ref) => {
     minRowsTextArea,
     height,
     onBlur,
+    labelRequired,
   } = props;
 
   const possuiErro = () => {
@@ -68,7 +76,11 @@ const CampoTexto = React.forwardRef((props, ref) => {
 
   return (
     <Campo className={classNameCampo} height={height}>
-      {label ? <Label text={label} control={name || ''} /> : ''}
+      {label ? (
+        <Label text={label} control={name || ''} isRequired={labelRequired} />
+      ) : (
+        <></>
+      )}
       {form ? (
         <>
           {' '}
@@ -138,6 +150,7 @@ CampoTexto.propTypes = {
   minRowsTextArea: PropTypes.string,
   height: PropTypes.string,
   onBlur: PropTypes.oneOfType([PropTypes.func]),
+  labelRequired: PropTypes.bool,
 };
 
 CampoTexto.defaultProps = {
@@ -162,6 +175,7 @@ CampoTexto.defaultProps = {
   minRowsTextArea: '2',
   height: '38',
   onBlur: () => {},
+  labelRequired: false,
 };
 
 export default CampoTexto;

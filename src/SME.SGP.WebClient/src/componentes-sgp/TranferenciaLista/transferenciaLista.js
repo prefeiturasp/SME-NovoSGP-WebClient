@@ -102,8 +102,8 @@ const TransferenciaLista = props => {
 };
 
 TransferenciaLista.propTypes = {
-  listaEsquerda: PropTypes.oneOfType(PropTypes.object),
-  listaDireita: PropTypes.oneOfType(PropTypes.object),
+  listaEsquerda: PropTypes.oneOfType([PropTypes.object]),
+  listaDireita: PropTypes.oneOfType([PropTypes.object]),
   onClickAdicionar: PropTypes.func,
   onClickRemover: PropTypes.func,
 };

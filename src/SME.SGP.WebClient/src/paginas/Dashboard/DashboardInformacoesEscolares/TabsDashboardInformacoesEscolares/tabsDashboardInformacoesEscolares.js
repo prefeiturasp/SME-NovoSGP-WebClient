@@ -59,7 +59,7 @@ const TabsDashboardInformacoesEscolares = props => {
 };
 
 TabsDashboardInformacoesEscolares.propTypes = {
-  anoLetivo: PropTypes.oneOfType(PropTypes.any),
+  anoLetivo: PropTypes.oneOfType([PropTypes.any]),
   ueId: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   dreId: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   modalidade: PropTypes.string,

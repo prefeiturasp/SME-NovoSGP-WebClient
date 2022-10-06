@@ -1,8 +1,8 @@
-import { Base } from '~/componentes';
 import React from 'react';
 import styled from 'styled-components';
 
 import { Table, Tooltip } from 'antd';
+import { Base } from '~/componentes';
 
 const ColunasFixas = () => [
   {

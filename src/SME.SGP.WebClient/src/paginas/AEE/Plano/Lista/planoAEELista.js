@@ -1,6 +1,7 @@
 import * as moment from 'moment';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { Col, Row } from 'antd';
 import { Cabecalho, NomeEstudanteLista } from '~/componentes-sgp';
 import AbrangenciaServico from '~/servicos/Abrangencia';
 import {
@@ -22,6 +23,8 @@ import { erros, verificaSomenteConsulta } from '~/servicos';
 import history from '~/servicos/history';
 import ServicoPlanoAEE from '~/servicos/Paginas/Relatorios/AEE/ServicoPlanoAEE';
 import FiltroHelper from '~componentes-sgp/filtro/helper';
+import { SGP_BUTTON_NOVO } from '~/componentes-sgp/filtro/idsCampos';
+import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
 
 const PlanoAEELista = () => {
   const dispatch = useDispatch();
@@ -224,6 +227,7 @@ const PlanoAEELista = () => {
 
   useEffect(() => {
     validarValorPadraoAnoLetivo(listaAnosLetivo);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [consideraHistorico, listaAnosLetivo]);
 
   const obterAnosLetivos = useCallback(async () => {
@@ -244,6 +248,7 @@ const PlanoAEELista = () => {
 
     setListaAnosLetivo(anosLetivos);
     setCarregandoAnos(false);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [anoAtual, consideraHistorico]);
 
   useEffect(() => {
@@ -354,6 +359,7 @@ const PlanoAEELista = () => {
         }
       }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [anoLetivo, ueId]);
 
   useEffect(() => {
@@ -393,6 +399,7 @@ const PlanoAEELista = () => {
     if (dreId && ueId && listaDres?.length && listaUes?.length) {
       filtrar(dreId, ueId, turmaId, alunoLocalizadorSelecionado, situacao);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     ueId,
     listaDres,
@@ -408,30 +415,27 @@ const PlanoAEELista = () => {
 
   return (
     <>
-      <Cabecalho pagina="Plano AEE" />
+      <Cabecalho pagina="Plano AEE">
+        <Row gutter={[8, 8]} type="flex">
+          <Col>
+            <BotaoVoltarPadrao onClick={() => onClickVoltar()} />
+          </Col>
+          <Col>
+            <Button
+              id={SGP_BUTTON_NOVO}
+              label="Novo"
+              color={Colors.Roxo}
+              border
+              bold
+              onClick={onClickNovo}
+              disabled={somenteConsulta || !permissoesTela.podeIncluir}
+            />
+          </Col>
+        </Row>
+      </Cabecalho>
       <Card>
         <div className="col-md-12">
           <div className="row">
-            <div className="col-md-12 d-flex justify-content-end pb-4 justify-itens-end">
-              <Button
-                id="btn-voltar"
-                label="Voltar"
-                icon="arrow-left"
-                color={Colors.Azul}
-                border
-                className="mr-2"
-                onClick={onClickVoltar}
-              />
-              <Button
-                id="btn-novo"
-                label="Novo"
-                color={Colors.Roxo}
-                border
-                bold
-                onClick={onClickNovo}
-                disabled={somenteConsulta || !permissoesTela.podeIncluir}
-              />
-            </div>
             <div className="col-sm-12 mb-4">
               <CheckboxComponent
                 id="exibir-historico"

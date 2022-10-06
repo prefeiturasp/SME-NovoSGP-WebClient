@@ -1,15 +1,16 @@
+/* eslint-disable */
 import React, { useState } from 'react';
 import { MaisMenos } from './fechamento-bimestre-lista.css';
 
 const BotaoExpandir = props => {
-  const { index, idLinhaRegencia, refElement } = props;
+  const { refElement } = props;
   const [expandido, setExpandido] = useState(false);
 
   const clickExpandirRetrair = () => {
     setExpandido(!expandido);
     if (refElement) {
       refElement.current.style.display =
-      refElement.current.style.display === 'none' ? 'contents' : 'none';
+        refElement.current.style.display === 'none' ? 'contents' : 'none';
     }
   };
 

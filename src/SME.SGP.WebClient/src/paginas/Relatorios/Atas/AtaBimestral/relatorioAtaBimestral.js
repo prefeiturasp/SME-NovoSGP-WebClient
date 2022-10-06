@@ -2,10 +2,8 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 
 import {
-  Button,
   Card,
   CheckboxComponent,
-  Colors,
   Loader,
   SelectComponent,
 } from '~/componentes';
@@ -15,6 +13,7 @@ import {
   Cabecalho,
   FiltroHelper,
 } from '~/componentes-sgp';
+import BotoesAcaoRelatorio from '~/componentes-sgp/botoesAcaoRelatorio';
 
 import { OPCAO_TODOS, URL_HOME } from '~/constantes';
 import { ModalidadeDTO, RotasDto } from '~/dtos';
@@ -57,6 +56,8 @@ const RelatorioAtaBimestral = () => {
 
   const [desabilitarBtnGerar, setDesabilitarBtnGerar] = useState(true);
 
+  const [modoEdicao, setModoEdicao] = useState(false);
+
   const usuarioStore = useSelector(store => store.usuario);
   const permissoesTela = usuarioStore.permissoes[RotasDto.ATA_BIMESTRAL];
 
@@ -74,11 +75,13 @@ const RelatorioAtaBimestral = () => {
     setBimestre();
     setListaTurmasPorSemestre({});
     setDesabilitarBtnGerar(true);
+    setModoEdicao(false);
   };
 
   const onCheckedConsideraHistorico = e => {
     setAnoLetivo(anoAtual);
     setConsideraHistorico(e.target.checked);
+    setModoEdicao(true);
   };
 
   const obterAnosLetivos = useCallback(async () => {
@@ -113,6 +116,8 @@ const RelatorioAtaBimestral = () => {
     setListaTurmas([]);
     setListaTurmasPorSemestre({});
     setTurmaCodigo();
+
+    setModoEdicao(true);
   };
 
   const obterDres = useCallback(async () => {
@@ -166,6 +171,8 @@ const RelatorioAtaBimestral = () => {
     setListaTurmas([]);
     setListaTurmasPorSemestre({});
     setTurmaCodigo();
+
+    setModoEdicao(true);
   };
 
   const obterUes = useCallback(
@@ -222,6 +229,8 @@ const RelatorioAtaBimestral = () => {
     setListaTurmas([]);
     setListaTurmasPorSemestre({});
     setTurmaCodigo();
+
+    setModoEdicao(true);
   };
 
   const obterModalidades = useCallback(
@@ -272,6 +281,8 @@ const RelatorioAtaBimestral = () => {
 
     setListaBimestres([]);
     setBimestre();
+
+    setModoEdicao(true);
   };
 
   const obterSemestres = useCallback(
@@ -337,7 +348,10 @@ const RelatorioAtaBimestral = () => {
     setListaSemestres([]);
   }, [obterAnosLetivos, obterSemestres, modalidadeId, ueCodigo, anoLetivo]);
 
-  const onChangeSemestre = valor => setSemestre(valor);
+  const onChangeSemestre = valor => {
+    setSemestre(valor);
+    setModoEdicao(true);
+  };
 
   const obterTurmas = useCallback(
     async (modalidadeSelecionada, ue) => {
@@ -435,6 +449,7 @@ const RelatorioAtaBimestral = () => {
     const todos = valor.find(a => a === OPCAO_TODOS && !todosSetado);
     const novoValor = todosSetado && valor.length === 2 ? [valor[1]] : valor;
     setTurmaCodigo(todos ? [todos] : novoValor);
+    setModoEdicao(true);
   };
 
   const obterBimestres = useCallback(async () => {
@@ -465,6 +480,7 @@ const RelatorioAtaBimestral = () => {
 
   const onChangeBimestre = valor => {
     setBimestre(valor);
+    setModoEdicao(true);
   };
 
   useEffect(() => {
@@ -528,44 +544,21 @@ const RelatorioAtaBimestral = () => {
         exibir={ehModalidadeInfantil}
         validarModalidadeFiltroPrincipal={false}
       />
-      <Cabecalho pagina="Ata bimestral" classes="mb-2" />
+      <Cabecalho pagina="Ata bimestral">
+        <BotoesAcaoRelatorio
+          onClickVoltar={() => history.push(URL_HOME)}
+          onClickCancelar={onClickCancelar}
+          onClickGerar={onClickGerar}
+          desabilitarBtnGerar={
+            String(modalidadeId) === String(ModalidadeDTO.INFANTIL) ||
+            desabilitarBtnGerar ||
+            !permissoesTela?.podeConsultar
+          }
+          modoEdicao={modoEdicao}
+        />
+      </Cabecalho>
       <Card>
-        <div className="col-md-12 p-0">
-          <div className="row mb-2">
-            <div className="col-md-12 d-flex justify-content-end">
-              <Button
-                id="btn-voltar-ata-final-resultado"
-                label="Voltar"
-                icon="arrow-left"
-                color={Colors.Azul}
-                border
-                className="mr-3"
-                onClick={() => history.push(URL_HOME)}
-              />
-              <Button
-                id="btn-cancelar-ata-final-resultado"
-                label="Cancelar"
-                color={Colors.Azul}
-                border
-                bold
-                className="mr-3"
-                onClick={onClickCancelar}
-              />
-              <Button
-                id="btn-gerar-ata-final-resultado"
-                icon="print"
-                label="Gerar"
-                color={Colors.Roxo}
-                bold
-                onClick={onClickGerar}
-                disabled={
-                  String(modalidadeId) === String(ModalidadeDTO.INFANTIL) ||
-                  desabilitarBtnGerar ||
-                  !permissoesTela?.podeConsultar
-                }
-              />
-            </div>
-          </div>
+        <div className="col-md-12">
           <div className="row mb-2">
             <div className="col-sm-12">
               <CheckboxComponent
@@ -577,7 +570,7 @@ const RelatorioAtaBimestral = () => {
             </div>
           </div>
           <div className="row mb-3">
-            <div className="col-sm-12 col-md-4 col-lg-2 col-xl-2 pr-0">
+            <div className="col-sm-12 col-md-4 col-lg-2 col-xl-2">
               <Loader loading={carregandoAnosLetivos} ignorarTip>
                 <SelectComponent
                   label="Ano Letivo"
@@ -595,7 +588,7 @@ const RelatorioAtaBimestral = () => {
                 />
               </Loader>
             </div>
-            <div className="col-sm-12 col-md-12 col-lg-5 col-xl-5 pr-0">
+            <div className="col-sm-12 col-md-12 col-lg-5 col-xl-5">
               <Loader loading={carregandoDres} ignorarTip>
                 <SelectComponent
                   label="Diretoria Regional de Educação (DRE)"
@@ -637,7 +630,7 @@ const RelatorioAtaBimestral = () => {
             </div>
           </div>
           <div className="row mb-3">
-            <div className="col-sm-12 col-md-8 col-lg-4 col-xl-4 pr-0">
+            <div className="col-sm-12 col-md-8 col-lg-4 col-xl-4">
               <Loader loading={carregandoModalidades} ignorarTip>
                 <SelectComponent
                   label="Modalidade"
@@ -656,7 +649,7 @@ const RelatorioAtaBimestral = () => {
                 />
               </Loader>
             </div>
-            <div className="col-sm-12 col-md-4 col-lg-4 pr-0">
+            <div className="col-sm-12 col-md-4 col-lg-4">
               <Loader loading={carregandoSemestres} ignorarTip>
                 <SelectComponent
                   lista={listaSemestres}
@@ -700,7 +693,7 @@ const RelatorioAtaBimestral = () => {
             </div>
           </div>
           <div className="row">
-            <div className="col-sm-12 col-md-12 col-lg-4 pr-0">
+            <div className="col-sm-12 col-md-12 col-lg-4">
               <Loader loading={carregandoBimestres} ignorarTip>
                 <SelectComponent
                   lista={listaBimestres}

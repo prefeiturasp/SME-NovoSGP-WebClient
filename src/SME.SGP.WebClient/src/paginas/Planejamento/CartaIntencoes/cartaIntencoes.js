@@ -94,6 +94,7 @@ const CartaIntencoes = () => {
 
       mostrarLoader(false);
     },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [dispatch]
   );
 
@@ -259,46 +260,35 @@ const CartaIntencoes = () => {
   return (
     <Container>
       {!turmaSelecionada.turma ? (
-        <div className="col-md-12">
-          <Alert
-            alerta={{
-              tipo: 'warning',
-              id: 'alerta-sem-turma-relatorio-semestral',
-              mensagem: 'Você precisa escolher uma turma.',
-              estiloTitulo: { fontSize: '18px' },
-            }}
-            className="mb-2"
-          />
-        </div>
+        <Alert
+          alerta={{
+            tipo: 'warning',
+            id: 'alerta-sem-turma-relatorio-semestral',
+            mensagem: 'Você precisa escolher uma turma.',
+            estiloTitulo: { fontSize: '18px' },
+          }}
+        />
       ) : (
-        ''
+        <></>
       )}
       {turmaSelecionada.turma ? <AlertaPermiteSomenteTurmaInfantil /> : ''}
       <ModalErrosCartaIntencoes />
-      <Cabecalho pagina="Carta de Intenções" />
       <LoaderCartaIntencoes>
+        <Cabecalho pagina="Carta de Intenções">
+          <BotoesAcoesCartaIntencoes
+            onClickCancelar={recaregarDados}
+            onClickSalvar={recaregarDados}
+            componenteCurricularId={componenteCurricular}
+            codigoTurma={turma}
+            ehTurmaInfantil={ehTurmaInfantil(
+              modalidadesFiltroPrincipal,
+              turmaSelecionada
+            )}
+            somenteConsulta={somenteConsulta}
+            salvarEditarObservacao={salvarEditarObservacao}
+          />
+        </Cabecalho>
         <Card>
-          <>
-            <div className="col-md-12">
-              <div className="row">
-                <div className="col-md-12 d-flex justify-content-end pb-4">
-                  <BotoesAcoesCartaIntencoes
-                    onClickCancelar={recaregarDados}
-                    onClickSalvar={recaregarDados}
-                    componenteCurricularId={componenteCurricular}
-                    codigoTurma={turma}
-                    ehTurmaInfantil={ehTurmaInfantil(
-                      modalidadesFiltroPrincipal,
-                      turmaSelecionada
-                    )}
-                    somenteConsulta={somenteConsulta}
-                    salvarEditarObservacao={salvarEditarObservacao}
-                  />
-                </div>
-              </div>
-            </div>
-          </>
-
           <div className="col-md-12">
             <div className="row">
               <div className="col-sm-12 col-md-12 col-lg-6 col-xl-4 mb-2">

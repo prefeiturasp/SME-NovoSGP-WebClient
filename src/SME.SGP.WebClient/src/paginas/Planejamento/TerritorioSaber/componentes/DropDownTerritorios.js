@@ -9,7 +9,6 @@ import { SelectComponent, Loader } from '~/componentes';
 
 // Serviços
 import AbrangenciaServico from '~/servicos/Abrangencia';
-import modalidade from '~/dtos/modalidade';
 import { ehTurmaInfantil } from '~/servicos/Validacoes/validacoesInfatil';
 
 function DropDownTerritorios({
@@ -53,6 +52,7 @@ function DropDownTerritorios({
       setListaTerritorios([]);
       onBuscarTerritorios(false);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [onChangeTerritorio, turmaSelecionada, modalidadesFiltroPrincipal]);
 
   useEffect(() => {

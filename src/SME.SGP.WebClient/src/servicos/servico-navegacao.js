@@ -9,11 +9,21 @@ import { obterModalidadeFiltroPrincipal } from './Validacoes/validacoesInfatil';
 import { FiltroHelper } from '~/componentes-sgp';
 
 const setMenusPermissoes = () => {
-  let permissoes = {};
-  let menus = [];
+  const permissoes = {};
+  const menus = [];
+
+  const setPermissao = (item, perm) => {
+    perm[item.url] = {
+      podeAlterar: item.podeAlterar,
+      podeConsultar: item.podeConsultar,
+      podeExcluir: item.podeExcluir,
+      podeIncluir: item.podeIncluir,
+    };
+  };
+
   api.get('v1/menus').then(resp => {
     resp.data.forEach(item => {
-      let subMenu = {
+      const subMenu = {
         codigo: item.codigo,
         descricao: item.descricao,
         ehMenu: item.ehMenu,
@@ -24,7 +34,7 @@ const setMenusPermissoes = () => {
       };
       if (item.menus && item.menus.length > 0) {
         item.menus.forEach(itemMenu => {
-          let menu = {
+          const menu = {
             codigo: itemMenu.codigo,
             descricao: itemMenu.descricao,
             url: itemMenu.url,
@@ -57,15 +67,6 @@ const setMenusPermissoes = () => {
     store.dispatch(setMenu(menus));
     store.dispatch(setPermissoes(permissoes));
   });
-
-  const setPermissao = (item, permissoes) => {
-    permissoes[item.url] = {
-      podeAlterar: item.podeAlterar,
-      podeConsultar: item.podeConsultar,
-      podeExcluir: item.podeExcluir,
-      podeIncluir: item.podeIncluir,
-    };
-  };
 };
 
 const getObjetoStorageUsuario = objeto => {
@@ -99,7 +100,7 @@ const verificaSomenteConsulta = (permissoes, naoSetarResultadoNoStore) => {
 
 const setSomenteConsultaManual = valor => {
   store.dispatch(setSomenteConsulta(valor));
-}
+};
 
 const obterDescricaoNomeMenu = (
   url,

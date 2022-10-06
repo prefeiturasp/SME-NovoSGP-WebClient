@@ -67,7 +67,7 @@ MontarDadosPorSecao.propTypes = {
   dados: PropTypes.oneOfType([PropTypes.object]),
   auditoria: PropTypes.oneOfType([PropTypes.object]),
   match: PropTypes.oneOfType([PropTypes.object]),
-  dadosQuestionarioAtual: PropTypes.oneOfType([PropTypes.object]),
+  dadosQuestionarioAtual: PropTypes.oneOfType([PropTypes.any]),
 };
 
 MontarDadosPorSecao.defaultProps = {

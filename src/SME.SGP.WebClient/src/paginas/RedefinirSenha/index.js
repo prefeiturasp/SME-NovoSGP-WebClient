@@ -1,5 +1,4 @@
 import React, { useState, useRef, useEffect, useLayoutEffect } from 'react';
-import PropTypes from 'prop-types';
 import { useSelector, useDispatch } from 'react-redux';
 import styled from 'styled-components';
 import { Form } from 'formik';
@@ -112,6 +111,7 @@ const RedefinirSenha = props => {
     return () => {
       document.removeEventListener('keydown', trataAcaoTeclado);
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -413,14 +413,6 @@ const RedefinirSenha = props => {
       </Container>
     </>
   );
-};
-
-RedefinirSenha.propTypes = {
-  match: PropTypes.oneOfType([PropTypes.any]),
-};
-
-RedefinirSenha.defaultProps = {
-  match: {},
 };
 
 export default RedefinirSenha;

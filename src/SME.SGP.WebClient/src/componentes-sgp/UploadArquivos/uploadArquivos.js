@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { Base } from '~/componentes/colors';
+import Label from '~/componentes/label';
 import { erro, erros, sucesso } from '~/servicos';
 import ServicoArmazenamento from '~/servicos/Componentes/ServicoArmazenamento';
 import { downloadBlob, permiteInserirFormato } from '~/utils/funcoes/gerais';
@@ -60,6 +61,8 @@ const UploadArquivos = props => {
     form,
     name,
     id,
+    label,
+    labelRequired,
   } = props;
 
   const [listaDeArquivos, setListaDeArquivos] = useState([...defaultFileList]);
@@ -248,6 +251,7 @@ const UploadArquivos = props => {
   return (
     <ContainerUpload>
       <>
+        {label ? <Label text={label} isRequired={labelRequired} /> : <></>}
         {form ? campoComValidacoes() : campoSemValidacoes()}
         {obterErros()}
       </>
@@ -274,6 +278,8 @@ UploadArquivos.propTypes = {
   form: PropTypes.oneOfType([PropTypes.object, PropTypes.any]),
   name: PropTypes.string,
   id: PropTypes.string,
+  label: PropTypes.string,
+  labelRequired: PropTypes.bool,
 };
 
 UploadArquivos.defaultProps = {
@@ -299,6 +305,8 @@ UploadArquivos.defaultProps = {
   form: null,
   name: '',
   id: '',
+  label: '',
+  labelRequired: false,
 };
 
 export default UploadArquivos;

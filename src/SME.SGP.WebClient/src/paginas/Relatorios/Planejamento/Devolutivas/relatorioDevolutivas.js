@@ -1,10 +1,8 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import {
-  Button,
   Card,
   CheckboxComponent,
-  Colors,
   Loader,
   RadioGroupButton,
   SelectComponent,
@@ -14,6 +12,7 @@ import {
   Cabecalho,
   FiltroHelper,
 } from '~/componentes-sgp';
+import BotoesAcaoRelatorio from '~/componentes-sgp/botoesAcaoRelatorio';
 import { SGP_SELECT_COMPONENTE_CURRICULAR } from '~/componentes-sgp/filtro/idsCampos';
 import { ANO_INICIO_INFANTIL, OPCAO_TODOS } from '~/constantes/constantes';
 import { ModalidadeDTO } from '~/dtos';
@@ -65,6 +64,7 @@ const RelatorioDevolutivas = () => {
     setListaComponenteCurriculares,
   ] = useState();
   const [componenteCurricular, setComponenteCurricular] = useState();
+  const [modoEdicao, setModoEdicao] = useState(false);
 
   const { turmaSelecionada } = useSelector(store => store.usuario);
 
@@ -99,6 +99,7 @@ const RelatorioDevolutivas = () => {
     setAnoLetivo(anoAtual);
     setConsideraHistorico(false);
     limparFiltrosSelecionados();
+    setModoEdicao(false);
   };
 
   const gerar = async () => {
@@ -146,11 +147,13 @@ const RelatorioDevolutivas = () => {
     limparFiltrosSelecionados(true);
     setConsideraHistorico(!consideraHistorico);
     setAnoLetivo(anoAtual);
+    setModoEdicao(true);
   };
 
   const onChangeAnoLetivo = ano => {
     setAnoLetivo(ano);
     limparFiltrosSelecionados(true);
+    setModoEdicao(true);
   };
 
   const obterAnosLetivos = useCallback(async () => {
@@ -243,6 +246,8 @@ const RelatorioDevolutivas = () => {
 
     setListaComponenteCurriculares([]);
     setComponenteCurricular();
+
+    setModoEdicao(true);
   };
 
   const onChangeUe = ue => {
@@ -256,6 +261,8 @@ const RelatorioDevolutivas = () => {
     if (!ue) {
       setNaoEhInfantil(false);
     }
+
+    setModoEdicao(true);
   };
 
   const obterUes = useCallback(async () => {
@@ -302,6 +309,8 @@ const RelatorioDevolutivas = () => {
 
     setListaComponenteCurriculares([]);
     setComponenteCurricular();
+
+    setModoEdicao(true);
   };
 
   const verificarAbrangencia = data => {
@@ -359,6 +368,8 @@ const RelatorioDevolutivas = () => {
       setListaComponenteCurriculares([]);
       setComponenteCurricular();
     }
+
+    setModoEdicao(true);
   };
 
   const onchangeMultiSelect = (valores, valoreAtual, funSetarNovoValor) => {
@@ -424,7 +435,10 @@ const RelatorioDevolutivas = () => {
     setComponenteCurricular();
   }, [ueId, obterTurmas, naoEhInfantil]);
 
-  const onChangeBimestre = valor => setBimestres(valor);
+  const onChangeBimestre = valor => {
+    setBimestres(valor);
+    setModoEdicao(true);
+  };
 
   const obterBimestres = useCallback(() => {
     const bi = [];
@@ -525,52 +539,25 @@ const RelatorioDevolutivas = () => {
       setComponenteCurricular();
       setListaComponenteCurriculares([]);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [turmaId]);
 
   return (
     <Loader loading={exibirLoaderGeral}>
       {naoEhInfantil && (
-        <AlertaPermiteSomenteTurmaInfantil
-          marginBottom={3}
-          exibir={naoEhInfantil}
-        />
+        <AlertaPermiteSomenteTurmaInfantil exibir={naoEhInfantil} />
       )}
-      <Cabecalho pagina="Relatório de devolutivas" />
+      <Cabecalho pagina="Relatório de devolutivas">
+        <BotoesAcaoRelatorio
+          onClickVoltar={onClickVoltar}
+          onClickCancelar={onClickCancelar}
+          onClickGerar={gerar}
+          desabilitarBtnGerar={desabilitarGerar}
+          modoEdicao={modoEdicao}
+        />
+      </Cabecalho>
       <Card>
-        <div className="col-md-12 p-0">
-          <div className="row mb-5">
-            <div className="col-sm-12 d-flex justify-content-end">
-              <Button
-                id="btn-voltar"
-                label="Voltar"
-                icon="arrow-left"
-                color={Colors.Azul}
-                border
-                className="mr-2"
-                onClick={onClickVoltar}
-              />
-              <Button
-                id="btn-cancelar"
-                label="Cancelar"
-                color={Colors.Roxo}
-                border
-                bold
-                className="mr-2"
-                onClick={onClickCancelar}
-              />
-              <Button
-                id="btn-gerar"
-                icon="print"
-                label="Gerar"
-                color={Colors.Azul}
-                border
-                bold
-                className="mr-0"
-                onClick={gerar}
-                disabled={desabilitarGerar}
-              />
-            </div>
-          </div>
+        <div className="col-md-12">
           <div className="row mb-2">
             <div className="col-sm-12">
               <CheckboxComponent
@@ -684,6 +671,7 @@ const RelatorioDevolutivas = () => {
                   onChange={valor => {
                     setComponenteCurricular(valor);
                     setAlterouCampos(true);
+                    setModoEdicao(true);
                   }}
                   placeholder="Selecione um componente curricular"
                   disabled={
@@ -719,6 +707,7 @@ const RelatorioDevolutivas = () => {
                 onChange={e => {
                   setAlterouCampos(true);
                   setExibirConteudoDevolutiva(e.target.value);
+                  setModoEdicao(true);
                 }}
                 value={exibirConteudoDevolutiva}
                 desabilitado={!dreId || !ueId || !turmaId || !bimestres}

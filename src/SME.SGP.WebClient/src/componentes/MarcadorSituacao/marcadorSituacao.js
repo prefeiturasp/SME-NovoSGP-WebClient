@@ -18,7 +18,7 @@ MarcadorSituacao.propTypes = {
 };
 
 MarcadorSituacao.defaultProps = {
-  children: PropTypes.oneOfType([PropTypes.object, PropTypes.string]),
+  children: <></>,
   corFundo: Colors.Roxo,
   corTexto: Colors.Branco,
 };

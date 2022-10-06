@@ -56,7 +56,7 @@ class ServicoPlanoAula {
     // Carrega lista de componentes para montar as TABS!
     const obterListaComponentesCurricularesPlanejamento = () => {
       dispatch(setExibirLoaderFrequenciaPlanoAula(true));
-      ServicoComponentesCurriculares.obterComponetensCuricularesRegencia(
+      ServicoComponentesCurriculares.obterComponetensCurricularesRegencia(
         turmaSelecionada.id
       )
         .then(resposta => {

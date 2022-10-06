@@ -1,7 +1,7 @@
+/* eslint-disable react/prop-types */
 import { Tooltip } from 'antd';
 import PropTypes from 'prop-types';
 import React, { useCallback, useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
 import SelectComponent from '~/componentes/select';
 
 const CampoConceitoFinal = props => {
@@ -15,10 +15,6 @@ const CampoConceitoFinal = props => {
     podeLancarNotaFinal,
   } = props;
 
-  const modoEdicaoGeral = useSelector(
-    store => store.notasConceitos.modoEdicaoGeral
-  );
-
   const [conceitoValorAtual, setConceitoValorAtual] = useState();
   const [notaConceitoBimestre, setNotaConceitoBimestre] = useState();
 
@@ -26,7 +22,7 @@ const CampoConceitoFinal = props => {
     notaConceito => {
       if (notaConceitoBimestre.notaOriginal) {
         notaConceitoBimestre.conceitoAlterado =
-          notaConceito != notaConceitoBimestre.notaOriginal;
+          String(notaConceito) !== String(notaConceitoBimestre.notaOriginal);
       }
     },
     [notaConceitoBimestre]
@@ -35,7 +31,7 @@ const CampoConceitoFinal = props => {
   const validaSeEstaAbaixoDaMedia = useCallback(
     valorAtual => {
       const tipoConceito = listaTiposConceitos.find(
-        item => item.id == valorAtual
+        item => String(item.id) === String(valorAtual)
       );
 
       if (tipoConceito && !tipoConceito.aprovado) {

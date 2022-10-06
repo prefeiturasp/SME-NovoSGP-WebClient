@@ -55,7 +55,7 @@ const QuantidadeEstudantesMatriculados = props => {
 };
 
 QuantidadeEstudantesMatriculados.propTypes = {
-  anoLetivo: PropTypes.oneOfType(PropTypes.any),
+  anoLetivo: PropTypes.oneOfType([PropTypes.any]),
   dreCodigo: PropTypes.string,
   ueCodigo: PropTypes.string,
 };

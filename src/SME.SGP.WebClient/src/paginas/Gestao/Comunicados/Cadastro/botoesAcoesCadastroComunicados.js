@@ -1,8 +1,16 @@
+import { Col, Row } from 'antd';
 import * as moment from 'moment';
 import PropTypes from 'prop-types';
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Button, Colors } from '~/componentes';
+import BotaoExcluirPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoExcluirPadrao';
+import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
+import {
+  SGP_BUTTON_ALTERAR,
+  SGP_BUTTON_CADASTRAR,
+  SGP_BUTTON_CANCELAR,
+} from '~/componentes-sgp/filtro/idsCampos';
 import { OPCAO_TODOS } from '~/constantes';
 import { RotasDto } from '~/dtos';
 import {
@@ -174,24 +182,17 @@ const BotoesAcoesCadastroComunicados = props => {
   };
 
   return (
-    <div className="row mb-4">
-      <div className="col-sm-12 d-flex justify-content-end">
+    <Row gutter={[8, 8]} type="flex">
+      <Col>
+        <BotaoVoltarPadrao onClick={() => aoClicarBotaoVoltar()} />
+      </Col>
+      <Col>
         <Button
-          id="botao-voltar"
-          label="Voltar"
-          icon="arrow-left"
-          color={Colors.Azul}
-          onClick={aoClicarBotaoVoltar}
-          border
-          className="mr-3"
-        />
-        <Button
-          id="botao-cancelar"
+          id={SGP_BUTTON_CANCELAR}
           label="Cancelar"
           color={Colors.Azul}
           onClick={() => onClickCancelar()}
           border
-          className="mr-3"
           disabled={
             somenteConsulta ||
             !modoEdicao ||
@@ -199,40 +200,43 @@ const BotoesAcoesCadastroComunicados = props => {
             !permissoesTela.podeAlterar
           }
         />
-        <Button
-          id="botao-excluir"
-          label="Excluir"
-          color={Colors.Vermelho}
+      </Col>
+      <Col>
+        <BotaoExcluirPadrao
           onClick={aoClicarBotaoExcluir}
-          border
-          className="mr-3"
           disabled={
             somenteConsulta || !comunicadoId || !permissoesTela.podeExcluir
           }
         />
+      </Col>
+      <Col>
         {comunicadoId ? (
           <Button
-            id="botao-alterar"
+            id={SGP_BUTTON_ALTERAR}
             label="Alterar"
             color={Colors.Roxo}
             onClick={() => validaAntesDoSubmit()}
             disabled={
-              !modoEdicao || somenteConsulta || !permissoesTela.podeAlterar
+              somenteConsulta ||
+              !permissoesTela.podeAlterar ||
+              (comunicadoId && !modoEdicao)
             }
           />
         ) : (
           <Button
-            id="botao-cadastrar"
+            id={SGP_BUTTON_CADASTRAR}
             label="Cadastrar"
             color={Colors.Roxo}
             onClick={() => validaAntesDoSubmit()}
             disabled={
-              !modoEdicao || somenteConsulta || !permissoesTela.podeIncluir
+              somenteConsulta ||
+              !permissoesTela.podeIncluir ||
+              (comunicadoId && !modoEdicao)
             }
           />
         )}
-      </div>
-    </div>
+      </Col>
+    </Row>
   );
 };
 

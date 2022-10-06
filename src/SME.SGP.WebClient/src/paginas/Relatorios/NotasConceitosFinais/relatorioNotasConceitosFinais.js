@@ -1,10 +1,8 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { Loader, SelectComponent } from '~/componentes';
 import { Cabecalho } from '~/componentes-sgp';
-import Button from '~/componentes/button';
 import CampoNumero from '~/componentes/campoNumero';
 import Card from '~/componentes/card';
-import { Colors } from '~/componentes/colors';
 import { URL_HOME } from '~/constantes/url';
 import modalidade from '~/dtos/modalidade';
 import AbrangenciaServico from '~/servicos/Abrangencia';
@@ -17,6 +15,7 @@ import ServicoNotaConceito from '~/servicos/Paginas/DiarioClasse/ServicoNotaConc
 import tipoNota from '~/dtos/tipoNota';
 import AlertaModalidadeInfantil from '~/componentes-sgp/AlertaModalidadeInfantil/alertaModalidadeInfantil';
 import { OPCAO_TODOS } from '~/constantes/constantes';
+import BotoesAcaoRelatorio from '~/componentes-sgp/botoesAcaoRelatorio';
 
 const RelatorioNotasConceitosFinais = () => {
   const [listaAnosLetivo, setListaAnosLetivo] = useState([]);
@@ -55,8 +54,9 @@ const RelatorioNotasConceitosFinais = () => {
   const [condicao, setCondicao] = useState(undefined);
   const [clicouBotaoGerar, setClicouBotaoGerar] = useState(false);
   const [desabilitarBtnGerar, setDesabilitarBtnGerar] = useState(true);
-  const [anoAtual, setAnoAtual] = useState(new Date().getFullYear());
+  const anoAtual = window.moment().format('YYYY');
   const [consideraHistorico, setConsideraHistorico] = useState(false);
+  const [modoEdicao, setModoEdicao] = useState(false);
 
   const listaFormatos = [
     { valor: '1', desc: 'PDF' },
@@ -152,6 +152,8 @@ const RelatorioNotasConceitosFinais = () => {
 
     setListaAnosEscolares([]);
     setAnosEscolares(undefined);
+
+    setModoEdicao(true);
   };
 
   const obterDres = useCallback(async () => {
@@ -202,6 +204,7 @@ const RelatorioNotasConceitosFinais = () => {
 
   useEffect(() => {
     setConsideraHistorico(anoLetivo < anoAtual);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [anoLetivo]);
 
   useEffect(() => {
@@ -211,6 +214,7 @@ const RelatorioNotasConceitosFinais = () => {
       setModalidadeId(undefined);
       setListaModalidades([]);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [codigoUe]);
 
   useEffect(() => {
@@ -229,7 +233,6 @@ const RelatorioNotasConceitosFinais = () => {
         setAnosEscolares([OPCAO_TODOS]);
       } else {
         setCarregandoGeral(true);
-        const anoAtual = window.moment().format('YYYY');
         const respota = await AbrangenciaServico.buscarAnosEscolares(
           ue,
           mod,
@@ -257,6 +260,7 @@ const RelatorioNotasConceitosFinais = () => {
         setCarregandoGeral(false);
       }
     },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     []
   );
 
@@ -284,7 +288,7 @@ const RelatorioNotasConceitosFinais = () => {
     const codigoTodosAnosEscolares = obterCodigoTodosAnosEscolares();
     if (anoLetivo) {
       setCarregandoGeral(true);
-      const retorno = await ServicoFiltroRelatorio.obterComponetensCuriculares(
+      const retorno = await ServicoFiltroRelatorio.obterComponetensCurriculares(
         codigoUe,
         modalidadeId,
         anoLetivo,
@@ -307,6 +311,7 @@ const RelatorioNotasConceitosFinais = () => {
       }
       setCarregandoGeral(false);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [modalidadeId, anoLetivo, obterCodigoTodosAnosEscolares]);
 
   useEffect(() => {
@@ -354,6 +359,7 @@ const RelatorioNotasConceitosFinais = () => {
       setSemestre(undefined);
       setListaSemestre([]);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [modalidadeId, anoLetivo]);
 
   const obterConceitos = async anoLetivoSelecionado => {
@@ -445,6 +451,7 @@ const RelatorioNotasConceitosFinais = () => {
     obterDres();
 
     setFormato('PDF');
+    setModoEdicao(false);
   };
 
   const onClickGerar = async () => {
@@ -495,6 +502,8 @@ const RelatorioNotasConceitosFinais = () => {
 
     setListaAnosEscolares([]);
     setAnosEscolares(undefined);
+
+    setModoEdicao(true);
   };
 
   const onChangeModalidade = novaModalidade => {
@@ -505,6 +514,8 @@ const RelatorioNotasConceitosFinais = () => {
 
     setListaAnosEscolares([]);
     setAnosEscolares(undefined);
+
+    setModoEdicao(true);
   };
 
   const onChangeAnoLetivo = ano => {
@@ -520,6 +531,8 @@ const RelatorioNotasConceitosFinais = () => {
 
     setCodigoDre();
     setCodigoUe();
+
+    setModoEdicao(true);
   };
 
   const onChangeAnos = valor => {
@@ -527,21 +540,25 @@ const RelatorioNotasConceitosFinais = () => {
 
     setListaComponenteCurricular([]);
     setComponentesCurriculares(undefined);
+    setModoEdicao(true);
   };
 
   const onChangeSemestre = valor => {
     setSemestre(valor);
     setClicouBotaoGerar(false);
+    setModoEdicao(true);
   };
 
   const onChangeComponenteCurricular = valor => {
     setComponentesCurriculares(valor);
     setClicouBotaoGerar(false);
+    setModoEdicao(true);
   };
 
   const onChangeBimestre = valor => {
     setBimestres(valor);
     setClicouBotaoGerar(false);
+    setModoEdicao(true);
   };
 
   const onChangeCondicao = valor => {
@@ -550,11 +567,13 @@ const RelatorioNotasConceitosFinais = () => {
     }
     setCondicao(valor);
     setClicouBotaoGerar(false);
+    setModoEdicao(true);
   };
 
   const onChangeComparacao = valor => {
     setValorCondicao(valor);
     setClicouBotaoGerar(false);
+    setModoEdicao(true);
   };
 
   const onChangeTipoNota = valor => {
@@ -593,11 +612,13 @@ const RelatorioNotasConceitosFinais = () => {
     setTipoNotaSelecionada(valor);
     setCampoBloqueado(bloqueado);
     setClicouBotaoGerar(false);
+    setModoEdicao(true);
   };
 
   const onChangeFormato = valor => {
     setFormato(valor);
     setClicouBotaoGerar(false);
+    setModoEdicao(true);
   };
 
   const removeAdicionaOpcaoTodos = (
@@ -642,42 +663,19 @@ const RelatorioNotasConceitosFinais = () => {
         exibir={String(modalidadeId) === String(modalidade.INFANTIL)}
         validarModalidadeFiltroPrincipal={false}
       />
-      <Cabecalho pagina="Notas e conceitos" />
+      <Cabecalho pagina="Notas e conceitos">
+        <BotoesAcaoRelatorio
+          onClickVoltar={onClickVoltar}
+          onClickCancelar={onClickCancelar}
+          onClickGerar={onClickGerar}
+          desabilitarBtnGerar={desabilitarBtnGerar}
+          modoEdicao={modoEdicao}
+        />
+      </Cabecalho>
       <Loader loading={carregandoGeral}>
         <Card>
           <div className="col-md-12">
             <div className="row">
-              <div className="col-md-12 d-flex justify-content-end pb-4">
-                <Button
-                  id="btn-voltar-frequencia-faltas"
-                  label="Voltar"
-                  icon="arrow-left"
-                  color={Colors.Azul}
-                  border
-                  className="mr-2"
-                  onClick={onClickVoltar}
-                />
-                <Button
-                  id="btn-cancelar-frequencia-faltas"
-                  label="Cancelar"
-                  color={Colors.Roxo}
-                  border
-                  bold
-                  className="mr-3"
-                  onClick={() => onClickCancelar()}
-                />
-                <Button
-                  id="btn-gerar-frequencia-faltas"
-                  icon="print"
-                  label="Gerar"
-                  color={Colors.Azul}
-                  border
-                  bold
-                  className="mr-2"
-                  onClick={() => onClickGerar()}
-                  disabled={desabilitarBtnGerar}
-                />
-              </div>
               <div className="col-sm-12 col-md-6 col-lg-3 col-xl-2 mb-2">
                 <SelectComponent
                   label="Ano Letivo"

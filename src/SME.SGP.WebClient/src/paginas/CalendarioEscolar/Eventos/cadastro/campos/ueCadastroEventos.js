@@ -75,6 +75,7 @@ const UeCadastroEventos = ({ form, onChangeCampos, desabilitar, eventoId }) => {
       form.setFieldValue(nomeCampo, undefined);
       setListaUes([]);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dreId, eventoId, listaCalendarios]);
 
   useEffect(() => {
@@ -84,6 +85,7 @@ const UeCadastroEventos = ({ form, onChangeCampos, desabilitar, eventoId }) => {
       form.setFieldValue(nomeCampo, undefined);
       setListaUes([]);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dreId, obterUes]);
 
   return (
@@ -102,6 +104,7 @@ const UeCadastroEventos = ({ form, onChangeCampos, desabilitar, eventoId }) => {
         onChange={ue => {
           onChangeCampos(ue);
         }}
+        labelRequired
       />
     </Loader>
   );

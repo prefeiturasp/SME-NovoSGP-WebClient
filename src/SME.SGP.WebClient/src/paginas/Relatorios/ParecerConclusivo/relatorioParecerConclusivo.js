@@ -3,9 +3,9 @@ import { useSelector } from 'react-redux';
 import { CheckboxComponent, Loader, SelectComponent } from '~/componentes';
 import { Cabecalho } from '~/componentes-sgp';
 import AlertaModalidadeInfantil from '~/componentes-sgp/AlertaModalidadeInfantil/alertaModalidadeInfantil';
-import Button from '~/componentes/button';
+import BotoesAcaoRelatorio from '~/componentes-sgp/botoesAcaoRelatorio';
 import Card from '~/componentes/card';
-import { Colors } from '~/componentes/colors';
+import { URL_HOME } from '~/constantes';
 import { OPCAO_TODOS } from '~/constantes/constantes';
 import modalidade from '~/dtos/modalidade';
 import { AbrangenciaServico } from '~/servicos';
@@ -64,6 +64,8 @@ const RelatorioParecerConclusivo = () => {
 
   const [anoAtual] = useState(window.moment().format('YYYY'));
 
+  const [modoEdicao, setModoEdicao] = useState(false);
+
   const onChangeConsideraHistorico = e => {
     setConsideraHistorico(e.target.checked);
     setAnoLetivo(anoAtual);
@@ -74,6 +76,7 @@ const RelatorioParecerConclusivo = () => {
     setListaModalidades([]);
     setSemestre();
     setListaSemestres([]);
+    setModoEdicao(true);
   };
 
   const onChangeAnoLetivo = valor => {
@@ -86,6 +89,7 @@ const RelatorioParecerConclusivo = () => {
     setListaModalidades([]);
     setSemestre();
     setListaSemestres([]);
+    setModoEdicao(true);
   };
 
   const onChangeDre = valor => {
@@ -98,6 +102,7 @@ const RelatorioParecerConclusivo = () => {
     setAno();
     setListaAnos([]);
     setDreId(valor);
+    setModoEdicao(true);
   };
 
   const onChangeUe = valor => {
@@ -108,6 +113,7 @@ const RelatorioParecerConclusivo = () => {
     setAno();
     setListaAnos([]);
     setUeId(valor);
+    setModoEdicao(true);
   };
 
   const onChangeModalidade = valor => {
@@ -116,11 +122,13 @@ const RelatorioParecerConclusivo = () => {
     setCiclo();
     setListaCiclos([]);
     setModalidadeId(valor);
+    setModoEdicao(true);
   };
 
   const onChangeSemestre = valor => {
     setSemestre(valor);
     setClicouBotaoGerar(false);
+    setModoEdicao(true);
   };
 
   const onChangeCiclos = valor => {
@@ -128,6 +136,7 @@ const RelatorioParecerConclusivo = () => {
     setListaAnos([]);
     setCiclo(valor);
     setClicouBotaoGerar(false);
+    setModoEdicao(true);
   };
 
   const onChangeAnos = valor => {
@@ -136,16 +145,19 @@ const RelatorioParecerConclusivo = () => {
     }
     setAno(valor);
     setClicouBotaoGerar(false);
+    setModoEdicao(true);
   };
 
   const onChangeParecerConclusivo = valor => {
     setParecerConclusivoId(valor);
     setClicouBotaoGerar(false);
+    setModoEdicao(true);
   };
 
   const onChangeFormato = valor => {
     setFormato(valor);
     setClicouBotaoGerar(false);
+    setModoEdicao(true);
   };
 
   const obterDres = useCallback(async () => {
@@ -442,12 +454,17 @@ const RelatorioParecerConclusivo = () => {
     obterAnos(modalidadeId, ciclo);
   }, [modalidadeId, ciclo]);
 
-  const cancelar = async () => {
-    await setCiclo();
-    await setAno();
-    await setParecerConclusivoId();
-    await setAnoLetivo(anoAtual);
-    await setFormato('1');
+  const cancelar = () => {
+    setDreId();
+    setUeId();
+    setConsideraHistorico(false);
+    setAnoLetivo(anoAtual);
+    setCiclo();
+    setAno();
+    setParecerConclusivoId();
+    setAnoLetivo(anoAtual);
+    setFormato('1');
+    setModoEdicao(false);
   };
 
   useEffect(() => {
@@ -513,52 +530,21 @@ const RelatorioParecerConclusivo = () => {
         exibir={String(modalidadeId) === String(modalidade.INFANTIL)}
         validarModalidadeFiltroPrincipal={false}
       />
-      <Cabecalho pagina="Parecer Conclusivo" />
+      <Cabecalho pagina="Parecer Conclusivo">
+        <BotoesAcaoRelatorio
+          onClickVoltar={() => {
+            history.push(URL_HOME);
+          }}
+          onClickCancelar={cancelar}
+          onClickGerar={gerar}
+          desabilitarBtnGerar={desabilitarBtnGerar}
+          carregandoGerar={carregandoGerar}
+          temLoaderBtnGerar
+          modoEdicao={modoEdicao}
+        />
+      </Cabecalho>
       <Card>
         <div className="col-md-12">
-          <div className="row">
-            <div className="col-md-12 d-flex justify-content-end pb-4 justify-itens-end">
-              <Button
-                id="btn-voltar-rel-parecer"
-                label="Voltar"
-                icon="arrow-left"
-                color={Colors.Azul}
-                border
-                className="mr-2"
-                onClick={() => {
-                  history.push('/');
-                }}
-              />
-              <Button
-                id="btn-cancelar-rel-parecer"
-                label="Cancelar"
-                color={Colors.Roxo}
-                border
-                bold
-                className="mr-2"
-                onClick={() => {
-                  cancelar();
-                }}
-              />
-              <Loader
-                loading={carregandoGerar}
-                className="d-flex w-auto"
-                tip=""
-              >
-                <Button
-                  id="btn-gerar-rel-parecer"
-                  icon="print"
-                  label="Gerar"
-                  color={Colors.Azul}
-                  border
-                  bold
-                  className="mr-0"
-                  onClick={gerar}
-                  disabled={desabilitarBtnGerar}
-                />
-              </Loader>
-            </div>
-          </div>
           <div className="row mb-2">
             <div className="col-12">
               <CheckboxComponent

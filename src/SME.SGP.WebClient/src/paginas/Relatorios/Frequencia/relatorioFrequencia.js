@@ -1,15 +1,14 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import {
-  Button,
   CampoNumero,
   Card,
-  Colors,
   Loader,
   RadioGroupButton,
   SelectComponent,
 } from '~/componentes';
 import { Cabecalho } from '~/componentes-sgp';
+import BotoesAcaoRelatorio from '~/componentes-sgp/botoesAcaoRelatorio';
 
 import { URL_HOME, OPCAO_TODOS } from '~/constantes';
 import { ModalidadeDTO } from '~/dtos';
@@ -72,6 +71,7 @@ const RelatorioFrequencia = () => {
   const [turmasPrograma, setTurmasPrograma] = useState(true);
   const [valorCondicao, setValorCondicao] = useState(undefined);
   const [desabilitarSemestre, setDesabilitarSemestre] = useState(false);
+  const [modoEdicao, setModoEdicao] = useState(false);
 
   const TIPO_RELATORIO = useMemo(
     () => ({
@@ -184,6 +184,8 @@ const RelatorioFrequencia = () => {
 
     setListaAnosEscolares([]);
     setAnosEscolares(undefined);
+
+    setModoEdicao(true);
   };
 
   const obterDres = async () => {
@@ -307,6 +309,7 @@ const RelatorioFrequencia = () => {
       todosAnosEscolares = listaAnosEscolares.map(item => item.valor);
     }
     return todosAnosEscolares;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [anosEscolares]);
 
   const escolherChamadaEndpointComponeteCurricular = useCallback(() => {
@@ -330,14 +333,14 @@ const RelatorioFrequencia = () => {
     if (ehTurma) {
       const turmas = ehOpcaoTodas ? [OPCAO_TODOS] : turmasCodigo;
 
-      return ServicoComponentesCurriculares.obterComponetensCuricularesPorTurma(
+      return ServicoComponentesCurriculares.obterComponetensCurricularesPorTurma(
         codigoUe,
         turmas
       );
     }
 
     const codigoTodosAnosEscolares = obterCodigoTodosAnosEscolares();
-    return ServicoComponentesCurriculares.obterComponetensCuriculares(
+    return ServicoComponentesCurriculares.obterComponetensCurriculares(
       codigoUe,
       modalidadeId,
       anoLetivo,
@@ -503,7 +506,7 @@ const RelatorioFrequencia = () => {
     history.push(URL_HOME);
   };
 
-  const onClickCancelar = () => {
+  const onClickCancelar = async () => {
     const anoAtual = listaAnosLetivo?.length && listaAnosLetivo[0].valor;
     setAnoLetivo(anoAtual);
     setCodigoDre();
@@ -512,6 +515,7 @@ const RelatorioFrequencia = () => {
     setCondicao(undefined);
     setValorCondicao(undefined);
     setFormato(FORMATOS.PDF);
+    setModoEdicao(false);
   };
 
   const onClickGerar = async () => {
@@ -562,6 +566,8 @@ const RelatorioFrequencia = () => {
 
     setTipoRelatorio(TIPO_RELATORIO.TURMA);
     setDesabilitarTipoRelatorio(ue !== OPCAO_TODOS);
+
+    setModoEdicao(true);
   };
 
   const onChangeModalidade = novaModalidade => {
@@ -572,6 +578,8 @@ const RelatorioFrequencia = () => {
 
     setListaAnosEscolares([]);
     setAnosEscolares(undefined);
+
+    setModoEdicao(true);
   };
 
   const onChangeAnoLetivo = ano => {
@@ -582,6 +590,8 @@ const RelatorioFrequencia = () => {
 
     setListaComponenteCurricular([]);
     setComponentesCurriculares(undefined);
+
+    setModoEdicao(true);
   };
 
   const onChangeAnos = valor => {
@@ -589,14 +599,34 @@ const RelatorioFrequencia = () => {
 
     setListaComponenteCurricular([]);
     setComponentesCurriculares(undefined);
+
+    setModoEdicao(true);
   };
 
-  const onChangeSemestre = valor => setSemestre(valor);
-  const onChangeComponenteCurricular = valor =>
+  const onChangeSemestre = valor => {
+    setSemestre(valor);
+    setModoEdicao(true);
+  };
+
+  const onChangeComponenteCurricular = valor => {
     setComponentesCurriculares(valor);
-  const onChangeBimestre = valor => setBimestres(valor);
-  const onChangeCondicao = valor => setCondicao(valor);
-  const onChangeComparacao = valor => setValorCondicao(valor);
+    setModoEdicao(true);
+  };
+
+  const onChangeBimestre = valor => {
+    setBimestres(valor);
+    setModoEdicao(true);
+  };
+
+  const onChangeCondicao = valor => {
+    setCondicao(valor);
+    setModoEdicao(true);
+  };
+
+  const onChangeComparacao = valor => {
+    setValorCondicao(valor);
+    setModoEdicao(true);
+  };
 
   const removeAdicionaOpcaoTodos = (
     valoresJaSelcionados,
@@ -636,6 +666,7 @@ const RelatorioFrequencia = () => {
   const onChangeTurma = valor => {
     setTurmasCodigo(valor);
     setBimestres(undefined);
+    setModoEdicao(true);
   };
 
   const obterTurmas = useCallback(async () => {
@@ -702,44 +733,20 @@ const RelatorioFrequencia = () => {
 
   return (
     <>
-      <Cabecalho pagina="Frequência" classes="mb-2" />
       <Loader loading={carregandoGeral}>
+        <Cabecalho pagina="Frequência">
+          <BotoesAcaoRelatorio
+            onClickVoltar={() => onClickVoltar()}
+            onClickCancelar={onClickCancelar}
+            onClickGerar={onClickGerar}
+            desabilitarBtnGerar={desabilitarBtnGerar}
+            modoEdicao={modoEdicao}
+          />
+        </Cabecalho>
         <Card>
-          <div className="col-md-12 p-0">
-            <div className="row">
-              <div className="col-md-12 d-flex justify-content-end pb-4">
-                <Button
-                  id="btn-voltar-frequencia"
-                  label="Voltar"
-                  icon="arrow-left"
-                  color={Colors.Azul}
-                  border
-                  className="mr-2"
-                  onClick={onClickVoltar}
-                />
-                <Button
-                  id="btn-cancelar-frequencia"
-                  label="Cancelar"
-                  color={Colors.Azul}
-                  border
-                  bold
-                  className="mr-3"
-                  onClick={() => onClickCancelar()}
-                />
-                <Button
-                  id="btn-gerar-frequencia"
-                  icon="print"
-                  label="Gerar"
-                  color={Colors.Roxo}
-                  border
-                  bold
-                  onClick={() => onClickGerar()}
-                  disabled={desabilitarBtnGerar}
-                />
-              </div>
-            </div>
+          <div className="col-md-12">
             <div className="row my-3">
-              <div className="col-sm-12 col-md-6 col-lg-3 col-xl-2 pr-0">
+              <div className="col-sm-12 col-md-6 col-lg-3 col-xl-2">
                 <Loader loading={carregandoAnosLetivos} ignorarTip>
                   <SelectComponent
                     label="Ano Letivo"
@@ -753,7 +760,7 @@ const RelatorioFrequencia = () => {
                   />
                 </Loader>
               </div>
-              <div className="col-sm-12 col-md-6 col-lg-9 col-xl-5 pr-0">
+              <div className="col-sm-12 col-md-6 col-lg-9 col-xl-5">
                 <Loader loading={carregandoDres} ignorarTip>
                   <SelectComponent
                     label="DRE"
@@ -785,7 +792,7 @@ const RelatorioFrequencia = () => {
               </div>
             </div>
             <div className="row mb-3">
-              <div className="col-sm-12 col-md-4 pr-0">
+              <div className="col-sm-12 col-md-4">
                 <Loader loading={carregandoModalidade} ignorarTip>
                   <SelectComponent
                     label="Modalidade"
@@ -799,7 +806,7 @@ const RelatorioFrequencia = () => {
                   />
                 </Loader>
               </div>
-              <div className="col-sm-12 col-md-4 pr-0">
+              <div className="col-sm-12 col-md-4">
                 <Loader loading={carregandoSemestres} ignorarTip>
                   <SelectComponent
                     lista={listaSemestre}
@@ -824,6 +831,7 @@ const RelatorioFrequencia = () => {
                   valorInicial
                   onChange={e => {
                     setTipoRelatorio(e.target.value);
+                    setModoEdicao(true);
                   }}
                   value={tipoRelatorio}
                   desabilitado={
@@ -836,7 +844,7 @@ const RelatorioFrequencia = () => {
               </div>
             </div>
             <div className="row mb-3">
-              <div className="col-sm-12 col-md-4 pr-0">
+              <div className="col-sm-12 col-md-4">
                 <Loader loading={carregandoAnosEscolares} ignorarTip>
                   <SelectComponent
                     lista={listaAnosEscolares}
@@ -861,13 +869,14 @@ const RelatorioFrequencia = () => {
                   />
                 </Loader>
               </div>
-              <div className="col-sm-12 col-md-4 pr-0">
+              <div className="col-sm-12 col-md-4">
                 <RadioGroupButton
                   label="Listar turmas de programa"
                   opcoes={opcoesListarTurmasDePrograma}
                   valorInicial
                   onChange={e => {
                     setTurmasPrograma(e.target.value);
+                    setModoEdicao(true);
                   }}
                   value={turmasPrograma}
                   desabilitado={
@@ -899,7 +908,7 @@ const RelatorioFrequencia = () => {
             </div>
 
             <div className="row mb-3">
-              <div className="col-sm-12 col-md-4 pr-0">
+              <div className="col-sm-12 col-md-4">
                 <Loader loading={carregandoComponentesCurriculares} ignorarTip>
                   <SelectComponent
                     lista={listaComponenteCurricular}
@@ -920,7 +929,7 @@ const RelatorioFrequencia = () => {
                   />
                 </Loader>
               </div>
-              <div className="col-sm-12 col-md-4 pr-0">
+              <div className="col-sm-12 col-md-4">
                 <Loader loading={carregandoBimestres} ignorarTip>
                   <SelectComponent
                     lista={listaBimestre}
@@ -948,7 +957,7 @@ const RelatorioFrequencia = () => {
               </div>
             </div>
             <div className="row mb-3">
-              <div className="col-sm-12 col-md-4 pr-0">
+              <div className="col-sm-12 col-md-4">
                 <CampoNumero
                   onChange={onChangeComparacao}
                   value={valorCondicao}
@@ -960,13 +969,14 @@ const RelatorioFrequencia = () => {
                   disabled={condicao === OPCAO_TODOS_ESTUDANTES}
                 />
               </div>
-              <div className="col-sm-12 col-md-4 pr-0">
+              <div className="col-sm-12 col-md-4">
                 <RadioGroupButton
                   label="Formato"
                   opcoes={opcoesListaFormatos}
                   valorInicial
                   onChange={e => {
                     setFormato(e.target.value);
+                    setModoEdicao(true);
                   }}
                   value={formato}
                   desabilitado={ehTurma}

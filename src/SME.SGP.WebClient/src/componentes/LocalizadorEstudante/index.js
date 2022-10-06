@@ -26,9 +26,6 @@ const LocalizadorEstudante = props => {
     historico = false
   } = props;
 
-  const classeNome = semMargin
-    ? 'col-sm-12 col-md-6 col-lg-8 col-xl-8 p-0'
-    : 'col-sm-12 col-md-6 col-lg-8 col-xl-8';
   const classeCodigo = semMargin
     ? 'col-sm-12 col-md-6 col-lg-4 col-xl-4 p-0 pl-4'
     : 'col-sm-12 col-md-6 col-lg-4 col-xl-4';
@@ -179,10 +176,11 @@ const LocalizadorEstudante = props => {
       const {
         codigo: cAluno,
         nome,
-        codigoTurma,
         turmaId,
         nomeComModalidadeTurma,
       } = retorno.data.items[0];
+      const alunoCodigoTurma = retorno?.data?.items?.[0];
+
       setDataSource(
         retorno.data.items.map(aluno => ({
           alunoCodigo: aluno.codigo,
@@ -195,7 +193,7 @@ const LocalizadorEstudante = props => {
       setPessoaSelecionada({
         alunoCodigo: parseInt(cAluno, 10),
         alunoNome: nome,
-        codigoTurma,
+        codigoTurma: alunoCodigoTurma,
         turmaId,
         nomeComModalidadeTurma,
       });
@@ -206,7 +204,7 @@ const LocalizadorEstudante = props => {
       onChange({
         alunoCodigo: parseInt(cAluno, 10),
         alunoNome: nome,
-        codigoTurma,
+        codigoTurma: alunoCodigoTurma,
         turmaId,
         nomeComModalidadeTurma,
       });
@@ -280,6 +278,7 @@ const LocalizadorEstudante = props => {
     ) {
       validaAntesBuscarPorCodigo({ codigo: valorInicialAlunoCodigo });
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [valorInicialAlunoCodigo, dataSource, pessoaSelecionada]);
 
   return (

@@ -60,8 +60,8 @@ const CampoMensagemInfantil = ({ mural, atividades }) => {
 };
 
 CampoMensagemInfantil.propTypes = {
-  mural: PropTypes.oneOfType(PropTypes.array),
-  atividades: PropTypes.oneOfType(PropTypes.array),
+  mural: PropTypes.oneOfType([PropTypes.array]),
+  atividades: PropTypes.oneOfType([PropTypes.array]),
 };
 
 CampoMensagemInfantil.defaultProps = {

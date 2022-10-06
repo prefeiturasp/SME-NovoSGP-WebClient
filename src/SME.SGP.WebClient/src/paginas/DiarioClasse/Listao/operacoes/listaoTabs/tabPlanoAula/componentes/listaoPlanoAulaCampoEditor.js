@@ -37,7 +37,7 @@ const ObjetivosEspecificosDesenvolvimentoAula = props => {
 };
 
 ObjetivosEspecificosDesenvolvimentoAula.propTypes = {
-  dados: PropTypes.oneOf(PropTypes.object),
+  dados: PropTypes.oneOf([PropTypes.object]),
   desabilitar: PropTypes.bool,
   indexPlano: PropTypes.number,
 };

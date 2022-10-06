@@ -148,6 +148,7 @@ const EventosListaFiltros = () => {
     } else {
       setListaTipoEventos([]);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const obterTiposCalendarios = useCallback(async descricao => {
@@ -177,6 +178,7 @@ const EventosListaFiltros = () => {
     if (!calendarioSelecionado?.id) {
       limparQuandoSemCalendario();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [calendarioSelecionado]);
 
   const selecionaTipoCalendario = descricao => {
@@ -237,6 +239,7 @@ const EventosListaFiltros = () => {
       setCodigoDre();
       setListaDres([]);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -246,6 +249,7 @@ const EventosListaFiltros = () => {
     return () => {
       clearTimeout(timeoutBuscarPorNome);
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [obterTiposCalendarios, obterListaEventos]);
 
   const setarDreListaAtual = useCallback(() => {
@@ -283,6 +287,7 @@ const EventosListaFiltros = () => {
     } else {
       setCodigoDre();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [obterDres, calendarioSelecionado, listaDres]);
 
   const onChangeDre = codigo => {

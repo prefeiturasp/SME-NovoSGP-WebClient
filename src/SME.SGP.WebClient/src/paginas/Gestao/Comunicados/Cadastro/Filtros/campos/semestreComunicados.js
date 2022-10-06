@@ -47,6 +47,7 @@ const SemestreComunicados = ({ form, onChangeCampos, desabilitar }) => {
       form.setFieldValue(nomeCampo, undefined);
       setListaSemestres([]);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [anoLetivo, codigoUe]);
 
   useEffect(() => {
@@ -58,6 +59,7 @@ const SemestreComunicados = ({ form, onChangeCampos, desabilitar }) => {
       form.setFieldValue(nomeCampo, undefined);
       setListaSemestres([]);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [modalidades, obterSemestres]);
 
   return (
@@ -78,6 +80,7 @@ const SemestreComunicados = ({ form, onChangeCampos, desabilitar }) => {
         showSearch
         name={nomeCampo}
         form={form}
+        labelRequired={temModalidadeEja}
         onChange={() => {
           onChangeCampos();
           form.setFieldValue('turmas', []);

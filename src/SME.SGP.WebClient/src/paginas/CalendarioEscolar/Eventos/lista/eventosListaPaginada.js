@@ -67,6 +67,7 @@ const EventosListaPaginada = () => {
 
   useEffect(() => {
     filtrar();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [calendarioSelecionado, codigoDre, codigoUe]);
 
   useEffect(() => {
@@ -74,6 +75,7 @@ const EventosListaPaginada = () => {
       filtrar();
       seFiltrarNovaConsulta(false);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [filtrarNovaConsulta]);
 
   const formatarCampoData = data => {

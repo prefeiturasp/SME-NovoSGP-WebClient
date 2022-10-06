@@ -14,6 +14,7 @@ function UeDropDown({
   label,
   desabilitado,
   preencherLista,
+  labelRequired,
 }) {
   const [listaUes, setListaUes] = useState([]);
 
@@ -50,6 +51,7 @@ function UeDropDown({
       setListaUes([]);
       form.setFieldValue('ueId', undefined);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dreId]);
 
   return (
@@ -67,6 +69,7 @@ function UeDropDown({
       placeholder="Unidade Escolar (UE)"
       disabled={listaUes.length === 1 || desabilitado}
       showSearch
+      labelRequired={labelRequired}
     />
   );
 }
@@ -81,6 +84,7 @@ UeDropDown.propTypes = {
   label: PropTypes.string,
   desabilitado: PropTypes.bool,
   preencherLista: PropTypes.func,
+  labelRequired: PropTypes.bool,
 };
 
 UeDropDown.defaultProps = {
@@ -90,6 +94,7 @@ UeDropDown.defaultProps = {
   label: null,
   desabilitado: null,
   preencherLista: () => {},
+  labelRequired: false,
 };
 
 export default UeDropDown;

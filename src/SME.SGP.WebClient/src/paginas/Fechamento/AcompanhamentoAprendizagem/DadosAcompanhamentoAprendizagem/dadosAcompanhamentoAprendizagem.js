@@ -72,6 +72,7 @@ const DadosAcompanhamentoAprendizagem = props => {
     if (turmaSelecionada && codigoEOL && semestreSelecionado) {
       obterDadosAcompanhamentoAprendizagemPorEstudante();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [turmaSelecionada, codigoEOL, semestreSelecionado]);
 
   const exibirTabs = false;

@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
+import { useSelector } from 'react-redux';
 import '~/servicos/Validacoes/regex';
 import CampoTexto from '~/componentes/campoTexto';
 import Button from '~/componentes/button';
@@ -11,7 +12,6 @@ import { Validacoes, Validacao } from './formularioSenha.css';
 import api from '~/servicos/api';
 import { sucesso } from '~/servicos/alertas';
 import AlertaBalao from '~/componentes/alertaBalao';
-import { useSelector } from 'react-redux';
 import RotasDto from '~/dtos/rotasDto';
 import { verificaSomenteConsulta } from '~/servicos/servico-navegacao';
 
@@ -25,6 +25,7 @@ const FormularioSenha = () => {
 
   useEffect(() => {
     setSomenteConsulta(verificaSomenteConsulta(permissoesTela));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const fecharModal = form => {
@@ -43,7 +44,7 @@ const FormularioSenha = () => {
         .naoContem(/([À-ÖØ-öø-ÿ])/, 'acentos')
         .naoContem(' ', 'espaco')
         .test('tamanho', 'tamanho', function(valor) {
-          return valor && (valor.length >= 8 && valor.length <= 12);
+          return valor && valor.length >= 8 && valor.length <= 12;
         })
         .test('simbolos', 'simbolos', function(valor) {
           return (
@@ -155,6 +156,7 @@ const FormularioSenha = () => {
                         form={form}
                         maskType="password"
                         maxlength="50"
+                        labelRequired
                       />
                     </div>
                   </div>
@@ -171,6 +173,7 @@ const FormularioSenha = () => {
                         maxlength="12"
                         maskType="password"
                         semMensagem
+                        labelRequired
                       />
                     </div>
                   </div>
@@ -182,6 +185,7 @@ const FormularioSenha = () => {
                         form={form}
                         maskType="password"
                         maxlength="12"
+                        labelRequired
                       />
                     </div>
                   </div>
@@ -246,6 +250,7 @@ const FormularioSenha = () => {
           placeholder="************"
           onChange={() => {}}
           type="password"
+          labelRequired
         />
       </div>
       <div className="col-md-2 botao">

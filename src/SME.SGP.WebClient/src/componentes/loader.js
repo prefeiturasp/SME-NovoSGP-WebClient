@@ -44,7 +44,7 @@ Loader.propTypes = {
   tip: PropTypes.string,
   ignorarTip: PropTypes.bool,
   className: PropTypes.string,
-  style: PropTypes.oneOfType(PropTypes.object),
+  style: PropTypes.oneOfType([PropTypes.object]),
 };
 
 Loader.defaultProps = {

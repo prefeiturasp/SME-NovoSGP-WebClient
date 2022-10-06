@@ -1,7 +1,10 @@
+import { Col, Row } from 'antd';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Loader } from '~/componentes';
+import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
 import Cabecalho from '~/componentes-sgp/cabecalho';
+import { SGP_BUTTON_NOVO } from '~/componentes-sgp/filtro/idsCampos';
 import RotasDto from '~/dtos/rotasDto';
 import { AbrangenciaServico, erros } from '~/servicos';
 import ServicoResponsaveis from '~/servicos/Paginas/Gestao/Responsaveis/ServicoResponsaveis';
@@ -36,7 +39,6 @@ export default function AtribuicaoSupervisorLista() {
     usuario.permissoes[RotasDto.ATRIBUICAO_RESPONSAVEIS_LISTA];
 
   const obterDres = useCallback(async () => {
-
     const retorno = await AbrangenciaServico.buscarDres().catch(e => erros(e));
 
     if (retorno?.data?.length) {
@@ -50,6 +52,7 @@ export default function AtribuicaoSupervisorLista() {
       setListaDres([]);
       setDresSelecionadas();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tipoResponsavel]);
 
   useEffect(() => {
@@ -60,18 +63,8 @@ export default function AtribuicaoSupervisorLista() {
     if (permissoesTela) {
       verificaSomenteConsulta(permissoesTela);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
-  useEffect(() => {
-    if (uesSemSupervisorCheck) {
-      montaListaUesSemSup(dresSelecionadas);
-    } else {
-      setSupervisoresSelecionados([]);
-      setUeSelecionada('');
-      setDesabilitarSupervisor(false);
-      onChangeDre(dresSelecionadas,null,true,tipoResponsavel);
-    }
-  }, [uesSemSupervisorCheck, tipoResponsavel]);
 
   const columns = [
     {
@@ -94,7 +87,9 @@ export default function AtribuicaoSupervisorLista() {
       dataIndex: 'tipoResponsavel',
       width: '20%',
       render: text => {
-        return text || <a className="texto-vermelho-negrito">NÃO ATRIBUIDO</a>;
+        return (
+          text || <span className="texto-vermelho-negrito">NÃO ATRIBUIDO</span>
+        );
       },
     },
     {
@@ -102,39 +97,39 @@ export default function AtribuicaoSupervisorLista() {
       dataIndex: 'responsavel',
       width: '35%',
       render: text => {
-        return text || <a className="texto-vermelho-negrito">NÃO ATRIBUIDO</a>;
+        return (
+          text || <span className="texto-vermelho-negrito">NÃO ATRIBUIDO</span>
+        );
       },
     },
   ];
-
-  function onClickRow(row) {
-    if (!permissoesTela.podeAlterar) return;
-
-    onClickEditar(row.responsavelId,row.tipoResponsavelId,row.ueid);
-  }
 
   function onClickVoltar() {
     history.push('/');
   }
 
-  function onClickEditar(responsavelId,tipoResponsavelId,codigoUe) {
+  function onClickEditar(responsavelId, tipoResponsavelId, codigoUe) {
     if (!permissoesTela.podeAlterar) return;
 
-    var tipoResp = tipoResponsavel ?? tipoResponsavelId;
+    const tipoResp = tipoResponsavel ?? tipoResponsavelId;
     let path = RotasDto.ATRIBUICAO_RESPONSAVEIS;
     if (dresSelecionadas) {
       path = `${path}/${dresSelecionadas}`;
       if (responsavelId && tipoResp && codigoUe) {
         path = `${path}/${responsavelId}/${tipoResp}/${codigoUe}`;
-      }
-      else if (!responsavelId && tipoResp && !codigoUe) {
+      } else if (!responsavelId && tipoResp && !codigoUe) {
         path = `${path}/${tipoResp}`;
-      }
-      else if(!responsavelId && tipoResp && codigoUe){
+      } else if (!responsavelId && tipoResp && codigoUe) {
         path = `${path}/0/${tipoResp}/${codigoUe}`;
       }
     }
     history.push(path);
+  }
+
+  function onClickRow(row) {
+    if (!permissoesTela.podeAlterar) return;
+
+    onClickEditar(row.responsavelId, row.tipoResponsavelId, row.ueid);
   }
 
   function onClickNovaAtribuicao() {
@@ -158,54 +153,22 @@ export default function AtribuicaoSupervisorLista() {
       setUesSemSupervisorCheck(false);
     }
   }
-  const montaListaUesSemSup = useCallback((dre) => {
 
-    setSupervisoresSelecionados([]);
-    setUeSelecionada('');
-    setDesabilitarSupervisor(true);
-    consultarApi(dre,tipoResponsavel,ueSelecionada,supervisoresSelecionados, uesSemSupervisorCheck);
-  }, [tipoResponsavel, uesSemSupervisorCheck]);
-
-  const onChangeDre = useCallback(async (dre, changeUe,chamarApi=true,tipoRes) => {
-
-    if (!changeUe) {
-      setListaSupervisores([]);
-      setSupervisoresSelecionados([]);
-    }
-    setListaUes([]);
-    setUeSelecionada('');
-    if (dre) {
-      if(chamarApi)
-        consultarApi(dre,tipoRes || tipoResponsavel,ueSelecionada,supervisoresSelecionados);
-    } else {
-      setListaFiltroAtribuicao([]);
-      setPaginaAtual(1);
-      setUesSemSupervisorCheck(false);
-    }
-
-    setDresSelecionadas(dre);
-    if (dre) {
-      obterResponsaveis(dre,tipoRes || tipoResponsavel);
-      carregarUes(dre);
-    }
-
-  }, [tipoResponsavel, uesSemSupervisorCheck]);
-
-function montarListaAtribuicao(lista) {
+  function montarListaAtribuicao(lista) {
     if (lista?.length) {
       const dadosAtribuicao = [];
       lista.forEach(item => {
         const contId = dadosAtribuicao.length + 1;
-       dadosAtribuicao.push({
-        id : contId,
-        atribuicaoId :item.id,
-        escola: item.ueNome,
-        responsavel: item.responsavelId ? item.responsavel : '',
-        responsavelId: item.responsavelId,
-        tipoResponsavel: item.tipoResponsavel,
-        tipoResponsavelId: item.tipoResponsavelId,
-        ueid : item.ueId
-      });
+        dadosAtribuicao.push({
+          id: contId,
+          atribuicaoId: item.id,
+          escola: item.ueNome,
+          responsavel: item.responsavelId ? item.responsavel : '',
+          responsavelId: item.responsavelId,
+          tipoResponsavel: item.tipoResponsavel,
+          tipoResponsavelId: item.tipoResponsavelId,
+          ueid: item.ueId,
+        });
       });
       setListaFiltroAtribuicao(dadosAtribuicao);
       setPaginaAtual(1);
@@ -215,98 +178,43 @@ function montarListaAtribuicao(lista) {
     }
   }
 
-  async function carregarUes(dre) {
-
-    const ues = await api.get(`/v1/supervisores/lista-ues/${dre}`);
-    if (ues.data) {
-      setListaUes(ues.data);
-    } else {
-      setListaUes([]);
-    }
-  }
-
-  async function onChangeSupervisores(sup) {
-
-    setUesSemSupervisorCheck(false);
-    if (sup && sup.length) {
-      setUeSelecionada([]);
-      setSupervisoresSelecionados(sup);
-    } else {
-      setSupervisoresSelecionados([]);
-      setUeSelecionada([]);
-      setListaFiltroAtribuicao([]);
-      setPaginaAtual(1);
-    }
-    consultarApi(dresSelecionadas,tipoResponsavel,ueSelecionada,sup.toString(),uesSemSupervisorCheck);
-  }
-
-  async function onChangeUes(ue) {
-
-    if (ue) {
-      setDesabilitarSupervisor(true);
-      setSupervisoresSelecionados([]);
-      setUeSelecionada(ue);
-    } else {
-      setUeSelecionada('');
-      setDesabilitarSupervisor(false);
-      onChangeDre(dresSelecionadas, true,false);
-    }
-    consultarApi(dresSelecionadas,tipoResponsavel,ue,supervisoresSelecionados,uesSemSupervisorCheck);
-  }
-
-  const onChangeTipoResponsavel = async valor => {
-
-    if(valor==null){
-      setUesSemSupervisorCheck(false);
-    }
-    setSupervisoresSelecionados();
-    setListaSupervisores([]);
-    setTipoResponsavel(valor);
-    consultarApi(dresSelecionadas,valor,ueSelecionada,supervisoresSelecionados,uesSemSupervisorCheck);
-  };
-
-  async function consultarApi(dre,codigoTipo,ue,supervisor, check){
+  async function consultarApi(dre, codigoTipo, ue, supervisor, check) {
     setCarregandoLista(true);
-    await api.get('/v1/supervisores/vinculo-lista', {
-      params: {
-        dreCodigo: dre,
-        tipoCodigo: codigoTipo || tipoResponsavel,
-        ueCodigo: ue,
-        supervisorId: supervisor,
-        ueSemResponsavel: check || uesSemSupervisorCheck
-      },
-    }).then(dados => {
-      montarListaAtribuicao(dados.data);
-      setCarregandoLista(false);
-    });
+    await api
+      .get('/v1/supervisores/vinculo-lista', {
+        params: {
+          dreCodigo: dre,
+          tipoCodigo: codigoTipo || tipoResponsavel,
+          ueCodigo: ue,
+          supervisorId: supervisor,
+          ueSemResponsavel: check || uesSemSupervisorCheck,
+        },
+      })
+      .then(dados => {
+        montarListaAtribuicao(dados.data);
+        setCarregandoLista(false);
+      });
   }
-  const obterTipoResponsavel = useCallback(async () => {
 
-    const resposta = await ServicoResponsaveis.obterTipoReponsavel().catch(e =>
-      erros(e)
-    );
-
-    if (resposta?.data?.length) {
-      setListaTipoResponsavel(resposta.data);
-      if (resposta?.data?.length === 1) {
-        setTipoResponsavel(resposta.data[0]?.codigo?.toString());
-      } else {
-        consultarApi(dresSelecionadas,null,ueSelecionada,supervisoresSelecionados,uesSemSupervisorCheck);
-      }
-    } else {
-      setListaTipoResponsavel([]);
-    }
-  }, [dresSelecionadas, ueSelecionada, supervisoresSelecionados, uesSemSupervisorCheck]);
-
-  useEffect(() => {
-    if (dresSelecionadas && !listaTipoResponsavel?.length) {
-      obterTipoResponsavel();
-    }
-  }, [dresSelecionadas, listaTipoResponsavel, obterTipoResponsavel]);
+  const montaListaUesSemSup = useCallback(
+    dre => {
+      setSupervisoresSelecionados([]);
+      setUeSelecionada('');
+      setDesabilitarSupervisor(true);
+      consultarApi(
+        dre,
+        tipoResponsavel,
+        ueSelecionada,
+        supervisoresSelecionados,
+        uesSemSupervisorCheck
+      );
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [tipoResponsavel, uesSemSupervisorCheck]
+  );
 
   const obterResponsaveis = useCallback(
-    async (dre,tipoResp) => {
-
+    async (dre, tipoResp) => {
       const tipoSelecionado = tipoResp || tipoResponsavel;
 
       if (!dre || !tipoSelecionado) return;
@@ -317,7 +225,7 @@ function montarListaAtribuicao(lista) {
         tipoSelecionado
       )
         .catch(e => erros(e))
-        .finally(() =>{
+        .finally(() => {
           setCarregandoResponsavel(false);
         });
 
@@ -336,8 +244,150 @@ function montarListaAtribuicao(lista) {
     [dresSelecionadas, tipoResponsavel]
   );
 
-  useEffect(() => {
+  async function carregarUes(dre) {
+    const ues = await api.get(`/v1/supervisores/lista-ues/${dre}`);
+    if (ues.data) {
+      setListaUes(ues.data);
+    } else {
+      setListaUes([]);
+    }
+  }
 
+  const onChangeDre = useCallback(
+    async (dre, changeUe, chamarApi = true, tipoRes) => {
+      if (!changeUe) {
+        setListaSupervisores([]);
+        setSupervisoresSelecionados([]);
+      }
+      setListaUes([]);
+      setUeSelecionada('');
+      if (dre) {
+        if (chamarApi)
+          consultarApi(
+            dre,
+            tipoRes || tipoResponsavel,
+            ueSelecionada,
+            supervisoresSelecionados
+          );
+      } else {
+        setListaFiltroAtribuicao([]);
+        setPaginaAtual(1);
+        setUesSemSupervisorCheck(false);
+      }
+
+      setDresSelecionadas(dre);
+      if (dre) {
+        obterResponsaveis(dre, tipoRes || tipoResponsavel);
+        carregarUes(dre);
+      }
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [tipoResponsavel, uesSemSupervisorCheck]
+  );
+
+  useEffect(() => {
+    if (uesSemSupervisorCheck) {
+      montaListaUesSemSup(dresSelecionadas);
+    } else {
+      setSupervisoresSelecionados([]);
+      setUeSelecionada('');
+      setDesabilitarSupervisor(false);
+      onChangeDre(dresSelecionadas, null, true, tipoResponsavel);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [uesSemSupervisorCheck, tipoResponsavel]);
+
+  async function onChangeSupervisores(sup) {
+    setUesSemSupervisorCheck(false);
+    if (sup && sup.length) {
+      setUeSelecionada([]);
+      setSupervisoresSelecionados(sup);
+    } else {
+      setSupervisoresSelecionados([]);
+      setUeSelecionada([]);
+      setListaFiltroAtribuicao([]);
+      setPaginaAtual(1);
+    }
+    consultarApi(
+      dresSelecionadas,
+      tipoResponsavel,
+      ueSelecionada,
+      sup.toString(),
+      uesSemSupervisorCheck
+    );
+  }
+
+  async function onChangeUes(ue) {
+    if (ue) {
+      setDesabilitarSupervisor(true);
+      setSupervisoresSelecionados([]);
+      setUeSelecionada(ue);
+    } else {
+      setUeSelecionada('');
+      setDesabilitarSupervisor(false);
+      onChangeDre(dresSelecionadas, true, false);
+    }
+    consultarApi(
+      dresSelecionadas,
+      tipoResponsavel,
+      ue,
+      supervisoresSelecionados,
+      uesSemSupervisorCheck
+    );
+  }
+
+  const onChangeTipoResponsavel = async valor => {
+    if (valor == null) {
+      setUesSemSupervisorCheck(false);
+    }
+    setSupervisoresSelecionados();
+    setListaSupervisores([]);
+    setTipoResponsavel(valor);
+    consultarApi(
+      dresSelecionadas,
+      valor,
+      ueSelecionada,
+      supervisoresSelecionados,
+      uesSemSupervisorCheck
+    );
+  };
+
+  const obterTipoResponsavel = useCallback(async () => {
+    const resposta = await ServicoResponsaveis.obterTipoReponsavel().catch(e =>
+      erros(e)
+    );
+
+    if (resposta?.data?.length) {
+      setListaTipoResponsavel(resposta.data);
+      if (resposta?.data?.length === 1) {
+        setTipoResponsavel(resposta.data[0]?.codigo?.toString());
+      } else {
+        consultarApi(
+          dresSelecionadas,
+          null,
+          ueSelecionada,
+          supervisoresSelecionados,
+          uesSemSupervisorCheck
+        );
+      }
+    } else {
+      setListaTipoResponsavel([]);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [
+    dresSelecionadas,
+    ueSelecionada,
+    supervisoresSelecionados,
+    uesSemSupervisorCheck,
+  ]);
+
+  useEffect(() => {
+    if (dresSelecionadas && !listaTipoResponsavel?.length) {
+      obterTipoResponsavel();
+    }
+  }, [dresSelecionadas, listaTipoResponsavel, obterTipoResponsavel]);
+
+  useEffect(() => {
     if (tipoResponsavel && dresSelecionadas) {
       obterResponsaveis(dresSelecionadas);
     } else {
@@ -348,138 +398,148 @@ function montarListaAtribuicao(lista) {
 
   return (
     <>
-      <Cabecalho pagina="Atribuição de responsáveis" />
-      <Card>
-        <div className="col-md-12 d-flex justify-content-end pb-4">
-          <Button
-            label="Voltar"
-            icon="arrow-left"
-            color={Colors.Azul}
-            border
-            className="mr-2"
-            onClick={onClickVoltar}
-          />
-          <Button
-            label="Nova Atribuição"
-            color={Colors.Roxo}
-            border
-            bold
-            disabled={!permissoesTela?.podeIncluir}
-            className="mr-2"
-            onClick={onClickNovaAtribuicao}
-          />
-        </div>
-
-        <div className="col-md-12 pb-2">
-          <CheckboxComponent
-            className="mb-2"
-            label="Exibir apenas UEs sem responsável"
-            onChangeCheckbox={onChangeUesSemSup}
-            disabled={
-              carregandoLista || carregandoResponsavel ||
-              !dresSelecionadas ||
-              !tipoResponsavel ||
-              !permissoesTela?.podeConsultar ||
-              supervisoresSelecionados?.length > 0
-            }
-            checked={uesSemSupervisorCheck}
-          />
-        </div>
-        <div className="col-sm-12 col-md-6 pb-2">
-          <SelectComponent
-            label="Diretoria Regional de Educação (DRE)"
-            name="dres-atribuicao-sup"
-            id="dres-atribuicao-sup"
-            lista={listaDres}
-            valueOption="codigo"
-            valueText="nome"
-            onChange={onChangeDre}
-            valueSelect={dresSelecionadas}
-            placeholder="Diretoria Regional de Educação (DRE)"
-            disabled={carregandoLista || carregandoResponsavel || listaDres?.length === 1 || !permissoesTela.podeConsultar}
-            allowClear={false}
-            showSearch
-          />
-        </div>
-        <div className="col-sm-12 col-md-6 pb-2">
-          <SelectComponent
-            id="SGP_SELECT_TIPO_RESPONSAVEL"
-            label="Tipo de responsável"
-            lista={listaTipoResponsavel}
-            valueOption="codigo"
-            valueText="descricao"
-            disabled={
-              carregandoLista ||
-              carregandoResponsavel ||
-              !dresSelecionadas ||
-              listaTipoResponsavel?.length === 1 ||
-              !permissoesTela?.podeConsultar
-            }
-            onChange={onChangeTipoResponsavel}
-            valueSelect={tipoResponsavel}
-            placeholder="Tipo de responsável"
-            showSearch
-          />
-        </div>
-        <div className="col-md-12 pb-2">
-          <Loader loading={carregandoResponsavel} ignorarTip>
-            <SelectComponent
-              label="Responsável"
-              name="supervisores-list"
-              id="supervisores-list"
-              lista={listaSupervisores}
-              valueOption="supervisorId"
-              valueText="descricaoCodigo"
-              onChange={onChangeSupervisores}
-              valueSelect={supervisoresSelecionados}
-              multiple
-              placeholder="SELECIONE O RESPONSÁVEL"
-              disabled={
-                carregandoLista ||
-                carregandoResponsavel ||
-                !tipoResponsavel ||
-                desabilitarSupervisor ||
-                !permissoesTela.podeConsultar
-              }
-              showSearch
+      <Cabecalho pagina="Atribuição de responsáveis">
+        <Row gutter={[8, 8]} type="flex">
+          <Col>
+            <BotaoVoltarPadrao onClick={() => onClickVoltar()} />
+          </Col>
+          <Col>
+            <Button
+              id={SGP_BUTTON_NOVO}
+              label="Nova Atribuição"
+              color={Colors.Roxo}
+              border
+              bold
+              disabled={!permissoesTela?.podeIncluir}
+              onClick={onClickNovaAtribuicao}
             />
-          </Loader>
-        </div>
-        <div className="col-sm-12 col-md-6 pb-2">
-          <SelectComponent
-            label="Unidade Escolar (UE)"
-            className="col-md-12"
-            name="ues-list"
-            id="ues-list"
-            lista={listaUes}
-            valueOption="codigo"
-            valueText="nome"
-            onChange={onChangeUes}
-            valueSelect={ueSelecionada || []}
-            placeholder="Unidade Escolar (UE)"
-            showSearch
-            disabled={
-              carregandoLista || carregandoResponsavel ||  !dresSelecionadas || !permissoesTela.podeConsultar
-            }
-          />
-        </div>
+          </Col>
+        </Row>
+      </Cabecalho>
+      <Card>
+        <div className="col-md-12">
+          <div className="row">
+            <div className="col-md-12 pb-2">
+              <CheckboxComponent
+                className="mb-2"
+                label="Exibir apenas UEs sem responsável"
+                onChangeCheckbox={onChangeUesSemSup}
+                disabled={
+                  carregandoLista ||
+                  carregandoResponsavel ||
+                  !dresSelecionadas ||
+                  !tipoResponsavel ||
+                  !permissoesTela?.podeConsultar ||
+                  supervisoresSelecionados?.length > 0
+                }
+                checked={uesSemSupervisorCheck}
+              />
+            </div>
+            <div className="col-sm-12 col-md-6 pb-2">
+              <SelectComponent
+                label="Diretoria Regional de Educação (DRE)"
+                name="dres-atribuicao-sup"
+                id="dres-atribuicao-sup"
+                lista={listaDres}
+                valueOption="codigo"
+                valueText="nome"
+                onChange={onChangeDre}
+                valueSelect={dresSelecionadas}
+                placeholder="Diretoria Regional de Educação (DRE)"
+                disabled={
+                  carregandoLista ||
+                  carregandoResponsavel ||
+                  listaDres?.length === 1 ||
+                  !permissoesTela.podeConsultar
+                }
+                allowClear={false}
+                showSearch
+              />
+            </div>
+            <div className="col-sm-12 col-md-6 pb-2">
+              <SelectComponent
+                id="SGP_SELECT_TIPO_RESPONSAVEL"
+                label="Tipo de responsável"
+                lista={listaTipoResponsavel}
+                valueOption="codigo"
+                valueText="descricao"
+                disabled={
+                  carregandoLista ||
+                  carregandoResponsavel ||
+                  !dresSelecionadas ||
+                  listaTipoResponsavel?.length === 1 ||
+                  !permissoesTela?.podeConsultar
+                }
+                onChange={onChangeTipoResponsavel}
+                valueSelect={tipoResponsavel}
+                placeholder="Tipo de responsável"
+                showSearch
+              />
+            </div>
+            <div className="col-md-12 pb-2">
+              <Loader loading={carregandoResponsavel} ignorarTip>
+                <SelectComponent
+                  label="Responsável"
+                  name="supervisores-list"
+                  id="supervisores-list"
+                  lista={listaSupervisores}
+                  valueOption="supervisorId"
+                  valueText="descricaoCodigo"
+                  onChange={onChangeSupervisores}
+                  valueSelect={supervisoresSelecionados}
+                  multiple
+                  placeholder="SELECIONE O RESPONSÁVEL"
+                  disabled={
+                    carregandoLista ||
+                    carregandoResponsavel ||
+                    !tipoResponsavel ||
+                    desabilitarSupervisor ||
+                    !permissoesTela.podeConsultar
+                  }
+                  showSearch
+                />
+              </Loader>
+            </div>
+            <div className="col-sm-12 col-md-6 pb-2">
+              <SelectComponent
+                label="Unidade Escolar (UE)"
+                className="col-md-12"
+                name="ues-list"
+                id="ues-list"
+                lista={listaUes}
+                valueOption="codigo"
+                valueText="nome"
+                onChange={onChangeUes}
+                valueSelect={ueSelecionada || []}
+                placeholder="Unidade Escolar (UE)"
+                showSearch
+                disabled={
+                  carregandoLista ||
+                  carregandoResponsavel ||
+                  !dresSelecionadas ||
+                  !permissoesTela.podeConsultar
+                }
+              />
+            </div>
 
-        <div className="col-md-12 pt-4">
-          <Loader loading={carregandoLista}>
-          <DataTable
-            onClickRow={permissoesTela.podeAlterar && onClickRow}
-            columns={columns}
-            dataSource={listaFiltroAtribuicao}
-            semHover
-            pagination={{
-              pageSize: 10,
-              total: listaFiltroAtribuicao?.length,
-              defaultCurrent: 1,
-              current: paginaAtual,
-              onChange: p => setPaginaAtual(p),
-            }}
-          />
-          </Loader>
+            <div className="col-md-12 pt-4">
+              <Loader loading={carregandoLista}>
+                <DataTable
+                  onClickRow={permissoesTela.podeAlterar && onClickRow}
+                  columns={columns}
+                  dataSource={listaFiltroAtribuicao}
+                  semHover
+                  pagination={{
+                    pageSize: 10,
+                    total: listaFiltroAtribuicao?.length,
+                    defaultCurrent: 1,
+                    current: paginaAtual,
+                    onChange: p => setPaginaAtual(p),
+                  }}
+                />
+              </Loader>
+            </div>
+          </div>
         </div>
       </Card>
     </>

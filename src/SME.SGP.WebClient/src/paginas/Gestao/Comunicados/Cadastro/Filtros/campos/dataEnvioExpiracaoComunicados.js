@@ -35,6 +35,7 @@ const DataEnvioExpiracaoComunicados = ({
           }
           form={form}
           name="dataEnvio"
+          labelRequired
         />
       </div>
       <div className="col-sm-12 col-md-6 col-lg-4 mb-2">
@@ -48,6 +49,7 @@ const DataEnvioExpiracaoComunicados = ({
           desabilitado={desabilitar}
           form={form}
           name="dataExpiracao"
+          labelRequired
         />
       </div>
     </>

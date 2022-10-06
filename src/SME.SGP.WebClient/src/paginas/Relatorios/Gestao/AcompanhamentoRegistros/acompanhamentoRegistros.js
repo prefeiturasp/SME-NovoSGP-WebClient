@@ -2,10 +2,8 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { Col, Row } from 'antd';
 
 import {
-  Button,
   Card,
   CheckboxComponent,
-  Colors,
   Loader,
   Localizador,
   SelectComponent,
@@ -24,6 +22,7 @@ import {
 import { ModalidadeDTO } from '~/dtos';
 import { onchangeMultiSelect, ordenarListaMaiorParaMenor } from '~/utils';
 import { OPCAO_TODOS } from '~/constantes';
+import BotoesAcaoRelatorio from '~/componentes-sgp/botoesAcaoRelatorio';
 
 const AcompanhamentoRegistros = () => {
   const [anoAtual] = useState(window.moment().format('YYYY'));
@@ -62,6 +61,7 @@ const AcompanhamentoRegistros = () => {
   const [desabilitarBtnGerar, setDesabilitarBtnGerar] = useState(true);
   const [carregandoBimestres, setCarregandoBimestres] = useState(false);
   const [consideraHistorico, setConsideraHistorico] = useState(false);
+  const [modoEdicao, setModoEdicao] = useState(false);
 
   const limparCampos = () => {
     setModalidadeId();
@@ -77,6 +77,7 @@ const AcompanhamentoRegistros = () => {
     setDreId();
     setUeId();
     setProfessorCodigo();
+    setModoEdicao(true);
   };
 
   const onChangeAnoLetivo = async valor => {
@@ -84,6 +85,7 @@ const AcompanhamentoRegistros = () => {
     setUeId();
     setAnoLetivo(valor);
     limparCampos();
+    setModoEdicao(true);
   };
 
   const obterAnosLetivos = useCallback(async () => {
@@ -135,6 +137,7 @@ const AcompanhamentoRegistros = () => {
     setUeId();
     setUeId();
     limparCampos();
+    setModoEdicao(true);
   };
 
   const obterDres = useCallback(async () => {
@@ -172,6 +175,7 @@ const AcompanhamentoRegistros = () => {
   const onChangeUe = valor => {
     setUeId(valor);
     limparCampos();
+    setModoEdicao(true);
   };
 
   const obterUes = useCallback(
@@ -216,6 +220,7 @@ const AcompanhamentoRegistros = () => {
   const onChangeModalidade = valor => {
     limparCampos();
     setModalidadeId(valor);
+    setModoEdicao(true);
   };
 
   const obterModalidades = async (ue, ano) => {
@@ -253,6 +258,7 @@ const AcompanhamentoRegistros = () => {
   const onChangeSemestre = valor => {
     setSemestre(valor);
     setClicouBotaoGerar(false);
+    setModoEdicao(true);
   };
 
   const obterSemestres = useCallback(
@@ -305,6 +311,7 @@ const AcompanhamentoRegistros = () => {
     setComponentesCurriculares();
     setBimestres();
     setClicouBotaoGerar(false);
+    setModoEdicao(true);
   };
 
   const obterTurmas = useCallback(
@@ -355,6 +362,7 @@ const AcompanhamentoRegistros = () => {
   const onChangeComponenteCurricular = valor => {
     setComponentesCurriculares(valor);
     setClicouBotaoGerar(false);
+    setModoEdicao(true);
   };
 
   const obterComponentesCurriculares = useCallback(
@@ -423,6 +431,7 @@ const AcompanhamentoRegistros = () => {
   const onChangeBimestre = valor => {
     setBimestres(valor);
     setClicouBotaoGerar(false);
+    setModoEdicao(true);
   };
 
   const obterBimestres = useCallback(async () => {
@@ -453,8 +462,11 @@ const AcompanhamentoRegistros = () => {
   }, [modalidadeId, obterBimestres]);
 
   const onChangeLocalizador = valores => {
-    setProfessorCodigo(valores?.professorRf);
-    setClicouBotaoGerar(false);
+    if (valores?.professorRf) {
+      setProfessorCodigo(valores?.professorRf);
+      setClicouBotaoGerar(false);
+      setModoEdicao(true);
+    }
   };
 
   const cancelar = () => {
@@ -475,6 +487,8 @@ const AcompanhamentoRegistros = () => {
     setTurmasCodigo(undefined);
     setBimestres();
     setProfessorCodigo();
+
+    setModoEdicao(false);
   };
 
   useEffect(() => {
@@ -535,46 +549,21 @@ const AcompanhamentoRegistros = () => {
 
   return (
     <>
-      <Cabecalho pagina="Relatório de acompanhamento dos registros pedagógicos" />
-      <Card>
+      <Cabecalho pagina="Relatório de acompanhamento dos registros pedagógicos">
+        <BotoesAcaoRelatorio
+          onClickVoltar={() => {
+            history.push('/');
+          }}
+          onClickCancelar={cancelar}
+          onClickGerar={gerar}
+          desabilitarBtnGerar={desabilitarBtnGerar}
+          carregandoGerar={carregandoGerar}
+          temLoaderBtnGerar
+          modoEdicao={modoEdicao}
+        />
+      </Cabecalho>
+      <Card padding="24px 24px">
         <Col span={24}>
-          <Row gutter={[16, 8]} type="flex" justify="end">
-            <Col>
-              <Button
-                id="btn-voltar-rel-acompanhamento-registros"
-                label="Voltar"
-                icon="arrow-left"
-                color={Colors.Azul}
-                border
-                onClick={() => {
-                  history.push('/');
-                }}
-              />
-            </Col>
-            <Col>
-              <Button
-                id="btn-cancelar-rel-acompanhamento-registros"
-                label="Cancelar"
-                color={Colors.Azul}
-                border
-                bold
-                onClick={cancelar}
-              />
-            </Col>
-            <Col>
-              <Loader loading={carregandoGerar} ignorarTip>
-                <Button
-                  id="btn-gerar-rel-acompanhamento-registros"
-                  icon="print"
-                  label="Gerar"
-                  color={Colors.Roxo}
-                  bold
-                  onClick={gerar}
-                  disabled={desabilitarBtnGerar}
-                />
-              </Loader>
-            </Col>
-          </Row>
           <Row gutter={[16, 8]}>
             <Col sm={24}>
               <CheckboxComponent

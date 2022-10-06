@@ -1,9 +1,8 @@
 import React, { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { Cabecalho } from '~/componentes-sgp';
-import Button from '~/componentes/button';
+import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
 import Card from '~/componentes/card';
-import { Colors } from '~/componentes/colors';
 import { URL_HOME } from '~/constantes/url';
 import { limparDadosDashboardDevolutivas } from '~/redux/modulos/dashboardDevolutivas/actions';
 import history from '~/servicos/history';
@@ -27,21 +26,11 @@ const DashboardDevolutivas = () => {
   return (
     <>
       <DashboardDevolutivasAlertaInfantil />
-      <Cabecalho pagina="Dashboard devolutivas" />
+      <Cabecalho pagina="Dashboard devolutivas">
+        <BotaoVoltarPadrao onClick={() => onClickVoltar()} />
+      </Cabecalho>
       <Card>
         <div className="col-md-12">
-          <div className="row">
-            <div className="col-md-12 d-flex justify-content-end pb-4">
-              <Button
-                id="btn-voltar"
-                label="Voltar"
-                icon="arrow-left"
-                color={Colors.Azul}
-                border
-                onClick={onClickVoltar}
-              />
-            </div>
-          </div>
           <DashboardDevolutivasFiltros />
           <div className="row">
             <div className="col-md-12 mt-2">

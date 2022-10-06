@@ -1,3 +1,5 @@
+import { Col, Row } from 'antd';
+import _ from 'lodash';
 import moment from 'moment';
 import PropTypes from 'prop-types';
 import React, { useCallback, useEffect, useState } from 'react';
@@ -17,6 +19,11 @@ import {
   SelectComponent,
 } from '~/componentes';
 import { Cabecalho, Paginacao } from '~/componentes-sgp';
+import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
+import {
+  SGP_BUTTON_CANCELAR,
+  SGP_BUTTON_SALVAR,
+} from '~/componentes-sgp/filtro/idsCampos';
 import { RotasDto } from '~/dtos';
 import {
   confirmar,
@@ -292,27 +299,44 @@ const RegistroItineranciaAEECadastro = ({ match }) => {
         objetivoBase = objetivo;
         objetivoBase.checked = true;
       });
+    } else {
+      setObjetivosSelecionados([]);
     }
 
     if (itinerancia?.ueId) {
       setUeId(String(itinerancia.ueId));
+    } else if (listaUes?.length > 1) {
+      setUeId();
     }
+
     if (itinerancia?.dreId) {
       setDreId(String(itinerancia.dreId));
+    } else if (listaDres?.length > 1) {
+      setDreId();
     }
+
     if (itinerancia.questoes?.length) {
       setQuestoesItinerancia(itinerancia.questoes);
+    } else {
+      setQuestoesItinerancia([]);
     }
+
     if (itinerancia.alunos?.length) {
       setAlunosSelecionados(itinerancia.alunos);
+    } else {
+      setAlunosSelecionados([]);
     }
 
     if (itinerancia.tipoCalendarioId) {
       setTipoCalendarioSelecionado(String(itinerancia.tipoCalendarioId));
+    } else if (listaCalendario?.length > 1) {
+      setTipoCalendarioSelecionado();
     }
 
     if (itinerancia.eventoId) {
       setEventoId(String(itinerancia.eventoId));
+    } else if (listaEvento?.length > 1) {
+      setEventoId();
     }
   };
 
@@ -329,7 +353,11 @@ const RegistroItineranciaAEECadastro = ({ match }) => {
       const ehParaCancelar = await perguntarAntesDeCancelar();
       if (ehParaCancelar) {
         if (itineranciaId) {
-          construirItineranciaAlteracao(itineranciaAlteracao);
+          setCarregandoGeral(true);
+          construirItineranciaAlteracao(_.cloneDeep(itineranciaAlteracao));
+          setTimeout(() => {
+            setCarregandoGeral(false);
+          }, 2000);
         } else {
           resetTela();
         }
@@ -346,8 +374,8 @@ const RegistroItineranciaAEECadastro = ({ match }) => {
       ).catch(e => erros(e));
       if (result?.data && result?.status === 200) {
         const itinerancia = result.data;
-        setItineranciaAlteracao(itinerancia);
-        construirItineranciaAlteracao(itinerancia);
+        setItineranciaAlteracao(_.cloneDeep(itinerancia));
+        construirItineranciaAlteracao(_.cloneDeep(itinerancia));
         setSomenteConsulta(itinerancia.criadoRF !== usuario.rf);
         setSomenteConsultaManual(itinerancia.criadoRF !== usuario.rf);
         setAuditoria(itinerancia.auditoria);
@@ -359,6 +387,7 @@ const RegistroItineranciaAEECadastro = ({ match }) => {
     } else {
       obterQuestoes();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [itineranciaId]);
 
   const perguntarAntesDeRemoverAluno = async () => {
@@ -519,6 +548,7 @@ const RegistroItineranciaAEECadastro = ({ match }) => {
       setEventoId();
       setListaEvento([]);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tipoCalendarioSelecionado, listaUes, itineranciaId]);
 
   const selecionaEvento = evento => {
@@ -673,42 +703,38 @@ const RegistroItineranciaAEECadastro = ({ match }) => {
 
   return (
     <>
-      <Cabecalho pagina="Registro de itinerância" />
+      <Cabecalho pagina="Registro de itinerância">
+        <Row gutter={[8, 8]} type="flex">
+          <Col>
+            <BotaoVoltarPadrao onClick={() => onClickVoltar()} />
+          </Col>
+          <Col>
+            <Button
+              id={SGP_BUTTON_CANCELAR}
+              label="Cancelar"
+              color={Colors.Roxo}
+              border
+              bold
+              onClick={onClickCancelar}
+              disabled={!modoEdicao}
+            />
+          </Col>
+          <Col>
+            <Button
+              id={SGP_BUTTON_SALVAR}
+              label={match?.params?.id ? 'Alterar' : 'Salvar'}
+              color={Colors.Roxo}
+              border
+              bold
+              onClick={() => onClickSalvar()}
+              disabled={somenteConsulta || (match?.params?.id && !modoEdicao)}
+            />
+          </Col>
+        </Row>
+      </Cabecalho>
       <Loader loading={carregandoGeral}>
         <Card>
-          <div className="col-12 p-0">
-            <div className="row mb-5">
-              <div className="col-md-12 d-flex justify-content-end">
-                <Button
-                  id="btn-voltar-ata-diario-bordo"
-                  label="Voltar"
-                  icon="arrow-left"
-                  color={Colors.Azul}
-                  border
-                  className="mr-3"
-                  onClick={onClickVoltar}
-                />
-                <Button
-                  id="btn-cancelar-ata-diario-bordo"
-                  label="Cancelar"
-                  color={Colors.Roxo}
-                  border
-                  bold
-                  className="mr-3"
-                  onClick={onClickCancelar}
-                  disabled={!modoEdicao}
-                />
-                <Button
-                  id="btn-gerar-ata-diario-bordo"
-                  label="Salvar"
-                  color={Colors.Roxo}
-                  border
-                  bold
-                  onClick={() => onClickSalvar()}
-                  disabled={!modoEdicao || somenteConsulta}
-                />
-              </div>
-            </div>
+          <div className="col-12">
             {itineranciaId && (
               <div className="row mb-4">
                 <div className="col-sm-12 d-flex justify-content-between align-items-center">
@@ -746,6 +772,7 @@ const RegistroItineranciaAEECadastro = ({ match }) => {
                   onChange={onChangeDataVisita}
                   desabilitarData={desabilitarDataVisita}
                   desabilitado={desabilitarCamposPorPermissao()}
+                  allowClear={false}
                 />
               </div>
             </div>
@@ -758,7 +785,9 @@ const RegistroItineranciaAEECadastro = ({ match }) => {
                     lista={listaDres}
                     valueOption="id"
                     valueText="nome"
-                    disabled={listaDres?.length === 1}
+                    disabled={
+                      listaDres?.length === 1 || desabilitarCamposPorPermissao()
+                    }
                     onChange={onChangeDre}
                     valueSelect={dreId}
                     placeholder="Diretoria Regional De Educação (DRE)"
@@ -774,7 +803,9 @@ const RegistroItineranciaAEECadastro = ({ match }) => {
                     lista={listaUes}
                     valueOption="id"
                     valueText="nome"
-                    disabled={listaUes?.length === 1}
+                    disabled={
+                      listaUes?.length === 1 || desabilitarCamposPorPermissao()
+                    }
                     onChange={onChangeUe}
                     valueSelect={ueId}
                     placeholder="Unidade Escolar (UE)"
@@ -795,6 +826,7 @@ const RegistroItineranciaAEECadastro = ({ match }) => {
                     placeholder="Selecione um calendário"
                     showSearch
                     searchValue={false}
+                    disabled={desabilitarCamposPorPermissao()}
                   />
                 </Loader>
               </div>
@@ -811,6 +843,7 @@ const RegistroItineranciaAEECadastro = ({ match }) => {
                     placeholder="Selecione um evento"
                     showSearch
                     searchValue={false}
+                    disabled={desabilitarCamposPorPermissao()}
                   />
                 </Loader>
               </div>
@@ -905,23 +938,23 @@ const RegistroItineranciaAEECadastro = ({ match }) => {
                   </div>
                 </div>
               </>
+            ) : carregandoQuestoes || carregandoGeral ? (
+              <Loader loading tip="Carregando questões" />
             ) : (
               questoesItinerancia?.map(questao => {
                 return (
-                  <Loader loading={carregandoQuestoes}>
-                    <div className="row mb-4" key={questao.questaoId}>
-                      <div className="col-12">
-                        <JoditEditor
-                          label={questao.descricao}
-                          value={questao.resposta}
-                          name={NOME_CAMPO_QUESTAO + questao.questaoId}
-                          id={`editor-questao-${questao.questaoId}`}
-                          onChange={e => setQuestao(e, questao)}
-                          desabilitar={desabilitarCamposPorPermissao()}
-                        />
-                      </div>
+                  <div className="row mb-4" key={questao.questaoId}>
+                    <div className="col-12">
+                      <JoditEditor
+                        label={questao.descricao}
+                        value={questao.resposta}
+                        name={NOME_CAMPO_QUESTAO + questao.questaoId}
+                        id={`editor-questao-${questao.questaoId}`}
+                        onChange={e => setQuestao(e, questao)}
+                        desabilitar={desabilitarCamposPorPermissao()}
+                      />
                     </div>
-                  </Loader>
+                  </div>
                 );
               })
             )}

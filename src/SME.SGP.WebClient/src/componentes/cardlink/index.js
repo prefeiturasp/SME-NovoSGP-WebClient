@@ -42,7 +42,7 @@ const CardLink = props => {
 
   return (
     <DivCardLink
-      className={`${getCols()} px-2 ${classHidden}`}
+      className={`${getCols()} ${classHidden}`}
       style={{ cursor: `${disabled ? 'not-allowed' : ''}` }}
     >
       <LinkRouter
