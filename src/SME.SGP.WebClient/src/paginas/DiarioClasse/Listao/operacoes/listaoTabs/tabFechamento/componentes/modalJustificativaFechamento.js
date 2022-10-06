@@ -20,6 +20,7 @@ const ModalJustificativaFechamento = () => {
     setExibirLoaderGeral,
     dadosModalJustificativaFechamento,
     setDadosModalJustificativaFechamento,
+    setDadosIniciaisFechamento,
   } = useContext(ListaoContext);
 
   const usuario = useSelector(store => store.usuario);
@@ -67,7 +68,9 @@ const ModalJustificativaFechamento = () => {
       dadosFechamento,
       bimestreOperacoes,
       loaderGeral ? setExibirLoaderGeral : setExibirLoader,
-      componenteCurricular
+      componenteCurricular,
+      setDadosFechamento,
+      setDadosIniciaisFechamento
     );
 
     if (salvou && dadosModalJustificativaFechamento.acaoPosSalvar) {
@@ -169,6 +172,7 @@ const ModalJustificativaFechamento = () => {
                     }}
                     name="descricao"
                     permiteInserirArquivo={false}
+                    labelRequired
                   />
                 </fieldset>
               </div>
@@ -191,7 +195,6 @@ const ModalJustificativaFechamento = () => {
                   bold
                   border
                   className="mr-3 mt-2 padding-btn-confirmacao"
-                  disabled={!modoEdicao}
                   onClick={() => {
                     validaAntesDoSubmit(false);
                     setModoEdicao(true);

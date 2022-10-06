@@ -118,17 +118,21 @@ const CopiarConteudoListaoPlanoAula = props => {
         </ContainerListaCopiar>
       )}
 
-      <ModalCopiarConteudoPlanoAula
-        codigoComponenteCurricular={codigoComponenteCurricular}
-        exibirModal={exibirModal}
-        setExibirModal={setExibirModal}
-        setExibirLoaderModal={setExibirLoaderModal}
-        exibirLoaderModal={exibirLoaderModal}
-        copiar={copiar}
-        executarCopiarPadrao={!!dadosPlanoAtual?.id}
-        aposCopiarConteudo={aposCopiarConteudo}
-        planoAulaId={dadosPlanoAtual?.id}
-      />
+      {exibirModal ? (
+        <ModalCopiarConteudoPlanoAula
+          codigoComponenteCurricular={codigoComponenteCurricular}
+          exibirModal={exibirModal}
+          setExibirModal={setExibirModal}
+          setExibirLoaderModal={setExibirLoaderModal}
+          exibirLoaderModal={exibirLoaderModal}
+          copiar={copiar}
+          executarCopiarPadrao={!!dadosPlanoAtual?.id}
+          aposCopiarConteudo={aposCopiarConteudo}
+          planoAulaId={dadosPlanoAtual?.id}
+        />
+      ) : (
+        <></>
+      )}
     </>
   );
 };
@@ -136,7 +140,10 @@ const CopiarConteudoListaoPlanoAula = props => {
 CopiarConteudoListaoPlanoAula.propTypes = {
   desabilitar: PropTypes.bool,
   dadosPlanoAtual: PropTypes.oneOfType([PropTypes.any]),
-  codigoComponenteCurricular: PropTypes.string,
+  codigoComponenteCurricular: PropTypes.oneOfType([
+    PropTypes.number,
+    PropTypes.string,
+  ]),
   dadosPlanoAula: PropTypes.oneOfType([PropTypes.array]),
   setDadosPlanoAula: PropTypes.func,
   indexPlano: PropTypes.number,

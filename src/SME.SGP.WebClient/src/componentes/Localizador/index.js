@@ -41,6 +41,7 @@ function Localizador({
   buscarCaracterPartir,
   ueId,
   buscarPorAbrangencia,
+  labelRequired,
 }) {
   const usuario = useSelector(store => store.usuario);
   const [dataSource, setDataSource] = useState([]);
@@ -49,7 +50,8 @@ function Localizador({
     rf: false,
     nome: false,
   });
-  const { ehPerfilProfessor, rf } = usuario;
+  const { ehPerfilProfessor } = usuario;
+  const usuarioRf = usuario?.rf;
   const [exibirLoader, setExibirLoader] = useState(false);
 
   const validacaoDesabilitaPerfilProfessor = () => {
@@ -71,9 +73,9 @@ function Localizador({
       }, 200);
     }
 
-    if (valor.length === 0){
+    if (valor.length === 0) {
       setDataSource([]);
-      return
+      return;
     }
 
     if (valor.length < buscarCaracterPartir) return;
@@ -144,6 +146,7 @@ function Localizador({
         });
       }
     },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [anoLetivo, buscarOutrosCargos, mensagemErroConsultaRF, dreId, ueId]
   );
 
@@ -183,6 +186,7 @@ function Localizador({
         usuarioId: '',
       });
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [rfEdicao]);
 
   useEffect(() => {
@@ -193,6 +197,7 @@ function Localizador({
         ...pessoaSelecionada,
       });
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pessoaSelecionada]);
 
   useEffect(() => {
@@ -202,13 +207,15 @@ function Localizador({
         setPessoaSelecionada(form.initialValues);
       }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [form?.initialValues]);
 
   useEffect(() => {
     if (dreId && validacaoDesabilitaPerfilProfessor()) {
-      onBuscarPorRF({ rf });
+      onBuscarPorRF({ rf: usuarioRf });
     }
-  }, [dreId, ehPerfilProfessor, rf, onBuscarPorRF]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [dreId, ehPerfilProfessor, usuarioRf, onBuscarPorRF]);
 
   useEffect(() => {
     if (form) {
@@ -221,6 +228,7 @@ function Localizador({
         });
       }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [form?.values]);
 
   useEffect(() => {
@@ -236,7 +244,13 @@ function Localizador({
   return (
     <>
       <Grid cols={4} className={classesRF}>
-        {showLabel && <Label text={labelRF} control="professorRf" />}
+        {showLabel && (
+          <Label
+            text={labelRF}
+            control="professorRf"
+            isRequired={labelRequired}
+          />
+        )}
         <InputRF
           pessoaSelecionada={pessoaSelecionada}
           onSelect={onBuscarPorRF}
@@ -253,7 +267,13 @@ function Localizador({
         />
       </Grid>
       <Grid className="pr-0" cols={colunasNome}>
-        {showLabel && <Label text={labelNome} control="professorNome" />}
+        {showLabel && (
+          <Label
+            text={labelNome}
+            control="professorNome"
+            isRequired={labelRequired}
+          />
+        )}
         <InputNome
           dataSource={dataSource}
           onSelect={onSelectPessoa}
@@ -299,10 +319,11 @@ Localizador.propTypes = {
   buscarCaracterPartir: PropTypes.number,
   ueId: PropTypes.string,
   buscarPorAbrangencia: PropTypes.bool,
+  labelRequired: PropTypes.bool,
 };
 
 Localizador.defaultProps = {
-  onChange: PropTypes.func,
+  onChange: () => {},
   form: null,
   showLabel: false,
   dreId: null,
@@ -323,6 +344,7 @@ Localizador.defaultProps = {
   buscarCaracterPartir: 3,
   ueId: null,
   buscarPorAbrangencia: false,
+  labelRequired: false,
 };
 
 export default Localizador;

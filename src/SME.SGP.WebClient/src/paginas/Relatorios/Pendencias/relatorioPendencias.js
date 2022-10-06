@@ -1,20 +1,18 @@
 import React, { useCallback, useEffect, useState } from 'react';
 
 import {
-  Button,
   Card,
   CheckboxComponent,
-  Colors,
   Loader,
   Localizador,
   RadioGroupButton,
   SelectComponent,
 } from '~/componentes';
 import { Cabecalho, FiltroHelper } from '~/componentes-sgp';
+import BotoesAcaoRelatorio from '~/componentes-sgp/botoesAcaoRelatorio';
 import { OPCAO_TODOS } from '~/constantes';
 
 import { ModalidadeDTO, tipoPendenciasGruposDto } from '~/dtos';
-import usuario from '~/redux/modulos/usuario/reducers';
 import {
   api,
   history,
@@ -85,6 +83,7 @@ const RelatorioPendencias = () => {
     setDesabilitarExibirPendenciasResolvidas,
   ] = useState(true);
   const [consideraHistorico, setConsideraHistorico] = useState(false);
+  const [modoEdicao, setModoEdicao] = useState(false);
 
   const opcaoExibirPendenciasResolvidas = [
     { value: false, label: 'Não' },
@@ -106,6 +105,7 @@ const RelatorioPendencias = () => {
     setDreId();
     setUeId();
     setUsuarioRf();
+    setModoEdicao(true);
   };
 
   const onChangeAnoLetivo = async valor => {
@@ -113,6 +113,7 @@ const RelatorioPendencias = () => {
     setUeId();
     setAnoLetivo(valor);
     limparCampos();
+    setModoEdicao(true);
   };
 
   const onChangeDre = valor => {
@@ -120,21 +121,25 @@ const RelatorioPendencias = () => {
     setUeId();
     setUeId(undefined);
     limparCampos();
+    setModoEdicao(true);
   };
 
   const onChangeUe = valor => {
     setUeId(valor);
     limparCampos();
+    setModoEdicao(true);
   };
 
   const onChangeModalidade = valor => {
     limparCampos();
     setModalidadeId(valor);
+    setModoEdicao(true);
   };
 
   const onChangeSemestre = valor => {
     setSemestre(valor);
     setClicouBotaoGerar(false);
+    setModoEdicao(true);
   };
 
   const onChangeTurma = valor => {
@@ -143,6 +148,7 @@ const RelatorioPendencias = () => {
     setBimestre();
     setTipoPendenciaGrupo();
     setClicouBotaoGerar(false);
+    setModoEdicao(true);
   };
 
   const onChangeComponenteCurricular = valor => {
@@ -150,17 +156,20 @@ const RelatorioPendencias = () => {
     setBimestre();
     setTipoPendenciaGrupo();
     setClicouBotaoGerar(false);
+    setModoEdicao(true);
   };
 
   const onChangeBimestre = valor => {
     setBimestre(valor);
     setTipoPendenciaGrupo();
     setClicouBotaoGerar(false);
+    setModoEdicao(true);
   };
 
   const onChangeTipoPendenciaGrupo = valor => {
     setTipoPendenciaGrupo(valor);
     setClicouBotaoGerar(false);
+    setModoEdicao(true);
   };
 
   const onChangeLocalizador = valores => {
@@ -546,6 +555,7 @@ const RelatorioPendencias = () => {
     setBimestre();
     setTipoPendenciaGrupo();
     setUsuarioRf();
+    setModoEdicao(false);
   };
 
   useEffect(() => {
@@ -633,49 +643,21 @@ const RelatorioPendencias = () => {
 
   return (
     <>
-      <Cabecalho pagina="Relatório de pendências" classes="mb-2" />
+      <Cabecalho pagina="Relatório de pendências">
+        <BotoesAcaoRelatorio
+          onClickVoltar={() => {
+            history.push('/');
+          }}
+          onClickCancelar={cancelar}
+          onClickGerar={gerar}
+          desabilitarBtnGerar={desabilitarBtnGerar}
+          carregandoGerar={carregandoGerar}
+          temLoaderBtnGerar
+          modoEdicao={modoEdicao}
+        />
+      </Cabecalho>
       <Card>
-        <div className="col-md-12 p-0">
-          <div className="row mb-3 pb-4">
-            <div className="col-md-12 d-flex justify-content-end justify-itens-end">
-              <Button
-                id="btn-voltar-rel-pendencias"
-                label="Voltar"
-                icon="arrow-left"
-                color={Colors.Azul}
-                border
-                className="mr-2"
-                onClick={() => {
-                  history.push('/');
-                }}
-              />
-              <Button
-                id="btn-cancelar-rel-pendencias"
-                label="Cancelar"
-                color={Colors.Azul}
-                border
-                bold
-                className="mr-2"
-                onClick={cancelar}
-              />
-              <Loader
-                loading={carregandoGerar}
-                className="d-flex w-auto"
-                tip=""
-              >
-                <Button
-                  id="btn-gerar-rel-pendencias"
-                  icon="print"
-                  label="Gerar"
-                  color={Colors.Roxo}
-                  bold
-                  className="mr-0"
-                  onClick={gerar}
-                  disabled={desabilitarBtnGerar}
-                />
-              </Loader>
-            </div>
-          </div>
+        <div className="col-md-12">
           <div className="row mb-2">
             <div className="col-12">
               <CheckboxComponent
@@ -687,7 +669,7 @@ const RelatorioPendencias = () => {
             </div>
           </div>
           <div className="row mb-3">
-            <div className="col-sm-12 col-md-6 col-lg-2 pr-0">
+            <div className="col-sm-12 col-md-6 col-lg-2">
               <Loader loading={carregandoAnos} ignorarTip>
                 <SelectComponent
                   id="drop-ano-letivo-rel-pendencias"
@@ -706,7 +688,7 @@ const RelatorioPendencias = () => {
                 />
               </Loader>
             </div>
-            <div className="col-sm-12 col-md-12 col-lg-5 pr-0">
+            <div className="col-sm-12 col-md-12 col-lg-5">
               <Loader loading={carregandoDres} ignorarTip>
                 <SelectComponent
                   id="drop-dre-rel-pendencias"
@@ -742,7 +724,7 @@ const RelatorioPendencias = () => {
             </div>
           </div>
           <div className="row mb-3">
-            <div className="col-sm-12 col-md-8 col-lg-4 pr-0">
+            <div className="col-sm-12 col-md-8 col-lg-4">
               <Loader loading={carregandoModalidades} ignorarTip>
                 <SelectComponent
                   id="drop-modalidade-rel-pendencias"
@@ -759,7 +741,7 @@ const RelatorioPendencias = () => {
                 />
               </Loader>
             </div>
-            <div className="col-sm-12 col-md-4 col-lg-4 pr-0">
+            <div className="col-sm-12 col-md-4 col-lg-4">
               <Loader loading={carregandoSemestres} ignorarTip>
                 <SelectComponent
                   id="drop-semestre-rel-pendencias"
@@ -801,7 +783,7 @@ const RelatorioPendencias = () => {
             </div>
           </div>
           <div className="row mb-3">
-            <div className="col-sm-12 col-md-9 col-lg-4 pr-0">
+            <div className="col-sm-12 col-md-9 col-lg-4">
               <Loader loading={carregandoComponentesCurriculares} ignorarTip>
                 <SelectComponent
                   id="drop-componente-curricular-rel-pendencias"
@@ -818,7 +800,7 @@ const RelatorioPendencias = () => {
                 />
               </Loader>
             </div>
-            <div className="col-sm-12 col-md-3 col-lg-4 pr-0">
+            <div className="col-sm-12 col-md-3 col-lg-4">
               <Loader loading={carregandoBimestres} ignorarTip>
                 <SelectComponent
                   id="drop-bimestre-rel-pendencias"
@@ -877,6 +859,7 @@ const RelatorioPendencias = () => {
                 onChange={e => {
                   setExibirPendenciasResolvidas(e.target.value);
                   setClicouBotaoGerar(false);
+                  setModoEdicao(true);
                 }}
                 value={exibirPendenciasResolvidas}
                 desabilitado={desabilitarExibirPendenciasResolvidas}

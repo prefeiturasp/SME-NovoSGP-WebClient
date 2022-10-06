@@ -2,7 +2,6 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Loader } from '~/componentes';
 import ObservacoesUsuario from '~/componentes-sgp/ObservacoesUsuario/observacoesUsuario';
-import { RotasDto } from '~/dtos';
 import {
   limparDadosObservacoesUsuario,
   setDadosObservacoesUsuario,
@@ -15,10 +14,6 @@ const MontarDadosObservacoesPlanoAEE = () => {
   const [desabilitarBotaoNotificar, setDesabilitarBotaoNotificar] = useState(
     true
   );
-
-  const usuario = useSelector(store => store.usuario);
-
-  const permissoesTela = usuario.permissoes[RotasDto.RELATORIO_AEE_PLANO];
 
   const planoAEEDados = useSelector(store => store.planoAEE.planoAEEDados);
 

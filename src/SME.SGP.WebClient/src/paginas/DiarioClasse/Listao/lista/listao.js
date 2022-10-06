@@ -8,9 +8,10 @@ import ListaoPaginado from './listaoPaginado';
 const Listao = () => {
   return (
     <>
-      <Cabecalho pagina="Listão" />
-      <Card>
+      <Cabecalho pagina="Listão">
         <ListaoBotoesAcao />
+      </Cabecalho>
+      <Card padding="24px 24px">
         <ListaoFiltros />
         <ListaoPaginado />
       </Card>

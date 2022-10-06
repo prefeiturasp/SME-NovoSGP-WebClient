@@ -4,15 +4,17 @@ import { useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 import * as Yup from 'yup';
 import { Formik, Form } from 'formik';
+import _ from 'lodash';
+import { Col, Row } from 'antd';
 import Card from '~/componentes/card';
 import Grid from '~/componentes/grid';
 import Button from '~/componentes/button';
 import RadioGroupButton from '~/componentes/radioGroupButton';
 import CampoTexto from '~/componentes/campoTexto';
 import SelectComponent from '~/componentes/select';
-import { Colors, Label, Loader, Editor } from '~/componentes';
+import { Auditoria, Colors, Label, Loader } from '~/componentes';
 import history from '~/servicos/history';
-import { Div, Titulo, Badge, InseridoAlterado } from './avaliacao.css';
+import { Div, Badge } from './avaliacao.css';
 import RotasDTO from '~/dtos/rotasDto';
 import ServicoAvaliacao from '~/servicos/Paginas/Calendario/ServicoAvaliacao';
 import { erro, sucesso, confirmar } from '~/servicos/alertas';
@@ -24,6 +26,13 @@ import { valorNuloOuVazio } from '~/utils/funcoes/gerais';
 import AlertaModalidadeInfantil from '~/componentes-sgp/AlertaModalidadeInfantil/alertaModalidadeInfantil';
 import { ehTurmaInfantil } from '~/servicos/Validacoes/validacoesInfatil';
 import JoditEditor from '~/componentes/jodit-editor/joditEditor';
+import { Cabecalho } from '~/componentes-sgp';
+import {
+  SGP_BUTTON_ALTERAR_CADASTRAR,
+  SGP_BUTTON_CANCELAR,
+} from '~/componentes-sgp/filtro/idsCampos';
+import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
+import BotaoExcluirPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoExcluirPadrao';
 
 const AvaliacaoForm = ({ match, location }) => {
   const [
@@ -49,9 +58,10 @@ const AvaliacaoForm = ({ match, location }) => {
   const [mostrarDisciplinaRegencia, setMostrarDisciplinaRegencia] = useState(
     false
   );
-  const [desabilitarBotaoCadastrar, setDesabilitarBotaoCadastrar] = useState(
-    false
-  );
+  const [listaDisciplinas, setListaDisciplinas] = useState([]);
+  const [carregandoTela, setCarregandoTela] = useState(false);
+  const [temRegencia, setTemRegencia] = useState(false);
+
   const clicouBotaoVoltar = async () => {
     if (dentroPeriodo && modoEdicao) {
       const confirmado = await confirmar(
@@ -69,12 +79,7 @@ const AvaliacaoForm = ({ match, location }) => {
   };
 
   const [idAvaliacao, setIdAvaliacao] = useState('');
-  const [inseridoAlterado, setInseridoAlterado] = useState({
-    alteradoEm: '',
-    alteradoPor: '',
-    criadoEm: '',
-    criadoPor: '',
-  });
+  const [auditoriaAvaliacao, setAuditoriaAvaliacao] = useState({});
 
   const aoTrocarCampos = () => {
     if (!modoEdicao) {
@@ -84,14 +89,19 @@ const AvaliacaoForm = ({ match, location }) => {
 
   const onChangeDisciplina = disciplinaId => {
     aoTrocarCampos();
-    if (disciplinaId && disciplinaId.length == 1 && !Array.isArray(disciplinaId)) {
+    if (
+      disciplinaId &&
+      disciplinaId.length === 1 &&
+      !Array.isArray(disciplinaId)
+    ) {
       const componenteSelecionado = listaDisciplinas.find(
-        item => item.codigoComponenteCurricular == disciplinaId
+        item => String(item.codigoComponenteCurricular) === String(disciplinaId)
       );
-      setPodeLancaNota(componenteSelecionado == undefined ? true : componenteSelecionado?.lancaNota);
+      setPodeLancaNota(
+        !componenteSelecionado ? true : componenteSelecionado?.lancaNota
+      );
     } else {
       setPodeLancaNota(true);
-      setDesabilitarBotaoCadastrar(!disciplinaId.length > 1 || disciplinaId.length == 0 || (Array.isArray(disciplinaId) && disciplinaId.length == 1));
     }
   };
 
@@ -129,8 +139,11 @@ const AvaliacaoForm = ({ match, location }) => {
 
   const [descricao, setDescricao] = useState('');
   const [copias, setCopias] = useState([]);
-  const [carregandoTela, setCarregandoTela] = useState(false);
   const [listaDisciplinasRegencia, setListaDisciplinasRegencia] = useState([]);
+  const [
+    listaDisciplinasRegenciaSelecionadas,
+    setListaDisciplinasRegenciaSelecionadas,
+  ] = useState([]);
   const [
     listaDisciplinasSelecionadas,
     setListaDisciplinasSelecionadas,
@@ -150,6 +163,16 @@ const AvaliacaoForm = ({ match, location }) => {
 
   const removerTagsHtml = texto => texto?.replace(/<\/?[^>]+(>|$)/g, '');
 
+  const tamanhoTextoDescricao = textoComHtml => {
+    const textoLimpo = removerTagsHtml(textoComHtml);
+    const textoComEspacos = textoLimpo?.replaceAll('&nbsp;', ' ');
+    return textoComEspacos.length + 1 - textoComEspacos.split(' ').length;
+  };
+
+  const validaTamanhoCaracteres = () => {
+    return importado ? true : tamanhoTextoDescricao(descricao) <= 500;
+  };
+
   const cadastrarAvaliacao = async dados => {
     const avaliacao = {};
     setCarregandoTela(true);
@@ -163,15 +186,23 @@ const AvaliacaoForm = ({ match, location }) => {
       avaliacao.ueId = turmaSelecionada.unidadeEscolar;
     }
 
-    const disciplinas = [];
-    listaDisciplinasRegencia.forEach(disciplina => {
-      if (
-        !disciplinas.includes(disciplina.codigoComponenteCurricular) &&
-        disciplina.selecionada
-      )
-        disciplinas.push(`${disciplina.codigoComponenteCurricular}`);
-    });
-    avaliacao.disciplinaContidaRegenciaId = disciplinas;
+    if (mostrarDisciplinaRegencia && temRegencia) {
+      const disciplinas = [];
+      listaDisciplinasRegenciaSelecionadas.forEach(disciplina => {
+        if (
+          !disciplinas.includes(disciplina.codigoComponenteCurricular) &&
+          disciplina.selecionada
+        )
+          disciplinas.push(`${disciplina.codigoComponenteCurricular}`);
+      });
+      if (disciplinas?.length) {
+        avaliacao.disciplinaContidaRegenciaId = disciplinas;
+      } else {
+        erro('É necessário informar as disciplinas da regência');
+        setCarregandoTela(false);
+        return;
+      }
+    }
 
     avaliacao.dataAvaliacao = window.moment(dataAvaliacao).format();
     avaliacao.descricao = descricao;
@@ -219,7 +250,8 @@ const AvaliacaoForm = ({ match, location }) => {
           } else {
             setCarregandoTela(false);
             sucesso(
-              `Avaliação ${idAvaliacao ? 'atualizada' : 'cadastrada'
+              `Avaliação ${
+                idAvaliacao ? 'atualizada' : 'cadastrada'
               } com sucesso.`
             );
           }
@@ -237,10 +269,6 @@ const AvaliacaoForm = ({ match, location }) => {
       setCarregandoTela(false);
       erro('A descrição não deve ter mais de 500 caracteres');
     }
-  };
-
-  const validaTamanhoCaracteres = () => {
-    return importado ? true : (tamanhoTextoDescricao(descricao) <= 500);
   };
 
   const categorias = { NORMAL: 1, INTERDISCIPLINAR: 2 };
@@ -263,24 +291,18 @@ const AvaliacaoForm = ({ match, location }) => {
         'Selecione o tipo de atividade avaliativa'
       ),
       nome: Yup.string().required('Preencha o nome da atividade avaliativa'),
-      descricao: Yup.string().test(
-        'len',
-        'A descrição não deve ter mais de 500 caracteres',
-        texto => {
-          return texto === undefined || validaTamanhoCaracteres();
-        }
-      ),
+      descricao: Yup.string()
+        .required('Campo obrigatório')
+        .test(
+          'len',
+          'A descrição não deve ter mais de 500 caracteres',
+          texto => {
+            return texto === undefined || validaTamanhoCaracteres();
+          }
+        ),
     };
     setValidacoes(Yup.object(val));
   };
-
-  const tamanhoTextoDescricao = textoComHtml => {
-    const textoLimpo = removerTagsHtml(textoComHtml);
-    const textoComEspacos = textoLimpo?.replaceAll('&nbsp;', ' ');
-    return (textoComEspacos.length + 1) - textoComEspacos.split(' ').length;
-  }
-
-  const [listaDisciplinas, setListaDisciplinas] = useState([]);
 
   const [listaCategorias, setListaCategorias] = useState([
     { label: 'Normal', value: categorias.NORMAL },
@@ -306,14 +328,7 @@ const AvaliacaoForm = ({ match, location }) => {
     nome: '',
     tipoAvaliacaoId: undefined,
     importado: false,
-  };
-
-  const clicouBotaoCancelar = form => {
-    if (!idAvaliacao) {
-      form.resetForm();
-      setDadosAvaliacao(inicial);
-      aoTrocarTextEditor('');
-    }
+    descricao: '',
   };
 
   const obterDisciplinas = async () => {
@@ -326,7 +341,7 @@ const AvaliacaoForm = ({ match, location }) => {
       if (data) {
         setListaDisciplinas(data);
         if (data.length > 1) {
-          listaCategorias.map(categoria => {
+          listaCategorias.forEach(categoria => {
             if (categoria.value === categorias.INTERDISCIPLINAR) {
               categoria.disabled = false;
             }
@@ -341,16 +356,50 @@ const AvaliacaoForm = ({ match, location }) => {
     }
   };
 
-  const [temRegencia, setTemRegencia] = useState(false);
+  const montarListaDisciplinasRegenciaExibicao = useCallback(
+    (listaDisciplinasReg, atividadesReg) => {
+      if (mostrarDisciplinaRegencia) {
+        atividadesReg.forEach(atividade => {
+          listaDisciplinasReg.forEach(disciplina => {
+            if (
+              Number(atividade.disciplinaContidaRegenciaId) ===
+              Number(disciplina.codigoComponenteCurricular)
+            ) {
+              disciplina.selecionada = true;
+            }
+          });
+          setListaDisciplinasRegenciaSelecionadas([...listaDisciplinasReg]);
+        });
+      }
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    },
+    [mostrarDisciplinaRegencia]
+  );
+
+  useEffect(() => {
+    if (listaDisciplinasRegencia?.length && atividadesRegencia?.length) {
+      montarListaDisciplinasRegenciaExibicao(
+        _.cloneDeep(listaDisciplinasRegencia),
+        atividadesRegencia
+      );
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [
+    montarListaDisciplinasRegenciaExibicao,
+    atividadesRegencia,
+    listaDisciplinasRegencia,
+  ]);
 
   const obterDisciplinasRegencia = async () => {
     try {
       setCarregandoTela(true);
       const { data, status } = await ServicoAvaliacao.listarDisciplinasRegencia(
-        turmaId, true
+        turmaId,
+        true
       );
       if (data && status === 200) {
-        setListaDisciplinasRegencia(data);
+        setListaDisciplinasRegenciaSelecionadas(_.cloneDeep(data));
+        setListaDisciplinasRegencia(_.cloneDeep(data));
         setTemRegencia(true);
         setCarregandoTela(false);
       }
@@ -373,6 +422,7 @@ const AvaliacaoForm = ({ match, location }) => {
       setTemRegencia(true);
       obterDisciplinasRegencia();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [listaDisciplinas, mostrarDisciplinaRegencia]);
 
   const [listaTiposAvaliacao, setListaTiposAvaliacao] = useState([]);
@@ -416,10 +466,11 @@ const AvaliacaoForm = ({ match, location }) => {
     } else {
       validaF5();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const validaInterdisciplinar = categoriaSelecionada => {
-    if (categoriaSelecionada == categorias.INTERDISCIPLINAR) {
+    if (Number(categoriaSelecionada) === categorias.INTERDISCIPLINAR) {
       setCopias([]);
       setDesabilitarCopiarAvaliacao(true);
     } else {
@@ -436,16 +487,11 @@ const AvaliacaoForm = ({ match, location }) => {
         setListaDisciplinasSelecionadas(avaliacao.data.disciplinasId);
         setDisciplinaSelecionada(avaliacao.data.disciplinasId[0]);
         validaInterdisciplinar(avaliacao.data.categoriaId);
-        const tipoAvaliacaoId = avaliacao.data.tipoAvaliacaoId.toString();        
+        const tipoAvaliacaoId = avaliacao.data.tipoAvaliacaoId.toString();
         setImportado(avaliacao.data.importado);
         setDadosAvaliacao({ ...avaliacao.data, tipoAvaliacaoId, importado });
         setDescricao(avaliacao.data.descricao);
-        setInseridoAlterado({
-          alteradoEm: avaliacao.data.alteradoEm,
-          alteradoPor: `${avaliacao.data.alteradoPor} (${avaliacao.data.alteradoRF})`,
-          criadoEm: avaliacao.data.criadoEm,
-          criadoPor: `${avaliacao.data.criadoPor} (${avaliacao.data.criadoRF})`,
-        });
+        setAuditoriaAvaliacao(avaliacao.data);
         setDentroPeriodo(avaliacao.data.dentroPeriodo);
         setPodeEditarAvaliacao(avaliacao.data.podeEditarAvaliacao);
         setAtividadesRegencia(avaliacao.data.atividadesRegencia);
@@ -469,6 +515,7 @@ const AvaliacaoForm = ({ match, location }) => {
       !ehTurmaInfantil(modalidadesFiltroPrincipal, turmaSelecionada)
     )
       obterAvaliacao();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [idAvaliacao]);
 
   useEffect(() => {
@@ -478,18 +525,23 @@ const AvaliacaoForm = ({ match, location }) => {
     );
     setDesabilitarCampos(turmaInfantil || !podeEditarAvaliacao);
 
-
     if (turmaInfantil && refForm && refForm.resetForm) {
       refForm.resetForm();
       setDescricao('');
       setModoEdicao(false);
     }
-  }, [turmaSelecionada, modalidadesFiltroPrincipal, refForm, inicial, podeEditarAvaliacao]);
+  }, [
+    turmaSelecionada,
+    modalidadesFiltroPrincipal,
+    refForm,
+    inicial,
+    podeEditarAvaliacao,
+  ]);
 
   const selecionarDisciplina = indice => {
-    const disciplinas = [...listaDisciplinasRegencia];
+    const disciplinas = _.cloneDeep(listaDisciplinasRegenciaSelecionadas);
     disciplinas[indice].selecionada = !disciplinas[indice].selecionada;
-    setListaDisciplinasRegencia(disciplinas);
+    setListaDisciplinasRegenciaSelecionadas([...disciplinas]);
     aoTrocarCampos();
   };
 
@@ -511,45 +563,38 @@ const AvaliacaoForm = ({ match, location }) => {
         Number(item.codigoComponenteCurricular) ===
         Number(disciplinaSelecionada)
     );
-    const regenciaSelecionada = listaDisciplinasRegencia.filter(
-      item => item.selecionada
-    );
-    const desabilitar =
-      disciplinaEncontrada?.regencia && !regenciaSelecionada?.length;
 
     setMostrarDisciplinaRegencia(disciplinaEncontrada?.regencia);
-    setDesabilitarBotaoCadastrar(desabilitar != undefined ? desabilitar : true);
-  }, [disciplinaSelecionada, listaDisciplinas, listaDisciplinasRegencia]);
+  }, [disciplinaSelecionada, listaDisciplinas]);
 
-  useEffect(() => {
-    if (
-      listaDisciplinasRegencia?.length &&
-      atividadesRegencia?.length &&
-      desabilitarBotaoCadastrar &&
-      mostrarDisciplinaRegencia
-    ) {
-      atividadesRegencia.forEach(atividade => {
-        setListaDisciplinasRegencia(estadoAntigo =>
-          estadoAntigo.map(disciplina => {
-            if (
-              Number(atividade.disciplinaContidaRegenciaId) ===
-              Number(disciplina.codigoComponenteCurricular)
-            ) {
-              return {
-                ...disciplina,
-                selecionada: true,
-              };
-            }
-            return disciplina;
-          })
-        );
-      });
+  const clicouBotaoCancelar = async form => {
+    if (modoEdicao) {
+      const confirmou = await confirmar(
+        'Atenção',
+        'Você não salvou as informações preenchidas.',
+        'Deseja realmente cancelar as alterações?'
+      );
+      if (confirmou) {
+        form.resetForm();
+        aoTrocarTextEditor('');
+        setModoEdicao(false);
+        if (idAvaliacao) {
+          montarListaDisciplinasRegenciaExibicao(
+            _.cloneDeep(listaDisciplinasRegencia),
+            atividadesRegencia
+          );
+        } else {
+          setListaDisciplinasRegenciaSelecionadas(
+            _.cloneDeep(listaDisciplinasRegencia)
+          );
+        }
+      }
     }
-  }, [atividadesRegencia, listaDisciplinasRegencia, desabilitarBotaoCadastrar]);
+  };
 
   return (
     <>
-      <div className="col-md-12">
+      <Div className="col-12">
         {!podeLancaNota ? (
           <Alert
             alerta={{
@@ -557,29 +602,23 @@ const AvaliacaoForm = ({ match, location }) => {
               id: 'cadastro-aula-nao-lanca-nota',
               mensagem:
                 'Este componente curricular não permite cadastrar avaliação.',
-              estiloTitulo: { fontSize: '18px' },
             }}
-            className="mb-2"
           />
-        ) : null}
-      </div>
-      <Div className="col-12">
-        <div className="col-md-12">
-          {!dentroPeriodo ? (
-            <Alert
-              alerta={{
-                tipo: 'warning',
-                id: 'alerta-perido-fechamento',
-                mensagem:
-                  'Apenas é possível consultar este registro pois o período não está em aberto.',
-                estiloTitulo: { fontSize: '18px' },
-              }}
-              className="mb-2"
-            />
-          ) : (
-            ''
-          )}
-        </div>
+        ) : (
+          <></>
+        )}
+        {!dentroPeriodo ? (
+          <Alert
+            alerta={{
+              tipo: 'warning',
+              id: 'alerta-perido-fechamento',
+              mensagem:
+                'Apenas é possível consultar este registro pois o período não está em aberto.',
+            }}
+          />
+        ) : (
+          <></>
+        )}
         {mostrarModalCopiarAvaliacao ? (
           <ModalCopiarAvaliacao
             show={mostrarModalCopiarAvaliacao}
@@ -594,277 +633,272 @@ const AvaliacaoForm = ({ match, location }) => {
           ''
         )}
         <AlertaModalidadeInfantil />
-        <Grid cols={12} className="mb-1 p-0">
-          <Titulo className="font-weight-bold">
-            {`Cadastro de avaliação - ${renderDataAvaliacao()}`}
-          </Titulo>
-        </Grid>
         <Loader loading={carregandoTela} tip="Carregando...">
           <Formik
             enableReinitialize
-            ref={refForm => setRefForm(refForm)}
+            ref={r => setRefForm(r)}
             initialValues={dadosAvaliacao}
             onSubmit={dados => cadastrarAvaliacao(dados)}
             validationSchema={validacoes}
-            validateOnBlur={false}
-            validateOnChange={false}
+            validateOnBlur
+            validateOnChange
           >
             {form => (
-              <Card className="rounded mb-4 mx-auto">
-                <Grid cols={12} className="d-flex justify-content-end mb-3">
-                  <Button
-                    label="Voltar"
-                    icon="arrow-left"
-                    color={Colors.Azul}
-                    onClick={clicouBotaoVoltar}
-                    border
-                    className="mr-3"
-                  />
-                  <Button
-                    label="Cancelar"
-                    color={Colors.Roxo}
-                    onClick={() => clicouBotaoCancelar(form)}
-                    border
-                    bold
-                    className="mr-3"
-                    disabled={
-                      desabilitarCampos || !dentroPeriodo || !modoEdicao
-                    }
-                  />
-                  <Button
-                    label="Excluir"
-                    color={Colors.Vermelho}
-                    border
-                    className="mr-3"
-                    disabled={
-                      desabilitarCampos ||
-                      !idAvaliacao ||
-                      (permissaoTela && !permissaoTela.podeAlterar) ||
-                      !dentroPeriodo
-                    }
-                    onClick={clicouBotaoExcluir}
-                  />
-                  <Button
-                    label={idAvaliacao ? 'Alterar' : 'Cadastrar'}
-                    color={Colors.Roxo}
-                    onClick={e => clicouBotaoCadastrar(form, e)}
-                    ref={botaoCadastrarRef}
-                    disabled={
-                      desabilitarCampos ||
-                      (permissaoTela &&
-                        (!permissaoTela.podeIncluir ||
-                          !permissaoTela.podeAlterar)) ||
-                      !dentroPeriodo ||
-                      !modoEdicao ||
-                      !podeLancaNota ||
-                      desabilitarBotaoCadastrar
-                    }
-                    border
-                    bold
-                  />
-                </Grid>
-                <Form>
-                  <Div className="row">
-                    <Grid cols={12} className="mb-4">
-                      <RadioGroupButton
-                        id="categoriaId"
-                        name="categoriaId"
-                        label="Categoria"
-                        opcoes={listaCategorias}
-                        form={form}
-                        onChange={e => {
-                          aoTrocarCampos();
-                          resetDisciplinasSelecionadas(form);
-                          montaValidacoes(e.target.value);
-                          validaInterdisciplinar(e.target.value);
-                          setDesabilitarBotaoCadastrar(true);
-                        }}
-                        desabilitado={desabilitarCampos || !dentroPeriodo}
-                      />
-                    </Grid>
-                  </Div>
-                  <Div className="row">
-                    <Grid cols={4} className="mb-4">
-                      {listaDisciplinas?.length > 1 &&
-                        form.values.categoriaId ===
-                        categorias.INTERDISCIPLINAR ? (
-                        <SelectComponent
-                          id="disciplinasId"
-                          name="disciplinasId"
-                          label="Componente curricular"
-                          lista={listaDisciplinas}
-                          valueOption="codigoComponenteCurricular"
-                          valueText="nome"
-                          disabled={
-                            desabilitarCampos ||
-                            !dentroPeriodo ||
-                            listaDisciplinas?.length === 1
-                          }
-                          placeholder="Selecione um componente curricular"
-                          form={form}
-                          multiple
-                          onChange={onChangeDisciplina}
-                          valueSelect={listaDisciplinasSelecionadas}
-                        />
-                      ) : (
-                        <SelectComponent
-                          id="disciplinasId"
-                          name="disciplinasId"
-                          label="Componente curricular"
-                          lista={listaDisciplinas}
-                          valueOption="codigoComponenteCurricular"
-                          valueText="nome"
-                          disabled={
-                            desabilitarCampos ||
-                            !dentroPeriodo ||
-                            listaDisciplinas?.length === 1
-                          }
-                          placeholder="Selecione um componente curricular"
-                          form={form}
-                          onChange={valor => {
-                            setDisciplinaSelecionada(valor);
-                            onChangeDisciplina(valor);
-                          }}
-                          valueSelect={disciplinaSelecionada}
-                        />
-                      )}
-                    </Grid>
-                    <Grid cols={4} className="mb-4">
-                      <SelectComponent
-                        id="tipoAvaliacaoId"
-                        name="tipoAvaliacaoId"
-                        label="Tipo de atividade avaliativa"
-                        lista={listaTiposAvaliacao}
-                        valueOption="id"
-                        valueText="nome"
-                        placeholder="Atividade avaliativa"
-                        form={form}
-                        onChange={aoTrocarCampos}
-                        disabled={desabilitarCampos || !dentroPeriodo}
-                      />
-                    </Grid>
-                    <Grid cols={4} className="mb-4">
-                      <Label text="Nome da atividade avaliativa" />
-                      <CampoTexto
-                        name="nome"
-                        id="nome"
-                        maxlength={50}
-                        placeholder="Nome"
-                        type="input"
-                        form={form}
-                        ref={campoNomeRef}
-                        onChange={e => {
-                          form.setFieldValue('nome', e.target.value);
-                          aoTrocarCampos();
-                        }}
-                        desabilitado={desabilitarCampos || !dentroPeriodo}
-                      />
-                    </Grid>
-                  </Div>
-                  {temRegencia &&
-                    listaDisciplinasRegencia &&
-                    mostrarDisciplinaRegencia && (
-                      <Div className="row">
-                        <Grid cols={12} className="mb-4">
-                          <Label text="Componentes da regência" />
-                          {listaDisciplinasRegencia.map(
-                            (disciplina, indice) => {
-                              return (
-                                <Badge
-                                  key={disciplina.codigoComponenteCurricular}
-                                  role="button"
-                                  onClick={e => {
-                                    e.preventDefault();
-                                    selecionarDisciplina(indice);
-                                  }}
-                                  aria-pressed={disciplina.selecionada && true}
-                                  alt={disciplina.nome}
-                                  className="badge badge-pill border text-dark bg-white font-weight-light px-2 py-1 mr-2"
-                                >
-                                  {disciplina.nome}
-                                </Badge>
-                              );
-                            }
-                          )}
-                        </Grid>
-                      </Div>
-                    )}
-                  <Div className="row">
-                    <Grid cols={12}>
-                      <JoditEditor
-                        label="Descrição"
-                        form={form}
-                        value={form.values.descricao}
-                        name="descricao"
-                        id="descricao"
-                        onChange={aoTrocarTextEditor}
-                        desabilitar={desabilitarCampos || !dentroPeriodo}
-                        permiteInserirArquivo={false}
-                      />
-                    </Grid>
-                  </Div>
-                  <Div className="row" style={{ marginTop: '14px' }}>
-                    <Grid
-                      style={{ display: 'flex', justifyContent: 'flex-start' }}
-                      cols={12}
-                    >
+              <>
+                <Cabecalho
+                  pagina={`Cadastro de avaliação - ${renderDataAvaliacao()}`}
+                >
+                  <Row gutter={[8, 8]} type="flex">
+                    <Col>
+                      <BotaoVoltarPadrao onClick={() => clicouBotaoVoltar()} />
+                    </Col>
+                    <Col>
                       <Button
-                        label="Copiar avaliação"
-                        icon="clipboard"
-                        color={Colors.Azul}
+                        id={SGP_BUTTON_CANCELAR}
+                        label="Cancelar"
+                        color={Colors.Roxo}
+                        onClick={() => clicouBotaoCancelar(form)}
                         border
-                        className="btnGroupItem"
-                        onClick={() => setMostrarModalCopiarAvaliacao(true)}
+                        bold
                         disabled={
-                          desabilitarCampos ||
-                          !dentroPeriodo ||
-                          desabilitarCopiarAvaliacao
+                          desabilitarCampos || !dentroPeriodo || !modoEdicao
                         }
                       />
-                      {copias?.length > 0 && (
-                        <div style={{ marginLeft: '14px' }}>
-                          <span>Avaliação será copiada para: </span>
-                          <br />
-                          {copias.map(x => (
-                            <span style={{ display: 'block' }}>
-                              <strong>Turma:</strong> &nbsp;
-                              {x.turma[0].desc} <strong>Data: &nbsp;</strong>
-                              {window
-                                .moment(x.dataAvaliacao)
-                                .format('DD/MM/YYYY')}
-                            </span>
-                          ))}
-                        </div>
+                    </Col>
+                    <Col>
+                      <BotaoExcluirPadrao
+                        disabled={
+                          desabilitarCampos ||
+                          !idAvaliacao ||
+                          (permissaoTela && !permissaoTela.podeAlterar) ||
+                          !dentroPeriodo
+                        }
+                        onClick={clicouBotaoExcluir}
+                      />
+                    </Col>
+                    <Col>
+                      <Button
+                        id={SGP_BUTTON_ALTERAR_CADASTRAR}
+                        label={idAvaliacao ? 'Alterar' : 'Cadastrar'}
+                        color={Colors.Roxo}
+                        onClick={e => clicouBotaoCadastrar(form, e)}
+                        ref={botaoCadastrarRef}
+                        disabled={
+                          desabilitarCampos ||
+                          (permissaoTela &&
+                            (!permissaoTela.podeIncluir ||
+                              !permissaoTela.podeAlterar)) ||
+                          !dentroPeriodo ||
+                          (idAvaliacao && !modoEdicao) ||
+                          !podeLancaNota
+                        }
+                        border
+                        bold
+                      />
+                    </Col>
+                  </Row>
+                </Cabecalho>
+                <Card>
+                  <Form className="col-md-12">
+                    <Div className="row">
+                      <Grid cols={12} className="mb-4">
+                        <RadioGroupButton
+                          id="categoriaId"
+                          name="categoriaId"
+                          label="Categoria"
+                          opcoes={listaCategorias}
+                          form={form}
+                          onChange={e => {
+                            aoTrocarCampos();
+                            resetDisciplinasSelecionadas(form);
+                            montaValidacoes(e.target.value);
+                            validaInterdisciplinar(e.target.value);
+                          }}
+                          desabilitado={desabilitarCampos || !dentroPeriodo}
+                          labelRequired
+                        />
+                      </Grid>
+                    </Div>
+                    <Div className="row">
+                      <Grid cols={4} className="mb-4">
+                        {listaDisciplinas?.length > 1 &&
+                        form.values.categoriaId ===
+                          categorias.INTERDISCIPLINAR ? (
+                          <SelectComponent
+                            id="disciplinasId"
+                            name="disciplinasId"
+                            label="Componente curricular"
+                            lista={listaDisciplinas}
+                            valueOption="codigoComponenteCurricular"
+                            valueText="nome"
+                            disabled={
+                              desabilitarCampos ||
+                              !dentroPeriodo ||
+                              listaDisciplinas?.length === 1
+                            }
+                            placeholder="Selecione um componente curricular"
+                            form={form}
+                            multiple
+                            onChange={onChangeDisciplina}
+                            valueSelect={listaDisciplinasSelecionadas}
+                            labelRequired
+                          />
+                        ) : (
+                          <SelectComponent
+                            id="disciplinasId"
+                            name="disciplinasId"
+                            label="Componente curricular"
+                            lista={listaDisciplinas}
+                            valueOption="codigoComponenteCurricular"
+                            valueText="nome"
+                            disabled={
+                              desabilitarCampos ||
+                              !dentroPeriodo ||
+                              listaDisciplinas?.length === 1
+                            }
+                            placeholder="Selecione um componente curricular"
+                            form={form}
+                            onChange={valor => {
+                              setDisciplinaSelecionada(valor);
+                              onChangeDisciplina(valor);
+                            }}
+                            valueSelect={disciplinaSelecionada}
+                            labelRequired
+                          />
+                        )}
+                      </Grid>
+                      <Grid cols={4} className="mb-4">
+                        <SelectComponent
+                          id="tipoAvaliacaoId"
+                          name="tipoAvaliacaoId"
+                          label="Tipo de atividade avaliativa"
+                          lista={listaTiposAvaliacao}
+                          valueOption="id"
+                          valueText="nome"
+                          placeholder="Atividade avaliativa"
+                          form={form}
+                          onChange={aoTrocarCampos}
+                          disabled={desabilitarCampos || !dentroPeriodo}
+                          labelRequired
+                        />
+                      </Grid>
+                      <Grid cols={4} className="mb-4">
+                        <CampoTexto
+                          label="Nome da atividade avaliativa"
+                          name="nome"
+                          id="nome"
+                          maxlength={50}
+                          placeholder="Nome"
+                          type="input"
+                          form={form}
+                          ref={campoNomeRef}
+                          onChange={e => {
+                            form.setFieldValue('nome', e.target.value);
+                            aoTrocarCampos();
+                          }}
+                          desabilitado={desabilitarCampos || !dentroPeriodo}
+                          labelRequired
+                        />
+                      </Grid>
+                    </Div>
+                    {temRegencia &&
+                      listaDisciplinasRegenciaSelecionadas &&
+                      mostrarDisciplinaRegencia && (
+                        <Div className="row">
+                          <Grid cols={12} className="mb-4">
+                            <Label isRequired text="Componentes da regência" />
+                            {listaDisciplinasRegenciaSelecionadas.map(
+                              (disciplina, indice) => {
+                                return (
+                                  <Badge
+                                    key={disciplina.codigoComponenteCurricular}
+                                    role="button"
+                                    onClick={e => {
+                                      e.preventDefault();
+                                      selecionarDisciplina(indice);
+                                    }}
+                                    aria-pressed={
+                                      disciplina.selecionada && true
+                                    }
+                                    alt={disciplina.nome}
+                                    className="badge badge-pill border text-dark bg-white font-weight-light px-2 py-1 mr-2"
+                                  >
+                                    {disciplina.nome}
+                                  </Badge>
+                                );
+                              }
+                            )}
+                          </Grid>
+                        </Div>
                       )}
+                    <Div className="row">
+                      <Grid cols={12}>
+                        <JoditEditor
+                          label="Descrição"
+                          form={form}
+                          value={form.values.descricao}
+                          name="descricao"
+                          id="descricao"
+                          onChange={aoTrocarTextEditor}
+                          desabilitar={desabilitarCampos || !dentroPeriodo}
+                          permiteInserirArquivo={false}
+                          labelRequired
+                        />
+                      </Grid>
+                    </Div>
+                    <Div className="row" style={{ marginTop: '14px' }}>
+                      <Grid
+                        style={{
+                          display: 'flex',
+                          justifyContent: 'flex-start',
+                        }}
+                        cols={12}
+                      >
+                        <Button
+                          label="Copiar avaliação"
+                          icon="clipboard"
+                          color={Colors.Azul}
+                          border
+                          className="btnGroupItem"
+                          onClick={() => setMostrarModalCopiarAvaliacao(true)}
+                          disabled={
+                            desabilitarCampos ||
+                            !dentroPeriodo ||
+                            desabilitarCopiarAvaliacao
+                          }
+                        />
+                        {copias?.length > 0 && (
+                          <div style={{ marginLeft: '14px' }}>
+                            <span>Avaliação será copiada para: </span>
+                            <br />
+                            {copias.map(x => (
+                              <span style={{ display: 'block' }}>
+                                <strong>Turma:</strong> &nbsp;
+                                {x.turma[0].desc} <strong>Data: &nbsp;</strong>
+                                {window
+                                  .moment(x.dataAvaliacao)
+                                  .format('DD/MM/YYYY')}
+                              </span>
+                            ))}
+                          </div>
+                        )}
+                      </Grid>
+                    </Div>
+                  </Form>
+                  <Div className="row">
+                    <Grid cols={12}>
+                      <Auditoria
+                        criadoPor={auditoriaAvaliacao?.criadoPor}
+                        criadoEm={auditoriaAvaliacao?.criadoEm}
+                        alteradoPor={auditoriaAvaliacao?.alteradoPor}
+                        alteradoEm={auditoriaAvaliacao?.alteradoEm}
+                        alteradoRf={auditoriaAvaliacao?.alteradoRF}
+                        criadoRf={auditoriaAvaliacao?.criadoRF}
+                      />
                     </Grid>
                   </Div>
-                </Form>
-                <Div className="row">
-                  <Grid cols={12}>
-                    <InseridoAlterado className="mt-4">
-                      {inseridoAlterado.criadoPor &&
-                        inseridoAlterado.criadoEm ? (
-                        <p className="pt-2">
-                          INSERIDO por {inseridoAlterado.criadoPor} em{' '}
-                          {window.moment(inseridoAlterado.criadoEm).format()}
-                        </p>
-                      ) : (
-                        ''
-                      )}
-
-                      {inseridoAlterado.alteradoPor &&
-                        inseridoAlterado.alteradoEm ? (
-                        <p>
-                          ALTERADO por {inseridoAlterado.alteradoPor} em{' '}
-                          {window.moment(inseridoAlterado.alteradoEm).format()}
-                        </p>
-                      ) : (
-                        ''
-                      )}
-                    </InseridoAlterado>
-                  </Grid>
-                </Div>
-              </Card>
+                </Card>
+              </>
             )}
           </Formik>
         </Loader>

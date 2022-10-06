@@ -20,15 +20,11 @@ import cpfMask from '~/servicos/maskCPF';
 import { MensagemInputError, InputBuscaCPF } from './style';
 
 export default function ReiniciarSenhaEA() {
-  const [linhaSelecionada, setLinhaSelecionada] = useState({});
   const [usuarioApp, setUsuarioApp] = useState([]);
   const [listaDres, setListaDres] = useState([]);
   const [dreSelecionada, setDreSelecionada] = useState('');
   const [listaUes, setListaUes] = useState([]);
   const [ueSelecionada, setUeSelecionada] = useState('');
-  const [exibirModalReiniciarSenha, setExibirModalReiniciarSenha] = useState(
-    false
-  );
   const [buscaCPF, setBuscaCPF] = useState('');
   const [tituloModal, setTituloModal] = useState('');
   const [
@@ -121,7 +117,6 @@ export default function ReiniciarSenhaEA() {
   const onClickReiniciar = async linha => {
     if (!permissoesTela.podeAlterar) return;
 
-    setLinhaSelecionada(linha);
     const confirmou = await confirmar(
       'Reiniciar Senha',
       '',
@@ -245,7 +240,6 @@ export default function ReiniciarSenhaEA() {
   }, [carregarUes, dreSelecionada]);
 
   const onCloseModalReiniciarSenha = () => {
-    setExibirModalReiniciarSenha(false);
     setExibirModalMensagemReiniciarSenha(false);
   };
 

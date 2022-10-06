@@ -11,8 +11,8 @@ import {
   SelectComponent,
 } from '~/componentes';
 import { Cabecalho } from '~/componentes-sgp';
+import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
 import {
-  SGP_BUTTON_VOLTAR,
   SGP_SELECT_DRE,
   SGP_SELECT_UE,
 } from '~/componentes-sgp/filtro/idsCampos';
@@ -220,23 +220,12 @@ const Suporte = ({ match }) => {
 
   return (
     <>
-      <Cabecalho pagina="Suporte" />
-      <Card>
+      <Cabecalho pagina="Suporte">
+        <BotaoVoltarPadrao onClick={() => onClickVoltar()} />
+      </Cabecalho>
+      <Card padding="24px 24px">
         <Col span={24}>
           <Loader loading={carregando}>
-            <Row gutter={[16, 8]} type="flex" justify="end">
-              <Col>
-                <Button
-                  id={SGP_BUTTON_VOLTAR}
-                  label="Voltar"
-                  icon="arrow-left"
-                  color={Colors.Azul}
-                  border
-                  onClick={onClickVoltar}
-                />
-              </Col>
-            </Row>
-
             <Row gutter={[16, 16]}>
               <Col sm={24} md={12}>
                 <Loader loading={carregandoDres} ignorarTip>

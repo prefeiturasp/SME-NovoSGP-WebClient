@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 
 import { Loader, SelectComponent } from '~/componentes';
-import { GraficoBarras, TagGrafico } from '~/componentes-sgp';
+import { GraficoBarras } from '~/componentes-sgp';
 
 import {
   erros,
@@ -136,7 +136,7 @@ const GraficoTotalAtividadeCompensacao = ({
 };
 
 GraficoTotalAtividadeCompensacao.propTypes = {
-  anoLetivo: PropTypes.oneOfType(PropTypes.any),
+  anoLetivo: PropTypes.oneOfType([PropTypes.any]),
   dreId: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   ueId: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   modalidade: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),

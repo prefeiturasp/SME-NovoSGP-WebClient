@@ -54,7 +54,7 @@ const QuantidadeRegistrosPAAI = props => {
 };
 
 QuantidadeRegistrosPAAI.propTypes = {
-  anoLetivo: PropTypes.oneOfType(PropTypes.any),
+  anoLetivo: PropTypes.oneOfType([PropTypes.any]),
   dreId: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   ueId: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   mesSelecionado: PropTypes.string,

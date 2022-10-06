@@ -1,5 +1,5 @@
 import * as moment from 'moment';
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import CardCollapse from '~/componentes/cardCollapse';
 import { setExibirCollapseVersao } from '~/redux/modulos/planoAEE/actions';

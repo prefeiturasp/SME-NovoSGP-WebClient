@@ -166,6 +166,7 @@ function ModalRecorrencia({
   };
   useEffect(() => {
     constroiValidacoes();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const onSubmitRecorrencia = () => {
@@ -208,6 +209,7 @@ function ModalRecorrencia({
       onCloseModal();
       setLimparRecorrencia(false);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [limparRecorrencia]);
 
   const desabilitarData = current => {

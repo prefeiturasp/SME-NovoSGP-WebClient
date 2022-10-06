@@ -287,9 +287,9 @@ const NavbarNotificacoes = props => {
 };
 
 NavbarNotificacoes.propTypes = {
-  Botao: PropTypes.oneOfType(PropTypes.object).isRequired,
-  Icone: PropTypes.oneOfType(PropTypes.object).isRequired,
-  Texto: PropTypes.oneOfType(PropTypes.object).isRequired,
+  Botao: PropTypes.oneOfType([PropTypes.object]).isRequired,
+  Icone: PropTypes.oneOfType([PropTypes.object]).isRequired,
+  Texto: PropTypes.oneOfType([PropTypes.object]).isRequired,
 };
 
 export default NavbarNotificacoes;

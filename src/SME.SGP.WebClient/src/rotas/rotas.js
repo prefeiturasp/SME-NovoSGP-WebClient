@@ -69,7 +69,6 @@ import RelatorioCompensacaoAusencia from '~/paginas/Relatorios/CompensacaoAusenc
 import DashboardEscolaAqui from '~/paginas/Dashboard/DashboardEscolaAqui/dashboardEscolaAqui';
 import ControleGrade from '~/paginas/Relatorios/DiarioClasse/ControleGrade/controleGrade';
 import Sondagem from '~/paginas/Sondagem/sondagem';
-import PocUploadArquivos from '~/componentes-sgp/UploadArquivos/pocUploadArquivos';
 import DocumentosPlanosTrabalhoLista from '~/paginas/Gestao/DocumentosPlanosTrabalho/documentosPlanosTrabalhoLista';
 import DocumentosPlanosTrabalhoCadastro from '~/paginas/Gestao/DocumentosPlanosTrabalho/documentosPlanosTrabalhoCadastro';
 import HistoricoNotificacoes from '~/paginas/Relatorios/Notificacoes/HistoricoNotificacoes/historicoNotificacoes';
@@ -1118,14 +1117,6 @@ rotas.set(RotasDto.SONDAGEM, {
   breadcrumbName: 'Sistema Sondagem',
   parent: '/',
   component: Sondagem,
-  exact: false,
-  tipo: RotasTipo.EstruturadaAutenticada,
-});
-
-rotas.set(RotasDto.POC_UPLOAD_ARQUIVOS, {
-  breadcrumbName: 'Poc Upload Arquivos',
-  parent: '/',
-  component: PocUploadArquivos,
   exact: false,
   tipo: RotasTipo.EstruturadaAutenticada,
 });

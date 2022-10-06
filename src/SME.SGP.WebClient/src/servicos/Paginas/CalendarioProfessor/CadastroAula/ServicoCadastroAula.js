@@ -45,7 +45,7 @@ class ServicoCadastroAula {
     );
   };
 
-  excluirAula = (id, tipoRecorrencia, nomeComponente) => {
+  excluirAula = (id, tipoRecorrencia) => {
     return api.delete(
       `v1/calendarios/professores/aulas/${id}/recorrencias/${tipoRecorrencia}`
     );

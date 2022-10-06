@@ -94,8 +94,8 @@ const GraficoTotalCriancasComAcompPorDRE = props => {
 };
 
 GraficoTotalCriancasComAcompPorDRE.propTypes = {
-  anoLetivo: PropTypes.oneOfType(PropTypes.any),
-  dataUltimaConsolidacao: PropTypes.oneOfType(PropTypes.any),
+  anoLetivo: PropTypes.oneOfType([PropTypes.any]),
+  dataUltimaConsolidacao: PropTypes.oneOfType([PropTypes.any]),
 };
 
 GraficoTotalCriancasComAcompPorDRE.defaultProps = {

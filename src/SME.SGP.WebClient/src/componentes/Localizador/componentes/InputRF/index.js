@@ -73,12 +73,14 @@ function InputRF({
         pessoaSelecionada && pessoaSelecionada.professorRf
       );
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pessoaSelecionada]);
 
   useEffect(() => {
     if (form && form.initialValues) {
       setValor(form.initialValues.professorRf);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [form?.initialValues]);
 
   useEffect(() => {
@@ -88,6 +90,7 @@ function InputRF({
         setValor('');
       }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [form?.values]);
 
   return (

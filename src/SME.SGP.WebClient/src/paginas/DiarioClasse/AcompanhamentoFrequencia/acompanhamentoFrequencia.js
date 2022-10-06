@@ -6,8 +6,6 @@ import { URL_HOME } from '~/constantes/url';
 import Alert from '~/componentes/alert';
 import Cabecalho from '~/componentes-sgp/cabecalho';
 import Card from '~/componentes/card';
-import Button from '~/componentes/button';
-import { Colors } from '~/componentes/colors';
 import { Loader } from '~/componentes';
 import SelectComponent from '~/componentes/select';
 
@@ -17,6 +15,7 @@ import ListaBimestres from './Componentes/listaBimestres';
 import modalidade from '~/dtos/modalidade';
 import { setBimestreSelecionado } from '~/redux/modulos/acompanhamentoFrequencia/actions';
 import ServicoConselhoClasse from '~/servicos/Paginas/ConselhoClasse/ServicoConselhoClasse';
+import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
 
 const AcompanhamentoFrequencia = () => {
   const usuario = useSelector(store => store.usuario);
@@ -147,6 +146,7 @@ const AcompanhamentoFrequencia = () => {
       resetarFiltro();
       setDesabilitarComponenteCurricular(true);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [turmaSelecionada, modalidadesFiltroPrincipal]);
 
   const onChangeComponenteCurricular = async componenteCurricularId => {
@@ -162,20 +162,21 @@ const AcompanhamentoFrequencia = () => {
           String(componenteCurricularIdSelecionado)
       );
 
-      setPodeLancarFrequencia(componenteCurriular?.registraFrequencia);      
+      setPodeLancarFrequencia(componenteCurriular?.registraFrequencia);
       setTerritorioSaber(componenteCurriular?.territorioSaber);
-      
+
       if (Number(turmaSelecionada.modalidade) === modalidade.EJA) {
         setBimestres(listagemBimestresEJA);
       } else {
         setBimestres(listagemBimestres);
       }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [componenteCurricularIdSelecionado]);
 
   return (
     <>
-      <div className="col-12">
+      <>
         {!turmaSelecionada.turma ? (
           <Alert
             alerta={{
@@ -201,20 +202,11 @@ const AcompanhamentoFrequencia = () => {
             className="mb-2"
           />
         )}
-        <Cabecalho pagina="Acompanhamento de Frequência" />
+        <Cabecalho pagina="Acompanhamento de Frequência">
+          <BotaoVoltarPadrao onClick={() => onClickVoltar()} />
+        </Cabecalho>
         <Card>
-          <div className="col-md-12 p-0">
-            <div className="row">
-              <div className="col-md-12 d-flex justify-content-end pb-4">
-                <Button
-                  label="Voltar"
-                  icon="arrow-left"
-                  color={Colors.Azul}
-                  border
-                  onClick={onClickVoltar}
-                />
-              </div>
-            </div>
+          <div className="col-md-12">
             <div className="row">
               <div className="col-sm-12 col-md-3 col-lg-3 col-xl-3 mb-2">
                 <Loader loading={carregandoComponentesCurriculares} tip="">
@@ -252,7 +244,7 @@ const AcompanhamentoFrequencia = () => {
             )}
           </div>
         </Card>
-      </div>
+      </>
     </>
   );
 };

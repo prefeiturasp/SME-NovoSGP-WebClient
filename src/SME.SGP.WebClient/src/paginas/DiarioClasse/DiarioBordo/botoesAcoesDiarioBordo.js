@@ -1,6 +1,11 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import { useSelector } from 'react-redux';
+import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
+import {
+  SGP_BUTTON_CANCELAR,
+  SGP_BUTTON_SALVAR_ALTERAR,
+} from '~/componentes-sgp/filtro/idsCampos';
 import Button from '~/componentes/button';
 import { Colors } from '~/componentes/colors';
 
@@ -12,6 +17,9 @@ const BotoesAcoesDiarioBordo = props => {
     desabilitarCampos,
     turmaInfantil,
     validaAntesDoSubmit,
+    componenteCurricularSelecionado,
+    dataSelecionada,
+    id,
   } = props;
 
   const observacaoEmEdicao = useSelector(
@@ -24,33 +32,34 @@ const BotoesAcoesDiarioBordo = props => {
 
   return (
     <>
-      <Button
-        id="btn-voltar-ata-diario-bordo"
-        label="Voltar"
-        icon="arrow-left"
-        color={Colors.Azul}
-        border
-        className="mr-3"
+      <BotaoVoltarPadrao
+        className="mr-2"
         onClick={() => onClickVoltar(observacaoEmEdicao, novaObservacao)}
       />
       <Button
-        id="btn-cancelar-ata-diario-bordo"
+        id={SGP_BUTTON_CANCELAR}
         label="Cancelar"
         color={Colors.Roxo}
         border
         bold
-        className="mr-3"
+        className="mr-2"
         onClick={onClickCancelar}
         disabled={!modoEdicao || desabilitarCampos}
       />
       <Button
-        id="btn-gerar-ata-diario-bordo"
-        label="Salvar"
+        id={SGP_BUTTON_SALVAR_ALTERAR}
+        label={id ? 'Alterar' : 'Salvar'}
         color={Colors.Roxo}
         border
         bold
         onClick={validaAntesDoSubmit}
-        disabled={!modoEdicao || !turmaInfantil || desabilitarCampos}
+        disabled={
+          !turmaInfantil ||
+          desabilitarCampos ||
+          !componenteCurricularSelecionado ||
+          !dataSelecionada ||
+          (id && !modoEdicao)
+        }
       />
     </>
   );
@@ -63,6 +72,9 @@ BotoesAcoesDiarioBordo.propTypes = {
   modoEdicao: PropTypes.bool,
   desabilitarCampos: PropTypes.bool,
   turmaInfantil: PropTypes.bool,
+  componenteCurricularSelecionado: PropTypes.oneOfType([PropTypes.any]),
+  dataSelecionada: PropTypes.oneOfType([PropTypes.any]),
+  id: PropTypes.oneOfType([PropTypes.any]),
 };
 
 BotoesAcoesDiarioBordo.defaultProps = {
@@ -72,6 +84,9 @@ BotoesAcoesDiarioBordo.defaultProps = {
   modoEdicao: false,
   desabilitarCampos: false,
   turmaInfantil: false,
+  componenteCurricularSelecionado: '',
+  dataSelecionada: '',
+  id: '',
 };
 
 export default BotoesAcoesDiarioBordo;

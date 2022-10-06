@@ -131,6 +131,7 @@ const FechamentoFinal = forwardRef((props, ref) => {
         erros(e);
         carregandoFechamentoFinal(false);
       });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [disciplinaCodigo, ehRegencia, turmaCodigo]);
 
   useImperativeHandle(ref, () => ({
@@ -143,17 +144,19 @@ const FechamentoFinal = forwardRef((props, ref) => {
   }));
 
   useEffect(() => {
-    if (bimestreCorrente == 'final' && turmaCodigo && disciplinaCodigo) {
+    if (bimestreCorrente === 'final' && turmaCodigo && disciplinaCodigo) {
       obterFechamentoFinal();
     } else {
       resetarTela();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [bimestreCorrente, disciplinaCodigo]);
 
   const setDisciplinaAtiva = disciplina => {
     const disciplinas = disciplinasRegencia.map(c => {
       c.ativa =
-        c.codigoComponenteCurricular == disciplina.codigoComponenteCurricular;
+        String(c.codigoComponenteCurricular) ===
+        String(disciplina.codigoComponenteCurricular);
       return c;
     });
     setDisciplinasRegencia([...disciplinas]);
@@ -164,7 +167,8 @@ const FechamentoFinal = forwardRef((props, ref) => {
     const notas = notasEmEdicao;
     const notaEmEdicao = notasEmEdicao.find(
       c =>
-        c.alunoRf == aluno.codigo && c.componenteCurricularCodigo == disciplina
+        String(c.alunoRf) === String(aluno.codigo) &&
+        String(c.componenteCurricularCodigo) === String(disciplina)
     );
     if (notaEmEdicao) {
       notaEmEdicao.conceitoId = ehNota ? '' : Number(nota);
@@ -232,6 +236,8 @@ const FechamentoFinal = forwardRef((props, ref) => {
               {!ehSintese && ehRegencia && (
                 <div className="lista-disciplinas">
                   {disciplinasRegencia.map(disciplina => (
+                    /* eslint-disable jsx-a11y/no-static-element-interactions */
+                    /* eslint-disable jsx-a11y/click-events-have-key-events */
                     <span
                       key={shortid.generate()}
                       className={`btn-disciplina ${

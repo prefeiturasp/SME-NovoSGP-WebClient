@@ -114,8 +114,8 @@ TabelaAvaliacoesFechamento.propTypes = {
   codigoAluno: PropTypes.string,
   periodoEscolarId: PropTypes.number,
   ehNota: PropTypes.bool,
-  listaTiposConceitos: PropTypes.oneOfType(PropTypes.array),
-  componenteCurricular: PropTypes.oneOfType(PropTypes.any),
+  listaTiposConceitos: PropTypes.oneOfType([PropTypes.array]),
+  componenteCurricular: PropTypes.oneOfType([PropTypes.any]),
 };
 
 TabelaAvaliacoesFechamento.defaultProps = {

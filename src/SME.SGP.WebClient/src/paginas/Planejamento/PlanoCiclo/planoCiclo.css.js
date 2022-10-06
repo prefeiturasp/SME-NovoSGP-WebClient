@@ -120,6 +120,12 @@ export const Planejamento = styled.div`
 
 export const Container = styled.div``;
 
+export const ContainerCampoTipoCiclo = styled.div`
+  @media (max-width: 768px) {
+    flex-direction: column-reverse;
+  }
+`;
+
 export const IframeStyle = css`
   body {
     min-height: 500px !important;

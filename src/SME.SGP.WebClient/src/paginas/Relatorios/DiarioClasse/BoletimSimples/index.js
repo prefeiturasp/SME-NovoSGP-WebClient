@@ -13,6 +13,7 @@ import modalidade from '~/dtos/modalidade';
 
 import { EstiloModal } from './boletimSimples.css';
 import { ModalidadeDTO } from '~/dtos';
+import { SGP_BUTTON_GERAR } from '~/componentes-sgp/filtro/idsCampos';
 
 const BoletimSimples = () => {
   const [loaderSecao] = useState(false);
@@ -148,9 +149,8 @@ const BoletimSimples = () => {
         exibir={String(filtro.modalidade) === String(modalidade.INFANTIL)}
         validarModalidadeFiltroPrincipal={false}
       />
-      <Cabecalho pagina="Impressão de Boletim" classes="mb-2" />
       <Loader loading={loaderSecao}>
-        <Card mx="mx-0">
+        <Cabecalho pagina="Impressão de Boletim">
           <ButtonGroup
             somenteConsulta={somenteConsulta}
             permissoesTela={{
@@ -166,9 +166,11 @@ const BoletimSimples = () => {
             desabilitarBotaoPrincipal={desabilitarBotaoGerar}
             botoesEstadoVariavel={false}
             labelBotaoPrincipal="Gerar"
+            idBotaoPrincipal={SGP_BUTTON_GERAR}
             modoEdicao
-            paddingBottom="8px"
           />
+        </Cabecalho>
+        <Card>
           <Filtro
             onFiltrar={onChangeFiltro}
             filtrou={filtrou}
@@ -177,7 +179,7 @@ const BoletimSimples = () => {
             setCancelou={setCancelou}
           />
           {!!filtro?.turmaCodigo?.length && selecionarAlunos && (
-            <div className="col-md-12 pt-4 py-0 px-0">
+            <div className="col-md-12 pt-4">
               <ListaPaginada
                 id="lista-alunos"
                 url="v1/boletim/alunos"

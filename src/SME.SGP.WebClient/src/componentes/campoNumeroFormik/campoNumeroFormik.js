@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import { InputNumber } from 'antd';
 import { Field } from 'formik';
 import PropTypes from 'prop-types';
@@ -11,14 +12,9 @@ const CampoNumeroFormik = React.forwardRef((props, ref) => {
     id,
     form,
     className,
-    classNameCampo,
-    type,
-    maskType,
     placeholder,
     onChange,
     onKeyDown,
-    value,
-    maxlength,
     label,
     semMensagem,
     max,
@@ -26,27 +22,22 @@ const CampoNumeroFormik = React.forwardRef((props, ref) => {
     step,
     disabled,
     onBlur,
+    labelRequired,
   } = props;
 
   const possuiErro = () => {
     return form && form.errors[name] && form.touched[name];
   };
 
-  const executaOnBlur = event => {
-    const { relatedTarget } = event;
-    if (relatedTarget && relatedTarget.getAttribute('type') === 'button') {
-      event.preventDefault();
-    }
-  };
-
   return (
     <Campo>
-      {label ? <Label text={label} control={name || ''} /> : ''}
+      {label ? (
+        <Label text={label} control={name || ''} isRequired={labelRequired} />
+      ) : (
+        ''
+      )}
       <Field name={name} id={name}>
-        {({
-          field: { value },
-          form: { setFieldValue, setFieldTouched, errors },
-        }) => (
+        {({ field: { value } }) => (
           <div>
             <div>
               <InputNumber
@@ -84,14 +75,14 @@ CampoNumeroFormik.propTypes = {
   onChange: PropTypes.func,
   onBlur: PropTypes.func,
   semMensagem: PropTypes.bool,
-  type: PropTypes.string,
+  labelRequired: PropTypes.bool,
 };
 
 CampoNumeroFormik.defaultProps = {
   onChange: () => {},
   onBlur: () => {},
   semMensagem: false,
-  type: 'number',
+  labelRequired: '',
 };
 
 export default CampoNumeroFormik;

@@ -110,6 +110,7 @@ const ModalSelecionarAulaFrequenciaPlanoAula = props => {
                   valueOption="value"
                   name="aula"
                   form={form}
+                  labelRequired
                 />
               </div>
             </div>

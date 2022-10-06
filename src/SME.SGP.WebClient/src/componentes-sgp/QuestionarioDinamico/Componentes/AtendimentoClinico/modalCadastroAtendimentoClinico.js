@@ -130,6 +130,7 @@ const ModalCadastroAtendimentoClinico = props => {
                 valueText="desc"
                 form={form}
                 name="diaSemana"
+                labelRequired
               />
             </div>
             <div className="col-md-12 mb-2">
@@ -138,6 +139,7 @@ const ModalCadastroAtendimentoClinico = props => {
                 name="atendimentoAtividade"
                 label="Atendimento/Atividade"
                 maxLength={100}
+                labelRequired
               />
             </div>
             <div className="col-md-12 mb-2">
@@ -146,6 +148,7 @@ const ModalCadastroAtendimentoClinico = props => {
                 name="localRealizacao"
                 label="Local de realização"
                 maxLength={100}
+                labelRequired
               />
             </div>
             <div className="col-md-12 mb-2">
@@ -156,6 +159,7 @@ const ModalCadastroAtendimentoClinico = props => {
                 placeholder="Horário"
                 formatoData="HH:mm"
                 somenteHora
+                labelRequired
               />
             </div>
             <div className="col-md-12 mb-2">
@@ -166,6 +170,7 @@ const ModalCadastroAtendimentoClinico = props => {
                 formatoData="HH:mm"
                 placeholder="Horário"
                 somenteHora
+                labelRequired
               />
             </div>
 

@@ -1,6 +1,11 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
+import {
+  SGP_BUTTON_CANCELAR,
+  SGP_BUTTON_SALVAR,
+} from '~/componentes-sgp/filtro/idsCampos';
 import Button from '~/componentes/button';
 import { Colors } from '~/componentes/colors';
 import { URL_HOME } from '~/constantes/url';
@@ -131,28 +136,20 @@ const BotoesAcoesCartaIntencoes = props => {
   };
   return (
     <>
+      <BotaoVoltarPadrao className="mr-2" onClick={() => onClickVoltar()} />
       <Button
-        id="btn-voltar-carta-intencoes"
-        label="Voltar"
-        icon="arrow-left"
-        color={Colors.Azul}
-        border
-        className="mr-3"
-        onClick={onClickVoltar}
-      />
-      <Button
-        id="btn-cancelar-carta-intencoes"
+        id={SGP_BUTTON_CANCELAR}
         label="Cancelar"
         color={Colors.Roxo}
         border
-        className="mr-3"
+        className="mr-2"
         onClick={onCancelar}
         disabled={
           !ehTurmaInfantil || somenteConsulta || !cartaIntencoesEmEdicao
         }
       />
       <Button
-        id="btn-salvar-carta-intencoes"
+        id={SGP_BUTTON_SALVAR}
         label="Salvar"
         color={Colors.Roxo}
         border

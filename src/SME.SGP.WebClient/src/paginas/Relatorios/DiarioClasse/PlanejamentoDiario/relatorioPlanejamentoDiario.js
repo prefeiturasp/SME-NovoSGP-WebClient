@@ -7,9 +7,7 @@ import {
   SelectComponent,
 } from '~/componentes';
 import { Cabecalho } from '~/componentes-sgp';
-import Button from '~/componentes/button';
 import Card from '~/componentes/card';
-import { Colors } from '~/componentes/colors';
 import { ModalidadeDTO } from '~/dtos';
 import AbrangenciaServico from '~/servicos/Abrangencia';
 import { erros, sucesso } from '~/servicos/alertas';
@@ -22,6 +20,8 @@ import ServicoPeriodoEscolar from '~/servicos/Paginas/Calendario/ServicoPeriodoE
 
 import FiltroHelper from '~componentes-sgp/filtro/helper';
 import { OPCAO_TODOS } from '~/constantes/constantes';
+import BotoesAcaoRelatorio from '~/componentes-sgp/botoesAcaoRelatorio';
+import { URL_HOME } from '~/constantes';
 
 const RelatorioPlanejamentoDiario = () => {
   const [exibirLoader, setExibirLoader] = useState(false);
@@ -58,6 +58,8 @@ const RelatorioPlanejamentoDiario = () => {
   const [clicouBotaoGerar, setClicouBotaoGerar] = useState(false);
   const [desabilitarGerar, setDesabilitarGerar] = useState(true);
 
+  const [modoEdicao, setModoEdicao] = useState(false);
+
   const opcoesRadioSimNao = [
     { label: 'Não', value: false },
     { label: 'Sim', value: true },
@@ -71,6 +73,7 @@ const RelatorioPlanejamentoDiario = () => {
     setAnoLetivo(valor);
     setListarDataFutura(false);
     setExibirDetalhamento(false);
+    setModoEdicao(true);
   };
 
   const onChangeDre = valor => {
@@ -81,6 +84,7 @@ const RelatorioPlanejamentoDiario = () => {
     setCodigoUe(undefined);
     setListarDataFutura(false);
     setExibirDetalhamento(false);
+    setModoEdicao(true);
   };
 
   const onChangeUe = valor => {
@@ -89,6 +93,7 @@ const RelatorioPlanejamentoDiario = () => {
     setCodigoUe(valor);
     setListarDataFutura(false);
     setExibirDetalhamento(false);
+    setModoEdicao(true);
   };
 
   const onChangeModalidade = valor => {
@@ -96,21 +101,25 @@ const RelatorioPlanejamentoDiario = () => {
     setModalidadeId(valor);
     setListarDataFutura(false);
     setExibirDetalhamento(false);
+    setModoEdicao(true);
   };
 
   const onChangeComponenteCurricular = valor => {
     setComponenteCurricularId(valor);
     setClicouBotaoGerar(false);
+    setModoEdicao(true);
   };
 
   const onChangeBimestre = valor => {
     setBimestre(valor);
     setClicouBotaoGerar(false);
+    setModoEdicao(true);
   };
 
   const onChangeSemestre = valor => {
     setSemestre(valor);
     setClicouBotaoGerar(false);
+    setModoEdicao(true);
   };
 
   const onChangeTurma = valor => {
@@ -118,6 +127,7 @@ const RelatorioPlanejamentoDiario = () => {
     setListarDataFutura(false);
     setExibirDetalhamento(false);
     setClicouBotaoGerar(false);
+    setModoEdicao(true);
   };
 
   const [anoAtual] = useState(moment().format('YYYY'));
@@ -217,6 +227,7 @@ const RelatorioPlanejamentoDiario = () => {
 
   useEffect(() => {
     validarValorPadraoAnoLetivo(listaAnosLetivo);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [consideraHistorico, listaAnosLetivo]);
 
   const obterUes = useCallback(async () => {
@@ -310,6 +321,7 @@ const RelatorioPlanejamentoDiario = () => {
 
   useEffect(() => {
     obterBimestres();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [modalidadeId, anoLetivo]);
 
   const checarPeriodoEhMaior = data => {
@@ -333,6 +345,7 @@ const RelatorioPlanejamentoDiario = () => {
 
   useEffect(() => {
     checarPeriodoFinalBimestre();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [bimestre]);
 
   const obterTurmas = useCallback(async () => {
@@ -368,6 +381,7 @@ const RelatorioPlanejamentoDiario = () => {
       }
       setExibirLoader(false);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [modalidadeId]);
 
   useEffect(() => {
@@ -377,6 +391,7 @@ const RelatorioPlanejamentoDiario = () => {
       setTurmaId();
       setListaTurmas([]);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [modalidadeId]);
 
   const obterComponentesCurriculares = useCallback(async () => {
@@ -451,6 +466,7 @@ const RelatorioPlanejamentoDiario = () => {
 
     setListaAnosLetivo(anosLetivos);
     setExibirLoader(false);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [anoAtual, consideraHistorico]);
 
   useEffect(() => {
@@ -487,20 +503,24 @@ const RelatorioPlanejamentoDiario = () => {
       setSemestre();
       setListaSemestres([]);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [obterAnosLetivos, modalidadeId, anoLetivo, consideraHistorico]);
 
   const cancelar = async () => {
-    await setCodigoUe();
-    await setCodigoDre();
-    await setTurmaId();
-    await setSemestre();
-    await setModalidadeId();
-    await setTurmaId();
-    await setComponenteCurricularId();
-    await setBimestre();
-    await setListarDataFutura(false);
-    await setExibirDetalhamento(false);
+    setConsideraHistorico(false);
+    setAnoLetivo(anoAtual);
+    setCodigoUe();
+    setCodigoDre();
+    setTurmaId();
+    setSemestre();
+    setModalidadeId();
+    setTurmaId();
+    setComponenteCurricularId();
+    setBimestre();
+    setListarDataFutura(false);
+    setExibirDetalhamento(false);
     validarValorPadraoAnoLetivo(listaAnosLetivo);
+    setModoEdicao(false);
   };
 
   const gerar = async () => {
@@ -540,46 +560,19 @@ const RelatorioPlanejamentoDiario = () => {
 
   return (
     <Loader loading={exibirLoader}>
-      <Cabecalho pagina="Relatório de controle de planejamento diário" />
+      <Cabecalho pagina="Relatório de controle de planejamento diário">
+        <BotoesAcaoRelatorio
+          onClick={() => {
+            history.push(URL_HOME);
+          }}
+          onClickCancelar={cancelar}
+          onClickGerar={gerar}
+          desabilitarBtnGerar={desabilitarGerar}
+          modoEdicao={modoEdicao}
+        />
+      </Cabecalho>
       <Card>
         <div className="col-md-12">
-          <div className="row">
-            <div className="col-md-12 d-flex justify-content-end pb-4 justify-itens-end">
-              <Button
-                id="btn-voltar"
-                label="Voltar"
-                icon="arrow-left"
-                color={Colors.Azul}
-                border
-                className="mr-2"
-                onClick={() => {
-                  history.push('/');
-                }}
-              />
-              <Button
-                id="btn-cancelar"
-                label="Cancelar"
-                color={Colors.Roxo}
-                border
-                bold
-                className="mr-2"
-                onClick={() => {
-                  cancelar();
-                }}
-              />
-              <Button
-                id="btn-gerar"
-                icon="print"
-                label="Gerar"
-                color={Colors.Azul}
-                border
-                bold
-                className="mr-0"
-                onClick={gerar}
-                disabled={desabilitarGerar}
-              />
-            </div>
-          </div>
           <div className="row">
             <div className="col-sm-12 col-md-6 col-lg-4 col-xl-4 mb-2">
               <CheckboxComponent
@@ -588,6 +581,7 @@ const RelatorioPlanejamentoDiario = () => {
                   setAnoLetivo();
                   setCodigoDre();
                   setConsideraHistorico(e.target.checked);
+                  setModoEdicao(true);
                 }}
                 checked={consideraHistorico}
               />
@@ -716,6 +710,7 @@ const RelatorioPlanejamentoDiario = () => {
                 onChange={e => {
                   setListarDataFutura(e.target.value);
                   setClicouBotaoGerar(false);
+                  setModoEdicao(true);
                 }}
                 desabilitado={
                   !turmaId ||
@@ -735,6 +730,7 @@ const RelatorioPlanejamentoDiario = () => {
                 onChange={e => {
                   setExibirDetalhamento(e.target.value);
                   setClicouBotaoGerar(false);
+                  setModoEdicao(true);
                 }}
                 value={exibirDetalhamento}
                 desabilitado={!turmaId || turmaId === OPCAO_TODOS}

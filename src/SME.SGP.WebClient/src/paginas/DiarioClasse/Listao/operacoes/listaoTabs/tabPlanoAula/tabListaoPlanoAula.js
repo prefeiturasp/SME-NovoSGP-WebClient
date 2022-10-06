@@ -40,6 +40,7 @@ const TabListaoPlanoAula = () => {
       limparDadosPlanoAula();
       dispatch(setLimparModoEdicaoGeral(false));
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const montarListaObjetivos = dados => {
@@ -103,6 +104,7 @@ const TabListaoPlanoAula = () => {
     limparDadosPlanoAula();
     setExibirLoaderGeral(false);
     return false;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     dispatch,
     periodoAbertoListao,
@@ -116,6 +118,7 @@ const TabListaoPlanoAula = () => {
       await obterPlanoAulaPorPeriodo();
       setExecutarObterPlanoAulaPorPeriodo(false);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [executarObterPlanoAulaPorPeriodo, obterPlanoAulaPorPeriodo]);
 
   useEffect(() => {
@@ -133,6 +136,7 @@ const TabListaoPlanoAula = () => {
     ) {
       obterPlanoAulaPorPeriodo();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [periodo]);
 
   return (

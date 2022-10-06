@@ -404,6 +404,7 @@ export default function ReiniciarSenha({ perfilSelecionado }) {
                 name="emailUsuario"
                 form={form}
                 maxlength="50"
+                labelRequired
               />
             </ModalConteudoHtml>
           </Form>

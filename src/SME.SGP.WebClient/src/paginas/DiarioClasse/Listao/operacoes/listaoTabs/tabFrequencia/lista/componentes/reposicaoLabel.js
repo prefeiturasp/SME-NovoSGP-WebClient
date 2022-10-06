@@ -21,7 +21,7 @@ const Container = styled.div`
 `;
 
 const ReposicaoLabel = ({ linhaDetalhe }) => (
-  <Tooltip title="Reposição">
+  <Tooltip title="Reposição" destroyTooltipOnHide>
     <Container linhaDetalhe={linhaDetalhe}>
       <div>R</div>
     </Container>

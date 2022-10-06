@@ -315,6 +315,7 @@ const ListaoPaginado = () => {
     }
 
     setColunas([...cols]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [modalidade, bimestre]);
 
   useEffect(() => {

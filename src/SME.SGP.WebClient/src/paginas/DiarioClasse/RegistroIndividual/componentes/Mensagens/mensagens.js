@@ -21,7 +21,7 @@ const Mensagens = () => {
     );
   }
 
-  return <AlertaPermiteSomenteTurmaInfantil marginBottom={3} />;
+  return <AlertaPermiteSomenteTurmaInfantil />;
 };
 
 export default Mensagens;

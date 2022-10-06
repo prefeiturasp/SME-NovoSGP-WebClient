@@ -338,6 +338,7 @@ export default createGlobalStyle`
   }
 
   .secao-conteudo{
+    padding-top: 16px;
     margin-left: var(--espacamento-conteudo);
 
     @media screen and (max-width: 993px) {

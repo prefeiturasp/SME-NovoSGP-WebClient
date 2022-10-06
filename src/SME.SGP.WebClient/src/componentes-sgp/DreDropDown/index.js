@@ -20,6 +20,7 @@ function DreDropDown({
   desabilitado,
   opcaoTodas,
   temModalidade,
+  labelRequired,
 }) {
   const [carregando, setCarregando] = useState(false);
   const [listaDres, setListaDres] = useState([]);
@@ -44,6 +45,7 @@ function DreDropDown({
 
   useEffect(() => {
     if (temModalidade) buscarDres();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [url]);
 
   useEffect(() => {
@@ -51,12 +53,14 @@ function DreDropDown({
       form.setFieldValue('dreId', listaDres[0].valor);
       onChange(listaDres[0].valor, listaDres);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [listaDres]);
 
   useEffect(() => {
     if (!valorNuloOuVazio(form.values.dreId)) {
       onChange(form.values.dreId, listaDres);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [form.values.dreId, onChange]);
 
   return (
@@ -73,6 +77,7 @@ function DreDropDown({
         placeholder="Diretoria Regional De Educação (DRE)"
         disabled={!listaDres.length || listaDres.length === 1 || desabilitado}
         showSearch
+        labelRequired={labelRequired}
       />
     </Loader>
   );
@@ -89,6 +94,7 @@ DreDropDown.propTypes = {
   desabilitado: PropTypes.bool,
   opcaoTodas: PropTypes.bool,
   temModalidade: PropTypes.bool,
+  labelRequired: PropTypes.bool,
 };
 
 DreDropDown.defaultProps = {
@@ -99,6 +105,7 @@ DreDropDown.defaultProps = {
   desabilitado: false,
   opcaoTodas: false,
   temModalidade: true,
+  labelRequired: false,
 };
 
 export default DreDropDown;

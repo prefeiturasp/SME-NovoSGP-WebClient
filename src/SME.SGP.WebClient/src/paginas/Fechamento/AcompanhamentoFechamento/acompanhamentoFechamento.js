@@ -2,15 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Divider } from 'antd';
 
-import {
-  Base,
-  Button,
-  Card,
-  Colors,
-  Label,
-  Loader,
-  PainelCollapse,
-} from '~/componentes';
+import { Base, Card, Label, Loader, PainelCollapse } from '~/componentes';
 import {
   Cabecalho,
   Paginacao,
@@ -32,6 +24,7 @@ import {
 import { Filtros } from './Filtros';
 import { SecaoFechamento } from './SecaoFechamento';
 import { SecaoConselhoClasse } from './SecaoConselhoClasse';
+import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
 
 const AcompanhamentoFechamento = () => {
   const [ehInfantil, setEhInfantil] = useState(false);
@@ -151,22 +144,12 @@ const AcompanhamentoFechamento = () => {
         exibir={escolheuModalidadeInfantil}
         validarModalidadeFiltroPrincipal={false}
       />
-      <Cabecalho pagina="Acompanhamento do fechamento" classes="mb-2" />
       <Loader loading={carregandoAcompanhamentoFechamento} ignorarTip>
+        <Cabecalho pagina="Acompanhamento do fechamento">
+          <BotaoVoltarPadrao onClick={() => aoClicarBotaoVoltar()} />
+        </Cabecalho>
         <Card>
-          <div className="col-md-12 p-0">
-            <div className="row mb-2">
-              <div className="col-sm-12 d-flex justify-content-end">
-                <Button
-                  id="botao-voltar"
-                  label="Voltar"
-                  icon="arrow-left"
-                  color={Colors.Azul}
-                  onClick={aoClicarBotaoVoltar}
-                  border
-                />
-              </div>
-            </div>
+          <div className="col-md-12">
             <div className="mb-4">
               <Filtros
                 onChangeFiltros={onChangeFiltros}

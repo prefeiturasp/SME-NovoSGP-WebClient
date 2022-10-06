@@ -55,7 +55,7 @@ const QuantidadePlanosUtilizamRecursosAcessibilidadeSalaRegularSRM = props => {
 };
 
 QuantidadePlanosUtilizamRecursosAcessibilidadeSalaRegularSRM.propTypes = {
-  anoLetivo: PropTypes.oneOfType(PropTypes.any),
+  anoLetivo: PropTypes.oneOfType([PropTypes.any]),
   dreId: PropTypes.string,
   ueId: PropTypes.string,
 };

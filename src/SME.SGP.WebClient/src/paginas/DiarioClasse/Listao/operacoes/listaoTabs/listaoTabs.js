@@ -47,6 +47,7 @@ const ListaoTabs = () => {
       turmaSelecionada
     );
     setListaoEhInfantil(ehInfantil);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [modalidadesFiltroPrincipal, turmaSelecionada]);
 
   const desabilitarTabs = !componenteCurricular || !bimestreOperacoes;

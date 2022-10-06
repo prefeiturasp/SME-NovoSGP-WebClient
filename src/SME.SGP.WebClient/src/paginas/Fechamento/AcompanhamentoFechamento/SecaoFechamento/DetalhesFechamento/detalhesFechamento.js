@@ -79,7 +79,7 @@ DetalhesFechamento.defaultProps = {
 
 DetalhesFechamento.propTypes = {
   turmaId: PropTypes.number,
-  parametrosFiltro: PropTypes.oneOfType(PropTypes.array, PropTypes.object),
+  parametrosFiltro: PropTypes.oneOfType([PropTypes.array, PropTypes.object]),
 };
 
 export default DetalhesFechamento;

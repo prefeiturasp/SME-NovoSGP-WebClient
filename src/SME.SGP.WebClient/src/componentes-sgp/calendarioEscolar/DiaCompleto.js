@@ -87,6 +87,7 @@ const DiaCompleto = props => {
     return () => {
       estado = false;
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     diaSelecionado,
     dreSelecionada,
@@ -98,6 +99,7 @@ const DiaCompleto = props => {
   ]);
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     estaAberto = false;
     store.dispatch(selecionaDia(undefined));
   }, [filtros]);

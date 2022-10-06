@@ -6,7 +6,7 @@ const inicial = {
   rotaAtiva: '/',
   rotas,
   menuSelecionado: [],
-  somenteConsulta: false
+  somenteConsulta: false,
 };
 
 export default function navegacao(state = inicial, action) {
