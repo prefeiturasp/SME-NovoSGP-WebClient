@@ -409,7 +409,10 @@ const ModalAnotacoesFrequencia = props => {
                     border
                     className="mr-3 mt-2 padding-btn-confirmacao"
                     onClick={() => validaAntesDoSubmit(form)}
-                    disabled={desabilitarCampos}
+                    disabled={
+                      desabilitarCampos ||
+                      (valoresIniciais?.auditoria?.id && !modoEdicao)
+                    }
                   />
                 </div>
               </div>
