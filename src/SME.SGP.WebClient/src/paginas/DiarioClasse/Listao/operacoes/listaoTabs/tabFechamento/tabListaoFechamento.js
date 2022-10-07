@@ -61,24 +61,24 @@ const TabListaoFechamento = () => {
   }, []);
 
   const ehEJA = Number(turmaSelecionada?.modalidade) === ModalidadeDTO.EJA;
-
+  const naoLancaNota =
+    componenteCurricular?.codigoComponenteCurricular &&
+    !componenteCurricular?.lancaNota;
   return (
     <>
-      {componenteCurricular?.codigoComponenteCurricular &&
-        !componenteCurricular?.lancaNota && (
-          <Alert
-            alerta={{
-              tipo: 'warning',
-              id: 'alertas-listao',
-              mensagem: 'Componente selecionado não lança nota',
-              estiloTitulo: { fontSize: '18px' },
-            }}
-            className="mb-2"
-          />
-        )}
+      {naoLancaNota && (
+        <Alert
+          alerta={{
+            tipo: 'warning',
+            id: 'alertas-listao',
+            mensagem: 'Componente selecionado não lança nota',
+            estiloTitulo: { fontSize: '18px' },
+          }}
+          className="mb-2"
+        />
+      )}
 
-      {/* TODO: Verificar se vai ser exibido a lista vazia com a informação 'Sem dados' */}
-      {dadosFechamento?.alunos?.length && bimestreOperacoes ? (
+      {!naoLancaNota && dadosFechamento?.alunos?.length && bimestreOperacoes ? (
         <ListaoListaFechamento ehEJA={ehEJA} />
       ) : (
         <></>
