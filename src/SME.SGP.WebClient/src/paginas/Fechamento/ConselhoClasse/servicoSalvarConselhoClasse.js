@@ -14,6 +14,8 @@ import {
   setDadosIniciaisListasNotasConceitos,
   setAuditoriaAnotacaoRecomendacao,
   setDadosListasNotasConceitos,
+  setRecomendacaoAlunoSelecionados,
+  setRecomendacaoFamiliaSelecionados,
 } from '~/redux/modulos/conselhoClasse/actions';
 import notasConceitos from '~/dtos/notasConceitos';
 
@@ -37,6 +39,8 @@ class ServicoSalvarConselhoClasse {
     dispatch(setExpandirLinha([]));
     dispatch(setNotaConceitoPosConselhoAtual({}));
     dispatch(setIdCamposNotasPosConselho({}));
+    dispatch(setRecomendacaoAlunoSelecionados([]));
+    dispatch(setRecomendacaoFamiliaSelecionados([]));
   };
 
   validarSalvarRecomendacoesAlunoFamilia = async (salvarSemValidar = false) => {
@@ -351,7 +355,6 @@ class ServicoSalvarConselhoClasse {
       const dadosCarregar = _.cloneDeep(resultado.data.notasConceitos);
       dispatch(setDadosIniciaisListasNotasConceitos([...dadosCarregar]));
       dispatch(setDadosListasNotasConceitos(resultado.data.notasConceitos));
-
       return true;
     }
     return false;
