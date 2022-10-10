@@ -759,7 +759,7 @@ function CadastroDeAula({ match, location }) {
                           placeholder="Selecione um componente curricular"
                           form={form}
                           disabled={
-                            (!!id && aula?.disciplinaId) ||
+                            !!(!!id && aula?.disciplinaId) ||
                             (listaComponentes.length === 1 && !id)
                           }
                           onChange={onChangeComponente}

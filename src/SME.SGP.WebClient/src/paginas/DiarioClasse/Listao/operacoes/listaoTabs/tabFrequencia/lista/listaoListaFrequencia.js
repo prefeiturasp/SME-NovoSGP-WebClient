@@ -1,8 +1,7 @@
 import { faAngleDown, faAngleUp } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Tooltip } from 'antd';
-import React, { useContext, useState } from 'react';
-import { useEffect } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { DataTable } from '~/componentes';
 import SinalizacaoAEE from '~/componentes-sgp/SinalizacaoAEE/sinalizacaoAEE';
@@ -227,7 +226,6 @@ const ListaoListaFrequencia = () => {
     },
   ];
 
-  // TODO - Verificar a regra - componenteCurricular.registraFrequencia
   if (dadosFrequencia?.aulas?.length) {
     dadosFrequencia.aulas.forEach(aula => {
       const ehAulaCj = aula?.aulaCj;
@@ -254,6 +252,7 @@ const ListaoListaFrequencia = () => {
             width,
             className: 'posicao-marcar-todos-header',
             title: montarColunaFrequenciaMarcarTodasAulas(aula),
+            key: aula?.aulaId,
             render: dadosAulas => {
               const dadosDiaAula = dadosAulas.aulas.find(
                 item => item.aulaId === aula.aulaId
@@ -462,7 +461,7 @@ const ListaoListaFrequencia = () => {
           expandIconColumnIndex={dadosFrequencia?.aulas.length + 3 || null}
           expandedRowKeys={expandedRowKeys}
           onClickExpandir={onClickExpandir}
-          rowClassName={(record, i) => {
+          rowClassName={record => {
             const ehLinhaExpandida = temLinhaExpandida(record?.codigoAluno);
             const nomeClasse = ehLinhaExpandida.length ? 'linha-ativa' : '';
             return nomeClasse;

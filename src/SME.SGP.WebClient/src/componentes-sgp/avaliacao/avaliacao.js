@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import { Tooltip } from 'antd';
 import PropTypes from 'prop-types';
 import React from 'react';
@@ -77,7 +78,7 @@ const Avaliacao = props => {
   };
 
   const montarCabecalhoAvaliacoes = () => {
-    return dados.avaliacoes && dados.avaliacoes.length > 0
+    return dados?.avaliacoes?.length > 0
       ? dados.avaliacoes.map(avaliacao => {
           return (
             <th key={shortid.generate()} className={obterTamanhoColuna()}>
@@ -91,6 +92,7 @@ const Avaliacao = props => {
                 <div className="row justify-content-center px-3">
                   {avaliacao.disciplinas.map(item => (
                     <div
+                      key={shortid.generate()}
                       alt={item}
                       className="badge badge-pill border text-dark bg-white font-weight-light"
                     >
@@ -329,7 +331,7 @@ const Avaliacao = props => {
                 <tbody className="tabela-avaliacao-tbody">
                   {dados.alunos.map((aluno, i) => {
                     return (
-                      <>
+                      <React.Fragment key={shortid.generate()}>
                         <tr>
                           <td className="sticky-col col-numero-chamada">
                             {aluno.numeroChamada}
@@ -392,7 +394,7 @@ const Avaliacao = props => {
                             )
                           }
                         />
-                      </>
+                      </React.Fragment>
                     );
                   })}
                 </tbody>

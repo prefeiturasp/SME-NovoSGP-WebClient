@@ -141,7 +141,7 @@ CampoTexto.propTypes = {
   onKeyDown: PropTypes.oneOfType([PropTypes.func]),
   value: PropTypes.oneOfType([PropTypes.any]),
   desabilitado: PropTypes.bool,
-  maxLength: PropTypes.oneOfType([PropTypes.number]),
+  maxLength: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   label: PropTypes.string,
   semMensagem: PropTypes.bool,
   style: PropTypes.oneOfType([PropTypes.any]),

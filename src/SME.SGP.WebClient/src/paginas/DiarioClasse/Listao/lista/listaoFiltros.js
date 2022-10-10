@@ -73,7 +73,6 @@ const ListaoFiltros = () => {
       const anosOrdenados = ordenarDescPor(anosLetivo, 'valor');
       setListaAnosLetivo(anosOrdenados);
       setAnoLetivo(anosLetivo[0].valor);
-      setCodigoDre();
       return;
     }
     setListaAnosLetivo([]);
@@ -119,7 +118,7 @@ const ListaoFiltros = () => {
       obterDres();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [obterDres, anoLetivo]);
+  }, [anoLetivo]);
 
   const obterUes = useCallback(async () => {
     setCarregandoUes(true);
@@ -285,10 +284,8 @@ const ListaoFiltros = () => {
   }, [modalidade, obterBimestres]);
 
   const onCheckedConsideraHistorico = e => {
-    const anoAutal = window.moment().format('YYYY');
-
     setListaAnosLetivo([]);
-    setAnoLetivo(anoAutal);
+    setAnoLetivo();
 
     setListaDres([]);
     setCodigoDre();
