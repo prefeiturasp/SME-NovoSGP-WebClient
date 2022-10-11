@@ -31,6 +31,7 @@ function DreDropDown({ form, onChange }) {
       form.setFieldValue('dreId', listaDres[0].valor);
       onChange(listaDres[0].valor);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [listaDres]);
 
   return (

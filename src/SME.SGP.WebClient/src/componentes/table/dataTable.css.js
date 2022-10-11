@@ -3,6 +3,7 @@ import { Base } from '../colors';
 
 export const Container = styled.div`
   .ocultar-coluna-multi-selecao {
+    background-color: 'black'!important;
     .ant-table-selection-column {
       display: none !important;
     }
@@ -56,7 +57,13 @@ export const Container = styled.div`
           : css`
               background: ${Base.Roxo} !important;
               color: ${Base.Branco} !important;
+
+              .button-reiniciar-hover {
+                color: ${Base.Branco} !important;
+                border-color: ${Base.Branco} !important;
+              }
             `}
+  }
 
   .ant-table-tbody tr:hover.ant-table-expanded-row > td {
     cursor: default !important;

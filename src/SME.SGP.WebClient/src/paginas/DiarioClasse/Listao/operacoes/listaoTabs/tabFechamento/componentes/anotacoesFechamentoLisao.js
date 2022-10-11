@@ -84,9 +84,9 @@ const AnotacoesFechamentoLisao = props => {
 AnotacoesFechamentoLisao.propTypes = {
   desabilitar: PropTypes.bool,
   ehInfantil: PropTypes.bool,
-  aluno: PropTypes.oneOfType(PropTypes.any),
+  aluno: PropTypes.oneOfType([PropTypes.any]),
   fechamentoId: PropTypes.number,
-  dadosFechamento: PropTypes.oneOfType(PropTypes.any),
+  dadosFechamento: PropTypes.oneOfType([PropTypes.any]),
   setDadosFechamento: PropTypes.func,
   alunoExpandido: PropTypes.bool,
 };

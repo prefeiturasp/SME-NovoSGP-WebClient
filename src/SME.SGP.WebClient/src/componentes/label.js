@@ -4,7 +4,8 @@ import PropTypes from 'prop-types';
 import { Base } from './colors';
 
 const Container = styled.div`
-  label {
+  label,
+  div {
     font-family: Roboto;
     height: ${({ altura }) => `${altura}px`};
     font-size: ${({ tamanhoFonte }) => `${tamanhoFonte}px`};
@@ -39,6 +40,8 @@ const Label = ({
   observacaoText,
   tamanhoFonte,
   altura,
+  isRequired,
+  withDiv,
 }) => {
   return (
     <Container
@@ -46,15 +49,44 @@ const Label = ({
       tamanhoFonte={tamanhoFonte}
       altura={altura}
     >
-      <label htmlFor={control} id={text} className={className}>
-        {text}
-        {observacaoText ? <span> {` ${observacaoText}`}</span> : ''}
-      </label>
-      {campoOpcional ? (
-        <label htmlFor={control} id={text} className="campoOpcional">
-          (opcional)
-        </label>
-      ) : null}
+      {isRequired && (
+        <span
+          style={{
+            marginLeft: '-11px',
+            color: Base.Vermelho,
+            marginRight: '4px',
+          }}
+        >
+          *
+        </span>
+      )}
+      {withDiv ? (
+        <>
+          <div htmlFor={control} id={text} className={className}>
+            {text}
+            {observacaoText ? <span> {` ${observacaoText}`}</span> : ''}
+          </div>
+          {campoOpcional ? (
+            <span htmlFor={control} id={text} className="campoOpcional">
+              (opcional)
+            </span>
+          ) : null}
+        </>
+      ) : (
+        <>
+          {/* eslint-disable-next-line jsx-a11y/label-has-for */}
+          <label htmlFor={control} id={text} className={className}>
+            {text}
+            {observacaoText ? <span> {` ${observacaoText}`}</span> : ''}
+          </label>
+          {campoOpcional ? (
+            // eslint-disable-next-line jsx-a11y/label-has-associated-control, jsx-a11y/label-has-for
+            <label htmlFor={control} id={text} className="campoOpcional">
+              (opcional)
+            </label>
+          ) : null}
+        </>
+      )}
     </Container>
   );
 };
@@ -67,10 +99,12 @@ Label.propTypes = {
   observacaoText: PropTypes.string,
   tamanhoFonte: PropTypes.string,
   altura: PropTypes.string,
+  isRequired: PropTypes.bool,
+  withDiv: PropTypes.bool,
 };
 
 Label.defaultProps = {
-  text: PropTypes.string,
+  text: '',
   control: null,
   center: false,
   className: '',
@@ -78,6 +112,8 @@ Label.defaultProps = {
   observacaoText: '',
   tamanhoFonte: '14',
   altura: '17',
+  isRequired: false,
+  withDiv: false,
 };
 
 export default Label;

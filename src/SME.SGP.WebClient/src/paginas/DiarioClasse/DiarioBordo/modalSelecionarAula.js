@@ -108,6 +108,7 @@ const ModalSelecionarAula = props => {
                   valueOption="value"
                   name="aula"
                   form={form}
+                  labelRequired
                 />
               </div>
             </div>

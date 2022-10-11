@@ -34,3 +34,7 @@ export const validarNavegacaoTela = async (e, urlDestino) => {
 
   return false;
 };
+
+export const isFieldRequired = (fieldName, validationSchema) => {
+  return validationSchema?.fields?.[fieldName]?._exclusive?.required;
+};

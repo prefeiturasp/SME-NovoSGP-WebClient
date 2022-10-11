@@ -25,7 +25,7 @@ LabelSemDados.propTypes = {
 };
 
 LabelSemDados.defaultProps = {
-  text: PropTypes.string,
+  text: '',
   center: false,
 };
 

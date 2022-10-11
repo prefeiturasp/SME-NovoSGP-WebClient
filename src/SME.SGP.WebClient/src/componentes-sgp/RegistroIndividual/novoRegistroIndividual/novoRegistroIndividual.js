@@ -260,12 +260,10 @@ const NovoRegistroIndividual = () => {
                 onChange={mudarData}
                 desabilitarData={desabilitarData}
               />
-            </div>
-            {permissoesTela.podeIncluir && (
-              <div className="col-12 p-0 pb-3">
-                <SugestaoTopico valorData={data} />
-              </div>
-            )}
+            </div>            
+            <div className="col-12 p-0 pb-3">
+              <SugestaoTopico valorData={data} />
+            </div>          
             <div className="pt-2">
               <Loader ignorarTip loading={carregandoNovoRegistro}>
                 <div style={{ minHeight: 200 }}>

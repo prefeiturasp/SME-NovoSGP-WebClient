@@ -45,6 +45,8 @@ export default function ReiniciarSenha({ perfilSelecionado }) {
 
   const [carregando, setCarregando] = useState(false);
 
+  const [colorButton, setColorButton] = useState();
+
   const { usuario } = store.getState();
   const anoLetivo = useMemo(
     () =>
@@ -91,7 +93,7 @@ export default function ReiniciarSenha({ perfilSelecionado }) {
               color={Colors.Roxo}
               disabled={!permissoesTela.podeAlterar}
               border
-              className="ml-2 text-center"
+              className="ml-2 text-center button-reiniciar-hover"
               onClick={() => onClickReiniciar(linha)}
             />
           </div>
@@ -358,6 +360,7 @@ export default function ReiniciarSenha({ perfilSelecionado }) {
         <div className="row">
           <div className="col-md-12 pt-4">
             <DataTable
+              setColorButton={setColorButton}
               rowKey="codigoRf"
               columns={colunas}
               dataSource={listaUsuario}
@@ -401,6 +404,7 @@ export default function ReiniciarSenha({ perfilSelecionado }) {
                 name="emailUsuario"
                 form={form}
                 maxlength="50"
+                labelRequired
               />
             </ModalConteudoHtml>
           </Form>

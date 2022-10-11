@@ -1,24 +1,22 @@
-import React from 'react'
-import Card from '~/componentes/card'
-import Button from '~/componentes/button'
-import { Colors } from '~/componentes/colors'
-import history from '~/servicos/history'
-import { URL_HOME } from '~/constantes/url';
 import styled from 'styled-components';
+import React from 'react';
+import Card from '~/componentes/card';
+import Button from '~/componentes/button';
+import { Colors } from '~/componentes/colors';
+import history from '~/servicos/history';
+import { URL_HOME } from '~/constantes/url';
 
 const SemPermissao = () => {
-
   const Corpo = styled.div`
-  display: flex;
-  justify-content: center;
-  flex-direction: column;
-  align-items: center;
-  min-height: 400px;
-  font-size:16px;
-  span{
-    padding-bottom:10px !important
-  }
-  
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    min-height: 400px;
+    font-size: 16px;
+    span {
+      padding-bottom: 10px !important;
+    }
   `;
 
   const onClickVoltar = () => {
@@ -39,7 +37,7 @@ const SemPermissao = () => {
         />
       </Corpo>
     </Card>
-  )
-}
+  );
+};
 
 export default SemPermissao;

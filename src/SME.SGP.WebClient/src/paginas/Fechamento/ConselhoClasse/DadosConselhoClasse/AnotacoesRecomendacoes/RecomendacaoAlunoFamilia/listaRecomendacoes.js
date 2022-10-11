@@ -1,12 +1,18 @@
 import PropTypes from 'prop-types';
 import React, { useState } from 'react';
+import { useSelector } from 'react-redux';
+
 import TransferenciaLista from '~/componentes-sgp/TranferenciaLista/transferenciaLista';
 
 const ListaRecomendacoes = props => {
   const { dadosRecomendacao, titulo, setDadosDireita, dadosDireita } = props;
 
-  const somenteConsulta = false;
-  const periodoAberto = true;
+  const dentroPeriodo = useSelector(
+    store => store.conselhoClasse.dentroPeriodo
+  );
+
+  const somenteConsulta = !dentroPeriodo;
+  const periodoAberto = dentroPeriodo;
 
   const [dadosEsquerda, setDadosEsquerda] = useState(dadosRecomendacao);
   const [idsSelecionadsEsquerda, setIdsSelecionadsEsquerda] = useState([]);

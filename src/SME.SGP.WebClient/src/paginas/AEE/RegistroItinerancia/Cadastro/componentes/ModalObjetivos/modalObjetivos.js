@@ -68,6 +68,7 @@ const ModalObjetivos = ({
       });
       setValidacoes(Yup.object(validacoesCamposComDescricao));
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [listaObjetivos]);
 
   const perguntarSalvarListaUsuario = async () => {
@@ -96,6 +97,7 @@ const ModalObjetivos = ({
       await form.validateForm();
       return form.isValid || Object.keys(form.errors).length === 0;
     }
+    return true;
   };
 
   const fecharModal = async form => {

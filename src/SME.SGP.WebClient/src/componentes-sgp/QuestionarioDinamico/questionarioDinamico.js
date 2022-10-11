@@ -51,6 +51,7 @@ const QuestionarioDinamico = props => {
         dados?.id
       );
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [refForm]);
 
   const montarValoresIniciais = useCallback(() => {
@@ -207,8 +208,12 @@ const QuestionarioDinamico = props => {
     );
   };
 
-  const labelPersonalizado = (textolabel, observacaoText) => (
-    <Label text={textolabel} observacaoText={observacaoText} />
+  const labelPersonalizado = (textolabel, observacaoText, obrigatorio) => (
+    <Label
+      text={textolabel}
+      observacaoText={observacaoText}
+      isRequired={obrigatorio}
+    />
   );
 
   const montarCampos = (questaoAtual, form, ordemAnterior, ordemSequencial) => {
@@ -232,7 +237,11 @@ const QuestionarioDinamico = props => {
       : questaoAtual.ordem;
 
     const textoLabel = `${ordemLabel} - ${questaoAtual.nome}`;
-    const label = labelPersonalizado(textoLabel, questaoAtual?.observacao);
+    const label = labelPersonalizado(
+      textoLabel,
+      questaoAtual?.observacao,
+      questaoAtual?.obrigatorio
+    );
 
     const valorAtualSelecionado = form.values[questaoAtual.id];
 
@@ -462,6 +471,7 @@ const QuestionarioDinamico = props => {
               onChangeQuestionario();
             }}
             turmaId={turmaId}
+            questionarioId={dados?.questionarioId}
           />
         );
         break;
@@ -470,10 +480,10 @@ const QuestionarioDinamico = props => {
     }
 
     return (
-      <>
+      <React.Fragment key={`campo-${questaoAtual?.id}`}>
         {campoAtual || ''}
         {campoQuestaoComplementar?.length ? campoQuestaoComplementar : ''}
-      </>
+      </React.Fragment>
     );
   };
 

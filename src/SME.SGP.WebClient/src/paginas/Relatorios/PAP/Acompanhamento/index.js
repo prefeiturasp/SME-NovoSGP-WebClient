@@ -46,7 +46,7 @@ import { valorNuloOuVazio } from '~/utils/funcoes/gerais';
 import AlertaModalidadeInfantil from '~/componentes-sgp/AlertaModalidadeInfantil/alertaModalidadeInfantil';
 import { ehTurmaInfantil } from '~/servicos/Validacoes/validacoesInfatil';
 import { verificaSomenteConsulta } from '~/servicos';
-import { constant } from 'lodash';
+import { SGP_BUTTON_SALVAR } from '~/componentes-sgp/filtro/idsCampos';
 
 function RelatorioPAPAcompanhamento() {
   const usuario = useSelector(store => store.usuario);
@@ -341,9 +341,8 @@ function RelatorioPAPAcompanhamento() {
           />
         )}
       <AlertaModalidadeInfantil />
-      <Cabecalho pagina="Relatório de encaminhamento e acompanhamento do PAP" />
       <Loader loading={carregando}>
-        <Card mx="mx-0">
+        <Cabecalho pagina="Relatório de encaminhamento e acompanhamento do PAP">
           <ButtonGroup
             somenteConsulta={somenteLeitura}
             permissoesTela={
@@ -355,6 +354,7 @@ function RelatorioPAPAcompanhamento() {
             onClickBotaoPrincipal={() => salvarAlteracoes(estado.ObjetivoAtivo, true)}
             onClickCancelar={() => onClickCancelarHandler()}
             labelBotaoPrincipal="Salvar"
+            idBotaoPrincipal={SGP_BUTTON_SALVAR}
             desabilitarBotaoPrincipal={
               ehTurmaInfantil(modalidadesFiltroPrincipal, turmaSelecionada) ||
               somenteLeitura ||
@@ -362,7 +362,9 @@ function RelatorioPAPAcompanhamento() {
               !periodo
             }
           />
-          <Grid className="p-0" cols={12}>
+        </Cabecalho>
+        <Card>
+          <Grid cols={12}>
             <Linha className="row m-0">
               <Grid cols={3}>
                 <PeriodosDropDown
@@ -379,14 +381,14 @@ function RelatorioPAPAcompanhamento() {
               </Grid>
             </Linha>
           </Grid>
-          <Grid className="p-0 mt-4" cols={12}>
+          <Grid className="mt-4" cols={12}>
             <BarraNavegacao
               objetivos={objetivosCorrentes}
               objetivoAtivo={estado.ObjetivoAtivo}
               onChangeObjetivo={objetivo => onChangeObjetivoHandler(objetivo)}
             />
           </Grid>
-          <Grid className="p-0 mt-2" cols={12}>
+          <Grid className="mt-2" cols={12}>
             <EixoObjetivo
               eixo={
                 estado.ObjetivoAtivo &&
@@ -397,7 +399,7 @@ function RelatorioPAPAcompanhamento() {
               objetivo={estado.ObjetivoAtivo}
             />
           </Grid>
-          <Grid className="p-0 mt-2" cols={12}>
+          <Grid className="mt-2" cols={12}>
             <Ordenacao
               retornoOrdenado={retorno => disparar(carregarAlunos(retorno))}
               ordenarColunaNumero="numeroChamada"
@@ -408,7 +410,7 @@ function RelatorioPAPAcompanhamento() {
             />
           </Grid>
 
-          <Grid className="p-0 mt-2" cols={12}>
+          <Grid className="mt-2" cols={12}>
             <TabelaAlunos
               alunos={estado.Alunos}
               objetivoAtivo={estado.ObjetivoAtivo}

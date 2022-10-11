@@ -53,7 +53,7 @@ const TabsDashboardRegistroItinerancia = props => {
 };
 
 TabsDashboardRegistroItinerancia.propTypes = {
-  anoLetivo: PropTypes.oneOfType(PropTypes.any),
+  anoLetivo: PropTypes.oneOfType([PropTypes.any]),
   ueId: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   dreId: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   mesSelecionado: PropTypes.string,

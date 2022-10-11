@@ -4,36 +4,30 @@ import { CONTEXT_LISTAO } from '~/constantes';
 import ListaoContextProvider from '~/paginas/DiarioClasse/Listao/listaoContextProvider';
 
 const montarContextProviders = (rotasComContextProvider, montarRota) => {
-  if (rotasComContextProvider?.length) {
-    const contextsArupados = _.groupBy(
-      rotasComContextProvider,
-      'contextProviderName'
-    );
+  if (!rotasComContextProvider || rotasComContextProvider?.length === 0)
+    return <></>;
 
-    const listaContextsAgrupados = Object.values(contextsArupados);
+  const contextosArupados = _.groupBy(
+    rotasComContextProvider,
+    'contextProviderName'
+  );
 
-    return listaContextsAgrupados?.length ? (
-      listaContextsAgrupados?.map(contexts => {
-        if (contexts?.length) {
-          switch (contexts?.[0]?.contextProviderName) {
-            case CONTEXT_LISTAO:
-              return (
-                <ListaoContextProvider>
-                  {contexts?.map(c => montarRota(c))}
-                </ListaoContextProvider>
-              );
-            default:
-              return <></>;
-          }
-        }
-        return <></>;
-      })
-    ) : (
-      <></>
-    );
-  }
+  const contextos = Object.keys(contextosArupados);
+  const contextProviderMap = {
+    [CONTEXT_LISTAO]: ListaoContextProvider,
+  };
 
-  return <></>;
+  return contextos
+    .filter(contexto => !!contextProviderMap[contexto])
+    .map(contexto => {
+      const ContextProvider = contextProviderMap[contexto];
+
+      return (
+        <ContextProvider key={contexto}>
+          {contextosArupados[contexto].map(rota => montarRota(rota))}
+        </ContextProvider>
+      );
+    });
 };
 
 export { montarContextProviders };

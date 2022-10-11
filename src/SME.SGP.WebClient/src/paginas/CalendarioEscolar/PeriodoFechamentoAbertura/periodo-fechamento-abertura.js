@@ -1,3 +1,4 @@
+import { Col, Row } from 'antd';
 import { FieldArray, Form, Formik } from 'formik';
 import moment from 'moment';
 import React, { useCallback, useEffect, useState } from 'react';
@@ -15,8 +16,14 @@ import {
   SelectAutocomplete,
 } from '~/componentes';
 import { Cabecalho, RegistroMigrado } from '~/componentes-sgp';
+import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
+import {
+  SGP_BUTTON_ALTERAR_CADASTRAR,
+  SGP_BUTTON_CANCELAR,
+} from '~/componentes-sgp/filtro/idsCampos';
 import { URL_HOME } from '~/constantes';
 import { periodo, RotasDto } from '~/dtos';
+import { ContainerColumnReverse } from '~/paginas/Planejamento/Anual/planoAnual.css';
 import {
   confirmar,
   erros,
@@ -302,6 +309,7 @@ const PeriodoFechamentoAbertura = () => {
   };
 
   const validaAntesDoSubmit = form => {
+    setModoEdicao(true);
     touchedFields(form);
     form.validateForm().then(() => {
       if (
@@ -462,81 +470,82 @@ const PeriodoFechamentoAbertura = () => {
   };
 
   return (
-    <>
-      <Loader loading={emProcessamento}>
-        <Cabecalho pagina="Período de Fechamento (Abertura)">
-          {registroMigrado && (
-            <div className="col-md-2 float-right">
-              <RegistroMigrado>Registro Migrado</RegistroMigrado>
-            </div>
-          )}
-        </Cabecalho>
-        <Card>
-          <Formik
-            enableReinitialize
-            initialValues={fechamento}
-            validationSchema={validacoes}
-            onSubmit={values => onSubmit(values)}
-            validateOnChange
-            validateOnBlur
-            id={shortid.generate()}
-          >
-            {form => (
+    <Loader loading={emProcessamento}>
+      <Formik
+        enableReinitialize
+        initialValues={fechamento}
+        validationSchema={validacoes}
+        onSubmit={values => onSubmit(values)}
+        validateOnChange
+        validateOnBlur
+        id={shortid.generate()}
+      >
+        {form => (
+          <>
+            <Cabecalho pagina="Período de Fechamento (Abertura)">
+              <Row gutter={[8, 8]} type="flex">
+                <Col>
+                  <BotaoVoltarPadrao onClick={() => onClickVoltar(form)} />
+                </Col>
+                <Col>
+                  <Button
+                    id={SGP_BUTTON_CANCELAR}
+                    label="Cancelar"
+                    color={Colors.Roxo}
+                    border
+                    bold
+                    disabled={desabilitarCampos || !modoEdicao}
+                    onClick={() => onClickCancelar(form)}
+                  />
+                </Col>
+                <Col>
+                  <Button
+                    id={SGP_BUTTON_ALTERAR_CADASTRAR}
+                    label={ehRegistroExistente ? 'Alterar' : 'Cadastrar'}
+                    color={Colors.Roxo}
+                    border
+                    bold
+                    disabled={desabilitarCampos}
+                    onClick={() => validaAntesDoSubmit(form)}
+                  />
+                </Col>
+              </Row>
+            </Cabecalho>
+            <Card>
               <Form className="col-md-12">
-                <div className="row mb-4">
-                  <div className="col-md-12 d-flex justify-content-end pb-4">
-                    <Button
-                      id={shortid.generate()}
-                      label="Voltar"
-                      icon="arrow-left"
-                      color={Colors.Azul}
-                      border
-                      className="mr-3"
-                      onClick={() => onClickVoltar(form)}
-                    />
-                    <Button
-                      id={shortid.generate()}
-                      label="Cancelar"
-                      color={Colors.Roxo}
-                      border
-                      bold
-                      className="mr-3"
-                      disabled={desabilitarCampos || !modoEdicao}
-                      onClick={() => onClickCancelar(form)}
-                    />
-                    <Button
-                      id={shortid.generate()}
-                      label={ehRegistroExistente ? 'Alterar' : 'Cadastrar'}
-                      color={Colors.Roxo}
-                      border
-                      bold
-                      disabled={desabilitarCampos}
-                      onClick={() => validaAntesDoSubmit(form)}
-                    />
-                  </div>
-                  <div className="col-md-8 pb-2">
+                <ContainerColumnReverse className="row mb-4">
+                  <div className="col-sm-12 col-md-8 col-lg-6 col-xl-4 mb-2">
                     <Loader loading={carregandoTipos} tip="">
-                      <div style={{ maxWidth: '300px' }}>
-                        <SelectAutocomplete
-                          hideLabel
-                          showList
-                          isHandleSearch
-                          placeholder="Selecione um tipo de calendário"
-                          className="col-md-12"
-                          name="tipoCalendarioId"
-                          id="tipoCalendarioId"
-                          lista={listaTipoCalendario}
-                          valueField="id"
-                          textField="descricao"
-                          onSelect={valor => selecionaTipoCalendario(valor)}
-                          onChange={valor => selecionaTipoCalendario(valor)}
-                          handleSearch={handleSearch}
-                          value={valorTipoCalendario}
-                        />
-                      </div>
+                      <SelectAutocomplete
+                        showList
+                        isHandleSearch
+                        placeholder="Selecione um tipo de calendário"
+                        className="col-md-12"
+                        name="tipoCalendarioId"
+                        id="tipoCalendarioId"
+                        lista={listaTipoCalendario}
+                        valueField="id"
+                        textField="descricao"
+                        onSelect={valor => selecionaTipoCalendario(valor)}
+                        onChange={valor => selecionaTipoCalendario(valor)}
+                        handleSearch={handleSearch}
+                        value={valorTipoCalendario}
+                        label="Calendário"
+                        labelRequired
+                        temErro={modoEdicao && !valorTipoCalendario}
+                        mensagemErro="Campo obrigatório"
+                      />
                     </Loader>
                   </div>
-                </div>
+                  <div className="col-sm-12 col-md-4 col-lg-6 col-xl-8 pt-2 pb-2 d-flex justify-content-end">
+                    {registroMigrado ? (
+                      <RegistroMigrado>Registro Migrado</RegistroMigrado>
+                    ) : (
+                      <></>
+                    )}
+                  </div>
+                </ContainerColumnReverse>
+
                 <FieldArray
                   name="fechamentosBimestres"
                   render={() => (
@@ -557,30 +566,29 @@ const PeriodoFechamentoAbertura = () => {
                     </>
                   )}
                 />
+                <div className="row">
+                  {tipoCalendarioSelecionado &&
+                  ehRegistroExistente &&
+                  auditoria?.criadoEm ? (
+                    <Auditoria
+                      criadoEm={auditoria.criadoEm}
+                      criadoPor={auditoria.criadoPor}
+                      criadoRf={auditoria.criadoRf}
+                      alteradoPor={auditoria.alteradoPor}
+                      alteradoEm={auditoria.alteradoEm}
+                      alteradoRf={auditoria.alteradoRf}
+                      ignorarMarginTop
+                    />
+                  ) : (
+                    <></>
+                  )}
+                </div>
               </Form>
-            )}
-          </Formik>
-          <div className="col-md-6 d-flex justify-content-start">
-            {tipoCalendarioSelecionado &&
-            tipoCalendarioSelecionado !== '' &&
-            ehRegistroExistente &&
-            auditoria &&
-            auditoria.criadoEm ? (
-              <Auditoria
-                criadoEm={auditoria.criadoEm}
-                criadoPor={auditoria.criadoPor}
-                criadoRf={auditoria.criadoRf}
-                alteradoPor={auditoria.alteradoPor}
-                alteradoEm={auditoria.alteradoEm}
-                alteradoRf={auditoria.alteradoRf}
-              />
-            ) : (
-              ''
-            )}
-          </div>
-        </Card>
-      </Loader>
-    </>
+            </Card>
+          </>
+        )}
+      </Formik>
+    </Loader>
   );
 };
 

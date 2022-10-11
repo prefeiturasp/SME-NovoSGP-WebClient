@@ -24,7 +24,9 @@ const CampoDinamicoRadio = props => {
 
   const opcoes = questaoAtual?.opcaoResposta.map(item => {
     return {
-      label: <Label text={item.nome} observacaoText={item.observacao} />,
+      label: (
+        <Label withDiv text={item.nome} observacaoText={item.observacao} />
+      ),
       value: item.id,
     };
   });

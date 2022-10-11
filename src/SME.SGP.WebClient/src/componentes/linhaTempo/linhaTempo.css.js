@@ -16,7 +16,7 @@ const EstiloLinhaTempo = styled.div`
     margin-bottom: 5px;
     font-size: 9px;
     li {
-      width: ${props => (props.quantidadeItems == 2 ? '50%' : '33.3%')};
+      width: ${props => (props.quantidadeItems === 2 ? '50%' : '33.3%')};
     }
   }
 

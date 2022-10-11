@@ -11,7 +11,6 @@ export const ContainerDescConceito = styled.div`
   border-radius: 3px;
   border: solid 1px #ced4da;
   background-color: ${Base.CinzaFundo};
-  argin-left: 5px;
   color: #a4a4a4;
   width: 53px;
   height: 37px;
@@ -55,6 +54,7 @@ const ColunaNotaConceitoPorBimestre = props => {
     } else {
       setValorExibir(notaBimestre?.notaConceito);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     notaTipo,
     bimestre,
@@ -78,7 +78,7 @@ ColunaNotaConceitoPorBimestre.propTypes = {
 ColunaNotaConceitoPorBimestre.defaultProps = {
   ehRegencia: '',
   notaTipo: null,
-  bimestre: PropTypes.string,
+  bimestre: '',
   notasConceitoBimestre: [],
   listaTiposConceitos: [],
 };

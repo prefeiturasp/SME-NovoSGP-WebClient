@@ -184,8 +184,8 @@ ModalNotificarUsuarios.defaultProps = {
   setModalVisivel: () => {},
   usarLocalizadorFuncionario: false,
   parametrosLocalizadorFuncionario: {},
-  dreId: PropTypes.string,
-  ueId: PropTypes.string,
+  dreId: '',
+  ueId: '',
 };
 
 ModalNotificarUsuarios.propTypes = {
@@ -194,8 +194,8 @@ ModalNotificarUsuarios.propTypes = {
   setModalVisivel: PropTypes.func,
   usarLocalizadorFuncionario: PropTypes.bool,
   parametrosLocalizadorFuncionario: PropTypes.oneOfType([PropTypes.object]),
-  dreId: '',
-  ueId: '',
+  dreId: PropTypes.oneOfType([PropTypes.any]),
+  ueId: PropTypes.oneOfType([PropTypes.any]),
 };
 
 export default ModalNotificarUsuarios;

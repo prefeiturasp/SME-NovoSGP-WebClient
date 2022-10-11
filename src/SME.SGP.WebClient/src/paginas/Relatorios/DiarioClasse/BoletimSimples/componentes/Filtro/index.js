@@ -138,11 +138,11 @@ const Filtros = ({ onFiltrar, filtrou, setFiltrou, cancelou, setCancelou }) => {
 
   useEffect(() => {
     validarValorPadraoAnoLetivo(listaAnosLetivo);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [consideraHistorico, listaAnosLetivo]);
 
   const obterAnosLetivos = useCallback(async () => {
     setCarregandoAnosLetivos(true);
-
     const anosLetivos = await FiltroHelper.obterAnosLetivos({
       consideraHistorico,
     });
@@ -158,6 +158,7 @@ const Filtros = ({ onFiltrar, filtrou, setFiltrou, cancelou, setCancelou }) => {
 
     setListaAnosLetivo(anosOrdenados);
     setCarregandoAnosLetivos(false);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [anoAtual, consideraHistorico]);
 
   useEffect(() => {
@@ -202,13 +203,15 @@ const Filtros = ({ onFiltrar, filtrou, setFiltrou, cancelou, setCancelou }) => {
       setDreId(undefined);
       setListaDres([]);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [anoLetivo]);
 
   useEffect(() => {
-    if (anoLetivo && !listaDres.length) {
+    if (anoLetivo) {
       obterDres();
     }
-  }, [anoLetivo, listaDres, obterDres]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [anoLetivo]);
 
   const onChangeUe = ue => {
     setUeCodigo(ue);
@@ -246,6 +249,7 @@ const Filtros = ({ onFiltrar, filtrou, setFiltrou, cancelou, setCancelou }) => {
       }
       setListaUes([]);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dreId, anoLetivo, consideraHistorico]);
 
   useEffect(() => {
@@ -262,12 +266,17 @@ const Filtros = ({ onFiltrar, filtrou, setFiltrou, cancelou, setCancelou }) => {
     setFiltrou(false);
   };
 
-  const obterModalidades = useCallback(async (ue, consideraHistorico) => {
+  const obterModalidades = useCallback(async (ue, considHistorico) => {
     if (ue) {
       setCarregandoModalidade(true);
-      const {
-        data,
-      } = consideraHistorico ? await ServicoFiltroRelatorio.obterModalidadesPorAbrangenciaHistorica(ue, consideraHistorico).finally(() => setCarregandoModalidade(false)) : await ServicoFiltroRelatorio.obterModalidadesPorAbrangencia(ue).finally(() => setCarregandoModalidade(false));
+      const { data } = considHistorico
+        ? await ServicoFiltroRelatorio.obterModalidadesPorAbrangenciaHistorica(
+            ue,
+            considHistorico
+          ).finally(() => setCarregandoModalidade(false))
+        : await ServicoFiltroRelatorio.obterModalidadesPorAbrangencia(
+            ue
+          ).finally(() => setCarregandoModalidade(false));
 
       if (data?.length) {
         const lista = data.map(item => ({
@@ -339,6 +348,7 @@ const Filtros = ({ onFiltrar, filtrou, setFiltrou, cancelou, setCancelou }) => {
     }
     setSemestre();
     setListaSemestres([]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [obterAnosLetivos, modalidadeId, anoLetivo, dreCodigo, ueCodigo]);
 
   const onChangeTurma = valor => {
@@ -391,6 +401,7 @@ const Filtros = ({ onFiltrar, filtrou, setFiltrou, cancelou, setCancelou }) => {
         }
       }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [ueCodigo, dreId, consideraHistorico, anoLetivo, modalidadeId]);
 
   useEffect(() => {
@@ -436,14 +447,15 @@ const Filtros = ({ onFiltrar, filtrou, setFiltrou, cancelou, setCancelou }) => {
       setImprimirEstudantesInativos(false);
     }
 
-    if(opcaoEstudanteId === OPCAO_SELECIONAR_ALUNOS){
+    if (opcaoEstudanteId === OPCAO_SELECIONAR_ALUNOS) {
       setFiltrou(false);
       setImprimirEstudantesInativos(true);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [opcaoEstudanteId]);
 
   return (
-    <div className="col-12 p-0">
+    <div className="col-12">
       <div className="row mb-2">
         <div className="col-12">
           <CheckboxComponent
@@ -454,7 +466,7 @@ const Filtros = ({ onFiltrar, filtrou, setFiltrou, cancelou, setCancelou }) => {
         </div>
       </div>
       <div className="row mb-2">
-        <div className="col-sm-12 col-md-2 col-lg-2 col-xl-2 pr-0">
+        <div className="col-sm-12 col-md-2 col-lg-2 col-xl-2">
           <Loader loading={carregandoAnosLetivos} ignorarTip>
             <SelectComponent
               label="Ano Letivo"
@@ -468,14 +480,14 @@ const Filtros = ({ onFiltrar, filtrou, setFiltrou, cancelou, setCancelou }) => {
             />
           </Loader>
         </div>
-        <div className="col-sm-12 col-md-5 col-lg-5 col-xl-5 pr-0">
+        <div className="col-sm-12 col-md-5 col-lg-5 col-xl-5">
           <Loader loading={carregandoDres} ignorarTip>
             <SelectComponent
               label="Diretoria Regional de Educação (DRE)"
               lista={listaDres}
               valueOption="valor"
               valueText="desc"
-              disabled={!anoLetivo || listaDres?.length === 1}
+              disabled={!anoLetivo  || listaDres?.length <= 1}
               onChange={onChangeDre}
               valueSelect={dreCodigo}
               placeholder="Diretoria Regional De Educação (DRE)"
@@ -501,7 +513,7 @@ const Filtros = ({ onFiltrar, filtrou, setFiltrou, cancelou, setCancelou }) => {
         </div>
       </div>
       <div className="row mb-3">
-        <div className="col-sm-12 col-md-4 pr-0">
+        <div className="col-sm-12 col-md-4">
           <Loader loading={carregandoModalidade} ignorarTip>
             <SelectComponent
               id="drop-modalidade"
@@ -516,7 +528,7 @@ const Filtros = ({ onFiltrar, filtrou, setFiltrou, cancelou, setCancelou }) => {
             />
           </Loader>
         </div>
-        <div className="col-sm-12 col-md-4 pr-0">
+        <div className="col-sm-12 col-md-4">
           <Loader loading={carregandoSemestres} ignorarTip>
             <SelectComponent
               id="drop-semestre"
@@ -553,7 +565,7 @@ const Filtros = ({ onFiltrar, filtrou, setFiltrou, cancelou, setCancelou }) => {
         </div>
       </div>
       <div className="row">
-        <div className="col-sm-12 col-md-4 pr-0">
+        <div className="col-sm-12 col-md-4">
           <SelectComponent
             lista={opcoesEstudantes}
             valueOption="valor"
@@ -565,7 +577,7 @@ const Filtros = ({ onFiltrar, filtrou, setFiltrou, cancelou, setCancelou }) => {
             placeholder="Estudante(s)"
           />
         </div>
-        <div className="col-sm-12 col-md-4 pr-0">
+        <div className="col-sm-12 col-md-4">
           <SelectComponent
             lista={opcoesModeloBoletim}
             valueOption="valor"

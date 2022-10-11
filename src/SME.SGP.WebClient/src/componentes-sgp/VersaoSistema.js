@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 
 import { useDispatch } from 'react-redux';
 
@@ -6,8 +6,12 @@ import api from '~/servicos/api';
 
 import { salvarVersao } from '~/redux/modulos/sistema/actions';
 
+import { useSelector } from 'react-redux';
+
 export default function VersaoSistema() {
   const dispatch = useDispatch();
+  const { logado } = useSelector(store => store.usuario);
+
   useEffect(() => {
     async function buscarVersao() {
       try {
@@ -19,8 +23,9 @@ export default function VersaoSistema() {
         dispatch(salvarVersao(1));
       }
     }
-
-    buscarVersao();
-  }, [dispatch]);
+    if (logado) {
+      buscarVersao();
+    }
+  }, [dispatch, logado]);
   return null;
 }

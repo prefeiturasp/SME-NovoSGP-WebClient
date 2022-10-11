@@ -1,8 +1,11 @@
+import { Col, Row } from 'antd';
 import * as moment from 'moment';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { ListaPaginada, Loader, SelectComponent } from '~/componentes';
 import { Cabecalho } from '~/componentes-sgp';
+import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
+import { SGP_BUTTON_NOVO } from '~/componentes-sgp/filtro/idsCampos';
 import Button from '~/componentes/button';
 import Card from '~/componentes/card';
 import { Colors } from '~/componentes/colors';
@@ -308,30 +311,27 @@ const DocumentosPlanosTrabalhoLista = () => {
 
   return (
     <>
-      <Cabecalho pagina="Upload de documentos e planos de trabalho" />
+      <Cabecalho pagina="Upload de documentos e planos de trabalho">
+        <Row gutter={[8, 8]} type="flex">
+          <Col>
+            <BotaoVoltarPadrao onClick={() => onClickVoltar()} />
+          </Col>
+          <Col>
+            <Button
+              id={SGP_BUTTON_NOVO}
+              label="Novo"
+              color={Colors.Roxo}
+              border
+              bold
+              onClick={onClickNovo}
+              disabled={somenteConsulta || !permissoesTela.podeIncluir}
+            />
+          </Col>
+        </Row>
+      </Cabecalho>
       <Card>
         <div className="col-md-12">
           <div className="row">
-            <div className="col-md-12 d-flex justify-content-end pb-4 justify-itens-end">
-              <Button
-                id="btn-voltar"
-                label="Voltar"
-                icon="arrow-left"
-                color={Colors.Azul}
-                border
-                className="mr-2"
-                onClick={onClickVoltar}
-              />
-              <Button
-                id="btn-novo"
-                label="Novo"
-                color={Colors.Roxo}
-                border
-                bold
-                onClick={onClickNovo}
-                disabled={somenteConsulta || !permissoesTela.podeIncluir}
-              />
-            </div>
             <div className="col-sm-12 col-md-6 col-lg-6 col-xl-2 mb-2">
               <Loader loading={carregandoAnos} tip="">
                 <SelectComponent

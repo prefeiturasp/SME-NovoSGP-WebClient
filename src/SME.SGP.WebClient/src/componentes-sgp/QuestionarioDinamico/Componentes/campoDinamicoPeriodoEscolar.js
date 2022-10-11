@@ -8,7 +8,15 @@ import ServicoPeriodoEscolar from '~/servicos/Paginas/Calendario/ServicoPeriodoE
 import { setQuestionarioDinamicoEmEdicao } from '~/redux/modulos/questionarioDinamico/actions';
 
 const CampoDinamicoPeriodoEscolar = props => {
-  const { questaoAtual, form, label, desabilitado, onChange, turmaId } = props;
+  const {
+    questaoAtual,
+    form,
+    label,
+    desabilitado,
+    onChange,
+    turmaId,
+    questionarioId,
+  } = props;
 
   const [lista, setLista] = useState([]);
   const [exibirLoader, setExibirLoader] = useState(false);
@@ -29,7 +37,10 @@ const CampoDinamicoPeriodoEscolar = props => {
   }, [turmaId]);
 
   const habilitaEdicaoSeMudarBimestreAtual = (questao, bimestreAtual) => {
-    if (questao?.resposta[0]?.texto !== String(bimestreAtual)) {
+    if (
+      questionarioId &&
+      questao?.resposta[0]?.texto !== String(bimestreAtual)
+    ) {
       dispatch(setQuestionarioDinamicoEmEdicao(true));
     } else {
       dispatch(setQuestionarioDinamicoEmEdicao(false));
@@ -49,6 +60,7 @@ const CampoDinamicoPeriodoEscolar = props => {
     } else {
       form.setFieldValue(String(questaoAtual.id), '');
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [turmaId, form, questaoAtual]);
 
   useEffect(() => {
@@ -60,6 +72,7 @@ const CampoDinamicoPeriodoEscolar = props => {
     } else {
       setLista([]);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [turmaId, obterBimestres, desabilitado]);
 
   return (
@@ -90,6 +103,7 @@ CampoDinamicoPeriodoEscolar.propTypes = {
   desabilitado: PropTypes.bool,
   onChange: PropTypes.oneOfType([PropTypes.any]),
   turmaId: PropTypes.oneOfType([PropTypes.any]),
+  questionarioId: PropTypes.oneOfType([PropTypes.any]),
 };
 
 CampoDinamicoPeriodoEscolar.defaultProps = {
@@ -99,6 +113,7 @@ CampoDinamicoPeriodoEscolar.defaultProps = {
   desabilitado: false,
   onChange: () => {},
   turmaId: null,
+  questionarioId: null,
 };
 
 export default CampoDinamicoPeriodoEscolar;

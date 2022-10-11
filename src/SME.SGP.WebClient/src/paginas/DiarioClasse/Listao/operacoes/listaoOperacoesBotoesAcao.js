@@ -4,10 +4,10 @@ import _ from 'lodash';
 import React, { useContext, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Button, Colors } from '~/componentes';
+import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
 import {
   SGP_BUTTON_CANCELAR,
   SGP_BUTTON_SALVAR,
-  SGP_BUTTON_VOLTAR,
 } from '~/componentes-sgp/filtro/idsCampos';
 import { RotasDto } from '~/dtos';
 import notasConceitos from '~/dtos/notasConceitos';
@@ -42,7 +42,6 @@ import {
 import ListaoContext from '../listaoContext';
 import {
   montarIdsObjetivosSelecionadosListao,
-  obterDaodsFechamentoPorBimestreListao,
   obterDiarioBordoListao,
   obterListaAlunosAvaliacaoListao,
   salvarEditarObservacao,
@@ -247,7 +246,7 @@ const ListaoOperacoesBotoesAcao = () => {
       const paramsPromise = new Promise(resolve => {
         ServicoPlanoAula.salvarPlanoAula(valorParaSalvar)
           .then(resposta => {
-            if (resposta.data) {
+            if (resposta?.data) {
               resposta.data.planoTeveCopia = !!plano?.copiarConteudo;
             }
             resolve(resposta?.data);
@@ -430,7 +429,7 @@ const ListaoOperacoesBotoesAcao = () => {
       .catch(e => erros(e))
       .finally(() => setExibirLoaderGeral(false));
 
-    if (resposta.status === 200) {
+    if (resposta?.status === 200) {
       if (clicouNoBotaoSalvar) {
         await obterDiarioBordoListao(
           turma,
@@ -496,7 +495,7 @@ const ListaoOperacoesBotoesAcao = () => {
       .catch(e => erros(e))
       .finally(() => setExibirLoaderGeral(false));
 
-    if (resposta.status === 200) {
+    if (resposta?.status === 200) {
       if (clicouNoBotaoSalvar) {
         await obterListaAlunosAvaliacaoListao(
           dadosPeriodosAvaliacao,
@@ -521,17 +520,9 @@ const ListaoOperacoesBotoesAcao = () => {
       setDadosFechamento();
     };
 
-    if (salvouFechamento && clicouNoBotaoSalvar) {
-      obterDaodsFechamentoPorBimestreListao(
-        setExibirLoaderGeral,
-        turmaSelecionada,
-        bimestreOperacoes,
-        componenteCurricular,
-        setDadosFechamento,
-        setDadosIniciaisFechamento,
-        limparFechamento
-      );
-    } else if (salvouFechamento) limparFechamento();
+    if (salvouFechamento && !clicouNoBotaoSalvar) {
+      limparFechamento();
+    }
 
     return salvouFechamento;
   };
@@ -548,7 +539,9 @@ const ListaoOperacoesBotoesAcao = () => {
       setExibirLoaderGeral,
       setDadosModalJustificativaFechamento,
       componenteCurricular,
-      posSalvar
+      posSalvar,
+      setDadosFechamento,
+      setDadosIniciaisFechamento
     );
 
     return acaoPosSalvarFechamento(salvouFechamento, clicouNoBotaoSalvar);
@@ -594,6 +587,7 @@ const ListaoOperacoesBotoesAcao = () => {
     } else {
       dispatch(setLimparModoEdicaoGeral());
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [telaEmEdicao]);
 
   const onClickVoltar = async () => {
@@ -676,16 +670,9 @@ const ListaoOperacoesBotoesAcao = () => {
 
   return (
     <Col span={24}>
-      <Row gutter={[16, 16]} type="flex" justify="end">
+      <Row gutter={[8, 8]} type="flex">
         <Col>
-          <Button
-            id={SGP_BUTTON_VOLTAR}
-            label="Voltar"
-            icon="arrow-left"
-            color={Colors.Azul}
-            border
-            onClick={onClickVoltar}
-          />
+          <BotaoVoltarPadrao onClick={() => onClickVoltar()} />
         </Col>
         <Col>
           <Button

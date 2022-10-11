@@ -3,7 +3,6 @@ import { useSelector } from 'react-redux';
 import shortid from 'shortid';
 import styled from 'styled-components';
 import CardLink from '../../componentes/cardlink';
-import Grid from '../../componentes/grid';
 import Row from '../../componentes/row';
 import LaderCardsDashboard from './laderCardsDashboard';
 
@@ -28,28 +27,28 @@ const CardsDashboard = () => {
   return (
     <LaderCardsDashboard>
       <Dashboard>
-        <Row>
-          <Grid cols={12} className="form-inline alinhar-itens-topo">
-            {dadosCardsDashboard && dadosCardsDashboard.length
-              ? dadosCardsDashboard.map(item => {
-                  return (
-                    <CardLink
-                      key={shortid.generate()}
-                      cols={[4, 4, 4, 12]}
-                      iconSize="40px"
-                      url={item.rota}
-                      disabled={
-                        !item.usuarioTemPermissao ||
-                        (item.turmaObrigatoria && !temTurma)
-                      }
-                      icone={item.icone}
-                      label={item.descricao}
-                      minHeight="130px"
-                    />
-                  );
-                })
-              : ''}
-          </Grid>
+        <Row className="form-inline alinhar-itens-topo">
+          {dadosCardsDashboard && dadosCardsDashboard.length ? (
+            dadosCardsDashboard.map(item => {
+              return (
+                <CardLink
+                  key={shortid.generate()}
+                  cols={[4, 4, 4, 12]}
+                  iconSize="40px"
+                  url={item.rota}
+                  disabled={
+                    !item.usuarioTemPermissao ||
+                    (item.turmaObrigatoria && !temTurma)
+                  }
+                  icone={item.icone}
+                  label={item.descricao}
+                  minHeight="130px"
+                />
+              );
+            })
+          ) : (
+            <></>
+          )}
         </Row>
       </Dashboard>
     </LaderCardsDashboard>

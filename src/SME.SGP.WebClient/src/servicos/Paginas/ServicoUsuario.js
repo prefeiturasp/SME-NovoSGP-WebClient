@@ -30,7 +30,7 @@ const obterPerfis = login => {
         sucesso('Perfis atualizados');
       }
     })
-    .catch(err => {
+    .catch(() => {
       erro('Não foi possivel obter os perfis do ususario');
     });
 };

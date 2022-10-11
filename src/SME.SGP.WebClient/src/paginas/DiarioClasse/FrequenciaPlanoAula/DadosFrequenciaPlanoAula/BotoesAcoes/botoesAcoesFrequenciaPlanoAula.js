@@ -1,5 +1,12 @@
+import { Col, Row } from 'antd';
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { useLocation } from 'react-router-dom';
+import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
+import {
+  SGP_BUTTON_ALTERAR_CADASTRAR,
+  SGP_BUTTON_CANCELAR,
+} from '~/componentes-sgp/filtro/idsCampos';
 import Button from '~/componentes/button';
 import { Colors } from '~/componentes/colors';
 import { URL_HOME } from '~/constantes';
@@ -15,6 +22,7 @@ import servicoSalvarFrequenciaPlanoAula from '../../servicoSalvarFrequenciaPlano
 
 const BotoesAcoesFrequenciaPlanoAula = () => {
   const dispatch = useDispatch();
+  const location = useLocation();
 
   const modoEdicaoFrequencia = useSelector(
     state => state.frequenciaPlanoAula.modoEdicaoFrequencia
@@ -49,7 +57,11 @@ const BotoesAcoesFrequenciaPlanoAula = () => {
   };
 
   const irParaHome = () => {
-    history.push(URL_HOME);
+    if (location?.state?.rotaOrigem) {
+      history.push(location.state.rotaOrigem);
+    } else {
+      history.push(URL_HOME);
+    }
   };
 
   const onClickVoltar = async () => {
@@ -86,41 +98,38 @@ const BotoesAcoesFrequenciaPlanoAula = () => {
   };
 
   return (
-    <>
-      <Button
-        id="btn-voltar"
-        label="Voltar"
-        icon="arrow-left"
-        color={Colors.Azul}
-        border
-        className="mr-3"
-        onClick={onClickVoltar}
-      />
-      <Button
-        id="btn-cancelar"
-        label="Cancelar"
-        color={Colors.Roxo}
-        border
-        className="mr-3"
-        onClick={onClickCancelar}
-        disabled={
-          somenteConsulta || (!modoEdicaoFrequencia && !modoEdicaoPlanoAula)
-        }
-      />
-      <Button
-        id="btn-salvar"
-        label={idFrequencia ? 'Alterar' : 'Cadastrar'}
-        color={Colors.Roxo}
-        border
-        bold
-        onClick={onClickSalvar}
-        disabled={
-          somenteConsulta ||
-          (!modoEdicaoFrequencia && !modoEdicaoPlanoAula) ||
-          !aulaIdPodeEditar
-        }
-      />
-    </>
+    <Row gutter={[8, 8]} type="flex">
+      <Col>
+        <BotaoVoltarPadrao onClick={() => onClickVoltar()} />
+      </Col>
+      <Col>
+        <Button
+          id={SGP_BUTTON_CANCELAR}
+          label="Cancelar"
+          color={Colors.Roxo}
+          border
+          onClick={onClickCancelar}
+          disabled={
+            somenteConsulta || (!modoEdicaoFrequencia && !modoEdicaoPlanoAula)
+          }
+        />
+      </Col>
+      <Col>
+        <Button
+          id={SGP_BUTTON_ALTERAR_CADASTRAR}
+          label={idFrequencia ? 'Alterar' : 'Cadastrar'}
+          color={Colors.Roxo}
+          border
+          bold
+          onClick={onClickSalvar}
+          disabled={
+            somenteConsulta ||
+            (!modoEdicaoFrequencia && !modoEdicaoPlanoAula) ||
+            !aulaIdPodeEditar
+          }
+        />
+      </Col>
+    </Row>
   );
 };
 

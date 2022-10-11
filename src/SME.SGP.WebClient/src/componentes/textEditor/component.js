@@ -42,12 +42,14 @@ const TextEditor = React.forwardRef((props, ref) => {
 
     return () => {
       if (onBlur) {
-        if (value !== ref.current.state.value) onBlur(ref.current.state.value);
+        if (value !== ref?.current.state.value)
+          onBlur(ref?.current.state.value);
       }
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const onBlurQuill = (posicaoAnterior, origem) => {
+  const onBlurQuill = (_, origem) => {
     if (onBlur && origem === 'user') onBlur(ref.current.state.value);
   };
 

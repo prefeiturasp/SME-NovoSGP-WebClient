@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import Cabecalho from '~/componentes-sgp/cabecalho';
 import Card from '~/componentes/card';
@@ -8,6 +8,7 @@ import RotasDto from '~/dtos/rotasDto';
 import Filtro from './componentes/Filtro';
 import servicoTipoAvaliaco from '~/servicos/Paginas/TipoAvaliacao';
 import { sucesso, confirmar, erro, erros } from '~/servicos/alertas';
+import { SGP_BUTTON_NOVO } from '~/componentes-sgp/filtro/idsCampos';
 
 const TipoAvaliacaoLista = () => {
   const [itensSelecionados, setItensSelecionados] = useState([]);
@@ -57,7 +58,7 @@ const TipoAvaliacaoLista = () => {
         const excluir = await servicoTipoAvaliaco
           .deletarTipoAvaliacao(idsDeletar)
           .catch(e => erros(e));
-        if (excluir && excluir.status == 200) {
+        if (excluir?.status === 200) {
           sucesso('Tipos de avaliação excluídos com sucesso.');
         } else {
           erro('Erro ao excluir tipos de avaliação.');
@@ -66,38 +67,8 @@ const TipoAvaliacaoLista = () => {
     }
   };
 
-  // const onClickExcluir = async () => {
-  //   if (eventosSelecionados && eventosSelecionados.length > 0) {
-  //     const listaNomeExcluir = eventosSelecionados.map(item => item.nome);
-  //     const confirmado = await confirmar(
-  //       'Excluir evento',
-  //       listaNomeExcluir,
-  //       `Deseja realmente excluir ${
-  //         eventosSelecionados.length > 1 ? 'estes eventos' : 'este evento'
-  //       }?`,
-  //       'Excluir',
-  //       'Cancelar'
-  //     );
-  //     if (confirmado) {
-  //       const idsDeletar = eventosSelecionados.map(c => c.id);
-  //       const excluir = await servicoEvento
-  //         .deletar(idsDeletar)
-  //         .catch(e => erros(e));
-  //       if (excluir && excluir.status == 200) {
-  //         const mensagemSucesso = `${
-  //           eventosSelecionados.length > 1
-  //             ? 'Eventos excluídos'
-  //             : 'Evento excluído'
-  //         } com sucesso.`;
-  //         sucesso(mensagemSucesso);
-  //         validaFiltrar();
-  //       }
-  //     }
-  //   }
-  // };
-
   const onClickEditar = item => {
-    history.push(`/configuracoes/tipo-avaliacao/editar/${item.id}`);
+    history.push(`${RotasDto.TIPO_AVALIACAO}/editar/${item.id}`);
   };
 
   const onChangeFiltro = valoresFiltro => {
@@ -116,8 +87,7 @@ const TipoAvaliacaoLista = () => {
 
   return (
     <>
-      <Cabecalho pagina="Tipos de Avaliações" />
-      <Card>
+      <Cabecalho pagina="Tipos de Avaliações">
         <ButtonGroup
           somenteConsulta={somenteConsulta}
           permissoesTela={permissoesTela[RotasDto.TIPO_AVALIACAO]}
@@ -126,20 +96,29 @@ const TipoAvaliacaoLista = () => {
           onClickExcluir={onClickExcluir}
           onClickBotaoPrincipal={onClickBotaoPrincipal}
           labelBotaoPrincipal="Novo"
+          idBotaoPrincipal={SGP_BUTTON_NOVO}
           desabilitarBotaoPrincipal={false}
         />
-        <Filtro onFiltrar={onChangeFiltro} />
-        <ListaPaginada
-          url="/v1/atividade-avaliativa/tipos/listar"
-          id="lista-tipo-avaliacao"
-          colunaChave="id"
-          colunas={colunas}
-          filtro={filtro}
-          onClick={onClickEditar}
-          selecionarItems={onSelecionarItems}
-          filtroEhValido
-          multiSelecao
-        />
+      </Cabecalho>
+      <Card>
+        <div className="col-md-12">
+          <div className="row">
+            <Filtro onFiltrar={onChangeFiltro} />
+            <div className="col-md-12">
+              <ListaPaginada
+                url="/v1/atividade-avaliativa/tipos/listar"
+                id="lista-tipo-avaliacao"
+                colunaChave="id"
+                colunas={colunas}
+                filtro={filtro}
+                onClick={onClickEditar}
+                selecionarItems={onSelecionarItems}
+                filtroEhValido
+                multiSelecao
+              />
+            </div>
+          </div>
+        </div>
       </Card>
     </>
   );

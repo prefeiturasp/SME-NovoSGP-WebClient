@@ -131,13 +131,13 @@ const ListaoCampoConceito = props => {
 };
 
 ListaoCampoConceito.propTypes = {
-  idCampo: PropTypes.oneOf(PropTypes.any),
-  dadosConceito: PropTypes.oneOf(PropTypes.any),
+  idCampo: PropTypes.oneOf([PropTypes.any]),
+  dadosConceito: PropTypes.oneOf([PropTypes.any]),
   onChangeNotaConceito: PropTypes.func,
   desabilitar: PropTypes.bool,
-  listaTiposConceitos: PropTypes.oneOf(PropTypes.array),
+  listaTiposConceitos: PropTypes.oneOf([PropTypes.array]),
   ehFechamento: PropTypes.bool,
-  styleContainer: PropTypes.oneOf(PropTypes.any),
+  styleContainer: PropTypes.oneOf([PropTypes.any]),
 };
 
 ListaoCampoConceito.defaultProps = {

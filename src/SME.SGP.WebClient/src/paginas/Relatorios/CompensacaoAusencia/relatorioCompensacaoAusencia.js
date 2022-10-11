@@ -1,21 +1,20 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { Loader, SelectComponent } from '~/componentes';
 import { Cabecalho } from '~/componentes-sgp';
-import Button from '~/componentes/button';
 import Card from '~/componentes/card';
-import { Colors } from '~/componentes/colors';
 import modalidade from '~/dtos/modalidade';
 import AbrangenciaServico from '~/servicos/Abrangencia';
 import { erros, sucesso } from '~/servicos/alertas';
 import api from '~/servicos/api';
 import history from '~/servicos/history';
-import ServicoRelatorioPendencias from '~/servicos/Paginas/Relatorios/Pendencias/ServicoRelatorioPendencias';
 import { ServicoComponentesCurriculares } from '~/servicos';
 import FiltroHelper from '~componentes-sgp/filtro/helper';
 import ServicoFiltroRelatorio from '~/servicos/Paginas/FiltroRelatorio/ServicoFiltroRelatorio';
 import AlertaModalidadeInfantil from '~/componentes-sgp/AlertaModalidadeInfantil/alertaModalidadeInfantil';
 import ServicoRelatorioCompensacaoAusencia from '~/servicos/Paginas/Relatorios/CompensacaoAusencia/ServicoRelatorioCompensacaoAusencia';
 import { ordenarListaMaiorParaMenor } from '~/utils/funcoes/gerais';
+import { URL_HOME } from '~/constantes';
+import BotoesAcaoRelatorio from '~/componentes-sgp/botoesAcaoRelatorio';
 
 const RelatorioCompensacaoAusencia = () => {
   const [carregandoGerar, setCarregandoGerar] = useState(false);
@@ -66,6 +65,9 @@ const RelatorioCompensacaoAusencia = () => {
   );
   const [bimestre, setBimestre] = useState(undefined);
 
+  const [modoEdicao, setModoEdicao] = useState(false);
+  const [desabilitarBtnGerar, setDesabilitarBtnGerar] = useState(true);
+
   const onChangeAnoLetivo = async valor => {
     setDreId();
     setUeId();
@@ -73,6 +75,7 @@ const RelatorioCompensacaoAusencia = () => {
     setTurmaId();
     setComponentesCurricularesId();
     setAnoLetivo(valor);
+    setModoEdicao(true);
   };
 
   const onChangeDre = valor => {
@@ -82,6 +85,7 @@ const RelatorioCompensacaoAusencia = () => {
     setTurmaId();
     setComponentesCurricularesId();
     setUeId(undefined);
+    setModoEdicao(true);
   };
 
   const onChangeUe = valor => {
@@ -89,29 +93,35 @@ const RelatorioCompensacaoAusencia = () => {
     setTurmaId();
     setComponentesCurricularesId();
     setUeId(valor);
+    setModoEdicao(true);
   };
 
   const onChangeModalidade = valor => {
     setTurmaId();
     setComponentesCurricularesId();
     setModalidadeId(valor);
+    setModoEdicao(true);
   };
 
   const onChangeSemestre = valor => {
     setSemestre(valor);
+    setModoEdicao(true);
   };
 
   const onChangeTurma = valor => {
     setComponentesCurricularesId();
     setTurmaId(valor);
+    setModoEdicao(true);
   };
 
   const onChangeComponenteCurricular = valor => {
     setComponentesCurricularesId([valor]);
+    setModoEdicao(true);
   };
 
   const onChangeBimestre = valor => {
     setBimestre(valor);
+    setModoEdicao(true);
   };
 
   const [anoAtual] = useState(window.moment().format('YYYY'));
@@ -259,6 +269,7 @@ const RelatorioCompensacaoAusencia = () => {
       setListaBimestres(bimestresFundMedio);
     }
     setBimestre();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [modalidadeId]);
 
   const obterAnosLetivos = useCallback(async () => {
@@ -392,18 +403,33 @@ const RelatorioCompensacaoAusencia = () => {
     await setTurmaId(undefined);
     await setAnoLetivo();
     await setAnoLetivo(anoAtual);
+    setModoEdicao(false);
+    setDesabilitarBtnGerar(true);
   };
 
-  const desabilitarGerar =
-    !anoLetivo ||
-    !dreId ||
-    !ueId ||
-    !modalidadeId ||
-    (String(modalidadeId) === String(modalidade.EJA) ? !semestre : false) ||
-    !turmaId ||
-    !componentesCurricularesId ||
-    !bimestre ||
-    String(modalidadeId) === String(modalidade.INFANTIL);
+  useEffect(() => {
+    const desabilitar =
+      !anoLetivo ||
+      !dreId ||
+      !ueId ||
+      !modalidadeId ||
+      (Number(modalidadeId) === modalidade.EJA ? !semestre : false) ||
+      !turmaId ||
+      !componentesCurricularesId ||
+      !bimestre ||
+      Number(modalidadeId) === modalidade.INFANTIL;
+
+    setDesabilitarBtnGerar(desabilitar);
+  }, [
+    anoLetivo,
+    dreId,
+    ueId,
+    modalidadeId,
+    semestre,
+    turmaId,
+    componentesCurricularesId,
+    bimestre,
+  ]);
 
   const gerar = async () => {
     setCarregandoGerar(true);
@@ -428,6 +454,7 @@ const RelatorioCompensacaoAusencia = () => {
       sucesso(
         'Solicitação de geração do relatório gerada com sucesso. Em breve você receberá uma notificação com o resultado.'
       );
+      setDesabilitarBtnGerar(true);
     }
   };
 
@@ -437,51 +464,20 @@ const RelatorioCompensacaoAusencia = () => {
         exibir={String(modalidadeId) === String(modalidade.INFANTIL)}
         validarModalidadeFiltroPrincipal={false}
       />
-      <Cabecalho pagina="Relatório de compensação de ausência" />
+      <Cabecalho pagina="Relatório de compensação de ausência">
+        <BotoesAcaoRelatorio
+          onClickVoltar={() => history.push(URL_HOME)}
+          onClickCancelar={cancelar}
+          onClickGerar={gerar}
+          desabilitarBtnGerar={desabilitarBtnGerar}
+          carregandoGerar={carregandoGerar}
+          temLoaderBtnGerar
+          modoEdicao={modoEdicao}
+        />
+      </Cabecalho>
       <Card>
         <div className="col-md-12">
           <div className="row">
-            <div className="col-md-12 d-flex justify-content-end pb-4 justify-itens-end">
-              <Button
-                id="btn-voltar-rel-pendencias"
-                label="Voltar"
-                icon="arrow-left"
-                color={Colors.Azul}
-                border
-                className="mr-2"
-                onClick={() => {
-                  history.push('/');
-                }}
-              />
-              <Button
-                id="btn-cancelar-rel-pendencias"
-                label="Cancelar"
-                color={Colors.Roxo}
-                border
-                bold
-                className="mr-2"
-                onClick={() => {
-                  cancelar();
-                }}
-              />
-              <Loader
-                loading={carregandoGerar}
-                className="d-flex w-auto"
-                tip=""
-              >
-                <Button
-                  id="btn-gerar-rel-pendencias"
-                  icon="print"
-                  label="Gerar"
-                  color={Colors.Azul}
-                  border
-                  bold
-                  className="mr-0"
-                  onClick={gerar}
-                  disabled={desabilitarGerar}
-                />
-              </Loader>
-            </div>
             <div className="col-sm-12 col-md-6 col-lg-2 col-xl-2 mb-2">
               <Loader loading={carregandoAnos} tip="">
                 <SelectComponent

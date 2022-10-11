@@ -65,6 +65,7 @@ const TabListaoDiarioBordoFiltros = () => {
     if (lista.length === 1) {
       setPeriodo(lista[0]);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     componenteCurricular,
     turma,
@@ -98,6 +99,7 @@ const TabListaoDiarioBordoFiltros = () => {
       limparDadosComponenteCurricularDiarioBordo();
       limparDadosDiarioBordo();
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -107,6 +109,7 @@ const TabListaoDiarioBordoFiltros = () => {
     } else {
       limparDadosDiarioBordo();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [bimestreOperacoes]);
 
   const obterPeriodoSelecionado = id => {
@@ -174,6 +177,7 @@ const TabListaoDiarioBordoFiltros = () => {
         );
       }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [turma, setComponenteCurricularDiarioBordo]);
 
   useEffect(() => {
@@ -183,6 +187,7 @@ const TabListaoDiarioBordoFiltros = () => {
     }
     setListaComponentesCurricularesDiario([]);
     setComponenteCurricularDiarioBordo();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     turma,
     obterComponentesCurriculares,

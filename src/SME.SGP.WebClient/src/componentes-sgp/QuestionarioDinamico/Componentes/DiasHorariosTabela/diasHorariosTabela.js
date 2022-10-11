@@ -7,7 +7,6 @@ import styled from 'styled-components';
 import { DataTable } from '~/componentes';
 import Button from '~/componentes/button';
 import { Base, Colors } from '~/componentes/colors';
-import Label from '~/componentes/label';
 import { BtnExcluirDiasHorario } from '~/paginas/AEE/Plano/Cadastro/planoAEECadastro.css';
 import { setResetarTabela } from '~/redux/modulos/questionarioDinamico/actions';
 import { confirmar } from '~/servicos';
@@ -179,7 +178,7 @@ const DiasHorariosTabela = props => {
         exibirModal={exibirModal}
         dadosIniciais={dadosIniciais}
       />
-      <Label text={label} />
+      {label}
       <div className={possuiErro() ? 'tabela-invalida' : ''}>
         <DataTable
           columns={colunas}
@@ -216,7 +215,7 @@ const DiasHorariosTabela = props => {
 DiasHorariosTabela.propTypes = {
   questaoAtual: PropTypes.oneOfType([PropTypes.any]),
   form: PropTypes.oneOfType([PropTypes.any]),
-  label: PropTypes.string,
+  label: PropTypes.oneOfType([PropTypes.any]),
   desabilitado: PropTypes.bool,
   onChange: PropTypes.func,
 };

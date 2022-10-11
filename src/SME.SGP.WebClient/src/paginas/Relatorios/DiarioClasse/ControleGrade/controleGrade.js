@@ -1,9 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { Loader, SelectComponent } from '~/componentes';
 import { Cabecalho } from '~/componentes-sgp';
-import Button from '~/componentes/button';
 import Card from '~/componentes/card';
-import { Colors } from '~/componentes/colors';
 import modalidade from '~/dtos/modalidade';
 import AbrangenciaServico from '~/servicos/Abrangencia';
 import { erros, sucesso } from '~/servicos/alertas';
@@ -14,6 +12,8 @@ import ServicoRelatorioControleGrade from '~/servicos/Paginas/Relatorios/DiarioC
 import ServicoComponentesCurriculares from '~/servicos/Paginas/ComponentesCurriculares/ServicoComponentesCurriculares';
 import FiltroHelper from '~componentes-sgp/filtro/helper';
 import { ordenarListaMaiorParaMenor } from '~/utils/funcoes/gerais';
+import BotoesAcaoRelatorio from '~/componentes-sgp/botoesAcaoRelatorio';
+import { URL_HOME } from '~/constantes';
 
 const ControleGrade = () => {
   const [exibirLoader, setExibirLoader] = useState(false);
@@ -61,6 +61,7 @@ const ControleGrade = () => {
   const [tipoRelatorio, setTipoRelatorio] = useState(undefined);
   const [clicouBotaoGerar, setClicouBotaoGerar] = useState(false);
   const [desabilitarBtnGerar, setDesabilitarBtnGerar] = useState(true);
+  const [modoEdicao, setModoEdicao] = useState(false);
 
   const onChangeAnoLetivo = async valor => {
     setDreId();
@@ -69,6 +70,7 @@ const ControleGrade = () => {
     setTurmaId();
     setComponentesCurricularesId();
     setAnoLetivo(valor);
+    setModoEdicao(true);
   };
 
   const onChangeDre = valor => {
@@ -78,6 +80,7 @@ const ControleGrade = () => {
     setTurmaId();
     setComponentesCurricularesId();
     setUeId(undefined);
+    setModoEdicao(true);
   };
 
   const onChangeUe = valor => {
@@ -85,38 +88,45 @@ const ControleGrade = () => {
     setTurmaId();
     setComponentesCurricularesId();
     setUeId(valor);
+    setModoEdicao(true);
   };
 
   const onChangeModalidade = valor => {
     setTurmaId();
     setComponentesCurricularesId();
     setModalidadeId(valor);
+    setModoEdicao(true);
   };
 
   const onChangeSemestre = valor => {
     setSemestre(valor);
     setClicouBotaoGerar(false);
+    setModoEdicao(true);
   };
 
   const onChangeTurma = valor => {
     setComponentesCurricularesId();
     setTurmaId(valor);
     setClicouBotaoGerar(false);
+    setModoEdicao(true);
   };
 
   const onChangeComponenteCurricular = valor => {
     setComponentesCurricularesId(valor);
     setClicouBotaoGerar(false);
+    setModoEdicao(true);
   };
 
   const onChangeBimestre = valor => {
     setBimestre(valor);
     setClicouBotaoGerar(false);
+    setModoEdicao(true);
   };
 
   const onChangeTipoRelatorio = valor => {
     setTipoRelatorio(valor);
     setClicouBotaoGerar(false);
+    setModoEdicao(true);
   };
 
   const [anoAtual] = useState(window.moment().format('YYYY'));
@@ -266,6 +276,7 @@ const ControleGrade = () => {
       setListaBimestres(bimestresFundMedio);
     }
     setBimestre();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [modalidadeId]);
 
   const obterAnosLetivos = useCallback(async () => {
@@ -407,6 +418,7 @@ const ControleGrade = () => {
     await setAnoLetivo();
     await setAnoLetivo(anoAtual);
     await setTipoRelatorio();
+    setModoEdicao(false);
   };
 
   useEffect(() => {
@@ -486,47 +498,21 @@ const ControleGrade = () => {
 
   return (
     <>
-      <Cabecalho pagina="Relatório controle de grade" />
+      <Cabecalho pagina="Relatório controle de grade">
+        <BotoesAcaoRelatorio
+          onClick={() => {
+            history.push(URL_HOME);
+          }}
+          onClickCancelar={cancelar}
+          onClickGerar={gerar}
+          desabilitarBtnGerar={desabilitarBtnGerar}
+          modoEdicao={modoEdicao}
+        />
+      </Cabecalho>
       <Card>
         <Loader loading={exibirLoader}>
           <div className="col-md-12">
             <div className="row">
-              <div className="col-md-12 d-flex justify-content-end pb-4 justify-itens-end">
-                <Button
-                  id="btn-voltar"
-                  label="Voltar"
-                  icon="arrow-left"
-                  color={Colors.Azul}
-                  border
-                  className="mr-2"
-                  onClick={() => {
-                    history.push('/');
-                  }}
-                />
-                <Button
-                  id="btn-cancelar"
-                  label="Cancelar"
-                  color={Colors.Roxo}
-                  border
-                  bold
-                  className="mr-2"
-                  onClick={() => {
-                    cancelar();
-                  }}
-                />
-
-                <Button
-                  id="btn-gerar"
-                  icon="print"
-                  label="Gerar"
-                  color={Colors.Azul}
-                  border
-                  bold
-                  className="mr-0"
-                  onClick={gerar}
-                  disabled={desabilitarBtnGerar}
-                />
-              </div>
               <div className="col-sm-12 col-md-6 col-lg-2 col-xl-2 mb-2">
                 <SelectComponent
                   id="drop-ano-letivo"

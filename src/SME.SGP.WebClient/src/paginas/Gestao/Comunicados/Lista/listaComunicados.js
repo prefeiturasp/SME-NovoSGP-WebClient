@@ -1,8 +1,12 @@
+import { Col, Row } from 'antd';
 import moment from 'moment';
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Button, Card, Colors, ListaPaginada, Loader } from '~/componentes';
 import { Cabecalho } from '~/componentes-sgp';
+import BotaoExcluirPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoExcluirPadrao';
+import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
+import { SGP_BUTTON_NOVO } from '~/componentes-sgp/filtro/idsCampos';
 import { ModalidadeDTO, RotasDto } from '~/dtos';
 import {
   confirmar,
@@ -129,50 +133,42 @@ const ListaComunicados = () => {
 
   return (
     <>
-      <Cabecalho pagina="Comunicação com pais ou responsáveis" classes="mb-2" />
+      <Cabecalho pagina="Comunicação com pais ou responsáveis">
+        <Row gutter={[8, 8]} type="flex">
+          <Col>
+            <BotaoVoltarPadrao onClick={() => aoClicarBotaoVoltar()} />
+          </Col>
+          <Col>
+            <BotaoExcluirPadrao
+              onClick={aoClicarBotaoExcluir}
+              disabled={
+                somenteConsulta ||
+                itensSelecionados?.length < 1 ||
+                !permissoesTela.podeExcluir
+              }
+            />
+          </Col>
+          <Col>
+            <Button
+              id={SGP_BUTTON_NOVO}
+              label="Novo"
+              color={Colors.Roxo}
+              onClick={aoClicarBotaoNovo}
+              disabled={somenteConsulta || !permissoesTela.podeIncluir}
+            />
+          </Col>
+        </Row>
+      </Cabecalho>
       <Loader loading={exibirLoader}>
         <Card>
-          <div className="col-md-12 p-0">
-            <div className="row mb-2">
-              <div className="col-sm-12 d-flex justify-content-end">
-                <Button
-                  id="botao-voltar"
-                  label="Voltar"
-                  icon="arrow-left"
-                  color={Colors.Azul}
-                  onClick={aoClicarBotaoVoltar}
-                  border
-                  className="mr-3"
-                />
-                <Button
-                  id="botao-excluir"
-                  label="Excluir"
-                  color={Colors.Vermelho}
-                  onClick={aoClicarBotaoExcluir}
-                  border
-                  className="mr-3"
-                  disabled={
-                    somenteConsulta ||
-                    itensSelecionados?.length < 1 ||
-                    !permissoesTela.podeExcluir
-                  }
-                />
-                <Button
-                  id="botao-novo"
-                  label="Novo"
-                  color={Colors.Roxo}
-                  onClick={aoClicarBotaoNovo}
-                  disabled={somenteConsulta || !permissoesTela.podeIncluir}
-                />
-              </div>
-            </div>
+          <div className="col-md-12">
             <Filtros
               onChangeFiltros={onChangeFiltros}
               temModalidadeEja={temModalidadeEja}
             />
 
             {filtroEhValido && (
-              <div className="col-md-12 px-0" style={{ paddingTop: 38 }}>
+              <div className="col-md-12" style={{ paddingTop: 38 }}>
                 <ListaPaginada
                   id="lista-comunicados"
                   url="v1/comunicados"

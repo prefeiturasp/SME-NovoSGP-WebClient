@@ -3,6 +3,12 @@ import React, { useContext, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { Button, Colors } from '~/componentes';
+import BotaoExcluirPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoExcluirPadrao';
+import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
+import {
+  SGP_BUTTON_ALTERAR_CADASTRAR,
+  SGP_BUTTON_CANCELAR,
+} from '~/componentes-sgp/filtro/idsCampos';
 import { RotasDto } from '~/dtos';
 import {
   confirmar,
@@ -16,6 +22,7 @@ import FechaReabCadastroContext from './fechaReabCadastroContext';
 
 const FechaReabCadastroBotoesAcao = () => {
   const {
+    setEmEdicao,
     emEdicao,
     setExecutaResetarTela,
     refForm,
@@ -24,7 +31,6 @@ const FechaReabCadastroBotoesAcao = () => {
     desabilitarCampos,
     setDesabilitarCampos,
     setSomenteConsulta,
-    calendarioSelecionado,
     setExibirLoaderReabertura,
   } = useContext(FechaReabCadastroContext);
 
@@ -59,6 +65,7 @@ const FechaReabCadastroBotoesAcao = () => {
   };
 
   const validaAntesDoSubmit = () => {
+    setEmEdicao(true);
     const arrayCampos = Object.keys(valoresIniciaisPadrao);
     arrayCampos.forEach(campo => {
       refForm.setFieldTouched(campo, true, true);
@@ -123,20 +130,13 @@ const FechaReabCadastroBotoesAcao = () => {
 
   return (
     <Col span={24}>
-      <Row gutter={[16, 16]} style={{ justifyContent: 'end', display: 'flex' }}>
+      <Row gutter={[8, 8]} type="flex">
         <Col>
-          <Button
-            id="btn-voltar"
-            label="Voltar"
-            icon="arrow-left"
-            color={Colors.Azul}
-            border
-            onClick={onClickVoltar}
-          />
+          <BotaoVoltarPadrao onClick={() => onClickVoltar()} />
         </Col>
         <Col>
           <Button
-            id="btn-cancelar"
+            id={SGP_BUTTON_CANCELAR}
             label="Cancelar"
             color={Colors.Roxo}
             border
@@ -146,12 +146,7 @@ const FechaReabCadastroBotoesAcao = () => {
         </Col>
         {!novoRegistro ? (
           <Col>
-            <Button
-              id="btn-excluir"
-              label="Excluir"
-              color={Colors.Vermelho}
-              border
-              hidden={novoRegistro}
+            <BotaoExcluirPadrao
               onClick={onClickExcluir}
               disabled={
                 somenteConsulta || !permissoesTela.podeExcluir || novoRegistro
@@ -163,13 +158,13 @@ const FechaReabCadastroBotoesAcao = () => {
         )}
         <Col>
           <Button
-            id={novoRegistro ? 'btn-cadastrar' : 'btn-alterar'}
+            id={SGP_BUTTON_ALTERAR_CADASTRAR}
             label={novoRegistro ? 'Cadastrar' : 'Alterar'}
             color={Colors.Roxo}
             border
             bold
             onClick={() => validaAntesDoSubmit()}
-            disabled={desabilitarCampos || !calendarioSelecionado?.id}
+            disabled={desabilitarCampos || (!novoRegistro && !emEdicao)}
           />
         </Col>
       </Row>

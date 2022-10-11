@@ -17,7 +17,6 @@ import api from '~/servicos/api';
 import history from '~/servicos/history';
 
 import ContadorExpiracao from './contadorExpiracao';
-import { setExibirMensagemSessaoExpirou } from '~/redux/modulos/mensagens/actions';
 
 const Container = styled.div`
   margin-right: 10px;
@@ -120,6 +119,7 @@ const TempoExpiracaoSessao = () => {
       }
     }
     setMostraTempoExpiracao(false);
+    return undefined;
   }, [tempoParaExpirar]);
 
   const revalidarAutenticacao = async () => {

@@ -22,22 +22,24 @@ const ListaoOperacoes = () => {
       limparTelaListao();
       dispatch(setLimparModoEdicaoGeral());
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
     <>
       <ListaoAlertaTurma />
       <ListaoAlertaPeriodoAberto />
-      <Cabecalho pagina="Operações" />
-      <Card>
-        <Col span={24}>
-          <ListaoLoaderGeral>
-            <ListaoOperacoesBotoesAcao />
+      <ListaoLoaderGeral>
+        <Cabecalho pagina="Operações">
+          <ListaoOperacoesBotoesAcao />
+        </Cabecalho>
+        <Card padding="24px 24px">
+          <Col span={24}>
             <ListaoOperacoesFiltros />
             <ListaoTabs />
-          </ListaoLoaderGeral>
-        </Col>
-      </Card>
+          </Col>
+        </Card>
+      </ListaoLoaderGeral>
     </>
   );
 };

@@ -56,10 +56,10 @@ const TabsDashboardRelAcompanhamentoAprendizagem = props => {
 };
 
 TabsDashboardRelAcompanhamentoAprendizagem.propTypes = {
-  anoLetivo: PropTypes.oneOfType(PropTypes.any),
+  anoLetivo: PropTypes.oneOfType([PropTypes.any]),
   ueId: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   dreId: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
-  dataUltimaConsolidacao: PropTypes.oneOfType(PropTypes.any),
+  dataUltimaConsolidacao: PropTypes.oneOfType([PropTypes.any]),
 };
 
 TabsDashboardRelAcompanhamentoAprendizagem.defaultProps = {

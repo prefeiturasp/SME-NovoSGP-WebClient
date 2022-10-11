@@ -1,6 +1,9 @@
 import React from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
+import { Affix } from 'antd';
+import { useSelector } from 'react-redux';
+import { Base } from '~/componentes/colors';
 
 const Container = styled.div`
   span {
@@ -26,21 +29,62 @@ const Container = styled.div`
     font-stretch: normal;
     line-height: normal;
     letter-spacing: normal;
-    color: #353535;
+    color: ${Base.CinzaMako};
     margin-bottom: 0.3rem;
   }
 
+  .background-row {
+    background: #f5f6f8;
+  }
+
+  .ant-affix .background-row {
+    box-shadow: 0 1.5rem 1rem -18px rgb(0 0 0 / 15%);
+    padding-bottom: 0.5rem !important;
+  }
+
   padding-bottom: 8px;
+  margin-right: -32px;
+  margin-left: -32px;
 `;
 
-const Cabecalho = ({ titulo, pagina, children, classes }) => {
-  return (
-    <Container className={classes}>
-      <div className="col-xs-12 col-md-12 col-lg-12">
+const Cabecalho = ({
+  titulo,
+  pagina,
+  children,
+  classes,
+  removeAffix,
+  style,
+}) => {
+  const usuario = useSelector(state => state.usuario);
+
+  const componentePadrao = (
+    <div
+      className="d-flex background-row pt-2"
+      style={{
+        justifyContent: 'space-between',
+        flexWrap: 'wrap-reverse',
+        alignItems: 'end',
+        paddingLeft: '32px',
+        paddingRight: '32px',
+        ...style,
+      }}
+    >
+      <div className="pt-3">
         <span>{titulo}</span>
         <span className="titulo">{pagina}</span>
-        {children}
       </div>
+      <div className="d-flex">{children}</div>
+    </div>
+  );
+  const offsetTop = usuario?.acessoAdmin ? 114.15 : 70;
+
+  return (
+    <Container className={classes}>
+      {removeAffix ? (
+        componentePadrao
+      ) : (
+        <Affix offsetTop={offsetTop}>{componentePadrao}</Affix>
+      )}
     </Container>
   );
 };
@@ -50,6 +94,8 @@ Cabecalho.defaultProps = {
   pagina: '',
   children: '',
   classes: '',
+  removeAffix: false,
+  style: {},
 };
 
 Cabecalho.propTypes = {
@@ -57,5 +103,7 @@ Cabecalho.propTypes = {
   pagina: PropTypes.string,
   children: PropTypes.oneOfType([PropTypes.node, PropTypes.string]),
   classes: PropTypes.string,
+  removeAffix: PropTypes.bool,
+  style: PropTypes.oneOfType([PropTypes.any]),
 };
 export default Cabecalho;

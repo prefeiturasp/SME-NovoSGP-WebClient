@@ -9,7 +9,7 @@ import {
   setExibirModalErrosRalSemestralPAP,
   setErrosRalSemestralPAP,
 } from '~/redux/modulos/relatorioSemestralPAP/actions';
-import { confirmar, erro, erros, sucesso } from '~/servicos/alertas';
+import { confirmar, erros, sucesso } from '~/servicos/alertas';
 import ServicoRelatorioSemestral from '~/servicos/Paginas/Relatorios/PAP/RelatorioSemestral/ServicoRelatorioSemestral';
 
 class ServicoSalvarRelatorioSemestral {
@@ -51,7 +51,7 @@ class ServicoSalvarRelatorioSemestral {
 
         if (secao.obrigatorio) {
           const itemAlterado = dadosParaSalvarRelatorioSemestral.find(
-            campo => campo.id == secao.id
+            campo => Number(campo.id) === Number(secao.id)
           );
           if (itemAlterado) {
             if (!itemAlterado.valor) {

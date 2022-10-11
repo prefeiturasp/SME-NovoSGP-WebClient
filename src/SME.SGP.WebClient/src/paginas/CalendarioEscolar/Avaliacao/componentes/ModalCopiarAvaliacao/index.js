@@ -3,8 +3,7 @@ import t from 'prop-types';
 import shortid from 'shortid';
 
 // Redux
-import { useSelector, useDispatch } from 'react-redux';
-import { setLoaderModal } from '~/redux/modulos/loader/actions';
+import { useSelector } from 'react-redux';
 
 // Componentes
 import {
@@ -22,9 +21,8 @@ import { Row } from './styles';
 
 // Serviço
 import api from '~/servicos/api';
-import PlanoAulaServico from '~/servicos/Paginas/PlanoAula';
 import AvaliacaoServico from '~/servicos/Paginas/Calendario/ServicoAvaliacao';
-import { erros, erro, sucesso } from '~/servicos/alertas';
+import { erro } from '~/servicos/alertas';
 
 // Reducer
 import Reducer, {
@@ -44,9 +42,7 @@ import { valorNuloOuVazio } from '~/utils/funcoes/gerais';
 function ModalCopiarAvaliacao({ show, disciplina, onClose, onSalvarCopias }) {
   const filtro = useSelector(store => store.usuario.turmaSelecionada);
   const carregando = useSelector(store => store.loader.loaderModal);
-  const dispatch = useDispatch();
   const [listaTurmas, setListaTurmas] = useState([]);
-  const [turmas, setTurmas] = useState([]);
 
   const [estado, disparar] = useReducer(Reducer, estadoInicial);
 
@@ -139,7 +135,6 @@ function ModalCopiarAvaliacao({ show, disciplina, onClose, onSalvarCopias }) {
   };
 
   const onCloseModal = () => {
-    setTurmas([]);
     onClose();
   };
 

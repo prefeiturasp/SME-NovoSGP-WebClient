@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { Select } from 'antd';
-import Icon from 'antd/es/icon';
 import shortid from 'shortid';
 import { Field } from 'formik';
 import { Base } from './colors';
@@ -55,7 +54,8 @@ const Container = styled.div`
 
   .ant-select-selection--multiple {
     min-height: 38px;
-    max-height: 39px;
+    ${({ maxHeightMultiple }) =>
+      maxHeightMultiple && `max-height: ${maxHeightMultiple};`}
     overflow-x: hidden;
 
     .ant-select-selection__placeholder {
@@ -65,6 +65,11 @@ const Container = styled.div`
     .ant-select-selection__rendered {
       margin-top: 3px;
     }
+  }
+
+  .ant-select-selection__clear {
+    top: 50% !important;
+    font-size: 15px !important;
   }
 
   div[class*='is-invalid'] {
@@ -109,6 +114,8 @@ const SelectComponent = React.forwardRef((props, ref) => {
     style,
     searchValue,
     setValueOnlyOnChange,
+    maxHeightMultiple,
+    labelRequired,
   } = props;
 
   const { Option } = Select;
@@ -231,8 +238,13 @@ const SelectComponent = React.forwardRef((props, ref) => {
       size={size}
       border={border}
       color={color}
+      maxHeightMultiple={maxHeightMultiple}
     >
-      {label ? <Label text={label} control={name} /> : ''}
+      {label ? (
+        <Label text={label} control={name} isRequired={labelRequired} />
+      ) : (
+        <></>
+      )}
       {form ? campoComValidacoes() : campoSemValidacoes()}
       {form ? obterErros() : ''}
     </Container>
@@ -264,6 +276,8 @@ SelectComponent.propTypes = {
   style: PropTypes.oneOfType([PropTypes.object]),
   searchValue: PropTypes.bool,
   setValueOnlyOnChange: PropTypes.bool,
+  maxHeightMultiple: PropTypes.string,
+  labelRequired: PropTypes.bool,
 };
 
 SelectComponent.defaultProps = {
@@ -272,6 +286,8 @@ SelectComponent.defaultProps = {
   style: null,
   searchValue: true,
   setValueOnlyOnChange: false,
+  maxHeightMultiple: '78px',
+  labelRequired: false,
 };
 
 export default SelectComponent;

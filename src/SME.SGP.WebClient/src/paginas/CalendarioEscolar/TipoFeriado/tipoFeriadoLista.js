@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { Col, Row } from 'antd';
 import Cabecalho from '~/componentes-sgp/cabecalho';
 import Button from '~/componentes/button';
 import CampoTexto from '~/componentes/campoTexto';
@@ -13,6 +14,9 @@ import history from '~/servicos/history';
 import { store } from '~/redux';
 import RotasDto from '~/dtos/rotasDto';
 import { verificaSomenteConsulta } from '~/servicos/servico-navegacao';
+import { SGP_BUTTON_NOVO } from '~/componentes-sgp/filtro/idsCampos';
+import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
+import BotaoExcluirPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoExcluirPadrao';
 
 const TipoFeriadoLista = () => {
   const [idsTipoFeriadoSelecionado, setIdsTipoFeriadoSelecionado] = useState(
@@ -29,7 +33,7 @@ const TipoFeriadoLista = () => {
     setDropdownTipoFeriadoSelecionado,
   ] = useState(0);
 
-  const usuario = store.getState().usuario;
+  const { usuario } = store.getState();
   const permissoesTela = usuario.permissoes[RotasDto.TIPO_FERIADO];
 
   const listaDropdownAbrangencia = [
@@ -60,15 +64,8 @@ const TipoFeriadoLista = () => {
 
   useEffect(() => {
     verificaSomenteConsulta(permissoesTela);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
-  useEffect(() => {
-    onFiltrar();
-  }, [
-    nomeTipoFeriado,
-    dropdownAbrangenciaSelecionada,
-    dropdownTipoFeriadoSelecionado,
-  ]);
 
   const onFiltrar = async () => {
     setIdsTipoFeriadoSelecionado([]);
@@ -81,14 +78,17 @@ const TipoFeriadoLista = () => {
     setListaTipoFeriado(tipos.data);
   };
 
+  useEffect(() => {
+    onFiltrar();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [
+    nomeTipoFeriado,
+    dropdownAbrangenciaSelecionada,
+    dropdownTipoFeriadoSelecionado,
+  ]);
+
   const onSelectRow = ids => {
     setIdsTipoFeriadoSelecionado(ids);
-  };
-
-  const onClickRow = row => {
-    if (!permissoesTela.podeAlterar) return;
-
-    onClickEditar(row.id);
   };
 
   const onClickVoltar = () => {
@@ -103,13 +103,21 @@ const TipoFeriadoLista = () => {
     history.push(`/calendario-escolar/tipo-feriado/editar/${id}`);
   };
 
+  const onClickRow = row => {
+    if (!permissoesTela.podeAlterar) return;
+
+    onClickEditar(row.id);
+  };
+
   const onClickExcluir = async () => {
     if (!permissoesTela.podeExcluir) return;
 
     const listaParaExcluir = [];
 
     idsTipoFeriadoSelecionado.forEach(id => {
-      const achou = listaTipoFeriado.find(tipo => id == tipo.id);
+      const achou = listaTipoFeriado.find(
+        tipo => Number(id) === Number(tipo.id)
+      );
       if (achou) {
         listaParaExcluir.push(achou);
       }
@@ -130,7 +138,7 @@ const TipoFeriadoLista = () => {
       const excluir = await api
         .delete('v1/calendarios/feriados', parametrosDelete)
         .catch(e => erros(e));
-      if (excluir && excluir.status == 200) {
+      if (excluir?.status === 200) {
         const mensagemSucesso = `${
           idsTipoFeriadoSelecionado.length > 1 ? 'Tipos' : 'Tipo'
         } de feriado excluído com sucesso.`;
@@ -154,89 +162,88 @@ const TipoFeriadoLista = () => {
 
   return (
     <>
-      <Cabecalho pagina="Lista de tipo de feriado" />
+      <Cabecalho pagina="Lista de tipo de feriado">
+        <Row gutter={[8, 8]} type="flex">
+          <Col>
+            <BotaoVoltarPadrao onClick={() => onClickVoltar()} />
+          </Col>
+          <Col>
+            <BotaoExcluirPadrao
+              disabled={
+                !permissoesTela.podeExcluir ||
+                (idsTipoFeriadoSelecionado &&
+                  idsTipoFeriadoSelecionado.length < 1)
+              }
+              onClick={onClickExcluir}
+            />
+          </Col>
+          <Col>
+            <Button
+              id={SGP_BUTTON_NOVO}
+              label="Novo"
+              color={Colors.Roxo}
+              border
+              bold
+              disabled={!permissoesTela.podeIncluir}
+              onClick={onClickNovo}
+            />
+          </Col>
+        </Row>
+      </Cabecalho>
       <Card>
-        <div className="col-md-12 d-flex justify-content-end pb-4">
-          <Button
-            label="Voltar"
-            icon="arrow-left"
-            color={Colors.Azul}
-            border
-            className="mr-2"
-            onClick={onClickVoltar}
-          />
-          <Button
-            label="Excluir"
-            color={Colors.Vermelho}
-            border
-            className="mr-2"
-            disabled={
-              !permissoesTela.podeExcluir ||
-              (idsTipoFeriadoSelecionado &&
-                idsTipoFeriadoSelecionado.length < 1)
-            }
-            onClick={onClickExcluir}
-          />
-          <Button
-            label="Novo"
-            color={Colors.Roxo}
-            border
-            bold
-            disabled={!permissoesTela.podeIncluir}
-            className="mr-2"
-            onClick={onClickNovo}
-          />
-        </div>
+        <div className="col-md-12">
+          <div className="row">
+            <div className="col-md-4 pb-2">
+              <SelectComponent
+                label="Abrangência"
+                name="select-abrangencia"
+                id="select-abrangencia"
+                lista={listaDropdownAbrangencia}
+                valueOption="id"
+                disabled={!permissoesTela.podeConsultar}
+                valueText="nome"
+                onChange={onChangeDropdownAbrangencia}
+                valueSelect={dropdownAbrangenciaSelecionada || []}
+                placeholder="SELECIONE UMA ABRANGÊNCIA"
+              />
+            </div>
+            <div className="col-md-3 pb-2">
+              <SelectComponent
+                label="Tipo"
+                name="select-tipo-feiado"
+                id="select-tipo-friado"
+                lista={listaDropdownTipoFeriado}
+                disabled={!permissoesTela.podeConsultar}
+                valueOption="id"
+                valueText="nome"
+                onChange={onChangeDropdownTipoFeriado}
+                valueSelect={dropdownTipoFeriadoSelecionado || []}
+                placeholder="SELECIONE UM TIPO"
+              />
+            </div>
 
-        <div className="col-md-4 pb-2">
-          <SelectComponent
-            label="Abrangência"
-            name="select-abrangencia"
-            id="select-abrangencia"
-            lista={listaDropdownAbrangencia}
-            valueOption="id"
-            disabled={!permissoesTela.podeConsultar}
-            valueText="nome"
-            onChange={onChangeDropdownAbrangencia}
-            valueSelect={dropdownAbrangenciaSelecionada || []}
-            placeholder="SELECIONE UMA ABRANGÊNCIA"
-          />
-        </div>
-        <div className="col-md-3 pb-2">
-          <SelectComponent
-            label="Tipo"
-            name="select-tipo-feiado"
-            id="select-tipo-friado"
-            lista={listaDropdownTipoFeriado}
-            disabled={!permissoesTela.podeConsultar}
-            valueOption="id"
-            valueText="nome"
-            onChange={onChangeDropdownTipoFeriado}
-            valueSelect={dropdownTipoFeriadoSelecionado || []}
-            placeholder="SELECIONE UM TIPO"
-          />
-        </div>
+            <div className="col-md-5 pb-2">
+              <CampoTexto
+                label="Nome do tipo de feriado"
+                desabilitado={!permissoesTela.podeConsultar}
+                placeholder="DIGITE O NOME DO TIPO DE FERIADO"
+                onChange={onChangeNomeTipoFeriado}
+                value={nomeTipoFeriado}
+              />
+            </div>
 
-        <div className="col-md-5 pb-2">
-          <CampoTexto
-            label="Nome do tipo de feriado"
-            desabilitado={!permissoesTela.podeConsultar}
-            placeholder="DIGITE O NOME DO TIPO DE FERIADO"
-            onChange={onChangeNomeTipoFeriado}
-            value={nomeTipoFeriado}
-          />
-        </div>
-
-        <div className="col-md-12 pt-2">
-          <DataTable
-            id="lista-tipo-calendario"
-            selectedRowKeys={idsTipoFeriadoSelecionado}
-            onSelectRow={onSelectRow}
-            onClickRow={permissoesTela.podeAlterar && onClickRow}
-            columns={colunas}
-            dataSource={listaTipoFeriado}
-            selectMultipleRows
-          />
+            <div className="col-md-12 pt-2">
+              <DataTable
+                id="lista-tipo-calendario"
+                selectedRowKeys={idsTipoFeriadoSelecionado}
+                onSelectRow={onSelectRow}
+                onClickRow={permissoesTela.podeAlterar && onClickRow}
+                columns={colunas}
+                dataSource={listaTipoFeriado}
+                selectMultipleRows
+              />
+            </div>
+          </div>
         </div>
       </Card>
     </>

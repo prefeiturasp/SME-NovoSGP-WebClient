@@ -11,7 +11,7 @@ import {
   setQtdMaxImagensCampoPercursoIndividual,
 } from '~/redux/modulos/acompanhamentoAprendizagem/actions';
 import { limparDadosRegistroIndividual } from '~/redux/modulos/registroIndividual/actions';
-import { erros, sucesso } from '~/servicos/alertas';
+import { erro, erros, sucesso } from '~/servicos/alertas';
 import api from '~/servicos/api';
 
 const urlPadrao = '/v1/acompanhamento/alunos';
@@ -155,7 +155,7 @@ class ServicoAcompanhamentoAprendizagem {
         );
 
       if (retorno?.status === 200) {
-        if (dadosAcompanhamentoAprendizagem.acompanhamentoAlunoId) {
+        if (dadosAcompanhamentoAprendizagem?.acompanhamentoAlunoSemestreId) {
           sucesso('Registro alterado com sucesso');
         } else {
           sucesso('Registro inserido com sucesso');
@@ -223,6 +223,10 @@ class ServicoAcompanhamentoAprendizagem {
     } = acompanhamentoAprendizagem;
 
     const salvar = async () => {
+      if (!dadosApanhadoGeral.apanhadoGeral) {
+        erro('Percurso coletivo da turma é obrigatório');
+        return false;
+      }
       const paramsApanhadoGeral = {
         turmaId: turmaSelecionada?.id,
         semestre: semestreSelecionado,
