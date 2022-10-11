@@ -2,7 +2,6 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import FrequenciaCardCollapse from './Frequencia/frequenciaCardCollapse';
 import OcorrenciasCardCollapse from './Ocorrencias/ocorrenciasCardCollapse';
-import RegistroComunicacaoEscolaAquiCardCollapse from './RegistroComunicacaoEscolaAqui/registroComunicacaoEscolaAquiCardCollapse';
 
 const DadosGerais = props => {
   const { semestreSelecionado } = props;
@@ -11,9 +10,6 @@ const DadosGerais = props => {
     <>
       <FrequenciaCardCollapse semestreSelecionado={semestreSelecionado} />
       <OcorrenciasCardCollapse semestreSelecionado={semestreSelecionado} />
-      <RegistroComunicacaoEscolaAquiCardCollapse
-        semestreSelecionado={semestreSelecionado}
-      />
     </>
   );
 };
