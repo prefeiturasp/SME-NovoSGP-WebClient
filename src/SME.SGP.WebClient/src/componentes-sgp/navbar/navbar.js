@@ -65,6 +65,12 @@ const Navbar = () => {
     );
     if (resposta?.sucesso) {
       history.push(URL_HOME);
+      ServicoNotificacao.obterUltimasNotificacoesNaoLidas().catch(e =>
+        erros(e)
+      );
+      ServicoNotificacao.obterQuantidadeNotificacoesNaoLidas().catch(e =>
+        erros(e)
+      );
     } else if (resposta.erro) {
       erros(resposta.erro);
     }
