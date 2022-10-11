@@ -432,7 +432,8 @@ const Notas = ({ match }) => {
 
   useEffect(() => {
     if (
-      !ehTurmaInfantil(modalidadesFiltroPrincipal, usuario.turmaSelecionada)
+      !ehTurmaInfantil(modalidadesFiltroPrincipal, usuario.turmaSelecionada) &&
+      usuario?.turmaSelecionada?.turma
     ) {
       obterDisciplinas();
       dispatch(setModoEdicaoGeral(false));
