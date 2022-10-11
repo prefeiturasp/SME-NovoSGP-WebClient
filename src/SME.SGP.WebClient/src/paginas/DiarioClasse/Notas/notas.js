@@ -141,10 +141,6 @@ const Notas = ({ match }) => {
     [usuario.turmaSelecionada, permissoesTela, modalidadesFiltroPrincipal]
   );
 
-  useEffect(() => {
-    validaSeDesabilitaCampos(bimestreCorrente);
-  }, [bimestreCorrente, validaSeDesabilitaCampos]);
-
   const resetarBimestres = () => {
     primeiroBimestre.alunos = [];
     primeiroBimestre.avaliacoes = [];
@@ -448,12 +444,7 @@ const Notas = ({ match }) => {
       resetarTela();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [
-    obterDisciplinas,
-    usuario.turmaSelecionada.turma,
-    resetarTela,
-    disciplinaSelecionada,
-  ]);
+  }, [obterDisciplinas, usuario.turmaSelecionada.turma]);
 
   useEffect(() => {
     if (usuario?.turmaSelecionada?.turma && disciplinaSelecionada) {
@@ -1315,8 +1306,10 @@ const Notas = ({ match }) => {
       <AlertaModalidadeInfantil />
       <Loader
         loading={
-          (carregandoListaBimestres || carregandoGeral) &&
-          usuario.turmaSelecionada.turma
+          !!(
+            (carregandoListaBimestres || carregandoGeral) &&
+            usuario.turmaSelecionada.turma
+          )
         }
       >
         <Cabecalho pagina={tituloNotasConceitos}>
