@@ -505,7 +505,11 @@ const PeriodoFechamentoAbertura = () => {
                     color={Colors.Roxo}
                     border
                     bold
-                    disabled={desabilitarCampos}
+                    disabled={
+                      desabilitarCampos ||
+                      (ehRegistroExistente && !modoEdicao) ||
+                      !valorTipoCalendario
+                    }
                     onClick={() => validaAntesDoSubmit(form)}
                   />
                 </Col>
