@@ -26,7 +26,6 @@ const TipoEventosForm = ({ match }) => {
   const botaoCadastrarRef = useRef();
   const campoDescricaoRef = useRef();
 
-  const [emEdicao, setEmEdicao] = useState(false);
   const [idTipoEvento, setIdTipoEvento] = useState('');
   const [dadosTipoEvento, setDadosTipoEvento] = useState({
     descricao: '',
@@ -113,8 +112,8 @@ const TipoEventosForm = ({ match }) => {
   }, [idTipoEvento]);
 
   const onChangeCampos = () => {
-    if (!emEdicao) {
-      setEmEdicao(true);
+    if (!modoEdicao) {
+      setModoEdicao(true);
     }
   };
 
@@ -132,7 +131,7 @@ const TipoEventosForm = ({ match }) => {
       dependencia: true,
       ativo: true,
     });
-    setEmEdicao(true);
+    setModoEdicao(false);
   };
 
   const clicouBotaoExcluir = async () => {
@@ -284,7 +283,7 @@ const TipoEventosForm = ({ match }) => {
                   onClick={clicouBotaoCancelar}
                   border
                   bold
-                  disabled={idTipoEvento || !emEdicao}
+                  disabled={idTipoEvento || !modoEdicao}
                 />
               </Col>
               <Col>
@@ -302,7 +301,7 @@ const TipoEventosForm = ({ match }) => {
                   border
                   bold
                   ref={botaoCadastrarRef}
-                  disabled={!emEdicao}
+                  disabled={!modoEdicao}
                 />
               </Col>
             </Row>
