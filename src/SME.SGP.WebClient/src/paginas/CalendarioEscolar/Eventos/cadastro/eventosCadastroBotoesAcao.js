@@ -169,6 +169,7 @@ const EventosCadastroBotoesAcao = () => {
             onClick={() => validaAntesDoSubmit()}
             disabled={
               desabilitarCampos ||
+              !emEdicao ||
               (!novoRegistro && !eventoId) ||
               somenteConsulta ||
               !permissoesTela?.podeAlterar ||

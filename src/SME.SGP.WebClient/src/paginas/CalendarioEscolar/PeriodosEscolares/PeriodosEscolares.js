@@ -45,7 +45,6 @@ const PeriodosEscolares = () => {
   const [isTipoCalendarioAnual, setIsTipoCalendarioAnual] = useState(true);
   const [validacoes, setValidacoes] = useState();
   const [modoEdicao, setModoEdicao] = useState(false);
-  const [ehRegistroExistente, setEhRegistroExistente] = useState(false);
   const [periodoEscolarEdicao, setPeriodoEscolarEdicao] = useState({});
   const valoresFormInicial = {
     primeiroBimestreDataInicial: '',
@@ -68,8 +67,7 @@ const PeriodosEscolares = () => {
   const [carregandoTipos, setCarregandoTipos] = useState(false);
   const [auditoria, setAuditoria] = useState({});
 
-  const labelBotaoCadastrar =
-    ehRegistroExistente || auditoria?.criadoEm ? 'Alterar' : 'Cadastrar';
+  const labelBotaoCadastrar = auditoria?.criadoEm ? 'Alterar' : 'Cadastrar';
 
   const validacaoPrimeiroBim = {
     primeiroBimestreDataInicial: momentSchema.required(
@@ -152,106 +150,6 @@ const PeriodosEscolares = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isTipoCalendarioAnual]);
 
-  const onSubmit = async dadosForm => {
-    if (periodoEscolarEdicao) {
-      periodoEscolarEdicao.periodos.forEach(item => {
-        switch (item.bimestre) {
-          case 1:
-            item.periodoInicio = dadosForm.primeiroBimestreDataInicial.toDate();
-            item.periodoFim = dadosForm.primeiroBimestreDataFinal.toDate();
-            break;
-          case 2:
-            item.periodoInicio = dadosForm.segundoBimestreDataInicial.toDate();
-            item.periodoFim = dadosForm.segundoBimestreDataFinal.toDate();
-            break;
-          case 3:
-            item.periodoInicio = dadosForm.terceiroBimestreDataInicial.toDate();
-            item.periodoFim = dadosForm.terceiroBimestreDataFinal.toDate();
-            break;
-          case 4:
-            item.periodoInicio = dadosForm.quartoBimestreDataInicial.toDate();
-            item.periodoFim = dadosForm.quartoBimestreDataFinal.toDate();
-            break;
-          default:
-            break;
-        }
-      });
-      const editado = await api
-        .post('v1/periodo-escolar', periodoEscolarEdicao)
-        .catch(e => erros(e));
-      if (editado?.status === 200) {
-        sucesso('Suas informações foram editadas com sucesso.');
-      }
-    } else {
-      const calendarioParaCadastrar = listaTipoCalendario.find(item => {
-        return String(item.id) === String(calendarioEscolarSelecionado);
-      });
-      const paramsCadastrar = {
-        periodos: [
-          {
-            id: 0,
-            bimestre: 1,
-            periodoInicio: dadosForm.primeiroBimestreDataInicial.toDate(),
-            periodoFim: dadosForm.primeiroBimestreDataFinal.toDate(),
-          },
-          {
-            id: 0,
-            bimestre: 2,
-            periodoInicio: dadosForm.segundoBimestreDataInicial.toDate(),
-            periodoFim: dadosForm.segundoBimestreDataFinal.toDate(),
-          },
-        ],
-        tipoCalendario: calendarioParaCadastrar.id,
-        anoBase: calendarioParaCadastrar.anoLetivo,
-      };
-
-      if (isTipoCalendarioAnual) {
-        paramsCadastrar.periodos.push(
-          {
-            id: 0,
-            bimestre: 3,
-            periodoInicio: dadosForm.terceiroBimestreDataInicial.toDate(),
-            periodoFim: dadosForm.terceiroBimestreDataFinal.toDate(),
-          },
-          {
-            id: 0,
-            bimestre: 4,
-            periodoInicio: dadosForm.quartoBimestreDataInicial.toDate(),
-            periodoFim: dadosForm.quartoBimestreDataFinal.toDate(),
-          }
-        );
-      }
-      const cadastrado = await api
-        .post('v1/periodo-escolar', paramsCadastrar)
-        .catch(e => erros(e));
-      if (cadastrado?.status === 200) {
-        sucesso('Suas informações foram salvas com sucesso.');
-      }
-    }
-  };
-
-  const onClickVoltar = () => {
-    history.push(URL_HOME);
-  };
-
-  const resetarTela = form => {
-    form.resetForm();
-    setModoEdicao(false);
-  };
-
-  const onClickCancelar = async form => {
-    if (modoEdicao) {
-      const confirmou = await confirmar(
-        'Atenção',
-        'Você não salvou as informações preenchidas.',
-        'Deseja realmente cancelar as alterações?'
-      );
-      if (confirmou) {
-        resetarTela(form);
-      }
-    }
-  };
-
   const consultarPeriodoPorId = async id => {
     const periodoAtual = await api.get('v1/periodo-escolar', {
       params: { codigoTipoCalendario: id },
@@ -305,17 +203,117 @@ const PeriodosEscolares = () => {
     } else {
       setDesabilitaCampos(!permissoesTela.podeIncluir || somenteConsulta);
     }
-    setEhRegistroExistente(periodoAtual.data.tipoCalendario);
+
     setAuditoria({
       criadoEm: periodoAtual.data.criadoEm,
       criadoPor: periodoAtual.data.criadoPor,
-      criadoRf: periodoAtual.data.criadoRf,
+      criadoRf: periodoAtual.data.criadoRF,
       alteradoPor: periodoAtual.data.alteradoPor,
       alteradoEm: periodoAtual.data.alteradoEm,
-      alteradoRf: periodoAtual.data.alteradoRf,
+      alteradoRf: periodoAtual.data.alteradoRF,
     });
     setPeriodoEscolarEdicao(periodoAtual.data);
     setValoresIniciais(bimestresValorInicial);
+  };
+
+  const onSubmit = async dadosForm => {
+    if (periodoEscolarEdicao) {
+      periodoEscolarEdicao.periodos.forEach(item => {
+        switch (item.bimestre) {
+          case 1:
+            item.periodoInicio = dadosForm.primeiroBimestreDataInicial.toDate();
+            item.periodoFim = dadosForm.primeiroBimestreDataFinal.toDate();
+            break;
+          case 2:
+            item.periodoInicio = dadosForm.segundoBimestreDataInicial.toDate();
+            item.periodoFim = dadosForm.segundoBimestreDataFinal.toDate();
+            break;
+          case 3:
+            item.periodoInicio = dadosForm.terceiroBimestreDataInicial.toDate();
+            item.periodoFim = dadosForm.terceiroBimestreDataFinal.toDate();
+            break;
+          case 4:
+            item.periodoInicio = dadosForm.quartoBimestreDataInicial.toDate();
+            item.periodoFim = dadosForm.quartoBimestreDataFinal.toDate();
+            break;
+          default:
+            break;
+        }
+      });
+      const editado = await api
+        .post('v1/periodo-escolar', periodoEscolarEdicao)
+        .catch(e => erros(e));
+      if (editado?.status === 200) {
+        setModoEdicao(false);
+        consultarPeriodoPorId(periodoEscolarEdicao.tipoCalendario);
+        sucesso('Suas informações foram editadas com sucesso.');
+      }
+    } else {
+      const calendarioParaCadastrar = listaTipoCalendario.find(item => {
+        return String(item.id) === String(calendarioEscolarSelecionado);
+      });
+      const paramsCadastrar = {
+        periodos: [
+          {
+            id: 0,
+            bimestre: 1,
+            periodoInicio: dadosForm.primeiroBimestreDataInicial.toDate(),
+            periodoFim: dadosForm.primeiroBimestreDataFinal.toDate(),
+          },
+          {
+            id: 0,
+            bimestre: 2,
+            periodoInicio: dadosForm.segundoBimestreDataInicial.toDate(),
+            periodoFim: dadosForm.segundoBimestreDataFinal.toDate(),
+          },
+        ],
+        tipoCalendario: calendarioParaCadastrar.id,
+        anoBase: calendarioParaCadastrar.anoLetivo,
+      };
+
+      if (isTipoCalendarioAnual) {
+        paramsCadastrar.periodos.push(
+          {
+            id: 0,
+            bimestre: 3,
+            periodoInicio: dadosForm.terceiroBimestreDataInicial.toDate(),
+            periodoFim: dadosForm.terceiroBimestreDataFinal.toDate(),
+          },
+          {
+            id: 0,
+            bimestre: 4,
+            periodoInicio: dadosForm.quartoBimestreDataInicial.toDate(),
+            periodoFim: dadosForm.quartoBimestreDataFinal.toDate(),
+          }
+        );
+      }
+      const cadastrado = await api
+        .post('v1/periodo-escolar', paramsCadastrar)
+        .catch(e => erros(e));
+      if (cadastrado?.status === 200) {
+        setModoEdicao(false);
+        consultarPeriodoPorId(calendarioParaCadastrar.id);
+        sucesso('Suas informações foram salvas com sucesso.');
+      }
+    }
+  };
+
+  const resetarTela = form => {
+    form.resetForm();
+    setModoEdicao(false);
+  };
+
+  const onClickCancelar = async form => {
+    if (modoEdicao) {
+      const confirmou = await confirmar(
+        'Atenção',
+        'Você não salvou as informações preenchidas.',
+        'Deseja realmente cancelar as alterações?'
+      );
+      if (confirmou) {
+        resetarTela(form);
+      }
+    }
   };
 
   const touchedFields = form => {
@@ -477,6 +475,22 @@ const PeriodosEscolares = () => {
     });
   };
 
+  const onClickVoltar = async form => {
+    if (modoEdicao) {
+      const confirmou = await confirmar(
+        'Atenção',
+        '',
+        'Suas alterações não foram salvas, deseja salvar agora?'
+      );
+
+      if (confirmou) {
+        validaAntesDoSubmit(form);
+      }
+    }
+
+    history.push(URL_HOME);
+  };
+
   const selecionaTipoCalendario = (descricao, form, foiSelecionado = false) => {
     const tipo = listaTipoCalendario?.find(t => t.descricao === descricao);
     if (Number(tipo?.id) || !tipo?.id) {
@@ -536,7 +550,7 @@ const PeriodosEscolares = () => {
           <Cabecalho pagina="Cadastro do período escolar">
             <Row gutter={[8, 8]} type="flex">
               <Col>
-                <BotaoVoltarPadrao onClick={() => onClickVoltar()} />
+                <BotaoVoltarPadrao onClick={() => onClickVoltar(form)} />
               </Col>
               <Col>
                 <Button
@@ -614,11 +628,7 @@ const PeriodosEscolares = () => {
               )}
             </Form>
 
-            {valorTipoCalendario &&
-            valorTipoCalendario !== '' &&
-            ehRegistroExistente &&
-            auditoria &&
-            auditoria.criadoEm ? (
+            {valorTipoCalendario && auditoria?.criadoEm ? (
               <Auditoria
                 criadoEm={auditoria.criadoEm}
                 criadoPor={auditoria.criadoPor}
