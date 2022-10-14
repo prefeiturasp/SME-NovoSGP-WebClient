@@ -276,6 +276,8 @@ const ordenarNotificoesNavBar = listaNotificacoes => {
   return listaOrdenada;
 };
 
+const removerTagsHtml = texto => texto?.replace(/<\/?[^>]+(>|$)/g, '');
+
 export {
   validaSeObjetoEhNuloOuVazio,
   valorNuloOuVazio,
@@ -298,4 +300,5 @@ export {
   primeiroMaisculo,
   editorTemValor,
   ordenarNotificoesNavBar,
+  removerTagsHtml,
 };
