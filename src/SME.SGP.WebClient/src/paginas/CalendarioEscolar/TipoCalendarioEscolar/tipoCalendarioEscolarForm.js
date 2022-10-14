@@ -102,6 +102,12 @@ const TipoCalendarioEscolarForm = ({ match }) => {
 
   const [possuiEventos, setPossuiEventos] = useState(false);
 
+  const desabilitarBotaoExcluir =
+    somenteConsulta ||
+    !permissoesTela.podeExcluir ||
+    novoRegistro ||
+    possuiEventos;
+
   const consultaPorId = async id => {
     const tipoCalendadio = await api
       .get(`v1/calendarios/tipos/${id}`)
@@ -138,7 +144,7 @@ const TipoCalendarioEscolarForm = ({ match }) => {
       setBreadcrumbManual(
         match.url,
         'Alterar Tipo de Calendário Escolar',
-        '/calendario-escolar/tipo-calendario-escolar'
+        RotasDto.TIPO_CALENDARIO_ESCOLAR
       );
       setIdTipoCalendario(match.params.id);
       consultaPorId(match.params.id);
@@ -157,10 +163,10 @@ const TipoCalendarioEscolarForm = ({ match }) => {
         'Deseja voltar para tela de listagem agora?'
       );
       if (confirmado) {
-        history.push('/calendario-escolar/tipo-calendario-escolar');
+        history.push(RotasDto.TIPO_CALENDARIO_ESCOLAR);
       }
     } else {
-      history.push('/calendario-escolar/tipo-calendario-escolar');
+      history.push(RotasDto.TIPO_CALENDARIO_ESCOLAR);
     }
   };
 
@@ -193,7 +199,7 @@ const TipoCalendarioEscolarForm = ({ match }) => {
     const cadastrado = await api[metodo](url, valoresForm).catch(e => erros(e));
     if (cadastrado) {
       sucesso('Suas informações foram salvas com sucesso.');
-      history.push('/calendario-escolar/tipo-calendario-escolar');
+      history.push(RotasDto.TIPO_CALENDARIO_ESCOLAR);
     }
     setCarregandoBotoesAcao(false);
   };
@@ -205,7 +211,7 @@ const TipoCalendarioEscolarForm = ({ match }) => {
   };
 
   const onClickExcluir = async () => {
-    if (!novoRegistro) {
+    if (!desabilitarBotaoExcluir) {
       const confirmado = await confirmar(
         'Excluir tipo de calendário escolar',
         '',
@@ -220,7 +226,7 @@ const TipoCalendarioEscolarForm = ({ match }) => {
           .catch(e => erros(e));
         if (excluir) {
           sucesso('Tipo de calendário excluído com sucesso.');
-          history.push('/calendario-escolar/tipo-calendario-escolar');
+          history.push(RotasDto.TIPO_CALENDARIO_ESCOLAR);
         }
       }
     }
@@ -298,12 +304,7 @@ const TipoCalendarioEscolarForm = ({ match }) => {
                 </Col>
                 <Col>
                   <BotaoExcluirPadrao
-                    disabled={
-                      somenteConsulta ||
-                      !permissoesTela.podeExcluir ||
-                      novoRegistro ||
-                      possuiEventos
-                    }
+                    disabled={desabilitarBotaoExcluir}
                     onClick={onClickExcluir}
                   />
                 </Col>
@@ -314,6 +315,7 @@ const TipoCalendarioEscolarForm = ({ match }) => {
                     color={Colors.Roxo}
                     border
                     bold
+                    disabled={!modoEdicao}
                     onClick={() => validaAntesDoSubmit(form)}
                   />
                 </Col>
