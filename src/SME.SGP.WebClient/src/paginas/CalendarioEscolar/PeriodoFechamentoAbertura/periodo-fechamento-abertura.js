@@ -570,8 +570,6 @@ const PeriodoFechamentoAbertura = () => {
                     </>
                   )}
                 />
-                {console.log(tipoCalendarioSelecionado, 'AA')}
-                {console.log(ehRegistroExistente, 'BB')}
                 <div className="row">
                   {tipoCalendarioSelecionado &&
                   ehRegistroExistente &&
