@@ -112,6 +112,12 @@ const TipoEventosForm = ({ match }) => {
     }
   }, [idTipoEvento]);
 
+  const onChangeCampos = () => {
+    if (!modoEdicao) {
+      setModoEdicao(true);
+    }
+  };
+
   const clicouBotaoVoltar = () => {
     history.push('/calendario-escolar/tipo-eventos');
   };
@@ -126,6 +132,7 @@ const TipoEventosForm = ({ match }) => {
       dependencia: true,
       ativo: true,
     });
+    setModoEdicao(false);
   };
 
   const clicouBotaoExcluir = async () => {
@@ -188,6 +195,7 @@ const TipoEventosForm = ({ match }) => {
   };
 
   const aoSelecionarLocalOcorrencia = local => {
+    onChangeCampos();
     setDadosTipoEvento({
       ...dadosTipoEvento,
       localOcorrencia: local,
@@ -196,6 +204,7 @@ const TipoEventosForm = ({ match }) => {
   };
 
   const aoSelecionarLetivo = letivo => {
+    onChangeCampos();
     setDadosTipoEvento({
       ...dadosTipoEvento,
       letivo,
@@ -204,6 +213,7 @@ const TipoEventosForm = ({ match }) => {
   };
 
   const aoSelecionarConcomitancia = concomitancia => {
+    onChangeCampos();
     setDadosTipoEvento({
       ...dadosTipoEvento,
       concomitancia: concomitancia.target.value,
@@ -212,6 +222,7 @@ const TipoEventosForm = ({ match }) => {
   };
 
   const aoSelecionarTipoData = tipoData => {
+    onChangeCampos();
     setDadosTipoEvento({
       ...dadosTipoEvento,
       tipoData: tipoData.target.value,
@@ -220,6 +231,7 @@ const TipoEventosForm = ({ match }) => {
   };
 
   const aoSelecionarDependencia = dependencia => {
+    onChangeCampos();
     setDadosTipoEvento({
       ...dadosTipoEvento,
       dependencia: dependencia.target.value,
@@ -228,6 +240,7 @@ const TipoEventosForm = ({ match }) => {
   };
 
   const aoSelecionarSituacao = situacao => {
+    onChangeCampos();
     setDadosTipoEvento({
       ...dadosTipoEvento,
       ativo: situacao.target.value,
@@ -271,12 +284,12 @@ const TipoEventosForm = ({ match }) => {
                   onClick={clicouBotaoCancelar}
                   border
                   bold
-                  disabled={idTipoEvento}
+                  disabled={idTipoEvento || !modoEdicao}
                 />
               </Col>
               <Col>
                 <BotaoExcluirPadrao
-                  disabled={possuiEventos}
+                  disabled={possuiEventos || !idTipoEvento}
                   onClick={clicouBotaoExcluir}
                 />
               </Col>
@@ -289,6 +302,7 @@ const TipoEventosForm = ({ match }) => {
                   border
                   bold
                   ref={botaoCadastrarRef}
+                  disabled={!modoEdicao}
                 />
               </Col>
             </Row>
