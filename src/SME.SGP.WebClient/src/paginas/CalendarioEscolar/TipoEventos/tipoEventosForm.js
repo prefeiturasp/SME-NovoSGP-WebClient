@@ -20,12 +20,15 @@ import {
 } from '~/componentes-sgp/filtro/idsCampos';
 import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
 import BotaoExcluirPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoExcluirPadrao';
-import { Label } from '~/componentes';
+import { Auditoria, Label } from '~/componentes';
+import { RotasDto } from '~/dtos';
 
+// eslint-disable-next-line react/prop-types
 const TipoEventosForm = ({ match }) => {
   const botaoCadastrarRef = useRef();
   const campoDescricaoRef = useRef();
 
+  const [valoresIniciais, setValoresIniciais] = useState({});
   const [idTipoEvento, setIdTipoEvento] = useState('');
   const [dadosTipoEvento, setDadosTipoEvento] = useState({
     descricao: '',
@@ -37,12 +40,7 @@ const TipoEventosForm = ({ match }) => {
     ativo: true,
   });
   const [modoEdicao, setModoEdicao] = useState(false);
-  const [inseridoAlterado, setInseridoAlterado] = useState({
-    alteradoEm: '',
-    alteradoPor: '',
-    criadoEm: '',
-    criadoPor: '',
-  });
+  const [inseridoAlterado, setInseridoAlterado] = useState({});
 
   const listaLetivo = [
     { valor: 1, descricao: 'Sim' },
@@ -68,18 +66,9 @@ const TipoEventosForm = ({ match }) => {
     }
   `;
 
-  const InseridoAlterado = styled(Div)`
-    color: ${Base.CinzaMako};
-    font-size: 10px;
-    font-weight: bold;
-    p {
-      margin: 0;
-    }
-  `;
-
   useEffect(() => {
-    if (match && match.params && match.params.id) {
-      setIdTipoEvento(match.params.id);
+    if (match?.params?.id) {
+      setIdTipoEvento(match?.params?.id);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -89,8 +78,8 @@ const TipoEventosForm = ({ match }) => {
   useEffect(() => {
     if (idTipoEvento) {
       api.get(`v1/calendarios/eventos/tipos/${idTipoEvento}`).then(resposta => {
-        if (resposta && resposta.data) {
-          setDadosTipoEvento({
+        if (resposta?.data) {
+          const data = {
             descricao: resposta.data.descricao,
             letivo: resposta.data.letivo.toString(),
             localOcorrencia: resposta.data.localOcorrencia.toString(),
@@ -98,15 +87,11 @@ const TipoEventosForm = ({ match }) => {
             tipoData: resposta.data.tipoData,
             dependencia: resposta.data.dependencia,
             ativo: resposta.data.ativo,
-          });
-          setInseridoAlterado({
-            alteradoEm: resposta.data.alteradoEm,
-            alteradoPor: `${resposta.data.alteradoPor} (${resposta.data.alteradoRF})`,
-            criadoEm: resposta.data.alteradoEm,
-            criadoPor: `${resposta.data.criadoPor} (${resposta.data.criadoRF})`,
-          });
-          setModoEdicao(true);
+          };
+          setDadosTipoEvento(data);
+          setInseridoAlterado({ ...resposta.data });
           setPossuiEventos(resposta.data.possuiEventos);
+          setValoresIniciais({ ...data });
         }
       });
     }
@@ -118,21 +103,34 @@ const TipoEventosForm = ({ match }) => {
     }
   };
 
-  const clicouBotaoVoltar = () => {
-    history.push('/calendario-escolar/tipo-eventos');
+  const resetarTela = form => {
+    if (idTipoEvento) {
+      form.resetForm();
+      setDadosTipoEvento({ ...valoresIniciais });
+    } else {
+      form.resetForm();
+      setDadosTipoEvento({
+        descricao: '',
+        letivo: undefined,
+        localOcorrencia: undefined,
+        concomitancia: true,
+        tipoData: 1,
+        dependencia: true,
+        ativo: true,
+      });
+    }
+    setModoEdicao(false);
   };
 
-  const clicouBotaoCancelar = () => {
-    setDadosTipoEvento({
-      descricao: '',
-      letivo: undefined,
-      localOcorrencia: undefined,
-      concomitancia: true,
-      tipoData: 1,
-      dependencia: true,
-      ativo: true,
-    });
-    setModoEdicao(false);
+  const clicouBotaoCancelar = async form => {
+    const confirmou = await confirmar(
+      'Atenção',
+      'Você não salvou as informações preenchidas.',
+      'Deseja realmente cancelar as alterações?'
+    );
+    if (confirmou) {
+      resetarTela(form);
+    }
   };
 
   const clicouBotaoExcluir = async () => {
@@ -151,7 +149,7 @@ const TipoEventosForm = ({ match }) => {
           .catch(e => erros(e));
         if (excluir) {
           sucesso('Tipos de evento deletados com sucesso!');
-          history.push('/calendario-escolar/tipo-eventos');
+          history.push(RotasDto.TIPO_EVENTOS);
         }
       }
     }
@@ -167,9 +165,25 @@ const TipoEventosForm = ({ match }) => {
     })
   );
 
-  const clicouBotaoCadastrar = (form, e) => {
-    e.persist();
-    form.validateForm().then(() => form.handleSubmit(e));
+  const clicouBotaoCadastrar = form => {
+    form.validateForm().then(() => form.handleSubmit());
+  };
+
+  const clicouBotaoVoltar = async form => {
+    if (modoEdicao) {
+      const confirmado = await confirmar(
+        'Atenção',
+        '',
+        'Suas alterações não foram salvas, deseja salvar agora?'
+      );
+      if (confirmado) {
+        clicouBotaoCadastrar(form);
+      } else {
+        history.push(RotasDto.TIPO_EVENTOS);
+      }
+    } else {
+      history.push(RotasDto.TIPO_EVENTOS);
+    }
   };
 
   const cadastrarTipoEvento = async dados => {
@@ -181,7 +195,7 @@ const TipoEventosForm = ({ match }) => {
             modoEdicao ? 'atualizado' : 'cadastrado'
           } com sucesso!`
         );
-        history.push('/calendario-escolar/tipo-eventos');
+        history.push(RotasDto.TIPO_EVENTOS);
       })
       .catch(() => {
         erro(
@@ -192,6 +206,7 @@ const TipoEventosForm = ({ match }) => {
 
   const aoDigitarDescricao = e => {
     campoDescricaoRef.current.value = e.target.value;
+    onChangeCampos();
   };
 
   const aoSelecionarLocalOcorrencia = local => {
@@ -274,17 +289,17 @@ const TipoEventosForm = ({ match }) => {
           >
             <Row gutter={[8, 8]} type="flex">
               <Col>
-                <BotaoVoltarPadrao onClick={() => clicouBotaoVoltar()} />
+                <BotaoVoltarPadrao onClick={() => clicouBotaoVoltar(form)} />
               </Col>
               <Col>
                 <Button
                   id={SGP_BUTTON_CANCELAR}
                   label="Cancelar"
                   color={Colors.Roxo}
-                  onClick={clicouBotaoCancelar}
+                  onClick={() => clicouBotaoCancelar(form)}
                   border
                   bold
-                  disabled={idTipoEvento || !modoEdicao}
+                  disabled={!modoEdicao}
                 />
               </Col>
               <Col>
@@ -302,7 +317,7 @@ const TipoEventosForm = ({ match }) => {
                   border
                   bold
                   ref={botaoCadastrarRef}
-                  disabled={!modoEdicao}
+                  disabled={idTipoEvento && !modoEdicao}
                 />
               </Col>
             </Row>
@@ -436,27 +451,11 @@ const TipoEventosForm = ({ match }) => {
                 </Div>
               </Form>
             </Grid>
-            <Grid cols={12}>
-              <InseridoAlterado className="mt-4">
-                {inseridoAlterado.criadoPor && inseridoAlterado.criadoEm ? (
-                  <p className="pt-2">
-                    INSERIDO por {inseridoAlterado.criadoPor} em
-                    {inseridoAlterado.criadoEm}
-                  </p>
-                ) : (
-                  ''
-                )}
-
-                {inseridoAlterado.alteradoPor && inseridoAlterado.alteradoEm ? (
-                  <p>
-                    ALTERADO por {inseridoAlterado.alteradoPor} em{' '}
-                    {inseridoAlterado.alteradoEm}
-                  </p>
-                ) : (
-                  ''
-                )}
-              </InseridoAlterado>
-            </Grid>
+            <Auditoria
+              {...inseridoAlterado}
+              criadoRf={inseridoAlterado?.criadoRF}
+              alteradoRf={inseridoAlterado?.alteradoRF}
+            />
           </Card>
         </>
       )}

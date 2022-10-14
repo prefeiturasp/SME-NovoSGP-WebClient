@@ -78,10 +78,12 @@ const TipoFeriadoForm = () => {
 
   const [possuiEventos, setPossuiEventos] = useState(false);
 
+  const temPermissao = novoRegistro
+    ? permissoesTela.podeIncluir
+    : permissoesTela.podeAlterar;
+
   const botaoAlterarCadastrarEstaDesabilitado =
-    !modoEdicao &&
-    ((novoRegistro && permissoesTela.podeIncluir) ||
-      (!novoRegistro && permissoesTela.podeAlterar));
+    !temPermissao || (!novoRegistro && !modoEdicao);
 
   useEffect(() => {
     verificaSomenteConsulta(permissoesTela);
@@ -127,21 +129,6 @@ const TipoFeriadoForm = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const onClickVoltar = async () => {
-    if (modoEdicao) {
-      const confirmado = await confirmar(
-        'Atenção',
-        'Você não salvou as informações preenchidas.',
-        'Deseja voltar para tela de listagem agora?'
-      );
-      if (confirmado) {
-        history.push(RotasDto.TIPO_FERIADO);
-      }
-    } else {
-      history.push(RotasDto.TIPO_FERIADO);
-    }
-  };
-
   const resetarTela = form => {
     form.resetForm();
     setModoEdicao(false);
@@ -184,9 +171,8 @@ const TipoFeriadoForm = () => {
       } else {
         sucesso('Novo tipo de feriado criado com sucesso.');
       }
+      history.push(RotasDto.TIPO_FERIADO);
     }
-
-    history.push(RotasDto.TIPO_FERIADO);
   };
 
   const onChangeCampos = () => {
@@ -256,6 +242,23 @@ const TipoFeriadoForm = () => {
     });
   };
 
+  const onClickVoltar = async form => {
+    if (modoEdicao) {
+      const confirmado = await confirmar(
+        'Atenção',
+        '',
+        'Suas alterações não foram salvas, deseja salvar agora?'
+      );
+      if (confirmado) {
+        validaAntesDoSubmit(form);
+      } else {
+        history.push(RotasDto.TIPO_FERIADO);
+      }
+    } else {
+      history.push(RotasDto.TIPO_FERIADO);
+    }
+  };
+
   return (
     <>
       <Formik
@@ -275,7 +278,7 @@ const TipoFeriadoForm = () => {
             >
               <Row gutter={[8, 8]} type="flex">
                 <Col>
-                  <BotaoVoltarPadrao onClick={() => onClickVoltar()} />
+                  <BotaoVoltarPadrao onClick={() => onClickVoltar(form)} />
                 </Col>
                 <Col>
                   <Button

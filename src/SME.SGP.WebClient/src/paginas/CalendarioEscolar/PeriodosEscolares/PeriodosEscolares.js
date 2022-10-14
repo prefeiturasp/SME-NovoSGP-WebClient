@@ -216,7 +216,7 @@ const PeriodosEscolares = () => {
     setValoresIniciais(bimestresValorInicial);
   };
 
-  const onSubmit = async dadosForm => {
+  const onSubmit = async (dadosForm, voltar) => {
     if (periodoEscolarEdicao) {
       periodoEscolarEdicao.periodos.forEach(item => {
         switch (item.bimestre) {
@@ -247,6 +247,7 @@ const PeriodosEscolares = () => {
         setModoEdicao(false);
         consultarPeriodoPorId(periodoEscolarEdicao.tipoCalendario);
         sucesso('Suas informações foram editadas com sucesso.');
+        if (voltar) history.push(URL_HOME);
       }
     } else {
       const calendarioParaCadastrar = listaTipoCalendario.find(item => {
@@ -294,6 +295,7 @@ const PeriodosEscolares = () => {
         setModoEdicao(false);
         consultarPeriodoPorId(calendarioParaCadastrar.id);
         sucesso('Suas informações foram salvas com sucesso.');
+        if (voltar) history.push(URL_HOME);
       }
     }
   };
@@ -461,7 +463,7 @@ const PeriodosEscolares = () => {
     );
   };
 
-  const validaAntesDoSubmit = form => {
+  const validaAntesDoSubmit = (form, voltar) => {
     setModoEdicao(true);
     touchedFields(form);
     form.validateForm().then(() => {
@@ -470,7 +472,7 @@ const PeriodosEscolares = () => {
         (Object.keys(form.errors).length === 0 &&
           Object.keys(form.values).length > 0)
       ) {
-        form.handleSubmit(e => e);
+        onSubmit(form?.values, voltar);
       }
     });
   };
@@ -484,11 +486,13 @@ const PeriodosEscolares = () => {
       );
 
       if (confirmou) {
-        validaAntesDoSubmit(form);
+        validaAntesDoSubmit(form, true);
+      } else {
+        history.push(URL_HOME);
       }
+    } else {
+      history.push(URL_HOME);
     }
-
-    history.push(URL_HOME);
   };
 
   const selecionaTipoCalendario = (descricao, form, foiSelecionado = false) => {
@@ -541,7 +545,6 @@ const PeriodosEscolares = () => {
       enableReinitialize
       initialValues={valoresIniciais}
       validationSchema={validacoes}
-      onSubmit={values => onSubmit(values)}
       validateOnChange
       validateOnBlur
     >

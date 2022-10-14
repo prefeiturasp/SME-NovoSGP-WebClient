@@ -155,21 +155,6 @@ const TipoCalendarioEscolarForm = ({ match }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const onClickVoltar = async () => {
-    if (modoEdicao) {
-      const confirmado = await confirmar(
-        'Atenção',
-        'Você não salvou as informações preenchidas.',
-        'Deseja voltar para tela de listagem agora?'
-      );
-      if (confirmado) {
-        history.push(RotasDto.TIPO_CALENDARIO_ESCOLAR);
-      }
-    } else {
-      history.push(RotasDto.TIPO_CALENDARIO_ESCOLAR);
-    }
-  };
-
   const resetarTela = form => {
     form.resetForm();
     setModoEdicao(false);
@@ -245,6 +230,23 @@ const TipoCalendarioEscolarForm = ({ match }) => {
     setCarregandoBotoesAcao(false);
   };
 
+  const onClickVoltar = async form => {
+    if (modoEdicao) {
+      const confirmado = await confirmar(
+        'Atenção',
+        '',
+        'Suas alterações não foram salvas, deseja salvar agora?'
+      );
+      if (confirmado) {
+        validaAntesDoSubmit(form);
+      } else {
+        history.push(RotasDto.TIPO_CALENDARIO_ESCOLAR);
+      }
+    } else {
+      history.push(RotasDto.TIPO_CALENDARIO_ESCOLAR);
+    }
+  };
+
   const onChangeAnoLetivo = async valor => {
     setAnoLetivo(valor);
   };
@@ -290,7 +292,7 @@ const TipoCalendarioEscolarForm = ({ match }) => {
             >
               <Row gutter={[8, 8]} type="flex">
                 <Col>
-                  <BotaoVoltarPadrao onClick={() => onClickVoltar()} />
+                  <BotaoVoltarPadrao onClick={() => onClickVoltar(form)} />
                 </Col>
                 <Col>
                   <Button
@@ -315,7 +317,7 @@ const TipoCalendarioEscolarForm = ({ match }) => {
                     color={Colors.Roxo}
                     border
                     bold
-                    disabled={!modoEdicao}
+                    disabled={idTipoCalendario && !modoEdicao}
                     onClick={() => validaAntesDoSubmit(form)}
                   />
                 </Col>
