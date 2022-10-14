@@ -313,8 +313,11 @@ const AtaFinalResultados = () => {
 
   useEffect(() => {
     obterDres();
+  }, [obterDres]);
+
+  useEffect(() => {
     obterVisualizacoes();
-  }, [obterDres, obterVisualizacoes]);
+  }, [obterVisualizacoes]);
 
   const compararTurmaAno = (stringComparacao, valorComparacao, arrayTurmas) => {
     return listaTurmasCompletas.filter(
