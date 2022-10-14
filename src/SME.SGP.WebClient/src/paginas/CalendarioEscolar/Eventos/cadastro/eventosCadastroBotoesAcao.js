@@ -65,22 +65,6 @@ const EventosCadastroBotoesAcao = () => {
     }
   };
 
-  const onClickVoltar = async () => {
-    if (emEdicao) {
-      const confirmado = await confirmar(
-        'Atenção',
-        'Você não salvou as informações preenchidas.',
-        'Deseja voltar para tela de listagem agora?'
-      );
-      if (confirmado) {
-        history.push(urlTelaListagemEventos());
-      }
-    } else {
-      setBreadcrumbLista();
-      history.push(urlTelaListagemEventos());
-    }
-  };
-
   const onClickCancelar = async () => {
     if (emEdicao) {
       const confirmou = await confirmar(
@@ -127,6 +111,33 @@ const EventosCadastroBotoesAcao = () => {
     });
   };
 
+  const onClickVoltar = async () => {
+    if (emEdicao) {
+      const confirmado = await confirmar(
+        'Atenção',
+        '',
+        'Suas alterações não foram salvas, deseja salvar agora?'
+      );
+      if (confirmado) {
+        validaAntesDoSubmit();
+      } else {
+        history.push(urlTelaListagemEventos());
+      }
+    } else {
+      setBreadcrumbLista();
+      history.push(urlTelaListagemEventos());
+    }
+  };
+
+  const desabilitarCadastrar =
+    desabilitarCampos ||
+    (!novoRegistro && !eventoId) ||
+    somenteConsulta ||
+    !permissoesTela?.podeAlterar ||
+    (!podeAlterarExcluir && !novoRegistro) ||
+    !podeAlterarEvento ||
+    (eventoId && !emEdicao);
+
   return (
     <Col span={24}>
       <Row gutter={[8, 8]} type="flex">
@@ -167,15 +178,7 @@ const EventosCadastroBotoesAcao = () => {
             border
             bold
             onClick={() => validaAntesDoSubmit()}
-            disabled={
-              desabilitarCampos ||
-              !emEdicao ||
-              (!novoRegistro && !eventoId) ||
-              somenteConsulta ||
-              !permissoesTela?.podeAlterar ||
-              (!podeAlterarExcluir && !novoRegistro) ||
-              !podeAlterarEvento
-            }
+            disabled={desabilitarCadastrar}
           />
         </Col>
       </Row>
