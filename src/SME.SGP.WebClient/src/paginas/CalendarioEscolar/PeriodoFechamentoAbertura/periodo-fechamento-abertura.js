@@ -505,7 +505,11 @@ const PeriodoFechamentoAbertura = () => {
                     color={Colors.Roxo}
                     border
                     bold
-                    disabled={desabilitarCampos || !modoEdicao}
+                    disabled={
+                      desabilitarCampos ||
+                      (ehRegistroExistente && !modoEdicao) ||
+                      !valorTipoCalendario
+                    }
                     onClick={() => validaAntesDoSubmit(form)}
                   />
                 </Col>
@@ -566,6 +570,8 @@ const PeriodoFechamentoAbertura = () => {
                     </>
                   )}
                 />
+                {console.log(tipoCalendarioSelecionado, 'AA')}
+                {console.log(ehRegistroExistente, 'BB')}
                 <div className="row">
                   {tipoCalendarioSelecionado &&
                   ehRegistroExistente &&
