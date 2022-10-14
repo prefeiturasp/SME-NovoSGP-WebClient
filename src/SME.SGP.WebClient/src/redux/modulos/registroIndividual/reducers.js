@@ -23,6 +23,7 @@ const inicial = {
   dataFimImpressaoRegistrosAnteriores: '',
   mostrarMensagemSemHistorico: false,
   valorEditorRegistrosAnteriores: '',
+  dadosSugestaoTopico: null,
 };
 
 export default function RegistroIndividual(state = inicial, action) {
@@ -259,6 +260,12 @@ export default function RegistroIndividual(state = inicial, action) {
         return {
           ...draft,
           valorEditorRegistrosAnteriores: action.payload,
+        };
+      }
+      case '@registroIndividual/setDadosSugestaoTopico': {
+        return {
+          ...draft,
+          dadosSugestaoTopico: action.payload,
         };
       }
       default:
