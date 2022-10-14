@@ -55,9 +55,6 @@ const AvaliacaoForm = ({ match, location }) => {
   const [modoEdicao, setModoEdicao] = useState(false);
   const [dentroPeriodo, setDentroPeriodo] = useState(true);
   const [podeLancaNota, setPodeLancaNota] = useState(true);
-  const [mostrarDisciplinaRegencia, setMostrarDisciplinaRegencia] = useState(
-    false
-  );
   const [listaDisciplinas, setListaDisciplinas] = useState([]);
   const [carregandoTela, setCarregandoTela] = useState(false);
   const [temRegencia, setTemRegencia] = useState(false);
@@ -80,6 +77,12 @@ const AvaliacaoForm = ({ match, location }) => {
 
   const [idAvaliacao, setIdAvaliacao] = useState('');
   const [auditoriaAvaliacao, setAuditoriaAvaliacao] = useState({});
+
+  const [disciplinaSelecionada, setDisciplinaSelecionada] = useState(undefined);
+  const mostrarDisciplinaRegencia = listaDisciplinas?.find?.(
+    item =>
+      Number(item?.codigoComponenteCurricular) === Number(disciplinaSelecionada)
+  )?.regencia;
 
   const aoTrocarCampos = () => {
     if (!modoEdicao) {
@@ -148,7 +151,6 @@ const AvaliacaoForm = ({ match, location }) => {
     listaDisciplinasSelecionadas,
     setListaDisciplinasSelecionadas,
   ] = useState([]);
-  const [disciplinaSelecionada, setDisciplinaSelecionada] = useState(undefined);
   const [desabilitarCopiarAvaliacao, setDesabilitarCopiarAvaliacao] = useState(
     false
   );
@@ -410,7 +412,7 @@ const AvaliacaoForm = ({ match, location }) => {
   };
 
   useEffect(() => {
-    if (!idAvaliacao && listaDisciplinas.length === 1) {
+    if (!match?.params?.id && listaDisciplinas?.length === 1) {
       setDadosAvaliacao({
         ...dadosAvaliacao,
         disciplinasId: listaDisciplinas[0].codigoComponenteCurricular.toString(),
@@ -423,7 +425,7 @@ const AvaliacaoForm = ({ match, location }) => {
       obterDisciplinasRegencia();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [listaDisciplinas, mostrarDisciplinaRegencia]);
+  }, [listaDisciplinas, mostrarDisciplinaRegencia, match]);
 
   const [listaTiposAvaliacao, setListaTiposAvaliacao] = useState([]);
 
@@ -495,12 +497,6 @@ const AvaliacaoForm = ({ match, location }) => {
         setDentroPeriodo(avaliacao.data.dentroPeriodo);
         setPodeEditarAvaliacao(avaliacao.data.podeEditarAvaliacao);
         setAtividadesRegencia(avaliacao.data.atividadesRegencia);
-        if (
-          avaliacao.data.atividadesRegencia &&
-          avaliacao.data.atividadesRegencia.length > 0
-        ) {
-          obterDisciplinasRegencia();
-        }
         setCarregandoTela(false);
       }
     } catch (error) {
@@ -547,7 +543,6 @@ const AvaliacaoForm = ({ match, location }) => {
 
   const resetDisciplinasSelecionadas = form => {
     setListaDisciplinasSelecionadas([]);
-    setMostrarDisciplinaRegencia(false);
     form.values.disciplinasId = [];
   };
 
@@ -556,16 +551,6 @@ const AvaliacaoForm = ({ match, location }) => {
       'DD/MM/YYYY'
     )}`;
   }, [dataAvaliacao]);
-
-  useEffect(() => {
-    const disciplinaEncontrada = listaDisciplinas.find(
-      item =>
-        Number(item.codigoComponenteCurricular) ===
-        Number(disciplinaSelecionada)
-    );
-
-    setMostrarDisciplinaRegencia(disciplinaEncontrada?.regencia);
-  }, [disciplinaSelecionada, listaDisciplinas]);
 
   const clicouBotaoCancelar = async form => {
     if (modoEdicao) {
