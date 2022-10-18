@@ -49,21 +49,25 @@ const ObjetivosEspecificosParaAula = () => {
   };
 
   const onChangeObjetivosEspecificosParaAula = valor => {
-    ServicoPlanoAula.atualizarDadosPlanoAula('descricao', valor);
-    dispatch(setModoEdicaoPlanoAula(true));
+    const descricaoValor = dadosPlanoAula?.descricao ?? '';
+
+    if (descricaoValor !== valor) {
+      ServicoPlanoAula.atualizarDadosPlanoAula('descricao', valor);
+      dispatch(setModoEdicaoPlanoAula(true));
+    }
   };
 
   const validarSeEhObrigatorio = () => {
     return exibirSwitchEscolhaObjetivos
       ? checkedExibirEscolhaObjetivos &&
-      componenteCurricular.possuiObjetivos &&
-      !ServicoPlanoAula.temPeloMenosUmObjetivoSelecionado(
-        objetivosAprendizagemComponente
-      )
+          componenteCurricular.possuiObjetivos &&
+          !ServicoPlanoAula.temPeloMenosUmObjetivoSelecionado(
+            objetivosAprendizagemComponente
+          )
       : componenteCurricular.possuiObjetivos &&
-      !ServicoPlanoAula.temPeloMenosUmObjetivoSelecionado(
-        objetivosAprendizagemComponente
-      );
+          !ServicoPlanoAula.temPeloMenosUmObjetivoSelecionado(
+            objetivosAprendizagemComponente
+          );
   };
 
   const objetivosEspecificosParaAulaValidaObrigatoriedade = () => {
