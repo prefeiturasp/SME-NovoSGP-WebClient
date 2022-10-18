@@ -87,8 +87,8 @@ class ServicoPlanoAula {
           criadoPor: plano.data.criadoPor,
           alteradoPor: plano.data.alteradoPor,
           alteradoEm: plano.data.alteradoEm,
-          alteradoRF: plano.data.alteradoRF,
-          criadoRF: plano.data.criadoRF,
+          alteradoRf: plano.data.alteradoRf,
+          criadoRf: plano.data.criadoRf,
         };
         plano.data.auditoria = { ...auditoria };
 

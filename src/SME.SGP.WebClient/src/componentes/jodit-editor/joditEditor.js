@@ -238,27 +238,23 @@ const JoditEditor = forwardRef((props, ref) => {
 
   const onChangePadrao = () => {
     const texto = textArea?.current?.text?.trim();
+    const temImagemOuVideo =
+      (permiteVideo && textArea.current.value.includes('<video')) ||
+      textArea.current.value.includes('<img');
 
     if (validarSeTemErro) {
       let valorParaValidar = '';
 
-      if (
-        !texto ||
-        (permiteVideo && textArea.current.value.includes('<video')) ||
-        textArea.current.value.includes('<img')
-      ) {
+      if (temImagemOuVideo) {
         valorParaValidar = textArea.current.value;
       } else if (texto) {
         valorParaValidar = texto;
       }
+
       setValidacaoComErro(validarSeTemErro(valorParaValidar, texto));
     }
 
-    if (
-      texto ||
-      (permiteVideo && textArea.current.value.includes('<video')) ||
-      textArea.current.value.includes('<img')
-    ) {
+    if (texto || temImagemOuVideo) {
       changeHandler(textArea.current.value);
     } else {
       changeHandler('');
