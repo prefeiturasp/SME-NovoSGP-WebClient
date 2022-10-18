@@ -106,6 +106,11 @@ function Localizador({
       try {
         if (buscarPorAbrangencia && !ueId) return;
 
+        if (!rf) {
+          erro('O campo RF é obrigatório.');
+          return;
+        }
+
         buscandoDados(true);
         setExibirLoader(true);
         const { data: dados } = await service
