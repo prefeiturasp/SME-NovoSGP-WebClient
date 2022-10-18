@@ -74,11 +74,16 @@ function Filtro({ onFiltrar }) {
               anoLetivo={anoLetivo}
               form={form}
               onChange={() => null}
+              desabilitado={!(form.values.dreId && form.values.ueId)}
             />
           </Linha>
           <Linha className="row mb-2">
             <Grid cols={2}>
-              <MesesDropDown form={form} name="bimestre" />
+              <MesesDropDown
+                form={form}
+                name="bimestre"
+                desabilitado={!form?.values?.professorRf}
+              />
             </Grid>
             <Grid cols={10}>
               <CampoTexto
@@ -88,6 +93,7 @@ function Filtro({ onFiltrar }) {
                 form={form}
                 iconeBusca
                 allowClear
+                desabilitado={!form?.values?.professorRf}
               />
             </Grid>
           </Linha>
