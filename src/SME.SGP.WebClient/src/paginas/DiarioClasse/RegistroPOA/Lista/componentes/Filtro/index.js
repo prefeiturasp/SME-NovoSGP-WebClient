@@ -71,6 +71,7 @@ function Filtro({ onFiltrar }) {
           <Linha className="row mb-2">
             <Localizador
               dreId={form.values.dreId}
+              ueId={form.values.ueId}
               anoLetivo={anoLetivo}
               form={form}
               onChange={() => null}
