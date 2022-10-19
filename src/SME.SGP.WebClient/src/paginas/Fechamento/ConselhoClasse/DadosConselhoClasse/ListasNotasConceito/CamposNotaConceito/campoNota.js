@@ -123,14 +123,19 @@ const CampoNota = props => {
       return;
     }
     setNotaValorAtual(valor);
-    const retorno = await ServicoNotaConceito.obterArredondamento(
-      Number(valor),
-      periodoFechamentoFim
-    ).catch(e => erros(e));
 
+    const resto = valor % 0.5;
     let notaArredondada = valor;
-    if (retorno && retorno.data) {
-      notaArredondada = retorno.data;
+
+    if (resto) {
+      const retorno = await ServicoNotaConceito.obterArredondamento(
+        Number(valor),
+        periodoFechamentoFim
+      ).catch(e => erros(e));
+
+      if (retorno?.data) {
+        notaArredondada = retorno.data;
+      }
     }
 
     if (validarMedia) {
@@ -178,14 +183,20 @@ const CampoNota = props => {
   const campoNotaPosConselho = (abaixoMedia, validarMedia) => {
     return (
       <CampoNumero
+        validateOnBlurInOnChange
         esconderSetas={esconderSetas}
         name={name}
         onKeyDown={clicarSetas}
         onChange={valorNovo => {
-          const invalido = valorInvalido(valorNovo);
-          if (!invalido && editouCampo(notaValorAtual, valorNovo)) {
-            onChangeValor(valorNovo, validarMedia);
+          let valorEnviado = null;
+          if (valorNovo) {
+            const invalido = valorInvalido(valorNovo);
+            if (!invalido && editouCampo(notaValorAtual, valorNovo)) {
+              valorEnviado = valorNovo;
+            }
           }
+          const valorCampo = valorNovo >= 0 ? valorNovo : null;
+          onChangeValor(valorEnviado || valorCampo, validarMedia);
         }}
         value={notaValorAtual}
         min={0}

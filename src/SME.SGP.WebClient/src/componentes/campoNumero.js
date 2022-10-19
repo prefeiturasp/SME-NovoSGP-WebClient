@@ -2,7 +2,7 @@
 import { InputNumber } from 'antd';
 import { Field } from 'formik';
 import PropTypes from 'prop-types';
-import React from 'react';
+import React, { useRef } from 'react';
 import styled, { css } from 'styled-components';
 import { Base } from './colors';
 import Label from './label';
@@ -56,6 +56,7 @@ const CampoNumero = React.forwardRef((props, ref) => {
     styleContainer,
     styleCampo,
     autoFocus,
+    validateOnBlurInOnChange,
   } = props;
 
   const possuiErro = () => {
@@ -83,6 +84,9 @@ const CampoNumero = React.forwardRef((props, ref) => {
     }
     return valor;
   };
+
+  const refInterno = useRef();
+  const refState = refInterno?.current?.inputNumberRef?.state;
 
   return (
     <>
@@ -121,9 +125,20 @@ const CampoNumero = React.forwardRef((props, ref) => {
         ) : (
           <InputNumber
             name={name}
-            ref={ref}
+            ref={validateOnBlurInOnChange ? refInterno : ref}
             placeholder={placeholder}
-            onChange={onChange}
+            onChange={newValue => {
+              if (validateOnBlurInOnChange) {
+                const valueHasChanged =
+                  refState?.value !== newValue &&
+                  refState?.inputValue !== newValue?.toString();
+                if (valueHasChanged) {
+                  onChange(newValue);
+                }
+              } else {
+                onChange(newValue);
+              }
+            }}
             readOnly={desabilitado}
             onKeyDown={onKeyDown}
             onKeyUp={onKeyUp}
@@ -157,6 +172,7 @@ CampoNumero.propTypes = {
   onKeyUp: PropTypes.func,
   autoFocus: PropTypes.bool,
   label: PropTypes.string,
+  validateOnBlurInOnChange: PropTypes.bool,
 };
 
 CampoNumero.defaultProps = {
@@ -169,6 +185,7 @@ CampoNumero.defaultProps = {
   onKeyUp: () => {},
   autoFocus: false,
   label: '',
+  validateOnBlurInOnChange: false,
 };
 
 export default CampoNumero;
