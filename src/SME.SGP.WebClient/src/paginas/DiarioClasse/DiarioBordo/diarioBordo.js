@@ -605,7 +605,7 @@ const DiarioBordo = ({ match }) => {
     }
   };
 
-  const onClickExcluir = async obs => {
+  const onClickExcluir = async form => {
     const confirmado = await confirmar(
       'Excluir',
       '',
@@ -615,10 +615,9 @@ const DiarioBordo = ({ match }) => {
     if (confirmado) {
       setCarregandoGeral(true);
       const resultado = await ServicoDiarioBordo.excluirDiarioBordo(
-        obs.values.aulaId
+        form.values.aulaId
       ).catch(e => {
         erros(e);
-        setCarregandoGeral(false);
       });
       if (resultado && resultado.status === 200) {
         sucesso('Diário de bordo excluído com sucesso');
@@ -704,7 +703,7 @@ const DiarioBordo = ({ match }) => {
                 onClickCancelar={() => onClickCancelar(form)}
                 onClickExcluir={() => onClickExcluir(form)}
                 validaAntesDoSubmit={() => validaAntesDoSubmit(form, true)}
-                disabledExcluir={aulaId}
+                disabledExcluir={!aulaId}
                 modoEdicao={modoEdicao}
                 desabilitarCampos={desabilitarCampos}
                 turmaInfantil={turmaInfantil}

@@ -52,7 +52,7 @@ const BotoesAcoesDiarioBordo = props => {
       />
       <BotaoExcluirPadrao
         className="mr-2"
-        disabled={!permissoesTela || !disabledExcluir}
+        disabled={!permissoesTela || disabledExcluir}
         onClick={onClickExcluir}
       />
       <Button
