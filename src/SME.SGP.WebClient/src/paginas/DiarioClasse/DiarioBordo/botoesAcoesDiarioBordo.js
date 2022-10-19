@@ -8,17 +8,21 @@ import {
 } from '~/componentes-sgp/filtro/idsCampos';
 import Button from '~/componentes/button';
 import { Colors } from '~/componentes/colors';
+import BotaoExcluirPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoExcluirPadrao';
 
 const BotoesAcoesDiarioBordo = props => {
   const {
     onClickVoltar,
     onClickCancelar,
+    onClickExcluir,
     modoEdicao,
     desabilitarCampos,
     turmaInfantil,
     validaAntesDoSubmit,
     componenteCurricularSelecionado,
     dataSelecionada,
+    permissoesTela,
+    disabledExcluir,
     id,
   } = props;
 
@@ -46,12 +50,18 @@ const BotoesAcoesDiarioBordo = props => {
         onClick={onClickCancelar}
         disabled={!modoEdicao || desabilitarCampos}
       />
+      <BotaoExcluirPadrao
+        className="mr-2"
+        disabled={!permissoesTela || !disabledExcluir}
+        onClick={onClickExcluir}
+      />
       <Button
         id={SGP_BUTTON_SALVAR_ALTERAR}
         label={id ? 'Alterar' : 'Salvar'}
         color={Colors.Roxo}
         border
         bold
+        className="ml-2"
         onClick={validaAntesDoSubmit}
         disabled={
           !turmaInfantil ||
