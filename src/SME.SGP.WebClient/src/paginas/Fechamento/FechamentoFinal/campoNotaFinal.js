@@ -138,6 +138,7 @@ const CampoNotaFinal = props => {
       <div>
         <Loader loading={carregandoValorArredondamento} tip="">
           <CampoNumero
+            validateOnBlurInOnChange
             esconderSetas={esconderSetas}
             name={name}
             onKeyDown={clicarSetas}

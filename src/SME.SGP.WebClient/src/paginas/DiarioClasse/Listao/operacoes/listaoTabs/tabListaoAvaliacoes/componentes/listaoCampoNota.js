@@ -140,6 +140,7 @@ const ListaoCampoNota = props => {
     <div onFocus={() => validarExibir(true)}>
       {!desabilitar && exibir ? (
         <CampoNumero
+          validateOnBlurInOnChange
           styleContainer={{ height: 38 }}
           esconderSetas
           onKeyUp={apertarTecla}
