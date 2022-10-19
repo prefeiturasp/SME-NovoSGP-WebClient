@@ -168,8 +168,8 @@ class ServicoSalvarFrequenciaPlanoAula {
         criadoPor: resposta.data.criadoPor,
         alteradoPor: resposta.data.alteradoPor,
         alteradoEm: resposta.data.alteradoEm,
-        alteradoRF: resposta.data.alteradoRF,
-        criadoRF: resposta.data.criadoRF,
+        alteradoRf: resposta.data.alteradoRf,
+        criadoRf: resposta.data.criadoRf,
       };
       dadosPlanoAula.auditoria = { ...auditoria };
       dadosPlanoAula.id = resposta.data.id;
