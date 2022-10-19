@@ -14,7 +14,7 @@ import AbrangenciaServico from '~/servicos/Abrangencia';
 import api from '~/servicos/api';
 import history from '~/servicos/history';
 import FiltroHelper from '~componentes-sgp/filtro/helper';
-import { sucesso } from '~/servicos/alertas';
+import { erros, sucesso } from '~/servicos/alertas';
 import LocalizadorEstudante from '~/componentes/LocalizadorEstudante';
 import ServicoHistoricoEscolar from '~/servicos/Paginas/HistoricoEscolar/ServicoHistoricoEscolar';
 import AlertaModalidadeInfantil from '~/componentes-sgp/AlertaModalidadeInfantil/alertaModalidadeInfantil';
@@ -53,7 +53,7 @@ const HistoricoEscolar = () => {
 
   const [alunosSelecionados, setAlunosSelecionados] = useState([]);
   const [filtro, setFiltro] = useState({});
-  const [clicouBotaoGerar, setClicouBotaoGerar] = useState(false);
+  const [modoEdicao, setModoEdicao] = useState(false);
 
   const vaidaDesabilitarBtnGerar = useCallback(
     desabilitar => {
@@ -141,15 +141,20 @@ const HistoricoEscolar = () => {
   const [carregandoUes, setCarregandoUes] = useState(false);
 
   const obterUes = useCallback(async (dre, ano, considHistorico = false) => {
-    if (dre) {
+    if (dre && ano) {
       setCarregandoUes(true);
-      const { data } = await AbrangenciaServico.buscarUes(
+      const resposta = await AbrangenciaServico.buscarUes(
         dre,
         `v1/abrangencias/${considHistorico}/dres/${dre}/ues?anoLetivo=${ano}`,
         true
-      );
-      if (data) {
-        const lista = data.map(item => ({
+      )
+        .catch(e => {
+          erros(e);
+          setCarregandoUes(false);
+        })
+        .finally(() => setCarregandoUes(false));
+      if (resposta?.data?.length) {
+        const lista = resposta.data.map(item => ({
           desc: item.nome,
           valor: String(item.codigo),
         }));
@@ -180,6 +185,8 @@ const HistoricoEscolar = () => {
 
     setListaTurmas([]);
     setTurmaId();
+
+    setModoEdicao(true);
   };
 
   const [carregandoDres, setCarregandoDres] = useState(false);
@@ -347,7 +354,6 @@ const HistoricoEscolar = () => {
     turmaId,
     semestre,
     vaidaDesabilitarBtnGerar,
-    clicouBotaoGerar,
     estudanteOpt,
     alunosSelecionados,
   ]);
@@ -361,6 +367,7 @@ const HistoricoEscolar = () => {
   };
 
   const onClickCancelar = () => {
+    setConsideraHistorico(false);
     setAnoLetivo();
     setDreId();
     setListaAnosLetivo([]);
@@ -369,6 +376,8 @@ const HistoricoEscolar = () => {
     setEstudanteOpt();
 
     obterAnosLetivos();
+
+    setModoEdicao(false);
   };
 
   const gerarHistorico = async params => {
@@ -380,7 +389,6 @@ const HistoricoEscolar = () => {
 
   const onClickGerar = () => {
     setCarregandoGerar(true);
-    setClicouBotaoGerar(true);
 
     const params = {
       anoLetivo,
@@ -402,6 +410,7 @@ const HistoricoEscolar = () => {
       sucesso(
         'Solicitação de geração do relatório gerada com sucesso. Em breve você receberá uma notificação com o resultado'
       );
+      setDesabilitarBtnGerar(true);
     }
 
     setCarregandoGerar(false);
@@ -418,6 +427,8 @@ const HistoricoEscolar = () => {
 
     setListaTurmas([]);
     setTurmaId();
+
+    setModoEdicao(true);
   };
 
   const onChangeModalidade = novaModalidade => {
@@ -428,6 +439,8 @@ const HistoricoEscolar = () => {
 
     setListaTurmas([]);
     setTurmaId();
+
+    setModoEdicao(true);
   };
 
   const onChangeAnoLetivo = ano => {
@@ -441,17 +454,19 @@ const HistoricoEscolar = () => {
 
     setListaTurmas([]);
     setTurmaId();
+
+    setModoEdicao(true);
   };
 
   const onChangeSemestre = valor => {
     setSemestre(valor);
-    setClicouBotaoGerar(false);
+    setModoEdicao(true);
   };
 
   const onChangeTurma = valor => {
     setTurmaId(valor);
     setEstudanteOpt('0');
-    setClicouBotaoGerar(false);
+    setModoEdicao(true);
   };
 
   const onChangeEstudanteOpt = valor => {
@@ -468,17 +483,17 @@ const HistoricoEscolar = () => {
       setAlunosSelecionados([]);
     }
     setEstudanteOpt(valor);
-    setClicouBotaoGerar(false);
+    setModoEdicao(true);
   };
 
   const onChangeImprimirDadosResp = valor => {
     setImprimirDadosResp(valor);
-    setClicouBotaoGerar(false);
+    setModoEdicao(true);
   };
 
   const onChangePreencherDataImpressao = valor => {
     setPreencherDataImpressao(valor);
-    setClicouBotaoGerar(false);
+    setModoEdicao(true);
   };
 
   const onChangeLocalizadorEstudante = aluno => {
@@ -492,16 +507,17 @@ const HistoricoEscolar = () => {
       if (listaModalidades && listaModalidades.length === 1)
         setModalidadeId(String(listaModalidades[0].valor));
     }
-    setClicouBotaoGerar(false);
+    setModoEdicao(true);
   };
 
   const onSelecionarItems = items => {
     setAlunosSelecionados([...items.map(item => String(item.codigo))]);
-    setClicouBotaoGerar(false);
+    setModoEdicao(true);
   };
 
   function onCheckedConsideraHistorico(e) {
     setConsideraHistorico(e.target.checked);
+    setModoEdicao(true);
   }
 
   return (
@@ -518,6 +534,7 @@ const HistoricoEscolar = () => {
           desabilitarBtnGerar={desabilitarBtnGerar}
           carregandoGerar={carregandoGerar}
           temLoaderBtnGerar
+          modoEdicao={modoEdicao}
         />
       </Cabecalho>
       <Card>

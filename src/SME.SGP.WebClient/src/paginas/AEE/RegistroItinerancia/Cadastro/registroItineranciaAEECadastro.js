@@ -353,7 +353,11 @@ const RegistroItineranciaAEECadastro = ({ match }) => {
       const ehParaCancelar = await perguntarAntesDeCancelar();
       if (ehParaCancelar) {
         if (itineranciaId) {
+          setCarregandoGeral(true);
           construirItineranciaAlteracao(_.cloneDeep(itineranciaAlteracao));
+          setTimeout(() => {
+            setCarregandoGeral(false);
+          }, 2000);
         } else {
           resetTela();
         }
@@ -934,23 +938,23 @@ const RegistroItineranciaAEECadastro = ({ match }) => {
                   </div>
                 </div>
               </>
+            ) : carregandoQuestoes || carregandoGeral ? (
+              <Loader loading tip="Carregando questões" />
             ) : (
               questoesItinerancia?.map(questao => {
                 return (
-                  <Loader loading={carregandoQuestoes}>
-                    <div className="row mb-4" key={questao.questaoId}>
-                      <div className="col-12">
-                        <JoditEditor
-                          label={questao.descricao}
-                          value={questao.resposta}
-                          name={NOME_CAMPO_QUESTAO + questao.questaoId}
-                          id={`editor-questao-${questao.questaoId}`}
-                          onChange={e => setQuestao(e, questao)}
-                          desabilitar={desabilitarCamposPorPermissao()}
-                        />
-                      </div>
+                  <div className="row mb-4" key={questao.questaoId}>
+                    <div className="col-12">
+                      <JoditEditor
+                        label={questao.descricao}
+                        value={questao.resposta}
+                        name={NOME_CAMPO_QUESTAO + questao.questaoId}
+                        id={`editor-questao-${questao.questaoId}`}
+                        onChange={e => setQuestao(e, questao)}
+                        desabilitar={desabilitarCamposPorPermissao()}
+                      />
                     </div>
-                  </Loader>
+                  </div>
                 );
               })
             )}

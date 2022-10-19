@@ -40,6 +40,7 @@ import {
 } from '~/servicos';
 import { ordenarPor } from '~/utils/funcoes/gerais';
 
+// eslint-disable-next-line react/prop-types
 const CadastroOcorrencias = ({ match }) => {
   const [dataOcorrencia, setDataOcorrencia] = useState();
   const [horaOcorrencia, setHoraOcorrencia] = useState();
@@ -98,11 +99,6 @@ const CadastroOcorrencias = ({ match }) => {
       setIdOcorrencia(match?.params?.id);
     }
   }, [match]);
-
-  useEffect(() => {
-    if (criancasSelecionadas) setModoEdicao(modificouCriancasSelecionadas());
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [criancasSelecionadas]);
 
   useEffect(() => {
     async function obterPorId(id) {
@@ -226,8 +222,8 @@ const CadastroOcorrencias = ({ match }) => {
     let modificou = false;
     if (idOcorrencia) {
       valoresIniciais.alunos.forEach(aluno => {
-        const alunoExistente = criancasSelecionadas.find(
-          c => c.codigoEOL.toString() === aluno.codigoAluno.toString()
+        const alunoExistente = criancasSelecionadas?.find?.(
+          c => c?.codigoEOL?.toString?.() === aluno?.codigoAluno?.toString?.()
         );
         if (!alunoExistente) {
           modificou = true;
@@ -241,6 +237,11 @@ const CadastroOcorrencias = ({ match }) => {
     }
     return modificou;
   };
+
+  useEffect(() => {
+    if (criancasSelecionadas) setModoEdicao(modificouCriancasSelecionadas());
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [criancasSelecionadas]);
 
   const onClickVoltar = async form => {
     let existeDivergencia = modificouCriancasSelecionadas();
@@ -270,13 +271,23 @@ const CadastroOcorrencias = ({ match }) => {
     );
   };
 
-  const onClickCancelar = () => {
-    refForm.resetForm();
-    setCriancasSelecionadas(criancasSelecionadasEdicao);
-    if (!idOcorrencia) {
-      setCriancasSelecionadas([]);
+  const onClickCancelar = async () => {
+    if (modoEdicao) {
+      const confirmou = await confirmar(
+        'Atenção',
+        'Você não salvou as informações preenchidas.',
+        'Deseja realmente cancelar as alterações?'
+      );
+
+      if (confirmou) {
+        refForm.resetForm();
+        setCriancasSelecionadas(criancasSelecionadasEdicao);
+        if (!idOcorrencia) {
+          setCriancasSelecionadas([]);
+        }
+        setModoEdicao(false);
+      }
     }
-    setModoEdicao(false);
   };
 
   const onChangeDataOcorrencia = valor => {
@@ -488,6 +499,7 @@ const CadastroOcorrencias = ({ match }) => {
                 <div className="p-0 col-12">
                   {criancasSelecionadas.slice(0, 3).map((crianca, index) => {
                     return (
+                      // eslint-disable-next-line react/no-array-index-key
                       <div className="mb-3" key={`crianca-${index}`}>
                         <span>
                           {crianca.nome} ({crianca.codigoEOL})
@@ -586,7 +598,7 @@ const CadastroOcorrencias = ({ match }) => {
                     <JoditEditor
                       label="Descrição"
                       form={form}
-                      value={valoresIniciais.descricao}
+                      value={form?.values?.descricao}
                       name="descricao"
                       id="descricao"
                       permiteInserirArquivo

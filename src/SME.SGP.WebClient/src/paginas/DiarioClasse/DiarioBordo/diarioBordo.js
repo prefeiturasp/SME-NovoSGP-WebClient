@@ -295,7 +295,6 @@ const DiarioBordo = ({ match }) => {
 
         setDiasParaHabilitar(habilitar);
       } else {
-        setListaDatasAulas();
         setDiasParaHabilitar();
       }
     },

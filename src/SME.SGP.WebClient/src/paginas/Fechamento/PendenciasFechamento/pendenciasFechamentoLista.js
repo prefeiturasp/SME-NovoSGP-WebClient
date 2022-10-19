@@ -331,6 +331,9 @@ const PendenciasFechamentoLista = ({ match }) => {
       b => String(b?.bimestre) === bimestreSelecionado
     )?.aberto;
 
+  const exibirTabela = match?.params?.codigoComponenteCurricular
+    ? !!filtro?.componenteCurricularId
+    : !!filtro?.bimestre;
   return (
     <>
       {bimestreSelecionado && !periodoAberto ? (
@@ -445,7 +448,7 @@ const PendenciasFechamentoLista = ({ match }) => {
             </div>
           </div>
         </div>
-        {filtro?.bimestre ? (
+        {exibirTabela ? (
           <div className="col-md-12 pt-2">
             <ListaPaginada
               url="v1/fechamentos/pendencias/listar"

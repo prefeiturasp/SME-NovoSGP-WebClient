@@ -137,3 +137,8 @@ export const setValorEditorRegistrosAnteriores = payload => ({
   type: '@registroIndividual/setValorEditorRegistrosAnteriores',
   payload,
 });
+
+export const setDadosSugestaoTopico = payload => ({
+  type: '@registroIndividual/setDadosSugestaoTopico',
+  payload,
+});

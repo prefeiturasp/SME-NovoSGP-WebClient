@@ -64,6 +64,7 @@ const RelatorioDevolutivas = () => {
     setListaComponenteCurriculares,
   ] = useState();
   const [componenteCurricular, setComponenteCurricular] = useState();
+  const [modoEdicao, setModoEdicao] = useState(false);
 
   const { turmaSelecionada } = useSelector(store => store.usuario);
 
@@ -97,6 +98,7 @@ const RelatorioDevolutivas = () => {
   const onClickCancelar = () => {
     setAnoLetivo(anoAtual);
     limparFiltrosSelecionados();
+    setModoEdicao(false);
   };
 
   const gerar = async () => {
@@ -144,11 +146,13 @@ const RelatorioDevolutivas = () => {
     limparFiltrosSelecionados(true);
     setConsideraHistorico(!consideraHistorico);
     setAnoLetivo(anoAtual);
+    setModoEdicao(true);
   };
 
   const onChangeAnoLetivo = ano => {
     setAnoLetivo(ano);
     limparFiltrosSelecionados(true);
+    setModoEdicao(true);
   };
 
   const obterAnosLetivos = useCallback(async () => {
@@ -241,6 +245,8 @@ const RelatorioDevolutivas = () => {
 
     setListaComponenteCurriculares([]);
     setComponenteCurricular();
+
+    setModoEdicao(true);
   };
 
   const onChangeUe = ue => {
@@ -254,6 +260,8 @@ const RelatorioDevolutivas = () => {
     if (!ue) {
       setNaoEhInfantil(false);
     }
+
+    setModoEdicao(true);
   };
 
   const obterUes = useCallback(async () => {
@@ -300,6 +308,8 @@ const RelatorioDevolutivas = () => {
 
     setListaComponenteCurriculares([]);
     setComponenteCurricular();
+
+    setModoEdicao(true);
   };
 
   const verificarAbrangencia = data => {
@@ -357,6 +367,8 @@ const RelatorioDevolutivas = () => {
       setListaComponenteCurriculares([]);
       setComponenteCurricular();
     }
+
+    setModoEdicao(true);
   };
 
   const onchangeMultiSelect = (valores, valoreAtual, funSetarNovoValor) => {
@@ -422,7 +434,10 @@ const RelatorioDevolutivas = () => {
     setComponenteCurricular();
   }, [ueId, obterTurmas, naoEhInfantil]);
 
-  const onChangeBimestre = valor => setBimestres(valor);
+  const onChangeBimestre = valor => {
+    setBimestres(valor);
+    setModoEdicao(true);
+  };
 
   const obterBimestres = useCallback(() => {
     const bi = [];
@@ -537,6 +552,7 @@ const RelatorioDevolutivas = () => {
           onClickCancelar={onClickCancelar}
           onClickGerar={gerar}
           desabilitarBtnGerar={desabilitarGerar}
+          modoEdicao={modoEdicao}
         />
       </Cabecalho>
       <Card>
@@ -654,6 +670,7 @@ const RelatorioDevolutivas = () => {
                   onChange={valor => {
                     setComponenteCurricular(valor);
                     setAlterouCampos(true);
+                    setModoEdicao(true);
                   }}
                   placeholder="Selecione um componente curricular"
                   disabled={
@@ -689,6 +706,7 @@ const RelatorioDevolutivas = () => {
                 onChange={e => {
                   setAlterouCampos(true);
                   setExibirConteudoDevolutiva(e.target.value);
+                  setModoEdicao(true);
                 }}
                 value={exibirConteudoDevolutiva}
                 desabilitado={!dreId || !ueId || !turmaId || !bimestres}

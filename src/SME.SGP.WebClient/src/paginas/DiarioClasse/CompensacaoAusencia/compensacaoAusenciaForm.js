@@ -438,6 +438,8 @@ const CompensacaoAusenciaForm = ({ match }) => {
       turmaSelecionada.turma
     );
 
+    setAlunosAusenciaTurma([]);
+
     if (disciplinas.data && disciplinas.data.length) {
       const disciplinasPreparadas = disciplinas.data.map(disciplina => {
         return {

@@ -72,6 +72,8 @@ const RelatorioLeitura = () => {
   const [clicouBotaoGerar, setClicouBotaoGerar] = useState(false);
   const [timeoutCampoPesquisa, setTimeoutCampoPesquisa] = useState();
 
+  const [modoEdicao, setModoEdicao] = useState(false);
+
   const opcoesRadioSimNao = [
     { label: 'Não', value: false },
     { label: 'Sim', value: true },
@@ -83,6 +85,7 @@ const RelatorioLeitura = () => {
     setModalidadeId();
     setTurmaId();
     setAnoLetivo(valor);
+    setModoEdicao(true);
   };
 
   const onChangeDre = valor => {
@@ -92,33 +95,39 @@ const RelatorioLeitura = () => {
     setTurmaId();
     setCodigoUe(undefined);
     setClicouBotaoGerar(false);
+    setModoEdicao(true);
   };
 
   const onChangeUe = valor => {
     setModalidadeId();
     setTurmaId();
     setCodigoUe(valor);
+    setModoEdicao(true);
   };
 
   const onChangeModalidade = valor => {
     setTurmaId();
     setModalidadeId(valor);
     setClicouBotaoGerar(false);
+    setModoEdicao(true);
   };
 
   const onChangeSemestre = valor => {
     setSemestre(valor);
     setClicouBotaoGerar(false);
+    setModoEdicao(true);
   };
 
   const onChangeAno = valor => {
     setAnosEscolares(valor);
     setTurmaId();
+    setModoEdicao(true);
   };
 
   const onChangeTurma = valor => {
     setTurmaId(valor);
     setClicouBotaoGerar(false);
+    setModoEdicao(true);
   };
 
   const [anoAtual] = useState(window.moment().format('YYYY'));
@@ -340,8 +349,9 @@ const RelatorioLeitura = () => {
 
   const filterTurmasAnoSelecionado = useCallback(() => {
     const turmas = listaTurmasOriginal.filter(a => a.ano === anosEscolares);
+    
     if (turmas?.length > 1) {
-      turmas.unshift({ valor: OPCAO_TODOS, desc: 'Todas' });
+      turmas.unshift({ valor: OPCAO_TODOS, desc: 'Todas', nomeFiltro: 'Todas' });
     }
     setListaTurmas(turmas);
   }, [anosEscolares, listaTurmasOriginal]);
@@ -477,6 +487,7 @@ const RelatorioLeitura = () => {
   }, [modalidadeId]);
 
   const cancelar = async () => {
+    setConsideraHistorico(false);
     await setCodigoUe();
     await setCodigoDre();
     await setListaComunicado();
@@ -492,6 +503,7 @@ const RelatorioLeitura = () => {
     await setModalidadeId();
     await setAnoLetivo();
     await setAnoLetivo(anoAtual);
+    setModoEdicao(false);
   };
 
   const obterCominicadoId = useCallback(
@@ -633,6 +645,7 @@ const RelatorioLeitura = () => {
       setDataInicio(dtInicio);
       setDataFim(dtFim);
       setClicouBotaoGerar(false);
+      setModoEdicao(true);
     }
   };
 
@@ -646,6 +659,7 @@ const RelatorioLeitura = () => {
           onClickCancelar={cancelar}
           onClickGerar={gerar}
           desabilitarBtnGerar={desabilitarGerar}
+          modoEdicao={modoEdicao}
         />
       </Cabecalho>
       <Card>
@@ -660,6 +674,7 @@ const RelatorioLeitura = () => {
                   setDataInicio();
                   setDataFim();
                   setConsideraHistorico(e.target.checked);
+                  setModoEdicao(true);
                 }}
                 checked={consideraHistorico}
               />
@@ -809,6 +824,7 @@ const RelatorioLeitura = () => {
                   onChange={valor => {
                     setComunicado(valor);
                     setClicouBotaoGerar(false);
+                    setModoEdicao(true);
                   }}
                   handleSearch={handleSearch}
                   value={comunicado}
@@ -823,6 +839,7 @@ const RelatorioLeitura = () => {
                 onChange={e => {
                   setListarResponsaveisEstudantes(e.target.value);
                   setClicouBotaoGerar(false);
+                  setModoEdicao(true);
                 }}
                 value={listarResponsaveisEstudantes}
                 desabilitado={
@@ -841,6 +858,7 @@ const RelatorioLeitura = () => {
                 onChange={e => {
                   setClicouBotaoGerar(false);
                   setListarComunicadosExpirados(e.target.value);
+                  setModoEdicao(true);
                 }}
                 value={listarComunicadosExpirados}
               />

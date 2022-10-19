@@ -50,6 +50,7 @@ const RelatorioHistoricoAlteracoesNotas = () => {
   const [consideraHistorico, setConsideraHistorico] = useState(false);
   const [clicouBotaoGerar, setClicouBotaoGerar] = useState(false);
   const [desabilitarBtnGerar, setDesabilitarBtnGerar] = useState(true);
+  const [modoEdicao, setModoEdicao] = useState(false);
 
   const onChangeAnoLetivo = async valor => {
     setDreId();
@@ -58,6 +59,7 @@ const RelatorioHistoricoAlteracoesNotas = () => {
     setTurmaId();
     setComponentesCurricularesId();
     setAnoLetivo(valor);
+    setModoEdicao(true);
   };
 
   const onChangeDre = valor => {
@@ -67,6 +69,7 @@ const RelatorioHistoricoAlteracoesNotas = () => {
     setTurmaId();
     setComponentesCurricularesId();
     setUeId(undefined);
+    setModoEdicao(true);
   };
 
   const onChangeUe = valor => {
@@ -74,38 +77,45 @@ const RelatorioHistoricoAlteracoesNotas = () => {
     setTurmaId();
     setComponentesCurricularesId();
     setUeId(valor);
+    setModoEdicao(true);
   };
 
   const onChangeModalidade = valor => {
     setTurmaId();
     setComponentesCurricularesId();
     setModalidadeId(valor);
+    setModoEdicao(true);
   };
 
   const onChangeSemestre = valor => {
     setSemestre(valor);
     setClicouBotaoGerar(false);
+    setModoEdicao(true);
   };
 
   const onChangeTurma = valor => {
     setComponentesCurricularesId();
     setTurmaId(valor);
     setClicouBotaoGerar(false);
+    setModoEdicao(true);
   };
 
   const onChangeComponenteCurricular = valor => {
     setComponentesCurricularesId(valor);
     setClicouBotaoGerar(false);
+    setModoEdicao(true);
   };
 
   const onChangeBimestre = valor => {
     setBimestre(valor);
     setClicouBotaoGerar(false);
+    setModoEdicao(true);
   };
 
   const onChangeTipoNota = valor => {
     setTipoDeNota(valor);
     setClicouBotaoGerar(false);
+    setModoEdicao(true);
   };
 
   const [anoAtual] = useState(window.moment().format('YYYY'));
@@ -406,15 +416,16 @@ const RelatorioHistoricoAlteracoesNotas = () => {
   }, [obterAnosLetivos, modalidadeId, anoLetivo, consideraHistorico]);
 
   const cancelar = async () => {
-    await setDreId();
-    await setUeId();
-    await setModalidadeId();
-    await setComponentesCurricularesId(undefined);
-    await setBimestre();
-    await setTurmaId(undefined);
-    await setAnoLetivo();
-    await setAnoLetivo(anoAtual);
-    await setTipoDeNota('1');
+    setConsideraHistorico(false);
+    setAnoLetivo(anoAtual);
+    setDreId();
+    setUeId();
+    setModalidadeId();
+    setComponentesCurricularesId(undefined);
+    setBimestre();
+    setTurmaId(undefined);
+    setTipoDeNota('1');
+    setModoEdicao(false);
   };
 
   useEffect(() => {
@@ -523,6 +534,7 @@ const RelatorioHistoricoAlteracoesNotas = () => {
             desabilitarBtnGerar ||
             String(modalidadeId) === String(modalidade.INFANTIL)
           }
+          modoEdicao={modoEdicao}
         />
       </Cabecalho>
       <Card>
@@ -535,6 +547,7 @@ const RelatorioHistoricoAlteracoesNotas = () => {
                   setAnoLetivo();
                   setDreId();
                   setConsideraHistorico(e.target.checked);
+                  setModoEdicao(true);
                 }}
                 checked={consideraHistorico}
               />

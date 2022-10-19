@@ -85,51 +85,55 @@ const MontarListaFrequencia = () => {
   return (
     <>
       {componenteCurricular?.codigoComponenteCurricular &&
-        dataSelecionada &&
-        aulaId ? (
-          <div className="col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-2">
-            <CardCollapse
-              key="frequencia-collapse"
-              onClick={onClickFrequencia}
-              titulo="Frequência"
-              indice="frequencia-collapse"
-              alt="card-collapse-frequencia"
-              show={exibirCardCollapseFrequencia}
-            >
-              {listaDadosFrequencia?.listaFrequencia?.length && (
-                <>
-                  <Ordenacao
-                    conteudoParaOrdenar={listaDadosFrequencia.listaFrequencia}
-                    ordenarColunaNumero="numeroAlunoChamada"
-                    ordenarColunaTexto="nomeAluno"
-                    retornoOrdenado={retorno => {
-                      const dados = { ...listaDadosFrequencia };
-                      dados.listaFrequencia = retorno;
-                      dispatch(setListaDadosFrequencia(dados));
-                    }}
-                  />
-                  <ListaFrequencia
-                    frequenciaId={listaDadosFrequencia.id}
-                    onChangeFrequencia={onChangeFrequencia}
-                    permissoesTela={permissoesTela}
-                    temPeriodoAberto={listaDadosFrequencia.temPeriodoAberto}
-                    ehInfantil={ehTurmaInfantil(
-                      modalidadesFiltroPrincipal,
-                      turmaSelecionada
-                    )}
-                    aulaId={aulaId}
-                    componenteCurricularId={
-                      componenteCurricular.codigoComponenteCurricular
-                    }
-                    setDataSource={atualizarValoresAlterados}
-                  />
+      dataSelecionada &&
+      aulaId ? (
+        <div className="col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-2">
+          <CardCollapse
+            key="frequencia-collapse"
+            onClick={onClickFrequencia}
+            titulo="Frequência"
+            indice="frequencia-collapse"
+            alt="card-collapse-frequencia"
+            show={exibirCardCollapseFrequencia}
+          >
+            {listaDadosFrequencia?.listaFrequencia?.length ? (
+              <>
+                <Ordenacao
+                  conteudoParaOrdenar={listaDadosFrequencia.listaFrequencia}
+                  ordenarColunaNumero="numeroAlunoChamada"
+                  ordenarColunaTexto="nomeAluno"
+                  retornoOrdenado={retorno => {
+                    const dados = { ...listaDadosFrequencia };
+                    dados.listaFrequencia = retorno;
+                    dispatch(setListaDadosFrequencia(dados));
+                  }}
+                />
+                <ListaFrequencia
+                  frequenciaId={listaDadosFrequencia.id}
+                  onChangeFrequencia={onChangeFrequencia}
+                  permissoesTela={permissoesTela}
+                  temPeriodoAberto={listaDadosFrequencia.temPeriodoAberto}
+                  ehInfantil={ehTurmaInfantil(
+                    modalidadesFiltroPrincipal,
+                    turmaSelecionada
+                  )}
+                  aulaId={aulaId}
+                  componenteCurricularId={
+                    componenteCurricular.codigoComponenteCurricular
+                  }
+                  setDataSource={atualizarValoresAlterados}
+                />
 
-                  {listaDadosFrequencia?.criadoEm && <AuditoriaFrequencia />}
-                </>
-              )}
-            </CardCollapse>
-          </div>
-        ) : <></>}
+                {listaDadosFrequencia?.criadoEm && <AuditoriaFrequencia />}
+              </>
+            ) : (
+              <></>
+            )}
+          </CardCollapse>
+        </div>
+      ) : (
+        <></>
+      )}
     </>
   );
 };

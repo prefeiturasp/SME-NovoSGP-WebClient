@@ -91,7 +91,7 @@ export default function ReiniciarSenha({ perfilSelecionado }) {
               color={Colors.Roxo}
               disabled={!permissoesTela.podeAlterar}
               border
-              className="ml-2 text-center"
+              className="ml-2 text-center button-reiniciar-hover"
               onClick={() => onClickReiniciar(linha)}
             />
           </div>

@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import { Tooltip } from 'antd';
 import React, { useState } from 'react';
 import * as moment from 'moment';
@@ -20,10 +21,10 @@ import ServicoFechamentoBimestre from '~/servicos/Paginas/Fechamento/ServicoFech
 import { erros, sucesso } from '~/servicos/alertas';
 import history from '~/servicos/history';
 import RotasDto from '~/dtos/rotasDto';
-import { BtbAnotacao } from '../fechamento-bimestre.css';
 import ModalAnotacaoAluno from '../../FechamentoModalAnotacaoAluno/modal-anotacao-aluno';
 import SinalizacaoAEE from '~/componentes-sgp/SinalizacaoAEE/sinalizacaoAEE';
 import Alert from '~/componentes/alert';
+import ListaoBotaoAnotacao from '~/paginas/DiarioClasse/Listao/operacoes/listaoTabs/tabFrequencia/lista/componentes/listaoBotaoAnotacao';
 
 const FechamentoBimestreLista = props => {
   const {
@@ -70,7 +71,7 @@ const FechamentoBimestreLista = props => {
 
   const onClickProcessarReprocessarSintese = async () => {
     setCarregandoProcesso(true);
-    const { alunos, fechamentoId, bimestre } = dados;
+    const { alunos, bimestre } = dados;
 
     const alunosParaProcessar = alunos.map(aluno => {
       return {
@@ -80,7 +81,7 @@ const FechamentoBimestreLista = props => {
       };
     });
     const params = {
-      id: fechamentoId,
+      id: dados?.fechamentoId,
       turmaId,
       bimestre,
       disciplinaId: codigoComponenteCurricular,
@@ -311,34 +312,16 @@ const FechamentoBimestreLista = props => {
                             <SinalizacaoAEE
                               exibirSinalizacao={item.ehAtendidoAEE}
                             />
-
-                            {item.ativo ? (
-                              <Tooltip
-                                title={
-                                  item.temAnotacao
-                                    ? 'Estudante com anotação'
-                                    : ''
-                                }
-                                placement="top"
-                              >
-                              {
-                                situacaoFechamento !== situacaoFechamentoDto.NaoProcessado ?                  
-                                <div className="d-flex justify-content-end ml-3">                   
-                                  <BtbAnotacao
-                                    className={
-                                      item.temAnotacao ? 'btn-com-anotacao' : ''
-                                    }
-                                    onClick={() => onClickAnotacao(item)}
-                                  >
-                                    <i className="fas fa-pen" />
-                                  </BtbAnotacao>
-                                </div>
-                                : ''
+                            <ListaoBotaoAnotacao
+                              permiteAnotacao={
+                                Number(situacaoFechamento) !==
+                                situacaoFechamentoDto.NaoProcessado
                               }
-                              </Tooltip>
-                            ) : (
-                              ''
-                            )}
+                              possuiAnotacao={item?.temAnotacao}
+                              onClickAnotacao={() => {
+                                onClickAnotacao(item);
+                              }}
+                            />
                           </div>
                         </div>
                       </td>
@@ -348,7 +331,7 @@ const FechamentoBimestreLista = props => {
                         }`}
                       >
                         {ehSintese ? (
-                          item.sintese 
+                          item.sintese
                         ) : ehRegencia && item.notas ? (
                           <BotaoExpandir
                             index={index}
@@ -365,14 +348,14 @@ const FechamentoBimestreLista = props => {
                           )
                         ) : null}
 
-                        {!ehSintese ? (
-                          item?.notas?.length && item.notas[0]?.emAprovacao && (
-                            <Tooltip title="Aguardando aprovação">
-                              <MarcadorTriangulo />
-                            </Tooltip>
-                          )) : ''
-                        }
-                        
+                        {!ehSintese
+                          ? item?.notas?.length &&
+                            item.notas[0]?.emAprovacao && (
+                              <Tooltip title="Aguardando aprovação">
+                                <MarcadorTriangulo />
+                              </Tooltip>
+                            )
+                          : ''}
                       </td>
                       <td
                         className={`text-center ${

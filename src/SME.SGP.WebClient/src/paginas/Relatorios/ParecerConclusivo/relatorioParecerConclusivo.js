@@ -64,6 +64,8 @@ const RelatorioParecerConclusivo = () => {
 
   const [anoAtual] = useState(window.moment().format('YYYY'));
 
+  const [modoEdicao, setModoEdicao] = useState(false);
+
   const onChangeConsideraHistorico = e => {
     setConsideraHistorico(e.target.checked);
     setAnoLetivo(anoAtual);
@@ -74,6 +76,7 @@ const RelatorioParecerConclusivo = () => {
     setListaModalidades([]);
     setSemestre();
     setListaSemestres([]);
+    setModoEdicao(true);
   };
 
   const onChangeAnoLetivo = valor => {
@@ -86,6 +89,7 @@ const RelatorioParecerConclusivo = () => {
     setListaModalidades([]);
     setSemestre();
     setListaSemestres([]);
+    setModoEdicao(true);
   };
 
   const onChangeDre = valor => {
@@ -98,6 +102,7 @@ const RelatorioParecerConclusivo = () => {
     setAno();
     setListaAnos([]);
     setDreId(valor);
+    setModoEdicao(true);
   };
 
   const onChangeUe = valor => {
@@ -108,6 +113,7 @@ const RelatorioParecerConclusivo = () => {
     setAno();
     setListaAnos([]);
     setUeId(valor);
+    setModoEdicao(true);
   };
 
   const onChangeModalidade = valor => {
@@ -116,11 +122,13 @@ const RelatorioParecerConclusivo = () => {
     setCiclo();
     setListaCiclos([]);
     setModalidadeId(valor);
+    setModoEdicao(true);
   };
 
   const onChangeSemestre = valor => {
     setSemestre(valor);
     setClicouBotaoGerar(false);
+    setModoEdicao(true);
   };
 
   const onChangeCiclos = valor => {
@@ -128,6 +136,7 @@ const RelatorioParecerConclusivo = () => {
     setListaAnos([]);
     setCiclo(valor);
     setClicouBotaoGerar(false);
+    setModoEdicao(true);
   };
 
   const onChangeAnos = valor => {
@@ -136,16 +145,19 @@ const RelatorioParecerConclusivo = () => {
     }
     setAno(valor);
     setClicouBotaoGerar(false);
+    setModoEdicao(true);
   };
 
   const onChangeParecerConclusivo = valor => {
     setParecerConclusivoId(valor);
     setClicouBotaoGerar(false);
+    setModoEdicao(true);
   };
 
   const onChangeFormato = valor => {
     setFormato(valor);
     setClicouBotaoGerar(false);
+    setModoEdicao(true);
   };
 
   const obterDres = useCallback(async () => {
@@ -442,13 +454,17 @@ const RelatorioParecerConclusivo = () => {
     obterAnos(modalidadeId, ciclo);
   }, [modalidadeId, ciclo]);
 
-  const cancelar = async () => {
-    await setCiclo();
-    await setAno();
-    await setParecerConclusivoId();
-    await setAnoLetivo(null);
-    await setAnoLetivo(anoAtual);
-    await setFormato('1');
+  const cancelar = () => {
+    setDreId();
+    setUeId();
+    setConsideraHistorico(false);
+    setAnoLetivo(anoAtual);
+    setCiclo();
+    setAno();
+    setParecerConclusivoId();
+    setAnoLetivo(anoAtual);
+    setFormato('1');
+    setModoEdicao(false);
   };
 
   useEffect(() => {
@@ -524,6 +540,7 @@ const RelatorioParecerConclusivo = () => {
           desabilitarBtnGerar={desabilitarBtnGerar}
           carregandoGerar={carregandoGerar}
           temLoaderBtnGerar
+          modoEdicao={modoEdicao}
         />
       </Cabecalho>
       <Card>

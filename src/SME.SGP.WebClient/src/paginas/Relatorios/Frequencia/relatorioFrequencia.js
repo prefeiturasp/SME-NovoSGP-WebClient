@@ -1,16 +1,14 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
-import { Col, Row } from 'antd';
 import {
-  Button,
   CampoNumero,
   Card,
-  Colors,
   Loader,
   RadioGroupButton,
   SelectComponent,
 } from '~/componentes';
 import { Cabecalho } from '~/componentes-sgp';
+import BotoesAcaoRelatorio from '~/componentes-sgp/botoesAcaoRelatorio';
 
 import { URL_HOME, OPCAO_TODOS } from '~/constantes';
 import { ModalidadeDTO } from '~/dtos';
@@ -26,11 +24,6 @@ import {
   ServicoFiltroRelatorio,
   ServicoComponentesCurriculares,
 } from '~/servicos';
-import {
-  SGP_BUTTON_CANCELAR,
-  SGP_BUTTON_GERAR,
-} from '~/componentes-sgp/filtro/idsCampos';
-import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
 
 const RelatorioFrequencia = () => {
   const [anoLetivo, setAnoLetivo] = useState(undefined);
@@ -78,6 +71,7 @@ const RelatorioFrequencia = () => {
   const [turmasPrograma, setTurmasPrograma] = useState(true);
   const [valorCondicao, setValorCondicao] = useState(undefined);
   const [desabilitarSemestre, setDesabilitarSemestre] = useState(false);
+  const [modoEdicao, setModoEdicao] = useState(false);
 
   const TIPO_RELATORIO = useMemo(
     () => ({
@@ -190,6 +184,8 @@ const RelatorioFrequencia = () => {
 
     setListaAnosEscolares([]);
     setAnosEscolares(undefined);
+
+    setModoEdicao(true);
   };
 
   const obterDres = async () => {
@@ -510,7 +506,7 @@ const RelatorioFrequencia = () => {
     history.push(URL_HOME);
   };
 
-  const onClickCancelar = () => {
+  const onClickCancelar = async () => {
     const anoAtual = listaAnosLetivo?.length && listaAnosLetivo[0].valor;
     setAnoLetivo(anoAtual);
     setCodigoDre();
@@ -519,6 +515,7 @@ const RelatorioFrequencia = () => {
     setCondicao(undefined);
     setValorCondicao(undefined);
     setFormato(FORMATOS.PDF);
+    setModoEdicao(false);
   };
 
   const onClickGerar = async () => {
@@ -569,6 +566,8 @@ const RelatorioFrequencia = () => {
 
     setTipoRelatorio(TIPO_RELATORIO.TURMA);
     setDesabilitarTipoRelatorio(ue !== OPCAO_TODOS);
+
+    setModoEdicao(true);
   };
 
   const onChangeModalidade = novaModalidade => {
@@ -579,6 +578,8 @@ const RelatorioFrequencia = () => {
 
     setListaAnosEscolares([]);
     setAnosEscolares(undefined);
+
+    setModoEdicao(true);
   };
 
   const onChangeAnoLetivo = ano => {
@@ -589,6 +590,8 @@ const RelatorioFrequencia = () => {
 
     setListaComponenteCurricular([]);
     setComponentesCurriculares(undefined);
+
+    setModoEdicao(true);
   };
 
   const onChangeAnos = valor => {
@@ -596,14 +599,34 @@ const RelatorioFrequencia = () => {
 
     setListaComponenteCurricular([]);
     setComponentesCurriculares(undefined);
+
+    setModoEdicao(true);
   };
 
-  const onChangeSemestre = valor => setSemestre(valor);
-  const onChangeComponenteCurricular = valor =>
+  const onChangeSemestre = valor => {
+    setSemestre(valor);
+    setModoEdicao(true);
+  };
+
+  const onChangeComponenteCurricular = valor => {
     setComponentesCurriculares(valor);
-  const onChangeBimestre = valor => setBimestres(valor);
-  const onChangeCondicao = valor => setCondicao(valor);
-  const onChangeComparacao = valor => setValorCondicao(valor);
+    setModoEdicao(true);
+  };
+
+  const onChangeBimestre = valor => {
+    setBimestres(valor);
+    setModoEdicao(true);
+  };
+
+  const onChangeCondicao = valor => {
+    setCondicao(valor);
+    setModoEdicao(true);
+  };
+
+  const onChangeComparacao = valor => {
+    setValorCondicao(valor);
+    setModoEdicao(true);
+  };
 
   const removeAdicionaOpcaoTodos = (
     valoresJaSelcionados,
@@ -643,6 +666,7 @@ const RelatorioFrequencia = () => {
   const onChangeTurma = valor => {
     setTurmasCodigo(valor);
     setBimestres(undefined);
+    setModoEdicao(true);
   };
 
   const obterTurmas = useCallback(async () => {
@@ -711,33 +735,13 @@ const RelatorioFrequencia = () => {
     <>
       <Loader loading={carregandoGeral}>
         <Cabecalho pagina="Frequência">
-          <Row gutter={[8, 8]} type="flex">
-            <Col>
-              <BotaoVoltarPadrao onClick={() => onClickVoltar()} />
-            </Col>
-            <Col>
-              <Button
-                id={SGP_BUTTON_CANCELAR}
-                label="Cancelar"
-                color={Colors.Azul}
-                border
-                bold
-                onClick={() => onClickCancelar()}
-              />
-            </Col>
-            <Col>
-              <Button
-                id={SGP_BUTTON_GERAR}
-                icon="print"
-                label="Gerar"
-                color={Colors.Roxo}
-                border
-                bold
-                onClick={() => onClickGerar()}
-                disabled={desabilitarBtnGerar}
-              />
-            </Col>
-          </Row>
+          <BotoesAcaoRelatorio
+            onClickVoltar={() => onClickVoltar()}
+            onClickCancelar={onClickCancelar}
+            onClickGerar={onClickGerar}
+            desabilitarBtnGerar={desabilitarBtnGerar}
+            modoEdicao={modoEdicao}
+          />
         </Cabecalho>
         <Card>
           <div className="col-md-12">
@@ -827,6 +831,7 @@ const RelatorioFrequencia = () => {
                   valorInicial
                   onChange={e => {
                     setTipoRelatorio(e.target.value);
+                    setModoEdicao(true);
                   }}
                   value={tipoRelatorio}
                   desabilitado={
@@ -871,6 +876,7 @@ const RelatorioFrequencia = () => {
                   valorInicial
                   onChange={e => {
                     setTurmasPrograma(e.target.value);
+                    setModoEdicao(true);
                   }}
                   value={turmasPrograma}
                   desabilitado={
@@ -970,6 +976,7 @@ const RelatorioFrequencia = () => {
                   valorInicial
                   onChange={e => {
                     setFormato(e.target.value);
+                    setModoEdicao(true);
                   }}
                   value={formato}
                   desabilitado={ehTurma}

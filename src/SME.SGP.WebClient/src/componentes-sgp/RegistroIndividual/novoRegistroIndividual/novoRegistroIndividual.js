@@ -20,6 +20,7 @@ import {
   setDadosRegistroAtual,
   setDesabilitarCampos,
   setRegistroIndividualEmEdicao,
+  setDadosSugestaoTopico,
 } from '~/redux/modulos/registroIndividual/actions';
 
 import {
@@ -56,6 +57,9 @@ const NovoRegistroIndividual = () => {
   const dadosRegistroAtual = useSelector(
     store => store.registroIndividual.dadosRegistroAtual
   );
+  const dadosSugestaoTopico = useSelector(
+    store => store.registroIndividual?.dadosSugestaoTopico
+  );
 
   const turmaSelecionada = useSelector(state => state.usuario.turmaSelecionada);
   const permissoes = useSelector(state => state.usuario.permissoes);
@@ -82,6 +86,36 @@ const NovoRegistroIndividual = () => {
   );
 
   const dispatch = useDispatch();
+
+  const obterSugestao = async mesParseado => {
+    if (mesParseado !== 1) {
+      const retorno = await ServicoRegistroIndividual.obterSugestao(
+        mesParseado
+      );
+
+      if (retorno?.data) {
+        dispatch(
+          setDadosSugestaoTopico({
+            mesParseado,
+            descricao: retorno?.data?.descricao,
+          })
+        );
+      } else {
+        dispatch(setDadosSugestaoTopico());
+      }
+    }
+  };
+
+  useEffect(() => {
+    if (data && expandir) {
+      const mes = window.moment(data).format('MM');
+      const mesParseado = parseInt(mes, 10);
+      if (dadosSugestaoTopico?.mesParseado !== mesParseado) {
+        obterSugestao(mesParseado);
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [data, expandir, dadosSugestaoTopico]);
 
   useEffect(() => {
     if (podeRealizarNovoRegistro && dadosAlunoObjectCard) {
@@ -261,11 +295,9 @@ const NovoRegistroIndividual = () => {
                 desabilitarData={desabilitarData}
               />
             </div>
-            {permissoesTela.podeIncluir && (
-              <div className="col-12 p-0 pb-3">
-                <SugestaoTopico valorData={data} />
-              </div>
-            )}
+            <div className="col-12 p-0 pb-3">
+              <SugestaoTopico />
+            </div>
             <div className="pt-2">
               <Loader ignorarTip loading={carregandoNovoRegistro}>
                 <div style={{ minHeight: 200 }}>

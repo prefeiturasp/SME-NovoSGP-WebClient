@@ -18,6 +18,7 @@ import {
   SGP_SELECT_FILTRO_PRINCIPAL_DRE,
   SGP_SELECT_FILTRO_PRINCIPAL_UE,
   SGP_CAMPO_FILTRO_PRINCIPAL_PESQUISAR_TURMA,
+  SGP_BUTTON_FILTRO_PRINCIPAL_EXPANDIR_RETRAIR_FILTRO,
 } from './idsCampos';
 
 import Grid from '~/componentes/grid';
@@ -1182,6 +1183,7 @@ const Filtro = () => {
             />
           )}
           <Seta
+            id={SGP_BUTTON_FILTRO_PRINCIPAL_EXPANDIR_RETRAIR_FILTRO}
             className="fa fa-caret-down rounded-circle position-absolute text-center"
             onClick={mostrarEsconderBusca}
           />
@@ -1334,7 +1336,9 @@ const Filtro = () => {
                     containerVinculoId="containerFiltro"
                     valueSelect={turmaSelecionada && `${turmaSelecionada}`}
                     placeholder="Turma"
-                    disabled={campoTurmaDesabilitado}
+                    disabled={
+                      !unidadeEscolarSelecionada || campoTurmaDesabilitado
+                    }
                     showSearch
                   />
                 </Loader>

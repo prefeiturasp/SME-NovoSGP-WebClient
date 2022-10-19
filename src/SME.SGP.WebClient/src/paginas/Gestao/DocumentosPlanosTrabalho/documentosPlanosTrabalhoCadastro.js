@@ -649,7 +649,17 @@ const DocumentosPlanosTrabalhoCadastro = ({ match }) => {
                                 !idDocumentosPlanoTrabalho &&
                                 onChangeManual === 'professorNome'
                               ) {
-                                setModoEdicao(true);
+                                if (
+                                  !(
+                                    !form.values.tipoDocumentoId ||
+                                    form.values.tipoDocumentoId ===
+                                      TIPO_DOCUMENTO.DOCUMENTOS ||
+                                    !!idDocumentosPlanoTrabalho ||
+                                    desabilitarCampos
+                                  )
+                                ) {
+                                  setModoEdicao(true);
+                                }
                               }
                             }}
                             buscarOutrosCargos={

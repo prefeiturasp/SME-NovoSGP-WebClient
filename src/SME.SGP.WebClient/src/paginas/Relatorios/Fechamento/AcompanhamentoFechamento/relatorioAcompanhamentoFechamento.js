@@ -87,6 +87,7 @@ const AcompanhamentoFechamento = () => {
     desabilitarListarPendencias,
     setDesabilitarListarPendencias,
   ] = useState(true);
+  const [modoEdicao, setModoEdicao] = useState(false);
 
   const OPCAO_TODAS = useMemo(
     () => ({ valor: OPCAO_TODOS, desc: 'Todas' }),
@@ -138,11 +139,13 @@ const AcompanhamentoFechamento = () => {
     setConsideraHistorico(e.target.checked);
     setAnoLetivo(anoAtual);
     limparCampos(true, true);
+    setModoEdicao(true);
   };
 
   const onChangeAnoLetivo = ano => {
     setAnoLetivo(ano);
     limparCampos(true, true);
+    setModoEdicao(true);
   };
 
   const obterAnosLetivos = useCallback(async () => {
@@ -190,6 +193,7 @@ const AcompanhamentoFechamento = () => {
   const onChangeDre = dre => {
     setDreCodigo(dre);
     limparCampos(false, true);
+    setModoEdicao(true);
   };
 
   const obterDres = useCallback(async () => {
@@ -234,6 +238,7 @@ const AcompanhamentoFechamento = () => {
 
     const ueSelecionada = listaUes?.find(item => item.valor === ue);
     setEscolheuModalidadeInfantil(ueSelecionada?.ehInfantil);
+    setModoEdicao(true);
   };
 
   const obterUes = useCallback(async () => {
@@ -286,6 +291,7 @@ const AcompanhamentoFechamento = () => {
     setTurmasCodigo();
     setModalidade(valor);
     setBimestres(undefined);
+    setModoEdicao(true);
   };
 
   const obterModalidades = useCallback(async ue => {
@@ -327,6 +333,7 @@ const AcompanhamentoFechamento = () => {
   const onChangeSemestre = valor => {
     setSemestre(valor);
     setClicouBotaoGerar(false);
+    setModoEdicao(true);
   };
 
   const obterSemestres = useCallback(
@@ -430,6 +437,7 @@ const AcompanhamentoFechamento = () => {
     setTurmasCodigo(valor);
     setBimestres(undefined);
     setClicouBotaoGerar(false);
+    setModoEdicao(true);
   };
 
   const obterTurmasEJA = useCallback(
@@ -530,6 +538,7 @@ const AcompanhamentoFechamento = () => {
   const onChangeBimestre = valor => {
     setBimestres(valor);
     setClicouBotaoGerar(false);
+    setModoEdicao(true);
   };
 
   const obterBimestres = useCallback(async () => {
@@ -563,6 +572,7 @@ const AcompanhamentoFechamento = () => {
   const onChangeSituacaoFechamento = valor => {
     setSituacaoFechamento(valor);
     setClicouBotaoGerar(false);
+    setModoEdicao(true);
   };
 
   const obterSituacaoFechamento = useCallback(async () => {
@@ -601,6 +611,7 @@ const AcompanhamentoFechamento = () => {
   const onChangeSituacaoConselhoClasse = valor => {
     setSituacaoConselhoClasse(valor);
     setClicouBotaoGerar(false);
+    setModoEdicao(true);
   };
 
   const obterSituacaoConselhoClasse = useCallback(async () => {
@@ -638,6 +649,7 @@ const AcompanhamentoFechamento = () => {
   const onChangeListarPendencias = e => {
     setListarPendencias(e.target.value);
     setClicouBotaoGerar(false);
+    setModoEdicao(true);
   };
 
   useEffect(() => {
@@ -690,7 +702,12 @@ const AcompanhamentoFechamento = () => {
 
   const onClickVoltar = () => history.push('/');
 
-  const onClickCancelar = () => limparCampos(true, true);
+  const onClickCancelar = () => {
+    setConsideraHistorico(false);
+    setAnoLetivo(anoAtual);
+    limparCampos(true, true);
+    setModoEdicao(false);
+  };
 
   const gerar = async () => {
     setCarregandoGeral(true);
@@ -732,6 +749,7 @@ const AcompanhamentoFechamento = () => {
           onClickCancelar={onClickCancelar}
           onClickGerar={gerar}
           desabilitarBtnGerar={desabilitarCampos || desabilitarGerar}
+          modoEdicao={modoEdicao}
         />
       </Cabecalho>
       <Loader loading={carregandoGeral} ignorarTip>

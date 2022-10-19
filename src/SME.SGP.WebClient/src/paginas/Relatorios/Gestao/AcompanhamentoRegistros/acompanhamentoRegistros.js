@@ -61,6 +61,7 @@ const AcompanhamentoRegistros = () => {
   const [desabilitarBtnGerar, setDesabilitarBtnGerar] = useState(true);
   const [carregandoBimestres, setCarregandoBimestres] = useState(false);
   const [consideraHistorico, setConsideraHistorico] = useState(false);
+  const [modoEdicao, setModoEdicao] = useState(false);
 
   const limparCampos = () => {
     setModalidadeId();
@@ -76,6 +77,7 @@ const AcompanhamentoRegistros = () => {
     setDreId();
     setUeId();
     setProfessorCodigo();
+    setModoEdicao(true);
   };
 
   const onChangeAnoLetivo = async valor => {
@@ -83,6 +85,7 @@ const AcompanhamentoRegistros = () => {
     setUeId();
     setAnoLetivo(valor);
     limparCampos();
+    setModoEdicao(true);
   };
 
   const obterAnosLetivos = useCallback(async () => {
@@ -134,6 +137,7 @@ const AcompanhamentoRegistros = () => {
     setUeId();
     setUeId();
     limparCampos();
+    setModoEdicao(true);
   };
 
   const obterDres = useCallback(async () => {
@@ -171,6 +175,7 @@ const AcompanhamentoRegistros = () => {
   const onChangeUe = valor => {
     setUeId(valor);
     limparCampos();
+    setModoEdicao(true);
   };
 
   const obterUes = useCallback(
@@ -215,6 +220,7 @@ const AcompanhamentoRegistros = () => {
   const onChangeModalidade = valor => {
     limparCampos();
     setModalidadeId(valor);
+    setModoEdicao(true);
   };
 
   const obterModalidades = async (ue, ano) => {
@@ -252,6 +258,7 @@ const AcompanhamentoRegistros = () => {
   const onChangeSemestre = valor => {
     setSemestre(valor);
     setClicouBotaoGerar(false);
+    setModoEdicao(true);
   };
 
   const obterSemestres = useCallback(
@@ -304,6 +311,7 @@ const AcompanhamentoRegistros = () => {
     setComponentesCurriculares();
     setBimestres();
     setClicouBotaoGerar(false);
+    setModoEdicao(true);
   };
 
   const obterTurmas = useCallback(
@@ -354,6 +362,7 @@ const AcompanhamentoRegistros = () => {
   const onChangeComponenteCurricular = valor => {
     setComponentesCurriculares(valor);
     setClicouBotaoGerar(false);
+    setModoEdicao(true);
   };
 
   const obterComponentesCurriculares = useCallback(
@@ -422,6 +431,7 @@ const AcompanhamentoRegistros = () => {
   const onChangeBimestre = valor => {
     setBimestres(valor);
     setClicouBotaoGerar(false);
+    setModoEdicao(true);
   };
 
   const obterBimestres = useCallback(async () => {
@@ -452,8 +462,11 @@ const AcompanhamentoRegistros = () => {
   }, [modalidadeId, obterBimestres]);
 
   const onChangeLocalizador = valores => {
-    setProfessorCodigo(valores?.professorRf);
-    setClicouBotaoGerar(false);
+    if (valores?.professorRf) {
+      setProfessorCodigo(valores?.professorRf);
+      setClicouBotaoGerar(false);
+      setModoEdicao(true);
+    }
   };
 
   const cancelar = () => {
@@ -474,6 +487,8 @@ const AcompanhamentoRegistros = () => {
     setTurmasCodigo(undefined);
     setBimestres();
     setProfessorCodigo();
+
+    setModoEdicao(false);
   };
 
   useEffect(() => {
@@ -544,6 +559,7 @@ const AcompanhamentoRegistros = () => {
           desabilitarBtnGerar={desabilitarBtnGerar}
           carregandoGerar={carregandoGerar}
           temLoaderBtnGerar
+          modoEdicao={modoEdicao}
         />
       </Cabecalho>
       <Card padding="24px 24px">

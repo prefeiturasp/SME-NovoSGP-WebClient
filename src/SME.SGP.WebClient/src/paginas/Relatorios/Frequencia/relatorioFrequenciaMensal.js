@@ -1,18 +1,14 @@
 import { Col, Row } from 'antd';
 import React, { useCallback, useEffect, useState } from 'react';
 import {
-  Button,
   CampoNumero,
   Card,
   CheckboxComponent,
-  Colors,
   Loader,
   SelectComponent,
 } from '~/componentes';
 import { Cabecalho, FiltroHelper } from '~/componentes-sgp';
 import {
-  SGP_BUTTON_CANCELAR,
-  SGP_BUTTON_GERAR,
   SGP_CHECKBOX_EXIBIR_HISTORICO,
   SGP_SELECT_ANO_LETIVO,
   SGP_SELECT_DRE,
@@ -37,7 +33,7 @@ import {
   obterTodosMeses,
 } from '~/utils';
 import api from '~/servicos/api';
-import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
+import BotoesAcaoRelatorio from '~/componentes-sgp/botoesAcaoRelatorio';
 
 const RelatorioFrequenciaMensal = () => {
   const [anoAtual] = useState(window.moment().format('YYYY'));
@@ -74,6 +70,7 @@ const RelatorioFrequenciaMensal = () => {
     apenasAlunosPercentualAbaixoDe,
     setApenasAlunosPercentualAbaixoDe,
   ] = useState();
+  const [modoEdicao, setModoEdicao] = useState(false);
 
   const ANO_MINIMO = 2020;
 
@@ -87,6 +84,7 @@ const RelatorioFrequenciaMensal = () => {
     setAnoLetivo(anoAtual);
     setDreId();
     setUeId();
+    setModoEdicao(true);
   };
 
   const onChangeAnoLetivo = async valor => {
@@ -94,6 +92,7 @@ const RelatorioFrequenciaMensal = () => {
     setUeId();
     setAnoLetivo(valor);
     limparCampos();
+    setModoEdicao(true);
   };
 
   const obterAnosLetivos = useCallback(async () => {
@@ -146,6 +145,7 @@ const RelatorioFrequenciaMensal = () => {
     setUeId();
     setUeId();
     limparCampos();
+    setModoEdicao(true);
   };
 
   const obterDres = useCallback(async () => {
@@ -189,6 +189,7 @@ const RelatorioFrequenciaMensal = () => {
   const onChangeUe = valor => {
     setUeId(valor);
     limparCampos();
+    setModoEdicao(true);
   };
 
   const obterUes = useCallback(
@@ -244,6 +245,7 @@ const RelatorioFrequenciaMensal = () => {
   const onChangeModalidade = valor => {
     limparCampos();
     setModalidadeId(valor);
+    setModoEdicao(true);
   };
 
   const obterModalidades = async (ue, ano) => {
@@ -280,6 +282,7 @@ const RelatorioFrequenciaMensal = () => {
 
   const onChangeSemestre = valor => {
     setSemestre(valor);
+    setModoEdicao(true);
   };
 
   const obterSemestres = useCallback(async () => {
@@ -324,6 +327,7 @@ const RelatorioFrequenciaMensal = () => {
 
   const onChangeTurma = valor => {
     setTurmasCodigo(valor);
+    setModoEdicao(true);
   };
 
   const obterTurmas = useCallback(
@@ -393,6 +397,7 @@ const RelatorioFrequenciaMensal = () => {
     setMesesReferencias();
     setApenasAlunosPercentualAbaixoDe();
     setTipoFormatoRelatorio('1');
+    setModoEdicao(false);
   };
 
   const montarMeses = useCallback(() => {
@@ -413,9 +418,13 @@ const RelatorioFrequenciaMensal = () => {
 
   const onChangeMes = valor => {
     setMesesReferencias(valor);
+    setModoEdicao(true);
   };
 
-  const onChangeFormato = valor => setTipoFormatoRelatorio(valor);
+  const onChangeFormato = valor => {
+    setTipoFormatoRelatorio(valor);
+    setModoEdicao(true);
+  };
 
   useEffect(() => {
     const temModalidadeEja = String(modalidadeId) === String(ModalidadeDTO.EJA);
@@ -473,34 +482,15 @@ const RelatorioFrequenciaMensal = () => {
   return (
     <>
       <Cabecalho pagina="Relatório de frequência mensal">
-        <Row gutter={[8, 8]} type="flex">
-          <Col>
-            <BotaoVoltarPadrao onClick={() => history.push(URL_HOME)} />
-          </Col>
-          <Col>
-            <Button
-              id={SGP_BUTTON_CANCELAR}
-              label="Cancelar"
-              color={Colors.Azul}
-              border
-              bold
-              onClick={cancelar}
-            />
-          </Col>
-          <Col>
-            <Loader loading={carregandoGerar} ignorarTip>
-              <Button
-                id={SGP_BUTTON_GERAR}
-                icon="print"
-                label="Gerar"
-                color={Colors.Roxo}
-                bold
-                onClick={gerar}
-                disabled={desabilitarBtnGerar}
-              />
-            </Loader>
-          </Col>
-        </Row>
+        <BotoesAcaoRelatorio
+          onClickVoltar={() => history.push(URL_HOME)}
+          onClickCancelar={cancelar}
+          onClickGerar={gerar}
+          desabilitarBtnGerar={desabilitarBtnGerar}
+          carregandoGerar={carregandoGerar}
+          temLoaderBtnGerar
+          modoEdicao={modoEdicao}
+        />
       </Cabecalho>
       <Card padding="24px 24px">
         <Col span={24}>
@@ -655,6 +645,7 @@ const RelatorioFrequenciaMensal = () => {
                 esconderSetas
                 onChange={valorNovo => {
                   setApenasAlunosPercentualAbaixoDe(valorNovo);
+                  setModoEdicao(true);
                 }}
                 value={apenasAlunosPercentualAbaixoDe}
                 min={1}

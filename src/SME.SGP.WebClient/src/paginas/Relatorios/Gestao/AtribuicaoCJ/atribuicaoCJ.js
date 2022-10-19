@@ -53,6 +53,8 @@ const AtribuicaoCJ = () => {
   const [carregandoGeral, setCarregandoGeral] = useState(false);
   const [clicouBotaoGerar, setClicouBotaoGerar] = useState(false);
 
+  const [modoEdicao, setModoEdicao] = useState(false);
+
   const opcoesExibir = [
     { label: 'Não', value: false },
     { label: 'Sim', value: true },
@@ -79,6 +81,7 @@ const AtribuicaoCJ = () => {
     setExibirAulas(false);
     setExibirAtribuicoesExporadicas(false);
     setTipoVisualizacao(1);
+    setModoEdicao(false);
   };
 
   const onClickGerar = async () => {
@@ -123,6 +126,7 @@ const AtribuicaoCJ = () => {
     setModalidadeId();
     setTurmaId([]);
     setAnoLetivo(valor);
+    setModoEdicao(true);
   };
 
   const onChangeDre = valor => {
@@ -132,28 +136,33 @@ const AtribuicaoCJ = () => {
     setTurmaId([]);
     setUeCodigo(undefined);
     setClicouBotaoGerar(false);
+    setModoEdicao(true);
   };
 
   const onChangeUe = valor => {
     setModalidadeId();
     setTurmaId([]);
     setUeCodigo(valor);
+    setModoEdicao(true);
   };
 
   const onChangeModalidade = valor => {
     setTurmaId([]);
     setModalidadeId(valor);
     setClicouBotaoGerar(false);
+    setModoEdicao(true);
   };
 
   const onChangeSemestre = valor => {
     setSemestre(valor);
     setClicouBotaoGerar(false);
+    setModoEdicao(true);
   };
 
   const onChangeTurma = valor => {
     setTurmaId(valor);
     setClicouBotaoGerar(false);
+    setModoEdicao(true);
   };
 
   const obterAnosLetivos = useCallback(async () => {
@@ -379,6 +388,7 @@ const AtribuicaoCJ = () => {
           onClickCancelar={onClickCancelar}
           onClickGerar={onClickGerar}
           desabilitarBtnGerar={desabilitarBtnGerar}
+          modoEdicao={modoEdicao}
         />
       </Cabecalho>
       <Loader loading={carregandoGeral}>
@@ -497,6 +507,7 @@ const AtribuicaoCJ = () => {
                 onChange={valores => {
                   if (valores && valores.professorRf) {
                     setUsuarioRf(valores.professorRf);
+                    setModoEdicao(true);
                   } else {
                     setUsuarioRf(undefined);
                   }
@@ -516,6 +527,7 @@ const AtribuicaoCJ = () => {
                   onChange={e => {
                     setExibirAulas(e.target.value);
                     setClicouBotaoGerar(false);
+                    setModoEdicao(true);
                   }}
                   value={exibirAulas}
                 />
@@ -528,6 +540,7 @@ const AtribuicaoCJ = () => {
                   onChange={e => {
                     setExibirAtribuicoesExporadicas(e.target.value);
                     setClicouBotaoGerar(false);
+                    setModoEdicao(true);
                   }}
                   value={exibirAtribuicoesExporadicas}
                 />
@@ -540,6 +553,7 @@ const AtribuicaoCJ = () => {
                   onChange={e => {
                     setTipoVisualizacao(e.target.value);
                     setClicouBotaoGerar(false);
+                    setModoEdicao(true);
                   }}
                   value={tipoVisualizacao}
                 />

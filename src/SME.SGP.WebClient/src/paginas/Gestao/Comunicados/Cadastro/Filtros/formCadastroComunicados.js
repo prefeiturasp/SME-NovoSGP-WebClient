@@ -331,7 +331,7 @@ const FormCadastroComunicados = props => {
                     desabilitar={desabilitarCampos || !!comunicadoId}
                   />
                 </div>
-                <div className="col-sm-12 col-md-12 col-lg-8 col-xl-6 mb-2">
+                <div className="col-sm-12 col-md-12 col-lg-12 col-xl-5 mb-2">
                   <TurmasComunicados
                     form={form}
                     onChangeCampos={onChangeCampos}

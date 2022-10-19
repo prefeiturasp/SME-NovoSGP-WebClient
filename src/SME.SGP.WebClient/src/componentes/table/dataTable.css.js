@@ -3,6 +3,7 @@ import { Base } from '../colors';
 
 export const Container = styled.div`
   .ocultar-coluna-multi-selecao {
+    background-color: 'black'!important;
     .ant-table-selection-column {
       display: none !important;
     }
@@ -47,11 +48,20 @@ export const Container = styled.div`
   .ant-table-tbody
     > tr:hover:not(.ant-table-expanded-row):not(.ant-table-row-selected)
     > td {
-    ${({ semHover }) =>
-      semHover
-        ? 'background: transparent !important;'
-        : `background: ${Base.Roxo} !important;
-             color: ${Base.Branco} !important;
+      ${({ semHover }) =>
+        semHover
+          ? css`
+                background: transparent !important;
+              }
+            `
+          : css`
+              background: ${Base.Roxo} !important;
+              color: ${Base.Branco} !important;
+
+              .button-reiniciar-hover {
+                color: ${Base.Branco} !important;
+                border-color: ${Base.Branco} !important;
+              }
             `}
   }
 

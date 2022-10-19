@@ -20,9 +20,7 @@ import {
   setExibirLoaderEncaminhamentoAEE,
   setExibirModalDevolverAEE,
   setExibirModalEncerramentoEncaminhamentoAEE,
-  setListaSecoesEmEdicao,
 } from '~/redux/modulos/encaminhamentoAEE/actions';
-import { setQuestionarioDinamicoEmEdicao } from '~/redux/modulos/questionarioDinamico/actions';
 import { confirmar, erros, sucesso } from '~/servicos';
 import history from '~/servicos/history';
 import ServicoEncaminhamentoAEE from '~/servicos/Paginas/Relatorios/AEE/ServicoEncaminhamentoAEE';
@@ -54,7 +52,7 @@ const BotoesAcoesEncaminhamentoAEE = props => {
   const permissoesTela =
     usuario.permissoes[RotasDto.RELATORIO_AEE_ENCAMINHAMENTO];
 
-  const onClickSalvar = async () => {
+  const onClickSalvarRascunho = async () => {
     const encaminhamentoId = match?.params?.id;
     let situacao = situacaoAEE.Rascunho;
 
@@ -65,12 +63,12 @@ const BotoesAcoesEncaminhamentoAEE = props => {
     const salvou = await ServicoEncaminhamentoAEE.salvarEncaminhamento(
       encaminhamentoId,
       situacao,
-      false
+      false,
+      false,
+      true
     );
     if (salvou) {
       sucesso(`Rascunho salvo com sucesso`);
-      dispatch(setQuestionarioDinamicoEmEdicao(false));
-      dispatch(setListaSecoesEmEdicao([]));
     }
   };
 
@@ -266,11 +264,14 @@ const BotoesAcoesEncaminhamentoAEE = props => {
           color={Colors.Azul}
           border
           bold
-          onClick={onClickSalvar}
+          onClick={onClickSalvarRascunho}
           disabled={
             desabilitarCamposEncaminhamentoAEE ||
             !questionarioDinamicoEmEdicao ||
-            (match?.params?.id && !dadosEncaminhamento?.podeEditar)
+            (match?.params?.id && !dadosEncaminhamento?.podeEditar) ||
+            (match?.params?.id &&
+              dadosEncaminhamento?.situacao !== situacaoAEE.Rascunho &&
+              dadosEncaminhamento?.situacao !== situacaoAEE.Deferido)
           }
         />
       </Col>

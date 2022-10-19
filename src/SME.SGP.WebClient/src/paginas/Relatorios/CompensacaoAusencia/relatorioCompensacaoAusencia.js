@@ -1,10 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { Col, Row } from 'antd';
 import { Loader, SelectComponent } from '~/componentes';
 import { Cabecalho } from '~/componentes-sgp';
-import Button from '~/componentes/button';
 import Card from '~/componentes/card';
-import { Colors } from '~/componentes/colors';
 import modalidade from '~/dtos/modalidade';
 import AbrangenciaServico from '~/servicos/Abrangencia';
 import { erros, sucesso } from '~/servicos/alertas';
@@ -16,12 +13,8 @@ import ServicoFiltroRelatorio from '~/servicos/Paginas/FiltroRelatorio/ServicoFi
 import AlertaModalidadeInfantil from '~/componentes-sgp/AlertaModalidadeInfantil/alertaModalidadeInfantil';
 import ServicoRelatorioCompensacaoAusencia from '~/servicos/Paginas/Relatorios/CompensacaoAusencia/ServicoRelatorioCompensacaoAusencia';
 import { ordenarListaMaiorParaMenor } from '~/utils/funcoes/gerais';
-import {
-  SGP_BUTTON_CANCELAR,
-  SGP_BUTTON_GERAR,
-} from '~/componentes-sgp/filtro/idsCampos';
-import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
 import { URL_HOME } from '~/constantes';
+import BotoesAcaoRelatorio from '~/componentes-sgp/botoesAcaoRelatorio';
 
 const RelatorioCompensacaoAusencia = () => {
   const [carregandoGerar, setCarregandoGerar] = useState(false);
@@ -72,6 +65,9 @@ const RelatorioCompensacaoAusencia = () => {
   );
   const [bimestre, setBimestre] = useState(undefined);
 
+  const [modoEdicao, setModoEdicao] = useState(false);
+  const [desabilitarBtnGerar, setDesabilitarBtnGerar] = useState(true);
+
   const onChangeAnoLetivo = async valor => {
     setDreId();
     setUeId();
@@ -79,6 +75,7 @@ const RelatorioCompensacaoAusencia = () => {
     setTurmaId();
     setComponentesCurricularesId();
     setAnoLetivo(valor);
+    setModoEdicao(true);
   };
 
   const onChangeDre = valor => {
@@ -88,6 +85,7 @@ const RelatorioCompensacaoAusencia = () => {
     setTurmaId();
     setComponentesCurricularesId();
     setUeId(undefined);
+    setModoEdicao(true);
   };
 
   const onChangeUe = valor => {
@@ -95,29 +93,35 @@ const RelatorioCompensacaoAusencia = () => {
     setTurmaId();
     setComponentesCurricularesId();
     setUeId(valor);
+    setModoEdicao(true);
   };
 
   const onChangeModalidade = valor => {
     setTurmaId();
     setComponentesCurricularesId();
     setModalidadeId(valor);
+    setModoEdicao(true);
   };
 
   const onChangeSemestre = valor => {
     setSemestre(valor);
+    setModoEdicao(true);
   };
 
   const onChangeTurma = valor => {
     setComponentesCurricularesId();
     setTurmaId(valor);
+    setModoEdicao(true);
   };
 
   const onChangeComponenteCurricular = valor => {
     setComponentesCurricularesId([valor]);
+    setModoEdicao(true);
   };
 
   const onChangeBimestre = valor => {
     setBimestre(valor);
+    setModoEdicao(true);
   };
 
   const [anoAtual] = useState(window.moment().format('YYYY'));
@@ -399,18 +403,33 @@ const RelatorioCompensacaoAusencia = () => {
     await setTurmaId(undefined);
     await setAnoLetivo();
     await setAnoLetivo(anoAtual);
+    setModoEdicao(false);
+    setDesabilitarBtnGerar(true);
   };
 
-  const desabilitarGerar =
-    !anoLetivo ||
-    !dreId ||
-    !ueId ||
-    !modalidadeId ||
-    (String(modalidadeId) === String(modalidade.EJA) ? !semestre : false) ||
-    !turmaId ||
-    !componentesCurricularesId ||
-    !bimestre ||
-    String(modalidadeId) === String(modalidade.INFANTIL);
+  useEffect(() => {
+    const desabilitar =
+      !anoLetivo ||
+      !dreId ||
+      !ueId ||
+      !modalidadeId ||
+      (Number(modalidadeId) === modalidade.EJA ? !semestre : false) ||
+      !turmaId ||
+      !componentesCurricularesId ||
+      !bimestre ||
+      Number(modalidadeId) === modalidade.INFANTIL;
+
+    setDesabilitarBtnGerar(desabilitar);
+  }, [
+    anoLetivo,
+    dreId,
+    ueId,
+    modalidadeId,
+    semestre,
+    turmaId,
+    componentesCurricularesId,
+    bimestre,
+  ]);
 
   const gerar = async () => {
     setCarregandoGerar(true);
@@ -435,6 +454,7 @@ const RelatorioCompensacaoAusencia = () => {
       sucesso(
         'Solicitação de geração do relatório gerada com sucesso. Em breve você receberá uma notificação com o resultado.'
       );
+      setDesabilitarBtnGerar(true);
     }
   };
 
@@ -445,37 +465,15 @@ const RelatorioCompensacaoAusencia = () => {
         validarModalidadeFiltroPrincipal={false}
       />
       <Cabecalho pagina="Relatório de compensação de ausência">
-        <Row gutter={[8, 8]} type="flex">
-          <Col>
-            <BotaoVoltarPadrao onClick={() => history.push(URL_HOME)} />
-          </Col>
-          <Col>
-            <Button
-              id={SGP_BUTTON_CANCELAR}
-              label="Cancelar"
-              color={Colors.Roxo}
-              border
-              bold
-              onClick={() => {
-                cancelar();
-              }}
-            />
-          </Col>
-          <Col>
-            <Loader loading={carregandoGerar} className="d-flex w-auto" tip="">
-              <Button
-                id={SGP_BUTTON_GERAR}
-                icon="print"
-                label="Gerar"
-                color={Colors.Azul}
-                border
-                bold
-                onClick={gerar}
-                disabled={desabilitarGerar}
-              />
-            </Loader>
-          </Col>
-        </Row>
+        <BotoesAcaoRelatorio
+          onClickVoltar={() => history.push(URL_HOME)}
+          onClickCancelar={cancelar}
+          onClickGerar={gerar}
+          desabilitarBtnGerar={desabilitarBtnGerar}
+          carregandoGerar={carregandoGerar}
+          temLoaderBtnGerar
+          modoEdicao={modoEdicao}
+        />
       </Cabecalho>
       <Card>
         <div className="col-md-12">

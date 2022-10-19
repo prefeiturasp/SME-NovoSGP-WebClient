@@ -125,18 +125,20 @@ function AtribuicaoCJForm({ match, location }) {
     }
   };
 
-  const onClickVoltar = async () => {
-    if (!novoRegistro && listaProfessores.some(x => x.substituir === true)) {
+  const onClickVoltar = async form => {
+    if (modoEdicao) {
       const confirmou = await confirmar(
         'Atenção',
-        'Você não salvou as informações preenchidas.',
-        'Deseja realmente cancelar as alterações?'
+        '',
+        'Suas alterações não foram salvas, deseja salvar agora?'
       );
       if (confirmou) {
-        history.push('/gestao/atribuicao-cjs');
+        validaAntesDoSubmit(form);
+      } else {
+        history.push(RotasDto.ATRIBUICAO_CJ_LISTA);
       }
     } else {
-      history.push('/gestao/atribuicao-cjs');
+      history.push(RotasDto.ATRIBUICAO_CJ_LISTA);
     }
   };
 
@@ -338,7 +340,7 @@ function AtribuicaoCJForm({ match, location }) {
                   labelBotaoPrincipal={novoRegistro ? 'Salvar' : 'Alterar'}
                   idBotaoPrincipal={SGP_BUTTON_SALVAR_ALTERAR}
                   onClickBotaoPrincipal={() => onClickBotaoPrincipal(form)}
-                  onClickVoltar={() => onClickVoltar()}
+                  onClickVoltar={() => onClickVoltar(form)}
                   modoEdicao={modoEdicao}
                   desabilitarBotaoPrincipal={!novoRegistro && !modoEdicao}
                 />
