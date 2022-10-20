@@ -15,7 +15,7 @@ const ObjectCardEstudantePlanoAEE = () => {
     <ObjectCardEstudante
       codigoAluno={dadosCollapseLocalizarEstudante?.codigoAluno}
       anoLetivo={dadosCollapseLocalizarEstudante?.anoLetivo}
-      codigoTurma={dadosCollapseLocalizarEstudante?.codigoTurma}
+      codigoTurma={dadosCollapseLocalizarEstudante?.codigoTurma?.codigoTurma}
       exibirBotaoImprimir={false}
       exibirFrequencia={false}
       permiteAlterarImagem={!desabilitarCamposPlanoAEE}
