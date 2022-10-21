@@ -605,6 +605,28 @@ const DiarioBordo = ({ match }) => {
     }
   };
 
+  const onClickExcluir = async form => {
+    const confirmado = await confirmar(
+      'Excluir',
+      '',
+      'Você tem certeza que deseja excluir esse diário de bordo?'
+    );
+
+    if (confirmado) {
+      setCarregandoGeral(true);
+      const resultado = await ServicoDiarioBordo.excluirDiarioBordo(
+        form.values.aulaId
+      ).catch(e => {
+        erros(e);
+      });
+      if (resultado && resultado.status === 200) {
+        sucesso('Diário de bordo excluído com sucesso');
+        setDataSelecionada();
+      }
+      setCarregandoGeral(false);
+    }
+  };
+
   const excluirObservacao = async obs => {
     const confirmado = await confirmar(
       'Excluir',
@@ -679,10 +701,13 @@ const DiarioBordo = ({ match }) => {
                   onClickVoltar(form, observacaoEmEdicao, novaObservacao)
                 }
                 onClickCancelar={() => onClickCancelar(form)}
+                onClickExcluir={() => onClickExcluir(form)}
                 validaAntesDoSubmit={() => validaAntesDoSubmit(form, true)}
+                disabledExcluir={!aulaId}
                 modoEdicao={modoEdicao}
                 desabilitarCampos={desabilitarCampos}
                 turmaInfantil={turmaInfantil}
+                permissoesTela={permissoesTela}
                 componenteCurricularSelecionado={
                   componenteCurricularSelecionado
                 }
