@@ -8,6 +8,14 @@ import {
   setLimparDadosAtribuicaoResponsavel,
 } from '~/redux/modulos/collapseAtribuicaoResponsavel/actions';
 import LocalizadorFuncionario from '../LocalizadorFuncionario';
+import SelectComponent from '~/componentes/select';
+
+const array = [
+  { codigoRF: '7856123', nomeServidor: 'João GOMES DOS SANTOS' },
+  { codigoRF: '7856123', nomeServidor: 'João GOMES DOS SANTOS' },
+  { codigoRF: '7856123', nomeServidor: 'João GOMES DOS SANTOS' },
+  { codigoRF: '7856123', nomeServidor: 'João GOMES DOS SANTOS' },
+];
 
 const CollapseAtribuicaoResponsavelDados = props => {
   const {
@@ -17,6 +25,7 @@ const CollapseAtribuicaoResponsavelDados = props => {
     codigoTurma,
     url,
     clickRemoverResponsavel,
+    usarAtribuicaoPaai,
   } = props;
   const dispatch = useDispatch();
 
@@ -78,21 +87,37 @@ const CollapseAtribuicaoResponsavelDados = props => {
   return (
     <div className="row">
       <div className="col-md-12 mb-2">
-        <div className="row">
-          <LocalizadorFuncionario
-            id="funcionario"
+        {usarAtribuicaoPaai ? (
+          <SelectComponent
+            label="PAAIS DRE"
+            valueOption="codigoRF"
+            valueText="nomeServidor"
+            lista={array}
+            showSearch
+            valueSelect={funcionarioLocalizadorSelecionado?.codigoRF}
+            className
             onChange={onChangeLocalizador}
-            codigoTurma={codigoTurma}
-            limparCampos={limparCampos}
-            url={url}
-            valorInicial={{
-              codigoRF: dadosCollapseAtribuicaoResponsavel?.codigoRF,
-              nomeServidor: dadosCollapseAtribuicaoResponsavel?.nomeServidor,
-            }}
-            desabilitado={!!dadosCollapseAtribuicaoResponsavel?.podeEditar}
+            allowClear={false}
+            searchValue
           />
-        </div>
+        ) : (
+          <div className="row">
+            <LocalizadorFuncionario
+              id="funcionario"
+              onChange={onChangeLocalizador}
+              codigoTurma={codigoTurma}
+              limparCampos={limparCampos}
+              url={url}
+              valorInicial={{
+                codigoRF: dadosCollapseAtribuicaoResponsavel?.codigoRF,
+                nomeServidor: dadosCollapseAtribuicaoResponsavel?.nomeServidor,
+              }}
+              desabilitado={!!dadosCollapseAtribuicaoResponsavel?.podeEditar}
+            />
+          </div>
+        )}
       </div>
+      {console.log(dadosCollapseAtribuicaoResponsavel, 'AQ')}
       <div className="col-md-12 d-flex justify-content-end pb-4 mt-2">
         <Button
           id="btn-cancelar"

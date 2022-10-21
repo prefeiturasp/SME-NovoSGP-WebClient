@@ -1,3 +1,4 @@
+import { data } from 'jquery';
 import QuestionarioDinamicoFuncoes from '~/componentes-sgp/QuestionarioDinamico/Funcoes/QuestionarioDinamicoFuncoes';
 import { RotasDto } from '~/dtos';
 import tipoQuestao from '~/dtos/tipoQuestao';
@@ -509,6 +510,20 @@ class ServicoEncaminhamentoAEE {
 
   devolverEncaminhamentoAEE = params => {
     return api.post(`${urlPadrao}/devolver`, params);
+  };
+
+  obterResponsavelPAAI = () => {
+    const mock = {
+      data: [
+        { codigoRF: '88888', nomeServidor: 'JOAO TESTE API' },
+        { codigoRF: '99999', nomeServidor: 'MATHEUS TESTE API2' },
+      ],
+    };
+    return new Promise(resolve => {
+      setTimeout(() => {
+        resolve(mock);
+      }, 2000);
+    });
   };
 }
 
