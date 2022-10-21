@@ -188,6 +188,7 @@ const BotoesAcoesPlanoAEE = props => {
       });
       if (resultado && resultado.status === 200) {
         sucesso('Plano excluído com sucesso');
+        history.push(RotasDto.RELATORIO_AEE_PLANO);
       }
     }
   };
