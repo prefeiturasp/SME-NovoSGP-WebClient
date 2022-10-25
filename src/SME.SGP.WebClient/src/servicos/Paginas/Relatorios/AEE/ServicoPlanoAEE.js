@@ -417,6 +417,10 @@ class ServicoPlanoAEE {
     return api.post(url, dados);
   };
 
+  excluirPlano = id => {
+    return api.delete(`${urlPadrao}/${id}`);
+  };
+
   excluirObservacao = id => {
     return api.delete(`${urlPadrao}/observacoes/${id}`);
   };

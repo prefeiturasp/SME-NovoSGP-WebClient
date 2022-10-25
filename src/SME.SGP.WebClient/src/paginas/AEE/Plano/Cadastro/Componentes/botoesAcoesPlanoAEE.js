@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Colors } from '~/componentes';
 import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
+import BotaoExcluirPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoExcluirPadrao';
 import {
   SGP_BUTTON_ATRIBUIR,
   SGP_BUTTON_CANCELAR,
@@ -173,6 +174,25 @@ const BotoesAcoesPlanoAEE = props => {
     }
   };
 
+  const onClickExcluir = async () => {
+    const confirmado = await confirmar(
+      'Excluir',
+      '',
+      'Você tem certeza que deseja excluir este plano?'
+    );
+    if (confirmado) {
+      const resultado = await ServicoPlanoAEE.excluirPlano(
+        planoAEEDados?.id
+      ).catch(e => {
+        erros(e);
+      });
+      if (resultado && resultado.status === 200) {
+        sucesso('Plano excluído com sucesso');
+        history.push(RotasDto.RELATORIO_AEE_PLANO);
+      }
+    }
+  };
+
   const onClickCancelar = async () => {
     if (
       !desabilitarCamposPlanoAEE &&
@@ -237,6 +257,13 @@ const BotoesAcoesPlanoAEE = props => {
         onClick={onClickSalvar}
         disabled={desabilitarBotaoSalvar}
       />
+      {planoAEEDados?.permitirExcluir && (
+        <BotaoExcluirPadrao
+          className="ml-2"
+          disabled={!permissoesTela || !planoAEEDados?.permitirExcluir}
+          onClick={onClickExcluir}
+        />
+      )}
       <Button
         id={SGP_BUTTON_DEVOLVER}
         label="Devolver"

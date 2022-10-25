@@ -27,6 +27,7 @@ const ModalImpressao = ({ dadosAlunos, componenteCurricularId }) => {
   );
   const [alunosSelecionados, setAlunosSelecionados] = useState([]);
   const [imprimirTodosBimestres, setImprimirTodosBimestres] = useState(false);
+  const [imprimirFreqDiaria, setImprimirFreqDiaria] = useState(false);
   const [desabilitarBotaoGerar, setDesabilitarBotaoGerar] = useState(false);
 
   const opcaoExibirPendenciasResolvidas = [
@@ -82,6 +83,7 @@ const ModalImpressao = ({ dadosAlunos, componenteCurricularId }) => {
       dreCodigo: turmaSelecionada?.dre,
       ueCodigo: turmaSelecionada?.unidadeEscolar,
       bimestre,
+      imprimirFrequenciaDiaria: imprimirFreqDiaria,
       turmaCodigo: turmaSelecionada?.turma,
     }).catch(e => erros(e));
     if (retorno?.status === 200) {
@@ -147,6 +149,14 @@ const ModalImpressao = ({ dadosAlunos, componenteCurricularId }) => {
         className="pb-3"
         onChangeCheckbox={e => setImprimirTodosBimestres(e.target.checked)}
         checked={imprimirTodosBimestres}
+      />
+
+      <CheckboxComponent
+        id="imprimir-frequencia-diaria"
+        label="Imprimir frequência diária"
+        className="pb-3"
+        onChangeCheckbox={e => setImprimirFreqDiaria(e.target.checked)}
+        checked={imprimirFreqDiaria}
       />
 
       <RadioGroupButtonCustomizado
