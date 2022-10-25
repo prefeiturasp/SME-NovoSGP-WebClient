@@ -12,10 +12,7 @@ import {
 } from '~/componentes';
 import { Cabecalho } from '~/componentes-sgp';
 import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
-import {
-  SGP_SELECT_DRE,
-  SGP_SELECT_UE,
-} from '~/componentes-sgp/filtro/idsCampos';
+import { SGP_SELECT_DRE, SGP_SELECT_UE } from '~/constantes/ids/select';
 import { OPCAO_TODOS, URL_HOME } from '~/constantes';
 import RotasDto from '~/dtos/rotasDto';
 import LoginHelper from '~/paginas/Login/loginHelper';

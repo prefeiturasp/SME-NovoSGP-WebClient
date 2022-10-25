@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import React, { useCallback, useContext, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { Loader, SelectComponent } from '~/componentes';
-import { SGP_SELECT_PERIODO_POR_COMPONENTE_CURRICULAR } from '~/componentes-sgp/filtro/idsCampos';
+import { SGP_SELECT_PERIODO_POR_COMPONENTE_CURRICULAR } from '~/constantes/ids/select';
 import { erros } from '~/servicos';
 import ServicoPeriodoEscolar from '~/servicos/Paginas/Calendario/ServicoPeriodoEscolar';
 import ListaoContext from '../../../listaoContext';

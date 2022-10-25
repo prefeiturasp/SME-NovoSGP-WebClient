@@ -20,7 +20,7 @@ import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPad
 import {
   SGP_BUTTON_ALTERAR_CADASTRAR,
   SGP_BUTTON_CANCELAR,
-} from '~/componentes-sgp/filtro/idsCampos';
+} from '~/constantes/ids/button';
 import { URL_HOME } from '~/constantes';
 import { periodo, RotasDto } from '~/dtos';
 import { ContainerColumnReverse } from '~/paginas/Planejamento/Anual/planoAnual.css';

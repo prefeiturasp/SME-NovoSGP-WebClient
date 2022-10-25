@@ -19,7 +19,7 @@ import {
   SGP_SELECT_FILTRO_PRINCIPAL_UE,
   SGP_CAMPO_FILTRO_PRINCIPAL_PESQUISAR_TURMA,
   SGP_BUTTON_FILTRO_PRINCIPAL_EXPANDIR_RETRAIR_FILTRO,
-} from './idsCampos';
+} from '../../constantes/ids/filtro-principal';
 
 import Grid from '~/componentes/grid';
 import Button from '~/componentes/button';

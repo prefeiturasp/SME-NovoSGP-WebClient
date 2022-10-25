@@ -17,11 +17,12 @@ import { Cabecalho } from '~/componentes-sgp';
 import {
   SGP_BUTTON_ALTERAR_CADASTRAR,
   SGP_BUTTON_CANCELAR,
-} from '~/componentes-sgp/filtro/idsCampos';
+} from '~/constantes/ids/button';
 import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
 import BotaoExcluirPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoExcluirPadrao';
 import { Label } from '~/componentes';
 
+// eslint-disable-next-line react/prop-types
 const TipoEventosForm = ({ match }) => {
   const botaoCadastrarRef = useRef();
   const campoDescricaoRef = useRef();
@@ -77,8 +78,8 @@ const TipoEventosForm = ({ match }) => {
   `;
 
   useEffect(() => {
-    if (match && match.params && match.params.id) {
-      setIdTipoEvento(match.params.id);
+    if (match?.params?.id) {
+      setIdTipoEvento(match?.params?.id);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);

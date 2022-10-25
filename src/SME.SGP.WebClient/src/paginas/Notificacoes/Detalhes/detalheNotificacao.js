@@ -25,7 +25,7 @@ import {
   SGP_BUTTON_ACEITAR,
   SGP_BUTTON_LIDA,
   SGP_BUTTON_RECUSAR,
-} from '~/componentes-sgp/filtro/idsCampos';
+} from '~/constantes/ids/button';
 import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
 import BotaoExcluirPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoExcluirPadrao';
 

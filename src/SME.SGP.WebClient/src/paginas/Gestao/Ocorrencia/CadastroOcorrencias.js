@@ -25,7 +25,7 @@ import {
   SGP_BUTTON_ALTERAR_CADASTRAR,
   SGP_BUTTON_CANCELAR,
   SGP_BUTTON_IMPRIMIR,
-} from '~/componentes-sgp/filtro/idsCampos';
+} from '~/constantes/ids/button';
 import JoditEditor from '~/componentes/jodit-editor/joditEditor';
 import { RotasDto } from '~/dtos';
 import {

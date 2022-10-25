@@ -8,7 +8,7 @@ import RotasDto from '~/dtos/rotasDto';
 import Filtro from './componentes/Filtro';
 import servicoTipoAvaliaco from '~/servicos/Paginas/TipoAvaliacao';
 import { sucesso, confirmar, erro, erros } from '~/servicos/alertas';
-import { SGP_BUTTON_NOVO } from '~/componentes-sgp/filtro/idsCampos';
+import { SGP_BUTTON_NOVO } from '~/constantes/ids/button';
 
 const TipoAvaliacaoLista = () => {
   const [itensSelecionados, setItensSelecionados] = useState([]);

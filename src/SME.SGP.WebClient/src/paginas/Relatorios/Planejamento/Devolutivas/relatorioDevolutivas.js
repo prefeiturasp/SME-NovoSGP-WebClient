@@ -13,7 +13,7 @@ import {
   FiltroHelper,
 } from '~/componentes-sgp';
 import BotoesAcaoRelatorio from '~/componentes-sgp/botoesAcaoRelatorio';
-import { SGP_SELECT_COMPONENTE_CURRICULAR } from '~/componentes-sgp/filtro/idsCampos';
+import { SGP_SELECT_COMPONENTE_CURRICULAR } from '~/constantes/ids/select';
 import { ANO_INICIO_INFANTIL, OPCAO_TODOS } from '~/constantes/constantes';
 import { ModalidadeDTO } from '~/dtos';
 import {
