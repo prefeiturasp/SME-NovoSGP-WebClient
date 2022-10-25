@@ -216,11 +216,11 @@ function Localizador({
   }, [form?.initialValues]);
 
   useEffect(() => {
-    if (dreId && validacaoDesabilitaPerfilProfessor()) {
+    if (dreId && ueId && validacaoDesabilitaPerfilProfessor()) {
       onBuscarPorRF({ rf: usuarioRf });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [dreId, ehPerfilProfessor, usuarioRf, onBuscarPorRF]);
+  }, [dreId, ueId, ehPerfilProfessor, usuarioRf, onBuscarPorRF]);
 
   useEffect(() => {
     if (form) {
