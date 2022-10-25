@@ -11,7 +11,7 @@ import {
 import {
   SGP_BUTTON_SALVAR_MODAL,
   SGP_BUTTON_VOLTAR_MODAL,
-} from '~/componentes-sgp/filtro/idsCampos';
+} from '~/constantes/ids/button';
 import Button from '~/componentes/button';
 import { confirmar } from '~/servicos';
 

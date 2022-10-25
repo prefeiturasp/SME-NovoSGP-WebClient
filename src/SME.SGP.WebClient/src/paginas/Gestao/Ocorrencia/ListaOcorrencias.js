@@ -14,7 +14,7 @@ import { Cabecalho } from '~/componentes-sgp';
 import AlertaPermiteSomenteTurmaInfantil from '~/componentes-sgp/AlertaPermiteSomenteTurmaInfantil/alertaPermiteSomenteTurmaInfantil';
 import BotaoExcluirPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoExcluirPadrao';
 import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
-import { SGP_BUTTON_NOVO } from '~/componentes-sgp/filtro/idsCampos';
+import { SGP_BUTTON_NOVO } from '~/constantes/ids/button';
 import { RotasDto } from '~/dtos';
 import modalidade from '~/dtos/modalidade';
 import {

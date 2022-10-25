@@ -23,7 +23,7 @@ import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPad
 import {
   SGP_BUTTON_CANCELAR,
   SGP_BUTTON_SALVAR,
-} from '~/componentes-sgp/filtro/idsCampos';
+} from '~/constantes/ids/button';
 import { RotasDto } from '~/dtos';
 import {
   confirmar,

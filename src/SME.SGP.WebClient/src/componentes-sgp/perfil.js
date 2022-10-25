@@ -24,7 +24,7 @@ import { validarAcaoTela } from '~/utils';
 import {
   SGP_MENU_PERFIL_BUTTON_EXPANDIR_RETRAIR_PERFIL,
   SGP_MENU_PERFIL_LISTA_PERFIS,
-} from './filtro/idsCampos';
+} from '../constantes/ids/menu';
 
 const Perfil = props => {
   // eslint-disable-next-line react/prop-types

@@ -19,7 +19,7 @@ import { Loader, Card, ButtonGroup, ListaPaginada } from '~/componentes';
 import Filtro from './componentes/Filtro';
 import AlertaModalidadeInfantil from '~/componentes-sgp/AlertaModalidadeInfantil/alertaModalidadeInfantil';
 import { ehTurmaInfantil } from '~/servicos/Validacoes/validacoesInfatil';
-import { SGP_BUTTON_NOVO } from '~/componentes-sgp/filtro/idsCampos';
+import { SGP_BUTTON_NOVO } from '~/constantes/ids/button';
 
 function RegistroPOALista() {
   const [itensSelecionados, setItensSelecionados] = useState([]);

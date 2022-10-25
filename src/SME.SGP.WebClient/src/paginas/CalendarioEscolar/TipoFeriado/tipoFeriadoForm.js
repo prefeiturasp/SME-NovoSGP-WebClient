@@ -22,10 +22,11 @@ import { verificaSomenteConsulta } from '~/servicos/servico-navegacao';
 import {
   SGP_BUTTON_ALTERAR_CADASTRAR,
   SGP_BUTTON_CANCELAR,
-} from '~/componentes-sgp/filtro/idsCampos';
+} from '~/constantes/ids/button';
 import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
 import BotaoExcluirPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoExcluirPadrao';
 
+// eslint-disable-next-line react/prop-types
 const TipoFeriadoForm = ({ match }) => {
   const [auditoria, setAuditoria] = useState([]);
   const [modoEdicao, setModoEdicao] = useState(false);
@@ -80,16 +81,16 @@ const TipoFeriadoForm = ({ match }) => {
     verificaSomenteConsulta(permissoesTela);
 
     const consultaPorId = async () => {
-      if (match && match.params && match.params.id) {
+      if (match?.params?.id) {
         setBreadcrumbManual(
-          match.url,
+          match?.url,
           'Alterar Tipo de Feriado',
           '/calendario-escolar/tipo-feriado'
         );
-        setIdTipoFeriadoEdicao(match.params.id);
+        setIdTipoFeriadoEdicao(match?.params?.id);
 
         const cadastrado = await api
-          .get(`v1/calendarios/feriados/${match.params.id}`)
+          .get(`v1/calendarios/feriados/${match?.params?.id}`)
           .catch(e => erros(e));
 
         if (cadastrado && cadastrado.data) {
@@ -135,6 +136,11 @@ const TipoFeriadoForm = ({ match }) => {
     }
   };
 
+  const resetarTela = form => {
+    form.resetForm();
+    setModoEdicao(false);
+  };
+
   const onClickCancelar = async form => {
     if (modoEdicao) {
       const confirmou = await confirmar(
@@ -146,11 +152,6 @@ const TipoFeriadoForm = ({ match }) => {
         resetarTela(form);
       }
     }
-  };
-
-  const resetarTela = form => {
-    form.resetForm();
-    setModoEdicao(false);
   };
 
   const onClickCadastrar = async valoresForm => {
