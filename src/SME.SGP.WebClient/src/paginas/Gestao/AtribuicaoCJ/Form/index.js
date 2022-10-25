@@ -406,6 +406,7 @@ function AtribuicaoCJForm({ match, location }) {
                       <Row className="row">
                         <Localizador
                           dreId={form.values.dreId}
+                          ueId={form.values.ueId}
                           anoLetivo={anoLetivo}
                           showLabel
                           form={form}
