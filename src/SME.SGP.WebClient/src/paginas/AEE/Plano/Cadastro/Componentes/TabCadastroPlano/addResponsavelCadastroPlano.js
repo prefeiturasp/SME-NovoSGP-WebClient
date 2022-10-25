@@ -10,7 +10,8 @@ import {
 import ServicoPlanoAEE from '~/servicos/Paginas/Relatorios/AEE/ServicoPlanoAEE';
 import SelectComponent from '~/componentes/select';
 
-const AddResponsavelCadastroPlano = () => {
+const AddResponsavelCadastroPlano = props => {
+  const { codigoUeNovo } = props;
   const paramsRota = useParams();
 
   const [responsavelSelecionado, setResponsavelSelecionado] = useState();
@@ -28,21 +29,14 @@ const AddResponsavelCadastroPlano = () => {
     store => store.planoAEE.desabilitarCamposPlanoAEE
   );
 
-  useEffect(() => {
-    if (planoAEEDados?.responsavel) {
-      setResponsavelSelecionado({
-        codigoRF: planoAEEDados?.responsavel?.responsavelRF,
-        nomeServidor: planoAEEDados?.responsavel?.responsavelNome,
-      });
-    }
-  }, [planoAEEDados]);
-
   const [responsaveisPAAI, setResponsaveisPAAI] = useState([]);
 
   const obterResponsaveisPAAI = async () => {
-    const resposta = await ServicoPlanoAEE.obterResponsavelPlanoPAAI(
-      planoAEEDados?.turma?.codigoUE
-    );
+    const codigoUe = codigoUeNovo
+      ? codigoUeNovo
+      : planoAEEDados?.turma?.codigoUE;
+
+    const resposta = await ServicoPlanoAEE.obterResponsavelPlanoPAAI(codigoUe);
     const newRes = { ...resposta };
 
     for (let el = 0; el < resposta.data.length; el++) {
