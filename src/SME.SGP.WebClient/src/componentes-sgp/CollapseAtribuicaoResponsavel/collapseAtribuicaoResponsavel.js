@@ -11,6 +11,7 @@ const CollapseAtribuicaoResponsavel = props => {
     clickRemoverResponsavel,
     codigoTurma,
     url,
+    match,
   } = props;
 
   return (

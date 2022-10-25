@@ -428,6 +428,10 @@ class ServicoPlanoAEE {
   devolverPlanoAEE = params => {
     return api.post(`${urlPadrao}/devolver`, params);
   };
+
+  obterResponsavelPlanoPAAI = idUe => {
+    return api.get(`${urlPadrao}/paai-ue?codigoUe=${idUe}`);
+  };
 }
 
 export default new ServicoPlanoAEE();
