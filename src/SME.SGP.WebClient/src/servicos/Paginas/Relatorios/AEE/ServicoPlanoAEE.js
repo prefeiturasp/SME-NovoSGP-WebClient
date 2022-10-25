@@ -424,6 +424,21 @@ class ServicoPlanoAEE {
   devolverPlanoAEE = params => {
     return api.post(`${urlPadrao}/devolver`, params);
   };
+
+  obterResponsavelPlanoPAAI = idUe => {
+    const mock = {
+      data: [
+        { codigoRF: '88888', nomeServidor: 'JOAO TESTE API' },
+        { codigoRF: '22222', nomeServidor: 'MATHEYS TESTE API' },
+      ],
+    };
+    return new Promise(resolve => {
+      setTimeout(() => {
+        resolve(mock);
+      }, 2000);
+    });
+    // return api.get(`${urlPadrao}/paai-ue?codigoUe=${idUe}`);
+  };
 }
 
 export default new ServicoPlanoAEE();

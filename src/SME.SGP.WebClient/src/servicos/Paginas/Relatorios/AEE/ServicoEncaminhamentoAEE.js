@@ -512,18 +512,8 @@ class ServicoEncaminhamentoAEE {
     return api.post(`${urlPadrao}/devolver`, params);
   };
 
-  obterResponsavelPAAI = () => {
-    const mock = {
-      data: [
-        { codigoRF: '88888', nomeServidor: 'JOAO TESTE API' },
-        { codigoRF: '99999', nomeServidor: 'MATHEUS TESTE API2' },
-      ],
-    };
-    return new Promise(resolve => {
-      setTimeout(() => {
-        resolve(mock);
-      }, 2000);
-    });
+  obterResponsavelEncaminhamentoPAAI = idUe => {
+    return api.get(`${urlPadrao}/paai-ue?codigoUe=${idUe}`);
   };
 }
 

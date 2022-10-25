@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Button from '~/componentes/button';
 import { Colors } from '~/componentes/colors';
@@ -7,25 +7,15 @@ import {
   setDadosCollapseAtribuicaoResponsavel,
   setLimparDadosAtribuicaoResponsavel,
 } from '~/redux/modulos/collapseAtribuicaoResponsavel/actions';
-import LocalizadorFuncionario from '../LocalizadorFuncionario';
 import SelectComponent from '~/componentes/select';
-
-const array = [
-  { codigoRF: '7856123', nomeServidor: 'João GOMES DOS SANTOS' },
-  { codigoRF: '7856123', nomeServidor: 'João GOMES DOS SANTOS' },
-  { codigoRF: '7856123', nomeServidor: 'João GOMES DOS SANTOS' },
-  { codigoRF: '7856123', nomeServidor: 'João GOMES DOS SANTOS' },
-];
+import ServicoEncaminhamentoAEE from '~/servicos/Paginas/Relatorios/AEE/ServicoEncaminhamentoAEE';
 
 const CollapseAtribuicaoResponsavelDados = props => {
   const {
     validarAntesAtribuirResponsavel,
     changeLocalizadorResponsavel,
     clickCancelar,
-    codigoTurma,
-    url,
     clickRemoverResponsavel,
-    usarAtribuicaoPaai,
   } = props;
   const dispatch = useDispatch();
 
@@ -34,24 +24,50 @@ const CollapseAtribuicaoResponsavelDados = props => {
       store.collapseAtribuicaoResponsavel.dadosCollapseAtribuicaoResponsavel
   );
 
+  const dadosEncaminhamento = useSelector(
+    store => store.encaminhamentoAEE.dadosEncaminhamento
+  );
   const [
     funcionarioLocalizadorSelecionado,
     setFuncionarioLocalizadorSelecionado,
   ] = useState();
 
-  const [limparCampos, setLimparCampos] = useState(false);
+  const [responsaveisPAAI, setResponsaveisPAAI] = useState([]);
 
-  const onChangeLocalizador = funcionario => {
-    setLimparCampos(false);
-    if (funcionario?.codigoRF && funcionario?.nomeServidor) {
+  const obterResponsaveisPAAI = async () => {
+    const resposta = await ServicoEncaminhamentoAEE.obterResponsavelEncaminhamentoPAAI(
+      dadosEncaminhamento.turma.codigoUE
+    );
+    const newRes = { ...resposta };
+
+    for (let el = 0; el < resposta.data.length; el++) {
+      const newNomeServidor = `${newRes.data[el].nomeServidor} - ${newRes.data[el].codigoRF}`;
+
+      newRes.data[el].nomeServidor = newNomeServidor;
+    }
+
+    if (newRes.data.length === 1) {
+      setFuncionarioLocalizadorSelecionado(newRes.data[0]);
+    }
+
+    setResponsaveisPAAI(newRes.data);
+  };
+
+  useEffect(() => {
+    obterResponsaveisPAAI();
+  }, []);
+
+  const onChangeLocalizador = (codigoResponsavelRF, obj) => {
+    const { title } = obj.props;
+    if (codigoResponsavelRF && title) {
       setFuncionarioLocalizadorSelecionado({
-        codigoRF: funcionario?.codigoRF,
-        nomeServidor: funcionario?.nomeServidor,
+        codigoRF: codigoResponsavelRF,
+        nomeServidor: title,
       });
     } else {
       setFuncionarioLocalizadorSelecionado();
       dispatch(setLimparDadosAtribuicaoResponsavel());
-      changeLocalizadorResponsavel(funcionario);
+      changeLocalizadorResponsavel(codigoResponsavelRF);
     }
   };
 
@@ -60,7 +76,6 @@ const CollapseAtribuicaoResponsavelDados = props => {
       codigoRF: funcionarioLocalizadorSelecionado.codigoRF,
       nomeServidor: funcionarioLocalizadorSelecionado.nomeServidor,
     };
-
     let continuar = true;
     if (validarAntesAtribuirResponsavel) {
       continuar = await validarAntesAtribuirResponsavel(params);
@@ -74,7 +89,6 @@ const CollapseAtribuicaoResponsavelDados = props => {
   const onClickCancelar = () => {
     setFuncionarioLocalizadorSelecionado();
     dispatch(setLimparDadosAtribuicaoResponsavel());
-    setLimparCampos(true);
     clickCancelar();
   };
 
@@ -87,37 +101,19 @@ const CollapseAtribuicaoResponsavelDados = props => {
   return (
     <div className="row">
       <div className="col-md-12 mb-2">
-        {usarAtribuicaoPaai ? (
-          <SelectComponent
-            label="PAAIS DRE"
-            valueOption="codigoRF"
-            valueText="nomeServidor"
-            lista={array}
-            showSearch
-            valueSelect={funcionarioLocalizadorSelecionado?.codigoRF}
-            className
-            onChange={onChangeLocalizador}
-            allowClear={false}
-            searchValue
-          />
-        ) : (
-          <div className="row">
-            <LocalizadorFuncionario
-              id="funcionario"
-              onChange={onChangeLocalizador}
-              codigoTurma={codigoTurma}
-              limparCampos={limparCampos}
-              url={url}
-              valorInicial={{
-                codigoRF: dadosCollapseAtribuicaoResponsavel?.codigoRF,
-                nomeServidor: dadosCollapseAtribuicaoResponsavel?.nomeServidor,
-              }}
-              desabilitado={!!dadosCollapseAtribuicaoResponsavel?.podeEditar}
-            />
-          </div>
-        )}
+        <SelectComponent
+          label="PAAIS DRE"
+          valueOption="codigoRF"
+          valueText="nomeServidor"
+          lista={responsaveisPAAI}
+          showSearch
+          valueSelect={funcionarioLocalizadorSelecionado?.codigoRF}
+          className
+          onChange={onChangeLocalizador}
+          allowClear={false}
+          searchValue
+        />
       </div>
-      {console.log(dadosCollapseAtribuicaoResponsavel, 'AQ')}
       <div className="col-md-12 d-flex justify-content-end pb-4 mt-2">
         <Button
           id="btn-cancelar"
@@ -162,8 +158,6 @@ CollapseAtribuicaoResponsavelDados.propTypes = {
   validarAntesAtribuirResponsavel: PropTypes.func,
   changeLocalizadorResponsavel: PropTypes.func,
   clickCancelar: PropTypes.func,
-  codigoTurma: PropTypes.string,
-  url: PropTypes.string,
   clickRemoverResponsavel: PropTypes.func,
 };
 
@@ -171,8 +165,6 @@ CollapseAtribuicaoResponsavelDados.defaultProps = {
   validarAntesAtribuirResponsavel: null,
   changeLocalizadorResponsavel: () => {},
   clickCancelar: () => {},
-  codigoTurma: '',
-  url: '',
   clickRemoverResponsavel: null,
 };
 

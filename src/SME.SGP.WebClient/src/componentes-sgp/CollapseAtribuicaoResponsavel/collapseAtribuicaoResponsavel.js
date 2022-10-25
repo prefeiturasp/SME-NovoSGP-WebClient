@@ -11,6 +11,7 @@ const CollapseAtribuicaoResponsavel = props => {
     clickRemoverResponsavel,
     codigoTurma,
     url,
+    match,
   } = props;
 
   return (
@@ -28,7 +29,6 @@ const CollapseAtribuicaoResponsavel = props => {
         codigoTurma={codigoTurma}
         url={url}
         clickRemoverResponsavel={clickRemoverResponsavel}
-        usarAtribuicaoPaai={true}
       />
     </CardCollapse>
   );

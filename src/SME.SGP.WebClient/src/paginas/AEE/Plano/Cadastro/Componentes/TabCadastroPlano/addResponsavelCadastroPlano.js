@@ -3,17 +3,16 @@ import { useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { Button, Colors } from '~/componentes';
 import { erros, sucesso } from '~/servicos';
-import LocalizadorFuncionario from '~/componentes-sgp/LocalizadorFuncionario';
 import {
   setDadosAtribuicaoResponsavel,
   setPlanoAEEDados,
 } from '~/redux/modulos/planoAEE/actions';
 import ServicoPlanoAEE from '~/servicos/Paginas/Relatorios/AEE/ServicoPlanoAEE';
+import SelectComponent from '~/componentes/select';
 
 const AddResponsavelCadastroPlano = () => {
   const paramsRota = useParams();
 
-  const [limparCampos, setLimparCampos] = useState(false);
   const [responsavelSelecionado, setResponsavelSelecionado] = useState();
   const [responsavelAlterado, setResponsavelAlterado] = useState(false);
 
@@ -38,16 +37,37 @@ const AddResponsavelCadastroPlano = () => {
     }
   }, [planoAEEDados]);
 
-  const dadosCollapseLocalizarEstudante = useSelector(
-    store => store.collapseLocalizarEstudante.dadosCollapseLocalizarEstudante
-  );
+  const [responsaveisPAAI, setResponsaveisPAAI] = useState([]);
 
-  const onChangeLocalizador = (funcionario, isOnChangeManual) => {
-    setLimparCampos(false);
-    if (funcionario?.codigoRF && funcionario?.nomeServidor) {
+  const obterResponsaveisPAAI = async () => {
+    const resposta = await ServicoPlanoAEE.obterResponsavelPlanoPAAI(
+      planoAEEDados?.turma?.codigoUE
+    );
+    const newRes = { ...resposta };
+
+    for (let el = 0; el < resposta.data.length; el++) {
+      const newNomeServidor = `${newRes.data[el].nomeServidor} - ${newRes.data[el].codigoRF}`;
+
+      newRes.data[el].nomeServidor = newNomeServidor;
+    }
+
+    if (newRes.data.length === 1) {
+      setResponsavelSelecionado(newRes.data[0]);
+    }
+
+    setResponsaveisPAAI(newRes.data);
+  };
+
+  useEffect(() => {
+    obterResponsaveisPAAI();
+  }, []);
+
+  const onChangeLocalizador = (codigoResponsavelRF, obj) => {
+    const { title } = obj.props;
+    if (codigoResponsavelRF && title) {
       const params = {
-        codigoRF: funcionario?.codigoRF,
-        nomeServidor: funcionario?.nomeServidor,
+        codigoRF: codigoResponsavelRF,
+        nomeServidor: title,
       };
       dispatch(setDadosAtribuicaoResponsavel(params));
       if (!desabilitarCamposPlanoAEE) setResponsavelSelecionado(params);
@@ -56,7 +76,7 @@ const AddResponsavelCadastroPlano = () => {
       setResponsavelSelecionado();
     }
 
-    if (!desabilitarCamposPlanoAEE) setResponsavelAlterado(!!isOnChangeManual);
+    if (!desabilitarCamposPlanoAEE) setResponsavelAlterado(!!obj);
   };
 
   const onClickAtribuirResponsavel = async () => {
@@ -76,7 +96,6 @@ const AddResponsavelCadastroPlano = () => {
   };
 
   const onClickCancelar = () => {
-    setLimparCampos(true);
     dispatch(setDadosAtribuicaoResponsavel({}));
     setResponsavelAlterado(false);
     setTimeout(() => {
@@ -92,18 +111,19 @@ const AddResponsavelCadastroPlano = () => {
   return (
     <>
       <p>Atribuir responsável:</p>
-      <div className="row mb-4">
-        <LocalizadorFuncionario
-          desabilitado={desabilitarCamposPlanoAEE || !paramsRota?.id}
-          id="funcionarioResponsavel"
+      <div className="col-md-12 mb-2">
+        <SelectComponent
+          label="PAAIS DRE"
+          valueOption="codigoRF"
+          valueText="nomeServidor"
+          lista={responsaveisPAAI}
+          showSearch
+          valueSelect={responsavelSelecionado?.codigoRF}
+          className
           onChange={onChangeLocalizador}
-          codigoTurma={dadosCollapseLocalizarEstudante?.codigoTurma}
-          limparCampos={limparCampos}
-          url="v1/encaminhamento-aee/responsavel-plano/pesquisa"
-          valorInicial={{
-            codigoRF: responsavelSelecionado?.codigoRF,
-            nomeServidor: responsavelSelecionado?.nomeServidor,
-          }}
+          allowClear={false}
+          searchValue
+          desabilitado={desabilitarCamposPlanoAEE || !paramsRota?.id}
         />
       </div>
       <div className="col-12 d-flex justify-content-end pb-4 mt-2 pr-0">
