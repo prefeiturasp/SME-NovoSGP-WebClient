@@ -451,6 +451,7 @@ function AtribuicaoEsporadicaForm({ match }) {
                       <Row className="row">
                         <Localizador
                           dreId={form.values.dreId}
+                          ueId={form.values.ueId}
                           anoLetivo={form.values.anoLetivo}
                           showLabel
                           form={form}
