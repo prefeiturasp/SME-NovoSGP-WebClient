@@ -21,7 +21,6 @@ const AtribuicaoResponsavel = props => {
   };
 
   const params = {
-    url: 'v1/encaminhamento-aee/responsavel/pesquisa',
     codigoTurma: dadosEncaminhamento?.turma?.codigo,
     validarAntesAtribuirResponsavel: async funcionario => {
       const encaminhamentoId = match?.params?.id;
@@ -55,7 +54,7 @@ const AtribuicaoResponsavel = props => {
   return dadosEncaminhamento?.podeAtribuirResponsavel ? (
     <CollapseAtribuicaoResponsavel {...params} />
   ) : (
-    ''
+    <></>
   );
 };
 
