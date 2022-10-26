@@ -22,7 +22,6 @@ const BotoesAcoesDiarioBordo = props => {
     componenteCurricularSelecionado,
     dataSelecionada,
     permissoesTela,
-    disabledExcluir,
     id,
   } = props;
 
@@ -52,7 +51,7 @@ const BotoesAcoesDiarioBordo = props => {
       />
       <BotaoExcluirPadrao
         className="mr-2"
-        disabled={!permissoesTela || disabledExcluir || desabilitarCampos}
+        disabled={!permissoesTela?.podeExcluir || !id || desabilitarCampos}
         onClick={onClickExcluir}
       />
       <Button
@@ -78,7 +77,9 @@ const BotoesAcoesDiarioBordo = props => {
 BotoesAcoesDiarioBordo.propTypes = {
   onClickVoltar: PropTypes.func,
   onClickCancelar: PropTypes.func,
+  onClickExcluir: PropTypes.func,
   validaAntesDoSubmit: PropTypes.func,
+  permissoesTela: PropTypes.oneOfType([PropTypes.any]),
   modoEdicao: PropTypes.bool,
   desabilitarCampos: PropTypes.bool,
   turmaInfantil: PropTypes.bool,
@@ -91,6 +92,8 @@ BotoesAcoesDiarioBordo.defaultProps = {
   onClickVoltar: () => {},
   onClickCancelar: () => {},
   validaAntesDoSubmit: () => {},
+  onClickExcluir: () => {},
+  permissoesTela: {},
   modoEdicao: false,
   desabilitarCampos: false,
   turmaInfantil: false,
