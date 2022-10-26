@@ -176,7 +176,6 @@ const DiarioBordo = ({ match }) => {
       turmaId,
       false
     ).catch(e => erros(e));
-
     if (componentes?.data?.length) {
       setListaComponenteCurriculares(componentes.data);
 
@@ -431,7 +430,6 @@ const DiarioBordo = ({ match }) => {
       setAulaSelecionada();
       setAuditoria();
       const aulasDataSelecionada = await obterAulasDataSelecionada(data);
-
       if (aulasDataSelecionada && aulasDataSelecionada.aulas.length === 1) {
         // Quando for Professor ou CJ podem visualizar somente uma aula por data selecionada!
         const aulaDataSelecionada = aulasDataSelecionada.aulas[0];
@@ -605,14 +603,14 @@ const DiarioBordo = ({ match }) => {
     }
   };
 
-  const onClickExcluir = async auditoria => {
+  const onClickExcluir = async () => {
     const confirmado = await confirmar(
       'Excluir',
       '',
       'Você tem certeza que deseja excluir esse diário de bordo?'
     );
 
-    if (confirmado) {
+    if (confirmado && auditoria) {
       setCarregandoGeral(true);
       const resultado = await ServicoDiarioBordo.excluirDiarioBordo(
         auditoria.id
@@ -702,9 +700,8 @@ const DiarioBordo = ({ match }) => {
                   onClickVoltar(form, observacaoEmEdicao, novaObservacao)
                 }
                 onClickCancelar={() => onClickCancelar(form)}
-                onClickExcluir={() => onClickExcluir(auditoria)}
+                onClickExcluir={onClickExcluir}
                 validaAntesDoSubmit={() => validaAntesDoSubmit(form, true)}
-                disabledExcluir={!aulaId}
                 modoEdicao={modoEdicao}
                 desabilitarCampos={desabilitarCampos}
                 turmaInfantil={turmaInfantil}

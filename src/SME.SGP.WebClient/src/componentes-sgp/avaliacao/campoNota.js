@@ -97,6 +97,7 @@ const CampoNota = props => {
       }}
     >
       <CampoNumero
+        validateOnBlurInOnChange
         esconderSetas={esconderSetas}
         name={name}
         onKeyDown={clicarSetas}

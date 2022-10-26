@@ -72,8 +72,7 @@ class ServicoSalvarFrequenciaPlanoAula {
 
     const validaSeTemErrosPlanoAula = () => {
       const errosValidacaoPlano = [];
-
-      if (!dadosPlanoAula.descricao && exibirSwitchEscolhaObjetivos) {
+      if (!dadosPlanoAula.descricao) {
         errosValidacaoPlano.push(
           'Meus objetivos - O campo meus objetivos específicos para a aula é obrigatório'
         );
@@ -169,8 +168,8 @@ class ServicoSalvarFrequenciaPlanoAula {
         criadoPor: resposta.data.criadoPor,
         alteradoPor: resposta.data.alteradoPor,
         alteradoEm: resposta.data.alteradoEm,
-        alteradoRF: resposta.data.alteradoRF,
-        criadoRF: resposta.data.criadoRF,
+        alteradoRf: resposta.data.alteradoRf,
+        criadoRf: resposta.data.criadoRf,
       };
       dadosPlanoAula.auditoria = { ...auditoria };
       dadosPlanoAula.id = resposta.data.id;

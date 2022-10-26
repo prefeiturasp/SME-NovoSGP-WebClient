@@ -105,21 +105,26 @@ const NavbarNotificacoes = props => {
             };
             dispatch(webSocketNotificacaoCriada(params));
           });
-          connection.on('NotificacaoLida', codigo => {
+          connection.on('NotificacaoLida', (codigo, isAnoAnterior) => {
             const params = {
               codigo,
+              isAnoAnterior,
               obterListaNotificacoes,
             };
             dispatch(webSocketNotificacaoLida(params));
           });
-          connection.on('NotificacaoExcluida', (codigo, status) => {
-            const params = {
-              codigo,
-              status,
-              obterListaNotificacoes,
-            };
-            dispatch(webSocketNotificacaoExcluida(params));
-          });
+          connection.on(
+            'NotificacaoExcluida',
+            (codigo, status, isAnoAnterior) => {
+              const params = {
+                codigo,
+                status,
+                isAnoAnterior,
+                obterListaNotificacoes,
+              };
+              dispatch(webSocketNotificacaoExcluida(params));
+            }
+          );
           dispatch(setIniciarNotificacoesSemWebSocket(false));
         })
         .catch(async () => {

@@ -114,28 +114,45 @@ const ListasNotasConceitos = props => {
 
   const habilitaConselhoClasse = dados => {
     let notasFechamentosPreenchidas = true;
-    dados.notasConceitos.map(notasConceitos =>
-      notasConceitos.componentesCurriculares.map(componentesCurriculares =>
-        componentesCurriculares.notasFechamentos.map(notasFechamentos => {
-          if (valorNuloOuVazio(notasFechamentos.notaConceito)) {
+
+    dados.notasConceitos.forEach(notasConceitos =>
+      notasConceitos.componentesCurriculares.forEach(
+        componentesCurriculares => {
+          if (
+            bimestreSelecionado?.valor === 'final' &&
+            componentesCurriculares?.notaPosConselho &&
+            valorNuloOuVazio(componentesCurriculares?.notaPosConselho?.nota)
+          ) {
             notasFechamentosPreenchidas = false;
+          } else {
+            componentesCurriculares.notasFechamentos.forEach(
+              notasFechamentos => {
+                if (valorNuloOuVazio(notasFechamentos.notaConceito)) {
+                  notasFechamentosPreenchidas = false;
+                }
+              }
+            );
           }
-          return notasFechamentos;
-        })
+        }
       )
     );
-
-    dados.notasConceitos.map(notasConceitos =>
-      notasConceitos.componenteRegencia?.componentesCurriculares.map(cc => {
-        cc.notasFechamentos.map(nf => {
-          if (valorNuloOuVazio(nf.notaConceito)) {
-            notasFechamentosPreenchidas = false;
-          }
-          return nf;
-        });
+    dados.notasConceitos.forEach(notasConceitos =>
+      notasConceitos.componenteRegencia?.componentesCurriculares.forEach(cc => {
+        if (
+          bimestreSelecionado?.valor === 'final' &&
+          cc?.notaPosConselho &&
+          valorNuloOuVazio(cc?.notaPosConselho?.nota)
+        ) {
+          notasFechamentosPreenchidas = false;
+        } else {
+          cc.notasFechamentos.forEach(nf => {
+            if (valorNuloOuVazio(nf.notaConceito)) {
+              notasFechamentosPreenchidas = false;
+            }
+          });
+        }
       })
     );
-
     let validarDataSituacao = false;
     if (dadosAlunoObjectCard?.situacaoCodigo) {
       switch (dadosAlunoObjectCard?.situacaoCodigo) {
@@ -188,8 +205,7 @@ const ListasNotasConceitos = props => {
       dispatch(setDadosListasNotasConceitos(resultado.data.notasConceitos));
       dispatch(setPodeEditarNota(resultado.data.podeEditarNota));
       setExibir(true);
-      if (bimestreSelecionado?.valor !== 'final')
-        habilitaConselhoClasse(resultado.data);
+      if (bimestreSelecionado?.valor) habilitaConselhoClasse(resultado.data);
     } else {
       setExibir(false);
     }
