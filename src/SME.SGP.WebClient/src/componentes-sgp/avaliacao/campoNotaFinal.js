@@ -125,6 +125,7 @@ const CampoNotaFinal = props => {
     <Tooltip placement="bottom" title={abaixoDaMedia ? 'Abaixo da Média' : ''}>
       <div>
         <CampoNumero
+          validateOnBlurInOnChange
           esconderSetas={esconderSetas}
           name={name}
           onKeyDown={clicarSetas}

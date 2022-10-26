@@ -177,7 +177,7 @@ const LocalizadorEstudante = props => {
         turmaId,
         nomeComModalidadeTurma,
       } = retorno.data.items[0];
-      const alunoCodigoTurma = retorno?.data?.items?.[0];
+      const alunoCodigoTurma = retorno?.data?.items?.[0]?.codigoTurma;
 
       setDataSource(
         retorno.data.items.map(aluno => ({

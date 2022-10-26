@@ -3,9 +3,11 @@ import {
   salvarDadosLogin,
   setLoginAcessoAdmin,
 } from '~/redux/modulos/usuario/actions';
+import { erros } from '~/servicos';
 import history from '~/servicos/history';
 import ServicoDashboard from '~/servicos/Paginas/Dashboard/ServicoDashboard';
 import LoginService from '~/servicos/Paginas/LoginServices';
+import ServicoNotificacao from '~/servicos/Paginas/ServicoNotificacao';
 import { obterMeusDados } from '~/servicos/Paginas/ServicoUsuario';
 import { setMenusPermissoes } from '~/servicos/servico-navegacao';
 
@@ -68,6 +70,15 @@ class LoginHelper {
     }
     obterMeusDados();
     setMenusPermissoes();
+
+    if (acessoAdmin) {
+      ServicoNotificacao.obterUltimasNotificacoesNaoLidas().catch(e =>
+        erros(e)
+      );
+      ServicoNotificacao.obterQuantidadeNotificacoesNaoLidas().catch(e =>
+        erros(e)
+      );
+    }
 
     if (this.redirect) history.push(atob(this.redirect));
     else history.push(URL_HOME);
