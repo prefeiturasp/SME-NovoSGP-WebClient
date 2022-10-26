@@ -334,12 +334,12 @@ class ServicoPlanoAEE {
     });
   };
 
-  atribuirResponsavel = () => {
+  atribuirResponsavel = codigoRF => {
     const { planoAEE } = store.getState();
     const { planoAEEDados, dadosAtribuicaoResponsavel } = planoAEE;
     return api.post(`${urlPadrao}/atribuir-responsavel`, {
       planoAEEId: planoAEEDados.id,
-      responsavelRF: dadosAtribuicaoResponsavel.codigoRF,
+      responsavelRF: codigoRF || dadosAtribuicaoResponsavel?.codigoRF,
     });
   };
 
@@ -432,6 +432,9 @@ class ServicoPlanoAEE {
   obterResponsavelPlanoPAAI = idUe => {
     return api.get(`${urlPadrao}/paai-ue?codigoUe=${idUe}`);
   };
+
+  removerReponsavelPAAI = id =>
+    api.post(`${urlPadrao}/remover-responsavel/${id}`);
 }
 
 export default new ServicoPlanoAEE();

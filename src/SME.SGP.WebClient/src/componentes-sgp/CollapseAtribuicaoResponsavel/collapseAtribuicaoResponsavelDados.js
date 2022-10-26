@@ -73,7 +73,7 @@ const CollapseAtribuicaoResponsavelDados = props => {
       obterResponsaveisPAAI();
   }, [codigoTurma, responsavelInicialEdicao, obterResponsaveisPAAI]);
 
-  const onChangeLocalizador = rf => {
+  const onChange = rf => {
     const itemSelecionado = responsaveisPAAI?.find(r => r?.codigoRF === rf);
 
     if (itemSelecionado) {
@@ -128,7 +128,7 @@ const CollapseAtribuicaoResponsavelDados = props => {
           showSearch
           valueSelect={funcionarioLocalizadorSelecionado?.codigoRF}
           className
-          onChange={onChangeLocalizador}
+          onChange={onChange}
           allowClear={false}
           searchValue
           disabled={responsaveisPAAI?.length === 1}
