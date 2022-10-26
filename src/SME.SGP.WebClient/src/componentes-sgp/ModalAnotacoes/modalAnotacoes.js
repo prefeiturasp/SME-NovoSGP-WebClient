@@ -167,6 +167,8 @@ const ModalAnotacoesFrequencia = props => {
     if (retorno && retorno.status === 200) {
       sucesso('Anotação excluída com sucesso');
       fecharAposSalvarExcluir(false, true);
+    } else {
+      dispatch(setExibirModal(true));
     }
   };
 
@@ -231,7 +233,6 @@ const ModalAnotacoesFrequencia = props => {
 
   const validaAntesDeExcluir = async id => {
     if (!desabilitarCampos) {
-      dispatch(setExibirModal(false));
       dispatch(setExibirModal(false));
       const confirmado = await confirmar(
         'Atenção',
