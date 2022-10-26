@@ -177,8 +177,11 @@ const ListaDiarioBordo = () => {
 
   const onColapse = async aulaId => {
     dispatch(limparDadosObservacoesUsuario());
+
+    const aulaIdFormatado = Number(aulaId?.split('-').pop());
+
     const diario = listaTitulos?.items?.find(
-      item => item?.aulaId === Number(aulaId)
+      item => item?.aulaId === aulaIdFormatado
     );
     const idDiario = diario?.id;
     let dados = {};
@@ -406,7 +409,7 @@ const ListaDiarioBordo = () => {
                     : Base.AzulBordaCollapse;
                   return (
                     <PainelCollapse.Painel
-                      key={aulaId}
+                      key={`${componenteCurricularSelecionado}-${aulaId}`}
                       accordion
                       espacoPadrao
                       corBorda={bordaCollapse}
