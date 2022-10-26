@@ -44,9 +44,7 @@ const MontarDadosTabs = props => {
     planoAEEDados?.questionarioId ? (
     <ContainerTabsCard type="card" width="20%" onTabClick={cliqueTab}>
       <TabPane tab="Cadastro do Plano" key="1">
-        <AddResponsavelCadastroPlano
-          codigoUeNovo={dadosCollapseLocalizarEstudante?.codigoUe}
-        />
+        <AddResponsavelCadastroPlano />
         <SecaoPlanoCollapse match={match} />
       </TabPane>
       {temId && exibirTabReestruturacao && (
