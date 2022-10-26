@@ -42,6 +42,7 @@ function Localizador({
   ueId,
   buscarPorAbrangencia,
   labelRequired,
+  buscarPorTodasDre,
 }) {
   const usuario = useSelector(store => store.usuario);
   const [dataSource, setDataSource] = useState([]);
@@ -121,6 +122,7 @@ function Localizador({
             dreId,
             ueId,
             buscarPorAbrangencia,
+            buscarPorTodasDre,
           })
           .finally(() => setExibirLoader(false));
 
@@ -325,6 +327,7 @@ Localizador.propTypes = {
   ueId: PropTypes.string,
   buscarPorAbrangencia: PropTypes.bool,
   labelRequired: PropTypes.bool,
+  buscarPorTodasDre: PropTypes.bool,
 };
 
 Localizador.defaultProps = {
@@ -350,6 +353,7 @@ Localizador.defaultProps = {
   ueId: null,
   buscarPorAbrangencia: false,
   labelRequired: false,
+  buscarPorTodasDre: false,
 };
 
 export default Localizador;

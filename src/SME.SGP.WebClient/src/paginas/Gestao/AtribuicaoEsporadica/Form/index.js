@@ -465,6 +465,7 @@ function AtribuicaoEsporadicaForm({ match }) {
                           }}
                           desabilitado={somenteConsulta || valoresIniciais.id}
                           labelRequired
+                          buscarPorTodasDre
                         />
                       </Row>
                     </Grid>
