@@ -40,7 +40,6 @@ const MontarDadosTabs = props => {
   const cliqueTab = async key => {
     ServicoPlanoAEE.cliqueTabPlanoAEE(key, temId);
   };
-
   return dadosCollapseLocalizarEstudante?.codigoAluno &&
     planoAEEDados?.questionarioId ? (
     <ContainerTabsCard type="card" width="20%" onTabClick={cliqueTab}>
