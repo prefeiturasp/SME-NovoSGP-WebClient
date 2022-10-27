@@ -24,6 +24,7 @@ import {
   SGP_BUTTON_CANCELAR_MODAL,
   SGP_BUTTON_SALVAR_MODAL,
 } from '~/constantes/ids/button';
+import { SGP_JODIT_EDITOR_DESCRICAO_JUSTIFICATIVA } from '~/constantes/ids/jodit-editor';
 import { SGP_SELECT_COMPONENTE_CURRICULAR } from '~/constantes/ids/select';
 import {
   SGP_TABS_PRIMEIRO_BIMESTRE,
@@ -1231,6 +1232,7 @@ const Notas = ({ match }) => {
               <div className="col-md-12">
                 <fieldset className="mt-3">
                   <JoditEditor
+                    id={SGP_JODIT_EDITOR_DESCRICAO_JUSTIFICATIVA}
                     form={form}
                     value={form.values.descricao}
                     onChange={onChangeJustificativa}
