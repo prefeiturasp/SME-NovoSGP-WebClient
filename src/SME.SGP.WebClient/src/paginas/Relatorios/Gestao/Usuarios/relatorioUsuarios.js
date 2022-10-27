@@ -268,6 +268,7 @@ const RelatorioUsuarios = () => {
                     rfEdicao={usuarioRf}
                     buscandoDados={setCarregandoGeral}
                     dreId={codigoDre}
+                    ueId={codigoUe}
                     anoLetivo={anoAtual}
                     showLabel
                     onChange={valores => {

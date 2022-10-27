@@ -159,6 +159,7 @@ const Filtro = memo(({ onFiltrar }) => {
           <Linha className="row">
             <Localizador
               dreId={dreId}
+              ueId={form.values.ueId}
               anoLetivo={anoAtual}
               form={form}
               onChange={valor => valor}
