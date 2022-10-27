@@ -8,6 +8,7 @@ import {
   Colors,
   DataTable,
   ModalConteudoHtml,
+  RadioGroupButton,
 } from '~/componentes';
 
 import { setExibirModalImpressao } from '~/redux/modulos/acompanhamentoFrequencia/actions';
@@ -33,6 +34,11 @@ const ModalImpressao = ({ dadosAlunos, componenteCurricularId }) => {
   const opcaoExibirPendenciasResolvidas = [
     { value: OPCAO_TODOS, label: 'Todas as crianças/estudantes' },
     { value: '1', label: 'Crianças/estudantes selecionadas' },
+  ];
+
+  const opcaoExibirFrequenciaDiaria = [
+    { value: true, label: 'Sim' },
+    { value: false, label: 'Não' },
   ];
 
   const columns = [
@@ -151,12 +157,14 @@ const ModalImpressao = ({ dadosAlunos, componenteCurricularId }) => {
         checked={imprimirTodosBimestres}
       />
 
-      <CheckboxComponent
-        id="imprimir-frequencia-diaria"
+      <RadioGroupButton
         label="Imprimir frequência diária"
-        className="pb-3"
-        onChangeCheckbox={e => setImprimirFreqDiaria(e.target.checked)}
-        checked={imprimirFreqDiaria}
+        opcoes={opcaoExibirFrequenciaDiaria}
+        valorInicial
+        onChange={e => {
+          setImprimirFreqDiaria(e.target.value);
+        }}
+        value={imprimirFreqDiaria}
       />
 
       <RadioGroupButtonCustomizado
