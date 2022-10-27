@@ -2,9 +2,9 @@ import { Dropdown, Menu } from 'antd';
 import PropTypes from 'prop-types';
 import React from 'react';
 import styled from 'styled-components';
-import shortid from 'shortid';
 import Button from '~/componentes/button';
 import { Base, Colors } from '~/componentes/colors';
+import { SGP_BUTTON_ORDENAR } from '~/constantes/ids/button';
 
 const Container = styled(Dropdown)`
   background-color: #064f79 !important;
@@ -122,7 +122,7 @@ const Ordenacao = props => {
       disabled={desabilitado}
     >
       <Button
-        id={shortid.generate()}
+        id={SGP_BUTTON_ORDENAR}
         label="Ordenar"
         icon="exchange-alt"
         color={Colors.Azul}
