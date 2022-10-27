@@ -61,7 +61,7 @@ function AtribuicaoCJLista() {
   const onClickEditar = item => {
     history.push(
       `/gestao/atribuicao-cjs/editar?modalidadeId=${item.modalidadeId}&turmaId=` +
-        `${item.turmaId}&dreId=${filtro.DreId}&ueId=${filtro.UeId}&anoLetivo=${filtro.AnoLetivo}&historico=${filtro.Historico}`
+        `${item.turmaId}&dreId=${filtro.DreId}&ueId=${filtro.UeId}&anoLetivo=${filtro.AnoLetivo}&historico=${filtro.Historico}&usuarioRF=${filtro?.UsuarioRF}&professorNome=${filtro?.professorNome}`
     );
   };
 
@@ -71,6 +71,7 @@ function AtribuicaoCJLista() {
       DreId: valoresFiltro.dreId,
       UeId: valoresFiltro.ueId,
       UsuarioRF: valoresFiltro.professorRf,
+      professorNome: valoresFiltro?.professorNome,
       Historico: valoresFiltro.exibirHistorico,
     });
   };
