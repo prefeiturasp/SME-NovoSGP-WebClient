@@ -38,6 +38,7 @@ class LocalizadorService {
     dreId,
     ueId,
     buscarPorAbrangencia,
+    buscarPorTodasDre,
   }) {
     const urlPadrao = `${this.urlProfessores}/${rf}/resumo/${anoLetivo}`;
     const urlPorAbrangencia = `${this.urlProfessores}/rfs/${rf}/anos-letivos/${anoLetivo}/buscar`;
@@ -49,6 +50,7 @@ class LocalizadorService {
         buscarOutrosCargos: outrosCargos,
         dreId,
         ueId,
+        buscarPorTodasDre,
       },
     });
   }
