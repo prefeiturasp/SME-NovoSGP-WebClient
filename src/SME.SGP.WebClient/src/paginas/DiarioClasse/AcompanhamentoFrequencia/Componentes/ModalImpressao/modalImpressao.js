@@ -168,7 +168,7 @@ const ModalImpressao = ({ dadosAlunos, componenteCurricularId }) => {
       />
 
       <RadioGroupButtonCustomizado
-        label="Quais crianças deseja incluir na impressão do relatório?"
+        label="Quais crianças/estudantes deseja incluir na impressão do relatório?"
         opcoes={opcaoExibirPendenciasResolvidas}
         valorInicial
         onChange={e => {
