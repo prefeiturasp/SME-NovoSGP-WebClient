@@ -15,10 +15,10 @@ import Row from '~/componentes/row';
 import SelectComponent from '~/componentes/select';
 import { ContainerTabsCard } from '~/componentes/tabs/tabs.css';
 import {
-  SGP_ALERT_ALERTA_PRINCIPAL,
-  SGP_ALERT_JUSTIFICATIVA_PORCENTAGEM,
-  SGP_ALERT_PERIODO_FECHAMENTO,
-  SGP_ALERT_PODE_LANCAR_NOTA,
+  SGP_ALERT_ALERTA_PRINCIPAL_ESCOLHER_TURMA,
+  SGP_ALERT_JUSTIFICATIVA_PORCENTAGEM_NOTAS_CONCEITO,
+  SGP_ALERT_NAO_PERMITE_LANCAMENTO_NOTA,
+  SGP_ALERT_PERIODO_FECHAMENTO_NAO_ESTA_ABERTO,
 } from '~/constantes/ids/alert';
 import {
   SGP_BUTTON_CANCELAR_MODAL,
@@ -27,10 +27,10 @@ import {
 import { SGP_JODIT_EDITOR_DESCRICAO_JUSTIFICATIVA } from '~/constantes/ids/jodit-editor';
 import { SGP_SELECT_COMPONENTE_CURRICULAR } from '~/constantes/ids/select';
 import {
-  SGP_TABS_PRIMEIRO_BIMESTRE,
-  SGP_TABS_QUARTO_BIMESTRE,
-  SGP_TABS_SEGUNDO_BIMESTRE,
-  SGP_TABS_TERCEIRO_BIMESTRE,
+  SGP_TAB_PRIMEIRO_BIMESTRE,
+  SGP_TAB_QUARTO_BIMESTRE,
+  SGP_TAB_SEGUNDO_BIMESTRE,
+  SGP_TAB_TERCEIRO_BIMESTRE,
 } from '~/constantes/ids/tabs';
 import { URL_HOME } from '~/constantes/url';
 import notasConceitos from '~/dtos/notasConceitos';
@@ -1217,7 +1217,7 @@ const Notas = ({ match }) => {
                 <Alert
                   alerta={{
                     tipo: 'warning',
-                    id: SGP_ALERT_JUSTIFICATIVA_PORCENTAGEM,
+                    id: SGP_ALERT_JUSTIFICATIVA_PORCENTAGEM_NOTAS_CONCEITO,
                     mensagem: `A maioria dos estudantes está com ${
                       notasConceitos.Notas === Number(notaTipo)
                         ? 'notas'
@@ -1280,7 +1280,7 @@ const Notas = ({ match }) => {
               <Alert
                 alerta={{
                   tipo: 'warning',
-                  id: SGP_ALERT_ALERTA_PRINCIPAL,
+                  id: SGP_ALERT_ALERTA_PRINCIPAL_ESCOLHER_TURMA,
                   mensagem: 'Você precisa escolher uma turma.',
                   estiloTitulo: { fontSize: '18px' },
                 }}
@@ -1296,7 +1296,7 @@ const Notas = ({ match }) => {
               <Alert
                 alerta={{
                   tipo: 'warning',
-                  id: SGP_ALERT_PODE_LANCAR_NOTA,
+                  id: SGP_ALERT_NAO_PERMITE_LANCAMENTO_NOTA,
                   mensagem:
                     'Este componente curricular não permite o lançamento de nota',
                   estiloTitulo: { fontSize: '18px' },
@@ -1315,7 +1315,7 @@ const Notas = ({ match }) => {
               <Alert
                 alerta={{
                   tipo: 'warning',
-                  id: SGP_ALERT_PERIODO_FECHAMENTO,
+                  id: SGP_ALERT_PERIODO_FECHAMENTO_NAO_ESTA_ABERTO,
                   mensagem:
                     'Apenas é possível consultar este registro pois o período não está em aberto.',
                   estiloTitulo: { fontSize: '18px' },
@@ -1374,7 +1374,7 @@ const Notas = ({ match }) => {
                     >
                       {primeiroBimestre.numero ? (
                         <TabPane
-                          id={SGP_TABS_PRIMEIRO_BIMESTRE}
+                          id={SGP_TAB_PRIMEIRO_BIMESTRE}
                           tab={primeiroBimestre.descricao}
                           key={primeiroBimestre.numero}
                         >
@@ -1403,7 +1403,7 @@ const Notas = ({ match }) => {
                       )}
                       {segundoBimestre.numero ? (
                         <TabPane
-                          id={SGP_TABS_SEGUNDO_BIMESTRE}
+                          id={SGP_TAB_SEGUNDO_BIMESTRE}
                           tab={segundoBimestre.descricao}
                           key={segundoBimestre.numero}
                         >
@@ -1431,7 +1431,7 @@ const Notas = ({ match }) => {
                       )}
                       {terceiroBimestre.numero ? (
                         <TabPane
-                          id={SGP_TABS_TERCEIRO_BIMESTRE}
+                          id={SGP_TAB_TERCEIRO_BIMESTRE}
                           tab={terceiroBimestre.descricao}
                           key={terceiroBimestre.numero}
                         >
@@ -1459,7 +1459,7 @@ const Notas = ({ match }) => {
                       )}
                       {quartoBimestre.numero ? (
                         <TabPane
-                          id={SGP_TABS_QUARTO_BIMESTRE}
+                          id={SGP_TAB_QUARTO_BIMESTRE}
                           tab={quartoBimestre.descricao}
                           key={quartoBimestre.numero}
                         >
