@@ -113,6 +113,7 @@ const CampoTexto = React.forwardRef((props, ref) => {
         </>
       ) : (
         <Input
+          id={id}
           ref={ref}
           placeholder={placeholder}
           onChange={onChange}
