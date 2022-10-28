@@ -5,6 +5,12 @@ import styled from 'styled-components';
 import Button from '~/componentes/button';
 import { Base, Colors } from '~/componentes/colors';
 import { SGP_BUTTON_ORDENAR } from '~/constantes/ids/button';
+import {
+  SGP_MENU_ITEM_ORDENAR_MAIOR_PARA_MENOR,
+  SGP_MENU_ITEM_ORDENAR_MENOR_PARA_MAIOR,
+  SGP_MENU_ITEM_ORDENAR_ORDEM_ALFABETICA_A_Z,
+  SGP_MENU_ITEM_ORDENAR_ORDEM_ALFABETICA_Z_A,
+} from '~/constantes/ids/menu-item';
 
 const Container = styled(Dropdown)`
   background-color: #064f79 !important;
@@ -103,14 +109,30 @@ const Ordenacao = props => {
 
   const menu = (
     <ContainerMenu>
-      <Menu.Item onClick={ordenarMenorParaMaior}>
+      <Menu.Item
+        onClick={ordenarMenorParaMaior}
+        id={SGP_MENU_ITEM_ORDENAR_MENOR_PARA_MAIOR}
+      >
         Número (Menor para o maior)
       </Menu.Item>
-      <Menu.Item onClick={ordenarMaiorParaMenor}>
+      <Menu.Item
+        onClick={ordenarMaiorParaMenor}
+        id={SGP_MENU_ITEM_ORDENAR_MAIOR_PARA_MENOR}
+      >
         Número (Maior para o menor)
       </Menu.Item>
-      <Menu.Item onClick={ordenarAZ}>Por ordem alfabética (A–Z)</Menu.Item>
-      <Menu.Item onClick={ordenarZA}>Por ordem alfabética (Z–A)</Menu.Item>
+      <Menu.Item
+        onClick={ordenarAZ}
+        id={SGP_MENU_ITEM_ORDENAR_ORDEM_ALFABETICA_A_Z}
+      >
+        Por ordem alfabética (A–Z)
+      </Menu.Item>
+      <Menu.Item
+        onClick={ordenarZA}
+        id={SGP_MENU_ITEM_ORDENAR_ORDEM_ALFABETICA_Z_A}
+      >
+        Por ordem alfabética (Z–A)
+      </Menu.Item>
     </ContainerMenu>
   );
 
