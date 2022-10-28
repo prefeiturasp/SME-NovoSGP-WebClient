@@ -2,6 +2,7 @@ import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { Colors } from '~/componentes';
+import { SGP_BUTTON_IMPRIMIR_RELATORIO_REGISTRO_INDIVIDUAL } from '~/constantes/ids/button';
 import { BotaoCustomizado } from '~/paginas/AEE/RegistroItinerancia/registroItinerancia.css';
 
 import { setExibirModalImpressaoRegistroIndividual } from '~/redux/modulos/registroIndividual/actions';
@@ -26,7 +27,7 @@ const BotaoGerarRelatorioRegistroIndividual = () => {
       color={Colors.Azul}
       border
       onClick={onClickImprimir}
-      id="btn-imprimir-relatorio-registro-individual"
+      id={SGP_BUTTON_IMPRIMIR_RELATORIO_REGISTRO_INDIVIDUAL}
       width="48px"
     />
   );

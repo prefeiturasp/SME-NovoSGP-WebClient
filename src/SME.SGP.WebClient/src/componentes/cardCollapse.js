@@ -16,6 +16,7 @@ const CardCollapse = React.forwardRef((props, ref) => {
     configCabecalho,
     icon,
     styleCardBody,
+    id,
   } = props;
 
   const Card = styled.div`
@@ -27,8 +28,9 @@ const CardCollapse = React.forwardRef((props, ref) => {
   `;
 
   return (
-    <Card ref={ref} className="card shadow-sm mb-3">
+    <Card ref={ref} className="card shadow-sm mb-3" id={id}>
       <CardHeader
+        id={id}
         indice={indice}
         border
         icon={icon}
@@ -54,6 +56,7 @@ CardCollapse.propTypes = {
   configCabecalho: PropTypes.oneOfType([PropTypes.any]),
   icon: PropTypes.bool,
   styleCardBody: PropTypes.oneOfType([PropTypes.any]),
+  id: PropTypes.string,
 };
 
 CardCollapse.defaultProps = {
@@ -68,6 +71,7 @@ CardCollapse.defaultProps = {
   },
   icon: true,
   styleCardBody: null,
+  id: '',
 };
 
 export default CardCollapse;

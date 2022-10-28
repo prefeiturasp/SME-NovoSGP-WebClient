@@ -5,6 +5,10 @@ import { CampoData, Label, Loader } from '~/componentes';
 import { Paginacao } from '~/componentes-sgp';
 import MetodosRegistroIndividual from '~/componentes-sgp/RegistroIndividual/metodosRegistroIndividual';
 import {
+  SGP_DATE_SELECIONAR_DATA_FIM_REGISTROS_ANTERIORES,
+  SGP_DATE_SELECIONAR_DATA_INICIO_REGISTROS_ANTERIORES,
+} from '~/constantes/ids/date';
+import {
   setDataFimImpressaoRegistrosAnteriores,
   setDataInicioImpressaoRegistrosAnteriores,
   setExibirLoaderGeralRegistroAnteriores,
@@ -283,6 +287,7 @@ const RegistrosAnterioresConteudo = props => {
               onChange={mudarDataInicio}
               placeholder="Data início"
               desabilitarData={desabilitarData}
+              id={SGP_DATE_SELECIONAR_DATA_INICIO_REGISTROS_ANTERIORES}
             />
           </div>
           <div className="col-3 p-0 pb-2 mb-4">
@@ -293,6 +298,7 @@ const RegistrosAnterioresConteudo = props => {
               onChange={mudarDataFim}
               placeholder="Data fim"
               desabilitarData={desabilitarData}
+              id={SGP_DATE_SELECIONAR_DATA_FIM_REGISTROS_ANTERIORES}
             />
           </div>
         </div>
