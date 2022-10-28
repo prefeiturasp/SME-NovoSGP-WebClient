@@ -32,12 +32,12 @@ import {
   SGP_BUTTON_CANCELAR,
   SGP_BUTTON_COPIAR_AVALIACAO,
   SGP_BUTTON_EXCLUIR,
+  SGP_BUTTON_REGENCIA,
 } from '~/constantes/ids/button';
 import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
 import BotaoExcluirPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoExcluirPadrao';
 import { SGP_RADIO_CATEGORIA } from '~/constantes/ids/radio';
 import {
-  SGP_BUTTON_REGENCIA_,
   SGP_SELECT_COMPONENTE_CURRICULAR,
   SGP_SELECT_NOME_AVALIACAO,
   SGP_SELECT_TIPO_AVALIACAO,
@@ -807,7 +807,7 @@ const AvaliacaoForm = ({ match, location }) => {
                               (disciplina, indice) => {
                                 return (
                                   <Badge
-                                    id={`${SGP_BUTTON_REGENCIA_}${disciplina.nome.toUpperCase()}`}
+                                    id={`${SGP_BUTTON_REGENCIA}_${disciplina.nome.toUpperCase()}`}
                                     key={disciplina.codigoComponenteCurricular}
                                     role="button"
                                     onClick={e => {
