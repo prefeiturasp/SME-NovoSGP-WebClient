@@ -2,7 +2,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Col, Row } from 'antd';
 import { Button, Colors } from '~/componentes';
-import { SGP_BUTTON_CANCELAR } from '~/constantes/ids/button';
+import {
+  SGP_BUTTON_CANCELAR,
+  SGP_BUTTON_EXCLUIR,
+} from '~/constantes/ids/button';
 import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
 import BotaoExcluirPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoExcluirPadrao';
 
@@ -53,6 +56,7 @@ function ButtonGroup({
       {typeof onClickExcluir === 'function' && (
         <Col>
           <BotaoExcluirPadrao
+            id={SGP_BUTTON_EXCLUIR}
             disabled={somenteConsulta || desabilitarExcluir()}
             onClick={() => onClickExcluir()}
           />

@@ -32,12 +32,12 @@ import {
   SGP_BUTTON_CANCELAR,
   SGP_BUTTON_COPIAR_AVALIACAO,
   SGP_BUTTON_EXCLUIR,
+  SGP_BUTTON_REGENCIA_,
 } from '~/constantes/ids/button';
 import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
 import BotaoExcluirPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoExcluirPadrao';
 import { SGP_RADIO_CATEGORIA } from '~/constantes/ids/radio';
 import {
-  SGP_BUTTON_REGENCIA_,
   SGP_SELECT_COMPONENTE_CURRICULAR,
   SGP_SELECT_NOME_AVALIACAO,
   SGP_SELECT_TIPO_AVALIACAO,
