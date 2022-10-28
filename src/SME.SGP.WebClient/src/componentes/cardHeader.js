@@ -5,7 +5,16 @@ import shortid from 'shortid';
 import { Base } from './colors';
 
 const CardHeader = props => {
-  const { indice, children, border, icon, show, onClick, configuracao } = props;
+  const {
+    id,
+    indice,
+    children,
+    border,
+    icon,
+    show,
+    onClick,
+    configuracao,
+  } = props;
 
   const Header = styled.div`
     height: ${configuracao.altura};
@@ -48,6 +57,7 @@ const CardHeader = props => {
 
   return (
     <Header
+      id={id ? `${id}_HEADER` : ''}
       className={`card-header shadow-sm rounded bg-white d-flex align-items-center ${show &&
         'expanded'} ${icon ? 'py-3' : 'py-4'} fonte-16`}
     >
@@ -71,6 +81,7 @@ const CardHeader = props => {
 };
 
 CardHeader.propTypes = {
+  id: PropTypes.string,
   indice: PropTypes.string,
   children: PropTypes.node,
   border: PropTypes.bool,
@@ -81,6 +92,7 @@ CardHeader.propTypes = {
 };
 
 CardHeader.defaultProps = {
+  id: '',
   indice: shortid.generate(),
   children: () => {},
   onClick: () => {},

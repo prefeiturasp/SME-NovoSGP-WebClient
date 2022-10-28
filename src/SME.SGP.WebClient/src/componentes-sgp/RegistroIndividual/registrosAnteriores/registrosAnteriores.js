@@ -5,6 +5,7 @@ import shortid from 'shortid';
 import { CardCollapse, Loader } from '~/componentes';
 
 import { CONFIG_COLLAPSE_REGISTRO_INDIVIDUAL } from '~/constantes';
+import { SGP_COLLAPSE_REGISTROS_ANTERIORES } from '~/constantes/ids/collapse';
 import { RotasDto } from '~/dtos';
 
 import { setRecolherRegistrosAnteriores } from '~/redux/modulos/registroIndividual/actions';
@@ -70,6 +71,7 @@ const RegistrosAnteriores = () => {
           alt={`${idCollapse}-alt`}
           show={expandir}
           onClick={expandirAlternado}
+          id={SGP_COLLAPSE_REGISTROS_ANTERIORES}
         >
           <RegistrosAnterioresConteudo
             permissoesTela={permissoesTela}
