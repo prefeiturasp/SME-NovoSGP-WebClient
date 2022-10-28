@@ -30,6 +30,9 @@ import {
 } from '~/servicos';
 
 import SugestaoTopico from '../SugestaoTopico/sugestaoTopico';
+import { SGP_DATE_SELECIONAR_DATA_NOVO_REGISTRO_INDIVIDUAL } from '~/constantes/ids/date';
+import { SGP_COLLAPSE_NOVO_REGISTRO_INDIVIDUAL } from '~/constantes/ids/collapse';
+import { SGP_JODIT_EDITOR_NOVO_REGISTRO_INDIVIDUAL } from '~/constantes/ids/jodit-editor';
 
 const NovoRegistroIndividual = () => {
   const dataAtual = window.moment();
@@ -284,9 +287,11 @@ const NovoRegistroIndividual = () => {
             alt={`${idSecao}-alt`}
             show={expandir}
             onClick={expandirAlternado}
+            id={SGP_COLLAPSE_NOVO_REGISTRO_INDIVIDUAL}
           >
             <div className="col-3 p-0 pb-2">
               <CampoData
+                id={SGP_DATE_SELECIONAR_DATA_NOVO_REGISTRO_INDIVIDUAL}
                 name="data"
                 placeholder="Selecione"
                 valor={data}
@@ -304,7 +309,7 @@ const NovoRegistroIndividual = () => {
                   <JoditEditor
                     validarSeTemErro={validarSeTemErro}
                     mensagemErro="Campo obrigatório"
-                    id={`secao-${idSecao}-editor`}
+                    id={SGP_JODIT_EDITOR_NOVO_REGISTRO_INDIVIDUAL}
                     value={registro}
                     onChange={mudarEditor}
                     desabilitar={
