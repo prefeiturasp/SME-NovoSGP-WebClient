@@ -15,6 +15,17 @@ import FiltroHelper from '~componentes-sgp/filtro/helper';
 import AlertaModalidadeInfantil from '~/componentes-sgp/AlertaModalidadeInfantil/alertaModalidadeInfantil';
 import { OPCAO_TODOS } from '~/constantes/constantes';
 import BotoesAcaoRelatorio from '~/componentes-sgp/botoesAcaoRelatorio';
+import { SGP_CHECKBOX_EXIBIR_HISTORICO } from '~/constantes/ids/checkbox';
+import {
+  SGP_SELECT_ANO_LETIVO,
+  SGP_SELECT_DRE,
+  SGP_SELECT_FORMATO,
+  SGP_SELECT_MODALIDADE,
+  SGP_SELECT_SEMESTRE,
+  SGP_SELECT_TURMA,
+  SGP_SELECT_UE,
+  SGP_SELECT_VISUALIZACAO,
+} from '~/constantes/ids/select';
 
 const AtaFinalResultados = () => {
   const usuarioStore = useSelector(store => store.usuario);
@@ -531,6 +542,7 @@ const AtaFinalResultados = () => {
           <div className="row">
             <div className="col-sm-12 mb-2">
               <CheckboxComponent
+                id={SGP_CHECKBOX_EXIBIR_HISTORICO}
                 label="Exibir histórico?"
                 onChangeCheckbox={onCheckedConsideraHistorico}
                 checked={consideraHistorico}
@@ -539,6 +551,7 @@ const AtaFinalResultados = () => {
             <div className="col-sm-12 col-md-4 col-lg-2 col-xl-2 mb-3">
               <Loader loading={carregandoAnosLetivos} tip="">
                 <SelectComponent
+                  id={SGP_SELECT_ANO_LETIVO}
                   label="Ano Letivo"
                   lista={listaAnosLetivo}
                   valueOption="valor"
@@ -555,6 +568,7 @@ const AtaFinalResultados = () => {
             <div className="col-sm-12 col-md-12 col-lg-5 col-xl-5 mb-3">
               <Loader loading={carregandoDres} tip="">
                 <SelectComponent
+                  id={SGP_SELECT_DRE}
                   label="Diretoria Regional de Educação (DRE)"
                   lista={listaDres}
                   valueOption="valor"
@@ -573,6 +587,7 @@ const AtaFinalResultados = () => {
             <div className="col-sm-12 col-md-12 col-lg-5 col-xl-5 mb-2">
               <Loader loading={carregandoUes} tip="">
                 <SelectComponent
+                  id={SGP_SELECT_UE}
                   label="Unidade Escolar (UE)"
                   lista={listaUes}
                   valueOption="valor"
@@ -590,6 +605,7 @@ const AtaFinalResultados = () => {
             </div>
             <div className="col-sm-12 col-md-8 col-lg-4 col-xl-4 mb-3">
               <SelectComponent
+                id={SGP_SELECT_MODALIDADE}
                 label="Modalidade"
                 lista={listaModalidades}
                 valueOption="valor"
@@ -605,6 +621,7 @@ const AtaFinalResultados = () => {
             </div>
             <div className="col-sm-12 col-md-4 col-lg-2 col-xl-2 mb-3">
               <SelectComponent
+                id={SGP_SELECT_SEMESTRE}
                 lista={listaSemestre}
                 valueOption="valor"
                 valueText="desc"
@@ -621,6 +638,7 @@ const AtaFinalResultados = () => {
             </div>
             <div className="col-sm-12 col-md-12 col-lg-6 col-xl-6 mb-3">
               <SelectComponent
+                id={SGP_SELECT_TURMA}
                 lista={listaTurmas}
                 valueOption="valor"
                 valueText="nomeFiltro"
@@ -638,6 +656,7 @@ const AtaFinalResultados = () => {
             </div>
             <div className="col-sm-12 col-md-3 col-lg-5 col-xl-3 mb-3">
               <SelectComponent
+                id={SGP_SELECT_VISUALIZACAO}
                 label="Visualização"
                 lista={listaVisualizacao}
                 valueOption="valor"
@@ -649,6 +668,7 @@ const AtaFinalResultados = () => {
             </div>
             <div className="col-sm-12 col-md-3 col-lg-2 col-xl-2">
               <SelectComponent
+                id={SGP_SELECT_FORMATO}
                 label="Formato"
                 lista={listaFormatos}
                 valueOption="valor"
