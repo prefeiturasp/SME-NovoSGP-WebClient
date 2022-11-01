@@ -42,6 +42,7 @@ import {
   ordenarDescPor,
 } from '~/utils/funcoes/gerais';
 import { SGP_BUTTON_SALVAR_ALTERAR } from '~/componentes-sgp/filtro/idsCampos';
+import { verificaSomenteConsulta } from '~/servicos';
 
 function AtribuicaoCJForm({ match, location }) {
   const anoAtual = window.moment().format('YYYY');
@@ -70,6 +71,12 @@ function AtribuicaoCJForm({ match, location }) {
     turmaId: '',
     anoLetivo: anoAtual,
   });
+
+  useEffect(() => {
+    setSomenteConsulta(
+      verificaSomenteConsulta(permissoesTela[RotasDto.ATRIBUICAO_CJ_LISTA])
+    );
+  }, [permissoesTela]);
 
   const validacoes = () => {
     return Yup.object({
@@ -184,6 +191,8 @@ function AtribuicaoCJForm({ match, location }) {
         ueId: query.ueId,
         dreId: query.dreId,
         anoLetivo: anoSelecionado,
+        professorRf: query?.usuarioRF,
+        professorNome: query?.professorNome,
       });
       setConsideraHistorico(historico);
       setAnoLetivo(anoSelecionado);
@@ -311,12 +320,6 @@ function AtribuicaoCJForm({ match, location }) {
     setAuditoria({});
   };
 
-  useEffect(() => {
-    const desabilitar = !permissoesTela[RotasDto.ATRIBUICAO_CJ_LISTA]
-      ?.podeIncluir;
-    setSomenteConsulta(desabilitar);
-  }, [permissoesTela]);
-
   return (
     <>
       <Loader loading={carregando}>
@@ -374,7 +377,7 @@ function AtribuicaoCJForm({ match, location }) {
                         onChange={onChangeAnoLetivo}
                         valueSelect={anoLetivo}
                         allowClear={false}
-                        disabled={!consideraHistorico}
+                        disabled={!consideraHistorico || somenteConsulta}
                         labelRequired
                       />
                     </Grid>
@@ -463,6 +466,7 @@ function AtribuicaoCJForm({ match, location }) {
                     carregando={carregandoTabela}
                     lista={listaProfessores}
                     onChangeSubstituir={onChangeSubstituir}
+                    somenteConsulta={somenteConsulta}
                   />
                   {auditoria && (
                     <div className="row">
