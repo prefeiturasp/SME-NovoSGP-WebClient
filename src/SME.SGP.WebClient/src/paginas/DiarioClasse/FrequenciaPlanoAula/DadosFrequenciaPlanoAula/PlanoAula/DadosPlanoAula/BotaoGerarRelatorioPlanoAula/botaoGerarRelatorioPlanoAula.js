@@ -4,6 +4,7 @@ import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
 import { Colors } from '~/componentes';
 import Button from '~/componentes/button';
+import { SGP_BUTTON_IMPRIMIR_RELATORIO_PLANO_AULA } from '~/constantes/ids/button';
 import { setExibirLoaderFrequenciaPlanoAula } from '~/redux/modulos/frequenciaPlanoAula/actions';
 import { erros, sucesso } from '~/servicos/alertas';
 import ServicoPlanoAula from '~/servicos/Paginas/DiarioClasse/ServicoPlanoAula';
@@ -38,8 +39,8 @@ const BotaoGerarRelatorioPlanoAula = props => {
         color={Colors.Azul}
         border
         onClick={() => gerarPlanoAula()}
-        id="btn-imprimir-relatorio"
         disabled={!planoAulaId}
+        id={SGP_BUTTON_IMPRIMIR_RELATORIO_PLANO_AULA}
       />
     </div>
   );

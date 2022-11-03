@@ -1,6 +1,7 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 import CardCollapse from '~/componentes/cardCollapse';
+import { SGP_COLLAPSE_OBJETIVOS_APRENDIZAGEM_MEUS_OBJETIVOS } from '~/constantes/ids/collapse';
 import TabsComponentesCorriculares from './TabsComponentesCorriculares/tabsComponentesCorriculares';
 
 const ObjetivosAprendizagemDesenvolvimento = () => {
@@ -25,6 +26,7 @@ const ObjetivosAprendizagemDesenvolvimento = () => {
     <>
       {componenteCurricular && componenteCurricular.possuiObjetivos ? (
         <CardCollapse
+          id={SGP_COLLAPSE_OBJETIVOS_APRENDIZAGEM_MEUS_OBJETIVOS}
           key="objetivos-aprendizagem-desenvolvimento"
           titulo="Objetivos de aprendizagem e meus objetivos (Currículo da Cidade)"
           indice="objetivos-aprendizagem-desenvolvimento"
