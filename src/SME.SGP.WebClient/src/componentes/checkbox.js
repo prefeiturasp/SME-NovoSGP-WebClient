@@ -68,6 +68,7 @@ const CheckboxComponent = props => {
   const campoSemValidacoes = () => {
     return (
       <Checkbox
+        id={id}
         onChange={onChangeCheckbox}
         defaultChecked={defaultChecked}
         disabled={disabled}

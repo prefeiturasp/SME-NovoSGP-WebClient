@@ -5,6 +5,9 @@ import { CampoData } from '~/componentes';
 import Button from '~/componentes/button';
 import { Colors } from '~/componentes/colors';
 import SelectComponent from '~/componentes/select';
+import { SGP_BUTTON_PROXIMA_AULA } from '~/constantes/ids/button';
+import { SGP_DATE_SELECIONAR_DATA_FREQUENCIA_PLANO_AULA } from '~/constantes/ids/date';
+import { SGP_SELECT_COMPONENTE_CURRICULAR } from '~/constantes/ids/select';
 import { salvarDadosAulaFrequencia } from '~/redux/modulos/calendarioProfessor/actions';
 import {
   limparDadosFrequenciaPlanoAula,
@@ -405,7 +408,7 @@ const CamposFiltrarDadosFrequenciaPlanoAula = () => {
     <>
       <div className="col-sm-12 col-md-4 col-lg-4 col-xl-4 mb-2">
         <SelectComponent
-          id="componente-curricular"
+          id={SGP_SELECT_COMPONENTE_CURRICULAR}
           lista={listaComponenteCurricular}
           valueOption="codigoComponenteCurricular"
           valueText="nome"
@@ -421,6 +424,7 @@ const CamposFiltrarDadosFrequenciaPlanoAula = () => {
       </div>
       <div className="col-sm-12 col-md-4 col-lg-3 col-xl-3 mb-3">
         <CampoData
+          id={SGP_DATE_SELECIONAR_DATA_FREQUENCIA_PLANO_AULA}
           valor={dataSelecionada}
           onChange={onChangeData}
           placeholder="DD/MM/AAAA"
@@ -438,7 +442,7 @@ const CamposFiltrarDadosFrequenciaPlanoAula = () => {
       </div>
       <div className="col-sm-12 col-md-4 col-lg-3 col-xl-3 mb-3">
         <Button
-          id="btn-proximo"
+          id={SGP_BUTTON_PROXIMA_AULA}
           label="Próxima aula"
           icon="arrow-right"
           color={Colors.Azul}
