@@ -26,6 +26,7 @@ const ListaPaginada = props => {
     showSizeChanger,
     naoFiltrarQuandoCarregando,
     mapearNovoDto,
+    id,
   } = props;
 
   const [carregando, setCarregando] = useState(false);
@@ -162,6 +163,7 @@ const ListaPaginada = props => {
   return (
     <Container className="table-responsive">
       <Table
+        id={id}
         className={multiSelecao ? '' : 'ocultar-coluna-multi-selecao'}
         rowKey={colunaChave}
         rowSelection={selecaoLinha}
@@ -238,6 +240,7 @@ ListaPaginada.propTypes = {
   showSizeChanger: PropTypes.oneOfType([PropTypes.bool]),
   naoFiltrarQuandoCarregando: PropTypes.oneOfType([PropTypes.bool]),
   mapearNovoDto: PropTypes.oneOfType([PropTypes.func]),
+  id: PropTypes.string,
 };
 
 ListaPaginada.defaultProps = {
@@ -256,6 +259,7 @@ ListaPaginada.defaultProps = {
   showSizeChanger: true,
   naoFiltrarQuandoCarregando: true,
   mapearNovoDto: null,
+  id: '',
 };
 
 export default ListaPaginada;

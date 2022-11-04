@@ -14,6 +14,7 @@ const InputNome = props => {
     regexIgnore,
     placeholder,
     exibirLoader,
+    id,
   } = props;
 
   const [sugestoes, setSugestoes] = useState([]);
@@ -78,6 +79,7 @@ const InputNome = props => {
           allowClear
         >
           <Input
+            id={id}
             placeholder={placeholder !== '' ? placeholder : 'Digite o nome'}
             prefix={<i className="fa fa-search fa-lg" />}
             disabled={desabilitado}
@@ -101,6 +103,7 @@ InputNome.propTypes = {
   regexIgnore: PropTypes.objectOf(PropTypes.any),
   placeholder: PropTypes.string,
   exibirLoader: PropTypes.bool,
+  id: PropTypes.string,
 };
 
 InputNome.defaultProps = {
@@ -112,6 +115,7 @@ InputNome.defaultProps = {
   regexIgnore: '',
   placeholder: '',
   exibirLoader: false,
+  id: '',
 };
 
 export default InputNome;
