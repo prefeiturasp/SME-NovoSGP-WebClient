@@ -7,6 +7,17 @@ import Button from '~/componentes/button';
 import { Colors } from '~/componentes/colors';
 import LocalizadorEstudante from '~/componentes/LocalizadorEstudante';
 import {
+  SGP_BUTTON_CANCELAR,
+  SGP_BUTTON_PROXIMO_PASSO,
+} from '~/constantes/ids/button';
+import {
+  SGP_SELECT_ANO_LETIVO,
+  SGP_SELECT_DRE,
+  SGP_SELECT_ESTUDANTE_CRIANCA,
+  SGP_SELECT_TURMA,
+  SGP_SELECT_UE,
+} from '~/constantes/ids/select';
+import {
   setDadosCollapseLocalizarEstudante,
   setLimparDadosLocalizarEstudante,
 } from '~/redux/modulos/collapseLocalizarEstudante/actions';
@@ -259,7 +270,7 @@ const CollapseLocalizarEstudanteDados = props => {
     <div className="row">
       <div className="col-sm-12 col-md-6 col-lg-2 col-xl-2 mb-2">
         <SelectComponent
-          id="ano-letivo"
+          id={SGP_SELECT_ANO_LETIVO}
           label="Ano Letivo"
           lista={listaAnosLetivo}
           valueOption="valor"
@@ -272,7 +283,7 @@ const CollapseLocalizarEstudanteDados = props => {
       <div className="col-sm-12 col-md-12 col-lg-12 col-xl-5 mb-2">
         <Loader loading={carregandoDres} tip="">
           <SelectComponent
-            id="dre"
+            id={SGP_SELECT_DRE}
             label="Diretoria Regional de Educação (DRE)"
             lista={listaDres}
             valueOption="valor"
@@ -288,7 +299,7 @@ const CollapseLocalizarEstudanteDados = props => {
       <div className="col-sm-12 col-md-12 col-lg-12 col-xl-5 mb-2">
         <Loader loading={carregandoUes} tip="">
           <SelectComponent
-            id="ue"
+            id={SGP_SELECT_UE}
             label="Unidade Escolar (UE)"
             lista={listaUes}
             valueOption="valor"
@@ -304,7 +315,7 @@ const CollapseLocalizarEstudanteDados = props => {
       <div className="col-sm-12 col-md-12 col-lg-12 col-xl-4 mb-2">
         <Loader loading={carregandoTurmas} tip="">
           <SelectComponent
-            id="turma"
+            id={SGP_SELECT_TURMA}
             lista={listaTurmas}
             valueOption="codigo"
             valueText="nomeFiltro"
@@ -320,7 +331,7 @@ const CollapseLocalizarEstudanteDados = props => {
       <div className="col-sm-12 col-md-12 col-lg-12 col-xl-8 mb-2">
         <div className="row">
           <LocalizadorEstudante
-            id="estudante"
+            id={SGP_SELECT_ESTUDANTE_CRIANCA}
             showLabel
             ueId={codigoDre ? codigoUe : ''}
             onChange={onChangeLocalizadorEstudante}
@@ -336,7 +347,7 @@ const CollapseLocalizarEstudanteDados = props => {
       </div>
       <div className="col-md-12 d-flex justify-content-end pb-4 mt-2">
         <Button
-          id="btn-cancelar"
+          id={SGP_BUTTON_CANCELAR}
           label="Cancelar"
           color={Colors.Roxo}
           border
@@ -344,7 +355,7 @@ const CollapseLocalizarEstudanteDados = props => {
           onClick={onClickCancelar}
         />
         <Button
-          id="btn-proximo-passo"
+          id={SGP_BUTTON_PROXIMO_PASSO}
           label="Próximo passo"
           color={Colors.Roxo}
           border
