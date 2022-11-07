@@ -80,7 +80,7 @@ const CompensacaoAusenciaLista = () => {
     return (
       <AlunosCompensacao>
         {dados.map(aluno => (
-          <span>{aluno}</span>
+          <span key={aluno}>{aluno}</span>
         ))}
       </AlunosCompensacao>
     );

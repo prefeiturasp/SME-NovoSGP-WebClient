@@ -10,7 +10,6 @@ const CollapseAtribuicaoResponsavel = props => {
     clickCancelar,
     clickRemoverResponsavel,
     codigoTurma,
-    url,
   } = props;
 
   return (
@@ -26,7 +25,6 @@ const CollapseAtribuicaoResponsavel = props => {
         changeLocalizadorResponsavel={changeLocalizadorResponsavel}
         clickCancelar={clickCancelar}
         codigoTurma={codigoTurma}
-        url={url}
         clickRemoverResponsavel={clickRemoverResponsavel}
       />
     </CardCollapse>
@@ -39,7 +37,6 @@ CollapseAtribuicaoResponsavel.propTypes = {
   clickCancelar: PropTypes.func,
   clickRemoverResponsavel: PropTypes.func,
   codigoTurma: PropTypes.string,
-  url: PropTypes.string,
 };
 
 CollapseAtribuicaoResponsavel.defaultProps = {
@@ -48,7 +45,6 @@ CollapseAtribuicaoResponsavel.defaultProps = {
   clickCancelar: () => {},
   clickRemoverResponsavel: () => {},
   codigoTurma: '',
-  url: '',
 };
 
 export default CollapseAtribuicaoResponsavel;
