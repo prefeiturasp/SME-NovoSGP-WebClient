@@ -35,6 +35,7 @@ const TabCadastroPlano = props => {
     }
 
     dispatch(setExibirLoaderPlanoAEE(true));
+    dispatch(setPlanoAEELimparDados());
     const historico = qs.parse(window.location.search)?.historico ?? false;
     const resultado = await ServicoPlanoAEE.obterPlanoPorId(
       planoId,
@@ -64,7 +65,6 @@ const TabCadastroPlano = props => {
         };
         dispatch(setDadosObjectCardEstudante(dadosObjectCard));
       }
-      dispatch(setPlanoAEEDados(resultado?.data));
 
       if (resultado?.data?.turma) {
         const { aluno, turma } = resultado?.data;
@@ -78,6 +78,8 @@ const TabCadastroPlano = props => {
 
         dispatch(setDadosCollapseLocalizarEstudante(dadosLocalizarEstudante));
       }
+
+      dispatch(setPlanoAEEDados(resultado?.data));
     } else {
       dispatch(setPlanoAEELimparDados());
     }

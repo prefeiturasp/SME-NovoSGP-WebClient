@@ -392,7 +392,9 @@ const PlanoAEELista = () => {
   };
 
   const onClickEditar = item => {
-    history.push(`${RotasDto.RELATORIO_AEE_PLANO}/editar/${item.id}?historico=${consideraHistorico}`);
+    history.push(
+      `${RotasDto.RELATORIO_AEE_PLANO}/editar/${item.id}?historico=${consideraHistorico}`
+    );
   };
 
   useEffect(() => {
@@ -519,7 +521,7 @@ const PlanoAEELista = () => {
                   exibirCodigoEOL={false}
                   codigoTurma={turmaId}
                   placeholder="Procure pelo nome da Criança/Estudante"
-                  historico = {consideraHistorico}
+                  historico={consideraHistorico}
                 />
               </div>
             </div>

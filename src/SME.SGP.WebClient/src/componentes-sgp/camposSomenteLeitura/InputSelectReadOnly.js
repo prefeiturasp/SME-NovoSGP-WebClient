@@ -61,7 +61,7 @@ const InputSelectReadOnly = props => {
                 ${disabled ? 'ant-select-disabled ant-select-selection ' : ''}
                 `}
                 placeholder={placeholder}
-                value={value}
+                value={value || ''}
                 disabled={disabled}
                 id={id}
               />

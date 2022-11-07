@@ -332,11 +332,21 @@ const ListaoPaginado = () => {
         <ListaPaginada
           url="v1/turmas/listagem-turmas"
           id="lista-paginada-listao"
-          colunaChave="nomeTurma"
+          colunaChave="colunaChave"
           colunas={colunas}
           filtro={filtros}
           filtroEhValido={filtroEhValido}
           naoFiltrarQuandocarregando
+          mapearNovoDto={data => {
+            return data?.length
+              ? data.map(linha => {
+                  return {
+                    ...linha,
+                    colunaChave: `${linha?.nomeTurma}-${linha?.componenteCurricularCodigo}`,
+                  };
+                })
+              : [];
+          }}
         />
       ) : (
         ''

@@ -25,6 +25,7 @@ const ListaPaginada = props => {
     setLista,
     showSizeChanger,
     naoFiltrarQuandoCarregando,
+    mapearNovoDto,
   } = props;
 
   const [carregando, setCarregando] = useState(false);
@@ -113,10 +114,14 @@ const ListaPaginada = props => {
         statusCode = resposta.status;
         setLinhas([]);
         setTotal(resposta.data.totalRegistros);
-        if (resposta?.data?.items?.length) {
-          setLinhas([...resposta.data.items]);
+        let items = resposta?.data?.items;
+        if (items?.length) {
+          if (mapearNovoDto) {
+            items = mapearNovoDto(items);
+          }
+          setLinhas([...items]);
           if (setLista) {
-            setLista(resposta.data.items);
+            setLista(items);
           }
         } else {
           setLista([]);
@@ -232,6 +237,7 @@ ListaPaginada.propTypes = {
   setLista: PropTypes.oneOfType([PropTypes.func]),
   showSizeChanger: PropTypes.oneOfType([PropTypes.bool]),
   naoFiltrarQuandoCarregando: PropTypes.oneOfType([PropTypes.bool]),
+  mapearNovoDto: PropTypes.oneOfType([PropTypes.func]),
 };
 
 ListaPaginada.defaultProps = {
@@ -249,6 +255,7 @@ ListaPaginada.defaultProps = {
   setLista: () => {},
   showSizeChanger: true,
   naoFiltrarQuandoCarregando: true,
+  mapearNovoDto: null,
 };
 
 export default ListaPaginada;

@@ -139,7 +139,7 @@ CampoNota.defaultProps = {
 };
 
 CampoNota.propTypes = {
-  nota: PropTypes.string,
+  nota: PropTypes.oneOfType([PropTypes.any]),
   onChangeNotaConceito: PropTypes.func,
   desabilitarCampo: PropTypes.bool,
   clicarSetas: PropTypes.func,

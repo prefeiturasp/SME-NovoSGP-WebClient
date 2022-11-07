@@ -171,7 +171,7 @@ CampoNotaFinal.propTypes = {
   clicarSetas: PropTypes.func,
   name: PropTypes.string,
   esconderSetas: PropTypes.bool,
-  step: PropTypes.bool,
+  step: PropTypes.number,
   label: PropTypes.string,
   podeLancarNotaFinal: PropTypes.bool,
 };

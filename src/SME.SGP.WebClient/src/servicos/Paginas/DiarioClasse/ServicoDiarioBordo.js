@@ -53,6 +53,10 @@ class ServicoDiarioBordo {
     return api.delete(`${urlPadrao}/observacoes/${observacaoId}`);
   };
 
+  excluirDiarioBordo = diarioId => {
+    return api.delete(`${urlPadrao}/${diarioId}`);
+  };
+
   atualizarExcluirDadosObservacao = dados => {
     const { dispatch } = store;
     const state = store.getState();

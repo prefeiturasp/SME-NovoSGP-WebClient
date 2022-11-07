@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import React, { useState } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Button from '~/componentes/button';
 import { Colors } from '~/componentes/colors';
@@ -7,16 +7,16 @@ import {
   setDadosCollapseAtribuicaoResponsavel,
   setLimparDadosAtribuicaoResponsavel,
 } from '~/redux/modulos/collapseAtribuicaoResponsavel/actions';
-import LocalizadorFuncionario from '../LocalizadorFuncionario';
+import SelectComponent from '~/componentes/select';
+import ServicoEncaminhamentoAEE from '~/servicos/Paginas/Relatorios/AEE/ServicoEncaminhamentoAEE';
 
 const CollapseAtribuicaoResponsavelDados = props => {
   const {
     validarAntesAtribuirResponsavel,
     changeLocalizadorResponsavel,
     clickCancelar,
-    codigoTurma,
-    url,
     clickRemoverResponsavel,
+    codigoTurma,
   } = props;
   const dispatch = useDispatch();
 
@@ -25,24 +25,63 @@ const CollapseAtribuicaoResponsavelDados = props => {
       store.collapseAtribuicaoResponsavel.dadosCollapseAtribuicaoResponsavel
   );
 
+  const responsavelInicialEdicao = dadosCollapseAtribuicaoResponsavel?.codigoRF
+    ? {
+        codigoRF: dadosCollapseAtribuicaoResponsavel?.codigoRF,
+        nomeServidor: dadosCollapseAtribuicaoResponsavel?.nomeServidor,
+        nomeServidorFormatado: `${dadosCollapseAtribuicaoResponsavel.nomeServidor} - ${dadosCollapseAtribuicaoResponsavel.codigoRF}`,
+      }
+    : undefined;
+
+  const listaRespInicialEdicao =
+    responsavelInicialEdicao?.codigoRF && responsavelInicialEdicao?.nomeServidor
+      ? [responsavelInicialEdicao]
+      : [];
+
   const [
     funcionarioLocalizadorSelecionado,
     setFuncionarioLocalizadorSelecionado,
-  ] = useState();
+  ] = useState(responsavelInicialEdicao);
 
-  const [limparCampos, setLimparCampos] = useState(false);
+  const [responsaveisPAAI, setResponsaveisPAAI] = useState(
+    listaRespInicialEdicao
+  );
 
-  const onChangeLocalizador = funcionario => {
-    setLimparCampos(false);
-    if (funcionario?.codigoRF && funcionario?.nomeServidor) {
-      setFuncionarioLocalizadorSelecionado({
-        codigoRF: funcionario?.codigoRF,
-        nomeServidor: funcionario?.nomeServidor,
+  const obterResponsaveisPAAI = useCallback(async () => {
+    const resposta = await ServicoEncaminhamentoAEE.obterResponsaveveisEncaminhamentoPAAI(
+      codigoTurma
+    );
+
+    const dados = resposta?.data?.items;
+    if (dados?.length) {
+      const listaResp = dados.map(item => {
+        return {
+          ...item,
+          codigoRF: item.codigoRf,
+          nomeServidorFormatado: `${item.nomeServidor} - ${item.codigoRf}`,
+        };
       });
+      if (listaResp?.length === 1) {
+        setFuncionarioLocalizadorSelecionado(listaResp[0]);
+      }
+      setResponsaveisPAAI(listaResp);
+    }
+  }, [codigoTurma]);
+
+  useEffect(() => {
+    if (codigoTurma && !responsavelInicialEdicao?.codigoRF)
+      obterResponsaveisPAAI();
+  }, [codigoTurma, responsavelInicialEdicao, obterResponsaveisPAAI]);
+
+  const onChange = rf => {
+    const itemSelecionado = responsaveisPAAI?.find(r => r?.codigoRF === rf);
+
+    if (itemSelecionado) {
+      setFuncionarioLocalizadorSelecionado(itemSelecionado);
     } else {
       setFuncionarioLocalizadorSelecionado();
       dispatch(setLimparDadosAtribuicaoResponsavel());
-      changeLocalizadorResponsavel(funcionario);
+      changeLocalizadorResponsavel(rf);
     }
   };
 
@@ -51,7 +90,6 @@ const CollapseAtribuicaoResponsavelDados = props => {
       codigoRF: funcionarioLocalizadorSelecionado.codigoRF,
       nomeServidor: funcionarioLocalizadorSelecionado.nomeServidor,
     };
-
     let continuar = true;
     if (validarAntesAtribuirResponsavel) {
       continuar = await validarAntesAtribuirResponsavel(params);
@@ -65,7 +103,6 @@ const CollapseAtribuicaoResponsavelDados = props => {
   const onClickCancelar = () => {
     setFuncionarioLocalizadorSelecionado();
     dispatch(setLimparDadosAtribuicaoResponsavel());
-    setLimparCampos(true);
     clickCancelar();
   };
 
@@ -75,23 +112,27 @@ const CollapseAtribuicaoResponsavelDados = props => {
     }
   };
 
+  const desabilitarBtnAtribuirCancelar =
+    !!dadosCollapseAtribuicaoResponsavel?.codigoRF ||
+    !funcionarioLocalizadorSelecionado?.codigoRF;
+
   return (
     <div className="row">
       <div className="col-md-12 mb-2">
-        <div className="row">
-          <LocalizadorFuncionario
-            id="funcionario"
-            onChange={onChangeLocalizador}
-            codigoTurma={codigoTurma}
-            limparCampos={limparCampos}
-            url={url}
-            valorInicial={{
-              codigoRF: dadosCollapseAtribuicaoResponsavel?.codigoRF,
-              nomeServidor: dadosCollapseAtribuicaoResponsavel?.nomeServidor,
-            }}
-            desabilitado={!!dadosCollapseAtribuicaoResponsavel?.podeEditar}
-          />
-        </div>
+        <SelectComponent
+          placeholder="Pesquise por nome ou RF"
+          label="PAAI responsável"
+          valueOption="codigoRF"
+          valueText="nomeServidorFormatado"
+          lista={responsaveisPAAI}
+          showSearch
+          valueSelect={funcionarioLocalizadorSelecionado?.codigoRF}
+          className
+          onChange={onChange}
+          allowClear={false}
+          searchValue
+          disabled={responsaveisPAAI?.length === 1}
+        />
       </div>
       <div className="col-md-12 d-flex justify-content-end pb-4 mt-2">
         <Button
@@ -101,10 +142,7 @@ const CollapseAtribuicaoResponsavelDados = props => {
           border
           className="mr-3"
           onClick={onClickCancelar}
-          disabled={
-            !!dadosCollapseAtribuicaoResponsavel?.codigoRF ||
-            !funcionarioLocalizadorSelecionado?.codigoRF
-          }
+          disabled={desabilitarBtnAtribuirCancelar}
         />
         <Button
           id="btn-atribuir"
@@ -113,10 +151,7 @@ const CollapseAtribuicaoResponsavelDados = props => {
           border
           bold
           onClick={onClickAtribuirResponsavel}
-          disabled={
-            !!dadosCollapseAtribuicaoResponsavel?.codigoRF ||
-            !funcionarioLocalizadorSelecionado?.codigoRF
-          }
+          disabled={desabilitarBtnAtribuirCancelar}
         />
         <Button
           id="btn-remover"
@@ -138,7 +173,6 @@ CollapseAtribuicaoResponsavelDados.propTypes = {
   changeLocalizadorResponsavel: PropTypes.func,
   clickCancelar: PropTypes.func,
   codigoTurma: PropTypes.string,
-  url: PropTypes.string,
   clickRemoverResponsavel: PropTypes.func,
 };
 
@@ -147,7 +181,6 @@ CollapseAtribuicaoResponsavelDados.defaultProps = {
   changeLocalizadorResponsavel: () => {},
   clickCancelar: () => {},
   codigoTurma: '',
-  url: '',
   clickRemoverResponsavel: null,
 };
 
