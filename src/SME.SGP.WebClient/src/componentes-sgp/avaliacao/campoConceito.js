@@ -64,7 +64,7 @@ const CampoConceito = props => {
 };
 
 CampoConceito.propTypes = {
-  nota: {},
+  nota: PropTypes.oneOfType([PropTypes.any]),
   onChangeNotaConceito: PropTypes.func,
   desabilitarCampo: PropTypes.bool,
   listaTiposConceitos: PropTypes.oneOfType([PropTypes.any]),

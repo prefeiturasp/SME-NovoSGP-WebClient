@@ -22,7 +22,7 @@ const InputNumberReadOnly = props => {
           placeholder={placeholder}
           className="ant-input-number-input"
           id={id}
-          value={value}
+          value={value || ''}
           disabled={disabled}
           readOnly
         />

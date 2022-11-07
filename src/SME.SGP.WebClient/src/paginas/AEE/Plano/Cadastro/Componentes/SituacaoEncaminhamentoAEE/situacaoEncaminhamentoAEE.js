@@ -12,7 +12,8 @@ const SituacaoEncaminhamentoAEE = () => {
   const [situacao, setSituacao] = useState({});
 
   useEffect(() => {
-    const { codigoAluno, codigoUe } = dadosCollapseLocalizarEstudante;
+    const codigoAluno = dadosCollapseLocalizarEstudante?.codigoAluno;
+    const codigoUe = dadosCollapseLocalizarEstudante?.codigoUe;
 
     const obtemSituacaoEncaminhamento = async () => {
       dispatch(setPlanoAEESituacaoEncaminhamentoAEE());

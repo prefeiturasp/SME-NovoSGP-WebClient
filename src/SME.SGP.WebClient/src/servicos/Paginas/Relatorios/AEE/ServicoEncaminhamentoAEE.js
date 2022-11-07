@@ -1,3 +1,4 @@
+import { data } from 'jquery';
 import QuestionarioDinamicoFuncoes from '~/componentes-sgp/QuestionarioDinamico/Funcoes/QuestionarioDinamicoFuncoes';
 import { RotasDto } from '~/dtos';
 import tipoQuestao from '~/dtos/tipoQuestao';
@@ -21,6 +22,10 @@ import {
   setNomesSecoesComCamposObrigatorios,
 } from '~/redux/modulos/encaminhamentoAEE/actions';
 import { setDadosObjectCardEstudante } from '~/redux/modulos/objectCardEstudante/actions';
+import {
+  setLimparDadosQuestionarioDinamico,
+  setQuestionarioDinamicoEmEdicao,
+} from '~/redux/modulos/questionarioDinamico/actions';
 import { erros } from '~/servicos/alertas';
 import api from '~/servicos/api';
 import history from '~/servicos/history';
@@ -136,7 +141,8 @@ class ServicoEncaminhamentoAEE {
     encaminhamentoId,
     situacao,
     validarCamposObrigatorios,
-    enviarEncaminhamento
+    enviarEncaminhamento,
+    salvarRascunho
   ) => {
     const { dispatch } = store;
 
@@ -383,7 +389,13 @@ class ServicoEncaminhamentoAEE {
             .catch(e => erros(e))
             .finally(() => dispatch(setExibirLoaderEncaminhamentoAEE(false)));
 
-          if (resposta?.data?.id) {
+          if (salvarRascunho && resposta?.data?.id) {
+            dispatch(setQuestionarioDinamicoEmEdicao(false));
+            dispatch(setListaSecoesEmEdicao([]));
+            dispatch(setLimparDadosEncaminhamento());
+            dispatch(setLimparDadosQuestionarioDinamico());
+            dispatch(setLimparDadosLocalizarEstudante());
+            dispatch(setLimparDadosAtribuicaoResponsavel());
             history.push(
               `${RotasDto.RELATORIO_AEE_ENCAMINHAMENTO}/editar/${resposta?.data?.id}`
             );
@@ -499,6 +511,9 @@ class ServicoEncaminhamentoAEE {
   devolverEncaminhamentoAEE = params => {
     return api.post(`${urlPadrao}/devolver`, params);
   };
+
+  obterResponsaveveisEncaminhamentoPAAI = codigoTurma =>
+    api.post(`${urlPadrao}/responsavel/pesquisa`, { codigoTurma, limite: 99 });
 }
 
 export default new ServicoEncaminhamentoAEE();

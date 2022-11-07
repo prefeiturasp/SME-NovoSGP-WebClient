@@ -70,12 +70,16 @@ const SecaoParecerPlanoCollapse = ({ match }) => {
             >
               PAAI responsável: {dadosParecer?.responsavelNome}
               <span
-                style={{ color: Base.CinzaDesabilitado, fontSize: '13px', marginLeft: 9, }}
+                style={{
+                  color: Base.CinzaDesabilitado,
+                  fontSize: '13px',
+                  marginLeft: 9,
+                }}
               >{` (${dadosParecer?.responsavelRF})`}</span>
             </p>
           </div>
         ) : (
-          ''
+          <></>
         )}
         <SecaoParecerCoordenacao
           desabilitar={!dadosParecer?.podeEditarParecerCoordenacao}
@@ -83,7 +87,7 @@ const SecaoParecerPlanoCollapse = ({ match }) => {
         {dadosParecer?.podeAtribuirResponsavel ? (
           <SecaoParecerResponsavel />
         ) : (
-          ''
+          <></>
         )}
 
         {(dadosParecer?.podeEditarParecerPAAI ||

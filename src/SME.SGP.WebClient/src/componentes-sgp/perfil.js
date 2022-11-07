@@ -21,6 +21,10 @@ import {
 import history from '../servicos/history';
 import ServicoDashboard from '~/servicos/Paginas/Dashboard/ServicoDashboard';
 import { validarAcaoTela } from '~/utils';
+import {
+  SGP_MENU_PERFIL_BUTTON_EXPANDIR_RETRAIR_PERFIL,
+  SGP_MENU_PERFIL_LISTA_PERFIS,
+} from './filtro/idsCampos';
 
 const Perfil = props => {
   // eslint-disable-next-line react/prop-types
@@ -214,6 +218,7 @@ const Perfil = props => {
         className="text-center stretched-link"
         onClick={onClickBotao}
         disabled={perfilStore.perfis.length <= 1}
+        id={SGP_MENU_PERFIL_BUTTON_EXPANDIR_RETRAIR_PERFIL}
       >
         <ContainerIcone>
           <Icone className="fas fa-user-circle" />
@@ -228,7 +233,7 @@ const Perfil = props => {
       </Botao>
       {ocultaPerfis}
       <ItensPerfil hidden={ocultaPerfis} className="list-inline">
-        <table>
+        <table id={SGP_MENU_PERFIL_LISTA_PERFIS}>
           <tbody>
             {perfilStore.perfis.map(item => (
               // eslint-disable-next-line jsx-a11y/no-access-key
