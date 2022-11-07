@@ -39,6 +39,7 @@ import {
   verificaSomenteConsulta,
 } from '~/servicos';
 import { ordenarPor } from '~/utils/funcoes/gerais';
+import FormCadastroOcorrencia from './Cadastro/FormCadastroOcorrencia';
 
 // eslint-disable-next-line react/prop-types
 const CadastroOcorrencias = ({ match }) => {
@@ -493,109 +494,11 @@ const CadastroOcorrencias = ({ match }) => {
                 </Col>
               </Row>
             </Cabecalho>
-            <Card>
+            <Card padding="24px 24px">
+              <FormCadastroOcorrencia />
+
               <Form className="col-md-12 mb-4">
-                <div className="p-0 col-12 font-weight-bold">
-                  <Label text="Crianças envolvidas na ocorrência" isRequired />
-                </div>
-                <div className="p-0 col-12">
-                  {criancasSelecionadas.slice(0, 3).map((crianca, index) => {
-                    return (
-                      // eslint-disable-next-line react/no-array-index-key
-                      <div className="mb-3" key={`crianca-${index}`}>
-                        <span>
-                          {crianca.nome} ({crianca.codigoEOL})
-                        </span>
-                        <br />
-                      </div>
-                    );
-                  })}
-                </div>
-                {criancasSelecionadas?.length > 3 ? (
-                  <div>
-                    <span style={{ color: Base.CinzaBotao, fontSize: '12px' }}>
-                      Mais {criancasSelecionadas.length - 3}{' '}
-                      {criancasSelecionadas.length > 4 ? 'crianças' : 'criança'}
-                    </span>
-                  </div>
-                ) : (
-                  ''
-                )}
-                <div className="p-0 col-12 mt-2">
-                  <Button
-                    id={shortid.generate()}
-                    label={
-                      ehTurmaAnoAnterior() ||
-                      somenteConsulta ||
-                      naoPodeIncluirOuAlterar()
-                        ? 'Consultar crianças envolvidas'
-                        : 'Editar crianças envolvidas'
-                    }
-                    color={Colors.Azul}
-                    border
-                    className="mr-2"
-                    onClick={() => onClickEditarCriancas()}
-                    icon="user-edit"
-                  />
-                </div>
                 <div className="row mt-3">
-                  <div className="col-md-3 col-sm-12 col-lg-3">
-                    <CampoData
-                      label="Data da ocorrência"
-                      name="dataOcorrencia"
-                      form={form}
-                      valor={dataOcorrencia}
-                      onChange={onChangeDataOcorrencia}
-                      placeholder="Selecione a data"
-                      formatoData="DD/MM/YYYY"
-                      desabilitarData={desabilitarData}
-                      desabilitado={desabilitarCampos()}
-                      labelRequired
-                    />
-                  </div>
-                  <div className="col-md-3 col-sm-12 col-lg-3">
-                    <CampoData
-                      label="Hora da ocorrência"
-                      name="horaOcorrencia"
-                      form={form}
-                      valor={horaOcorrencia}
-                      onChange={onChangeHoraOcorrencia}
-                      placeholder="Selecione a hora"
-                      formatoData="HH:mm"
-                      somenteHora
-                      campoOpcional
-                      desabilitado={desabilitarCampos()}
-                    />
-                  </div>
-                  <div className="col-md-6 col-sm-12 col-lg-6">
-                    <SelectComponent
-                      form={form}
-                      id="tipoOcorrenciaId"
-                      placeholder="Situação"
-                      label="Tipo de ocorrência"
-                      name="ocorrenciaTipoId"
-                      valueOption="id"
-                      valueText="descricao"
-                      lista={listaTiposOcorrencias}
-                      value={form.values.ocorrenciaTipoId}
-                      onChange={() => setModoEdicao(true)}
-                      disabled={desabilitarCampos()}
-                      labelRequired
-                    />
-                  </div>
-                  <div className="col-md-6 col-sm-12 col-lg-6 mt-2">
-                    <CampoTexto
-                      form={form}
-                      name="titulo"
-                      id="tituloOcorrencia"
-                      label="Título da ocorrência"
-                      placeholder="Situação"
-                      maxLength={50}
-                      desabilitado={desabilitarCampos()}
-                      onChange={() => setModoEdicao(true)}
-                      labelRequired
-                    />
-                  </div>
                   <div className="col-12 mt-2">
                     <JoditEditor
                       label="Descrição"
