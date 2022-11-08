@@ -124,6 +124,15 @@ const CadastroOcorrencias = () => {
       : undefined;
     dados.dreId = ocorrencia?.dreId ? ocorrencia.dreId.toString() : undefined;
     dados.ueId = ocorrencia?.ueId ? ocorrencia.ueId.toString() : undefined;
+    dados.modalidade = ocorrencia?.modalidade
+      ? ocorrencia.modalidade.toString()
+      : undefined;
+    dados.semestre = ocorrencia?.semestre
+      ? ocorrencia.semestre.toString()
+      : undefined;
+    dados.turmaId = ocorrencia?.turmaId
+      ? ocorrencia.turmaId.toString()
+      : undefined;
 
     const data = new Date(ocorrencia.dataOcorrencia);
     const horaMin = ocorrencia.horaOcorrencia.split(':');
