@@ -2,18 +2,10 @@
 import { Col } from 'antd';
 import React, { useState, useEffect } from 'react';
 import { Loader, SelectComponent } from '~/componentes';
-import ServicoLocalizadorFuncionario from '~/componentes-sgp/LocalizadorFuncionario/services/ServicoLocalizadorFuncionario';
-import { erros, ServicoOcorrencias } from '~/servicos';
+import { api, erros, ServicoOcorrencias } from '~/servicos';
 
 const EnvolvidosNaOcorrencia = props => {
-  const {
-    form,
-    listaUes,
-    setListaServidoresSelecionados,
-    listaServidoresSelecionados,
-    setListaAlunosSelecionados,
-    listaAlunosSelecionados,
-  } = props;
+  const { form, listaUes, onChangeCampos, desabilitar } = props;
 
   const { ueId, turmaId } = form?.values;
 
@@ -34,6 +26,11 @@ const EnvolvidosNaOcorrencia = props => {
             const lista = resposta.data.map(d => {
               return { ...d, nomeExibicao: `${d?.nome} - (${d?.codigoEOL})` };
             });
+            if (lista?.length === 1) {
+              form.setFieldValue('codigosAlunos', [
+                lista[0]?.codigoEOL?.toString(),
+              ]);
+            }
             setListaAlunos(lista);
           }
         })
@@ -41,7 +38,7 @@ const EnvolvidosNaOcorrencia = props => {
         .finally(() => setCarregandoAlunos(false));
     } else {
       setListaAlunos([]);
-      setListaAlunosSelecionados();
+      form.setFieldValue('codigosAlunos', []);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [turmaId]);
@@ -49,20 +46,20 @@ const EnvolvidosNaOcorrencia = props => {
   useEffect(() => {
     if (ueCodigo) {
       setCarregandoServidores(true);
-      ServicoLocalizadorFuncionario.buscarPorNome({
-        codigoUe: ueCodigo,
-        limite: 999,
-      })
+      api
+        .get(`v1/funcionarios/codigoUe/${ueCodigo}`)
         .then(resposta => {
-          if (resposta?.data?.items?.length) {
-            const lista = resposta.data.items.map(d => {
+          if (resposta?.data?.length) {
+            const lista = resposta.data.map(d => {
               return {
                 ...d,
                 nomeExibicao: `${d?.nomeServidor} - (${d?.codigoRf})`,
               };
             });
             if (lista?.length === 1) {
-              setListaServidoresSelecionados(lista[0]?.codigoRf);
+              form.setFieldValue('codigosServidores', [
+                lista[0]?.codigoRf?.toString(),
+              ]);
             }
             setListaServidores(lista);
           }
@@ -71,7 +68,7 @@ const EnvolvidosNaOcorrencia = props => {
         .finally(() => setCarregandoServidores(false));
     } else {
       setListaServidores([]);
-      setListaServidoresSelecionados();
+      form.setFieldValue('codigosServidores', []);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [ueCodigo]);
@@ -81,29 +78,31 @@ const EnvolvidosNaOcorrencia = props => {
       <Col sm={24} md={12}>
         <Loader loading={carregandoAlunos}>
           <SelectComponent
+            form={form}
+            name="codigosAlunos"
             maxHeightMultiple="100%"
             label="Criança(s)/Estudante(s) envolvido(s) na ocorrência"
             lista={listaAlunos}
             valueOption="codigoEOL"
             valueText="nomeExibicao"
-            onChange={setListaAlunosSelecionados}
-            valueSelect={listaAlunosSelecionados}
+            onChange={() => onChangeCampos()}
             multiple
-            disalbed={!turmaId || listaAlunos?.length === 1}
+            disalbed={!turmaId || listaAlunos?.length === 1 || desabilitar}
           />
         </Loader>
       </Col>
       <Col sm={24} md={12}>
         <Loader loading={carregandoServidores}>
           <SelectComponent
+            form={form}
+            name="codigosServidores"
             maxHeightMultiple="100%"
             label="Servidor(es) envolvido(s) na ocorrência"
             lista={listaServidores}
             valueOption="codigoRf"
             valueText="nomeExibicao"
-            onChange={setListaServidoresSelecionados}
-            valueSelect={listaServidoresSelecionados}
-            disalbed={!ueCodigo || listaServidores?.length === 1}
+            onChange={() => onChangeCampos()}
+            disalbed={!ueCodigo || listaServidores?.length === 1 || desabilitar}
             multiple
           />
         </Loader>

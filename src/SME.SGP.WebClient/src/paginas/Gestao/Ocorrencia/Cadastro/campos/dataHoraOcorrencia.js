@@ -16,7 +16,7 @@ const DataHoraOcorrencia = ({ form, onChangeCampos, desabilitar }) => {
     <>
       <Col sm={24} md={6}>
         <CampoData
-          id="SGP_DATE_DATA_OCORRENCIA"
+          id="SGP_DATE_OCORRENCIA"
           label="Data da ocorrência"
           name="dataOcorrencia"
           form={form}
