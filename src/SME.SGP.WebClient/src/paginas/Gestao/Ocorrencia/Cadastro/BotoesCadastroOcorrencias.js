@@ -52,7 +52,22 @@ const BotoesCadastroOcorrencias = props => {
     });
   };
 
-  const onClickVoltar = () => {};
+  const onClickVoltar = async () => {
+    if (modoEdicao) {
+      const confirmado = await confirmar(
+        'Atenção',
+        '',
+        'Suas alterações não foram salvas, deseja salvar agora?'
+      );
+      if (confirmado) {
+        validaAntesDoSubmit(form);
+      } else {
+        history.push(RotasDto.OCORRENCIAS);
+      }
+    } else {
+      history.push(RotasDto.OCORRENCIAS);
+    }
+  };
 
   const onClickCancelar = async () => {
     if (modoEdicao) {
@@ -64,11 +79,6 @@ const BotoesCadastroOcorrencias = props => {
 
       if (confirmou) {
         form.resetForm();
-        // TODO
-        // setCriancasEstudantesSelecionados(criancasSelecionadasEdicao);
-        // if (!ocorrenciaId) {
-        //   setCriancasSelecionadas([]);
-        // }
         setModoEdicao(false);
       }
     }

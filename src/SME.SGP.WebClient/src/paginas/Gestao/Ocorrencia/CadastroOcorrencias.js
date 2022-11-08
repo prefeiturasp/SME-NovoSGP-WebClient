@@ -34,12 +34,6 @@ const CadastroOcorrencias = () => {
   const [carregandoOcorrencia, setCarregandoOcorrencia] = useState(false);
   const [auditoria, setAuditoria] = useState();
 
-  const [listaAlunosSelecionados, setListaAlunosSelecionados] = useState([]);
-  const [
-    listaServidoresSelecionados,
-    setListaServidoresSelecionados,
-  ] = useState([]);
-
   const ocorrenciaId = routeMatch.params?.id;
 
   useEffect(() => {
@@ -70,6 +64,8 @@ const CadastroOcorrencias = () => {
     ocorrenciaTipoId: undefined,
     titulo: '',
     descricao: '',
+    codigosAlunos: [],
+    codigosServidores: [],
   };
 
   const [initialValues, setInitialValues] = useState(
@@ -97,8 +93,6 @@ const CadastroOcorrencias = () => {
   const onClickCadastrar = valores => {
     const params = {
       ...valores,
-      codigosAlunos: listaAlunosSelecionados,
-      codigosServidores: listaServidoresSelecionados,
       horaOcorrencia: valores?.horaOcorrencia
         ? valores.horaOcorrencia.format('HH:mm').toString()
         : null,
@@ -128,6 +122,8 @@ const CadastroOcorrencias = () => {
     dados.turmaId = ocorrencia?.turmaId
       ? ocorrencia.turmaId.toString()
       : undefined;
+    dados.dreId = ocorrencia?.dreId ? ocorrencia.dreId.toString() : undefined;
+    dados.ueId = ocorrencia?.ueId ? ocorrencia.ueId.toString() : undefined;
 
     const data = new Date(ocorrencia.dataOcorrencia);
     const horaMin = ocorrencia.horaOcorrencia.split(':');
@@ -135,6 +131,17 @@ const CadastroOcorrencias = () => {
     data.setMinutes(ocorrencia.horaOcorrencia ? horaMin[1] : '');
     if (ocorrencia?.horaOcorrencia) {
       ocorrencia.horaOcorrencia = window.moment(new Date(data));
+    }
+
+    if (ocorrencia?.alunos?.length) {
+      ocorrencia.codigosAlunos = ocorrencia.alunos.map(a =>
+        a?.codigoAluno?.toString()
+      );
+    }
+    if (ocorrencia?.servidores?.length) {
+      ocorrencia.codigosServidores = ocorrencia.servidores.map(a =>
+        a?.codigoServidor?.toString()
+      );
     }
     setAuditoria(ocorrencia.auditoria);
 
@@ -203,12 +210,6 @@ const CadastroOcorrencias = () => {
                   listaDres={listaDres}
                   setListaUes={setListaUes}
                   listaUes={listaUes}
-                  setListaServidoresSelecionados={
-                    setListaServidoresSelecionados
-                  }
-                  listaServidoresSelecionados={listaServidoresSelecionados}
-                  setListaAlunosSelecionados={setListaAlunosSelecionados}
-                  listaAlunosSelecionados={listaAlunosSelecionados}
                 />
                 {auditoria?.criadoEm ? (
                   <div className="row">

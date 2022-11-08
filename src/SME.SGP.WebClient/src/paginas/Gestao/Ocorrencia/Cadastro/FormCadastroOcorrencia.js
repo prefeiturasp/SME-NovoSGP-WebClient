@@ -24,10 +24,6 @@ const FormCadastroOcorrencia = props => {
     listaDres,
     setListaUes,
     listaUes,
-    setListaServidoresSelecionados,
-    listaServidoresSelecionados,
-    setListaAlunosSelecionados,
-    listaAlunosSelecionados,
   } = props;
 
   const { dreId, ueId } = form?.values;
@@ -100,14 +96,16 @@ const FormCadastroOcorrencia = props => {
           desabilitar={desabilitar}
           ueCodigo={ueCodigo}
         />
+      </Row>
+      <Row gutter={[16, 16]}>
         <EnvolvidoNaOcorrencia
           form={form}
+          onChangeCampos={onChangeCampos}
+          desabilitar={desabilitar}
           listaUes={listaUes}
-          setListaServidoresSelecionados={setListaServidoresSelecionados}
-          listaServidoresSelecionados={listaServidoresSelecionados}
-          setListaAlunosSelecionados={setListaAlunosSelecionados}
-          listaAlunosSelecionados={listaAlunosSelecionados}
         />
+      </Row>
+      <Row gutter={[16, 16]}>
         <DataHoraOcorrencia
           form={form}
           onChangeCampos={onChangeCampos}
