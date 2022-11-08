@@ -592,6 +592,7 @@ const ListaOcorrencias = () => {
             </Col>
             <Col sm={24} md={12}>
               <CampoTexto
+                id="SGP_INPUT_TEXT_ALUNO_NOME"
                 value={alunoNomeExibicao}
                 onChange={onChangeAlunoNome}
                 label="Criança/Estudante"
@@ -602,6 +603,7 @@ const ListaOcorrencias = () => {
             </Col>
             <Col sm={24} md={12}>
               <CampoTexto
+                id="SGP_INPUT_TEXT_SERVIDOR_NOME"
                 value={servidorNomeExibicao}
                 onChange={onChangeServidorNome}
                 label="Servidor"
@@ -612,6 +614,7 @@ const ListaOcorrencias = () => {
             </Col>
             <Col sm={24} md={6}>
               <CampoData
+                id="SGP_DATE_OCORRENCIA_INICIO"
                 label="Data da ocorrência"
                 valor={dataOcorrenciaInicio}
                 onChange={setDataOcorrenciaInicio}
@@ -621,6 +624,7 @@ const ListaOcorrencias = () => {
             </Col>
             <Col sm={24} md={6} style={{ marginTop: '25px' }}>
               <CampoData
+                id="SGP_DATE_OCORRENCIA_FIM"
                 valor={dataOcorrenciaFim}
                 onChange={setDataOcorrenciaFim}
                 placeholder="Data final"
@@ -629,6 +633,7 @@ const ListaOcorrencias = () => {
             </Col>
             <Col sm={24} md={12}>
               <SelectComponent
+                id="SGP_SELECT_TIPO_OCORRENCIA"
                 placeholder="Situação"
                 label="Tipo da ocorrência"
                 valueOption="id"
@@ -641,6 +646,7 @@ const ListaOcorrencias = () => {
             </Col>
             <Col sm={24} md={12}>
               <CampoTexto
+                id="SGP_INPUT_TEXT_TITULO"
                 value={tituloExibicao}
                 onChange={onChangeTitulo}
                 label="Título da ocorrência"
