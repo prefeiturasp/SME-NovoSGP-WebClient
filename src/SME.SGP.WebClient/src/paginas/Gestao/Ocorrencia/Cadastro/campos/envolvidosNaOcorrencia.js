@@ -5,11 +5,9 @@ import { Loader, SelectComponent } from '~/componentes';
 import { api, erros, ServicoOcorrencias } from '~/servicos';
 
 const EnvolvidosNaOcorrencia = props => {
-  const { form, listaUes, onChangeCampos, desabilitar } = props;
+  const { form, ueCodigo, onChangeCampos, desabilitar } = props;
 
-  const { ueId, turmaId } = form?.values;
-
-  const ueCodigo = listaUes?.find(d => d?.id === Number(ueId))?.codigo;
+  const { turmaId } = form?.values;
 
   const [listaAlunos, setListaAlunos] = useState([]);
   const [carregandoAlunos, setCarregandoAlunos] = useState(false);
@@ -87,7 +85,7 @@ const EnvolvidosNaOcorrencia = props => {
             valueText="nomeExibicao"
             onChange={() => onChangeCampos()}
             multiple
-            disalbed={!turmaId || listaAlunos?.length === 1 || desabilitar}
+            disabled={!turmaId || listaAlunos?.length === 1 || desabilitar}
           />
         </Loader>
       </Col>
@@ -102,7 +100,7 @@ const EnvolvidosNaOcorrencia = props => {
             valueOption="codigoRf"
             valueText="nomeExibicao"
             onChange={() => onChangeCampos()}
-            disalbed={!ueCodigo || listaServidores?.length === 1 || desabilitar}
+            disabled={!ueCodigo || listaServidores?.length === 1 || desabilitar}
             multiple
           />
         </Loader>

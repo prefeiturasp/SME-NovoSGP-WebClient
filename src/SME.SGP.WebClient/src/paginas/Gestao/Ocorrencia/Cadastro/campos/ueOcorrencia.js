@@ -21,9 +21,16 @@ const UeOcorrencia = props => {
 
   const nomeCampo = 'ueId';
 
-  const listaUesEdicao = form?.initialValues?.ueId
-    ? [{ id: form?.initialValues?.ueId, nome: form?.initialValues?.ueNome }]
-    : [];
+  const listaUesEdicao =
+    ocorrenciaId && form?.initialValues?.ueId
+      ? [
+          {
+            id: form?.initialValues?.ueId,
+            nome: form?.initialValues?.ueNome,
+            codigo: form?.initialValues?.ueCodigo,
+          },
+        ]
+      : null;
 
   const obterUes = useCallback(async () => {
     setExibirLoader(true);

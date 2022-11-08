@@ -9,7 +9,7 @@ const TituloOcorrencia = ({ form, onChangeCampos, desabilitar }) => {
       form={form}
       name="titulo"
       label="Título da ocorrência"
-      placeholder="Situação"
+      placeholder="Título"
       maxLength={50}
       desabilitado={desabilitar}
       onChange={() => onChangeCampos()}

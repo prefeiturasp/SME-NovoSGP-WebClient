@@ -33,8 +33,13 @@ const BotoesCadastroOcorrencias = props => {
 
   const { anoLetivo, dreId, ueId, turmaId } = form?.values;
 
-  const dreCodigo = listaUes?.find(d => d?.id === Number(dreId))?.codigo;
-  const ueCodigo = listaUes?.find(d => d?.id === Number(ueId))?.codigo;
+  const dreCodigo = ocorrenciaId
+    ? form?.initialValues?.dreCodigo
+    : listaUes?.find(d => Number(d?.id) === Number(dreId))?.codigo;
+
+  const ueCodigo = ocorrenciaId
+    ? form?.initialValues?.ueCodigo
+    : listaUes?.find(d => Number(d?.id) === Number(ueId))?.codigo;
 
   const ehTurmaAnoAnterior = anoLetivo
     ? anoLetivo?.toString() !== window.moment().format('YYYY')

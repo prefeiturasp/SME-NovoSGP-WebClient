@@ -634,7 +634,7 @@ const ListaOcorrencias = () => {
             <Col sm={24} md={12}>
               <SelectComponent
                 id="SGP_SELECT_TIPO_OCORRENCIA"
-                placeholder="Situação"
+                placeholder="Tipo da ocorrência"
                 label="Tipo da ocorrência"
                 valueOption="id"
                 valueText="descricao"
