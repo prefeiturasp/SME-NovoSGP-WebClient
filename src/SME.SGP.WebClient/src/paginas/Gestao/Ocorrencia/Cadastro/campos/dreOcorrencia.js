@@ -1,28 +1,30 @@
-import PropTypes from 'prop-types';
+/* eslint-disable react/prop-types */
 import React, { useCallback, useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
 import { Loader, SelectComponent } from '~/componentes';
 import { FiltroHelper } from '~/componentes-sgp';
-import { OPCAO_TODOS } from '~/constantes';
-import { setAlunosComunicados } from '~/redux/modulos/comunicados/actions';
+import { SGP_SELECT_DRE } from '~/componentes-sgp/filtro/idsCampos';
 import { AbrangenciaServico, erros } from '~/servicos';
 
 const DreOcorrencia = props => {
-  const { form, onChangeCampos, desabilitar, comunicadoId } = props;
+  const {
+    form,
+    onChangeCampos,
+    desabilitar,
+    ocorrenciaId,
+    setListaDres,
+    listaDres,
+  } = props;
 
   const [exibirLoader, setExibirLoader] = useState(false);
-  const [listaDres, setListaDres] = useState([]);
 
-  const { anoLetivo } = form.values;
+  const { consideraHistorico, anoLetivo } = form.values;
 
-  const nomeCampo = 'codigoDre';
-
-  const dispatch = useDispatch();
+  const nomeCampo = 'dreId';
 
   const obterDres = useCallback(async () => {
     setExibirLoader(true);
     const resposta = await AbrangenciaServico.buscarDres(
-      `v1/abrangencias/false/dres?anoLetivo=${anoLetivo}`
+      `v1/abrangencias/${consideraHistorico}/dres?anoLetivo=${anoLetivo}`
     )
       .catch(e => erros(e))
       .finally(() => setExibirLoader(false));
@@ -31,14 +33,10 @@ const DreOcorrencia = props => {
       const lista = resposta.data.sort(FiltroHelper.ordenarLista('nome'));
 
       if (lista?.length === 1) {
-        const { codigo } = lista[0];
-
-        form.setFieldValue(nomeCampo, codigo);
-        if (!comunicadoId) {
-          form.initialValues[nomeCampo] = codigo;
+        form.setFieldValue(nomeCampo, String(lista[0]?.id));
+        if (!ocorrenciaId) {
+          form.initialValues[nomeCampo] = String(lista[0]?.id);
         }
-      } else {
-        lista.unshift({ codigo: OPCAO_TODOS, nome: 'Todas' });
       }
       setListaDres(lista);
     } else {
@@ -46,7 +44,7 @@ const DreOcorrencia = props => {
       setListaDres([]);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [anoLetivo]);
+  }, [anoLetivo, consideraHistorico]);
 
   useEffect(() => {
     if (anoLetivo) {
@@ -56,15 +54,15 @@ const DreOcorrencia = props => {
       setListaDres([]);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [anoLetivo, obterDres]);
+  }, [anoLetivo]);
 
   return (
     <Loader loading={exibirLoader} ignorarTip>
       <SelectComponent
-        id="codigo-dre"
+        id={SGP_SELECT_DRE}
         label="Diretoria Regional de Educação (DRE)"
         lista={listaDres}
-        valueOption="codigo"
+        valueOption="id"
         valueText="nome"
         disabled={!anoLetivo || listaDres?.length === 1 || desabilitar}
         placeholder="Diretoria Regional De Educação (DRE)"
@@ -74,35 +72,19 @@ const DreOcorrencia = props => {
         labelRequired
         onChange={() => {
           onChangeCampos();
-          form.setFieldValue('codigoUe', undefined);
-          form.setFieldValue('modalidades', []);
+          form.setFieldValue('ueCodigo', undefined);
+          form.setFieldValue('modalidade', undefined);
           form.setFieldValue('semestre', undefined);
-          form.setFieldValue('tipoEscola', []);
-          form.setFieldValue('anosEscolares', []);
-          form.setFieldValue('turmas', []);
-          form.setFieldValue('alunoEspecifico', undefined);
-          form.setFieldValue('alunos', []);
-          form.setFieldValue('tipoCalendarioId', undefined);
-          form.setFieldValue('eventoId', undefined);
-          dispatch(setAlunosComunicados([]));
+          form.setFieldValue('turmaId', null);
+          form.setFieldValue('dataOcorrencia', '');
+          form.setFieldValue('horaOcorrencia', '');
+          form.setFieldValue('ocorrenciaTipoId', undefined);
+          form.setFieldValue('titulo', '');
+          form.setFieldValue('descricao', '');
         }}
       />
     </Loader>
   );
-};
-
-DreOcorrencia.propTypes = {
-  form: PropTypes.oneOfType([PropTypes.object]),
-  onChangeCampos: PropTypes.func,
-  desabilitar: PropTypes.bool,
-  comunicadoId: PropTypes.string,
-};
-
-DreOcorrencia.defaultProps = {
-  form: null,
-  onChangeCampos: () => null,
-  desabilitar: false,
-  comunicadoId: '',
 };
 
 export default DreOcorrencia;

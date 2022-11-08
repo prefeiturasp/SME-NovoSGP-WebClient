@@ -1,35 +1,28 @@
-import PropTypes from 'prop-types';
+/* eslint-disable react/prop-types */
 import React, { useCallback, useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
 import { Loader, SelectComponent } from '~/componentes';
-import { OPCAO_TODOS } from '~/constantes';
-import { setAlunosComunicados } from '~/redux/modulos/comunicados/actions';
+import { SGP_SELECT_UE } from '~/componentes-sgp/filtro/idsCampos';
 import { AbrangenciaServico, erros } from '~/servicos';
 
-const UeOcorrencia = ({ form, onChangeCampos, desabilitar }) => {
+const UeOcorrencia = ({
+  form,
+  onChangeCampos,
+  desabilitar,
+  setListaUes,
+  listaUes,
+  dreCodigo,
+}) => {
   const [exibirLoader, setExibirLoader] = useState(false);
-  const [listaUes, setListaUes] = useState([]);
 
-  const { anoLetivo, codigoDre } = form.values;
+  const { consideraHistorico, anoLetivo } = form.values;
 
-  const nomeCampo = 'codigoUe';
-
-  const dispatch = useDispatch();
+  const nomeCampo = 'ueId';
 
   const obterUes = useCallback(async () => {
-    const ueTodos = { nome: 'Todas', codigo: OPCAO_TODOS };
-
-    if (codigoDre === OPCAO_TODOS) {
-      setListaUes([ueTodos]);
-      form.setFieldValue(nomeCampo, OPCAO_TODOS);
-      form.initialValues[nomeCampo] = OPCAO_TODOS;
-      return;
-    }
-
     setExibirLoader(true);
     const resposta = await AbrangenciaServico.buscarUes(
-      codigoDre,
-      `v1/abrangencias/false/dres/${codigoDre}/ues?anoLetivo=${anoLetivo}&consideraNovasUEs=${true}`,
+      dreCodigo,
+      `v1/abrangencias/${consideraHistorico}/dres/${dreCodigo}/ues?anoLetivo=${anoLetivo}`,
       true
     )
       .catch(e => erros(e))
@@ -39,10 +32,7 @@ const UeOcorrencia = ({ form, onChangeCampos, desabilitar }) => {
       const lista = resposta.data;
 
       if (lista?.length === 1) {
-        const { codigo } = lista[0];
-        form.setFieldValue(nomeCampo, codigo);
-      } else {
-        lista.unshift(ueTodos);
+        form.setFieldValue(nomeCampo, String(lista[0]?.id));
       }
 
       setListaUes(lista);
@@ -51,27 +41,27 @@ const UeOcorrencia = ({ form, onChangeCampos, desabilitar }) => {
       setListaUes([]);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [anoLetivo, codigoDre]);
+  }, [anoLetivo, dreCodigo]);
 
   useEffect(() => {
-    if (codigoDre) {
+    if (dreCodigo) {
       obterUes();
     } else {
       form.setFieldValue(nomeCampo, undefined);
       setListaUes([]);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [codigoDre, obterUes]);
+  }, [dreCodigo]);
 
   return (
     <Loader loading={exibirLoader} ignorarTip>
       <SelectComponent
-        id="codigo-ue"
+        id={SGP_SELECT_UE}
         label="Unidade Escolar (UE)"
         lista={listaUes}
-        valueOption="codigo"
+        valueOption="id"
         valueText="nome"
-        disabled={!codigoDre || listaUes?.length === 1 || desabilitar}
+        disabled={!dreCodigo || listaUes?.length === 1 || desabilitar}
         placeholder="Unidade Escolar (UE)"
         showSearch
         name={nomeCampo}
@@ -79,32 +69,13 @@ const UeOcorrencia = ({ form, onChangeCampos, desabilitar }) => {
         labelRequired
         onChange={() => {
           onChangeCampos();
-          form.setFieldValue('modalidades', []);
+          form.setFieldValue('modalidade', undefined);
           form.setFieldValue('semestre', undefined);
-          form.setFieldValue('tipoEscola', []);
-          form.setFieldValue('anosEscolares', []);
-          form.setFieldValue('turmas', []);
-          form.setFieldValue('alunoEspecifico', undefined);
-          form.setFieldValue('alunos', []);
-          form.setFieldValue('tipoCalendarioId', undefined);
-          form.setFieldValue('eventoId', undefined);
-          dispatch(setAlunosComunicados([]));
+          form.setFieldValue('turmaId', null);
         }}
       />
     </Loader>
   );
-};
-
-UeOcorrencia.propTypes = {
-  form: PropTypes.oneOfType([PropTypes.object]),
-  onChangeCampos: PropTypes.func,
-  desabilitar: PropTypes.bool,
-};
-
-UeOcorrencia.defaultProps = {
-  form: null,
-  onChangeCampos: () => null,
-  desabilitar: false,
 };
 
 export default UeOcorrencia;

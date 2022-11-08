@@ -5,14 +5,14 @@ import { CampoTexto } from '~/componentes';
 const TituloOcorrencia = ({ form, onChangeCampos, desabilitar }) => {
   return (
     <CampoTexto
+      id="SGP_INPUT_TEXT_TITULO_OCORRENCIA"
       form={form}
       name="titulo"
-      id="tituloOcorrencia"
       label="Título da ocorrência"
       placeholder="Situação"
       maxLength={50}
-      //   desabilitado={desabilitarCampos()}
-      //   onChange={() => setModoEdicao(true)}
+      desabilitado={desabilitar}
+      onChange={() => onChangeCampos()}
       labelRequired
     />
   );

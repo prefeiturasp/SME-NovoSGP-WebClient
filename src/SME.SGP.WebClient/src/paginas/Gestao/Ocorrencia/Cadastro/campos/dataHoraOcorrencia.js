@@ -1,9 +1,9 @@
-import { Col, Row } from 'antd';
+import { Col } from 'antd';
 import PropTypes from 'prop-types';
 import React from 'react';
 import { CampoData } from '~/componentes';
 
-const DataHoraOcorrencia = ({ form, onChangeCampos, desabilitarCampos }) => {
+const DataHoraOcorrencia = ({ form, onChangeCampos, desabilitar }) => {
   const desabilitarData = current => {
     if (current) {
       return (
@@ -14,47 +14,46 @@ const DataHoraOcorrencia = ({ form, onChangeCampos, desabilitarCampos }) => {
   };
   return (
     <>
-      <Row gutter={[16, 16]} type="flex" justify="space-betwenn">
-        <Col span={12}>
-          <CampoData
-            label="Data da ocorrência"
-            name="dataOcorrencia"
-            form={form}
-            onChange={onChangeCampos}
-            placeholder="Selecione a data"
-            formatoData="DD/MM/YYYY"
-            desabilitarData={desabilitarData}
-            desabilitado={desabilitarCampos()}
-            labelRequired
-          />
-        </Col>
-        <Col span={12}>
-          <CampoData
-            label="Hora da ocorrência"
-            name="horaOcorrencia"
-            form={form}
-            onChange={onChangeCampos}
-            placeholder="Selecione a hora"
-            formatoData="HH:mm"
-            somenteHora
-            campoOpcional
-            desabilitado={desabilitarCampos()}
-          />
-        </Col>
-      </Row>
+      <Col sm={24} md={6}>
+        <CampoData
+          id="SGP_DATE_DATA_OCORRENCIA"
+          label="Data da ocorrência"
+          name="dataOcorrencia"
+          form={form}
+          onChange={onChangeCampos}
+          placeholder="Selecione a data"
+          formatoData="DD/MM/YYYY"
+          desabilitarData={desabilitarData}
+          desabilitado={desabilitar}
+          labelRequired
+        />
+      </Col>
+      <Col sm={24} md={6}>
+        <CampoData
+          id="SGP_DATE_HORA_OCORRENCIA"
+          label="Hora da ocorrência"
+          name="horaOcorrencia"
+          form={form}
+          onChange={onChangeCampos}
+          placeholder="Selecione a hora"
+          formatoData="HH:mm"
+          somenteHora
+          desabilitado={desabilitar}
+        />
+      </Col>
     </>
   );
 };
 
 DataHoraOcorrencia.propTypes = {
   form: PropTypes.oneOfType([PropTypes.object]),
-  desabilitarCampos: PropTypes.func,
+  desabilitar: PropTypes.bool,
   onChangeCampos: PropTypes.func,
 };
 
 DataHoraOcorrencia.defaultProps = {
   form: null,
-  desabilitarCampos: () => null,
+  desabilitar: false,
   onChangeCampos: () => null,
 };
 

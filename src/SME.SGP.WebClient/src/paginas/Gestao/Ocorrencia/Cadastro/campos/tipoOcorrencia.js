@@ -1,32 +1,38 @@
 import PropTypes from 'prop-types';
-import React, { useState } from 'react';
-import { Loader, SelectComponent } from '~/componentes';
+import React, { useState, useEffect } from 'react';
+import { SelectComponent } from '~/componentes';
+import { ServicoOcorrencias } from '~/servicos';
 
 const TipoOcorrencia = ({ form, onChangeCampos, desabilitar }) => {
-  const [exibirLoader, setExibirLoader] = useState(false);
-  const [listaUes, setListaUes] = useState([]);
+  const [listaTiposOcorrencias, setListaTiposOcorrencias] = useState([]);
+
+  useEffect(() => {
+    ServicoOcorrencias.buscarTiposOcorrencias().then(resposta => {
+      if (resposta?.data?.length) {
+        setListaTiposOcorrencias(resposta.data);
+      } else {
+        setListaTiposOcorrencias([]);
+      }
+    });
+  }, []);
 
   return (
-    <Loader loading={exibirLoader} ignorarTip>
-      <SelectComponent
-        id="codigo-ue"
-        label="Tipo de ocorrência"
-        lista={listaUes}
-        // disabled={!codigoDre || listaUes?.length === 1 || desabilitar}
-        placeholder="Situação"
-        showSearch
-        // name={nomeCampo}
-        form={form}
-        labelRequired
-        onChange={() => {
-          onChangeCampos();
-          form.setFieldValue('modalidades', []);
-          form.setFieldValue('semestre', undefined);
-          form.setFieldValue('turmas', []);
-          //   dispatch(setAlunosComunicados([]));
-        }}
-      />
-    </Loader>
+    <SelectComponent
+      id="SGP_SELECT_TIPO_OCORRENCIA"
+      form={form}
+      name="ocorrenciaTipoId"
+      placeholder="Tipo da ocorrência"
+      label="Tipo da ocorrência"
+      valueOption="id"
+      valueText="descricao"
+      lista={listaTiposOcorrencias}
+      disabled={desabilitar}
+      onChange={() => {
+        onChangeCampos();
+      }}
+      allowClear
+      labelRequired
+    />
   );
 };
 
