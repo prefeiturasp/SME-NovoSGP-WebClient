@@ -4,25 +4,32 @@ import { Loader, SelectComponent } from '~/componentes';
 import { SGP_SELECT_UE } from '~/componentes-sgp/filtro/idsCampos';
 import { AbrangenciaServico, erros } from '~/servicos';
 
-const UeOcorrencia = ({
-  form,
-  onChangeCampos,
-  desabilitar,
-  setListaUes,
-  listaUes,
-  dreCodigo,
-}) => {
+const UeOcorrencia = props => {
+  const {
+    form,
+    onChangeCampos,
+    desabilitar,
+    setListaUes,
+    listaUes,
+    dreCodigo,
+    ocorrenciaId,
+  } = props;
+
   const [exibirLoader, setExibirLoader] = useState(false);
 
-  const { consideraHistorico, anoLetivo } = form.values;
+  const { anoLetivo } = form.values;
 
   const nomeCampo = 'ueId';
+
+  const listaUesEdicao = form?.initialValues?.ueId
+    ? [{ id: form?.initialValues?.ueId, nome: form?.initialValues?.ueNome }]
+    : [];
 
   const obterUes = useCallback(async () => {
     setExibirLoader(true);
     const resposta = await AbrangenciaServico.buscarUes(
       dreCodigo,
-      `v1/abrangencias/${consideraHistorico}/dres/${dreCodigo}/ues?anoLetivo=${anoLetivo}`,
+      `v1/abrangencias/false/dres/${dreCodigo}/ues?anoLetivo=${anoLetivo}`,
       true
     )
       .catch(e => erros(e))
@@ -44,6 +51,8 @@ const UeOcorrencia = ({
   }, [anoLetivo, dreCodigo]);
 
   useEffect(() => {
+    if (ocorrenciaId) return;
+
     if (dreCodigo) {
       obterUes();
     } else {
@@ -51,17 +60,19 @@ const UeOcorrencia = ({
       setListaUes([]);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [dreCodigo]);
+  }, [dreCodigo, ocorrenciaId]);
 
   return (
     <Loader loading={exibirLoader} ignorarTip>
       <SelectComponent
         id={SGP_SELECT_UE}
         label="Unidade Escolar (UE)"
-        lista={listaUes}
+        lista={ocorrenciaId ? listaUesEdicao : listaUes}
         valueOption="id"
         valueText="nome"
-        disabled={!dreCodigo || listaUes?.length === 1 || desabilitar}
+        disabled={
+          !dreCodigo || listaUes?.length === 1 || desabilitar || !!ocorrenciaId
+        }
         placeholder="Unidade Escolar (UE)"
         showSearch
         name={nomeCampo}

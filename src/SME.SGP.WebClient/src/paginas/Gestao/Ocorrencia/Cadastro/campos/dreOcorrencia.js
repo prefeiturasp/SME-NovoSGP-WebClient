@@ -17,14 +17,18 @@ const DreOcorrencia = props => {
 
   const [exibirLoader, setExibirLoader] = useState(false);
 
-  const { consideraHistorico, anoLetivo } = form.values;
+  const { anoLetivo } = form.values;
 
   const nomeCampo = 'dreId';
+
+  const listaDresEdicao = form?.initialValues?.dreId
+    ? [{ id: form?.initialValues?.dreId, nome: form?.initialValues?.dreNome }]
+    : [];
 
   const obterDres = useCallback(async () => {
     setExibirLoader(true);
     const resposta = await AbrangenciaServico.buscarDres(
-      `v1/abrangencias/${consideraHistorico}/dres?anoLetivo=${anoLetivo}`
+      `v1/abrangencias/false/dres?anoLetivo=${anoLetivo}`
     )
       .catch(e => erros(e))
       .finally(() => setExibirLoader(false));
@@ -44,9 +48,11 @@ const DreOcorrencia = props => {
       setListaDres([]);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [anoLetivo, consideraHistorico]);
+  }, [anoLetivo]);
 
   useEffect(() => {
+    if (ocorrenciaId) return;
+
     if (anoLetivo) {
       obterDres();
     } else {
@@ -54,17 +60,19 @@ const DreOcorrencia = props => {
       setListaDres([]);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [anoLetivo]);
+  }, [anoLetivo, ocorrenciaId]);
 
   return (
     <Loader loading={exibirLoader} ignorarTip>
       <SelectComponent
         id={SGP_SELECT_DRE}
         label="Diretoria Regional de Educação (DRE)"
-        lista={listaDres}
+        lista={ocorrenciaId ? listaDresEdicao : listaDres}
         valueOption="id"
         valueText="nome"
-        disabled={!anoLetivo || listaDres?.length === 1 || desabilitar}
+        disabled={
+          !anoLetivo || listaDres?.length === 1 || desabilitar || !!ocorrenciaId
+        }
         placeholder="Diretoria Regional De Educação (DRE)"
         showSearch
         name={nomeCampo}
@@ -76,11 +84,6 @@ const DreOcorrencia = props => {
           form.setFieldValue('modalidade', undefined);
           form.setFieldValue('semestre', undefined);
           form.setFieldValue('turmaId', null);
-          form.setFieldValue('dataOcorrencia', '');
-          form.setFieldValue('horaOcorrencia', '');
-          form.setFieldValue('ocorrenciaTipoId', undefined);
-          form.setFieldValue('titulo', '');
-          form.setFieldValue('descricao', '');
         }}
       />
     </Loader>

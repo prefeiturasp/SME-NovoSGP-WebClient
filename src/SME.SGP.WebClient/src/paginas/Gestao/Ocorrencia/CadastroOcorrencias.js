@@ -1,5 +1,4 @@
 import React, { useEffect, useState, useCallback } from 'react';
-import { Row } from 'antd';
 import { Formik } from 'formik';
 import { useSelector } from 'react-redux';
 import { useRouteMatch } from 'react-router-dom';
@@ -52,7 +51,6 @@ const CadastroOcorrencias = () => {
   const desabilitarCampos = validarSeDesabilitaCampos();
 
   const inicial = {
-    consideraHistorico: false,
     anoLetivo: undefined,
     dreId: undefined,
     ueId: undefined,
@@ -119,9 +117,6 @@ const CadastroOcorrencias = () => {
   const tratarValores = ocorrencia => {
     const dados = {};
     dados.dataOcorrencia = window.moment(new Date(ocorrencia.dataOcorrencia));
-    dados.turmaId = ocorrencia?.turmaId
-      ? ocorrencia.turmaId.toString()
-      : undefined;
     dados.dreId = ocorrencia?.dreId ? ocorrencia.dreId.toString() : undefined;
     dados.ueId = ocorrencia?.ueId ? ocorrencia.ueId.toString() : undefined;
     dados.modalidade = ocorrencia?.modalidade
@@ -195,19 +190,17 @@ const CadastroOcorrencias = () => {
           {form => (
             <>
               <Cabecalho pagina="Cadastro de ocorrência">
-                <Row gutter={[8, 8]} type="flex">
-                  <BotoesCadastroOcorrencias
-                    form={form}
-                    initialValues={initialValues}
-                    ocorrenciaId={ocorrenciaId}
-                    modoEdicao={modoEdicao}
-                    setModoEdicao={setModoEdicao}
-                    somenteConsulta={somenteConsulta}
-                    desabilitar={desabilitarCampos}
-                    podeExcluir={permissoesTela?.podeExcluir}
-                    listaUes={listaUes}
-                  />
-                </Row>
+                <BotoesCadastroOcorrencias
+                  form={form}
+                  initialValues={initialValues}
+                  ocorrenciaId={ocorrenciaId}
+                  modoEdicao={modoEdicao}
+                  setModoEdicao={setModoEdicao}
+                  somenteConsulta={somenteConsulta}
+                  desabilitar={desabilitarCampos}
+                  podeExcluir={permissoesTela?.podeExcluir}
+                  listaUes={listaUes}
+                />
               </Cabecalho>
               <Card padding="24px 24px">
                 <FormCadastroOcorrencia

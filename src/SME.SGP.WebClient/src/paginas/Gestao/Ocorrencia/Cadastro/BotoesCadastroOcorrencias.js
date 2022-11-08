@@ -78,7 +78,16 @@ const BotoesCadastroOcorrencias = props => {
       );
 
       if (confirmou) {
-        form.resetForm();
+        form.setFieldValue('dataOcorrencia', initialValues?.dataOcorrencia);
+        form.setFieldValue('horaOcorrencia', initialValues?.horaOcorrencia);
+        form.setFieldValue('ocorrenciaTipoId', initialValues?.ocorrenciaTipoId);
+        form.setFieldValue('titulo', initialValues?.titulo);
+        form.setFieldValue('descricao', initialValues?.descricao);
+        form.setFieldValue('codigosAlunos', initialValues?.codigosAlunos);
+        form.setFieldValue(
+          'codigosServidores',
+          initialValues?.codigosServidores
+        );
         setModoEdicao(false);
       }
     }
