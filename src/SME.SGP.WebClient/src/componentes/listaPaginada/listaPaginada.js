@@ -26,6 +26,7 @@ const ListaPaginada = props => {
     showSizeChanger,
     naoFiltrarQuandoCarregando,
     mapearNovoDto,
+    disabledCheckboxRow,
   } = props;
 
   const [carregando, setCarregando] = useState(false);
@@ -67,9 +68,14 @@ const ListaPaginada = props => {
   const selecaoLinha = {
     selectedRowKeys: linhasSelecionadas,
     onChange: ids => selecionar(ids),
+    getCheckboxProps: record => ({
+      disabled: disabledCheckboxRow ? disabledCheckboxRow(record) : false,
+    }),
   };
 
   const selecionarLinha = linha => {
+    if (disabledCheckboxRow && disabledCheckboxRow(linha)) return;
+
     let selecionadas = [...linhasSelecionadas];
     if (selecionadas.indexOf(linha[colunaChave]) >= 0) {
       selecionadas.splice(selecionadas.indexOf(linha[colunaChave]), 1);
@@ -238,6 +244,7 @@ ListaPaginada.propTypes = {
   showSizeChanger: PropTypes.oneOfType([PropTypes.bool]),
   naoFiltrarQuandoCarregando: PropTypes.oneOfType([PropTypes.bool]),
   mapearNovoDto: PropTypes.oneOfType([PropTypes.func]),
+  disabledCheckboxRow: PropTypes.oneOfType([PropTypes.func]),
 };
 
 ListaPaginada.defaultProps = {
@@ -256,6 +263,7 @@ ListaPaginada.defaultProps = {
   showSizeChanger: true,
   naoFiltrarQuandoCarregando: true,
   mapearNovoDto: null,
+  disabledCheckboxRow: null,
 };
 
 export default ListaPaginada;

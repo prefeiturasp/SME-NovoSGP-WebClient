@@ -77,7 +77,7 @@ import AtribuicaoCJ from '~/paginas/Relatorios/Gestao/AtribuicaoCJ/atribuicaoCJ'
 import RelatorioHistoricoAlteracoesNotas from '~/paginas/Relatorios/Fechamento/HistoricoAlteracoesNotas/relatorioHistoricoAlteracoesNotas';
 import relatorioEscolaAquiAdesao from '~/paginas/Relatorios/EscolaAqui/Adesao/relatorioEscolaAquiAdesao';
 import RelatorioLeitura from '~/paginas/Relatorios/EscolaAqui/Leitura/relatorioLeitura';
-import ListaOcorrencias from '~/paginas/Gestao/Ocorrencia/ListaOcorrencias';
+import ListaOcorrencias from '~/paginas/Gestao/Ocorrencia/lista/listaOcorrencias';
 import CadastroOcorrencias from '~/paginas/Gestao/Ocorrencia/CadastroOcorrencias';
 import RelatorioPlanejamentoDiario from '~/paginas/Relatorios/DiarioClasse/PlanejamentoDiario/relatorioPlanejamentoDiario';
 import EncaminhamentoAEELista from '~/paginas/AEE/Encaminhamento/Lista/encaminhamentoAEELista';
