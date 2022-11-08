@@ -95,8 +95,6 @@ const CadastroOcorrencias = () => {
   };
 
   const onClickCadastrar = valores => {
-    debugger;
-
     const params = {
       ...valores,
       codigosAlunos: listaAlunosSelecionados,
