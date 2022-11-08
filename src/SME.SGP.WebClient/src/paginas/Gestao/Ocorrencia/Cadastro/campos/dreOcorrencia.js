@@ -21,9 +21,16 @@ const DreOcorrencia = props => {
 
   const nomeCampo = 'dreId';
 
-  const listaDresEdicao = form?.initialValues?.dreId
-    ? [{ id: form?.initialValues?.dreId, nome: form?.initialValues?.dreNome }]
-    : [];
+  const listaDresEdicao =
+    ocorrenciaId && form?.initialValues?.dreId
+      ? [
+          {
+            id: form?.initialValues?.dreId,
+            nome: form?.initialValues?.dreNome,
+            codigo: form?.initialValues?.dreCodigo,
+          },
+        ]
+      : null;
 
   const obterDres = useCallback(async () => {
     setExibirLoader(true);

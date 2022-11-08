@@ -21,7 +21,7 @@ const DataHoraOcorrencia = ({ form, onChangeCampos, desabilitar }) => {
           name="dataOcorrencia"
           form={form}
           onChange={onChangeCampos}
-          placeholder="Selecione a data"
+          placeholder="Data"
           formatoData="DD/MM/YYYY"
           desabilitarData={desabilitarData}
           desabilitado={desabilitar}
@@ -35,7 +35,7 @@ const DataHoraOcorrencia = ({ form, onChangeCampos, desabilitar }) => {
           name="horaOcorrencia"
           form={form}
           onChange={onChangeCampos}
-          placeholder="Selecione a hora"
+          placeholder="Hora"
           formatoData="HH:mm"
           somenteHora
           desabilitado={desabilitar}

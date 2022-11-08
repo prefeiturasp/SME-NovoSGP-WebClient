@@ -26,8 +26,13 @@ const FormCadastroOcorrencia = props => {
 
   const { dreId, ueId } = form?.values;
 
-  const dreCodigo = listaDres?.find(d => d?.id === Number(dreId))?.codigo;
-  const ueCodigo = listaUes?.find(d => d?.id === Number(ueId))?.codigo;
+  const dreCodigo = ocorrenciaId
+    ? form?.initialValues?.dreCodigo
+    : listaUes?.find(d => Number(d?.id) === Number(dreId))?.codigo;
+
+  const ueCodigo = ocorrenciaId
+    ? form?.initialValues?.ueCodigo
+    : listaUes?.find(d => Number(d?.id) === Number(ueId))?.codigo;
 
   return (
     <Col span={24}>
@@ -39,7 +44,7 @@ const FormCadastroOcorrencia = props => {
         ) : (
           <></>
         )}
-        <Col sm={24} md={24} lg={10}>
+        <Col sm={24} md={24} lg={ocorrenciaId ? 12 : 10}>
           <DreOcorrencia
             form={form}
             onChangeCampos={onChangeCampos}
@@ -49,7 +54,7 @@ const FormCadastroOcorrencia = props => {
             listaDres={listaDres}
           />
         </Col>
-        <Col sm={24} md={24} lg={10}>
+        <Col sm={24} md={24} lg={ocorrenciaId ? 12 : 10}>
           <UeOcorrencia
             form={form}
             onChangeCampos={onChangeCampos}
@@ -83,7 +88,7 @@ const FormCadastroOcorrencia = props => {
           form={form}
           onChangeCampos={onChangeCampos}
           desabilitar={desabilitar}
-          listaUes={listaUes}
+          ueCodigo={ueCodigo}
         />
       </Row>
       <Row gutter={[16, 16]}>
