@@ -6,15 +6,26 @@ import { SGP_SELECT_TURMA } from '~/componentes-sgp/filtro/idsCampos';
 import { ModalidadeDTO } from '~/dtos';
 import { AbrangenciaServico, erros } from '~/servicos';
 
-const TurmaOcorrencia = ({ form, onChangeCampos, desabilitar, ueCodigo }) => {
+const TurmaOcorrencia = props => {
+  const { form, onChangeCampos, desabilitar, ueCodigo, ocorrenciaId } = props;
+
   const [exibirLoader, setExibirLoader] = useState(false);
   const [listaTurmas, setListaTurmas] = useState([]);
 
-  const { consideraHistorico, anoLetivo, modalidade, semestre } = form.values;
+  const { anoLetivo, modalidade, semestre } = form.values;
 
   const ehEJA = Number(modalidade) === ModalidadeDTO.EJA;
 
   const nomeCampo = 'turmaId';
+
+  const listaTurmasEdicao = form?.initialValues?.turmaId
+    ? [
+        {
+          id: form?.initialValues?.turmaId,
+          nomeFiltro: form?.initialValues?.turmaNome,
+        },
+      ]
+    : [];
 
   const obterTurmas = useCallback(async () => {
     setExibirLoader(true);
@@ -24,7 +35,7 @@ const TurmaOcorrencia = ({ form, onChangeCampos, desabilitar, ueCodigo }) => {
       modalidade,
       '',
       anoLetivo,
-      consideraHistorico
+      false
     )
       .catch(e => erros(e))
       .finally(() => setExibirLoader(false));
@@ -39,9 +50,11 @@ const TurmaOcorrencia = ({ form, onChangeCampos, desabilitar, ueCodigo }) => {
       setListaTurmas([]);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [anoLetivo, consideraHistorico, ueCodigo, modalidade]);
+  }, [anoLetivo, ueCodigo, modalidade]);
 
   useEffect(() => {
+    if (ocorrenciaId) return;
+
     if (modalidade) {
       obterTurmas();
     } else {
@@ -64,7 +77,7 @@ const TurmaOcorrencia = ({ form, onChangeCampos, desabilitar, ueCodigo }) => {
           id={SGP_SELECT_TURMA}
           form={form}
           name={nomeCampo}
-          lista={listaTurmas}
+          lista={ocorrenciaId ? listaTurmasEdicao : listaTurmas}
           valueOption="id"
           valueText="nomeFiltro"
           label="Turma"

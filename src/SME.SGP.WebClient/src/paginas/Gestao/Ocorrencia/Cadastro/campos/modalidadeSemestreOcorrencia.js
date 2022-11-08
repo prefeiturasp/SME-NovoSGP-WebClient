@@ -9,27 +9,48 @@ import {
 import { ModalidadeDTO } from '~/dtos';
 import { AbrangenciaServico, erros, ServicoFiltroRelatorio } from '~/servicos';
 
-const ModalidadeSemestreOcorrencia = ({
-  form,
-  onChangeCampos,
-  desabilitar,
-  dreCodigo,
-  ueCodigo,
-}) => {
+const ModalidadeSemestreOcorrencia = props => {
+  const {
+    form,
+    onChangeCampos,
+    desabilitar,
+    dreCodigo,
+    ueCodigo,
+    ocorrenciaId,
+  } = props;
+
   const [listaModalidades, setListaModalidades] = useState(false);
   const [listaSemestres, setListaSemestres] = useState(false);
   const [exibirLoader, setExibirLoader] = useState(false);
 
-  const { consideraHistorico, anoLetivo, modalidade } = form.values;
+  const { anoLetivo, modalidade } = form.values;
 
   const ehEJA = Number(modalidade) === ModalidadeDTO.EJA;
+
+  const listaModalidadesEdicao = form?.initialValues?.modalidade
+    ? [
+        {
+          valor: form?.initialValues?.modalidade || '',
+          descricao: form?.initialValues?.modalidadeNome,
+        },
+      ]
+    : [];
+
+  const listaSemestresEdicao = form?.initialValues?.semestre
+    ? [
+        {
+          valor: form?.initialValues?.semestre || '',
+          descricao: form?.initialValues?.semestre,
+        },
+      ]
+    : [];
 
   const obterModalidades = useCallback(async () => {
     setExibirLoader(true);
     const resposta = await ServicoFiltroRelatorio.obterModalidades(
       ueCodigo,
       anoLetivo,
-      consideraHistorico
+      false
     )
       .catch(e => erros(e))
       .finally(() => setExibirLoader(false));
@@ -47,9 +68,11 @@ const ModalidadeSemestreOcorrencia = ({
       setListaModalidades([]);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [consideraHistorico, anoLetivo, ueCodigo]);
+  }, [anoLetivo, ueCodigo]);
 
   useEffect(() => {
+    if (ocorrenciaId) return;
+
     if (ueCodigo) {
       obterModalidades();
     } else {
@@ -61,7 +84,7 @@ const ModalidadeSemestreOcorrencia = ({
 
   const obterSemestres = useCallback(async () => {
     const retorno = await AbrangenciaServico.obterSemestres(
-      consideraHistorico,
+      false,
       anoLetivo,
       modalidade,
       dreCodigo,
@@ -81,9 +104,11 @@ const ModalidadeSemestreOcorrencia = ({
       form.setFieldValue('semestre', undefined);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [anoLetivo, modalidade, consideraHistorico, dreCodigo, ueCodigo]);
+  }, [anoLetivo, modalidade, dreCodigo, ueCodigo]);
 
   useEffect(() => {
+    if (ocorrenciaId) return;
+
     if (modalidade && ehEJA) {
       obterSemestres();
     }
@@ -97,11 +122,14 @@ const ModalidadeSemestreOcorrencia = ({
           <SelectComponent
             id={SGP_SELECT_MODALIDADE}
             label="Modalidade"
-            lista={listaModalidades}
+            lista={ocorrenciaId ? listaModalidadesEdicao : listaModalidades}
             valueOption="valor"
             valueText="descricao"
             disabled={
-              !ueCodigo || listaModalidades?.length === 1 || desabilitar
+              !ueCodigo ||
+              listaModalidades?.length === 1 ||
+              desabilitar ||
+              !!ocorrenciaId
             }
             placeholder="Modalidade"
             name="modalidade"
@@ -119,10 +147,12 @@ const ModalidadeSemestreOcorrencia = ({
           <SelectComponent
             id={SGP_SELECT_SEMESTRE}
             label="Semestre"
-            lista={listaSemestres}
+            lista={ocorrenciaId ? listaSemestresEdicao : listaSemestres}
             valueOption="valor"
             valueText="descricao"
-            disabled={!modalidade || listaSemestres?.length === 1}
+            disabled={
+              !modalidade || listaSemestres?.length === 1 || !!ocorrenciaId
+            }
             placeholder="Semestre"
             name="semestre"
             form={form}

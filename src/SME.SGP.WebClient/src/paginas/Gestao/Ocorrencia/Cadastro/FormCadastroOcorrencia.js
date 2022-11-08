@@ -1,8 +1,6 @@
 /* eslint-disable react/prop-types */
 import { Col, Row } from 'antd';
 import React from 'react';
-import { CheckboxComponent } from '~/componentes';
-import { SGP_CHECKBOX_EXIBIR_HISTORICO } from '~/componentes-sgp/filtro/idsCampos';
 import AnoLetivoOcorrencia from './campos/anoLetivoOcorrencia';
 import DataHoraOcorrencia from './campos/dataHoraOcorrencia';
 import DescricaoOcorrencia from './campos/descricaoOcorrencia';
@@ -34,33 +32,13 @@ const FormCadastroOcorrencia = props => {
   return (
     <Col span={24}>
       <Row gutter={[16, 16]}>
-        <Col md={24} xl={12}>
-          <CheckboxComponent
-            form={form}
-            name="consideraHistorico"
-            id={SGP_CHECKBOX_EXIBIR_HISTORICO}
-            label="Exibir histórico?"
-            disabled={desabilitar}
-            onChangeCheckbox={() => {
-              onChangeCampos();
-              form.setFieldValue('anoLetivo', undefined);
-              form.setFieldValue('dreId', undefined);
-              form.setFieldValue('ueId', undefined);
-              form.setFieldValue('modalidade', undefined);
-              form.setFieldValue('semestre', undefined);
-              form.setFieldValue('turmaId', null);
-            }}
-          />
-        </Col>
-      </Row>
-      <Row gutter={[16, 16]}>
-        <Col sm={24} md={8} lg={4}>
-          <AnoLetivoOcorrencia
-            form={form}
-            onChangeCampos={onChangeCampos}
-            desabilitar={desabilitar}
-          />
-        </Col>
+        {!ocorrenciaId ? (
+          <Col sm={24} md={8} lg={4}>
+            <AnoLetivoOcorrencia form={form} />
+          </Col>
+        ) : (
+          <></>
+        )}
         <Col sm={24} md={24} lg={10}>
           <DreOcorrencia
             form={form}
@@ -79,6 +57,7 @@ const FormCadastroOcorrencia = props => {
             setListaUes={setListaUes}
             listaUes={listaUes}
             dreCodigo={dreCodigo}
+            ocorrenciaId={ocorrenciaId}
           />
         </Col>
       </Row>
@@ -89,12 +68,14 @@ const FormCadastroOcorrencia = props => {
           desabilitar={desabilitar}
           dreCodigo={dreCodigo}
           ueCodigo={ueCodigo}
+          ocorrenciaId={ocorrenciaId}
         />
         <TurmaOcorrencia
           form={form}
           onChangeCampos={onChangeCampos}
           desabilitar={desabilitar}
           ueCodigo={ueCodigo}
+          ocorrenciaId={ocorrenciaId}
         />
       </Row>
       <Row gutter={[16, 16]}>
