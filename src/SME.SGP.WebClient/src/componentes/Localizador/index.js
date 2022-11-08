@@ -42,6 +42,7 @@ function Localizador({
   ueId,
   buscarPorAbrangencia,
   labelRequired,
+  buscarPorTodasDre,
 }) {
   const usuario = useSelector(store => store.usuario);
   const [dataSource, setDataSource] = useState([]);
@@ -106,6 +107,11 @@ function Localizador({
       try {
         if (buscarPorAbrangencia && !ueId) return;
 
+        if (!rf) {
+          erro('O campo RF é obrigatório.');
+          return;
+        }
+
         buscandoDados(true);
         setExibirLoader(true);
         const { data: dados } = await service
@@ -116,6 +122,7 @@ function Localizador({
             dreId,
             ueId,
             buscarPorAbrangencia,
+            buscarPorTodasDre,
           })
           .finally(() => setExibirLoader(false));
 
@@ -211,11 +218,11 @@ function Localizador({
   }, [form?.initialValues]);
 
   useEffect(() => {
-    if (dreId && validacaoDesabilitaPerfilProfessor()) {
+    if (dreId && ueId && validacaoDesabilitaPerfilProfessor()) {
       onBuscarPorRF({ rf: usuarioRf });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [dreId, ehPerfilProfessor, usuarioRf, onBuscarPorRF]);
+  }, [dreId, ueId, ehPerfilProfessor, usuarioRf, onBuscarPorRF]);
 
   useEffect(() => {
     if (form) {
@@ -320,6 +327,7 @@ Localizador.propTypes = {
   ueId: PropTypes.string,
   buscarPorAbrangencia: PropTypes.bool,
   labelRequired: PropTypes.bool,
+  buscarPorTodasDre: PropTypes.bool,
 };
 
 Localizador.defaultProps = {
@@ -345,6 +353,7 @@ Localizador.defaultProps = {
   ueId: null,
   buscarPorAbrangencia: false,
   labelRequired: false,
+  buscarPorTodasDre: false,
 };
 
 export default Localizador;

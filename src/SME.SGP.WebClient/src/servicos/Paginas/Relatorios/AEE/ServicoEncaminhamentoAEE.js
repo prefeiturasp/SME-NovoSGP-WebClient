@@ -1,3 +1,4 @@
+import { data } from 'jquery';
 import QuestionarioDinamicoFuncoes from '~/componentes-sgp/QuestionarioDinamico/Funcoes/QuestionarioDinamicoFuncoes';
 import { RotasDto } from '~/dtos';
 import tipoQuestao from '~/dtos/tipoQuestao';
@@ -510,6 +511,9 @@ class ServicoEncaminhamentoAEE {
   devolverEncaminhamentoAEE = params => {
     return api.post(`${urlPadrao}/devolver`, params);
   };
+
+  obterResponsaveveisEncaminhamentoPAAI = codigoTurma =>
+    api.post(`${urlPadrao}/responsavel/pesquisa`, { codigoTurma, limite: 99 });
 }
 
 export default new ServicoEncaminhamentoAEE();
