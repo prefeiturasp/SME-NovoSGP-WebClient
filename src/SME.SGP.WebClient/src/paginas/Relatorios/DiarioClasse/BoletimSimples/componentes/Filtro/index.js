@@ -33,7 +33,9 @@ const Filtros = ({ onFiltrar, filtrou, setFiltrou, cancelou, setCancelou }) => {
   const [listaTurmas, setListaTurmas] = useState([]);
   const [listaUes, setListaUes] = useState([]);
   const [modalidadeId, setModalidadeId] = useState();
-  const [modeloBoletimId, setModeloBoletimId] = useState();
+  const [quantidadeBoletimPorPagina, setQuantidadeBoletimPorPagina] = useState(
+    '1'
+  );
   const [semestre, setSemestre] = useState();
   const [opcaoEstudanteId, setOpcaoEstudanteId] = useState();
   const [turmasId, setTurmasId] = useState('');
@@ -43,6 +45,8 @@ const Filtros = ({ onFiltrar, filtrou, setFiltrou, cancelou, setCancelou }) => {
     setImprimirEstudantesInativos,
   ] = useState();
 
+  const ehEnsinoMedio = Number(modalidadeId) === ModalidadeDTO.ENSINO_MEDIO;
+
   const OPCAO_TODOS_ESTUDANTES = '0';
   const OPCAO_SELECIONAR_ALUNOS = '1';
   const opcoesEstudantes = [
@@ -50,10 +54,20 @@ const Filtros = ({ onFiltrar, filtrou, setFiltrou, cancelou, setCancelou }) => {
     { desc: 'Selecionar Alunos', valor: '1' },
   ];
 
-  const opcoesModeloBoletim = [
-    { valor: 1, desc: 'Simples' },
-    { valor: 2, desc: 'Detalhado' },
+  const qtdBoletinsPaginMedio = [
+    { valor: '1', desc: '1' },
+    { valor: '4', desc: '4' },
   ];
+
+  const qtdBoletinsPaginFundamentalEJA = [
+    { valor: '1', desc: '1' },
+    { valor: '2', desc: '2' },
+    { valor: '6', desc: '6' },
+  ];
+
+  const listaQtdBoletinsPagina = ehEnsinoMedio
+    ? qtdBoletinsPaginMedio
+    : qtdBoletinsPaginFundamentalEJA;
 
   const opcoesImprimirEstudantesInativos = [
     { value: true, label: 'Sim' },
@@ -84,7 +98,7 @@ const Filtros = ({ onFiltrar, filtrou, setFiltrou, cancelou, setCancelou }) => {
       semestre: semestre || 0,
       turmasId,
       opcaoEstudanteId,
-      modeloBoletimId,
+      quantidadeBoletimPorPagina,
       imprimirEstudantesInativos,
     };
 
@@ -102,7 +116,7 @@ const Filtros = ({ onFiltrar, filtrou, setFiltrou, cancelou, setCancelou }) => {
     opcaoEstudanteId,
     onFiltrar,
     filtrou,
-    modeloBoletimId,
+    quantidadeBoletimPorPagina,
     imprimirEstudantesInativos,
   ]);
 
@@ -356,7 +370,6 @@ const Filtros = ({ onFiltrar, filtrou, setFiltrou, cancelou, setCancelou }) => {
 
     setTurmasId(valor);
     setOpcaoEstudanteId(OPCAO_TODOS_ESTUDANTES);
-    setModeloBoletimId('1');
     setDesabilitarEstudante(temOpcaoTodas);
     setFiltrou(false);
   };
@@ -416,15 +429,11 @@ const Filtros = ({ onFiltrar, filtrou, setFiltrou, cancelou, setCancelou }) => {
   const onChangeOpcaoEstudante = valor => {
     setFiltrou(false);
     setOpcaoEstudanteId(valor);
-
-    if (!modeloBoletimId) {
-      setModeloBoletimId('1');
-    }
   };
 
-  const onChangeModeloBoletim = valor => {
+  const onChangeQtdBoletinsPagina = valor => {
     setFiltrou(false);
-    setModeloBoletimId(valor);
+    setQuantidadeBoletimPorPagina(valor);
   };
 
   useEffect(() => {
@@ -438,6 +447,7 @@ const Filtros = ({ onFiltrar, filtrou, setFiltrou, cancelou, setCancelou }) => {
       setCancelou(false);
       setFiltrou(false);
       setImprimirEstudantesInativos(false);
+      setQuantidadeBoletimPorPagina('1');
       setOpcaoEstudanteId();
     }
   }, [cancelou, setFiltrou, setCancelou, anoAtual]);
@@ -453,6 +463,20 @@ const Filtros = ({ onFiltrar, filtrou, setFiltrou, cancelou, setCancelou }) => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [opcaoEstudanteId]);
+
+  const obterMensagemQtdBoletionsPagina = () => {
+    switch (quantidadeBoletimPorPagina) {
+      case '1':
+        return 'Nesta opção será impresso o boletim detalhado';
+      case '2':
+        return 'Nesta opção será impresso o boletim detalhado sem as recomendações';
+      case '4':
+      case '6':
+        return 'Nesta opção será impresso o boletim simples';
+      default:
+        return '';
+    }
+  };
 
   return (
     <div className="col-12">
@@ -487,7 +511,7 @@ const Filtros = ({ onFiltrar, filtrou, setFiltrou, cancelou, setCancelou }) => {
               lista={listaDres}
               valueOption="valor"
               valueText="desc"
-              disabled={!anoLetivo  || listaDres?.length <= 1}
+              disabled={!anoLetivo || listaDres?.length <= 1}
               onChange={onChangeDre}
               valueSelect={dreCodigo}
               placeholder="Diretoria Regional De Educação (DRE)"
@@ -579,18 +603,16 @@ const Filtros = ({ onFiltrar, filtrou, setFiltrou, cancelou, setCancelou }) => {
         </div>
         <div className="col-sm-12 col-md-4">
           <SelectComponent
-            lista={opcoesModeloBoletim}
+            lista={listaQtdBoletinsPagina}
             valueOption="valor"
             valueText="desc"
-            label="Modelo de boletim"
+            label="Qtde de boletins por página"
             disabled={!turmasId?.length || !opcaoEstudanteId}
-            valueSelect={modeloBoletimId}
-            onChange={onChangeModeloBoletim}
-            placeholder="Modelo de boletim"
+            valueSelect={quantidadeBoletimPorPagina}
+            onChange={onChangeQtdBoletinsPagina}
+            allowClear={false}
           />
-          <AvisoBoletim visivel={modeloBoletimId === '2'}>
-            Neste modelo cada estudante ocupará no mínimo 1 página
-          </AvisoBoletim>
+          <AvisoBoletim>{obterMensagemQtdBoletionsPagina()}</AvisoBoletim>
         </div>
         <div className="col-sm-12 col-md-4">
           <RadioGroupButton
