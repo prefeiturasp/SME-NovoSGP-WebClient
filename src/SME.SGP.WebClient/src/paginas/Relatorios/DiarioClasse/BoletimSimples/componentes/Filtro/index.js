@@ -55,8 +55,8 @@ const Filtros = ({ onFiltrar, filtrou, setFiltrou, cancelou, setCancelou }) => {
   ];
 
   const qtdBoletinsPaginMedio = [
-    { valor: '1', desc: '1 - Um' },
-    { valor: '4', desc: '4 - Quatro' },
+    { valor: '1', desc: '1' },
+    { valor: '4', desc: '4' },
   ];
 
   const qtdBoletinsPaginFundamentalEJA = [
