@@ -31,9 +31,12 @@ import {
   verificaSomenteConsulta,
 } from '~/servicos';
 import ServicoPlanoAEE from '~/servicos/Paginas/Relatorios/AEE/ServicoPlanoAEE';
+import ModalImpressaoPlano from './ModalImpressaoPlano/modalImpressaoPlano';
 
 const BotoesAcoesPlanoAEE = props => {
   const { match } = props;
+
+  const [exibirModal, setExibirModal] = useState(false);
 
   const questionarioDinamicoEmEdicao = useSelector(
     store => store.questionarioDinamico.questionarioDinamicoEmEdicao
@@ -236,9 +239,49 @@ const BotoesAcoesPlanoAEE = props => {
 
   const onClickDevolver = () => dispatch(setExibirModalDevolverPlanoAEE(true));
 
+  const imprimirDados = async id => {
+    if (id) {
+      const resultado = await ServicoPlanoAEE.imprimirVersoes(id).catch(e => {
+        erros(e);
+      });
+      if (resultado && resultado.status === 200) {
+        sucesso('Impressão concluída com sucesso');
+      }
+    } else {
+      erros();
+    }
+  };
+
+  const onClickImpressaoDados = async () => {
+    if (planoAEEDados?.versoes.length === 0) {
+      const confirmou = await confirmar(
+        'Atenção',
+        '',
+        'Você tem certeza que deseja imprimir esses dados?'
+      );
+      if (confirmou) {
+        imprimirDados(planoAEEDados?.planoAtual?.id);
+      }
+    } else {
+      setExibirModal(!exibirModal);
+    }
+  };
+
   return (
     <>
       <BotaoVoltarPadrao className="mr-2" onClick={() => onClickVoltar()} />
+      <Button
+        icon="print"
+        className="btn-imprimir mr-2"
+        color={Colors.Azul}
+        onClick={onClickImpressaoDados}
+        border
+        semMargemDireita
+        id="btn-imprimir"
+        disabled={
+          planoAEEDados?.versoes?.length === 0 && !planoAEEDados?.ultimaVersao
+        }
+      />
       <Button
         id={SGP_BUTTON_CANCELAR}
         label="Cancelar"
@@ -308,6 +351,11 @@ const BotoesAcoesPlanoAEE = props => {
           !parecerEmEdicao ||
           !permissoesTela?.podeAlterar
         }
+      />
+      <ModalImpressaoPlano
+        exibirModal={exibirModal}
+        setExibirModal={setExibirModal}
+        imprimirDados={imprimirDados}
       />
     </>
   );
