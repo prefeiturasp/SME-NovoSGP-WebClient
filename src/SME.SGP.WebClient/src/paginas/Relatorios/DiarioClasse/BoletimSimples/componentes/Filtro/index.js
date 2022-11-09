@@ -60,9 +60,9 @@ const Filtros = ({ onFiltrar, filtrou, setFiltrou, cancelou, setCancelou }) => {
   ];
 
   const qtdBoletinsPaginFundamentalEJA = [
-    { valor: '1', desc: '1 - Um' },
-    { valor: '2', desc: '2 - Dois' },
-    { valor: '6', desc: '6 - Seis' },
+    { valor: '1', desc: '1' },
+    { valor: '2', desc: '2' },
+    { valor: '6', desc: '6' },
   ];
 
   const listaQtdBoletinsPagina = ehEnsinoMedio
