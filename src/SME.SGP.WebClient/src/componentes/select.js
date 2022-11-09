@@ -64,9 +64,6 @@ const Container = styled.div`
 
     .ant-select-selection__rendered {
       margin-top: 3px;
-      ul {
-        ${props => props?.displayGridUl && 'display: grid'}
-      }
     }
   }
 
@@ -119,7 +116,6 @@ const SelectComponent = React.forwardRef((props, ref) => {
     setValueOnlyOnChange,
     maxHeightMultiple,
     labelRequired,
-    displayGridUl,
   } = props;
 
   const { Option } = Select;
@@ -243,7 +239,6 @@ const SelectComponent = React.forwardRef((props, ref) => {
       border={border}
       color={color}
       maxHeightMultiple={maxHeightMultiple}
-      displayGridUl={displayGridUl}
     >
       {label ? (
         <Label text={label} control={name} isRequired={labelRequired} />
@@ -283,7 +278,6 @@ SelectComponent.propTypes = {
   setValueOnlyOnChange: PropTypes.bool,
   maxHeightMultiple: PropTypes.string,
   labelRequired: PropTypes.bool,
-  displayGridUl: PropTypes.bool,
 };
 
 SelectComponent.defaultProps = {
@@ -294,7 +288,6 @@ SelectComponent.defaultProps = {
   setValueOnlyOnChange: false,
   maxHeightMultiple: '78px',
   labelRequired: false,
-  displayGridUl: false,
 };
 
 export default SelectComponent;

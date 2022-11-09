@@ -28,7 +28,7 @@ const FormCadastroOcorrencia = props => {
 
   const dreCodigo = ocorrenciaId
     ? form?.initialValues?.dreCodigo
-    : listaUes?.find(d => Number(d?.id) === Number(dreId))?.codigo;
+    : listaDres?.find(d => Number(d?.id) === Number(dreId))?.codigo;
 
   const ueCodigo = ocorrenciaId
     ? form?.initialValues?.ueCodigo
