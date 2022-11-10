@@ -417,7 +417,7 @@ const PlanoAEELista = () => {
   }, [permissoesTela]);
 
   const onSelecionarItems = items =>
-    setIdsPlanosSelecionados(items?.map(item => item?.id));
+    setIdsPlanosSelecionados(items?.map(item => item?.planoAeeVersaoId));
 
   return (
     <>
