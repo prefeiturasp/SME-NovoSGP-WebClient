@@ -433,6 +433,8 @@ class ServicoPlanoAEE {
     return api.get(`${urlPadrao}/paai-ue?codigoUe=${idUe}`);
   };
 
+  imprimirVersoes = ids => api.post(`${urlPadrao}/imprimir`, ids);
+
   removerReponsavelPAAI = id =>
     api.post(`${urlPadrao}/remover-responsavel/${id}`);
 }
