@@ -1,113 +1,128 @@
 import React, { useEffect, useState } from 'react';
-import PropTypes from 'prop-types';
 import moment from 'moment';
 import { Col, Row } from 'antd';
 import { useSelector } from 'react-redux';
-import shortid from 'shortid';
-import { Colors, ModalConteudoHtml, SelectComponent } from '~/componentes';
+import {
+  Button,
+  Colors,
+  Loader,
+  ModalConteudoHtml,
+  SelectComponent,
+} from '~/componentes';
+import { erros, sucesso } from '~/servicos';
+import ServicoPlanoAEE from '~/servicos/Paginas/Relatorios/AEE/ServicoPlanoAEE';
+import { MENSAGEM_SOLICITACAO_RELATORIO_SUCESSO } from '~/constantes';
+import { SGP_BUTTON_IMPRIMIR } from '~/componentes-sgp/filtro/idsCampos';
 
-const ModalImpressaoPlano = ({
-  key,
-  exibirModal,
-  modoConsulta,
-  setExibirModal,
-  imprimirDados,
-}) => {
+const ModalImpressaoPlano = () => {
   const planoAEEDados = useSelector(store => store.planoAEE.planoAEEDados);
-  const [versaoSelect, setVersaoSelect] = useState();
+  const [versaoSelecionada, setVersaoSelecionada] = useState();
+
   const [listaVersao, setListaVersao] = useState([]);
 
-  const setVersaoFunc = () => {
-    const valuesSelect = {
-      descricao: `v${planoAEEDados?.ultimaVersao?.numero} - ${moment(
-        planoAEEDados?.ultimaVersao?.criadoEm
-      ).format('DD/MM/YYYY')}`,
-      id: planoAEEDados?.ultimaVersao?.id,
-    };
-    setVersaoSelect(valuesSelect);
-    const newValues = planoAEEDados?.versoes?.map(el => {
-      return {
-        descricao: `v${el.numero} - ${moment(el.criadoEm).format(
-          'DD/MM/YYYY'
-        )}`,
-        id: el.id,
-      };
-    });
-    if (newValues) {
-      newValues.unshift(valuesSelect);
-    }
-    setListaVersao(newValues);
-  };
+  const [exibirModal, setExibirModal] = useState(false);
+  const [exibirLoader, setExibirLoader] = useState(false);
 
   useEffect(() => {
-    setVersaoFunc();
-  }, [planoAEEDados]);
+    if (exibirModal) {
+      const ultimaVersao = {
+        descricao: `v${planoAEEDados?.ultimaVersao?.numero} - ${moment(
+          planoAEEDados?.ultimaVersao?.criadoEm
+        ).format('DD/MM/YYYY')}`,
+        id: planoAEEDados?.ultimaVersao?.id,
+      };
 
-  const onChangeVersao = (idValue, values) => {
-    const valuesSelect = {
-      descricao: values?.props?.title,
-      id: idValue,
-    };
-    setVersaoSelect(valuesSelect);
+      const newValues = planoAEEDados?.versoes?.map(el => {
+        return {
+          descricao: `v${el.numero} - ${moment(el.criadoEm).format(
+            'DD/MM/YYYY'
+          )}`,
+          id: el.id,
+        };
+      });
+
+      newValues.unshift(ultimaVersao);
+
+      setListaVersao(newValues);
+      setVersaoSelecionada(planoAEEDados?.ultimaVersao?.id?.toString());
+    }
+  }, [planoAEEDados, exibirModal]);
+
+  const onClose = () => setExibirModal(false);
+
+  const imprimirDados = async id => {
+    const isAtual = id || versaoSelecionada;
+    if (isAtual) {
+      setExibirLoader(true);
+      setExibirModal(false);
+
+      const resultado = await ServicoPlanoAEE.imprimirVersoes([isAtual])
+        .catch(e => erros(e))
+        .finally(() => setExibirLoader(false));
+
+      if (resultado?.status === 200) {
+        sucesso(MENSAGEM_SOLICITACAO_RELATORIO_SUCESSO);
+      }
+    }
   };
 
-  const onClickCancelar = () => {
-    setExibirModal(false);
-  };
-
-  const validaAntesDeFechar = async () => {
-    setExibirModal();
+  const onClickImpressao = () => {
+    if (planoAEEDados?.versoes?.length > 1) {
+      setExibirModal(true);
+    } else {
+      imprimirDados(planoAEEDados?.ultimaVersao?.id?.toString());
+    }
   };
 
   return (
-    <ModalConteudoHtml
-      id={shortid.generate()}
-      key={key}
-      visivel={exibirModal}
-      titulo="Gerar relatório"
-      onClose={validaAntesDeFechar}
-      onConfirmacaoPrincipal={() => imprimirDados(versaoSelect.id)}
-      onConfirmacaoSecundaria={onClickCancelar}
-      labelBotaoPrincipal="Gerar"
-      labelBotaoSecundario="Cancelar"
-      width="50%"
-      closable
-      paddingBottom="24"
-      colorBotaoSecundario={Colors.Azul}
-    >
-      <Row gutter={[8, 8]}>
-        <Col>
-          <p>Selecione a versão que deseja gerar o relatório de impressão:</p>
-        </Col>
-        <Col span={6}>
-          <SelectComponent
-            lista={listaVersao}
-            valueOption="id"
-            valueText="descricao"
-            name="versao"
-            onChange={onChangeVersao}
-            valueSelect={versaoSelect?.descricao}
-            disabled={modoConsulta}
-          />
-        </Col>
-      </Row>
-    </ModalConteudoHtml>
+    <>
+      <Loader loading={exibirLoader} tip="">
+        <Button
+          icon="print"
+          className="mr-2"
+          color={Colors.Azul}
+          onClick={onClickImpressao}
+          border
+          semMargemDireita
+          id={SGP_BUTTON_IMPRIMIR}
+          disabled={
+            planoAEEDados?.versoes?.length === 0 && !planoAEEDados?.ultimaVersao
+          }
+        />
+      </Loader>
+      {exibirModal && (
+        <ModalConteudoHtml
+          id="SGP_MODAL_IMPRESSAO_VERSAO"
+          key="MODAL_IMPRESSAO_VERSAO"
+          visivel
+          titulo="Gerar relatório"
+          onClose={() => onClose()}
+          onConfirmacaoPrincipal={() => imprimirDados()}
+          onConfirmacaoSecundaria={() => onClose()}
+          labelBotaoPrincipal="Gerar"
+          labelBotaoSecundario="Cancelar"
+          closable
+          paddingBottom="24"
+          colorBotaoSecundario={Colors.Azul}
+        >
+          <Row>
+            <Col span={24}>
+              <SelectComponent
+                label="Selecione a versão que deseja gerar o relatório de impressão"
+                id="SGP_SELECT_VERSAO_IMPRESSAO"
+                lista={listaVersao}
+                valueOption="id"
+                valueText="descricao"
+                onChange={v => setVersaoSelecionada(v)}
+                valueSelect={versaoSelecionada}
+                allowClear={false}
+              />
+            </Col>
+          </Row>
+        </ModalConteudoHtml>
+      )}
+    </>
   );
-};
-
-ModalImpressaoPlano.defaultProps = {
-  exibirModal: false,
-  modoConsulta: false,
-  setExibirModal: PropTypes.oneOfType([PropTypes.func]),
-  imprimirDados: PropTypes.oneOfType([PropTypes.func]),
-};
-
-ModalImpressaoPlano.propTypes = {
-  exibirModal: PropTypes.bool,
-  key: PropTypes.string.isRequired,
-  modoConsulta: PropTypes.bool,
-  setExibirModal: () => {},
-  imprimirDados: () => {},
 };
 
 export default ModalImpressaoPlano;
