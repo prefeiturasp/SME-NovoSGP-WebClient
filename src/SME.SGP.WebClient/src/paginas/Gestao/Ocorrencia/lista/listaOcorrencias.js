@@ -595,7 +595,7 @@ const ListaOcorrencias = () => {
                 id="SGP_INPUT_TEXT_ALUNO_NOME"
                 value={alunoNomeExibicao}
                 onChange={onChangeAlunoNome}
-                label="Criança/Estudante"
+                label="Crianças/Estudantes"
                 placeholder="Procure pelo nome da criança"
                 iconeBusca
                 allowClear

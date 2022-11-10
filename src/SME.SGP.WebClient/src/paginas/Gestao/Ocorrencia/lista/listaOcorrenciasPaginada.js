@@ -39,7 +39,7 @@ const ListaOcorrenciasPaginada = props => {
       ellipsis: true,
     },
     {
-      title: 'Criança/Estudante',
+      title: 'Crianças/Estudantes',
       dataIndex: 'alunoOcorrencia',
       width: '30%',
       ellipsis: true,

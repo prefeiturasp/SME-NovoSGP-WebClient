@@ -31,7 +31,7 @@ const BoletimSimples = () => {
     turmaCodigo: '',
     consideraHistorico: false,
     opcaoEstudanteId: '',
-    quantidadeBoletimPorPagina: '1',
+    quantidadeBoletimPorPagina: '',
     filtroEhValido: true,
   };
   const [filtro, setFiltro] = useState(estadoInicial);

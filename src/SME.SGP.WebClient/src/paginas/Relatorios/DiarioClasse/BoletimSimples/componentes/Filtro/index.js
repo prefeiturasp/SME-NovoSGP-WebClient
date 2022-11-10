@@ -34,7 +34,7 @@ const Filtros = ({ onFiltrar, filtrou, setFiltrou, cancelou, setCancelou }) => {
   const [listaUes, setListaUes] = useState([]);
   const [modalidadeId, setModalidadeId] = useState();
   const [quantidadeBoletimPorPagina, setQuantidadeBoletimPorPagina] = useState(
-    '1'
+    ''
   );
   const [semestre, setSemestre] = useState();
   const [opcaoEstudanteId, setOpcaoEstudanteId] = useState();
@@ -86,6 +86,8 @@ const Filtros = ({ onFiltrar, filtrou, setFiltrou, cancelou, setCancelou }) => {
 
     setListaTurmas([]);
     setTurmasId();
+
+    setQuantidadeBoletimPorPagina('');
   };
 
   useEffect(() => {
@@ -127,6 +129,7 @@ const Filtros = ({ onFiltrar, filtrou, setFiltrou, cancelou, setCancelou }) => {
     setDreId();
     setFiltrou(false);
     setListaDres([]);
+    setQuantidadeBoletimPorPagina('');
   };
 
   const onChangeAnoLetivo = ano => {
@@ -234,6 +237,7 @@ const Filtros = ({ onFiltrar, filtrou, setFiltrou, cancelou, setCancelou }) => {
     setListaTurmas([]);
     setTurmasId();
     setFiltrou(false);
+    setQuantidadeBoletimPorPagina('');
   };
 
   const obterUes = useCallback(async () => {
@@ -278,6 +282,7 @@ const Filtros = ({ onFiltrar, filtrou, setFiltrou, cancelou, setCancelou }) => {
     setTurmasId();
     setModalidadeId(valor);
     setFiltrou(false);
+    setQuantidadeBoletimPorPagina('');
   };
 
   const obterModalidades = useCallback(async (ue, considHistorico) => {
@@ -318,6 +323,7 @@ const Filtros = ({ onFiltrar, filtrou, setFiltrou, cancelou, setCancelou }) => {
   const onChangeSemestre = valor => {
     setSemestre(valor);
     setFiltrou(false);
+    setQuantidadeBoletimPorPagina('');
   };
 
   const obterSemestres = async (
@@ -372,6 +378,7 @@ const Filtros = ({ onFiltrar, filtrou, setFiltrou, cancelou, setCancelou }) => {
     setOpcaoEstudanteId(OPCAO_TODOS_ESTUDANTES);
     setDesabilitarEstudante(temOpcaoTodas);
     setFiltrou(false);
+    setQuantidadeBoletimPorPagina('');
   };
 
   const onChangeImprimirEstudantesInativos = valor => {
@@ -429,6 +436,7 @@ const Filtros = ({ onFiltrar, filtrou, setFiltrou, cancelou, setCancelou }) => {
   const onChangeOpcaoEstudante = valor => {
     setFiltrou(false);
     setOpcaoEstudanteId(valor);
+    setQuantidadeBoletimPorPagina('');
   };
 
   const onChangeQtdBoletinsPagina = valor => {
@@ -447,7 +455,7 @@ const Filtros = ({ onFiltrar, filtrou, setFiltrou, cancelou, setCancelou }) => {
       setCancelou(false);
       setFiltrou(false);
       setImprimirEstudantesInativos(false);
-      setQuantidadeBoletimPorPagina('1');
+      setQuantidadeBoletimPorPagina('');
       setOpcaoEstudanteId();
     }
   }, [cancelou, setFiltrou, setCancelou, anoAtual]);
@@ -608,9 +616,10 @@ const Filtros = ({ onFiltrar, filtrou, setFiltrou, cancelou, setCancelou }) => {
             valueText="desc"
             label="Qtde de boletins por página"
             disabled={!turmasId?.length || !opcaoEstudanteId}
-            valueSelect={quantidadeBoletimPorPagina}
+            valueSelect={quantidadeBoletimPorPagina || undefined}
             onChange={onChangeQtdBoletinsPagina}
             allowClear={false}
+            placeholder="Qtde de boletins por página"
           />
           <AvisoBoletim>{obterMensagemQtdBoletionsPagina()}</AvisoBoletim>
         </div>
