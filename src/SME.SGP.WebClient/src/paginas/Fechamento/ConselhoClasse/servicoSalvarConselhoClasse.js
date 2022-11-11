@@ -321,7 +321,7 @@ class ServicoSalvarConselhoClasse {
 
       dispatch(setDadosPrincipaisConselhoClasse(dadosPrincipaisConselhoClasse));
 
-      const { auditoria } = retorno.data;
+      const { auditoria, emAprovacao } = retorno.data;
 
       let auditoriaDto = null;
       if (auditoria) {
@@ -337,8 +337,6 @@ class ServicoSalvarConselhoClasse {
       dispatch(setAuditoriaAnotacaoRecomendacao(auditoriaDto));
 
       limparDadosNotaPosConselhoJustificativa();
-
-      const emAprovacao = resultado?.data?.emAprovacao;
 
       const mensagemSucesso = `${ehNota ? 'Nota' : 'Conceito'} pós-conselho ${
         ehNota ? 'salva' : 'salvo'
