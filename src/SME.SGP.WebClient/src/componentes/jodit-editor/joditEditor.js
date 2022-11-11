@@ -349,11 +349,11 @@ const JoditEditor = forwardRef((props, ref) => {
           }
 
           textArea.current.events.on('beforePaste', e => {
-            if (qtdMaxImg) {
-              const dadosColado = e?.clipboardData?.getData?.('text/html');
-              const dadosColadoEstaSemTexto =
-                dadosColado.replace(/<\/?[^>]+(>|$)/g, '').trim() === '';
+            const dadosColado = e?.clipboardData?.getData?.('text/html');
+            const dadosColadoEstaSemTexto =
+              dadosColado.replace(/<\/?[^>]+(>|$)/g, '').trim() === '';
 
+            if (qtdMaxImg) {
               const qtdElementoImgNova = dadosColado?.match(/<img/g) || [];
               const qtdElementoImgAtual = textArea?.current?.editorDocument?.querySelectorAll?.(
                 'img'
@@ -374,6 +374,11 @@ const JoditEditor = forwardRef((props, ref) => {
                 return false;
               }
             }
+
+            if (dadosColadoEstaSemTexto) {
+              return false;
+            }
+
             return true;
           });
 
