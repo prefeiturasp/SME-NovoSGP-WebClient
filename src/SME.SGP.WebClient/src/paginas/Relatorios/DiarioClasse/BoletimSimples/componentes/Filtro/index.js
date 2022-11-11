@@ -410,6 +410,7 @@ const Filtros = ({
         setListaTurmas(lista);
         if (lista.length === 1) {
           setTurmasId(lista[0].valor);
+          setOpcaoEstudanteId(OPCAO_TODOS_ESTUDANTES);
         }
       }
     }
