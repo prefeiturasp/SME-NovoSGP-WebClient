@@ -382,7 +382,9 @@ const ListaOcorrencias = () => {
   };
 
   const onChangeUe = ueCodigo => {
-    setFinalizouConsultas(false);
+    if (ueCodigo) {
+      setFinalizouConsultas(false);
+    }
 
     setListaModalidades();
     setModalidade();
@@ -400,7 +402,9 @@ const ListaOcorrencias = () => {
   };
 
   const onChangeModalidade = novaModalidade => {
-    setFinalizouConsultas(false);
+    if (novaModalidade) {
+      setFinalizouConsultas(false);
+    }
 
     setListaSemestres();
     setSemestre();
@@ -414,7 +418,9 @@ const ListaOcorrencias = () => {
   };
 
   const onChangeSemestre = valor => {
-    setFinalizouConsultas(false);
+    if (valor) {
+      setFinalizouConsultas(false);
+    }
 
     limparCamposSemConsulta();
 
