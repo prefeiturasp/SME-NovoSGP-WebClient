@@ -19,8 +19,8 @@ const ModalidadeSemestreOcorrencia = props => {
     ocorrenciaId,
   } = props;
 
-  const [listaModalidades, setListaModalidades] = useState(false);
-  const [listaSemestres, setListaSemestres] = useState(false);
+  const [listaModalidades, setListaModalidades] = useState([]);
+  const [listaSemestres, setListaSemestres] = useState([]);
   const [exibirLoader, setExibirLoader] = useState(false);
 
   const { anoLetivo, modalidade } = form.values;
@@ -40,7 +40,7 @@ const ModalidadeSemestreOcorrencia = props => {
     ? [
         {
           valor: form?.initialValues?.semestre || '',
-          descricao: form?.initialValues?.semestre,
+          desc: form?.initialValues?.semestre,
         },
       ]
     : [];
@@ -58,10 +58,6 @@ const ModalidadeSemestreOcorrencia = props => {
     if (resposta?.data?.length) {
       const lista = resposta.data;
 
-      if (lista?.length === 1) {
-        const { valor } = lista[0];
-        form.setFieldValue('modalidade', valor);
-      }
       setListaModalidades(lista);
     } else {
       form.setFieldValue('modalidade', undefined);
@@ -95,9 +91,6 @@ const ModalidadeSemestreOcorrencia = props => {
       const lista = retorno.data.map(periodo => {
         return { desc: periodo, valor: periodo };
       });
-      if (lista?.length === 1) {
-        form.setFieldValue('semestre', lista[0].valor);
-      }
       setListaSemestres(lista);
     } else {
       setListaSemestres([]);
@@ -125,12 +118,7 @@ const ModalidadeSemestreOcorrencia = props => {
             lista={ocorrenciaId ? listaModalidadesEdicao : listaModalidades}
             valueOption="valor"
             valueText="descricao"
-            disabled={
-              !ueCodigo ||
-              listaModalidades?.length === 1 ||
-              desabilitar ||
-              !!ocorrenciaId
-            }
+            disabled={!ueCodigo || desabilitar || !!ocorrenciaId}
             placeholder="Modalidade"
             name="modalidade"
             form={form}
@@ -149,10 +137,8 @@ const ModalidadeSemestreOcorrencia = props => {
             label="Semestre"
             lista={ocorrenciaId ? listaSemestresEdicao : listaSemestres}
             valueOption="valor"
-            valueText="descricao"
-            disabled={
-              !modalidade || listaSemestres?.length === 1 || !!ocorrenciaId
-            }
+            valueText="desc"
+            disabled={!modalidade || !!ocorrenciaId}
             placeholder="Semestre"
             name="semestre"
             form={form}

@@ -50,7 +50,7 @@ const ListaOcorrenciasBotoesAcao = props => {
       const confirmado = await confirmar('Atenção', msgConfirm);
 
       if (confirmado) {
-        const parametros = { data: ocorrenciasSelecionadas };
+        const parametros = { data: ocorrenciasSelecionadas?.map(o => o?.id) };
         setExibirLoaderExcluir(true);
         ServicoOcorrencias.excluir(parametros)
           .then(resp => {

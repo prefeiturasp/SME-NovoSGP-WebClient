@@ -60,7 +60,7 @@ const ListaOcorrenciasPaginada = props => {
 
   const onSelecionarItems = items => {
     if (items?.length) {
-      setOcorrenciasSelecionadas(items.map(item => String(item.id)));
+      setOcorrenciasSelecionadas([...items]);
     } else {
       setOcorrenciasSelecionadas([]);
     }
@@ -121,7 +121,6 @@ const ListaOcorrenciasPaginada = props => {
       multiSelecao
       selecionarItems={onSelecionarItems}
       filtroEhValido={filtroEhValido}
-      disabledCheckboxRow={linha => !linha?.alunoOcorrencia}
     />
   ) : (
     <></>
