@@ -264,7 +264,7 @@ const ListaOcorrencias = () => {
       const lista = retorno?.data;
       setListaTurmas(lista);
       if (lista.length === 1) {
-        setTurmaId([String(lista[0]?.id)]);
+        setTurmaId(String(lista[0]?.id));
       }
     } else {
       setListaTurmas([]);
