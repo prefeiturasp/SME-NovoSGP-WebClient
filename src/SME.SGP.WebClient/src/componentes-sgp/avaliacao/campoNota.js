@@ -16,6 +16,7 @@ const CampoNota = props => {
     name,
     esconderSetas,
     step,
+    id,
   } = props;
 
   const [notaValorAtual, setNotaValorAtual] = useState();
@@ -97,6 +98,7 @@ const CampoNota = props => {
       }}
     >
       <CampoNumero
+        id={id}
         esconderSetas={esconderSetas}
         name={name}
         onKeyDown={clicarSetas}
@@ -135,6 +137,7 @@ CampoNota.defaultProps = {
   name: '',
   esconderSetas: false,
   step: 0.5,
+  id: '',
 };
 
 CampoNota.propTypes = {
@@ -145,6 +148,7 @@ CampoNota.propTypes = {
   name: PropTypes.string,
   esconderSetas: PropTypes.bool,
   step: PropTypes.number,
+  id: PropTypes.string,
 };
 
 export default CampoNota;
