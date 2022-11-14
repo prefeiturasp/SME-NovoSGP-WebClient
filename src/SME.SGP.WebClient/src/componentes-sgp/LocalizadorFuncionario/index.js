@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
 import React, { useCallback, useEffect, useState } from 'react';
 import { Label } from '~/componentes';
+import { SGP_INPUT_NOME, SGP_INPUT_RF } from '~/constantes/ids/input';
 import { erro, erros } from '~/servicos/alertas';
 import { removerNumeros } from '~/utils/funcoes/gerais';
 import InputCodigo from './componentes/InputCodigo';
@@ -279,6 +280,7 @@ const LocalizadorFuncionario = props => {
       >
         <Label text="Nome" />
         <InputNome
+          id={SGP_INPUT_NOME}
           placeholder={placeholder}
           dataSource={dataSource}
           onSelect={valor => onSelectFuncionario(valor, true)}
@@ -294,6 +296,7 @@ const LocalizadorFuncionario = props => {
         <div className="col-sm-12 col-md-6 col-lg-4 col-xl-4">
           <Label text="RF" />
           <InputCodigo
+            id={SGP_INPUT_RF}
             funcionarioSelecionado={funcionarioSelecionado}
             onSelect={valor => validaAntesBuscarPorCodigo(valor, true)}
             onChange={valor => onChangeCodigo(valor, true)}

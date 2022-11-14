@@ -4,6 +4,13 @@ import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Button from '~/componentes/button';
 import { Colors } from '~/componentes/colors';
+import {
+  SGP_BUTTON_CANCELAR_OBSERVACAO,
+  SGP_BUTTON_EDITAR_OBSERVACAO,
+  SGP_BUTTON_EXCLUIR_OBSERVACAO,
+  SGP_BUTTON_SALVAR_OBSERVACAO,
+} from '~/constantes/ids/button';
+import { SGP_TEXTAREA_OBSERVACAO } from '~/constantes/ids/text-area';
 import { setObservacaoEmEdicao } from '~/redux/modulos/observacoesUsuario/actions';
 import { confirmar } from '~/servicos/alertas';
 import { ContainerCampoObservacao } from './observacoesUsuario.css';
@@ -72,7 +79,7 @@ const LinhaObservacaoProprietario = props => {
     return (
       <div className="d-flex mt-2">
         <Button
-          id="btn-cancelar-obs-novo"
+          id={SGP_BUTTON_CANCELAR_OBSERVACAO}
           label="Cancelar"
           color={Colors.Roxo}
           border
@@ -82,7 +89,7 @@ const LinhaObservacaoProprietario = props => {
           height="30px"
         />
         <Button
-          id="btn-salvar-obs-novo"
+          id={SGP_BUTTON_SALVAR_OBSERVACAO}
           label="Salvar"
           color={Colors.Roxo}
           border
@@ -118,7 +125,7 @@ const LinhaObservacaoProprietario = props => {
         <Tooltip title={desabilitaEditar() ? '' : 'Editar'}>
           <span>
             <Button
-              id="btn-editar"
+              id={SGP_BUTTON_EDITAR_OBSERVACAO}
               icon="edit"
               iconType="far"
               color={Colors.Azul}
@@ -134,7 +141,7 @@ const LinhaObservacaoProprietario = props => {
         <Tooltip title={desabilitaExcluir() ? '' : 'Excluir'}>
           <span>
             <Button
-              id="btn-excluir"
+              id={SGP_BUTTON_EXCLUIR_OBSERVACAO}
               icon="trash-alt"
               iconType="far"
               color={Colors.Azul}
@@ -156,7 +163,7 @@ const LinhaObservacaoProprietario = props => {
       {dados && observacaoEmEdicao && observacaoEmEdicao.id === dados.id ? (
         <>
           <ContainerCampoObservacao
-            id="editando-observacao"
+            id={SGP_TEXTAREA_OBSERVACAO}
             autoSize={{ minRows: 3 }}
             value={observacaoEmEdicao.observacao}
             onChange={onChangeObs}
@@ -169,6 +176,7 @@ const LinhaObservacaoProprietario = props => {
       ) : (
         <>
           <ContainerCampoObservacao
+            id={SGP_TEXTAREA_OBSERVACAO}
             style={{ cursor: 'not-allowed' }}
             className="col-md-12"
             readOnly

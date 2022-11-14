@@ -123,6 +123,7 @@ function InputRF({
       ) : (
         <InputRFEstilo>
           <Input
+            id={id}
             value={valor}
             placeholder={placeholderRF}
             onChange={onChangeRf}
@@ -141,6 +142,7 @@ function InputRF({
 InputRF.propTypes = {
   pessoaSelecionada: t.oneOfType([t.objectOf(t.object), t.any]),
   onSelect: t.func,
+  onChange: t.func,
   form: t.oneOfType([t.objectOf(t.object), t.any]),
   name: t.string,
   id: t.string,
@@ -156,6 +158,7 @@ InputRF.propTypes = {
 InputRF.defaultProps = {
   pessoaSelecionada: {},
   onSelect: () => null,
+  onChange: () => null,
   form: null,
   name: '',
   id: '',

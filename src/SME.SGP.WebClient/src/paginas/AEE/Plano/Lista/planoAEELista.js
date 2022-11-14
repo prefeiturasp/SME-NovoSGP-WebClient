@@ -25,6 +25,15 @@ import ServicoPlanoAEE from '~/servicos/Paginas/Relatorios/AEE/ServicoPlanoAEE';
 import FiltroHelper from '~componentes-sgp/filtro/helper';
 import { SGP_BUTTON_NOVO } from '~/constantes/ids/button';
 import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
+import {
+  SGP_SELECT_ANO_LETIVO,
+  SGP_SELECT_DRE,
+  SGP_SELECT_ESTUDANTE_CRIANCA,
+  SGP_SELECT_SITUACAO,
+  SGP_SELECT_TURMA,
+  SGP_SELECT_UE,
+} from '~/constantes/ids/select';
+import { SGP_CHECKBOX_EXIBIR_HISTORICO } from '~/constantes/ids/checkbox';
 
 const PlanoAEELista = () => {
   const dispatch = useDispatch();
@@ -438,7 +447,7 @@ const PlanoAEELista = () => {
           <div className="row">
             <div className="col-sm-12 mb-4">
               <CheckboxComponent
-                id="exibir-historico"
+                id={SGP_CHECKBOX_EXIBIR_HISTORICO}
                 label="Exibir histórico?"
                 onChangeCheckbox={onCheckedConsideraHistorico}
                 checked={consideraHistorico}
@@ -447,7 +456,7 @@ const PlanoAEELista = () => {
             <div className="col-sm-12 col-md-6 col-lg-2 col-xl-2 mb-2">
               <Loader loading={carregandoAnos} tip="">
                 <SelectComponent
-                  id="ano-letivo"
+                  id={SGP_SELECT_ANO_LETIVO}
                   label="Ano Letivo"
                   lista={listaAnosLetivo}
                   valueOption="valor"
@@ -462,7 +471,7 @@ const PlanoAEELista = () => {
             <div className="col-sm-12 col-md-12 col-lg-5 col-xl-5 mb-2">
               <Loader loading={carregandoDres} tip="">
                 <SelectComponent
-                  id="dre"
+                  id={SGP_SELECT_DRE}
                   label="Diretoria Regional de Educação (DRE)"
                   lista={listaDres}
                   valueOption="valor"
@@ -478,7 +487,7 @@ const PlanoAEELista = () => {
             <div className="col-sm-12 col-md-12 col-lg-5 col-xl-5 mb-2">
               <Loader loading={carregandoUes} tip="">
                 <SelectComponent
-                  id="ue"
+                  id={SGP_SELECT_UE}
                   label="Unidade Escolar (UE)"
                   lista={listaUes}
                   valueOption="valor"
@@ -494,7 +503,7 @@ const PlanoAEELista = () => {
             <div className="col-sm-12 col-md-12 col-lg-6 col-xl-5 mb-2">
               <Loader loading={carregandoTurmas} tip="">
                 <SelectComponent
-                  id="turma"
+                  id={SGP_SELECT_TURMA}
                   lista={listaTurmas}
                   valueOption="codigo"
                   valueText="nomeFiltro"
@@ -510,7 +519,7 @@ const PlanoAEELista = () => {
             <div className="col-sm-12 col-md-12 col-lg-6 col-xl-7 mb-2">
               <div className="row">
                 <LocalizadorEstudante
-                  id="estudante"
+                  id={SGP_SELECT_ESTUDANTE_CRIANCA}
                   showLabel
                   ueId={ueId}
                   onChange={onChangeLocalizadorEstudante}
@@ -525,7 +534,7 @@ const PlanoAEELista = () => {
             <div className="col-sm-12 col-md-6 col-lg-6 col-xl-5 mb-2">
               <Loader loading={carregandoSituacao} tip="">
                 <SelectComponent
-                  id="situacao"
+                  id={SGP_SELECT_SITUACAO}
                   label="Situação"
                   lista={listaSituacao}
                   valueOption="codigo"

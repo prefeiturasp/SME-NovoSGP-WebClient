@@ -9,6 +9,12 @@ import {
 } from '~/redux/modulos/collapseAtribuicaoResponsavel/actions';
 import SelectComponent from '~/componentes/select';
 import ServicoEncaminhamentoAEE from '~/servicos/Paginas/Relatorios/AEE/ServicoEncaminhamentoAEE';
+import {
+  SGP_BUTTON_ATRIBUICAO_RESPONSAVEL,
+  SGP_BUTTON_CANCELAR_ATRIBUICAO_RESPONSAVEL,
+  SGP_BUTTON_REMOVER_RESPONSAVEL,
+} from '~/constantes/ids/button';
+import { SGP_SELECT_PAAIS_DRE } from '~/constantes/ids/select';
 
 const CollapseAtribuicaoResponsavelDados = props => {
   const {
@@ -55,6 +61,7 @@ const CollapseAtribuicaoResponsavelDados = props => {
 
   useEffect(() => {
     obterResponsaveisPAAI();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const onChangeLocalizador = (codigoResponsavelRF, obj) => {
@@ -102,6 +109,7 @@ const CollapseAtribuicaoResponsavelDados = props => {
     <div className="row">
       <div className="col-md-12 mb-2">
         <SelectComponent
+          id={SGP_SELECT_PAAIS_DRE}
           label="PAAIS DRE"
           valueOption="codigoRF"
           valueText="nomeServidor"
@@ -116,7 +124,7 @@ const CollapseAtribuicaoResponsavelDados = props => {
       </div>
       <div className="col-md-12 d-flex justify-content-end pb-4 mt-2">
         <Button
-          id="btn-cancelar"
+          id={SGP_BUTTON_CANCELAR_ATRIBUICAO_RESPONSAVEL}
           label="Cancelar"
           color={Colors.Roxo}
           border
@@ -128,7 +136,7 @@ const CollapseAtribuicaoResponsavelDados = props => {
           }
         />
         <Button
-          id="btn-atribuir"
+          id={SGP_BUTTON_ATRIBUICAO_RESPONSAVEL}
           label="Atribuir responsável"
           color={Colors.Roxo}
           border
@@ -140,7 +148,7 @@ const CollapseAtribuicaoResponsavelDados = props => {
           }
         />
         <Button
-          id="btn-remover"
+          id={SGP_BUTTON_REMOVER_RESPONSAVEL}
           label="Remover responsável"
           color={Colors.Roxo}
           border

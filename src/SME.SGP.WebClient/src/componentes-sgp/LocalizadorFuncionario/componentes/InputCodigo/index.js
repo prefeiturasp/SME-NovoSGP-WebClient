@@ -6,6 +6,7 @@ import { InputRFEstilo } from './styles';
 
 const InputCodigo = props => {
   const {
+    id,
     funcionarioSelecionado,
     onSelect,
     onChange,
@@ -44,6 +45,7 @@ const InputCodigo = props => {
     <Loader loading={exibirLoader}>
       <InputRFEstilo>
         <Input
+          id={id}
           value={valor}
           placeholder="Procure pelo RF"
           onChange={onChangeCodigo}
@@ -62,6 +64,7 @@ const InputCodigo = props => {
 };
 
 InputCodigo.propTypes = {
+  id: PropTypes.string,
   funcionarioSelecionado: PropTypes.oneOfType([
     PropTypes.objectOf(PropTypes.object),
     PropTypes.any,
@@ -73,6 +76,7 @@ InputCodigo.propTypes = {
 };
 
 InputCodigo.defaultProps = {
+  id: '',
   funcionarioSelecionado: {},
   onSelect: () => {},
   onChange: () => {},
