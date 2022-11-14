@@ -20,6 +20,7 @@ const CampoNotaFinal = props => {
     name,
     esconderSetas,
     step,
+    id,
   } = props;
 
   const [notaBimestre, setNotaBimestre] = useState();
@@ -125,6 +126,7 @@ const CampoNotaFinal = props => {
     <Tooltip placement="bottom" title={abaixoDaMedia ? 'Abaixo da Média' : ''}>
       <div>
         <CampoNumero
+          id={id}
           esconderSetas={esconderSetas}
           name={name}
           onKeyDown={clicarSetas}
@@ -173,6 +175,7 @@ CampoNotaFinal.propTypes = {
   step: PropTypes.number,
   label: PropTypes.string,
   podeLancarNotaFinal: PropTypes.bool,
+  id: PropTypes.string,
 };
 
 CampoNotaFinal.defaultProps = {
@@ -188,6 +191,7 @@ CampoNotaFinal.defaultProps = {
   step: 0.5,
   label: '',
   podeLancarNotaFinal: false,
+  id: '',
 };
 
 export default CampoNotaFinal;

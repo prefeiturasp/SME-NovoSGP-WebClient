@@ -120,6 +120,7 @@ const CampoNumero = React.forwardRef((props, ref) => {
           </>
         ) : (
           <InputNumber
+            id={id}
             name={name}
             ref={ref}
             placeholder={placeholder}
