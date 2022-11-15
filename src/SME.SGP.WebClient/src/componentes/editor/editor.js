@@ -43,6 +43,7 @@ const toolbar = [
 
 export default React.forwardRef((props, ref) => {
   const {
+    id,
     onChange,
     inicial,
     form,
@@ -82,6 +83,7 @@ export default React.forwardRef((props, ref) => {
       <Campo>
         <div className={form ? (possuiErro() ? 'is-invalid' : '') : ''}>
           <Field
+            id={id}
             name={name}
             component={CKEditor}
             editor={ClassicEditor}
@@ -119,6 +121,7 @@ export default React.forwardRef((props, ref) => {
       <Campo>
         <div className={validacaoComErro || possuiErro() ? 'is-invalid' : ''}>
           <CKEditor
+            id={id}
             disabled={desabilitar || false}
             editor={ClassicEditor}
             config={{

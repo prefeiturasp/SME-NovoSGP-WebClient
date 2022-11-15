@@ -9,6 +9,11 @@ import {
 } from '~/redux/modulos/planoAEE/actions';
 import ServicoPlanoAEE from '~/servicos/Paginas/Relatorios/AEE/ServicoPlanoAEE';
 import SelectComponent from '~/componentes/select';
+import {
+  SGP_BUTTON_ATRIBUICAO_RESPONSAVEL,
+  SGP_BUTTON_CANCELAR_ATRIBUICAO_RESPONSAVEL,
+} from '~/constantes/ids/button';
+import { SGP_SELECT_PAAIS_DRE } from '~/constantes/ids/select';
 
 const AddResponsavelCadastroPlano = () => {
   const paramsRota = useParams();
@@ -60,6 +65,7 @@ const AddResponsavelCadastroPlano = () => {
 
   useEffect(() => {
     obterResponsaveisPAAI();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const onChangeLocalizador = (codigoResponsavelRF, obj) => {
@@ -113,6 +119,7 @@ const AddResponsavelCadastroPlano = () => {
       <p>Atribuir responsável:</p>
       <div className="col-md-12 mb-2">
         <SelectComponent
+          id={SGP_SELECT_PAAIS_DRE}
           label="PAAIS DRE"
           valueOption="codigoRF"
           valueText="nomeServidor"
@@ -128,7 +135,7 @@ const AddResponsavelCadastroPlano = () => {
       </div>
       <div className="col-12 d-flex justify-content-end pb-4 mt-2 pr-0">
         <Button
-          id="btn-cancelar"
+          id={SGP_BUTTON_CANCELAR_ATRIBUICAO_RESPONSAVEL}
           label="Cancelar"
           color={Colors.Roxo}
           border
@@ -141,7 +148,7 @@ const AddResponsavelCadastroPlano = () => {
           }
         />
         <Button
-          id="btn-atribuir"
+          id={SGP_BUTTON_ATRIBUICAO_RESPONSAVEL}
           label="Atribuir responsável"
           color={Colors.Roxo}
           border
