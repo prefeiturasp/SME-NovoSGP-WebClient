@@ -25,7 +25,11 @@ export default function notificacoes(state = inicial, action) {
         break;
       }
       case '@notificacoes/webSocketNotificacaoLida': {
-        const { codigo, obterListaNotificacoes } = action.payload;
+        const {
+          codigo,
+          isAnoAnterior,
+          obterListaNotificacoes,
+        } = action.payload;
         const estaNaLista = draft.notificacoes?.find?.(
           n => n?.codigo === codigo
         );
@@ -39,8 +43,7 @@ export default function notificacoes(state = inicial, action) {
           draft.notificacoes[index].status = notificacaoStatus.Lida;
           draft.notificacoes = ordenarNotificoesNavBar(draft.notificacoes);
         }
-
-        draft.quantidade -= 1;
+        if (!isAnoAnterior) draft.quantidade -= 1;
         break;
       }
       case '@notificacoes/webSocketNotificacaoCriada': {
@@ -63,14 +66,19 @@ export default function notificacoes(state = inicial, action) {
         break;
       }
       case '@notificacoes/webSocketNotificacaoExcluida': {
-        const { codigo, status, obterListaNotificacoes } = action.payload;
+        const {
+          codigo,
+          status,
+          isAnoAnterior,
+          obterListaNotificacoes,
+        } = action.payload;
         const estaNaLista = draft.notificacoes?.find?.(
           n => n?.codigo === codigo
         );
         if (estaNaLista && obterListaNotificacoes) {
           obterListaNotificacoes();
         }
-        if (status === notificacaoStatus.Pendente) {
+        if (status === notificacaoStatus.Pendente && !isAnoAnterior) {
           draft.quantidade -= 1;
         }
         break;

@@ -321,7 +321,7 @@ class ServicoSalvarConselhoClasse {
 
       dispatch(setDadosPrincipaisConselhoClasse(dadosPrincipaisConselhoClasse));
 
-      const { auditoria } = retorno.data;
+      const { auditoria, emAprovacao } = retorno.data;
 
       let auditoriaDto = null;
       if (auditoria) {
@@ -338,11 +338,17 @@ class ServicoSalvarConselhoClasse {
 
       limparDadosNotaPosConselhoJustificativa();
 
-      sucesso(
-        `${ehNota ? 'Nota' : 'Conceito'} pós-conselho ${
-          ehNota ? 'salva' : 'salvo'
-        } com sucesso`
-      );
+      const mensagemSucesso = `${ehNota ? 'Nota' : 'Conceito'} pós-conselho ${
+        ehNota ? 'salva' : 'salvo'
+      } com sucesso`;
+
+      if (emAprovacao) {
+        sucesso(
+          `${mensagemSucesso}. Em até 24 horas será enviado para aprovação e será considerado válido após a aprovação do último nível.`
+        );
+      } else {
+        sucesso(mensagemSucesso);
+      }
 
       if (bimestreAtual && bimestreAtual.valor === 'final') {
         this.gerarParecerConclusivo(

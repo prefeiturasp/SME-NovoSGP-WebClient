@@ -7,7 +7,7 @@ import history from '~/servicos/history';
 
 import Filtro from './componentes/Filtro';
 import ServicoBoletimSimples from '~/servicos/Paginas/Relatorios/DiarioClasse/BoletimSimples/ServicoBoletimSimples';
-import { sucesso, erro, confirmar } from '~/servicos/alertas';
+import { sucesso, erro } from '~/servicos/alertas';
 import AlertaModalidadeInfantil from '~/componentes-sgp/AlertaModalidadeInfantil/alertaModalidadeInfantil';
 import modalidade from '~/dtos/modalidade';
 
@@ -31,7 +31,7 @@ const BoletimSimples = () => {
     turmaCodigo: '',
     consideraHistorico: false,
     opcaoEstudanteId: '',
-    modelo: '',
+    quantidadeBoletimPorPagina: '',
     filtroEhValido: true,
   };
   const [filtro, setFiltro] = useState(estadoInicial);
@@ -58,7 +58,7 @@ const BoletimSimples = () => {
           : 0,
       consideraHistorico: valoresFiltro.consideraHistorico,
       opcaoEstudanteId: valoresFiltro.opcaoEstudanteId,
-      modelo: valoresFiltro.modeloBoletimId,
+      quantidadeBoletimPorPagina: valoresFiltro.quantidadeBoletimPorPagina,
       filtroEhValido: !naoLimparItensSelecionados,
       consideraInativo: valoresFiltro?.imprimirEstudantesInativos,
     });
@@ -82,31 +82,17 @@ const BoletimSimples = () => {
   };
 
   const onClickBotaoPrincipal = async () => {
-    let confirmou = false;
-
-    if (filtro.modelo === '2') {
-      confirmou = await confirmar(
-        'Modelo de boletim detalhado',
-        'O modelo de boletim detalhado vai gerar pelo menos uma página para cada estudante. Deseja continuar?',
-        '',
-        'Cancelar',
-        'Continuar'
+    setClicouBotaoGerar(true);
+    const resultado = await ServicoBoletimSimples.imprimirBoletim({
+      ...filtro,
+      alunosCodigo: itensSelecionados,
+    });
+    if (resultado.erro)
+      erro('Não foi possível solicitar a impressão do Boletim');
+    else
+      sucesso(
+        'Solicitação de geração do relatório gerada com sucesso. Em breve você receberá uma notificação com o resultado.'
       );
-    }
-
-    if (!confirmou) {
-      setClicouBotaoGerar(true);
-      const resultado = await ServicoBoletimSimples.imprimirBoletim({
-        ...filtro,
-        alunosCodigo: itensSelecionados,
-      });
-      if (resultado.erro)
-        erro('Não foi possível solicitar a impressão do Boletim');
-      else
-        sucesso(
-          'Solicitação de geração do relatório gerada com sucesso. Em breve você receberá uma notificação com o resultado.'
-        );
-    }
   };
 
   const colunas = [
@@ -136,7 +122,7 @@ const BoletimSimples = () => {
       !filtro?.turmaCodigo?.length ||
       !filtro?.opcaoEstudanteId ||
       !temSemestreOuNaoEja ||
-      !filtro?.modelo ||
+      !filtro?.quantidadeBoletimPorPagina ||
       clicouBotaoGerar;
 
     setDesabilitarBotaoGerar(desabilitar);

@@ -45,8 +45,12 @@ const DesenvolvimentoDaAula = () => {
   }, [refForm, dispatch]);
 
   const onChangeDesenvolvimentoAula = valor => {
-    ServicoPlanoAula.atualizarDadosPlanoAula('desenvolvimentoAula', valor);
-    dispatch(setModoEdicaoPlanoAula(true));
+    const desenvolvimentoAulaValor = dadosPlanoAula?.desenvolvimentoAula ?? '';
+
+    if (desenvolvimentoAulaValor !== valor) {
+      ServicoPlanoAula.atualizarDadosPlanoAula('desenvolvimentoAula', valor);
+      dispatch(setModoEdicaoPlanoAula(true));
+    }
   };
 
   return (

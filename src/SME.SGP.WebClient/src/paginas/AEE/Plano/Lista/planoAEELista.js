@@ -34,6 +34,7 @@ import {
   SGP_SELECT_UE,
 } from '~/constantes/ids/select';
 import { SGP_CHECKBOX_EXIBIR_HISTORICO } from '~/constantes/ids/checkbox';
+import BtnImpressaoListaPlanoAEE from './btnImpressaoListaPlanoAEE';
 
 const PlanoAEELista = () => {
   const dispatch = useDispatch();
@@ -65,6 +66,8 @@ const PlanoAEELista = () => {
     alunoLocalizadorSelecionado,
     setAlunoLocalizadorSelecionado,
   ] = useState();
+
+  const [idsPlanosSelecionados, setIdsPlanosSelecionados] = useState([]);
 
   const usuario = useSelector(store => store.usuario);
   const permissoesTela = usuario.permissoes[RotasDto.RELATORIO_AEE_PLANO];
@@ -422,12 +425,20 @@ const PlanoAEELista = () => {
     verificaSomenteConsulta(permissoesTela);
   }, [permissoesTela]);
 
+  const onSelecionarItems = items =>
+    setIdsPlanosSelecionados(items?.map(item => item?.planoAeeVersaoId));
+
   return (
     <>
       <Cabecalho pagina="Plano AEE">
         <Row gutter={[8, 8]} type="flex">
           <Col>
             <BotaoVoltarPadrao onClick={() => onClickVoltar()} />
+          </Col>
+          <Col>
+            <BtnImpressaoListaPlanoAEE
+              idsPlanosSelecionados={idsPlanosSelecionados}
+            />
           </Col>
           <Col>
             <Button
@@ -553,6 +564,7 @@ const PlanoAEELista = () => {
             listaUes?.length ? (
               <div className="col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-2">
                 <ListaPaginada
+                  multiSelecao
                   url="v1/plano-aee"
                   id="lista-alunos"
                   colunas={colunas}
@@ -570,6 +582,7 @@ const PlanoAEELista = () => {
                   }
                   temPaginacao
                   onClick={onClickEditar}
+                  selecionarItems={onSelecionarItems}
                 />
               </div>
             ) : (

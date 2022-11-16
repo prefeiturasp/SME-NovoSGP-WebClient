@@ -51,8 +51,12 @@ const ObjetivosEspecificosParaAula = () => {
   };
 
   const onChangeObjetivosEspecificosParaAula = valor => {
-    ServicoPlanoAula.atualizarDadosPlanoAula('descricao', valor);
-    dispatch(setModoEdicaoPlanoAula(true));
+    const descricaoValor = dadosPlanoAula?.descricao ?? '';
+
+    if (descricaoValor !== valor) {
+      ServicoPlanoAula.atualizarDadosPlanoAula('descricao', valor);
+      dispatch(setModoEdicaoPlanoAula(true));
+    }
   };
 
   const validarSeEhObrigatorio = () => {

@@ -87,7 +87,6 @@ const BotoesAcoesConselhoClasse = () => {
       history.push(URL_HOME);
     }
   };
-
   const onClickCancelar = async () => {
     if (conselhoClasseEmEdicao || notaConceitoPosConselhoAtual.ehEdicao) {
       const confirmou = await confirmar(

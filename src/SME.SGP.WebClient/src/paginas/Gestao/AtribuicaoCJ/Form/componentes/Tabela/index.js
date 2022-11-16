@@ -7,7 +7,7 @@ import { Switch } from 'antd';
 // Componentes
 import { DataTable } from '~/componentes';
 
-function Tabela({ carregando, lista, onChangeSubstituir }) {
+function Tabela({ carregando, lista, onChangeSubstituir, somenteConsulta }) {
   const colunas = [
     {
       title: 'Componente curricular',
@@ -30,6 +30,7 @@ function Tabela({ carregando, lista, onChangeSubstituir }) {
           <Switch
             checked={registro.substituir}
             onChange={() => onChangeSubstituir(registro)}
+            disabled={somenteConsulta}
           />
         );
       },
@@ -52,12 +53,14 @@ Tabela.propTypes = {
   carregando: PropTypes.bool,
   lista: PropTypes.oneOfType([PropTypes.array]),
   onChangeSubstituir: PropTypes.func,
+  somenteConsulta: PropTypes.bool,
 };
 
 Tabela.defaultProps = {
   carregando: false,
   lista: [],
   onChangeSubstituir: null,
+  somenteConsulta: false,
 };
 
 export default Tabela;

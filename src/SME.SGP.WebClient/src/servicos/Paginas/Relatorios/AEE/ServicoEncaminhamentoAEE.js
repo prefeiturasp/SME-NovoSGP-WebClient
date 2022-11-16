@@ -512,9 +512,8 @@ class ServicoEncaminhamentoAEE {
     return api.post(`${urlPadrao}/devolver`, params);
   };
 
-  obterResponsavelEncaminhamentoPAAI = idUe => {
-    return api.get(`${urlPadrao}/paai-ue?codigoUe=${idUe}`);
-  };
+  obterResponsaveveisEncaminhamentoPAAI = codigoTurma =>
+    api.post(`${urlPadrao}/responsavel/pesquisa`, { codigoTurma, limite: 99 });
 }
 
 export default new ServicoEncaminhamentoAEE();
