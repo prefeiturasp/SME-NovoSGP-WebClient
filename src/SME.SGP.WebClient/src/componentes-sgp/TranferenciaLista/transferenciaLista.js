@@ -3,6 +3,10 @@ import React from 'react';
 import shortid from 'shortid';
 import { DataTable, Label } from '~/componentes';
 import {
+  SGP_BUTTON_ADICIONAR_TRANSFERENCIA_LISTA,
+  SGP_BUTTON_REMOVER_TRANSFERENCIA_LISTA,
+} from '~/constantes/ids/button';
+import {
   CardLista,
   ColunaBotaoLista,
   BotaoLista,
@@ -55,6 +59,7 @@ const TransferenciaLista = props => {
         </div>
         <ColunaBotaoLista style={{ margin: '15px' }}>
           <BotaoLista
+            id={SGP_BUTTON_ADICIONAR_TRANSFERENCIA_LISTA}
             className="mb-2"
             onClick={() => {
               if (listaEsquerda.selectMultipleRows) onClickAdicionar();
@@ -64,6 +69,7 @@ const TransferenciaLista = props => {
             <i className="fas fa-chevron-right" />
           </BotaoLista>
           <BotaoLista
+            id={SGP_BUTTON_REMOVER_TRANSFERENCIA_LISTA}
             onClick={() => {
               if (listaDireita.selectMultipleRows) onClickRemover();
             }}

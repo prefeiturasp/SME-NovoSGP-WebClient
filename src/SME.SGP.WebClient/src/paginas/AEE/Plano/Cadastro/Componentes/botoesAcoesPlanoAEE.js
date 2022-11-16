@@ -9,7 +9,7 @@ import {
   SGP_BUTTON_CANCELAR,
   SGP_BUTTON_DEVOLVER,
   SGP_BUTTON_SALVAR,
-} from '~/componentes-sgp/filtro/idsCampos';
+} from '~/constantes/ids/button';
 import QuestionarioDinamicoFuncoes from '~/componentes-sgp/QuestionarioDinamico/Funcoes/QuestionarioDinamicoFuncoes';
 import Button from '~/componentes/button';
 import { RotasDto, situacaoPlanoAEE } from '~/dtos';

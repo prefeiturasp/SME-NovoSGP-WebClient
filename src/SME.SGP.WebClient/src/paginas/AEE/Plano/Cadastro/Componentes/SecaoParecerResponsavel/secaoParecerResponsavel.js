@@ -1,6 +1,10 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Button, Colors, Loader, SelectComponent } from '~/componentes';
+import {
+  SGP_BUTTON_ATRIBUICAO_RESPONSAVEL,
+  SGP_BUTTON_CANCELAR_ATRIBUICAO_RESPONSAVEL,
+} from '~/constantes/ids/button';
 import { RotasDto } from '~/dtos';
 import {
   limparDadosParecer,
@@ -162,7 +166,7 @@ const SecaoParecerResponsavel = () => {
       </div>
       <div className="col-12 d-flex justify-content-end pb-4 mt-2 pr-0">
         <Button
-          id="btn-cancelar"
+          id={SGP_BUTTON_CANCELAR_ATRIBUICAO_RESPONSAVEL}
           label="Cancelar"
           color={Colors.Roxo}
           border
@@ -171,7 +175,7 @@ const SecaoParecerResponsavel = () => {
           disabled={!emEdicao}
         />
         <Button
-          id="btn-atribuir"
+          id={SGP_BUTTON_ATRIBUICAO_RESPONSAVEL}
           label="Atribuir responsável"
           color={Colors.Roxo}
           border

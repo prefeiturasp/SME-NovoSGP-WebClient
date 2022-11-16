@@ -33,11 +33,21 @@ import {
 import AlertaModalidadeInfantil from '~/componentes-sgp/AlertaModalidadeInfantil/alertaModalidadeInfantil';
 import { ehTurmaInfantil } from '~/servicos/Validacoes/validacoesInfatil';
 import {
+  SGP_BUTTON_ADICIONAR_ESTUDANTE_TABELA_AUSENCIA_COMPENSADA,
   SGP_BUTTON_ALTERAR_CADASTRAR,
   SGP_BUTTON_CANCELAR,
-} from '~/componentes-sgp/filtro/idsCampos';
+  SGP_BUTTON_COPIAR_COMPENSACAO,
+  SGP_BUTTON_NOME_ATIVIDADE,
+  SGP_BUTTON_NOME_ESTUDANTE,
+  SGP_BUTTON_REMOVER_ESTUDANTE_TABELA_AUSENCIA_COMPENSADA,
+} from '~/constantes/ids/button';
 import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
 import BotaoExcluirPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoExcluirPadrao';
+import {
+  SGP_SELECT_BIMESTRE,
+  SGP_SELECT_COMPONENTE_CURRICULAR,
+} from '~/constantes/ids/select';
+import { SGP_JODIT_EDITOR_COMPENSACAO_AUSENCIA_DETALHAMENTO_ATIVIDADE } from '~/constantes/ids/jodit-editor';
 
 const CompensacaoAusenciaForm = ({ match }) => {
   const usuario = useSelector(store => store.usuario);
@@ -418,6 +428,64 @@ const CompensacaoAusenciaForm = ({ match }) => {
     onChangeCampos();
   };
 
+  const limparListas = () => {
+    setAlunosAusenciaCompensada([]);
+    setIdsAlunosAusenciaCompensadas([]);
+    setIdsAlunos([]);
+    setAlunosAusenciaTurma([]);
+    setAlunosAusenciaTurmaOriginal([]);
+  };
+
+  const onChangeBimestre = async (bimestre, form, disciplina = 0) => {
+    limparListas();
+    const dentroPeriodo = await podeAlterarNoPeriodo(String(bimestre));
+    setForaDoPeriodo(!dentroPeriodo);
+
+    if (dentroPeriodo && (disciplina > 0 || form.values.disciplinaId)) {
+      let podeEditar = false;
+      const valorDisciplina =
+        disciplina > 0 ? disciplina : form.values.disciplinaId;
+
+      const exucutandoCalculoFrequencia = await ServicoCompensacaoAusencia.obterStatusCalculoFrequencia(
+        turmaSelecionada.turma,
+        valorDisciplina,
+        bimestre
+      ).catch(e => {
+        erros(e);
+      });
+      if (
+        exucutandoCalculoFrequencia &&
+        exucutandoCalculoFrequencia.status === 200
+      ) {
+        const temProcessoEmExecucao =
+          exucutandoCalculoFrequencia && exucutandoCalculoFrequencia.data;
+
+        if (temProcessoEmExecucao) {
+          podeEditar = false;
+        } else {
+          podeEditar = true;
+        }
+
+        if (podeEditar) {
+          setAlunosAusenciaCompensada([]);
+          setIdsAlunosAusenciaCompensadas([]);
+          setIdsAlunos([]);
+          if (bimestre && form && valorDisciplina) {
+            obterAlunosComAusencia(valorDisciplina, bimestre);
+          } else {
+            setAlunosAusenciaTurma([]);
+            setAlunosAusenciaTurmaOriginal([]);
+          }
+          onChangeCampos();
+        } else {
+          erro(
+            'No momento não é possível realizar a edição pois tem cálculo(s) em processo, tente mais tarde!'
+          );
+        }
+      }
+    }
+  };
+
   const onChangeDisciplina = async (codigoDisciplina, form) => {
     setDisciplinaSelecionada(codigoDisciplina);
     setAlunosAusenciaTurma([]);
@@ -428,8 +496,8 @@ const CompensacaoAusenciaForm = ({ match }) => {
     obterDisciplinasRegencia(codigoDisciplina, listaDisciplinas);
     onChangeCampos();
 
-    if(form.values.bimestre > 0)
-      await onChangeBimestre(form.values.bimestre,form,codigoDisciplina);
+    if (form.values.bimestre > 0)
+      await onChangeBimestre(form.values.bimestre, form, codigoDisciplina);
   };
 
   const obterDisciplinas = useCallback(async () => {
@@ -524,63 +592,6 @@ const CompensacaoAusenciaForm = ({ match }) => {
     turmaSelecionada,
     modalidadesFiltroPrincipal,
   ]);
-
-  const limparListas = () => {
-    setAlunosAusenciaCompensada([]);
-    setIdsAlunosAusenciaCompensadas([]);
-    setIdsAlunos([]);
-    setAlunosAusenciaTurma([]);
-    setAlunosAusenciaTurmaOriginal([]);
-  };
-
-  const onChangeBimestre = async (bimestre, form, disciplina = 0) => {
-    limparListas();
-    const dentroPeriodo = await podeAlterarNoPeriodo(String(bimestre));
-    setForaDoPeriodo(!dentroPeriodo);
-
-    if (dentroPeriodo && (disciplina > 0 || form.values.disciplinaId)) {
-      let podeEditar = false;
-      let valorDisciplina = disciplina > 0 ? disciplina : form.values.disciplinaId;
-
-      const exucutandoCalculoFrequencia = await ServicoCompensacaoAusencia.obterStatusCalculoFrequencia(
-        turmaSelecionada.turma,
-        valorDisciplina,
-        bimestre
-      ).catch(e => {
-        erros(e);
-      });
-      if (
-        exucutandoCalculoFrequencia &&
-        exucutandoCalculoFrequencia.status === 200
-      ) {
-        const temProcessoEmExecucao =
-          exucutandoCalculoFrequencia && exucutandoCalculoFrequencia.data;
-
-        if (temProcessoEmExecucao) {
-          podeEditar = false;
-        } else {
-          podeEditar = true;
-        }
-
-        if (podeEditar) {
-          setAlunosAusenciaCompensada([]);
-          setIdsAlunosAusenciaCompensadas([]);
-          setIdsAlunos([]);
-          if (bimestre && form && valorDisciplina) {
-            obterAlunosComAusencia(valorDisciplina, bimestre);
-          } else {
-            setAlunosAusenciaTurma([]);
-            setAlunosAusenciaTurmaOriginal([]);
-          }
-          onChangeCampos();
-        } else {
-          erro(
-            'No momento não é possível realizar a edição pois tem cálculo(s) em processo, tente mais tarde!'
-          );
-        }
-      }
-    }
-  };
 
   const validaAntesDoSubmit = form => {
     const arrayCampos = Object.keys(valoresIniciais);
@@ -1021,7 +1032,7 @@ const CompensacaoAusenciaForm = ({ match }) => {
                       <Loader loading={carregandoDisciplinas} tip="">
                         <SelectComponent
                           form={form}
-                          id="disciplina"
+                          id={SGP_SELECT_COMPONENTE_CURRICULAR}
                           label="Componente Curricular"
                           name="disciplinaId"
                           lista={listaDisciplinas}
@@ -1042,7 +1053,7 @@ const CompensacaoAusenciaForm = ({ match }) => {
                     <div className="col-sm-12 col-md-4 col-lg-2 col-xl-2 mb-2">
                       <SelectComponent
                         form={form}
-                        id="bimestre"
+                        id={SGP_SELECT_BIMESTRE}
                         label="Bimestre"
                         name="bimestre"
                         lista={listaBimestres}
@@ -1057,6 +1068,7 @@ const CompensacaoAusenciaForm = ({ match }) => {
                     </div>
                     <div className="col-sm-12 col-md-12 col-lg-6 col-xl-6 mb-2">
                       <CampoTexto
+                        id={SGP_BUTTON_NOME_ATIVIDADE}
                         form={form}
                         label="Atividade"
                         placeholder="Atividade"
@@ -1103,6 +1115,9 @@ const CompensacaoAusenciaForm = ({ match }) => {
                           desabilitar={desabilitarCampos}
                           value={form.values.descricao}
                           labelRequired
+                          id={
+                            SGP_JODIT_EDITOR_COMPENSACAO_AUSENCIA_DETALHAMENTO_ATIVIDADE
+                          }
                         />
                       ) : (
                         ''
@@ -1112,6 +1127,7 @@ const CompensacaoAusenciaForm = ({ match }) => {
                   <div className="row">
                     <div className="col-sm-5 col-md-5 col-lg-5 col-xl-5 mb-2">
                       <CampoTexto
+                        id={SGP_BUTTON_NOME_ESTUDANTE}
                         label="Seleção dos estudantes"
                         placeholder="Digite o nome do estudante"
                         onChange={onChangeSelecaoAluno}
@@ -1134,12 +1150,20 @@ const CompensacaoAusenciaForm = ({ match }) => {
                     </div>
                     <ColunaBotaoListaAlunos style={{ margin: '15px' }}>
                       <BotaoListaAlunos
+                        id={
+                          SGP_BUTTON_ADICIONAR_ESTUDANTE_TABELA_AUSENCIA_COMPENSADA
+                        }
                         className="mb-2"
                         onClick={onClickAdicionarAlunos}
                       >
                         <i className="fas fa-chevron-right" />
                       </BotaoListaAlunos>
-                      <BotaoListaAlunos onClick={onClickRemoverAlunos}>
+                      <BotaoListaAlunos
+                        id={
+                          SGP_BUTTON_REMOVER_ESTUDANTE_TABELA_AUSENCIA_COMPENSADA
+                        }
+                        onClick={onClickRemoverAlunos}
+                      >
                         <i className="fas fa-chevron-left" />
                       </BotaoListaAlunos>
                     </ColunaBotaoListaAlunos>
@@ -1170,6 +1194,7 @@ const CompensacaoAusenciaForm = ({ match }) => {
                   <div className="row mt-3">
                     <div className="col-md-12">
                       <Button
+                        id={SGP_BUTTON_COPIAR_COMPENSACAO}
                         label="Copiar Compensação"
                         icon="share-square"
                         color={Colors.Azul}

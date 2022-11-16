@@ -8,6 +8,20 @@ import {
 } from '~/componentes';
 import { FiltroHelper } from '~/componentes-sgp';
 import { OPCAO_TODOS } from '~/constantes/constantes';
+import {
+  SGP_CHECKBOX_EXIBIR_HISTORICO,
+  SGP_CHECKBOX_IMPRIMIR_ESTUDANTE_INATIVO,
+} from '~/constantes/ids/checkbox';
+import {
+  SGP_SELECT_ANO_LETIVO,
+  SGP_SELECT_DRE,
+  SGP_SELECT_MODALIDADE,
+  SGP_SELECT_MODELO_BOLETIM,
+  SGP_SELECT_OPCAO_ESTUDANTE,
+  SGP_SELECT_SEMESTRE,
+  SGP_SELECT_TURMA,
+  SGP_SELECT_UE,
+} from '~/constantes/ids/select';
 import { ModalidadeDTO } from '~/dtos';
 import { AbrangenciaServico, erros, ServicoFiltroRelatorio } from '~/servicos';
 import { ordenarDescPor } from '~/utils';
@@ -491,6 +505,7 @@ const Filtros = ({ onFiltrar, filtrou, setFiltrou, cancelou, setCancelou }) => {
       <div className="row mb-2">
         <div className="col-12">
           <CheckboxComponent
+            id={SGP_CHECKBOX_EXIBIR_HISTORICO}
             label="Exibir histórico?"
             onChangeCheckbox={onChangeConsideraHistorico}
             checked={consideraHistorico}
@@ -501,6 +516,7 @@ const Filtros = ({ onFiltrar, filtrou, setFiltrou, cancelou, setCancelou }) => {
         <div className="col-sm-12 col-md-2 col-lg-2 col-xl-2">
           <Loader loading={carregandoAnosLetivos} ignorarTip>
             <SelectComponent
+              id={SGP_SELECT_ANO_LETIVO}
               label="Ano Letivo"
               lista={listaAnosLetivo}
               valueOption="valor"
@@ -515,6 +531,7 @@ const Filtros = ({ onFiltrar, filtrou, setFiltrou, cancelou, setCancelou }) => {
         <div className="col-sm-12 col-md-5 col-lg-5 col-xl-5">
           <Loader loading={carregandoDres} ignorarTip>
             <SelectComponent
+              id={SGP_SELECT_DRE}
               label="Diretoria Regional de Educação (DRE)"
               lista={listaDres}
               valueOption="valor"
@@ -530,7 +547,7 @@ const Filtros = ({ onFiltrar, filtrou, setFiltrou, cancelou, setCancelou }) => {
         <div className="col-sm-12 col-md-5 col-lg-5 col-xl-5">
           <Loader loading={carregandoUes} ignorarTip>
             <SelectComponent
-              id="ue"
+              id={SGP_SELECT_UE}
               label="Unidade Escolar (UE)"
               lista={listaUes}
               valueOption="valor"
@@ -548,7 +565,7 @@ const Filtros = ({ onFiltrar, filtrou, setFiltrou, cancelou, setCancelou }) => {
         <div className="col-sm-12 col-md-4">
           <Loader loading={carregandoModalidade} ignorarTip>
             <SelectComponent
-              id="drop-modalidade"
+              id={SGP_SELECT_MODALIDADE}
               label="Modalidade"
               lista={listaModalidades}
               valueOption="valor"
@@ -563,7 +580,7 @@ const Filtros = ({ onFiltrar, filtrou, setFiltrou, cancelou, setCancelou }) => {
         <div className="col-sm-12 col-md-4">
           <Loader loading={carregandoSemestres} ignorarTip>
             <SelectComponent
-              id="drop-semestre"
+              id={SGP_SELECT_SEMESTRE}
               lista={listaSemestres}
               valueOption="valor"
               valueText="desc"
@@ -582,7 +599,7 @@ const Filtros = ({ onFiltrar, filtrou, setFiltrou, cancelou, setCancelou }) => {
         <div className="col-sm-12 col-md-4">
           <Loader loading={carregandoTurmas} ignorarTip>
             <SelectComponent
-              id="turma"
+              id={SGP_SELECT_TURMA}
               lista={listaTurmas}
               valueOption="valor"
               valueText="nomeFiltro"
@@ -599,6 +616,7 @@ const Filtros = ({ onFiltrar, filtrou, setFiltrou, cancelou, setCancelou }) => {
       <div className="row">
         <div className="col-sm-12 col-md-4">
           <SelectComponent
+            id={SGP_SELECT_OPCAO_ESTUDANTE}
             lista={opcoesEstudantes}
             valueOption="valor"
             valueText="desc"
@@ -611,6 +629,7 @@ const Filtros = ({ onFiltrar, filtrou, setFiltrou, cancelou, setCancelou }) => {
         </div>
         <div className="col-sm-12 col-md-4">
           <SelectComponent
+            id={SGP_SELECT_MODELO_BOLETIM}
             lista={listaQtdBoletinsPagina}
             valueOption="valor"
             valueText="desc"
@@ -625,6 +644,7 @@ const Filtros = ({ onFiltrar, filtrou, setFiltrou, cancelou, setCancelou }) => {
         </div>
         <div className="col-sm-12 col-md-4">
           <RadioGroupButton
+            id={SGP_CHECKBOX_IMPRIMIR_ESTUDANTE_INATIVO}
             label="Imprimir estudantes inativos"
             opcoes={opcoesImprimirEstudantesInativos}
             valorInicial

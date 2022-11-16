@@ -1,5 +1,6 @@
 import React from 'react';
 import { useDispatch } from 'react-redux';
+import { SGP_BUTTON_FECHAR_ALERTA } from '~/constantes/ids/button';
 import { removerAlerta } from '../redux/modulos/alertas/actions';
 import { MessageClick } from './alert.css';
 
@@ -27,6 +28,7 @@ const Alert = props => {
       </b>
       {closable ? (
         <button
+          id={SGP_BUTTON_FECHAR_ALERTA}
           type="button"
           className="close"
           onClick={() => dispatch(removerAlerta(id))}

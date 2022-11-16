@@ -5,7 +5,7 @@ import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPad
 import {
   SGP_BUTTON_CANCELAR,
   SGP_BUTTON_SALVAR,
-} from '~/componentes-sgp/filtro/idsCampos';
+} from '~/constantes/ids/button';
 import Button from '~/componentes/button';
 import { Colors } from '~/componentes/colors';
 import { URL_HOME } from '~/constantes/url';

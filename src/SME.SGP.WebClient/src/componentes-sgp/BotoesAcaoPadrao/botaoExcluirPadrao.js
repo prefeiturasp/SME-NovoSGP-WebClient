@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Tooltip } from 'antd';
 import Button from '~/componentes/button';
-import { SGP_BUTTON_EXCLUIR } from '../filtro/idsCampos';
+import { SGP_BUTTON_EXCLUIR } from '../../constantes/ids/button';
 import { Colors } from '~/componentes/colors';
 
 const BotaoExcluirPadrao = props => {
@@ -34,11 +34,13 @@ const BotaoExcluirPadrao = props => {
 BotaoExcluirPadrao.propTypes = {
   onClick: PropTypes.func,
   disabled: PropTypes.bool,
+  className: PropTypes.string,
 };
 
 BotaoExcluirPadrao.defaultProps = {
   onClick: () => {},
   disabled: false,
+  className: '',
 };
 
 export default BotaoExcluirPadrao;

@@ -2,6 +2,7 @@ import { Switch } from 'antd';
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Label } from '~/componentes';
+import { SGP_SWITCH_EXIBIR_ESCOLHA_OBJETIVOS_APRENDIZAGEM_DESENVOLVIMENTO } from '~/constantes/ids/switch';
 import {
   setCheckedExibirEscolhaObjetivos,
   setModoEdicaoPlanoAula,
@@ -37,6 +38,9 @@ function SwitchInformarObjetivos() {
         <>
           <Label text="Informar Objetivos de Aprendizagem e Desenvolvimento" />
           <Switch
+            id={
+              SGP_SWITCH_EXIBIR_ESCOLHA_OBJETIVOS_APRENDIZAGEM_DESENVOLVIMENTO
+            }
             onChange={() => onChangeSwitch()}
             checked={checkedExibirEscolhaObjetivos}
             size="default"

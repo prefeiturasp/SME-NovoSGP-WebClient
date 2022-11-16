@@ -12,7 +12,7 @@ import DreDropDown from '~/componentes-sgp/DreDropDown/';
 import {
   SGP_BUTTON_ALTERAR_CADASTRAR,
   SGP_BUTTON_CANCELAR,
-} from '~/componentes-sgp/filtro/idsCampos';
+} from '~/constantes/ids/button';
 import UeDropDown from '~/componentes-sgp/UeDropDown/';
 import UploadArquivos from '~/componentes-sgp/UploadArquivos/uploadArquivos';
 import Button from '~/componentes/button';

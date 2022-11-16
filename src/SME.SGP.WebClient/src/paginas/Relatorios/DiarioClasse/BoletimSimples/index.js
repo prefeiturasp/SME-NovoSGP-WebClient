@@ -13,7 +13,7 @@ import modalidade from '~/dtos/modalidade';
 
 import { EstiloModal } from './boletimSimples.css';
 import { ModalidadeDTO } from '~/dtos';
-import { SGP_BUTTON_GERAR } from '~/componentes-sgp/filtro/idsCampos';
+import { SGP_BUTTON_GERAR } from '~/constantes/ids/button';
 
 const BoletimSimples = () => {
   const [loaderSecao] = useState(false);

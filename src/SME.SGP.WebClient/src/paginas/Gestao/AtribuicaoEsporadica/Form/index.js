@@ -36,7 +36,7 @@ import {
 import { validaSeObjetoEhNuloOuVazio } from '~/utils';
 
 import { Row } from './styles';
-import { SGP_BUTTON_ALTERAR_CADASTRAR } from '~/componentes-sgp/filtro/idsCampos';
+import { SGP_BUTTON_ALTERAR_CADASTRAR } from '~/constantes/ids/button';
 
 function AtribuicaoEsporadicaForm({ match }) {
   const [carregando, setCarregando] = useState(false);

@@ -14,7 +14,7 @@ import MetodosRegistroIndividual from '~/componentes-sgp/RegistroIndividual/meto
 import {
   SGP_BUTTON_CADASTRAR,
   SGP_BUTTON_CANCELAR,
-} from '~/componentes-sgp/filtro/idsCampos';
+} from '~/constantes/ids/button';
 import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
 
 const BotoesAcoes = ({ turmaInfantil }) => {

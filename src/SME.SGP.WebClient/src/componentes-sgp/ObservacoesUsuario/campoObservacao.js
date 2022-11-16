@@ -1,10 +1,15 @@
 import PropTypes from 'prop-types';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import shortid from 'shortid';
 import { Label } from '~/componentes';
 import Button from '~/componentes/button';
 import { Colors } from '~/componentes/colors';
+import {
+  SGP_BUTTON_ABRIR_MODAL_NOTIFICAR_USUARIOS,
+  SGP_BUTTON_CANCELAR_OBSERVACAO,
+  SGP_BUTTON_SALVAR_OBSERVACAO,
+} from '~/constantes/ids/button';
+import { SGP_TEXTAREA_OBSERVACAO } from '~/constantes/ids/text-area';
 import { ModalNotificarUsuarios } from '~/paginas/DiarioClasse/DiarioBordo/componentes';
 import {
   setNovaObservacao,
@@ -117,7 +122,7 @@ const CampoObservacao = props => {
       <div className={`col-md-12 pb-2 ${esconderCaixaExterna && 'p-0'}`}>
         <Label text="Escreva uma observação" />
         <ContainerCampoObservacao
-          id="nova-observacao"
+          id={SGP_TEXTAREA_OBSERVACAO}
           autoSize={{ minRows: 4 }}
           value={novaObservacao}
           onChange={onChangeNovaObservacao}
@@ -131,7 +136,7 @@ const CampoObservacao = props => {
         <div className="p-0 col-md-6 d-flex justify-content-start">
           <Button
             height="30px"
-            id={shortid.generate()}
+            id={SGP_BUTTON_ABRIR_MODAL_NOTIFICAR_USUARIOS}
             label={`Notificar usuários (${listaUsuarios?.length})`}
             icon="bell"
             color={Colors.Azul}
@@ -144,7 +149,7 @@ const CampoObservacao = props => {
         </div>
         <div className="p-0 col-md-6 d-flex justify-content-end">
           <Button
-            id="btn-cancelar-obs-novo"
+            id={SGP_BUTTON_CANCELAR_OBSERVACAO}
             label="Cancelar"
             color={Colors.Roxo}
             border
@@ -155,7 +160,7 @@ const CampoObservacao = props => {
             disabled={!novaObservacao || !podeIncluir}
           />
           <Button
-            id="btn-salvar-obs-novo"
+            id={SGP_BUTTON_SALVAR_OBSERVACAO}
             label="Salvar"
             color={Colors.Roxo}
             border
