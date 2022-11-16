@@ -67,7 +67,7 @@ const ModalImpressaoPlano = () => {
   };
 
   const onClickImpressao = () => {
-    if (planoAEEDados?.versoes?.length > 1) {
+    if (planoAEEDados?.versoes?.length) {
       setExibirModal(true);
     } else {
       imprimirDados(planoAEEDados?.ultimaVersao?.id?.toString());
