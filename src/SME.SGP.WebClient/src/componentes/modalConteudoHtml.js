@@ -8,6 +8,10 @@ import Button from './button';
 import { Base, Colors } from './colors';
 import CardBody from './cardBody';
 import Grid from './grid';
+import {
+  SGP_BUTTON_CANCELAR_MODAL,
+  SGP_BUTTON_SALVAR_MODAL,
+} from '~/constantes/ids/button';
 
 const Container = styled(Modal)`
   .ant-modal-footer {
@@ -119,7 +123,7 @@ const ModalConteudoHtml = props => {
                       hidden={esconderBotoes}
                     >
                       <Button
-                        id={idBotaoPrincipal || shortid.generate()}
+                        id={idBotaoSecundario || SGP_BUTTON_SALVAR_MODAL}
                         key="btn-sim-confirmacao"
                         label={labelBotaoSecundario}
                         color={colorBotaoSecundario}
@@ -130,7 +134,7 @@ const ModalConteudoHtml = props => {
                         disabled={loader}
                       />
                       <Button
-                        id={idBotaoSecundario || shortid.generate()}
+                        id={idBotaoPrincipal || SGP_BUTTON_CANCELAR_MODAL}
                         key="btn-nao-confirmacao"
                         label={labelBotaoPrincipal}
                         color={Colors.Roxo}
@@ -148,7 +152,7 @@ const ModalConteudoHtml = props => {
         ) : (
           <div className="d-flex justify-content-end" hidden={esconderBotoes}>
             <Button
-              id={idBotaoPrincipal || shortid.generate()}
+              id={idBotaoPrincipal || SGP_BUTTON_SALVAR_MODAL}
               key="btn-sim-confirmacao"
               label={labelBotaoSecundario}
               color={colorBotaoSecundario}
@@ -160,7 +164,7 @@ const ModalConteudoHtml = props => {
               disabled={loader}
             />
             <Button
-              id={idBotaoSecundario || shortid.generate()}
+              id={idBotaoSecundario || SGP_BUTTON_CANCELAR_MODAL}
               key="btn-nao-confirmacao"
               label={labelBotaoPrincipal}
               color={Colors.Roxo}

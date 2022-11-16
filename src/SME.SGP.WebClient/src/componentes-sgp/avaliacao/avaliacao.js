@@ -5,12 +5,11 @@ import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import shortid from 'shortid';
 import { LabelSemDados, MarcadorTriangulo } from '~/componentes';
+import { SGP_INPUT_NOTA, SGP_INPUT_NOTA_FINAL } from '~/constantes/ids/input';
 import {
-  SGP_INPUT_CONCEITO_FINAL,
-  SGP_INPUT_NOTA,
-  SGP_INPUT_NOTA_FINAL,
-} from '~/constantes/ids/input';
-import { SGP_SELECT_NOTA } from '~/constantes/ids/select';
+  SGP_SELECT_CONCEITO_FINAL,
+  SGP_SELECT_NOTA,
+} from '~/constantes/ids/select';
 import {
   SGP_TABLE_LANCAMENTO_NOTAS,
   SGP_TABLE_LANCAMENTO_NOTAS_LINHA,
@@ -263,7 +262,7 @@ const Avaliacao = props => {
     if (Number(notaTipo) === Number(notasConceitos.Conceitos)) {
       return (
         <CampoConceitoFinal
-          id={`${SGP_INPUT_CONCEITO_FINAL}_LINHA_${index}`}
+          id={`${SGP_SELECT_CONCEITO_FINAL}_LINHA_${index}`}
           montaNotaConceitoFinal={() => montaNotaFinal(aluno, index)}
           onChangeNotaConceitoFinal={(nota, valor) =>
             onChangeNotaConceitoFinal(nota, valor)
