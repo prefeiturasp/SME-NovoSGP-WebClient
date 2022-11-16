@@ -1,7 +1,7 @@
 /* eslint-disable react/prop-types */
 import React, { useCallback, useEffect, useState } from 'react';
 import { Loader, SelectComponent } from '~/componentes';
-import { SGP_SELECT_UE } from '~/componentes-sgp/filtro/idsCampos';
+import { SGP_SELECT_UE } from '~/constantes/ids/select';
 import { AbrangenciaServico, erros } from '~/servicos';
 
 const UeOcorrencia = props => {

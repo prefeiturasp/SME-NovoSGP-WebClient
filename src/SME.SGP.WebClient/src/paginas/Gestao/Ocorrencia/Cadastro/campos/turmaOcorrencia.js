@@ -2,7 +2,7 @@
 import { Col } from 'antd';
 import React, { useCallback, useEffect, useState } from 'react';
 import { Loader, SelectComponent } from '~/componentes';
-import { SGP_SELECT_TURMA } from '~/componentes-sgp/filtro/idsCampos';
+import { SGP_SELECT_TURMA } from '~/constantes/ids/select';
 import { ModalidadeDTO } from '~/dtos';
 import { AbrangenciaServico, erros } from '~/servicos';
 
