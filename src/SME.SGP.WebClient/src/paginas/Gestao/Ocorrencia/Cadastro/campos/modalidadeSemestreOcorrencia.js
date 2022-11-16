@@ -5,7 +5,7 @@ import { Loader, SelectComponent } from '~/componentes';
 import {
   SGP_SELECT_MODALIDADE,
   SGP_SELECT_SEMESTRE,
-} from '~/componentes-sgp/filtro/idsCampos';
+} from '~/constantes/ids/select';
 import { ModalidadeDTO } from '~/dtos';
 import { AbrangenciaServico, erros, ServicoFiltroRelatorio } from '~/servicos';
 

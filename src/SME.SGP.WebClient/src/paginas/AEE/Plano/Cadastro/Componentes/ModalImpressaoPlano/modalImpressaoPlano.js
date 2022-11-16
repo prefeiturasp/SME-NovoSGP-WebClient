@@ -12,7 +12,7 @@ import {
 import { erros, sucesso } from '~/servicos';
 import ServicoPlanoAEE from '~/servicos/Paginas/Relatorios/AEE/ServicoPlanoAEE';
 import { MENSAGEM_SOLICITACAO_RELATORIO_SUCESSO } from '~/constantes';
-import { SGP_BUTTON_IMPRIMIR } from '~/componentes-sgp/filtro/idsCampos';
+import { SGP_BUTTON_IMPRIMIR } from '~/constantes/ids/button';
 
 const ModalImpressaoPlano = () => {
   const planoAEEDados = useSelector(store => store.planoAEE.planoAEEDados);
