@@ -28,8 +28,12 @@ const LicaoDeCasa = () => {
   };
 
   const onChangeLicaoCasa = valor => {
-    ServicoPlanoAula.atualizarDadosPlanoAula('licaoCasa', valor);
-    dispatch(setModoEdicaoPlanoAula(true));
+    const licaoCasaValor = dadosPlanoAula?.licaoCasa ?? '';
+
+    if (licaoCasaValor !== valor) {
+      ServicoPlanoAula.atualizarDadosPlanoAula('licaoCasa', valor);
+      dispatch(setModoEdicaoPlanoAula(true));
+    }
   };
 
   return (

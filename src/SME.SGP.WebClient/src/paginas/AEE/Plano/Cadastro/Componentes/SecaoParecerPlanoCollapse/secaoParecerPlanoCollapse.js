@@ -81,7 +81,7 @@ const SecaoParecerPlanoCollapse = ({ match }) => {
             </p>
           </div>
         ) : (
-          ''
+          <></>
         )}
         <SecaoParecerCoordenacao
           desabilitar={!dadosParecer?.podeEditarParecerCoordenacao}
@@ -89,7 +89,7 @@ const SecaoParecerPlanoCollapse = ({ match }) => {
         {dadosParecer?.podeAtribuirResponsavel ? (
           <SecaoParecerResponsavel />
         ) : (
-          ''
+          <></>
         )}
 
         {(dadosParecer?.podeEditarParecerPAAI ||
