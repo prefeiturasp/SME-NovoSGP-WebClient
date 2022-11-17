@@ -7,7 +7,7 @@ import history from '~/servicos/history';
 
 import Filtro from './componentes/Filtro';
 import ServicoBoletimSimples from '~/servicos/Paginas/Relatorios/DiarioClasse/BoletimSimples/ServicoBoletimSimples';
-import { sucesso, erro } from '~/servicos/alertas';
+import { sucesso, erro, confirmar } from '~/servicos/alertas';
 import AlertaModalidadeInfantil from '~/componentes-sgp/AlertaModalidadeInfantil/alertaModalidadeInfantil';
 import modalidade from '~/dtos/modalidade';
 
