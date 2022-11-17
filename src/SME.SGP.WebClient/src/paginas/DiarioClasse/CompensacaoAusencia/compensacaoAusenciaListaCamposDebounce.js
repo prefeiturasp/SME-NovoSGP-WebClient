@@ -2,9 +2,9 @@ import PropTypes from 'prop-types';
 import React, { useCallback, useEffect, useState } from 'react';
 import { CampoTexto } from '~/componentes';
 import {
-  SGP_BUTTON_NOME_ATIVIDADE,
-  SGP_BUTTON_NOME_ESTUDANTE,
-} from '~/constantes/ids/button';
+  SGP_INPUT_NOME_ATIVIDADE,
+  SGP_INPUT_NOME_ESTUDANTE,
+} from '~/constantes/ids/input';
 
 const CompensacaoAusenciaListaCamposDebounce = props => {
   const {
@@ -71,7 +71,7 @@ const CompensacaoAusenciaListaCamposDebounce = props => {
     <>
       <div className="col-sm-12 col-md-3 col-lg-3 col-xl-3 mb-2">
         <CampoTexto
-          id={SGP_BUTTON_NOME_ATIVIDADE}
+          id={SGP_INPUT_NOME_ATIVIDADE}
           placeholder="Nome da Atividade"
           iconeBusca
           allowClear
@@ -83,7 +83,7 @@ const CompensacaoAusenciaListaCamposDebounce = props => {
       </div>
       <div className="col-sm-12 col-md-3 col-lg-3 col-xl-3 mb-2">
         <CampoTexto
-          id={SGP_BUTTON_NOME_ESTUDANTE}
+          id={SGP_INPUT_NOME_ESTUDANTE}
           placeholder="Nome do Estudante"
           iconeBusca
           allowClear
