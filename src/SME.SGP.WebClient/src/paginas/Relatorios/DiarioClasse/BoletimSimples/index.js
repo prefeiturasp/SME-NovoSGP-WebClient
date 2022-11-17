@@ -11,7 +11,6 @@ import { sucesso, erro } from '~/servicos/alertas';
 import AlertaModalidadeInfantil from '~/componentes-sgp/AlertaModalidadeInfantil/alertaModalidadeInfantil';
 import modalidade from '~/dtos/modalidade';
 
-import { EstiloModal } from './boletimSimples.css';
 import { ModalidadeDTO } from '~/dtos';
 import { SGP_BUTTON_GERAR } from '~/constantes/ids/button';
 
@@ -21,6 +20,7 @@ const BoletimSimples = () => {
   const [clicouBotaoGerar, setClicouBotaoGerar] = useState(false);
   const [desabilitarBotaoGerar, setDesabilitarBotaoGerar] = useState(false);
   const [filtrou, setFiltrou] = useState(false);
+  const [modoEdicao, setModoEdicao] = useState(false);
   const [cancelou, setCancelou] = useState(false);
   const estadoInicial = {
     anoLetivo: '',
@@ -76,9 +76,19 @@ const BoletimSimples = () => {
     history.push('/');
   };
 
-  const onClickCancelar = () => {
-    setCancelou(true);
-    setFiltro(estadoInicial);
+  const onClickCancelar = async () => {
+    if (modoEdicao) {
+      const confirmou = await confirmar(
+        'Atenção',
+        '',
+        'Deseja realmente cancelar as alterações?'
+      );
+
+      if (confirmou) {
+        setCancelou(true);
+        setModoEdicao(false);
+      }
+    }
   };
 
   const onClickBotaoPrincipal = async () => {
@@ -130,7 +140,6 @@ const BoletimSimples = () => {
 
   return (
     <>
-      <EstiloModal />
       <AlertaModalidadeInfantil
         exibir={String(filtro.modalidade) === String(modalidade.INFANTIL)}
         validarModalidadeFiltroPrincipal={false}
@@ -153,16 +162,17 @@ const BoletimSimples = () => {
             botoesEstadoVariavel={false}
             labelBotaoPrincipal="Gerar"
             idBotaoPrincipal={SGP_BUTTON_GERAR}
-            modoEdicao
+            modoEdicao={modoEdicao}
           />
         </Cabecalho>
         <Card>
           <Filtro
-            onFiltrar={onChangeFiltro}
+            cancelou={cancelou}
             filtrou={filtrou}
             setFiltrou={setFiltrou}
-            cancelou={cancelou}
             setCancelou={setCancelou}
+            onFiltrar={onChangeFiltro}
+            setModoEdicao={setModoEdicao}
           />
           {!!filtro?.turmaCodigo?.length && selecionarAlunos && (
             <div className="col-md-12 pt-4">

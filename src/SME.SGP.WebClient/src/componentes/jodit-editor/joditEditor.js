@@ -349,26 +349,36 @@ const JoditEditor = forwardRef((props, ref) => {
           }
 
           textArea.current.events.on('beforePaste', e => {
+            const dadosColado = e?.clipboardData?.getData?.('text/html');
+            const dadosColadoEstaSemTexto =
+              dadosColado.replace(/<\/?[^>]+(>|$)/g, '').trim() === '';
+
             if (qtdMaxImg) {
-              const dadosColado = e?.clipboardData?.getData?.('text/html');
               const qtdElementoImgNova = dadosColado?.match(/<img/g) || [];
               const qtdElementoImgAtual = textArea?.current?.editorDocument?.querySelectorAll?.(
                 'img'
               );
-
               const totalImg =
                 qtdElementoImgNova?.length + qtdElementoImgAtual?.length;
 
-              if (totalImg > qtdMaxImg) {
+              if (totalImg > qtdMaxImg || dadosColadoEstaSemTexto) {
                 if (e?.preventDefault) {
                   e.preventDefault();
-                }
-                if (e?.preventDefault) {
                   e.stopPropagation();
                 }
+
+                if (!dadosColadoEstaSemTexto) {
+                  exibirMsgMaximoImg();
+                }
+
                 return false;
               }
             }
+
+            if (dadosColadoEstaSemTexto) {
+              return false;
+            }
+
             return true;
           });
 
