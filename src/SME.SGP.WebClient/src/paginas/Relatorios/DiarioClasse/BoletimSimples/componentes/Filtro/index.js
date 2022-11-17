@@ -27,7 +27,14 @@ import { AbrangenciaServico, erros, ServicoFiltroRelatorio } from '~/servicos';
 import { ordenarDescPor } from '~/utils';
 import { AvisoBoletim } from './styles';
 
-const Filtros = ({ onFiltrar, filtrou, setFiltrou, cancelou, setCancelou }) => {
+const Filtros = ({
+  onFiltrar,
+  filtrou,
+  setFiltrou,
+  setModoEdicao,
+  cancelou,
+  setCancelou,
+}) => {
   const [anoAtual] = useState(window.moment().format('YYYY'));
   const [anoLetivo, setAnoLetivo] = useState();
   const [carregandoAnosLetivos, setCarregandoAnosLetivos] = useState(false);
@@ -39,7 +46,6 @@ const Filtros = ({ onFiltrar, filtrou, setFiltrou, cancelou, setCancelou }) => {
   const [consideraHistorico, setConsideraHistorico] = useState(false);
   const [desabilitarEstudante, setDesabilitarEstudante] = useState(false);
   const [dreCodigo, setDreCodigo] = useState();
-  const [dreId, setDreId] = useState('');
   const [listaAnosLetivo, setListaAnosLetivo] = useState([]);
   const [listaDres, setListaDres] = useState([]);
   const [listaModalidades, setListaModalidades] = useState([]);
@@ -102,6 +108,9 @@ const Filtros = ({ onFiltrar, filtrou, setFiltrou, cancelou, setCancelou }) => {
     setTurmasId();
 
     setQuantidadeBoletimPorPagina('');
+
+    setOpcaoEstudanteId();
+    setImprimirEstudantesInativos(false);
   };
 
   useEffect(() => {
@@ -140,16 +149,16 @@ const Filtros = ({ onFiltrar, filtrou, setFiltrou, cancelou, setCancelou }) => {
     setConsideraHistorico(e.target.checked);
     limparCampos();
     setDreCodigo();
-    setDreId();
     setFiltrou(false);
-    setListaDres([]);
+    setModoEdicao(true);
     setQuantidadeBoletimPorPagina('');
   };
 
   const onChangeAnoLetivo = ano => {
-    setAnoLetivo(ano);
     limparCampos();
+    setAnoLetivo(ano);
     setFiltrou(false);
+    setModoEdicao(true);
   };
 
   const validarValorPadraoAnoLetivo = lista => {
@@ -197,11 +206,10 @@ const Filtros = ({ onFiltrar, filtrou, setFiltrou, cancelou, setCancelou }) => {
   }, [obterAnosLetivos, consideraHistorico]);
 
   const onChangeDre = dre => {
-    const id = listaDres.find(d => d.valor === dre)?.id;
-    setDreId(id);
     setDreCodigo(dre);
     limparCampos();
     setFiltrou(false);
+    setModoEdicao(true);
   };
 
   const obterDres = useCallback(async () => {
@@ -226,12 +234,10 @@ const Filtros = ({ onFiltrar, filtrou, setFiltrou, cancelou, setCancelou }) => {
 
         if (lista?.length === 1) {
           setDreCodigo(lista[0].valor);
-          setDreId(lista[0].id);
         }
         return;
       }
       setDreCodigo(undefined);
-      setDreId(undefined);
       setListaDres([]);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -252,6 +258,7 @@ const Filtros = ({ onFiltrar, filtrou, setFiltrou, cancelou, setCancelou }) => {
     setTurmasId();
     setFiltrou(false);
     setQuantidadeBoletimPorPagina('');
+    setModoEdicao(true);
   };
 
   const obterUes = useCallback(async () => {
@@ -282,21 +289,22 @@ const Filtros = ({ onFiltrar, filtrou, setFiltrou, cancelou, setCancelou }) => {
       setListaUes([]);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [dreId, anoLetivo, consideraHistorico]);
+  }, [dreCodigo, anoLetivo, consideraHistorico]);
 
   useEffect(() => {
-    if (dreId) {
+    if (dreCodigo) {
       obterUes();
       return;
     }
     setListaUes([]);
-  }, [dreId, obterUes]);
+  }, [dreCodigo, obterUes]);
 
   const onChangeModalidade = valor => {
     setTurmasId();
     setModalidadeId(valor);
     setFiltrou(false);
     setQuantidadeBoletimPorPagina('');
+    setModoEdicao(true);
   };
 
   const obterModalidades = useCallback(async (ue, considHistorico) => {
@@ -338,6 +346,7 @@ const Filtros = ({ onFiltrar, filtrou, setFiltrou, cancelou, setCancelou }) => {
     setSemestre(valor);
     setFiltrou(false);
     setQuantidadeBoletimPorPagina('');
+    setModoEdicao(true);
   };
 
   const obterSemestres = async (
@@ -393,11 +402,13 @@ const Filtros = ({ onFiltrar, filtrou, setFiltrou, cancelou, setCancelou }) => {
     setDesabilitarEstudante(temOpcaoTodas);
     setFiltrou(false);
     setQuantidadeBoletimPorPagina('');
+    setModoEdicao(true);
   };
 
   const onChangeImprimirEstudantesInativos = valor => {
     setFiltrou(false);
     setImprimirEstudantesInativos(valor);
+    setModoEdicao(true);
   };
 
   const obterTurmas = useCallback(async () => {
@@ -432,11 +443,12 @@ const Filtros = ({ onFiltrar, filtrou, setFiltrou, cancelou, setCancelou }) => {
         setListaTurmas(lista);
         if (lista.length === 1) {
           setTurmasId(lista[0].valor);
+          setOpcaoEstudanteId(OPCAO_TODOS_ESTUDANTES);
         }
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [ueCodigo, dreId, consideraHistorico, anoLetivo, modalidadeId]);
+  }, [ueCodigo, dreCodigo, consideraHistorico, anoLetivo, modalidadeId]);
 
   useEffect(() => {
     if (ueCodigo) {
@@ -456,23 +468,25 @@ const Filtros = ({ onFiltrar, filtrou, setFiltrou, cancelou, setCancelou }) => {
   const onChangeQtdBoletinsPagina = valor => {
     setFiltrou(false);
     setQuantidadeBoletimPorPagina(valor);
+    setModoEdicao(true);
   };
 
   useEffect(() => {
     if (cancelou) {
       setConsideraHistorico(false);
       limparCampos();
-      setListaDres([]);
-      setDreCodigo();
-      setDreId();
       setAnoLetivo(anoAtual);
+      setDreCodigo();
+      obterDres();
+      setFiltrou(false);
       setCancelou(false);
       setFiltrou(false);
       setImprimirEstudantesInativos(false);
       setQuantidadeBoletimPorPagina('');
       setOpcaoEstudanteId();
     }
-  }, [cancelou, setFiltrou, setCancelou, anoAtual]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [cancelou]);
 
   useEffect(() => {
     if (opcaoEstudanteId !== OPCAO_TODOS_ESTUDANTES) {
@@ -664,6 +678,7 @@ Filtros.propTypes = {
   onFiltrar: PropTypes.func,
   filtrou: PropTypes.bool,
   setFiltrou: PropTypes.func,
+  setModoEdicao: PropTypes.func,
   cancelou: PropTypes.bool,
   setCancelou: PropTypes.func,
 };
@@ -672,6 +687,7 @@ Filtros.defaultProps = {
   onFiltrar: () => {},
   filtrou: false,
   setFiltrou: () => {},
+  setModoEdicao: () => {},
   cancelou: false,
   setCancelou: () => {},
 };

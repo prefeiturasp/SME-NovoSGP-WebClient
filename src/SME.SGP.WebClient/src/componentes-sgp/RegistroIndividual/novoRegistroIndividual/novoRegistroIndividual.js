@@ -183,7 +183,6 @@ const NovoRegistroIndividual = () => {
       if (resposta && ehMesmoCodigo) {
         if (ehDataAnterior) {
           setDesabilitarNovoRegistro(true);
-          return;
         }
 
         dispatch(
