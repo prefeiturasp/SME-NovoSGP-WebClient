@@ -37,8 +37,6 @@ import {
   SGP_BUTTON_ALTERAR_CADASTRAR,
   SGP_BUTTON_CANCELAR,
   SGP_BUTTON_COPIAR_COMPENSACAO,
-  SGP_BUTTON_NOME_ATIVIDADE,
-  SGP_BUTTON_NOME_ESTUDANTE,
   SGP_BUTTON_REMOVER_ESTUDANTE_TABELA_AUSENCIA_COMPENSADA,
 } from '~/constantes/ids/button';
 import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
@@ -48,6 +46,10 @@ import {
   SGP_SELECT_COMPONENTE_CURRICULAR,
 } from '~/constantes/ids/select';
 import { SGP_JODIT_EDITOR_COMPENSACAO_AUSENCIA_DETALHAMENTO_ATIVIDADE } from '~/constantes/ids/jodit-editor';
+import {
+  SGP_INPUT_NOME_ATIVIDADE,
+  SGP_INPUT_NOME_ESTUDANTE,
+} from '~/constantes/ids/input';
 
 const CompensacaoAusenciaForm = ({ match }) => {
   const usuario = useSelector(store => store.usuario);
@@ -1068,7 +1070,7 @@ const CompensacaoAusenciaForm = ({ match }) => {
                     </div>
                     <div className="col-sm-12 col-md-12 col-lg-6 col-xl-6 mb-2">
                       <CampoTexto
-                        id={SGP_BUTTON_NOME_ATIVIDADE}
+                        id={SGP_INPUT_NOME_ATIVIDADE}
                         form={form}
                         label="Atividade"
                         placeholder="Atividade"
@@ -1127,7 +1129,7 @@ const CompensacaoAusenciaForm = ({ match }) => {
                   <div className="row">
                     <div className="col-sm-5 col-md-5 col-lg-5 col-xl-5 mb-2">
                       <CampoTexto
-                        id={SGP_BUTTON_NOME_ESTUDANTE}
+                        id={SGP_INPUT_NOME_ESTUDANTE}
                         label="Seleção dos estudantes"
                         placeholder="Digite o nome do estudante"
                         onChange={onChangeSelecaoAluno}
