@@ -112,6 +112,7 @@ import DashboardNAAPA from '~/paginas/Dashboard/DashboardNAAPA/dashboardNAAPA';
 import Suporte from '~/paginas/Configuracoes/Usuarios/Suporte/suporte';
 import ListaEncaminhamentoNAAPA from '~/paginas/NAAPA/Encaminhamento/Lista/listaEncaminhamentoNAAPA';
 import CadastroEncaminhamentoNAAPA from '~/paginas/NAAPA/Encaminhamento/Cadastro/cadastroEncaminhamentoNAAPA';
+import CadastroEncaminhamentoNAAPABusca from '~/paginas/NAAPA/Encaminhamento/Cadastro/cadastroEncaminhamentoNAAPABusca';
 
 const rotas = new Map();
 
@@ -1568,7 +1569,7 @@ rotas.set(RotasDto.ENCAMINHAMENTO_NAAPA, {
 rotas.set(`${RotasDto.ENCAMINHAMENTO_NAAPA}/novo`, {
   breadcrumbName: 'Cadastro',
   parent: RotasDto.ENCAMINHAMENTO_NAAPA,
-  component: CadastroEncaminhamentoNAAPA,
+  component: CadastroEncaminhamentoNAAPABusca,
   exact: true,
   tipo: RotasTipo.EstruturadaAutenticada,
   temPermissionamento: true,
