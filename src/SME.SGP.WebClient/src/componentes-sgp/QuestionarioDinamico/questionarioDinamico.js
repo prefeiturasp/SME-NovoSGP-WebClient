@@ -34,6 +34,7 @@ const QuestionarioDinamico = props => {
     funcaoRemoverArquivoCampoUpload,
     onChangeQuestionario,
     turmaId,
+    versaoPlano,
   } = props;
 
   const [valoresIniciais, setValoresIniciais] = useState();
@@ -472,6 +473,7 @@ const QuestionarioDinamico = props => {
             }}
             turmaId={turmaId}
             questionarioId={dados?.questionarioId}
+            versaoPlano ={versaoPlano}
           />
         );
         break;

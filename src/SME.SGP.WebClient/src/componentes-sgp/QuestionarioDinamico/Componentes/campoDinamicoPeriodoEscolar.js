@@ -16,6 +16,7 @@ const CampoDinamicoPeriodoEscolar = props => {
     onChange,
     turmaId,
     questionarioId,
+    versaoPlano,
   } = props;
 
   const [lista, setLista] = useState([]);
@@ -54,9 +55,14 @@ const CampoDinamicoPeriodoEscolar = props => {
     )
       .catch(e => erros(e))
       .finally(() => setExibirLoader(false));
-    if (retorno?.data) {
+      const anoAtual = new Date().getFullYear();
+      const anoVersao = versaoPlano? new Date(versaoPlano.criadoEm).getFullYear() : null ;
+
+    if (retorno?.data && anoVersao === anoAtual) {
       habilitaEdicaoSeMudarBimestreAtual(questaoAtual, retorno.data.id);
       form.setFieldValue(String(questaoAtual.id), String(retorno.data.id));
+    } else {
+      form.setFieldValue(String(questaoAtual.id), questaoAtual?.resposta[0]?.texto);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [turmaId, form, questaoAtual]);
