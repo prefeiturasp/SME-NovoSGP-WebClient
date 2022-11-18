@@ -110,6 +110,8 @@ import Listao from '~/paginas/DiarioClasse/Listao/lista/listao';
 import RelatorioFrequenciaMensal from '~/paginas/Relatorios/Frequencia/relatorioFrequenciaMensal';
 import DashboardNAAPA from '~/paginas/Dashboard/DashboardNAAPA/dashboardNAAPA';
 import Suporte from '~/paginas/Configuracoes/Usuarios/Suporte/suporte';
+import ListaEncaminhamentoNAAPA from '~/paginas/NAAPA/Encaminhamento/Lista/listaEncaminhamentoNAAPA';
+import CadastroEncaminhamentoNAAPA from '~/paginas/NAAPA/Encaminhamento/Cadastro/cadastroEncaminhamentoNAAPA';
 
 const rotas = new Map();
 
@@ -295,7 +297,6 @@ rotas.set(
     chavePermissao: RotasDto.ATRIBUICAO_RESPONSAVEIS_LISTA,
   }
 );
-
 
 rotas.set(`${RotasDto.ATRIBUICAO_RESPONSAVEIS}/:dreId/:tipoResponsavel`, {
   breadcrumbName: 'Atribuição de responsáveis',
@@ -1551,6 +1552,37 @@ rotas.set(RotasDto.DASHBOARD_NAAPA, {
   tipo: RotasTipo.EstruturadaAutenticada,
   temPermissionamento: true,
   chavePermissao: RotasDto.DASHBOARD_NAAPA,
+});
+
+rotas.set(RotasDto.ENCAMINHAMENTO_NAAPA, {
+  breadcrumbName: 'Encaminhamento NAAPA',
+  menu: ['Gestão'],
+  parent: '/',
+  component: ListaEncaminhamentoNAAPA,
+  exact: true,
+  tipo: RotasTipo.EstruturadaAutenticada,
+  temPermissionamento: true,
+  chavePermissao: RotasDto.ENCAMINHAMENTO_NAAPA,
+});
+
+rotas.set(`${RotasDto.ENCAMINHAMENTO_NAAPA}/novo`, {
+  breadcrumbName: 'Cadastro',
+  parent: RotasDto.ENCAMINHAMENTO_NAAPA,
+  component: CadastroEncaminhamentoNAAPA,
+  exact: true,
+  tipo: RotasTipo.EstruturadaAutenticada,
+  temPermissionamento: true,
+  chavePermissao: RotasDto.ENCAMINHAMENTO_NAAPA,
+});
+
+rotas.set(`${RotasDto.ENCAMINHAMENTO_NAAPA}/:id`, {
+  breadcrumbName: 'Cadastro',
+  parent: RotasDto.ENCAMINHAMENTO_NAAPA,
+  component: CadastroEncaminhamentoNAAPA,
+  exact: true,
+  tipo: RotasTipo.EstruturadaAutenticada,
+  temPermissionamento: true,
+  chavePermissao: RotasDto.ENCAMINHAMENTO_NAAPA,
 });
 
 const rotasArray = [];
