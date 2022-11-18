@@ -54,6 +54,9 @@ const BotoesAcoesAcompanhamentoAprendizagem = props => {
       semestreSelecionado
     );
 
+    if(salvouApanhadoGeral || salvouCompanhamento)
+      await recarregarDados();
+
     return salvouApanhadoGeral && salvouCompanhamento;
   };
 
