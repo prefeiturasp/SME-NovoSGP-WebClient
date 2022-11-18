@@ -502,7 +502,6 @@ const AtribuicaoCJ = () => {
                 rfEdicao={usuarioRf}
                 buscandoDados={setCarregandoGeral}
                 dreId={dreCodigo}
-                ueId={ueCodigo}
                 anoLetivo={anoAtual}
                 showLabel
                 onChange={valores => {
