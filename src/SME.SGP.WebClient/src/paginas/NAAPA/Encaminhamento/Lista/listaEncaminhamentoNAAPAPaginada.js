@@ -53,7 +53,7 @@ const ListaEncaminhamentoNAAPAPaginada = props => {
   if (ue?.codigo === OPCAO_TODOS) {
     colunas.unshift({
       title: 'Unidade Escolar (UE)',
-      dataIndex: 'ueNome',
+      dataIndex: 'ue',
       ellipsis: true,
     });
   }
@@ -90,7 +90,7 @@ const ListaEncaminhamentoNAAPAPaginada = props => {
     filtrar();
   }, [filtrar]);
 
-  return filtros?.anoLetivo && filtros?.dreId && filtros?.ueId ? (
+  return filtros?.anoLetivo && filtros?.dreId && filtros?.codigoUe ? (
     <ListaPaginada
       url="v1/encaminhamento-naapa"
       id={SGP_TABLE_ENCAMINHAMENTO_NAAPA}
