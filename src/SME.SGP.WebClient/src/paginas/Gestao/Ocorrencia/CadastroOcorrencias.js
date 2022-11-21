@@ -96,6 +96,8 @@ const CadastroOcorrencias = () => {
         : null,
     };
 
+    if (!params?.modalidade) delete params.modalidade;
+
     if (ocorrenciaId) {
       params.id = ocorrenciaId;
       ServicoOcorrencias.alterar(params)

@@ -10,6 +10,12 @@ import {
 import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
 import Card from '~/componentes/card';
 import { ANO_INICIO_INFANTIL, OPCAO_TODOS } from '~/constantes/constantes';
+import { SGP_CHECKBOX_EXIBIR_HISTORICO } from '~/constantes/ids/checkbox';
+import {
+  SGP_SELECT_ANO_LETIVO,
+  SGP_SELECT_DRE,
+  SGP_SELECT_UE,
+} from '~/constantes/ids/select';
 import { URL_HOME } from '~/constantes/url';
 import AbrangenciaServico from '~/servicos/Abrangencia';
 import { erros } from '~/servicos/alertas';
@@ -217,6 +223,7 @@ const DashboardRelAcompanhamentoAprendizagem = () => {
           <div className="row">
             <div className="col-sm-12 col-md-6 col-lg-4 col-xl-4 mb-2">
               <CheckboxComponent
+                id={SGP_CHECKBOX_EXIBIR_HISTORICO}
                 label="Exibir histórico?"
                 onChangeCheckbox={e => {
                   setAnoLetivo();
@@ -232,7 +239,7 @@ const DashboardRelAcompanhamentoAprendizagem = () => {
             <div className="col-sm-12 col-md-6 col-lg-3 col-xl-2 mb-2">
               <Loader loading={carregandoAnosLetivos}>
                 <SelectComponent
-                  id="ano-letivo"
+                  id={SGP_SELECT_ANO_LETIVO}
                   label="Ano Letivo"
                   lista={listaAnosLetivo}
                   valueOption="valor"
@@ -247,7 +254,7 @@ const DashboardRelAcompanhamentoAprendizagem = () => {
             <div className="col-sm-12 col-md-12 col-lg-9 col-xl-5 mb-2">
               <Loader loading={carregandoDres}>
                 <SelectComponent
-                  id="dre"
+                  id={SGP_SELECT_DRE}
                   label="DRE"
                   lista={listaDres}
                   valueOption="codigo"
@@ -263,7 +270,7 @@ const DashboardRelAcompanhamentoAprendizagem = () => {
             <div className="col-sm-12 col-md-12 col-lg-12 col-xl-5 mb-2">
               <Loader loading={carregandoUes}>
                 <SelectComponent
-                  id="ue"
+                  id={SGP_SELECT_UE}
                   label="Unidade Escolar (UE)"
                   lista={listaUes}
                   valueOption="codigo"

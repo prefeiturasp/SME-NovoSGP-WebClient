@@ -18,6 +18,7 @@ import { validaSeObjetoEhNuloOuVazio } from '~/utils/funcoes/gerais';
 
 // Utils
 import RFNaoEncontradoExcecao from '~/utils/excecoes/RFNãoEncontradoExcecao';
+import { SGP_INPUT_NOME, SGP_INPUT_RF } from '~/constantes/ids/input';
 
 function Localizador({
   onChange,
@@ -259,6 +260,7 @@ function Localizador({
           />
         )}
         <InputRF
+          id={SGP_INPUT_RF}
           pessoaSelecionada={pessoaSelecionada}
           onSelect={onBuscarPorRF}
           onChange={onChangeRF}
@@ -282,6 +284,7 @@ function Localizador({
           />
         )}
         <InputNome
+          id={SGP_INPUT_NOME}
           dataSource={dataSource}
           onSelect={onSelectPessoa}
           onChange={onChangeInput}

@@ -8,6 +8,7 @@ import service from './services/LocalizadorEstudanteService';
 import { store } from '~/redux';
 import { setAlunosCodigo } from '~/redux/modulos/localizadorEstudante/actions';
 import { removerNumeros } from '~/utils/funcoes/gerais';
+import { SGP_INPUT_CODIGO_EOL } from '~/constantes/ids/input';
 
 const LocalizadorEstudante = props => {
   const {
@@ -23,6 +24,7 @@ const LocalizadorEstudante = props => {
     semMargin,
     limparCamposAposPesquisa,
     labelAlunoNome,
+    id,
   } = props;
 
   const classeCodigo = semMargin
@@ -288,6 +290,7 @@ const LocalizadorEstudante = props => {
       >
         {showLabel && <Label text={labelAlunoNome} control="alunoNome" />}
         <InputNome
+          id={id}
           placeholder={placeholder}
           dataSource={dataSource}
           onSelect={onSelectPessoa}
@@ -303,6 +306,7 @@ const LocalizadorEstudante = props => {
         <div className={classeCodigo}>
           {showLabel && <Label text="Código EOL" control="alunoCodigo" />}
           <InputCodigo
+            id={SGP_INPUT_CODIGO_EOL}
             pessoaSelecionada={pessoaSelecionada}
             onSelect={validaAntesBuscarPorCodigo}
             onChange={onChangeCodigo}
@@ -334,6 +338,7 @@ LocalizadorEstudante.propTypes = {
   semMargin: PropTypes.bool,
   limparCamposAposPesquisa: PropTypes.bool,
   labelAlunoNome: PropTypes.string,
+  id: PropTypes.string,
 };
 
 LocalizadorEstudante.defaultProps = {
@@ -349,6 +354,7 @@ LocalizadorEstudante.defaultProps = {
   semMargin: false,
   limparCamposAposPesquisa: false,
   labelAlunoNome: 'Nome',
+  id: '',
 };
 
 export default LocalizadorEstudante;

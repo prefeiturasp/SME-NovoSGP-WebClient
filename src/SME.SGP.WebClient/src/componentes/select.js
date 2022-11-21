@@ -288,6 +288,7 @@ SelectComponent.defaultProps = {
   setValueOnlyOnChange: false,
   maxHeightMultiple: '78px',
   labelRequired: false,
+  showSearch: true,
 };
 
 export default SelectComponent;

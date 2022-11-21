@@ -5,6 +5,7 @@ import React from 'react';
 import { SinalizacaoAEE } from '~/componentes-sgp';
 import Button from '~/componentes/button';
 import { Base, Colors } from '~/componentes/colors';
+import { SGP_BUTTON_IMPRIMIR_DADOS_INDIVIDUAIS } from '~/constantes/ids/button';
 import FotoEstudanteObjectCard from './imagemEstudanteObjectCard';
 import { Container, DadosAluno, FrequenciaGlobal } from './styles';
 
@@ -130,7 +131,7 @@ const DetalhesAluno = props => {
                   border
                   onClick={onClickImprimir}
                   disabled={desabilitarImprimir}
-                  id="btn-imprimir-dados-aluno"
+                  id={SGP_BUTTON_IMPRIMIR_DADOS_INDIVIDUAIS}
                 />
               ) : (
                 ''

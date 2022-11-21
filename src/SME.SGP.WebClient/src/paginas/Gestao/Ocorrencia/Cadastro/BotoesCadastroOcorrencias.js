@@ -7,7 +7,7 @@ import {
   SGP_BUTTON_ALTERAR_CADASTRAR,
   SGP_BUTTON_CANCELAR,
   SGP_BUTTON_IMPRIMIR,
-} from '~/componentes-sgp/filtro/idsCampos';
+} from '~/constantes/ids/button';
 import {
   confirmar,
   erros,
@@ -31,7 +31,7 @@ const BotoesCadastroOcorrencias = props => {
     listaUes,
   } = props;
 
-  const { anoLetivo, dreId, ueId, turmaId } = form?.values;
+  const { anoLetivo, dreId, ueId, turmaId, codigosAlunos } = form?.values;
 
   const dreCodigo = ocorrenciaId
     ? form?.initialValues?.dreCodigo
@@ -150,7 +150,7 @@ const BotoesCadastroOcorrencias = props => {
           semMargemDireita
           border
           onClick={onClickGerar}
-          disabled={!ocorrenciaId}
+          disabled={!ocorrenciaId || !codigosAlunos?.length || modoEdicao}
         />
       </Col>
       <Col>

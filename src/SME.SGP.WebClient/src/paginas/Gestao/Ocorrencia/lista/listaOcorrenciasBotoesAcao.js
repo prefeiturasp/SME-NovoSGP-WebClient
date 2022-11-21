@@ -4,7 +4,7 @@ import React from 'react';
 import { Button, Colors } from '~/componentes';
 import BotaoExcluirPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoExcluirPadrao';
 import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
-import { SGP_BUTTON_NOVO } from '~/componentes-sgp/filtro/idsCampos';
+import { SGP_BUTTON_NOVO } from '~/constantes/ids/button';
 import { URL_HOME } from '~/constantes';
 import { RotasDto } from '~/dtos';
 import {
@@ -50,7 +50,7 @@ const ListaOcorrenciasBotoesAcao = props => {
       const confirmado = await confirmar('Atenção', msgConfirm);
 
       if (confirmado) {
-        const parametros = { data: ocorrenciasSelecionadas };
+        const parametros = { data: ocorrenciasSelecionadas?.map(o => o?.id) };
         setExibirLoaderExcluir(true);
         ServicoOcorrencias.excluir(parametros)
           .then(resp => {

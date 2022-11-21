@@ -3,6 +3,10 @@ import t from 'prop-types';
 import React, { useCallback, useEffect, useState } from 'react';
 import shortid from 'shortid';
 import SinalizacaoAEE from '~/componentes-sgp/SinalizacaoAEE/sinalizacaoAEE';
+import {
+  SGP_TABLE_REGISTRO_INDIVIDUAL,
+  SGP_TABLE_REGISTRO_INDIVIDUAL_LINHA,
+} from '~/constantes/ids/table';
 import Cabecalho from './componentes/Cabecalho';
 import { DetalhesAluno, LinhaTabela, Tabela, TabelaEstilo } from './style';
 
@@ -139,7 +143,10 @@ function TabelaRetratil({
   return (
     <TabelaEstilo>
       <div className="tabelaCollapse">
-        <Tabela className={retraido && `retraido`}>
+        <Tabela
+          id={SGP_TABLE_REGISTRO_INDIVIDUAL}
+          className={retraido && `retraido`}
+        >
           <thead>
             <tr>
               <th>Nº</th>
@@ -147,8 +154,9 @@ function TabelaRetratil({
             </tr>
           </thead>
           <tbody>
-            {alunos.map(item => (
+            {alunos.map((item, index) => (
               <LinhaTabela
+                id={`${SGP_TABLE_REGISTRO_INDIVIDUAL_LINHA}${index}`}
                 className={isAlunoSelecionado(item) && `selecionado`}
                 key={shortid.generate()}
                 ativo={!item.desabilitado}

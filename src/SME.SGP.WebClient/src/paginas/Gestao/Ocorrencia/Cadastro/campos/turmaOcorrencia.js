@@ -2,7 +2,7 @@
 import { Col } from 'antd';
 import React, { useCallback, useEffect, useState } from 'react';
 import { Loader, SelectComponent } from '~/componentes';
-import { SGP_SELECT_TURMA } from '~/componentes-sgp/filtro/idsCampos';
+import { SGP_SELECT_TURMA } from '~/constantes/ids/select';
 import { ModalidadeDTO } from '~/dtos';
 import { AbrangenciaServico, erros } from '~/servicos';
 
@@ -42,9 +42,6 @@ const TurmaOcorrencia = props => {
 
     if (retorno?.data?.length) {
       const lista = retorno?.data;
-      if (lista?.length === 1) {
-        form.setFieldValue(nomeCampo, String(lista[0]?.id));
-      }
       setListaTurmas(lista);
     } else {
       setListaTurmas([]);
@@ -64,11 +61,7 @@ const TurmaOcorrencia = props => {
   }, [modalidade]);
 
   const disabled =
-    !modalidade ||
-    listaTurmas?.length === 1 ||
-    !listaTurmas?.length ||
-    (ehEJA && !semestre) ||
-    desabilitar;
+    !modalidade || (ehEJA && !semestre) || desabilitar || !!ocorrenciaId;
 
   return (
     <Col sm={24} md={12} lg={ehEJA ? 8 : 12}>

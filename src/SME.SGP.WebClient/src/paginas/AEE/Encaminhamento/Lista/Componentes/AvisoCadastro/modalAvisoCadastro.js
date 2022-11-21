@@ -3,6 +3,10 @@ import { useDispatch, useSelector } from 'react-redux';
 import shortid from 'shortid';
 import { Colors, ModalConteudoHtml } from '~/componentes';
 import Button from '~/componentes/button';
+import {
+  SGP_BUTTON_CONTINUAR_MODAL,
+  SGP_BUTTON_VOLTAR_MODAL,
+} from '~/constantes/ids/button';
 import { RotasDto } from '~/dtos';
 import { setExibirModalAviso } from '~/redux/modulos/encaminhamentoAEE/actions';
 import { history } from '~/servicos';
@@ -47,7 +51,7 @@ const ModalAvisoNovoEncaminhamentoAEE = () => {
       <div className="col-md-12 mt-2 p-0 d-flex justify-content-end">
         <Button
           key="btn-voltar"
-          id="btn-voltar"
+          id={SGP_BUTTON_VOLTAR_MODAL}
           label="Voltar"
           color={Colors.Azul}
           border
@@ -56,7 +60,7 @@ const ModalAvisoNovoEncaminhamentoAEE = () => {
         />
         <Button
           key="btn-continuar"
-          id="btn-continuar"
+          id={SGP_BUTTON_CONTINUAR_MODAL}
           label="Continuar"
           color={Colors.Roxo}
           border

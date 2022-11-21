@@ -30,7 +30,7 @@ import { ehTurmaInfantil } from '~/servicos/Validacoes/validacoesInfatil';
 import JoditEditor from '~/componentes/jodit-editor/joditEditor';
 import { IframeStyle } from './pendenciasFechamentoLista.css';
 import { ServicoPeriodoFechamento } from '~/servicos';
-import { SGP_BUTTON_APROVAR } from '~/componentes-sgp/filtro/idsCampos';
+import { SGP_BUTTON_APROVAR } from '~/constantes/ids/button';
 import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
 
 const PendenciasFechamentoForm = ({ match }) => {

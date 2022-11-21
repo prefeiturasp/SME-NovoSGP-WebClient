@@ -3,7 +3,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { Loader, SelectComponent } from '~/componentes';
 import { FiltroHelper } from '~/componentes-sgp';
-import { SGP_SELECT_ANO_LETIVO } from '~/componentes-sgp/filtro/idsCampos';
+import { SGP_SELECT_ANO_LETIVO } from '~/constantes/ids/select';
 import { erros } from '~/servicos';
 import { ordenarDescPor } from '~/utils';
 

@@ -3,7 +3,7 @@ import { Button, Colors, Loader } from '~/componentes';
 import { erros, sucesso } from '~/servicos';
 import ServicoPlanoAEE from '~/servicos/Paginas/Relatorios/AEE/ServicoPlanoAEE';
 import { MENSAGEM_SOLICITACAO_RELATORIO_SUCESSO } from '~/constantes';
-import { SGP_BUTTON_IMPRIMIR } from '~/componentes-sgp/filtro/idsCampos';
+import { SGP_BUTTON_IMPRIMIR } from '~/constantes/ids/button';
 
 const BtnImpressaoListaPlanoAEE = props => {
   // eslint-disable-next-line react/prop-types

@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import { DataTable, Label } from '~/componentes';
+import { SGP_TABLE_LISTA_ALUNOS } from '~/constantes/ids/table';
 import { ordenarPor } from '~/utils/funcoes/gerais';
 
 import { CardTabelaAlunos } from '../styles';
@@ -55,7 +56,7 @@ const ListaAlunos = props => {
       <CardTabelaAlunos>
         <DataTable
           scroll={{ y: 420 }}
-          id="lista-alunos"
+          id={SGP_TABLE_LISTA_ALUNOS}
           selectedRowKeys={idsAlunos}
           onSelectRow={onSelectRowAlunos}
           columns={colunasListaAlunos}

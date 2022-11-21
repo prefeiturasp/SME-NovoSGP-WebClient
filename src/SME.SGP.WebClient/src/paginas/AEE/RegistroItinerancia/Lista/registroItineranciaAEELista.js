@@ -14,7 +14,7 @@ import {
 } from '~/componentes';
 import { Cabecalho, FiltroHelper } from '~/componentes-sgp';
 import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
-import { SGP_BUTTON_NOVO } from '~/componentes-sgp/filtro/idsCampos';
+import { SGP_BUTTON_NOVO } from '~/constantes/ids/button';
 import LocalizadorPadrao from '~/componentes/LocalizadorPadrao';
 import { URL_HOME } from '~/constantes';
 import { RotasDto } from '~/dtos';

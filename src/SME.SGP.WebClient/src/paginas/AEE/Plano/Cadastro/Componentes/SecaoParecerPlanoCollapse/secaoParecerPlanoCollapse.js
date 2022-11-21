@@ -14,6 +14,7 @@ import ServicoPlanoAEE from '~/servicos/Paginas/Relatorios/AEE/ServicoPlanoAEE';
 import SecaoParecerPAAI from '../SecaoParecerPAAI/secaoParecerPAAI';
 import SecaoParecerResponsavel from '../SecaoParecerResponsavel/secaoParecerResponsavel';
 import SecaoParecerCoordenacao from '../SecaoParecerCoordenacao/secaoParecerCoordenacao';
+import { SGP_COLLAPSE_PARECER_PLANO_AEE } from '~/constantes/ids/collapse';
 
 const SecaoParecerPlanoCollapse = ({ match }) => {
   const planoAEEDados = useSelector(store => store.planoAEE.planoAEEDados);
@@ -53,6 +54,7 @@ const SecaoParecerPlanoCollapse = ({ match }) => {
   return (
     <>
       <CardCollapse
+        id={SGP_COLLAPSE_PARECER_PLANO_AEE}
         key="secao-parecer-plano-collapse-key"
         titulo="Parecer"
         show

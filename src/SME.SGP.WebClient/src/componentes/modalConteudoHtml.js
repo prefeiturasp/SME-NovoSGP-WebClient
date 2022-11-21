@@ -8,6 +8,10 @@ import Button from './button';
 import { Base, Colors } from './colors';
 import CardBody from './cardBody';
 import Grid from './grid';
+import {
+  SGP_BUTTON_CANCELAR_MODAL,
+  SGP_BUTTON_SALVAR_MODAL,
+} from '~/constantes/ids/button';
 
 const Container = styled(Modal)`
   .ant-modal-footer {
@@ -63,7 +67,9 @@ const ModalConteudoHtml = props => {
     onConfirmacaoPrincipal,
     onConfirmacaoSecundaria,
     onClose,
+    idBotaoPrincipal,
     labelBotaoPrincipal,
+    idBotaoSecundario,
     labelBotaoSecundario,
     titulo,
     tituloAtencao,
@@ -117,7 +123,7 @@ const ModalConteudoHtml = props => {
                       hidden={esconderBotoes}
                     >
                       <Button
-                        id={shortid.generate()}
+                        id={idBotaoSecundario || SGP_BUTTON_SALVAR_MODAL}
                         key="btn-sim-confirmacao"
                         label={labelBotaoSecundario}
                         color={colorBotaoSecundario}
@@ -128,7 +134,7 @@ const ModalConteudoHtml = props => {
                         disabled={loader}
                       />
                       <Button
-                        id={shortid.generate()}
+                        id={idBotaoPrincipal || SGP_BUTTON_CANCELAR_MODAL}
                         key="btn-nao-confirmacao"
                         label={labelBotaoPrincipal}
                         color={Colors.Roxo}
@@ -146,7 +152,7 @@ const ModalConteudoHtml = props => {
         ) : (
           <div className="d-flex justify-content-end" hidden={esconderBotoes}>
             <Button
-              id={shortid.generate()}
+              id={idBotaoPrincipal || SGP_BUTTON_SALVAR_MODAL}
               key="btn-sim-confirmacao"
               label={labelBotaoSecundario}
               color={colorBotaoSecundario}
@@ -158,7 +164,7 @@ const ModalConteudoHtml = props => {
               disabled={loader}
             />
             <Button
-              id={shortid.generate()}
+              id={idBotaoSecundario || SGP_BUTTON_CANCELAR_MODAL}
               key="btn-nao-confirmacao"
               label={labelBotaoPrincipal}
               color={Colors.Roxo}
@@ -190,6 +196,10 @@ ModalConteudoHtml.propTypes = {
   botoesRodape: PropTypes.node,
   fontSizeTitulo: PropTypes.string,
   tipoFonte: PropTypes.string,
+  idBotaoPrincipal: PropTypes.string,
+  labelBotaoPrincipal: PropTypes.string,
+  idBotaoSecundario: PropTypes.string,
+  labelBotaoSecundario: PropTypes.string,
 };
 
 ModalConteudoHtml.defaultProps = {
@@ -199,13 +209,16 @@ ModalConteudoHtml.defaultProps = {
   fecharAoClicarEsc: true,
   esconderBotaoPrincipal: false,
   esconderBotaoSecundario: false,
-
   paddingBottom: '15',
   paddingRight: '20',
   colorBotaoSecundario: 'Roxo',
   botoesRodape: null,
   fontSizeTitulo: '24',
   tipoFonte: '',
+  idBotaoPrincipal: '',
+  labelBotaoPrincipal: '',
+  idBotaoSecundario: '',
+  labelBotaoSecundario: '',
 };
 
 export default ModalConteudoHtml;

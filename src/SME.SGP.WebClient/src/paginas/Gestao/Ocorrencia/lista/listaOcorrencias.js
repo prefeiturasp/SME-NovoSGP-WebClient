@@ -12,19 +12,20 @@ import {
   SelectComponent,
 } from '~/componentes';
 import { Cabecalho, FiltroHelper } from '~/componentes-sgp';
+import { SGP_BUTTON_IMPRIMIR } from '~/constantes/ids/button';
+import { SGP_CHECKBOX_EXIBIR_HISTORICO } from '~/constantes/ids/checkbox';
 import {
-  SGP_BUTTON_IMPRIMIR,
-  SGP_CHECKBOX_EXIBIR_HISTORICO,
   SGP_SELECT_ANO_LETIVO,
   SGP_SELECT_DRE,
   SGP_SELECT_MODALIDADE,
   SGP_SELECT_SEMESTRE,
   SGP_SELECT_TURMA,
   SGP_SELECT_UE,
-} from '~/componentes-sgp/filtro/idsCampos';
+} from '~/constantes/ids/select';
 import { ModalidadeDTO, RotasDto } from '~/dtos';
 import {
   AbrangenciaServico,
+  confirmar,
   erros,
   ServicoFiltroRelatorio,
   ServicoOcorrencias,
@@ -79,8 +80,6 @@ const ListaOcorrencias = () => {
   const [ocorrenciasSelecionadas, setOcorrenciasSelecionadas] = useState([]);
   const [somenteConsulta, setSomenteConsulta] = useState(false);
 
-  const [finalizouConsultas, setFinalizouConsultas] = useState(false);
-
   const [filtros, setFiltros] = useState();
 
   const ehTurmaAnoAnterior =
@@ -88,8 +87,7 @@ const ListaOcorrencias = () => {
 
   const ehEJA = Number(modalidade) === ModalidadeDTO.EJA;
 
-  const filtroEhValido =
-    finalizouConsultas && !!(anoLetivo && dre?.id && ue?.id);
+  const filtroEhValido = !!(anoLetivo && dre?.id && ue?.id);
 
   useEffect(() => {
     const soConsulta = verificaSomenteConsulta(
@@ -192,21 +190,14 @@ const ListaOcorrencias = () => {
     if (retorno?.data?.length) {
       const lista = retorno.data;
 
-      if (lista?.length === 1) {
-        setModalidade(lista[0].valor);
-      } else {
-        setFinalizouConsultas(true);
-      }
       setListaModalidades(lista);
     } else {
       setListaModalidades([]);
-      setFinalizouConsultas(true);
     }
   }, [anoLetivo, ue, consideraHistorico]);
 
   useEffect(() => {
     if (ue?.codigo) {
-      setFinalizouConsultas(false);
       obterModalidades();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -228,21 +219,14 @@ const ListaOcorrencias = () => {
       const lista = retorno.data.map(periodo => {
         return { desc: periodo, valor: periodo };
       });
-      if (lista?.length === 1) {
-        setSemestre(lista[0].valor);
-      } else {
-        setFinalizouConsultas(true);
-      }
       setListaSemestres(lista);
     } else {
       setListaSemestres([]);
-      setFinalizouConsultas(true);
     }
   }, [anoLetivo, modalidade, consideraHistorico, dre, ue]);
 
   useEffect(() => {
     if (modalidade && ehEJA) {
-      setFinalizouConsultas(false);
       obterSemestres();
     }
   }, [obterSemestres, ehEJA, modalidade]);
@@ -263,18 +247,13 @@ const ListaOcorrencias = () => {
     if (retorno?.data?.length) {
       const lista = retorno?.data;
       setListaTurmas(lista);
-      if (lista.length === 1) {
-        setTurmaId([String(lista[0]?.id)]);
-      }
     } else {
       setListaTurmas([]);
     }
-    setFinalizouConsultas(true);
   }, [anoLetivo, consideraHistorico, ue, modalidade]);
 
   useEffect(() => {
     if (modalidade) {
-      setFinalizouConsultas(false);
       obterTurmas();
     }
   }, [modalidade, obterTurmas]);
@@ -290,11 +269,31 @@ const ListaOcorrencias = () => {
   }, []);
 
   const onClickGerar = async () => {
+    const linhaSemEstudante = ocorrenciasSelecionadas?.find(
+      d => !d?.alunoOcorrencia
+    );
+
+    let confirmado = true;
+
+    if (linhaSemEstudante) {
+      confirmado = await confirmar(
+        'Atenção',
+        'Serão impressos somente ocorrências que tem Crianças/Estudantes selecionados, deseja realizar a impressão?'
+      );
+    }
+
+    if (!confirmado) return;
+
+    const correnciasComEstudantes = ocorrenciasSelecionadas?.filter(
+      d => !!d?.alunoOcorrencia
+    );
     const params = {
       dreCodigo: dre?.codigo,
       ueCodigo: ue?.codigo,
       turmaId,
-      ocorrenciasIds: ocorrenciasSelecionadas,
+      ocorrenciasIds: correnciasComEstudantes
+        ? correnciasComEstudantes?.map(item => String(item.id))
+        : [],
     };
     setCarregandoImpressao(true);
     const retorno = await ServicoOcorrencias.gerar(params).catch(e => erros(e));
@@ -382,8 +381,6 @@ const ListaOcorrencias = () => {
   };
 
   const onChangeUe = ueCodigo => {
-    setFinalizouConsultas(false);
-
     setListaModalidades();
     setModalidade();
 
@@ -400,8 +397,6 @@ const ListaOcorrencias = () => {
   };
 
   const onChangeModalidade = novaModalidade => {
-    setFinalizouConsultas(false);
-
     setListaSemestres();
     setSemestre();
 
@@ -414,10 +409,8 @@ const ListaOcorrencias = () => {
   };
 
   const onChangeSemestre = valor => {
-    setFinalizouConsultas(false);
-
     limparCamposSemConsulta();
-
+    setTurmaId();
     setSemestre(valor);
   };
 
@@ -549,7 +542,7 @@ const ListaOcorrencias = () => {
                   lista={listaModalidades}
                   valueOption="valor"
                   valueText="descricao"
-                  disabled={listaModalidades?.length === 1 || !ue?.codigo}
+                  disabled={!ue?.codigo}
                   onChange={onChangeModalidade}
                   valueSelect={modalidade}
                 />
@@ -565,7 +558,7 @@ const ListaOcorrencias = () => {
                     valueText="desc"
                     label="Semestre"
                     placeholder="Selecione o semestre"
-                    disabled={!modalidade || listaSemestres?.length === 1}
+                    disabled={!modalidade}
                     valueSelect={semestre}
                     onChange={onChangeSemestre}
                   />
@@ -582,7 +575,7 @@ const ListaOcorrencias = () => {
                   valueOption="id"
                   valueText="nomeFiltro"
                   label="Turma"
-                  disabled={!modalidade || listaTurmas?.length === 1}
+                  disabled={!modalidade || (ehEJA && !semestre)}
                   valueSelect={turmaId}
                   onChange={onChangeTurma}
                   placeholder="Turma"
@@ -595,7 +588,7 @@ const ListaOcorrencias = () => {
                 id="SGP_INPUT_TEXT_ALUNO_NOME"
                 value={alunoNomeExibicao}
                 onChange={onChangeAlunoNome}
-                label="Criança/Estudante"
+                label="Crianças/Estudantes"
                 placeholder="Procure pelo nome da criança"
                 iconeBusca
                 allowClear
@@ -664,7 +657,11 @@ const ListaOcorrencias = () => {
                   semMargemDireita
                   border
                   onClick={onClickGerar}
-                  disabled={!ocorrenciasSelecionadas?.length}
+                  disabled={
+                    !ocorrenciasSelecionadas?.length ||
+                    ocorrenciasSelecionadas?.filter(d => !d?.alunoOcorrencia)
+                      ?.length === ocorrenciasSelecionadas?.length
+                  }
                 />
               </Loader>
             </Col>

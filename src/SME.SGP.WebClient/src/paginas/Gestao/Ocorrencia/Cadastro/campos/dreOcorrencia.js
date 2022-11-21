@@ -2,7 +2,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { Loader, SelectComponent } from '~/componentes';
 import { FiltroHelper } from '~/componentes-sgp';
-import { SGP_SELECT_DRE } from '~/componentes-sgp/filtro/idsCampos';
+import { SGP_SELECT_DRE } from '~/constantes/ids/select';
 import { AbrangenciaServico, erros } from '~/servicos';
 
 const DreOcorrencia = props => {

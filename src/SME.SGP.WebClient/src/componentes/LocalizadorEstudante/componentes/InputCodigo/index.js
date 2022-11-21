@@ -11,6 +11,7 @@ const InputCodigo = props => {
     onChange,
     desabilitado,
     exibirLoader,
+    id,
   } = props;
 
   const [valor, setValor] = useState('');
@@ -48,6 +49,7 @@ const InputCodigo = props => {
     <Loader loading={exibirLoader}>
       <InputRFEstilo>
         <Input
+          id={id}
           value={valor}
           placeholder="Digite o Código EOL"
           onChange={e => {
@@ -78,6 +80,7 @@ InputCodigo.propTypes = {
   onChange: PropTypes.func,
   desabilitado: PropTypes.bool,
   exibirLoader: PropTypes.bool,
+  id: PropTypes.string,
 };
 
 InputCodigo.defaultProps = {
@@ -86,6 +89,7 @@ InputCodigo.defaultProps = {
   onChange: () => {},
   desabilitado: false,
   exibirLoader: false,
+  id: '',
 };
 
 export default InputCodigo;

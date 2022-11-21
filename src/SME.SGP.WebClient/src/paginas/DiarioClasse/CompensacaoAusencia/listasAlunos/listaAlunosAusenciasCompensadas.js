@@ -2,6 +2,8 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import { DataTable, Label } from '~/componentes';
 import SelectComponent from '~/componentes/select';
+import { SGP_SELECT_FALTAS_COMPENSACAO } from '~/constantes/ids/select';
+import { SGP_TABLE_LISTA_ALUNOS_AUSENCIA_COMPENSADA } from '~/constantes/ids/table';
 
 import { CardTabelaAlunos } from '../styles';
 
@@ -50,6 +52,7 @@ const ListaAlunosAusenciasCompensadas = props => {
         lista={listaMaximoCompensar}
         valueSelect={qtCompensada || undefined}
         placeholder="Faltas"
+        id={SGP_SELECT_FALTAS_COMPENSACAO}
       />
     );
   };
@@ -79,7 +82,7 @@ const ListaAlunosAusenciasCompensadas = props => {
       <CardTabelaAlunos>
         <DataTable
           scroll={{ y: 420 }}
-          id="lista-alunos-ausencia-compensada"
+          id={SGP_TABLE_LISTA_ALUNOS_AUSENCIA_COMPENSADA}
           selectedRowKeys={idsAlunosAusenciaCompensadas}
           onSelectRow={onSelectRowAlunos}
           columns={colunasListaAlunosAusenciaCompensada}

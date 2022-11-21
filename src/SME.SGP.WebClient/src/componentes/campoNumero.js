@@ -124,6 +124,7 @@ const CampoNumero = React.forwardRef((props, ref) => {
           </>
         ) : (
           <InputNumber
+            id={id}
             name={name}
             ref={validateOnBlurInOnChange ? refInterno : ref}
             placeholder={placeholder}

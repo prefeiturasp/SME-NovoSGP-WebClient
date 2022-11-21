@@ -8,12 +8,33 @@ import {
 } from '~/componentes';
 import { FiltroHelper } from '~/componentes-sgp';
 import { OPCAO_TODOS } from '~/constantes/constantes';
+import {
+  SGP_CHECKBOX_EXIBIR_HISTORICO,
+  SGP_CHECKBOX_IMPRIMIR_ESTUDANTE_INATIVO,
+} from '~/constantes/ids/checkbox';
+import {
+  SGP_SELECT_ANO_LETIVO,
+  SGP_SELECT_DRE,
+  SGP_SELECT_MODALIDADE,
+  SGP_SELECT_MODELO_BOLETIM,
+  SGP_SELECT_OPCAO_ESTUDANTE,
+  SGP_SELECT_SEMESTRE,
+  SGP_SELECT_TURMA,
+  SGP_SELECT_UE,
+} from '~/constantes/ids/select';
 import { ModalidadeDTO } from '~/dtos';
 import { AbrangenciaServico, erros, ServicoFiltroRelatorio } from '~/servicos';
 import { ordenarDescPor } from '~/utils';
 import { AvisoBoletim } from './styles';
 
-const Filtros = ({ onFiltrar, filtrou, setFiltrou, cancelou, setCancelou }) => {
+const Filtros = ({
+  onFiltrar,
+  filtrou,
+  setFiltrou,
+  setModoEdicao,
+  cancelou,
+  setCancelou,
+}) => {
   const [anoAtual] = useState(window.moment().format('YYYY'));
   const [anoLetivo, setAnoLetivo] = useState();
   const [carregandoAnosLetivos, setCarregandoAnosLetivos] = useState(false);
@@ -25,7 +46,6 @@ const Filtros = ({ onFiltrar, filtrou, setFiltrou, cancelou, setCancelou }) => {
   const [consideraHistorico, setConsideraHistorico] = useState(false);
   const [desabilitarEstudante, setDesabilitarEstudante] = useState(false);
   const [dreCodigo, setDreCodigo] = useState();
-  const [dreId, setDreId] = useState('');
   const [listaAnosLetivo, setListaAnosLetivo] = useState([]);
   const [listaDres, setListaDres] = useState([]);
   const [listaModalidades, setListaModalidades] = useState([]);
@@ -34,7 +54,7 @@ const Filtros = ({ onFiltrar, filtrou, setFiltrou, cancelou, setCancelou }) => {
   const [listaUes, setListaUes] = useState([]);
   const [modalidadeId, setModalidadeId] = useState();
   const [quantidadeBoletimPorPagina, setQuantidadeBoletimPorPagina] = useState(
-    '1'
+    ''
   );
   const [semestre, setSemestre] = useState();
   const [opcaoEstudanteId, setOpcaoEstudanteId] = useState();
@@ -86,6 +106,11 @@ const Filtros = ({ onFiltrar, filtrou, setFiltrou, cancelou, setCancelou }) => {
 
     setListaTurmas([]);
     setTurmasId();
+
+    setQuantidadeBoletimPorPagina('');
+
+    setOpcaoEstudanteId();
+    setImprimirEstudantesInativos(false);
   };
 
   useEffect(() => {
@@ -124,15 +149,16 @@ const Filtros = ({ onFiltrar, filtrou, setFiltrou, cancelou, setCancelou }) => {
     setConsideraHistorico(e.target.checked);
     limparCampos();
     setDreCodigo();
-    setDreId();
     setFiltrou(false);
-    setListaDres([]);
+    setModoEdicao(true);
+    setQuantidadeBoletimPorPagina('');
   };
 
   const onChangeAnoLetivo = ano => {
-    setAnoLetivo(ano);
     limparCampos();
+    setAnoLetivo(ano);
     setFiltrou(false);
+    setModoEdicao(true);
   };
 
   const validarValorPadraoAnoLetivo = lista => {
@@ -180,11 +206,10 @@ const Filtros = ({ onFiltrar, filtrou, setFiltrou, cancelou, setCancelou }) => {
   }, [obterAnosLetivos, consideraHistorico]);
 
   const onChangeDre = dre => {
-    const id = listaDres.find(d => d.valor === dre)?.id;
-    setDreId(id);
     setDreCodigo(dre);
     limparCampos();
     setFiltrou(false);
+    setModoEdicao(true);
   };
 
   const obterDres = useCallback(async () => {
@@ -209,12 +234,10 @@ const Filtros = ({ onFiltrar, filtrou, setFiltrou, cancelou, setCancelou }) => {
 
         if (lista?.length === 1) {
           setDreCodigo(lista[0].valor);
-          setDreId(lista[0].id);
         }
         return;
       }
       setDreCodigo(undefined);
-      setDreId(undefined);
       setListaDres([]);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -234,6 +257,8 @@ const Filtros = ({ onFiltrar, filtrou, setFiltrou, cancelou, setCancelou }) => {
     setListaTurmas([]);
     setTurmasId();
     setFiltrou(false);
+    setQuantidadeBoletimPorPagina('');
+    setModoEdicao(true);
   };
 
   const obterUes = useCallback(async () => {
@@ -264,20 +289,22 @@ const Filtros = ({ onFiltrar, filtrou, setFiltrou, cancelou, setCancelou }) => {
       setListaUes([]);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [dreId, anoLetivo, consideraHistorico]);
+  }, [dreCodigo, anoLetivo, consideraHistorico]);
 
   useEffect(() => {
-    if (dreId) {
+    if (dreCodigo) {
       obterUes();
       return;
     }
     setListaUes([]);
-  }, [dreId, obterUes]);
+  }, [dreCodigo, obterUes]);
 
   const onChangeModalidade = valor => {
     setTurmasId();
     setModalidadeId(valor);
     setFiltrou(false);
+    setQuantidadeBoletimPorPagina('');
+    setModoEdicao(true);
   };
 
   const obterModalidades = useCallback(async (ue, considHistorico) => {
@@ -318,6 +345,8 @@ const Filtros = ({ onFiltrar, filtrou, setFiltrou, cancelou, setCancelou }) => {
   const onChangeSemestre = valor => {
     setSemestre(valor);
     setFiltrou(false);
+    setQuantidadeBoletimPorPagina('');
+    setModoEdicao(true);
   };
 
   const obterSemestres = async (
@@ -372,11 +401,14 @@ const Filtros = ({ onFiltrar, filtrou, setFiltrou, cancelou, setCancelou }) => {
     setOpcaoEstudanteId(OPCAO_TODOS_ESTUDANTES);
     setDesabilitarEstudante(temOpcaoTodas);
     setFiltrou(false);
+    setQuantidadeBoletimPorPagina('');
+    setModoEdicao(true);
   };
 
   const onChangeImprimirEstudantesInativos = valor => {
     setFiltrou(false);
     setImprimirEstudantesInativos(valor);
+    setModoEdicao(true);
   };
 
   const obterTurmas = useCallback(async () => {
@@ -411,11 +443,12 @@ const Filtros = ({ onFiltrar, filtrou, setFiltrou, cancelou, setCancelou }) => {
         setListaTurmas(lista);
         if (lista.length === 1) {
           setTurmasId(lista[0].valor);
+          setOpcaoEstudanteId(OPCAO_TODOS_ESTUDANTES);
         }
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [ueCodigo, dreId, consideraHistorico, anoLetivo, modalidadeId]);
+  }, [ueCodigo, dreCodigo, consideraHistorico, anoLetivo, modalidadeId]);
 
   useEffect(() => {
     if (ueCodigo) {
@@ -429,28 +462,31 @@ const Filtros = ({ onFiltrar, filtrou, setFiltrou, cancelou, setCancelou }) => {
   const onChangeOpcaoEstudante = valor => {
     setFiltrou(false);
     setOpcaoEstudanteId(valor);
+    setQuantidadeBoletimPorPagina('');
   };
 
   const onChangeQtdBoletinsPagina = valor => {
     setFiltrou(false);
     setQuantidadeBoletimPorPagina(valor);
+    setModoEdicao(true);
   };
 
   useEffect(() => {
     if (cancelou) {
       setConsideraHistorico(false);
       limparCampos();
-      setListaDres([]);
-      setDreCodigo();
-      setDreId();
       setAnoLetivo(anoAtual);
+      setDreCodigo();
+      obterDres();
+      setFiltrou(false);
       setCancelou(false);
       setFiltrou(false);
       setImprimirEstudantesInativos(false);
-      setQuantidadeBoletimPorPagina('1');
+      setQuantidadeBoletimPorPagina('');
       setOpcaoEstudanteId();
     }
-  }, [cancelou, setFiltrou, setCancelou, anoAtual]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [cancelou]);
 
   useEffect(() => {
     if (opcaoEstudanteId !== OPCAO_TODOS_ESTUDANTES) {
@@ -483,6 +519,7 @@ const Filtros = ({ onFiltrar, filtrou, setFiltrou, cancelou, setCancelou }) => {
       <div className="row mb-2">
         <div className="col-12">
           <CheckboxComponent
+            id={SGP_CHECKBOX_EXIBIR_HISTORICO}
             label="Exibir histórico?"
             onChangeCheckbox={onChangeConsideraHistorico}
             checked={consideraHistorico}
@@ -493,6 +530,7 @@ const Filtros = ({ onFiltrar, filtrou, setFiltrou, cancelou, setCancelou }) => {
         <div className="col-sm-12 col-md-2 col-lg-2 col-xl-2">
           <Loader loading={carregandoAnosLetivos} ignorarTip>
             <SelectComponent
+              id={SGP_SELECT_ANO_LETIVO}
               label="Ano Letivo"
               lista={listaAnosLetivo}
               valueOption="valor"
@@ -507,6 +545,7 @@ const Filtros = ({ onFiltrar, filtrou, setFiltrou, cancelou, setCancelou }) => {
         <div className="col-sm-12 col-md-5 col-lg-5 col-xl-5">
           <Loader loading={carregandoDres} ignorarTip>
             <SelectComponent
+              id={SGP_SELECT_DRE}
               label="Diretoria Regional de Educação (DRE)"
               lista={listaDres}
               valueOption="valor"
@@ -522,7 +561,7 @@ const Filtros = ({ onFiltrar, filtrou, setFiltrou, cancelou, setCancelou }) => {
         <div className="col-sm-12 col-md-5 col-lg-5 col-xl-5">
           <Loader loading={carregandoUes} ignorarTip>
             <SelectComponent
-              id="ue"
+              id={SGP_SELECT_UE}
               label="Unidade Escolar (UE)"
               lista={listaUes}
               valueOption="valor"
@@ -540,7 +579,7 @@ const Filtros = ({ onFiltrar, filtrou, setFiltrou, cancelou, setCancelou }) => {
         <div className="col-sm-12 col-md-4">
           <Loader loading={carregandoModalidade} ignorarTip>
             <SelectComponent
-              id="drop-modalidade"
+              id={SGP_SELECT_MODALIDADE}
               label="Modalidade"
               lista={listaModalidades}
               valueOption="valor"
@@ -555,7 +594,7 @@ const Filtros = ({ onFiltrar, filtrou, setFiltrou, cancelou, setCancelou }) => {
         <div className="col-sm-12 col-md-4">
           <Loader loading={carregandoSemestres} ignorarTip>
             <SelectComponent
-              id="drop-semestre"
+              id={SGP_SELECT_SEMESTRE}
               lista={listaSemestres}
               valueOption="valor"
               valueText="desc"
@@ -574,7 +613,7 @@ const Filtros = ({ onFiltrar, filtrou, setFiltrou, cancelou, setCancelou }) => {
         <div className="col-sm-12 col-md-4">
           <Loader loading={carregandoTurmas} ignorarTip>
             <SelectComponent
-              id="turma"
+              id={SGP_SELECT_TURMA}
               lista={listaTurmas}
               valueOption="valor"
               valueText="nomeFiltro"
@@ -591,6 +630,7 @@ const Filtros = ({ onFiltrar, filtrou, setFiltrou, cancelou, setCancelou }) => {
       <div className="row">
         <div className="col-sm-12 col-md-4">
           <SelectComponent
+            id={SGP_SELECT_OPCAO_ESTUDANTE}
             lista={opcoesEstudantes}
             valueOption="valor"
             valueText="desc"
@@ -603,19 +643,22 @@ const Filtros = ({ onFiltrar, filtrou, setFiltrou, cancelou, setCancelou }) => {
         </div>
         <div className="col-sm-12 col-md-4">
           <SelectComponent
+            id={SGP_SELECT_MODELO_BOLETIM}
             lista={listaQtdBoletinsPagina}
             valueOption="valor"
             valueText="desc"
             label="Qtde de boletins por página"
             disabled={!turmasId?.length || !opcaoEstudanteId}
-            valueSelect={quantidadeBoletimPorPagina}
+            valueSelect={quantidadeBoletimPorPagina || undefined}
             onChange={onChangeQtdBoletinsPagina}
             allowClear={false}
+            placeholder="Qtde de boletins por página"
           />
           <AvisoBoletim>{obterMensagemQtdBoletionsPagina()}</AvisoBoletim>
         </div>
         <div className="col-sm-12 col-md-4">
           <RadioGroupButton
+            id={SGP_CHECKBOX_IMPRIMIR_ESTUDANTE_INATIVO}
             label="Imprimir estudantes inativos"
             opcoes={opcoesImprimirEstudantesInativos}
             valorInicial
@@ -635,6 +678,7 @@ Filtros.propTypes = {
   onFiltrar: PropTypes.func,
   filtrou: PropTypes.bool,
   setFiltrou: PropTypes.func,
+  setModoEdicao: PropTypes.func,
   cancelou: PropTypes.bool,
   setCancelou: PropTypes.func,
 };
@@ -643,6 +687,7 @@ Filtros.defaultProps = {
   onFiltrar: () => {},
   filtrou: false,
   setFiltrou: () => {},
+  setModoEdicao: () => {},
   cancelou: false,
   setCancelou: () => {},
 };

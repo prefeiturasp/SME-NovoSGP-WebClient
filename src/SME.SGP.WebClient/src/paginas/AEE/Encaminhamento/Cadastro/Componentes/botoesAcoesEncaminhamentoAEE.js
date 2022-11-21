@@ -11,7 +11,7 @@ import {
   SGP_BUTTON_ENVIAR,
   SGP_BUTTON_INDEFERIR,
   SGP_BUTTON_SALVAR_RASCUNHO,
-} from '~/componentes-sgp/filtro/idsCampos';
+} from '~/constantes/ids/button';
 import Button from '~/componentes/button';
 import { Colors } from '~/componentes/colors';
 import { RotasDto } from '~/dtos';
