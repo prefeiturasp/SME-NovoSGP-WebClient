@@ -1,29 +1,24 @@
-export const setDreId = payload => ({
-  type: '@localizarEstudante/setDreId',
+export const setDre = payload => ({
+  type: '@localizarEstudante/setDre',
   payload,
 });
 
-export const setCodigoDre = payload => ({
-  type: '@localizarEstudante/setCodigoDre',
+export const setUe = payload => ({
+  type: '@localizarEstudante/setUe',
   payload,
 });
 
-export const setUeId = payload => ({
-  type: '@localizarEstudante/setUeId',
+export const setTurma = payload => ({
+  type: '@localizarEstudante/setTurma',
   payload,
 });
 
-export const setCodigoUe = payload => ({
-  type: '@localizarEstudante/setCodigoUe',
+export const setAluno = payload => ({
+  type: '@localizarEstudante/setAluno',
   payload,
 });
 
-export const setTurmaId = payload => ({
-  type: '@localizarEstudante/setTurmaId',
-  payload,
-});
-
-export const setCodigoTurma = payload => ({
-  type: '@localizarEstudante/setCodigoTurma',
+export const limparDados = payload => ({
+  type: '@localizarEstudante/limparDados',
   payload,
 });

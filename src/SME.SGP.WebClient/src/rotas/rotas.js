@@ -111,8 +111,7 @@ import RelatorioFrequenciaMensal from '~/paginas/Relatorios/Frequencia/relatorio
 import DashboardNAAPA from '~/paginas/Dashboard/DashboardNAAPA/dashboardNAAPA';
 import Suporte from '~/paginas/Configuracoes/Usuarios/Suporte/suporte';
 import ListaEncaminhamentoNAAPA from '~/paginas/NAAPA/Encaminhamento/Lista/listaEncaminhamentoNAAPA';
-import CadastroEncaminhamentoNAAPA from '~/paginas/NAAPA/Encaminhamento/Cadastro/cadastroEncaminhamentoNAAPA';
-import CadastroEncaminhamentoNAAPABusca from '~/paginas/NAAPA/Encaminhamento/Cadastro/cadastroEncaminhamentoNAAPABusca';
+import CadastroEncaminhamentoNAAPA from '~/paginas/NAAPA/Encaminhamento/Cadastro/encaminhamentoNAAPA';
 
 const rotas = new Map();
 
@@ -1562,27 +1561,27 @@ rotas.set(RotasDto.ENCAMINHAMENTO_NAAPA, {
   component: ListaEncaminhamentoNAAPA,
   exact: true,
   tipo: RotasTipo.EstruturadaAutenticada,
-  temPermissionamento: true,
+  temPermissionamento: false,
   chavePermissao: RotasDto.ENCAMINHAMENTO_NAAPA,
 });
 
 rotas.set(`${RotasDto.ENCAMINHAMENTO_NAAPA}/novo`, {
-  breadcrumbName: 'Cadastro',
-  parent: RotasDto.ENCAMINHAMENTO_NAAPA,
-  component: CadastroEncaminhamentoNAAPABusca,
-  exact: true,
-  tipo: RotasTipo.EstruturadaAutenticada,
-  temPermissionamento: true,
-  chavePermissao: RotasDto.ENCAMINHAMENTO_NAAPA,
-});
-
-rotas.set(`${RotasDto.ENCAMINHAMENTO_NAAPA}/:id`, {
-  breadcrumbName: 'Cadastro',
+  breadcrumbName: 'Novo encaminhamento',
   parent: RotasDto.ENCAMINHAMENTO_NAAPA,
   component: CadastroEncaminhamentoNAAPA,
   exact: true,
   tipo: RotasTipo.EstruturadaAutenticada,
-  temPermissionamento: true,
+  temPermissionamento: false,
+  chavePermissao: RotasDto.ENCAMINHAMENTO_NAAPA,
+});
+
+rotas.set(`${RotasDto.ENCAMINHAMENTO_NAAPA}/:id`, {
+  breadcrumbName: 'Editar',
+  parent: RotasDto.ENCAMINHAMENTO_NAAPA,
+  component: CadastroEncaminhamentoNAAPA,
+  exact: true,
+  tipo: RotasTipo.EstruturadaAutenticada,
+  temPermissionamento: false,
   chavePermissao: RotasDto.ENCAMINHAMENTO_NAAPA,
 });
 

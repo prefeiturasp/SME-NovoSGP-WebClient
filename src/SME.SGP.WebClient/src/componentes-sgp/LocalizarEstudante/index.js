@@ -1,4 +1,3 @@
-import PropTypes from 'prop-types';
 import React, { useState, useCallback, useEffect } from 'react';
 import { Col, Row } from 'antd';
 import { useSelector } from 'react-redux';
@@ -14,25 +13,16 @@ import { AbrangenciaServico, erros } from '~/servicos';
 import { FiltroHelper } from '..';
 import { store } from '~/redux';
 import {
-  setCodigoDre,
-  setCodigoTurma,
-  setCodigoUe,
-  setDreId,
-  setTurmaId,
-  setUeId,
+  setAluno,
+  setDre,
+  setTurma,
+  setUe,
 } from '~/redux/modulos/localizarEstudante/actions';
 
-const LocalizarEstudante = props => {
-  const {} = props;
-
+const LocalizarEstudante = () => {
   const [anoAtual] = useState(window.moment().format('YYYY'));
 
-  const listaAnosLetivo = [
-    {
-      label: anoAtual,
-      id: anoAtual,
-    },
-  ];
+  const listaAnosLetivo = [{ label: anoAtual, id: anoAtual }];
 
   const [carregandoDres, setCarregandoDres] = useState(false);
   const [carregandoUes, setCarregandoUes] = useState(false);
@@ -46,121 +36,106 @@ const LocalizarEstudante = props => {
   const [listaUes, setListaUes] = useState([]);
   const [listaTurmas, setListaTurmas] = useState([]);
 
-  const dreId = useSelector(state => state.localizarEstudante.dreId);
-  const codigoDre = useSelector(state => state.localizarEstudante.codigoDre);
-
-  const ueId = useSelector(state => state.localizarEstudante.ueId);
-  const codigoUe = useSelector(state => state.localizarEstudante.codigoUe);
-
-  const turmaId = useSelector(state => state.localizarEstudante.turmaId);
-  const codigoTurma = useSelector(
-    state => state.localizarEstudante.codigoTurma
-  );
+  const codigoDre = useSelector(state => state.localizarEstudante.dre)?.codigo;
+  const codigoUe = useSelector(state => state.localizarEstudante.ue)?.codigo;
+  const codigoTurma = useSelector(state => state.localizarEstudante.turma)
+    ?.codigo;
 
   const obterDres = useCallback(async () => {
-    if (anoAtual) {
-      setCarregandoDres(true);
+    setCarregandoDres(true);
 
-      const resposta = await AbrangenciaServico.buscarDres(
-        `v1/abrangencias/false/dres?anoLetivo=${anoAtual}`
-      )
-        .catch(e => erros(e))
-        .finally(() => setCarregandoDres(false));
+    const resposta = await AbrangenciaServico.buscarDres(
+      `v1/abrangencias/false/dres?anoLetivo=${anoAtual}`
+    )
+      .catch(e => erros(e))
+      .finally(() => setCarregandoDres(false));
 
-      if (resposta?.data?.length) {
-        const lista = resposta.data
-          .map(item => ({
-            nome: item.nome,
-            id: String(item.id),
-            codigo: String(item.codigo),
-          }))
-          .sort(FiltroHelper.ordenarLista('nome'));
-        setListaDres(lista);
+    if (resposta?.data?.length) {
+      const lista = resposta.data.sort(FiltroHelper.ordenarLista('nome'));
 
-        if (lista && lista.length && lista.length === 1) {
-          store.dispatch(setDreId(lista[0].id));
-          store.dispatch(setCodigoDre(lista[0].codigo));
-        }
-      } else {
-        setListaDres([]);
-        store.dispatch(setDreId());
-        store.dispatch(setCodigoDre());
+      if (lista?.length === 1) {
+        store.dispatch(setDre(lista[0]));
       }
+      setListaDres(lista);
+    } else {
+      setListaDres([]);
+      store.dispatch(setDre());
     }
   }, [anoAtual]);
 
   const obterUes = useCallback(async () => {
-    if (codigoDre && anoAtual) {
-      setCarregandoUes(true);
-      const resposta = await AbrangenciaServico.buscarUes(
-        codigoDre,
-        `v1/abrangencias/false/dres/${codigoDre}/ues?anoLetivo=${anoAtual}`,
-        true
-      )
-        .catch(e => erros(e))
-        .finally(() => setCarregandoUes(false));
+    setCarregandoUes(true);
+    const resposta = await AbrangenciaServico.buscarUes(
+      codigoDre,
+      `v1/abrangencias/false/dres/${codigoDre}/ues?anoLetivo=${anoAtual}`,
+      true
+    )
+      .catch(e => erros(e))
+      .finally(() => setCarregandoUes(false));
 
-      if (resposta?.data) {
-        const lista = resposta.data.map(item => ({
-          nome: item.nome,
-          id: String(item.id),
-          codigo: String(item.codigo),
-        }));
-
-        if (lista?.length === 1) {
-          store.dispatch(setUeId(lista[0].id));
-          store.dispatch(setCodigoUe(lista[0].codigo));
-        }
-
-        setListaUes(lista);
-      } else {
-        setListaUes([]);
+    if (resposta?.data?.length) {
+      if (resposta?.data?.length === 1) {
+        store.dispatch(setUe(resposta.data[0]));
       }
+
+      setListaUes(resposta.data);
+    } else {
+      setListaUes([]);
+      store.dispatch(setUe());
     }
   }, [codigoDre, anoAtual]);
 
   const obterTurmas = useCallback(async () => {
-    if (codigoUe) {
-      setCarregandoTurmas(true);
-      const resposta = await AbrangenciaServico.buscarTurmas(
-        codigoUe,
-        0,
-        '',
-        anoAtual,
-        false
-      )
-        .catch(e => erros(e))
-        .finally(() => setCarregandoTurmas(false));
+    setCarregandoTurmas(true);
+    const resposta = await AbrangenciaServico.buscarTurmas(
+      codigoUe,
+      0,
+      '',
+      anoAtual,
+      false
+    )
+      .catch(e => erros(e))
+      .finally(() => setCarregandoTurmas(false));
 
-      if (resposta?.data) {
-        setListaTurmas(resposta.data);
+    if (resposta?.data?.length) {
+      const lista = resposta.data.map(t => {
+        return { ...t, nome: t?.nomeFiltro };
+      });
 
-        if (resposta?.data.length === 1) {
-          store.dispatch(setTurmaId());
-          store.dispatch(setCodigoTurma());
-        }
+      if (lista?.length === 1) {
+        store.dispatch(setTurma(lista[0]));
       }
+      setListaTurmas(lista);
+    } else {
+      setListaTurmas([]);
+      store.dispatch(setTurma());
     }
   }, [codigoUe, anoAtual]);
 
-  const onChangeDre = dre => {
-    store.dispatch(setDreId(dre));
-    store.dispatch(setCodigoUe());
-    store.dispatch(setCodigoTurma());
+  const onChangeDre = id => {
+    const dreSelecionada = listaDres?.find(d => d?.id === id);
+
+    store.dispatch(setDre(dreSelecionada));
+    store.dispatch(setUe());
+    store.dispatch(setTurma());
 
     setListaUes([]);
     setListaTurmas([]);
   };
 
-  const onChangeUe = ue => {
-    store.dispatch(setCodigoUe(ue));
-    store.dispatch(setCodigoTurma());
+  const onChangeUe = codigo => {
+    const ueSelecionada = listaUes?.find(d => d?.codigo === codigo);
+
+    store.dispatch(setUe(ueSelecionada));
+    store.dispatch(setTurma());
 
     setListaTurmas([]);
   };
 
-  const onChangeTurma = turma => {
-    store.dispatch(setCodigoTurma(turma));
+  const onChangeTurma = codigo => {
+    const turmaSelecionada = listaTurmas?.find(d => d?.codigo === codigo);
+
+    store.dispatch(setTurma(turmaSelecionada));
   };
 
   const onChangeLocalizadorEstudante = aluno => {
@@ -170,8 +145,11 @@ const LocalizarEstudante = props => {
         codigoTurma: aluno?.codigoTurma,
         turmaId: aluno?.turmaId,
       });
+
+      store.dispatch(setAluno(aluno?.alunoCodigo));
     } else {
       setAlunoLocalizadorSelecionado();
+      store.dispatch(setAluno());
     }
   };
 
@@ -186,18 +164,20 @@ const LocalizarEstudante = props => {
       obterUes();
     } else {
       setListaUes([]);
-      store.dispatch(setCodigoUe());
+      store.dispatch(setUe());
     }
-  }, [codigoDre, anoAtual, obterUes]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [codigoDre]);
 
   useEffect(() => {
     if (codigoUe) {
       obterTurmas();
     } else {
       setListaTurmas([]);
-      store.dispatch(setCodigoTurma());
+      store.dispatch(setTurma());
     }
-  }, [codigoUe, obterTurmas]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [codigoUe]);
 
   return (
     <>
@@ -207,8 +187,8 @@ const LocalizarEstudante = props => {
             valueText="id"
             label="Ano letivo"
             valueOption="label"
-            lista={listaAnosLetivo}
             valueSelect={anoAtual}
+            lista={listaAnosLetivo}
             placeholder="Ano letivo"
             id={SGP_SELECT_ANO_LETIVO}
             disabled={listaAnosLetivo?.length === 1}
@@ -218,7 +198,6 @@ const LocalizarEstudante = props => {
         <Col sm={24} md={24} lg={10}>
           <Loader loading={carregandoDres} ignorarTip>
             <SelectComponent
-              showSearch
               valueText="nome"
               id={SGP_SELECT_DRE}
               valueOption="codigo"
@@ -235,7 +214,6 @@ const LocalizarEstudante = props => {
         <Col sm={24} md={24} lg={10}>
           <Loader loading={carregandoUes} ignorarTip>
             <SelectComponent
-              showSearch
               valueText="nome"
               id={SGP_SELECT_UE}
               valueOption="codigo"
@@ -255,11 +233,11 @@ const LocalizarEstudante = props => {
           <Loader loading={carregandoTurmas} ignorarTip>
             <SelectComponent
               label="Turma"
+              valueText="nome"
               placeholder="Turma"
               lista={listaTurmas}
               valueOption="codigo"
               id={SGP_SELECT_TURMA}
-              valueText="nomeFiltro"
               onChange={onChangeTurma}
               valueSelect={codigoTurma}
               disabled={listaTurmas?.length === 1}
@@ -267,16 +245,16 @@ const LocalizarEstudante = props => {
           </Loader>
         </Col>
 
-        <Col sm={24} md={24} lg={16}>
+        <Col sm={24} md={24} lg={16} style={{ padding: 0 }}>
           <LocalizadorEstudante
             showLabel
+            novaEstrutura
             anoLetivo={anoAtual}
-            id={SGP_SELECT_ESTUDANTE_CRIANCA}
             ueId={codigoDre ? codigoUe : ''}
+            id={SGP_SELECT_ESTUDANTE_CRIANCA}
+            labelAlunoNome="Criança/Estudante"
             onChange={onChangeLocalizadorEstudante}
-            // desabilitado={
-            //   !codigoUe || ((ehProfessor || ehProfessorInfantil) && !codigoTurma)
-            // }
+            placeholder="Procure pelo nome da criança"
             codigoTurma={codigoDre ? codigoTurma : ''}
             valorInicialAlunoCodigo={alunoLocalizadorSelecionado?.codigoAluno}
           />
@@ -285,9 +263,5 @@ const LocalizarEstudante = props => {
     </>
   );
 };
-
-LocalizarEstudante.propTypes = {};
-
-LocalizarEstudante.defaultProps = {};
 
 export default LocalizarEstudante;

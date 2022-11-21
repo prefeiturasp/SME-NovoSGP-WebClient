@@ -1,34 +1,44 @@
 import produce from 'immer';
 
 const inicial = {
-  dreId: 0,
-  codigoDre: 0,
-  ueId: 0,
-  codigoUe: 0,
-  turmaId: 0,
-  codigoTurma: 0,
+  dre: {
+    id: 0,
+    nome: '',
+    codigo: '',
+  },
+  ue: {
+    id: 0,
+    nome: '',
+    codigo: '',
+  },
+  turma: {
+    id: 0,
+    nome: '',
+    codigo: '',
+  },
+  codigoAluno: 0,
 };
 
 export default function localizarEstudante(state = inicial, action) {
   return produce(state, draft => {
     switch (action.type) {
-      case '@localizarEstudante/setDreId':
-        draft.dreId = action.payload;
+      case '@localizarEstudante/setDre':
+        draft.dre = action.payload;
         break;
-      case '@localizarEstudante/setCodigoDre':
-        draft.codigoDre = action.payload;
+      case '@localizarEstudante/setUe':
+        draft.ue = action.payload;
         break;
-      case '@localizarEstudante/setUeId':
-        draft.ueId = action.payload;
+      case '@localizarEstudante/setTurma':
+        draft.turma = action.payload;
         break;
-      case '@localizarEstudante/setCodigoUe':
-        draft.codigoUe = action.payload;
+      case '@localizarEstudante/setAluno':
+        draft.codigoAluno = action.payload;
         break;
-      case '@localizarEstudante/setTurmaId':
-        draft.turmaId = action.payload;
-        break;
-      case '@localizarEstudante/setCodigoTurma':
-        draft.codigoTurma = action.payload;
+      case '@localizarEstudante/limparDados':
+        draft.dre = inicial.dre;
+        draft.ue = inicial.ue;
+        draft.turma = inicial.turma;
+        draft.codigoAluno = inicial.codigoAluno;
         break;
       default:
         break;
