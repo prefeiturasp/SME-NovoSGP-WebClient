@@ -53,7 +53,7 @@ const ListaEncaminhamentoNAAPAPaginada = props => {
   if (ue?.codigo === OPCAO_TODOS) {
     colunas.unshift({
       title: 'Unidade Escolar (UE)',
-      dataIndex: 'ueNome',
+      dataIndex: 'ue',
       ellipsis: true,
     });
   }
