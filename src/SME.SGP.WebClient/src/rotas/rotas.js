@@ -111,7 +111,7 @@ import RelatorioFrequenciaMensal from '~/paginas/Relatorios/Frequencia/relatorio
 import DashboardNAAPA from '~/paginas/Dashboard/DashboardNAAPA/dashboardNAAPA';
 import Suporte from '~/paginas/Configuracoes/Usuarios/Suporte/suporte';
 import ListaEncaminhamentoNAAPA from '~/paginas/NAAPA/Encaminhamento/Lista/listaEncaminhamentoNAAPA';
-import CadastroEncaminhamentoNAAPA from '~/paginas/NAAPA/Encaminhamento/Cadastro/cadastroEncaminhamentoNAAPA';
+import CadastroEncaminhamentoNAAPA from '~/paginas/NAAPA/Encaminhamento/Cadastro/encaminhamentoNAAPA';
 
 const rotas = new Map();
 
@@ -1566,7 +1566,7 @@ rotas.set(RotasDto.ENCAMINHAMENTO_NAAPA, {
 });
 
 rotas.set(`${RotasDto.ENCAMINHAMENTO_NAAPA}/novo`, {
-  breadcrumbName: 'Cadastro',
+  breadcrumbName: 'Novo encaminhamento',
   parent: RotasDto.ENCAMINHAMENTO_NAAPA,
   component: CadastroEncaminhamentoNAAPA,
   exact: true,
@@ -1576,7 +1576,7 @@ rotas.set(`${RotasDto.ENCAMINHAMENTO_NAAPA}/novo`, {
 });
 
 rotas.set(`${RotasDto.ENCAMINHAMENTO_NAAPA}/:id`, {
-  breadcrumbName: 'Cadastro',
+  breadcrumbName: 'Editar',
   parent: RotasDto.ENCAMINHAMENTO_NAAPA,
   component: CadastroEncaminhamentoNAAPA,
   exact: true,

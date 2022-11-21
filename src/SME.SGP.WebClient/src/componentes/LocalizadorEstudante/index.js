@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
 import React, { useEffect, useState } from 'react';
+import { Col } from 'antd';
 import { Label } from '~/componentes';
 import { erros, erro } from '~/servicos/alertas';
 import InputCodigo from './componentes/InputCodigo';
@@ -25,6 +26,7 @@ const LocalizadorEstudante = props => {
     limparCamposAposPesquisa,
     labelAlunoNome,
     id,
+    novaEstrutura,
   } = props;
 
   const classeCodigo = semMargin
@@ -281,7 +283,41 @@ const LocalizadorEstudante = props => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [valorInicialAlunoCodigo, dataSource, pessoaSelecionada]);
 
-  return (
+  return novaEstrutura ? (
+    <>
+      <Col sm={24} md={24} lg={exibirCodigoEOL ? 16 : 24}>
+        {showLabel && <Label text={labelAlunoNome} control="alunoNome" />}
+
+        <InputNome
+          id={id}
+          placeholder={placeholder}
+          dataSource={dataSource}
+          onSelect={onSelectPessoa}
+          onChange={validaAntesBuscarPorNome}
+          pessoaSelecionada={pessoaSelecionada}
+          name="alunoNome"
+          desabilitado={desabilitado || desabilitarCampo.nome}
+          regexIgnore={/\d+/}
+          exibirLoader={exibirLoader}
+        />
+      </Col>
+
+      {exibirCodigoEOL && (
+        <Col sm={24} md={24} lg={8}>
+          {showLabel && <Label text="Código EOL" control="alunoCodigo" />}
+          <InputCodigo
+            id={SGP_INPUT_CODIGO_EOL}
+            pessoaSelecionada={pessoaSelecionada}
+            onSelect={validaAntesBuscarPorCodigo}
+            onChange={onChangeCodigo}
+            name="alunoCodigo"
+            desabilitado={desabilitado || desabilitarCampo.codigo}
+            exibirLoader={exibirLoader}
+          />
+        </Col>
+      )}
+    </>
+  ) : (
     <React.Fragment>
       <div
         className={`${
@@ -339,6 +375,7 @@ LocalizadorEstudante.propTypes = {
   limparCamposAposPesquisa: PropTypes.bool,
   labelAlunoNome: PropTypes.string,
   id: PropTypes.string,
+  novaEstrutura: PropTypes.bool,
 };
 
 LocalizadorEstudante.defaultProps = {
@@ -355,6 +392,7 @@ LocalizadorEstudante.defaultProps = {
   limparCamposAposPesquisa: false,
   labelAlunoNome: 'Nome',
   id: '',
+  novaEstrutura: false,
 };
 
 export default LocalizadorEstudante;
