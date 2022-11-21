@@ -1,6 +1,7 @@
 /* eslint-disable react/prop-types */
 import { Col, Row } from 'antd';
 import React from 'react';
+import { useSelector } from 'react-redux';
 import { useRouteMatch } from 'react-router-dom';
 import { Button, Colors } from '~/componentes';
 import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
@@ -20,8 +21,10 @@ const CadastroEncaminhamentoNAAPABotoesAcao = props => {
 
   const routeMatch = useRouteMatch();
 
+  const aluno = useSelector(state => state.localizarEstudante.codigoAluno);
+
   const encaminhamentoId = routeMatch.params?.id;
-  const desabilitarNovo = somenteConsulta || !podeIncluir;
+  const desabilitarNovo = somenteConsulta || !podeIncluir || !aluno;
 
   const onClickVoltar = () => history.push(RotasDto.ENCAMINHAMENTO_NAAPA);
 
@@ -46,13 +49,13 @@ const CadastroEncaminhamentoNAAPABotoesAcao = props => {
       {mostrarBusca ? (
         <Col>
           <Button
-            id={SGP_BUTTON_PROXIMO_PASSO}
-            label="Próximo passo"
-            color={Colors.Roxo}
-            border
             bold
-            onClick={onClickProximoPasso}
+            border
+            color={Colors.Roxo}
+            label="Próximo passo"
             disabled={desabilitarNovo}
+            onClick={onClickProximoPasso}
+            id={SGP_BUTTON_PROXIMO_PASSO}
           />
         </Col>
       ) : (
