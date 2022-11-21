@@ -9,6 +9,7 @@ import MontarDadosTabs from './componentes/montarDadosTabs/montarDadosTabs';
 import ServicoNAAPA from '~/servicos/Paginas/Gestao/NAAPA/ServicoNAAPA';
 import { store } from '~/redux';
 import { setDadosEncaminhamentoNAAPA } from '~/redux/modulos/encaminhamentoNAAPA/actions';
+import { erros } from '~/servicos';
 
 const CadastroEncaminhamentoNAAPA = () => {
   const routeMatch = useRouteMatch();
@@ -20,7 +21,7 @@ const CadastroEncaminhamentoNAAPA = () => {
   );
 
   const dadosEncaminhamentoNAAPA = useSelector(
-    state => state.setDadosEncaminhamentoNAAPA
+    state => state.encaminhamentoNAAPA.dadosEncaminhamentoNAAPA
   );
 
   const listaDres = dadosEncaminhamentoNAAPA
@@ -33,7 +34,7 @@ const CadastroEncaminhamentoNAAPA = () => {
   const obterDadosEncaminhamentoNAAPA = useCallback(async () => {
     const resposta = await ServicoNAAPA.obterDadosEncaminhamentoNAAPA(
       encaminhamentoId
-    );
+    ).catch(e => erros(e));
 
     if (resposta?.data?.length) {
       store.dispatch(setDadosEncaminhamentoNAAPA(resposta.data));
@@ -84,25 +85,25 @@ const CadastroEncaminhamentoNAAPA = () => {
         </Col>
       </Row>
 
-      <Row gutter={[16, 16]}>
+      <Row>
         <Col sm={24}>
           <ObjectCardEstudante
-            anoLetivo={dadosEncaminhamentoNAAPA.anoLetivo}
             exibirFrequencia={false}
             exibirBotaoImprimir={false}
             permiteAlterarImagem={false}
-            codigoAluno={dadosEncaminhamentoNAAPA.aluno?.codigoAluno}
+            anoLetivo={dadosEncaminhamentoNAAPA.anoLetivo}
             codigoTurma={dadosEncaminhamentoNAAPA.turma?.codigo}
+            codigoAluno={dadosEncaminhamentoNAAPA.aluno?.codigoAluno}
           />
         </Col>
       </Row>
 
-      <Row gutter={[16, 16]}>
+      <Row>
         <Col sm={24}>
           <MontarDadosTabs
             anoLetivo={dadosEncaminhamentoNAAPA.anoLetivo}
-            codigoAluno={dadosEncaminhamentoNAAPA.aluno?.codigoAluno}
             codigoTurma={dadosEncaminhamentoNAAPA.turma?.codigo}
+            codigoAluno={dadosEncaminhamentoNAAPA.aluno?.codigoAluno}
           />
         </Col>
       </Row>

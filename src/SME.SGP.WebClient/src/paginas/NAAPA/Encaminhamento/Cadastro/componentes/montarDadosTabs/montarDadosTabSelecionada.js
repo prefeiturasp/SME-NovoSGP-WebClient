@@ -1,9 +1,14 @@
 /* eslint-disable react/prop-types */
 import React, { useEffect, useCallback } from 'react';
+import { useSelector } from 'react-redux';
 import ServicoNAAPA from '~/servicos/Paginas/Gestao/NAAPA/ServicoNAAPA';
 
 const MontarDadosTabSelecionada = props => {
-  const { questionarioId, codigoAluno, codigoTurma } = props;
+  const { questionarioId } = props;
+
+  const { codigoAluno, codigoTurma } = useSelector(
+    state => state.encaminhamentoNAAPA.dadosEncaminhamentoNAAPA
+  );
 
   const obterDadosQuestionarioId = useCallback(async () => {
     const resposta = await ServicoNAAPA.obterDadosQuestionarioId(
@@ -15,10 +20,12 @@ const MontarDadosTabSelecionada = props => {
     if (resposta?.data?.length) {
       console.log(resposta.data);
     }
-  }, [questionarioId]);
+  }, [questionarioId, codigoAluno, codigoTurma]);
 
   useEffect(() => {
-    if (questionarioId) obterDadosQuestionarioId();
+    if (questionarioId) {
+      obterDadosQuestionarioId();
+    }
   }, [questionarioId, obterDadosQuestionarioId]);
 
   return <div>montarDadosTabSelecionada</div>;

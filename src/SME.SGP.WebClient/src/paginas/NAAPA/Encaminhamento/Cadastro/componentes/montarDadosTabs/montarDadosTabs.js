@@ -10,16 +10,17 @@ import MontarDadosTabSelecionada from './montarDadosTabSelecionada';
 
 const { TabPane } = Tabs;
 
-const MontarDadosTabs = props => {
-  // eslint-disable-next-line react/prop-types
-  const { codigoAluno, anoLetivo, codigoTurma } = props;
+const MontarDadosTabs = () => {
+  const { aluno, anoLetivo } = useSelector(
+    state => state.encaminhamentoNAAPA.dadosEncaminhamentoNAAPA
+  );
 
   const routeMatch = useRouteMatch();
   const dispatch = useDispatch();
 
   const encaminhamentoId = routeMatch?.params?.id || 0;
 
-  const [tabAtual, setTabAtual] = useState();
+  const [tabAtiva, setTabAtiva] = useState();
 
   const dadosSecoesEncaminhamentoNAAPA = useSelector(
     store => store.encaminhamentoNAAPA.dadosSecoesEncaminhamentoNAAPA
@@ -34,31 +35,27 @@ const MontarDadosTabs = props => {
   }, [dispatch, encaminhamentoId]);
 
   useEffect(() => {
-    if (codigoAluno && anoLetivo) {
+    if (aluno?.codigoAluno && anoLetivo) {
       obterSecoes();
     } else {
       dispatch(setDadosSecoesEncaminhamentoNAAPA([]));
     }
-  }, [dispatch, obterSecoes, codigoAluno, anoLetivo]);
+  }, [dispatch, obterSecoes, aluno, anoLetivo]);
 
-  const onChangeTab = tabAtiva => {
-    setTabAtual(tabAtiva);
+  const onChangeTab = tabIndex => {
+    setTabAtiva(tabIndex);
   };
 
   return (
-    <ContainerTabsCard type="card" onChange={onChangeTab} activeKey={tabAtual}>
+    <ContainerTabsCard type="card" onChange={onChangeTab} activeKey={tabAtiva}>
       {dadosSecoesEncaminhamentoNAAPA?.map(tab => {
         const questionarioId = tab?.questionarioId;
         const nomeTab = tab?.nome;
 
         return (
           <TabPane tab={nomeTab} key={questionarioId}>
-            {questionarioId == tabAtual && (
-              <MontarDadosTabSelecionada
-                questionarioId={questionarioId}
-                codigoAluno={codigoAluno}
-                codigoTurma={codigoTurma}
-              />
+            {questionarioId === tabAtiva && (
+              <MontarDadosTabSelecionada questionarioId={questionarioId} />
             )}
           </TabPane>
         );

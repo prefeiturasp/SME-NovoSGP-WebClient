@@ -242,7 +242,7 @@ const LocalizarEstudante = () => {
               id={SGP_SELECT_TURMA}
               onChange={onChangeTurma}
               valueSelect={codigoTurma}
-              disabled={listaTurmas?.length === 1}
+              disabled={!codigoUe || listaTurmas?.length === 1}
             />
           </Loader>
         </Col>
@@ -252,6 +252,7 @@ const LocalizarEstudante = () => {
             showLabel
             novaEstrutura
             anoLetivo={anoAtual}
+            desabilitado={!codigoTurma}
             ueId={codigoDre ? codigoUe : ''}
             id={SGP_SELECT_ESTUDANTE_CRIANCA}
             labelAlunoNome="Criança/Estudante"
