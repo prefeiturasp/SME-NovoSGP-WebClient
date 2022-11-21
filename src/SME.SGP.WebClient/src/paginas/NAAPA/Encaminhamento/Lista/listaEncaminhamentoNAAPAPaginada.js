@@ -64,7 +64,7 @@ const ListaEncaminhamentoNAAPAPaginada = props => {
       anoLetivo,
       dreId: dre?.id,
       codigoUe: ue?.codigo,
-      turmaId,
+      turmaId: turmaId === OPCAO_TODOS ? '' : turmaId,
       nomeAluno,
       dataAberturaQueixaInicio,
       dataAberturaQueixaFim,
