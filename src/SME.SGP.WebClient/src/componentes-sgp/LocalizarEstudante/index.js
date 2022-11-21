@@ -17,6 +17,7 @@ import {
   setDre,
   setTurma,
   setUe,
+  setAnoLetivo,
 } from '~/redux/modulos/localizarEstudante/actions';
 
 const LocalizarEstudante = () => {
@@ -112,8 +113,8 @@ const LocalizarEstudante = () => {
     }
   }, [codigoUe, anoAtual]);
 
-  const onChangeDre = id => {
-    const dreSelecionada = listaDres?.find(d => d?.id === id);
+  const onChangeDre = codigo => {
+    const dreSelecionada = listaDres?.find(d => d?.codigo === codigo);
 
     store.dispatch(setDre(dreSelecionada));
     store.dispatch(setUe());
@@ -140,13 +141,13 @@ const LocalizarEstudante = () => {
 
   const onChangeLocalizadorEstudante = aluno => {
     if (aluno?.alunoCodigo && aluno?.alunoNome) {
-      setAlunoLocalizadorSelecionado({
+      const dados = {
         codigoAluno: aluno?.alunoCodigo,
         codigoTurma: aluno?.codigoTurma,
         turmaId: aluno?.turmaId,
-      });
-
-      store.dispatch(setAluno(aluno?.alunoCodigo));
+      };
+      setAlunoLocalizadorSelecionado(dados);
+      store.dispatch(setAluno(dados));
     } else {
       setAlunoLocalizadorSelecionado();
       store.dispatch(setAluno());
@@ -156,6 +157,7 @@ const LocalizarEstudante = () => {
   useEffect(() => {
     if (anoAtual) {
       obterDres();
+      store.dispatch(setAnoLetivo(anoAtual));
     }
   }, [anoAtual, obterDres]);
 

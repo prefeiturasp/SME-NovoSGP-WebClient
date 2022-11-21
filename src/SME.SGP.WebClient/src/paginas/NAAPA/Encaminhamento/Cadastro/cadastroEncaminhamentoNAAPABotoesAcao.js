@@ -21,10 +21,11 @@ const CadastroEncaminhamentoNAAPABotoesAcao = props => {
 
   const routeMatch = useRouteMatch();
 
-  const aluno = useSelector(state => state.localizarEstudante.codigoAluno);
+  const aluno = useSelector(state => state.localizarEstudante.aluno);
 
   const encaminhamentoId = routeMatch.params?.id;
-  const desabilitarNovo = somenteConsulta || !podeIncluir || !aluno;
+  const desabilitarNovo =
+    somenteConsulta || !podeIncluir || !aluno?.codigoAluno;
 
   const onClickVoltar = () => history.push(RotasDto.ENCAMINHAMENTO_NAAPA);
 

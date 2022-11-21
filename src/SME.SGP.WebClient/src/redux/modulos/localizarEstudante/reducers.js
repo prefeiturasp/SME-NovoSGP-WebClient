@@ -1,6 +1,7 @@
 import produce from 'immer';
 
 const inicial = {
+  anoLetivo: 0,
   dre: {
     id: 0,
     nome: '',
@@ -16,12 +17,15 @@ const inicial = {
     nome: '',
     codigo: '',
   },
-  codigoAluno: 0,
+  aluno: {},
 };
 
 export default function localizarEstudante(state = inicial, action) {
   return produce(state, draft => {
     switch (action.type) {
+      case '@localizarEstudante/setAnoLetivo':
+        draft.anoLetivo = action.payload;
+        break;
       case '@localizarEstudante/setDre':
         draft.dre = action.payload;
         break;
@@ -32,13 +36,14 @@ export default function localizarEstudante(state = inicial, action) {
         draft.turma = action.payload;
         break;
       case '@localizarEstudante/setAluno':
-        draft.codigoAluno = action.payload;
+        draft.aluno = action.payload;
         break;
       case '@localizarEstudante/limparDados':
+        draft.anoLetivo = inicial.anoLetivo;
         draft.dre = inicial.dre;
         draft.ue = inicial.ue;
         draft.turma = inicial.turma;
-        draft.codigoAluno = inicial.codigoAluno;
+        draft.aluno = inicial.aluno;
         break;
       default:
         break;
