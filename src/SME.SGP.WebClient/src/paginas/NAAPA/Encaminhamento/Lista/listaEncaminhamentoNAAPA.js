@@ -35,7 +35,7 @@ import ListaEncaminhamentoNAAPAPaginada from './listaEncaminhamentoNAAPAPaginada
 const ListaEncaminhamentoNAAPA = () => {
   const usuario = useSelector(state => state.usuario);
   const { permissoes } = usuario;
-  const { podeIncluir } = permissoes?.[RotasDto.OCORRENCIAS];
+  const { podeIncluir } = permissoes?.[RotasDto.ENCAMINHAMENTO_NAAPA];
 
   const [consideraHistorico, setConsideraHistorico] = useState(false);
   const [anoLetivo, setAnoLetivo] = useState();

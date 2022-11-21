@@ -15,7 +15,7 @@ const EncaminhamentoNAAPA = () => {
   const usuario = useSelector(state => state.usuario);
 
   const { permissoes } = usuario;
-  const { podeIncluir } = permissoes?.[RotasDto.OCORRENCIAS];
+  const { podeIncluir } = permissoes?.[RotasDto.ENCAMINHAMENTO_NAAPA];
 
   const routeMatch = useRouteMatch();
 
