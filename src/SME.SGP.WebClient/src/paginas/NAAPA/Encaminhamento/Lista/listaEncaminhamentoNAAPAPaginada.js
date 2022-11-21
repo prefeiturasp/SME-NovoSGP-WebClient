@@ -53,25 +53,21 @@ const ListaEncaminhamentoNAAPAPaginada = props => {
   if (ue?.codigo === OPCAO_TODOS) {
     colunas.unshift({
       title: 'Unidade Escolar (UE)',
-      dataIndex: 'ue',
+      dataIndex: 'ueNome',
       ellipsis: true,
     });
   }
 
   const filtrar = useCallback(() => {
     const params = {
-      consideraHistorico,
+      exibirHistorico: consideraHistorico,
       anoLetivo,
       dreId: dre?.id,
-      ueId: ue?.id,
+      codigoUe: ue?.codigo,
       turmaId,
       nomeAluno,
-      dataAberturaQueixaInicio: dataAberturaQueixaInicio
-        ? dataAberturaQueixaInicio?.format('YYYY-MM-DD')
-        : '',
-      dataAberturaQueixaFim: dataAberturaQueixaFim
-        ? dataAberturaQueixaFim?.format('YYYY-MM-DD')
-        : '',
+      dataAberturaQueixaInicio,
+      dataAberturaQueixaFim,
       situacao,
       prioridade,
     };
@@ -98,7 +94,6 @@ const ListaEncaminhamentoNAAPAPaginada = props => {
     <ListaPaginada
       url="v1/encaminhamento-naapa"
       id={SGP_TABLE_ENCAMINHAMENTO_NAAPA}
-      colunaChave="encaminhamentoNAAPAId"
       colunas={colunas}
       filtro={filtros}
       onClick={linha =>

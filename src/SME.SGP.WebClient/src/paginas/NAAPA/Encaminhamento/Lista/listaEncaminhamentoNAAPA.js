@@ -456,7 +456,7 @@ const ListaEncaminhamentoNAAPA = () => {
                 allowClear
                 valueOption="id"
                 label="Prioridade"
-                valueText="descricao"
+                valueText="nome"
                 disabled={!ue?.codigo}
                 placeholder="Prioridade"
                 lista={listaPrioridades}
