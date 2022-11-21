@@ -60,18 +60,14 @@ const ListaEncaminhamentoNAAPAPaginada = props => {
 
   const filtrar = useCallback(() => {
     const params = {
-      consideraHistorico,
+      exibirHistorico: consideraHistorico,
       anoLetivo,
       dreId: dre?.id,
-      ueId: ue?.id,
-      turmaId,
+      codigoUe: ue?.codigo,
+      turmaId: turmaId === OPCAO_TODOS ? '' : turmaId,
       nomeAluno,
-      dataAberturaQueixaInicio: dataAberturaQueixaInicio
-        ? dataAberturaQueixaInicio?.format('YYYY-MM-DD')
-        : '',
-      dataAberturaQueixaFim: dataAberturaQueixaFim
-        ? dataAberturaQueixaFim?.format('YYYY-MM-DD')
-        : '',
+      dataAberturaQueixaInicio,
+      dataAberturaQueixaFim,
       situacao,
       prioridade,
     };
@@ -94,11 +90,10 @@ const ListaEncaminhamentoNAAPAPaginada = props => {
     filtrar();
   }, [filtrar]);
 
-  return filtros?.anoLetivo && filtros?.dreId && filtros?.ueId ? (
+  return filtros?.anoLetivo && filtros?.dreId && filtros?.codigoUe ? (
     <ListaPaginada
       url="v1/encaminhamento-naapa"
       id={SGP_TABLE_ENCAMINHAMENTO_NAAPA}
-      colunaChave="encaminhamentoNAAPAId"
       colunas={colunas}
       filtro={filtros}
       onClick={linha =>

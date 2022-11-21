@@ -1,33 +1,11 @@
-class ServicoNAAPA {
-  buscarSituacoes = () => {
-    const mock = [
-      {
-        descricao: 'SITUAÇÃO 01',
-        id: 1,
-      },
-      { descricao: 'SITUAÇÃO 02', id: 2 },
-    ];
-    return new Promise(resolve => {
-      setTimeout(() => {
-        resolve({ data: mock });
-      }, 2000);
-    });
-  };
+import api from '~/servicos/api';
 
-  buscarPrioridades = () => {
-    const mock = [
-      {
-        descricao: 'PRIORIDADE 01',
-        id: 1,
-      },
-      { descricao: 'PRIORIDADE 02', id: 2 },
-    ];
-    return new Promise(resolve => {
-      setTimeout(() => {
-        resolve({ data: mock });
-      }, 2000);
-    });
-  };
+const URL_PADRAO = 'v1/encaminhamento-naapa';
+
+class ServicoNAAPA {
+  buscarSituacoes = () => api.get(`${URL_PADRAO}/situacoes`);
+
+  buscarPrioridades = () => api.get(`${URL_PADRAO}/prioridades`);
 }
 
 export default new ServicoNAAPA();
