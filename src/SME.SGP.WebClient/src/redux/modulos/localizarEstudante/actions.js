@@ -1,3 +1,8 @@
+export const setAnoLetivo = payload => ({
+  type: '@localizarEstudante/setAnoLetivo',
+  payload,
+});
+
 export const setDre = payload => ({
   type: '@localizarEstudante/setDre',
   payload,

@@ -26,6 +26,7 @@ import planoAnual from './anual/reducers';
 import frequenciaPlanoAula from './frequenciaPlanoAula/reducers';
 import dashboardEscolaAqui from './dashboardEscolaAqui/reducers';
 import encaminhamentoAEE from './encaminhamentoAEE/reducers';
+import encaminhamentoNAAPA from './encaminhamentoNAAPA/reducers';
 import planoAEE from './planoAEE/reducers';
 import registroIndividual from './registroIndividual/reducers';
 import collapseLocalizarEstudante from './collapseLocalizarEstudante/reducers';
@@ -74,6 +75,7 @@ const reducers = combineReducers({
   frequenciaPlanoAula,
   dashboardEscolaAqui,
   encaminhamentoAEE,
+  encaminhamentoNAAPA,
   planoAEE,
   registroIndividual,
   collapseLocalizarEstudante,
