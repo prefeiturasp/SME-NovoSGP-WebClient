@@ -3,15 +3,7 @@ import React from 'react';
 import { CampoTexto } from '~/componentes';
 
 const CampoDinamicoFrase = props => {
-  const {
-    questaoAtual,
-    form,
-    label,
-    disabled,
-    onChange,
-    maxLength,
-    type,
-  } = props;
+  const { questaoAtual, form, label, disabled, onChange, maxLength } = props;
 
   return (
     <div className="col-md-12 mb-3">
@@ -19,10 +11,9 @@ const CampoDinamicoFrase = props => {
       <CampoTexto
         form={form}
         onChange={onChange}
-        type={type || 'text'}
+        maxLength={maxLength}
         id={String(questaoAtual?.id)}
         name={String(questaoAtual?.id)}
-        maxLength={maxLength || 999999}
         desabilitado={disabled || questaoAtual.somenteLeitura}
       />
     </div>
@@ -32,7 +23,6 @@ const CampoDinamicoFrase = props => {
 CampoDinamicoFrase.propTypes = {
   label: PropTypes.oneOfType([PropTypes.any]),
   form: PropTypes.oneOfType([PropTypes.any]),
-  type: PropTypes.string,
   disabled: PropTypes.bool,
   maxLength: PropTypes.number,
   onChange: PropTypes.func,
@@ -42,7 +32,6 @@ CampoDinamicoFrase.propTypes = {
 CampoDinamicoFrase.defaultProps = {
   label: '',
   form: null,
-  type: 'text',
   disabled: false,
   maxLength: 999999,
   onChange: () => {},

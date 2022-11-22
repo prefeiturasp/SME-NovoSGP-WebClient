@@ -1,43 +1,129 @@
 /* eslint-disable react/prop-types */
 import { Col, Row } from 'antd';
-import React from 'react';
-import { useSelector } from 'react-redux';
+import React, { useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import { useRouteMatch } from 'react-router-dom';
 import { Button, Colors } from '~/componentes';
 import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
 import {
   SGP_BUTTON_CANCELAR,
   SGP_BUTTON_ENVIAR,
-  SGP_BUTTON_EXCLUIR,
   SGP_BUTTON_PROXIMO_PASSO,
   SGP_BUTTON_SALVAR_RASCUNHO,
 } from '~/constantes/ids/button';
-import { history } from '~/servicos';
+import {
+  history,
+  verificaSomenteConsulta,
+  confirmar,
+  sucesso,
+  erros,
+} from '~/servicos';
 import BotaoExcluirPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoExcluirPadrao';
 import { RotasDto } from '~/dtos';
+import ServicoNAAPA from '~/servicos/Paginas/Gestao/NAAPA/ServicoNAAPA';
+import { setDesabilitarCamposEncaminhamentoNAAPA } from '~/redux/modulos/encaminhamentoNAAPA/actions';
+import QuestionarioDinamicoFuncoes from '~/componentes-sgp/QuestionarioDinamico/Funcoes/QuestionarioDinamicoFuncoes';
 
 const CadastroEncaminhamentoNAAPABotoesAcao = props => {
-  const { somenteConsulta, podeIncluir, mostrarBusca, setMostrarBusca } = props;
+  const { mostrarBusca, setMostrarBusca } = props;
 
   const routeMatch = useRouteMatch();
+  const dispatch = useDispatch();
 
   const aluno = useSelector(state => state.localizarEstudante.aluno);
 
-  const encaminhamentoId = routeMatch.params?.id;
-  const desabilitarNovo =
-    somenteConsulta || !podeIncluir || !aluno?.codigoAluno;
+  const usuario = useSelector(state => state.usuario);
 
-  const onClickVoltar = () => history.push(RotasDto.ENCAMINHAMENTO_NAAPA);
+  const permissoesTela = usuario.permissoes[RotasDto.ENCAMINHAMENTO_NAAPA];
+
+  const questionarioDinamicoEmEdicao = useSelector(
+    store => store.questionarioDinamico.questionarioDinamicoEmEdicao
+  );
+
+  const desabilitarCamposEncaminhamentoNAAPA = useSelector(
+    store => store.encaminhamentoNAAPA.desabilitarCamposEncaminhamentoNAAPA
+  );
+
+  const encaminhamentoId = routeMatch.params?.id;
+
+  const desabilitarProximoPasso =
+    desabilitarCamposEncaminhamentoNAAPA || !aluno?.codigoAluno;
+
+  useEffect(() => {
+    const soConsulta = verificaSomenteConsulta(permissoesTela);
+    const desabilitar =
+      encaminhamentoId > 0
+        ? soConsulta || !permissoesTela.podeAlterar
+        : soConsulta || !permissoesTela.podeIncluir;
+    dispatch(setDesabilitarCamposEncaminhamentoNAAPA(desabilitar));
+  }, [encaminhamentoId, permissoesTela, dispatch]);
 
   const onClickProximoPasso = () => {
     setMostrarBusca(false);
   };
 
-  const onClickExcluir = () => {};
+  const onClickVoltar = async () => {
+    if (questionarioDinamicoEmEdicao) {
+      const confirmou = await confirmar(
+        'Atenção',
+        '',
+        'Suas alterações não foram salvas, deseja salvar agora?'
+      );
 
-  const onClickCancelar = () => {};
+      if (confirmou) {
+        const salvou = await ServicoNAAPA.salvarEncaminhamento();
 
-  const onClickSalvarRascunho = () => {};
+        if (salvou) {
+          let mensagem = 'Registro salvo com sucesso';
+          if (encaminhamentoId) {
+            mensagem = 'Registro alterado com sucesso';
+          }
+          sucesso(mensagem);
+          history.push(RotasDto.ENCAMINHAMENTO_NAAPA);
+        }
+      } else {
+        history.push(RotasDto.ENCAMINHAMENTO_NAAPA);
+      }
+    } else {
+      history.push(RotasDto.ENCAMINHAMENTO_NAAPA);
+    }
+  };
+
+  const onClickExcluir = async () => {
+    const confirmado = await confirmar(
+      'Excluir',
+      '',
+      'Você tem certeza que deseja excluir este encaminhamento?'
+    );
+    if (confirmado) {
+      const resultado = await ServicoNAAPA.excluirEncaminhamento(
+        encaminhamentoId
+      ).catch(e => {
+        erros(e);
+      });
+      if (resultado?.status === 200) {
+        sucesso('Plano excluído com sucesso');
+        history.push(RotasDto.RELATORIO_AEE_PLANO);
+      }
+    }
+  };
+
+  const onClickCancelar = async () => {
+    if (!desabilitarCamposEncaminhamentoNAAPA && questionarioDinamicoEmEdicao) {
+      const confirmou = await confirmar(
+        'Atenção',
+        'Você não salvou as informações preenchidas.',
+        'Deseja realmente cancelar as alterações?'
+      );
+      if (confirmou) {
+        QuestionarioDinamicoFuncoes.limparDadosOriginaisQuestionarioDinamico();
+      }
+    }
+  };
+
+  const onClickSalvarRascunho = () => {
+    ServicoNAAPA.salvarEncaminhamento();
+  };
 
   const onClickEnviar = () => {};
 
@@ -54,7 +140,7 @@ const CadastroEncaminhamentoNAAPABotoesAcao = props => {
             border
             color={Colors.Roxo}
             label="Próximo passo"
-            disabled={desabilitarNovo}
+            disabled={desabilitarProximoPasso}
             onClick={onClickProximoPasso}
             id={SGP_BUTTON_PROXIMO_PASSO}
           />
@@ -63,8 +149,7 @@ const CadastroEncaminhamentoNAAPABotoesAcao = props => {
         <>
           <Col>
             <BotaoExcluirPadrao
-              id={SGP_BUTTON_EXCLUIR}
-              disabled={somenteConsulta || !encaminhamentoId}
+              disabled={!permissoesTela?.podeExcluir || !encaminhamentoId}
               onClick={() => onClickExcluir()}
             />
           </Col>
@@ -75,7 +160,10 @@ const CadastroEncaminhamentoNAAPABotoesAcao = props => {
               label="Cancelar"
               color={Colors.Roxo}
               id={SGP_BUTTON_CANCELAR}
-              disabled={somenteConsulta}
+              disabled={
+                desabilitarCamposEncaminhamentoNAAPA ||
+                !questionarioDinamicoEmEdicao
+              }
               onClick={() => onClickCancelar()}
             />
           </Col>
@@ -88,11 +176,16 @@ const CadastroEncaminhamentoNAAPABotoesAcao = props => {
               label="Salvar rascunho"
               id={SGP_BUTTON_SALVAR_RASCUNHO}
               onClick={onClickSalvarRascunho}
+              disabled={
+                desabilitarCamposEncaminhamentoNAAPA ||
+                !questionarioDinamicoEmEdicao
+              }
             />
           </Col>
 
           <Col>
             <Button
+              hidden
               bold
               border
               label="Enviar"

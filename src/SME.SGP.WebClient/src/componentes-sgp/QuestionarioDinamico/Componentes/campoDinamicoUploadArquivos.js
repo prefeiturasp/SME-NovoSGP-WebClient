@@ -60,7 +60,7 @@ const CampoDinamicoUploadArquivos = props => {
   return (
     <>
       <div className="col-md-12 mt-2 mb-3">
-        {questaoAtual?.nome ? <Label text={label} /> : ''}
+        {questaoAtual?.nome ? <Label text={label?.props?.text} /> : ''}
         <UploadArquivos
           desabilitarGeral={desabilitado || questaoAtual.somenteLeitura}
           form={form}

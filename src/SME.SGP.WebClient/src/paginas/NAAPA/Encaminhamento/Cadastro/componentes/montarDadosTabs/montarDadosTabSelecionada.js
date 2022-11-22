@@ -12,6 +12,10 @@ const MontarDadosTabSelecionada = props => {
     state => state.encaminhamentoNAAPA.dadosEncaminhamentoNAAPA
   );
 
+  const desabilitarCamposEncaminhamentoNAAPA = useSelector(
+    store => store.encaminhamentoNAAPA.desabilitarCamposEncaminhamentoNAAPA
+  );
+
   const [dadosQuestionarioAtual, setDadosQuestionarioAtual] = useState();
 
   const obterDadosQuestionarioId = useCallback(async () => {
@@ -42,11 +46,9 @@ const MontarDadosTabSelecionada = props => {
         anoLetivo={anoLetivo}
         dados={dadosTab}
         dadosQuestionarioAtual={dadosQuestionarioAtual}
-        // desabilitarCampos={validaSeDesabilitarCampo()}
-        // funcaoRemoverArquivoCampoUpload={
-        //   ServicoEncaminhamentoAEE.removerArquivo
-        // }
-        // urlUpload="v1/encaminhamento-aee/upload"
+        desabilitarCampos={desabilitarCamposEncaminhamentoNAAPA}
+        funcaoRemoverArquivoCampoUpload={ServicoNAAPA.removerArquivo}
+        urlUpload="v1/encaminhamento-naapa/upload"
         onChangeQuestionario={() => {
           ServicoNAAPA.guardarSecaoEmEdicao(dadosTab?.id);
         }}
