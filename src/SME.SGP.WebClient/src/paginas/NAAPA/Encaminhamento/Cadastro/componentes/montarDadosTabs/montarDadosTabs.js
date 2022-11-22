@@ -54,8 +54,11 @@ const MontarDadosTabs = () => {
 
         return (
           <TabPane tab={nomeTab} key={questionarioId}>
-            {questionarioId === tabAtiva && (
-              <MontarDadosTabSelecionada questionarioId={questionarioId} />
+            {questionarioId?.toString() === tabAtiva && (
+              <MontarDadosTabSelecionada
+                questionarioId={questionarioId}
+                dadosTab={tab}
+              />
             )}
           </TabPane>
         );

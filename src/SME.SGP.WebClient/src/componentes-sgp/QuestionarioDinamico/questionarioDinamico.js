@@ -7,6 +7,7 @@ import { Label } from '~/componentes';
 import tipoQuestao from '~/dtos/tipoQuestao';
 import AtendimentoClinicoTabela from './Componentes/AtendimentoClinico/atendimentoClinicoTabela';
 import { setQuestionarioDinamicoEmEdicao } from '~/redux/modulos/questionarioDinamico/actions';
+import CampoDinamicoFrase from './Componentes/campoDinamicoFrase';
 import CampoDinamicoCombo from './Componentes/campoDinamicoCombo';
 import CampoDinamicoComboMultiplaEscolha from './Componentes/campoDinamicoComboMultiplaEscolha';
 import CampoDinamicoRadio from './Componentes/campoDinamicoRadio';
@@ -19,6 +20,8 @@ import DiasHorariosTabela from './Componentes/DiasHorariosTabela/diasHorariosTab
 import CampoDinamicoPeriodo from './Componentes/campoDinamicoPeriodo';
 import CampoDinamicoCheckbox from './Componentes/campoDinamicoCheckbox';
 import CampoDinamicoPeriodoEscolar from './Componentes/campoDinamicoPeriodoEscolar';
+import CampoDinamicoNumerico from './Componentes/campoDinamicoNumerico';
+import CampoDinamicoData from './Componentes/campoDinamicoData';
 
 const QuestionarioDinamico = props => {
   const dispatch = useDispatch();
@@ -311,6 +314,16 @@ const QuestionarioDinamico = props => {
 
     let campoAtual = null;
     switch (questaoAtual?.tipoQuestao) {
+      case tipoQuestao.Frase:
+        campoAtual = (
+          <CampoDinamicoFrase
+            form={form}
+            label={label}
+            questaoAtual={questaoAtual}
+            disabled={desabilitarCampos}
+          />
+        );
+        break;
       case tipoQuestao.Radio:
         campoAtual = (
           <CampoDinamicoRadio
@@ -474,6 +487,32 @@ const QuestionarioDinamico = props => {
             questionarioId={dados?.questionarioId}
           />
         );
+        break;
+      case tipoQuestao.Numerico:
+        campoAtual = (
+          <CampoDinamicoNumerico
+            form={form}
+            label={label}
+            questaoAtual={questaoAtual}
+            disabled={desabilitarCampos}
+          />
+        );
+        break;
+      case tipoQuestao.Data:
+        campoAtual = (
+          <CampoDinamicoData
+            form={form}
+            label={label}
+            questaoAtual={questaoAtual}
+            disabled={desabilitarCampos}
+          />
+        );
+        break;
+      case tipoQuestao.Endereco:
+        break;
+      case tipoQuestao.ContatoResponsaveis:
+        break;
+      case tipoQuestao.AtividadesContraturno:
         break;
       default:
         break;

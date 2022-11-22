@@ -4,34 +4,42 @@ const inicial = {
   dadosEncaminhamentoNAAPA: null,
   dadosSecoesEncaminhamentoNAAPA: null,
   exibirLoaderEncaminhamentoNAAPA: false,
+  listaSecoesEmEdicao: [],
 };
 
-export default function EncaminhamentoAEE(state = inicial, action) {
+export default function EncaminhamentoNAAPA(state = inicial, action) {
   return produce(state, draft => {
     switch (action.type) {
-      case '@encaminhamentoAEE/setDadosEncaminhamentoNAAPA': {
+      case '@encaminhamentoNAAPA/setDadosEncaminhamentoNAAPA': {
         return {
           ...draft,
           dadosEncaminhamentoNAAPA: action.payload,
         };
       }
-      case '@encaminhamentoAEE/setDadosSecoesEncaminhamentoNAAPA': {
+      case '@encaminhamentoNAAPA/setDadosSecoesEncaminhamentoNAAPA': {
         return {
           ...draft,
           dadosSecoesEncaminhamentoNAAPA: action.payload,
         };
       }
-      case '@encaminhamentoAEE/setExibirLoaderEncaminhamentoNAAPA': {
+      case '@encaminhamentoNAAPA/setExibirLoaderEncaminhamentoNAAPA': {
         return {
           ...draft,
           exibirLoaderEncaminhamentoNAAPA: action.payload,
         };
       }
-      case '@encaminhamentoAEE/setLimparDadosEncaminhamentoNAAPA': {
+      case '@encaminhamentoNAAPA/setListaSecoesEmEdicao': {
+        return {
+          ...draft,
+          listaSecoesEmEdicao: action.payload,
+        };
+      }
+      case '@encaminhamentoNAAPA/setLimparDadosEncaminhamentoNAAPA': {
         return {
           ...draft,
           dadosSecoesEncaminhamentoNAAPA: null,
           exibirLoaderEncaminhamentoNAAPA: false,
+          listaSecoesEmEdicao: [],
         };
       }
       default:

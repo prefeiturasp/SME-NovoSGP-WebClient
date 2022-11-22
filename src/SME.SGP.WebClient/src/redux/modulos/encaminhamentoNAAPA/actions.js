@@ -1,19 +1,24 @@
 export const setDadosEncaminhamentoNAAPA = payload => ({
-  type: '@encaminhamentoAEE/setDadosEncaminhamentoNAAPA',
+  type: '@encaminhamentoNAAPA/setDadosEncaminhamentoNAAPA',
   payload,
 });
 
 export const setDadosSecoesEncaminhamentoNAAPA = payload => ({
-  type: '@encaminhamentoAEE/setDadosSecoesEncaminhamentoNAAPA',
+  type: '@encaminhamentoNAAPA/setDadosSecoesEncaminhamentoNAAPA',
   payload,
 });
 
 export const setExibirLoaderEncaminhamentoNAAPA = payload => ({
-  type: '@encaminhamentoAEE/setExibirLoaderEncaminhamentoNAAPA',
+  type: '@encaminhamentoNAAPA/setExibirLoaderEncaminhamentoNAAPA',
   payload,
 });
 
 export const setLimparDadosEncaminhamentoNAAPA = payload => ({
-  type: '@encaminhamentoAEE/setLimparDadosEncaminhamentoNAAPA',
+  type: '@encaminhamentoNAAPA/setLimparDadosEncaminhamentoNAAPA',
+  payload,
+});
+
+export const setListaSecoesEmEdicao = payload => ({
+  type: '@encaminhamentoNAAPA/setListaSecoesEmEdicao',
   payload,
 });

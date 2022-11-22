@@ -22,7 +22,8 @@ const EncaminhamentoNAAPA = () => {
   const encaminhamentoId = routeMatch.params?.id;
 
   const [somenteConsulta, setSomenteConsulta] = useState(false);
-  const [mostrarBusca, setMostrarBusca] = useState(!encaminhamentoId);
+  //const [mostrarBusca, setMostrarBusca] = useState(!encaminhamentoId);
+  const [mostrarBusca, setMostrarBusca] = useState(false);
 
   useEffect(() => {
     const soConsulta = verificaSomenteConsulta(

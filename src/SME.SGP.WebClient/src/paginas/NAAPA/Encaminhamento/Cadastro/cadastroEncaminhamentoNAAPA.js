@@ -36,7 +36,7 @@ const CadastroEncaminhamentoNAAPA = () => {
       encaminhamentoId
     ).catch(e => erros(e));
 
-    if (resposta?.data?.length) {
+    if (resposta?.data) {
       store.dispatch(setDadosEncaminhamentoNAAPA(resposta.data));
     } else {
       store.dispatch(setDadosEncaminhamentoNAAPA([]));
@@ -91,9 +91,9 @@ const CadastroEncaminhamentoNAAPA = () => {
             exibirFrequencia={false}
             exibirBotaoImprimir={false}
             permiteAlterarImagem={false}
-            anoLetivo={dadosEncaminhamentoNAAPA.anoLetivo}
-            codigoTurma={dadosEncaminhamentoNAAPA.turma?.codigo}
-            codigoAluno={dadosEncaminhamentoNAAPA.aluno?.codigoAluno}
+            anoLetivo={dadosEncaminhamentoNAAPA?.anoLetivo}
+            codigoTurma={dadosEncaminhamentoNAAPA?.turma?.codigo}
+            codigoAluno={dadosEncaminhamentoNAAPA?.aluno?.codigoAluno}
           />
         </Col>
       </Row>
@@ -101,9 +101,9 @@ const CadastroEncaminhamentoNAAPA = () => {
       <Row>
         <Col sm={24}>
           <MontarDadosTabs
-            anoLetivo={dadosEncaminhamentoNAAPA.anoLetivo}
-            codigoTurma={dadosEncaminhamentoNAAPA.turma?.codigo}
-            codigoAluno={dadosEncaminhamentoNAAPA.aluno?.codigoAluno}
+            anoLetivo={dadosEncaminhamentoNAAPA?.anoLetivo}
+            codigoTurma={dadosEncaminhamentoNAAPA?.turma?.codigo}
+            codigoAluno={dadosEncaminhamentoNAAPA?.aluno?.codigoAluno}
           />
         </Col>
       </Row>
