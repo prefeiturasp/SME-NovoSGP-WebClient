@@ -45,6 +45,26 @@ const BotoesAcoesAcompanhamentoAprendizagem = props => {
   const usuario = useSelector(store => store.usuario);
   const { turmaSelecionada } = usuario;
 
+  const recarregarDados = () => {
+    if (acompanhamentoAprendizagemEmEdicao) {
+      dispatch(setAcompanhamentoAprendizagemEmEdicao(false));
+      ServicoAcompanhamentoAprendizagem.obterAcompanhamentoEstudante(
+        turmaSelecionada?.id,
+        codigoEOL,
+        semestreSelecionado,
+        componenteCurricularId
+      );
+    }
+
+    if (apanhadoGeralEmEdicao) {
+      dispatch(setApanhadoGeralEmEdicao(false));
+      ServicoAcompanhamentoAprendizagem.obterDadosApanhadoGeral(
+        turmaSelecionada?.id,
+        semestreSelecionado
+      );
+    }
+  };
+
   const onClickSalvar = async () => {
     const salvouApanhadoGeral = await ServicoAcompanhamentoAprendizagem.salvarDadosApanhadoGeral(
       semestreSelecionado
@@ -54,8 +74,7 @@ const BotoesAcoesAcompanhamentoAprendizagem = props => {
       semestreSelecionado
     );
 
-    if(salvouApanhadoGeral || salvouCompanhamento)
-      await recarregarDados();
+    if (salvouApanhadoGeral && salvouCompanhamento) await recarregarDados();
 
     return salvouApanhadoGeral && salvouCompanhamento;
   };
@@ -84,26 +103,6 @@ const BotoesAcoesAcompanhamentoAprendizagem = props => {
       }
     } else {
       history.push(URL_HOME);
-    }
-  };
-
-  const recarregarDados = () => {
-    if (acompanhamentoAprendizagemEmEdicao) {
-      dispatch(setAcompanhamentoAprendizagemEmEdicao(false));
-      ServicoAcompanhamentoAprendizagem.obterAcompanhamentoEstudante(
-        turmaSelecionada?.id,
-        codigoEOL,
-        semestreSelecionado,
-        componenteCurricularId
-      );
-    }
-
-    if (apanhadoGeralEmEdicao) {
-      dispatch(setApanhadoGeralEmEdicao(false));
-      ServicoAcompanhamentoAprendizagem.obterDadosApanhadoGeral(
-        turmaSelecionada?.id,
-        semestreSelecionado
-      );
     }
   };
 
