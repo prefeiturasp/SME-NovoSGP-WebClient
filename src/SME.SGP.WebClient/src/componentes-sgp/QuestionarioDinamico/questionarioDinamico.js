@@ -82,6 +82,8 @@ const QuestionarioDinamico = props => {
             valorRespostaAtual = resposta.map(r => Number(r.opcaoRespostaId));
             break;
           case tipoQuestao.Texto:
+          case tipoQuestao.Frase:
+          case tipoQuestao.Numerico:
           case tipoQuestao.PeriodoEscolar:
             valorRespostaAtual = resposta[0].texto;
             break;
@@ -93,6 +95,9 @@ const QuestionarioDinamico = props => {
             break;
           case tipoQuestao.FrequenciaEstudanteAEE:
           case tipoQuestao.AtendimentoClinico:
+          case tipoQuestao.AtividadesContraturno:
+          case tipoQuestao.Endereco:
+          case tipoQuestao.ContatoResponsaveis:
             valorRespostaAtual = resposta[0].texto
               ? JSON.parse(resposta[0].texto)
               : '';
@@ -502,6 +507,10 @@ const QuestionarioDinamico = props => {
             label={label}
             questaoAtual={questaoAtual}
             disabled={desabilitarCampos}
+            onChange={() => {
+              dispatch(setQuestionarioDinamicoEmEdicao(true));
+              onChangeQuestionario();
+            }}
           />
         );
         break;
@@ -512,6 +521,10 @@ const QuestionarioDinamico = props => {
             label={label}
             questaoAtual={questaoAtual}
             disabled={desabilitarCampos}
+            onChange={() => {
+              dispatch(setQuestionarioDinamicoEmEdicao(true));
+              onChangeQuestionario();
+            }}
           />
         );
         break;

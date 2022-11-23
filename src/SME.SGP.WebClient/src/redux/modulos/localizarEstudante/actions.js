@@ -23,7 +23,7 @@ export const setAluno = payload => ({
   payload,
 });
 
-export const limparDados = payload => ({
-  type: '@localizarEstudante/limparDados',
+export const limparDadosLocalizarEstudante = payload => ({
+  type: '@localizarEstudante/limparDadosLocalizarEstudante',
   payload,
 });

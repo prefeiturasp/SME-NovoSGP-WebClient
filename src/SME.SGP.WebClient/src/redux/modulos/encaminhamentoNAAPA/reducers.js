@@ -38,6 +38,7 @@ export default function EncaminhamentoNAAPA(state = inicial, action) {
       case '@encaminhamentoNAAPA/setLimparDadosEncaminhamentoNAAPA': {
         return {
           ...draft,
+          dadosEncaminhamentoNAAPA: null,
           dadosSecoesEncaminhamentoNAAPA: null,
           exibirLoaderEncaminhamentoNAAPA: false,
           listaSecoesEmEdicao: [],

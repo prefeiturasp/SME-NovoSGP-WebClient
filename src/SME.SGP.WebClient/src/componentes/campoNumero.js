@@ -113,6 +113,7 @@ const CampoNumero = React.forwardRef((props, ref) => {
               innerRef={ref}
               onKeyDown={onKeyDown}
               onKeyUp={onKeyUp}
+              value={form.values[name]}
               onChange={v => {
                 form.setFieldValue(name, v);
                 form.setFieldTouched(name, true);

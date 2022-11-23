@@ -38,7 +38,7 @@ export default function localizarEstudante(state = inicial, action) {
       case '@localizarEstudante/setAluno':
         draft.aluno = action.payload;
         break;
-      case '@localizarEstudante/limparDados':
+      case '@localizarEstudante/limparDadosLocalizarEstudante':
         draft.anoLetivo = inicial.anoLetivo;
         draft.dre = inicial.dre;
         draft.ue = inicial.ue;

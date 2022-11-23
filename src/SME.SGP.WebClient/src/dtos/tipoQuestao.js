@@ -16,6 +16,7 @@ const tipoQuestao = {
   Endereco: 15,
   ContatoResponsaveis: 16,
   AtividadesContraturno: 17,
+  EditorTexto: 18,
 };
 
 export default tipoQuestao;
