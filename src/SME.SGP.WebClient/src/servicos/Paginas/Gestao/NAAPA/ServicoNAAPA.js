@@ -23,13 +23,8 @@ class ServicoNAAPA {
 
   buscarPrioridades = () => api.get(`${URL_PADRAO}/prioridades`);
 
-  obterDadosEncaminhamentoNAAPA = encaminhamentoId => {
-    return new Promise(resolve => {
-      setTimeout(() => {
-        resolve();
-      }, 1000);
-    });
-  };
+  obterDadosEncaminhamentoNAAPA = encaminhamentoId =>
+    api.get(`${URL_PADRAO}/${encaminhamentoId}`);
 
   obterSecoes = encaminhamentoId =>
     api.get(`${URL_PADRAO}/secoes?encaminhamentoNAAPAId=${encaminhamentoId}`);

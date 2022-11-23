@@ -25,6 +25,7 @@ import CampoDinamicoData from './Componentes/campoDinamicoData';
 import EnderecoResidencialTabela from './Componentes/EnderecoResidencial/enderecoResidencialTabela';
 import ContatoResponsaveisTabela from './Componentes/ContatoResponsaveis/contatoResponsaveisTabela';
 import AtividadeContraturnoTabela from './Componentes/AtividadeContraturno/atividadeContraturnoTabela';
+import CampoDinamicoEditor from './Componentes/campoDinamicoEditor';
 
 const QuestionarioDinamico = props => {
   const dispatch = useDispatch();
@@ -85,6 +86,7 @@ const QuestionarioDinamico = props => {
           case tipoQuestao.Frase:
           case tipoQuestao.Numerico:
           case tipoQuestao.PeriodoEscolar:
+          case tipoQuestao.EditorTexto:
             valorRespostaAtual = resposta[0].texto;
             break;
           case tipoQuestao.Periodo:
@@ -575,6 +577,20 @@ const QuestionarioDinamico = props => {
               }}
             />
           </div>
+        );
+        break;
+      case tipoQuestao.EditorTexto:
+        campoAtual = (
+          <CampoDinamicoEditor
+            questaoAtual={questaoAtual}
+            form={form}
+            label={label}
+            desabilitado={desabilitarCampos}
+            onChange={() => {
+              dispatch(setQuestionarioDinamicoEmEdicao(true));
+              onChangeQuestionario();
+            }}
+          />
         );
         break;
       default:

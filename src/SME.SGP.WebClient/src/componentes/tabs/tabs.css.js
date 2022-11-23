@@ -44,4 +44,20 @@ export const ContainerTabsCard = styled(Tabs)`
     padding-right: 0px;
     padding-left: 0px;
   }
+
+  .ant-tabs-bar {
+    margin: ${props => (props.border ? 0 : 'initial')};
+  }
+
+  .ant-tabs-tabpane {
+    padding-top: ${props => (props.border ? '16px' : 'initial')};
+    border: ${props =>
+      props.border ? `1px solid ${Base.CinzaDesabilitado}` : 'initial'};
+    border-top: ${props => (props.border ? 0 : 'initial')};
+
+    form {
+      padding-left: ${props => (props.border ? '30px' : 'initial')};
+      padding-right: ${props => (props.border ? '30px' : 'initial')};
+    }
+  }
 `;
