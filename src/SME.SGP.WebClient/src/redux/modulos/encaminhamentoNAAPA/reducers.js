@@ -5,6 +5,7 @@ const inicial = {
   dadosSecoesEncaminhamentoNAAPA: null,
   exibirLoaderEncaminhamentoNAAPA: false,
   listaSecoesEmEdicao: [],
+  desabilitarCamposEncaminhamentoNAAPA: false,
 };
 
 export default function EncaminhamentoNAAPA(state = inicial, action) {
@@ -40,6 +41,12 @@ export default function EncaminhamentoNAAPA(state = inicial, action) {
           dadosSecoesEncaminhamentoNAAPA: null,
           exibirLoaderEncaminhamentoNAAPA: false,
           listaSecoesEmEdicao: [],
+        };
+      }
+      case '@encaminhamentoNAAPA/setDesabilitarCamposEncaminhamentoNAAPA': {
+        return {
+          ...draft,
+          desabilitarCamposEncaminhamentoNAAPA: action.payload,
         };
       }
       default:

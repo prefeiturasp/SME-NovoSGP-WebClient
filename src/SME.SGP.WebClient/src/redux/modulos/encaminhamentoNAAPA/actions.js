@@ -22,3 +22,8 @@ export const setListaSecoesEmEdicao = payload => ({
   type: '@encaminhamentoNAAPA/setListaSecoesEmEdicao',
   payload,
 });
+
+export const setDesabilitarCamposEncaminhamentoNAAPA = payload => ({
+  type: '@encaminhamentoNAAPA/setDesabilitarCamposEncaminhamentoNAAPA',
+  payload,
+});

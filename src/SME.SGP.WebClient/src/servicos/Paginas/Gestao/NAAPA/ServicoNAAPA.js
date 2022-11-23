@@ -50,6 +50,28 @@ class ServicoNAAPA {
       dispatch(setListaSecoesEmEdicao([{ secaoId }]));
     }
   };
+
+  removerArquivo = arquivoCodigo =>
+    api.delete(`${URL_PADRAO}/arquivo?arquivoCodigo=${arquivoCodigo}`);
+
+  excluirEncaminhamento = id => api.delete(`${URL_PADRAO}/${id}`);
+
+  salvarEncaminhamento = async () => {
+    const state = store.getState();
+    const { questionarioDinamico } = state;
+
+    const { formsQuestionarioDinamico } = questionarioDinamico;
+
+    formsQuestionarioDinamico.forEach(item => {
+      console.log(item?.form()?.state?.values);
+    });
+
+    return new Promise(resolve => {
+      setTimeout(() => {
+        resolve(true);
+      }, 2000);
+    });
+  };
 }
 
 export default new ServicoNAAPA();

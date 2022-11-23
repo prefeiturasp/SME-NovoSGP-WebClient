@@ -37,7 +37,29 @@ const CadastroEncaminhamentoNAAPA = () => {
     ).catch(e => erros(e));
 
     if (resposta?.data) {
-      store.dispatch(setDadosEncaminhamentoNAAPA(resposta.data));
+      // TODO - Testar!
+      const dados = resposta.data;
+
+      dados.anoLetivo = resposta.data.anoLetivo;
+      dados.aluno = resposta.data.aluno;
+
+      dados.dre = {
+        codigo: dados?.dreCodigo,
+        nome: dados?.dreNome,
+        id: dados?.dreNome,
+      };
+      dados.ue = {
+        codigo: dados?.ueCodigo,
+        nome: dados?.ueNome,
+        id: dados?.ueId,
+      };
+      dados.turma = {
+        codigo: dados?.turmaCodigo,
+        nome: dados?.turmaNome,
+        id: dados?.turmaId,
+      };
+
+      store.dispatch(setDadosEncaminhamentoNAAPA(dados));
     } else {
       store.dispatch(setDadosEncaminhamentoNAAPA([]));
     }
