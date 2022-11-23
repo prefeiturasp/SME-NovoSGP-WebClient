@@ -1,6 +1,7 @@
 import * as Yup from 'yup';
 import * as moment from 'moment';
 import tipoQuestao from '~/dtos/tipoQuestao';
+import { momentSchema } from '~/componentes/campoData/campoData';
 
 class QuestionarioDinamicoValidacoes {
   obterValidationSchema = (dadosQuestionarioAtual, form) => {
@@ -67,6 +68,10 @@ class QuestionarioDinamicoValidacoes {
                   return ehValido;
                 }
               );
+          } else if (questaoAtual.tipoQuestao === tipoQuestao.Data) {
+            camposComValidacao[questaoAtual.id] = momentSchema.required(
+              'Campo obrigatório'
+            );
           } else {
             camposComValidacao[questaoAtual.id] = Yup.string()
               .nullable()

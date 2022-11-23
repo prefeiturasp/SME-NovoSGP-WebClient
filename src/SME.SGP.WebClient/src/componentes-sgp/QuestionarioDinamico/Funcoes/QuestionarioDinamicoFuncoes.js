@@ -1,9 +1,12 @@
 import { groupBy } from 'lodash';
+import tipoQuestao from '~/dtos/tipoQuestao';
 import { store } from '~/redux';
 import {
+  setExibirModalErrosQuestionarioDinamico,
   setFormsQuestionarioDinamico,
   setQuestionarioDinamicoEmEdicao,
   setResetarTabela,
+  setNomesSecoesComCamposObrigatorios,
 } from '~/redux/modulos/questionarioDinamico/actions';
 
 class QuestionarioDinamicoFuncoes {
@@ -324,20 +327,6 @@ class QuestionarioDinamicoFuncoes {
     }
   };
 
-  limparDadosOriginaisQuestionarioDinamico = () => {
-    const { dispatch } = store;
-    const state = store.getState();
-    const { questionarioDinamico } = state;
-    const { formsQuestionarioDinamico } = questionarioDinamico;
-    if (formsQuestionarioDinamico?.length) {
-      formsQuestionarioDinamico.forEach(item => {
-        const form = item.form();
-        form.resetForm();
-      });
-      dispatch(setQuestionarioDinamicoEmEdicao(false));
-    }
-  };
-
   obterOpcaoRespostaPorId = (opcoesResposta, idComparacao) => {
     if (opcoesResposta?.length) {
       const opcaoResposta = opcoesResposta.find(
@@ -461,6 +450,234 @@ class QuestionarioDinamicoFuncoes {
       }
     });
     return listaOrdenada;
+  };
+
+  mapearQuestionarios = async (
+    listaSecoesEmEdicao,
+    dadosSecoes,
+    validarCamposObrigatorios
+  ) => {
+    const { dispatch } = store;
+
+    const state = store.getState();
+    const { questionarioDinamico } = state;
+    const { formsQuestionarioDinamico, arquivoRemovido } = questionarioDinamico;
+
+    let contadorFormsValidos = 0;
+    const nomesSecoesComCamposObrigatorios = [];
+
+    const validaAntesDoSubmit = (refForm, secaoId) => {
+      let arrayCampos = [];
+      const camposValidar = refForm?.state?.values;
+
+      if (camposValidar && Object.keys(camposValidar)?.length) {
+        arrayCampos = Object.keys(camposValidar);
+      }
+
+      arrayCampos.forEach(campo => {
+        refForm.setFieldTouched(campo, true, true);
+      });
+
+      return refForm.validateForm().then(() => {
+        if (
+          refForm.getFormikContext().isValid ||
+          Object.keys(refForm.getFormikContext().errors).length === 0
+        ) {
+          contadorFormsValidos += 1;
+        } else {
+          const dadosSecao = dadosSecoes.find(secao => secao.id === secaoId);
+
+          if (dadosSecao) {
+            nomesSecoesComCamposObrigatorios.push(dadosSecao.nome);
+          }
+        }
+      });
+    };
+
+    if (formsQuestionarioDinamico?.length) {
+      let todosOsFormsEstaoValidos = !validarCamposObrigatorios;
+
+      if (validarCamposObrigatorios) {
+        const promises = formsQuestionarioDinamico.map(async item =>
+          validaAntesDoSubmit(item.form(), item?.secaoId || 0)
+        );
+
+        await Promise.all(promises);
+
+        todosOsFormsEstaoValidos =
+          contadorFormsValidos ===
+          formsQuestionarioDinamico?.filter(a => a)?.length;
+      }
+
+      if (todosOsFormsEstaoValidos) {
+        let formsParaSalvar = [];
+
+        formsParaSalvar = formsQuestionarioDinamico.filter(f =>
+          listaSecoesEmEdicao.find(
+            secaoEdicao => secaoEdicao.secaoId === f.secaoId
+          )
+        );
+
+        const valoresParaSalvar = {};
+
+        valoresParaSalvar.secoes = formsParaSalvar.map(item => {
+          const form = item.form();
+          const campos = form.state.values;
+          const questoes = [];
+
+          Object.keys(campos).forEach(key => {
+            const questaoAtual = this.obterQuestaoPorId(
+              item.dadosQuestionarioAtual,
+              key
+            );
+
+            let questao = {
+              questaoId: key,
+              tipoQuestao: questaoAtual.tipoQuestao,
+            };
+
+            switch (questao.tipoQuestao) {
+              case tipoQuestao.AtendimentoClinico:
+                questao.resposta = JSON.stringify(campos[key] || '');
+                break;
+              case tipoQuestao.Upload:
+                if (campos[key]?.length) {
+                  const arquivosId = campos[key].map(a => a.xhr);
+                  questao.resposta = arquivosId;
+                } else {
+                  questao.resposta = '';
+                }
+                break;
+              case tipoQuestao.ComboMultiplaEscolha:
+                if (campos[key]?.length) {
+                  questao.resposta = campos[key];
+                } else {
+                  questao.resposta = '';
+                }
+                break;
+              default:
+                questao.resposta = JSON.parse(
+                  JSON.stringify(campos[key] || '')
+                );
+                break;
+            }
+
+            if (
+              questao.tipoQuestao === tipoQuestao.Upload &&
+              questao?.resposta?.length
+            ) {
+              questao.resposta.forEach(codigo => {
+                if (codigo) {
+                  if (questaoAtual?.resposta?.length) {
+                    const arquivoResposta = questaoAtual.resposta.find(
+                      a => a?.arquivo?.codigo === codigo
+                    );
+
+                    if (arquivoResposta) {
+                      questoes.push({
+                        ...questao,
+                        resposta: codigo,
+                        respostaEncaminhamentoId: arquivoResposta.id,
+                      });
+                    } else {
+                      questoes.push({
+                        ...questao,
+                        resposta: codigo,
+                      });
+                    }
+                  } else {
+                    questoes.push({
+                      ...questao,
+                      resposta: codigo,
+                    });
+                  }
+                }
+              });
+            } else if (
+              (questao.tipoQuestao === tipoQuestao.ComboMultiplaEscolha ||
+                questao.tipoQuestao === tipoQuestao.Checkbox) &&
+              questao?.resposta?.length
+            ) {
+              if (!Array.isArray(questao?.resposta))
+                questao.resposta = questao.resposta
+                  .replace('[', '')
+                  .replace(']', '')
+                  .split(',')
+                  .map(Number);
+              questao.resposta.forEach(valorSelecionado => {
+                if (valorSelecionado) {
+                  if (questaoAtual?.resposta?.length) {
+                    const temResposta = questaoAtual.resposta.find(
+                      a =>
+                        String(a?.opcaoRespostaId) === String(valorSelecionado)
+                    );
+
+                    if (temResposta) {
+                      questoes.push({
+                        ...questao,
+                        resposta: valorSelecionado,
+                        respostaEncaminhamentoId: temResposta.id,
+                      });
+                    } else {
+                      questoes.push({
+                        ...questao,
+                        resposta: valorSelecionado,
+                      });
+                    }
+                  } else {
+                    questoes.push({
+                      ...questao,
+                      resposta: valorSelecionado,
+                    });
+                  }
+                }
+              });
+            } else {
+              if (questaoAtual?.resposta[0]?.id) {
+                questao.respostaEncaminhamentoId = questaoAtual.resposta[0].id;
+              }
+
+              if (
+                ((!arquivoRemovido &&
+                  questao.tipoQuestao === tipoQuestao.Upload) ||
+                  questao.tipoQuestao === tipoQuestao.ComboMultiplaEscolha) &&
+                !questao.resposta
+              ) {
+                questao = null;
+              }
+
+              if (questao) {
+                questoes.push(questao);
+              }
+            }
+          });
+          return {
+            questoes,
+            secaoId: item?.secaoId || 0,
+            concluido:
+              Object.keys(form.getFormikContext().errors)?.length === 0,
+          };
+        });
+
+        valoresParaSalvar.secoes = valoresParaSalvar.secoes
+          .filter(a => a)
+          .filter(b => b.questoes?.length);
+
+        return valoresParaSalvar;
+      }
+
+      if (nomesSecoesComCamposObrigatorios?.length) {
+        dispatch(
+          setNomesSecoesComCamposObrigatorios(nomesSecoesComCamposObrigatorios)
+        );
+      }
+
+      dispatch(setExibirModalErrosQuestionarioDinamico(true));
+
+      return false;
+    }
+
+    return false;
   };
 }
 
