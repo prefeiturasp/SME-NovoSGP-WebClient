@@ -23,6 +23,7 @@ import { RotasDto } from '~/dtos';
 import ServicoNAAPA from '~/servicos/Paginas/Gestao/NAAPA/ServicoNAAPA';
 import { setDesabilitarCamposEncaminhamentoNAAPA } from '~/redux/modulos/encaminhamentoNAAPA/actions';
 import QuestionarioDinamicoFuncoes from '~/componentes-sgp/QuestionarioDinamico/Funcoes/QuestionarioDinamicoFuncoes';
+import situacaoNAAPA from '~/dtos/situacaoNAAPA';
 
 const CadastroEncaminhamentoNAAPABotoesAcao = props => {
   const { mostrarBusca, setMostrarBusca } = props;
@@ -42,6 +43,10 @@ const CadastroEncaminhamentoNAAPABotoesAcao = props => {
 
   const desabilitarCamposEncaminhamentoNAAPA = useSelector(
     store => store.encaminhamentoNAAPA.desabilitarCamposEncaminhamentoNAAPA
+  );
+
+  const dadosEncaminhamentoNAAPA = useSelector(
+    state => state.encaminhamentoNAAPA.dadosEncaminhamentoNAAPA
   );
 
   const encaminhamentoId = routeMatch.params?.id;
@@ -121,8 +126,22 @@ const CadastroEncaminhamentoNAAPABotoesAcao = props => {
     }
   };
 
-  const onClickSalvarRascunho = () => {
-    ServicoNAAPA.salvarEncaminhamento();
+  const onClickSalvarRascunho = async () => {
+    let situacao = situacaoNAAPA.Rascunho;
+
+    if (encaminhamentoId) {
+      // TODO - Validar com back se tem a prop situacao
+      situacao = dadosEncaminhamentoNAAPA?.situacao;
+    }
+
+    const salvou = await ServicoNAAPA.salvarEncaminhamento(
+      encaminhamentoId,
+      situacao,
+      true
+    );
+    if (salvou) {
+      sucesso(`Rascunho salvo com sucesso`);
+    }
   };
 
   const onClickEnviar = () => {};

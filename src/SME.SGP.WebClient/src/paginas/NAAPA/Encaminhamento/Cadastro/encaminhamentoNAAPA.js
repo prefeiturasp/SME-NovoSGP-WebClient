@@ -6,7 +6,8 @@ import { Card } from '~/componentes';
 import CadastroEncaminhamentoNAAPABotoesAcao from './cadastroEncaminhamentoNAAPABotoesAcao';
 import CadastroEncaminhamentoNAAPA from './cadastroEncaminhamentoNAAPA';
 import { store } from '~/redux';
-import { limparDados } from '~/redux/modulos/localizarEstudante/actions';
+import LoaderEncaminhamentoNAAPA from './componentes/loaderEncaminhamentoNAAPA';
+import { limparDadosLocalizarEstudante } from '~/redux/modulos/localizarEstudante/actions';
 
 const EncaminhamentoNAAPA = () => {
   const routeMatch = useRouteMatch();
@@ -17,12 +18,12 @@ const EncaminhamentoNAAPA = () => {
 
   useEffect(() => {
     return () => {
-      store.dispatch(limparDados());
+      store.dispatch(limparDadosLocalizarEstudante());
     };
   }, []);
 
   return (
-    <>
+    <LoaderEncaminhamentoNAAPA>
       <Cabecalho pagina="Novo encaminhamento">
         <CadastroEncaminhamentoNAAPABotoesAcao
           mostrarBusca={mostrarBusca}
@@ -37,7 +38,7 @@ const EncaminhamentoNAAPA = () => {
           <CadastroEncaminhamentoNAAPA />
         )}
       </Card>
-    </>
+    </LoaderEncaminhamentoNAAPA>
   );
 };
 
