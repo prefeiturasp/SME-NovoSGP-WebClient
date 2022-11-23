@@ -10,7 +10,7 @@ import ServicoNAAPA from '~/servicos/Paginas/Gestao/NAAPA/ServicoNAAPA';
 import { store } from '~/redux';
 import { setDadosEncaminhamentoNAAPA } from '~/redux/modulos/encaminhamentoNAAPA/actions';
 import { erros } from '~/servicos';
-import ModalErrosQuestionarioDinamico from '~/componentes-sgp/QuestionarioDinamico/Componentes/ModalErrosEncaminhamento/modalErrosQuestionarioDinamico';
+import ModalErrosQuestionarioDinamico from '~/componentes-sgp/QuestionarioDinamico/Componentes/ModalErrosQuestionarioDinamico/modalErrosQuestionarioDinamico';
 
 const CadastroEncaminhamentoNAAPA = () => {
   const routeMatch = useRouteMatch();
@@ -38,7 +38,6 @@ const CadastroEncaminhamentoNAAPA = () => {
     ).catch(e => erros(e));
 
     if (resposta?.data) {
-      // TODO - Testar!
       const dados = resposta.data;
 
       dados.anoLetivo = resposta.data.anoLetivo;
@@ -121,9 +120,10 @@ const CadastroEncaminhamentoNAAPA = () => {
         </Col>
       </Row>
 
-      <Row>
+      <Row style={{ marginTop: '16px' }}>
         <Col sm={24}>
           <ModalErrosQuestionarioDinamico />
+
           <MontarDadosTabs
             anoLetivo={dadosEncaminhamentoNAAPA?.anoLetivo}
             codigoTurma={dadosEncaminhamentoNAAPA?.turma?.codigo}

@@ -538,6 +538,9 @@ class QuestionarioDinamicoFuncoes {
 
             switch (questao.tipoQuestao) {
               case tipoQuestao.AtendimentoClinico:
+              case tipoQuestao.AtividadesContraturno:
+              case tipoQuestao.Endereco:
+              case tipoQuestao.ContatoResponsaveis:
                 questao.resposta = JSON.stringify(campos[key] || '');
                 break;
               case tipoQuestao.Upload:

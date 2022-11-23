@@ -47,7 +47,12 @@ const MontarDadosTabs = () => {
   };
 
   return (
-    <ContainerTabsCard type="card" onChange={onChangeTab} activeKey={tabAtiva}>
+    <ContainerTabsCard
+      border
+      type="card"
+      onChange={onChangeTab}
+      activeKey={tabAtiva}
+    >
       {dadosSecoesEncaminhamentoNAAPA?.map(tab => {
         const questionarioId = tab?.questionarioId;
         const nomeTab = tab?.nome;

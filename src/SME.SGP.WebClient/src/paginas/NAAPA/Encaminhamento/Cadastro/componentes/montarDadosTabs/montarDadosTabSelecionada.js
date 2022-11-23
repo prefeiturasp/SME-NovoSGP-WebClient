@@ -1,12 +1,16 @@
 /* eslint-disable react/prop-types */
 import React, { useEffect, useCallback, useState } from 'react';
 import { useSelector } from 'react-redux';
+import { useRouteMatch } from 'react-router-dom';
 import { Auditoria } from '~/componentes';
 import QuestionarioDinamico from '~/componentes-sgp/QuestionarioDinamico/questionarioDinamico';
 import ServicoNAAPA from '~/servicos/Paginas/Gestao/NAAPA/ServicoNAAPA';
 
 const MontarDadosTabSelecionada = props => {
   const { questionarioId, dadosTab } = props;
+
+  const routeMatch = useRouteMatch();
+  const encaminhamentoId = routeMatch?.params?.id || 0;
 
   const { aluno, turma, anoLetivo } = useSelector(
     state => state.encaminhamentoNAAPA.dadosEncaminhamentoNAAPA
@@ -22,7 +26,8 @@ const MontarDadosTabSelecionada = props => {
     const resposta = await ServicoNAAPA.obterDadosQuestionarioId(
       questionarioId,
       aluno?.codigoAluno,
-      turma?.codigo
+      turma?.codigo,
+      encaminhamentoId
     );
 
     if (resposta?.data?.length) {
@@ -30,7 +35,7 @@ const MontarDadosTabSelecionada = props => {
     } else {
       setDadosQuestionarioAtual([]);
     }
-  }, [questionarioId, aluno, turma]);
+  }, [questionarioId, aluno, turma, encaminhamentoId]);
 
   useEffect(() => {
     if (questionarioId) {
