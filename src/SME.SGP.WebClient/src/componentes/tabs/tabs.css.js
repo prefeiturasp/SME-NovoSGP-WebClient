@@ -56,8 +56,8 @@ export const ContainerTabsCard = styled(Tabs)`
     border-top: ${props => (props.border ? 0 : 'initial')};
 
     form {
-      padding-left: ${props => (props.border ? '30px' : 'initial')};
-      padding-right: ${props => (props.border ? '30px' : 'initial')};
+      padding-left: ${props => (props.border ? '25px' : 'initial')};
+      padding-right: ${props => (props.border ? '25px' : 'initial')};
     }
   }
 `;

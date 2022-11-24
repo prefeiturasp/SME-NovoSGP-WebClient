@@ -7,6 +7,7 @@ import Label from '~/componentes/label';
 import { erros } from '~/servicos';
 import ServicoEstudante from '~/servicos/Paginas/Estudante/ServicoEstudante';
 import ModalCadastroEnderecoResidencial from './modalCadastroEnderecoResidencial';
+import ColunaDimensionavel from '../ColunaDimensionavel/colunaDimensionavel';
 
 const EnderecoResidencialTabela = props => {
   const { label, questaoAtual, form, onChange, codigoAluno } = props;
@@ -25,14 +26,17 @@ const EnderecoResidencialTabela = props => {
       codigoAluno
     ).catch(e => erros(e));
 
-    if (resposta?.data) {
-      const lista = resposta.data.map(item => ({
-        numero: item.nro,
-        bairro: item.bairro,
-        complemento: item.complemento,
-        logradouro: item.tipoLogradouro,
-        tipoLogradouro: item.tipoLogradouro,
-      }));
+    if (resposta?.data?.length) {
+      const lista = resposta.data.map(item => {
+        const endereco = { item };
+        return {
+          numero: endereco?.nro,
+          bairro: endereco?.bairro,
+          complemento: endereco?.complemento,
+          logradouro: endereco?.logradouro,
+          tipoLogradouro: endereco?.tipoLogradouro,
+        };
+      });
 
       setDadosAluno(lista);
     } else {
@@ -120,7 +124,7 @@ const EnderecoResidencialTabela = props => {
   }, []);
 
   return (
-    <>
+    <ColunaDimensionavel dimensao={questaoAtual?.dimensao}>
       <ModalCadastroEnderecoResidencial
         onClose={onCloseModal}
         exibirModal={exibirModal}
@@ -139,7 +143,7 @@ const EnderecoResidencialTabela = props => {
       </div>
 
       {form ? obterErros() : ''}
-    </>
+    </ColunaDimensionavel>
   );
 };
 

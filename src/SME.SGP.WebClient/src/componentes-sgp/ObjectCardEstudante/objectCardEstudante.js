@@ -15,6 +15,7 @@ const ObjectCardEstudante = props => {
     exibirBotaoImprimir,
     exibirFrequencia,
     permiteAlterarImagem,
+    dadosIniciais,
   } = props;
 
   const dispatch = useDispatch();
@@ -47,7 +48,7 @@ const ObjectCardEstudante = props => {
   }, [dispatch, codigoAluno, anoLetivo, codigoTurma]);
 
   useEffect(() => {
-    if (!dadosObjectCardEstudante?.codigoEOL) {
+    if (!dadosObjectCardEstudante?.codigoEOL && !dadosIniciais) {
       if (codigoAluno && anoLetivo) {
         obterDadosEstudante();
       } else {
@@ -61,7 +62,20 @@ const ObjectCardEstudante = props => {
     codigoTurma,
     dadosObjectCardEstudante,
     obterDadosEstudante,
+    dadosIniciais,
   ]);
+
+  useEffect(() => {
+    if (!dadosObjectCardEstudante?.codigoEOL && dadosIniciais) {
+      const aluno = {
+        ...dadosIniciais,
+        codigoEOL: dadosIniciais.codigoAluno,
+        numeroChamada: dadosIniciais.numeroAlunoChamada,
+        turma: dadosIniciais.turmaEscola,
+      };
+      dispatch(setDadosObjectCardEstudante(aluno));
+    }
+  }, [dispatch, dadosObjectCardEstudante, dadosIniciais]);
 
   useEffect(() => {
     return () => dispatch(setDadosObjectCardEstudante());
@@ -86,6 +100,7 @@ ObjectCardEstudante.propTypes = {
   exibirBotaoImprimir: PropTypes.bool,
   exibirFrequencia: PropTypes.bool,
   permiteAlterarImagem: PropTypes.bool,
+  dadosIniciais: PropTypes.oneOfType([PropTypes.any]),
 };
 
 ObjectCardEstudante.defaultProps = {
@@ -95,6 +110,7 @@ ObjectCardEstudante.defaultProps = {
   exibirBotaoImprimir: true,
   exibirFrequencia: true,
   permiteAlterarImagem: true,
+  dadosIniciais: null,
 };
 
 export default ObjectCardEstudante;

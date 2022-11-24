@@ -91,12 +91,15 @@ class ServicoNAAPA {
 
     if (dadosMapeados?.secoes?.length) {
       const paramsSalvar = {
-        id: encaminhamentoId || 0,
         turmaId: turma?.id,
         alunoCodigo: aluno?.codigoAluno,
         situacao,
         secoes: dadosMapeados?.secoes,
       };
+
+      if (encaminhamentoId) {
+        paramsSalvar.id = encaminhamentoId;
+      }
 
       dispatch(setExibirLoaderEncaminhamentoNAAPA(true));
 

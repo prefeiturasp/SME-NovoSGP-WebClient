@@ -6,6 +6,14 @@ import shortid from 'shortid';
 import * as Yup from 'yup';
 import { CampoTexto, Colors, ModalConteudoHtml } from '~/componentes';
 import Button from '~/componentes/button';
+import {
+  SGP_BUTTON_SALVAR_ATIVIDADE_CONTRATURNO_MODAL,
+  SGP_BUTTON_VOLTAR_ATIVIDADE_CONTRATURNO_MODAL,
+} from '~/constantes/ids/button';
+import {
+  SGP_INPUT_ATIVIDADE_CONTRATURNO_MODAL,
+  SGP_INPUT_LOCAL_ATIVIDADE_CONTRATURNO_MODAL,
+} from '~/constantes/ids/input';
 
 const ModalCadastroAtividadeContraturno = props => {
   const { onClose, exibirModal, dadosIniciais } = props;
@@ -79,6 +87,7 @@ const ModalCadastroAtividadeContraturno = props => {
                   name="local"
                   label="Local"
                   placeholder="Informe o local"
+                  id={SGP_INPUT_LOCAL_ATIVIDADE_CONTRATURNO_MODAL}
                 />
               </Col>
 
@@ -89,6 +98,7 @@ const ModalCadastroAtividadeContraturno = props => {
                   name="atividade"
                   label="Atividade"
                   placeholder="Informe a atividade"
+                  id={SGP_INPUT_ATIVIDADE_CONTRATURNO_MODAL}
                 />
               </Col>
             </Row>
@@ -97,7 +107,7 @@ const ModalCadastroAtividadeContraturno = props => {
               <Col>
                 <Button
                   border
-                  id="btn-voltar"
+                  id={SGP_BUTTON_VOLTAR_ATIVIDADE_CONTRATURNO_MODAL}
                   key="btn-voltar"
                   label="Cancelar"
                   color={Colors.Azul}
@@ -109,7 +119,7 @@ const ModalCadastroAtividadeContraturno = props => {
                 <Button
                   border
                   label="Salvar"
-                  id="btn-salvar"
+                  id={SGP_BUTTON_SALVAR_ATIVIDADE_CONTRATURNO_MODAL}
                   key="btn-salvar"
                   color={Colors.Roxo}
                   onClick={() => validaAntesDoSubmit(form)}

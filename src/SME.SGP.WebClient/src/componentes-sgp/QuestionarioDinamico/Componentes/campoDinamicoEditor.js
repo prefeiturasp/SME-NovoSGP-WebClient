@@ -1,41 +1,51 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import JoditEditor from '~/componentes/jodit-editor/joditEditor';
+import ColunaDimensionavel from './ColunaDimensionavel/colunaDimensionavel';
 
 const CampoDinamicoEditor = props => {
-  const { questaoAtual, form, label, desabilitado, onChange } = props;
+  const { questaoAtual, form, label, desabilitado, onChange, prefixId } = props;
+
+  const id = prefixId
+    ? `${prefixId}_ORDEM_${questaoAtual?.ordem}`
+    : questaoAtual?.id;
 
   return (
-    <div className="col-md-12 mb-3">
-      {label}
-      <JoditEditor
-        form={form}
-        value={form?.values?.[String(questaoAtual?.id)]}
-        id={String(questaoAtual?.id)}
-        name={String(questaoAtual?.id)}
-        onChange={v => {
-          if (form?.initialValues?.[String(questaoAtual?.id)] !== v) {
-            onChange();
-          }
-        }}
-        readonly={desabilitado}
-      />
-    </div>
+    <ColunaDimensionavel dimensao={questaoAtual?.dimensao}>
+      <div id={id}>
+        {label}
+        <JoditEditor
+          id={id}
+          form={form}
+          readonly={desabilitado}
+          name={String(questaoAtual?.id)}
+          placeholder={questaoAtual?.placeHolder}
+          value={form?.values?.[String(questaoAtual?.id)]}
+          onChange={v => {
+            if (form?.initialValues?.[String(questaoAtual?.id)] !== v) {
+              onChange();
+            }
+          }}
+        />
+      </div>
+    </ColunaDimensionavel>
   );
 };
 
 CampoDinamicoEditor.propTypes = {
-  questaoAtual: PropTypes.oneOfType([PropTypes.any]),
-  form: PropTypes.oneOfType([PropTypes.any]),
   label: PropTypes.oneOfType([PropTypes.any]),
+  form: PropTypes.oneOfType([PropTypes.any]),
+  questaoAtual: PropTypes.oneOfType([PropTypes.any]),
+  prefixId: PropTypes.string,
   desabilitado: PropTypes.bool,
   onChange: PropTypes.func,
 };
 
 CampoDinamicoEditor.defaultProps = {
-  questaoAtual: null,
-  form: null,
   label: '',
+  form: null,
+  prefixId: '',
+  questaoAtual: null,
   desabilitado: false,
   onChange: () => {},
 };

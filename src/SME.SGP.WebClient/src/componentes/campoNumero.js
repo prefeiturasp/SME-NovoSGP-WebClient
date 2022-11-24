@@ -120,6 +120,7 @@ const CampoNumero = React.forwardRef((props, ref) => {
                 onChange(v);
               }}
               disabled={disabled}
+              placeholder={placeholder}
             />
             {!semMensagem ? <span>{form.errors[name]}</span> : ''}
           </>
@@ -175,6 +176,7 @@ CampoNumero.propTypes = {
   autoFocus: PropTypes.bool,
   label: PropTypes.string,
   validateOnBlurInOnChange: PropTypes.bool,
+  placeholder: PropTypes.string,
 };
 
 CampoNumero.defaultProps = {
@@ -188,6 +190,7 @@ CampoNumero.defaultProps = {
   autoFocus: false,
   label: '',
   validateOnBlurInOnChange: false,
+  placeholder: '',
 };
 
 export default CampoNumero;

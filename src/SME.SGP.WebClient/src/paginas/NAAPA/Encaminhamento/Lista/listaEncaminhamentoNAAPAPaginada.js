@@ -90,7 +90,10 @@ const ListaEncaminhamentoNAAPAPaginada = props => {
     filtrar();
   }, [filtrar]);
 
-  return filtros?.anoLetivo && filtros?.dreId && filtros?.codigoUe ? (
+  const exibirTabela =
+    filtros?.anoLetivo && filtros?.dreId && filtros?.codigoUe;
+
+  return exibirTabela ? (
     <ListaPaginada
       url="v1/encaminhamento-naapa"
       id={SGP_TABLE_ENCAMINHAMENTO_NAAPA}

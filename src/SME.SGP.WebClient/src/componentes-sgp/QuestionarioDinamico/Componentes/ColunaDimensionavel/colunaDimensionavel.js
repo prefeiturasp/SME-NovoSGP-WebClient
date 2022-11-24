@@ -12,13 +12,11 @@ const ColunaDimensionavel = props => {
   }
 
   return novaEstrutura ? (
-    <Col sm={24} md={dimensaoCalculada} lg={dimensaoCalculada}>
+    <Col sm={24} lg={dimensaoCalculada}>
       {children}
     </Col>
   ) : (
-    <div className={`col-12 col-md-${dimensao} col-lg-${dimensao}`}>
-      {children}
-    </div>
+    <div className={`col-12 col-lg-${dimensao} mb-3`}>{children}</div>
   );
 };
 
