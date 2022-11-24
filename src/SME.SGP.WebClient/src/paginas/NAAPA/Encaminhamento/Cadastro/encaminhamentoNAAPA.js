@@ -8,6 +8,7 @@ import CadastroEncaminhamentoNAAPA from './cadastroEncaminhamentoNAAPA';
 import { store } from '~/redux';
 import LoaderEncaminhamentoNAAPA from './componentes/loaderEncaminhamentoNAAPA';
 import { limparDadosLocalizarEstudante } from '~/redux/modulos/localizarEstudante/actions';
+import { setLimparDadosEncaminhamentoNAAPA } from '~/redux/modulos/encaminhamentoNAAPA/actions';
 
 const EncaminhamentoNAAPA = () => {
   const routeMatch = useRouteMatch();
@@ -19,12 +20,13 @@ const EncaminhamentoNAAPA = () => {
   useEffect(() => {
     return () => {
       store.dispatch(limparDadosLocalizarEstudante());
+      store.dispatch(setLimparDadosEncaminhamentoNAAPA());
     };
   }, []);
 
   return (
     <LoaderEncaminhamentoNAAPA>
-      <Cabecalho pagina="Novo encaminhamento">
+      <Cabecalho pagina="Encaminhamento">
         <CadastroEncaminhamentoNAAPABotoesAcao
           mostrarBusca={mostrarBusca}
           setMostrarBusca={setMostrarBusca}

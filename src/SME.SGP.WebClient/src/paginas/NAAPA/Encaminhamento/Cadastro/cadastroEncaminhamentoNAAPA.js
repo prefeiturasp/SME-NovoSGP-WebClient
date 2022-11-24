@@ -9,8 +9,9 @@ import MontarDadosTabs from './componentes/montarDadosTabs/montarDadosTabs';
 import ServicoNAAPA from '~/servicos/Paginas/Gestao/NAAPA/ServicoNAAPA';
 import { store } from '~/redux';
 import { setDadosEncaminhamentoNAAPA } from '~/redux/modulos/encaminhamentoNAAPA/actions';
-import { erros } from '~/servicos';
-import ModalErrosQuestionarioDinamico from '~/componentes-sgp/QuestionarioDinamico/Componentes/ModalErrosEncaminhamento/modalErrosQuestionarioDinamico';
+import { erros, setBreadcrumbManual } from '~/servicos';
+import ModalErrosQuestionarioDinamico from '~/componentes-sgp/QuestionarioDinamico/Componentes/ModalErrosQuestionarioDinamico/modalErrosQuestionarioDinamico';
+import { RotasDto } from '~/dtos';
 
 const CadastroEncaminhamentoNAAPA = () => {
   const routeMatch = useRouteMatch();
@@ -38,11 +39,7 @@ const CadastroEncaminhamentoNAAPA = () => {
     ).catch(e => erros(e));
 
     if (resposta?.data) {
-      // TODO - Testar!
       const dados = resposta.data;
-
-      dados.anoLetivo = resposta.data.anoLetivo;
-      dados.aluno = resposta.data.aluno;
 
       dados.dre = {
         codigo: dados?.dreCodigo,
@@ -77,6 +74,16 @@ const CadastroEncaminhamentoNAAPA = () => {
     novoEncaminhamentoNAAPADados,
     obterDadosEncaminhamentoNAAPA,
   ]);
+
+  useEffect(() => {
+    if (routeMatch.url && encaminhamentoId) {
+      setBreadcrumbManual(
+        routeMatch.url,
+        'Encaminhamento',
+        `${RotasDto.ENCAMINHAMENTO_NAAPA}`
+      );
+    }
+  }, [routeMatch, encaminhamentoId]);
 
   return dadosEncaminhamentoNAAPA?.aluno?.codigoAluno ? (
     <>
@@ -117,13 +124,19 @@ const CadastroEncaminhamentoNAAPA = () => {
             anoLetivo={dadosEncaminhamentoNAAPA?.anoLetivo}
             codigoTurma={dadosEncaminhamentoNAAPA?.turma?.codigo}
             codigoAluno={dadosEncaminhamentoNAAPA?.aluno?.codigoAluno}
+            dadosIniciais={
+              encaminhamentoId && dadosEncaminhamentoNAAPA?.aluno?.turmaEscola
+                ? dadosEncaminhamentoNAAPA?.aluno
+                : null
+            }
           />
         </Col>
       </Row>
 
-      <Row>
+      <Row style={{ marginTop: '16px' }}>
         <Col sm={24}>
           <ModalErrosQuestionarioDinamico />
+
           <MontarDadosTabs
             anoLetivo={dadosEncaminhamentoNAAPA?.anoLetivo}
             codigoTurma={dadosEncaminhamentoNAAPA?.turma?.codigo}

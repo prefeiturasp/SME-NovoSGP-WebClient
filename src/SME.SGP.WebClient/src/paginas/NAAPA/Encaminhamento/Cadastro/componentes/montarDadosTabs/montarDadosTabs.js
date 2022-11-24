@@ -1,4 +1,4 @@
-import { Tabs } from 'antd';
+import { Row, Tabs } from 'antd';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useRouteMatch } from 'react-router-dom';
@@ -47,23 +47,36 @@ const MontarDadosTabs = () => {
   };
 
   return (
-    <ContainerTabsCard type="card" onChange={onChangeTab} activeKey={tabAtiva}>
-      {dadosSecoesEncaminhamentoNAAPA?.map(tab => {
-        const questionarioId = tab?.questionarioId;
-        const nomeTab = tab?.nome;
+    <>
+      <ContainerTabsCard
+        border
+        type="card"
+        onChange={onChangeTab}
+        activeKey={tabAtiva}
+      >
+        {dadosSecoesEncaminhamentoNAAPA?.map(tab => {
+          const questionarioId = tab?.questionarioId;
+          const nomeTab = tab?.nome;
 
-        return (
-          <TabPane tab={nomeTab} key={questionarioId}>
-            {questionarioId?.toString() === tabAtiva && (
-              <MontarDadosTabSelecionada
-                questionarioId={questionarioId}
-                dadosTab={tab}
-              />
-            )}
-          </TabPane>
-        );
-      })}
-    </ContainerTabsCard>
+          return (
+            <TabPane tab={nomeTab} key={questionarioId}>
+              {questionarioId?.toString() === tabAtiva && (
+                <MontarDadosTabSelecionada
+                  questionarioId={questionarioId}
+                  dadosTab={tab}
+                />
+              )}
+            </TabPane>
+          );
+        })}
+      </ContainerTabsCard>
+
+      {!tabAtiva && (
+        <Row type="flex" justify="center" style={{ marginTop: 20 }}>
+          Selecione uma aba
+        </Row>
+      )}
+    </>
   );
 };
 

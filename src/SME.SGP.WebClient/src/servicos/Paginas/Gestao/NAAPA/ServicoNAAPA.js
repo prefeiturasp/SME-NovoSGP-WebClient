@@ -23,13 +23,8 @@ class ServicoNAAPA {
 
   buscarPrioridades = () => api.get(`${URL_PADRAO}/prioridades`);
 
-  obterDadosEncaminhamentoNAAPA = encaminhamentoId => {
-    return new Promise(resolve => {
-      setTimeout(() => {
-        resolve();
-      }, 1000);
-    });
-  };
+  obterDadosEncaminhamentoNAAPA = encaminhamentoId =>
+    api.get(`${URL_PADRAO}/${encaminhamentoId}`);
 
   obterSecoes = encaminhamentoId =>
     api.get(`${URL_PADRAO}/secoes?encaminhamentoNAAPAId=${encaminhamentoId}`);
@@ -96,12 +91,15 @@ class ServicoNAAPA {
 
     if (dadosMapeados?.secoes?.length) {
       const paramsSalvar = {
-        id: encaminhamentoId || 0,
         turmaId: turma?.id,
         alunoCodigo: aluno?.codigoAluno,
         situacao,
         secoes: dadosMapeados?.secoes,
       };
+
+      if (encaminhamentoId) {
+        paramsSalvar.id = encaminhamentoId;
+      }
 
       dispatch(setExibirLoaderEncaminhamentoNAAPA(true));
 

@@ -141,13 +141,22 @@ const LocalizarEstudante = () => {
 
   const onChangeLocalizadorEstudante = aluno => {
     if (aluno?.alunoCodigo && aluno?.alunoNome) {
-      const dados = {
+      const dadosAluno = {
         codigoAluno: aluno?.alunoCodigo,
-        codigoTurma: aluno?.codigoTurma,
-        turmaId: aluno?.turmaId,
       };
-      setAlunoLocalizadorSelecionado(dados);
-      store.dispatch(setAluno(dados));
+
+      setAlunoLocalizadorSelecionado(dadosAluno);
+      store.dispatch(setAluno(dadosAluno));
+
+      if (!codigoTurma) {
+        const dadosTurma = {
+          codigo: aluno?.codigoTurma,
+          nome: aluno?.nomeComModalidadeTurma,
+          id: aluno?.turmaId,
+        };
+
+        store.dispatch(setTurma(dadosTurma));
+      }
     } else {
       setAlunoLocalizadorSelecionado();
       store.dispatch(setAluno());
@@ -252,7 +261,7 @@ const LocalizarEstudante = () => {
             showLabel
             novaEstrutura
             anoLetivo={anoAtual}
-            desabilitado={!codigoTurma}
+            desabilitado={!codigoUe}
             ueId={codigoDre ? codigoUe : ''}
             id={SGP_SELECT_ESTUDANTE_CRIANCA}
             labelAlunoNome="Criança/Estudante"

@@ -1566,7 +1566,7 @@ rotas.set(RotasDto.ENCAMINHAMENTO_NAAPA, {
 });
 
 rotas.set(`${RotasDto.ENCAMINHAMENTO_NAAPA}/novo`, {
-  breadcrumbName: 'Novo encaminhamento',
+  breadcrumbName: 'Encaminhamento',
   parent: RotasDto.ENCAMINHAMENTO_NAAPA,
   component: CadastroEncaminhamentoNAAPA,
   exact: true,
@@ -1576,7 +1576,7 @@ rotas.set(`${RotasDto.ENCAMINHAMENTO_NAAPA}/novo`, {
 });
 
 rotas.set(`${RotasDto.ENCAMINHAMENTO_NAAPA}/:id`, {
-  breadcrumbName: 'Editar',
+  breadcrumbName: 'Encaminhamento',
   parent: RotasDto.ENCAMINHAMENTO_NAAPA,
   component: CadastroEncaminhamentoNAAPA,
   exact: true,

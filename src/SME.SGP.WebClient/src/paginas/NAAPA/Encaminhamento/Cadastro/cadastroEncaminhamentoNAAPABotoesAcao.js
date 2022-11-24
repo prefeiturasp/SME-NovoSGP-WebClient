@@ -75,8 +75,16 @@ const CadastroEncaminhamentoNAAPABotoesAcao = props => {
         'Suas alterações não foram salvas, deseja salvar agora?'
       );
 
+      // TODO - Validar com back se tem a prop situacao
+      const situacao =
+        dadosEncaminhamentoNAAPA?.situacao || situacaoNAAPA.Rascunho;
+
       if (confirmou) {
-        const salvou = await ServicoNAAPA.salvarEncaminhamento();
+        const salvou = await ServicoNAAPA.salvarEncaminhamento(
+          encaminhamentoId,
+          situacao,
+          false
+        );
 
         if (salvou) {
           let mensagem = 'Registro salvo com sucesso';
@@ -107,8 +115,8 @@ const CadastroEncaminhamentoNAAPABotoesAcao = props => {
         erros(e);
       });
       if (resultado?.status === 200) {
-        sucesso('Plano excluído com sucesso');
-        history.push(RotasDto.RELATORIO_AEE_PLANO);
+        sucesso('Encaminhamento excluído com sucesso');
+        history.push(RotasDto.ENCAMINHAMENTO_NAAPA);
       }
     }
   };
@@ -130,14 +138,13 @@ const CadastroEncaminhamentoNAAPABotoesAcao = props => {
     let situacao = situacaoNAAPA.Rascunho;
 
     if (encaminhamentoId) {
-      // TODO - Validar com back se tem a prop situacao
       situacao = dadosEncaminhamentoNAAPA?.situacao;
     }
 
     const salvou = await ServicoNAAPA.salvarEncaminhamento(
       encaminhamentoId,
       situacao,
-      true
+      false
     );
     if (salvou) {
       sucesso(`Rascunho salvo com sucesso`);
@@ -202,9 +209,8 @@ const CadastroEncaminhamentoNAAPABotoesAcao = props => {
             />
           </Col>
 
-          <Col>
+          <Col hidden>
             <Button
-              hidden
               bold
               border
               label="Enviar"
