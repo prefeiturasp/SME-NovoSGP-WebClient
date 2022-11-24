@@ -1,66 +1,33 @@
 import PropTypes from 'prop-types';
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import { DataTable } from '~/componentes';
 import { Base } from '~/componentes/colors';
 import Label from '~/componentes/label';
-import { erros } from '~/servicos';
-import ServicoEstudante from '~/servicos/Paginas/Estudante/ServicoEstudante';
 import ModalCadastroEnderecoResidencial from './modalCadastroEnderecoResidencial';
 import ColunaDimensionavel from '../ColunaDimensionavel/colunaDimensionavel';
+import { SGP_TABLE_ENDERECO_RESIDENCIAL } from '~/constantes/ids/table';
 
 const EnderecoResidencialTabela = props => {
-  const { label, questaoAtual, form, onChange, codigoAluno } = props;
+  const { label, questaoAtual, form, onChange, disabled } = props;
 
   const [exibirModal, setExibirModal] = useState(false);
   const [dadosIniciais, setDadosIniciais] = useState();
-  const [dadosAluno, setDadosAluno] = useState();
 
   const valoresFormulario = form?.values?.[questaoAtual.id];
-  const dadosTabela = valoresFormulario?.length
-    ? [...valoresFormulario, dadosAluno]
-    : [];
-
-  const obterEnderecoResidencial = async () => {
-    const resposta = await ServicoEstudante.obterInformacoesAlunoPorCodigo(
-      codigoAluno
-    ).catch(e => erros(e));
-
-    if (resposta?.data?.length) {
-      const lista = resposta.data.map(item => {
-        const endereco = { item };
-        return {
-          numero: endereco?.nro,
-          bairro: endereco?.bairro,
-          complemento: endereco?.complemento,
-          logradouro: endereco?.logradouro,
-          tipoLogradouro: endereco?.tipoLogradouro,
-        };
-      });
-
-      setDadosAluno(lista);
-    } else {
-      setDadosAluno([]);
-    }
-  };
+  const dadosTabela = valoresFormulario?.length ? valoresFormulario : [];
 
   const onCloseModal = novosDados => {
     setExibirModal(false);
     setDadosIniciais();
 
     if (novosDados) {
-      const dadosAtuais = form?.values?.[questaoAtual.id]?.length
+      let dadosAtuais = form?.values?.[questaoAtual.id]?.length
         ? form?.values?.[questaoAtual.id]
         : [];
-      if (novosDados?.id) {
-        const indexItemAnterior = dadosAtuais.findIndex(
-          x => x.id === novosDados.id
-        );
-        dadosAtuais[indexItemAnterior] = novosDados;
-      } else {
-        novosDados.id = dadosAtuais.length + 1;
-        dadosAtuais.push(novosDados);
-      }
+
+      dadosAtuais = [{ ...novosDados }];
+
       if (form) {
         form.setFieldValue(questaoAtual.id, dadosAtuais);
         onChange();
@@ -69,7 +36,7 @@ const EnderecoResidencialTabela = props => {
   };
 
   const onClickRow = row => {
-    setDadosIniciais(row);
+    setDadosIniciais({ ...row });
     setExibirModal(true);
   };
 
@@ -118,17 +85,13 @@ const EnderecoResidencialTabela = props => {
     );
   };
 
-  useEffect(() => {
-    obterEnderecoResidencial();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
   return (
     <ColunaDimensionavel dimensao={questaoAtual?.dimensao}>
       <ModalCadastroEnderecoResidencial
         onClose={onCloseModal}
         exibirModal={exibirModal}
         dadosIniciais={dadosIniciais}
+        disabled={disabled}
       />
 
       <Label text={label} />
@@ -139,6 +102,7 @@ const EnderecoResidencialTabela = props => {
           pagination={false}
           onClickRow={onClickRow}
           dataSource={dadosTabela}
+          id={SGP_TABLE_ENDERECO_RESIDENCIAL}
         />
       </div>
 
@@ -149,8 +113,8 @@ const EnderecoResidencialTabela = props => {
 
 EnderecoResidencialTabela.propTypes = {
   label: PropTypes.string,
+  disabled: PropTypes.bool,
   form: PropTypes.oneOfType([PropTypes.any]),
-  codigoAluno: PropTypes.number,
   onChange: PropTypes.func,
   questaoAtual: PropTypes.oneOfType([PropTypes.any]),
 };
@@ -158,7 +122,7 @@ EnderecoResidencialTabela.propTypes = {
 EnderecoResidencialTabela.defaultProps = {
   label: '',
   form: null,
-  codigoAluno: 0,
+  disabled: false,
   onChange: () => {},
   questaoAtual: null,
 };

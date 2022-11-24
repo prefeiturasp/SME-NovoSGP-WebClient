@@ -1,4 +1,4 @@
-import { groupBy } from 'lodash';
+import _, { groupBy } from 'lodash';
 import tipoQuestao from '~/dtos/tipoQuestao';
 import { store } from '~/redux';
 import {
@@ -8,6 +8,7 @@ import {
   setResetarTabela,
   setNomesSecoesComCamposObrigatorios,
 } from '~/redux/modulos/questionarioDinamico/actions';
+import { confirmar } from '~/servicos';
 
 class QuestionarioDinamicoFuncoes {
   agruparCamposDuplicados = (data, campo) => {
@@ -681,6 +682,102 @@ class QuestionarioDinamicoFuncoes {
     }
 
     return false;
+  };
+
+  pegarTipoQuestao = tipoQuestaoValor => {
+    switch (tipoQuestaoValor) {
+      case tipoQuestao.Frase:
+      case tipoQuestao.Numerico:
+        return 'INPUT';
+      case tipoQuestao.Texto:
+        return 'TEXT_AREA';
+      case tipoQuestao.Radio:
+        return 'RADIO';
+      case tipoQuestao.Combo:
+      case tipoQuestao.ComboMultiplaEscolha:
+      case tipoQuestao.PeriodoEscolar:
+        return 'SELECT';
+      case tipoQuestao.Checkbox:
+        return 'CHECKBOX';
+      case tipoQuestao.Upload:
+        return 'UPLOAD';
+      case tipoQuestao.InformacoesEscolares:
+      case tipoQuestao.AtendimentoClinico:
+      case tipoQuestao.FrequenciaEstudanteAEE:
+      case tipoQuestao.Endereco:
+      case tipoQuestao.ContatoResponsaveis:
+      case tipoQuestao.AtividadesContraturno:
+        return 'TABLE';
+      case tipoQuestao.Periodo:
+      case tipoQuestao.Data:
+        return 'DATE';
+      case tipoQuestao.EditorTexto:
+        return 'JODIT_EDITOR';
+      default:
+        return '';
+    }
+  };
+
+  gerarId = (prefixId, dadosQuestao) => {
+    const temPrefixIdENomeComponente = prefixId && dadosQuestao?.nomeComponente;
+    const tipoQuestaoNome = this.pegarTipoQuestao(dadosQuestao?.tipoQuestao);
+
+    return temPrefixIdENomeComponente
+      ? `${prefixId}_${tipoQuestaoNome}_${dadosQuestao?.nomeComponente}`
+      : dadosQuestao?.id;
+  };
+
+  removerLinhaTabela = async (
+    e,
+    form,
+    questaoAtual,
+    linha,
+    onChange,
+    disabled
+  ) => {
+    e.stopPropagation();
+
+    if (!disabled) {
+      const confirmado = await confirmar(
+        'Excluir',
+        '',
+        'Você tem certeza que deseja excluir este registro?'
+      );
+
+      if (confirmado) {
+        const dadosAtuais = form?.values?.[questaoAtual.id]?.length
+          ? form?.values?.[questaoAtual.id]
+          : [];
+
+        const novoMap = _.cloneDeep(dadosAtuais);
+
+        const indice = novoMap.findIndex(item => item.id === linha.id);
+        if (indice !== -1) {
+          novoMap.splice(indice, 1);
+          form.setFieldValue(questaoAtual.id, novoMap);
+          onChange();
+        }
+      }
+    }
+  };
+
+  adicionarLinhaTabela = (form, questaoAtual, novosDados, onChange) => {
+    const dadosAtuais = form?.values?.[questaoAtual.id]?.length
+      ? form?.values?.[questaoAtual.id]
+      : [];
+    const novoMap = _.cloneDeep(dadosAtuais);
+
+    if (novosDados?.id) {
+      const indexItemAnterior = novoMap.findIndex(x => x.id === novosDados.id);
+      novoMap[indexItemAnterior] = novosDados;
+    } else {
+      novosDados.id = novoMap.length + 1;
+      novoMap.push(novosDados);
+    }
+    if (form) {
+      form.setFieldValue(questaoAtual.id, novoMap);
+      onChange();
+    }
   };
 }
 

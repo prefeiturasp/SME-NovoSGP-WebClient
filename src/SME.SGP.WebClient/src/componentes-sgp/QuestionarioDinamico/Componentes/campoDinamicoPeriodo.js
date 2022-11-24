@@ -3,17 +3,12 @@ import React from 'react';
 import { CampoData } from '~/componentes/campoData/campoData';
 import { Base } from '~/componentes/colors';
 import ColunaDimensionavel from './ColunaDimensionavel/colunaDimensionavel';
+import QuestionarioDinamicoFuncoes from '../Funcoes/QuestionarioDinamicoFuncoes';
 
 const CampoDinamicoPeriodo = props => {
   const { questaoAtual, form, label, desabilitado, onChange, prefixId } = props;
 
-  const idPeriodoInicio = prefixId
-    ? `${prefixId}_ORDEM_${questaoAtual?.ordem}_PERIODO_INICIO`
-    : `${questaoAtual?.id}.periodoInicio`;
-
-  const idPeriodoFim = prefixId
-    ? `${prefixId}_ORDEM_${questaoAtual?.ordem}_PERIODO_FIM`
-    : `${questaoAtual?.id}.periodoFim`;
+  const id = QuestionarioDinamicoFuncoes.gerarId(prefixId, questaoAtual);
 
   const obterErroQuestaoAtual = () => {
     return form &&
@@ -61,10 +56,10 @@ const CampoDinamicoPeriodo = props => {
         <div className="col-md-2">
           <CampoData
             form={form}
-            id={idPeriodoInicio}
             placeholder="Início"
             executarOnChangeExterno
             formatoData="DD/MM/YYYY"
+            id={`${id}_PERIODO_INICIO`}
             name={`${questaoAtual?.id}.periodoInicio`}
             desabilitado={desabilitado || questaoAtual?.somenteLeitura}
             className={obterErroPorCampo('periodoInicio') ? 'is-invalid' : ''}
@@ -83,10 +78,10 @@ const CampoDinamicoPeriodo = props => {
         <div className="col-md-2">
           <CampoData
             form={form}
-            id={idPeriodoFim}
             placeholder="Fim"
             executarOnChangeExterno
             formatoData="DD/MM/YYYY"
+            id={`${id}_PERIODO_FIM`}
             desabilitado={desabilitado}
             name={`${questaoAtual?.id}.periodoFim`}
             className={obterErroPorCampo('periodoFim') ? 'is-invalid' : ''}

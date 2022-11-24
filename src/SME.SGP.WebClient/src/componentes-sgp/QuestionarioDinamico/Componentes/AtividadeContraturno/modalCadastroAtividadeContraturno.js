@@ -16,7 +16,7 @@ import {
 } from '~/constantes/ids/input';
 
 const ModalCadastroAtividadeContraturno = props => {
-  const { onClose, exibirModal, dadosIniciais } = props;
+  const { onClose, exibirModal, dadosIniciais, disabled } = props;
 
   const [refForm, setRefForm] = useState({});
 
@@ -86,6 +86,7 @@ const ModalCadastroAtividadeContraturno = props => {
                   labelRequired
                   name="local"
                   label="Local"
+                  desabilitado={disabled}
                   placeholder="Informe o local"
                   id={SGP_INPUT_LOCAL_ATIVIDADE_CONTRATURNO_MODAL}
                 />
@@ -97,6 +98,7 @@ const ModalCadastroAtividadeContraturno = props => {
                   labelRequired
                   name="atividade"
                   label="Atividade"
+                  desabilitado={disabled}
                   placeholder="Informe a atividade"
                   id={SGP_INPUT_ATIVIDADE_CONTRATURNO_MODAL}
                 />
@@ -107,11 +109,11 @@ const ModalCadastroAtividadeContraturno = props => {
               <Col>
                 <Button
                   border
-                  id={SGP_BUTTON_VOLTAR_ATIVIDADE_CONTRATURNO_MODAL}
                   key="btn-voltar"
                   label="Cancelar"
                   color={Colors.Azul}
                   onClick={fecharModal}
+                  id={SGP_BUTTON_VOLTAR_ATIVIDADE_CONTRATURNO_MODAL}
                 />
               </Col>
 
@@ -119,10 +121,11 @@ const ModalCadastroAtividadeContraturno = props => {
                 <Button
                   border
                   label="Salvar"
-                  id={SGP_BUTTON_SALVAR_ATIVIDADE_CONTRATURNO_MODAL}
                   key="btn-salvar"
                   color={Colors.Roxo}
+                  disabled={disabled}
                   onClick={() => validaAntesDoSubmit(form)}
+                  id={SGP_BUTTON_SALVAR_ATIVIDADE_CONTRATURNO_MODAL}
                 />
               </Col>
             </Row>
@@ -137,12 +140,14 @@ ModalCadastroAtividadeContraturno.propTypes = {
   onClose: PropTypes.func,
   exibirModal: PropTypes.bool,
   dadosIniciais: PropTypes.oneOfType([PropTypes.any]),
+  disabled: PropTypes.bool,
 };
 
 ModalCadastroAtividadeContraturno.defaultProps = {
   onClose: () => {},
   exibirModal: false,
   dadosIniciais: null,
+  disabled: false,
 };
 
 export default ModalCadastroAtividadeContraturno;

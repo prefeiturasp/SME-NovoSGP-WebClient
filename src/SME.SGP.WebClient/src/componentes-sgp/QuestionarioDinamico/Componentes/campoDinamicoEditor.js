@@ -2,13 +2,12 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import JoditEditor from '~/componentes/jodit-editor/joditEditor';
 import ColunaDimensionavel from './ColunaDimensionavel/colunaDimensionavel';
+import QuestionarioDinamicoFuncoes from '../Funcoes/QuestionarioDinamicoFuncoes';
 
 const CampoDinamicoEditor = props => {
   const { questaoAtual, form, label, desabilitado, onChange, prefixId } = props;
 
-  const id = prefixId
-    ? `${prefixId}_ORDEM_${questaoAtual?.ordem}`
-    : questaoAtual?.id;
+  const id = QuestionarioDinamicoFuncoes.gerarId(prefixId, questaoAtual);
 
   return (
     <ColunaDimensionavel dimensao={questaoAtual?.dimensao}>

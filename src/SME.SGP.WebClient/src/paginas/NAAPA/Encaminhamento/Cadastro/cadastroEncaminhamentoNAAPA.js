@@ -118,7 +118,8 @@ const CadastroEncaminhamentoNAAPA = () => {
       <Row>
         <Col sm={24}>
           <ObjectCardEstudante
-            exibirFrequencia={false}
+            consultarFrequenciaGlobal
+            exibirFrequencia
             exibirBotaoImprimir={false}
             permiteAlterarImagem={false}
             anoLetivo={dadosEncaminhamentoNAAPA?.anoLetivo}

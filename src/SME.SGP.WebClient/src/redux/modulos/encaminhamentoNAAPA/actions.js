@@ -27,3 +27,8 @@ export const setDesabilitarCamposEncaminhamentoNAAPA = payload => ({
   type: '@encaminhamentoNAAPA/setDesabilitarCamposEncaminhamentoNAAPA',
   payload,
 });
+
+export const setTabAtivaEncaminhamentoNAAPA = payload => ({
+  type: '@encaminhamentoNAAPA/setTabAtivaEncaminhamentoNAAPA',
+  payload,
+});

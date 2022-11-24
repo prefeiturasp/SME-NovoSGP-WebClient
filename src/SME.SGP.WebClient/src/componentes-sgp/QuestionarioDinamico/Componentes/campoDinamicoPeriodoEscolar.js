@@ -7,6 +7,7 @@ import { erros } from '~/servicos';
 import ColunaDimensionavel from './ColunaDimensionavel/colunaDimensionavel';
 import ServicoPeriodoEscolar from '~/servicos/Paginas/Calendario/ServicoPeriodoEscolar';
 import { setQuestionarioDinamicoEmEdicao } from '~/redux/modulos/questionarioDinamico/actions';
+import QuestionarioDinamicoFuncoes from '../Funcoes/QuestionarioDinamicoFuncoes';
 
 const CampoDinamicoPeriodoEscolar = props => {
   const {
@@ -20,9 +21,7 @@ const CampoDinamicoPeriodoEscolar = props => {
     prefixId,
   } = props;
 
-  const id = prefixId
-    ? `${prefixId}_ORDEM_${questaoAtual?.ordem}`
-    : questaoAtual?.id;
+  const id = QuestionarioDinamicoFuncoes.gerarId(prefixId, questaoAtual);
 
   const [lista, setLista] = useState([]);
   const [exibirLoader, setExibirLoader] = useState(false);

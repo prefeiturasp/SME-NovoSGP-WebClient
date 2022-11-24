@@ -5,6 +5,7 @@ import { Loader } from '~/componentes';
 import DetalhesAluno from '~/componentes/Alunos/Detalhes';
 import { setDadosObjectCardEstudante } from '~/redux/modulos/objectCardEstudante/actions';
 import { erros } from '~/servicos';
+import ServicoConselhoClasse from '~/servicos/Paginas/ConselhoClasse/ServicoConselhoClasse';
 import ServicoEstudante from '~/servicos/Paginas/Estudante/ServicoEstudante';
 
 const ObjectCardEstudante = props => {
@@ -16,6 +17,7 @@ const ObjectCardEstudante = props => {
     exibirFrequencia,
     permiteAlterarImagem,
     dadosIniciais,
+    consultarFrequenciaGlobal,
   } = props;
 
   const dispatch = useDispatch();
@@ -25,6 +27,15 @@ const ObjectCardEstudante = props => {
   );
 
   const [exibirLoader, setExibirLoader] = useState(false);
+
+  const obterFrequenciaGlobalAluno = useCallback(async () => {
+    const retorno = await ServicoConselhoClasse.obterFrequenciaAluno(
+      codigoAluno,
+      codigoTurma
+    ).catch(e => erros(e));
+
+    return retorno?.data;
+  }, [codigoTurma, codigoAluno]);
 
   const obterDadosEstudante = useCallback(async () => {
     setExibirLoader(true);
@@ -43,9 +54,20 @@ const ObjectCardEstudante = props => {
         numeroChamada: resultado.data.numeroAlunoChamada,
         turma: resultado.data.turmaEscola,
       };
+      if (consultarFrequenciaGlobal) {
+        const novaFreq = await obterFrequenciaGlobalAluno();
+        aluno.frequencia = novaFreq;
+      }
       dispatch(setDadosObjectCardEstudante(aluno));
     }
-  }, [dispatch, codigoAluno, anoLetivo, codigoTurma]);
+  }, [
+    dispatch,
+    consultarFrequenciaGlobal,
+    codigoAluno,
+    anoLetivo,
+    codigoTurma,
+    obterFrequenciaGlobalAluno,
+  ]);
 
   useEffect(() => {
     if (!dadosObjectCardEstudante?.codigoEOL && !dadosIniciais) {
@@ -101,6 +123,7 @@ ObjectCardEstudante.propTypes = {
   exibirFrequencia: PropTypes.bool,
   permiteAlterarImagem: PropTypes.bool,
   dadosIniciais: PropTypes.oneOfType([PropTypes.any]),
+  consultarFrequenciaGlobal: PropTypes.bool,
 };
 
 ObjectCardEstudante.defaultProps = {
@@ -111,6 +134,7 @@ ObjectCardEstudante.defaultProps = {
   exibirFrequencia: true,
   permiteAlterarImagem: true,
   dadosIniciais: null,
+  consultarFrequenciaGlobal: false,
 };
 
 export default ObjectCardEstudante;

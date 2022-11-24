@@ -19,7 +19,7 @@ import {
 } from '~/constantes/ids/input';
 
 const ModalCadastroEnderecoResidencial = props => {
-  const { onClose, exibirModal, dadosIniciais } = props;
+  const { onClose, exibirModal, dadosIniciais, disabled } = props;
 
   const [refForm, setRefForm] = useState({});
 
@@ -100,6 +100,7 @@ const ModalCadastroEnderecoResidencial = props => {
                   form={form}
                   labelRequired
                   name="tipoLogradouro"
+                  desabilitado={disabled}
                   label="Tipo de logradouro"
                   placeholder="Informe o tipo de logradouro"
                   id={SGP_INPUT_TIPO_LOGRADOURO_ENDERECO_RESIDENCIAL_MODAL}
@@ -112,6 +113,7 @@ const ModalCadastroEnderecoResidencial = props => {
                   labelRequired
                   name="logradouro"
                   label="Logradouro"
+                  desabilitado={disabled}
                   placeholder="Informe o logradouro"
                   id={SGP_INPUT_LOGRADOURO_ENDERECO_RESIDENCIAL_MODAL}
                 />
@@ -126,6 +128,7 @@ const ModalCadastroEnderecoResidencial = props => {
                   maxLength={11}
                   name="numero"
                   label="Número"
+                  desabilitado={disabled}
                   placeholder="Informe o número"
                   id={SGP_INPUT_NUMERO_ENDERECO_RESIDENCIAL_MODAL}
                 />
@@ -137,6 +140,7 @@ const ModalCadastroEnderecoResidencial = props => {
                   labelRequired
                   name="complemento"
                   label="Complemento"
+                  desabilitado={disabled}
                   placeholder="Informe o complemento"
                   id={SGP_INPUT_COMPLEMENTO_ENDERECO_RESIDENCIAL_MODAL}
                 />
@@ -148,6 +152,7 @@ const ModalCadastroEnderecoResidencial = props => {
                   labelRequired
                   name="bairro"
                   label="Bairro"
+                  desabilitado={disabled}
                   placeholder="Informe o bairro"
                   id={SGP_INPUT_BAIRRO_ENDERECO_RESIDENCIAL_MODAL}
                 />
@@ -172,6 +177,7 @@ const ModalCadastroEnderecoResidencial = props => {
                   label="Salvar"
                   key="btn-salvar"
                   color={Colors.Roxo}
+                  disabled={disabled}
                   onClick={() => validaAntesDoSubmit(form)}
                   id={SGP_BUTTON_SALVAR_ENDERECO_RESIDENCIAL_MODAL}
                 />
@@ -186,11 +192,13 @@ const ModalCadastroEnderecoResidencial = props => {
 
 ModalCadastroEnderecoResidencial.propTypes = {
   onClose: PropTypes.func,
+  disabled: PropTypes.bool,
   exibirModal: PropTypes.bool,
   dadosIniciais: PropTypes.oneOfType([PropTypes.any]),
 };
 
 ModalCadastroEnderecoResidencial.defaultProps = {
+  disabled: false,
   onClose: () => {},
   exibirModal: false,
   dadosIniciais: null,

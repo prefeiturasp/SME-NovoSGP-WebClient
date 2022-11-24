@@ -9,7 +9,7 @@ import {
   SGP_BUTTON_CANCELAR_OBSERVACAO,
   SGP_BUTTON_SALVAR_OBSERVACAO,
 } from '~/constantes/ids/button';
-import { SGP_TEXTAREA_OBSERVACAO } from '~/constantes/ids/text-area';
+import { SGP_TEXT_AREA_OBSERVACAO } from '~/constantes/ids/text-area';
 import { ModalNotificarUsuarios } from '~/paginas/DiarioClasse/DiarioBordo/componentes';
 import {
   setNovaObservacao,
@@ -122,7 +122,7 @@ const CampoObservacao = props => {
       <div className={`col-md-12 pb-2 ${esconderCaixaExterna && 'p-0'}`}>
         <Label text="Escreva uma observação" />
         <ContainerCampoObservacao
-          id={SGP_TEXTAREA_OBSERVACAO}
+          id={SGP_TEXT_AREA_OBSERVACAO}
           autoSize={{ minRows: 4 }}
           value={novaObservacao}
           onChange={onChangeNovaObservacao}

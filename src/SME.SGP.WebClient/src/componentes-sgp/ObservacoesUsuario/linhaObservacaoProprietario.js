@@ -10,7 +10,7 @@ import {
   SGP_BUTTON_EXCLUIR_OBSERVACAO,
   SGP_BUTTON_SALVAR_OBSERVACAO,
 } from '~/constantes/ids/button';
-import { SGP_TEXTAREA_OBSERVACAO } from '~/constantes/ids/text-area';
+import { SGP_TEXT_AREA_OBSERVACAO } from '~/constantes/ids/text-area';
 import { setObservacaoEmEdicao } from '~/redux/modulos/observacoesUsuario/actions';
 import { confirmar } from '~/servicos/alertas';
 import { ContainerCampoObservacao } from './observacoesUsuario.css';
@@ -163,7 +163,7 @@ const LinhaObservacaoProprietario = props => {
       {dados && observacaoEmEdicao && observacaoEmEdicao.id === dados.id ? (
         <>
           <ContainerCampoObservacao
-            id={SGP_TEXTAREA_OBSERVACAO}
+            id={SGP_TEXT_AREA_OBSERVACAO}
             autoSize={{ minRows: 3 }}
             value={observacaoEmEdicao.observacao}
             onChange={onChangeObs}
@@ -176,7 +176,7 @@ const LinhaObservacaoProprietario = props => {
       ) : (
         <>
           <ContainerCampoObservacao
-            id={SGP_TEXTAREA_OBSERVACAO}
+            id={SGP_TEXT_AREA_OBSERVACAO}
             style={{ cursor: 'not-allowed' }}
             className="col-md-12"
             readOnly

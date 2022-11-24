@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useRouteMatch } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 import { Cabecalho } from '~/componentes-sgp';
 import LocalizarEstudante from '~/componentes-sgp/LocalizarEstudante';
 import { Card } from '~/componentes';
@@ -8,10 +9,18 @@ import CadastroEncaminhamentoNAAPA from './cadastroEncaminhamentoNAAPA';
 import { store } from '~/redux';
 import LoaderEncaminhamentoNAAPA from './componentes/loaderEncaminhamentoNAAPA';
 import { limparDadosLocalizarEstudante } from '~/redux/modulos/localizarEstudante/actions';
-import { setLimparDadosEncaminhamentoNAAPA } from '~/redux/modulos/encaminhamentoNAAPA/actions';
+import {
+  setLimparDadosEncaminhamentoNAAPA,
+  setTabAtivaEncaminhamentoNAAPA,
+} from '~/redux/modulos/encaminhamentoNAAPA/actions';
+import { RotasDto } from '~/dtos';
+import { history, verificaSomenteConsulta } from '~/servicos';
 
 const EncaminhamentoNAAPA = () => {
   const routeMatch = useRouteMatch();
+
+  const usuario = useSelector(state => state.usuario);
+  const permissoesTela = usuario.permissoes[RotasDto.ENCAMINHAMENTO_NAAPA];
 
   const encaminhamentoId = routeMatch.params?.id;
 
@@ -21,8 +30,17 @@ const EncaminhamentoNAAPA = () => {
     return () => {
       store.dispatch(limparDadosLocalizarEstudante());
       store.dispatch(setLimparDadosEncaminhamentoNAAPA());
+      store.dispatch(setTabAtivaEncaminhamentoNAAPA());
     };
   }, []);
+
+  useEffect(() => {
+    const soConsulta = verificaSomenteConsulta(permissoesTela);
+
+    if (mostrarBusca && soConsulta) {
+      history.push(RotasDto.ENCAMINHAMENTO_NAAPA);
+    }
+  }, [permissoesTela, mostrarBusca]);
 
   return (
     <LoaderEncaminhamentoNAAPA>

@@ -10,9 +10,10 @@ import {
   SGP_BUTTON_ABRIR_CONTATO_RESPONSAVEIS_MODAL,
   SGP_BUTTON_EXCLUIR_ATIVIDADE_CONTRATURNO,
 } from '~/constantes/ids/button';
-import { confirmar } from '~/servicos';
 import ModalCadastroContatoResponsaveis from './modalCadastroContatoResponsaveis';
 import ColunaDimensionavel from '../ColunaDimensionavel/colunaDimensionavel';
+import QuestionarioDinamicoFuncoes from '../../Funcoes/QuestionarioDinamicoFuncoes';
+import { SGP_TABLE_CONTATO_RESPONSAVEIS } from '~/constantes/ids/table';
 
 const ContatoResponsaveisTabela = props => {
   const { label, questaoAtual, form, disabled, onChange } = props;
@@ -32,22 +33,12 @@ const ContatoResponsaveisTabela = props => {
     setDadosIniciais();
 
     if (novosDados) {
-      const dadosAtuais = form?.values?.[questaoAtual.id]?.length
-        ? form?.values?.[questaoAtual.id]
-        : [];
-      if (novosDados?.id) {
-        const indexItemAnterior = dadosAtuais.findIndex(
-          x => x.id === novosDados.id
-        );
-        dadosAtuais[indexItemAnterior] = novosDados;
-      } else {
-        novosDados.id = dadosAtuais.length + 1;
-        dadosAtuais.push(novosDados);
-      }
-      if (form) {
-        form.setFieldValue(questaoAtual.id, dadosAtuais);
-        onChange();
-      }
+      QuestionarioDinamicoFuncoes.adicionarLinhaTabela(
+        form,
+        questaoAtual,
+        novosDados,
+        onChange
+      );
     }
   };
 
@@ -57,28 +48,14 @@ const ContatoResponsaveisTabela = props => {
   };
 
   const onClickRemover = async (e, linha) => {
-    e.stopPropagation();
-
-    if (!disabled) {
-      const confirmado = await confirmar(
-        'Excluir',
-        '',
-        'Você tem certeza que deseja excluir este registro?'
-      );
-
-      if (confirmado) {
-        const dadosAtuais = form?.values?.[questaoAtual.id]?.length
-          ? form?.values?.[questaoAtual.id]
-          : [];
-
-        const indice = dadosAtuais.findIndex(item => item.id === linha.id);
-        if (indice !== -1) {
-          dadosAtuais.splice(indice, 1);
-          form.setFieldValue(questaoAtual.id, dadosAtuais);
-          onChange();
-        }
-      }
-    }
+    QuestionarioDinamicoFuncoes.removerLinhaTabela(
+      e,
+      form,
+      questaoAtual,
+      linha,
+      onChange,
+      disabled
+    );
   };
 
   const colunas = [
@@ -88,7 +65,7 @@ const ContatoResponsaveisTabela = props => {
     },
     {
       title: 'Grau de parentesco/afetividade',
-      dataIndex: 'grauParentescoAfetividade',
+      dataIndex: 'grauParentescoAfetividadeDescricao',
     },
     {
       title: 'Telefone',
@@ -102,7 +79,7 @@ const ContatoResponsaveisTabela = props => {
       render: (_, linha) => {
         return (
           <BotaoExcluirPadrao
-            id={`${SGP_BUTTON_EXCLUIR_ATIVIDADE_CONTRATURNO}_LINHA_${linha}`}
+            id={`${SGP_BUTTON_EXCLUIR_ATIVIDADE_CONTRATURNO}_LINHA_${linha?.id}`}
             disabled={disabled || questaoAtual.somenteLeitura}
             onClick={e => onClickRemover(e, linha)}
           />
@@ -137,6 +114,7 @@ const ContatoResponsaveisTabela = props => {
     <ColunaDimensionavel dimensao={questaoAtual?.dimensao}>
       {exibirModal && (
         <ModalCadastroContatoResponsaveis
+          disabled={disabled}
           onClose={onCloseModal}
           exibirModal={exibirModal}
           dadosIniciais={dadosIniciais}
@@ -151,6 +129,7 @@ const ContatoResponsaveisTabela = props => {
           pagination={false}
           onClickRow={onClickRow}
           dataSource={dadosTabela}
+          id={SGP_TABLE_CONTATO_RESPONSAVEIS}
         />
       </div>
 

@@ -10,9 +10,10 @@ import {
   SGP_BUTTON_ABRIR_ATIVIDADE_CONTRATURNO_MODAL,
   SGP_BUTTON_EXCLUIR_ATIVIDADE_CONTRATURNO,
 } from '~/constantes/ids/button';
-import { confirmar } from '~/servicos';
 import ModalCadastroAtividadeContraturno from './modalCadastroAtividadeContraturno';
 import ColunaDimensionavel from '../ColunaDimensionavel/colunaDimensionavel';
+import QuestionarioDinamicoFuncoes from '../../Funcoes/QuestionarioDinamicoFuncoes';
+import { SGP_TABLE_ATIVIDADE_CONTRATURNO } from '~/constantes/ids/table';
 
 const AtividadeContraturnoTabela = props => {
   const { label, questaoAtual, form, disabled, onChange } = props;
@@ -32,22 +33,12 @@ const AtividadeContraturnoTabela = props => {
     setDadosIniciais();
 
     if (novosDados) {
-      const dadosAtuais = form?.values?.[questaoAtual.id]?.length
-        ? form?.values?.[questaoAtual.id]
-        : [];
-      if (novosDados?.id) {
-        const indexItemAnterior = dadosAtuais.findIndex(
-          x => x.id === novosDados.id
-        );
-        dadosAtuais[indexItemAnterior] = novosDados;
-      } else {
-        novosDados.id = dadosAtuais.length + 1;
-        dadosAtuais.push(novosDados);
-      }
-      if (form) {
-        form.setFieldValue(questaoAtual.id, dadosAtuais);
-        onChange();
-      }
+      QuestionarioDinamicoFuncoes.adicionarLinhaTabela(
+        form,
+        questaoAtual,
+        novosDados,
+        onChange
+      );
     }
   };
 
@@ -57,28 +48,14 @@ const AtividadeContraturnoTabela = props => {
   };
 
   const onClickRemover = async (e, linha) => {
-    e.stopPropagation();
-
-    if (!disabled) {
-      const confirmado = await confirmar(
-        'Excluir',
-        '',
-        'Você tem certeza que deseja excluir este registro?'
-      );
-
-      if (confirmado) {
-        const dadosAtuais = form?.values?.[questaoAtual.id]?.length
-          ? form?.values?.[questaoAtual.id]
-          : [];
-
-        const indice = dadosAtuais.findIndex(item => item.id === linha.id);
-        if (indice !== -1) {
-          dadosAtuais.splice(indice, 1);
-          form.setFieldValue(questaoAtual.id, dadosAtuais);
-          onChange();
-        }
-      }
-    }
+    QuestionarioDinamicoFuncoes.removerLinhaTabela(
+      e,
+      form,
+      questaoAtual,
+      linha,
+      onChange,
+      disabled
+    );
   };
 
   const colunas = [
@@ -98,7 +75,7 @@ const AtividadeContraturnoTabela = props => {
       render: (_, linha) => {
         return (
           <BotaoExcluirPadrao
-            id={`${SGP_BUTTON_EXCLUIR_ATIVIDADE_CONTRATURNO}_LINHA_${linha}`}
+            id={`${SGP_BUTTON_EXCLUIR_ATIVIDADE_CONTRATURNO}_LINHA_${linha?.id}`}
             disabled={disabled || questaoAtual.somenteLeitura}
             onClick={e => onClickRemover(e, linha)}
           />
@@ -136,6 +113,7 @@ const AtividadeContraturnoTabela = props => {
           onClose={onCloseModal}
           exibirModal={exibirModal}
           dadosIniciais={dadosIniciais}
+          disabled={disabled}
         />
       )}
 
@@ -147,6 +125,7 @@ const AtividadeContraturnoTabela = props => {
           pagination={false}
           onClickRow={onClickRow}
           dataSource={dadosTabela}
+          id={SGP_TABLE_ATIVIDADE_CONTRATURNO}
         />
       </div>
 

@@ -66,8 +66,12 @@ const ListaEncaminhamentoNAAPAPaginada = props => {
       codigoUe: ue?.codigo,
       turmaId: turmaId === OPCAO_TODOS ? '' : turmaId,
       nomeAluno,
-      dataAberturaQueixaInicio,
-      dataAberturaQueixaFim,
+      dataAberturaQueixaInicio: dataAberturaQueixaInicio
+        ? dataAberturaQueixaInicio.format('YYYY-MM-DD')
+        : '',
+      dataAberturaQueixaFim: dataAberturaQueixaFim
+        ? dataAberturaQueixaFim.format('YYYY-MM-DD')
+        : '',
       situacao,
       prioridade,
     };
