@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import { RadioGroupButton } from '~/componentes';
 import Label from '~/componentes/label';
 import ColunaDimensionavel from './ColunaDimensionavel/colunaDimensionavel';
+import QuestionarioDinamicoFuncoes from '../Funcoes/QuestionarioDinamicoFuncoes';
 
 const ContainerRadioGroupButton = styled.div`
   .ant-radio-group {
@@ -23,9 +24,7 @@ const ContainerRadioGroupButton = styled.div`
 const CampoDinamicoRadio = props => {
   const { questaoAtual, form, label, desabilitado, onChange, prefixId } = props;
 
-  const id = prefixId
-    ? `${prefixId}_ORDEM_${questaoAtual?.ordem}`
-    : questaoAtual?.id;
+  const id = QuestionarioDinamicoFuncoes.gerarId(prefixId, questaoAtual);
 
   const opcoes = questaoAtual?.opcaoResposta.map(item => {
     return {

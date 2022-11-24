@@ -105,8 +105,7 @@ class ServicoNAAPA {
 
       const resposta = await api
         .post(`${URL_PADRAO}/salvar`, paramsSalvar)
-        .catch(e => erros(e))
-        .finally(() => dispatch(setExibirLoaderEncaminhamentoNAAPA(false)));
+        .catch(e => erros(e));
 
       if (resposta?.data?.id) {
         dispatch(setQuestionarioDinamicoEmEdicao(false));
@@ -122,6 +121,10 @@ class ServicoNAAPA {
         } else {
           history.push(`${RotasDto.ENCAMINHAMENTO_NAAPA}`);
         }
+
+        setTimeout(() => {
+          dispatch(setExibirLoaderEncaminhamentoNAAPA(false));
+        }, 1000);
       }
 
       return resposta?.status === 200;

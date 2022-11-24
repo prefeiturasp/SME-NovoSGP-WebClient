@@ -75,6 +75,7 @@ const ImagemEstudanteObjectCard = props => {
         className="mr-3"
         onClick={onClickAlterarImagem}
         id={SGP_BUTTON_ALTERAR_IMAGEM}
+        cursor={permiteAlterarImagem ? 'cursor' : 'initial'}
       >
         <Loader loading={exibirLoader} tip="">
           <span className="ant-avatar">

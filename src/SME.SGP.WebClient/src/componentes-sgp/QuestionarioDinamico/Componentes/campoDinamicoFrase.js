@@ -2,13 +2,12 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import { CampoTexto } from '~/componentes';
 import ColunaDimensionavel from './ColunaDimensionavel/colunaDimensionavel';
+import QuestionarioDinamicoFuncoes from '../Funcoes/QuestionarioDinamicoFuncoes';
 
 const CampoDinamicoFrase = props => {
   const { questaoAtual, form, label, disabled, onChange, prefixId } = props;
 
-  const id = prefixId
-    ? `${prefixId}_ORDEM_${questaoAtual?.ordem}`
-    : questaoAtual?.id;
+  const id = QuestionarioDinamicoFuncoes.gerarId(prefixId, questaoAtual);
 
   return (
     <ColunaDimensionavel dimensao={questaoAtual?.dimensao}>
@@ -18,8 +17,9 @@ const CampoDinamicoFrase = props => {
         form={form}
         onChange={onChange}
         name={String(questaoAtual?.id)}
-        desabilitado={disabled || questaoAtual.somenteLeitura}
+        maxLength={questaoAtual?.tamanho}
         placeholder={questaoAtual?.placeHolder}
+        desabilitado={disabled || questaoAtual.somenteLeitura}
       />
     </ColunaDimensionavel>
   );
