@@ -115,8 +115,8 @@ const CadastroEncaminhamentoNAAPABotoesAcao = props => {
         erros(e);
       });
       if (resultado?.status === 200) {
-        sucesso('Plano excluído com sucesso');
-        history.push(RotasDto.RELATORIO_AEE_PLANO);
+        sucesso('Encaminhamento excluído com sucesso');
+        history.push(RotasDto.ENCAMINHAMENTO_NAAPA);
       }
     }
   };
@@ -138,7 +138,6 @@ const CadastroEncaminhamentoNAAPABotoesAcao = props => {
     let situacao = situacaoNAAPA.Rascunho;
 
     if (encaminhamentoId) {
-      // TODO - Validar com back se tem a prop situacao
       situacao = dadosEncaminhamentoNAAPA?.situacao;
     }
 

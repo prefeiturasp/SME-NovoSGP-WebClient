@@ -13,6 +13,7 @@ import { confirmar } from '~/servicos';
 import { removerArrayAninhados } from '~/utils';
 import QuestionarioDinamicoFuncoes from '../../Funcoes/QuestionarioDinamicoFuncoes';
 import ModalCadastroDiasHorario from './modalCadastroDiasHorarios';
+import ColunaDimensionavel from '../ColunaDimensionavel/colunaDimensionavel';
 
 const DiasHorariosTabela = props => {
   const { label, questaoAtual, form, desabilitado, onChange } = props;
@@ -172,7 +173,7 @@ const DiasHorariosTabela = props => {
   }, [dispatch, resetarTabela, questaoAtual, form]);
 
   return (
-    <>
+    <ColunaDimensionavel dimensao={questaoAtual?.dimensao}>
       <ModalCadastroDiasHorario
         onClose={onCloseModal}
         exibirModal={exibirModal}
@@ -208,7 +209,7 @@ const DiasHorariosTabela = props => {
       ) : (
         ''
       )}
-    </>
+    </ColunaDimensionavel>
   );
 };
 

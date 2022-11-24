@@ -4,6 +4,7 @@ import { useDispatch } from 'react-redux';
 import Loader from '~/componentes/loader';
 import SelectComponent from '~/componentes/select';
 import { erros } from '~/servicos';
+import ColunaDimensionavel from './ColunaDimensionavel/colunaDimensionavel';
 import ServicoPeriodoEscolar from '~/servicos/Paginas/Calendario/ServicoPeriodoEscolar';
 import { setQuestionarioDinamicoEmEdicao } from '~/redux/modulos/questionarioDinamico/actions';
 
@@ -16,7 +17,12 @@ const CampoDinamicoPeriodoEscolar = props => {
     onChange,
     turmaId,
     questionarioId,
+    prefixId,
   } = props;
+
+  const id = prefixId
+    ? `${prefixId}_ORDEM_${questaoAtual?.ordem}`
+    : questaoAtual?.id;
 
   const [lista, setLista] = useState([]);
   const [exibirLoader, setExibirLoader] = useState(false);
@@ -76,23 +82,23 @@ const CampoDinamicoPeriodoEscolar = props => {
   }, [turmaId, obterBimestres, desabilitado]);
 
   return (
-    <div className="col-sm-12 col-md-12 col-lg-6 col-xl-6 mb-3">
+    <ColunaDimensionavel dimensao={questaoAtual?.dimensao}>
       {label}
       <Loader loading={exibirLoader}>
         <SelectComponent
-          id={String(questaoAtual.id)}
-          name={String(questaoAtual.id)}
+          id={id}
           form={form}
           lista={lista}
           valueOption="id"
           valueText="descricao"
-          disabled={desabilitado || questaoAtual.somenteLeitura}
+          name={String(questaoAtual?.id)}
+          disabled={desabilitado || questaoAtual?.somenteLeitura}
           onChange={valorAtualSelecionado => {
             onChange(valorAtualSelecionado);
           }}
         />
       </Loader>
-    </div>
+    </ColunaDimensionavel>
   );
 };
 
@@ -100,6 +106,7 @@ CampoDinamicoPeriodoEscolar.propTypes = {
   questaoAtual: PropTypes.oneOfType([PropTypes.any]),
   form: PropTypes.oneOfType([PropTypes.any]),
   label: PropTypes.oneOfType([PropTypes.any]),
+  prefixId: PropTypes.string,
   desabilitado: PropTypes.bool,
   onChange: PropTypes.oneOfType([PropTypes.any]),
   turmaId: PropTypes.oneOfType([PropTypes.any]),
@@ -110,6 +117,7 @@ CampoDinamicoPeriodoEscolar.defaultProps = {
   questaoAtual: null,
   form: null,
   label: '',
+  prefixId: '',
   desabilitado: false,
   onChange: () => {},
   turmaId: null,

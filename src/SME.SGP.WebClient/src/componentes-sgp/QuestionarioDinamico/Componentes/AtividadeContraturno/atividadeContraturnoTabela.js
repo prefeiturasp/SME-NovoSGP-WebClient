@@ -6,9 +6,13 @@ import BotaoExcluirPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoExcluirP
 import Button from '~/componentes/button';
 import { Base, Colors } from '~/componentes/colors';
 import Label from '~/componentes/label';
-import { SGP_BUTTON_EXCLUIR_ATIVIDADE_CONTRATURNO } from '~/constantes/ids/button';
+import {
+  SGP_BUTTON_ABRIR_ATIVIDADE_CONTRATURNO_MODAL,
+  SGP_BUTTON_EXCLUIR_ATIVIDADE_CONTRATURNO,
+} from '~/constantes/ids/button';
 import { confirmar } from '~/servicos';
 import ModalCadastroAtividadeContraturno from './modalCadastroAtividadeContraturno';
+import ColunaDimensionavel from '../ColunaDimensionavel/colunaDimensionavel';
 
 const AtividadeContraturnoTabela = props => {
   const { label, questaoAtual, form, disabled, onChange } = props;
@@ -126,7 +130,7 @@ const AtividadeContraturnoTabela = props => {
   };
 
   return (
-    <>
+    <ColunaDimensionavel dimensao={questaoAtual?.dimensao}>
       {exibirModal && (
         <ModalCadastroAtividadeContraturno
           onClose={onCloseModal}
@@ -156,8 +160,9 @@ const AtividadeContraturnoTabela = props => {
         className="mr-3 mt-2"
         label="Nova atividade"
         onClick={onClickNovaAtividade}
+        id={SGP_BUTTON_ABRIR_ATIVIDADE_CONTRATURNO_MODAL}
       />
-    </>
+    </ColunaDimensionavel>
   );
 };
 

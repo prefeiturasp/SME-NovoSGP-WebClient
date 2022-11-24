@@ -6,6 +6,17 @@ import shortid from 'shortid';
 import * as Yup from 'yup';
 import { CampoTexto, Colors, ModalConteudoHtml } from '~/componentes';
 import Button from '~/componentes/button';
+import {
+  SGP_BUTTON_SALVAR_ENDERECO_RESIDENCIAL_MODAL,
+  SGP_BUTTON_VOLTAR_ENDERECO_RESIDENCIAL_MODAL,
+} from '~/constantes/ids/button';
+import {
+  SGP_INPUT_BAIRRO_ENDERECO_RESIDENCIAL_MODAL,
+  SGP_INPUT_COMPLEMENTO_ENDERECO_RESIDENCIAL_MODAL,
+  SGP_INPUT_LOGRADOURO_ENDERECO_RESIDENCIAL_MODAL,
+  SGP_INPUT_NUMERO_ENDERECO_RESIDENCIAL_MODAL,
+  SGP_INPUT_TIPO_LOGRADOURO_ENDERECO_RESIDENCIAL_MODAL,
+} from '~/constantes/ids/input';
 
 const ModalCadastroEnderecoResidencial = props => {
   const { onClose, exibirModal, dadosIniciais } = props;
@@ -91,6 +102,7 @@ const ModalCadastroEnderecoResidencial = props => {
                   name="tipoLogradouro"
                   label="Tipo de logradouro"
                   placeholder="Informe o tipo de logradouro"
+                  id={SGP_INPUT_TIPO_LOGRADOURO_ENDERECO_RESIDENCIAL_MODAL}
                 />
               </Col>
 
@@ -101,6 +113,7 @@ const ModalCadastroEnderecoResidencial = props => {
                   name="logradouro"
                   label="Logradouro"
                   placeholder="Informe o logradouro"
+                  id={SGP_INPUT_LOGRADOURO_ENDERECO_RESIDENCIAL_MODAL}
                 />
               </Col>
             </Row>
@@ -114,6 +127,7 @@ const ModalCadastroEnderecoResidencial = props => {
                   name="numero"
                   label="Número"
                   placeholder="Informe o número"
+                  id={SGP_INPUT_NUMERO_ENDERECO_RESIDENCIAL_MODAL}
                 />
               </Col>
 
@@ -124,6 +138,7 @@ const ModalCadastroEnderecoResidencial = props => {
                   name="complemento"
                   label="Complemento"
                   placeholder="Informe o complemento"
+                  id={SGP_INPUT_COMPLEMENTO_ENDERECO_RESIDENCIAL_MODAL}
                 />
               </Col>
 
@@ -134,6 +149,7 @@ const ModalCadastroEnderecoResidencial = props => {
                   name="bairro"
                   label="Bairro"
                   placeholder="Informe o bairro"
+                  id={SGP_INPUT_BAIRRO_ENDERECO_RESIDENCIAL_MODAL}
                 />
               </Col>
             </Row>
@@ -142,11 +158,11 @@ const ModalCadastroEnderecoResidencial = props => {
               <Col>
                 <Button
                   border
-                  id="btn-voltar"
                   key="btn-voltar"
                   label="Cancelar"
                   color={Colors.Azul}
                   onClick={fecharModal}
+                  id={SGP_BUTTON_VOLTAR_ENDERECO_RESIDENCIAL_MODAL}
                 />
               </Col>
 
@@ -154,10 +170,10 @@ const ModalCadastroEnderecoResidencial = props => {
                 <Button
                   border
                   label="Salvar"
-                  id="btn-salvar"
                   key="btn-salvar"
                   color={Colors.Roxo}
                   onClick={() => validaAntesDoSubmit(form)}
+                  id={SGP_BUTTON_SALVAR_ENDERECO_RESIDENCIAL_MODAL}
                 />
               </Col>
             </Row>

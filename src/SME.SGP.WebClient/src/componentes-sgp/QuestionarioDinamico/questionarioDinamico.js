@@ -41,6 +41,7 @@ const QuestionarioDinamico = props => {
     funcaoRemoverArquivoCampoUpload,
     onChangeQuestionario,
     turmaId,
+    prefixId,
   } = props;
 
   const [valoresIniciais, setValoresIniciais] = useState();
@@ -317,9 +318,10 @@ const QuestionarioDinamico = props => {
     }
 
     const params = {
-      questaoAtual,
       form,
       label,
+      prefixId,
+      questaoAtual,
     };
 
     let campoAtual = null;
@@ -327,9 +329,7 @@ const QuestionarioDinamico = props => {
       case tipoQuestao.Frase:
         campoAtual = (
           <CampoDinamicoFrase
-            form={form}
-            label={label}
-            questaoAtual={questaoAtual}
+            {...params}
             disabled={desabilitarCampos}
             onChange={() => {
               dispatch(setQuestionarioDinamicoEmEdicao(true));
@@ -341,9 +341,7 @@ const QuestionarioDinamico = props => {
       case tipoQuestao.Texto:
         campoAtual = (
           <CampoDinamicoTexto
-            questaoAtual={questaoAtual}
-            form={form}
-            label={label}
+            {...params}
             desabilitado={desabilitarCampos}
             onChange={() => {
               dispatch(setQuestionarioDinamicoEmEdicao(true));
@@ -355,9 +353,7 @@ const QuestionarioDinamico = props => {
       case tipoQuestao.Radio:
         campoAtual = (
           <CampoDinamicoRadio
-            questaoAtual={questaoAtual}
-            form={form}
-            label={label}
+            {...params}
             desabilitado={desabilitarCampos}
             onChange={valorAtual => {
               QuestionarioDinamicoFuncoes.onChangeCamposComOpcaoResposta(
@@ -374,9 +370,7 @@ const QuestionarioDinamico = props => {
       case tipoQuestao.Combo:
         campoAtual = (
           <CampoDinamicoCombo
-            questaoAtual={questaoAtual}
-            form={form}
-            label={label}
+            {...params}
             desabilitado={desabilitarCampos}
             onChange={valorAtual => {
               QuestionarioDinamicoFuncoes.onChangeCamposComOpcaoResposta(
@@ -393,9 +387,7 @@ const QuestionarioDinamico = props => {
       case tipoQuestao.Checkbox:
         campoAtual = (
           <CampoDinamicoCheckbox
-            questaoAtual={questaoAtual}
-            form={form}
-            label={label}
+            {...params}
             desabilitado={desabilitarCampos}
             onChange={valorAtual => {
               QuestionarioDinamicoFuncoes.onChangeCampoCheckboxOuComboMultiplaEscolha(
@@ -425,13 +417,12 @@ const QuestionarioDinamico = props => {
         break;
       case tipoQuestao.InformacoesEscolares:
         campoAtual = (
-          <div className="col-md-12 mb-3">
-            <InformacoesEscolares
-              codigoAluno={codigoAluno}
-              codigoTurma={codigoTurma}
-              anoLetivo={anoLetivo}
-            />
-          </div>
+          <InformacoesEscolares
+            {...params}
+            codigoAluno={codigoAluno}
+            codigoTurma={codigoTurma}
+            anoLetivo={anoLetivo}
+          />
         );
         break;
       case tipoQuestao.AtendimentoClinico:
@@ -440,9 +431,7 @@ const QuestionarioDinamico = props => {
       case tipoQuestao.ComboMultiplaEscolha:
         campoAtual = (
           <CampoDinamicoComboMultiplaEscolha
-            questaoAtual={questaoAtual}
-            form={form}
-            label={label}
+            {...params}
             desabilitado={desabilitarCampos}
             onChange={valoresSelecionados => {
               QuestionarioDinamicoFuncoes.onChangeCampoCheckboxOuComboMultiplaEscolha(
@@ -459,9 +448,7 @@ const QuestionarioDinamico = props => {
       case tipoQuestao.Periodo:
         campoAtual = (
           <CampoDinamicoPeriodo
-            questaoAtual={questaoAtual}
-            form={form}
-            label={label}
+            {...params}
             desabilitado={desabilitarCampos}
             onChange={() => {
               dispatch(setQuestionarioDinamicoEmEdicao(true));
@@ -472,26 +459,20 @@ const QuestionarioDinamico = props => {
         break;
       case tipoQuestao.FrequenciaEstudanteAEE:
         campoAtual = (
-          <div className="col-md-12 mb-3">
-            <DiasHorariosTabela
-              desabilitado={desabilitarCampos}
-              label={label}
-              form={form}
-              questaoAtual={questaoAtual}
-              onChange={() => {
-                dispatch(setQuestionarioDinamicoEmEdicao(true));
-                onChangeQuestionario();
-              }}
-            />
-          </div>
+          <DiasHorariosTabela
+            desabilitado={desabilitarCampos}
+            {...params}
+            onChange={() => {
+              dispatch(setQuestionarioDinamicoEmEdicao(true));
+              onChangeQuestionario();
+            }}
+          />
         );
         break;
       case tipoQuestao.PeriodoEscolar:
         campoAtual = (
           <CampoDinamicoPeriodoEscolar
-            questaoAtual={questaoAtual}
-            form={form}
-            label={label}
+            {...params}
             desabilitado={desabilitarCampos}
             onChange={() => {
               dispatch(setQuestionarioDinamicoEmEdicao(true));
@@ -505,9 +486,7 @@ const QuestionarioDinamico = props => {
       case tipoQuestao.Numerico:
         campoAtual = (
           <CampoDinamicoNumerico
-            form={form}
-            label={label}
-            questaoAtual={questaoAtual}
+            {...params}
             disabled={desabilitarCampos}
             onChange={() => {
               dispatch(setQuestionarioDinamicoEmEdicao(true));
@@ -519,9 +498,7 @@ const QuestionarioDinamico = props => {
       case tipoQuestao.Data:
         campoAtual = (
           <CampoDinamicoData
-            form={form}
-            label={label}
-            questaoAtual={questaoAtual}
+            {...params}
             disabled={desabilitarCampos}
             onChange={() => {
               dispatch(setQuestionarioDinamicoEmEdicao(true));
@@ -532,59 +509,47 @@ const QuestionarioDinamico = props => {
         break;
       case tipoQuestao.Endereco:
         campoAtual = (
-          <div className="col-md-12 mb-3">
-            <EnderecoResidencialTabela
-              form={form}
-              codigoAluno={codigoAluno}
-              label={label?.props?.text}
-              questaoAtual={questaoAtual}
-              disabled={desabilitarCampos}
-              onChange={() => {
-                dispatch(setQuestionarioDinamicoEmEdicao(true));
-                onChangeQuestionario();
-              }}
-            />
-          </div>
+          <EnderecoResidencialTabela
+            {...params}
+            label={label?.props?.text}
+            disabled={desabilitarCampos}
+            onChange={() => {
+              dispatch(setQuestionarioDinamicoEmEdicao(true));
+              onChangeQuestionario();
+            }}
+          />
         );
         break;
       case tipoQuestao.ContatoResponsaveis:
         campoAtual = (
-          <div className="col-md-12 mb-3">
-            <ContatoResponsaveisTabela
-              form={form}
-              label={label?.props?.text}
-              questaoAtual={questaoAtual}
-              disabled={desabilitarCampos}
-              onChange={() => {
-                dispatch(setQuestionarioDinamicoEmEdicao(true));
-                onChangeQuestionario();
-              }}
-            />
-          </div>
+          <ContatoResponsaveisTabela
+            {...params}
+            label={label?.props?.text}
+            disabled={desabilitarCampos}
+            onChange={() => {
+              dispatch(setQuestionarioDinamicoEmEdicao(true));
+              onChangeQuestionario();
+            }}
+          />
         );
         break;
       case tipoQuestao.AtividadesContraturno:
         campoAtual = (
-          <div className="col-md-12 mb-3">
-            <AtividadeContraturnoTabela
-              form={form}
-              label={label?.props?.text}
-              questaoAtual={questaoAtual}
-              disabled={desabilitarCampos}
-              onChange={() => {
-                dispatch(setQuestionarioDinamicoEmEdicao(true));
-                onChangeQuestionario();
-              }}
-            />
-          </div>
+          <AtividadeContraturnoTabela
+            {...params}
+            label={label?.props?.text}
+            disabled={desabilitarCampos}
+            onChange={() => {
+              dispatch(setQuestionarioDinamicoEmEdicao(true));
+              onChangeQuestionario();
+            }}
+          />
         );
         break;
       case tipoQuestao.EditorTexto:
         campoAtual = (
           <CampoDinamicoEditor
-            questaoAtual={questaoAtual}
-            form={form}
-            label={label}
+            {...params}
             desabilitado={desabilitarCampos}
             onChange={() => {
               dispatch(setQuestionarioDinamicoEmEdicao(true));
@@ -608,9 +573,9 @@ const QuestionarioDinamico = props => {
   const montarQuestionarioAtual = (data, form) => {
     const campos = data.map(questaoAtual => {
       return (
-        <div className="row" key={questaoAtual.id}>
+        <React.Fragment key={questaoAtual.id}>
           {montarCampos(questaoAtual, form, '')}
-        </div>
+        </React.Fragment>
       );
     });
 
@@ -634,8 +599,10 @@ const QuestionarioDinamico = props => {
       ref={refFormik => setRefForm(refFormik)}
     >
       {form => (
-        <Form className="col-md-12">
-          {montarQuestionarioAtual(dadosQuestionarioAtual, form)}
+        <Form>
+          <div className="row">
+            {montarQuestionarioAtual(dadosQuestionarioAtual, form)}
+          </div>
         </Form>
       )}
     </Formik>
@@ -655,6 +622,7 @@ QuestionarioDinamico.propTypes = {
   funcaoRemoverArquivoCampoUpload: PropTypes.func,
   onChangeQuestionario: PropTypes.func,
   turmaId: PropTypes.oneOfType([PropTypes.any]),
+  prefixId: PropTypes.string,
 };
 
 QuestionarioDinamico.defaultProps = {
@@ -668,6 +636,7 @@ QuestionarioDinamico.defaultProps = {
   funcaoRemoverArquivoCampoUpload: () => {},
   onChangeQuestionario: () => {},
   turmaId: null,
+  prefixId: '',
 };
 
 export default QuestionarioDinamico;

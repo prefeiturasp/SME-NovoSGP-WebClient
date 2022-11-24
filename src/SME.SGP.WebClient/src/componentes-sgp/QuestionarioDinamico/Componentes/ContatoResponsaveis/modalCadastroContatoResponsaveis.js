@@ -11,6 +11,15 @@ import {
   SelectComponent,
 } from '~/componentes';
 import Button from '~/componentes/button';
+import {
+  SGP_BUTTON_SALVAR_CONTATO_RESPONSAVEIS_MODAL,
+  SGP_BUTTON_VOLTAR_CONTATO_RESPONSAVEIS_MODAL,
+} from '~/constantes/ids/button';
+import {
+  SGP_INPUT_GRAU_PARENTESCO_AFETIVIDADE_CONTATO_RESPONSAVEIS_MODAL,
+  SGP_INPUT_NOME_COMPLETO_CONTATO_RESPONSAVEIS_MODAL,
+  SGP_INPUT_TELEFONE_CONTATO_RESPONSAVEIS_MODAL,
+} from '~/constantes/ids/input';
 import { erros } from '~/servicos';
 import ServicoEstudante from '~/servicos/Paginas/Estudante/ServicoEstudante';
 
@@ -105,6 +114,7 @@ const ModalCadastroContatoResponsaveis = props => {
                   name="nomeCompleto"
                   label="Nome completo"
                   placeholder="Informe o nome completo"
+                  id={SGP_INPUT_NOME_COMPLETO_CONTATO_RESPONSAVEIS_MODAL}
                 />
               </Col>
             </Row>
@@ -120,6 +130,9 @@ const ModalCadastroContatoResponsaveis = props => {
                   name="grauParentescoAfetividade"
                   label="Grau de parentesco/afetividade"
                   placeholder="Grau de parentesco/afetividade"
+                  id={
+                    SGP_INPUT_GRAU_PARENTESCO_AFETIVIDADE_CONTATO_RESPONSAVEIS_MODAL
+                  }
                 />
               </Col>
 
@@ -131,6 +144,7 @@ const ModalCadastroContatoResponsaveis = props => {
                   name="telefone"
                   label="Telefone"
                   placeholder="Informe o telefone"
+                  id={SGP_INPUT_TELEFONE_CONTATO_RESPONSAVEIS_MODAL}
                 />
               </Col>
             </Row>
@@ -139,11 +153,11 @@ const ModalCadastroContatoResponsaveis = props => {
               <Col>
                 <Button
                   border
-                  id="btn-voltar"
                   key="btn-voltar"
                   label="Cancelar"
                   color={Colors.Azul}
                   onClick={fecharModal}
+                  id={SGP_BUTTON_VOLTAR_CONTATO_RESPONSAVEIS_MODAL}
                 />
               </Col>
 
@@ -151,10 +165,10 @@ const ModalCadastroContatoResponsaveis = props => {
                 <Button
                   border
                   label="Salvar"
-                  id="btn-salvar"
                   key="btn-salvar"
                   color={Colors.Roxo}
                   onClick={() => validaAntesDoSubmit(form)}
+                  id={SGP_BUTTON_SALVAR_CONTATO_RESPONSAVEIS_MODAL}
                 />
               </Col>
             </Row>

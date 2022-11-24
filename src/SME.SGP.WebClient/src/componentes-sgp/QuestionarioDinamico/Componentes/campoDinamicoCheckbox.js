@@ -1,26 +1,31 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import CheckboxGroup from '~/componentes/checkboxGroup';
+import ColunaDimensionavel from './ColunaDimensionavel/colunaDimensionavel';
 
 const CampoDinamicoCheckbox = props => {
-  const { questaoAtual, form, label, desabilitado, onChange } = props;
+  const { questaoAtual, form, label, desabilitado, onChange, prefixId } = props;
+
+  const id = prefixId
+    ? `${prefixId}_ORDEM_${questaoAtual?.ordem}`
+    : questaoAtual?.id;
 
   const options = questaoAtual?.opcaoResposta.map(item => {
     return { label: item.nome, value: item.id };
   });
 
   return (
-    <div className="col-md-12 mb-3">
+    <ColunaDimensionavel dimensao={questaoAtual?.dimensao}>
       {label}
       <CheckboxGroup
-        options={options}
-        disabled={desabilitado || questaoAtual.somenteLeitura}
-        id={String(questaoAtual?.id)}
-        name={String(questaoAtual?.id)}
+        id={id}
         form={form}
+        options={options}
         onChange={onChange}
+        name={String(questaoAtual?.id)}
+        disabled={desabilitado || questaoAtual?.somenteLeitura}
       />
-    </div>
+    </ColunaDimensionavel>
   );
 };
 
@@ -28,6 +33,7 @@ CampoDinamicoCheckbox.propTypes = {
   questaoAtual: PropTypes.oneOfType([PropTypes.any]),
   form: PropTypes.oneOfType([PropTypes.any]),
   label: PropTypes.oneOfType([PropTypes.any]),
+  prefixId: PropTypes.string,
   desabilitado: PropTypes.bool,
   onChange: PropTypes.func,
 };
@@ -36,6 +42,7 @@ CampoDinamicoCheckbox.defaultProps = {
   questaoAtual: null,
   form: null,
   label: '',
+  prefixId: '',
   desabilitado: false,
   onChange: () => {},
 };

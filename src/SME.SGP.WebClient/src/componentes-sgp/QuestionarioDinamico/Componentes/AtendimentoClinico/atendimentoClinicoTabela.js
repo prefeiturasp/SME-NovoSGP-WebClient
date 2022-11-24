@@ -9,6 +9,7 @@ import { Base, Colors } from '~/componentes/colors';
 import Label from '~/componentes/label';
 import { confirmar } from '~/servicos';
 import ModalCadastroAtendimentoClinico from './modalCadastroAtendimentoClinico';
+import ColunaDimensionavel from '../ColunaDimensionavel/colunaDimensionavel';
 
 const AtendimentoClinicoTabela = props => {
   const { label, questaoAtual, form, desabilitado, onChange } = props;
@@ -154,7 +155,7 @@ const AtendimentoClinicoTabela = props => {
   };
 
   return (
-    <>
+    <ColunaDimensionavel dimensao={questaoAtual?.dimensao}>
       <ModalCadastroAtendimentoClinico
         onClose={onCloseModal}
         exibirModal={exibirModal}
@@ -184,7 +185,7 @@ const AtendimentoClinicoTabela = props => {
         onClick={onClickNovoDetalhamento}
         disabled={desabilitado}
       />
-    </>
+    </ColunaDimensionavel>
   );
 };
 

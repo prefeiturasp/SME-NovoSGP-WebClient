@@ -4,22 +4,27 @@ import SelectComponent from '~/componentes/select';
 import ColunaDimensionavel from './ColunaDimensionavel/colunaDimensionavel';
 
 const CampoDinamicoCombo = props => {
-  const { questaoAtual, form, label, desabilitado, onChange } = props;
+  const { questaoAtual, form, label, desabilitado, onChange, prefixId } = props;
+
+  const id = prefixId
+    ? `${prefixId}_ORDEM_${questaoAtual?.ordem}`
+    : questaoAtual?.id;
 
   const lista = questaoAtual?.opcaoResposta.map(item => {
     return { label: item.nome, value: item.id };
   });
 
   return (
-    <ColunaDimensionavel dimensao={6}>
+    <ColunaDimensionavel dimensao={questaoAtual?.dimensao}>
       {label}
       <SelectComponent
-        id={String(questaoAtual.id)}
-        name={String(questaoAtual.id)}
+        id={id}
         form={form}
         lista={lista}
-        valueOption="value"
         valueText="label"
+        valueOption="value"
+        name={String(questaoAtual.id)}
+        placeholder={questaoAtual?.placeHolder}
         disabled={desabilitado || questaoAtual.somenteLeitura}
         onChange={valorAtualSelecionado => {
           onChange(valorAtualSelecionado);
@@ -33,6 +38,7 @@ CampoDinamicoCombo.propTypes = {
   questaoAtual: PropTypes.oneOfType([PropTypes.any]),
   form: PropTypes.oneOfType([PropTypes.any]),
   label: PropTypes.oneOfType([PropTypes.any]),
+  prefixId: PropTypes.string,
   desabilitado: PropTypes.bool,
   onChange: PropTypes.oneOfType([PropTypes.any]),
 };
@@ -41,6 +47,7 @@ CampoDinamicoCombo.defaultProps = {
   questaoAtual: null,
   form: null,
   label: '',
+  prefixId: '',
   desabilitado: false,
   onChange: () => {},
 };
