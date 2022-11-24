@@ -2,13 +2,23 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import { CampoData } from '~/componentes';
 import ColunaDimensionavel from './ColunaDimensionavel/colunaDimensionavel';
+import QuestionarioDinamicoFuncoes from '../Funcoes/QuestionarioDinamicoFuncoes';
 
 const CampoDinamicoData = props => {
   const { questaoAtual, form, label, disabled, onChange, prefixId } = props;
 
-  const id = prefixId
-    ? `${prefixId}_ORDEM_${questaoAtual?.ordem}`
-    : questaoAtual?.id;
+  const id = QuestionarioDinamicoFuncoes.gerarId(prefixId, questaoAtual);
+
+  const desabilitarDataFutura = current => {
+    if (current) {
+      return current >= window.moment();
+    }
+    return false;
+  };
+
+  const opcionais = questaoAtual?.opcionais
+    ? JSON.parse(questaoAtual?.opcionais)
+    : null;
 
   return (
     <ColunaDimensionavel dimensao={questaoAtual?.dimensao}>
@@ -20,6 +30,9 @@ const CampoDinamicoData = props => {
         desabilitado={disabled}
         formatoData="DD/MM/YYYY"
         name={String(questaoAtual?.id)}
+        desabilitarData={
+          opcionais?.desabilitarDataFutura ? desabilitarDataFutura : null
+        }
         placeholder={questaoAtual?.placeHolder || 'DD/MM/AAAA'}
       />
     </ColunaDimensionavel>

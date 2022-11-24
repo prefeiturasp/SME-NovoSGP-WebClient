@@ -3,6 +3,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { CampoNumero } from '~/componentes';
 import ColunaDimensionavel from './ColunaDimensionavel/colunaDimensionavel';
+import QuestionarioDinamicoFuncoes from '../Funcoes/QuestionarioDinamicoFuncoes';
 
 const CampoDinamicoNumericoContainer = styled.div`
   .ant-input-number {
@@ -13,9 +14,7 @@ const CampoDinamicoNumericoContainer = styled.div`
 const CampoDinamicoNumerico = props => {
   const { questaoAtual, form, label, disabled, onChange, prefixId } = props;
 
-  const id = prefixId
-    ? `${prefixId}_ORDEM_${questaoAtual?.ordem}`
-    : questaoAtual?.id;
+  const id = QuestionarioDinamicoFuncoes.gerarId(prefixId, questaoAtual);
 
   return (
     <ColunaDimensionavel dimensao={questaoAtual?.dimensao}>
@@ -24,10 +23,12 @@ const CampoDinamicoNumerico = props => {
         <CampoNumero
           id={id}
           form={form}
+          esconderSetas
           onChange={onChange}
           desabilitado={disabled}
           name={String(questaoAtual?.id)}
           placeholder={questaoAtual?.placeHolder}
+          maxlength={questaoAtual?.tamanho || 9999999}
         />
       </CampoDinamicoNumericoContainer>
     </ColunaDimensionavel>

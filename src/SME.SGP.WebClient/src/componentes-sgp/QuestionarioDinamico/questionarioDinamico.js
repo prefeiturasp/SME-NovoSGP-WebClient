@@ -42,6 +42,7 @@ const QuestionarioDinamico = props => {
     onChangeQuestionario,
     turmaId,
     prefixId,
+    exibirOrdemLabel,
   } = props;
 
   const [valoresIniciais, setValoresIniciais] = useState();
@@ -89,6 +90,11 @@ const QuestionarioDinamico = props => {
           case tipoQuestao.PeriodoEscolar:
           case tipoQuestao.EditorTexto:
             valorRespostaAtual = resposta[0].texto;
+            break;
+          case tipoQuestao.Data:
+            valorRespostaAtual = resposta[0].texto
+              ? moment(resposta[0].texto)
+              : null;
             break;
           case tipoQuestao.Periodo:
             valorRespostaAtual = {
@@ -250,7 +256,14 @@ const QuestionarioDinamico = props => {
       ? `${ordemAnterior}.${ordemSequencial || questaoAtual.ordem}`
       : questaoAtual.ordem;
 
-    const textoLabel = `${ordemLabel} - ${questaoAtual.nome}`;
+    let textoLabel = '';
+
+    if (exibirOrdemLabel) {
+      textoLabel = `${ordemLabel} - ${questaoAtual.nome}`;
+    } else {
+      textoLabel = questaoAtual.nome;
+    }
+
     const label = labelPersonalizado(
       textoLabel,
       questaoAtual?.observacao,
@@ -623,6 +636,7 @@ QuestionarioDinamico.propTypes = {
   onChangeQuestionario: PropTypes.func,
   turmaId: PropTypes.oneOfType([PropTypes.any]),
   prefixId: PropTypes.string,
+  exibirOrdemLabel: PropTypes.bool,
 };
 
 QuestionarioDinamico.defaultProps = {
@@ -637,6 +651,7 @@ QuestionarioDinamico.defaultProps = {
   onChangeQuestionario: () => {},
   turmaId: null,
   prefixId: '',
+  exibirOrdemLabel: true,
 };
 
 export default QuestionarioDinamico;

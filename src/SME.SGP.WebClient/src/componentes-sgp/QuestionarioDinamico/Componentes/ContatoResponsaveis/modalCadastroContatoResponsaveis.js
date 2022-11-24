@@ -24,16 +24,19 @@ import { erros } from '~/servicos';
 import ServicoEstudante from '~/servicos/Paginas/Estudante/ServicoEstudante';
 
 const ModalCadastroContatoResponsaveis = props => {
-  const { onClose, exibirModal, dadosIniciais } = props;
+  const { onClose, exibirModal, dadosIniciais, disabled } = props;
 
   const [refForm, setRefForm] = useState({});
-  const [grauParentescoLista, setGruParentescoLista] = useState([]);
+  const [grauParentescoLista, setGrauParentescoLista] = useState([]);
 
   const valoresIniciais = {
     id: dadosIniciais ? dadosIniciais.id : 0,
     nomeCompleto: dadosIniciais ? dadosIniciais.nomeCompleto : '',
     grauParentescoAfetividade: dadosIniciais
       ? dadosIniciais.grauParentescoAfetividade
+      : '',
+    grauParentescoAfetividadeDescricao: dadosIniciais
+      ? dadosIniciais?.grauParentescoAfetividadeDescricao
       : '',
     telefone: dadosIniciais ? dadosIniciais.telefone : '',
   };
@@ -55,7 +58,7 @@ const ModalCadastroContatoResponsaveis = props => {
       erros(e)
     );
 
-    setGruParentescoLista(resposta?.data || []);
+    setGrauParentescoLista(resposta?.data || []);
   };
 
   const fecharModal = () => {
@@ -64,8 +67,16 @@ const ModalCadastroContatoResponsaveis = props => {
   };
 
   const onSalvar = valores => {
-    refForm.resetForm();
+    if (valores?.grauParentescoAfetividade) {
+      const grauSelecionado = grauParentescoLista?.find(
+        g =>
+          g?.codigo?.toString() ===
+          valores?.grauParentescoAfetividade?.toString()
+      );
+      valores.grauParentescoAfetividadeDescricao = grauSelecionado?.descricao;
+    }
     onClose(valores);
+    refForm.resetForm();
   };
 
   const validaAntesDoSubmit = form => {
@@ -113,6 +124,7 @@ const ModalCadastroContatoResponsaveis = props => {
                   labelRequired
                   name="nomeCompleto"
                   label="Nome completo"
+                  desabilitado={disabled}
                   placeholder="Informe o nome completo"
                   id={SGP_INPUT_NOME_COMPLETO_CONTATO_RESPONSAVEIS_MODAL}
                 />
@@ -124,6 +136,7 @@ const ModalCadastroContatoResponsaveis = props => {
                 <SelectComponent
                   form={form}
                   labelRequired
+                  disabled={disabled}
                   valueOption="codigo"
                   valueText="descricao"
                   lista={grauParentescoLista}
@@ -140,9 +153,11 @@ const ModalCadastroContatoResponsaveis = props => {
                 <CampoTexto
                   form={form}
                   labelRequired
-                  maxLength={11}
+                  maxLength={15}
                   name="telefone"
+                  addMaskTelefone
                   label="Telefone"
+                  desabilitado={disabled}
                   placeholder="Informe o telefone"
                   id={SGP_INPUT_TELEFONE_CONTATO_RESPONSAVEIS_MODAL}
                 />
@@ -167,6 +182,7 @@ const ModalCadastroContatoResponsaveis = props => {
                   label="Salvar"
                   key="btn-salvar"
                   color={Colors.Roxo}
+                  disabled={disabled}
                   onClick={() => validaAntesDoSubmit(form)}
                   id={SGP_BUTTON_SALVAR_CONTATO_RESPONSAVEIS_MODAL}
                 />
@@ -181,12 +197,14 @@ const ModalCadastroContatoResponsaveis = props => {
 
 ModalCadastroContatoResponsaveis.propTypes = {
   onClose: PropTypes.func,
+  disabled: PropTypes.bool,
   exibirModal: PropTypes.bool,
   dadosIniciais: PropTypes.oneOfType([PropTypes.any]),
 };
 
 ModalCadastroContatoResponsaveis.defaultProps = {
   onClose: () => {},
+  disabled: false,
   exibirModal: false,
   dadosIniciais: null,
 };

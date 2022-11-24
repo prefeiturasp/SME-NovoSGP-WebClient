@@ -75,7 +75,6 @@ const CadastroEncaminhamentoNAAPABotoesAcao = props => {
         'Suas alterações não foram salvas, deseja salvar agora?'
       );
 
-      // TODO - Validar com back se tem a prop situacao
       const situacao =
         dadosEncaminhamentoNAAPA?.situacao || situacaoNAAPA.Rascunho;
 
@@ -106,7 +105,7 @@ const CadastroEncaminhamentoNAAPABotoesAcao = props => {
     const confirmado = await confirmar(
       'Excluir',
       '',
-      'Você tem certeza que deseja excluir este encaminhamento?'
+      'Você tem certeza que deseja excluir este registro?'
     );
     if (confirmado) {
       const resultado = await ServicoNAAPA.excluirEncaminhamento(

@@ -6,6 +6,7 @@ import UploadArquivos from '~/componentes-sgp/UploadArquivos/uploadArquivos';
 import { setArquivoRemovido } from '~/redux/modulos/questionarioDinamico/actions';
 import { erros, sucesso } from '~/servicos';
 import ColunaDimensionavel from './ColunaDimensionavel/colunaDimensionavel';
+import QuestionarioDinamicoFuncoes from '../Funcoes/QuestionarioDinamicoFuncoes';
 
 const CampoDinamicoUploadArquivos = props => {
   const {
@@ -18,9 +19,7 @@ const CampoDinamicoUploadArquivos = props => {
   const { form, questaoAtual, label, prefixId } = dados;
   const dispatch = useDispatch();
 
-  const id = prefixId
-    ? `${prefixId}_ORDEM_${questaoAtual?.ordem}`
-    : questaoAtual?.id;
+  const id = QuestionarioDinamicoFuncoes.gerarId(prefixId, questaoAtual);
 
   const onRemoveFile = async arquivo => {
     const codigoArquivo = arquivo.xhr;
