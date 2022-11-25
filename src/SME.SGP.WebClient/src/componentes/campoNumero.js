@@ -113,12 +113,14 @@ const CampoNumero = React.forwardRef((props, ref) => {
               innerRef={ref}
               onKeyDown={onKeyDown}
               onKeyUp={onKeyUp}
+              value={form.values[name]}
               onChange={v => {
                 form.setFieldValue(name, v);
                 form.setFieldTouched(name, true);
                 onChange(v);
               }}
               disabled={disabled}
+              placeholder={placeholder}
             />
             {!semMensagem ? <span>{form.errors[name]}</span> : ''}
           </>
@@ -174,6 +176,7 @@ CampoNumero.propTypes = {
   autoFocus: PropTypes.bool,
   label: PropTypes.string,
   validateOnBlurInOnChange: PropTypes.bool,
+  placeholder: PropTypes.string,
 };
 
 CampoNumero.defaultProps = {
@@ -187,6 +190,7 @@ CampoNumero.defaultProps = {
   autoFocus: false,
   label: '',
   validateOnBlurInOnChange: false,
+  placeholder: '',
 };
 
 export default CampoNumero;

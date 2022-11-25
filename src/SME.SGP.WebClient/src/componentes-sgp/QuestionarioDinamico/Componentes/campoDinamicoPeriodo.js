@@ -2,9 +2,13 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import { CampoData } from '~/componentes/campoData/campoData';
 import { Base } from '~/componentes/colors';
+import ColunaDimensionavel from './ColunaDimensionavel/colunaDimensionavel';
+import QuestionarioDinamicoFuncoes from '../Funcoes/QuestionarioDinamicoFuncoes';
 
 const CampoDinamicoPeriodo = props => {
-  const { questaoAtual, form, label, desabilitado, onChange } = props;
+  const { questaoAtual, form, label, desabilitado, onChange, prefixId } = props;
+
+  const id = QuestionarioDinamicoFuncoes.gerarId(prefixId, questaoAtual);
 
   const obterErroQuestaoAtual = () => {
     return form &&
@@ -46,17 +50,19 @@ const CampoDinamicoPeriodo = props => {
   };
 
   return (
-    <div className="col-md-12 mb-3">
+    <ColunaDimensionavel dimensao={questaoAtual?.dimensao}>
       {label}
       <div className="row">
         <div className="col-md-2">
           <CampoData
             form={form}
-            id={`${questaoAtual?.id}.periodoInicio`}
-            name={`${questaoAtual?.id}.periodoInicio`}
             placeholder="Início"
+            executarOnChangeExterno
             formatoData="DD/MM/YYYY"
-            desabilitado={desabilitado || questaoAtual.somenteLeitura}
+            id={`${id}_PERIODO_INICIO`}
+            name={`${questaoAtual?.id}.periodoInicio`}
+            desabilitado={desabilitado || questaoAtual?.somenteLeitura}
+            className={obterErroPorCampo('periodoInicio') ? 'is-invalid' : ''}
             onChange={valorData => {
               form.setFieldTouched(questaoAtual?.id, true);
               form.setFieldValue(
@@ -65,8 +71,6 @@ const CampoDinamicoPeriodo = props => {
               );
               onChange();
             }}
-            executarOnChangeExterno
-            className={obterErroPorCampo('periodoInicio') ? 'is-invalid' : ''}
           />
           {obterErroPorCampo('periodoInicio')}
         </div>
@@ -74,11 +78,13 @@ const CampoDinamicoPeriodo = props => {
         <div className="col-md-2">
           <CampoData
             form={form}
-            id={`${questaoAtual?.id}.periodoFim`}
-            name={`${questaoAtual?.id}.periodoFim`}
             placeholder="Fim"
+            executarOnChangeExterno
             formatoData="DD/MM/YYYY"
+            id={`${id}_PERIODO_FIM`}
             desabilitado={desabilitado}
+            name={`${questaoAtual?.id}.periodoFim`}
+            className={obterErroPorCampo('periodoFim') ? 'is-invalid' : ''}
             onChange={valorData => {
               form.setFieldTouched(questaoAtual?.id, true);
               form.setFieldValue(
@@ -87,13 +93,11 @@ const CampoDinamicoPeriodo = props => {
               );
               onChange();
             }}
-            executarOnChangeExterno
-            className={obterErroPorCampo('periodoFim') ? 'is-invalid' : ''}
           />
           {obterErroPorCampo('periodoFim')}
         </div>
       </div>
-    </div>
+    </ColunaDimensionavel>
   );
 };
 
@@ -101,6 +105,7 @@ CampoDinamicoPeriodo.propTypes = {
   questaoAtual: PropTypes.oneOfType([PropTypes.any]),
   form: PropTypes.oneOfType([PropTypes.any]),
   label: PropTypes.oneOfType([PropTypes.any]),
+  prefixId: PropTypes.string,
   desabilitado: PropTypes.bool,
   onChange: PropTypes.func,
 };
@@ -109,6 +114,7 @@ CampoDinamicoPeriodo.defaultProps = {
   questaoAtual: null,
   form: null,
   label: '',
+  prefixId: '',
   desabilitado: false,
   onChange: () => {},
 };

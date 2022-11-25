@@ -5,6 +5,8 @@ import { Label } from '~/componentes';
 import UploadArquivos from '~/componentes-sgp/UploadArquivos/uploadArquivos';
 import { setArquivoRemovido } from '~/redux/modulos/questionarioDinamico/actions';
 import { erros, sucesso } from '~/servicos';
+import ColunaDimensionavel from './ColunaDimensionavel/colunaDimensionavel';
+import QuestionarioDinamicoFuncoes from '../Funcoes/QuestionarioDinamicoFuncoes';
 
 const CampoDinamicoUploadArquivos = props => {
   const {
@@ -14,8 +16,10 @@ const CampoDinamicoUploadArquivos = props => {
     funcaoRemoverArquivoCampoUpload,
     onChange,
   } = props;
-  const { form, questaoAtual, label } = dados;
+  const { form, questaoAtual, label, prefixId } = dados;
   const dispatch = useDispatch();
+
+  const id = QuestionarioDinamicoFuncoes.gerarId(prefixId, questaoAtual);
 
   const onRemoveFile = async arquivo => {
     const codigoArquivo = arquivo.xhr;
@@ -58,32 +62,33 @@ const CampoDinamicoUploadArquivos = props => {
   };
 
   return (
-    <>
-      <div className="col-md-12 mt-2 mb-3">
-        {questaoAtual?.nome ? <Label text={label} /> : ''}
+    <ColunaDimensionavel dimensao={questaoAtual?.dimensao}>
+      <div id={id}>
+        {questaoAtual?.nome ? <Label text={label?.props?.text} /> : ''}
         <UploadArquivos
-          desabilitarGeral={desabilitado || questaoAtual.somenteLeitura}
+          id={id}
           form={form}
-          name={String(questaoAtual?.id)}
-          id={String(questaoAtual?.id)}
-          tiposArquivosPermitidos={questaoAtual.opcionais || ''}
-          desabilitarUpload={form?.values?.[questaoAtual?.id]?.length > 9}
-          onRemove={onRemoveFile}
           urlUpload={urlUpload}
+          onRemove={onRemoveFile}
+          name={String(questaoAtual?.id)}
+          onChangeListaArquivos={onChange}
+          tiposArquivosPermitidos={questaoAtual.opcionais || ''}
+          desabilitarGeral={desabilitado || questaoAtual.somenteLeitura}
+          desabilitarUpload={form?.values?.[questaoAtual?.id]?.length > 9}
           defaultFileList={
             form?.values?.[questaoAtual?.id]?.length
               ? form?.values?.[questaoAtual?.id]
               : []
           }
-          onChangeListaArquivos={onChange}
         />
       </div>
-    </>
+    </ColunaDimensionavel>
   );
 };
 
 CampoDinamicoUploadArquivos.propTypes = {
   dados: PropTypes.oneOfType([PropTypes.object]),
+  prefixId: PropTypes.string,
   desabilitado: PropTypes.bool,
   urlUpload: PropTypes.string,
   funcaoRemoverArquivoCampoUpload: PropTypes.func,
@@ -92,6 +97,7 @@ CampoDinamicoUploadArquivos.propTypes = {
 
 CampoDinamicoUploadArquivos.defaultProps = {
   dados: {},
+  prefixId: '',
   desabilitado: false,
   urlUpload: '',
   funcaoRemoverArquivoCampoUpload: () => {},

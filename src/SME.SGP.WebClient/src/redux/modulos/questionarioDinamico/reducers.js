@@ -8,6 +8,8 @@ const inicial = {
   questionarioDinamicoExibirModalAnotacao: false,
   resetarTabela: false,
   arquivoRemovido: false,
+  exibirModalErrosQuestionarioDinamico: false,
+  nomesSecoesComCamposObrigatorios: null,
 };
 
 export default function questionarioDinamico(state = inicial, action) {
@@ -51,6 +53,8 @@ export default function questionarioDinamico(state = inicial, action) {
           questionarioDinamicoDadosModalAnotacao: null,
           questionarioDinamicoExpandirLinhaAusenciaEstudante: [],
           questionarioDinamicoExibirModalAnotacao: false,
+          nomesSecoesComCamposObrigatorios: null,
+          exibirModalErrosQuestionarioDinamico: false,
         };
       }
       case '@questionarioDinamico/setResetarTabela': {
@@ -63,6 +67,18 @@ export default function questionarioDinamico(state = inicial, action) {
         return {
           ...draft,
           arquivoRemovido: action.payload,
+        };
+      }
+      case '@questionarioDinamico/setExibirModalErrosQuestionarioDinamico': {
+        return {
+          ...draft,
+          exibirModalErrosQuestionarioDinamico: action.payload,
+        };
+      }
+      case '@questionarioDinamico/setNomesSecoesComCamposObrigatorios': {
+        return {
+          ...draft,
+          nomesSecoesComCamposObrigatorios: action.payload,
         };
       }
       default:

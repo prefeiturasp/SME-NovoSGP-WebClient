@@ -3,6 +3,7 @@ import { Field } from 'formik';
 import PropTypes from 'prop-types';
 import React from 'react';
 import styled from 'styled-components';
+import { maskTelefone } from '~/utils';
 import { Base } from './colors';
 import Label from './label';
 
@@ -55,6 +56,7 @@ const CampoTexto = React.forwardRef((props, ref) => {
     height,
     onBlur,
     labelRequired,
+    addMaskTelefone,
   } = props;
 
   const possuiErro = () => {
@@ -69,9 +71,16 @@ const CampoTexto = React.forwardRef((props, ref) => {
   };
 
   const onChangeCampo = e => {
-    form.setFieldValue(name, e.target.value);
+    let valorComMask = '';
+
+    if (e.target.value && addMaskTelefone) {
+      valorComMask = maskTelefone(e.target.value);
+      form.setFieldValue(name, valorComMask);
+    } else {
+      form.setFieldValue(name, e.target.value);
+    }
     form.setFieldTouched(name, true, true);
-    onChange(e);
+    onChange(e, valorComMask);
   };
 
   return (
@@ -152,6 +161,7 @@ CampoTexto.propTypes = {
   height: PropTypes.string,
   onBlur: PropTypes.oneOfType([PropTypes.func]),
   labelRequired: PropTypes.bool,
+  addMaskTelefone: PropTypes.bool,
 };
 
 CampoTexto.defaultProps = {
@@ -177,6 +187,7 @@ CampoTexto.defaultProps = {
   height: '38',
   onBlur: () => {},
   labelRequired: false,
+  addMaskTelefone: false,
 };
 
 export default CampoTexto;
