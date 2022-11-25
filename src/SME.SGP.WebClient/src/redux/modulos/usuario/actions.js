@@ -127,3 +127,10 @@ export function setLoginAcessoAdmin(recarregar) {
     payload: recarregar,
   };
 }
+
+export function setListaUrlAjudaDoSistema(payload) {
+  return {
+    type: '@usuario/setListaUrlAjudaDoSistema',
+    payload,
+  };
+}
