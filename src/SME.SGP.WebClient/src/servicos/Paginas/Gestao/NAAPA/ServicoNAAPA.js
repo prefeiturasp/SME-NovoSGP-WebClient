@@ -1,6 +1,4 @@
 import QuestionarioDinamicoFuncoes from '~/componentes-sgp/QuestionarioDinamico/Funcoes/QuestionarioDinamicoFuncoes';
-import { RotasDto } from '~/dtos';
-import situacaoNAAPA from '~/dtos/situacaoNAAPA';
 import { store } from '~/redux';
 import {
   setLimparDadosEncaminhamentoNAAPA,
@@ -14,7 +12,6 @@ import {
 } from '~/redux/modulos/questionarioDinamico/actions';
 import { erros } from '~/servicos/alertas';
 import api from '~/servicos/api';
-import history from '~/servicos/history';
 
 const URL_PADRAO = 'v1/encaminhamento-naapa';
 
@@ -114,20 +111,12 @@ class ServicoNAAPA {
         dispatch(setLimparDadosQuestionarioDinamico());
         dispatch(limparDadosLocalizarEstudante());
 
-        if (situacaoNAAPA.Rascunho === situacao) {
-          history.push(
-            `${RotasDto.ENCAMINHAMENTO_NAAPA}/${resposta?.data?.id}`
-          );
-        } else {
-          history.push(`${RotasDto.ENCAMINHAMENTO_NAAPA}`);
-        }
-
         setTimeout(() => {
           dispatch(setExibirLoaderEncaminhamentoNAAPA(false));
         }, 1000);
       }
 
-      return resposta?.status === 200;
+      return resposta;
     }
 
     return false;

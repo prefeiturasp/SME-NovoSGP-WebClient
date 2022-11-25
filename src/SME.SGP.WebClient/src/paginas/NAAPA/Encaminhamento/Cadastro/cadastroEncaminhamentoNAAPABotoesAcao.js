@@ -79,13 +79,13 @@ const CadastroEncaminhamentoNAAPABotoesAcao = props => {
         dadosEncaminhamentoNAAPA?.situacao || situacaoNAAPA.Rascunho;
 
       if (confirmou) {
-        const salvou = await ServicoNAAPA.salvarEncaminhamento(
+        const resposta = await ServicoNAAPA.salvarEncaminhamento(
           encaminhamentoId,
           situacao,
           false
         );
 
-        if (salvou) {
+        if (resposta?.status === 200) {
           let mensagem = 'Registro salvo com sucesso';
           if (encaminhamentoId) {
             mensagem = 'Registro alterado com sucesso';
@@ -128,7 +128,9 @@ const CadastroEncaminhamentoNAAPABotoesAcao = props => {
         'Deseja realmente cancelar as alterações?'
       );
       if (confirmou) {
-        QuestionarioDinamicoFuncoes.limparDadosOriginaisQuestionarioDinamico();
+        QuestionarioDinamicoFuncoes.limparDadosOriginaisQuestionarioDinamico(
+          ServicoNAAPA.removerArquivo
+        );
       }
     }
   };
@@ -140,13 +142,15 @@ const CadastroEncaminhamentoNAAPABotoesAcao = props => {
       situacao = dadosEncaminhamentoNAAPA?.situacao;
     }
 
-    const salvou = await ServicoNAAPA.salvarEncaminhamento(
+    const resposta = await ServicoNAAPA.salvarEncaminhamento(
       encaminhamentoId,
       situacao,
       false
     );
-    if (salvou) {
+
+    if (resposta?.status === 200) {
       sucesso(`Rascunho salvo com sucesso`);
+      history.push(`${RotasDto.ENCAMINHAMENTO_NAAPA}/${resposta?.data?.id}`);
     }
   };
 
