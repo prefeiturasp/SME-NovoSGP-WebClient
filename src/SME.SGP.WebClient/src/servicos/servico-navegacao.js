@@ -1,7 +1,11 @@
 import tipoPermissao from '~/dtos/tipoPermissao';
 import { store } from '~/redux';
 import { setSomenteConsulta } from '~/redux/modulos/navegacao/actions';
-import { setMenu, setPermissoes } from '~/redux/modulos/usuario/actions';
+import {
+  setListaUrlAjudaDoSistema,
+  setMenu,
+  setPermissoes,
+} from '~/redux/modulos/usuario/actions';
 import api from '~/servicos/api';
 import RotasDto from '~/dtos/rotasDto';
 import modalidade from '~/dtos/modalidade';
@@ -21,6 +25,8 @@ const setMenusPermissoes = () => {
     };
   };
 
+  const listaUrlAjudaDoSistema = [];
+
   api.get('v1/menus').then(resp => {
     resp.data.forEach(item => {
       const subMenu = {
@@ -38,8 +44,15 @@ const setMenusPermissoes = () => {
             codigo: itemMenu.codigo,
             descricao: itemMenu.descricao,
             url: itemMenu.url,
+            ajudaDoSistema: itemMenu?.ajudaDoSistema,
             subMenus: [],
           };
+          if (itemMenu?.ajudaDoSistema) {
+            listaUrlAjudaDoSistema.push({
+              url: itemMenu?.ajudaDoSistema,
+              rota: itemMenu.url,
+            });
+          }
           if (subMenu.menus) {
             subMenu.menus.push(menu);
             if (itemMenu.url) {
@@ -55,8 +68,15 @@ const setMenusPermissoes = () => {
                 codigo: subItem.codigo,
                 descricao: subItem.descricao,
                 url: subItem.url,
+                ajudaDoSistema: subItem?.ajudaDoSistema,
                 subMenus: [],
               });
+              if (itemMenu?.ajudaDoSistema) {
+                listaUrlAjudaDoSistema.push({
+                  url: itemMenu?.ajudaDoSistema,
+                  rota: itemMenu.url,
+                });
+              }
               setPermissao(subItem, permissoes);
             });
           }
@@ -64,6 +84,12 @@ const setMenusPermissoes = () => {
       }
       menus.push(subMenu);
     });
+
+    if (listaUrlAjudaDoSistema?.length) {
+      store.dispatch(setListaUrlAjudaDoSistema(listaUrlAjudaDoSistema));
+    } else {
+      store.dispatch(setListaUrlAjudaDoSistema([]));
+    }
     store.dispatch(setMenu(menus));
     store.dispatch(setPermissoes(permissoes));
   });
@@ -141,10 +167,26 @@ const obterDescricaoNomeMenu = (
   return descricao;
 };
 
+const obterAjudaDoSistemaURL = () => {
+  const state = store.getState();
+
+  const { usuario, navegacao } = state;
+  const { listaUrlAjudaDoSistema } = usuario;
+  const { rotaAtiva } = navegacao;
+
+  let urlAjuda = '';
+  if (listaUrlAjudaDoSistema?.length && rotaAtiva) {
+    urlAjuda = listaUrlAjudaDoSistema.find(l => !!rotaAtiva?.includes(l?.rota))
+      ?.url;
+  }
+  return urlAjuda;
+};
+
 export {
   setMenusPermissoes,
   getObjetoStorageUsuario,
   verificaSomenteConsulta,
   obterDescricaoNomeMenu,
   setSomenteConsultaManual,
+  obterAjudaDoSistemaURL,
 };
