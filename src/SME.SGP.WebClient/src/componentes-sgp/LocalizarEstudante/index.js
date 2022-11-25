@@ -136,6 +136,8 @@ const LocalizarEstudante = () => {
   const onChangeTurma = codigo => {
     const turmaSelecionada = listaTurmas?.find(d => d?.codigo === codigo);
 
+    store.dispatch(setAluno());
+    setAlunoLocalizadorSelecionado();
     store.dispatch(setTurma(turmaSelecionada));
   };
 

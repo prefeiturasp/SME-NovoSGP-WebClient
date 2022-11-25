@@ -8,7 +8,7 @@ import {
   setResetarTabela,
   setNomesSecoesComCamposObrigatorios,
 } from '~/redux/modulos/questionarioDinamico/actions';
-import { confirmar } from '~/servicos';
+import { confirmar, erros } from '~/servicos';
 
 class QuestionarioDinamicoFuncoes {
   agruparCamposDuplicados = (data, campo) => {
@@ -96,7 +96,30 @@ class QuestionarioDinamicoFuncoes {
     });
   };
 
-  limparDadosOriginaisQuestionarioDinamico = () => {
+  deletarArquivosAoCancelar = (values, funcaoDeletarArquivos) => {
+    if (values) {
+      const camposEmTela = Object.keys(values);
+
+      camposEmTela.forEach(campo => {
+        const valorCampo = values[campo];
+        if (valorCampo?.length && Array.isArray(valorCampo)) {
+          const arquivosDeletar = valorCampo?.filter(
+            c => c?.xhr && !c?.arquivoId
+          );
+          if (arquivosDeletar?.length) {
+            arquivosDeletar.forEach(arquivo => {
+              const codigoArquivo = arquivo.xhr;
+              if (codigoArquivo) {
+                funcaoDeletarArquivos(codigoArquivo).catch(e => erros(e));
+              }
+            });
+          }
+        }
+      });
+    }
+  };
+
+  limparDadosOriginaisQuestionarioDinamico = funcaoDeletarArquivos => {
     const { dispatch } = store;
     const state = store.getState();
     const { questionarioDinamico } = state;
@@ -104,6 +127,12 @@ class QuestionarioDinamicoFuncoes {
     if (formsQuestionarioDinamico?.length) {
       formsQuestionarioDinamico.forEach(item => {
         const form = item.form();
+        if (funcaoDeletarArquivos) {
+          this.deletarArquivosAoCancelar(
+            form?.state?.values,
+            funcaoDeletarArquivos
+          );
+        }
         form.resetForm();
       });
       dispatch(setQuestionarioDinamicoEmEdicao(false));
