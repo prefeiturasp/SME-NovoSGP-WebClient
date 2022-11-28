@@ -71,10 +71,10 @@ const setMenusPermissoes = () => {
                 ajudaDoSistema: subItem?.ajudaDoSistema,
                 subMenus: [],
               });
-              if (itemMenu?.ajudaDoSistema) {
+              if (subItem?.ajudaDoSistema) {
                 listaUrlAjudaDoSistema.push({
-                  url: itemMenu?.ajudaDoSistema,
-                  rota: itemMenu.url,
+                  url: subItem?.ajudaDoSistema,
+                  rota: subItem?.url,
                 });
               }
               setPermissao(subItem, permissoes);
