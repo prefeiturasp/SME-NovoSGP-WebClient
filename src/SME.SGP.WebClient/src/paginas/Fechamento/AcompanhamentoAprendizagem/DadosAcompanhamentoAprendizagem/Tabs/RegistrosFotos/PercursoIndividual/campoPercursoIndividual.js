@@ -45,7 +45,6 @@ const CampoPercursoIndividual = () => {
       mensagemErro="Campo obrigatório"
       validarSeTemErro={valorNovo => !valorNovo}
       permiteVideo={false}
-      permiteGif={false}
       qtdMaxImg={qtdMaxImagensCampoPercursoIndividual}
     />
   );
