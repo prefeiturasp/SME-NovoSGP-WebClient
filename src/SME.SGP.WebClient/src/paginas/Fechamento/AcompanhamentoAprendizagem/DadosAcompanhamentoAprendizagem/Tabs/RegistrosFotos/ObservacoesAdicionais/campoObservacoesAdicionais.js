@@ -38,7 +38,6 @@ const CampoObservacoesAdicionais = () => {
       onChange={onChange}
       readonly={desabilitarCamposAcompanhamentoAprendizagem}
       permiteVideo={false}
-      permiteGif={false}
     />
   );
 };
