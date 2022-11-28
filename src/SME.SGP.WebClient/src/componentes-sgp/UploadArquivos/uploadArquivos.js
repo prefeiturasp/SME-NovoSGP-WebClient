@@ -133,7 +133,8 @@ const UploadArquivos = props => {
 
     ServicoArmazenamento.fazerUploadArquivo(fmData, config, urlUpload)
       .then(resposta => {
-        onSuccess(file, resposta.data);
+        const codigo = resposta?.data?.codigo || resposta.data;
+        onSuccess(file, codigo);
       })
       .catch(e => {
         onError({ event: e });

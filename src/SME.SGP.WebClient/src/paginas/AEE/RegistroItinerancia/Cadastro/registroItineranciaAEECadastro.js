@@ -20,11 +20,14 @@ import {
 } from '~/componentes';
 import { Cabecalho, Paginacao } from '~/componentes-sgp';
 import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
+import UploadArquivos from '~/componentes-sgp/UploadArquivos/uploadArquivos';
 import {
   SGP_BUTTON_CANCELAR,
   SGP_BUTTON_SALVAR,
 } from '~/constantes/ids/button';
+import { SGP_UPLOAD_REGISTRO_ITINERANCIA } from '~/constantes/ids/upload';
 import { RotasDto } from '~/dtos';
+import tipoQuestaoDto from '~/dtos/tipoQuestao';
 import {
   confirmar,
   erros,
@@ -86,13 +89,65 @@ const RegistroItineranciaAEECadastro = ({ match }) => {
   const [dreId, setDreId] = useState();
   const [ueId, setUeId] = useState();
 
+  const [arquivosExcluido, setArquivosExcluido] = useState([]);
+
   const usuario = useSelector(store => store.usuario);
   const permissoesTela =
     usuario.permissoes[RotasDto.RELATORIO_AEE_REGISTRO_ITINERANCIA];
 
   const permissaoStatus = itineranciaId && !itineranciaAlteracao?.podeEditar;
 
+  const mapearSalvarQuestoesUpload = () => {
+    const questaoUpload = questoesItinerancia.find(
+      questao => questao?.tipoQuestao === tipoQuestaoDto.Upload
+    );
+
+    if (arquivosExcluido?.length) {
+      arquivosExcluido.forEach(id => {
+        const arquivoRespostaOriginal = itineranciaAlteracao.questoes.find(
+          r => r?.arquivoId === id
+        );
+
+        if (arquivoRespostaOriginal) {
+          const respostas = [...questaoUpload.resposta];
+          respostas.push({
+            xhr: arquivoRespostaOriginal.resposta,
+            excluido: true,
+            questaoId: arquivoRespostaOriginal.questaoId,
+            arquivoId: arquivoRespostaOriginal.arquivoId,
+          });
+          questaoUpload.resposta = respostas;
+        }
+      });
+    }
+
+    const questoesSalvar = questoesItinerancia.filter(
+      questao => questao?.tipoQuestao !== tipoQuestaoDto.Upload
+    );
+
+    if (questaoUpload?.resposta?.length) {
+      questaoUpload.resposta.forEach(resposta => {
+        if (questaoUpload?.tipoQuestao === tipoQuestaoDto.Upload) {
+          const questao = {
+            questaoId: questaoUpload.questaoId,
+            resposta: resposta?.xhr,
+            tipoQuestao: questaoUpload?.tipoQuestao,
+            excluido: false,
+          };
+          if (resposta?.arquivoId) {
+            questao.arquivoId = resposta.arquivoId;
+            questao.excluido = !!resposta.excluido;
+          }
+          questoesSalvar.push(questao);
+        }
+      });
+    }
+    return questoesSalvar;
+  };
+
   const onClickSalvar = () => {
+    const questoes = mapearSalvarQuestoesUpload();
+
     const itinerancia = {
       id: itineranciaId,
       dataVisita,
@@ -101,7 +156,7 @@ const RegistroItineranciaAEECadastro = ({ match }) => {
       ueId,
       dreId,
       alunos: alunosSelecionados,
-      questoes: alunosSelecionados?.length ? [] : questoesItinerancia,
+      questoes: alunosSelecionados?.length ? [] : questoes,
       anoLetivo: new Date().getFullYear(),
       eventoId,
     };
@@ -282,6 +337,38 @@ const RegistroItineranciaAEECadastro = ({ match }) => {
     setModoEdicao(false);
   };
 
+  const mapearQuestoesUpload = questoes => {
+    const questoesMapeadas = questoes.filter(
+      questao => questao?.tipoQuestao !== tipoQuestaoDto.Upload
+    );
+
+    const questoesUpload = questoes.filter(
+      questao => questao?.tipoQuestao === tipoQuestaoDto.Upload
+    );
+
+    if (questoesUpload?.length) {
+      // Considerando que sempre vai ser uma questão de upload!
+      const { questaoId, tipoQuestao, descricao } = questoesUpload[0];
+      const questaoUpload = {
+        questaoId,
+        tipoQuestao,
+        descricao,
+        resposta: questoesUpload.map(questao => {
+          return {
+            uid: questao?.resposta,
+            xhr: questao?.resposta,
+            name: questao?.arquivoNome || 'asdasdasdsad',
+            status: 'done',
+            arquivoId: questao?.arquivoId,
+          };
+        }),
+      };
+      questoesMapeadas.push(questaoUpload);
+    }
+
+    return questoesMapeadas;
+  };
+
   const construirItineranciaAlteracao = itinerancia => {
     setDataVisita(window.moment(itinerancia.dataVisita));
     setDataRetornoVerificacao(
@@ -316,7 +403,9 @@ const RegistroItineranciaAEECadastro = ({ match }) => {
     }
 
     if (itinerancia.questoes?.length) {
-      setQuestoesItinerancia(itinerancia.questoes);
+      const questoes = mapearQuestoesUpload(itinerancia.questoes);
+
+      setQuestoesItinerancia(questoes);
     } else {
       setQuestoesItinerancia([]);
     }
@@ -338,6 +427,8 @@ const RegistroItineranciaAEECadastro = ({ match }) => {
     } else if (listaEvento?.length > 1) {
       setEventoId();
     }
+
+    setArquivosExcluido([]);
   };
 
   const perguntarAntesDeCancelar = async () => {
@@ -701,6 +792,47 @@ const RegistroItineranciaAEECadastro = ({ match }) => {
     return false;
   };
 
+  const onRemoveFile = async arquivo => {
+    const codigoArquivo = arquivo?.xhr;
+    if (arquivo.arquivoId) {
+      const questaoUpload = questoesItinerancia.find(
+        q => q?.tipoQuestao === tipoQuestaoDto.Upload
+      );
+
+      const index = questoesItinerancia.indexOf(questaoUpload);
+
+      let listaDeArquivos = questaoUpload?.resposta?.length
+        ? questaoUpload.resposta
+        : [];
+
+      if (listaDeArquivos?.length) {
+        const novoMap = [...listaDeArquivos];
+        const indice = novoMap.findIndex(
+          item => arquivo.arquivoId === item.arquivoId
+        );
+        if (indice !== -1) {
+          const listaExcluidos = [...arquivosExcluido];
+          listaExcluidos.push(arquivo.arquivoId);
+          setArquivosExcluido(listaExcluidos);
+
+          novoMap.splice(indice, 1);
+          listaDeArquivos = [...novoMap];
+          sucesso(`Arquivo ${arquivo.name} removido com sucesso`);
+          questaoUpload.resposta = [...listaDeArquivos];
+          questoesItinerancia[index] = questaoUpload;
+        }
+      }
+    } else {
+      const resposta = await ServicoRegistroItineranciaAEE.removerArquivo(
+        codigoArquivo
+      ).catch(e => erros(e));
+      if (resposta?.status === 200) {
+        sucesso(`Arquivo ${arquivo.name} removido com sucesso`);
+      }
+    }
+    setModoEdicao(true);
+  };
+
   return (
     <>
       <Cabecalho pagina="Registro de itinerância">
@@ -942,7 +1074,7 @@ const RegistroItineranciaAEECadastro = ({ match }) => {
               <Loader loading tip="Carregando questões" />
             ) : (
               questoesItinerancia?.map(questao => {
-                return (
+                return questao?.tipoQuestao !== tipoQuestaoDto.Upload ? (
                   <div className="row mb-4" key={questao.questaoId}>
                     <div className="col-12">
                       <JoditEditor
@@ -955,6 +1087,8 @@ const RegistroItineranciaAEECadastro = ({ match }) => {
                       />
                     </div>
                   </div>
+                ) : (
+                  <></>
                 );
               })
             )}
@@ -972,6 +1106,38 @@ const RegistroItineranciaAEECadastro = ({ match }) => {
                 />
               </div>
             </div>
+            {questoesItinerancia?.map((questao, index) => {
+              return questao?.tipoQuestao === tipoQuestaoDto.Upload ? (
+                <div className="row mb-4">
+                  <div className="col-md-12">
+                    <UploadArquivos
+                      name="listaArquivos"
+                      id={SGP_UPLOAD_REGISTRO_ITINERANCIA}
+                      desabilitarGeral={desabilitarCamposPorPermissao()}
+                      onRemove={onRemoveFile}
+                      urlUpload="v1/itinerancias/upload"
+                      defaultFileList={
+                        questao.resposta?.length ? questao.resposta : []
+                      }
+                      label={questao?.descricao}
+                      labelRequired
+                      onChangeListaArquivos={lista => {
+                        if (lista?.length) {
+                          const listaComCodigo = lista.filter(l => !!l.xhr);
+                          if (lista.length === listaComCodigo.length) {
+                            questoesItinerancia[index].resposta = lista;
+                            setQuestoesItinerancia([...questoesItinerancia]);
+                            setModoEdicao(true);
+                          }
+                        }
+                      }}
+                    />
+                  </div>
+                </div>
+              ) : (
+                <></>
+              );
+            })}
           </div>
           {auditoria && (
             <Auditoria
