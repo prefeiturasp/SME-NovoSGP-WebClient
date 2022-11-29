@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import { useDispatch } from 'react-redux';
+import _ from 'lodash';
 import { Label } from '~/componentes';
 import UploadArquivos from '~/componentes-sgp/UploadArquivos/uploadArquivos';
 import { setArquivoRemovido } from '~/redux/modulos/questionarioDinamico/actions';
@@ -30,12 +31,13 @@ const CampoDinamicoUploadArquivos = props => {
         form?.setFieldValue &&
         form?.values?.[questaoAtual?.id]?.length
       ) {
-        const novoMap = form?.values?.[questaoAtual?.id];
-        const indice = novoMap.findIndex(
+        const dadosAtuais = form?.values?.[questaoAtual?.id];
+        const indice = dadosAtuais.findIndex(
           item => arquivo.arquivoId === item.arquivoId
         );
 
         if (indice !== -1) {
+          const novoMap = _.cloneDeep(dadosAtuais);
           novoMap.splice(indice, 1);
 
           form.setFieldValue(String(questaoAtual?.id), novoMap);
