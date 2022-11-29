@@ -357,7 +357,7 @@ const RegistroItineranciaAEECadastro = ({ match }) => {
           return {
             uid: questao?.resposta,
             xhr: questao?.resposta,
-            name: questao?.arquivoNome || 'asdasdasdsad',
+            name: questao?.arquivoNome,
             status: 'done',
             arquivoId: questao?.arquivoId,
           };
@@ -1111,7 +1111,6 @@ const RegistroItineranciaAEECadastro = ({ match }) => {
                 <div className="row mb-4">
                   <div className="col-md-12">
                     <UploadArquivos
-                      name="listaArquivos"
                       id={SGP_UPLOAD_REGISTRO_ITINERANCIA}
                       desabilitarGeral={desabilitarCamposPorPermissao()}
                       onRemove={onRemoveFile}
