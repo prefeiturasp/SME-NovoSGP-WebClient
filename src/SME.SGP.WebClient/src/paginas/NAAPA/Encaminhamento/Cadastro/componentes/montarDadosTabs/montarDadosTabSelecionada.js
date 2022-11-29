@@ -140,10 +140,10 @@ const MontarDadosTabSelecionada = props => {
       }
 
       setDadosQuestionarioAtual(dadosMapeados);
-      dispatch(setExibirLoaderEncaminhamentoNAAPA(false));
     } else {
       setDadosQuestionarioAtual([]);
     }
+    dispatch(setExibirLoaderEncaminhamentoNAAPA(false));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dispatch, questionarioId, aluno, turma, encaminhamentoId]);
 
