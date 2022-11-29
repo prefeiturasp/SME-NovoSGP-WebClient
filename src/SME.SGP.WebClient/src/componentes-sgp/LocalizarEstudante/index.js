@@ -122,6 +122,9 @@ const LocalizarEstudante = () => {
 
     setListaUes([]);
     setListaTurmas([]);
+
+    store.dispatch(setAluno());
+    setAlunoLocalizadorSelecionado();
   };
 
   const onChangeUe = codigo => {
@@ -131,6 +134,9 @@ const LocalizarEstudante = () => {
     store.dispatch(setTurma());
 
     setListaTurmas([]);
+
+    store.dispatch(setAluno());
+    setAlunoLocalizadorSelecionado();
   };
 
   const onChangeTurma = codigo => {
