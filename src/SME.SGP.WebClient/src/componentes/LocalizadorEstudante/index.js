@@ -69,8 +69,8 @@ const LocalizadorEstudante = props => {
     }
   }, [pessoaSelecionada, limparCamposAposPesquisa]);
 
-  const limparDados = () => {
-    onChange();
+  const limparDados = limpouDados => {
+    onChange(undefined, limpouDados);
     setDataSource([]);
     setPessoaSelecionada({
       alunoCodigo: '',
@@ -113,7 +113,7 @@ const LocalizadorEstudante = props => {
         erros(e);
       }
       setExibirLoader(false);
-      limparDados();
+      limparDados(true);
     });
     setExibirLoader(false);
     if (retorno?.data?.items?.length > 0) {
@@ -169,7 +169,7 @@ const LocalizadorEstudante = props => {
       } else {
         erros(e);
       }
-      limparDados();
+      limparDados(true);
     });
 
     setExibirLoader(false);
