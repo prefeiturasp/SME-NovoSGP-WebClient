@@ -359,19 +359,23 @@ const RegistroItineranciaAEECadastro = ({ match }) => {
     if (questoesUpload?.length) {
       // Considerando que sempre vai ser uma questão de upload!
       const { questaoId, tipoQuestao, descricao } = questoesUpload[0];
+
+      const respostas = questoesUpload.map(questao => {
+        return {
+          uid: questao?.resposta,
+          xhr: questao?.resposta,
+          name: questao?.arquivoNome,
+          status: 'done',
+          arquivoId: questao?.arquivoId,
+        };
+      });
+      const questoesResposta = respostas.filter(q => !!q?.xhr);
+
       const questaoUpload = {
         questaoId,
         tipoQuestao,
         descricao,
-        resposta: questoesUpload.map(questao => {
-          return {
-            uid: questao?.resposta,
-            xhr: questao?.resposta,
-            name: questao?.arquivoNome,
-            status: 'done',
-            arquivoId: questao?.arquivoId,
-          };
-        }),
+        resposta: questoesResposta,
       };
       questoesMapeadas.push(questaoUpload);
     }
