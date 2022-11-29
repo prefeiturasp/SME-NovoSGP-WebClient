@@ -110,7 +110,9 @@ const RegistroItineranciaAEECadastro = ({ match }) => {
 
         if (arquivoRespostaOriginal) {
           const respostas = [...questaoUpload.resposta];
+
           respostas.push({
+            id: arquivoRespostaOriginal?.id,
             xhr: arquivoRespostaOriginal.resposta,
             excluido: true,
             questaoId: arquivoRespostaOriginal.questaoId,
@@ -128,7 +130,15 @@ const RegistroItineranciaAEECadastro = ({ match }) => {
     if (questaoUpload?.resposta?.length) {
       questaoUpload.resposta.forEach(resposta => {
         if (questaoUpload?.tipoQuestao === tipoQuestaoDto.Upload) {
+          let idResposta = resposta?.id || 0;
+
+          if (!idResposta) {
+            idResposta = itineranciaAlteracao?.questoes?.find?.(
+              r => r?.resposta === resposta?.xhr
+            )?.id;
+          }
           const questao = {
+            id: idResposta || 0,
             questaoId: questaoUpload.questaoId,
             resposta: resposta?.xhr,
             tipoQuestao: questaoUpload?.tipoQuestao,
