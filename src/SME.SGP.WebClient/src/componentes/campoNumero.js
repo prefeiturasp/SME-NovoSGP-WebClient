@@ -15,7 +15,7 @@ const Campo = styled.div`
     margin-bottom: 5px;
   }
   .ant-input-number {
-    height: 38px;
+    min-height: 38px;
     &-handler-wrap {
       ${({ esconderSetas }) =>
         esconderSetas &&
@@ -24,8 +24,12 @@ const Campo = styled.div`
         `}
     }
   }
+  .ant-input-number-input,
+  .ant-input-number-input-wrap {
+    height: 100%;
+  }
 
-  height: 45px;
+  min-height: 45px;
 `;
 
 const CampoNumero = React.forwardRef((props, ref) => {
@@ -35,7 +39,7 @@ const CampoNumero = React.forwardRef((props, ref) => {
     form,
     className,
     classNameCampo,
-    maskType,
+    type,
     placeholder,
     onChange,
     onKeyDown,
@@ -106,7 +110,7 @@ const CampoNumero = React.forwardRef((props, ref) => {
                 possuiErro() ? 'is-invalid' : ''
               } ${className || ''} ${desabilitado ? 'desabilitado' : ''}`}
               component={InputNumber}
-              type={maskType || ''}
+              type={type || ''}
               readOnly={desabilitado}
               onBlur={executaOnBlur}
               maxLength={maxlength || ''}
@@ -122,7 +126,11 @@ const CampoNumero = React.forwardRef((props, ref) => {
               disabled={disabled}
               placeholder={placeholder}
             />
-            {!semMensagem ? <span>{form.errors[name]}</span> : ''}
+            {!semMensagem && possuiErro() ? (
+              <span>{form.errors[name]}</span>
+            ) : (
+              ''
+            )}
           </>
         ) : (
           <InputNumber

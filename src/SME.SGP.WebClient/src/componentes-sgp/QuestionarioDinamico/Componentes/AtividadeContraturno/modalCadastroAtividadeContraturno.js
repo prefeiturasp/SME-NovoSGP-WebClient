@@ -120,7 +120,7 @@ const ModalCadastroAtividadeContraturno = props => {
               <Col>
                 <Button
                   border
-                  label="Salvar"
+                  label="Adicionar"
                   key="btn-salvar"
                   color={Colors.Roxo}
                   disabled={disabled}
