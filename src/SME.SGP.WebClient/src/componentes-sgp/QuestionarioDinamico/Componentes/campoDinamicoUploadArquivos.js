@@ -76,7 +76,6 @@ const CampoDinamicoUploadArquivos = props => {
           onChangeListaArquivos={onChange}
           tiposArquivosPermitidos={questaoAtual.opcionais || ''}
           desabilitarGeral={desabilitado || questaoAtual.somenteLeitura}
-          desabilitarUpload={form?.values?.[questaoAtual?.id]?.length > 9}
           defaultFileList={
             form?.values?.[questaoAtual?.id]?.length
               ? form?.values?.[questaoAtual?.id]
