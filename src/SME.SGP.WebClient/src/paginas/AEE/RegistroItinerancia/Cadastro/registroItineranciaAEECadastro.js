@@ -1129,7 +1129,6 @@ const RegistroItineranciaAEECadastro = ({ match }) => {
                         questao.resposta?.length ? questao.resposta : []
                       }
                       label={questao?.descricao}
-                      labelRequired
                       onChangeListaArquivos={lista => {
                         if (lista?.length) {
                           const listaComCodigo = lista.filter(l => !!l.xhr);
