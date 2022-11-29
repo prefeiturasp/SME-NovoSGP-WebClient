@@ -15,6 +15,7 @@ import {
 } from '~/redux/modulos/encaminhamentoNAAPA/actions';
 import { RotasDto } from '~/dtos';
 import { history, verificaSomenteConsulta } from '~/servicos';
+import { setLimparDadosQuestionarioDinamico } from '~/redux/modulos/questionarioDinamico/actions';
 
 const EncaminhamentoNAAPA = () => {
   const routeMatch = useRouteMatch();
@@ -31,6 +32,7 @@ const EncaminhamentoNAAPA = () => {
       store.dispatch(limparDadosLocalizarEstudante());
       store.dispatch(setLimparDadosEncaminhamentoNAAPA());
       store.dispatch(setTabAtivaEncaminhamentoNAAPA());
+      store.dispatch(setLimparDadosQuestionarioDinamico());
     };
   }, []);
 

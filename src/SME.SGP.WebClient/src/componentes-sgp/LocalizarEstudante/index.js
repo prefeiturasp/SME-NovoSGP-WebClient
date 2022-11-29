@@ -122,6 +122,9 @@ const LocalizarEstudante = () => {
 
     setListaUes([]);
     setListaTurmas([]);
+
+    store.dispatch(setAluno());
+    setAlunoLocalizadorSelecionado();
   };
 
   const onChangeUe = codigo => {
@@ -131,6 +134,9 @@ const LocalizarEstudante = () => {
     store.dispatch(setTurma());
 
     setListaTurmas([]);
+
+    store.dispatch(setAluno());
+    setAlunoLocalizadorSelecionado();
   };
 
   const onChangeTurma = codigo => {
@@ -141,7 +147,7 @@ const LocalizarEstudante = () => {
     store.dispatch(setTurma(turmaSelecionada));
   };
 
-  const onChangeLocalizadorEstudante = aluno => {
+  const onChangeLocalizadorEstudante = (aluno, limpouDados) => {
     if (aluno?.alunoCodigo && aluno?.alunoNome) {
       const dadosAluno = {
         codigoAluno: aluno?.alunoCodigo,
@@ -162,6 +168,9 @@ const LocalizarEstudante = () => {
     } else {
       setAlunoLocalizadorSelecionado();
       store.dispatch(setAluno());
+      if (!limpouDados) {
+        store.dispatch(setTurma());
+      }
     }
   };
 
