@@ -43,9 +43,7 @@ const ObjectCardEstudante = props => {
       codigoAluno,
       anoLetivo,
       codigoTurma
-    )
-      .catch(e => erros(e))
-      .finally(() => setExibirLoader(false));
+    ).catch(e => erros(e));
 
     if (resultado?.data) {
       const aluno = {
@@ -58,7 +56,8 @@ const ObjectCardEstudante = props => {
         const novaFreq = await obterFrequenciaGlobalAluno();
         aluno.frequencia = novaFreq;
       }
-      dispatch(setDadosObjectCardEstudante(aluno));
+      dispatch(setDadosObjectCardEstudante({ ...aluno }));
+      setExibirLoader(false);
     }
   }, [
     dispatch,

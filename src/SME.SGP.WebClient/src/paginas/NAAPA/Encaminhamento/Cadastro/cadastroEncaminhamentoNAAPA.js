@@ -1,6 +1,6 @@
 import { Row, Col } from 'antd';
 import React, { useEffect, useCallback } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useRouteMatch } from 'react-router-dom';
 import { SelectComponent } from '~/componentes';
 import ObjectCardEstudante from '~/componentes-sgp/ObjectCardEstudante/objectCardEstudante';
@@ -8,13 +8,17 @@ import { SGP_SELECT_DRE, SGP_SELECT_UE } from '~/constantes/ids/select';
 import MontarDadosTabs from './componentes/montarDadosTabs/montarDadosTabs';
 import ServicoNAAPA from '~/servicos/Paginas/Gestao/NAAPA/ServicoNAAPA';
 import { store } from '~/redux';
-import { setDadosEncaminhamentoNAAPA } from '~/redux/modulos/encaminhamentoNAAPA/actions';
+import {
+  setDadosEncaminhamentoNAAPA,
+  setExibirLoaderEncaminhamentoNAAPA,
+} from '~/redux/modulos/encaminhamentoNAAPA/actions';
 import { erros, setBreadcrumbManual } from '~/servicos';
 import ModalErrosQuestionarioDinamico from '~/componentes-sgp/QuestionarioDinamico/Componentes/ModalErrosQuestionarioDinamico/modalErrosQuestionarioDinamico';
 import { RotasDto } from '~/dtos';
 
 const CadastroEncaminhamentoNAAPA = () => {
   const routeMatch = useRouteMatch();
+  const dispatch = useDispatch();
 
   const encaminhamentoId = routeMatch.params?.id;
 
@@ -34,6 +38,7 @@ const CadastroEncaminhamentoNAAPA = () => {
     : [];
 
   const obterDadosEncaminhamentoNAAPA = useCallback(async () => {
+    dispatch(setExibirLoaderEncaminhamentoNAAPA(true));
     const resposta = await ServicoNAAPA.obterDadosEncaminhamentoNAAPA(
       encaminhamentoId
     ).catch(e => erros(e));
@@ -61,7 +66,8 @@ const CadastroEncaminhamentoNAAPA = () => {
     } else {
       store.dispatch(setDadosEncaminhamentoNAAPA([]));
     }
-  }, [encaminhamentoId]);
+    dispatch(setExibirLoaderEncaminhamentoNAAPA(false));
+  }, [dispatch, encaminhamentoId]);
 
   useEffect(() => {
     if (encaminhamentoId) {
