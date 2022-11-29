@@ -12,7 +12,7 @@ import {
 } from '~/componentes';
 import Button from '~/componentes/button';
 import {
-  SGP_BUTTON_SALVAR_CONTATO_RESPONSAVEIS_MODAL,
+  SGP_BUTTON_ADICIONAR_CONTATO_RESPONSAVEIS_MODAL,
   SGP_BUTTON_VOLTAR_CONTATO_RESPONSAVEIS_MODAL,
 } from '~/constantes/ids/button';
 import {
@@ -50,7 +50,12 @@ const ModalCadastroContatoResponsaveis = props => {
       .required('Campo obrigatório'),
     telefone: Yup.string()
       .nullable()
-      .required('Campo obrigatório'),
+      .required('Campo obrigatório')
+      .test(
+        'len',
+        'Telefone inválido, você deve digitar o DDD com dois dígitos e o telefone com 8 ou 9 dígitos.',
+        val => val?.length === 14 || val?.length === 15
+      ),
   });
 
   const obterGrauParentesco = async () => {
@@ -121,6 +126,7 @@ const ModalCadastroContatoResponsaveis = props => {
               <Col sm={24}>
                 <CampoTexto
                   form={form}
+                  somenteTexto
                   labelRequired
                   name="nomeCompleto"
                   label="Nome completo"
@@ -179,12 +185,12 @@ const ModalCadastroContatoResponsaveis = props => {
               <Col>
                 <Button
                   border
-                  label="Adicionar"
                   key="btn-salvar"
+                  label="Adicionar"
                   color={Colors.Roxo}
                   disabled={disabled}
                   onClick={() => validaAntesDoSubmit(form)}
-                  id={SGP_BUTTON_SALVAR_CONTATO_RESPONSAVEIS_MODAL}
+                  id={SGP_BUTTON_ADICIONAR_CONTATO_RESPONSAVEIS_MODAL}
                 />
               </Col>
             </Row>
