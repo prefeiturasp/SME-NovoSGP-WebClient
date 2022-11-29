@@ -23,6 +23,7 @@ const CampoDinamicoNumerico = props => {
         <CampoNumero
           id={id}
           form={form}
+          type="number"
           esconderSetas
           onChange={onChange}
           desabilitado={disabled}
