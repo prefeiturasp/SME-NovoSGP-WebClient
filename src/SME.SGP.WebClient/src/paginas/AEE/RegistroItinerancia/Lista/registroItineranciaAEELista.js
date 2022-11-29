@@ -24,6 +24,7 @@ import {
   history,
   ServicoRegistroItineranciaAEE,
   sucesso,
+  verificaSomenteConsulta,
 } from '~/servicos';
 import { BotaoCustomizado } from '../registroItinerancia.css';
 
@@ -59,6 +60,8 @@ const RegistroItineranciaAEELista = () => {
   const usuario = useSelector(store => store.usuario);
   const permissoesTela =
     usuario.permissoes[RotasDto.RELATORIO_AEE_REGISTRO_ITINERANCIA];
+  const somenteConsulta = useSelector(store => store.navegacao)
+    ?.somenteConsulta;
 
   const colunas = [
     {
@@ -86,6 +89,10 @@ const RegistroItineranciaAEELista = () => {
       dataIndex: 'criadoPor',
     },
   ];
+
+  useEffect(() => {
+    verificaSomenteConsulta(permissoesTela);
+  }, [permissoesTela]);
 
   const filtrar = (
     ano,
@@ -451,7 +458,7 @@ const RegistroItineranciaAEELista = () => {
               color={Colors.Roxo}
               bold
               onClick={onClickNovo}
-              disabled={!permissoesTela.podeIncluir}
+              disabled={somenteConsulta || !permissoesTela.podeIncluir}
             />
           </Col>
         </Row>
