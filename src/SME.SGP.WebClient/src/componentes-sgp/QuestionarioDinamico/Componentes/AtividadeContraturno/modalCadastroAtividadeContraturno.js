@@ -7,7 +7,7 @@ import * as Yup from 'yup';
 import { CampoTexto, Colors, ModalConteudoHtml } from '~/componentes';
 import Button from '~/componentes/button';
 import {
-  SGP_BUTTON_SALVAR_ATIVIDADE_CONTRATURNO_MODAL,
+  SGP_BUTTON_ADICIONAR_ATIVIDADE_CONTRATURNO_MODAL,
   SGP_BUTTON_VOLTAR_ATIVIDADE_CONTRATURNO_MODAL,
 } from '~/constantes/ids/button';
 import {
@@ -120,12 +120,12 @@ const ModalCadastroAtividadeContraturno = props => {
               <Col>
                 <Button
                   border
-                  label="Adicionar"
                   key="btn-salvar"
+                  label="Adicionar"
                   color={Colors.Roxo}
                   disabled={disabled}
                   onClick={() => validaAntesDoSubmit(form)}
-                  id={SGP_BUTTON_SALVAR_ATIVIDADE_CONTRATURNO_MODAL}
+                  id={SGP_BUTTON_ADICIONAR_ATIVIDADE_CONTRATURNO_MODAL}
                 />
               </Col>
             </Row>
