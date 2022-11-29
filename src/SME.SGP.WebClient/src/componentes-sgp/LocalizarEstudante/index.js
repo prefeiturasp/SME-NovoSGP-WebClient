@@ -20,7 +20,10 @@ import {
   setAnoLetivo,
 } from '~/redux/modulos/localizarEstudante/actions';
 
-const LocalizarEstudante = () => {
+const LocalizarEstudante = props => {
+  // eslint-disable-next-line react/prop-types
+  const { consideraNovasUEs } = props;
+
   const [anoAtual] = useState(window.moment().format('YYYY'));
 
   const listaAnosLetivo = [{ label: anoAtual, id: anoAtual }];
@@ -68,7 +71,7 @@ const LocalizarEstudante = () => {
     setCarregandoUes(true);
     const resposta = await AbrangenciaServico.buscarUes(
       codigoDre,
-      `v1/abrangencias/false/dres/${codigoDre}/ues?anoLetivo=${anoAtual}`,
+      `v1/abrangencias/false/dres/${codigoDre}/ues?anoLetivo=${anoAtual}&consideraNovasUEs=${!!consideraNovasUEs}`,
       true
     )
       .catch(e => erros(e))
@@ -84,7 +87,7 @@ const LocalizarEstudante = () => {
       setListaUes([]);
       store.dispatch(setUe());
     }
-  }, [codigoDre, anoAtual]);
+  }, [codigoDre, anoAtual, consideraNovasUEs]);
 
   const obterTurmas = useCallback(async () => {
     setCarregandoTurmas(true);
