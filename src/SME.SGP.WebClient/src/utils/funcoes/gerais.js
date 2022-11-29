@@ -89,6 +89,12 @@ const maskTelefone = v => {
   return v;
 };
 
+const maskSomenteTexto = v => {
+  v = String(v);
+  v = v.replace(/[0-9!@#¨$%^&*)(+=._-]+/g, '');
+  return v;
+};
+
 const ordenarListaMaiorParaMenor = (conteudoParaOrdenar, nomeCampo) => {
   const ordenar = (a, b) => {
     return b[nomeCampo] - a[nomeCampo];
@@ -287,6 +293,7 @@ export {
   removerNumeros,
   downloadBlob,
   maskTelefone,
+  maskSomenteTexto,
   ordenarListaMaiorParaMenor,
   removerArrayAninhados,
   clonarObjeto,

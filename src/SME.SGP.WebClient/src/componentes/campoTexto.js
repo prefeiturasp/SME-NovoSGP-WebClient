@@ -3,7 +3,7 @@ import { Field } from 'formik';
 import PropTypes from 'prop-types';
 import React from 'react';
 import styled from 'styled-components';
-import { maskTelefone } from '~/utils';
+import { maskSomenteTexto, maskTelefone } from '~/utils';
 import { Base } from './colors';
 import Label from './label';
 
@@ -57,6 +57,7 @@ const CampoTexto = React.forwardRef((props, ref) => {
     onBlur,
     labelRequired,
     addMaskTelefone,
+    somenteTexto,
   } = props;
 
   const possuiErro = () => {
@@ -75,6 +76,9 @@ const CampoTexto = React.forwardRef((props, ref) => {
 
     if (e.target.value && addMaskTelefone) {
       valorComMask = maskTelefone(e.target.value);
+      form.setFieldValue(name, valorComMask);
+    } else if (e.target.value && somenteTexto) {
+      valorComMask = maskSomenteTexto(e.target.value);
       form.setFieldValue(name, valorComMask);
     } else {
       form.setFieldValue(name, e.target.value);
@@ -114,11 +118,7 @@ const CampoTexto = React.forwardRef((props, ref) => {
             value={value || form.values[name]}
             rows={minRowsTextArea}
           />
-          {!semMensagem && form && form.touched[name] ? (
-            <span>{form.errors[name]}</span>
-          ) : (
-            ''
-          )}
+          {!semMensagem && possuiErro() ? <span>{form.errors[name]}</span> : ''}
         </>
       ) : (
         <Input
@@ -162,6 +162,7 @@ CampoTexto.propTypes = {
   onBlur: PropTypes.oneOfType([PropTypes.func]),
   labelRequired: PropTypes.bool,
   addMaskTelefone: PropTypes.bool,
+  somenteTexto: PropTypes.bool,
 };
 
 CampoTexto.defaultProps = {
@@ -188,6 +189,7 @@ CampoTexto.defaultProps = {
   onBlur: () => {},
   labelRequired: false,
   addMaskTelefone: false,
+  somenteTexto: false,
 };
 
 export default CampoTexto;
