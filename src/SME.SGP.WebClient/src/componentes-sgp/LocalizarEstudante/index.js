@@ -168,6 +168,7 @@ const LocalizarEstudante = () => {
     } else {
       setAlunoLocalizadorSelecionado();
       store.dispatch(setAluno());
+      store.dispatch(setTurma());
     }
   };
 
