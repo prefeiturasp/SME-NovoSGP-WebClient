@@ -1,4 +1,5 @@
 import $ from 'jquery';
+import moment from 'moment';
 import { OPCAO_TODOS } from '~/constantes/constantes';
 import notificacaoStatus from '~/dtos/notificacaoStatus';
 
@@ -276,6 +277,11 @@ const ordenarNotificoesNavBar = listaNotificacoes => {
   return listaOrdenada;
 };
 
+const verificarDataFimMaiorInicio = (dataInicio, dataFim) => {
+  if (!dataInicio || !dataFim) return true;
+  return moment(dataInicio, 'MM-DD-YYYY') <= moment(dataFim, 'MM-DD-YYYY');
+};
+
 export {
   validaSeObjetoEhNuloOuVazio,
   valorNuloOuVazio,
@@ -298,4 +304,5 @@ export {
   primeiroMaisculo,
   editorTemValor,
   ordenarNotificoesNavBar,
+  verificarDataFimMaiorInicio,
 };
