@@ -142,7 +142,7 @@ const LocalizarEstudante = () => {
     store.dispatch(setTurma(turmaSelecionada));
   };
 
-  const onChangeLocalizadorEstudante = (aluno, limpouDados) => {
+  const onChangeLocalizadorEstudante = aluno => {
     if (aluno?.alunoCodigo && aluno?.alunoNome) {
       const dadosTurma = {
         codigo: aluno?.codigoTurma,
@@ -157,9 +157,6 @@ const LocalizarEstudante = () => {
       store.dispatch(setAluno(dadosAluno));
     } else {
       store.dispatch(setAluno());
-      if (!limpouDados) {
-        store.dispatch(setTurma());
-      }
     }
   };
 
