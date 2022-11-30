@@ -5,6 +5,8 @@ import { ListaPaginada } from '~/componentes';
 import { OPCAO_TODOS } from '~/constantes';
 import { SGP_TABLE_ENCAMINHAMENTO_NAAPA } from '~/constantes/ids/table';
 import { RotasDto } from '~/dtos';
+import { store } from '~/redux';
+import { setTabAtivaEncaminhamentoNAAPA } from '~/redux/modulos/encaminhamentoNAAPA/actions';
 import { history } from '~/servicos';
 
 const ListaEncaminhamentoNAAPAPaginada = props => {
@@ -103,9 +105,10 @@ const ListaEncaminhamentoNAAPAPaginada = props => {
       id={SGP_TABLE_ENCAMINHAMENTO_NAAPA}
       colunas={colunas}
       filtro={filtros}
-      onClick={linha =>
-        history.push(`${RotasDto.ENCAMINHAMENTO_NAAPA}/${linha?.id}`)
-      }
+      onClick={linha => {
+        store.dispatch(setTabAtivaEncaminhamentoNAAPA());
+        history.push(`${RotasDto.ENCAMINHAMENTO_NAAPA}/${linha?.id}`);
+      }}
       filtroEhValido={filtroEhValido}
     />
   ) : (
