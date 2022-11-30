@@ -26,10 +26,9 @@ class ServicoEstudante {
   obterLocalAtividadeAluno = (
     codigoAluno,
     anoLetivo,
-    filtrarSituacaoMatricula = true,
-    tipoTurma = false
+    filtrarSituacaoMatricula = true
   ) => {
-    const queryString = `codigoAluno=${codigoAluno}&anoLetivo=${anoLetivo}&filtrarSituacaoMatricula=${filtrarSituacaoMatricula}&tipoTurma=${tipoTurma}`;
+    const queryString = `codigoAluno=${codigoAluno}&anoLetivo=${anoLetivo}&filtrarSituacaoMatricula=${filtrarSituacaoMatricula}`;
     const url = `${urlPadrao}/local-atividade?${queryString}`;
     return api.get(url);
   };
