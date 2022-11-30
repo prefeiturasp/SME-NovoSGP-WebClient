@@ -415,7 +415,7 @@ const CamposFiltrarDadosFrequenciaPlanoAula = () => {
           disabled={
             !turmaSelecionada.turma ||
             (listaComponenteCurricular &&
-              listaComponenteCurricular.length === 1)
+              listaComponenteCurricular.length === 1) || codigoComponenteCurricular !== undefined
           }
         />
       </div>
