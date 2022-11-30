@@ -30,7 +30,7 @@ class ServicoEstudante {
     tipoTurma = false
   ) => {
     const queryString = `codigoAluno=${codigoAluno}&anoLetivo=${anoLetivo}&filtrarSituacaoMatricula=${filtrarSituacaoMatricula}&tipoTurma=${tipoTurma}`;
-    const url = `${urlPadrao}/local-atividade?${queryString}}`;
+    const url = `${urlPadrao}/local-atividade?${queryString}`;
     return api.get(url);
   };
 }
