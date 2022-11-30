@@ -73,7 +73,20 @@ const CadastroEncaminhamentoNAAPA = () => {
     if (encaminhamentoId) {
       obterDadosEncaminhamentoNAAPA();
     } else if (novoEncaminhamentoNAAPADados?.aluno?.codigoAluno) {
-      store.dispatch(setDadosEncaminhamentoNAAPA(novoEncaminhamentoNAAPADados));
+      const temTurmaSelecionada = !!novoEncaminhamentoNAAPADados?.turma?.codigo;
+      if (temTurmaSelecionada) {
+        store.dispatch(
+          setDadosEncaminhamentoNAAPA(novoEncaminhamentoNAAPADados)
+        );
+      } else {
+        const turmaAluno = novoEncaminhamentoNAAPADados?.aluno?.turma;
+        store.dispatch(
+          setDadosEncaminhamentoNAAPA({
+            ...novoEncaminhamentoNAAPADados,
+            turma: turmaAluno,
+          })
+        );
+      }
     }
   }, [
     encaminhamentoId,
