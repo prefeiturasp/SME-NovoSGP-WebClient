@@ -61,7 +61,7 @@ const MontarDadosTabSelecionada = props => {
       anoLetivo
     ).catch(e => erros(e));
     if (resposta?.data?.length) {
-      const dados = resposta.map((item, index) => {
+      const dados = resposta.data.map((item, index) => {
         return { ...item, id: index + 1 };
       });
       return dados;
