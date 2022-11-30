@@ -28,7 +28,7 @@ import {
 import { RotasDto } from '~/dtos';
 import { AbrangenciaServico, erros, verificaSomenteConsulta } from '~/servicos';
 import ServicoNAAPA from '~/servicos/Paginas/Gestao/NAAPA/ServicoNAAPA';
-import { ordenarDescPor } from '~/utils';
+import { ordenarDescPor, verificarDataFimMaiorInicio } from '~/utils';
 import ListaEncaminhamentoNAAPABotoesAcao from './listaEncaminhamentoNAAPABotoesAcao';
 import ListaEncaminhamentoNAAPAPaginada from './listaEncaminhamentoNAAPAPaginada';
 
@@ -64,10 +64,6 @@ const ListaEncaminhamentoNAAPA = () => {
   const [carregandoTurmas, setCarregandoTurmas] = useState(false);
 
   const [somenteConsulta, setSomenteConsulta] = useState(false);
-
-  const [filtros, setFiltros] = useState();
-
-  const filtroEhValido = !!(anoLetivo && dre?.id && ue?.id);
 
   useEffect(() => {
     const soConsulta = verificaSomenteConsulta(
@@ -306,6 +302,11 @@ const ListaEncaminhamentoNAAPA = () => {
     onChangeDebounce(e?.target?.value, setNomeAluno);
   };
 
+  const dataFimMaiorInicio = verificarDataFimMaiorInicio(
+    dataAberturaQueixaInicio,
+    dataAberturaQueixaFim
+  );
+
   return (
     <>
       <Cabecalho pagina="Encaminhamento NAAPA">
@@ -427,16 +428,18 @@ const ListaEncaminhamentoNAAPA = () => {
 
             <Col sm={24} md={12} lg={12} xl={6} style={{ marginTop: '25px' }}>
               <CampoData
-                desabilitado={!ue?.codigo}
+                temErro={!dataFimMaiorInicio}
                 formatoData="DD/MM/YYYY"
                 placeholder="Data final"
+                desabilitado={!ue?.codigo}
                 valor={dataAberturaQueixaFim}
                 id={SGP_DATE_ABERTURA_QUEIXA_FIM}
                 onChange={setDataAberturaQueixaFim}
+                mensagemErro="Data fim deve ser maior que a data início"
               />
             </Col>
 
-            <Col sm={24} lg={12} xl={12}>
+            <Col sm={24} lg={24} xl={12}>
               <SelectComponent
                 allowClear
                 valueOption="id"
@@ -450,7 +453,9 @@ const ListaEncaminhamentoNAAPA = () => {
                 placeholder="Situação do encaminhamento"
               />
             </Col>
+          </Row>
 
+          <Row gutter={[16, 16]}>
             <Col sm={24} lg={12}>
               <SelectComponent
                 allowClear
@@ -472,14 +477,11 @@ const ListaEncaminhamentoNAAPA = () => {
               <ListaEncaminhamentoNAAPAPaginada
                 ue={ue}
                 dre={dre}
-                filtros={filtros}
                 turmaId={turmaId}
                 situacao={situacao}
                 anoLetivo={anoLetivo}
                 nomeAluno={nomeAluno}
-                setFiltros={setFiltros}
                 prioridade={prioridade}
-                filtroEhValido={filtroEhValido}
                 consideraHistorico={consideraHistorico}
                 dataAberturaQueixaFim={dataAberturaQueixaFim}
                 dataAberturaQueixaInicio={dataAberturaQueixaInicio}
