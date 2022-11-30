@@ -167,7 +167,8 @@ const MontarDadosTabSelecionada = props => {
           questao => questao.nomeComponente === 'ATIVIDADES_CONTRATURNO'
         );
         if (temCampoContraturno) {
-          dadosContraturno = await dadosIniciaisAtividadesContraturno();
+          // TODO - Descomentar quando finalizar o endpoint
+          // dadosContraturno = await dadosIniciaisAtividadesContraturno();
         }
       }
 
