@@ -93,7 +93,9 @@ const LocalizarEstudante = () => {
       0,
       '',
       anoAtual,
-      false
+      false,
+      false,
+      [1]
     )
       .catch(e => erros(e))
       .finally(() => setCarregandoTurmas(false));
