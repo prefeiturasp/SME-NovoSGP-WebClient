@@ -177,7 +177,8 @@ const MontarDadosTabSelecionada = props => {
       ) {
         dadosMapeados = mapearDados(
           resposta.data,
-          informacoesAdicionaisEstudante
+          informacoesAdicionaisEstudante,
+          dadosContraturno
         );
       }
 
