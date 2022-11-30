@@ -28,10 +28,6 @@ const LocalizarEstudante = () => {
   const [carregandoDres, setCarregandoDres] = useState(false);
   const [carregandoUes, setCarregandoUes] = useState(false);
   const [carregandoTurmas, setCarregandoTurmas] = useState(false);
-  const [
-    alunoLocalizadorSelecionado,
-    setAlunoLocalizadorSelecionado,
-  ] = useState();
 
   const [listaDres, setListaDres] = useState([]);
   const [listaUes, setListaUes] = useState([]);
@@ -93,7 +89,9 @@ const LocalizarEstudante = () => {
       0,
       '',
       anoAtual,
-      false
+      false,
+      false,
+      [1]
     )
       .catch(e => erros(e))
       .finally(() => setCarregandoTurmas(false));
@@ -124,7 +122,6 @@ const LocalizarEstudante = () => {
     setListaTurmas([]);
 
     store.dispatch(setAluno());
-    setAlunoLocalizadorSelecionado();
   };
 
   const onChangeUe = codigo => {
@@ -136,41 +133,30 @@ const LocalizarEstudante = () => {
     setListaTurmas([]);
 
     store.dispatch(setAluno());
-    setAlunoLocalizadorSelecionado();
   };
 
   const onChangeTurma = codigo => {
     const turmaSelecionada = listaTurmas?.find(d => d?.codigo === codigo);
 
     store.dispatch(setAluno());
-    setAlunoLocalizadorSelecionado();
     store.dispatch(setTurma(turmaSelecionada));
   };
 
-  const onChangeLocalizadorEstudante = (aluno, limpouDados) => {
+  const onChangeLocalizadorEstudante = aluno => {
     if (aluno?.alunoCodigo && aluno?.alunoNome) {
+      const dadosTurma = {
+        codigo: aluno?.codigoTurma,
+        nome: aluno?.nomeComModalidadeTurma,
+        id: aluno?.turmaId,
+      };
       const dadosAluno = {
+        turma: dadosTurma,
         codigoAluno: aluno?.alunoCodigo,
       };
 
-      setAlunoLocalizadorSelecionado(dadosAluno);
       store.dispatch(setAluno(dadosAluno));
-
-      if (!codigoTurma) {
-        const dadosTurma = {
-          codigo: aluno?.codigoTurma,
-          nome: aluno?.nomeComModalidadeTurma,
-          id: aluno?.turmaId,
-        };
-
-        store.dispatch(setTurma(dadosTurma));
-      }
     } else {
-      setAlunoLocalizadorSelecionado();
       store.dispatch(setAluno());
-      if (!limpouDados) {
-        store.dispatch(setTurma());
-      }
     }
   };
 
@@ -279,7 +265,7 @@ const LocalizarEstudante = () => {
             onChange={onChangeLocalizadorEstudante}
             placeholder="Procure pelo nome da criança"
             codigoTurma={codigoDre ? codigoTurma : ''}
-            valorInicialAlunoCodigo={alunoLocalizadorSelecionado?.codigoAluno}
+            // valorInicialAlunoCodigo={alunoLocalizadorSelecionado?.codigoAluno}
           />
         </Col>
       </Row>

@@ -55,7 +55,25 @@ const MontarDadosTabSelecionada = props => {
     return Number(buscarValoresOpcaoResposta(array, 'N'));
   };
 
-  const mapearDados = (dadosQuestinario, informacoesEstudante) => {
+  const dadosIniciaisAtividadesContraturno = async () => {
+    const resposta = await ServicoEstudante.obterLocalAtividadeAluno(
+      aluno?.codigoAluno,
+      anoLetivo
+    ).catch(e => erros(e));
+    if (resposta?.data?.length) {
+      const dados = resposta.data.map((item, index) => {
+        return { ...item, id: index + 1 };
+      });
+      return dados;
+    }
+    return [];
+  };
+
+  const mapearDados = (
+    dadosQuestinario,
+    informacoesEstudante,
+    dadosAtividadesContraturno
+  ) => {
     dadosQuestinario.forEach(questao => {
       switch (questao.nomeComponente) {
         case 'NOME_MAE':
@@ -108,6 +126,13 @@ const MontarDadosTabSelecionada = props => {
             },
           ];
           break;
+        case 'ATIVIDADES_CONTRATURNO':
+          if (dadosAtividadesContraturno?.length) {
+            questao.resposta = [
+              { texto: JSON.stringify(dadosAtividadesContraturno) },
+            ];
+          }
+          break;
         default:
           break;
       }
@@ -127,12 +152,30 @@ const MontarDadosTabSelecionada = props => {
     );
 
     if (resposta?.data?.length) {
-      const informacoesAdicionaisEstudante = await obterinformacoesAdicionaisEstudante(
-        aluno?.codigoAluno
-      );
       let dadosMapeados = resposta.data;
 
-      if (!encaminhamentoId && informacoesAdicionaisEstudante) {
+      let informacoesAdicionaisEstudante = null;
+      if (!encaminhamentoId) {
+        informacoesAdicionaisEstudante = await obterinformacoesAdicionaisEstudante(
+          aluno?.codigoAluno
+        );
+      }
+
+      let dadosContraturno = [];
+      if (!encaminhamentoId) {
+        const temCampoContraturno = dadosMapeados.find(
+          questao => questao.nomeComponente === 'ATIVIDADES_CONTRATURNO'
+        );
+        if (temCampoContraturno) {
+          // TODO - Descomentar quando finalizar o endpoint
+          // dadosContraturno = await dadosIniciaisAtividadesContraturno();
+        }
+      }
+
+      if (
+        !encaminhamentoId &&
+        (informacoesAdicionaisEstudante || dadosContraturno?.length)
+      ) {
         dadosMapeados = mapearDados(
           resposta.data,
           informacoesAdicionaisEstudante

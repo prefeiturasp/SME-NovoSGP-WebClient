@@ -22,8 +22,8 @@ const ModalCadastroAtividadeContraturno = props => {
 
   const valoresIniciais = {
     id: dadosIniciais ? dadosIniciais.id : 0,
-    local: dadosIniciais ? dadosIniciais.tipoLogradouro : '',
-    atividade: dadosIniciais ? dadosIniciais.logradouro : '',
+    local: dadosIniciais ? dadosIniciais.local : '',
+    atividade: dadosIniciais ? dadosIniciais.atividade : '',
   };
 
   const validacoes = Yup.object().shape({
