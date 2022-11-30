@@ -31,7 +31,6 @@ const EncaminhamentoNAAPA = () => {
     return () => {
       store.dispatch(limparDadosLocalizarEstudante());
       store.dispatch(setLimparDadosEncaminhamentoNAAPA());
-      store.dispatch(setTabAtivaEncaminhamentoNAAPA());
       store.dispatch(setLimparDadosQuestionarioDinamico());
     };
   }, []);
