@@ -9,10 +9,7 @@ import CadastroEncaminhamentoNAAPA from './cadastroEncaminhamentoNAAPA';
 import { store } from '~/redux';
 import LoaderEncaminhamentoNAAPA from './componentes/loaderEncaminhamentoNAAPA';
 import { limparDadosLocalizarEstudante } from '~/redux/modulos/localizarEstudante/actions';
-import {
-  setLimparDadosEncaminhamentoNAAPA,
-  setTabAtivaEncaminhamentoNAAPA,
-} from '~/redux/modulos/encaminhamentoNAAPA/actions';
+import { setLimparDadosEncaminhamentoNAAPA } from '~/redux/modulos/encaminhamentoNAAPA/actions';
 import { RotasDto } from '~/dtos';
 import { history, verificaSomenteConsulta } from '~/servicos';
 import { setLimparDadosQuestionarioDinamico } from '~/redux/modulos/questionarioDinamico/actions';

@@ -98,7 +98,9 @@ const RegistroItineranciaAEECadastro = ({ match }) => {
   const permissaoStatus = itineranciaId && !itineranciaAlteracao?.podeEditar;
 
   const mapearSalvarQuestoesUpload = () => {
-    const questaoUpload = questoesItinerancia.find(
+    const novoMapQuestoes = _.cloneDeep(questoesItinerancia);
+
+    const questaoUpload = novoMapQuestoes.find(
       questao => questao?.tipoQuestao === tipoQuestaoDto.Upload
     );
 
@@ -123,7 +125,7 @@ const RegistroItineranciaAEECadastro = ({ match }) => {
       });
     }
 
-    const questoesSalvar = questoesItinerancia.filter(
+    const questoesSalvar = novoMapQuestoes.filter(
       questao => questao?.tipoQuestao !== tipoQuestaoDto.Upload
     );
 
@@ -226,9 +228,9 @@ const RegistroItineranciaAEECadastro = ({ match }) => {
             sucesso(
               `Registro ${itineranciaId ? 'alterado' : 'salvo'} com sucesso`
             );
-            setModoEdicao(false);
-            setCarregandoGeral(false);
             history.push(RotasDto.RELATORIO_AEE_REGISTRO_ITINERANCIA);
+          } else {
+            setCarregandoGeral(false);
           }
         })
         .catch(e => {
@@ -848,7 +850,7 @@ const RegistroItineranciaAEECadastro = ({ match }) => {
   };
 
   return (
-    <>
+    <Loader loading={carregandoGeral}>
       <Cabecalho pagina="Registro de itinerância">
         <Row gutter={[8, 8]} type="flex">
           <Col>
@@ -878,291 +880,291 @@ const RegistroItineranciaAEECadastro = ({ match }) => {
           </Col>
         </Row>
       </Cabecalho>
-      <Loader loading={carregandoGeral}>
-        <Card>
-          <div className="col-12">
-            {itineranciaId && (
-              <div className="row mb-4">
-                <div className="col-sm-12 d-flex justify-content-between align-items-center">
-                  <div className="pr-4">
-                    <Loader loading={imprimindo} ignorarTip>
-                      <BotaoCustomizado
-                        border
-                        id="btn-imprimir-relatorio-itinerancia"
-                        className="btn-imprimir"
-                        icon="print"
-                        color={Colors.Azul}
-                        width="38px"
-                        onClick={() => gerarRelatorio()}
-                      />
-                    </Loader>
-                  </div>
-                  <div>
-                    {itineranciaAlteracao?.statusWorkflow && (
-                      <MarcadorSituacao corFundo={Colors.Azul}>
-                        {itineranciaAlteracao?.statusWorkflow}
-                      </MarcadorSituacao>
-                    )}
-                  </div>
+
+      <Card>
+        <div className="col-12">
+          {itineranciaId && (
+            <div className="row mb-4">
+              <div className="col-sm-12 d-flex justify-content-between align-items-center">
+                <div className="pr-4">
+                  <Loader loading={imprimindo} ignorarTip>
+                    <BotaoCustomizado
+                      border
+                      id="btn-imprimir-relatorio-itinerancia"
+                      className="btn-imprimir"
+                      icon="print"
+                      color={Colors.Azul}
+                      width="38px"
+                      onClick={() => gerarRelatorio()}
+                    />
+                  </Loader>
+                </div>
+                <div>
+                  {itineranciaAlteracao?.statusWorkflow && (
+                    <MarcadorSituacao corFundo={Colors.Azul}>
+                      {itineranciaAlteracao?.statusWorkflow}
+                    </MarcadorSituacao>
+                  )}
                 </div>
               </div>
-            )}
-            <div className="row mt-2">
-              <div className="col-sm-12 col-md-6 col-lg-3 col-xl-3 mb-2">
-                <CampoData
-                  name="dataVisita"
-                  formatoData="DD/MM/YYYY"
-                  valor={dataVisita}
-                  label="Data da visita"
-                  placeholder="Selecione a data"
-                  onChange={onChangeDataVisita}
-                  desabilitarData={desabilitarDataVisita}
-                  desabilitado={desabilitarCamposPorPermissao()}
-                  allowClear={false}
-                />
-              </div>
             </div>
-            <div className="row mb-4">
-              <div className="col-sm-12 col-md-12 col-lg-6 col-xl-6 mb-2">
-                <Loader loading={carregandoDres} tip="">
-                  <SelectComponent
-                    id="dre"
-                    label="Diretoria Regional de Educação (DRE)"
-                    lista={listaDres}
-                    valueOption="id"
-                    valueText="nome"
-                    disabled={
-                      listaDres?.length === 1 || desabilitarCamposPorPermissao()
-                    }
-                    onChange={onChangeDre}
-                    valueSelect={dreId}
-                    placeholder="Diretoria Regional De Educação (DRE)"
-                    showSearch
-                  />
-                </Loader>
-              </div>
-              <div className="col-sm-12 col-md-12 col-lg-6 col-xl-6 mb-2">
-                <Loader loading={carregandoUes} tip="">
-                  <SelectComponent
-                    id="ue"
-                    label="Unidade Escolar (UE)"
-                    lista={listaUes}
-                    valueOption="id"
-                    valueText="nome"
-                    disabled={
-                      listaUes?.length === 1 || desabilitarCamposPorPermissao()
-                    }
-                    onChange={onChangeUe}
-                    valueSelect={ueId}
-                    placeholder="Unidade Escolar (UE)"
-                    showSearch
-                  />
-                </Loader>
-              </div>
-              <div className="col-sm-12 col-md-6 col-lg-6 col-xl-6 mb-2">
-                <Loader loading={carregandoTipos} tip="">
-                  <SelectComponent
-                    id="tipo-calendario"
-                    label="Tipo de Calendário"
-                    lista={listaCalendario}
-                    valueOption="id"
-                    valueText="nome"
-                    onChange={onChangeTipoCalendario}
-                    valueSelect={tipoCalendarioSelecionado}
-                    placeholder="Selecione um calendário"
-                    showSearch
-                    searchValue={false}
-                    disabled={desabilitarCamposPorPermissao()}
-                  />
-                </Loader>
-              </div>
-              <div className="col-sm-12 col-md-6 col-lg-6 col-xl-6 mb-2">
-                <Loader loading={carregandoEventos} tip="">
-                  <SelectComponent
-                    id="evento"
-                    label="Evento"
-                    lista={listaEvento}
-                    valueOption="id"
-                    valueText="nome"
-                    onChange={selecionaEvento}
-                    valueSelect={eventoId}
-                    placeholder="Selecione um evento"
-                    showSearch
-                    searchValue={false}
-                    disabled={desabilitarCamposPorPermissao()}
-                  />
-                </Loader>
-              </div>
-            </div>
-            <div className="row mb-4">
-              <TabelaLinhaRemovivel
-                bordered
-                ordenacao
-                dataIndex="nome"
-                labelTabela="Objetivos da itinerância"
-                tituloTabela="Objetivos selecionados"
-                labelBotao="Novo objetivo"
-                desabilitadoIncluir={
-                  !permissoesTela?.podeIncluir ||
-                  somenteConsulta ||
-                  permissaoStatus
-                }
-                desabilitadoExcluir={
-                  !permissoesTela?.podeAlterar ||
-                  somenteConsulta ||
-                  permissaoStatus
-                }
-                pagination={false}
-                dadosTabela={objetivosSelecionados}
-                removerUsuario={text => removerObjetivoSelecionado(text)}
-                botaoAdicionar={() => setModalVisivelObjetivos(true)}
+          )}
+          <div className="row mt-2">
+            <div className="col-sm-12 col-md-6 col-lg-3 col-xl-3 mb-2">
+              <CampoData
+                name="dataVisita"
+                formatoData="DD/MM/YYYY"
+                valor={dataVisita}
+                label="Data da visita"
+                placeholder="Selecione a data"
+                onChange={onChangeDataVisita}
+                desabilitarData={desabilitarDataVisita}
+                desabilitado={desabilitarCamposPorPermissao()}
+                allowClear={false}
               />
             </div>
-            {ueId && (
-              <div className="row mb-4">
-                <div className="col-12 font-weight-bold mb-2">
-                  <span style={{ color: Base.CinzaMako }}>
-                    {ueIdEhInfantil(ueId, listaUes) ? 'Crianças' : 'Estudantes'}
-                  </span>
-                </div>
-                <div className="col-12">
-                  <Button
-                    id={shortid.generate()}
-                    label={`Adicionar ${
-                      ueIdEhInfantil(ueId, listaUes)
-                        ? 'nova criança'
-                        : 'novo estudante'
-                    }`}
-                    color={Colors.Azul}
-                    border
-                    className="mr-2"
-                    onClick={() => setModalVisivelAlunos(true)}
-                    icon="user-plus"
-                    disabled={desabilitarCamposPorPermissao()}
-                  />
-                </div>
-              </div>
-            )}
-            {alunosSelecionados?.length ? (
-              <>
-                <div className="row mb-4">
-                  <div className="col-12">
-                    <PainelCollapse accordion onChange={() => {}}>
-                      {alunosSelecionados
-                        .slice(paginaAtual * 10 - 10, paginaAtual * 10)
-                        .map(aluno => (
-                          <PainelCollapse.Painel
-                            key={`painel-${aluno.alunoCodigo}`}
-                            accordion
-                            espacoPadrao
-                            corBorda={Base.AzulBordaCollapse}
-                            temBorda
-                            header={aluno.nomeAlunoComTurmaModalidade}
-                          >
-                            <CollapseAluno
-                              key={aluno.alunoCodigo}
-                              aluno={aluno}
-                              removerAlunos={() =>
-                                removerAlunos(aluno.alunoCodigo)
-                              }
-                              setModoEdicaoItinerancia={setModoEdicao}
-                              desabilitar={desabilitarCamposPorPermissao()}
-                            />
-                          </PainelCollapse.Painel>
-                        ))}
-                    </PainelCollapse>
-                  </div>
-                </div>
-
-                <div className="row">
-                  <div className="col-12 d-flex justify-content-center mt-4">
-                    <Paginacao
-                      numeroRegistros={alunosSelecionados.length}
-                      pageSize={10}
-                      onChangePaginacao={e => setPaginaAtual(e)}
-                    />
-                  </div>
-                </div>
-              </>
-            ) : carregandoQuestoes || carregandoGeral ? (
-              <Loader loading tip="Carregando questões" />
-            ) : (
-              questoesItinerancia?.map(questao => {
-                return questao?.tipoQuestao !== tipoQuestaoDto.Upload ? (
-                  <div className="row mb-4" key={questao.questaoId}>
-                    <div className="col-12">
-                      <JoditEditor
-                        label={questao.descricao}
-                        value={questao.resposta}
-                        name={NOME_CAMPO_QUESTAO + questao.questaoId}
-                        id={`editor-questao-${questao.questaoId}`}
-                        onChange={e => setQuestao(e, questao)}
-                        desabilitar={desabilitarCamposPorPermissao()}
-                      />
-                    </div>
-                  </div>
-                ) : (
-                  <></>
-                );
-              })
-            )}
+          </div>
+          <div className="row mb-4">
+            <div className="col-sm-12 col-md-12 col-lg-6 col-xl-6 mb-2">
+              <Loader loading={carregandoDres} tip="">
+                <SelectComponent
+                  id="dre"
+                  label="Diretoria Regional de Educação (DRE)"
+                  lista={listaDres}
+                  valueOption="id"
+                  valueText="nome"
+                  disabled={
+                    listaDres?.length === 1 || desabilitarCamposPorPermissao()
+                  }
+                  onChange={onChangeDre}
+                  valueSelect={dreId}
+                  placeholder="Diretoria Regional De Educação (DRE)"
+                  showSearch
+                />
+              </Loader>
+            </div>
+            <div className="col-sm-12 col-md-12 col-lg-6 col-xl-6 mb-2">
+              <Loader loading={carregandoUes} tip="">
+                <SelectComponent
+                  id="ue"
+                  label="Unidade Escolar (UE)"
+                  lista={listaUes}
+                  valueOption="id"
+                  valueText="nome"
+                  disabled={
+                    listaUes?.length === 1 || desabilitarCamposPorPermissao()
+                  }
+                  onChange={onChangeUe}
+                  valueSelect={ueId}
+                  placeholder="Unidade Escolar (UE)"
+                  showSearch
+                />
+              </Loader>
+            </div>
+            <div className="col-sm-12 col-md-6 col-lg-6 col-xl-6 mb-2">
+              <Loader loading={carregandoTipos} tip="">
+                <SelectComponent
+                  id="tipo-calendario"
+                  label="Tipo de Calendário"
+                  lista={listaCalendario}
+                  valueOption="id"
+                  valueText="nome"
+                  onChange={onChangeTipoCalendario}
+                  valueSelect={tipoCalendarioSelecionado}
+                  placeholder="Selecione um calendário"
+                  showSearch
+                  searchValue={false}
+                  disabled={desabilitarCamposPorPermissao()}
+                />
+              </Loader>
+            </div>
+            <div className="col-sm-12 col-md-6 col-lg-6 col-xl-6 mb-2">
+              <Loader loading={carregandoEventos} tip="">
+                <SelectComponent
+                  id="evento"
+                  label="Evento"
+                  lista={listaEvento}
+                  valueOption="id"
+                  valueText="nome"
+                  onChange={selecionaEvento}
+                  valueSelect={eventoId}
+                  placeholder="Selecione um evento"
+                  showSearch
+                  searchValue={false}
+                  disabled={desabilitarCamposPorPermissao()}
+                />
+              </Loader>
+            </div>
+          </div>
+          <div className="row mb-4">
+            <TabelaLinhaRemovivel
+              bordered
+              ordenacao
+              dataIndex="nome"
+              labelTabela="Objetivos da itinerância"
+              tituloTabela="Objetivos selecionados"
+              labelBotao="Novo objetivo"
+              desabilitadoIncluir={
+                !permissoesTela?.podeIncluir ||
+                somenteConsulta ||
+                permissaoStatus
+              }
+              desabilitadoExcluir={
+                !permissoesTela?.podeAlterar ||
+                somenteConsulta ||
+                permissaoStatus
+              }
+              pagination={false}
+              dadosTabela={objetivosSelecionados}
+              removerUsuario={text => removerObjetivoSelecionado(text)}
+              botaoAdicionar={() => setModalVisivelObjetivos(true)}
+            />
+          </div>
+          {ueId && (
             <div className="row mb-4">
-              <div className="col-3">
-                <CampoData
-                  name="dataRetornoVerificacao"
-                  formatoData="DD/MM/YYYY"
-                  valor={dataRetornoVerificacao}
-                  label="Data para retorno/verificação"
-                  placeholder="Selecione a data"
-                  onChange={mudarDataRetorno}
-                  desabilitarData={desabilitarDataRetorno}
-                  desabilitado={desabilitarCamposPorPermissao()}
+              <div className="col-12 font-weight-bold mb-2">
+                <span style={{ color: Base.CinzaMako }}>
+                  {ueIdEhInfantil(ueId, listaUes) ? 'Crianças' : 'Estudantes'}
+                </span>
+              </div>
+              <div className="col-12">
+                <Button
+                  id={shortid.generate()}
+                  label={`Adicionar ${
+                    ueIdEhInfantil(ueId, listaUes)
+                      ? 'nova criança'
+                      : 'novo estudante'
+                  }`}
+                  color={Colors.Azul}
+                  border
+                  className="mr-2"
+                  onClick={() => setModalVisivelAlunos(true)}
+                  icon="user-plus"
+                  disabled={desabilitarCamposPorPermissao()}
                 />
               </div>
             </div>
-            {questoesItinerancia?.map((questao, index) => {
-              return questao?.tipoQuestao === tipoQuestaoDto.Upload ? (
-                <div className="row mb-4">
-                  <div className="col-md-12">
-                    <UploadArquivos
-                      id={SGP_UPLOAD_REGISTRO_ITINERANCIA}
-                      desabilitarGeral={desabilitarCamposPorPermissao()}
-                      onRemove={onRemoveFile}
-                      urlUpload="v1/itinerancias/upload"
-                      defaultFileList={
-                        questao.resposta?.length ? questao.resposta : []
-                      }
-                      label={questao?.descricao}
-                      onChangeListaArquivos={lista => {
-                        if (lista?.length) {
-                          const listaComCodigo = lista.filter(l => !!l.xhr);
-                          if (lista.length === listaComCodigo.length) {
-                            questoesItinerancia[index].resposta = lista;
-                            setQuestoesItinerancia([...questoesItinerancia]);
-                            setModoEdicao(true);
-                          }
-                        }
-                      }}
+          )}
+          {alunosSelecionados?.length ? (
+            <>
+              <div className="row mb-4">
+                <div className="col-12">
+                  <PainelCollapse accordion onChange={() => {}}>
+                    {alunosSelecionados
+                      .slice(paginaAtual * 10 - 10, paginaAtual * 10)
+                      .map(aluno => (
+                        <PainelCollapse.Painel
+                          key={`painel-${aluno.alunoCodigo}`}
+                          accordion
+                          espacoPadrao
+                          corBorda={Base.AzulBordaCollapse}
+                          temBorda
+                          header={aluno.nomeAlunoComTurmaModalidade}
+                        >
+                          <CollapseAluno
+                            key={aluno.alunoCodigo}
+                            aluno={aluno}
+                            removerAlunos={() =>
+                              removerAlunos(aluno.alunoCodigo)
+                            }
+                            setModoEdicaoItinerancia={setModoEdicao}
+                            desabilitar={desabilitarCamposPorPermissao()}
+                          />
+                        </PainelCollapse.Painel>
+                      ))}
+                  </PainelCollapse>
+                </div>
+              </div>
+
+              <div className="row">
+                <div className="col-12 d-flex justify-content-center mt-4">
+                  <Paginacao
+                    numeroRegistros={alunosSelecionados.length}
+                    pageSize={10}
+                    onChangePaginacao={e => setPaginaAtual(e)}
+                  />
+                </div>
+              </div>
+            </>
+          ) : carregandoQuestoes || carregandoGeral ? (
+            <Loader loading tip="Carregando questões" />
+          ) : (
+            questoesItinerancia?.map(questao => {
+              return questao?.tipoQuestao !== tipoQuestaoDto.Upload ? (
+                <div className="row mb-4" key={questao.questaoId}>
+                  <div className="col-12">
+                    <JoditEditor
+                      label={questao.descricao}
+                      value={questao.resposta}
+                      name={NOME_CAMPO_QUESTAO + questao.questaoId}
+                      id={`editor-questao-${questao.questaoId}`}
+                      onChange={e => setQuestao(e, questao)}
+                      desabilitar={desabilitarCamposPorPermissao()}
                     />
                   </div>
                 </div>
               ) : (
                 <></>
               );
-            })}
-          </div>
-          {auditoria && (
-            <Auditoria
-              criadoEm={auditoria.criadoEm}
-              criadoPor={auditoria.criadoPor}
-              criadoRf={auditoria.criadoRf}
-              alteradoPor={auditoria.alteradoPor}
-              alteradoEm={auditoria.alteradoEm}
-              alteradoRf={auditoria.alteradoRf}
-            />
+            })
           )}
-        </Card>
-      </Loader>
+          <div className="row mb-4">
+            <div className="col-3">
+              <CampoData
+                name="dataRetornoVerificacao"
+                formatoData="DD/MM/YYYY"
+                valor={dataRetornoVerificacao}
+                label="Data para retorno/verificação"
+                placeholder="Selecione a data"
+                onChange={mudarDataRetorno}
+                desabilitarData={desabilitarDataRetorno}
+                desabilitado={desabilitarCamposPorPermissao()}
+              />
+            </div>
+          </div>
+          {questoesItinerancia?.map((questao, index) => {
+            return questao?.tipoQuestao === tipoQuestaoDto.Upload ? (
+              <div className="row mb-4">
+                <div className="col-md-12">
+                  <UploadArquivos
+                    id={SGP_UPLOAD_REGISTRO_ITINERANCIA}
+                    desabilitarGeral={desabilitarCamposPorPermissao()}
+                    onRemove={onRemoveFile}
+                    urlUpload="v1/itinerancias/upload"
+                    defaultFileList={
+                      questao.resposta?.length ? questao.resposta : []
+                    }
+                    label={questao?.descricao}
+                    onChangeListaArquivos={lista => {
+                      if (lista?.length) {
+                        const listaComCodigo = lista.filter(l => !!l.xhr);
+                        if (lista.length === listaComCodigo.length) {
+                          questoesItinerancia[index].resposta = lista;
+                          setQuestoesItinerancia([...questoesItinerancia]);
+                          setModoEdicao(true);
+                        }
+                      }
+                    }}
+                  />
+                </div>
+              </div>
+            ) : (
+              <></>
+            );
+          })}
+        </div>
+        {auditoria && (
+          <Auditoria
+            criadoEm={auditoria.criadoEm}
+            criadoPor={auditoria.criadoPor}
+            criadoRf={auditoria.criadoRf}
+            alteradoPor={auditoria.alteradoPor}
+            alteradoEm={auditoria.alteradoEm}
+            alteradoRf={auditoria.alteradoRf}
+          />
+        )}
+      </Card>
+
       {modalVisivelObjetivos && (
         <ModalObjetivos
           modalVisivel={modalVisivelObjetivos}
@@ -1192,7 +1194,7 @@ const RegistroItineranciaAEECadastro = ({ match }) => {
           erros={errosValidacao}
         />
       )}
-    </>
+    </Loader>
   );
 };
 
