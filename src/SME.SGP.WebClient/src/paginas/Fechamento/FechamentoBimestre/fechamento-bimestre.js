@@ -130,7 +130,7 @@ const FechamentoBismestre = () => {
     if (modoEdicaoFechamentoBimestre?.emEdicao) {
       confirmou = await confirmar(
         'Atenção',
-        'Existem alterações pendetes, deseja realmente sair da tela de fechamento?'
+        'Existem alterações pendentes, deseja realmente sair da tela de fechamento?'
       );
     }
     if (confirmou) {
@@ -142,7 +142,7 @@ const FechamentoBismestre = () => {
   const onClickCancelar = async () => {
     const confirmou = await confirmar(
       'Atenção',
-      'Existem alterações pendetes, deseja realmente cancelar?'
+      'Existem alterações pendentes, deseja realmente cancelar?'
     );
     if (confirmou) {
       refFechamentoFinal.current.cancelar();
