@@ -172,7 +172,9 @@ const ListaEncaminhamentoNAAPA = () => {
       0,
       '',
       anoLetivo,
-      consideraHistorico
+      consideraHistorico,
+      false,
+      [1]
     )
       .catch(e => erros(e))
       .finally(() => setCarregandoTurmas(false));
