@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import styled from 'styled-components';
-import { CampoNumero } from '~/componentes';
+import { CampoTexto } from '~/componentes';
 import ColunaDimensionavel from './ColunaDimensionavel/colunaDimensionavel';
 import QuestionarioDinamicoFuncoes from '../Funcoes/QuestionarioDinamicoFuncoes';
 
@@ -20,16 +20,15 @@ const CampoDinamicoNumerico = props => {
     <ColunaDimensionavel dimensao={questaoAtual?.dimensao}>
       <CampoDinamicoNumericoContainer>
         {label}
-        <CampoNumero
+        <CampoTexto
           id={id}
           form={form}
-          type="number"
-          esconderSetas
           onChange={onChange}
-          desabilitado={disabled}
+          desabilitado={disabled || questaoAtual?.somenteLeitura}
           name={String(questaoAtual?.id)}
           placeholder={questaoAtual?.placeHolder}
-          maxlength={questaoAtual?.tamanho || 9999999}
+          maxLength={questaoAtual?.tamanho || 9999999}
+          somenteNumero
         />
       </CampoDinamicoNumericoContainer>
     </ColunaDimensionavel>

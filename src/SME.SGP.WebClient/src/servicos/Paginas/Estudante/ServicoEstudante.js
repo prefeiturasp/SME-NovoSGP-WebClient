@@ -22,6 +22,16 @@ class ServicoEstudante {
     const url = `${urlPadrao}/${codigoAluno}/informacoes`;
     return api.get(url);
   };
+
+  obterLocalAtividadeAluno = (
+    codigoAluno,
+    anoLetivo,
+    filtrarSituacaoMatricula = true
+  ) => {
+    const queryString = `codigoAluno=${codigoAluno}&anoLetivo=${anoLetivo}&filtrarSituacaoMatricula=${filtrarSituacaoMatricula}`;
+    const url = `${urlPadrao}/local-atividade?${queryString}`;
+    return api.get(url);
+  };
 }
 
 export default new ServicoEstudante();
