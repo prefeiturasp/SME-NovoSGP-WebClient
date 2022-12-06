@@ -542,11 +542,13 @@ class QuestionarioDinamicoFuncoes {
       if (todosOsFormsEstaoValidos) {
         let formsParaSalvar = [];
 
-        formsParaSalvar = formsQuestionarioDinamico.filter(f =>
-          listaSecoesEmEdicao.find(
-            secaoEdicao => secaoEdicao.secaoId === f.secaoId
-          )
-        );
+        // TODO - Somente os que estão em edição!
+        // formsParaSalvar = formsQuestionarioDinamico.filter(f =>
+        //   listaSecoesEmEdicao.find(
+        //     secaoEdicao => secaoEdicao.secaoId === f.secaoId
+        //   )
+        // );
+        formsParaSalvar = formsQuestionarioDinamico;
 
         const valoresParaSalvar = {};
 

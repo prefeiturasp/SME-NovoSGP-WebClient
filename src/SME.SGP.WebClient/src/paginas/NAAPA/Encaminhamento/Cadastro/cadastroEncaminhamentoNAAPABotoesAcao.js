@@ -6,8 +6,8 @@ import { useRouteMatch } from 'react-router-dom';
 import { Button, Colors } from '~/componentes';
 import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
 import {
+  SGP_BUTTON_ALTERAR_CADASTRAR,
   SGP_BUTTON_CANCELAR,
-  SGP_BUTTON_ENVIAR,
   SGP_BUTTON_PROXIMO_PASSO,
   SGP_BUTTON_SALVAR_RASCUNHO,
 } from '~/constantes/ids/button';
@@ -67,6 +67,33 @@ const CadastroEncaminhamentoNAAPABotoesAcao = props => {
     setMostrarBusca(false);
   };
 
+  const salvar = async situacao => {
+    const situacaoSalvar =
+      situacao || dadosEncaminhamentoNAAPA?.situacao || situacaoNAAPA.Rascunho;
+
+    const ehRascunho = situacaoSalvar === situacaoNAAPA.Rascunho;
+
+    const validarCamposObrigatorios = !ehRascunho;
+
+    const resposta = await ServicoNAAPA.salvarEncaminhamento(
+      encaminhamentoId,
+      situacaoSalvar,
+      validarCamposObrigatorios
+    );
+
+    if (resposta?.status === 200) {
+      let mensagem = ehRascunho
+        ? 'Rascunho salvo com sucesso'
+        : 'Registro cadastrado com sucesso';
+
+      if (encaminhamentoId && !ehRascunho) {
+        mensagem = 'Registro alterado com sucesso';
+      }
+      sucesso(mensagem);
+    }
+    return resposta;
+  };
+
   const onClickVoltar = async () => {
     if (questionarioDinamicoEmEdicao) {
       const confirmou = await confirmar(
@@ -75,24 +102,10 @@ const CadastroEncaminhamentoNAAPABotoesAcao = props => {
         'Suas alterações não foram salvas, deseja salvar agora?'
       );
 
-      const situacao =
-        dadosEncaminhamentoNAAPA?.situacao || situacaoNAAPA.Rascunho;
-
       if (confirmou) {
-        const resposta = await ServicoNAAPA.salvarEncaminhamento(
-          encaminhamentoId,
-          situacao,
-          false
-        );
-
-        if (resposta?.status === 200) {
-          let mensagem = 'Registro salvo com sucesso';
-          if (encaminhamentoId) {
-            mensagem = 'Registro alterado com sucesso';
-          }
-          sucesso(mensagem);
+        const resposta = await salvar();
+        if (resposta?.status === 200)
           history.push(RotasDto.ENCAMINHAMENTO_NAAPA);
-        }
       } else {
         history.push(RotasDto.ENCAMINHAMENTO_NAAPA);
       }
@@ -136,25 +149,28 @@ const CadastroEncaminhamentoNAAPABotoesAcao = props => {
   };
 
   const onClickSalvarRascunho = async () => {
-    let situacao = situacaoNAAPA.Rascunho;
-
-    if (encaminhamentoId) {
-      situacao = dadosEncaminhamentoNAAPA?.situacao;
-    }
-
-    const resposta = await ServicoNAAPA.salvarEncaminhamento(
-      encaminhamentoId,
-      situacao,
-      false
-    );
-
+    const resposta = await salvar(situacaoNAAPA.Rascunho);
     if (resposta?.status === 200) {
-      sucesso(`Rascunho salvo com sucesso`);
       history.push(`${RotasDto.ENCAMINHAMENTO_NAAPA}/${resposta?.data?.id}`);
     }
   };
 
-  const onClickEnviar = () => {};
+  const onClickCadastrarAlterar = async () => {
+    const resposta = await salvar(situacaoNAAPA.AguardandoAtendimento);
+    if (resposta?.status === 200) {
+      history.push(RotasDto.ENCAMINHAMENTO_NAAPA);
+    }
+  };
+
+  const ocultarBtnRascunho =
+    encaminhamentoId &&
+    dadosEncaminhamentoNAAPA?.situacao &&
+    dadosEncaminhamentoNAAPA?.situacao !== situacaoNAAPA.Rascunho;
+
+  const labelBtnCadastrarAlterar = ocultarBtnRascunho ? 'Alterar' : 'Cadastrar';
+
+  const disabledBtnDefault =
+    desabilitarCamposEncaminhamentoNAAPA || !questionarioDinamicoEmEdicao;
 
   return (
     <Row gutter={[8, 8]} type="flex">
@@ -189,14 +205,12 @@ const CadastroEncaminhamentoNAAPABotoesAcao = props => {
               label="Cancelar"
               color={Colors.Roxo}
               id={SGP_BUTTON_CANCELAR}
-              disabled={
-                desabilitarCamposEncaminhamentoNAAPA ||
-                !questionarioDinamicoEmEdicao
-              }
+              disabled={disabledBtnDefault}
               onClick={() => onClickCancelar()}
             />
           </Col>
 
+          {/* {!ocultarBtnRascunho && ( */}
           <Col>
             <Button
               bold
@@ -205,21 +219,18 @@ const CadastroEncaminhamentoNAAPABotoesAcao = props => {
               label="Salvar rascunho"
               id={SGP_BUTTON_SALVAR_RASCUNHO}
               onClick={onClickSalvarRascunho}
-              disabled={
-                desabilitarCamposEncaminhamentoNAAPA ||
-                !questionarioDinamicoEmEdicao
-              }
+              disabled={disabledBtnDefault}
             />
           </Col>
 
-          <Col hidden>
+          <Col>
             <Button
               bold
               border
-              label="Enviar"
+              label={labelBtnCadastrarAlterar}
               color={Colors.Azul}
-              id={SGP_BUTTON_ENVIAR}
-              onClick={onClickEnviar}
+              id={SGP_BUTTON_ALTERAR_CADASTRAR}
+              onClick={onClickCadastrarAlterar}
             />
           </Col>
         </>

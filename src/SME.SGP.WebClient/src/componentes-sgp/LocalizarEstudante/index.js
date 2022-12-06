@@ -157,6 +157,13 @@ const LocalizarEstudante = props => {
         codigoAluno: aluno?.alunoCodigo,
       };
 
+      if (aluno?.codigoTurma) {
+        const modalidade = listaTurmas?.find(
+          t => t?.codigo === aluno?.codigoTurma
+        )?.codigoModalidade;
+        dadosAluno.modalidade = modalidade;
+      }
+
       store.dispatch(setAluno(dadosAluno));
     } else {
       store.dispatch(setAluno());
@@ -268,7 +275,6 @@ const LocalizarEstudante = props => {
             onChange={onChangeLocalizadorEstudante}
             placeholder="Procure pelo nome da criança"
             codigoTurma={codigoDre ? codigoTurma : ''}
-            // valorInicialAlunoCodigo={alunoLocalizadorSelecionado?.codigoAluno}
           />
         </Col>
       </Row>

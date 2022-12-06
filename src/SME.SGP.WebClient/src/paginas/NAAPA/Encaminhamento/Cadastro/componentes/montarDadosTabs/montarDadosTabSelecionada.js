@@ -196,6 +196,65 @@ const MontarDadosTabSelecionada = props => {
     }
   }, [questionarioId, obterDadosQuestionarioId]);
 
+  const validarCampoObrigatorioCustomizado = (questaoAtual, formValues) => {
+    if (
+      formValues &&
+      questaoAtual?.nomeComponente === 'OBS_AGRUPAMENTO_PROMOCAO_CUIDADOS'
+    ) {
+      const campoAgrupamento = dadosQuestionarioAtual.find(
+        d => d.nomeComponente === 'AGRUPAMENTO_PROMOCAO_CUIDADOS'
+      );
+
+      const idCampoAgrupamento = campoAgrupamento?.id;
+
+      const respostasCampoAgrupamento = formValues[idCampoAgrupamento];
+
+      const labelCampoAdoece =
+        'Adoece com frequência sem receber cuidados médicos';
+
+      if (!respostasCampoAgrupamento?.length) return questaoAtual.obrigatorio;
+
+      const campoAdoece = campoAgrupamento.opcaoResposta.find(opcao => {
+        const opcaoEhSelecionada = respostasCampoAgrupamento.find(
+          opcaoRespostaId => opcao.id === Number(opcaoRespostaId)
+        );
+
+        return opcaoEhSelecionada && opcao?.nome === labelCampoAdoece;
+      });
+
+      if (campoAdoece?.questoesComplementares?.length) {
+        const campoTipoAdoece = campoAdoece.questoesComplementares.find(
+          q =>
+            q.nomeComponente ===
+            'TIPO_ADOECE_COM_FREQUENCIA_SEM_CUIDADOS_MEDICOS'
+        );
+
+        if (campoTipoAdoece) {
+          const idTipoAdoece = campoTipoAdoece.id;
+          const respostaTipoAdoece = formValues[idTipoAdoece];
+
+          if (!respostaTipoAdoece?.length) return questaoAtual.obrigatorio;
+
+          const labelOutras = 'Outras';
+
+          const tipoOutrasSelecionada = campoTipoAdoece.opcaoResposta.find(
+            opcao => {
+              const opcaoEhSelecionada = respostaTipoAdoece.find(
+                opcaoRespostaId => opcao.id === Number(opcaoRespostaId)
+              );
+
+              return opcaoEhSelecionada && opcao?.nome === labelOutras;
+            }
+          );
+
+          return !!tipoOutrasSelecionada;
+        }
+      }
+    }
+
+    return questaoAtual.obrigatorio;
+  };
+
   return (
     <>
       <QuestionarioDinamico
@@ -212,6 +271,7 @@ const MontarDadosTabSelecionada = props => {
         onChangeQuestionario={() => {
           ServicoNAAPA.guardarSecaoEmEdicao(dadosTab?.id);
         }}
+        validarCampoObrigatorioCustomizado={validarCampoObrigatorioCustomizado}
       />
 
       <Row style={{ padding: '0 10px 10px' }}>

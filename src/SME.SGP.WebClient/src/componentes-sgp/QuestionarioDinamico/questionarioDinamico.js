@@ -43,6 +43,7 @@ const QuestionarioDinamico = props => {
     turmaId,
     prefixId,
     exibirOrdemLabel,
+    validarCampoObrigatorioCustomizado,
   } = props;
 
   const [valoresIniciais, setValoresIniciais] = useState();
@@ -142,21 +143,21 @@ const QuestionarioDinamico = props => {
         (questaoAtual?.tipoQuestao === tipoQuestao.ComboMultiplaEscolha ||
           questaoAtual?.tipoQuestao === tipoQuestao.Checkbox)
       ) {
-        const idsQuestoesComResposta = valorRespostaAtual.filter(valorSalvo => {
-          const opcaoResposta = questaoAtual?.opcaoResposta.find(
-            q => String(q.id) === String(valorSalvo)
-          );
+        const idsQuestoesComplementares = valorRespostaAtual.filter(
+          valorSalvo => {
+            const opcaoResposta = questaoAtual?.opcaoResposta.find(
+              q => String(q.id) === String(valorSalvo)
+            );
 
-          if (
-            opcaoResposta?.questoesComplementares?.find(q => q.resposta?.length)
-          ) {
-            return true;
+            if (opcaoResposta?.questoesComplementares?.length) {
+              return true;
+            }
+            return false;
           }
-          return false;
-        });
+        );
 
-        if (idsQuestoesComResposta?.length) {
-          idsQuestoesComResposta.forEach(idQuestao => {
+        if (idsQuestoesComplementares?.length) {
+          idsQuestoesComplementares.forEach(idQuestao => {
             const questaoComplmentarComResposta = questaoAtual?.opcaoResposta.find(
               q => String(q.id) === String(idQuestao)
             );
@@ -267,7 +268,7 @@ const QuestionarioDinamico = props => {
     const label = labelPersonalizado(
       textoLabel,
       questaoAtual?.observacao,
-      questaoAtual?.obrigatorio
+      validarCampoObrigatorioCustomizado(questaoAtual, form.values)
     );
 
     const valorAtualSelecionado = form.values[questaoAtual.id];
@@ -604,7 +605,8 @@ const QuestionarioDinamico = props => {
       validationSchema={() =>
         QuestionarioDinamicoValidacoes.obterValidationSchema(
           dadosQuestionarioAtual,
-          refForm
+          refForm,
+          validarCampoObrigatorioCustomizado
         )
       }
       validateOnChange
@@ -637,6 +639,7 @@ QuestionarioDinamico.propTypes = {
   turmaId: PropTypes.oneOfType([PropTypes.any]),
   prefixId: PropTypes.string,
   exibirOrdemLabel: PropTypes.bool,
+  validarCampoObrigatorioCustomizado: PropTypes.oneOfType([PropTypes.any]),
 };
 
 QuestionarioDinamico.defaultProps = {
@@ -652,6 +655,7 @@ QuestionarioDinamico.defaultProps = {
   turmaId: null,
   prefixId: '',
   exibirOrdemLabel: true,
+  validarCampoObrigatorioCustomizado: null,
 };
 
 export default QuestionarioDinamico;
