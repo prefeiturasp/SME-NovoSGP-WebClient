@@ -67,9 +67,11 @@ const CadastroEncaminhamentoNAAPABotoesAcao = props => {
     setMostrarBusca(false);
   };
 
-  const salvar = async situacao => {
-    const situacaoSalvar =
-      situacao || dadosEncaminhamentoNAAPA?.situacao || situacaoNAAPA.Rascunho;
+  const salvar = async novaSituacao => {
+    const situacaoAtual =
+      dadosEncaminhamentoNAAPA?.situacao || situacaoNAAPA.Rascunho;
+
+    const situacaoSalvar = novaSituacao || situacaoAtual;
 
     const ehRascunho = situacaoSalvar === situacaoNAAPA.Rascunho;
 
@@ -78,7 +80,8 @@ const CadastroEncaminhamentoNAAPABotoesAcao = props => {
     const resposta = await ServicoNAAPA.salvarEncaminhamento(
       encaminhamentoId,
       situacaoSalvar,
-      validarCamposObrigatorios
+      validarCamposObrigatorios,
+      ehRascunho
     );
 
     if (resposta?.status === 200) {
@@ -86,7 +89,7 @@ const CadastroEncaminhamentoNAAPABotoesAcao = props => {
         ? 'Rascunho salvo com sucesso'
         : 'Registro cadastrado com sucesso';
 
-      if (encaminhamentoId && !ehRascunho) {
+      if (encaminhamentoId && situacaoAtual !== situacaoNAAPA.Rascunho) {
         mensagem = 'Registro alterado com sucesso';
       }
       sucesso(mensagem);
@@ -172,6 +175,20 @@ const CadastroEncaminhamentoNAAPABotoesAcao = props => {
   const disabledBtnDefault =
     desabilitarCamposEncaminhamentoNAAPA || !questionarioDinamicoEmEdicao;
 
+  const disabledBtnExcluir =
+    !permissoesTela?.podeExcluir ||
+    !encaminhamentoId ||
+    (dadosEncaminhamentoNAAPA?.situacao !== situacaoNAAPA.Rascunho &&
+      dadosEncaminhamentoNAAPA?.situacao !==
+        situacaoNAAPA.AguardandoAtendimento);
+
+  const disabledCadastrarAlterar =
+    desabilitarCamposEncaminhamentoNAAPA ||
+    !permissoesTela?.podeAlterar ||
+    (encaminhamentoId &&
+      !questionarioDinamicoEmEdicao &&
+      dadosEncaminhamentoNAAPA?.situacao !== situacaoNAAPA.Rascunho);
+
   return (
     <Row gutter={[8, 8]} type="flex">
       <Col>
@@ -194,7 +211,7 @@ const CadastroEncaminhamentoNAAPABotoesAcao = props => {
         <>
           <Col>
             <BotaoExcluirPadrao
-              disabled={!permissoesTela?.podeExcluir || !encaminhamentoId}
+              disabled={disabledBtnExcluir}
               onClick={() => onClickExcluir()}
             />
           </Col>
@@ -210,18 +227,19 @@ const CadastroEncaminhamentoNAAPABotoesAcao = props => {
             />
           </Col>
 
-          {/* {!ocultarBtnRascunho && ( */}
-          <Col>
-            <Button
-              bold
-              border
-              color={Colors.Azul}
-              label="Salvar rascunho"
-              id={SGP_BUTTON_SALVAR_RASCUNHO}
-              onClick={onClickSalvarRascunho}
-              disabled={disabledBtnDefault}
-            />
-          </Col>
+          {!ocultarBtnRascunho && (
+            <Col>
+              <Button
+                bold
+                border
+                color={Colors.Azul}
+                label="Salvar rascunho"
+                id={SGP_BUTTON_SALVAR_RASCUNHO}
+                onClick={onClickSalvarRascunho}
+                disabled={desabilitarCamposEncaminhamentoNAAPA}
+              />
+            </Col>
+          )}
 
           <Col>
             <Button
@@ -231,6 +249,7 @@ const CadastroEncaminhamentoNAAPABotoesAcao = props => {
               color={Colors.Azul}
               id={SGP_BUTTON_ALTERAR_CADASTRAR}
               onClick={onClickCadastrarAlterar}
+              disabled={disabledCadastrarAlterar}
             />
           </Col>
         </>

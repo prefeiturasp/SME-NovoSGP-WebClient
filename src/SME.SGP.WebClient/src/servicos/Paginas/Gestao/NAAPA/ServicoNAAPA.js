@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import QuestionarioDinamicoFuncoes from '~/componentes-sgp/QuestionarioDinamico/Funcoes/QuestionarioDinamicoFuncoes';
 import { store } from '~/redux';
 import {
@@ -7,9 +8,7 @@ import {
 } from '~/redux/modulos/encaminhamentoNAAPA/actions';
 import { limparDadosLocalizarEstudante } from '~/redux/modulos/localizarEstudante/actions';
 import {
-  setExibirModalErrosQuestionarioDinamico,
   setLimparDadosQuestionarioDinamico,
-  setNomesSecoesComCamposObrigatorios,
   setQuestionarioDinamicoEmEdicao,
 } from '~/redux/modulos/questionarioDinamico/actions';
 import { erros } from '~/servicos/alertas';
@@ -69,7 +68,8 @@ class ServicoNAAPA {
   salvarEncaminhamento = async (
     encaminhamentoId,
     situacao,
-    validarCamposObrigatorios
+    validarCamposObrigatorios,
+    ehRascunho
   ) => {
     const state = store.getState();
 
@@ -84,24 +84,28 @@ class ServicoNAAPA {
 
     const { aluno, turma } = dadosEncaminhamentoNAAPA;
 
-    // const secoesEmEdicao = _.cloneDeep(listaSecoesEmEdicao);
-    // const secoesEncaminhamentoNAAPA = _.cloneDeep(
-    //   dadosSecoesEncaminhamentoNAAPA
-    // );
+    const secoesEmEdicao = _.cloneDeep(listaSecoesEmEdicao);
+    const secoesEncaminhamentoNAAPA = _.cloneDeep(
+      dadosSecoesEncaminhamentoNAAPA
+    );
 
     const nomesSecoesComCamposObrigatorios = [];
 
-    // if (secoesEncaminhamentoNAAPA?.length !== secoesEmEdicao?.length) {
-    //   secoesEncaminhamentoNAAPA.forEach(secao => {
-    //     const secaoEstaEmEdicao = secoesEmEdicao.find(
-    //       e => e.secaoId === secao.id
-    //     );
+    if (
+      !ehRascunho &&
+      secoesEncaminhamentoNAAPA?.length !== secoesEmEdicao?.length
+    ) {
+      secoesEncaminhamentoNAAPA.forEach(secao => {
+        const secaoEstaEmEdicao = secoesEmEdicao.find(
+          e => e.secaoId === secao.id
+        );
 
-    //     if (!secaoEstaEmEdicao && !secao.concluido) {
-    //       nomesSecoesComCamposObrigatorios.push(secao.nome);
-    //     }
-    //   });
-    // }
+        const secaoInvalida = !secaoEstaEmEdicao && !secao.concluido;
+        if (secaoInvalida) {
+          nomesSecoesComCamposObrigatorios.push(secao.nome);
+        }
+      });
+    }
 
     const dadosMapeados = await QuestionarioDinamicoFuncoes.mapearQuestionarios(
       listaSecoesEmEdicao,
@@ -110,48 +114,42 @@ class ServicoNAAPA {
       nomesSecoesComCamposObrigatorios
     );
 
-    // if (dadosMapeados) {
-    // if (nomesSecoesComCamposObrigatorios?.length) {
-    //   dispatch(
-    //     setNomesSecoesComCamposObrigatorios(nomesSecoesComCamposObrigatorios)
-    //   );
-    //   dispatch(setExibirModalErrosQuestionarioDinamico(true));
-    // }
-    // if (nomesSecoesComCamposObrigatorios?.length) return false;
+    const formsInvalidos = !!dadosMapeados?.formsInvalidos;
 
-    const paramsSalvar = {
-      turmaId: turma?.id,
-      alunoCodigo: aluno?.codigoAluno,
-      situacao,
-      secoes: dadosMapeados?.secoes?.length ? dadosMapeados.secoes : [],
-    };
+    if (formsInvalidos || dadosMapeados?.secoes?.length) {
+      const paramsSalvar = {
+        turmaId: turma?.id,
+        alunoCodigo: aluno?.codigoAluno,
+        situacao,
+        secoes: dadosMapeados?.secoes?.length ? dadosMapeados.secoes : [],
+      };
 
-    if (encaminhamentoId) {
-      paramsSalvar.id = encaminhamentoId;
+      if (encaminhamentoId) {
+        paramsSalvar.id = encaminhamentoId;
+      }
+
+      dispatch(setExibirLoaderEncaminhamentoNAAPA(true));
+
+      const resposta = await api
+        .post(`${URL_PADRAO}/salvar`, paramsSalvar)
+        .catch(e => erros(e));
+
+      if (resposta?.data?.id) {
+        dispatch(setQuestionarioDinamicoEmEdicao(false));
+        dispatch(setListaSecoesEmEdicao([]));
+        dispatch(setLimparDadosEncaminhamentoNAAPA());
+        dispatch(setLimparDadosQuestionarioDinamico());
+        dispatch(limparDadosLocalizarEstudante());
+      }
+
+      setTimeout(() => {
+        dispatch(setExibirLoaderEncaminhamentoNAAPA(false));
+      }, 1000);
+
+      return resposta;
     }
 
-    dispatch(setExibirLoaderEncaminhamentoNAAPA(true));
-
-    const resposta = await api
-      .post(`${URL_PADRAO}/salvar`, paramsSalvar)
-      .catch(e => erros(e));
-
-    if (resposta?.data?.id) {
-      dispatch(setQuestionarioDinamicoEmEdicao(false));
-      dispatch(setListaSecoesEmEdicao([]));
-      dispatch(setLimparDadosEncaminhamentoNAAPA());
-      dispatch(setLimparDadosQuestionarioDinamico());
-      dispatch(limparDadosLocalizarEstudante());
-    }
-
-    setTimeout(() => {
-      dispatch(setExibirLoaderEncaminhamentoNAAPA(false));
-    }, 1000);
-
-    return resposta;
-    // }
-
-    // return false;
+    return false;
   };
 }
 

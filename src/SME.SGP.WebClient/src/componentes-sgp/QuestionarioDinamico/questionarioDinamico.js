@@ -95,7 +95,7 @@ const QuestionarioDinamico = props => {
           case tipoQuestao.Data:
             valorRespostaAtual = resposta[0].texto
               ? moment(resposta[0].texto)
-              : null;
+              : '';
             break;
           case tipoQuestao.Periodo:
             valorRespostaAtual = {
