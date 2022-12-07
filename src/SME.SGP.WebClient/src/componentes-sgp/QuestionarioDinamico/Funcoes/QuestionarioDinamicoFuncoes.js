@@ -482,19 +482,28 @@ class QuestionarioDinamicoFuncoes {
     return listaOrdenada;
   };
 
+  exibirModalCamposInvalidos = secoesInvalidas => {
+    if (secoesInvalidas?.length) {
+      const { dispatch } = store;
+      dispatch(setNomesSecoesComCamposObrigatorios(secoesInvalidas));
+      dispatch(setExibirModalErrosQuestionarioDinamico(true));
+    }
+  };
+
   mapearQuestionarios = async (
     listaSecoesEmEdicao,
     dadosSecoes,
-    validarCamposObrigatorios
+    validarCamposObrigatorios,
+    secoesComCamposObrigatorios
   ) => {
-    const { dispatch } = store;
-
     const state = store.getState();
     const { questionarioDinamico } = state;
     const { formsQuestionarioDinamico, arquivoRemovido } = questionarioDinamico;
 
     let contadorFormsValidos = 0;
-    const nomesSecoesComCamposObrigatorios = [];
+    const nomesSecoesComCamposObrigatorios = secoesComCamposObrigatorios?.length
+      ? secoesComCamposObrigatorios
+      : [];
 
     const validaAntesDoSubmit = (refForm, secaoId) => {
       let arrayCampos = [];
@@ -518,7 +527,12 @@ class QuestionarioDinamicoFuncoes {
           const dadosSecao = dadosSecoes.find(secao => secao.id === secaoId);
 
           if (dadosSecao) {
-            nomesSecoesComCamposObrigatorios.push(dadosSecao.nome);
+            const naoEstaNaLista = nomesSecoesComCamposObrigatorios.find(
+              nome => nome !== dadosSecao.nome
+            );
+            if (naoEstaNaLista) {
+              nomesSecoesComCamposObrigatorios.push(dadosSecao.nome);
+            }
           }
         }
       });
@@ -698,19 +712,10 @@ class QuestionarioDinamicoFuncoes {
 
         return valoresParaSalvar;
       }
-
-      if (nomesSecoesComCamposObrigatorios?.length) {
-        dispatch(
-          setNomesSecoesComCamposObrigatorios(nomesSecoesComCamposObrigatorios)
-        );
-      }
-
-      dispatch(setExibirModalErrosQuestionarioDinamico(true));
-
-      return false;
     }
 
-    return false;
+    this.exibirModalCamposInvalidos(nomesSecoesComCamposObrigatorios);
+    return { formsInvalidos: !nomesSecoesComCamposObrigatorios?.length };
   };
 
   pegarTipoQuestao = tipoQuestaoValor => {

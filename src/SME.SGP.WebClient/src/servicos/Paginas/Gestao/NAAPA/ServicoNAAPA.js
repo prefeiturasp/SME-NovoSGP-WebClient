@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import QuestionarioDinamicoFuncoes from '~/componentes-sgp/QuestionarioDinamico/Funcoes/QuestionarioDinamicoFuncoes';
 import { store } from '~/redux';
 import {
@@ -23,8 +24,10 @@ class ServicoNAAPA {
   obterDadosEncaminhamentoNAAPA = encaminhamentoId =>
     api.get(`${URL_PADRAO}/${encaminhamentoId}`);
 
-  obterSecoes = encaminhamentoId =>
-    api.get(`${URL_PADRAO}/secoes?encaminhamentoNAAPAId=${encaminhamentoId}`);
+  obterSecoes = (encaminhamentoId, modalidade) =>
+    api.get(
+      `${URL_PADRAO}/secoes?encaminhamentoNAAPAId=${encaminhamentoId}&modalidade=${modalidade}`
+    );
 
   obterDadosQuestionarioId = (
     questionarioId,
@@ -65,7 +68,8 @@ class ServicoNAAPA {
   salvarEncaminhamento = async (
     encaminhamentoId,
     situacao,
-    validarCamposObrigatorios
+    validarCamposObrigatorios,
+    ehRascunho
   ) => {
     const state = store.getState();
 
@@ -80,18 +84,44 @@ class ServicoNAAPA {
 
     const { aluno, turma } = dadosEncaminhamentoNAAPA;
 
+    const secoesEmEdicao = _.cloneDeep(listaSecoesEmEdicao);
+    const secoesEncaminhamentoNAAPA = _.cloneDeep(
+      dadosSecoesEncaminhamentoNAAPA
+    );
+
+    const nomesSecoesComCamposObrigatorios = [];
+
+    if (
+      !ehRascunho &&
+      secoesEncaminhamentoNAAPA?.length !== secoesEmEdicao?.length
+    ) {
+      secoesEncaminhamentoNAAPA.forEach(secao => {
+        const secaoEstaEmEdicao = secoesEmEdicao.find(
+          e => e.secaoId === secao.id
+        );
+
+        const secaoInvalida = !secaoEstaEmEdicao && !secao.concluido;
+        if (secaoInvalida) {
+          nomesSecoesComCamposObrigatorios.push(secao.nome);
+        }
+      });
+    }
+
     const dadosMapeados = await QuestionarioDinamicoFuncoes.mapearQuestionarios(
       listaSecoesEmEdicao,
       dadosSecoesEncaminhamentoNAAPA,
-      validarCamposObrigatorios
+      validarCamposObrigatorios,
+      nomesSecoesComCamposObrigatorios
     );
 
-    if (dadosMapeados?.secoes?.length) {
+    const formsInvalidos = !!dadosMapeados?.formsInvalidos;
+
+    if (formsInvalidos || dadosMapeados?.secoes?.length) {
       const paramsSalvar = {
         turmaId: turma?.id,
         alunoCodigo: aluno?.codigoAluno,
         situacao,
-        secoes: dadosMapeados?.secoes,
+        secoes: dadosMapeados?.secoes?.length ? dadosMapeados.secoes : [],
       };
 
       if (encaminhamentoId) {
@@ -110,11 +140,11 @@ class ServicoNAAPA {
         dispatch(setLimparDadosEncaminhamentoNAAPA());
         dispatch(setLimparDadosQuestionarioDinamico());
         dispatch(limparDadosLocalizarEstudante());
-
-        setTimeout(() => {
-          dispatch(setExibirLoaderEncaminhamentoNAAPA(false));
-        }, 1000);
       }
+
+      setTimeout(() => {
+        dispatch(setExibirLoaderEncaminhamentoNAAPA(false));
+      }, 1000);
 
       return resposta;
     }

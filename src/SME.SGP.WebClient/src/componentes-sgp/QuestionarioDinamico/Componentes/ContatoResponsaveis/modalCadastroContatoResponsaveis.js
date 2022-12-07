@@ -54,7 +54,15 @@ const ModalCadastroContatoResponsaveis = props => {
       .test(
         'len',
         'Telefone inválido, você deve digitar o DDD com dois dígitos e o telefone com 8 ou 9 dígitos.',
-        val => val?.length === 14 || val?.length === 15
+        val => {
+          const regex = /(?=\s(9)).*/;
+          const comecaComNove = regex.test(val);
+
+          const ehCelular = comecaComNove && val?.length === 15;
+          const ehTelefone = !comecaComNove && val?.length === 14;
+
+          return ehCelular || ehTelefone;
+        }
       ),
   });
 

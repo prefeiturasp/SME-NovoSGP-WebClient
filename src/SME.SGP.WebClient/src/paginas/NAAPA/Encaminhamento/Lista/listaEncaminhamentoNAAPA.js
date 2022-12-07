@@ -126,7 +126,9 @@ const ListaEncaminhamentoNAAPA = () => {
     setCarregandoUes(true);
     const resposta = await AbrangenciaServico.buscarUes(
       dre?.codigo,
-      `v1/abrangencias/${consideraHistorico}/dres/${dre?.codigo}/ues?anoLetivo=${anoLetivo}`,
+      `v1/abrangencias/${consideraHistorico}/dres/${
+        dre?.codigo
+      }/ues?anoLetivo=${anoLetivo}&consideraNovasUEs=${true}`,
       true
     )
       .catch(e => erros(e))
@@ -172,7 +174,9 @@ const ListaEncaminhamentoNAAPA = () => {
       0,
       '',
       anoLetivo,
-      consideraHistorico
+      consideraHistorico,
+      false,
+      [1]
     )
       .catch(e => erros(e))
       .finally(() => setCarregandoTurmas(false));

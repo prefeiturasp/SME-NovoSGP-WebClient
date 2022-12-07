@@ -15,6 +15,7 @@ import {
 import { erros, setBreadcrumbManual } from '~/servicos';
 import ModalErrosQuestionarioDinamico from '~/componentes-sgp/QuestionarioDinamico/Componentes/ModalErrosQuestionarioDinamico/modalErrosQuestionarioDinamico';
 import { RotasDto } from '~/dtos';
+import LabelSituacao from './componentes/labelSituacao';
 
 const CadastroEncaminhamentoNAAPA = () => {
   const routeMatch = useRouteMatch();
@@ -49,7 +50,7 @@ const CadastroEncaminhamentoNAAPA = () => {
       dados.dre = {
         codigo: dados?.dreCodigo,
         nome: dados?.dreNome,
-        id: dados?.dreNome,
+        id: dados?.dreId,
       };
       dados.ue = {
         codigo: dados?.ueCodigo,
@@ -73,20 +74,16 @@ const CadastroEncaminhamentoNAAPA = () => {
     if (encaminhamentoId) {
       obterDadosEncaminhamentoNAAPA();
     } else if (novoEncaminhamentoNAAPADados?.aluno?.codigoAluno) {
-      const temTurmaSelecionada = !!novoEncaminhamentoNAAPADados?.turma?.codigo;
-      if (temTurmaSelecionada) {
-        store.dispatch(
-          setDadosEncaminhamentoNAAPA(novoEncaminhamentoNAAPADados)
-        );
-      } else {
-        const turmaAluno = novoEncaminhamentoNAAPADados?.aluno?.turma;
-        store.dispatch(
-          setDadosEncaminhamentoNAAPA({
-            ...novoEncaminhamentoNAAPADados,
-            turma: turmaAluno,
-          })
-        );
-      }
+      const turmaAluno = novoEncaminhamentoNAAPADados?.aluno?.turma;
+      const modalidade = novoEncaminhamentoNAAPADados?.aluno?.modalidade;
+
+      store.dispatch(
+        setDadosEncaminhamentoNAAPA({
+          ...novoEncaminhamentoNAAPADados,
+          turma: turmaAluno,
+          modalidade,
+        })
+      );
     }
   }, [
     encaminhamentoId,
@@ -106,6 +103,12 @@ const CadastroEncaminhamentoNAAPA = () => {
 
   return dadosEncaminhamentoNAAPA?.aluno?.codigoAluno ? (
     <>
+      <Row gutter={[16, 0]} type="flex" justify="end">
+        <Col>
+          <LabelSituacao />
+        </Col>
+      </Row>
+
       <Row gutter={[16, 16]}>
         <Col sm={24} lg={12}>
           <SelectComponent

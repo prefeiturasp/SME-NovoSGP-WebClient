@@ -58,6 +58,7 @@ const CampoTexto = React.forwardRef((props, ref) => {
     labelRequired,
     addMaskTelefone,
     somenteTexto,
+    somenteNumero,
   } = props;
 
   const possuiErro = () => {
@@ -71,20 +72,23 @@ const CampoTexto = React.forwardRef((props, ref) => {
     }
   };
 
-  const onChangeCampo = e => {
-    let valorComMask = '';
+  const onChangeCampoComForm = e => {
+    let valorParaAtualizar = e.target.value;
 
-    if (e.target.value && addMaskTelefone) {
-      valorComMask = maskTelefone(e.target.value);
-      form.setFieldValue(name, valorComMask);
-    } else if (e.target.value && somenteTexto) {
-      valorComMask = maskSomenteTexto(e.target.value);
-      form.setFieldValue(name, valorComMask);
-    } else {
-      form.setFieldValue(name, e.target.value);
+    if (valorParaAtualizar && addMaskTelefone) {
+      valorParaAtualizar = maskTelefone(e.target.value);
+    } else if (valorParaAtualizar && somenteTexto) {
+      valorParaAtualizar = maskSomenteTexto(e.target.value);
+    } else if (valorParaAtualizar && somenteNumero) {
+      valorParaAtualizar = String(e.target.value)?.replace?.(/\D/g, '');
     }
-    form.setFieldTouched(name, true, true);
-    onChange(e, valorComMask);
+
+    const valorDiferente = form.values[name] !== valorParaAtualizar;
+    if (valorDiferente) {
+      form.setFieldValue(name, valorParaAtualizar);
+      form.setFieldTouched(name, true, true);
+      onChange(e, valorParaAtualizar);
+    }
   };
 
   return (
@@ -112,7 +116,7 @@ const CampoTexto = React.forwardRef((props, ref) => {
             innerRef={ref}
             onKeyDown={onKeyDown}
             placeholder={placeholder}
-            onChange={onChangeCampo}
+            onChange={onChangeCampoComForm}
             style={style}
             prefix={iconeBusca ? <i className="fa fa-search fa-lg" /> : ''}
             value={value || form.values[name]}
@@ -163,6 +167,7 @@ CampoTexto.propTypes = {
   labelRequired: PropTypes.bool,
   addMaskTelefone: PropTypes.bool,
   somenteTexto: PropTypes.bool,
+  somenteNumero: PropTypes.bool,
 };
 
 CampoTexto.defaultProps = {
@@ -190,6 +195,7 @@ CampoTexto.defaultProps = {
   labelRequired: false,
   addMaskTelefone: false,
   somenteTexto: false,
+  somenteNumero: false,
 };
 
 export default CampoTexto;
