@@ -260,7 +260,7 @@ class QuestionarioDinamicoFuncoes {
 
     const camposDuplicados = this.agruparCamposDuplicados(
       camposSemEspaco,
-      'nome'
+      'id'
     );
 
     if (camposDuplicados?.length) {
