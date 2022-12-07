@@ -212,44 +212,60 @@ const MontarDadosTabSelecionada = props => {
       const labelCampoAdoece =
         'Adoece com frequência sem receber cuidados médicos';
 
+      const labelDoencaCronica =
+        'Doença crônica ou em tratamento de longa duração';
+
       if (!respostasCampoAgrupamento?.length) return questaoAtual.obrigatorio;
 
-      const campoAdoece = campoAgrupamento.opcaoResposta.find(opcao => {
-        const opcaoEhSelecionada = respostasCampoAgrupamento.find(
-          opcaoRespostaId => opcao.id === Number(opcaoRespostaId)
-        );
-
-        return opcaoEhSelecionada && opcao?.nome === labelCampoAdoece;
-      });
-
-      if (campoAdoece?.questoesComplementares?.length) {
-        const campoTipoAdoece = campoAdoece.questoesComplementares.find(
-          q =>
-            q.nomeComponente ===
-            'TIPO_ADOECE_COM_FREQUENCIA_SEM_CUIDADOS_MEDICOS'
-        );
-
-        if (campoTipoAdoece) {
-          const idTipoAdoece = campoTipoAdoece.id;
-          const respostaTipoAdoece = formValues[idTipoAdoece];
-
-          if (!respostaTipoAdoece?.length) return questaoAtual.obrigatorio;
-
-          const labelOutras = 'Outras';
-
-          const tipoOutrasSelecionada = campoTipoAdoece.opcaoResposta.find(
-            opcao => {
-              const opcaoEhSelecionada = respostaTipoAdoece.find(
-                opcaoRespostaId => opcao.id === Number(opcaoRespostaId)
-              );
-
-              return opcaoEhSelecionada && opcao?.nome === labelOutras;
-            }
+      const camposValidarObrigatoriedade = campoAgrupamento.opcaoResposta.filter(
+        opcao => {
+          const opcaoEhSelecionada = respostasCampoAgrupamento.find(
+            opcaoRespostaId => opcao.id === Number(opcaoRespostaId)
           );
 
-          return !!tipoOutrasSelecionada;
+          return (
+            opcaoEhSelecionada &&
+            (opcao?.nome === labelCampoAdoece ||
+              opcao?.nome === labelDoencaCronica)
+          );
         }
-      }
+      );
+
+      const ehObrigatorio = camposValidarObrigatoriedade.find(campo => {
+        if (campo?.questoesComplementares?.length) {
+          const campoValidarObrigatoriedade = campo.questoesComplementares.find(
+            q =>
+              q.nomeComponente ===
+                'TIPO_ADOECE_COM_FREQUENCIA_SEM_CUIDADOS_MEDICOS' ||
+              q.nomeComponente ===
+                'TIPO_DOENCA_CRONICA_TRATAMENTO_LONGA_DURACAO'
+          );
+
+          if (campoValidarObrigatoriedade) {
+            const idTipoAdoece = campoValidarObrigatoriedade.id;
+            const respostaTipoAdoece = formValues[idTipoAdoece];
+
+            if (!respostaTipoAdoece?.length) return questaoAtual.obrigatorio;
+
+            const labelOutras = 'Outras';
+
+            const tipoOutrasSelecionada = campoValidarObrigatoriedade.opcaoResposta.find(
+              opcao => {
+                const opcaoEhSelecionada = respostaTipoAdoece.find(
+                  opcaoRespostaId => opcao.id === Number(opcaoRespostaId)
+                );
+
+                return opcaoEhSelecionada && opcao?.nome === labelOutras;
+              }
+            );
+
+            return !!tipoOutrasSelecionada;
+          }
+        }
+        return false;
+      });
+
+      return !!ehObrigatorio;
     }
 
     return questaoAtual.obrigatorio;
