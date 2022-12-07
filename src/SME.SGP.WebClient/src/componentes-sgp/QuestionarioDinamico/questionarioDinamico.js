@@ -291,7 +291,7 @@ const QuestionarioDinamico = props => {
 
         const camposDuplicados = QuestionarioDinamicoFuncoes.agruparCamposDuplicados(
           camposSemEspaco,
-          'nome'
+          'id'
         );
 
         if (camposDuplicados?.length) {
