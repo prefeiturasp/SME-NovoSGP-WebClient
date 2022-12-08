@@ -629,6 +629,34 @@ const Notas = ({ match }) => {
     }
   };
 
+  const mudarStatusEdicaoAlunosPorBimestre = bimestre => {
+    const alunosEmEdicao = bimestre?.alunos.filter(a =>
+      a.notasBimestre.find(m => m.modoEdicao === true)
+    );
+
+    if (alunosEmEdicao?.length) {
+      alunosEmEdicao.forEach(aluno => {
+        if (aluno?.notasBimestre?.length) {
+          aluno.notasBimestre.forEach(nota => {
+            nota.modoEdicao = false;
+          });
+        }
+      });
+    }
+  };
+
+  const mudarStatusEdicaoAlunos = () => {
+    if (primeiroBimestre.modoEdicao) {
+      mudarStatusEdicaoAlunosPorBimestre(primeiroBimestre);
+    } else if (segundoBimestre.modoEdicao) {
+      mudarStatusEdicaoAlunosPorBimestre(segundoBimestre);
+    } else if (terceiroBimestre.modoEdicao) {
+      mudarStatusEdicaoAlunosPorBimestre(terceiroBimestre);
+    } else if (quartoBimestre.modoEdicao) {
+      mudarStatusEdicaoAlunosPorBimestre(quartoBimestre);
+    }
+  };
+
   const salvarNotasFinais = async (
     resolve,
     reject,
@@ -699,6 +727,8 @@ const Notas = ({ match }) => {
           .then(salvouNotas => {
             setCarregandoGeral(false);
             if (salvouNotas && salvouNotas.status === 200) {
+              mudarStatusEdicaoAlunos();
+
               const auditoriaBimestre = salvouNotas?.data?.[0];
               if (!salvarNotasAvaliacao) {
                 sucesso(auditoriaBimestre.mensagemConsistencia);
