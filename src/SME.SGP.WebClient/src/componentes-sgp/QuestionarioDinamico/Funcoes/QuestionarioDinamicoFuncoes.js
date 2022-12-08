@@ -13,7 +13,12 @@ import { confirmar, erros } from '~/servicos';
 class QuestionarioDinamicoFuncoes {
   agruparCamposDuplicados = (data, campo) => {
     if (data?.length) {
-      const groups = groupBy(data, campo);
+      let novoMap = _.cloneDeep(data);
+      novoMap = novoMap.map(m => ({
+        ...m,
+        nome: m?.observacao ? `${m.nome}${m?.observacao.trim()}` : m.nome,
+      }));
+      const groups = groupBy(novoMap, campo);
       const results = Object.entries(groups).map(([key, values]) => {
         return { questaoNome: key, questoesDuplicadas: values };
       });
@@ -260,7 +265,7 @@ class QuestionarioDinamicoFuncoes {
 
     const camposDuplicados = this.agruparCamposDuplicados(
       camposSemEspaco,
-      'id'
+      'nome'
     );
 
     if (camposDuplicados?.length) {
@@ -491,10 +496,11 @@ class QuestionarioDinamicoFuncoes {
   };
 
   mapearQuestionarios = async (
-    listaSecoesEmEdicao,
     dadosSecoes,
     validarCamposObrigatorios,
-    secoesComCamposObrigatorios
+    secoesComCamposObrigatorios,
+    validarSecoesEmEdicao = false,
+    listaSecoesEmEdicao
   ) => {
     const state = store.getState();
     const { questionarioDinamico } = state;
@@ -527,10 +533,10 @@ class QuestionarioDinamicoFuncoes {
           const dadosSecao = dadosSecoes.find(secao => secao.id === secaoId);
 
           if (dadosSecao) {
-            const naoEstaNaLista = nomesSecoesComCamposObrigatorios.find(
-              nome => nome !== dadosSecao.nome
+            const estaNaLista = nomesSecoesComCamposObrigatorios.find(
+              nome => nome === dadosSecao.nome
             );
-            if (naoEstaNaLista) {
+            if (!estaNaLista) {
               nomesSecoesComCamposObrigatorios.push(dadosSecao.nome);
             }
           }
@@ -556,11 +562,15 @@ class QuestionarioDinamicoFuncoes {
       if (todosOsFormsEstaoValidos) {
         let formsParaSalvar = [];
 
-        formsParaSalvar = formsQuestionarioDinamico.filter(f =>
-          listaSecoesEmEdicao.find(
-            secaoEdicao => secaoEdicao.secaoId === f.secaoId
-          )
-        );
+        if (validarSecoesEmEdicao) {
+          formsParaSalvar = formsQuestionarioDinamico.filter(f =>
+            listaSecoesEmEdicao.find(
+              secaoEdicao => secaoEdicao.secaoId === f.secaoId
+            )
+          );
+        } else {
+          formsParaSalvar = formsQuestionarioDinamico;
+        }
 
         const valoresParaSalvar = {};
 
@@ -715,7 +725,7 @@ class QuestionarioDinamicoFuncoes {
     }
 
     this.exibirModalCamposInvalidos(nomesSecoesComCamposObrigatorios);
-    return { formsInvalidos: !nomesSecoesComCamposObrigatorios?.length };
+    return { formsValidos: !nomesSecoesComCamposObrigatorios?.length };
   };
 
   pegarTipoQuestao = tipoQuestaoValor => {
