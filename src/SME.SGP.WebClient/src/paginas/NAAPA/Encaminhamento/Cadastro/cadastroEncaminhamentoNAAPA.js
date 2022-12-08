@@ -12,9 +12,8 @@ import {
   setDadosEncaminhamentoNAAPA,
   setExibirLoaderEncaminhamentoNAAPA,
 } from '~/redux/modulos/encaminhamentoNAAPA/actions';
-import { erros, setBreadcrumbManual } from '~/servicos';
+import { erros } from '~/servicos';
 import ModalErrosQuestionarioDinamico from '~/componentes-sgp/QuestionarioDinamico/Componentes/ModalErrosQuestionarioDinamico/modalErrosQuestionarioDinamico';
-import { RotasDto } from '~/dtos';
 import LabelSituacao from './componentes/labelSituacao';
 
 const CadastroEncaminhamentoNAAPA = () => {
@@ -90,16 +89,6 @@ const CadastroEncaminhamentoNAAPA = () => {
     novoEncaminhamentoNAAPADados,
     obterDadosEncaminhamentoNAAPA,
   ]);
-
-  useEffect(() => {
-    if (routeMatch.url && encaminhamentoId) {
-      setBreadcrumbManual(
-        routeMatch.url,
-        'Encaminhamento',
-        `${RotasDto.ENCAMINHAMENTO_NAAPA}`
-      );
-    }
-  }, [routeMatch, encaminhamentoId]);
 
   return dadosEncaminhamentoNAAPA?.aluno?.codigoAluno ? (
     <>
