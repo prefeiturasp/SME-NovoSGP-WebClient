@@ -17,6 +17,7 @@ import {
   confirmar,
   sucesso,
   erros,
+  setBreadcrumbManual,
 } from '~/servicos';
 import BotaoExcluirPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoExcluirPadrao';
 import { RotasDto } from '~/dtos';
@@ -53,6 +54,16 @@ const CadastroEncaminhamentoNAAPABotoesAcao = props => {
 
   const desabilitarProximoPasso =
     desabilitarCamposEncaminhamentoNAAPA || !aluno?.codigoAluno;
+
+  useEffect(() => {
+    if (routeMatch.url && encaminhamentoId) {
+      setBreadcrumbManual(
+        routeMatch.url,
+        'Encaminhamento',
+        `${RotasDto.ENCAMINHAMENTO_NAAPA}`
+      );
+    }
+  }, [routeMatch, encaminhamentoId]);
 
   useEffect(() => {
     const soConsulta = verificaSomenteConsulta(permissoesTela);
