@@ -438,6 +438,9 @@ class ServicoPlanoAEE {
 
   removerReponsavelPAAI = id =>
     api.post(`${urlPadrao}/remover-responsavel/${id}`);
+
+  gerarRelatorioPlanosAEE = params =>
+    api.post('v1/relatorios/planos-aee', params);
 }
 
 export default new ServicoPlanoAEE();

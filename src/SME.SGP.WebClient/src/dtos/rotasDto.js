@@ -70,6 +70,7 @@ const RotasDto = {
   OCORRENCIAS: '/gestao/ocorrencias',
   RELATORIO_AEE_REGISTRO_ITINERANCIA: '/aee/registro-itinerancia',
   RELATORIO_AEE_PLANO: '/aee/plano',
+  RELATORIO_AEE_PLANO_IMPRESSAO: '/relatorios/aee/plano',
   ACOMPANHAMENTO_APRENDIZAGEM: '/fechamento/acompanhamento-aprendizagem',
   RELATORIO_DEVOLUTIVAS: '/relatorios/planejamento/devolutivas',
   DASHBOARD_ESCOLA_AQUI: '/dashboard/escola-aqui',
