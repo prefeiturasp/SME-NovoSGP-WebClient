@@ -556,7 +556,8 @@ class QuestionarioDinamicoFuncoes {
 
         todosOsFormsEstaoValidos =
           contadorFormsValidos ===
-          formsQuestionarioDinamico?.filter(a => a)?.length;
+            formsQuestionarioDinamico?.filter(a => a)?.length &&
+          !nomesSecoesComCamposObrigatorios?.length;
       }
 
       if (todosOsFormsEstaoValidos) {
