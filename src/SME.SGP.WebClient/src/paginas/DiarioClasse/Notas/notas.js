@@ -631,7 +631,7 @@ const Notas = ({ match }) => {
 
   const mudarStatusEdicaoAlunosPorBimestre = bimestre => {
     const alunosEmEdicao = bimestre?.alunos.filter(a =>
-      a.notasBimestre.find(m => m.modoEdicao === true)
+      a.notasBimestre.find(m => m.modoEdicao)
     );
 
     if (alunosEmEdicao?.length) {

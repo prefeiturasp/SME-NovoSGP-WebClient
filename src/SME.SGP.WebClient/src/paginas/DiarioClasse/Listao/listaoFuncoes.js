@@ -256,8 +256,8 @@ const obterDaodsFechamentoPorBimestreListao = async (
 const mudarStatusEdicaoAlunos = dados => {
   const alunosEmEdicao = dados?.alunos.filter(
     a =>
-      a.notasConceitoFinal.find(m => m.modoEdicao === true) ||
-      a.notasConceitoBimestre.find(m => m.modoEdicao === true)
+      a.notasConceitoFinal.find(m => m.modoEdicao) ||
+      a.notasConceitoBimestre.find(m => m.modoEdicao)
   );
 
   if (alunosEmEdicao?.length) {
