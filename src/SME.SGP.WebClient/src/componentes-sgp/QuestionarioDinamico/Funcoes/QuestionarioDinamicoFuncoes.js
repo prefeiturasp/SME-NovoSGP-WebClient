@@ -13,7 +13,12 @@ import { confirmar, erros } from '~/servicos';
 class QuestionarioDinamicoFuncoes {
   agruparCamposDuplicados = (data, campo) => {
     if (data?.length) {
-      const groups = groupBy(data, campo);
+      let novoMap = _.cloneDeep(data);
+      novoMap = novoMap.map(m => ({
+        ...m,
+        nome: m?.observacao ? `${m.nome}${m?.observacao.trim()}` : m.nome,
+      }));
+      const groups = groupBy(novoMap, campo);
       const results = Object.entries(groups).map(([key, values]) => {
         return { questaoNome: key, questoesDuplicadas: values };
       });
@@ -280,7 +285,7 @@ class QuestionarioDinamicoFuncoes {
     } else {
       camposSemEspaco.forEach(a => {
         const valorCampoRemovido = valoresCamposComplemetares.find(
-          valorCampo => valorCampo?.id === a?.id || valorCampo?.nome === a?.nome
+          valorCampo => valorCampo?.id === a?.id
         );
 
         this.adicionarCampoNovo(form, a.id, valorCampoRemovido?.valor);
@@ -482,19 +487,29 @@ class QuestionarioDinamicoFuncoes {
     return listaOrdenada;
   };
 
-  mapearQuestionarios = async (
-    listaSecoesEmEdicao,
-    dadosSecoes,
-    validarCamposObrigatorios
-  ) => {
-    const { dispatch } = store;
+  exibirModalCamposInvalidos = secoesInvalidas => {
+    if (secoesInvalidas?.length) {
+      const { dispatch } = store;
+      dispatch(setNomesSecoesComCamposObrigatorios(secoesInvalidas));
+      dispatch(setExibirModalErrosQuestionarioDinamico(true));
+    }
+  };
 
+  mapearQuestionarios = async (
+    dadosSecoes,
+    validarCamposObrigatorios,
+    secoesComCamposObrigatorios,
+    validarSecoesEmEdicao = false,
+    listaSecoesEmEdicao
+  ) => {
     const state = store.getState();
     const { questionarioDinamico } = state;
     const { formsQuestionarioDinamico, arquivoRemovido } = questionarioDinamico;
 
     let contadorFormsValidos = 0;
-    const nomesSecoesComCamposObrigatorios = [];
+    const nomesSecoesComCamposObrigatorios = secoesComCamposObrigatorios?.length
+      ? secoesComCamposObrigatorios
+      : [];
 
     const validaAntesDoSubmit = (refForm, secaoId) => {
       let arrayCampos = [];
@@ -518,7 +533,12 @@ class QuestionarioDinamicoFuncoes {
           const dadosSecao = dadosSecoes.find(secao => secao.id === secaoId);
 
           if (dadosSecao) {
-            nomesSecoesComCamposObrigatorios.push(dadosSecao.nome);
+            const estaNaLista = nomesSecoesComCamposObrigatorios.find(
+              nome => nome === dadosSecao.nome
+            );
+            if (!estaNaLista) {
+              nomesSecoesComCamposObrigatorios.push(dadosSecao.nome);
+            }
           }
         }
       });
@@ -536,17 +556,22 @@ class QuestionarioDinamicoFuncoes {
 
         todosOsFormsEstaoValidos =
           contadorFormsValidos ===
-          formsQuestionarioDinamico?.filter(a => a)?.length;
+            formsQuestionarioDinamico?.filter(a => a)?.length &&
+          !nomesSecoesComCamposObrigatorios?.length;
       }
 
       if (todosOsFormsEstaoValidos) {
         let formsParaSalvar = [];
 
-        formsParaSalvar = formsQuestionarioDinamico.filter(f =>
-          listaSecoesEmEdicao.find(
-            secaoEdicao => secaoEdicao.secaoId === f.secaoId
-          )
-        );
+        if (validarSecoesEmEdicao) {
+          formsParaSalvar = formsQuestionarioDinamico.filter(f =>
+            listaSecoesEmEdicao.find(
+              secaoEdicao => secaoEdicao.secaoId === f.secaoId
+            )
+          );
+        } else {
+          formsParaSalvar = formsQuestionarioDinamico;
+        }
 
         const valoresParaSalvar = {};
 
@@ -698,19 +723,10 @@ class QuestionarioDinamicoFuncoes {
 
         return valoresParaSalvar;
       }
-
-      if (nomesSecoesComCamposObrigatorios?.length) {
-        dispatch(
-          setNomesSecoesComCamposObrigatorios(nomesSecoesComCamposObrigatorios)
-        );
-      }
-
-      dispatch(setExibirModalErrosQuestionarioDinamico(true));
-
-      return false;
     }
 
-    return false;
+    this.exibirModalCamposInvalidos(nomesSecoesComCamposObrigatorios);
+    return { formsValidos: !nomesSecoesComCamposObrigatorios?.length };
   };
 
   pegarTipoQuestao = tipoQuestaoValor => {

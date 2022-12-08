@@ -196,6 +196,81 @@ const MontarDadosTabSelecionada = props => {
     }
   }, [questionarioId, obterDadosQuestionarioId]);
 
+  const validarCampoObrigatorioCustomizado = (questaoAtual, formValues) => {
+    if (
+      formValues &&
+      questaoAtual?.nomeComponente === 'OBS_AGRUPAMENTO_PROMOCAO_CUIDADOS'
+    ) {
+      const campoAgrupamento = dadosQuestionarioAtual.find(
+        d => d.nomeComponente === 'AGRUPAMENTO_PROMOCAO_CUIDADOS'
+      );
+
+      const idCampoAgrupamento = campoAgrupamento?.id;
+
+      const respostasCampoAgrupamento = formValues[idCampoAgrupamento];
+
+      const labelCampoAdoece =
+        'Adoece com frequência sem receber cuidados médicos';
+
+      const labelDoencaCronica =
+        'Doença crônica ou em tratamento de longa duração';
+
+      if (!respostasCampoAgrupamento?.length) return questaoAtual.obrigatorio;
+
+      const camposValidarObrigatoriedade = campoAgrupamento.opcaoResposta.filter(
+        opcao => {
+          const opcaoEhSelecionada = respostasCampoAgrupamento.find(
+            opcaoRespostaId => opcao.id === Number(opcaoRespostaId)
+          );
+
+          return (
+            opcaoEhSelecionada &&
+            (opcao?.nome === labelCampoAdoece ||
+              opcao?.nome === labelDoencaCronica)
+          );
+        }
+      );
+
+      const ehObrigatorio = camposValidarObrigatoriedade.find(campo => {
+        if (campo?.questoesComplementares?.length) {
+          const campoValidarObrigatoriedade = campo.questoesComplementares.find(
+            q =>
+              q.nomeComponente ===
+                'TIPO_ADOECE_COM_FREQUENCIA_SEM_CUIDADOS_MEDICOS' ||
+              q.nomeComponente ===
+                'TIPO_DOENCA_CRONICA_TRATAMENTO_LONGA_DURACAO'
+          );
+
+          if (campoValidarObrigatoriedade) {
+            const idTipoAdoece = campoValidarObrigatoriedade.id;
+            const respostaTipoAdoece = formValues[idTipoAdoece];
+
+            if (!respostaTipoAdoece?.length) return questaoAtual.obrigatorio;
+
+            const labelOutras = 'Outras';
+
+            const tipoOutrasSelecionada = campoValidarObrigatoriedade.opcaoResposta.find(
+              opcao => {
+                const opcaoEhSelecionada = respostaTipoAdoece.find(
+                  opcaoRespostaId => opcao.id === Number(opcaoRespostaId)
+                );
+
+                return opcaoEhSelecionada && opcao?.nome === labelOutras;
+              }
+            );
+
+            return !!tipoOutrasSelecionada;
+          }
+        }
+        return false;
+      });
+
+      return !!ehObrigatorio;
+    }
+
+    return questaoAtual.obrigatorio;
+  };
+
   return (
     <>
       <QuestionarioDinamico
@@ -212,6 +287,8 @@ const MontarDadosTabSelecionada = props => {
         onChangeQuestionario={() => {
           ServicoNAAPA.guardarSecaoEmEdicao(dadosTab?.id);
         }}
+        validarCampoObrigatorioCustomizado={validarCampoObrigatorioCustomizado}
+        montarComboMultiplaEscolhaComplementarComResposta={false}
       />
 
       <Row style={{ padding: '0 10px 10px' }}>

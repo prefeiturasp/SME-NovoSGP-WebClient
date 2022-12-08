@@ -14,7 +14,7 @@ const ModalErrosQuestionarioDinamico = () => {
     store => store.questionarioDinamico?.nomesSecoesComCamposObrigatorios
   );
 
-  let mensagemErro = `Existem campos obrigatórios sem preenchimentos nas seguintes seções: `;
+  let mensagemErro = `Existem campos obrigatórios ou inválidos sem preenchimentos nas seguintes seções: `;
 
   const onCloseErros = () => {
     dispatch(setExibirModalErrosQuestionarioDinamico(false));
