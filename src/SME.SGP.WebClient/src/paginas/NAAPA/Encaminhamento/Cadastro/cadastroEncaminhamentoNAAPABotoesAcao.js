@@ -200,6 +200,12 @@ const CadastroEncaminhamentoNAAPABotoesAcao = props => {
       !questionarioDinamicoEmEdicao &&
       dadosEncaminhamentoNAAPA?.situacao !== situacaoNAAPA.Rascunho);
 
+  const disabledRascunho =
+    desabilitarCamposEncaminhamentoNAAPA ||
+    (encaminhamentoId &&
+      !questionarioDinamicoEmEdicao &&
+      dadosEncaminhamentoNAAPA?.situacao === situacaoNAAPA.Rascunho);
+
   return (
     <Row gutter={[8, 8]} type="flex">
       <Col>
@@ -247,7 +253,7 @@ const CadastroEncaminhamentoNAAPABotoesAcao = props => {
                 label="Salvar rascunho"
                 id={SGP_BUTTON_SALVAR_RASCUNHO}
                 onClick={onClickSalvarRascunho}
-                disabled={desabilitarCamposEncaminhamentoNAAPA}
+                disabled={disabledRascunho}
               />
             </Col>
           )}

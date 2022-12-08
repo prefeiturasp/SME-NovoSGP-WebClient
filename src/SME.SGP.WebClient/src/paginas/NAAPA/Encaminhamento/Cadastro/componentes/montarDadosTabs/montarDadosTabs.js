@@ -38,6 +38,10 @@ const MontarDadosTabs = () => {
     ).catch(e => erros(e));
 
     dispatch(setDadosSecoesEncaminhamentoNAAPA(resposta?.data || []));
+    if (!encaminhamentoId) {
+      const primeiraTabSelecionada = resposta?.data[0]?.questionarioId?.toString();
+      dispatch(setTabAtivaEncaminhamentoNAAPA(primeiraTabSelecionada));
+    }
   }, [dispatch, encaminhamentoId, modalidade]);
 
   useEffect(() => {
