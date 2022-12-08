@@ -84,7 +84,6 @@ class ServicoNAAPA {
 
     const { aluno, turma } = dadosEncaminhamentoNAAPA;
 
-    const secoesEmEdicao = _.cloneDeep(listaSecoesEmEdicao);
     const secoesEncaminhamentoNAAPA = _.cloneDeep(
       dadosSecoesEncaminhamentoNAAPA
     );
@@ -93,10 +92,10 @@ class ServicoNAAPA {
 
     if (
       !ehRascunho &&
-      secoesEncaminhamentoNAAPA?.length !== secoesEmEdicao?.length
+      secoesEncaminhamentoNAAPA?.length !== listaSecoesEmEdicao?.length
     ) {
       secoesEncaminhamentoNAAPA.forEach(secao => {
-        const secaoEstaEmEdicao = secoesEmEdicao.find(
+        const secaoEstaEmEdicao = listaSecoesEmEdicao.find(
           e => e.secaoId === secao.id
         );
 
@@ -108,15 +107,14 @@ class ServicoNAAPA {
     }
 
     const dadosMapeados = await QuestionarioDinamicoFuncoes.mapearQuestionarios(
-      listaSecoesEmEdicao,
       dadosSecoesEncaminhamentoNAAPA,
       validarCamposObrigatorios,
       nomesSecoesComCamposObrigatorios
     );
 
-    const formsInvalidos = !!dadosMapeados?.formsInvalidos;
+    const formsValidos = !!dadosMapeados?.formsValidos;
 
-    if (formsInvalidos || dadosMapeados?.secoes?.length) {
+    if (formsValidos || dadosMapeados?.secoes?.length) {
       const paramsSalvar = {
         turmaId: turma?.id,
         alunoCodigo: aluno?.codigoAluno,

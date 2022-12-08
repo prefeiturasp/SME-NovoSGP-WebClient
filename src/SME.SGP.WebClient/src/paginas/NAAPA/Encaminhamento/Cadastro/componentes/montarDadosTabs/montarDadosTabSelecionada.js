@@ -288,6 +288,7 @@ const MontarDadosTabSelecionada = props => {
           ServicoNAAPA.guardarSecaoEmEdicao(dadosTab?.id);
         }}
         validarCampoObrigatorioCustomizado={validarCampoObrigatorioCustomizado}
+        montarComboMultiplaEscolhaComplementarComResposta={false}
       />
 
       <Row style={{ padding: '0 10px 10px' }}>
