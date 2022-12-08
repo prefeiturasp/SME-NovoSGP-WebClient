@@ -285,7 +285,7 @@ class QuestionarioDinamicoFuncoes {
     } else {
       camposSemEspaco.forEach(a => {
         const valorCampoRemovido = valoresCamposComplemetares.find(
-          valorCampo => valorCampo?.id === a?.id || valorCampo?.nome === a?.nome
+          valorCampo => valorCampo?.id === a?.id
         );
 
         this.adicionarCampoNovo(form, a.id, valorCampoRemovido?.valor);
