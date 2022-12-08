@@ -15,7 +15,7 @@ const Campo = styled.div`
     margin-bottom: 5px;
   }
   .ant-input-number {
-    min-height: 38px;
+    height: 38px;
     &-handler-wrap {
       ${({ esconderSetas }) =>
         esconderSetas &&
@@ -24,12 +24,8 @@ const Campo = styled.div`
         `}
     }
   }
-  .ant-input-number-input,
-  .ant-input-number-input-wrap {
-    height: 100%;
-  }
 
-  min-height: 45px;
+  height: 45px;
 `;
 
 const CampoNumero = React.forwardRef((props, ref) => {
