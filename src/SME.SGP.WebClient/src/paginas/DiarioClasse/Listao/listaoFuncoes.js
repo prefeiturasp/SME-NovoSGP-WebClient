@@ -253,6 +253,30 @@ const obterDaodsFechamentoPorBimestreListao = async (
   }
 };
 
+const mudarStatusEdicaoAlunos = dados => {
+  const alunosEmEdicao = dados?.alunos.filter(
+    a =>
+      a.notasConceitoFinal.find(m => m.modoEdicao) ||
+      a.notasConceitoBimestre.find(m => m.modoEdicao)
+  );
+
+  if (alunosEmEdicao?.length) {
+    alunosEmEdicao.forEach(aluno => {
+      if (aluno?.notasConceitoBimestre?.length) {
+        aluno.notasConceitoBimestre.forEach(nota => {
+          nota.modoEdicao = false;
+        });
+      }
+
+      if (aluno?.notasConceitoFinal?.length) {
+        aluno.notasConceitoFinal.forEach(nota => {
+          nota.modoEdicao = false;
+        });
+      }
+    });
+  }
+};
+
 const salvarFechamentoListao = async (
   turma,
   ehBimestreFinal,
@@ -306,6 +330,8 @@ const salvarFechamentoListao = async (
   if (resposta?.status === 200) {
     sucesso(resposta.data.mensagemConsistencia);
     const { dispatch } = store;
+
+    mudarStatusEdicaoAlunos(dadosFechamento);
 
     dispatch(setTelaEmEdicao(false));
     const dadosComAuditoriaAtualizada = { ...dadosFechamento };
