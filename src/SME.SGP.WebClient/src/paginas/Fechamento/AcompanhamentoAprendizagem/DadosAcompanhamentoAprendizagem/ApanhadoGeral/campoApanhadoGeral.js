@@ -66,7 +66,6 @@ const CampoApanhadoGeral = () => {
       permiteVideo={false}
       qtdMaxImg={qtdMaxImagensCampoPercursoColetivo}
       imagensCentralizadas
-      permiteGif={false}
       desabilitar={desabilitarCamposAcompanhamentoAprendizagem}
       validarSeTemErro={validarSeTemErro}
       mensagemErro="Campo obrigatório"
