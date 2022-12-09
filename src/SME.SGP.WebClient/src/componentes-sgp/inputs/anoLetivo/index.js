@@ -17,12 +17,19 @@ export const AnoLetivo = ({
   const [exibirLoader, setExibirLoader] = useState(false);
   const [listaAnosLetivos, setListaAnosLetivos] = useState([]);
 
-  const consideraHistorico = form.values?.consideraHistorico;
+  const consideraHistorico = !!form.values?.consideraHistorico;
+
+  const limparDados = () => {
+    form.setFieldValue(name, undefined);
+    setListaAnosLetivos([]);
+  };
 
   const obterAnosLetivos = useCallback(async () => {
     setExibirLoader(true);
 
-    const resposta = await FiltroHelper.obterAnosLetivos({ consideraHistorico })
+    const resposta = await FiltroHelper.obterAnosLetivos({
+      consideraHistorico,
+    })
       .catch(e => erros(e))
       .finally(() => setExibirLoader(false));
 
@@ -31,17 +38,25 @@ export const AnoLetivo = ({
 
       if (anosOrdenados?.length) {
         const { valor } = anosOrdenados[0];
-
+        form.initialValues[name] = valor;
         form.setFieldValue(name, valor);
       }
 
       setListaAnosLetivos(anosOrdenados);
+    } else {
+      limparDados();
     }
-  }, [form, name, consideraHistorico]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [consideraHistorico]);
 
   useEffect(() => {
+    limparDados();
+
     obterAnosLetivos();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [obterAnosLetivos]);
+
+  const desabilitar = listaAnosLetivos?.length === 1 || disabled;
 
   return (
     <Loader loading={exibirLoader} ignorarTip>
@@ -51,7 +66,7 @@ export const AnoLetivo = ({
         label="Ano Letivo"
         valueText="desc"
         valueOption="valor"
-        disabled={disabled}
+        disabled={desabilitar}
         showSearch={showSearch}
         lista={listaAnosLetivos}
         placeholder="Ano letivo"
@@ -74,7 +89,7 @@ AnoLetivo.propTypes = {
 
 AnoLetivo.defaultProps = {
   form: null,
-  disabled: true,
+  disabled: false,
   showSearch: true,
   name: 'anoLetivo',
   labelRequired: true,

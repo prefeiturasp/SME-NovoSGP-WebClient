@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
-import { Auditoria, Card, Loader } from '~/componentes';
+import { Card, Loader } from '~/componentes';
 import { Cabecalho } from '~/componentes-sgp';
 import { ModalidadeDTO } from '~/dtos';
 import RelatorioPlanoAEEBotoesAcoes from './relatorioPlanoAEEBotoesAcoes';
@@ -9,20 +9,24 @@ import RelatorioPlanoAEEForm from './relatorioPlanoAEEForm';
 
 const RelatorioPlanoAEE = () => {
   const [modoEdicao, setModoEdicao] = useState(false);
-
   const [gerandoRelatorio, setGerandoRelatorio] = useState(false);
-  const [auditoria, setAuditoria] = useState();
+  const [desabilitarGerar, setDesabilitarGerar] = useState(false);
 
   const inicial = {
-    exibirHistorico: false,
+    consideraHistorico: false,
     anoLetivo: undefined,
     dreCodigo: undefined,
     ueCodigo: undefined,
     modalidade: undefined,
     semestre: undefined,
+    codigosTurma: undefined,
+    situacao: undefined,
+    exibirEncerrados: false,
+    codigosResponsavel: undefined,
+    codigosPAAIResponsavel: undefined,
   };
 
-  const [initialValues, setInitialValues] = useState(inicial);
+  const [initialValues] = useState(inicial);
 
   const textoCampoObrigatorio = 'Campo obrigatório';
 
@@ -50,30 +54,35 @@ const RelatorioPlanoAEE = () => {
           return ehValido;
         }
       ),
+    codigosTurma: Yup.string().required(textoCampoObrigatorio),
   });
 
   const onChangeCampos = () => {
     setModoEdicao(true);
+    setDesabilitarGerar(false);
   };
 
   return (
     <Loader loading={gerandoRelatorio}>
       {initialValues ? (
         <Formik
+          validateOnBlur
+          validateOnChange
           enableReinitialize
           initialValues={initialValues}
           validationSchema={validacoes}
-          validateOnBlur
-          validateOnChange
         >
           {form => (
             <>
               <Cabecalho pagina="Plano">
                 <RelatorioPlanoAEEBotoesAcoes
                   form={form}
-                  initialValues={initialValues}
                   modoEdicao={modoEdicao}
+                  initialValues={initialValues}
                   setModoEdicao={setModoEdicao}
+                  desabilitarGerar={desabilitarGerar}
+                  setGerandoRelatorio={setGerandoRelatorio}
+                  setDesabilitarGerar={setDesabilitarGerar}
                 />
               </Cabecalho>
 
@@ -82,12 +91,6 @@ const RelatorioPlanoAEE = () => {
                   form={form}
                   onChangeCampos={onChangeCampos}
                 />
-
-                {auditoria?.criadoEm && (
-                  <div className="row">
-                    <Auditoria {...auditoria} />
-                  </div>
-                )}
               </Card>
             </>
           )}

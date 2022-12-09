@@ -511,8 +511,32 @@ class ServicoEncaminhamentoAEE {
     return api.post(`${urlPadrao}/devolver`, params);
   };
 
-  obterResponsaveveisEncaminhamentoPAAI = codigoTurma =>
-    api.post(`${urlPadrao}/responsavel/pesquisa`, { codigoTurma, limite: 99 });
+  obterResponsaveisPAAIPesquisa = (codigoTurma, dreCodigo) => {
+    const params = { limite: 999 };
+
+    if (codigoTurma) {
+      params.codigoTurma = codigoTurma;
+    }
+    if (dreCodigo) {
+      params.codigoDRE = dreCodigo;
+    }
+    return api.post(`${urlPadrao}/responsavel/pesquisa`, params);
+  };
+
+  obterResponsaveisPesquisa = (codigoTurma, dreCodigo, ueCodigo) => {
+    const params = { limite: 999 };
+
+    if (codigoTurma) {
+      params.codigoTurma = codigoTurma;
+    }
+    if (dreCodigo) {
+      params.codigoDRE = dreCodigo;
+    }
+    if (dreCodigo) {
+      params.codigoUE = ueCodigo;
+    }
+    return api.post(`${urlPadrao}/responsavel-plano/pesquisa`, params);
+  };
 }
 
 export default new ServicoEncaminhamentoAEE();

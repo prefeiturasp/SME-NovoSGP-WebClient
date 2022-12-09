@@ -27,5 +27,5 @@ ExibirHistorico.defaultProps = {
   form: null,
   disabled: false,
   onChange: () => null,
-  name: 'exibirHistorico',
+  name: 'consideraHistorico',
 };

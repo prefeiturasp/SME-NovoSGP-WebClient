@@ -2,13 +2,17 @@ import React, { useCallback, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { Loader, SelectComponent } from '~/componentes';
 import { SGP_SELECT_SITUACAO_PLANO } from '~/constantes/ids/select';
+import ServicoPlanoAEE from '~/servicos/Paginas/Relatorios/AEE/ServicoPlanoAEE';
+import { erros } from '~/servicos';
 
 export const SituacaoPlano = ({
   name,
   form,
   onChange,
   disabled,
+  multiple,
   showSearch,
+  updateData,
   labelRequired,
 }) => {
   const [exibirLoader, setExibirLoader] = useState(false);
@@ -17,16 +21,23 @@ export const SituacaoPlano = ({
   const obterSituacoes = useCallback(async () => {
     setExibirLoader(true);
 
-    // TODO: Função para buscar situações
-  }, []);
+    const resposta = await ServicoPlanoAEE.obterSituacoes()
+      .catch(e => erros(e))
+      .finally(() => setExibirLoader(false));
+
+    if (resposta?.data?.length) {
+      const lista = updateData ? updateData(resposta.data) : resposta.data;
+
+      setListaSituacoes(lista);
+    } else {
+      setListaSituacoes([]);
+      form.setFieldValue(name, undefined);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [updateData]);
 
   useEffect(() => {
-    if (true) {
-      obterSituacoes();
-    } else {
-      form.setFieldValue(name, undefined);
-      setListaSituacoes([]);
-    }
+    obterSituacoes();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -35,9 +46,10 @@ export const SituacaoPlano = ({
       <SelectComponent
         name={name}
         form={form}
-        valueText="nome"
+        onChange={onChange}
+        multiple={multiple}
         valueOption="codigo"
-        onChange={onChange()}
+        valueText="descricao"
         lista={listaSituacoes}
         showSearch={showSearch}
         label="Situação do plano"
@@ -53,17 +65,21 @@ export const SituacaoPlano = ({
 SituacaoPlano.propTypes = {
   name: PropTypes.string,
   disabled: PropTypes.bool,
+  multiple: PropTypes.bool,
   onChange: PropTypes.func,
   showSearch: PropTypes.bool,
   labelRequired: PropTypes.bool,
   form: PropTypes.oneOfType([PropTypes.any]),
+  updateData: PropTypes.oneOfType([PropTypes.any]),
 };
 
 SituacaoPlano.defaultProps = {
   form: null,
   disabled: false,
+  multiple: true,
   showSearch: true,
-  labelRequired: true,
+  labelRequired: false,
   onChange: () => null,
   name: 'situacaoPlano',
+  updateData: () => null,
 };

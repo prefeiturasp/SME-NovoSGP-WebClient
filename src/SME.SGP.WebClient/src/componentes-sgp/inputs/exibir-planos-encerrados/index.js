@@ -9,6 +9,7 @@ export const ExibirPlanosEncerrados = ({
   onChange,
   disabled,
   valorInicial,
+  labelRequired,
 }) => {
   const opcoesExibirPlanosEncerrados = [
     { label: 'Sim', value: true },
@@ -19,9 +20,10 @@ export const ExibirPlanosEncerrados = ({
     <RadioGroupButton
       name={name}
       form={form}
-      onChange={onChange()}
+      onChange={onChange}
       desabilitado={disabled}
       valorInicial={valorInicial}
+      labelRequired={labelRequired}
       label="Exibir planos encerrados"
       opcoes={opcoesExibirPlanosEncerrados}
       id={SGP_RADIO_EXIBIR_PLANOS_ENCERRADOS}
@@ -34,6 +36,7 @@ ExibirPlanosEncerrados.propTypes = {
   disabled: PropTypes.bool,
   onChange: PropTypes.func,
   valorInicial: PropTypes.bool,
+  labelRequired: PropTypes.bool,
   form: PropTypes.oneOfType([PropTypes.any]),
 };
 
@@ -41,6 +44,7 @@ ExibirPlanosEncerrados.defaultProps = {
   form: null,
   disabled: false,
   valorInicial: false,
+  labelRequired: false,
   onChange: () => null,
   name: 'exibirPlanosEncerrados',
 };
