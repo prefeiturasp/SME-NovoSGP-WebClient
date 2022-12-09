@@ -4,7 +4,11 @@ import tipoQuestao from '~/dtos/tipoQuestao';
 import { momentSchema } from '~/componentes/campoData/campoData';
 
 class QuestionarioDinamicoValidacoes {
-  obterValidationSchema = (dadosQuestionarioAtual, form) => {
+  obterValidationSchema = (
+    dadosQuestionarioAtual,
+    form,
+    validarCampoObrigatorioCustomizado
+  ) => {
     if (dadosQuestionarioAtual?.length && form?.state?.values) {
       const camposComValidacao = {};
 
@@ -31,7 +35,16 @@ class QuestionarioDinamicoValidacoes {
         );
 
         if (temCampoEmTela) {
-          if (questaoAtual.obrigatorio) {
+          let questaoAtualObrigatorio = questaoAtual.obrigatorio;
+
+          if (validarCampoObrigatorioCustomizado) {
+            questaoAtualObrigatorio = validarCampoObrigatorioCustomizado(
+              questaoAtual,
+              form.state.values
+            );
+          }
+
+          if (questaoAtualObrigatorio) {
             switch (questaoAtual.tipoQuestao) {
               case tipoQuestao.Periodo:
                 camposComValidacao[questaoAtual.id] = Yup.object()

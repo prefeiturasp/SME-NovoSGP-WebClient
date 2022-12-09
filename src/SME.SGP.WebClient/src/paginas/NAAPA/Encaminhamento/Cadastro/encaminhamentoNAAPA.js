@@ -51,7 +51,7 @@ const EncaminhamentoNAAPA = () => {
 
       <Card padding="24px 24px">
         {mostrarBusca ? (
-          <LocalizarEstudante />
+          <LocalizarEstudante consideraNovasUEs />
         ) : (
           <CadastroEncaminhamentoNAAPA />
         )}

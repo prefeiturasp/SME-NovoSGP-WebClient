@@ -20,7 +20,10 @@ import {
   setAnoLetivo,
 } from '~/redux/modulos/localizarEstudante/actions';
 
-const LocalizarEstudante = () => {
+const LocalizarEstudante = props => {
+  // eslint-disable-next-line react/prop-types
+  const { consideraNovasUEs } = props;
+
   const [anoAtual] = useState(window.moment().format('YYYY'));
 
   const listaAnosLetivo = [{ label: anoAtual, id: anoAtual }];
@@ -64,7 +67,7 @@ const LocalizarEstudante = () => {
     setCarregandoUes(true);
     const resposta = await AbrangenciaServico.buscarUes(
       codigoDre,
-      `v1/abrangencias/false/dres/${codigoDre}/ues?anoLetivo=${anoAtual}`,
+      `v1/abrangencias/false/dres/${codigoDre}/ues?anoLetivo=${anoAtual}&consideraNovasUEs=${!!consideraNovasUEs}`,
       true
     )
       .catch(e => erros(e))
@@ -80,7 +83,7 @@ const LocalizarEstudante = () => {
       setListaUes([]);
       store.dispatch(setUe());
     }
-  }, [codigoDre, anoAtual]);
+  }, [codigoDre, anoAtual, consideraNovasUEs]);
 
   const obterTurmas = useCallback(async () => {
     setCarregandoTurmas(true);
@@ -153,6 +156,13 @@ const LocalizarEstudante = () => {
         turma: dadosTurma,
         codigoAluno: aluno?.alunoCodigo,
       };
+
+      if (aluno?.codigoTurma) {
+        const modalidade = listaTurmas?.find(
+          t => t?.codigo === aluno?.codigoTurma
+        )?.codigoModalidade;
+        dadosAluno.modalidade = modalidade;
+      }
 
       store.dispatch(setAluno(dadosAluno));
     } else {
@@ -265,7 +275,6 @@ const LocalizarEstudante = () => {
             onChange={onChangeLocalizadorEstudante}
             placeholder="Procure pelo nome da criança"
             codigoTurma={codigoDre ? codigoTurma : ''}
-            // valorInicialAlunoCodigo={alunoLocalizadorSelecionado?.codigoAluno}
           />
         </Col>
       </Row>

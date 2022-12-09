@@ -14,7 +14,7 @@ import MontarDadosTabSelecionada from './montarDadosTabSelecionada';
 const { TabPane } = Tabs;
 
 const MontarDadosTabs = () => {
-  const { aluno, anoLetivo } = useSelector(
+  const { aluno, anoLetivo, modalidade } = useSelector(
     state => state.encaminhamentoNAAPA.dadosEncaminhamentoNAAPA
   );
 
@@ -32,12 +32,17 @@ const MontarDadosTabs = () => {
   );
 
   const obterSecoes = useCallback(async () => {
-    const resposta = await ServicoNAAPA.obterSecoes(encaminhamentoId).catch(e =>
-      erros(e)
-    );
+    const resposta = await ServicoNAAPA.obterSecoes(
+      encaminhamentoId,
+      modalidade
+    ).catch(e => erros(e));
 
     dispatch(setDadosSecoesEncaminhamentoNAAPA(resposta?.data || []));
-  }, [dispatch, encaminhamentoId]);
+    if (!encaminhamentoId) {
+      const primeiraTabSelecionada = resposta?.data[0]?.questionarioId?.toString();
+      dispatch(setTabAtivaEncaminhamentoNAAPA(primeiraTabSelecionada));
+    }
+  }, [dispatch, encaminhamentoId, modalidade]);
 
   useEffect(() => {
     if (aluno?.codigoAluno && anoLetivo) {
@@ -65,12 +70,10 @@ const MontarDadosTabs = () => {
 
           return (
             <TabPane tab={nomeTab} key={questionarioId}>
-              {questionarioId?.toString() === tabAtivaEncaminhamentoNAAPA && (
-                <MontarDadosTabSelecionada
-                  questionarioId={questionarioId}
-                  dadosTab={tab}
-                />
-              )}
+              <MontarDadosTabSelecionada
+                questionarioId={questionarioId}
+                dadosTab={tab}
+              />
             </TabPane>
           );
         })}
