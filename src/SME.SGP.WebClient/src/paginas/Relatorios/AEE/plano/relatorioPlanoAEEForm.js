@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 import { Col, Row } from 'antd';
-import React from 'react';
+import React, { useEffect } from 'react';
 import {
   ExibirHistorico,
   AnoLetivo,
@@ -14,9 +14,35 @@ import {
   Responsavel,
   PAAIResponsavel,
 } from '~/componentes-sgp/inputs';
+import { OPCAO_TODOS } from '~/constantes';
+import { situacaoPlanoAEE } from '~/dtos';
 
 const RelatorioPlanoAEEForm = props => {
   const { form, onChangeCampos } = props;
+
+  const atualizarSituacoes = situacoes => {
+    const novasListaSituacoes = situacoes.filter(
+      situacao =>
+        situacao.codigo !== situacaoPlanoAEE.Encerrado &&
+        situacao.codigo !== situacaoPlanoAEE.EncerradoAutomaticamento
+    );
+
+    return novasListaSituacoes;
+  };
+
+  const ueCodigo = form?.values?.ueCodigo;
+  const dreCodigo = form?.values?.dreCodigo;
+  const situacao = form?.values?.situacao;
+
+  const desabilitarResponsavel = !ueCodigo || ueCodigo === OPCAO_TODOS;
+  const desabilitarResponsavelPAAI = !dreCodigo || dreCodigo === OPCAO_TODOS;
+
+  useEffect(() => {
+    if (form?.setFieldValue && situacao?.length) {
+      form.setFieldValue('exibirEncerrados', false);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [situacao]);
 
   return (
     <Col span={24}>
@@ -24,45 +50,82 @@ const RelatorioPlanoAEEForm = props => {
         <Col sm={24}>
           <ExibirHistorico form={form} />
         </Col>
+      </Row>
 
+      <Row gutter={[16, 16]}>
         <Col sm={24} md={8} lg={4}>
           <AnoLetivo form={form} onChange={onChangeCampos} />
         </Col>
 
         <Col sm={24} md={24} lg={10}>
-          <Dre form={form} />
+          <Dre form={form} onChange={onChangeCampos} />
         </Col>
 
         <Col sm={24} md={24} lg={10}>
-          <Ue form={form} />
+          <Ue form={form} onChange={onChangeCampos} />
         </Col>
+      </Row>
 
+      <Row gutter={[16, 16]}>
         <Col sm={24} md={12} lg={8}>
-          <Modalidade form={form} />
+          <Modalidade form={form} onChange={onChangeCampos} />
         </Col>
 
-        <Col sm={24} md={12} lg={8}>
-          <Semestre form={form} />
+        <Col sm={24} md={12} lg={6}>
+          <Semestre form={form} onChange={onChangeCampos} />
         </Col>
 
-        <Col sm={24} md={12} lg={8}>
-          <Turma form={form} />
+        <Col sm={24} lg={10}>
+          <Turma
+            form={form}
+            onChange={onChangeCampos}
+            name="codigosTurma"
+            multiple
+          />
+        </Col>
+      </Row>
+
+      <Row gutter={[16, 16]}>
+        <Col sm={24} md={14}>
+          <SituacaoPlano
+            form={form}
+            onChange={onChangeCampos}
+            updateData={atualizarSituacoes}
+            name="situacao"
+          />
         </Col>
 
-        <Col sm={24} md={12}>
-          <SituacaoPlano form={form} />
+        <Col sm={24} md={10}>
+          <ExibirPlanosEncerrados
+            form={form}
+            onChange={onChangeCampos}
+            name="exibirEncerrados"
+            disabled={!!situacao?.length}
+          />
         </Col>
+      </Row>
 
-        <Col sm={24} md={12}>
-          <ExibirPlanosEncerrados form={form} />
+      <Row gutter={[16, 16]}>
+        <Col sm={24}>
+          <Responsavel
+            multiple
+            form={form}
+            name="codigosResponsavel"
+            onChange={onChangeCampos}
+            disabled={desabilitarResponsavel}
+          />
         </Col>
+      </Row>
 
-        <Col sm={24} md={12}>
-          <Responsavel form={form} />
-        </Col>
-
-        <Col sm={24} md={12}>
-          <PAAIResponsavel form={form} />
+      <Row gutter={[16, 16]}>
+        <Col sm={24}>
+          <PAAIResponsavel
+            multiple
+            form={form}
+            name="codigosPAAIResponsavel"
+            onChange={onChangeCampos}
+            disabled={desabilitarResponsavelPAAI}
+          />
         </Col>
       </Row>
     </Col>
