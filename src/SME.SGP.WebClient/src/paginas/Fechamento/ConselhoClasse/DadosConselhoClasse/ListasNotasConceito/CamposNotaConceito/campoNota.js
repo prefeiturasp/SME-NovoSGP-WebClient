@@ -135,6 +135,7 @@ const CampoNota = props => {
 
       if (retorno?.data) {
         notaArredondada = retorno.data;
+        valor = notaArredondada;
       }
     }
 
