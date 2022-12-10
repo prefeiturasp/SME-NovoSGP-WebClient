@@ -100,7 +100,6 @@ const ListaRecomendacoes = props => {
       listaDireita={parametrosListaDireita}
       onClickAdicionar={onClickAdicionar}
       onClickRemover={onClickRemover}
-      dentroPeriodo={dentroPeriodo}
     />
   );
 };
