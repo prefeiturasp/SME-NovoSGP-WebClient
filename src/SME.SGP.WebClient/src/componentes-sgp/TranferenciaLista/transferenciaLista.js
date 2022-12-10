@@ -14,7 +14,6 @@ const TransferenciaLista = props => {
     listaDireita,
     onClickAdicionar,
     onClickRemover,
-    dentroPeriodo,
   } = props;
 
   const propPadrao = {
@@ -51,7 +50,6 @@ const TransferenciaLista = props => {
                 listaEsquerda.selectMultipleRows ||
                 propPadrao.selectMultipleRows
               }
-              semHover={!dentroPeriodo}
             />
           </CardLista>
         </div>
@@ -92,7 +90,6 @@ const TransferenciaLista = props => {
               selectMultipleRows={
                 listaDireita.selectMultipleRows || propPadrao.selectMultipleRows
               }
-              semHover={!dentroPeriodo}
             />
           </CardLista>
         </div>
