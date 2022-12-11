@@ -9,7 +9,6 @@ import {
   setAnotacoesPedagogicas,
   setAuditoriaAnotacaoRecomendacao,
   setConselhoClasseEmEdicao,
-  setDentroPeriodo,
   setRecomendacaoAluno,
   setRecomendacaoAlunoSelecionados,
   setRecomendacaoFamilia,
@@ -108,13 +107,6 @@ const AnotacoesRecomendacoes = props => {
   const setarSituacaoConselho = useCallback(
     valor => {
       dispatch(setSituacaoConselhoAluno(valor));
-    },
-    [dispatch]
-  );
-
-  const setarDentroDoPeriodo = useCallback(
-    valor => {
-      dispatch(setDentroPeriodo(valor));
     },
     [dispatch]
   );
@@ -218,10 +210,6 @@ const AnotacoesRecomendacoes = props => {
 
       setMatriculaAtivaPeriodo(resposta.data.matriculaAtiva);
 
-      if (!desabilitarEdicaoAluno()) {
-        setarDentroDoPeriodo(!resposta.data.somenteLeitura);
-      }
-
       onChangeAnotacoesPedagogicas(resposta.data.anotacoesPedagogicas);
       onChangeRecomendacaoAluno(resposta.data.textoRecomendacaoAluno);
       onChangeRecomendacaoFamilia(resposta.data.textoRecomendacaoFamilia);
@@ -245,7 +233,6 @@ const AnotacoesRecomendacoes = props => {
     onChangeRecomendacaoFamilia,
     setarAnotacaoAluno,
     setarAuditoria,
-    setarDentroDoPeriodo,
     setarSituacaoConselho,
     alunoDesabilitado,
     bimestre,
@@ -255,7 +242,7 @@ const AnotacoesRecomendacoes = props => {
   useEffect(() => {
     if (alunoCodigo && fechamentoTurmaId) {
       obterAnotacoesRecomendacoes();
-    } 
+    }
   }, [fechamentoTurmaId, alunoCodigo, obterAnotacoesRecomendacoes]);
 
   const setarConselhoClasseEmEdicao = emEdicao => {
