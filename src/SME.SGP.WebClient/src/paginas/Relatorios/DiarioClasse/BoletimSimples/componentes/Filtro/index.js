@@ -211,14 +211,13 @@ const Filtros = ({
       setListaDres([]);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [anoLetivo]);
+  }, [anoLetivo, consideraHistorico]);
 
   useEffect(() => {
     if (anoLetivo) {
       obterDres();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [anoLetivo]);
+  }, [anoLetivo, consideraHistorico, obterDres]);
 
   const onChangeUe = ue => {
     setUeCodigo(ue);
@@ -412,6 +411,8 @@ const Filtros = ({
           setTurmasId(lista[0].valor);
           setOpcaoEstudanteId(OPCAO_TODOS_ESTUDANTES);
         }
+      } else {
+        setListaTurmas([]);
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -500,7 +501,7 @@ const Filtros = ({
               lista={listaDres}
               valueOption="valor"
               valueText="desc"
-              disabled={!anoLetivo || listaDres?.length <= 1}
+              disabled={!anoLetivo || listaDres?.length === 1}
               onChange={onChangeDre}
               valueSelect={dreCodigo}
               placeholder="Diretoria Regional De Educação (DRE)"
