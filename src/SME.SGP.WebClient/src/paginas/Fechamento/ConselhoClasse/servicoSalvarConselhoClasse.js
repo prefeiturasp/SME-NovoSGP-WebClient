@@ -111,8 +111,8 @@ class ServicoSalvarConselhoClasse {
         sucesso('Anotações e recomendações salvas com sucesso.');
         if (bimestreAtual?.valor === 'final') {
           this.gerarParecerConclusivo(
-            dadosPrincipaisConselhoClasse.conselhoClasseId,
-            dadosPrincipaisConselhoClasse.fechamentoTurmaId,
+            retorno.data?.conselhoClasseId,
+            retorno.data?.conselhoClasse?.fechamentoTurmaId,
             dadosAlunoObjectCard.codigoEOL
           );
         }
@@ -211,6 +211,11 @@ class ServicoSalvarConselhoClasse {
       alunoCodigo
     ).catch(e => erros(e));
     if (retorno && retorno.data) {
+      if (retorno?.data?.emAprovacao) {
+        sucesso(
+          'Parecer conclusivo alterado com sucesso. Em até 24 horas será enviado para aprovação e será considerado válido após a aprovação do último nível'
+        );
+      }
       ServicoConselhoClasse.setarParecerConclusivo(retorno.data);
     }
     dispatch(setGerandoParecerConclusivo(false));
@@ -251,14 +256,6 @@ class ServicoSalvarConselhoClasse {
       dispatch(setExpandirLinha([]));
       dispatch(setNotaConceitoPosConselhoAtual({}));
     };
-
-    if (bimestreAtual?.valor === 'final') {
-      this.gerarParecerConclusivo(
-        conselhoClasseId,
-        fechamentoTurmaId,
-        alunoCodigo
-      );
-    }
 
     if (desabilitarCampos) {
       return false;
@@ -311,8 +308,8 @@ class ServicoSalvarConselhoClasse {
         bimestreAtual?.valor === 'final' ? 0 : bimestreAtual?.valor;
 
       const resultado = await ServicoConselhoClasse.obterNotasConceitosConselhoClasse(
-        conselhoClasseId,
-        fechamentoTurmaId,
+        retorno?.data?.conselhoClasseId,
+        retorno?.data?.fechamentoTurmaId,
         alunoCodigo,
         turmaCodigo,
         bimestre,
@@ -350,10 +347,10 @@ class ServicoSalvarConselhoClasse {
         sucesso(mensagemSucesso);
       }
 
-      if (bimestreAtual && bimestreAtual.valor === 'final') {
+      if (bimestreAtual?.valor === 'final') {
         this.gerarParecerConclusivo(
-          conselhoClasseId,
-          fechamentoTurmaId,
+          retorno?.data?.conselhoClasseId,
+          retorno?.data?.fechamentoTurmaId,
           alunoCodigo
         );
       }
