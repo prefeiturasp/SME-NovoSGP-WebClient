@@ -111,8 +111,8 @@ class ServicoSalvarConselhoClasse {
         sucesso('Anotações e recomendações salvas com sucesso.');
         if (bimestreAtual?.valor === 'final') {
           this.gerarParecerConclusivo(
-            dadosPrincipaisConselhoClasse.conselhoClasseId,
-            dadosPrincipaisConselhoClasse.fechamentoTurmaId,
+            retorno.data?.conselhoClasseId,
+            retorno.data?.conselhoClasse?.fechamentoTurmaId,
             dadosAlunoObjectCard.codigoEOL
           );
         }
@@ -257,14 +257,6 @@ class ServicoSalvarConselhoClasse {
       dispatch(setNotaConceitoPosConselhoAtual({}));
     };
 
-    if (bimestreAtual?.valor === 'final') {
-      this.gerarParecerConclusivo(
-        conselhoClasseId,
-        fechamentoTurmaId,
-        alunoCodigo
-      );
-    }
-
     if (desabilitarCampos) {
       return false;
     }
@@ -316,8 +308,8 @@ class ServicoSalvarConselhoClasse {
         bimestreAtual?.valor === 'final' ? 0 : bimestreAtual?.valor;
 
       const resultado = await ServicoConselhoClasse.obterNotasConceitosConselhoClasse(
-        conselhoClasseId,
-        fechamentoTurmaId,
+        retorno?.data?.conselhoClasseId,
+        retorno?.data?.fechamentoTurmaId,
         alunoCodigo,
         turmaCodigo,
         bimestre,
@@ -355,10 +347,10 @@ class ServicoSalvarConselhoClasse {
         sucesso(mensagemSucesso);
       }
 
-      if (bimestreAtual && bimestreAtual.valor === 'final') {
+      if (bimestreAtual?.valor === 'final') {
         this.gerarParecerConclusivo(
-          conselhoClasseId,
-          fechamentoTurmaId,
+          retorno?.data?.conselhoClasseId,
+          retorno?.data?.fechamentoTurmaId,
           alunoCodigo
         );
       }
