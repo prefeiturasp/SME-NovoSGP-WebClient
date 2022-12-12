@@ -32,17 +32,17 @@ const RelatorioPlanoAEEForm = props => {
 
   const ueCodigo = form?.values?.ueCodigo;
   const dreCodigo = form?.values?.dreCodigo;
-  const situacao = form?.values?.situacao;
+  const situacaoIds = form?.values?.situacaoIds;
 
   const desabilitarResponsavel = !ueCodigo || ueCodigo === OPCAO_TODOS;
   const desabilitarResponsavelPAAI = !dreCodigo || dreCodigo === OPCAO_TODOS;
 
   useEffect(() => {
-    if (form?.setFieldValue && situacao?.length) {
+    if (form?.setFieldValue && situacaoIds?.length) {
       form.setFieldValue('exibirEncerrados', false);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [situacao]);
+  }, [situacaoIds]);
 
   return (
     <Col span={24}>
@@ -91,7 +91,7 @@ const RelatorioPlanoAEEForm = props => {
             form={form}
             onChange={onChangeCampos}
             updateData={atualizarSituacoes}
-            name="situacao"
+            name="situacaoIds"
           />
         </Col>
 
@@ -100,7 +100,7 @@ const RelatorioPlanoAEEForm = props => {
             form={form}
             onChange={onChangeCampos}
             name="exibirEncerrados"
-            disabled={!!situacao?.length}
+            disabled={!!situacaoIds?.length}
           />
         </Col>
       </Row>

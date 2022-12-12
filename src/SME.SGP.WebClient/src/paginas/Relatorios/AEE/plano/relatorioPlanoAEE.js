@@ -20,7 +20,7 @@ const RelatorioPlanoAEE = () => {
     modalidade: undefined,
     semestre: undefined,
     codigosTurma: undefined,
-    situacao: undefined,
+    situacaoIds: undefined,
     exibirEncerrados: false,
     codigosResponsavel: undefined,
     codigosPAAIResponsavel: undefined,
