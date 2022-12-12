@@ -176,9 +176,14 @@ const obterAjudaDoSistemaURL = () => {
 
   let urlAjuda = '';
   if (listaUrlAjudaDoSistema?.length && rotaAtiva) {
-    urlAjuda = listaUrlAjudaDoSistema.find(l => !!rotaAtiva?.includes(l?.rota))
-      ?.url;
+    const dadosUrlAjuda = listaUrlAjudaDoSistema.find(
+      l => !!rotaAtiva?.includes(l?.rota)
+    );
+    if (dadosUrlAjuda && rotaAtiva?.startsWith?.(dadosUrlAjuda?.rota)) {
+      urlAjuda = dadosUrlAjuda.url;
+    }
   }
+
   return urlAjuda;
 };
 
