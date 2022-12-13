@@ -87,7 +87,7 @@ const DadosConselhoClasse = props => {
 
   // Quando passa bimestre 0 o retorno vai trazer dados do bimestre corrente!
   const caregarInformacoes = useCallback(
-    async (bimestreConsulta = 0) => {
+    async (bimestreConsulta = 0, carregarParecer = true) => {
       limparDadosNotaPosConselhoJustificativa();
       setCarregando(true);
       setSemDados(true);
@@ -140,7 +140,9 @@ const DadosConselhoClasse = props => {
         if (
           fechamentoTurmaId &&
           conselhoClasseId &&
-          bimestreConsulta === 'final'
+          bimestreConsulta === 'final' &&
+          conselhoClasseAlunoId &&
+          carregarParecer
         ) {
           validouPodeAcessar = await servicoSalvarConselhoClasse.validaParecerConclusivo(
             conselhoClasseId,
@@ -264,7 +266,7 @@ const DadosConselhoClasse = props => {
     }
 
     if (continuar) {
-      caregarInformacoes(numeroBimestre);
+      caregarInformacoes(numeroBimestre, false);
     }
   };
 
