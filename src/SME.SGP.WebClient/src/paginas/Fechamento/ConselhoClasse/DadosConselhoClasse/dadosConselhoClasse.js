@@ -140,7 +140,8 @@ const DadosConselhoClasse = props => {
         if (
           fechamentoTurmaId &&
           conselhoClasseId &&
-          bimestreConsulta === 'final'
+          bimestreConsulta === 'final' &&
+          conselhoClasseAlunoId
         ) {
           validouPodeAcessar = await servicoSalvarConselhoClasse.validaParecerConclusivo(
             conselhoClasseId,
