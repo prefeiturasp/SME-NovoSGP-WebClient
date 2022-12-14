@@ -1593,7 +1593,7 @@ rotas.set(RotasDto.RELATORIO_AEE_PLANO_IMPRESSAO, {
   component: RelatorioPlanoAEE,
   exact: true,
   tipo: RotasTipo.EstruturadaAutenticada,
-  temPermissionamento: true,
+  // temPermissionamento: true,
   chavePermissao: RotasDto.RELATORIO_AEE_PLANO_IMPRESSAO,
 });
 
