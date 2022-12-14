@@ -345,14 +345,13 @@ class ServicoSalvarConselhoClasse {
         );
       } else {
         sucesso(mensagemSucesso);
-      }
-
-      if (bimestreAtual?.valor === 'final') {
-        this.gerarParecerConclusivo(
-          retorno?.data?.conselhoClasseId,
-          retorno?.data?.fechamentoTurmaId,
-          alunoCodigo
-        );
+        if (bimestreAtual?.valor === 'final') {
+          this.gerarParecerConclusivo(
+            retorno?.data?.conselhoClasseId,
+            retorno?.data?.fechamentoTurmaId,
+            alunoCodigo
+          );
+        }
       }
 
       const dadosCarregar = _.cloneDeep(resultado.data.notasConceitos);
