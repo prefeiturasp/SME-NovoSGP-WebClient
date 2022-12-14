@@ -112,6 +112,7 @@ import DashboardNAAPA from '~/paginas/Dashboard/DashboardNAAPA/dashboardNAAPA';
 import Suporte from '~/paginas/Configuracoes/Usuarios/Suporte/suporte';
 import ListaEncaminhamentoNAAPA from '~/paginas/NAAPA/Encaminhamento/Lista/listaEncaminhamentoNAAPA';
 import CadastroEncaminhamentoNAAPA from '~/paginas/NAAPA/Encaminhamento/Cadastro/encaminhamentoNAAPA';
+import RelatorioPlanoAEE from '~/paginas/Relatorios/AEE/plano/relatorioPlanoAEE';
 
 const rotas = new Map();
 
@@ -1583,6 +1584,17 @@ rotas.set(`${RotasDto.ENCAMINHAMENTO_NAAPA}/:id`, {
   tipo: RotasTipo.EstruturadaAutenticada,
   temPermissionamento: true,
   chavePermissao: RotasDto.ENCAMINHAMENTO_NAAPA,
+});
+
+rotas.set(RotasDto.RELATORIO_AEE_PLANO_IMPRESSAO, {
+  breadcrumbName: 'Plano',
+  menu: ['Relatórios', 'AEE'],
+  parent: '/',
+  component: RelatorioPlanoAEE,
+  exact: true,
+  tipo: RotasTipo.EstruturadaAutenticada,
+  // temPermissionamento: true,
+  chavePermissao: RotasDto.RELATORIO_AEE_PLANO_IMPRESSAO,
 });
 
 const rotasArray = [];

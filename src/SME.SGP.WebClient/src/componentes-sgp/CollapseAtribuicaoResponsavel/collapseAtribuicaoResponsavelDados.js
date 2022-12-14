@@ -54,7 +54,7 @@ const CollapseAtribuicaoResponsavelDados = props => {
   );
 
   const obterResponsaveisPAAI = useCallback(async () => {
-    const resposta = await ServicoEncaminhamentoAEE.obterResponsaveveisEncaminhamentoPAAI(
+    const resposta = await ServicoEncaminhamentoAEE.obterResponsaveisPAAIPesquisa(
       codigoTurma
     );
 
