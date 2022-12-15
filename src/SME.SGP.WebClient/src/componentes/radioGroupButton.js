@@ -50,6 +50,7 @@ const RadioGroupButton = ({
   opcoes,
   value,
   labelRequired,
+  setValueOnlyOnChange,
 }) => {
   const obterErros = () => {
     return form && form.touched[name] && form.errors[name] ? (
@@ -75,9 +76,13 @@ const RadioGroupButton = ({
             id={id || name}
             options={opcoes}
             onChange={e => {
-              form.setFieldValue(name, e.target.value);
-              onChange(e);
-              form.setFieldTouched(name, true, true);
+              if (setValueOnlyOnChange) {
+                if (onChange) onChange(e.target.value);
+              } else {
+                form.setFieldValue(name, e.target.value);
+                onChange(e.target.value);
+                form.setFieldTouched(name, true, true);
+              }
             }}
             defaultValue={valorInicial}
             disabled={desabilitado}
@@ -127,6 +132,7 @@ RadioGroupButton.propTypes = {
   desabilitado: PropTypes.bool,
   onChange: PropTypes.func,
   labelRequired: PropTypes.bool,
+  setValueOnlyOnChange: PropTypes.bool,
 };
 
 RadioGroupButton.defaultProps = {
@@ -135,6 +141,7 @@ RadioGroupButton.defaultProps = {
   desabilitado: false,
   onChange: () => {},
   labelRequired: false,
+  setValueOnlyOnChange: false,
 };
 
 export default RadioGroupButton;

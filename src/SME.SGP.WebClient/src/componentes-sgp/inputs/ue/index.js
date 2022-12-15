@@ -13,24 +13,28 @@ export const Ue = ({
   showSearch,
   labelRequired,
   mostrarOpcaoTodas,
+  nameList,
 }) => {
-  const [listaUes, setListaUes] = useState([]);
   const [exibirLoader, setExibirLoader] = useState(false);
 
   const { anoLetivo, dreCodigo } = form.values;
   const consideraHistorico = !!form.values?.consideraHistorico;
+  const listaUes = form.values?.[nameList];
+
+  const setInitialValues = !form?.values?.modoEdicao;
 
   const limparDados = () => {
-    setListaUes([]);
+    form.setFieldValue(nameList, []);
     form.setFieldValue(name, undefined);
-    // form.setFieldTouched(name, false, false);
   };
 
   const obterUes = useCallback(async () => {
+    if (!anoLetivo) return;
+
     const OPCAO_TODAS_UE = { codigo: OPCAO_TODOS, nome: 'Todas' };
 
     if (dreCodigo === OPCAO_TODOS) {
-      setListaUes([OPCAO_TODAS_UE]);
+      form.setFieldValue(nameList, [OPCAO_TODAS_UE]);
       form.setFieldValue(name, OPCAO_TODOS);
       return;
     }
@@ -49,12 +53,18 @@ export const Ue = ({
       const lista = resposta.data;
 
       if (lista?.length === 1) {
+        if (setInitialValues) {
+          form.initialValues[name] = String(lista[0]?.codigo);
+        }
         form.setFieldValue(name, String(lista[0]?.codigo));
       } else if (mostrarOpcaoTodas) {
         lista.unshift(OPCAO_TODAS_UE);
       }
 
-      setListaUes(lista);
+      if (setInitialValues) {
+        form.initialValues[nameList] = lista;
+      }
+      form.setFieldValue(nameList, lista);
     } else {
       limparDados();
     }
@@ -62,6 +72,8 @@ export const Ue = ({
   }, [consideraHistorico, anoLetivo, dreCodigo]);
 
   useEffect(() => {
+    if (form.initialValues[nameList]?.length && setInitialValues) return;
+
     limparDados();
     if (dreCodigo) obterUes();
 
@@ -77,12 +89,18 @@ export const Ue = ({
         valueText="nome"
         lista={listaUes}
         id={SGP_SELECT_UE}
-        onChange={onChange}
         showSearch={showSearch}
         labelRequired={labelRequired}
         label="Unidade Escolar (UE)"
         placeholder="Unidade Escolar (UE)"
         disabled={!dreCodigo || listaUes?.length === 1 || disabled}
+        setValueOnlyOnChange
+        onChange={newValue => {
+          form.setFieldValue('modoEdicao', true);
+          form.setFieldValue(name, newValue);
+          form.setFieldTouched(name, true, true);
+          onChange(newValue);
+        }}
       />
     </Loader>
   );
@@ -96,6 +114,7 @@ Ue.propTypes = {
   labelRequired: PropTypes.bool,
   mostrarOpcaoTodas: PropTypes.bool,
   form: PropTypes.oneOfType([PropTypes.any]),
+  nameList: PropTypes.string,
 };
 
 Ue.defaultProps = {
@@ -106,4 +125,5 @@ Ue.defaultProps = {
   labelRequired: true,
   onChange: () => null,
   mostrarOpcaoTodas: true,
+  nameList: 'listaUes',
 };

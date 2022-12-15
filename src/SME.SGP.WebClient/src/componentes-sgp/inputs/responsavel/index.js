@@ -56,7 +56,6 @@ export const Responsavel = React.memo(
           form={form}
           name={name}
           label="Responsável"
-          onChange={onChange}
           disabled={disabled}
           multiple={multiple}
           lista={responsaveis}
@@ -65,6 +64,14 @@ export const Responsavel = React.memo(
           valueText="nomeServidorFormatado"
           valueOption="codigoRF"
           placeholder="Pesquise por nome ou RF"
+          setValueOnlyOnChange
+          onChange={newValue => {
+            form.setFieldValue('modoEdicao', true);
+
+            form.setFieldValue(name, newValue);
+            form.setFieldTouched(name, true, true);
+            onChange(newValue);
+          }}
         />
       </Loader>
     );

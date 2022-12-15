@@ -13,19 +13,24 @@ export const Modalidade = ({
   showSearch,
   labelRequired,
   mostrarOpcaoTodas,
+  nameList,
 }) => {
   const [exibirLoader, setExibirLoader] = useState(false);
-  const [listaModalidades, setListaModalidades] = useState([]);
 
   const { anoLetivo, ueCodigo } = form.values;
   const consideraHistorico = !!form.values?.consideraHistorico;
+  const listaModalidades = form.values?.[nameList];
+
+  const setInitialValues = !form?.values?.modoEdicao;
 
   const limparDados = () => {
-    setListaModalidades([]);
+    form.setFieldValue(nameList, []);
     form.setFieldValue(name, undefined);
   };
 
   const obterModalidades = useCallback(async () => {
+    if (!anoLetivo) return;
+
     setExibirLoader(true);
 
     const resposta = await ServicoFiltroRelatorio.obterModalidades(
@@ -40,6 +45,9 @@ export const Modalidade = ({
       const lista = resposta.data;
 
       if (lista?.length === 1) {
+        if (setInitialValues) {
+          form.initialValues[name] = String(lista[0]?.valor);
+        }
         form.setFieldValue(name, String(lista[0]?.valor));
       } else if (mostrarOpcaoTodas) {
         const OPCAO_TODAS_TURMA = { valor: OPCAO_TODOS, descricao: 'Todas' };
@@ -47,7 +55,10 @@ export const Modalidade = ({
         lista.unshift(OPCAO_TODAS_TURMA);
       }
 
-      setListaModalidades(lista);
+      if (setInitialValues) {
+        form.initialValues[nameList] = lista;
+      }
+      form.setFieldValue(nameList, lista);
     } else {
       limparDados();
     }
@@ -55,6 +66,8 @@ export const Modalidade = ({
   }, [consideraHistorico, anoLetivo, ueCodigo]);
 
   useEffect(() => {
+    if (form.initialValues[nameList]?.length && setInitialValues) return;
+
     limparDados();
     if (ueCodigo) obterModalidades();
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -68,13 +81,20 @@ export const Modalidade = ({
         label="Modalidade"
         valueOption="valor"
         valueText="descricao"
-        onChange={onChange}
         showSearch={showSearch}
         lista={listaModalidades}
         id={SGP_SELECT_MODALIDADE}
         labelRequired={labelRequired}
         disabled={!ueCodigo || disabled || listaModalidades?.length === 1}
         placeholder="Selecione uma modalidade"
+        setValueOnlyOnChange
+        onChange={newValue => {
+          form.setFieldValue('modoEdicao', true);
+
+          form.setFieldValue(name, newValue);
+          form.setFieldTouched(name, true, true);
+          onChange(newValue);
+        }}
       />
     </Loader>
   );
@@ -88,6 +108,7 @@ Modalidade.propTypes = {
   labelRequired: PropTypes.bool,
   mostrarOpcaoTodas: PropTypes.bool,
   form: PropTypes.oneOfType([PropTypes.any]),
+  nameList: PropTypes.string,
 };
 
 Modalidade.defaultProps = {
@@ -98,4 +119,5 @@ Modalidade.defaultProps = {
   labelRequired: true,
   onChange: () => null,
   mostrarOpcaoTodas: true,
+  nameList: 'listaModalidades',
 };

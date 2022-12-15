@@ -16,21 +16,26 @@ export const Turma = ({
   showSearch,
   labelRequired,
   mostrarOpcaoTodas,
+  nameList,
 }) => {
-  const [listaTurmas, setListaTurmas] = useState([]);
   const [exibirLoader, setExibirLoader] = useState(false);
 
   const { anoLetivo, ueCodigo, modalidade, semestre } = form.values;
   const consideraHistorico = !!form.values?.consideraHistorico;
+  const listaTurmas = form.values?.[nameList];
+
+  const setInitialValues = !form?.values?.modoEdicao;
 
   const ehEJA = Number(modalidade) === ModalidadeDTO.EJA;
 
   const limparDados = () => {
-    setListaTurmas([]);
+    form.setFieldValue(nameList, []);
     form.setFieldValue(name, undefined);
   };
 
   const obterTurmas = useCallback(async () => {
+    if (!anoLetivo || !ueCodigo || !modalidade) return;
+
     if (ehEJA && !semestre) return;
 
     const OPCAO_TODAS_TURMA = { codigo: OPCAO_TODOS, nomeFiltro: 'Todas' };
@@ -38,7 +43,7 @@ export const Turma = ({
     if (ueCodigo === OPCAO_TODOS) {
       const codigoAtual = multiple ? [OPCAO_TODOS] : OPCAO_TODOS;
 
-      setListaTurmas([OPCAO_TODAS_TURMA]);
+      form.setFieldValue(nameList, [OPCAO_TODAS_TURMA]);
       form.setFieldValue(name, codigoAtual);
       return;
     }
@@ -59,23 +64,31 @@ export const Turma = ({
       const lista = retorno.data;
 
       if (lista.length === 1) {
-        const codigoAtual = String(lista[0]?.codigo);
+        let codigoAtual = String(lista[0]?.codigo);
+        codigoAtual = multiple ? [codigoAtual] : codigoAtual;
 
-        form.setFieldValue(name, multiple ? [codigoAtual] : codigoAtual);
+        if (setInitialValues) {
+          form.initialValues[name] = codigoAtual;
+        }
+        form.setFieldValue(name, codigoAtual);
       } else if (mostrarOpcaoTodas) {
         lista.unshift(OPCAO_TODAS_TURMA);
       }
 
-      setListaTurmas(lista);
+      if (setInitialValues) {
+        form.initialValues[nameList] = lista;
+      }
+      form.setFieldValue(nameList, lista);
     } else {
-      setListaTurmas([]);
+      limparDados();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [ueCodigo, modalidade, anoLetivo, consideraHistorico, semestre]);
 
   useEffect(() => {
-    limparDados();
+    if (form.initialValues[nameList]?.length && setInitialValues) return;
 
+    limparDados();
     if (modalidade) obterTurmas();
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -87,7 +100,10 @@ export const Turma = ({
     listaTurmas?.length === 1 ||
     disabled;
 
-  const onchangeMultiple = valores => form.setFieldValue(name, valores);
+  const setarNovoValor = newValue => {
+    form.setFieldValue(name, newValue || '');
+    form.setFieldTouched(name, true, true);
+  };
 
   return (
     <Loader loading={exibirLoader} ignorarTip>
@@ -104,11 +120,15 @@ export const Turma = ({
         disabled={desabilitar}
         showSearch={showSearch}
         labelRequired={labelRequired}
+        setValueOnlyOnChange
         onChange={valor => {
+          form.setFieldValue('modoEdicao', true);
+
           if (multiple) {
-            onchangeMultiSelect(valor, form.values[name], onchangeMultiple);
+            onchangeMultiSelect(valor, form.values[name], setarNovoValor);
             onChange(valor);
           } else {
+            setarNovoValor(valor);
             onChange(valor);
           }
         }}
@@ -126,15 +146,17 @@ Turma.propTypes = {
   labelRequired: PropTypes.bool,
   mostrarOpcaoTodas: PropTypes.bool,
   form: PropTypes.oneOfType([PropTypes.any]),
+  nameList: PropTypes.string,
 };
 
 Turma.defaultProps = {
   form: null,
-  name: 'turmaId',
+  name: 'turmaCodigo',
   disabled: false,
   multiple: false,
   showSearch: false,
   labelRequired: true,
   onChange: () => null,
   mostrarOpcaoTodas: true,
+  nameList: 'listaTurmas',
 };
