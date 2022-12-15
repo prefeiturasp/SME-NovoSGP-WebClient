@@ -13,21 +13,26 @@ export const Semestre = ({
   disabled,
   showSearch,
   labelRequired,
+  nameList,
 }) => {
   const [exibirLoader, setExibirLoader] = useState(false);
-  const [listaSemestres, setListaSemestres] = useState([]);
 
   const { anoLetivo, dreCodigo, ueCodigo, modalidade } = form.values;
   const consideraHistorico = !!form.values?.consideraHistorico;
+  const listaSemestres = form.values?.[nameList];
+
+  const setInitialValues = !form?.values?.modoEdicao;
 
   const ehEJA = Number(modalidade) === ModalidadeDTO.EJA;
 
   const limparDados = () => {
-    setListaSemestres([]);
+    form.setFieldValue(nameList, []);
     form.setFieldValue(name, undefined);
   };
 
   const obterSemestres = useCallback(async () => {
+    if (!anoLetivo || !dreCodigo || !ueCodigo || !modalidade) return;
+
     setExibirLoader(true);
 
     const retorno = await AbrangenciaServico.obterSemestres(
@@ -46,10 +51,16 @@ export const Semestre = ({
       });
 
       if (lista?.length === 1) {
+        if (setInitialValues) {
+          form.initialValues[name] = String(lista[0]?.valor);
+        }
         form.setFieldValue(name, String(lista[0]?.valor));
       }
 
-      setListaSemestres(lista);
+      if (setInitialValues) {
+        form.initialValues[nameList] = lista;
+      }
+      form.setFieldValue(nameList, lista);
     } else {
       limparDados();
     }
@@ -57,6 +68,8 @@ export const Semestre = ({
   }, [consideraHistorico, anoLetivo, modalidade, dreCodigo, ueCodigo]);
 
   useEffect(() => {
+    if (form.initialValues[nameList]?.length && setInitialValues) return;
+
     limparDados();
     if (modalidade && ehEJA) obterSemestres();
 
@@ -77,13 +90,20 @@ export const Semestre = ({
         label="Semestre"
         valueText="desc"
         valueOption="valor"
-        onChange={onChange}
         lista={listaSemestres}
         disabled={desabilitar}
         showSearch={showSearch}
         id={SGP_SELECT_SEMESTRE}
         labelRequired={ehEJA && labelRequired}
         placeholder="Selecione um semestre"
+        setValueOnlyOnChange
+        onChange={newValue => {
+          form.setFieldValue('modoEdicao', true);
+
+          form.setFieldValue(name, newValue || '');
+          form.setFieldTouched(name, true, true);
+          onChange(newValue);
+        }}
       />
     </Loader>
   );
@@ -96,6 +116,7 @@ Semestre.propTypes = {
   showSearch: PropTypes.bool,
   labelRequired: PropTypes.bool,
   form: PropTypes.oneOfType([PropTypes.any]),
+  nameList: PropTypes.string,
 };
 
 Semestre.defaultProps = {
@@ -105,4 +126,5 @@ Semestre.defaultProps = {
   showSearch: true,
   onChange: () => null,
   labelRequired: true,
+  nameList: 'listaSemestres',
 };

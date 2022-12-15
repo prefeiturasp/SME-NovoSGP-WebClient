@@ -52,7 +52,6 @@ export const PAAIResponsavel = React.memo(
           name={name}
           disabled={disabled}
           multiple={multiple}
-          onChange={onChange}
           label="PAAI responsável"
           allowClear={allowClear}
           lista={responsaveisPAAI}
@@ -60,6 +59,14 @@ export const PAAIResponsavel = React.memo(
           valueText="nomeServidorFormatado"
           id={SGP_SELECT_PAAI_RESPONSAVEL}
           placeholder="Pesquise por nome ou RF"
+          setValueOnlyOnChange
+          onChange={newValue => {
+            form.setFieldValue('modoEdicao', true);
+
+            form.setFieldValue(name, newValue);
+            form.setFieldTouched(name, true, true);
+            onChange(newValue);
+          }}
         />
       </Loader>
     );

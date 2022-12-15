@@ -48,7 +48,7 @@ const RelatorioPlanoAEEForm = props => {
     <Col span={24}>
       <Row gutter={[16, 16]}>
         <Col sm={24}>
-          <ExibirHistorico form={form} />
+          <ExibirHistorico form={form} onChange={onChangeCampos} />
         </Col>
       </Row>
 

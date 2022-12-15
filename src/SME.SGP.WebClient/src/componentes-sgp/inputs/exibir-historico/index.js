@@ -8,10 +8,17 @@ export const ExibirHistorico = ({ name, form, onChange, disabled }) => {
     <CheckboxComponent
       form={form}
       name={name}
-      onChange={onChange}
       disabled={disabled}
       label="Exibir histórico?"
       id={SGP_CHECKBOX_EXIBIR_HISTORICO}
+      setValueOnlyOnChange
+      onChangeCheckbox={checked => {
+        form.setFieldValue('modoEdicao', true);
+
+        form.setFieldValue(name, checked);
+        onChange(checked);
+        form.setFieldTouched(name, true, true);
+      }}
     />
   );
 };
