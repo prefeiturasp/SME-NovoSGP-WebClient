@@ -8,19 +8,25 @@ import RelatorioPlanoAEEBotoesAcoes from './relatorioPlanoAEEBotoesAcoes';
 import RelatorioPlanoAEEForm from './relatorioPlanoAEEForm';
 
 const RelatorioPlanoAEE = () => {
-  const [modoEdicao, setModoEdicao] = useState(false);
   const [gerandoRelatorio, setGerandoRelatorio] = useState(false);
   const [desabilitarGerar, setDesabilitarGerar] = useState(false);
 
   const inicial = {
+    modoEdicao: false,
     consideraHistorico: false,
     anoLetivo: undefined,
+    listaAnosLetivos: [],
     dreCodigo: undefined,
+    listaDres: [],
     ueCodigo: undefined,
+    listaUes: [],
     modalidade: undefined,
+    listaModalidades: [],
     semestre: undefined,
+    listaSemestres: [],
     codigosTurma: undefined,
-    situacao: undefined,
+    listaTurmas: [],
+    situacaoIds: undefined,
     exibirEncerrados: false,
     codigosResponsavel: undefined,
     codigosPAAIResponsavel: undefined,
@@ -57,10 +63,7 @@ const RelatorioPlanoAEE = () => {
     codigosTurma: Yup.string().required(textoCampoObrigatorio),
   });
 
-  const onChangeCampos = () => {
-    setModoEdicao(true);
-    setDesabilitarGerar(false);
-  };
+  const onChangeCampos = () => setDesabilitarGerar(false);
 
   return (
     <Loader loading={gerandoRelatorio}>
@@ -77,9 +80,7 @@ const RelatorioPlanoAEE = () => {
               <Cabecalho pagina="Plano">
                 <RelatorioPlanoAEEBotoesAcoes
                   form={form}
-                  modoEdicao={modoEdicao}
                   initialValues={initialValues}
-                  setModoEdicao={setModoEdicao}
                   desabilitarGerar={desabilitarGerar}
                   setGerandoRelatorio={setGerandoRelatorio}
                   setDesabilitarGerar={setDesabilitarGerar}

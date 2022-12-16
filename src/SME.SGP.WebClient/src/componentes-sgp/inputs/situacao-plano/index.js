@@ -46,7 +46,6 @@ export const SituacaoPlano = ({
       <SelectComponent
         name={name}
         form={form}
-        onChange={onChange}
         multiple={multiple}
         valueOption="codigo"
         valueText="descricao"
@@ -57,6 +56,14 @@ export const SituacaoPlano = ({
         id={SGP_SELECT_SITUACAO_PLANO}
         placeholder="Selecione uma situação do plano"
         disabled={listaSituacoes?.length === 1 || disabled}
+        setValueOnlyOnChange
+        onChange={newValue => {
+          form.setFieldValue('modoEdicao', true);
+
+          form.setFieldValue(name, newValue);
+          form.setFieldTouched(name, true, true);
+          onChange(newValue);
+        }}
       />
     </Loader>
   );

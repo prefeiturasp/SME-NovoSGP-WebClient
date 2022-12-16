@@ -20,13 +20,20 @@ export const ExibirPlanosEncerrados = ({
     <RadioGroupButton
       name={name}
       form={form}
-      onChange={onChange}
       desabilitado={disabled}
       valorInicial={valorInicial}
       labelRequired={labelRequired}
       label="Exibir planos encerrados"
       opcoes={opcoesExibirPlanosEncerrados}
       id={SGP_RADIO_EXIBIR_PLANOS_ENCERRADOS}
+      setValueOnlyOnChange
+      onChange={newValue => {
+        form.setFieldValue('modoEdicao', true);
+
+        form.setFieldValue(name, newValue);
+        onChange(newValue);
+        form.setFieldTouched(name, true, true);
+      }}
     />
   );
 };

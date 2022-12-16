@@ -9,6 +9,7 @@ import RotasDto from '~/dtos/rotasDto';
 import {
   setBimestreAtual,
   setDadosPrincipaisConselhoClasse,
+  setDentroPeriodo,
   setDesabilitarCampos,
   setExpandirLinha,
   setFechamentoPeriodoInicioFim,
@@ -129,6 +130,7 @@ const DadosConselhoClasse = props => {
           tipoNota,
           media,
           anoLetivo,
+          periodoAberto,
         } = retorno.data;
 
         const novoRegistro = !conselhoClasseId;
@@ -171,9 +173,11 @@ const DadosConselhoClasse = props => {
           alunoDesabilitado: desabilitado,
           tipoNota,
           media,
+          periodoAberto,
         };
 
         dispatch(setDadosPrincipaisConselhoClasse(valores));
+        dispatch(setDentroPeriodo(!!periodoAberto));
 
         const datas = {
           periodoFechamentoInicio,

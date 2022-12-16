@@ -14,15 +14,18 @@ export const Dre = ({
   showSearch,
   labelRequired,
   mostrarOpcaoTodas,
+  nameList,
 }) => {
-  const [listaDres, setListaDres] = useState([]);
   const [exibirLoader, setExibirLoader] = useState(false);
 
   const { anoLetivo } = form.values;
   const consideraHistorico = !!form.values?.consideraHistorico;
+  const listaDres = form.values?.[nameList];
+
+  const setInitialValues = !form?.values?.modoEdicao;
 
   const limparDados = () => {
-    setListaDres([]);
+    form.setFieldValue(nameList, []);
     form.setFieldValue(name, undefined);
   };
 
@@ -39,13 +42,19 @@ export const Dre = ({
       const lista = resposta.data.sort(FiltroHelper.ordenarLista('nome'));
 
       if (lista?.length === 1) {
+        if (setInitialValues) {
+          form.initialValues[name] = String(lista[0]?.codigo);
+        }
         form.setFieldValue(name, String(lista[0]?.codigo));
       } else if (mostrarOpcaoTodas) {
         const OPCAO_TODAS_DRE = { codigo: OPCAO_TODOS, nome: 'Todas' };
         lista.unshift(OPCAO_TODAS_DRE);
       }
 
-      setListaDres(lista);
+      if (setInitialValues) {
+        form.initialValues[nameList] = lista;
+      }
+      form.setFieldValue(nameList, lista);
     } else {
       limparDados();
     }
@@ -53,6 +62,8 @@ export const Dre = ({
   }, [anoLetivo, consideraHistorico]);
 
   useEffect(() => {
+    if (form.initialValues[nameList]?.length && setInitialValues) return;
+
     limparDados();
 
     if (anoLetivo) obterDres();
@@ -69,12 +80,19 @@ export const Dre = ({
         valueText="nome"
         valueOption="codigo"
         id={SGP_SELECT_DRE}
-        onChange={onChange}
         showSearch={showSearch}
         labelRequired={labelRequired}
         label="Diretoria Regional de Educação (DRE)"
         placeholder="Diretoria Regional De Educação (DRE)"
         disabled={!anoLetivo || listaDres?.length === 1 || disabled}
+        setValueOnlyOnChange
+        onChange={newValue => {
+          form.setFieldValue('modoEdicao', true);
+
+          form.setFieldValue(name, newValue);
+          form.setFieldTouched(name, true, true);
+          onChange(newValue);
+        }}
       />
     </Loader>
   );
@@ -88,6 +106,7 @@ Dre.propTypes = {
   labelRequired: PropTypes.bool,
   mostrarOpcaoTodas: PropTypes.bool,
   form: PropTypes.oneOfType([PropTypes.any]),
+  nameList: PropTypes.string,
 };
 
 Dre.defaultProps = {
@@ -98,4 +117,5 @@ Dre.defaultProps = {
   labelRequired: true,
   onChange: () => null,
   mostrarOpcaoTodas: true,
+  nameList: 'listaDres',
 };
