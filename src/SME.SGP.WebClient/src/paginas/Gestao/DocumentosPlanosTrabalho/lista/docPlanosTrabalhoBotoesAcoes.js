@@ -20,24 +20,22 @@ const DocPlanosTrabalhoBotoesAcoes = props => {
   };
 
   return (
-    <>
-      <Row gutter={[8, 8]} type="flex">
-        <Col>
-          <BotaoVoltarPadrao onClick={() => onClickVoltar()} />
-        </Col>
-        <Col>
-          <Button
-            id={SGP_BUTTON_NOVO}
-            label="Novo"
-            color={Colors.Roxo}
-            border
-            bold
-            onClick={onClickNovo}
-            disabled={desabilitarNovo}
-          />
-        </Col>
-      </Row>
-    </>
+    <Row gutter={[8, 8]} type="flex">
+      <Col>
+        <BotaoVoltarPadrao onClick={() => onClickVoltar()} />
+      </Col>
+      <Col>
+        <Button
+          id={SGP_BUTTON_NOVO}
+          label="Novo"
+          color={Colors.Roxo}
+          border
+          bold
+          onClick={onClickNovo}
+          disabled={desabilitarNovo}
+        />
+      </Col>
+    </Row>
   );
 };
 
