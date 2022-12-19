@@ -27,7 +27,17 @@ const DocPlanosTrabalhoCadastroForm = props => {
     DOCUMENTOS: '2',
   };
 
+  const TIPO_CLASSIFICACAO = {
+    DOCUMENTOS_DA_TURMA: '10',
+  };
+
   const auditoria = form?.initialValues?.auditoria;
+  const classificacaoId = form?.values?.classificacaoId;
+
+  const desabilitarUpload =
+    classificacaoId?.toString() !== TIPO_CLASSIFICACAO.DOCUMENTOS_DA_TURMA
+      ? form?.values?.listaArquivos?.length > 0
+      : false;
 
   const onRemoveFile = async arquivo => {
     if (!desabilitarCampos) {
@@ -155,7 +165,7 @@ const DocPlanosTrabalhoCadastroForm = props => {
             name="listaArquivos"
             id="lista-arquivos"
             desabilitarGeral={desabilitarCampos}
-            desabilitarUpload={form?.values?.listaArquivos.length > 0}
+            desabilitarUpload={desabilitarUpload}
             textoFormatoUpload="Permitido somente um arquivo. Tipo permitido PDF"
             tiposArquivosPermitidos=".pdf"
             onRemove={onRemoveFile}

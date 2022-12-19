@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 import { useSelector } from 'react-redux';
@@ -8,7 +8,8 @@ import { Cabecalho } from '~/componentes-sgp';
 import { ModalidadeDTO, RotasDto } from '~/dtos';
 import DocPlanosTrabalhoCadastroBotoesAcoes from './docPlanosTrabalhoCadastroBotoesAcoes';
 import DocPlanosTrabalhoCadastroForm from './docPlanosTrabalhoCadastroForm';
-import { verificaSomenteConsulta } from '~/servicos';
+import { erros, verificaSomenteConsulta } from '~/servicos';
+import ServicoDocumentosPlanosTrabalho from '~/servicos/Paginas/Gestao/DocumentosPlanosTrabalho/ServicoDocumentosPlanosTrabalho';
 
 const DocPlanosTrabalhoCadastro = () => {
   const routeMatch = useRouteMatch();
@@ -54,7 +55,9 @@ const DocPlanosTrabalhoCadastro = () => {
     listaArquivos: [],
   };
 
-  const [initialValues] = useState(inicial);
+  const [initialValues, setInitialValues] = useState(
+    idDocumentosPlanoTrabalho ? null : inicial
+  );
 
   const textoCampoObrigatorio = 'Campo obrigatório';
 
@@ -98,6 +101,51 @@ const DocPlanosTrabalhoCadastro = () => {
     //   ),
     // turmaCodigo: Yup.string().required(textoCampoObrigatorio),
   });
+
+  const obterDadosDocumento = useCallback(async () => {
+    setExibirLoader(true);
+
+    const resposta = await ServicoDocumentosPlanosTrabalho.obterDocumento(
+      idDocumentosPlanoTrabalho
+    )
+      .catch(e => erros(e))
+      .finally(() => setExibirLoader(false));
+
+    if (resposta?.status === 200) {
+      const valores = {
+        id: resposta.data.id,
+        tipoDocumentoId: String(resposta.data.tipoDocumentoId),
+        classificacaoId: String(resposta.data.classificacaoId),
+        ueCodigo: String(resposta.data.ueId),
+        dreCodigo: String(resposta.data.dreId),
+        anoLetivo: resposta.data.anoLetivo,
+        professorRf: resposta.data.professorRf,
+        listaArquivos: [],
+      };
+
+      let arquivos = resposta.data?.length ? resposta.data.arquivos : [];
+
+      if (arquivos?.length) {
+        arquivos = arquivos.map(arquivo => ({
+          uid: arquivo.codigoArquivo,
+          xhr: arquivo.codigoArquivo,
+          name: arquivo.nomeArquivo,
+          status: 'done',
+          documentoId: resposta.data.id,
+        }));
+      }
+
+      valores.listaArquivos = arquivos;
+
+      setInitialValues(valores);
+    }
+  }, [idDocumentosPlanoTrabalho]);
+
+  useEffect(() => {
+    if (idDocumentosPlanoTrabalho) {
+      obterDadosDocumento();
+    }
+  }, [idDocumentosPlanoTrabalho, obterDadosDocumento]);
 
   return (
     <Loader loading={exibirLoader}>

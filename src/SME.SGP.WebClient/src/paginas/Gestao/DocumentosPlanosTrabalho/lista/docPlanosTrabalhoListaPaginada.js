@@ -20,6 +20,20 @@ const DocPlanosTrabalhoListaPaginada = props => {
 
   const [filtros, setFiltros] = useState();
 
+  const TIPO_DOCUMENTO = {
+    DOCUMENTOS: '2',
+  };
+
+  const TIPO_CLASSIFICACAO = {
+    DOCUMENTOS_DA_TURMA: '10',
+  };
+
+  // TODO - VALIDAR
+  const ocultarColunaTurmaComponente =
+    (tipoDocumentoId && tipoDocumentoId !== TIPO_DOCUMENTO.DOCUMENTOS) ||
+    (classificacaoId &&
+      classificacaoId !== TIPO_CLASSIFICACAO.DOCUMENTOS_DA_TURMA);
+
   const formatarCampoDataGrid = data => {
     let dataFormatada = '';
     if (data) {
@@ -29,11 +43,13 @@ const DocPlanosTrabalhoListaPaginada = props => {
   };
 
   const onClickDownload = linha => {
-    ServicoArmazenamento.obterArquivoParaDownload(linha.codigoArquivo)
-      .then(resposta => {
-        downloadBlob(resposta.data, linha.nomeArquivo);
-      })
-      .catch(e => erros(e));
+    linha.arquivos.forEach(arquivo => {
+      ServicoArmazenamento.obterArquivoParaDownload(arquivo?.codigoArquivo)
+        .then(resposta => {
+          downloadBlob(resposta.data, arquivo?.nomeArquivo);
+        })
+        .catch(e => erros(e));
+    });
   };
 
   const colunas = [
@@ -54,23 +70,32 @@ const DocPlanosTrabalhoListaPaginada = props => {
       dataIndex: 'dataUpload',
       render: data => formatarCampoDataGrid(data),
     },
-    {
-      title: 'Anexo',
-      dataIndex: 'anexo',
-      width: '10%',
-      render: (_, linha) => {
-        return (
-          <Button
-            icon={`fas fa-arrow-down ${SGP_BUTTON_DOWNLOAD_ARQUIVO}`}
-            label="Download"
-            color={Colors.Azul}
-            className={`ml-2 text-center ${SGP_BUTTON_DOWNLOAD_ARQUIVO}`}
-            onClick={() => onClickDownload(linha)}
-          />
-        );
-      },
-    },
   ];
+
+  if (!ocultarColunaTurmaComponente) {
+    colunas.push({
+      title: 'Turma/Componente Curricular',
+      dataIndex: 'turmaComponenteCurricular',
+    });
+  }
+
+  colunas.push({
+    title: 'Anexo',
+    dataIndex: 'anexo',
+    width: '10%',
+    render: (_, linha) => {
+      const qtdAquivos = linha?.arquivos?.length;
+      return (
+        <Button
+          icon={`fas fa-arrow-down ${SGP_BUTTON_DOWNLOAD_ARQUIVO}`}
+          label={`Download de ${qtdAquivos || 0} arquivo(s)`}
+          color={Colors.Azul}
+          className={`ml-2 text-center ${SGP_BUTTON_DOWNLOAD_ARQUIVO}`}
+          onClick={() => qtdAquivos && onClickDownload(linha)}
+        />
+      );
+    },
+  });
 
   const filtrar = useCallback(() => {
     if (ueCodigo && listaUes?.length) {
