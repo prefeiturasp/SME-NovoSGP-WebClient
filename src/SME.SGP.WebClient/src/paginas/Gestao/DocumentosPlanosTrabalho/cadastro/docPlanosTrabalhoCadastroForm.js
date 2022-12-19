@@ -31,7 +31,7 @@ const DocPlanosTrabalhoCadastroForm = props => {
 
   const onRemoveFile = async arquivo => {
     if (!desabilitarCampos) {
-      const codigoArquivo = arquivo.xhr;
+      const codigoArquivo = arquivo?.xhr;
 
       if (arquivo.documentoId) {
         form.setFieldValue('listaArquivos', []);
@@ -160,7 +160,7 @@ const DocPlanosTrabalhoCadastroForm = props => {
             tiposArquivosPermitidos=".pdf"
             onRemove={onRemoveFile}
             urlUpload="v1/armazenamento/documentos/upload"
-            defaultFileList={form?.initialValues?.listaArquivos}
+            defaultFileList={form?.initialValues?.listaArquivos || []}
             label="Arquivo"
             labelRequired
             onChangeListaArquivos={() => {

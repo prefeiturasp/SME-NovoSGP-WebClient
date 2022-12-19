@@ -46,6 +46,7 @@ const DocPlanosTrabalhoCadastro = () => {
     // listaSemestres: [],
     // turmaCodigo: undefined,
     // listaTurmas: [],
+    listaTipoDocumento: [],
     tipoDocumentoId: undefined,
     listaClassificacoes: [],
     classificacaoId: undefined,

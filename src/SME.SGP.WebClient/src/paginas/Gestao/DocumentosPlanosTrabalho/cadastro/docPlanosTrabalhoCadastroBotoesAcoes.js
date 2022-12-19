@@ -1,4 +1,5 @@
 import { Col, Row } from 'antd';
+import _ from 'lodash';
 import PropTypes from 'prop-types';
 import React from 'react';
 import { Button, Colors } from '~/componentes';
@@ -42,7 +43,7 @@ const DocPlanosTrabalhoCadastroBotoesAcoes = props => {
       if (confirmado) {
         if (listaArquivos?.length) {
           listaArquivos.forEach(arquivo => {
-            if (!arquivo?.documentoId) {
+            if (!arquivo?.documentoId && arquivo?.xhr) {
               ServicoArmazenamento.removerArquivo(arquivo?.xhr);
             }
           });
@@ -53,6 +54,20 @@ const DocPlanosTrabalhoCadastroBotoesAcoes = props => {
       history.push(RotasDto.DOCUMENTOS_PLANOS_TRABALHO);
     }
   };
+
+  const resetarFormulario = () => {
+    const listaArquivosClonada = _.cloneDeep(
+      form?.initialValues?.listaArquivos
+    );
+
+    form.initialValues.listaArquivos = null;
+    form.setFieldValue('modoEdicao', false);
+    form.resetForm({
+      ...form.initialValues,
+      listaArquivos: listaArquivosClonada,
+    });
+  };
+
   const onClickCancelar = async () => {
     if (!desabilitarCampos && modoEdicao) {
       const confirmou = await confirmar(
@@ -64,15 +79,12 @@ const DocPlanosTrabalhoCadastroBotoesAcoes = props => {
         if (listaArquivos?.length) {
           let contador = 0;
           listaArquivos.forEach(arquivo => {
-            if (!arquivo?.documentoId) {
+            if (!arquivo?.documentoId && arquivo?.xhr) {
               ServicoArmazenamento.removerArquivo(arquivo?.xhr)
                 .then(() => {
                   contador = +1;
-
                   if (contador === listaArquivos?.length) {
-                    form.setFieldValue('listaArquivos', null);
-                    form.setFieldValue('modoEdicao', false);
-                    form.resetForm();
+                    resetarFormulario();
                   }
                 })
                 .catch(e => erros(e));
@@ -82,14 +94,10 @@ const DocPlanosTrabalhoCadastroBotoesAcoes = props => {
           });
 
           if (contador === listaArquivos?.length) {
-            form.setFieldValue('listaArquivos', null);
-            form.setFieldValue('modoEdicao', false);
-            form.resetForm();
+            resetarFormulario();
           }
         } else {
-          form.setFieldValue('listaArquivos', null);
-          form.setFieldValue('modoEdicao', false);
-          form.resetForm();
+          resetarFormulario();
         }
       }
     }
@@ -108,7 +116,7 @@ const DocPlanosTrabalhoCadastroBotoesAcoes = props => {
         .catch(e => erros(e))
         .finally(() => setExibirLoader(false));
 
-      if (resultado && resultado.status === 200) {
+      if (resultado?.status === 200) {
         sucesso('Registro excluído com sucesso!');
         history.push(RotasDto.DOCUMENTOS_PLANOS_TRABALHO);
       }
@@ -125,7 +133,7 @@ const DocPlanosTrabalhoCadastroBotoesAcoes = props => {
     } = valores;
 
     const ueSelecionada = listaUes.find(
-      item => String(item.valor) === String(ueCodigo)
+      item => String(item.codigo) === String(ueCodigo)
     );
 
     setExibirLoader(true);
@@ -134,7 +142,7 @@ const DocPlanosTrabalhoCadastroBotoesAcoes = props => {
       tipoDocumentoId,
       classificacaoId,
       usuarioId,
-      ueSelecionada.id
+      ueSelecionada?.id
     ).catch(e => {
       erros(e);
       setExibirLoader(false);
@@ -153,9 +161,10 @@ const DocPlanosTrabalhoCadastroBotoesAcoes = props => {
       return;
     }
 
-    // const arquivoCodigo = listaDeArquivos[0].xhr;
     const params = {
-      // arquivoCodigo,
+      arquivosCodigos: valores?.listaArquivos?.length
+        ? valores.listaArquivos.map(l => l?.xhr)
+        : [],
       ueId: ueSelecionada.id,
       tipoDocumentoId,
       classificacaoId,
@@ -170,10 +179,10 @@ const DocPlanosTrabalhoCadastroBotoesAcoes = props => {
       .catch(e => erros(e))
       .finally(() => setExibirLoader(false));
 
-    if (resposta && resposta.status === 200) {
+    if (resposta?.status === 200) {
       sucesso(
         `Registro ${
-          idDocumentosPlanoTrabalho ? 'alterado' : 'salvo'
+          idDocumentosPlanoTrabalho ? 'alterado' : 'cadastrado'
         } com sucesso`
       );
       history.push(RotasDto.DOCUMENTOS_PLANOS_TRABALHO);
