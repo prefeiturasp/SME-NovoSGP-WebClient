@@ -12,9 +12,19 @@ export const TipoDocumento = ({
   disabled,
   showSearch,
   labelRequired,
+  nameList,
 }) => {
   const [exibirLoader, setExibirLoader] = useState(false);
-  const [listaTipoDocumento, setListaTipoDocumento] = useState([]);
+
+  const listaTipoDocumento = form.values?.[nameList];
+  const setInitialValues = !form?.values?.modoEdicao;
+
+  const limparDados = () => {
+    form.setFieldValue(nameList, []);
+    form.setFieldValue(name, undefined);
+    form.setFieldValue('listaClassificacoes', []);
+    form.setFieldValue('classificacaoId', undefined);
+  };
 
   const obterTiposDocumento = useCallback(async () => {
     setExibirLoader(true);
@@ -23,22 +33,43 @@ export const TipoDocumento = ({
     );
 
     if (resposta?.data?.length) {
-      setListaTipoDocumento(resposta.data);
-      if (resposta.data.length === 1) {
-        const tipo = resposta.data[0];
+      const lista = resposta.data;
+
+      form.setFieldValue(nameList, lista);
+      if (setInitialValues) {
+        form.initialValues[nameList] = lista;
+      }
+
+      if (lista.length === 1) {
+        const tipo = lista[0];
+
         form.setFieldValue(name, String(tipo.id));
+        if (setInitialValues) {
+          form.initialValues[name] = String(tipo.id);
+        }
 
         if (tipo.classificacoes.length === 1) {
           form.setFieldValue('listaClassificacoes', tipo.classificacoes);
+          if (setInitialValues) {
+            form.initialValues.listaClassificacoes = tipo.classificacoes;
+          }
+
           const classificacao = tipo.classificacoes[0];
           form.setFieldValue('classificacaoId', String(classificacao.id));
+          if (setInitialValues) {
+            form.initialValues.classificacaoId = String(classificacao.id);
+          }
         }
       }
     }
     setExibirLoader(false);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [form, name]);
 
   useEffect(() => {
+    if (form.initialValues?.[nameList]?.length && setInitialValues) return;
+
+    limparDados();
     obterTiposDocumento();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -90,6 +121,7 @@ TipoDocumento.propTypes = {
   showSearch: PropTypes.bool,
   labelRequired: PropTypes.bool,
   form: PropTypes.oneOfType([PropTypes.any]),
+  nameList: PropTypes.string,
 };
 
 TipoDocumento.defaultProps = {
@@ -99,4 +131,5 @@ TipoDocumento.defaultProps = {
   labelRequired: false,
   onChange: () => null,
   name: 'tipoDocumentoId',
+  nameList: 'listaTipoDocumento',
 };
