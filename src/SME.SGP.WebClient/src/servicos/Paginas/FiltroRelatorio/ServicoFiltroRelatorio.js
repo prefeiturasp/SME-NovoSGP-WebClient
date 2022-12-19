@@ -34,9 +34,10 @@ class ServicoFiltroRelatorio {
   obterModalidadesPorAbrangenciaHistorica = (
     codigoUe,
     consideraNovasModalidades = false,
-    consideraHistorico = true
+    consideraHistorico = true,
+    anoLetivo
   ) => {
-    const url = `${urlPadrao}/ues/${codigoUe}/modalidades/abrangencias?consideraNovasModalidades=${consideraNovasModalidades}&consideraHistorico=${consideraHistorico}`;
+    const url = `${urlPadrao}/ues/${codigoUe}/modalidades/abrangencias?consideraNovasModalidades=${consideraNovasModalidades}&consideraHistorico=${consideraHistorico}&anoLetivo=${anoLetivo}`;
     return api.get(url);
   };
 
