@@ -339,13 +339,34 @@ class ServicoSalvarConselhoClasse {
         ehNota ? 'salva' : 'salvo'
       } com sucesso`;
 
+      const verificarSeTemTodasNotasPreenchidas = () => {
+        let todasNotasPreenchidas = true;
+
+        if (resultado?.data?.notasConceitos?.length) {
+          resultado.data.notasConceitos.forEach(value => {
+            const resultadoFiltro = value.componentesCurriculares.filter(
+              item => item?.notaPosConselho?.nota === null
+            );
+
+            todasNotasPreenchidas = !resultadoFiltro.length;
+          });
+        } else {
+          todasNotasPreenchidas = false;
+        }
+
+        return todasNotasPreenchidas;
+      };
+
       if (emAprovacao) {
         sucesso(
           `${mensagemSucesso}. Em até 24 horas será enviado para aprovação e será considerado válido após a aprovação do último nível.`
         );
       } else {
         sucesso(mensagemSucesso);
-        if (bimestreAtual?.valor === 'final') {
+        if (
+          bimestreAtual?.valor === 'final' &&
+          verificarSeTemTodasNotasPreenchidas()
+        ) {
           this.gerarParecerConclusivo(
             retorno?.data?.conselhoClasseId,
             retorno?.data?.fechamentoTurmaId,

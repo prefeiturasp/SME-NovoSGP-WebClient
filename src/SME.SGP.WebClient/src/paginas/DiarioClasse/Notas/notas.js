@@ -688,6 +688,8 @@ const Notas = ({ match }) => {
       return;
     }
 
+    let dadosBimestreAtualizar = null;
+
     if (primeiroBimestre.modoEdicao) {
       montaQtdAvaliacaoBimestralPendent(
         primeiroBimestre,
@@ -696,6 +698,7 @@ const Notas = ({ match }) => {
       valoresBimestresSalvar.push(
         montarBimestreParaSalvarNotaFinal(primeiroBimestre)
       );
+      dadosBimestreAtualizar = primeiroBimestre;
     }
     if (segundoBimestre.modoEdicao) {
       montaQtdAvaliacaoBimestralPendent(
@@ -705,6 +708,7 @@ const Notas = ({ match }) => {
       valoresBimestresSalvar.push(
         montarBimestreParaSalvarNotaFinal(segundoBimestre)
       );
+      dadosBimestreAtualizar = segundoBimestre;
     }
     if (terceiroBimestre.modoEdicao) {
       montaQtdAvaliacaoBimestralPendent(
@@ -714,6 +718,7 @@ const Notas = ({ match }) => {
       valoresBimestresSalvar.push(
         montarBimestreParaSalvarNotaFinal(terceiroBimestre)
       );
+      dadosBimestreAtualizar = terceiroBimestre;
     }
     if (quartoBimestre.modoEdicao) {
       montaQtdAvaliacaoBimestralPendent(
@@ -723,6 +728,7 @@ const Notas = ({ match }) => {
       valoresBimestresSalvar.push(
         montarBimestreParaSalvarNotaFinal(quartoBimestre)
       );
+      dadosBimestreAtualizar = quartoBimestre;
     }
 
     try {
@@ -780,6 +786,31 @@ const Notas = ({ match }) => {
                     auditoriaBimestreAlterado,
                   };
                 });
+              }
+              const fechamentoTurmaId = salvouNotas?.data?.[0]?.id;
+
+              if (
+                !dadosBimestreAtualizar?.fechamentoTurmaId &&
+                fechamentoTurmaId
+              ) {
+                dadosBimestreAtualizar.fechamentoTurmaId = fechamentoTurmaId;
+
+                switch (dadosBimestreAtualizar?.numero) {
+                  case 1:
+                    setPrimeiroBimestre({ ...dadosBimestreAtualizar });
+                    break;
+                  case 2:
+                    setSegundoBimestre({ ...dadosBimestreAtualizar });
+                    break;
+                  case 3:
+                    setTerceiroBimestre({ ...dadosBimestreAtualizar });
+                    break;
+                  case 4:
+                    setQuartoBimestre({ ...dadosBimestreAtualizar });
+                    break;
+                  default:
+                    break;
+                }
               }
               return resolve(true);
             }
