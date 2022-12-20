@@ -85,6 +85,9 @@ function Localizador({
     if (valor.length < buscarCaracterPartir) return;
     setDataSource([]);
     setExibirLoader(true);
+
+    if (!anoLetivo) return;
+
     const { data: dados } = await service
       .buscarAutocomplete({
         nome: valor,
@@ -114,6 +117,8 @@ function Localizador({
           erro('O campo RF é obrigatório.');
           return;
         }
+
+        if (!anoLetivo) return;
 
         buscandoDados(true);
         setExibirLoader(true);
