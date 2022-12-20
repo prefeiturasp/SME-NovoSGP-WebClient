@@ -8,8 +8,13 @@ import { Cabecalho } from '~/componentes-sgp';
 import { ModalidadeDTO, RotasDto } from '~/dtos';
 import DocPlanosTrabalhoCadastroBotoesAcoes from './docPlanosTrabalhoCadastroBotoesAcoes';
 import DocPlanosTrabalhoCadastroForm from './docPlanosTrabalhoCadastroForm';
-import { erros, verificaSomenteConsulta } from '~/servicos';
+import {
+  erros,
+  setBreadcrumbManual,
+  verificaSomenteConsulta,
+} from '~/servicos';
 import ServicoDocumentosPlanosTrabalho from '~/servicos/Paginas/Gestao/DocumentosPlanosTrabalho/ServicoDocumentosPlanosTrabalho';
+import { TIPO_CLASSIFICACAO } from '~/constantes';
 
 const DocPlanosTrabalhoCadastro = () => {
   const routeMatch = useRouteMatch();
@@ -41,12 +46,14 @@ const DocPlanosTrabalhoCadastro = () => {
     listaDres: [],
     ueCodigo: undefined,
     listaUes: [],
-    // modalidade: undefined,
-    // listaModalidades: [],
-    // semestre: undefined,
-    // listaSemestres: [],
-    // turmaCodigo: undefined,
-    // listaTurmas: [],
+    modalidade: undefined,
+    listaModalidades: [],
+    semestre: undefined,
+    listaSemestres: [],
+    turmaCodigo: undefined,
+    listaTurmas: [],
+    codigoComponenteCurricular: undefined,
+    listaComponentesCurriculares: [],
     listaTipoDocumento: [],
     tipoDocumentoId: undefined,
     listaClassificacoes: [],
@@ -60,6 +67,20 @@ const DocPlanosTrabalhoCadastro = () => {
   );
 
   const textoCampoObrigatorio = 'Campo obrigatório';
+
+  const validacaoCampoObrigatorio = (valores, valorCampoAtual) => {
+    let ehValido = true;
+
+    const classificacaoId = valores?.classificacaoId;
+
+    const ehClassificacaoDocumentosTurma =
+      classificacaoId?.toString() === TIPO_CLASSIFICACAO.DOCUMENTOS_DA_TURMA;
+
+    if (ehClassificacaoDocumentosTurma && !valorCampoAtual) {
+      ehValido = false;
+    }
+    return ehValido;
+  };
 
   const validacoes = Yup.object({
     anoLetivo: Yup.string().required(textoCampoObrigatorio),
@@ -79,27 +100,58 @@ const DocPlanosTrabalhoCadastro = () => {
         return false;
       }
     ),
-    // modalidade: Yup.string().required(textoCampoObrigatorio),
-    // semestre: Yup.string()
-    //   .nullable()
-    //   .test(
-    //     'validaSeEjaSelecionado',
-    //     textoCampoObrigatorio,
-    //     function validar() {
-    //       const { modalidade, semestre } = this.parent;
-    //       const temModalidadeEja = Number(modalidade) === ModalidadeDTO.EJA;
+    modalidade: Yup.string()
+      .nullable()
+      .test(
+        'validacaoCampoObrigatorio',
+        textoCampoObrigatorio,
+        function validar() {
+          const { modalidade } = this.parent;
+          return validacaoCampoObrigatorio(this.parent, modalidade);
+        }
+      ),
+    semestre: Yup.string()
+      .nullable()
+      .test(
+        'validaSeEjaSelecionado',
+        textoCampoObrigatorio,
+        function validar() {
+          const { modalidade, semestre } = this.parent;
+          const temModalidadeEja = Number(modalidade) === ModalidadeDTO.EJA;
 
-    //       let ehValido = true;
-    //       if (!temModalidadeEja) {
-    //         return ehValido;
-    //       }
-    //       if (!semestre) {
-    //         ehValido = false;
-    //       }
-    //       return ehValido;
-    //     }
-    //   ),
-    // turmaCodigo: Yup.string().required(textoCampoObrigatorio),
+          let ehValido = true;
+          if (!temModalidadeEja) {
+            return ehValido;
+          }
+          if (!semestre) {
+            ehValido = false;
+          }
+          return ehValido;
+        }
+      ),
+    turmaCodigo: Yup.string()
+      .nullable()
+      .test(
+        'validacaoCampoObrigatorio',
+        textoCampoObrigatorio,
+        function validar() {
+          const { turmaCodigo } = this.parent;
+          return validacaoCampoObrigatorio(this.parent, turmaCodigo);
+        }
+      ),
+    codigoComponenteCurricular: Yup.string()
+      .nullable()
+      .test(
+        'validacaoCampoObrigatorio',
+        textoCampoObrigatorio,
+        function validar() {
+          const { codigoComponenteCurricular } = this.parent;
+          return validacaoCampoObrigatorio(
+            this.parent,
+            codigoComponenteCurricular
+          );
+        }
+      ),
   });
 
   const obterDadosDocumento = useCallback(async () => {
@@ -137,6 +189,15 @@ const DocPlanosTrabalhoCadastro = () => {
 
       valores.listaArquivos = arquivos;
 
+      valores.auditoria = {
+        alteradoEm: resposta.data?.alteradoEm,
+        alteradoPor: resposta.data?.alteradoPor,
+        alteradoRf: resposta.data?.alteradoRF,
+        criadoEm: resposta.data?.criadoEm,
+        criadoPor: resposta.data?.criadoPor,
+        criadoRf: resposta.data?.criadoRF,
+      };
+
       setInitialValues(valores);
     }
   }, [idDocumentosPlanoTrabalho]);
@@ -146,6 +207,16 @@ const DocPlanosTrabalhoCadastro = () => {
       obterDadosDocumento();
     }
   }, [idDocumentosPlanoTrabalho, obterDadosDocumento]);
+
+  useEffect(() => {
+    if (idDocumentosPlanoTrabalho) {
+      setBreadcrumbManual(
+        routeMatch.url,
+        'Upload do arquivo',
+        RotasDto.DOCUMENTOS_PLANOS_TRABALHO
+      );
+    }
+  }, [idDocumentosPlanoTrabalho, routeMatch]);
 
   return (
     <Loader loading={exibirLoader}>

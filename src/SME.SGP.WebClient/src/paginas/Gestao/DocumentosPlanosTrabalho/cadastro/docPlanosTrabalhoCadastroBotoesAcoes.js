@@ -5,6 +5,7 @@ import React from 'react';
 import { Button, Colors } from '~/componentes';
 import BotaoExcluirPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoExcluirPadrao';
 import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
+import { TIPO_CLASSIFICACAO } from '~/constantes';
 import {
   SGP_BUTTON_ALTERAR_CADASTRAR,
   SGP_BUTTON_CANCELAR,
@@ -171,6 +172,11 @@ const DocPlanosTrabalhoCadastroBotoesAcoes = props => {
       usuarioId,
       anoLetivo,
     };
+
+    if (classificacaoId === TIPO_CLASSIFICACAO.DOCUMENTOS_DA_TURMA) {
+      params.turmaId = valores?.turmaCodigo;
+      params.componenteCurricularId = valores?.codigoComponenteCurricular;
+    }
 
     const resposta = await ServicoDocumentosPlanosTrabalho.salvarDocumento(
       params,

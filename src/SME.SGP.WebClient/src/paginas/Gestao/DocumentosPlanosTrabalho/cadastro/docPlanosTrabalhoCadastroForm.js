@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import { Col, Row } from 'antd';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import {
   ExibirHistorico,
@@ -17,27 +17,56 @@ import UploadArquivos from '~/componentes-sgp/UploadArquivos/uploadArquivos';
 import { erros, sucesso } from '~/servicos';
 import ServicoArmazenamento from '~/servicos/Componentes/ServicoArmazenamento';
 import { Auditoria, Localizador } from '~/componentes';
+import { ComponenteCurricular } from '~/componentes-sgp/inputs/componenteCurricular';
+import { TIPO_CLASSIFICACAO, TIPO_DOCUMENTO } from '~/constantes';
+import { SGP_UPLOAD_DOCUMENTOS_PLANOS_DE_TRABALHO } from '~/constantes/ids/upload';
 
 const DocPlanosTrabalhoCadastroForm = props => {
   const { form, desabilitarCampos, idDocumentosPlanoTrabalho } = props;
 
   const usuario = useSelector(store => store.usuario);
 
-  const TIPO_DOCUMENTO = {
-    DOCUMENTOS: '2',
-  };
-
-  const TIPO_CLASSIFICACAO = {
-    DOCUMENTOS_DA_TURMA: '10',
-  };
-
   const auditoria = form?.initialValues?.auditoria;
   const classificacaoId = form?.values?.classificacaoId;
+  const tipoDocumentoId = form?.initialValues?.tipoDocumentoId;
+  const listaTipoDocumento = form?.initialValues?.listaTipoDocumento;
 
-  const desabilitarUpload =
-    classificacaoId?.toString() !== TIPO_CLASSIFICACAO.DOCUMENTOS_DA_TURMA
-      ? form?.values?.listaArquivos?.length > 0
-      : false;
+  const ehClassificacaoDocumentosTurma =
+    classificacaoId?.toString() === TIPO_CLASSIFICACAO.DOCUMENTOS_DA_TURMA;
+
+  const desabilitarUpload = !ehClassificacaoDocumentosTurma
+    ? form?.values?.listaArquivos?.length > 0
+    : false;
+
+  const tiposArquivosDocTurma =
+    '.docx,.doc,.xls,.xlsx,.ppt,.pptx,.txt,.pdf,.jpeg,.jpg,.png';
+
+  const tiposArquivosPermitidos = ehClassificacaoDocumentosTurma
+    ? tiposArquivosDocTurma
+    : '.pdf';
+
+  const textoFormatoUpload = ehClassificacaoDocumentosTurma
+    ? ''
+    : 'Permitido somente um arquivo. Tipo permitido PDF';
+
+  useEffect(() => {
+    if (
+      idDocumentosPlanoTrabalho &&
+      tipoDocumentoId &&
+      listaTipoDocumento?.length
+    ) {
+      // TODO
+      let classificacaoPorTipo = [];
+
+      const lista = listaTipoDocumento.find(
+        item => String(item.id) === String(tipoDocumentoId)
+      );
+      classificacaoPorTipo = lista.classificacoes;
+      form.initialValues.listaClassificacoes = classificacaoPorTipo;
+      form.values.listaClassificacoes = classificacaoPorTipo;
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [tipoDocumentoId, idDocumentosPlanoTrabalho, listaTipoDocumento]);
 
   const onRemoveFile = async arquivo => {
     if (!desabilitarCampos) {
@@ -74,50 +103,100 @@ const DocPlanosTrabalhoCadastroForm = props => {
     }
   };
 
+  const onChangeClassificacao = id => {
+    if (id === TIPO_CLASSIFICACAO.DOCUMENTOS_DA_TURMA) {
+      form.setFieldValue('professorRf', '');
+      form.setFieldValue('professorNome', '');
+      form.setFieldValue('usuarioId', '');
+      setTimeout(() => {
+        form.setFieldValue('professorRf', usuario.rf);
+      }, 600);
+    }
+  };
+
   return (
     <Col span={24}>
       <Row gutter={[16, 16]}>
         <Col sm={24}>
-          <ExibirHistorico form={form} />
+          <ExibirHistorico
+            form={form}
+            disabled={desabilitarCampos || !!idDocumentosPlanoTrabalho}
+          />
         </Col>
       </Row>
 
       <Row gutter={[16, 16]}>
         <Col sm={24} md={8} lg={4}>
-          <AnoLetivo form={form} />
+          <AnoLetivo
+            form={form}
+            disabled={desabilitarCampos || !!idDocumentosPlanoTrabalho}
+          />
         </Col>
 
         <Col sm={24} md={24} lg={10}>
-          <Dre form={form} mostrarOpcaoTodas={false} />
+          <Dre
+            form={form}
+            disabled={desabilitarCampos || !!idDocumentosPlanoTrabalho}
+            mostrarOpcaoTodas={false}
+          />
         </Col>
 
         <Col sm={24} md={24} lg={10}>
-          <Ue form={form} mostrarOpcaoTodas={false} />
+          <Ue
+            form={form}
+            disabled={desabilitarCampos || !!idDocumentosPlanoTrabalho}
+            mostrarOpcaoTodas={false}
+          />
         </Col>
       </Row>
 
       <Row gutter={[16, 16]}>
         <Col sm={24} md={12}>
-          <TipoDocumento form={form} onChange={onChangeTipoDocumento} />
+          <TipoDocumento
+            form={form}
+            disabled={desabilitarCampos || !!idDocumentosPlanoTrabalho}
+            onChange={onChangeTipoDocumento}
+            labelRequired
+          />
         </Col>
         <Col sm={24} md={12}>
-          <ClassificacaoDocumento form={form} />
+          <ClassificacaoDocumento
+            form={form}
+            disabled={desabilitarCampos || !!idDocumentosPlanoTrabalho}
+            onChange={onChangeClassificacao}
+            labelRequired
+          />
         </Col>
       </Row>
+      {ehClassificacaoDocumentosTurma && (
+        <Row gutter={[16, 16]}>
+          <Col sm={24} md={12} lg={8}>
+            <Modalidade
+              form={form}
+              mostrarOpcaoTodas={false}
+              disabled={desabilitarCampos || !!idDocumentosPlanoTrabalho}
+            />
+          </Col>
 
-      {/* <Row gutter={[16, 16]}>
-        <Col sm={24} md={12} lg={8}>
-          <Modalidade form={form} mostrarOpcaoTodas={false} />
-        </Col>
+          <Col sm={24} md={12} lg={6}>
+            <Semestre form={form} />
+          </Col>
 
-        <Col sm={24} md={12} lg={6}>
-          <Semestre form={form} />
-        </Col>
-
-        <Col sm={24} lg={10}>
-          <Turma form={form} mostrarOpcaoTodas={false} />
-        </Col>
-      </Row> */}
+          <Col sm={24} md={12} lg={10}>
+            <Turma
+              form={form}
+              mostrarOpcaoTodas={false}
+              disabled={desabilitarCampos || !!idDocumentosPlanoTrabalho}
+            />
+          </Col>
+          <Col sm={24} md={12} lg={24}>
+            <ComponenteCurricular
+              form={form}
+              disabled={desabilitarCampos || !!idDocumentosPlanoTrabalho}
+            />
+          </Col>
+        </Row>
+      )}
       <Row gutter={[16, 16]}>
         <Localizador
           novaEstrutura
@@ -163,11 +242,11 @@ const DocPlanosTrabalhoCadastroForm = props => {
           <UploadArquivos
             form={form}
             name="listaArquivos"
-            id="lista-arquivos"
+            id={SGP_UPLOAD_DOCUMENTOS_PLANOS_DE_TRABALHO}
             desabilitarGeral={desabilitarCampos}
             desabilitarUpload={desabilitarUpload}
-            textoFormatoUpload="Permitido somente um arquivo. Tipo permitido PDF"
-            tiposArquivosPermitidos=".pdf"
+            textoFormatoUpload={textoFormatoUpload}
+            tiposArquivosPermitidos={tiposArquivosPermitidos}
             onRemove={onRemoveFile}
             urlUpload="v1/armazenamento/documentos/upload"
             defaultFileList={form?.initialValues?.listaArquivos || []}
@@ -179,13 +258,9 @@ const DocPlanosTrabalhoCadastroForm = props => {
           />
         </Col>
       </Row>
-      {auditoria?.criadoRF && (
-        <Auditoria
-          {...auditoria}
-          criadoRf={auditoria.criadoRF}
-          alteradoRf={auditoria.alteradoRF}
-        />
-      )}
+      <Row gutter={[24]}>
+        {auditoria?.criadoEm && <Auditoria ignorarMarginTop {...auditoria} />}
+      </Row>
     </Col>
   );
 };

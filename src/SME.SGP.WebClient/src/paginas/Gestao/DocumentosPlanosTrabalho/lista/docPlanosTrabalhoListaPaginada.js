@@ -44,9 +44,9 @@ const DocPlanosTrabalhoListaPaginada = props => {
 
   const onClickDownload = linha => {
     linha.arquivos.forEach(arquivo => {
-      ServicoArmazenamento.obterArquivoParaDownload(arquivo?.codigoArquivo)
+      ServicoArmazenamento.obterArquivoParaDownload(arquivo?.codigo)
         .then(resposta => {
-          downloadBlob(resposta.data, arquivo?.nomeArquivo);
+          downloadBlob(resposta.data, arquivo?.nome);
         })
         .catch(e => erros(e));
     });
@@ -67,7 +67,7 @@ const DocPlanosTrabalhoListaPaginada = props => {
     },
     {
       title: 'Data de inclusão',
-      dataIndex: 'dataUpload',
+      dataIndex: 'data',
       render: data => formatarCampoDataGrid(data),
     },
   ];
