@@ -173,9 +173,19 @@ const DocPlanosTrabalhoCadastroBotoesAcoes = props => {
       anoLetivo,
     };
 
-    if (classificacaoId === TIPO_CLASSIFICACAO.DOCUMENTOS_DA_TURMA) {
-      params.turmaId = valores?.turmaCodigo;
-      params.componenteCurricularId = valores?.codigoComponenteCurricular;
+    if (
+      classificacaoId?.toString() === TIPO_CLASSIFICACAO.DOCUMENTOS_DA_TURMA
+    ) {
+      const turmaAtual = valores.listaTurmas.find(
+        t => t.codigo?.toString() === valores?.turmaCodigo?.toString()
+      );
+      const componenteAtual = valores.listaComponentesCurriculares.find(
+        t =>
+          t.codigoComponenteCurricular?.toString() ===
+          valores?.codigoComponenteCurricular?.toString()
+      );
+      params.turmaId = turmaAtual?.id;
+      params.componenteCurricularId = componenteAtual?.id;
     }
 
     const resposta = await ServicoDocumentosPlanosTrabalho.salvarDocumento(

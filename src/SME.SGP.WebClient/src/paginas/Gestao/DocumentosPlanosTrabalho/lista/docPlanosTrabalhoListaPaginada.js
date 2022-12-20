@@ -28,11 +28,11 @@ const DocPlanosTrabalhoListaPaginada = props => {
     DOCUMENTOS_DA_TURMA: '10',
   };
 
-  // TODO - VALIDAR
   const ocultarColunaTurmaComponente =
-    (tipoDocumentoId && tipoDocumentoId !== TIPO_DOCUMENTO.DOCUMENTOS) ||
+    (tipoDocumentoId &&
+      tipoDocumentoId?.toString() !== TIPO_DOCUMENTO.DOCUMENTOS) ||
     (classificacaoId &&
-      classificacaoId !== TIPO_CLASSIFICACAO.DOCUMENTOS_DA_TURMA);
+      classificacaoId?.toString() !== TIPO_CLASSIFICACAO.DOCUMENTOS_DA_TURMA);
 
   const formatarCampoDataGrid = data => {
     let dataFormatada = '';
