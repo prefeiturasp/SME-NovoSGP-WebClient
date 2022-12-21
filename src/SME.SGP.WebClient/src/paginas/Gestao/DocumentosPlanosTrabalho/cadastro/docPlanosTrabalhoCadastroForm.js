@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import { Col, Row } from 'antd';
-import React, { useEffect } from 'react';
+import React from 'react';
 import { useSelector } from 'react-redux';
 import {
   ExibirHistorico,
@@ -28,8 +28,6 @@ const DocPlanosTrabalhoCadastroForm = props => {
 
   const auditoria = form?.initialValues?.auditoria;
   const classificacaoId = form?.values?.classificacaoId;
-  const tipoDocumentoId = form?.initialValues?.tipoDocumentoId;
-  const listaTipoDocumento = form?.initialValues?.listaTipoDocumento;
 
   const ehClassificacaoDocumentosTurma =
     classificacaoId?.toString() === TIPO_CLASSIFICACAO.DOCUMENTOS_DA_TURMA;
@@ -48,25 +46,6 @@ const DocPlanosTrabalhoCadastroForm = props => {
   const textoFormatoUpload = ehClassificacaoDocumentosTurma
     ? ''
     : 'Permitido somente um arquivo. Tipo permitido PDF';
-
-  useEffect(() => {
-    if (
-      idDocumentosPlanoTrabalho &&
-      tipoDocumentoId &&
-      listaTipoDocumento?.length
-    ) {
-      // TODO
-      let classificacaoPorTipo = [];
-
-      const lista = listaTipoDocumento.find(
-        item => String(item.id) === String(tipoDocumentoId)
-      );
-      classificacaoPorTipo = lista.classificacoes;
-      form.initialValues.listaClassificacoes = classificacaoPorTipo;
-      form.values.listaClassificacoes = classificacaoPorTipo;
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [tipoDocumentoId, idDocumentosPlanoTrabalho, listaTipoDocumento]);
 
   const onRemoveFile = async arquivo => {
     if (!desabilitarCampos) {
@@ -116,14 +95,13 @@ const DocPlanosTrabalhoCadastroForm = props => {
 
   return (
     <Col span={24}>
-      <Row gutter={[16, 16]}>
-        <Col sm={24}>
-          <ExibirHistorico
-            form={form}
-            disabled={desabilitarCampos || !!idDocumentosPlanoTrabalho}
-          />
-        </Col>
-      </Row>
+      {!idDocumentosPlanoTrabalho && (
+        <Row gutter={[16, 16]}>
+          <Col sm={24}>
+            <ExibirHistorico form={form} disabled={desabilitarCampos} />
+          </Col>
+        </Row>
+      )}
 
       <Row gutter={[16, 16]}>
         <Col sm={24} md={8} lg={4}>
@@ -259,7 +237,7 @@ const DocPlanosTrabalhoCadastroForm = props => {
         </Col>
       </Row>
       <Row gutter={[24]}>
-        {auditoria?.criadoEm && <Auditoria ignorarMarginTop {...auditoria} />}
+        {auditoria?.criadoEm && <Auditoria {...auditoria} />}
       </Row>
     </Col>
   );
