@@ -10,7 +10,7 @@ class ServicoDocumentosPlanosTrabalho {
   salvarDocumento = (params, documentoId) => {
     if (documentoId) {
       return api.put(`${urlPadrao}/${documentoId}`, {
-        codigoArquivo: params.arquivoCodigo,
+        arquivosCodigos: params.arquivosCodigos,
       });
     }
 

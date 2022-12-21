@@ -88,6 +88,7 @@ export const Dre = ({
         setValueOnlyOnChange
         onChange={newValue => {
           form.setFieldValue('modoEdicao', true);
+          form.setFieldValue('ueCodigo', undefined);
 
           form.setFieldValue(name, newValue);
           form.setFieldTouched(name, true, true);
