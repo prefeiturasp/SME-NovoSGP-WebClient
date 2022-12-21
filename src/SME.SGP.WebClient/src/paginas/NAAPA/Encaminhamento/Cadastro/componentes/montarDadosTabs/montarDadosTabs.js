@@ -3,18 +3,21 @@ import React, { useCallback, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useRouteMatch } from 'react-router-dom';
 import { ContainerTabsCard } from '~/componentes/tabs/tabs.css';
+import situacaoNAAPA from '~/dtos/situacaoNAAPA';
 import {
   setDadosSecoesEncaminhamentoNAAPA,
   setTabAtivaEncaminhamentoNAAPA,
+  setTabIndexEncaminhamentoNAAPA,
 } from '~/redux/modulos/encaminhamentoNAAPA/actions';
 import { erros } from '~/servicos';
 import ServicoNAAPA from '~/servicos/Paginas/Gestao/NAAPA/ServicoNAAPA';
+import MontarDadosTabItinerancia from './montarDadosTabItinerancia/montarDadosTabItinerancia';
 import MontarDadosTabSelecionada from './montarDadosTabSelecionada';
 
 const { TabPane } = Tabs;
 
 const MontarDadosTabs = () => {
-  const { aluno, anoLetivo, modalidade } = useSelector(
+  const { aluno, anoLetivo, modalidade, situacao } = useSelector(
     state => state.encaminhamentoNAAPA.dadosEncaminhamentoNAAPA
   );
 
@@ -29,6 +32,14 @@ const MontarDadosTabs = () => {
 
   const tabAtivaEncaminhamentoNAAPA = useSelector(
     store => store.encaminhamentoNAAPA.tabAtivaEncaminhamentoNAAPA
+  );
+
+  const tabIndexEncaminhamentoNAAPA = useSelector(
+    store => store.encaminhamentoNAAPA.tabIndexEncaminhamentoNAAPA
+  );
+
+  const listaSecoesEmEdicao = useSelector(
+    store => store.encaminhamentoNAAPA.listaSecoesEmEdicao
   );
 
   const obterSecoes = useCallback(async () => {
@@ -53,7 +64,14 @@ const MontarDadosTabs = () => {
   }, [dispatch, obterSecoes, aluno, anoLetivo]);
 
   const onChangeTab = tabIndex => {
-    dispatch(setTabAtivaEncaminhamentoNAAPA(tabIndex));
+    if (
+      listaSecoesEmEdicao.length &&
+      tabIndexEncaminhamentoNAAPA !== tabIndex
+    ) {
+      dispatch(setTabIndexEncaminhamentoNAAPA(tabIndex));
+    } else {
+      dispatch(setTabAtivaEncaminhamentoNAAPA(tabIndex));
+    }
   };
 
   return (
@@ -67,13 +85,28 @@ const MontarDadosTabs = () => {
         {dadosSecoesEncaminhamentoNAAPA?.map(tab => {
           const questionarioId = tab?.questionarioId;
           const nomeTab = tab?.nome;
+          const ehTabItinerancia =
+            tab?.nomeComponente === 'QUESTOES_ITINERACIA';
+          const desabilitarTabItinerancia =
+            ehTabItinerancia && situacao === situacaoNAAPA.Rascunho;
 
           return (
-            <TabPane tab={nomeTab} key={questionarioId}>
-              <MontarDadosTabSelecionada
-                questionarioId={questionarioId}
-                dadosTab={tab}
-              />
+            <TabPane
+              tab={nomeTab}
+              key={questionarioId}
+              disabled={desabilitarTabItinerancia}
+            >
+              {ehTabItinerancia ? (
+                <MontarDadosTabItinerancia
+                  questionarioId={questionarioId}
+                  dadosTab={tab}
+                />
+              ) : (
+                <MontarDadosTabSelecionada
+                  questionarioId={questionarioId}
+                  dadosTab={tab}
+                />
+              )}
             </TabPane>
           );
         })}
