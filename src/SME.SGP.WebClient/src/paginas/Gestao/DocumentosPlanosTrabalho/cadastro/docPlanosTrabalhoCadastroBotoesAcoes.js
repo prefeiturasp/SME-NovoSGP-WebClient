@@ -138,29 +138,37 @@ const DocPlanosTrabalhoCadastroBotoesAcoes = props => {
     );
 
     setExibirLoader(true);
-    const existeRegistro = await ServicoDocumentosPlanosTrabalho.validacaoUsuarioDocumento(
-      idDocumentosPlanoTrabalho || 0,
-      tipoDocumentoId,
-      classificacaoId,
-      usuarioId,
-      ueSelecionada?.id
-    ).catch(e => {
-      erros(e);
-      setExibirLoader(false);
-    });
+    const ehClassificacaoDocumentosTurma =
+      classificacaoId?.toString() === TIPO_CLASSIFICACAO.DOCUMENTOS_DA_TURMA;
 
-    if (existeRegistro?.status !== 200) {
-      setExibirLoader(false);
-      return;
+    let continuar = true;
+
+    if (!ehClassificacaoDocumentosTurma) {
+      const existeRegistro = await ServicoDocumentosPlanosTrabalho.validacaoUsuarioDocumento(
+        idDocumentosPlanoTrabalho || 0,
+        tipoDocumentoId,
+        classificacaoId,
+        usuarioId,
+        ueSelecionada?.id
+      ).catch(e => {
+        erros(e);
+        setExibirLoader(false);
+      });
+
+      if (existeRegistro?.status !== 200) {
+        setExibirLoader(false);
+        continuar = false;
+      }
+      if (existeRegistro?.data) {
+        erro(
+          `Este RF já está vinculado a outro registro do mesmo tipo e classificação no ano letivo ${anoLetivo}`
+        );
+        setExibirLoader(false);
+        continuar = false;
+      }
     }
 
-    if (existeRegistro?.data) {
-      erro(
-        `Este RF já está vinculado a outro registro do mesmo tipo e classificação no ano letivo ${anoLetivo}`
-      );
-      setExibirLoader(false);
-      return;
-    }
+    if (!continuar) return;
 
     const params = {
       arquivosCodigos: valores?.listaArquivos?.length

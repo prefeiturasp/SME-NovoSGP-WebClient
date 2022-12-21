@@ -164,24 +164,73 @@ const DocPlanosTrabalhoCadastro = () => {
       .finally(() => setExibirLoader(false));
 
     if (resposta?.status === 200) {
+      const dreCodigo = resposta.data?.dreId?.toString();
+      const ueCodigo = resposta.data?.ueId?.toString();
+      const modalidade = resposta.data?.modalidade?.toString();
+      const semestre = resposta.data?.semestre?.toString();
+      const turmaCodigo = resposta.data?.turmaCodigo?.toString();
+      const componenteCurricularId = resposta.data?.componenteCurricularId?.toString();
+
+      const dreNome = resposta.data?.dreNome;
+      const ueNome = resposta.data?.ueNome;
+      const modalidadeNome = resposta.data?.modalidade;
+      const turmaNome = resposta.data?.turmaNome;
+      const componenteCurricularDescricao =
+        resposta.data?.componenteCurricularDescricao;
+
       const valores = {
         id: resposta.data.id,
-        tipoDocumentoId: String(resposta.data.tipoDocumentoId),
-        classificacaoId: String(resposta.data.classificacaoId),
-        ueCodigo: String(resposta.data.ueId),
-        dreCodigo: String(resposta.data.dreId),
+        tipoDocumentoId: resposta.data?.tipoDocumentoId?.toString(),
+        classificacaoId: resposta.data?.classificacaoId?.toString(),
+        ueCodigo,
+        dreCodigo,
         anoLetivo: resposta.data.anoLetivo,
         professorRf: resposta.data.professorRf,
         listaArquivos: [],
+        modalidade,
+        semestre,
+        turmaCodigo,
+        codigoComponenteCurricular: componenteCurricularId,
       };
+
+      if (dreCodigo && dreNome) {
+        valores.listaDres = [{ codigo: dreCodigo, nome: dreNome }];
+      }
+
+      if (ueCodigo && ueNome) {
+        valores.listaUes = [{ codigo: ueCodigo, nome: ueNome }];
+      }
+
+      if (modalidade && modalidadeNome) {
+        valores.listaModalidades = [
+          { valor: modalidade, descricao: modalidadeNome },
+        ];
+      }
+
+      if (semestre) {
+        valores.listaSemestres = [{ valor: semestre, desc: semestre }];
+      }
+
+      if (turmaCodigo && turmaNome) {
+        valores.listaTurmas = [{ codigo: turmaCodigo, nomeFiltro: turmaNome }];
+      }
+
+      if (componenteCurricularId && componenteCurricularDescricao) {
+        valores.listaComponentesCurriculares = [
+          {
+            codigoComponenteCurricular: componenteCurricularId,
+            nome: componenteCurricularDescricao,
+          },
+        ];
+      }
 
       let arquivos = resposta.data?.length ? resposta.data.arquivos : [];
 
       if (arquivos?.length) {
         arquivos = arquivos.map(arquivo => ({
-          uid: arquivo.codigoArquivo,
-          xhr: arquivo.codigoArquivo,
-          name: arquivo.nomeArquivo,
+          uid: arquivo.codigo,
+          xhr: arquivo.codigo,
+          name: arquivo.nome,
           status: 'done',
           documentoId: resposta.data.id,
         }));
