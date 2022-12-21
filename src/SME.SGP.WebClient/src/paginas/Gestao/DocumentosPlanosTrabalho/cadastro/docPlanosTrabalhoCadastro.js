@@ -164,34 +164,46 @@ const DocPlanosTrabalhoCadastro = () => {
       .finally(() => setExibirLoader(false));
 
     if (resposta?.status === 200) {
+      const anoLetivo = resposta.data?.anoLetivo?.toString();
       const dreCodigo = resposta.data?.dreId?.toString();
       const ueCodigo = resposta.data?.ueId?.toString();
       const modalidade = resposta.data?.modalidade?.toString();
-      const semestre = resposta.data?.semestre?.toString();
+      const semestre = resposta.data?.semestre
+        ? resposta.data?.semestre?.toString()
+        : null;
       const turmaCodigo = resposta.data?.turmaCodigo?.toString();
       const componenteCurricularId = resposta.data?.componenteCurricularId?.toString();
-
       const dreNome = resposta.data?.dreNome;
       const ueNome = resposta.data?.ueNome;
-      const modalidadeNome = resposta.data?.modalidade;
+      const modalidadeNome = resposta.data?.modalidadeNome;
       const turmaNome = resposta.data?.turmaNome;
       const componenteCurricularDescricao =
         resposta.data?.componenteCurricularDescricao;
+      const tipoDocumentoId = resposta.data?.tipoDocumentoId?.toString();
+      const tipoDocumentoDescricao = resposta.data?.tipoDocumentoDescricao;
+      const classificacaoId = resposta.data?.classificacaoId?.toString();
+      const classificacaoDescricao = resposta.data?.classificacaoDescricao;
 
       const valores = {
         id: resposta.data.id,
-        tipoDocumentoId: resposta.data?.tipoDocumentoId?.toString(),
-        classificacaoId: resposta.data?.classificacaoId?.toString(),
-        ueCodigo,
+        anoLetivo,
         dreCodigo,
-        anoLetivo: resposta.data.anoLetivo,
-        professorRf: resposta.data.professorRf,
-        listaArquivos: [],
+        ueCodigo,
+        tipoDocumentoId,
+        listaTipoDocumento: [],
+        classificacaoId,
+        listaClassificacoes: [],
         modalidade,
         semestre,
         turmaCodigo,
         codigoComponenteCurricular: componenteCurricularId,
+        professorRf: resposta.data.professorRf,
+        listaArquivos: [],
       };
+
+      if (anoLetivo) {
+        valores.listaAnosLetivos = [{ desc: anoLetivo, valor: anoLetivo }];
+      }
 
       if (dreCodigo && dreNome) {
         valores.listaDres = [{ codigo: dreCodigo, nome: dreNome }];
@@ -199,6 +211,18 @@ const DocPlanosTrabalhoCadastro = () => {
 
       if (ueCodigo && ueNome) {
         valores.listaUes = [{ codigo: ueCodigo, nome: ueNome }];
+      }
+
+      if (tipoDocumentoId && tipoDocumentoDescricao) {
+        valores.listaTipoDocumento = [
+          { id: tipoDocumentoId, tipoDocumento: tipoDocumentoDescricao },
+        ];
+      }
+
+      if (classificacaoId && classificacaoDescricao) {
+        valores.listaClassificacoes = [
+          { id: classificacaoId, classificacao: classificacaoDescricao },
+        ];
       }
 
       if (modalidade && modalidadeNome) {
@@ -224,7 +248,9 @@ const DocPlanosTrabalhoCadastro = () => {
         ];
       }
 
-      let arquivos = resposta.data?.length ? resposta.data.arquivos : [];
+      let arquivos = resposta.data?.arquivos?.length
+        ? resposta.data.arquivos
+        : [];
 
       if (arquivos?.length) {
         arquivos = arquivos.map(arquivo => ({
