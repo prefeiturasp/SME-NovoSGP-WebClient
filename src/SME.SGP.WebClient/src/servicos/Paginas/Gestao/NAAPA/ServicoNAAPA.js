@@ -1,17 +1,19 @@
 import _ from 'lodash';
 import QuestionarioDinamicoFuncoes from '~/componentes-sgp/QuestionarioDinamico/Funcoes/QuestionarioDinamicoFuncoes';
+import situacaoNAAPA from '~/dtos/situacaoNAAPA';
 import { store } from '~/redux';
 import {
   setLimparDadosEncaminhamentoNAAPA,
   setExibirLoaderEncaminhamentoNAAPA,
   setListaSecoesEmEdicao,
+  setTabAtivaEncaminhamentoNAAPA,
 } from '~/redux/modulos/encaminhamentoNAAPA/actions';
 import { limparDadosLocalizarEstudante } from '~/redux/modulos/localizarEstudante/actions';
 import {
   setLimparDadosQuestionarioDinamico,
   setQuestionarioDinamicoEmEdicao,
 } from '~/redux/modulos/questionarioDinamico/actions';
-import { erros } from '~/servicos/alertas';
+import { confirmar, erros, sucesso } from '~/servicos/alertas';
 import api from '~/servicos/api';
 
 const URL_PADRAO = 'v1/encaminhamento-naapa';
@@ -69,7 +71,8 @@ class ServicoNAAPA {
     encaminhamentoId,
     situacao,
     validarCamposObrigatorios,
-    ehRascunho
+    ehRascunho,
+    limparDadosAoSalvar = true
   ) => {
     const state = store.getState();
 
@@ -100,7 +103,9 @@ class ServicoNAAPA {
         );
 
         const secaoInvalida = !secaoEstaEmEdicao && !secao.concluido;
-        if (secaoInvalida) {
+        const ehSecaoItinerancia =
+          secao.nomeComponente === 'QUESTOES_ITINERACIA';
+        if (secaoInvalida && !ehSecaoItinerancia) {
           nomesSecoesComCamposObrigatorios.push(secao.nome);
         }
       });
@@ -132,7 +137,7 @@ class ServicoNAAPA {
         .post(`${URL_PADRAO}/salvar`, paramsSalvar)
         .catch(e => erros(e));
 
-      if (resposta?.data?.id) {
+      if (resposta?.data?.id && limparDadosAoSalvar) {
         dispatch(setQuestionarioDinamicoEmEdicao(false));
         dispatch(setListaSecoesEmEdicao([]));
         dispatch(setLimparDadosEncaminhamentoNAAPA());
@@ -148,6 +153,46 @@ class ServicoNAAPA {
     }
 
     return false;
+  };
+
+  salvarPadrao = async (
+    encaminhamentoId,
+    limparDadosAoSalvar = true,
+    novaSituacao
+  ) => {
+    const state = store.getState();
+
+    const { encaminhamentoNAAPA } = state;
+    const { dadosEncaminhamentoNAAPA } = encaminhamentoNAAPA;
+
+    const situacaoAtual =
+      dadosEncaminhamentoNAAPA?.situacao || situacaoNAAPA.Rascunho;
+
+    const situacaoSalvar = novaSituacao || situacaoAtual;
+
+    const ehRascunho = situacaoSalvar === situacaoNAAPA.Rascunho;
+
+    const validarCamposObrigatorios = !ehRascunho;
+
+    const resposta = await this.salvarEncaminhamento(
+      encaminhamentoId,
+      situacaoSalvar,
+      validarCamposObrigatorios,
+      ehRascunho,
+      limparDadosAoSalvar
+    );
+
+    if (resposta?.status === 200) {
+      let mensagem = ehRascunho
+        ? 'Rascunho salvo com sucesso'
+        : 'Registro cadastrado com sucesso';
+
+      if (encaminhamentoId && situacaoAtual !== situacaoNAAPA.Rascunho) {
+        mensagem = 'Registro alterado com sucesso';
+      }
+      sucesso(mensagem);
+    }
+    return resposta;
   };
 
   obterDadosAtendimento = (questionarioId, atendimentoId) => {
@@ -208,6 +253,60 @@ class ServicoNAAPA {
 
   excluirAtendimento = atendimentoId => {
     return api.delete(`${URL_PADRAO}/secoes-itinerancia/${atendimentoId}`);
+  };
+
+  validarTrocaDeAbas = async (tabIndex, encaminhamentoId) => {
+    const state = store.getState();
+
+    const { dispatch } = store;
+
+    const { encaminhamentoNAAPA, questionarioDinamico } = state;
+
+    const {
+      dadosSecoesEncaminhamentoNAAPA,
+      listaSecoesEmEdicao,
+    } = encaminhamentoNAAPA;
+    const { questionarioDinamicoEmEdicao } = questionarioDinamico;
+
+    const secaoDestino = dadosSecoesEncaminhamentoNAAPA?.find(
+      secao => secao?.questionarioId?.toString() === tabIndex
+    );
+
+    const secaoItinerancia =
+      secaoDestino?.nomeComponente === 'QUESTOES_ITINERACIA';
+
+    if (
+      secaoItinerancia &&
+      questionarioDinamicoEmEdicao &&
+      listaSecoesEmEdicao.length
+    ) {
+      const confirmou = await confirmar(
+        'Atenção',
+        '',
+        'Suas alterações não foram salvas, deseja salvar agora?'
+      );
+
+      if (confirmou) {
+        const resposta = await this.salvarPadrao(encaminhamentoId, false);
+        if (resposta?.status === 200) {
+          dispatch(setLimparDadosQuestionarioDinamico());
+          dispatch(setListaSecoesEmEdicao([]));
+
+          dispatch(setTabAtivaEncaminhamentoNAAPA(tabIndex));
+        }
+      } else {
+        QuestionarioDinamicoFuncoes.limparDadosOriginaisQuestionarioDinamico(
+          ServicoNAAPA.removerArquivo
+        );
+
+        dispatch(setLimparDadosQuestionarioDinamico());
+        dispatch(setListaSecoesEmEdicao([]));
+
+        dispatch(setTabAtivaEncaminhamentoNAAPA(tabIndex));
+      }
+    } else {
+      dispatch(setTabAtivaEncaminhamentoNAAPA(tabIndex));
+    }
   };
 }
 

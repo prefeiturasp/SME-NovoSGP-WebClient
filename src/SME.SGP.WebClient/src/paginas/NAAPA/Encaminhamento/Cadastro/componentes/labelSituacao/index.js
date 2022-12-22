@@ -2,6 +2,7 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 import { Base } from '~/componentes';
+import { SGP_LABEL_SITUACAO_ENCAMINHAMENTO_NAAPA } from '~/constantes/ids/label';
 
 export const LabelContainer = styled.div`
   padding: 4px;
@@ -17,7 +18,7 @@ const LabelSituacao = () => {
   );
 
   return dadosEncaminhamentoNAAPA?.descricaoSituacao ? (
-    <LabelContainer>
+    <LabelContainer id={SGP_LABEL_SITUACAO_ENCAMINHAMENTO_NAAPA}>
       {dadosEncaminhamentoNAAPA?.descricaoSituacao}
     </LabelContainer>
   ) : (

@@ -7,7 +7,6 @@ import situacaoNAAPA from '~/dtos/situacaoNAAPA';
 import {
   setDadosSecoesEncaminhamentoNAAPA,
   setTabAtivaEncaminhamentoNAAPA,
-  setTabIndexEncaminhamentoNAAPA,
 } from '~/redux/modulos/encaminhamentoNAAPA/actions';
 import { erros } from '~/servicos';
 import ServicoNAAPA from '~/servicos/Paginas/Gestao/NAAPA/ServicoNAAPA';
@@ -34,14 +33,6 @@ const MontarDadosTabs = () => {
     store => store.encaminhamentoNAAPA.tabAtivaEncaminhamentoNAAPA
   );
 
-  const tabIndexEncaminhamentoNAAPA = useSelector(
-    store => store.encaminhamentoNAAPA.tabIndexEncaminhamentoNAAPA
-  );
-
-  const listaSecoesEmEdicao = useSelector(
-    store => store.encaminhamentoNAAPA.listaSecoesEmEdicao
-  );
-
   const obterSecoes = useCallback(async () => {
     const resposta = await ServicoNAAPA.obterSecoes(
       encaminhamentoId,
@@ -64,14 +55,7 @@ const MontarDadosTabs = () => {
   }, [dispatch, obterSecoes, aluno, anoLetivo]);
 
   const onChangeTab = tabIndex => {
-    if (
-      listaSecoesEmEdicao.length &&
-      tabIndexEncaminhamentoNAAPA !== tabIndex
-    ) {
-      dispatch(setTabIndexEncaminhamentoNAAPA(tabIndex));
-    } else {
-      dispatch(setTabAtivaEncaminhamentoNAAPA(tabIndex));
-    }
+    ServicoNAAPA.validarTrocaDeAbas(tabIndex, encaminhamentoId);
   };
 
   return (

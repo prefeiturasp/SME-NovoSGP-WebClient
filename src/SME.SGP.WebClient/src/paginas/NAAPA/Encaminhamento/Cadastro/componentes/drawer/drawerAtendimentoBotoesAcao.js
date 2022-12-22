@@ -71,7 +71,7 @@ const DrawerAtendimentoBotoesAcao = ({
         erros(e);
       });
       if (resultado?.status === 200) {
-        onCloseDrawer();
+        onCloseDrawer({ atualizarDados: true });
         sucesso('Atendimento excluído com sucesso');
       }
 

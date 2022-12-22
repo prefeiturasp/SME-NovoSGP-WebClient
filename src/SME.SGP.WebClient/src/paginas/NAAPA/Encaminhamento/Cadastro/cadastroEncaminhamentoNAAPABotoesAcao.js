@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 import { Col, Row } from 'antd';
-import React, { useEffect, useCallback } from 'react';
+import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useRouteMatch } from 'react-router-dom';
 import { Button, Colors } from '~/componentes';
@@ -22,12 +22,7 @@ import {
 import BotaoExcluirPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoExcluirPadrao';
 import { RotasDto } from '~/dtos';
 import ServicoNAAPA from '~/servicos/Paginas/Gestao/NAAPA/ServicoNAAPA';
-import {
-  setDesabilitarCamposEncaminhamentoNAAPA,
-  setListaSecoesEmEdicao,
-  setTabAtivaEncaminhamentoNAAPA,
-  setTabIndexEncaminhamentoNAAPA,
-} from '~/redux/modulos/encaminhamentoNAAPA/actions';
+import { setDesabilitarCamposEncaminhamentoNAAPA } from '~/redux/modulos/encaminhamentoNAAPA/actions';
 import QuestionarioDinamicoFuncoes from '~/componentes-sgp/QuestionarioDinamico/Funcoes/QuestionarioDinamicoFuncoes';
 import situacaoNAAPA from '~/dtos/situacaoNAAPA';
 
@@ -53,14 +48,6 @@ const CadastroEncaminhamentoNAAPABotoesAcao = props => {
 
   const dadosEncaminhamentoNAAPA = useSelector(
     state => state.encaminhamentoNAAPA.dadosEncaminhamentoNAAPA
-  );
-
-  const listaSecoesEmEdicao = useSelector(
-    store => store.encaminhamentoNAAPA.listaSecoesEmEdicao
-  );
-
-  const tabIndexEncaminhamentoNAAPA = useSelector(
-    store => store.encaminhamentoNAAPA.tabIndexEncaminhamentoNAAPA
   );
 
   const encaminhamentoId = routeMatch.params?.id;
@@ -91,36 +78,6 @@ const CadastroEncaminhamentoNAAPABotoesAcao = props => {
     setMostrarBusca(false);
   };
 
-  const salvar = async novaSituacao => {
-    const situacaoAtual =
-      dadosEncaminhamentoNAAPA?.situacao || situacaoNAAPA.Rascunho;
-
-    const situacaoSalvar = novaSituacao || situacaoAtual;
-
-    const ehRascunho = situacaoSalvar === situacaoNAAPA.Rascunho;
-
-    const validarCamposObrigatorios = !ehRascunho;
-
-    const resposta = await ServicoNAAPA.salvarEncaminhamento(
-      encaminhamentoId,
-      situacaoSalvar,
-      validarCamposObrigatorios,
-      ehRascunho
-    );
-
-    if (resposta?.status === 200) {
-      let mensagem = ehRascunho
-        ? 'Rascunho salvo com sucesso'
-        : 'Registro cadastrado com sucesso';
-
-      if (encaminhamentoId && situacaoAtual !== situacaoNAAPA.Rascunho) {
-        mensagem = 'Registro alterado com sucesso';
-      }
-      sucesso(mensagem);
-    }
-    return resposta;
-  };
-
   const onClickVoltar = async () => {
     if (questionarioDinamicoEmEdicao) {
       const confirmou = await confirmar(
@@ -130,7 +87,7 @@ const CadastroEncaminhamentoNAAPABotoesAcao = props => {
       );
 
       if (confirmou) {
-        const resposta = await salvar();
+        const resposta = await ServicoNAAPA.salvarPadrao(encaminhamentoId);
         if (resposta?.status === 200)
           history.push(RotasDto.ENCAMINHAMENTO_NAAPA);
       } else {
@@ -176,44 +133,26 @@ const CadastroEncaminhamentoNAAPABotoesAcao = props => {
   };
 
   const onClickSalvarRascunho = async () => {
-    const resposta = await salvar(situacaoNAAPA.Rascunho);
+    const resposta = await ServicoNAAPA.salvarPadrao(
+      encaminhamentoId,
+      true,
+      situacaoNAAPA.Rascunho
+    );
     if (resposta?.status === 200) {
       history.push(`${RotasDto.ENCAMINHAMENTO_NAAPA}/${resposta?.data?.id}`);
     }
   };
 
   const onClickCadastrarAlterar = async () => {
-    const resposta = await salvar(situacaoNAAPA.AguardandoAtendimento);
+    const resposta = await ServicoNAAPA.salvarPadrao(
+      encaminhamentoId,
+      true,
+      situacaoNAAPA.AguardandoAtendimento
+    );
     if (resposta?.status === 200) {
       history.push(RotasDto.ENCAMINHAMENTO_NAAPA);
     }
   };
-
-  const onChangeTab = useCallback(
-    async tabIndex => {
-      if (questionarioDinamicoEmEdicao && listaSecoesEmEdicao.length) {
-        const confirmou = await confirmar(
-          'Atenção',
-          '',
-          'Suas alterações não foram salvas, deseja salvar agora?'
-        );
-
-        if (confirmou) {
-          await salvar();
-          dispatch(setTabAtivaEncaminhamentoNAAPA(tabIndex));
-        } else {
-          QuestionarioDinamicoFuncoes.limparDadosOriginaisQuestionarioDinamico(
-            ServicoNAAPA.removerArquivo
-          );
-          dispatch(setTabAtivaEncaminhamentoNAAPA(tabIndex));
-        }
-        dispatch(setTabIndexEncaminhamentoNAAPA(null));
-        dispatch(setListaSecoesEmEdicao([]));
-      }
-    },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [questionarioDinamicoEmEdicao, listaSecoesEmEdicao]
-  );
 
   const ocultarBtnRascunho =
     encaminhamentoId &&
@@ -244,12 +183,6 @@ const CadastroEncaminhamentoNAAPABotoesAcao = props => {
     (encaminhamentoId &&
       !questionarioDinamicoEmEdicao &&
       dadosEncaminhamentoNAAPA?.situacao === situacaoNAAPA.Rascunho);
-
-  useEffect(() => {
-    if (tabIndexEncaminhamentoNAAPA) {
-      onChangeTab(tabIndexEncaminhamentoNAAPA);
-    }
-  }, [tabIndexEncaminhamentoNAAPA, onChangeTab]);
 
   return (
     <Row gutter={[8, 8]} type="flex">
