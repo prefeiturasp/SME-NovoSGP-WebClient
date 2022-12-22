@@ -2,7 +2,6 @@ import { faSyncAlt } from '@fortawesome/free-solid-svg-icons';
 import React, { useEffect, useState } from 'react';
 import { Tooltip } from 'antd';
 import { useSelector } from 'react-redux';
-import { statusParecerConclusivo } from '~/dtos';
 import { Loader } from '~/componentes';
 import ServicoConselhoClasse from '~/servicos/Paginas/ConselhoClasse/ServicoConselhoClasse';
 import { erros } from '~/servicos';
@@ -10,6 +9,7 @@ import { LabelParecer, IconeEstilizado } from './marcadorParecerConclusivo.css';
 
 const MarcadorParecerConclusivo = () => {
   const [sincronizando, setSincronizando] = useState(false);
+  const [exibirIconeSincronizar, setExibirIconeSincronizar] = useState(false);
 
   const dadosPrincipaisConselhoClasse = useSelector(
     store => store.conselhoClasse.dadosPrincipaisConselhoClasse
@@ -26,6 +26,10 @@ const MarcadorParecerConclusivo = () => {
 
   const gerandoParecerConclusivo = useSelector(
     store => store.conselhoClasse.gerandoParecerConclusivo
+  );
+
+  const bimestreAtual = useSelector(
+    store => store.conselhoClasse.bimestreAtual
   );
 
   const [parecer, setParecer] = useState('');
@@ -62,12 +66,16 @@ const MarcadorParecerConclusivo = () => {
     }
   };
 
-  const exibirIconeSincronizar = () => {
-    return (
-      statusParecerConclusivo.RETIDO === parecer ||
-      statusParecerConclusivo.RETIDO_FREQUENCIA === parecer
-    );
-  };
+  useEffect(() => {
+    const exibir =
+      bimestreAtual?.valor === 'final' &&
+      conselhoClasseId &&
+      fechamentoTurmaId &&
+      alunoCodigo;
+
+    setExibirIconeSincronizar(exibir);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [bimestreAtual]);
 
   return (
     <>
