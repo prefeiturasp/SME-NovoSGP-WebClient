@@ -70,10 +70,14 @@ const DocPlanosTrabalhoCadastroForm = props => {
     return false;
   };
 
-  const onChangeTipoDocumento = tipo => {
+  const limparDadosLocalizados = () => {
     form.setFieldValue('professorRf', '');
     form.setFieldValue('professorNome', '');
     form.setFieldValue('usuarioId', '');
+  };
+
+  const onChangeTipoDocumento = tipo => {
+    limparDadosLocalizados();
 
     if (tipo === TIPO_DOCUMENTO.DOCUMENTOS) {
       setTimeout(() => {
@@ -83,13 +87,21 @@ const DocPlanosTrabalhoCadastroForm = props => {
   };
 
   const onChangeClassificacao = id => {
-    if (id === TIPO_CLASSIFICACAO.DOCUMENTOS_DA_TURMA) {
-      form.setFieldValue('professorRf', '');
-      form.setFieldValue('professorNome', '');
-      form.setFieldValue('usuarioId', '');
-      setTimeout(() => {
-        form.setFieldValue('professorRf', usuario.rf);
-      }, 600);
+    if (form.values.tipoDocumentoId?.toString() === TIPO_DOCUMENTO.DOCUMENTOS) {
+      if (id === TIPO_CLASSIFICACAO.DOCUMENTOS_DA_TURMA) {
+        limparDadosLocalizados();
+      } else if (
+        !form?.values?.professorNome ||
+        form?.values?.professorRf !== usuario.rf
+      ) {
+        limparDadosLocalizados();
+
+        setTimeout(() => {
+          form.setFieldValue('professorRf', usuario.rf);
+        }, 600);
+      }
+    } else {
+      limparDadosLocalizados();
     }
   };
 
@@ -180,7 +192,9 @@ const DocPlanosTrabalhoCadastroForm = props => {
           novaEstrutura
           desabilitado={
             !form.values.tipoDocumentoId ||
-            form.values.tipoDocumentoId === TIPO_DOCUMENTO.DOCUMENTOS ||
+            (form.values.tipoDocumentoId === TIPO_DOCUMENTO.DOCUMENTOS &&
+              classificacaoId?.toString() !==
+                TIPO_CLASSIFICACAO.DOCUMENTOS_DA_TURMA) ||
             !!idDocumentosPlanoTrabalho ||
             desabilitarCampos
           }
@@ -201,7 +215,9 @@ const DocPlanosTrabalhoCadastroForm = props => {
             ) {
               const estaEmModoEdicao = !(
                 !form.values.tipoDocumentoId ||
-                form.values.tipoDocumentoId === TIPO_DOCUMENTO.DOCUMENTOS ||
+                (form.values.tipoDocumentoId === TIPO_DOCUMENTO.DOCUMENTOS &&
+                  classificacaoId?.toString() !==
+                    TIPO_CLASSIFICACAO.DOCUMENTOS_DA_TURMA) ||
                 desabilitarCampos
               );
               if (estaEmModoEdicao) {
@@ -210,7 +226,11 @@ const DocPlanosTrabalhoCadastroForm = props => {
             }
           }}
           buscarOutrosCargos={
-            form.values.tipoDocumentoId === TIPO_DOCUMENTO.DOCUMENTOS
+            !!(
+              form.values.tipoDocumentoId === TIPO_DOCUMENTO.DOCUMENTOS &&
+              classificacaoId?.toString() !==
+                TIPO_CLASSIFICACAO.DOCUMENTOS_DA_TURMA
+            )
           }
           labelRequired
         />
