@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 import { Col, Row } from 'antd';
-import React, { useEffect } from 'react';
+import React, { useEffect, useCallback } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useRouteMatch } from 'react-router-dom';
 import { Button, Colors } from '~/componentes';
@@ -22,7 +22,12 @@ import {
 import BotaoExcluirPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoExcluirPadrao';
 import { RotasDto } from '~/dtos';
 import ServicoNAAPA from '~/servicos/Paginas/Gestao/NAAPA/ServicoNAAPA';
-import { setDesabilitarCamposEncaminhamentoNAAPA } from '~/redux/modulos/encaminhamentoNAAPA/actions';
+import {
+  setDesabilitarCamposEncaminhamentoNAAPA,
+  setListaSecoesEmEdicao,
+  setTabAtivaEncaminhamentoNAAPA,
+  setTabIndexEncaminhamentoNAAPA,
+} from '~/redux/modulos/encaminhamentoNAAPA/actions';
 import QuestionarioDinamicoFuncoes from '~/componentes-sgp/QuestionarioDinamico/Funcoes/QuestionarioDinamicoFuncoes';
 import situacaoNAAPA from '~/dtos/situacaoNAAPA';
 
@@ -48,6 +53,14 @@ const CadastroEncaminhamentoNAAPABotoesAcao = props => {
 
   const dadosEncaminhamentoNAAPA = useSelector(
     state => state.encaminhamentoNAAPA.dadosEncaminhamentoNAAPA
+  );
+
+  const listaSecoesEmEdicao = useSelector(
+    store => store.encaminhamentoNAAPA.listaSecoesEmEdicao
+  );
+
+  const tabIndexEncaminhamentoNAAPA = useSelector(
+    store => store.encaminhamentoNAAPA.tabIndexEncaminhamentoNAAPA
   );
 
   const encaminhamentoId = routeMatch.params?.id;
@@ -176,6 +189,32 @@ const CadastroEncaminhamentoNAAPABotoesAcao = props => {
     }
   };
 
+  const onChangeTab = useCallback(
+    async tabIndex => {
+      if (questionarioDinamicoEmEdicao && listaSecoesEmEdicao.length) {
+        const confirmou = await confirmar(
+          'Atenção',
+          '',
+          'Suas alterações não foram salvas, deseja salvar agora?'
+        );
+
+        if (confirmou) {
+          await salvar();
+          dispatch(setTabAtivaEncaminhamentoNAAPA(tabIndex));
+        } else {
+          QuestionarioDinamicoFuncoes.limparDadosOriginaisQuestionarioDinamico(
+            ServicoNAAPA.removerArquivo
+          );
+          dispatch(setTabAtivaEncaminhamentoNAAPA(tabIndex));
+        }
+        dispatch(setTabIndexEncaminhamentoNAAPA(null));
+        dispatch(setListaSecoesEmEdicao([]));
+      }
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [questionarioDinamicoEmEdicao, listaSecoesEmEdicao]
+  );
+
   const ocultarBtnRascunho =
     encaminhamentoId &&
     dadosEncaminhamentoNAAPA?.situacao &&
@@ -205,6 +244,12 @@ const CadastroEncaminhamentoNAAPABotoesAcao = props => {
     (encaminhamentoId &&
       !questionarioDinamicoEmEdicao &&
       dadosEncaminhamentoNAAPA?.situacao === situacaoNAAPA.Rascunho);
+
+  useEffect(() => {
+    if (tabIndexEncaminhamentoNAAPA) {
+      onChangeTab(tabIndexEncaminhamentoNAAPA);
+    }
+  }, [tabIndexEncaminhamentoNAAPA, onChangeTab]);
 
   return (
     <Row gutter={[8, 8]} type="flex">

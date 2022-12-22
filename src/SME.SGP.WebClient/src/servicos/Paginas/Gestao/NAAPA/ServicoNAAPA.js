@@ -149,6 +149,66 @@ class ServicoNAAPA {
 
     return false;
   };
+
+  obterDadosAtendimento = (questionarioId, atendimentoId) => {
+    const encaminhamentoSecaoId = atendimentoId
+      ? `&encaminhamentoSecaoId=${atendimentoId}`
+      : ``;
+
+    return api.get(
+      `${URL_PADRAO}/questionarioItinerario?questionarioId=${questionarioId}${encaminhamentoSecaoId}`
+    );
+  };
+
+  salvarAtendimento = async (encaminhamentoId, atendimentoId) => {
+    const state = store.getState();
+
+    const { dispatch } = store;
+    const { encaminhamentoNAAPA } = state;
+
+    const { dadosSecoesEncaminhamentoNAAPA } = encaminhamentoNAAPA;
+
+    const dadosMapeados = await QuestionarioDinamicoFuncoes.mapearQuestionarios(
+      dadosSecoesEncaminhamentoNAAPA,
+      true,
+      [],
+      false,
+      [],
+      false
+    );
+
+    const formsValidos = !!dadosMapeados?.formsValidos;
+
+    if (formsValidos || dadosMapeados?.secoes?.length) {
+      const paramsSalvar = {
+        encaminhamentoId: Number(encaminhamentoId),
+        encaminhamentoNAAPASecao: dadosMapeados?.secoes?.length
+          ? dadosMapeados.secoes[0]
+          : [],
+      };
+
+      if (atendimentoId) {
+        paramsSalvar.encaminhamentoNAAPASecaoId = atendimentoId;
+      }
+
+      const resposta = await api
+        .post(`${URL_PADRAO}/salvarItinerario`, paramsSalvar)
+        .catch(e => erros(e));
+
+      if (resposta?.data?.id) {
+        dispatch(setQuestionarioDinamicoEmEdicao(false));
+        dispatch(setListaSecoesEmEdicao([]));
+        dispatch(setLimparDadosQuestionarioDinamico());
+      }
+
+      return resposta;
+    }
+    return false;
+  };
+
+  excluirAtendimento = atendimentoId => {
+    return api.delete(`${URL_PADRAO}/secoes-itinerancia/${atendimentoId}`);
+  };
 }
 
 export default new ServicoNAAPA();
