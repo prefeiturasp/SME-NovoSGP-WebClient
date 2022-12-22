@@ -100,7 +100,7 @@ const DocPlanosTrabalhoCadastroForm = props => {
           form.setFieldValue('professorRf', usuario.rf);
         }, 600);
       }
-    } else {
+    } else if (!form?.values?.professorRf || !form?.values?.professorNome) {
       limparDadosLocalizador();
     }
   };
