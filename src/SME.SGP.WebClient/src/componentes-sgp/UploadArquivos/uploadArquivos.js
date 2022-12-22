@@ -162,7 +162,7 @@ const UploadArquivos = props => {
       return;
     }
 
-    if (!permiteInserirFormato(file)) {
+    if (!permiteInserirFormato(file, tiposArquivosPermitidos)) {
       atualizaListaArquivos(fileList, file);
       return;
     }
