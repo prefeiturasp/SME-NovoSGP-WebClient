@@ -70,14 +70,14 @@ const DocPlanosTrabalhoCadastroForm = props => {
     return false;
   };
 
-  const limparDadosLocalizados = () => {
+  const limparDadosLocalizador = () => {
     form.setFieldValue('professorRf', '');
     form.setFieldValue('professorNome', '');
     form.setFieldValue('usuarioId', '');
   };
 
   const onChangeTipoDocumento = tipo => {
-    limparDadosLocalizados();
+    limparDadosLocalizador();
 
     if (tipo === TIPO_DOCUMENTO.DOCUMENTOS) {
       setTimeout(() => {
@@ -89,19 +89,19 @@ const DocPlanosTrabalhoCadastroForm = props => {
   const onChangeClassificacao = id => {
     if (form.values.tipoDocumentoId?.toString() === TIPO_DOCUMENTO.DOCUMENTOS) {
       if (id === TIPO_CLASSIFICACAO.DOCUMENTOS_DA_TURMA) {
-        limparDadosLocalizados();
+        limparDadosLocalizador();
       } else if (
         !form?.values?.professorNome ||
         form?.values?.professorRf !== usuario.rf
       ) {
-        limparDadosLocalizados();
+        limparDadosLocalizador();
 
         setTimeout(() => {
           form.setFieldValue('professorRf', usuario.rf);
         }, 600);
       }
     } else {
-      limparDadosLocalizados();
+      limparDadosLocalizador();
     }
   };
 
