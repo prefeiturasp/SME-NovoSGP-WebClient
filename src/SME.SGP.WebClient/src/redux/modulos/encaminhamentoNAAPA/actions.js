@@ -37,8 +37,3 @@ export const setTabAtivaEncaminhamentoNAAPA = payload => ({
   type: '@encaminhamentoNAAPA/setTabAtivaEncaminhamentoNAAPA',
   payload,
 });
-
-export const setTabIndexEncaminhamentoNAAPA = payload => ({
-  type: '@encaminhamentoNAAPA/setTabIndexEncaminhamentoNAAPA',
-  payload,
-});

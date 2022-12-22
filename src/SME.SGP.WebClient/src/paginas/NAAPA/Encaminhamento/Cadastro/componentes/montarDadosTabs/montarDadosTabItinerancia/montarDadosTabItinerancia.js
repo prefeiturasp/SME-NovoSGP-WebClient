@@ -4,7 +4,11 @@ import React, { useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { Button, Card, Colors } from '~/componentes';
 import { SGP_BUTTON_NOVO_ATENDIMENTO } from '~/constantes/ids/button';
-import { setQuestionarioDinamicoEmEdicao } from '~/redux/modulos/questionarioDinamico/actions';
+import { setListaSecoesEmEdicao } from '~/redux/modulos/encaminhamentoNAAPA/actions';
+import {
+  setLimparDadosQuestionarioDinamico,
+  setQuestionarioDinamicoEmEdicao,
+} from '~/redux/modulos/questionarioDinamico/actions';
 import DrawerAtendimento from '../../drawer/drawerAtendimento';
 import ListaHistoricoAtendimentosPaginada from './listaHistoricoAtendimentosPaginada';
 
@@ -24,11 +28,17 @@ const MontarDadosTabItinerancia = ({ questionarioId, dadosTab }) => {
     abrirDrawer();
   };
 
-  const onCloseDrawer = () => {
-    setAtualizarTabela(true);
-    dispatch(setQuestionarioDinamicoEmEdicao(false));
-    setAtendimentoId(undefined);
+  const onCloseDrawer = props => {
+    const atualizarDados = !!props?.atualizarDados;
+
     setMostrarDrawer(false);
+    setAtendimentoId(undefined);
+    if (atualizarDados) {
+      setAtualizarTabela(true);
+    }
+    dispatch(setQuestionarioDinamicoEmEdicao(false));
+    dispatch(setLimparDadosQuestionarioDinamico());
+    dispatch(setListaSecoesEmEdicao([]));
   };
 
   useEffect(() => {

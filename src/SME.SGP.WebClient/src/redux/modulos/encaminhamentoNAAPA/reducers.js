@@ -8,7 +8,6 @@ const inicial = {
   listaSecoesEmEdicao: [],
   desabilitarCamposEncaminhamentoNAAPA: false,
   tabAtivaEncaminhamentoNAAPA: null,
-  tabIndexEncaminhamentoNAAPA: null,
 };
 
 export default function EncaminhamentoNAAPA(state = inicial, action) {
@@ -63,12 +62,6 @@ export default function EncaminhamentoNAAPA(state = inicial, action) {
         return {
           ...draft,
           tabAtivaEncaminhamentoNAAPA: action.payload,
-        };
-      }
-      case '@encaminhamentoNAAPA/setTabIndexEncaminhamentoNAAPA': {
-        return {
-          ...draft,
-          tabIndexEncaminhamentoNAAPA: action.payload,
         };
       }
       default:

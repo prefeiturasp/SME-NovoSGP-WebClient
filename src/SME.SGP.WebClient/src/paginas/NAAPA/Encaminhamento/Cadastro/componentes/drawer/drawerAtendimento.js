@@ -72,7 +72,7 @@ const DrawerAtendimento = ({
         : 'Atendimento registrado com sucesso';
 
       sucesso(mensagem);
-      onCloseDrawer();
+      onCloseDrawer({ atualizarDados: true });
     }
 
     dispatch(setExibirLoaderDrawerAtendimento(false));
@@ -99,10 +99,10 @@ const DrawerAtendimento = ({
   };
 
   useEffect(() => {
-    if (questionarioId) {
+    if (questionarioId && mostrarDrawer) {
       obterDadosAtendimento();
     }
-  }, [questionarioId, obterDadosAtendimento]);
+  }, [questionarioId, mostrarDrawer, obterDadosAtendimento]);
 
   return (
     <DrawerContainer
@@ -165,7 +165,9 @@ DrawerAtendimento.defaultProps = {
   atendimentoId: 0,
   questionarioId: 0,
   mostrarDrawer: false,
-  onCloseDrawer: () => null,
+  onCloseDrawer: () => ({
+    atualizarDados: false,
+  }),
 };
 
 export default DrawerAtendimento;
