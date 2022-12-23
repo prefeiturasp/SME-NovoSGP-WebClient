@@ -381,6 +381,9 @@ const JoditEditor = forwardRef((props, ref) => {
               'jodit'
             )[0].style.cssText = 'overflow: auto;';
           }
+          textArea.current.editorDocument.getElementsByClassName(
+            'jodit'
+          )[0].translate = false;
 
           if (ref) {
             if (typeof ref === 'function') {
