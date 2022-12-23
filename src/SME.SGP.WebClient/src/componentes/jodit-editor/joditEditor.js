@@ -320,7 +320,31 @@ const JoditEditor = forwardRef((props, ref) => {
     form.setFieldTouched(name, true, true);
   };
 
+  const bloquearTraducaoNavegador = () => {
+    const isEdge = navigator?.userAgent?.indexOf?.('Edg') !== -1;
+    if (isEdge && textArea?.current) {
+      const elementTextArea = textArea?.current?.editorDocument?.getElementsByClassName(
+        'jodit'
+      )?.[0];
+
+      const elementBodyTextArea = elementTextArea
+        ? elementTextArea.getElementsByTagName('body')[0]
+        : null;
+      if (elementBodyTextArea) {
+        const childrens = elementBodyTextArea?.children;
+
+        if (childrens?.length) {
+          for (let index = 0; index < childrens.length; index++) {
+            childrens[index].className = 'notranslate';
+          }
+        }
+      }
+    }
+  };
+
   const beforeOnChange = () => {
+    bloquearTraducaoNavegador();
+
     if (textArea?.current?.editorIsActive) {
       if (CHANGE_DEBOUNCE_FLAG) clearTimeout(CHANGE_DEBOUNCE_FLAG);
 
@@ -371,19 +395,18 @@ const JoditEditor = forwardRef((props, ref) => {
       if (textArea?.current && config) {
         if (textArea?.current?.type === 'textarea') {
           textArea.current = Jodit.make(element, config);
-
-          if (
-            textArea?.current?.editorDocument?.getElementsByClassName(
-              'jodit'
-            )?.[0]?.style
-          ) {
-            textArea.current.editorDocument.getElementsByClassName(
-              'jodit'
-            )[0].style.cssText = 'overflow: auto;';
-          }
-          textArea.current.editorDocument.getElementsByClassName(
+          const elementTextArea = textArea?.current?.editorDocument?.getElementsByClassName(
             'jodit'
-          )[0].translate = false;
+          )?.[0];
+
+          if (elementTextArea?.style) {
+            elementTextArea.style.cssText = 'overflow: auto;';
+          }
+
+          if (elementTextArea) {
+            elementTextArea.translate = false;
+            elementTextArea.className = `${elementTextArea.className} notranslate`;
+          }
 
           if (ref) {
             if (typeof ref === 'function') {
@@ -415,6 +438,7 @@ const JoditEditor = forwardRef((props, ref) => {
   useEffect(() => {
     if (textArea && textArea.current) {
       textArea.current.value = value;
+      bloquearTraducaoNavegador();
     }
   }, [textArea, value]);
 
