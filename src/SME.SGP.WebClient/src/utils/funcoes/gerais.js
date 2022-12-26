@@ -89,6 +89,21 @@ const maskTelefone = v => {
   return v;
 };
 
+const maskNota = v => {
+  v = String(v);
+  v = v
+    .replace(/^\D(,\D)/g, '')
+    .replace(/,+/g, ',')
+    .replace(/\.+/g, '');
+  return v;
+};
+
+const maskSomenteTexto = v => {
+  v = String(v);
+  v = v.replace(/[0-9!@#¨$%^&*)(+=._-]+/g, '');
+  return v;
+};
+
 const ordenarListaMaiorParaMenor = (conteudoParaOrdenar, nomeCampo) => {
   const ordenar = (a, b) => {
     return b[nomeCampo] - a[nomeCampo];
@@ -276,6 +291,30 @@ const ordenarNotificoesNavBar = listaNotificacoes => {
   return listaOrdenada;
 };
 
+const arredondarNota = (nota, dadosArredondamento) => {
+  const min = dadosArredondamento?.minima || 0;
+  const max = dadosArredondamento?.maxima || 10;
+  const incremento = dadosArredondamento?.incremento || 0.5;
+
+  if (typeof nota === 'number') {
+    if (nota >= max) return max;
+    if (nota <= min) return min;
+
+    const parteDecimal = nota - Math.trunc(nota);
+    const parteInteira = Math.trunc(nota);
+
+    if (!!incremento && !!parteDecimal && parteDecimal !== incremento) {
+      if (parteDecimal > incremento) {
+        return parteInteira + 1;
+      }
+
+      return parteInteira + incremento;
+    }
+  }
+
+  return nota;
+};
+
 export {
   validaSeObjetoEhNuloOuVazio,
   valorNuloOuVazio,
@@ -287,6 +326,8 @@ export {
   removerNumeros,
   downloadBlob,
   maskTelefone,
+  maskNota,
+  maskSomenteTexto,
   ordenarListaMaiorParaMenor,
   removerArrayAninhados,
   clonarObjeto,
@@ -298,4 +339,5 @@ export {
   primeiroMaisculo,
   editorTemValor,
   ordenarNotificoesNavBar,
+  arredondarNota,
 };

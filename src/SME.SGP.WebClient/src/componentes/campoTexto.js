@@ -3,6 +3,7 @@ import { Field } from 'formik';
 import PropTypes from 'prop-types';
 import React from 'react';
 import styled from 'styled-components';
+import { maskSomenteTexto, maskTelefone, maskNota } from '~/utils';
 import { Base } from './colors';
 import Label from './label';
 
@@ -55,6 +56,10 @@ const CampoTexto = React.forwardRef((props, ref) => {
     height,
     onBlur,
     labelRequired,
+    addMaskTelefone,
+    somenteTexto,
+    somenteNumero,
+    addMaskNota,
   } = props;
 
   const possuiErro = () => {
@@ -68,10 +73,36 @@ const CampoTexto = React.forwardRef((props, ref) => {
     }
   };
 
-  const onChangeCampo = e => {
-    form.setFieldValue(name, e.target.value);
-    form.setFieldTouched(name, true, true);
-    onChange(e);
+  const onChangeCampoComForm = e => {
+    let valorParaAtualizar = e.target.value;
+
+    if (valorParaAtualizar && addMaskTelefone) {
+      valorParaAtualizar = maskTelefone(e.target.value);
+    } else if (valorParaAtualizar && somenteTexto) {
+      valorParaAtualizar = maskSomenteTexto(e.target.value);
+    } else if (valorParaAtualizar && somenteNumero) {
+      valorParaAtualizar = String(e.target.value)?.replace?.(/\D/g, '');
+    }
+
+    const valorDiferente = form.values[name] !== valorParaAtualizar;
+    if (valorDiferente) {
+      form.setFieldValue(name, valorParaAtualizar);
+      form.setFieldTouched(name, true, true);
+      onChange(e, valorParaAtualizar);
+    }
+  };
+
+  const onChangeCampoSemForm = e => {
+    let valorParaAtualizar = e.target.value;
+    console.log(valorParaAtualizar);
+    if (valorParaAtualizar && addMaskNota) {
+      valorParaAtualizar = maskNota(valorParaAtualizar);
+    }
+
+    const valorDiferente = value !== valorParaAtualizar;
+    if (valorDiferente) {
+      onChange(e, valorParaAtualizar);
+    }
   };
 
   return (
@@ -99,29 +130,28 @@ const CampoTexto = React.forwardRef((props, ref) => {
             innerRef={ref}
             onKeyDown={onKeyDown}
             placeholder={placeholder}
-            onChange={onChangeCampo}
+            onChange={onChangeCampoComForm}
             style={style}
             prefix={iconeBusca ? <i className="fa fa-search fa-lg" /> : ''}
             value={value || form.values[name]}
             rows={minRowsTextArea}
           />
-          {!semMensagem && form && form.touched[name] ? (
-            <span>{form.errors[name]}</span>
-          ) : (
-            ''
-          )}
+          {!semMensagem && possuiErro() ? <span>{form.errors[name]}</span> : ''}
         </>
       ) : (
         <Input
+          id={id}
           ref={ref}
           placeholder={placeholder}
-          onChange={onChange}
+          onChange={onChangeCampoSemForm}
           onBlur={onBlur}
           disabled={desabilitado}
+          readOnly={desabilitado}
           onKeyDown={onKeyDown}
           value={value}
           prefix={iconeBusca ? <i className="fa fa-search fa-lg" /> : ''}
           allowClear={allowClear}
+          maxLength={maxLength || ''}
         />
       )}
     </Campo>
@@ -151,6 +181,10 @@ CampoTexto.propTypes = {
   height: PropTypes.string,
   onBlur: PropTypes.oneOfType([PropTypes.func]),
   labelRequired: PropTypes.bool,
+  addMaskTelefone: PropTypes.bool,
+  addMaskNota: PropTypes.bool,
+  somenteTexto: PropTypes.bool,
+  somenteNumero: PropTypes.bool,
 };
 
 CampoTexto.defaultProps = {
@@ -176,6 +210,10 @@ CampoTexto.defaultProps = {
   height: '38',
   onBlur: () => {},
   labelRequired: false,
+  addMaskTelefone: false,
+  addMaskNota: false,
+  somenteTexto: false,
+  somenteNumero: false,
 };
 
 export default CampoTexto;

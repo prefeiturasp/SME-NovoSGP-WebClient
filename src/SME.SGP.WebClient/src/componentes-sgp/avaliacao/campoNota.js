@@ -1,11 +1,12 @@
 import PropTypes from 'prop-types';
 import React, { useCallback, useEffect, useState } from 'react';
 import CampoNumero from '~/componentes/campoNumero';
-import { erros } from '~/servicos/alertas';
-import api from '~/servicos/api';
-import { converterAcaoTecla } from '~/utils';
+import CampoTexto from '~/componentes/campoTexto';
+import { arredondarNota, converterAcaoTecla } from '~/utils';
 import TooltipEstudanteAusente from './tooltipEstudanteAusente';
 import TooltipStatusGsa from './tooltipStatusGsa';
+
+import LabelAusenteCellTable from '~/paginas/DiarioClasse/Listao/operacoes/listaoTabs/tabListaoAvaliacoes/componentes/labelAusenteCellTable';
 
 const CampoNota = props => {
   const {
@@ -16,78 +17,63 @@ const CampoNota = props => {
     name,
     esconderSetas,
     step,
+    dadosArredondamento,
   } = props;
 
   const [notaValorAtual, setNotaValorAtual] = useState();
-  const [notaAlterada, setNotaAlterada] = useState(false);
+  // const [notaAlterada, setNotaAlterada] = useState(false);
 
-  const validaSeTeveAlteracao = useCallback((notaOriginal, notaNova) => {
-    if (
-      notaOriginal !== undefined &&
-      notaOriginal != null &&
-      notaOriginal.trim() !== ''
-    ) {
-      setNotaAlterada(
-        Number(notaNova).toFixed(1) !== Number(notaOriginal).toFixed(1)
-      );
-    }
-  }, []);
+  // const validaSeTeveAlteracao = useCallback((notaOriginal, notaNova) => {
+  //   if (
+  //     notaOriginal !== undefined &&
+  //     notaOriginal != null &&
+  //     notaOriginal.trim() !== ''
+  //   ) {
+  //     setNotaAlterada(
+  //       Number(notaNova).toFixed(1) !== Number(notaOriginal).toFixed(1)
+  //     );
+  //   }
+  // }, []);
 
-  const removerCaracteresInvalidos = texto => {
-    return texto.replace(/[^0-9,.]+/g, '');
-  };
+  // const removerCaracteresInvalidos = texto => {
+  //   return texto.replace(/[^0-9,.]+/g, '');
+  // };
 
-  const editouCampo = (notaOriginal, notaNova) => {
-    notaOriginal = removerCaracteresInvalidos(String(notaOriginal));
-    notaNova = removerCaracteresInvalidos(String(notaNova));
-    if (notaOriginal === '' && notaNova === '') {
-      return false;
-    }
-    return notaOriginal !== notaNova;
-  };
+  // const editouCampo = (notaOriginal, notaNova) => {
+  //   notaOriginal = removerCaracteresInvalidos(String(notaOriginal));
+  //   notaNova = removerCaracteresInvalidos(String(notaNova));
+  //   if (notaOriginal === '' && notaNova === '') {
+  //     return false;
+  //   }
+  //   return notaOriginal !== notaNova;
+  // };
 
   useEffect(() => {
     setNotaValorAtual(nota.notaConceito);
-    validaSeTeveAlteracao(nota.notaOriginal, nota.notaConceito);
-  }, [nota.notaConceito, nota.notaOriginal, validaSeTeveAlteracao]);
+    // validaSeTeveAlteracao(nota.notaOriginal, nota.notaConceito);
+  }, [nota.notaConceito]);
 
-  const setarValorNovo = async valorNovo => {
+  const setarValorNovo = valorNovo => {
     if (!desabilitarCampo && nota.podeEditar) {
-      setNotaValorAtual(valorNovo);
-      const resto = valorNovo % 0.5;
-      let notaArredondada = valorNovo;
-      if (resto) {
-        setNotaValorAtual(valorNovo);
-        const retorno = await api
-          .get(
-            `v1/avaliacoes/${nota.atividadeAvaliativaId}/notas/${Number(
-              valorNovo
-            )}/arredondamento`
-          )
-          .catch(e => erros(e));
+      const notaArredondada = arredondarNota(valorNovo, dadosArredondamento);
 
-        if (retorno && retorno.data) {
-          notaArredondada = retorno.data;
-        }
-      }
-
-      validaSeTeveAlteracao(nota.notaOriginal, notaArredondada);
+      // validaSeTeveAlteracao(nota.notaOriginal, notaArredondada);
       onChangeNotaConceito(notaArredondada);
       setNotaValorAtual(notaArredondada);
     }
   };
 
-  const valorInvalido = valorNovo => {
-    const regexValorInvalido = /[^0-9,.]+/g;
-    return regexValorInvalido.test(String(valorNovo));
-  };
+  // const valorInvalido = valorNovo => {
+  //   const regexValorInvalido = /[^0-9,.]+/g;
+  //   return regexValorInvalido.test(String(valorNovo));
+  // };
 
-  const apertarTecla = e => {
-    const teclaEscolhida = converterAcaoTecla(e.keyCode);
-    if (teclaEscolhida === 0 && !notaValorAtual) {
-      setarValorNovo(0);
-    }
-  };
+  // const apertarTecla = e => {
+  //   const teclaEscolhida = converterAcaoTecla(e.keyCode);
+  //   if (teclaEscolhida === 0 && !notaValorAtual) {
+  //     setarValorNovo(0);
+  //   }
+  // };
 
   return (
     <div
@@ -96,12 +82,8 @@ const CampoNota = props => {
         alignItems: 'center',
       }}
     >
-      <CampoNumero
-        validateOnBlurInOnChange
-        esconderSetas={esconderSetas}
+      {/* <CampoTexto
         name={name}
-        onKeyDown={clicarSetas}
-        onKeyUp={apertarTecla}
         onChange={valorNovo => {
           let valorEnviado = null;
           if (valorNovo) {
@@ -114,15 +96,29 @@ const CampoNota = props => {
           setarValorNovo(valorEnviado || valorCampo);
         }}
         value={notaValorAtual}
-        min={0}
-        max={10}
-        step={step}
+        //maxlength={3}
         placeholder="Nota"
         classNameCampo={`${nota.ausente ? 'aluno-ausente-notas' : ''}`}
-        disabled={desabilitarCampo || !nota.podeEditar}
+        desabilitado={desabilitarCampo || !nota.podeEditar}
         className={`${notaAlterada ? 'border-registro-alterado' : ''}`}
+        somenteNumero
+      /> */}
+
+      <CampoTexto
+        id={name}
+        onChange={(_, novaNota) => {
+          debugger;
+          setarValorNovo(novaNota);
+        }}
+        desabilitado={desabilitarCampo || !nota.podeEditar}
+        value={notaValorAtual}
+        placeholder="Nota"
+        maxLength={3}
+        addMaskNota
+        allowClear={false}
       />
-      {nota?.ausente ? <TooltipEstudanteAusente /> : ''}
+      {/* {nota?.ausente ? <TooltipEstudanteAusente /> : ''} */}
+      {nota?.ausente && <LabelAusenteCellTable />}
       {nota?.statusGsa ? <TooltipStatusGsa /> : ''}
     </div>
   );
@@ -136,10 +132,12 @@ CampoNota.defaultProps = {
   name: '',
   esconderSetas: false,
   step: 0.5,
+  dadosArredondamento: null,
 };
 
 CampoNota.propTypes = {
   nota: PropTypes.oneOfType([PropTypes.any]),
+  dadosArredondamento: PropTypes.oneOfType([PropTypes.any]),
   onChangeNotaConceito: PropTypes.func,
   desabilitarCampo: PropTypes.bool,
   clicarSetas: PropTypes.func,

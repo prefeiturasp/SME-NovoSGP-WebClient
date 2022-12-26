@@ -185,6 +185,7 @@ const Avaliacao = props => {
               onChangeNotaConceito(nota, valorNovo)
             }
             desabilitarCampo={desabilitarCampos || desabilitarNota}
+            dadosArredondamento={avaliacao.dadosArredondamento}
             mediaAprovacaoBimestre={dados.mediaAprovacaoBimestre}
           />
         );
