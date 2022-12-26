@@ -46,8 +46,8 @@ const CadastroEncaminhamentoNAAPABotoesAcao = props => {
     store => store.encaminhamentoNAAPA.desabilitarCamposEncaminhamentoNAAPA
   );
 
-  const dadosEncaminhamentoNAAPA = useSelector(
-    state => state.encaminhamentoNAAPA.dadosEncaminhamentoNAAPA
+  const dadosSituacao = useSelector(
+    state => state.encaminhamentoNAAPA.dadosSituacaoEncaminhamentoNAAPA
   );
 
   const encaminhamentoId = routeMatch.params?.id;
@@ -156,8 +156,8 @@ const CadastroEncaminhamentoNAAPABotoesAcao = props => {
 
   const ocultarBtnRascunho =
     encaminhamentoId &&
-    dadosEncaminhamentoNAAPA?.situacao &&
-    dadosEncaminhamentoNAAPA?.situacao !== situacaoNAAPA.Rascunho;
+    dadosSituacao?.situacao &&
+    dadosSituacao?.situacao !== situacaoNAAPA.Rascunho;
 
   const labelBtnCadastrarAlterar = ocultarBtnRascunho ? 'Alterar' : 'Cadastrar';
 
@@ -167,22 +167,21 @@ const CadastroEncaminhamentoNAAPABotoesAcao = props => {
   const disabledBtnExcluir =
     !permissoesTela?.podeExcluir ||
     !encaminhamentoId ||
-    (dadosEncaminhamentoNAAPA?.situacao !== situacaoNAAPA.Rascunho &&
-      dadosEncaminhamentoNAAPA?.situacao !==
-        situacaoNAAPA.AguardandoAtendimento);
+    (dadosSituacao?.situacao !== situacaoNAAPA.Rascunho &&
+      dadosSituacao?.situacao !== situacaoNAAPA.AguardandoAtendimento);
 
   const disabledCadastrarAlterar =
     desabilitarCamposEncaminhamentoNAAPA ||
     !permissoesTela?.podeAlterar ||
     (encaminhamentoId &&
       !questionarioDinamicoEmEdicao &&
-      dadosEncaminhamentoNAAPA?.situacao !== situacaoNAAPA.Rascunho);
+      dadosSituacao?.situacao !== situacaoNAAPA.Rascunho);
 
   const disabledRascunho =
     desabilitarCamposEncaminhamentoNAAPA ||
     (encaminhamentoId &&
       !questionarioDinamicoEmEdicao &&
-      dadosEncaminhamentoNAAPA?.situacao === situacaoNAAPA.Rascunho);
+      dadosSituacao?.situacao === situacaoNAAPA.Rascunho);
 
   return (
     <Row gutter={[8, 8]} type="flex">

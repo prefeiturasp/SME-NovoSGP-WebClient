@@ -16,9 +16,14 @@ import MontarDadosTabSelecionada from './montarDadosTabSelecionada';
 const { TabPane } = Tabs;
 
 const MontarDadosTabs = () => {
-  const { aluno, anoLetivo, modalidade, situacao } = useSelector(
+  const { aluno, anoLetivo, modalidade } = useSelector(
     state => state.encaminhamentoNAAPA.dadosEncaminhamentoNAAPA
   );
+  const dadosSituacao = useSelector(
+    state => state.encaminhamentoNAAPA.dadosSituacaoEncaminhamentoNAAPA
+  );
+
+  const situacao = dadosSituacao?.situacao;
 
   const routeMatch = useRouteMatch();
   const dispatch = useDispatch();
