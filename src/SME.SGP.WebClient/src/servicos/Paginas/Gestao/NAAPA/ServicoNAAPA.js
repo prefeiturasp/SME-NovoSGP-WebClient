@@ -7,6 +7,8 @@ import {
   setExibirLoaderEncaminhamentoNAAPA,
   setListaSecoesEmEdicao,
   setTabAtivaEncaminhamentoNAAPA,
+  setDadosSecoesEncaminhamentoNAAPA,
+  setDadosSituacaoEncaminhamentoNAAPA,
 } from '~/redux/modulos/encaminhamentoNAAPA/actions';
 import { limparDadosLocalizarEstudante } from '~/redux/modulos/localizarEstudante/actions';
 import {
@@ -251,9 +253,10 @@ class ServicoNAAPA {
     return false;
   };
 
-  excluirAtendimento = atendimentoId => {
-    return api.delete(`${URL_PADRAO}/secoes-itinerancia/${atendimentoId}`);
-  };
+  excluirAtendimento = (encaminhamentoNAAPAId, atendimentoId) =>
+    api.delete(
+      `${URL_PADRAO}/${encaminhamentoNAAPAId}/secoes-itinerancia/${atendimentoId}`
+    );
 
   validarTrocaDeAbas = async (tabIndex, encaminhamentoId) => {
     const state = store.getState();
@@ -292,6 +295,16 @@ class ServicoNAAPA {
           dispatch(setLimparDadosQuestionarioDinamico());
           dispatch(setListaSecoesEmEdicao([]));
 
+          dispatch(setDadosSecoesEncaminhamentoNAAPA([]));
+
+          const dadosSecoesClonado = _.cloneDeep(
+            dadosSecoesEncaminhamentoNAAPA
+          );
+
+          setTimeout(() => {
+            dispatch(setDadosSecoesEncaminhamentoNAAPA(dadosSecoesClonado));
+          }, 300);
+          dispatch(setQuestionarioDinamicoEmEdicao(false));
           dispatch(setTabAtivaEncaminhamentoNAAPA(tabIndex));
         }
       } else {
@@ -299,13 +312,26 @@ class ServicoNAAPA {
           ServicoNAAPA.removerArquivo
         );
 
-        dispatch(setLimparDadosQuestionarioDinamico());
         dispatch(setListaSecoesEmEdicao([]));
 
         dispatch(setTabAtivaEncaminhamentoNAAPA(tabIndex));
       }
     } else {
       dispatch(setTabAtivaEncaminhamentoNAAPA(tabIndex));
+    }
+  };
+
+  obterSituacaoEncaminhamento = async encaminhamentoNAAPAId => {
+    const resposta = await api.get(
+      `${URL_PADRAO}/${encaminhamentoNAAPAId}/situacao`
+    );
+    if (resposta?.status === 200) {
+      const { dispatch } = store;
+      const dadosSituacao = {
+        situacao: resposta?.data?.codigo,
+        descricaoSituacao: resposta?.data?.descricao,
+      };
+      dispatch(setDadosSituacaoEncaminhamentoNAAPA({ ...dadosSituacao }));
     }
   };
 }

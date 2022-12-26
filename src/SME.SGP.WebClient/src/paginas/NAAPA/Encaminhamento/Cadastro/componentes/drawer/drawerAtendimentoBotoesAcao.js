@@ -34,15 +34,15 @@ const DrawerAtendimentoBotoesAcao = ({
 
   const permissoesTela = usuario.permissoes[RotasDto.ENCAMINHAMENTO_NAAPA];
 
-  const encaminhamentoId = routeMatch.params?.id;
+  const encaminhamentoNAAPAId = routeMatch.params?.id;
 
   const soConsulta = verificaSomenteConsulta(permissoesTela);
 
   const podeExcluir =
-    encaminhamentoId && !!atendimentoId && permissoesTela?.podeExcluir;
+    encaminhamentoNAAPAId && !!atendimentoId && permissoesTela?.podeExcluir;
 
   const podeIncluir =
-    encaminhamentoId && atendimentoId > 0
+    encaminhamentoNAAPAId && atendimentoId > 0
       ? permissoesTela?.podeAlterar
       : permissoesTela?.podeIncluir;
 
@@ -66,6 +66,7 @@ const DrawerAtendimentoBotoesAcao = ({
       dispatch(setExibirLoaderDrawerAtendimento(true));
 
       const resultado = await ServicoNAAPA.excluirAtendimento(
+        encaminhamentoNAAPAId,
         atendimentoId
       ).catch(e => {
         erros(e);

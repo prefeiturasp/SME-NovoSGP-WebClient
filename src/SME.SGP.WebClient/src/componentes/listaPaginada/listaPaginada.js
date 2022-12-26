@@ -128,10 +128,10 @@ const ListaPaginada = props => {
           }
           setLinhas([...items]);
           if (setLista) {
-            setLista(items);
+            setLista(items, linhas);
           }
         } else {
-          setLista([]);
+          setLista([], linhas);
         }
       })
       .catch(e => {

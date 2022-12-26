@@ -37,3 +37,8 @@ export const setTabAtivaEncaminhamentoNAAPA = payload => ({
   type: '@encaminhamentoNAAPA/setTabAtivaEncaminhamentoNAAPA',
   payload,
 });
+
+export const setDadosSituacaoEncaminhamentoNAAPA = payload => ({
+  type: '@encaminhamentoNAAPA/setDadosSituacaoEncaminhamentoNAAPA',
+  payload,
+});
