@@ -5,6 +5,7 @@ import { useRouteMatch } from 'react-router-dom';
 import { ListaPaginada } from '~/componentes';
 import { SGP_TABLE_HISTORICO_ATENDIMENTO } from '~/constantes/ids/table';
 import { Titulo } from './style';
+import ServicoNAAPA from '~/servicos/Paginas/Gestao/NAAPA/ServicoNAAPA';
 
 const ListaHistoricoAtendimentosPaginada = ({
   atualizarTabela,
@@ -67,6 +68,20 @@ const ListaHistoricoAtendimentosPaginada = ({
         id={SGP_TABLE_HISTORICO_ATENDIMENTO}
         onClick={linha => onClickLinha(linha)}
         url={`v1/encaminhamento-naapa/${encaminhamentoNAAPAId}/secoes-itinerancia`}
+        setLista={(dadosNovos, dadosAntigos) => {
+          const excluidoUltimoRegistro = !dadosNovos?.length;
+
+          const inseridoPrimeiroRegistro =
+            !dadosAntigos?.length && dadosNovos?.length === 1;
+
+          const obterNovaSituacao =
+            atualizarTabela &&
+            (excluidoUltimoRegistro || inseridoPrimeiroRegistro);
+
+          if (obterNovaSituacao) {
+            ServicoNAAPA.obterSituacaoEncaminhamento(encaminhamentoNAAPAId);
+          }
+        }}
       />
     </>
   ) : (

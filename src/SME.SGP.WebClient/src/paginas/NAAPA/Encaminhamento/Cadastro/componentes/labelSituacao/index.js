@@ -13,13 +13,13 @@ export const LabelContainer = styled.div`
 `;
 
 const LabelSituacao = () => {
-  const dadosEncaminhamentoNAAPA = useSelector(
-    state => state.encaminhamentoNAAPA.dadosEncaminhamentoNAAPA
+  const dadosSituacao = useSelector(
+    state => state.encaminhamentoNAAPA.dadosSituacaoEncaminhamentoNAAPA
   );
 
-  return dadosEncaminhamentoNAAPA?.descricaoSituacao ? (
+  return dadosSituacao?.descricaoSituacao ? (
     <LabelContainer id={SGP_LABEL_SITUACAO_ENCAMINHAMENTO_NAAPA}>
-      {dadosEncaminhamentoNAAPA?.descricaoSituacao}
+      {dadosSituacao?.descricaoSituacao}
     </LabelContainer>
   ) : (
     <></>

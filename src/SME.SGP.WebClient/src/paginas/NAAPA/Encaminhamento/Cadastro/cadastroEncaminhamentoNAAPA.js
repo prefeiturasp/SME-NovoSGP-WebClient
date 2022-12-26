@@ -10,6 +10,7 @@ import ServicoNAAPA from '~/servicos/Paginas/Gestao/NAAPA/ServicoNAAPA';
 import { store } from '~/redux';
 import {
   setDadosEncaminhamentoNAAPA,
+  setDadosSituacaoEncaminhamentoNAAPA,
   setExibirLoaderEncaminhamentoNAAPA,
 } from '~/redux/modulos/encaminhamentoNAAPA/actions';
 import { erros } from '~/servicos';
@@ -62,9 +63,16 @@ const CadastroEncaminhamentoNAAPA = () => {
         id: dados?.turmaId,
       };
 
+      const dadosSituacao = {
+        situacao: dados.situacao,
+        descricaoSituacao: dados.descricaoSituacao,
+      };
+      store.dispatch(setDadosSituacaoEncaminhamentoNAAPA(dadosSituacao));
+
       store.dispatch(setDadosEncaminhamentoNAAPA(dados));
     } else {
       store.dispatch(setDadosEncaminhamentoNAAPA([]));
+      store.dispatch(setDadosSituacaoEncaminhamentoNAAPA(null));
     }
     dispatch(setExibirLoaderEncaminhamentoNAAPA(false));
   }, [dispatch, encaminhamentoId]);
