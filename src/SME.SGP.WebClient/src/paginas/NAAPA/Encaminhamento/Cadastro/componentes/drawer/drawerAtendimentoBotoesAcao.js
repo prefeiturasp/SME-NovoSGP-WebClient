@@ -60,7 +60,7 @@ const DrawerAtendimentoBotoesAcao = ({
     const confirmado = await confirmar(
       'Excluir',
       '',
-      'Deseja realmente excluir o atendimento'
+      'Deseja realmente excluir o atendimento?'
     );
     if (confirmado) {
       dispatch(setExibirLoaderDrawerAtendimento(true));
