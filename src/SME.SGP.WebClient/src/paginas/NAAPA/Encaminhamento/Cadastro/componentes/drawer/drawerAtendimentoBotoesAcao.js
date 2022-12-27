@@ -7,8 +7,9 @@ import { Button, Colors } from '~/componentes';
 import BotaoExcluirPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoExcluirPadrao';
 import QuestionarioDinamicoFuncoes from '~/componentes-sgp/QuestionarioDinamico/Funcoes/QuestionarioDinamicoFuncoes';
 import {
-  SGP_BUTTON_CANCELAR,
-  SGP_BUTTON_SALVAR,
+  SGP_BUTTON_CANCELAR_ATENDIMENTO,
+  SGP_BUTTON_EXCLUIR_ATENDIMENTO,
+  SGP_BUTTON_SALVAR_ATENDIMENTO,
 } from '~/constantes/ids/button';
 import { RotasDto } from '~/dtos';
 import { setExibirLoaderDrawerAtendimento } from '~/redux/modulos/encaminhamentoNAAPA/actions';
@@ -100,6 +101,7 @@ const DrawerAtendimentoBotoesAcao = ({
           <BotaoExcluirPadrao
             onClick={() => onClickExcluir()}
             disabled={exibirLoaderDrawerAtendimento}
+            id={SGP_BUTTON_EXCLUIR_ATENDIMENTO}
           />
         </Col>
       )}
@@ -109,7 +111,7 @@ const DrawerAtendimentoBotoesAcao = ({
           border
           label="Cancelar"
           color={Colors.Roxo}
-          id={SGP_BUTTON_CANCELAR}
+          id={SGP_BUTTON_CANCELAR_ATENDIMENTO}
           disabled={desabilitarCancelar}
           onClick={() => onClickCancelar()}
         />
@@ -121,7 +123,7 @@ const DrawerAtendimentoBotoesAcao = ({
           border
           label="Salvar"
           color={Colors.Azul}
-          id={SGP_BUTTON_SALVAR}
+          id={SGP_BUTTON_SALVAR_ATENDIMENTO}
           disabled={desabilitarSalvar}
           onClick={() => onClickSalvar()}
         />
