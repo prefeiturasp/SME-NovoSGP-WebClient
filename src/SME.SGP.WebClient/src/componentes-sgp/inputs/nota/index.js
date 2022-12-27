@@ -1,22 +1,22 @@
 import { Tooltip } from 'antd';
 import PropTypes from 'prop-types';
 import React, { useEffect, useState } from 'react';
-import { Base } from '~/componentes';
+import { Base, CampoTexto } from '~/componentes';
 import InputNumberReadOnly from '~/componentes-sgp/camposSomenteLeitura/inputNumberReadOnly/inputNumberReadOnly';
-import CampoNumero from '~/componentes/campoNumero';
-import { erros } from '~/servicos/alertas';
-import api from '~/servicos/api';
-import { converterAcaoTecla } from '~/utils';
+import { arredondarNota, converterAcaoTecla } from '~/utils';
+import LabelAusenteCellTable from './labelAusenteCellTable';
 
-const ListaoCampoNota = props => {
+import { Container } from './style';
+
+const Nota = props => {
   const {
     dadosNota,
     idCampo,
     desabilitar,
     onChangeNotaConceito,
     ehFechamento,
-    periodoFim,
     mediaAprovacaoBimestre,
+    dadosArredondamento,
   } = props;
 
   const [exibir, setExibir] = useState(false);
@@ -25,15 +25,6 @@ const ListaoCampoNota = props => {
 
   const removerCaracteresInvalidos = texto =>
     texto.replace(regexCaracteresInvalidos, '');
-
-  const editouCampo = (notaOriginal, notaNova) => {
-    notaOriginal = removerCaracteresInvalidos(String(notaOriginal));
-    notaNova = removerCaracteresInvalidos(String(notaNova));
-    if (notaOriginal === '' && notaNova === '') {
-      return false;
-    }
-    return notaOriginal !== notaNova;
-  };
 
   const estaAbaixoDaMedia = valorAtual => {
     if (!ehFechamento) return false;
@@ -57,42 +48,19 @@ const ListaoCampoNota = props => {
     }
   }, [dadosNota]);
 
-  const arredondamentoNota = valorValidar =>
-    api.get(
-      `v1/avaliacoes/${dadosNota?.atividadeAvaliativaId}/notas/${Number(
-        valorValidar
-      )}/arredondamento`
-    );
-
-  const arredondamentoNotaFinal = valorValidar => {
-    return api.get(
-      `v1/avaliacoes/notas/${Number(
-        valorValidar
-      )}/arredondamento?data=${periodoFim}`
-    );
-  };
-
-  const validarArredondamento = valorValidar => {
-    if (ehFechamento) {
-      return arredondamentoNotaFinal(valorValidar);
-    }
-    return arredondamentoNota(valorValidar);
-  };
-
   const setarValorNovo = async valorNovo => {
     if (!desabilitar) {
+      onChangeNotaConceito(valorNovo);
       setNotaValorAtual(valorNovo);
-      const resto = valorNovo % 0.5;
-      let notaArredondada = valorNovo;
-      if (resto) {
-        setNotaValorAtual(valorNovo);
-        const retorno = await validarArredondamento(valorNovo).catch(e =>
-          erros(e)
-        );
+    }
+  };
 
-        if (retorno?.data) {
-          notaArredondada = retorno.data;
-        }
+  const onBlur = valorNovo => {
+    if (!desabilitar) {
+      let notaArredondada = valorNovo;
+
+      if (valorNovo && dadosArredondamento) {
+        notaArredondada = arredondarNota(valorNovo, dadosArredondamento);
       }
 
       onChangeNotaConceito(notaArredondada);
@@ -100,31 +68,16 @@ const ListaoCampoNota = props => {
     }
   };
 
-  const valorInvalido = valorNovo =>
-    regexCaracteresInvalidos.test(String(valorNovo));
-
-  const onChangeNota = valorNovo => {
-    let valorEnviado = null;
-    if (valorNovo) {
-      const invalido = valorInvalido(valorNovo);
-      if (!invalido && editouCampo(notaValorAtual, valorNovo)) {
-        valorEnviado = valorNovo;
-      }
+  const validarExibir = valor => {
+    if (!desabilitar) {
+      setExibir(valor);
     }
-    const valorCampo = valorNovo >= 0 ? valorNovo : null;
-    setarValorNovo(valorEnviado || valorCampo);
   };
 
   const apertarTecla = e => {
     const teclaEscolhida = converterAcaoTecla(e.keyCode);
     if (teclaEscolhida === 0 && !notaValorAtual) {
       setarValorNovo(0);
-    }
-  };
-
-  const validarExibir = valor => {
-    if (!desabilitar) {
-      setExibir(valor);
     }
   };
 
@@ -137,37 +90,36 @@ const ListaoCampoNota = props => {
   }
 
   const montarCampo = () => (
-    <div onFocus={() => validarExibir(true)}>
+    <Container onFocus={() => validarExibir(true)}>
       {!desabilitar && exibir ? (
-        <CampoNumero
-          validateOnBlurInOnChange
-          styleContainer={{ height: 38 }}
-          esconderSetas
-          onKeyUp={apertarTecla}
-          name={idCampo}
-          id={idCampo}
-          onChange={valorNovo => onChangeNota(valorNovo)}
-          value={notaValorAtual}
-          min={0}
-          max={10}
-          step={0}
-          placeholder="Nota"
-          disabled={desabilitar}
-          styleCampo={{ ...styleCampo }}
-          maxlength={3}
+        <CampoTexto
           autoFocus
+          addMaskNota
+          id={idCampo}
+          maxLength={3}
+          allowClear={false}
+          placeholder="Nota"
+          onKeyUp={apertarTecla}
+          desabilitado={desabilitar}
+          value={formataNota(notaValorAtual)}
+          onBlur={e => onBlur(e.target.value)}
+          onChange={(_, novaNota) => {
+            setarValorNovo(novaNota);
+          }}
         />
       ) : (
         <InputNumberReadOnly
-          key={idCampo}
           id={idCampo}
-          value={formataNota(notaValorAtual)}
-          disabled={desabilitar}
+          key={idCampo}
           placeholder="Nota"
+          disabled={desabilitar}
           style={{ ...styleCampo }}
+          value={formataNota(notaValorAtual)}
         />
       )}
-    </div>
+
+      {dadosNota?.ausente && <LabelAusenteCellTable />}
+    </Container>
   );
 
   return ehFechamento ? (
@@ -182,24 +134,24 @@ const ListaoCampoNota = props => {
   );
 };
 
-ListaoCampoNota.propTypes = {
+Nota.propTypes = {
   dadosNota: PropTypes.oneOf([PropTypes.any]),
   idCampo: PropTypes.oneOf([PropTypes.any]),
   desabilitar: PropTypes.bool,
   onChangeNotaConceito: PropTypes.func,
   ehFechamento: PropTypes.bool,
-  periodoFim: PropTypes.string,
   mediaAprovacaoBimestre: PropTypes.number,
+  dadosArredondamento: PropTypes.oneOf([PropTypes.any]),
 };
 
-ListaoCampoNota.defaultProps = {
+Nota.defaultProps = {
   dadosNota: {},
   idCampo: 'campo-nota-listao',
   desabilitar: false,
   onChangeNotaConceito: () => {},
   ehFechamento: false,
-  periodoFim: '',
   mediaAprovacaoBimestre: null,
+  dadosArredondamento: null,
 };
 
-export default ListaoCampoNota;
+export default Nota;

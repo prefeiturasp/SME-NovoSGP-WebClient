@@ -1,9 +1,7 @@
 import PropTypes from 'prop-types';
-import React, { useCallback, useEffect, useState } from 'react';
-import CampoNumero from '~/componentes/campoNumero';
+import React, { useEffect, useState } from 'react';
 import CampoTexto from '~/componentes/campoTexto';
-import { arredondarNota, converterAcaoTecla } from '~/utils';
-import TooltipEstudanteAusente from './tooltipEstudanteAusente';
+import { arredondarNota } from '~/utils';
 import TooltipStatusGsa from './tooltipStatusGsa';
 
 import LabelAusenteCellTable from '~/paginas/DiarioClasse/Listao/operacoes/listaoTabs/tabListaoAvaliacoes/componentes/labelAusenteCellTable';
@@ -13,10 +11,7 @@ const CampoNota = props => {
     nota,
     onChangeNotaConceito,
     desabilitarCampo,
-    clicarSetas,
     name,
-    esconderSetas,
-    step,
     dadosArredondamento,
   } = props;
 
@@ -49,13 +44,25 @@ const CampoNota = props => {
   // };
 
   useEffect(() => {
-    setNotaValorAtual(nota.notaConceito);
+    setNotaValorAtual(String(nota.notaConceito).replace('.', ','));
     // validaSeTeveAlteracao(nota.notaOriginal, nota.notaConceito);
   }, [nota.notaConceito]);
 
   const setarValorNovo = valorNovo => {
     if (!desabilitarCampo && nota.podeEditar) {
-      const notaArredondada = arredondarNota(valorNovo, dadosArredondamento);
+      // validaSeTeveAlteracao(nota.notaOriginal, notaArredondada);
+      onChangeNotaConceito(valorNovo);
+      setNotaValorAtual(valorNovo);
+    }
+  };
+
+  const onBlur = valorNovo => {
+    if (!desabilitarCampo && nota.podeEditar) {
+      let notaArredondada = valorNovo;
+
+      if (valorNovo) {
+        notaArredondada = arredondarNota(valorNovo, dadosArredondamento);
+      }
 
       // validaSeTeveAlteracao(nota.notaOriginal, notaArredondada);
       onChangeNotaConceito(notaArredondada);
@@ -106,16 +113,16 @@ const CampoNota = props => {
 
       <CampoTexto
         id={name}
+        addMaskNota
+        maxLength={3}
+        allowClear={false}
+        placeholder="Nota"
+        value={String(notaValorAtual).replace('.', ',')}
+        onBlur={e => onBlur(e.target.value)}
+        desabilitado={desabilitarCampo || !nota.podeEditar}
         onChange={(_, novaNota) => {
-          debugger;
           setarValorNovo(novaNota);
         }}
-        desabilitado={desabilitarCampo || !nota.podeEditar}
-        value={notaValorAtual}
-        placeholder="Nota"
-        maxLength={3}
-        addMaskNota
-        allowClear={false}
       />
       {/* {nota?.ausente ? <TooltipEstudanteAusente /> : ''} */}
       {nota?.ausente && <LabelAusenteCellTable />}
@@ -128,10 +135,7 @@ CampoNota.defaultProps = {
   nota: '',
   onChangeNotaConceito: () => {},
   desabilitarCampo: false,
-  clicarSetas: () => {},
   name: '',
-  esconderSetas: false,
-  step: 0.5,
   dadosArredondamento: null,
 };
 
@@ -140,10 +144,7 @@ CampoNota.propTypes = {
   dadosArredondamento: PropTypes.oneOfType([PropTypes.any]),
   onChangeNotaConceito: PropTypes.func,
   desabilitarCampo: PropTypes.bool,
-  clicarSetas: PropTypes.func,
   name: PropTypes.string,
-  esconderSetas: PropTypes.bool,
-  step: PropTypes.number,
 };
 
 export default CampoNota;

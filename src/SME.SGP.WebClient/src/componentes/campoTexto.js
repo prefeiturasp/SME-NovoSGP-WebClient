@@ -44,6 +44,7 @@ const CampoTexto = React.forwardRef((props, ref) => {
     placeholder,
     onChange,
     onKeyDown,
+    onKeyUp,
     value,
     desabilitado,
     maxLength,
@@ -60,6 +61,7 @@ const CampoTexto = React.forwardRef((props, ref) => {
     somenteTexto,
     somenteNumero,
     addMaskNota,
+    autoFocus,
   } = props;
 
   const possuiErro = () => {
@@ -94,7 +96,7 @@ const CampoTexto = React.forwardRef((props, ref) => {
 
   const onChangeCampoSemForm = e => {
     let valorParaAtualizar = e.target.value;
-    console.log(valorParaAtualizar);
+
     if (valorParaAtualizar && addMaskNota) {
       valorParaAtualizar = maskNota(valorParaAtualizar);
     }
@@ -129,6 +131,7 @@ const CampoTexto = React.forwardRef((props, ref) => {
             maxLength={maxLength || ''}
             innerRef={ref}
             onKeyDown={onKeyDown}
+            onKeyUp={onKeyUp}
             placeholder={placeholder}
             onChange={onChangeCampoComForm}
             style={style}
@@ -142,12 +145,14 @@ const CampoTexto = React.forwardRef((props, ref) => {
         <Input
           id={id}
           ref={ref}
+          autoFocus={autoFocus}
           placeholder={placeholder}
           onChange={onChangeCampoSemForm}
           onBlur={onBlur}
           disabled={desabilitado}
           readOnly={desabilitado}
           onKeyDown={onKeyDown}
+          onKeyUp={onKeyUp}
           value={value}
           prefix={iconeBusca ? <i className="fa fa-search fa-lg" /> : ''}
           allowClear={allowClear}
@@ -168,6 +173,7 @@ CampoTexto.propTypes = {
   maskType: PropTypes.string,
   placeholder: PropTypes.string,
   onChange: PropTypes.oneOfType([PropTypes.func]),
+  onKeyUp: PropTypes.oneOfType([PropTypes.func]),
   onKeyDown: PropTypes.oneOfType([PropTypes.func]),
   value: PropTypes.oneOfType([PropTypes.any]),
   desabilitado: PropTypes.bool,
@@ -185,6 +191,7 @@ CampoTexto.propTypes = {
   addMaskNota: PropTypes.bool,
   somenteTexto: PropTypes.bool,
   somenteNumero: PropTypes.bool,
+  autoFocus: PropTypes.bool,
 };
 
 CampoTexto.defaultProps = {
@@ -197,6 +204,7 @@ CampoTexto.defaultProps = {
   maskType: '',
   placeholder: '',
   onChange: () => {},
+  onKeyUp: () => {},
   onKeyDown: () => {},
   value: '',
   desabilitado: false,
@@ -214,6 +222,7 @@ CampoTexto.defaultProps = {
   addMaskNota: false,
   somenteTexto: false,
   somenteNumero: false,
+  autoFocus: false,
 };
 
 export default CampoTexto;

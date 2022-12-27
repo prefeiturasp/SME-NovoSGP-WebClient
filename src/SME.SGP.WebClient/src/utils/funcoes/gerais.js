@@ -92,9 +92,10 @@ const maskTelefone = v => {
 const maskNota = v => {
   v = String(v);
   v = v
-    .replace(/^\D(,\D)/g, '')
-    .replace(/,+/g, ',')
-    .replace(/\.+/g, '');
+    .replace(/^,/, '')
+    .replace(/[^\d.^\d,]/g, '')
+    .replace(/\.+/g, ',')
+    .replace(/,+/g, ',');
   return v;
 };
 
@@ -295,20 +296,29 @@ const arredondarNota = (nota, dadosArredondamento) => {
   const min = dadosArredondamento?.minima || 0;
   const max = dadosArredondamento?.maxima || 10;
   const incremento = dadosArredondamento?.incremento || 0.5;
+  let notaFormatada = Number(nota);
 
-  if (typeof nota === 'number') {
-    if (nota >= max) return max;
-    if (nota <= min) return min;
+  if (nota.includes(',') && nota.length === 3) {
+    notaFormatada = Number(nota.replace(',', '.'));
+  }
 
-    const parteDecimal = nota - Math.trunc(nota);
-    const parteInteira = Math.trunc(nota);
+  if (typeof notaFormatada === 'number' && !Number.isNaN(notaFormatada)) {
+    if (notaFormatada >= max) return max;
+    if (notaFormatada <= min) return min;
+
+    const parteDecimal = notaFormatada - Math.trunc(notaFormatada);
+    const parteInteira = Math.trunc(notaFormatada);
 
     if (!!incremento && !!parteDecimal && parteDecimal !== incremento) {
+      let novaNota = parteInteira + incremento;
+
       if (parteDecimal > incremento) {
-        return parteInteira + 1;
+        novaNota = parteInteira + 1;
+
+        return novaNota;
       }
 
-      return parteInteira + incremento;
+      return novaNota;
     }
   }
 

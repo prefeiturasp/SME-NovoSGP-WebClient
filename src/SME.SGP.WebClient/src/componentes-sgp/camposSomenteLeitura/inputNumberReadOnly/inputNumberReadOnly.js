@@ -1,33 +1,29 @@
 import PropTypes from 'prop-types';
 import React from 'react';
+import { Container } from './style';
 
 const InputNumberReadOnly = props => {
   const { id, value, style, disabled, placeholder } = props;
 
-  const styleInput = {
-    ...style,
-    cursor: disabled ? 'default' : 'pointer',
-    height: '38px',
-  };
-
   return (
-    <div
+    <Container
       className={`ant-input-number ${
         disabled ? 'ant-input-number-disabled' : ''
       }`}
-      style={styleInput}
+      style={style}
     >
       <div className="ant-input-number-input-wrap">
         <input
-          placeholder={placeholder}
-          className="ant-input-number-input"
           id={id}
+          readOnly
           value={value || ''}
           disabled={disabled}
-          readOnly
+          placeholder={placeholder}
+          style={{ height: '36px' }}
+          className="ant-input-number-input"
         />
       </div>
-    </div>
+    </Container>
   );
 };
 

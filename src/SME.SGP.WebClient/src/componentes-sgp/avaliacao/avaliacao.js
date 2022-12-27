@@ -17,6 +17,7 @@ import {
   moverCursor,
   tratarString,
 } from '~/utils';
+import Nota from '../inputs/nota';
 import Ordenacao from '../Ordenacao/ordenacao';
 import {
   CaixaMarcadores,
@@ -25,7 +26,6 @@ import {
 } from './avaliacao.css';
 import CampoConceito from './campoConceito';
 import CampoConceitoFinal from './campoConceitoFinal';
-import CampoNota from './campoNota';
 import CampoNotaFinal from './campoNotaFinal';
 import ColunaNotaFinalRegencia from './colunaNotaFinalRegencia';
 import LinhaConceitoFinal from './linhaConceitoFinal';
@@ -139,54 +139,52 @@ const Avaliacao = props => {
     return e.nativeEvent.path.find(item => item.localName === elemento);
   };
 
-  const clicarSetas = (e, aluno, label = '', index = 0, regencia = false) => {
-    const direcao = converterAcaoTecla(e.keyCode);
-    const disciplina = label.toLowerCase();
+  // const clicarSetas = (e, aluno, label = '', index = 0, regencia = false) => {
+  //   const direcao = converterAcaoTecla(e.keyCode);
+  //   const disciplina = label.toLowerCase();
 
-    if (direcao && regencia) {
-      let novaLinha = [];
-      const novoIndex = index + direcao;
-      if (expandirLinha[novoIndex]) {
-        expandirLinha[novoIndex] = false;
-        novaLinha = expandirLinha;
-      } else {
-        novaLinha[novoIndex] = true;
-      }
-      dispatch(setExpandirLinha([...novaLinha]));
-    }
-    const elementoTD = acharElemento(e, 'td');
-    const indexElemento = elementoTD?.cellIndex - 2;
-    const alunoEscolhido =
-      direcao && acharItem(dados?.alunos, aluno, direcao, 'id');
-    if (alunoEscolhido.length) {
-      const disciplinaTratada = tratarString(disciplina);
-      const item = regencia ? disciplinaTratada : 'aluno';
-      const itemEscolhido = `${item}${alunoEscolhido[0].id}`;
-      moverCursor(itemEscolhido, indexElemento, regencia);
-    }
-  };
+  //   if (direcao && regencia) {
+  //     let novaLinha = [];
+  //     const novoIndex = index + direcao;
+  //     if (expandirLinha[novoIndex]) {
+  //       expandirLinha[novoIndex] = false;
+  //       novaLinha = expandirLinha;
+  //     } else {
+  //       novaLinha[novoIndex] = true;
+  //     }
+  //     dispatch(setExpandirLinha([...novaLinha]));
+  //   }
+  //   const elementoTD = acharElemento(e, 'td');
+  //   const indexElemento = elementoTD?.cellIndex - 2;
+  //   const alunoEscolhido =
+  //     direcao && acharItem(dados?.alunos, aluno, direcao, 'id');
+  //   if (alunoEscolhido.length) {
+  //     const disciplinaTratada = tratarString(disciplina);
+  //     const item = regencia ? disciplinaTratada : 'aluno';
+  //     const itemEscolhido = `${item}${alunoEscolhido[0].id}`;
+  //     moverCursor(itemEscolhido, indexElemento, regencia);
+  //   }
+  // };
 
   const montarCampoNotaConceito = (nota, aluno) => {
     const avaliacao = dados.avaliacoes.find(
       item => item.id === nota.atividadeAvaliativaId
     );
     const desabilitarNota = ehProfessorCj ? !avaliacao.ehCJ : avaliacao.ehCJ;
+    const desabilitar =
+      desabilitarCampos || desabilitarNota || !nota?.podeEditar;
 
     switch (Number(notaTipo)) {
       case Number(notasConceitos.Notas):
         return (
-          <CampoNota
-            esconderSetas
-            name={`aluno${aluno.id}`}
-            clicarSetas={e => clicarSetas(e, aluno)}
-            step={0}
-            nota={nota}
+          <Nota
+            dadosNota={nota}
+            desabilitar={desabilitar}
+            idCampo={`aluno${aluno.id}`}
+            dadosArredondamento={avaliacao?.dadosArredondamento}
             onChangeNotaConceito={valorNovo =>
               onChangeNotaConceito(nota, valorNovo)
             }
-            desabilitarCampo={desabilitarCampos || desabilitarNota}
-            dadosArredondamento={avaliacao.dadosArredondamento}
-            mediaAprovacaoBimestre={dados.mediaAprovacaoBimestre}
           />
         );
       case Number(notasConceitos.Conceitos):
@@ -224,28 +222,50 @@ const Avaliacao = props => {
     regencia,
     indexLinha
   ) => {
+    const desabilitarNotaFinal =
+      ehProfessorCj ||
+      desabilitarCampos ||
+      !dados.podeLancarNotaFinal ||
+      !aluno.podeEditar;
+
     if (Number(notaTipo) === Number(notasConceitos.Notas)) {
+      const dadosNota = montaNotaFinal(aluno, index);
       return (
-        <CampoNotaFinal
-          esconderSetas
-          name={`aluno${aluno.id}`}
-          clicarSetas={e => clicarSetas(e, aluno, label, indexLinha, regencia)}
-          step={0}
-          montaNotaFinal={() => montaNotaFinal(aluno, index)}
-          onChangeNotaConceitoFinal={(nota, valor) =>
-            onChangeNotaConceitoFinal(nota, valor)
-          }
-          desabilitarCampo={ehProfessorCj || desabilitarCampos}
-          podeEditar={aluno.podeEditar}
-          periodoFim={dados.periodoFim}
-          notaFinal={aluno.notasBimestre.find(
-            x => String(x.disciplinaId) === String(disciplinaSelecionada)
-          )}
-          disciplinaSelecionada={disciplinaSelecionada}
-          mediaAprovacaoBimestre={dados.mediaAprovacaoBimestre}
-          label={label}
-          podeLancarNotaFinal={dados.podeLancarNotaFinal}
-        />
+        <>
+          <Nota
+            dadosNota={dadosNota}
+            desabilitar={desabilitarNotaFinal}
+            idCampo={`aluno${aluno.id}`}
+            name={`aluno${aluno.id}`}
+            dadosArredondamento={null}
+            onChangeNotaConceito={valorNovo =>
+              onChangeNotaConceitoFinal(dadosNota, valorNovo)
+            }
+            mediaAprovacaoBimestre={dados.mediaAprovacaoBimestre}
+            label={label}
+          />
+          {/*
+          <CampoNotaFinal
+            esconderSetas
+            name={`aluno${aluno.id}`}
+            clicarSetas={e => clicarSetas(e, aluno, label, indexLinha, regencia)}
+            step={0}
+            montaNotaFinal={() => montaNotaFinal(aluno, index)}
+            onChangeNotaConceitoFinal={(nota, valor) =>
+              onChangeNotaConceitoFinal(nota, valor)
+            }
+            desabilitarCampo={ehProfessorCj || desabilitarCampos}
+            podeEditar={aluno.podeEditar}
+            periodoFim={dados.periodoFim}
+            notaFinal={aluno.notasBimestre.find(
+              x => String(x.disciplinaId) === String(disciplinaSelecionada)
+            )}
+            disciplinaSelecionada={disciplinaSelecionada}
+            mediaAprovacaoBimestre={dados.mediaAprovacaoBimestre}
+            label={label}
+            podeLancarNotaFinal={dados.podeLancarNotaFinal}
+          /> */}
+        </>
       );
     }
     if (Number(notaTipo) === Number(notasConceitos.Conceitos)) {
