@@ -9,6 +9,7 @@ import { SGP_BUTTON_DOWNLOAD_ARQUIVO } from '~/constantes/ids/button';
 import ServicoArmazenamento from '~/servicos/Componentes/ServicoArmazenamento';
 import { downloadBlob } from '~/utils';
 import { SGP_TABLE_DOCUMENTOS_PLANOS_TRABALHO } from '~/constantes/ids/table';
+import ServicoDocumentosPlanosTrabalho from '~/servicos/Paginas/Gestao/DocumentosPlanosTrabalho/ServicoDocumentosPlanosTrabalho';
 
 const DocPlanosTrabalhoListaPaginada = props => {
   const { form } = props;
@@ -17,6 +18,7 @@ const DocPlanosTrabalhoListaPaginada = props => {
   const listaUes = form?.values?.listaUes;
   const tipoDocumentoId = form?.values?.tipoDocumentoId;
   const classificacaoId = form?.values?.classificacaoId;
+  const listaClassificacoes = form?.values?.listaClassificacoes;
 
   const [filtros, setFiltros] = useState();
 
@@ -24,15 +26,15 @@ const DocPlanosTrabalhoListaPaginada = props => {
     DOCUMENTOS: '2',
   };
 
-  const TIPO_CLASSIFICACAO = {
-    DOCUMENTOS_DA_TURMA: '10',
-  };
+  const ehClassificacaoDocumentosTurma = ServicoDocumentosPlanosTrabalho.verificaSeEhClassificacaoDocumentosTurma(
+    classificacaoId,
+    listaClassificacoes
+  );
 
   const ocultarColunaTurmaComponente =
     (tipoDocumentoId &&
       tipoDocumentoId?.toString() !== TIPO_DOCUMENTO.DOCUMENTOS) ||
-    (classificacaoId &&
-      classificacaoId?.toString() !== TIPO_CLASSIFICACAO.DOCUMENTOS_DA_TURMA);
+    (classificacaoId && !ehClassificacaoDocumentosTurma);
 
   const formatarCampoDataGrid = data => {
     let dataFormatada = '';

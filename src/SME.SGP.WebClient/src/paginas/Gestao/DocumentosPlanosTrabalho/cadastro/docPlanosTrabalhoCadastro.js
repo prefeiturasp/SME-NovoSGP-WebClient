@@ -14,7 +14,6 @@ import {
   verificaSomenteConsulta,
 } from '~/servicos';
 import ServicoDocumentosPlanosTrabalho from '~/servicos/Paginas/Gestao/DocumentosPlanosTrabalho/ServicoDocumentosPlanosTrabalho';
-import { TIPO_CLASSIFICACAO } from '~/constantes';
 
 const DocPlanosTrabalhoCadastro = () => {
   const routeMatch = useRouteMatch();
@@ -72,9 +71,12 @@ const DocPlanosTrabalhoCadastro = () => {
     let ehValido = true;
 
     const classificacaoId = valores?.classificacaoId;
+    const listaClassificacoes = valores?.listaClassificacoes;
 
-    const ehClassificacaoDocumentosTurma =
-      classificacaoId?.toString() === TIPO_CLASSIFICACAO.DOCUMENTOS_DA_TURMA;
+    const ehClassificacaoDocumentosTurma = ServicoDocumentosPlanosTrabalho.verificaSeEhClassificacaoDocumentosTurma(
+      classificacaoId,
+      listaClassificacoes
+    );
 
     if (ehClassificacaoDocumentosTurma && !valorCampoAtual) {
       ehValido = false;
