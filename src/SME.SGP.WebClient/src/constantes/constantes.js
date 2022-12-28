@@ -8,5 +8,5 @@ export const TIPO_DOCUMENTO = {
   DOCUMENTOS: '2',
 };
 export const TIPO_CLASSIFICACAO = {
-  DOCUMENTOS_DA_TURMA: '10',
+  DOCUMENTOS_DA_TURMA: 'Documentos da Turma',
 };

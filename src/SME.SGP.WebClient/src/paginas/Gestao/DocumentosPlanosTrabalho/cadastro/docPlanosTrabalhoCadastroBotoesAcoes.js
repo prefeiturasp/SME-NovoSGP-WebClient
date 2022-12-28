@@ -5,7 +5,6 @@ import React from 'react';
 import { Button, Colors } from '~/componentes';
 import BotaoExcluirPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoExcluirPadrao';
 import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
-import { TIPO_CLASSIFICACAO } from '~/constantes';
 import {
   SGP_BUTTON_ALTERAR_CADASTRAR,
   SGP_BUTTON_CANCELAR,
@@ -138,8 +137,10 @@ const DocPlanosTrabalhoCadastroBotoesAcoes = props => {
     );
 
     setExibirLoader(true);
-    const ehClassificacaoDocumentosTurma =
-      classificacaoId?.toString() === TIPO_CLASSIFICACAO.DOCUMENTOS_DA_TURMA;
+    const ehClassificacaoDocumentosTurma = ServicoDocumentosPlanosTrabalho.verificaSeEhClassificacaoDocumentosTurma(
+      classificacaoId,
+      valores?.listaClassificacoes
+    );
 
     let continuar = true;
 
@@ -181,9 +182,7 @@ const DocPlanosTrabalhoCadastroBotoesAcoes = props => {
       anoLetivo,
     };
 
-    if (
-      classificacaoId?.toString() === TIPO_CLASSIFICACAO.DOCUMENTOS_DA_TURMA
-    ) {
+    if (ehClassificacaoDocumentosTurma) {
       const turmaAtual = valores.listaTurmas.find(
         t => t.codigo?.toString() === valores?.turmaCodigo?.toString()
       );
