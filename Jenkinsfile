@@ -6,9 +6,7 @@ pipeline {
       deployment1 = "${env.branchname == 'release-r2' ? 'sme-webclient-rc2' : 'sme-webclient' }"
     }
   
-    agent {
-      node { label 'node-16-rc' }
-    }
+    agent { node { label 'SME-AGENT-SGP' } }
 
     options {
       buildDiscarder(logRotator(numToKeepStr: '5', artifactNumToKeepStr: '5'))
@@ -51,7 +49,7 @@ pipeline {
             when { anyOf {  branch 'master'; branch 'main'; branch 'development'; branch 'release'; branch 'release-r2'; } }        
             steps {
                 script{
-                    if ( env.branchname == 'main' ||  env.branchname == 'master' || env.branchname == 'homolog' || env.branchname == '_release' ) {
+                    if ( env.branchname == 'main' ||  env.branchname == 'master' || env.branchname == 'homolog' || env.branchname == 'release' ) {
                       sendTelegram("🤩 [Deploy ${env.branchname}] Job Name: ${JOB_NAME} \nBuild: ${BUILD_DISPLAY_NAME} \nMe aprove! \nLog: \n${env.BUILD_URL}")
 			
 		      withCredentials([string(credentialsId: 'aprovadores-sgp', variable: 'aprovadores')]) {
