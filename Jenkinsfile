@@ -6,9 +6,7 @@ pipeline {
       deployment1 = "${env.branchname == 'release-r2' ? 'sme-webclient-rc2' : 'sme-webclient' }"
     }
   
-    agent {
-      node { label 'node-16-rc' }
-    }
+    agent { node { label 'SME-AGENT-SGP' } }
 
     options {
       buildDiscarder(logRotator(numToKeepStr: '5', artifactNumToKeepStr: '5'))
