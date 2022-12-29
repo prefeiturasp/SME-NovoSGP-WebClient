@@ -1,9 +1,9 @@
 import { Tooltip } from 'antd';
 import PropTypes from 'prop-types';
 import React, { useEffect, useState } from 'react';
-import { Base, CampoTexto } from '~/componentes';
+import { Base, CampoTexto, Label } from '~/componentes';
 import InputNumberReadOnly from '~/componentes-sgp/camposSomenteLeitura/inputNumberReadOnly/inputNumberReadOnly';
-import { arredondarNota, converterAcaoTecla } from '~/utils';
+import { arredondarNota } from '~/utils';
 import LabelAusenteCellTable from './labelAusenteCellTable';
 
 import { Container } from './style';
@@ -17,14 +17,18 @@ const Nota = props => {
     ehFechamento,
     mediaAprovacaoBimestre,
     dadosArredondamento,
+    onKeyDown,
+    label,
   } = props;
 
   const [exibir, setExibir] = useState(false);
   const [notaValorAtual, setNotaValorAtual] = useState();
+  const [notaValorAtualExibicao, setNotaValorAtualExibicao] = useState();
+
   const regexCaracteresInvalidos = /[^0-9,.]+/g;
 
   const removerCaracteresInvalidos = texto =>
-    texto.replace(regexCaracteresInvalidos, '');
+    texto?.replace?.(regexCaracteresInvalidos, '');
 
   const estaAbaixoDaMedia = valorAtual => {
     if (!ehFechamento) return false;
@@ -36,7 +40,7 @@ const Nota = props => {
   const notaAlterada = nota => {
     if (nota === 0) return nota;
     const notaConceitoParseada = String(nota);
-    const notaConceitoAlterada = notaConceitoParseada.replace(',', '.');
+    const notaConceitoAlterada = notaConceitoParseada?.replace?.(',', '.');
     const notaModificada = Number(notaConceitoAlterada);
     return notaModificada;
   };
@@ -45,26 +49,53 @@ const Nota = props => {
     if (dadosNota?.notaConceito || dadosNota?.notaConceito === 0) {
       const nota = notaAlterada(dadosNota.notaConceito);
       setNotaValorAtual(nota);
+      setNotaValorAtualExibicao(nota);
     }
   }, [dadosNota]);
 
-  const setarValorNovo = async valorNovo => {
+  const formatarNotaValida = nota => {
+    let notaFormatada = nota;
+    if (nota.includes(',') || nota.includes('.')) {
+      if (nota.length === 2 || nota.length === 1) {
+        notaFormatada = nota.replace(',', '');
+      }
+    }
+    return notaFormatada;
+  };
+
+  const editouCampo = (notaOriginal, notaNova) => {
+    notaOriginal = removerCaracteresInvalidos(
+      notaOriginal?.toString()?.replace?.(',', '.')
+    );
+    notaNova = removerCaracteresInvalidos(
+      notaNova?.toString()?.replace?.(',', '.')
+    );
+    if (notaOriginal === '' && notaNova === '') {
+      return false;
+    }
+    return notaOriginal !== notaNova;
+  };
+
+  const setarValorExibicao = async valorNovo => {
     if (!desabilitar) {
-      onChangeNotaConceito(valorNovo);
-      setNotaValorAtual(valorNovo);
+      setNotaValorAtualExibicao(valorNovo);
     }
   };
 
   const onBlur = valorNovo => {
     if (!desabilitar) {
-      let notaArredondada = valorNovo;
+      const editou = editouCampo(notaValorAtual, valorNovo);
+      if (!editou) return;
 
-      if (valorNovo && dadosArredondamento) {
+      let notaArredondada = formatarNotaValida(valorNovo);
+
+      if (valorNovo) {
         notaArredondada = arredondarNota(valorNovo, dadosArredondamento);
       }
 
       onChangeNotaConceito(notaArredondada);
       setNotaValorAtual(notaArredondada);
+      setNotaValorAtualExibicao(notaArredondada);
     }
   };
 
@@ -74,14 +105,20 @@ const Nota = props => {
     }
   };
 
-  const apertarTecla = e => {
-    const teclaEscolhida = converterAcaoTecla(e.keyCode);
-    if (teclaEscolhida === 0 && !notaValorAtual) {
-      setarValorNovo(0);
+  const formataNotaExibicao = newValue => {
+    if (
+      newValue?.toString?.()?.includes?.(',') ||
+      newValue?.toString?.()?.includes?.('.')
+    ) {
+      if (newValue?.length === 1) {
+        return '';
+      }
+      if (newValue?.toString?.()?.length > 1) {
+        return newValue?.toString?.()?.replace?.('.', ',');
+      }
     }
+    return newValue;
   };
-
-  const formataNota = newValue => newValue?.toString?.()?.replace?.('.', ',');
 
   const styleCampo = {};
 
@@ -91,30 +128,34 @@ const Nota = props => {
 
   const montarCampo = () => (
     <Container onFocus={() => validarExibir(true)}>
+      {label ? <Label text={label} /> : <></>}
       {!desabilitar && exibir ? (
         <CampoTexto
           autoFocus
           addMaskNota
           id={idCampo}
+          name={idCampo}
           maxLength={3}
           allowClear={false}
           placeholder="Nota"
-          onKeyUp={apertarTecla}
+          onKeyDown={onKeyDown}
           desabilitado={desabilitar}
-          value={formataNota(notaValorAtual)}
+          value={formataNotaExibicao(notaValorAtualExibicao)}
           onBlur={e => onBlur(e.target.value)}
           onChange={(_, novaNota) => {
-            setarValorNovo(novaNota);
+            setarValorExibicao(novaNota);
           }}
+          style={{ ...styleCampo }}
         />
       ) : (
         <InputNumberReadOnly
+          name={idCampo}
           id={idCampo}
           key={idCampo}
           placeholder="Nota"
           disabled={desabilitar}
           style={{ ...styleCampo }}
-          value={formataNota(notaValorAtual)}
+          value={formataNotaExibicao(notaValorAtualExibicao)}
         />
       )}
 
@@ -142,6 +183,8 @@ Nota.propTypes = {
   ehFechamento: PropTypes.bool,
   mediaAprovacaoBimestre: PropTypes.number,
   dadosArredondamento: PropTypes.oneOf([PropTypes.any]),
+  onKeyDown: PropTypes.oneOf([PropTypes.any]),
+  label: PropTypes.oneOf([PropTypes.any]),
 };
 
 Nota.defaultProps = {
@@ -152,6 +195,8 @@ Nota.defaultProps = {
   ehFechamento: false,
   mediaAprovacaoBimestre: null,
   dadosArredondamento: null,
+  onKeyDown: () => {},
+  label: null,
 };
 
 export default Nota;

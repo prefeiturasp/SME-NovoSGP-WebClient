@@ -143,6 +143,8 @@ const CampoTexto = React.forwardRef((props, ref) => {
         </>
       ) : (
         <Input
+          style={style}
+          name={name}
           id={id}
           ref={ref}
           autoFocus={autoFocus}
@@ -157,6 +159,7 @@ const CampoTexto = React.forwardRef((props, ref) => {
           prefix={iconeBusca ? <i className="fa fa-search fa-lg" /> : ''}
           allowClear={allowClear}
           maxLength={maxLength || ''}
+          autoComplete="off"
         />
       )}
     </Campo>

@@ -302,7 +302,17 @@ const arredondarNota = (nota, dadosArredondamento) => {
     notaFormatada = Number(nota.replace(',', '.'));
   }
 
-  if (typeof notaFormatada === 'number' && !Number.isNaN(notaFormatada)) {
+  if (nota.includes(',') || nota.includes('.')) {
+    if (nota.length === 2 || nota.length === 1) {
+      notaFormatada = nota.replace(',', '');
+    }
+  }
+
+  if (
+    dadosArredondamento &&
+    typeof notaFormatada === 'number' &&
+    !Number.isNaN(notaFormatada)
+  ) {
     if (notaFormatada >= max) return max;
     if (notaFormatada <= min) return min;
 
@@ -322,7 +332,7 @@ const arredondarNota = (nota, dadosArredondamento) => {
     }
   }
 
-  return nota;
+  return notaFormatada;
 };
 
 export {

@@ -3,7 +3,7 @@ import React from 'react';
 import { Container } from './style';
 
 const InputNumberReadOnly = props => {
-  const { id, value, style, disabled, placeholder } = props;
+  const { id, value, name, style, disabled, placeholder } = props;
 
   return (
     <Container
@@ -14,6 +14,7 @@ const InputNumberReadOnly = props => {
     >
       <div className="ant-input-number-input-wrap">
         <input
+          name={name}
           id={id}
           readOnly
           value={value || ''}
@@ -29,6 +30,7 @@ const InputNumberReadOnly = props => {
 
 InputNumberReadOnly.propTypes = {
   id: PropTypes.string,
+  name: PropTypes.oneOfType([PropTypes.any]),
   value: PropTypes.string,
   style: PropTypes.oneOfType([PropTypes.object]),
   disabled: PropTypes.bool,
@@ -41,6 +43,7 @@ InputNumberReadOnly.defaultProps = {
   style: {},
   disabled: false,
   placeholder: '',
+  name: '',
 };
 
 export default InputNumberReadOnly;
