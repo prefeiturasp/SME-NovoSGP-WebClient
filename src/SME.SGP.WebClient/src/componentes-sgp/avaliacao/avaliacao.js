@@ -11,13 +11,8 @@ import {
   setModoEdicaoGeral,
   setModoEdicaoGeralNotaFinal,
 } from '~/redux/modulos/notasConceitos/actions';
-import {
-  acharItem,
-  converterAcaoTecla,
-  moverCursor,
-  tratarString,
-} from '~/utils';
 import Nota from '../inputs/nota';
+import { clicarSetas } from '../inputs/nota/funcoes';
 import Ordenacao from '../Ordenacao/ordenacao';
 import {
   CaixaMarcadores,
@@ -26,7 +21,6 @@ import {
 } from './avaliacao.css';
 import CampoConceito from './campoConceito';
 import CampoConceitoFinal from './campoConceitoFinal';
-import CampoNotaFinal from './campoNotaFinal';
 import ColunaNotaFinalRegencia from './colunaNotaFinalRegencia';
 import LinhaConceitoFinal from './linhaConceitoFinal';
 
@@ -40,7 +34,6 @@ const Avaliacao = props => {
     desabilitarCampos,
     ehProfessorCj,
     ehRegencia,
-    disciplinaSelecionada,
     exibirTootipStatusGsa,
     exibirStatusAlunoAusente,
   } = props;
@@ -135,37 +128,6 @@ const Avaliacao = props => {
       : '';
   };
 
-  const acharElemento = (e, elemento) => {
-    return e.nativeEvent.path.find(item => item.localName === elemento);
-  };
-
-  // const clicarSetas = (e, aluno, label = '', index = 0, regencia = false) => {
-  //   const direcao = converterAcaoTecla(e.keyCode);
-  //   const disciplina = label.toLowerCase();
-
-  //   if (direcao && regencia) {
-  //     let novaLinha = [];
-  //     const novoIndex = index + direcao;
-  //     if (expandirLinha[novoIndex]) {
-  //       expandirLinha[novoIndex] = false;
-  //       novaLinha = expandirLinha;
-  //     } else {
-  //       novaLinha[novoIndex] = true;
-  //     }
-  //     dispatch(setExpandirLinha([...novaLinha]));
-  //   }
-  //   const elementoTD = acharElemento(e, 'td');
-  //   const indexElemento = elementoTD?.cellIndex - 2;
-  //   const alunoEscolhido =
-  //     direcao && acharItem(dados?.alunos, aluno, direcao, 'id');
-  //   if (alunoEscolhido.length) {
-  //     const disciplinaTratada = tratarString(disciplina);
-  //     const item = regencia ? disciplinaTratada : 'aluno';
-  //     const itemEscolhido = `${item}${alunoEscolhido[0].id}`;
-  //     moverCursor(itemEscolhido, indexElemento, regencia);
-  //   }
-  // };
-
   const montarCampoNotaConceito = (nota, aluno) => {
     const avaliacao = dados.avaliacoes.find(
       item => item.id === nota.atividadeAvaliativaId
@@ -175,9 +137,10 @@ const Avaliacao = props => {
       desabilitarCampos || desabilitarNota || !nota?.podeEditar;
 
     switch (Number(notaTipo)) {
-      case Number(notasConceitos.Notas):
+      case notasConceitos.Notas:
         return (
           <Nota
+            onKeyDown={e => clicarSetas(e, aluno, dados?.alunos)}
             dadosNota={nota}
             desabilitar={desabilitar}
             idCampo={`aluno${aluno.id}`}
@@ -187,7 +150,7 @@ const Avaliacao = props => {
             }
           />
         );
-      case Number(notasConceitos.Conceitos):
+      case notasConceitos.Conceitos:
         return (
           <CampoConceito
             nota={nota}
@@ -215,6 +178,19 @@ const Avaliacao = props => {
     return aluno.notasBimestre[0];
   };
 
+  const acaoExpandirLinha = (direcao, index) => {
+    let novaLinha = [];
+    const novoIndex = index + direcao;
+
+    if (expandirLinha[novoIndex]) {
+      expandirLinha[novoIndex] = false;
+      novaLinha = expandirLinha;
+    } else {
+      novaLinha[novoIndex] = true;
+    }
+    dispatch(setExpandirLinha([...novaLinha]));
+  };
+
   const montarCampoNotaConceitoFinal = (
     aluno,
     label,
@@ -230,41 +206,35 @@ const Avaliacao = props => {
 
     if (Number(notaTipo) === Number(notasConceitos.Notas)) {
       const dadosNota = montaNotaFinal(aluno, index);
+
+      const dadosArredondamentoFechamento = dados?.dadosArredondamento;
       return (
         <>
           <Nota
+            ehFechamento
+            onKeyDown={e =>
+              clicarSetas(
+                e,
+                aluno,
+                dados?.alunos,
+                2,
+                label,
+                indexLinha,
+                regencia,
+                direcao => acaoExpandirLinha(direcao, indexLinha)
+              )
+            }
             dadosNota={dadosNota}
             desabilitar={desabilitarNotaFinal}
             idCampo={`aluno${aluno.id}`}
             name={`aluno${aluno.id}`}
-            dadosArredondamento={null}
+            dadosArredondamento={dadosArredondamentoFechamento}
             onChangeNotaConceito={valorNovo =>
               onChangeNotaConceitoFinal(dadosNota, valorNovo)
             }
             mediaAprovacaoBimestre={dados.mediaAprovacaoBimestre}
             label={label}
           />
-          {/*
-          <CampoNotaFinal
-            esconderSetas
-            name={`aluno${aluno.id}`}
-            clicarSetas={e => clicarSetas(e, aluno, label, indexLinha, regencia)}
-            step={0}
-            montaNotaFinal={() => montaNotaFinal(aluno, index)}
-            onChangeNotaConceitoFinal={(nota, valor) =>
-              onChangeNotaConceitoFinal(nota, valor)
-            }
-            desabilitarCampo={ehProfessorCj || desabilitarCampos}
-            podeEditar={aluno.podeEditar}
-            periodoFim={dados.periodoFim}
-            notaFinal={aluno.notasBimestre.find(
-              x => String(x.disciplinaId) === String(disciplinaSelecionada)
-            )}
-            disciplinaSelecionada={disciplinaSelecionada}
-            mediaAprovacaoBimestre={dados.mediaAprovacaoBimestre}
-            label={label}
-            podeLancarNotaFinal={dados.podeLancarNotaFinal}
-          /> */}
         </>
       );
     }
@@ -283,7 +253,7 @@ const Avaliacao = props => {
         />
       );
     }
-    return '';
+    return <></>;
   };
 
   return (

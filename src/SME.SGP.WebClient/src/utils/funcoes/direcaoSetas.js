@@ -37,20 +37,41 @@ const tratarString = item =>
     .normalize('NFD')
     .replace(/[\u0300-\u036f]|[^a-zA-Zs]|\s/g, '');
 
+const focusRegencia = async elemento => {
+  const [elementoDiv] = elemento;
+  const [elementoInput] = elementoDiv?.getElementsByTagName?.('input');
+
+  if (elementoInput?.focus) {
+    elementoInput.focus();
+    elementoInput.select();
+    return true;
+  }
+  return false;
+};
+
+const validaFocusRegencia = async elemento => {
+  await esperarMiliSegundos(600);
+  // TODO PENDENTE LISTAO FECHAMENTO
+  const fezFocus = elemento?.length ? focusRegencia(elemento) : false;
+
+  if (fezFocus) return;
+
+  await esperarMiliSegundos(600);
+  if (elemento?.length) {
+    focusRegencia(elemento);
+  }
+};
+
 const moverCursor = async (
   itemEscolhido,
   indexElemento = 0,
   regencia = false
 ) => {
   const elemento = document.getElementsByName(itemEscolhido);
-  let elementoCursor = elemento[indexElemento];
+  const elementoCursor = elemento[indexElemento];
   if (regencia) {
-    await esperarMiliSegundos(600);
-    const [elementoDiv] = elemento;
-    const [elementoInput] = elementoDiv.getElementsByTagName('input');
-    elementoCursor = elementoInput;
-  }
-  if (elementoCursor) {
+    validaFocusRegencia(elemento);
+  } else if (elementoCursor) {
     elementoCursor.focus();
     elementoCursor.select();
   }

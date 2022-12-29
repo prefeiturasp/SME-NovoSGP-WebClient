@@ -12,6 +12,8 @@ import { useDispatch } from 'react-redux';
 import shortid from 'shortid';
 import styled from 'styled-components';
 import { DataTable } from '~/componentes';
+import Nota from '~/componentes-sgp/inputs/nota';
+import { clicarSetas } from '~/componentes-sgp/inputs/nota/funcoes';
 import SinalizacaoAEE from '~/componentes-sgp/SinalizacaoAEE/sinalizacaoAEE';
 import { Base } from '~/componentes/colors';
 import { BIMESTRE_FINAL } from '~/constantes/constantes';
@@ -156,23 +158,77 @@ const ListaoListaFechamento = props => {
     }
   };
 
+  const onClickExpandir = (expandir, codigoAluno, expandirColunaRegencia) => {
+    if (expandir) {
+      setExpandedRowKeys({
+        codigoAluno,
+        expandirColunaRegencia,
+      });
+    } else {
+      setExpandedRowKeys();
+    }
+  };
+
+  const acaoExpandirLinha = (incrementoIndexLinha, indexLinhaOrigem) => {
+    const indexLinhaDestino = incrementoIndexLinha + indexLinhaOrigem;
+    const aluno = dadosFechamento?.alunos[indexLinhaDestino];
+    if (aluno?.codigoAluno) {
+      const alunoExpandido = temLinhaExpandida(aluno?.codigoAluno);
+      onClickExpandir(!alunoExpandido, aluno?.codigoAluno, true);
+    }
+  };
+
+  const onKeyDown = (e, dadosEstudante, indexLinha) => {
+    clicarSetas(
+      e,
+      dadosEstudante,
+      dadosFechamento?.alunos,
+      1,
+      '',
+      indexLinha,
+      ehRegencia,
+      direcao => acaoExpandirLinha(direcao, indexLinha)
+    );
+  };
+
   const montarCampoNotaConceito = (
     dadosEstudante,
     notaFechamento,
     indexNotaFechamento,
-    refNomeParamOrigemDados
+    refNomeParamOrigemDados,
+    indexLinha = 0
   ) => {
     const desabilitar = desabilitarCampos || !dadosEstudante?.podeEditar;
+
+    const dadosArredondamentoFechamento = dadosFechamento?.dadosArredondamento;
 
     switch (Number(dadosFechamento?.notaTipo)) {
       case notasConceitos.Notas:
         return (
           <>
-            <ListaoCampoNota
+            <Nota
+              ehFechamento
+              onKeyDown={e => onKeyDown(e, dadosEstudante, indexLinha)}
+              dadosNota={notaFechamento}
+              desabilitar={desabilitar}
+              idCampo={`aluno${dadosEstudante?.codigoAluno}`}
+              name={`aluno${dadosEstudante?.codigoAluno}`}
+              dadosArredondamento={dadosArredondamentoFechamento}
+              mediaAprovacaoBimestre={dadosFechamento?.mediaAprovacaoBimestre}
+              onChangeNotaConceito={valorNovo =>
+                onChangeNotaConceito(
+                  valorNovo,
+                  dadosEstudante?.codigoAluno,
+                  dadosEstudante?.podeEditar,
+                  indexNotaFechamento,
+                  refNomeParamOrigemDados
+                )
+              }
+            />
+            {/* <ListaoCampoNota
               dadosNota={notaFechamento}
               idCampo={shortid.generate()}
               desabilitar={desabilitar}
-              podeEditar={dadosEstudante?.podeEditar}
               ehFechamento
               periodoFim={dadosFechamento?.periodoFim}
               mediaAprovacaoBimestre={dadosFechamento?.mediaAprovacaoBimestre}
@@ -185,7 +241,7 @@ const ListaoListaFechamento = props => {
                   refNomeParamOrigemDados
                 )
               }
-            />
+            /> */}
             {notaFechamento?.emAprovacao && <MarcadorAguardandoAprovacao />}
           </>
         );
@@ -245,17 +301,6 @@ const ListaoListaFechamento = props => {
     });
 
     return mapColunas;
-  };
-
-  const onClickExpandir = (expandir, codigoAluno, expandirColunaRegencia) => {
-    if (expandir) {
-      setExpandedRowKeys({
-        codigoAluno,
-        expandirColunaRegencia,
-      });
-    } else {
-      setExpandedRowKeys();
-    }
   };
 
   const iconeExpandirLinhaRegencia = (alunoExpandido, dadosEstudante) => (
@@ -328,7 +373,7 @@ const ListaoListaFechamento = props => {
         return iconeExpandir;
       };
     } else {
-      paramsColFinal.render = dadosEstudante => {
+      paramsColFinal.render = (dadosEstudante, _, indexLinha) => {
         // Quando não for regência vai ter somente um(a) nota/conceito!
         const indexNotaFechamento = 0;
         const notaFechamento =
@@ -338,7 +383,8 @@ const ListaoListaFechamento = props => {
           dadosEstudante,
           notaFechamento,
           indexNotaFechamento,
-          'notasConceitoFinal'
+          'notasConceitoFinal',
+          indexLinha
         );
       };
     }
@@ -376,7 +422,7 @@ const ListaoListaFechamento = props => {
         return iconeExpandir;
       };
     } else {
-      paramsCol.render = dadosEstudante => {
+      paramsCol.render = (dadosEstudante, _, indexLinha) => {
         // Quando não for regência vai ter somente um(a) nota/conceito!
         const indexNotaFechamento = 0;
         const notaFechamento =
@@ -386,7 +432,8 @@ const ListaoListaFechamento = props => {
           dadosEstudante,
           notaFechamento,
           indexNotaFechamento,
-          'notasConceitoBimestre'
+          'notasConceitoBimestre',
+          indexLinha
         );
       };
     }

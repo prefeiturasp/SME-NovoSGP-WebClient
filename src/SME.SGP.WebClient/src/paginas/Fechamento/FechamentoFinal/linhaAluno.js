@@ -4,18 +4,13 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { MarcadorTriangulo } from '~/componentes';
+import Nota from '~/componentes-sgp/inputs/nota';
+import { clicarSetas } from '~/componentes-sgp/inputs/nota/funcoes';
 import NomeEstudanteLista from '~/componentes-sgp/NomeEstudanteLista/nomeEstudanteLista';
 
 import { setExpandirLinha } from '~/redux/modulos/notasConceitos/actions';
-import {
-  acharItem,
-  converterAcaoTecla,
-  moverCursor,
-  tratarString,
-} from '~/utils';
 
 import CampoConceitoFinal from './campoConceitoFinal';
-import CampoNotaFinal from './campoNotaFinal';
 import ColunaNotaFinalRegencia from './colunaNotaFinalRegencia';
 import { Info } from './fechamentoFinal.css';
 import LinhaConceitoFinal from './linhaConceitoFinal';
@@ -28,13 +23,15 @@ const LinhaAluno = ({
   listaConceitos,
   disciplinaSelecionada,
   onChange,
-  eventoData,
-  notaMedia,
   indexAluno,
   desabilitarCampo,
   ehSintese,
   registraFrequencia,
+  dadosFechamentoFinal,
 }) => {
+  const notaMedia = dadosFechamentoFinal?.notaMedia;
+  const dadosArredondamento = dadosFechamentoFinal?.dadosArredondamento;
+
   const expandirLinha = useSelector(
     store => store.notasConceitos.expandirLinha
   );
@@ -97,37 +94,30 @@ const LinhaAluno = ({
     onChange(aluno, valorNovo, notaBimestre.disciplinaCodigo);
   };
 
-  const clicarSetas = (
-    e,
-    alunoEscolhido,
-    label = '',
-    index = 0,
-    regencia = false
-  ) => {
-    const direcao = converterAcaoTecla(e.keyCode);
-    const disciplina = label.toLowerCase();
+  const acaoExpandirLinha = (direcao, index) => {
+    let novaLinha = [];
+    const novoIndex = index + direcao;
 
-    if (direcao && regencia) {
-      let novaLinha = [];
-      const novoIndex = index + direcao;
-
-      if (expandirLinha[novoIndex]) {
-        expandirLinha[novoIndex] = false;
-        novaLinha = expandirLinha;
-      } else {
-        novaLinha[novoIndex] = true;
-      }
-      dispatch(setExpandirLinha([...novaLinha]));
+    if (expandirLinha[novoIndex]) {
+      expandirLinha[novoIndex] = false;
+      novaLinha = expandirLinha;
+    } else {
+      novaLinha[novoIndex] = true;
     }
+    dispatch(setExpandirLinha([...novaLinha]));
+  };
 
-    const alunoEscolhidoMover =
-      direcao && acharItem(dados, alunoEscolhido, direcao, 'codigo');
-    if (alunoEscolhidoMover.length) {
-      const disciplinaTratada = tratarString(disciplina);
-      const item = regencia ? disciplinaTratada : 'aluno';
-      const itemEscolhido = `${item}${alunoEscolhidoMover[0].codigo}`;
-      moverCursor(itemEscolhido, 0, regencia);
-    }
+  const onKeyDown = (e, alunoEscolhido, label) => {
+    clicarSetas(
+      e,
+      alunoEscolhido,
+      dados,
+      0,
+      label,
+      indexAluno,
+      ehRegencia,
+      direcao => acaoExpandirLinha(direcao, indexAluno)
+    );
   };
 
   const montarCampoNotaConceitoFinal = (
@@ -136,25 +126,22 @@ const LinhaAluno = ({
     indexNotaConceito
   ) => {
     if (ehNota) {
+      const dadosNota = montaNotaFinal(alunoEscolhido, indexNotaConceito);
+
       return (
-        <CampoNotaFinal
-          esconderSetas
-          name={`aluno${alunoEscolhido.codigo}`}
-          clicarSetas={e =>
-            clicarSetas(e, alunoEscolhido, label, indexAluno, ehRegencia)
-          }
-          step={0}
-          montaNotaFinal={() =>
-            montaNotaFinal(alunoEscolhido, indexNotaConceito)
-          }
-          onChangeNotaConceitoFinal={(nota, valor) =>
-            onChangeNotaConceitoFinal(nota, valor)
-          }
-          desabilitarCampo={desabilitarCampo}
-          podeEditar={alunoEscolhido.podeEditar}
-          eventoData={eventoData}
-          mediaAprovacaoBimestre={notaMedia}
+        <Nota
           label={label}
+          ehFechamento
+          onKeyDown={e => onKeyDown(e, alunoEscolhido, label)}
+          dadosNota={dadosNota}
+          desabilitar={desabilitarCampo || !alunoEscolhido.podeEditar}
+          idCampo={`aluno${alunoEscolhido?.codigo}`}
+          name={`aluno${alunoEscolhido?.codigo}`}
+          dadosArredondamento={dadosArredondamento}
+          mediaAprovacaoBimestre={notaMedia}
+          onChangeNotaConceito={valorNovo =>
+            onChangeNotaConceitoFinal(dadosNota, valorNovo)
+          }
         />
       );
     }
@@ -244,6 +231,7 @@ LinhaAluno.propTypes = {
   desabilitarCampo: PropTypes.bool,
   ehSintese: PropTypes.bool,
   aluno: PropTypes.oneOfType([PropTypes.any]),
+  dadosFechamentoFinal: PropTypes.oneOfType([PropTypes.any]),
 };
 
 LinhaAluno.defaultProps = {
@@ -251,6 +239,7 @@ LinhaAluno.defaultProps = {
   desabilitarCampo: false,
   ehSintese: false,
   aluno: [],
+  dadosFechamentoFinal: null,
 };
 
 export default LinhaAluno;

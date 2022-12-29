@@ -4,15 +4,15 @@ import { useDispatch, useSelector } from 'react-redux';
 import shortid from 'shortid';
 import styled from 'styled-components';
 import { DataTable, LabelSemDados } from '~/componentes';
+import Nota from '~/componentes-sgp/inputs/nota';
+import { clicarSetas } from '~/componentes-sgp/inputs/nota/funcoes';
 import SinalizacaoAEE from '~/componentes-sgp/SinalizacaoAEE/sinalizacaoAEE';
 import { Base } from '~/componentes/colors';
 import notasConceitos from '~/dtos/notasConceitos';
 import ListaoContext from '~/paginas/DiarioClasse/Listao/listaoContext';
 import { setTelaEmEdicao } from '~/redux/modulos/geral/actions';
 import { MarcadorSituacao } from '../tabFrequencia/lista/listaFrequencia.css';
-import LabelAusenteCellTable from './componentes/labelAusenteCellTable';
 import ListaoCampoConceito from './componentes/listaoCampoConceito';
-import ListaoCampoNota from './componentes/listaoCampoNota';
 import ListaoAuditoriaAvaliacoes from './listaoAuditoriaAvaliacoes';
 
 export const ContainerTableAvaliacao = styled.div`
@@ -115,29 +115,34 @@ const ListaoListaAvaliacoes = () => {
       desabilitarCampos || professorNaoEditaNota || !notaAvaliacao.podeEditar;
 
     switch (Number(dadosAvaliacao?.notaTipo)) {
-      case Number(notasConceitos.Notas):
+      case notasConceitos.Notas:
         return (
-          <>
-            {notaAvaliacao?.ausente && <LabelAusenteCellTable />}
-            <ListaoCampoNota
-              dadosNota={notaAvaliacao}
-              idCampo={shortid.generate()}
-              desabilitar={desabilitarCampoNota}
-              onChangeNotaConceito={valorNovo =>
-                onChangeNotaConceito(
-                  valorNovo,
-                  dadosEstudante.id,
-                  notaAvaliacao.podeEditar,
-                  indexAvaliacao
-                )
-              }
-            />
-          </>
+          <Nota
+            onKeyDown={e =>
+              clicarSetas(
+                e,
+                dadosEstudante,
+                dadosAvaliacao?.bimestres?.[0]?.alunos,
+                3
+              )
+            }
+            dadosNota={notaAvaliacao}
+            desabilitar={desabilitarCampoNota}
+            idCampo={`aluno${dadosEstudante?.id}`}
+            dadosArredondamento={avaliacao?.dadosArredondamento}
+            onChangeNotaConceito={valorNovo =>
+              onChangeNotaConceito(
+                valorNovo,
+                dadosEstudante.id,
+                notaAvaliacao.podeEditar,
+                indexAvaliacao
+              )
+            }
+          />
         );
-      case Number(notasConceitos.Conceitos):
+      case notasConceitos.Conceitos:
         return (
           <>
-            {notaAvaliacao?.ausente ? <LabelAusenteCellTable /> : <></>}
             <ListaoCampoConceito
               styleContainer={{ paddingRight: 15, paddingLeft: 15 }}
               dadosConceito={notaAvaliacao}
@@ -212,6 +217,7 @@ const ListaoListaAvaliacoes = () => {
         ),
         align: 'center',
         width: '150px',
+        className: 'position-relative',
         render: dadosEstudante =>
           montarCampoNotaConceito(dadosEstudante, avaliacao),
       });
