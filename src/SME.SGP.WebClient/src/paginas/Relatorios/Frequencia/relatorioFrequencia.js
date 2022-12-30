@@ -180,7 +180,7 @@ const RelatorioFrequencia = () => {
   const obterUes = useCallback(async dre => {
     if (dre) {
       setCarregandoUes(true);
-      const retorno = await ServicoFiltroRelatorio.obterUes(dre)
+      const retorno = await ServicoFiltroRelatorio.obterUes(dre, consideraHistorico)
         .catch(e => {
           erros(e);
         })
@@ -200,7 +200,7 @@ const RelatorioFrequencia = () => {
       }
       setListaUes([]);
     }
-  }, []);
+  }, [consideraHistorico]);
 
   const onChangeDre = dre => {
     setCodigoDre(dre);
