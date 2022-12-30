@@ -42,11 +42,14 @@ const DocPlanosTrabalhoCadastroBotoesAcoes = props => {
       );
       if (confirmado) {
         if (listaArquivos?.length) {
-          listaArquivos.forEach(arquivo => {
-            if (!arquivo?.documentoId && arquivo?.xhr) {
-              ServicoArmazenamento.removerArquivo(arquivo?.xhr);
-            }
-          });
+          const arquivosDeletar = listaArquivos.filter(
+            arquivo => !arquivo?.documentoId && arquivo?.xhr
+          );
+          if (arquivosDeletar?.length) {
+            await ServicoArmazenamento.removerArquivos(
+              arquivosDeletar.map(a => a?.xhr)
+            );
+          }
         }
         history.push(RotasDto.DOCUMENTOS_PLANOS_TRABALHO);
       }
@@ -77,23 +80,20 @@ const DocPlanosTrabalhoCadastroBotoesAcoes = props => {
       );
       if (confirmou) {
         if (listaArquivos?.length) {
-          let contador = 0;
-          listaArquivos.forEach(arquivo => {
-            if (!arquivo?.documentoId && arquivo?.xhr) {
-              ServicoArmazenamento.removerArquivo(arquivo?.xhr)
-                .then(() => {
-                  contador = +1;
-                  if (contador === listaArquivos?.length) {
-                    resetarFormulario();
-                  }
-                })
-                .catch(e => erros(e));
-            } else {
-              contador = +1;
-            }
-          });
+          const arquivosDeletar = listaArquivos.filter(
+            arquivo => !arquivo?.documentoId && arquivo?.xhr
+          );
+          if (arquivosDeletar?.length) {
+            setExibirLoader(true);
+            const resposta = await ServicoArmazenamento.removerArquivos(
+              arquivosDeletar.map(a => a?.xhr)
+            ).catch(e => erros(e));
 
-          if (contador === listaArquivos?.length) {
+            if (resposta?.status === 200) {
+              resetarFormulario();
+            }
+            setExibirLoader(false);
+          } else {
             resetarFormulario();
           }
         } else {
