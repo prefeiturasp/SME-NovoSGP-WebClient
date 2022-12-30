@@ -28,6 +28,9 @@ const ListaPaginada = props => {
     mapearNovoDto,
     id,
     disabledCheckboxRow,
+    expandIcon,
+    expandedRowKeys,
+    expandedRowRender,
   } = props;
 
   const [carregando, setCarregando] = useState(false);
@@ -225,6 +228,10 @@ const ListaPaginada = props => {
         }}
         onChange={executaPaginacao}
         loading={carregando}
+        expandedRowRender={expandedRowRender}
+        expandIconAsCell={false}
+        expandIcon={expandIcon}
+        expandedRowKeys={expandedRowKeys}
       />
     </Container>
   );
@@ -248,6 +255,9 @@ ListaPaginada.propTypes = {
   mapearNovoDto: PropTypes.oneOfType([PropTypes.func]),
   id: PropTypes.string,
   disabledCheckboxRow: PropTypes.oneOfType([PropTypes.func]),
+  expandIcon: PropTypes.oneOfType([PropTypes.any]),
+  expandedRowKeys: PropTypes.oneOfType([PropTypes.any]),
+  expandedRowRender: PropTypes.oneOfType([PropTypes.any]),
 };
 
 ListaPaginada.defaultProps = {
@@ -268,6 +278,9 @@ ListaPaginada.defaultProps = {
   mapearNovoDto: null,
   id: '',
   disabledCheckboxRow: null,
+  expandIcon: null,
+  expandedRowKeys: [],
+  expandedRowRender: null,
 };
 
 export default ListaPaginada;
