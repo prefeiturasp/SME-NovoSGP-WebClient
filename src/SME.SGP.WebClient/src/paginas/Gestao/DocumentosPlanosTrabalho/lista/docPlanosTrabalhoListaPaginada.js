@@ -16,6 +16,8 @@ const DocPlanosTrabalhoListaPaginada = props => {
 
   const ueCodigo = form?.values?.ueCodigo;
   const listaUes = form?.values?.listaUes;
+  const consideraHistorico = form?.values?.consideraHistorico;
+  const anoLetivo = form?.values?.anoLetivo;
   const tipoDocumentoId = form?.values?.tipoDocumentoId;
   const classificacaoId = form?.values?.classificacaoId;
   const listaClassificacoes = form?.values?.listaClassificacoes;
@@ -109,6 +111,9 @@ const DocPlanosTrabalhoListaPaginada = props => {
         tipoDocumentoId,
         classificacaoId,
       };
+      if (consideraHistorico) {
+        params.anoLetivo = anoLetivo;
+      }
       setFiltros({ ...params });
     } else {
       setFiltros({});
