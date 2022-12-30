@@ -144,9 +144,10 @@ const DocPlanosTrabalhoCadastroBotoesAcoes = props => {
 
     let continuar = true;
 
-    if (!ehClassificacaoDocumentosTurma) {
+    const novoRegistro = !idDocumentosPlanoTrabalho;
+    if (novoRegistro && !ehClassificacaoDocumentosTurma) {
       const existeRegistro = await ServicoDocumentosPlanosTrabalho.validacaoUsuarioDocumento(
-        idDocumentosPlanoTrabalho || 0,
+        0,
         tipoDocumentoId,
         classificacaoId,
         usuarioId,
