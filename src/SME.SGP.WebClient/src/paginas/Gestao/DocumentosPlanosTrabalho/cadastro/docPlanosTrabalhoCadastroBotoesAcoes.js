@@ -5,7 +5,6 @@ import React from 'react';
 import { Button, Colors } from '~/componentes';
 import BotaoExcluirPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoExcluirPadrao';
 import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
-import { TIPO_CLASSIFICACAO } from '~/constantes';
 import {
   SGP_BUTTON_ALTERAR_CADASTRAR,
   SGP_BUTTON_CANCELAR,
@@ -43,11 +42,14 @@ const DocPlanosTrabalhoCadastroBotoesAcoes = props => {
       );
       if (confirmado) {
         if (listaArquivos?.length) {
-          listaArquivos.forEach(arquivo => {
-            if (!arquivo?.documentoId && arquivo?.xhr) {
-              ServicoArmazenamento.removerArquivo(arquivo?.xhr);
-            }
-          });
+          const arquivosDeletar = listaArquivos.filter(
+            arquivo => !arquivo?.documentoId && arquivo?.xhr
+          );
+          if (arquivosDeletar?.length) {
+            await ServicoArmazenamento.removerArquivos(
+              arquivosDeletar.map(a => a?.xhr)
+            );
+          }
         }
         history.push(RotasDto.DOCUMENTOS_PLANOS_TRABALHO);
       }
@@ -78,23 +80,20 @@ const DocPlanosTrabalhoCadastroBotoesAcoes = props => {
       );
       if (confirmou) {
         if (listaArquivos?.length) {
-          let contador = 0;
-          listaArquivos.forEach(arquivo => {
-            if (!arquivo?.documentoId && arquivo?.xhr) {
-              ServicoArmazenamento.removerArquivo(arquivo?.xhr)
-                .then(() => {
-                  contador = +1;
-                  if (contador === listaArquivos?.length) {
-                    resetarFormulario();
-                  }
-                })
-                .catch(e => erros(e));
-            } else {
-              contador = +1;
-            }
-          });
+          const arquivosDeletar = listaArquivos.filter(
+            arquivo => !arquivo?.documentoId && arquivo?.xhr
+          );
+          if (arquivosDeletar?.length) {
+            setExibirLoader(true);
+            const resposta = await ServicoArmazenamento.removerArquivos(
+              arquivosDeletar.map(a => a?.xhr)
+            ).catch(e => erros(e));
 
-          if (contador === listaArquivos?.length) {
+            if (resposta?.status === 200) {
+              resetarFormulario();
+            }
+            setExibirLoader(false);
+          } else {
             resetarFormulario();
           }
         } else {
@@ -138,14 +137,17 @@ const DocPlanosTrabalhoCadastroBotoesAcoes = props => {
     );
 
     setExibirLoader(true);
-    const ehClassificacaoDocumentosTurma =
-      classificacaoId?.toString() === TIPO_CLASSIFICACAO.DOCUMENTOS_DA_TURMA;
+    const ehClassificacaoDocumentosTurma = ServicoDocumentosPlanosTrabalho.verificaSeEhClassificacaoDocumentosTurma(
+      classificacaoId,
+      valores?.listaClassificacoes
+    );
 
     let continuar = true;
 
-    if (!ehClassificacaoDocumentosTurma) {
+    const novoRegistro = !idDocumentosPlanoTrabalho;
+    if (novoRegistro && !ehClassificacaoDocumentosTurma) {
       const existeRegistro = await ServicoDocumentosPlanosTrabalho.validacaoUsuarioDocumento(
-        idDocumentosPlanoTrabalho || 0,
+        0,
         tipoDocumentoId,
         classificacaoId,
         usuarioId,
@@ -181,9 +183,7 @@ const DocPlanosTrabalhoCadastroBotoesAcoes = props => {
       anoLetivo,
     };
 
-    if (
-      classificacaoId?.toString() === TIPO_CLASSIFICACAO.DOCUMENTOS_DA_TURMA
-    ) {
+    if (ehClassificacaoDocumentosTurma) {
       const turmaAtual = valores.listaTurmas.find(
         t => t.codigo?.toString() === valores?.turmaCodigo?.toString()
       );

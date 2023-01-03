@@ -18,8 +18,9 @@ import { erros, sucesso } from '~/servicos';
 import ServicoArmazenamento from '~/servicos/Componentes/ServicoArmazenamento';
 import { Auditoria, Localizador } from '~/componentes';
 import { ComponenteCurricular } from '~/componentes-sgp/inputs/componenteCurricular';
-import { TIPO_CLASSIFICACAO, TIPO_DOCUMENTO } from '~/constantes';
+import { TIPO_DOCUMENTO } from '~/constantes';
 import { SGP_UPLOAD_DOCUMENTOS_PLANOS_DE_TRABALHO } from '~/constantes/ids/upload';
+import ServicoDocumentosPlanosTrabalho from '~/servicos/Paginas/Gestao/DocumentosPlanosTrabalho/ServicoDocumentosPlanosTrabalho';
 
 const DocPlanosTrabalhoCadastroForm = props => {
   const { form, desabilitarCampos, idDocumentosPlanoTrabalho } = props;
@@ -28,9 +29,12 @@ const DocPlanosTrabalhoCadastroForm = props => {
 
   const auditoria = form?.initialValues?.auditoria;
   const classificacaoId = form?.values?.classificacaoId;
+  const listaClassificacoes = form?.values?.listaClassificacoes;
 
-  const ehClassificacaoDocumentosTurma =
-    classificacaoId?.toString() === TIPO_CLASSIFICACAO.DOCUMENTOS_DA_TURMA;
+  const ehClassificacaoDocumentosTurma = ServicoDocumentosPlanosTrabalho.verificaSeEhClassificacaoDocumentosTurma(
+    classificacaoId,
+    listaClassificacoes
+  );
 
   const desabilitarUpload = !ehClassificacaoDocumentosTurma
     ? form?.values?.listaArquivos?.length > 0
@@ -70,10 +74,14 @@ const DocPlanosTrabalhoCadastroForm = props => {
     return false;
   };
 
-  const onChangeTipoDocumento = tipo => {
+  const limparDadosLocalizador = () => {
     form.setFieldValue('professorRf', '');
     form.setFieldValue('professorNome', '');
     form.setFieldValue('usuarioId', '');
+  };
+
+  const onChangeTipoDocumento = tipo => {
+    limparDadosLocalizador();
 
     if (tipo === TIPO_DOCUMENTO.DOCUMENTOS) {
       setTimeout(() => {
@@ -83,13 +91,25 @@ const DocPlanosTrabalhoCadastroForm = props => {
   };
 
   const onChangeClassificacao = id => {
-    if (id === TIPO_CLASSIFICACAO.DOCUMENTOS_DA_TURMA) {
-      form.setFieldValue('professorRf', '');
-      form.setFieldValue('professorNome', '');
-      form.setFieldValue('usuarioId', '');
-      setTimeout(() => {
-        form.setFieldValue('professorRf', usuario.rf);
-      }, 600);
+    if (form.values.tipoDocumentoId?.toString() === TIPO_DOCUMENTO.DOCUMENTOS) {
+      const ehDocTurma = ServicoDocumentosPlanosTrabalho.verificaSeEhClassificacaoDocumentosTurma(
+        id,
+        listaClassificacoes
+      );
+      if (ehDocTurma) {
+        limparDadosLocalizador();
+      } else if (
+        !form?.values?.professorNome ||
+        form?.values?.professorRf !== usuario.rf
+      ) {
+        limparDadosLocalizador();
+
+        setTimeout(() => {
+          form.setFieldValue('professorRf', usuario.rf);
+        }, 600);
+      }
+    } else if (!form?.values?.professorRf || !form?.values?.professorNome) {
+      limparDadosLocalizador();
     }
   };
 
@@ -180,7 +200,8 @@ const DocPlanosTrabalhoCadastroForm = props => {
           novaEstrutura
           desabilitado={
             !form.values.tipoDocumentoId ||
-            form.values.tipoDocumentoId === TIPO_DOCUMENTO.DOCUMENTOS ||
+            (form.values.tipoDocumentoId === TIPO_DOCUMENTO.DOCUMENTOS &&
+              !ehClassificacaoDocumentosTurma) ||
             !!idDocumentosPlanoTrabalho ||
             desabilitarCampos
           }
@@ -201,7 +222,8 @@ const DocPlanosTrabalhoCadastroForm = props => {
             ) {
               const estaEmModoEdicao = !(
                 !form.values.tipoDocumentoId ||
-                form.values.tipoDocumentoId === TIPO_DOCUMENTO.DOCUMENTOS ||
+                (form.values.tipoDocumentoId === TIPO_DOCUMENTO.DOCUMENTOS &&
+                  !ehClassificacaoDocumentosTurma) ||
                 desabilitarCampos
               );
               if (estaEmModoEdicao) {
@@ -210,7 +232,10 @@ const DocPlanosTrabalhoCadastroForm = props => {
             }
           }}
           buscarOutrosCargos={
-            form.values.tipoDocumentoId === TIPO_DOCUMENTO.DOCUMENTOS
+            !!(
+              form.values.tipoDocumentoId === TIPO_DOCUMENTO.DOCUMENTOS &&
+              !ehClassificacaoDocumentosTurma
+            )
           }
           labelRequired
         />

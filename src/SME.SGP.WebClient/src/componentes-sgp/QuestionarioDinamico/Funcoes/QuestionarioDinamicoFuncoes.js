@@ -1,6 +1,7 @@
 import _, { groupBy } from 'lodash';
 import tipoQuestao from '~/dtos/tipoQuestao';
 import { store } from '~/redux';
+import { setListaSecoesEmEdicao } from '~/redux/modulos/encaminhamentoNAAPA/actions';
 import {
   setExibirModalErrosQuestionarioDinamico,
   setFormsQuestionarioDinamico,
@@ -140,6 +141,7 @@ class QuestionarioDinamicoFuncoes {
         }
         form.resetForm();
       });
+      dispatch(setListaSecoesEmEdicao([]));
       dispatch(setQuestionarioDinamicoEmEdicao(false));
       dispatch(setResetarTabela(true));
     }
@@ -500,7 +502,8 @@ class QuestionarioDinamicoFuncoes {
     validarCamposObrigatorios,
     secoesComCamposObrigatorios,
     validarSecoesEmEdicao = false,
-    listaSecoesEmEdicao
+    listaSecoesEmEdicao,
+    exibirModalCamposInvalidos = true
   ) => {
     const state = store.getState();
     const { questionarioDinamico } = state;
@@ -724,8 +727,9 @@ class QuestionarioDinamicoFuncoes {
         return valoresParaSalvar;
       }
     }
-
-    this.exibirModalCamposInvalidos(nomesSecoesComCamposObrigatorios);
+    if (exibirModalCamposInvalidos) {
+      this.exibirModalCamposInvalidos(nomesSecoesComCamposObrigatorios);
+    }
     return { formsValidos: !nomesSecoesComCamposObrigatorios?.length };
   };
 

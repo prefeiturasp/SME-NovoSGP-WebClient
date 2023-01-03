@@ -46,8 +46,8 @@ const CadastroEncaminhamentoNAAPABotoesAcao = props => {
     store => store.encaminhamentoNAAPA.desabilitarCamposEncaminhamentoNAAPA
   );
 
-  const dadosEncaminhamentoNAAPA = useSelector(
-    state => state.encaminhamentoNAAPA.dadosEncaminhamentoNAAPA
+  const dadosSituacao = useSelector(
+    state => state.encaminhamentoNAAPA.dadosSituacaoEncaminhamentoNAAPA
   );
 
   const encaminhamentoId = routeMatch.params?.id;
@@ -78,36 +78,6 @@ const CadastroEncaminhamentoNAAPABotoesAcao = props => {
     setMostrarBusca(false);
   };
 
-  const salvar = async novaSituacao => {
-    const situacaoAtual =
-      dadosEncaminhamentoNAAPA?.situacao || situacaoNAAPA.Rascunho;
-
-    const situacaoSalvar = novaSituacao || situacaoAtual;
-
-    const ehRascunho = situacaoSalvar === situacaoNAAPA.Rascunho;
-
-    const validarCamposObrigatorios = !ehRascunho;
-
-    const resposta = await ServicoNAAPA.salvarEncaminhamento(
-      encaminhamentoId,
-      situacaoSalvar,
-      validarCamposObrigatorios,
-      ehRascunho
-    );
-
-    if (resposta?.status === 200) {
-      let mensagem = ehRascunho
-        ? 'Rascunho salvo com sucesso'
-        : 'Registro cadastrado com sucesso';
-
-      if (encaminhamentoId && situacaoAtual !== situacaoNAAPA.Rascunho) {
-        mensagem = 'Registro alterado com sucesso';
-      }
-      sucesso(mensagem);
-    }
-    return resposta;
-  };
-
   const onClickVoltar = async () => {
     if (questionarioDinamicoEmEdicao) {
       const confirmou = await confirmar(
@@ -117,7 +87,7 @@ const CadastroEncaminhamentoNAAPABotoesAcao = props => {
       );
 
       if (confirmou) {
-        const resposta = await salvar();
+        const resposta = await ServicoNAAPA.salvarPadrao(encaminhamentoId);
         if (resposta?.status === 200)
           history.push(RotasDto.ENCAMINHAMENTO_NAAPA);
       } else {
@@ -163,14 +133,22 @@ const CadastroEncaminhamentoNAAPABotoesAcao = props => {
   };
 
   const onClickSalvarRascunho = async () => {
-    const resposta = await salvar(situacaoNAAPA.Rascunho);
+    const resposta = await ServicoNAAPA.salvarPadrao(
+      encaminhamentoId,
+      true,
+      situacaoNAAPA.Rascunho
+    );
     if (resposta?.status === 200) {
       history.push(`${RotasDto.ENCAMINHAMENTO_NAAPA}/${resposta?.data?.id}`);
     }
   };
 
   const onClickCadastrarAlterar = async () => {
-    const resposta = await salvar(situacaoNAAPA.AguardandoAtendimento);
+    const resposta = await ServicoNAAPA.salvarPadrao(
+      encaminhamentoId,
+      true,
+      situacaoNAAPA.AguardandoAtendimento
+    );
     if (resposta?.status === 200) {
       history.push(RotasDto.ENCAMINHAMENTO_NAAPA);
     }
@@ -178,8 +156,8 @@ const CadastroEncaminhamentoNAAPABotoesAcao = props => {
 
   const ocultarBtnRascunho =
     encaminhamentoId &&
-    dadosEncaminhamentoNAAPA?.situacao &&
-    dadosEncaminhamentoNAAPA?.situacao !== situacaoNAAPA.Rascunho;
+    dadosSituacao?.situacao &&
+    dadosSituacao?.situacao !== situacaoNAAPA.Rascunho;
 
   const labelBtnCadastrarAlterar = ocultarBtnRascunho ? 'Alterar' : 'Cadastrar';
 
@@ -189,22 +167,21 @@ const CadastroEncaminhamentoNAAPABotoesAcao = props => {
   const disabledBtnExcluir =
     !permissoesTela?.podeExcluir ||
     !encaminhamentoId ||
-    (dadosEncaminhamentoNAAPA?.situacao !== situacaoNAAPA.Rascunho &&
-      dadosEncaminhamentoNAAPA?.situacao !==
-        situacaoNAAPA.AguardandoAtendimento);
+    (dadosSituacao?.situacao !== situacaoNAAPA.Rascunho &&
+      dadosSituacao?.situacao !== situacaoNAAPA.AguardandoAtendimento);
 
   const disabledCadastrarAlterar =
     desabilitarCamposEncaminhamentoNAAPA ||
     !permissoesTela?.podeAlterar ||
     (encaminhamentoId &&
       !questionarioDinamicoEmEdicao &&
-      dadosEncaminhamentoNAAPA?.situacao !== situacaoNAAPA.Rascunho);
+      dadosSituacao?.situacao !== situacaoNAAPA.Rascunho);
 
   const disabledRascunho =
     desabilitarCamposEncaminhamentoNAAPA ||
     (encaminhamentoId &&
       !questionarioDinamicoEmEdicao &&
-      dadosEncaminhamentoNAAPA?.situacao === situacaoNAAPA.Rascunho);
+      dadosSituacao?.situacao === situacaoNAAPA.Rascunho);
 
   return (
     <Row gutter={[8, 8]} type="flex">

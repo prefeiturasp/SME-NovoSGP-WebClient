@@ -2,37 +2,42 @@ import PropTypes from 'prop-types';
 import React, { useEffect, useCallback, useState } from 'react';
 
 import * as moment from 'moment';
-import { Button, Colors, ListaPaginada } from '~/componentes';
+import { Button, Colors, DataTable, ListaPaginada } from '~/componentes';
 import { RotasDto } from '~/dtos';
 import { erros, history } from '~/servicos';
 import { SGP_BUTTON_DOWNLOAD_ARQUIVO } from '~/constantes/ids/button';
 import ServicoArmazenamento from '~/servicos/Componentes/ServicoArmazenamento';
 import { downloadBlob } from '~/utils';
 import { SGP_TABLE_DOCUMENTOS_PLANOS_TRABALHO } from '~/constantes/ids/table';
+import ServicoDocumentosPlanosTrabalho from '~/servicos/Paginas/Gestao/DocumentosPlanosTrabalho/ServicoDocumentosPlanosTrabalho';
 
 const DocPlanosTrabalhoListaPaginada = props => {
   const { form } = props;
 
   const ueCodigo = form?.values?.ueCodigo;
   const listaUes = form?.values?.listaUes;
+  const consideraHistorico = form?.values?.consideraHistorico;
+  const anoLetivo = form?.values?.anoLetivo;
   const tipoDocumentoId = form?.values?.tipoDocumentoId;
   const classificacaoId = form?.values?.classificacaoId;
+  const listaClassificacoes = form?.values?.listaClassificacoes;
 
   const [filtros, setFiltros] = useState();
+  const [expandedRowKeys, setExpandedRowKeys] = useState();
 
   const TIPO_DOCUMENTO = {
     DOCUMENTOS: '2',
   };
 
-  const TIPO_CLASSIFICACAO = {
-    DOCUMENTOS_DA_TURMA: '10',
-  };
+  const ehClassificacaoDocumentosTurma = ServicoDocumentosPlanosTrabalho.verificaSeEhClassificacaoDocumentosTurma(
+    classificacaoId,
+    listaClassificacoes
+  );
 
   const ocultarColunaTurmaComponente =
     (tipoDocumentoId &&
       tipoDocumentoId?.toString() !== TIPO_DOCUMENTO.DOCUMENTOS) ||
-    (classificacaoId &&
-      classificacaoId?.toString() !== TIPO_CLASSIFICACAO.DOCUMENTOS_DA_TURMA);
+    (classificacaoId && !ehClassificacaoDocumentosTurma);
 
   const formatarCampoDataGrid = data => {
     let dataFormatada = '';
@@ -42,14 +47,12 @@ const DocPlanosTrabalhoListaPaginada = props => {
     return <span> {dataFormatada}</span>;
   };
 
-  const onClickDownload = linha => {
-    linha.arquivos.forEach(arquivo => {
-      ServicoArmazenamento.obterArquivoParaDownload(arquivo?.codigo)
-        .then(resposta => {
-          downloadBlob(resposta.data, arquivo?.nome);
-        })
-        .catch(e => erros(e));
-    });
+  const onClickDownload = arquivo => {
+    ServicoArmazenamento.obterArquivoParaDownload(arquivo?.codigo)
+      .then(resposta => {
+        downloadBlob(resposta.data, arquivo?.nome);
+      })
+      .catch(e => erros(e));
   };
 
   const colunas = [
@@ -79,19 +82,40 @@ const DocPlanosTrabalhoListaPaginada = props => {
     });
   }
 
+  const onClickExpandir = (expandir, linha, qtdAquivos) => {
+    if (qtdAquivos === 1) {
+      onClickDownload(linha?.arquivos?.[0]);
+    } else if (expandir) {
+      setExpandedRowKeys({
+        documentoId: linha?.documentoId,
+      });
+    } else {
+      setExpandedRowKeys();
+    }
+  };
+
   colunas.push({
     title: 'Anexo',
     dataIndex: 'anexo',
-    width: '10%',
+    width: '5%',
     render: (_, linha) => {
+      const expandido = expandedRowKeys?.documentoId === linha?.documentoId;
       const qtdAquivos = linha?.arquivos?.length;
+
+      let icone = `fas fa-arrow-${expandido ? 'up' : 'down'}`;
+      if (qtdAquivos && qtdAquivos > 1) {
+        icone = `fas fa-chevron-${expandido ? 'up' : 'down'}`;
+      }
+
       return (
         <Button
-          icon={`fas fa-arrow-down ${SGP_BUTTON_DOWNLOAD_ARQUIVO}`}
-          label={`Download de ${qtdAquivos || 0} arquivo(s)`}
+          icon={`${icone} ${SGP_BUTTON_DOWNLOAD_ARQUIVO}`}
+          label={
+            qtdAquivos > 1 ? `Exibir (${qtdAquivos}) anexos` : 'Download anexo'
+          }
           color={Colors.Azul}
-          className={`ml-2 text-center ${SGP_BUTTON_DOWNLOAD_ARQUIVO}`}
-          onClick={() => qtdAquivos && onClickDownload(linha)}
+          className={`text-center ${SGP_BUTTON_DOWNLOAD_ARQUIVO}`}
+          onClick={() => onClickExpandir(!expandido, linha, qtdAquivos)}
         />
       );
     },
@@ -107,6 +131,9 @@ const DocPlanosTrabalhoListaPaginada = props => {
         tipoDocumentoId,
         classificacaoId,
       };
+      if (consideraHistorico) {
+        params.anoLetivo = anoLetivo;
+      }
       setFiltros({ ...params });
     } else {
       setFiltros({});
@@ -133,6 +160,38 @@ const DocPlanosTrabalhoListaPaginada = props => {
     }
   };
 
+  const expandedRowRender = linha => {
+    const columnsArquivos = [
+      { title: 'Nome', dataIndex: 'nome' },
+      {
+        title: 'Anexo',
+        dataIndex: 'codigo',
+        width: '5%',
+        render: (_, arquivo) => {
+          return (
+            <Button
+              icon="fas fa-arrow-down"
+              label="Download anexo"
+              color={Colors.Azul}
+              className="text-center"
+              onClick={() => onClickDownload(arquivo)}
+            />
+          );
+        },
+      },
+    ];
+    const arquivos = linha?.arquivos;
+    return (
+      <DataTable
+        idLinha="codigo"
+        columns={columnsArquivos}
+        dataSource={arquivos}
+        pagination={false}
+        semHover
+      />
+    );
+  };
+
   return filtros?.ueId ? (
     <ListaPaginada
       url="v1/armazenamento/documentos"
@@ -142,6 +201,11 @@ const DocPlanosTrabalhoListaPaginada = props => {
       filtro={filtros}
       onClick={(linha, colunaClicada) => onClickEditar(linha, colunaClicada)}
       filtroEhValido={!!filtros?.ueId}
+      expandedRowKeys={
+        expandedRowKeys?.documentoId ? [expandedRowKeys.documentoId] : []
+      }
+      expandIcon={() => ''}
+      expandedRowRender={expandedRowRender}
     />
   ) : (
     <></>

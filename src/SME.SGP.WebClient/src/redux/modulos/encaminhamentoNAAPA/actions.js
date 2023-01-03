@@ -13,6 +13,11 @@ export const setExibirLoaderEncaminhamentoNAAPA = payload => ({
   payload,
 });
 
+export const setExibirLoaderDrawerAtendimento = payload => ({
+  type: '@encaminhamentoNAAPA/setExibirLoaderDrawerAtendimento',
+  payload,
+});
+
 export const setLimparDadosEncaminhamentoNAAPA = payload => ({
   type: '@encaminhamentoNAAPA/setLimparDadosEncaminhamentoNAAPA',
   payload,
@@ -30,5 +35,10 @@ export const setDesabilitarCamposEncaminhamentoNAAPA = payload => ({
 
 export const setTabAtivaEncaminhamentoNAAPA = payload => ({
   type: '@encaminhamentoNAAPA/setTabAtivaEncaminhamentoNAAPA',
+  payload,
+});
+
+export const setDadosSituacaoEncaminhamentoNAAPA = payload => ({
+  type: '@encaminhamentoNAAPA/setDadosSituacaoEncaminhamentoNAAPA',
   payload,
 });

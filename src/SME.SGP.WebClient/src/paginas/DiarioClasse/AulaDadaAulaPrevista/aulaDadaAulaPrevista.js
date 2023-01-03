@@ -15,7 +15,13 @@ import Grid from '~/componentes/grid';
 import SelectComponent from '~/componentes/select';
 import { URL_HOME } from '~/constantes/url';
 import RotasDto from '~/dtos/rotasDto';
-import { confirmar, erros, exibirAlerta, sucesso } from '~/servicos/alertas';
+import {
+  confirmar,
+  erro,
+  erros,
+  exibirAlerta,
+  sucesso,
+} from '~/servicos/alertas';
 import api from '~/servicos/api';
 import history from '~/servicos/history';
 import ServicoDisciplina from '~/servicos/Paginas/ServicoDisciplina';
@@ -71,12 +77,21 @@ const AulaDadaAulaPrevista = () => {
     );
   };
 
-  const buscarDados = async disciplinaId => {
+  const buscarDados = async (disciplinaId, novosDados) => {
     setExibirLoader(true);
-    const resposta = await api.get(
-      `v1/aula-prevista/modalidades/${modalidade}/turmas/${turmaId}/disciplinas/${disciplinaId}/semestres/${periodo}`
-    );
-    const dadosAula = resposta.data;
+
+    let dadosAula = null;
+
+    if (novosDados) {
+      dadosAula = novosDados;
+    } else {
+      const resposta = await api.get(
+        `v1/aula-prevista/modalidades/${modalidade}/turmas/${turmaId}/disciplinas/${disciplinaId}/semestres/${periodo}`
+      );
+
+      dadosAula = resposta.data;
+    }
+
     let periodosFechados = '';
     if (dadosAula && dadosAula.aulasPrevistasPorBimestre) {
       const dadosBimestre = dadosAula.aulasPrevistasPorBimestre;
@@ -113,10 +128,10 @@ const AulaDadaAulaPrevista = () => {
       };
       setDadosLista(dados);
       const aud = {
-        alteradoRf: dados.alteradoRf,
+        alteradoRf: dadosAula.alteradoRF,
         alteradoEm: dadosAula.alteradoEm,
         alteradoPor: dadosAula.alteradoPor,
-        criadoRf: dadosAula.criadoRf,
+        criadoRf: dadosAula.criadoRF,
         criadoEm: dadosAula.criadoEm,
         criadoPor: dadosAula.criadoPor,
       };
@@ -131,9 +146,9 @@ const AulaDadaAulaPrevista = () => {
     setExibirLoader(false);
   };
 
-  const resetarTela = () => {
+  const resetarTela = (novosDados = null) => {
     setModoEdicao(false);
-    buscarDados(disciplinaIdSelecionada);
+    buscarDados(disciplinaIdSelecionada, novosDados);
   };
 
   const salvar = async () => {
@@ -141,14 +156,24 @@ const AulaDadaAulaPrevista = () => {
 
     const bimestresQuantidade = [];
     dadoslista.bimestres.forEach(item => {
-      if (item?.previstas?.quantidade > 0) {
-        const dados = {
-          bimestre: item.bimestre,
-          quantidade: item.previstas.quantidade,
-        };
-        bimestresQuantidade.push(dados);
-      }
+      const dados = {
+        bimestre: item.bimestre,
+        quantidade: item.previstas.quantidade,
+      };
+
+      bimestresQuantidade.push(dados);
     });
+
+    const temAulaPrevistaVazio = bimestresQuantidade.findIndex(
+      element => element.quantidade === null
+    );
+
+    if (temAulaPrevistaVazio !== -1) {
+      setExibirLoader(false);
+      erro('É necessário preencher todos os campos de aulas previstas.');
+      return;
+    }
+
     const dados = {
       bimestresQuantidade,
       disciplinaId: disciplinaIdSelecionada,
@@ -163,12 +188,16 @@ const AulaDadaAulaPrevista = () => {
     apiUrl
       .then(res => {
         if (res?.status === 200) {
-          sucesso(
-            `Suas informações foram ${
-              dadoslista.id ? 'alteradas' : 'salvas'
-            } com sucesso`
-          );
-          resetarTela();
+          const texto = dadoslista.id ? 'alteradas' : 'salvas';
+
+          sucesso(`Suas informações foram ${texto} com sucesso`);
+
+          if (dadoslista?.id) {
+            resetarTela();
+          } else {
+            resetarTela(res?.data);
+          }
+
           setExibirLoader(false);
         }
       })

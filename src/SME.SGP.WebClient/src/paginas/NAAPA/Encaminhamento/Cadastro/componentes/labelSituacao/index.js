@@ -2,6 +2,7 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 import { Base } from '~/componentes';
+import { SGP_LABEL_SITUACAO_ENCAMINHAMENTO_NAAPA } from '~/constantes/ids/label';
 
 export const LabelContainer = styled.div`
   padding: 4px;
@@ -12,13 +13,13 @@ export const LabelContainer = styled.div`
 `;
 
 const LabelSituacao = () => {
-  const dadosEncaminhamentoNAAPA = useSelector(
-    state => state.encaminhamentoNAAPA.dadosEncaminhamentoNAAPA
+  const dadosSituacao = useSelector(
+    state => state.encaminhamentoNAAPA.dadosSituacaoEncaminhamentoNAAPA
   );
 
-  return dadosEncaminhamentoNAAPA?.descricaoSituacao ? (
-    <LabelContainer>
-      {dadosEncaminhamentoNAAPA?.descricaoSituacao}
+  return dadosSituacao?.descricaoSituacao ? (
+    <LabelContainer id={SGP_LABEL_SITUACAO_ENCAMINHAMENTO_NAAPA}>
+      {dadosSituacao?.descricaoSituacao}
     </LabelContainer>
   ) : (
     <></>
