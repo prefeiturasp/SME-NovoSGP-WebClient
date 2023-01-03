@@ -582,6 +582,9 @@ class QuestionarioDinamicoFuncoes {
           const form = item.form();
           const campos = form.state.values;
           const questoes = [];
+          const nomeCompoente =
+            dadosSecoes.find(secao => secao.id === item?.secaoId)
+              ?.nomeComponente || '';
 
           Object.keys(campos).forEach(key => {
             const questaoAtual = this.obterQuestaoPorId(
@@ -712,8 +715,10 @@ class QuestionarioDinamicoFuncoes {
               }
             }
           });
+
           return {
             questoes,
+            secaoNome: nomeCompoente || '',
             secaoId: item?.secaoId || 0,
             concluido:
               Object.keys(form.getFormikContext().errors)?.length === 0,
