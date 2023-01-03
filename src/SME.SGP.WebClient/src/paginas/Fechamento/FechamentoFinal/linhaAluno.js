@@ -5,7 +5,7 @@ import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { MarcadorTriangulo } from '~/componentes';
 import Nota from '~/componentes-sgp/inputs/nota';
-import { clicarSetas } from '~/componentes-sgp/inputs/nota/funcoes';
+import { moverFocoCampoNota } from '~/componentes-sgp/inputs/nota/funcoes';
 import NomeEstudanteLista from '~/componentes-sgp/NomeEstudanteLista/nomeEstudanteLista';
 
 import { setExpandirLinha } from '~/redux/modulos/notasConceitos/actions';
@@ -107,17 +107,21 @@ const LinhaAluno = ({
     dispatch(setExpandirLinha([...novaLinha]));
   };
 
-  const onKeyDown = (e, alunoEscolhido, label) => {
-    clicarSetas(
+  const onKeyDownNotaFinal = (e, alunoEscolhido, label) => {
+    const qtdColunasSemCampoNota = ehRegencia ? 0 : 5;
+
+    const params = {
       e,
-      alunoEscolhido,
-      dados,
-      ehRegencia ? 0 : 5,
-      label,
-      indexAluno,
-      ehRegencia,
-      direcao => acaoExpandirLinha(direcao, indexAluno)
-    );
+      aluno: alunoEscolhido,
+      alunos: dados,
+      qtdColunasSemCampoNota,
+      componenteCurricularNome: label,
+      regencia: ehRegencia,
+      chaveAluno: 'codigo',
+      acaoExpandirLinha: direcao => acaoExpandirLinha(direcao, indexAluno),
+    };
+
+    moverFocoCampoNota(params);
   };
 
   const montarCampoNotaConceitoFinal = (
@@ -132,7 +136,7 @@ const LinhaAluno = ({
         <Nota
           label={label}
           ehFechamento
-          onKeyDown={e => onKeyDown(e, alunoEscolhido, label)}
+          onKeyDown={e => onKeyDownNotaFinal(e, alunoEscolhido, label)}
           dadosNota={dadosNota}
           desabilitar={desabilitarCampo || !alunoEscolhido.podeEditar}
           idCampo={`aluno${alunoEscolhido?.codigo}`}

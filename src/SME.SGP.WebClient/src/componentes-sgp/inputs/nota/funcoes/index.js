@@ -1,4 +1,8 @@
-import { converterAcaoTecla, moverCursor, tratarString } from '~/utils';
+import {
+  converterAcaoTecla,
+  moverCursor,
+  tratarStringComponenteCurricularNome,
+} from '~/utils';
 
 const acharItem = (dados, alunoEscolhido, numero, nomeItem) => {
   if (dados?.length) {
@@ -26,53 +30,43 @@ const acharElemento = (e, elemento) => {
 };
 
 /** Ao clicar para cima ou baixo, mover o foco para o próximo campo */
-const clicarSetas = (
-  e,
-  aluno,
-  alunos,
-  /** TELA DE NOTAS/LISTÃO FECHAMENTO = 2, LISTAO AVALIAÇÃO = 3 */
-  qtdColunasSemCampoNota = 2,
-  disciplinaNome = '',
-  index = 0,
-  regencia = false,
-  acaoExpandirLinha
-) => {
+const moverFocoCampoNota = props => {
+  const {
+    e,
+    aluno,
+    alunos,
+    qtdColunasSemCampoNota = 2,
+    chaveAluno = 'id',
+    componenteCurricularNome = '',
+    regencia = false,
+    acaoExpandirLinha,
+  } = props;
+
   const direcao = converterAcaoTecla(e.keyCode);
-  const disciplina = disciplinaNome.toLowerCase();
 
   if (direcao && regencia && acaoExpandirLinha) {
     acaoExpandirLinha(direcao);
   }
+
   const elementoTD = acharElemento(e, 'td');
+
   if (!elementoTD) return;
 
   const indexElemento = elementoTD?.cellIndex - qtdColunasSemCampoNota;
 
-  let alunoEscolhido = [];
-  if (aluno?.id) {
-    alunoEscolhido = direcao && acharItem(alunos, aluno, direcao, 'id');
-  } else if (aluno?.codigoAluno) {
-    alunoEscolhido =
-      direcao && acharItem(alunos, aluno, direcao, 'codigoAluno');
-  } else if (aluno?.codigo) {
-    alunoEscolhido = direcao && acharItem(alunos, aluno, direcao, 'codigo');
-  }
+  const alunoEscolhido =
+    direcao && acharItem(alunos, aluno, direcao, chaveAluno);
 
   if (alunoEscolhido?.length) {
-    const disciplinaTratada = tratarString(disciplina);
+    const disciplinaTratada = tratarStringComponenteCurricularNome(
+      componenteCurricularNome
+    );
     const item = regencia && disciplinaTratada ? disciplinaTratada : 'aluno';
 
-    let itemEscolhido = '';
-    if (alunoEscolhido[0].id) {
-      itemEscolhido = `${item}${alunoEscolhido[0]?.id}`;
-    } else if (alunoEscolhido[0]?.codigoAluno) {
-      itemEscolhido = `${item}${alunoEscolhido[0].codigoAluno}`;
-    } else if (alunoEscolhido[0]?.codigo) {
-      itemEscolhido = `${item}${alunoEscolhido[0].codigo}`;
-    }
+    const itemEscolhido = `${item}${alunoEscolhido[0][chaveAluno]}`;
 
     moverCursor(itemEscolhido, indexElemento, regencia);
   }
 };
 
-export { clicarSetas };
+export { moverFocoCampoNota };

@@ -31,13 +31,13 @@ const esperarMiliSegundos = milisegundos => {
   return new Promise(resolve => setTimeout(resolve, milisegundos));
 };
 
-const tratarString = item =>
+const tratarStringComponenteCurricularNome = item =>
   item
     ?.toLowerCase()
     .normalize('NFD')
     .replace(/[\u0300-\u036f]|[^a-zA-Zs]|\s/g, '');
 
-const focusRegencia = async elemento => {
+const focusRegenciaElementoDiv = async elemento => {
   const [elementoDiv] = elemento;
   const [elementoInput] = elementoDiv?.getElementsByTagName?.('input');
 
@@ -52,13 +52,17 @@ const focusRegencia = async elemento => {
 const validaFocusRegencia = async elemento => {
   await esperarMiliSegundos(600);
   // TODO PENDENTE LISTAO FECHAMENTO
-  const fezFocus = elemento?.length ? focusRegencia(elemento) : false;
+  let fezFocus = false;
+
+  if (elemento?.length) {
+    fezFocus = await focusRegenciaElementoDiv(elemento);
+  }
 
   if (fezFocus) return;
 
   if (elemento?.length) {
     await esperarMiliSegundos(600);
-    focusRegencia(elemento);
+    await focusRegenciaElementoDiv(elemento);
   }
 };
 
@@ -81,6 +85,6 @@ export {
   converterAcaoTecla,
   acharItem,
   esperarMiliSegundos,
-  tratarString,
+  tratarStringComponenteCurricularNome,
   moverCursor,
 };

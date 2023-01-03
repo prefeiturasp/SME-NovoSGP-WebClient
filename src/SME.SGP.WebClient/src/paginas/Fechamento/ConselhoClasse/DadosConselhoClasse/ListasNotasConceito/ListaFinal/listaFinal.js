@@ -9,7 +9,7 @@ import {
   converterAcaoTecla,
   moverCursor,
   removerArrayAninhados,
-  tratarString,
+  tratarStringComponenteCurricularNome,
 } from '~/utils';
 import CampoConceito from '../CamposNotaConceito/campoConceito';
 import CampoNota from '../CamposNotaConceito/campoNota';
@@ -53,7 +53,9 @@ const ListaFinal = props => {
   const acharComponenteCurricular = (codigoComponente, numero) => {
     return componentesAgrupados
       ?.map((valor, index, elementos) => {
-        const nomeComponente = tratarString(valor?.nome);
+        const nomeComponente = tratarStringComponenteCurricularNome(
+          valor?.nome
+        );
         if (nomeComponente === codigoComponente) {
           return elementos[index + numero];
         }
@@ -68,7 +70,9 @@ const ListaFinal = props => {
       direcao && acharComponenteCurricular(nomeComponenteCurricular, direcao);
 
     if (componenteEscolhido.length) {
-      const componenteTratado = tratarString(componenteEscolhido[0].nome);
+      const componenteTratado = tratarStringComponenteCurricularNome(
+        componenteEscolhido[0].nome
+      );
       moverCursor(componenteTratado);
     }
   };
@@ -81,7 +85,9 @@ const ListaFinal = props => {
     item,
     podeEditar
   ) => {
-    const nomeComponenteCurricular = tratarString(item?.nome);
+    const nomeComponenteCurricular = tratarStringComponenteCurricularNome(
+      item?.nome
+    );
     switch (Number(tipoNota)) {
       case Number(notasConceitos.Notas):
         return (

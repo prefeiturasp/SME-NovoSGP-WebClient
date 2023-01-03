@@ -5,7 +5,7 @@ import shortid from 'shortid';
 import styled from 'styled-components';
 import { DataTable, LabelSemDados } from '~/componentes';
 import Nota from '~/componentes-sgp/inputs/nota';
-import { clicarSetas } from '~/componentes-sgp/inputs/nota/funcoes';
+import { moverFocoCampoNota } from '~/componentes-sgp/inputs/nota/funcoes';
 import SinalizacaoAEE from '~/componentes-sgp/SinalizacaoAEE/sinalizacaoAEE';
 import { Base } from '~/componentes/colors';
 import notasConceitos from '~/dtos/notasConceitos';
@@ -98,6 +98,18 @@ const ListaoListaAvaliacoes = () => {
     }
   };
 
+  const onKeyDownNota = (e, dadosEstudante) => {
+    const qtdColunasSemCampoNota = 3;
+    const params = {
+      e,
+      aluno: dadosEstudante,
+      alunos: dadosAvaliacao?.bimestres?.[0]?.alunos,
+      qtdColunasSemCampoNota,
+    };
+
+    moverFocoCampoNota(params);
+  };
+
   const montarCampoNotaConceito = (dadosEstudante, avaliacao) => {
     const notaAvaliacao = dadosEstudante.notasAvaliacoes.find(
       item => item.atividadeAvaliativaId === avaliacao.id
@@ -118,14 +130,7 @@ const ListaoListaAvaliacoes = () => {
       case notasConceitos.Notas:
         return (
           <Nota
-            onKeyDown={e =>
-              clicarSetas(
-                e,
-                dadosEstudante,
-                dadosAvaliacao?.bimestres?.[0]?.alunos,
-                3
-              )
-            }
+            onKeyDown={e => onKeyDownNota(e, dadosEstudante)}
             dadosNota={notaAvaliacao}
             desabilitar={desabilitarCampoNota}
             idCampo={`aluno${dadosEstudante?.id}`}

@@ -12,7 +12,7 @@ import {
   setModoEdicaoGeralNotaFinal,
 } from '~/redux/modulos/notasConceitos/actions';
 import Nota from '../inputs/nota';
-import { clicarSetas } from '../inputs/nota/funcoes';
+import { moverFocoCampoNota } from '../inputs/nota/funcoes';
 import Ordenacao from '../Ordenacao/ordenacao';
 import {
   CaixaMarcadores,
@@ -140,7 +140,9 @@ const Avaliacao = props => {
       case notasConceitos.Notas:
         return (
           <Nota
-            onKeyDown={e => clicarSetas(e, aluno, dados?.alunos)}
+            onKeyDown={e =>
+              moverFocoCampoNota({ e, aluno, alunos: dados?.alunos })
+            }
             dadosNota={nota}
             desabilitar={desabilitar}
             idCampo={`aluno${aluno.id}`}
@@ -178,9 +180,9 @@ const Avaliacao = props => {
     return aluno.notasBimestre[0];
   };
 
-  const acaoExpandirLinha = (direcao, index) => {
+  const acaoExpandirLinhaRegencia = (direcao, indexLinha) => {
     let novaLinha = [];
-    const novoIndex = index + direcao;
+    const novoIndex = indexLinha + direcao;
 
     if (expandirLinha[novoIndex]) {
       expandirLinha[novoIndex] = false;
@@ -189,6 +191,26 @@ const Avaliacao = props => {
       novaLinha[novoIndex] = true;
     }
     dispatch(setExpandirLinha([...novaLinha]));
+  };
+
+  const onKeyDownCampoFinal = (
+    e,
+    aluno,
+    componenteCurricularNome,
+    regencia,
+    indexLinha
+  ) => {
+    const params = {
+      e,
+      aluno,
+      alunos: dados?.alunos,
+      componenteCurricularNome,
+      regencia,
+      acaoExpandirLinha: direcao =>
+        acaoExpandirLinhaRegencia(direcao, indexLinha),
+    };
+
+    moverFocoCampoNota(params);
   };
 
   const montarCampoNotaConceitoFinal = (
@@ -213,16 +235,7 @@ const Avaliacao = props => {
           <Nota
             ehFechamento
             onKeyDown={e =>
-              clicarSetas(
-                e,
-                aluno,
-                dados?.alunos,
-                2,
-                label,
-                indexLinha,
-                regencia,
-                direcao => acaoExpandirLinha(direcao, indexLinha)
-              )
+              onKeyDownCampoFinal(e, aluno, label, regencia, indexLinha)
             }
             dadosNota={dadosNota}
             desabilitar={desabilitarNotaFinal}
