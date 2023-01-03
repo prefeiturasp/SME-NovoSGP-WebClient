@@ -112,7 +112,7 @@ const LinhaAluno = ({
       e,
       alunoEscolhido,
       dados,
-      0,
+      ehRegencia ? 0 : 5,
       label,
       indexAluno,
       ehRegencia,

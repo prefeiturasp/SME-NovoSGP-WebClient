@@ -56,8 +56,8 @@ const validaFocusRegencia = async elemento => {
 
   if (fezFocus) return;
 
-  await esperarMiliSegundos(600);
   if (elemento?.length) {
+    await esperarMiliSegundos(600);
     focusRegencia(elemento);
   }
 };
