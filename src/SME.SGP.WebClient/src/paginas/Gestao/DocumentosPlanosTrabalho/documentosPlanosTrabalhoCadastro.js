@@ -636,6 +636,7 @@ const DocumentosPlanosTrabalhoCadastro = ({ match }) => {
                               desabilitarCampos
                             }
                             dreId={form.values.dreId}
+                            ueId={form.values.ueId}
                             anoLetivo={form.values.anoLetivo}
                             rfEdicao={form.values.professorRf}
                             showLabel
