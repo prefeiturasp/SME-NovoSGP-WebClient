@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
 import React, { useEffect, useState } from 'react';
 import Loader from '~/componentes/loader';
+import { SGP_BUTTON_ALTERAR_IMAGEM } from '~/constantes/ids/button';
 import { erros } from '~/servicos';
 import ServicoImagemEstudante from '~/servicos/Componentes/ServicoImagemEstudante';
 import ModalTrocarImagem from './modalTrocarImagem';
@@ -70,7 +71,12 @@ const ImagemEstudanteObjectCard = props => {
         codigoEOL={codigoEOL}
         dadosImagem={dadosImagem}
       />
-      <ContainerAvatar className="mr-3" onClick={onClickAlterarImagem}>
+      <ContainerAvatar
+        className="mr-3"
+        onClick={onClickAlterarImagem}
+        id={SGP_BUTTON_ALTERAR_IMAGEM}
+        cursor={permiteAlterarImagem ? 'cursor' : 'initial'}
+      >
         <Loader loading={exibirLoader} tip="">
           <span className="ant-avatar">
             {dadosImagem?.url ? (

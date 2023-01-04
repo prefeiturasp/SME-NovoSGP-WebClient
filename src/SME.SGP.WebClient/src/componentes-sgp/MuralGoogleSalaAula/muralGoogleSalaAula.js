@@ -2,6 +2,7 @@ import PropTypes from 'prop-types';
 import React, { useState } from 'react';
 import { Base } from '~/componentes';
 import CardCollapse from '~/componentes/cardCollapse';
+import { SGP_COLLAPSE_MURAL_GOOGLE_SALA_AULA } from '~/constantes/ids/collapse';
 import DadosMuralGoogleSalaAula from './dadosMuralGoogleSalaAula';
 
 const MuralGoogleSalaAula = props => {
@@ -18,6 +19,7 @@ const MuralGoogleSalaAula = props => {
 
   return (
     <CardCollapse
+      id={SGP_COLLAPSE_MURAL_GOOGLE_SALA_AULA}
       titulo="Mural do Google Sala de Aula"
       key={`${key}-collapse-key`}
       indice={`${key}-collapse-indice`}

@@ -14,6 +14,24 @@ import JoditEditor from '~/componentes/jodit-editor/joditEditor';
 import Row from '~/componentes/row';
 import SelectComponent from '~/componentes/select';
 import { ContainerTabsCard } from '~/componentes/tabs/tabs.css';
+import {
+  SGP_ALERT_ALERTA_PRINCIPAL_ESCOLHER_TURMA,
+  SGP_ALERT_JUSTIFICATIVA_PORCENTAGEM_NOTAS_CONCEITO,
+  SGP_ALERT_NAO_PERMITE_LANCAMENTO_NOTA,
+  SGP_ALERT_PERIODO_FECHAMENTO_NAO_ESTA_ABERTO,
+} from '~/constantes/ids/alert';
+import {
+  SGP_BUTTON_CANCELAR_MODAL,
+  SGP_BUTTON_SALVAR_MODAL,
+} from '~/constantes/ids/button';
+import { SGP_JODIT_EDITOR_DESCRICAO_JUSTIFICATIVA } from '~/constantes/ids/jodit-editor';
+import { SGP_SELECT_COMPONENTE_CURRICULAR } from '~/constantes/ids/select';
+import {
+  SGP_TAB_PRIMEIRO_BIMESTRE,
+  SGP_TAB_QUARTO_BIMESTRE,
+  SGP_TAB_SEGUNDO_BIMESTRE,
+  SGP_TAB_TERCEIRO_BIMESTRE,
+} from '~/constantes/ids/tabs';
 import { URL_HOME } from '~/constantes/url';
 import notasConceitos from '~/dtos/notasConceitos';
 import RotasDto from '~/dtos/rotasDto';
@@ -1264,7 +1282,7 @@ const Notas = ({ match }) => {
                 <Alert
                   alerta={{
                     tipo: 'warning',
-                    id: 'justificativa-porcentagem',
+                    id: SGP_ALERT_JUSTIFICATIVA_PORCENTAGEM_NOTAS_CONCEITO,
                     mensagem: `A maioria dos estudantes está com ${
                       notasConceitos.Notas === Number(notaTipo)
                         ? 'notas'
@@ -1279,6 +1297,7 @@ const Notas = ({ match }) => {
               <div className="col-md-12">
                 <fieldset className="mt-3">
                   <JoditEditor
+                    id={SGP_JODIT_EDITOR_DESCRICAO_JUSTIFICATIVA}
                     form={form}
                     value={form.values.descricao}
                     onChange={onChangeJustificativa}
@@ -1294,6 +1313,7 @@ const Notas = ({ match }) => {
                   label="Cancelar"
                   color={Colors.Roxo}
                   bold
+                  id={SGP_BUTTON_CANCELAR_MODAL}
                   border
                   className="mr-3 mt-2 padding-btn-confirmacao"
                   onClick={() => {
@@ -1307,6 +1327,7 @@ const Notas = ({ match }) => {
                   label="Confirmar"
                   color={Colors.Roxo}
                   bold
+                  id={SGP_BUTTON_SALVAR_MODAL}
                   border
                   className="mr-3 mt-2 padding-btn-confirmacao"
                   onClick={() => validaAntesDoSubmit(form)}
@@ -1324,7 +1345,7 @@ const Notas = ({ match }) => {
               <Alert
                 alerta={{
                   tipo: 'warning',
-                  id: 'AlertaPrincipal',
+                  id: SGP_ALERT_ALERTA_PRINCIPAL_ESCOLHER_TURMA,
                   mensagem: 'Você precisa escolher uma turma.',
                   estiloTitulo: { fontSize: '18px' },
                 }}
@@ -1340,7 +1361,7 @@ const Notas = ({ match }) => {
               <Alert
                 alerta={{
                   tipo: 'warning',
-                  id: 'pode-lanca-nota',
+                  id: SGP_ALERT_NAO_PERMITE_LANCAMENTO_NOTA,
                   mensagem:
                     'Este componente curricular não permite o lançamento de nota',
                   estiloTitulo: { fontSize: '18px' },
@@ -1359,7 +1380,7 @@ const Notas = ({ match }) => {
               <Alert
                 alerta={{
                   tipo: 'warning',
-                  id: 'alerta-perido-fechamento',
+                  id: SGP_ALERT_PERIODO_FECHAMENTO_NAO_ESTA_ABERTO,
                   mensagem:
                     'Apenas é possível consultar este registro pois o período não está em aberto.',
                   estiloTitulo: { fontSize: '18px' },
@@ -1391,7 +1412,7 @@ const Notas = ({ match }) => {
             <div className="row">
               <div className="col-sm-12 col-md-4 col-lg-4 col-xl-4 mb-2">
                 <SelectComponent
-                  id="disciplina"
+                  id={SGP_SELECT_COMPONENTE_CURRICULAR}
                   name="disciplinaId"
                   lista={listaDisciplinas}
                   valueOption="codigoComponenteCurricular"
@@ -1418,6 +1439,7 @@ const Notas = ({ match }) => {
                     >
                       {primeiroBimestre.numero ? (
                         <TabPane
+                          id={SGP_TAB_PRIMEIRO_BIMESTRE}
                           tab={primeiroBimestre.descricao}
                           key={primeiroBimestre.numero}
                         >
@@ -1446,6 +1468,7 @@ const Notas = ({ match }) => {
                       )}
                       {segundoBimestre.numero ? (
                         <TabPane
+                          id={SGP_TAB_SEGUNDO_BIMESTRE}
                           tab={segundoBimestre.descricao}
                           key={segundoBimestre.numero}
                         >
@@ -1473,6 +1496,7 @@ const Notas = ({ match }) => {
                       )}
                       {terceiroBimestre.numero ? (
                         <TabPane
+                          id={SGP_TAB_TERCEIRO_BIMESTRE}
                           tab={terceiroBimestre.descricao}
                           key={terceiroBimestre.numero}
                         >
@@ -1500,6 +1524,7 @@ const Notas = ({ match }) => {
                       )}
                       {quartoBimestre.numero ? (
                         <TabPane
+                          id={SGP_TAB_QUARTO_BIMESTRE}
                           tab={quartoBimestre.descricao}
                           key={quartoBimestre.numero}
                         >

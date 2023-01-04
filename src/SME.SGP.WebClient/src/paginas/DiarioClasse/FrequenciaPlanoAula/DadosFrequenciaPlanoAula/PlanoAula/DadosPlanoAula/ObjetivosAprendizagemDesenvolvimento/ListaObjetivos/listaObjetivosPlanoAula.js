@@ -3,6 +3,10 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import TransferenciaLista from '~/componentes-sgp/TranferenciaLista/transferenciaLista';
 import {
+  SGP_TABLE_OBJETIVOS_APRENDIZAGEM,
+  SGP_TABLE_OBJETIVOS_APRENDIZAGEM_ADICIONADOS,
+} from '~/constantes/ids/table';
+import {
   setDadosPlanoAula,
   setExibirLoaderFrequenciaPlanoAula,
   setModoEdicaoPlanoAula,
@@ -124,6 +128,7 @@ const ListaObjetivosPlanoAula = React.memo(props => {
   }, [tabAtualComponenteCurricular, obterObjetivosPorAnoEComponenteCurricular]);
 
   const parametrosListaEsquerda = {
+    id: `${SGP_TABLE_OBJETIVOS_APRENDIZAGEM}`,
     title: 'Objetivos de aprendizagem',
     columns: [
       {
@@ -146,6 +151,7 @@ const ListaObjetivosPlanoAula = React.memo(props => {
   };
 
   const parametrosListaDireita = {
+    id: `${SGP_TABLE_OBJETIVOS_APRENDIZAGEM_ADICIONADOS}`,
     title:
       dadosDireita && dadosDireita.length
         ? 'Objetivos de aprendizagem selecionados para este componente curricular'

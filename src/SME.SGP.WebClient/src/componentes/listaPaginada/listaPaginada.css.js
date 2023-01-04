@@ -127,7 +127,7 @@ export const Container = styled.div`
     color: ${Base.Vermelho};
   }
 
-  .ant-table-tbody tr:hover td {
+  .ant-table-tbody tr:not(.ant-table-expanded-row):hover td {
     background: ${Base.Roxo} !important;
     color: ${Base.Branco} !important;
 
@@ -152,9 +152,17 @@ export const Container = styled.div`
     }
   }
 
-  .ant-table-tbody tr:hover {
+  .ant-table-tbody tr:not(.ant-table-expanded-row):hover {
     background: ${Base.Roxo} !important;
     color: ${Base.Branco} !important;
+  }
+
+  .ant-table-tbody tr.ant-table-expanded-row {
+    background: none !important;
+  }
+
+  .ant-table-tbody tr.ant-table-expanded-row td {
+    cursor: default !important;
   }
 
   .ant-table-tbody tr.ant-table-row-selected > td {

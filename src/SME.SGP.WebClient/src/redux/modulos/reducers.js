@@ -17,6 +17,7 @@ import conselhoClasse from './conselhoClasse/reducers';
 import relatorioSemestralPAP from './relatorioSemestralPAP/reducers';
 import sistema from './sistema/reducers';
 import localizadorEstudante from './localizadorEstudante/reducers';
+import localizarEstudante from './localizarEstudante/reducers';
 import observacoesUsuario from './observacoesUsuario/reducers';
 import cartaIntencoes from './cartaIntencoes/reducers';
 import devolutivas from './devolutivas/reducers';
@@ -25,6 +26,7 @@ import planoAnual from './anual/reducers';
 import frequenciaPlanoAula from './frequenciaPlanoAula/reducers';
 import dashboardEscolaAqui from './dashboardEscolaAqui/reducers';
 import encaminhamentoAEE from './encaminhamentoAEE/reducers';
+import encaminhamentoNAAPA from './encaminhamentoNAAPA/reducers';
 import planoAEE from './planoAEE/reducers';
 import registroIndividual from './registroIndividual/reducers';
 import collapseLocalizarEstudante from './collapseLocalizarEstudante/reducers';
@@ -64,6 +66,7 @@ const reducers = combineReducers({
   relatorioSemestralPAP,
   sistema,
   localizadorEstudante,
+  localizarEstudante,
   observacoesUsuario,
   cartaIntencoes,
   devolutivas,
@@ -72,6 +75,7 @@ const reducers = combineReducers({
   frequenciaPlanoAula,
   dashboardEscolaAqui,
   encaminhamentoAEE,
+  encaminhamentoNAAPA,
   planoAEE,
   registroIndividual,
   collapseLocalizarEstudante,

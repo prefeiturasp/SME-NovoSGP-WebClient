@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Tooltip } from 'antd';
 import Button from '~/componentes/button';
-import { SGP_BUTTON_VOLTAR } from '../filtro/idsCampos';
+import { SGP_BUTTON_VOLTAR } from '../../constantes/ids/button';
 import { Colors } from '~/componentes/colors';
 
 const BotaoVoltarPadrao = props => {

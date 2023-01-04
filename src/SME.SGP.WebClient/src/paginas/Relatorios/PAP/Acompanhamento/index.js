@@ -46,7 +46,7 @@ import { valorNuloOuVazio } from '~/utils/funcoes/gerais';
 import AlertaModalidadeInfantil from '~/componentes-sgp/AlertaModalidadeInfantil/alertaModalidadeInfantil';
 import { ehTurmaInfantil } from '~/servicos/Validacoes/validacoesInfatil';
 import { verificaSomenteConsulta } from '~/servicos';
-import { SGP_BUTTON_SALVAR } from '~/componentes-sgp/filtro/idsCampos';
+import { SGP_BUTTON_SALVAR } from '~/constantes/ids/button';
 
 function RelatorioPAPAcompanhamento() {
   const usuario = useSelector(store => store.usuario);

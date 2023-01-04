@@ -6,6 +6,7 @@ import SelectComponent from '~/componentes/select';
 
 const CampoConceitoFinal = props => {
   const {
+    id,
     montaNotaConceitoFinal,
     onChangeNotaConceitoFinal,
     desabilitarCampo,
@@ -68,6 +69,7 @@ const CampoConceitoFinal = props => {
     return (
       <div>
         <SelectComponent
+          id={id}
           label={label || ''}
           onChange={valorNovo => setarValorNovo(valorNovo)}
           valueOption="id"
@@ -105,11 +107,13 @@ const CampoConceitoFinal = props => {
 };
 
 CampoConceitoFinal.defaultProps = {
+  id: PropTypes.string,
   onChangeNotaConceitoFinal: PropTypes.func,
   montaNotaConceitoFinal: PropTypes.func,
 };
 
 CampoConceitoFinal.propTypes = {
+  id: '',
   onChangeNotaConceitoFinal: () => {},
   montaNotaConceitoFinal: () => {},
 };

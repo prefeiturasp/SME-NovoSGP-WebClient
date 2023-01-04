@@ -13,7 +13,7 @@ import {
   SGP_SELECT_TIPO_PENDENCIA,
   SGP_SELECT_TURMA,
   SGP_SELECT_NOME_TIPO_PENDENCIA,
-} from '~/componentes-sgp/filtro/idsCampos';
+} from '~/constantes/ids/select';
 import { Container, TextoTitulo } from './pendenciasGerais.css';
 
 const PendenciasGerais = () => {

@@ -9,6 +9,10 @@ import {
   setPlanoAEEDados,
 } from '~/redux/modulos/planoAEE/actions';
 import ServicoPlanoAEE from '~/servicos/Paginas/Relatorios/AEE/ServicoPlanoAEE';
+import {
+  SGP_BUTTON_ATRIBUICAO_RESPONSAVEL,
+  SGP_BUTTON_CANCELAR_ATRIBUICAO_RESPONSAVEL,
+} from '~/constantes/ids/button';
 
 const AddResponsavelCadastroPlano = () => {
   const paramsRota = useParams();
@@ -95,7 +99,6 @@ const AddResponsavelCadastroPlano = () => {
       <div className="row mb-4">
         <LocalizadorFuncionario
           desabilitado={desabilitarCamposPlanoAEE || !paramsRota?.id}
-          id="funcionarioResponsavel"
           onChange={onChangeLocalizador}
           codigoTurma={dadosCollapseLocalizarEstudante?.codigoTurma}
           limparCampos={limparCampos}
@@ -108,7 +111,7 @@ const AddResponsavelCadastroPlano = () => {
       </div>
       <div className="col-12 d-flex justify-content-end pb-4 mt-2 pr-0">
         <Button
-          id="btn-cancelar"
+          id={SGP_BUTTON_CANCELAR_ATRIBUICAO_RESPONSAVEL}
           label="Cancelar"
           color={Colors.Roxo}
           border
@@ -121,7 +124,7 @@ const AddResponsavelCadastroPlano = () => {
           }
         />
         <Button
-          id="btn-atribuir"
+          id={SGP_BUTTON_ATRIBUICAO_RESPONSAVEL}
           label="Atribuir responsável"
           color={Colors.Roxo}
           border

@@ -8,6 +8,20 @@ import {
 } from '~/componentes';
 import { FiltroHelper } from '~/componentes-sgp';
 import { OPCAO_TODOS } from '~/constantes/constantes';
+import {
+  SGP_CHECKBOX_EXIBIR_HISTORICO,
+  SGP_CHECKBOX_IMPRIMIR_ESTUDANTE_INATIVO,
+} from '~/constantes/ids/checkbox';
+import {
+  SGP_SELECT_ANO_LETIVO,
+  SGP_SELECT_DRE,
+  SGP_SELECT_MODALIDADE,
+  SGP_SELECT_MODELO_BOLETIM,
+  SGP_SELECT_OPCAO_ESTUDANTE,
+  SGP_SELECT_SEMESTRE,
+  SGP_SELECT_TURMA,
+  SGP_SELECT_UE,
+} from '~/constantes/ids/select';
 import { ModalidadeDTO } from '~/dtos';
 import { AbrangenciaServico, erros, ServicoFiltroRelatorio } from '~/servicos';
 import { ordenarDescPor } from '~/utils';
@@ -39,7 +53,9 @@ const Filtros = ({
   const [listaTurmas, setListaTurmas] = useState([]);
   const [listaUes, setListaUes] = useState([]);
   const [modalidadeId, setModalidadeId] = useState();
-  const [modeloBoletimId, setModeloBoletimId] = useState();
+  const [quantidadeBoletimPorPagina, setQuantidadeBoletimPorPagina] = useState(
+    ''
+  );
   const [semestre, setSemestre] = useState();
   const [opcaoEstudanteId, setOpcaoEstudanteId] = useState();
   const [turmasId, setTurmasId] = useState('');
@@ -49,6 +65,8 @@ const Filtros = ({
     setImprimirEstudantesInativos,
   ] = useState();
 
+  const ehEnsinoMedio = Number(modalidadeId) === ModalidadeDTO.ENSINO_MEDIO;
+
   const OPCAO_TODOS_ESTUDANTES = '0';
   const OPCAO_SELECIONAR_ALUNOS = '1';
   const opcoesEstudantes = [
@@ -56,10 +74,20 @@ const Filtros = ({
     { desc: 'Selecionar Alunos', valor: '1' },
   ];
 
-  const opcoesModeloBoletim = [
-    { valor: 1, desc: 'Simples' },
-    { valor: 2, desc: 'Detalhado' },
+  const qtdBoletinsPaginMedio = [
+    { valor: '1', desc: '1' },
+    { valor: '4', desc: '4' },
   ];
+
+  const qtdBoletinsPaginFundamentalEJA = [
+    { valor: '1', desc: '1' },
+    { valor: '2', desc: '2' },
+    { valor: '6', desc: '6' },
+  ];
+
+  const listaQtdBoletinsPagina = ehEnsinoMedio
+    ? qtdBoletinsPaginMedio
+    : qtdBoletinsPaginFundamentalEJA;
 
   const opcoesImprimirEstudantesInativos = [
     { value: true, label: 'Sim' },
@@ -79,8 +107,9 @@ const Filtros = ({
     setListaTurmas([]);
     setTurmasId();
 
+    setQuantidadeBoletimPorPagina('');
+
     setOpcaoEstudanteId();
-    setModeloBoletimId();
     setImprimirEstudantesInativos(false);
   };
 
@@ -94,7 +123,7 @@ const Filtros = ({
       semestre: semestre || 0,
       turmasId,
       opcaoEstudanteId,
-      modeloBoletimId,
+      quantidadeBoletimPorPagina,
       imprimirEstudantesInativos,
     };
 
@@ -112,7 +141,7 @@ const Filtros = ({
     opcaoEstudanteId,
     onFiltrar,
     filtrou,
-    modeloBoletimId,
+    quantidadeBoletimPorPagina,
     imprimirEstudantesInativos,
   ]);
 
@@ -122,6 +151,7 @@ const Filtros = ({
     setDreCodigo();
     setFiltrou(false);
     setModoEdicao(true);
+    setQuantidadeBoletimPorPagina('');
   };
 
   const onChangeAnoLetivo = ano => {
@@ -226,6 +256,7 @@ const Filtros = ({
     setListaTurmas([]);
     setTurmasId();
     setFiltrou(false);
+    setQuantidadeBoletimPorPagina('');
     setModoEdicao(true);
   };
 
@@ -271,6 +302,7 @@ const Filtros = ({
     setTurmasId();
     setModalidadeId(valor);
     setFiltrou(false);
+    setQuantidadeBoletimPorPagina('');
     setModoEdicao(true);
   };
 
@@ -312,6 +344,7 @@ const Filtros = ({
   const onChangeSemestre = valor => {
     setSemestre(valor);
     setFiltrou(false);
+    setQuantidadeBoletimPorPagina('');
     setModoEdicao(true);
   };
 
@@ -365,9 +398,9 @@ const Filtros = ({
 
     setTurmasId(valor);
     setOpcaoEstudanteId(OPCAO_TODOS_ESTUDANTES);
-    setModeloBoletimId('1');
     setDesabilitarEstudante(temOpcaoTodas);
     setFiltrou(false);
+    setQuantidadeBoletimPorPagina('');
     setModoEdicao(true);
   };
 
@@ -430,17 +463,12 @@ const Filtros = ({
   const onChangeOpcaoEstudante = valor => {
     setFiltrou(false);
     setOpcaoEstudanteId(valor);
-
-    if (!modeloBoletimId) {
-      setModeloBoletimId('1');
-    }
-
-    setModoEdicao(true);
+    setQuantidadeBoletimPorPagina('');
   };
 
-  const onChangeModeloBoletim = valor => {
+  const onChangeQtdBoletinsPagina = valor => {
     setFiltrou(false);
-    setModeloBoletimId(valor);
+    setQuantidadeBoletimPorPagina(valor);
     setModoEdicao(true);
   };
 
@@ -453,6 +481,10 @@ const Filtros = ({
       obterDres();
       setFiltrou(false);
       setCancelou(false);
+      setFiltrou(false);
+      setImprimirEstudantesInativos(false);
+      setQuantidadeBoletimPorPagina('');
+      setOpcaoEstudanteId();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [cancelou]);
@@ -469,11 +501,26 @@ const Filtros = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [opcaoEstudanteId]);
 
+  const obterMensagemQtdBoletionsPagina = () => {
+    switch (quantidadeBoletimPorPagina) {
+      case '1':
+        return 'Nesta opção será impresso o boletim detalhado';
+      case '2':
+        return 'Nesta opção será impresso o boletim detalhado sem as recomendações';
+      case '4':
+      case '6':
+        return 'Nesta opção será impresso o boletim simples';
+      default:
+        return '';
+    }
+  };
+
   return (
     <div className="col-12">
       <div className="row mb-2">
         <div className="col-12">
           <CheckboxComponent
+            id={SGP_CHECKBOX_EXIBIR_HISTORICO}
             label="Exibir histórico?"
             onChangeCheckbox={onChangeConsideraHistorico}
             checked={consideraHistorico}
@@ -484,6 +531,7 @@ const Filtros = ({
         <div className="col-sm-12 col-md-2 col-lg-2 col-xl-2">
           <Loader loading={carregandoAnosLetivos} ignorarTip>
             <SelectComponent
+              id={SGP_SELECT_ANO_LETIVO}
               label="Ano Letivo"
               lista={listaAnosLetivo}
               valueOption="valor"
@@ -498,6 +546,7 @@ const Filtros = ({
         <div className="col-sm-12 col-md-5 col-lg-5 col-xl-5">
           <Loader loading={carregandoDres} ignorarTip>
             <SelectComponent
+              id={SGP_SELECT_DRE}
               label="Diretoria Regional de Educação (DRE)"
               lista={listaDres}
               valueOption="valor"
@@ -513,7 +562,7 @@ const Filtros = ({
         <div className="col-sm-12 col-md-5 col-lg-5 col-xl-5">
           <Loader loading={carregandoUes} ignorarTip>
             <SelectComponent
-              id="ue"
+              id={SGP_SELECT_UE}
               label="Unidade Escolar (UE)"
               lista={listaUes}
               valueOption="valor"
@@ -531,7 +580,7 @@ const Filtros = ({
         <div className="col-sm-12 col-md-4">
           <Loader loading={carregandoModalidade} ignorarTip>
             <SelectComponent
-              id="drop-modalidade"
+              id={SGP_SELECT_MODALIDADE}
               label="Modalidade"
               lista={listaModalidades}
               valueOption="valor"
@@ -546,7 +595,7 @@ const Filtros = ({
         <div className="col-sm-12 col-md-4">
           <Loader loading={carregandoSemestres} ignorarTip>
             <SelectComponent
-              id="drop-semestre"
+              id={SGP_SELECT_SEMESTRE}
               lista={listaSemestres}
               valueOption="valor"
               valueText="desc"
@@ -565,7 +614,7 @@ const Filtros = ({
         <div className="col-sm-12 col-md-4">
           <Loader loading={carregandoTurmas} ignorarTip>
             <SelectComponent
-              id="turma"
+              id={SGP_SELECT_TURMA}
               lista={listaTurmas}
               valueOption="valor"
               valueText="nomeFiltro"
@@ -582,6 +631,7 @@ const Filtros = ({
       <div className="row">
         <div className="col-sm-12 col-md-4">
           <SelectComponent
+            id={SGP_SELECT_OPCAO_ESTUDANTE}
             lista={opcoesEstudantes}
             valueOption="valor"
             valueText="desc"
@@ -594,21 +644,22 @@ const Filtros = ({
         </div>
         <div className="col-sm-12 col-md-4">
           <SelectComponent
-            lista={opcoesModeloBoletim}
+            id={SGP_SELECT_MODELO_BOLETIM}
+            lista={listaQtdBoletinsPagina}
             valueOption="valor"
             valueText="desc"
-            label="Modelo de boletim"
+            label="Qtde de boletins por página"
             disabled={!turmasId?.length || !opcaoEstudanteId}
-            valueSelect={modeloBoletimId}
-            onChange={onChangeModeloBoletim}
-            placeholder="Modelo de boletim"
+            valueSelect={quantidadeBoletimPorPagina || undefined}
+            onChange={onChangeQtdBoletinsPagina}
+            allowClear={false}
+            placeholder="Qtde de boletins por página"
           />
-          <AvisoBoletim visivel={modeloBoletimId === '2'}>
-            Neste modelo cada estudante ocupará no mínimo 1 página
-          </AvisoBoletim>
+          <AvisoBoletim>{obterMensagemQtdBoletionsPagina()}</AvisoBoletim>
         </div>
         <div className="col-sm-12 col-md-4">
           <RadioGroupButton
+            id={SGP_CHECKBOX_IMPRIMIR_ESTUDANTE_INATIVO}
             label="Imprimir estudantes inativos"
             opcoes={opcoesImprimirEstudantesInativos}
             valorInicial
