@@ -239,7 +239,7 @@ const ListaoListaFechamento = props => {
               }
               dadosNota={notaFechamento}
               desabilitar={desabilitar}
-              idCampo={`aluno${dadosEstudante?.codigoAluno}`}
+              id={`aluno${dadosEstudante?.codigoAluno}`}
               name={`aluno${dadosEstudante?.codigoAluno}`}
               dadosArredondamento={dadosArredondamentoFechamento}
               mediaAprovacaoBimestre={dadosFechamento?.mediaAprovacaoBimestre}

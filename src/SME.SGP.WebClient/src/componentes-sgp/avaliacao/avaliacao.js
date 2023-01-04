@@ -5,7 +5,7 @@ import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import shortid from 'shortid';
 import { LabelSemDados, MarcadorTriangulo } from '~/componentes';
-// import { SGP_INPUT_NOTA, SGP_INPUT_NOTA_FINAL } from '~/constantes/ids/input';
+import { SGP_INPUT_NOTA, SGP_INPUT_NOTA_FINAL } from '~/constantes/ids/input';
 import {
   SGP_SELECT_CONCEITO_FINAL,
   SGP_SELECT_NOTA,
@@ -149,13 +149,13 @@ const Avaliacao = props => {
       case notasConceitos.Notas:
         return (
           <Nota
-            // id={`${SGP_INPUT_NOTA}_LINHA_${linha}_COLUNA_${coluna}`}
+            id={`${SGP_INPUT_NOTA}_LINHA_${linha}_COLUNA_${coluna}`}
             onKeyDown={e =>
               moverFocoCampoNota({ e, aluno, alunos: dados?.alunos })
             }
             dadosNota={nota}
             desabilitar={desabilitar}
-            idCampo={`aluno${aluno.id}`}
+            name={`aluno${aluno.id}`}
             dadosArredondamento={avaliacao?.dadosArredondamento}
             onChangeNotaConceito={valorNovo =>
               onChangeNotaConceito(nota, valorNovo)
@@ -244,14 +244,13 @@ const Avaliacao = props => {
       return (
         <>
           <Nota
-            // id={`${SGP_INPUT_NOTA_FINAL}_LINHA_${index}`}
             ehFechamento
             onKeyDown={e =>
               onKeyDownCampoFinal(e, aluno, label, regencia, indexLinha)
             }
             dadosNota={dadosNota}
             desabilitar={desabilitarNotaFinal}
-            idCampo={`aluno${aluno.id}`}
+            id={`${SGP_INPUT_NOTA_FINAL}_LINHA_${index}`}
             name={`aluno${aluno.id}`}
             dadosArredondamento={dadosArredondamentoFechamento}
             onChangeNotaConceito={valorNovo =>

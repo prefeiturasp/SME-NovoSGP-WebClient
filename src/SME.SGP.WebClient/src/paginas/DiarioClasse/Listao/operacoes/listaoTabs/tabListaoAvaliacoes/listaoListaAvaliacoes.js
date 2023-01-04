@@ -133,7 +133,8 @@ const ListaoListaAvaliacoes = () => {
             onKeyDown={e => onKeyDownNota(e, dadosEstudante)}
             dadosNota={notaAvaliacao}
             desabilitar={desabilitarCampoNota}
-            idCampo={`aluno${dadosEstudante?.id}`}
+            id={`aluno${dadosEstudante?.id}`}
+            name={`aluno${dadosEstudante?.id}`}
             dadosArredondamento={avaliacao?.dadosArredondamento}
             onChangeNotaConceito={valorNovo =>
               onChangeNotaConceito(

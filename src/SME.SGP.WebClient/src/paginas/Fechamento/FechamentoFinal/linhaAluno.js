@@ -139,7 +139,7 @@ const LinhaAluno = ({
           onKeyDown={e => onKeyDownNotaFinal(e, alunoEscolhido, label)}
           dadosNota={dadosNota}
           desabilitar={desabilitarCampo || !alunoEscolhido.podeEditar}
-          idCampo={`aluno${alunoEscolhido?.codigo}`}
+          id={`aluno${alunoEscolhido?.codigo}`}
           name={`aluno${alunoEscolhido?.codigo}`}
           dadosArredondamento={dadosArredondamento}
           mediaAprovacaoBimestre={notaMedia}

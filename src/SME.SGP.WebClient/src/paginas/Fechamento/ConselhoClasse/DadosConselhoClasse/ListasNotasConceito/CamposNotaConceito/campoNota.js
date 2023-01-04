@@ -137,7 +137,8 @@ const CampoNota = props => {
       <>
         <Nota
           ehFechamento
-          idCampo={name}
+          id={name}
+          name={name}
           dadosNota={dadosNota}
           desabilitar={desabilitarCampoNota}
           validaAbaixoMedia={validaAbaixoMedia}

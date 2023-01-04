@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import React, { useEffect, useState } from 'react';
 import { Base, CampoTexto, Label } from '~/componentes';
 import InputNumberReadOnly from '~/componentes-sgp/camposSomenteLeitura/inputNumberReadOnly/inputNumberReadOnly';
+import { SGP_INPUT_NOTA } from '~/constantes/ids/input';
 import { arredondarNota } from '~/utils';
 import LabelAusenteCellTable from './labelAusenteCellTable';
 
@@ -11,7 +12,7 @@ import { Container } from './style';
 const Nota = props => {
   const {
     dadosNota,
-    idCampo,
+    id,
     desabilitar,
     onChangeNotaConceito,
     onChangeValorAtualExibicao,
@@ -24,6 +25,7 @@ const Nota = props => {
     notaValorInicial,
     styleContainer,
     style,
+    name,
   } = props;
 
   const [exibir, setExibir] = useState(false);
@@ -143,8 +145,8 @@ const Nota = props => {
         <CampoTexto
           autoFocus
           addMaskNota
-          id={idCampo}
-          name={idCampo}
+          id={id}
+          name={name}
           maxLength={3}
           allowClear={false}
           placeholder="Nota"
@@ -159,9 +161,9 @@ const Nota = props => {
         />
       ) : (
         <InputNumberReadOnly
-          name={idCampo}
-          id={idCampo}
-          key={idCampo}
+          name={name}
+          id={id}
+          key={id}
           placeholder="Nota"
           disabled={desabilitar}
           style={{ ...styleCampo }}
@@ -189,7 +191,7 @@ const Nota = props => {
 
 Nota.propTypes = {
   dadosNota: PropTypes.oneOf([PropTypes.any]),
-  idCampo: PropTypes.oneOf([PropTypes.any]),
+  id: PropTypes.oneOf([PropTypes.any]),
   desabilitar: PropTypes.bool,
   onChangeNotaConceito: PropTypes.func,
   onChangeValorAtualExibicao: PropTypes.func,
@@ -201,11 +203,12 @@ Nota.propTypes = {
   validaAbaixoMedia: PropTypes.bool,
   styleContainer: PropTypes.oneOf([PropTypes.any]),
   style: PropTypes.oneOf([PropTypes.any]),
+  name: PropTypes.string,
 };
 
 Nota.defaultProps = {
   dadosNota: {},
-  idCampo: 'campo-nota-listao',
+  id: SGP_INPUT_NOTA,
   desabilitar: false,
   onChangeNotaConceito: () => {},
   onChangeValorAtualExibicao: () => {},
@@ -217,6 +220,7 @@ Nota.defaultProps = {
   validaAbaixoMedia: true,
   styleContainer: {},
   style: {},
+  name: '',
 };
 
 export default Nota;
