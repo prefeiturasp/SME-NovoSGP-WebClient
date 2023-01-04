@@ -69,4 +69,36 @@ const moverFocoCampoNota = props => {
   }
 };
 
-export { moverFocoCampoNota };
+const moverFocoCampoNotaConselhoClasse = (
+  e,
+  componentesAgrupados,
+  nomeComponenteCurricular
+) => {
+  const direcao = converterAcaoTecla(e.keyCode);
+  let componenteEscolhido = [];
+
+  if (componentesAgrupados?.length) {
+    componenteEscolhido = componentesAgrupados
+      .map((valor, index, elementos) => {
+        const nomeComponente = tratarStringComponenteCurricularNome(
+          valor?.nome
+        );
+        if (nomeComponente === nomeComponenteCurricular) {
+          return elementos[index + direcao];
+        }
+        return '';
+      })
+      .filter(item => item?.nome);
+  }
+
+  componenteEscolhido = direcao && componenteEscolhido;
+
+  if (componenteEscolhido?.length) {
+    const componenteTratado = tratarStringComponenteCurricularNome(
+      componenteEscolhido?.[0]?.nome
+    );
+    moverCursor(componenteTratado);
+  }
+};
+
+export { moverFocoCampoNota, moverFocoCampoNotaConselhoClasse };

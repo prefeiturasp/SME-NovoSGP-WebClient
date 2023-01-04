@@ -14,11 +14,16 @@ const Nota = props => {
     idCampo,
     desabilitar,
     onChangeNotaConceito,
+    onChangeValorAtualExibicao,
     ehFechamento,
     mediaAprovacaoBimestre,
     dadosArredondamento,
     onKeyDown,
     label,
+    validaAbaixoMedia,
+    notaValorInicial,
+    styleContainer,
+    style,
   } = props;
 
   const [exibir, setExibir] = useState(false);
@@ -63,9 +68,10 @@ const Nota = props => {
     return notaFormatada;
   };
 
-  const editouCampo = (notaOriginal, notaNova) => {
-    notaOriginal = removerCaracteresInvalidos(
-      notaOriginal?.toString()?.replace?.(',', '.')
+  const editouCampo = notaNova => {
+    const notaValidar = notaValorInicial || notaValorAtual;
+    const notaOriginal = removerCaracteresInvalidos(
+      notaValidar?.toString()?.replace?.(',', '.')
     );
     notaNova = removerCaracteresInvalidos(
       notaNova?.toString()?.replace?.(',', '.')
@@ -79,12 +85,13 @@ const Nota = props => {
   const setarValorExibicao = async valorNovo => {
     if (!desabilitar) {
       setNotaValorAtualExibicao(valorNovo);
+      onChangeValorAtualExibicao(valorNovo);
     }
   };
 
   const onBlur = valorNovo => {
     if (!desabilitar) {
-      const editou = editouCampo(notaValorAtual, valorNovo);
+      const editou = editouCampo(valorNovo);
       if (!editou) return;
 
       let notaArredondada = formatarNotaValida(valorNovo);
@@ -120,14 +127,17 @@ const Nota = props => {
     return newValue;
   };
 
-  const styleCampo = {};
+  const styleCampo = { ...style };
 
-  if (estaAbaixoDaMedia(notaValorAtual)) {
+  if (ehFechamento && validaAbaixoMedia && estaAbaixoDaMedia(notaValorAtual)) {
     styleCampo.border = `solid 2px ${Base.Vermelho}`;
   }
 
   const montarCampo = () => (
-    <Container onFocus={() => validarExibir(true)}>
+    <Container
+      onFocus={() => validarExibir(true)}
+      style={{ ...styleContainer }}
+    >
       {label ? <Label text={label} /> : <></>}
       {!desabilitar && exibir ? (
         <CampoTexto
@@ -163,16 +173,18 @@ const Nota = props => {
     </Container>
   );
 
-  return ehFechamento ? (
-    <Tooltip
-      placement="top"
-      title={estaAbaixoDaMedia(notaValorAtual) ? 'Abaixo da Média' : ''}
-    >
-      {montarCampo()}
-    </Tooltip>
-  ) : (
-    montarCampo()
-  );
+  if (ehFechamento && validaAbaixoMedia) {
+    return (
+      <Tooltip
+        placement="top"
+        title={estaAbaixoDaMedia(notaValorAtual) ? 'Abaixo da Média' : ''}
+      >
+        {montarCampo()}
+      </Tooltip>
+    );
+  }
+
+  return montarCampo();
 };
 
 Nota.propTypes = {
@@ -180,11 +192,15 @@ Nota.propTypes = {
   idCampo: PropTypes.oneOf([PropTypes.any]),
   desabilitar: PropTypes.bool,
   onChangeNotaConceito: PropTypes.func,
+  onChangeValorAtualExibicao: PropTypes.func,
   ehFechamento: PropTypes.bool,
   mediaAprovacaoBimestre: PropTypes.number,
   dadosArredondamento: PropTypes.oneOf([PropTypes.any]),
   onKeyDown: PropTypes.oneOf([PropTypes.any]),
   label: PropTypes.oneOf([PropTypes.any]),
+  validaAbaixoMedia: PropTypes.bool,
+  styleContainer: PropTypes.oneOf([PropTypes.any]),
+  style: PropTypes.oneOf([PropTypes.any]),
 };
 
 Nota.defaultProps = {
@@ -192,11 +208,15 @@ Nota.defaultProps = {
   idCampo: 'campo-nota-listao',
   desabilitar: false,
   onChangeNotaConceito: () => {},
+  onChangeValorAtualExibicao: () => {},
   ehFechamento: false,
   mediaAprovacaoBimestre: null,
   dadosArredondamento: null,
   onKeyDown: () => {},
   label: null,
+  validaAbaixoMedia: true,
+  styleContainer: {},
+  style: {},
 };
 
 export default Nota;
