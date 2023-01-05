@@ -781,7 +781,6 @@ const RelatorioFrequencia = () => {
   }, [ehTurma, FORMATOS, codigoUe]);
 
   useEffect(() => {
-    console.log('Entrou', anoLetivo);
     if (anoLetivo) {
       obterDres();
     }
