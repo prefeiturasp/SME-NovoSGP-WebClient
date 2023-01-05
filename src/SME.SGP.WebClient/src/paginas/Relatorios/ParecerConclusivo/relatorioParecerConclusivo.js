@@ -68,7 +68,6 @@ const RelatorioParecerConclusivo = () => {
 
   const onChangeConsideraHistorico = e => {
     setConsideraHistorico(e.target.checked);
-    setAnoLetivo(anoAtual);
     setDreId();
     setUeId();
     setListaUes([]);
@@ -271,47 +270,36 @@ const RelatorioParecerConclusivo = () => {
     }
   }, [ueId, obterModalidades]);
 
-  const obterAnosLetivos = useCallback(async () => {
-    setCarregandoAnosLetivos(true);
-    let anosLetivos = [];
+  const obterAnosLetivos = useCallback(
+    async consideraHistoricoEstaMarcado => {
+      setCarregandoAnosLetivos(true);
 
-    const anosLetivoComHistorico = await FiltroHelper.obterAnosLetivos({
-      consideraHistorico: true,
-    });
-    const anosLetivoSemHistorico = await FiltroHelper.obterAnosLetivos({
-      consideraHistorico: false,
-    });
+      const resposta = await FiltroHelper.obterAnosLetivos({
+        consideraHistorico: consideraHistoricoEstaMarcado,
+      })
+        .catch(e => erros(e))
+        .finally(() => setCarregandoAnosLetivos(false));
 
-    anosLetivos = anosLetivos.concat(anosLetivoComHistorico);
+      const anosLetivos = resposta || [];
 
-    anosLetivoSemHistorico.forEach(itemAno => {
-      if (!anosLetivoComHistorico.find(a => a.valor === itemAno.valor)) {
-        anosLetivos.push(itemAno);
+      if (!anosLetivos?.length) {
+        anosLetivos.push({
+          desc: anoAtual,
+          valor: anoAtual,
+        });
       }
-    });
 
-    if (!anosLetivos.length) {
-      anosLetivos.push({
-        desc: anoAtual,
-        valor: anoAtual,
-      });
-    }
+      const anosOrdenados = ordenarListaMaiorParaMenor(anosLetivos, 'valor');
 
-    if (anosLetivos && anosLetivos.length) {
-      const temAnoAtualNaLista = anosLetivos.find(
-        item => String(item.valor) === String(anoAtual)
-      );
-      if (temAnoAtualNaLista) setAnoLetivo(anoAtual);
-      else setAnoLetivo(anosLetivos[0].valor);
-    }
-
-    setListaAnosLetivo(ordenarListaMaiorParaMenor(anosLetivos, 'valor'));
-    setCarregandoAnosLetivos(false);
-  }, [anoAtual]);
+      setAnoLetivo(anosOrdenados[0]?.valor);
+      setListaAnosLetivo(anosOrdenados);
+    },
+    [anoAtual]
+  );
 
   useEffect(() => {
-    obterAnosLetivos();
-  }, [obterAnosLetivos]);
+    obterAnosLetivos(consideraHistorico);
+  }, [consideraHistorico, obterAnosLetivos]);
 
   const obterSemestres = useCallback(async () => {
     setCarregandoSemestres(true);
@@ -564,12 +552,10 @@ const RelatorioParecerConclusivo = () => {
                   lista={listaAnosLetivo}
                   valueOption="valor"
                   valueText="desc"
-                  disabled={
-                    !consideraHistorico || listaAnosLetivo?.length === 1
-                  }
                   onChange={onChangeAnoLetivo}
                   valueSelect={anoLetivo}
                   placeholder="Ano letivo"
+                  disabled={listaAnosLetivo?.length === 1}
                 />
               </Loader>
             </div>
