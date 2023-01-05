@@ -537,9 +537,8 @@ const RelatorioParecerConclusivo = () => {
             <div className="col-12">
               <CheckboxComponent
                 label="Exibir histórico?"
-                onChangeCheckbox={onChangeConsideraHistorico}
                 checked={consideraHistorico}
-                disabled={listaAnosLetivo.length === 1}
+                onChangeCheckbox={onChangeConsideraHistorico}
               />
             </div>
           </div>
