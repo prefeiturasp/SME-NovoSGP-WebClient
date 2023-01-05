@@ -228,11 +228,16 @@ class ServicoNAAPA {
     const formsValidos = !!dadosMapeados?.formsValidos;
 
     if (formsValidos || dadosMapeados?.secoes?.length) {
+      const tabItineranciaIndex = dadosMapeados?.secoes?.findIndex(
+        item => item.secaoNome === 'QUESTOES_ITINERACIA'
+      );
+
       const paramsSalvar = {
         encaminhamentoId: Number(encaminhamentoId),
-        encaminhamentoNAAPASecao: dadosMapeados?.secoes?.length
-          ? dadosMapeados.secoes[0]
-          : [],
+        encaminhamentoNAAPASecao:
+          tabItineranciaIndex > -1
+            ? dadosMapeados.secoes[tabItineranciaIndex]
+            : [],
       };
 
       if (atendimentoId) {
@@ -258,6 +263,27 @@ class ServicoNAAPA {
     api.delete(
       `${URL_PADRAO}/${encaminhamentoNAAPAId}/secoes-itinerancia/${atendimentoId}`
     );
+
+  limparDadosAoEntrarItinerancia = (
+    tabIndex,
+    dadosSecoesEncaminhamentoNAAPA
+  ) => {
+    const { dispatch } = store;
+
+    dispatch(setLimparDadosQuestionarioDinamico());
+    dispatch(setListaSecoesEmEdicao([]));
+
+    dispatch(setDadosSecoesEncaminhamentoNAAPA([]));
+
+    const dadosSecoesClonado = _.cloneDeep(dadosSecoesEncaminhamentoNAAPA);
+
+    setTimeout(() => {
+      dispatch(setDadosSecoesEncaminhamentoNAAPA(dadosSecoesClonado));
+    }, 300);
+
+    dispatch(setQuestionarioDinamicoEmEdicao(false));
+    dispatch(setTabAtivaEncaminhamentoNAAPA(tabIndex));
+  };
 
   validarTrocaDeAbas = async (tabIndex, encaminhamentoId) => {
     const state = store.getState();
@@ -293,20 +319,10 @@ class ServicoNAAPA {
       if (confirmou) {
         const resposta = await this.salvarPadrao(encaminhamentoId, false);
         if (resposta?.status === 200) {
-          dispatch(setLimparDadosQuestionarioDinamico());
-          dispatch(setListaSecoesEmEdicao([]));
-
-          dispatch(setDadosSecoesEncaminhamentoNAAPA([]));
-
-          const dadosSecoesClonado = _.cloneDeep(
+          this.limparDadosAoEntrarItinerancia(
+            tabIndex,
             dadosSecoesEncaminhamentoNAAPA
           );
-
-          setTimeout(() => {
-            dispatch(setDadosSecoesEncaminhamentoNAAPA(dadosSecoesClonado));
-          }, 300);
-          dispatch(setQuestionarioDinamicoEmEdicao(false));
-          dispatch(setTabAtivaEncaminhamentoNAAPA(tabIndex));
         }
       } else {
         QuestionarioDinamicoFuncoes.limparDadosOriginaisQuestionarioDinamico(
@@ -317,6 +333,11 @@ class ServicoNAAPA {
 
         dispatch(setTabAtivaEncaminhamentoNAAPA(tabIndex));
       }
+    } else if (secaoItinerancia) {
+      this.limparDadosAoEntrarItinerancia(
+        tabIndex,
+        dadosSecoesEncaminhamentoNAAPA
+      );
     } else {
       dispatch(setTabAtivaEncaminhamentoNAAPA(tabIndex));
     }
