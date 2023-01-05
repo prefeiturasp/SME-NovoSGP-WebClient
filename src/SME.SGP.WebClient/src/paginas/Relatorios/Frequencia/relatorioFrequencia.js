@@ -813,7 +813,6 @@ const RelatorioFrequencia = () => {
                 <CheckboxComponent
                   label="Exibir histórico?"
                   checked={consideraHistorico}
-                  disabled={listaAnosLetivo.length === 1}
                   onChangeCheckbox={onChangeConsideraHistorico}
                 />
               </Col>
