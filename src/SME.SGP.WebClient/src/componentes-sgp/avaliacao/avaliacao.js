@@ -20,12 +20,8 @@ import {
   setModoEdicaoGeral,
   setModoEdicaoGeralNotaFinal,
 } from '~/redux/modulos/notasConceitos/actions';
-import {
-  acharItem,
-  converterAcaoTecla,
-  moverCursor,
-  tratarString,
-} from '~/utils';
+import Nota from '../inputs/nota';
+import { moverFocoCampoNota } from '../inputs/nota/funcoes';
 import Ordenacao from '../Ordenacao/ordenacao';
 import {
   CaixaMarcadores,
@@ -34,8 +30,6 @@ import {
 } from './avaliacao.css';
 import CampoConceito from './campoConceito';
 import CampoConceitoFinal from './campoConceitoFinal';
-import CampoNota from './campoNota';
-import CampoNotaFinal from './campoNotaFinal';
 import ColunaNotaFinalRegencia from './colunaNotaFinalRegencia';
 import LinhaConceitoFinal from './linhaConceitoFinal';
 
@@ -49,7 +43,6 @@ const Avaliacao = props => {
     desabilitarCampos,
     ehProfessorCj,
     ehRegencia,
-    disciplinaSelecionada,
     exibirTootipStatusGsa,
     exibirStatusAlunoAusente,
   } = props;
@@ -144,61 +137,32 @@ const Avaliacao = props => {
       : '';
   };
 
-  const acharElemento = (e, elemento) => {
-    return e.nativeEvent.path.find(item => item.localName === elemento);
-  };
-
-  const clicarSetas = (e, aluno, label = '', index = 0, regencia = false) => {
-    const direcao = converterAcaoTecla(e.keyCode);
-    const disciplina = label.toLowerCase();
-
-    if (direcao && regencia) {
-      let novaLinha = [];
-      const novoIndex = index + direcao;
-      if (expandirLinha[novoIndex]) {
-        expandirLinha[novoIndex] = false;
-        novaLinha = expandirLinha;
-      } else {
-        novaLinha[novoIndex] = true;
-      }
-      dispatch(setExpandirLinha([...novaLinha]));
-    }
-    const elementoTD = acharElemento(e, 'td');
-    const indexElemento = elementoTD?.cellIndex - 2;
-    const alunoEscolhido =
-      direcao && acharItem(dados?.alunos, aluno, direcao, 'id');
-    if (alunoEscolhido.length) {
-      const disciplinaTratada = tratarString(disciplina);
-      const item = regencia ? disciplinaTratada : 'aluno';
-      const itemEscolhido = `${item}${alunoEscolhido[0].id}`;
-      moverCursor(itemEscolhido, indexElemento, regencia);
-    }
-  };
-
   const montarCampoNotaConceito = (nota, aluno, linha, coluna) => {
     const avaliacao = dados.avaliacoes.find(
       item => item.id === nota.atividadeAvaliativaId
     );
     const desabilitarNota = ehProfessorCj ? !avaliacao.ehCJ : avaliacao.ehCJ;
+    const desabilitar =
+      desabilitarCampos || desabilitarNota || !nota?.podeEditar;
 
     switch (Number(notaTipo)) {
-      case Number(notasConceitos.Notas):
+      case notasConceitos.Notas:
         return (
-          <CampoNota
+          <Nota
             id={`${SGP_INPUT_NOTA}_LINHA_${linha}_COLUNA_${coluna}`}
-            esconderSetas
+            onKeyDown={e =>
+              moverFocoCampoNota({ e, aluno, alunos: dados?.alunos })
+            }
+            dadosNota={nota}
+            desabilitar={desabilitar}
             name={`aluno${aluno.id}`}
-            clicarSetas={e => clicarSetas(e, aluno)}
-            step={0}
-            nota={nota}
+            dadosArredondamento={avaliacao?.dadosArredondamento}
             onChangeNotaConceito={valorNovo =>
               onChangeNotaConceito(nota, valorNovo)
             }
-            desabilitarCampo={desabilitarCampos || desabilitarNota}
-            mediaAprovacaoBimestre={dados.mediaAprovacaoBimestre}
           />
         );
-      case Number(notasConceitos.Conceitos):
+      case notasConceitos.Conceitos:
         return (
           <CampoConceito
             id={`${SGP_SELECT_NOTA}_LINHA_${linha}_COLUNA_${coluna}`}
@@ -227,6 +191,39 @@ const Avaliacao = props => {
     return aluno.notasBimestre[0];
   };
 
+  const acaoExpandirLinhaRegencia = (direcao, indexLinha) => {
+    let novaLinha = [];
+    const novoIndex = indexLinha + direcao;
+
+    if (expandirLinha[novoIndex]) {
+      expandirLinha[novoIndex] = false;
+      novaLinha = expandirLinha;
+    } else {
+      novaLinha[novoIndex] = true;
+    }
+    dispatch(setExpandirLinha([...novaLinha]));
+  };
+
+  const onKeyDownCampoFinal = (
+    e,
+    aluno,
+    componenteCurricularNome,
+    regencia,
+    indexLinha
+  ) => {
+    const params = {
+      e,
+      aluno,
+      alunos: dados?.alunos,
+      componenteCurricularNome,
+      regencia,
+      acaoExpandirLinha: direcao =>
+        acaoExpandirLinhaRegencia(direcao, indexLinha),
+    };
+
+    moverFocoCampoNota(params);
+  };
+
   const montarCampoNotaConceitoFinal = (
     aluno,
     label,
@@ -234,29 +231,35 @@ const Avaliacao = props => {
     regencia,
     indexLinha
   ) => {
+    const desabilitarNotaFinal =
+      ehProfessorCj ||
+      desabilitarCampos ||
+      !dados.podeLancarNotaFinal ||
+      !aluno.podeEditar;
+
     if (Number(notaTipo) === Number(notasConceitos.Notas)) {
+      const dadosNota = montaNotaFinal(aluno, index);
+
+      const dadosArredondamentoFechamento = dados?.dadosArredondamento;
       return (
-        <CampoNotaFinal
-          id={`${SGP_INPUT_NOTA_FINAL}_LINHA_${index}`}
-          esconderSetas
-          name={`aluno${aluno.id}`}
-          clicarSetas={e => clicarSetas(e, aluno, label, indexLinha, regencia)}
-          step={0}
-          montaNotaFinal={() => montaNotaFinal(aluno, index)}
-          onChangeNotaConceitoFinal={(nota, valor) =>
-            onChangeNotaConceitoFinal(nota, valor)
-          }
-          desabilitarCampo={ehProfessorCj || desabilitarCampos}
-          podeEditar={aluno.podeEditar}
-          periodoFim={dados.periodoFim}
-          notaFinal={aluno.notasBimestre.find(
-            x => String(x.disciplinaId) === String(disciplinaSelecionada)
-          )}
-          disciplinaSelecionada={disciplinaSelecionada}
-          mediaAprovacaoBimestre={dados.mediaAprovacaoBimestre}
-          label={label}
-          podeLancarNotaFinal={dados.podeLancarNotaFinal}
-        />
+        <>
+          <Nota
+            ehFechamento
+            onKeyDown={e =>
+              onKeyDownCampoFinal(e, aluno, label, regencia, indexLinha)
+            }
+            dadosNota={dadosNota}
+            desabilitar={desabilitarNotaFinal}
+            id={`${SGP_INPUT_NOTA_FINAL}_LINHA_${index}`}
+            name={`aluno${aluno.id}`}
+            dadosArredondamento={dadosArredondamentoFechamento}
+            onChangeNotaConceito={valorNovo =>
+              onChangeNotaConceitoFinal(dadosNota, valorNovo)
+            }
+            mediaAprovacaoBimestre={dados.mediaAprovacaoBimestre}
+            label={label}
+          />
+        </>
       );
     }
     if (Number(notaTipo) === Number(notasConceitos.Conceitos)) {
@@ -275,7 +278,7 @@ const Avaliacao = props => {
         />
       );
     }
-    return '';
+    return <></>;
   };
 
   return (

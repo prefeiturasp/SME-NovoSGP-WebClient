@@ -8,6 +8,8 @@ import CampoNota from '../CamposNotaConceito/campoNota';
 import { BarraLateralLista, Lista } from '../listasNotasConceitos.css';
 import LinhaJustificativa from '../../Justificativa/LinhaJustificativa/LinhaJustificativa';
 import { MarcadorTriangulo } from '~/componentes';
+import { moverFocoCampoNotaConselhoClasse } from '~/componentes-sgp/inputs/nota/funcoes';
+import { tratarStringComponenteCurricularNome } from '~/utils';
 
 const ListaBimestre = props => {
   const {
@@ -18,6 +20,8 @@ const ListaBimestre = props => {
     alunoDesabilitado,
     corBarraLateral,
     corRegenciaBarraLateral,
+    dadosArredondamento,
+    componentesAgrupados,
   } = props;
 
   const descricaoTipoNota =
@@ -39,14 +43,18 @@ const ListaBimestre = props => {
   const montaCampoPosConselho = (
     notaPosConselho,
     idCampo,
-    codigoComponenteCurricular
+    codigoComponenteCurricular,
+    notaFechamento
   ) => {
+    const nomeComponenteCurricular = tratarStringComponenteCurricularNome(
+      notaFechamento?.nome
+    );
+
     switch (Number(tipoNota)) {
       case Number(notasConceitos.Notas):
         return (
           <CampoNota
-            esconderSetas
-            step={0}
+            name={nomeComponenteCurricular}
             id={notaPosConselho?.id}
             notaPosConselho={notaPosConselho?.nota}
             idCampo={idCampo}
@@ -56,6 +64,14 @@ const ListaBimestre = props => {
               alunoDesabilitado || !notaPosConselho?.podeEditar
             }
             dadosNotaPosConselho={notaPosConselho}
+            dadosArredondamento={dadosArredondamento}
+            clicarSetas={e =>
+              moverFocoCampoNotaConselhoClasse(
+                e,
+                componentesAgrupados,
+                nomeComponenteCurricular
+              )
+            }
           />
         );
       case Number(notasConceitos.Conceitos):
@@ -149,7 +165,8 @@ const ListaBimestre = props => {
                         {montaCampoPosConselho(
                           item.notaPosConselho,
                           `${descricaoGrupoMatriz} ${index} componente`,
-                          item.codigoComponenteCurricular
+                          item.codigoComponenteCurricular,
+                          item
                         )}
                         {item.notaPosConselho.emAprovacao && (
                           <Tooltip title="Aguardando aprovação">
@@ -242,6 +259,8 @@ ListaBimestre.propTypes = {
   alunoDesabilitado: PropTypes.bool,
   corBarraLateral: PropTypes.string,
   corRegenciaBarraLateral: PropTypes.string,
+  dadosArredondamento: PropTypes.oneOfType([PropTypes.any]),
+  componentesAgrupados: PropTypes.oneOfType([PropTypes.any]),
 };
 
 ListaBimestre.defaultProps = {
@@ -252,6 +271,8 @@ ListaBimestre.defaultProps = {
   alunoDesabilitado: false,
   corBarraLateral: '',
   corRegenciaBarraLateral: '',
+  dadosArredondamento: null,
+  componentesAgrupados: [],
 };
 
 export default ListaBimestre;
