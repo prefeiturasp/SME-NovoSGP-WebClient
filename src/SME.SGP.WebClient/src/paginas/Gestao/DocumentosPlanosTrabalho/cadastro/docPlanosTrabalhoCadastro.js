@@ -324,6 +324,7 @@ const DocPlanosTrabalhoCadastro = () => {
                   form={form}
                   desabilitarCampos={desabilitarCampos}
                   idDocumentosPlanoTrabalho={idDocumentosPlanoTrabalho}
+                  setExibirLoader={setExibirLoader}
                 />
               </Card>
             </>
