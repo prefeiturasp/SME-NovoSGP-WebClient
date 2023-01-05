@@ -51,19 +51,19 @@ const focusRegenciaElementoDiv = async elemento => {
 
 const validaFocusRegencia = async elemento => {
   await esperarMiliSegundos(600);
-  // TODO PENDENTE LISTAO FECHAMENTO
   let fezFocus = false;
 
   if (elemento?.length) {
     fezFocus = await focusRegenciaElementoDiv(elemento);
   }
 
-  if (fezFocus) return;
+  if (fezFocus) return true;
 
   if (elemento?.length) {
     await esperarMiliSegundos(600);
     await focusRegenciaElementoDiv(elemento);
   }
+  return true;
 };
 
 const moverCursor = async (
@@ -74,11 +74,19 @@ const moverCursor = async (
   const elemento = document.getElementsByName(itemEscolhido);
   const elementoCursor = elemento[indexElemento];
   if (regencia) {
-    validaFocusRegencia(elemento);
-  } else if (elementoCursor) {
+    return validaFocusRegencia(elemento);
+  }
+
+  if (elementoCursor) {
+    const desabilitado = !!elementoCursor?.disabled;
+    if (desabilitado) {
+      return { desabilitado };
+    }
     elementoCursor.focus();
     elementoCursor.select();
   }
+
+  return { desabilitado: false };
 };
 
 export {
