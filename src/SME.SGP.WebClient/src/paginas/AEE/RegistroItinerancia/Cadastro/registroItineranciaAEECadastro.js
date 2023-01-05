@@ -173,7 +173,7 @@ const RegistroItineranciaAEECadastro = ({ match }) => {
       ueId,
       dreId,
       alunos: alunosSelecionados,
-      questoes: alunosSelecionados?.length ? [] : questoes,
+      questoes,
       anoLetivo: new Date().getFullYear(),
       eventoId,
     };
