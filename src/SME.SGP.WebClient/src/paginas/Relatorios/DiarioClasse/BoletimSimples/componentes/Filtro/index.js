@@ -306,13 +306,15 @@ const Filtros = ({
     setModoEdicao(true);
   };
 
-  const obterModalidades = useCallback(async (ue, considHistorico) => {
+  const obterModalidades = useCallback(async (ue, considHistorico, anoLetivo) => {
     if (ue) {
       setCarregandoModalidade(true);
       const { data } = considHistorico
         ? await ServicoFiltroRelatorio.obterModalidadesPorAbrangenciaHistorica(
             ue,
-            considHistorico
+            false,
+            considHistorico,
+            anoLetivo
           ).finally(() => setCarregandoModalidade(false))
         : await ServicoFiltroRelatorio.obterModalidadesPorAbrangencia(
             ue
@@ -334,7 +336,7 @@ const Filtros = ({
 
   useEffect(() => {
     if (anoLetivo && ueCodigo) {
-      obterModalidades(ueCodigo, consideraHistorico);
+      obterModalidades(ueCodigo, consideraHistorico, anoLetivo);
       return;
     }
     setModalidadeId();
