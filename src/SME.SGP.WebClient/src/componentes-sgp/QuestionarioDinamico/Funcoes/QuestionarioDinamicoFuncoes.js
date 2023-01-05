@@ -602,6 +602,7 @@ class QuestionarioDinamicoFuncoes {
               case tipoQuestao.AtividadesContraturno:
               case tipoQuestao.Endereco:
               case tipoQuestao.ContatoResponsaveis:
+              case tipoQuestao.InformacoesSrm:
                 questao.resposta = JSON.stringify(campos[key] || '');
                 break;
               case tipoQuestao.Upload:
@@ -761,6 +762,8 @@ class QuestionarioDinamicoFuncoes {
       case tipoQuestao.Endereco:
       case tipoQuestao.ContatoResponsaveis:
       case tipoQuestao.AtividadesContraturno:
+      case tipoQuestao.TurmasPrograma:
+      case tipoQuestao.InformacoesSrm:
         return 'TABLE';
       case tipoQuestao.Periodo:
       case tipoQuestao.Data:
