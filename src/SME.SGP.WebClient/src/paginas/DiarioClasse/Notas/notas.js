@@ -232,6 +232,7 @@ const Notas = ({ match }) => {
         const bimestreAtualizado = { ...periodo };
         bimestreAtualizado.numero = periodo.bimestre;
         bimestreAtualizado.descricao = `${periodo.bimestre}º bimestre`;
+        bimestreAtualizado.dadosArredondamento = periodo?.dadosArredondamento;
 
         switch (Number(periodo.bimestre)) {
           case 1:
@@ -353,6 +354,7 @@ const Notas = ({ match }) => {
               periodoInicioTicks: dadosBimestre.periodoInicioTicks,
               periodoFimTicks: dadosBimestre.periodoFimTicks,
               periodoEscolarId: dadosBimestre.periodoEscolarId,
+              dadosArredondamento: item?.dadosArredondamento,
             };
 
             switch (Number(item.numero)) {
@@ -1025,6 +1027,7 @@ const Notas = ({ match }) => {
           periodoInicioTicks: dadosBimestre.periodoInicioTicks,
           periodoFimTicks: dadosBimestre.periodoFimTicks,
           periodoEscolarId: dadosBimestre.periodoEscolarId,
+          dadosArredondamento: bimestrePesquisado?.dadosArredondamento,
         };
 
         switch (Number(numeroBimestre)) {
@@ -1196,6 +1199,7 @@ const Notas = ({ match }) => {
       periodoInicioTicks: bimestreOrdenado.periodoInicioTicks,
       periodoFimTicks: bimestreOrdenado.periodoFimTicks,
       periodoEscolarId: bimestreOrdenado.periodoEscolarId,
+      dadosArredondamento: bimestreOrdenado?.dadosArredondamento,
     };
     switch (Number(bimestreOrdenado.numero)) {
       case 1:

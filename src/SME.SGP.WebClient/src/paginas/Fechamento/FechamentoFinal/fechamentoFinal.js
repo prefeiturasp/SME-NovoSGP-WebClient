@@ -283,9 +283,7 @@ const FechamentoFinal = forwardRef((props, ref) => {
                         disciplinaSelecionada={disciplinaSelecionada}
                         listaConceitos={listaConceitos}
                         onChange={onChangeNotaAluno}
-                        eventoData={dadosFechamentoFinal.eventoData}
-                        notaMedia={dadosFechamentoFinal.notaMedia}
-                        frequenciaMedia={dadosFechamentoFinal.frequenciaMedia}
+                        dadosFechamentoFinal={dadosFechamentoFinal}
                         indexAluno={i}
                         desabilitarCampo={
                           desabilitarCampo ||
@@ -293,6 +291,9 @@ const FechamentoFinal = forwardRef((props, ref) => {
                         }
                         ehSintese={ehSintese}
                         registraFrequencia={registraFrequencia}
+                        dadosArredondamento={
+                          dadosFechamentoFinal?.dadosArredondamento
+                        }
                       />
                     </>
                   );

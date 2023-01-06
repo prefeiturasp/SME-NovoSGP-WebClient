@@ -41,8 +41,6 @@ export const Lista = styled.div`
     }
   }
 
-
-
   .tabela-fechamento-final-thead {
     background: ${Base.CinzaFundo} !important;
     text-align: center;
@@ -56,7 +54,6 @@ export const Lista = styled.div`
     tr {
       border-left: solid 1px ${Base.CinzaDesabilitado};
     }
-
 
     .coluna-ordenacao-tr {
       border-left: none;
@@ -99,7 +96,8 @@ export const Lista = styled.div`
       text-align: left !important;
     }
 
-    .ant-input-number {
+    .ant-input-number,
+    .ant-input {
       width: 79px;
     }
 

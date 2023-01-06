@@ -90,6 +90,16 @@ const maskTelefone = v => {
   return v;
 };
 
+const maskNota = v => {
+  v = String(v);
+  v = v
+    .replace(/^,/, '')
+    .replace(/[^\d.^\d,]/g, '')
+    .replace(/\.+/g, ',')
+    .replace(/,+/g, ',');
+  return v;
+};
+
 const maskSomenteTexto = v => {
   v = String(v);
   v = v.replace(/[0-9!@#¨$%^&*)(+=._-]+/g, '');
@@ -283,6 +293,49 @@ const ordenarNotificoesNavBar = listaNotificacoes => {
   return listaOrdenada;
 };
 
+const arredondarNota = (nota, dadosArredondamento) => {
+  const min = dadosArredondamento?.minima || 0;
+  const max = dadosArredondamento?.maxima || 10;
+  const incremento = dadosArredondamento?.incremento || 0.5;
+  let notaFormatada = Number(nota);
+
+  if (nota.includes(',') && nota.length === 3) {
+    notaFormatada = Number(nota.replace(',', '.'));
+  }
+
+  if (nota.includes(',') || nota.includes('.')) {
+    if (nota.length === 2 || nota.length === 1) {
+      notaFormatada = nota.replace(',', '');
+    }
+  }
+
+  if (
+    dadosArredondamento &&
+    typeof notaFormatada === 'number' &&
+    !Number.isNaN(notaFormatada)
+  ) {
+    if (notaFormatada >= max) return max;
+    if (notaFormatada <= min) return min;
+
+    const parteDecimal = notaFormatada - Math.trunc(notaFormatada);
+    const parteInteira = Math.trunc(notaFormatada);
+
+    if (!!incremento && !!parteDecimal && parteDecimal !== incremento) {
+      let novaNota = parteInteira + incremento;
+
+      if (parteDecimal > incremento) {
+        novaNota = parteInteira + 1;
+
+        return novaNota;
+      }
+
+      return novaNota;
+    }
+  }
+
+  return notaFormatada;
+};
+
 const verificarDataFimMaiorInicio = (dataInicio, dataFim) => {
   if (!dataInicio || !dataFim) return true;
   return moment(dataInicio, 'MM-DD-YYYY') <= moment(dataFim, 'MM-DD-YYYY');
@@ -299,6 +352,7 @@ export {
   removerNumeros,
   downloadBlob,
   maskTelefone,
+  maskNota,
   maskSomenteTexto,
   ordenarListaMaiorParaMenor,
   removerArrayAninhados,
@@ -311,5 +365,6 @@ export {
   primeiroMaisculo,
   editorTemValor,
   ordenarNotificoesNavBar,
+  arredondarNota,
   verificarDataFimMaiorInicio,
 };

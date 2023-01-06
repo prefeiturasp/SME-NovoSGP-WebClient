@@ -3,7 +3,7 @@ import { Field } from 'formik';
 import PropTypes from 'prop-types';
 import React from 'react';
 import styled from 'styled-components';
-import { maskSomenteTexto, maskTelefone } from '~/utils';
+import { maskSomenteTexto, maskTelefone, maskNota } from '~/utils';
 import { Base } from './colors';
 import Label from './label';
 
@@ -44,6 +44,7 @@ const CampoTexto = React.forwardRef((props, ref) => {
     placeholder,
     onChange,
     onKeyDown,
+    onKeyUp,
     value,
     desabilitado,
     maxLength,
@@ -59,6 +60,8 @@ const CampoTexto = React.forwardRef((props, ref) => {
     addMaskTelefone,
     somenteTexto,
     somenteNumero,
+    addMaskNota,
+    autoFocus,
   } = props;
 
   const possuiErro = () => {
@@ -91,6 +94,19 @@ const CampoTexto = React.forwardRef((props, ref) => {
     }
   };
 
+  const onChangeCampoSemForm = e => {
+    let valorParaAtualizar = e.target.value;
+
+    if (valorParaAtualizar && addMaskNota) {
+      valorParaAtualizar = maskNota(valorParaAtualizar);
+    }
+
+    const valorDiferente = value !== valorParaAtualizar;
+    if (valorDiferente) {
+      onChange(e, valorParaAtualizar);
+    }
+  };
+
   return (
     <Campo className={classNameCampo} height={height}>
       {label ? (
@@ -115,6 +131,7 @@ const CampoTexto = React.forwardRef((props, ref) => {
             maxLength={maxLength || ''}
             innerRef={ref}
             onKeyDown={onKeyDown}
+            onKeyUp={onKeyUp}
             placeholder={placeholder}
             onChange={onChangeCampoComForm}
             style={style}
@@ -126,16 +143,23 @@ const CampoTexto = React.forwardRef((props, ref) => {
         </>
       ) : (
         <Input
+          style={style}
+          name={name}
           id={id}
           ref={ref}
+          autoFocus={autoFocus}
           placeholder={placeholder}
-          onChange={onChange}
+          onChange={onChangeCampoSemForm}
           onBlur={onBlur}
           disabled={desabilitado}
+          readOnly={desabilitado}
           onKeyDown={onKeyDown}
+          onKeyUp={onKeyUp}
           value={value}
           prefix={iconeBusca ? <i className="fa fa-search fa-lg" /> : ''}
           allowClear={allowClear}
+          maxLength={maxLength || ''}
+          autoComplete="off"
         />
       )}
     </Campo>
@@ -152,6 +176,7 @@ CampoTexto.propTypes = {
   maskType: PropTypes.string,
   placeholder: PropTypes.string,
   onChange: PropTypes.oneOfType([PropTypes.func]),
+  onKeyUp: PropTypes.oneOfType([PropTypes.func]),
   onKeyDown: PropTypes.oneOfType([PropTypes.func]),
   value: PropTypes.oneOfType([PropTypes.any]),
   desabilitado: PropTypes.bool,
@@ -166,8 +191,10 @@ CampoTexto.propTypes = {
   onBlur: PropTypes.oneOfType([PropTypes.func]),
   labelRequired: PropTypes.bool,
   addMaskTelefone: PropTypes.bool,
+  addMaskNota: PropTypes.bool,
   somenteTexto: PropTypes.bool,
   somenteNumero: PropTypes.bool,
+  autoFocus: PropTypes.bool,
 };
 
 CampoTexto.defaultProps = {
@@ -180,6 +207,7 @@ CampoTexto.defaultProps = {
   maskType: '',
   placeholder: '',
   onChange: () => {},
+  onKeyUp: () => {},
   onKeyDown: () => {},
   value: '',
   desabilitado: false,
@@ -194,8 +222,10 @@ CampoTexto.defaultProps = {
   onBlur: () => {},
   labelRequired: false,
   addMaskTelefone: false,
+  addMaskNota: false,
   somenteTexto: false,
   somenteNumero: false,
+  autoFocus: false,
 };
 
 export default CampoTexto;
