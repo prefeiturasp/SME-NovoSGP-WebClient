@@ -1,8 +1,8 @@
 import PropTypes from 'prop-types';
-import React from 'react';
+import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import _ from 'lodash';
-import { Label } from '~/componentes';
+import { Label, Loader } from '~/componentes';
 import UploadArquivos from '~/componentes-sgp/UploadArquivos/uploadArquivos';
 import { setArquivoRemovido } from '~/redux/modulos/questionarioDinamico/actions';
 import { erros, sucesso } from '~/servicos';
@@ -19,6 +19,8 @@ const CampoDinamicoUploadArquivos = props => {
   } = props;
   const { form, questaoAtual, label, prefixId } = dados;
   const dispatch = useDispatch();
+
+  const [exibirLoader, setExibirLoader] = useState(false);
 
   const id = QuestionarioDinamicoFuncoes.gerarId(prefixId, questaoAtual);
 
@@ -49,11 +51,12 @@ const CampoDinamicoUploadArquivos = props => {
       onChange();
       return true;
     }
-
+    setExibirLoader(true);
     const resposta = await funcaoRemoverArquivoCampoUpload(
       codigoArquivo
     ).catch(e => erros(e));
 
+    setExibirLoader(false);
     if (resposta && resposta.status === 200) {
       dispatch(setArquivoRemovido(true));
       sucesso(`Arquivo ${arquivo.name} removido com sucesso`);
@@ -65,24 +68,26 @@ const CampoDinamicoUploadArquivos = props => {
 
   return (
     <ColunaDimensionavel dimensao={questaoAtual?.dimensao}>
-      <div id={id}>
-        {questaoAtual?.nome ? <Label text={label?.props?.text} /> : ''}
-        <UploadArquivos
-          id={id}
-          form={form}
-          urlUpload={urlUpload}
-          onRemove={onRemoveFile}
-          name={String(questaoAtual?.id)}
-          onChangeListaArquivos={onChange}
-          tiposArquivosPermitidos={questaoAtual.opcionais || ''}
-          desabilitarGeral={desabilitado || questaoAtual.somenteLeitura}
-          defaultFileList={
-            form?.values?.[questaoAtual?.id]?.length
-              ? form?.values?.[questaoAtual?.id]
-              : []
-          }
-        />
-      </div>
+      <Loader loading={exibirLoader} tip="Removendo arquivo...">
+        <div id={id}>
+          {questaoAtual?.nome ? <Label text={label?.props?.text} /> : ''}
+          <UploadArquivos
+            id={id}
+            form={form}
+            urlUpload={urlUpload}
+            onRemove={onRemoveFile}
+            name={String(questaoAtual?.id)}
+            onChangeListaArquivos={onChange}
+            tiposArquivosPermitidos={questaoAtual.opcionais || ''}
+            desabilitarGeral={desabilitado || questaoAtual.somenteLeitura}
+            defaultFileList={
+              form?.values?.[questaoAtual?.id]?.length
+                ? form?.values?.[questaoAtual?.id]
+                : []
+            }
+          />
+        </div>
+      </Loader>
     </ColunaDimensionavel>
   );
 };

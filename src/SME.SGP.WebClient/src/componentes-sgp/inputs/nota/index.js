@@ -29,7 +29,7 @@ const Nota = props => {
   } = props;
 
   const [exibir, setExibir] = useState(false);
-  const [notaValorAtual, setNotaValorAtual] = useState();
+  const [notaValorAtual, setNotaValorAtual] = useState('');
   const [notaValorAtualExibicao, setNotaValorAtualExibicao] = useState();
 
   const regexCaracteresInvalidos = /[^0-9,.]+/g;
@@ -204,6 +204,7 @@ Nota.propTypes = {
   styleContainer: PropTypes.oneOf([PropTypes.any]),
   style: PropTypes.oneOf([PropTypes.any]),
   name: PropTypes.string,
+  notaValorInicial: PropTypes.string,
 };
 
 Nota.defaultProps = {
@@ -221,6 +222,7 @@ Nota.defaultProps = {
   styleContainer: {},
   style: {},
   name: '',
+  notaValorInicial: '',
 };
 
 export default Nota;
