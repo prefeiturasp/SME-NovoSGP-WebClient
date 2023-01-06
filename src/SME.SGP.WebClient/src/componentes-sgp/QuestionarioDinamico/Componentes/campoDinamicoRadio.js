@@ -47,7 +47,7 @@ const CampoDinamicoRadio = props => {
           name={String(questaoAtual?.id)}
           desabilitado={desabilitado || questaoAtual?.somenteLeitura}
           onChange={e => {
-            const valorAtualSelecionado = e.target.value;
+            const valorAtualSelecionado = e?.target?.value;
             onChange(valorAtualSelecionado);
           }}
         />
