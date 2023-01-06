@@ -17,7 +17,7 @@ const InputNumberReadOnly = props => {
           name={name}
           id={id}
           readOnly
-          value={value || ''}
+          value={value}
           disabled={disabled}
           placeholder={placeholder}
           style={{ height: '36px' }}

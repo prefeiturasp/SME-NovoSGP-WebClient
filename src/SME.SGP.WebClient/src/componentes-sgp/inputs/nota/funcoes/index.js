@@ -4,18 +4,19 @@ import {
   tratarStringComponenteCurricularNome,
 } from '~/utils';
 
-const acharItem = (dados, alunoEscolhido, numero, nomeItem) => {
-  if (dados?.length) {
-    return dados
-      ?.map((valor, index, elementos) => {
-        if (valor[nomeItem] === alunoEscolhido[nomeItem]) {
-          return elementos[index + numero];
-        }
-        return '';
-      })
-      .filter(item => item && item[nomeItem]);
+const acharAluno = (alunos, alunoEscolhido, direcao, chaveAluno) => {
+  if (alunos?.length) {
+    const index = alunos.findIndex(
+      a => a[chaveAluno] === alunoEscolhido[chaveAluno]
+    );
+    const totalIndex = alunos?.length - 1;
+    const indexDestino = index + direcao;
+
+    if (indexDestino <= totalIndex && indexDestino >= 0) {
+      return { aluno: alunos[indexDestino], indexDestino };
+    }
   }
-  return '';
+  return null;
 };
 
 const acharElemento = (e, elemento) => {
@@ -27,6 +28,50 @@ const acharElemento = (e, elemento) => {
     path = e.nativeEvent?.composedPath();
   }
   return path ? path.find(item => item.localName === elemento) : '';
+};
+
+const acharAlunoMoverFoco = async (
+  direcao,
+  alunos,
+  aluno,
+  chaveAluno,
+  componenteCurricularNome,
+  regencia,
+  indexElemento
+) => {
+  const retorno = direcao && acharAluno(alunos, aluno, direcao, chaveAluno);
+
+  const alunoEscolhido = retorno?.aluno;
+
+  if (alunoEscolhido?.[chaveAluno]) {
+    const disciplinaTratada = tratarStringComponenteCurricularNome(
+      componenteCurricularNome
+    );
+    const item = regencia && disciplinaTratada ? disciplinaTratada : 'aluno';
+
+    const itemEscolhido = `${item}${alunoEscolhido[chaveAluno]}`;
+
+    const campo = await moverCursor(itemEscolhido, indexElemento, regencia);
+    if (campo?.desabilitado) {
+      const totalIndex = alunos?.length - 1;
+      const indexDestino = retorno?.indexDestino + direcao;
+      const temProximoAnteriorAluno =
+        indexDestino <= totalIndex && indexDestino >= 0;
+
+      if (temProximoAnteriorAluno) {
+        acharAlunoMoverFoco(
+          direcao,
+          alunos,
+          alunoEscolhido,
+          chaveAluno,
+          componenteCurricularNome,
+          regencia,
+          indexElemento
+        );
+      }
+    }
+  }
+  return true;
 };
 
 /** Ao clicar para cima ou baixo, mover o foco para o próximo campo */
@@ -54,19 +99,15 @@ const moverFocoCampoNota = props => {
 
   const indexElemento = elementoTD?.cellIndex - qtdColunasSemCampoNota;
 
-  const alunoEscolhido =
-    direcao && acharItem(alunos, aluno, direcao, chaveAluno);
-
-  if (alunoEscolhido?.length) {
-    const disciplinaTratada = tratarStringComponenteCurricularNome(
-      componenteCurricularNome
-    );
-    const item = regencia && disciplinaTratada ? disciplinaTratada : 'aluno';
-
-    const itemEscolhido = `${item}${alunoEscolhido[0][chaveAluno]}`;
-
-    moverCursor(itemEscolhido, indexElemento, regencia);
-  }
+  acharAlunoMoverFoco(
+    direcao,
+    alunos,
+    aluno,
+    chaveAluno,
+    componenteCurricularNome,
+    regencia,
+    indexElemento
+  );
 };
 
 const moverFocoCampoNotaConselhoClasse = (
