@@ -23,7 +23,12 @@ import { SGP_UPLOAD_DOCUMENTOS_PLANOS_DE_TRABALHO } from '~/constantes/ids/uploa
 import ServicoDocumentosPlanosTrabalho from '~/servicos/Paginas/Gestao/DocumentosPlanosTrabalho/ServicoDocumentosPlanosTrabalho';
 
 const DocPlanosTrabalhoCadastroForm = props => {
-  const { form, desabilitarCampos, idDocumentosPlanoTrabalho } = props;
+  const {
+    form,
+    desabilitarCampos,
+    idDocumentosPlanoTrabalho,
+    setExibirLoader,
+  } = props;
 
   const usuario = useSelector(store => store.usuario);
 
@@ -60,10 +65,15 @@ const DocPlanosTrabalhoCadastroForm = props => {
         sucesso(`Arquivo ${arquivo.name} removido com sucesso`);
         return true;
       }
+      if (!codigoArquivo) return false;
+
+      setExibirLoader(true);
 
       const resposta = await ServicoArmazenamento.removerArquivo(
         codigoArquivo
       ).catch(e => erros(e));
+
+      setExibirLoader(false);
 
       if (resposta?.status === 200) {
         sucesso(`Arquivo ${arquivo.name} removido com sucesso`);
@@ -272,12 +282,14 @@ DocPlanosTrabalhoCadastroForm.propTypes = {
   form: PropTypes.oneOfType([PropTypes.any]),
   desabilitarCampos: PropTypes.bool,
   idDocumentosPlanoTrabalho: PropTypes.oneOfType([PropTypes.any]),
+  setExibirLoader: PropTypes.oneOfType([PropTypes.any]),
 };
 
 DocPlanosTrabalhoCadastroForm.defaultProps = {
   form: null,
   desabilitarCampos: false,
   idDocumentosPlanoTrabalho: 0,
+  setExibirLoader: null,
 };
 
 export default DocPlanosTrabalhoCadastroForm;
