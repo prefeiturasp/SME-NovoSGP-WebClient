@@ -113,6 +113,7 @@ import CadastroEncaminhamentoNAAPA from '~/paginas/NAAPA/Encaminhamento/Cadastro
 import RelatorioPlanoAEE from '~/paginas/Relatorios/AEE/plano/relatorioPlanoAEE';
 import DocPlanosTrabalhoLista from '~/paginas/Gestao/DocumentosPlanosTrabalho/lista/docPlanosTrabalhoLista';
 import DocPlanosTrabalhoCadastro from '~/paginas/Gestao/DocumentosPlanosTrabalho/cadastro/docPlanosTrabalhoCadastro';
+import RelatorioEncaminhamentoAEE from '~/paginas/Relatorios/AEE/encaminhamento/relatorioEncaminhamentoAEE';
 
 const rotas = new Map();
 
@@ -1595,6 +1596,17 @@ rotas.set(RotasDto.RELATORIO_AEE_PLANO_IMPRESSAO, {
   tipo: RotasTipo.EstruturadaAutenticada,
   temPermissionamento: true,
   chavePermissao: RotasDto.RELATORIO_AEE_PLANO_IMPRESSAO,
+});
+
+rotas.set(RotasDto.RELATORIO_AEE_ENCAMINHAMENTO_IMPRESSAO, {
+  breadcrumbName: 'Encaminhamento',
+  menu: ['Relatórios', 'AEE'],
+  parent: '/',
+  component: RelatorioEncaminhamentoAEE,
+  exact: true,
+  tipo: RotasTipo.EstruturadaAutenticada,
+  temPermissionamento: true,
+  chavePermissao: RotasDto.RELATORIO_AEE_ENCAMINHAMENTO_IMPRESSAO,
 });
 
 const rotasArray = [];
