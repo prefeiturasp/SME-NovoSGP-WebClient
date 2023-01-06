@@ -620,6 +620,8 @@ class QuestionarioDinamicoFuncoes {
                   questao.resposta = '';
                 }
                 break;
+              case tipoQuestao.TurmasPrograma:
+                break;
               default:
                 questao.resposta = JSON.parse(
                   JSON.stringify(campos[key] || '')
@@ -697,6 +699,8 @@ class QuestionarioDinamicoFuncoes {
                   }
                 }
               });
+            } else if (questao.tipoQuestao === tipoQuestao.TurmasPrograma) {
+              questao = null;
             } else {
               if (questaoAtual?.resposta[0]?.id) {
                 questao.respostaEncaminhamentoId = questaoAtual.resposta[0].id;
