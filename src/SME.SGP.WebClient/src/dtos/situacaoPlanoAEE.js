@@ -12,7 +12,7 @@ const situacaoPlanoAEE = {
   /**  Aguardando parecer do CEFAI */
   ParecerPAAI: 6,
   /**  Encerrado Automaticamente */
-  EncerradoAutomaticamento: 7,
+  EncerradoAutomaticamente: 7,
   /**  Expirado */
   Expirado: 8,
   /**  Devolvido */

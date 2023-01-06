@@ -55,7 +55,7 @@ const MontarDadosTabs = props => {
             planoAEEDados?.situacao !== situacaoPlanoAEE.Expirado &&
             planoAEEDados?.situacao !== situacaoPlanoAEE.Encerrado &&
             planoAEEDados?.situacao !==
-              situacaoPlanoAEE.EncerradoAutomaticamento
+              situacaoPlanoAEE.EncerradoAutomaticamente
           }
         >
           <SecaoReestruturacaoPlano match={match} />

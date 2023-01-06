@@ -24,7 +24,7 @@ const RelatorioPlanoAEEForm = props => {
     const novasListaSituacoes = situacoes.filter(
       situacao =>
         situacao.codigo !== situacaoPlanoAEE.Encerrado &&
-        situacao.codigo !== situacaoPlanoAEE.EncerradoAutomaticamento
+        situacao.codigo !== situacaoPlanoAEE.EncerradoAutomaticamente
     );
 
     return novasListaSituacoes;
