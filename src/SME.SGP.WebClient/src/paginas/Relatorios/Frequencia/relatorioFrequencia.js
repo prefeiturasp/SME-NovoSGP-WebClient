@@ -117,45 +117,32 @@ const RelatorioFrequencia = () => {
     { valor: OPCAO_TODOS_ESTUDANTES, desc: 'Todos os estudantes' },
   ]);
 
-  const obterAnosLetivos = useCallback(async () => {
-    setCarregandoAnosLetivos(true);
-    let anosLetivos = [];
+  const obterAnosLetivos = useCallback(
+    async consideraHistoricoEstaMarcado => {
+      setCarregandoAnosLetivos(true);
 
-    const [anosLetivoComHistorico, anosLetivoSemHistorico] = await Promise.all([
-      FiltroHelper.obterAnosLetivos({
-        consideraHistorico: true,
-      }),
-      FiltroHelper.obterAnosLetivos({
-        consideraHistorico: false,
-      }),
-    ])
-      .catch(e => erros(e))
-      .finally(() => setCarregandoAnosLetivos(false));
-    anosLetivos = anosLetivos.concat(anosLetivoComHistorico);
+      const resposta = await FiltroHelper.obterAnosLetivos({
+        consideraHistorico: consideraHistoricoEstaMarcado,
+      })
+        .catch(e => erros(e))
+        .finally(() => setCarregandoAnosLetivos(false));
 
-    anosLetivoSemHistorico.forEach(ano => {
-      if (!anosLetivoComHistorico.find(a => a.valor === ano.valor)) {
-        anosLetivos.push(ano);
+      const anosLetivos = resposta || [];
+
+      if (!anosLetivos?.length) {
+        anosLetivos.push({
+          desc: anoAtual,
+          valor: anoAtual,
+        });
       }
-    });
 
-    if (!anosLetivos.length) {
-      anosLetivos.push({
-        desc: anoAtual,
-        valor: anoAtual,
-      });
-    }
+      const anosOrdenados = ordenarListaMaiorParaMenor(anosLetivos, 'valor');
 
-    if (anosLetivos?.length) {
-      const temAnoAtualNaLista = anosLetivos.find(
-        item => String(item.valor) === String(anoAtual)
-      );
-      if (temAnoAtualNaLista) setAnoLetivo(anoAtual);
-      else setAnoLetivo(anosLetivos[0].valor);
-    }
-
-    setListaAnosLetivo(ordenarListaMaiorParaMenor(anosLetivos, 'valor'));
-  }, [anoAtual]);
+      setAnoLetivo(anosOrdenados[0]?.valor);
+      setListaAnosLetivo(anosOrdenados);
+    },
+    [anoAtual]
+  );
 
   const obterModalidades = async ue => {
     if (ue) {
@@ -177,30 +164,36 @@ const RelatorioFrequencia = () => {
     }
   };
 
-  const obterUes = useCallback(async dre => {
-    if (dre) {
-      setCarregandoUes(true);
-      const retorno = await ServicoFiltroRelatorio.obterUes(dre, consideraHistorico)
-        .catch(e => {
-          erros(e);
-        })
-        .finally(() => setCarregandoUes(false));
+  const obterUes = useCallback(
+    async dre => {
+      if (dre) {
+        setCarregandoUes(true);
+        const retorno = await ServicoFiltroRelatorio.obterUes(
+          dre,
+          consideraHistorico
+        )
+          .catch(e => {
+            erros(e);
+          })
+          .finally(() => setCarregandoUes(false));
 
-      if (retorno?.data) {
-        const lista = retorno.data.map(item => ({
-          desc: item.nome,
-          valor: String(item.codigo),
-        }));
+        if (retorno?.data) {
+          const lista = retorno.data.map(item => ({
+            desc: item.nome,
+            valor: String(item.codigo),
+          }));
 
-        if (lista?.length === 1) {
-          setCodigoUe(lista[0].valor);
+          if (lista?.length === 1) {
+            setCodigoUe(lista[0].valor);
+          }
+          setListaUes(lista);
+          return;
         }
-        setListaUes(lista);
-        return;
+        setListaUes([]);
       }
-      setListaUes([]);
-    }
-  }, [consideraHistorico]);
+    },
+    [consideraHistorico]
+  );
 
   const onChangeDre = dre => {
     setCodigoDre(dre);
@@ -546,8 +539,8 @@ const RelatorioFrequencia = () => {
   ]);
 
   useEffect(() => {
-    obterAnosLetivos();
-  }, [obterAnosLetivos]);
+    obterAnosLetivos(consideraHistorico);
+  }, [consideraHistorico, obterAnosLetivos]);
 
   const onClickVoltar = () => {
     history.push(URL_HOME);
@@ -798,7 +791,6 @@ const RelatorioFrequencia = () => {
     setCodigoUe();
     setCodigoDre();
     setModoEdicao(true);
-    setAnoLetivo(anoAtual);
   };
 
   return (
@@ -821,7 +813,6 @@ const RelatorioFrequencia = () => {
                 <CheckboxComponent
                   label="Exibir histórico?"
                   checked={consideraHistorico}
-                  disabled={listaAnosLetivo.length === 1}
                   onChangeCheckbox={onChangeConsideraHistorico}
                 />
               </Col>
@@ -839,9 +830,7 @@ const RelatorioFrequencia = () => {
                     placeholder="Ano letivo"
                     onChange={onChangeAnoLetivo}
                     disabled={
-                      !consideraHistorico ||
-                      !listaAnosLetivo?.length ||
-                      listaAnosLetivo?.length === 1
+                      !listaAnosLetivo?.length || listaAnosLetivo?.length === 1
                     }
                   />
                 </Loader>
