@@ -3,7 +3,7 @@ import React from 'react';
 import { DataTable } from '~/componentes';
 import Label from '~/componentes/label';
 import ColunaDimensionavel from '../ColunaDimensionavel/colunaDimensionavel';
-import { SGP_TABLE_ATIVIDADE_CONTRATURNO } from '~/constantes/ids/table';
+import { SGP_TABLE_INFORMACOES_SRM } from '~/constantes/ids/table';
 
 const InformacoesSrmTabela = props => {
   const { label, questaoAtual, form } = props;
@@ -14,15 +14,15 @@ const InformacoesSrmTabela = props => {
   const colunas = [
     {
       title: 'DRE - UE',
-      dataIndex: 'dreUe',
+      dataIndex: 'DreUe',
     },
     {
       title: 'Turma - Turno',
-      dataIndex: 'turmaTurno',
+      dataIndex: 'TurmaTurno',
     },
     {
       title: 'Componente curricular',
-      dataIndex: 'componenteCurricular',
+      dataIndex: 'ComponenteCurricular',
     },
   ];
 
@@ -35,7 +35,7 @@ const InformacoesSrmTabela = props => {
           columns={colunas}
           pagination={false}
           dataSource={dadosTabela}
-          id={SGP_TABLE_ATIVIDADE_CONTRATURNO}
+          id={SGP_TABLE_INFORMACOES_SRM}
         />
       </div>
     </ColunaDimensionavel>
