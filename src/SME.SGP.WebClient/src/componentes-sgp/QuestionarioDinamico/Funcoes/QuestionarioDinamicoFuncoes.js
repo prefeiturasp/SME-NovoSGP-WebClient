@@ -602,7 +602,6 @@ class QuestionarioDinamicoFuncoes {
               case tipoQuestao.AtividadesContraturno:
               case tipoQuestao.Endereco:
               case tipoQuestao.ContatoResponsaveis:
-              case tipoQuestao.TurmasPrograma:
               case tipoQuestao.InformacoesSrm:
                 questao.resposta = JSON.stringify(campos[key] || '');
                 break;
@@ -620,6 +619,8 @@ class QuestionarioDinamicoFuncoes {
                 } else {
                   questao.resposta = '';
                 }
+                break;
+              case tipoQuestao.TurmasPrograma:
                 break;
               default:
                 questao.resposta = JSON.parse(
@@ -698,6 +699,8 @@ class QuestionarioDinamicoFuncoes {
                   }
                 }
               });
+            } else if (questao.tipoQuestao === tipoQuestao.TurmasPrograma) {
+              questao = null;
             } else {
               if (questaoAtual?.resposta[0]?.id) {
                 questao.respostaEncaminhamentoId = questaoAtual.resposta[0].id;
