@@ -24,7 +24,7 @@ const LocalizarEstudante = props => {
   // eslint-disable-next-line react/prop-types
   const { consideraNovasUEs } = props;
 
-  const [anoAtual] = useState('2022');
+  const [anoAtual] = useState(window.moment().format('YYYY'));
 
   const listaAnosLetivo = [{ label: anoAtual, id: anoAtual }];
 
