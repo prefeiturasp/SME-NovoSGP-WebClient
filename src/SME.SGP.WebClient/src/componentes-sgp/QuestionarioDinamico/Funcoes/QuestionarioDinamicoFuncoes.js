@@ -785,7 +785,7 @@ class QuestionarioDinamicoFuncoes {
 
     return temPrefixIdENomeComponente
       ? `${prefixId}_${tipoQuestaoNome}_${dadosQuestao?.nomeComponente}`
-      : dadosQuestao?.id;
+      : dadosQuestao?.id.toString();
   };
 
   removerLinhaTabela = async (
