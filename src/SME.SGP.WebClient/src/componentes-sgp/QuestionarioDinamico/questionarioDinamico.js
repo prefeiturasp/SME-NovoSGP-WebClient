@@ -589,6 +589,7 @@ const QuestionarioDinamico = props => {
         campoAtual = (
           <TurmasProgramaTabela
             {...params}
+            label={label?.props?.text}
             desabilitado={desabilitarCampos}
             onChange={() => {
               dispatch(setQuestionarioDinamicoEmEdicao(true));

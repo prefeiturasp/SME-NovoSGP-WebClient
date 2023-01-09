@@ -32,6 +32,7 @@ const TurmasProgramaTabela = props => {
 
       <div>
         <DataTable
+          gerarIdUnico
           columns={colunas}
           pagination={false}
           dataSource={dadosTabela}
