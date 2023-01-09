@@ -1,4 +1,4 @@
-/* eslint-disable react/prop-types */
+import PropTypes from 'prop-types';
 import { Col, Row } from 'antd';
 import React, { useEffect } from 'react';
 import {
@@ -9,32 +9,27 @@ import {
   Modalidade,
   Semestre,
   Turma,
-  ExibirPlanosEncerrados,
-  SituacaoPlano,
-  Responsavel,
   PAAIResponsavel,
 } from '~/componentes-sgp/inputs';
+import { ExibirEncaminhamentosEncerrados } from '~/componentes-sgp/inputs/exibir-encaminhamentos-encerrados';
+import { SituacaoEncaminhamentoAEE } from '~/componentes-sgp/inputs/situacao-encaminhamento-aee';
 import { OPCAO_TODOS } from '~/constantes';
-import { situacaoPlanoAEE } from '~/dtos';
+import { situacaoAEE } from '~/dtos';
 
-const RelatorioPlanoAEEForm = props => {
+const RelatorioEncaminhamentoAEEForm = props => {
   const { form, onChangeCampos } = props;
 
   const atualizarSituacoes = situacoes => {
     const novasListaSituacoes = situacoes.filter(
-      situacao =>
-        situacao.codigo !== situacaoPlanoAEE.Encerrado &&
-        situacao.codigo !== situacaoPlanoAEE.EncerradoAutomaticamente
+      situacao => situacao.codigo !== situacaoAEE.EncerradoAutomaticamente
     );
 
     return novasListaSituacoes;
   };
 
-  const ueCodigo = form?.values?.ueCodigo;
   const dreCodigo = form?.values?.dreCodigo;
   const situacaoIds = form?.values?.situacaoIds;
 
-  const desabilitarResponsavel = !ueCodigo || ueCodigo === OPCAO_TODOS;
   const desabilitarResponsavelPAAI = !dreCodigo || dreCodigo === OPCAO_TODOS;
 
   useEffect(() => {
@@ -87,7 +82,7 @@ const RelatorioPlanoAEEForm = props => {
 
       <Row gutter={[16, 16]}>
         <Col sm={24} md={14}>
-          <SituacaoPlano
+          <SituacaoEncaminhamentoAEE
             form={form}
             onChange={onChangeCampos}
             updateData={atualizarSituacoes}
@@ -96,23 +91,11 @@ const RelatorioPlanoAEEForm = props => {
         </Col>
 
         <Col sm={24} md={10}>
-          <ExibirPlanosEncerrados
+          <ExibirEncaminhamentosEncerrados
             form={form}
             onChange={onChangeCampos}
             name="exibirEncerrados"
             disabled={!!situacaoIds?.length}
-          />
-        </Col>
-      </Row>
-
-      <Row gutter={[16, 16]}>
-        <Col sm={24}>
-          <Responsavel
-            multiple
-            form={form}
-            name="codigosResponsavel"
-            onChange={onChangeCampos}
-            disabled={desabilitarResponsavel}
           />
         </Col>
       </Row>
@@ -132,4 +115,14 @@ const RelatorioPlanoAEEForm = props => {
   );
 };
 
-export default RelatorioPlanoAEEForm;
+RelatorioEncaminhamentoAEEForm.propTypes = {
+  onChangeCampos: PropTypes.func,
+  form: PropTypes.oneOfType([PropTypes.any]),
+};
+
+RelatorioEncaminhamentoAEEForm.defaultProps = {
+  form: null,
+  onChangeCampos: () => null,
+};
+
+export default RelatorioEncaminhamentoAEEForm;

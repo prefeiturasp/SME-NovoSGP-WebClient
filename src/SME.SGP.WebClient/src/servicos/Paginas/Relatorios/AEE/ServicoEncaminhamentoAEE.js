@@ -537,6 +537,9 @@ class ServicoEncaminhamentoAEE {
     }
     return api.post(`${urlPadrao}/responsavel-plano/pesquisa`, params);
   };
+
+  gerarRelatorioEncaminhamentoAEE = params =>
+    api.post('v1/relatorios/encaminhamento-aee', params);
 }
 
 export default new ServicoEncaminhamentoAEE();

@@ -96,7 +96,7 @@ const SecaoParecerPlanoCollapse = ({ match }) => {
           planoAEEDados?.situacao === situacaoPlanoAEE.ParecerPAAI ||
           planoAEEDados?.situacao === situacaoPlanoAEE.Encerrado ||
           planoAEEDados?.situacao ===
-            situacaoPlanoAEE.EncerradoAutomaticamento ||
+            situacaoPlanoAEE.EncerradoAutomaticamente ||
           planoAEEDados?.situacao === situacaoPlanoAEE.Validado) && (
           <SecaoParecerPAAI />
         )}
