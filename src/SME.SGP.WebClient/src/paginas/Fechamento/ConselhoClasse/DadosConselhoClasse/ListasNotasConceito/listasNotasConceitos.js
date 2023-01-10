@@ -60,6 +60,7 @@ const ListasNotasConceitos = props => {
 
   const [exibir, setExibir] = useState(false);
   const [carregando, setCarregando] = useState(false);
+  const [dadosArredondamento, setDadosArredondamento] = useState();
 
   const pegueInicioPeriodoFechamento = () => {
     if (fechamentoPeriodoInicioFim) {
@@ -204,6 +205,7 @@ const ListasNotasConceitos = props => {
       dispatch(setDadosIniciaisListasNotasConceitos([...dadosCarregar]));
       dispatch(setDadosListasNotasConceitos(resultado.data.notasConceitos));
       dispatch(setPodeEditarNota(resultado.data.podeEditarNota));
+      setDadosArredondamento(resultado.data?.dadosArredondamento);
       setExibir(true);
       if (bimestreSelecionado?.valor) habilitaConselhoClasse(resultado.data);
     } else {
@@ -246,6 +248,7 @@ const ListasNotasConceitos = props => {
           listaTiposConceitos={listaTiposConceitos}
           mediaAprovacao={media}
           alunoDesabilitado={desabilitarEdicaoAluno()}
+          dadosArredondamento={dadosArredondamento}
         />
       ) : (
         ''

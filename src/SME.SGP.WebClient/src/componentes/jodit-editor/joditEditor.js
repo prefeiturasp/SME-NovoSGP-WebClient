@@ -281,8 +281,8 @@ const JoditEditor = forwardRef((props, ref) => {
   const onChangePadrao = () => {
     const texto = textArea?.current?.text?.trim();
     const temImagemOuVideo =
-      (permiteVideo && textArea.current.value.includes('<video')) ||
-      textArea.current.value.includes('<img');
+      (permiteVideo && textArea?.current?.value?.includes('<video')) ||
+      textArea?.current?.value?.includes('<img');
 
     if (validarSeTemErro) {
       let valorParaValidar = '';
@@ -309,8 +309,8 @@ const JoditEditor = forwardRef((props, ref) => {
 
     if (
       texto ||
-      (permiteVideo && textArea.current.value.includes('<video')) ||
-      textArea.current.value.includes('<img')
+      (permiteVideo && textArea?.current?.value?.includes('<video')) ||
+      textArea?.current?.value?.includes('<img')
     ) {
       valorAtual = textArea.current.value;
     }

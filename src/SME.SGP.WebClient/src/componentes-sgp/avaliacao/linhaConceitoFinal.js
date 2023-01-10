@@ -5,7 +5,7 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 import shortid from 'shortid';
 import { MarcadorTriangulo } from '~/componentes';
-import { tratarString } from '~/utils';
+import { tratarStringComponenteCurricularNome } from '~/utils';
 
 const LinhaConceitoFinal = props => {
   const expandirLinha = useSelector(
@@ -36,7 +36,7 @@ const LinhaConceitoFinal = props => {
                       aluno.notasBimestre &&
                       aluno.notasBimestre.length ? (
                         aluno.notasBimestre.map((item, index) => {
-                          const disciplinaTratada = tratarString(
+                          const disciplinaTratada = tratarStringComponenteCurricularNome(
                             item.disciplina
                           );
                           return (

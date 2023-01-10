@@ -29,6 +29,7 @@ const CheckboxComponent = props => {
     name,
     id,
     form,
+    setValueOnlyOnChange,
   } = props;
 
   const Error = styled.span`
@@ -52,9 +53,13 @@ const CheckboxComponent = props => {
         id={id || name}
         component={Checkbox}
         onChange={e => {
-          form.setFieldValue(name, e.target.checked);
-          onChangeCheckbox(e);
-          form.setFieldTouched(name, true, true);
+          if (setValueOnlyOnChange) {
+            if (onChangeCheckbox) onChangeCheckbox(e.target.checked);
+          } else {
+            form.setFieldValue(name, e.target.checked);
+            onChangeCheckbox(e);
+            form.setFieldTouched(name, true, true);
+          }
         }}
         defaultChecked={defaultChecked}
         disabled={disabled}
@@ -68,6 +73,7 @@ const CheckboxComponent = props => {
   const campoSemValidacoes = () => {
     return (
       <Checkbox
+        id={id}
         onChange={onChangeCheckbox}
         defaultChecked={defaultChecked}
         disabled={disabled}
@@ -97,6 +103,7 @@ CheckboxComponent.propTypes = {
   name: PropTypes.string,
   id: PropTypes.string,
   form: PropTypes.oneOfType([PropTypes.any]),
+  setValueOnlyOnChange: PropTypes.bool,
 };
 
 CheckboxComponent.defaultProps = {
@@ -109,6 +116,7 @@ CheckboxComponent.defaultProps = {
   name: '',
   id: '',
   form: null,
+  setValueOnlyOnChange: false,
 };
 
 export default CheckboxComponent;

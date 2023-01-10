@@ -2,7 +2,10 @@ import { Col, Row } from 'antd';
 import React, { useCallback, useContext, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Loader, SelectComponent } from '~/componentes';
-import * as idsCampos from '~/componentes-sgp/filtro/idsCampos';
+import {
+  SGP_SELECT_COMPONENTE_CURRICULAR,
+  SGP_SELECT_PERIODO_POR_COMPONENTE_CURRICULAR,
+} from '~/constantes/ids/select';
 import { erros, ServicoDisciplina, ServicoPeriodoEscolar } from '~/servicos';
 import ListaoContext from '../../../listaoContext';
 
@@ -201,7 +204,7 @@ const TabListaoDiarioBordoFiltros = () => {
         <Loader loading={exibirLoaderComponenteCurricular} ignorarTip>
           <SelectComponent
             label="Componente curricular"
-            id={idsCampos.SGP_SELECT_COMPONENTE_CURRICULAR}
+            id={SGP_SELECT_COMPONENTE_CURRICULAR}
             lista={listaComponentesCurricularesDiario}
             valueOption="codigoComponenteCurricular"
             valueText="nomeComponenteInfantil"
@@ -221,7 +224,7 @@ const TabListaoDiarioBordoFiltros = () => {
         <Loader loading={exibirLoaderPeriodo} ignorarTip>
           <SelectComponent
             label="Período"
-            id={idsCampos.SGP_SELECT_PERIODO_POR_COMPONENTE_CURRICULAR}
+            id={SGP_SELECT_PERIODO_POR_COMPONENTE_CURRICULAR}
             lista={listaPeriodos}
             valueOption="id"
             valueText="periodoEscolar"

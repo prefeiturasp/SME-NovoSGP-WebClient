@@ -5,6 +5,7 @@ import styled from 'styled-components';
 
 import Button from './button';
 import { Colors } from './colors';
+import { SGP_BUTTON_OK_MODAL } from '~/constantes/ids/button';
 
 const Container = styled(Modal)`
   .ant-modal-footer {
@@ -42,7 +43,7 @@ const Container = styled(Modal)`
 `;
 
 const ModalMultiLinhas = props => {
-  const { visivel, onClose, conteudo, titulo, type } = props;
+  const { id, visivel, onClose, conteudo, titulo, type } = props;
 
   return (
     <Container
@@ -53,7 +54,7 @@ const ModalMultiLinhas = props => {
       centered
       footer={[
         <Button
-          id={shortid.generate()}
+          id={id || SGP_BUTTON_OK_MODAL}
           key="btn-sim-confirmacao"
           label="Ok"
           color={Colors.Azul}

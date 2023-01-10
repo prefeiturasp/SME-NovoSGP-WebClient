@@ -1,6 +1,10 @@
 import { Modal } from 'antd';
 import React from 'react';
 import styled from 'styled-components';
+import {
+  SGP_BUTTON_CANCELAR_MODAL,
+  SGP_BUTTON_SALVAR_MODAL,
+} from '~/constantes/ids/button';
 
 import Button from './button';
 import { Colors } from './colors';
@@ -42,6 +46,7 @@ const Container = styled(Modal)`
 
 const ModalConfirmacao = props => {
   const {
+    id,
     visivel,
     onConfirmacaoPrincipal,
     onConfirmacaoSecundaria,
@@ -60,6 +65,7 @@ const ModalConfirmacao = props => {
       centered
       footer={[
         <Button
+          id={id || SGP_BUTTON_SALVAR_MODAL}
           key="btn-sim-confirmacao"
           label={labelSecundaria}
           color={Colors.Azul}
@@ -68,6 +74,7 @@ const ModalConfirmacao = props => {
           onClick={onConfirmacaoSecundaria}
         />,
         <Button
+          id={id || SGP_BUTTON_CANCELAR_MODAL}
           key="btn-nao-confirmacao"
           label={labelPrincipal}
           color={Colors.Azul}

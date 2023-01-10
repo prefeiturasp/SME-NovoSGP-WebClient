@@ -35,7 +35,7 @@ const CampoNumero = React.forwardRef((props, ref) => {
     form,
     className,
     classNameCampo,
-    maskType,
+    type,
     placeholder,
     onChange,
     onKeyDown,
@@ -106,24 +106,31 @@ const CampoNumero = React.forwardRef((props, ref) => {
                 possuiErro() ? 'is-invalid' : ''
               } ${className || ''} ${desabilitado ? 'desabilitado' : ''}`}
               component={InputNumber}
-              type={maskType || ''}
+              type={type || ''}
               readOnly={desabilitado}
               onBlur={executaOnBlur}
               maxLength={maxlength || ''}
               innerRef={ref}
               onKeyDown={onKeyDown}
               onKeyUp={onKeyUp}
+              value={form.values[name]}
               onChange={v => {
                 form.setFieldValue(name, v);
                 form.setFieldTouched(name, true);
                 onChange(v);
               }}
               disabled={disabled}
+              placeholder={placeholder}
             />
-            {!semMensagem ? <span>{form.errors[name]}</span> : ''}
+            {!semMensagem && possuiErro() ? (
+              <span>{form.errors[name]}</span>
+            ) : (
+              ''
+            )}
           </>
         ) : (
           <InputNumber
+            id={id}
             name={name}
             ref={validateOnBlurInOnChange ? refInterno : ref}
             placeholder={placeholder}
@@ -173,6 +180,7 @@ CampoNumero.propTypes = {
   autoFocus: PropTypes.bool,
   label: PropTypes.string,
   validateOnBlurInOnChange: PropTypes.bool,
+  placeholder: PropTypes.string,
 };
 
 CampoNumero.defaultProps = {
@@ -186,6 +194,7 @@ CampoNumero.defaultProps = {
   autoFocus: false,
   label: '',
   validateOnBlurInOnChange: false,
+  placeholder: '',
 };
 
 export default CampoNumero;

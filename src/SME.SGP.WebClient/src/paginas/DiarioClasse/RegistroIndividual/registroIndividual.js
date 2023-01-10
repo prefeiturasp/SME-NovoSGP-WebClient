@@ -35,6 +35,7 @@ import {
 
 import { RotasDto } from '~/dtos';
 import MetodosRegistroIndividual from '~/componentes-sgp/RegistroIndividual/metodosRegistroIndividual';
+import { SGP_SELECT_COMPONENTE_CURRICULAR } from '~/constantes/ids/select';
 
 const RegistroIndividual = () => {
   const [exibirListas, setExibirListas] = useState(false);
@@ -167,7 +168,7 @@ const RegistroIndividual = () => {
           <div className="row">
             <div className="col-sm-12 col-md-4 col-lg-4 col-xl-4 mb-4">
               <SelectComponent
-                id="componenteCurricular"
+                id={SGP_SELECT_COMPONENTE_CURRICULAR}
                 name="ComponenteCurricularId"
                 lista={listaComponenteCurricular || []}
                 valueOption="codigoComponenteCurricular"

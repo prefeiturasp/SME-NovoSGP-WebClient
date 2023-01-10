@@ -13,7 +13,7 @@ import { Card, DataTable, ButtonGroup, Loader } from '~/componentes';
 import Filtro from './componentes/Filtro';
 
 import { PilulaEstilo } from './styles';
-import { SGP_BUTTON_NOVO } from '~/componentes-sgp/filtro/idsCampos';
+import { SGP_BUTTON_NOVO } from '~/constantes/ids/button';
 
 function AtribuicaoCJLista() {
   const [itensSelecionados, setItensSelecionados] = useState([]);

@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Colors } from '~/componentes';
 import { RegistroMigrado } from '~/componentes-sgp';
 import Button from '~/componentes/button';
+import { SGP_BUTTON_COPIAR_CONTEUDO_PLANO_AULA } from '~/constantes/ids/button';
 import { setExibirModalCopiarConteudoPlanoAula } from '~/redux/modulos/frequenciaPlanoAula/actions';
 import BotaoGerarRelatorioPlanoAula from '../BotaoGerarRelatorioPlanoAula/botaoGerarRelatorioPlanoAula';
 import SwitchInformarObjetivos from '../SwitchInformarObjetivos/switchInformarObjetivos';
@@ -30,7 +31,7 @@ const CabecalhoDadosPlanoAula = () => {
         </div>
         <div className="col-md-9 d-flex justify-content-end">
           <Button
-            id="copiar-conteudo-plano-aula"
+            id={SGP_BUTTON_COPIAR_CONTEUDO_PLANO_AULA}
             label="Copiar Conteúdo"
             icon="clipboard"
             color={Colors.Azul}

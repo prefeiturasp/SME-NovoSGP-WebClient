@@ -9,7 +9,7 @@ import {
   SGP_BUTTON_CANCELAR,
   SGP_BUTTON_DEVOLVER,
   SGP_BUTTON_SALVAR,
-} from '~/componentes-sgp/filtro/idsCampos';
+} from '~/constantes/ids/button';
 import QuestionarioDinamicoFuncoes from '~/componentes-sgp/QuestionarioDinamico/Funcoes/QuestionarioDinamicoFuncoes';
 import Button from '~/componentes/button';
 import { RotasDto, situacaoPlanoAEE } from '~/dtos';
@@ -31,6 +31,7 @@ import {
   verificaSomenteConsulta,
 } from '~/servicos';
 import ServicoPlanoAEE from '~/servicos/Paginas/Relatorios/AEE/ServicoPlanoAEE';
+import ModalImpressaoPlano from './ModalImpressaoPlano/modalImpressaoPlano';
 
 const BotoesAcoesPlanoAEE = props => {
   const { match } = props;
@@ -239,6 +240,7 @@ const BotoesAcoesPlanoAEE = props => {
   return (
     <>
       <BotaoVoltarPadrao className="mr-2" onClick={() => onClickVoltar()} />
+      {match?.params?.id ? <ModalImpressaoPlano /> : <></>}
       <Button
         id={SGP_BUTTON_CANCELAR}
         label="Cancelar"
