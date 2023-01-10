@@ -51,7 +51,7 @@ export default function ReiniciarSenhaEA() {
     () =>
       (usuario.turmaSelecionada &&
         !!usuario.turmaSelecionada.consideraHistorico) ||
-      false,
+      true,
     [usuario.turmaSelecionada]
   );
 
