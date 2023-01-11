@@ -28,16 +28,19 @@ const TabCadastroPlano = props => {
     const planoId = match?.params?.id ? match?.params?.id : 0;
 
     let turmaCodigo = 0;
+    let codigoAluno = 0;
 
     if (!planoId) {
       turmaCodigo = dadosCollapseLocalizarEstudante?.codigoTurma;
+      codigoAluno = dadosCollapseLocalizarEstudante?.codigoAluno;
     }
 
     dispatch(setExibirLoaderPlanoAEE(true));
     dispatch(setPlanoAEELimparDados());
     const resultado = await ServicoPlanoAEE.obterPlanoPorId(
       planoId,
-      turmaCodigo
+      turmaCodigo,
+      codigoAluno
     )
       .catch(e => erros(e))
       .finally(() => dispatch(setExibirLoaderPlanoAEE(false)));

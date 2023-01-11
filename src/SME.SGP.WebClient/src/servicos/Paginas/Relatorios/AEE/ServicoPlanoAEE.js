@@ -32,8 +32,8 @@ class ServicoPlanoAEE {
     return false;
   };
 
-  obterPlanoPorId = (planoId, turmaCodigo) => {
-    let url = `${urlPadrao}/${planoId}`;
+  obterPlanoPorId = (planoId, turmaCodigo, codigoAluno) => {
+    let url = `${urlPadrao}/${planoId}/aluno/${codigoAluno}`;
     if (turmaCodigo) {
       url = `${url}?turmaCodigo=${turmaCodigo}`;
     }
@@ -160,6 +160,9 @@ class ServicoPlanoAEE {
                 } else {
                   questao.resposta = '';
                 }
+                break;
+              case tipoQuestao.InformacoesSrm:
+                questao.resposta = JSON.stringify(campos[key] || '');
                 break;
               default:
                 questao.resposta = campos[key] || '';
