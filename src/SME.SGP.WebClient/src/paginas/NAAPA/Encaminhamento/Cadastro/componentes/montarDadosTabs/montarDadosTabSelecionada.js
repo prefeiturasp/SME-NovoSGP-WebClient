@@ -137,9 +137,7 @@ const MontarDadosTabSelecionada = props => {
     dadosQuestinario.forEach(questao => {
       switch (questao.nomeComponente) {
         case 'TURMAS_PROGRAMA':
-          if (dadosTurmasPrograma?.length) {
-            questao.resposta = [{ texto: JSON.stringify(dadosTurmasPrograma) }];
-          }
+          questao.resposta = [{ texto: JSON.stringify(dadosTurmasPrograma) }];
           break;
         default:
           break;
@@ -186,9 +184,7 @@ const MontarDadosTabSelecionada = props => {
         dadosTurmasPrograma = await dadosIniciaisTurmasPrograma();
       }
 
-      if (dadosTurmasPrograma?.length) {
-        dadosMapeados = mapearDados(resposta.data, dadosTurmasPrograma);
-      }
+      dadosMapeados = mapearDados(resposta.data, dadosTurmasPrograma);
 
       setDadosQuestionarioAtual(dadosMapeados);
     } else {
