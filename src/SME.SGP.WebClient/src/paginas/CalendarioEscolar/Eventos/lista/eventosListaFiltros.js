@@ -13,6 +13,18 @@ import {
 import { FiltroHelper } from '~/componentes-sgp';
 import { Base } from '~/componentes/colors';
 import { OPCAO_TODOS } from '~/constantes';
+import {
+  SGP_DATE_SELECIONAR_DATA_FIM,
+  SGP_DATE_SELECIONAR_DATA_INICIO,
+} from '~/constantes/ids/date';
+import { SGP_INPUT_TEXT_NOME_EVENTO } from '~/constantes/ids/input';
+import {
+  SGP_SELECT_DRE,
+  SGP_SELECT_TIPO_CALENDARIO,
+  SGP_SELECT_TIPO_EVENTO,
+  SGP_SELECT_UE,
+} from '~/constantes/ids/select';
+import { SGP_SWITCH_EXIBIR_EVENTO_VALIDO } from '~/constantes/ids/switch';
 import ListaLocalOcorrencia from '~/constantes/localOcorrencia';
 import { setFiltroListaEventos } from '~/redux/modulos/calendarioEscolar/actions';
 import {
@@ -450,13 +462,13 @@ const EventosListaFiltros = () => {
         <Col sm={24} md={12} xl={8}>
           <Loader loading={carregandoCalendarios} tip="">
             <SelectAutocomplete
+              id={SGP_SELECT_TIPO_CALENDARIO}
               label="Calendário"
               showList
               isHandleSearch
               placeholder="Selecione o calendário"
               className="ant-col-md-24"
               name="tipoCalendarioId"
-              id="select-tipo-calendario"
               lista={listaCalendarios || []}
               valueField="id"
               textField="descricao"
@@ -473,7 +485,7 @@ const EventosListaFiltros = () => {
         <Col md={24} xl={12}>
           <Loader loading={carregandoDres} tip="">
             <SelectComponent
-              id="dre"
+              id={SGP_SELECT_DRE}
               label="Diretoria Regional de Educação (DRE)"
               lista={listaDres || []}
               valueOption="codigo"
@@ -489,7 +501,7 @@ const EventosListaFiltros = () => {
         <Col md={24} xl={12}>
           <Loader loading={carregandoUes} tip="">
             <SelectComponent
-              id="ue"
+              id={SGP_SELECT_UE}
               label="Unidade Escolar (UE)"
               lista={listaUes || []}
               valueOption="codigo"
@@ -504,6 +516,7 @@ const EventosListaFiltros = () => {
         </Col>
         <Col sm={24} md={12} xl={8}>
           <CampoTexto
+            id={SGP_INPUT_TEXT_NOME_EVENTO}
             label="Nome do evento"
             placeholder="Pesquise o evento pelo nome"
             onChange={onChangeNomeEvento}
@@ -515,8 +528,8 @@ const EventosListaFiltros = () => {
         </Col>
         <Col sm={24} md={12} xl={8}>
           <SelectComponent
+            id={SGP_SELECT_TIPO_EVENTO}
             label="Tipo de evento"
-            id="select-tipo-evento"
             lista={listaTipoEventosFiltrados}
             valueOption="id"
             valueText="descricao"
@@ -530,6 +543,7 @@ const EventosListaFiltros = () => {
         </Col>
         <Col sm={12} md={6} xl={4}>
           <CampoData
+            id={SGP_DATE_SELECIONAR_DATA_INICIO}
             label="Data início"
             formatoData="DD/MM/YYYY"
             onChange={data => {
@@ -547,6 +561,7 @@ const EventosListaFiltros = () => {
         </Col>
         <Col sm={12} md={6} xl={4}>
           <CampoData
+            id={SGP_DATE_SELECIONAR_DATA_FIM}
             label="Data fim"
             formatoData="DD/MM/YYYY"
             onChange={data => {
@@ -568,6 +583,7 @@ const EventosListaFiltros = () => {
           <Col span={24}>
             <ContainerSwitchExibirEventos>
               <Switch
+                id={SGP_SWITCH_EXIBIR_EVENTO_VALIDO}
                 onChange={() => {
                   setEhEventosTodaRede(!ehEventosTodaRede);
                   seFiltrarNovaConsulta(true);

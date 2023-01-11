@@ -1,9 +1,12 @@
-import React from 'react';
+import React, { useState, useEffect }  from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
 import { Affix } from 'antd';
 import { useSelector } from 'react-redux';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faQuestionCircle } from '@fortawesome/free-solid-svg-icons';
 import { Base } from '~/componentes/colors';
+import { obterAjudaDoSistemaURL } from '~/servicos';
 
 const Container = styled.div`
   span {
@@ -57,6 +60,15 @@ const Cabecalho = ({
 }) => {
   const usuario = useSelector(state => state.usuario);
 
+  const [urlAjuda, setUrlAjuda] = useState('');
+
+  const onClickAjuda = () => window.open(urlAjuda, '_blank');
+
+  useEffect(() => {
+    const url = obterAjudaDoSistemaURL();
+    setUrlAjuda(url);
+  }, []);
+
   const componentePadrao = (
     <div
       className="d-flex background-row pt-2"
@@ -72,6 +84,19 @@ const Cabecalho = ({
       <div className="pt-3">
         <span>{titulo}</span>
         <span className="titulo">{pagina}</span>
+        {pagina && urlAjuda && (
+          <FontAwesomeIcon
+            cursor="pointer"
+            onClick={onClickAjuda}
+            style={{
+              fontSize: '16px',
+              color: Base.Azul,
+              marginLeft: 5,
+              marginRight: 5,
+            }}
+            icon={faQuestionCircle}
+          />
+        )}
       </div>
       <div className="d-flex">{children}</div>
     </div>

@@ -1,10 +1,7 @@
 import PropTypes from 'prop-types';
 import { Col, Row } from 'antd';
 import React from 'react';
-import {
-  SGP_BUTTON_CANCELAR,
-  SGP_BUTTON_GERAR,
-} from '~/componentes-sgp/filtro/idsCampos';
+import { SGP_BUTTON_CANCELAR, SGP_BUTTON_GERAR } from '~/constantes/ids/button';
 import Button from '~/componentes/button';
 import { Colors } from '~/componentes/colors';
 import Loader from '~/componentes/loader';

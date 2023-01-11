@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import CardCollapse from '~/componentes/cardCollapse';
 import CollapseLocalizarEstudanteDados from './collapseLocalizarEstudanteDados';
+import { SGP_COLLAPSE_LOCALIZAR_ESTUDANTE_CRIANCA } from '~/constantes/ids/collapse';
 
 const CollapseLocalizarEstudante = props => {
   const {
@@ -16,6 +17,7 @@ const CollapseLocalizarEstudante = props => {
 
   return (
     <CardCollapse
+      id={SGP_COLLAPSE_LOCALIZAR_ESTUDANTE_CRIANCA}
       key="localizar-estudante-collapse-key"
       titulo="Localizar Criança/Estudante"
       indice="localizar-estudante-collapse-indice"

@@ -3,6 +3,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Base } from '~/componentes';
 import CardCollapse from '~/componentes/cardCollapse';
 import JoditEditor from '~/componentes/jodit-editor/joditEditor';
+import { SGP_COLLAPSE_OBJETIVOS_ESPECIFICOS_AULA } from '~/constantes/ids/collapse';
+import { SGP_JODIT_EDITOR_OBJETIVOS_ESPECIFICOS_AULA } from '~/constantes/ids/jodit-editor';
 import {
   setModoEdicaoPlanoAula,
   setobjetivosEspecificosParaAulaValidarObrigatoriedade,
@@ -85,6 +87,7 @@ const ObjetivosEspecificosParaAula = () => {
   return (
     <>
       <CardCollapse
+        id={SGP_COLLAPSE_OBJETIVOS_ESPECIFICOS_AULA}
         key="objetivos-especificos-para-aula"
         titulo="Objetivos específicos e desenvolvimento da aula"
         indice="objetivos-especificos-para-aula"
@@ -101,6 +104,7 @@ const ObjetivosEspecificosParaAula = () => {
             ''
           )}
           <JoditEditor
+            id={SGP_JODIT_EDITOR_OBJETIVOS_ESPECIFICOS_AULA}
             ref={refForm}
             validarSeTemErro={valor =>
               !valor && !desabilitarCamposPlanoAula && temPeriodoAberto

@@ -38,3 +38,13 @@ export const setArquivoRemovido = payload => ({
   type: '@questionarioDinamico/setArquivoRemovido',
   payload,
 });
+
+export const setExibirModalErrosQuestionarioDinamico = payload => ({
+  type: '@questionarioDinamico/setExibirModalErrosQuestionarioDinamico',
+  payload,
+});
+
+export const setNomesSecoesComCamposObrigatorios = payload => ({
+  type: '@questionarioDinamico/setNomesSecoesComCamposObrigatorios',
+  payload,
+});

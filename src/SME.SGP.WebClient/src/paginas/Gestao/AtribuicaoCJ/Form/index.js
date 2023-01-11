@@ -41,7 +41,7 @@ import {
   objetoEstaTodoPreenchido,
   ordenarDescPor,
 } from '~/utils/funcoes/gerais';
-import { SGP_BUTTON_SALVAR_ALTERAR } from '~/componentes-sgp/filtro/idsCampos';
+import { SGP_BUTTON_SALVAR_ALTERAR } from '~/constantes/ids/button';
 import { verificaSomenteConsulta } from '~/servicos';
 
 function AtribuicaoCJForm({ match, location }) {

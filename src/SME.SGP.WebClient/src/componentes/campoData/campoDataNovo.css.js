@@ -7,6 +7,7 @@ export const Campo = styled.div`
   width: 100%;
 
   span {
+    margin-bottom: 5px;
     color: ${Base.Vermelho};
   }
 

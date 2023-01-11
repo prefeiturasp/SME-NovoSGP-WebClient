@@ -13,6 +13,9 @@ class ServicoArmazenamento {
     return api.delete(`${urlPadrao}/${codigoArquivo}`);
   };
 
+  removerArquivos = codigosArquivo =>
+    api.delete(urlPadrao, { data: codigosArquivo });
+
   fazerUploadArquivo = (formData, configuracaoHeader, urlUpload) => {
     let url = `${urlPadrao}/upload`;
     if (urlUpload) {

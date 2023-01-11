@@ -9,6 +9,7 @@ import { InputNomeEstilo } from './styles';
 import Loader from '~/componentes/loader';
 
 function InputNome({
+  id,
   dataSource,
   onSelect,
   onChange,
@@ -57,6 +58,7 @@ function InputNome({
           allowClear
         >
           <Input
+            id={id}
             placeholder={placeholderNome}
             prefix={<i className="fa fa-search fa-lg" />}
             disabled={desabilitado}
@@ -69,6 +71,7 @@ function InputNome({
 }
 
 InputNome.propTypes = {
+  id: PropTypes.string,
   dataSource: PropTypes.oneOfType([PropTypes.array]),
   pessoaSelecionada: PropTypes.oneOfType([
     PropTypes.objectOf(PropTypes.object),
@@ -82,6 +85,7 @@ InputNome.propTypes = {
 };
 
 InputNome.defaultProps = {
+  id: '',
   dataSource: [],
   pessoaSelecionada: {},
   onSelect: null,

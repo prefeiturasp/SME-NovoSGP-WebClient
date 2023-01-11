@@ -48,6 +48,9 @@ class ServicoRegistroItineranciaAEE {
     }
     return api.get(url);
   };
+
+  removerArquivo = codigoArquivo =>
+    api.delete(`${urlPadrao}/excluir-arquivo?arquivoCodigo=${codigoArquivo}`);
 }
 
 export default new ServicoRegistroItineranciaAEE();

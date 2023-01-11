@@ -4,6 +4,10 @@ import { useDispatch, useSelector } from 'react-redux';
 import shortid from 'shortid';
 import styled from 'styled-components';
 import { Loader } from '~/componentes';
+import {
+  SGP_BUTTON_CONFIRMAR_ALERTA,
+  SGP_BUTTON_FECHAR_ALERTA,
+} from '~/constantes/ids/button';
 
 import Button from '../componentes/button';
 import { Base, Colors } from '../componentes/colors';
@@ -57,7 +61,7 @@ const ModalConfirmacao = () => {
           >
             <Loader loading={loadingCliqueOk} ignorarTip className="mr-1">
               <Button
-                id={shortid.generate()}
+                id={SGP_BUTTON_CONFIRMAR_ALERTA}
                 className="botao-confirmacao"
                 key={shortid.generate()}
                 onClick={() => {
@@ -70,7 +74,7 @@ const ModalConfirmacao = () => {
               />
             </Loader>
             <Button
-              id={shortid.generate()}
+              id={SGP_BUTTON_FECHAR_ALERTA}
               key={shortid.generate()}
               onClick={() => fecharConfirmacao(false)}
               label={confirmacao.textoCancelar}

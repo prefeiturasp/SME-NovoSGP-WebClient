@@ -211,6 +211,11 @@ class ServicoSalvarConselhoClasse {
       alunoCodigo
     ).catch(e => erros(e));
     if (retorno && retorno.data) {
+      if (retorno?.data?.emAprovacao) {
+        sucesso(
+          'Parecer conclusivo alterado com sucesso. Em até 24 horas será enviado para aprovação e será considerado válido após a aprovação do último nível'
+        );
+      }
       ServicoConselhoClasse.setarParecerConclusivo(retorno.data);
     }
     dispatch(setGerandoParecerConclusivo(false));
@@ -313,7 +318,7 @@ class ServicoSalvarConselhoClasse {
 
       dispatch(setDadosPrincipaisConselhoClasse(dadosPrincipaisConselhoClasse));
 
-      const { auditoria } = retorno.data;
+      const { auditoria, emAprovacao } = retorno.data;
 
       let auditoriaDto = null;
       if (auditoria) {
@@ -330,11 +335,9 @@ class ServicoSalvarConselhoClasse {
 
       limparDadosNotaPosConselhoJustificativa();
 
-      sucesso(
-        `${ehNota ? 'Nota' : 'Conceito'} pós-conselho ${
-          ehNota ? 'salva' : 'salvo'
-        } com sucesso`
-      );
+      const mensagemSucesso = `${ehNota ? 'Nota' : 'Conceito'} pós-conselho ${
+        ehNota ? 'salva' : 'salvo'
+      } com sucesso`;
 
       const verificarSeTemTodasNotasPreenchidas = () => {
         let todasNotasPreenchidas = true;
@@ -354,15 +357,22 @@ class ServicoSalvarConselhoClasse {
         return todasNotasPreenchidas;
       };
 
-      if (
-        bimestreAtual?.valor === 'final' &&
-        verificarSeTemTodasNotasPreenchidas()
-      ) {
-        this.gerarParecerConclusivo(
-          retorno?.data?.conselhoClasseId,
-          retorno?.data?.fechamentoTurmaId,
-          alunoCodigo
+      if (emAprovacao) {
+        sucesso(
+          `${mensagemSucesso}. Em até 24 horas será enviado para aprovação e será considerado válido após a aprovação do último nível.`
         );
+      } else {
+        sucesso(mensagemSucesso);
+        if (
+          bimestreAtual?.valor === 'final' &&
+          verificarSeTemTodasNotasPreenchidas()
+        ) {
+          this.gerarParecerConclusivo(
+            retorno?.data?.conselhoClasseId,
+            retorno?.data?.fechamentoTurmaId,
+            alunoCodigo
+          );
+        }
       }
 
       const dadosCarregar = _.cloneDeep(resultado.data.notasConceitos);
