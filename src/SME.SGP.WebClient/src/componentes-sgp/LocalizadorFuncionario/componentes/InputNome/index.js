@@ -6,6 +6,7 @@ import { InputNomeEstilo } from './styles';
 
 const InputNome = props => {
   const {
+    id,
     dataSource,
     onSelect,
     onChange,
@@ -76,6 +77,7 @@ const InputNome = props => {
           allowClear
         >
           <Input
+            id={id}
             placeholder={placeholder !== '' ? placeholder : 'Digite o nome'}
             prefix={<i className="fa fa-search fa-lg" />}
             disabled={desabilitado}
@@ -88,6 +90,7 @@ const InputNome = props => {
 };
 
 InputNome.propTypes = {
+  id: PropTypes.string,
   dataSource: PropTypes.oneOfType([PropTypes.array]),
   funcionarioSelecionado: PropTypes.oneOfType([PropTypes.any]),
   onSelect: PropTypes.func,
@@ -99,6 +102,7 @@ InputNome.propTypes = {
 };
 
 InputNome.defaultProps = {
+  id: '',
   dataSource: [],
   funcionarioSelecionado: {},
   onSelect: {},

@@ -56,8 +56,13 @@ function InputRF({
     }
   };
 
+  const setInitialValues = !form?.values?.modoEdicao;
+
   const onChangeRf = e => {
     if (form && valorNuloOuVazio(e.target.value)) {
+      if (setInitialValues) {
+        form.initialValues[name] = e.target.value;
+      }
       form.setFieldValue(name, e.target.value, false);
       form.setFieldTouched(name);
     }
@@ -66,12 +71,13 @@ function InputRF({
   };
 
   useEffect(() => {
-    setValor(pessoaSelecionada && pessoaSelecionada.professorRf);
+    setValor(pessoaSelecionada?.professorRf);
     if (form) {
-      form.setFieldValue(
-        name,
-        pessoaSelecionada && pessoaSelecionada.professorRf
-      );
+      if (setInitialValues) {
+        form.initialValues[name] = pessoaSelecionada?.professorRf;
+        form.initialValues.professorNome = pessoaSelecionada?.professorNome;
+      }
+      form.setFieldValue(name, pessoaSelecionada?.professorRf);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pessoaSelecionada]);
@@ -109,7 +115,10 @@ function InputRF({
             value={valor}
             placeholder={placeholderRF}
             onKeyDown={onKeyDown}
-            onChange={onChangeRf}
+            onChange={e => {
+              form.setFieldValue('modoEdicao', true);
+              onChangeRf(e);
+            }}
             style={style}
             suffix={botao}
             onPressEnter={e => onSubmitRF(e.target.value)}
@@ -123,6 +132,7 @@ function InputRF({
       ) : (
         <InputRFEstilo>
           <Input
+            id={id}
             value={valor}
             placeholder={placeholderRF}
             onChange={onChangeRf}
@@ -141,6 +151,7 @@ function InputRF({
 InputRF.propTypes = {
   pessoaSelecionada: t.oneOfType([t.objectOf(t.object), t.any]),
   onSelect: t.func,
+  onChange: t.func,
   form: t.oneOfType([t.objectOf(t.object), t.any]),
   name: t.string,
   id: t.string,
@@ -156,6 +167,7 @@ InputRF.propTypes = {
 InputRF.defaultProps = {
   pessoaSelecionada: {},
   onSelect: () => null,
+  onChange: () => null,
   form: null,
   name: '',
   id: '',

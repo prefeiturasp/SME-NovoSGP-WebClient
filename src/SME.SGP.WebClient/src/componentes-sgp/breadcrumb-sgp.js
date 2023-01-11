@@ -75,6 +75,11 @@ const BreadcrumbSgp = () => {
   useEffect(() => {
     carregaBreadcrumbs();
     // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [itemRotaAtual]);
+
+  useEffect(() => {
+    carregaBreadcrumbs();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [NavegacaoStore.rotaAtiva]);
 
   useEffect(() => {
@@ -176,10 +181,7 @@ const BreadcrumbSgp = () => {
     <BreadcrumbBody>
       {itens.map(item => {
         return (
-          <Breadcrumb.Item
-            key={item.path}
-            separator=""
-          >
+          <Breadcrumb.Item key={item.path} separator="">
             <Link
               hidden={item.ehEstatico}
               to={item.path}
@@ -201,9 +203,7 @@ const BreadcrumbSgp = () => {
               className={item.icone}
               title={item.dicaIcone}
             />
-            <span
-              hidden={!item.ehEstatico}
-              style={{ marginLeft: 8 }}>
+            <span hidden={!item.ehEstatico} style={{ marginLeft: 8 }}>
               {item.breadcrumbName}
             </span>
             <i

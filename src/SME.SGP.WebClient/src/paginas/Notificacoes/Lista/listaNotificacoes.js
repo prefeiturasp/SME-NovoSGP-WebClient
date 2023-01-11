@@ -21,7 +21,7 @@ import { verificaSomenteConsulta } from '~/servicos/servico-navegacao';
 import { validaSeObjetoEhNuloOuVazio } from '~/utils/funcoes/gerais';
 
 import { Card, Loader } from '~/componentes';
-import { SGP_BUTTON_LIDA } from '~/componentes-sgp/filtro/idsCampos';
+import { SGP_BUTTON_LIDA } from '~/constantes/ids/button';
 import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
 import BotaoExcluirPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoExcluirPadrao';
 

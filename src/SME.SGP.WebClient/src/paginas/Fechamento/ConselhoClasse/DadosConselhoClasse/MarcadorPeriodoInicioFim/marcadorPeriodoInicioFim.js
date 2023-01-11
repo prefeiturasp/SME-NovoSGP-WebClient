@@ -55,7 +55,7 @@ const MarcadorPeriodoInicioFim = () => {
   return (
     <>
       {dataInicio && dataFim ? (
-        <div className="col-m-12 d-flex justify-content-end mb-2">
+        <div className="col-m-12 d-flex justify-content-end mb-2 mt-2">
           <Periodo>
             <span>
               Período de fechamento de {dataInicio} até {dataFim}

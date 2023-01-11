@@ -14,7 +14,7 @@ import Cabecalho from '~/componentes-sgp/cabecalho';
 import {
   SGP_BUTTON_CANCELAR,
   SGP_BUTTON_SALVAR_ALTERAR,
-} from '~/componentes-sgp/filtro/idsCampos';
+} from '~/constantes/ids/button';
 import Alert from '~/componentes/alert';
 import Button from '~/componentes/button';
 import Card from '~/componentes/card';

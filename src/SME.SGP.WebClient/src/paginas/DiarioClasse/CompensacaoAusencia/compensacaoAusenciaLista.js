@@ -22,9 +22,13 @@ import { AlunosCompensacao } from './styles';
 import AlertaModalidadeInfantil from '~/componentes-sgp/AlertaModalidadeInfantil/alertaModalidadeInfantil';
 import { ehTurmaInfantil } from '~/servicos/Validacoes/validacoesInfatil';
 import CompensacaoAusenciaListaCamposDebounce from './compensacaoAusenciaListaCamposDebounce';
-import { SGP_BUTTON_NOVO } from '~/componentes-sgp/filtro/idsCampos';
+import { SGP_BUTTON_NOVO } from '~/constantes/ids/button';
 import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
 import BotaoExcluirPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoExcluirPadrao';
+import {
+  SGP_SELECT_BIMESTRE,
+  SGP_SELECT_COMPONENTE_CURRICULAR,
+} from '~/constantes/ids/select';
 
 const CompensacaoAusenciaLista = () => {
   const usuario = useSelector(store => store.usuario);
@@ -360,7 +364,7 @@ const CompensacaoAusenciaLista = () => {
             <div className="col-sm-12 col-md-3 col-lg-3 col-xl-3 mb-2">
               <Loader loading={carregandoDisciplinas} tip="">
                 <SelectComponent
-                  id="disciplina"
+                  id={SGP_SELECT_COMPONENTE_CURRICULAR}
                   name="disciplinaId"
                   lista={listaDisciplinas}
                   valueOption="codigoSelecao"
@@ -374,7 +378,7 @@ const CompensacaoAusenciaLista = () => {
             </div>
             <div className="col-sm-12 col-md-3 col-lg-3 col-xl-3 mb-2">
               <SelectComponent
-                id="bimestre"
+                id={SGP_SELECT_BIMESTRE}
                 name="bimestre"
                 onChange={onChangeBimestre}
                 valueOption="valor"

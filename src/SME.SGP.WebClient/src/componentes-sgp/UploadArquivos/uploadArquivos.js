@@ -33,6 +33,10 @@ export const ContainerUpload = styled.div`
   .ant-upload-list-item-card-actions {
     opacity: 1 !important;
   }
+
+  .ant-upload-list-item-uploading .ant-upload-list-item-card-actions {
+    display: none !important;
+  }
 `;
 
 export const MensagemCampoObrigatorio = styled.span`
@@ -133,7 +137,8 @@ const UploadArquivos = props => {
 
     ServicoArmazenamento.fazerUploadArquivo(fmData, config, urlUpload)
       .then(resposta => {
-        onSuccess(file, resposta.data);
+        const codigo = resposta?.data?.codigo || resposta.data;
+        onSuccess(file, codigo);
       })
       .catch(e => {
         onError({ event: e });
@@ -161,12 +166,12 @@ const UploadArquivos = props => {
       return;
     }
 
-    if (!permiteInserirFormato(file)) {
+    if (!permiteInserirFormato(file, tiposArquivosPermitidos)) {
       atualizaListaArquivos(fileList, file);
       return;
     }
 
-    const novoMap = [...fileList];
+    const novoMap = [...fileList]?.filter(f => f?.status !== 'removed');
 
     if (status === 'done') {
       sucesso(`${file.name} arquivo carregado com sucesso`);

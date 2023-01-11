@@ -2,6 +2,7 @@ import PropTypes from 'prop-types';
 import React, { useState } from 'react';
 import { Base } from '~/componentes';
 import CardCollapse from '~/componentes/cardCollapse';
+import { SGP_COLLAPSE_TOTAL_CRIANCAS_RELATORIO_ACOMPANHAMENTO_APRENDIZADO } from '~/constantes/ids/collapse';
 import GraficoTotalCriancasComRelAcompanhamentoAprendizagem from './graficoTotalCriancas';
 
 const TotalCriancasComRelAcompanhamentoAprendizagem = props => {
@@ -19,6 +20,7 @@ const TotalCriancasComRelAcompanhamentoAprendizagem = props => {
   return (
     <div className="mt-3">
       <CardCollapse
+        id={SGP_COLLAPSE_TOTAL_CRIANCAS_RELATORIO_ACOMPANHAMENTO_APRENDIZADO}
         titulo="Total de crianças com relatório do acompanhamento da aprendizagem registrado"
         key={`${key}-collapse-key`}
         indice={`${key}-collapse-indice`}
