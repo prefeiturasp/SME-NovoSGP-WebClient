@@ -33,6 +33,10 @@ export const ContainerUpload = styled.div`
   .ant-upload-list-item-card-actions {
     opacity: 1 !important;
   }
+
+  .ant-upload-list-item-uploading .ant-upload-list-item-card-actions {
+    display: none !important;
+  }
 `;
 
 export const MensagemCampoObrigatorio = styled.span`
@@ -167,7 +171,7 @@ const UploadArquivos = props => {
       return;
     }
 
-    const novoMap = [...fileList];
+    const novoMap = [...fileList]?.filter(f => f?.status !== 'removed');
 
     if (status === 'done') {
       sucesso(`${file.name} arquivo carregado com sucesso`);

@@ -124,36 +124,21 @@ export const TabelaColunasFixas = styled.div`
     width: 110px;
     max-width: 110px;
     min-width: 110px;
-    vertical-align: top;
-
-    .ant-input-number {
-      width: 85px !important;
-      margin-top: 4px;
-    }
+    vertical-align: middle;
   }
 
   .width-135 {
     width: 135px;
     max-width: 135px;
     min-width: 135px;
-    vertical-align: top;
-
-    .ant-input-number {
-      width: 85px !important;
-      margin-top: 4px;
-    }
+    vertical-align: middle;
   }
 
   .width-150 {
     width: 150px;
     max-width: 150px;
     min-width: 150px;
-    vertical-align: top;
-
-    .ant-input-number {
-      width: 85px !important;
-      margin-top: 4px;
-    }
+    vertical-align: middle;
   }
 
   .cabecalho-nota-conceito-final {

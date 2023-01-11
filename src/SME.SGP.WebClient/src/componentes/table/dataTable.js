@@ -1,6 +1,7 @@
 import { Table } from 'antd';
 import PropTypes from 'prop-types';
 import React from 'react';
+import shortid from 'shortid';
 import { Container } from './dataTable.css';
 
 const DataTable = props => {
@@ -26,6 +27,7 @@ const DataTable = props => {
     expandIcon,
     tableResponsive,
     fixExpandedRowResetColSpan,
+    gerarIdUnico,
     ...rest
   } = props;
 
@@ -55,6 +57,13 @@ const DataTable = props => {
     }
   };
 
+  const gerarColunaId = array => {
+    return array.map(item => {
+      item.id = shortid.generate();
+      return item;
+    });
+  };
+
   return (
     <Container
       className={tableResponsive ? 'table-responsive' : ''}
@@ -76,7 +85,7 @@ const DataTable = props => {
             : rowSelection
         }
         columns={columns}
-        dataSource={dataSource}
+        dataSource={gerarIdUnico ? gerarColunaId(dataSource) : dataSource}
         onRow={row => ({
           onClick: colunaClicada => {
             if (
@@ -149,6 +158,7 @@ DataTable.propTypes = {
   tableResponsive: PropTypes.bool,
   fixExpandedRowResetColSpan: PropTypes.bool,
   loading: PropTypes.bool,
+  gerarIdUnico: PropTypes.bool,
 };
 
 DataTable.defaultProps = {
@@ -173,6 +183,7 @@ DataTable.defaultProps = {
   tableResponsive: true,
   fixExpandedRowResetColSpan: false,
   loading: false,
+  gerarIdUnico: false,
 };
 
 export default DataTable;

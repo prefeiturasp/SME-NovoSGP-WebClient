@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { Base } from '~/componentes';
 import InputSelectReadOnly from '~/componentes-sgp/camposSomenteLeitura/InputSelectReadOnly';
+import LabelAusenteCellTable from '~/componentes-sgp/inputs/nota/labelAusenteCellTable';
 import SelectComponent from '~/componentes/select';
 
 const ContainerConceitoFinal = styled.div`
@@ -76,42 +77,47 @@ const ListaoCampoConceito = props => {
   }
 
   const montarCampo = () => (
-    <div
-      style={{ ...styleContainer }}
-      onFocus={() => validarExibir(true)}
-      onMouseEnter={() => validarExibir(true)}
-      onMouseLeave={() => validarExibir(false)}
-    >
-      {!desabilitar && exibir ? (
-        <div>
-          <SelectComponent
+    <>
+      <div
+        style={{ ...styleContainer }}
+        onFocus={() => validarExibir(true)}
+        onMouseEnter={() => validarExibir(true)}
+        onMouseLeave={() => validarExibir(false)}
+      >
+        {!desabilitar && exibir ? (
+          <div>
+            <SelectComponent
+              key={idCampo}
+              id={idCampo}
+              name={idCampo}
+              onChange={valorNovo => {
+                setarValorNovo(valorNovo);
+              }}
+              valueOption="id"
+              valueText="valor"
+              lista={listaTiposConceitos || []}
+              valueSelect={
+                conceitoValorAtual ? String(conceitoValorAtual) : undefined
+              }
+              showSearch
+              placeholder="Conceito"
+              disabled={desabilitar}
+              // searchValue={false}
+            />
+          </div>
+        ) : (
+          <InputSelectReadOnly
+            name={idCampo}
             key={idCampo}
             id={idCampo}
-            onChange={valorNovo => {
-              setarValorNovo(valorNovo);
-            }}
-            valueOption="id"
-            valueText="valor"
-            lista={listaTiposConceitos || []}
-            valueSelect={
-              conceitoValorAtual ? String(conceitoValorAtual) : undefined
-            }
-            showSearch
-            placeholder="Conceito"
+            value={obterDescConceito(conceitoValorAtual)}
             disabled={desabilitar}
-            searchValue={false}
+            placeholder="Conceito"
           />
-        </div>
-      ) : (
-        <InputSelectReadOnly
-          key={idCampo}
-          id={idCampo}
-          value={obterDescConceito(conceitoValorAtual)}
-          disabled={desabilitar}
-          placeholder="Conceito"
-        />
-      )}
-    </div>
+        )}
+      </div>
+      {dadosConceito?.ausente ? <LabelAusenteCellTable /> : <></>}
+    </>
   );
 
   return ehFechamento ? (

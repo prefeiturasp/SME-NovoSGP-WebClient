@@ -76,11 +76,12 @@ const RadioGroupButton = ({
             id={id || name}
             options={opcoes}
             onChange={e => {
+              const newValue = e?.target?.value;
               if (setValueOnlyOnChange) {
-                if (onChange) onChange(e.target.value);
+                if (onChange) onChange(newValue);
               } else {
-                form.setFieldValue(name, e.target.value);
-                onChange(e.target.value);
+                form.setFieldValue(name, newValue);
+                onChange(newValue);
                 form.setFieldTouched(name, true, true);
               }
             }}

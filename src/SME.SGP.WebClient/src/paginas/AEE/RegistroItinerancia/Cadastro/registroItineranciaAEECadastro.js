@@ -97,7 +97,7 @@ const RegistroItineranciaAEECadastro = ({ match }) => {
 
   const permissaoStatus = itineranciaId && !itineranciaAlteracao?.podeEditar;
 
-  const mapearSalvarQuestoesUpload = () => {
+  const mapearSalvarQuestoesUpload = mapearSomenteUpload => {
     const novoMapQuestoes = _.cloneDeep(questoesItinerancia);
 
     const questaoUpload = novoMapQuestoes.find(
@@ -124,10 +124,13 @@ const RegistroItineranciaAEECadastro = ({ match }) => {
         }
       });
     }
+    let questoesSalvar = [];
 
-    const questoesSalvar = novoMapQuestoes.filter(
-      questao => questao?.tipoQuestao !== tipoQuestaoDto.Upload
-    );
+    if (!mapearSomenteUpload) {
+      questoesSalvar = novoMapQuestoes.filter(
+        questao => questao?.tipoQuestao !== tipoQuestaoDto.Upload
+      );
+    }
 
     if (questaoUpload?.resposta?.length) {
       questaoUpload.resposta.forEach(resposta => {
@@ -158,7 +161,9 @@ const RegistroItineranciaAEECadastro = ({ match }) => {
   };
 
   const onClickSalvar = () => {
-    const questoes = mapearSalvarQuestoesUpload();
+    const mapearSomenteUpload = !!alunosSelecionados?.length;
+
+    const questoes = mapearSalvarQuestoesUpload(mapearSomenteUpload);
 
     const itinerancia = {
       id: itineranciaId,
@@ -168,7 +173,7 @@ const RegistroItineranciaAEECadastro = ({ match }) => {
       ueId,
       dreId,
       alunos: alunosSelecionados,
-      questoes: alunosSelecionados?.length ? [] : questoes,
+      questoes,
       anoLetivo: new Date().getFullYear(),
       eventoId,
     };
