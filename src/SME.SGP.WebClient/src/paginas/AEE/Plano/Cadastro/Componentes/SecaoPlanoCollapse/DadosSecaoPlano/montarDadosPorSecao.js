@@ -27,7 +27,7 @@ const MontarDadosPorSecao = props => {
       (planoId &&
         (planoAEEDados?.situacao === situacaoPlanoAEE.Encerrado ||
           planoAEEDados?.situacao ===
-            situacaoPlanoAEE.EncerradoAutomaticamento))
+            situacaoPlanoAEE.EncerradoAutomaticamente))
     );
   };
 
