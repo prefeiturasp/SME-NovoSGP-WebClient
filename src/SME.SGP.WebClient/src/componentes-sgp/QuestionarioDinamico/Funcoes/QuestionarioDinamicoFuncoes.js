@@ -602,6 +602,7 @@ class QuestionarioDinamicoFuncoes {
               case tipoQuestao.AtividadesContraturno:
               case tipoQuestao.Endereco:
               case tipoQuestao.ContatoResponsaveis:
+              case tipoQuestao.InformacoesSrm:
                 questao.resposta = JSON.stringify(campos[key] || '');
                 break;
               case tipoQuestao.Upload:
@@ -618,6 +619,8 @@ class QuestionarioDinamicoFuncoes {
                 } else {
                   questao.resposta = '';
                 }
+                break;
+              case tipoQuestao.TurmasPrograma:
                 break;
               default:
                 questao.resposta = JSON.parse(
@@ -696,6 +699,8 @@ class QuestionarioDinamicoFuncoes {
                   }
                 }
               });
+            } else if (questao.tipoQuestao === tipoQuestao.TurmasPrograma) {
+              questao = null;
             } else {
               if (questaoAtual?.resposta[0]?.id) {
                 questao.respostaEncaminhamentoId = questaoAtual.resposta[0].id;
@@ -761,6 +766,8 @@ class QuestionarioDinamicoFuncoes {
       case tipoQuestao.Endereco:
       case tipoQuestao.ContatoResponsaveis:
       case tipoQuestao.AtividadesContraturno:
+      case tipoQuestao.TurmasPrograma:
+      case tipoQuestao.InformacoesSrm:
         return 'TABLE';
       case tipoQuestao.Periodo:
       case tipoQuestao.Data:
@@ -778,7 +785,7 @@ class QuestionarioDinamicoFuncoes {
 
     return temPrefixIdENomeComponente
       ? `${prefixId}_${tipoQuestaoNome}_${dadosQuestao?.nomeComponente}`
-      : dadosQuestao?.id;
+      : dadosQuestao?.id.toString();
   };
 
   removerLinhaTabela = async (

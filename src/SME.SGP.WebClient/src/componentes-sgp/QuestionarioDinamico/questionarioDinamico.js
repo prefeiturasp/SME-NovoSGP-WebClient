@@ -26,6 +26,7 @@ import EnderecoResidencialTabela from './Componentes/EnderecoResidencial/enderec
 import ContatoResponsaveisTabela from './Componentes/ContatoResponsaveis/contatoResponsaveisTabela';
 import AtividadeContraturnoTabela from './Componentes/AtividadeContraturno/atividadeContraturnoTabela';
 import CampoDinamicoEditor from './Componentes/campoDinamicoEditor';
+import TurmasProgramaTabela from './Componentes/TurmasPrograma/turmasProgramaTabela';
 
 const QuestionarioDinamico = props => {
   const dispatch = useDispatch();
@@ -110,6 +111,7 @@ const QuestionarioDinamico = props => {
           case tipoQuestao.AtividadesContraturno:
           case tipoQuestao.Endereco:
           case tipoQuestao.ContatoResponsaveis:
+          case tipoQuestao.TurmasPrograma:
             valorRespostaAtual = resposta[0].texto
               ? JSON.parse(resposta[0].texto)
               : '';
@@ -504,7 +506,7 @@ const QuestionarioDinamico = props => {
             }}
             turmaId={turmaId}
             questionarioId={dados?.questionarioId}
-            versaoPlano ={versaoPlano}
+            versaoPlano={versaoPlano}
           />
         );
         break;
@@ -575,6 +577,19 @@ const QuestionarioDinamico = props => {
         campoAtual = (
           <CampoDinamicoEditor
             {...params}
+            desabilitado={desabilitarCampos}
+            onChange={() => {
+              dispatch(setQuestionarioDinamicoEmEdicao(true));
+              onChangeQuestionario();
+            }}
+          />
+        );
+        break;
+      case tipoQuestao.TurmasPrograma:
+        campoAtual = (
+          <TurmasProgramaTabela
+            {...params}
+            label={label?.props?.text}
             desabilitado={desabilitarCampos}
             onChange={() => {
               dispatch(setQuestionarioDinamicoEmEdicao(true));
