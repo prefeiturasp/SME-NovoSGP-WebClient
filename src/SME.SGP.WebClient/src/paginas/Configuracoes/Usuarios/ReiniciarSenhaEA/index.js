@@ -153,7 +153,7 @@ export default function ReiniciarSenhaEA() {
   useEffect(() => {
     const carregarDres = async () => {
       const dres = await api.get(
-        `v1/abrangencias/${false}/dres?anoLetivo=${anoLetivo}`
+        `v1/abrangencias/false/dres?anoLetivo=${anoLetivo}`
       );
       if (dres.data) {
         setListaDres(dres.data.sort(FiltroHelper.ordenarLista('nome')));
@@ -213,7 +213,7 @@ export default function ReiniciarSenhaEA() {
 
   const carregarUes = useCallback(async dre => {
     const ues = await api.get(
-      `/v1/abrangencias/${false}/dres/${dre}/ues?consideraNovasUEs=${true}`
+      `/v1/abrangencias/false/dres/${dre}/ues?consideraNovasUEs=${true}`
     );
     if (ues.data) {
       setListaUes(ues.data);
