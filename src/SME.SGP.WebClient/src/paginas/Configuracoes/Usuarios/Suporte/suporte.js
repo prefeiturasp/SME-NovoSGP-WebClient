@@ -108,7 +108,7 @@ const Suporte = ({ match }) => {
       setCarregandoUes(true);
       const resposta = await AbrangenciaServico.buscarUes(
         dreId,
-        `/v1/abrangencias/${true}/dres/${dreId}/ues?consideraNovasUEs=${true}`,
+        `/v1/abrangencias/${false}/dres/${dreId}/ues?consideraNovasUEs=${true}`,
         true
       )
         .catch(e => erros(e))
