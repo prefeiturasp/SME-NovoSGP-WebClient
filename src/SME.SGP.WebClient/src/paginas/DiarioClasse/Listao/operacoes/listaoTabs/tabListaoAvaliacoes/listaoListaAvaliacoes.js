@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import shortid from 'shortid';
 import styled from 'styled-components';
 import { DataTable, LabelSemDados } from '~/componentes';
+import { Ordenacao } from '~/componentes-sgp';
 import Nota from '~/componentes-sgp/inputs/nota';
 import { moverFocoCampoNota } from '~/componentes-sgp/inputs/nota/funcoes';
 import SinalizacaoAEE from '~/componentes-sgp/SinalizacaoAEE/sinalizacaoAEE';
@@ -233,6 +234,19 @@ const ListaoListaAvaliacoes = () => {
   return dadosAvaliacao?.bimestres?.[0]?.alunos?.length &&
     dadosAvaliacao?.bimestres?.[0]?.avaliacoes?.length ? (
     <>
+      <div className="col-sm-12 p-0 mb-3 mt-3 d-flex justify-content-start">
+        <Ordenacao
+          conteudoParaOrdenar={dadosAvaliacao?.bimestres?.[0]?.alunos}
+          ordenarColunaNumero="numeroChamada"
+          retornoOrdenado={retorno => {
+            if (dadosAvaliacao?.bimestres?.[0]?.alunos?.length) {
+              const dados = dadosAvaliacao;
+              dados.bimestres[0].alunos = [...retorno];
+              setDadosAvaliacao({ ...dados });
+            }
+          }}
+        />
+      </div>
       <ContainerTableAvaliacao className="col-md-12 p-0">
         <DataTable
           scroll={{ x: 1000, y: 500 }}
