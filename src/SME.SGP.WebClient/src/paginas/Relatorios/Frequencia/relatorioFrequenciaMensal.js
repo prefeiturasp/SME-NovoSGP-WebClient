@@ -9,14 +9,14 @@ import {
 } from '~/componentes';
 import { Cabecalho, FiltroHelper } from '~/componentes-sgp';
 import {
-  SGP_CHECKBOX_EXIBIR_HISTORICO,
   SGP_SELECT_ANO_LETIVO,
   SGP_SELECT_DRE,
   SGP_SELECT_MODALIDADE,
   SGP_SELECT_SEMESTRE,
   SGP_SELECT_TURMA,
   SGP_SELECT_UE,
-} from '~/componentes-sgp/filtro/idsCampos';
+} from '~/constantes/ids/select';
+import { SGP_CHECKBOX_EXIBIR_HISTORICO } from '~/constantes/ids/checkbox';
 import { OPCAO_TODOS, URL_HOME } from '~/constantes';
 import { ModalidadeDTO } from '~/dtos';
 import {

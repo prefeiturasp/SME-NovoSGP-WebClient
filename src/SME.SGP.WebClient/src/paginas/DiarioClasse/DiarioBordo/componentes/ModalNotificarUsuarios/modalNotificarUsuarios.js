@@ -3,6 +3,10 @@ import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { Colors, Localizador, ModalConteudoHtml } from '~/componentes';
 import LocalizadorFuncionario from '~/componentes-sgp/LocalizadorFuncionario';
+import {
+  SGP_BUTTON_CONFIRMAR_MODAL,
+  SGP_BUTTON_EXCLUIR_USUARIO_MODAL,
+} from '~/constantes/ids/button';
 import { setListaUsuariosNotificacao } from '~/redux/modulos/observacoesUsuario/actions';
 import { confirmar, erro } from '~/servicos';
 import { BotaoEstilizado, TextoEstilizado } from './modalNotificarUsuarios.css';
@@ -113,6 +117,7 @@ const ModalNotificarUsuarios = ({
       esconderBotaoSecundario
       onClose={fecharModal}
       onConfirmacaoPrincipal={onConfirmarModal}
+      idBotaoPrincipal={SGP_BUTTON_CONFIRMAR_MODAL}
       labelBotaoPrincipal="Confirmar"
       closable
       width="50%"
@@ -161,7 +166,7 @@ const ModalNotificarUsuarios = ({
           <span>{nome}</span>
           {podeRemover ? (
             <BotaoEstilizado
-              id="btn-excluir"
+              id={SGP_BUTTON_EXCLUIR_USUARIO_MODAL}
               icon="trash-alt"
               iconType="far"
               color={Colors.CinzaBotao}

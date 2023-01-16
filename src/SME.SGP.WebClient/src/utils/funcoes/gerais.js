@@ -1,4 +1,5 @@
 import $ from 'jquery';
+import moment from 'moment';
 import { OPCAO_TODOS } from '~/constantes/constantes';
 import notificacaoStatus from '~/dtos/notificacaoStatus';
 
@@ -86,6 +87,22 @@ const maskTelefone = v => {
   v = removerTudoQueNaoEhDigito(v);
   v = v.replace(/^(\d{2})(\d)/g, '($1) $2'); // Coloca parênteses em volta dos dois primeiros dígitos
   v = v.replace(/(\d)(\d{4})$/, '$1-$2'); // Coloca hífen entre o quarto e o quinto dígitos
+  return v;
+};
+
+const maskNota = v => {
+  v = String(v);
+  v = v
+    .replace(/^,/, '')
+    .replace(/[^\d.^\d,]/g, '')
+    .replace(/\.+/g, ',')
+    .replace(/,+/g, ',');
+  return v;
+};
+
+const maskSomenteTexto = v => {
+  v = String(v);
+  v = v.replace(/[0-9!@#¨$%^&*)(+=._-]+/g, '');
   return v;
 };
 
@@ -276,6 +293,54 @@ const ordenarNotificoesNavBar = listaNotificacoes => {
   return listaOrdenada;
 };
 
+const arredondarNota = (nota, dadosArredondamento) => {
+  const min = dadosArredondamento?.minima || 0;
+  const max = dadosArredondamento?.maxima || 10;
+  const incremento = dadosArredondamento?.incremento || 0.5;
+  let notaFormatada = Number(nota);
+
+  if (nota.includes(',') && nota.length === 3) {
+    notaFormatada = Number(nota.replace(',', '.'));
+  }
+
+  if (nota.includes(',') || nota.includes('.')) {
+    if (nota.length === 2 || nota.length === 1) {
+      notaFormatada = nota.replace(',', '');
+    }
+  }
+
+  if (
+    dadosArredondamento &&
+    typeof notaFormatada === 'number' &&
+    !Number.isNaN(notaFormatada)
+  ) {
+    if (notaFormatada >= max) return max;
+    if (notaFormatada <= min) return min;
+
+    const parteDecimal = notaFormatada - Math.trunc(notaFormatada);
+    const parteInteira = Math.trunc(notaFormatada);
+
+    if (!!incremento && !!parteDecimal && parteDecimal !== incremento) {
+      let novaNota = parteInteira + incremento;
+
+      if (parteDecimal > incremento) {
+        novaNota = parteInteira + 1;
+
+        return novaNota;
+      }
+
+      return novaNota;
+    }
+  }
+
+  return notaFormatada;
+};
+
+const verificarDataFimMaiorInicio = (dataInicio, dataFim) => {
+  if (!dataInicio || !dataFim) return true;
+  return moment(dataInicio, 'MM-DD-YYYY') <= moment(dataFim, 'MM-DD-YYYY');
+};
+
 export {
   validaSeObjetoEhNuloOuVazio,
   valorNuloOuVazio,
@@ -287,6 +352,8 @@ export {
   removerNumeros,
   downloadBlob,
   maskTelefone,
+  maskNota,
+  maskSomenteTexto,
   ordenarListaMaiorParaMenor,
   removerArrayAninhados,
   clonarObjeto,
@@ -298,4 +365,6 @@ export {
   primeiroMaisculo,
   editorTemValor,
   ordenarNotificoesNavBar,
+  arredondarNota,
+  verificarDataFimMaiorInicio,
 };

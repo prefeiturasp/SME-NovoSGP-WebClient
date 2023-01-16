@@ -10,7 +10,7 @@ import {
   SGP_BUTTON_ALTERAR,
   SGP_BUTTON_CADASTRAR,
   SGP_BUTTON_CANCELAR,
-} from '~/componentes-sgp/filtro/idsCampos';
+} from '~/constantes/ids/button';
 import { OPCAO_TODOS } from '~/constantes';
 import { RotasDto } from '~/dtos';
 import {

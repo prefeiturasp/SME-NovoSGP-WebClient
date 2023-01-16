@@ -16,6 +16,17 @@ import FiltroHelper from '~componentes-sgp/filtro/helper';
 import AlertaModalidadeInfantil from '~/componentes-sgp/AlertaModalidadeInfantil/alertaModalidadeInfantil';
 import { OPCAO_TODOS } from '~/constantes/constantes';
 import BotoesAcaoRelatorio from '~/componentes-sgp/botoesAcaoRelatorio';
+import { SGP_CHECKBOX_EXIBIR_HISTORICO } from '~/constantes/ids/checkbox';
+import {
+  SGP_SELECT_ANO_LETIVO,
+  SGP_SELECT_DRE,
+  SGP_SELECT_FORMATO,
+  SGP_SELECT_MODALIDADE,
+  SGP_SELECT_SEMESTRE,
+  SGP_SELECT_TURMA,
+  SGP_SELECT_UE,
+  SGP_SELECT_VISUALIZACAO,
+} from '~/constantes/ids/select';
 import { ModalidadeDTO } from '~/dtos';
 
 const AtaFinalResultados = () => {
@@ -542,6 +553,7 @@ const AtaFinalResultados = () => {
           <Row gutter={[16, 8]}>
             <Col sm={24}>
               <CheckboxComponent
+                id={SGP_CHECKBOX_EXIBIR_HISTORICO}
                 label="Exibir histórico?"
                 onChangeCheckbox={onCheckedConsideraHistorico}
                 checked={consideraHistorico}
@@ -553,6 +565,7 @@ const AtaFinalResultados = () => {
             <Col sm={24} md={12} xl={4}>
               <Loader loading={carregandoAnosLetivos} ignorarTip>
                 <SelectComponent
+                  id={SGP_SELECT_ANO_LETIVO}
                   label="Ano Letivo"
                   lista={listaAnosLetivo}
                   valueOption="valor"
@@ -571,6 +584,7 @@ const AtaFinalResultados = () => {
             <Col sm={24} md={12} xl={10}>
               <Loader loading={carregandoDres} ignorarTip>
                 <SelectComponent
+                  id={SGP_SELECT_DRE}
                   label="Diretoria Regional de Educação (DRE)"
                   lista={listaDres}
                   valueOption="valor"
@@ -591,6 +605,7 @@ const AtaFinalResultados = () => {
             <Col sm={24} md={12} xl={10}>
               <Loader loading={carregandoUes} ignorarTip>
                 <SelectComponent
+                  id={SGP_SELECT_UE}
                   label="Unidade Escolar (UE)"
                   lista={listaUes}
                   valueOption="valor"
@@ -612,6 +627,7 @@ const AtaFinalResultados = () => {
           <Row gutter={[16, 16]}>
             <Col sm={24} md={12} xl={8}>
               <SelectComponent
+                id={SGP_SELECT_MODALIDADE}
                 label="Modalidade"
                 lista={listaModalidades}
                 valueOption="valor"
@@ -629,6 +645,7 @@ const AtaFinalResultados = () => {
 
             <Col sm={24} md={12} xl={6}>
               <SelectComponent
+                id={SGP_SELECT_SEMESTRE}
                 lista={listaSemestre}
                 valueOption="valor"
                 valueText="desc"
@@ -647,6 +664,7 @@ const AtaFinalResultados = () => {
 
             <Col sm={24} md={12} xl={10}>
               <SelectComponent
+                id={SGP_SELECT_TURMA}
                 lista={listaTurmas}
                 valueOption="valor"
                 valueText="nomeFiltro"
@@ -669,6 +687,7 @@ const AtaFinalResultados = () => {
           <Row gutter={[16, 16]}>
             <Col sm={24} md={12} xl={6}>
               <SelectComponent
+                id={SGP_SELECT_VISUALIZACAO}
                 label="Visualização"
                 lista={listaVisualizacao}
                 valueOption="valor"
@@ -682,6 +701,7 @@ const AtaFinalResultados = () => {
 
             <Col sm={24} md={12} xl={4}>
               <SelectComponent
+                id={SGP_SELECT_FORMATO}
                 label="Formato"
                 lista={listaFormatos}
                 valueOption="valor"

@@ -41,7 +41,7 @@ const FrequenciaGlobal = styled.div`
 `;
 
 const ContainerAvatar = styled.div`
-  cursor: pointer;
+  cursor: ${props => props.cursor};
 
   span {
     width: 80px;

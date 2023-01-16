@@ -30,9 +30,19 @@ import { Cabecalho } from '~/componentes-sgp';
 import {
   SGP_BUTTON_ALTERAR_CADASTRAR,
   SGP_BUTTON_CANCELAR,
-} from '~/componentes-sgp/filtro/idsCampos';
+  SGP_BUTTON_COPIAR_AVALIACAO,
+  SGP_BUTTON_EXCLUIR,
+  SGP_BUTTON_REGENCIA,
+} from '~/constantes/ids/button';
 import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
 import BotaoExcluirPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoExcluirPadrao';
+import { SGP_RADIO_CATEGORIA } from '~/constantes/ids/radio';
+import {
+  SGP_SELECT_COMPONENTE_CURRICULAR,
+  SGP_SELECT_NOME_AVALIACAO,
+  SGP_SELECT_TIPO_AVALIACAO,
+} from '~/constantes/ids/select';
+import { SGP_JODIT_EDITOR_CADASTRO_AVALIACAO_DESCRICAO } from '~/constantes/ids/jodit-editor';
 
 const AvaliacaoForm = ({ match, location }) => {
   const [
@@ -652,6 +662,7 @@ const AvaliacaoForm = ({ match, location }) => {
                     </Col>
                     <Col>
                       <BotaoExcluirPadrao
+                        id={SGP_BUTTON_EXCLUIR}
                         disabled={
                           desabilitarCampos ||
                           !idAvaliacao ||
@@ -688,7 +699,7 @@ const AvaliacaoForm = ({ match, location }) => {
                     <Div className="row">
                       <Grid cols={12} className="mb-4">
                         <RadioGroupButton
-                          id="categoriaId"
+                          id={SGP_RADIO_CATEGORIA}
                           name="categoriaId"
                           label="Categoria"
                           opcoes={listaCategorias}
@@ -710,7 +721,7 @@ const AvaliacaoForm = ({ match, location }) => {
                         form.values.categoriaId ===
                           categorias.INTERDISCIPLINAR ? (
                           <SelectComponent
-                            id="disciplinasId"
+                            id={SGP_SELECT_COMPONENTE_CURRICULAR}
                             name="disciplinasId"
                             label="Componente curricular"
                             lista={listaDisciplinas}
@@ -730,7 +741,7 @@ const AvaliacaoForm = ({ match, location }) => {
                           />
                         ) : (
                           <SelectComponent
-                            id="disciplinasId"
+                            id={SGP_SELECT_COMPONENTE_CURRICULAR}
                             name="disciplinasId"
                             label="Componente curricular"
                             lista={listaDisciplinas}
@@ -754,7 +765,7 @@ const AvaliacaoForm = ({ match, location }) => {
                       </Grid>
                       <Grid cols={4} className="mb-4">
                         <SelectComponent
-                          id="tipoAvaliacaoId"
+                          id={SGP_SELECT_TIPO_AVALIACAO}
                           name="tipoAvaliacaoId"
                           label="Tipo de atividade avaliativa"
                           lista={listaTiposAvaliacao}
@@ -769,9 +780,9 @@ const AvaliacaoForm = ({ match, location }) => {
                       </Grid>
                       <Grid cols={4} className="mb-4">
                         <CampoTexto
+                          id={SGP_SELECT_NOME_AVALIACAO}
                           label="Nome da atividade avaliativa"
                           name="nome"
-                          id="nome"
                           maxlength={50}
                           placeholder="Nome"
                           type="input"
@@ -796,6 +807,7 @@ const AvaliacaoForm = ({ match, location }) => {
                               (disciplina, indice) => {
                                 return (
                                   <Badge
+                                    id={`${SGP_BUTTON_REGENCIA}_${disciplina.nome.toUpperCase()}`}
                                     key={disciplina.codigoComponenteCurricular}
                                     role="button"
                                     onClick={e => {
@@ -819,11 +831,11 @@ const AvaliacaoForm = ({ match, location }) => {
                     <Div className="row">
                       <Grid cols={12}>
                         <JoditEditor
+                          id={SGP_JODIT_EDITOR_CADASTRO_AVALIACAO_DESCRICAO}
                           label="Descrição"
                           form={form}
                           value={form.values.descricao}
                           name="descricao"
-                          id="descricao"
                           onChange={aoTrocarTextEditor}
                           desabilitar={desabilitarCampos || !dentroPeriodo}
                           permiteInserirArquivo={false}
@@ -840,6 +852,7 @@ const AvaliacaoForm = ({ match, location }) => {
                         cols={12}
                       >
                         <Button
+                          id={SGP_BUTTON_COPIAR_AVALIACAO}
                           label="Copiar avaliação"
                           icon="clipboard"
                           color={Colors.Azul}

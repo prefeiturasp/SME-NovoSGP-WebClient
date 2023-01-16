@@ -16,6 +16,7 @@ function TurmasDropDown({
   valor,
   dados,
   allowClear,
+  id,
 }) {
   const [listaTurmas, setListaTurmas] = useState([]);
 
@@ -65,6 +66,7 @@ function TurmasDropDown({
 
   return (
     <SelectComponent
+      id={id}
       form={form}
       name="turmaId"
       className="fonte-14"
@@ -91,6 +93,7 @@ TurmasDropDown.propTypes = {
   valor: t.string,
   dados: t.oneOfType([t.object, t.array]),
   allowClear: t.bool,
+  id: t.string,
 };
 
 TurmasDropDown.defaultProps = {
@@ -102,6 +105,7 @@ TurmasDropDown.defaultProps = {
   valor: '',
   dados: null,
   allowClear: true,
+  id: '',
 };
 
 export default TurmasDropDown;

@@ -26,6 +26,11 @@ const ListaPaginada = props => {
     showSizeChanger,
     naoFiltrarQuandoCarregando,
     mapearNovoDto,
+    id,
+    disabledCheckboxRow,
+    expandIcon,
+    expandedRowKeys,
+    expandedRowRender,
   } = props;
 
   const [carregando, setCarregando] = useState(false);
@@ -67,9 +72,14 @@ const ListaPaginada = props => {
   const selecaoLinha = {
     selectedRowKeys: linhasSelecionadas,
     onChange: ids => selecionar(ids),
+    getCheckboxProps: record => ({
+      disabled: disabledCheckboxRow ? disabledCheckboxRow(record) : false,
+    }),
   };
 
   const selecionarLinha = linha => {
+    if (disabledCheckboxRow && disabledCheckboxRow(linha)) return;
+
     let selecionadas = [...linhasSelecionadas];
     if (selecionadas.indexOf(linha[colunaChave]) >= 0) {
       selecionadas.splice(selecionadas.indexOf(linha[colunaChave]), 1);
@@ -121,10 +131,10 @@ const ListaPaginada = props => {
           }
           setLinhas([...items]);
           if (setLista) {
-            setLista(items);
+            setLista(items, linhas);
           }
         } else {
-          setLista([]);
+          setLista([], linhas);
         }
       })
       .catch(e => {
@@ -162,6 +172,7 @@ const ListaPaginada = props => {
   return (
     <Container className="table-responsive">
       <Table
+        id={id}
         className={multiSelecao ? '' : 'ocultar-coluna-multi-selecao'}
         rowKey={colunaChave}
         rowSelection={selecaoLinha}
@@ -217,6 +228,10 @@ const ListaPaginada = props => {
         }}
         onChange={executaPaginacao}
         loading={carregando}
+        expandedRowRender={expandedRowRender}
+        expandIconAsCell={false}
+        expandIcon={expandIcon}
+        expandedRowKeys={expandedRowKeys}
       />
     </Container>
   );
@@ -238,6 +253,11 @@ ListaPaginada.propTypes = {
   showSizeChanger: PropTypes.oneOfType([PropTypes.bool]),
   naoFiltrarQuandoCarregando: PropTypes.oneOfType([PropTypes.bool]),
   mapearNovoDto: PropTypes.oneOfType([PropTypes.func]),
+  id: PropTypes.string,
+  disabledCheckboxRow: PropTypes.oneOfType([PropTypes.func]),
+  expandIcon: PropTypes.oneOfType([PropTypes.any]),
+  expandedRowKeys: PropTypes.oneOfType([PropTypes.any]),
+  expandedRowRender: PropTypes.oneOfType([PropTypes.any]),
 };
 
 ListaPaginada.defaultProps = {
@@ -256,6 +276,11 @@ ListaPaginada.defaultProps = {
   showSizeChanger: true,
   naoFiltrarQuandoCarregando: true,
   mapearNovoDto: null,
+  id: '',
+  disabledCheckboxRow: null,
+  expandIcon: null,
+  expandedRowKeys: [],
+  expandedRowRender: null,
 };
 
 export default ListaPaginada;

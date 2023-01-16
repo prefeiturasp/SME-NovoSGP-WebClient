@@ -29,6 +29,7 @@ const inicial = {
   ehProfessorInfantil: false,
   ehPerfilProfessor: false,
   recarregarFiltroPrincipal: false,
+  listaUrlAjudaDoSistema: [],
 };
 
 export default function usuario(state = inicial, action) {
@@ -117,6 +118,9 @@ export default function usuario(state = inicial, action) {
       case '@usuario/setLoginAcessoAdmin':
         draft.acessoAdmin = action.payload.acessoAdmin;
         draft.administradorSuporte = action.payload.administradorSuporte;
+        break;
+      case '@usuario/setListaUrlAjudaDoSistema':
+        draft.listaUrlAjudaDoSistema = action.payload;
         break;
       default:
         break;

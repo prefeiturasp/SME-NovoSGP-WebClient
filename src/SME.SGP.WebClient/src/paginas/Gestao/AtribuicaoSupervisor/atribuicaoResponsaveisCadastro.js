@@ -7,8 +7,8 @@ import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPad
 import {
   SGP_BUTTON_CANCELAR,
   SGP_BUTTON_SALVAR,
-  SGP_SELECT_DRE,
-} from '~/componentes-sgp/filtro/idsCampos';
+} from '~/constantes/ids/button';
+import { SGP_SELECT_DRE } from '~/constantes/ids/select';
 import Auditoria from '~/componentes/auditoria';
 import RotasDto from '~/dtos/rotasDto';
 import { store } from '~/redux';

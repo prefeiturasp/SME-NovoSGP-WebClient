@@ -31,11 +31,40 @@ const esperarMiliSegundos = milisegundos => {
   return new Promise(resolve => setTimeout(resolve, milisegundos));
 };
 
-const tratarString = item =>
+const tratarStringComponenteCurricularNome = item =>
   item
     ?.toLowerCase()
     .normalize('NFD')
     .replace(/[\u0300-\u036f]|[^a-zA-Zs]|\s/g, '');
+
+const focusRegenciaElementoDiv = async elemento => {
+  const [elementoDiv] = elemento;
+  const [elementoInput] = elementoDiv?.getElementsByTagName?.('input');
+
+  if (elementoInput?.focus) {
+    elementoInput.focus();
+    elementoInput.select();
+    return true;
+  }
+  return false;
+};
+
+const validaFocusRegencia = async elemento => {
+  await esperarMiliSegundos(600);
+  let fezFocus = false;
+
+  if (elemento?.length) {
+    fezFocus = await focusRegenciaElementoDiv(elemento);
+  }
+
+  if (fezFocus) return true;
+
+  if (elemento?.length) {
+    await esperarMiliSegundos(600);
+    await focusRegenciaElementoDiv(elemento);
+  }
+  return true;
+};
 
 const moverCursor = async (
   itemEscolhido,
@@ -43,23 +72,27 @@ const moverCursor = async (
   regencia = false
 ) => {
   const elemento = document.getElementsByName(itemEscolhido);
-  let elementoCursor = elemento[indexElemento];
+  const elementoCursor = elemento[indexElemento];
   if (regencia) {
-    await esperarMiliSegundos(600);
-    const [elementoDiv] = elemento;
-    const [elementoInput] = elementoDiv.getElementsByTagName('input');
-    elementoCursor = elementoInput;
+    return validaFocusRegencia(elemento);
   }
+
   if (elementoCursor) {
+    const desabilitado = !!elementoCursor?.disabled;
+    if (desabilitado) {
+      return { desabilitado };
+    }
     elementoCursor.focus();
     elementoCursor.select();
   }
+
+  return { desabilitado: false };
 };
 
 export {
   converterAcaoTecla,
   acharItem,
   esperarMiliSegundos,
-  tratarString,
+  tratarStringComponenteCurricularNome,
   moverCursor,
 };

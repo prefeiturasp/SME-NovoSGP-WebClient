@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import styled from 'styled-components';
 import { Base, Colors } from '~/componentes';
-import { SGP_BUTTON_ADD_OBJETIVOS_APRENDIZAGEM_DESENVOLVIMENTO } from '~/componentes-sgp/filtro/idsCampos';
+import { SGP_BUTTON_ADD_OBJETIVOS_APRENDIZAGEM_DESENVOLVIMENTO } from '~/constantes/ids/button';
 import Button from '~/componentes/button';
 import ModalObjetivosAprendizagem from './modalObjetivosAprendizagem';
 

@@ -5,6 +5,7 @@ import shortid from 'shortid';
 import ListaBimestre from './ListaBimestre/listaBimestre';
 import ListaFinal from './ListaFinal/listaFinal';
 import { Base } from '~/componentes';
+import { removerArrayAninhados } from '~/utils';
 
 const ListasCarregar = props => {
   const {
@@ -13,6 +14,7 @@ const ListasCarregar = props => {
     listaTiposConceitos,
     mediaAprovacao,
     alunoDesabilitado,
+    dadosArredondamento,
   } = props;
 
   const dadosListasNotasConceitos = useSelector(
@@ -46,18 +48,28 @@ const ListasCarregar = props => {
   ];
 
   const validaExibirLista = () => {
+    let componentesAgrupados = [];
+
+    if (dadosListasNotasConceitos?.length) {
+      const componentes = dadosListasNotasConceitos?.map(
+        item => item?.componentesCurriculares
+      );
+      componentesAgrupados = removerArrayAninhados(componentes);
+    }
+
     if (ehFinal) {
       return dadosListasNotasConceitos.map((item, index) => (
         <ListaFinal
           key={shortid.generate()}
           dadosLista={item}
-          dadosListasNotasConceitos={dadosListasNotasConceitos}
           tipoNota={tipoNota}
           listaTiposConceitos={listaTiposConceitos}
           mediaAprovacao={mediaAprovacao}
           alunoDesabilitado={alunoDesabilitado}
           corBarraLateral={cores[index] || ''}
           corRegenciaBarraLateral={coresRegencia[index] || ''}
+          dadosArredondamento={dadosArredondamento}
+          componentesAgrupados={componentesAgrupados}
         />
       ));
     }
@@ -72,6 +84,8 @@ const ListasCarregar = props => {
         alunoDesabilitado={alunoDesabilitado}
         corBarraLateral={cores[index] || ''}
         corRegenciaBarraLateral={coresRegencia[index] || ''}
+        dadosArredondamento={dadosArredondamento}
+        componentesAgrupados={componentesAgrupados}
       />
     ));
   };
@@ -85,6 +99,7 @@ ListasCarregar.propTypes = {
   listaTiposConceitos: PropTypes.oneOfType([PropTypes.array]),
   mediaAprovacao: PropTypes.number,
   alunoDesabilitado: PropTypes.bool,
+  dadosArredondamento: PropTypes.oneOfType([PropTypes.any]),
 };
 
 ListasCarregar.defaultProps = {
@@ -93,6 +108,7 @@ ListasCarregar.defaultProps = {
   listaTiposConceitos: [],
   mediaAprovacao: 5,
   alunoDesabilitado: false,
+  dadosArredondamento: null,
 };
 
 export default ListasCarregar;

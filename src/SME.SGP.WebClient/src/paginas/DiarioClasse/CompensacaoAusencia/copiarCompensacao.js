@@ -3,6 +3,11 @@ import PropTypes from 'prop-types';
 import React, { useEffect, useRef, useState } from 'react';
 import * as Yup from 'yup';
 import { ModalConteudoHtml, SelectComponent } from '~/componentes';
+import {
+  SGP_BUTTON_CANCELAR_MODAL,
+  SGP_BUTTON_SELECIONAR_MODAL,
+} from '~/constantes/ids/button';
+import { SGP_SELECT_BIMESTRE, SGP_SELECT_TURMA } from '~/constantes/ids/select';
 import { erros } from '~/servicos/alertas';
 import ServicoCompensacaoAusencia from '~/servicos/Paginas/DiarioClasse/ServicoCompensacaoAusencia';
 
@@ -88,7 +93,9 @@ const CopiarCompensacao = ({
             }}
             onConfirmacaoSecundaria={fecharCopiarCompensacao}
             onClose={fecharCopiarCompensacao}
+            idBotaoPrincipal={SGP_BUTTON_SELECIONAR_MODAL}
             labelBotaoPrincipal="Selecionar"
+            idBotaoSecundario={SGP_BUTTON_CANCELAR_MODAL}
             labelBotaoSecundario="Cancelar"
             titulo="Copiar Compensação"
             closable
@@ -98,7 +105,7 @@ const CopiarCompensacao = ({
             <div>
               <SelectComponent
                 label="Copiar para a(s) turma(s)"
-                id="turmas"
+                id={SGP_SELECT_TURMA}
                 name="turmas"
                 lista={listaTurmas}
                 valueOption="codigo"
@@ -110,7 +117,7 @@ const CopiarCompensacao = ({
               />
               <SelectComponent
                 form={form}
-                id="bimestre"
+                id={SGP_SELECT_BIMESTRE}
                 label="Copiar para o bimestre"
                 name="bimestre"
                 lista={listaBimestres}

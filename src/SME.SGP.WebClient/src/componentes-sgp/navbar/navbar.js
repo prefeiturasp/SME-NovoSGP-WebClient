@@ -21,7 +21,7 @@ import { validarAcaoTela, validarNavegacaoTela } from '~/utils';
 import Alert from '~/componentes/alert';
 import LoginHelper from '~/paginas/Login/loginHelper';
 import Loader from '~/componentes/loader';
-import { SGP_BUTTON_SAIR } from '../filtro/idsCampos';
+import { SGP_BUTTON_SAIR } from '../../constantes/ids/button';
 
 const Navbar = () => {
   const retraido = useSelector(state => state.navegacao.retraido);

@@ -6,6 +6,11 @@ import shortid from 'shortid';
 import * as Yup from 'yup';
 import { CampoTexto, Colors, Loader, ModalConteudoHtml } from '~/componentes';
 import Button from '~/componentes/button';
+import {
+  SGP_BUTTON_DEVOLVER_MODAL,
+  SGP_BUTTON_VOLTAR_MODAL,
+} from '~/constantes/ids/button';
+import { SGP_INPUT_JUSTIFIQUE_MOTIVO_DEVOLUCAO } from '~/constantes/ids/input';
 import { RotasDto } from '~/dtos';
 import { setExibirModalDevolverPlanoAEE } from '~/redux/modulos/planoAEE/actions';
 import { confirmar, erros, history, sucesso } from '~/servicos';
@@ -117,6 +122,7 @@ const ModalDevolverPlanoAEE = props => {
             <Form>
               <div className="col-md-12 mb-2">
                 <CampoTexto
+                  id={SGP_INPUT_JUSTIFIQUE_MOTIVO_DEVOLUCAO}
                   label="Justifique o motivo da devolução"
                   maxLength={999999}
                   form={form}
@@ -132,7 +138,7 @@ const ModalDevolverPlanoAEE = props => {
               <div className="col-md-12 mt-2  d-flex justify-content-end">
                 <Button
                   key="btn-voltar"
-                  id="btn-voltar"
+                  id={SGP_BUTTON_VOLTAR_MODAL}
                   label="Voltar"
                   color={Colors.Azul}
                   border
@@ -141,7 +147,7 @@ const ModalDevolverPlanoAEE = props => {
                 />
                 <Button
                   key="btn-devolver"
-                  id="btn-devolver"
+                  id={SGP_BUTTON_DEVOLVER_MODAL}
                   label="Devolver"
                   color={Colors.Vermelho}
                   border
