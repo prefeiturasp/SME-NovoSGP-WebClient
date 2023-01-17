@@ -108,7 +108,7 @@ const HistoricoNotificacoes = () => {
   const obterUes = useCallback(async dre => {
     if (dre) {
       setCarregandoGeral(true);
-      const retorno = await ServicoFiltroRelatorio.obterUes(dre).catch(e => {
+      const retorno = await ServicoFiltroRelatorio.obterUes(dre, false, anoLetivo).catch(e => {
         erros(e);
         setCarregandoGeral(false);
       });
@@ -129,7 +129,7 @@ const HistoricoNotificacoes = () => {
       }
       setCarregandoGeral(false);
     }
-  }, []);
+  }, [anoLetivo]);
 
   const onChangeDre = dre => {
     setCodigoDre(dre);

@@ -170,7 +170,8 @@ const RelatorioFrequencia = () => {
         setCarregandoUes(true);
         const retorno = await ServicoFiltroRelatorio.obterUes(
           dre,
-          consideraHistorico
+          consideraHistorico,
+          anoLetivo
         )
           .catch(e => {
             erros(e);
@@ -192,7 +193,7 @@ const RelatorioFrequencia = () => {
         setListaUes([]);
       }
     },
-    [consideraHistorico]
+    [consideraHistorico, anoLetivo]
   );
 
   const onChangeDre = dre => {
