@@ -24,6 +24,7 @@ import {
 import { confirmar, erros, sucesso } from '~/servicos';
 import history from '~/servicos/history';
 import ServicoEncaminhamentoAEE from '~/servicos/Paginas/Relatorios/AEE/ServicoEncaminhamentoAEE';
+import BotaoGerarRelatorioEncaminhamentoAEE from '../../BotaoGerarRelatorioEncaminhamentoAEE';
 
 const BotoesAcoesEncaminhamentoAEE = props => {
   const { match } = props;
@@ -356,6 +357,12 @@ const BotoesAcoesEncaminhamentoAEE = props => {
           />
         </Col>
       )}
+      <Col>
+        <BotaoGerarRelatorioEncaminhamentoAEE
+          disabled={!match?.params?.id}
+          ids={[match?.params?.id]}
+        />
+      </Col>
     </Row>
   );
 };
