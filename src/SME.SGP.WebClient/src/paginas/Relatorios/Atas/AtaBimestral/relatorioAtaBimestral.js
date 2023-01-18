@@ -184,7 +184,8 @@ const RelatorioAtaBimestral = () => {
           '',
           false,
           undefined,
-          consideraHistorico
+          consideraHistorico,
+          anoLetivo
         )
           .catch(e => erros(e))
           .finally(() => setCarregandoUes(false));
@@ -205,7 +206,7 @@ const RelatorioAtaBimestral = () => {
       }
       setListaUes([]);
     },
-    [consideraHistorico]
+    [consideraHistorico, anoLetivo]
   );
 
   useEffect(() => {
