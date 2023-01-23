@@ -17,8 +17,36 @@ import ListaoCampoConceito from './componentes/listaoCampoConceito';
 import ListaoAuditoriaAvaliacoes from './listaoAuditoriaAvaliacoes';
 
 export const ContainerTableAvaliacao = styled.div`
+  table {
+    border-collapse: separate !important;
+    border-spacing: 0;
+    border-left: 0 !important;
+  }
+
+  .ant-table-body {
+    overflow: auto !important;
+  }
+
+  .ant-table-tbody tr:hover td,
+  .ant-table-tbody
+    > tr:hover:not(.ant-table-expanded-row):not(.ant-table-row-selected)
+    > td {
+    background-color: white !important;
+  }
+
   tr {
     position: relative;
+  }
+
+  .col-numero-chamada {
+    left: 0;
+    border-left: solid 1px #dadada;
+    border-right: 0 !important;
+  }
+
+  .col-nome-aluno {
+    left: 60px;
+    border-left: solid 1px #dadada;
   }
 `;
 
@@ -172,21 +200,23 @@ const ListaoListaAvaliacoes = () => {
     }
   };
 
-  const temMaisDeCincoAvaliacoes =
-    dadosAvaliacao?.bimestres?.[0]?.avaliacoes?.length > 5;
+  const temMaisDeTresAvaliacoes =
+    dadosAvaliacao?.bimestres?.[0]?.avaliacoes?.length > 3;
 
   const colunasEstudantes = [
     {
       title: 'Nº',
       align: 'center',
       width: '60px',
+      className: 'position-sticky-col col-numero-chamada',
       render: montarColunaNumeroAula,
     },
 
     {
       title: 'Nome do estudante',
-      width: temMaisDeCincoAvaliacoes ? '400px' : '',
+      width: temMaisDeTresAvaliacoes ? '400px' : 'auto',
       render: montarColunaEstudante,
+      className: 'position-sticky-col col-nome-aluno',
     },
   ];
 
@@ -249,7 +279,7 @@ const ListaoListaAvaliacoes = () => {
       </div>
       <ContainerTableAvaliacao className="col-md-12 p-0">
         <DataTable
-          scroll={{ x: 1000, y: 500 }}
+          scroll={{ x: '100%', y: 500 }}
           columns={colunasEstudantes}
           dataSource={dadosAvaliacao?.bimestres?.[0]?.alunos}
           pagination={false}
