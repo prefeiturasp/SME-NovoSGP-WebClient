@@ -6,10 +6,10 @@ import { Form, Formik } from 'formik';
 import * as Yup from 'yup';
 
 // Componentes
-import { Grid, SelectComponent, Loader } from '~/componentes';
+import { Grid, SelectComponent, Loader,CheckboxComponent } from '~/componentes';
 import PeriodosDropDown from './componentes/PeriodosDropDown';
 import { DreDropDown, UeDropDown } from '~/componentes-sgp';
-
+import { SGP_CHECKBOX_EXIBIR_HISTORICO } from '~/constantes/ids/checkbox';
 // Styles
 import { Linha } from '~/componentes/EstilosGlobais';
 
@@ -40,6 +40,7 @@ function Filtro({ onFiltrar }) {
   const [carregandoAnosLetivos, setCarregandoAnosLetivos] = useState(false);
   const [anoLetivo, setAnoLetivo] = useState(undefined);
   const [listaAnosLetivo, setListaAnosLetivo] = useState([]);
+  const [consideraHistorico, setConsideraHistorico] = useState(false);
 
   const [valoresIniciais] = useState({
     dreId,
@@ -287,6 +288,16 @@ function Filtro({ onFiltrar }) {
     }
   }, [refForm, anoLetivo]);
 
+  const onCheckedConsideraHistorico = e => {
+    limparFiltrosSelecionados();
+    setConsideraHistorico(e.target.checked);
+  };
+  const limparFiltrosSelecionados = () => {
+    setDreId(undefined)
+    setUeId(undefined);
+    refForm.setFieldValue('ueId', undefined);
+    refForm.setFieldValue('dreId', undefined);
+  };
   return (
     <Formik
       enableReinitialize
@@ -300,6 +311,18 @@ function Filtro({ onFiltrar }) {
     >
       {form => (
         <Form className="col-md-12 mb-4">
+          <Linha className="row mb-2">
+          <Grid cols={2}>
+            <div className="col-sm-12 mb-4">
+                <CheckboxComponent
+                  id={SGP_CHECKBOX_EXIBIR_HISTORICO}
+                  label="Exibir histórico?"
+                  onChangeCheckbox={onCheckedConsideraHistorico}
+                  checked={consideraHistorico}
+                />
+              </div>
+            </Grid>
+          </Linha>
           <Linha className="row mb-2">
             <Grid cols={2}>
               <Loader loading={carregandoAnosLetivos} tip="">
@@ -324,7 +347,8 @@ function Filtro({ onFiltrar }) {
             </Grid>
             <Grid cols={5}>
               <UeDropDown
-                form={form}
+                form={form} 
+                consideraHistorico={consideraHistorico}
                 dreId={form.values.dreId}
                 onChange={ue => aoTrocarUeId(ue)}
                 opcaoTodas
