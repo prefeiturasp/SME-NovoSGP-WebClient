@@ -9,6 +9,7 @@ import {
   Loader,
   SelectAutocomplete,
   SelectComponent,
+  CheckboxComponent,
 } from '~/componentes';
 import { FiltroHelper } from '~/componentes-sgp';
 import { Base } from '~/componentes/colors';
@@ -35,6 +36,7 @@ import {
 } from '~/servicos';
 import { ContainerSwitchExibirEventos } from '../eventos.css';
 import EventosListaContext from './eventosListaContext';
+import { SGP_CHECKBOX_EXIBIR_HISTORICO } from '~/constantes/ids/checkbox';
 
 const EventosListaFiltros = () => {
   const {
@@ -57,6 +59,7 @@ const EventosListaFiltros = () => {
     ehEventosTodaRede,
   } = useContext(EventosListaContext);
 
+  const [consideraHistorico, setConsideraHistorico] = useState(false);
   const [carregandoCalendarios, setCarregandoCalendarios] = useState(false);
   const [carregandoDres, setCarregandoDres] = useState(false);
   const [carregandoUes, setCarregandoUes] = useState(false);
@@ -348,7 +351,7 @@ const EventosListaFiltros = () => {
       codigoDre,
       '',
       false,
-      modalidadeConvertida
+      modalidadeConvertida,consideraHistorico
     )
       .catch(e => erros(e))
       .finally(() => setCarregandoUes(false));
@@ -456,10 +459,29 @@ const EventosListaFiltros = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [paramsRota, listaCalendarios, filtroListaEventos, limparFiltrosSalvos]);
 
+  const onCheckedConsideraHistorico = e => {
+    limparFiltrosSelecionados();
+    setConsideraHistorico(e.target.checked);
+  };
+  const limparFiltrosSelecionados = () => {
+    setCodigoUe();
+    setListaUes([]);
+    setCodigoDre();
+  };
+
+
   return (
     <Col span={24}>
       <Row gutter={[16, 16]}>
         <Col sm={24} md={12} xl={8}>
+        <div className="col-sm-24 mb-4">
+              <CheckboxComponent
+                id={SGP_CHECKBOX_EXIBIR_HISTORICO}
+                label="Exibir histórico?"
+                onChangeCheckbox={onCheckedConsideraHistorico}
+                checked={consideraHistorico}
+              />
+            </div>
           <Loader loading={carregandoCalendarios} tip="">
             <SelectAutocomplete
               id={SGP_SELECT_TIPO_CALENDARIO}
