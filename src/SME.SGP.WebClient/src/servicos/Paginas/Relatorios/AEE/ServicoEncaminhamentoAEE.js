@@ -543,6 +543,8 @@ class ServicoEncaminhamentoAEE {
 
   gerarRelatorioEncaminhamentoAEE = params =>
     api.post('v1/relatorios/encaminhamento-aee', params);
+
+  gerarRelatorio = params => api.post(`${urlPadrao}/imprimir-detalhado`, params);
 }
 
 export default new ServicoEncaminhamentoAEE();
