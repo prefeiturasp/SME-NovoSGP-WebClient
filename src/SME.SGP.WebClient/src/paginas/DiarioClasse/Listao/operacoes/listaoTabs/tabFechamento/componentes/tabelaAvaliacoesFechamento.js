@@ -72,7 +72,7 @@ const TabelaAvaliacoesFechamento = props => {
           className: 'position-relative',
           render: dadosAvaliacao => {
             let notaConceito = dadosAvaliacao?.notaConceito;
-            const ausente = !dadosAvaliacao?.ausente;
+            const ausente = dadosAvaliacao?.ausente;
 
             if (ehNota) {
               notaConceito =
