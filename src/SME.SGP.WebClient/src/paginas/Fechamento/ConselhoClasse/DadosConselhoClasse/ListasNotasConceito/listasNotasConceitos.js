@@ -81,7 +81,7 @@ const ListasNotasConceitos = props => {
 
     const alunoDentroDoFechamento =
       dataInicioPeriodoFechamento &&
-      dataSituacao.isAfter(dataInicioPeriodoFechamento);
+      dataSituacao.isSameOrAfter(dataInicioPeriodoFechamento);
 
     return alunoDentroDoBimestre || alunoDentroDoFechamento;
   };
