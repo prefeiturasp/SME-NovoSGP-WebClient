@@ -150,7 +150,7 @@ export default createGlobalStyle`
   }
 
   .m-r-0{
-    margin-rigth: 0px !important;
+    margin-right: 0px !important;
   }
 
   .m-l-0{
@@ -293,6 +293,13 @@ export default createGlobalStyle`
 
   .texto-vermelho {
     color: #b40c02 !important;
+  }
+
+  .position-sticky-col {
+    z-index: 100;
+    position: sticky;
+    background: white;
+    position: -webkit-sticky;
   }
 
   .texto-vermelho-negrito {
