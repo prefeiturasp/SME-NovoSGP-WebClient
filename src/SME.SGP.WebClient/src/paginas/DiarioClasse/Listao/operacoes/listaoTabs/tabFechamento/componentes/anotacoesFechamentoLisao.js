@@ -1,7 +1,6 @@
 import PropTypes from 'prop-types';
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
-import { Base } from '~/componentes';
 import ModalAnotacaoAluno from '~/paginas/Fechamento/FechamentoModalAnotacaoAluno/modal-anotacao-aluno';
 import ListaoBotaoAnotacao from '../../tabFrequencia/lista/componentes/listaoBotaoAnotacao';
 
@@ -16,7 +15,6 @@ const AnotacoesFechamentoLisao = props => {
     fechamentoId,
     dadosFechamento,
     setDadosFechamento,
-    alunoExpandido,
   } = props;
 
   const [exibirModalAnotacao, setExibirModalAnotacao] = useState(false);
@@ -49,7 +47,6 @@ const AnotacoesFechamentoLisao = props => {
   return (
     <>
       <ListaoBotaoAnotacao
-        corIcone={alunoExpandido ? Base.Branco : ''}
         descricaoTooltip={descricaoTooltip}
         desabilitarCampos={desabilitar || !dadosFechamento?.fechamentoId}
         ehInfantil={ehInfantil}
@@ -88,7 +85,6 @@ AnotacoesFechamentoLisao.propTypes = {
   fechamentoId: PropTypes.number,
   dadosFechamento: PropTypes.oneOfType([PropTypes.any]),
   setDadosFechamento: PropTypes.func,
-  alunoExpandido: PropTypes.bool,
 };
 
 AnotacoesFechamentoLisao.defaultProps = {
@@ -98,7 +94,6 @@ AnotacoesFechamentoLisao.defaultProps = {
   fechamentoId: null,
   dadosFechamento: {},
   setDadosFechamento: () => null,
-  alunoExpandido: false,
 };
 
 export default AnotacoesFechamentoLisao;

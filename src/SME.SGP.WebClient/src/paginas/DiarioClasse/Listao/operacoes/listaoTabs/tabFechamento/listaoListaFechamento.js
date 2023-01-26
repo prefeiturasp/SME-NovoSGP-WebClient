@@ -144,10 +144,6 @@ const ListaoListaFechamento = props => {
     );
 
   const montarColunaEstudante = aluno => {
-    const alunoExpandido =
-      temLinhaAvaliacoesExpandida(aluno?.codigoAluno) ||
-      temLinhaNotaConceitoExpandida(aluno?.codigoAluno);
-
     return (
       <div className="d-flex justify-content-between">
         <div className="d-flex justify-content-start">{aluno.nome}</div>
@@ -163,7 +159,6 @@ const ListaoListaFechamento = props => {
               fechamentoId={dadosFechamento.fechamentoId}
               dadosFechamento={dadosFechamento}
               setDadosFechamento={setDadosFechamento}
-              alunoExpandido={alunoExpandido}
             />
           )}
         </div>
