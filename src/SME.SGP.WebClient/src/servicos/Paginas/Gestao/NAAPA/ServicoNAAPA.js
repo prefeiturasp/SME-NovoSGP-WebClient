@@ -167,9 +167,7 @@ class ServicoNAAPA {
     const { encaminhamentoNAAPA } = state;
     const { dadosSituacaoEncaminhamentoNAAPA } = encaminhamentoNAAPA;
 
-    const situacaoAtual =
-      dadosSituacaoEncaminhamentoNAAPA?.dadosSituacao?.situacao ||
-      situacaoNAAPA.Rascunho;
+    const situacaoAtual = dadosSituacaoEncaminhamentoNAAPA?.situacao || situacaoNAAPA.Rascunho;
 
     const situacaoSalvar = novaSituacao || situacaoAtual;
 
