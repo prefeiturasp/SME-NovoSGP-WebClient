@@ -7,6 +7,7 @@ import { DataTable, LabelSemDados } from '~/componentes';
 import { Ordenacao } from '~/componentes-sgp';
 import Nota from '~/componentes-sgp/inputs/nota';
 import { moverFocoCampoNota } from '~/componentes-sgp/inputs/nota/funcoes';
+import LabelInterdisciplinar from '~/componentes-sgp/interdisciplinar';
 import SinalizacaoAEE from '~/componentes-sgp/SinalizacaoAEE/sinalizacaoAEE';
 import { Base } from '~/componentes/colors';
 import notasConceitos from '~/dtos/notasConceitos';
@@ -248,6 +249,11 @@ const ListaoListaAvaliacoes = () => {
                     </Tooltip>
                   </div>
                 ))}
+              </div>
+            )}
+            {avaliacao?.ehInterdisciplinar && (
+              <div style={{ marginTop: '8px' }}>
+                <LabelInterdisciplinar disciplinas={avaliacao.disciplinas} />
               </div>
             )}
           </div>

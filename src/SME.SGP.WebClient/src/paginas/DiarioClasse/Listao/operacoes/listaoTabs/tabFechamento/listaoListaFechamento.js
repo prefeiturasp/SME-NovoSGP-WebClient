@@ -103,13 +103,17 @@ const ListaoListaFechamento = props => {
     listaoEhInfantil,
   } = useContext(ListaoContext);
 
+  const ehRegencia = componenteCurricular?.regencia;
+
   const [expandedRowKeys, setExpandedRowKeys] = useState(
-    dadosFechamento?.alunos?.map(a => ({ codigoAluno: a?.codigoAluno }))
+    dadosFechamento?.alunos?.map(a => ({
+      codigoAluno: a?.codigoAluno,
+      ocultarNotaConceito: !ehRegencia,
+      expandirAvaliacoes: false,
+    }))
   );
 
   const { ehEJA } = props;
-
-  const ehRegencia = componenteCurricular?.regencia;
 
   const desabilitarCampos = somenteConsultaListao || !periodoAbertoListao;
 
@@ -140,7 +144,7 @@ const ListaoListaFechamento = props => {
 
   const temLinhaNotaConceitoExpandida = codigoAluno =>
     !!expandedRowKeys?.find?.(
-      r => r?.codigoAluno === codigoAluno && !r?.ocultarLinha
+      r => r?.codigoAluno === codigoAluno && !r?.ocultarNotaConceito
     );
 
   const montarColunaEstudante = aluno => {
@@ -226,7 +230,10 @@ const ListaoListaFechamento = props => {
     }
   };
 
-  const onClickExpandirNotaConceitoRegencia = (ocultarLinha, codigoAluno) => {
+  const onClickExpandirNotaConceitoRegencia = (
+    ocultarNotaConceito,
+    codigoAluno
+  ) => {
     let index = 0;
     let alunoExpandido = null;
 
@@ -238,14 +245,14 @@ const ListaoListaFechamento = props => {
 
       if (index > -1) {
         const rowKeys = [...expandedRowKeys];
-        rowKeys[index].ocultarLinha = ocultarLinha;
+        rowKeys[index].ocultarNotaConceito = ocultarNotaConceito;
         setExpandedRowKeys(rowKeys);
       }
     } else {
       setExpandedRowKeys([
         {
           codigoAluno,
-          ocultarLinha,
+          ocultarNotaConceito,
         },
       ]);
     }
@@ -662,7 +669,7 @@ const ListaoListaFechamento = props => {
   const getExpandedRowKeys = () => {
     if (expandedRowKeys?.length) {
       const alunosExpandidos = expandedRowKeys.filter(
-        r => !r?.ocultarLinha || !!r.expandirAvaliacoes
+        r => !r?.ocultarNotaConceito || !!r.expandirAvaliacoes
       );
       return alunosExpandidos.map(a => a.codigoAluno);
     }
@@ -752,6 +759,7 @@ const ListaoListaFechamento = props => {
       )}
       <LinhaTabela className="col-md-12 p-0">
         <DataTable
+          scroll={{ x: '100%', y: 500 }}
           fixExpandedRowResetColSpan
           columns={colunasEstudantes}
           dataSource={dadosFechamento?.alunos}
@@ -760,13 +768,6 @@ const ListaoListaFechamento = props => {
           idLinha="codigoAluno"
           expandIconColumnIndex={getExpandIconColumnIndex()}
           expandedRowKeys={getExpandedRowKeys()}
-          rowClassName={record => {
-            const alunoExpandido =
-              temLinhaAvaliacoesExpandida(record?.codigoAluno) ||
-              temLinhaNotaConceitoExpandida(record?.codigoAluno);
-            const nomeClasse = alunoExpandido ? 'linha-ativa' : '';
-            return nomeClasse;
-          }}
           expandedRowRender={record => {
             return (
               <TabelaAvaliacoesFechamento

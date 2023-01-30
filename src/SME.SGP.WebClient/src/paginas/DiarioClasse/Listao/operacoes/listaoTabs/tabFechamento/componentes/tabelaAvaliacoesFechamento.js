@@ -4,6 +4,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { DataTable, Loader } from '~/componentes';
 import LabelAusenteCellTable from '~/componentes-sgp/inputs/nota/labelAusenteCellTable';
+import LabelInterdisciplinar from '~/componentes-sgp/interdisciplinar';
 import { obterDescricaoConceito } from '~/paginas/DiarioClasse/Listao/listaoFuncoes';
 import { erros } from '~/servicos';
 import ServicoNotaConceito from '~/servicos/Paginas/DiarioClasse/ServicoNotaConceito';
@@ -61,6 +62,11 @@ const TabelaAvaliacoesFechamento = props => {
                       <Tooltip title={disciplina}>{disciplina}</Tooltip>
                     </div>
                   ))}
+                </div>
+              )}
+              {avaliacao?.ehInterdisciplinar && (
+                <div style={{ marginTop: '8px' }}>
+                  <LabelInterdisciplinar disciplinas={avaliacao.disciplinas} />
                 </div>
               )}
             </div>
