@@ -1,9 +1,11 @@
 import { Col, Row } from 'antd';
 import React, { useCallback, useContext, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
+import { date } from 'yup';
 import { Loader, SelectAutocomplete, SelectComponent } from '~/componentes';
 import { FiltroHelper } from '~/componentes-sgp';
 import { OPCAO_TODOS } from '~/constantes';
+import modalidade from '~/dtos/modalidade';
 import { AbrangenciaServico, erros, ServicoCalendarios } from '~/servicos';
 import FechaReabListaContext from './fechaReabListaContext';
 
@@ -145,7 +147,9 @@ const FechaReabListaFiltros = () => {
       codigoDre,
       '',
       false,
-      modalidadeConvertida
+      modalidadeConvertida,
+      calendarioSelecionado.anoLetivo < new Date().getFullYear(),
+      calendarioSelecionado.anoLetivo
     )
       .catch(e => erros(e))
       .finally(() => setCarregandoUes(false));
