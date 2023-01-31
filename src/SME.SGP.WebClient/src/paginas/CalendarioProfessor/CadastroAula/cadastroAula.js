@@ -482,12 +482,12 @@ function CadastroDeAula({ match, location }) {
     setAula(aulaState => {
       return {
         ...aulaState,
-        recorrenciaAula: e.target.value,
+        recorrenciaAula: e,
       };
     });
     if (id) {
       servicoCadastroAula
-        .obterRecorrenciaPorIdAula(id, e.target.value)
+        .obterRecorrenciaPorIdAula(id, e)
         .then(resposta => {
           setRecorrenciaAulaEmEdicao(resposta.data);
         })
