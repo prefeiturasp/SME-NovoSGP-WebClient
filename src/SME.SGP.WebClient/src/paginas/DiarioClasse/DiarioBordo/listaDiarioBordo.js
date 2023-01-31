@@ -66,6 +66,7 @@ const ListaDiarioBordo = () => {
   const dispatch = useDispatch();
 
   const obterComponentesCurriculares = useCallback(async () => {
+    setComponenteCurricularSelecionado(undefined);
     setCarregandoGeral(true);
     const componentes = await ServicoDisciplina.obterDisciplinasPorTurma(
       turma,
@@ -74,7 +75,7 @@ const ListaDiarioBordo = () => {
 
     if (componentes?.data?.length) {
       setListaComponenteCurriculares(componentes.data);
-
+      
       if (componentes.data.length === 1) {
         const componente = componentes.data[0];
         setComponenteCurricularSelecionado(
