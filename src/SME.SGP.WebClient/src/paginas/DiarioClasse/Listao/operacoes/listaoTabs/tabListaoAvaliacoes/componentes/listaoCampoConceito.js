@@ -69,12 +69,7 @@ const ListaoCampoConceito = props => {
     return tipoConceito && !tipoConceito.aprovado;
   };
 
-  const styleCampo = {};
-
-  if (estaAbaixoDaMedia(conceitoValorAtual)) {
-    styleCampo.border = `solid 2px ${Base.Vermelho}`;
-    styleCampo.borderRadius = '4px';
-  }
+  styleContainer.padding = styleContainer.padding || '7px 8px 2px';
 
   const montarCampo = () => (
     <>
@@ -102,7 +97,6 @@ const ListaoCampoConceito = props => {
               showSearch
               placeholder="Conceito"
               disabled={desabilitar}
-              // searchValue={false}
             />
           </div>
         ) : (

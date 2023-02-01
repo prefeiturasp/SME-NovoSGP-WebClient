@@ -21,6 +21,7 @@ function UeDropDown({
   modalidade,
   onChangeListaUes,
   labelRequired,
+  consideraHistorico,
 }) {
   const [carregando, setCarregando] = useState(false);
   const [listaUes, setListaUes] = useState([]);
@@ -37,7 +38,8 @@ function UeDropDown({
         dreId,
         url,
         temParametros,
-        modalidade
+        modalidade,
+        consideraHistorico
       ).finally(() => setCarregando(false));
       let lista = [];
       if (data) {

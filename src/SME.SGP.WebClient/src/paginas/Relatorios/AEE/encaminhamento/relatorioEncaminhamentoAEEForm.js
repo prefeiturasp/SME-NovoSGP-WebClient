@@ -104,6 +104,7 @@ const RelatorioEncaminhamentoAEEForm = props => {
         <Col sm={24}>
           <PAAIResponsavel
             multiple
+            ehRelatorio
             form={form}
             name="codigosPAAIResponsavel"
             onChange={onChangeCampos}

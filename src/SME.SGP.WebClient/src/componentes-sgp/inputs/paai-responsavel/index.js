@@ -6,7 +6,7 @@ import ServicoEncaminhamentoAEE from '~/servicos/Paginas/Relatorios/AEE/ServicoE
 import { erros } from '~/servicos';
 
 export const PAAIResponsavel = React.memo(
-  ({ name, form, onChange, disabled, allowClear, multiple }) => {
+  ({ name, form, onChange, disabled, allowClear, multiple, ehRelatorio }) => {
     const [exibirLoader, setExibirLoader] = useState(false);
     const [responsaveisPAAI, setResponsaveisPAAI] = useState([]);
 
@@ -16,7 +16,8 @@ export const PAAIResponsavel = React.memo(
       setExibirLoader(true);
       const resposta = await ServicoEncaminhamentoAEE.obterResponsaveisPAAIPesquisa(
         null,
-        dreCodigo
+        dreCodigo,
+        ehRelatorio
       ).catch(e => erros(e));
 
       const dados = resposta?.data?.items;
@@ -33,7 +34,7 @@ export const PAAIResponsavel = React.memo(
       }
 
       setExibirLoader(false);
-    }, [dreCodigo]);
+    }, [dreCodigo, ehRelatorio]);
 
     useEffect(() => {
       setResponsaveisPAAI([]);
@@ -80,6 +81,7 @@ PAAIResponsavel.propTypes = {
   allowClear: PropTypes.bool,
   multiple: PropTypes.bool,
   form: PropTypes.oneOfType([PropTypes.any]),
+  ehRelatorio: PropTypes.bool,
 };
 
 PAAIResponsavel.defaultProps = {
@@ -89,4 +91,5 @@ PAAIResponsavel.defaultProps = {
   name: 'responsavelPAAI',
   multiple: false,
   onChange: () => null,
+  ehRelatorio: false,
 };

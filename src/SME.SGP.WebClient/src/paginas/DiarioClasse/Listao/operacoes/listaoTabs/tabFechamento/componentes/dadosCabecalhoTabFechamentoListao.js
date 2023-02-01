@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
 import React, { useContext, useState, useEffect } from 'react';
 import { Button, Colors, Loader } from '~/componentes';
+import { Ordenacao } from '~/componentes-sgp';
 import situacaoFechamentoDto from '~/dtos/situacaoFechamentoDto';
 import ListaoContext from '~/paginas/DiarioClasse/Listao/listaoContext';
 import {
@@ -11,7 +12,7 @@ import { erros, sucesso } from '~/servicos';
 import ServicoFechamentoBimestre from '~/servicos/Paginas/Fechamento/ServicoFechamentoBimestre';
 
 const DadosCabecalhoTabFechamentoListao = props => {
-  const { dadosFechamento } = useContext(ListaoContext);
+  const { dadosFechamento, setDadosFechamento } = useContext(ListaoContext);
 
   const { desabilitarCampos } = props;
 
@@ -69,6 +70,15 @@ const DadosCabecalhoTabFechamentoListao = props => {
         <></>
       )}
       <div className="col-md-6 col-sm-12 d-flex justify-content-start mb-2">
+        <Ordenacao
+          conteudoParaOrdenar={dadosFechamento?.alunos}
+          ordenarColunaNumero="numeroChamada"
+          retornoOrdenado={retorno => {
+            if (dadosFechamento?.alunos?.length) {
+              setDadosFechamento({ ...dadosFechamento, alunos: [...retorno] });
+            }
+          }}
+        />
         <Loader loading={exibirLoader} tip="">
           <Button
             id="btn-reprocessar"
@@ -85,6 +95,7 @@ const DadosCabecalhoTabFechamentoListao = props => {
           />
         </Loader>
       </div>
+
       <div className="col-md-6 col-sm-12 d-flex justify-content-end">
         <SituacaoProcessadoComPendencias>
           <span>{situacaoNome}</span>

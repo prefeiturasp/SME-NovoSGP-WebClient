@@ -314,6 +314,10 @@ export const LinhaTabela = styled.div`
     color: ${Base.Branco} !important;
   }
 
+  .linha-expandida-regencia-listao-fechamento {
+    background: #fbfbfb;
+  }
+
   .ant-table-expanded-row {
     border: 0 !important;
     background: ${Base.Branco} !important;
@@ -357,10 +361,6 @@ export const LinhaTabela = styled.div`
         justify-content: center;
       }
     }
-
-    /* div {
-      width: 100%;
-    } */
 
     thead {
       th {
