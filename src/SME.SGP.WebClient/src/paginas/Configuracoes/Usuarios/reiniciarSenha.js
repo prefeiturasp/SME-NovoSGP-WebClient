@@ -17,14 +17,15 @@ import { verificaSomenteConsulta } from '~/servicos/servico-navegacao';
 
 import FiltroHelper from '~/componentes-sgp/filtro/helper';
 
+// eslint-disable-next-line react/prop-types
 export default function ReiniciarSenha({ perfilSelecionado }) {
   const [linhaSelecionada, setLinhaSelecionada] = useState({});
   const [listaUsuario, setListaUsuario] = useState([]);
 
   const [listaDres, setListaDres] = useState([]);
-  const [dreSelecionada, setDreSelecionada] = useState('');
+  const [dreSelecionada, setDreSelecionada] = useState(undefined);
   const [listaUes, setListaUes] = useState([]);
-  const [ueSelecionada, setUeSelecionada] = useState('');
+  const [ueSelecionada, setUeSelecionada] = useState(undefined);
   const [nomeUsuarioSelecionado, setNomeUsuarioSelecionado] = useState('');
   const [rfSelecionado, setRfSelecionado] = useState('');
   const [emailUsuarioSelecionado, setEmailUsuarioSelecionado] = useState('');
@@ -71,35 +72,6 @@ export default function ReiniciarSenha({ perfilSelecionado }) {
     })
   );
 
-  const colunas = [
-    {
-      title: 'Nome do usuário',
-      dataIndex: 'nomeServidor',
-    },
-    {
-      title: 'Registro Funcional (RF)',
-      dataIndex: 'codigoRf',
-    },
-    {
-      title: 'Ação',
-      dataIndex: 'acaoReiniciar',
-      render: (texto, linha) => {
-        return (
-          <div className="botao-reiniciar-tabela-acao">
-            <Button
-              label="Reiniciar"
-              color={Colors.Roxo}
-              disabled={!permissoesTela.podeAlterar}
-              border
-              className="ml-2 text-center button-reiniciar-hover"
-              onClick={() => onClickReiniciar(linha)}
-            />
-          </div>
-        );
-      },
-    },
-  ];
-
   useEffect(() => {
     const carregarDres = async () => {
       const dres = await api.get(
@@ -140,7 +112,7 @@ export default function ReiniciarSenha({ perfilSelecionado }) {
 
   const onChangeDre = dre => {
     setDreSelecionada(!dre ? '' : dre);
-    setUeSelecionada('');
+    setUeSelecionada(undefined);
     setListaUes([]);
   };
 
@@ -206,6 +178,37 @@ export default function ReiniciarSenha({ perfilSelecionado }) {
     }
   };
 
+  const reiniciarSenha = async linha => {
+    const parametros = {
+      dreCodigo: dreSelecionada,
+      ueCodigo: ueSelecionada,
+    };
+
+    let deveAtualizarEmail = false;
+    setCarregando(true);
+    await api
+      .put(`v1/autenticacao/${linha.codigoRf}/reiniciar-senha`, parametros)
+      .then(resposta => {
+        setExibirModalMensagemReiniciarSenha(true);
+        setMensagemSenhaAlterada(resposta.data.mensagem);
+      })
+      .catch(error => {
+        if (error?.response?.data) {
+          deveAtualizarEmail = error?.response?.data?.deveAtualizarEmail;
+        }
+        setCarregando(false);
+      });
+    if (deveAtualizarEmail) {
+      setEmailUsuarioSelecionado('');
+      setSemEmailCadastrado(true);
+      setExibirModalReiniciarSenha(true);
+    } else {
+      setSemEmailCadastrado(false);
+      onClickFiltrar();
+    }
+    setCarregando(false);
+  };
+
   const onClickReiniciar = async linha => {
     if (!permissoesTela.podeAlterar) return;
 
@@ -222,36 +225,33 @@ export default function ReiniciarSenha({ perfilSelecionado }) {
     }
   };
 
-  const reiniciarSenha = async linha => {
-    const parametros = {
-      dreCodigo: dreSelecionada,
-      ueCodigo: ueSelecionada,
-    };
-
-    let deveAtualizarEmail = false;
-    setCarregando(true);
-    await api
-      .put(`v1/autenticacao/${linha.codigoRf}/reiniciar-senha`, parametros)
-      .then(resposta => {
-        setExibirModalMensagemReiniciarSenha(true);
-        setMensagemSenhaAlterada(resposta.data.mensagem);
-      })
-      .catch(error => {
-        if (error && error.response && error.response.data) {
-          deveAtualizarEmail = error.response.data.deveAtualizarEmail;
-        }
-        setCarregando(false);
-      });
-    if (deveAtualizarEmail) {
-      setEmailUsuarioSelecionado('');
-      setSemEmailCadastrado(true);
-      setExibirModalReiniciarSenha(true);
-    } else {
-      setSemEmailCadastrado(false);
-      onClickFiltrar();
-    }
-    setCarregando(false);
-  };
+  const colunas = [
+    {
+      title: 'Nome do usuário',
+      dataIndex: 'nomeServidor',
+    },
+    {
+      title: 'Login',
+      dataIndex: 'codigoRf',
+    },
+    {
+      title: 'Ação',
+      dataIndex: 'acaoReiniciar',
+      render: (_, linha) => {
+        return (
+          <div className="d-flex justify-content-center">
+            <Button
+              label="Reiniciar"
+              color={Colors.Roxo}
+              disabled={!permissoesTela.podeAlterar}
+              border
+              onClick={() => onClickReiniciar(linha)}
+            />
+          </div>
+        );
+      },
+    },
+  ];
 
   const onCloseModalReiniciarSenha = () => {
     setExibirModalReiniciarSenha(false);
@@ -300,7 +300,7 @@ export default function ReiniciarSenha({ perfilSelecionado }) {
             valueOption="codigo"
             valueText="nome"
             onChange={onChangeDre}
-            valueSelect={String(dreSelecionada) || ''}
+            valueSelect={dreSelecionada}
             label="Diretoria Regional de Educação (DRE)"
             placeholder="Diretoria Regional de Educação (DRE)"
             showSearch
@@ -315,7 +315,7 @@ export default function ReiniciarSenha({ perfilSelecionado }) {
             valueOption="codigo"
             valueText="nome"
             onChange={onChangeUe}
-            valueSelect={ueSelecionada || ''}
+            valueSelect={ueSelecionada}
             label="Unidade Escolar (UE)"
             placeholder="Unidade Escolar (UE)"
             showSearch
@@ -335,8 +335,8 @@ export default function ReiniciarSenha({ perfilSelecionado }) {
         </div>
         <div className="col-sm-12 col-md-6 col-lg-4 col-xl-5 pb-3">
           <CampoTexto
-            label="Registro Funcional (RF)"
-            placeholder="Registro Funcional (RF)"
+            label="Login"
+            placeholder="Digite o login"
             onChange={onChangeRf}
             desabilitado={!permissoesTela.podeConsultar}
             value={rfSelecionado}
@@ -361,6 +361,7 @@ export default function ReiniciarSenha({ perfilSelecionado }) {
               rowKey="codigoRf"
               columns={colunas}
               dataSource={listaUsuario}
+              semHover
             />
           </div>
         </div>
