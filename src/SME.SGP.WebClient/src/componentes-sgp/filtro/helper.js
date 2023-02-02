@@ -21,6 +21,22 @@ class FiltroHelper {
       .catch(() => anosLetivosLista);
   };
 
+  obterAnosLetivosAtribuicao = async consideraHistorico => {
+    const anosLetivosLista = [];
+
+    return ServicoFiltro.listarAnosLetivosAtribuicao(consideraHistorico)
+      .then(resposta => {
+        if (resposta.data) {
+          resposta.data.forEach(ano => {
+            anosLetivosLista.push({ desc: ano, valor: ano });
+          });
+        }
+
+        return anosLetivosLista;
+      })
+      .catch(() => anosLetivosLista);
+  };
+
   obterModalidades = async ({ consideraHistorico, anoLetivoSelecionado }) => {
     const modalidadesLista = [];
 

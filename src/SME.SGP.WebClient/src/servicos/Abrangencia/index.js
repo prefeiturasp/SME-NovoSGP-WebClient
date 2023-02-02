@@ -10,14 +10,15 @@ const AbrangenciaServico = {
     url = '',
     temParametros = false,
     modalidade,
-    consideraHistorico = true
+    consideraHistorico = true,
+    anoLetivo
   ) {
     if (url && !temParametros)
       return api.get(`${url}/${dreId}/ues/atribuicoes`);
     if (temParametros) return api.get(url);
     return api.get(
       `/v1/abrangencias/${consideraHistorico}/dres/${dreId}/ues?modalidade=${modalidade ||
-        ''}`
+        ''}&anoLetivo=${anoLetivo}`
     );
   },
   buscarModalidades() {

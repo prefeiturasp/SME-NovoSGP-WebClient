@@ -9,6 +9,14 @@ class ServicoFiltro {
       .then(resposta => resposta);
   };
 
+  static listarAnosLetivosAtribuicao = async consideraHistorico => {
+    return api
+      .get(
+        `v1/anos-letivos/atribuicoes?consideraHistorico=${consideraHistorico}`
+      )
+      .then(resposta => resposta);
+  };
+
   static listarModalidades = async ({
     consideraHistorico,
     anoLetivoSelecionado,

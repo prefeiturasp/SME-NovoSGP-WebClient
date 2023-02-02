@@ -63,6 +63,7 @@ function AtribuicaoCJForm({ match, location }) {
   const [somenteConsulta, setSomenteConsulta] = useState(false);
   const [ehEdicao, setEhEdicao] = useState(false);
   const [valoresIniciais, setValoresIniciais] = useState({
+    exibirHistorico: consideraHistorico,
     professorRf: '',
     professorNome: '',
     dreId: '',
@@ -182,10 +183,11 @@ function AtribuicaoCJForm({ match, location }) {
       }
 
       const anoSelecionado = query.anoLetivo || anoAtual;
-      const historico = query.historico || consideraHistorico;
+      const historico = query.historico === 'true' || consideraHistorico;
 
       setValoresIniciais({
         ...valoresIniciais,
+        exibirHistorico: historico,
         modalidadeId: query.modalidadeId,
         turmaId: query.turmaId,
         ueId: query.ueId,
@@ -194,6 +196,7 @@ function AtribuicaoCJForm({ match, location }) {
         professorRf: query?.usuarioRF,
         professorNome: query?.professorNome,
       });
+
       setConsideraHistorico(historico);
       setAnoLetivo(anoSelecionado);
     }
@@ -272,22 +275,9 @@ function AtribuicaoCJForm({ match, location }) {
   };
 
   const obterAnosLetivos = useCallback(async () => {
-    let anosLetivos = [];
-
-    const anosLetivoComHistorico = await FiltroHelper.obterAnosLetivos({
-      consideraHistorico: true,
-    });
-    const anosLetivoSemHistorico = await FiltroHelper.obterAnosLetivos({
-      consideraHistorico: false,
-    });
-
-    anosLetivos = anosLetivos.concat(anosLetivoComHistorico);
-
-    anosLetivoSemHistorico.forEach(ano => {
-      if (!anosLetivoComHistorico.find(a => a.valor === ano.valor)) {
-        anosLetivos.push(ano);
-      }
-    });
+    const anosLetivos = await FiltroHelper.obterAnosLetivosAtribuicao(
+      consideraHistorico
+    );
 
     if (!anosLetivos.length) {
       anosLetivos.push({
@@ -296,21 +286,15 @@ function AtribuicaoCJForm({ match, location }) {
       });
     }
 
-    if (anosLetivos && anosLetivos.length) {
-      const temAnoAtualNaLista = anosLetivos.find(
-        item => String(item.valor) === String(anoAtual)
-      );
-      if (temAnoAtualNaLista) setAnoLetivo(anoAtual);
-      else setAnoLetivo(anosLetivos[0].valor);
-    }
-
     const anosOrdenados = ordenarDescPor(anosLetivos, 'valor');
+
     setListaAnosLetivo(anosOrdenados);
-  }, [anoAtual]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [anoAtual, consideraHistorico]);
 
   useEffect(() => {
     obterAnosLetivos();
-  }, [obterAnosLetivos]);
+  }, [obterAnosLetivos, consideraHistorico]);
 
   const onChangeAnoLetivo = ano => {
     setAnoLetivo(ano);
@@ -377,13 +361,17 @@ function AtribuicaoCJForm({ match, location }) {
                         onChange={onChangeAnoLetivo}
                         valueSelect={anoLetivo}
                         allowClear={false}
-                        disabled={!consideraHistorico || somenteConsulta}
+                        disabled={
+                          !consideraHistorico ||
+                          listaAnosLetivo?.length === 1 ||
+                          somenteConsulta
+                        }
                         labelRequired
                       />
                     </Grid>
                     <Grid cols={5}>
                       <DreDropDown
-                        url={`v1/dres/atribuicoes?anoLetivo=${anoLetivo}`}
+                        url={`v1/dres/atribuicoes?anoLetivo=${anoLetivo}&consideraHistorico=${consideraHistorico}`}
                         label="Diretoria Regional de Educação (DRE)"
                         form={form}
                         onChange={valor => setDreId(valor)}
@@ -394,7 +382,7 @@ function AtribuicaoCJForm({ match, location }) {
                     <Grid cols={5}>
                       <UeDropDown
                         temParametros
-                        url={`v1/dres/${form.values.dreId}/ues/atribuicoes?anoLetivo=${anoLetivo}`}
+                        url={`v1/dres/${form.values.dreId}/ues/atribuicoes?anoLetivo=${anoLetivo}&consideraHistorico=${consideraHistorico}`}
                         label="Unidade Escolar (UE)"
                         dreId={dreId}
                         form={form}

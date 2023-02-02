@@ -43,7 +43,9 @@ const UeReabertura = ({ form, onChangeCampos }) => {
       dreCodigo,
       '',
       false,
-      modalidade
+      modalidade,
+      calendarioSelecionado.anoLetivo < new Date().getFullYear(),
+      calendarioSelecionado.anoLetivo
     )
       .catch(e => erros(e))
       .finally(() => setExibirLoader(false));

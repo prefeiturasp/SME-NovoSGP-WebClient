@@ -242,7 +242,8 @@ const ListaFinal = props => {
                             item.notaPosConselho.nota,
                             `${descricaoGrupoMatriz} ${index} regencia`,
                             item.codigoComponenteCurricular,
-                            item
+                            item,
+                            item.notaPosConselho.podeEditar
                           )}
                           {item.notaPosConselho.emAprovacao && (
                             <Tooltip title="Aguardando aprovação">
