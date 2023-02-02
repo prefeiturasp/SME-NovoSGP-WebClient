@@ -26,6 +26,7 @@ import {
   verificaSomenteConsulta,
 } from '~/servicos';
 
+// eslint-disable-next-line react/prop-types
 const Suporte = ({ match }) => {
   const { usuario } = store.getState();
   const permissoesTela = usuario.permissoes[RotasDto.SUPORTE];
@@ -47,7 +48,7 @@ const Suporte = ({ match }) => {
 
   const dispatch = useDispatch();
 
-  const redirect = match?.params?.redirect ? match.params.redirect : null;
+  const redirect = match?.params?.redirect || null;
 
   const helper = new LoginHelper(dispatch, redirect);
 
@@ -143,16 +144,21 @@ const Suporte = ({ match }) => {
   const onChangeRf = rf => setRfSelecionado(rf.target.value);
 
   const acessar = async linha => {
-    setCarregando(true);
+    if (linha?.codigoRf || linha?.login) {
+      setCarregando(true);
 
-    const resposta = await helper.acessar({ usuario: linha.codigoRf }, true);
+      const resposta = await helper.acessar(
+        { usuario: linha?.codigoRf || linha?.login },
+        true
+      );
 
-    if (resposta?.sucesso) {
-      history.push(URL_HOME);
-    } else if (resposta.erro) {
-      erros(resposta.erro);
+      if (resposta?.sucesso) {
+        history.push(URL_HOME);
+      } else if (resposta.erro) {
+        erros(resposta.erro);
+      }
+      setCarregando(false);
     }
-    setCarregando(false);
   };
 
   const onClickFiltrar = async () => {
@@ -193,8 +199,8 @@ const Suporte = ({ match }) => {
     },
     {
       title: 'Login',
-      dataIndex: 'codigoRf',
       width: '25%',
+      render: (_, linha) => linha?.codigoRf || linha?.login,
     },
     {
       title: 'Ação',
@@ -207,7 +213,7 @@ const Suporte = ({ match }) => {
               color={Colors.Roxo}
               border
               onClick={() => acessar(linha)}
-              disabled={!linha.codigoRf}
+              disabled={!linha.codigoRf && !linha?.login}
             />
           </div>
         );
