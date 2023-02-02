@@ -95,7 +95,7 @@ const EnvolvidosNaOcorrencia = props => {
             form={form}
             name="codigosServidores"
             maxHeightMultiple="100%"
-            label="Servidor(es) envolvido(s) na ocorrência"
+            label="Servidor(es)/Funcionário(s) envolvido(s) na ocorrência"
             lista={listaServidores}
             valueOption="codigoRf"
             valueText="nomeExibicao"
