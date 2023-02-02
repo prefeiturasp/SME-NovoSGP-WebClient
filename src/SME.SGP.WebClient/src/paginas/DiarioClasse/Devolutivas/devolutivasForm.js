@@ -348,6 +348,7 @@ const DevolutivasForm = ({ match }) => {
   ]);
 
   const obterComponentesCurriculares = useCallback(async () => {
+    setCodigoComponenteCurricular(undefined);
     setCarregandoGeral(true);
     dispatch(limparDadosPlanejamento());
     const componentes = await ServicoDisciplina.obterDisciplinasPorTurma(

@@ -47,14 +47,6 @@ export default function ReiniciarSenhaEA() {
     [usuario.turmaSelecionada]
   );
 
-  const consideraHistorico = useMemo(
-    () =>
-      (usuario.turmaSelecionada &&
-        !!usuario.turmaSelecionada.consideraHistorico) ||
-      false,
-    [usuario.turmaSelecionada]
-  );
-
   const permissoesTela = usuario.permissoes[RotasDto.REINICIAR_SENHA];
 
   const onClickBuscaUsuarioPorCPF = async () => {
@@ -161,7 +153,7 @@ export default function ReiniciarSenhaEA() {
   useEffect(() => {
     const carregarDres = async () => {
       const dres = await api.get(
-        `v1/abrangencias/${consideraHistorico}/dres?anoLetivo=${anoLetivo}`
+        `v1/abrangencias/false/dres?anoLetivo=${anoLetivo}`
       );
       if (dres.data) {
         setListaDres(dres.data.sort(FiltroHelper.ordenarLista('nome')));
@@ -172,7 +164,7 @@ export default function ReiniciarSenhaEA() {
 
     carregarDres();
     verificaSomenteConsulta(permissoesTela);
-  }, [anoLetivo, consideraHistorico, permissoesTela]);
+  }, [anoLetivo, permissoesTela]);
 
   useEffect(() => {
     let desabilitada = !listaDres || listaDres.length === 0;
@@ -219,19 +211,16 @@ export default function ReiniciarSenhaEA() {
     setBuscaCPF(cpfUsuario.target.value);
   };
 
-  const carregarUes = useCallback(
-    async dre => {
-      const ues = await api.get(
-        `/v1/abrangencias/${consideraHistorico}/dres/${dre}/ues?consideraNovasUEs=${true}`
-      );
-      if (ues.data) {
-        setListaUes(ues.data);
-      } else {
-        setListaUes([]);
-      }
-    },
-    [consideraHistorico]
-  );
+  const carregarUes = useCallback(async dre => {
+    const ues = await api.get(
+      `/v1/abrangencias/false/dres/${dre}/ues?consideraNovasUEs=${true}`
+    );
+    if (ues.data) {
+      setListaUes(ues.data);
+    } else {
+      setListaUes([]);
+    }
+  }, []);
 
   useEffect(() => {
     if (dreSelecionada) {

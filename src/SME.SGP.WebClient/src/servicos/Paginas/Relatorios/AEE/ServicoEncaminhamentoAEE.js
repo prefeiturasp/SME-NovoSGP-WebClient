@@ -511,7 +511,7 @@ class ServicoEncaminhamentoAEE {
     return api.post(`${urlPadrao}/devolver`, params);
   };
 
-  obterResponsaveisPAAIPesquisa = (codigoTurma, dreCodigo) => {
+  obterResponsaveisPAAIPesquisa = (codigoTurma, dreCodigo, ehRelatorio) => {
     const params = { limite: 999 };
 
     if (codigoTurma) {
@@ -519,6 +519,9 @@ class ServicoEncaminhamentoAEE {
     }
     if (dreCodigo) {
       params.codigoDRE = dreCodigo;
+    }
+    if (ehRelatorio) {
+      params.ehRelatorio = ehRelatorio;
     }
     return api.post(`${urlPadrao}/responsavel/pesquisa`, params);
   };
@@ -540,6 +543,8 @@ class ServicoEncaminhamentoAEE {
 
   gerarRelatorioEncaminhamentoAEE = params =>
     api.post('v1/relatorios/encaminhamento-aee', params);
+
+  gerarRelatorio = params => api.post(`${urlPadrao}/imprimir-detalhado`, params);
 }
 
 export default new ServicoEncaminhamentoAEE();

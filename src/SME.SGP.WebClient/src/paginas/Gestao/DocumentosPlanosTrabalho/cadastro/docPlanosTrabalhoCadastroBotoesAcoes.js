@@ -151,7 +151,8 @@ const DocPlanosTrabalhoCadastroBotoesAcoes = props => {
         tipoDocumentoId,
         classificacaoId,
         usuarioId,
-        ueSelecionada?.id
+        ueSelecionada?.id,
+        anoLetivo
       ).catch(e => {
         erros(e);
         setExibirLoader(false);
