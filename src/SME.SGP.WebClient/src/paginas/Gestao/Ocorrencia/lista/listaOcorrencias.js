@@ -599,8 +599,8 @@ const ListaOcorrencias = () => {
                 id="SGP_INPUT_TEXT_SERVIDOR_NOME"
                 value={servidorNomeExibicao}
                 onChange={onChangeServidorNome}
-                label="Servidor"
-                placeholder="Procure pelo nome do servidor"
+                label="Servidor/Funcionário"
+                placeholder="Procure pelo nome do servidor/funcionário"
                 iconeBusca
                 allowClear
               />
