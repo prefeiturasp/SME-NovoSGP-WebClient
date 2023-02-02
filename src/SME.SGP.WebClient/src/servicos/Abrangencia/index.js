@@ -2,7 +2,7 @@ import api from '~/servicos/api';
 
 const AbrangenciaServico = {
   buscarDres(url = '', consideraHistorico = false) {
-    if (url) return api.get(url, (consideraHistorico = false));
+    if (url) return api.get(url, consideraHistorico);
     return api.get(`/v1/abrangencias/${consideraHistorico}/dres`);
   },
   buscarUes(
@@ -18,7 +18,7 @@ const AbrangenciaServico = {
     if (temParametros) return api.get(url);
     return api.get(
       `/v1/abrangencias/${consideraHistorico}/dres/${dreId}/ues?modalidade=${modalidade ||
-        ''}&anoLetivo=${anoLetivo}`
+        ''}${anoLetivo ? `&anoLetivo=${anoLetivo}` : ''}`
     );
   },
   buscarModalidades() {
@@ -67,7 +67,7 @@ const AbrangenciaServico = {
    * @param {String} periodo Periodo (opcional)
    * @param {String} componenteCurricular Componente selecionado
    */
-   buscarTurmasMesmoComponenteCurricular(
+  buscarTurmasMesmoComponenteCurricular(
     ue,
     modalidade = 0,
     periodo = '',
