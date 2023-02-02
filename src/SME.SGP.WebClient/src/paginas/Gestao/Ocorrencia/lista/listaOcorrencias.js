@@ -605,7 +605,7 @@ const ListaOcorrencias = () => {
                 allowClear
               />
             </Col>
-            <Col sm={24} md={6}>
+            <Col sm={24} md={12} lg={4}>
               <CampoData
                 id="SGP_DATE_OCORRENCIA_INICIO"
                 label="Data da ocorrência"
@@ -615,7 +615,7 @@ const ListaOcorrencias = () => {
                 formatoData="DD/MM/YYYY"
               />
             </Col>
-            <Col sm={24} md={6} style={{ marginTop: '25px' }}>
+            <Col sm={24} md={12} lg={4} style={{ marginTop: '25px' }}>
               <CampoData
                 id="SGP_DATE_OCORRENCIA_FIM"
                 valor={dataOcorrenciaFim}
@@ -624,7 +624,7 @@ const ListaOcorrencias = () => {
                 formatoData="DD/MM/YYYY"
               />
             </Col>
-            <Col sm={24} md={12}>
+            <Col sm={24} md={12} lg={8}>
               <SelectComponent
                 id="SGP_SELECT_TIPO_OCORRENCIA"
                 placeholder="Tipo da ocorrência"
@@ -637,7 +637,7 @@ const ListaOcorrencias = () => {
                 allowClear
               />
             </Col>
-            <Col sm={24} md={12}>
+            <Col sm={24} md={12} lg={8}>
               <CampoTexto
                 id="SGP_INPUT_TEXT_TITULO"
                 value={tituloExibicao}
