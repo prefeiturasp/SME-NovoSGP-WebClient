@@ -36,6 +36,10 @@ const ListaFrequencia = props => {
     state => state.frequenciaPlanoAula.listaDadosFrequencia?.listaFrequencia
   );
 
+  const desabilitaInformacoesDataFutura = useSelector(
+    state => state.frequenciaPlanoAula.listaDadosFrequencia?.desabilitado
+  );
+
   const listaTiposFrequencia = useSelector(
     state =>
       state.frequenciaPlanoAula.listaDadosFrequencia?.listaTiposFrequencia
@@ -62,7 +66,11 @@ const ListaFrequencia = props => {
       return;
     }
 
-    if (!temPeriodoAberto || !aulaIdPodeEditar) {
+    if (
+      !temPeriodoAberto ||
+      !aulaIdPodeEditar ||
+      desabilitaInformacoesDataFutura
+    ) {
       desabilitar = true;
     }
 

@@ -125,7 +125,8 @@ const AtaFinalResultados = () => {
           '',
           false,
           undefined,
-          consideraHistorico
+          consideraHistorico,
+          anoLetivo
         );
         if (data) {
           const lista = data.map(item => ({
@@ -145,7 +146,7 @@ const AtaFinalResultados = () => {
       setCarregandoUes(false);
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [dreId]
+    [dreId, anoLetivo]
   );
 
   const onChangeDre = dre => {
