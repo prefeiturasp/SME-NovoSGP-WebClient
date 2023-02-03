@@ -222,7 +222,7 @@ const CalendarioEscolar = () => {
     const modalidade = ServicoCalendarios.converterModalidade(
       calendario?.modalidade
     );
-    AbrangenciaServico.buscarUes(dre, '', false, modalidade)
+    AbrangenciaServico.buscarUes(dre, '', false, modalidade, false, new Date().getFullYear())
       .then(resposta => {
         if (resposta.data) {
           const lista = [];
