@@ -15,11 +15,17 @@ const AbrangenciaServico = {
   ) {
     if (url && !temParametros)
       return api.get(`${url}/${dreId}/ues/atribuicoes`);
+
     if (temParametros) return api.get(url);
-    return api.get(
-      `/v1/abrangencias/${consideraHistorico}/dres/${dreId}/ues?modalidade=${modalidade ||
-        ''}${anoLetivo ? `&anoLetivo=${anoLetivo}` : ''}`
-    );
+
+    const params = {
+      ...(modalidade && { modalidade }),
+      ...(anoLetivo && { anoLetivo }),
+    };
+
+    return api.get(`/v1/abrangencias/${consideraHistorico}/dres/${dreId}/ues`, {
+      params,
+    });
   },
   buscarModalidades() {
     return api.get(`v1/abrangencias/modalidades`);
