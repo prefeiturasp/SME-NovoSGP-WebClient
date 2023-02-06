@@ -89,10 +89,18 @@ const AvaliacaoForm = ({ match, location }) => {
   const [auditoriaAvaliacao, setAuditoriaAvaliacao] = useState({});
 
   const [disciplinaSelecionada, setDisciplinaSelecionada] = useState(undefined);
-  const mostrarDisciplinaRegencia = listaDisciplinas?.find?.(
-    item =>
-      Number(item?.codigoComponenteCurricular) === Number(disciplinaSelecionada)
-  )?.regencia;
+
+  const ehParamostrarDisciplinaRegencia = useCallback(() => {
+    return listaDisciplinas?.find?.(
+      item =>
+        Number(item?.codigoComponenteCurricular) ===
+        Number(disciplinaSelecionada)
+    )?.regencia;
+  }, [listaDisciplinas, disciplinaSelecionada]);
+
+  const [mostrarDisciplinaRegencia, setMostrarDisciplinaRegencia] = useState(
+    ehParamostrarDisciplinaRegencia()
+  );
 
   const aoTrocarCampos = () => {
     if (!modoEdicao) {
@@ -117,6 +125,12 @@ const AvaliacaoForm = ({ match, location }) => {
       setPodeLancaNota(true);
     }
   };
+
+  useEffect(() => {
+    if (disciplinaSelecionada) {
+      setMostrarDisciplinaRegencia(ehParamostrarDisciplinaRegencia());
+    }
+  }, [disciplinaSelecionada, ehParamostrarDisciplinaRegencia]);
 
   const clicouBotaoExcluir = async () => {
     const confirmado = await confirmar(
@@ -485,6 +499,8 @@ const AvaliacaoForm = ({ match, location }) => {
     if (Number(categoriaSelecionada) === categorias.INTERDISCIPLINAR) {
       setCopias([]);
       setDesabilitarCopiarAvaliacao(true);
+      setDisciplinaSelecionada(undefined);
+      setMostrarDisciplinaRegencia(false);
     } else {
       setDesabilitarCopiarAvaliacao(false);
     }
@@ -707,8 +723,8 @@ const AvaliacaoForm = ({ match, location }) => {
                           onChange={e => {
                             aoTrocarCampos();
                             resetDisciplinasSelecionadas(form);
-                            montaValidacoes(e.target.value);
-                            validaInterdisciplinar(e.target.value);
+                            montaValidacoes(e);
+                            validaInterdisciplinar(e);
                           }}
                           desabilitado={desabilitarCampos || !dentroPeriodo}
                           labelRequired
@@ -798,7 +814,7 @@ const AvaliacaoForm = ({ match, location }) => {
                       </Grid>
                     </Div>
                     {temRegencia &&
-                      listaDisciplinasRegenciaSelecionadas &&
+                      !!listaDisciplinasRegenciaSelecionadas.length &&
                       mostrarDisciplinaRegencia && (
                         <Div className="row">
                           <Grid cols={12} className="mb-4">
