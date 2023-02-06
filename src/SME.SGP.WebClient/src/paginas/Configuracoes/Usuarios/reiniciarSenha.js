@@ -335,8 +335,8 @@ export default function ReiniciarSenha({ perfilSelecionado }) {
         </div>
         <div className="col-sm-12 col-md-6 col-lg-4 col-xl-5 pb-3">
           <CampoTexto
-            label="Registro Funcional (RF)"
-            placeholder="Registro Funcional (RF)"
+            label="Login"
+            placeholder="Digite o Login"
             onChange={onChangeRf}
             desabilitado={!permissoesTela.podeConsultar}
             value={rfSelecionado}
