@@ -4,8 +4,10 @@ import { useDispatch, useSelector } from 'react-redux';
 import shortid from 'shortid';
 import styled from 'styled-components';
 import { DataTable, LabelSemDados } from '~/componentes';
+import { Ordenacao } from '~/componentes-sgp';
 import Nota from '~/componentes-sgp/inputs/nota';
 import { moverFocoCampoNota } from '~/componentes-sgp/inputs/nota/funcoes';
+import LabelInterdisciplinar from '~/componentes-sgp/interdisciplinar';
 import SinalizacaoAEE from '~/componentes-sgp/SinalizacaoAEE/sinalizacaoAEE';
 import { Base } from '~/componentes/colors';
 import notasConceitos from '~/dtos/notasConceitos';
@@ -16,8 +18,36 @@ import ListaoCampoConceito from './componentes/listaoCampoConceito';
 import ListaoAuditoriaAvaliacoes from './listaoAuditoriaAvaliacoes';
 
 export const ContainerTableAvaliacao = styled.div`
+  table {
+    border-collapse: separate !important;
+    border-spacing: 0;
+    border-left: 0 !important;
+  }
+
+  .ant-table-body {
+    overflow: auto !important;
+  }
+
+  .ant-table-tbody tr:hover td,
+  .ant-table-tbody
+    > tr:hover:not(.ant-table-expanded-row):not(.ant-table-row-selected)
+    > td {
+    background-color: white !important;
+  }
+
   tr {
     position: relative;
+  }
+
+  .col-numero-chamada {
+    left: 0;
+    border-left: solid 1px #dadada;
+    border-right: 0 !important;
+  }
+
+  .col-nome-aluno {
+    left: 60px;
+    border-left: solid 1px #dadada;
   }
 `;
 
@@ -171,21 +201,23 @@ const ListaoListaAvaliacoes = () => {
     }
   };
 
-  const temMaisDeCincoAvaliacoes =
-    dadosAvaliacao?.bimestres?.[0]?.avaliacoes?.length > 5;
+  const temMaisDeTresAvaliacoes =
+    dadosAvaliacao?.bimestres?.[0]?.avaliacoes?.length > 3;
 
   const colunasEstudantes = [
     {
       title: 'Nº',
       align: 'center',
       width: '60px',
+      className: 'position-sticky-col col-numero-chamada',
       render: montarColunaNumeroAula,
     },
 
     {
       title: 'Nome do estudante',
-      width: temMaisDeCincoAvaliacoes ? '400px' : '',
+      width: temMaisDeTresAvaliacoes ? '400px' : 'auto',
       render: montarColunaEstudante,
+      className: 'position-sticky-col col-nome-aluno',
     },
   ];
 
@@ -219,6 +251,11 @@ const ListaoListaAvaliacoes = () => {
                 ))}
               </div>
             )}
+            {avaliacao?.ehInterdisciplinar && (
+              <div style={{ marginTop: '8px' }}>
+                <LabelInterdisciplinar disciplinas={avaliacao.disciplinas} />
+              </div>
+            )}
           </div>
         ),
         align: 'center',
@@ -233,9 +270,22 @@ const ListaoListaAvaliacoes = () => {
   return dadosAvaliacao?.bimestres?.[0]?.alunos?.length &&
     dadosAvaliacao?.bimestres?.[0]?.avaliacoes?.length ? (
     <>
+      <div className="col-sm-12 p-0 mb-3 mt-3 d-flex justify-content-start">
+        <Ordenacao
+          conteudoParaOrdenar={dadosAvaliacao?.bimestres?.[0]?.alunos}
+          ordenarColunaNumero="numeroChamada"
+          retornoOrdenado={retorno => {
+            if (dadosAvaliacao?.bimestres?.[0]?.alunos?.length) {
+              const dados = dadosAvaliacao;
+              dados.bimestres[0].alunos = [...retorno];
+              setDadosAvaliacao({ ...dados });
+            }
+          }}
+        />
+      </div>
       <ContainerTableAvaliacao className="col-md-12 p-0">
         <DataTable
-          scroll={{ x: 1000, y: 500 }}
+          scroll={{ x: '100%', y: 500 }}
           columns={colunasEstudantes}
           dataSource={dadosAvaliacao?.bimestres?.[0]?.alunos}
           pagination={false}

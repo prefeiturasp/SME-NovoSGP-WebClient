@@ -35,6 +35,7 @@ import {
   SGP_SELECT_UE,
 } from '~/constantes/ids/select';
 import { SGP_TABLE_LISTA_ALUNOS_ENCAMINHAMENTO_AEE } from '~/constantes/ids/table';
+import BotaoGerarRelatorioEncaminhamentoAEE from '../BotaoGerarRelatorioEncaminhamentoAEE';
 
 const EncaminhamentoAEELista = () => {
   const dispatch = useDispatch();
@@ -78,6 +79,11 @@ const EncaminhamentoAEELista = () => {
   const [carregandoAnos, setCarregandoAnos] = useState(false);
   const [carregandoSituacao, setCarregandoSituacao] = useState(false);
   const [carregandoResponsavel, setCarregandoResponsavel] = useState(false);
+
+  const [
+    idsEncaminhamentosSelecionados,
+    setIdsEncaminhamentosSelecionados,
+  ] = useState([]);
 
   useEffect(() => {
     verificaSomenteConsulta(permissoesTela);
@@ -499,6 +505,9 @@ const EncaminhamentoAEELista = () => {
     setConsideraHistorico(e.target.checked);
   };
 
+  const selecionarEcaminhamentos = selecionados =>
+    setIdsEncaminhamentosSelecionados(selecionados?.map(item => item?.id));
+
   return (
     <>
       <ModalAvisoNovoEncaminhamentoAEE />
@@ -516,6 +525,12 @@ const EncaminhamentoAEELista = () => {
               bold
               onClick={onClickNovo}
               disabled={somenteConsulta || !permissoesTela.podeIncluir}
+            />
+          </Col>
+          <Col>
+            <BotaoGerarRelatorioEncaminhamentoAEE
+              ids={idsEncaminhamentosSelecionados}
+              disabled={!idsEncaminhamentosSelecionados?.length}
             />
           </Col>
         </Row>
@@ -645,6 +660,7 @@ const EncaminhamentoAEELista = () => {
             listaUes?.length ? (
               <div className="col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-2">
                 <ListaPaginada
+                  multiSelecao
                   url="v1/encaminhamento-aee"
                   id={SGP_TABLE_LISTA_ALUNOS_ENCAMINHAMENTO_AEE}
                   colunas={colunas}
@@ -662,6 +678,7 @@ const EncaminhamentoAEELista = () => {
                   }
                   temPaginacao
                   onClick={onClickEditar}
+                  selecionarItems={selecionarEcaminhamentos}
                 />
               </div>
             ) : (

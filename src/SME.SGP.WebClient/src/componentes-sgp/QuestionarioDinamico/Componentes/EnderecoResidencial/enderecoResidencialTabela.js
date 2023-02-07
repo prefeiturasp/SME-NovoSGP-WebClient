@@ -98,6 +98,7 @@ const EnderecoResidencialTabela = props => {
 
       <div className={possuiErro() ? 'tabela-invalida' : ''}>
         <DataTable
+          gerarIdUnico
           columns={colunas}
           pagination={false}
           onClickRow={onClickRow}
