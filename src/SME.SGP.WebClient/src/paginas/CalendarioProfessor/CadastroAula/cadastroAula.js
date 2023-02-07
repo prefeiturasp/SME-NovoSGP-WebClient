@@ -447,7 +447,7 @@ function CadastroDeAula({ match, location }) {
 
   const onChangeTipoAula = e => {
     setModoEdicao(true);
-    const ehAulaNormal = e.target.value === 1;
+    const ehAulaNormal = e === 1;
     setControlaGrade(ehAulaNormal);
 
     let tipoRecorrencia = aula.recorrenciaAula;
@@ -457,11 +457,11 @@ function CadastroDeAula({ match, location }) {
       tipoRecorrencia = recorrencia.AULA_UNICA;
       setQuantidadeBloqueada(false);
     }
-    carregarGrade(componente, aula.dataAula, e.target.value, ehAulaNormal);
+    carregarGrade(componente, aula.dataAula, e, ehAulaNormal);
     setAula(aulaState => {
       return {
         ...aulaState,
-        tipoAula: e.target.value,
+        tipoAula: e,
         recorrenciaAula: tipoRecorrencia,
       };
     });
