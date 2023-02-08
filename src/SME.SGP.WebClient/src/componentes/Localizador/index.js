@@ -420,7 +420,7 @@ Localizador.defaultProps = {
   rfEdicao: '',
   buscarOutrosCargos: false,
   buscandoDados: () => {},
-  labelRF: 'Registro Funcional (RF)',
+  labelRF: 'RF/CPF',
   labelNome: 'Nome',
   placeholderRF: 'Digite o RF/CPF',
   placeholderNome: 'Digite o nome da pessoa',
