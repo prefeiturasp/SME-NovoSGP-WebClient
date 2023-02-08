@@ -29,7 +29,7 @@ class ServicoEstudante {
     filtrarSituacaoMatricula = true
   ) => {
     const queryString = `codigoAluno=${codigoAluno}&anoLetivo=${anoLetivo}&filtrarSituacaoMatricula=${filtrarSituacaoMatricula}`;
-    const url = `${urlPadrao}/local-atividade?${queryString}`;
+    const url = `${urlPadrao}/turmas-programa?${queryString}`;
     return api.get(url);
   };
 }

@@ -55,7 +55,7 @@ const MontarDadosTabSelecionada = props => {
     return Number(buscarValoresOpcaoResposta(array, 'N'));
   };
 
-  const dadosIniciaisAtividadesContraturno = async () => {
+  const dadosIniciaisTurmasPrograma = async () => {
     const resposta = await ServicoEstudante.obterLocalAtividadeAluno(
       aluno?.codigoAluno,
       anoLetivo
@@ -69,10 +69,9 @@ const MontarDadosTabSelecionada = props => {
     return [];
   };
 
-  const mapearDados = (
+  const mapearDadosNovoEncaminhamento = (
     dadosQuestinario,
-    informacoesEstudante,
-    dadosAtividadesContraturno
+    informacoesEstudante
   ) => {
     dadosQuestinario.forEach(questao => {
       switch (questao.nomeComponente) {
@@ -126,12 +125,19 @@ const MontarDadosTabSelecionada = props => {
             },
           ];
           break;
-        case 'ATIVIDADES_CONTRATURNO':
-          if (dadosAtividadesContraturno?.length) {
-            questao.resposta = [
-              { texto: JSON.stringify(dadosAtividadesContraturno) },
-            ];
-          }
+        default:
+          break;
+      }
+    });
+
+    return dadosQuestinario;
+  };
+
+  const mapearDados = (dadosQuestinario, dadosTurmasPrograma) => {
+    dadosQuestinario.forEach(questao => {
+      switch (questao.nomeComponente) {
+        case 'TURMAS_PROGRAMA':
+          questao.resposta = [{ texto: JSON.stringify(dadosTurmasPrograma) }];
           break;
         default:
           break;
@@ -161,26 +167,24 @@ const MontarDadosTabSelecionada = props => {
         );
       }
 
-      let dadosContraturno = [];
-      if (!encaminhamentoId) {
-        const temCampoContraturno = dadosMapeados.find(
-          questao => questao.nomeComponente === 'ATIVIDADES_CONTRATURNO'
+      if (!encaminhamentoId && informacoesAdicionaisEstudante) {
+        dadosMapeados = mapearDadosNovoEncaminhamento(
+          resposta.data,
+          informacoesAdicionaisEstudante
         );
-        if (temCampoContraturno) {
-          dadosContraturno = await dadosIniciaisAtividadesContraturno();
-        }
       }
 
-      if (
-        !encaminhamentoId &&
-        (informacoesAdicionaisEstudante || dadosContraturno?.length)
-      ) {
-        dadosMapeados = mapearDados(
-          resposta.data,
-          informacoesAdicionaisEstudante,
-          dadosContraturno
-        );
+      let dadosTurmasPrograma = [];
+
+      const temTurmasPrograma = dadosMapeados.find(
+        questao => questao.nomeComponente === 'TURMAS_PROGRAMA'
+      );
+
+      if (temTurmasPrograma) {
+        dadosTurmasPrograma = await dadosIniciaisTurmasPrograma();
       }
+
+      dadosMapeados = mapearDados(resposta.data, dadosTurmasPrograma);
 
       setDadosQuestionarioAtual(dadosMapeados);
     } else {

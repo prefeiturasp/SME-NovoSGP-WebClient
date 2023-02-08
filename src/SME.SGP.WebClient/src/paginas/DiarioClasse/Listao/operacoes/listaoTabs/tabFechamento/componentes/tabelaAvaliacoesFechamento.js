@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { DataTable, Loader } from '~/componentes';
+import LabelAusenteCellTable from '~/componentes-sgp/inputs/nota/labelAusenteCellTable';
+import LabelInterdisciplinar from '~/componentes-sgp/interdisciplinar';
 import { obterDescricaoConceito } from '~/paginas/DiarioClasse/Listao/listaoFuncoes';
 import { erros } from '~/servicos';
 import ServicoNotaConceito from '~/servicos/Paginas/DiarioClasse/ServicoNotaConceito';
@@ -23,34 +25,74 @@ const TabelaAvaliacoesFechamento = props => {
   const [colunas, setColunas] = useState([]);
   const [carregandoDados, setCarregandoDados] = useState(false);
 
+  const montarNotaConceito = (valorNotaConceito, ausente) => {
+    return (
+      <>
+        {valorNotaConceito}
+        {ausente && <LabelAusenteCellTable />}
+      </>
+    );
+  };
+
   const montarColunas = useCallback(() => {
     const cols = [];
     if (dadosAlunoSelecionado?.avaliacoes?.length) {
       dadosAlunoSelecionado.avaliacoes.forEach((avaliacao, index) => {
-        const titulo = `${avaliacao?.nome} - ${window
-          .moment(avaliacao.data)
-          .format('DD/MM/YYYY')}`;
-
         cols.push({
           ellipsis: true,
-          title: <Tooltip title={titulo}>{titulo}</Tooltip>,
+          title: () => (
+            <div>
+              <div
+                style={{
+                  whiteSpace: 'nowrap',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                }}
+              >
+                <Tooltip title={avaliacao.nome}>{avaliacao?.nome}</Tooltip>
+              </div>
+              <div>{window.moment(avaliacao.data).format('DD/MM/YYYY')}</div>
+              {avaliacao?.disciplinas?.length && (
+                <div style={{ display: 'grid' }}>
+                  {avaliacao.disciplinas.map(disciplina => (
+                    <div
+                      alt={disciplina}
+                      className="badge badge-pill border text-dark bg-white font-weight-light "
+                    >
+                      <Tooltip title={disciplina}>{disciplina}</Tooltip>
+                    </div>
+                  ))}
+                </div>
+              )}
+              {avaliacao?.ehInterdisciplinar && (
+                <div style={{ marginTop: '8px' }}>
+                  <LabelInterdisciplinar disciplinas={avaliacao.disciplinas} />
+                </div>
+              )}
+            </div>
+          ),
           align: 'center',
           width: '200px',
           dataIndex: `avaliacoes[${index}]`,
           key: `avaliacoes[${index}]`,
+          className: 'position-relative',
           render: dadosAvaliacao => {
             let notaConceito = dadosAvaliacao?.notaConceito;
+            const ausente = dadosAvaliacao?.ausente;
 
             if (ehNota) {
               notaConceito =
                 notaConceito === 0 || notaConceito > 0
                   ? notaConceito?.toString?.()?.replace?.('.', ',')
                   : '-';
-              return notaConceito;
+              return montarNotaConceito(notaConceito, ausente);
             }
 
             return notaConceito
-              ? obterDescricaoConceito(listaTiposConceitos, notaConceito)
+              ? montarNotaConceito(
+                  obterDescricaoConceito(listaTiposConceitos, notaConceito),
+                  ausente
+                )
               : '-';
           },
         });

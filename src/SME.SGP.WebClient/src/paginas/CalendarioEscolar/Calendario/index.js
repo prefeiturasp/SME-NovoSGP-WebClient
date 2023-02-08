@@ -10,6 +10,7 @@ import {
   Loader,
   SelectAutocomplete,
   SelectComponent,
+  CheckboxComponent,
 } from '~/componentes';
 import { Cabecalho, FiltroHelper } from '~/componentes-sgp';
 import Calendario from '~/componentes-sgp/calendarioEscolar/Calendario';
@@ -25,7 +26,7 @@ import { erro, sucesso } from '~/servicos/alertas';
 import { Div } from './index.css';
 import { OPCAO_TODOS } from '~/constantes';
 import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
-
+import { SGP_CHECKBOX_EXIBIR_HISTORICO } from '~/constantes/ids/checkbox';
 export const ContainerLabelDiasLetivos = styled.div`
   font-style: normal;
   font-weight: 700;
@@ -51,7 +52,7 @@ const CalendarioEscolar = () => {
   const [listaTipoCalendario, setListaTipoCalendario] = useState([]);
   const [valorTipoCalendario, setValorTipoCalendario] = useState('');
   const [pesquisaTipoCalendario, setPesquisaTipoCalendario] = useState('');
-
+  const [consideraHistorico, setConsideraHistorico] = useState(false);
   const eventoCalendarioEdicao = useSelector(
     state => state.calendarioEscolar.eventoCalendarioEdicao
   );
@@ -222,7 +223,14 @@ const CalendarioEscolar = () => {
     const modalidade = ServicoCalendarios.converterModalidade(
       calendario?.modalidade
     );
-    AbrangenciaServico.buscarUes(dre, '', false, modalidade, false, new Date().getFullYear())
+    AbrangenciaServico.buscarUes(
+      dre,
+      '',
+      false,
+      modalidade,
+      false,
+      new Date().getFullYear()
+    )
       .then(resposta => {
         if (resposta.data) {
           const lista = [];
@@ -367,6 +375,18 @@ const CalendarioEscolar = () => {
       setPesquisaTipoCalendario(descricao);
     }
   };
+  const onCheckedConsideraHistorico = e => {
+    limparFiltrosSelecionados();
+    setConsideraHistorico(e.target.checked);
+  };
+  const limparFiltrosSelecionados = () => {
+    setValorTipoCalendario();
+    setTipoCalendarioSelecionado();
+    setAnoLetivo();
+    store.dispatch(zeraCalendario());
+    setDreSelecionada();
+    setUnidadeEscolarSelecionada();
+  };
 
   return (
     <>
@@ -376,6 +396,14 @@ const CalendarioEscolar = () => {
       <Card>
         <Grid cols={12}>
           <Div className="row">
+            <div className="col-sm-12 mb-4">
+              <CheckboxComponent
+                id={SGP_CHECKBOX_EXIBIR_HISTORICO}
+                label="Exibir histórico?"
+                onChangeCheckbox={onCheckedConsideraHistorico}
+                checked={consideraHistorico}
+              />
+            </div>
             <Grid cols={6} className="mb-2">
               <Loader loading={carregandoDres}>
                 <SelectComponent

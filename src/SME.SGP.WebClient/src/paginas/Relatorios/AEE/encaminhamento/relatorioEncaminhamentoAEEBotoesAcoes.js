@@ -1,12 +1,12 @@
-/* eslint-disable react/prop-types */
+import PropTypes from 'prop-types';
 import _ from 'lodash';
 import React from 'react';
 import BotoesAcaoRelatorio from '~/componentes-sgp/botoesAcaoRelatorio';
 import { MENSAGEM_SOLICITACAO_RELATORIO_SUCESSO, URL_HOME } from '~/constantes';
 import { erros, history, sucesso } from '~/servicos';
-import ServicoPlanoAEE from '~/servicos/Paginas/Relatorios/AEE/ServicoPlanoAEE';
+import ServicoEncaminhamentoAEE from '~/servicos/Paginas/Relatorios/AEE/ServicoEncaminhamentoAEE';
 
-const RelatorioPlanoAEEBotoesAcoes = props => {
+const RelatorioEncaminhamentoAEEBotoesAcoes = props => {
   const {
     form,
     initialValues,
@@ -34,14 +34,11 @@ const RelatorioPlanoAEEBotoesAcoes = props => {
     if (valuesClone?.situacaoIds?.length) {
       params.situacaoIds = valuesClone.situacaoIds;
     }
-    if (valuesClone?.codigosResponsavel?.length) {
-      params.codigosResponsavel = valuesClone.codigosResponsavel;
-    }
     if (valuesClone?.codigosPAAIResponsavel?.length) {
       params.codigosPAAIResponsavel = valuesClone.codigosPAAIResponsavel;
     }
 
-    const retorno = await ServicoPlanoAEE.gerarRelatorioPlanosAEE(
+    const retorno = await ServicoEncaminhamentoAEE.gerarRelatorioEncaminhamentoAEE(
       params
     ).catch(e => erros(e));
 
@@ -85,4 +82,20 @@ const RelatorioPlanoAEEBotoesAcoes = props => {
   );
 };
 
-export default RelatorioPlanoAEEBotoesAcoes;
+RelatorioEncaminhamentoAEEBotoesAcoes.propTypes = {
+  form: PropTypes.oneOfType([PropTypes.any]),
+  initialValues: PropTypes.oneOfType([PropTypes.any]),
+  desabilitarGerar: PropTypes.bool,
+  setGerandoRelatorio: PropTypes.oneOfType([PropTypes.any]),
+  setDesabilitarGerar: PropTypes.oneOfType([PropTypes.any]),
+};
+
+RelatorioEncaminhamentoAEEBotoesAcoes.defaultProps = {
+  form: null,
+  initialValues: {},
+  desabilitarGerar: false,
+  setGerandoRelatorio: () => false,
+  setDesabilitarGerar: () => false,
+};
+
+export default RelatorioEncaminhamentoAEEBotoesAcoes;

@@ -130,10 +130,8 @@ const DocPlanosTrabalhoListaPaginada = props => {
         ueId: ueSelecionada?.id || '',
         tipoDocumentoId,
         classificacaoId,
+        anoLetivo:anoLetivo
       };
-      if (consideraHistorico) {
-        params.anoLetivo = anoLetivo;
-      }
       setFiltros({ ...params });
     } else {
       setFiltros({});

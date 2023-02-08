@@ -31,9 +31,10 @@ class ServicoDocumentosPlanosTrabalho {
     tipoDocumentoId,
     classificacaoId,
     usuarioId,
-    ueId
+    ueId,
+    anoLetivo
   ) => {
-    const url = `${documentoId}/tipo-documento/${tipoDocumentoId}/classificacao/${classificacaoId}/usuario/${usuarioId}/ue/${ueId}`;
+    const url = `${documentoId}/tipo-documento/${tipoDocumentoId}/classificacao/${classificacaoId}/usuario/${usuarioId}/ue/${ueId}/anoLetivo/${anoLetivo}`;
     return api.get(`${urlPadrao}/${url}`);
   };
 
