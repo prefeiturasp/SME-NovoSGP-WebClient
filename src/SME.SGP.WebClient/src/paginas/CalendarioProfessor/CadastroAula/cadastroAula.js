@@ -364,6 +364,21 @@ function CadastroDeAula({ match, location }) {
         Number(aulaInicial.tipoAula) === 1
       );
     }
+    if(componentes?.length > 1){
+      carregarGrade(
+        null,
+        aulaInicial.dataAula,
+        aulaInicial.tipoAula,
+        Number(aulaInicial.tipoAula) === 1
+      );
+
+      setAula({
+        ...aulaInicial,
+        disciplinaId: null,
+      });
+
+    }
+  
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id, turmaSelecionada.turma]);
 
