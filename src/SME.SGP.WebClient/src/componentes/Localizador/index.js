@@ -342,6 +342,7 @@ function Localizador({
           name="professorRf"
           placeholderRF={placeholderRF}
           form={form}
+          maxlength = '11'
           desabilitado={
             desabilitado ||
             validacaoDesabilitaPerfilProfessor() ||
@@ -421,7 +422,7 @@ Localizador.defaultProps = {
   buscandoDados: () => {},
   labelRF: 'Registro Funcional (RF)',
   labelNome: 'Nome',
-  placeholderRF: 'Digite o RF',
+  placeholderRF: 'Digite o RF/CPF',
   placeholderNome: 'Digite o nome da pessoa',
   classesRF: '',
   limparCamposAposPesquisa: false,
