@@ -273,6 +273,7 @@ function Localizador({
             />
           )}
           <InputRF
+            maxlength={11}
             id={SGP_INPUT_RF}
             pessoaSelecionada={pessoaSelecionada}
             onSelect={onBuscarPorRF}
@@ -333,6 +334,7 @@ function Localizador({
           />
         )}
         <InputRF
+          maxlength={11}
           id={SGP_INPUT_RF}
           pessoaSelecionada={pessoaSelecionada}
           onSelect={onBuscarPorRF}

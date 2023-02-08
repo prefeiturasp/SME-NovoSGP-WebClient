@@ -207,6 +207,8 @@ const DocPlanosTrabalhoCadastroForm = props => {
       )}
       <Row gutter={[16, 16]}>
         <Localizador
+          labelRF="RF/CPF"
+          placeholderRF="Digite o RF/CPF"
           novaEstrutura
           desabilitado={
             !form.values.tipoDocumentoId ||
