@@ -351,7 +351,8 @@ const EventosListaFiltros = () => {
       codigoDre,
       '',
       false,
-      modalidadeConvertida,consideraHistorico
+      modalidadeConvertida,
+      consideraHistorico
     )
       .catch(e => erros(e))
       .finally(() => setCarregandoUes(false));
@@ -459,29 +460,29 @@ const EventosListaFiltros = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [paramsRota, listaCalendarios, filtroListaEventos, limparFiltrosSalvos]);
 
-  const onCheckedConsideraHistorico = e => {
-    limparFiltrosSelecionados();
-    setConsideraHistorico(e.target.checked);
-  };
   const limparFiltrosSelecionados = () => {
     setCodigoUe();
     setListaUes([]);
     setCodigoDre();
   };
 
+  const onCheckedConsideraHistorico = e => {
+    limparFiltrosSelecionados();
+    setConsideraHistorico(e.target.checked);
+  };
 
   return (
     <Col span={24}>
       <Row gutter={[16, 16]}>
         <Col sm={24} md={12} xl={8}>
-        <div className="col-sm-24 mb-4">
-              <CheckboxComponent
-                id={SGP_CHECKBOX_EXIBIR_HISTORICO}
-                label="Exibir histórico?"
-                onChangeCheckbox={onCheckedConsideraHistorico}
-                checked={consideraHistorico}
-              />
-            </div>
+          <div className="col-sm-24 mb-4">
+            <CheckboxComponent
+              id={SGP_CHECKBOX_EXIBIR_HISTORICO}
+              label="Exibir histórico?"
+              onChangeCheckbox={onCheckedConsideraHistorico}
+              checked={consideraHistorico}
+            />
+          </div>
           <Loader loading={carregandoCalendarios} tip="">
             <SelectAutocomplete
               id={SGP_SELECT_TIPO_CALENDARIO}

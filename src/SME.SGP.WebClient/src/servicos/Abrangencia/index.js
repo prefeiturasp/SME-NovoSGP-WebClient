@@ -2,7 +2,7 @@ import api from '~/servicos/api';
 
 const AbrangenciaServico = {
   buscarDres(url = '', consideraHistorico = false) {
-    if (url) return api.get(url, (consideraHistorico = false));
+    if (url) return api.get(url, consideraHistorico);
     return api.get(`/v1/abrangencias/${consideraHistorico}/dres`);
   },
   buscarUes(
