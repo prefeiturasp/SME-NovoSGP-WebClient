@@ -171,6 +171,7 @@ const DiarioBordo = ({ match }) => {
   }, [turmaSelecionada.turma]);
 
   const obterComponentesCurriculares = useCallback(async () => {
+    setComponenteCurricularSelecionado(undefined);
     setCarregandoGeral(true);
     const componentes = await ServicoDisciplina.obterDisciplinasPorTurma(
       turmaId,

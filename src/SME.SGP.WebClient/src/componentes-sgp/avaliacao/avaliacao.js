@@ -22,12 +22,9 @@ import {
 } from '~/redux/modulos/notasConceitos/actions';
 import Nota from '../inputs/nota';
 import { moverFocoCampoNota } from '../inputs/nota/funcoes';
+import LabelInterdisciplinar from '../interdisciplinar';
 import Ordenacao from '../Ordenacao/ordenacao';
-import {
-  CaixaMarcadores,
-  InfoMarcador,
-  TabelaColunasFixas,
-} from './avaliacao.css';
+import { InfoMarcador, TabelaColunasFixas } from './avaliacao.css';
 import CampoConceito from './campoConceito';
 import CampoConceitoFinal from './campoConceitoFinal';
 import ColunaNotaFinalRegencia from './colunaNotaFinalRegencia';
@@ -109,26 +106,12 @@ const Avaliacao = props => {
       : '';
   };
 
-  const montarToolTipDisciplinas = disciplinas => {
-    let nomes = '';
-    disciplinas.forEach(nomeDisciplina => {
-      nomes += nomes.length > 0 ? `, ${nomeDisciplina}` : nomeDisciplina;
-    });
-    return nomes;
-  };
-
   const montarCabecalhoInterdisciplinar = () => {
     return dados.avaliacoes && dados.avaliacoes.length > 0
       ? dados.avaliacoes.map(avaliacao => {
           return avaliacao.ehInterdisciplinar ? (
             <th key={shortid.generate()}>
-              <Tooltip
-                title={montarToolTipDisciplinas(avaliacao.disciplinas)}
-                placement="bottom"
-                overlayStyle={{ fontSize: '12px' }}
-              >
-                <CaixaMarcadores>Interdisciplinar</CaixaMarcadores>
-              </Tooltip>
+              <LabelInterdisciplinar disciplinas={avaliacao.disciplinas} />
             </th>
           ) : (
             <th key={shortid.generate()} />
