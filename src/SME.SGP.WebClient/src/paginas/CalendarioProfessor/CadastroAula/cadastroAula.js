@@ -144,9 +144,10 @@ function CadastroDeAula({ match, location }) {
     },
   ];
   const obterComponenteSelecionadoPorId = useCallback(
-    componenteCurricularId => {
-      return listaComponentes.find(
-        c => c.codigoComponenteCurricular === Number(componenteCurricularId)
+    componenteCurricularId => {      
+      return listaComponentes.find(        
+        c => c.codigoComponenteCurricular === Number(componenteCurricularId) ||
+             c.id === Number(componenteCurricularId)
       );
     },
     [listaComponentes]
@@ -252,7 +253,7 @@ function CadastroDeAula({ match, location }) {
         servicoCadastroAula
           .obterGradePorComponenteETurma(
             turmaSelecionada.turma,
-            componenteSelecionado.codigoComponenteCurricular,
+            componenteSelecionado.territorioSaber ? componenteSelecionado.id : componenteSelecionado.codigoComponenteCurricular,
             dataAula,
             id || 0,
             componenteSelecionado.regencia,
@@ -326,8 +327,15 @@ function CadastroDeAula({ match, location }) {
             const componenteSelecionado = componentes.find(
               c =>
                 String(c.codigoComponenteCurricular) ===
+                String(respostaAula.disciplinaId) ||
+                String(c.id) ===
                 String(respostaAula.disciplinaId)
             );
+            if (respostaAula.disciplinaId.length < String(componenteSelecionado.codigoComponenteCurricular).length){
+              componentes.forEach(c => c.codigoComponenteCurricular = c.id);
+              setListaComponentes(componentes);
+            }
+            
             if (componenteSelecionado) {
               carregarGrade(
                 componenteSelecionado,
