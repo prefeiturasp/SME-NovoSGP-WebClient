@@ -24,6 +24,7 @@ function DreDropDown({
 }) {
   const [carregando, setCarregando] = useState(false);
   const [listaDres, setListaDres] = useState([]);
+  const anoLetivo = form?.values?.anoLetivo;
 
   const buscarDres = async () => {
     setCarregando(true);
@@ -46,7 +47,7 @@ function DreDropDown({
   useEffect(() => {
     if (temModalidade) buscarDres();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [url]);
+  }, [url, anoLetivo]);
 
   useEffect(() => {
     if (listaDres.length === 1) {
@@ -61,7 +62,7 @@ function DreDropDown({
       onChange(form.values.dreId, listaDres);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [form.values.dreId, onChange]);
+  }, [form.values.dreId]);
 
   return (
     <Loader loading={carregando} tip="">
