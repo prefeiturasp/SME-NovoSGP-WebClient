@@ -342,7 +342,6 @@ function Localizador({
           name="professorRf"
           placeholderRF={placeholderRF}
           form={form}
-          maxlength = '11'
           desabilitado={
             desabilitado ||
             validacaoDesabilitaPerfilProfessor() ||
