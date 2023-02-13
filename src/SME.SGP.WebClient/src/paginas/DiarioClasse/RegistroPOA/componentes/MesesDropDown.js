@@ -4,7 +4,7 @@ import t from 'prop-types';
 // Componentes
 import { SelectComponent } from '~/componentes';
 
-function MesesDropDown({ form, label, desabilitado, name }) {
+function MesesDropDown({ form, label, desabilitado, name, onChange }) {
   const listaMeses = [
     {
       valor: '1',
@@ -36,6 +36,7 @@ function MesesDropDown({ form, label, desabilitado, name }) {
       className="select-mes"
       disabled={desabilitado}
       labelRequired
+      onChange={onChange}
     />
   );
 }
@@ -45,6 +46,7 @@ MesesDropDown.propTypes = {
   label: t.string,
   desabilitado: t.bool,
   name: t.string,
+  onChange: t.oneOfType([t.func]),
 };
 
 MesesDropDown.defaultProps = {
@@ -52,6 +54,7 @@ MesesDropDown.defaultProps = {
   label: null,
   desabilitado: false,
   name: 'mes',
+  onChange: () => null,
 };
 
 export default MesesDropDown;

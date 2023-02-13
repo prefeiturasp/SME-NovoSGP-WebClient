@@ -179,6 +179,7 @@ function TerritorioSaber() {
         setBimestreAberto(false);
         setDados({ bimestres: [] });
         buscarPlanejamento();
+        setModoEdicao(false);
       }
     }
   };

@@ -1,5 +1,5 @@
 import * as moment from 'moment';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 
 import Alert from '../../../componentes/alert';
@@ -7,7 +7,7 @@ import Button from '../../../componentes/button';
 import Card from '../../../componentes/card';
 import { Colors } from '../../../componentes/colors';
 import SelectComponent from '../../../componentes/select';
-import { erro, sucesso, confirmar } from '../../../servicos/alertas';
+import { erro, sucesso, confirmar, erros } from '../../../servicos/alertas';
 import api from '../../../servicos/api';
 import history from '../../../servicos/history';
 import {
@@ -36,6 +36,7 @@ import {
   SGP_BUTTON_SALVAR,
 } from '~/constantes/ids/button';
 import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
+import { removerTagsHtml } from '~/utils';
 
 export default function PlanoCiclo() {
   const urlPrefeitura = 'https://curriculo.sme.prefeitura.sp.gov.br';
@@ -62,7 +63,6 @@ export default function PlanoCiclo() {
   });
   const [listaMatrizSelecionda, setListaMatrizSelecionda] = useState([]);
   const [listaODSSelecionado, setListaODSSelecionado] = useState([]);
-  const [anosTurmasUsuario, setAnosTurmasUsuario] = useState([]);
   const [planoCicloId, setPlanoCicloId] = useState(0);
   const [modalidadeEja, setModalidadeEja] = useState(false);
   const [somenteConsulta, setSomenteConsulta] = useState(false);
@@ -74,17 +74,17 @@ export default function PlanoCiclo() {
   const modalidadesFiltroPrincipal = useSelector(
     store => store.filtro.modalidades
   );
-  const [ehModalidadeInfantil, setEhModalidadeInfantil] = useState(false);
+
+  const ehModalidadeInfantil = ehTurmaInfantil(
+    modalidadesFiltroPrincipal,
+    turmaSelecionada
+  );
 
   useEffect(() => {
-    const naoSetarSomenteConsultaNoStore = ehTurmaInfantil(
-      modalidadesFiltroPrincipal,
-      turmaSelecionada
-    );
     setSomenteConsulta(
-      verificaSomenteConsulta(permissoesTela, naoSetarSomenteConsultaNoStore)
+      verificaSomenteConsulta(permissoesTela, ehModalidadeInfantil)
     );
-  }, [turmaSelecionada, permissoesTela, modalidadesFiltroPrincipal]);
+  }, [turmaSelecionada, permissoesTela, ehModalidadeInfantil]);
 
   useEffect(() => {
     async function carregarListas() {
@@ -96,14 +96,6 @@ export default function PlanoCiclo() {
     }
     carregarListas();
   }, []);
-
-  useEffect(() => {
-    let anosTurmUsuario = usuario.turmasUsuario.map(item => item.ano);
-    anosTurmUsuario = anosTurmUsuario.filter(
-      (elem, pos) => anosTurmUsuario.indexOf(elem) === Number(pos)
-    );
-    setAnosTurmasUsuario(anosTurmUsuario);
-  }, [usuario.turmasUsuario]);
 
   const [carregando, setCarregando] = useState(false);
   const [carregandoSalvar, setCarregandoSalvar] = useState(false);
@@ -183,10 +175,13 @@ export default function PlanoCiclo() {
       setPronto(true);
     } else {
       setPronto(true);
+      resetListas();
     }
   }
 
-  const carregarCiclos = async () => {
+  const turmasUsuario = usuario?.turmasUsuario;
+
+  const carregarCiclos = useCallback(async () => {
     if (usuario && turmaSelecionada.turma) {
       let anoSelecionado = '';
       let codModalidade = null;
@@ -201,20 +196,11 @@ export default function PlanoCiclo() {
       };
 
       let anos = [];
-      if (
-        usuario.turmasUsuario &&
-        usuario.turmasUsuario.length &&
-        anosTurmasUsuario.length < 1
-      ) {
-        anos = usuario.turmasUsuario.map(item => item.ano);
-        anos = anos.filter((elem, pos) => anos.indexOf(elem) === Number(pos));
-      }
-      if (anosTurmasUsuario.length < 1 && anos.length > 0) {
-        setAnosTurmasUsuario(anos);
-        params.anos = anos;
-      } else {
-        params.anos = anosTurmasUsuario;
-      }
+      anos = turmasUsuario?.map?.(item => item?.ano);
+      anos = anos?.filter?.(
+        (elem, pos) => anos?.indexOf?.(elem) === Number(pos)
+      );
+      params.anos = anos;
 
       const ciclos = await api.post('v1/ciclos/filtro', params).catch(err => {
         if (err?.response?.status === 601) erro(err.response.data.mensagens[0]);
@@ -255,16 +241,15 @@ export default function PlanoCiclo() {
       }
     }
     setCarregando(false);
-  };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [turmaSelecionada, turmasUsuario]);
 
   useEffect(() => {
-    const ehInfantil = ehTurmaInfantil(
-      modalidadesFiltroPrincipal,
-      turmaSelecionada
-    );
-    setEhModalidadeInfantil(ehInfantil);
-
-    if (turmaSelecionada && !ehInfantil && modalidadesFiltroPrincipal.length) {
+    if (
+      turmaSelecionada &&
+      !ehModalidadeInfantil &&
+      modalidadesFiltroPrincipal.length
+    ) {
       setCarregando(true);
       carregarCiclos();
     } else {
@@ -275,7 +260,7 @@ export default function PlanoCiclo() {
 
     if (!Object.entries(turmaSelecionada).length) setCicloSelecionado();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [turmaSelecionada, modalidadesFiltroPrincipal]);
+  }, [turmaSelecionada, ehModalidadeInfantil]);
 
   function addRemoverMatriz(event, matrizSelecionada) {
     const estaSelecionado =
@@ -399,7 +384,8 @@ export default function PlanoCiclo() {
     const anoLetivo = String(turmaSelecionada.anoLetivo);
     const codEscola = String(turmaSelecionada.unidadeEscolar);
 
-    if (!textEditorRef.current.value) {
+    const textoSemHtml = removerTagsHtml(textEditorRef.current.value);
+    if (!textoSemHtml?.trim()) {
       erro('A descrição deve ser informada');
       return;
     }
@@ -415,8 +401,9 @@ export default function PlanoCiclo() {
 
     setCarregandoSalvar(true);
 
-    api.post('v1/planos/ciclo', params).then(
-      () => {
+    api
+      .post('v1/planos/ciclo', params)
+      .then(() => {
         setCarregandoSalvar(false);
         sucesso('Suas informações foram salvas com sucesso.');
         if (navegarParaPlanejamento) {
@@ -424,12 +411,9 @@ export default function PlanoCiclo() {
         } else {
           confirmarCancelamento();
         }
-      },
-      e => {
-        setCarregandoSalvar(false);
-        erro(`Erro: ${e.response.data.mensagens[0]}`);
-      }
-    );
+      })
+      .catch(e => erros(e))
+      .finally(() => setCarregandoSalvar(false));
   }
 
   const onClickVoltar = async () => {
@@ -480,14 +464,15 @@ export default function PlanoCiclo() {
     }
   }
 
-  const podeAlterar = () => {
-    return permissoesTela[tipoPermissao.podeAlterar];
-  };
+  const podeAlterar = permissoesTela[tipoPermissao.podeAlterar];
 
   const desabilitaCamposEdicao = () => {
-    if (podeAlterar()) return !modoEdicao;
+    if (podeAlterar) return !modoEdicao;
     return true;
   };
+
+  const desabilitarTipoCiclo =
+    somenteConsulta || !podeAlterar ? true : listaCiclos?.length < 2;
 
   return (
     <>
@@ -527,14 +512,16 @@ export default function PlanoCiclo() {
           <Loader loading={carregandoSalvar} tip="">
             <Button
               id={SGP_BUTTON_SALVAR}
-              label="Salvar"
+              label={inseridoAlterado?.criadoEm ? 'Alterar' : 'Salvar'}
               color={Colors.Roxo}
               border
               bold
               onClick={() => salvarPlanoCiclo(false)}
               disabled={
                 ehTurmaInfantil(modalidadesFiltroPrincipal, turmaSelecionada) ||
-                desabilitaCamposEdicao()
+                !podeAlterar ||
+                somenteConsulta ||
+                (inseridoAlterado?.criadoEm && !modoEdicao)
               }
             />
           </Loader>
@@ -556,11 +543,7 @@ export default function PlanoCiclo() {
                       id="tipo-ciclo"
                       placeHolder="Selecione um tipo de ciclo"
                       lista={listaCiclos}
-                      disabled={
-                        somenteConsulta || !podeAlterar()
-                          ? true
-                          : listaCiclos.length < 2
-                      }
+                      disabled={desabilitarTipoCiclo}
                       valueOption="id"
                       valueText="descricao"
                       onChange={validaTrocaCiclo}
