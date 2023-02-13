@@ -521,7 +521,8 @@ export default function PlanoCiclo() {
                 ehTurmaInfantil(modalidadesFiltroPrincipal, turmaSelecionada) ||
                 !podeAlterar ||
                 somenteConsulta ||
-                (inseridoAlterado?.criadoEm && !modoEdicao)
+                (inseridoAlterado?.criadoEm && !modoEdicao) ||
+                !cicloSelecionado
               }
             />
           </Loader>
