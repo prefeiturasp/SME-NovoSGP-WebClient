@@ -2,6 +2,8 @@ import React, { useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import CardCollapse from '~/componentes/cardCollapse';
 import JoditEditor from '~/componentes/jodit-editor/joditEditor';
+import { SGP_COLLAPSE_DESENVOLVIMENTO_AULA } from '~/constantes/ids/collapse';
+import { SGP_JODIT_EDITOR_DESENVOLVIMENTO_AULA } from '~/constantes/ids/jodit-editor';
 import {
   setDesenvolvimentoDaAulaValidaObrigatoriedade,
   setModoEdicaoPlanoAula,
@@ -43,13 +45,18 @@ const DesenvolvimentoDaAula = () => {
   }, [refForm, dispatch]);
 
   const onChangeDesenvolvimentoAula = valor => {
-    ServicoPlanoAula.atualizarDadosPlanoAula('desenvolvimentoAula', valor);
-    dispatch(setModoEdicaoPlanoAula(true));
+    const desenvolvimentoAulaValor = dadosPlanoAula?.desenvolvimentoAula ?? '';
+
+    if (desenvolvimentoAulaValor !== valor) {
+      ServicoPlanoAula.atualizarDadosPlanoAula('desenvolvimentoAula', valor);
+      dispatch(setModoEdicaoPlanoAula(true));
+    }
   };
 
   return (
     <>
       <CardCollapse
+        id={SGP_COLLAPSE_DESENVOLVIMENTO_AULA}
         key="desenvolvimento-aula"
         titulo="Desenvolvimento da aula"
         indice="desenvolvimento-aula"
@@ -58,6 +65,7 @@ const DesenvolvimentoDaAula = () => {
       >
         <fieldset className="mt-3">
           <JoditEditor
+            id={SGP_JODIT_EDITOR_DESENVOLVIMENTO_AULA}
             ref={refForm}
             validarSeTemErro={valor =>
               !valor && !desabilitarCamposPlanoAula && temPeriodoAberto

@@ -2,6 +2,8 @@ import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import CardCollapse from '~/componentes/cardCollapse';
 import JoditEditor from '~/componentes/jodit-editor/joditEditor';
+import { SGP_COLLAPSE_RECUPERACAO_CONTINUA } from '~/constantes/ids/collapse';
+import { SGP_JODIT_EDITOR_RECUPERACAO_CONTINUA } from '~/constantes/ids/jodit-editor';
 import { setModoEdicaoPlanoAula } from '~/redux/modulos/frequenciaPlanoAula/actions';
 import ServicoPlanoAula from '~/servicos/Paginas/DiarioClasse/ServicoPlanoAula';
 
@@ -26,13 +28,18 @@ const RecuperacaoContinua = () => {
   };
 
   const onChangeRecuperacaoContinua = valor => {
-    ServicoPlanoAula.atualizarDadosPlanoAula('recuperacaoAula', valor);
-    dispatch(setModoEdicaoPlanoAula(true));
+    const recuperacaoAulaValor = dadosPlanoAula?.recuperacaoAula ?? '';
+
+    if (recuperacaoAulaValor !== valor) {
+      ServicoPlanoAula.atualizarDadosPlanoAula('recuperacaoAula', valor);
+      dispatch(setModoEdicaoPlanoAula(true));
+    }
   };
 
   return (
     <>
       <CardCollapse
+        id={SGP_COLLAPSE_RECUPERACAO_CONTINUA}
         key="recuperacao-continua"
         titulo="Recuperação contínua"
         indice="recuperacao-continua"
@@ -40,6 +47,7 @@ const RecuperacaoContinua = () => {
       >
         <fieldset className="mt-3">
           <JoditEditor
+            id={SGP_JODIT_EDITOR_RECUPERACAO_CONTINUA}
             desabilitar={desabilitarCamposPlanoAula || !temPeriodoAberto}
             onChange={onChangeRecuperacaoContinua}
             value={dadosPlanoAula?.recuperacaoAula}

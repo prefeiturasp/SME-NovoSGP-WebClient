@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 import { useSelector } from 'react-redux';
 
 // Componentes
+import { Col } from 'antd';
 import InputRF from './componentes/InputRF';
 import InputNome from './componentes/InputNome';
 import { Grid, Label } from '~/componentes';
@@ -18,6 +19,7 @@ import { validaSeObjetoEhNuloOuVazio } from '~/utils/funcoes/gerais';
 
 // Utils
 import RFNaoEncontradoExcecao from '~/utils/excecoes/RFNãoEncontradoExcecao';
+import { SGP_INPUT_NOME, SGP_INPUT_RF } from '~/constantes/ids/input';
 
 function Localizador({
   onChange,
@@ -42,6 +44,8 @@ function Localizador({
   ueId,
   buscarPorAbrangencia,
   labelRequired,
+  buscarPorTodasDre,
+  novaEstrutura,
 }) {
   const usuario = useSelector(store => store.usuario);
   const [dataSource, setDataSource] = useState([]);
@@ -81,6 +85,9 @@ function Localizador({
     if (valor.length < buscarCaracterPartir) return;
     setDataSource([]);
     setExibirLoader(true);
+
+    if (!anoLetivo) return;
+
     const { data: dados } = await service
       .buscarAutocomplete({
         nome: valor,
@@ -106,6 +113,13 @@ function Localizador({
       try {
         if (buscarPorAbrangencia && !ueId) return;
 
+        if (!rf) {
+          erro('O campo RF é obrigatório.');
+          return;
+        }
+
+        if (!anoLetivo) return;
+
         buscandoDados(true);
         setExibirLoader(true);
         const { data: dados } = await service
@@ -116,6 +130,7 @@ function Localizador({
             dreId,
             ueId,
             buscarPorAbrangencia,
+            buscarPorTodasDre,
           })
           .finally(() => setExibirLoader(false));
 
@@ -211,11 +226,11 @@ function Localizador({
   }, [form?.initialValues]);
 
   useEffect(() => {
-    if (dreId && validacaoDesabilitaPerfilProfessor()) {
+    if (dreId && ueId && validacaoDesabilitaPerfilProfessor()) {
       onBuscarPorRF({ rf: usuarioRf });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [dreId, ehPerfilProfessor, usuarioRf, onBuscarPorRF]);
+  }, [dreId, ueId, ehPerfilProfessor, usuarioRf, onBuscarPorRF]);
 
   useEffect(() => {
     if (form) {
@@ -226,6 +241,11 @@ function Localizador({
           professorNome: '',
           usuarioId: '',
         });
+        setDesabilitarCampo({
+          rf: false,
+          nome: false,
+        });
+        setDataSource([]);
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -241,6 +261,67 @@ function Localizador({
     }
   }, [pessoaSelecionada, limparCamposAposPesquisa]);
 
+  if (novaEstrutura) {
+    return (
+      <>
+        <Col sm={24} md={8}>
+          {showLabel && (
+            <Label
+              text={labelRF}
+              control="professorRf"
+              isRequired={labelRequired}
+            />
+          )}
+          <InputRF
+            id={SGP_INPUT_RF}
+            pessoaSelecionada={pessoaSelecionada}
+            onSelect={onBuscarPorRF}
+            onChange={v => {
+              if (v?.length === 0) {
+                setDataSource([]);
+              }
+              onChangeRF(v);
+            }}
+            name="professorRf"
+            placeholderRF={placeholderRF}
+            form={form}
+            desabilitado={
+              desabilitado ||
+              validacaoDesabilitaPerfilProfessor() ||
+              desabilitarCampo.rf
+            }
+            exibirLoader={exibirLoader}
+          />
+        </Col>
+        <Col sm={24} md={16}>
+          {showLabel && (
+            <Label
+              text={labelNome}
+              control="professorNome"
+              isRequired={labelRequired}
+            />
+          )}
+          <InputNome
+            id={SGP_INPUT_NOME}
+            dataSource={dataSource}
+            onSelect={onSelectPessoa}
+            onChange={onChangeInput}
+            pessoaSelecionada={pessoaSelecionada}
+            form={form}
+            name="professorNome"
+            placeholderNome={placeholderNome}
+            desabilitado={
+              desabilitado ||
+              validacaoDesabilitaPerfilProfessor() ||
+              desabilitarCampo.nome
+            }
+            exibirLoader={exibirLoader}
+          />
+        </Col>
+      </>
+    );
+  }
+
   return (
     <>
       <Grid cols={4} className={classesRF}>
@@ -252,6 +333,7 @@ function Localizador({
           />
         )}
         <InputRF
+          id={SGP_INPUT_RF}
           pessoaSelecionada={pessoaSelecionada}
           onSelect={onBuscarPorRF}
           onChange={onChangeRF}
@@ -275,6 +357,7 @@ function Localizador({
           />
         )}
         <InputNome
+          id={SGP_INPUT_NOME}
           dataSource={dataSource}
           onSelect={onSelectPessoa}
           onChange={onChangeInput}
@@ -320,6 +403,8 @@ Localizador.propTypes = {
   ueId: PropTypes.string,
   buscarPorAbrangencia: PropTypes.bool,
   labelRequired: PropTypes.bool,
+  buscarPorTodasDre: PropTypes.bool,
+  novaEstrutura: PropTypes.bool,
 };
 
 Localizador.defaultProps = {
@@ -345,6 +430,8 @@ Localizador.defaultProps = {
   ueId: null,
   buscarPorAbrangencia: false,
   labelRequired: false,
+  buscarPorTodasDre: false,
+  novaEstrutura: false,
 };
 
 export default Localizador;

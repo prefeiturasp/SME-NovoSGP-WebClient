@@ -9,7 +9,7 @@ import {
 } from '~/componentes';
 import { Cabecalho, NomeEstudanteLista } from '~/componentes-sgp';
 import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
-import { SGP_BUTTON_NOVO } from '~/componentes-sgp/filtro/idsCampos';
+import { SGP_BUTTON_NOVO } from '~/constantes/ids/button';
 import Button from '~/componentes/button';
 import Card from '~/componentes/card';
 import { Colors } from '~/componentes/colors';
@@ -24,6 +24,18 @@ import history from '~/servicos/history';
 import ServicoEncaminhamentoAEE from '~/servicos/Paginas/Relatorios/AEE/ServicoEncaminhamentoAEE';
 import FiltroHelper from '~componentes-sgp/filtro/helper';
 import ModalAvisoNovoEncaminhamentoAEE from './Componentes/AvisoCadastro/modalAvisoCadastro';
+import { SGP_CHECKBOX_EXIBIR_HISTORICO } from '~/constantes/ids/checkbox';
+import {
+  SGP_SELECT_ANO_LETIVO,
+  SGP_SELECT_DRE,
+  SGP_SELECT_ESTUDANTE_CRIANCA,
+  SGP_SELECT_RESPONSAVEL,
+  SGP_SELECT_SITUACAO,
+  SGP_SELECT_TURMA,
+  SGP_SELECT_UE,
+} from '~/constantes/ids/select';
+import { SGP_TABLE_LISTA_ALUNOS_ENCAMINHAMENTO_AEE } from '~/constantes/ids/table';
+import BotaoGerarRelatorioEncaminhamentoAEE from '../BotaoGerarRelatorioEncaminhamentoAEE';
 
 const EncaminhamentoAEELista = () => {
   const dispatch = useDispatch();
@@ -67,6 +79,11 @@ const EncaminhamentoAEELista = () => {
   const [carregandoAnos, setCarregandoAnos] = useState(false);
   const [carregandoSituacao, setCarregandoSituacao] = useState(false);
   const [carregandoResponsavel, setCarregandoResponsavel] = useState(false);
+
+  const [
+    idsEncaminhamentosSelecionados,
+    setIdsEncaminhamentosSelecionados,
+  ] = useState([]);
 
   useEffect(() => {
     verificaSomenteConsulta(permissoesTela);
@@ -488,6 +505,9 @@ const EncaminhamentoAEELista = () => {
     setConsideraHistorico(e.target.checked);
   };
 
+  const selecionarEcaminhamentos = selecionados =>
+    setIdsEncaminhamentosSelecionados(selecionados?.map(item => item?.id));
+
   return (
     <>
       <ModalAvisoNovoEncaminhamentoAEE />
@@ -507,6 +527,12 @@ const EncaminhamentoAEELista = () => {
               disabled={somenteConsulta || !permissoesTela.podeIncluir}
             />
           </Col>
+          <Col>
+            <BotaoGerarRelatorioEncaminhamentoAEE
+              ids={idsEncaminhamentosSelecionados}
+              disabled={!idsEncaminhamentosSelecionados?.length}
+            />
+          </Col>
         </Row>
       </Cabecalho>
       <Card>
@@ -514,7 +540,7 @@ const EncaminhamentoAEELista = () => {
           <div className="row">
             <div className="col-sm-12 mb-4">
               <CheckboxComponent
-                id="exibir-historico"
+                id={SGP_CHECKBOX_EXIBIR_HISTORICO}
                 label="Exibir histórico?"
                 onChangeCheckbox={onCheckedConsideraHistorico}
                 checked={consideraHistorico}
@@ -523,7 +549,7 @@ const EncaminhamentoAEELista = () => {
             <div className="col-sm-12 col-md-6 col-lg-2 col-xl-2 mb-2">
               <Loader loading={carregandoAnos} tip="">
                 <SelectComponent
-                  id="ano-letivo"
+                  id={SGP_SELECT_ANO_LETIVO}
                   label="Ano Letivo"
                   lista={listaAnosLetivo}
                   valueOption="valor"
@@ -538,7 +564,7 @@ const EncaminhamentoAEELista = () => {
             <div className="col-sm-12 col-md-12 col-lg-5 col-xl-5 mb-2">
               <Loader loading={carregandoDres} tip="">
                 <SelectComponent
-                  id="dre"
+                  id={SGP_SELECT_DRE}
                   label="Diretoria Regional de Educação (DRE)"
                   lista={listaDres}
                   valueOption="codigo"
@@ -554,7 +580,7 @@ const EncaminhamentoAEELista = () => {
             <div className="col-sm-12 col-md-12 col-lg-5 col-xl-5 mb-2">
               <Loader loading={carregandoUes} tip="">
                 <SelectComponent
-                  id="ue"
+                  id={SGP_SELECT_UE}
                   label="Unidade Escolar (UE)"
                   lista={listaUes}
                   valueOption="codigo"
@@ -570,7 +596,7 @@ const EncaminhamentoAEELista = () => {
             <div className="col-sm-12 col-md-12 col-lg-6 col-xl-6 mb-2">
               <Loader loading={carregandoTurmas} tip="">
                 <SelectComponent
-                  id="turma"
+                  id={SGP_SELECT_TURMA}
                   lista={listaTurmas}
                   valueOption="codigo"
                   valueText="nomeFiltro"
@@ -586,7 +612,7 @@ const EncaminhamentoAEELista = () => {
             <div className="col-sm-12 col-md-6 col-lg-6 col-xl-6 mb-2">
               <div className="row">
                 <LocalizadorEstudante
-                  id="estudante"
+                  id={SGP_SELECT_ESTUDANTE_CRIANCA}
                   showLabel
                   ueId={ue?.codigo}
                   onChange={onChangeLocalizadorEstudante}
@@ -601,7 +627,7 @@ const EncaminhamentoAEELista = () => {
             <div className="col-sm-12 col-md-6 col-lg-6 col-xl-6 mb-2">
               <Loader loading={carregandoSituacao} tip="">
                 <SelectComponent
-                  id="situacao"
+                  id={SGP_SELECT_SITUACAO}
                   label="Situação"
                   lista={listaSituacao}
                   valueOption="codigo"
@@ -616,7 +642,7 @@ const EncaminhamentoAEELista = () => {
             <div className="col-sm-12 col-md-6 col-lg-6 col-xl-6 mb-4">
               <Loader loading={carregandoResponsavel} tip="">
                 <SelectComponent
-                  id="responsavel"
+                  id={SGP_SELECT_RESPONSAVEL}
                   label="Responsável"
                   lista={listaResponsavel}
                   valueOption="codigoRf"
@@ -634,8 +660,9 @@ const EncaminhamentoAEELista = () => {
             listaUes?.length ? (
               <div className="col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-2">
                 <ListaPaginada
+                  multiSelecao
                   url="v1/encaminhamento-aee"
-                  id="lista-alunos"
+                  id={SGP_TABLE_LISTA_ALUNOS_ENCAMINHAMENTO_AEE}
                   colunas={colunas}
                   filtro={filtro}
                   filtroEhValido={
@@ -651,6 +678,7 @@ const EncaminhamentoAEELista = () => {
                   }
                   temPaginacao
                   onClick={onClickEditar}
+                  selecionarItems={selecionarEcaminhamentos}
                 />
               </div>
             ) : (

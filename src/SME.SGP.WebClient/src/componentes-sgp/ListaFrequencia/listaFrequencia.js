@@ -36,6 +36,10 @@ const ListaFrequencia = props => {
     state => state.frequenciaPlanoAula.listaDadosFrequencia?.listaFrequencia
   );
 
+  const desabilitaInformacoesDataFutura = useSelector(
+    state => state.frequenciaPlanoAula.listaDadosFrequencia?.desabilitado
+  );
+
   const listaTiposFrequencia = useSelector(
     state =>
       state.frequenciaPlanoAula.listaDadosFrequencia?.listaTiposFrequencia
@@ -62,7 +66,11 @@ const ListaFrequencia = props => {
       return;
     }
 
-    if (!temPeriodoAberto || !aulaIdPodeEditar) {
+    if (
+      !temPeriodoAberto ||
+      !aulaIdPodeEditar ||
+      desabilitaInformacoesDataFutura
+    ) {
       desabilitar = true;
     }
 
@@ -320,6 +328,7 @@ const ListaFrequencia = props => {
           align: 'center',
           className: 'p-2',
           title: montarTituloColunaMarcarTodas(),
+          key: 'childrenMarcarTodas',
           render: aluno => {
             const indexAluno = dataSource.indexOf(aluno);
             return (
@@ -371,6 +380,7 @@ const ListaFrequencia = props => {
       <ContainerListaFrequencia className="pt-2">
         {dataSource?.length ? (
           <DataTable
+            idLinha="codigoAluno"
             columns={columns}
             dataSource={dataSource}
             pagination={false}

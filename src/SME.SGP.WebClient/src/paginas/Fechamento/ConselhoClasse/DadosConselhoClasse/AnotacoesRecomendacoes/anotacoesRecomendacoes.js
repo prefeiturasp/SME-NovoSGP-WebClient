@@ -9,7 +9,6 @@ import {
   setAnotacoesPedagogicas,
   setAuditoriaAnotacaoRecomendacao,
   setConselhoClasseEmEdicao,
-  setDentroPeriodo,
   setRecomendacaoAluno,
   setRecomendacaoAlunoSelecionados,
   setRecomendacaoFamilia,
@@ -24,7 +23,7 @@ import AuditoriaAnotacaoRecomendacao from './AuditoriaAnotacaoRecomendacao/audit
 import RecomendacaoAlunoFamilia from './RecomendacaoAlunoFamilia/recomendacaoAlunoFamilia';
 
 const AnotacoesRecomendacoes = props => {
-  const { codigoTurma, bimestre } = props;
+  const { codigoTurma, bimestre, setCarregandoAba } = props;
   const dispatch = useDispatch();
 
   const fechamentoPeriodoInicioFim = useSelector(
@@ -108,13 +107,6 @@ const AnotacoesRecomendacoes = props => {
   const setarSituacaoConselho = useCallback(
     valor => {
       dispatch(setSituacaoConselhoAluno(valor));
-    },
-    [dispatch]
-  );
-
-  const setarDentroDoPeriodo = useCallback(
-    valor => {
-      dispatch(setDentroPeriodo(valor));
     },
     [dispatch]
   );
@@ -218,10 +210,6 @@ const AnotacoesRecomendacoes = props => {
 
       setMatriculaAtivaPeriodo(resposta.data.matriculaAtiva);
 
-      if (!desabilitarEdicaoAluno()) {
-        setarDentroDoPeriodo(!resposta.data.somenteLeitura);
-      }
-
       onChangeAnotacoesPedagogicas(resposta.data.anotacoesPedagogicas);
       onChangeRecomendacaoAluno(resposta.data.textoRecomendacaoAluno);
       onChangeRecomendacaoFamilia(resposta.data.textoRecomendacaoFamilia);
@@ -230,11 +218,13 @@ const AnotacoesRecomendacoes = props => {
       setarAuditoria(resposta.data);
       setExibir(true);
       setCarregando(false);
+      setCarregandoAba(false);
       return;
     }
     setarAuditoria({});
     setExibir(false);
     setCarregando(false);
+    setCarregandoAba(false);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     alunoCodigo,
@@ -245,7 +235,6 @@ const AnotacoesRecomendacoes = props => {
     onChangeRecomendacaoFamilia,
     setarAnotacaoAluno,
     setarAuditoria,
-    setarDentroDoPeriodo,
     setarSituacaoConselho,
     alunoDesabilitado,
     bimestre,
@@ -255,7 +244,7 @@ const AnotacoesRecomendacoes = props => {
   useEffect(() => {
     if (alunoCodigo && fechamentoTurmaId) {
       obterAnotacoesRecomendacoes();
-    } 
+    }
   }, [fechamentoTurmaId, alunoCodigo, obterAnotacoesRecomendacoes]);
 
   const setarConselhoClasseEmEdicao = emEdicao => {
@@ -303,11 +292,13 @@ const AnotacoesRecomendacoes = props => {
 AnotacoesRecomendacoes.propTypes = {
   codigoTurma: PropTypes.oneOfType([PropTypes.string]),
   bimestre: PropTypes.oneOfType([PropTypes.any]),
+  setCarregandoAba: PropTypes.oneOfType([PropTypes.func]),
 };
 
 AnotacoesRecomendacoes.defaultProps = {
   codigoTurma: '',
   bimestre: 0,
+  setCarregandoAba: () => {},
 };
 
 export default AnotacoesRecomendacoes;

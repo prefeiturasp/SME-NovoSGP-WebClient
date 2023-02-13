@@ -9,6 +9,7 @@ import RotasDto from '~/dtos/rotasDto';
 import {
   setBimestreAtual,
   setDadosPrincipaisConselhoClasse,
+  setDentroPeriodo,
   setDesabilitarCampos,
   setExpandirLinha,
   setFechamentoPeriodoInicioFim,
@@ -86,7 +87,7 @@ const DadosConselhoClasse = props => {
 
   // Quando passa bimestre 0 o retorno vai trazer dados do bimestre corrente!
   const caregarInformacoes = useCallback(
-    async (bimestreConsulta = 0) => {
+    async (bimestreConsulta = 0, carregarParecer = true) => {
       limparDadosNotaPosConselhoJustificativa();
       setCarregando(true);
       setSemDados(true);
@@ -101,20 +102,18 @@ const DadosConselhoClasse = props => {
         codigoEOL,
         ehFinal,
         usuario.turmaSelecionada.consideraHistorico
-      )
-        .catch(e => {
-          erros(e);
-          dispatch(
-            setBimestreAtual({
-              valor: bimestreConsulta,
-              dataInicio: null,
-              dataFim: null,
-            })
-          );
-          dispatch(setDadosPrincipaisConselhoClasse({}));
-          setSemDados(true);
-        })
-        .finally(() => setCarregando(false));
+      ).catch(e => {
+        erros(e);
+        dispatch(
+          setBimestreAtual({
+            valor: bimestreConsulta,
+            dataInicio: null,
+            dataFim: null,
+          })
+        );
+        dispatch(setDadosPrincipaisConselhoClasse({}));
+        setSemDados(true);
+      });
 
       if (retorno && retorno.data) {
         const {
@@ -129,6 +128,7 @@ const DadosConselhoClasse = props => {
           tipoNota,
           media,
           anoLetivo,
+          periodoAberto,
         } = retorno.data;
 
         const novoRegistro = !conselhoClasseId;
@@ -138,7 +138,9 @@ const DadosConselhoClasse = props => {
         if (
           fechamentoTurmaId &&
           conselhoClasseId &&
-          bimestreConsulta === 'final'
+          bimestreConsulta === 'final' &&
+          conselhoClasseAlunoId &&
+          carregarParecer
         ) {
           validouPodeAcessar = await servicoSalvarConselhoClasse.validaParecerConclusivo(
             conselhoClasseId,
@@ -171,9 +173,11 @@ const DadosConselhoClasse = props => {
           alunoDesabilitado: desabilitado,
           tipoNota,
           media,
+          periodoAberto,
         };
 
         dispatch(setDadosPrincipaisConselhoClasse(valores));
+        dispatch(setDentroPeriodo(!!periodoAberto));
 
         const datas = {
           periodoFechamentoInicio,
@@ -213,11 +217,10 @@ const DadosConselhoClasse = props => {
           );
         }
         setSemDados(false);
-        setCarregando(false);
       } else {
         validaPermissoes(true);
+        setCarregando(false);
       }
-      setCarregando(false);
     },
     [
       codigoEOL,
@@ -260,37 +263,35 @@ const DadosConselhoClasse = props => {
     }
 
     if (continuar) {
-      caregarInformacoes(numeroBimestre);
+      caregarInformacoes(numeroBimestre, false);
     }
   };
 
   const montarDados = () => {
-    return (
-      <Loader loading={carregando} className={carregando ? 'text-center' : ''}>
-        {!semDados && String(turmaSelecionada.turma) === String(turmaAtual) ? (
-          <>
-            <AlertaDentroPeriodo />
-            <MarcadorPeriodoInicioFim />
-            <ListasNotasConceitos bimestreSelecionado={bimestreAtual} />
-            <Sintese
-              ehFinal={bimestreAtual.valor === 'final'}
-              bimestreSelecionado={bimestreAtual.valor}
-              turmaId={turmaSelecionada.turma}
-            />
-            <AnotacoesRecomendacoes
-              bimestre={bimestreAtual}
-              codigoTurma={turmaCodigo}
-            />
-          </>
-        ) : semDados && !carregando ? (
-          <div className="text-center">Sem dados</div>
-        ) : null}
-      </Loader>
-    );
+    return !semDados &&
+      String(turmaSelecionada.turma) === String(turmaAtual) ? (
+      <>
+        <AlertaDentroPeriodo />
+        <MarcadorPeriodoInicioFim />
+        <ListasNotasConceitos bimestreSelecionado={bimestreAtual} />
+        <Sintese
+          ehFinal={bimestreAtual.valor === 'final'}
+          bimestreSelecionado={bimestreAtual.valor}
+          turmaId={turmaSelecionada.turma}
+        />
+        <AnotacoesRecomendacoes
+          bimestre={bimestreAtual}
+          codigoTurma={turmaCodigo}
+          setCarregandoAba={setCarregando}
+        />
+      </>
+    ) : semDados && !carregando ? (
+      <div className="text-center">Sem dados</div>
+    ) : null;
   };
 
   return (
-    <>
+    <Loader loading={carregando}>
       {codigoEOL ? (
         <ContainerTabsCard
           type="card"
@@ -332,7 +333,7 @@ const DadosConselhoClasse = props => {
       {codigoEOL && !bimestreAtual?.valor && (
         <div className="text-center">Selecione um bimestre</div>
       )}
-    </>
+    </Loader>
   );
 };
 

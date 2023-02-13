@@ -69,15 +69,13 @@ import RelatorioCompensacaoAusencia from '~/paginas/Relatorios/CompensacaoAusenc
 import DashboardEscolaAqui from '~/paginas/Dashboard/DashboardEscolaAqui/dashboardEscolaAqui';
 import ControleGrade from '~/paginas/Relatorios/DiarioClasse/ControleGrade/controleGrade';
 import Sondagem from '~/paginas/Sondagem/sondagem';
-import DocumentosPlanosTrabalhoLista from '~/paginas/Gestao/DocumentosPlanosTrabalho/documentosPlanosTrabalhoLista';
-import DocumentosPlanosTrabalhoCadastro from '~/paginas/Gestao/DocumentosPlanosTrabalho/documentosPlanosTrabalhoCadastro';
 import HistoricoNotificacoes from '~/paginas/Relatorios/Notificacoes/HistoricoNotificacoes/historicoNotificacoes';
 import RelatorioUsuarios from '~/paginas/Relatorios/Gestao/Usuarios/relatorioUsuarios';
 import AtribuicaoCJ from '~/paginas/Relatorios/Gestao/AtribuicaoCJ/atribuicaoCJ';
 import RelatorioHistoricoAlteracoesNotas from '~/paginas/Relatorios/Fechamento/HistoricoAlteracoesNotas/relatorioHistoricoAlteracoesNotas';
 import relatorioEscolaAquiAdesao from '~/paginas/Relatorios/EscolaAqui/Adesao/relatorioEscolaAquiAdesao';
 import RelatorioLeitura from '~/paginas/Relatorios/EscolaAqui/Leitura/relatorioLeitura';
-import ListaOcorrencias from '~/paginas/Gestao/Ocorrencia/ListaOcorrencias';
+import ListaOcorrencias from '~/paginas/Gestao/Ocorrencia/lista/listaOcorrencias';
 import CadastroOcorrencias from '~/paginas/Gestao/Ocorrencia/CadastroOcorrencias';
 import RelatorioPlanejamentoDiario from '~/paginas/Relatorios/DiarioClasse/PlanejamentoDiario/relatorioPlanejamentoDiario';
 import EncaminhamentoAEELista from '~/paginas/AEE/Encaminhamento/Lista/encaminhamentoAEELista';
@@ -110,6 +108,12 @@ import Listao from '~/paginas/DiarioClasse/Listao/lista/listao';
 import RelatorioFrequenciaMensal from '~/paginas/Relatorios/Frequencia/relatorioFrequenciaMensal';
 import DashboardNAAPA from '~/paginas/Dashboard/DashboardNAAPA/dashboardNAAPA';
 import Suporte from '~/paginas/Configuracoes/Usuarios/Suporte/suporte';
+import ListaEncaminhamentoNAAPA from '~/paginas/NAAPA/Encaminhamento/Lista/listaEncaminhamentoNAAPA';
+import CadastroEncaminhamentoNAAPA from '~/paginas/NAAPA/Encaminhamento/Cadastro/encaminhamentoNAAPA';
+import RelatorioPlanoAEE from '~/paginas/Relatorios/AEE/plano/relatorioPlanoAEE';
+import DocPlanosTrabalhoLista from '~/paginas/Gestao/DocumentosPlanosTrabalho/lista/docPlanosTrabalhoLista';
+import DocPlanosTrabalhoCadastro from '~/paginas/Gestao/DocumentosPlanosTrabalho/cadastro/docPlanosTrabalhoCadastro';
+import RelatorioEncaminhamentoAEE from '~/paginas/Relatorios/AEE/encaminhamento/relatorioEncaminhamentoAEE';
 
 const rotas = new Map();
 
@@ -295,7 +299,6 @@ rotas.set(
     chavePermissao: RotasDto.ATRIBUICAO_RESPONSAVEIS_LISTA,
   }
 );
-
 
 rotas.set(`${RotasDto.ATRIBUICAO_RESPONSAVEIS}/:dreId/:tipoResponsavel`, {
   breadcrumbName: 'Atribuição de responsáveis',
@@ -1136,7 +1139,7 @@ rotas.set(RotasDto.DOCUMENTOS_PLANOS_TRABALHO, {
   breadcrumbName: 'Documentos e planos de trabalho',
   menu: ['Gestão'],
   parent: '/',
-  component: DocumentosPlanosTrabalhoLista,
+  component: DocPlanosTrabalhoLista,
   exact: true,
   tipo: RotasTipo.EstruturadaAutenticada,
   temPermissionamento: true,
@@ -1146,7 +1149,7 @@ rotas.set(RotasDto.DOCUMENTOS_PLANOS_TRABALHO, {
 rotas.set(`${RotasDto.DOCUMENTOS_PLANOS_TRABALHO}/novo`, {
   breadcrumbName: 'Upload do arquivo',
   parent: RotasDto.DOCUMENTOS_PLANOS_TRABALHO,
-  component: DocumentosPlanosTrabalhoCadastro,
+  component: DocPlanosTrabalhoCadastro,
   exact: true,
   tipo: RotasTipo.EstruturadaAutenticada,
   temPermissionamento: true,
@@ -1156,7 +1159,7 @@ rotas.set(`${RotasDto.DOCUMENTOS_PLANOS_TRABALHO}/novo`, {
 rotas.set(`${RotasDto.DOCUMENTOS_PLANOS_TRABALHO}/editar/:id`, {
   breadcrumbName: 'Upload do arquivo',
   parent: RotasDto.DOCUMENTOS_PLANOS_TRABALHO,
-  component: DocumentosPlanosTrabalhoCadastro,
+  component: DocPlanosTrabalhoCadastro,
   exact: true,
   tipo: RotasTipo.EstruturadaAutenticada,
   temPermissionamento: true,
@@ -1551,6 +1554,59 @@ rotas.set(RotasDto.DASHBOARD_NAAPA, {
   tipo: RotasTipo.EstruturadaAutenticada,
   temPermissionamento: true,
   chavePermissao: RotasDto.DASHBOARD_NAAPA,
+});
+
+rotas.set(RotasDto.ENCAMINHAMENTO_NAAPA, {
+  breadcrumbName: 'Encaminhamento NAAPA',
+  menu: ['Gestão'],
+  parent: '/',
+  component: ListaEncaminhamentoNAAPA,
+  exact: true,
+  tipo: RotasTipo.EstruturadaAutenticada,
+  temPermissionamento: true,
+  chavePermissao: RotasDto.ENCAMINHAMENTO_NAAPA,
+});
+
+rotas.set(`${RotasDto.ENCAMINHAMENTO_NAAPA}/novo`, {
+  breadcrumbName: 'Encaminhamento',
+  parent: RotasDto.ENCAMINHAMENTO_NAAPA,
+  component: CadastroEncaminhamentoNAAPA,
+  exact: true,
+  tipo: RotasTipo.EstruturadaAutenticada,
+  temPermissionamento: true,
+  chavePermissao: RotasDto.ENCAMINHAMENTO_NAAPA,
+});
+
+rotas.set(`${RotasDto.ENCAMINHAMENTO_NAAPA}/:id`, {
+  breadcrumbName: 'Encaminhamento',
+  parent: RotasDto.ENCAMINHAMENTO_NAAPA,
+  component: CadastroEncaminhamentoNAAPA,
+  exact: true,
+  tipo: RotasTipo.EstruturadaAutenticada,
+  temPermissionamento: true,
+  chavePermissao: RotasDto.ENCAMINHAMENTO_NAAPA,
+});
+
+rotas.set(RotasDto.RELATORIO_AEE_PLANO_IMPRESSAO, {
+  breadcrumbName: 'Plano',
+  menu: ['Relatórios', 'AEE'],
+  parent: '/',
+  component: RelatorioPlanoAEE,
+  exact: true,
+  tipo: RotasTipo.EstruturadaAutenticada,
+  temPermissionamento: true,
+  chavePermissao: RotasDto.RELATORIO_AEE_PLANO_IMPRESSAO,
+});
+
+rotas.set(RotasDto.RELATORIO_AEE_ENCAMINHAMENTO_IMPRESSAO, {
+  breadcrumbName: 'Encaminhamento',
+  menu: ['Relatórios', 'AEE'],
+  parent: '/',
+  component: RelatorioEncaminhamentoAEE,
+  exact: true,
+  tipo: RotasTipo.EstruturadaAutenticada,
+  temPermissionamento: true,
+  chavePermissao: RotasDto.RELATORIO_AEE_ENCAMINHAMENTO_IMPRESSAO,
 });
 
 const rotasArray = [];

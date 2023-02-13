@@ -13,7 +13,7 @@ import {
   SGP_SELECT_TIPO_PENDENCIA,
   SGP_SELECT_TURMA,
   SGP_SELECT_NOME_TIPO_PENDENCIA,
-} from '~/componentes-sgp/filtro/idsCampos';
+} from '~/constantes/ids/select';
 import { Container, TextoTitulo } from './pendenciasGerais.css';
 
 const PendenciasGerais = () => {
@@ -31,6 +31,7 @@ const PendenciasGerais = () => {
   );
   const [listaTurmas, setListaTurmas] = useState([]);
   const [carregandoTurmas, setCarregandoTurmas] = useState(false);
+  const [carregouTurmas, setCarregouTurmas] = useState(false);
   const [
     carregandoTipoPendenciaGrupo,
     setCarregandoTipoPendenciaGrupo,
@@ -44,26 +45,28 @@ const PendenciasGerais = () => {
 
   const obterPendencias = useCallback(
     async (paginaAtual, numeroPag) => {
-      setCarregando(true);
-      const resposta = await ServicoPendencias.obterPendenciasListaPaginada(
-        codigoTurma,
-        tipoPendenciaGrupo,
-        titulo,
-        paginaAtual,
-        numeroPag
-      )
-        .catch(e => erros(e))
-        .finally(() => setCarregando(false));
+      if (carregouTurmas) {
+        setCarregando(true);
+        const resposta = await ServicoPendencias.obterPendenciasListaPaginada(
+          codigoTurma,
+          tipoPendenciaGrupo,
+          titulo,
+          paginaAtual,
+          numeroPag
+        )
+          .catch(e => erros(e))
+          .finally(() => setCarregando(false));
 
-      if (resposta?.data?.items) {
-        setDadosPendencias(resposta.data);
-        setNumeroRegistros(resposta.data.totalRegistros);
-      } else {
-        setDadosPendencias([]);
+        if (resposta?.data?.items) {
+          setDadosPendencias(resposta.data);
+          setNumeroRegistros(resposta.data.totalRegistros);
+        } else {
+          setDadosPendencias([]);
+        }
+        setCollapseExpandido();
       }
-      setCollapseExpandido();
     },
-    [codigoTurma, tipoPendenciaGrupo, titulo]
+    [carregouTurmas, codigoTurma, tipoPendenciaGrupo, titulo]
   );
 
   const onChangePaginacao = async pagina => {
@@ -86,9 +89,10 @@ const PendenciasGerais = () => {
       const lista = retorno?.data;
       setListaTurmas(lista);
       if (lista.length === 1) {
-        setCodigoTurma([String(lista[0].codigo)]);
+        setCodigoTurma(String(lista[0].codigo));
       }
     }
+    setCarregouTurmas(true);
   };
 
   const obterTipoPendenciaGrupo = async () => {

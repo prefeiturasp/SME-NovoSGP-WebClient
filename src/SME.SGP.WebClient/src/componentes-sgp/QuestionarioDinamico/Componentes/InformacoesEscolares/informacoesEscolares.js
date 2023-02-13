@@ -6,10 +6,11 @@ import AusenciasEstudante from './ausenciasEstudante';
 import BtnExpandirAusenciaEstudante from './btnExpandirAusenciaEstudante';
 import { TabelaColunasFixas } from './informacoesEscolares.css';
 import ModalAnotacoesQuestionarioDinamico from './modalAnotacoesQuestionarioDinamico';
+import ColunaDimensionavel from '../ColunaDimensionavel/colunaDimensionavel';
 
 const InformacoesEscolares = props => {
   const [dados, setDados] = useState([]);
-  const { codigoAluno, codigoTurma, anoLetivo } = props;
+  const { codigoAluno, codigoTurma, anoLetivo, questaoAtual } = props;
 
   const obterInformacoesEscolaresDoAluno = useCallback(async () => {
     const resposta = await ServicoEstudante.obterInformacoesEscolaresDoAluno(
@@ -29,7 +30,7 @@ const InformacoesEscolares = props => {
   }, [obterInformacoesEscolaresDoAluno]);
 
   return (
-    <>
+    <ColunaDimensionavel dimensao={questaoAtual?.dimensao}>
       <ModalAnotacoesQuestionarioDinamico />
       <TabelaColunasFixas>
         <div className="wrapper">
@@ -113,7 +114,7 @@ const InformacoesEscolares = props => {
           </div>
         </div>
       </TabelaColunasFixas>
-    </>
+    </ColunaDimensionavel>
   );
 };
 
@@ -121,12 +122,14 @@ InformacoesEscolares.propTypes = {
   codigoAluno: PropTypes.oneOfType([PropTypes.any]),
   codigoTurma: PropTypes.oneOfType([PropTypes.any]),
   anoLetivo: PropTypes.oneOfType([PropTypes.any]),
+  questaoAtual: PropTypes.oneOfType([PropTypes.any]),
 };
 
 InformacoesEscolares.defaultProps = {
   codigoAluno: '',
   codigoTurma: '',
   anoLetivo: null,
+  questaoAtual: null,
 };
 
 export default InformacoesEscolares;

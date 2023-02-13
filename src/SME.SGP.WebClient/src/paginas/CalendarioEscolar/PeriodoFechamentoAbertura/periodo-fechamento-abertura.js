@@ -20,7 +20,7 @@ import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPad
 import {
   SGP_BUTTON_ALTERAR_CADASTRAR,
   SGP_BUTTON_CANCELAR,
-} from '~/componentes-sgp/filtro/idsCampos';
+} from '~/constantes/ids/button';
 import { URL_HOME } from '~/constantes';
 import { periodo, RotasDto } from '~/dtos';
 import { ContainerColumnReverse } from '~/paginas/Planejamento/Anual/planoAnual.css';
@@ -270,10 +270,10 @@ const PeriodoFechamentoAbertura = () => {
             setAuditoria({
               criadoEm: resposta.data.criadoEm,
               criadoPor: resposta.data.criadoPor,
-              criadoRf: resposta.data.criadoRf,
+              criadoRf: resposta.data.criadoRF,
               alteradoPor: resposta.data.alteradoPor,
               alteradoEm: resposta.data.alteradoEm,
-              alteradoRf: resposta.data.alteradoRf,
+              alteradoRf: resposta.data.alteradoRF,
             });
             setIdFechamentoAbertura(resposta.data.id);
           } else {
@@ -308,41 +308,6 @@ const PeriodoFechamentoAbertura = () => {
     }
   };
 
-  const validaAntesDoSubmit = form => {
-    setModoEdicao(true);
-    touchedFields(form);
-    form.validateForm().then(() => {
-      if (
-        form.isValid ||
-        (Object.keys(form.errors).length === 0 &&
-          Object.keys(form.values).length > 0)
-      ) {
-        form.handleSubmit(e => e);
-      }
-    });
-  };
-
-  const onClickVoltar = async form => {
-    if (modoEdicao) {
-      const confirmado = await confirmar(
-        'Atenção',
-        '',
-        'Suas alterações não foram salvas, deseja salvar agora?',
-        'Sim',
-        'Não'
-      );
-
-      if (confirmado) {
-        validaAntesDoSubmit(form);
-        history.push(URL_HOME);
-      } else {
-        history.push(URL_HOME);
-      }
-    } else {
-      history.push(URL_HOME);
-    }
-  };
-
   const resetarTela = form => {
     form.resetForm();
     setModoEdicao(false);
@@ -363,7 +328,7 @@ const PeriodoFechamentoAbertura = () => {
     }
   };
 
-  const onSubmit = async (form, confirmou = false) => {
+  const onSubmit = async (form, voltar) => {
     form.fechamentosBimestres.forEach(item => {
       switch (item.bimestre) {
         case 1:
@@ -390,15 +355,50 @@ const PeriodoFechamentoAbertura = () => {
     setEmprocessamento(true);
     ServicoPeriodoFechamento.salvar({
       ...form,
-      confirmouAlteracaoHierarquica: confirmou,
+      confirmouAlteracaoHierarquica: false,
     })
       .then(() => {
         sucesso('Períodos salvos com sucesso.');
         carregaDados();
         setModoEdicao(false);
+        if (voltar) history.push(URL_HOME);
       })
       .catch(e => erros(e))
       .finally(() => setEmprocessamento(false));
+  };
+
+  const validaAntesDoSubmit = (form, voltar) => {
+    setModoEdicao(true);
+    touchedFields(form);
+    form.validateForm().then(() => {
+      if (
+        form.isValid ||
+        (Object.keys(form.errors).length === 0 &&
+          Object.keys(form.values).length > 0)
+      ) {
+        onSubmit(form?.values, voltar);
+      }
+    });
+  };
+
+  const onClickVoltar = async form => {
+    if (modoEdicao) {
+      const confirmado = await confirmar(
+        'Atenção',
+        '',
+        'Suas alterações não foram salvas, deseja salvar agora?',
+        'Sim',
+        'Não'
+      );
+
+      if (confirmado) {
+        validaAntesDoSubmit(form, true);
+      } else {
+        history.push(URL_HOME);
+      }
+    } else {
+      history.push(URL_HOME);
+    }
   };
 
   const obterDatasParaHabilitar = (inicio, fim) => {
@@ -475,7 +475,6 @@ const PeriodoFechamentoAbertura = () => {
         enableReinitialize
         initialValues={fechamento}
         validationSchema={validacoes}
-        onSubmit={values => onSubmit(values)}
         validateOnChange
         validateOnBlur
         id={shortid.generate()}
@@ -505,7 +504,11 @@ const PeriodoFechamentoAbertura = () => {
                     color={Colors.Roxo}
                     border
                     bold
-                    disabled={desabilitarCampos}
+                    disabled={
+                      desabilitarCampos ||
+                      (ehRegistroExistente && !modoEdicao) ||
+                      !valorTipoCalendario
+                    }
                     onClick={() => validaAntesDoSubmit(form)}
                   />
                 </Col>

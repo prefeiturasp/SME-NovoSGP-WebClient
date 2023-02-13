@@ -88,6 +88,8 @@ class ServicoNotificacao {
     await api.get(`v1/notificacoes/nao-lidas/quantidade`).then(res => {
       if (res.data) {
         store.dispatch(naoLidas(res.data));
+      } else {
+        store.dispatch(naoLidas(0));
       }
     });
   };

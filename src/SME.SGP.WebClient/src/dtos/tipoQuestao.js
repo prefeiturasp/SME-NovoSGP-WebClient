@@ -11,6 +11,14 @@ const tipoQuestao = {
   Periodo: 10,
   FrequenciaEstudanteAEE: 11,
   PeriodoEscolar: 12,
+  Numerico: 13,
+  Data: 14,
+  Endereco: 15,
+  ContatoResponsaveis: 16,
+  AtividadesContraturno: 17,
+  EditorTexto: 18,
+  TurmasPrograma: 19,
+  InformacoesSrm: 20,
 };
 
 export default tipoQuestao;

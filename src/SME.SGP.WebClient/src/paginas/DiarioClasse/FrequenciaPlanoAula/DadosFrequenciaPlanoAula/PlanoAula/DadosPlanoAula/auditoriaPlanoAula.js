@@ -7,19 +7,7 @@ const AuditoriaPlanoAula = () => {
     state => state.frequenciaPlanoAula.dadosPlanoAula?.auditoria
   );
 
-  return (
-    <div className="row">
-      <Auditoria
-        className="mt-2"
-        criadoEm={auditoria?.criadoEm}
-        criadoPor={auditoria?.criadoPor}
-        alteradoPor={auditoria?.alteradoPor}
-        alteradoEm={auditoria?.alteradoEm}
-        alteradoRf={auditoria?.alteradoRF}
-        criadoRf={auditoria?.criadoRF}
-      />
-    </div>
-  );
+  return <Auditoria className="mt-2" {...auditoria} />;
 };
 
 export default AuditoriaPlanoAula;

@@ -1,6 +1,7 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Editor } from '~/componentes';
+import { SGP_CKEDITOR_PARECER_CEFAI_PLANO_AEE } from '~/constantes/ids/ckeditor';
 import {
   setParecerEmEdicao,
   setParecerPAAI,
@@ -24,6 +25,7 @@ const SecaoParecerPAAI = () => {
   return (
     <div className="mb-3">
       <Editor
+        id={SGP_CKEDITOR_PARECER_CEFAI_PLANO_AEE}
         label="Parecer do CEFAI"
         onChange={mudarDescricaoPAAI}
         inicial={dadosParecer?.parecerPAAI || parecerPAAI || ''}

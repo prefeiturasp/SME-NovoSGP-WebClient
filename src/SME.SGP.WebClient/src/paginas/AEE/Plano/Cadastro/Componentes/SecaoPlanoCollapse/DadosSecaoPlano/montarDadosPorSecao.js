@@ -27,7 +27,7 @@ const MontarDadosPorSecao = props => {
       (planoId &&
         (planoAEEDados?.situacao === situacaoPlanoAEE.Encerrado ||
           planoAEEDados?.situacao ===
-            situacaoPlanoAEE.EncerradoAutomaticamento))
+            situacaoPlanoAEE.EncerradoAutomaticamente))
     );
   };
 
@@ -44,6 +44,7 @@ const MontarDadosPorSecao = props => {
           funcaoRemoverArquivoCampoUpload={ServicoPlanoAEE.removerArquivo}
           urlUpload="v1/plano-aee/upload"
           turmaId={dadosCollapseLocalizarEstudante?.turmaId}
+          versaoPlano ={planoAEEDados?.ultimaVersao}
         />
       ) : (
         ''

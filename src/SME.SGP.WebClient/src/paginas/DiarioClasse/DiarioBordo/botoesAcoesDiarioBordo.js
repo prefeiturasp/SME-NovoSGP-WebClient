@@ -5,20 +5,23 @@ import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPad
 import {
   SGP_BUTTON_CANCELAR,
   SGP_BUTTON_SALVAR_ALTERAR,
-} from '~/componentes-sgp/filtro/idsCampos';
+} from '~/constantes/ids/button';
 import Button from '~/componentes/button';
 import { Colors } from '~/componentes/colors';
+import BotaoExcluirPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoExcluirPadrao';
 
 const BotoesAcoesDiarioBordo = props => {
   const {
     onClickVoltar,
     onClickCancelar,
+    onClickExcluir,
     modoEdicao,
     desabilitarCampos,
     turmaInfantil,
     validaAntesDoSubmit,
     componenteCurricularSelecionado,
     dataSelecionada,
+    permissoesTela,
     id,
   } = props;
 
@@ -46,12 +49,18 @@ const BotoesAcoesDiarioBordo = props => {
         onClick={onClickCancelar}
         disabled={!modoEdicao || desabilitarCampos}
       />
+      <BotaoExcluirPadrao
+        className="mr-2"
+        disabled={!permissoesTela?.podeExcluir || !id || desabilitarCampos}
+        onClick={onClickExcluir}
+      />
       <Button
         id={SGP_BUTTON_SALVAR_ALTERAR}
         label={id ? 'Alterar' : 'Salvar'}
         color={Colors.Roxo}
         border
         bold
+        className="ml-2"
         onClick={validaAntesDoSubmit}
         disabled={
           !turmaInfantil ||
@@ -68,7 +77,9 @@ const BotoesAcoesDiarioBordo = props => {
 BotoesAcoesDiarioBordo.propTypes = {
   onClickVoltar: PropTypes.func,
   onClickCancelar: PropTypes.func,
+  onClickExcluir: PropTypes.func,
   validaAntesDoSubmit: PropTypes.func,
+  permissoesTela: PropTypes.oneOfType([PropTypes.any]),
   modoEdicao: PropTypes.bool,
   desabilitarCampos: PropTypes.bool,
   turmaInfantil: PropTypes.bool,
@@ -81,6 +92,8 @@ BotoesAcoesDiarioBordo.defaultProps = {
   onClickVoltar: () => {},
   onClickCancelar: () => {},
   validaAntesDoSubmit: () => {},
+  onClickExcluir: () => {},
+  permissoesTela: {},
   modoEdicao: false,
   desabilitarCampos: false,
   turmaInfantil: false,

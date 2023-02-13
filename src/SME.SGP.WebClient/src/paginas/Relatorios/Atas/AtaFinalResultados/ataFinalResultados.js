@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
+import { Col, Row } from 'antd';
 import { useSelector } from 'react-redux';
 import { SelectComponent, CheckboxComponent, Loader } from '~/componentes';
 import { Cabecalho } from '~/componentes-sgp';
@@ -15,6 +16,18 @@ import FiltroHelper from '~componentes-sgp/filtro/helper';
 import AlertaModalidadeInfantil from '~/componentes-sgp/AlertaModalidadeInfantil/alertaModalidadeInfantil';
 import { OPCAO_TODOS } from '~/constantes/constantes';
 import BotoesAcaoRelatorio from '~/componentes-sgp/botoesAcaoRelatorio';
+import { SGP_CHECKBOX_EXIBIR_HISTORICO } from '~/constantes/ids/checkbox';
+import {
+  SGP_SELECT_ANO_LETIVO,
+  SGP_SELECT_DRE,
+  SGP_SELECT_FORMATO,
+  SGP_SELECT_MODALIDADE,
+  SGP_SELECT_SEMESTRE,
+  SGP_SELECT_TURMA,
+  SGP_SELECT_UE,
+  SGP_SELECT_VISUALIZACAO,
+} from '~/constantes/ids/select';
+import { ModalidadeDTO } from '~/dtos';
 
 const AtaFinalResultados = () => {
   const usuarioStore = useSelector(store => store.usuario);
@@ -51,6 +64,8 @@ const AtaFinalResultados = () => {
     { valor: '1', desc: 'PDF' },
     { valor: '4', desc: 'EXCEL' },
   ];
+
+  const ehEJA = Number(modalidadeId) === ModalidadeDTO.EJA;
 
   const obterAnosLetivos = useCallback(async considHistorico => {
     setCarregandoAnosLetivos(true);
@@ -110,7 +125,8 @@ const AtaFinalResultados = () => {
           '',
           false,
           undefined,
-          consideraHistorico
+          consideraHistorico,
+          anoLetivo
         );
         if (data) {
           const lista = data.map(item => ({
@@ -130,7 +146,7 @@ const AtaFinalResultados = () => {
       setCarregandoUes(false);
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [dreId]
+    [dreId, anoLetivo]
   );
 
   const onChangeDre = dre => {
@@ -180,12 +196,12 @@ const AtaFinalResultados = () => {
   }, [anoLetivo]);
 
   const obterTurmas = useCallback(
-    async (modalidadeSelecionada, ue) => {
+    async (modalidadeSelecionada, ue, semestreSelecionado, ehEja) => {
       if (ue && modalidadeSelecionada) {
         const { data } = await AbrangenciaServico.buscarTurmas(
           ue,
           modalidadeSelecionada,
-          '',
+          semestreSelecionado,
           anoLetivo,
           consideraHistorico,
           false,
@@ -198,6 +214,8 @@ const AtaFinalResultados = () => {
             valor: item.codigo,
             nomeFiltro: item.nomeFiltro,
           }));
+
+          if (ehEja && !semestreSelecionado) return;
 
           lista.unshift({ nomeFiltro: 'Todas', valor: OPCAO_TODOS });
 
@@ -256,12 +274,12 @@ const AtaFinalResultados = () => {
 
   useEffect(() => {
     if (modalidadeId && ueId) {
-      obterTurmas(modalidadeId, ueId);
+      obterTurmas(modalidadeId, ueId, semestre, ehEJA);
     } else {
       setTurmaId(undefined);
       setListaTurmas([]);
     }
-  }, [modalidadeId, ueId, obterTurmas]);
+  }, [modalidadeId, ueId, obterTurmas, semestre, ehEJA]);
 
   useEffect(() => {
     if (modalidadeId && anoLetivo) {
@@ -276,7 +294,7 @@ const AtaFinalResultados = () => {
       setListaSemestre([]);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [modalidadeId, anoLetivo, obterTurmas]);
+  }, [modalidadeId, anoLetivo]);
 
   useEffect(() => {
     const desabilitar =
@@ -313,8 +331,11 @@ const AtaFinalResultados = () => {
 
   useEffect(() => {
     obterDres();
+  }, [obterDres]);
+
+  useEffect(() => {
     obterVisualizacoes();
-  }, [obterDres, obterVisualizacoes]);
+  }, [obterVisualizacoes]);
 
   const compararTurmaAno = (stringComparacao, valorComparacao, arrayTurmas) => {
     return listaTurmasCompletas.filter(
@@ -475,6 +496,8 @@ const AtaFinalResultados = () => {
   };
 
   const onChangeSemestre = valor => {
+    setListaTurmas([]);
+    setTurmaId(undefined);
     setSemestre(valor);
     setModoEdicao(true);
   };
@@ -488,6 +511,7 @@ const AtaFinalResultados = () => {
     setVisualizacao('');
     setModoEdicao(true);
   };
+
   const onChangeFormato = valor => {
     setFormato(valor);
     setModoEdicao(true);
@@ -510,6 +534,7 @@ const AtaFinalResultados = () => {
         exibir={String(modalidadeId) === String(modalidade.INFANTIL)}
         validarModalidadeFiltroPrincipal={false}
       />
+
       <Cabecalho pagina="Ata de resultados finais">
         <BotoesAcaoRelatorio
           onClickVoltar={onClickVoltar}
@@ -523,19 +548,25 @@ const AtaFinalResultados = () => {
           modoEdicao={modoEdicao}
         />
       </Cabecalho>
-      <Card>
-        <div className="col-md-12">
-          <div className="row">
-            <div className="col-sm-12 mb-2">
+
+      <Card padding="24px 24px">
+        <Col span={24}>
+          <Row gutter={[16, 8]}>
+            <Col sm={24}>
               <CheckboxComponent
+                id={SGP_CHECKBOX_EXIBIR_HISTORICO}
                 label="Exibir histórico?"
                 onChangeCheckbox={onCheckedConsideraHistorico}
                 checked={consideraHistorico}
               />
-            </div>
-            <div className="col-sm-12 col-md-4 col-lg-2 col-xl-2 mb-3">
-              <Loader loading={carregandoAnosLetivos} tip="">
+            </Col>
+          </Row>
+
+          <Row gutter={[16, 16]}>
+            <Col sm={24} md={12} xl={4}>
+              <Loader loading={carregandoAnosLetivos} ignorarTip>
                 <SelectComponent
+                  id={SGP_SELECT_ANO_LETIVO}
                   label="Ano Letivo"
                   lista={listaAnosLetivo}
                   valueOption="valor"
@@ -546,12 +577,15 @@ const AtaFinalResultados = () => {
                   }
                   onChange={onChangeAnoLetivo}
                   valueSelect={anoLetivo}
+                  placeholder="Ano letivo"
                 />
               </Loader>
-            </div>
-            <div className="col-sm-12 col-md-12 col-lg-5 col-xl-5 mb-3">
-              <Loader loading={carregandoDres} tip="">
+            </Col>
+
+            <Col sm={24} md={12} xl={10}>
+              <Loader loading={carregandoDres} ignorarTip>
                 <SelectComponent
+                  id={SGP_SELECT_DRE}
                   label="Diretoria Regional de Educação (DRE)"
                   lista={listaDres}
                   valueOption="valor"
@@ -564,12 +598,15 @@ const AtaFinalResultados = () => {
                   onChange={onChangeDre}
                   valueSelect={dreId}
                   showSearch
+                  placeholder="Diretoria Regional de Educação (DRE)"
                 />
               </Loader>
-            </div>
-            <div className="col-sm-12 col-md-12 col-lg-5 col-xl-5 mb-2">
-              <Loader loading={carregandoUes} tip="">
+            </Col>
+
+            <Col sm={24} md={12} xl={10}>
+              <Loader loading={carregandoUes} ignorarTip>
                 <SelectComponent
+                  id={SGP_SELECT_UE}
                   label="Unidade Escolar (UE)"
                   lista={listaUes}
                   valueOption="valor"
@@ -582,11 +619,16 @@ const AtaFinalResultados = () => {
                   onChange={onChangeUe}
                   valueSelect={ueId}
                   showSearch
+                  placeholder="Unidade Escolar (UE)"
                 />
               </Loader>
-            </div>
-            <div className="col-sm-12 col-md-8 col-lg-4 col-xl-4 mb-3">
+            </Col>
+          </Row>
+
+          <Row gutter={[16, 16]}>
+            <Col sm={24} md={12} xl={8}>
               <SelectComponent
+                id={SGP_SELECT_MODALIDADE}
                 label="Modalidade"
                 lista={listaModalidades}
                 valueOption="valor"
@@ -598,10 +640,13 @@ const AtaFinalResultados = () => {
                 }
                 onChange={onChangeModalidade}
                 valueSelect={modalidadeId}
+                placeholder="Selecione uma modalidade"
               />
-            </div>
-            <div className="col-sm-12 col-md-4 col-lg-2 col-xl-2 mb-3">
+            </Col>
+
+            <Col sm={24} md={12} xl={6}>
               <SelectComponent
+                id={SGP_SELECT_SEMESTRE}
                 lista={listaSemestre}
                 valueOption="valor"
                 valueText="desc"
@@ -614,27 +659,36 @@ const AtaFinalResultados = () => {
                 }
                 valueSelect={semestre}
                 onChange={onChangeSemestre}
+                placeholder="Selecione o semestre"
               />
-            </div>
-            <div className="col-sm-12 col-md-12 col-lg-6 col-xl-6 mb-3">
+            </Col>
+
+            <Col sm={24} md={12} xl={10}>
               <SelectComponent
+                id={SGP_SELECT_TURMA}
                 lista={listaTurmas}
                 valueOption="valor"
                 valueText="nomeFiltro"
                 label="Turma"
                 disabled={
                   !permissoesTela.podeConsultar ||
-                  (listaTurmas && listaTurmas.length === 1) ||
-                  !modalidadeId
+                  !modalidadeId ||
+                  listaTurmas?.length === 1 ||
+                  (ehEJA && !semestre)
                 }
                 valueSelect={turmaId}
                 onChange={onChangeTurma}
                 multiple
                 showSearch
+                placeholder="Selecione uma ou mais turmas"
               />
-            </div>
-            <div className="col-sm-12 col-md-3 col-lg-5 col-xl-3 mb-3">
+            </Col>
+          </Row>
+
+          <Row gutter={[16, 16]}>
+            <Col sm={24} md={12} xl={6}>
               <SelectComponent
+                id={SGP_SELECT_VISUALIZACAO}
                 label="Visualização"
                 lista={listaVisualizacao}
                 valueOption="valor"
@@ -642,10 +696,13 @@ const AtaFinalResultados = () => {
                 valueSelect={visualizacao}
                 onChange={onChangeVisualizacao}
                 disabled={desabilitaVisualizacao}
+                placeholder="Selecione uma visualização"
               />
-            </div>
-            <div className="col-sm-12 col-md-3 col-lg-2 col-xl-2">
+            </Col>
+
+            <Col sm={24} md={12} xl={4}>
               <SelectComponent
+                id={SGP_SELECT_FORMATO}
                 label="Formato"
                 lista={listaFormatos}
                 valueOption="valor"
@@ -653,10 +710,11 @@ const AtaFinalResultados = () => {
                 valueSelect={formato}
                 onChange={onChangeFormato}
                 disabled={desabilitarBtnFormato}
+                placeholder="Selecione um formato"
               />
-            </div>
-          </div>
-        </div>
+            </Col>
+          </Row>
+        </Col>
       </Card>
     </>
   );

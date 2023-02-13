@@ -1,3 +1,4 @@
+import { TIPO_CLASSIFICACAO } from '~/constantes';
 import api from '~/servicos/api';
 
 const urlPadrao = 'v1/armazenamento/documentos';
@@ -10,7 +11,7 @@ class ServicoDocumentosPlanosTrabalho {
   salvarDocumento = (params, documentoId) => {
     if (documentoId) {
       return api.put(`${urlPadrao}/${documentoId}`, {
-        codigoArquivo: params.arquivoCodigo,
+        arquivosCodigos: params.arquivosCodigos,
       });
     }
 
@@ -30,10 +31,26 @@ class ServicoDocumentosPlanosTrabalho {
     tipoDocumentoId,
     classificacaoId,
     usuarioId,
-    ueId
+    ueId,
+    anoLetivo
   ) => {
-    const url = `${documentoId}/tipo-documento/${tipoDocumentoId}/classificacao/${classificacaoId}/usuario/${usuarioId}/ue/${ueId}`;
+    const url = `${documentoId}/tipo-documento/${tipoDocumentoId}/classificacao/${classificacaoId}/usuario/${usuarioId}/ue/${ueId}/anoLetivo/${anoLetivo}`;
     return api.get(`${urlPadrao}/${url}`);
+  };
+
+  verificaSeEhClassificacaoDocumentosTurma = (
+    classificacaoId,
+    listaClassificacoes
+  ) => {
+    const classificacaoSelecionada = listaClassificacoes?.find(
+      c => c?.id?.toString() === classificacaoId?.toString()
+    );
+
+    const ehClassificacaoDocumentosTurma =
+      classificacaoSelecionada?.classificacao ===
+      TIPO_CLASSIFICACAO.DOCUMENTOS_DA_TURMA;
+
+    return ehClassificacaoDocumentosTurma;
   };
 }
 

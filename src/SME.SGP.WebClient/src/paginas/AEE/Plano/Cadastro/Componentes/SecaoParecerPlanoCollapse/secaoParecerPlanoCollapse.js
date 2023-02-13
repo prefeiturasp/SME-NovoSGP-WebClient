@@ -14,6 +14,7 @@ import ServicoPlanoAEE from '~/servicos/Paginas/Relatorios/AEE/ServicoPlanoAEE';
 import SecaoParecerPAAI from '../SecaoParecerPAAI/secaoParecerPAAI';
 import SecaoParecerResponsavel from '../SecaoParecerResponsavel/secaoParecerResponsavel';
 import SecaoParecerCoordenacao from '../SecaoParecerCoordenacao/secaoParecerCoordenacao';
+import { SGP_COLLAPSE_PARECER_PLANO_AEE } from '~/constantes/ids/collapse';
 
 const SecaoParecerPlanoCollapse = ({ match }) => {
   const planoAEEDados = useSelector(store => store.planoAEE.planoAEEDados);
@@ -53,6 +54,7 @@ const SecaoParecerPlanoCollapse = ({ match }) => {
   return (
     <>
       <CardCollapse
+        id={SGP_COLLAPSE_PARECER_PLANO_AEE}
         key="secao-parecer-plano-collapse-key"
         titulo="Parecer"
         show
@@ -70,12 +72,16 @@ const SecaoParecerPlanoCollapse = ({ match }) => {
             >
               PAAI responsável: {dadosParecer?.responsavelNome}
               <span
-                style={{ color: Base.CinzaDesabilitado, fontSize: '13px', marginLeft: 9, }}
+                style={{
+                  color: Base.CinzaDesabilitado,
+                  fontSize: '13px',
+                  marginLeft: 9,
+                }}
               >{` (${dadosParecer?.responsavelRF})`}</span>
             </p>
           </div>
         ) : (
-          ''
+          <></>
         )}
         <SecaoParecerCoordenacao
           desabilitar={!dadosParecer?.podeEditarParecerCoordenacao}
@@ -83,14 +89,14 @@ const SecaoParecerPlanoCollapse = ({ match }) => {
         {dadosParecer?.podeAtribuirResponsavel ? (
           <SecaoParecerResponsavel />
         ) : (
-          ''
+          <></>
         )}
 
         {(dadosParecer?.podeEditarParecerPAAI ||
           planoAEEDados?.situacao === situacaoPlanoAEE.ParecerPAAI ||
           planoAEEDados?.situacao === situacaoPlanoAEE.Encerrado ||
           planoAEEDados?.situacao ===
-            situacaoPlanoAEE.EncerradoAutomaticamento ||
+            situacaoPlanoAEE.EncerradoAutomaticamente ||
           planoAEEDados?.situacao === situacaoPlanoAEE.Validado) && (
           <SecaoParecerPAAI />
         )}

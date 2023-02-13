@@ -20,6 +20,7 @@ import {
   setDadosRegistroAtual,
   setDesabilitarCampos,
   setRegistroIndividualEmEdicao,
+  setDadosSugestaoTopico,
 } from '~/redux/modulos/registroIndividual/actions';
 
 import {
@@ -29,6 +30,9 @@ import {
 } from '~/servicos';
 
 import SugestaoTopico from '../SugestaoTopico/sugestaoTopico';
+import { SGP_DATE_SELECIONAR_DATA_NOVO_REGISTRO_INDIVIDUAL } from '~/constantes/ids/date';
+import { SGP_COLLAPSE_NOVO_REGISTRO_INDIVIDUAL } from '~/constantes/ids/collapse';
+import { SGP_JODIT_EDITOR_NOVO_REGISTRO_INDIVIDUAL } from '~/constantes/ids/jodit-editor';
 
 const NovoRegistroIndividual = () => {
   const dataAtual = window.moment();
@@ -56,6 +60,9 @@ const NovoRegistroIndividual = () => {
   const dadosRegistroAtual = useSelector(
     store => store.registroIndividual.dadosRegistroAtual
   );
+  const dadosSugestaoTopico = useSelector(
+    store => store.registroIndividual?.dadosSugestaoTopico
+  );
 
   const turmaSelecionada = useSelector(state => state.usuario.turmaSelecionada);
   const permissoes = useSelector(state => state.usuario.permissoes);
@@ -82,6 +89,36 @@ const NovoRegistroIndividual = () => {
   );
 
   const dispatch = useDispatch();
+
+  const obterSugestao = async mesParseado => {
+    if (mesParseado !== 1) {
+      const retorno = await ServicoRegistroIndividual.obterSugestao(
+        mesParseado
+      );
+
+      if (retorno?.data) {
+        dispatch(
+          setDadosSugestaoTopico({
+            mesParseado,
+            descricao: retorno?.data?.descricao,
+          })
+        );
+      } else {
+        dispatch(setDadosSugestaoTopico());
+      }
+    }
+  };
+
+  useEffect(() => {
+    if (data && expandir) {
+      const mes = window.moment(data).format('MM');
+      const mesParseado = parseInt(mes, 10);
+      if (dadosSugestaoTopico?.mesParseado !== mesParseado) {
+        obterSugestao(mesParseado);
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [data, expandir, dadosSugestaoTopico]);
 
   useEffect(() => {
     if (podeRealizarNovoRegistro && dadosAlunoObjectCard) {
@@ -146,7 +183,6 @@ const NovoRegistroIndividual = () => {
       if (resposta && ehMesmoCodigo) {
         if (ehDataAnterior) {
           setDesabilitarNovoRegistro(true);
-          return;
         }
 
         dispatch(
@@ -250,9 +286,11 @@ const NovoRegistroIndividual = () => {
             alt={`${idSecao}-alt`}
             show={expandir}
             onClick={expandirAlternado}
+            id={SGP_COLLAPSE_NOVO_REGISTRO_INDIVIDUAL}
           >
             <div className="col-3 p-0 pb-2">
               <CampoData
+                id={SGP_DATE_SELECIONAR_DATA_NOVO_REGISTRO_INDIVIDUAL}
                 name="data"
                 placeholder="Selecione"
                 valor={data}
@@ -260,17 +298,17 @@ const NovoRegistroIndividual = () => {
                 onChange={mudarData}
                 desabilitarData={desabilitarData}
               />
-            </div>            
+            </div>
             <div className="col-12 p-0 pb-3">
-              <SugestaoTopico valorData={data} />
-            </div>          
+              <SugestaoTopico />
+            </div>
             <div className="pt-2">
               <Loader ignorarTip loading={carregandoNovoRegistro}>
                 <div style={{ minHeight: 200 }}>
                   <JoditEditor
                     validarSeTemErro={validarSeTemErro}
                     mensagemErro="Campo obrigatório"
-                    id={`secao-${idSecao}-editor`}
+                    id={SGP_JODIT_EDITOR_NOVO_REGISTRO_INDIVIDUAL}
                     value={registro}
                     onChange={mudarEditor}
                     desabilitar={

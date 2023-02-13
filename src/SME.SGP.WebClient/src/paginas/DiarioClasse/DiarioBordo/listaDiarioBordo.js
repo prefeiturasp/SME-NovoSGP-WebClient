@@ -32,7 +32,7 @@ import {
 import ServicoDiarioBordo from '~/servicos/Paginas/DiarioClasse/ServicoDiarioBordo';
 import { Mensagens } from './componentes';
 import { erro } from '~/servicos/alertas';
-import { SGP_BUTTON_NOVO } from '~/componentes-sgp/filtro/idsCampos';
+import { SGP_BUTTON_NOVO } from '~/constantes/ids/button';
 import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
 
 const ListaDiarioBordo = () => {
@@ -66,6 +66,7 @@ const ListaDiarioBordo = () => {
   const dispatch = useDispatch();
 
   const obterComponentesCurriculares = useCallback(async () => {
+    setComponenteCurricularSelecionado(undefined);
     setCarregandoGeral(true);
     const componentes = await ServicoDisciplina.obterDisciplinasPorTurma(
       turma,
@@ -74,7 +75,7 @@ const ListaDiarioBordo = () => {
 
     if (componentes?.data?.length) {
       setListaComponenteCurriculares(componentes.data);
-
+      
       if (componentes.data.length === 1) {
         const componente = componentes.data[0];
         setComponenteCurricularSelecionado(
@@ -177,8 +178,11 @@ const ListaDiarioBordo = () => {
 
   const onColapse = async aulaId => {
     dispatch(limparDadosObservacoesUsuario());
+
+    const aulaIdFormatado = Number(aulaId?.split('-').pop());
+
     const diario = listaTitulos?.items?.find(
-      item => item?.aulaId === Number(aulaId)
+      item => item?.aulaId === aulaIdFormatado
     );
     const idDiario = diario?.id;
     let dados = {};
@@ -406,7 +410,7 @@ const ListaDiarioBordo = () => {
                     : Base.AzulBordaCollapse;
                   return (
                     <PainelCollapse.Painel
-                      key={aulaId}
+                      key={`${componenteCurricularSelecionado}-${aulaId}`}
                       accordion
                       espacoPadrao
                       corBorda={bordaCollapse}

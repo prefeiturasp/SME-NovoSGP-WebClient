@@ -35,12 +35,14 @@ import AlterarAula from './alterarAula';
 import {
   SGP_BUTTON_ALTERAR_CADASTRAR,
   SGP_BUTTON_CANCELAR,
-  SGP_DATA_AULA,
-  SGP_INPUT_NUMBER_QUANTIDADE_AULAS,
+} from '~/constantes/ids/button';
+import { SGP_INPUT_NUMBER_QUANTIDADE_AULAS } from '~/constantes/ids/input';
+import { SGP_SELECT_COMPONENTE_CURRICULAR } from '~/constantes/ids/select';
+import {
   SGP_RADIO_RECORRENCIA,
   SGP_RADIO_TIPO_AULA,
-  SGP_SELECT_COMPONENTE_CURRICULAR,
-} from '~/componentes-sgp/filtro/idsCampos';
+} from '~/constantes/ids/radio';
+import { SGP_DATA_AULA } from '~/constantes/ids/date';
 import { ContainerColumnReverse } from '~/paginas/Planejamento/Anual/planoAnual.css';
 import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
 import BotaoExcluirPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoExcluirPadrao';
@@ -479,12 +481,12 @@ function CadastroDeAula({ match, location }) {
     setAula(aulaState => {
       return {
         ...aulaState,
-        recorrenciaAula: e.target.value,
+        recorrenciaAula: e,
       };
     });
     if (id) {
       servicoCadastroAula
-        .obterRecorrenciaPorIdAula(id, e.target.value)
+        .obterRecorrenciaPorIdAula(id, e)
         .then(resposta => {
           setRecorrenciaAulaEmEdicao(resposta.data);
         })
@@ -759,7 +761,7 @@ function CadastroDeAula({ match, location }) {
                           placeholder="Selecione um componente curricular"
                           form={form}
                           disabled={
-                            (!!id && aula?.disciplinaId) ||
+                            !!(!!id && aula?.disciplinaId) ||
                             (listaComponentes.length === 1 && !id)
                           }
                           onChange={onChangeComponente}

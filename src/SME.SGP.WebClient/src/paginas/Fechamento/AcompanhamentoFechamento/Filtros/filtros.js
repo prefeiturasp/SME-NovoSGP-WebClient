@@ -311,30 +311,29 @@ const Filtros = ({ onChangeFiltros, ehInfantil }) => {
     setSemestre(valor);
   };
 
-  const obterSemestres = useCallback(
-    async (modalidadeSelecionada, anoLetivoSelecionado) => {
-      setCarregandoSemestres(true);
-      const retorno = await AbrangenciaServico.obterSemestres(
-        consideraHistorico,
-        anoLetivoSelecionado,
-        modalidadeSelecionada
-      )
-        .catch(e => erros(e))
-        .finally(() => setCarregandoSemestres(false));
+  const obterSemestres = useCallback(async () => {
+    setCarregandoSemestres(true);
+    const retorno = await AbrangenciaServico.obterSemestres(
+      consideraHistorico,
+      anoLetivo,
+      modalidadeId,
+      dreCodigo,
+      ueCodigo
+    )
+      .catch(e => erros(e))
+      .finally(() => setCarregandoSemestres(false));
 
-      if (retorno?.data?.length) {
-        const lista = retorno.data.map(periodo => {
-          return { desc: periodo, valor: periodo };
-        });
+    if (retorno?.data?.length) {
+      const lista = retorno.data.map(periodo => {
+        return { desc: periodo, valor: periodo };
+      });
 
-        if (lista?.length === 1) {
-          setSemestre(lista[0].valor);
-        }
-        setListaSemestres(lista);
+      if (lista?.length === 1) {
+        setSemestre(lista[0].valor);
       }
-    },
-    [consideraHistorico]
-  );
+      setListaSemestres(lista);
+    }
+  }, [consideraHistorico, modalidadeId, anoLetivo, ueCodigo, dreCodigo]);
 
   useEffect(() => {
     if (
@@ -342,12 +341,13 @@ const Filtros = ({ onChangeFiltros, ehInfantil }) => {
       anoLetivo &&
       String(modalidadeId) === String(ModalidadeDTO.EJA)
     ) {
-      obterSemestres(modalidadeId, anoLetivo);
-      return;
+      obterSemestres();
+    } else {
+      setSemestre();
+      setListaSemestres([]);
     }
-    setSemestre();
-    setListaSemestres([]);
-  }, [obterAnosLetivos, obterSemestres, modalidadeId, anoLetivo]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [modalidadeId]);
 
   const onChangeTurma = valor => {
     setTurmasId(valor);

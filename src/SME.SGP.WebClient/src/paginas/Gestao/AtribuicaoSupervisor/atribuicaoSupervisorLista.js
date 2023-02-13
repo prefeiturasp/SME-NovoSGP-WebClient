@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux';
 import { Loader } from '~/componentes';
 import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
 import Cabecalho from '~/componentes-sgp/cabecalho';
-import { SGP_BUTTON_NOVO } from '~/componentes-sgp/filtro/idsCampos';
+import { SGP_BUTTON_NOVO } from '~/constantes/ids/button';
 import RotasDto from '~/dtos/rotasDto';
 import { AbrangenciaServico, erros } from '~/servicos';
 import ServicoResponsaveis from '~/servicos/Paginas/Gestao/Responsaveis/ServicoResponsaveis';
@@ -256,11 +256,16 @@ export default function AtribuicaoSupervisorLista() {
   const onChangeDre = useCallback(
     async (dre, changeUe, chamarApi = true, tipoRes) => {
       if (!changeUe) {
+        if (listaTipoResponsavel?.length > 1) {
+          setTipoResponsavel('');
+        }
+
         setListaSupervisores([]);
         setSupervisoresSelecionados([]);
       }
       setListaUes([]);
       setUeSelecionada('');
+
       if (dre) {
         if (chamarApi)
           consultarApi(
@@ -292,7 +297,15 @@ export default function AtribuicaoSupervisorLista() {
       setSupervisoresSelecionados([]);
       setUeSelecionada('');
       setDesabilitarSupervisor(false);
-      onChangeDre(dresSelecionadas, null, true, tipoResponsavel);
+
+      if (dresSelecionadas) {
+        consultarApi(
+          dresSelecionadas,
+          tipoResponsavel,
+          ueSelecionada,
+          supervisoresSelecionados
+        );
+      }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [uesSemSupervisorCheck, tipoResponsavel]);
@@ -323,7 +336,6 @@ export default function AtribuicaoSupervisorLista() {
       setSupervisoresSelecionados([]);
       setUeSelecionada(ue);
     } else {
-      setUeSelecionada('');
       setDesabilitarSupervisor(false);
       onChangeDre(dresSelecionadas, true, false);
     }
@@ -361,14 +373,6 @@ export default function AtribuicaoSupervisorLista() {
       setListaTipoResponsavel(resposta.data);
       if (resposta?.data?.length === 1) {
         setTipoResponsavel(resposta.data[0]?.codigo?.toString());
-      } else {
-        consultarApi(
-          dresSelecionadas,
-          null,
-          ueSelecionada,
-          supervisoresSelecionados,
-          uesSemSupervisorCheck
-        );
       }
     } else {
       setListaTipoResponsavel([]);
@@ -443,7 +447,7 @@ export default function AtribuicaoSupervisorLista() {
                 lista={listaDres}
                 valueOption="codigo"
                 valueText="nome"
-                onChange={onChangeDre}
+                onChange={dre => onChangeDre(dre, false, true)}
                 valueSelect={dresSelecionadas}
                 placeholder="Diretoria Regional de Educação (DRE)"
                 disabled={

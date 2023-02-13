@@ -2,12 +2,15 @@ import React from 'react';
 import { Modal, Row } from 'antd';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
-import shortid from 'shortid';
 import Card from './cardBootstrap';
 import Button from './button';
 import { Base, Colors } from './colors';
 import CardBody from './cardBody';
 import Grid from './grid';
+import {
+  SGP_BUTTON_CANCELAR_MODAL,
+  SGP_BUTTON_SALVAR_MODAL,
+} from '~/constantes/ids/button';
 
 const Container = styled(Modal)`
   .ant-modal-footer {
@@ -63,7 +66,9 @@ const ModalConteudoHtml = props => {
     onConfirmacaoPrincipal,
     onConfirmacaoSecundaria,
     onClose,
+    idBotaoPrincipal,
     labelBotaoPrincipal,
+    idBotaoSecundario,
     labelBotaoSecundario,
     titulo,
     tituloAtencao,
@@ -101,75 +106,76 @@ const ModalConteudoHtml = props => {
       fontSizeTitulo={fontSizeTitulo}
       tipoFonte={tipoFonte}
       footer={
-        botoesRodape ||
-        (tituloAtencao || perguntaAtencao ? (
-          <>
-            <Row className="m-b-10">
-              <Grid cols={12} className="p-l-8 p-r-8">
-                <Card className="border-2 border-vermelhoAlerta border-radius-4">
-                  <CardBody>
-                    <TituloAlerta>{tituloAtencao}</TituloAlerta>
-                    <TextoAlerta className="m-b-20">
-                      {perguntaAtencao}
-                    </TextoAlerta>
-                    <div
-                      className="d-flex justify-content-end"
-                      hidden={esconderBotoes}
-                    >
-                      <Button
-                        id={shortid.generate()}
-                        key="btn-sim-confirmacao"
-                        label={labelBotaoSecundario}
-                        color={colorBotaoSecundario}
-                        bold
-                        border
-                        className="mr-2 padding-btn-confirmacao"
-                        onClick={onConfirmacaoSecundaria}
-                        disabled={loader}
-                      />
-                      <Button
-                        id={shortid.generate()}
-                        key="btn-nao-confirmacao"
-                        label={labelBotaoPrincipal}
-                        color={Colors.Roxo}
-                        bold
-                        className="padding-btn-confirmacao"
-                        onClick={onConfirmacaoPrincipal}
-                        disabled={desabilitarBotaoPrincipal || loader}
-                      />
-                    </div>
-                  </CardBody>
-                </Card>
-              </Grid>
-            </Row>
-          </>
-        ) : (
-          <div className="d-flex justify-content-end" hidden={esconderBotoes}>
-            <Button
-              id={shortid.generate()}
-              key="btn-sim-confirmacao"
-              label={labelBotaoSecundario}
-              color={colorBotaoSecundario}
-              bold
-              border
-              className="mr-2 padding-btn-confirmacao"
-              onClick={onConfirmacaoSecundaria}
-              hidden={esconderBotaoSecundario}
-              disabled={loader}
-            />
-            <Button
-              id={shortid.generate()}
-              key="btn-nao-confirmacao"
-              label={labelBotaoPrincipal}
-              color={Colors.Roxo}
-              bold
-              className="padding-btn-confirmacao"
-              onClick={onConfirmacaoPrincipal}
-              disabled={desabilitarBotaoPrincipal || loader}
-              hidden={esconderBotaoPrincipal}
-            />
-          </div>
-        ))
+        !esconderBotoes &&
+        (botoesRodape ||
+          (tituloAtencao || perguntaAtencao ? (
+            <>
+              <Row className="m-b-10">
+                <Grid cols={12} className="p-l-8 p-r-8">
+                  <Card className="border-2 border-vermelhoAlerta border-radius-4">
+                    <CardBody>
+                      <TituloAlerta>{tituloAtencao}</TituloAlerta>
+                      <TextoAlerta className="m-b-20">
+                        {perguntaAtencao}
+                      </TextoAlerta>
+                      <div
+                        className="d-flex justify-content-end"
+                        hidden={esconderBotoes}
+                      >
+                        <Button
+                          id={idBotaoSecundario || SGP_BUTTON_SALVAR_MODAL}
+                          key="btn-sim-confirmacao"
+                          label={labelBotaoSecundario}
+                          color={colorBotaoSecundario}
+                          bold
+                          border
+                          className="mr-2 padding-btn-confirmacao"
+                          onClick={onConfirmacaoSecundaria}
+                          disabled={loader}
+                        />
+                        <Button
+                          id={idBotaoPrincipal || SGP_BUTTON_CANCELAR_MODAL}
+                          key="btn-nao-confirmacao"
+                          label={labelBotaoPrincipal}
+                          color={Colors.Roxo}
+                          bold
+                          className="padding-btn-confirmacao"
+                          onClick={onConfirmacaoPrincipal}
+                          disabled={desabilitarBotaoPrincipal || loader}
+                        />
+                      </div>
+                    </CardBody>
+                  </Card>
+                </Grid>
+              </Row>
+            </>
+          ) : (
+            <div className="d-flex justify-content-end" hidden={esconderBotoes}>
+              <Button
+                id={idBotaoPrincipal || SGP_BUTTON_SALVAR_MODAL}
+                key="btn-sim-confirmacao"
+                label={labelBotaoSecundario}
+                color={colorBotaoSecundario}
+                bold
+                border
+                className="mr-2 padding-btn-confirmacao"
+                onClick={onConfirmacaoSecundaria}
+                hidden={esconderBotaoSecundario}
+                disabled={loader}
+              />
+              <Button
+                id={idBotaoSecundario || SGP_BUTTON_CANCELAR_MODAL}
+                key="btn-nao-confirmacao"
+                label={labelBotaoPrincipal}
+                color={Colors.Roxo}
+                bold
+                className="padding-btn-confirmacao"
+                onClick={onConfirmacaoPrincipal}
+                disabled={desabilitarBotaoPrincipal || loader}
+                hidden={esconderBotaoPrincipal}
+              />
+            </div>
+          )))
       }
     >
       {children}
@@ -190,6 +196,10 @@ ModalConteudoHtml.propTypes = {
   botoesRodape: PropTypes.node,
   fontSizeTitulo: PropTypes.string,
   tipoFonte: PropTypes.string,
+  idBotaoPrincipal: PropTypes.string,
+  labelBotaoPrincipal: PropTypes.string,
+  idBotaoSecundario: PropTypes.string,
+  labelBotaoSecundario: PropTypes.string,
 };
 
 ModalConteudoHtml.defaultProps = {
@@ -199,13 +209,16 @@ ModalConteudoHtml.defaultProps = {
   fecharAoClicarEsc: true,
   esconderBotaoPrincipal: false,
   esconderBotaoSecundario: false,
-
   paddingBottom: '15',
   paddingRight: '20',
   colorBotaoSecundario: 'Roxo',
   botoesRodape: null,
   fontSizeTitulo: '24',
   tipoFonte: '',
+  idBotaoPrincipal: '',
+  labelBotaoPrincipal: '',
+  idBotaoSecundario: '',
+  labelBotaoSecundario: '',
 };
 
 export default ModalConteudoHtml;

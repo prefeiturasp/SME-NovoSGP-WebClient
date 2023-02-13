@@ -18,7 +18,8 @@ import {
   SGP_SELECT_FILTRO_PRINCIPAL_DRE,
   SGP_SELECT_FILTRO_PRINCIPAL_UE,
   SGP_CAMPO_FILTRO_PRINCIPAL_PESQUISAR_TURMA,
-} from './idsCampos';
+  SGP_BUTTON_FILTRO_PRINCIPAL_EXPANDIR_RETRAIR_FILTRO,
+} from '../../constantes/ids/filtro-principal';
 
 import Grid from '~/componentes/grid';
 import Button from '~/componentes/button';
@@ -1182,6 +1183,7 @@ const Filtro = () => {
             />
           )}
           <Seta
+            id={SGP_BUTTON_FILTRO_PRINCIPAL_EXPANDIR_RETRAIR_FILTRO}
             className="fa fa-caret-down rounded-circle position-absolute text-center"
             onClick={mostrarEsconderBusca}
           />

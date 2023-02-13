@@ -41,7 +41,8 @@ import {
   objetoEstaTodoPreenchido,
   ordenarDescPor,
 } from '~/utils/funcoes/gerais';
-import { SGP_BUTTON_SALVAR_ALTERAR } from '~/componentes-sgp/filtro/idsCampos';
+import { SGP_BUTTON_SALVAR_ALTERAR } from '~/constantes/ids/button';
+import { verificaSomenteConsulta } from '~/servicos';
 
 function AtribuicaoCJForm({ match, location }) {
   const anoAtual = window.moment().format('YYYY');
@@ -62,6 +63,7 @@ function AtribuicaoCJForm({ match, location }) {
   const [somenteConsulta, setSomenteConsulta] = useState(false);
   const [ehEdicao, setEhEdicao] = useState(false);
   const [valoresIniciais, setValoresIniciais] = useState({
+    exibirHistorico: consideraHistorico,
     professorRf: '',
     professorNome: '',
     dreId: '',
@@ -70,6 +72,12 @@ function AtribuicaoCJForm({ match, location }) {
     turmaId: '',
     anoLetivo: anoAtual,
   });
+
+  useEffect(() => {
+    setSomenteConsulta(
+      verificaSomenteConsulta(permissoesTela[RotasDto.ATRIBUICAO_CJ_LISTA])
+    );
+  }, [permissoesTela]);
 
   const validacoes = () => {
     return Yup.object({
@@ -175,16 +183,20 @@ function AtribuicaoCJForm({ match, location }) {
       }
 
       const anoSelecionado = query.anoLetivo || anoAtual;
-      const historico = query.historico || consideraHistorico;
+      const historico = query.historico === 'true' || consideraHistorico;
 
       setValoresIniciais({
         ...valoresIniciais,
+        exibirHistorico: historico,
         modalidadeId: query.modalidadeId,
         turmaId: query.turmaId,
         ueId: query.ueId,
         dreId: query.dreId,
         anoLetivo: anoSelecionado,
+        professorRf: query?.usuarioRF,
+        professorNome: query?.professorNome,
       });
+
       setConsideraHistorico(historico);
       setAnoLetivo(anoSelecionado);
     }
@@ -263,22 +275,9 @@ function AtribuicaoCJForm({ match, location }) {
   };
 
   const obterAnosLetivos = useCallback(async () => {
-    let anosLetivos = [];
-
-    const anosLetivoComHistorico = await FiltroHelper.obterAnosLetivos({
-      consideraHistorico: true,
-    });
-    const anosLetivoSemHistorico = await FiltroHelper.obterAnosLetivos({
-      consideraHistorico: false,
-    });
-
-    anosLetivos = anosLetivos.concat(anosLetivoComHistorico);
-
-    anosLetivoSemHistorico.forEach(ano => {
-      if (!anosLetivoComHistorico.find(a => a.valor === ano.valor)) {
-        anosLetivos.push(ano);
-      }
-    });
+    const anosLetivos = await FiltroHelper.obterAnosLetivosAtribuicao(
+      consideraHistorico
+    );
 
     if (!anosLetivos.length) {
       anosLetivos.push({
@@ -287,21 +286,15 @@ function AtribuicaoCJForm({ match, location }) {
       });
     }
 
-    if (anosLetivos && anosLetivos.length) {
-      const temAnoAtualNaLista = anosLetivos.find(
-        item => String(item.valor) === String(anoAtual)
-      );
-      if (temAnoAtualNaLista) setAnoLetivo(anoAtual);
-      else setAnoLetivo(anosLetivos[0].valor);
-    }
-
     const anosOrdenados = ordenarDescPor(anosLetivos, 'valor');
+
     setListaAnosLetivo(anosOrdenados);
-  }, [anoAtual]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [anoAtual, consideraHistorico]);
 
   useEffect(() => {
     obterAnosLetivos();
-  }, [obterAnosLetivos]);
+  }, [obterAnosLetivos, consideraHistorico]);
 
   const onChangeAnoLetivo = ano => {
     setAnoLetivo(ano);
@@ -310,12 +303,6 @@ function AtribuicaoCJForm({ match, location }) {
     setListaProfessores([]);
     setAuditoria({});
   };
-
-  useEffect(() => {
-    const desabilitar = !permissoesTela[RotasDto.ATRIBUICAO_CJ_LISTA]
-      ?.podeIncluir;
-    setSomenteConsulta(desabilitar);
-  }, [permissoesTela]);
 
   return (
     <>
@@ -374,13 +361,17 @@ function AtribuicaoCJForm({ match, location }) {
                         onChange={onChangeAnoLetivo}
                         valueSelect={anoLetivo}
                         allowClear={false}
-                        disabled={!consideraHistorico}
+                        disabled={
+                          !consideraHistorico ||
+                          listaAnosLetivo?.length === 1 ||
+                          somenteConsulta
+                        }
                         labelRequired
                       />
                     </Grid>
                     <Grid cols={5}>
                       <DreDropDown
-                        url={`v1/dres/atribuicoes?anoLetivo=${anoLetivo}`}
+                        url={`v1/dres/atribuicoes?anoLetivo=${anoLetivo}&consideraHistorico=${consideraHistorico}`}
                         label="Diretoria Regional de Educação (DRE)"
                         form={form}
                         onChange={valor => setDreId(valor)}
@@ -391,7 +382,7 @@ function AtribuicaoCJForm({ match, location }) {
                     <Grid cols={5}>
                       <UeDropDown
                         temParametros
-                        url={`v1/dres/${form.values.dreId}/ues/atribuicoes?anoLetivo=${anoLetivo}`}
+                        url={`v1/dres/${form.values.dreId}/ues/atribuicoes?anoLetivo=${anoLetivo}&consideraHistorico=${consideraHistorico}`}
                         label="Unidade Escolar (UE)"
                         dreId={dreId}
                         form={form}
@@ -406,6 +397,7 @@ function AtribuicaoCJForm({ match, location }) {
                       <Row className="row">
                         <Localizador
                           dreId={form.values.dreId}
+                          ueId={form.values.ueId}
                           anoLetivo={anoLetivo}
                           showLabel
                           form={form}
@@ -462,6 +454,7 @@ function AtribuicaoCJForm({ match, location }) {
                     carregando={carregandoTabela}
                     lista={listaProfessores}
                     onChangeSubstituir={onChangeSubstituir}
+                    somenteConsulta={somenteConsulta}
                   />
                   {auditoria && (
                     <div className="row">

@@ -1,6 +1,8 @@
+import { Col } from 'antd';
 import PropTypes from 'prop-types';
 import React, { useCallback, useEffect, useState } from 'react';
 import { Label } from '~/componentes';
+import { SGP_INPUT_NOME, SGP_INPUT_RF } from '~/constantes/ids/input';
 import { erro, erros } from '~/servicos/alertas';
 import { removerNumeros } from '~/utils/funcoes/gerais';
 import InputCodigo from './componentes/InputCodigo';
@@ -21,6 +23,7 @@ const LocalizadorFuncionario = props => {
     limparCampos,
     mensagemErroConsultaRF,
     limparCamposAposPesquisa,
+    novaEstrutura,
   } = props;
 
   const [dataSource, setDataSource] = useState([]);
@@ -270,7 +273,41 @@ const LocalizadorFuncionario = props => {
     }
   }, [limparCampos, limparDados]);
 
-  return (
+  return novaEstrutura ? (
+    <>
+      <Col sm={24} md={exibirCampoRf ? 12 : 24} lg={exibirCampoRf ? 16 : 24}>
+        <Label text="Nome" />
+
+        <InputNome
+          id={SGP_INPUT_NOME}
+          placeholder={placeholder}
+          dataSource={dataSource}
+          onSelect={valor => onSelectFuncionario(valor, true)}
+          onChange={valor => validaAntesBuscarPorNome(valor, true)}
+          funcionarioSelecionado={funcionarioSelecionado}
+          name="nomeServidor"
+          desabilitado={desabilitado || desabilitarCampo.nomeServidor}
+          regexIgnore={/\d+/}
+          exibirLoader={exibirLoader}
+        />
+      </Col>
+
+      {exibirCampoRf && (
+        <Col sm={24} md={12} lg={8}>
+          <Label text="RF" />
+          <InputCodigo
+            id={SGP_INPUT_RF}
+            funcionarioSelecionado={funcionarioSelecionado}
+            onSelect={valor => validaAntesBuscarPorCodigo(valor, true)}
+            onChange={valor => onChangeCodigo(valor, true)}
+            name="codigoRF"
+            desabilitado={desabilitado}
+            exibirLoader={exibirLoader}
+          />
+        </Col>
+      )}
+    </>
+  ) : (
     <>
       <div
         className={`${
@@ -279,6 +316,7 @@ const LocalizadorFuncionario = props => {
       >
         <Label text="Nome" />
         <InputNome
+          id={SGP_INPUT_NOME}
           placeholder={placeholder}
           dataSource={dataSource}
           onSelect={valor => onSelectFuncionario(valor, true)}
@@ -290,10 +328,12 @@ const LocalizadorFuncionario = props => {
           exibirLoader={exibirLoader}
         />
       </div>
+
       {exibirCampoRf ? (
         <div className="col-sm-12 col-md-6 col-lg-4 col-xl-4">
           <Label text="RF" />
           <InputCodigo
+            id={SGP_INPUT_RF}
             funcionarioSelecionado={funcionarioSelecionado}
             onSelect={valor => validaAntesBuscarPorCodigo(valor, true)}
             onChange={valor => onChangeCodigo(valor, true)}
@@ -322,6 +362,7 @@ LocalizadorFuncionario.propTypes = {
   limparCampos: PropTypes.bool,
   mensagemErroConsultaRF: PropTypes.string,
   limparCamposAposPesquisa: PropTypes.bool,
+  novaEstrutura: PropTypes.bool,
 };
 
 LocalizadorFuncionario.defaultProps = {
@@ -337,6 +378,7 @@ LocalizadorFuncionario.defaultProps = {
   limparCampos: false,
   mensagemErroConsultaRF: '',
   limparCamposAposPesquisa: false,
+  novaEstrutura: false,
 };
 
 export default LocalizadorFuncionario;

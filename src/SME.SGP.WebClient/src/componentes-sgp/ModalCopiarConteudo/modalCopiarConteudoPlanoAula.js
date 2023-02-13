@@ -11,6 +11,14 @@ import {
   ModalConteudoHtml,
 } from '~/componentes';
 import TurmasDropDown from '~/componentes-sgp/TurmasDropDown';
+import {
+  SGP_BUTTON_ADICIONAR_TURMA,
+  SGP_BUTTON_CONFIRMAR,
+  SGP_BUTTON_DESCARTAR,
+  SGP_BUTTON_EXCLUIR_TURMA,
+} from '~/constantes/ids/button';
+import { SGP_DATE_SELECIONAR_DATA_INICIO } from '~/constantes/ids/date';
+import { SGP_SELECT_TURMA } from '~/constantes/ids/select';
 import AbrangenciaServico from '~/servicos/Abrangencia';
 import { confirmar, sucesso, erro, erros } from '~/servicos/alertas';
 import api from '~/servicos/api';
@@ -48,7 +56,9 @@ const ModalCopiarConteudoPlanoAula = props => {
 
   useEffect(() => {
     async function buscaTurmas() {
-      const { data } = await AbrangenciaServico.buscarTurmasMesmoComponenteCurricular(
+      const {
+        data,
+      } = await AbrangenciaServico.buscarTurmasMesmoComponenteCurricular(
         filtro.unidadeEscolar,
         filtro.modalidade,
         '',
@@ -281,8 +291,10 @@ const ModalCopiarConteudoPlanoAula = props => {
       titulo="Copiar conteúdo"
       visivel={exibirModal}
       onClose={validarAntesDeFechar}
-      onConfirmacaoSecundaria={validarAntesDeFechar}
+      idBotaoPrincipal={SGP_BUTTON_DESCARTAR}
+      idBotaoSecundario={SGP_BUTTON_CONFIRMAR}
       onConfirmacaoPrincipal={onClickSalvar}
+      onConfirmacaoSecundaria={validarAntesDeFechar}
       labelBotaoPrincipal="Confirmar"
       labelBotaoSecundario="Descartar"
       perguntaAtencao={
@@ -307,6 +319,7 @@ const ModalCopiarConteudoPlanoAula = props => {
           <Row key={shortid.generate()} className="row">
             <Grid cols={5}>
               <TurmasDropDown
+                id={SGP_SELECT_TURMA}
                 ueId={filtro.unidadeEscolar}
                 modalidadeId={filtro.modalidade}
                 valor={linha.turmaId}
@@ -319,6 +332,7 @@ const ModalCopiarConteudoPlanoAula = props => {
             </Grid>
             <Grid cols={5}>
               <CampoData
+                id={SGP_DATE_SELECIONAR_DATA_INICIO}
                 valor={linha.data}
                 onChange={data => onChangeData(data, linha)}
                 name="dataInicio"
@@ -331,7 +345,7 @@ const ModalCopiarConteudoPlanoAula = props => {
             </Grid>
             <Grid cols={2}>
               <Button
-                id={shortid.generate()}
+                id={SGP_BUTTON_EXCLUIR_TURMA}
                 label="Excluir"
                 color={Colors.Roxo}
                 border
@@ -343,7 +357,7 @@ const ModalCopiarConteudoPlanoAula = props => {
         ))}
         <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
           <Button
-            id={shortid.generate()}
+            id={SGP_BUTTON_ADICIONAR_TURMA}
             label="Adicionar turma"
             color={Colors.Roxo}
             border

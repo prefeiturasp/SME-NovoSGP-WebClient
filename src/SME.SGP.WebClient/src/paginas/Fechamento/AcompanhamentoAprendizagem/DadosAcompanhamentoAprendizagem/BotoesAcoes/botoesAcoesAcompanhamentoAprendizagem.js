@@ -5,7 +5,7 @@ import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPad
 import {
   SGP_BUTTON_CANCELAR,
   SGP_BUTTON_SALVAR,
-} from '~/componentes-sgp/filtro/idsCampos';
+} from '~/constantes/ids/button';
 import Button from '~/componentes/button';
 import { Colors } from '~/componentes/colors';
 import { URL_HOME } from '~/constantes/url';
@@ -45,6 +45,26 @@ const BotoesAcoesAcompanhamentoAprendizagem = props => {
   const usuario = useSelector(store => store.usuario);
   const { turmaSelecionada } = usuario;
 
+  const recarregarDados = () => {
+    if (acompanhamentoAprendizagemEmEdicao) {
+      dispatch(setAcompanhamentoAprendizagemEmEdicao(false));
+      ServicoAcompanhamentoAprendizagem.obterAcompanhamentoEstudante(
+        turmaSelecionada?.id,
+        codigoEOL,
+        semestreSelecionado,
+        componenteCurricularId
+      );
+    }
+
+    if (apanhadoGeralEmEdicao) {
+      dispatch(setApanhadoGeralEmEdicao(false));
+      ServicoAcompanhamentoAprendizagem.obterDadosApanhadoGeral(
+        turmaSelecionada?.id,
+        semestreSelecionado
+      );
+    }
+  };
+
   const onClickSalvar = async () => {
     const salvouApanhadoGeral = await ServicoAcompanhamentoAprendizagem.salvarDadosApanhadoGeral(
       semestreSelecionado
@@ -53,6 +73,8 @@ const BotoesAcoesAcompanhamentoAprendizagem = props => {
     const salvouCompanhamento = await ServicoAcompanhamentoAprendizagem.salvarDadosAcompanhamentoAprendizagem(
       semestreSelecionado
     );
+
+    if (salvouApanhadoGeral && salvouCompanhamento) await recarregarDados();
 
     return salvouApanhadoGeral && salvouCompanhamento;
   };
@@ -81,26 +103,6 @@ const BotoesAcoesAcompanhamentoAprendizagem = props => {
       }
     } else {
       history.push(URL_HOME);
-    }
-  };
-
-  const recarregarDados = () => {
-    if (acompanhamentoAprendizagemEmEdicao) {
-      dispatch(setAcompanhamentoAprendizagemEmEdicao(false));
-      ServicoAcompanhamentoAprendizagem.obterAcompanhamentoEstudante(
-        turmaSelecionada?.id,
-        codigoEOL,
-        semestreSelecionado,
-        componenteCurricularId
-      );
-    }
-
-    if (apanhadoGeralEmEdicao) {
-      dispatch(setApanhadoGeralEmEdicao(false));
-      ServicoAcompanhamentoAprendizagem.obterDadosApanhadoGeral(
-        turmaSelecionada?.id,
-        semestreSelecionado
-      );
     }
   };
 

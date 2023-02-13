@@ -32,7 +32,7 @@ import ServicoPeriodoEscolar from '~/servicos/Paginas/Calendario/ServicoPeriodoE
 import {
   SGP_BUTTON_APROVAR,
   SGP_BUTTON_IMPRIMIR,
-} from '~/componentes-sgp/filtro/idsCampos';
+} from '~/constantes/ids/button';
 import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
 
 // eslint-disable-next-line react/prop-types
@@ -331,6 +331,9 @@ const PendenciasFechamentoLista = ({ match }) => {
       b => String(b?.bimestre) === bimestreSelecionado
     )?.aberto;
 
+  const exibirTabela = match?.params?.codigoComponenteCurricular
+    ? !!filtro?.componenteCurricularId
+    : !!filtro?.bimestre;
   return (
     <>
       {bimestreSelecionado && !periodoAberto ? (
@@ -445,7 +448,7 @@ const PendenciasFechamentoLista = ({ match }) => {
             </div>
           </div>
         </div>
-        {filtro?.bimestre ? (
+        {exibirTabela ? (
           <div className="col-md-12 pt-2">
             <ListaPaginada
               url="v1/fechamentos/pendencias/listar"

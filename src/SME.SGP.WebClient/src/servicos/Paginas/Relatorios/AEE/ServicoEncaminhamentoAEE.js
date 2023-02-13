@@ -21,6 +21,10 @@ import {
   setNomesSecoesComCamposObrigatorios,
 } from '~/redux/modulos/encaminhamentoAEE/actions';
 import { setDadosObjectCardEstudante } from '~/redux/modulos/objectCardEstudante/actions';
+import {
+  setLimparDadosQuestionarioDinamico,
+  setQuestionarioDinamicoEmEdicao,
+} from '~/redux/modulos/questionarioDinamico/actions';
 import { erros } from '~/servicos/alertas';
 import api from '~/servicos/api';
 import history from '~/servicos/history';
@@ -136,7 +140,8 @@ class ServicoEncaminhamentoAEE {
     encaminhamentoId,
     situacao,
     validarCamposObrigatorios,
-    enviarEncaminhamento
+    enviarEncaminhamento,
+    salvarRascunho
   ) => {
     const { dispatch } = store;
 
@@ -383,7 +388,13 @@ class ServicoEncaminhamentoAEE {
             .catch(e => erros(e))
             .finally(() => dispatch(setExibirLoaderEncaminhamentoAEE(false)));
 
-          if (resposta?.data?.id) {
+          if (salvarRascunho && resposta?.data?.id) {
+            dispatch(setQuestionarioDinamicoEmEdicao(false));
+            dispatch(setListaSecoesEmEdicao([]));
+            dispatch(setLimparDadosEncaminhamento());
+            dispatch(setLimparDadosQuestionarioDinamico());
+            dispatch(setLimparDadosLocalizarEstudante());
+            dispatch(setLimparDadosAtribuicaoResponsavel());
             history.push(
               `${RotasDto.RELATORIO_AEE_ENCAMINHAMENTO}/editar/${resposta?.data?.id}`
             );
@@ -499,6 +510,41 @@ class ServicoEncaminhamentoAEE {
   devolverEncaminhamentoAEE = params => {
     return api.post(`${urlPadrao}/devolver`, params);
   };
+
+  obterResponsaveisPAAIPesquisa = (codigoTurma, dreCodigo, ehRelatorio) => {
+    const params = { limite: 999 };
+
+    if (codigoTurma) {
+      params.codigoTurma = codigoTurma;
+    }
+    if (dreCodigo) {
+      params.codigoDRE = dreCodigo;
+    }
+    if (ehRelatorio) {
+      params.ehRelatorio = ehRelatorio;
+    }
+    return api.post(`${urlPadrao}/responsavel/pesquisa`, params);
+  };
+
+  obterResponsaveisPesquisa = (codigoTurma, dreCodigo, ueCodigo) => {
+    const params = { limite: 999 };
+
+    if (codigoTurma) {
+      params.codigoTurma = codigoTurma;
+    }
+    if (dreCodigo) {
+      params.codigoDRE = dreCodigo;
+    }
+    if (dreCodigo) {
+      params.codigoUE = ueCodigo;
+    }
+    return api.post(`${urlPadrao}/responsavel-plano/pesquisa`, params);
+  };
+
+  gerarRelatorioEncaminhamentoAEE = params =>
+    api.post('v1/relatorios/encaminhamento-aee', params);
+
+  gerarRelatorio = params => api.post(`${urlPadrao}/imprimir-detalhado`, params);
 }
 
 export default new ServicoEncaminhamentoAEE();

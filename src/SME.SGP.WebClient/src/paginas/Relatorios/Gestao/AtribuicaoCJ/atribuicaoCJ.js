@@ -242,7 +242,7 @@ const AtribuicaoCJ = () => {
   const obterUes = useCallback(async dre => {
     if (dre) {
       setCarregandoGeral(true);
-      const resposta = await ServicoFiltroRelatorio.obterUes(dre)
+      const resposta = await ServicoFiltroRelatorio.obterUes(dre, false, anoLetivo)
         .catch(e => erros(e))
         .finally(() => setCarregandoGeral(false));
 
@@ -261,7 +261,7 @@ const AtribuicaoCJ = () => {
         setListaUes([]);
       }
     }
-  }, []);
+  }, [anoLetivo]);
 
   useEffect(() => {
     if (dreCodigo) {
@@ -502,6 +502,7 @@ const AtribuicaoCJ = () => {
                 rfEdicao={usuarioRf}
                 buscandoDados={setCarregandoGeral}
                 dreId={dreCodigo}
+                ueId={ueCodigo}
                 anoLetivo={anoAtual}
                 showLabel
                 onChange={valores => {

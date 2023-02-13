@@ -6,6 +6,7 @@ import TooltipStatusGsa from './tooltipStatusGsa';
 
 const CampoConceito = props => {
   const {
+    id,
     nota,
     onChangeNotaConceito,
     desabilitarCampo,
@@ -40,6 +41,7 @@ const CampoConceito = props => {
       }}
     >
       <SelectComponent
+        id={id}
         onChange={valorNovo => setarValorNovo(valorNovo)}
         valueOption="id"
         valueText="valor"
@@ -64,13 +66,15 @@ const CampoConceito = props => {
 };
 
 CampoConceito.propTypes = {
-  nota: {},
+  id: PropTypes.string,
+  nota: PropTypes.oneOfType([PropTypes.any]),
   onChangeNotaConceito: PropTypes.func,
   desabilitarCampo: PropTypes.bool,
   listaTiposConceitos: PropTypes.oneOfType([PropTypes.any]),
 };
 
 CampoConceito.defaultProps = {
+  id: '',
   nota: {},
   onChangeNotaConceito: () => {},
   desabilitarCampo: false,

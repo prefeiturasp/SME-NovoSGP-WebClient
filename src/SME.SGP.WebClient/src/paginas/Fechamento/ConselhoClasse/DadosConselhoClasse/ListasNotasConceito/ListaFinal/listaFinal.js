@@ -1,21 +1,17 @@
 import PropTypes from 'prop-types';
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { useSelector } from 'react-redux';
 import shortid from 'shortid';
 import { Tooltip } from 'antd';
 import modalidadeDto from '~/dtos/modalidade';
 import notasConceitos from '~/dtos/notasConceitos';
-import {
-  converterAcaoTecla,
-  moverCursor,
-  removerArrayAninhados,
-  tratarString,
-} from '~/utils';
+import { tratarStringComponenteCurricularNome } from '~/utils';
 import CampoConceito from '../CamposNotaConceito/campoConceito';
 import CampoNota from '../CamposNotaConceito/campoNota';
 import { BarraLateralLista, Lista } from '../listasNotasConceitos.css';
 import LinhaJustificativa from '../../Justificativa/LinhaJustificativa/LinhaJustificativa';
 import { MarcadorTriangulo } from '~/componentes';
+import { moverFocoCampoNotaConselhoClasse } from '~/componentes-sgp/inputs/nota/funcoes';
 
 const ListaFinal = props => {
   const {
@@ -26,10 +22,10 @@ const ListaFinal = props => {
     alunoDesabilitado,
     corBarraLateral,
     corRegenciaBarraLateral,
-    dadosListasNotasConceitos,
+    componentesAgrupados,
+    dadosArredondamento,
   } = props;
 
-  const [componentesAgrupados, setComponentesAgrupados] = useState();
   const usuario = useSelector(store => store.usuario);
   const { turmaSelecionada } = usuario;
   const { modalidade } = turmaSelecionada;
@@ -50,29 +46,6 @@ const ListaFinal = props => {
       ? dadosLista.componenteRegencia.componentesCurriculares.length * 2
       : 0;
 
-  const acharComponenteCurricular = (codigoComponente, numero) => {
-    return componentesAgrupados
-      ?.map((valor, index, elementos) => {
-        const nomeComponente = tratarString(valor?.nome);
-        if (nomeComponente === codigoComponente) {
-          return elementos[index + numero];
-        }
-        return '';
-      })
-      .filter(item => item?.nome);
-  };
-
-  const clicarSetas = (e, nomeComponenteCurricular) => {
-    const direcao = converterAcaoTecla(e.keyCode);
-    const componenteEscolhido =
-      direcao && acharComponenteCurricular(nomeComponenteCurricular, direcao);
-
-    if (componenteEscolhido.length) {
-      const componenteTratado = tratarString(componenteEscolhido[0].nome);
-      moverCursor(componenteTratado);
-    }
-  };
-
   const montaCampoPosConselho = (
     id,
     notaPosConselho,
@@ -81,23 +54,29 @@ const ListaFinal = props => {
     item,
     podeEditar
   ) => {
-    const nomeComponenteCurricular = tratarString(item?.nome);
+    const nomeComponenteCurricular = tratarStringComponenteCurricularNome(
+      item?.nome
+    );
     switch (Number(tipoNota)) {
       case Number(notasConceitos.Notas):
         return (
           <CampoNota
-            esconderSetas
             name={nomeComponenteCurricular}
-            clicarSetas={e => clicarSetas(e, nomeComponenteCurricular)}
-            step={0}
+            clicarSetas={e =>
+              moverFocoCampoNotaConselhoClasse(
+                e,
+                componentesAgrupados,
+                nomeComponenteCurricular
+              )
+            }
             id={id}
             notaPosConselho={notaPosConselho}
             idCampo={idCampo}
             codigoComponenteCurricular={String(codigoComponenteCurricular)}
             mediaAprovacao={mediaAprovacao}
-            alunoDesabilitado={alunoDesabilitado}
-            podeEditar={podeEditar}
+            alunoDesabilitado={alunoDesabilitado || !podeEditar}
             dadosNotaPosConselho={item}
+            dadosArredondamento={dadosArredondamento}
           />
         );
       case Number(notasConceitos.Conceitos):
@@ -168,16 +147,6 @@ const ListaFinal = props => {
       </>
     );
   };
-
-  useEffect(() => {
-    if (!componentesAgrupados && dadosListasNotasConceitos?.length) {
-      const componentes = dadosListasNotasConceitos?.map(
-        item => item.componentesCurriculares
-      );
-      const componentesNaoAninhados = removerArrayAninhados(componentes);
-      setComponentesAgrupados(componentesNaoAninhados);
-    }
-  }, [dadosListasNotasConceitos, componentesAgrupados]);
 
   return (
     <Lista className="col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-2">
@@ -273,7 +242,8 @@ const ListaFinal = props => {
                             item.notaPosConselho.nota,
                             `${descricaoGrupoMatriz} ${index} regencia`,
                             item.codigoComponenteCurricular,
-                            item
+                            item,
+                            item.notaPosConselho.podeEditar
                           )}
                           {item.notaPosConselho.emAprovacao && (
                             <Tooltip title="Aguardando aprovação">
@@ -327,10 +297,8 @@ ListaFinal.propTypes = {
   alunoDesabilitado: PropTypes.bool,
   corBarraLateral: PropTypes.string,
   corRegenciaBarraLateral: PropTypes.string,
-  dadosListasNotasConceitos: PropTypes.oneOfType([
-    PropTypes.object,
-    PropTypes.array,
-  ]),
+  dadosArredondamento: PropTypes.oneOfType([PropTypes.any]),
+  componentesAgrupados: PropTypes.oneOfType([PropTypes.any]),
 };
 
 ListaFinal.defaultProps = {
@@ -341,7 +309,8 @@ ListaFinal.defaultProps = {
   alunoDesabilitado: false,
   corBarraLateral: '',
   corRegenciaBarraLateral: '',
-  dadosListasNotasConceitos: [],
+  dadosArredondamento: null,
+  componentesAgrupados: null,
 };
 
 export default ListaFinal;

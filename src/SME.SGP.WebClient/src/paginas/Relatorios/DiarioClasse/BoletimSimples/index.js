@@ -11,9 +11,8 @@ import { sucesso, erro, confirmar } from '~/servicos/alertas';
 import AlertaModalidadeInfantil from '~/componentes-sgp/AlertaModalidadeInfantil/alertaModalidadeInfantil';
 import modalidade from '~/dtos/modalidade';
 
-import { EstiloModal } from './boletimSimples.css';
 import { ModalidadeDTO } from '~/dtos';
-import { SGP_BUTTON_GERAR } from '~/componentes-sgp/filtro/idsCampos';
+import { SGP_BUTTON_GERAR } from '~/constantes/ids/button';
 
 const BoletimSimples = () => {
   const [loaderSecao] = useState(false);
@@ -21,6 +20,7 @@ const BoletimSimples = () => {
   const [clicouBotaoGerar, setClicouBotaoGerar] = useState(false);
   const [desabilitarBotaoGerar, setDesabilitarBotaoGerar] = useState(false);
   const [filtrou, setFiltrou] = useState(false);
+  const [modoEdicao, setModoEdicao] = useState(false);
   const [cancelou, setCancelou] = useState(false);
   const estadoInicial = {
     anoLetivo: '',
@@ -31,7 +31,7 @@ const BoletimSimples = () => {
     turmaCodigo: '',
     consideraHistorico: false,
     opcaoEstudanteId: '',
-    modelo: '',
+    quantidadeBoletimPorPagina: '',
     filtroEhValido: true,
   };
   const [filtro, setFiltro] = useState(estadoInicial);
@@ -58,7 +58,7 @@ const BoletimSimples = () => {
           : 0,
       consideraHistorico: valoresFiltro.consideraHistorico,
       opcaoEstudanteId: valoresFiltro.opcaoEstudanteId,
-      modelo: valoresFiltro.modeloBoletimId,
+      quantidadeBoletimPorPagina: valoresFiltro.quantidadeBoletimPorPagina,
       filtroEhValido: !naoLimparItensSelecionados,
       consideraInativo: valoresFiltro?.imprimirEstudantesInativos,
     });
@@ -76,37 +76,33 @@ const BoletimSimples = () => {
     history.push('/');
   };
 
-  const onClickCancelar = () => {
-    setCancelou(true);
-    setFiltro(estadoInicial);
+  const onClickCancelar = async () => {
+    if (modoEdicao) {
+      const confirmou = await confirmar(
+        'Atenção',
+        '',
+        'Deseja realmente cancelar as alterações?'
+      );
+
+      if (confirmou) {
+        setCancelou(true);
+        setModoEdicao(false);
+      }
+    }
   };
 
   const onClickBotaoPrincipal = async () => {
-    let confirmou = false;
-
-    if (filtro.modelo === '2') {
-      confirmou = await confirmar(
-        'Modelo de boletim detalhado',
-        'O modelo de boletim detalhado vai gerar pelo menos uma página para cada estudante. Deseja continuar?',
-        '',
-        'Cancelar',
-        'Continuar'
+    setClicouBotaoGerar(true);
+    const resultado = await ServicoBoletimSimples.imprimirBoletim({
+      ...filtro,
+      alunosCodigo: itensSelecionados,
+    });
+    if (resultado.erro)
+      erro('Não foi possível solicitar a impressão do Boletim');
+    else
+      sucesso(
+        'Solicitação de geração do relatório gerada com sucesso. Em breve você receberá uma notificação com o resultado.'
       );
-    }
-
-    if (!confirmou) {
-      setClicouBotaoGerar(true);
-      const resultado = await ServicoBoletimSimples.imprimirBoletim({
-        ...filtro,
-        alunosCodigo: itensSelecionados,
-      });
-      if (resultado.erro)
-        erro('Não foi possível solicitar a impressão do Boletim');
-      else
-        sucesso(
-          'Solicitação de geração do relatório gerada com sucesso. Em breve você receberá uma notificação com o resultado.'
-        );
-    }
   };
 
   const colunas = [
@@ -136,7 +132,7 @@ const BoletimSimples = () => {
       !filtro?.turmaCodigo?.length ||
       !filtro?.opcaoEstudanteId ||
       !temSemestreOuNaoEja ||
-      !filtro?.modelo ||
+      !filtro?.quantidadeBoletimPorPagina ||
       clicouBotaoGerar;
 
     setDesabilitarBotaoGerar(desabilitar);
@@ -144,7 +140,6 @@ const BoletimSimples = () => {
 
   return (
     <>
-      <EstiloModal />
       <AlertaModalidadeInfantil
         exibir={String(filtro.modalidade) === String(modalidade.INFANTIL)}
         validarModalidadeFiltroPrincipal={false}
@@ -167,16 +162,17 @@ const BoletimSimples = () => {
             botoesEstadoVariavel={false}
             labelBotaoPrincipal="Gerar"
             idBotaoPrincipal={SGP_BUTTON_GERAR}
-            modoEdicao
+            modoEdicao={modoEdicao}
           />
         </Cabecalho>
         <Card>
           <Filtro
-            onFiltrar={onChangeFiltro}
+            cancelou={cancelou}
             filtrou={filtrou}
             setFiltrou={setFiltrou}
-            cancelou={cancelou}
             setCancelou={setCancelou}
+            onFiltrar={onChangeFiltro}
+            setModoEdicao={setModoEdicao}
           />
           {!!filtro?.turmaCodigo?.length && selecionarAlunos && (
             <div className="col-md-12 pt-4">

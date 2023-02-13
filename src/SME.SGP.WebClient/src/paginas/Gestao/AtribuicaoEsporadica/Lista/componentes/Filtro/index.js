@@ -146,19 +146,21 @@ const Filtro = memo(({ onFiltrar }) => {
               />
             </Grid>
             <Grid cols={5}>
-              <DreDropDown form={form} onChange={valor => onChangeDre(valor)} />
+              <DreDropDown form={form} onChange={valor => onChangeDre(valor)}/>
             </Grid>
             <Grid cols={5}>
               <UeDropDown
                 dreId={dreId}
                 form={form}
                 onChange={valor => dispatch(selecionarUe(valor))}
+                consideraHistorico={consideraHistorico}
               />
             </Grid>
           </Linha>
           <Linha className="row">
             <Localizador
               dreId={dreId}
+              ueId={form.values.ueId}
               anoLetivo={anoAtual}
               form={form}
               onChange={valor => valor}

@@ -8,6 +8,7 @@ import {
   Colors,
   DataTable,
   ModalConteudoHtml,
+  RadioGroupButton,
 } from '~/componentes';
 
 import { setExibirModalImpressao } from '~/redux/modulos/acompanhamentoFrequencia/actions';
@@ -27,11 +28,17 @@ const ModalImpressao = ({ dadosAlunos, componenteCurricularId }) => {
   );
   const [alunosSelecionados, setAlunosSelecionados] = useState([]);
   const [imprimirTodosBimestres, setImprimirTodosBimestres] = useState(false);
+  const [imprimirFreqDiaria, setImprimirFreqDiaria] = useState(false);
   const [desabilitarBotaoGerar, setDesabilitarBotaoGerar] = useState(false);
 
   const opcaoExibirPendenciasResolvidas = [
     { value: OPCAO_TODOS, label: 'Todas as crianças/estudantes' },
     { value: '1', label: 'Crianças/estudantes selecionadas' },
+  ];
+
+  const opcaoExibirFrequenciaDiaria = [
+    { value: true, label: 'Sim' },
+    { value: false, label: 'Não' },
   ];
 
   const columns = [
@@ -82,6 +89,7 @@ const ModalImpressao = ({ dadosAlunos, componenteCurricularId }) => {
       dreCodigo: turmaSelecionada?.dre,
       ueCodigo: turmaSelecionada?.unidadeEscolar,
       bimestre,
+      imprimirFrequenciaDiaria: imprimirFreqDiaria,
       turmaCodigo: turmaSelecionada?.turma,
     }).catch(e => erros(e));
     if (retorno?.status === 200) {
@@ -149,8 +157,18 @@ const ModalImpressao = ({ dadosAlunos, componenteCurricularId }) => {
         checked={imprimirTodosBimestres}
       />
 
+      <RadioGroupButton
+        label="Imprimir frequência diária"
+        opcoes={opcaoExibirFrequenciaDiaria}
+        valorInicial
+        onChange={e => {
+          setImprimirFreqDiaria(e.target.value);
+        }}
+        value={imprimirFreqDiaria}
+      />
+
       <RadioGroupButtonCustomizado
-        label="Quais crianças deseja incluir na impressão do relatório?"
+        label="Quais crianças/estudantes deseja incluir na impressão do relatório?"
         opcoes={opcaoExibirPendenciasResolvidas}
         valorInicial
         onChange={e => {

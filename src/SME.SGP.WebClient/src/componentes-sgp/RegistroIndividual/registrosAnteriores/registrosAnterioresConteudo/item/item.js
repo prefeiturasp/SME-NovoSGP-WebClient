@@ -4,6 +4,12 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Auditoria, Button, Colors, JoditEditor } from '~/componentes';
 import {
+  SGP_BUTTON_CANCELAR_OBSERVACAO,
+  SGP_BUTTON_EDITAR_OBSERVACAO,
+  SGP_BUTTON_EXCLUIR_OBSERVACAO,
+  SGP_BUTTON_SALVAR_OBSERVACAO,
+} from '~/constantes/ids/button';
+import {
   alterarRegistroAnterior,
   excluirRegistroAnteriorId,
   setRegistroAnteriorEmEdicao,
@@ -175,7 +181,7 @@ const Item = ({ dados, setCarregandoGeral, permissoesTela, podeEditar }) => {
           {editando ? (
             <div className="d-flex mt-2">
               <Button
-                id="btn-cancelar-obs-novo"
+                id={SGP_BUTTON_CANCELAR_OBSERVACAO}
                 label="Cancelar"
                 color={Colors.Roxo}
                 border
@@ -185,7 +191,7 @@ const Item = ({ dados, setCarregandoGeral, permissoesTela, podeEditar }) => {
                 height="30px"
               />
               <Button
-                id="btn-salvar-obs-novo"
+                id={SGP_BUTTON_SALVAR_OBSERVACAO}
                 label="Salvar"
                 color={Colors.Roxo}
                 border
@@ -199,7 +205,7 @@ const Item = ({ dados, setCarregandoGeral, permissoesTela, podeEditar }) => {
               <Tooltip title="Editar">
                 <span>
                   <Button
-                    id="btn-editar"
+                    id={SGP_BUTTON_EDITAR_OBSERVACAO}
                     icon="edit"
                     iconType="far"
                     color={Colors.Azul}
@@ -215,7 +221,7 @@ const Item = ({ dados, setCarregandoGeral, permissoesTela, podeEditar }) => {
               <Tooltip title="Excluir">
                 <span>
                   <Button
-                    id="btn-excluir"
+                    id={SGP_BUTTON_EXCLUIR_OBSERVACAO}
                     icon="trash-alt"
                     iconType="far"
                     color={Colors.Azul}

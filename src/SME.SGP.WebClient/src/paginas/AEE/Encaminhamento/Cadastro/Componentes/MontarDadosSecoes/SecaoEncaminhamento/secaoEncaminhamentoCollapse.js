@@ -3,6 +3,7 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 import ObjectCardEstudante from '~/componentes-sgp/ObjectCardEstudante/objectCardEstudante';
 import CardCollapse from '~/componentes/cardCollapse';
+import { SGP_COLLAPSE_ENCAMINHAMENTO_AEE } from '~/constantes/ids/collapse';
 import situacaoAEE from '~/dtos/situacaoAEE';
 import ModalDevolverAEE from '../../ModalDevolverAEE/modalDevolverAEE';
 import ModalEncerramentoEncaminhamentoAEE from '../../ModalEncerramentoEncaminhamentoAEE/modalEncerramentoEncaminhamentoAEE';
@@ -27,6 +28,7 @@ const SecaoEncaminhamentoCollapse = props => {
 
   return (
     <CardCollapse
+      id={SGP_COLLAPSE_ENCAMINHAMENTO_AEE}
       key="secao-encaminhamento-collapse-key"
       titulo="Encaminhamento"
       indice="secao-encaminhamento-collapse-indice"

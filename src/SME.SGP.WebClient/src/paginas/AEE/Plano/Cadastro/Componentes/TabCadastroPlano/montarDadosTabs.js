@@ -40,8 +40,8 @@ const MontarDadosTabs = props => {
   const cliqueTab = async key => {
     ServicoPlanoAEE.cliqueTabPlanoAEE(key, temId);
   };
-
-  return dadosCollapseLocalizarEstudante?.codigoAluno ? (
+  return dadosCollapseLocalizarEstudante?.codigoAluno &&
+    planoAEEDados?.questionarioId ? (
     <ContainerTabsCard type="card" width="20%" onTabClick={cliqueTab}>
       <TabPane tab="Cadastro do Plano" key="1">
         <AddResponsavelCadastroPlano />
@@ -55,7 +55,7 @@ const MontarDadosTabs = props => {
             planoAEEDados?.situacao !== situacaoPlanoAEE.Expirado &&
             planoAEEDados?.situacao !== situacaoPlanoAEE.Encerrado &&
             planoAEEDados?.situacao !==
-              situacaoPlanoAEE.EncerradoAutomaticamento
+              situacaoPlanoAEE.EncerradoAutomaticamente
           }
         >
           <SecaoReestruturacaoPlano match={match} />

@@ -2,7 +2,7 @@
 import { InputNumber } from 'antd';
 import { Field } from 'formik';
 import PropTypes from 'prop-types';
-import React from 'react';
+import React, { useRef } from 'react';
 import styled, { css } from 'styled-components';
 import { Base } from './colors';
 import Label from './label';
@@ -35,7 +35,7 @@ const CampoNumero = React.forwardRef((props, ref) => {
     form,
     className,
     classNameCampo,
-    maskType,
+    type,
     placeholder,
     onChange,
     onKeyDown,
@@ -56,6 +56,7 @@ const CampoNumero = React.forwardRef((props, ref) => {
     styleContainer,
     styleCampo,
     autoFocus,
+    validateOnBlurInOnChange,
   } = props;
 
   const possuiErro = () => {
@@ -84,6 +85,9 @@ const CampoNumero = React.forwardRef((props, ref) => {
     return valor;
   };
 
+  const refInterno = useRef();
+  const refState = refInterno?.current?.inputNumberRef?.state;
+
   return (
     <>
       <Campo
@@ -102,28 +106,46 @@ const CampoNumero = React.forwardRef((props, ref) => {
                 possuiErro() ? 'is-invalid' : ''
               } ${className || ''} ${desabilitado ? 'desabilitado' : ''}`}
               component={InputNumber}
-              type={maskType || ''}
+              type={type || ''}
               readOnly={desabilitado}
               onBlur={executaOnBlur}
               maxLength={maxlength || ''}
               innerRef={ref}
               onKeyDown={onKeyDown}
               onKeyUp={onKeyUp}
+              value={form.values[name]}
               onChange={v => {
                 form.setFieldValue(name, v);
                 form.setFieldTouched(name, true);
                 onChange(v);
               }}
               disabled={disabled}
+              placeholder={placeholder}
             />
-            {!semMensagem ? <span>{form.errors[name]}</span> : ''}
+            {!semMensagem && possuiErro() ? (
+              <span>{form.errors[name]}</span>
+            ) : (
+              ''
+            )}
           </>
         ) : (
           <InputNumber
+            id={id}
             name={name}
-            ref={ref}
+            ref={validateOnBlurInOnChange ? refInterno : ref}
             placeholder={placeholder}
-            onChange={onChange}
+            onChange={newValue => {
+              if (validateOnBlurInOnChange) {
+                const valueHasChanged =
+                  refState?.value !== newValue &&
+                  refState?.inputValue !== newValue?.toString();
+                if (valueHasChanged) {
+                  onChange(newValue);
+                }
+              } else {
+                onChange(newValue);
+              }
+            }}
             readOnly={desabilitado}
             onKeyDown={onKeyDown}
             onKeyUp={onKeyUp}
@@ -157,6 +179,8 @@ CampoNumero.propTypes = {
   onKeyUp: PropTypes.func,
   autoFocus: PropTypes.bool,
   label: PropTypes.string,
+  validateOnBlurInOnChange: PropTypes.bool,
+  placeholder: PropTypes.string,
 };
 
 CampoNumero.defaultProps = {
@@ -169,6 +193,8 @@ CampoNumero.defaultProps = {
   onKeyUp: () => {},
   autoFocus: false,
   label: '',
+  validateOnBlurInOnChange: false,
+  placeholder: '',
 };
 
 export default CampoNumero;

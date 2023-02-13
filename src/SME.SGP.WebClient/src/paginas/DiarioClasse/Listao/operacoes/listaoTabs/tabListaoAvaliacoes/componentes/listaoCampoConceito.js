@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { Base } from '~/componentes';
 import InputSelectReadOnly from '~/componentes-sgp/camposSomenteLeitura/InputSelectReadOnly';
+import LabelAusenteCellTable from '~/componentes-sgp/inputs/nota/labelAusenteCellTable';
 import SelectComponent from '~/componentes/select';
 
 const ContainerConceitoFinal = styled.div`
@@ -68,50 +69,49 @@ const ListaoCampoConceito = props => {
     return tipoConceito && !tipoConceito.aprovado;
   };
 
-  const styleCampo = {};
-
-  if (estaAbaixoDaMedia(conceitoValorAtual)) {
-    styleCampo.border = `solid 2px ${Base.Vermelho}`;
-    styleCampo.borderRadius = '4px';
-  }
+  styleContainer.padding = styleContainer.padding || '7px 8px 2px';
 
   const montarCampo = () => (
-    <div
-      style={{ ...styleContainer }}
-      onFocus={() => validarExibir(true)}
-      onMouseEnter={() => validarExibir(true)}
-      onMouseLeave={() => validarExibir(false)}
-    >
-      {!desabilitar && exibir ? (
-        <div>
-          <SelectComponent
+    <>
+      <div
+        style={{ ...styleContainer }}
+        onFocus={() => validarExibir(true)}
+        onMouseEnter={() => validarExibir(true)}
+        onMouseLeave={() => validarExibir(false)}
+      >
+        {!desabilitar && exibir ? (
+          <div>
+            <SelectComponent
+              key={idCampo}
+              id={idCampo}
+              name={idCampo}
+              onChange={valorNovo => {
+                setarValorNovo(valorNovo);
+              }}
+              valueOption="id"
+              valueText="valor"
+              lista={listaTiposConceitos || []}
+              valueSelect={
+                conceitoValorAtual ? String(conceitoValorAtual) : undefined
+              }
+              showSearch
+              placeholder="Conceito"
+              disabled={desabilitar}
+            />
+          </div>
+        ) : (
+          <InputSelectReadOnly
+            name={idCampo}
             key={idCampo}
             id={idCampo}
-            onChange={valorNovo => {
-              setarValorNovo(valorNovo);
-            }}
-            valueOption="id"
-            valueText="valor"
-            lista={listaTiposConceitos || []}
-            valueSelect={
-              conceitoValorAtual ? String(conceitoValorAtual) : undefined
-            }
-            showSearch
-            placeholder="Conceito"
+            value={obterDescConceito(conceitoValorAtual)}
             disabled={desabilitar}
-            searchValue={false}
+            placeholder="Conceito"
           />
-        </div>
-      ) : (
-        <InputSelectReadOnly
-          key={idCampo}
-          id={idCampo}
-          value={obterDescConceito(conceitoValorAtual)}
-          disabled={desabilitar}
-          placeholder="Conceito"
-        />
-      )}
-    </div>
+        )}
+      </div>
+      {dadosConceito?.ausente ? <LabelAusenteCellTable /> : <></>}
+    </>
   );
 
   return ehFechamento ? (
@@ -131,13 +131,13 @@ const ListaoCampoConceito = props => {
 };
 
 ListaoCampoConceito.propTypes = {
-  idCampo: PropTypes.oneOf([PropTypes.any]),
-  dadosConceito: PropTypes.oneOf([PropTypes.any]),
+  idCampo: PropTypes.oneOfType([PropTypes.any]),
+  dadosConceito: PropTypes.oneOfType([PropTypes.any]),
   onChangeNotaConceito: PropTypes.func,
   desabilitar: PropTypes.bool,
-  listaTiposConceitos: PropTypes.oneOf([PropTypes.array]),
+  listaTiposConceitos: PropTypes.oneOfType([PropTypes.any]),
   ehFechamento: PropTypes.bool,
-  styleContainer: PropTypes.oneOf([PropTypes.any]),
+  styleContainer: PropTypes.oneOfType([PropTypes.any]),
 };
 
 ListaoCampoConceito.defaultProps = {

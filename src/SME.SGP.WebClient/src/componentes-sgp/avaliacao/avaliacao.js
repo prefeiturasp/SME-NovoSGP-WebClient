@@ -1,31 +1,32 @@
+/* eslint-disable react/prop-types */
 import { Tooltip } from 'antd';
 import PropTypes from 'prop-types';
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import shortid from 'shortid';
 import { LabelSemDados, MarcadorTriangulo } from '~/componentes';
+import { SGP_INPUT_NOTA, SGP_INPUT_NOTA_FINAL } from '~/constantes/ids/input';
+import {
+  SGP_SELECT_CONCEITO_FINAL,
+  SGP_SELECT_NOTA,
+} from '~/constantes/ids/select';
+import {
+  SGP_TABLE_LANCAMENTO_NOTAS,
+  SGP_TABLE_LANCAMENTO_NOTAS_LINHA,
+} from '~/constantes/ids/table';
 import notasConceitos from '~/dtos/notasConceitos';
 import {
   setExpandirLinha,
   setModoEdicaoGeral,
   setModoEdicaoGeralNotaFinal,
 } from '~/redux/modulos/notasConceitos/actions';
-import {
-  acharItem,
-  converterAcaoTecla,
-  moverCursor,
-  tratarString,
-} from '~/utils';
+import Nota from '../inputs/nota';
+import { moverFocoCampoNota } from '../inputs/nota/funcoes';
+import LabelInterdisciplinar from '../interdisciplinar';
 import Ordenacao from '../Ordenacao/ordenacao';
-import {
-  CaixaMarcadores,
-  InfoMarcador,
-  TabelaColunasFixas,
-} from './avaliacao.css';
+import { InfoMarcador, TabelaColunasFixas } from './avaliacao.css';
 import CampoConceito from './campoConceito';
 import CampoConceitoFinal from './campoConceitoFinal';
-import CampoNota from './campoNota';
-import CampoNotaFinal from './campoNotaFinal';
 import ColunaNotaFinalRegencia from './colunaNotaFinalRegencia';
 import LinhaConceitoFinal from './linhaConceitoFinal';
 
@@ -39,7 +40,6 @@ const Avaliacao = props => {
     desabilitarCampos,
     ehProfessorCj,
     ehRegencia,
-    disciplinaSelecionada,
     exibirTootipStatusGsa,
     exibirStatusAlunoAusente,
   } = props;
@@ -77,7 +77,7 @@ const Avaliacao = props => {
   };
 
   const montarCabecalhoAvaliacoes = () => {
-    return dados.avaliacoes && dados.avaliacoes.length > 0
+    return dados?.avaliacoes?.length > 0
       ? dados.avaliacoes.map(avaliacao => {
           return (
             <th key={shortid.generate()} className={obterTamanhoColuna()}>
@@ -91,6 +91,7 @@ const Avaliacao = props => {
                 <div className="row justify-content-center px-3">
                   {avaliacao.disciplinas.map(item => (
                     <div
+                      key={shortid.generate()}
                       alt={item}
                       className="badge badge-pill border text-dark bg-white font-weight-light"
                     >
@@ -105,26 +106,12 @@ const Avaliacao = props => {
       : '';
   };
 
-  const montarToolTipDisciplinas = disciplinas => {
-    let nomes = '';
-    disciplinas.forEach(nomeDisciplina => {
-      nomes += nomes.length > 0 ? `, ${nomeDisciplina}` : nomeDisciplina;
-    });
-    return nomes;
-  };
-
   const montarCabecalhoInterdisciplinar = () => {
     return dados.avaliacoes && dados.avaliacoes.length > 0
       ? dados.avaliacoes.map(avaliacao => {
           return avaliacao.ehInterdisciplinar ? (
             <th key={shortid.generate()}>
-              <Tooltip
-                title={montarToolTipDisciplinas(avaliacao.disciplinas)}
-                placement="bottom"
-                overlayStyle={{ fontSize: '12px' }}
-              >
-                <CaixaMarcadores>Interdisciplinar</CaixaMarcadores>
-              </Tooltip>
+              <LabelInterdisciplinar disciplinas={avaliacao.disciplinas} />
             </th>
           ) : (
             <th key={shortid.generate()} />
@@ -133,62 +120,35 @@ const Avaliacao = props => {
       : '';
   };
 
-  const acharElemento = (e, elemento) => {
-    return e.nativeEvent.path.find(item => item.localName === elemento);
-  };
-
-  const clicarSetas = (e, aluno, label = '', index = 0, regencia = false) => {
-    const direcao = converterAcaoTecla(e.keyCode);
-    const disciplina = label.toLowerCase();
-
-    if (direcao && regencia) {
-      let novaLinha = [];
-      const novoIndex = index + direcao;
-      if (expandirLinha[novoIndex]) {
-        expandirLinha[novoIndex] = false;
-        novaLinha = expandirLinha;
-      } else {
-        novaLinha[novoIndex] = true;
-      }
-      dispatch(setExpandirLinha([...novaLinha]));
-    }
-    const elementoTD = acharElemento(e, 'td');
-    const indexElemento = elementoTD?.cellIndex - 2;
-    const alunoEscolhido =
-      direcao && acharItem(dados?.alunos, aluno, direcao, 'id');
-    if (alunoEscolhido.length) {
-      const disciplinaTratada = tratarString(disciplina);
-      const item = regencia ? disciplinaTratada : 'aluno';
-      const itemEscolhido = `${item}${alunoEscolhido[0].id}`;
-      moverCursor(itemEscolhido, indexElemento, regencia);
-    }
-  };
-
-  const montarCampoNotaConceito = (nota, aluno) => {
+  const montarCampoNotaConceito = (nota, aluno, linha, coluna) => {
     const avaliacao = dados.avaliacoes.find(
       item => item.id === nota.atividadeAvaliativaId
     );
     const desabilitarNota = ehProfessorCj ? !avaliacao.ehCJ : avaliacao.ehCJ;
+    const desabilitar =
+      desabilitarCampos || desabilitarNota || !nota?.podeEditar;
 
     switch (Number(notaTipo)) {
-      case Number(notasConceitos.Notas):
+      case notasConceitos.Notas:
         return (
-          <CampoNota
-            esconderSetas
+          <Nota
+            id={`${SGP_INPUT_NOTA}_LINHA_${linha}_COLUNA_${coluna}`}
+            onKeyDown={e =>
+              moverFocoCampoNota({ e, aluno, alunos: dados?.alunos })
+            }
+            dadosNota={nota}
+            desabilitar={desabilitar}
             name={`aluno${aluno.id}`}
-            clicarSetas={e => clicarSetas(e, aluno)}
-            step={0}
-            nota={nota}
+            dadosArredondamento={avaliacao?.dadosArredondamento}
             onChangeNotaConceito={valorNovo =>
               onChangeNotaConceito(nota, valorNovo)
             }
-            desabilitarCampo={desabilitarCampos || desabilitarNota}
-            mediaAprovacaoBimestre={dados.mediaAprovacaoBimestre}
           />
         );
-      case Number(notasConceitos.Conceitos):
+      case notasConceitos.Conceitos:
         return (
           <CampoConceito
+            id={`${SGP_SELECT_NOTA}_LINHA_${linha}_COLUNA_${coluna}`}
             nota={nota}
             onChangeNotaConceito={valorNovo =>
               onChangeNotaConceito(nota, valorNovo)
@@ -214,6 +174,39 @@ const Avaliacao = props => {
     return aluno.notasBimestre[0];
   };
 
+  const acaoExpandirLinhaRegencia = (direcao, indexLinha) => {
+    let novaLinha = [];
+    const novoIndex = indexLinha + direcao;
+
+    if (expandirLinha[novoIndex]) {
+      expandirLinha[novoIndex] = false;
+      novaLinha = expandirLinha;
+    } else {
+      novaLinha[novoIndex] = true;
+    }
+    dispatch(setExpandirLinha([...novaLinha]));
+  };
+
+  const onKeyDownCampoFinal = (
+    e,
+    aluno,
+    componenteCurricularNome,
+    regencia,
+    indexLinha
+  ) => {
+    const params = {
+      e,
+      aluno,
+      alunos: dados?.alunos,
+      componenteCurricularNome,
+      regencia,
+      acaoExpandirLinha: direcao =>
+        acaoExpandirLinhaRegencia(direcao, indexLinha),
+    };
+
+    moverFocoCampoNota(params);
+  };
+
   const montarCampoNotaConceitoFinal = (
     aluno,
     label,
@@ -221,33 +214,41 @@ const Avaliacao = props => {
     regencia,
     indexLinha
   ) => {
+    const desabilitarNotaFinal =
+      ehProfessorCj ||
+      desabilitarCampos ||
+      !dados.podeLancarNotaFinal ||
+      !aluno.podeEditar;
+
     if (Number(notaTipo) === Number(notasConceitos.Notas)) {
+      const dadosNota = montaNotaFinal(aluno, index);
+
+      const dadosArredondamentoFechamento = dados?.dadosArredondamento;
       return (
-        <CampoNotaFinal
-          esconderSetas
-          name={`aluno${aluno.id}`}
-          clicarSetas={e => clicarSetas(e, aluno, label, indexLinha, regencia)}
-          step={0}
-          montaNotaFinal={() => montaNotaFinal(aluno, index)}
-          onChangeNotaConceitoFinal={(nota, valor) =>
-            onChangeNotaConceitoFinal(nota, valor)
-          }
-          desabilitarCampo={ehProfessorCj || desabilitarCampos}
-          podeEditar={aluno.podeEditar}
-          periodoFim={dados.periodoFim}
-          notaFinal={aluno.notasBimestre.find(
-            x => String(x.disciplinaId) === String(disciplinaSelecionada)
-          )}
-          disciplinaSelecionada={disciplinaSelecionada}
-          mediaAprovacaoBimestre={dados.mediaAprovacaoBimestre}
-          label={label}
-          podeLancarNotaFinal={dados.podeLancarNotaFinal}
-        />
+        <>
+          <Nota
+            ehFechamento
+            onKeyDown={e =>
+              onKeyDownCampoFinal(e, aluno, label, regencia, indexLinha)
+            }
+            dadosNota={dadosNota}
+            desabilitar={desabilitarNotaFinal}
+            id={`${SGP_INPUT_NOTA_FINAL}_LINHA_${index}`}
+            name={`aluno${aluno.id}`}
+            dadosArredondamento={dadosArredondamentoFechamento}
+            onChangeNotaConceito={valorNovo =>
+              onChangeNotaConceitoFinal(dadosNota, valorNovo)
+            }
+            mediaAprovacaoBimestre={dados.mediaAprovacaoBimestre}
+            label={label}
+          />
+        </>
       );
     }
     if (Number(notaTipo) === Number(notasConceitos.Conceitos)) {
       return (
         <CampoConceitoFinal
+          id={`${SGP_SELECT_CONCEITO_FINAL}_LINHA_${index}`}
           montaNotaConceitoFinal={() => montaNotaFinal(aluno, index)}
           onChangeNotaConceitoFinal={(nota, valor) =>
             onChangeNotaConceitoFinal(nota, valor)
@@ -260,7 +261,7 @@ const Avaliacao = props => {
         />
       );
     }
-    return '';
+    return <></>;
   };
 
   return (
@@ -325,12 +326,12 @@ const Avaliacao = props => {
             </div>
 
             <div>
-              <table className="table">
+              <table className="table" id={SGP_TABLE_LANCAMENTO_NOTAS}>
                 <tbody className="tabela-avaliacao-tbody">
                   {dados.alunos.map((aluno, i) => {
                     return (
-                      <>
-                        <tr>
+                      <React.Fragment key={shortid.generate()}>
+                        <tr id={`${SGP_TABLE_LANCAMENTO_NOTAS_LINHA}_${i}`}>
                           <td className="sticky-col col-numero-chamada">
                             {aluno.numeroChamada}
                             {aluno.marcador && (
@@ -348,13 +349,18 @@ const Avaliacao = props => {
                             </Tooltip>
                           </td>
                           {aluno.notasAvaliacoes.length
-                            ? aluno.notasAvaliacoes.map(nota => {
+                            ? aluno.notasAvaliacoes.map((nota, index) => {
                                 return (
                                   <td
                                     key={shortid.generate()}
                                     className={`${obterTamanhoColuna()} position-relative`}
                                   >
-                                    {montarCampoNotaConceito(nota, aluno)}
+                                    {montarCampoNotaConceito(
+                                      nota,
+                                      aluno,
+                                      i,
+                                      index
+                                    )}
                                   </td>
                                 );
                               })
@@ -363,7 +369,7 @@ const Avaliacao = props => {
                             {ehRegencia ? (
                               <ColunaNotaFinalRegencia indexLinha={i} />
                             ) : (
-                              montarCampoNotaConceitoFinal(aluno)
+                              montarCampoNotaConceitoFinal(aluno, '', i)
                             )}
                             {aluno?.notasBimestre[0]?.emAprovacao && (
                               <Tooltip title="Aguardando aprovação">
@@ -392,7 +398,7 @@ const Avaliacao = props => {
                             )
                           }
                         />
-                      </>
+                      </React.Fragment>
                     );
                   })}
                 </tbody>

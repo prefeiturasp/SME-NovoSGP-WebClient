@@ -36,7 +36,7 @@ import {
 import { validaSeObjetoEhNuloOuVazio } from '~/utils';
 
 import { Row } from './styles';
-import { SGP_BUTTON_ALTERAR_CADASTRAR } from '~/componentes-sgp/filtro/idsCampos';
+import { SGP_BUTTON_ALTERAR_CADASTRAR } from '~/constantes/ids/button';
 
 function AtribuicaoEsporadicaForm({ match }) {
   const [carregando, setCarregando] = useState(false);
@@ -451,6 +451,7 @@ function AtribuicaoEsporadicaForm({ match }) {
                       <Row className="row">
                         <Localizador
                           dreId={form.values.dreId}
+                          ueId={form.values.ueId}
                           anoLetivo={form.values.anoLetivo}
                           showLabel
                           form={form}
@@ -464,6 +465,7 @@ function AtribuicaoEsporadicaForm({ match }) {
                           }}
                           desabilitado={somenteConsulta || valoresIniciais.id}
                           labelRequired
+                          buscarPorTodasDre
                         />
                       </Row>
                     </Grid>

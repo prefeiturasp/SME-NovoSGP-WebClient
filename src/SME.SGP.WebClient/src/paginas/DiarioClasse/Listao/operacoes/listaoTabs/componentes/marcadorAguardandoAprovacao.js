@@ -5,14 +5,24 @@ import { Base } from '~/componentes/colors';
 
 export const Container = styled.div`
   position: absolute;
-  border-bottom: 15px solid transparent;
-  border-right: 15px solid ${Base.LaranjaCalendario};
-  top: 0;
-  margin-left: 82px;
+  border-left: 35px solid transparent;
+  border-bottom: 35px solid ${Base.CinzaBordaCalendario};
+  bottom: 0;
+  right: 0;
+
+  i {
+    position: absolute;
+    color: ${Base.Branco};
+    right: 5px;
+    font-size: 12px;
+    bottom: -30px;
+  }
 `;
 const MarcadorAguardandoAprovacao = () => (
   <Tooltip title="Aguardando aprovação">
-    <Container />
+    <Container>
+      <i className="fa fa-hourglass-half" />
+    </Container>
   </Tooltip>
 );
 

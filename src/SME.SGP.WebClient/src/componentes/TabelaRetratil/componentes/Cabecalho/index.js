@@ -9,6 +9,11 @@ import { Button, Colors } from '~/componentes';
 
 // Estilos
 import { CabecalhoDetalhes } from '../../style';
+import {
+  SGP_BUTTON_ANTERIOR_TABELA_RETRATIL,
+  SGP_BUTTON_EXPANDIR_RETRAIR_TABELA_RETRATIL,
+  SGP_BUTTON_PROXIMO_TABELA_RETRATIL,
+} from '~/constantes/ids/button';
 
 function Cabecalho({
   titulo,
@@ -26,6 +31,7 @@ function Cabecalho({
       <div className="titulo">
         <Tooltip title={`${retraido ? `Expandir alunos` : `Retrair alunos`}`}>
           <span
+            id={SGP_BUTTON_EXPANDIR_RETRAIR_TABELA_RETRATIL}
             className={`botaoCollapse ${retraido && `retraido`}`}
             role="button"
             tabIndex={0}
@@ -40,7 +46,7 @@ function Cabecalho({
       <div className="botoes">
         <div>
           <Button
-            id="anteriorBtn"
+            id={SGP_BUTTON_ANTERIOR_TABELA_RETRATIL}
             label="Anterior"
             color={Colors.Roxo}
             className="ml-auto attached right"
@@ -52,7 +58,7 @@ function Cabecalho({
         </div>
         <div>
           <Button
-            id="proximoBtn"
+            id={SGP_BUTTON_PROXIMO_TABELA_RETRATIL}
             label="Próximo"
             color={Colors.Roxo}
             className="ml-auto attached right"

@@ -48,8 +48,8 @@ const RelatorioUsuarios = () => {
 
   const obterUes = useCallback(async dre => {
     if (dre) {
-      setCarregandoGeral(true);
-      const retorno = await ServicoFiltroRelatorio.obterUes(dre).catch(e => {
+      setCarregandoGeral(true);      
+      const retorno = await ServicoFiltroRelatorio.obterUes(dre, false, anoAtual).catch(e => {
         erros(e);
         setCarregandoGeral(false);
       });
@@ -66,7 +66,7 @@ const RelatorioUsuarios = () => {
 
       setCarregandoGeral(false);
     }
-  }, []);
+  }, [anoAtual]);
 
   const onChangeDre = dre => {
     setCodigoDre(dre);
@@ -268,6 +268,7 @@ const RelatorioUsuarios = () => {
                     rfEdicao={usuarioRf}
                     buscandoDados={setCarregandoGeral}
                     dreId={codigoDre}
+                    ueId={codigoUe}
                     anoLetivo={anoAtual}
                     showLabel
                     onChange={valores => {

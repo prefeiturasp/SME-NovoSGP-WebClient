@@ -6,6 +6,7 @@ import * as Yup from 'yup';
 import {
   CheckboxComponent,
   Grid,
+  Loader,
   Localizador,
   SelectComponent,
 } from '~/componentes';
@@ -21,8 +22,10 @@ function Filtro({ onFiltrar }) {
 
   const [refForm, setRefForm] = useState({});
   const [consideraHistorico, setConsideraHistorico] = useState(false);
+  const [carregandoAnos, setCarregandoAnos] = useState(false);
   const [listaAnosLetivo, setListaAnosLetivo] = useState([]);
-  const [valoresIniciais] = useState({
+
+  const [valoresIniciais, setValoresIniciais] = useState({
     anoLetivo: anoAtual,
     dreId: '',
     ueId: '',
@@ -42,22 +45,11 @@ function Filtro({ onFiltrar }) {
   };
 
   const obterAnosLetivos = useCallback(async () => {
-    let anosLetivos = [];
+    setCarregandoAnos(true);
 
-    const anosLetivoComHistorico = await FiltroHelper.obterAnosLetivos({
-      consideraHistorico: true,
-    });
-    const anosLetivoSemHistorico = await FiltroHelper.obterAnosLetivos({
-      consideraHistorico: false,
-    });
-
-    anosLetivos = anosLetivos.concat(anosLetivoComHistorico);
-
-    anosLetivoSemHistorico.forEach(ano => {
-      if (!anosLetivoComHistorico.find(a => a.valor === ano.valor)) {
-        anosLetivos.push(ano);
-      }
-    });
+    const anosLetivos = await FiltroHelper.obterAnosLetivosAtribuicao(
+      consideraHistorico
+    );
 
     if (!anosLetivos.length) {
       anosLetivos.push({
@@ -65,13 +57,23 @@ function Filtro({ onFiltrar }) {
         valor: anoAtual,
       });
     }
+
     const anosOrdenados = ordenarDescPor(anosLetivos, 'valor');
+
     setListaAnosLetivo(anosOrdenados);
-  }, [anoAtual]);
+    setCarregandoAnos(false);
+    setValoresIniciais({
+      ...valoresIniciais,
+      anoLetivo: anosOrdenados[0]?.valor,
+      exibirHistorico: consideraHistorico,
+    });
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [anoAtual, consideraHistorico]);
 
   useEffect(() => {
     obterAnosLetivos();
-  }, [obterAnosLetivos]);
+  }, [obterAnosLetivos, consideraHistorico]);
 
   const onChangeConsideraHistorico = e => {
     setConsideraHistorico(e.target.checked);
@@ -103,21 +105,23 @@ function Filtro({ onFiltrar }) {
           </Linha>
           <Linha className="row mb-2">
             <Grid cols={2}>
-              <SelectComponent
-                name="anoLetivo"
-                placeholder="Ano letivo"
-                lista={listaAnosLetivo}
-                valueText="desc"
-                valueOption="valor"
-                form={form}
-                onChange={() => {}}
-                allowClear={false}
-                disabled={!consideraHistorico || listaAnosLetivo?.length === 1}
-              />
+              <Loader loading={carregandoAnos} tip="">
+                <SelectComponent
+                  name="anoLetivo"
+                  placeholder="Ano letivo"
+                  lista={listaAnosLetivo}
+                  valueText="desc"
+                  valueOption="valor"
+                  form={form}
+                  onChange={() => {}}
+                  allowClear={false}
+                  disabled={listaAnosLetivo?.length === 1}
+                />
+              </Loader>
             </Grid>
             <Grid cols={5}>
               <DreDropDown
-                url={`v1/dres/atribuicoes?anoLetivo=${form.values.anoLetivo}`}
+                url={`v1/dres/atribuicoes?anoLetivo=${form.values.anoLetivo}&consideraHistorico=${consideraHistorico}`}
                 form={form}
                 onChange={() => null}
               />
@@ -125,7 +129,7 @@ function Filtro({ onFiltrar }) {
             <Grid cols={5}>
               <UeDropDown
                 temParametros
-                url={`v1/dres/${form.values.dreId}/ues/atribuicoes?anoLetivo=${form.values.anoLetivo}`}
+                url={`v1/dres/${form.values.dreId}/ues/atribuicoes?anoLetivo=${form.values.anoLetivo}&consideraHistorico=${consideraHistorico}`}
                 dreId={form.values.dreId}
                 form={form}
                 onChange={() => null}
@@ -135,6 +139,7 @@ function Filtro({ onFiltrar }) {
           <Linha className="row">
             <Localizador
               dreId={form.values.dreId}
+              ueId={form.values.ueId}
               anoLetivo={form.values.anoLetivo}
               form={form}
               onChange={() => null}

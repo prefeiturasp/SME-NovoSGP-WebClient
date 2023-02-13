@@ -171,12 +171,12 @@ const DiarioBordo = ({ match }) => {
   }, [turmaSelecionada.turma]);
 
   const obterComponentesCurriculares = useCallback(async () => {
+    setComponenteCurricularSelecionado(undefined);
     setCarregandoGeral(true);
     const componentes = await ServicoDisciplina.obterDisciplinasPorTurma(
       turmaId,
       false
     ).catch(e => erros(e));
-
     if (componentes?.data?.length) {
       setListaComponenteCurriculares(componentes.data);
 
@@ -431,7 +431,6 @@ const DiarioBordo = ({ match }) => {
       setAulaSelecionada();
       setAuditoria();
       const aulasDataSelecionada = await obterAulasDataSelecionada(data);
-
       if (aulasDataSelecionada && aulasDataSelecionada.aulas.length === 1) {
         // Quando for Professor ou CJ podem visualizar somente uma aula por data selecionada!
         const aulaDataSelecionada = aulasDataSelecionada.aulas[0];
@@ -605,6 +604,29 @@ const DiarioBordo = ({ match }) => {
     }
   };
 
+  const onClickExcluir = async () => {
+    const confirmado = await confirmar(
+      'Excluir',
+      '',
+      'Você tem certeza que deseja excluir esse diário de bordo?'
+    );
+
+    if (confirmado && auditoria) {
+      setCarregandoGeral(true);
+      const resultado = await ServicoDiarioBordo.excluirDiarioBordo(
+        auditoria.id
+      ).catch(e => {
+        erros(e);
+      });
+      if (resultado && resultado.status === 200) {
+        sucesso('Diário de bordo excluído com sucesso');
+        history.push(`${RotasDto.DIARIO_BORDO}/novo`);
+        setDataSelecionada();
+      }
+      setCarregandoGeral(false);
+    }
+  };
+
   const excluirObservacao = async obs => {
     const confirmado = await confirmar(
       'Excluir',
@@ -679,10 +701,12 @@ const DiarioBordo = ({ match }) => {
                   onClickVoltar(form, observacaoEmEdicao, novaObservacao)
                 }
                 onClickCancelar={() => onClickCancelar(form)}
+                onClickExcluir={onClickExcluir}
                 validaAntesDoSubmit={() => validaAntesDoSubmit(form, true)}
                 modoEdicao={modoEdicao}
                 desabilitarCampos={desabilitarCampos}
                 turmaInfantil={turmaInfantil}
+                permissoesTela={permissoesTela}
                 componenteCurricularSelecionado={
                   componenteCurricularSelecionado
                 }

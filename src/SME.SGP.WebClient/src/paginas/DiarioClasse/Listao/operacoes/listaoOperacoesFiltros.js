@@ -5,7 +5,7 @@ import { Loader, SelectComponent } from '~/componentes';
 import {
   SGP_SELECT_BIMESTRE,
   SGP_SELECT_COMPONENTE_CURRICULAR,
-} from '~/componentes-sgp/filtro/idsCampos';
+} from '~/constantes/ids/select';
 import { ModalidadeDTO, RotasDto } from '~/dtos';
 import { setLimparModoEdicaoGeral } from '~/redux/modulos/geral/actions';
 import { setSomenteConsulta } from '~/redux/modulos/navegacao/actions';

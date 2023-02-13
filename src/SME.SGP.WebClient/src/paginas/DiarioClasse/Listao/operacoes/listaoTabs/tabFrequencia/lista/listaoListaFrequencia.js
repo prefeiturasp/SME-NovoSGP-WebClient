@@ -1,10 +1,10 @@
 import { faAngleDown, faAngleUp } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Tooltip } from 'antd';
-import React, { useContext, useState } from 'react';
-import { useEffect } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { DataTable } from '~/componentes';
+import { Ordenacao } from '~/componentes-sgp';
 import SinalizacaoAEE from '~/componentes-sgp/SinalizacaoAEE/sinalizacaoAEE';
 import { Base } from '~/componentes/colors';
 import tipoIndicativoFrequencia from '~/dtos/tipoIndicativoFrequencia';
@@ -227,7 +227,6 @@ const ListaoListaFrequencia = () => {
     },
   ];
 
-  // TODO - Verificar a regra - componenteCurricular.registraFrequencia
   if (dadosFrequencia?.aulas?.length) {
     dadosFrequencia.aulas.forEach(aula => {
       const ehAulaCj = aula?.aulaCj;
@@ -254,6 +253,7 @@ const ListaoListaFrequencia = () => {
             width,
             className: 'posicao-marcar-todos-header',
             title: montarColunaFrequenciaMarcarTodasAulas(aula),
+            key: aula?.aulaId,
             render: dadosAulas => {
               const dadosDiaAula = dadosAulas.aulas.find(
                 item => item.aulaId === aula.aulaId
@@ -452,6 +452,18 @@ const ListaoListaFrequencia = () => {
         desabilitarCampos={desabilitarCampos}
         fechouModal={atualizarDados}
       />
+      <div className="col-sm-12 p-0 mb-3 d-flex justify-content-start">
+        <Ordenacao
+          conteudoParaOrdenar={dadosFrequencia?.alunos}
+          ordenarColunaNumero="numeroAlunoChamada"
+          ordenarColunaTexto="nomeAluno"
+          retornoOrdenado={retorno => {
+            if (dadosFrequencia?.alunos?.length) {
+              setDadosFrequencia({ ...dadosFrequencia, alunos: [...retorno] });
+            }
+          }}
+        />
+      </div>
       <LinhaTabela className="col-md-12 p-0">
         <DataTable
           idLinha="codigoAluno"
@@ -462,7 +474,7 @@ const ListaoListaFrequencia = () => {
           expandIconColumnIndex={dadosFrequencia?.aulas.length + 3 || null}
           expandedRowKeys={expandedRowKeys}
           onClickExpandir={onClickExpandir}
-          rowClassName={(record, i) => {
+          rowClassName={record => {
             const ehLinhaExpandida = temLinhaExpandida(record?.codigoAluno);
             const nomeClasse = ehLinhaExpandida.length ? 'linha-ativa' : '';
             return nomeClasse;

@@ -1,36 +1,64 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Button, Colors, Label } from '~/componentes';
-import LocalizadorFuncionario from '~/componentes-sgp/LocalizadorFuncionario';
+import { Button, Colors, Loader, SelectComponent } from '~/componentes';
+import {
+  SGP_BUTTON_ATRIBUICAO_RESPONSAVEL,
+  SGP_BUTTON_CANCELAR_ATRIBUICAO_RESPONSAVEL,
+} from '~/constantes/ids/button';
 import { RotasDto } from '~/dtos';
 import {
+  limparDadosParecer,
   setDadosAtribuicaoResponsavel,
   setParecerEmEdicao,
+  setPlanoAEELimparDados,
 } from '~/redux/modulos/planoAEE/actions';
 import { erros, history, sucesso } from '~/servicos';
+import ServicoEncaminhamentoAEE from '~/servicos/Paginas/Relatorios/AEE/ServicoEncaminhamentoAEE';
 import ServicoPlanoAEE from '~/servicos/Paginas/Relatorios/AEE/ServicoPlanoAEE';
 
 const SecaoParecerResponsavel = () => {
-  const [limparCampos, setLimparCampos] = useState(false);
-  const [responsavelSelecionado, setResponsavelSelecionado] = useState();
-
   const dadosParecer = useSelector(store => store.planoAEE.dadosParecer);
   const planoAEEDados = useSelector(store => store.planoAEE.planoAEEDados);
+  const codigoTurma = planoAEEDados?.turma?.codigo;
+
   const dadosAtribuicaoResponsavel = useSelector(
     store => store.planoAEE.dadosAtribuicaoResponsavel
   );
 
+  const responsavelInicialEdicao = dadosParecer?.responsavelRF
+    ? {
+        codigoRF: dadosParecer?.responsavelRF,
+        nomeServidor: dadosParecer?.responsavelNome,
+        nomeServidorFormatado: `${dadosParecer.responsavelNome} - ${dadosParecer.responsavelRF}`,
+      }
+    : undefined;
+
+  const listaRespInicialEdicao =
+    responsavelInicialEdicao?.codigoRF && responsavelInicialEdicao?.nomeServidor
+      ? [responsavelInicialEdicao]
+      : [];
+
+  const [responsavelSelecionado, setResponsavelSelecionado] = useState(
+    responsavelInicialEdicao
+  );
+  const [responsaveisPAAI, setResponsaveisPAAI] = useState(
+    listaRespInicialEdicao
+  );
+  const [exibirLoader, setExibirLoader] = useState(false);
+  const [emEdicao, setEmEdicao] = useState(false);
+
   const dispatch = useDispatch();
 
-  const onChangeLocalizador = funcionario => {
-    setLimparCampos(false);
+  const onChange = rf => {
+    const funcionario = responsaveisPAAI?.find(r => r?.codigoRF === rf);
+
     if (funcionario?.codigoRF && funcionario?.nomeServidor) {
       const params = {
         codigoRF: funcionario?.codigoRF,
         nomeServidor: funcionario?.nomeServidor,
       };
       dispatch(setDadosAtribuicaoResponsavel(params));
-      setResponsavelSelecionado(params);
+      setResponsavelSelecionado(funcionario);
       if (
         !dadosAtribuicaoResponsavel?.codigoRF &&
         !dadosParecer?.responsavelRF
@@ -42,12 +70,13 @@ const SecaoParecerResponsavel = () => {
       setResponsavelSelecionado();
       dispatch(setParecerEmEdicao(true));
     }
+    setEmEdicao(true);
   };
 
   const onClickAtribuirResponsavel = async () => {
-    const resposta = await ServicoPlanoAEE.atribuirResponsavel().catch(e =>
-      erros(e)
-    );
+    const resposta = await ServicoPlanoAEE.atribuirResponsavel(
+      responsavelSelecionado?.codigoRF
+    ).catch(e => erros(e));
 
     if (resposta?.data) {
       history.push(RotasDto.RELATORIO_AEE_PLANO);
@@ -56,70 +85,116 @@ const SecaoParecerResponsavel = () => {
   };
 
   const onClickCancelar = () => {
+    setResponsavelSelecionado(responsavelInicialEdicao);
     dispatch(setDadosAtribuicaoResponsavel({}));
     dispatch(setParecerEmEdicao(false));
-    setLimparCampos(true);
+    setEmEdicao(false);
   };
 
-  useEffect(() => {
-    if (!dadosAtribuicaoResponsavel?.codigoRF) {
-      setLimparCampos(true);
+  const obterResponsaveisPAAI = useCallback(async () => {
+    const resposta = await ServicoEncaminhamentoAEE.obterResponsaveisPAAIPesquisa(
+      codigoTurma
+    );
+
+    const dados = resposta?.data?.items;
+    if (dados?.length) {
+      const listaResp = dados.map(item => {
+        return {
+          ...item,
+          codigoRF: item.codigoRf,
+          nomeServidorFormatado: `${item.nomeServidor} - ${item.codigoRf}`,
+        };
+      });
+      if (listaResp?.length === 1) {
+        setResponsavelSelecionado(listaResp[0]);
+      }
+      setResponsaveisPAAI(listaResp);
     }
-  }, [dadosAtribuicaoResponsavel]);
+  }, [codigoTurma]);
 
   useEffect(() => {
-    if (!dadosParecer?.codigoRF) {
-      setResponsavelSelecionado({
-        codigoRF: dadosParecer?.responsavelRF,
-        nomeServidor: dadosParecer?.responsavelNome,
-      });
+    if (codigoTurma && !responsavelInicialEdicao?.codigoRF)
+      obterResponsaveisPAAI();
+  }, [codigoTurma, responsavelInicialEdicao, obterResponsaveisPAAI]);
+
+  const onClickRemover = async () => {
+    setExibirLoader(true);
+    const retorno = await ServicoPlanoAEE.removerReponsavelPAAI(
+      planoAEEDados?.id
+    )
+      .catch(e => erros(e))
+      .finally(() => setExibirLoader(false));
+
+    if (retorno?.status === 200) {
+      sucesso('Remoção do responsável realizada com sucesso');
+      dispatch(limparDadosParecer());
+      dispatch(setParecerEmEdicao(false));
+      dispatch(setPlanoAEELimparDados());
+      history.push(RotasDto.RELATORIO_AEE_PLANO);
     }
-  }, [dadosParecer]);
+  };
+
+  const desabilitarBtnRemover =
+    !dadosParecer?.responsavelRF ||
+    (dadosParecer?.responsavelRF &&
+      dadosParecer?.responsavelRF !== responsavelSelecionado?.codigoRF);
+
+  const desabilitarAtribuir =
+    !!dadosParecer?.responsavelRF || !responsavelSelecionado?.codigoRF;
 
   return (
-    <>
-      <Label text="PAAI responsável" className="mb-3" />
+    <Loader loading={exibirLoader}>
       <div className="row">
-        <LocalizadorFuncionario
-          id="funcionario"
-          onChange={onChangeLocalizador}
-          codigoTurma={planoAEEDados?.turma?.codigo}
-          limparCampos={limparCampos}
-          url="v1/encaminhamento-aee/responsavel/pesquisa"
-          valorInicial={{
-            codigoRF: responsavelSelecionado?.codigoRF,
-            nomeServidor: responsavelSelecionado?.nomeServidor,
-          }}
-          desabilitado={!dadosParecer?.podeAtribuirResponsavel}
-        />
+        <div className="col-md-12">
+          <SelectComponent
+            placeholder="Pesquise por nome ou RF"
+            label="PAAI responsável"
+            valueOption="codigoRF"
+            valueText="nomeServidorFormatado"
+            lista={responsaveisPAAI}
+            showSearch
+            valueSelect={responsavelSelecionado?.codigoRF}
+            onChange={onChange}
+            allowClear={false}
+            searchValue
+            disabled={
+              responsaveisPAAI?.length === 1 ||
+              !dadosParecer?.podeAtribuirResponsavel
+            }
+          />
+        </div>
       </div>
       <div className="col-12 d-flex justify-content-end pb-4 mt-2 pr-0">
         <Button
-          id="btn-cancelar"
+          id={SGP_BUTTON_CANCELAR_ATRIBUICAO_RESPONSAVEL}
           label="Cancelar"
           color={Colors.Roxo}
           border
           className="mr-3"
           onClick={onClickCancelar}
-          disabled={
-            !responsavelSelecionado?.codigoRF ||
-            !dadosParecer?.podeAtribuirResponsavel
-          }
+          disabled={!emEdicao}
         />
         <Button
-          id="btn-atribuir"
+          id={SGP_BUTTON_ATRIBUICAO_RESPONSAVEL}
           label="Atribuir responsável"
           color={Colors.Roxo}
           border
           bold
           onClick={onClickAtribuirResponsavel}
-          disabled={
-            !responsavelSelecionado?.codigoRF ||
-            !dadosParecer?.podeAtribuirResponsavel
-          }
+          disabled={desabilitarAtribuir}
+        />
+        <Button
+          id="btn-remover"
+          label="Remover responsável"
+          color={Colors.Roxo}
+          border
+          bold
+          className="ml-3"
+          onClick={onClickRemover}
+          disabled={desabilitarBtnRemover}
         />
       </div>
-    </>
+    </Loader>
   );
 };
 

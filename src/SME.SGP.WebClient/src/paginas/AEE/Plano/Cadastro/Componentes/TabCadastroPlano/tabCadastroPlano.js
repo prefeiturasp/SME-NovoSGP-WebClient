@@ -28,15 +28,19 @@ const TabCadastroPlano = props => {
     const planoId = match?.params?.id ? match?.params?.id : 0;
 
     let turmaCodigo = 0;
+    let codigoAluno = 0;
 
     if (!planoId) {
       turmaCodigo = dadosCollapseLocalizarEstudante?.codigoTurma;
+      codigoAluno = dadosCollapseLocalizarEstudante?.codigoAluno;
     }
 
     dispatch(setExibirLoaderPlanoAEE(true));
+    dispatch(setPlanoAEELimparDados());
     const resultado = await ServicoPlanoAEE.obterPlanoPorId(
       planoId,
-      turmaCodigo
+      turmaCodigo,
+      codigoAluno
     )
       .catch(e => erros(e))
       .finally(() => dispatch(setExibirLoaderPlanoAEE(false)));
@@ -61,7 +65,6 @@ const TabCadastroPlano = props => {
         };
         dispatch(setDadosObjectCardEstudante(dadosObjectCard));
       }
-      dispatch(setPlanoAEEDados(resultado?.data));
 
       if (resultado?.data?.turma) {
         const { aluno, turma } = resultado?.data;
@@ -75,6 +78,8 @@ const TabCadastroPlano = props => {
 
         dispatch(setDadosCollapseLocalizarEstudante(dadosLocalizarEstudante));
       }
+
+      dispatch(setPlanoAEEDados(resultado?.data));
     } else {
       dispatch(setPlanoAEELimparDados());
     }

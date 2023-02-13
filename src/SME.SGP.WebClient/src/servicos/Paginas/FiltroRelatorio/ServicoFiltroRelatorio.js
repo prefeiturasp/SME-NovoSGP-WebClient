@@ -8,8 +8,8 @@ class ServicoFiltroRelatorio {
     return api.get(`${urlPadrao}/dres`);
   };
 
-  obterUes = (codigoDre, consideraNovasUEs = false) => {
-    const url = `${urlPadrao}/dres/${codigoDre}/ues?consideraNovasUEs=${consideraNovasUEs}`;
+  obterUes = (codigoDre, consideraHistorico, anoLetivo, consideraNovasUEs = false) => {
+    const url = `${urlPadrao}/dres/${codigoDre}/ues?consideraNovasUEs=${consideraNovasUEs}&consideraHistorico=${consideraHistorico}&anoLetivo=${anoLetivo}`;
     return api.get(url);
   };
 
@@ -34,9 +34,10 @@ class ServicoFiltroRelatorio {
   obterModalidadesPorAbrangenciaHistorica = (
     codigoUe,
     consideraNovasModalidades = false,
-    consideraHistorico = true
+    consideraHistorico = true,
+    anoLetivo
   ) => {
-    const url = `${urlPadrao}/ues/${codigoUe}/modalidades/abrangencias?consideraNovasModalidades=${consideraNovasModalidades}&consideraHistorico=${consideraHistorico}`;
+    const url = `${urlPadrao}/ues/${codigoUe}/modalidades/abrangencias?consideraNovasModalidades=${consideraNovasModalidades}&consideraHistorico=${consideraHistorico}&anoLetivo=${anoLetivo}`;
     return api.get(url);
   };
 

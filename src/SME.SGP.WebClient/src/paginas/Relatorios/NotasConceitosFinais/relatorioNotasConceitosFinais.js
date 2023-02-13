@@ -117,7 +117,7 @@ const RelatorioNotasConceitosFinais = () => {
   const obterUes = useCallback(async dre => {
     if (dre) {
       setCarregandoGeral(true);
-      const retorno = await ServicoFiltroRelatorio.obterUes(dre).catch(e => {
+      const retorno = await ServicoFiltroRelatorio.obterUes(dre, false, anoLetivo).catch(e => {
         erros(e);
         setCarregandoGeral(false);
       });
@@ -136,7 +136,7 @@ const RelatorioNotasConceitosFinais = () => {
       }
       setCarregandoGeral(false);
     }
-  }, []);
+  }, [anoLetivo]);
 
   const onChangeDre = dre => {
     setCodigoDre(dre);

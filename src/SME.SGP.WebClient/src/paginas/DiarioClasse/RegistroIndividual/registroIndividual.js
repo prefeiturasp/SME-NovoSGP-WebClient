@@ -35,6 +35,7 @@ import {
 
 import { RotasDto } from '~/dtos';
 import MetodosRegistroIndividual from '~/componentes-sgp/RegistroIndividual/metodosRegistroIndividual';
+import { SGP_SELECT_COMPONENTE_CURRICULAR } from '~/constantes/ids/select';
 
 const RegistroIndividual = () => {
   const [exibirListas, setExibirListas] = useState(false);
@@ -65,6 +66,10 @@ const RegistroIndividual = () => {
 
   const dispatch = useDispatch();
 
+  const resetarTela = useCallback(() => {
+    dispatch(resetarDadosRegistroIndividual());
+  }, [dispatch]);
+
   const obterListaAlunos = useCallback(async () => {
     const retorno = await ServicoRegistroIndividual.obterListaAlunos({
       componenteCurricularId: componenteCurricularSelecionado,
@@ -73,14 +78,29 @@ const RegistroIndividual = () => {
     if (retorno?.data) {
       dispatch(setAlunosRegistroIndividual(retorno.data));
       setExibirListas(true);
+    } else {
+      setExibirListas(false);
+      dispatch(setAlunosRegistroIndividual([]));
+      resetarTela();
     }
-  }, [dispatch, componenteCurricularSelecionado, turmaId]);
+  }, [dispatch, resetarTela, componenteCurricularSelecionado, turmaId]);
 
   useEffect(() => {
     if (componenteCurricularSelecionado) {
       obterListaAlunos();
+    } else {
+      setExibirListas(false);
+      dispatch(setAlunosRegistroIndividual([]));
+      resetarTela();
     }
-  }, [obterListaAlunos, componenteCurricularSelecionado]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [componenteCurricularSelecionado]);
+
+  useEffect(() => {
+    if (!turmaId) {
+      dispatch(setComponenteCurricularSelecionado(undefined));
+    }
+  }, [dispatch, turmaId]);
 
   useEffect(() => {
     const infantil = ehTurmaInfantil(
@@ -113,15 +133,15 @@ const RegistroIndividual = () => {
           )
         );
       }
+    } else {
+      dispatch(setComponenteCurricularSelecionado(undefined));
+      setListaComponenteCurricular([]);
     }
   }, [dispatch, turmaSelecionada]);
 
-  const resetarTela = useCallback(() => {
-    dispatch(resetarDadosRegistroIndividual());
-  }, [dispatch]);
-
   useEffect(() => {
     if (turmaSelecionada?.turma && turmaInfantil) {
+      dispatch(setComponenteCurricularSelecionado(undefined));
       obterComponentesCurriculares();
       return;
     }
@@ -131,6 +151,7 @@ const RegistroIndividual = () => {
     obterComponentesCurriculares,
     resetarTela,
     turmaInfantil,
+    dispatch,
   ]);
 
   const onChangeComponenteCurricular = valor => {
@@ -152,8 +173,9 @@ const RegistroIndividual = () => {
   useEffect(() => {
     return () => {
       resetarTela();
+      dispatch(setComponenteCurricularSelecionado(undefined));
     };
-  }, [turmaSelecionada, resetarTela]);
+  }, [turmaSelecionada, dispatch, resetarTela]);
 
   return (
     <Loader loading={exibirLoaderGeralRegistroIndividual}>
@@ -167,7 +189,7 @@ const RegistroIndividual = () => {
           <div className="row">
             <div className="col-sm-12 col-md-4 col-lg-4 col-xl-4 mb-4">
               <SelectComponent
-                id="componenteCurricular"
+                id={SGP_SELECT_COMPONENTE_CURRICULAR}
                 name="ComponenteCurricularId"
                 lista={listaComponenteCurricular || []}
                 valueOption="codigoComponenteCurricular"

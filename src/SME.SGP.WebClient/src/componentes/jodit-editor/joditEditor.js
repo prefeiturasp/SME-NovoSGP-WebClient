@@ -49,7 +49,6 @@ const JoditEditor = forwardRef((props, ref) => {
     qtdMaxImg,
     imagensCentralizadas,
     valideClipboardHTML,
-    permiteGif,
     labelRequired,
   } = props;
 
@@ -84,6 +83,58 @@ const JoditEditor = forwardRef((props, ref) => {
     if (reject) {
       reject(new Error(msg));
     }
+  };
+
+  const exibirMensagemError = (msg, reject) => {
+    erro(msg);
+
+    if (reject) {
+      reject(new Error(msg));
+    }
+  };
+
+  const verificaSeTemSvg = e => {
+    const dadosColadoTexto = e?.clipboardData?.getData?.('text');
+    const dadosColadoHTML = e?.clipboardData?.getData?.('text/html');
+
+    const temTagSvg =
+      dadosColadoHTML?.match(/<svg/g) || dadosColadoTexto?.match(/<svg/g);
+
+    if (temTagSvg) {
+      erro('Não é possivel inserir código HTML com SVG.');
+    }
+
+    return temTagSvg;
+  };
+
+  const verificaSePodeInserirImagem = e => {
+    const dadosColadoTexto = e?.clipboardData?.getData?.('text');
+    const dadosColadoHTML = e?.clipboardData?.getData?.('text/html');
+
+    const qtdElementoImgNova = dadosColadoHTML?.match(/<img/g) || [];
+    const temImagemNosDadosColados = qtdElementoImgNova.length;
+
+    if (temImagemNosDadosColados && qtdMaxImg) {
+      const qtdElementoImgAtual = textArea?.current?.editorDocument?.querySelectorAll?.(
+        'img'
+      );
+      const totalImg = qtdElementoImgNova?.length + qtdElementoImgAtual?.length;
+
+      if (totalImg > qtdMaxImg || dadosColadoTexto === '') {
+        if (dadosColadoTexto !== '') {
+          exibirMsgMaximoImg();
+        }
+
+        e.preventDefault();
+        e.stopPropagation();
+
+        return false;
+      }
+    } else if (temImagemNosDadosColados && dadosColadoTexto === '') {
+      return false;
+    }
+
+    return true;
   };
 
   const config = {
@@ -124,22 +175,20 @@ const JoditEditor = forwardRef((props, ref) => {
         return new Promise((resolve, reject) => {
           if (permiteInserirArquivo) {
             const arquivo = data.getAll('files[0]')[0];
-            const validaInserirTiposArquivos = arquivo.type.includes('gif')
-              ? permiteGif
-              : true;
+
+            const tiposValidos = ['jpg', 'jpeg', 'png'];
+
+            const ehImagem = arquivo.type.substring(0, 5) === 'image';
+            const ehVideo = arquivo.type.substring(0, 5) === 'video';
+            const ehValido = tiposValidos.some(x => arquivo.type.includes(x));
 
             if (excedeuLimiteMaximo(arquivo)) {
               const msg = `Tamanho máximo ${TAMANHO_MAXIMO_UPLOAD_MB}MB.`;
-              erro(msg);
-              reject(new Error(msg));
+              exibirMensagemError(msg, reject);
             }
 
-            if (
-              (arquivo.type.substring(0, 5) === 'image' ||
-                (permiteVideo && arquivo.type.substring(0, 5) === 'video')) &&
-              validaInserirTiposArquivos
-            ) {
-              if (arquivo.type.substring(0, 5) === 'image' && qtdMaxImg) {
+            if ((ehImagem && ehValido) || (ehVideo && permiteVideo)) {
+              if (ehImagem && qtdMaxImg) {
                 const quantidadeTotalImagens = (
                   textArea?.current?.value?.match(/<img/g) || []
                 )?.length;
@@ -153,9 +202,14 @@ const JoditEditor = forwardRef((props, ref) => {
                 resolve(data);
               }
             } else {
-              const msg = 'Formato inválido';
-              erro(msg);
-              reject(new Error(msg));
+              const formato = arquivo.type
+                .split('/')
+                .pop()
+                .replace('+xml', '');
+
+              const msg = `O formato .${formato} não é valido.`;
+
+              exibirMensagemError(msg, reject);
             }
           } else {
             reject(new Error('Não é possível inserir arquivo'));
@@ -183,14 +237,6 @@ const JoditEditor = forwardRef((props, ref) => {
             textArea.current.selection.insertHTML(
               `<video width="600" height="240" controls><source src="${dados.path}"></video>`
             );
-          } else if (dados.contentType.startsWith('image/gif')) {
-            textArea.current.selection.insertHTML(
-              `<img src="${
-                dados.path
-              }" style="max-width: 100%; max-height: 700px; ${
-                imagensCentralizadas ? 'display: block; margin: auto;' : ''
-              }">`
-            );
           } else {
             textArea.current.selection.insertHTML(
               `<img src="${
@@ -201,10 +247,6 @@ const JoditEditor = forwardRef((props, ref) => {
             );
           }
         }
-      },
-      defaultHandlerError: e => {
-        console.log('defaultHandlerError');
-        console.log(e);
       },
     },
     iframe: true,
@@ -238,27 +280,23 @@ const JoditEditor = forwardRef((props, ref) => {
 
   const onChangePadrao = () => {
     const texto = textArea?.current?.text?.trim();
+    const temImagemOuVideo =
+      (permiteVideo && textArea?.current?.value?.includes('<video')) ||
+      textArea?.current?.value?.includes('<img');
 
     if (validarSeTemErro) {
       let valorParaValidar = '';
 
-      if (
-        !texto ||
-        (permiteVideo && textArea.current.value.includes('<video')) ||
-        textArea.current.value.includes('<img')
-      ) {
+      if (temImagemOuVideo) {
         valorParaValidar = textArea.current.value;
       } else if (texto) {
         valorParaValidar = texto;
       }
+
       setValidacaoComErro(validarSeTemErro(valorParaValidar, texto));
     }
 
-    if (
-      texto ||
-      (permiteVideo && textArea.current.value.includes('<video')) ||
-      textArea.current.value.includes('<img')
-    ) {
+    if (texto || temImagemOuVideo) {
       changeHandler(textArea.current.value);
     } else {
       changeHandler('');
@@ -271,8 +309,8 @@ const JoditEditor = forwardRef((props, ref) => {
 
     if (
       texto ||
-      (permiteVideo && textArea.current.value.includes('<video')) ||
-      textArea.current.value.includes('<img')
+      (permiteVideo && textArea?.current?.value?.includes('<video')) ||
+      textArea?.current?.value?.includes('<img')
     ) {
       valorAtual = textArea.current.value;
     }
@@ -282,7 +320,31 @@ const JoditEditor = forwardRef((props, ref) => {
     form.setFieldTouched(name, true, true);
   };
 
+  const bloquearTraducaoNavegador = () => {
+    const isEdge = navigator?.userAgent?.indexOf?.('Edg') !== -1;
+    if (isEdge && textArea?.current) {
+      const elementTextArea = textArea?.current?.editorDocument?.getElementsByClassName(
+        'jodit'
+      )?.[0];
+
+      const elementBodyTextArea = elementTextArea
+        ? elementTextArea.getElementsByTagName('body')[0]
+        : null;
+      if (elementBodyTextArea) {
+        const childrens = elementBodyTextArea?.children;
+
+        if (childrens?.length) {
+          for (let index = 0; index < childrens.length; index++) {
+            childrens[index].className = 'notranslate';
+          }
+        }
+      }
+    }
+  };
+
   const beforeOnChange = () => {
+    bloquearTraducaoNavegador();
+
     if (textArea?.current?.editorIsActive) {
       if (CHANGE_DEBOUNCE_FLAG) clearTimeout(CHANGE_DEBOUNCE_FLAG);
 
@@ -333,15 +395,17 @@ const JoditEditor = forwardRef((props, ref) => {
       if (textArea?.current && config) {
         if (textArea?.current?.type === 'textarea') {
           textArea.current = Jodit.make(element, config);
+          const elementTextArea = textArea?.current?.editorDocument?.getElementsByClassName(
+            'jodit'
+          )?.[0];
 
-          if (
-            textArea?.current?.editorDocument?.getElementsByClassName(
-              'jodit'
-            )?.[0]?.style
-          ) {
-            textArea.current.editorDocument.getElementsByClassName(
-              'jodit'
-            )[0].style.cssText = 'overflow: auto;';
+          if (elementTextArea?.style) {
+            elementTextArea.style.cssText = 'overflow: auto;';
+          }
+
+          if (elementTextArea) {
+            elementTextArea.translate = false;
+            elementTextArea.className = `${elementTextArea.className} notranslate`;
           }
 
           if (ref) {
@@ -353,26 +417,10 @@ const JoditEditor = forwardRef((props, ref) => {
           }
 
           textArea.current.events.on('beforePaste', e => {
-            if (qtdMaxImg) {
-              const dadosColado = e?.clipboardData?.getData?.('text/html');
-              const qtdElementoImgNova = dadosColado?.match(/<img/g) || [];
-              const qtdElementoImgAtual = textArea?.current?.editorDocument?.querySelectorAll?.(
-                'img'
-              );
-
-              const totalImg =
-                qtdElementoImgNova?.length + qtdElementoImgAtual?.length;
-
-              if (totalImg > qtdMaxImg) {
-                if (e?.preventDefault) {
-                  e.preventDefault();
-                }
-                if (e?.preventDefault) {
-                  e.stopPropagation();
-                }
-                return false;
-              }
+            if (verificaSeTemSvg(e) || !verificaSePodeInserirImagem(e)) {
+              return false;
             }
+
             return true;
           });
 
@@ -390,6 +438,7 @@ const JoditEditor = forwardRef((props, ref) => {
   useEffect(() => {
     if (textArea && textArea.current) {
       textArea.current.value = value;
+      bloquearTraducaoNavegador();
     }
   }, [textArea, value]);
 
@@ -485,7 +534,6 @@ JoditEditor.propTypes = {
   qtdMaxImg: PropTypes.number,
   imagensCentralizadas: PropTypes.bool,
   valideClipboardHTML: PropTypes.bool,
-  permiteGif: PropTypes.bool,
   labelRequired: PropTypes.bool,
 };
 
@@ -511,7 +559,6 @@ JoditEditor.defaultProps = {
   qtdMaxImg: null,
   imagensCentralizadas: false,
   valideClipboardHTML: false,
-  permiteGif: true,
   labelRequired: false,
 };
 

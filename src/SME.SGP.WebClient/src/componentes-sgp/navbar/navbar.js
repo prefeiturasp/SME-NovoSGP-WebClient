@@ -21,6 +21,7 @@ import { validarAcaoTela, validarNavegacaoTela } from '~/utils';
 import Alert from '~/componentes/alert';
 import LoginHelper from '~/paginas/Login/loginHelper';
 import Loader from '~/componentes/loader';
+import { SGP_BUTTON_SAIR } from '../../constantes/ids/button';
 
 const Navbar = () => {
   const retraido = useSelector(state => state.navegacao.retraido);
@@ -65,6 +66,12 @@ const Navbar = () => {
     );
     if (resposta?.sucesso) {
       history.push(URL_HOME);
+      ServicoNotificacao.obterUltimasNotificacoesNaoLidas().catch(e =>
+        erros(e)
+      );
+      ServicoNotificacao.obterQuantidadeNotificacoesNaoLidas().catch(e =>
+        erros(e)
+      );
     } else if (resposta.erro) {
       erros(resposta.erro);
     }
@@ -134,7 +141,11 @@ const Navbar = () => {
                       <Perfil Botao={Botao} Icone={Icone} Texto={Texto} />
                     </li>
                     <li className="list-inline-item">
-                      <Botao className="text-center" onClick={onClickSair}>
+                      <Botao
+                        className="text-center"
+                        onClick={onClickSair}
+                        id={SGP_BUTTON_SAIR}
+                      >
                         <Icone className="fa fa-power-off fa-lg" />
                         <Texto className="d-block mt-1">Sair</Texto>
                       </Botao>

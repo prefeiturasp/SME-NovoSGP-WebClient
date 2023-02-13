@@ -3,7 +3,6 @@ import React, { useCallback, useContext, useEffect, useState } from 'react';
 import { CheckboxComponent, Loader, SelectComponent } from '~/componentes';
 import { FiltroHelper } from '~/componentes-sgp';
 import {
-  SGP_CHECKBOX_EXIBIR_HISTORICO,
   SGP_SELECT_ANO_LETIVO,
   SGP_SELECT_BIMESTRE,
   SGP_SELECT_DRE,
@@ -11,7 +10,8 @@ import {
   SGP_SELECT_SEMESTRE,
   SGP_SELECT_TURMA,
   SGP_SELECT_UE,
-} from '~/componentes-sgp/filtro/idsCampos';
+} from '~/constantes/ids/select';
+import { SGP_CHECKBOX_EXIBIR_HISTORICO } from '~/constantes/ids/checkbox';
 import { OPCAO_TODOS } from '~/constantes';
 import { ModalidadeDTO } from '~/dtos';
 import { AbrangenciaServico, erros, ServicoFiltroRelatorio } from '~/servicos';
@@ -73,7 +73,6 @@ const ListaoFiltros = () => {
       const anosOrdenados = ordenarDescPor(anosLetivo, 'valor');
       setListaAnosLetivo(anosOrdenados);
       setAnoLetivo(anosLetivo[0].valor);
-      setCodigoDre();
       return;
     }
     setListaAnosLetivo([]);
@@ -119,7 +118,7 @@ const ListaoFiltros = () => {
       obterDres();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [obterDres, anoLetivo]);
+  }, [anoLetivo]);
 
   const obterUes = useCallback(async () => {
     setCarregandoUes(true);
@@ -285,10 +284,8 @@ const ListaoFiltros = () => {
   }, [modalidade, obterBimestres]);
 
   const onCheckedConsideraHistorico = e => {
-    const anoAutal = window.moment().format('YYYY');
-
     setListaAnosLetivo([]);
-    setAnoLetivo(anoAutal);
+    setAnoLetivo();
 
     setListaDres([]);
     setCodigoDre();

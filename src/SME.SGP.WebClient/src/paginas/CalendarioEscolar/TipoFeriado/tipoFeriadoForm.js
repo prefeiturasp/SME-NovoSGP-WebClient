@@ -2,6 +2,7 @@ import { Form, Formik } from 'formik';
 import React, { useEffect, useState } from 'react';
 import * as Yup from 'yup';
 import { Col, Row } from 'antd';
+import { useRouteMatch } from 'react-router-dom';
 import Cabecalho from '~/componentes-sgp/cabecalho';
 import Auditoria from '~/componentes/auditoria';
 import Button from '~/componentes/button';
@@ -22,11 +23,11 @@ import { verificaSomenteConsulta } from '~/servicos/servico-navegacao';
 import {
   SGP_BUTTON_ALTERAR_CADASTRAR,
   SGP_BUTTON_CANCELAR,
-} from '~/componentes-sgp/filtro/idsCampos';
+} from '~/constantes/ids/button';
 import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
 import BotaoExcluirPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoExcluirPadrao';
 
-const TipoFeriadoForm = ({ match }) => {
+const TipoFeriadoForm = () => {
   const [auditoria, setAuditoria] = useState([]);
   const [modoEdicao, setModoEdicao] = useState(false);
   const [novoRegistro, setNovoRegistro] = useState(true);
@@ -34,6 +35,7 @@ const TipoFeriadoForm = ({ match }) => {
   const [idTipoFeriadoEdicao, setIdTipoFeriadoEdicao] = useState(0);
   const [isTipoMovel, setIsTipoMovel] = useState(false);
 
+  const routeMatch = useRouteMatch();
   const { usuario } = store.getState();
   const permissoesTela = usuario.permissoes[RotasDto.TIPO_FERIADO];
 
@@ -76,20 +78,27 @@ const TipoFeriadoForm = ({ match }) => {
 
   const [possuiEventos, setPossuiEventos] = useState(false);
 
+  const temPermissao = novoRegistro
+    ? permissoesTela.podeIncluir
+    : permissoesTela.podeAlterar;
+
+  const botaoAlterarCadastrarEstaDesabilitado =
+    !temPermissao || (!novoRegistro && !modoEdicao);
+
   useEffect(() => {
     verificaSomenteConsulta(permissoesTela);
 
     const consultaPorId = async () => {
-      if (match && match.params && match.params.id) {
+      if (routeMatch?.params?.id) {
         setBreadcrumbManual(
-          match.url,
+          routeMatch.url,
           'Alterar Tipo de Feriado',
-          '/calendario-escolar/tipo-feriado'
+          RotasDto.TIPO_FERIADO
         );
-        setIdTipoFeriadoEdicao(match.params.id);
+        setIdTipoFeriadoEdicao(routeMatch.params.id);
 
         const cadastrado = await api
-          .get(`v1/calendarios/feriados/${match.params.id}`)
+          .get(`v1/calendarios/feriados/${routeMatch.params.id}`)
           .catch(e => erros(e));
 
         if (cadastrado && cadastrado.data) {
@@ -103,10 +112,10 @@ const TipoFeriadoForm = ({ match }) => {
           });
           setAuditoria({
             criadoPor: cadastrado.data.criadoPor,
-            criadoRf: cadastrado.data.criadoRf,
+            criadoRf: cadastrado.data.criadoRF,
             criadoEm: cadastrado.data.criadoEm,
             alteradoPor: cadastrado.data.alteradoPor,
-            alteradoRf: cadastrado.data.alteradoRf,
+            alteradoRf: cadastrado.data.alteradoRF,
             alteradoEm: cadastrado.data.alteradoEm,
           });
           setExibirAuditoria(true);
@@ -120,19 +129,9 @@ const TipoFeriadoForm = ({ match }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const onClickVoltar = async () => {
-    if (modoEdicao) {
-      const confirmado = await confirmar(
-        'Atenção',
-        'Você não salvou as informações preenchidas.',
-        'Deseja voltar para tela de listagem agora?'
-      );
-      if (confirmado) {
-        history.push('/calendario-escolar/tipo-feriado');
-      }
-    } else {
-      history.push('/calendario-escolar/tipo-feriado');
-    }
+  const resetarTela = form => {
+    form.resetForm();
+    setModoEdicao(false);
   };
 
   const onClickCancelar = async form => {
@@ -146,11 +145,6 @@ const TipoFeriadoForm = ({ match }) => {
         resetarTela(form);
       }
     }
-  };
-
-  const resetarTela = form => {
-    form.resetForm();
-    setModoEdicao(false);
   };
 
   const onClickCadastrar = async valoresForm => {
@@ -177,9 +171,8 @@ const TipoFeriadoForm = ({ match }) => {
       } else {
         sucesso('Novo tipo de feriado criado com sucesso.');
       }
+      history.push(RotasDto.TIPO_FERIADO);
     }
-
-    history.push('/calendario-escolar/tipo-feriado');
   };
 
   const onChangeCampos = () => {
@@ -207,7 +200,7 @@ const TipoFeriadoForm = ({ match }) => {
 
         if (excluir?.status === 200) {
           sucesso('Tipo de feriado excluído com sucesso.');
-          history.push('/calendario-escolar/tipo-feriado');
+          history.push(RotasDto.TIPO_FERIADO);
         }
       }
     }
@@ -249,6 +242,23 @@ const TipoFeriadoForm = ({ match }) => {
     });
   };
 
+  const onClickVoltar = async form => {
+    if (modoEdicao) {
+      const confirmado = await confirmar(
+        'Atenção',
+        '',
+        'Suas alterações não foram salvas, deseja salvar agora?'
+      );
+      if (confirmado) {
+        validaAntesDoSubmit(form);
+      } else {
+        history.push(RotasDto.TIPO_FERIADO);
+      }
+    } else {
+      history.push(RotasDto.TIPO_FERIADO);
+    }
+  };
+
   return (
     <>
       <Formik
@@ -268,7 +278,7 @@ const TipoFeriadoForm = ({ match }) => {
             >
               <Row gutter={[8, 8]} type="flex">
                 <Col>
-                  <BotaoVoltarPadrao onClick={() => onClickVoltar()} />
+                  <BotaoVoltarPadrao onClick={() => onClickVoltar(form)} />
                 </Col>
                 <Col>
                   <Button
@@ -299,10 +309,7 @@ const TipoFeriadoForm = ({ match }) => {
                     color={Colors.Roxo}
                     border
                     bold
-                    disabled={
-                      (novoRegistro && !permissoesTela.podeIncluir) ||
-                      (!novoRegistro && !permissoesTela.podeAlterar)
-                    }
+                    disabled={botaoAlterarCadastrarEstaDesabilitado}
                     onClick={() => validaAntesDoSubmit(form)}
                   />
                 </Col>
@@ -384,8 +391,10 @@ const TipoFeriadoForm = ({ match }) => {
                 <Auditoria
                   criadoEm={auditoria.criadoEm}
                   criadoPor={auditoria.criadoPor}
+                  criadoRf={auditoria.criadoRf}
                   alteradoPor={auditoria.alteradoPor}
                   alteradoEm={auditoria.alteradoEm}
+                  alteradoRf={auditoria.alteradoRf}
                 />
               ) : (
                 <></>

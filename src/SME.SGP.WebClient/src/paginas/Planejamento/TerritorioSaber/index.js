@@ -33,7 +33,7 @@ import RotasDto from '~/dtos/rotasDto';
 import { URL_HOME } from '~/constantes/url';
 import AlertaModalidadeInfantil from '~/componentes-sgp/AlertaModalidadeInfantil/alertaModalidadeInfantil';
 import { ehTurmaInfantil } from '~/servicos/Validacoes/validacoesInfatil';
-import { SGP_BUTTON_SALVAR } from '~/componentes-sgp/filtro/idsCampos';
+import { SGP_BUTTON_SALVAR } from '~/constantes/ids/button';
 
 // Componentes internos
 const DesenvolvimentoReflexao = React.lazy(() =>

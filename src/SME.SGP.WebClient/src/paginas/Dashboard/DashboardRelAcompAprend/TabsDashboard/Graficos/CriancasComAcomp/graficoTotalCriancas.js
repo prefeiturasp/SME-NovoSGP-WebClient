@@ -4,6 +4,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { Loader, SelectComponent } from '~/componentes';
 import { GraficoBarras, TagGrafico } from '~/componentes-sgp';
 import { OPCAO_TODOS } from '~/constantes/constantes';
+import { SGP_SELECT_SEMESTRE } from '~/constantes/ids/select';
 import { erros } from '~/servicos';
 import ServicoDashboardRelAcompanhamentoAprendizagem from '~/servicos/Paginas/Dashboard/ServicoDashboardRelAcompanhamentoAprendizagem';
 
@@ -50,7 +51,7 @@ const GraficoTotalCriancasComRelAcompanhamentoAprendizagem = props => {
       <div className="row">
         <div className="col-sm-12 col-md-6 col-lg-4 col-xl-4 mb-2">
           <SelectComponent
-            id="semestre"
+            id={SGP_SELECT_SEMESTRE}
             lista={listaSemestres}
             valueOption="valor"
             valueText="desc"

@@ -30,9 +30,19 @@ import { Cabecalho } from '~/componentes-sgp';
 import {
   SGP_BUTTON_ALTERAR_CADASTRAR,
   SGP_BUTTON_CANCELAR,
-} from '~/componentes-sgp/filtro/idsCampos';
+  SGP_BUTTON_COPIAR_AVALIACAO,
+  SGP_BUTTON_EXCLUIR,
+  SGP_BUTTON_REGENCIA,
+} from '~/constantes/ids/button';
 import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
 import BotaoExcluirPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoExcluirPadrao';
+import { SGP_RADIO_CATEGORIA } from '~/constantes/ids/radio';
+import {
+  SGP_SELECT_COMPONENTE_CURRICULAR,
+  SGP_SELECT_NOME_AVALIACAO,
+  SGP_SELECT_TIPO_AVALIACAO,
+} from '~/constantes/ids/select';
+import { SGP_JODIT_EDITOR_CADASTRO_AVALIACAO_DESCRICAO } from '~/constantes/ids/jodit-editor';
 
 const AvaliacaoForm = ({ match, location }) => {
   const [
@@ -55,9 +65,6 @@ const AvaliacaoForm = ({ match, location }) => {
   const [modoEdicao, setModoEdicao] = useState(false);
   const [dentroPeriodo, setDentroPeriodo] = useState(true);
   const [podeLancaNota, setPodeLancaNota] = useState(true);
-  const [mostrarDisciplinaRegencia, setMostrarDisciplinaRegencia] = useState(
-    false
-  );
   const [listaDisciplinas, setListaDisciplinas] = useState([]);
   const [carregandoTela, setCarregandoTela] = useState(false);
   const [temRegencia, setTemRegencia] = useState(false);
@@ -80,6 +87,20 @@ const AvaliacaoForm = ({ match, location }) => {
 
   const [idAvaliacao, setIdAvaliacao] = useState('');
   const [auditoriaAvaliacao, setAuditoriaAvaliacao] = useState({});
+
+  const [disciplinaSelecionada, setDisciplinaSelecionada] = useState(undefined);
+
+  const ehParamostrarDisciplinaRegencia = useCallback(() => {
+    return listaDisciplinas?.find?.(
+      item =>
+        Number(item?.codigoComponenteCurricular) ===
+        Number(disciplinaSelecionada)
+    )?.regencia;
+  }, [listaDisciplinas, disciplinaSelecionada]);
+
+  const [mostrarDisciplinaRegencia, setMostrarDisciplinaRegencia] = useState(
+    ehParamostrarDisciplinaRegencia()
+  );
 
   const aoTrocarCampos = () => {
     if (!modoEdicao) {
@@ -104,6 +125,12 @@ const AvaliacaoForm = ({ match, location }) => {
       setPodeLancaNota(true);
     }
   };
+
+  useEffect(() => {
+    if (disciplinaSelecionada) {
+      setMostrarDisciplinaRegencia(ehParamostrarDisciplinaRegencia());
+    }
+  }, [disciplinaSelecionada, ehParamostrarDisciplinaRegencia]);
 
   const clicouBotaoExcluir = async () => {
     const confirmado = await confirmar(
@@ -148,7 +175,6 @@ const AvaliacaoForm = ({ match, location }) => {
     listaDisciplinasSelecionadas,
     setListaDisciplinasSelecionadas,
   ] = useState([]);
-  const [disciplinaSelecionada, setDisciplinaSelecionada] = useState(undefined);
   const [desabilitarCopiarAvaliacao, setDesabilitarCopiarAvaliacao] = useState(
     false
   );
@@ -410,7 +436,7 @@ const AvaliacaoForm = ({ match, location }) => {
   };
 
   useEffect(() => {
-    if (!idAvaliacao && listaDisciplinas.length === 1) {
+    if (!match?.params?.id && listaDisciplinas?.length === 1) {
       setDadosAvaliacao({
         ...dadosAvaliacao,
         disciplinasId: listaDisciplinas[0].codigoComponenteCurricular.toString(),
@@ -423,7 +449,7 @@ const AvaliacaoForm = ({ match, location }) => {
       obterDisciplinasRegencia();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [listaDisciplinas, mostrarDisciplinaRegencia]);
+  }, [listaDisciplinas, mostrarDisciplinaRegencia, match]);
 
   const [listaTiposAvaliacao, setListaTiposAvaliacao] = useState([]);
 
@@ -473,6 +499,8 @@ const AvaliacaoForm = ({ match, location }) => {
     if (Number(categoriaSelecionada) === categorias.INTERDISCIPLINAR) {
       setCopias([]);
       setDesabilitarCopiarAvaliacao(true);
+      setDisciplinaSelecionada(undefined);
+      setMostrarDisciplinaRegencia(false);
     } else {
       setDesabilitarCopiarAvaliacao(false);
     }
@@ -495,12 +523,6 @@ const AvaliacaoForm = ({ match, location }) => {
         setDentroPeriodo(avaliacao.data.dentroPeriodo);
         setPodeEditarAvaliacao(avaliacao.data.podeEditarAvaliacao);
         setAtividadesRegencia(avaliacao.data.atividadesRegencia);
-        if (
-          avaliacao.data.atividadesRegencia &&
-          avaliacao.data.atividadesRegencia.length > 0
-        ) {
-          obterDisciplinasRegencia();
-        }
         setCarregandoTela(false);
       }
     } catch (error) {
@@ -547,7 +569,6 @@ const AvaliacaoForm = ({ match, location }) => {
 
   const resetDisciplinasSelecionadas = form => {
     setListaDisciplinasSelecionadas([]);
-    setMostrarDisciplinaRegencia(false);
     form.values.disciplinasId = [];
   };
 
@@ -556,16 +577,6 @@ const AvaliacaoForm = ({ match, location }) => {
       'DD/MM/YYYY'
     )}`;
   }, [dataAvaliacao]);
-
-  useEffect(() => {
-    const disciplinaEncontrada = listaDisciplinas.find(
-      item =>
-        Number(item.codigoComponenteCurricular) ===
-        Number(disciplinaSelecionada)
-    );
-
-    setMostrarDisciplinaRegencia(disciplinaEncontrada?.regencia);
-  }, [disciplinaSelecionada, listaDisciplinas]);
 
   const clicouBotaoCancelar = async form => {
     if (modoEdicao) {
@@ -667,6 +678,7 @@ const AvaliacaoForm = ({ match, location }) => {
                     </Col>
                     <Col>
                       <BotaoExcluirPadrao
+                        id={SGP_BUTTON_EXCLUIR}
                         disabled={
                           desabilitarCampos ||
                           !idAvaliacao ||
@@ -703,7 +715,7 @@ const AvaliacaoForm = ({ match, location }) => {
                     <Div className="row">
                       <Grid cols={12} className="mb-4">
                         <RadioGroupButton
-                          id="categoriaId"
+                          id={SGP_RADIO_CATEGORIA}
                           name="categoriaId"
                           label="Categoria"
                           opcoes={listaCategorias}
@@ -711,8 +723,8 @@ const AvaliacaoForm = ({ match, location }) => {
                           onChange={e => {
                             aoTrocarCampos();
                             resetDisciplinasSelecionadas(form);
-                            montaValidacoes(e.target.value);
-                            validaInterdisciplinar(e.target.value);
+                            montaValidacoes(e);
+                            validaInterdisciplinar(e);
                           }}
                           desabilitado={desabilitarCampos || !dentroPeriodo}
                           labelRequired
@@ -725,7 +737,7 @@ const AvaliacaoForm = ({ match, location }) => {
                         form.values.categoriaId ===
                           categorias.INTERDISCIPLINAR ? (
                           <SelectComponent
-                            id="disciplinasId"
+                            id={SGP_SELECT_COMPONENTE_CURRICULAR}
                             name="disciplinasId"
                             label="Componente curricular"
                             lista={listaDisciplinas}
@@ -745,7 +757,7 @@ const AvaliacaoForm = ({ match, location }) => {
                           />
                         ) : (
                           <SelectComponent
-                            id="disciplinasId"
+                            id={SGP_SELECT_COMPONENTE_CURRICULAR}
                             name="disciplinasId"
                             label="Componente curricular"
                             lista={listaDisciplinas}
@@ -769,7 +781,7 @@ const AvaliacaoForm = ({ match, location }) => {
                       </Grid>
                       <Grid cols={4} className="mb-4">
                         <SelectComponent
-                          id="tipoAvaliacaoId"
+                          id={SGP_SELECT_TIPO_AVALIACAO}
                           name="tipoAvaliacaoId"
                           label="Tipo de atividade avaliativa"
                           lista={listaTiposAvaliacao}
@@ -784,9 +796,9 @@ const AvaliacaoForm = ({ match, location }) => {
                       </Grid>
                       <Grid cols={4} className="mb-4">
                         <CampoTexto
+                          id={SGP_SELECT_NOME_AVALIACAO}
                           label="Nome da atividade avaliativa"
                           name="nome"
-                          id="nome"
                           maxlength={50}
                           placeholder="Nome"
                           type="input"
@@ -802,7 +814,7 @@ const AvaliacaoForm = ({ match, location }) => {
                       </Grid>
                     </Div>
                     {temRegencia &&
-                      listaDisciplinasRegenciaSelecionadas &&
+                      !!listaDisciplinasRegenciaSelecionadas.length &&
                       mostrarDisciplinaRegencia && (
                         <Div className="row">
                           <Grid cols={12} className="mb-4">
@@ -811,6 +823,7 @@ const AvaliacaoForm = ({ match, location }) => {
                               (disciplina, indice) => {
                                 return (
                                   <Badge
+                                    id={`${SGP_BUTTON_REGENCIA}_${disciplina.nome.toUpperCase()}`}
                                     key={disciplina.codigoComponenteCurricular}
                                     role="button"
                                     onClick={e => {
@@ -834,11 +847,11 @@ const AvaliacaoForm = ({ match, location }) => {
                     <Div className="row">
                       <Grid cols={12}>
                         <JoditEditor
+                          id={SGP_JODIT_EDITOR_CADASTRO_AVALIACAO_DESCRICAO}
                           label="Descrição"
                           form={form}
                           value={form.values.descricao}
                           name="descricao"
-                          id="descricao"
                           onChange={aoTrocarTextEditor}
                           desabilitar={desabilitarCampos || !dentroPeriodo}
                           permiteInserirArquivo={false}
@@ -855,6 +868,7 @@ const AvaliacaoForm = ({ match, location }) => {
                         cols={12}
                       >
                         <Button
+                          id={SGP_BUTTON_COPIAR_AVALIACAO}
                           label="Copiar avaliação"
                           icon="clipboard"
                           color={Colors.Azul}
