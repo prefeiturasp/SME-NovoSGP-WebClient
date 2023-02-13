@@ -589,6 +589,8 @@ export default function PlanoCiclo() {
                     value={descricaoCiclo}
                     desabilitar={somenteConsulta}
                     onChange={onChangeTextEditor}
+                    mensagemErro="Campo obrigatório"
+                    validarSeTemErro={valor => !valor}
                   />
                   <InseridoAlterado>
                     {inseridoAlterado.criadoPor && inseridoAlterado.criadoEm ? (
