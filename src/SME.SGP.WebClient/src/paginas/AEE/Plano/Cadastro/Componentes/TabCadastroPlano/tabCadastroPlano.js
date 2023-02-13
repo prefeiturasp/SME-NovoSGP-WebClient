@@ -12,7 +12,6 @@ import {
 import { erros } from '~/servicos';
 import ServicoPlanoAEE from '~/servicos/Paginas/Relatorios/AEE/ServicoPlanoAEE';
 import MontarDadosTabs from './montarDadosTabs';
-import * as qs from 'query-string';
 
 const TabCadastroPlano = props => {
   const { match } = props;
@@ -38,7 +37,7 @@ const TabCadastroPlano = props => {
 
     dispatch(setExibirLoaderPlanoAEE(true));
     dispatch(setPlanoAEELimparDados());
-    const historico = qs.parse(window.location.search)?.historico ?? false;
+
     const resultado = await ServicoPlanoAEE.obterPlanoPorId(
       planoId,
       turmaCodigo,

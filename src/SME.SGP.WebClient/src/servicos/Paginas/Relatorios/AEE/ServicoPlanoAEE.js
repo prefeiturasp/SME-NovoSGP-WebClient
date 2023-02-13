@@ -35,7 +35,7 @@ class ServicoPlanoAEE {
   obterPlanoPorId = (planoId, turmaCodigo, codigoAluno) => {
     let url = `${urlPadrao}/${planoId}/aluno/${codigoAluno}`;
     if (turmaCodigo) {
-      url = `${url}&turmaCodigo=${turmaCodigo}`;
+      url = `${url}?turmaCodigo=${turmaCodigo}`;
     }
     return api.get(url);
   };
