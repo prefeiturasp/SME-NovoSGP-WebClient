@@ -32,10 +32,10 @@ class ServicoPlanoAEE {
     return false;
   };
 
-  obterPlanoPorId = (planoId, turmaCodigo, ehistorico) => {
-    let url = `${urlPadrao}/${planoId}?historico=${ehistorico}`;
+  obterPlanoPorId = (planoId, turmaCodigo, codigoAluno) => {
+    let url = `${urlPadrao}/${planoId}/aluno/${codigoAluno}`;
     if (turmaCodigo) {
-      url = `${url}&turmaCodigo=${turmaCodigo}`;
+      url = `${url}?turmaCodigo=${turmaCodigo}`;
     }
     return api.get(url);
   };
