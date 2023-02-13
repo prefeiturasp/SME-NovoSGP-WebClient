@@ -75,7 +75,7 @@ const MontarDadosTabSelecionada = props => {
   ) => {
     dadosQuestinario.forEach(questao => {
       switch (questao.nomeComponente) {
-        case 'NOME_MAE':
+        case 'FILIACAO_1':
           if (informacoesEstudante?.nomeMae) {
             questao.resposta = [
               { texto: informacoesEstudante?.nomeMae, id: 0 },
@@ -115,7 +115,7 @@ const MontarDadosTabSelecionada = props => {
             questao.resposta = [{ opcaoRespostaId }];
           }
           break;
-        case 'ESTUDANTE_IMIGRANTE':
+        case 'ESTUDANTE_MIGRANTE':
           questao.resposta = [
             {
               opcaoRespostaId: buscarValoresSimNao(
@@ -124,6 +124,16 @@ const MontarDadosTabSelecionada = props => {
               ),
             },
           ];
+          break;
+        case 'CNS':
+          if (informacoesEstudante?.cns) {
+            questao.resposta = [{ texto: informacoesEstudante?.cns, id: 0 }];
+          }
+          break;
+        case 'NIS':
+          if (informacoesEstudante?.nis) {
+            questao.resposta = [{ texto: informacoesEstudante?.nis, id: 0 }];
+          }
           break;
         default:
           break;
