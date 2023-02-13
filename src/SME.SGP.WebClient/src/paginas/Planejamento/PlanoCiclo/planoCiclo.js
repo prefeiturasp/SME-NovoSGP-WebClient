@@ -36,6 +36,7 @@ import {
   SGP_BUTTON_SALVAR,
 } from '~/constantes/ids/button';
 import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
+import { removerTagsHtml } from '~/utils';
 
 export default function PlanoCiclo() {
   const urlPrefeitura = 'https://curriculo.sme.prefeitura.sp.gov.br';
@@ -383,7 +384,8 @@ export default function PlanoCiclo() {
     const anoLetivo = String(turmaSelecionada.anoLetivo);
     const codEscola = String(turmaSelecionada.unidadeEscolar);
 
-    if (!textEditorRef.current.value) {
+    const textoSemHtml = removerTagsHtml(textEditorRef.current.value);
+    if (!textoSemHtml?.trim()) {
       erro('A descrição deve ser informada');
       return;
     }

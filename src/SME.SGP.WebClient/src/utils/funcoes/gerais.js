@@ -293,6 +293,8 @@ const ordenarNotificoesNavBar = listaNotificacoes => {
   return listaOrdenada;
 };
 
+const removerTagsHtml = texto => texto?.replace(/<\/?[^>]+(>|$)/g, '');
+
 const arredondarNota = (nota, dadosArredondamento) => {
   const min = dadosArredondamento?.minima || 0;
   const max = dadosArredondamento?.maxima || 10;
@@ -365,6 +367,7 @@ export {
   primeiroMaisculo,
   editorTemValor,
   ordenarNotificoesNavBar,
+  removerTagsHtml,
   arredondarNota,
   verificarDataFimMaiorInicio,  
 };
