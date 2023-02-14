@@ -16,7 +16,6 @@ const DocPlanosTrabalhoListaPaginada = props => {
 
   const ueCodigo = form?.values?.ueCodigo;
   const listaUes = form?.values?.listaUes;
-  const consideraHistorico = form?.values?.consideraHistorico;
   const anoLetivo = form?.values?.anoLetivo;
   const tipoDocumentoId = form?.values?.tipoDocumentoId;
   const classificacaoId = form?.values?.classificacaoId;
@@ -130,12 +129,13 @@ const DocPlanosTrabalhoListaPaginada = props => {
         ueId: ueSelecionada?.id || '',
         tipoDocumentoId,
         classificacaoId,
-        anoLetivo:anoLetivo
+        anoLetivo,
       };
       setFiltros({ ...params });
     } else {
       setFiltros({});
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [ueCodigo, tipoDocumentoId, classificacaoId, listaUes]);
 
   useEffect(() => {
