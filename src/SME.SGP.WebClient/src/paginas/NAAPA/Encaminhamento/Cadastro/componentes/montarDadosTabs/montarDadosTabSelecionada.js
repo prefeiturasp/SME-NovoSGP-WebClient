@@ -47,6 +47,34 @@ const MontarDadosTabSelecionada = props => {
     return opcaoResposta?.id?.toString() || null;
   };
 
+  const buscarValoresOpcaoRespostaPorNome = (array, value) => {
+    const opcaoResposta = array.find(x =>
+      x.nome === value
+    );
+    return opcaoResposta?.id?.toString() || null;
+  };
+
+  const converterRacaCorEolToOpcaoRespostaGrupoEtnico = (nomeRaca) => {
+    switch(nomeRaca) {
+      case 'BRANCA':
+        return 'Branco';
+      case 'PRETA':
+        return 'Preta';
+      case 'PARDA':
+        return 'Pardo';
+      case 'AMARELA':
+        return 'Amarelo';
+      case 'INDIGENA':
+        return 'Indígena';
+      case 'NAO INFORMADA':
+        return 'Não declarado';
+      case 'RECUSOU INFORMAR':
+        return 'Não declarado';
+      default:
+        return '';
+    }
+  }
+
   const buscarValoresSimNao = (array, value) => {
     if (value) {
       return Number(buscarValoresOpcaoResposta(array, 'S'));
@@ -108,9 +136,9 @@ const MontarDadosTabSelecionada = props => {
           break;
         case 'GRUPO_ETNICO':
           if (informacoesEstudante?.grupoEtnico) {
-            const opcaoRespostaId = buscarValoresOpcaoResposta(
+            const opcaoRespostaId = buscarValoresOpcaoRespostaPorNome(
               questao.opcaoResposta,
-              informacoesEstudante?.grupoEtnico.substring(0, 1)
+              converterRacaCorEolToOpcaoRespostaGrupoEtnico(informacoesEstudante?.grupoEtnico)
             );
             questao.resposta = [{ opcaoRespostaId }];
           }
