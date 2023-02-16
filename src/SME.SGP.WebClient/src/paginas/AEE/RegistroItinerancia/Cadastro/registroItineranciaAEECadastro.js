@@ -700,9 +700,12 @@ const RegistroItineranciaAEECadastro = ({ match }) => {
   const obterDres = useCallback(async () => {
     if (dataVisita && moment.isMoment(dataVisita)) {
       const anoLetivo = dataVisita.get('year');
+      const anoLetivoAtual = new Date().getFullYear();
+      const consideraHistorico = anoLetivo !== anoLetivoAtual;
+
       setCarregandoDres(true);
       const resposta = await AbrangenciaServico.buscarDres(
-        `v1/abrangencias/false/dres?anoLetivo=${anoLetivo}`
+        `v1/abrangencias/${consideraHistorico}/dres?anoLetivo=${anoLetivo}`
       )
         .catch(e => erros(e))
         .finally(() => setCarregandoDres(false));
@@ -732,13 +735,16 @@ const RegistroItineranciaAEECadastro = ({ match }) => {
   const obterUes = useCallback(async () => {
     if (dataVisita && moment.isMoment(dataVisita) && dreId) {
       const anoLetivo = dataVisita.get('year');
+      const anoLetivoAtual = new Date().getFullYear();
+      const consideraHistorico = anoLetivo !== anoLetivoAtual;
+
       const dreSelecionada = listaDres?.find(
         item => item?.id === Number(dreId)
       );
       setCarregandoUes(true);
       const resposta = await AbrangenciaServico.buscarUes(
         dreSelecionada?.codigo,
-        `v1/abrangencias/false/dres/${dreSelecionada?.codigo}/ues?anoLetivo=${anoLetivo}`,
+        `v1/abrangencias/${consideraHistorico}/dres/${dreSelecionada?.codigo}/ues?anoLetivo=${anoLetivo}`,
         true
       )
         .catch(e => erros(e))

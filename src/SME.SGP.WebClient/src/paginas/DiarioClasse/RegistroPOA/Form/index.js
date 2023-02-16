@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import PropTypes from 'prop-types';
-import _ from 'lodash';
 
 // Form
 import { Formik, Form } from 'formik';
@@ -144,31 +143,35 @@ function RegistroPOAForm({ match }) {
         },
         valores.id || null
       );
-      if (cadastrado && cadastrado.status === 200) {
+      if (cadastrado?.status === 200) {
         dispatch(setLoaderSecao(false));
-        sucesso('Registro salvo com sucesso.');
-        history.push('/diario-classe/registro-poa');
+        sucesso(
+          `Registro ${match?.params?.id ? 'alterado' : 'salvo'} com sucesso.`
+        );
+        history.push(RotasDto.REGISTRO_POA);
       }
     } catch (err) {
       if (err) {
         dispatch(setLoaderSecao(false));
-        erro(err.response.data.mensagens[0]);
+        erro(err?.response?.data?.mensagens?.[0]);
       }
     }
   };
 
-  const onClickVoltar = async () => {
+  const onClickVoltar = async form => {
     if (modoEdicao) {
       const confirmou = await confirmar(
         'Atenção',
-        'Você não salvou as informações preenchidas.',
-        'Deseja realmente cancelar as alterações?'
+        '',
+        'Suas alterações não foram salvas, deseja salvar agora?'
       );
       if (confirmou) {
-        history.push('/diario-classe/registro-poa');
+        validaAntesDoSubmit(form);
+      } else {
+        history.push(RotasDto.REGISTRO_POA);
       }
     } else {
-      history.push('/diario-classe/registro-poa');
+      history.push(RotasDto.REGISTRO_POA);
     }
   };
 
@@ -200,8 +203,8 @@ function RegistroPOAForm({ match }) {
         form.values.id
       );
       if (excluir) {
-        sucesso(`Registro excluido com sucesso!`);
-        history.push('/diario-classe/registro-poa');
+        sucesso(`Registro excluído com sucesso!`);
+        history.push(RotasDto.REGISTRO_POA);
       }
     }
   };
@@ -226,51 +229,40 @@ function RegistroPOAForm({ match }) {
             registro.data.alteradoRF > 0 ? registro.data.alteradoRF : '',
           alteradoEm: registro.data.alteradoEm,
         });
-        setValoresCarregados(true);
+        setTimeout(() => {
+          setValoresCarregados(true);
+        }, 1500);
       }
     } catch (err) {
       erros(err);
     }
   }, []);
 
-  const validaFormulario = valores => {
-    if (validaSeObjetoEhNuloOuVazio(valores)) return;
-    if (
-      (!modoEdicao &&
-        valoresCarregados &&
-        !_.isEqual(
-          refForm.getFormikContext().initialValues,
-          refForm.getFormikContext().values
-        )) ||
-      (!modoEdicao &&
-        novoRegistro &&
-        !_.isEqual(
-          refForm.getFormikContext().initialValues,
-          refForm.getFormikContext().values
-        ))
-    ) {
+  const onChangeCampos = useCallback(() => {
+    if (valoresCarregados) {
       setModoEdicao(true);
     }
-  };
+  }, [valoresCarregados]);
 
   useEffect(() => {
     if (match && match.params && match.params.id) {
       setNovoRegistro(false);
-      setBreadcrumbManual(match.url, 'Registro', '/diario-classe/registro-poa');
+      setBreadcrumbManual(match.url, 'Registro', RotasDto.REGISTRO_POA);
       buscarPorId(match.params.id);
+    } else {
+      setValoresCarregados(true);
     }
   }, [buscarPorId, match]);
 
   return (
     <>
       <AlertaModalidadeInfantil />
-      <Loader loading={carregando}>
+      <Loader loading={carregando || !valoresCarregados}>
         <Formik
           enableReinitialize
           initialValues={valoresIniciais}
           validationSchema={validacoes}
           onSubmit={valores => onSubmitFormulario(valores)}
-          validate={valores => validaFormulario(valores)}
           ref={refFormik => setRefForm(refFormik)}
           validateOnBlur
           validateOnChange
@@ -288,13 +280,16 @@ function RegistroPOAForm({ match }) {
                   }
                   onClickBotaoPrincipal={() => onClickBotaoPrincipal(form)}
                   onClickCancelar={formulario => onClickCancelar(formulario)}
-                  onClickVoltar={() => onClickVoltar()}
+                  onClickVoltar={() => onClickVoltar(form)}
                   onClickExcluir={() => onClickExcluir(form)}
                   modoEdicao={modoEdicao}
-                  desabilitarBotaoPrincipal={ehTurmaInfantil(
-                    modalidadesFiltroPrincipal,
-                    turmaSelecionada
-                  )}
+                  desabilitarBotaoPrincipal={
+                    ehTurmaInfantil(
+                      modalidadesFiltroPrincipal,
+                      turmaSelecionada
+                    ) ||
+                    (match?.params?.id && !modoEdicao)
+                  }
                 />
               </Cabecalho>
               <Card>
@@ -310,7 +305,9 @@ function RegistroPOAForm({ match }) {
                             url="v1/dres/atribuicoes"
                             label="Diretoria Regional de Educação (DRE)"
                             form={form}
-                            onChange={() => null}
+                            onChange={(_, __, onChangeManual) => {
+                              if (onChangeManual) onChangeCampos();
+                            }}
                             desabilitado={somenteConsulta}
                             labelRequired
                           />
@@ -321,7 +318,9 @@ function RegistroPOAForm({ match }) {
                             label="Unidade Escolar (UE)"
                             form={form}
                             url="v1/dres"
-                            onChange={() => null}
+                            onChange={(_, __, onChangeManual) => {
+                              if (onChangeManual) onChangeCampos();
+                            }}
                             desabilitado={somenteConsulta}
                             labelRequired
                           />
@@ -333,7 +332,14 @@ function RegistroPOAForm({ match }) {
                           ueId={form.values.ueId}
                           anoLetivo={anoLetivo}
                           form={form}
-                          onChange={() => null}
+                          onChange={valorLocalizador => {
+                            if (
+                              valorLocalizador?.professorRf !==
+                              valoresIniciais?.professorRf
+                            ) {
+                              onChangeCampos();
+                            }
+                          }}
                           showLabel
                           desabilitado={somenteConsulta}
                           labelRequired
@@ -346,6 +352,9 @@ function RegistroPOAForm({ match }) {
                             name="bimestre"
                             form={form}
                             desabilitado={somenteConsulta}
+                            onChange={() => {
+                              onChangeCampos();
+                            }}
                           />
                         </Grid>
                         <Grid cols={10}>
@@ -357,6 +366,9 @@ function RegistroPOAForm({ match }) {
                             form={form}
                             desabilitado={somenteConsulta}
                             labelRequired
+                            onChange={() => {
+                              onChangeCampos();
+                            }}
                           />
                         </Grid>
                       </Row>
@@ -368,9 +380,12 @@ function RegistroPOAForm({ match }) {
                             id="descricao"
                             alt="Registro das atividades realizadas junto aos professores ao longo do bimestre, considerando a análise e o acompanhamento do planejamento docente"
                             name="descricao"
-                            value={valoresIniciais.descricao}
+                            value={form?.values?.descricao}
                             desabilitado={somenteConsulta}
                             labelRequired
+                            onChange={() => {
+                              setModoEdicao(true);
+                            }}
                           />
                         </Grid>
                       </Row>

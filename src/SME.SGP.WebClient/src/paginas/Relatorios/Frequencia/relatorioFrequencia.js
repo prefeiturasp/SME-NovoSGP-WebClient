@@ -620,6 +620,7 @@ const RelatorioFrequencia = () => {
     setListaAnosEscolares([]);
     setAnosEscolares(undefined);
 
+    setTipoRelatorio(TIPO_RELATORIO.TURMA);
     setModoEdicao(true);
   };
 
@@ -916,7 +917,7 @@ const RelatorioFrequencia = () => {
                   desabilitado={
                     !codigoUe ||
                     desabilitarTipoRelatorio ||
-                    !modalidadeId ||
+                    modalidadeId ||
                     desabilitarSemestre
                   }
                 />

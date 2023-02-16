@@ -93,7 +93,7 @@ function TerritorioSaber() {
   }, [territorioSelecionado, turmaSelecionada]);
 
   useEffect(() => {
-    if (habilitaCollapse) buscarPlanejamento();
+    if (habilitaCollapse && turmaSelecionada) buscarPlanejamento();
 
     if (Object.keys(turmaSelecionada).length === 0) {
       setTerritorioSelecionado('');
@@ -179,6 +179,7 @@ function TerritorioSaber() {
         setBimestreAberto(false);
         setDados({ bimestres: [] });
         buscarPlanejamento();
+        setModoEdicao(false);
       }
     }
   };

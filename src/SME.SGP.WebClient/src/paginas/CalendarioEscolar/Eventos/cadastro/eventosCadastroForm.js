@@ -177,7 +177,7 @@ const EventosCadastroForm = () => {
     }
   };
 
-  const onChangeTipoEvento = (listaTipoEventoAtual, evento, form) => {
+  const onChangeTipoEvento = (listaTipoEventoAtual, evento, form, idEvento) => {
     if (evento) {
       const tipoEventoSelecionado = listaTipoEventoAtual.find(
         item => item.id.toString() === evento.toString()
@@ -212,7 +212,7 @@ const EventosCadastroForm = () => {
         tipoUnico = false;
       }
 
-      if (form && tipoEventoSelecionado?.letivo) {
+      if ((form || idEvento > 0) && tipoEventoSelecionado?.letivo) {
         if (tipoEventoSelecionado.letivo === eventoLetivo.Opcional) {
           valorOpcaoLetivo = false;
         } else {
@@ -619,7 +619,7 @@ const EventosCadastroForm = () => {
 
       verificarAlteracaoLetivoEdicao(listaTipoEvento, evento.data.tipoEventoId);
 
-      onChangeTipoEvento(listaEventoAtual, evento.data.tipoEventoId);
+      onChangeTipoEvento(listaEventoAtual, evento.data.tipoEventoId,undefined, evento.data.id);
     }
   };
 
