@@ -167,7 +167,8 @@ class ServicoNAAPA {
     const { encaminhamentoNAAPA } = state;
     const { dadosSituacaoEncaminhamentoNAAPA } = encaminhamentoNAAPA;
 
-    const situacaoAtual = dadosSituacaoEncaminhamentoNAAPA?.situacao || situacaoNAAPA.Rascunho;
+    const situacaoAtual =
+      dadosSituacaoEncaminhamentoNAAPA?.situacao || situacaoNAAPA.Rascunho;
 
     const situacaoSalvar = novaSituacao || situacaoAtual;
 
@@ -353,6 +354,11 @@ class ServicoNAAPA {
       };
       dispatch(setDadosSituacaoEncaminhamentoNAAPA({ ...dadosSituacao }));
     }
+  };
+
+  encerrarEncaminhamentoNAAPA = (encaminhamentoId, motivoEncerramento) => {
+    const params = { encaminhamentoId, motivoEncerramento };
+    return api.post(`${URL_PADRAO}/encerrar`, params);
   };
 }
 

@@ -8,6 +8,7 @@ import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPad
 import {
   SGP_BUTTON_ALTERAR_CADASTRAR,
   SGP_BUTTON_CANCELAR,
+  SGP_BUTTON_ENCERRAR_ENCAMINHAMENTO_NAAPA,
   SGP_BUTTON_PROXIMO_PASSO,
   SGP_BUTTON_SALVAR_RASCUNHO,
 } from '~/constantes/ids/button';
@@ -22,7 +23,10 @@ import {
 import BotaoExcluirPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoExcluirPadrao';
 import { RotasDto } from '~/dtos';
 import ServicoNAAPA from '~/servicos/Paginas/Gestao/NAAPA/ServicoNAAPA';
-import { setDesabilitarCamposEncaminhamentoNAAPA } from '~/redux/modulos/encaminhamentoNAAPA/actions';
+import {
+  setDesabilitarCamposEncaminhamentoNAAPA,
+  setExibirModalEncerramentoEncaminhamentoNAAPA,
+} from '~/redux/modulos/encaminhamentoNAAPA/actions';
 import QuestionarioDinamicoFuncoes from '~/componentes-sgp/QuestionarioDinamico/Funcoes/QuestionarioDinamicoFuncoes';
 import situacaoNAAPA from '~/dtos/situacaoNAAPA';
 
@@ -154,10 +158,19 @@ const CadastroEncaminhamentoNAAPABotoesAcao = props => {
     }
   };
 
+  const onClickEncerrar = () =>
+    dispatch(setExibirModalEncerramentoEncaminhamentoNAAPA(true));
+
   const ocultarBtnRascunho =
     encaminhamentoId &&
     dadosSituacao?.situacao &&
     dadosSituacao?.situacao !== situacaoNAAPA.Rascunho;
+
+  const exibirBtnEncerrar =
+    encaminhamentoId &&
+    dadosSituacao?.situacao &&
+    (dadosSituacao?.situacao === situacaoNAAPA.AguardandoAtendimento ||
+      dadosSituacao?.situacao === situacaoNAAPA.EmAtendimento);
 
   const labelBtnCadastrarAlterar = ocultarBtnRascunho ? 'Alterar' : 'Cadastrar';
 
@@ -197,7 +210,7 @@ const CadastroEncaminhamentoNAAPABotoesAcao = props => {
             color={Colors.Roxo}
             label="Próximo passo"
             disabled={desabilitarProximoPasso}
-            onClick={onClickProximoPasso}
+            onClick={() => onClickProximoPasso()}
             id={SGP_BUTTON_PROXIMO_PASSO}
           />
         </Col>
@@ -229,7 +242,7 @@ const CadastroEncaminhamentoNAAPABotoesAcao = props => {
                 color={Colors.Azul}
                 label="Salvar rascunho"
                 id={SGP_BUTTON_SALVAR_RASCUNHO}
-                onClick={onClickSalvarRascunho}
+                onClick={() => onClickSalvarRascunho()}
                 disabled={disabledRascunho}
               />
             </Col>
@@ -242,10 +255,24 @@ const CadastroEncaminhamentoNAAPABotoesAcao = props => {
               label={labelBtnCadastrarAlterar}
               color={Colors.Azul}
               id={SGP_BUTTON_ALTERAR_CADASTRAR}
-              onClick={onClickCadastrarAlterar}
+              onClick={() => onClickCadastrarAlterar()}
               disabled={disabledCadastrarAlterar}
             />
           </Col>
+
+          {exibirBtnEncerrar && (
+            <Col>
+              <Button
+                bold
+                border
+                color={Colors.Roxo}
+                label="Encerrar"
+                id={SGP_BUTTON_ENCERRAR_ENCAMINHAMENTO_NAAPA}
+                onClick={() => onClickEncerrar()}
+                disabled={desabilitarCamposEncaminhamentoNAAPA}
+              />
+            </Col>
+          )}
         </>
       )}
     </Row>

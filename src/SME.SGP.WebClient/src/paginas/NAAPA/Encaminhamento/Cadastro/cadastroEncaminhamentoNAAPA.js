@@ -16,6 +16,7 @@ import {
 import { erros } from '~/servicos';
 import ModalErrosQuestionarioDinamico from '~/componentes-sgp/QuestionarioDinamico/Componentes/ModalErrosQuestionarioDinamico/modalErrosQuestionarioDinamico';
 import LabelSituacao from './componentes/labelSituacao';
+import ModalEncerramentoEncaminhamentoNAAPA from './componentes/modalEncerramentoEncaminhamentoNAAPA';
 
 const CadastroEncaminhamentoNAAPA = () => {
   const routeMatch = useRouteMatch();
@@ -156,6 +157,8 @@ const CadastroEncaminhamentoNAAPA = () => {
       <Row style={{ marginTop: '16px' }}>
         <Col sm={24}>
           <ModalErrosQuestionarioDinamico />
+
+          <ModalEncerramentoEncaminhamentoNAAPA />
 
           <MontarDadosTabs
             anoLetivo={dadosEncaminhamentoNAAPA?.anoLetivo}
