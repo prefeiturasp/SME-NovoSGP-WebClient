@@ -86,6 +86,7 @@ const Nota = props => {
 
   const setarValorExibicao = async valorNovo => {
     if (!desabilitar) {
+      onChangeNotaConceito(valorNovo);
       setNotaValorAtualExibicao(valorNovo);
       onChangeValorAtualExibicao(valorNovo);
     }
