@@ -84,6 +84,7 @@ function CadastroDeAula({ match, location }) {
   const [registroMigrado, setRegistroMigrado] = useState(false);
   const [emManutencao, setEmManutencao] = useState(false);
   const [desabilitarBtnSalvar, setDesabilitarBtnSalvar] = useState(false);
+  const [turmaFiltro] = useState(turmaSelecionada.turma);
 
   const { diaAula } = queryString.parse(location.search);
   const aulaInicial = {
@@ -494,6 +495,25 @@ function CadastroDeAula({ match, location }) {
     }
   };
 
+  const salvarAntesMudarTurma = async () => {
+    if (modoEdicao) {
+      const confirmou = await confirmar(
+        'Atenção',
+        '',
+        'Suas alterações não foram salvas, deseja salvar agora?'
+      );
+
+      if (confirmou) {
+        if (refForm.current) {
+          salvar(refForm.current?.state?.values);
+        }
+      }
+
+      navegarParaCalendarioProfessor();
+      setModoEdicao(false);
+    } else navegarParaCalendarioProfessor();
+  };
+
   const onClickVoltar = async () => {
     if (modoEdicao) {
       const confirmou = await confirmar(
@@ -555,7 +575,11 @@ function CadastroDeAula({ match, location }) {
       'Cadastro de Aula',
       '/calendario-escolar/calendario-professor'
     );
-    obterAula();
+
+    if (turmaFiltro === turmaSelecionada.turma) {
+      obterAula();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [obterAula, match.url]);
 
   useEffect(() => {
@@ -563,6 +587,11 @@ function CadastroDeAula({ match, location }) {
       setSomenteLeitura(true);
     }
   }, [carregandoDados, aula.somenteLeitura]);
+
+  useEffect(() => {
+    if (turmaFiltro !== turmaSelecionada.turma) salvarAntesMudarTurma();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [turmaSelecionada]);
 
   return (
     <>
