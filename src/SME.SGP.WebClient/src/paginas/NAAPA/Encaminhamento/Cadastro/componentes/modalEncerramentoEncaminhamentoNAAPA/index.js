@@ -43,7 +43,9 @@ const ModalEncerramentoEncaminhamentoNAAPA = () => {
   const fecharModal = () => {
     dispatch(setExibirModalEncerramentoEncaminhamentoNAAPA(false));
     setModoEdicao(false);
-    refForm.resetForm();
+    if (refForm && refForm.resetForm) {
+      refForm.resetForm();
+    }
   };
 
   const validaAntesDoSubmit = form => {
