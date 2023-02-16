@@ -47,6 +47,34 @@ const MontarDadosTabSelecionada = props => {
     return opcaoResposta?.id?.toString() || null;
   };
 
+  const buscarValoresOpcaoRespostaPorNome = (array, value) => {
+    const opcaoResposta = array.find(x =>
+      x.nome === value
+    );
+    return opcaoResposta?.id?.toString() || null;
+  };
+
+  const converterRacaCorEolToOpcaoRespostaGrupoEtnico = (nomeRaca) => {
+    switch(nomeRaca) {
+      case 'BRANCA':
+        return 'Branco';
+      case 'PRETA':
+        return 'Preta';
+      case 'PARDA':
+        return 'Pardo';
+      case 'AMARELA':
+        return 'Amarelo';
+      case 'INDIGENA':
+        return 'Indígena';
+      case 'NAO INFORMADA':
+        return 'Não declarado';
+      case 'RECUSOU INFORMAR':
+        return 'Não declarado';
+      default:
+        return '';
+    }
+  }
+
   const buscarValoresSimNao = (array, value) => {
     if (value) {
       return Number(buscarValoresOpcaoResposta(array, 'S'));
@@ -75,7 +103,7 @@ const MontarDadosTabSelecionada = props => {
   ) => {
     dadosQuestinario.forEach(questao => {
       switch (questao.nomeComponente) {
-        case 'NOME_MAE':
+        case 'FILIACAO_1':
           if (informacoesEstudante?.nomeMae) {
             questao.resposta = [
               { texto: informacoesEstudante?.nomeMae, id: 0 },
@@ -108,14 +136,14 @@ const MontarDadosTabSelecionada = props => {
           break;
         case 'GRUPO_ETNICO':
           if (informacoesEstudante?.grupoEtnico) {
-            const opcaoRespostaId = buscarValoresOpcaoResposta(
+            const opcaoRespostaId = buscarValoresOpcaoRespostaPorNome(
               questao.opcaoResposta,
-              informacoesEstudante?.grupoEtnico.substring(0, 1)
+              converterRacaCorEolToOpcaoRespostaGrupoEtnico(informacoesEstudante?.grupoEtnico)
             );
             questao.resposta = [{ opcaoRespostaId }];
           }
           break;
-        case 'ESTUDANTE_IMIGRANTE':
+        case 'ESTUDANTE_MIGRANTE':
           questao.resposta = [
             {
               opcaoRespostaId: buscarValoresSimNao(
@@ -124,6 +152,16 @@ const MontarDadosTabSelecionada = props => {
               ),
             },
           ];
+          break;
+        case 'CNS':
+          if (informacoesEstudante?.cns) {
+            questao.resposta = [{ texto: informacoesEstudante?.cns, id: 0 }];
+          }
+          break;
+        case 'NIS':
+          if (informacoesEstudante?.nis) {
+            questao.resposta = [{ texto: informacoesEstudante?.nis, id: 0 }];
+          }
           break;
         default:
           break;
