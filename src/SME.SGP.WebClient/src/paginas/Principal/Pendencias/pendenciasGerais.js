@@ -88,9 +88,6 @@ const PendenciasGerais = () => {
     if (retorno?.data?.length) {
       const lista = retorno?.data;
       setListaTurmas(lista);
-      if (lista.length === 1) {
-        setCodigoTurma(String(lista[0].codigo));
-      }
     }
     setCarregouTurmas(true);
   };
@@ -228,9 +225,7 @@ const PendenciasGerais = () => {
                   valueSelect={codigoTurma}
                   onChange={onChangeTurma}
                   placeholder="Selecione a turma"
-                  disabled={
-                    listaTurmas?.length === 1 || listaTurmas?.length === 0
-                  }
+                  disabled={listaTurmas?.length === 0}
                   showSearch
                 />
               </Loader>
