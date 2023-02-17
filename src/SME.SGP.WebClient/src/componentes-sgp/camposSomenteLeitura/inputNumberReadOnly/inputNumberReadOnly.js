@@ -31,7 +31,7 @@ const InputNumberReadOnly = props => {
 InputNumberReadOnly.propTypes = {
   id: PropTypes.string,
   name: PropTypes.oneOfType([PropTypes.any]),
-  value: PropTypes.string,
+  value: PropTypes.oneOfType([PropTypes.any]),
   style: PropTypes.oneOfType([PropTypes.object]),
   disabled: PropTypes.bool,
   placeholder: PropTypes.string,

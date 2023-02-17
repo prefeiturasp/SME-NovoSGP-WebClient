@@ -136,6 +136,7 @@ const TabelaAvaliacoesFechamento = props => {
     <Loader loading={carregandoDados}>
       {dadosAlunoSelecionado ? (
         <DataTable
+          scroll={{ x: '100%', y: 500 }}
           id={`tabela-aluno-${codigoAluno}`}
           idLinha="codigoAluno"
           pagination={false}

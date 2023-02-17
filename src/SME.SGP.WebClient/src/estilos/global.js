@@ -296,7 +296,7 @@ export default createGlobalStyle`
   }
 
   .position-sticky-col {
-    z-index: 100;
+    z-index: 9;
     position: sticky;
     background: white;
     position: -webkit-sticky;

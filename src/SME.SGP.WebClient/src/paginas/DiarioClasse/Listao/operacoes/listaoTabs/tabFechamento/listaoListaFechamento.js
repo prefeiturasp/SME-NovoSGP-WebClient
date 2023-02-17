@@ -692,7 +692,7 @@ const ListaoListaFechamento = props => {
         )}
         <DataTable
           fixExpandedRowResetColSpan
-          scroll={{ x: 1000, y: 500 }}
+          scroll={{ x: '100%', y: 500 }}
           columns={colunasEstudantes}
           dataSource={dadosFechamento?.alunos}
           pagination={false}
