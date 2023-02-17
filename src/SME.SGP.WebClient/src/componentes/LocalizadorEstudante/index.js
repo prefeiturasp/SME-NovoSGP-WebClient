@@ -52,6 +52,8 @@ const LocalizadorEstudante = props => {
       codigoTurma: '',
       turmaId: '',
       nomeComModalidadeTurma: '',
+      semestre: '',
+      modalidadeCodigo: '',
     });
     setDesabilitarCampo({
       codigo: false,
@@ -79,6 +81,8 @@ const LocalizadorEstudante = props => {
       codigoTurma: '',
       turmaId: '',
       nomeComModalidadeTurma: '',
+      semestre: '',
+      modalidadeCodigo: '',
     });
     setTimeout(() => {
       setDesabilitarCampo(() => ({
@@ -127,6 +131,8 @@ const LocalizadorEstudante = props => {
           codigoTurma: aluno.codigoTurma,
           turmaId: aluno.turmaId,
           nomeComModalidadeTurma: aluno.nomeComModalidadeTurma,
+          semestre: aluno?.semestre,
+          modalidadeCodigo: aluno?.modalidadeCodigo,
         }))
       );
 
@@ -137,6 +143,8 @@ const LocalizadorEstudante = props => {
           alunoNome: p.nome,
           codigoTurma: p.codigoTurma,
           turmaId: p.turmaId,
+          semestre: p?.semestre,
+          modalidadeCodigo: p?.modalidadeCodigo,
         };
         setPessoaSelecionada(pe);
         setDesabilitarCampo(estado => ({
@@ -177,13 +185,18 @@ const LocalizadorEstudante = props => {
     setExibirLoader(false);
 
     if (retorno?.data?.items?.length > 0) {
+      const primeiroAluno = retorno.data.items[0];
+
       const {
         codigo: cAluno,
         nome,
         turmaId,
         nomeComModalidadeTurma,
-      } = retorno.data.items[0];
-      const alunoCodigoTurma = retorno?.data?.items?.[0]?.codigoTurma;
+      } = primeiroAluno;
+
+      const semestre = primeiroAluno?.semestre;
+      const modalidadeCodigo = primeiroAluno?.modalidadeCodigo;
+      const alunoCodigoTurma = primeiroAluno?.codigoTurma;
 
       setDataSource(
         retorno.data.items.map(aluno => ({
@@ -192,6 +205,8 @@ const LocalizadorEstudante = props => {
           codigoTurma: aluno.codigoTurma,
           turmaId: aluno.turmaId,
           nomeComModalidadeTurma: aluno.nomeComModalidadeTurma,
+          semestre: aluno?.semestre,
+          modalidadeCodigo: aluno?.modalidadeCodigo,
         }))
       );
       setPessoaSelecionada({
@@ -200,6 +215,8 @@ const LocalizadorEstudante = props => {
         codigoTurma: alunoCodigoTurma,
         turmaId,
         nomeComModalidadeTurma,
+        semestre,
+        modalidadeCodigo,
       });
       setDesabilitarCampo(estado => ({
         ...estado,
@@ -211,6 +228,8 @@ const LocalizadorEstudante = props => {
         codigoTurma: alunoCodigoTurma,
         turmaId,
         nomeComModalidadeTurma,
+        semestre,
+        modalidadeCodigo,
       });
     }
   };
@@ -256,6 +275,8 @@ const LocalizadorEstudante = props => {
       codigoTurma: objeto.props.codigoTurma,
       turmaId: objeto.props.turmaId,
       nomeComModalidadeTurma: objeto.props.nomeComModalidadeTurma,
+      semestre: objeto?.props?.semestre,
+      modalidadeCodigo: objeto?.props?.modalidadeCodigo,
     };
     setPessoaSelecionada(pessoa);
     onChange(pessoa);

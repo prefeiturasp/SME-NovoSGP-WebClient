@@ -49,6 +49,8 @@ const InputNome = props => {
         codigoTurma={item.codigoTurma}
         turmaId={item.turmaId}
         nomeComModalidadeTurma={item.nomeComModalidadeTurma}
+        semestre={item?.semestre}
+        modalidadeCodigo={item?.modalidadeCodigo}
       >
         {item.alunoNome}
       </AutoComplete.Option>
