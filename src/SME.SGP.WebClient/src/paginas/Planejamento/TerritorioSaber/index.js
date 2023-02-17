@@ -153,17 +153,17 @@ function TerritorioSaber() {
       );
 
       const bimestresAlteradosSemTexto = dados.bimestres.filter(
-        x => x.id !== 0 && !!x.desenvolvimento && !!x.reflexao
+        x => x.id !== 0 && !x.desenvolvimento && !x.reflexao
       );
 
-      if (bimestresPreenchidos.length === 0) {
-        erro(`É necessário preencher pelo menos um dos campos.`);
-      } else if (bimestresAlteradosSemTexto.length) {
+      if (bimestresAlteradosSemTexto.length) {
         const bimestreNaoPreenchido = bimestresAlteradosSemTexto[0].bimestre;
 
         erro(
           `É necessário preencher pelo menos um campo do ${bimestreNaoPreenchido}° Bimestre.`
         );
+      } else if (bimestresPreenchidos.length === 0) {
+        erro(`É necessário preencher pelo menos um dos campos.`);
       } else {
         salvar();
       }
