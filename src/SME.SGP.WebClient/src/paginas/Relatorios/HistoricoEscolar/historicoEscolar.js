@@ -19,6 +19,7 @@ import LocalizadorEstudante from '~/componentes/LocalizadorEstudante';
 import ServicoHistoricoEscolar from '~/servicos/Paginas/HistoricoEscolar/ServicoHistoricoEscolar';
 import AlertaModalidadeInfantil from '~/componentes-sgp/AlertaModalidadeInfantil/alertaModalidadeInfantil';
 import BotoesAcaoRelatorio from '~/componentes-sgp/botoesAcaoRelatorio';
+import { ServicoFiltroRelatorio } from '~/servicos';
 
 const HistoricoEscolar = () => {
   const codigosAlunosSelecionados = useSelector(
@@ -70,7 +71,6 @@ const HistoricoEscolar = () => {
     if (codigosAlunosSelecionados?.length > 0) {
       setAlunosSelecionados([]);
       setEstudanteOpt('0');
-      setTurmaId();
     }
   }, [codigosAlunosSelecionados]);
 
@@ -119,24 +119,31 @@ const HistoricoEscolar = () => {
 
   const [carregandoModalidades, setCarregandoModalidades] = useState(false);
 
-  const obterModalidades = async (ue, ano) => {
-    if (ue && ano) {
-      setCarregandoModalidades(true);
-      const { data } = await api.get(`/v1/ues/${ue}/modalidades?ano=${ano}`);
-      if (data) {
-        const lista = data.map(item => ({
-          desc: item.nome,
-          valor: String(item.id),
-        }));
+  const obterModalidades = useCallback(
+    async (ue, ano) => {
+      if (ue && ano) {
+        setCarregandoModalidades(true);
+        setModalidadeId();
+        const resposta = await ServicoFiltroRelatorio.obterModalidades(
+          ue,
+          ano,
+          consideraHistorico
+        )
+          .catch(e => erros(e))
+          .finally(() => setCarregandoModalidades(false));
 
-        if (lista && lista.length && lista.length === 1) {
-          setModalidadeId(lista[0].valor);
+        if (resposta?.data?.length) {
+          const lista = resposta.data;
+
+          if (lista?.length === 1) {
+            setModalidadeId(lista[0].valor);
+          }
+          setListaModalidades(lista);
         }
-        setListaModalidades(lista);
       }
-      setCarregandoModalidades(false);
-    }
-  };
+    },
+    [consideraHistorico]
+  );
 
   const [carregandoUes, setCarregandoUes] = useState(false);
 
@@ -228,7 +235,7 @@ const HistoricoEscolar = () => {
         const { data } = await AbrangenciaServico.buscarTurmas(
           ue,
           modalidadeSelecionada,
-          '',
+          semestre,
           ano,
           considHistorico,
           true
@@ -244,36 +251,47 @@ const HistoricoEscolar = () => {
           if (lista && lista.length && lista.length === 1) {
             setTurmaId(lista[0].valor);
           }
+
+          if (alunoLocalizadorSelecionado?.codigoTurma) {
+            setTurmaId(alunoLocalizadorSelecionado.codigoTurma);
+          }
         }
         setCarregandoTurmas(false);
       }
     },
-    []
+    [alunoLocalizadorSelecionado, semestre]
   );
 
   const [carregandoSemestres, setCarregandoSemestres] = useState(false);
 
-  const obterSemestres = async (
-    modalidadeSelecionada,
-    anoLetivoSelecionado
-  ) => {
-    setCarregandoSemestres(true);
-    const retorno = await api.get(
-      `v1/abrangencias/${consideraHistorico}/semestres?anoLetivo=${anoLetivoSelecionado}&modalidade=${modalidadeSelecionada ||
-        0}`
-    );
-    if (retorno && retorno.data) {
-      const lista = retorno.data.map(periodo => {
-        return { desc: periodo, valor: periodo };
-      });
+  const obterSemestres = useCallback(
+    async (modalidadeSelecionada, anoLetivoSelecionado) => {
+      setCarregandoSemestres(true);
+      const retorno = await api.get(
+        `v1/abrangencias/${consideraHistorico}/semestres?anoLetivo=${anoLetivoSelecionado}&modalidade=${modalidadeSelecionada ||
+          0}`
+      );
+      if (retorno && retorno.data) {
+        const lista = retorno.data.map(periodo => {
+          return { desc: periodo, valor: periodo };
+        });
 
-      if (lista && lista.length && lista.length === 1) {
-        setSemestre(lista[0].valor);
+        if (lista && lista.length && lista.length === 1) {
+          setSemestre(lista[0].valor?.toString());
+        }
+        setListaSemestre(lista);
+
+        if (
+          Number(modalidadeSelecionada) === modalidade.EJA &&
+          alunoLocalizadorSelecionado?.semestre
+        ) {
+          setSemestre(alunoLocalizadorSelecionado?.semestre?.toString());
+        }
       }
-      setListaSemestre(lista);
-    }
-    setCarregandoSemestres(false);
-  };
+      setCarregandoSemestres(false);
+    },
+    [alunoLocalizadorSelecionado, consideraHistorico]
+  );
 
   useEffect(() => {
     if (anoLetivo && ueId) {
@@ -282,6 +300,7 @@ const HistoricoEscolar = () => {
       setModalidadeId();
       setListaModalidades([]);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [anoLetivo, ueId]);
 
   useEffect(() => {
@@ -302,7 +321,7 @@ const HistoricoEscolar = () => {
       setListaTurmas([]);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [modalidadeId, ueId, anoLetivo, obterTurmas]);
+  }, [modalidadeId, ueId, anoLetivo, semestre]);
 
   useEffect(() => {
     if (modalidadeId && anoLetivo) {
@@ -317,7 +336,7 @@ const HistoricoEscolar = () => {
       setListaSemestre([]);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [modalidadeId, anoLetivo, obterTurmas]);
+  }, [modalidadeId, anoLetivo]);
 
   useEffect(() => {
     let desabilitar = true;
@@ -499,13 +518,21 @@ const HistoricoEscolar = () => {
   const onChangeLocalizadorEstudante = aluno => {
     if (aluno?.alunoCodigo && aluno?.alunoNome) {
       setAlunoLocalizadorSelecionado(aluno);
-      obterModalidades(ueId, anoLetivo);
-      setTurmaId(aluno.turmaId);
+      if (aluno?.codigoTurma) {
+        setTurmaId(aluno?.codigoTurma);
+      }
+      if (
+        Number(aluno?.modalidadeCodigo) === modalidade.EJA &&
+        aluno?.semestre
+      ) {
+        setSemestre(aluno?.semestre?.toString());
+      }
+      if (aluno?.modalidadeCodigo) {
+        setModalidadeId(aluno?.modalidadeCodigo?.toString());
+      }
       vaidaDesabilitarBtnGerar(false);
     } else {
       setAlunoLocalizadorSelecionado();
-      if (listaModalidades && listaModalidades.length === 1)
-        setModalidadeId(String(listaModalidades[0].valor));
     }
     setModoEdicao(true);
   };
@@ -617,7 +644,7 @@ const HistoricoEscolar = () => {
                   label="Modalidade"
                   lista={listaModalidades}
                   valueOption="valor"
-                  valueText="desc"
+                  valueText="descricao"
                   disabled={
                     !ueId ||
                     alunoLocalizadorSelecionado?.length ||
@@ -641,7 +668,8 @@ const HistoricoEscolar = () => {
                     disabled={
                       !modalidadeId ||
                       (listaSemestre && listaSemestre.length === 1) ||
-                      String(modalidadeId) === String(modalidade.FUNDAMENTAL)
+                      String(modalidadeId) === String(modalidade.FUNDAMENTAL) ||
+                      alunoLocalizadorSelecionado?.semestre
                     }
                     valueSelect={semestre}
                     onChange={onChangeSemestre}
