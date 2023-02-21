@@ -45,11 +45,12 @@ class ServicoAcompanhamentoFrequencia {
     componenteCurricularId,
     alunoCodigo,
     bimestre,
+    semestre,
     numeroPagina,
     numeroRegistros
   ) => {
     const url = `${urlPadrao}/turma/${turmaId}/componente-curricular/${componenteCurricularId ||
-      0}/aluno/${alunoCodigo}/bimestre/${bimestre}?numeroPagina=${numeroPagina ||
+      0}/aluno/${alunoCodigo}/bimestre/${bimestre}/semestre/${semestre}?numeroPagina=${numeroPagina ||
       1}&numeroRegistros=${numeroRegistros}`;
     return api.get(url);
   };
