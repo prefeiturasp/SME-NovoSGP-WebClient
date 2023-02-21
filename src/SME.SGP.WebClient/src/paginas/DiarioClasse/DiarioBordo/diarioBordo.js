@@ -160,14 +160,14 @@ const DiarioBordo = ({ match }) => {
     if (!turmaInfantil) {
       resetarTela(refForm);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [turmaSelecionada, modalidadesFiltroPrincipal, turmaInfantil]);
 
   useEffect(() => {
     setListaDatasAulas();
     setDiasParaHabilitar();
     resetarTela(refForm);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [turmaSelecionada.turma]);
 
   const obterComponentesCurriculares = useCallback(async () => {
@@ -202,7 +202,7 @@ const DiarioBordo = ({ match }) => {
       setCodDisciplinaPai(undefined);
       resetarTela();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [turmaId, obterComponentesCurriculares, turmaInfantil]);
 
   const obterDadosObservacoes = async diarioBordoIdSel => {
@@ -298,7 +298,7 @@ const DiarioBordo = ({ match }) => {
         setDiasParaHabilitar();
       }
     },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
     [turmaId]
   );
 
@@ -454,7 +454,7 @@ const DiarioBordo = ({ match }) => {
         resetarTela(form);
       }
     },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
     [obterAulasDataSelecionada]
   );
 

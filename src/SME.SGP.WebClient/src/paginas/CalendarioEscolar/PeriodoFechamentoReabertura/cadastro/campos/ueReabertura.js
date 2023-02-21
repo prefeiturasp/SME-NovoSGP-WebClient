@@ -66,7 +66,7 @@ const UeReabertura = ({ form, onChangeCampos }) => {
       form.setFieldValue(nomeCampo, undefined);
       setListaUes([]);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [dreCodigo, calendarioSelecionado, paramsRota]);
 
   useEffect(() => {
@@ -79,7 +79,7 @@ const UeReabertura = ({ form, onChangeCampos }) => {
       form.setFieldValue(nomeCampo, undefined);
       setListaUes([]);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [dreCodigo, calendarioSelecionado, obterUes]);
 
   useEffect(() => {
@@ -87,7 +87,7 @@ const UeReabertura = ({ form, onChangeCampos }) => {
       form.setFieldValue(nomeCampo, undefined);
       setListaUes([]);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [calendarioSelecionado]);
 
   return (

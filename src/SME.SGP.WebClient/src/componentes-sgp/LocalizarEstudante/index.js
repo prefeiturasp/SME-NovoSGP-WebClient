@@ -184,7 +184,7 @@ const LocalizarEstudante = props => {
       setListaUes([]);
       store.dispatch(setUe());
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [codigoDre]);
 
   useEffect(() => {
@@ -194,7 +194,7 @@ const LocalizarEstudante = props => {
       setListaTurmas([]);
       store.dispatch(setTurma());
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [codigoUe]);
 
   return (

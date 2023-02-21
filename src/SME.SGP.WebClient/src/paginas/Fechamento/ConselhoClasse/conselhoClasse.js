@@ -87,7 +87,7 @@ const ConselhoClasse = () => {
     ) {
       obterListaAlunos();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [turmaAtual, turmaSelecionada]);
 
   const verificarExibicaoMarcador = async codigoEOL => {

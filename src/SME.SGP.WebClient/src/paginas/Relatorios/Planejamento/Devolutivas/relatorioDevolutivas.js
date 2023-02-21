@@ -538,7 +538,6 @@ const RelatorioDevolutivas = () => {
       setComponenteCurricular();
       setListaComponenteCurriculares([]);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [turmaId]);
 
   return (

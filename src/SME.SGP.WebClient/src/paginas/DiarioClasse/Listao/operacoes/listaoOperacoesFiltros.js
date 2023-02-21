@@ -65,7 +65,7 @@ const ListaoOperacoesFiltros = () => {
       setPermissaoLista();
       dispatch(setSomenteConsulta(false));
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [permissoesTela, turma, setSomenteConsultaListao, dispatch]);
 
   useEffect(() => {
@@ -73,7 +73,7 @@ const ListaoOperacoesFiltros = () => {
       setComponenteCurricular();
       setBimestreOperacoes();
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, []);
 
   const obterComponentesCurriculares = useCallback(async () => {
@@ -92,7 +92,7 @@ const ListaoOperacoesFiltros = () => {
       setListaComponenteCurricular([]);
       setComponenteCurricular();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [turma]);
 
   useEffect(() => {
@@ -107,7 +107,7 @@ const ListaoOperacoesFiltros = () => {
       limparTelaListao();
       dispatch(setLimparModoEdicaoGeral());
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [turma, obterComponentesCurriculares]);
 
   useEffect(() => {
@@ -123,7 +123,7 @@ const ListaoOperacoesFiltros = () => {
     } else {
       setPeriodoAbertoListao(true);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [bimestreOperacoes, listaBimestresOperacoe]);
 
   const obterBimestresAbertoFechado = useCallback(async () => {
@@ -167,7 +167,7 @@ const ListaoOperacoesFiltros = () => {
       setListaBimestresOperacoes([]);
       setBimestreOperacoes();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [turma, componenteCurricular, listaComponenteCurricular]);
 
   useEffect(() => {
@@ -180,7 +180,7 @@ const ListaoOperacoesFiltros = () => {
       setBimestreOperacoes(bimestreInicial);
       setBimestreInicial();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [
     bimestreInicial,
     listaBimestresOperacoe,
@@ -202,7 +202,7 @@ const ListaoOperacoesFiltros = () => {
       }
       setComponenteCurricularInicial();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [componenteCurricularInicial, listaComponenteCurricular]);
 
   const onChangeBimestre = async valor => {

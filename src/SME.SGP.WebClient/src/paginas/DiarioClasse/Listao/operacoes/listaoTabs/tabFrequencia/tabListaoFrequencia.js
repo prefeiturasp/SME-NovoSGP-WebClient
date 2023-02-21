@@ -43,7 +43,7 @@ const TabListaoFrequencia = () => {
       setListaTiposFrequencia([]);
       dispatch(setLimparModoEdicaoGeral(false));
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, []);
 
   const obterFrequenciasPorPeriodo = useCallback(async () => {
@@ -88,7 +88,7 @@ const TabListaoFrequencia = () => {
       limparFrequencia();
     }
     setExibirLoaderGeral(false);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [
     dispatch,
     periodoAbertoListao,
@@ -108,7 +108,7 @@ const TabListaoFrequencia = () => {
     ) {
       obterFrequenciasPorPeriodo();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [periodo]);
 
   return (

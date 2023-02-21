@@ -79,7 +79,7 @@ const FormCadastroComunicados = props => {
     if (refForm) {
       dispatch(setFormComunicados(() => obterForm()));
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [refForm]);
 
   const tratarValores = valores => {
@@ -142,7 +142,7 @@ const FormCadastroComunicados = props => {
       const valoresTratados = tratarValores(resposta.data);
       setInitialValues(valoresTratados);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [comunicadoId]);
 
   useEffect(() => {

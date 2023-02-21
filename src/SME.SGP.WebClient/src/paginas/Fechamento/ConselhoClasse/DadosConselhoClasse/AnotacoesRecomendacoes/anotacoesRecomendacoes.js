@@ -225,7 +225,7 @@ const AnotacoesRecomendacoes = props => {
     setExibir(false);
     setCarregando(false);
     setCarregandoAba(false);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [
     alunoCodigo,
     conselhoClasseId,

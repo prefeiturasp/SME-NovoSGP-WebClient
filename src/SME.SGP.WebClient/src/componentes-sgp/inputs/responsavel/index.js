@@ -45,7 +45,7 @@ export const Responsavel = React.memo(
       if (dreCodigo && ueCodigo) {
         obterResponsaveis();
       }
-      // eslint-disable-next-line react-hooks/exhaustive-deps
+
     }, [turmaCodigo, dreCodigo, ueCodigo]);
 
     return (

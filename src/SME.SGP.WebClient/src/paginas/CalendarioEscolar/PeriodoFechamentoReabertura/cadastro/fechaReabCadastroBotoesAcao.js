@@ -45,7 +45,7 @@ const FechaReabCadastroBotoesAcao = () => {
 
   useEffect(() => {
     setSomenteConsulta(verificaSomenteConsulta(permissoesTela));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [permissoesTela]);
 
   useEffect(() => {
@@ -53,7 +53,7 @@ const FechaReabCadastroBotoesAcao = () => {
       ? somenteConsulta || !permissoesTela.podeIncluir
       : somenteConsulta || !permissoesTela.podeAlterar;
     setDesabilitarCampos(desabilitar);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [somenteConsulta, novoRegistro, permissoesTela]);
 
   const perguntaAoSalvar = async () => {

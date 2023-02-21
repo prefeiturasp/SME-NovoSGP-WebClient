@@ -67,7 +67,7 @@ const ListaAlunos = props => {
 
     const dados = retorno?.data ? retorno?.data : [];
     setDadosBimestre(dados);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [turmaSelecionada, componenteCurricularId, bimestreSelecionado]);
 
   useEffect(() => {

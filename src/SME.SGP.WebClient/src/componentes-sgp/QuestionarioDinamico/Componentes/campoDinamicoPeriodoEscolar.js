@@ -69,7 +69,7 @@ const CampoDinamicoPeriodoEscolar = props => {
     } else {
       form.setFieldValue(String(questaoAtual.id), questaoAtual?.resposta[0]?.texto);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [turmaId, form, questaoAtual]);
 
   useEffect(() => {
@@ -81,7 +81,7 @@ const CampoDinamicoPeriodoEscolar = props => {
     } else {
       setLista([]);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [turmaId, obterBimestres, desabilitado]);
 
   return (

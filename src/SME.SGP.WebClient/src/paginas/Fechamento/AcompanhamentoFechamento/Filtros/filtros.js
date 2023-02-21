@@ -346,7 +346,7 @@ const Filtros = ({ onChangeFiltros, ehInfantil }) => {
       setSemestre();
       setListaSemestres([]);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [modalidadeId]);
 
   const onChangeTurma = valor => {

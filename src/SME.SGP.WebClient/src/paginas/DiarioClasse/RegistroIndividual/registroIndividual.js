@@ -93,7 +93,7 @@ const RegistroIndividual = () => {
       dispatch(setAlunosRegistroIndividual([]));
       resetarTela();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [componenteCurricularSelecionado]);
 
   useEffect(() => {

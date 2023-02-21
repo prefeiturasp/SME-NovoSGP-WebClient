@@ -144,7 +144,7 @@ const ListaOcorrencias = () => {
     if (anoLetivo) {
       obterDres();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [anoLetivo]);
 
   const obterUes = useCallback(async () => {
@@ -200,7 +200,7 @@ const ListaOcorrencias = () => {
     if (ue?.codigo) {
       obterModalidades();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [ue]);
 
   const obterSemestres = useCallback(async () => {

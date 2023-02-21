@@ -68,7 +68,7 @@ export const Ue = ({
     } else {
       limparDados();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [consideraHistorico, anoLetivo, dreCodigo]);
 
   useEffect(() => {
@@ -77,7 +77,7 @@ export const Ue = ({
     limparDados();
     if (dreCodigo) obterUes();
 
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [dreCodigo]);
 
   return (

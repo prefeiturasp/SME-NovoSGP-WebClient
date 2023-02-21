@@ -127,14 +127,14 @@ const RegistrosAnterioresConteudo = props => {
 
     setDataInicio(dataInicioSelecionada);
     dispatch(setDataInicioImpressaoRegistrosAnteriores(dataInicioSelecionada));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [dataFim, turmaSelecionada]);
 
   useEffect(() => {
     if (!dataInicio && dataFim && !periodoInicio && !periodoFim) {
       escolherData();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [dataInicio, dataFim, escolherData]);
 
   useEffect(() => {
@@ -177,7 +177,7 @@ const RegistrosAnterioresConteudo = props => {
       setDataFim(dataFimSelecionada);
       dispatch(setDataFimImpressaoRegistrosAnteriores(dataFimSelecionada));
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [periodoInicio, periodoFim]);
 
   const onChangePaginacao = async pagina => {

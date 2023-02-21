@@ -315,7 +315,7 @@ const AtribuicaoResponsaveisCadastro = () => {
 
       setCarregandoUes(false);
     },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
     [dreId, responsavel, obterListaUesAtribuidas]
   );
 
@@ -328,7 +328,7 @@ const AtribuicaoResponsaveisCadastro = () => {
       setTipoResponsavel();
       setResponsavel();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [dreId]);
 
   useEffect(() => {
@@ -339,7 +339,7 @@ const AtribuicaoResponsaveisCadastro = () => {
       setResponsavel();
       setUesAtribuidas([]);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [dreId, responsavel, obterListaUES]);
 
   useEffect(() => {

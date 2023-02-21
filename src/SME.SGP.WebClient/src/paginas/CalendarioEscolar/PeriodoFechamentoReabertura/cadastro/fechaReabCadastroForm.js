@@ -109,7 +109,7 @@ const FechaReabCadastroForm = () => {
       resetarTela();
       setExecutaResetarTela(false);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [executaResetarTela]);
 
   const obterBimestresConsultaPorId = dados => {
@@ -190,7 +190,7 @@ const FechaReabCadastroForm = () => {
     } else {
       resetarTela();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [paramsRota, listaTipoCalendarioEscolar]);
 
   useEffect(() => {
@@ -296,7 +296,7 @@ const FechaReabCadastroForm = () => {
     } else {
       setListaTipoCalendarioEscolar([]);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, []);
 
   useEffect(() => {

@@ -146,7 +146,7 @@ const AcompanhamentoFrequencia = () => {
       resetarFiltro();
       setDesabilitarComponenteCurricular(true);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [turmaSelecionada, modalidadesFiltroPrincipal]);
 
   const onChangeComponenteCurricular = async componenteCurricularId => {
@@ -171,7 +171,7 @@ const AcompanhamentoFrequencia = () => {
         setBimestres(listagemBimestres);
       }
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [componenteCurricularIdSelecionado]);
 
   return (

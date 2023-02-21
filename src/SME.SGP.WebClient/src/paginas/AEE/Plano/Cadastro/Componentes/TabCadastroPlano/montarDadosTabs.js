@@ -27,7 +27,7 @@ const MontarDadosTabs = props => {
     } else {
       dispatch(setTypePlanoAEECadastro(false));
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [planoAEEDados]);
 
   const dadosCollapseLocalizarEstudante = useSelector(

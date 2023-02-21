@@ -115,7 +115,7 @@ const SelectAutocomplete = ({
     } else {
       filtrar(value);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [value]);
 
   const campoComValidacoes = () => (

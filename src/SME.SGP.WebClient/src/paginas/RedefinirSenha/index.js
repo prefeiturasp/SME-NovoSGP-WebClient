@@ -111,7 +111,7 @@ const RedefinirSenha = props => {
     return () => {
       document.removeEventListener('keydown', trataAcaoTeclado);
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, []);
 
   useEffect(() => {

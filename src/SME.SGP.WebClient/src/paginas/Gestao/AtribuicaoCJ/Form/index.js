@@ -200,7 +200,7 @@ function AtribuicaoCJForm({ match, location }) {
       setConsideraHistorico(historico);
       setAnoLetivo(anoSelecionado);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [location, match.url]);
 
   useEffect(() => {
@@ -256,7 +256,7 @@ function AtribuicaoCJForm({ match, location }) {
     ) {
       buscaAtribs(valoresForm);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [refForm, valoresForm]);
 
   const limparCampos = () => {
@@ -289,7 +289,7 @@ function AtribuicaoCJForm({ match, location }) {
     const anosOrdenados = ordenarDescPor(anosLetivos, 'valor');
 
     setListaAnosLetivo(anosOrdenados);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [anoAtual, consideraHistorico]);
 
   useEffect(() => {

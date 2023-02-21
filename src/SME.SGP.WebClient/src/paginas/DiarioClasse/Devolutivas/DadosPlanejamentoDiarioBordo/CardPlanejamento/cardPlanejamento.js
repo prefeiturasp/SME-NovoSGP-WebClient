@@ -70,7 +70,7 @@ const CardPlanejamento = React.memo(() => {
       setTotalRegistrosSelecionado('4');
       setListaRegistrosPorPaginas(listaRegistros);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [dadosPlanejamentos, alterouCaixaSelecao]);
 
   return (

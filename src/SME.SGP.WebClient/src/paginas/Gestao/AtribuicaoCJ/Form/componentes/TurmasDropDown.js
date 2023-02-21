@@ -60,7 +60,7 @@ function TurmasDropDown({
       form.setFieldValue('turmaId', listaTurmas[0].valor);
       onChange(listaTurmas[0].valor);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [listaTurmas]);
 
   return (

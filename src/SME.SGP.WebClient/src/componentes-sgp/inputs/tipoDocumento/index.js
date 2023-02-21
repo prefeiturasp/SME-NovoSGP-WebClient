@@ -63,7 +63,7 @@ export const TipoDocumento = ({
       }
     }
     setExibirLoader(false);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [form, name]);
 
   useEffect(() => {
@@ -71,7 +71,7 @@ export const TipoDocumento = ({
 
     limparDados();
     obterTiposDocumento();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, []);
 
   const onChangeTipoDocumento = tipo => {

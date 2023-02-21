@@ -247,7 +247,7 @@ const DadosConselhoClasse = props => {
       );
       setTurmaAtual(turmaSelecionada.turma);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [codigoEOL, turmaSelecionada, turmaAtual]);
 
   const onChangeTab = async numeroBimestre => {

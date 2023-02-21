@@ -397,7 +397,7 @@ const AvaliacaoForm = ({ match, location }) => {
           setListaDisciplinasRegenciaSelecionadas([...listaDisciplinasReg]);
         });
       }
-      // eslint-disable-next-line react-hooks/exhaustive-deps
+
     },
     [mostrarDisciplinaRegencia]
   );
@@ -409,7 +409,7 @@ const AvaliacaoForm = ({ match, location }) => {
         atividadesRegencia
       );
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [
     montarListaDisciplinasRegenciaExibicao,
     atividadesRegencia,
@@ -448,7 +448,7 @@ const AvaliacaoForm = ({ match, location }) => {
       setTemRegencia(true);
       obterDisciplinasRegencia();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [listaDisciplinas, mostrarDisciplinaRegencia, match]);
 
   const [listaTiposAvaliacao, setListaTiposAvaliacao] = useState([]);
@@ -492,7 +492,7 @@ const AvaliacaoForm = ({ match, location }) => {
     } else {
       validaF5();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, []);
 
   const validaInterdisciplinar = categoriaSelecionada => {
@@ -537,7 +537,7 @@ const AvaliacaoForm = ({ match, location }) => {
       !ehTurmaInfantil(modalidadesFiltroPrincipal, turmaSelecionada)
     )
       obterAvaliacao();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [idAvaliacao]);
 
   useEffect(() => {

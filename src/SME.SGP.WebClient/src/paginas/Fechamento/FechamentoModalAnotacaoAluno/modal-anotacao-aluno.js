@@ -88,7 +88,7 @@ const ModalAnotacaoAluno = props => {
     if (dadosAlunoSelecionado) {
       obterAnotacaoAluno(dadosAlunoSelecionado);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [dadosAlunoSelecionado]);
 
   const validaAntesDoSubmit = form => {

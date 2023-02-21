@@ -54,7 +54,7 @@ const DreOcorrencia = props => {
       form.setFieldValue(nomeCampo, undefined);
       setListaDres([]);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [anoLetivo]);
 
   useEffect(() => {
@@ -66,7 +66,7 @@ const DreOcorrencia = props => {
       form.setFieldValue(nomeCampo, undefined);
       setListaDres([]);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [anoLetivo, ocorrenciaId]);
 
   return (

@@ -77,14 +77,14 @@ const ListaoFiltros = () => {
     }
     setListaAnosLetivo([]);
     setAnoLetivo();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [consideraHistorico]);
 
   useEffect(() => {
     if (carregarFiltrosSalvos) return;
 
     obterAnosLetivos();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [obterAnosLetivos]);
 
   const obterDres = useCallback(async () => {
@@ -108,7 +108,7 @@ const ListaoFiltros = () => {
       setCodigoDre();
       setListaDres([]);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [anoLetivo, consideraHistorico]);
 
   useEffect(() => {
@@ -117,7 +117,7 @@ const ListaoFiltros = () => {
     if (anoLetivo) {
       obterDres();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [anoLetivo]);
 
   const obterUes = useCallback(async () => {
@@ -143,7 +143,7 @@ const ListaoFiltros = () => {
       setCodigoUe();
       setListaUes([]);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [codigoDre, anoLetivo, consideraHistorico]);
 
   useEffect(() => {
@@ -152,7 +152,7 @@ const ListaoFiltros = () => {
     if (codigoDre) {
       obterUes();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [codigoDre, obterUes]);
 
   const obterModalidades = useCallback(async () => {
@@ -173,7 +173,7 @@ const ListaoFiltros = () => {
       }
       setListaModalidades(lista);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [anoLetivo, codigoUe, consideraHistorico]);
 
   useEffect(() => {
@@ -182,7 +182,7 @@ const ListaoFiltros = () => {
     if (codigoUe) {
       obterModalidades();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [codigoUe, obterModalidades]);
 
   const obterSemestres = useCallback(async () => {
@@ -209,7 +209,7 @@ const ListaoFiltros = () => {
     } else {
       setListaSemestres([]);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [anoLetivo, modalidade, consideraHistorico, codigoDre, codigoUe]);
 
   useEffect(() => {
@@ -218,7 +218,7 @@ const ListaoFiltros = () => {
     if (modalidade && String(modalidade) === String(ModalidadeDTO.EJA)) {
       obterSemestres();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [obterSemestres, modalidade]);
 
   const obterTurmas = useCallback(async () => {
@@ -245,7 +245,7 @@ const ListaoFiltros = () => {
         setCodigoTurma([String(lista[0].codigo)]);
       }
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [anoLetivo, consideraHistorico, codigoUe, modalidade]);
 
   useEffect(() => {
@@ -254,7 +254,7 @@ const ListaoFiltros = () => {
     if (modalidade) {
       obterTurmas();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [modalidade, obterTurmas]);
 
   const obterBimestres = useCallback(() => {
@@ -271,7 +271,7 @@ const ListaoFiltros = () => {
     }
 
     setListaBimestres(bi);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [modalidade]);
 
   useEffect(() => {
@@ -280,7 +280,7 @@ const ListaoFiltros = () => {
     if (modalidade) {
       obterBimestres();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [modalidade, obterBimestres]);
 
   const onCheckedConsideraHistorico = e => {

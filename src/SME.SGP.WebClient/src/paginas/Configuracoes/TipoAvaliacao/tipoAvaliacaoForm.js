@@ -200,7 +200,7 @@ const TipoAvaliacaoForm = ({ match }) => {
       setBreadcrumbManual(match.url, 'Atribuição', RotasDto.TIPO_AVALIACAO);
       buscarPorId(match.params.id);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, []);
 
   return (

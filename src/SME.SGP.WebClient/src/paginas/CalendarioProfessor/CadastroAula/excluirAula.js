@@ -53,7 +53,7 @@ function ExcluirAula({
     } else {
       setOpcoesExcluirRecorrencia(listRecorrenciaInicial);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [visivel]);
 
   return (

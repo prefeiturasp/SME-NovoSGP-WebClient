@@ -66,7 +66,7 @@ const TipoEventosLista = () => {
 
   useEffect(() => {
     verificaSomenteConsulta(permissoesTela);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, []);
 
   const clicouBotaoNovo = () => {

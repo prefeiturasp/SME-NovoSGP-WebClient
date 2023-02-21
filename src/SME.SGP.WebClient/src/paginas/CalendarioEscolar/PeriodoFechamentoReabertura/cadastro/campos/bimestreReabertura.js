@@ -56,7 +56,7 @@ const BimestreReabertura = ({ form, onChangeCampos }) => {
     } else {
       setListaBimestres([]);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [calendarioSelecionado]);
 
   const onChangeBimestre = novosValores => {

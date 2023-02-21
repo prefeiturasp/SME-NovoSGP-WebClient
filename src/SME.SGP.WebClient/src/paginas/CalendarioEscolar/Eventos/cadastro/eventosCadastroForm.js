@@ -129,7 +129,7 @@ const EventosCadastroForm = () => {
       return;
     }
     setDesabilitarCampos(desabilitar);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [
     somenteConsulta,
     eventoId,
@@ -264,7 +264,7 @@ const EventosCadastroForm = () => {
       resetarTela();
       setExecutaResetarTela(false);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [executaResetarTela]);
 
   const onChangeUe = () => {
@@ -301,7 +301,7 @@ const EventosCadastroForm = () => {
     if (recorrencia) {
       onCloseRecorrencia();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [recorrencia]);
 
   const onClickCopiarEvento = async () => {
@@ -640,7 +640,7 @@ const EventosCadastroForm = () => {
     if (eventoId) {
       consultaPorId(eventoId, lista);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [eventoId]);
 
   useEffect(() => {

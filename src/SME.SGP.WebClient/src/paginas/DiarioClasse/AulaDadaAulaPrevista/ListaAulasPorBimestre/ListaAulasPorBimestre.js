@@ -24,7 +24,7 @@ const ListaAulasPorBimestre = props => {
   useEffect(() => {
     setBimestres([...dados.bimestres]);
     setTotalPrevistas(dados.totalPrevistas);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [dados.bimestres]);
 
   const formatarData = data => {

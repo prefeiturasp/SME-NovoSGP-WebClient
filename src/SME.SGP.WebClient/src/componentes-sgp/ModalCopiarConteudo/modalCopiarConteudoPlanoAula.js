@@ -81,7 +81,7 @@ const ModalCopiarConteudoPlanoAula = props => {
       }
     }
     buscaTurmas();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [filtro.unidadeEscolar, filtro.modalidade, filtro.ano]);
 
   const adicionarTurma = () => {

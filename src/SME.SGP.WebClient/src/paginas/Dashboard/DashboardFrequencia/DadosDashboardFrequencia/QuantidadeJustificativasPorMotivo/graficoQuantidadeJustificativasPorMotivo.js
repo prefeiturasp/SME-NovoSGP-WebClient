@@ -133,7 +133,7 @@ const GraficoQuantidadeJustificativasPorMotivo = props => {
       setTurmaId();
       setListaTurmas([]);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [modalidade]);
 
   const onChangeTurma = valor => setTurmaId(valor);

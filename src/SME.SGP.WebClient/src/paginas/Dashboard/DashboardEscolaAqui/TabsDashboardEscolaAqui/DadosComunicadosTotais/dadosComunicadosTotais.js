@@ -67,7 +67,7 @@ const DadosComunicadosTotais = props => {
     } else {
       setDadosGraficoTotalComunicadosEnviados([]);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [codigoDre, codigoUe, anoLetivo]);
 
   const mapearParaDtoGraficoTotalComunicadosPorDRE = useCallback(dados => {
@@ -98,7 +98,7 @@ const DadosComunicadosTotais = props => {
     } else {
       setDadosTotalComunicadosPorDRE([]);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, []);
 
   const obterComunicadosTotaisAgrupadosPorDre = useCallback(async () => {

@@ -45,7 +45,7 @@ const EventosCadastroBotoesAcao = () => {
 
   useEffect(() => {
     setSomenteConsulta(verificaSomenteConsulta(permissoesTela));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [permissoesTela]);
 
   const urlTelaListagemEventos = () => {

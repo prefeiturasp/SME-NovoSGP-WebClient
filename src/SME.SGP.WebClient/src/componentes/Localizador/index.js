@@ -161,7 +161,7 @@ function Localizador({
         });
       }
     },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
     [anoLetivo, buscarOutrosCargos, mensagemErroConsultaRF, dreId, ueId]
   );
 
@@ -201,7 +201,7 @@ function Localizador({
         usuarioId: '',
       });
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [rfEdicao]);
 
   useEffect(() => {
@@ -212,7 +212,7 @@ function Localizador({
         ...pessoaSelecionada,
       });
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [pessoaSelecionada]);
 
   useEffect(() => {
@@ -222,14 +222,14 @@ function Localizador({
         setPessoaSelecionada(form.initialValues);
       }
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [form?.initialValues]);
 
   useEffect(() => {
     if (dreId && ueId && validacaoDesabilitaPerfilProfessor()) {
       onBuscarPorRF({ rf: usuarioRf });
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [dreId, ueId, ehPerfilProfessor, usuarioRf, onBuscarPorRF]);
 
   useEffect(() => {
@@ -248,7 +248,7 @@ function Localizador({
         setDataSource([]);
       }
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [form?.values]);
 
   useEffect(() => {

@@ -82,7 +82,7 @@ export const Turma = ({
     } else {
       limparDados();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [ueCodigo, modalidade, anoLetivo, consideraHistorico, semestre]);
 
   useEffect(() => {
@@ -91,7 +91,7 @@ export const Turma = ({
     limparDados();
     if (modalidade) obterTurmas();
 
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [modalidade, semestre]);
 
   const desabilitar =

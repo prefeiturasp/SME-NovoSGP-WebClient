@@ -103,7 +103,7 @@ const ListaObjetivos = React.memo(props => {
           dispatch(setExibirLoaderPlanoAnual(false));
         });
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [
     dispatch,
     tabAtualComponenteCurricular,

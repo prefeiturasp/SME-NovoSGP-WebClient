@@ -52,7 +52,7 @@ export default function AtribuicaoSupervisorLista() {
       setListaDres([]);
       setDresSelecionadas();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [tipoResponsavel]);
 
   useEffect(() => {
@@ -63,7 +63,7 @@ export default function AtribuicaoSupervisorLista() {
     if (permissoesTela) {
       verificaSomenteConsulta(permissoesTela);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, []);
 
   const columns = [
@@ -209,7 +209,7 @@ export default function AtribuicaoSupervisorLista() {
         uesSemSupervisorCheck
       );
     },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
     [tipoResponsavel, uesSemSupervisorCheck]
   );
 
@@ -286,7 +286,7 @@ export default function AtribuicaoSupervisorLista() {
         carregarUes(dre);
       }
     },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
     [tipoResponsavel, uesSemSupervisorCheck]
   );
 
@@ -307,7 +307,7 @@ export default function AtribuicaoSupervisorLista() {
         );
       }
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [uesSemSupervisorCheck, tipoResponsavel]);
 
   async function onChangeSupervisores(sup) {
@@ -377,7 +377,7 @@ export default function AtribuicaoSupervisorLista() {
     } else {
       setListaTipoResponsavel([]);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [
     dresSelecionadas,
     ueSelecionada,

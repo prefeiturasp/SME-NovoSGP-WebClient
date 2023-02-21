@@ -64,7 +64,7 @@ export const Semestre = ({
     } else {
       limparDados();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [consideraHistorico, anoLetivo, modalidade, dreCodigo, ueCodigo]);
 
   useEffect(() => {
@@ -73,7 +73,7 @@ export const Semestre = ({
     limparDados();
     if (modalidade && ehEJA) obterSemestres();
 
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [ehEJA, modalidade]);
 
   const desabilitar =

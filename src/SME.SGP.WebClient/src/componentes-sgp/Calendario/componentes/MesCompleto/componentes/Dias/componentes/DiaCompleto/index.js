@@ -72,7 +72,7 @@ function DiaCompleto({
         `${RotasDTO.CADASTRO_DE_AULA}/novo/${tipoCalendarioId}/${dadosDia.dados.somenteAulaReposicao}?diaAula=${diaSelecionado}`
       );
     },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
     [tipoCalendarioId]
   );
 
@@ -97,14 +97,14 @@ function DiaCompleto({
         state: { rotaOrigem: location?.pathname },
       });
     },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
     []
   );
 
   const onClickAula = useCallback(item => {
     if (item.ehAula)
       history.push(`${RotasDTO.CADASTRO_DE_AULA}/editar/${item.aulaId}/${dadosDia.dados.somenteAulaReposicao}`);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, []);
 
   const obterDescricoesPendencias = pendencias => {

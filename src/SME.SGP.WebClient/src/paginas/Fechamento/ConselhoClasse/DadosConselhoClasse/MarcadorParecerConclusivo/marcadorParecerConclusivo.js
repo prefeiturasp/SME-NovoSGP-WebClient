@@ -79,7 +79,7 @@ const MarcadorParecerConclusivo = () => {
       alunoCodigo;
 
     setExibirIconeSincronizar(exibir);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [bimestreAtual]);
 
   return (

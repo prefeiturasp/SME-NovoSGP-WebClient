@@ -52,7 +52,7 @@ const TipoCalendarioEscolarLista = () => {
   useEffect(() => {
     onFiltrar();
     setSomenteConsulta(verificaSomenteConsulta(permissoesTela));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, []);
 
   const onSelectRow = ids => {

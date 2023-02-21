@@ -46,7 +46,7 @@ const ImagemEstudanteObjectCard = props => {
     if (codigoEOL) {
       obterFoto();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [codigoEOL]);
 
   const onClickAlterarImagem = () => {

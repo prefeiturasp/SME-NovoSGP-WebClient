@@ -32,7 +32,7 @@ function AnoLetivoDropDown({ form, onChange, consideraHistorico }) {
       form.setFieldValue('anoLetivo', '', false);
       onChange(String(''));
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [listaAnosLetivo]);
 
   return (

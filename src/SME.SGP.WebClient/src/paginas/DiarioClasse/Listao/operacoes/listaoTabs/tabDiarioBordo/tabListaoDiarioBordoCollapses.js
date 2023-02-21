@@ -59,7 +59,7 @@ const TabListaoDiarioBordoCollapses = () => {
         setDadosIniciaisDiarioBordo
       );
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [periodo, componenteCurricularDiarioBordo]);
 
   const perguntarSalvarObservacao = async () => {

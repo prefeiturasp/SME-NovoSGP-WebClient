@@ -178,7 +178,7 @@ const Filtros = ({
 
   useEffect(() => {
     validarValorPadraoAnoLetivo(listaAnosLetivo);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [consideraHistorico, listaAnosLetivo]);
 
   const obterAnosLetivos = useCallback(async () => {
@@ -198,7 +198,7 @@ const Filtros = ({
 
     setListaAnosLetivo(anosOrdenados);
     setCarregandoAnosLetivos(false);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [anoAtual, consideraHistorico]);
 
   useEffect(() => {
@@ -240,7 +240,7 @@ const Filtros = ({
       setDreCodigo(undefined);
       setListaDres([]);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [anoLetivo, consideraHistorico]);
 
   useEffect(() => {
@@ -287,7 +287,7 @@ const Filtros = ({
       }
       setListaUes([]);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [dreCodigo, anoLetivo, consideraHistorico]);
 
   useEffect(() => {
@@ -392,7 +392,7 @@ const Filtros = ({
     }
     setSemestre();
     setListaSemestres([]);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [obterAnosLetivos, modalidadeId, anoLetivo, dreCodigo, ueCodigo]);
 
   const onChangeTurma = valor => {
@@ -450,7 +450,7 @@ const Filtros = ({
         setListaTurmas([]);
       }
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [ueCodigo, dreCodigo, consideraHistorico, anoLetivo, modalidadeId]);
 
   useEffect(() => {
@@ -488,7 +488,7 @@ const Filtros = ({
       setQuantidadeBoletimPorPagina('');
       setOpcaoEstudanteId();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [cancelou]);
 
   useEffect(() => {
@@ -500,7 +500,7 @@ const Filtros = ({
       setFiltrou(false);
       setImprimirEstudantesInativos(true);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [opcaoEstudanteId]);
 
   const obterMensagemQtdBoletionsPagina = () => {

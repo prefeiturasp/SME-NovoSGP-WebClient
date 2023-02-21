@@ -25,7 +25,7 @@ const FormularioSenha = () => {
 
   useEffect(() => {
     setSomenteConsulta(verificaSomenteConsulta(permissoesTela));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, []);
 
   const fecharModal = form => {

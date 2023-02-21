@@ -44,7 +44,7 @@ const ModalConfirmacao = () => {
     if (!confirmacao.visivel && loadingCliqueOk) {
       setLoadingCliqueOk(false);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [confirmacao.visivel]);
 
   return (

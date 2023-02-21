@@ -210,7 +210,7 @@ const ListasNotasConceitos = props => {
     } else {
       setExibir(false);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [
     alunoCodigo,
     conselhoClasseId,

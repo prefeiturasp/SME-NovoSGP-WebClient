@@ -48,7 +48,7 @@ const DreComunicados = ({
       form.setFieldValue(nomeCampo, undefined);
       setListaDres([]);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [anoLetivo]);
 
   useEffect(() => {
@@ -58,7 +58,7 @@ const DreComunicados = ({
       form.setFieldValue(nomeCampo, undefined);
       setListaDres([]);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [anoLetivo, obterDres]);
 
   return (

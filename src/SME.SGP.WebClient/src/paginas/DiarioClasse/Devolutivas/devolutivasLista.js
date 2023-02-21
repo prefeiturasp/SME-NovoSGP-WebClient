@@ -79,7 +79,7 @@ const DevolutivasLista = () => {
       verificaSomenteConsulta(permissoesTela, naoSetarSomenteConsultaNoStore)
     );
     obterPeriodoLetivoTurma();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [turmaSelecionada, permissoesTela, modalidadesFiltroPrincipal]);
 
   const colunas = [

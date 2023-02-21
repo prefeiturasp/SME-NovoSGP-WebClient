@@ -344,12 +344,12 @@ const RelatorioLeitura = () => {
       }
       setCarregandoTurma(false);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [modalidadeId]);
 
   const filterTurmasAnoSelecionado = useCallback(() => {
     const turmas = listaTurmasOriginal.filter(a => a.ano === anosEscolares);
-    
+
     if (turmas?.length > 1) {
       turmas.unshift({ valor: OPCAO_TODOS, desc: 'Todas', nomeFiltro: 'Todas' });
     }
@@ -362,7 +362,7 @@ const RelatorioLeitura = () => {
     } else {
       setListaTurmas(listaTurmasOriginal);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [anosEscolares, listaTurmasOriginal]);
 
   useEffect(() => {
@@ -373,7 +373,7 @@ const RelatorioLeitura = () => {
       setListaTurmas([]);
       setListaTurmasOriginal([]);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [modalidadeId]);
 
   const obterAnosLetivos = useCallback(async () => {
@@ -483,7 +483,7 @@ const RelatorioLeitura = () => {
       setAnosEscolares();
       setListaAnosEscolares([]);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [modalidadeId]);
 
   const cancelar = async () => {

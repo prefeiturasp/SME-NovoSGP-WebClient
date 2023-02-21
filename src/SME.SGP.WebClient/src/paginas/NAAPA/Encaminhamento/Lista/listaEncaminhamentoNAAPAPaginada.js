@@ -88,7 +88,7 @@ const ListaEncaminhamentoNAAPAPaginada = props => {
     if (dataFimMaiorInicio) {
       setFiltros({ ...params });
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [
     consideraHistorico,
     anoLetivo,

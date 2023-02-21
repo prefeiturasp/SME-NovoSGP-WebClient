@@ -63,7 +63,7 @@ const ModalidadeSemestreOcorrencia = props => {
       form.setFieldValue('modalidade', undefined);
       setListaModalidades([]);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [anoLetivo, ueCodigo]);
 
   useEffect(() => {
@@ -75,7 +75,7 @@ const ModalidadeSemestreOcorrencia = props => {
       form.setFieldValue('modalidade', undefined);
       setListaModalidades([]);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [ueCodigo]);
 
   const obterSemestres = useCallback(async () => {
@@ -96,7 +96,7 @@ const ModalidadeSemestreOcorrencia = props => {
       setListaSemestres([]);
       form.setFieldValue('semestre', undefined);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [anoLetivo, modalidade, dreCodigo, ueCodigo]);
 
   useEffect(() => {
@@ -105,7 +105,7 @@ const ModalidadeSemestreOcorrencia = props => {
     if (modalidade && ehEJA) {
       obterSemestres();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [ehEJA, modalidade]);
 
   return (

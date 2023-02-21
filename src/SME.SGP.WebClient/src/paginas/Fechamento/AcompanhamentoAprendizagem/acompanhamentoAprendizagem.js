@@ -206,7 +206,7 @@ const AcompanhamentoAprendizagem = () => {
         }
       }
     },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
     [anoLetivo, dispatch, turma, resetarInfomacoes]
   );
 

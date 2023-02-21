@@ -142,7 +142,7 @@ const DevolutivasForm = ({ match }) => {
         : soConsulta || !permissoesTela.podeIncluir;
     setDesabilitarCampos(desabilitar);
     obterPeriodoLetivoTurma();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [
     idDevolutiva,
     permissoesTela,
@@ -253,7 +253,7 @@ const DevolutivasForm = ({ match }) => {
       }
       setValoresIniciais(valores);
     },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
     [obterSugestaoDataInicio]
   );
 
@@ -339,7 +339,7 @@ const DevolutivasForm = ({ match }) => {
       }
       setValoresIniciais(inicial);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [
     codigoComponenteCurricular,
     listaComponenteCurriculare,

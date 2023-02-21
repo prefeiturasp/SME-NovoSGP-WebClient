@@ -46,7 +46,7 @@ const TurmaOcorrencia = props => {
     } else {
       setListaTurmas([]);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [anoLetivo, ueCodigo, modalidade]);
 
   useEffect(() => {
@@ -57,7 +57,7 @@ const TurmaOcorrencia = props => {
     } else {
       setListaTurmas([]);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [modalidade]);
 
   const disabled =

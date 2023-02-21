@@ -127,7 +127,7 @@ const FechamentoFinal = forwardRef((props, ref) => {
         erros(e);
         carregandoFechamentoFinal(false);
       });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [disciplinaCodigo, ehRegencia, turmaCodigo]);
 
   useImperativeHandle(ref, () => ({
@@ -145,7 +145,7 @@ const FechamentoFinal = forwardRef((props, ref) => {
     } else {
       resetarTela();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [bimestreCorrente, disciplinaCodigo]);
 
   const setDisciplinaAtiva = disciplina => {
@@ -231,8 +231,6 @@ const FechamentoFinal = forwardRef((props, ref) => {
               {!ehSintese && ehRegencia && (
                 <div className="lista-disciplinas">
                   {disciplinasRegencia.map(disciplina => (
-                    /* eslint-disable jsx-a11y/no-static-element-interactions */
-                    /* eslint-disable jsx-a11y/click-events-have-key-events */
                     <span
                       key={shortid.generate()}
                       className={`btn-disciplina ${

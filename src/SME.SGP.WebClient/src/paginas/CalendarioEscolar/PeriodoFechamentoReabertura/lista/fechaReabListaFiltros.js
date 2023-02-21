@@ -84,7 +84,7 @@ const FechaReabListaFiltros = () => {
       setCodigoDre();
       setListaDres([]);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [usuario]);
 
   useEffect(() => {
@@ -98,7 +98,7 @@ const FechaReabListaFiltros = () => {
       setCodigoDre(OPCAO_TODOS);
     }
 
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [listaDres, usuario]);
 
   useEffect(() => {
@@ -116,7 +116,7 @@ const FechaReabListaFiltros = () => {
     } else {
       setCodigoDre();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [obterDres, calendarioSelecionado, listaDres]);
 
   const onChangeDre = codigo => {
@@ -172,7 +172,7 @@ const FechaReabListaFiltros = () => {
       setCodigoUe();
       setListaUes([]);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [codigoDre, calendarioSelecionado, usuario]);
 
   useEffect(() => {
@@ -182,7 +182,7 @@ const FechaReabListaFiltros = () => {
       setListaUes([]);
       setCodigoUe();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [codigoDre, calendarioSelecionado, obterUes]);
 
   const onChangeUe = codigo => {

@@ -241,7 +241,7 @@ export default function PlanoCiclo() {
       }
     }
     setCarregando(false);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [turmaSelecionada, turmasUsuario]);
 
   useEffect(() => {
@@ -259,7 +259,7 @@ export default function PlanoCiclo() {
     }
 
     if (!Object.entries(turmaSelecionada).length) setCicloSelecionado();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [turmaSelecionada, ehModalidadeInfantil]);
 
   function addRemoverMatriz(event, matrizSelecionada) {

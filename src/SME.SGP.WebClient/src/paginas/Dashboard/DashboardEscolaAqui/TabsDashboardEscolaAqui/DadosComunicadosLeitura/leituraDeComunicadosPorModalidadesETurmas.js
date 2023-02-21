@@ -102,7 +102,7 @@ const LeituraDeComunicadosPorModalidadesETurmas = props => {
         obterDadosDeLeituraDeComunicadosPorModalidadesETurmas(dadosComunicado);
       }
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [
     modoVisualizacao,
     comunicado,

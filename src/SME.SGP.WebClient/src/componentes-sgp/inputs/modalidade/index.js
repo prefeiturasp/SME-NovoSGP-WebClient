@@ -62,7 +62,7 @@ export const Modalidade = ({
     } else {
       limparDados();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [consideraHistorico, anoLetivo, ueCodigo]);
 
   useEffect(() => {
@@ -70,7 +70,7 @@ export const Modalidade = ({
 
     limparDados();
     if (ueCodigo) obterModalidades();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [ueCodigo]);
 
   return (

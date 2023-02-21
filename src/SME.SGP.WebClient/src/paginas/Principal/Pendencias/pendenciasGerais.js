@@ -108,7 +108,7 @@ const PendenciasGerais = () => {
     obterTipoPendenciaGrupo();
     setTipoPendenciaGrupo();
     setListaTipoPendenciaGrupos([]);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, []);
 
   const onChangeTurma = valor => setCodigoTurma(valor);

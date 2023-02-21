@@ -80,7 +80,7 @@ const LeituraDeComunicadosAgrupadosPorDre = props => {
         obterDadosDeLeituraDeComunicadosAgrupadosPorDre(dadosComunicado);
       }
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [comunicado, modoVisualizacao, listaComunicado]);
 
   return (

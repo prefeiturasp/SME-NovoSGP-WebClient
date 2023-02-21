@@ -97,7 +97,7 @@ const LeituraDeComunicadosPorTurmas = props => {
         );
       }
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [comunicado, modoVisualizacao, listaComunicado, dispatch]);
 
   return dadosDeLeituraDeComunicadosPorTurmas.length ? (

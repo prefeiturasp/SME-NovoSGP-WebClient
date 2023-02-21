@@ -235,7 +235,7 @@ const PendenciasFechamentoLista = ({ match }) => {
     } else {
       resetarFiltro();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [turmaSelecionada, modalidadesFiltroPrincipal]);
 
   useEffect(() => {

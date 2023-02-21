@@ -46,7 +46,7 @@ const ListaHistoricoAtendimentosPaginada = ({
     };
 
     setFiltros({ ...params });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [atualizarTabela]);
 
   useEffect(() => {

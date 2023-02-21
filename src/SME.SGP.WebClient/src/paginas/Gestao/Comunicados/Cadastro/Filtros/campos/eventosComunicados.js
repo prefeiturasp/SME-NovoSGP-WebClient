@@ -44,7 +44,7 @@ const EventosComunicados = ({ form, onChangeCampos, desabilitar }) => {
       setListaEventos([]);
       form.setFieldValue(nomeCampo, undefined);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [anoLetivo, codigoDre, codigoUe, modalidades, tipoCalendarioId]);
 
   useEffect(() => {
@@ -54,7 +54,7 @@ const EventosComunicados = ({ form, onChangeCampos, desabilitar }) => {
       setListaEventos([]);
       form.setFieldValue(nomeCampo, undefined);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [tipoCalendarioId, codigoUe, modalidades, obterEventos]);
 
   return (

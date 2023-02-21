@@ -87,7 +87,7 @@ const ListaOcorrenciasPaginada = props => {
       titulo,
     };
     setFiltros({ ...params });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [
     consideraHistorico,
     anoLetivo,

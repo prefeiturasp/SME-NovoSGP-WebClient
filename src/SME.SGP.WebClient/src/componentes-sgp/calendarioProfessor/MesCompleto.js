@@ -112,7 +112,7 @@ const MesCompleto = props => {
         } else setTipoEventosDiaLista([]);
       }
     },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
     [filtros]
   );
 

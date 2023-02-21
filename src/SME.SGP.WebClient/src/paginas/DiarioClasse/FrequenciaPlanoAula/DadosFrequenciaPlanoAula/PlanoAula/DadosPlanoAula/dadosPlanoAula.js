@@ -58,7 +58,7 @@ const DadosPlanoAula = props => {
     }
 
     dispatch(setDesabilitarCamposPlanoAula(desabilitar));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [permissoesTela, somenteConsulta, dadosPlanoAula, dispatch]);
 
   useEffect(() => {

@@ -64,7 +64,7 @@ const AusenciasEstudante = props => {
         setAusencias([]);
       }
     },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
     [bimestre, semestre, turmaId, componenteCurricularId, codigoAluno]
   );
 

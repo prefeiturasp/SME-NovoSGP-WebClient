@@ -110,7 +110,7 @@ const HistoricoEscolar = () => {
     setAlunosSelecionados([]);
     setEstudanteOpt('0');
     setCarregandoAnos(false);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [anoAtual, consideraHistorico]);
 
   useEffect(() => {
@@ -223,7 +223,7 @@ const HistoricoEscolar = () => {
       }
       setCarregandoDres(false);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [anoLetivo]);
 
   const [carregandoTurmas, setCarregandoTurmas] = useState(false);
@@ -300,7 +300,7 @@ const HistoricoEscolar = () => {
       setModalidadeId();
       setListaModalidades([]);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [anoLetivo, ueId]);
 
   useEffect(() => {
@@ -310,7 +310,7 @@ const HistoricoEscolar = () => {
       setUeId();
       setListaUes([]);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [dreId, anoLetivo, obterUes]);
 
   useEffect(() => {
@@ -320,7 +320,7 @@ const HistoricoEscolar = () => {
       setTurmaId();
       setListaTurmas([]);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [modalidadeId, ueId, anoLetivo, semestre]);
 
   useEffect(() => {
@@ -335,7 +335,7 @@ const HistoricoEscolar = () => {
       setSemestre();
       setListaSemestre([]);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [modalidadeId, anoLetivo]);
 
   useEffect(() => {

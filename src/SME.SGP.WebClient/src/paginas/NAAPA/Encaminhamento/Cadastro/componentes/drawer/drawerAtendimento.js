@@ -55,7 +55,7 @@ const DrawerAtendimento = ({
 
     dispatch(setExibirLoaderDrawerAtendimento(false));
 
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [questionarioId, atendimentoId]);
 
   const onClickSalvar = async () => {

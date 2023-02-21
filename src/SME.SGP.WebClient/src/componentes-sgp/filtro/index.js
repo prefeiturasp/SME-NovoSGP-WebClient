@@ -506,7 +506,7 @@ const Filtro = () => {
       setCarregandoTurmas(false);
       return listaTurmas;
     },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
     [
       anoLetivoSelecionado,
       consideraHistorico,
@@ -716,7 +716,7 @@ const Filtro = () => {
     obterAnosLetivos(true);
   }, [dispatch, limparCamposSelecionados, obterAnosLetivos]);
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+
   const recarregarFiltro = useCallback(async () => {
     if (usuarioStore && usuarioStore.ehProfessorCj) {
       if (
@@ -816,7 +816,7 @@ const Filtro = () => {
     ) {
       limparFiltro();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   });
 
   useEffect(() => {
@@ -824,7 +824,7 @@ const Filtro = () => {
       recarregarFiltro();
       dispatch(setTrocouPerfil(false));
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [trocouPerfil, recarregarFiltro]);
 
   const mostrarEsconderBusca = () => {
@@ -1112,7 +1112,7 @@ const Filtro = () => {
       setTextoAutocomplete(turmaUsuarioSelecionada.desc);
       setConsideraHistorico(!!turmaUsuarioSelecionada.consideraHistorico);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [
     alternarFocoBusca,
     turmaUsuarioSelecionada.anoLetivo,

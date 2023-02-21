@@ -236,7 +236,6 @@ const Perfil = props => {
         <table id={SGP_MENU_PERFIL_LISTA_PERFIS}>
           <tbody>
             {perfilStore.perfis.map(item => (
-              // eslint-disable-next-line jsx-a11y/no-access-key
               <Item
                 key={item.codigoPerfil}
                 onClick={onClickPerfil}

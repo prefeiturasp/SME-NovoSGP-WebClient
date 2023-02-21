@@ -58,7 +58,7 @@ export const Dre = ({
     } else {
       limparDados();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [anoLetivo, consideraHistorico]);
 
   useEffect(() => {
@@ -68,7 +68,7 @@ export const Dre = ({
 
     if (anoLetivo) obterDres();
 
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [anoLetivo]);
 
   return (

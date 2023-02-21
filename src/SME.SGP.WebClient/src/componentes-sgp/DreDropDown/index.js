@@ -45,7 +45,7 @@ function DreDropDown({
 
   useEffect(() => {
     if (temModalidade) buscarDres();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [url]);
 
   useEffect(() => {
@@ -53,14 +53,14 @@ function DreDropDown({
       form.setFieldValue('dreId', listaDres[0].valor);
       onChange(listaDres[0].valor, listaDres);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [listaDres]);
 
   useEffect(() => {
     if (!valorNuloOuVazio(form.values.dreId)) {
       onChange(form.values.dreId, listaDres);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [form.values.dreId, onChange]);
 
   return (

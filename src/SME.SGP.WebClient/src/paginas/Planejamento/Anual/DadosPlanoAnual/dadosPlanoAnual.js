@@ -93,7 +93,7 @@ const DadosPlanoAnual = () => {
     if (componenteCurricular && !exibirModalCopiarConteudo) {
       obterTurmasParaCopiarConteudo();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [exibirModalCopiarConteudo])
 
   /**
@@ -126,7 +126,7 @@ const DadosPlanoAnual = () => {
         }
       });
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [componenteCurricular]);
 
   return (

@@ -42,7 +42,7 @@ const TabListaoAvaliacoes = () => {
       limparDadosAvaliacao();
       setDadosPeriodosAvaliacao();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [turmaSelecionada]);
 
   useEffect(() => {
@@ -55,7 +55,7 @@ const TabListaoAvaliacoes = () => {
     ) {
       obterDadosPeriodos();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [componenteCurricular, turmaSelecionada, bimestreOperacoes]);
 
   const obterListaAlunosAvaliacao = useCallback(async () => {
@@ -68,7 +68,7 @@ const TabListaoAvaliacoes = () => {
       setDadosAvaliacao,
       setDadosIniciaisAvaliacao
     );
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [componenteCurricular, turmaSelecionada, dadosPeriodosAvaliacao]);
 
   useEffect(() => {
@@ -80,7 +80,7 @@ const TabListaoAvaliacoes = () => {
     ) {
       obterListaAlunosAvaliacao();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [dadosPeriodosAvaliacao]);
 
   useEffect(() => {
@@ -88,7 +88,7 @@ const TabListaoAvaliacoes = () => {
       limparDadosAvaliacao();
       setDadosPeriodosAvaliacao();
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, []);
 
   return (

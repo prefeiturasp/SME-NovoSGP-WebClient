@@ -141,7 +141,7 @@ const MesCompleto = props => {
       obterTipoEventosDia(mesSelecionado);
     }
     return () => setEstaAberto({ [mesSelecionado]: false });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [mesSelecionado, obterTipoEventosDia]);
 
   return mesSelecionado > 0 && estaAberto[mesSelecionado] ? (

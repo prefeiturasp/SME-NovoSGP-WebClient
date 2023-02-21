@@ -54,7 +54,7 @@ export const AnoLetivo = ({
     } else {
       limparDados();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [consideraHistorico]);
 
   useEffect(() => {
@@ -63,7 +63,7 @@ export const AnoLetivo = ({
     limparDados();
 
     obterAnosLetivos();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [obterAnosLetivos]);
 
   const desabilitar = listaAnosLetivos?.length === 1 || disabled;

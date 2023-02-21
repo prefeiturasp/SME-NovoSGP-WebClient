@@ -86,7 +86,7 @@ function RegistroPOAForm({ match }) {
       refForm.resetForm();
       setModoEdicao(false);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [turmaSelecionada, permissoesTela, modalidadesFiltroPrincipal]);
 
   const validacoes = () => {

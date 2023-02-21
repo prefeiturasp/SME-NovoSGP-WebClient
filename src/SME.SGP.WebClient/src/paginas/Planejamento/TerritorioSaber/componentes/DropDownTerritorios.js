@@ -52,7 +52,7 @@ function DropDownTerritorios({
       setListaTerritorios([]);
       onBuscarTerritorios(false);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [onChangeTerritorio, turmaSelecionada, modalidadesFiltroPrincipal]);
 
   useEffect(() => {

@@ -57,14 +57,14 @@ const DreReabertura = ({ form, onChangeCampos }) => {
       form.setFieldValue('dreCodigo', undefined);
       setListaDres([]);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [paramsRota, usuario.possuiPerfilSme]);
 
   useEffect(() => {
     if (!paramsRota?.id || (paramsRota?.id && dreCodigo)) {
       obterDres();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [obterDres, paramsRota]);
 
   return (

@@ -76,7 +76,7 @@ function TabelaRetratil({
         onChangeAlunoSelecionado(aluno);
       }
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [
     alunoSelecionado,
     alunos,
@@ -108,7 +108,7 @@ function TabelaRetratil({
         onChangeAlunoSelecionado(aluno);
       }
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [
     alunoSelecionado,
     alunos,

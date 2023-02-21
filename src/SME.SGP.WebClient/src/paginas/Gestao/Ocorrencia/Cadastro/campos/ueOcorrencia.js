@@ -54,7 +54,7 @@ const UeOcorrencia = props => {
       form.initialValues[nomeCampo] = undefined;
       setListaUes([]);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [anoLetivo, dreCodigo]);
 
   useEffect(() => {
@@ -66,7 +66,7 @@ const UeOcorrencia = props => {
       form.setFieldValue(nomeCampo, undefined);
       setListaUes([]);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [dreCodigo, ocorrenciaId]);
 
   return (

@@ -157,7 +157,7 @@ const CalendarioEscolar = () => {
       dreSelecionada,
       unidadeEscolarSelecionada,
     });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, []);
 
   useEffect(() => {
@@ -173,7 +173,7 @@ const CalendarioEscolar = () => {
       dreSelecionada,
       unidadeEscolarSelecionada,
     });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [tipoCalendarioSelecionado, unidadeEscolarSelecionada]);
 
   const aoClicarBotaoVoltar = () => {
@@ -188,7 +188,7 @@ const CalendarioEscolar = () => {
       unidadeEscolarSelecionada,
     });
     store.dispatch(zeraCalendario());
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [eventoSme]);
 
   useEffect(() => {
@@ -202,7 +202,7 @@ const CalendarioEscolar = () => {
     } else if (dres && eventoCalendarioEdicao && eventoCalendarioEdicao.dre) {
       setDreSelecionada(eventoCalendarioEdicao.dre);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [dres, carregandoMeses]);
 
   const unidadesEscolaresStore = useSelector(
@@ -286,7 +286,7 @@ const CalendarioEscolar = () => {
       setDreSelecionada(eventoCalendarioEdicao.dre);
       setUnidadeEscolarSelecionada(eventoCalendarioEdicao.unidadeEscolar);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [unidadesEscolares, carregandoMeses]);
 
   const aoSelecionarDre = dre => {
@@ -310,7 +310,7 @@ const CalendarioEscolar = () => {
       dreSelecionada,
       unidadeEscolarSelecionada,
     });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [dreSelecionada]);
 
   const aoSelecionarUnidadeEscolar = unidade => {

@@ -145,7 +145,7 @@ function CalendarioProfessor() {
       }
       buscarEventosDias();
     },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
     [
       tipoCalendarioId,
       turmaSelecionada.anoLetivo,

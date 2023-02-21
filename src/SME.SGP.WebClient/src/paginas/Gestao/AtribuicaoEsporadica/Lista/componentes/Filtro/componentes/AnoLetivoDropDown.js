@@ -15,7 +15,7 @@ function AnoLetivoDropDown({ form, name, onChange }) {
       form.setFieldValue(name, String(anosLetivos[0].valor), false);
       onChange(String(anosLetivos[0].valor));
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [anosLetivos]);
 
   return (

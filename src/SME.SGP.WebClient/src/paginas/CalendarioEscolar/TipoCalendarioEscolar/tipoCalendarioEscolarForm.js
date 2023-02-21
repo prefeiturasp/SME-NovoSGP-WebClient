@@ -97,7 +97,7 @@ const TipoCalendarioEscolarForm = ({ match }) => {
       ? somenteConsulta || !permissoesTela.podeIncluir
       : somenteConsulta || !permissoesTela.podeAlterar;
     setDesabilitarCampos(desabilitar);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [somenteConsulta, novoRegistro]);
 
   const [possuiEventos, setPossuiEventos] = useState(false);
@@ -152,7 +152,7 @@ const TipoCalendarioEscolarForm = ({ match }) => {
       setAnoLetivo(usuario.turmaSelecionada.anoLetivo);
     }
     setSomenteConsulta(verificaSomenteConsulta(permissoesTela));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, []);
 
   const resetarTela = form => {

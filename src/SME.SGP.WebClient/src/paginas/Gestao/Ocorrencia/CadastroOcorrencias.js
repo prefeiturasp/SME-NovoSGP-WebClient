@@ -164,7 +164,7 @@ const CadastroOcorrencias = () => {
       const valoresTratados = tratarValores(resposta.data);
       setInitialValues(valoresTratados);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [ocorrenciaId]);
 
   useEffect(() => {

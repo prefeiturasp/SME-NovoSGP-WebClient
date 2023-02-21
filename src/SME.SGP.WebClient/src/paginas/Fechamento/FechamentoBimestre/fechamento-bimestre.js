@@ -185,7 +185,7 @@ const FechamentoBismestre = () => {
     setListaDisciplinas([]);
     resetarTela();
     obterDisciplinas();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [turmaSelecionada, modalidadesFiltroPrincipal]);
 
   const setDadosBimestre = (bimestre, dados) => {

@@ -135,7 +135,7 @@ const DocPlanosTrabalhoListaPaginada = props => {
     } else {
       setFiltros({});
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [ueCodigo, tipoDocumentoId, classificacaoId, listaUes]);
 
   useEffect(() => {

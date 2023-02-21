@@ -47,7 +47,7 @@ const ModalidadeComunicados = ({ form, onChangeCampos, desabilitar }) => {
       form.setFieldValue(nomeCampo, []);
       dispatch(setListaModalidadesComunicados([]));
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [codigoUe]);
 
   useEffect(() => {
@@ -57,7 +57,7 @@ const ModalidadeComunicados = ({ form, onChangeCampos, desabilitar }) => {
       form.setFieldValue(nomeCampo, []);
       dispatch(setListaModalidadesComunicados([]));
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [codigoUe, obterModalidades]);
 
   useEffect(() => {

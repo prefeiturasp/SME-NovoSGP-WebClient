@@ -41,7 +41,7 @@ export const PAAIResponsavel = React.memo(
       form.setFieldValue(name, undefined);
 
       if (dreCodigo) obterResponsaveisPAAI();
-      // eslint-disable-next-line react-hooks/exhaustive-deps
+
     }, [dreCodigo]);
 
     return (

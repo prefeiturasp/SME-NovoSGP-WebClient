@@ -38,7 +38,7 @@ const EnvolvidosNaOcorrencia = props => {
       setListaAlunos([]);
       form.setFieldValue('codigosAlunos', []);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [turmaId]);
 
   useEffect(() => {
@@ -68,7 +68,7 @@ const EnvolvidosNaOcorrencia = props => {
       setListaServidores([]);
       form.setFieldValue('codigosServidores', []);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [ueCodigo]);
 
   return (

@@ -165,7 +165,6 @@ const CampoNota = props => {
         {idNotaPosConselho || idCamposNotasPosConselho ? (
           <CampoAlerta ehNota>
             {campoNotaPosConselho(false)}
-            {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events */}
             <div
               className="icone"
               onClick={

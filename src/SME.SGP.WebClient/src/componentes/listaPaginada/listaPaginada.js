@@ -149,7 +149,7 @@ const ListaPaginada = props => {
     if (filtroEhValido) {
       filtrar();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [filtroEhValido, paginaAtual]);
 
   useEffect(() => {
@@ -157,7 +157,7 @@ const ListaPaginada = props => {
     novaPagina.current = 1;
     setPaginaAtual(novaPagina);
     defineUrlBusca(novaPagina);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [filtro]);
 
   const executaPaginacao = pagina => {

@@ -156,7 +156,7 @@ const EncaminhamentoAEELista = () => {
 
   useEffect(() => {
     validarValorPadraoAnoLetivo(listaAnosLetivo);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [consideraHistorico, listaAnosLetivo]);
 
   const obterAnosLetivos = useCallback(async () => {
@@ -177,7 +177,7 @@ const EncaminhamentoAEELista = () => {
 
     setListaAnosLetivo(anosLetivos);
     setCarregandoAnos(false);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [anoAtual, consideraHistorico]);
 
   useEffect(() => {
@@ -268,7 +268,7 @@ const EncaminhamentoAEELista = () => {
         setListaUes([]);
       }
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [dre, anoLetivo, consideraHistorico]);
 
   useEffect(() => {
@@ -369,7 +369,7 @@ const EncaminhamentoAEELista = () => {
         setListaTurmas([]);
       }
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [anoLetivo, ue]);
 
   useEffect(() => {

@@ -85,7 +85,7 @@ const FiltroComponentesRegencia = props => {
     return () => {
       setComponentesRegenciaListao([]);
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [turmaSelecionada, componenteCurricular]);
 
   return exibirFiltro ? (

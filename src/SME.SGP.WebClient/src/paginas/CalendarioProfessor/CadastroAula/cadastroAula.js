@@ -364,7 +364,7 @@ function CadastroDeAula({ match, location }) {
         Number(aulaInicial.tipoAula) === 1
       );
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [id, turmaSelecionada.turma]);
 
   const salvar = async valoresForm => {
@@ -579,7 +579,7 @@ function CadastroDeAula({ match, location }) {
     if (turmaFiltro === turmaSelecionada.turma) {
       obterAula();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [obterAula, match.url]);
 
   useEffect(() => {
@@ -590,7 +590,7 @@ function CadastroDeAula({ match, location }) {
 
   useEffect(() => {
     if (turmaFiltro !== turmaSelecionada.turma) salvarAntesMudarTurma();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [turmaSelecionada]);
 
   return (

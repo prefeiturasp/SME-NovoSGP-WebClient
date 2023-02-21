@@ -185,7 +185,7 @@ const DashboardInformacoesEscolares = () => {
       setListaModalidades([]);
       setModalidade();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [ue, anoLetivo]);
 
   useEffect(() => {

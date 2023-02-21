@@ -33,12 +33,12 @@ export const SituacaoEncaminhamentoAEE = ({
       setListaSituacoes([]);
       form.setFieldValue(name, undefined);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [updateData]);
 
   useEffect(() => {
     obterSituacoes();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, []);
 
   return (

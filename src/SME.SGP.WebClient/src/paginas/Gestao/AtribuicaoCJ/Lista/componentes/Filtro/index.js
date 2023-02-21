@@ -68,7 +68,7 @@ function Filtro({ onFiltrar }) {
       exibirHistorico: consideraHistorico,
     });
 
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [anoAtual, consideraHistorico]);
 
   useEffect(() => {

@@ -76,7 +76,7 @@ const ListaFrequencia = props => {
 
     setDesabilitarCampos(desabilitar);
 
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [frequenciaId, permissoesTela, temPeriodoAberto, componenteCurricular]);
 
   const marcaPresencaFaltaTodasAulas = (aluno, tipo) => {

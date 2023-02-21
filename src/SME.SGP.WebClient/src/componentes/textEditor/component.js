@@ -46,7 +46,7 @@ const TextEditor = React.forwardRef((props, ref) => {
           onBlur(ref?.current.state.value);
       }
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, []);
 
   const onBlurQuill = (_, origem) => {

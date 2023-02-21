@@ -47,7 +47,7 @@ const SemestreComunicados = ({ form, onChangeCampos, desabilitar }) => {
       form.setFieldValue(nomeCampo, undefined);
       setListaSemestres([]);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [anoLetivo, codigoUe]);
 
   useEffect(() => {
@@ -59,7 +59,7 @@ const SemestreComunicados = ({ form, onChangeCampos, desabilitar }) => {
       form.setFieldValue(nomeCampo, undefined);
       setListaSemestres([]);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [modalidades, obterSemestres]);
 
   return (

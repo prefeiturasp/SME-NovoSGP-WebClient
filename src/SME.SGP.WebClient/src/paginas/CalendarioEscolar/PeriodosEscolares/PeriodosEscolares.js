@@ -147,7 +147,7 @@ const PeriodosEscolares = () => {
       periodos = Object.assign({}, validacaoPrimeiroBim, validacaoSegundoBim);
     }
     setValidacoes(Yup.object().shape(periodos));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [isTipoCalendarioAnual]);
 
   const consultarPeriodoPorId = async id => {
@@ -537,7 +537,7 @@ const PeriodosEscolares = () => {
     return () => {
       isSubscribed = false;
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [pesquisaTipoCalendario]);
 
   return (

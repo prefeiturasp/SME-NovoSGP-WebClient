@@ -188,12 +188,12 @@ const Notas = ({ match }) => {
     dispatch(setModoEdicaoGeral(false));
     dispatch(setModoEdicaoGeralNotaFinal(false));
     dispatch(setExpandirLinha([]));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [dispatch]);
 
   useEffect(() => {
     resetarTela();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [usuario.turmaSelecionada]);
 
   const obterListaConceitos = async periodoFim => {
@@ -253,7 +253,7 @@ const Notas = ({ match }) => {
         }
       });
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [usuario.turmaSelecionada]);
 
   const obterBimestres = useCallback(
@@ -284,7 +284,7 @@ const Notas = ({ match }) => {
       }
       return resultado;
     },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
     [
       usuario.turmaSelecionada.anoLetivo,
       usuario.turmaSelecionada.modalidade,
@@ -397,7 +397,7 @@ const Notas = ({ match }) => {
         resetarTela();
       }
     },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
     [obterBimestres, resetarTela]
   );
 
@@ -422,7 +422,7 @@ const Notas = ({ match }) => {
     if (match?.params?.disciplinaId && match?.params?.bimestre) {
       setDisciplinaSelecionada(String(match?.params.disciplinaId));
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [usuario.turmaSelecionada.turma]);
 
   const obterTituloTela = useCallback(async () => {
@@ -441,7 +441,7 @@ const Notas = ({ match }) => {
       return 'Lançamento de Notas';
     }
     return '';
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [usuario.turmaSelecionada.anoLetivo, usuario.turmaSelecionada.turma]);
 
   useEffect(() => {
@@ -464,7 +464,7 @@ const Notas = ({ match }) => {
       setDesabilitarDisciplina(false);
       resetarTela();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [obterDisciplinas, usuario.turmaSelecionada.turma]);
 
   useEffect(() => {
@@ -473,7 +473,7 @@ const Notas = ({ match }) => {
     } else {
       resetarTela();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [disciplinaSelecionada, usuario.turmaSelecionada]);
 
   const pergutarParaSalvar = () => {

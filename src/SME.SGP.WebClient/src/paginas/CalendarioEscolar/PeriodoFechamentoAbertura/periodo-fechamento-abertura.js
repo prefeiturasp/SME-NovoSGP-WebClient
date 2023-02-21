@@ -158,7 +158,7 @@ const PeriodoFechamentoAbertura = () => {
       periodos = Object.assign({}, validacaoPrimeiroBim, validacaoSegundoBim);
     }
     setValidacoes(Yup.object().shape(periodos));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [isTipoCalendarioAnual]);
 
   useEffect(() => {

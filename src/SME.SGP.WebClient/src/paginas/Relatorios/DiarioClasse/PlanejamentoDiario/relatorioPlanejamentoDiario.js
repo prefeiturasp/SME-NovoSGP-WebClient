@@ -227,7 +227,7 @@ const RelatorioPlanejamentoDiario = () => {
 
   useEffect(() => {
     validarValorPadraoAnoLetivo(listaAnosLetivo);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [consideraHistorico, listaAnosLetivo]);
 
   const obterUes = useCallback(async () => {
@@ -321,7 +321,7 @@ const RelatorioPlanejamentoDiario = () => {
 
   useEffect(() => {
     obterBimestres();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [modalidadeId, anoLetivo]);
 
   const checarPeriodoEhMaior = data => {
@@ -345,7 +345,7 @@ const RelatorioPlanejamentoDiario = () => {
 
   useEffect(() => {
     checarPeriodoFinalBimestre();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [bimestre]);
 
   const obterTurmas = useCallback(async () => {
@@ -381,7 +381,7 @@ const RelatorioPlanejamentoDiario = () => {
       }
       setExibirLoader(false);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [modalidadeId]);
 
   useEffect(() => {
@@ -391,7 +391,7 @@ const RelatorioPlanejamentoDiario = () => {
       setTurmaId();
       setListaTurmas([]);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [modalidadeId]);
 
   const obterComponentesCurriculares = useCallback(async () => {
@@ -466,7 +466,7 @@ const RelatorioPlanejamentoDiario = () => {
 
     setListaAnosLetivo(anosLetivos);
     setExibirLoader(false);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [anoAtual, consideraHistorico]);
 
   useEffect(() => {
@@ -503,7 +503,7 @@ const RelatorioPlanejamentoDiario = () => {
       setSemestre();
       setListaSemestres([]);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [obterAnosLetivos, modalidadeId, anoLetivo, consideraHistorico]);
 
   const cancelar = async () => {

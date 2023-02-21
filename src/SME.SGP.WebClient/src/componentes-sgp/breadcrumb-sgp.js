@@ -74,17 +74,17 @@ const BreadcrumbSgp = () => {
 
   useEffect(() => {
     carregaBreadcrumbs();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [itemRotaAtual]);
 
   useEffect(() => {
     carregaBreadcrumbs();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [NavegacaoStore.rotaAtiva]);
 
   useEffect(() => {
     carregaBreadcrumbs();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [UsuarioStrore.turmaSelecionada]);
 
   useEffect(

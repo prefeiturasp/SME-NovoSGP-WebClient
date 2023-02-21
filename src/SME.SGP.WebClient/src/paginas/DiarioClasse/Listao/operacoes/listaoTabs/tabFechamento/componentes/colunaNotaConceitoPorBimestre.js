@@ -54,7 +54,7 @@ const ColunaNotaConceitoPorBimestre = props => {
     } else {
       setValorExibir(notaBimestre?.notaConceito);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [
     notaTipo,
     bimestre,

@@ -63,7 +63,7 @@ export const ComponenteCurricular = ({
     limparDados();
     if (turmaCodigo) obterComponentesCurriculares();
 
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [turmaCodigo]);
 
   const setarNovoValor = newValue => {

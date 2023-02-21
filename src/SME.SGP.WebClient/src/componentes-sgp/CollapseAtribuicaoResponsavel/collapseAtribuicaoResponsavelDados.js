@@ -77,7 +77,7 @@ const CollapseAtribuicaoResponsavelDados = props => {
   useEffect(() => {
     if (codigoTurma && !responsavelInicialEdicao?.codigoRF)
       obterResponsaveisPAAI();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [codigoTurma, responsavelInicialEdicao, obterResponsaveisPAAI]);
 
   const onChange = rf => {

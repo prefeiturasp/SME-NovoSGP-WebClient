@@ -41,7 +41,7 @@ const RelatorioPlanoAEEForm = props => {
     if (form?.setFieldValue && situacaoIds?.length) {
       form.setFieldValue('exibirEncerrados', false);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [situacaoIds]);
 
   return (

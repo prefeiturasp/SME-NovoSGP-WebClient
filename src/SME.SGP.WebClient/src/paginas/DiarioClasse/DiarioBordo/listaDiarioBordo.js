@@ -75,7 +75,7 @@ const ListaDiarioBordo = () => {
 
     if (componentes?.data?.length) {
       setListaComponenteCurriculares(componentes.data);
-      
+
       if (componentes.data.length === 1) {
         const componente = componentes.data[0];
         setComponenteCurricularSelecionado(
@@ -93,7 +93,7 @@ const ListaDiarioBordo = () => {
       turmaSelecionada
     );
     verificaSomenteConsulta(permissoesTela, naoSetarSomenteConsultaNoStore);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [permissoesTela, turmaSelecionada]);
 
   const numeroRegistros = 10;
@@ -323,7 +323,7 @@ const ListaDiarioBordo = () => {
 
   useEffect(() => {
     if (dataFinal) validarSetarDataFinal(dataFinal);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [dataInicial]);
 
   return (

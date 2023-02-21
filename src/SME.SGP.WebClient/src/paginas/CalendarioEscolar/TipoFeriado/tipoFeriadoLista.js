@@ -64,7 +64,7 @@ const TipoFeriadoLista = () => {
 
   useEffect(() => {
     verificaSomenteConsulta(permissoesTela);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, []);
 
   const onFiltrar = async () => {
@@ -80,7 +80,7 @@ const TipoFeriadoLista = () => {
 
   useEffect(() => {
     onFiltrar();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [
     nomeTipoFeriado,
     dropdownAbrangenciaSelecionada,

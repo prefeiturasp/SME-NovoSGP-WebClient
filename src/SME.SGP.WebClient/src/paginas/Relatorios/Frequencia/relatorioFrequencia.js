@@ -351,7 +351,7 @@ const RelatorioFrequencia = () => {
       todosAnosEscolares = listaAnosEscolares.map(item => item.valor);
     }
     return todosAnosEscolares;
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [anosEscolares]);
 
   const escolherChamadaEndpointComponeteCurricular = useCallback(() => {

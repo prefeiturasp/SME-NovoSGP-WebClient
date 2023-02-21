@@ -130,7 +130,7 @@ export default function NotificacoesLista() {
     verificaSomenteConsulta(permissoesTela);
     setDesabilitarBotaoExcluir(permissoesTela.podeExcluir);
     carregarListas();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, []);
 
   const listaSelectTurma = [
@@ -218,7 +218,7 @@ export default function NotificacoesLista() {
       setTurmaSelecionada('');
     }
     onClickFiltrar();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [turmaSelecionada]);
 
   useEffect(() => {
@@ -228,7 +228,7 @@ export default function NotificacoesLista() {
       tipoSelecionado,
       tituloSelecionado
     );
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [
     statusSelecionado,
     dropdownTurmaSelecionada,

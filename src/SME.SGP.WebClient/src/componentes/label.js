@@ -74,13 +74,11 @@ const Label = ({
         </>
       ) : (
         <>
-          {/* eslint-disable-next-line jsx-a11y/label-has-for */}
           <label htmlFor={control} id={text} className={className}>
             {text}
             {observacaoText ? <span> {` ${observacaoText}`}</span> : ''}
           </label>
           {campoOpcional ? (
-            // eslint-disable-next-line jsx-a11y/label-has-associated-control, jsx-a11y/label-has-for
             <label htmlFor={control} id={text} className="campoOpcional">
               (opcional)
             </label>

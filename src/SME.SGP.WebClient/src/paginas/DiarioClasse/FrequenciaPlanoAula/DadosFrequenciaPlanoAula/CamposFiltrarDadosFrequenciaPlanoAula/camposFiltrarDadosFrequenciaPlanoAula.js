@@ -118,7 +118,7 @@ const CamposFiltrarDadosFrequenciaPlanoAula = () => {
       setDiasParaHabilitar();
       dispatch(setExibirLoaderFrequenciaPlanoAula(false));
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [codigoComponenteCurricular, componenteCurricular, dispatch]);
 
   const obterListaComponenteCurricular = useCallback(async () => {
@@ -164,14 +164,14 @@ const CamposFiltrarDadosFrequenciaPlanoAula = () => {
     if (codigoComponenteCurricular && turmaSelecionada?.turma) {
       obterDatasDeAulasDisponiveis();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [codigoComponenteCurricular]);
 
   useEffect(() => {
     if (atualizarDatas) {
       obterDatasDeAulasDisponiveis();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [atualizarDatas]);
 
   // Quando tem valor do componente curricular no redux vai setar o id no componente select!
@@ -365,7 +365,7 @@ const CamposFiltrarDadosFrequenciaPlanoAula = () => {
       });
       dispatch(salvarDadosAulaFrequencia());
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [
     dadosAulaFrequencia,
     listaComponenteCurricular,

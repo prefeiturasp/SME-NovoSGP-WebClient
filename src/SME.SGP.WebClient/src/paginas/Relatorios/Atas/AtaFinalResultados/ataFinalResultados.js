@@ -99,7 +99,7 @@ const AtaFinalResultados = () => {
         }
       }
     },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
     [ueId]
   );
 
@@ -145,7 +145,7 @@ const AtaFinalResultados = () => {
       }
       setCarregandoUes(false);
     },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
     [dreId, anoLetivo]
   );
 
@@ -192,7 +192,7 @@ const AtaFinalResultados = () => {
       }
       setCarregandoDres(false);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [anoLetivo]);
 
   const obterTurmas = useCallback(
@@ -229,7 +229,7 @@ const AtaFinalResultados = () => {
         }
       }
     },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
     [modalidadeId]
   );
 
@@ -260,7 +260,7 @@ const AtaFinalResultados = () => {
       setModalidadeId(undefined);
       setListaModalidades([]);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [ueId]);
 
   useEffect(() => {
@@ -293,7 +293,7 @@ const AtaFinalResultados = () => {
       setSemestre(undefined);
       setListaSemestre([]);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [modalidadeId, anoLetivo]);
 
   useEffect(() => {
@@ -387,7 +387,7 @@ const AtaFinalResultados = () => {
       !turmaId.length ||
       turmaExcecao;
     setDesabilitaVisualizacao(desabilita);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [turmaId, modalidadeId, listaTurmasCompletas]);
 
   const onClickVoltar = () => {

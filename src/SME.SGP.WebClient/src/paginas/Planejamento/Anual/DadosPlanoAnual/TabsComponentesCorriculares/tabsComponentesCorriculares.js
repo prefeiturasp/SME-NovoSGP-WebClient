@@ -92,7 +92,7 @@ const TabsComponentesCorriculares = props => {
         );
       }
     },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
     [
       dispatch,
       dadosBimestre,
@@ -153,7 +153,7 @@ const TabsComponentesCorriculares = props => {
       }
     }
     verificarComponentesComObjetivos();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [
     listaComponentesCurricularesPlanejamento,
     dadosBimestre,
