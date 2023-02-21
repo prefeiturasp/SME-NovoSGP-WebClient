@@ -12,6 +12,13 @@ export function salvarDadosLogin(Login) {
   };
 }
 
+export function salvarToken(token) {
+  return {
+    type: '@usuario/salvarToken',
+    payload: token,
+  };
+}
+
 export function salvarLoginRevalidado(Login) {
   return {
     type: '@usuario/salvarLoginRevalidado',
