@@ -6,7 +6,6 @@ import ReactGA from 'react-ga';
 import { PersistGate } from 'redux-persist/integration/react';
 import { obterTrackingID } from './servicos/variaveis';
 
-import './configuracao/ReactotronConfig';
 import history from './servicos/history';
 import GlobalStyle from './estilos/global';
 import { store, persistor } from './redux';
