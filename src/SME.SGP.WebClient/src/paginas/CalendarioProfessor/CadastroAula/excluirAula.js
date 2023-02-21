@@ -104,7 +104,7 @@ function ExcluirAula({
                     label="Realizar exclusão"
                     opcoes={opcoesExcluirRecorrencia}
                     name="tipoRecorrenciaExclusao"
-                    onChange={e => setRRecorrenciaSelecionada(e.target.value)}
+                    onChange={e => setRRecorrenciaSelecionada(e)}
                     desabilitado={false}
                   />
                 </div>

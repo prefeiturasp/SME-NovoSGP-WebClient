@@ -52,6 +52,7 @@ const AusenciasEstudante = props => {
         componenteCurricularId,
         codigoAluno,
         bimestre,
+        semestre,
         numeroPagina || 1,
         REGISTROS_POR_PAGINA
       )

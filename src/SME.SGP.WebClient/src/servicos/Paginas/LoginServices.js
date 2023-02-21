@@ -6,7 +6,11 @@ import {
   setTrocouPerfil,
 } from '~/redux/modulos/perfil/actions';
 import { limparDadosFiltro } from '~/redux/modulos/filtro/actions';
-import { Deslogar, removerTurma } from '~/redux/modulos/usuario/actions';
+import {
+  Deslogar,
+  removerTurma,
+  salvarToken,
+} from '~/redux/modulos/usuario/actions';
 
 class LoginService {
   autenticar = async (Login, acessoAdmin, deslogar) => {
@@ -19,9 +23,19 @@ class LoginService {
           senha: Login.senha,
         });
 
-    const validarAutenticar = () =>
+    const validarAutenticar = (limparDadosSuporte = false) =>
       endpoint
         .then(res => {
+          const token = res?.data?.token;
+          store.dispatch(salvarToken(token));
+
+          if (limparDadosSuporte) {
+            localStorage.clear();
+            store.dispatch(limparDadosFiltro());
+            store.dispatch(Deslogar());
+            store.dispatch(removerTurma());
+          }
+
           if (res.data && res.data.perfisUsuario) {
             const { perfis } = res.data.perfisUsuario;
             const selecionado = perfis.find(
@@ -55,19 +69,9 @@ class LoginService {
           };
         });
 
-    if (acessoAdmin || deslogar) {
-      localStorage.clear();
-      store.dispatch(limparDadosFiltro());
-      store.dispatch(Deslogar());
-      store.dispatch(removerTurma());
-      return new Promise(resolve => {
-        setTimeout(async () => {
-          resolve(validarAutenticar());
-        }, 300);
-      });
-    }
+    const limparDadosSuporte = acessoAdmin || deslogar;
 
-    return validarAutenticar();
+    return validarAutenticar(limparDadosSuporte);
   };
 
   obtenhaUrlAutenticacao = () => {
