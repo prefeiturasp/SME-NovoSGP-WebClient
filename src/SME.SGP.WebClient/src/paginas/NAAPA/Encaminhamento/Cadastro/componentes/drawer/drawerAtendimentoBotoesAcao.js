@@ -33,6 +33,10 @@ const DrawerAtendimentoBotoesAcao = ({
     store => store.encaminhamentoNAAPA.exibirLoaderDrawerAtendimento
   );
 
+  const desabilitarCamposEncaminhamentoNAAPA = useSelector(
+    store => store.encaminhamentoNAAPA.desabilitarCamposEncaminhamentoNAAPA
+  );
+
   const permissoesTela = usuario.permissoes[RotasDto.ENCAMINHAMENTO_NAAPA];
 
   const encaminhamentoNAAPAId = routeMatch.params?.id;
@@ -48,36 +52,40 @@ const DrawerAtendimentoBotoesAcao = ({
       : permissoesTela?.podeIncluir;
 
   const desabilitarCancelar =
+    desabilitarCamposEncaminhamentoNAAPA ||
     soConsulta ||
     !questionarioDinamicoEmEdicao ||
     exibirLoaderDrawerAtendimento;
 
   const desabilitarSalvar =
+    desabilitarCamposEncaminhamentoNAAPA ||
     !podeIncluir ||
     (atendimentoId > 0 && !questionarioDinamicoEmEdicao) ||
     exibirLoaderDrawerAtendimento;
 
   const onClickExcluir = async () => {
-    const confirmado = await confirmar(
-      'Excluir',
-      '',
-      'Deseja realmente excluir o atendimento?'
-    );
-    if (confirmado) {
-      dispatch(setExibirLoaderDrawerAtendimento(true));
+    if (!desabilitarCamposEncaminhamentoNAAPA) {
+      const confirmado = await confirmar(
+        'Excluir',
+        '',
+        'Deseja realmente excluir o atendimento?'
+      );
+      if (confirmado) {
+        dispatch(setExibirLoaderDrawerAtendimento(true));
 
-      const resultado = await ServicoNAAPA.excluirAtendimento(
-        encaminhamentoNAAPAId,
-        atendimentoId
-      ).catch(e => {
-        erros(e);
-      });
-      if (resultado?.status === 200) {
-        onCloseDrawer({ atualizarDados: true });
-        sucesso('Atendimento excluído com sucesso');
+        const resultado = await ServicoNAAPA.excluirAtendimento(
+          encaminhamentoNAAPAId,
+          atendimentoId
+        ).catch(e => {
+          erros(e);
+        });
+        if (resultado?.status === 200) {
+          onCloseDrawer({ atualizarDados: true });
+          sucesso('Atendimento excluído com sucesso');
+        }
+
+        dispatch(setExibirLoaderDrawerAtendimento(false));
       }
-
-      dispatch(setExibirLoaderDrawerAtendimento(false));
     }
   };
 
@@ -100,7 +108,10 @@ const DrawerAtendimentoBotoesAcao = ({
         <Col>
           <BotaoExcluirPadrao
             onClick={() => onClickExcluir()}
-            disabled={exibirLoaderDrawerAtendimento}
+            disabled={
+              exibirLoaderDrawerAtendimento ||
+              desabilitarCamposEncaminhamentoNAAPA
+            }
             id={SGP_BUTTON_EXCLUIR_ATENDIMENTO}
           />
         </Col>

@@ -84,6 +84,7 @@ function CadastroDeAula({ match, location }) {
   const [registroMigrado, setRegistroMigrado] = useState(false);
   const [emManutencao, setEmManutencao] = useState(false);
   const [desabilitarBtnSalvar, setDesabilitarBtnSalvar] = useState(false);
+  const [turmaFiltro] = useState(turmaSelecionada.turma);
 
   const { diaAula } = queryString.parse(location.search);
   const aulaInicial = {
@@ -144,9 +145,10 @@ function CadastroDeAula({ match, location }) {
     },
   ];
   const obterComponenteSelecionadoPorId = useCallback(
-    componenteCurricularId => {
-      return listaComponentes.find(
-        c => c.codigoComponenteCurricular === Number(componenteCurricularId)
+    componenteCurricularId => {      
+      return listaComponentes.find(        
+        c => c.codigoComponenteCurricular === Number(componenteCurricularId) ||
+             c.id === Number(componenteCurricularId)
       );
     },
     [listaComponentes]
@@ -252,7 +254,7 @@ function CadastroDeAula({ match, location }) {
         servicoCadastroAula
           .obterGradePorComponenteETurma(
             turmaSelecionada.turma,
-            componenteSelecionado.codigoComponenteCurricular,
+            componenteSelecionado.territorioSaber ? componenteSelecionado.id : componenteSelecionado.codigoComponenteCurricular,
             dataAula,
             id || 0,
             componenteSelecionado.regencia,
@@ -326,8 +328,15 @@ function CadastroDeAula({ match, location }) {
             const componenteSelecionado = componentes.find(
               c =>
                 String(c.codigoComponenteCurricular) ===
+                String(respostaAula.disciplinaId) ||
+                String(c.id) ===
                 String(respostaAula.disciplinaId)
             );
+            if (respostaAula.disciplinaId.length < String(componenteSelecionado.codigoComponenteCurricular).length){
+              componentes.forEach(c => c.codigoComponenteCurricular = c.id);
+              setListaComponentes(componentes);
+            }
+            
             if (componenteSelecionado) {
               carregarGrade(
                 componenteSelecionado,
@@ -446,7 +455,7 @@ function CadastroDeAula({ match, location }) {
 
   const onChangeTipoAula = e => {
     setModoEdicao(true);
-    const ehAulaNormal = e.target.value === 1;
+    const ehAulaNormal = e === 1;
     setControlaGrade(ehAulaNormal);
 
     let tipoRecorrencia = aula.recorrenciaAula;
@@ -456,11 +465,11 @@ function CadastroDeAula({ match, location }) {
       tipoRecorrencia = recorrencia.AULA_UNICA;
       setQuantidadeBloqueada(false);
     }
-    carregarGrade(componente, aula.dataAula, e.target.value, ehAulaNormal);
+    carregarGrade(componente, aula.dataAula, e, ehAulaNormal);
     setAula(aulaState => {
       return {
         ...aulaState,
-        tipoAula: e.target.value,
+        tipoAula: e,
         recorrenciaAula: tipoRecorrencia,
       };
     });
@@ -492,6 +501,25 @@ function CadastroDeAula({ match, location }) {
         })
         .catch(er => erros(er));
     }
+  };
+
+  const salvarAntesMudarTurma = async () => {
+    if (modoEdicao) {
+      const confirmou = await confirmar(
+        'Atenção',
+        '',
+        'Suas alterações não foram salvas, deseja salvar agora?'
+      );
+
+      if (confirmou) {
+        if (refForm.current) {
+          salvar(refForm.current?.state?.values);
+        }
+      }
+
+      navegarParaCalendarioProfessor();
+      setModoEdicao(false);
+    } else navegarParaCalendarioProfessor();
   };
 
   const onClickVoltar = async () => {
@@ -555,7 +583,11 @@ function CadastroDeAula({ match, location }) {
       'Cadastro de Aula',
       '/calendario-escolar/calendario-professor'
     );
-    obterAula();
+
+    if (turmaFiltro === turmaSelecionada.turma) {
+      obterAula();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [obterAula, match.url]);
 
   useEffect(() => {
@@ -563,6 +595,11 @@ function CadastroDeAula({ match, location }) {
       setSomenteLeitura(true);
     }
   }, [carregandoDados, aula.somenteLeitura]);
+
+  useEffect(() => {
+    if (turmaFiltro !== turmaSelecionada.turma) salvarAntesMudarTurma();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [turmaSelecionada]);
 
   return (
     <>
@@ -634,185 +671,184 @@ function CadastroDeAula({ match, location }) {
             }}
           />
         )}
-        <div>
-          <Formik
-            enableReinitialize
-            initialValues={aula}
-            validationSchema={Yup.object(validacoes)}
-            onSubmit={salvar}
-            validateOnChange
-            validateOnBlur
-            ref={refForm}
-          >
-            {form => (
-              <>
-                <Cabecalho
-                  pagina={`Cadastro de Aula - ${obterDataFormatada()} `}
-                >
-                  <Row gutter={[8, 8]} type="flex">
-                    <Col>
-                      <BotaoVoltarPadrao onClick={onClickVoltar} />
-                    </Col>
-                    <Col>
-                      <Button
-                        id={SGP_BUTTON_CANCELAR}
-                        label="Cancelar"
-                        color={Colors.Roxo}
-                        border
-                        onClick={onClickCancelar}
-                        disabled={somenteConsulta || !modoEdicao}
-                      />
-                    </Col>
-                    <Col>
-                      <BotaoExcluirPadrao
-                        onClick={onClickExcluir}
-                        disabled={
-                          somenteConsulta ||
+        <Formik
+          enableReinitialize
+          initialValues={aula}
+          validationSchema={Yup.object(validacoes)}
+          onSubmit={salvar}
+          validateOnChange
+          validateOnBlur
+          ref={refForm}
+        >
+          {form => (
+            <>
+              <Cabecalho pagina={`Cadastro de Aula - ${obterDataFormatada()} `}>
+                <Row gutter={[8, 8]} type="flex">
+                  <Col>
+                    <BotaoVoltarPadrao onClick={onClickVoltar} />
+                  </Col>
+                  <Col>
+                    <Button
+                      id={SGP_BUTTON_CANCELAR}
+                      label="Cancelar"
+                      color={Colors.Roxo}
+                      border
+                      onClick={onClickCancelar}
+                      disabled={somenteConsulta || !modoEdicao}
+                    />
+                  </Col>
+                  <Col>
+                    <BotaoExcluirPadrao
+                      onClick={onClickExcluir}
+                      disabled={
+                        somenteConsulta ||
+                        !id ||
+                        somenteLeitura ||
+                        !aula.podeEditar
+                      }
+                    />
+                  </Col>
+                  <Col>
+                    <Button
+                      id={SGP_BUTTON_ALTERAR_CADASTRAR}
+                      label={id ? 'Alterar' : 'Cadastrar'}
+                      color={Colors.Roxo}
+                      border
+                      bold
+                      onClick={() => {
+                        if (
                           !id ||
-                          somenteLeitura ||
-                          !aula.podeEditar
+                          (Number(aula.recorrenciaAula) ===
+                            recorrencia.AULA_UNICA &&
+                            !recorrenciaAulaEmEdicao.existeFrequenciaOuPlanoAula)
+                        ) {
+                          form.handleSubmit();
+                        } else {
+                          setExibirModalAlteracao(true);
                         }
+                      }}
+                      disabled={
+                        somenteConsulta ||
+                        (controlaGrade && gradeAtingida && !id) ||
+                        !aula.disciplinaId ||
+                        somenteLeitura ||
+                        desabilitarBtnSalvar ||
+                        (id && !modoEdicao) ||
+                        !aula.podeEditar
+                      }
+                    />
+                  </Col>
+                </Row>
+              </Cabecalho>
+
+              <Card padding="24px 24px">
+                <Form>
+                  <Row gutter={[16, 16]}>
+                    <ContainerColumnReverse>
+                      <Col span={6}>
+                        <CampoData
+                          placeholder="Data da aula"
+                          label="Data da aula"
+                          formatoData="DD/MM/YYYY"
+                          name="dataAula"
+                          id={SGP_DATA_AULA}
+                          form={form}
+                          onChange={onChangeDataAula}
+                          labelRequired
+                        />
+                      </Col>
+
+                      <Col span={18}>
+                        {registroMigrado && (
+                          <RegistroMigrado>Registro Migrado</RegistroMigrado>
+                        )}
+                      </Col>
+                    </ContainerColumnReverse>
+                  </Row>
+
+                  <Row gutter={[16, 16]}>
+                    <Col md={24} lg={6}>
+                      <RadioGroupButton
+                        id={SGP_RADIO_TIPO_AULA}
+                        label="Tipo de aula"
+                        opcoes={
+                          ehReposicao
+                            ? opcoesTipoAulaSomenteReposicao
+                            : opcoesTipoAula
+                        }
+                        name="tipoAula"
+                        form={form}
+                        onChange={onChangeTipoAula}
+                        desabilitado={!!id}
+                        labelRequired
                       />
                     </Col>
-                    <Col>
-                      <Button
-                        id={SGP_BUTTON_ALTERAR_CADASTRAR}
-                        label={id ? 'Alterar' : 'Cadastrar'}
-                        color={Colors.Roxo}
-                        border
-                        bold
-                        onClick={() => {
-                          if (
-                            !id ||
-                            (Number(aula.recorrenciaAula) ===
-                              recorrencia.AULA_UNICA &&
-                              !recorrenciaAulaEmEdicao.existeFrequenciaOuPlanoAula)
-                          ) {
-                            form.handleSubmit();
-                          } else {
-                            setExibirModalAlteracao(true);
-                          }
-                        }}
+
+                    <Col md={24} lg={18}>
+                      <SelectComponent
+                        id={SGP_SELECT_COMPONENTE_CURRICULAR}
+                        name="disciplinaId"
+                        lista={listaComponentes}
+                        label="Componente Curricular"
+                        valueOption="codigoComponenteCurricular"
+                        valueText="nome"
+                        placeholder="Selecione um componente curricular"
+                        form={form}
                         disabled={
-                          somenteConsulta ||
-                          (controlaGrade && gradeAtingida && !id) ||
-                          !aula.disciplinaId ||
-                          somenteLeitura ||
-                          desabilitarBtnSalvar ||
-                          (id && !modoEdicao) ||
-                          !aula.podeEditar
+                          !!(!!id && aula?.disciplinaId) ||
+                          (listaComponentes.length === 1 && !id)
                         }
+                        onChange={onChangeComponente}
+                        labelRequired
+                      />
+                    </Col>
+
+                    <Col sm={24} md={6}>
+                      <CampoNumeroFormik
+                        height="auto"
+                        label="Quantidade de aulas"
+                        id={SGP_INPUT_NUMBER_QUANTIDADE_AULAS}
+                        name="quantidade"
+                        form={form}
+                        min={1}
+                        onChange={onChangeQuantidadeAula}
+                        disabled={quantidadeBloqueada}
+                        labelRequired
+                      />
+                    </Col>
+
+                    <Col sm={24} md={18}>
+                      <RadioGroupButton
+                        id={SGP_RADIO_RECORRENCIA}
+                        label="Recorrência"
+                        opcoes={
+                          ehReposicao
+                            ? opcoesRecorrenciaSomenteReposicao
+                            : opcoesRecorrencia
+                        }
+                        name="recorrenciaAula"
+                        form={form}
+                        onChange={onChangeRecorrencia}
+                        desabilitado={aula.tipoAula === 2}
+                        labelRequired
                       />
                     </Col>
                   </Row>
-                </Cabecalho>
-                <Card>
-                  <Form className="col-md-12">
-                    <div className="row">
-                      <div className="col-md-12">
-                        <ContainerColumnReverse className="row">
-                          <div className="col-md-3 pb-2">
-                            <CampoData
-                              placeholder="Data da aula"
-                              label="Data da aula"
-                              formatoData="DD/MM/YYYY"
-                              name="dataAula"
-                              id={SGP_DATA_AULA}
-                              form={form}
-                              onChange={onChangeDataAula}
-                              labelRequired
-                            />
-                          </div>
-                          <div className="col-md-9 pt-2 pb-2 d-flex justify-content-end">
-                            {registroMigrado && (
-                              <RegistroMigrado>
-                                Registro Migrado
-                              </RegistroMigrado>
-                            )}
-                          </div>
-                        </ContainerColumnReverse>
-                      </div>
-                    </div>
-                    <div className="row">
-                      <div className="col-md-12 col-lg-3">
-                        <RadioGroupButton
-                          id={SGP_RADIO_TIPO_AULA}
-                          label="Tipo de aula"
-                          opcoes={
-                            ehReposicao
-                              ? opcoesTipoAulaSomenteReposicao
-                              : opcoesTipoAula
-                          }
-                          name="tipoAula"
-                          form={form}
-                          onChange={onChangeTipoAula}
-                          desabilitado={!!id}
-                          labelRequired
-                        />
-                      </div>
-                      <div className="col-md-12 col-lg-9">
-                        <SelectComponent
-                          id={SGP_SELECT_COMPONENTE_CURRICULAR}
-                          name="disciplinaId"
-                          lista={listaComponentes}
-                          label="Componente Curricular"
-                          valueOption="codigoComponenteCurricular"
-                          valueText="nome"
-                          placeholder="Selecione um componente curricular"
-                          form={form}
-                          disabled={
-                            !!(!!id && aula?.disciplinaId) ||
-                            (listaComponentes.length === 1 && !id)
-                          }
-                          onChange={onChangeComponente}
-                          labelRequired
-                        />
-                      </div>
-                    </div>
-                    <div className="row">
-                      <div className="col-xs-12 col-md-3 mb-3">
-                        <CampoNumeroFormik
-                          label="Quantidade de aulas"
-                          id={SGP_INPUT_NUMBER_QUANTIDADE_AULAS}
-                          name="quantidade"
-                          form={form}
-                          min={1}
-                          onChange={onChangeQuantidadeAula}
-                          disabled={quantidadeBloqueada}
-                          labelRequired
-                        />
-                      </div>
-                      <div className="col-xs-12 col-md-9 mb-4">
-                        <RadioGroupButton
-                          id={SGP_RADIO_RECORRENCIA}
-                          label="Recorrência"
-                          opcoes={
-                            ehReposicao
-                              ? opcoesRecorrenciaSomenteReposicao
-                              : opcoesRecorrencia
-                          }
-                          name="recorrenciaAula"
-                          form={form}
-                          onChange={onChangeRecorrencia}
-                          desabilitado={aula.tipoAula === 2}
-                          labelRequired
-                        />
-                      </div>
-                    </div>
-                  </Form>
-                  <Auditoria
-                    alteradoEm={aula.alteradoEm}
-                    alteradoPor={aula.alteradoPor}
-                    alteradoRf={aula.alteradoRF}
-                    criadoEm={aula.criadoEm}
-                    criadoPor={aula.criadoPor}
-                    criadoRf={aula.criadoRF}
-                  />
-                </Card>
-              </>
-            )}
-          </Formik>
-        </div>
+                </Form>
+
+                <Auditoria
+                  novaEstrutura
+                  alteradoEm={aula.alteradoEm}
+                  alteradoPor={aula.alteradoPor}
+                  alteradoRf={aula.alteradoRF}
+                  criadoEm={aula.criadoEm}
+                  criadoPor={aula.criadoPor}
+                  criadoRf={aula.criadoRF}
+                />
+              </Card>
+            </>
+          )}
+        </Formik>
       </Loader>
     </>
   );

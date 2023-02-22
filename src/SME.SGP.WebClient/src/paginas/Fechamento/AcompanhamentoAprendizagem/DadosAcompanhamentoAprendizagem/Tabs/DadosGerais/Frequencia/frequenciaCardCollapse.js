@@ -73,6 +73,7 @@ const FrequenciaCardCollapse = props => {
             turmaId={turmaSelecionada?.id}
             codigoAluno={codigoEOL}
             esconderBimestre={ehInfantil}
+            componenteCurricularId={componenteCurricularSelecionado}
           />
         ) : (
           ''

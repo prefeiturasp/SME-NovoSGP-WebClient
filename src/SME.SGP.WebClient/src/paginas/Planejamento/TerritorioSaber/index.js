@@ -93,7 +93,7 @@ function TerritorioSaber() {
   }, [territorioSelecionado, turmaSelecionada]);
 
   useEffect(() => {
-    if (habilitaCollapse) buscarPlanejamento();
+    if (habilitaCollapse && turmaSelecionada) buscarPlanejamento();
 
     if (Object.keys(turmaSelecionada).length === 0) {
       setTerritorioSelecionado('');
@@ -148,7 +148,25 @@ function TerritorioSaber() {
         setCarregando(false);
       }
 
-      salvar();
+      const bimestresPreenchidos = dados.bimestres.filter(
+        x => !!x.desenvolvimento || !!x.reflexao
+      );
+
+      const bimestresAlteradosSemTexto = dados.bimestres.filter(
+        x => x.id !== 0 && !x.desenvolvimento && !x.reflexao
+      );
+
+      if (bimestresAlteradosSemTexto.length) {
+        const bimestreNaoPreenchido = bimestresAlteradosSemTexto[0].bimestre;
+
+        erro(
+          `É necessário preencher pelo menos um campo do ${bimestreNaoPreenchido}° Bimestre.`
+        );
+      } else if (bimestresPreenchidos.length === 0) {
+        erro(`É necessário preencher pelo menos um dos campos.`);
+      } else {
+        salvar();
+      }
     },
     [
       dados.bimestres,
@@ -179,6 +197,7 @@ function TerritorioSaber() {
         setBimestreAberto(false);
         setDados({ bimestres: [] });
         buscarPlanejamento();
+        setModoEdicao(false);
       }
     }
   };

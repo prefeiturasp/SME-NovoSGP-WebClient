@@ -23,6 +23,7 @@ const CampoNumeroFormik = React.forwardRef((props, ref) => {
     disabled,
     onBlur,
     labelRequired,
+    height,
   } = props;
 
   const possuiErro = () => {
@@ -30,7 +31,7 @@ const CampoNumeroFormik = React.forwardRef((props, ref) => {
   };
 
   return (
-    <Campo>
+    <Campo height={height}>
       {label ? (
         <Label text={label} control={name || ''} isRequired={labelRequired} />
       ) : (
@@ -76,6 +77,7 @@ CampoNumeroFormik.propTypes = {
   onBlur: PropTypes.func,
   semMensagem: PropTypes.bool,
   labelRequired: PropTypes.bool,
+  height: PropTypes.string,
 };
 
 CampoNumeroFormik.defaultProps = {
@@ -83,6 +85,7 @@ CampoNumeroFormik.defaultProps = {
   onBlur: () => {},
   semMensagem: false,
   labelRequired: '',
+  height: null,
 };
 
 export default CampoNumeroFormik;

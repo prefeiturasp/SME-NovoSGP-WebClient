@@ -8,7 +8,7 @@ import NavbarNotificacoes from '../IconeNotificacoes/navbar-notificacoes';
 import { Nav, Botao, Botoes, Logo, Icone, Texto, Div } from './navbar.css';
 
 import Perfil from '../perfil';
-import { Deslogar } from '~/redux/modulos/usuario/actions';
+import { Deslogar, removerTurma } from '~/redux/modulos/usuario/actions';
 import history from '~/servicos/history';
 import { URL_LOGIN, URL_HOME } from '~/constantes/url';
 import { limparDadosFiltro } from '~/redux/modulos/filtro/actions';
@@ -35,6 +35,7 @@ const Navbar = () => {
     const pararAcao = await validarAcaoTela();
     if (pararAcao) return;
 
+    store.dispatch(removerTurma());
     store.dispatch(limparDadosFiltro());
     store.dispatch(Deslogar());
     store.dispatch(LimparSessao());

@@ -223,7 +223,14 @@ const CalendarioEscolar = () => {
     const modalidade = ServicoCalendarios.converterModalidade(
       calendario?.modalidade
     );
-    AbrangenciaServico.buscarUes(dre, '', false, modalidade,consideraHistorico)
+    AbrangenciaServico.buscarUes(
+      dre,
+      '',
+      false,
+      modalidade,
+      false,
+      new Date().getFullYear()
+    )
       .then(resposta => {
         if (resposta.data) {
           const lista = [];
@@ -389,7 +396,7 @@ const CalendarioEscolar = () => {
       <Card>
         <Grid cols={12}>
           <Div className="row">
-          <div className="col-sm-12 mb-4">
+            <div className="col-sm-12 mb-4">
               <CheckboxComponent
                 id={SGP_CHECKBOX_EXIBIR_HISTORICO}
                 label="Exibir histórico?"

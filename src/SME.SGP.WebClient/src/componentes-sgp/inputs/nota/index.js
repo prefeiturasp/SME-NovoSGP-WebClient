@@ -86,6 +86,7 @@ const Nota = props => {
 
   const setarValorExibicao = async valorNovo => {
     if (!desabilitar) {
+      onChangeNotaConceito(valorNovo);
       setNotaValorAtualExibicao(valorNovo);
       onChangeValorAtualExibicao(valorNovo);
     }
@@ -190,19 +191,19 @@ const Nota = props => {
 };
 
 Nota.propTypes = {
-  dadosNota: PropTypes.oneOf([PropTypes.any]),
-  id: PropTypes.oneOf([PropTypes.any]),
+  dadosNota: PropTypes.oneOfType([PropTypes.any]),
+  id: PropTypes.oneOfType([PropTypes.any]),
   desabilitar: PropTypes.bool,
   onChangeNotaConceito: PropTypes.func,
   onChangeValorAtualExibicao: PropTypes.func,
   ehFechamento: PropTypes.bool,
   mediaAprovacaoBimestre: PropTypes.number,
-  dadosArredondamento: PropTypes.oneOf([PropTypes.any]),
-  onKeyDown: PropTypes.oneOf([PropTypes.any]),
-  label: PropTypes.oneOf([PropTypes.any]),
+  dadosArredondamento: PropTypes.oneOfType([PropTypes.any]),
+  onKeyDown: PropTypes.oneOfType([PropTypes.any]),
+  label: PropTypes.oneOfType([PropTypes.any]),
   validaAbaixoMedia: PropTypes.bool,
-  styleContainer: PropTypes.oneOf([PropTypes.any]),
-  style: PropTypes.oneOf([PropTypes.any]),
+  styleContainer: PropTypes.oneOfType([PropTypes.any]),
+  style: PropTypes.oneOfType([PropTypes.any]),
   name: PropTypes.string,
   notaValorInicial: PropTypes.string,
 };

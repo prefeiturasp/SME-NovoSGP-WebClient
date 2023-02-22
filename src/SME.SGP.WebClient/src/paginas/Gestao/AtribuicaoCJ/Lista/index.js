@@ -75,11 +75,6 @@ function AtribuicaoCJLista() {
       Historico: valoresFiltro.exibirHistorico,
     });
   };
-
-  const validarFiltro = React.useCallback(() => {
-    return !!filtro.DreId && !!filtro.UeId && !!filtro.UsuarioRF;
-  }, [filtro]);
-
   useEffect(() => {
     setSomenteConsulta(
       verificaSomenteConsulta(permissoesTela[RotasDto.ATRIBUICAO_CJ_LISTA])
@@ -100,11 +95,11 @@ function AtribuicaoCJLista() {
         setCarregandoLista(false);
       }
     }
-    if (validarFiltro()) {
+    if (filtro.DreId && filtro.UeId && filtro.UsuarioRF) {
       setItens([]);
       buscaItens();
     }
-  }, [filtro, validarFiltro]);
+  }, [filtro]);
 
   return (
     <>

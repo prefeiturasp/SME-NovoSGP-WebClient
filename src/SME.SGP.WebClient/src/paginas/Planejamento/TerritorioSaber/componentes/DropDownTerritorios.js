@@ -64,7 +64,7 @@ function DropDownTerritorios({
   }, [listaTerritorios, onChangeTerritorio]);
 
   return (
-    <Loader tip={false} loading={carregando}>
+    <Loader tip="" loading={carregando}>
       <SelectComponent
         name="territorio"
         id="territorio"
