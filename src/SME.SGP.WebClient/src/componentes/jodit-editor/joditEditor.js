@@ -52,7 +52,7 @@ const JoditEditor = forwardRef((props, ref) => {
 
   const textArea = useRef(null);
 
-  const [url, setUrl] = useState('');
+  const [url, setUrl] = useState(urlBase);
   const { token } = store.getState().usuario;
 
   const [validacaoComErro, setValidacaoComErro] = useState(false);
@@ -261,20 +261,6 @@ const JoditEditor = forwardRef((props, ref) => {
     },
     iframeStyle,
   };
-
-  useEffect(() => {
-    let isMounted = true;
-    if (!url) {
-      urlBase().then(resposta => {
-        if (isMounted) {
-          setUrl(resposta);
-        }
-      });
-    }
-    return () => {
-      isMounted = false;
-    };
-  }, [url]);
 
   const onChangePadrao = () => {
     const texto = textArea?.current?.text?.trim();

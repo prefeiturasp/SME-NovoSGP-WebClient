@@ -1,8 +1,8 @@
 import createHost from 'cross-domain-storage/host';
 import { obterUrlSondagem } from '~/servicos/variaveis';
 
-const newHost = async () => {
-  const origin = await obterUrlSondagem();
+const newHost = () => {
+  const origin = obterUrlSondagem;
   return createHost([
     {
       origin,

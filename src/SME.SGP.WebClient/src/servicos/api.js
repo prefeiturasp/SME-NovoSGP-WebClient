@@ -6,13 +6,9 @@ import { deslogarPorSessaoInvalida } from '~/servicos/ServicoUsuarioDeslogar';
 import { DeslogarSessaoExpirou } from '~/redux/modulos/usuario/actions';
 import { TOKEN_EXPIRADO } from '~/constantes';
 
-let url = '';
+let url = urlBase;
 
 let CancelToken = axios.CancelToken.source();
-
-urlBase().then(resposta => {
-  url = resposta?.data;
-});
 
 const api = axios.create({
   baseURL: url,
@@ -27,7 +23,7 @@ api.interceptors.request.use(
     const { token, dataHoraExpiracao } = store.getState().usuario;
     const diff = moment().diff(dataHoraExpiracao, 'seconds');
 
-    if (!url) url = await urlBase();
+    if (!url) url = urlBase;
     if (token) config.headers.Authorization = `Bearer ${token}`;
 
     config.cancelToken = CancelToken.token;

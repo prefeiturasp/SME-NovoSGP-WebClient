@@ -4,8 +4,8 @@ import { obterUrlSondagem } from '~/servicos/variaveis';
 
 const Sondagem = ({ history }) => {
   useEffect(() => {
-    (async () => {
-      const url = await obterUrlSondagem();
+    (() => {
+      const url = obterUrlSondagem;
       window.open(`${url}/sgp?redirect=/Relatorios/Sondagem`);
       history.push('/');
     })();

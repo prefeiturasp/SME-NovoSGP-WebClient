@@ -79,15 +79,12 @@ const NavbarNotificacoes = props => {
   }, [urlConnection, conectarSignalR]);
 
   useEffect(() => {
-    obterUrlSignalR()
-      .then(url => {
-        setUrlConnection(url);
-      })
-      .catch(() => {
-        setUrlConnection('');
-        dispatch(setIniciarNotificacoesSemWebSocket(true));
-      });
-
+    if (obterUrlSignalR) {
+      setUrlConnection(obterUrlSignalR);
+    } else {
+      setUrlConnection('');
+      dispatch(setIniciarNotificacoesSemWebSocket(true));
+    }
   }, []);
 
   const startConnection = useCallback(async () => {

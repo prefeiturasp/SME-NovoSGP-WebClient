@@ -21,7 +21,7 @@ import CapturaErros from './captura-erros';
 import { Deslogar } from '~/redux/modulos/usuario/actions';
 import VersaoSistema from '~/componentes-sgp/VersaoSistema';
 
-obterTrackingID().then(id => ReactGA.initialize(id));
+ReactGA.initialize(obterTrackingID);
 
 function App() {
   const verificaSairResetSenha = () => {
