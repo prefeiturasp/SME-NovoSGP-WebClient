@@ -6,7 +6,8 @@ import {
 } from '~/redux/modulos/conselhoClasse/actions';
 import ListaRecomendacoes from './listaRecomendacoes';
 
-const ListaRecomendacaoFamilia = () => {
+// eslint-disable-next-line react/prop-types
+const ListaRecomendacaoFamilia = ({ desabilitar }) => {
   const dispatch = useDispatch();
 
   const listaRecomendacoesFamilia = useSelector(
@@ -29,6 +30,7 @@ const ListaRecomendacaoFamilia = () => {
 
   return (
     <ListaRecomendacoes
+      desabilitar={desabilitar}
       dadosRecomendacao={
         listaRecomendacoesFamilia?.length
           ? listaRecomendacoesFamilia.filter(
