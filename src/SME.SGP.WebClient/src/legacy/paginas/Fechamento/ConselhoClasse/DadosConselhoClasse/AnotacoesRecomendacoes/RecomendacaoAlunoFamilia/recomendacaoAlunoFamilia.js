@@ -32,6 +32,8 @@ const RecomendacaoAlunoFamilia = props => {
 
   const onChangeFamilia = valor => onChangeRecomendacaoFamilia(valor);
 
+  const desabilitar = alunoDesabilitado || desabilitarCampos || !dentroPeriodo;
+
   return (
     <div className="col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-2">
       <CardCollapse
@@ -45,31 +47,27 @@ const RecomendacaoAlunoFamilia = props => {
         {exibirCardRecomendacao ? (
           <div className="row">
             <div className="col-md-12">
-              <ListaRecomendacaoAluno />
+              <ListaRecomendacaoAluno desabilitar={desabilitar} />
             </div>
             <div className="col-md-12 mb-3 mt-3">
               <JoditEditor
                 id="recomendacao-aluno"
                 value={dadosIniciais.recomendacaoAluno}
                 onChange={onChangeAluno}
-                desabilitar={
-                  alunoDesabilitado || desabilitarCampos || !dentroPeriodo
-                }
+                desabilitar={desabilitar}
                 height="300px"
               />
             </div>
             <Divider />
             <div className="col-md-12">
-              <ListaRecomendacaoFamilia />
+              <ListaRecomendacaoFamilia desabilitar={desabilitar} />
             </div>
             <div className="col-md-12 mt-3">
               <JoditEditor
                 id="recomendacao-familia"
                 value={dadosIniciais.recomendacaoFamilia}
                 onChange={onChangeFamilia}
-                desabilitar={
-                  alunoDesabilitado || desabilitarCampos || !dentroPeriodo
-                }
+                desabilitar={desabilitar}
                 height="300px"
               />
             </div>
