@@ -66,6 +66,9 @@ export default function usuario(state = inicial, action) {
         draft.dataLogin = new Date();
         draft.dataHoraExpiracao = action.payload.dataHoraExpiracao;
         break;
+      case '@usuario/salvarToken':
+        draft.token = action.payload;
+        break;
       case '@usuario/deslogar':
         localStorage.clear();
         inicial.sessaoExpirou = false;

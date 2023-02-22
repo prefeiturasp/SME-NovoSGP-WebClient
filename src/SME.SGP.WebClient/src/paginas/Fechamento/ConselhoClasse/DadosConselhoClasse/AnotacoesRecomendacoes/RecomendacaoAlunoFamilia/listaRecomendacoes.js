@@ -1,22 +1,22 @@
 import PropTypes from 'prop-types';
 import React, { useState } from 'react';
-import { useSelector } from 'react-redux';
 
 import TransferenciaLista from '~/componentes-sgp/TranferenciaLista/transferenciaLista';
 
 const ListaRecomendacoes = props => {
-  const { dadosRecomendacao, titulo, setDadosDireita, dadosDireita } = props;
-
-  const dentroPeriodo = useSelector(
-    store => store.conselhoClasse.dentroPeriodo
-  );
-
-  const somenteConsulta = !dentroPeriodo;
-  const periodoAberto = dentroPeriodo;
+  const {
+    dadosRecomendacao,
+    titulo,
+    setDadosDireita,
+    dadosDireita,
+    desabilitar,
+  } = props;
 
   const [dadosEsquerda, setDadosEsquerda] = useState(dadosRecomendacao);
   const [idsSelecionadsEsquerda, setIdsSelecionadsEsquerda] = useState([]);
   const [idsSelecionadsDireita, setIdsSelecionadsDireita] = useState([]);
+
+  const habilitarAcoes = !desabilitar;
 
   const parametrosListaEsquerda = {
     titleHeight: '30px',
@@ -30,7 +30,7 @@ const ListaRecomendacoes = props => {
     dataSource: dadosEsquerda,
     onSelectRow: setIdsSelecionadsEsquerda,
     selectedRowKeys: idsSelecionadsEsquerda,
-    selectMultipleRows: periodoAberto && !somenteConsulta,
+    selectMultipleRows: habilitarAcoes,
   };
 
   const parametrosListaDireita = {
@@ -45,7 +45,7 @@ const ListaRecomendacoes = props => {
     dataSource: dadosDireita,
     onSelectRow: setIdsSelecionadsDireita,
     selectedRowKeys: idsSelecionadsDireita,
-    selectMultipleRows: periodoAberto && !somenteConsulta,
+    selectMultipleRows: habilitarAcoes,
   };
 
   const obterListaComIdsSelecionados = (list, ids) => {
@@ -57,7 +57,7 @@ const ListaRecomendacoes = props => {
   };
 
   const onClickAdicionar = () => {
-    if (idsSelecionadsEsquerda?.length && !somenteConsulta) {
+    if (idsSelecionadsEsquerda?.length && habilitarAcoes) {
       const novaListaDireita = obterListaComIdsSelecionados(
         dadosEsquerda,
         idsSelecionadsEsquerda
@@ -76,7 +76,7 @@ const ListaRecomendacoes = props => {
   };
 
   const onClickRemover = async () => {
-    if (idsSelecionadsDireita?.length && !somenteConsulta) {
+    if (idsSelecionadsDireita?.length && habilitarAcoes) {
       const novaListaEsquerda = obterListaComIdsSelecionados(
         dadosDireita,
         idsSelecionadsDireita
@@ -109,6 +109,7 @@ ListaRecomendacoes.propTypes = {
   titulo: PropTypes.string,
   setDadosDireita: PropTypes.func,
   dadosDireita: PropTypes.oneOfType([PropTypes.array]),
+  desabilitar: PropTypes.bool,
 };
 
 ListaRecomendacoes.defaultProps = {
@@ -116,6 +117,7 @@ ListaRecomendacoes.defaultProps = {
   titulo: '',
   dadosDireita: [],
   setDadosDireita: () => [],
+  desabilitar: false,
 };
 
 export default ListaRecomendacoes;
