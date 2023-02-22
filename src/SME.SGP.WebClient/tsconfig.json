@@ -20,7 +20,7 @@
     "incremental": false,
     "baseUrl": "src",
     "paths": {
-      "~/*": ["*"]
+      "~/*": ["./legacy/*"],
     }
   },
   "include": ["src"]
