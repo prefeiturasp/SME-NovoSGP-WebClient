@@ -10,7 +10,7 @@ RUN set NODE_OPTIONS=--max_old_space_size=4096 && \
 
 FROM nginx:1.21-alpine
 
-COPY default.conf /etc/nginx/conf.d/
+COPY /default.conf /etc/nginx/conf.d/
 COPY --from=build-deps /usr/src/app/build /usr/share/nginx/html
 EXPOSE 80
 
