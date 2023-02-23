@@ -3,7 +3,7 @@
     [
       "babel-plugin-root-import",
       {
-        "rootPathSuffix": "src/legacy"
+        "rootPathSuffix": "src/@legacy"
       }
     ]
   ]
