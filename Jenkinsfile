@@ -25,7 +25,7 @@ pipeline {
           steps {
             script {
               imagename1 = "registry.sme.prefeitura.sp.gov.br/${env.branchname}/sme-sgp-webclient"
-              dockerImage1 = docker.build(imagename1, "-f Dockerfile .")
+              dockerImage1 = docker.build(imagename1, "-f docker/Dockerfile .")
               docker.withRegistry( 'https://registry.sme.prefeitura.sp.gov.br', registryCredential ) {
               dockerImage1.push()
               }
