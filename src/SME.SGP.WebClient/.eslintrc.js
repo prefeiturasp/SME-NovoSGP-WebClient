@@ -1,48 +1,60 @@
 module.exports = {
   env: {
     browser: true,
-    es6: true,
+    es2021: true,
+    jest: true,
   },
-  extends: ['airbnb', 'prettier', 'prettier/react'],
-  globals: {
-    Atomics: 'readonly',
-    SharedArrayBuffer: 'readonly',
-  },
-  parser: 'babel-eslint',
+  extends: [
+    'plugin:react/recommended',
+    'plugin:react-hooks/recommended',
+    'standard',
+    'plugin:prettier/recommended',
+  ],
+  parser: '@typescript-eslint/parser',
   parserOptions: {
     ecmaFeatures: {
       jsx: true,
     },
-    ecmaVersion: 2018,
+    ecmaVersion: 'latest',
     sourceType: 'module',
   },
-  plugins: ['react', 'prettier', 'react-hooks'],
+  plugins: ['react', 'jsx-a11y', '@typescript-eslint'],
   rules: {
-    'prettier/prettier': 'error',
-    'react/jsx-filename-extension': ['warn', { extensions: ['.jsx', '.js'] }],
-    'react/no-this-in-sfc': 'off',
-    'no-nested-ternary': 'off',
-    'import/prefer-default-export': 'off',
-    'import/no-extraneous-dependencies': [
+    'prettier/prettier': [
       'error',
       {
-        devDependencies: true,
-        optionalDependencies: false,
-        peerDependencies: false,
+        singleQuote: true,
+        semi: true,
+        tabWidth: 2,
+        trailingComma: 'all',
+        printWidth: 100,
+        bracketSameLine: false,
+        useTabs: false,
+        arrowParens: 'always',
+        endOfLine: 'auto',
       },
     ],
-    'no-param-reassign': 'off',
-    'no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
-    'no-console': ['error', { allow: ['tron'] }],
-    'react-hooks/rules-of-hooks': 'error',
-    'react-hooks/exhaustive-deps': 'warn',
-    'no-plusplus': ["error", { "allowForLoopAfterthoughts": true }]
+    'react/react-in-jsx-scope': 'off',
+    'react/prop-types': 'off',
+    'jsx-a11y/alt-text': [
+      'warn',
+      {
+        elements: ['img'],
+        img: ['Image'],
+      },
+    ],
+    'jsx-a11y/aria-props': 'warn',
+    'jsx-a11y/aria-proptypes': 'warn',
+    'jsx-a11y/aria-unsupported-elements': 'warn',
+    'jsx-a11y/role-has-required-aria-props': 'warn',
+    'jsx-a11y/role-supports-aria-props': 'warn',
   },
   settings: {
-    'import/resolver': {
-      'babel-plugin-root-import': {
-        rootPathSuffix: 'src',
-      },
+    react: {
+      version: 'detect',
+    },
+    'import/parsers': {
+      [require.resolve('@typescript-eslint/parser')]: ['.ts', '.tsx', '.d.ts'],
     },
   },
 };

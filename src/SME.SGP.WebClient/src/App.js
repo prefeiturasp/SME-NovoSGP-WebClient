@@ -4,25 +4,24 @@ import { Provider } from 'react-redux';
 import { Router, Switch } from 'react-router-dom';
 import ReactGA from 'react-ga';
 import { PersistGate } from 'redux-persist/integration/react';
-import { obterTrackingID } from './servicos/variaveis';
+import { obterTrackingID } from '~/servicos/variaveis';
 
-import './configuracao/ReactotronConfig';
-import history from './servicos/history';
-import GlobalStyle from './estilos/global';
-import { store, persistor } from './redux';
+import history from '~/servicos/history';
+import GlobalStyle from '~/estilos/global';
+import { store, persistor } from '~/redux';
 import Pagina from '~/componentes-sgp/pagina';
 import Login from '~/paginas/Login';
-import RecuperarSenha from './paginas/RecuperarSenha';
-import RedefinirSenha from './paginas/RedefinirSenha';
-import RotaAutenticadaEstruturada from './rotas/rotaAutenticadaEstruturada';
-import RotaNaoAutenticadaDesestruturada from './rotas/rotaNaoAutenticadaDesestruturada';
-import RotaAutenticadaDesestruturada from './rotas/rotaAutenticadaDesestruturada';
-import { rotaAtiva } from './redux/modulos/navegacao/actions';
-import CapturaErros from './captura-erros';
+import RecuperarSenha from '~/paginas/RecuperarSenha';
+import RedefinirSenha from '~/paginas/RedefinirSenha';
+import RotaAutenticadaEstruturada from '~/rotas/rotaAutenticadaEstruturada';
+import RotaNaoAutenticadaDesestruturada from '~/rotas/rotaNaoAutenticadaDesestruturada';
+import RotaAutenticadaDesestruturada from '~/rotas/rotaAutenticadaDesestruturada';
+import { rotaAtiva } from '~/redux/modulos/navegacao/actions';
+import CapturaErros from '~/componentes-sgp/captura-erros';
 import { Deslogar } from '~/redux/modulos/usuario/actions';
 import VersaoSistema from '~/componentes-sgp/VersaoSistema';
 
-obterTrackingID().then(id => ReactGA.initialize(id));
+ReactGA.initialize(obterTrackingID);
 
 function App() {
   const verificaSairResetSenha = () => {
