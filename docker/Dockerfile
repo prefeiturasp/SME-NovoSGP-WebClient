@@ -10,12 +10,12 @@ RUN set NODE_OPTIONS=--max_old_space_size=4096 && \
 
 FROM nginx:1.21-alpine
 
-COPY ./default.conf /etc/nginx/conf.d/
+COPY / docker/default.conf /etc/nginx/conf.d/
 COPY --from=build-deps /usr/src/app/build /usr/share/nginx/html
 EXPOSE 80
 
 ## startup.sh script is launched at container run
-ADD ./startup.sh /startup.sh
+ADD / docker/startup.sh /startup.sh
 RUN dos2unix "/startup.sh"
 RUN ["chmod", "+x", "/startup.sh"]
 CMD /startup.sh
