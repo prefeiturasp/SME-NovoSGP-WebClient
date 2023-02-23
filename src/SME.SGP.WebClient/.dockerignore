@@ -1,4 +1,12 @@
-.git
-.idea
 node_modules
 build
+.idea
+.dockerignore
+.env
+.git
+.gitignore
+.vs
+.vscode
+*/bin
+*/obj
+**/.toolstarget
