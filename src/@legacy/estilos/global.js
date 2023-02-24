@@ -406,4 +406,11 @@ export default createGlobalStyle`
       min-width: 286px !important;
     }
   }
+
+  a:not([href]),
+  a:not([href]):hover {
+    color: inherit;
+    text-decoration: none;
+  }
+
 `;
