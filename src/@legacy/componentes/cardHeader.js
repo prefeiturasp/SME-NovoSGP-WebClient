@@ -52,7 +52,11 @@ const CardHeader = props => {
     if (!header.contains('expanded')) header.add('expanded');
     else header.remove('expanded');
 
-    if (onClick) onClick();
+    if (onClick) {
+      setTimeout(() => {
+        onClick();
+      }, 100);
+    }
   };
 
   return (
