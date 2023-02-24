@@ -105,7 +105,7 @@ const RegistroItineranciaAEELista = () => {
     dtFinal,
     criadoPor
   ) => {
-    if (anoLetivo && dre && listaDres?.length) {
+    if (anoLetivo && dre && listaDres?.length && listaUes?.length) {
       const dreSelecionada = listaDres.find(
         item => String(item.valor) === String(dre)
       );
@@ -288,11 +288,11 @@ const RegistroItineranciaAEELista = () => {
           id: item.id,
         }));
 
+        setListaUes(lista);
+
         if (lista?.length === 1) {
           setUeId(lista[0].valor);
         }
-
-        setListaUes(lista);
         return;
       }
       setListaUes([]);
@@ -300,7 +300,7 @@ const RegistroItineranciaAEELista = () => {
   }, [dreId, anoLetivo, consideraHistorico]);
 
   useEffect(() => {
-    if (anoLetivo && dreId)
+    if (anoLetivo && dreId && listaUes?.length > 0)
       filtrar(
         anoLetivo,
         dreId,
@@ -312,7 +312,8 @@ const RegistroItineranciaAEELista = () => {
         dataFinal,
         criador
       );
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     anoLetivo,
     dreId,
