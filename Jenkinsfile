@@ -5,7 +5,7 @@ pipeline {
       registryCredential = 'jenkins_registry'
       deployment1 = "${env.branchname == 'release-r2' ? 'sme-webclient-rc2' : 'sme-webclient' }"
     }
-  
+
     agent { node { label 'SME-AGENT-SGP' } }
 
     options {
@@ -13,30 +13,19 @@ pipeline {
       disableConcurrentBuilds()
       skipDefaultCheckout()
     }
-  
+
     stages {
 
-        stage('CheckOut') {            
-            steps { checkout scm }            
+        stage('CheckOut') {
+            steps { checkout scm }
         }
-      
-        //stage('AnaliseCodigo') {
-	     //   when { branch 'release' }
-         // steps {
-         //     withSonarQubeEnv('sonarqube-local'){
-         //       sh 'dotnet-sonarscanner begin /k:"SME-NovoSGP-API-EOL"'
-         //       sh 'dotnet build SME.Pedagogico.API.sln'
-         //       sh 'dotnet-sonarscanner'
-         //   }
-         // }
-       // }
 
         stage('Build') {
-          when { anyOf { branch 'master'; branch 'main'; branch "story/*"; branch 'development'; branch 'release'; branch 'release-r2'; } } 
+          when { anyOf { branch 'master'; branch 'main'; branch "story/*"; branch 'development'; branch 'release'; branch 'release-r2'; } }
           steps {
             script {
               imagename1 = "registry.sme.prefeitura.sp.gov.br/${env.branchname}/sme-sgp-webclient"
-              dockerImage1 = docker.build(imagename1, "-f src/SME.SGP.WebClient/Dockerfile .")
+              dockerImage1 = docker.build(imagename1, "-f Dockerfile .")
               docker.withRegistry( 'https://registry.sme.prefeitura.sp.gov.br', registryCredential ) {
               dockerImage1.push()
               }
@@ -44,14 +33,14 @@ pipeline {
             }
           }
         }
-	    
+
         stage('Deploy'){
-            when { anyOf {  branch 'master'; branch 'main'; branch 'development'; branch 'release'; branch 'release-r2'; } }        
+            when { anyOf {  branch 'master'; branch 'main'; branch 'development'; branch 'release'; branch 'release-r2'; } }
             steps {
                 script{
                     if ( env.branchname == 'main' ||  env.branchname == 'master' || env.branchname == 'homolog' || env.branchname == 'release' ) {
                       sendTelegram("🤩 [Deploy ${env.branchname}] Job Name: ${JOB_NAME} \nBuild: ${BUILD_DISPLAY_NAME} \nMe aprove! \nLog: \n${env.BUILD_URL}")
-			
+
 		      withCredentials([string(credentialsId: 'aprovadores-sgp', variable: 'aprovadores')]) {
 		        timeout(time: 24, unit: "HOURS") {
 			  input message: 'Deseja realizar o deploy?', ok: 'SIM', submitter: "${aprovadores}"
@@ -64,8 +53,8 @@ pipeline {
                         sh('rm -f '+"$home"+'/.kube/config')
                     }
                 }
-            }           
-        }    
+            }
+        }
     }
 
   post {
