@@ -43,7 +43,8 @@ const UeCadastroEventos = ({ form, onChangeCampos, desabilitar, eventoId }) => {
       dreId,
       '',
       false,
-      modalidade
+      modalidade,
+      false
     )
       .catch(e => erros(e))
       .finally(() => setExibirLoader(false));
