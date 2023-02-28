@@ -277,6 +277,36 @@ const mudarStatusEdicaoAlunos = dados => {
   }
 };
 
+const mudarStatusEmAprovacaoAlunosPorBimestre = (
+  dadosAtualizar,
+  dadosAlunosAlterados,
+) => {
+  if (dadosAtualizar?.alunos?.length) {
+    const nomeRef = dadosAlunosAlterados?.ehFinal
+      ? 'notasConceitoFinal'
+      : 'notasConceitoBimestre';
+
+    dadosAtualizar.alunos.forEach((aluno) => {
+      const alunoAlterado = dadosAlunosAlterados?.notaConceitoAlunos?.find(
+        (a) => a?.codigoAluno === aluno?.codigoAluno,
+      );
+      const atualizarEmAprovacao = alunoAlterado && aluno?.[nomeRef]?.length;
+
+      if (atualizarEmAprovacao) {
+        aluno[nomeRef].forEach((nota) => {
+          if (dadosAlunosAlterados?.ehRegencia) {
+            if (alunoAlterado?.disciplinaCodigo === nota?.disciplinaId) {
+              nota.emAprovacao = true;
+            }
+          } else {
+            nota.emAprovacao = true;
+          }
+        });
+      }
+    });
+  }
+};
+
 const salvarFechamentoListao = async (
   turma,
   ehBimestreFinal,
@@ -332,6 +362,10 @@ const salvarFechamentoListao = async (
     const { dispatch } = store;
 
     mudarStatusEdicaoAlunos(dadosFechamento);
+
+    if (resposta?.data?.emAprovacao) {
+      mudarStatusEmAprovacaoAlunosPorBimestre(dadosFechamento, dadosParaSalvar);
+    }
 
     dispatch(setTelaEmEdicao(false));
     const dadosComAuditoriaAtualizada = { ...dadosFechamento };

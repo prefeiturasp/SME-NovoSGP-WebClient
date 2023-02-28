@@ -371,7 +371,9 @@ const Avaliacao = props => {
                             ) : (
                               montarCampoNotaConceitoFinal(aluno, '', i)
                             )}
-                            {aluno?.notasBimestre[0]?.emAprovacao && (
+                            {!!aluno?.notasBimestre?.find(
+                              (n) => !!n?.emAprovacao,
+                            ) && (
                               <Tooltip title="Aguardando aprovação">
                                 <MarcadorTriangulo />
                               </Tooltip>

@@ -665,6 +665,33 @@ const Notas = ({ match }) => {
     }
   };
 
+  const mudarStatusEmAprovacaoAlunosPorBimestre = (
+    dadosBimestreAtualizar,
+    dadosAlunosAlterados,
+  ) => {
+    if (dadosBimestreAtualizar?.alunos?.length) {
+      dadosBimestreAtualizar.alunos.forEach((aluno) => {
+        const alunoAlterado = dadosAlunosAlterados?.notaConceitoAlunos?.find(
+          (a) => a?.codigoAluno === aluno?.id,
+        );
+        const atualizarEmAprovacao =
+          alunoAlterado && aluno?.notasBimestre?.length;
+
+        if (atualizarEmAprovacao) {
+          aluno.notasBimestre.forEach((nota) => {
+            if (ehRegencia) {
+              if (alunoAlterado?.disciplinaId === nota?.disciplinaId) {
+                nota.emAprovacao = true;
+              }
+            } else {
+              nota.emAprovacao = true;
+            }
+          });
+        }
+      });
+    }
+  };
+
   const mudarStatusEdicaoAlunos = () => {
     if (primeiroBimestre.modoEdicao) {
       mudarStatusEdicaoAlunosPorBimestre(primeiroBimestre);
@@ -755,30 +782,30 @@ const Notas = ({ match }) => {
             if (salvouNotas && salvouNotas.status === 200) {
               mudarStatusEdicaoAlunos();
 
-              const auditoriaBimestre = salvouNotas?.data?.[0];
+              const dadosRetornoSalvar = salvouNotas?.data?.[0];
               if (!salvarNotasAvaliacao) {
-                sucesso(auditoriaBimestre.mensagemConsistencia);
+                sucesso(dadosRetornoSalvar.mensagemConsistencia);
               }
               dispatch(setModoEdicaoGeral(false));
               dispatch(setModoEdicaoGeralNotaFinal(false));
               dispatch(setExpandirLinha([]));
 
-              if (auditoriaBimestre) {
+              if (dadosRetornoSalvar) {
                 const auditoriaBimestreInserido = `Nota final do bimestre inserida por ${
-                  auditoriaBimestre?.criadoPor
-                }(${auditoriaBimestre?.criadoRF}) em ${window.moment
-                  .utc(auditoriaBimestre?.criadoEm)
+                  dadosRetornoSalvar?.criadoPor
+                }(${dadosRetornoSalvar?.criadoRF}) em ${window.moment
+                  .utc(dadosRetornoSalvar?.criadoEm)
                   .format('DD/MM/YYYY')}, às ${window.moment
-                  .utc(auditoriaBimestre?.criadoEm)
+                  .utc(dadosRetornoSalvar?.criadoEm)
                   .format('HH:mm')}.`;
                 let auditoriaBimestreAlterado = '';
-                if (auditoriaBimestre?.alteradoPor) {
+                if (dadosRetornoSalvar?.alteradoPor) {
                   auditoriaBimestreAlterado = `Nota final do bimestre alterada por ${
-                    auditoriaBimestre?.alteradoPor
-                  }(${auditoriaBimestre?.alteradoRF}) em ${window.moment
-                    .utc(auditoriaBimestre?.alteradoEm)
+                    dadosRetornoSalvar?.alteradoPor
+                  }(${dadosRetornoSalvar?.alteradoRF}) em ${window.moment
+                    .utc(dadosRetornoSalvar?.alteradoEm)
                     .format('DD/MM/YYYY')}, às ${window.moment
-                    .utc(auditoriaBimestre?.alteradoEm)
+                    .utc(dadosRetornoSalvar?.alteradoEm)
                     .format('HH:mm')}.`;
                 }
                 setAuditoriaInfo(current => {
@@ -790,12 +817,20 @@ const Notas = ({ match }) => {
                 });
               }
               const fechamentoTurmaId = salvouNotas?.data?.[0]?.id;
+              const emAprovacao = salvouNotas?.data?.[0]?.emAprovacao;
 
-              if (
-                !dadosBimestreAtualizar?.fechamentoTurmaId &&
-                fechamentoTurmaId
-              ) {
+              const atualizarFechamentoId =
+                !dadosBimestreAtualizar?.fechamentoTurmaId && fechamentoTurmaId;
+
+              if (atualizarFechamentoId) {
                 dadosBimestreAtualizar.fechamentoTurmaId = fechamentoTurmaId;
+              }
+
+              if (emAprovacao || atualizarFechamentoId) {
+                mudarStatusEmAprovacaoAlunosPorBimestre(
+                  dadosBimestreAtualizar,
+                  valoresBimestresSalvarComNotas?.[0],
+                );
 
                 switch (dadosBimestreAtualizar?.numero) {
                   case 1:
