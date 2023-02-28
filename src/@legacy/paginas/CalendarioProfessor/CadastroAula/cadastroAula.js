@@ -338,7 +338,6 @@ function CadastroDeAula({ match, location }) {
               componentes.forEach(c => c.codigoComponenteCurricular === c.id);
               setListaComponentes(componentes);
             }
-            console.log('componenteSelecionado',componenteSelecionado);
             if (componenteSelecionado) {
               carregarGrade(
                 componenteSelecionado,
