@@ -350,7 +350,7 @@ const FechamentoBimestreLista = props => {
 
                         {!ehSintese
                           ? item?.notas?.length &&
-                            item.notas[0]?.emAprovacao && (
+                            !!item.notas?.find(n => n?.emAprovacao) && (
                               <Tooltip title="Aguardando aprovação">
                                 <MarcadorTriangulo />
                               </Tooltip>
