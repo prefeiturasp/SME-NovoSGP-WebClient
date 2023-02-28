@@ -219,6 +219,11 @@ const ListaOcorrencias = () => {
       const lista = retorno.data.map(periodo => {
         return { desc: periodo, valor: periodo };
       });
+
+      if (lista?.length === 1) {
+        setSemestre(lista[0].valor);
+      }
+
       setListaSemestres(lista);
     } else {
       setListaSemestres([]);
@@ -558,7 +563,7 @@ const ListaOcorrencias = () => {
                     valueText="desc"
                     label="Semestre"
                     placeholder="Selecione o semestre"
-                    disabled={!modalidade}
+                    disabled={!modalidade || listaSemestres?.length === 1}
                     valueSelect={semestre}
                     onChange={onChangeSemestre}
                   />
