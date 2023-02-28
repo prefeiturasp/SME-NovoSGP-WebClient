@@ -149,6 +149,7 @@ function CadastroDeAula({ match, location }) {
       return listaComponentes.find(        
         c => c.codigoComponenteCurricular === Number(componenteCurricularId) ||
              c.id === Number(componenteCurricularId)
+             || (c.regencia && (c.codDisciplinaPai === Number(componenteCurricularId)))
       );
     },
     [listaComponentes]
@@ -330,10 +331,11 @@ function CadastroDeAula({ match, location }) {
                 String(c.codigoComponenteCurricular) ===
                 String(respostaAula.disciplinaId) ||
                 String(c.id) ===
-                String(respostaAula.disciplinaId)
+                String(respostaAula.disciplinaId) ||
+                (c.regencia && String(c.codDisciplinaPai) === respostaAula.disciplinaId)
             );
             if (respostaAula.disciplinaId.length < String(componenteSelecionado.codigoComponenteCurricular).length){
-              componentes.forEach(c => c.codigoComponenteCurricular = c.id);
+              componentes.forEach(c => c.codigoComponenteCurricular === c.id);
               setListaComponentes(componentes);
             }
             
