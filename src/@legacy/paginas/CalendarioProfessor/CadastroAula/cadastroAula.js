@@ -338,7 +338,7 @@ function CadastroDeAula({ match, location }) {
               componentes.forEach(c => c.codigoComponenteCurricular === c.id);
               setListaComponentes(componentes);
             }
-            
+            console.log('componenteSelecionado',componenteSelecionado);
             if (componenteSelecionado) {
               carregarGrade(
                 componenteSelecionado,
@@ -792,7 +792,7 @@ function CadastroDeAula({ match, location }) {
                         name="disciplinaId"
                         lista={listaComponentes}
                         label="Componente Curricular"
-                        valueOption="codigoComponenteCurricular"
+                        valueOption={!listaComponentes[0]?.regencia ? "codigoComponenteCurricular" : "codDisciplinaPai"}
                         valueText="nome"
                         placeholder="Selecione um componente curricular"
                         form={form}
