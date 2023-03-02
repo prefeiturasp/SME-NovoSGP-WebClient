@@ -91,6 +91,11 @@ const ModalidadeSemestreOcorrencia = props => {
       const lista = retorno.data.map(periodo => {
         return { desc: periodo, valor: periodo };
       });
+
+      if (lista?.length === 1) {
+        form.setFieldValue('semestre', lista[0].valor);
+      }
+
       setListaSemestres(lista);
     } else {
       setListaSemestres([]);
@@ -138,8 +143,8 @@ const ModalidadeSemestreOcorrencia = props => {
             lista={ocorrenciaId ? listaSemestresEdicao : listaSemestres}
             valueOption="valor"
             valueText="desc"
-            disabled={!modalidade || !!ocorrenciaId}
-            placeholder="Semestre"
+            disabled={!modalidade || !!ocorrenciaId || listaSemestres?.length === 1}
+            placeholder="Selecione o semestre"
             name="semestre"
             form={form}
             onChange={() => {
