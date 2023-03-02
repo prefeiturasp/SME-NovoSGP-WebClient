@@ -20,6 +20,18 @@ import ServicoHistoricoEscolar from '~/servicos/Paginas/HistoricoEscolar/Servico
 import AlertaModalidadeInfantil from '~/componentes-sgp/AlertaModalidadeInfantil/alertaModalidadeInfantil';
 import BotoesAcaoRelatorio from '~/componentes-sgp/botoesAcaoRelatorio';
 import { ServicoFiltroRelatorio } from '~/servicos';
+import { SGP_CHECKBOX_EXIBIR_HISTORICO } from '~/constantes/ids/checkbox';
+import { SGP_INPUT_CODIGO_EOL,SGP_INPUT_NOME_ESTUDANTE } from '~/constantes/ids/input';
+import { 
+  SGP_SELECT_DRE,
+  SGP_SELECT_UE ,
+  SGP_SELECT_MODALIDADE,
+  SGP_SELECT_TURMA,
+  SGP_SELECT_ESTUDANTE_CRIANCA,
+  SGP_SELECT_IMPRIMIR_DADOS_RESPONSAVEIS ,
+  SGP_SELECT_PREENCHER_DATA_IMPRESSAO,
+  SGP_SELECT_ANO_LETIVO
+} from '~/constantes/ids/select';
 
 const HistoricoEscolar = () => {
   const codigosAlunosSelecionados = useSelector(
@@ -570,6 +582,7 @@ const HistoricoEscolar = () => {
             <div className="col-sm-12 mb-4">
               <CheckboxComponent
                 label="Exibir histórico?"
+                id={SGP_CHECKBOX_EXIBIR_HISTORICO}
                 onChangeCheckbox={onCheckedConsideraHistorico}
                 checked={consideraHistorico}
               />
@@ -578,6 +591,7 @@ const HistoricoEscolar = () => {
               <Loader loading={carregandoAnos} tip="">
                 <SelectComponent
                   label="Ano Letivo"
+                  id={SGP_SELECT_ANO_LETIVO}
                   lista={listaAnosLetivo}
                   valueOption="valor"
                   valueText="desc"
@@ -596,6 +610,7 @@ const HistoricoEscolar = () => {
                 <SelectComponent
                   label="Diretoria Regional de Educação (DRE)"
                   lista={listaDres}
+                  id={SGP_SELECT_DRE}
                   valueOption="valor"
                   valueText="desc"
                   disabled={!anoLetivo || (listaDres && listaDres.length === 1)}
@@ -611,6 +626,7 @@ const HistoricoEscolar = () => {
                 <SelectComponent
                   label="Unidade Escolar (UE)"
                   lista={listaUes}
+                  id={SGP_SELECT_UE}
                   valueOption="valor"
                   valueText="desc"
                   disabled={!dreId || (listaUes && listaUes.length === 1)}
@@ -624,6 +640,7 @@ const HistoricoEscolar = () => {
             <div className="col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-2">
               <div className="row">
                 <LocalizadorEstudante
+                  id={SGP_INPUT_NOME_ESTUDANTE}
                   showLabel
                   ueId={ueId}
                   onChange={onChangeLocalizadorEstudante}
@@ -642,6 +659,7 @@ const HistoricoEscolar = () => {
               <Loader loading={carregandoModalidades} tip="">
                 <SelectComponent
                   label="Modalidade"
+                  id={SGP_SELECT_MODALIDADE}
                   lista={listaModalidades}
                   valueOption="valor"
                   valueText="descricao"
@@ -691,6 +709,7 @@ const HistoricoEscolar = () => {
                   valueOption="valor"
                   valueText="nomeFiltro"
                   label="Turma"
+                  id={SGP_SELECT_TURMA}
                   disabled={
                     !modalidadeId ||
                     alunoLocalizadorSelecionado?.length ||
@@ -716,6 +735,7 @@ const HistoricoEscolar = () => {
                 lista={listaEstudanteOpt}
                 valueOption="valor"
                 valueText="desc"
+                id={SGP_SELECT_ESTUDANTE_CRIANCA}
                 valueSelect={estudanteOpt}
                 onChange={onChangeEstudanteOpt}
                 placeholder="Estudantes"
@@ -729,6 +749,7 @@ const HistoricoEscolar = () => {
             <div className="col-sm-12 col-md-6 col-lg-4 col-xl-4 mb-2">
               <SelectComponent
                 label="Imprimir dados dos responsáveis"
+                id={SGP_SELECT_IMPRIMIR_DADOS_RESPONSAVEIS }
                 lista={listaSimNao}
                 valueOption="valor"
                 valueText="desc"
@@ -739,6 +760,7 @@ const HistoricoEscolar = () => {
             <div className="col-sm-12 col-md-6 col-lg-4 col-xl-4 mb-2">
               <SelectComponent
                 label="Preencher a data de impressão"
+                id={SGP_SELECT_PREENCHER_DATA_IMPRESSAO}
                 lista={listaSimNao}
                 valueOption="valor"
                 valueText="desc"
