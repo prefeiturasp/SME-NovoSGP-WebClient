@@ -145,8 +145,8 @@ function CadastroDeAula({ match, location }) {
     },
   ];
   const obterComponenteSelecionadoPorId = useCallback(
-    componenteCurricularId => {      
-      return listaComponentes.find(        
+    componenteCurricularId => {
+      return listaComponentes.find(
         c => c.codigoComponenteCurricular === Number(componenteCurricularId) ||
              c.id === Number(componenteCurricularId)
              || (c.regencia && (c.codDisciplinaPai === Number(componenteCurricularId)))
@@ -791,7 +791,12 @@ function CadastroDeAula({ match, location }) {
                         name="disciplinaId"
                         lista={listaComponentes}
                         label="Componente Curricular"
-                        valueOption={!listaComponentes[0]?.regencia ? "codigoComponenteCurricular" : "codDisciplinaPai"}
+                        valueOption={
+                          listaComponentes[0]?.regencia &&
+                          listaComponentes[0]?.codDisciplinaPai !== 0
+                            ? 'codDisciplinaPai'
+                            : 'codigoComponenteCurricular'
+                        }
                         valueText="nome"
                         placeholder="Selecione um componente curricular"
                         form={form}
