@@ -314,7 +314,6 @@ const RegistroItineranciaAEELista = () => {
         dataFinal,
         criador
       );
-
   }, [
     anoLetivo,
     dreId,
@@ -325,6 +324,7 @@ const RegistroItineranciaAEELista = () => {
     dataInicial,
     dataFinal,
     criador,
+    listaUes
   ]);
 
   useEffect(() => {
