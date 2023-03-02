@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { Loader, SelectComponent } from '~/componentes';
-import { Cabecalho } from '~/componentes-sgp';
+import { CheckboxComponent, Loader, SelectComponent } from '~/componentes';
+import { Cabecalho, FiltroHelper } from '~/componentes-sgp';
 import CampoNumero from '~/componentes/campoNumero';
 import Card from '~/componentes/card';
 import { URL_HOME } from '~/constantes/url';
@@ -16,6 +16,7 @@ import tipoNota from '~/dtos/tipoNota';
 import AlertaModalidadeInfantil from '~/componentes-sgp/AlertaModalidadeInfantil/alertaModalidadeInfantil';
 import { OPCAO_TODOS } from '~/constantes/constantes';
 import BotoesAcaoRelatorio from '~/componentes-sgp/botoesAcaoRelatorio';
+import { ordenarListaMaiorParaMenor } from '~/utils';
 
 const RelatorioNotasConceitosFinais = () => {
   const [listaAnosLetivo, setListaAnosLetivo] = useState([]);
@@ -35,9 +36,8 @@ const RelatorioNotasConceitosFinais = () => {
   const [modalidadeId, setModalidadeId] = useState(undefined);
   const [semestre, setSemestre] = useState(undefined);
   const [anosEscolares, setAnosEscolares] = useState(undefined);
-  const [componentesCurriculares, setComponentesCurriculares] = useState(
-    undefined
-  );
+  const [componentesCurriculares, setComponentesCurriculares] =
+    useState(undefined);
   const [bimestres, setBimestres] = useState(undefined);
   const [valorCondicao, setValorCondicao] = useState(undefined);
   const [tipoNotaSelecionada, setTipoNotaSelecionada] = useState(undefined);
@@ -74,24 +74,29 @@ const RelatorioNotasConceitosFinais = () => {
 
   const obterAnosLetivos = useCallback(async () => {
     setCarregandoGeral(true);
-    const anosLetivo = await AbrangenciaServico.buscarTodosAnosLetivos().catch(
-      e => {
-        erros(e);
-        setCarregandoGeral(false);
-      }
-    );
-    if (anosLetivo && anosLetivo.data) {
-      const a = [];
-      anosLetivo.data.forEach(ano => {
-        a.push({ desc: ano, valor: ano });
+    const resposta = await FiltroHelper.obterAnosLetivos({
+      consideraHistorico,
+    }).catch(e => {
+      erros(e);
+      setCarregandoGeral(false);
+    });
+
+    const anosLetivos = resposta || [];
+
+    if (!anosLetivos?.length) {
+      anosLetivos.push({
+        desc: anoAtual,
+        valor: anoAtual,
       });
-      setAnoLetivo(a[0].valor);
-      setListaAnosLetivo(a);
-    } else {
-      setListaAnosLetivo([]);
     }
+
+    const anosOrdenados = ordenarListaMaiorParaMenor(anosLetivos, 'valor');
+
+    setAnoLetivo(anosOrdenados[0]?.valor);
+    setListaAnosLetivo(anosOrdenados);
+
     setCarregandoGeral(false);
-  }, []);
+  }, [consideraHistorico, anoAtual]);
 
   const obterModalidades = async ue => {
     if (ue) {
@@ -114,10 +119,14 @@ const RelatorioNotasConceitosFinais = () => {
     }
   };
 
-  const obterUes = useCallback(async dre => {
-    if (dre) {
+  const obterUes = useCallback(async () => {
+    if (codigoDre) {
       setCarregandoGeral(true);
-      const retorno = await ServicoFiltroRelatorio.obterUes(dre, false, anoLetivo).catch(e => {
+      const retorno = await ServicoFiltroRelatorio.obterUes(
+        codigoDre,
+        consideraHistorico,
+        anoLetivo
+      ).catch(e => {
         erros(e);
         setCarregandoGeral(false);
       });
@@ -136,7 +145,7 @@ const RelatorioNotasConceitosFinais = () => {
       }
       setCarregandoGeral(false);
     }
-  }, [anoLetivo]);
+  }, [anoLetivo, codigoDre, consideraHistorico]);
 
   const onChangeDre = dre => {
     setCodigoDre(dre);
@@ -157,24 +166,37 @@ const RelatorioNotasConceitosFinais = () => {
   };
 
   const obterDres = useCallback(async () => {
-    if (anoLetivo) {
-      setCarregandoGeral(true);
-      const retorno = await ServicoFiltroRelatorio.obterDres().catch(e => {
-        erros(e);
-        setCarregandoGeral(false);
-      });
-      if (retorno && retorno.data && retorno.data.length) {
-        setListaDres(retorno.data);
+    setCarregandoGeral(true);
+    const retorno = await AbrangenciaServico.buscarDres(
+      `v1/abrangencias/${consideraHistorico}/dres?anoLetivo=${anoLetivo}`
+    )
+      .catch(e => erros(e))
+      .finally(() => setCarregandoGeral(false));
 
-        if (retorno && retorno.data.length && retorno.data.length === 1) {
-          setCodigoDre(retorno.data[0].codigo);
-        }
+    if (retorno?.data?.length) {
+      const lista = retorno.data
+        .map(item => ({
+          desc: item.nome,
+          valor: String(item.codigo),
+          abrev: item.abreviacao,
+        }))
+        .sort(FiltroHelper.ordenarLista('desc'));
+
+      if (lista?.length === 1) {
+        setCodigoDre(lista[0].valor);
       } else {
-        setListaDres([]);
+        lista.unshift({
+          desc: 'Todas',
+          valor: OPCAO_TODOS,
+        });
       }
+
+      setListaDres(lista);
+      return;
     }
-    setCarregandoGeral(false);
-  }, [anoLetivo]);
+    setListaDres([]);
+    setCodigoDre();
+  }, [anoLetivo, consideraHistorico]);
 
   const obterSemestres = async (
     modalidadeSelecionada,
@@ -183,8 +205,9 @@ const RelatorioNotasConceitosFinais = () => {
     setCarregandoGeral(true);
     const retorno = await api
       .get(
-        `v1/abrangencias/${consideraHistorico}/semestres?anoLetivo=${anoLetivoSelecionado}&modalidade=${modalidadeSelecionada ||
-          0}`
+        `v1/abrangencias/${consideraHistorico}/semestres?anoLetivo=${anoLetivoSelecionado}&modalidade=${
+          modalidadeSelecionada || 0
+        }`
       )
       .catch(e => {
         erros(e);
@@ -203,23 +226,17 @@ const RelatorioNotasConceitosFinais = () => {
   };
 
   useEffect(() => {
-    setConsideraHistorico(anoLetivo < anoAtual);
-
-  }, [anoLetivo]);
-
-  useEffect(() => {
     if (codigoUe) {
       obterModalidades(codigoUe);
     } else {
       setModalidadeId(undefined);
       setListaModalidades([]);
     }
-
   }, [codigoUe]);
 
   useEffect(() => {
     if (codigoDre) {
-      obterUes(codigoDre);
+      obterUes();
     } else {
       setCodigoUe(undefined);
       setListaUes([]);
@@ -236,7 +253,7 @@ const RelatorioNotasConceitosFinais = () => {
         const respota = await AbrangenciaServico.buscarAnosEscolares(
           ue,
           mod,
-          String(anoLetivoSelecionado) !== String(anoAtual)
+          consideraHistorico
         ).catch(e => {
           erros(e);
           setCarregandoGeral(false);
@@ -311,7 +328,6 @@ const RelatorioNotasConceitosFinais = () => {
       }
       setCarregandoGeral(false);
     }
-
   }, [modalidadeId, anoLetivo, obterCodigoTodosAnosEscolares]);
 
   useEffect(() => {
@@ -359,7 +375,6 @@ const RelatorioNotasConceitosFinais = () => {
       setSemestre(undefined);
       setListaSemestre([]);
     }
-
   }, [modalidadeId, anoLetivo]);
 
   const obterConceitos = async anoLetivoSelecionado => {
@@ -427,18 +442,21 @@ const RelatorioNotasConceitosFinais = () => {
   ]);
 
   useEffect(() => {
-    obterDres();
-  }, [obterDres]);
+    if (anoLetivo) {
+      obterDres();
+    }
+  }, [obterDres, anoLetivo]);
 
   useEffect(() => {
     obterAnosLetivos();
-  }, [obterAnosLetivos]);
+  }, [consideraHistorico, obterAnosLetivos]);
 
   const onClickVoltar = () => {
     history.push(URL_HOME);
   };
 
   const onClickCancelar = () => {
+    setConsideraHistorico(false);
     setAnoLetivo(undefined);
     setCodigoDre(undefined);
     setCondicao(undefined);
@@ -448,7 +466,6 @@ const RelatorioNotasConceitosFinais = () => {
     setTipoNotaSelecionada(undefined);
 
     obterAnosLetivos();
-    obterDres();
 
     setFormato('PDF');
     setModoEdicao(false);
@@ -657,6 +674,24 @@ const RelatorioNotasConceitosFinais = () => {
     return valoresParaSelecionar;
   };
 
+  const onChangeConsideraHistorico = e => {
+    setConsideraHistorico(e.target.checked);
+    setAnoLetivo();
+
+    setModalidadeId(undefined);
+
+    setListaSemestre([]);
+    setSemestre(undefined);
+
+    setListaAnosEscolares([]);
+    setAnosEscolares(undefined);
+
+    setCodigoDre();
+    setCodigoUe();
+
+    setModoEdicao(true);
+  };
+
   return (
     <>
       <AlertaModalidadeInfantil
@@ -676,6 +711,13 @@ const RelatorioNotasConceitosFinais = () => {
         <Card>
           <div className="col-md-12">
             <div className="row">
+              <div className="col-md-12 mb-2">
+                <CheckboxComponent
+                  label="Exibir histórico?"
+                  checked={consideraHistorico}
+                  onChangeCheckbox={e => onChangeConsideraHistorico(e)}
+                />
+              </div>
               <div className="col-sm-12 col-md-6 col-lg-3 col-xl-2 mb-2">
                 <SelectComponent
                   label="Ano Letivo"
@@ -692,9 +734,9 @@ const RelatorioNotasConceitosFinais = () => {
                 <SelectComponent
                   label="DRE"
                   lista={listaDres}
-                  valueOption="codigo"
-                  valueText="nome"
-                  disabled={listaDres && listaDres.length === 1}
+                  valueOption="valor"
+                  valueText="desc"
+                  disabled={listaDres?.length === 1}
                   onChange={onChangeDre}
                   valueSelect={codigoDre}
                   placeholder="Diretoria Regional de Educação (DRE)"
