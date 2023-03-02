@@ -28,7 +28,7 @@ import {
   SGP_SELECT_MODALIDADE,
   SGP_SELECT_TURMA,
   SGP_SELECT_ESTUDANTE_CRIANCA,
-  SGP_SELECT_IMPRIMIR_DADOS_REPONSAVEIS ,
+  SGP_SELECT_IMPRIMIR_DADOS_RESPONSAVEIS ,
   SGP_SELECT_PREENCHER_IMPRESSAO,
   SGP_SELECT_ANO_LETIVO
 } from '~/constantes/ids/select';
@@ -749,7 +749,7 @@ const HistoricoEscolar = () => {
             <div className="col-sm-12 col-md-6 col-lg-4 col-xl-4 mb-2">
               <SelectComponent
                 label="Imprimir dados dos responsáveis"
-                id={SGP_SELECT_IMPRIMIR_DADOS_REPONSAVEIS }
+                id={SGP_SELECT_IMPRIMIR_DADOS_RESPONSAVEIS }
                 lista={listaSimNao}
                 valueOption="valor"
                 valueText="desc"
