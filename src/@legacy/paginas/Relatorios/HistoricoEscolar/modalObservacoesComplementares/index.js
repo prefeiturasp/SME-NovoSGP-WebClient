@@ -75,7 +75,7 @@ const ModalObservacoesComplementares = props => {
       .catch(e => erros(e))
       .finally(() => setExibirLoader(false));
     if (retorno?.status === 200) {
-      setValoresIniciais({ observacao: retorno?.data || '' });
+      setValoresIniciais({ observacao: retorno?.data?.observacao || '' });
     }
   };
 
