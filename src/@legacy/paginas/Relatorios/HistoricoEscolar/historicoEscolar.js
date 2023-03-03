@@ -21,19 +21,21 @@ import AlertaModalidadeInfantil from '~/componentes-sgp/AlertaModalidadeInfantil
 import BotoesAcaoRelatorio from '~/componentes-sgp/botoesAcaoRelatorio';
 import { ServicoFiltroRelatorio } from '~/servicos';
 import { SGP_CHECKBOX_EXIBIR_HISTORICO } from '~/constantes/ids/checkbox';
-import { SGP_INPUT_CODIGO_EOL,SGP_INPUT_NOME_ESTUDANTE } from '~/constantes/ids/input';
-import { 
+import { SGP_INPUT_NOME_ESTUDANTE } from '~/constantes/ids/input';
+import {
   SGP_SELECT_DRE,
-  SGP_SELECT_UE ,
+  SGP_SELECT_UE,
   SGP_SELECT_MODALIDADE,
   SGP_SELECT_TURMA,
   SGP_SELECT_ESTUDANTE_CRIANCA,
-  SGP_SELECT_IMPRIMIR_DADOS_RESPONSAVEIS ,
+  SGP_SELECT_IMPRIMIR_DADOS_RESPONSAVEIS,
   SGP_SELECT_PREENCHER_DATA_IMPRESSAO,
-  SGP_SELECT_ANO_LETIVO
+  SGP_SELECT_ANO_LETIVO,
+  SGP_SELECT_INFORMAR_OBSERVACOES_COMPLEMENTARES,
 } from '~/constantes/ids/select';
+import ModalObservacoesComplementares from './modalObservacoesComplementares';
 
-const HistoricoEscolar = () => {
+const HistoricoEscolar = teste => {
   const codigosAlunosSelecionados = useSelector(
     state => state.localizadorEstudante.codigosAluno
   );
@@ -55,18 +57,39 @@ const HistoricoEscolar = () => {
   const [semestre, setSemestre] = useState(undefined);
   const [turmaId, setTurmaId] = useState(undefined);
   const [estudanteOpt, setEstudanteOpt] = useState(undefined);
-  const [imprimirDadosResp, setImprimirDadosResp] = useState('0');
-  const [preencherDataImpressao, setPreencherDataImpressao] = useState('0');
 
   const [desabilitarBtnGerar, setDesabilitarBtnGerar] = useState(true);
-  const [
-    alunoLocalizadorSelecionado,
-    setAlunoLocalizadorSelecionado,
-  ] = useState();
-
+  const [alunoLocalizadorSelecionado, setAlunoLocalizadorSelecionado] =
+    useState();
   const [alunosSelecionados, setAlunosSelecionados] = useState([]);
   const [filtro, setFiltro] = useState({});
   const [modoEdicao, setModoEdicao] = useState(false);
+  const [exibirModalObservacoes, setExibirModalObservacoes] = useState(false);
+
+  const SIM = '1';
+  const NAO = '0';
+
+  const [preencherDataImpressao, setPreencherDataImpressao] = useState(SIM);
+  const [imprimirDadosResponsaveis, setImprimirDadosResponsaveis] =
+    useState(SIM);
+  const [
+    informarObservacoesComplementares,
+    setInformarObservacoesComplementares,
+  ] = useState(NAO);
+
+  const desabilitarInformarObsComplementares =
+    alunosSelecionados?.length !== 1 &&
+    !alunoLocalizadorSelecionado?.alunoCodigo;
+
+  const alunosCodigo =
+    codigosAlunosSelecionados?.length > 0
+      ? codigosAlunosSelecionados
+      : alunosSelecionados;
+
+  const alunoCodigo =
+    informarObservacoesComplementares === SIM && alunosCodigo?.length === 1
+      ? alunosCodigo[0]
+      : 0;
 
   const vaidaDesabilitarBtnGerar = useCallback(
     desabilitar => {
@@ -78,6 +101,12 @@ const HistoricoEscolar = () => {
     },
     [modalidadeId]
   );
+
+  useEffect(() => {
+    if (desabilitarInformarObsComplementares) {
+      setInformarObservacoesComplementares(NAO);
+    }
+  }, [desabilitarInformarObsComplementares]);
 
   useEffect(() => {
     if (codigosAlunosSelecionados?.length > 0) {
@@ -92,8 +121,8 @@ const HistoricoEscolar = () => {
   ];
 
   const listaSimNao = [
-    { valor: '0', desc: 'Sim' },
-    { valor: '1', desc: 'Não' },
+    { valor: SIM, desc: 'Sim' },
+    { valor: NAO, desc: 'Não' },
   ];
 
   const colunas = [
@@ -122,7 +151,6 @@ const HistoricoEscolar = () => {
     setAlunosSelecionados([]);
     setEstudanteOpt('0');
     setCarregandoAnos(false);
-
   }, [anoAtual, consideraHistorico]);
 
   useEffect(() => {
@@ -235,7 +263,6 @@ const HistoricoEscolar = () => {
       }
       setCarregandoDres(false);
     }
-
   }, [anoLetivo]);
 
   const [carregandoTurmas, setCarregandoTurmas] = useState(false);
@@ -280,8 +307,9 @@ const HistoricoEscolar = () => {
     async (modalidadeSelecionada, anoLetivoSelecionado) => {
       setCarregandoSemestres(true);
       const retorno = await api.get(
-        `v1/abrangencias/${consideraHistorico}/semestres?anoLetivo=${anoLetivoSelecionado}&modalidade=${modalidadeSelecionada ||
-          0}`
+        `v1/abrangencias/${consideraHistorico}/semestres?anoLetivo=${anoLetivoSelecionado}&modalidade=${
+          modalidadeSelecionada || 0
+        }`
       );
       if (retorno && retorno.data) {
         const lista = retorno.data.map(periodo => {
@@ -312,7 +340,6 @@ const HistoricoEscolar = () => {
       setModalidadeId();
       setListaModalidades([]);
     }
-
   }, [anoLetivo, ueId]);
 
   useEffect(() => {
@@ -322,7 +349,6 @@ const HistoricoEscolar = () => {
       setUeId();
       setListaUes([]);
     }
-
   }, [dreId, anoLetivo, obterUes]);
 
   useEffect(() => {
@@ -332,7 +358,6 @@ const HistoricoEscolar = () => {
       setTurmaId();
       setListaTurmas([]);
     }
-
   }, [modalidadeId, ueId, anoLetivo, semestre]);
 
   useEffect(() => {
@@ -347,7 +372,6 @@ const HistoricoEscolar = () => {
       setSemestre();
       setListaSemestre([]);
     }
-
   }, [modalidadeId, anoLetivo]);
 
   useEffect(() => {
@@ -387,6 +411,7 @@ const HistoricoEscolar = () => {
     vaidaDesabilitarBtnGerar,
     estudanteOpt,
     alunosSelecionados,
+    informarObservacoesComplementares,
   ]);
 
   useEffect(() => {
@@ -409,6 +434,10 @@ const HistoricoEscolar = () => {
     obterAnosLetivos();
 
     setModoEdicao(false);
+
+    setPreencherDataImpressao(SIM);
+    setImprimirDadosResponsaveis(SIM);
+    setInformarObservacoesComplementares(NAO);
   };
 
   const gerarHistorico = async params => {
@@ -418,7 +447,15 @@ const HistoricoEscolar = () => {
 
   const [carregandoGerar, setCarregandoGerar] = useState(false);
 
-  const onClickGerar = () => {
+  const validarAntesDeGerarRel = () => {
+    if (informarObservacoesComplementares === SIM) {
+      setExibirModalObservacoes(true);
+    } else {
+      onClickGerar();
+    }
+  };
+
+  const onClickGerar = (observacaoComplementar = '') => {
     setCarregandoGerar(true);
 
     const params = {
@@ -429,12 +466,12 @@ const HistoricoEscolar = () => {
       semestre,
       turmaCodigo: turmaId,
       consideraHistorico,
-      imprimirDadosResponsaveis: imprimirDadosResp === '0',
-      preencherDataImpressao: preencherDataImpressao === '0',
-      alunosCodigo:
-        codigosAlunosSelecionados?.length > 0
-          ? codigosAlunosSelecionados
-          : alunosSelecionados,
+      alunosCodigo,
+      observacaoComplementar,
+      imprimirDadosResponsaveis: imprimirDadosResponsaveis === SIM,
+      preencherDataImpressao: preencherDataImpressao === SIM,
+      informarObservacoesComplementares:
+        informarObservacoesComplementares === SIM,
     };
 
     if (gerarHistorico(params)) {
@@ -518,7 +555,7 @@ const HistoricoEscolar = () => {
   };
 
   const onChangeImprimirDadosResp = valor => {
-    setImprimirDadosResp(valor);
+    setImprimirDadosResponsaveis(valor);
     setModoEdicao(true);
   };
 
@@ -554,13 +591,26 @@ const HistoricoEscolar = () => {
     setModoEdicao(true);
   };
 
-  function onCheckedConsideraHistorico(e) {
+  const onCheckedConsideraHistorico = e => {
     setConsideraHistorico(e.target.checked);
     setModoEdicao(true);
-  }
+  };
+
+  const onChangeInformarObservacoesComplementares = valor => {
+    setInformarObservacoesComplementares(valor);
+    setModoEdicao(true);
+  };
 
   return (
     <>
+      {exibirModalObservacoes && (
+        <ModalObservacoesComplementares
+          exibirModal={exibirModalObservacoes}
+          setExibirModal={setExibirModalObservacoes}
+          codigoAluno={alunoCodigo}
+          gerarRelatorio={obs => onClickGerar(obs)}
+        />
+      )}
       <AlertaModalidadeInfantil
         exibir={String(modalidadeId) === String(modalidade.INFANTIL)}
         validarModalidadeFiltroPrincipal={false}
@@ -569,7 +619,7 @@ const HistoricoEscolar = () => {
         <BotoesAcaoRelatorio
           onClickVoltar={onClickVoltar}
           onClickCancelar={onClickCancelar}
-          onClickGerar={onClickGerar}
+          onClickGerar={() => validarAntesDeGerarRel()}
           desabilitarBtnGerar={desabilitarBtnGerar}
           carregandoGerar={carregandoGerar}
           temLoaderBtnGerar
@@ -749,11 +799,11 @@ const HistoricoEscolar = () => {
             <div className="col-sm-12 col-md-6 col-lg-4 col-xl-4 mb-2">
               <SelectComponent
                 label="Imprimir dados dos responsáveis"
-                id={SGP_SELECT_IMPRIMIR_DADOS_RESPONSAVEIS }
+                id={SGP_SELECT_IMPRIMIR_DADOS_RESPONSAVEIS}
                 lista={listaSimNao}
                 valueOption="valor"
                 valueText="desc"
-                valueSelect={imprimirDadosResp}
+                valueSelect={imprimirDadosResponsaveis}
                 onChange={onChangeImprimirDadosResp}
               />
             </div>
@@ -766,6 +816,18 @@ const HistoricoEscolar = () => {
                 valueText="desc"
                 valueSelect={preencherDataImpressao}
                 onChange={onChangePreencherDataImpressao}
+              />
+            </div>
+            <div className="col-sm-12 col-md-6 col-lg-4 col-xl-4 mb-2">
+              <SelectComponent
+                label="Informar observações complementares"
+                id={SGP_SELECT_INFORMAR_OBSERVACOES_COMPLEMENTARES}
+                lista={listaSimNao}
+                valueOption="valor"
+                valueText="desc"
+                valueSelect={informarObservacoesComplementares}
+                onChange={v => onChangeInformarObservacoesComplementares(v)}
+                disabled={desabilitarInformarObsComplementares}
               />
             </div>
             <div className="col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-2">
