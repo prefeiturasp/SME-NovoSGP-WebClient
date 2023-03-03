@@ -57,4 +57,20 @@ module.exports = {
       [require.resolve('@typescript-eslint/parser')]: ['.ts', '.tsx', '.d.ts'],
     },
   },
+  overrides: [
+    {
+      files: ['src/**/*.js'],
+      rules: {
+        'prettier/prettier': [
+          'error',
+          {
+            trailingComma: 'es5',
+            printWidth: 80,
+            arrowParens: 'avoid',
+            endOfLine: 'auto',
+          },
+        ],
+      },
+    },
+  ],
 };
