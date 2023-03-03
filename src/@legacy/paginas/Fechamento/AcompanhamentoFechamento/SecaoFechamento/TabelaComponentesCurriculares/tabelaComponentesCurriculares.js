@@ -155,8 +155,8 @@ const TabelaComponentesCurriculares = ({
       render: (_, record) => {
         const ehLinhaClicada =
           record.pendenciaId === detalhePendenciaEscolhido?.pendenciaId;
-        const corTexto = ehLinhaClicada ? Colors.Branco : Colors.Azul;
-        const corTextoHover = ehLinhaClicada ? Colors.Azul : '';
+        const corTexto = Colors.Azul;
+        const corTextoHover = ehLinhaClicada ? Colors.Branco : '';
         return (
           <Button
             id="botao-detalhar"
