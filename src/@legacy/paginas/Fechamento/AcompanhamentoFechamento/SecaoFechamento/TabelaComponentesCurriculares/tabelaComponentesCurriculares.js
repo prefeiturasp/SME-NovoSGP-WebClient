@@ -25,9 +25,8 @@ const TabelaComponentesCurriculares = ({
   bimestre,
 }) => {
   const [carregandoComponentes, setCarregandoComponentes] = useState(false);
-  const [carregandoDetalhePendencia, setCarregandoDetalhePendencia] = useState(
-    false
-  );
+  const [carregandoDetalhePendencia, setCarregandoDetalhePendencia] =
+    useState(false);
   const [dadosPendencias, setDadosPendencias] = useState([]);
   const [dadosDetalhePendencias, setDadosDetalhePendencias] = useState([]);
   const [linhasExpandidasPendencia, setLinhasExpandidasPendencia] = useState(
@@ -110,12 +109,13 @@ const TabelaComponentesCurriculares = ({
     let mostrarPendencia = false;
     setCarregandoDetalhePendencia(true);
 
-    const resposta = await ServicoAcompanhamentoFechamento.obterDetalhePendencia(
-      dadosLinha?.tipoPendencia,
-      dadosLinha?.pendenciaId
-    )
-      .catch(e => erros(e))
-      .finally(() => setCarregandoDetalhePendencia(false));
+    const resposta =
+      await ServicoAcompanhamentoFechamento.obterDetalhePendencia(
+        dadosLinha?.tipoPendencia,
+        dadosLinha?.pendenciaId
+      )
+        .catch(e => erros(e))
+        .finally(() => setCarregandoDetalhePendencia(false));
 
     if (resposta?.data) {
       mostrarPendencia = true;
@@ -181,13 +181,14 @@ const TabelaComponentesCurriculares = ({
     if (expandir) {
       setCarregandoComponentes(true);
 
-      const resposta = await ServicoAcompanhamentoFechamento.obterDetalhesPendencias(
-        turmaId,
-        bimestre,
-        componente.id
-      )
-        .catch(e => erros(e))
-        .finally(() => setCarregandoComponentes(false));
+      const resposta =
+        await ServicoAcompanhamentoFechamento.obterDetalhesPendencias(
+          turmaId,
+          bimestre,
+          componente.id
+        )
+          .catch(e => erros(e))
+          .finally(() => setCarregandoComponentes(false));
 
       if (resposta?.data?.length) {
         componenteSelecionado = [componente?.id];
@@ -236,7 +237,9 @@ const TabelaComponentesCurriculares = ({
         pagination={false}
         expandIconColumnIndex={3}
         expandedRowKeys={linhasExpandidasPendencia}
-        onClickExpandir={obterDetalhesPendencias}
+        onClickExpandir={(expanded, record) =>
+          obterDetalhesPendencias(expanded, record)
+        }
         semHover
         expandIcon={({ expanded, onExpand, record }) =>
           expandIcon(expanded, onExpand, record)
