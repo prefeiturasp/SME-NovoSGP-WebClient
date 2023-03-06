@@ -52,7 +52,7 @@ const LinhaConceitoFinal = props => {
                                 item.disciplina,
                                 index
                               )}
-                              {aluno?.notasBimestre?.emAprovacao && (
+                              {item?.emAprovacao && (
                                 <Tooltip title="Aguardando aprovação">
                                   <MarcadorTriangulo />
                                 </Tooltip>
