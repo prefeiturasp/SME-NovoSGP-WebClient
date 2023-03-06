@@ -85,7 +85,7 @@ const CamposFiltrarDadosFrequenciaPlanoAula = () => {
 
     const codComponenteCurricular =
       componenteCurricular?.codDisciplinaPai ||
-      componenteCurricular?.codigoComponenteCurricular;
+      componenteCurricular?.id;
 
     const datasDeAulas =
       turmaSelecionada && turmaSelecionada.turma
