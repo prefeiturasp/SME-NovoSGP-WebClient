@@ -52,7 +52,7 @@ const JoditEditor = forwardRef((props, ref) => {
 
   const textArea = useRef(null);
 
-  const [url, setUrl] = useState(urlBase);
+  const [url] = useState(urlBase);
   const { token } = store.getState().usuario;
 
   const [validacaoComErro, setValidacaoComErro] = useState(false);
@@ -113,9 +113,8 @@ const JoditEditor = forwardRef((props, ref) => {
     const temImagemNosDadosColados = qtdElementoImgNova.length;
 
     if (temImagemNosDadosColados && qtdMaxImg) {
-      const qtdElementoImgAtual = textArea?.current?.editorDocument?.querySelectorAll?.(
-        'img'
-      );
+      const qtdElementoImgAtual =
+        textArea?.current?.editorDocument?.querySelectorAll?.('img');
       const totalImg = qtdElementoImgNova?.length + qtdElementoImgAtual?.length;
 
       if (totalImg > qtdMaxImg || dadosColadoTexto === '') {
@@ -200,10 +199,7 @@ const JoditEditor = forwardRef((props, ref) => {
                 resolve(data);
               }
             } else {
-              const formato = arquivo.type
-                .split('/')
-                .pop()
-                .replace('+xml', '');
+              const formato = arquivo.type.split('/').pop().replace('+xml', '');
 
               const msg = `O formato .${formato} não é valido.`;
 
@@ -307,9 +303,8 @@ const JoditEditor = forwardRef((props, ref) => {
   const bloquearTraducaoNavegador = () => {
     const isEdge = navigator?.userAgent?.indexOf?.('Edg') !== -1;
     if (isEdge && textArea?.current) {
-      const elementTextArea = textArea?.current?.editorDocument?.getElementsByClassName(
-        'jodit'
-      )?.[0];
+      const elementTextArea =
+        textArea?.current?.editorDocument?.getElementsByClassName('jodit')?.[0];
 
       const elementBodyTextArea = elementTextArea
         ? elementTextArea.getElementsByTagName('body')[0]
@@ -379,9 +374,10 @@ const JoditEditor = forwardRef((props, ref) => {
       if (textArea?.current && config) {
         if (textArea?.current?.type === 'textarea') {
           textArea.current = Jodit.make(element, config);
-          const elementTextArea = textArea?.current?.editorDocument?.getElementsByClassName(
-            'jodit'
-          )?.[0];
+          const elementTextArea =
+            textArea?.current?.editorDocument?.getElementsByClassName(
+              'jodit'
+            )?.[0];
 
           if (elementTextArea?.style) {
             elementTextArea.style.cssText = 'overflow: auto;';
@@ -416,7 +412,6 @@ const JoditEditor = forwardRef((props, ref) => {
         }
       }
     }
-
   }, [url]);
 
   useEffect(() => {
@@ -430,7 +425,6 @@ const JoditEditor = forwardRef((props, ref) => {
     if (config && textArea?.current && textArea?.current?.type !== 'textarea') {
       textArea.current.setReadOnly(desabilitar);
     }
-
   }, [desabilitar]);
 
   const possuiErro = () => {
