@@ -36,6 +36,7 @@ import { verificaSomenteConsulta } from '~/servicos/servico-navegacao';
 import { ehTurmaInfantil } from '~/servicos/Validacoes/validacoesInfatil';
 import BotoesAcoesDiarioBordo from './botoesAcoesDiarioBordo';
 import ModalSelecionarAula from './modalSelecionarAula';
+import { removerTagsHtml } from '~/utils';
 
 const DiarioBordo = ({ match }) => {
   const usuario = useSelector(state => state.usuario);
@@ -50,14 +51,10 @@ const DiarioBordo = ({ match }) => {
     store => store.observacoesUsuario.listaUsuariosNotificacao
   );
 
-  const [
-    listaComponenteCurriculares,
-    setListaComponenteCurriculares,
-  ] = useState();
-  const [
-    componenteCurricularSelecionado,
-    setComponenteCurricularSelecionado,
-  ] = useState();
+  const [listaComponenteCurriculares, setListaComponenteCurriculares] =
+    useState();
+  const [componenteCurricularSelecionado, setComponenteCurricularSelecionado] =
+    useState();
 
   const [codDisciplinaPai, setCodDisciplinaPai] = useState();
   const [dataSelecionada, setDataSelecionada] = useState();
@@ -74,9 +71,8 @@ const DiarioBordo = ({ match }) => {
   const [temPeriodoAberto, setTemPeriodoAberto] = useState(true);
   const [aulaSelecionada, setAulaSelecionada] = useState();
   const [aulasParaSelecionar, setAulasParaSelecionar] = useState([]);
-  const [exibirModalSelecionarAula, setExibirModalSelecionarAula] = useState(
-    false
-  );
+  const [exibirModalSelecionarAula, setExibirModalSelecionarAula] =
+    useState(false);
   const [desabilitarCampos, setDesabilitarCampos] = useState(false);
   const [somenteConsulta, setSomenteConsulta] = useState(false);
   const [ehInseridoCJ, setEhInseridoCJ] = useState(false);
@@ -100,9 +96,16 @@ const DiarioBordo = ({ match }) => {
   const validacoes = Yup.object({
     planejamento: Yup.string()
       .required('Campo planejamento é obrigatório')
-      .min(
-        200,
-        'Você precisa preencher o planejamento com no mínimo 200 caracteres'
+      .test(
+        'len',
+        'Você precisa preencher o planejamento com no mínimo 200 caracteres',
+        val => {
+          const length = removerTagsHtml(val)
+            ?.replaceAll(/\s/g, '')
+            ?.replace(/&nbsp;/g, '')?.length;
+
+          return length > 200;
+        }
       ),
   });
 
@@ -160,14 +163,12 @@ const DiarioBordo = ({ match }) => {
     if (!turmaInfantil) {
       resetarTela(refForm);
     }
-
   }, [turmaSelecionada, modalidadesFiltroPrincipal, turmaInfantil]);
 
   useEffect(() => {
     setListaDatasAulas();
     setDiasParaHabilitar();
     resetarTela(refForm);
-
   }, [turmaSelecionada.turma]);
 
   const obterComponentesCurriculares = useCallback(async () => {
@@ -202,7 +203,6 @@ const DiarioBordo = ({ match }) => {
       setCodDisciplinaPai(undefined);
       resetarTela();
     }
-
   }, [turmaId, obterComponentesCurriculares, turmaInfantil]);
 
   const obterDadosObservacoes = async diarioBordoIdSel => {
@@ -216,9 +216,8 @@ const DiarioBordo = ({ match }) => {
     });
 
     if (retorno && retorno.data) {
-      const dadosObservacoes = ServicoObservacoesUsuario.obterUsuarioPorObservacao(
-        retorno.data
-      );
+      const dadosObservacoes =
+        ServicoObservacoesUsuario.obterUsuarioPorObservacao(retorno.data);
       dispatch(setDadosObservacoesUsuario([...dadosObservacoes]));
     } else {
       dispatch(setDadosObservacoesUsuario([]));
@@ -264,17 +263,18 @@ const DiarioBordo = ({ match }) => {
   const obterDatasDeAulasDisponiveis = useCallback(
     async codDiscipPai => {
       setCarregandoData(true);
-      const datasDeAulas = await ServicoFrequencia.obterDatasDeAulasPorCalendarioTurmaEComponenteCurricular(
-        turmaId,
-        codDiscipPai
-      )
-        .catch(e => {
-          setCarregandoGeral(false);
-          erros(e);
-        })
-        .finally(() => {
-          setCarregandoData(false);
-        });
+      const datasDeAulas =
+        await ServicoFrequencia.obterDatasDeAulasPorCalendarioTurmaEComponenteCurricular(
+          turmaId,
+          codDiscipPai
+        )
+          .catch(e => {
+            setCarregandoGeral(false);
+            erros(e);
+          })
+          .finally(() => {
+            setCarregandoData(false);
+          });
 
       const codigoComponenteCurricular = componenteCurricularId || codDiscipPai;
 
@@ -775,7 +775,7 @@ const DiarioBordo = ({ match }) => {
                                 <JoditEditor
                                   valideClipboardHTML={false}
                                   form={form}
-                                  value={form?.values?.planejamento}
+                                  value={valoresIniciais.planejamento}
                                   name="planejamento"
                                   onChange={v => {
                                     if (valoresIniciais.planejamento !== v) {
