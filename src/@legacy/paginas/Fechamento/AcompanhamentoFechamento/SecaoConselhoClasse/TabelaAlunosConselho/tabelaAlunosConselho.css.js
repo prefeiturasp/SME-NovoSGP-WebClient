@@ -56,7 +56,6 @@ export const LinhaTabela = styled.div`
         white-space: break-spaces;
 
         @supports (-moz-appearance: none) {
-          margin-top: -22px;
           padding-left: 25px;
         }
       }
