@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 import { Col, Row } from 'antd';
-import React, { useEffect} from 'react';
+import React, { useEffect,setState} from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useRouteMatch } from 'react-router-dom';
 import { Button, Colors,Loader } from '~/componentes';
@@ -137,7 +137,7 @@ const CadastroEncaminhamentoNAAPABotoesAcao = props => {
     }
   };
   const onClickImpressao = async () => {
-    const resultado = await ServicoNAAPA.imprimir(
+    await ServicoNAAPA.imprimir(
       [idEncaminhamento]
     )
       .catch(e => erros(e))
