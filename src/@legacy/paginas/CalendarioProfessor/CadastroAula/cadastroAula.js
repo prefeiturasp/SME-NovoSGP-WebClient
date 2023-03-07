@@ -46,7 +46,6 @@ import { SGP_DATA_AULA } from '~/constantes/ids/date';
 import { ContainerColumnReverse } from '~/paginas/Planejamento/Anual/planoAnual.css';
 import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
 import BotaoExcluirPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoExcluirPadrao';
-import { set } from 'react-ga';
 
 function CadastroDeAula({ match, location }) {
   const { id, tipoCalendarioId, somenteReposicao } = match.params;
