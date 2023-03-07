@@ -1,9 +1,8 @@
-/* eslint-disable react/prop-types */
 import { Col, Row } from 'antd';
-import React, { useEffect,setState} from 'react';
+import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useRouteMatch } from 'react-router-dom';
-import { Button, Colors,Loader } from '~/componentes';
+import { Button, Colors } from '~/componentes';
 import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
 import {
   SGP_BUTTON_ALTERAR_CADASTRAR,
@@ -11,7 +10,6 @@ import {
   SGP_BUTTON_ENCERRAR_ENCAMINHAMENTO_NAAPA,
   SGP_BUTTON_PROXIMO_PASSO,
   SGP_BUTTON_SALVAR_RASCUNHO,
-  SGP_BUTTON_IMPRIMIR,
 } from '~/constantes/ids/button';
 import {
   history,
@@ -30,10 +28,10 @@ import {
 } from '~/redux/modulos/encaminhamentoNAAPA/actions';
 import QuestionarioDinamicoFuncoes from '~/componentes-sgp/QuestionarioDinamico/Funcoes/QuestionarioDinamicoFuncoes';
 import situacaoNAAPA from '~/dtos/situacaoNAAPA';
-import { MENSAGEM_SOLICITACAO_RELATORIO_SUCESSO } from '~/constantes';
+import BtnImpressaoEncaminhamentoNAAPA from '../componentes/btnImpressaoNAAPA';
 
 const CadastroEncaminhamentoNAAPABotoesAcao = props => {
-  const { mostrarBusca, setMostrarBusca,idEncaminhamento } = props;
+  const { mostrarBusca, setMostrarBusca } = props;
 
   const routeMatch = useRouteMatch();
   const dispatch = useDispatch();
@@ -136,16 +134,7 @@ const CadastroEncaminhamentoNAAPABotoesAcao = props => {
       }
     }
   };
-  const onClickImpressao = async () => {
-    await ServicoNAAPA.imprimir(
-      [idEncaminhamento]
-    )
-      .catch(e => erros(e))
-      .finally();
 
-      sucesso(MENSAGEM_SOLICITACAO_RELATORIO_SUCESSO);
-    
-  };
   const onClickSalvarRascunho = async () => {
     const resposta = await ServicoNAAPA.salvarPadrao(
       encaminhamentoId,
@@ -212,13 +201,8 @@ const CadastroEncaminhamentoNAAPABotoesAcao = props => {
         <BotaoVoltarPadrao onClick={() => onClickVoltar()} />
       </Col>
       <Col>
-        <Button
-          bold
-          border
-          icon='print'
-          color={Colors.Azul}
-          id={SGP_BUTTON_IMPRIMIR}
-          onClick={onClickImpressao}
+        <BtnImpressaoEncaminhamentoNAAPA
+          idsSelecionados={encaminhamentoId ? [encaminhamentoId] : []}
         />
       </Col>
       {mostrarBusca ? (
