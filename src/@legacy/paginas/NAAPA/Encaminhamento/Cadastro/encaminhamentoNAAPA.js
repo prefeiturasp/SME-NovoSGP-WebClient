@@ -46,6 +46,7 @@ const EncaminhamentoNAAPA = () => {
         <CadastroEncaminhamentoNAAPABotoesAcao
           mostrarBusca={mostrarBusca}
           setMostrarBusca={setMostrarBusca}
+          idEncaminhamento={encaminhamentoId}
         />
       </Cabecalho>
 

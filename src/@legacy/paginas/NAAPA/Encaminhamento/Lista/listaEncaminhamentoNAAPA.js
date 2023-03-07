@@ -1,4 +1,9 @@
 import { Col, Row } from 'antd';
+import { ListaPaginada } from '~/componentes';
+import { SGP_TABLE_ENCAMINHAMENTO_NAAPA } from '~/constantes/ids/table';
+import { store } from '~/redux';
+import { setTabAtivaEncaminhamentoNAAPA } from '~/redux/modulos/encaminhamentoNAAPA/actions';
+import { history } from '~/servicos';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import {
@@ -30,7 +35,7 @@ import { AbrangenciaServico, erros, verificaSomenteConsulta } from '~/servicos';
 import ServicoNAAPA from '~/servicos/Paginas/Gestao/NAAPA/ServicoNAAPA';
 import { ordenarDescPor, verificarDataFimMaiorInicio } from '~/utils';
 import ListaEncaminhamentoNAAPABotoesAcao from './listaEncaminhamentoNAAPABotoesAcao';
-import ListaEncaminhamentoNAAPAPaginada from './listaEncaminhamentoNAAPAPaginada';
+import { MENSAGEM_SOLICITACAO_RELATORIO_SUCESSO } from '~/constantes';
 
 const ListaEncaminhamentoNAAPA = () => {
   const usuario = useSelector(state => state.usuario);
@@ -64,13 +69,93 @@ const ListaEncaminhamentoNAAPA = () => {
   const [carregandoTurmas, setCarregandoTurmas] = useState(false);
 
   const [somenteConsulta, setSomenteConsulta] = useState(false);
-
+  const [filtros, setFiltros] = useState();
+  const filtroEhValido = !!(anoLetivo && dre?.id && ue?.id);
+  const [idsEncaminhamentoNAAPASelecionados, setIdsEncaminhamentoNAAPASelecionados] = useState([]);
+  const colunas = [
+    {
+      title: 'Criança/Estudante',
+      dataIndex: 'nomeAluno ',
+      ellipsis: true,
+      render: (_, linha) => `${linha?.nomeAluno} (${linha?.codigoAluno})`,
+    },
+    {
+      title: 'Data de entrada da queixa',
+      dataIndex: 'dataAberturaQueixaInicio',
+      ellipsis: true,
+      render: dataInicio =>
+        dataInicio ? window.moment(dataInicio).format('DD/MM/YYYY') : '',
+    },
+    {
+      title: 'Prioridade',
+      dataIndex: 'prioridade',
+      ellipsis: true,
+    },
+    {
+      title: 'Situação',
+      dataIndex: 'situacao',
+      ellipsis: true,
+    },
+  ];
+    if (ue?.codigo === OPCAO_TODOS) {
+      colunas.unshift({
+        title: 'Unidade Escolar (UE)',
+        dataIndex: 'ue',
+        ellipsis: true,
+      });
+    }
   useEffect(() => {
     const soConsulta = verificaSomenteConsulta(
       permissoes?.[RotasDto.ENCAMINHAMENTO_NAAPA]
     );
     setSomenteConsulta(soConsulta);
   }, [permissoes]);
+  const filtrar = useCallback(() => {
+    const params = {
+      exibirHistorico: consideraHistorico,
+      anoLetivo,
+      dreId: dre?.id,
+      codigoUe: ue?.codigo,
+      turmaId: turmaId === OPCAO_TODOS ? '' : turmaId,
+      nomeAluno,
+      dataAberturaQueixaInicio: dataAberturaQueixaInicio
+        ? dataAberturaQueixaInicio.format('YYYY-MM-DD')
+        : '',
+      dataAberturaQueixaFim: dataAberturaQueixaFim
+        ? dataAberturaQueixaFim.format('YYYY-MM-DD')
+        : '',
+      situacao,
+      prioridade,
+    };
+
+    const dataFimMaiorInicio = verificarDataFimMaiorInicio(
+      dataAberturaQueixaInicio,
+      dataAberturaQueixaFim
+    );
+
+    if (dataFimMaiorInicio) {
+      setFiltros({ ...params });
+    }
+
+  }, [
+    consideraHistorico,
+    anoLetivo,
+    dre,
+    ue,
+    turmaId,
+    nomeAluno,
+    dataAberturaQueixaInicio,
+    dataAberturaQueixaFim,
+    situacao,
+    prioridade,
+  ]);
+  
+  useEffect(() => {
+    filtrar();
+  }, [filtrar]);
+
+  const exibirTabela =
+    filtros?.anoLetivo && filtros?.dreId && filtros?.codigoUe;
 
   const obterAnosLetivos = useCallback(async () => {
     setCarregandoAnosLetivos(true);
@@ -310,6 +395,9 @@ const ListaEncaminhamentoNAAPA = () => {
     dataAberturaQueixaInicio,
     dataAberturaQueixaFim
   );
+  const onSelecionarItems = items =>{
+        setIdsEncaminhamentoNAAPASelecionados(items?.map(item => item?.id));
+  }
 
   return (
     <>
@@ -317,6 +405,7 @@ const ListaEncaminhamentoNAAPA = () => {
         <ListaEncaminhamentoNAAPABotoesAcao
           podeIncluir={podeIncluir}
           somenteConsulta={somenteConsulta}
+          idsSelecionados={idsEncaminhamentoNAAPASelecionados}
         />
       </Cabecalho>
 
@@ -478,18 +567,25 @@ const ListaEncaminhamentoNAAPA = () => {
 
           <Row gutter={[16, 16]}>
             <Col sm={24}>
-              <ListaEncaminhamentoNAAPAPaginada
-                ue={ue}
-                dre={dre}
-                turmaId={turmaId}
-                situacao={situacao}
-                anoLetivo={anoLetivo}
-                nomeAluno={nomeAluno}
-                prioridade={prioridade}
-                consideraHistorico={consideraHistorico}
-                dataAberturaQueixaFim={dataAberturaQueixaFim}
-                dataAberturaQueixaInicio={dataAberturaQueixaInicio}
-              />
+              <>
+              {
+                exibirTabela ?     
+                <ListaPaginada
+                url="v1/encaminhamento-naapa"
+                id={SGP_TABLE_ENCAMINHAMENTO_NAAPA}
+                colunas={colunas}
+                filtro={filtros}
+                onClick={linha => {
+                  store.dispatch(setTabAtivaEncaminhamentoNAAPA());
+                  history.push(`${RotasDto.ENCAMINHAMENTO_NAAPA}/${linha?.id}`);
+                }}
+                filtroEhValido={filtroEhValido}
+                multiSelecao
+                selecionarItems={onSelecionarItems}
+              /> 
+              :<></>
+              }
+              </>
             </Col>
           </Row>
         </Col>

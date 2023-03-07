@@ -44,6 +44,11 @@ class ServicoNAAPA {
         0}`
     );
 
+  imprimir = async idsSelecionados =>{
+     await api.post(`${URL_PADRAO}/imprimir-detalhado`, { encaminhamentoNaapaIds: idsSelecionados })
+      .catch(e => erros(e));
+  };
+
   guardarSecaoEmEdicao = secaoId => {
     const { dispatch } = store;
 
