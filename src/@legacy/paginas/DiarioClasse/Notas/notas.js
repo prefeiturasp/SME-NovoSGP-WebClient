@@ -818,7 +818,7 @@ const Notas = ({ match }) => {
               }
               const fechamentoTurmaId = salvouNotas?.data?.[0]?.id;
               const emAprovacao = salvouNotas?.data?.[0]?.emAprovacao;
-
+              
               const atualizarFechamentoId =
                 !dadosBimestreAtualizar?.fechamentoTurmaId && fechamentoTurmaId;
 
@@ -826,7 +826,7 @@ const Notas = ({ match }) => {
                 dadosBimestreAtualizar.fechamentoTurmaId = fechamentoTurmaId;
               }
 
-              if (emAprovacao || atualizarFechamentoId) {
+              if (emAprovacao) {
                 mudarStatusEmAprovacaoAlunosPorBimestre(
                   dadosBimestreAtualizar,
                   valoresBimestresSalvarComNotas?.[0],
