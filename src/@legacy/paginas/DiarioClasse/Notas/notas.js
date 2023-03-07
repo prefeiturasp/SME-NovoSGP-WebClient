@@ -826,11 +826,13 @@ const Notas = ({ match }) => {
                 dadosBimestreAtualizar.fechamentoTurmaId = fechamentoTurmaId;
               }
 
-              if (emAprovacao) {
-                mudarStatusEmAprovacaoAlunosPorBimestre(
-                  dadosBimestreAtualizar,
-                  valoresBimestresSalvarComNotas?.[0],
-                );
+              if (emAprovacao || atualizarFechamentoId) {
+                
+                if (emAprovacao)  
+                  mudarStatusEmAprovacaoAlunosPorBimestre(
+                    dadosBimestreAtualizar,
+                    valoresBimestresSalvarComNotas?.[0],
+                  );
 
                 switch (dadosBimestreAtualizar?.numero) {
                   case 1:
