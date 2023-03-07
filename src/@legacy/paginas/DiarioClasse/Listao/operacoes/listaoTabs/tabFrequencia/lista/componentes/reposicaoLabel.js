@@ -15,7 +15,7 @@ const Container = styled.div`
   left: 0;
   div {
     position: absolute;
-    right: ${props => (props.linhaDetalhe ? '32px' : '23px')};
+    right: ${props => (props.linhaDetalhe ? '20px' : '23px')};
     color: ${Base.Branco};
   }
 `;
