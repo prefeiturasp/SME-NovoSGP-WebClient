@@ -71,21 +71,15 @@ const Filtro = () => {
   const trocouPerfil = useSelector(state => state.perfil)?.trocouPerfil;
   const turmaUsuarioSelecionada = usuarioStore.turmaSelecionada;
   const recarregarFiltroPrincipal = usuarioStore?.recarregarFiltroPrincipal;
-  const [campoAnoLetivoDesabilitado, setCampoAnoLetivoDesabilitado] = useState(
-    true
-  );
-  const [
-    campoModalidadeDesabilitado,
-    setCampoModalidadeDesabilitado,
-  ] = useState(true);
-  const [campoPeriodoDesabilitado, setCampoPeriodoDesabilitado] = useState(
-    true
-  );
+  const [campoAnoLetivoDesabilitado, setCampoAnoLetivoDesabilitado] =
+    useState(true);
+  const [campoModalidadeDesabilitado, setCampoModalidadeDesabilitado] =
+    useState(true);
+  const [campoPeriodoDesabilitado, setCampoPeriodoDesabilitado] =
+    useState(true);
   const [campoDreDesabilitado, setCampoDreDesabilitado] = useState(true);
-  const [
-    campoUnidadeEscolarDesabilitado,
-    setCampoUnidadeEscolarDesabilitado,
-  ] = useState(true);
+  const [campoUnidadeEscolarDesabilitado, setCampoUnidadeEscolarDesabilitado] =
+    useState(true);
   const [campoTurmaDesabilitado, setCampoTurmaDesabilitado] = useState(true);
 
   const anosLetivoStore = useSelector(state => state.filtro.anosLetivos);
@@ -716,7 +710,6 @@ const Filtro = () => {
     obterAnosLetivos(true);
   }, [dispatch, limparCamposSelecionados, obterAnosLetivos]);
 
-
   const recarregarFiltro = useCallback(async () => {
     if (usuarioStore && usuarioStore.ehProfessorCj) {
       if (
@@ -816,7 +809,6 @@ const Filtro = () => {
     ) {
       limparFiltro();
     }
-
   });
 
   useEffect(() => {
@@ -824,7 +816,6 @@ const Filtro = () => {
       recarregarFiltro();
       dispatch(setTrocouPerfil(false));
     }
-
   }, [trocouPerfil, recarregarFiltro]);
 
   const mostrarEsconderBusca = () => {
@@ -1112,7 +1103,6 @@ const Filtro = () => {
       setTextoAutocomplete(turmaUsuarioSelecionada.desc);
       setConsideraHistorico(!!turmaUsuarioSelecionada.consideraHistorico);
     }
-
   }, [
     alternarFocoBusca,
     turmaUsuarioSelecionada.anoLetivo,
@@ -1128,6 +1118,7 @@ const Filtro = () => {
 
   useEffect(() => {
     if (recarregarFiltroPrincipal) {
+      recarregarFiltro();
       aplicarFiltro(
         turmaUsuarioSelecionada.consideraHistorico,
         turmaUsuarioSelecionada.anoLetivo,
