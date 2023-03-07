@@ -71,14 +71,21 @@ const RelatorioNotasConceitosFinais = () => {
   const [formato, setFormato] = useState('1');
 
   const [carregandoGeral, setCarregandoGeral] = useState(false);
+  const [carregandoAnosLetivos, setCarregandoAnosLetivos] = useState(false);
+  const [carregandoDres, setCarregandoDres] = useState(false);
+  const [carregandoUes, setCarregandoUes] = useState(false);
+  const [carregandoModalidades, setCarregandoModalidades] = useState(false);
+  const [carregandoSemestres, setCarregandoSemestres] = useState(false);
+  const [carregandoAnosEscolares, setCarregandoAnosEscolares] = useState(false);
+  const [carregandoComponentes, setCarregandoComponentes] = useState(false);
 
   const obterAnosLetivos = useCallback(async () => {
-    setCarregandoGeral(true);
+    setCarregandoAnosLetivos(true);
     const resposta = await FiltroHelper.obterAnosLetivos({
       consideraHistorico,
     }).catch(e => {
       erros(e);
-      setCarregandoGeral(false);
+      setCarregandoAnosLetivos(false);
     });
 
     const anosLetivos = resposta || [];
@@ -95,19 +102,19 @@ const RelatorioNotasConceitosFinais = () => {
     setAnoLetivo(anosOrdenados[0]?.valor);
     setListaAnosLetivo(anosOrdenados);
 
-    setCarregandoGeral(false);
+    setCarregandoAnosLetivos(false);
   }, [consideraHistorico, anoAtual]);
 
   const obterModalidades = async ue => {
     if (ue) {
-      setCarregandoGeral(true);
+      setCarregandoModalidades(true);
       const retorno = await ServicoFiltroRelatorio.obterModalidades(
         ue,
         anoLetivo,
         consideraHistorico
       ).catch(e => {
         erros(e);
-        setCarregandoGeral(false);
+        setCarregandoModalidades(false);
       });
       if (retorno && retorno.data) {
         if (retorno.data && retorno.data.length && retorno.data.length === 1) {
@@ -115,20 +122,20 @@ const RelatorioNotasConceitosFinais = () => {
         }
         setListaModalidades(retorno.data);
       }
-      setCarregandoGeral(false);
+      setCarregandoModalidades(false);
     }
   };
 
   const obterUes = useCallback(async () => {
     if (codigoDre) {
-      setCarregandoGeral(true);
+      setCarregandoUes(true);
       const retorno = await ServicoFiltroRelatorio.obterUes(
         codigoDre,
         consideraHistorico,
         anoLetivo
       ).catch(e => {
         erros(e);
-        setCarregandoGeral(false);
+        setCarregandoUes(false);
       });
       if (retorno && retorno.data) {
         const lista = retorno.data.map(item => ({
@@ -143,7 +150,7 @@ const RelatorioNotasConceitosFinais = () => {
       } else {
         setListaUes([]);
       }
-      setCarregandoGeral(false);
+      setCarregandoUes(false);
     }
   }, [anoLetivo, codigoDre, consideraHistorico]);
 
@@ -166,12 +173,12 @@ const RelatorioNotasConceitosFinais = () => {
   };
 
   const obterDres = useCallback(async () => {
-    setCarregandoGeral(true);
+    setCarregandoDres(true);
     const retorno = await AbrangenciaServico.buscarDres(
       `v1/abrangencias/${consideraHistorico}/dres?anoLetivo=${anoLetivo}`
     )
       .catch(e => erros(e))
-      .finally(() => setCarregandoGeral(false));
+      .finally(() => setCarregandoDres(false));
 
     if (retorno?.data?.length) {
       const lista = retorno.data
@@ -202,7 +209,7 @@ const RelatorioNotasConceitosFinais = () => {
     modalidadeSelecionada,
     anoLetivoSelecionado
   ) => {
-    setCarregandoGeral(true);
+    setCarregandoSemestres(true);
     const retorno = await api
       .get(
         `v1/abrangencias/${consideraHistorico}/semestres?anoLetivo=${anoLetivoSelecionado}&modalidade=${
@@ -211,7 +218,7 @@ const RelatorioNotasConceitosFinais = () => {
       )
       .catch(e => {
         erros(e);
-        setCarregandoGeral(false);
+        setCarregandoSemestres(false);
       });
     if (retorno && retorno.data) {
       const lista = retorno.data.map(periodo => {
@@ -249,14 +256,14 @@ const RelatorioNotasConceitosFinais = () => {
         setListaAnosEscolares([{ descricao: 'Todos', valor: OPCAO_TODOS }]);
         setAnosEscolares([OPCAO_TODOS]);
       } else {
-        setCarregandoGeral(true);
+        setCarregandoAnosEscolares(true);
         const respota = await AbrangenciaServico.buscarAnosEscolares(
           ue,
           mod,
           consideraHistorico
         ).catch(e => {
           erros(e);
-          setCarregandoGeral(false);
+          setCarregandoAnosEscolares(false);
         });
 
         if (respota && respota.data && respota.data.length) {
@@ -264,17 +271,13 @@ const RelatorioNotasConceitosFinais = () => {
             [{ descricao: 'Todos', valor: OPCAO_TODOS }].concat(respota.data)
           );
 
-          if (
-            respota.data &&
-            respota.data.length &&
-            respota.data.length === 1
-          ) {
-            setAnosEscolares(respota.data[0].valor);
+          if (respota?.data?.length === 1) {
+            setAnosEscolares([respota.data[0].valor?.toString()]);
           }
         } else {
           setListaAnosEscolares([]);
         }
-        setCarregandoGeral(false);
+        setCarregandoAnosEscolares(false);
       }
     },
 
@@ -304,7 +307,7 @@ const RelatorioNotasConceitosFinais = () => {
   const obterComponenteCurricular = useCallback(async () => {
     const codigoTodosAnosEscolares = obterCodigoTodosAnosEscolares();
     if (anoLetivo) {
-      setCarregandoGeral(true);
+      setCarregandoComponentes(true);
       const retorno = await ServicoFiltroRelatorio.obterComponetensCurriculares(
         codigoUe,
         modalidadeId,
@@ -312,7 +315,7 @@ const RelatorioNotasConceitosFinais = () => {
         codigoTodosAnosEscolares
       ).catch(e => {
         erros(e);
-        setCarregandoGeral(false);
+        setCarregandoComponentes(false);
       });
       if (retorno && retorno.data && retorno.data.length) {
         const lista = retorno.data.map(item => {
@@ -326,7 +329,7 @@ const RelatorioNotasConceitosFinais = () => {
       } else {
         setListaComponenteCurricular([]);
       }
-      setCarregandoGeral(false);
+      setCarregandoComponentes(false);
     }
   }, [modalidadeId, anoLetivo, obterCodigoTodosAnosEscolares]);
 
@@ -719,113 +722,127 @@ const RelatorioNotasConceitosFinais = () => {
                 />
               </div>
               <div className="col-sm-12 col-md-6 col-lg-3 col-xl-2 mb-2">
-                <SelectComponent
-                  label="Ano Letivo"
-                  lista={listaAnosLetivo}
-                  valueOption="valor"
-                  valueText="desc"
-                  disabled={listaAnosLetivo && listaAnosLetivo.length === 1}
-                  onChange={onChangeAnoLetivo}
-                  valueSelect={anoLetivo}
-                  placeholder="Selecione o ano"
-                />
+                <Loader loading={carregandoAnosLetivos}>
+                  <SelectComponent
+                    label="Ano Letivo"
+                    lista={listaAnosLetivo}
+                    valueOption="valor"
+                    valueText="desc"
+                    disabled={listaAnosLetivo && listaAnosLetivo.length === 1}
+                    onChange={onChangeAnoLetivo}
+                    valueSelect={anoLetivo}
+                    placeholder="Selecione o ano"
+                  />
+                </Loader>
               </div>
               <div className="col-sm-12 col-md-6 col-lg-9 col-xl-5 mb-2">
-                <SelectComponent
-                  label="DRE"
-                  lista={listaDres}
-                  valueOption="valor"
-                  valueText="desc"
-                  disabled={listaDres?.length === 1}
-                  onChange={onChangeDre}
-                  valueSelect={codigoDre}
-                  placeholder="Diretoria Regional de Educação (DRE)"
-                  showSearch
-                />
+                <Loader loading={carregandoDres}>
+                  <SelectComponent
+                    label="DRE"
+                    lista={listaDres}
+                    valueOption="valor"
+                    valueText="desc"
+                    disabled={listaDres?.length === 1}
+                    onChange={onChangeDre}
+                    valueSelect={codigoDre}
+                    placeholder="Diretoria Regional de Educação (DRE)"
+                    showSearch
+                  />
+                </Loader>
               </div>
               <div className="col-sm-12 col-md-6 col-lg-9 col-xl-5 mb-2">
-                <SelectComponent
-                  label="Unidade Escolar (UE)"
-                  lista={listaUes}
-                  valueOption="valor"
-                  valueText="desc"
-                  disabled={listaUes && listaUes.length === 1}
-                  onChange={onChangeUe}
-                  valueSelect={codigoUe}
-                  placeholder="Unidade Escolar (UE)"
-                  showSearch
-                />
+                <Loader loading={carregandoUes}>
+                  <SelectComponent
+                    label="Unidade Escolar (UE)"
+                    lista={listaUes}
+                    valueOption="valor"
+                    valueText="desc"
+                    disabled={listaUes && listaUes.length === 1}
+                    onChange={onChangeUe}
+                    valueSelect={codigoUe}
+                    placeholder="Unidade Escolar (UE)"
+                    showSearch
+                  />
+                </Loader>
               </div>
               <div className="col-sm-12 col-md-6 col-lg-3 col-xl-3 mb-2">
-                <SelectComponent
-                  label="Modalidade"
-                  lista={listaModalidades}
-                  valueOption="valor"
-                  valueText="descricao"
-                  disabled={listaModalidades && listaModalidades.length === 1}
-                  onChange={onChangeModalidade}
-                  valueSelect={modalidadeId}
-                  placeholder="Selecione uma modalidade"
-                />
+                <Loader loading={carregandoModalidades}>
+                  <SelectComponent
+                    label="Modalidade"
+                    lista={listaModalidades}
+                    valueOption="valor"
+                    valueText="descricao"
+                    disabled={listaModalidades && listaModalidades.length === 1}
+                    onChange={onChangeModalidade}
+                    valueSelect={modalidadeId}
+                    placeholder="Selecione uma modalidade"
+                  />
+                </Loader>
               </div>
               <div className="col-sm-12 col-md-6 col-lg-3 col-xl-3 mb-2">
-                <SelectComponent
-                  lista={listaSemestre}
-                  valueOption="valor"
-                  valueText="desc"
-                  label="Semestre"
-                  disabled={
-                    !modalidadeId ||
-                    String(modalidadeId) !== String(modalidade.EJA) ||
-                    (listaSemestre && listaSemestre.length === 1)
-                  }
-                  valueSelect={semestre}
-                  onChange={onChangeSemestre}
-                  placeholder="Selecione o semestre"
-                />
+                <Loader loading={carregandoSemestres}>
+                  <SelectComponent
+                    lista={listaSemestre}
+                    valueOption="valor"
+                    valueText="desc"
+                    label="Semestre"
+                    disabled={
+                      !modalidadeId ||
+                      String(modalidadeId) !== String(modalidade.EJA) ||
+                      (listaSemestre && listaSemestre.length === 1)
+                    }
+                    valueSelect={semestre}
+                    onChange={onChangeSemestre}
+                    placeholder="Selecione o semestre"
+                  />
+                </Loader>
               </div>
               <div className="col-sm-12 col-md-6 col-lg-3 col-xl-3 mb-2">
-                <SelectComponent
-                  lista={listaAnosEscolares}
-                  valueOption="valor"
-                  valueText="descricao"
-                  label="Ano"
-                  disabled={
-                    listaAnosEscolares && listaAnosEscolares.length === 1
-                  }
-                  valueSelect={anosEscolares}
-                  onChange={valoresNovos => {
-                    valoresNovos = removeAdicionaOpcaoTodos(
-                      anosEscolares,
-                      valoresNovos
-                    );
-                    onChangeAnos(valoresNovos);
-                  }}
-                  placeholder="Selecione o ano"
-                  multiple
-                />
+                <Loader loading={carregandoAnosEscolares}>
+                  <SelectComponent
+                    lista={listaAnosEscolares}
+                    valueOption="valor"
+                    valueText="descricao"
+                    label="Ano"
+                    disabled={
+                      listaAnosEscolares && listaAnosEscolares.length === 1
+                    }
+                    valueSelect={anosEscolares}
+                    onChange={valoresNovos => {
+                      valoresNovos = removeAdicionaOpcaoTodos(
+                        anosEscolares,
+                        valoresNovos
+                      );
+                      onChangeAnos(valoresNovos);
+                    }}
+                    placeholder="Selecione o ano"
+                    multiple
+                  />
+                </Loader>
               </div>
               <div className="col-sm-12 col-md-9 col-lg-3 col-xl-3 mb-2">
-                <SelectComponent
-                  lista={listaComponenteCurricular}
-                  valueOption="valor"
-                  valueText="desc"
-                  label="Componente Curricular"
-                  disabled={
-                    listaComponenteCurricular &&
-                    listaComponenteCurricular.length === 1
-                  }
-                  valueSelect={componentesCurriculares}
-                  onChange={valoresNovos => {
-                    valoresNovos = removeAdicionaOpcaoTodos(
-                      componentesCurriculares,
-                      valoresNovos
-                    );
-                    onChangeComponenteCurricular(valoresNovos);
-                  }}
-                  placeholder="Selecione o componente curricular"
-                  multiple
-                />
+                <Loader loading={carregandoComponentes}>
+                  <SelectComponent
+                    lista={listaComponenteCurricular}
+                    valueOption="valor"
+                    valueText="desc"
+                    label="Componente Curricular"
+                    disabled={
+                      listaComponenteCurricular &&
+                      listaComponenteCurricular.length === 1
+                    }
+                    valueSelect={componentesCurriculares}
+                    onChange={valoresNovos => {
+                      valoresNovos = removeAdicionaOpcaoTodos(
+                        componentesCurriculares,
+                        valoresNovos
+                      );
+                      onChangeComponenteCurricular(valoresNovos);
+                    }}
+                    placeholder="Selecione o componente curricular"
+                    multiple
+                  />
+                </Loader>
               </div>
               <div className="col-sm-12 col-md-3 col-lg-3 col-xl-2 mb-2">
                 <SelectComponent
