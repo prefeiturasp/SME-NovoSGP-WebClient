@@ -4,7 +4,7 @@ import { isEqual } from 'lodash';
 import queryString from 'query-string';
 import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import RotasDto from '~/dtos/rotasDto';
 import history from '~/servicos/history';
@@ -43,8 +43,11 @@ import {
 } from '~/utils/funcoes/gerais';
 import { SGP_BUTTON_SALVAR_ALTERAR } from '~/constantes/ids/button';
 import { verificaSomenteConsulta } from '~/servicos';
+import { setRecarregarFiltroPrincipal } from '~/redux/modulos/usuario/actions';
 
 function AtribuicaoCJForm({ match, location }) {
+  const dispatch = useDispatch();
+
   const anoAtual = window.moment().format('YYYY');
   const [carregando, setCarregando] = useState(false);
   const [carregandoTabela, setcarregandoTabela] = useState(false);
@@ -122,6 +125,7 @@ function AtribuicaoCJForm({ match, location }) {
       if (data || status === 200) {
         setCarregando(false);
         sucesso('Atribuição de CJ salva com sucesso.');
+        dispatch(setRecarregarFiltroPrincipal(true));
         history.push('/gestao/atribuicao-cjs');
         obterPerfis(usuario.rf);
       }
@@ -200,7 +204,6 @@ function AtribuicaoCJForm({ match, location }) {
       setConsideraHistorico(historico);
       setAnoLetivo(anoSelecionado);
     }
-
   }, [location, match.url]);
 
   useEffect(() => {
@@ -256,7 +259,6 @@ function AtribuicaoCJForm({ match, location }) {
     ) {
       buscaAtribs(valoresForm);
     }
-
   }, [refForm, valoresForm]);
 
   const limparCampos = () => {
@@ -289,7 +291,6 @@ function AtribuicaoCJForm({ match, location }) {
     const anosOrdenados = ordenarDescPor(anosLetivos, 'valor');
 
     setListaAnosLetivo(anosOrdenados);
-
   }, [anoAtual, consideraHistorico]);
 
   useEffect(() => {
