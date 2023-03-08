@@ -40,8 +40,9 @@ class ServicoNAAPA {
     encaminhamentoId
   ) =>
     api.get(
-      `${URL_PADRAO}/questionario?questionarioId=${questionarioId}&codigoAluno=${codigoAluno}&codigoTurma=${codigoTurma}&encaminhamentoId=${encaminhamentoId ||
-        0}`
+      `${URL_PADRAO}/questionario?questionarioId=${questionarioId}&codigoAluno=${codigoAluno}&codigoTurma=${codigoTurma}&encaminhamentoId=${
+        encaminhamentoId || 0
+      }`
     );
 
   guardarSecaoEmEdicao = secaoId => {
@@ -291,10 +292,8 @@ class ServicoNAAPA {
 
     const { encaminhamentoNAAPA, questionarioDinamico } = state;
 
-    const {
-      dadosSecoesEncaminhamentoNAAPA,
-      listaSecoesEmEdicao,
-    } = encaminhamentoNAAPA;
+    const { dadosSecoesEncaminhamentoNAAPA, listaSecoesEmEdicao } =
+      encaminhamentoNAAPA;
     const { questionarioDinamicoEmEdicao } = questionarioDinamico;
 
     const secaoDestino = dadosSecoesEncaminhamentoNAAPA?.find(
@@ -360,6 +359,10 @@ class ServicoNAAPA {
     const params = { encaminhamentoId, motivoEncerramento };
     return api.post(`${URL_PADRAO}/encerrar`, params);
   };
+
+  obterPortasEntrada = () => api.get(`${URL_PADRAO}/portas-entrada`);
+
+  obterFluxosAlerta = () => api.get(`${URL_PADRAO}/fluxos-alerta`);
 }
 
 export default new ServicoNAAPA();
