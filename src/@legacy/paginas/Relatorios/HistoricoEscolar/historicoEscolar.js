@@ -35,7 +35,7 @@ import {
 } from '~/constantes/ids/select';
 import ModalObservacoesComplementares from './modalObservacoesComplementares';
 
-const HistoricoEscolar = teste => {
+const HistoricoEscolar = () => {
   const codigosAlunosSelecionados = useSelector(
     state => state.localizadorEstudante.codigosAluno
   );
