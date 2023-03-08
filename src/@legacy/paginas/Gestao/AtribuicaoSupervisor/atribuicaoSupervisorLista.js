@@ -283,7 +283,6 @@ export default function AtribuicaoSupervisorLista() {
       setDresSelecionadas(dre);
       if (dre) {
         obterResponsaveis(dre, tipoRes || tipoResponsavel);
-        carregarUes(dre);
       }
     },
 
@@ -399,6 +398,12 @@ export default function AtribuicaoSupervisorLista() {
       setListaSupervisores([]);
     }
   }, [dresSelecionadas, tipoResponsavel, obterResponsaveis]);
+
+  useEffect(() => {
+    if (dresSelecionadas) {
+      carregarUes(dresSelecionadas);
+    }
+  }, [dresSelecionadas]);
 
   return (
     <>

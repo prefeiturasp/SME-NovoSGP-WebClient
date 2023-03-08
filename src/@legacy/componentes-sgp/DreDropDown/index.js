@@ -37,9 +37,18 @@ function DreDropDown({
           abrev: item.abreviacao,
         }))
         .sort(FiltroHelper.ordenarLista('desc'));
-      if (opcaoTodas && lista.length > 1)
-        lista.unshift({ desc: 'Todas', valor: '0' });
+
       setListaDres(lista);
+
+      if (lista.length === 1) {
+        setTimeout(() => {
+          form.setFieldValue('dreId', lista[0].valor);
+        }, 100);
+      }
+
+      if (opcaoTodas && lista.length > 1) {
+        lista.unshift({ desc: 'Todas', valor: '0' });
+      }
     }
     setCarregando(false);
   };
@@ -47,14 +56,6 @@ function DreDropDown({
   useEffect(() => {
     if (temModalidade) buscarDres();
   }, [url, anoLetivo]);
-
-  useEffect(() => {
-    if (listaDres.length === 1) {
-      form.setFieldValue('dreId', listaDres[0].valor);
-      onChange(listaDres[0].valor, listaDres);
-    }
-
-  }, [listaDres]);
 
   useEffect(() => {
     if (!valorNuloOuVazio(form.values.dreId)) {
