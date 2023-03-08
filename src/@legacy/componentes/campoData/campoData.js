@@ -1,6 +1,7 @@
 import 'moment/locale/pt-br';
 
-import { DatePicker, TimePicker, Icon } from 'antd';
+import { DatePicker, TimePicker } from 'antd';
+import { LoadingOutlined, CalendarOutlined } from '@ant-design/icons';
 import locale from 'antd/es/date-picker/locale/pt_BR';
 import { Field } from 'formik';
 import moment from 'moment';
@@ -92,9 +93,9 @@ const CampoData = ({
   };
 
   const Icone = carregando ? (
-    <Icon style={{ fontSize: '16px', lineHeight: 0 }} type="loading" spin />
+    <LoadingOutlined style={{ fontSize: '16px', lineHeight: 0 }} spin />
   ) : (
-    <Icon style={{ fontSize: '16px', lineHeight: 0 }} type="calendar" />
+    <CalendarOutlined style={{ fontSize: '16px', lineHeight: 0 }} />
   );
 
   const dataRender = (dataRenderizar, dataAtualSelecionada) => {
@@ -120,7 +121,7 @@ const CampoData = ({
     }
     return (
       <div
-        className="ant-calendar-date"
+        className="ant-picker-cell-inner"
         aria-selected="false"
         aria-disabled="false"
         style={style}

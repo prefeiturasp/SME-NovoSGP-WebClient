@@ -2,7 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 // Components
-import { Dropdown, Icon, Menu } from 'antd';
+import { Dropdown, Menu } from 'antd';
+import { DownOutlined } from '@ant-design/icons';
 
 // Styles
 import { DefaultDropDownLink } from '../styles';
@@ -28,7 +29,7 @@ function DropDownQuantidade({ onChange, value }) {
   return (
     <Dropdown trigger={['click']} overlay={options}>
       <DefaultDropDownLink href="#">
-        <span>{value}</span> <Icon type="down" />
+        <span>{value}</span> <DownOutlined />
       </DefaultDropDownLink>
     </Dropdown>
   );

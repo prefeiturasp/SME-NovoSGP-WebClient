@@ -37,14 +37,14 @@ export const Campo = styled.div`
     width: 100%;
   }
 
-  .ant-calendar-disabled-cell.ant-calendar-today .ant-calendar-date {
+  .ant-calendar-disabled-cell.ant-calendar-today .ant-picker-cell-inner {
     background-color: #f5f5f5;
     ::before {
       border: 0;
     }
   }
 
-  .ant-calendar-today .ant-calendar-date {
+  .ant-calendar-today .ant-picker-cell-inner {
     color: black;
     border: 0;
   }

@@ -1,6 +1,7 @@
 import ReactDOM from 'react-dom/client';
 import '~/bibliotecas-legacy';
-import 'antd/dist/antd.css';
+// import 'antd/dist/antd.css';
+// import 'antd/dist/reset.css';
 
 import App from './App';
 

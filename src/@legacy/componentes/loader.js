@@ -2,7 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 // Ant
-import { Spin, Icon } from 'antd';
+import { Spin } from 'antd';
+import { LoadingOutlined } from '@ant-design/icons';
 
 // Styles
 import styled from 'styled-components';
@@ -17,7 +18,7 @@ const LoaderWrapper = styled.div`
   }
 `;
 
-const icone = <Icon type="loading" style={{ fontWeight: 'bold' }} spin />;
+const icone = <LoadingOutlined style={{ fontWeight: 'bold' }} spin />;
 
 function Loader({ children, loading, tip, className, ignorarTip, style }) {
   return (
