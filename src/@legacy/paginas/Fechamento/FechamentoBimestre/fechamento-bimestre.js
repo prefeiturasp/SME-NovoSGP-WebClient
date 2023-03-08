@@ -24,7 +24,6 @@ import AlertaModalidadeInfantil from '~/componentes-sgp/AlertaModalidadeInfantil
 import { ehTurmaInfantil } from '~/servicos/Validacoes/validacoesInfatil';
 import { ModalidadeDTO } from '~/dtos';
 import BtnAcoesFechamentoBimestre from './btnAcoesFechamentoBimestre';
-import { setModoEdicaoFechamentoBimestre } from '~/redux/modulos/fechamentoBimestre/actions';
 
 const FechamentoBismestre = () => {
   const dispatch = useDispatch();
@@ -35,12 +34,10 @@ const FechamentoBismestre = () => {
   const permissoesTela = permissoes[RotasDto.FECHAMENTO_BIMESTRE];
   const { podeIncluir, podeAlterar } = permissoesTela;
   const [somenteConsulta, setSomenteConsulta] = useState(false);
+  const [emEdicao, setEmEdicao] = useState(false);
 
   const modalidadesFiltroPrincipal = useSelector(
     store => store.filtro.modalidades
-  );
-  const modoEdicaoFechamentoBimestre = useSelector(
-    store => store.fechamentoBimestre.modoEdicaoFechamentoBimestre
   );
 
   useEffect(() => {
@@ -89,8 +86,7 @@ const FechamentoBismestre = () => {
   });
 
   const trocarEstadoEmEdicao = novoEstado => {
-    modoEdicaoFechamentoBimestre.emEdicao = novoEstado;
-    dispatch(setModoEdicaoFechamentoBimestre(modoEdicaoFechamentoBimestre));
+    setEmEdicao(novoEstado);
   };
 
   const resetarTela = () => {
@@ -127,7 +123,7 @@ const FechamentoBismestre = () => {
 
   const onClickVoltar = async () => {
     let confirmou = true;
-    if (modoEdicaoFechamentoBimestre?.emEdicao) {
+    if (emEdicao) {
       confirmou = await confirmar(
         'Atenção',
         'Existem alterações pendentes, deseja realmente sair da tela de fechamento?'
@@ -259,6 +255,7 @@ const FechamentoBismestre = () => {
     fechamentoFinal.turmaCodigo = turmaSelecionada.turma;
     fechamentoFinal.ehRegencia = ehRegencia;
     fechamentoFinal.disciplinaId = disciplinaIdSelecionada;
+    setCarregandoBimestres(true);
     ServicoFechamentoFinal.salvar(fechamentoFinal)
       .then(result => {
         sucesso(result.data.mensagemConsistencia);
@@ -267,11 +264,14 @@ const FechamentoBismestre = () => {
         refFechamentoFinal.current.salvarFechamentoFinal();
         return result.data;
       })
-      .catch(e => erros(e));
+      .catch(e => {
+        erros(e);
+        setCarregandoBimestres(false);
+      });
   };
 
   const onChangeTab = async numeroBimestre => {
-    if (modoEdicaoFechamentoBimestre?.emEdicao) {
+    if (emEdicao) {
       const confirmado = await confirmar(
         'Atenção',
         'Suas alterações não foram salvas, deseja salvar agora?'
@@ -342,6 +342,8 @@ const FechamentoBismestre = () => {
             onClickCancelar={onClickCancelar}
             somenteConsulta={somenteConsulta}
             ehSintese={ehSintese}
+            setEmEdicao={setEmEdicao}
+            emEdicao={emEdicao}
           />
         </Cabecalho>
         <Card>

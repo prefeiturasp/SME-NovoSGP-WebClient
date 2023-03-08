@@ -467,6 +467,7 @@ const ListaoListaFechamento = props => {
           : 'Conceito final',
       align: 'center',
       width: '115px',
+      className: 'position-relative',
     };
 
     if (ehRegencia) {
