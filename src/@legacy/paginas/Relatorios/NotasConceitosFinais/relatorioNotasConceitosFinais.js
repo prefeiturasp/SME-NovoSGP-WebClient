@@ -280,8 +280,7 @@ const RelatorioNotasConceitosFinais = () => {
         setCarregandoAnosEscolares(false);
       }
     },
-
-    []
+    [consideraHistorico]
   );
 
   useEffect(() => {
