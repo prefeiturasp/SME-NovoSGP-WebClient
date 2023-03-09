@@ -15,7 +15,11 @@ export const ContainerTabsCard = styled(Tabs)`
   }
 
   .ant-tabs-nav {
-    width: ${props => (props.width ? props.width : '25%')};
+    width: ${props => (props.width ? props.width : '100%')};
+
+    .ant-tabs-nav-list {
+      width: 100%;
+    }
   }
 
   .ant-tabs-tab {
@@ -35,7 +39,8 @@ export const ContainerTabsCard = styled(Tabs)`
   .ant-tabs-tab-active:hover {
     color: ${Base.Roxo} !important;
   }
-  .ant-tabs-tab-active {
+  .ant-tabs-tab-active,
+  .ant-tabs-tab-active .ant-tabs-tab-btn {
     color: ${Base.Roxo} !important;
     border-bottom: 1px solid #fff !important;
   }

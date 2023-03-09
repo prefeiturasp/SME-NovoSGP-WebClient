@@ -16,7 +16,6 @@ const Container = styled.div`
 
   .ant-select-arrow {
     color: ${Base.CinzaMako};
-    margin-top: -9px;
   }
 
   .ant-select-selection {
@@ -170,8 +169,9 @@ const SelectComponent = React.forwardRef((props, ref) => {
       suffixIcon={<i className="fas fa-angle-down" style={{ fontSize: 18 }} />}
       className={
         form
-          ? `overflow-hidden ${possuiErro() ? 'is-invalid' : ''} ${className ||
-              ''}`
+          ? `overflow-hidden ${possuiErro() ? 'is-invalid' : ''} ${
+              className || ''
+            }`
           : ''
       }
       name={name}

@@ -28,6 +28,10 @@ const BreadcrumbBody = styled.div`
     margin-left: 10px;
     color: ${Base.Roxo};
   }
+
+  ol {
+    align-items: center;
+  }
 `;
 const BreadcrumbSgp = () => {
   const NavegacaoStore = useSelector(
@@ -74,17 +78,14 @@ const BreadcrumbSgp = () => {
 
   useEffect(() => {
     carregaBreadcrumbs();
-
   }, [itemRotaAtual]);
 
   useEffect(() => {
     carregaBreadcrumbs();
-
   }, [NavegacaoStore.rotaAtiva]);
 
   useEffect(() => {
     carregaBreadcrumbs();
-
   }, [UsuarioStrore.turmaSelecionada]);
 
   useEffect(
@@ -181,7 +182,7 @@ const BreadcrumbSgp = () => {
     <BreadcrumbBody>
       {itens.map(item => {
         return (
-          <Breadcrumb.Item key={item.path} separator="">
+          <Breadcrumb key={item.path} separator="">
             <Link
               hidden={item.ehEstatico}
               to={item.path}
@@ -211,7 +212,7 @@ const BreadcrumbSgp = () => {
               style={{ color: Base.Roxo }}
               className="fas fa-chevron-circle-right icone-seta"
             />
-          </Breadcrumb.Item>
+          </Breadcrumb>
         );
       })}
     </BreadcrumbBody>
