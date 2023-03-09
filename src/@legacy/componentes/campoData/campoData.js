@@ -1,6 +1,6 @@
 import 'moment/locale/pt-br';
 
-import { DatePicker, TimePicker } from 'antd';
+import DatePickerMoment from './datePickerMoment';
 import { LoadingOutlined, CalendarOutlined } from '@ant-design/icons';
 import locale from 'antd/es/date-picker/locale/pt_BR';
 import { Field } from 'formik';
@@ -137,7 +137,7 @@ const CampoData = ({
         {({ field: { value }, form: { setFieldValue, setFieldTouched } }) => (
           <div>
             <div>
-              <DatePicker
+              <DatePickerMoment
                 disabled={desabilitado}
                 format={formatoData}
                 locale={locale}
@@ -173,7 +173,7 @@ const CampoData = ({
 
   const campoDataAntSemValidacoes = () => {
     return (
-      <DatePicker
+      <DatePickerMoment
         disabled={desabilitado}
         locale={locale}
         format={formatoData}
@@ -203,7 +203,7 @@ const CampoData = ({
         disabled={desabilitado}
         locale={locale}
         format={formatoData}
-        component={TimePicker}
+        component={DatePickerMoment.TimePicker}
         placeholder={placeholder}
         name={name}
         id={id || name}
@@ -224,7 +224,7 @@ const CampoData = ({
 
   const campoHoraAntSemValidacoes = () => {
     return (
-      <TimePicker
+      <DatePickerMoment.TimePicker
         disabled={desabilitado}
         locale={locale}
         format={formatoData}
@@ -246,7 +246,7 @@ const CampoData = ({
     return (
       <>
         <IconeEstilizado icon={faLongArrowAltRight} />
-        <DatePicker.RangePicker
+        <DatePickerMoment.RangePicker
           disabled={desabilitado}
           locale={locale}
           format={formatoData}
@@ -367,9 +367,9 @@ Yup.addMethod(
   Yup.mixed,
   'dataMenorIgualQue',
   // eslint-disable-next-line func-names
-  function(nomeDataInicial, nomeDataFinal, mensagem) {
+  function (nomeDataInicial, nomeDataFinal, mensagem) {
     // eslint-disable-next-line func-names
-    return this.test('dataMenorIgualQue', mensagem, function() {
+    return this.test('dataMenorIgualQue', mensagem, function () {
       let dataValida = true;
       const dataInicial = this.parent[nomeDataInicial];
       const dataFinal = this.parent[nomeDataFinal];
@@ -390,9 +390,9 @@ Yup.addMethod(
   Yup.mixed,
   'dataMenorQue',
   // eslint-disable-next-line func-names
-  function(nomeDataInicial, nomeDataFinal, mensagem) {
+  function (nomeDataInicial, nomeDataFinal, mensagem) {
     // eslint-disable-next-line func-names
-    return this.test('dataMenorQue', mensagem, function() {
+    return this.test('dataMenorQue', mensagem, function () {
       let dataValida = true;
       const dataInicial = this.parent[nomeDataInicial];
       const dataFinal = this.parent[nomeDataFinal];

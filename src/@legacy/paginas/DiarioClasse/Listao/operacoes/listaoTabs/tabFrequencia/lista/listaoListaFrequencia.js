@@ -419,7 +419,7 @@ const ListaoListaFrequencia = () => {
         colunasDetalhamentoEstudante.push({
           title: `Aula ${indiceAula + 1}`,
           align: 'center',
-          dataIndex: `detalheFrequencia[${indiceAula}]`,
+          dataIndex: ['detalheFrequencia', `${indiceAula}`],
           width: '150px',
           render: (detalheFreq, dadosAula) =>
             detalheFreq?.numeroAula
