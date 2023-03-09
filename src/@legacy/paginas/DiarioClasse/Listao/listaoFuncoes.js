@@ -279,30 +279,37 @@ const mudarStatusEdicaoAlunos = dados => {
 
 const mudarStatusEmAprovacaoAlunosPorBimestre = (
   dadosAtualizar,
-  dadosAlunosAlterados,
+  dadosAlunosAlterados
 ) => {
   if (dadosAtualizar?.alunos?.length) {
     const nomeRef = dadosAlunosAlterados?.ehFinal
       ? 'notasConceitoFinal'
       : 'notasConceitoBimestre';
 
-    dadosAtualizar.alunos.forEach((aluno) => {
-      const alunoAlterado = dadosAlunosAlterados?.notaConceitoAlunos?.find(
-        (a) => a?.codigoAluno === aluno?.codigoAluno,
-      );
-      const atualizarEmAprovacao = alunoAlterado && aluno?.[nomeRef]?.length;
+    dadosAtualizar.alunos.forEach(aluno => {
+      aluno[nomeRef].forEach(nota => {
+        if (dadosAlunosAlterados?.ehRegencia) {
+          const ehNotaDisciplinaAlterada =
+            dadosAlunosAlterados?.notaConceitoAlunos?.find(
+              a =>
+                a?.codigoAluno === aluno?.codigoAluno &&
+                a?.disciplinaId &&
+                nota?.disciplinaCodigo &&
+                a?.disciplinaId === nota?.disciplinaCodigo
+            );
 
-      if (atualizarEmAprovacao) {
-        aluno[nomeRef].forEach((nota) => {
-          if (dadosAlunosAlterados?.ehRegencia) {
-            if (alunoAlterado?.disciplinaCodigo === nota?.disciplinaId) {
-              nota.emAprovacao = true;
-            }
-          } else {
+          if (ehNotaDisciplinaAlterada) {
             nota.emAprovacao = true;
           }
-        });
-      }
+        } else {
+          const ehNotaAlterada = dadosAlunosAlterados?.notaConceitoAlunos?.find(
+            a => a?.codigoAluno === aluno?.codigoAluno
+          );
+          if (ehNotaAlterada) {
+            nota.emAprovacao = true;
+          }
+        }
+      });
     });
   }
 };
