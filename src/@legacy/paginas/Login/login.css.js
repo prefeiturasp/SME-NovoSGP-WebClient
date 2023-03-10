@@ -44,13 +44,13 @@ export const CampoTexto = styled.input`
     color: ${Base.CinzaBotao} !important;
   }
   ::-moz-placeholder {
-    font-size: 14px !import;
+    font-size: 14px !important;
   }
   :-ms-input-placeholder {
-    font-size: 14px !import;
+    font-size: 14px !important;
   }
   :-moz-placeholder {
-    font-size: 14px !import;
+    font-size: 14px !important;
   }
 `;
 

@@ -1,4 +1,4 @@
-import { store } from '~/redux';
+import { store } from '@/core/redux';
 import {
   limparDadosParaSalvarCartaIntencoes,
   setCartaIntencoesEmEdicao,
@@ -57,10 +57,8 @@ class ServicoSalvarCartaIntencoes {
 
     const { cartaIntencoes } = state;
 
-    const {
-      cartaIntencoesEmEdicao,
-      dadosParaSalvarCartaIntencoes,
-    } = cartaIntencoes;
+    const { cartaIntencoesEmEdicao, dadosParaSalvarCartaIntencoes } =
+      cartaIntencoes;
 
     const todosCamposValidos = () => {
       const camposInvalidos = [];

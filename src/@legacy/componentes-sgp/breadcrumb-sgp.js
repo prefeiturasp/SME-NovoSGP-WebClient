@@ -4,11 +4,12 @@ import { Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 import { Base } from '../componentes/colors';
-import { store } from '../redux';
+import { store } from '@/core/redux';
 import { rotaAtiva } from '../redux/modulos/navegacao/actions';
 import { obterDescricaoNomeMenu } from '~/servicos/servico-navegacao';
 import RotasDto from '~/dtos/rotasDto';
 import { validarNavegacaoTela } from '~/utils';
+import _ from 'lodash';
 
 const BreadcrumbBody = styled.div`
   height: 24px;
@@ -43,7 +44,7 @@ const BreadcrumbSgp = () => {
     state => state.filtro.modalidades
   );
 
-  const { rotas } = NavegacaoStore;
+  const rotas = _.cloneDeep(NavegacaoStore.rotas);
 
   const [itens, setItens] = useState([]);
 
@@ -78,7 +79,7 @@ const BreadcrumbSgp = () => {
 
   useEffect(() => {
     carregaBreadcrumbs();
-  }, [itemRotaAtual]);
+  }, [rotaAtual]);
 
   useEffect(() => {
     carregaBreadcrumbs();
@@ -180,41 +181,42 @@ const BreadcrumbSgp = () => {
 
   return (
     <BreadcrumbBody>
-      {itens.map(item => {
-        return (
-          <Breadcrumb key={item.path} separator="">
-            <Link
-              hidden={item.ehEstatico}
-              to={item.path}
-              onClick={e => validarNavegacaoTela(e, item.path)}
-            >
-              <i className={item.icone} title={item.breadcrumbName} />
-              <span hidden={item.path === '/'} style={{ marginLeft: 8 }}>
-                {item.breadcrumbName}
-              </span>
-              <span
-                hidden={item.path !== '/' && item.icone !== 'fas fa-home'}
-                style={{ marginLeft: 8 }}
+      {itens?.length &&
+        itens.map(item => {
+          return (
+            <Breadcrumb key={item.path} separator="">
+              <Link
+                hidden={item.ehEstatico}
+                to={item.path}
+                onClick={e => validarNavegacaoTela(e, item.path)}
               >
+                <i className={item.icone} title={item.breadcrumbName} />
+                <span hidden={item.path === '/'} style={{ marginLeft: 8 }}>
+                  {item.breadcrumbName}
+                </span>
+                <span
+                  hidden={item.path !== '/' && item.icone !== 'fas fa-home'}
+                  style={{ marginLeft: 8 }}
+                >
+                  {item.breadcrumbName}
+                </span>
+              </Link>
+              <i
+                hidden={!item.ehEstatico}
+                className={item.icone}
+                title={item.dicaIcone}
+              />
+              <span hidden={!item.ehEstatico} style={{ marginLeft: 8 }}>
                 {item.breadcrumbName}
               </span>
-            </Link>
-            <i
-              hidden={!item.ehEstatico}
-              className={item.icone}
-              title={item.dicaIcone}
-            />
-            <span hidden={!item.ehEstatico} style={{ marginLeft: 8 }}>
-              {item.breadcrumbName}
-            </span>
-            <i
-              hidden={item.ehRotaAtual}
-              style={{ color: Base.Roxo }}
-              className="fas fa-chevron-circle-right icone-seta"
-            />
-          </Breadcrumb>
-        );
-      })}
+              <i
+                hidden={item.ehRotaAtual}
+                style={{ color: Base.Roxo }}
+                className="fas fa-chevron-circle-right icone-seta"
+              />
+            </Breadcrumb>
+          );
+        })}
     </BreadcrumbBody>
   );
 };

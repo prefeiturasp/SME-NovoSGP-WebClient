@@ -2,7 +2,7 @@ import _ from 'lodash';
 import ServicoObservacoesUsuario from '~/componentes-sgp/ObservacoesUsuario/ServicoObservacoesUsuario';
 import { BIMESTRE_FINAL } from '~/constantes';
 import notasConceitos from '~/dtos/notasConceitos';
-import { store } from '~/redux';
+import { store } from '@/core/redux';
 import { setTelaEmEdicao } from '~/redux/modulos/geral/actions';
 import { confirmar, erros, ServicoDiarioBordo, sucesso } from '~/servicos';
 import ServicoNotaConceito from '~/servicos/Paginas/DiarioClasse/ServicoNotaConceito';
@@ -279,21 +279,21 @@ const mudarStatusEdicaoAlunos = dados => {
 
 const mudarStatusEmAprovacaoAlunosPorBimestre = (
   dadosAtualizar,
-  dadosAlunosAlterados,
+  dadosAlunosAlterados
 ) => {
   if (dadosAtualizar?.alunos?.length) {
     const nomeRef = dadosAlunosAlterados?.ehFinal
       ? 'notasConceitoFinal'
       : 'notasConceitoBimestre';
 
-    dadosAtualizar.alunos.forEach((aluno) => {
+    dadosAtualizar.alunos.forEach(aluno => {
       const alunoAlterado = dadosAlunosAlterados?.notaConceitoAlunos?.find(
-        (a) => a?.codigoAluno === aluno?.codigoAluno,
+        a => a?.codigoAluno === aluno?.codigoAluno
       );
       const atualizarEmAprovacao = alunoAlterado && aluno?.[nomeRef]?.length;
 
       if (atualizarEmAprovacao) {
-        aluno[nomeRef].forEach((nota) => {
+        aluno[nomeRef].forEach(nota => {
           if (dadosAlunosAlterados?.ehRegencia) {
             if (alunoAlterado?.disciplinaCodigo === nota?.disciplinaId) {
               nota.emAprovacao = true;

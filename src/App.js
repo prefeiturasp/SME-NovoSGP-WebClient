@@ -8,7 +8,7 @@ import { obterTrackingID } from '~/servicos/variaveis';
 
 import history from '~/servicos/history';
 import GlobalStyle from '~/estilos/global';
-import { store, persistor } from '~/redux';
+import { store, persistor } from '@/core/redux';
 import Pagina from '~/componentes-sgp/pagina';
 import Login from '~/paginas/Login';
 import RecuperarSenha from '~/paginas/RecuperarSenha';

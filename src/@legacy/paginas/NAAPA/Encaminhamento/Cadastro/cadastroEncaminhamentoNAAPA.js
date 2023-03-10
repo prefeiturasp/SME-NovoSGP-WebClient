@@ -7,7 +7,7 @@ import ObjectCardEstudante from '~/componentes-sgp/ObjectCardEstudante/objectCar
 import { SGP_SELECT_DRE, SGP_SELECT_UE } from '~/constantes/ids/select';
 import MontarDadosTabs from './componentes/montarDadosTabs/montarDadosTabs';
 import ServicoNAAPA from '~/servicos/Paginas/Gestao/NAAPA/ServicoNAAPA';
-import { store } from '~/redux';
+import { store } from '@/core/redux';
 import {
   setDadosEncaminhamentoNAAPA,
   setDadosSituacaoEncaminhamentoNAAPA,

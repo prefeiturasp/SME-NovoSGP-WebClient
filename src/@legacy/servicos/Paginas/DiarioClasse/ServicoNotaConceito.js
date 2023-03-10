@@ -1,5 +1,5 @@
 import api from '~/servicos/api';
-import { store } from '~/redux';
+import { store } from '@/core/redux';
 
 class ServicoNotaConceito {
   obterTodosConceitos = data => {
@@ -12,8 +12,9 @@ class ServicoNotaConceito {
 
   obterArredondamento = (nota, data) => {
     return api.get(
-      `v1/avaliacoes/notas/${nota}/arredondamento?data=${data ||
-        window.moment().format('YYYY-MM-DD')}`
+      `v1/avaliacoes/notas/${nota}/arredondamento?data=${
+        data || window.moment().format('YYYY-MM-DD')
+      }`
     );
   };
 

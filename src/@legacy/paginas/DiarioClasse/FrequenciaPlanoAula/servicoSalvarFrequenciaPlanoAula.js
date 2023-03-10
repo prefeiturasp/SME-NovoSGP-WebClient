@@ -1,4 +1,4 @@
-import { store } from '~/redux';
+import { store } from '@/core/redux';
 import {
   setAtualizarDatas,
   setDadosPlanoAula,
@@ -192,11 +192,8 @@ class ServicoSalvarFrequenciaPlanoAula {
 
     const { frequenciaPlanoAula } = state;
 
-    const {
-      listaDadosFrequencia,
-      modoEdicaoFrequencia,
-      modoEdicaoPlanoAula,
-    } = frequenciaPlanoAula;
+    const { listaDadosFrequencia, modoEdicaoFrequencia, modoEdicaoPlanoAula } =
+      frequenciaPlanoAula;
 
     let salvouFrequencia = true;
     let salvouPlanoAula = true;

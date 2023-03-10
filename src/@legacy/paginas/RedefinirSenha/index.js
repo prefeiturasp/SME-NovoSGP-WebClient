@@ -29,7 +29,7 @@ import {
   setModificarSenha,
   setLogado,
 } from '~/redux/modulos/usuario/actions';
-import { store } from '~/redux';
+import { store } from '@/core/redux';
 import Erro from '../RecuperarSenha/erro';
 import { setMenusPermissoes } from '~/servicos/servico-navegacao';
 import { obterMeusDados } from '~/servicos/Paginas/ServicoUsuario';
@@ -111,7 +111,6 @@ const RedefinirSenha = props => {
     return () => {
       document.removeEventListener('keydown', trataAcaoTeclado);
     };
-
   }, []);
 
   useEffect(() => {

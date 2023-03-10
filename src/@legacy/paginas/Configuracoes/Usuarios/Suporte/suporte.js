@@ -16,7 +16,7 @@ import { SGP_SELECT_DRE, SGP_SELECT_UE } from '~/constantes/ids/select';
 import { OPCAO_TODOS, URL_HOME } from '~/constantes';
 import RotasDto from '~/dtos/rotasDto';
 import LoginHelper from '~/paginas/Login/loginHelper';
-import { store } from '~/redux';
+import { store } from '@/core/redux';
 import {
   AbrangenciaServico,
   api,

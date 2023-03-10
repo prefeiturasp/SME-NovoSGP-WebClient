@@ -6,7 +6,7 @@ import LocalizarEstudante from '~/componentes-sgp/LocalizarEstudante';
 import { Card } from '~/componentes';
 import CadastroEncaminhamentoNAAPABotoesAcao from './cadastroEncaminhamentoNAAPABotoesAcao';
 import CadastroEncaminhamentoNAAPA from './cadastroEncaminhamentoNAAPA';
-import { store } from '~/redux';
+import { store } from '@/core/redux';
 import LoaderEncaminhamentoNAAPA from './componentes/loaderEncaminhamentoNAAPA';
 import { limparDadosLocalizarEstudante } from '~/redux/modulos/localizarEstudante/actions';
 import { setLimparDadosEncaminhamentoNAAPA } from '~/redux/modulos/encaminhamentoNAAPA/actions';

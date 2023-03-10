@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 import Semana from './Semana';
 import DiaCompleto from './DiaCompleto';
-import { store } from '~/redux';
+import { store } from '@/core/redux';
 import { selecionaMes } from '~/redux/modulos/calendarioEscolar/actions';
 import api from '~/servicos/api';
 import Loader from '~/componentes/loader';
@@ -141,7 +141,6 @@ const MesCompleto = props => {
       obterTipoEventosDia(mesSelecionado);
     }
     return () => setEstaAberto({ [mesSelecionado]: false });
-
   }, [mesSelecionado, obterTipoEventosDia]);
 
   return mesSelecionado > 0 && estaAberto[mesSelecionado] ? (

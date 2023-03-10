@@ -1,4 +1,4 @@
-import { store } from '~/redux';
+import { store } from '@/core/redux';
 import { setRotas, rotaAtiva } from '~/redux/modulos/navegacao/actions';
 
 const setBreadcrumbManual = (path, breadcrumbName, parent) => {

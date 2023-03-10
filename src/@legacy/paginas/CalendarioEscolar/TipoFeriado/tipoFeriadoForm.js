@@ -17,7 +17,7 @@ import api from '~/servicos/api';
 import { setBreadcrumbManual } from '~/servicos/breadcrumb-services';
 import history from '~/servicos/history';
 import tipoFeriado from '~/dtos/tipoFeriado';
-import { store } from '~/redux';
+import { store } from '@/core/redux';
 import RotasDto from '~/dtos/rotasDto';
 import { verificaSomenteConsulta } from '~/servicos/servico-navegacao';
 import {
@@ -126,7 +126,6 @@ const TipoFeriadoForm = () => {
     };
 
     consultaPorId();
-
   }, []);
 
   const resetarTela = form => {

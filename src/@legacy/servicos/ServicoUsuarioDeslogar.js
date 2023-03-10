@@ -1,5 +1,5 @@
 import { URL_LOGIN } from '~/constantes/url';
-import { store } from '~/redux';
+import { store } from '@/core/redux';
 import { limparDadosFiltro } from '~/redux/modulos/filtro/actions';
 import { Deslogar } from '~/redux/modulos/usuario/actions';
 import { LimparSessao } from '~/redux/modulos/sessao/actions';

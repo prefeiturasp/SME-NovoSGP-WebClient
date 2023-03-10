@@ -1,7 +1,7 @@
 import _ from 'lodash';
 import QuestionarioDinamicoFuncoes from '~/componentes-sgp/QuestionarioDinamico/Funcoes/QuestionarioDinamicoFuncoes';
 import situacaoNAAPA from '~/dtos/situacaoNAAPA';
-import { store } from '~/redux';
+import { store } from '@/core/redux';
 import {
   setLimparDadosEncaminhamentoNAAPA,
   setExibirLoaderEncaminhamentoNAAPA,
@@ -40,8 +40,9 @@ class ServicoNAAPA {
     encaminhamentoId
   ) =>
     api.get(
-      `${URL_PADRAO}/questionario?questionarioId=${questionarioId}&codigoAluno=${codigoAluno}&codigoTurma=${codigoTurma}&encaminhamentoId=${encaminhamentoId ||
-        0}`
+      `${URL_PADRAO}/questionario?questionarioId=${questionarioId}&codigoAluno=${codigoAluno}&codigoTurma=${codigoTurma}&encaminhamentoId=${
+        encaminhamentoId || 0
+      }`
     );
 
   guardarSecaoEmEdicao = secaoId => {
@@ -291,10 +292,8 @@ class ServicoNAAPA {
 
     const { encaminhamentoNAAPA, questionarioDinamico } = state;
 
-    const {
-      dadosSecoesEncaminhamentoNAAPA,
-      listaSecoesEmEdicao,
-    } = encaminhamentoNAAPA;
+    const { dadosSecoesEncaminhamentoNAAPA, listaSecoesEmEdicao } =
+      encaminhamentoNAAPA;
     const { questionarioDinamicoEmEdicao } = questionarioDinamico;
 
     const secaoDestino = dadosSecoesEncaminhamentoNAAPA?.find(

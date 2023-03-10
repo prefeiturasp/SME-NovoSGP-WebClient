@@ -9,7 +9,7 @@ import {
   setarPerfis,
   setTrocouPerfil,
 } from '~/redux/modulos/perfil/actions';
-import { store } from '~/redux';
+import { store } from '@/core/redux';
 import ServicoDashboard from './Dashboard/ServicoDashboard';
 
 class ServicoRedefinirSenha {
@@ -64,8 +64,7 @@ class ServicoRedefinirSenha {
         if (!response)
           return {
             sucesso: false,
-            erro:
-              'Ocorreu uma falha na comunicação com o servidor, por favor contate o suporte',
+            erro: 'Ocorreu uma falha na comunicação com o servidor, por favor contate o suporte',
           };
 
         if (response.status === 403)
@@ -83,8 +82,7 @@ class ServicoRedefinirSenha {
 
         return {
           sucesso: false,
-          erro:
-            'Ocorreu uma falha na comunicação com o servidor, por favor contate o suporte',
+          erro: 'Ocorreu uma falha na comunicação com o servidor, por favor contate o suporte',
         };
       });
   };

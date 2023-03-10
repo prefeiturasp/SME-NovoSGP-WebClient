@@ -7,7 +7,7 @@ import { useLocation } from 'react-router-dom';
 import { Tooltip } from 'antd';
 
 // Redux
-import { store } from '~/redux';
+import { store } from '@/core/redux';
 import { salvarDadosAulaFrequencia } from '~/redux/modulos/calendarioProfessor/actions';
 import { useSelector } from 'react-redux';
 
@@ -103,8 +103,9 @@ function DiaCompleto({
 
   const onClickAula = useCallback(item => {
     if (item.ehAula)
-      history.push(`${RotasDTO.CADASTRO_DE_AULA}/editar/${item.aulaId}/${dadosDia.dados.somenteAulaReposicao}`);
-
+      history.push(
+        `${RotasDTO.CADASTRO_DE_AULA}/editar/${item.aulaId}/${dadosDia.dados.somenteAulaReposicao}`
+      );
   }, []);
 
   const obterDescricoesPendencias = pendencias => {
@@ -233,20 +234,21 @@ function DiaCompleto({
                     ''
                   )}
                   <div className="botoesEventoAula">
-                    {eventoAula?.ehAula && eventoAula?.mostrarBotaoFrequencia && (
-                      <Tooltip title="Ir para frequência">
-                        <BotaoFrequencia
-                          onClickFrequencia={() =>
-                            onClickFrequenciaHandler(
-                              eventoAula.componenteCurricularId,
-                              dia,
-                              eventoAula.aulaId,
-                              eventoAula.podeEditarAula
-                            )
-                          }
-                        />
-                      </Tooltip>
-                    )}
+                    {eventoAula?.ehAula &&
+                      eventoAula?.mostrarBotaoFrequencia && (
+                        <Tooltip title="Ir para frequência">
+                          <BotaoFrequencia
+                            onClickFrequencia={() =>
+                              onClickFrequenciaHandler(
+                                eventoAula.componenteCurricularId,
+                                dia,
+                                eventoAula.aulaId,
+                                eventoAula.podeEditarAula
+                              )
+                            }
+                          />
+                        </Tooltip>
+                      )}
                     {eventoAula?.atividadesAvaliativas.length > 0 && (
                       <BotaoAvaliacoes
                         atividadesAvaliativas={eventoAula.atividadesAvaliativas}

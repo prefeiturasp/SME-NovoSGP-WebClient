@@ -1,4 +1,4 @@
-import { store } from '~/redux';
+import { store } from '@/core/redux';
 import { setDadosDashboardDevolutivas } from '~/redux/modulos/dashboardDevolutivas/actions';
 import api from '~/servicos/api';
 
@@ -6,15 +6,8 @@ const urlPadrao = 'v1/dashboard/devolutivas';
 
 class ServicoDashboardDevolutivas {
   montarConsultaPadraoGraficos = params => {
-    const {
-      rota,
-      anoLetivo,
-      dreId,
-      ueId,
-      modalidade,
-      anoEscolar,
-      mes,
-    } = params;
+    const { rota, anoLetivo, dreId, ueId, modalidade, anoEscolar, mes } =
+      params;
 
     let url = `${urlPadrao}/${rota}?anoLetivo=${anoLetivo}`;
 

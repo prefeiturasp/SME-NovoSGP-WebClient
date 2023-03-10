@@ -7,7 +7,7 @@ import api from '~/servicos/api';
 import history from '~/servicos/history';
 import Grid from '~/componentes/grid';
 import { Div, Evento, Botao, BotoesAuxiliaresEstilo } from './DiaCompleto.css';
-import { store } from '~/redux';
+import { store } from '@/core/redux';
 import {
   selecionaDia,
   salvarEventoAulaCalendarioEdicao,
@@ -212,7 +212,7 @@ const DiaCompleto = props => {
 
   return (
     estaAberto && (
-      <Loader loading={carregandoDia} tip="">      
+      <Loader loading={carregandoDia} tip="">
         <Div className="border-bottom border-top-0 h-100 p-md-1 p-3">
           {eventosDia &&
           eventosDia.eventosAulas &&
@@ -275,10 +275,11 @@ const DiaCompleto = props => {
                         className="align-self-center font-weight-bold position-relative"
                       >
                         <Div
-                          className={`pl-2 stretched-link ${(evento.tipoEvento ===
-                            TiposEventoAulaDTO.Aula ||
-                            evento.tipoEvento === TiposEventoAulaDTO.CJ) &&
-                            'descricao'}`}
+                          className={`pl-2 stretched-link ${
+                            (evento.tipoEvento === TiposEventoAulaDTO.Aula ||
+                              evento.tipoEvento === TiposEventoAulaDTO.CJ) &&
+                            'descricao'
+                          }`}
                         >
                           {evento.tipoEvento !== TiposEventoAulaDTO.Aula &&
                             evento.tipoEvento !== TiposEventoAulaDTO.CJ &&

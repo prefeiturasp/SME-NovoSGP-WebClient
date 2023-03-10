@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import { store } from '~/redux';
+import { store } from '@/core/redux';
 import Filtro from '../filtro';
 import LogoDoSgp from '~/recursos/LogoDoSgp.svg';
 import NavbarNotificacoes from '../IconeNotificacoes/navbar-notificacoes';

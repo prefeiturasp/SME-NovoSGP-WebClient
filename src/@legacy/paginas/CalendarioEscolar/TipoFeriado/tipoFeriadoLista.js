@@ -11,7 +11,7 @@ import { URL_HOME } from '~/constantes/url';
 import { confirmar, erros, sucesso } from '~/servicos/alertas';
 import api from '~/servicos/api';
 import history from '~/servicos/history';
-import { store } from '~/redux';
+import { store } from '@/core/redux';
 import RotasDto from '~/dtos/rotasDto';
 import { verificaSomenteConsulta } from '~/servicos/servico-navegacao';
 import { SGP_BUTTON_NOVO } from '~/constantes/ids/button';
@@ -24,14 +24,10 @@ const TipoFeriadoLista = () => {
   );
   const [listaTipoFeriado, setListaTipoFeriado] = useState([]);
   const [nomeTipoFeriado, setNomeTipoFeriado] = useState('');
-  const [
-    dropdownAbrangenciaSelecionada,
-    setDropdownAbrangenciaSelecionada,
-  ] = useState(0);
-  const [
-    dropdownTipoFeriadoSelecionado,
-    setDropdownTipoFeriadoSelecionado,
-  ] = useState(0);
+  const [dropdownAbrangenciaSelecionada, setDropdownAbrangenciaSelecionada] =
+    useState(0);
+  const [dropdownTipoFeriadoSelecionado, setDropdownTipoFeriadoSelecionado] =
+    useState(0);
 
   const { usuario } = store.getState();
   const permissoesTela = usuario.permissoes[RotasDto.TIPO_FERIADO];
@@ -64,7 +60,6 @@ const TipoFeriadoLista = () => {
 
   useEffect(() => {
     verificaSomenteConsulta(permissoesTela);
-
   }, []);
 
   const onFiltrar = async () => {
@@ -80,7 +75,6 @@ const TipoFeriadoLista = () => {
 
   useEffect(() => {
     onFiltrar();
-
   }, [
     nomeTipoFeriado,
     dropdownAbrangenciaSelecionada,

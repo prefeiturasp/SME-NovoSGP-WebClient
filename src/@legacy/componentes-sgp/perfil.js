@@ -13,7 +13,7 @@ import api from '~/servicos/api';
 import { setMenusPermissoes } from '~/servicos/servico-navegacao';
 
 import { Base } from '../componentes/colors';
-import { store } from '../redux';
+import { store } from '@/core/redux';
 import {
   perfilSelecionado,
   setTrocouPerfil,

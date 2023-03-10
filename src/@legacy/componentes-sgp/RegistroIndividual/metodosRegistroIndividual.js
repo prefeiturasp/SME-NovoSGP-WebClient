@@ -1,4 +1,4 @@
-import { store } from '~/redux';
+import { store } from '@/core/redux';
 import { setDesabilitarCampos } from '~/redux/modulos/conselhoClasse/actions';
 
 import {
@@ -91,10 +91,8 @@ class MetodosRegistroIndividual {
     turmaId
   ) => {
     this.dispatch(setExibirLoaderGeralRegistroIndividual(true));
-    const {
-      dadosAlunoObjectCard,
-      dadosParaSalvarNovoRegistro,
-    } = registroIndividual;
+    const { dadosAlunoObjectCard, dadosParaSalvarNovoRegistro } =
+      registroIndividual;
     const { alunoCodigo, data, registro } = dadosParaSalvarNovoRegistro;
 
     const retorno = await ServicoRegistroIndividual.salvarRegistroIndividual({
@@ -188,15 +186,13 @@ class MetodosRegistroIndividual {
     registros
   ) => {
     const { registroIndividual, turmaId } = this.obterDados();
-    const {
-      dadosAlunoObjectCard,
-      componenteCurricularSelecionado,
-    } = registroIndividual;
+    const { dadosAlunoObjectCard, componenteCurricularSelecionado } =
+      registroIndividual;
     const alunoCodigo = dadosAlunoObjectCard.codigoEOL;
 
     if (alunoCodigo) {
-      const retorno = await ServicoRegistroIndividual.obterRegistroIndividualPorPeriodo(
-        {
+      const retorno =
+        await ServicoRegistroIndividual.obterRegistroIndividualPorPeriodo({
           alunoCodigo,
           componenteCurricular: componenteCurricularSelecionado,
           dataInicio: dataFormatadaInicio,
@@ -204,8 +200,7 @@ class MetodosRegistroIndividual {
           turmaCodigo: turmaId,
           numeroPagina: pagina,
           numeroRegistros: registros,
-        }
-      ).catch(e => erros(e));
+        }).catch(e => erros(e));
 
       if (retorno?.data) {
         this.dispatch(setDadosPrincipaisRegistroIndividual(retorno.data));

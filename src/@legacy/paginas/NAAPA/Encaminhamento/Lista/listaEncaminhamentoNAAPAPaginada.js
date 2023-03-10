@@ -5,7 +5,7 @@ import { ListaPaginada } from '~/componentes';
 import { OPCAO_TODOS } from '~/constantes';
 import { SGP_TABLE_ENCAMINHAMENTO_NAAPA } from '~/constantes/ids/table';
 import { RotasDto } from '~/dtos';
-import { store } from '~/redux';
+import { store } from '@/core/redux';
 import { setTabAtivaEncaminhamentoNAAPA } from '~/redux/modulos/encaminhamentoNAAPA/actions';
 import { history } from '~/servicos';
 import { verificarDataFimMaiorInicio } from '~/utils';
@@ -88,7 +88,6 @@ const ListaEncaminhamentoNAAPAPaginada = props => {
     if (dataFimMaiorInicio) {
       setFiltros({ ...params });
     }
-
   }, [
     consideraHistorico,
     anoLetivo,

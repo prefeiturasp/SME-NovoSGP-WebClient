@@ -1,4 +1,4 @@
-import { store } from '~/redux';
+import { store } from '@/core/redux';
 import {
   limparDadosPlanoAnual,
   setErrosPlanoAnual,
@@ -155,7 +155,8 @@ class ServicoSalvarPlanoAnual {
           }
         });
       });
-      const copiaListaComponentesCurricularesPlanejamento = listaComponentesCurricularesPlanejamento;
+      const copiaListaComponentesCurricularesPlanejamento =
+        listaComponentesCurricularesPlanejamento;
       dispatch(setListaComponentesCurricularesPlanejamento([]));
       dispatch(
         setListaComponentesCurricularesPlanejamento(
@@ -201,11 +202,12 @@ class ServicoSalvarPlanoAnual {
           );
           if (bimestreComNovaAuditoria) {
             bimestreParaSetarAuditoria.componentes.forEach(compSetarAudi => {
-              const componenteComNovaAuditoria = bimestreComNovaAuditoria.componentes.find(
-                comp =>
-                  String(comp.componenteCurricularId) ===
-                  String(compSetarAudi.componenteCurricularId)
-              );
+              const componenteComNovaAuditoria =
+                bimestreComNovaAuditoria.componentes.find(
+                  comp =>
+                    String(comp.componenteCurricularId) ===
+                    String(compSetarAudi.componenteCurricularId)
+                );
               if (componenteComNovaAuditoria) {
                 compSetarAudi.descricao = componenteComNovaAuditoria.descricao;
                 compSetarAudi.auditoria = componenteComNovaAuditoria.auditoria;

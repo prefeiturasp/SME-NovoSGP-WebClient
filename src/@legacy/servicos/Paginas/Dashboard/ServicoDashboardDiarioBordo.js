@@ -1,4 +1,4 @@
-import { store } from '~/redux';
+import { store } from '@/core/redux';
 import { setDadosDashboardDiarioBordo } from '~/redux/modulos/dashboardDiarioBordo/actions';
 import api from '~/servicos/api';
 

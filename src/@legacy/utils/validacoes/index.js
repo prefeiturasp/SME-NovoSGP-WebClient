@@ -1,4 +1,4 @@
-import { store } from '~/redux';
+import { store } from '@/core/redux';
 import { setTelaEmEdicao } from '~/redux/modulos/geral/actions';
 import { confirmar, history } from '~/servicos';
 

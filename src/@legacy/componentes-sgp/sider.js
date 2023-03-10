@@ -12,7 +12,7 @@ import {
   IconeRetrair,
 } from './sider.css';
 import LogoMenuFooter from '../recursos/LogoMenuFooter.svg';
-import { store } from '../redux';
+import { store } from '@/core/redux';
 import {
   menuRetraido,
   menuSelecionado,

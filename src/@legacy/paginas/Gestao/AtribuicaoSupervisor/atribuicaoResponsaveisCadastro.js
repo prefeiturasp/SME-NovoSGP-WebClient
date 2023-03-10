@@ -11,7 +11,7 @@ import {
 import { SGP_SELECT_DRE } from '~/constantes/ids/select';
 import Auditoria from '~/componentes/auditoria';
 import RotasDto from '~/dtos/rotasDto';
-import { store } from '~/redux';
+import { store } from '@/core/redux';
 import {
   AbrangenciaServico,
   confirmar,
@@ -38,9 +38,8 @@ const AtribuicaoResponsaveisCadastro = () => {
 
   const [tipoResponsavel, setTipoResponsavel] = useState();
   const [listaTipoResponsavel, setListaTipoResponsavel] = useState([]);
-  const [carregandoTipoResponsavel, setCarregandoTipoResponsavel] = useState(
-    false
-  );
+  const [carregandoTipoResponsavel, setCarregandoTipoResponsavel] =
+    useState(false);
 
   const [responsavel, setResponsavel] = useState();
   const [codigoUeSelecionadoGrid, setCodigoUeSelecionadoGrid] = useState('0');
@@ -328,7 +327,6 @@ const AtribuicaoResponsaveisCadastro = () => {
       setTipoResponsavel();
       setResponsavel();
     }
-
   }, [dreId]);
 
   useEffect(() => {
@@ -339,7 +337,6 @@ const AtribuicaoResponsaveisCadastro = () => {
       setResponsavel();
       setUesAtribuidas([]);
     }
-
   }, [dreId, responsavel, obterListaUES]);
 
   useEffect(() => {

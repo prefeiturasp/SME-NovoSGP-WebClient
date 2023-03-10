@@ -5,7 +5,7 @@ import styled from 'styled-components';
 import Button from '~/componentes/button';
 import { Base, Colors } from '~/componentes/colors';
 import { URL_LOGIN } from '~/constantes/url';
-import { store } from '~/redux';
+import { store } from '@/core/redux';
 import { limparDadosFiltro } from '~/redux/modulos/filtro/actions';
 import { LimparSessao } from '~/redux/modulos/sessao/actions';
 import {
