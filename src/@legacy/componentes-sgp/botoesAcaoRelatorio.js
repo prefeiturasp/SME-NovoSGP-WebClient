@@ -6,7 +6,6 @@ import Button from '~/componentes/button';
 import { Colors } from '~/componentes/colors';
 import Loader from '~/componentes/loader';
 import BotaoVoltarPadrao from './BotoesAcaoPadrao/botaoVoltarPadrao';
-import { confirmar } from '~/servicos';
 
 const BotoesAcaoRelatorio = props => {
   const {
