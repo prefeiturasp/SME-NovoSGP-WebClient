@@ -19,18 +19,6 @@ const BotoesAcaoRelatorio = props => {
     modoEdicao,
   } = props;
 
-  const validarCancelar = async () => {
-    if (modoEdicao) {
-      const confirmou = await confirmar(
-        'Atenção',
-        '',
-        'Deseja realmente cancelar as alterações?'
-      );
-      if (confirmou && onClickCancelar) {
-        onClickCancelar();
-      }
-    }
-  };
   return (
     <Row gutter={[8, 8]} type="flex">
       <Col>
@@ -43,7 +31,7 @@ const BotoesAcaoRelatorio = props => {
           color={Colors.Roxo}
           border
           bold
-          onClick={() => validarCancelar()}
+          onClick={() => onClickCancelar()}
           disabled={!modoEdicao}
         />
       </Col>
