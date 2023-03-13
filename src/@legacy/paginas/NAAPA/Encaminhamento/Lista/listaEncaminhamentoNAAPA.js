@@ -64,7 +64,10 @@ const ListaEncaminhamentoNAAPA = () => {
   const [carregandoTurmas, setCarregandoTurmas] = useState(false);
 
   const [somenteConsulta, setSomenteConsulta] = useState(false);
-
+  const [
+    idsEncaminhamentoNAAPASelecionados,
+    setIdsEncaminhamentoNAAPASelecionados,
+  ] = useState([]);
   useEffect(() => {
     const soConsulta = verificaSomenteConsulta(
       permissoes?.[RotasDto.ENCAMINHAMENTO_NAAPA]
@@ -310,6 +313,8 @@ const ListaEncaminhamentoNAAPA = () => {
     dataAberturaQueixaInicio,
     dataAberturaQueixaFim
   );
+  const onSelecionarItems = items =>
+    setIdsEncaminhamentoNAAPASelecionados(items?.map(item => item?.id));
 
   return (
     <>
@@ -317,6 +322,7 @@ const ListaEncaminhamentoNAAPA = () => {
         <ListaEncaminhamentoNAAPABotoesAcao
           podeIncluir={podeIncluir}
           somenteConsulta={somenteConsulta}
+          idsSelecionados={idsEncaminhamentoNAAPASelecionados}
         />
       </Cabecalho>
 
@@ -489,6 +495,7 @@ const ListaEncaminhamentoNAAPA = () => {
                 consideraHistorico={consideraHistorico}
                 dataAberturaQueixaFim={dataAberturaQueixaFim}
                 dataAberturaQueixaInicio={dataAberturaQueixaInicio}
+                onSelecionarItems={onSelecionarItems}
               />
             </Col>
           </Row>
