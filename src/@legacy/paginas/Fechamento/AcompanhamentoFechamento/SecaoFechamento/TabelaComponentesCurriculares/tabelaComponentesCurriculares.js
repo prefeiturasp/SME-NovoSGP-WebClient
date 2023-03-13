@@ -38,15 +38,21 @@ const TabelaComponentesCurriculares = ({
 
   const STATUS_EM_PROCESSAMENTO = 1;
 
-  const obterCorSituacaoFechamento = situacaoFechamentoCodigo =>
-    Object.keys(statusAcompanhamentoFechamento)
+  const obterCorSituacaoFechamento = situacaoFechamentoCodigo => {
+    const colors = Object.keys(statusAcompanhamentoFechamento)
       .map(
         item =>
           statusAcompanhamentoFechamento[item].id ===
             situacaoFechamentoCodigo && statusAcompanhamentoFechamento[item].cor
       )
-      .filter(item => item)
-      .reduce(item => item);
+      .filter(item => item);
+
+    if (colors?.length) {
+      return colors.reduce(item => item);
+    }
+
+    return '';
+  };
 
   const montarDadosComCores = useCallback(dados => {
     const novoMap = dados.map(item => {
