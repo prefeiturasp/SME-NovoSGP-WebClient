@@ -223,7 +223,7 @@ const AulaDadaAulaPrevista = () => {
       setListaDisciplinas(disciplinas.data);
       if (disciplinas?.data?.length === 1) {
         const disciplina = disciplinas.data[0];
-        onChangeDisciplinas(disciplina.codigoComponenteCurricular);
+        onChangeDisciplinas(disciplina.id);
         setDesabilitarDisciplina(true);
       }
     };
@@ -318,7 +318,7 @@ const AulaDadaAulaPrevista = () => {
                 id="disciplina"
                 name="disciplinaId"
                 lista={listaDisciplinas}
-                valueOption="codigoComponenteCurricular"
+                valueOption="id"
                 valueText="nome"
                 valueSelect={disciplinaIdSelecionada}
                 onChange={onChangeDisciplinas}

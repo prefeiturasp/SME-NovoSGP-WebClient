@@ -114,7 +114,7 @@ const FechamentoBismestre = () => {
 
     if (id) {
       const disciplina = listaDisciplinas.find(
-        c => String(c.codigoComponenteCurricular) === id
+        c => String(c.id) === id
       );
       setIdDisciplinaTerritorioSaber(
         disciplina.territorioSaber ? disciplina.id : id
@@ -353,7 +353,7 @@ const FechamentoBismestre = () => {
                     id="disciplina"
                     name="disciplinaId"
                     lista={listaDisciplinas}
-                    valueOption="codigoComponenteCurricular"
+                    valueOption="id"
                     valueText="nome"
                     valueSelect={disciplinaIdSelecionada}
                     onChange={onChangeDisciplinas}
