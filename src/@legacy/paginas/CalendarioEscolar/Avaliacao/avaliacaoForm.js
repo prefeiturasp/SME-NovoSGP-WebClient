@@ -13,7 +13,6 @@ import RadioGroupButton from '~/componentes/radioGroupButton';
 import CampoTexto from '~/componentes/campoTexto';
 import SelectComponent from '~/componentes/select';
 import { Auditoria, Colors, Label, Loader } from '~/componentes';
-import history from '~/servicos/history';
 import { Div, Badge } from './avaliacao.css';
 import RotasDTO from '~/dtos/rotasDto';
 import ServicoAvaliacao from '~/servicos/Paginas/Calendario/ServicoAvaliacao';
@@ -43,12 +42,13 @@ import {
   SGP_SELECT_TIPO_AVALIACAO,
 } from '~/constantes/ids/select';
 import { SGP_JODIT_EDITOR_CADASTRO_AVALIACAO_DESCRICAO } from '~/constantes/ids/jodit-editor';
+import { useNavigate } from 'react-router-dom';
 
 const AvaliacaoForm = ({ match, location }) => {
-  const [
-    mostrarModalCopiarAvaliacao,
-    setMostrarModalCopiarAvaliacao,
-  ] = useState(false);
+  const navigate = useNavigate();
+
+  const [mostrarModalCopiarAvaliacao, setMostrarModalCopiarAvaliacao] =
+    useState(false);
   const permissaoTela = useSelector(
     state => state.usuario.permissoes[RotasDTO.CADASTRO_DE_AVALIACAO]
   );
@@ -78,10 +78,10 @@ const AvaliacaoForm = ({ match, location }) => {
       if (confirmado) {
         if (botaoCadastrarRef.current) botaoCadastrarRef.current.click();
       } else {
-        history.push(RotasDTO.CALENDARIO_PROFESSOR);
+        navigate(RotasDTO.CALENDARIO_PROFESSOR);
       }
     } else {
-      history.push(RotasDTO.CALENDARIO_PROFESSOR);
+      navigate(RotasDTO.CALENDARIO_PROFESSOR);
     }
   };
 
@@ -143,7 +143,7 @@ const AvaliacaoForm = ({ match, location }) => {
       if (exclusao && exclusao.status === 200) {
         setCarregandoTela(false);
         sucesso('Atividade avaliativa excluída com sucesso!');
-        history.push(RotasDTO.CALENDARIO_PROFESSOR);
+        navigate(RotasDTO.CALENDARIO_PROFESSOR);
       } else {
         erro(exclusao);
         setCarregandoTela(false);
@@ -171,13 +171,10 @@ const AvaliacaoForm = ({ match, location }) => {
     listaDisciplinasRegenciaSelecionadas,
     setListaDisciplinasRegenciaSelecionadas,
   ] = useState([]);
-  const [
-    listaDisciplinasSelecionadas,
-    setListaDisciplinasSelecionadas,
-  ] = useState([]);
-  const [desabilitarCopiarAvaliacao, setDesabilitarCopiarAvaliacao] = useState(
-    false
-  );
+  const [listaDisciplinasSelecionadas, setListaDisciplinasSelecionadas] =
+    useState([]);
+  const [desabilitarCopiarAvaliacao, setDesabilitarCopiarAvaliacao] =
+    useState(false);
   const [atividadesRegencia, setAtividadesRegencia] = useState([]);
 
   const usuario = useSelector(store => store.usuario);
@@ -282,7 +279,7 @@ const AvaliacaoForm = ({ match, location }) => {
             );
           }
           setCarregandoTela(false);
-          history.push(RotasDTO.CALENDARIO_PROFESSOR);
+          navigate(RotasDTO.CALENDARIO_PROFESSOR);
         } else {
           setCarregandoTela(false);
           erro(salvar);
@@ -397,7 +394,6 @@ const AvaliacaoForm = ({ match, location }) => {
           setListaDisciplinasRegenciaSelecionadas([...listaDisciplinasReg]);
         });
       }
-
     },
     [mostrarDisciplinaRegencia]
   );
@@ -409,7 +405,6 @@ const AvaliacaoForm = ({ match, location }) => {
         atividadesRegencia
       );
     }
-
   }, [
     montarListaDisciplinasRegenciaExibicao,
     atividadesRegencia,
@@ -439,7 +434,8 @@ const AvaliacaoForm = ({ match, location }) => {
     if (!match?.params?.id && listaDisciplinas?.length === 1) {
       setDadosAvaliacao({
         ...dadosAvaliacao,
-        disciplinasId: listaDisciplinas[0].codigoComponenteCurricular.toString(),
+        disciplinasId:
+          listaDisciplinas[0].codigoComponenteCurricular.toString(),
       });
       setPodeLancaNota(listaDisciplinas[0].lancaNota);
       setDisciplinaSelecionada(listaDisciplinas[0].codigoComponenteCurricular);
@@ -448,7 +444,6 @@ const AvaliacaoForm = ({ match, location }) => {
       setTemRegencia(true);
       obterDisciplinasRegencia();
     }
-
   }, [listaDisciplinas, mostrarDisciplinaRegencia, match]);
 
   const [listaTiposAvaliacao, setListaTiposAvaliacao] = useState([]);
@@ -471,7 +466,7 @@ const AvaliacaoForm = ({ match, location }) => {
     setCarregandoTela(true);
     setTimeout(() => {
       setCarregandoTela(false);
-      history.push(RotasDTO.CALENDARIO_PROFESSOR);
+      navigate(RotasDTO.CALENDARIO_PROFESSOR);
     }, 2000);
   };
 
@@ -492,7 +487,6 @@ const AvaliacaoForm = ({ match, location }) => {
     } else {
       validaF5();
     }
-
   }, []);
 
   const validaInterdisciplinar = categoriaSelecionada => {
@@ -537,7 +531,6 @@ const AvaliacaoForm = ({ match, location }) => {
       !ehTurmaInfantil(modalidadesFiltroPrincipal, turmaSelecionada)
     )
       obterAvaliacao();
-
   }, [idAvaliacao]);
 
   useEffect(() => {

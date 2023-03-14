@@ -1,6 +1,5 @@
 import Api from '../api';
 import { salvarDadosLogin } from '~/redux/modulos/usuario/actions';
-import history from '~/servicos/history';
 import { URL_HOME } from '~/constantes/url';
 import { obterMeusDados } from '~/servicos/Paginas/ServicoUsuario';
 import { setMenusPermissoes } from '~/servicos/servico-navegacao';
@@ -13,7 +12,7 @@ import { store } from '@/core/redux';
 import ServicoDashboard from './Dashboard/ServicoDashboard';
 
 class ServicoRedefinirSenha {
-  redefinirSenha = async (redefinirSenhaDto, dispatch) => {
+  redefinirSenha = async (redefinirSenhaDto, dispatch, navigate) => {
     const formData = new FormData();
 
     formData.set('token', redefinirSenhaDto.token);
@@ -54,7 +53,7 @@ class ServicoRedefinirSenha {
         obterMeusDados();
         setMenusPermissoes();
 
-        history.push(URL_HOME);
+        navigate(URL_HOME);
 
         return { sucesso: false, erroGeral: '' };
       })

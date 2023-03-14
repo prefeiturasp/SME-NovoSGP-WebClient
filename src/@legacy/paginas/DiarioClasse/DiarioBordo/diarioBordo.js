@@ -28,7 +28,6 @@ import {
 } from '~/redux/modulos/observacoesUsuario/actions';
 import { setBreadcrumbManual } from '~/servicos';
 import { confirmar, erros, sucesso } from '~/servicos/alertas';
-import history from '~/servicos/history';
 import ServicoDiarioBordo from '~/servicos/Paginas/DiarioClasse/ServicoDiarioBordo';
 import ServicoFrequencia from '~/servicos/Paginas/DiarioClasse/ServicoFrequencia';
 import ServicoDisciplina from '~/servicos/Paginas/ServicoDisciplina';
@@ -37,8 +36,10 @@ import { ehTurmaInfantil } from '~/servicos/Validacoes/validacoesInfatil';
 import BotoesAcoesDiarioBordo from './botoesAcoesDiarioBordo';
 import ModalSelecionarAula from './modalSelecionarAula';
 import { removerTagsHtml } from '~/utils';
+import { useNavigate } from 'react-router-dom';
 
 const DiarioBordo = ({ match }) => {
+  const navigate = useNavigate();
   const usuario = useSelector(state => state.usuario);
   const { turmaSelecionada } = usuario;
   const permissoesTela = usuario.permissoes[RotasDto.DIARIO_BORDO];
@@ -377,7 +378,7 @@ const DiarioBordo = ({ match }) => {
         resetarTela();
       }
       if (voltarParaListagem) {
-        history.push(RotasDto.DIARIO_BORDO);
+        navigate(RotasDto.DIARIO_BORDO);
       }
       salvouComSucesso = true;
     }
@@ -583,7 +584,7 @@ const DiarioBordo = ({ match }) => {
     }
 
     if (validouSalvarDiario && validouSalvarObservacao) {
-      history.push(RotasDto.DIARIO_BORDO);
+      navigate(RotasDto.DIARIO_BORDO);
     }
   };
 
@@ -620,7 +621,7 @@ const DiarioBordo = ({ match }) => {
       });
       if (resultado && resultado.status === 200) {
         sucesso('Diário de bordo excluído com sucesso');
-        history.push(`${RotasDto.DIARIO_BORDO}/novo`);
+        navigate(`${RotasDto.DIARIO_BORDO}/novo`);
         setDataSelecionada();
       }
       setCarregandoGeral(false);

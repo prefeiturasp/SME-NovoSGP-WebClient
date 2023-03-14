@@ -15,7 +15,6 @@ import { ModalidadeDTO } from '~/dtos';
 import AbrangenciaServico from '~/servicos/Abrangencia';
 import { erros, sucesso } from '~/servicos/alertas';
 import api from '~/servicos/api';
-import history from '~/servicos/history';
 import ServicoComunicados from '~/servicos/Paginas/Gestao/Comunicados/ServicoComunicados';
 import ServicoFiltroRelatorio from '~/servicos/Paginas/FiltroRelatorio/ServicoFiltroRelatorio';
 import ServicoDashboardEscolaAqui from '~/servicos/Paginas/Dashboard/ServicoDashboardEscolaAqui';
@@ -24,8 +23,11 @@ import FiltroHelper from '~/componentes-sgp/filtro/helper';
 import { OPCAO_TODOS } from '~/constantes/constantes';
 import BotoesAcaoRelatorio from '~/componentes-sgp/botoesAcaoRelatorio';
 import { URL_HOME } from '~/constantes';
+import { useNavigate } from 'react-router-dom';
 
 const RelatorioLeitura = () => {
+  const navigate = useNavigate();
+
   const usuario = useSelector(store => store.usuario);
   const { possuiPerfilSme, possuiPerfilDre } = usuario;
 
@@ -59,13 +61,10 @@ const RelatorioLeitura = () => {
   const [dataFim, setDataFim] = useState();
   const [comunicado, setComunicado] = useState();
   const [pesquisaComunicado, setPesquisaComunicado] = useState('');
-  const [
-    listarResponsaveisEstudantes,
-    setListarResponsaveisEstudantes,
-  ] = useState(false);
-  const [listarComunicadosExpirados, setListarComunicadosExpirados] = useState(
-    false
-  );
+  const [listarResponsaveisEstudantes, setListarResponsaveisEstudantes] =
+    useState(false);
+  const [listarComunicadosExpirados, setListarComunicadosExpirados] =
+    useState(false);
 
   const [consideraHistorico, setConsideraHistorico] = useState(false);
   const [desabilitarGerar, setDesabilitarGerar] = useState(true);
@@ -279,9 +278,8 @@ const RelatorioLeitura = () => {
   const obterModalidades = async (ue, ano) => {
     if (ue && ano) {
       setCarregandoModalidade(true);
-      const {
-        data,
-      } = await ServicoFiltroRelatorio.obterModalidadesPorAbrangencia(ue, true);
+      const { data } =
+        await ServicoFiltroRelatorio.obterModalidadesPorAbrangencia(ue, true);
 
       if (data) {
         const lista = data.map(item => ({
@@ -344,14 +342,17 @@ const RelatorioLeitura = () => {
       }
       setCarregandoTurma(false);
     }
-
   }, [modalidadeId]);
 
   const filterTurmasAnoSelecionado = useCallback(() => {
     const turmas = listaTurmasOriginal.filter(a => a.ano === anosEscolares);
 
     if (turmas?.length > 1) {
-      turmas.unshift({ valor: OPCAO_TODOS, desc: 'Todas', nomeFiltro: 'Todas' });
+      turmas.unshift({
+        valor: OPCAO_TODOS,
+        desc: 'Todas',
+        nomeFiltro: 'Todas',
+      });
     }
     setListaTurmas(turmas);
   }, [anosEscolares, listaTurmasOriginal]);
@@ -362,7 +363,6 @@ const RelatorioLeitura = () => {
     } else {
       setListaTurmas(listaTurmasOriginal);
     }
-
   }, [anosEscolares, listaTurmasOriginal]);
 
   useEffect(() => {
@@ -373,7 +373,6 @@ const RelatorioLeitura = () => {
       setListaTurmas([]);
       setListaTurmasOriginal([]);
     }
-
   }, [modalidadeId]);
 
   const obterAnosLetivos = useCallback(async () => {
@@ -423,8 +422,9 @@ const RelatorioLeitura = () => {
     anoLetivoSelecionado
   ) => {
     const retorno = await api.get(
-      `v1/abrangencias/false/semestres?anoLetivo=${anoLetivoSelecionado}&modalidade=${modalidadeSelecionada ||
-        0}`
+      `v1/abrangencias/false/semestres?anoLetivo=${anoLetivoSelecionado}&modalidade=${
+        modalidadeSelecionada || 0
+      }`
     );
     if (retorno && retorno.data) {
       const lista = retorno.data.map(periodo => {
@@ -483,7 +483,6 @@ const RelatorioLeitura = () => {
       setAnosEscolares();
       setListaAnosEscolares([]);
     }
-
   }, [modalidadeId]);
 
   const cancelar = async () => {
@@ -584,20 +583,21 @@ const RelatorioLeitura = () => {
         }
 
         setCarregandoComunicados(true);
-        const resposta = await ServicoDashboardEscolaAqui.obterComunicadosAutoComplete(
-          anoLetivo || '',
-          codigoDre === OPCAO_TODOS ? '' : codigoDre || '',
-          codigoUe === OPCAO_TODOS ? '' : codigoUe || '',
-          modalidadeId,
-          semestre || '',
-          anosEscolares || '',
-          turmaId === OPCAO_TODOS ? '' : turmaId || '',
-          dataInicio || '',
-          dataFim || '',
-          pesquisaComunicado || ''
-        )
-          .catch(e => erros(e))
-          .finally(() => setCarregandoComunicados(false));
+        const resposta =
+          await ServicoDashboardEscolaAqui.obterComunicadosAutoComplete(
+            anoLetivo || '',
+            codigoDre === OPCAO_TODOS ? '' : codigoDre || '',
+            codigoUe === OPCAO_TODOS ? '' : codigoUe || '',
+            modalidadeId,
+            semestre || '',
+            anosEscolares || '',
+            turmaId === OPCAO_TODOS ? '' : turmaId || '',
+            dataInicio || '',
+            dataFim || '',
+            pesquisaComunicado || ''
+          )
+            .catch(e => erros(e))
+            .finally(() => setCarregandoComunicados(false));
 
         if (resposta?.data?.length) {
           const lista = resposta.data.map(item => {
@@ -654,7 +654,7 @@ const RelatorioLeitura = () => {
       <Cabecalho pagina="Relatório de leitura">
         <BotoesAcaoRelatorio
           onClickVoltar={() => {
-            history.push(URL_HOME);
+            navigate(URL_HOME);
           }}
           onClickCancelar={cancelar}
           onClickGerar={gerar}

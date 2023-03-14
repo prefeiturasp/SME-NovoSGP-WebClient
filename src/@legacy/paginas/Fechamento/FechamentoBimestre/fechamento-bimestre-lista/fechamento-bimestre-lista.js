@@ -2,7 +2,7 @@
 import { Tooltip } from 'antd';
 import React, { useState } from 'react';
 import * as moment from 'moment';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import Ordenacao from '~/componentes-sgp/Ordenacao/ordenacao';
 import FechamentoRegencia from '../fechamanto-regencia/fechamento-regencia';
 import BotaoExpandir from './botao-expandir';
@@ -19,7 +19,6 @@ import Button from '~/componentes/button';
 import situacaoFechamentoDto from '~/dtos/situacaoFechamentoDto';
 import ServicoFechamentoBimestre from '~/servicos/Paginas/Fechamento/ServicoFechamentoBimestre';
 import { erros, sucesso } from '~/servicos/alertas';
-import history from '~/servicos/history';
 import RotasDto from '~/dtos/rotasDto';
 import ModalAnotacaoAluno from '../../FechamentoModalAnotacaoAluno/modal-anotacao-aluno';
 import SinalizacaoAEE from '~/componentes-sgp/SinalizacaoAEE/sinalizacaoAEE';
@@ -37,16 +36,17 @@ const FechamentoBimestreLista = props => {
     registraFrequencia,
     desabilitarCampo,
   } = props;
+
+  const navigate = useNavigate();
+
   const [dadosLista, setDadosLista] = useState(
     dados ? dados.alunos : undefined
   );
   const [situacaoFechamento, setSituacaoFechamento] = useState(dados.situacao);
   const [carregandoProcesso, setCarregandoProcesso] = useState(false);
   const [podeProcessarReprocessar] = useState(dados.podeProcessarReprocessar);
-  const [
-    situacaosituacaoNomeFechamento,
-    setSituacaosituacaoNomeFechamento,
-  ] = useState(dados.situacaoNome);
+  const [situacaosituacaoNomeFechamento, setSituacaosituacaoNomeFechamento] =
+    useState(dados.situacaoNome);
   const [dataFechamento] = useState(dados.dataFechamento);
 
   const [exibirModalAnotacao, setExibirModalAnotacao] = useState(false);
@@ -59,9 +59,10 @@ const FechamentoBimestreLista = props => {
     'Solicitação de fechamento realizada com sucesso. Em breve você receberá uma notificação com o resultado do processo.';
 
   const onClickReprocessarNotasConceitos = async () => {
-    const processando = await ServicoFechamentoBimestre.reprocessarNotasConceitos(
-      dados.fechamentoId
-    ).catch(e => erros(e));
+    const processando =
+      await ServicoFechamentoBimestre.reprocessarNotasConceitos(
+        dados.fechamentoId
+      ).catch(e => erros(e));
     if (processando?.status === 200) {
       setSituacaoFechamento(situacaoFechamentoDto.EmProcessamento);
       setSituacaosituacaoNomeFechamento('Em Processamento');
@@ -87,9 +88,10 @@ const FechamentoBimestreLista = props => {
       disciplinaId: codigoComponenteCurricular,
       notaConceitoAlunos: alunosParaProcessar,
     };
-    const processando = await ServicoFechamentoBimestre.processarReprocessarSintese(
-      [params]
-    ).catch(e => erros(e));
+    const processando =
+      await ServicoFechamentoBimestre.processarReprocessarSintese([
+        params,
+      ]).catch(e => erros(e));
     setCarregandoProcesso(false);
     if (processando?.status === 200) {
       setSituacaoFechamento(situacaoFechamentoDto.EmProcessamento);
@@ -100,7 +102,7 @@ const FechamentoBimestreLista = props => {
 
   const onClickVerPendecias = async () => {
     const { bimestre } = dados;
-    history.push({
+    navigate({
       pathname: `${RotasDto.PENDENCIAS_FECHAMENTO}/${bimestre}/${codigoComponenteCurricular}`,
       state: { rotaOrigem: location.pathname },
     });

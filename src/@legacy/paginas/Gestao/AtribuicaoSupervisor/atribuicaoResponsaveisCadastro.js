@@ -1,6 +1,6 @@
 import { Col, Row } from 'antd';
 import React, { useCallback, useEffect, useState } from 'react';
-import { useRouteMatch } from 'react-router-dom';
+import { useMatch, useNavigate } from 'react-router-dom';
 import { Button, Card, Colors, Loader, SelectComponent } from '~/componentes';
 import { Cabecalho } from '~/componentes-sgp';
 import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
@@ -16,7 +16,6 @@ import {
   AbrangenciaServico,
   confirmar,
   erros,
-  history,
   setBreadcrumbManual,
   sucesso,
   erro,
@@ -30,7 +29,8 @@ const AtribuicaoResponsaveisCadastro = () => {
   const permissoesTela =
     usuario.permissoes[RotasDto.ATRIBUICAO_RESPONSAVEIS_LISTA];
 
-  const routeMatch = useRouteMatch();
+  const routeMatch = useMatch();
+  const navigate = useNavigate();
 
   const [carregandoDres, setCarregandoDres] = useState(false);
   const [listaDres, setListaDres] = useState([]);
@@ -92,7 +92,7 @@ const AtribuicaoResponsaveisCadastro = () => {
     ServicoResponsaveis.salvarAtribuicao(atribuicao)
       .then(() => {
         sucesso('Atribuição realizada com sucesso.');
-        history.push(RotasDto.ATRIBUICAO_RESPONSAVEIS_LISTA);
+        navigate(RotasDto.ATRIBUICAO_RESPONSAVEIS_LISTA);
       })
       .catch(e => {
         if (e.response.status === 601) {
@@ -114,10 +114,10 @@ const AtribuicaoResponsaveisCadastro = () => {
       if (confirmado) {
         salvarAtribuicao();
       } else {
-        history.push(RotasDto.ATRIBUICAO_RESPONSAVEIS_LISTA);
+        navigate(RotasDto.ATRIBUICAO_RESPONSAVEIS_LISTA);
       }
     } else {
-      history.push(RotasDto.ATRIBUICAO_RESPONSAVEIS_LISTA);
+      navigate(RotasDto.ATRIBUICAO_RESPONSAVEIS_LISTA);
     }
   };
 

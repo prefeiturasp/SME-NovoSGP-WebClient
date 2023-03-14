@@ -13,6 +13,7 @@ import React, {
   useState,
 } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import shortid from 'shortid';
 import Button from '~/componentes/button';
 import { Colors } from '~/componentes/colors';
@@ -23,7 +24,6 @@ import {
   setIniciarNotificacoesSemWebSocket,
 } from '~/redux/modulos/notificacoes/actions';
 import { erros } from '~/servicos/alertas';
-import history from '~/servicos/history';
 import servicoNotificacao from '~/servicos/Paginas/ServicoNotificacao';
 import { obterUrlSignalR } from '~/servicos/variaveis';
 import { validarAcaoTela } from '~/utils';
@@ -33,6 +33,7 @@ const NavbarNotificacoes = props => {
   const { Botao, Icone, Texto } = props;
 
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const usuario = useSelector(store => store.usuario);
   const usuarioRf = usuario?.rf;
@@ -71,7 +72,6 @@ const NavbarNotificacoes = props => {
       setConnection(null);
       dispatch(setIniciarNotificacoesSemWebSocket(true));
     }
-
   }, [urlConnection, usuarioRf]);
 
   useEffect(() => {
@@ -142,7 +142,6 @@ const NavbarNotificacoes = props => {
         dispatch(setIniciarNotificacoesSemWebSocket(false));
       });
     }
-
   }, [connection]);
 
   useEffect(() => {
@@ -194,7 +193,6 @@ const NavbarNotificacoes = props => {
         obterListaNotificacoes();
       }
     }
-
   }, [mostraNotificacoes]);
 
   const onClickBotao = () => {
@@ -206,7 +204,7 @@ const NavbarNotificacoes = props => {
     if (pararAcao) return;
 
     if (codigo) {
-      history.push(`/notificacoes/${codigo}`);
+      navigate(`/notificacoes/${codigo}`);
       setMostraNotificacoes(!mostraNotificacoes);
     }
   };
@@ -215,7 +213,7 @@ const NavbarNotificacoes = props => {
     const pararAcao = await validarAcaoTela();
     if (pararAcao) return;
 
-    history.push(`/notificacoes`);
+    navigate(`/notificacoes`);
     setMostraNotificacoes(!mostraNotificacoes);
   };
 
@@ -226,9 +224,11 @@ const NavbarNotificacoes = props => {
           <Icone className="fa fa-bell fa-lg" />
         </Count>
         <Texto
-          className={`d-block mt-1 ${mostraNotificacoes &&
+          className={`d-block mt-1 ${
+            mostraNotificacoes &&
             notificacoes.quantidade > 0 &&
-            'font-weight-bold'}`}
+            'font-weight-bold'
+          }`}
         >
           Notificações
         </Texto>

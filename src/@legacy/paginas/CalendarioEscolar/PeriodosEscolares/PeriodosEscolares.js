@@ -24,7 +24,6 @@ import {
   api,
   confirmar,
   erros,
-  history,
   ServicoCalendarios,
   sucesso,
   verificaSomenteConsulta,
@@ -36,12 +35,13 @@ import {
   SGP_BUTTON_CANCELAR,
 } from '~/constantes/ids/button';
 import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
+import { useNavigate } from 'react-router-dom';
 
 const PeriodosEscolares = () => {
-  const [
-    calendarioEscolarSelecionado,
-    setCalendarioEscolarSelecionado,
-  ] = useState('');
+  const navigate = useNavigate();
+
+  const [calendarioEscolarSelecionado, setCalendarioEscolarSelecionado] =
+    useState('');
   const [isTipoCalendarioAnual, setIsTipoCalendarioAnual] = useState(true);
   const [validacoes, setValidacoes] = useState();
   const [modoEdicao, setModoEdicao] = useState(false);
@@ -147,7 +147,6 @@ const PeriodosEscolares = () => {
       periodos = Object.assign({}, validacaoPrimeiroBim, validacaoSegundoBim);
     }
     setValidacoes(Yup.object().shape(periodos));
-
   }, [isTipoCalendarioAnual]);
 
   const consultarPeriodoPorId = async id => {
@@ -247,7 +246,7 @@ const PeriodosEscolares = () => {
         setModoEdicao(false);
         consultarPeriodoPorId(periodoEscolarEdicao.tipoCalendario);
         sucesso('Suas informações foram editadas com sucesso.');
-        if (voltar) history.push(URL_HOME);
+        if (voltar) navigate(URL_HOME);
       }
     } else {
       const calendarioParaCadastrar = listaTipoCalendario.find(item => {
@@ -295,7 +294,7 @@ const PeriodosEscolares = () => {
         setModoEdicao(false);
         consultarPeriodoPorId(calendarioParaCadastrar.id);
         sucesso('Suas informações foram salvas com sucesso.');
-        if (voltar) history.push(URL_HOME);
+        if (voltar) navigate(URL_HOME);
       }
     }
   };
@@ -488,10 +487,10 @@ const PeriodosEscolares = () => {
       if (confirmou) {
         validaAntesDoSubmit(form, true);
       } else {
-        history.push(URL_HOME);
+        navigate(URL_HOME);
       }
     } else {
-      history.push(URL_HOME);
+      navigate(URL_HOME);
     }
   };
 
@@ -521,11 +520,10 @@ const PeriodosEscolares = () => {
     (async () => {
       setCarregandoTipos(true);
 
-      const {
-        data,
-      } = await ServicoCalendarios.obterTiposCalendarioAutoComplete(
-        pesquisaTipoCalendario
-      );
+      const { data } =
+        await ServicoCalendarios.obterTiposCalendarioAutoComplete(
+          pesquisaTipoCalendario
+        );
 
       if (isSubscribed) {
         setListaTipoCalendario(data);
@@ -537,7 +535,6 @@ const PeriodosEscolares = () => {
     return () => {
       isSubscribed = false;
     };
-
   }, [pesquisaTipoCalendario]);
 
   return (

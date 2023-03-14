@@ -17,14 +17,16 @@ import {
   Loader,
 } from '~/componentes';
 import RotasDto from '~/dtos/rotasDto';
-import history from '~/servicos/history';
 import { erros, sucesso, confirmar, erro } from '~/servicos/alertas';
 import servicoTipoAvaliaco from '~/servicos/Paginas/TipoAvaliacao';
 import { setBreadcrumbManual } from '~/servicos/breadcrumb-services';
 
 import { validaSeObjetoEhNuloOuVazio } from '~/utils/funcoes/gerais';
+import { useNavigate } from 'react-router-dom';
 
 const TipoAvaliacaoForm = ({ match }) => {
+  const navigate = useNavigate();
+
   const listaSituacao = [
     {
       label: 'Ativo',
@@ -77,7 +79,7 @@ const TipoAvaliacaoForm = ({ match }) => {
       ]);
       if (excluir && excluir.status === 200) {
         sucesso(`Tipo Avaliação excluido com sucesso!`);
-        history.push(RotasDto.TIPO_AVALIACAO);
+        navigate(RotasDto.TIPO_AVALIACAO);
       } else {
         erro(excluir);
       }
@@ -104,10 +106,10 @@ const TipoAvaliacaoForm = ({ match }) => {
         'Deseja realmente cancelar as alterações?'
       );
       if (confirmou) {
-        history.push(RotasDto.TIPO_AVALIACAO);
+        navigate(RotasDto.TIPO_AVALIACAO);
       }
     } else {
-      history.push(RotasDto.TIPO_AVALIACAO);
+      navigate(RotasDto.TIPO_AVALIACAO);
     }
   };
   const validaAntesDoSubmit = form => {
@@ -156,7 +158,7 @@ const TipoAvaliacaoForm = ({ match }) => {
 
       if (cadastrado && cadastrado.status === 200) {
         sucesso('Tipo de avaliação salvo com sucesso.');
-        history.push(RotasDto.TIPO_AVALIACAO);
+        navigate(RotasDto.TIPO_AVALIACAO);
       }
     } catch (err) {
       if (err) {
@@ -200,7 +202,6 @@ const TipoAvaliacaoForm = ({ match }) => {
       setBreadcrumbManual(match.url, 'Atribuição', RotasDto.TIPO_AVALIACAO);
       buscarPorId(match.params.id);
     }
-
   }, []);
 
   return (

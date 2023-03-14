@@ -3,10 +3,12 @@ import React from 'react';
 import Card from '~/componentes/card';
 import Button from '~/componentes/button';
 import { Colors } from '~/componentes/colors';
-import history from '~/servicos/history';
 import { URL_HOME } from '~/constantes/url';
+import { useNavigate } from 'react-router-dom';
 
 const SemPermissao = () => {
+  const navigate = useNavigate();
+
   const Corpo = styled.div`
     display: flex;
     justify-content: center;
@@ -20,7 +22,7 @@ const SemPermissao = () => {
   `;
 
   const onClickVoltar = () => {
-    history.push(URL_HOME);
+    navigate(URL_HOME);
   };
 
   return (

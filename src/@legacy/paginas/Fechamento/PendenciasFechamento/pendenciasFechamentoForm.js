@@ -11,7 +11,6 @@ import Label from '~/componentes/label';
 import modalidade from '~/dtos/modalidade';
 import { erros, erro, sucesso } from '~/servicos/alertas';
 import ServicoDisciplina from '~/servicos/Paginas/ServicoDisciplina';
-import history from '~/servicos/history';
 import RotasDto from '~/dtos/rotasDto';
 import situacaoPendenciaDto from '~/dtos/situacaoPendenciaDto';
 import { setBreadcrumbManual } from '~/servicos/breadcrumb-services';
@@ -32,8 +31,12 @@ import { IframeStyle } from './pendenciasFechamentoLista.css';
 import { ServicoPeriodoFechamento } from '~/servicos';
 import { SGP_BUTTON_APROVAR } from '~/constantes/ids/button';
 import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
+import { URL_HOME } from '@/@legacy/constantes';
+import { useNavigate } from 'react-router-dom';
 
 const PendenciasFechamentoForm = ({ match }) => {
+  const navigate = useNavigate();
+
   const usuario = useSelector(store => store.usuario);
   const { turmaSelecionada } = usuario;
 
@@ -52,9 +55,8 @@ const PendenciasFechamentoForm = ({ match }) => {
   const [exibirAuditoria, setExibirAuditoria] = useState(false);
 
   const [idPendenciaFechamento, setIdPendenciaFechamento] = useState(0);
-  const [codigoComponenteCurricular, setCodigoComponenteCurricular] = useState(
-    undefined
-  );
+  const [codigoComponenteCurricular, setCodigoComponenteCurricular] =
+    useState(undefined);
   const [bimestre, setBimestre] = useState('');
   const [situacaoId, setSituacaoId] = useState('');
   const [situacaoNome, setSituacaoNome] = useState('');
@@ -128,10 +130,11 @@ const PendenciasFechamentoForm = ({ match }) => {
   }, [turmaSelecionada, modalidadesFiltroPrincipal]);
 
   const obterPeriodoAberto = useCallback(async () => {
-    const retorno = await ServicoPeriodoFechamento.verificarSePodeAlterarNoPeriodo(
-      turmaSelecionada.turma,
-      bimestre
-    ).catch(e => erros(e));
+    const retorno =
+      await ServicoPeriodoFechamento.verificarSePodeAlterarNoPeriodo(
+        turmaSelecionada.turma,
+        bimestre
+      ).catch(e => erros(e));
 
     setPeriodoAberto(!!retorno.data);
   }, [turmaSelecionada, bimestre]);
@@ -201,7 +204,7 @@ const PendenciasFechamentoForm = ({ match }) => {
     }
   }, [modalidadesFiltroPrincipal, turmaSelecionada, match]);
 
-  const onClickVoltar = () => history.goBack();
+  const onClickVoltar = () => navigate(URL_HOME);
 
   const onClickAprovar = async () => {
     const retorno = await ServicoPendenciasFechamento.aprovar([

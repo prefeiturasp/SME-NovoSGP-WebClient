@@ -6,7 +6,6 @@ import modalidade from '~/dtos/modalidade';
 import AbrangenciaServico from '~/servicos/Abrangencia';
 import { erros, sucesso } from '~/servicos/alertas';
 import api from '~/servicos/api';
-import history from '~/servicos/history';
 import { ServicoComponentesCurriculares } from '~/servicos';
 import FiltroHelper from '~/componentes-sgp/filtro/helper';
 import ServicoFiltroRelatorio from '~/servicos/Paginas/FiltroRelatorio/ServicoFiltroRelatorio';
@@ -15,8 +14,11 @@ import ServicoRelatorioCompensacaoAusencia from '~/servicos/Paginas/Relatorios/C
 import { ordenarListaMaiorParaMenor } from '~/utils/funcoes/gerais';
 import { URL_HOME } from '~/constantes';
 import BotoesAcaoRelatorio from '~/componentes-sgp/botoesAcaoRelatorio';
+import { useNavigate } from 'react-router-dom';
 
 const RelatorioCompensacaoAusencia = () => {
+  const navigate = useNavigate();
+
   const [carregandoGerar, setCarregandoGerar] = useState(false);
   const [carregandoAnos, setCarregandoAnos] = useState(false);
   const [listaAnosLetivo, setListaAnosLetivo] = useState([]);
@@ -34,10 +36,8 @@ const RelatorioCompensacaoAusencia = () => {
     carregandoComponentesCurriculares,
     setCarregandoComponentesCurriculares,
   ] = useState(false);
-  const [
-    listaComponentesCurriculares,
-    setListaComponentesCurriculares,
-  ] = useState([]);
+  const [listaComponentesCurriculares, setListaComponentesCurriculares] =
+    useState([]);
   const [listaBimestres, setListaBimestres] = useState([]);
 
   const bimestresEja = [
@@ -60,9 +60,8 @@ const RelatorioCompensacaoAusencia = () => {
   const [modalidadeId, setModalidadeId] = useState(undefined);
   const [semestre, setSemestre] = useState(undefined);
   const [turmaId, setTurmaId] = useState(undefined);
-  const [componentesCurricularesId, setComponentesCurricularesId] = useState(
-    undefined
-  );
+  const [componentesCurricularesId, setComponentesCurricularesId] =
+    useState(undefined);
   const [bimestre, setBimestre] = useState(undefined);
 
   const [modoEdicao, setModoEdicao] = useState(false);
@@ -195,9 +194,8 @@ const RelatorioCompensacaoAusencia = () => {
   const obterModalidades = async (ue, ano) => {
     if (ue && ano) {
       setCarregandoModalidades(true);
-      const {
-        data,
-      } = await ServicoFiltroRelatorio.obterModalidadesPorAbrangencia(ue);
+      const { data } =
+        await ServicoFiltroRelatorio.obterModalidadesPorAbrangencia(ue);
 
       if (data) {
         const lista = data.map(item => ({
@@ -269,7 +267,6 @@ const RelatorioCompensacaoAusencia = () => {
       setListaBimestres(bimestresFundMedio);
     }
     setBimestre();
-
   }, [modalidadeId]);
 
   const obterAnosLetivos = useCallback(async () => {
@@ -323,10 +320,11 @@ const RelatorioCompensacaoAusencia = () => {
             ? lista.map(a => a.valor).filter(a => a !== '0')
             : idsTurma
         );
-        const disciplinas = await ServicoComponentesCurriculares.obterComponentesPorUeTurmas(
-          ueCodigo,
-          turmas
-        ).catch(e => erros(e));
+        const disciplinas =
+          await ServicoComponentesCurriculares.obterComponentesPorUeTurmas(
+            ueCodigo,
+            turmas
+          ).catch(e => erros(e));
         let componentesCurriculares = [];
         componentesCurriculares.push({
           codigo: '0',
@@ -365,8 +363,9 @@ const RelatorioCompensacaoAusencia = () => {
   ) => {
     setCarregandoSemestres(true);
     const retorno = await api.get(
-      `v1/abrangencias/false/semestres?anoLetivo=${anoLetivoSelecionado}&modalidade=${modalidadeSelecionada ||
-        0}`
+      `v1/abrangencias/false/semestres?anoLetivo=${anoLetivoSelecionado}&modalidade=${
+        modalidadeSelecionada || 0
+      }`
     );
     if (retorno && retorno.data) {
       const lista = retorno.data.map(periodo => {
@@ -466,7 +465,7 @@ const RelatorioCompensacaoAusencia = () => {
       />
       <Cabecalho pagina="Relatório de compensação de ausência">
         <BotoesAcaoRelatorio
-          onClickVoltar={() => history.push(URL_HOME)}
+          onClickVoltar={() => navigate(URL_HOME)}
           onClickCancelar={cancelar}
           onClickGerar={gerar}
           desabilitarBtnGerar={desabilitarBtnGerar}

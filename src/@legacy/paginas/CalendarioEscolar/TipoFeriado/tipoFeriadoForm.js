@@ -2,7 +2,7 @@ import { Form, Formik } from 'formik';
 import React, { useEffect, useState } from 'react';
 import * as Yup from 'yup';
 import { Col, Row } from 'antd';
-import { useRouteMatch } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import Cabecalho from '~/componentes-sgp/cabecalho';
 import Auditoria from '~/componentes/auditoria';
 import Button from '~/componentes/button';
@@ -15,7 +15,6 @@ import SelectComponent from '~/componentes/select';
 import { confirmar, erros, sucesso } from '~/servicos/alertas';
 import api from '~/servicos/api';
 import { setBreadcrumbManual } from '~/servicos/breadcrumb-services';
-import history from '~/servicos/history';
 import tipoFeriado from '~/dtos/tipoFeriado';
 import { store } from '@/core/redux';
 import RotasDto from '~/dtos/rotasDto';
@@ -35,7 +34,10 @@ const TipoFeriadoForm = () => {
   const [idTipoFeriadoEdicao, setIdTipoFeriadoEdicao] = useState(0);
   const [isTipoMovel, setIsTipoMovel] = useState(false);
 
-  const routeMatch = useRouteMatch();
+  const { pathname } = useLocation();
+  const { id } = useParams();
+  const navigate = useNavigate();
+
   const { usuario } = store.getState();
   const permissoesTela = usuario.permissoes[RotasDto.TIPO_FERIADO];
 
@@ -89,16 +91,16 @@ const TipoFeriadoForm = () => {
     verificaSomenteConsulta(permissoesTela);
 
     const consultaPorId = async () => {
-      if (routeMatch?.params?.id) {
+      if (id) {
         setBreadcrumbManual(
-          routeMatch.url,
+          pathname,
           'Alterar Tipo de Feriado',
           RotasDto.TIPO_FERIADO
         );
-        setIdTipoFeriadoEdicao(routeMatch.params.id);
+        setIdTipoFeriadoEdicao(id);
 
         const cadastrado = await api
-          .get(`v1/calendarios/feriados/${routeMatch.params.id}`)
+          .get(`v1/calendarios/feriados/${id}`)
           .catch(e => erros(e));
 
         if (cadastrado && cadastrado.data) {
@@ -170,7 +172,7 @@ const TipoFeriadoForm = () => {
       } else {
         sucesso('Novo tipo de feriado criado com sucesso.');
       }
-      history.push(RotasDto.TIPO_FERIADO);
+      navigate(RotasDto.TIPO_FERIADO);
     }
   };
 
@@ -199,7 +201,7 @@ const TipoFeriadoForm = () => {
 
         if (excluir?.status === 200) {
           sucesso('Tipo de feriado excluído com sucesso.');
-          history.push(RotasDto.TIPO_FERIADO);
+          navigate(RotasDto.TIPO_FERIADO);
         }
       }
     }
@@ -251,10 +253,10 @@ const TipoFeriadoForm = () => {
       if (confirmado) {
         validaAntesDoSubmit(form);
       } else {
-        history.push(RotasDto.TIPO_FERIADO);
+        navigate(RotasDto.TIPO_FERIADO);
       }
     } else {
-      history.push(RotasDto.TIPO_FERIADO);
+      navigate(RotasDto.TIPO_FERIADO);
     }
   };
 

@@ -22,14 +22,15 @@ import {
   setExibirModalEncerramentoEncaminhamentoAEE,
 } from '~/redux/modulos/encaminhamentoAEE/actions';
 import { confirmar, erros, sucesso } from '~/servicos';
-import history from '~/servicos/history';
 import ServicoEncaminhamentoAEE from '~/servicos/Paginas/Relatorios/AEE/ServicoEncaminhamentoAEE';
 import BotaoGerarRelatorioEncaminhamentoAEE from '../../BotaoGerarRelatorioEncaminhamentoAEE';
+import { useNavigate } from 'react-router-dom';
 
 const BotoesAcoesEncaminhamentoAEE = props => {
   const { match } = props;
 
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const questionarioDinamicoEmEdicao = useSelector(
     store => store.questionarioDinamico.questionarioDinamicoEmEdicao
@@ -66,7 +67,8 @@ const BotoesAcoesEncaminhamentoAEE = props => {
       situacao,
       false,
       false,
-      true
+      true,
+      navigate
     );
     if (salvou) {
       sucesso(`Rascunho salvo com sucesso`);
@@ -83,7 +85,7 @@ const BotoesAcoesEncaminhamentoAEE = props => {
     );
     if (salvou) {
       sucesso('Encaminhamento enviado para validação do CP');
-      history.push(RotasDto.RELATORIO_AEE_ENCAMINHAMENTO);
+      navigate(RotasDto.RELATORIO_AEE_ENCAMINHAMENTO);
     }
   };
 
@@ -108,10 +110,10 @@ const BotoesAcoesEncaminhamentoAEE = props => {
         );
         if (salvou) {
           sucesso(`Rascunho salvo com sucesso`);
-          history.push(RotasDto.RELATORIO_AEE_ENCAMINHAMENTO);
+          navigate(RotasDto.RELATORIO_AEE_ENCAMINHAMENTO);
         }
       } else {
-        history.push(RotasDto.RELATORIO_AEE_ENCAMINHAMENTO);
+        navigate(RotasDto.RELATORIO_AEE_ENCAMINHAMENTO);
       }
     } else if (
       match?.params?.id &&
@@ -123,10 +125,10 @@ const BotoesAcoesEncaminhamentoAEE = props => {
         `Você salvou o encaminhamento como rascunho. Para dar andamento ao encaminhamento você precisa clicar em "Enviar", deseja realmente sair da tela?`
       );
       if (confirmou) {
-        history.push(RotasDto.RELATORIO_AEE_ENCAMINHAMENTO);
+        navigate(RotasDto.RELATORIO_AEE_ENCAMINHAMENTO);
       }
     } else {
-      history.push(RotasDto.RELATORIO_AEE_ENCAMINHAMENTO);
+      navigate(RotasDto.RELATORIO_AEE_ENCAMINHAMENTO);
     }
   };
 
@@ -149,7 +151,7 @@ const BotoesAcoesEncaminhamentoAEE = props => {
 
         if (resposta?.status === 200) {
           sucesso('Registro excluído com sucesso');
-          history.push(RotasDto.RELATORIO_AEE_ENCAMINHAMENTO);
+          navigate(RotasDto.RELATORIO_AEE_ENCAMINHAMENTO);
         }
       }
     }
@@ -184,15 +186,16 @@ const BotoesAcoesEncaminhamentoAEE = props => {
       );
       if (salvou) {
         dispatch(setExibirLoaderEncaminhamentoAEE(true));
-        const resposta = await ServicoEncaminhamentoAEE.enviarParaAnaliseEncaminhamento(
-          encaminhamentoId
-        )
-          .catch(e => erros(e))
-          .finally(() => dispatch(setExibirLoaderEncaminhamentoAEE(false)));
+        const resposta =
+          await ServicoEncaminhamentoAEE.enviarParaAnaliseEncaminhamento(
+            encaminhamentoId
+          )
+            .catch(e => erros(e))
+            .finally(() => dispatch(setExibirLoaderEncaminhamentoAEE(false)));
 
         if (resposta?.status === 200) {
           sucesso('Encaminhamento enviado para a AEE');
-          history.push(RotasDto.RELATORIO_AEE_ENCAMINHAMENTO);
+          navigate(RotasDto.RELATORIO_AEE_ENCAMINHAMENTO);
         }
       }
       setDesabilitarBtnAcao(false);
@@ -217,7 +220,7 @@ const BotoesAcoesEncaminhamentoAEE = props => {
 
         if (resposta?.status === 200) {
           sucesso('Encaminhamento concluído');
-          history.push(RotasDto.RELATORIO_AEE_ENCAMINHAMENTO);
+          navigate(RotasDto.RELATORIO_AEE_ENCAMINHAMENTO);
         }
       }
     }

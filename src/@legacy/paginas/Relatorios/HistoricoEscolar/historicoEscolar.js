@@ -12,7 +12,6 @@ import { URL_HOME } from '~/constantes/url';
 import modalidade from '~/dtos/modalidade';
 import AbrangenciaServico from '~/servicos/Abrangencia';
 import api from '~/servicos/api';
-import history from '~/servicos/history';
 import FiltroHelper from '~/componentes-sgp/filtro/helper';
 import { erros, sucesso } from '~/servicos/alertas';
 import LocalizadorEstudante from '~/componentes/LocalizadorEstudante';
@@ -34,8 +33,11 @@ import {
   SGP_SELECT_INFORMAR_OBSERVACOES_COMPLEMENTARES,
 } from '~/constantes/ids/select';
 import ModalObservacoesComplementares from './modalObservacoesComplementares';
+import { useNavigate } from 'react-router-dom';
 
 const HistoricoEscolar = () => {
+  const navigate = useNavigate();
+
   const codigosAlunosSelecionados = useSelector(
     state => state.localizadorEstudante.codigosAluno
   );
@@ -419,7 +421,7 @@ const HistoricoEscolar = () => {
   }, [obterDres]);
 
   const onClickVoltar = () => {
-    history.push(URL_HOME);
+    navigate(URL_HOME);
   };
 
   const onClickCancelar = () => {

@@ -6,17 +6,17 @@ import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPad
 import { SGP_BUTTON_NOVO } from '~/constantes/ids/button';
 import { URL_HOME } from '~/constantes';
 import { RotasDto } from '~/dtos';
-import { history } from '~/servicos';
+import { useNavigate } from 'react-router-dom';
 
 const ListaEncaminhamentoNAAPABotoesAcao = props => {
   const { somenteConsulta, podeIncluir } = props;
+  const navigate = useNavigate();
 
   const desabilitarNovo = somenteConsulta || !podeIncluir;
 
-  const onClickVoltar = () => history.push(URL_HOME);
+  const onClickVoltar = () => navigate(URL_HOME);
 
-  const onClickNovo = () =>
-    history.push(`${RotasDto.ENCAMINHAMENTO_NAAPA}/novo`);
+  const onClickNovo = () => navigate(`${RotasDto.ENCAMINHAMENTO_NAAPA}/novo`);
 
   return (
     <Row gutter={[8, 8]} type="flex">

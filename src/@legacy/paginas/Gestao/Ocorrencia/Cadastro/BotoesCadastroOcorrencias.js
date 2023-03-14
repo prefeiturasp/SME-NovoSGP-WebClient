@@ -8,15 +8,10 @@ import {
   SGP_BUTTON_CANCELAR,
   SGP_BUTTON_IMPRIMIR,
 } from '~/constantes/ids/button';
-import {
-  confirmar,
-  erros,
-  history,
-  ServicoOcorrencias,
-  sucesso,
-} from '~/servicos';
+import { confirmar, erros, ServicoOcorrencias, sucesso } from '~/servicos';
 import BotaoExcluirPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoExcluirPadrao';
 import { RotasDto } from '~/dtos';
+import { useNavigate } from 'react-router-dom';
 
 const BotoesCadastroOcorrencias = props => {
   const {
@@ -30,6 +25,8 @@ const BotoesCadastroOcorrencias = props => {
     podeExcluir,
     listaUes,
   } = props;
+
+  const navigate = useNavigate();
 
   const { anoLetivo, dreId, ueId, turmaId, codigosAlunos } = form?.values;
 
@@ -67,10 +64,10 @@ const BotoesCadastroOcorrencias = props => {
       if (confirmado) {
         validaAntesDoSubmit(form);
       } else {
-        history.push(RotasDto.OCORRENCIAS);
+        navigate(RotasDto.OCORRENCIAS);
       }
     } else {
-      history.push(RotasDto.OCORRENCIAS);
+      navigate(RotasDto.OCORRENCIAS);
     }
   };
 
@@ -126,7 +123,7 @@ const BotoesCadastroOcorrencias = props => {
       );
       if (retorno?.status === 200) {
         sucesso('Registro excluído com sucesso');
-        history.push(RotasDto.OCORRENCIAS);
+        navigate(RotasDto.OCORRENCIAS);
       }
     }
   };

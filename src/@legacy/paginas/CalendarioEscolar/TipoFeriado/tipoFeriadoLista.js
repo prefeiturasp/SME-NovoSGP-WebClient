@@ -10,15 +10,18 @@ import DataTable from '~/componentes/table/dataTable';
 import { URL_HOME } from '~/constantes/url';
 import { confirmar, erros, sucesso } from '~/servicos/alertas';
 import api from '~/servicos/api';
-import history from '~/servicos/history';
+
 import { store } from '@/core/redux';
 import RotasDto from '~/dtos/rotasDto';
 import { verificaSomenteConsulta } from '~/servicos/servico-navegacao';
 import { SGP_BUTTON_NOVO } from '~/constantes/ids/button';
 import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
 import BotaoExcluirPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoExcluirPadrao';
+import { useNavigate } from 'react-router-dom';
 
 const TipoFeriadoLista = () => {
+  const navigate = useNavigate();
+
   const [idsTipoFeriadoSelecionado, setIdsTipoFeriadoSelecionado] = useState(
     []
   );
@@ -86,15 +89,15 @@ const TipoFeriadoLista = () => {
   };
 
   const onClickVoltar = () => {
-    history.push(URL_HOME);
+    navigate(URL_HOME);
   };
 
   const onClickNovo = () => {
-    history.push(`/calendario-escolar/tipo-feriado/novo`);
+    navigate(`/calendario-escolar/tipo-feriado/novo`);
   };
 
   const onClickEditar = id => {
-    history.push(`/calendario-escolar/tipo-feriado/editar/${id}`);
+    navigate(`/calendario-escolar/tipo-feriado/editar/${id}`);
   };
 
   const onClickRow = row => {

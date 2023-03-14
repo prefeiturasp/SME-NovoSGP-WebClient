@@ -22,7 +22,6 @@ import DreDropDown from '../componentes/DreDropDown';
 import UeDropDown from '../componentes/UeDropDown';
 
 import RotasDto from '~/dtos/rotasDto';
-import history from '~/servicos/history';
 import AtribuicaoEsporadicaServico from '~/servicos/Paginas/AtribuicaoEsporadica';
 import {
   erros,
@@ -37,8 +36,11 @@ import { validaSeObjetoEhNuloOuVazio } from '~/utils';
 
 import { Row } from './styles';
 import { SGP_BUTTON_ALTERAR_CADASTRAR } from '~/constantes/ids/button';
+import { useNavigate } from 'react-router-dom';
 
 function AtribuicaoEsporadicaForm({ match }) {
+  const navigate = useNavigate();
+
   const [carregando, setCarregando] = useState(false);
   const permissoesTela = useSelector(store => store.usuario.permissoes);
   const somenteConsulta = verificaSomenteConsulta(
@@ -117,13 +119,12 @@ function AtribuicaoEsporadicaForm({ match }) {
   const onSubmitFormulario = async valores => {
     try {
       setCarregando(true);
-      const cadastrado = await AtribuicaoEsporadicaServico.salvarAtribuicaoEsporadica(
-        {
+      const cadastrado =
+        await AtribuicaoEsporadicaServico.salvarAtribuicaoEsporadica({
           ...filtroListagem,
           ...valores,
           ehInfantil,
-        }
-      );
+        });
       if (cadastrado && cadastrado.status === 200) {
         setCarregando(false);
         sucesso(
@@ -131,7 +132,7 @@ function AtribuicaoEsporadicaForm({ match }) {
             match?.params?.id ? 'alterada' : 'salva'
           } com sucesso.`
         );
-        history.push(RotasDto.ATRIBUICAO_ESPORADICA_LISTA);
+        navigate(RotasDto.ATRIBUICAO_ESPORADICA_LISTA);
       }
     } catch (err) {
       if (err) {
@@ -151,10 +152,10 @@ function AtribuicaoEsporadicaForm({ match }) {
       if (confirmou) {
         validaAntesDoSubmit(form);
       } else {
-        history.push(RotasDto.ATRIBUICAO_ESPORADICA_LISTA);
+        navigate(RotasDto.ATRIBUICAO_ESPORADICA_LISTA);
       }
     } else {
-      history.push(RotasDto.ATRIBUICAO_ESPORADICA_LISTA);
+      navigate(RotasDto.ATRIBUICAO_ESPORADICA_LISTA);
     }
   };
 
@@ -206,12 +207,13 @@ function AtribuicaoEsporadicaForm({ match }) {
       'Cancelar'
     );
     if (confirmado) {
-      const excluir = await AtribuicaoEsporadicaServico.deletarAtribuicaoEsporadica(
-        form.values.id
-      ).catch(e => erros(e));
+      const excluir =
+        await AtribuicaoEsporadicaServico.deletarAtribuicaoEsporadica(
+          form.values.id
+        ).catch(e => erros(e));
       if (excluir) {
         sucesso(`Atribuição excluida com sucesso!`);
-        history.push(RotasDto.ATRIBUICAO_ESPORADICA_LISTA);
+        navigate(RotasDto.ATRIBUICAO_ESPORADICA_LISTA);
       }
     }
   };
@@ -219,9 +221,8 @@ function AtribuicaoEsporadicaForm({ match }) {
   const buscarPorId = async id => {
     try {
       setCarregando(true);
-      const registro = await AtribuicaoEsporadicaServico.buscarAtribuicaoEsporadica(
-        id
-      );
+      const registro =
+        await AtribuicaoEsporadicaServico.buscarAtribuicaoEsporadica(id);
       if (registro && registro.data) {
         setValoresIniciais({
           ...registro.data,

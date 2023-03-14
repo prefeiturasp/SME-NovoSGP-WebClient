@@ -22,12 +22,14 @@ import {
   api,
   erro,
   erros,
-  history,
   verificaSomenteConsulta,
 } from '~/servicos';
+import { useNavigate } from 'react-router-dom';
 
 // eslint-disable-next-line react/prop-types
 const Suporte = ({ match }) => {
+  const navigate = useNavigate();
+
   const { usuario } = store.getState();
   const permissoesTela = usuario.permissoes[RotasDto.SUPORTE];
 
@@ -56,7 +58,7 @@ const Suporte = ({ match }) => {
     verificaSomenteConsulta(permissoesTela);
   }, [permissoesTela]);
 
-  const onClickVoltar = () => history.push(URL_HOME);
+  const onClickVoltar = () => navigate(URL_HOME);
 
   const onChangeDre = valor => {
     setUeId();
@@ -149,11 +151,13 @@ const Suporte = ({ match }) => {
 
       const resposta = await helper.acessar(
         { usuario: linha?.codigoRf || linha?.login },
-        true
+        true,
+        false,
+        navigate
       );
 
       if (resposta?.sucesso) {
-        history.push(URL_HOME);
+        navigate(URL_HOME);
       } else if (resposta.erro) {
         erros(resposta.erro);
       }

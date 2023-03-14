@@ -20,7 +20,6 @@ import { setDadosIniciaisLocalizarEstudante } from '~/redux/modulos/collapseLoca
 import { verificaSomenteConsulta } from '~/servicos';
 import AbrangenciaServico from '~/servicos/Abrangencia';
 import { erros } from '~/servicos/alertas';
-import history from '~/servicos/history';
 import ServicoEncaminhamentoAEE from '~/servicos/Paginas/Relatorios/AEE/ServicoEncaminhamentoAEE';
 import FiltroHelper from '~/componentes-sgp/filtro/helper';
 import ModalAvisoNovoEncaminhamentoAEE from './Componentes/AvisoCadastro/modalAvisoCadastro';
@@ -36,9 +35,11 @@ import {
 } from '~/constantes/ids/select';
 import { SGP_TABLE_LISTA_ALUNOS_ENCAMINHAMENTO_AEE } from '~/constantes/ids/table';
 import BotaoGerarRelatorioEncaminhamentoAEE from '../BotaoGerarRelatorioEncaminhamentoAEE';
+import { useNavigate } from 'react-router-dom';
 
 const EncaminhamentoAEELista = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const codigosAlunosSelecionados = useSelector(
     state => state.localizadorEstudante.codigosAluno
@@ -67,10 +68,8 @@ const EncaminhamentoAEELista = () => {
   const [situacao, setSituacao] = useState();
   const [responsavel, setResponsavel] = useState();
 
-  const [
-    alunoLocalizadorSelecionado,
-    setAlunoLocalizadorSelecionado,
-  ] = useState();
+  const [alunoLocalizadorSelecionado, setAlunoLocalizadorSelecionado] =
+    useState();
 
   const [filtro, setFiltro] = useState({});
 
@@ -80,10 +79,8 @@ const EncaminhamentoAEELista = () => {
   const [carregandoSituacao, setCarregandoSituacao] = useState(false);
   const [carregandoResponsavel, setCarregandoResponsavel] = useState(false);
 
-  const [
-    idsEncaminhamentosSelecionados,
-    setIdsEncaminhamentosSelecionados,
-  ] = useState([]);
+  const [idsEncaminhamentosSelecionados, setIdsEncaminhamentosSelecionados] =
+    useState([]);
 
   useEffect(() => {
     verificaSomenteConsulta(permissoesTela);
@@ -156,7 +153,6 @@ const EncaminhamentoAEELista = () => {
 
   useEffect(() => {
     validarValorPadraoAnoLetivo(listaAnosLetivo);
-
   }, [consideraHistorico, listaAnosLetivo]);
 
   const obterAnosLetivos = useCallback(async () => {
@@ -177,7 +173,6 @@ const EncaminhamentoAEELista = () => {
 
     setListaAnosLetivo(anosLetivos);
     setCarregandoAnos(false);
-
   }, [anoAtual, consideraHistorico]);
 
   useEffect(() => {
@@ -268,7 +263,6 @@ const EncaminhamentoAEELista = () => {
         setListaUes([]);
       }
     }
-
   }, [dre, anoLetivo, consideraHistorico]);
 
   useEffect(() => {
@@ -369,7 +363,6 @@ const EncaminhamentoAEELista = () => {
         setListaTurmas([]);
       }
     }
-
   }, [anoLetivo, ue]);
 
   useEffect(() => {
@@ -382,7 +375,7 @@ const EncaminhamentoAEELista = () => {
   }, [ue, obterTurmas]);
 
   const onClickVoltar = () => {
-    history.push(URL_HOME);
+    navigate(URL_HOME);
   };
 
   const onClickNovo = () => {
@@ -497,7 +490,7 @@ const EncaminhamentoAEELista = () => {
   };
 
   const onClickEditar = item => {
-    history.push(`${RotasDto.RELATORIO_AEE_ENCAMINHAMENTO}/editar/${item.id}`);
+    navigate(`${RotasDto.RELATORIO_AEE_ENCAMINHAMENTO}/editar/${item.id}`);
   };
 
   const onCheckedConsideraHistorico = e => {

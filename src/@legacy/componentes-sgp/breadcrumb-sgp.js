@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Breadcrumb } from 'antd';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 import { Base } from '../componentes/colors';
@@ -35,6 +35,8 @@ const BreadcrumbBody = styled.div`
   }
 `;
 const BreadcrumbSgp = () => {
+  const navigate = useNavigate();
+
   const NavegacaoStore = useSelector(
     storeNavegacao => storeNavegacao.navegacao
   );
@@ -55,26 +57,34 @@ const BreadcrumbSgp = () => {
   const itemRotaDinamica = rotaDinamica ? JSON.parse(rotaDinamica) : null;
 
   const verificaTrocaNomesBreadcrumb = () => {
-    const rotaPlanoCiclo = rotas.get(RotasDto.PLANO_CICLO);
-    rotaPlanoCiclo.breadcrumbName = obterDescricaoNomeMenu(
-      RotasDto.PLANO_CICLO,
-      modalidadesFiltroPrincipal,
-      UsuarioStrore.turmaSelecionada
-    );
+    if (rotas?.length) {
+      const rotaPlanoCiclo = rotas.get(RotasDto.PLANO_CICLO);
+      if (rotaPlanoCiclo) {
+        rotaPlanoCiclo.breadcrumbName = obterDescricaoNomeMenu(
+          RotasDto.PLANO_CICLO,
+          modalidadesFiltroPrincipal,
+          UsuarioStrore.turmaSelecionada
+        );
+      }
 
-    const rotaPlanoAnual = rotas.get(RotasDto.PLANO_ANUAL);
-    rotaPlanoAnual.breadcrumbName = obterDescricaoNomeMenu(
-      RotasDto.PLANO_ANUAL,
-      modalidadesFiltroPrincipal,
-      UsuarioStrore.turmaSelecionada
-    );
+      const rotaPlanoAnual = rotas.get(RotasDto.PLANO_ANUAL);
+      if (rotaPlanoAnual) {
+        rotaPlanoAnual.breadcrumbName = obterDescricaoNomeMenu(
+          RotasDto.PLANO_ANUAL,
+          modalidadesFiltroPrincipal,
+          UsuarioStrore.turmaSelecionada
+        );
+      }
 
-    const rotaFrequencia = rotas.get(RotasDto.FREQUENCIA_PLANO_AULA);
-    rotaFrequencia.breadcrumbName = obterDescricaoNomeMenu(
-      RotasDto.FREQUENCIA_PLANO_AULA,
-      modalidadesFiltroPrincipal,
-      UsuarioStrore.turmaSelecionada
-    );
+      const rotaFrequencia = rotas.get(RotasDto.FREQUENCIA_PLANO_AULA);
+      if (rotaFrequencia) {
+        rotaFrequencia.breadcrumbName = obterDescricaoNomeMenu(
+          RotasDto.FREQUENCIA_PLANO_AULA,
+          modalidadesFiltroPrincipal,
+          UsuarioStrore.turmaSelecionada
+        );
+      }
+    }
   };
 
   useEffect(() => {
@@ -116,43 +126,43 @@ const BreadcrumbSgp = () => {
 
   const setItensBreadcrumb = item => {
     const newItens = [];
-    if (!item.breadcrumbName && item.parent) {
+    if (!item?.breadcrumbName && item?.parent) {
       item = rotas.get(item.parent);
     }
     carregaBreadcrumbsExtra(item, newItens);
     newItens.push(
       criarItemBreadcrumb(
-        item.breadcrumbName,
+        item?.breadcrumbName,
         rotaAtual,
         true,
         true,
-        item.icone,
-        item.dicaIcone
+        item?.icone,
+        item?.dicaIcone
       )
     );
     setItens(newItens);
   };
 
   const carregaBreadcrumbsExtra = (item, newItens) => {
-    const itemParent = rotas.get(item.parent);
-    if (itemParent && itemParent.parent) {
+    const itemParent = rotas.get(item?.parent);
+    if (itemParent && itemParent?.parent) {
       carregaBreadcrumbsExtra(itemParent, newItens);
     }
 
     if (itemParent) {
       newItens.push(
         criarItemBreadcrumb(
-          itemParent.breadcrumbName,
-          item.parent,
+          itemParent?.breadcrumbName,
+          item?.parent,
           false,
           false,
-          itemParent.icone,
-          itemParent.dicaIcone
+          itemParent?.icone,
+          itemParent?.dicaIcone
         )
       );
     }
 
-    if (item.menu && item.menu.length) {
+    if (item?.menu && item?.menu?.length) {
       item.menu.forEach((menu, i) => {
         newItens.push(
           criarItemBreadcrumb(
@@ -188,7 +198,10 @@ const BreadcrumbSgp = () => {
               <Link
                 hidden={item.ehEstatico}
                 to={item.path}
-                onClick={e => validarNavegacaoTela(e, item.path)}
+                onClick={async e => {
+                  const pararAcao = await validarNavegacaoTela(e, item.path);
+                  if (!pararAcao) navigate(item.path);
+                }}
               >
                 <i className={item.icone} title={item.breadcrumbName} />
                 <span hidden={item.path === '/'} style={{ marginLeft: 8 }}>

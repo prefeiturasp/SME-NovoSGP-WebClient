@@ -32,7 +32,6 @@ import {
 } from '~/redux/modulos/devolutivas/actions';
 import { confirmar, erros, sucesso } from '~/servicos/alertas';
 import { setBreadcrumbManual } from '~/servicos/breadcrumb-services';
-import history from '~/servicos/history';
 import ServicoPeriodoEscolar from '~/servicos/Paginas/Calendario/ServicoPeriodoEscolar';
 import ServicoDevolutivas from '~/servicos/Paginas/DiarioClasse/ServicoDevolutivas';
 import ServicoDiarioBordo from '~/servicos/Paginas/DiarioClasse/ServicoDiarioBordo';
@@ -40,9 +39,11 @@ import ServicoDisciplina from '~/servicos/Paginas/ServicoDisciplina';
 import { verificaSomenteConsulta } from '~/servicos/servico-navegacao';
 import { ehTurmaInfantil } from '~/servicos/Validacoes/validacoesInfatil';
 import DadosPlanejamentoDiarioBordo from './DadosPlanejamentoDiarioBordo/dadosPlanejamentoDiarioBordo';
+import { useNavigate } from 'react-router-dom';
 
 const DevolutivasForm = ({ match }) => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const usuario = useSelector(state => state.usuario);
   const { turmaSelecionada } = usuario;
@@ -56,16 +57,12 @@ const DevolutivasForm = ({ match }) => {
     store => store.devolutivas.numeroRegistros
   );
 
-  const [
-    listaComponenteCurriculare,
-    setListaComponenteCurriculare,
-  ] = useState();
+  const [listaComponenteCurriculare, setListaComponenteCurriculare] =
+    useState();
 
   const [carregandoGeral, setCarregandoGeral] = useState(false);
-  const [
-    codigoComponenteCurricular,
-    setCodigoComponenteCurricular,
-  ] = useState();
+  const [codigoComponenteCurricular, setCodigoComponenteCurricular] =
+    useState();
   const [turmaInfantil, setTurmaInfantil] = useState(false);
   const [modoEdicao, setModoEdicao] = useState(false);
   const [datasParaHabilitar, setDatasParaHabilitar] = useState();
@@ -102,9 +99,10 @@ const DevolutivasForm = ({ match }) => {
 
   const obterPeriodoLetivoTurma = async () => {
     if (turmaSelecionada && turmaSelecionada.turma) {
-      const periodoLetivoTurmaResponse = await ServicoPeriodoEscolar.obterPeriodoLetivoTurma(
-        turmaSelecionada.turma
-      ).catch(e => erros(e));
+      const periodoLetivoTurmaResponse =
+        await ServicoPeriodoEscolar.obterPeriodoLetivoTurma(
+          turmaSelecionada.turma
+        ).catch(e => erros(e));
       if (periodoLetivoTurmaResponse?.data) {
         const datas = [
           moment(periodoLetivoTurmaResponse.data.periodoInicio).format(
@@ -142,7 +140,6 @@ const DevolutivasForm = ({ match }) => {
         : soConsulta || !permissoesTela.podeIncluir;
     setDesabilitarCampos(desabilitar);
     obterPeriodoLetivoTurma();
-
   }, [
     idDevolutiva,
     permissoesTela,
@@ -186,13 +183,13 @@ const DevolutivasForm = ({ match }) => {
 
     if (!infantil) {
       resetarTela();
-      history.push(RotasDto.DEVOLUTIVAS);
+      navigate(RotasDto.DEVOLUTIVAS);
     }
   }, [turmaSelecionada, modalidadesFiltroPrincipal, resetarTela]);
 
   useEffect(() => {
     if (!turmaSelecionada.turma) {
-      history.push(RotasDto.DEVOLUTIVAS);
+      navigate(RotasDto.DEVOLUTIVAS);
     }
     resetarTela();
   }, [turmaSelecionada.turma, resetarTela]);
@@ -216,11 +213,12 @@ const DevolutivasForm = ({ match }) => {
     const datas = [dataInicial.format('YYYY-MM-DD')];
 
     setCarregandoGeral(true);
-    const periodoDeDiasDevolutivaPorParametro = await ServicoDevolutivas.obterPeriodoDeDiasDevolutivaPorParametro(
-      turmaSelecionada?.anoLetivo
-    )
-      .catch(e => erros(e))
-      .finally(() => setCarregandoGeral(false));
+    const periodoDeDiasDevolutivaPorParametro =
+      await ServicoDevolutivas.obterPeriodoDeDiasDevolutivaPorParametro(
+        turmaSelecionada?.anoLetivo
+      )
+        .catch(e => erros(e))
+        .finally(() => setCarregandoGeral(false));
 
     const qtdMaxDias = periodoDeDiasDevolutivaPorParametro?.data || 0;
     if (qtdMaxDias) {
@@ -339,7 +337,6 @@ const DevolutivasForm = ({ match }) => {
       }
       setValoresIniciais(inicial);
     }
-
   }, [
     codigoComponenteCurricular,
     listaComponenteCurriculare,
@@ -517,13 +514,13 @@ const DevolutivasForm = ({ match }) => {
       if (confirmado) {
         const salvou = await validaAntesDoSubmit(form);
         if (salvou) {
-          history.push(RotasDto.DEVOLUTIVAS);
+          navigate(RotasDto.DEVOLUTIVAS);
         }
       } else {
-        history.push(RotasDto.DEVOLUTIVAS);
+        navigate(RotasDto.DEVOLUTIVAS);
       }
     } else {
-      history.push(RotasDto.DEVOLUTIVAS);
+      navigate(RotasDto.DEVOLUTIVAS);
     }
   };
 
@@ -541,7 +538,7 @@ const DevolutivasForm = ({ match }) => {
 
         if (deletou && deletou.status === 200) {
           sucesso('Registro excluído com sucesso.');
-          history.push(RotasDto.DEVOLUTIVAS);
+          navigate(RotasDto.DEVOLUTIVAS);
         }
       }
     }
@@ -638,7 +635,7 @@ const DevolutivasForm = ({ match }) => {
                     onClick={async () => {
                       const salvou = await validaAntesDoSubmit(form, true);
                       if (salvou) {
-                        history.push(RotasDto.DEVOLUTIVAS);
+                        navigate(RotasDto.DEVOLUTIVAS);
                       }
                     }}
                     disabled={

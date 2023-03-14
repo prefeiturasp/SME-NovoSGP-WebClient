@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, Navigate, useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { store } from '@/core/redux';
 import Filtro from '../filtro';
@@ -9,7 +9,6 @@ import { Nav, Botao, Botoes, Logo, Icone, Texto, Div } from './navbar.css';
 
 import Perfil from '../perfil';
 import { Deslogar, removerTurma } from '~/redux/modulos/usuario/actions';
-import history from '~/servicos/history';
 import { URL_LOGIN, URL_HOME } from '~/constantes/url';
 import { limparDadosFiltro } from '~/redux/modulos/filtro/actions';
 import { setExibirMensagemSessaoExpirou } from '~/redux/modulos/mensagens/actions';
@@ -28,6 +27,7 @@ const Navbar = () => {
   const [carregando, setCarregando] = useState(false);
 
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const helper = new LoginHelper(dispatch);
 
@@ -40,7 +40,7 @@ const Navbar = () => {
     store.dispatch(Deslogar());
     store.dispatch(LimparSessao());
     store.dispatch(setExibirMensagemSessaoExpirou(false));
-    history.push(URL_LOGIN);
+    navigate(URL_LOGIN);
   };
 
   useEffect(() => {
@@ -63,10 +63,11 @@ const Navbar = () => {
     const resposta = await helper.acessar(
       usuarioStore.administradorSuporte,
       false,
-      deslogar
+      deslogar,
+      navigate
     );
     if (resposta?.sucesso) {
-      history.push(URL_HOME);
+      navigate(URL_HOME);
       ServicoNotificacao.obterUltimasNotificacoesNaoLidas().catch(e =>
         erros(e)
       );
@@ -112,7 +113,8 @@ const Navbar = () => {
                   }}
                   to={URL_HOME}
                   onClick={async e => {
-                    await validarNavegacaoTela(e, URL_HOME);
+                    const pararAcao = await validarNavegacaoTela(e, URL_HOME);
+                    if (!pararAcao) Navigate(URL_HOME);
                   }}
                 >
                   <Logo

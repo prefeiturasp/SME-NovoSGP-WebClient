@@ -1,11 +1,11 @@
 import { Col } from 'antd';
 import * as moment from 'moment';
 import React, { useCallback, useContext, useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { Base, ListaPaginada } from '~/componentes';
 import { OPCAO_TODOS } from '~/constantes';
 import { modalidadeTipoCalendario, RotasDto } from '~/dtos';
-import { history } from '~/servicos';
 import FechaReabListaContext from './fechaReabListaContext';
 
 export const CampoBimestre = styled.div`
@@ -23,6 +23,8 @@ const FechaReabListaPaginada = () => {
     filtrarNovaConsulta,
     seFiltrarNovaConsulta,
   } = useContext(FechaReabListaContext);
+
+  const navigate = useNavigate();
 
   const [filtros, setFiltros] = useState({});
   const [filtroEhValido, setFiltroEhValido] = useState(false);
@@ -50,7 +52,6 @@ const FechaReabListaPaginada = () => {
 
   useEffect(() => {
     filtrar();
-
   }, [calendarioSelecionado, codigoDre, codigoUe]);
 
   useEffect(() => {
@@ -58,7 +59,6 @@ const FechaReabListaPaginada = () => {
       filtrar();
       seFiltrarNovaConsulta(false);
     }
-
   }, [filtrarNovaConsulta]);
 
   const formatarCampoData = data => {
@@ -94,7 +94,7 @@ const FechaReabListaPaginada = () => {
   ];
 
   const onClickEditar = item => {
-    history.push(`${RotasDto.PERIODO_FECHAMENTO_REABERTURA}/editar/${item.id}`);
+    navigate(`${RotasDto.PERIODO_FECHAMENTO_REABERTURA}/editar/${item.id}`);
   };
 
   const onSelecionarItems = ids => {
@@ -166,8 +166,6 @@ const FechaReabListaPaginada = () => {
           : getColunasBimestreAnual();
       setColunasBimestre([...colBim]);
     }
-
-
   }, [calendarioSelecionado]);
 
   return (

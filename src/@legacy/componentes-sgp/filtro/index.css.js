@@ -44,7 +44,7 @@ export const Busca = styled(Icone)`
   max-width: 14px;
   padding: 1rem;
   right: 0;
-  top: 0;
+  top: 7px;
 `;
 
 export const Fechar = styled(Icone)`

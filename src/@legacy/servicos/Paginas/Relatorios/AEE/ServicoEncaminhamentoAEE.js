@@ -27,7 +27,6 @@ import {
 } from '~/redux/modulos/questionarioDinamico/actions';
 import { erros } from '~/servicos/alertas';
 import api from '~/servicos/api';
-import history from '~/servicos/history';
 
 const urlPadrao = 'v1/encaminhamento-aee';
 
@@ -141,7 +140,8 @@ class ServicoEncaminhamentoAEE {
     situacao,
     validarCamposObrigatorios,
     enviarEncaminhamento,
-    salvarRascunho
+    salvarRascunho,
+    navigate
   ) => {
     const { dispatch } = store;
 
@@ -393,7 +393,7 @@ class ServicoEncaminhamentoAEE {
             dispatch(setLimparDadosQuestionarioDinamico());
             dispatch(setLimparDadosLocalizarEstudante());
             dispatch(setLimparDadosAtribuicaoResponsavel());
-            history.push(
+            navigate(
               `${RotasDto.RELATORIO_AEE_ENCAMINHAMENTO}/editar/${resposta?.data?.id}`
             );
           }

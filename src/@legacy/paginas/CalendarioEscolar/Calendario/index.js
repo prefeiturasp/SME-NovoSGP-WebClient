@@ -16,17 +16,13 @@ import { Cabecalho, FiltroHelper } from '~/componentes-sgp';
 import Calendario from '~/componentes-sgp/calendarioEscolar/Calendario';
 import { store } from '@/core/redux';
 import { zeraCalendario } from '~/redux/modulos/calendarioEscolar/actions';
-import {
-  AbrangenciaServico,
-  api,
-  history,
-  ServicoCalendarios,
-} from '~/servicos';
+import { AbrangenciaServico, api, ServicoCalendarios } from '~/servicos';
 import { erro, sucesso } from '~/servicos/alertas';
 import { Div } from './index.css';
 import { OPCAO_TODOS } from '~/constantes';
 import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
 import { SGP_CHECKBOX_EXIBIR_HISTORICO } from '~/constantes/ids/checkbox';
+import { useNavigate } from 'react-router-dom';
 export const ContainerLabelDiasLetivos = styled.div`
   font-style: normal;
   font-weight: 700;
@@ -38,6 +34,8 @@ export const ContainerLabelDiasLetivos = styled.div`
 `;
 
 const CalendarioEscolar = () => {
+  const navigate = useNavigate();
+
   const [anoLetivo, setAnoLetivo] = useState();
   const [tipoCalendarioSelecionado, setTipoCalendarioSelecionado] =
     useState(undefined);
@@ -173,7 +171,7 @@ const CalendarioEscolar = () => {
   }, [tipoCalendarioSelecionado, unidadeEscolarSelecionada]);
 
   const aoClicarBotaoVoltar = () => {
-    history.push('/');
+    navigate('/');
   };
 
   useEffect(() => {

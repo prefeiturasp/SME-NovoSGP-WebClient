@@ -7,7 +7,6 @@ import * as Yup from 'yup';
 import { useSelector } from 'react-redux';
 
 import RotasDto from '~/dtos/rotasDto';
-import history from '~/servicos/history';
 import { erro, sucesso, confirmar } from '~/servicos/alertas';
 import { setBreadcrumbManual } from '~/servicos/breadcrumb-services';
 import AtribuicaoCJServico from '~/servicos/Paginas/AtribuicaoCJ';
@@ -43,8 +42,11 @@ import {
 } from '~/utils/funcoes/gerais';
 import { SGP_BUTTON_SALVAR_ALTERAR } from '~/constantes/ids/button';
 import { verificaSomenteConsulta } from '~/servicos';
+import { useNavigate } from 'react-router-dom';
 
 function AtribuicaoCJForm({ match, location }) {
+  const navigate = useNavigate();
+
   const anoAtual = window.moment().format('YYYY');
   const [carregando, setCarregando] = useState(false);
   const [carregandoTabela, setcarregandoTabela] = useState(false);
@@ -122,7 +124,7 @@ function AtribuicaoCJForm({ match, location }) {
       if (data || status === 200) {
         setCarregando(false);
         sucesso('Atribuição de CJ salva com sucesso.');
-        history.push('/gestao/atribuicao-cjs');
+        navigate('/gestao/atribuicao-cjs');
         obterPerfis(usuario.rf);
       }
     } catch (err) {
@@ -143,10 +145,10 @@ function AtribuicaoCJForm({ match, location }) {
       if (confirmou) {
         validaAntesDoSubmit(form);
       } else {
-        history.push(RotasDto.ATRIBUICAO_CJ_LISTA);
+        navigate(RotasDto.ATRIBUICAO_CJ_LISTA);
       }
     } else {
-      history.push(RotasDto.ATRIBUICAO_CJ_LISTA);
+      navigate(RotasDto.ATRIBUICAO_CJ_LISTA);
     }
   };
 
@@ -200,7 +202,6 @@ function AtribuicaoCJForm({ match, location }) {
       setConsideraHistorico(historico);
       setAnoLetivo(anoSelecionado);
     }
-
   }, [location, match.url]);
 
   useEffect(() => {
@@ -256,7 +257,6 @@ function AtribuicaoCJForm({ match, location }) {
     ) {
       buscaAtribs(valoresForm);
     }
-
   }, [refForm, valoresForm]);
 
   const limparCampos = () => {
@@ -289,7 +289,6 @@ function AtribuicaoCJForm({ match, location }) {
     const anosOrdenados = ordenarDescPor(anosLetivos, 'valor');
 
     setListaAnosLetivo(anosOrdenados);
-
   }, [anoAtual, consideraHistorico]);
 
   useEffect(() => {
