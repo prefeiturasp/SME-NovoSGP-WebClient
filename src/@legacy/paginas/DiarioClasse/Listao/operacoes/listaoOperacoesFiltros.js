@@ -195,7 +195,8 @@ const ListaoOperacoesFiltros = () => {
       listaComponenteCurricular?.length > 1
     ) {
       const componenteNaLista = listaComponenteCurricular.find(
-        item => item.codigoComponenteCurricular === componenteCurricularInicial
+        item => item.codigoComponenteCurricular === componenteCurricularInicial ||
+                item.id === componenteCurricularInicial
       );
       if (componenteNaLista) {
         setComponenteCurricular(componenteNaLista);
