@@ -2,6 +2,7 @@ import { Tabs } from 'antd';
 import { Form, Formik } from 'formik';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import * as Yup from 'yup';
 import { Colors, Grid, Loader, ModalConteudoHtml } from '~/componentes';
 import AlertaModalidadeInfantil from '~/componentes-sgp/AlertaModalidadeInfantil/alertaModalidadeInfantil';
@@ -42,7 +43,6 @@ import {
 } from '~/redux/modulos/notasConceitos/actions';
 import { confirmar, erros, sucesso } from '~/servicos/alertas';
 import api from '~/servicos/api';
-import history from '~/servicos/history';
 import ServicoPeriodoFechamento from '~/servicos/Paginas/Calendario/ServicoPeriodoFechamento';
 import ServicoNotaConceito from '~/servicos/Paginas/DiarioClasse/ServicoNotaConceito';
 import { verificaSomenteConsulta } from '~/servicos/servico-navegacao';
@@ -57,6 +57,7 @@ const { TabPane } = Tabs;
 const Notas = ({ match }) => {
   const usuario = useSelector(store => store.usuario);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const modalidadesFiltroPrincipal = useSelector(
     store => store.filtro.modalidades
@@ -70,9 +71,8 @@ const Notas = ({ match }) => {
   const [disciplinaSelecionada, setDisciplinaSelecionada] = useState(undefined);
   const [desabilitarDisciplina, setDesabilitarDisciplina] = useState(false);
   const [notaTipo, setNotaTipo] = useState();
-  const [carregandoListaBimestres, setCarregandoListaBimestres] = useState(
-    false
-  );
+  const [carregandoListaBimestres, setCarregandoListaBimestres] =
+    useState(false);
   const [auditoriaInfo, setAuditoriaInfo] = useState({
     auditoriaAlterado: '',
     auditoriaInserido: '',
@@ -108,9 +108,8 @@ const Notas = ({ match }) => {
 
   const [podeLancaNota, setPodeLancaNota] = useState(true);
 
-  const [showMsgPeriodoFechamento, setShowMsgPeriodoFechamento] = useState(
-    false
-  );
+  const [showMsgPeriodoFechamento, setShowMsgPeriodoFechamento] =
+    useState(false);
 
   const valoresIniciais = { descricao: '' };
 
@@ -131,12 +130,13 @@ const Notas = ({ match }) => {
 
       let dentroDoPeriodo = true;
       if (!desabilitar && bimestre && usuario.turmaSelecionada.turma) {
-        const retorno = await ServicoPeriodoFechamento.verificarSePodeAlterarNoPeriodo(
-          usuario.turmaSelecionada.turma,
-          bimestre
-        ).catch(e => {
-          erros(e);
-        });
+        const retorno =
+          await ServicoPeriodoFechamento.verificarSePodeAlterarNoPeriodo(
+            usuario.turmaSelecionada.turma,
+            bimestre
+          ).catch(e => {
+            erros(e);
+          });
         if (retorno?.status === 200) {
           dentroDoPeriodo = retorno.data;
         }
@@ -188,12 +188,10 @@ const Notas = ({ match }) => {
     dispatch(setModoEdicaoGeral(false));
     dispatch(setModoEdicaoGeralNotaFinal(false));
     dispatch(setExpandirLinha([]));
-
   }, [dispatch]);
 
   useEffect(() => {
     resetarTela();
-
   }, [usuario.turmaSelecionada]);
 
   const obterListaConceitos = async periodoFim => {
@@ -253,7 +251,6 @@ const Notas = ({ match }) => {
         }
       });
     }
-
   }, [usuario.turmaSelecionada]);
 
   const obterBimestres = useCallback(
@@ -422,7 +419,6 @@ const Notas = ({ match }) => {
     if (match?.params?.disciplinaId && match?.params?.bimestre) {
       setDisciplinaSelecionada(String(match?.params.disciplinaId));
     }
-
   }, [usuario.turmaSelecionada.turma]);
 
   const obterTituloTela = useCallback(async () => {
@@ -441,7 +437,6 @@ const Notas = ({ match }) => {
       return 'Lançamento de Notas';
     }
     return '';
-
   }, [usuario.turmaSelecionada.anoLetivo, usuario.turmaSelecionada.turma]);
 
   useEffect(() => {
@@ -464,7 +459,6 @@ const Notas = ({ match }) => {
       setDesabilitarDisciplina(false);
       resetarTela();
     }
-
   }, [obterDisciplinas, usuario.turmaSelecionada.turma]);
 
   useEffect(() => {
@@ -473,7 +467,6 @@ const Notas = ({ match }) => {
     } else {
       resetarTela();
     }
-
   }, [disciplinaSelecionada, usuario.turmaSelecionada]);
 
   const pergutarParaSalvar = () => {
@@ -485,7 +478,7 @@ const Notas = ({ match }) => {
   };
 
   const irParaHome = () => {
-    history.push(URL_HOME);
+    navigate(URL_HOME);
   };
 
   const montarBimestreParaSalvar = bimestreParaMontar => {
@@ -667,18 +660,18 @@ const Notas = ({ match }) => {
 
   const mudarStatusEmAprovacaoAlunosPorBimestre = (
     dadosBimestreAtualizar,
-    dadosAlunosAlterados,
+    dadosAlunosAlterados
   ) => {
     if (dadosBimestreAtualizar?.alunos?.length) {
-      dadosBimestreAtualizar.alunos.forEach((aluno) => {
+      dadosBimestreAtualizar.alunos.forEach(aluno => {
         const alunoAlterado = dadosAlunosAlterados?.notaConceitoAlunos?.find(
-          (a) => a?.codigoAluno === aluno?.id,
+          a => a?.codigoAluno === aluno?.id
         );
         const atualizarEmAprovacao =
           alunoAlterado && aluno?.notasBimestre?.length;
 
         if (atualizarEmAprovacao) {
-          aluno.notasBimestre.forEach((nota) => {
+          aluno.notasBimestre.forEach(nota => {
             if (ehRegencia) {
               if (alunoAlterado?.disciplinaId === nota?.disciplinaId) {
                 nota.emAprovacao = true;
@@ -818,7 +811,7 @@ const Notas = ({ match }) => {
               }
               const fechamentoTurmaId = salvouNotas?.data?.[0]?.id;
               const emAprovacao = salvouNotas?.data?.[0]?.emAprovacao;
-              
+
               const atualizarFechamentoId =
                 !dadosBimestreAtualizar?.fechamentoTurmaId && fechamentoTurmaId;
 
@@ -827,11 +820,10 @@ const Notas = ({ match }) => {
               }
 
               if (emAprovacao || atualizarFechamentoId) {
-                
-                if (emAprovacao)  
+                if (emAprovacao)
                   mudarStatusEmAprovacaoAlunosPorBimestre(
                     dadosBimestreAtualizar,
-                    valoresBimestresSalvarComNotas?.[0],
+                    valoresBimestresSalvarComNotas?.[0]
                   );
 
                 switch (dadosBimestreAtualizar?.numero) {
@@ -1123,7 +1115,8 @@ const Notas = ({ match }) => {
     setClicouNoBotaoSalvar(clicouSalvar);
     setClicouNoBotaoVoltar(clicouVoltar);
     const estaEmModoEdicaoGeral = ServicoNotaConceito.estaEmModoEdicaoGeral();
-    const estaEmModoEdicaoGeralNotaFinal = ServicoNotaConceito.estaEmModoEdicaoGeralNotaFinal();
+    const estaEmModoEdicaoGeralNotaFinal =
+      ServicoNotaConceito.estaEmModoEdicaoGeralNotaFinal();
     const modoEdicao = bimestreEmModoEdicao(numeroBimestre);
 
     if (estaEmModoEdicaoGeralNotaFinal || estaEmModoEdicaoGeral) {

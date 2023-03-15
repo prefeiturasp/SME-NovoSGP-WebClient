@@ -14,9 +14,7 @@ import { Botao } from '../styles';
 
 // DTOs
 import RotasDTO from '~/dtos/rotasDto';
-
-// Serviços
-import history from '~/servicos/history';
+import { useNavigate } from 'react-router-dom';
 
 const Wrapper = styled.div`
   padding-right: 0 !important;
@@ -26,11 +24,12 @@ const Wrapper = styled.div`
 `;
 
 function BotaoAvaliacoes({ atividadesAvaliativas, permissaoTela }) {
-  
+  const navigate = useNavigate();
+
   const onClickAvaliacaoHandler = useCallback(
-    avaliacao => {      
+    avaliacao => {
       if (permissaoTela?.podeConsultar && avaliacao) {
-        history.push(`${RotasDTO.CADASTRO_DE_AVALIACAO}/editar/${avaliacao}`);
+        navigate(`${RotasDTO.CADASTRO_DE_AVALIACAO}/editar/${avaliacao}`);
       }
     },
     [permissaoTela]

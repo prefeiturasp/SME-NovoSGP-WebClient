@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 
 import {
   Card,
@@ -20,13 +21,14 @@ import { ModalidadeDTO, RotasDto } from '~/dtos';
 import {
   AbrangenciaServico,
   erros,
-  history,
   ServicoFiltroRelatorio,
   ServicoRelatorioAtaBimestral,
   sucesso,
 } from '~/servicos';
 
 const RelatorioAtaBimestral = () => {
+  const navigate = useNavigate();
+
   const [listaAnosLetivo, setListaAnosLetivo] = useState([]);
   const [listaBimestres, setListaBimestres] = useState([]);
   const [listaDres, setListaDres] = useState([]);
@@ -547,7 +549,7 @@ const RelatorioAtaBimestral = () => {
       />
       <Cabecalho pagina="Ata bimestral">
         <BotoesAcaoRelatorio
-          onClickVoltar={() => history.push(URL_HOME)}
+          onClickVoltar={() => navigate(URL_HOME)}
           onClickCancelar={onClickCancelar}
           onClickGerar={onClickGerar}
           desabilitarBtnGerar={

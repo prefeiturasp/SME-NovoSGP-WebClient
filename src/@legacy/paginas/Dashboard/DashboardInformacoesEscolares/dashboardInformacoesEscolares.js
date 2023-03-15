@@ -1,6 +1,7 @@
 import * as moment from 'moment';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import { CheckboxComponent, Loader, SelectComponent } from '~/componentes';
 import { Cabecalho, FiltroHelper } from '~/componentes-sgp';
 import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
@@ -10,10 +11,10 @@ import { URL_HOME } from '~/constantes/url';
 import { ServicoFiltroRelatorio } from '~/servicos';
 import AbrangenciaServico from '~/servicos/Abrangencia';
 import { erros } from '~/servicos/alertas';
-import history from '~/servicos/history';
 import TabsDashboardInformacoesEscolares from './TabsDashboardInformacoesEscolares/tabsDashboardInformacoesEscolares';
 
 const DashboardInformacoesEscolares = () => {
+  const navigate = useNavigate();
   const usuario = useSelector(store => store.usuario);
 
   const [listaAnosLetivo, setListaAnosLetivo] = useState([]);
@@ -185,7 +186,6 @@ const DashboardInformacoesEscolares = () => {
       setListaModalidades([]);
       setModalidade();
     }
-
   }, [ue, anoLetivo]);
 
   useEffect(() => {
@@ -198,7 +198,7 @@ const DashboardInformacoesEscolares = () => {
   }, [ue, anoLetivo, obterModalidades]);
 
   const onClickVoltar = () => {
-    history.push(URL_HOME);
+    navigate(URL_HOME);
   };
 
   const onChangeUe = codigoUe => {

@@ -1,7 +1,7 @@
 import { Row, Col } from 'antd';
 import React, { useEffect, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useRouteMatch } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { SelectComponent } from '~/componentes';
 import ObjectCardEstudante from '~/componentes-sgp/ObjectCardEstudante/objectCardEstudante';
 import { SGP_SELECT_DRE, SGP_SELECT_UE } from '~/constantes/ids/select';
@@ -22,10 +22,10 @@ import MotivoEncerramentoNAAPA from './componentes/motivoEncerramentoNAAPA';
 import situacaoNAAPA from '~/dtos/situacaoNAAPA';
 
 const CadastroEncaminhamentoNAAPA = () => {
-  const routeMatch = useRouteMatch();
+  const { id } = useParams();
   const dispatch = useDispatch();
 
-  const encaminhamentoId = routeMatch.params?.id;
+  const encaminhamentoId = id;
 
   const novoEncaminhamentoNAAPADados = useSelector(
     state => state.localizarEstudante

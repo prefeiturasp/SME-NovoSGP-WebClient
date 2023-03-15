@@ -13,7 +13,6 @@ import { URL_HOME } from '~/constantes/url';
 import modalidade from '~/dtos/modalidade';
 import RotasDto from '~/dtos/rotasDto';
 import { confirmar, erro, erros, sucesso } from '~/servicos/alertas';
-import history from '~/servicos/history';
 import ServicoCompensacaoAusencia from '~/servicos/Paginas/DiarioClasse/ServicoCompensacaoAusencia';
 import ServicoDisciplina from '~/servicos/Paginas/ServicoDisciplina';
 import { verificaSomenteConsulta } from '~/servicos/servico-navegacao';
@@ -29,8 +28,10 @@ import {
   SGP_SELECT_BIMESTRE,
   SGP_SELECT_COMPONENTE_CURRICULAR,
 } from '~/constantes/ids/select';
+import { useNavigate } from 'react-router-dom';
 
 const CompensacaoAusenciaLista = () => {
+  const navigate = useNavigate();
   const usuario = useSelector(store => store.usuario);
   const { turmaSelecionada } = usuario;
 
@@ -52,9 +53,8 @@ const CompensacaoAusenciaLista = () => {
   const [nomeAluno, setNomeAluno] = useState('');
   const [componenteSemFrequencia, setComponenteSemFrequencia] = useState(false);
   const [listaBimestres, setListaBimestres] = useState([]);
-  const [disciplinaIdSelecionada, setDisciplinaIdSelecionada] = useState(
-    undefined
-  );
+  const [disciplinaIdSelecionada, setDisciplinaIdSelecionada] =
+    useState(undefined);
 
   useEffect(() => {
     const naoSetarSomenteConsultaNoStore = ehTurmaInfantil(
@@ -217,13 +217,14 @@ const CompensacaoAusenciaLista = () => {
 
   const onClickEditar = async compensacao => {
     let podeEditar = false;
-    const exucutandoCalculoFrequencia = await ServicoCompensacaoAusencia.obterStatusCalculoFrequencia(
-      turmaSelecionada.turma,
-      disciplinaIdSelecionada,
-      compensacao.bimestre
-    ).catch(e => {
-      erros(e);
-    });
+    const exucutandoCalculoFrequencia =
+      await ServicoCompensacaoAusencia.obterStatusCalculoFrequencia(
+        turmaSelecionada.turma,
+        disciplinaIdSelecionada,
+        compensacao.bimestre
+      ).catch(e => {
+        erros(e);
+      });
 
     if (
       exucutandoCalculoFrequencia &&
@@ -239,7 +240,7 @@ const CompensacaoAusenciaLista = () => {
       }
 
       if (podeEditar) {
-        history.push(`compensacao-ausencia/editar/${compensacao.id}`);
+        navigate(`compensacao-ausencia/editar/${compensacao.id}`);
       } else {
         erro(
           'No momento não é possível realizar a edição pois tem cálculo(s) em processo, tente mais tarde!'
@@ -249,7 +250,7 @@ const CompensacaoAusenciaLista = () => {
   };
 
   const onClickVoltar = () => {
-    history.push(URL_HOME);
+    navigate(URL_HOME);
   };
 
   const onClickExcluir = async () => {
@@ -291,7 +292,7 @@ const CompensacaoAusenciaLista = () => {
   };
 
   const onClickNovo = () => {
-    history.push(`compensacao-ausencia/novo`);
+    navigate(`compensacao-ausencia/novo`);
   };
 
   return (

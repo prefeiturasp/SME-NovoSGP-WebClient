@@ -10,7 +10,6 @@ import SelectComponent from '~/componentes/select';
 import ListaPaginada from '~/componentes/listaPaginada/listaPaginada';
 import { confirmar, erro, sucesso } from '~/servicos/alertas';
 import api from '~/servicos/api';
-import history from '~/servicos/history';
 import servicoNotificacao from '~/servicos/Paginas/ServicoNotificacao';
 
 import notificacaoStatus from '~/dtos/notificacaoStatus';
@@ -24,8 +23,11 @@ import { Card, Loader } from '~/componentes';
 import { SGP_BUTTON_LIDA } from '~/constantes/ids/button';
 import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
 import BotaoExcluirPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoExcluirPadrao';
+import { useNavigate } from 'react-router-dom';
 
 export default function NotificacoesLista() {
+  const navigate = useNavigate();
+
   const [idNotificacoesSelecionadas, setIdNotificacoesSelecionadas] = useState(
     []
   );
@@ -105,9 +107,8 @@ export default function NotificacoesLista() {
   const [tituloSelecionado, setTituloSelecionado] = useState();
   const [codigoSelecionado, setCodigoSelecionado] = useState();
   const [desabilitarBotaoExcluir, setDesabilitarBotaoExcluir] = useState(true);
-  const [desabilitarBotaoMarcarLido, setDesabilitarBotaoMarcarLido] = useState(
-    true
-  );
+  const [desabilitarBotaoMarcarLido, setDesabilitarBotaoMarcarLido] =
+    useState(true);
   const [carregandoTela, setCarregandoTela] = useState(false);
   const [desabilitarTurma, setDesabilitarTurma] = useState(true);
   const [colunasTabela, setColunasTabela] = useState([]);
@@ -130,7 +131,6 @@ export default function NotificacoesLista() {
     verificaSomenteConsulta(permissoesTela);
     setDesabilitarBotaoExcluir(permissoesTela.podeExcluir);
     carregarListas();
-
   }, []);
 
   const listaSelectTurma = [
@@ -218,7 +218,6 @@ export default function NotificacoesLista() {
       setTurmaSelecionada('');
     }
     onClickFiltrar();
-
   }, [turmaSelecionada]);
 
   useEffect(() => {
@@ -228,7 +227,6 @@ export default function NotificacoesLista() {
       tipoSelecionado,
       tituloSelecionado
     );
-
   }, [
     statusSelecionado,
     dropdownTurmaSelecionada,
@@ -252,7 +250,7 @@ export default function NotificacoesLista() {
   function onClickEditar(notificacao) {
     if (!permissoesTela.podeAlterar) return;
 
-    history.push(`/notificacoes/${notificacao.id}`);
+    navigate(`/notificacoes/${notificacao.id}`);
   }
 
   const validarFiltro = () => {
@@ -331,7 +329,7 @@ export default function NotificacoesLista() {
   }
 
   function quandoClicarVoltar() {
-    history.push(URL_HOME);
+    navigate(URL_HOME);
   }
 
   return (

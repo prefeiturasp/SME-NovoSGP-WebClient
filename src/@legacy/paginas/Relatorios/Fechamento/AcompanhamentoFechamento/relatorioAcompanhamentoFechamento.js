@@ -28,14 +28,16 @@ import {
   AbrangenciaServico,
   ehTurmaInfantil,
   erros,
-  history,
   ServicoRelatorioAcompanhamentoFechamento,
   ServicoFiltroRelatorio,
   sucesso,
 } from '~/servicos';
 import BotoesAcaoRelatorio from '~/componentes-sgp/botoesAcaoRelatorio';
+import { useNavigate } from 'react-router-dom';
 
 const AcompanhamentoFechamento = () => {
+  const navigate = useNavigate();
+
   const [anoAtual] = useState(window.moment().format('YYYY'));
   const [anoLetivo, setAnoLetivo] = useState();
   const [bimestres, setBimestres] = useState();
@@ -51,18 +53,15 @@ const AcompanhamentoFechamento = () => {
     carregandoSituacaoConselhoClasse,
     setCarregandoSituacaoConselhoClasse,
   ] = useState(false);
-  const [
-    carregandoSituacaoFechamento,
-    setCarregandoSituacaoFechamento,
-  ] = useState(false);
+  const [carregandoSituacaoFechamento, setCarregandoSituacaoFechamento] =
+    useState(false);
   const [carregandoTurmas, setCarregandoTurmas] = useState(false);
   const [carregandoUes, setCarregandoUes] = useState(false);
   const [clicouBotaoGerar, setClicouBotaoGerar] = useState(false);
   const [desabilitarCampos, setDesabilitarCampos] = useState(false);
   const [dreCodigo, setDreCodigo] = useState();
-  const [escolheuModalidadeInfantil, setEscolheuModalidadeInfantil] = useState(
-    false
-  );
+  const [escolheuModalidadeInfantil, setEscolheuModalidadeInfantil] =
+    useState(false);
   const [listaAnosLetivo, setListaAnosLetivo] = useState([]);
   const [listaBimestres, setListaBimestres] = useState([]);
   const [listaDres, setListaDres] = useState([]);
@@ -70,10 +69,8 @@ const AcompanhamentoFechamento = () => {
   const [listaSemestres, setListaSemestres] = useState([]);
   const [listaTurmasPorSemestre, setListaTurmasPorSemestre] = useState([]);
   const [listaSituacaoFechamento, setListaSituacaoFechamento] = useState([]);
-  const [
-    listaSituacaoConselhoClasse,
-    setListaSituacaoConselhoClasse,
-  ] = useState([]);
+  const [listaSituacaoConselhoClasse, setListaSituacaoConselhoClasse] =
+    useState([]);
   const [listaTurmas, setListaTurmas] = useState([]);
   const [listaUes, setListaUes] = useState([]);
   const [modalidade, setModalidade] = useState();
@@ -83,10 +80,8 @@ const AcompanhamentoFechamento = () => {
   const [turmasCodigo, setTurmasCodigo] = useState('');
   const [ueCodigo, setUeCodigo] = useState();
   const [listarPendencias, setListarPendencias] = useState(false);
-  const [
-    desabilitarListarPendencias,
-    setDesabilitarListarPendencias,
-  ] = useState(true);
+  const [desabilitarListarPendencias, setDesabilitarListarPendencias] =
+    useState(true);
   const [modoEdicao, setModoEdicao] = useState(false);
 
   const OPCAO_TODAS = useMemo(
@@ -297,11 +292,10 @@ const AcompanhamentoFechamento = () => {
   const obterModalidades = useCallback(async ue => {
     if (ue) {
       setCarregandoModalidade(true);
-      const {
-        data,
-      } = await ServicoFiltroRelatorio.obterModalidadesPorAbrangencia(
-        ue
-      ).finally(() => setCarregandoModalidade(false));
+      const { data } =
+        await ServicoFiltroRelatorio.obterModalidadesPorAbrangencia(ue).finally(
+          () => setCarregandoModalidade(false)
+        );
 
       if (data?.length) {
         const lista = data
@@ -700,7 +694,7 @@ const AcompanhamentoFechamento = () => {
     setDesabilitarListarPendencias(desabilitar);
   }, [ueCodigo, situacaoConselhoClasse]);
 
-  const onClickVoltar = () => history.push('/');
+  const onClickVoltar = () => navigate('/');
 
   const onClickCancelar = () => {
     setConsideraHistorico(false);

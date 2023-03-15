@@ -17,7 +17,6 @@ import {
 import {
   ehTurmaInfantil,
   erros,
-  history,
   ServicoAcompanhamentoFechamento,
 } from '~/servicos';
 
@@ -25,8 +24,11 @@ import { Filtros } from './Filtros';
 import { SecaoFechamento } from './SecaoFechamento';
 import { SecaoConselhoClasse } from './SecaoConselhoClasse';
 import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
+import { useNavigate } from 'react-router-dom';
 
 const AcompanhamentoFechamento = () => {
+  const navigate = useNavigate();
+
   const [ehInfantil, setEhInfantil] = useState(false);
   const [parametrosFiltro, setParametrosFiltro] = useState();
   const [dadosStatusFechamento, setDadosStatusFechamento] = useState([]);
@@ -59,7 +61,7 @@ const AcompanhamentoFechamento = () => {
   const exibiPaginacao = numeroRegistros > pageSize;
 
   const dispatch = useDispatch();
-  const aoClicarBotaoVoltar = () => history.push('/');
+  const aoClicarBotaoVoltar = () => navigate('/');
 
   const onChangeFiltros = async (
     params,

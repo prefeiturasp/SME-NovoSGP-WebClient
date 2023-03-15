@@ -20,7 +20,6 @@ enableMapSet();
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
 
-console.log('asdasdasdas', process.env.NODE_ENV);
 const store = configureStore({
   reducer: persistedReducer,
   middleware: [thunk],

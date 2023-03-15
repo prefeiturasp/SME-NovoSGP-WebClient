@@ -6,16 +6,18 @@ import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPad
 import { URL_HOME } from '~/constantes';
 import { SGP_BUTTON_NOVO } from '~/constantes/ids/button';
 import { RotasDto } from '~/dtos';
-import { history } from '~/servicos';
+import { useNavigate } from 'react-router-dom';
 
 const DocPlanosTrabalhoBotoesAcoes = props => {
   const { desabilitarNovo } = props;
 
-  const onClickVoltar = () => history.push(URL_HOME);
+  const navigate = useNavigate();
+
+  const onClickVoltar = () => navigate(URL_HOME);
 
   const onClickNovo = () => {
     if (!desabilitarNovo) {
-      history.push(`${RotasDto.DOCUMENTOS_PLANOS_TRABALHO}/novo`);
+      navigate(`${RotasDto.DOCUMENTOS_PLANOS_TRABALHO}/novo`);
     }
   };
 

@@ -3,13 +3,15 @@ import shortid from 'shortid';
 import Card from '~/componentes/card';
 import Button from '~/componentes/button';
 import { Colors } from '~/componentes/colors';
-import history from '~/servicos/history';
 import { URL_HOME } from '~/constantes/url';
 import { Corpo } from './pagina-com-erro.css';
+import { useNavigate } from 'react-router-dom';
 
 const PaginaComErro = () => {
+  const navigate = useNavigate();
+
   const onClickVoltar = () => {
-    history.push(URL_HOME);
+    navigate(URL_HOME);
   };
 
   return (

@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import {
   Card,
@@ -15,7 +16,6 @@ import { OPCAO_TODOS } from '~/constantes';
 import { ModalidadeDTO, tipoPendenciasGruposDto } from '~/dtos';
 import {
   api,
-  history,
   erros,
   sucesso,
   AbrangenciaServico,
@@ -30,6 +30,8 @@ import {
 } from '~/utils/funcoes/gerais';
 
 const RelatorioPendencias = () => {
+  const navigate = useNavigate();
+
   const [anoAtual] = useState(window.moment().format('YYYY'));
   const [carregandoGerar, setCarregandoGerar] = useState(false);
   const [carregandoAnos, setCarregandoAnos] = useState(false);
@@ -48,10 +50,8 @@ const RelatorioPendencias = () => {
     carregandoComponentesCurriculares,
     setCarregandoComponentesCurriculares,
   ] = useState(false);
-  const [
-    listaComponentesCurriculares,
-    setListaComponentesCurriculares,
-  ] = useState([]);
+  const [listaComponentesCurriculares, setListaComponentesCurriculares] =
+    useState([]);
   const [listaBimestres, setListaBimestres] = useState([]);
   const [usuarioRf, setUsuarioRf] = useState(undefined);
   const [anoLetivo, setAnoLetivo] = useState(undefined);
@@ -60,23 +60,18 @@ const RelatorioPendencias = () => {
   const [modalidadeId, setModalidadeId] = useState(undefined);
   const [semestre, setSemestre] = useState(undefined);
   const [turmaId, setTurmaId] = useState(undefined);
-  const [componentesCurricularesId, setComponentesCurricularesId] = useState(
-    undefined
-  );
+  const [componentesCurricularesId, setComponentesCurricularesId] =
+    useState(undefined);
   const [bimestre, setBimestre] = useState(undefined);
   const [clicouBotaoGerar, setClicouBotaoGerar] = useState(false);
   const [desabilitarBtnGerar, setDesabilitarBtnGerar] = useState(true);
-  const [
-    carregandoTipoPendenciaGrupo,
-    setCarregandoTipoPendenciaGrupo,
-  ] = useState(false);
-  const [listaTipoPendenciaGrupos, setListaTipoPendenciaGrupos] = useState(
-    true
-  );
+  const [carregandoTipoPendenciaGrupo, setCarregandoTipoPendenciaGrupo] =
+    useState(false);
+  const [listaTipoPendenciaGrupos, setListaTipoPendenciaGrupos] =
+    useState(true);
   const [tipoPendenciaGrupo, setTipoPendenciaGrupo] = useState();
-  const [exibirPendenciasResolvidas, setExibirPendenciasResolvidas] = useState(
-    false
-  );
+  const [exibirPendenciasResolvidas, setExibirPendenciasResolvidas] =
+    useState(false);
   const [carregandoBimestres, setCarregandoBimestres] = useState(false);
   const [
     desabilitarExibirPendenciasResolvidas,
@@ -251,11 +246,10 @@ const RelatorioPendencias = () => {
   const obterModalidades = async (ue, ano) => {
     if (ue && ano) {
       setCarregandoModalidades(true);
-      const {
-        data,
-      } = await ServicoFiltroRelatorio.obterModalidadesPorAbrangencia(ue)
-        .catch(e => erros(e))
-        .finally(() => setCarregandoModalidades(false));
+      const { data } =
+        await ServicoFiltroRelatorio.obterModalidadesPorAbrangencia(ue)
+          .catch(e => erros(e))
+          .finally(() => setCarregandoModalidades(false));
 
       if (data) {
         const lista = data.map(item => ({
@@ -471,8 +465,9 @@ const RelatorioPendencias = () => {
     async (modalidadeSelecionada, anoLetivoSelecionado) => {
       setCarregandoSemestres(true);
       const retorno = await api.get(
-        `v1/abrangencias/${consideraHistorico}/semestres?anoLetivo=${anoLetivoSelecionado}&modalidade=${modalidadeSelecionada ||
-          0}`
+        `v1/abrangencias/${consideraHistorico}/semestres?anoLetivo=${anoLetivoSelecionado}&modalidade=${
+          modalidadeSelecionada || 0
+        }`
       );
       if (retorno && retorno.data) {
         const lista = retorno.data.map(periodo => {
@@ -646,7 +641,7 @@ const RelatorioPendencias = () => {
       <Cabecalho pagina="Relatório de pendências">
         <BotoesAcaoRelatorio
           onClickVoltar={() => {
-            history.push('/');
+            navigate('/');
           }}
           onClickCancelar={cancelar}
           onClickGerar={gerar}

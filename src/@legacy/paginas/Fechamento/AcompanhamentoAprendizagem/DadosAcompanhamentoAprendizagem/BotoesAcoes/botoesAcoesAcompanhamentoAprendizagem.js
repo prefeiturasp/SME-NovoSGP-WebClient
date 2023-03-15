@@ -14,13 +14,14 @@ import {
   setApanhadoGeralEmEdicao,
 } from '~/redux/modulos/acompanhamentoAprendizagem/actions';
 import { confirmar } from '~/servicos';
-import history from '~/servicos/history';
 import ServicoAcompanhamentoAprendizagem from '~/servicos/Paginas/Relatorios/AcompanhamentoAprendizagem/ServicoAcompanhamentoAprendizagem';
+import { useNavigate } from 'react-router-dom';
 
 const BotoesAcoesAcompanhamentoAprendizagem = props => {
   const { semestreSelecionado, componenteCurricularId } = props;
 
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const desabilitarCamposAcompanhamentoAprendizagem = useSelector(
     store =>
@@ -66,13 +67,15 @@ const BotoesAcoesAcompanhamentoAprendizagem = props => {
   };
 
   const onClickSalvar = async () => {
-    const salvouApanhadoGeral = await ServicoAcompanhamentoAprendizagem.salvarDadosApanhadoGeral(
-      semestreSelecionado
-    );
+    const salvouApanhadoGeral =
+      await ServicoAcompanhamentoAprendizagem.salvarDadosApanhadoGeral(
+        semestreSelecionado
+      );
 
-    const salvouCompanhamento = await ServicoAcompanhamentoAprendizagem.salvarDadosAcompanhamentoAprendizagem(
-      semestreSelecionado
-    );
+    const salvouCompanhamento =
+      await ServicoAcompanhamentoAprendizagem.salvarDadosAcompanhamentoAprendizagem(
+        semestreSelecionado
+      );
 
     if (salvouApanhadoGeral && salvouCompanhamento) await recarregarDados();
 
@@ -96,13 +99,13 @@ const BotoesAcoesAcompanhamentoAprendizagem = props => {
       if (confirmado) {
         const continuar = await onClickSalvar();
         if (continuar) {
-          history.push(URL_HOME);
+          navigate(URL_HOME);
         }
       } else {
-        history.push(URL_HOME);
+        navigate(URL_HOME);
       }
     } else {
-      history.push(URL_HOME);
+      navigate(URL_HOME);
     }
   };
 

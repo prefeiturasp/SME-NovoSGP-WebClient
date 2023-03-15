@@ -3,17 +3,18 @@ import { useSelector } from 'react-redux';
 
 import { Cabecalho } from '~/componentes-sgp';
 import { Card, ListaPaginada, ButtonGroup, Loader } from '~/componentes';
-
-import history from '~/servicos/history';
 import RotasDto from '~/dtos/rotasDto';
 import AtribuicaoEsporadicaServico from '~/servicos/Paginas/AtribuicaoEsporadica';
 import { verificaSomenteConsulta } from '~/servicos/servico-navegacao';
-import { confirmar, sucesso,erros } from '~/servicos/alertas';
+import { confirmar, sucesso, erros } from '~/servicos/alertas';
 
 import Filtro from './componentes/Filtro';
 import { SGP_BUTTON_NOVO } from '~/constantes/ids/button';
+import { useNavigate } from 'react-router-dom';
 
 function AtribuicaoEsporadicaLista() {
+  const navigate = useNavigate();
+
   const [itensSelecionados, setItensSelecionados] = useState([]);
   const [filtro, setFiltro] = useState({});
   const [somenteConsulta, setSomenteConsulta] = useState(false);
@@ -50,10 +51,10 @@ function AtribuicaoEsporadicaLista() {
     },
   ];
 
-  const onClickVoltar = () => history.push('/');
+  const onClickVoltar = () => navigate('/');
 
   const onClickBotaoPrincipal = () => {
-    history.push(`atribuicao-esporadica/novo`);
+    navigate(`atribuicao-esporadica/novo`);
   };
 
   const onSelecionarItems = items => {
@@ -78,20 +79,20 @@ function AtribuicaoEsporadicaLista() {
         await Promise.all(
           itensSelecionados.map(x =>
             AtribuicaoEsporadicaServico.deletarAtribuicaoEsporadica(x.id)
-            .then(() => {
-              const mensagemSucesso = `${
-                itensSelecionados.length > 1
-                  ? 'Atribuições excluídas'
-                  : 'Atribuição excluída'
-              } com sucesso.`;
-              sucesso(mensagemSucesso);
-              setFiltro({
-                ...filtro,
-                atualizar: !filtro.atualizar || true,
-              });
-              setItensSelecionados([]);
-            })
-            .catch(e => erros(e))
+              .then(() => {
+                const mensagemSucesso = `${
+                  itensSelecionados.length > 1
+                    ? 'Atribuições excluídas'
+                    : 'Atribuição excluída'
+                } com sucesso.`;
+                sucesso(mensagemSucesso);
+                setFiltro({
+                  ...filtro,
+                  atualizar: !filtro.atualizar || true,
+                });
+                setItensSelecionados([]);
+              })
+              .catch(e => erros(e))
           )
         );
       }
@@ -99,7 +100,7 @@ function AtribuicaoEsporadicaLista() {
   };
 
   const onClickEditar = item => {
-    history.push(`/gestao/atribuicao-esporadica/editar/${item.id}`);
+    navigate(`/gestao/atribuicao-esporadica/editar/${item.id}`);
   };
 
   const onChangeFiltro = useCallback(valoresFiltro => {

@@ -11,14 +11,16 @@ import modalidade from '~/dtos/modalidade';
 import { AbrangenciaServico } from '~/servicos';
 import { erros, sucesso } from '~/servicos/alertas';
 import api from '~/servicos/api';
-import history from '~/servicos/history';
 import ServicoFiltroRelatorio from '~/servicos/Paginas/FiltroRelatorio/ServicoFiltroRelatorio';
 import ServicoRelatorioParecerConclusivo from '~/servicos/Paginas/Relatorios/ParecerConclusivo/ServicoRelatorioParecerConclusivo';
 import { ordenarListaMaiorParaMenor } from '~/utils/funcoes/gerais';
 import FiltroHelper from '~/componentes-sgp/filtro/helper';
 import { CorpoRelatorio } from './relatorioParecerConclusivo.css';
+import { useNavigate } from 'react-router-dom';
 
 const RelatorioParecerConclusivo = () => {
+  const navigate = useNavigate();
+
   const usuario = useSelector(store => store.usuario);
   const { possuiPerfilSme, possuiPerfilDre } = usuario;
 
@@ -37,10 +39,8 @@ const RelatorioParecerConclusivo = () => {
   const [listaCiclos, setListaCiclos] = useState([]);
   const [carregandoAnos, setCarregandoAnos] = useState(false);
   const [listaAnos, setListaAnos] = useState([]);
-  const [
-    carregandoPareceresConclusivos,
-    setCarregandoPareceresConclusivos,
-  ] = useState(false);
+  const [carregandoPareceresConclusivos, setCarregandoPareceresConclusivos] =
+    useState(false);
   const [listaPareceresConclusivos, setListaPareceresConclusivos] = useState(
     []
   );
@@ -244,11 +244,10 @@ const RelatorioParecerConclusivo = () => {
 
   const obterModalidades = useCallback(async () => {
     setCarregandoModalidades(true);
-    const resposta = await ServicoFiltroRelatorio.obterModalidadesPorAbrangencia(
-      ueId
-    )
-      .catch(e => erros(e))
-      .finally(() => setCarregandoModalidades(false));
+    const resposta =
+      await ServicoFiltroRelatorio.obterModalidadesPorAbrangencia(ueId)
+        .catch(e => erros(e))
+        .finally(() => setCarregandoModalidades(false));
 
     if (resposta?.data?.length) {
       if (resposta?.data?.length === 1) {
@@ -305,8 +304,9 @@ const RelatorioParecerConclusivo = () => {
     setCarregandoSemestres(true);
     const retorno = await api
       .get(
-        `v1/abrangencias/${consideraHistorico}/semestres?anoLetivo=${anoLetivo}&modalidade=${modalidadeId ||
-          0}`
+        `v1/abrangencias/${consideraHistorico}/semestres?anoLetivo=${anoLetivo}&modalidade=${
+          modalidadeId || 0
+        }`
       )
       .catch(e => erros(e))
       .finally(() => {
@@ -377,11 +377,12 @@ const RelatorioParecerConclusivo = () => {
 
   const obterPareceresConclusivos = useCallback(async () => {
     setCarregandoPareceresConclusivos(true);
-    const retorno = await ServicoRelatorioParecerConclusivo.buscarPareceresConclusivos()
-      .catch(e => erros(e))
-      .finally(() => {
-        setCarregandoPareceresConclusivos(false);
-      });
+    const retorno =
+      await ServicoRelatorioParecerConclusivo.buscarPareceresConclusivos()
+        .catch(e => erros(e))
+        .finally(() => {
+          setCarregandoPareceresConclusivos(false);
+        });
     if (retorno && retorno.data) {
       setParecerConclusivoId();
       let lista =
@@ -406,10 +407,11 @@ const RelatorioParecerConclusivo = () => {
         String(modalidadeIdSelecionada) === String(modalidade.ENSINO_MEDIO)
           ? '0'
           : cicloSelecionado;
-      const retorno = await ServicoFiltroRelatorio.obterAnosEscolaresPorAbrangencia(
-        modalidadeIdSelecionada,
-        cicloSelecionado
-      ).finally(setCarregandoAnos(false));
+      const retorno =
+        await ServicoFiltroRelatorio.obterAnosEscolaresPorAbrangencia(
+          modalidadeIdSelecionada,
+          cicloSelecionado
+        ).finally(setCarregandoAnos(false));
       if (retorno?.data?.length) {
         if (retorno.data.length === 1) {
           setListaAnos(retorno.data);
@@ -521,7 +523,7 @@ const RelatorioParecerConclusivo = () => {
       <Cabecalho pagina="Parecer Conclusivo">
         <BotoesAcaoRelatorio
           onClickVoltar={() => {
-            history.push(URL_HOME);
+            navigate(URL_HOME);
           }}
           onClickCancelar={cancelar}
           onClickGerar={gerar}

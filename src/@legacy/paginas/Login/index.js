@@ -32,12 +32,14 @@ import {
 } from './login.css';
 import CampoTexto from '~/componentes/campoTexto';
 import { URL_RECUPERARSENHA } from '~/constantes/url';
-import history from '~/servicos/history';
 import { Loader } from '~/componentes';
 import { setExibirMensagemSessaoExpirou } from '~/redux/modulos/mensagens/actions';
+import { useNavigate } from 'react-router-dom';
 
 const Login = props => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+
   const inputUsuarioRf = useRef();
   const btnAcessar = useRef();
 
@@ -82,7 +84,12 @@ const Login = props => {
     setErroGeral('');
     dispatch(setExibirMensagemSessaoExpirou(false));
 
-    const { sucesso, ...retorno } = await helper.acessar(dados);
+    const { sucesso, ...retorno } = await helper.acessar(
+      dados,
+      false,
+      false,
+      navigate
+    );
 
     if (!sucesso) {
       setErroGeral(retorno.erroGeral);
@@ -118,7 +125,7 @@ const Login = props => {
   const navegarParaRecuperarSenha = () => {
     const rf =
       inputUsuarioRf && inputUsuarioRf.currrent && inputUsuarioRf.current.value;
-    history.push({
+    navigate({
       pathname: URL_RECUPERARSENHA,
       state: {
         rf,

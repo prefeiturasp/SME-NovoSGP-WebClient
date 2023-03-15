@@ -24,7 +24,6 @@ import {
   api,
   confirmar,
   erros,
-  history,
   setBreadcrumbManual,
   sucesso,
   verificaSomenteConsulta,
@@ -35,9 +34,11 @@ import {
 } from '~/constantes/ids/button';
 import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
 import BotaoExcluirPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoExcluirPadrao';
+import { useNavigate } from 'react-router-dom';
 
 const TipoCalendarioEscolarForm = ({ match }) => {
   const usuario = useSelector(store => store.usuario);
+  const navigate = useNavigate();
   const permissoesTela = usuario.permissoes[RotasDto.TIPO_CALENDARIO_ESCOLAR];
 
   const [somenteConsulta, setSomenteConsulta] = useState(false);
@@ -97,7 +98,6 @@ const TipoCalendarioEscolarForm = ({ match }) => {
       ? somenteConsulta || !permissoesTela.podeIncluir
       : somenteConsulta || !permissoesTela.podeAlterar;
     setDesabilitarCampos(desabilitar);
-
   }, [somenteConsulta, novoRegistro]);
 
   const [possuiEventos, setPossuiEventos] = useState(false);
@@ -152,7 +152,6 @@ const TipoCalendarioEscolarForm = ({ match }) => {
       setAnoLetivo(usuario.turmaSelecionada.anoLetivo);
     }
     setSomenteConsulta(verificaSomenteConsulta(permissoesTela));
-
   }, []);
 
   const resetarTela = form => {
@@ -184,7 +183,7 @@ const TipoCalendarioEscolarForm = ({ match }) => {
     const cadastrado = await api[metodo](url, valoresForm).catch(e => erros(e));
     if (cadastrado) {
       sucesso('Suas informações foram salvas com sucesso.');
-      history.push(RotasDto.TIPO_CALENDARIO_ESCOLAR);
+      navigate(RotasDto.TIPO_CALENDARIO_ESCOLAR);
     }
     setCarregandoBotoesAcao(false);
   };
@@ -211,7 +210,7 @@ const TipoCalendarioEscolarForm = ({ match }) => {
           .catch(e => erros(e));
         if (excluir) {
           sucesso('Tipo de calendário excluído com sucesso.');
-          history.push(RotasDto.TIPO_CALENDARIO_ESCOLAR);
+          navigate(RotasDto.TIPO_CALENDARIO_ESCOLAR);
         }
       }
     }
@@ -240,10 +239,10 @@ const TipoCalendarioEscolarForm = ({ match }) => {
       if (confirmado) {
         validaAntesDoSubmit(form);
       } else {
-        history.push(RotasDto.TIPO_CALENDARIO_ESCOLAR);
+        navigate(RotasDto.TIPO_CALENDARIO_ESCOLAR);
       }
     } else {
-      history.push(RotasDto.TIPO_CALENDARIO_ESCOLAR);
+      navigate(RotasDto.TIPO_CALENDARIO_ESCOLAR);
     }
   };
 
