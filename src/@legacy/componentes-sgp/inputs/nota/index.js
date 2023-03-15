@@ -57,6 +57,9 @@ const Nota = props => {
       const nota = notaAlterada(dadosNota.notaConceito);
       setNotaValorAtual(nota);
       setNotaValorAtualExibicao(nota);
+    } else {
+      setNotaValorAtual('');
+      setNotaValorAtualExibicao();
     }
   }, [dadosNota]);
 
