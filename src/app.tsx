@@ -9,6 +9,9 @@ import GlobalStyle from '~/estilos/global';
 import { store, persistor } from '@/core/redux';
 import { Deslogar } from '~/redux/modulos/usuario/actions';
 import VersaoSistema from '~/componentes-sgp/VersaoSistema';
+import { ConfigProvider } from 'antd';
+import ThemeProviders from '@/core/providers/theme-providers';
+import { SGPTheme } from '@/core/config/theme';
 
 ReactGA.initialize(obterTrackingID);
 
@@ -37,17 +40,21 @@ const App: React.FC = () => {
   });
 
   return (
-    <Provider store={store}>
-      <PersistGate loading={null} persistor={persistor}>
-        <BrowserRouter>
-          <GlobalStyle />
-          <VersaoSistema />
-          <div className="h-100">
-            <Routes />
-          </div>
-        </BrowserRouter>
-      </PersistGate>
-    </Provider>
+    <ConfigProvider theme={SGPTheme}>
+      <ThemeProviders>
+        <Provider store={store}>
+          <PersistGate loading={null} persistor={persistor}>
+            <BrowserRouter>
+              <GlobalStyle />
+              <VersaoSistema />
+              <div className="h-100">
+                <Routes />
+              </div>
+            </BrowserRouter>
+          </PersistGate>
+        </Provider>
+      </ThemeProviders>
+    </ConfigProvider>
   );
 };
 
