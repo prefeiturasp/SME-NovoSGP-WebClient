@@ -111,6 +111,7 @@ import { store } from 'core/redux';
 import { ROUTES } from 'core/enum/routes';
 import Login from '~/paginas/Login';
 import ListaoPrincipal from '~/paginas/DiarioClasse/Listao';
+import RelatorioEncaminhamentonNAAPA from '~/paginas/Relatorios/NAAPA/encaminhamento/relatorioEncaminhamentoNAAPA';
 
 export interface RouteProps {
   path: string;
@@ -1609,6 +1610,17 @@ route.set(ROUTES.RELATORIO_AEE_ENCAMINHAMENTO_IMPRESSAO, {
   tipo: RotasTipo.EstruturadaAutenticada,
   temPermissionamento: true,
   chavePermissao: ROUTES.RELATORIO_AEE_ENCAMINHAMENTO_IMPRESSAO,
+});
+
+route.set(ROUTES.RELATORIO_ENCAMINHAMENTO_NAAPA, {
+  breadcrumbName: 'Encaminhamento',
+  menu: ['Relatórios', 'NAAPA'],
+  parent: '/',
+  component: RelatorioEncaminhamentonNAAPA,
+  exact: true,
+  tipo: RotasTipo.EstruturadaAutenticada,
+  temPermissionamento: true,
+  chavePermissao: ROUTES.RELATORIO_ENCAMINHAMENTO_NAAPA,
 });
 
 for (const [key, value] of route) {
