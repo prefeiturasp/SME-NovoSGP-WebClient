@@ -1,5 +1,5 @@
 import { setRotas } from '../redux/modulos/navegacao/actions';
-import { store } from '../redux';
+import { store } from '@/core/redux';
 import Principal from '../paginas/Principal/principal';
 import PlanoCiclo from '../paginas/Planejamento/PlanoCiclo/planoCiclo';
 import PlanoAnual from '../paginas/Planejamento/Anual/planoAnual';

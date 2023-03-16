@@ -1,7 +1,7 @@
 import QuestionarioDinamicoFuncoes from '~/componentes-sgp/QuestionarioDinamico/Funcoes/QuestionarioDinamicoFuncoes';
 import { RotasDto } from '~/dtos';
 import tipoQuestao from '~/dtos/tipoQuestao';
-import { store } from '~/redux';
+import { store } from '@/core/redux';
 import {
   setDadosCollapseAtribuicaoResponsavel,
   setLimparDadosAtribuicaoResponsavel,
@@ -27,7 +27,6 @@ import {
 } from '~/redux/modulos/questionarioDinamico/actions';
 import { erros } from '~/servicos/alertas';
 import api from '~/servicos/api';
-import history from '~/servicos/history';
 
 const urlPadrao = 'v1/encaminhamento-aee';
 
@@ -141,7 +140,8 @@ class ServicoEncaminhamentoAEE {
     situacao,
     validarCamposObrigatorios,
     enviarEncaminhamento,
-    salvarRascunho
+    salvarRascunho,
+    navigate
   ) => {
     const { dispatch } = store;
 
@@ -152,10 +152,8 @@ class ServicoEncaminhamentoAEE {
       encaminhamentoAEE,
     } = state;
     const { formsQuestionarioDinamico, arquivoRemovido } = questionarioDinamico;
-    const {
-      listaSecoesEmEdicao,
-      dadosSecoesPorEtapaDeEncaminhamentoAEE,
-    } = encaminhamentoAEE;
+    const { listaSecoesEmEdicao, dadosSecoesPorEtapaDeEncaminhamentoAEE } =
+      encaminhamentoAEE;
 
     const { dadosCollapseLocalizarEstudante } = collapseLocalizarEstudante;
 
@@ -395,7 +393,7 @@ class ServicoEncaminhamentoAEE {
             dispatch(setLimparDadosQuestionarioDinamico());
             dispatch(setLimparDadosLocalizarEstudante());
             dispatch(setLimparDadosAtribuicaoResponsavel());
-            history.push(
+            navigate(
               `${RotasDto.RELATORIO_AEE_ENCAMINHAMENTO}/editar/${resposta?.data?.id}`
             );
           }
@@ -544,7 +542,8 @@ class ServicoEncaminhamentoAEE {
   gerarRelatorioEncaminhamentoAEE = params =>
     api.post('v1/relatorios/encaminhamento-aee', params);
 
-  gerarRelatorio = params => api.post(`${urlPadrao}/imprimir-detalhado`, params);
+  gerarRelatorio = params =>
+    api.post(`${urlPadrao}/imprimir-detalhado`, params);
 }
 
 export default new ServicoEncaminhamentoAEE();

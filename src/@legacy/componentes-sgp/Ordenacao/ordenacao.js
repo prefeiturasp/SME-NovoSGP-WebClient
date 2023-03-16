@@ -42,7 +42,7 @@ const Container = styled(Dropdown)`
 const ContainerMenu = styled(Menu)`
   .ant-dropdown-menu-item:hover,
   .ant-dropdown-menu-submenu-title:hover {
-    background-color: ${Base.Roxo};
+    background-color: ${Base.Roxo} !important;
     color: white;
   }
 

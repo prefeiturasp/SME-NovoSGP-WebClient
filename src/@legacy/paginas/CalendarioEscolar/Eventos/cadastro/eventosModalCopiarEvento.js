@@ -1,9 +1,8 @@
 import React, { useContext } from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import shortid from 'shortid';
 import { ModalConteudoHtml, SelectComponent } from '~/componentes';
 import { RotasDto } from '~/dtos';
-import { history } from '~/servicos';
 import EventosCadastroContext from './eventosCadastroContext';
 
 const EventosModalCopiarEvento = () => {
@@ -20,6 +19,7 @@ const EventosModalCopiarEvento = () => {
   } = useContext(EventosCadastroContext);
 
   const paramsRota = useParams();
+  const navigate = useNavigate();
   const tipoCalendarioId = paramsRota?.tipoCalendarioId;
 
   const onCloseCopiarConteudo = () => {
@@ -48,7 +48,7 @@ const EventosModalCopiarEvento = () => {
 
   const onCloseRetornoCopiarEvento = () => {
     setExibirModalRetornoCopiarEvento(false);
-    history.push(urlTelaListagemEventos());
+    navigate(urlTelaListagemEventos());
   };
 
   return (

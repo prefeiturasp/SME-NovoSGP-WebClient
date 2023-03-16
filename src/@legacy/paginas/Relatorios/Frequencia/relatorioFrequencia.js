@@ -24,13 +24,15 @@ import {
   sucesso,
   AbrangenciaServico,
   api,
-  history,
   ServicoRelatorioFrequencia,
   ServicoFiltroRelatorio,
   ServicoComponentesCurriculares,
 } from '~/servicos';
+import { useNavigate } from 'react-router-dom';
 
 const RelatorioFrequencia = () => {
+  const navigate = useNavigate();
+
   const [anoAtual] = useState(window.moment().format('YYYY'));
   const [anoLetivo, setAnoLetivo] = useState(undefined);
   const [anosEscolares, setAnosEscolares] = useState(undefined);
@@ -50,14 +52,12 @@ const RelatorioFrequencia = () => {
   const [carregandoUes, setCarregandoUes] = useState(false);
   const [codigoDre, setCodigoDre] = useState(undefined);
   const [codigoUe, setCodigoUe] = useState(undefined);
-  const [componentesCurriculares, setComponentesCurriculares] = useState(
-    undefined
-  );
+  const [componentesCurriculares, setComponentesCurriculares] =
+    useState(undefined);
   const [condicao, setCondicao] = useState(undefined);
   const [desabilitarBtnGerar, setDesabilitarBtnGerar] = useState(true);
-  const [desabilitarTipoRelatorio, setDesabilitarTipoRelatorio] = useState(
-    false
-  );
+  const [desabilitarTipoRelatorio, setDesabilitarTipoRelatorio] =
+    useState(false);
   const [formato, setFormato] = useState('1');
   const [listaAnosEscolares, setListaAnosEscolares] = useState([]);
   const [listaAnosLetivo, setListaAnosLetivo] = useState([]);
@@ -147,13 +147,12 @@ const RelatorioFrequencia = () => {
   const obterModalidades = async ue => {
     if (ue) {
       setCarregandoModalidade(true);
-      const retorno = await ServicoFiltroRelatorio.obterModalidadesPorAbrangencia(
-        ue
-      )
-        .catch(e => {
-          erros(e);
-        })
-        .finally(() => setCarregandoModalidade(false));
+      const retorno =
+        await ServicoFiltroRelatorio.obterModalidadesPorAbrangencia(ue)
+          .catch(e => {
+            erros(e);
+          })
+          .finally(() => setCarregandoModalidade(false));
 
       if (retorno?.data) {
         if (retorno.data.length === 1) {
@@ -251,8 +250,9 @@ const RelatorioFrequencia = () => {
     setCarregandoSemestres(true);
     const retorno = await api
       .get(
-        `v1/abrangencias/${consideraHistorico}/semestres?anoLetivo=${anoLetivo}&modalidade=${modalidadeId ||
-          0}`
+        `v1/abrangencias/${consideraHistorico}/semestres?anoLetivo=${anoLetivo}&modalidade=${
+          modalidadeId || 0
+        }`
       )
       .catch(e => erros(e))
       .finally(() => {
@@ -351,7 +351,6 @@ const RelatorioFrequencia = () => {
       todosAnosEscolares = listaAnosEscolares.map(item => item.valor);
     }
     return todosAnosEscolares;
-
   }, [anosEscolares]);
 
   const escolherChamadaEndpointComponeteCurricular = useCallback(() => {
@@ -544,7 +543,7 @@ const RelatorioFrequencia = () => {
   }, [consideraHistorico, obterAnosLetivos]);
 
   const onClickVoltar = () => {
-    history.push(URL_HOME);
+    navigate(URL_HOME);
   };
 
   const onClickCancelar = async () => {

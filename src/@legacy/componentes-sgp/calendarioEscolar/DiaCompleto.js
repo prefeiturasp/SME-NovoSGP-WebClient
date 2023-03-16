@@ -6,7 +6,7 @@ import shortid from 'shortid';
 import { Base } from '~/componentes/colors';
 import Loader from '~/componentes/loader';
 import { OPCAO_TODOS } from '~/constantes';
-import { store } from '~/redux';
+import { store } from '@/core/redux';
 import { selecionaDia } from '~/redux/modulos/calendarioEscolar/actions';
 import api from '~/servicos/api';
 import DataInicioFim from '../Calendario/componentes/MesCompleto/componentes/Dias/componentes/DiaCompleto/componentes/DataInicioFim';
@@ -87,7 +87,6 @@ const DiaCompleto = props => {
     return () => {
       estado = false;
     };
-
   }, [
     diaSelecionado,
     dreSelecionada,
@@ -99,7 +98,6 @@ const DiaCompleto = props => {
   ]);
 
   useEffect(() => {
-
     estaAberto = false;
     store.dispatch(selecionaDia(undefined));
   }, [filtros]);

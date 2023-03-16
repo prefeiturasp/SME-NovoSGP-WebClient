@@ -4,6 +4,7 @@ import moment from 'moment';
 import PropTypes from 'prop-types';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import shortid from 'shortid';
 import {
   Auditoria,
@@ -35,7 +36,6 @@ import {
   setSomenteConsultaManual,
   sucesso,
   verificaSomenteConsulta,
-  history,
   ServicoCalendarios,
   AbrangenciaServico,
   ServicoFiltroRelatorio,
@@ -53,6 +53,8 @@ import {
 import { NOME_CAMPO_QUESTAO } from './componentes/ConstantesCamposDinâmicos';
 
 const RegistroItineranciaAEECadastro = ({ match }) => {
+  const navigate = useNavigate();
+
   const [carregandoGeral, setCarregandoGeral] = useState(false);
   const [carregandoQuestoes, setCarregandoQuestoes] = useState(false);
   const [dataVisita, setDataVisita] = useState('');
@@ -233,7 +235,7 @@ const RegistroItineranciaAEECadastro = ({ match }) => {
             sucesso(
               `Registro ${itineranciaId ? 'alterado' : 'salvo'} com sucesso`
             );
-            history.push(RotasDto.RELATORIO_AEE_REGISTRO_ITINERANCIA);
+            navigate(RotasDto.RELATORIO_AEE_REGISTRO_ITINERANCIA);
           } else {
             setCarregandoGeral(false);
           }
@@ -252,9 +254,9 @@ const RegistroItineranciaAEECadastro = ({ match }) => {
         'Suas alterações não foram salvas, deseja salvar agora?'
       );
       if (confirmou) onClickSalvar();
-      else history.push(RotasDto.RELATORIO_AEE_REGISTRO_ITINERANCIA);
+      else navigate(RotasDto.RELATORIO_AEE_REGISTRO_ITINERANCIA);
     } else {
-      history.push(RotasDto.RELATORIO_AEE_REGISTRO_ITINERANCIA);
+      navigate(RotasDto.RELATORIO_AEE_REGISTRO_ITINERANCIA);
     }
   };
 
@@ -330,7 +332,8 @@ const RegistroItineranciaAEECadastro = ({ match }) => {
 
   const obterQuestoes = async () => {
     setCarregandoQuestoes(true);
-    const result = await ServicoRegistroItineranciaAEE.obterQuestoesItinerancia();
+    const result =
+      await ServicoRegistroItineranciaAEE.obterQuestoesItinerancia();
     if (result?.status === 200) {
       setQuestoesItinerancia(result?.data?.itineranciaQuestao);
       setQuestoesAluno(result?.data?.itineranciaAlunoQuestao);
@@ -499,7 +502,6 @@ const RegistroItineranciaAEECadastro = ({ match }) => {
     } else {
       obterQuestoes();
     }
-
   }, [itineranciaId]);
 
   const perguntarAntesDeRemoverAluno = async () => {
@@ -600,12 +602,13 @@ const RegistroItineranciaAEECadastro = ({ match }) => {
   const obterTiposCalendarios = useCallback(async () => {
     setCarregandoTipos(true);
     const anoLetivo = dataVisita.get('year');
-    const resposta = await ServicoCalendarios.obterTiposCalendarioPorAnoLetivoModalidade(
-      anoLetivo,
-      listaModalidades?.map(item => item?.valor)?.toString()
-    )
-      .catch(e => erros(e))
-      .finally(() => setCarregandoTipos(false));
+    const resposta =
+      await ServicoCalendarios.obterTiposCalendarioPorAnoLetivoModalidade(
+        anoLetivo,
+        listaModalidades?.map(item => item?.valor)?.toString()
+      )
+        .catch(e => erros(e))
+        .finally(() => setCarregandoTipos(false));
 
     if (resposta?.data?.length) {
       const listaCaledariosAtivos = resposta.data
@@ -660,7 +663,6 @@ const RegistroItineranciaAEECadastro = ({ match }) => {
       setEventoId();
       setListaEvento([]);
     }
-
   }, [tipoCalendarioSelecionado, listaUes, itineranciaId]);
 
   const selecionaEvento = evento => {

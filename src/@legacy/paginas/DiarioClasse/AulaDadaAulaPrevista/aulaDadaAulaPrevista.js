@@ -23,13 +23,15 @@ import {
   sucesso,
 } from '~/servicos/alertas';
 import api from '~/servicos/api';
-import history from '~/servicos/history';
 import ServicoDisciplina from '~/servicos/Paginas/ServicoDisciplina';
 import { verificaSomenteConsulta } from '~/servicos/servico-navegacao';
 import { ehTurmaInfantil } from '~/servicos/Validacoes/validacoesInfatil';
 import ListaAulasPorBimestre from './ListaAulasPorBimestre/ListaAulasPorBimestre';
+import { useNavigate } from 'react-router-dom';
 
 const AulaDadaAulaPrevista = () => {
+  const navigate = useNavigate();
+
   const usuario = useSelector(store => store.usuario);
   const { turmaSelecionada } = usuario;
   const turmaId = turmaSelecionada ? turmaSelecionada.turma : 0;
@@ -38,9 +40,8 @@ const AulaDadaAulaPrevista = () => {
   const [desabilitarDisciplina, setDesabilitarDisciplina] = useState(false);
   const [listaDisciplinas, setListaDisciplinas] = useState([]);
   const [modoEdicao, setModoEdicao] = useState(false);
-  const [disciplinaIdSelecionada, setDisciplinaIdSelecionada] = useState(
-    undefined
-  );
+  const [disciplinaIdSelecionada, setDisciplinaIdSelecionada] =
+    useState(undefined);
   const [dadoslista, setDadosLista] = useState([]);
   const [auditoria, setAuditoria] = useState(undefined);
   const permissoesTela = usuario.permissoes[RotasDto.AULA_DADA_AULA_PREVISTA];
@@ -238,7 +239,6 @@ const AulaDadaAulaPrevista = () => {
       setDisciplinaIdSelecionada(undefined);
       setListaDisciplinas([]);
     }
-
   }, [turmaSelecionada, modalidade, modalidadesFiltroPrincipal]);
 
   const onClickVoltar = async () => {
@@ -246,10 +246,10 @@ const AulaDadaAulaPrevista = () => {
       const confirmado = await perguntaAoSalvar();
       if (confirmado) {
         await salvar();
-        history.push(URL_HOME);
+        navigate(URL_HOME);
       }
     } else {
-      history.push(URL_HOME);
+      navigate(URL_HOME);
     }
   };
 

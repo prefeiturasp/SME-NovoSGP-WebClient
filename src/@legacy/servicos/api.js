@@ -1,7 +1,7 @@
 import axios from 'axios';
 import moment from 'moment';
 import { urlBase } from './variaveis';
-import { store } from '~/redux';
+import { store } from '@/core/redux';
 import { deslogarPorSessaoInvalida } from '~/servicos/ServicoUsuarioDeslogar';
 import { DeslogarSessaoExpirou } from '~/redux/modulos/usuario/actions';
 import { TOKEN_EXPIRADO } from '~/constantes';

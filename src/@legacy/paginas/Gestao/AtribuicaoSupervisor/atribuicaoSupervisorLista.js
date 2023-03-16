@@ -1,6 +1,7 @@
 import { Col, Row } from 'antd';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import { Loader } from '~/componentes';
 import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
 import Cabecalho from '~/componentes-sgp/cabecalho';
@@ -16,9 +17,10 @@ import { Colors } from '../../../componentes/colors';
 import SelectComponent from '../../../componentes/select';
 import DataTable from '../../../componentes/table/dataTable';
 import api from '../../../servicos/api';
-import history from '../../../servicos/history';
 
 export default function AtribuicaoSupervisorLista() {
+  const navigate = useNavigate();
+
   const [uesSemSupervisorCheck, setUesSemSupervisorCheck] = useState(false);
   const [dresSelecionadas, setDresSelecionadas] = useState('');
   const [supervisoresSelecionados, setSupervisoresSelecionados] = useState([]);
@@ -52,7 +54,6 @@ export default function AtribuicaoSupervisorLista() {
       setListaDres([]);
       setDresSelecionadas();
     }
-
   }, [tipoResponsavel]);
 
   useEffect(() => {
@@ -63,7 +64,6 @@ export default function AtribuicaoSupervisorLista() {
     if (permissoesTela) {
       verificaSomenteConsulta(permissoesTela);
     }
-
   }, []);
 
   const columns = [
@@ -105,7 +105,7 @@ export default function AtribuicaoSupervisorLista() {
   ];
 
   function onClickVoltar() {
-    history.push('/');
+    navigate('/');
   }
 
   function onClickEditar(responsavelId, tipoResponsavelId, codigoUe) {
@@ -123,7 +123,7 @@ export default function AtribuicaoSupervisorLista() {
         path = `${path}/0/${tipoResp}/${codigoUe}`;
       }
     }
-    history.push(path);
+    navigate(path);
   }
 
   function onClickRow(row) {
@@ -136,13 +136,13 @@ export default function AtribuicaoSupervisorLista() {
     if (!permissoesTela.podeIncluir) return;
 
     if (dresSelecionadas && !tipoResponsavel) {
-      history.push(`${RotasDto.ATRIBUICAO_RESPONSAVEIS}/${dresSelecionadas}/`);
+      navigate(`${RotasDto.ATRIBUICAO_RESPONSAVEIS}/${dresSelecionadas}/`);
     } else if (dresSelecionadas && tipoResponsavel) {
-      history.push(
+      navigate(
         `${RotasDto.ATRIBUICAO_RESPONSAVEIS}/${dresSelecionadas}/${tipoResponsavel}/`
       );
     } else {
-      history.push(RotasDto.ATRIBUICAO_RESPONSAVEIS);
+      navigate(RotasDto.ATRIBUICAO_RESPONSAVEIS);
     }
   }
 
@@ -306,7 +306,6 @@ export default function AtribuicaoSupervisorLista() {
         );
       }
     }
-
   }, [uesSemSupervisorCheck, tipoResponsavel]);
 
   async function onChangeSupervisores(sup) {
@@ -376,7 +375,6 @@ export default function AtribuicaoSupervisorLista() {
     } else {
       setListaTipoResponsavel([]);
     }
-
   }, [
     dresSelecionadas,
     ueSelecionada,

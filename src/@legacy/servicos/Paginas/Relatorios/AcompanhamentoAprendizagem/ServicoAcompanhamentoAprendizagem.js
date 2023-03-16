@@ -1,4 +1,4 @@
-import { store } from '~/redux';
+import { store } from '@/core/redux';
 import {
   setAcompanhamentoAprendizagemEmEdicao,
   setApanhadoGeralEmEdicao,
@@ -171,7 +171,8 @@ class ServicoAcompanhamentoAprendizagem {
 
         dadosNovos.auditoria = auditoria;
         dadosNovos.acompanhamentoAlunoId = acompanhamentoAlunoId;
-        dadosNovos.acompanhamentoAlunoSemestreId = acompanhamentoAlunoSemestreId;
+        dadosNovos.acompanhamentoAlunoSemestreId =
+          acompanhamentoAlunoSemestreId;
         dispatch(setDadosAcompanhamentoAprendizagem(dadosNovos));
 
         dispatch(setAcompanhamentoAprendizagemEmEdicao(false));

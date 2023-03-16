@@ -5,7 +5,6 @@ import { Form } from 'formik';
 import LogoDoSgp from '~/recursos/LogoDoSgp.svg';
 import { Base, Colors } from '~/componentes/colors';
 import Button from '~/componentes/button';
-import history from '~/servicos/history';
 import RedefinirSenhaServico from '~/servicos/Paginas/ServicoRedefinirSenha';
 import {
   Nav,
@@ -29,12 +28,13 @@ import {
   setModificarSenha,
   setLogado,
 } from '~/redux/modulos/usuario/actions';
-import { store } from '~/redux';
+import { store } from '@/core/redux';
 import Erro from '../RecuperarSenha/erro';
 import { setMenusPermissoes } from '~/servicos/servico-navegacao';
 import { obterMeusDados } from '~/servicos/Paginas/ServicoUsuario';
 import { Loader } from '~/componentes';
 import ServicoDashboard from '~/servicos/Paginas/Dashboard/ServicoDashboard';
+import { useNavigate } from 'react-router-dom';
 
 const Item = styled.li`
   ${props => props.status === true && `color: ${Base.Verde}`};
@@ -44,6 +44,8 @@ const Item = styled.li`
 
 const RedefinirSenha = props => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+
   const [senhas, setSenhas] = useState({
     senha: '',
     confirmarSenha: '',
@@ -86,13 +88,13 @@ const RedefinirSenha = props => {
   const trataAcaoTeclado = e => {
     if (!token && e.code === 'F5') {
       store.dispatch(Deslogar());
-      history.push(URL_LOGIN);
+      navigate(URL_LOGIN);
     }
   };
 
   const validarToken = async () => {
     let tokenValido = true;
-    if (!token) history.push(URL_LOGIN);
+    if (!token) navigate(URL_LOGIN);
     if (token) tokenValido = await RedefinirSenhaServico.validarToken(token);
 
     if (!tokenValido) {
@@ -111,7 +113,6 @@ const RedefinirSenha = props => {
     return () => {
       document.removeEventListener('keydown', trataAcaoTeclado);
     };
-
   }, []);
 
   useEffect(() => {
@@ -170,7 +171,7 @@ const RedefinirSenha = props => {
       store.dispatch(setModificarSenha(false));
       store.dispatch(setLogado(false));
     }
-    history.push(URL_LOGIN);
+    navigate(URL_LOGIN);
   };
 
   const alterarSenha = async () => {
@@ -181,10 +182,11 @@ const RedefinirSenha = props => {
           token,
           novaSenha: senha,
         },
-        dispatch
+        dispatch,
+        navigate
       );
 
-      if (requisicao.sucesso) history.push(URL_LOGIN);
+      if (requisicao.sucesso) navigate(URL_LOGIN);
       if (requisicao.tokenExpirado) setTokenExpirado(requisicao.tokenExpirado);
 
       setErroGeral(requisicao.erro);
@@ -229,7 +231,7 @@ const RedefinirSenha = props => {
         );
         ServicoDashboard.obterDadosDashboard();
         setCarregandoContinuar(false);
-        history.push(URL_HOME);
+        navigate(URL_HOME);
       } else {
         setCarregandoContinuar(false);
         setErroGeral(requisicao.erro);
@@ -242,7 +244,7 @@ const RedefinirSenha = props => {
     setErroGeral('');
 
     if (tokenExpirado) {
-      history.push(URL_RECUPERARSENHA);
+      navigate(URL_RECUPERARSENHA);
       return;
     }
 
@@ -250,7 +252,7 @@ const RedefinirSenha = props => {
   };
 
   const aoClicarContinuarExpirado = () => {
-    if (token && !tokenValidado) history.push(URL_RECUPERARSENHA);
+    if (token && !tokenValidado) navigate(URL_RECUPERARSENHA);
   };
 
   return (

@@ -1,7 +1,7 @@
 import { Col, Row } from 'antd';
 import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { useRouteMatch } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { Button, Colors } from '~/componentes';
 import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
 import {
@@ -12,7 +12,6 @@ import {
   SGP_BUTTON_SALVAR_RASCUNHO,
 } from '~/constantes/ids/button';
 import {
-  history,
   verificaSomenteConsulta,
   confirmar,
   sucesso,
@@ -33,7 +32,9 @@ import BtnImpressaoEncaminhamentoNAAPA from '../componentes/btnImpressaoNAAPA';
 const CadastroEncaminhamentoNAAPABotoesAcao = props => {
   const { mostrarBusca, setMostrarBusca } = props;
 
-  const routeMatch = useRouteMatch();
+  const { id } = useParams();
+  const { pathname } = useLocation();
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const aluno = useSelector(state => state.localizarEstudante.aluno);
 
@@ -53,20 +54,20 @@ const CadastroEncaminhamentoNAAPABotoesAcao = props => {
     state => state.encaminhamentoNAAPA.dadosSituacaoEncaminhamentoNAAPA
   );
 
-  const encaminhamentoId = routeMatch.params?.id;
+  const encaminhamentoId = id;
 
   const desabilitarProximoPasso =
     desabilitarCamposEncaminhamentoNAAPA || !aluno?.codigoAluno;
 
   useEffect(() => {
-    if (routeMatch.url && encaminhamentoId) {
+    if (pathname && encaminhamentoId) {
       setBreadcrumbManual(
-        routeMatch.url,
+        pathname,
         'Encaminhamento',
         `${RotasDto.ENCAMINHAMENTO_NAAPA}`
       );
     }
-  }, [routeMatch, encaminhamentoId]);
+  }, [pathname, encaminhamentoId]);
 
   useEffect(() => {
     const soConsulta = verificaSomenteConsulta(permissoesTela);
@@ -91,13 +92,12 @@ const CadastroEncaminhamentoNAAPABotoesAcao = props => {
 
       if (confirmou) {
         const resposta = await ServicoNAAPA.salvarPadrao(encaminhamentoId);
-        if (resposta?.status === 200)
-          history.push(RotasDto.ENCAMINHAMENTO_NAAPA);
+        if (resposta?.status === 200) navigate(RotasDto.ENCAMINHAMENTO_NAAPA);
       } else {
-        history.push(RotasDto.ENCAMINHAMENTO_NAAPA);
+        navigate(RotasDto.ENCAMINHAMENTO_NAAPA);
       }
     } else {
-      history.push(RotasDto.ENCAMINHAMENTO_NAAPA);
+      navigate(RotasDto.ENCAMINHAMENTO_NAAPA);
     }
   };
 
@@ -115,7 +115,7 @@ const CadastroEncaminhamentoNAAPABotoesAcao = props => {
       });
       if (resultado?.status === 200) {
         sucesso('Encaminhamento excluído com sucesso');
-        history.push(RotasDto.ENCAMINHAMENTO_NAAPA);
+        navigate(RotasDto.ENCAMINHAMENTO_NAAPA);
       }
     }
   };
@@ -142,7 +142,7 @@ const CadastroEncaminhamentoNAAPABotoesAcao = props => {
       situacaoNAAPA.Rascunho
     );
     if (resposta?.status === 200) {
-      history.push(`${RotasDto.ENCAMINHAMENTO_NAAPA}/${resposta?.data?.id}`);
+      navigate(`${RotasDto.ENCAMINHAMENTO_NAAPA}/${resposta?.data?.id}`);
     }
   };
 
@@ -153,7 +153,7 @@ const CadastroEncaminhamentoNAAPABotoesAcao = props => {
       situacaoNAAPA.AguardandoAtendimento
     );
     if (resposta?.status === 200) {
-      history.push(RotasDto.ENCAMINHAMENTO_NAAPA);
+      navigate(RotasDto.ENCAMINHAMENTO_NAAPA);
     }
   };
 

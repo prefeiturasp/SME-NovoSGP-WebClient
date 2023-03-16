@@ -1,13 +1,13 @@
 import React, { useMemo, useCallback } from 'react';
 import shortid from 'shortid';
 import t from 'prop-types';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 // Ant
 import { Tooltip } from 'antd';
 
 // Redux
-import { store } from '~/redux';
+import { store } from '@/core/redux';
 import { salvarDadosAulaFrequencia } from '~/redux/modulos/calendarioProfessor/actions';
 import { useSelector } from 'react-redux';
 
@@ -35,9 +35,6 @@ import DataInicioFim from './componentes/DataInicioFim';
 // Utils
 import { valorNuloOuVazio } from '~/utils/funcoes/gerais';
 
-// Serviços
-import history from '~/servicos/history';
-
 // DTOs
 import RotasDTO from '~/dtos/rotasDto';
 import { IconeDiaComPendencia } from '../../styles';
@@ -51,6 +48,8 @@ function DiaCompleto({
   permissaoTela,
   tipoCalendarioId,
 }) {
+  const navigate = useNavigate();
+
   const deveExibir = useMemo(
     () => dia && !!diasPermitidos.find(x => x.toString() === dia.toString()),
     [dia, diasPermitidos]
@@ -68,7 +67,7 @@ function DiaCompleto({
 
   const onClickNovaAulaHandler = useCallback(
     diaSelecionado => {
-      history.push(
+      navigate(
         `${RotasDTO.CADASTRO_DE_AULA}/novo/${tipoCalendarioId}/${dadosDia.dados.somenteAulaReposicao}?diaAula=${diaSelecionado}`
       );
     },
@@ -77,7 +76,7 @@ function DiaCompleto({
   );
 
   const onClickNovaAvaliacaoHandler = useCallback(diaSelecionado => {
-    history.push(
+    navigate(
       `${RotasDTO.CADASTRO_DE_AVALIACAO}/novo?diaAvaliacao=${diaSelecionado}`
     );
   }, []);
@@ -92,7 +91,7 @@ function DiaCompleto({
           podeEditarAula
         )
       );
-      history.push({
+      navigate({
         pathname: `${RotasDTO.FREQUENCIA_PLANO_AULA}`,
         state: { rotaOrigem: location?.pathname },
       });
@@ -103,8 +102,9 @@ function DiaCompleto({
 
   const onClickAula = useCallback(item => {
     if (item.ehAula)
-      history.push(`${RotasDTO.CADASTRO_DE_AULA}/editar/${item.aulaId}/${dadosDia.dados.somenteAulaReposicao}`);
-
+      navigate(
+        `${RotasDTO.CADASTRO_DE_AULA}/editar/${item.aulaId}/${dadosDia.dados.somenteAulaReposicao}`
+      );
   }, []);
 
   const obterDescricoesPendencias = pendencias => {
@@ -233,20 +233,21 @@ function DiaCompleto({
                     ''
                   )}
                   <div className="botoesEventoAula">
-                    {eventoAula?.ehAula && eventoAula?.mostrarBotaoFrequencia && (
-                      <Tooltip title="Ir para frequência">
-                        <BotaoFrequencia
-                          onClickFrequencia={() =>
-                            onClickFrequenciaHandler(
-                              eventoAula.componenteCurricularId,
-                              dia,
-                              eventoAula.aulaId,
-                              eventoAula.podeEditarAula
-                            )
-                          }
-                        />
-                      </Tooltip>
-                    )}
+                    {eventoAula?.ehAula &&
+                      eventoAula?.mostrarBotaoFrequencia && (
+                        <Tooltip title="Ir para frequência">
+                          <BotaoFrequencia
+                            onClickFrequencia={() =>
+                              onClickFrequenciaHandler(
+                                eventoAula.componenteCurricularId,
+                                dia,
+                                eventoAula.aulaId,
+                                eventoAula.podeEditarAula
+                              )
+                            }
+                          />
+                        </Tooltip>
+                      )}
                     {eventoAula?.atividadesAvaliativas.length > 0 && (
                       <BotaoAvaliacoes
                         atividadesAvaliativas={eventoAula.atividadesAvaliativas}

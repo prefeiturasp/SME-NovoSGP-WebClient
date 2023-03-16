@@ -11,7 +11,6 @@ import { setLoaderSecao } from '~/redux/modulos/loader/actions';
 
 // Serviços
 import RotasDto from '~/dtos/rotasDto';
-import history from '~/servicos/history';
 import RegistroPOAServico from '~/servicos/Paginas/DiarioClasse/RegistroPOA';
 import { erros, erro, sucesso, confirmar } from '~/servicos/alertas';
 import { setBreadcrumbManual } from '~/servicos/breadcrumb-services';
@@ -41,9 +40,12 @@ import AlertaModalidadeInfantil from '~/componentes-sgp/AlertaModalidadeInfantil
 import { ehTurmaInfantil } from '~/servicos/Validacoes/validacoesInfatil';
 import JoditEditor from '~/componentes/jodit-editor/joditEditor';
 import { SGP_BUTTON_ALTERAR_CADASTRAR } from '~/constantes/ids/button';
+import { useNavigate } from 'react-router-dom';
 
 function RegistroPOAForm({ match }) {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+
   const carregando = useSelector(store => store.loader.loaderSecao);
   const permissoesTela = useSelector(store => store.usuario.permissoes);
   const anoLetivo =
@@ -86,7 +88,6 @@ function RegistroPOAForm({ match }) {
       refForm.resetForm();
       setModoEdicao(false);
     }
-
   }, [turmaSelecionada, permissoesTela, modalidadesFiltroPrincipal]);
 
   const validacoes = () => {
@@ -148,7 +149,7 @@ function RegistroPOAForm({ match }) {
         sucesso(
           `Registro ${match?.params?.id ? 'alterado' : 'salvo'} com sucesso.`
         );
-        history.push(RotasDto.REGISTRO_POA);
+        navigate(RotasDto.REGISTRO_POA);
       }
     } catch (err) {
       if (err) {
@@ -168,10 +169,10 @@ function RegistroPOAForm({ match }) {
       if (confirmou) {
         validaAntesDoSubmit(form);
       } else {
-        history.push(RotasDto.REGISTRO_POA);
+        navigate(RotasDto.REGISTRO_POA);
       }
     } else {
-      history.push(RotasDto.REGISTRO_POA);
+      navigate(RotasDto.REGISTRO_POA);
     }
   };
 
@@ -204,7 +205,7 @@ function RegistroPOAForm({ match }) {
       );
       if (excluir) {
         sucesso(`Registro excluído com sucesso!`);
-        history.push(RotasDto.REGISTRO_POA);
+        navigate(RotasDto.REGISTRO_POA);
       }
     }
   };

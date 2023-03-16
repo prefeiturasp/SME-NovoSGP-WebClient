@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 import Semana from './Semana';
 import DiaCompleto from './DiaCompleto';
-import { store } from '~/redux';
+import { store } from '@/core/redux';
 import { selecionaMes } from '~/redux/modulos/calendarioProfessor/actions';
 import api from '~/servicos/api';
 import Loader from '~/componentes/loader';

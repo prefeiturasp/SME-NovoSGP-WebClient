@@ -7,7 +7,6 @@ import * as Yup from 'yup';
 import { Col, Row } from 'antd';
 import Alert from '~/componentes/alert';
 import { Cabecalho } from '~/componentes-sgp';
-import history from '~/servicos/history';
 import { verificaSomenteConsulta } from '~/servicos/servico-navegacao';
 
 import {
@@ -46,8 +45,11 @@ import { SGP_DATA_AULA } from '~/constantes/ids/date';
 import { ContainerColumnReverse } from '~/paginas/Planejamento/Anual/planoAnual.css';
 import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
 import BotaoExcluirPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoExcluirPadrao';
+import { useNavigate } from 'react-router-dom';
 
 function CadastroDeAula({ match, location }) {
+  const navigate = useNavigate();
+
   const { id, tipoCalendarioId, somenteReposicao } = match.params;
   const ehReposicao = somenteReposicao === 'true';
   const permissoesTela = useSelector(state => state.usuario.permissoes);
@@ -147,16 +149,17 @@ function CadastroDeAula({ match, location }) {
   const obterComponenteSelecionadoPorId = useCallback(
     componenteCurricularId => {
       return listaComponentes.find(
-        c => c.codigoComponenteCurricular === Number(componenteCurricularId) ||
-             c.id === Number(componenteCurricularId)
-             || (c.regencia && (c.codDisciplinaPai === Number(componenteCurricularId)))
+        c =>
+          c.codigoComponenteCurricular === Number(componenteCurricularId) ||
+          c.id === Number(componenteCurricularId) ||
+          (c.regencia && c.codDisciplinaPai === Number(componenteCurricularId))
       );
     },
     [listaComponentes]
   );
 
   const navegarParaCalendarioProfessor = () => {
-    history.push('/calendario-escolar/calendario-professor');
+    navigate('/calendario-escolar/calendario-professor');
   };
 
   const removeGrade = () => {
@@ -255,7 +258,9 @@ function CadastroDeAula({ match, location }) {
         servicoCadastroAula
           .obterGradePorComponenteETurma(
             turmaSelecionada.turma,
-            componenteSelecionado.territorioSaber ? componenteSelecionado.id : componenteSelecionado.codigoComponenteCurricular,
+            componenteSelecionado.territorioSaber
+              ? componenteSelecionado.id
+              : componenteSelecionado.codigoComponenteCurricular,
             dataAula,
             id || 0,
             componenteSelecionado.regencia,
@@ -329,13 +334,16 @@ function CadastroDeAula({ match, location }) {
             const componenteSelecionado = componentes.find(
               c =>
                 String(c.codigoComponenteCurricular) ===
-                String(respostaAula.disciplinaId) ||
-                String(c.id) ===
-                String(respostaAula.disciplinaId) ||
-                (c.regencia && String(c.codDisciplinaPai) === respostaAula.disciplinaId)
-            );            
+                  String(respostaAula.disciplinaId) ||
+                String(c.id) === String(respostaAula.disciplinaId) ||
+                (c.regencia &&
+                  String(c.codDisciplinaPai) === respostaAula.disciplinaId)
+            );
 
-            if (componenteSelecionado.codigoComponenteCurricular == respostaAula.disciplinaId){
+            if (
+              componenteSelecionado.codigoComponenteCurricular ==
+              respostaAula.disciplinaId
+            ) {
               respostaAula.disciplinaId = String(componenteSelecionado.id);
               setAula(respostaAula);
             }
@@ -375,16 +383,16 @@ function CadastroDeAula({ match, location }) {
         Number(aulaInicial.tipoAula) === 1
       );
     }
-
   }, [id, turmaSelecionada.turma]);
 
   const salvar = async valoresForm => {
     const componente = obterComponenteSelecionadoPorId(
       valoresForm.disciplinaId
     );
-    if (Number(valoresForm.quantidade) === 0) valoresForm.quantidade = 1;    
+    if (Number(valoresForm.quantidade) === 0) valoresForm.quantidade = 1;
     if (componente) valoresForm.disciplinaNome = componente.nome;
-    if (componente?.territorioSaber) valoresForm.disciplinaId = componente.codigoComponenteCurricular;
+    if (componente?.territorioSaber)
+      valoresForm.disciplinaId = componente.codigoComponenteCurricular;
     setCarregandoDados(true);
     servicoCadastroAula
       .salvar(id, valoresForm, componente.regencia || false)
@@ -590,7 +598,6 @@ function CadastroDeAula({ match, location }) {
     if (turmaFiltro === turmaSelecionada.turma) {
       obterAula();
     }
-
   }, [obterAula, match.url]);
 
   useEffect(() => {
@@ -601,7 +608,6 @@ function CadastroDeAula({ match, location }) {
 
   useEffect(() => {
     if (turmaFiltro !== turmaSelecionada.turma) salvarAntesMudarTurma();
-
   }, [turmaSelecionada]);
 
   return (

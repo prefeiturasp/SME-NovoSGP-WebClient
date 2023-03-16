@@ -472,9 +472,8 @@ const ListaoListaFechamento = props => {
 
     if (ehRegencia) {
       paramsColFinal.render = dadosEstudante => {
-        const temNotaConceitoEmAprovacao = dadosEstudante?.notasConceitoFinal?.find?.(
-          item => item?.emAprovacao
-        );
+        const temNotaConceitoEmAprovacao =
+          dadosEstudante?.notasConceitoFinal?.find?.(item => item?.emAprovacao);
 
         const alunoExpandido = temLinhaNotaConceitoExpandida(
           dadosEstudante?.codigoAluno
@@ -524,9 +523,10 @@ const ListaoListaFechamento = props => {
 
     if (ehRegencia) {
       paramsCol.render = dadosEstudante => {
-        const temNotaConceitoEmAprovacao = dadosEstudante?.notasConceitoBimestre?.find?.(
-          item => item?.emAprovacao
-        );
+        const temNotaConceitoEmAprovacao =
+          dadosEstudante?.notasConceitoBimestre?.find?.(
+            item => item?.emAprovacao
+          );
 
         const alunoExpandido = temLinhaNotaConceitoExpandida(
           dadosEstudante?.codigoAluno
@@ -626,7 +626,7 @@ const ListaoListaFechamento = props => {
         colunasRegencia.push({
           title: item?.disciplina,
           align: 'center',
-          dataIndex: `${nomeRef}[${index}]`,
+          dataIndex: [`${nomeRef}`, `${index}`],
           key: `${nomeRef}[${index}]`,
           width: '115px',
           className: 'position-relative',

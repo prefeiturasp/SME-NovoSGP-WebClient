@@ -11,7 +11,7 @@ import SelectComponent from '~/componentes/select';
 import DataTable from '~/componentes/table/dataTable';
 import { erros, confirmar } from '~/servicos/alertas';
 import api from '~/servicos/api';
-import { store } from '~/redux';
+import { store } from '@/core/redux';
 import RotasDto from '~/dtos/rotasDto';
 import { verificaSomenteConsulta } from '~/servicos/servico-navegacao';
 
@@ -29,9 +29,8 @@ export default function ReiniciarSenha({ perfilSelecionado }) {
   const [nomeUsuarioSelecionado, setNomeUsuarioSelecionado] = useState('');
   const [rfSelecionado, setRfSelecionado] = useState('');
   const [emailUsuarioSelecionado, setEmailUsuarioSelecionado] = useState('');
-  const [exibirModalReiniciarSenha, setExibirModalReiniciarSenha] = useState(
-    false
-  );
+  const [exibirModalReiniciarSenha, setExibirModalReiniciarSenha] =
+    useState(false);
   const [
     exibirModalMensagemReiniciarSenha,
     setExibirModalMensagemReiniciarSenha,

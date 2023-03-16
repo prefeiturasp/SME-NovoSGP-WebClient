@@ -8,7 +8,6 @@ import Card from '~/componentes/card';
 import SelectComponent from '~/componentes/select';
 import { ContainerTabsCard } from '~/componentes/tabs/tabs.css';
 import { URL_HOME } from '~/constantes/url';
-import history from '~/servicos/history';
 import ServicoDisciplina from '~/servicos/Paginas/ServicoDisciplina';
 import { verificaSomenteConsulta } from '~/servicos/servico-navegacao';
 import FechamentoBimestreLista from './fechamento-bimestre-lista/fechamento-bimestre-lista';
@@ -24,9 +23,11 @@ import AlertaModalidadeInfantil from '~/componentes-sgp/AlertaModalidadeInfantil
 import { ehTurmaInfantil } from '~/servicos/Validacoes/validacoesInfatil';
 import { ModalidadeDTO } from '~/dtos';
 import BtnAcoesFechamentoBimestre from './btnAcoesFechamentoBimestre';
+import { useNavigate } from 'react-router-dom';
 
 const FechamentoBismestre = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const { TabPane } = Tabs;
   const usuario = useSelector(store => store.usuario);
@@ -68,10 +69,8 @@ const FechamentoBismestre = () => {
   const [periodoFechamento, setPeriodoFechamento] = useState(periodo.Anual);
   const [situacaoFechamento, setSituacaoFechamento] = useState(0);
   const [registraFrequencia, setRegistraFrequencia] = useState(true);
-  const [
-    idDisciplinaTerritorioSaber,
-    setIdDisciplinaTerritorioSaber,
-  ] = useState(undefined);
+  const [idDisciplinaTerritorioSaber, setIdDisciplinaTerritorioSaber] =
+    useState(undefined);
 
   const ehModaliadeEJA =
     Number(turmaSelecionada?.modalidade) !== ModalidadeDTO.EJA;
@@ -130,7 +129,7 @@ const FechamentoBismestre = () => {
       );
     }
     if (confirmou) {
-      history.push(URL_HOME);
+      navigate(URL_HOME);
       dispatch(setExpandirLinha([]));
     }
   };
@@ -181,7 +180,6 @@ const FechamentoBismestre = () => {
     setListaDisciplinas([]);
     resetarTela();
     obterDisciplinas();
-
   }, [turmaSelecionada, modalidadesFiltroPrincipal]);
 
   const setDadosBimestre = (bimestre, dados) => {

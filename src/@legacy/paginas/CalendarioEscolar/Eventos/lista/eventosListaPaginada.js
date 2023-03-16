@@ -2,12 +2,12 @@ import { Col } from 'antd';
 import * as moment from 'moment';
 import React, { useCallback, useContext, useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import { ListaPaginada } from '~/componentes';
 import { OPCAO_TODOS } from '~/constantes';
 import { RotasDto } from '~/dtos';
 import entidadeStatusDto from '~/dtos/entidadeStatusDto';
 import { setFiltroListaEventos } from '~/redux/modulos/calendarioEscolar/actions';
-import { history } from '~/servicos';
 import EventosListaContext from './eventosListaContext';
 
 const EventosListaPaginada = () => {
@@ -28,6 +28,7 @@ const EventosListaPaginada = () => {
   const [filtros, setFiltros] = useState({});
   const [filtroEhValido, setFiltroEhValido] = useState(false);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (filtros?.tipoCalendarioId) {
@@ -67,7 +68,6 @@ const EventosListaPaginada = () => {
 
   useEffect(() => {
     filtrar();
-
   }, [calendarioSelecionado, codigoDre, codigoUe]);
 
   useEffect(() => {
@@ -75,7 +75,6 @@ const EventosListaPaginada = () => {
       filtrar();
       seFiltrarNovaConsulta(false);
     }
-
   }, [filtrarNovaConsulta]);
 
   const formatarCampoData = data => {
@@ -145,7 +144,7 @@ const EventosListaPaginada = () => {
 
   const onClickEditar = evento => {
     salvarFiltros();
-    history.push(
+    navigate(
       `${RotasDto.EVENTOS}/editar/${evento.id}/${calendarioSelecionado?.id}`
     );
   };

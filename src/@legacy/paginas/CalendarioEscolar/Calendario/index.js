@@ -14,19 +14,15 @@ import {
 } from '~/componentes';
 import { Cabecalho, FiltroHelper } from '~/componentes-sgp';
 import Calendario from '~/componentes-sgp/calendarioEscolar/Calendario';
-import { store } from '~/redux';
+import { store } from '@/core/redux';
 import { zeraCalendario } from '~/redux/modulos/calendarioEscolar/actions';
-import {
-  AbrangenciaServico,
-  api,
-  history,
-  ServicoCalendarios,
-} from '~/servicos';
+import { AbrangenciaServico, api, ServicoCalendarios } from '~/servicos';
 import { erro, sucesso } from '~/servicos/alertas';
 import { Div } from './index.css';
 import { OPCAO_TODOS } from '~/constantes';
 import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
 import { SGP_CHECKBOX_EXIBIR_HISTORICO } from '~/constantes/ids/checkbox';
+import { useNavigate } from 'react-router-dom';
 export const ContainerLabelDiasLetivos = styled.div`
   font-style: normal;
   font-weight: 700;
@@ -38,10 +34,11 @@ export const ContainerLabelDiasLetivos = styled.div`
 `;
 
 const CalendarioEscolar = () => {
+  const navigate = useNavigate();
+
   const [anoLetivo, setAnoLetivo] = useState();
-  const [tipoCalendarioSelecionado, setTipoCalendarioSelecionado] = useState(
-    undefined
-  );
+  const [tipoCalendarioSelecionado, setTipoCalendarioSelecionado] =
+    useState(undefined);
   const [diasLetivos, setDiasLetivos] = useState({});
   const [carregandoTipos, setCarregandoTipos] = useState(false);
   const [carregandoDres, setCarregandoDres] = useState(false);
@@ -83,9 +80,8 @@ const CalendarioEscolar = () => {
   }, [eventoCalendarioEdicao, selecionarTipoCalendario]);
 
   const [dreSelecionada, setDreSelecionada] = useState(undefined);
-  const [unidadeEscolarSelecionada, setUnidadeEscolarSelecionada] = useState(
-    undefined
-  );
+  const [unidadeEscolarSelecionada, setUnidadeEscolarSelecionada] =
+    useState(undefined);
 
   const consultarDiasLetivos = () => {
     api
@@ -157,7 +153,6 @@ const CalendarioEscolar = () => {
       dreSelecionada,
       unidadeEscolarSelecionada,
     });
-
   }, []);
 
   useEffect(() => {
@@ -173,11 +168,10 @@ const CalendarioEscolar = () => {
       dreSelecionada,
       unidadeEscolarSelecionada,
     });
-
   }, [tipoCalendarioSelecionado, unidadeEscolarSelecionada]);
 
   const aoClicarBotaoVoltar = () => {
-    history.push('/');
+    navigate('/');
   };
 
   useEffect(() => {
@@ -188,7 +182,6 @@ const CalendarioEscolar = () => {
       unidadeEscolarSelecionada,
     });
     store.dispatch(zeraCalendario());
-
   }, [eventoSme]);
 
   useEffect(() => {
@@ -202,7 +195,6 @@ const CalendarioEscolar = () => {
     } else if (dres && eventoCalendarioEdicao && eventoCalendarioEdicao.dre) {
       setDreSelecionada(eventoCalendarioEdicao.dre);
     }
-
   }, [dres, carregandoMeses]);
 
   const unidadesEscolaresStore = useSelector(
@@ -286,7 +278,6 @@ const CalendarioEscolar = () => {
       setDreSelecionada(eventoCalendarioEdicao.dre);
       setUnidadeEscolarSelecionada(eventoCalendarioEdicao.unidadeEscolar);
     }
-
   }, [unidadesEscolares, carregandoMeses]);
 
   const aoSelecionarDre = dre => {
@@ -310,7 +301,6 @@ const CalendarioEscolar = () => {
       dreSelecionada,
       unidadeEscolarSelecionada,
     });
-
   }, [dreSelecionada]);
 
   const aoSelecionarUnidadeEscolar = unidade => {
@@ -336,11 +326,10 @@ const CalendarioEscolar = () => {
       setCarregandoTipos(true);
       setCarregandoMeses(true);
 
-      const {
-        data,
-      } = await ServicoCalendarios.obterTiposCalendarioAutoComplete(
-        pesquisaTipoCalendario
-      );
+      const { data } =
+        await ServicoCalendarios.obterTiposCalendarioAutoComplete(
+          pesquisaTipoCalendario
+        );
 
       if (isSubscribed) {
         setListaTipoCalendario(data);

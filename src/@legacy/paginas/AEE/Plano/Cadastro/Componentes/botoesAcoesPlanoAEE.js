@@ -23,18 +23,14 @@ import {
   setParecerEmEdicao,
 } from '~/redux/modulos/planoAEE/actions';
 import { setQuestionarioDinamicoEmEdicao } from '~/redux/modulos/questionarioDinamico/actions';
-import {
-  confirmar,
-  erros,
-  history,
-  sucesso,
-  verificaSomenteConsulta,
-} from '~/servicos';
+import { confirmar, erros, sucesso, verificaSomenteConsulta } from '~/servicos';
 import ServicoPlanoAEE from '~/servicos/Paginas/Relatorios/AEE/ServicoPlanoAEE';
 import ModalImpressaoPlano from './ModalImpressaoPlano/modalImpressaoPlano';
 
 const BotoesAcoesPlanoAEE = props => {
   const { match } = props;
+
+  const navigate = useNavigate();
 
   const questionarioDinamicoEmEdicao = useSelector(
     store => store.questionarioDinamico.questionarioDinamicoEmEdicao
@@ -137,7 +133,7 @@ const BotoesAcoesPlanoAEE = props => {
     if (resposta?.data) {
       sucesso(msg);
       limparParecer();
-      history.push(RotasDto.RELATORIO_AEE_PLANO);
+      navigate(RotasDto.RELATORIO_AEE_PLANO);
     }
     setDesabilitarBtnAcao(false);
   };
@@ -164,14 +160,14 @@ const BotoesAcoesPlanoAEE = props => {
             mensagem = 'Registro alterado com sucesso';
           }
           sucesso(mensagem);
-          history.push(RotasDto.RELATORIO_AEE_PLANO);
+          navigate(RotasDto.RELATORIO_AEE_PLANO);
         }
       } else {
         limparParecer();
-        history.push(RotasDto.RELATORIO_AEE_PLANO);
+        navigate(RotasDto.RELATORIO_AEE_PLANO);
       }
     } else {
-      history.push(RotasDto.RELATORIO_AEE_PLANO);
+      navigate(RotasDto.RELATORIO_AEE_PLANO);
     }
   };
 
@@ -189,7 +185,7 @@ const BotoesAcoesPlanoAEE = props => {
       });
       if (resultado && resultado.status === 200) {
         sucesso('Plano excluído com sucesso');
-        history.push(RotasDto.RELATORIO_AEE_PLANO);
+        navigate(RotasDto.RELATORIO_AEE_PLANO);
       }
     }
   };
@@ -228,7 +224,7 @@ const BotoesAcoesPlanoAEE = props => {
 
       dispatch(setQuestionarioDinamicoEmEdicao(false));
       if (registroNovo) {
-        history.push(`${RotasDto.RELATORIO_AEE_PLANO}`);
+        navigate(`${RotasDto.RELATORIO_AEE_PLANO}`);
       } else {
         dispatch(setAtualizarDados(true));
       }

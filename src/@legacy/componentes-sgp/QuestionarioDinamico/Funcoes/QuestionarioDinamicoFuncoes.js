@@ -1,6 +1,6 @@
 import _, { groupBy } from 'lodash';
 import tipoQuestao from '~/dtos/tipoQuestao';
-import { store } from '~/redux';
+import { store } from '@/core/redux';
 import { setListaSecoesEmEdicao } from '~/redux/modulos/encaminhamentoNAAPA/actions';
 import {
   setExibirModalErrosQuestionarioDinamico,
@@ -316,13 +316,11 @@ class QuestionarioDinamicoFuncoes {
       c => String(c.id) === String(valorAnteriorSelecionado || '')
     );
 
-    const idsQuestoesComplementaresAnterior = opcaoAnterior?.questoesComplementares.map(
-      q => q.id
-    );
+    const idsQuestoesComplementaresAnterior =
+      opcaoAnterior?.questoesComplementares.map(q => q.id);
 
-    const idsQuestoesComplementaresAtual = opcaoAtual?.questoesComplementares.map(
-      q => q.id
-    );
+    const idsQuestoesComplementaresAtual =
+      opcaoAtual?.questoesComplementares.map(q => q.id);
 
     const idsQuestoesExclusao = idsQuestoesComplementaresAnterior?.filter(
       idComplentar => {

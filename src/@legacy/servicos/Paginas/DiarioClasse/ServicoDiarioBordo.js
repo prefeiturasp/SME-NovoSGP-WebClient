@@ -1,4 +1,4 @@
-import { store } from '~/redux';
+import { store } from '@/core/redux';
 import { setDadosObservacoesUsuario } from '~/redux/modulos/observacoesUsuario/actions';
 import api from '~/servicos/api';
 
@@ -93,8 +93,9 @@ class ServicoDiarioBordo {
     numeroPagina,
     numeroRegistros
   ) => {
-    const url = `${urlPadrao}/turmas/${turmaCodigo}/componentes-curriculares/${componenteCurricularId}/inicio/${dataInicio}/fim/${dataFim}?numeroPagina=${numeroPagina ||
-      1}&NumeroRegistros=${numeroRegistros}`;
+    const url = `${urlPadrao}/turmas/${turmaCodigo}/componentes-curriculares/${componenteCurricularId}/inicio/${dataInicio}/fim/${dataFim}?numeroPagina=${
+      numeroPagina || 1
+    }&NumeroRegistros=${numeroRegistros}`;
     return api.get(url);
   };
 
@@ -103,8 +104,9 @@ class ServicoDiarioBordo {
     numeroPagina,
     numeroRegistros
   ) => {
-    const url = `${urlPadrao}/devolutivas/${idDevolutiva}?numeroPagina=${numeroPagina ||
-      1}&NumeroRegistros=${numeroRegistros}`;
+    const url = `${urlPadrao}/devolutivas/${idDevolutiva}?numeroPagina=${
+      numeroPagina || 1
+    }&NumeroRegistros=${numeroRegistros}`;
     return api.get(url);
   };
 

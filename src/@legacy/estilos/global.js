@@ -4,8 +4,6 @@ import ExclamacaoCampoErro from '~/recursos/ExclamacaoCampoErro.svg';
 import '../componentes/campoData/campoData.css';
 
 export default createGlobalStyle`
-  @import url('https://fonts.googleapis.com/css?family=Roboto:400,700&display=swap');
-
   *, *:before, *:after {
     box-sizing: border-box;
     margin: 0;
@@ -16,7 +14,7 @@ export default createGlobalStyle`
     box-shadow: none;
   }
   html, body, #root {
-    font-family: 'FontAwesome', 'Roboto', sans-serif !important;
+    font-family: 'Roboto', sans-serif !important;
     font-stretch: normal;
     height: 100%;
     letter-spacing: normal;
@@ -84,9 +82,19 @@ export default createGlobalStyle`
     color: white !important;
   }
 
+  .ant-select .ant-select-clear {
+    top: 45% !important;
+    width: 20px !important;
+    inset-inline-end: 8px !important;
+  }
+
   .desabilitar-elemento {
     pointer-events: none !important;
     opacity: 0.6 !important;
+  }
+
+  .ant-input-clear-icon span {
+    color: rgba(0, 0, 0, 0.25) !important;
   }
 
   @media (max-width: 544px) {

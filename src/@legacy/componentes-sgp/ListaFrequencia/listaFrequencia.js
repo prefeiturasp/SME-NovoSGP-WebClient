@@ -75,8 +75,6 @@ const ListaFrequencia = props => {
     }
 
     setDesabilitarCampos(desabilitar);
-
-
   }, [frequenciaId, permissoesTela, temPeriodoAberto, componenteCurricular]);
 
   const marcaPresencaFaltaTodasAulas = (aluno, tipo) => {
@@ -195,11 +193,8 @@ const ListaFrequencia = props => {
   };
 
   const montarTituloColunaMarcarTodas = () => {
-    const {
-      exibirCompareceu,
-      exibirFaltou,
-      exibirRemoto,
-    } = obterTiposFrequenciaPermitidos();
+    const { exibirCompareceu, exibirFaltou, exibirRemoto } =
+      obterTiposFrequenciaPermitidos();
 
     let margin = '';
     let totalColunas = 0;
@@ -260,11 +255,8 @@ const ListaFrequencia = props => {
   };
 
   const montarTituloMarcarTodasAulas = () => {
-    const {
-      exibirCompareceu,
-      exibirFaltou,
-      exibirRemoto,
-    } = obterTiposFrequenciaPermitidos();
+    const { exibirCompareceu, exibirFaltou, exibirRemoto } =
+      obterTiposFrequenciaPermitidos();
 
     return (
       <Tooltip
@@ -351,7 +343,7 @@ const ListaFrequencia = props => {
       columns.push({
         title: () => <span className="fonte-16">{aula.numeroAula}</span>,
         align: 'center',
-        dataIndex: `aulas.${indexAula}`,
+        dataIndex: ['aulas', `${indexAula}`],
         width: '75px',
         render: (dadosAula, aluno) => {
           const indexAluno = dataSource.indexOf(aluno);

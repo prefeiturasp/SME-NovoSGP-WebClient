@@ -13,20 +13,19 @@ import { URL_HOME } from '~/constantes/url';
 import RotasDto from '~/dtos/rotasDto';
 import { confirmar, erros, sucesso } from '~/servicos/alertas';
 import api from '~/servicos/api';
-import history from '~/servicos/history';
 import { verificaSomenteConsulta } from '~/servicos/servico-navegacao';
+import { useNavigate } from 'react-router-dom';
 
 const TipoCalendarioEscolarLista = () => {
   const usuario = useSelector(store => store.usuario);
+  const navigate = useNavigate();
   const permissoesTela = usuario.permissoes[RotasDto.TIPO_CALENDARIO_ESCOLAR];
 
   const [somenteConsulta, setSomenteConsulta] = useState(false);
 
   const [idTiposSelecionados, setIdTiposSelecionados] = useState([]);
-  const [
-    listaTiposCalendarioEscolar,
-    setListaTiposCalendarioEscolar,
-  ] = useState([]);
+  const [listaTiposCalendarioEscolar, setListaTiposCalendarioEscolar] =
+    useState([]);
 
   const colunas = [
     {
@@ -52,7 +51,6 @@ const TipoCalendarioEscolarLista = () => {
   useEffect(() => {
     onFiltrar();
     setSomenteConsulta(verificaSomenteConsulta(permissoesTela));
-
   }, []);
 
   const onSelectRow = ids => {
@@ -60,7 +58,7 @@ const TipoCalendarioEscolarLista = () => {
   };
 
   const onClickEditar = id => {
-    history.push(`/calendario-escolar/tipo-calendario-escolar/editar/${id}`);
+    navigate(`/calendario-escolar/tipo-calendario-escolar/editar/${id}`);
   };
 
   const onClickRow = row => {
@@ -68,11 +66,11 @@ const TipoCalendarioEscolarLista = () => {
   };
 
   const onClickVoltar = () => {
-    history.push(URL_HOME);
+    navigate(URL_HOME);
   };
 
   const onClickNovo = () => {
-    history.push(`/calendario-escolar/tipo-calendario-escolar/novo`);
+    navigate(`/calendario-escolar/tipo-calendario-escolar/novo`);
   };
 
   const onClickExcluir = async () => {

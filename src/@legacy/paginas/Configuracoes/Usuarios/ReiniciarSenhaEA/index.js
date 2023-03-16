@@ -10,7 +10,7 @@ import ModalConteudoHtml from '~/componentes/modalConteudoHtml';
 import SelectComponent from '~/componentes/select';
 import DataTable from '~/componentes/table/dataTable';
 import api from '~/servicos/api';
-import { store } from '~/redux';
+import { store } from '@/core/redux';
 import RotasDto from '~/dtos/rotasDto';
 import { verificaSomenteConsulta } from '~/servicos/servico-navegacao';
 import FiltroHelper from '~/componentes-sgp/filtro/helper';

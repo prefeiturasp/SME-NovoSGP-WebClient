@@ -1,7 +1,7 @@
 /* eslint-disable */
 import React, { useState, useEffect } from 'react';
 import { Menu, Layout, Tooltip } from 'antd';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { Base } from '../componentes/colors';
 import {
@@ -12,7 +12,7 @@ import {
   IconeRetrair,
 } from './sider.css';
 import LogoMenuFooter from '../recursos/LogoMenuFooter.svg';
-import { store } from '../redux';
+import { store } from '@/core/redux';
 import {
   menuRetraido,
   menuSelecionado,
@@ -23,6 +23,8 @@ import { validarNavegacaoTela } from '~/utils/validacoes';
 const Sider = () => {
   const { Sider, Footer } = Layout;
   const { SubMenu } = Menu;
+  const navigate = useNavigate();
+
   const NavegacaoStore = useSelector(state => state.navegacao);
   const [openKeys, setOpenKeys] = useState([]);
 
@@ -147,6 +149,7 @@ const Sider = () => {
                 const pararAcao = await validarNavegacaoTela(e, item.url);
                 if (!pararAcao)
                   selecionarItem({ key: item.codigo.toString() }, true);
+                navigate(item.url);
               }}
             />
           ) : (
@@ -267,7 +270,11 @@ const Sider = () => {
                 id="perfil-edit"
                 to="/meus-dados"
                 onClick={async e => {
-                  await validarNavegacaoTela(e, '/meus-dados');
+                  const pararAcao = await validarNavegacaoTela(
+                    e,
+                    '/meus-dados'
+                  );
+                  if (!pararAcao) navigate('/meus-dados');
                 }}
               >
                 <i className="fas fa-user-edit" />

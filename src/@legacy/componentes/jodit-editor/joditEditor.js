@@ -4,7 +4,7 @@ import 'jodit/build/jodit.min.css';
 import PropTypes from 'prop-types';
 import React, { forwardRef, useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
-import { store } from '~/redux';
+import { store } from '@/core/redux';
 import { erro } from '~/servicos/alertas';
 import { urlBase } from '~/servicos/variaveis';
 import { Base } from '../colors';

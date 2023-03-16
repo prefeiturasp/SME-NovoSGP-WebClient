@@ -1,6 +1,6 @@
 import { Modal, notification } from 'antd';
 import { CANCELADO_USUARIO, TOKEN_EXPIRADO } from '~/constantes';
-import { store } from '../redux';
+import { store } from '@/core/redux';
 import {
   alertaConfirmar,
   alertaFechar,

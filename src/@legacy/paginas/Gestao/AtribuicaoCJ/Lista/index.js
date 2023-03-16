@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import shortid from 'shortid';
 import { useSelector } from 'react-redux';
 
-import history from '~/servicos/history';
 import RotasDto from '~/dtos/rotasDto';
 import AtribuicaoCJServico from '~/servicos/Paginas/AtribuicaoCJ';
 import { verificaSomenteConsulta } from '~/servicos/servico-navegacao';
@@ -14,8 +13,11 @@ import Filtro from './componentes/Filtro';
 
 import { PilulaEstilo } from './styles';
 import { SGP_BUTTON_NOVO } from '~/constantes/ids/button';
+import { useNavigate } from 'react-router-dom';
 
 function AtribuicaoCJLista() {
+  const navigate = useNavigate();
+
   const [itensSelecionados, setItensSelecionados] = useState([]);
   const [itens, setItens] = useState([]);
   const [filtro, setFiltro] = useState({});
@@ -47,10 +49,10 @@ function AtribuicaoCJLista() {
     },
   ];
 
-  const onClickVoltar = () => history.push('/');
+  const onClickVoltar = () => navigate('/');
 
   const onClickBotaoPrincipal = () =>
-    history.push(
+    navigate(
       `/gestao/atribuicao-cjs/novo?dreId=${filtro.DreId}&ueId=${filtro.UeId}&historico=${filtro.Historico}`
     );
 
@@ -59,7 +61,7 @@ function AtribuicaoCJLista() {
   };
 
   const onClickEditar = item => {
-    history.push(
+    navigate(
       `/gestao/atribuicao-cjs/editar?modalidadeId=${item.modalidadeId}&turmaId=` +
         `${item.turmaId}&dreId=${filtro.DreId}&ueId=${filtro.UeId}&anoLetivo=${filtro.AnoLetivo}&historico=${filtro.Historico}&usuarioRF=${filtro?.UsuarioRF}&professorNome=${filtro?.professorNome}`
     );

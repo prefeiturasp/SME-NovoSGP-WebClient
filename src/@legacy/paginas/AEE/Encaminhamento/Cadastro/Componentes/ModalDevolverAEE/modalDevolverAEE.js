@@ -2,19 +2,21 @@ import { Form, Formik } from 'formik';
 import PropTypes from 'prop-types';
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import shortid from 'shortid';
 import * as Yup from 'yup';
 import { CampoTexto, Colors, Loader, ModalConteudoHtml } from '~/componentes';
 import Button from '~/componentes/button';
 import { RotasDto } from '~/dtos';
 import { setExibirModalDevolverAEE } from '~/redux/modulos/encaminhamentoAEE/actions';
-import { confirmar, erros, history, sucesso } from '~/servicos';
+import { confirmar, erros, sucesso } from '~/servicos';
 import ServicoEncaminhamentoAEE from '~/servicos/Paginas/Relatorios/AEE/ServicoEncaminhamentoAEE';
 
 const ModalDevolverAEE = props => {
   const { match } = props;
 
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const exibirModalDevolverAEE = useSelector(
     store => store.encaminhamentoAEE.exibirModalDevolverAEE
@@ -29,9 +31,7 @@ const ModalDevolverAEE = props => {
   };
 
   const validacoes = Yup.object().shape({
-    motivo: Yup.string()
-      .nullable()
-      .required('Campo obrigatório'),
+    motivo: Yup.string().nullable().required('Campo obrigatório'),
   });
 
   const fecharModal = () => {
@@ -83,7 +83,7 @@ const ModalDevolverAEE = props => {
     if (retorno?.status === 200) {
       sucesso('Encaminhamento devolvido com sucesso');
       fecharModal();
-      history.push(RotasDto.RELATORIO_AEE_ENCAMINHAMENTO);
+      navigate(RotasDto.RELATORIO_AEE_ENCAMINHAMENTO);
     }
   };
 

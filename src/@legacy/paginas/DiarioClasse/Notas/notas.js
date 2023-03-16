@@ -2,6 +2,7 @@ import { Tabs } from 'antd';
 import { Form, Formik } from 'formik';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import * as Yup from 'yup';
 import { Colors, Grid, Loader, ModalConteudoHtml } from '~/componentes';
 import AlertaModalidadeInfantil from '~/componentes-sgp/AlertaModalidadeInfantil/alertaModalidadeInfantil';
@@ -42,7 +43,6 @@ import {
 } from '~/redux/modulos/notasConceitos/actions';
 import { confirmar, erros, sucesso } from '~/servicos/alertas';
 import api from '~/servicos/api';
-import history from '~/servicos/history';
 import ServicoPeriodoFechamento from '~/servicos/Paginas/Calendario/ServicoPeriodoFechamento';
 import ServicoNotaConceito from '~/servicos/Paginas/DiarioClasse/ServicoNotaConceito';
 import { verificaSomenteConsulta } from '~/servicos/servico-navegacao';
@@ -57,6 +57,7 @@ const { TabPane } = Tabs;
 const Notas = ({ match }) => {
   const usuario = useSelector(store => store.usuario);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const modalidadesFiltroPrincipal = useSelector(
     store => store.filtro.modalidades
@@ -478,7 +479,7 @@ const Notas = ({ match }) => {
   };
 
   const irParaHome = () => {
-    history.push(URL_HOME);
+    navigate(URL_HOME);
   };
 
   const montarBimestreParaSalvar = bimestreParaMontar => {

@@ -2,7 +2,7 @@ import { Col, Row } from 'antd';
 import { Form, Formik } from 'formik';
 import React, { useCallback, useContext, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { useLocation, useParams } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import shortid from 'shortid';
 import * as Yup from 'yup';
 import {
@@ -26,7 +26,6 @@ import {
   api,
   confirmar,
   erros,
-  history,
   ServicoCalendarios,
   ServicoEvento,
   setBreadcrumbManual,
@@ -80,6 +79,8 @@ const EventosCadastroForm = () => {
     setLimparRecorrencia,
   } = useContext(EventosCadastroContext);
 
+  const navigate = useNavigate();
+
   const [validacoes, setValidacoes] = useState({});
   const [listaFeriados, setListaFeriados] = useState([]);
   const [desabilitarOpcaoLetivo, setDesabilitarOpcaoLetivo] = useState(true);
@@ -87,10 +88,8 @@ const EventosCadastroForm = () => {
   const [recorrencia, setRecorrencia] = useState(null);
   const [showModalRecorrencia, setShowModalRecorrencia] = useState(false);
   const [auditoriaEventos, setAuditoriaEventos] = useState({});
-  const [
-    eventoTipoFeriadoSelecionado,
-    setEventoTipoFeriadoSelecionado,
-  ] = useState(false);
+  const [eventoTipoFeriadoSelecionado, setEventoTipoFeriadoSelecionado] =
+    useState(false);
   const [
     eventoTipoLocalOcorrenciaSMESelecionado,
     setEventoTipoLocalOcorrenciaSMESelecionado,
@@ -129,7 +128,6 @@ const EventosCadastroForm = () => {
       return;
     }
     setDesabilitarCampos(desabilitar);
-
   }, [
     somenteConsulta,
     eventoId,
@@ -264,7 +262,6 @@ const EventosCadastroForm = () => {
       resetarTela();
       setExecutaResetarTela(false);
     }
-
   }, [executaResetarTela]);
 
   const onChangeUe = () => {
@@ -301,7 +298,6 @@ const EventosCadastroForm = () => {
     if (recorrencia) {
       onCloseRecorrencia();
     }
-
   }, [recorrencia]);
 
   const onClickCopiarEvento = async () => {
@@ -402,7 +398,7 @@ const EventosCadastroForm = () => {
             } com sucesso. Serão cadastrados eventos recorrentes, em breve você receberá uma notificação com o resultado do processamento.`
           );
         }
-        history.push(urlTelaListagemEventos());
+        navigate(urlTelaListagemEventos());
       }
     };
 
@@ -619,7 +615,12 @@ const EventosCadastroForm = () => {
 
       verificarAlteracaoLetivoEdicao(listaTipoEvento, evento.data.tipoEventoId);
 
-      onChangeTipoEvento(listaEventoAtual, evento.data.tipoEventoId,undefined, evento.data.id);
+      onChangeTipoEvento(
+        listaEventoAtual,
+        evento.data.tipoEventoId,
+        undefined,
+        evento.data.id
+      );
     }
   };
 
@@ -640,7 +641,6 @@ const EventosCadastroForm = () => {
     if (eventoId) {
       consultaPorId(eventoId, lista);
     }
-
   }, [eventoId]);
 
   useEffect(() => {

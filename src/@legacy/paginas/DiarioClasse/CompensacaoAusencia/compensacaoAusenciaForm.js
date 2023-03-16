@@ -17,7 +17,6 @@ import modalidade from '~/dtos/modalidade';
 import RotasDto from '~/dtos/rotasDto';
 import { confirmar, erro, erros, sucesso } from '~/servicos/alertas';
 import { setBreadcrumbManual } from '~/servicos/breadcrumb-services';
-import history from '~/servicos/history';
 import ServicoCompensacaoAusencia from '~/servicos/Paginas/DiarioClasse/ServicoCompensacaoAusencia';
 import ServicoDisciplina from '~/servicos/Paginas/ServicoDisciplina';
 import { verificaSomenteConsulta } from '~/servicos/servico-navegacao';
@@ -50,8 +49,11 @@ import {
   SGP_INPUT_NOME_ATIVIDADE,
   SGP_INPUT_NOME_ESTUDANTE,
 } from '~/constantes/ids/input';
+import { useNavigate } from 'react-router-dom';
 
 const CompensacaoAusenciaForm = ({ match }) => {
+  const navigate = useNavigate();
+
   const usuario = useSelector(store => store.usuario);
 
   const permissoesTela = usuario.permissoes[RotasDto.COMPENSACAO_AUSENCIA];
@@ -86,22 +88,14 @@ const CompensacaoAusenciaForm = ({ match }) => {
   const [exibirCopiarCompensacao, setExibirCopiarCompensacao] = useState(false);
   const [disciplinaSelecionada, setDisciplinaSelecionada] = useState(undefined);
   const [foraDoPeriodo, setForaDoPeriodo] = useState(false);
-  const [
-    turmaSelecionadaFiltroPrincipal,
-    setTurmaSelecionadaFiltroPrincipal,
-  ] = useState(undefined);
-  const [
-    idsAlunosAusenciaCompensadas,
-    setIdsAlunosAusenciaCompensadas,
-  ] = useState([]);
-  const [
-    alunosAusenciaTurmaOriginal,
-    setAlunosAusenciaTurmaOriginal,
-  ] = useState([]);
-  const [
-    carregandoListaAlunosFrequencia,
-    setCarregandoListaAlunosFrequencia,
-  ] = useState(false);
+  const [turmaSelecionadaFiltroPrincipal, setTurmaSelecionadaFiltroPrincipal] =
+    useState(undefined);
+  const [idsAlunosAusenciaCompensadas, setIdsAlunosAusenciaCompensadas] =
+    useState([]);
+  const [alunosAusenciaTurmaOriginal, setAlunosAusenciaTurmaOriginal] =
+    useState([]);
+  const [carregandoListaAlunosFrequencia, setCarregandoListaAlunosFrequencia] =
+    useState(false);
 
   const [compensacoesParaCopiar, setCompensacoesParaCopiar] = useState({
     compensacaoOrigemId: 0,
@@ -165,12 +159,13 @@ const CompensacaoAusenciaForm = ({ match }) => {
 
   const podeAlterarNoPeriodo = useCallback(
     async bimestre => {
-      const podeAlterar = await ServicoCompensacaoAusencia.verificarSePodeAlterarNoPeriodo(
-        turmaSelecionada.turma,
-        bimestre
-      ).catch(e => {
-        erros(e);
-      });
+      const podeAlterar =
+        await ServicoCompensacaoAusencia.verificarSePodeAlterarNoPeriodo(
+          turmaSelecionada.turma,
+          bimestre
+        ).catch(e => {
+          erros(e);
+        });
       if (podeAlterar && podeAlterar.data) {
         setDesabilitarCampos(false);
         return true;
@@ -281,12 +276,13 @@ const CompensacaoAusenciaForm = ({ match }) => {
           String(codigoDisciplinaSelecionada)
       );
       if (disciplina && disciplina.regencia) {
-        const disciplinasRegencia = await ServicoDisciplina.obterDisciplinasPlanejamento(
-          codigoDisciplinaSelecionada,
-          turmaSelecionada.turma,
-          false,
-          disciplina.regencia
-        ).catch(e => erros(e));
+        const disciplinasRegencia =
+          await ServicoDisciplina.obterDisciplinasPlanejamento(
+            codigoDisciplinaSelecionada,
+            turmaSelecionada.turma,
+            false,
+            disciplina.regencia
+          ).catch(e => erros(e));
 
         if (
           disciplinasRegencia &&
@@ -448,13 +444,14 @@ const CompensacaoAusenciaForm = ({ match }) => {
       const valorDisciplina =
         disciplina > 0 ? disciplina : form.values.disciplinaId;
 
-      const exucutandoCalculoFrequencia = await ServicoCompensacaoAusencia.obterStatusCalculoFrequencia(
-        turmaSelecionada.turma,
-        valorDisciplina,
-        bimestre
-      ).catch(e => {
-        erros(e);
-      });
+      const exucutandoCalculoFrequencia =
+        await ServicoCompensacaoAusencia.obterStatusCalculoFrequencia(
+          turmaSelecionada.turma,
+          valorDisciplina,
+          bimestre
+        ).catch(e => {
+          erros(e);
+        });
       if (
         exucutandoCalculoFrequencia &&
         exucutandoCalculoFrequencia.status === 200
@@ -566,7 +563,7 @@ const CompensacaoAusenciaForm = ({ match }) => {
 
   useEffect(() => {
     if (!turmaSelecionada.turma) {
-      history.push('/diario-classe/compensacao-ausencia');
+      navigate('/diario-classe/compensacao-ausencia');
     }
 
     if (
@@ -626,7 +623,7 @@ const CompensacaoAusenciaForm = ({ match }) => {
 
         if (excluir && excluir.status === 200) {
           sucesso('Compensação excluída com sucesso.');
-          history.push('/diario-classe/compensacao-ausencia');
+          navigate('/diario-classe/compensacao-ausencia');
         }
       }
     }
@@ -714,10 +711,10 @@ const CompensacaoAusenciaForm = ({ match }) => {
       if (confirmado) {
         validaAntesDoSubmit(form);
       } else {
-        history.push('/diario-classe/compensacao-ausencia');
+        navigate('/diario-classe/compensacao-ausencia');
       }
     } else {
-      history.push('/diario-classe/compensacao-ausencia');
+      navigate('/diario-classe/compensacao-ausencia');
     }
   };
 
@@ -771,7 +768,7 @@ const CompensacaoAusenciaForm = ({ match }) => {
       } else {
         sucesso('Compensação criada com sucesso.');
       }
-      history.push('/diario-classe/compensacao-ausencia');
+      navigate('/diario-classe/compensacao-ausencia');
     }
   };
 
@@ -785,15 +782,15 @@ const CompensacaoAusenciaForm = ({ match }) => {
 
   const onClickAdicionarAlunos = () => {
     if (!desabilitarCampos && idsAlunos && idsAlunos.length) {
-      const novaListaAlunosAusenciaCompensada = obterListaAlunosComIdsSelecionados(
-        alunosAusenciaTurma,
-        idsAlunos
-      ).map(item => {
-        return {
-          ...item,
-          alunoSemSalvar: true,
-        };
-      });
+      const novaListaAlunosAusenciaCompensada =
+        obterListaAlunosComIdsSelecionados(alunosAusenciaTurma, idsAlunos).map(
+          item => {
+            return {
+              ...item,
+              alunoSemSalvar: true,
+            };
+          }
+        );
 
       const novaListaAlunos = obterListaAlunosSemIdsSelecionados(
         alunosAusenciaTurma,
@@ -850,10 +847,11 @@ const CompensacaoAusenciaForm = ({ match }) => {
           idsAlunosAusenciaCompensadas
         );
 
-        const novaListaAlunosAusenciaCompensada = obterListaAlunosSemIdsSelecionados(
-          alunosAusenciaCompensada,
-          idsAlunosAusenciaCompensadas
-        );
+        const novaListaAlunosAusenciaCompensada =
+          obterListaAlunosSemIdsSelecionados(
+            alunosAusenciaCompensada,
+            idsAlunosAusenciaCompensadas
+          );
 
         onChangeCampos();
         setAlunosAusenciaTurmaOriginal([...novaListaAlunosOriginal]);

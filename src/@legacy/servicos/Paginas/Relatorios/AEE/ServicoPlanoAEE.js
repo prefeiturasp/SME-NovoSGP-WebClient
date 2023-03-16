@@ -2,7 +2,7 @@ import * as moment from 'moment';
 import QuestionarioDinamicoFuncoes from '~/componentes-sgp/QuestionarioDinamico/Funcoes/QuestionarioDinamicoFuncoes';
 import situacaoPlanoAEE from '~/dtos/situacaoPlanoAEE';
 import tipoQuestao from '~/dtos/tipoQuestao';
-import { store } from '~/redux';
+import { store } from '@/core/redux';
 import {
   limparDadosParecer,
   setAtualizarDados,
@@ -65,11 +65,8 @@ class ServicoPlanoAEE {
     const { dispatch } = store;
 
     const state = store.getState();
-    const {
-      questionarioDinamico,
-      collapseLocalizarEstudante,
-      planoAEE,
-    } = state;
+    const { questionarioDinamico, collapseLocalizarEstudante, planoAEE } =
+      state;
     const { formsQuestionarioDinamico } = questionarioDinamico;
 
     const { dadosCollapseLocalizarEstudante } = collapseLocalizarEstudante;
@@ -275,10 +272,8 @@ class ServicoPlanoAEE {
     const { dispatch } = store;
     const state = store.getState();
     const { questionarioDinamico } = state;
-    const {
-      planoAEEDados,
-      questionarioDinamicoEmEdicao,
-    } = questionarioDinamico;
+    const { planoAEEDados, questionarioDinamicoEmEdicao } =
+      questionarioDinamico;
 
     if (questionarioDinamicoEmEdicao && key !== '1') {
       const confirmou = await confirmar(

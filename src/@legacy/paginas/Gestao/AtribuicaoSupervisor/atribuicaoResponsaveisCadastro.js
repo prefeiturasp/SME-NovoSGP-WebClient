@@ -1,6 +1,6 @@
 import { Col, Row } from 'antd';
 import React, { useCallback, useEffect, useState } from 'react';
-import { useRouteMatch } from 'react-router-dom';
+import { useMatch, useNavigate } from 'react-router-dom';
 import { Button, Card, Colors, Loader, SelectComponent } from '~/componentes';
 import { Cabecalho } from '~/componentes-sgp';
 import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
@@ -11,12 +11,11 @@ import {
 import { SGP_SELECT_DRE } from '~/constantes/ids/select';
 import Auditoria from '~/componentes/auditoria';
 import RotasDto from '~/dtos/rotasDto';
-import { store } from '~/redux';
+import { store } from '@/core/redux';
 import {
   AbrangenciaServico,
   confirmar,
   erros,
-  history,
   setBreadcrumbManual,
   sucesso,
   erro,
@@ -30,7 +29,8 @@ const AtribuicaoResponsaveisCadastro = () => {
   const permissoesTela =
     usuario.permissoes[RotasDto.ATRIBUICAO_RESPONSAVEIS_LISTA];
 
-  const routeMatch = useRouteMatch();
+  const routeMatch = useMatch();
+  const navigate = useNavigate();
 
   const [carregandoDres, setCarregandoDres] = useState(false);
   const [listaDres, setListaDres] = useState([]);
@@ -38,9 +38,8 @@ const AtribuicaoResponsaveisCadastro = () => {
 
   const [tipoResponsavel, setTipoResponsavel] = useState();
   const [listaTipoResponsavel, setListaTipoResponsavel] = useState([]);
-  const [carregandoTipoResponsavel, setCarregandoTipoResponsavel] = useState(
-    false
-  );
+  const [carregandoTipoResponsavel, setCarregandoTipoResponsavel] =
+    useState(false);
 
   const [responsavel, setResponsavel] = useState();
   const [codigoUeSelecionadoGrid, setCodigoUeSelecionadoGrid] = useState('0');
@@ -93,7 +92,7 @@ const AtribuicaoResponsaveisCadastro = () => {
     ServicoResponsaveis.salvarAtribuicao(atribuicao)
       .then(() => {
         sucesso('Atribuição realizada com sucesso.');
-        history.push(RotasDto.ATRIBUICAO_RESPONSAVEIS_LISTA);
+        navigate(RotasDto.ATRIBUICAO_RESPONSAVEIS_LISTA);
       })
       .catch(e => {
         if (e.response.status === 601) {
@@ -115,10 +114,10 @@ const AtribuicaoResponsaveisCadastro = () => {
       if (confirmado) {
         salvarAtribuicao();
       } else {
-        history.push(RotasDto.ATRIBUICAO_RESPONSAVEIS_LISTA);
+        navigate(RotasDto.ATRIBUICAO_RESPONSAVEIS_LISTA);
       }
     } else {
-      history.push(RotasDto.ATRIBUICAO_RESPONSAVEIS_LISTA);
+      navigate(RotasDto.ATRIBUICAO_RESPONSAVEIS_LISTA);
     }
   };
 
@@ -328,7 +327,6 @@ const AtribuicaoResponsaveisCadastro = () => {
       setTipoResponsavel();
       setResponsavel();
     }
-
   }, [dreId]);
 
   useEffect(() => {
@@ -339,7 +337,6 @@ const AtribuicaoResponsaveisCadastro = () => {
       setResponsavel();
       setUesAtribuidas([]);
     }
-
   }, [dreId, responsavel, obterListaUES]);
 
   useEffect(() => {

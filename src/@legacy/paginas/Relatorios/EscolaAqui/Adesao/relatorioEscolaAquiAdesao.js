@@ -4,7 +4,6 @@ import { Card, Loader, SelectComponent, RadioGroupButton } from '~/componentes';
 import { Cabecalho } from '~/componentes-sgp';
 
 import {
-  history,
   erros,
   sucesso,
   ServicoFiltroRelatorio,
@@ -14,8 +13,11 @@ import {
 import { URL_HOME } from '~/constantes';
 import { OPCAO_TODOS } from '~/constantes/constantes';
 import BotoesAcaoRelatorio from '~/componentes-sgp/botoesAcaoRelatorio';
+import { useNavigate } from 'react-router-dom';
 
 const RelatorioEscolaAquiAdesao = () => {
+  const navigate = useNavigate();
+
   const [exibirLoader, setExibirLoader] = useState(false);
   const [listaDres, setListaDres] = useState([]);
   const [listaUes, setListaUes] = useState([]);
@@ -25,10 +27,8 @@ const RelatorioEscolaAquiAdesao = () => {
   const [opcaoListaUsuarios, setOpcaoListaUsuarios] = useState(1);
 
   const [desabilitarBtnGerar, setDesabilitarBtnGerar] = useState(true);
-  const [
-    desabilitarRadioListarUsuario,
-    setDesabilitarRadioListarUsuario,
-  ] = useState(true);
+  const [desabilitarRadioListarUsuario, setDesabilitarRadioListarUsuario] =
+    useState(true);
   const [clicouBotaoGerar, setClicouBotaoGerar] = useState(false);
 
   const [modoEdicao, setModoEdicao] = useState(false);
@@ -41,7 +41,7 @@ const RelatorioEscolaAquiAdesao = () => {
   ];
 
   const voltar = () => {
-    history.push(URL_HOME);
+    navigate(URL_HOME);
   };
 
   const cancelar = () => {
