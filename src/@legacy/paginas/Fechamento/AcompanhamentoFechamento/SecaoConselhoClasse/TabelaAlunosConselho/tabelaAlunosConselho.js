@@ -26,16 +26,21 @@ const TabelaAlunosConselho = props => {
   const [expandedRowKeys, setExpandedRowKeys] = useState([]);
   const [dadosComCores, setDadosComCores] = useState([]);
 
-  const obterCorSituacaoFechamento = situacaoFechamentoCodigo =>
-    Object.keys(statusAcompanhamentoConselhoClasse)
+  const obterCorSituacaoFechamento = situacaoFechamentoCodigo => {
+    const colors = Object.keys(statusAcompanhamentoConselhoClasse)
       .map(
         item =>
           statusAcompanhamentoConselhoClasse[item].id ===
             situacaoFechamentoCodigo &&
           statusAcompanhamentoConselhoClasse[item].cor
       )
-      .filter(item => item)
-      .reduce(item => item);
+      .filter(item => item);
+
+    if (colors?.length) {
+      return colors.reduce(item => item);
+    }
+    return '';
+  };
 
   const montarDadosComCores = useCallback(dados => {
     const novoMap = dados.map(item => {
@@ -194,13 +199,14 @@ const TabelaAlunosConselho = props => {
     if (expandir) {
       setCarregandoComponentes(true);
       setExpandedRowKeys([aluno?.alunoCodigo]);
-      const resposta = await ServicoAcompanhamentoFechamento.obterDetalhamentoComponentesCurricularesAluno(
-        turmaId,
-        bimestre,
-        aluno.alunoCodigo
-      )
-        .catch(e => erros(e))
-        .finally(() => setCarregandoComponentes(false));
+      const resposta =
+        await ServicoAcompanhamentoFechamento.obterDetalhamentoComponentesCurricularesAluno(
+          turmaId,
+          bimestre,
+          aluno.alunoCodigo
+        )
+          .catch(e => erros(e))
+          .finally(() => setCarregandoComponentes(false));
 
       if (resposta?.data?.length) {
         setDadosComponentes(resposta.data);
