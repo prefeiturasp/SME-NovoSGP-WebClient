@@ -1,6 +1,4 @@
-/* eslint-disable react/prop-types */
 import React, { useState, useEffect, useCallback } from 'react';
-
 import { ListaPaginada } from '~/componentes';
 import { OPCAO_TODOS } from '~/constantes';
 import { SGP_TABLE_ENCAMINHAMENTO_NAAPA } from '~/constantes/ids/table';
@@ -22,6 +20,7 @@ const ListaEncaminhamentoNAAPAPaginada = props => {
     consideraHistorico,
     dataAberturaQueixaFim,
     dataAberturaQueixaInicio,
+    onSelecionarItems,
   } = props;
 
   const navigate = useNavigate();
@@ -121,6 +120,8 @@ const ListaEncaminhamentoNAAPAPaginada = props => {
         navigate(`${RotasDto.ENCAMINHAMENTO_NAAPA}/${linha?.id}`);
       }}
       filtroEhValido={filtroEhValido}
+      multiSelecao
+      selecionarItems={valores => onSelecionarItems(valores)}
     />
   ) : (
     <></>

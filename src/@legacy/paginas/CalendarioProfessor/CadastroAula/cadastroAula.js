@@ -339,13 +339,15 @@ function CadastroDeAula({ match, location }) {
                 (c.regencia &&
                   String(c.codDisciplinaPai) === respostaAula.disciplinaId)
             );
+
             if (
-              respostaAula.disciplinaId.length <
-              String(componenteSelecionado.codigoComponenteCurricular).length
+              componenteSelecionado.codigoComponenteCurricular ==
+              respostaAula.disciplinaId
             ) {
-              componentes.forEach(c => c.codigoComponenteCurricular === c.id);
-              setListaComponentes(componentes);
+              respostaAula.disciplinaId = String(componenteSelecionado.id);
+              setAula(respostaAula);
             }
+
             if (componenteSelecionado) {
               carregarGrade(
                 componenteSelecionado,
@@ -371,7 +373,7 @@ function CadastroDeAula({ match, location }) {
     } else if (componentes?.length === 1) {
       setAula({
         ...aulaInicial,
-        disciplinaId: String(componentes[0].codigoComponenteCurricular),
+        disciplinaId: String(componentes[0].id),
       });
 
       carregarGrade(
@@ -388,8 +390,9 @@ function CadastroDeAula({ match, location }) {
       valoresForm.disciplinaId
     );
     if (Number(valoresForm.quantidade) === 0) valoresForm.quantidade = 1;
-
     if (componente) valoresForm.disciplinaNome = componente.nome;
+    if (componente?.territorioSaber)
+      valoresForm.disciplinaId = componente.codigoComponenteCurricular;
     setCarregandoDados(true);
     servicoCadastroAula
       .salvar(id, valoresForm, componente.regencia || false)
@@ -420,7 +423,7 @@ function CadastroDeAula({ match, location }) {
       return {
         ...aulaState,
         disciplinaId: componenteSelecionado
-          ? String(componenteSelecionado.codigoComponenteCurricular)
+          ? String(componenteSelecionado.id)
           : null,
         disciplinaCompartilhadaId: componenteSelecionado?.compartilhada
           ? componenteSelecionado.componenteCurricularId
@@ -800,7 +803,7 @@ function CadastroDeAula({ match, location }) {
                           listaComponentes[0]?.regencia &&
                           listaComponentes[0]?.codDisciplinaPai !== 0
                             ? 'codDisciplinaPai'
-                            : 'codigoComponenteCurricular'
+                            : 'id'
                         }
                         valueText="nome"
                         placeholder="Selecione um componente curricular"

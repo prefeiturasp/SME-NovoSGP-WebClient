@@ -1,4 +1,3 @@
-/* eslint-disable react/prop-types */
 import { Col, Row } from 'antd';
 import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
@@ -28,6 +27,7 @@ import {
 } from '~/redux/modulos/encaminhamentoNAAPA/actions';
 import QuestionarioDinamicoFuncoes from '~/componentes-sgp/QuestionarioDinamico/Funcoes/QuestionarioDinamicoFuncoes';
 import situacaoNAAPA from '~/dtos/situacaoNAAPA';
+import BtnImpressaoEncaminhamentoNAAPA from '../componentes/btnImpressaoNAAPA';
 
 const CadastroEncaminhamentoNAAPABotoesAcao = props => {
   const { mostrarBusca, setMostrarBusca } = props;
@@ -36,7 +36,6 @@ const CadastroEncaminhamentoNAAPABotoesAcao = props => {
   const { pathname } = useLocation();
   const navigate = useNavigate();
   const dispatch = useDispatch();
-
   const aluno = useSelector(state => state.localizarEstudante.aluno);
 
   const usuario = useSelector(state => state.usuario);
@@ -201,7 +200,11 @@ const CadastroEncaminhamentoNAAPABotoesAcao = props => {
       <Col>
         <BotaoVoltarPadrao onClick={() => onClickVoltar()} />
       </Col>
-
+      <Col>
+        <BtnImpressaoEncaminhamentoNAAPA
+          idsSelecionados={encaminhamentoId ? [encaminhamentoId] : []}
+        />
+      </Col>
       {mostrarBusca ? (
         <Col>
           <Button
