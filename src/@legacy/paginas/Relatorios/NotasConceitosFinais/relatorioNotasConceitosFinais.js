@@ -260,7 +260,8 @@ const RelatorioNotasConceitosFinais = () => {
         const respota = await AbrangenciaServico.buscarAnosEscolares(
           ue,
           mod,
-          consideraHistorico
+          consideraHistorico,
+          anoLetivoSelecionado
         ).catch(e => {
           erros(e);
           setCarregandoAnosEscolares(false);
@@ -280,8 +281,7 @@ const RelatorioNotasConceitosFinais = () => {
         setCarregandoAnosEscolares(false);
       }
     },
-
-    []
+    [consideraHistorico]
   );
 
   useEffect(() => {

@@ -5,12 +5,11 @@ class ServicoHistoricoEscolar {
   gerar = async params => api.post(`${URL_PADRAO}/gerar`, params);
 
   obterObservacaoComplementar = codigoAluno =>
-    api.get(`${URL_PADRAO}/observacao-complementar/${codigoAluno}`);
+    api.get(`${URL_PADRAO}/aluno/${codigoAluno}/observacao-complementar`);
 
   salvarObservacaoComplementar = (codigoAluno, observacao) =>
-    api.post(`${URL_PADRAO}/observacao-complementar`, {
-      codigoAluno,
-      observacao,
+    api.post(`${URL_PADRAO}/aluno/${codigoAluno}/observacao-complementar`, {
+      observacao
     });
 }
 

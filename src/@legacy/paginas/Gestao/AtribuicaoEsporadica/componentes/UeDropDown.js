@@ -39,7 +39,7 @@ function UeDropDown({
       preencherLista(lista);
       if (lista.length === 1) {
         form.setFieldValue('ueId', lista[0].valor);
-        onChange(lista[0].valor, lista[0].ehInfantil, listaUes);
+        onChange(lista[0].valor, lista[0].ehInfantil, lista);
       }
     }
   }
