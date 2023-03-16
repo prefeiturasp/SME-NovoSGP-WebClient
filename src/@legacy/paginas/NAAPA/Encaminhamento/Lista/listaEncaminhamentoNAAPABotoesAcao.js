@@ -1,4 +1,3 @@
-/* eslint-disable react/prop-types */
 import { Col, Row } from 'antd';
 import React from 'react';
 import { Button, Colors } from '~/componentes';
@@ -7,10 +6,12 @@ import { SGP_BUTTON_NOVO } from '~/constantes/ids/button';
 import { URL_HOME } from '~/constantes';
 import { RotasDto } from '~/dtos';
 import { useNavigate } from 'react-router-dom';
+import BtnImpressaoEncaminhamentoNAAPA from '../componentes/btnImpressaoNAAPA';
 
 const ListaEncaminhamentoNAAPABotoesAcao = props => {
-  const { somenteConsulta, podeIncluir } = props;
   const navigate = useNavigate();
+
+  const { somenteConsulta, podeIncluir, idsSelecionados } = props;
 
   const desabilitarNovo = somenteConsulta || !podeIncluir;
 
@@ -23,7 +24,9 @@ const ListaEncaminhamentoNAAPABotoesAcao = props => {
       <Col>
         <BotaoVoltarPadrao onClick={() => onClickVoltar()} />
       </Col>
-
+      <Col>
+        <BtnImpressaoEncaminhamentoNAAPA idsSelecionados={idsSelecionados} />
+      </Col>
       <Col>
         <Button
           bold

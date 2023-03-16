@@ -1,7 +1,9 @@
+import { Tooltip } from 'antd';
 import PropTypes from 'prop-types';
 import React from 'react';
 import { useSelector } from 'react-redux';
 import shortid from 'shortid';
+import { MarcadorTriangulo } from '~/componentes';
 import { tratarStringComponenteCurricularNome } from '~/utils';
 
 const LinhaConceitoFinal = props => {
@@ -11,40 +13,37 @@ const LinhaConceitoFinal = props => {
 
   const { indexLinha, montarCampoNotaConceitoFinal, aluno } = props;
 
-  return (
-    <>
-      {expandirLinha[indexLinha] ? (
-        <>
-          <tr className="linha-conceito-regencia">
-            <td colSpan="7">
-              <div className="coluna-regencia">
-                {aluno &&
-                aluno.notasConceitoFinal &&
-                aluno.notasConceitoFinal.length
-                  ? aluno.notasConceitoFinal.map((item, index) => {
-                      const disciplinaTratada = tratarStringComponenteCurricularNome(
-                        item.disciplina
-                      );
+  return expandirLinha[indexLinha] ? (
+    <tr>
+      <td colSpan="7" style={{ padding: 0 }}>
+        {aluno &&
+        aluno.notasConceitoFinal &&
+        aluno.notasConceitoFinal.length ? (
+          aluno.notasConceitoFinal.map((item, index) => {
+            const disciplinaTratada = tratarStringComponenteCurricularNome(
+              item.disciplina
+            );
 
-                      return (
-                        <div
-                          style={{ paddingRight: '22px' }}
-                          key={shortid.generate()}
-                          name={`${disciplinaTratada}${aluno?.codigo}`}
-                        >
-                          {montarCampoNotaConceitoFinal(item.disciplina, index)}
-                        </div>
-                      );
-                    })
-                  : ''}
-              </div>
-            </td>
-          </tr>
-        </>
-      ) : (
-        ''
-      )}
-    </>
+            return (
+              <td key={shortid.generate()} style={{ position: 'relative' }}>
+                <div name={`${disciplinaTratada}${aluno?.codigo}`}>
+                  {montarCampoNotaConceitoFinal(item.disciplina, index)}
+                </div>
+                {item?.emAprovacao && (
+                  <Tooltip title="Aguardando aprovação">
+                    <MarcadorTriangulo />
+                  </Tooltip>
+                )}
+              </td>
+            );
+          })
+        ) : (
+          <></>
+        )}
+      </td>
+    </tr>
+  ) : (
+    <></>
   );
 };
 

@@ -182,7 +182,7 @@ const CamposFiltrarDadosFrequenciaPlanoAula = () => {
       componenteCurricular
     ) {
       setCodigoComponenteCurricular(
-        String(componenteCurricular.codigoComponenteCurricular)
+        String(componenteCurricular.id)
       );
     } else {
       setCodigoComponenteCurricular(undefined);
@@ -207,9 +207,9 @@ const CamposFiltrarDadosFrequenciaPlanoAula = () => {
         resetarInfomacoes();
         if (codigoComponenteCurricularId) {
           const componente = listaComponenteCurricular.find(
-            item =>
-              String(item.codigoComponenteCurricular) ===
-              codigoComponenteCurricularId
+            (item) =>
+              String(item.codigoComponenteCurricular) === codigoComponenteCurricularId ||
+              String(item.id) === codigoComponenteCurricularId
           );
           dispatch(setComponenteCurricularFrequenciaPlanoAula(componente));
         } else {
@@ -410,7 +410,7 @@ const CamposFiltrarDadosFrequenciaPlanoAula = () => {
         <SelectComponent
           id={SGP_SELECT_COMPONENTE_CURRICULAR}
           lista={listaComponenteCurricular}
-          valueOption="codigoComponenteCurricular"
+          valueOption="id"
           valueText="nome"
           valueSelect={codigoComponenteCurricular}
           onChange={onChangeComponenteCurricular}

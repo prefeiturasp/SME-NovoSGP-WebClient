@@ -413,7 +413,7 @@ const Notas = ({ match }) => {
       const disciplina = disciplinas.data[0];
       setPodeLancaNota(disciplina.lancaNota);
       setEhRegencia(disciplina.regencia);
-      setDisciplinaSelecionada(String(disciplina.codigoComponenteCurricular));
+      setDisciplinaSelecionada(String(disciplina.id));
       setDesabilitarDisciplina(true);
     }
     if (match?.params?.disciplinaId && match?.params?.bimestre) {
@@ -464,6 +464,7 @@ const Notas = ({ match }) => {
   useEffect(() => {
     if (usuario?.turmaSelecionada?.turma && disciplinaSelecionada) {
       obterPeriodos();
+      obterDisciplinas();
     } else {
       resetarTela();
     }
@@ -664,20 +665,29 @@ const Notas = ({ match }) => {
   ) => {
     if (dadosBimestreAtualizar?.alunos?.length) {
       dadosBimestreAtualizar.alunos.forEach(aluno => {
-        const alunoAlterado = dadosAlunosAlterados?.notaConceitoAlunos?.find(
-          a => a?.codigoAluno === aluno?.id
-        );
-        const atualizarEmAprovacao =
-          alunoAlterado && aluno?.notasBimestre?.length;
-
-        if (atualizarEmAprovacao) {
+        if (aluno?.notasBimestre?.length) {
           aluno.notasBimestre.forEach(nota => {
             if (ehRegencia) {
-              if (alunoAlterado?.disciplinaId === nota?.disciplinaId) {
+              const ehNotaDisciplinaAlterada =
+                dadosAlunosAlterados?.notaConceitoAlunos?.find(
+                  a =>
+                    a?.codigoAluno === aluno?.id &&
+                    a?.disciplinaId &&
+                    nota?.disciplinaId &&
+                    a?.disciplinaId === nota?.disciplinaId
+                );
+
+              if (ehNotaDisciplinaAlterada) {
                 nota.emAprovacao = true;
               }
             } else {
-              nota.emAprovacao = true;
+              const ehNotaAlterada =
+                dadosAlunosAlterados?.notaConceitoAlunos?.find(
+                  a => a?.codigoAluno === aluno?.id
+                );
+              if (ehNotaAlterada) {
+                nota.emAprovacao = true;
+              }
             }
           });
         }
@@ -1445,7 +1455,7 @@ const Notas = ({ match }) => {
                   id={SGP_SELECT_COMPONENTE_CURRICULAR}
                   name="disciplinaId"
                   lista={listaDisciplinas}
-                  valueOption="codigoComponenteCurricular"
+                  valueOption="id"
                   valueText="nome"
                   valueSelect={disciplinaSelecionada}
                   onChange={onChangeDisciplinas}

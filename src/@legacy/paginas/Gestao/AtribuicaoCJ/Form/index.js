@@ -4,7 +4,7 @@ import { isEqual } from 'lodash';
 import queryString from 'query-string';
 import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import RotasDto from '~/dtos/rotasDto';
 import { erro, sucesso, confirmar } from '~/servicos/alertas';
@@ -42,9 +42,11 @@ import {
 } from '~/utils/funcoes/gerais';
 import { SGP_BUTTON_SALVAR_ALTERAR } from '~/constantes/ids/button';
 import { verificaSomenteConsulta } from '~/servicos';
+import { setRecarregarFiltroPrincipal } from '~/redux/modulos/usuario/actions';
 import { useNavigate } from 'react-router-dom';
 
 function AtribuicaoCJForm({ match, location }) {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const anoAtual = window.moment().format('YYYY');
@@ -124,6 +126,7 @@ function AtribuicaoCJForm({ match, location }) {
       if (data || status === 200) {
         setCarregando(false);
         sucesso('Atribuição de CJ salva com sucesso.');
+        dispatch(setRecarregarFiltroPrincipal(true));
         navigate('/gestao/atribuicao-cjs');
         obterPerfis(usuario.rf);
       }

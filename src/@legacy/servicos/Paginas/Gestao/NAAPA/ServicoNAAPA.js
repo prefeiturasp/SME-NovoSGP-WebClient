@@ -45,6 +45,10 @@ class ServicoNAAPA {
       }`
     );
 
+  imprimir = idsSelecionados =>
+      api.post(`${URL_PADRAO}/imprimir-detalhado`, { encaminhamentoNaapaIds: idsSelecionados });
+  
+
   guardarSecaoEmEdicao = secaoId => {
     const { dispatch } = store;
 
@@ -359,6 +363,10 @@ class ServicoNAAPA {
     const params = { encaminhamentoId, motivoEncerramento };
     return api.post(`${URL_PADRAO}/encerrar`, params);
   };
+
+  obterPortasEntrada = () => api.get(`${URL_PADRAO}/portas-entrada`);
+
+  obterFluxosAlerta = () => api.get(`${URL_PADRAO}/fluxos-alerta`);
 }
 
 export default new ServicoNAAPA();
