@@ -93,6 +93,10 @@ export default createGlobalStyle`
     opacity: 0.6 !important;
   }
 
+  .ant-input-clear-icon span {
+    color: rgba(0, 0, 0, 0.25) !important;
+  }
+
   @media (max-width: 544px) {
 
     .hidden-xs-down{
