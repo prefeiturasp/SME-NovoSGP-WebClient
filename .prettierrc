@@ -7,5 +7,16 @@
   "bracketSameLine": false,
   "useTabs": false,
   "arrowParens": "always",
-  "endOfLine": "auto"
+  "endOfLine": "auto",
+  "overrides": [
+    {
+      "files": ["src/**/*.js"],
+      "options": {
+        "trailingComma": "es5",
+        "printWidth": 80,
+        "arrowParens": "avoid",
+        "endOfLine": "auto"
+      }
+    }
+  ]
 }
