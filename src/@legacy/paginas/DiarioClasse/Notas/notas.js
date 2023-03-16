@@ -470,6 +470,7 @@ const Notas = ({ match }) => {
   useEffect(() => {
     if (usuario?.turmaSelecionada?.turma && disciplinaSelecionada) {
       obterPeriodos();
+      obterDisciplinas();
     } else {
       resetarTela();
     }
