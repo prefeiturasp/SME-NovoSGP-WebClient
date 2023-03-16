@@ -10,7 +10,7 @@ const DashboardNAAPATabs = () => {
 
   const [tabSelecionada, setTabSelecionada] = useState();
 
-  const EVASAO_ESCOLAR = '1';
+  const RISCO_ABANDONO = '1';
 
   const ehModalidadeEJA = Number(modalidade) === ModalidadeDTO.EJA;
   const exibirAbas =
@@ -24,7 +24,7 @@ const DashboardNAAPATabs = () => {
     return (
       <>
         <div className="col-md-12 p-0">
-          {tabSelecionada === EVASAO_ESCOLAR && <GraficosEvasaoEscolar />}
+          {tabSelecionada === RISCO_ABANDONO && <GraficosEvasaoEscolar />}
         </div>
       </>
     );
@@ -42,7 +42,7 @@ const DashboardNAAPATabs = () => {
           onChange={onChangeTab}
           activeKey={tabSelecionada}
         >
-          <Tabs.TabPane tab="Evasão Escola" key={EVASAO_ESCOLAR}>
+          <Tabs.TabPane tab="Risco de abandono" key={RISCO_ABANDONO}>
             {montarDados()}
           </Tabs.TabPane>
         </ContainerTabsCard>

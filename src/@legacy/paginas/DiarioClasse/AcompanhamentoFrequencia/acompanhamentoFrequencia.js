@@ -120,7 +120,7 @@ const AcompanhamentoFrequencia = () => {
       ) {
         const componenteCurricular = componentesCurriculares.data[0];
         setComponenteCurricularIdSelecionado(
-          String(componenteCurricular.codigoComponenteCurricular)
+          String(componenteCurricular.id)
         );
         setDesabilitarComponenteCurricular(true);
       }
@@ -158,7 +158,7 @@ const AcompanhamentoFrequencia = () => {
     if (componenteCurricularIdSelecionado) {
       const componenteCurriular = listaComponentesCurriculares.find(
         item =>
-          String(item.codigoComponenteCurricular) ===
+          String(item.id) ===
           String(componenteCurricularIdSelecionado)
       );
 
@@ -214,7 +214,7 @@ const AcompanhamentoFrequencia = () => {
                     id="disciplina"
                     name="disciplinaId"
                     lista={listaComponentesCurriculares}
-                    valueOption="codigoComponenteCurricular"
+                    valueOption="id"
                     valueText="nome"
                     valueSelect={componenteCurricularIdSelecionado}
                     onChange={onChangeComponenteCurricular}
