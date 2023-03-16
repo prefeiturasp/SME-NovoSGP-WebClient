@@ -33,7 +33,7 @@ const RelatorioAtaBimestral = () => {
   const [listaModalidades, setListaModalidades] = useState([]);
   const [listaSemestres, setListaSemestres] = useState([]);
   const [listaTurmas, setListaTurmas] = useState([]);
-  const [listaTurmasPorSemestre, setListaTurmasPorSemestre] = useState([]);
+  const [listaTurmasPorSemestre, setListaTurmasPorSemestre] = useState({});
   const [listaUes, setListaUes] = useState({});
 
   const [anoAtual] = useState(window.moment().format('YYYY'));
@@ -425,8 +425,11 @@ const RelatorioAtaBimestral = () => {
     const temModalidadeEja = Number(modalidadeId) === ModalidadeDTO.EJA;
     if (modalidadeId && ueCodigo && !temModalidadeEja) {
       obterTurmas(modalidadeId, ueCodigo);
-      return;
     }
+  }, [modalidadeId, ueCodigo, obterTurmasEJA, obterTurmas]);
+
+  useEffect(() => {
+    const temModalidadeEja = Number(modalidadeId) === ModalidadeDTO.EJA;
     if (
       modalidadeId &&
       ueCodigo &&
@@ -437,12 +440,11 @@ const RelatorioAtaBimestral = () => {
       obterTurmasEJA(semestre, listaTurmasPorSemestre);
     }
   }, [
-    modalidadeId,
-    ueCodigo,
-    semestre,
     listaTurmasPorSemestre,
+    modalidadeId,
+    semestre,
+    ueCodigo,
     obterTurmasEJA,
-    obterTurmas,
   ]);
 
   const onChangeTurma = valor => {
