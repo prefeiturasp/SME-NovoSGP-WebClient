@@ -27,10 +27,8 @@ const Filtros = ({ onChangeFiltros, ehInfantil }) => {
     carregandoSituacaoConselhoClasse,
     setCarregandoSituacaoConselhoClasse,
   ] = useState(false);
-  const [
-    carregandoSituacaoFechamento,
-    setCarregandoSituacaoFechamento,
-  ] = useState(false);
+  const [carregandoSituacaoFechamento, setCarregandoSituacaoFechamento] =
+    useState(false);
   const [carregandoTurmas, setCarregandoTurmas] = useState(false);
   const [carregandoUes, setCarregandoUes] = useState(false);
   const [consideraHistorico, setConsideraHistorico] = useState(false);
@@ -43,10 +41,8 @@ const Filtros = ({ onChangeFiltros, ehInfantil }) => {
   const [listaModalidades, setListaModalidades] = useState([]);
   const [listaSemestres, setListaSemestres] = useState([]);
   const [listaSituacaoFechamento, setListaSituacaoFechamento] = useState([]);
-  const [
-    listaSituacaoConselhoClasse,
-    setListaSituacaoConselhoClasse,
-  ] = useState([]);
+  const [listaSituacaoConselhoClasse, setListaSituacaoConselhoClasse] =
+    useState([]);
   const [listaTurmas, setListaTurmas] = useState([]);
   const [listaUes, setListaUes] = useState([]);
   const [modalidadeId, setModalidadeId] = useState();
@@ -58,6 +54,8 @@ const Filtros = ({ onChangeFiltros, ehInfantil }) => {
   const [ueCodigo, setUeCodigo] = useState();
 
   const OPCAO_PADRAO = '-99';
+
+  const ehEJA = String(modalidadeId) === String(ModalidadeDTO.EJA);
 
   const carregandoAcompanhamentoFechamento = useSelector(
     store => store.acompanhamentoFechamento.carregandoAcompanhamentoFechamento
@@ -95,8 +93,7 @@ const Filtros = ({ onChangeFiltros, ehInfantil }) => {
       situacaoConselhoClasse: valorSituacaoConselhoClasse || OPCAO_PADRAO,
     };
 
-    const temSemestreOuNaoEja =
-      String(modalidadeId) !== String(ModalidadeDTO.EJA) || semestre;
+    const temSemestreOuNaoEja = !ehEJA || semestre;
 
     if (
       anoLetivo &&
@@ -277,11 +274,10 @@ const Filtros = ({ onChangeFiltros, ehInfantil }) => {
   const obterModalidades = useCallback(async ue => {
     if (ue) {
       setCarregandoModalidade(true);
-      const {
-        data,
-      } = await ServicoFiltroRelatorio.obterModalidadesPorAbrangencia(
-        ue
-      ).finally(() => setCarregandoModalidade(false));
+      const { data } =
+        await ServicoFiltroRelatorio.obterModalidadesPorAbrangencia(ue).finally(
+          () => setCarregandoModalidade(false)
+        );
 
       if (data?.length) {
         const lista = data.map(item => ({
@@ -346,7 +342,6 @@ const Filtros = ({ onChangeFiltros, ehInfantil }) => {
       setSemestre();
       setListaSemestres([]);
     }
-
   }, [modalidadeId]);
 
   const onChangeTurma = valor => {
@@ -369,12 +364,14 @@ const Filtros = ({ onChangeFiltros, ehInfantil }) => {
   };
 
   const obterTurmas = useCallback(async () => {
+    if (ehEJA && !semestre) return;
+
     if (dreCodigo && ueCodigo && modalidadeId) {
       setCarregandoTurmas(true);
       const retorno = await AbrangenciaServico.buscarTurmas(
         ueCodigo,
         modalidadeId,
-        '',
+        semestre,
         anoLetivo,
         consideraHistorico,
         false,
@@ -403,16 +400,24 @@ const Filtros = ({ onChangeFiltros, ehInfantil }) => {
         }
       }
     }
-  }, [ueCodigo, dreCodigo, consideraHistorico, anoLetivo, modalidadeId]);
+  }, [
+    ueCodigo,
+    dreCodigo,
+    consideraHistorico,
+    anoLetivo,
+    modalidadeId,
+    ehEJA,
+    semestre,
+  ]);
 
   useEffect(() => {
-    if (ueCodigo) {
+    if (ueCodigo || (ehEJA && semestre)) {
       obterTurmas();
-      return;
+    } else {
+      setTurmasId();
+      setListaTurmas([]);
     }
-    setTurmasId();
-    setListaTurmas([]);
-  }, [ueCodigo, obterTurmas]);
+  }, [ehEJA, semestre, ueCodigo, obterTurmas]);
 
   const onChangeBimestre = valor => {
     dispatch(setTurmasAcompanhamentoFechamento(undefined));
@@ -611,7 +616,10 @@ const Filtros = ({ onChangeFiltros, ehInfantil }) => {
               valueText="nomeFiltro"
               label="Turmas"
               disabled={
-                !modalidadeId || listaTurmas?.length === 1 || desabilitarCampos
+                !modalidadeId ||
+                listaTurmas?.length === 1 ||
+                desabilitarCampos ||
+                (ehEJA && !semestre)
               }
               valueSelect={turmasId}
               onChange={valores => {
