@@ -87,10 +87,8 @@ const EventosCadastroForm = () => {
   const [recorrencia, setRecorrencia] = useState(null);
   const [showModalRecorrencia, setShowModalRecorrencia] = useState(false);
   const [auditoriaEventos, setAuditoriaEventos] = useState({});
-  const [
-    eventoTipoFeriadoSelecionado,
-    setEventoTipoFeriadoSelecionado,
-  ] = useState(false);
+  const [eventoTipoFeriadoSelecionado, setEventoTipoFeriadoSelecionado] =
+    useState(false);
   const [
     eventoTipoLocalOcorrenciaSMESelecionado,
     setEventoTipoLocalOcorrenciaSMESelecionado,
@@ -129,7 +127,6 @@ const EventosCadastroForm = () => {
       return;
     }
     setDesabilitarCampos(desabilitar);
-
   }, [
     somenteConsulta,
     eventoId,
@@ -257,6 +254,7 @@ const EventosCadastroForm = () => {
       refFormEventos.initialValues.tipoEventoId
     );
     setLimparRecorrencia(true);
+    setListaCalendarioParaCopiar([]);
   };
 
   useEffect(() => {
@@ -264,7 +262,6 @@ const EventosCadastroForm = () => {
       resetarTela();
       setExecutaResetarTela(false);
     }
-
   }, [executaResetarTela]);
 
   const onChangeUe = () => {
@@ -301,7 +298,6 @@ const EventosCadastroForm = () => {
     if (recorrencia) {
       onCloseRecorrencia();
     }
-
   }, [recorrencia]);
 
   const onClickCopiarEvento = async () => {
@@ -619,7 +615,12 @@ const EventosCadastroForm = () => {
 
       verificarAlteracaoLetivoEdicao(listaTipoEvento, evento.data.tipoEventoId);
 
-      onChangeTipoEvento(listaEventoAtual, evento.data.tipoEventoId,undefined, evento.data.id);
+      onChangeTipoEvento(
+        listaEventoAtual,
+        evento.data.tipoEventoId,
+        undefined,
+        evento.data.id
+      );
     }
   };
 
@@ -640,7 +641,6 @@ const EventosCadastroForm = () => {
     if (eventoId) {
       consultaPorId(eventoId, lista);
     }
-
   }, [eventoId]);
 
   useEffect(() => {
