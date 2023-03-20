@@ -74,6 +74,12 @@ const Filtros = ({ onChangeFiltros, ehInfantil }) => {
 
     setListaTurmas([]);
     setTurmasId();
+
+    setBimestre(undefined);
+    setListaBimestres([]);
+
+    setSituacaoFechamento(undefined);
+    setSituacaoConselhoClasse(undefined);
   };
 
   const filtrar = (
@@ -110,6 +116,7 @@ const Filtros = ({ onChangeFiltros, ehInfantil }) => {
   };
 
   const onChangeConsideraHistorico = e => {
+    limparCampos();
     dispatch(setTurmasAcompanhamentoFechamento());
     setConsideraHistorico(e.target.checked);
     setAnoLetivo(anoAtual);
@@ -257,13 +264,13 @@ const Filtros = ({ onChangeFiltros, ehInfantil }) => {
   }, [dreCodigo, anoLetivo, consideraHistorico]);
 
   useEffect(() => {
-    if (dreId) {
+    if (dreCodigo) {
       obterUes();
-      return;
+    } else {
+      setUeCodigo();
+      setListaUes([]);
     }
-    setUeId();
-    setListaUes([]);
-  }, [dreId, obterUes]);
+  }, [dreCodigo, obterUes]);
 
   const onChangeModalidade = valor => {
     dispatch(setTurmasAcompanhamentoFechamento());
@@ -445,11 +452,11 @@ const Filtros = ({ onChangeFiltros, ehInfantil }) => {
 
   useEffect(() => {
     if (modalidadeId) {
+      setBimestre(undefined);
       obterBimestres();
-      return;
+    } else {
+      setListaBimestres([]);
     }
-    setListaBimestres([]);
-    setBimestre(undefined);
   }, [modalidadeId, obterBimestres]);
 
   useEffect(() => {
