@@ -109,18 +109,12 @@ const ListaoOperacoesBotoesAcao = () => {
       .map(aula => {
         const alunos = dadosFrequencia?.alunos
           ?.map(aluno => {
-            let aulasParaSalvar = [];
-            if (aula?.frequenciaId) {
-              aulasParaSalvar = aluno?.aulas?.filter(a => a?.alterado);
-            } else {
-              aulasParaSalvar = aluno?.aulas;
-            }
-            if (aulasParaSalvar?.length) {
-              const aulaAlunoPorIdAula = aulasParaSalvar.find(
+            if (aluno?.aulas?.length) {
+              const aulaAlunoPorIdAula = aluno?.aulas.find(
                 aulaAluno => aulaAluno?.aulaId === aula?.aulaId
               );
-
               return {
+                desabilitado: aulaAlunoPorIdAula?.desabilitado,
                 codigoAluno: aluno?.codigoAluno,
                 frequencias: aulaAlunoPorIdAula?.detalheFrequencia,
               };
@@ -130,7 +124,6 @@ const ListaoOperacoesBotoesAcao = () => {
           ?.filter(a => a?.codigoAluno && a?.frequencias?.length);
         return {
           aulaId: aula.aulaId,
-          frequenciaId: aula?.frequenciaId,
           alunos,
         };
       })
