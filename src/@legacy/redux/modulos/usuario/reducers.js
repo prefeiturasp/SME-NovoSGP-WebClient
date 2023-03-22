@@ -37,11 +37,13 @@ export default function usuario(state = inicial, action) {
     switch (action.type) {
       case '@usuario/salvarRf':
         draft.rf = action.payload;
+        window.clarity('identify', action.payload);
         break;
       case '@usuario/turmasUsuario':
         draft.turmasUsuario = action.payload;
         break;
       case '@usuario/salvarLogin':
+        window.clarity('identify', action.payload.rf.trim() || draft.rf);
         draft.rf = action.payload.rf.trim() || draft.rf;
         draft.token = action.payload.token;
         draft.dataLogin = new Date();
