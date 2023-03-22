@@ -73,6 +73,45 @@ export default createGlobalStyle`
     color: #ffffff !important;
   }
 
+  /* Antd V5 */
+  .ant-select {
+    width: 100%;
+  }
+
+  .ant-select-item:hover {
+    color: #ffffff !important;
+  }
+
+  .ant-select-item {
+    -webkit-transition: none !important;
+    transition: none !important;
+    border-radius: 0px !important;
+
+    .anticon-check {
+      color: white !important;
+    }
+  }
+
+  .ant-select-item-option-active,
+  .ant-select-item-option-selected {
+    color: #ffffff !important;
+  }
+
+  .ant-select-selection-item {
+    font-weight: bold !important;
+    color: rgba(0, 0, 0, 0.65);
+  }
+
+  .ant-select-disabled .ant-select-selection-item {
+    color: rgba(0, 0, 0, 0.25) !important;
+  }
+
+  .ant-select-clear {
+    top: 50% !important;
+    font-size: 15px !important;
+  }
+  /* Antd V5 */
+
   .ant-select-dropdown-menu-item  {
     -webkit-transition: none !important;
     transition: none !important;

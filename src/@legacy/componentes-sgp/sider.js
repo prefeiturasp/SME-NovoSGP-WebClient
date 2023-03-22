@@ -226,7 +226,6 @@ const Sider = () => {
       <Sider
         style={{ background: Base.Roxo, height: '100%' }}
         collapsed={NavegacaoStore.retraido}
-        onCollapse={NavegacaoStore.retraido}
         width="250px"
         collapsedWidth="115px"
         breakpoint="lg"
