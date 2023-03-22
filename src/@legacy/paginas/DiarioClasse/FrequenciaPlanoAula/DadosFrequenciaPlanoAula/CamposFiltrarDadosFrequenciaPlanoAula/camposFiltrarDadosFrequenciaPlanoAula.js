@@ -61,17 +61,15 @@ const CamposFiltrarDadosFrequenciaPlanoAula = () => {
   const [listaComponenteCurricular, setListaComponenteCurricular] = useState(
     []
   );
-  const [codigoComponenteCurricular, setCodigoComponenteCurricular] = useState(
-    undefined
-  );
+  const [codigoComponenteCurricular, setCodigoComponenteCurricular] =
+    useState(undefined);
 
   const [listaDatasAulas, setListaDatasAulas] = useState();
   const [diasParaHabilitar, setDiasParaHabilitar] = useState();
   const [diasParaSinalizar, setDiasParaSinalizar] = useState();
   const [aulasParaSelecionar, setAulasParaSelecionar] = useState([]);
-  const [exibirModalSelecionarAula, setExibirModalSelecionarAula] = useState(
-    false
-  );
+  const [exibirModalSelecionarAula, setExibirModalSelecionarAula] =
+    useState(false);
 
   const valorPadrao = useMemo(() => {
     const ano = turmaSelecionada.anoLetivo;
@@ -84,11 +82,10 @@ const CamposFiltrarDadosFrequenciaPlanoAula = () => {
     dispatch(setExibirLoaderFrequenciaPlanoAula(true));
 
     const codComponenteCurricular =
-      componenteCurricular?.codDisciplinaPai ||
-      componenteCurricular?.id;
+      componenteCurricular?.codDisciplinaPai || componenteCurricular?.id;
 
     const datasDeAulas =
-      turmaSelecionada && turmaSelecionada.turma
+      turmaSelecionada && turmaSelecionada.turma && codComponenteCurricular
         ? await ServicoFrequencia.obterDatasDeAulasPorCalendarioTurmaEComponenteCurricular(
             turmaSelecionada.turma,
             codComponenteCurricular
@@ -118,8 +115,7 @@ const CamposFiltrarDadosFrequenciaPlanoAula = () => {
       setDiasParaHabilitar();
       dispatch(setExibirLoaderFrequenciaPlanoAula(false));
     }
-
-  }, [codigoComponenteCurricular, componenteCurricular, dispatch]);
+  }, [turmaSelecionada, componenteCurricular, dispatch]);
 
   const obterListaComponenteCurricular = useCallback(async () => {
     dispatch(setExibirLoaderFrequenciaPlanoAula(true));
@@ -164,14 +160,12 @@ const CamposFiltrarDadosFrequenciaPlanoAula = () => {
     if (codigoComponenteCurricular && turmaSelecionada?.turma) {
       obterDatasDeAulasDisponiveis();
     }
-
   }, [codigoComponenteCurricular]);
 
   useEffect(() => {
     if (atualizarDatas) {
       obterDatasDeAulasDisponiveis();
     }
-
   }, [atualizarDatas]);
 
   // Quando tem valor do componente curricular no redux vai setar o id no componente select!
@@ -181,9 +175,7 @@ const CamposFiltrarDadosFrequenciaPlanoAula = () => {
       listaComponenteCurricular.length &&
       componenteCurricular
     ) {
-      setCodigoComponenteCurricular(
-        String(componenteCurricular.id)
-      );
+      setCodigoComponenteCurricular(String(componenteCurricular.id));
     } else {
       setCodigoComponenteCurricular(undefined);
     }
@@ -207,8 +199,9 @@ const CamposFiltrarDadosFrequenciaPlanoAula = () => {
         resetarInfomacoes();
         if (codigoComponenteCurricularId) {
           const componente = listaComponenteCurricular.find(
-            (item) =>
-              String(item.codigoComponenteCurricular) === codigoComponenteCurricularId ||
+            item =>
+              String(item.codigoComponenteCurricular) ===
+                codigoComponenteCurricularId ||
               String(item.id) === codigoComponenteCurricularId
           );
           dispatch(setComponenteCurricularFrequenciaPlanoAula(componente));
@@ -226,7 +219,8 @@ const CamposFiltrarDadosFrequenciaPlanoAula = () => {
       if (modoEdicaoFrequencia || modoEdicaoPlanoAula) {
         const confirmarParaSalvar = await pergutarParaSalvar();
         if (confirmarParaSalvar) {
-          const salvou = await servicoSalvarFrequenciaPlanoAula.validarSalvarFrequenciPlanoAula();
+          const salvou =
+            await servicoSalvarFrequenciaPlanoAula.validarSalvarFrequenciPlanoAula();
 
           if (salvou) {
             aposValidarSalvar();
@@ -308,7 +302,8 @@ const CamposFiltrarDadosFrequenciaPlanoAula = () => {
       if (modoEdicaoFrequencia || modoEdicaoPlanoAula) {
         const confirmarParaSalvar = await pergutarParaSalvar();
         if (confirmarParaSalvar) {
-          salvou = await servicoSalvarFrequenciaPlanoAula.validarSalvarFrequenciPlanoAula();
+          salvou =
+            await servicoSalvarFrequenciaPlanoAula.validarSalvarFrequenciPlanoAula();
         }
       }
 
@@ -365,7 +360,6 @@ const CamposFiltrarDadosFrequenciaPlanoAula = () => {
       });
       dispatch(salvarDadosAulaFrequencia());
     }
-
   }, [
     dadosAulaFrequencia,
     listaComponenteCurricular,
