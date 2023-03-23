@@ -9,7 +9,7 @@ import {
   setModoEdicaoFrequencia,
   setModoEdicaoPlanoAula,
 } from '~/redux/modulos/frequenciaPlanoAula/actions';
-import { erros, sucesso } from '~/servicos/alertas';
+import { erro, erros, sucesso } from '~/servicos/alertas';
 import ServicoFrequencia from '~/servicos/Paginas/DiarioClasse/ServicoFrequencia';
 import ServicoPlanoAula from '~/servicos/Paginas/DiarioClasse/ServicoPlanoAula';
 
@@ -28,13 +28,27 @@ class ServicoSalvarFrequenciaPlanoAula {
 
     dispatch(setExibirLoaderFrequenciaPlanoAula(true));
 
-    const resposta = await ServicoFrequencia.salvarFrequencia(valorParaSalvar)
-      .finally(() => dispatch(setExibirLoaderFrequenciaPlanoAula(false)))
-      .catch(e => erros(e));
+    let status = null;
 
-    if (resposta?.status === 204) {
-      ServicoFrequencia.registrarLog('Retorno 204 ao salvar frequência!');
+    const resposta = await ServicoFrequencia.salvarFrequencia(
+      valorParaSalvar
+    ).catch(e => {
+      erros(e);
+      status = e?.response?.status;
+    });
+
+    status = status || resposta?.status;
+
+    if (status !== 200 && status !== 500 && status !== 601) {
+      ServicoFrequencia.registrarLog(`Retorno ${status} ao salvar frequência!`);
+      listaDadosFrequencia.desabilitado = true;
+      dispatch(setListaDadosFrequencia({ ...listaDadosFrequencia }));
+
+      erro('Erro ao salvar frequência, tente novamente mais tarde');
+      dispatch(setModoEdicaoFrequencia(false));
     }
+
+    dispatch(setExibirLoaderFrequenciaPlanoAula(false));
 
     if (resposta?.status === 200) {
       const auditoria = {
