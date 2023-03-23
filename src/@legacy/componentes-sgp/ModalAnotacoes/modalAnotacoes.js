@@ -37,9 +37,8 @@ const ModalAnotacoesFrequencia = props => {
     };
   }, [dispatch, setExibirModal, setDadosModal]);
 
-  const [carregandoMotivosAusencia, setCarregandoMotivosAusencia] = useState(
-    exibirModal
-  );
+  const [carregandoMotivosAusencia, setCarregandoMotivosAusencia] =
+    useState(exibirModal);
 
   const iniciar = {
     id: 0,
@@ -105,9 +104,10 @@ const ModalAnotacoesFrequencia = props => {
   }, [aulaId, dadosModal]);
 
   const obterListaMotivosAusencia = async () => {
-    const retorno = await ServicoAnotacaoFrequenciaAluno.obterMotivosAusencia().catch(
-      e => erros(e)
-    );
+    const retorno =
+      await ServicoAnotacaoFrequenciaAluno.obterMotivosAusencia().catch(e =>
+        erros(e)
+      );
     if (retorno && retorno.data) {
       setListaMotivoAusencia(retorno.data);
     } else {
@@ -338,7 +338,7 @@ const ModalAnotacoesFrequencia = props => {
                   <JoditEditor
                     label="Anotação"
                     form={form}
-                    value={refForm?.state?.values?.anotacao}
+                    value={valoresIniciais?.anotacao}
                     name="anotacao"
                     onChange={v => {
                       if (valoresIniciais.anotacao !== v) {

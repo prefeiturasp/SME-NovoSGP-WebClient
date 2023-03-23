@@ -32,6 +32,7 @@ const ModalJustificativaFechamento = () => {
   const [refForm, setRefForm] = useState({});
 
   const ehNota = Number(dadosFechamento?.notaTipo) === notasConceitos.Notas;
+  const valoresIniciais = { descricao: '' };
 
   const mensagemAlerta = `A maioria dos estudantes está com ${
     ehNota ? 'notas' : 'conceitos'
@@ -140,7 +141,7 @@ const ModalJustificativaFechamento = () => {
     >
       <Formik
         enableReinitialize
-        initialValues={{ descricao: '' }}
+        initialValues={valoresIniciais}
         validationSchema={validacoes}
         validateOnChange
         validateOnBlur
@@ -164,7 +165,7 @@ const ModalJustificativaFechamento = () => {
                 <fieldset className="mt-3">
                   <JoditEditor
                     form={form}
-                    value={form?.values?.descricao}
+                    value={valoresIniciais?.descricao}
                     onChange={v => {
                       onChangeJustificativa(v);
                       form.setFieldTouched('descricao', true, true);
