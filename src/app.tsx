@@ -47,7 +47,7 @@ const App: React.FC = () => {
             <BrowserRouter>
               <GlobalStyle />
               <VersaoSistema />
-              <div className="h-100">
+              <div style={{ height: 'auto' }}>
                 <Routes />
               </div>
             </BrowserRouter>
