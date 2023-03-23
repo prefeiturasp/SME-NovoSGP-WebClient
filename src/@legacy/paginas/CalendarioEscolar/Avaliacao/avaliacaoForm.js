@@ -45,10 +45,8 @@ import {
 import { SGP_JODIT_EDITOR_CADASTRO_AVALIACAO_DESCRICAO } from '~/constantes/ids/jodit-editor';
 
 const AvaliacaoForm = ({ match, location }) => {
-  const [
-    mostrarModalCopiarAvaliacao,
-    setMostrarModalCopiarAvaliacao,
-  ] = useState(false);
+  const [mostrarModalCopiarAvaliacao, setMostrarModalCopiarAvaliacao] =
+    useState(false);
   const permissaoTela = useSelector(
     state => state.usuario.permissoes[RotasDTO.CADASTRO_DE_AVALIACAO]
   );
@@ -171,13 +169,10 @@ const AvaliacaoForm = ({ match, location }) => {
     listaDisciplinasRegenciaSelecionadas,
     setListaDisciplinasRegenciaSelecionadas,
   ] = useState([]);
-  const [
-    listaDisciplinasSelecionadas,
-    setListaDisciplinasSelecionadas,
-  ] = useState([]);
-  const [desabilitarCopiarAvaliacao, setDesabilitarCopiarAvaliacao] = useState(
-    false
-  );
+  const [listaDisciplinasSelecionadas, setListaDisciplinasSelecionadas] =
+    useState([]);
+  const [desabilitarCopiarAvaliacao, setDesabilitarCopiarAvaliacao] =
+    useState(false);
   const [atividadesRegencia, setAtividadesRegencia] = useState([]);
 
   const usuario = useSelector(store => store.usuario);
@@ -397,7 +392,6 @@ const AvaliacaoForm = ({ match, location }) => {
           setListaDisciplinasRegenciaSelecionadas([...listaDisciplinasReg]);
         });
       }
-
     },
     [mostrarDisciplinaRegencia]
   );
@@ -409,7 +403,6 @@ const AvaliacaoForm = ({ match, location }) => {
         atividadesRegencia
       );
     }
-
   }, [
     montarListaDisciplinasRegenciaExibicao,
     atividadesRegencia,
@@ -439,7 +432,8 @@ const AvaliacaoForm = ({ match, location }) => {
     if (!match?.params?.id && listaDisciplinas?.length === 1) {
       setDadosAvaliacao({
         ...dadosAvaliacao,
-        disciplinasId: listaDisciplinas[0].codigoComponenteCurricular.toString(),
+        disciplinasId:
+          listaDisciplinas[0].codigoComponenteCurricular.toString(),
       });
       setPodeLancaNota(listaDisciplinas[0].lancaNota);
       setDisciplinaSelecionada(listaDisciplinas[0].codigoComponenteCurricular);
@@ -448,7 +442,6 @@ const AvaliacaoForm = ({ match, location }) => {
       setTemRegencia(true);
       obterDisciplinasRegencia();
     }
-
   }, [listaDisciplinas, mostrarDisciplinaRegencia, match]);
 
   const [listaTiposAvaliacao, setListaTiposAvaliacao] = useState([]);
@@ -492,7 +485,6 @@ const AvaliacaoForm = ({ match, location }) => {
     } else {
       validaF5();
     }
-
   }, []);
 
   const validaInterdisciplinar = categoriaSelecionada => {
@@ -537,7 +529,6 @@ const AvaliacaoForm = ({ match, location }) => {
       !ehTurmaInfantil(modalidadesFiltroPrincipal, turmaSelecionada)
     )
       obterAvaliacao();
-
   }, [idAvaliacao]);
 
   useEffect(() => {
@@ -850,7 +841,7 @@ const AvaliacaoForm = ({ match, location }) => {
                           id={SGP_JODIT_EDITOR_CADASTRO_AVALIACAO_DESCRICAO}
                           label="Descrição"
                           form={form}
-                          value={form.values.descricao}
+                          value={dadosAvaliacao?.descricao}
                           name="descricao"
                           onChange={aoTrocarTextEditor}
                           desabilitar={desabilitarCampos || !dentroPeriodo}
@@ -885,8 +876,8 @@ const AvaliacaoForm = ({ match, location }) => {
                           <div style={{ marginLeft: '14px' }}>
                             <span>Avaliação será copiada para: </span>
                             <br />
-                            {copias.map(x => (
-                              <span style={{ display: 'block' }}>
+                            {copias.map((x, i) => (
+                              <span key={i} style={{ display: 'block' }}>
                                 <strong>Turma:</strong> &nbsp;
                                 {x.turma[0].desc} <strong>Data: &nbsp;</strong>
                                 {window

@@ -79,6 +79,8 @@ const DescricaoPlanejamento = React.memo(props => {
     return '';
   };
 
+  const descricaoInicial = obterDadosComponenteAtual()?.descricao;
+
   return (
     <>
       {dadosBimestrePlanoAnual &&
@@ -95,7 +97,7 @@ const DescricaoPlanejamento = React.memo(props => {
             validarSeTemErro={validarSeTemErro}
             mensagemErro="Campo obrigatório"
             id={`bimestre-${bimestre}-editor`}
-            value={obterDadosComponenteAtual()?.descricao}
+            value={descricaoInicial}
             onChange={v => {
               if (
                 !planoAnualSomenteConsulta &&

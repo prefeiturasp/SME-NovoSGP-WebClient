@@ -86,7 +86,6 @@ function RegistroPOAForm({ match }) {
       refForm.resetForm();
       setModoEdicao(false);
     }
-
   }, [turmaSelecionada, permissoesTela, modalidadesFiltroPrincipal]);
 
   const validacoes = () => {
@@ -380,7 +379,7 @@ function RegistroPOAForm({ match }) {
                             id="descricao"
                             alt="Registro das atividades realizadas junto aos professores ao longo do bimestre, considerando a análise e o acompanhamento do planejamento docente"
                             name="descricao"
-                            value={form?.values?.descricao}
+                            value={valoresIniciais?.descricao}
                             desabilitado={somenteConsulta}
                             labelRequired
                             onChange={() => {
