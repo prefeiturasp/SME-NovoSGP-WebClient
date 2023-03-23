@@ -32,6 +32,10 @@ class ServicoSalvarFrequenciaPlanoAula {
       .finally(() => dispatch(setExibirLoaderFrequenciaPlanoAula(false)))
       .catch(e => erros(e));
 
+    if (resposta?.status === 204) {
+      ServicoFrequencia.registrarLog('Retorno 204 ao salvar frequência!');
+    }
+
     if (resposta?.status === 200) {
       const auditoria = {
         criadoEm: resposta.data.criadoEm,
@@ -192,11 +196,8 @@ class ServicoSalvarFrequenciaPlanoAula {
 
     const { frequenciaPlanoAula } = state;
 
-    const {
-      listaDadosFrequencia,
-      modoEdicaoFrequencia,
-      modoEdicaoPlanoAula,
-    } = frequenciaPlanoAula;
+    const { listaDadosFrequencia, modoEdicaoFrequencia, modoEdicaoPlanoAula } =
+      frequenciaPlanoAula;
 
     let salvouFrequencia = true;
     let salvouPlanoAula = true;
