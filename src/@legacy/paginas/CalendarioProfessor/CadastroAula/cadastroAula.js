@@ -150,6 +150,7 @@ function CadastroDeAula({ match, location }) {
         c => c.codigoComponenteCurricular === Number(componenteCurricularId) ||
              c.id === Number(componenteCurricularId)
              || (c.regencia && (c.codDisciplinaPai === Number(componenteCurricularId)))
+             || (c.territorioSaber && (c.codigoTerritorioSaber === Number(componenteCurricularId)))
       );
     },
     [listaComponentes]
@@ -332,10 +333,12 @@ function CadastroDeAula({ match, location }) {
                 String(respostaAula.disciplinaId) ||
                 String(c.id) ===
                 String(respostaAula.disciplinaId) ||
-                (c.regencia && String(c.codDisciplinaPai) === respostaAula.disciplinaId)
+                (c.regencia && String(c.codDisciplinaPai) === respostaAula.disciplinaId) ||
+                (c.territorioSaber && String(c.codigoTerritorioSaber) === respostaAula.disciplinaId)
             );            
 
-            if (componenteSelecionado.codigoComponenteCurricular == respostaAula.disciplinaId){
+            if (componenteSelecionado.codigoComponenteCurricular == respostaAula.disciplinaId ||
+                componenteSelecionado.codigoTerritorioSaber == respostaAula.disciplinaId && componenteSelecionado.territorioSaber){
               respostaAula.disciplinaId = String(componenteSelecionado.id);
               setAula(respostaAula);
             }
@@ -797,7 +800,7 @@ function CadastroDeAula({ match, location }) {
                           listaComponentes[0]?.regencia &&
                           listaComponentes[0]?.codDisciplinaPai !== 0
                             ? 'codDisciplinaPai'
-                            : 'id'
+                            : listaComponentes[0]?.codigoTerritorioSaber > 0 ? 'codigoTerritorioSaber' : 'id'
                         }
                         valueText="nome"
                         placeholder="Selecione um componente curricular"
