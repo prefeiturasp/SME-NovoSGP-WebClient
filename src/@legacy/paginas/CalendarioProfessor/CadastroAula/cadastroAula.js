@@ -337,7 +337,7 @@ function CadastroDeAula({ match, location }) {
                 (c.territorioSaber && String(c.codigoTerritorioSaber) === respostaAula.disciplinaId)
             );            
 
-            if (componenteSelecionado.codigoComponenteCurricular == respostaAula.disciplinaId ||
+            if (componenteSelecionado.codigoComponenteCurricular == respostaAula.disciplinaId||
                 componenteSelecionado.codigoTerritorioSaber == respostaAula.disciplinaId && componenteSelecionado.territorioSaber){
               respostaAula.disciplinaId = String(componenteSelecionado.id);
               setAula(respostaAula);
@@ -387,7 +387,6 @@ function CadastroDeAula({ match, location }) {
     );
     if (Number(valoresForm.quantidade) === 0) valoresForm.quantidade = 1;    
     if (componente) valoresForm.disciplinaNome = componente.nome;
-    if (componente?.territorioSaber) valoresForm.disciplinaId = componente.codigoComponenteCurricular;
     setCarregandoDados(true);
     servicoCadastroAula
       .salvar(id, valoresForm, componente.regencia || false)
@@ -800,7 +799,7 @@ function CadastroDeAula({ match, location }) {
                           listaComponentes[0]?.regencia &&
                           listaComponentes[0]?.codDisciplinaPai !== 0
                             ? 'codDisciplinaPai'
-                            : listaComponentes[0]?.codigoTerritorioSaber > 0 ? 'codigoTerritorioSaber' : 'id'
+                            :  'id' 
                         }
                         valueText="nome"
                         placeholder="Selecione um componente curricular"
