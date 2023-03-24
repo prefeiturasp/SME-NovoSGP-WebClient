@@ -8,6 +8,7 @@ import EventosCadastroContext from './eventosCadastroContext';
 
 const EventosModalCopiarEvento = () => {
   const {
+    setEmEdicao,
     exibirModalCopiarEvento,
     exibirModalRetornoCopiarEvento,
     listaMensagensCopiarEvento,
@@ -27,6 +28,7 @@ const EventosModalCopiarEvento = () => {
   };
 
   const onConfirmarCopiarEvento = () => {
+    setEmEdicao(true);
     onCloseCopiarConteudo();
   };
 

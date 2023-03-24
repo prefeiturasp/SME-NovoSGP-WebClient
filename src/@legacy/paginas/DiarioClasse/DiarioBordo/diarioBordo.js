@@ -264,17 +264,19 @@ const DiarioBordo = ({ match }) => {
     async codDiscipPai => {
       setCarregandoData(true);
       const datasDeAulas =
-        await ServicoFrequencia.obterDatasDeAulasPorCalendarioTurmaEComponenteCurricular(
-          turmaId,
-          codDiscipPai
-        )
-          .catch(e => {
-            setCarregandoGeral(false);
-            erros(e);
-          })
-          .finally(() => {
-            setCarregandoData(false);
-          });
+        turmaId && codDiscipPai
+          ? await ServicoFrequencia.obterDatasDeAulasPorCalendarioTurmaEComponenteCurricular(
+              turmaId,
+              codDiscipPai
+            )
+              .catch(e => {
+                setCarregandoGeral(false);
+                erros(e);
+              })
+              .finally(() => {
+                setCarregandoData(false);
+              })
+          : [];
 
       const codigoComponenteCurricular = componenteCurricularId || codDiscipPai;
 
