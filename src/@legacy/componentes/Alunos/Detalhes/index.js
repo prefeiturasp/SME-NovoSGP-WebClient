@@ -140,12 +140,7 @@ const DetalhesAluno = props => {
               {exibirFrequencia ? (
                 <FrequenciaGlobal>
                   {`Frequência Global: `}
-                  {frequencia === 0 ||
-                  frequencia === '0' ||
-                  frequencia > 0 ||
-                  frequencia
-                    ? formatarFrequencia(frequencia)
-                    : ''}
+                  {formatarFrequencia(frequencia)}
                 </FrequenciaGlobal>
               ) : (
                 ''
