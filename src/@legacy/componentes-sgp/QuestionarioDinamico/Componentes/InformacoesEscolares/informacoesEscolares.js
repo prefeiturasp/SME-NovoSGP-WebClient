@@ -7,6 +7,7 @@ import BtnExpandirAusenciaEstudante from './btnExpandirAusenciaEstudante';
 import { TabelaColunasFixas } from './informacoesEscolares.css';
 import ModalAnotacoesQuestionarioDinamico from './modalAnotacoesQuestionarioDinamico';
 import ColunaDimensionavel from '../ColunaDimensionavel/colunaDimensionavel';
+import { formatarFrequencia } from '~/utils';
 
 const InformacoesEscolares = props => {
   const [dados, setDados] = useState([]);
@@ -54,7 +55,7 @@ const InformacoesEscolares = props => {
                     {dados.descricaoRecurso || '-'}
                   </td>
                   <td className="col-valor-linha-um">
-                    {dados.frequenciaGlobal}
+                    {formatarFrequencia(dados?.frequenciaGlobal)}
                   </td>
                 </tr>
               </tbody>
@@ -91,7 +92,7 @@ const InformacoesEscolares = props => {
                             {data.quantidadeCompensacoes}
                           </td>
                           <td className="col-valor-linha-dois">
-                            {data.frequencia}
+                            {formatarFrequencia(data?.frequencia)}
                             <BtnExpandirAusenciaEstudante indexLinha={index} />
                           </td>
                         </tr>

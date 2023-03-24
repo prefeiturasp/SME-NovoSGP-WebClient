@@ -6,6 +6,7 @@ import { SinalizacaoAEE } from '~/componentes-sgp';
 import Button from '~/componentes/button';
 import { Base, Colors } from '~/componentes/colors';
 import { SGP_BUTTON_IMPRIMIR_DADOS_INDIVIDUAIS } from '~/constantes/ids/button';
+import { formatarFrequencia } from '~/utils';
 import FotoEstudanteObjectCard from './imagemEstudanteObjectCard';
 import { Container, DadosAluno, FrequenciaGlobal } from './styles';
 
@@ -143,7 +144,7 @@ const DetalhesAluno = props => {
                   frequencia === '0' ||
                   frequencia > 0 ||
                   frequencia
-                    ? `${frequencia}%`
+                    ? formatarFrequencia(frequencia)
                     : ''}
                 </FrequenciaGlobal>
               ) : (
