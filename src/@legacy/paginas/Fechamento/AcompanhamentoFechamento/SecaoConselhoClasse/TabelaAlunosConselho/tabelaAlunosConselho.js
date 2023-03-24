@@ -186,7 +186,7 @@ const TabelaAlunosConselho = props => {
     },
     {
       title: 'Percentual de frequência',
-      dataIndex: 'percentualFrequencia',
+      dataIndex: 'percentualFrequenciaFormatado',
       align: 'center',
       render: percentualFrequencia => formatarFrequencia(percentualFrequencia),
     },
