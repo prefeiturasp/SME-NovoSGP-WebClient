@@ -92,7 +92,7 @@ const InformacoesEscolares = props => {
                             {data.quantidadeCompensacoes}
                           </td>
                           <td className="col-valor-linha-dois">
-                            {formatarFrequencia(data?.frequencia)}
+                            {formatarFrequencia(data?.frequenciaFormatado)}
                             <BtnExpandirAusenciaEstudante indexLinha={index} />
                           </td>
                         </tr>

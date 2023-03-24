@@ -35,7 +35,7 @@ const ListaAlunos = props => {
     },
     {
       title: 'Frequência',
-      dataIndex: 'percentualFrequencia',
+      dataIndex: 'frequenciaFormatado',
       render: (frequencia, dadosAluno) =>
         montaExibicaoPercentual(frequencia, dadosAluno),
     },
