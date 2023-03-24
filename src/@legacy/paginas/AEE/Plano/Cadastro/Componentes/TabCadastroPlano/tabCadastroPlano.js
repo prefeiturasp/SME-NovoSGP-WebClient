@@ -9,7 +9,7 @@ import {
   setPlanoAEEDados,
   setPlanoAEELimparDados,
 } from '~/redux/modulos/planoAEE/actions';
-import { erros } from '~/servicos';
+import { erros, ServicoCalendarios } from '~/servicos';
 import ServicoPlanoAEE from '~/servicos/Paginas/Relatorios/AEE/ServicoPlanoAEE';
 import MontarDadosTabs from './montarDadosTabs';
 
@@ -35,15 +35,13 @@ const TabCadastroPlano = props => {
       codigoAluno = dadosCollapseLocalizarEstudante?.codigoAluno;
     }
 
-    dispatch(setExibirLoaderPlanoAEE(true));
     dispatch(setPlanoAEELimparDados());
+    dispatch(setExibirLoaderPlanoAEE(true));
     const resultado = await ServicoPlanoAEE.obterPlanoPorId(
       planoId,
       turmaCodigo,
       codigoAluno
-    )
-      .catch(e => erros(e))
-      .finally(() => dispatch(setExibirLoaderPlanoAEE(false)));
+    ).catch(e => erros(e));
 
     if (resultado?.data) {
       if (resultado?.data?.aluno) {
@@ -63,6 +61,16 @@ const TabCadastroPlano = props => {
           ehAtendidoAEE: aluno?.ehAtendidoAEE,
           numeroChamada: aluno.numeroAlunoChamada,
         };
+
+        if (resultado?.data?.turma?.codigo) {
+          const retornoFrequencia =
+            await ServicoCalendarios.obterFrequenciaAluno(
+              aluno.codigoAluno,
+              resultado?.data?.turma?.codigo
+            ).catch(e => erros(e));
+          dadosObjectCard.frequencia = retornoFrequencia?.data || '';
+        }
+
         dispatch(setDadosObjectCardEstudante(dadosObjectCard));
       }
 
@@ -83,6 +91,7 @@ const TabCadastroPlano = props => {
     } else {
       dispatch(setPlanoAEELimparDados());
     }
+    dispatch(setExibirLoaderPlanoAEE(false));
   }, [match, dispatch, dadosCollapseLocalizarEstudante]);
 
   useEffect(() => {
