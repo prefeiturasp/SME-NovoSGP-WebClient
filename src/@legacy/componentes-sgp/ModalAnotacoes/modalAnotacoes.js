@@ -100,6 +100,9 @@ const ModalAnotacoesFrequencia = props => {
         : undefined;
       setValoresIniciais(resultado.data);
       setModoEdicao(false);
+    } else {
+      setValoresIniciais({});
+      setValoresIniciais({ ...iniciar });
     }
   }, [aulaId, dadosModal]);
 
