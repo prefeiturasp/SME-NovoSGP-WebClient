@@ -18,7 +18,7 @@ class ServicoSalvarFrequenciaPlanoAula {
     const { dispatch } = store;
     const state = store.getState();
 
-    const { frequenciaPlanoAula } = state;
+    const { frequenciaPlanoAula, usuario } = state;
     const { listaDadosFrequencia, aulaId } = frequenciaPlanoAula;
 
     const valorParaSalvar = {
@@ -40,7 +40,11 @@ class ServicoSalvarFrequenciaPlanoAula {
     status = status || resposta?.status;
 
     if (status !== 200 && status !== 500 && status !== 601) {
-      ServicoFrequencia.registrarLog(`Retorno ${status} ao salvar frequência!`);
+      const loginUsuario = usuario?.rf;
+
+      ServicoFrequencia.registrarLog(
+        `Retorno ${status} ao salvar frequência! Login ${loginUsuario}`
+      );
       listaDadosFrequencia.desabilitado = true;
       dispatch(setListaDadosFrequencia({ ...listaDadosFrequencia }));
 
