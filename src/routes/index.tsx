@@ -6,7 +6,7 @@ import { useAppSelector } from '@/core/hooks/use-redux';
 import Login from '~/paginas/Login';
 import { ROUTES } from '@/core/enum/routes';
 import RedefinirSenha from '~/paginas/RedefinirSenha';
-import routesArray, { RouteProps } from '@/routes/config/route-list';
+import { RouteProps, getRoutesArray } from '@/routes/config/route-list';
 import { rotaAtiva } from '~/redux/modulos/navegacao/actions';
 import { store } from '@/core/redux';
 import ReactGA from 'react-ga';
@@ -22,6 +22,8 @@ const Routes = () => {
   const loginPage = createElement(Login);
   const elementRedefinirSenha = createElement(RedefinirSenha);
   const elementRecuperarSenha = createElement(RecuperarSenha);
+
+  const routesArray = getRoutesArray();
 
   useEffect(() => {
     localStorage.setItem('rota-atual', location.pathname);
@@ -41,7 +43,7 @@ const Routes = () => {
   };
 
   return (
-    <>
+    <div style={{ height: logado ? 'auto' : '100%' }}>
       {logado ? (
         <>
           <BaseRoutes>
@@ -59,7 +61,7 @@ const Routes = () => {
           <Route path={ROUTES.REDEFINIR_SENHA_TOKEN} element={elementRedefinirSenha} />
         </BaseRoutes>
       )}
-    </>
+    </div>
   );
 };
 

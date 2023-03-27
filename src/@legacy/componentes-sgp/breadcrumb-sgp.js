@@ -99,12 +99,9 @@ const BreadcrumbSgp = () => {
     carregaBreadcrumbs();
   }, [UsuarioStrore.turmaSelecionada]);
 
-  useEffect(
-    (window.onbeforeunload = () => {
-      depoisDeCarregar();
-    }),
-    []
-  );
+  window.onbeforeunload = () => {
+    depoisDeCarregar();
+  };
 
   const depoisDeCarregar = () => {
     localStorage.setItem('rota-atual', window.location.pathname);
@@ -194,7 +191,7 @@ const BreadcrumbSgp = () => {
       {itens?.length &&
         itens.map(item => {
           return (
-            <Breadcrumb key={item.path} separator="">
+            <Breadcrumb key={item.path}>
               <Link
                 hidden={item.ehEstatico}
                 to={item.path}

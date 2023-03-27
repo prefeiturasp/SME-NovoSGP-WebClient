@@ -1623,22 +1623,25 @@ route.set(ROUTES.RELATORIO_ENCAMINHAMENTO_NAAPA, {
   chavePermissao: ROUTES.RELATORIO_ENCAMINHAMENTO_NAAPA,
 });
 
-for (const [key, value] of route) {
-  const rota = value;
-  rota.path = key;
-  routesArray.push(rota);
+const getRoutesArray = () => {
+  for (const [key, value] of route) {
+    const rota = value;
+    rota.path = key;
+    routesArray.push(rota);
 
-  const rotaRedux = {
-    path: value.paginaInicial ? '/' : key,
-    icone: value.icone,
-    dicaIcone: value.dicaIcone,
-    breadcrumbName: value.breadcrumbName,
-    menu: value.menu,
-    parent: value.parent,
-    limpaSelecaoMenu: value.limpaSelecaoMenu,
-  };
+    const rotaRedux = {
+      path: value.paginaInicial ? '/' : key,
+      icone: value.icone,
+      dicaIcone: value.dicaIcone,
+      breadcrumbName: value.breadcrumbName,
+      menu: value.menu,
+      parent: value.parent,
+      limpaSelecaoMenu: value.limpaSelecaoMenu,
+    };
 
-  store.dispatch(setRotas(rotaRedux));
-}
+    store.dispatch(setRotas(rotaRedux));
+  }
+  return routesArray;
+};
 
-export default routesArray;
+export { getRoutesArray };

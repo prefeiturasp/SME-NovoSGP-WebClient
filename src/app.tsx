@@ -47,9 +47,7 @@ const App: React.FC = () => {
             <BrowserRouter>
               <GlobalStyle />
               <VersaoSistema />
-              <div style={{ height: 'auto' }}>
-                <Routes />
-              </div>
+              <Routes />
             </BrowserRouter>
           </PersistGate>
         </Provider>
