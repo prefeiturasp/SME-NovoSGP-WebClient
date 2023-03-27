@@ -11,7 +11,7 @@ import ListaPaginada from '~/componentes/listaPaginada/listaPaginada';
 import SelectComponent from '~/componentes/select';
 import { URL_HOME } from '~/constantes/url';
 import modalidade from '~/dtos/modalidade';
-import RotasDto from '~/dtos/rotasDto';
+import { ROUTES } from '@/core/enum/routes';
 import { confirmar, erro, erros, sucesso } from '~/servicos/alertas';
 import ServicoCompensacaoAusencia from '~/servicos/Paginas/DiarioClasse/ServicoCompensacaoAusencia';
 import ServicoDisciplina from '~/servicos/Paginas/ServicoDisciplina';
@@ -39,7 +39,7 @@ const CompensacaoAusenciaLista = () => {
     store => store.filtro.modalidades
   );
 
-  const permissoesTela = usuario.permissoes[RotasDto.COMPENSACAO_AUSENCIA];
+  const permissoesTela = usuario.permissoes[ROUTES.COMPENSACAO_AUSENCIA];
   const [somenteConsulta, setSomenteConsulta] = useState(false);
 
   const [exibirLista, setExibirLista] = useState(false);
@@ -240,7 +240,7 @@ const CompensacaoAusenciaLista = () => {
       }
 
       if (podeEditar) {
-        navigate(`compensacao-ausencia/editar/${compensacao.id}`);
+        navigate(`${ROUTES.COMPENSACAO_AUSENCIA}/editar/${compensacao.id}`);
       } else {
         erro(
           'No momento não é possível realizar a edição pois tem cálculo(s) em processo, tente mais tarde!'
@@ -292,7 +292,7 @@ const CompensacaoAusenciaLista = () => {
   };
 
   const onClickNovo = () => {
-    navigate(`compensacao-ausencia/novo`);
+    navigate(`${ROUTES.COMPENSACAO_AUSENCIA}/novo`);
   };
 
   return (
