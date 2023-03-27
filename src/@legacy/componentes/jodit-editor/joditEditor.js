@@ -257,6 +257,7 @@ const JoditEditor = forwardRef((props, ref) => {
       },
     },
     iframe: true,
+    spellcheck: true,
     showWordsCounter: false,
     showXPathInStatusbar: false,
     buttons: BOTOES_PADRAO,
