@@ -4,7 +4,6 @@ import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { DataTable } from '~/componentes';
 import tipoFrequencia from '~/dtos/tipoFrequencia';
-import tipoIndicativoFrequencia from '~/dtos/tipoIndicativoFrequencia';
 import { verificaSomenteConsulta } from '~/servicos/servico-navegacao';
 import ModalAnotacoesListaFrequencia from './componentes/modalAnotacoesListaFrequencia';
 import SinalizacaoAEE from '../SinalizacaoAEE/sinalizacaoAEE';
@@ -14,11 +13,10 @@ import CampoTipoFrequencia from './componentes/campoTipoFrequencia';
 import IconesMarcarTodos from './componentes/iconesMarcarTodos';
 import {
   ContainerListaFrequencia,
-  IndicativoAlerta,
-  IndicativoCritico,
   MarcadorSituacao,
   MarcarTodasAulasTipoFrequencia,
 } from './listaFrequencia.css';
+import { formatarFrequencia } from '~/utils';
 
 const ListaFrequencia = props => {
   const {
@@ -75,8 +73,6 @@ const ListaFrequencia = props => {
     }
 
     setDesabilitarCampos(desabilitar);
-
-
   }, [frequenciaId, permissoesTela, temPeriodoAberto, componenteCurricular]);
 
   const marcaPresencaFaltaTodasAulas = (aluno, tipo) => {
@@ -166,18 +162,10 @@ const ListaFrequencia = props => {
   };
 
   const montarColunaFrequencia = aluno => {
-    const percentual = aluno?.indicativoFrequencia?.percentual
-      ? `${aluno.indicativoFrequencia.percentual}%`
-      : '';
-
-    switch (aluno?.indicativoFrequencia?.tipo) {
-      case tipoIndicativoFrequencia.Alerta:
-        return <IndicativoAlerta>{percentual}</IndicativoAlerta>;
-      case tipoIndicativoFrequencia.Critico:
-        return <IndicativoCritico>{percentual}</IndicativoCritico>;
-      default:
-        return percentual;
-    }
+    const percentual = formatarFrequencia(
+      aluno?.indicativoFrequencia?.percentual
+    );
+    return percentual;
   };
 
   const obterTiposFrequenciaPermitidos = () => {
@@ -195,11 +183,8 @@ const ListaFrequencia = props => {
   };
 
   const montarTituloColunaMarcarTodas = () => {
-    const {
-      exibirCompareceu,
-      exibirFaltou,
-      exibirRemoto,
-    } = obterTiposFrequenciaPermitidos();
+    const { exibirCompareceu, exibirFaltou, exibirRemoto } =
+      obterTiposFrequenciaPermitidos();
 
     let margin = '';
     let totalColunas = 0;
@@ -260,11 +245,8 @@ const ListaFrequencia = props => {
   };
 
   const montarTituloMarcarTodasAulas = () => {
-    const {
-      exibirCompareceu,
-      exibirFaltou,
-      exibirRemoto,
-    } = obterTiposFrequenciaPermitidos();
+    const { exibirCompareceu, exibirFaltou, exibirRemoto } =
+      obterTiposFrequenciaPermitidos();
 
     return (
       <Tooltip
