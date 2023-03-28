@@ -6,6 +6,10 @@ import { Base } from '../colors';
 export const Campo = styled.div`
   width: 100%;
 
+  .ant-picker {
+    height: 38px;
+  }
+
   span {
     margin-bottom: 5px;
     color: ${Base.Vermelho};
