@@ -40,6 +40,7 @@ import ServicoDisciplina from '~/servicos/Paginas/ServicoDisciplina';
 import { verificaSomenteConsulta } from '~/servicos/servico-navegacao';
 import { ehTurmaInfantil } from '~/servicos/Validacoes/validacoesInfatil';
 import DadosPlanejamentoDiarioBordo from './DadosPlanejamentoDiarioBordo/dadosPlanejamentoDiarioBordo';
+import { removerTagsHtml } from '~/utils';
 
 const DevolutivasForm = ({ match }) => {
   const dispatch = useDispatch();
@@ -56,16 +57,12 @@ const DevolutivasForm = ({ match }) => {
     store => store.devolutivas.numeroRegistros
   );
 
-  const [
-    listaComponenteCurriculare,
-    setListaComponenteCurriculare,
-  ] = useState();
+  const [listaComponenteCurriculare, setListaComponenteCurriculare] =
+    useState();
 
   const [carregandoGeral, setCarregandoGeral] = useState(false);
-  const [
-    codigoComponenteCurricular,
-    setCodigoComponenteCurricular,
-  ] = useState();
+  const [codigoComponenteCurricular, setCodigoComponenteCurricular] =
+    useState();
   const [turmaInfantil, setTurmaInfantil] = useState(false);
   const [modoEdicao, setModoEdicao] = useState(false);
   const [datasParaHabilitar, setDatasParaHabilitar] = useState();
@@ -91,20 +88,41 @@ const DevolutivasForm = ({ match }) => {
     periodoFim: momentSchema.required('Campo obrigatório'),
     descricao: Yup.string()
       .required('Campo obrigatório')
-      .min(200, 'Você precisa preencher com no mínimo 200 caracteres'),
+      .test(
+        'len',
+        'Você precisa preencher com no mínimo 200 caracteres',
+        val => {
+          const length = removerTagsHtml(val)
+            ?.replaceAll(/\s/g, '')
+            ?.replace(/&nbsp;/g, '')?.length;
+
+          return length > 200;
+        }
+      ),
   });
 
   const validacoesRegistroEdicao = Yup.object({
     descricao: Yup.string()
       .required('Campo obrigatório')
-      .min(200, 'Você precisa preencher com no mínimo 200 caracteres'),
+      .test(
+        'len',
+        'Você precisa preencher com no mínimo 200 caracteres',
+        val => {
+          const length = removerTagsHtml(val)
+            ?.replaceAll(/\s/g, '')
+            ?.replace(/&nbsp;/g, '')?.length;
+
+          return length > 200;
+        }
+      ),
   });
 
   const obterPeriodoLetivoTurma = async () => {
     if (turmaSelecionada && turmaSelecionada.turma) {
-      const periodoLetivoTurmaResponse = await ServicoPeriodoEscolar.obterPeriodoLetivoTurma(
-        turmaSelecionada.turma
-      ).catch(e => erros(e));
+      const periodoLetivoTurmaResponse =
+        await ServicoPeriodoEscolar.obterPeriodoLetivoTurma(
+          turmaSelecionada.turma
+        ).catch(e => erros(e));
       if (periodoLetivoTurmaResponse?.data) {
         const datas = [
           moment(periodoLetivoTurmaResponse.data.periodoInicio).format(
@@ -142,7 +160,6 @@ const DevolutivasForm = ({ match }) => {
         : soConsulta || !permissoesTela.podeIncluir;
     setDesabilitarCampos(desabilitar);
     obterPeriodoLetivoTurma();
-
   }, [
     idDevolutiva,
     permissoesTela,
@@ -216,11 +233,12 @@ const DevolutivasForm = ({ match }) => {
     const datas = [dataInicial.format('YYYY-MM-DD')];
 
     setCarregandoGeral(true);
-    const periodoDeDiasDevolutivaPorParametro = await ServicoDevolutivas.obterPeriodoDeDiasDevolutivaPorParametro(
-      turmaSelecionada?.anoLetivo
-    )
-      .catch(e => erros(e))
-      .finally(() => setCarregandoGeral(false));
+    const periodoDeDiasDevolutivaPorParametro =
+      await ServicoDevolutivas.obterPeriodoDeDiasDevolutivaPorParametro(
+        turmaSelecionada?.anoLetivo
+      )
+        .catch(e => erros(e))
+        .finally(() => setCarregandoGeral(false));
 
     const qtdMaxDias = periodoDeDiasDevolutivaPorParametro?.data || 0;
     if (qtdMaxDias) {
@@ -339,7 +357,6 @@ const DevolutivasForm = ({ match }) => {
       }
       setValoresIniciais(inicial);
     }
-
   }, [
     codigoComponenteCurricular,
     listaComponenteCurriculare,
@@ -730,7 +747,7 @@ const DevolutivasForm = ({ match }) => {
                           <JoditEditor
                             label="Registre a sua devolutiva para este intervalo de datas"
                             form={form}
-                            value={form.values.descricao}
+                            value={valoresIniciais?.descricao}
                             name="descricao"
                             id="editor-devolutiva"
                             onChange={v => {
