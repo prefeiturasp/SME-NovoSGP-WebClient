@@ -1,7 +1,6 @@
 import { createGlobalStyle } from 'styled-components';
 import { Base } from '../componentes/colors';
 import ExclamacaoCampoErro from '~/recursos/ExclamacaoCampoErro.svg';
-import '../componentes/campoData/campoData.css';
 
 export default createGlobalStyle`
   *, *:before, *:after {
@@ -110,6 +109,59 @@ export default createGlobalStyle`
     top: 50% !important;
     font-size: 15px !important;
   }
+
+  .ant-picker {
+    height: 38px;
+    width: 100%;
+  }
+
+  .ant-picker-dropdown  {
+    z-index: 9999 !important;
+
+    .ant-picker-cell {
+      padding: 3px 0 !important;
+    }
+  }
+
+  .ant-picker-cell-selected .ant-picker-cell-inner {
+    background: #086397 !important;
+    color: #ffffff;
+  }
+
+  .ant-picker-cell-inner {
+    -webkit-transition: none;
+    transition: none;
+  }
+
+  .ant-picker-cell-in-view:hover{
+    .ant-picker-cell-inner {
+      background: #086397 !important;
+      color: #ffffff !important;
+    }
+  }
+
+  .ant-picker-cell-in-view.ant-picker-cell-today .ant-picker-cell-inner {
+    ::before {
+      border: 0 !important;
+    }
+    color: #bdbdbd;
+    font-weight: 100;
+  }
+
+  .ant-picker-header-view button:hover {
+    color: #086397 !important;
+  }
+
+  .ant-picker-dropdown .ant-picker-cell-in-view.ant-picker-cell-range-end .ant-picker-cell-inner {
+    background: #086397 !important;
+    color: #ffffff !important;
+  }
+
+  .ant-picker-dropdown .ant-picker-cell-in-view.ant-picker-cell-range-start .ant-picker-cell-inner {
+    background: #086397 !important;
+    color: #ffffff !important;
+  }
+
   /* Antd V5 */
 
   .ant-select-dropdown-menu-item  {

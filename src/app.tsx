@@ -40,19 +40,21 @@ const App: React.FC = () => {
   });
 
   return (
-    <ConfigProvider theme={SGPTheme}>
-      <ThemeProviders>
-        <Provider store={store}>
-          <PersistGate loading={null} persistor={persistor}>
-            <BrowserRouter>
-              <GlobalStyle />
-              <VersaoSistema />
-              <Routes />
-            </BrowserRouter>
-          </PersistGate>
-        </Provider>
-      </ThemeProviders>
-    </ConfigProvider>
+    <React.StrictMode>
+      <ConfigProvider theme={SGPTheme}>
+        <ThemeProviders>
+          <Provider store={store}>
+            <PersistGate loading={null} persistor={persistor}>
+              <BrowserRouter>
+                <GlobalStyle />
+                <VersaoSistema />
+                <Routes />
+              </BrowserRouter>
+            </PersistGate>
+          </Provider>
+        </ThemeProviders>
+      </ConfigProvider>
+    </React.StrictMode>
   );
 };
 
