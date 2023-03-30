@@ -149,15 +149,7 @@ const JoditEditor = forwardRef((props, ref) => {
         return false;
       }
     } else if (qtdElementoImg && dadosColadoTexto === '') {
-      const regex = new RegExp(`<img[^>]*src=".*?${spgURL}.*?"[^>]*>`);
-      const temImagemServidorSGP = dadosColadoHTML?.match(regex) || [];
-
-      if (
-        !temImagemServidorSGP.length ||
-        qtdElementoImg !== temImagemServidorSGP.length
-      ) {
-        return false;
-      }
+      return false;
     }
 
     return true;
