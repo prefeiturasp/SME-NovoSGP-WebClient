@@ -382,55 +382,54 @@ const JoditEditor = forwardRef((props, ref) => {
     };
   }, [textArea]);
 
-  useEffect(() => {
-    if (url) {
-      const element = textArea.current || '';
-      if (textArea?.current && config) {
-        if (textArea?.current?.type === 'textarea') {
-          textArea.current = Jodit.make(element, config);
-          const elementTextArea =
-            textArea?.current?.editorDocument?.getElementsByClassName(
-              'jodit'
-            )?.[0];
+  if (url) {
+    if (textArea?.current && config) {
+      const element = textArea?.current || '';
 
-          if (elementTextArea?.style) {
-            elementTextArea.style.cssText = 'overflow: auto;';
-          }
+      if (textArea?.current?.type === 'textarea') {
+        textArea.current = Jodit.make(element, config);
+        const elementTextArea =
+          textArea?.current?.editorDocument?.getElementsByClassName(
+            'jodit'
+          )?.[0];
 
-          if (elementTextArea) {
-            elementTextArea.translate = false;
-            elementTextArea.className = `${elementTextArea.className} notranslate`;
-          }
-
-          if (ref) {
-            if (typeof ref === 'function') {
-              ref(textArea.current);
-            } else {
-              ref.current = textArea.current;
-            }
-          }
-
-          textArea.current.events.on('beforePaste', e => {
-            if (verificaSeTemSvg(e) || !verificaSePodeInserirArquivo(e)) {
-              return false;
-            }
-
-            return true;
-          });
-
-          textArea.current.events.on('change', () => {
-            beforeOnChange();
-          });
-
-          textArea.current.workplace.tabIndex = tabIndex;
+        if (elementTextArea?.style) {
+          elementTextArea.style.cssText = 'overflow: auto;';
         }
+
+        if (elementTextArea) {
+          elementTextArea.translate = false;
+          elementTextArea.className = `${elementTextArea.className} notranslate`;
+        }
+
+        if (ref) {
+          if (typeof ref === 'function') {
+            ref(textArea.current);
+          } else {
+            ref.current = textArea.current;
+          }
+        }
+
+        textArea.current.events.on('beforePaste', e => {
+          if (verificaSeTemSvg(e) || !verificaSePodeInserirArquivo(e)) {
+            return false;
+          }
+
+          return true;
+        });
+
+        textArea.current.events.on('change', () => {
+          beforeOnChange();
+        });
+
+        textArea.current.workplace.tabIndex = tabIndex;
       }
     }
-  }, [url]);
+  }
 
   useEffect(() => {
-    if (textArea && textArea.current) {
-      textArea.current.value = value;
+    if (textArea?.current?.setEditorValue) {
+      textArea.current.setEditorValue(value);
       bloquearTraducaoNavegador();
     }
   }, [textArea, value]);
