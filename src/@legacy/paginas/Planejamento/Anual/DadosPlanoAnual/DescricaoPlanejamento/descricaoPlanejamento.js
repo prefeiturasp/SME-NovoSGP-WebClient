@@ -29,6 +29,7 @@ const DescricaoPlanejamento = React.memo(props => {
   );
 
   const [descricaoInicial, setDescricaoInicial] = useState();
+  const [descricaoJaAtribuida, setDescricaoJaAtribuida] = useState(false);
 
   const onChange = useCallback(
     valorNovo => {
@@ -43,6 +44,7 @@ const DescricaoPlanejamento = React.memo(props => {
         }
       });
       dispatch(setDadosBimestresPlanoAnual(dados));
+      setDescricaoJaAtribuida(true);
     },
     [dispatch, dadosBimestrePlanoAnual, tabAtualComponenteCurricular]
   );
@@ -81,11 +83,15 @@ const DescricaoPlanejamento = React.memo(props => {
     return '';
   };
 
-  const descricao = obterDadosComponenteAtual()?.descricao;
-
   useEffect(() => {
-    setDescricaoInicial(descricao);
-  }, [descricao]);
+    if (dadosBimestrePlanoAnual) {
+      const descricao = obterDadosComponenteAtual()?.descricao;
+
+      if (descricao && !descricaoJaAtribuida) {
+        setDescricaoInicial(descricao);
+      }
+    }
+  }, [dadosBimestrePlanoAnual]);
 
   return (
     <>
