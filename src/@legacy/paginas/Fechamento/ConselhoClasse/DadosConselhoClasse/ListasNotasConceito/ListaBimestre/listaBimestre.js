@@ -9,7 +9,10 @@ import { BarraLateralLista, Lista } from '../listasNotasConceitos.css';
 import LinhaJustificativa from '../../Justificativa/LinhaJustificativa/LinhaJustificativa';
 import { MarcadorTriangulo } from '~/componentes';
 import { moverFocoCampoNotaConselhoClasse } from '~/componentes-sgp/inputs/nota/funcoes';
-import { tratarStringComponenteCurricularNome } from '~/utils';
+import {
+  formatarFrequencia,
+  tratarStringComponenteCurricularNome,
+} from '~/utils';
 
 const ListaBimestre = props => {
   const {
@@ -177,7 +180,7 @@ const ListaBimestre = props => {
                       <td>{item.quantidadeAulas}</td>
                       <td>{item.faltas}</td>
                       <td>{item.ausenciasCompensadas}</td>
-                      <td>{item?.frequencia ? `${item.frequencia}%` : ''}</td>
+                      <td>{formatarFrequencia(item?.frequencia)}</td>
                     </tr>
                     <LinhaJustificativa
                       idCampo={`${descricaoGrupoMatriz} ${index} componente`}
@@ -232,7 +235,9 @@ const ListaBimestre = props => {
                         ) : null}
                         {index === 0 ? (
                           <td rowSpan={alturaLinhaMesclada}>
-                            {dadosLista.componenteRegencia.frequencia}%
+                            {formatarFrequencia(
+                              dadosLista?.componenteRegencia?.frequencia
+                            )}
                           </td>
                         ) : null}
                       </tr>

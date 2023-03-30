@@ -5,7 +5,10 @@ import shortid from 'shortid';
 import { Tooltip } from 'antd';
 import modalidadeDto from '~/dtos/modalidade';
 import notasConceitos from '~/dtos/notasConceitos';
-import { tratarStringComponenteCurricularNome } from '~/utils';
+import {
+  formatarFrequencia,
+  tratarStringComponenteCurricularNome,
+} from '~/utils';
 import CampoConceito from '../CamposNotaConceito/campoConceito';
 import CampoNota from '../CamposNotaConceito/campoNota';
 import { BarraLateralLista, Lista } from '../listasNotasConceitos.css';
@@ -208,7 +211,7 @@ const ListaFinal = props => {
                       <td>{item?.aulas}</td>
                       <td>{item.faltas}</td>
                       <td>{item.ausenciasCompensadas}</td>
-                      <td>{item.frequencia ? `${item.frequencia}%` : ''}</td>
+                      <td>{formatarFrequencia(item?.frequencia)}</td>
                     </tr>
                     <LinhaJustificativa
                       idCampo={`${descricaoGrupoMatriz} ${index} componente`}
@@ -268,9 +271,9 @@ const ListaFinal = props => {
                         ) : null}
                         {index === 0 ? (
                           <td rowSpan={alturaLinhaMesclada}>
-                            {dadosLista?.componenteRegencia?.frequencia
-                              ? `${dadosLista.componenteRegencia.frequencia}%`
-                              : ''}
+                            {formatarFrequencia(
+                              dadosLista?.componenteRegencia?.frequencia
+                            )}
                           </td>
                         ) : null}
                       </tr>

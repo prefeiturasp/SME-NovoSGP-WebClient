@@ -14,6 +14,7 @@ export const AnoLetivo = ({
   onChange,
   showSearch,
   labelRequired,
+  defaultDataList,
 }) => {
   const [exibirLoader, setExibirLoader] = useState(false);
 
@@ -27,6 +28,23 @@ export const AnoLetivo = ({
     form.setFieldValue(nameList, []);
   };
 
+  const setarDados = anos => {
+    const anosOrdenados = ordenarDescPor(anos, 'valor');
+
+    if (anosOrdenados?.length) {
+      const { valor } = anosOrdenados[0];
+      if (setInitialValues) {
+        form.initialValues[name] = valor;
+      }
+      form.setFieldValue(name, valor);
+    }
+
+    if (setInitialValues) {
+      form.initialValues[nameList] = anosOrdenados;
+    }
+    form.setFieldValue(nameList, anosOrdenados);
+  };
+
   const obterAnosLetivos = useCallback(async () => {
     setExibirLoader(true);
 
@@ -37,24 +55,10 @@ export const AnoLetivo = ({
       .finally(() => setExibirLoader(false));
 
     if (resposta?.length) {
-      const anosOrdenados = ordenarDescPor(resposta, 'valor');
-
-      if (anosOrdenados?.length) {
-        const { valor } = anosOrdenados[0];
-        if (setInitialValues) {
-          form.initialValues[name] = valor;
-        }
-        form.setFieldValue(name, valor);
-      }
-
-      if (setInitialValues) {
-        form.initialValues[nameList] = anosOrdenados;
-      }
-      form.setFieldValue(nameList, anosOrdenados);
+      setarDados(resposta);
     } else {
       limparDados();
     }
-
   }, [consideraHistorico]);
 
   useEffect(() => {
@@ -62,8 +66,11 @@ export const AnoLetivo = ({
 
     limparDados();
 
-    obterAnosLetivos();
-
+    if (defaultDataList?.length) {
+      setarDados(defaultDataList);
+    } else {
+      obterAnosLetivos();
+    }
   }, [obterAnosLetivos]);
 
   const desabilitar = listaAnosLetivos?.length === 1 || disabled;
@@ -101,7 +108,7 @@ AnoLetivo.propTypes = {
   labelRequired: PropTypes.bool,
   form: PropTypes.oneOfType([PropTypes.any]),
   onChange: PropTypes.oneOfType([PropTypes.any]),
-  nameList: PropTypes.string,
+  defaultDataList: PropTypes.oneOfType([PropTypes.any]),
 };
 
 AnoLetivo.defaultProps = {
@@ -112,4 +119,5 @@ AnoLetivo.defaultProps = {
   labelRequired: true,
   onChange: () => null,
   nameList: 'listaAnosLetivos',
+  defaultDataList: [],
 };
