@@ -112,6 +112,7 @@ import { ROUTES } from 'core/enum/routes';
 import Login from '~/paginas/Login';
 import ListaoPrincipal from '~/paginas/DiarioClasse/Listao';
 import RelatorioEncaminhamentonNAAPA from '~/paginas/Relatorios/NAAPA/encaminhamento/relatorioEncaminhamentoNAAPA';
+import RelatorioSondagemAnalitico from '~/paginas/Relatorios/Sondagem/relatorioSondagem';
 
 export interface RouteProps {
   path: string;
@@ -1621,6 +1622,17 @@ route.set(ROUTES.RELATORIO_ENCAMINHAMENTO_NAAPA, {
   tipo: RotasTipo.EstruturadaAutenticada,
   temPermissionamento: true,
   chavePermissao: ROUTES.RELATORIO_ENCAMINHAMENTO_NAAPA,
+});
+
+route.set(ROUTES.RELATORIO_SONDAGEM_ANALITICO, {
+  breadcrumbName: 'Relatório analítico',
+  menu: ['Relatórios', 'Sondagem'],
+  parent: '/',
+  component: RelatorioSondagemAnalitico,
+  exact: true,
+  tipo: RotasTipo.EstruturadaAutenticada,
+  temPermissionamento: true,
+  chavePermissao: ROUTES.RELATORIO_SONDAGEM_ANALITICO,
 });
 
 const getRoutesArray = () => {
