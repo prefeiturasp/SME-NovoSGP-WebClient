@@ -154,10 +154,10 @@ function CadastroDeAula() {
   const obterComponenteSelecionadoPorId = useCallback(
     componenteCurricularId => {
       return listaComponentes.find(
-        c =>
-          c.codigoComponenteCurricular === Number(componenteCurricularId) ||
-          c.id === Number(componenteCurricularId) ||
-          (c.regencia && c.codDisciplinaPai === Number(componenteCurricularId))
+        c => c.codigoComponenteCurricular === Number(componenteCurricularId) ||
+             c.id === Number(componenteCurricularId)
+             || (c.regencia && (c.codDisciplinaPai === Number(componenteCurricularId)))
+             || (c.territorioSaber && (c.codigoTerritorioSaber === Number(componenteCurricularId)))
       );
     },
     [listaComponentes]
@@ -335,23 +335,22 @@ function CadastroDeAula() {
               setRecorrenciaAulaEmEdicao(resp.data);
             })
             .catch(e => erros(e));
-          if (componentes) {
-            const componenteSelecionado = componentes.find(
-              c =>
-                String(c.codigoComponenteCurricular) ===
+            if (componentes) {
+              const componenteSelecionado = componentes.find(
+                c =>
+                  String(c.codigoComponenteCurricular) ===
                   String(respostaAula.disciplinaId) ||
-                String(c.id) === String(respostaAula.disciplinaId) ||
-                (c.regencia &&
-                  String(c.codDisciplinaPai) === respostaAula.disciplinaId)
-            );
+                  String(c.id) ===
+                  String(respostaAula.disciplinaId) ||
+                  (c.regencia && String(c.codDisciplinaPai) === respostaAula.disciplinaId) ||
+                  (c.territorioSaber && String(c.codigoTerritorioSaber) === respostaAula.disciplinaId)
+              );
 
-            if (
-              componenteSelecionado.codigoComponenteCurricular ==
-              respostaAula.disciplinaId
-            ) {
-              respostaAula.disciplinaId = String(componenteSelecionado.id);
-              setAula(respostaAula);
-            }
+              if (componenteSelecionado.codigoComponenteCurricular == respostaAula.disciplinaId||
+                  componenteSelecionado.codigoTerritorioSaber == respostaAula.disciplinaId && componenteSelecionado.territorioSaber){
+                respostaAula.disciplinaId = String(componenteSelecionado.id);
+                setAula(respostaAula);
+              }
 
             if (componenteSelecionado) {
               carregarGrade(
@@ -396,8 +395,6 @@ function CadastroDeAula() {
     );
     if (Number(valoresForm.quantidade) === 0) valoresForm.quantidade = 1;
     if (componente) valoresForm.disciplinaNome = componente.nome;
-    if (componente?.territorioSaber)
-      valoresForm.disciplinaId = componente.codigoComponenteCurricular;
     setCarregandoDados(true);
     servicoCadastroAula
       .salvar(id, valoresForm, componente.regencia || false)
@@ -811,7 +808,7 @@ function CadastroDeAula() {
                           listaComponentes[0]?.regencia &&
                           listaComponentes[0]?.codDisciplinaPai !== 0
                             ? 'codDisciplinaPai'
-                            : 'id'
+                            :  'id'
                         }
                         valueText="nome"
                         placeholder="Selecione um componente curricular"

@@ -255,6 +255,7 @@ const EventosCadastroForm = () => {
       refFormEventos.initialValues.tipoEventoId
     );
     setLimparRecorrencia(true);
+    setListaCalendarioParaCopiar([]);
   };
 
   useEffect(() => {

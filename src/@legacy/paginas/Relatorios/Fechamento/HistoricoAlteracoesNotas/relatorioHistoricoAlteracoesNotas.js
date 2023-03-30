@@ -201,8 +201,10 @@ const RelatorioHistoricoAlteracoesNotas = () => {
   const obterModalidades = async (ue, ano) => {
     if (ue && ano) {
       setExibirLoader(true);
-      const { data } =
-        await ServicoFiltroRelatorio.obterModalidadesPorAbrangencia(ue);
+
+      const { data } = consideraHistorico
+        ? await ServicoFiltroRelatorio.obterModalidadesPorAbrangenciaHistorica(ue, false, true, ano)
+        : await ServicoFiltroRelatorio.obterModalidadesPorAbrangencia(ue);
 
       if (data) {
         const lista = data.map(item => ({
@@ -386,9 +388,8 @@ const RelatorioHistoricoAlteracoesNotas = () => {
   ) => {
     setExibirLoader(true);
     const retorno = await api.get(
-      `v1/abrangencias/${historico}/semestres?anoLetivo=${anoLetivoSelecionado}&modalidade=${
-        modalidadeSelecionada || 0
-      }`
+      `v1/abrangencias/${historico}/semestres?anoLetivo=${anoLetivoSelecionado}&modalidade=${modalidadeSelecionada ||
+      0}`
     );
     if (retorno && retorno.data) {
       const lista = retorno.data.map(periodo => {

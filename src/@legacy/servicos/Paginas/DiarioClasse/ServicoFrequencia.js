@@ -108,6 +108,9 @@ class ServicoFrequencia {
 
   salvarFrequenciaListao = params =>
     api.post(`${urlPadrao}/frequencias/salvar`, params);
+
+  registrarLog = mensagem =>
+    api.post(`${urlPadrao}/frequencias/log/registrar`, { mensagem });
 }
 
 export default new ServicoFrequencia();

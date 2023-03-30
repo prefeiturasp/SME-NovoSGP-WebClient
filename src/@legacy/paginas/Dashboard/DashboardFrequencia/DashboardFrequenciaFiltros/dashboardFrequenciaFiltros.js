@@ -237,7 +237,9 @@ const DashboardFrequenciaFiltros = () => {
     const retorno = await AbrangenciaServico.obterSemestres(
       consideraHistorico,
       anoLetivo,
-      modalidade
+      modalidade,
+      dre?.codigo === OPCAO_TODOS ? '' : dre?.codigo,
+      ue?.codigo === OPCAO_TODOS ? '' : ue?.codigo
     )
       .catch(e => erros(e))
       .finally(() => setCarregandoSemestres(false));
@@ -255,7 +257,7 @@ const DashboardFrequenciaFiltros = () => {
       ServicoDashboardFrequencia.atualizarFiltros('semestre', undefined);
       setListaSemestres([]);
     }
-  }, [consideraHistorico, anoLetivo, modalidade]);
+  }, [consideraHistorico, anoLetivo, modalidade, ue, dre]);
 
   useEffect(() => {
     if (

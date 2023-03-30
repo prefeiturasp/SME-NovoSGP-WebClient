@@ -7,7 +7,6 @@ import { DataTable } from '~/componentes';
 import { Ordenacao } from '~/componentes-sgp';
 import SinalizacaoAEE from '~/componentes-sgp/SinalizacaoAEE/sinalizacaoAEE';
 import { Base } from '~/componentes/colors';
-import tipoIndicativoFrequencia from '~/dtos/tipoIndicativoFrequencia';
 import ListaoContext from '~/paginas/DiarioClasse/Listao/listaoContext';
 import { setTelaEmEdicao } from '~/redux/modulos/geral/actions';
 import {
@@ -15,13 +14,12 @@ import {
   setExibirModalAnotacaoFrequencia,
 } from '~/redux/modulos/modalAnotacaoFrequencia/actions';
 import ServicoAnotacaoFrequenciaAluno from '~/servicos/Paginas/DiarioClasse/ServicoAnotacaoFrequenciaAluno';
+import { formatarFrequencia } from '~/utils';
 import CampoTiposFrequencia from './componentes/campoTiposFrequencia';
 import ListaoBotaoAnotacao from './componentes/listaoBotaoAnotacao';
 import ListaoModalAnotacoesFrequencia from './componentes/listaoModalAnotacaoFrequencia';
 import ReposicaoLabel from './componentes/reposicaoLabel';
 import {
-  IndicativoAlerta,
-  IndicativoCritico,
   LinhaTabela,
   MarcadorSituacao,
   TextoEstilizado,
@@ -313,21 +311,11 @@ const ListaoListaFrequencia = () => {
       }
       let children = '';
 
-      const percentual = aluno?.indicativoFrequencia?.percentual
-        ? `${aluno.indicativoFrequencia.percentual}%`
-        : '';
+      const percentual = formatarFrequencia(
+        aluno?.indicativoFrequencia?.percentual
+      );
 
-      switch (aluno?.indicativoFrequencia?.tipo) {
-        case tipoIndicativoFrequencia.Alerta:
-          children = <IndicativoAlerta>{percentual}</IndicativoAlerta>;
-          break;
-        case tipoIndicativoFrequencia.Critico:
-          children = <IndicativoCritico>{percentual}</IndicativoCritico>;
-          break;
-        default:
-          children = percentual;
-          break;
-      }
+      children = percentual;
 
       const obj = {
         children,

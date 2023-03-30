@@ -8,7 +8,7 @@ import { ExibirEncaminhamentosEncerrados } from '~/componentes-sgp/inputs/exibir
 import { PortaEntradaNAAPA } from '~/componentes-sgp/inputs/porta-entrada-naapa';
 import { FluxoAlertaNAAPA } from '~/componentes-sgp/inputs/fluxo-alerta-naapa';
 
-const RelatorioEncaminhamentoAEEForm = props => {
+const RelatorioEncaminhamentoNAAPAForm = props => {
   const { form, onChangeCampos } = props;
 
   const situacaoIds = form?.values?.situacaoIds;
@@ -72,14 +72,14 @@ const RelatorioEncaminhamentoAEEForm = props => {
   );
 };
 
-RelatorioEncaminhamentoAEEForm.propTypes = {
+RelatorioEncaminhamentoNAAPAForm.propTypes = {
   onChangeCampos: PropTypes.func,
   form: PropTypes.oneOfType([PropTypes.any]),
 };
 
-RelatorioEncaminhamentoAEEForm.defaultProps = {
+RelatorioEncaminhamentoNAAPAForm.defaultProps = {
   form: null,
   onChangeCampos: () => null,
 };
 
-export default RelatorioEncaminhamentoAEEForm;
+export default RelatorioEncaminhamentoNAAPAForm;

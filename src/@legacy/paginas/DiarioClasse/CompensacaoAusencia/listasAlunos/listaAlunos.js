@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import { DataTable, Label } from '~/componentes';
 import { SGP_TABLE_LISTA_ALUNOS } from '~/constantes/ids/table';
-import { ordenarPor } from '~/utils/funcoes/gerais';
+import { formatarFrequencia, ordenarPor } from '~/utils/funcoes/gerais';
 
 import { CardTabelaAlunos } from '../styles';
 
@@ -12,13 +12,11 @@ const ListaAlunos = props => {
   const listaOrdenada = ordenarPor(lista, 'nome');
 
   const montaExibicaoPercentual = (frequencia, dadosAluno) => {
-    const frequenciaArredondada = frequencia
-      ? Number(frequencia).toFixed(2)
-      : '0.00';
+    const frequenciaFormatada = formatarFrequencia(frequencia);
     if (dadosAluno.alerta) {
       return (
         <>
-          {`${frequenciaArredondada}% `}
+          {frequenciaFormatada}
           <i
             className="fas fa-exclamation-triangle"
             style={{ color: '#b40c02' }}
@@ -26,7 +24,7 @@ const ListaAlunos = props => {
         </>
       );
     }
-    return `${frequenciaArredondada}%`;
+    return frequenciaFormatada;
   };
 
   const colunasListaAlunos = [
@@ -37,7 +35,7 @@ const ListaAlunos = props => {
     },
     {
       title: 'Frequência',
-      dataIndex: 'percentualFrequencia',
+      dataIndex: 'frequenciaFormatado',
       render: (frequencia, dadosAluno) =>
         montaExibicaoPercentual(frequencia, dadosAluno),
     },
