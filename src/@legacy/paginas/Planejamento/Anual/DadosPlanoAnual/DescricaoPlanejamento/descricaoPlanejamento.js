@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import React, { useCallback } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Auditoria, Label } from '~/componentes';
 import JoditEditor from '~/componentes/jodit-editor/joditEditor';
@@ -27,6 +27,8 @@ const DescricaoPlanejamento = React.memo(props => {
   const planoAnualSomenteConsulta = useSelector(
     store => store.planoAnual.planoAnualSomenteConsulta
   );
+
+  const [descricaoInicial, setDescricaoInicial] = useState();
 
   const onChange = useCallback(
     valorNovo => {
@@ -79,7 +81,11 @@ const DescricaoPlanejamento = React.memo(props => {
     return '';
   };
 
-  const descricaoInicial = obterDadosComponenteAtual()?.descricao;
+  const descricao = obterDadosComponenteAtual()?.descricao;
+
+  useEffect(() => {
+    setDescricaoInicial(descricao);
+  }, [descricao]);
 
   return (
     <>
@@ -102,7 +108,7 @@ const DescricaoPlanejamento = React.memo(props => {
               if (
                 !planoAnualSomenteConsulta &&
                 periodoAberto &&
-                obterDadosComponenteAtual()?.descricao !== v
+                descricaoInicial !== v
               ) {
                 dispatch(setPlanoAnualEmEdicao(true));
                 onChange(v);
