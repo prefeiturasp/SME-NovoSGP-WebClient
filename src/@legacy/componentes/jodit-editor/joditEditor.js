@@ -4,7 +4,7 @@ import 'jodit/build/jodit.min.css';
 import PropTypes from 'prop-types';
 import React, { forwardRef, useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
-import { store } from '~/redux';
+import { store } from '@/core/redux';
 import { erro } from '~/servicos/alertas';
 import { urlBase } from '~/servicos/variaveis';
 import { Base } from '../colors';
@@ -426,7 +426,7 @@ const JoditEditor = forwardRef((props, ref) => {
         }
       }
     }
-  }, [url]);
+  }, [textArea, url]);
 
   useEffect(() => {
     if (textArea?.current?.setEditorValue) {
@@ -490,13 +490,13 @@ const JoditEditor = forwardRef((props, ref) => {
         {(form && form.errors[name]) || mensagemErro}
       </span>
     ) : (
-      ''
+      <></>
     );
   };
 
   return (
     <>
-      {label ? <Label text={label} isRequired={labelRequired} /> : ''}
+      {label ? <Label text={label} isRequired={labelRequired} /> : <></>}
       {form ? editorComValidacoes() : editorSemValidacoes()}
       {obterErros()}
     </>
