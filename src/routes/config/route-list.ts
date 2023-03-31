@@ -112,6 +112,7 @@ import { ROUTES } from 'core/enum/routes';
 import Login from '~/paginas/Login';
 import ListaoPrincipal from '~/paginas/DiarioClasse/Listao';
 import RelatorioEncaminhamentonNAAPA from '~/paginas/Relatorios/NAAPA/encaminhamento/relatorioEncaminhamentoNAAPA';
+import RelatorioSondagemAnalitico from '~/paginas/Relatorios/Sondagem/relatorioSondagem';
 
 export interface RouteProps {
   path: string;
@@ -1623,22 +1624,36 @@ route.set(ROUTES.RELATORIO_ENCAMINHAMENTO_NAAPA, {
   chavePermissao: ROUTES.RELATORIO_ENCAMINHAMENTO_NAAPA,
 });
 
-for (const [key, value] of route) {
-  const rota = value;
-  rota.path = key;
-  routesArray.push(rota);
+route.set(ROUTES.RELATORIO_SONDAGEM_ANALITICO, {
+  breadcrumbName: 'Relatório analítico',
+  menu: ['Relatórios', 'Sondagem'],
+  parent: '/',
+  component: RelatorioSondagemAnalitico,
+  exact: true,
+  tipo: RotasTipo.EstruturadaAutenticada,
+  temPermissionamento: true,
+  chavePermissao: ROUTES.RELATORIO_SONDAGEM_ANALITICO,
+});
 
-  const rotaRedux = {
-    path: value.paginaInicial ? '/' : key,
-    icone: value.icone,
-    dicaIcone: value.dicaIcone,
-    breadcrumbName: value.breadcrumbName,
-    menu: value.menu,
-    parent: value.parent,
-    limpaSelecaoMenu: value.limpaSelecaoMenu,
-  };
+const getRoutesArray = () => {
+  for (const [key, value] of route) {
+    const rota = value;
+    rota.path = key;
+    routesArray.push(rota);
 
-  store.dispatch(setRotas(rotaRedux));
-}
+    const rotaRedux = {
+      path: value.paginaInicial ? '/' : key,
+      icone: value.icone,
+      dicaIcone: value.dicaIcone,
+      breadcrumbName: value.breadcrumbName,
+      menu: value.menu,
+      parent: value.parent,
+      limpaSelecaoMenu: value.limpaSelecaoMenu,
+    };
 
-export default routesArray;
+    store.dispatch(setRotas(rotaRedux));
+  }
+  return routesArray;
+};
+
+export { getRoutesArray };

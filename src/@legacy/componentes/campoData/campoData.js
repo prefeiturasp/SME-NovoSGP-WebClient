@@ -283,7 +283,9 @@ const CampoData = ({
 
   const obterErros = () => {
     return (form && form.touched[name] && form.errors[name]) || temErro ? (
-      <span>{(form && form.errors[name]) || mensagemErro}</span>
+      <span style={{ color: Base.Vermelho, marginBottom: '5px' }}>
+        {(form && form.errors[name]) || mensagemErro}
+      </span>
     ) : (
       ''
     );

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Link, Navigate, useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { store } from '@/core/redux';
 import Filtro from '../filtro';
@@ -114,7 +114,7 @@ const Navbar = () => {
                   to={URL_HOME}
                   onClick={async e => {
                     const pararAcao = await validarNavegacaoTela(e, URL_HOME);
-                    if (!pararAcao) Navigate(URL_HOME);
+                    if (!pararAcao) navigate(URL_HOME);
                   }}
                 >
                   <Logo

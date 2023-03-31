@@ -9,6 +9,7 @@ import { moverFocoCampoNota } from '~/componentes-sgp/inputs/nota/funcoes';
 import NomeEstudanteLista from '~/componentes-sgp/NomeEstudanteLista/nomeEstudanteLista';
 
 import { setExpandirLinha } from '~/redux/modulos/notasConceitos/actions';
+import { formatarFrequencia } from '~/utils';
 
 import CampoConceitoFinal from './campoConceitoFinal';
 import ColunaNotaFinalRegencia from './colunaNotaFinalRegencia';
@@ -213,11 +214,7 @@ const LinhaAluno = ({
               )}
           </td>
         )}
-        <td>
-          {registraFrequencia && aluno?.frequencia
-            ? `${aluno?.frequencia}%`
-            : ''}
-        </td>
+        <td>{registraFrequencia && formatarFrequencia(aluno?.frequencia)}</td>
       </tr>
       <LinhaConceitoFinal
         indexLinha={indexAluno}

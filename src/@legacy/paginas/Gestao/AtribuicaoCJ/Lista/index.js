@@ -53,7 +53,7 @@ function AtribuicaoCJLista() {
 
   const onClickBotaoPrincipal = () =>
     navigate(
-      `/gestao/atribuicao-cjs/novo?dreId=${filtro.DreId}&ueId=${filtro.UeId}&historico=${filtro.Historico}`
+      `/gestao/atribuicao-cjs/novo?dreId=${filtro.DreId}${filtro.UeId ? `&ueId=${filtro.UeId}` : ''}&historico=${filtro.Historico}`
     );
 
   const onSelecionarItems = items => {

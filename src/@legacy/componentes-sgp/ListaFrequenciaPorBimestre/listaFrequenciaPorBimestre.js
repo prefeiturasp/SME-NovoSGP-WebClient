@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import shortid from 'shortid';
+import { formatarFrequencia } from '~/utils';
 import AusenciasEstudante from './ausenciasEstudante';
 import BtnExpandirAusenciaEstudante from './btnExpandirAusenciaEstudante';
 import { TabelaColunasFixas } from './listaFrequenciaPorBimestre.css';
@@ -55,15 +56,17 @@ const ListaFrequenciaPorBimestre = props => {
                                   {data.ausencias}
                                 </td>
                                 <td className="col-valor-linha-dois">
-                                  {data.frequencia ? (
+                                  {data.frequenciaFormatado ? (
                                     <>
-                                      {data.frequencia}
+                                      {formatarFrequencia(
+                                        data.frequenciaFormatado
+                                      )}
                                       <BtnExpandirAusenciaEstudante
                                         indexLinha={index}
                                       />
                                     </>
                                   ) : (
-                                    data.frequencia
+                                    ''
                                   )}
                                 </td>
                               </tr>

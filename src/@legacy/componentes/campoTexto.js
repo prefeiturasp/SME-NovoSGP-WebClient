@@ -235,7 +235,7 @@ CampoTexto.defaultProps = {
   iconeBusca: false,
   allowClear: true,
   minRowsTextArea: '2',
-  height: '30',
+  height: '38',
   onBlur: () => {},
   labelRequired: false,
   addMaskTelefone: false,

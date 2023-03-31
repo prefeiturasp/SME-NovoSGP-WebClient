@@ -1,7 +1,6 @@
 import { createGlobalStyle } from 'styled-components';
 import { Base } from '../componentes/colors';
 import ExclamacaoCampoErro from '~/recursos/ExclamacaoCampoErro.svg';
-import '../componentes/campoData/campoData.css';
 
 export default createGlobalStyle`
   *, *:before, *:after {
@@ -72,6 +71,98 @@ export default createGlobalStyle`
     background-color:  ${Base.Roxo}  !important;
     color: #ffffff !important;
   }
+
+  /* Antd V5 */
+  .ant-select {
+    width: 100%;
+  }
+
+  .ant-select-item:hover {
+    color: #ffffff !important;
+  }
+
+  .ant-select-item {
+    -webkit-transition: none !important;
+    transition: none !important;
+    border-radius: 0px !important;
+
+    .anticon-check {
+      color: white !important;
+    }
+  }
+
+  .ant-select-item-option-active,
+  .ant-select-item-option-selected {
+    color: #ffffff !important;
+  }
+
+  .ant-select-selection-item {
+    font-weight: bold !important;
+    color: rgba(0, 0, 0, 0.65);
+  }
+
+  .ant-select-disabled .ant-select-selection-item {
+    color: rgba(0, 0, 0, 0.25) !important;
+  }
+
+  .ant-select-clear {
+    top: 50% !important;
+    font-size: 15px !important;
+  }
+
+  .ant-picker {
+    height: 38px;
+    width: 100%;
+  }
+
+  .ant-picker-dropdown  {
+    z-index: 9999 !important;
+
+    .ant-picker-cell {
+      padding: 3px 0 !important;
+    }
+  }
+
+  .ant-picker-cell-selected .ant-picker-cell-inner {
+    background: #086397 !important;
+    color: #ffffff;
+  }
+
+  .ant-picker-cell-inner {
+    -webkit-transition: none;
+    transition: none;
+  }
+
+  .ant-picker-cell-in-view:hover{
+    .ant-picker-cell-inner {
+      background: #086397 !important;
+      color: #ffffff !important;
+    }
+  }
+
+  .ant-picker-cell-in-view.ant-picker-cell-today .ant-picker-cell-inner {
+    ::before {
+      border: 0 !important;
+    }
+    color: #bdbdbd;
+    font-weight: 100;
+  }
+
+  .ant-picker-header-view button:hover {
+    color: #086397 !important;
+  }
+
+  .ant-picker-dropdown .ant-picker-cell-in-view.ant-picker-cell-range-end .ant-picker-cell-inner {
+    background: #086397 !important;
+    color: #ffffff !important;
+  }
+
+  .ant-picker-dropdown .ant-picker-cell-in-view.ant-picker-cell-range-start .ant-picker-cell-inner {
+    background: #086397 !important;
+    color: #ffffff !important;
+  }
+
+  /* Antd V5 */
 
   .ant-select-dropdown-menu-item  {
     -webkit-transition: none !important;

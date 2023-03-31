@@ -105,12 +105,25 @@ const JoditEditor = forwardRef((props, ref) => {
     return temTagSvg;
   };
 
-  const verificaSePodeInserirImagem = e => {
+  const verificaSePodeInserirArquivo = e => {
     const dadosColadoTexto = e?.clipboardData?.getData?.('text');
     const dadosColadoHTML = e?.clipboardData?.getData?.('text/html');
 
     const qtdElementoImgNova = dadosColadoHTML?.match(/<img/g) || [];
+    const qtdElementoVideo = dadosColadoHTML?.match(/<video/g) || [];
     const temImagemNosDadosColados = qtdElementoImgNova.length;
+    const temVideoNosDadosColados = qtdElementoVideo.length;
+
+    if (
+      !permiteInserirArquivo &&
+      (temImagemNosDadosColados || temVideoNosDadosColados)
+    ) {
+      e.preventDefault();
+      e.stopPropagation();
+      erro('Não é possível inserir arquivo');
+
+      return false;
+    }
 
     if (temImagemNosDadosColados && qtdMaxImg) {
       const qtdElementoImgAtual =
@@ -244,6 +257,7 @@ const JoditEditor = forwardRef((props, ref) => {
       },
     },
     iframe: true,
+    spellcheck: true,
     showWordsCounter: false,
     showXPathInStatusbar: false,
     buttons: BOTOES_PADRAO,
@@ -397,7 +411,7 @@ const JoditEditor = forwardRef((props, ref) => {
           }
 
           textArea.current.events.on('beforePaste', e => {
-            if (verificaSeTemSvg(e) || !verificaSePodeInserirImagem(e)) {
+            if (verificaSeTemSvg(e) || !verificaSePodeInserirArquivo(e)) {
               return false;
             }
 
@@ -412,15 +426,14 @@ const JoditEditor = forwardRef((props, ref) => {
         }
       }
     }
-  }, [url]);
+  }, [textArea, url]);
 
   useEffect(() => {
-    if (textArea && textArea.current) {
-      textArea.current.value = value;
+    if (textArea?.current?.setEditorValue) {
+      textArea.current.setEditorValue(value);
       bloquearTraducaoNavegador();
     }
   }, [textArea, value]);
-
   useEffect(() => {
     if (config && textArea?.current && textArea?.current?.type !== 'textarea') {
       textArea.current.setReadOnly(desabilitar);
@@ -477,13 +490,13 @@ const JoditEditor = forwardRef((props, ref) => {
         {(form && form.errors[name]) || mensagemErro}
       </span>
     ) : (
-      ''
+      <></>
     );
   };
 
   return (
     <>
-      {label ? <Label text={label} isRequired={labelRequired} /> : ''}
+      {label ? <Label text={label} isRequired={labelRequired} /> : <></>}
       {form ? editorComValidacoes() : editorSemValidacoes()}
       {obterErros()}
     </>

@@ -1,10 +1,15 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { DetalhesAluno } from '~/componentes';
+import { DetalhesAluno, Loader } from '~/componentes';
 import { setMostrarMensagemSemHistorico } from '~/redux/modulos/registroIndividual/actions';
 
-import { erros, ServicoRegistroIndividual, sucesso } from '~/servicos';
+import {
+  erros,
+  ServicoCalendarios,
+  ServicoRegistroIndividual,
+  sucesso,
+} from '~/servicos';
 
 const ObjectCardRegistroIndividual = () => {
   const [desabilitarBotaoImprimir, setDesabilitarBotaoImprimir] = useState();
@@ -34,8 +39,13 @@ const ObjectCardRegistroIndividual = () => {
 
   const turmaSelecionada = useSelector(state => state.usuario.turmaSelecionada);
 
+  const codigoTurma = turmaSelecionada?.turma;
+
   const { codigoEOL } = dadosAlunoObjectCard;
   const dispatch = useDispatch();
+
+  const [frequencia, setFrequencia] = useState();
+  const [exibirLoaderFrequencia, setExibirLoaderFrequencia] = useState(false);
 
   const gerar = async () => {
     await ServicoRegistroIndividual.gerar({
@@ -66,19 +76,38 @@ const ObjectCardRegistroIndividual = () => {
     desabilitarBotaoImprimir,
   ]);
 
+  const obterFrequenciaGlobalAluno = useCallback(async () => {
+    if (codigoEOL && codigoTurma) {
+      setExibirLoaderFrequencia(true);
+      const retorno = await ServicoCalendarios.obterFrequenciaAluno(
+        codigoEOL,
+        codigoTurma
+      )
+        .finally(() => setExibirLoaderFrequencia(false))
+        .catch(e => erros(e));
+
+      setFrequencia(retorno?.data || '');
+    }
+  }, [codigoTurma, codigoEOL]);
+
+  useEffect(() => {
+    obterFrequenciaGlobalAluno();
+  }, [obterFrequenciaGlobalAluno]);
+
   return (
-    <DetalhesAluno
-      exibirFrequencia={false}
-      dados={dadosAlunoObjectCard}
-      permiteAlterarImagem={!desabilitarCampos}
-      onClickImprimir={gerar}
-      desabilitarImprimir={
-        !codigoEOL ||
-        !dataInicioImpressaoRegistrosAnteriores ||
-        !dataFimImpressaoRegistrosAnteriores ||
-        desabilitarBotaoImprimir
-      }
-    />
+    <Loader loading={exibirLoaderFrequencia}>
+      <DetalhesAluno
+        dados={{ ...dadosAlunoObjectCard, frequencia }}
+        permiteAlterarImagem={!desabilitarCampos}
+        onClickImprimir={gerar}
+        desabilitarImprimir={
+          !codigoEOL ||
+          !dataInicioImpressaoRegistrosAnteriores ||
+          !dataFimImpressaoRegistrosAnteriores ||
+          desabilitarBotaoImprimir
+        }
+      />
+    </Loader>
   );
 };
 

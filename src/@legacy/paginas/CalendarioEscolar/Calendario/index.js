@@ -431,7 +431,6 @@ const CalendarioEscolar = () => {
                   showList
                   isHandleSearch
                   placeholder="Tipo de calendário"
-                  className="col-md-12"
                   name="tipoCalendarioId"
                   id="tipoCalendarioId"
                   lista={listaTipoCalendario}

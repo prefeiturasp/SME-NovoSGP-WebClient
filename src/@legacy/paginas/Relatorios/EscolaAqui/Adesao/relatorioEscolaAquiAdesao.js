@@ -114,7 +114,7 @@ const RelatorioEscolaAquiAdesao = () => {
   const obterUes = useCallback(async dre => {
     if (dre) {
       setExibirLoader(true);
-      const retorno = await ServicoFiltroRelatorio.obterUes(dre, true).catch(
+      const retorno = await ServicoFiltroRelatorio.obterUes(dre, false).catch(
         e => {
           erros(e);
           setExibirLoader(false);

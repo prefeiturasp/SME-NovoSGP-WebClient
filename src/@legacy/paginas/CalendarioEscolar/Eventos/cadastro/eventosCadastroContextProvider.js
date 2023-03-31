@@ -22,10 +22,8 @@ const EventosCadastroContextProvider = ({ children }) => {
     listaCalendarioParaCopiarInicial,
     setListaCalendarioParaCopiarInicial,
   ] = useState([]);
-  const [
-    exibirModalRetornoCopiarEvento,
-    setExibirModalRetornoCopiarEvento,
-  ] = useState(false);
+  const [exibirModalRetornoCopiarEvento, setExibirModalRetornoCopiarEvento] =
+    useState(false);
   const [listaCalendarioParaCopiar, setListaCalendarioParaCopiar] = useState(
     []
   );

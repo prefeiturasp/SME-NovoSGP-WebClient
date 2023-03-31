@@ -42,15 +42,20 @@ import {
   SGP_RADIO_TIPO_AULA,
 } from '~/constantes/ids/radio';
 import { SGP_DATA_AULA } from '~/constantes/ids/date';
-import { ContainerColumnReverse } from '~/paginas/Planejamento/Anual/planoAnual.css';
+import { ContainerColumnReverseRowAntd } from '~/paginas/Planejamento/Anual/planoAnual.css';
 import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
 import BotaoExcluirPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoExcluirPadrao';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 
-function CadastroDeAula({ match, location }) {
+function CadastroDeAula() {
   const navigate = useNavigate();
+  const location = useLocation();
+  const routeParams = useParams();
 
-  const { id, tipoCalendarioId, somenteReposicao } = match.params;
+  const id = routeParams?.id;
+  const tipoCalendarioId = routeParams?.tipoCalendarioId;
+  const somenteReposicao = routeParams?.somenteReposicao;
+
   const ehReposicao = somenteReposicao === 'true';
   const permissoesTela = useSelector(state => state.usuario.permissoes);
   const somenteConsulta = verificaSomenteConsulta(
@@ -149,10 +154,10 @@ function CadastroDeAula({ match, location }) {
   const obterComponenteSelecionadoPorId = useCallback(
     componenteCurricularId => {
       return listaComponentes.find(
-        c =>
-          c.codigoComponenteCurricular === Number(componenteCurricularId) ||
-          c.id === Number(componenteCurricularId) ||
-          (c.regencia && c.codDisciplinaPai === Number(componenteCurricularId))
+        c => c.codigoComponenteCurricular === Number(componenteCurricularId) ||
+             c.id === Number(componenteCurricularId)
+             || (c.regencia && (c.codDisciplinaPai === Number(componenteCurricularId)))
+             || (c.territorioSaber && (c.codigoTerritorioSaber === Number(componenteCurricularId)))
       );
     },
     [listaComponentes]
@@ -330,23 +335,22 @@ function CadastroDeAula({ match, location }) {
               setRecorrenciaAulaEmEdicao(resp.data);
             })
             .catch(e => erros(e));
-          if (componentes) {
-            const componenteSelecionado = componentes.find(
-              c =>
-                String(c.codigoComponenteCurricular) ===
+            if (componentes) {
+              const componenteSelecionado = componentes.find(
+                c =>
+                  String(c.codigoComponenteCurricular) ===
                   String(respostaAula.disciplinaId) ||
-                String(c.id) === String(respostaAula.disciplinaId) ||
-                (c.regencia &&
-                  String(c.codDisciplinaPai) === respostaAula.disciplinaId)
-            );
+                  String(c.id) ===
+                  String(respostaAula.disciplinaId) ||
+                  (c.regencia && String(c.codDisciplinaPai) === respostaAula.disciplinaId) ||
+                  (c.territorioSaber && String(c.codigoTerritorioSaber) === respostaAula.disciplinaId)
+              );
 
-            if (
-              componenteSelecionado.codigoComponenteCurricular ==
-              respostaAula.disciplinaId
-            ) {
-              respostaAula.disciplinaId = String(componenteSelecionado.id);
-              setAula(respostaAula);
-            }
+              if (componenteSelecionado.codigoComponenteCurricular == respostaAula.disciplinaId||
+                  componenteSelecionado.codigoTerritorioSaber == respostaAula.disciplinaId && componenteSelecionado.territorioSaber){
+                respostaAula.disciplinaId = String(componenteSelecionado.id);
+                setAula(respostaAula);
+              }
 
             if (componenteSelecionado) {
               carregarGrade(
@@ -391,8 +395,6 @@ function CadastroDeAula({ match, location }) {
     );
     if (Number(valoresForm.quantidade) === 0) valoresForm.quantidade = 1;
     if (componente) valoresForm.disciplinaNome = componente.nome;
-    if (componente?.territorioSaber)
-      valoresForm.disciplinaId = componente.codigoComponenteCurricular;
     setCarregandoDados(true);
     servicoCadastroAula
       .salvar(id, valoresForm, componente.regencia || false)
@@ -590,7 +592,7 @@ function CadastroDeAula({ match, location }) {
 
   useEffect(() => {
     setBreadcrumbManual(
-      match.url,
+      location?.pathname,
       'Cadastro de Aula',
       '/calendario-escolar/calendario-professor'
     );
@@ -598,7 +600,7 @@ function CadastroDeAula({ match, location }) {
     if (turmaFiltro === turmaSelecionada.turma) {
       obterAula();
     }
-  }, [obterAula, match.url]);
+  }, [obterAula, location]);
 
   useEffect(() => {
     if (!carregandoDados && aula.somenteLeitura) {
@@ -752,28 +754,31 @@ function CadastroDeAula({ match, location }) {
 
               <Card padding="24px 24px">
                 <Form>
-                  <Row gutter={[16, 16]}>
-                    <ContainerColumnReverse>
-                      <Col span={6}>
-                        <CampoData
-                          placeholder="Data da aula"
-                          label="Data da aula"
-                          formatoData="DD/MM/YYYY"
-                          name="dataAula"
-                          id={SGP_DATA_AULA}
-                          form={form}
-                          onChange={onChangeDataAula}
-                          labelRequired
-                        />
-                      </Col>
-
-                      <Col span={18}>
-                        {registroMigrado && (
-                          <RegistroMigrado>Registro Migrado</RegistroMigrado>
-                        )}
-                      </Col>
-                    </ContainerColumnReverse>
-                  </Row>
+                  <ContainerColumnReverseRowAntd
+                    gutter={[16, 16]}
+                    style={{ paddingBottom: '8px' }}
+                  >
+                    <Col md={6}>
+                      <CampoData
+                        placeholder="Data da aula"
+                        label="Data da aula"
+                        formatoData="DD/MM/YYYY"
+                        name="dataAula"
+                        id={SGP_DATA_AULA}
+                        form={form}
+                        onChange={onChangeDataAula}
+                        labelRequired
+                      />
+                    </Col>
+                    <Col
+                      span={18}
+                      style={{ display: 'flex', justifyContent: 'end' }}
+                    >
+                      {registroMigrado && (
+                        <RegistroMigrado>Registro Migrado</RegistroMigrado>
+                      )}
+                    </Col>
+                  </ContainerColumnReverseRowAntd>
 
                   <Row gutter={[16, 16]}>
                     <Col md={24} lg={6}>
@@ -803,7 +808,7 @@ function CadastroDeAula({ match, location }) {
                           listaComponentes[0]?.regencia &&
                           listaComponentes[0]?.codDisciplinaPai !== 0
                             ? 'codDisciplinaPai'
-                            : 'id'
+                            :  'id'
                         }
                         valueText="nome"
                         placeholder="Selecione um componente curricular"

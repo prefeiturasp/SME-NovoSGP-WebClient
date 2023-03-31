@@ -734,21 +734,19 @@ const AcompanhamentoRegistros = () => {
               </Loader>
             </Col>
           </Row>
-          <Row gutter={[16, 16]} style={{ padding: '8px 8px 5px' }}>
-            <Row type="flex">
-              <Localizador
-                classesRF="px-0"
-                dreId={dreId}
-                ueId={ueId}
-                rfEdicao={professorCodigo}
-                anoLetivo={anoLetivo}
-                showLabel
-                onChange={onChangeLocalizador}
-                buscarCaracterPartir={5}
-                desabilitado={!ueId}
-                buscarPorAbrangencia
-              />
-            </Row>
+          <Row gutter={[16, 16]}>
+            <Localizador
+              dreId={dreId}
+              ueId={ueId}
+              rfEdicao={professorCodigo}
+              anoLetivo={anoLetivo}
+              showLabel
+              onChange={onChangeLocalizador}
+              buscarCaracterPartir={5}
+              desabilitado={!ueId}
+              buscarPorAbrangencia
+              novaEstrutura
+            />
           </Row>
         </Col>
       </Card>

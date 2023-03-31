@@ -24,6 +24,7 @@ import ModalAnotacaoAluno from '../../FechamentoModalAnotacaoAluno/modal-anotaca
 import SinalizacaoAEE from '~/componentes-sgp/SinalizacaoAEE/sinalizacaoAEE';
 import Alert from '~/componentes/alert';
 import ListaoBotaoAnotacao from '~/paginas/DiarioClasse/Listao/operacoes/listaoTabs/tabFrequencia/lista/componentes/listaoBotaoAnotacao';
+import { formatarFrequencia } from '~/utils';
 
 const FechamentoBimestreLista = props => {
   const {
@@ -379,9 +380,7 @@ const FechamentoBimestreLista = props => {
                             !item.ativo ? 'fundo-cinza' : ''
                           }`}
                         >
-                          {item.percentualFrequencia
-                            ? `${item.percentualFrequencia}%`
-                            : ''}
+                          {formatarFrequencia(item?.percentualFrequencia)}
                         </td>
                       ) : (
                         ''

@@ -102,6 +102,14 @@ const DiaCompleto = props => {
     store.dispatch(selecionaDia(undefined));
   }, [filtros]);
 
+  const styleLoader = {
+    width: 'inherit',
+  };
+
+  if (carregandoDia) {
+    styleLoader.padding = '40px';
+  }
+
   return (
     <DiaCompletoWrapper className={`${estaAberto && `visivel`}`}>
       {estaAberto && (
@@ -109,7 +117,7 @@ const DiaCompleto = props => {
           loading={carregandoDia}
           tip="Carregando eventos..."
           className={carregandoDia ? 'text-center' : ''}
-          style={{ width: 'inherit' }}
+          style={{ ...styleLoader }}
         >
           {eventosDia && eventosDia.length > 0 ? (
             <>

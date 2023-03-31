@@ -8,7 +8,7 @@ class ServicoFiltroRelatorio {
     return api.get(`${urlPadrao}/dres`);
   };
 
-  obterUes = (codigoDre, consideraHistorico, anoLetivo, consideraNovasUEs = false) => {
+  obterUes = (codigoDre, consideraHistorico = false, anoLetivo = new Date().getFullYear(), consideraNovasUEs = false) => {
     const url = `${urlPadrao}/dres/${codigoDre}/ues?consideraNovasUEs=${consideraNovasUEs}&consideraHistorico=${consideraHistorico}&anoLetivo=${anoLetivo}`;
     return api.get(url);
   };
