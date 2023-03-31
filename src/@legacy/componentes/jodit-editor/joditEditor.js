@@ -4,7 +4,7 @@ import 'jodit/build/jodit.min.css';
 import PropTypes from 'prop-types';
 import React, { forwardRef, useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
-import { store } from '@/core/redux';
+import { store } from '~/redux';
 import { erro } from '~/servicos/alertas';
 import { urlBase } from '~/servicos/variaveis';
 import { Base } from '../colors';
@@ -382,50 +382,51 @@ const JoditEditor = forwardRef((props, ref) => {
     };
   }, [textArea]);
 
-  if (url) {
-    if (textArea?.current && config) {
-      const element = textArea?.current || '';
+  useEffect(() => {
+    if (url) {
+      const element = textArea.current || '';
+      if (textArea?.current && config) {
+        if (textArea?.current?.type === 'textarea') {
+          textArea.current = Jodit.make(element, config);
+          const elementTextArea =
+            textArea?.current?.editorDocument?.getElementsByClassName(
+              'jodit'
+            )?.[0];
 
-      if (textArea?.current?.type === 'textarea') {
-        textArea.current = Jodit.make(element, config);
-        const elementTextArea =
-          textArea?.current?.editorDocument?.getElementsByClassName(
-            'jodit'
-          )?.[0];
-
-        if (elementTextArea?.style) {
-          elementTextArea.style.cssText = 'overflow: auto;';
-        }
-
-        if (elementTextArea) {
-          elementTextArea.translate = false;
-          elementTextArea.className = `${elementTextArea.className} notranslate`;
-        }
-
-        if (ref) {
-          if (typeof ref === 'function') {
-            ref(textArea.current);
-          } else {
-            ref.current = textArea.current;
-          }
-        }
-
-        textArea.current.events.on('beforePaste', e => {
-          if (verificaSeTemSvg(e) || !verificaSePodeInserirArquivo(e)) {
-            return false;
+          if (elementTextArea?.style) {
+            elementTextArea.style.cssText = 'overflow: auto;';
           }
 
-          return true;
-        });
+          if (elementTextArea) {
+            elementTextArea.translate = false;
+            elementTextArea.className = `${elementTextArea.className} notranslate`;
+          }
 
-        textArea.current.events.on('change', () => {
-          beforeOnChange();
-        });
+          if (ref) {
+            if (typeof ref === 'function') {
+              ref(textArea.current);
+            } else {
+              ref.current = textArea.current;
+            }
+          }
 
-        textArea.current.workplace.tabIndex = tabIndex;
+          textArea.current.events.on('beforePaste', e => {
+            if (verificaSeTemSvg(e) || !verificaSePodeInserirArquivo(e)) {
+              return false;
+            }
+
+            return true;
+          });
+
+          textArea.current.events.on('change', () => {
+            beforeOnChange();
+          });
+
+          textArea.current.workplace.tabIndex = tabIndex;
+        }
       }
     }
-  }
+  }, [url]);
 
   useEffect(() => {
     if (textArea?.current?.setEditorValue) {
@@ -433,7 +434,6 @@ const JoditEditor = forwardRef((props, ref) => {
       bloquearTraducaoNavegador();
     }
   }, [textArea, value]);
-
   useEffect(() => {
     if (config && textArea?.current && textArea?.current?.type !== 'textarea') {
       textArea.current.setReadOnly(desabilitar);
