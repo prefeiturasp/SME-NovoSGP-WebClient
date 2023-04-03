@@ -29,6 +29,7 @@ import CampoConceito from './campoConceito';
 import CampoConceitoFinal from './campoConceitoFinal';
 import ColunaNotaFinalRegencia from './colunaNotaFinalRegencia';
 import LinhaConceitoFinal from './linhaConceitoFinal';
+import SinalizacaoAEE from '../SinalizacaoAEE/sinalizacaoAEE';
 
 const Avaliacao = props => {
   const dispatch = useDispatch();
@@ -79,44 +80,44 @@ const Avaliacao = props => {
   const montarCabecalhoAvaliacoes = () => {
     return dados?.avaliacoes?.length > 0
       ? dados.avaliacoes.map(avaliacao => {
-          return (
-            <th key={shortid.generate()} className={obterTamanhoColuna()}>
-              <div className="texto-header-avaliacao">
-                <Tooltip title={avaliacao.nome}>{avaliacao.nome}</Tooltip>
+        return (
+          <th key={shortid.generate()} className={obterTamanhoColuna()}>
+            <div className="texto-header-avaliacao">
+              <Tooltip title={avaliacao.nome}>{avaliacao.nome}</Tooltip>
+            </div>
+            <div className="texto-header-avaliacao">
+              {window.moment(avaliacao.data).format('DD/MM/YYYY')}
+            </div>
+            {avaliacao.disciplinas && (
+              <div className="row justify-content-center px-3">
+                {avaliacao.disciplinas.map(item => (
+                  <div
+                    key={shortid.generate()}
+                    alt={item}
+                    className="badge badge-pill border text-dark bg-white font-weight-light"
+                  >
+                    {item}
+                  </div>
+                ))}
               </div>
-              <div className="texto-header-avaliacao">
-                {window.moment(avaliacao.data).format('DD/MM/YYYY')}
-              </div>
-              {avaliacao.disciplinas && (
-                <div className="row justify-content-center px-3">
-                  {avaliacao.disciplinas.map(item => (
-                    <div
-                      key={shortid.generate()}
-                      alt={item}
-                      className="badge badge-pill border text-dark bg-white font-weight-light"
-                    >
-                      {item}
-                    </div>
-                  ))}
-                </div>
-              )}
-            </th>
-          );
-        })
+            )}
+          </th>
+        );
+      })
       : '';
   };
 
   const montarCabecalhoInterdisciplinar = () => {
     return dados.avaliacoes && dados.avaliacoes.length > 0
       ? dados.avaliacoes.map(avaliacao => {
-          return avaliacao.ehInterdisciplinar ? (
-            <th key={shortid.generate()}>
-              <LabelInterdisciplinar disciplinas={avaliacao.disciplinas} />
-            </th>
-          ) : (
-            <th key={shortid.generate()} />
-          );
-        })
+        return avaliacao.ehInterdisciplinar ? (
+          <th key={shortid.generate()}>
+            <LabelInterdisciplinar disciplinas={avaliacao.disciplinas} />
+          </th>
+        ) : (
+          <th key={shortid.generate()} />
+        );
+      })
       : '';
   };
 
@@ -343,27 +344,33 @@ const Avaliacao = props => {
                               </Tooltip>
                             )}
                           </td>
+
                           <td className="sticky-col col-nome-aluno">
-                            <Tooltip title={aluno.nome} placement="top">
+                            <div className="d-flex" style={{ justifyContent: 'space-between', alignItems: 'center' }}>
                               {aluno.nome}
-                            </Tooltip>
+                              <div className="d-flex justify-content-end">
+                                <SinalizacaoAEE exibirSinalizacao={aluno?.ehAtendidoAEE} />
+                              </div>
+                            </div>
                           </td>
+
+
                           {aluno.notasAvaliacoes.length
                             ? aluno.notasAvaliacoes.map((nota, index) => {
-                                return (
-                                  <td
-                                    key={shortid.generate()}
-                                    className={`${obterTamanhoColuna()} position-relative`}
-                                  >
-                                    {montarCampoNotaConceito(
-                                      nota,
-                                      aluno,
-                                      i,
-                                      index
-                                    )}
-                                  </td>
-                                );
-                              })
+                              return (
+                                <td
+                                  key={shortid.generate()}
+                                  className={`${obterTamanhoColuna()} position-relative`}
+                                >
+                                  {montarCampoNotaConceito(
+                                    nota,
+                                    aluno,
+                                    i,
+                                    index
+                                  )}
+                                </td>
+                              );
+                            })
                             : ''}
                           <td className="sticky-col col-nota-final linha-nota-conceito-final">
                             {ehRegencia ? (
@@ -418,14 +425,14 @@ const Avaliacao = props => {
 
 Avaliacao.propTypes = {
   notaTipo: PropTypes.number,
-  onChangeOrdenacao: () => {},
+  onChangeOrdenacao: () => { },
   exibirTootipStatusGsa: PropTypes.bool,
   exibirStatusAlunoAusente: PropTypes.bool,
 };
 
 Avaliacao.defaultProps = {
   notaTipo: 0,
-  onChangeOrdenacao: () => {},
+  onChangeOrdenacao: () => { },
   exibirTootipStatusGsa: false,
   exibirStatusAlunoAusente: false,
 };
