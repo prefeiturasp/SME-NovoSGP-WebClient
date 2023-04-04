@@ -53,19 +53,17 @@ const Filtros = ({
   const [listaTurmas, setListaTurmas] = useState([]);
   const [listaUes, setListaUes] = useState([]);
   const [modalidadeId, setModalidadeId] = useState();
-  const [quantidadeBoletimPorPagina, setQuantidadeBoletimPorPagina] = useState(
-    ''
-  );
+  const [quantidadeBoletimPorPagina, setQuantidadeBoletimPorPagina] =
+    useState('');
   const [semestre, setSemestre] = useState();
   const [opcaoEstudanteId, setOpcaoEstudanteId] = useState();
   const [turmasId, setTurmasId] = useState('');
   const [ueCodigo, setUeCodigo] = useState();
-  const [
-    imprimirEstudantesInativos,
-    setImprimirEstudantesInativos,
-  ] = useState();
+  const [imprimirEstudantesInativos, setImprimirEstudantesInativos] =
+    useState();
 
   const ehEnsinoMedio = Number(modalidadeId) === ModalidadeDTO.ENSINO_MEDIO;
+  const ehEJA = Number(modalidadeId) === ModalidadeDTO.EJA;
 
   const OPCAO_TODOS_ESTUDANTES = '0';
   const OPCAO_SELECIONAR_ALUNOS = '1';
@@ -178,7 +176,6 @@ const Filtros = ({
 
   useEffect(() => {
     validarValorPadraoAnoLetivo(listaAnosLetivo);
-
   }, [consideraHistorico, listaAnosLetivo]);
 
   const obterAnosLetivos = useCallback(async () => {
@@ -198,7 +195,6 @@ const Filtros = ({
 
     setListaAnosLetivo(anosOrdenados);
     setCarregandoAnosLetivos(false);
-
   }, [anoAtual, consideraHistorico]);
 
   useEffect(() => {
@@ -240,7 +236,6 @@ const Filtros = ({
       setDreCodigo(undefined);
       setListaDres([]);
     }
-
   }, [anoLetivo, consideraHistorico]);
 
   useEffect(() => {
@@ -287,7 +282,6 @@ const Filtros = ({
       }
       setListaUes([]);
     }
-
   }, [dreCodigo, anoLetivo, consideraHistorico]);
 
   useEffect(() => {
@@ -306,33 +300,36 @@ const Filtros = ({
     setModoEdicao(true);
   };
 
-  const obterModalidades = useCallback(async (ue, considHistorico, anoLetivo) => {
-    if (ue) {
-      setCarregandoModalidade(true);
-      const { data } = considHistorico
-        ? await ServicoFiltroRelatorio.obterModalidadesPorAbrangenciaHistorica(
-            ue,
-            false,
-            considHistorico,
-            anoLetivo
-          ).finally(() => setCarregandoModalidade(false))
-        : await ServicoFiltroRelatorio.obterModalidadesPorAbrangencia(
-            ue
-          ).finally(() => setCarregandoModalidade(false));
+  const obterModalidades = useCallback(
+    async (ue, considHistorico, anoLetivo) => {
+      if (ue) {
+        setCarregandoModalidade(true);
+        const { data } = considHistorico
+          ? await ServicoFiltroRelatorio.obterModalidadesPorAbrangenciaHistorica(
+              ue,
+              false,
+              considHistorico,
+              anoLetivo
+            ).finally(() => setCarregandoModalidade(false))
+          : await ServicoFiltroRelatorio.obterModalidadesPorAbrangencia(
+              ue
+            ).finally(() => setCarregandoModalidade(false));
 
-      if (data?.length) {
-        const lista = data.map(item => ({
-          desc: item.descricao,
-          valor: String(item.valor),
-        }));
+        if (data?.length) {
+          const lista = data.map(item => ({
+            desc: item.descricao,
+            valor: String(item.valor),
+          }));
 
-        setListaModalidades(lista);
-        if (lista?.length === 1) {
-          setModalidadeId(lista[0].valor);
+          setListaModalidades(lista);
+          if (lista?.length === 1) {
+            setModalidadeId(lista[0].valor);
+          }
         }
       }
-    }
-  }, []);
+    },
+    []
+  );
 
   useEffect(() => {
     if (anoLetivo && ueCodigo) {
@@ -392,7 +389,6 @@ const Filtros = ({
     }
     setSemestre();
     setListaSemestres([]);
-
   }, [obterAnosLetivos, modalidadeId, anoLetivo, dreCodigo, ueCodigo]);
 
   const onChangeTurma = valor => {
@@ -413,12 +409,14 @@ const Filtros = ({
   };
 
   const obterTurmas = useCallback(async () => {
+    if (ehEJA && !semestre) return;
+
     if (dreCodigo && ueCodigo && modalidadeId) {
       setCarregandoTurmas(true);
       const retorno = await AbrangenciaServico.buscarTurmas(
         ueCodigo,
         modalidadeId,
-        '',
+        semestre,
         anoLetivo,
         consideraHistorico,
         [1]
@@ -450,17 +448,24 @@ const Filtros = ({
         setListaTurmas([]);
       }
     }
-
-  }, [ueCodigo, dreCodigo, consideraHistorico, anoLetivo, modalidadeId]);
+  }, [
+    ehEJA,
+    ueCodigo,
+    dreCodigo,
+    consideraHistorico,
+    anoLetivo,
+    modalidadeId,
+    semestre,
+  ]);
 
   useEffect(() => {
-    if (ueCodigo) {
+    if (ueCodigo && modalidadeId) {
       obterTurmas();
       return;
     }
     setTurmasId();
     setListaTurmas([]);
-  }, [ueCodigo, obterTurmas]);
+  }, [ueCodigo, modalidadeId, semestre, obterTurmas]);
 
   const onChangeOpcaoEstudante = valor => {
     setFiltrou(false);
@@ -488,7 +493,6 @@ const Filtros = ({
       setQuantidadeBoletimPorPagina('');
       setOpcaoEstudanteId();
     }
-
   }, [cancelou]);
 
   useEffect(() => {
@@ -500,7 +504,6 @@ const Filtros = ({
       setFiltrou(false);
       setImprimirEstudantesInativos(true);
     }
-
   }, [opcaoEstudanteId]);
 
   const obterMensagemQtdBoletionsPagina = () => {
@@ -621,7 +624,11 @@ const Filtros = ({
               valueOption="valor"
               valueText="nomeFiltro"
               label="Turma"
-              disabled={!modalidadeId || listaTurmas?.length === 1}
+              disabled={
+                !modalidadeId ||
+                listaTurmas?.length === 1 ||
+                (ehEJA && !semestre)
+              }
               valueSelect={turmasId}
               onChange={onChangeTurma}
               placeholder="Turma"
