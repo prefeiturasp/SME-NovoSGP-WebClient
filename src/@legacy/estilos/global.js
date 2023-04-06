@@ -96,6 +96,17 @@ export default createGlobalStyle`
     color: #ffffff !important;
   }
 
+  .ant-select-selection {
+    outline: none;
+    display: block;
+    user-select: none;
+    border-radius: 4px;
+    box-sizing: border-box;
+    background-color: #fff;
+    border: 1px solid #d9d9d9;
+    transition: all .3s cubic-bezier(.645,.045,.355,1);
+  }
+
   .ant-select-selection-item {
     font-weight: bold !important;
     color: rgba(0, 0, 0, 0.65);
