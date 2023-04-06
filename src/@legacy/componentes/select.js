@@ -12,6 +12,7 @@ const Container = styled.div`
 
   .ant-select-single .ant-select-selector {
     ${({ color }) => color && `color: ${color} !important;`}
+    ${({ border }) => border && `border-color: ${border} !important;`}
   }
 
   .ant-select-selection-placeholder {
@@ -23,6 +24,10 @@ const Container = styled.div`
     .ant-select-selector {
       border-color: #dc3545 !important;
     }
+  }
+
+  .ant-select-selection-item {
+    color: inherit;
   }
 
   label {
