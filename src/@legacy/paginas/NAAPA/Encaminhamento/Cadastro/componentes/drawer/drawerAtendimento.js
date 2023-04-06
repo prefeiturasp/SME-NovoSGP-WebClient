@@ -114,7 +114,7 @@ const DrawerAtendimento = ({
       zIndex={1100}
       onClose={onClose}
       title="Atendimento"
-      visible={mostrarDrawer}
+      open={mostrarDrawer}
       bodyStyle={{ paddingBottom: 80 }}
     >
       <LoaderDrawerAtendimento>

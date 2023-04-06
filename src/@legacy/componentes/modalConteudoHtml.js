@@ -95,7 +95,7 @@ const ModalConteudoHtml = props => {
       maskClosable={fecharAoClicarFora}
       onCancel={onClose}
       title={titulo}
-      visible={visivel}
+      open={visivel}
       closable={!!closable}
       centered
       confirmLoading={loader}

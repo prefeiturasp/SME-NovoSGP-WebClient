@@ -13,12 +13,8 @@ import {
 } from './transferenciaLista.css';
 
 const TransferenciaLista = props => {
-  const {
-    listaEsquerda,
-    listaDireita,
-    onClickAdicionar,
-    onClickRemover,
-  } = props;
+  const { listaEsquerda, listaDireita, onClickAdicionar, onClickRemover } =
+    props;
 
   const propPadrao = {
     id: shortid.generate(),
