@@ -70,9 +70,8 @@ const Notas = ({ match }) => {
   const [disciplinaSelecionada, setDisciplinaSelecionada] = useState(undefined);
   const [desabilitarDisciplina, setDesabilitarDisciplina] = useState(false);
   const [notaTipo, setNotaTipo] = useState();
-  const [carregandoListaBimestres, setCarregandoListaBimestres] = useState(
-    false
-  );
+  const [carregandoListaBimestres, setCarregandoListaBimestres] =
+    useState(false);
   const [auditoriaInfo, setAuditoriaInfo] = useState({
     auditoriaAlterado: '',
     auditoriaInserido: '',
@@ -108,9 +107,8 @@ const Notas = ({ match }) => {
 
   const [podeLancaNota, setPodeLancaNota] = useState(true);
 
-  const [showMsgPeriodoFechamento, setShowMsgPeriodoFechamento] = useState(
-    false
-  );
+  const [showMsgPeriodoFechamento, setShowMsgPeriodoFechamento] =
+    useState(false);
 
   const valoresIniciais = { descricao: '' };
 
@@ -131,12 +129,13 @@ const Notas = ({ match }) => {
 
       let dentroDoPeriodo = true;
       if (!desabilitar && bimestre && usuario.turmaSelecionada.turma) {
-        const retorno = await ServicoPeriodoFechamento.verificarSePodeAlterarNoPeriodo(
-          usuario.turmaSelecionada.turma,
-          bimestre
-        ).catch(e => {
-          erros(e);
-        });
+        const retorno =
+          await ServicoPeriodoFechamento.verificarSePodeAlterarNoPeriodo(
+            usuario.turmaSelecionada.turma,
+            bimestre
+          ).catch(e => {
+            erros(e);
+          });
         if (retorno?.status === 200) {
           dentroDoPeriodo = retorno.data;
         }
@@ -188,12 +187,10 @@ const Notas = ({ match }) => {
     dispatch(setModoEdicaoGeral(false));
     dispatch(setModoEdicaoGeralNotaFinal(false));
     dispatch(setExpandirLinha([]));
-
   }, [dispatch]);
 
   useEffect(() => {
     resetarTela();
-
   }, [usuario.turmaSelecionada]);
 
   const obterListaConceitos = async periodoFim => {
@@ -253,7 +250,6 @@ const Notas = ({ match }) => {
         }
       });
     }
-
   }, [usuario.turmaSelecionada]);
 
   const obterBimestres = useCallback(
@@ -422,7 +418,6 @@ const Notas = ({ match }) => {
     if (match?.params?.disciplinaId && match?.params?.bimestre) {
       setDisciplinaSelecionada(String(match?.params.disciplinaId));
     }
-
   }, [usuario.turmaSelecionada.turma]);
 
   const obterTituloTela = useCallback(async () => {
@@ -441,7 +436,6 @@ const Notas = ({ match }) => {
       return 'Lançamento de Notas';
     }
     return '';
-
   }, [usuario.turmaSelecionada.anoLetivo, usuario.turmaSelecionada.turma]);
 
   useEffect(() => {
@@ -464,7 +458,6 @@ const Notas = ({ match }) => {
       setDesabilitarDisciplina(false);
       resetarTela();
     }
-
   }, [obterDisciplinas, usuario.turmaSelecionada.turma]);
 
   useEffect(() => {
@@ -474,7 +467,6 @@ const Notas = ({ match }) => {
     } else {
       resetarTela();
     }
-
   }, [disciplinaSelecionada, usuario.turmaSelecionada]);
 
   const pergutarParaSalvar = () => {
@@ -1087,7 +1079,8 @@ const Notas = ({ match }) => {
     setClicouNoBotaoSalvar(clicouSalvar);
     setClicouNoBotaoVoltar(clicouVoltar);
     const estaEmModoEdicaoGeral = ServicoNotaConceito.estaEmModoEdicaoGeral();
-    const estaEmModoEdicaoGeralNotaFinal = ServicoNotaConceito.estaEmModoEdicaoGeralNotaFinal();
+    const estaEmModoEdicaoGeralNotaFinal =
+      ServicoNotaConceito.estaEmModoEdicaoGeralNotaFinal();
     const modoEdicao = bimestreEmModoEdicao(numeroBimestre);
 
     if (estaEmModoEdicaoGeralNotaFinal || estaEmModoEdicaoGeral) {
@@ -1300,7 +1293,7 @@ const Notas = ({ match }) => {
                   <JoditEditor
                     id={SGP_JODIT_EDITOR_DESCRICAO_JUSTIFICATIVA}
                     form={form}
-                    value={form.values.descricao}
+                    value={valoresIniciais?.descricao}
                     onChange={onChangeJustificativa}
                     name="descricao"
                     permiteInserirArquivo={false}
