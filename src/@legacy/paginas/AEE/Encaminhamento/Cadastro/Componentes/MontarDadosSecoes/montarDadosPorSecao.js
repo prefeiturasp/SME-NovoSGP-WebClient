@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { useParams } from 'react-router-dom';
 import QuestionarioDinamico from '~/componentes-sgp/QuestionarioDinamico/questionarioDinamico';
 import { setQuestionarioDinamicoEmEdicao } from '~/redux/modulos/questionarioDinamico/actions';
 import { erros } from '~/servicos';
@@ -10,7 +11,11 @@ import AuditoriaEncaminhamento from '../AuditoriaEncaminhamento/auditoriaEncamin
 const MontarDadosPorSecao = props => {
   const dispatch = useDispatch();
 
-  const { dados, match } = props;
+  const paramsRoute = useParams();
+
+  const encaminhamentoId = paramsRoute?.id || 0;
+
+  const { dados } = props;
 
   const dadosEncaminhamento = useSelector(
     store => store.encaminhamentoAEE.dadosEncaminhamento
@@ -27,7 +32,6 @@ const MontarDadosPorSecao = props => {
   const [dadosQuestionarioAtual, setDadosQuestionarioAtual] = useState();
 
   const obterQuestionario = useCallback(async questionarioId => {
-    const encaminhamentoId = match?.params?.id;
     dispatch(setQuestionarioDinamicoEmEdicao(false));
     const resposta = await ServicoEncaminhamentoAEE.obterQuestionario(
       questionarioId,
@@ -41,7 +45,6 @@ const MontarDadosPorSecao = props => {
     } else {
       setDadosQuestionarioAtual();
     }
-
   }, []);
 
   useEffect(() => {
@@ -57,8 +60,6 @@ const MontarDadosPorSecao = props => {
   }, [dados, dadosCollapseLocalizarEstudante, obterQuestionario]);
 
   const validaSeDesabilitarCampo = () => {
-    const encaminhamentoId = match?.params?.id;
-
     return (
       desabilitarCamposEncaminhamentoAEE ||
       (encaminhamentoId && !dadosEncaminhamento.podeEditar)
@@ -85,18 +86,16 @@ const MontarDadosPorSecao = props => {
       <AuditoriaEncaminhamento dadosAuditoria={dados?.auditoria} />
     </>
   ) : (
-    ''
+    <></>
   );
 };
 
 MontarDadosPorSecao.propTypes = {
   dados: PropTypes.oneOfType([PropTypes.object]),
-  match: PropTypes.oneOfType([PropTypes.object]),
 };
 
 MontarDadosPorSecao.defaultProps = {
   dados: {},
-  match: {},
 };
 
 export default MontarDadosPorSecao;

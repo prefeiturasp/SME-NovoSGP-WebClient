@@ -1,8 +1,7 @@
 import { Form, Formik } from 'formik';
-import PropTypes from 'prop-types';
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import shortid from 'shortid';
 import * as Yup from 'yup';
 import { CampoTexto, Colors, Loader, ModalConteudoHtml } from '~/componentes';
@@ -12,11 +11,12 @@ import { setExibirModalDevolverAEE } from '~/redux/modulos/encaminhamentoAEE/act
 import { confirmar, erros, sucesso } from '~/servicos';
 import ServicoEncaminhamentoAEE from '~/servicos/Paginas/Relatorios/AEE/ServicoEncaminhamentoAEE';
 
-const ModalDevolverAEE = props => {
-  const { match } = props;
-
+const ModalDevolverAEE = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const paramsRoute = useParams();
+
+  const encaminhamentoId = paramsRoute?.id || 0;
 
   const exibirModalDevolverAEE = useSelector(
     store => store.encaminhamentoAEE.exibirModalDevolverAEE
@@ -69,12 +69,11 @@ const ModalDevolverAEE = props => {
 
   const onClickDevolver = async valores => {
     const { motivo } = valores;
-    const encaminhamentoAEEId = match?.params?.id;
 
     setExibirLoader(true);
 
     const retorno = await ServicoEncaminhamentoAEE.devolverEncaminhamentoAEE({
-      encaminhamentoAEEId,
+      encaminhamentoId,
       motivo,
     })
       .catch(e => erros(e))
@@ -155,14 +154,6 @@ const ModalDevolverAEE = props => {
       </Formik>
     </ModalConteudoHtml>
   );
-};
-
-ModalDevolverAEE.propTypes = {
-  match: PropTypes.oneOfType([PropTypes.object]),
-};
-
-ModalDevolverAEE.defaultProps = {
-  match: {},
 };
 
 export default ModalDevolverAEE;
