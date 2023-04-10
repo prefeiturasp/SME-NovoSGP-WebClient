@@ -7,6 +7,7 @@ export enum ROUTES {
   ATRIBUICAO_RESPONSAVEIS_LISTA = '/gestao/atribuicao-responsaveis/lista',
   ATRIBUICAO_RESPONSAVEIS = '/gestao/atribuicao-responsaveis',
   ATRIBUICAO_ESPORADICA_LISTA = '/gestao/atribuicao-esporadica',
+  ATRIBUICAO_ESPORADICA_NOVO = '/gestao/atribuicao-esporadica/novo',
   ATRIBUICAO_CJ_LISTA = '/gestao/atribuicao-cjs',
   ATRIBUICAO_CJ_FORM = '/gestao/atribuicao-cjs/editar',
   REINICIAR_SENHA = '/usuarios/reiniciar-senha',

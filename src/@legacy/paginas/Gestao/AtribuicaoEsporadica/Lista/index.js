@@ -11,6 +11,7 @@ import { confirmar, sucesso, erros } from '~/servicos/alertas';
 import Filtro from './componentes/Filtro';
 import { SGP_BUTTON_NOVO } from '~/constantes/ids/button';
 import { useNavigate } from 'react-router-dom';
+import { ROUTES } from '@/core/enum/routes';
 
 function AtribuicaoEsporadicaLista() {
   const navigate = useNavigate();
@@ -54,7 +55,7 @@ function AtribuicaoEsporadicaLista() {
   const onClickVoltar = () => navigate('/');
 
   const onClickBotaoPrincipal = () => {
-    navigate(`atribuicao-esporadica/novo`);
+    navigate(ROUTES.ATRIBUICAO_ESPORADICA_NOVO);
   };
 
   const onSelecionarItems = items => {
