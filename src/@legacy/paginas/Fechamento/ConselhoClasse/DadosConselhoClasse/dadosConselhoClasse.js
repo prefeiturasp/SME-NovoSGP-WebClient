@@ -142,13 +142,14 @@ const DadosConselhoClasse = props => {
           conselhoClasseAlunoId &&
           carregarParecer
         ) {
-          validouPodeAcessar = await servicoSalvarConselhoClasse.validaParecerConclusivo(
-            conselhoClasseId,
-            fechamentoTurmaId,
-            codigoEOL,
-            turmaCodigo,
-            turmaSelecionada?.consideraHistorico
-          );
+          validouPodeAcessar =
+            await servicoSalvarConselhoClasse.validaParecerConclusivo(
+              conselhoClasseId,
+              fechamentoTurmaId,
+              codigoEOL,
+              turmaCodigo,
+              turmaSelecionada?.consideraHistorico
+            );
           dispatch(setPodeAcessar(validouPodeAcessar));
         }
 
@@ -247,16 +248,17 @@ const DadosConselhoClasse = props => {
       );
       setTurmaAtual(turmaSelecionada.turma);
     }
-
   }, [codigoEOL, turmaSelecionada, turmaAtual]);
 
   const onChangeTab = async numeroBimestre => {
     let continuar = false;
 
-    const validouNotaConceitoPosConselho = await servicoSalvarConselhoClasse.validarNotaPosConselho();
+    const validouNotaConceitoPosConselho =
+      await servicoSalvarConselhoClasse.validarNotaPosConselho();
 
     if (validouNotaConceitoPosConselho) {
-      const validouAnotacaoRecomendacao = await servicoSalvarConselhoClasse.validarSalvarRecomendacoesAlunoFamilia();
+      const validouAnotacaoRecomendacao =
+        await servicoSalvarConselhoClasse.validarSalvarRecomendacoesAlunoFamilia();
       if (validouNotaConceitoPosConselho && validouAnotacaoRecomendacao) {
         continuar = true;
       }
@@ -297,11 +299,6 @@ const DadosConselhoClasse = props => {
           type="card"
           onChange={onChangeTab}
           activeKey={bimestreAtual.valor}
-          className={
-            modalidade === modalidadeDto.EJA
-              ? 'ant-tab-nav-33'
-              : 'ant-tab-nav-20'
-          }
         >
           <TabPane tab="1º Bimestre" key="1">
             {bimestreAtual.valor === '1' ? montarDados() : ''}
