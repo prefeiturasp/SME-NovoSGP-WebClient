@@ -27,7 +27,7 @@ function DropDownTipoRecorrencia({ onChange, value }) {
   );
 
   return (
-    <Dropdown trigger={['click']} overlay={options}>
+    <Dropdown trigger={['click']} menu={options}>
       <DefaultDropDownLink href="#">
         {value.label ? value.label : 'Selecione'} <DownOutlined />
       </DefaultDropDownLink>

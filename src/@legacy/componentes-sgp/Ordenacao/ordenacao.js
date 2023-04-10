@@ -139,7 +139,7 @@ const Ordenacao = props => {
   return (
     <Container
       trigger={['click']}
-      overlay={menu}
+      menu={menu}
       placement="bottomLeft"
       disabled={desabilitado}
     >
