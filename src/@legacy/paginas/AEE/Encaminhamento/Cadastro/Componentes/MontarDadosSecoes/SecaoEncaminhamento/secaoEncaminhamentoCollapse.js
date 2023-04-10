@@ -1,4 +1,3 @@
-import PropTypes from 'prop-types';
 import React from 'react';
 import { useSelector } from 'react-redux';
 import ObjectCardEstudante from '~/componentes-sgp/ObjectCardEstudante/objectCardEstudante';
@@ -11,9 +10,7 @@ import ModalErrosEncaminhamento from '../../ModalErrosEncaminhamento/modalErrosE
 import MotivoEncerramento from '../../MotivoEncerramento/MotivoEncerramento';
 import DadosSecaoEncaminhamento from './dadosSecaoEncaminhamento';
 
-const SecaoEncaminhamentoCollapse = props => {
-  const { match } = props;
-
+const SecaoEncaminhamentoCollapse = () => {
   const dadosCollapseLocalizarEstudante = useSelector(
     store => store.collapseLocalizarEstudante.dadosCollapseLocalizarEstudante
   );
@@ -51,24 +48,16 @@ const SecaoEncaminhamentoCollapse = props => {
             permiteAlterarImagem={!desabilitarCamposEncaminhamentoAEE}
           />
           <MotivoEncerramento />
-          <DadosSecaoEncaminhamento match={match} />
+          <DadosSecaoEncaminhamento />
           <ModalErrosEncaminhamento />
-          <ModalEncerramentoEncaminhamentoAEE match={match} />
-          <ModalDevolverAEE match={match} />
+          <ModalEncerramentoEncaminhamentoAEE />
+          <ModalDevolverAEE />
         </>
       ) : (
-        ''
+        <></>
       )}
     </CardCollapse>
   );
-};
-
-SecaoEncaminhamentoCollapse.propTypes = {
-  match: PropTypes.oneOfType([PropTypes.object]),
-};
-
-SecaoEncaminhamentoCollapse.defaultProps = {
-  match: {},
 };
 
 export default SecaoEncaminhamentoCollapse;
