@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { SelectComponent } from '~/componentes';
 import { SGP_SELECT_PERIODO_SONDAGEM } from '~/constantes/ids/select';
+import { TIPO_SONDAGEM } from 'core/enum/tipo-sondagem';
 
 export const PeriodoSondagem = ({
   name,
@@ -13,8 +14,15 @@ export const PeriodoSondagem = ({
 }) => {
   const [lista, setLista] = useState([]);
 
-  // TODO Quando for IAD Matemática realizar validação!
-  const ehSemestre = false;
+  const tipoSondagem = form.values?.tipoSondagem;
+  const anoLetivo = form.values?.anoLetivo;
+
+  const ANO_LETIVO_IAD_BIMESTRE = 2022;
+
+  const ehSemestre =
+    tipoSondagem &&
+    ANO_LETIVO_IAD_BIMESTRE !== Number(anoLetivo) &&
+    TIPO_SONDAGEM.MAT_IAD === Number(tipoSondagem);
 
   const obterPeriodos = useCallback(async () => {
     let listaSemestreBimestre = [];
