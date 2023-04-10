@@ -818,6 +818,7 @@ const Notas = ({ match }) => {
           });
         return;
       }
+      setCarregandoGeral(false);
       resolve(false);
       return;
     } catch (er) {
