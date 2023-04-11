@@ -514,7 +514,6 @@ const PeriodoFechamentoAbertura = () => {
                         showList
                         isHandleSearch
                         placeholder="Selecione um tipo de calendário"
-                        className="col-md-12"
                         name="tipoCalendarioId"
                         id="tipoCalendarioId"
                         lista={listaTipoCalendario}
