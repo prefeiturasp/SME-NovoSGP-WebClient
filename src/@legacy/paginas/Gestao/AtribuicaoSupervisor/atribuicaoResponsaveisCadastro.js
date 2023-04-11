@@ -1,6 +1,6 @@
 import { Col, Row } from 'antd';
 import React, { useCallback, useEffect, useState } from 'react';
-import { useMatch, useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { Button, Card, Colors, Loader, SelectComponent } from '~/componentes';
 import { Cabecalho } from '~/componentes-sgp';
 import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
@@ -29,7 +29,7 @@ const AtribuicaoResponsaveisCadastro = () => {
   const permissoesTela =
     usuario.permissoes[RotasDto.ATRIBUICAO_RESPONSAVEIS_LISTA];
 
-  const routeMatch = useMatch();
+  const routeMatch = useParams();
   const navigate = useNavigate();
 
   const [carregandoDres, setCarregandoDres] = useState(false);
@@ -59,9 +59,9 @@ const AtribuicaoResponsaveisCadastro = () => {
   }, [permissoesTela]);
 
   useEffect(() => {
-    if (routeMatch.params?.dreId) {
+    if (routeMatch.dreId) {
       setBreadcrumbManual(
-        routeMatch.url,
+        RotasDto.ATRIBUICAO_RESPONSAVEIS,
         'Editar Atribuição',
         RotasDto.ATRIBUICAO_RESPONSAVEIS_LISTA
       );
@@ -154,8 +154,8 @@ const AtribuicaoResponsaveisCadastro = () => {
     if (retorno?.data?.length) {
       if (retorno.data.length === 1) {
         setDreId(retorno.data[0].codigo);
-      } else if (routeMatch.params?.dreId) {
-        setDreId(routeMatch.params.dreId);
+      } else if (routeMatch?.dreId) {
+        setDreId(routeMatch.dreId);
       }
 
       setListaDres(retorno.data);
@@ -183,9 +183,9 @@ const AtribuicaoResponsaveisCadastro = () => {
       setListaTipoResponsavel(resposta.data);
       if (resposta?.data?.length === 1) {
         setTipoResponsavel(resposta.data[0]?.codigo?.toString());
-      } else if (routeMatch.params?.tipoResponsavel) {
-        setTipoResponsavel(routeMatch.params.tipoResponsavel);
-        setCodigoUeSelecionadoGrid(routeMatch.params?.codigoUe);
+      } else if (routeMatch?.tipoResponsavel) {
+        setTipoResponsavel(routeMatch.tipoResponsavel);
+        setCodigoUeSelecionadoGrid(routeMatch?.codigoUe);
       }
     } else {
       setListaTipoResponsavel([]);
@@ -226,12 +226,12 @@ const AtribuicaoResponsaveisCadastro = () => {
 
       if (lista?.length === 1) {
         setResponsavel(lista[0].supervisorId);
-      } else if (routeMatch.params?.supervisorId) {
+      } else if (routeMatch?.supervisorId) {
         if (
-          routeMatch.params.supervisorId > 0 &&
-          String(routeMatch.params.tipoResponsavel) === String(tipoResponsavel)
+          routeMatch.supervisorId > 0 &&
+          String(routeMatch.tipoResponsavel) === String(tipoResponsavel)
         )
-          setResponsavel(routeMatch.params.supervisorId);
+          setResponsavel(routeMatch.supervisorId);
       }
       setListaResponsavel(lista);
     } else {

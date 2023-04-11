@@ -194,7 +194,6 @@ function AtribuicaoCJForm() {
 
       const anoSelecionado = query.anoLetivo || anoAtual;
       const historico = query.historico === 'true' || consideraHistorico;
-      console.log(query);
 
       setValoresIniciais({
         ...valoresIniciais,

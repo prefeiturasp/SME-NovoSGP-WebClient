@@ -510,7 +510,6 @@ export default function AtribuicaoSupervisorLista() {
             <div className="col-sm-12 col-md-6 pb-2">
               <SelectComponent
                 label="Unidade Escolar (UE)"
-                className="col-md-12"
                 name="ues-list"
                 id="ues-list"
                 lista={listaUes}
