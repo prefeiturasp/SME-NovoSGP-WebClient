@@ -1,4 +1,3 @@
-import PropTypes from 'prop-types';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Colors } from '~/componentes';
@@ -26,11 +25,13 @@ import { setQuestionarioDinamicoEmEdicao } from '~/redux/modulos/questionarioDin
 import { confirmar, erros, sucesso, verificaSomenteConsulta } from '~/servicos';
 import ServicoPlanoAEE from '~/servicos/Paginas/Relatorios/AEE/ServicoPlanoAEE';
 import ModalImpressaoPlano from './ModalImpressaoPlano/modalImpressaoPlano';
+import { useNavigate, useParams } from 'react-router-dom';
 
-const BotoesAcoesPlanoAEE = props => {
-  const { match } = props;
-
+const BotoesAcoesPlanoAEE = () => {
   const navigate = useNavigate();
+  const paramsRoute = useParams();
+
+  const planoId = paramsRoute?.id;
 
   const questionarioDinamicoEmEdicao = useSelector(
     store => store.questionarioDinamico.questionarioDinamicoEmEdicao
@@ -72,14 +73,13 @@ const BotoesAcoesPlanoAEE = props => {
     parecerCP ||
     (situacaoAtribuicaoPAAI && !dadosAtribuicaoResponsavel?.codigoRF);
 
-  const planoAeeId = match?.params?.id || 0;
-  const labelBotaoSalvar = !planoAeeId ? 'Salvar plano' : 'Alterar plano';
+  const labelBotaoSalvar = !planoId ? 'Salvar plano' : 'Alterar plano';
 
   const desabilitarBotaoSalvar =
     planoAEEDados?.situacao !== situacaoPlanoAEE.Expirado &&
     (desabilitarCamposPlanoAEE ||
       !planoAEEDados?.questionarioId ||
-      (planoAeeId && !questionarioDinamicoEmEdicao));
+      (planoId && !questionarioDinamicoEmEdicao));
 
   const desabilitarBotaoCancelar =
     desabilitarCamposPlanoAEE ||
@@ -90,11 +90,11 @@ const BotoesAcoesPlanoAEE = props => {
   useEffect(() => {
     const soConsulta = verificaSomenteConsulta(permissoesTela);
     const desabilitar =
-      planoAeeId > 0
+      planoId > 0
         ? soConsulta || !permissoesTela.podeAlterar
         : soConsulta || !permissoesTela.podeIncluir;
     dispatch(setDesabilitarCamposPlanoAEE(desabilitar));
-  }, [planoAeeId, permissoesTela, dispatch]);
+  }, [planoId, permissoesTela, dispatch]);
 
   const limparParecer = () => {
     dispatch(limparDadosParecer());
@@ -152,7 +152,6 @@ const BotoesAcoesPlanoAEE = props => {
           return;
         }
         const salvou = await ServicoPlanoAEE.salvarPlano();
-        const planoId = match?.params?.id;
 
         if (salvou) {
           let mensagem = 'Registro salvo com sucesso';
@@ -212,10 +211,10 @@ const BotoesAcoesPlanoAEE = props => {
   };
 
   const onClickSalvar = async () => {
-    const planoId = await ServicoPlanoAEE.salvarPlano(true);
-    const registroNovo = !match?.params?.id;
+    const id = await ServicoPlanoAEE.salvarPlano(true);
+    const registroNovo = !planoId;
 
-    if (planoId) {
+    if (id) {
       let mensagem = 'Registro alterado com sucesso';
       if (registroNovo) {
         mensagem = 'Registro salvo com sucesso';
@@ -236,7 +235,7 @@ const BotoesAcoesPlanoAEE = props => {
   return (
     <>
       <BotaoVoltarPadrao className="mr-2" onClick={() => onClickVoltar()} />
-      {match?.params?.id ? <ModalImpressaoPlano /> : <></>}
+      {planoId ? <ModalImpressaoPlano /> : <></>}
       <Button
         id={SGP_BUTTON_CANCELAR}
         label="Cancelar"
@@ -309,14 +308,6 @@ const BotoesAcoesPlanoAEE = props => {
       />
     </>
   );
-};
-
-BotoesAcoesPlanoAEE.propTypes = {
-  match: PropTypes.oneOfType([PropTypes.object]),
-};
-
-BotoesAcoesPlanoAEE.defaultProps = {
-  match: {},
 };
 
 export default BotoesAcoesPlanoAEE;

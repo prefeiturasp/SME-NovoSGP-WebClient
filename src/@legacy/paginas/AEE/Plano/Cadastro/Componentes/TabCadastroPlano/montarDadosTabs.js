@@ -1,7 +1,7 @@
 import { Tabs } from 'antd';
-import PropTypes from 'prop-types';
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { useLocation, useParams } from 'react-router-dom';
 import { ContainerTabsCard } from '~/componentes/tabs/tabs.css';
 import { RotasDto, situacaoPlanoAEE } from '~/dtos';
 import { setTypePlanoAEECadastro } from '~/redux/modulos/planoAEE/actions';
@@ -13,21 +13,22 @@ import AddResponsavelCadastroPlano from './addResponsavelCadastroPlano';
 
 const { TabPane } = Tabs;
 
-const MontarDadosTabs = props => {
-  const { match } = props;
-  const temId = match?.params?.id;
+const MontarDadosTabs = () => {
+  const location = useLocation();
+  const paramsRoute = useParams();
+
+  const temId = !!paramsRoute?.id;
 
   const dispatch = useDispatch();
 
   const planoAEEDados = useSelector(store => store.planoAEE.planoAEEDados);
 
   useEffect(() => {
-    if (match.url === `${RotasDto.RELATORIO_AEE_PLANO}/novo`) {
+    if (location.pathname === `${RotasDto.RELATORIO_AEE_PLANO}/novo`) {
       dispatch(setTypePlanoAEECadastro(true));
     } else {
       dispatch(setTypePlanoAEECadastro(false));
     }
-
   }, [planoAEEDados]);
 
   const dadosCollapseLocalizarEstudante = useSelector(
@@ -45,7 +46,7 @@ const MontarDadosTabs = props => {
     <ContainerTabsCard type="card" width="20%" onTabClick={cliqueTab}>
       <TabPane tab="Cadastro do Plano" key="1">
         <AddResponsavelCadastroPlano />
-        <SecaoPlanoCollapse match={match} />
+        <SecaoPlanoCollapse />
       </TabPane>
       {temId && exibirTabReestruturacao && (
         <TabPane
@@ -58,7 +59,7 @@ const MontarDadosTabs = props => {
               situacaoPlanoAEE.EncerradoAutomaticamente
           }
         >
-          <SecaoReestruturacaoPlano match={match} />
+          <SecaoReestruturacaoPlano />
         </TabPane>
       )}
       {temId && (
@@ -67,21 +68,13 @@ const MontarDadosTabs = props => {
           key="3"
           disabled={planoAEEDados?.situacao === situacaoPlanoAEE.Expirado}
         >
-          <SecaoParecerPlanoCollapse match={match} />
+          <SecaoParecerPlanoCollapse />
         </TabPane>
       )}
     </ContainerTabsCard>
   ) : (
-    ''
+    <></>
   );
-};
-
-MontarDadosTabs.propTypes = {
-  match: PropTypes.oneOfType([PropTypes.object]),
-};
-
-MontarDadosTabs.defaultProps = {
-  match: {},
 };
 
 export default MontarDadosTabs;
