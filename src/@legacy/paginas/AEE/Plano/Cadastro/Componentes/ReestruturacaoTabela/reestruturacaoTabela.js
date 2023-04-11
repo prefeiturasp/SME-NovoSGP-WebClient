@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import PropTypes from 'prop-types';
 import { useSelector } from 'react-redux';
 
 import { Button, Colors, DataTable } from '~/componentes';
@@ -10,7 +9,7 @@ import { verificaSomenteConsulta } from '~/servicos';
 import ModalReestruturacaoPlano from '../ModalReestruturacaoPlano/modalReestruturacaoPlano';
 import { BotaoEstilizado, TextoEstilizado } from './reestruturacaoTabela.css';
 
-const ReestruturacaoTabela = ({ key, listaDados, match, semestre }) => {
+const ReestruturacaoTabela = ({ key, listaDados, semestre }) => {
   const [exibirModal, setModalVisivel] = useState(false);
   const [modoConsulta, setModoConsulta] = useState(false);
   const [dadosVisualizacao, setDadosVisualizacao] = useState();
@@ -92,7 +91,6 @@ const ReestruturacaoTabela = ({ key, listaDados, match, semestre }) => {
           modoConsulta={modoConsulta}
           dadosVisualizacao={dadosVisualizacao}
           semestre={semestre}
-          match={match}
         />
       )}
       <div>
@@ -121,17 +119,6 @@ const ReestruturacaoTabela = ({ key, listaDados, match, semestre }) => {
         )}
     </>
   );
-};
-
-ReestruturacaoTabela.defaultProps = {
-  match: {},
-};
-
-ReestruturacaoTabela.propTypes = {
-  key: PropTypes.string.isRequired,
-  listaDados: PropTypes.oneOfType([PropTypes.array]).isRequired,
-  semestre: PropTypes.number.isRequired,
-  match: PropTypes.oneOfType([PropTypes.object]),
 };
 
 export default ReestruturacaoTabela;
