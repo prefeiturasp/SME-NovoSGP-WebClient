@@ -592,7 +592,7 @@ const RelatorioParecerConclusivo = () => {
                 />
               </Loader>
             </div>
-            <div className="col-sm-12 col-md-6 col-lg-3 col-xl-3 mb-2">
+            <div className="col-sm-12 col-md-6 mb-2">
               <Loader loading={carregandoModalidades} tip="">
                 <SelectComponent
                   id="drop-modalidade-rel-parecer"
@@ -609,7 +609,7 @@ const RelatorioParecerConclusivo = () => {
                 />
               </Loader>
             </div>
-            <div className="col-sm-12 col-md-6 col-lg-1 col-xl-1 mb-2">
+            <div className="col-sm-12 col-md-2 mb-2">
               <Loader loading={carregandoSemestres} tip="">
                 <SelectComponent
                   id="drop-semestre-rel-parecer"
@@ -628,7 +628,7 @@ const RelatorioParecerConclusivo = () => {
                 />
               </Loader>
             </div>
-            <div className="col-sm-12 col-md-2 col-lg-2 col-xl-2 mb-2">
+            <div className="col-sm-12 col-md-4 mb-2">
               <Loader loading={carregandoCiclos} tip="">
                 <SelectComponent
                   id="drop-ciclos-rel-parecer"
@@ -646,7 +646,7 @@ const RelatorioParecerConclusivo = () => {
                 />
               </Loader>
             </div>
-            <div className="col-sm-12 col-md-2 col-lg-2 col-xl-2 mb-2">
+            <div className="col-sm-12 col-md-6 mb-2">
               <Loader loading={carregandoAnos} tip="">
                 <SelectComponent
                   id="drop-ano-rel-parecer"
@@ -662,7 +662,7 @@ const RelatorioParecerConclusivo = () => {
                 />
               </Loader>
             </div>
-            <div className="col-sm-12 col-md-2 col-lg-2 col-xl-2 mb-2">
+            <div className="col-sm-12 col-md-4 mb-2">
               <Loader loading={carregandoPareceresConclusivos} tip="">
                 <SelectComponent
                   id="drop-parecer-conclucivo-rel-parecer"
@@ -680,7 +680,7 @@ const RelatorioParecerConclusivo = () => {
                 />
               </Loader>
             </div>
-            <div className="col-sm-12 col-md-2 col-lg-2 col-xl-2 mb-2">
+            <div className="col-sm-12 col-md-2 mb-2">
               <SelectComponent
                 id="drop-formato-rel-parecer"
                 label="Formato"
