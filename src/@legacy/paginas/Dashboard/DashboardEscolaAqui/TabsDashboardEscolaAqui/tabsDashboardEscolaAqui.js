@@ -12,7 +12,7 @@ const { TabPane } = Tabs;
 const TabsDashboardEscolaAqui = props => {
   const { codigoDre, codigoUe } = props;
 
-  const [tabSelecionada, setTabSelecionada] = useState();
+  const [tabSelecionada, setTabSelecionada] = useState(0);
 
   useEffect(() => {
     if (!codigoDre || !codigoUe) {

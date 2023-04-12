@@ -10,7 +10,7 @@ const { TabPane } = Tabs;
 const TabsDashboardRegistroItinerancia = props => {
   const { anoLetivo, dreId, ueId, mesSelecionado } = props;
 
-  const [tabSelecionada, setTabSelecionada] = useState();
+  const [tabSelecionada, setTabSelecionada] = useState(0);
 
   const TAB_REGISTROS = '1';
 

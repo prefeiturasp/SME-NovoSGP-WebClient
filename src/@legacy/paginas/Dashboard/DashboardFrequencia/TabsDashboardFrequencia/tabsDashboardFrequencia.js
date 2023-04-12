@@ -11,7 +11,7 @@ import { ContainerTabsCard } from '~/componentes/tabs/tabs.css';
 import { ContainerTabsDashboardFrequencia } from '../dashboardFrequencia.css';
 
 const TabsDashboardFrequencia = () => {
-  const [tabSelecionada, setTabSelecionada] = useState();
+  const [tabSelecionada, setTabSelecionada] = useState(0);
   const anoLetivo = useSelector(
     store => store.dashboardFrequencia?.dadosDashboardFrequencia?.anoLetivo
   );
