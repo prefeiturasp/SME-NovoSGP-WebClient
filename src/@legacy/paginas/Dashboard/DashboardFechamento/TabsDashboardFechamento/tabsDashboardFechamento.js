@@ -11,7 +11,7 @@ import { ContainerTabsDashboardFechamento } from '../dashboardFechamento.css';
 import { ContainerTabsCard } from '~/componentes/tabs/tabs.css';
 
 const TabsDashboardFechamento = () => {
-  const [tabSelecionada, setTabSelecionada] = useState();
+  const [tabSelecionada, setTabSelecionada] = useState(0);
   const anoLetivo = useSelector(
     store => store.dashboardFechamento?.dadosDashboardFechamento?.anoLetivo
   );
