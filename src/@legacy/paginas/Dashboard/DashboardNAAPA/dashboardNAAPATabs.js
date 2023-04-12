@@ -8,7 +8,7 @@ import NAAPAContext from './naapaContext';
 const DashboardNAAPATabs = () => {
   const { anoLetivo, dre, ue, modalidade, semestre } = useContext(NAAPAContext);
 
-  const [tabSelecionada, setTabSelecionada] = useState();
+  const [tabSelecionada, setTabSelecionada] = useState(0);
 
   const RISCO_ABANDONO = '1';
 

@@ -16,10 +16,6 @@ export const ContainerTabsCard = styled(Tabs)`
 
   .ant-tabs-nav {
     width: ${props => (props.width ? props.width : '100%')};
-
-    .ant-tabs-nav-list {
-      width: 100%;
-    }
   }
 
   .ant-tabs-tab {
