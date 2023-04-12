@@ -797,6 +797,7 @@ function CadastroDeAula({ match, location }) {
                         label="Componente Curricular"
                         valueOption={
                           listaComponentes[0]?.regencia &&
+                          listaComponentes[0]?.codDisciplinaPai &&
                           listaComponentes[0]?.codDisciplinaPai !== 0
                             ? 'codDisciplinaPai'
                             :  'id' 
