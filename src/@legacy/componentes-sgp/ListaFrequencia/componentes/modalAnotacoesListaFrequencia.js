@@ -22,7 +22,7 @@ const ModalAnotacoesListaFrequencia = ({
     state => state.frequenciaPlanoAula.dadosModalAnotacaoFrequencia
   );
 
-  return (
+  return exibirModalAnotacaoFrequencia ? (
     <ModalAnotacoesFrequencia
       dadosListaFrequencia={dadosListaFrequencia}
       ehInfantil={ehInfantil}
@@ -34,6 +34,8 @@ const ModalAnotacoesListaFrequencia = ({
       dadosModal={dadosModalAnotacaoFrequencia}
       setDadosModal={setDadosModalAnotacaoFrequencia}
     />
+  ) : (
+    <></>
   );
 };
 

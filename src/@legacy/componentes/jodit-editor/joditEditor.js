@@ -269,7 +269,7 @@ const JoditEditor = forwardRef((props, ref) => {
       font: '16px Arial',
       overflow: 'none',
     },
-    iframeStyle,
+    iframeStyle: `${iframeStyle} img{max-width: 100%;max-height: 700px;object-fit: cover;}`,
   };
 
   const onChangePadrao = () => {
