@@ -59,7 +59,7 @@ const FechamentoBismestre = () => {
     listaDisciplinas && listaDisciplinas.length === 1
   );
 
-  const [bimestreCorrente, setBimestreCorrente] = useState();
+  const [bimestreCorrente, setBimestreCorrente] = useState(0);
   const [dadosBimestre1, setDadosBimestre1] = useState(undefined);
   const [dadosBimestre2, setDadosBimestre2] = useState(undefined);
   const [dadosBimestre3, setDadosBimestre3] = useState(undefined);
@@ -89,7 +89,7 @@ const FechamentoBismestre = () => {
   };
 
   const resetarTela = () => {
-    setBimestreCorrente();
+    setBimestreCorrente(0);
     setDadosBimestre1(undefined);
     setDadosBimestre2(undefined);
     setDadosBimestre3(undefined);
@@ -108,9 +108,7 @@ const FechamentoBismestre = () => {
     resetarTela();
 
     if (id) {
-      const disciplina = listaDisciplinas.find(
-        c => String(c.id) === id
-      );
+      const disciplina = listaDisciplinas.find(c => String(c.id) === id);
       setIdDisciplinaTerritorioSaber(
         disciplina.territorioSaber ? disciplina.id : id
       );

@@ -19,10 +19,8 @@ export const ContainerTabsCard = styled(Tabs)`
   }
 
   .ant-tabs-tab {
-    width: 100% !important;
     margin-right: 0px !important;
     border: 1px solid ${Base.CinzaDesabilitado} !important;
-
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -48,10 +46,6 @@ export const ContainerTabsCard = styled(Tabs)`
 
   .ant-tabs-bar {
     margin: ${props => (props.border ? 0 : 'initial')};
-  }
-
-  .ant-tabs-nav-list {
-    display: block !important;
   }
 
   .ant-tabs-tabpane {
