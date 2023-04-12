@@ -50,6 +50,10 @@ export const ContainerTabsCard = styled(Tabs)`
     margin: ${props => (props.border ? 0 : 'initial')};
   }
 
+  .ant-tabs-nav-list {
+    display: block !important;
+  }
+
   .ant-tabs-tabpane {
     padding-top: ${props => (props.border ? '16px' : 'initial')};
     border: ${props =>

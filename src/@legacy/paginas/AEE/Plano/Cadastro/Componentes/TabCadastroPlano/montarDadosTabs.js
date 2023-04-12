@@ -43,7 +43,7 @@ const MontarDadosTabs = () => {
   };
   return dadosCollapseLocalizarEstudante?.codigoAluno &&
     planoAEEDados?.questionarioId ? (
-    <ContainerTabsCard type="card" width="20%" onTabClick={cliqueTab}>
+    <ContainerTabsCard type="card" onTabClick={cliqueTab}>
       <TabPane tab="Cadastro do Plano" key="1">
         <AddResponsavelCadastroPlano />
         <SecaoPlanoCollapse />
