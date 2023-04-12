@@ -253,7 +253,6 @@ const DiarioBordo = ({ match }) => {
       setTemPeriodoAberto(retorno.data.temPeriodoAberto);
       setEhInseridoCJ(retorno.data.inseridoCJ);
       setValoresIniciais(valInicial);
-      setCodDisciplinaPai(componenteCurricular);
       if (retorno?.data?.auditoria?.id) {
         setAuditoria(retorno.data.auditoria);
         obterDadosObservacoes(retorno.data.auditoria.id);
@@ -298,6 +297,7 @@ const DiarioBordo = ({ match }) => {
 
         setDiasParaHabilitar(habilitar);
       } else {
+        setListaDatasAulas([]);
         setDiasParaHabilitar();
       }
     },
@@ -751,6 +751,7 @@ const DiarioBordo = ({ match }) => {
                             !componenteCurricularSelecionado
                           }
                           diasParaHabilitar={diasParaHabilitar}
+                          desabilitarData={!listaDatasAulas?.length}
                         />
                       </Loader>
                     </div>
