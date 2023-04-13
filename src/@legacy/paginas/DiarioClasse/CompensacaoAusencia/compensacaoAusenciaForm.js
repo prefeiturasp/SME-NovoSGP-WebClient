@@ -50,6 +50,7 @@ import {
   SGP_INPUT_NOME_ATIVIDADE,
   SGP_INPUT_NOME_ESTUDANTE,
 } from '~/constantes/ids/input';
+import _ from 'lodash';
 
 const CompensacaoAusenciaForm = ({ match }) => {
   const usuario = useSelector(store => store.usuario);
@@ -731,9 +732,16 @@ const CompensacaoAusenciaForm = ({ match }) => {
       );
     }
     paramas.alunos = alunosAusenciaCompensada.map(item => {
+      const compensacaoAusenciaAlunoAula = item?.compensacoes?.length
+        ? item.compensacoes?.map(c => ({
+            registroFrequenciaAlunoId: c?.registroFrequenciaAlunoId,
+          }))
+        : [];
+
       return {
         id: item.id,
         qtdFaltasCompensadas: item.quantidadeFaltasCompensadas,
+        compensacaoAusenciaAlunoAula,
       };
     });
 
@@ -875,7 +883,7 @@ const CompensacaoAusenciaForm = ({ match }) => {
   const atualizarValoresListaCompensacao = novaListaAlunos => {
     if (!desabilitarCampos) {
       onChangeCampos();
-      setAlunosAusenciaCompensada([...novaListaAlunos]);
+      setAlunosAusenciaCompensada(_.cloneDeep(novaListaAlunos));
     }
   };
 
@@ -1176,6 +1184,10 @@ const CompensacaoAusenciaForm = ({ match }) => {
                           atualizarValoresListaCompensacao
                         }
                         desabilitarCampos={desabilitarCampos}
+                        idCompensacaoAusencia={idCompensacaoAusencia}
+                        turmaCodigo={turmaSelecionada.turma}
+                        bimestre={form?.values?.bimestre}
+                        disciplinaId={form?.values?.disciplinaId}
                       />
                     </div>
                   </div>
