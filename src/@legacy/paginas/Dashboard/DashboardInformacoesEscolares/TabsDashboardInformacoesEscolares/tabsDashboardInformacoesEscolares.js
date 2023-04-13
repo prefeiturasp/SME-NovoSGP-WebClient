@@ -22,7 +22,7 @@ const TabsDashboardInformacoesEscolares = props => {
 
   useEffect(() => {
     if (!modalidade) {
-      setTabSelecionada();
+      setTabSelecionada(0);
     }
   }, [modalidade]);
 
