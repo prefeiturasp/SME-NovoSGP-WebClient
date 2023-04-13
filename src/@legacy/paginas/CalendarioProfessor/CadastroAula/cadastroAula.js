@@ -295,8 +295,8 @@ function CadastroDeAula({ match, location }) {
   const obterAula = useCallback(async () => {
     const carregarComponentesCurriculares = async idTurma => {
       setCarregandoDados(true);
-      const respostaComponentes = await servicoDisciplina
-        .obterDisciplinasPorTurma(idTurma)
+      const respostaComponentes = !!(!!id || aula?.disciplinaId) ? await servicoDisciplina
+        .obterDisciplinasTurma(idTurma) : await servicoDisciplina.obterDisciplinasPorTurma(idTurma)
         .catch(e => erros(e))
         .finally(() => setCarregandoDados(false));
 
