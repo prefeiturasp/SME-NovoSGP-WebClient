@@ -54,6 +54,7 @@ const TabsDashboardFrequencia = () => {
       {exibirAbas && (
         <ContainerTabsDashboardFrequencia>
           <ContainerTabsCard
+            width="auto"
             type="card"
             onChange={onChangeTab}
             activeKey={tabSelecionada}

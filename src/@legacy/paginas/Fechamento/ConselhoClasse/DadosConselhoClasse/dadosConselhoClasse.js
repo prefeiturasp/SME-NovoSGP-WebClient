@@ -296,6 +296,7 @@ const DadosConselhoClasse = props => {
     <Loader loading={carregando}>
       {codigoEOL ? (
         <ContainerTabsCard
+          width="20%"
           type="card"
           onChange={onChangeTab}
           activeKey={bimestreAtual.valor}

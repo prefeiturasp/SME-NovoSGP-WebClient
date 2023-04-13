@@ -56,6 +56,7 @@ const TabsDashboardEscolaAqui = props => {
       {codigoDre && codigoUe ? (
         <ContainerTabsDashboardEscolaAqui>
           <ContainerTabsCard
+            width="auto"
             type="card"
             onChange={onChangeTab}
             activeKey={tabSelecionada}

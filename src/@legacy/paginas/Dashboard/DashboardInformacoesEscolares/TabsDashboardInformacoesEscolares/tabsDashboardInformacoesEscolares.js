@@ -29,6 +29,7 @@ const TabsDashboardInformacoesEscolares = props => {
   return (
     <ContainerTabsDashboard>
       <ContainerTabsCard
+        width="auto"
         type="card"
         onChange={onChangeTab}
         activeKey={tabSelecionada}

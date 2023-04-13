@@ -62,6 +62,7 @@ const TabsDashboardFechamento = () => {
       {exibirAbas && (
         <ContainerTabsDashboardFechamento>
           <ContainerTabsCard
+            width="auto"
             type="card"
             onChange={onChangeTab}
             activeKey={tabSelecionada}
