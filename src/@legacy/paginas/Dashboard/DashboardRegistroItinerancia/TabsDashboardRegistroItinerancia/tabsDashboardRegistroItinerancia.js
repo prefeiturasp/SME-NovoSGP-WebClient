@@ -31,6 +31,7 @@ const TabsDashboardRegistroItinerancia = props => {
       {anoLetivo && dreId && ueId && mesSelecionado ? (
         <ContainerTabsDashboard>
           <ContainerTabsCard
+            width="auto"
             type="card"
             onChange={onChangeTab}
             activeKey={tabSelecionada}

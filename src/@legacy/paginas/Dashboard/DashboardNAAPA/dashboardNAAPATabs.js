@@ -38,6 +38,7 @@ const DashboardNAAPATabs = () => {
     <>
       {exibirAbas && (
         <ContainerTabsCard
+          width="auto"
           type="card"
           onChange={onChangeTab}
           activeKey={tabSelecionada}

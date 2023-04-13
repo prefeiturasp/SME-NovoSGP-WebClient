@@ -5,10 +5,7 @@ import { ContainerTabsCard } from '~/componentes/tabs/tabs.css';
 import { setTabAtualComponenteCurricular } from '~/redux/modulos/frequenciaPlanoAula/actions';
 import ServicoPlanoAula from '~/servicos/Paginas/DiarioClasse/ServicoPlanoAula';
 import ListaObjetivosPlanoAula from '../ListaObjetivos/listaObjetivosPlanoAula';
-import {
-  ContainerTabsComponentesCorriculares,
-  DescricaoNomeTabComponenteCurricular,
-} from './tabsComponentesCorriculares.css';
+import { DescricaoNomeTabComponenteCurricular } from './tabsComponentesCorriculares.css';
 
 const { TabPane } = Tabs;
 
@@ -34,7 +31,7 @@ const TabsComponentesCorriculares = () => {
             tabAtualComponenteCurricular={tabAtualComponenteCurricular}
           />
         ) : (
-          ''
+          <></>
         )}
       </div>
     );
@@ -65,9 +62,10 @@ const TabsComponentesCorriculares = () => {
     nome,
     codigoComponenteCurricular
   ) => {
-    const temObjetivosSelecionados = ServicoPlanoAula.temObjetivosSelecionadosTabComponenteCurricular(
-      codigoComponenteCurricular
-    );
+    const temObjetivosSelecionados =
+      ServicoPlanoAula.temObjetivosSelecionadosTabComponenteCurricular(
+        codigoComponenteCurricular
+      );
 
     if (temObjetivosSelecionados) {
       return (
@@ -90,41 +88,40 @@ const TabsComponentesCorriculares = () => {
     <>
       {listaComponentesCurricularesPlanejamento &&
       listaComponentesCurricularesPlanejamento.length ? (
-        <ContainerTabsComponentesCorriculares
-          widthAntTabsNav={
+        <ContainerTabsCard
+          width={
             listaComponentesCurricularesPlanejamento.length > 4
               ? `${100 / listaComponentesCurricularesPlanejamento.length}%`
               : '25%'
           }
+          type="card"
+          onChange={onChangeTab}
+          activeKey={String(
+            tabAtualComponenteCurricular?.codigoComponenteCurricular
+          )}
         >
-          <ContainerTabsCard
-            type="card"
-            onChange={onChangeTab}
-            activeKey={String(
-              tabAtualComponenteCurricular?.codigoComponenteCurricular
-            )}
-          >
-            {listaComponentesCurricularesPlanejamento.map(item => {
-              return (
-                <TabPane
-                  tab={obterDescricaoNomeTabComponenteCurricular(
-                    item.nome,
-                    item.codigoComponenteCurricular
-                  )}
-                  key={String(item.codigoComponenteCurricular)}
-                >
-                  {String(
-                    tabAtualComponenteCurricular?.codigoComponenteCurricular
-                  ) === String(item.codigoComponenteCurricular)
-                    ? montarDados()
-                    : ''}
-                </TabPane>
-              );
-            })}
-          </ContainerTabsCard>
-        </ContainerTabsComponentesCorriculares>
+          {listaComponentesCurricularesPlanejamento.map(item => {
+            return (
+              <TabPane
+                tab={obterDescricaoNomeTabComponenteCurricular(
+                  item.nome,
+                  item.codigoComponenteCurricular
+                )}
+                key={String(item.codigoComponenteCurricular)}
+              >
+                {String(
+                  tabAtualComponenteCurricular?.codigoComponenteCurricular
+                ) === String(item.codigoComponenteCurricular) ? (
+                  montarDados()
+                ) : (
+                  <></>
+                )}
+              </TabPane>
+            );
+          })}
+        </ContainerTabsCard>
       ) : (
-        ''
+        <></>
       )}
     </>
   );

@@ -14,11 +14,12 @@ export const ContainerTabsCard = styled(Tabs)`
     display: none;
   }
 
-  .ant-tabs-nav {
-    width: ${props => (props.width ? props.width : '100%')};
+  .ant-tabs-nav-list {
+    width: 100%;
   }
 
   .ant-tabs-tab {
+    width: ${props => (props.width ? props.width : '25%')};
     margin-right: 0px !important;
     border: 1px solid ${Base.CinzaDesabilitado} !important;
     white-space: nowrap;
