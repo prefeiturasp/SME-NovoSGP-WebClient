@@ -62,40 +62,41 @@ const MontarDadosTabItinerancia = ({ questionarioId, dadosTab }) => {
           questionarioId={questionarioId}
         />
       )}
+      <Col span={24}>
+        <Row
+          gutter={[16, 16]}
+          type="flex"
+          justify="center"
+          style={{ marginBottom: 20 }}
+        >
+          <Col>
+            <Button
+              border
+              color={Colors.Roxo}
+              label="Novo atendimento"
+              id={SGP_BUTTON_NOVO_ATENDIMENTO}
+              onClick={() => onClickNovoAtendimento()}
+              disabled={desabilitarCamposEncaminhamentoNAAPA}
+            />
+          </Col>
+        </Row>
 
-      <Row
-        gutter={[16, 16]}
-        type="flex"
-        justify="center"
-        style={{ marginBottom: 20 }}
-      >
-        <Col>
-          <Button
-            border
-            color={Colors.Roxo}
-            label="Novo atendimento"
-            id={SGP_BUTTON_NOVO_ATENDIMENTO}
-            onClick={() => onClickNovoAtendimento()}
-            disabled={desabilitarCamposEncaminhamentoNAAPA}
-          />
-        </Col>
-      </Row>
+        <hr />
 
-      <hr />
-
-      <Row
-        type="flex"
-        justify="center"
-        gutter={[16, 16]}
-        style={{ marginTop: 20 }}
-      >
-        <Col span={24}>
-          <ListaHistoricoAtendimentosPaginada
-            atualizarTabela={atualizarTabela}
-            setAtendimentoId={setAtendimentoId}
-          />
-        </Col>
-      </Row>
+        <Row
+          type="flex"
+          justify="center"
+          gutter={[16, 16]}
+          style={{ marginTop: 20 }}
+        >
+          <Col span={24}>
+            <ListaHistoricoAtendimentosPaginada
+              atualizarTabela={atualizarTabela}
+              setAtendimentoId={setAtendimentoId}
+            />
+          </Col>
+        </Row>
+      </Col>
     </Card>
   );
 };
