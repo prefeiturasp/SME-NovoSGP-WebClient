@@ -1188,6 +1188,7 @@ const CompensacaoAusenciaForm = ({ match }) => {
                         turmaCodigo={turmaSelecionada.turma}
                         bimestre={form?.values?.bimestre}
                         disciplinaId={form?.values?.disciplinaId}
+                        anoLetivo={turmaSelecionada?.anoLetivo}
                       />
                     </div>
                   </div>
