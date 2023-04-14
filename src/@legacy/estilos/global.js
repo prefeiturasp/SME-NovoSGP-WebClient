@@ -72,7 +72,7 @@ export default createGlobalStyle`
     color: #ffffff !important;
   }
 
-  /* Antd V5 */
+  /* Antd V5 Start */
   .ant-select {
     width: 100%;
   }
@@ -173,7 +173,11 @@ export default createGlobalStyle`
     color: #ffffff !important;
   }
 
-  /* Antd V5 */
+  .ant-table-thead > tr:hover:not(.ant-table-expanded-row):not(.ant-table-row-selected) > td.ant-table-cell-scrollbar {
+    background: ${Base.CinzaTabela} !important;
+  }
+
+  /* Antd V5 End */
 
   .ant-select-dropdown-menu-item  {
     -webkit-transition: none !important;
