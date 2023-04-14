@@ -21,7 +21,10 @@ const ListaAlunosAusenciasCompensadas = props => {
     turmaCodigo,
     bimestre,
     disciplinaId,
+    anoLetivo,
   } = props;
+
+  const exibirColunaAulas = anoLetivo && Number(anoLetivo) >= 2023;
 
   const atualizarValores = (
     qt,
@@ -152,7 +155,10 @@ const ListaAlunosAusenciasCompensadas = props => {
         return montaCompensacao(qtdFaltas ? String(qtdFaltas) : '', dadosAluno);
       },
     },
-    {
+  ];
+
+  if (exibirColunaAulas) {
+    colunasListaAlunosAusenciaCompensada.push({
       title: 'Aulas',
       width: '85px',
       align: 'center',
@@ -169,8 +175,8 @@ const ListaAlunosAusenciasCompensadas = props => {
           indexAluno={indexAluno}
         />
       ),
-    },
-  ];
+    });
+  }
 
   const onSelectRowAlunos = ids => {
     onSelectRow(ids);
