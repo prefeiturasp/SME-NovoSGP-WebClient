@@ -21,17 +21,18 @@ import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPad
 import BotaoExcluirPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoExcluirPadrao';
 import { Auditoria, Label } from '~/componentes';
 import { RotasDto } from '~/dtos';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
-// eslint-disable-next-line react/prop-types
-const TipoEventosForm = ({ match }) => {
+const TipoEventosForm = () => {
   const botaoCadastrarRef = useRef();
   const campoDescricaoRef = useRef();
 
   const navigate = useNavigate();
+  const paramsRoute = useParams();
+
+  const idTipoEvento = paramsRoute?.id;
 
   const [valoresIniciais, setValoresIniciais] = useState({});
-  const [idTipoEvento, setIdTipoEvento] = useState('');
   const [dadosTipoEvento, setDadosTipoEvento] = useState({
     descricao: '',
     letivo: undefined,
@@ -66,12 +67,6 @@ const TipoEventosForm = ({ match }) => {
       background-color: ${Base.Roxo};
     }
   `;
-
-  useEffect(() => {
-    if (match?.params?.id) {
-      setIdTipoEvento(match?.params?.id);
-    }
-  }, []);
 
   const [possuiEventos, setPossuiEventos] = useState(false);
 

@@ -29,7 +29,7 @@ const AtribuicaoResponsaveisCadastro = () => {
   const permissoesTela =
     usuario.permissoes[RotasDto.ATRIBUICAO_RESPONSAVEIS_LISTA];
 
-  const routeMatch = useParams();
+  const paramsRoute = useParams();
   const navigate = useNavigate();
 
   const [carregandoDres, setCarregandoDres] = useState(false);
@@ -59,14 +59,14 @@ const AtribuicaoResponsaveisCadastro = () => {
   }, [permissoesTela]);
 
   useEffect(() => {
-    if (routeMatch.dreId) {
+    if (paramsRoute?.dreId) {
       setBreadcrumbManual(
         RotasDto.ATRIBUICAO_RESPONSAVEIS,
         'Editar Atribuição',
         RotasDto.ATRIBUICAO_RESPONSAVEIS_LISTA
       );
     }
-  }, [routeMatch]);
+  }, [paramsRoute]);
 
   const limparTela = () => {
     if (listaTipoResponsavel?.length > 1) {
@@ -154,8 +154,8 @@ const AtribuicaoResponsaveisCadastro = () => {
     if (retorno?.data?.length) {
       if (retorno.data.length === 1) {
         setDreId(retorno.data[0].codigo);
-      } else if (routeMatch?.dreId) {
-        setDreId(routeMatch.dreId);
+      } else if (paramsRoute?.dreId) {
+        setDreId(paramsRoute?.dreId);
       }
 
       setListaDres(retorno.data);
@@ -163,7 +163,7 @@ const AtribuicaoResponsaveisCadastro = () => {
       setListaDres([]);
       setDreId();
     }
-  }, [routeMatch]);
+  }, [paramsRoute]);
 
   useEffect(() => {
     obterDres();
@@ -183,14 +183,14 @@ const AtribuicaoResponsaveisCadastro = () => {
       setListaTipoResponsavel(resposta.data);
       if (resposta?.data?.length === 1) {
         setTipoResponsavel(resposta.data[0]?.codigo?.toString());
-      } else if (routeMatch?.tipoResponsavel) {
-        setTipoResponsavel(routeMatch.tipoResponsavel);
-        setCodigoUeSelecionadoGrid(routeMatch?.codigoUe);
+      } else if (paramsRoute?.tipoResponsavel) {
+        setTipoResponsavel(paramsRoute.tipoResponsavel);
+        setCodigoUeSelecionadoGrid(paramsRoute?.codigoUe);
       }
     } else {
       setListaTipoResponsavel([]);
     }
-  }, [routeMatch]);
+  }, [paramsRoute]);
 
   useEffect(() => {
     obterTipoResponsavel();
@@ -226,19 +226,19 @@ const AtribuicaoResponsaveisCadastro = () => {
 
       if (lista?.length === 1) {
         setResponsavel(lista[0].supervisorId);
-      } else if (routeMatch?.supervisorId) {
+      } else if (paramsRoute?.supervisorId) {
         if (
-          routeMatch.supervisorId > 0 &&
-          String(routeMatch.tipoResponsavel) === String(tipoResponsavel)
+          paramsRoute.supervisorId > 0 &&
+          String(paramsRoute.tipoResponsavel) === String(tipoResponsavel)
         )
-          setResponsavel(routeMatch.supervisorId);
+          setResponsavel(paramsRoute.supervisorId);
       }
       setListaResponsavel(lista);
     } else {
       setListaResponsavel([]);
     }
     setCarregandoResponsavel(false);
-  }, [dreId, tipoResponsavel, routeMatch]);
+  }, [dreId, tipoResponsavel, paramsRoute]);
 
   useEffect(() => {
     if (dreId && tipoResponsavel) {

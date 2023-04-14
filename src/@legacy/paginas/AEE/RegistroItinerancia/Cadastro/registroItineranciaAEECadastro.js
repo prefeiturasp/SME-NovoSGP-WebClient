@@ -1,10 +1,9 @@
 import { Col, Row } from 'antd';
 import _ from 'lodash';
 import moment from 'moment';
-import PropTypes from 'prop-types';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import shortid from 'shortid';
 import {
   Auditoria,
@@ -52,8 +51,10 @@ import {
 } from './componentes';
 import { NOME_CAMPO_QUESTAO } from './componentes/ConstantesCamposDinâmicos';
 
-const RegistroItineranciaAEECadastro = ({ match }) => {
+const RegistroItineranciaAEECadastro = () => {
   const navigate = useNavigate();
+  const location = useLocation();
+  const paramsRoute = useParams();
 
   const [carregandoGeral, setCarregandoGeral] = useState(false);
   const [carregandoQuestoes, setCarregandoQuestoes] = useState(false);
@@ -307,15 +308,15 @@ const RegistroItineranciaAEECadastro = ({ match }) => {
   };
 
   useEffect(() => {
-    if (match?.params?.id) {
+    if (paramsRoute?.id) {
       setBreadcrumbManual(
-        match?.url,
+        location.pathname,
         'Alterar',
         RotasDto.RELATORIO_AEE_REGISTRO_ITINERANCIA
       );
-      setItineranciaId(match.params.id);
+      setItineranciaId(paramsRoute?.id);
     }
-  }, [match]);
+  }, [location, paramsRoute]);
 
   const obterObjetivos = async () => {
     const retorno = await ServicoRegistroItineranciaAEE.obterObjetivos().catch(
@@ -561,7 +562,7 @@ const RegistroItineranciaAEECadastro = ({ match }) => {
 
   const desabilitarCamposPorPermissao = () => {
     return (
-      (match?.params?.id
+      (paramsRoute?.id
         ? !permissoesTela?.podeAlterar
         : !permissoesTela?.podeIncluir) ||
       somenteConsulta ||
@@ -577,7 +578,7 @@ const RegistroItineranciaAEECadastro = ({ match }) => {
   const gerarRelatorio = () => {
     setImprimindo(true);
 
-    ServicoRegistroItineranciaAEE.gerarRelatorio([match?.params?.id])
+    ServicoRegistroItineranciaAEE.gerarRelatorio([paramsRoute?.id])
       .then(() => {
         sucesso(
           'Solicitação de geração do relatório gerada com sucesso. Em breve você receberá uma notificação com o resultado.'
@@ -883,12 +884,12 @@ const RegistroItineranciaAEECadastro = ({ match }) => {
           <Col>
             <Button
               id={SGP_BUTTON_SALVAR}
-              label={match?.params?.id ? 'Alterar' : 'Salvar'}
+              label={paramsRoute?.id ? 'Alterar' : 'Salvar'}
               color={Colors.Roxo}
               border
               bold
               onClick={() => onClickSalvar()}
-              disabled={somenteConsulta || (match?.params?.id && !modoEdicao)}
+              disabled={somenteConsulta || (paramsRoute?.id && !modoEdicao)}
             />
           </Col>
         </Row>
@@ -1209,14 +1210,6 @@ const RegistroItineranciaAEECadastro = ({ match }) => {
       )}
     </Loader>
   );
-};
-
-RegistroItineranciaAEECadastro.propTypes = {
-  match: PropTypes.oneOfType([PropTypes.object]),
-};
-
-RegistroItineranciaAEECadastro.defaultProps = {
-  match: {},
 };
 
 export default RegistroItineranciaAEECadastro;

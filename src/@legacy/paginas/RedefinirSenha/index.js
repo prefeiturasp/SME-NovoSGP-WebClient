@@ -34,7 +34,7 @@ import { setMenusPermissoes } from '~/servicos/servico-navegacao';
 import { obterMeusDados } from '~/servicos/Paginas/ServicoUsuario';
 import { Loader } from '~/componentes';
 import ServicoDashboard from '~/servicos/Paginas/Dashboard/ServicoDashboard';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 
 const Item = styled.li`
   ${props => props.status === true && `color: ${Base.Verde}`};
@@ -42,9 +42,11 @@ const Item = styled.li`
   font-weight: normal;
 `;
 
-const RedefinirSenha = props => {
+const RedefinirSenha = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const location = useLocation();
+  const paramsRoute = useParams();
 
   const [senhas, setSenhas] = useState({
     senha: '',
@@ -58,7 +60,7 @@ const RedefinirSenha = props => {
   const [finalizouCarregamento, setFinalizouCarregamento] = useState(false);
 
   const { senha, confirmarSenha } = senhas;
-  const token = props?.match?.params?.token;
+  const token = paramsRoute?.token;
 
   const [validacoes, setValidacoes] = useState({
     maiuscula: '',
@@ -193,8 +195,8 @@ const RedefinirSenha = props => {
     } else {
       const rf = Number.isInteger(usuario * 1)
         ? usuario
-        : Number.isInteger(props?.location?.state?.rf * 1)
-        ? props?.location?.state?.rf
+        : Number.isInteger(location?.state?.rf * 1)
+        ? location?.state?.rf
         : '';
 
       const requisicao = await ServicoPrimeiroAcesso.alterarSenha({

@@ -27,14 +27,17 @@ import {
 } from '~/constantes/ids/button';
 import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
 import BotaoExcluirPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoExcluirPadrao';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 
 const urlTelaNotificacoes = '/notificacoes';
 
-const DetalheNotificacao = ({ match }) => {
+const DetalheNotificacao = () => {
   const navigate = useNavigate();
+  const location = useLocation();
+  const paramsRoute = useParams();
 
-  const [idNotificacao, setIdNotificacao] = useState('');
+  const idNotificacao = paramsRoute?.id || 0;
+
   const [listaDeStatus, setListaDeStatus] = useState([]);
   const [carregandoTela, setCarregandoTela] = useState(false);
   const [aprovar, setAprovar] = useState(false);
@@ -87,19 +90,15 @@ const DetalheNotificacao = ({ match }) => {
   };
 
   useEffect(() => {
-    setBreadcrumbManual(match.url, 'Detalhes', '/notificacoes');
+    setBreadcrumbManual(location.pathname, 'Detalhes', '/notificacoes');
     verificaSomenteConsulta(permissoesTela);
-  }, []);
+  }, [location]);
 
   useEffect(() => {
     if (idNotificacao) {
       buscaNotificacao(idNotificacao);
     }
   }, [idNotificacao]);
-
-  useEffect(() => {
-    setIdNotificacao(match.params.id);
-  }, [match.params.id]);
 
   const anoAtual = window.moment().format('YYYY');
 

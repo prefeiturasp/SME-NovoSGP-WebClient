@@ -32,10 +32,14 @@ import { ServicoPeriodoFechamento } from '~/servicos';
 import { SGP_BUTTON_APROVAR } from '~/constantes/ids/button';
 import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
 import { URL_HOME } from '@/@legacy/constantes';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 
-const PendenciasFechamentoForm = ({ match }) => {
+const PendenciasFechamentoForm = () => {
   const navigate = useNavigate();
+  const location = useLocation();
+  const paramsRoute = useParams();
+
+  const idPendenciaFechamento = paramsRoute?.id || 0;
 
   const usuario = useSelector(store => store.usuario);
   const { turmaSelecionada } = usuario;
@@ -54,7 +58,6 @@ const PendenciasFechamentoForm = ({ match }) => {
   const [auditoria, setAuditoria] = useState([]);
   const [exibirAuditoria, setExibirAuditoria] = useState(false);
 
-  const [idPendenciaFechamento, setIdPendenciaFechamento] = useState(0);
   const [codigoComponenteCurricular, setCodigoComponenteCurricular] =
     useState(undefined);
   const [bimestre, setBimestre] = useState('');
@@ -147,16 +150,15 @@ const PendenciasFechamentoForm = ({ match }) => {
 
   useEffect(() => {
     const consultaPorId = async () => {
-      if (match && match.params && match.params.id) {
+      if (idPendenciaFechamento) {
         setBreadcrumbManual(
-          match.url,
+          location.pathname,
           'Análise de pendências',
           RotasDto.PENDENCIAS_FECHAMENTO
         );
-        setIdPendenciaFechamento(match.params.id);
         setCarregandoDados(true);
         const retorno = await ServicoPendenciasFechamento.obterPorId(
-          match.params.id
+          idPendenciaFechamento
         ).catch(e => erros(e));
 
         if (retorno && retorno.data) {
@@ -202,7 +204,7 @@ const PendenciasFechamentoForm = ({ match }) => {
     if (!ehTurmaInfantil(modalidadesFiltroPrincipal, turmaSelecionada)) {
       consultaPorId();
     }
-  }, [modalidadesFiltroPrincipal, turmaSelecionada, match]);
+  }, [modalidadesFiltroPrincipal, turmaSelecionada, idPendenciaFechamento]);
 
   const onClickVoltar = () => navigate(URL_HOME);
 

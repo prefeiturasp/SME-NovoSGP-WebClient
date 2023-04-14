@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import queryString from 'query-string';
 import { useSelector } from 'react-redux';
-import PropTypes from 'prop-types';
 import * as Yup from 'yup';
 import { Formik, Form } from 'formik';
 import _ from 'lodash';
@@ -42,10 +41,12 @@ import {
   SGP_SELECT_TIPO_AVALIACAO,
 } from '~/constantes/ids/select';
 import { SGP_JODIT_EDITOR_CADASTRO_AVALIACAO_DESCRICAO } from '~/constantes/ids/jodit-editor';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 
-const AvaliacaoForm = ({ match, location }) => {
+const AvaliacaoForm = () => {
   const navigate = useNavigate();
+  const location = useLocation();
+  const paramsRoute = useParams();
 
   const [mostrarModalCopiarAvaliacao, setMostrarModalCopiarAvaliacao] =
     useState(false);
@@ -431,7 +432,7 @@ const AvaliacaoForm = ({ match, location }) => {
   };
 
   useEffect(() => {
-    if (!match?.params?.id && listaDisciplinas?.length === 1) {
+    if (!paramsRoute?.id && listaDisciplinas?.length === 1) {
       setDadosAvaliacao({
         ...dadosAvaliacao,
         disciplinasId:
@@ -444,7 +445,7 @@ const AvaliacaoForm = ({ match, location }) => {
       setTemRegencia(true);
       obterDisciplinasRegencia();
     }
-  }, [listaDisciplinas, mostrarDisciplinaRegencia, match]);
+  }, [listaDisciplinas, mostrarDisciplinaRegencia, paramsRoute]);
 
   const [listaTiposAvaliacao, setListaTiposAvaliacao] = useState([]);
 
@@ -477,8 +478,8 @@ const AvaliacaoForm = ({ match, location }) => {
 
     if (!idAvaliacao) setDadosAvaliacao(inicial);
 
-    if (match?.params?.id) {
-      setIdAvaliacao(match.params.id);
+    if (paramsRoute?.id) {
+      setIdAvaliacao(paramsRoute.id);
     } else if (diaAvaliacao) {
       setDataAvaliacao(window.moment(diaAvaliacao));
     } else if (!valorNuloOuVazio(location.search)) {
@@ -912,16 +913,6 @@ const AvaliacaoForm = ({ match, location }) => {
       </Div>
     </>
   );
-};
-
-AvaliacaoForm.propTypes = {
-  match: PropTypes.oneOfType([PropTypes.array, PropTypes.object]),
-  location: PropTypes.oneOfType([PropTypes.array, PropTypes.object]),
-};
-
-AvaliacaoForm.defaultProps = {
-  match: {},
-  location: {},
 };
 
 export default AvaliacaoForm;
