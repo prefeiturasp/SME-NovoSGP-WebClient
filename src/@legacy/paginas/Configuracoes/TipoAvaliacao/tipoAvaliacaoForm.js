@@ -1,5 +1,4 @@
 import * as Yup from 'yup';
-import PropTypes from 'prop-types';
 import { Form, Formik } from 'formik';
 import { useSelector } from 'react-redux';
 import React, { useState, useRef, useEffect } from 'react';
@@ -22,10 +21,14 @@ import servicoTipoAvaliaco from '~/servicos/Paginas/TipoAvaliacao';
 import { setBreadcrumbManual } from '~/servicos/breadcrumb-services';
 
 import { validaSeObjetoEhNuloOuVazio } from '~/utils/funcoes/gerais';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 
-const TipoAvaliacaoForm = ({ match }) => {
+const TipoAvaliacaoForm = () => {
   const navigate = useNavigate();
+  const location = useLocation();
+  const paramsRoute = useParams();
+
+  const idTipoAvaliacao = paramsRoute?.id;
 
   const listaSituacao = [
     {
@@ -49,7 +52,6 @@ const TipoAvaliacaoForm = ({ match }) => {
     possuiAvaliacao: false,
   });
 
-  const [idTipoAvaliacao, setIdTipoAvaliacao] = useState('');
   const [exibirLoader, setExibirLoader] = useState(false);
 
   const textEditorRef = useRef(null);
@@ -177,7 +179,6 @@ const TipoAvaliacaoForm = ({ match }) => {
         });
 
         setDescricao(registro.data.descricao);
-        setIdTipoAvaliacao(match.params.id);
         setAuditoria({
           criadoPor: registro.data.criadoPor,
           criadoRf: registro.data.criadoRF > 0 ? registro.data.criadoRF : '',
@@ -197,12 +198,16 @@ const TipoAvaliacaoForm = ({ match }) => {
   };
 
   useEffect(() => {
-    if (match && match.params && match.params.id) {
+    if (idTipoAvaliacao) {
       setNovoRegistro(false);
-      setBreadcrumbManual(match.url, 'Atribuição', RotasDto.TIPO_AVALIACAO);
-      buscarPorId(match.params.id);
+      setBreadcrumbManual(
+        location.pathname,
+        'Atribuição',
+        RotasDto.TIPO_AVALIACAO
+      );
+      buscarPorId(idTipoAvaliacao);
     }
-  }, []);
+  }, [idTipoAvaliacao, location]);
 
   return (
     <Loader loading={exibirLoader}>
@@ -294,14 +299,4 @@ const TipoAvaliacaoForm = ({ match }) => {
   );
 };
 
-TipoAvaliacaoForm.propTypes = {
-  match: PropTypes.oneOfType([
-    PropTypes.objectOf(PropTypes.object),
-    PropTypes.any,
-  ]),
-};
-
-TipoAvaliacaoForm.defaultProps = {
-  match: {},
-};
 export default TipoAvaliacaoForm;

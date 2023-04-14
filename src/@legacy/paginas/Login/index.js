@@ -34,11 +34,12 @@ import CampoTexto from '~/componentes/campoTexto';
 import { URL_RECUPERARSENHA } from '~/constantes/url';
 import { Loader } from '~/componentes';
 import { setExibirMensagemSessaoExpirou } from '~/redux/modulos/mensagens/actions';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
-const Login = props => {
+const Login = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const paramsRoute = useParams();
 
   const inputUsuarioRf = useRef();
   const btnAcessar = useRef();
@@ -57,8 +58,7 @@ const Login = props => {
 
   const { versao } = useSelector(store => store.sistema);
 
-  const { match } = props;
-  const redirect = match?.params?.redirect ? match.params.redirect : null;
+  const redirect = paramsRoute?.redirect || null;
 
   const helper = new LoginHelper(dispatch, redirect);
 
@@ -253,14 +253,6 @@ const Login = props => {
       </Grid>
     </Fundo>
   );
-};
-
-Login.propTypes = {
-  match: PropTypes.oneOfType([PropTypes.any]),
-};
-
-Login.defaultProps = {
-  match: {},
 };
 
 export default Login;

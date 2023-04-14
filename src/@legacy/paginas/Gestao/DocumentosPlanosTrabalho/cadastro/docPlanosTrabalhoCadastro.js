@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 import { useSelector } from 'react-redux';
-import { useMatch } from 'react-router-dom';
+import { useLocation, useParams } from 'react-router-dom';
 import { Card, Loader } from '~/componentes';
 import { Cabecalho } from '~/componentes-sgp';
 import { ModalidadeDTO, RotasDto } from '~/dtos';
@@ -16,13 +16,14 @@ import {
 import ServicoDocumentosPlanosTrabalho from '~/servicos/Paginas/Gestao/DocumentosPlanosTrabalho/ServicoDocumentosPlanosTrabalho';
 
 const DocPlanosTrabalhoCadastro = () => {
-  const routeMatch = useMatch();
+  const location = useLocation();
+  const paramsRoute = useParams();
 
   const usuario = useSelector(store => store.usuario);
   const permissoesTela =
     usuario.permissoes[RotasDto.DOCUMENTOS_PLANOS_TRABALHO];
 
-  const idDocumentosPlanoTrabalho = routeMatch.params?.id;
+  const idDocumentosPlanoTrabalho = paramsRoute?.id;
 
   const [desabilitarCampos, setDesabilitarCampos] = useState(false);
   const [exibirLoader, setExibirLoader] = useState(false);
@@ -290,12 +291,12 @@ const DocPlanosTrabalhoCadastro = () => {
   useEffect(() => {
     if (idDocumentosPlanoTrabalho) {
       setBreadcrumbManual(
-        routeMatch.url,
+        location.pathname,
         'Upload do arquivo',
         RotasDto.DOCUMENTOS_PLANOS_TRABALHO
       );
     }
-  }, [idDocumentosPlanoTrabalho, routeMatch]);
+  }, [idDocumentosPlanoTrabalho, location]);
 
   return (
     <Loader loading={exibirLoader}>

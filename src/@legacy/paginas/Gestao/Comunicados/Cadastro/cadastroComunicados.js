@@ -1,6 +1,6 @@
-import PropTypes from 'prop-types';
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
+import { useLocation, useParams } from 'react-router-dom';
 import { Card } from '~/componentes';
 import { Cabecalho } from '~/componentes-sgp';
 import { RotasDto } from '~/dtos';
@@ -9,7 +9,10 @@ import BotoesAcoesCadastroComunicados from './botoesAcoesCadastroComunicados';
 import FormCadastroComunicados from './Filtros/formCadastroComunicados';
 import LoaderGeralComunicados from './loaderGeralComunicados';
 
-const CadastroComunicados = ({ match }) => {
+const CadastroComunicados = () => {
+  const location = useLocation();
+  const paramsRoute = useParams();
+
   const usuario = useSelector(store => store.usuario);
   const permissoesTela =
     usuario.permissoes[RotasDto.ACOMPANHAMENTO_COMUNICADOS];
@@ -23,25 +26,25 @@ const CadastroComunicados = ({ match }) => {
 
   useEffect(() => {
     setBreadcrumbManual(
-      match.url,
+      location.pathname,
       'Cadastro de comunicados',
       RotasDto.ACOMPANHAMENTO_COMUNICADOS
     );
-  }, [match]);
+  }, [location]);
 
   return (
     <>
       <LoaderGeralComunicados>
         <Cabecalho pagina="Cadastro de comunicados">
           <BotoesAcoesCadastroComunicados
-            comunicadoId={match?.params?.id}
+            comunicadoId={paramsRoute?.id}
             somenteConsulta={somenteConsulta}
           />
         </Cabecalho>
         <Card>
           <div className="col-md-12">
             <FormCadastroComunicados
-              comunicadoId={match?.params?.id}
+              comunicadoId={paramsRoute?.id}
               somenteConsulta={somenteConsulta}
             />
           </div>
@@ -49,14 +52,6 @@ const CadastroComunicados = ({ match }) => {
       </LoaderGeralComunicados>
     </>
   );
-};
-
-CadastroComunicados.propTypes = {
-  match: PropTypes.objectOf(PropTypes.object),
-};
-
-CadastroComunicados.defaultProps = {
-  match: {},
 };
 
 export default CadastroComunicados;

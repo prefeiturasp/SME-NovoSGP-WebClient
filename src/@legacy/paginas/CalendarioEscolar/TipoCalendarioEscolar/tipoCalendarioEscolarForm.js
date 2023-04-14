@@ -1,5 +1,4 @@
 import React, { useEffect, useState, useCallback } from 'react';
-import PropTypes from 'prop-types';
 import { Form, Formik } from 'formik';
 import { useSelector } from 'react-redux';
 import * as Yup from 'yup';
@@ -34,11 +33,16 @@ import {
 } from '~/constantes/ids/button';
 import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
 import BotaoExcluirPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoExcluirPadrao';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 
-const TipoCalendarioEscolarForm = ({ match }) => {
+const TipoCalendarioEscolarForm = () => {
   const usuario = useSelector(store => store.usuario);
   const navigate = useNavigate();
+  const location = useLocation();
+  const paramsRoute = useParams();
+
+  const idTipoCalendario = paramsRoute?.id;
+
   const permissoesTela = usuario.permissoes[RotasDto.TIPO_CALENDARIO_ESCOLAR];
 
   const [somenteConsulta, setSomenteConsulta] = useState(false);
@@ -50,7 +54,6 @@ const TipoCalendarioEscolarForm = ({ match }) => {
   const anoAtual = window.moment().format('YYYY');
 
   const [anoLetivo, setAnoLetivo] = useState(anoAtual);
-  const [idTipoCalendario, setIdTipoCalendario] = useState(0);
   const [exibirAuditoria, setExibirAuditoria] = useState(false);
   const valoresIniciaisForm = {
     situacao: true,
@@ -140,19 +143,18 @@ const TipoCalendarioEscolarForm = ({ match }) => {
   };
 
   useEffect(() => {
-    if (match && match.params && match.params.id) {
+    if (idTipoCalendario) {
       setBreadcrumbManual(
-        match.url,
+        location.pathname,
         'Alterar Tipo de Calendário Escolar',
         RotasDto.TIPO_CALENDARIO_ESCOLAR
       );
-      setIdTipoCalendario(match.params.id);
-      consultaPorId(match.params.id);
+      consultaPorId(idTipoCalendario);
     } else if (usuario.turmaSelecionada && usuario.turmaSelecionada.anoLetivo) {
       setAnoLetivo(usuario.turmaSelecionada.anoLetivo);
     }
     setSomenteConsulta(verificaSomenteConsulta(permissoesTela));
-  }, []);
+  }, [idTipoCalendario, location]);
 
   const resetarTela = form => {
     form.resetForm();
@@ -415,14 +417,6 @@ const TipoCalendarioEscolarForm = ({ match }) => {
       </Formik>
     </Loader>
   );
-};
-
-TipoCalendarioEscolarForm.defaultProps = {
-  match: {},
-};
-
-TipoCalendarioEscolarForm.propTypes = {
-  match: PropTypes.instanceOf(Object),
 };
 
 export default TipoCalendarioEscolarForm;

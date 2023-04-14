@@ -1,6 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { Form, Formik } from 'formik';
-import PropTypes from 'prop-types';
 import { useSelector } from 'react-redux';
 import shortid from 'shortid';
 import * as Yup from 'yup';
@@ -49,10 +48,14 @@ import {
   SGP_INPUT_NOME_ATIVIDADE,
   SGP_INPUT_NOME_ESTUDANTE,
 } from '~/constantes/ids/input';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 
-const CompensacaoAusenciaForm = ({ match }) => {
+const CompensacaoAusenciaForm = () => {
   const navigate = useNavigate();
+  const location = useLocation();
+  const paramsRoute = useParams();
+
+  const idCompensacaoAusencia = paramsRoute?.id || 0;
 
   const usuario = useSelector(store => store.usuario);
 
@@ -78,7 +81,6 @@ const CompensacaoAusenciaForm = ({ match }) => {
   const [carregandoGeral, setCarregandoGeral] = useState(false);
   const [alunosAusenciaTurma, setAlunosAusenciaTurma] = useState([]);
   const [carregouInformacoes, setCarregouInformacoes] = useState(false);
-  const [idCompensacaoAusencia, setIdCompensacaoAusencia] = useState(0);
   const [carregandoDisciplinas, setCarregandoDisciplinas] = useState(false);
   const [desabilitarDisciplina, setDesabilitarDisciplina] = useState(false);
   const [bimestreSugeridoCopia, setBimestreSugeridoCopia] = useState(null);
@@ -179,12 +181,12 @@ const CompensacaoAusenciaForm = ({ match }) => {
   useEffect(() => {
     if (!novoRegistro) {
       setBreadcrumbManual(
-        match.url,
+        location.pathname,
         'Alterar Compensação de Ausência',
         ROUTES.COMPENSACAO_AUSENCIA
       );
     }
-  }, [match.url, novoRegistro]);
+  }, [location, novoRegistro]);
 
   useEffect(() => {
     const naoSetarSomenteConsultaNoStore = ehTurmaInfantil(
@@ -384,14 +386,6 @@ const CompensacaoAusenciaForm = ({ match }) => {
   );
 
   useEffect(() => {
-    const temId = match && match.params && match.params.id;
-
-    if (turmaSelecionada.turma && temId) {
-      setIdCompensacaoAusencia(match.params.id);
-    }
-  }, [match, turmaSelecionada.turma]);
-
-  useEffect(() => {
     if (disciplinaSelecionada && listaDisciplinas && listaDisciplinas.length) {
       obterDisciplinasRegencia(String(disciplinaSelecionada), listaDisciplinas);
     }
@@ -529,7 +523,7 @@ const CompensacaoAusenciaForm = ({ match }) => {
       descricao: '',
     };
 
-    const registroNovo = !(match && match.params && match.params.id);
+    const registroNovo = !idCompensacaoAusencia;
 
     if (disciplinas.data && disciplinas.data.length === 1) {
       setDesabilitarDisciplina(true);
@@ -559,7 +553,7 @@ const CompensacaoAusenciaForm = ({ match }) => {
       );
     }
     setCarregandoDisciplinas(false);
-  }, [match, turmaSelecionada.turma, consultaPorId]);
+  }, [idCompensacaoAusencia, turmaSelecionada.turma, consultaPorId]);
 
   useEffect(() => {
     if (!turmaSelecionada.turma) {
@@ -633,7 +627,7 @@ const CompensacaoAusenciaForm = ({ match }) => {
     setCarregouInformacoes(false);
     setCarregandoDados(true);
     const dadosEdicao = await ServicoCompensacaoAusencia.obterPorId(
-      match?.params?.id
+      idCompensacaoAusencia
     )
       .catch(e => {
         erros(e);
@@ -680,7 +674,7 @@ const CompensacaoAusenciaForm = ({ match }) => {
         'Deseja realmente cancelar as alterações?'
       );
       if (confirmou) {
-        if (match && match.params && match.params.id) {
+        if (idCompensacaoAusencia) {
           resetarTelaEdicaoComId(form);
         } else {
           setCarregouInformacoes(false);
@@ -1019,7 +1013,7 @@ const CompensacaoAusenciaForm = ({ match }) => {
                           turmaSelecionada
                         ) ||
                         desabilitarCampos ||
-                        (match?.params?.id && !modoEdicao)
+                        (idCompensacaoAusencia && !modoEdicao)
                       }
                     />
                   </Col>
@@ -1231,14 +1225,6 @@ const CompensacaoAusenciaForm = ({ match }) => {
       </Loader>
     </Loader>
   );
-};
-
-CompensacaoAusenciaForm.propTypes = {
-  match: PropTypes.oneOfType([PropTypes.any]),
-};
-
-CompensacaoAusenciaForm.defaultProps = {
-  match: {},
 };
 
 export default CompensacaoAusenciaForm;
