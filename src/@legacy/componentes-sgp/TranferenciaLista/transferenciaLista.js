@@ -1,3 +1,4 @@
+import { Col } from 'antd';
 import PropTypes from 'prop-types';
 import React from 'react';
 import shortid from 'shortid';
@@ -30,8 +31,8 @@ const TransferenciaLista = props => {
 
   return (
     <>
-      <div className="mt-2" style={{ flexGrow: 1, display: 'flex' }}>
-        <div>
+      <div className="mt-2" style={{ display: 'flex' }}>
+        <Col span={11}>
           <div style={{ height: listaEsquerda?.titleHeight || '50px' }}>
             <Label text={listaEsquerda?.title || ''} />
           </div>
@@ -52,8 +53,8 @@ const TransferenciaLista = props => {
               }
             />
           </CardLista>
-        </div>
-        <ColunaBotaoLista style={{ margin: '15px' }}>
+        </Col>
+        <ColunaBotaoLista span={2}>
           <BotaoLista
             id={SGP_BUTTON_ADICIONAR_TRANSFERENCIA_LISTA}
             className="mb-2"
@@ -74,7 +75,7 @@ const TransferenciaLista = props => {
             <i className="fas fa-chevron-left" />
           </BotaoLista>
         </ColunaBotaoLista>
-        <div>
+        <Col span={11}>
           <div style={{ height: listaDireita?.titleHeight || '50px' }}>
             <Label text={listaDireita?.title || ''} />
           </div>
@@ -94,7 +95,7 @@ const TransferenciaLista = props => {
               }
             />
           </CardLista>
-        </div>
+        </Col>
       </div>
     </>
   );

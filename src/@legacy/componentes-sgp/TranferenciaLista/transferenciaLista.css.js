@@ -1,3 +1,4 @@
+import { Col } from 'antd';
 import styled from 'styled-components';
 import { Base } from '~/componentes';
 
@@ -22,7 +23,7 @@ export const BotaoLista = styled.div`
   }
 `;
 
-export const ColunaBotaoLista = styled.div`
+export const ColunaBotaoLista = styled(Col)`
   display: flex;
   align-items: center;
   justify-content: center;

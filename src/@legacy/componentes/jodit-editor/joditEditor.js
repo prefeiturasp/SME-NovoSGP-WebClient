@@ -256,7 +256,7 @@ const JoditEditor = forwardRef((props, ref) => {
         }
       },
     },
-    iframe: true,
+    // iframe: true, // TODO bug jodit-react
     spellcheck: true,
     showWordsCounter: false,
     showXPathInStatusbar: false,
