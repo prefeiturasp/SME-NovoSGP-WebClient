@@ -108,7 +108,7 @@ const CadastroEncaminhamentoNAAPA = () => {
   ]);
 
   return dadosEncaminhamentoNAAPA?.aluno?.codigoAluno ? (
-    <>
+    <Col span={24}>
       <Row gutter={[16, 0]} type="flex" justify="end">
         <Col>
           <LabelSituacao />
@@ -180,7 +180,7 @@ const CadastroEncaminhamentoNAAPA = () => {
           />
         </Col>
       </Row>
-    </>
+    </Col>
   ) : (
     <></>
   );
