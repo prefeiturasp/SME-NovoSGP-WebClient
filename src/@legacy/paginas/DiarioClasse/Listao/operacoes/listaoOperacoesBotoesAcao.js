@@ -105,6 +105,8 @@ const ListaoOperacoesBotoesAcao = () => {
     );
 
   const salvarFrequencia = async () => {
+    const aulasAlteradasPossuiCompensacao = [];
+
     const paramsSalvar = dadosFrequencia.aulas
       .map(aula => {
         const alunos = dadosFrequencia?.alunos
@@ -113,6 +115,20 @@ const ListaoOperacoesBotoesAcao = () => {
               const aulaAlunoPorIdAula = aluno?.aulas.find(
                 aulaAluno => aulaAluno?.aulaId === aula?.aulaId
               );
+
+              const possuiCompensacao =
+                aulaAlunoPorIdAula?.detalheFrequencia?.find(
+                  c => !!c?.possuiCompensacao
+                );
+
+              if (possuiCompensacao && aulaAlunoPorIdAula?.alterado) {
+                const dataJaInserida = aulasAlteradasPossuiCompensacao.find(
+                  d => d === aula?.dataAula
+                );
+                if (!dataJaInserida) {
+                  aulasAlteradasPossuiCompensacao.push(aula?.dataAula);
+                }
+              }
               return {
                 desabilitado: aulaAlunoPorIdAula?.desabilitado,
                 codigoAluno: aluno?.codigoAluno,
@@ -129,6 +145,22 @@ const ListaoOperacoesBotoesAcao = () => {
       })
       ?.filter(a => a?.alunos?.length);
 
+    let continuarSalvar = true;
+
+    if (aulasAlteradasPossuiCompensacao?.length) {
+      continuarSalvar = await confirmar(
+        'Atenção',
+        `Existe(m) estudante(s) com compensação de ausência para esta(s) aula(s) ${aulasAlteradasPossuiCompensacao.join(
+          ', '
+        )}, ao alterar a frequência a compensação poderá ser alterada ou excluída.`,
+        'Deseja continuar?'
+      );
+    }
+
+    if (!continuarSalvar) {
+      return false;
+    }
+
     setExibirLoaderGeral(true);
     const resposta = await ServicoFrequencia.salvarFrequenciaListao(
       paramsSalvar
@@ -141,7 +173,13 @@ const ListaoOperacoesBotoesAcao = () => {
       if (auditoriaNova?.id) {
         dadosFrequencia.auditoria = { ...auditoriaNova };
         dadosIniciaisFrequencia.auditoria = { ...auditoriaNova };
-        setDadosFrequencia({ ...dadosFrequencia });
+        const dadosAtualizados = _.cloneDeep(dadosFrequencia);
+        dadosAtualizados?.alunos?.forEach(a => {
+          a?.aulas?.forEach(b => {
+            b.alterado = false;
+          });
+        });
+        setDadosFrequencia({ ...dadosAtualizados });
         setDadosIniciaisFrequencia(dadosIniciaisFrequencia);
       }
 
