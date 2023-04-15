@@ -1,7 +1,7 @@
 import { Tooltip } from 'antd';
 import PropTypes from 'prop-types';
 import React, { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { DataTable } from '~/componentes';
 import tipoFrequencia from '~/dtos/tipoFrequencia';
 import { verificaSomenteConsulta } from '~/servicos/servico-navegacao';
@@ -17,6 +17,7 @@ import {
   MarcarTodasAulasTipoFrequencia,
 } from './listaFrequencia.css';
 import { formatarFrequencia } from '~/utils';
+import { setTemEstudanteAlteradoComCompensacao } from '~/redux/modulos/frequenciaPlanoAula/actions';
 
 const ListaFrequencia = props => {
   const {
@@ -29,6 +30,8 @@ const ListaFrequencia = props => {
     componenteCurricularId,
     setDataSource,
   } = props;
+
+  const dispatch = useDispatch();
 
   const dataSource = useSelector(
     state => state.frequenciaPlanoAula.listaDadosFrequencia?.listaFrequencia
@@ -84,12 +87,19 @@ const ListaFrequencia = props => {
       aluno.aulas = aulas;
       setDataSource(dataSource);
       onChangeFrequencia();
+
+      const possuiCompensacao = aluno?.aulas?.find(a => a?.possuiCompensacao);
+      if (possuiCompensacao) {
+        dispatch(setTemEstudanteAlteradoComCompensacao(true));
+      }
     }
   };
 
   const marcarPresencaFaltaTodosAlunos = tipo => {
     if (!desabilitarCampos) {
       let teveAlteracao = false;
+      let possuiCompensacao = false;
+
       dataSource.forEach(aluno => {
         if (!aluno.desabilitado) {
           const aulas = [...aluno.aulas];
@@ -98,6 +108,10 @@ const ListaFrequencia = props => {
           });
           aluno.aulas = aulas;
           teveAlteracao = true;
+          possuiCompensacao = aluno?.aulas?.find(a => a?.possuiCompensacao);
+          if (possuiCompensacao) {
+            dispatch(setTemEstudanteAlteradoComCompensacao(true));
+          }
         }
       });
       if (teveAlteracao) {
@@ -154,6 +168,10 @@ const ListaFrequencia = props => {
           aula.tipoFrequencia = valorNovo;
           dataSource[indexAluno].aulas = [...dataSource[indexAluno].aulas];
           onChangeFrequencia();
+
+          if (aula?.possuiCompensacao) {
+            dispatch(setTemEstudanteAlteradoComCompensacao(true));
+          }
         }}
         numeroAula={aula.numeroAula}
         desabilitar={desabilitarCampos || aluno?.desabilitado}

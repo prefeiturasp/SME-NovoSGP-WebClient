@@ -84,6 +84,7 @@ function CadastroDeAula({ match, location }) {
   const [registroMigrado, setRegistroMigrado] = useState(false);
   const [emManutencao, setEmManutencao] = useState(false);
   const [desabilitarBtnSalvar, setDesabilitarBtnSalvar] = useState(false);
+  const [possuiCompensacao, setPossuiCompensacao] = useState(false);
   const [turmaFiltro] = useState(turmaSelecionada.turma);
 
   const { diaAula } = queryString.parse(location.search);
@@ -254,14 +255,14 @@ function CadastroDeAula({ match, location }) {
       if (componenteSelecionado && dataAula) {
         setCarregandoDados(true);
         servicoCadastroAula
-          .obterGradePorComponenteETurma(
-            turmaSelecionada.turma,
-            componenteSelecionado.territorioSaber ? componenteSelecionado.id : componenteSelecionado.codigoComponenteCurricular,
-            dataAula,
-            id || 0,
-            componenteSelecionado.regencia,
-            tipoAula
-          )
+        .obterGradePorComponenteETurma(
+          turmaSelecionada.turma,
+          componenteSelecionado.territorioSaber ? componenteSelecionado.id : componenteSelecionado.codigoComponenteCurricular,
+          dataAula,
+          id || 0,
+          componenteSelecionado.regencia,
+          tipoAula
+        )
           .then(respostaGrade => {
             setDesabilitarBtnSalvar(false);
             if (respostaGrade.status === 200) {
@@ -320,28 +321,29 @@ function CadastroDeAula({ match, location }) {
           setAula(respostaAula);
           setRegistroMigrado(respostaAula.migrado);
           setEmManutencao(respostaAula.emManutencao);
+          setPossuiCompensacao(respostaAula.possuiCompensacao);
           servicoCadastroAula
             .obterRecorrenciaPorIdAula(id, respostaAula.recorrenciaAula)
             .then(resp => {
               setRecorrenciaAulaEmEdicao(resp.data);
             })
             .catch(e => erros(e));
-          if (componentes) {
-            const componenteSelecionado = componentes.find(
-              c =>
-                String(c.codigoComponenteCurricular) ===
-                String(respostaAula.disciplinaId) ||
-                String(c.id) ===
-                String(respostaAula.disciplinaId) ||
-                (c.regencia && String(c.codDisciplinaPai) === respostaAula.disciplinaId) ||
-                (c.territorioSaber && String(c.codigoTerritorioSaber) === respostaAula.disciplinaId)
-            );            
+            if (componentes) {
+              const componenteSelecionado = componentes.find(
+                c =>
+                  String(c.codigoComponenteCurricular) ===
+                  String(respostaAula.disciplinaId) ||
+                  String(c.id) ===
+                  String(respostaAula.disciplinaId) ||
+                  (c.regencia && String(c.codDisciplinaPai) === respostaAula.disciplinaId) ||
+                  (c.territorioSaber && String(c.codigoTerritorioSaber) === respostaAula.disciplinaId)
+              );
 
-            if (componenteSelecionado.codigoComponenteCurricular == respostaAula.disciplinaId||
-                componenteSelecionado.codigoTerritorioSaber == respostaAula.disciplinaId && componenteSelecionado.territorioSaber){
-              respostaAula.disciplinaId = String(componenteSelecionado.id);
-              setAula(respostaAula);
-            }
+              if (componenteSelecionado.codigoComponenteCurricular == respostaAula.disciplinaId||
+                  componenteSelecionado.codigoTerritorioSaber == respostaAula.disciplinaId && componenteSelecionado.territorioSaber){
+                respostaAula.disciplinaId = String(componenteSelecionado.id);
+                setAula(respostaAula);
+              }
 
             if (componenteSelecionado) {
               carregarGrade(
@@ -381,11 +383,26 @@ function CadastroDeAula({ match, location }) {
 
   }, [id, turmaSelecionada.turma]);
 
+  const continuarQuandoTemCompensacao = () =>
+    confirmar(
+      'Atenção',
+      'Existe(m) estudante(s) com compensação de ausência para esta aula, ao alterar esta aula a compensação será alterada ou excluída.',
+      'Deseja continuar?'
+    );
+
   const salvar = async valoresForm => {
+    let continuarSalvar = true;
+
+    if (possuiCompensacao) {
+      continuarSalvar = await continuarQuandoTemCompensacao();
+    }
+
+    if (!continuarSalvar) return;
+
     const componente = obterComponenteSelecionadoPorId(
       valoresForm.disciplinaId
     );
-    if (Number(valoresForm.quantidade) === 0) valoresForm.quantidade = 1;    
+    if (Number(valoresForm.quantidade) === 0) valoresForm.quantidade = 1;
     if (componente) valoresForm.disciplinaNome = componente.nome;
     setCarregandoDados(true);
     servicoCadastroAula
@@ -554,13 +571,18 @@ function CadastroDeAula({ match, location }) {
           infantil ? 'diário de bordo' : 'plano de aula'
         } registrado, ao excluí - la estará excluindo esse registro também`;
       }
-      const confirmado = await confirmar(
+      let confirmado = await confirmar(
         `Excluir aula - ${obterDataFormatada()} `,
         mensagem,
         'Deseja Continuar?',
         'Excluir',
         'Cancelar'
       );
+
+      if (confirmado && possuiCompensacao) {
+        confirmado = await continuarQuandoTemCompensacao();
+      }
+
       if (confirmado) {
         const componenteSelecionado = obterComponenteSelecionadoPorId(
           aula.disciplinaId
@@ -592,7 +614,6 @@ function CadastroDeAula({ match, location }) {
     if (turmaFiltro === turmaSelecionada.turma) {
       obterAula();
     }
-
   }, [obterAula, match.url]);
 
   useEffect(() => {
@@ -603,7 +624,6 @@ function CadastroDeAula({ match, location }) {
 
   useEffect(() => {
     if (turmaFiltro !== turmaSelecionada.turma) salvarAntesMudarTurma();
-
   }, [turmaSelecionada]);
 
   return (
@@ -799,7 +819,7 @@ function CadastroDeAula({ match, location }) {
                           listaComponentes[0]?.regencia &&
                           listaComponentes[0]?.codDisciplinaPai !== 0
                             ? 'codDisciplinaPai'
-                            :  'id' 
+                            :  'id'
                         }
                         valueText="nome"
                         placeholder="Selecione um componente curricular"
