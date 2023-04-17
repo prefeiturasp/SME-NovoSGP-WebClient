@@ -202,7 +202,8 @@ const CamposFiltrarDadosFrequenciaPlanoAula = () => {
             item =>
               String(item.codigoComponenteCurricular) ===
                 codigoComponenteCurricularId ||
-              String(item.id) === codigoComponenteCurricularId
+              String(item.id) === codigoComponenteCurricularId ||
+              String(item.codigoTerritorioSaber) === codigoComponenteCurricularId
           );
           dispatch(setComponenteCurricularFrequenciaPlanoAula(componente));
         } else {

@@ -2,9 +2,9 @@ import React, { useCallback, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { SelectComponent } from '~/componentes';
 import { SGP_SELECT_PERIODO_SONDAGEM } from '~/constantes/ids/select';
+import { TIPO_SONDAGEM } from 'core/enum/tipo-sondagem';
 
 export const PeriodoSondagem = ({
-  name,
   form,
   onChange,
   disabled,
@@ -13,11 +13,44 @@ export const PeriodoSondagem = ({
 }) => {
   const [lista, setLista] = useState([]);
 
-  // TODO Quando for IAD Matemática realizar validação!
-  const ehSemestre = false;
+  const tipoSondagem = form.values?.tipoSondagem;
+  const anoLetivo = form.values?.anoLetivo;
+
+  const ANO_LETIVO_IAD_BIMESTRE = 2022;
+
+  const tipoEhMatematica = tipo => {
+    switch (Number(tipo)) {
+      case TIPO_SONDAGEM.MAT_Numeros:
+      case TIPO_SONDAGEM.MAT_CampoAditivo:
+      case TIPO_SONDAGEM.MAT_CampoMultiplicativo:
+      case TIPO_SONDAGEM.MAT_IAD:
+        return true;
+      default:
+        return false;
+    }
+  };
 
   const obterPeriodos = useCallback(async () => {
     let listaSemestreBimestre = [];
+
+    const ehMatematica = tipoEhMatematica(tipoSondagem);
+
+    let ehSemestre = ehMatematica;
+
+    if (ehMatematica) {
+      if (anoLetivo < ANO_LETIVO_IAD_BIMESTRE) {
+        ehSemestre = true;
+      } else if (anoLetivo === ANO_LETIVO_IAD_BIMESTRE) {
+        ehSemestre = false;
+      } else if (
+        anoLetivo > ANO_LETIVO_IAD_BIMESTRE &&
+        TIPO_SONDAGEM.MAT_IAD === Number(tipoSondagem)
+      ) {
+        ehSemestre = true;
+      } else {
+        ehSemestre = false;
+      }
+    }
 
     if (ehSemestre) {
       listaSemestreBimestre = [
@@ -33,9 +66,9 @@ export const PeriodoSondagem = ({
       ];
     }
 
-    form.setFieldValue(name, undefined);
+    form.setFieldValue('periodoSondagem', undefined);
     setLista(listaSemestreBimestre);
-  }, [ehSemestre]);
+  }, [anoLetivo, tipoSondagem]);
 
   useEffect(() => {
     obterPeriodos();

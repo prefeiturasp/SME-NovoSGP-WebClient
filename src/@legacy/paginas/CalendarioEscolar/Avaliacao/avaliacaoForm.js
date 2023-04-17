@@ -844,7 +844,7 @@ const AvaliacaoForm = () => {
                           id={SGP_JODIT_EDITOR_CADASTRO_AVALIACAO_DESCRICAO}
                           label="Descrição"
                           form={form}
-                          value={form.values.descricao}
+                          value={dadosAvaliacao?.descricao}
                           name="descricao"
                           onChange={aoTrocarTextEditor}
                           desabilitar={desabilitarCampos || !dentroPeriodo}
@@ -879,8 +879,8 @@ const AvaliacaoForm = () => {
                           <div style={{ marginLeft: '14px' }}>
                             <span>Avaliação será copiada para: </span>
                             <br />
-                            {copias.map(x => (
-                              <span style={{ display: 'block' }}>
+                            {copias.map((x, i) => (
+                              <span key={i} style={{ display: 'block' }}>
                                 <strong>Turma:</strong> &nbsp;
                                 {x.turma[0].desc} <strong>Data: &nbsp;</strong>
                                 {window

@@ -49,6 +49,7 @@ import {
   SGP_INPUT_NOME_ESTUDANTE,
 } from '~/constantes/ids/input';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import _ from 'lodash';
 
 const CompensacaoAusenciaForm = () => {
   const navigate = useNavigate();
@@ -727,9 +728,16 @@ const CompensacaoAusenciaForm = () => {
       );
     }
     paramas.alunos = alunosAusenciaCompensada.map(item => {
+      const compensacaoAusenciaAlunoAula = item?.compensacoes?.length
+        ? item.compensacoes?.map(c => ({
+            registroFrequenciaAlunoId: c?.registroFrequenciaAlunoId,
+          }))
+        : [];
+
       return {
         id: item.id,
         qtdFaltasCompensadas: item.quantidadeFaltasCompensadas,
+        compensacaoAusenciaAlunoAula,
       };
     });
 
@@ -871,7 +879,7 @@ const CompensacaoAusenciaForm = () => {
   const atualizarValoresListaCompensacao = novaListaAlunos => {
     if (!desabilitarCampos) {
       onChangeCampos();
-      setAlunosAusenciaCompensada([...novaListaAlunos]);
+      setAlunosAusenciaCompensada(_.cloneDeep(novaListaAlunos));
     }
   };
 
@@ -1107,7 +1115,7 @@ const CompensacaoAusenciaForm = () => {
                           onChange={onChangeCampos}
                           label="Detalhamento da atividade"
                           desabilitar={desabilitarCampos}
-                          value={form.values.descricao}
+                          value={valoresIniciais?.descricao}
                           labelRequired
                           id={
                             SGP_JODIT_EDITOR_COMPENSACAO_AUSENCIA_DETALHAMENTO_ATIVIDADE
@@ -1172,6 +1180,11 @@ const CompensacaoAusenciaForm = () => {
                           atualizarValoresListaCompensacao
                         }
                         desabilitarCampos={desabilitarCampos}
+                        idCompensacaoAusencia={idCompensacaoAusencia}
+                        turmaCodigo={turmaSelecionada.turma}
+                        bimestre={form?.values?.bimestre}
+                        disciplinaId={form?.values?.disciplinaId}
+                        anoLetivo={turmaSelecionada?.anoLetivo}
                       />
                     </div>
                   </div>
