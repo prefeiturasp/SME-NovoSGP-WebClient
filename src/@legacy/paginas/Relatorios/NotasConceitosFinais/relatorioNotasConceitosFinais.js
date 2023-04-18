@@ -128,14 +128,14 @@ const RelatorioNotasConceitosFinais = () => {
     }
   };
 
-  const obterUes = useCallback(async () => {
-    if (codigoDre) {
-      setCarregandoUes(true);
-      const retorno = await ServicoFiltroRelatorio.obterUes(
-        codigoDre,
-        consideraHistorico,
-        anoLetivo
-      ).catch(e => {
+  const obterUes = useCallback(async dre => {
+    if (dre) {
+      setCarregandoGeral(true);
+
+      const dataAtual = new Date();
+      const consideraHistorico = anoLetivo != dataAtual.getFullYear();
+      
+      const retorno = await ServicoFiltroRelatorio.obterUes(dre, consideraHistorico, anoLetivo).catch(e => {
         erros(e);
         setCarregandoUes(false);
       });
