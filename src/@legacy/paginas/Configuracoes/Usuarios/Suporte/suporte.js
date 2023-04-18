@@ -24,11 +24,11 @@ import {
   erros,
   verificaSomenteConsulta,
 } from '~/servicos';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
-// eslint-disable-next-line react/prop-types
-const Suporte = ({ match }) => {
+const Suporte = () => {
   const navigate = useNavigate();
+  const paramsRoute = useParams();
 
   const { usuario } = store.getState();
   const permissoesTela = usuario.permissoes[RotasDto.SUPORTE];
@@ -50,7 +50,7 @@ const Suporte = ({ match }) => {
 
   const dispatch = useDispatch();
 
-  const redirect = match?.params?.redirect || null;
+  const redirect = paramsRoute?.redirect || null;
 
   const helper = new LoginHelper(dispatch, redirect);
 

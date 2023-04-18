@@ -2,11 +2,6 @@ import styled from 'styled-components';
 import { Base } from '~/componentes/colors';
 
 export const ContainerTabsDashboardEscolaAqui = styled.div`
-  .ant-tabs-tab {
-    width: auto !important;
-    margin-right: 8px !important;
-  }
-
   .scrolling-chart {
     display: flex;
     flex-wrap: nowrap;

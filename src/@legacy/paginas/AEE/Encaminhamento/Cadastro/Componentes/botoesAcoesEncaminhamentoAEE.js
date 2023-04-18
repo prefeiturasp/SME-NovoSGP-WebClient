@@ -1,5 +1,4 @@
 import { Col, Row } from 'antd';
-import PropTypes from 'prop-types';
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import BotaoExcluirPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoExcluirPadrao';
@@ -24,13 +23,15 @@ import {
 import { confirmar, erros, sucesso } from '~/servicos';
 import ServicoEncaminhamentoAEE from '~/servicos/Paginas/Relatorios/AEE/ServicoEncaminhamentoAEE';
 import BotaoGerarRelatorioEncaminhamentoAEE from '../../BotaoGerarRelatorioEncaminhamentoAEE';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
-const BotoesAcoesEncaminhamentoAEE = props => {
-  const { match } = props;
-
+const BotoesAcoesEncaminhamentoAEE = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  const paramsRoute = useParams();
+
+  const encaminhamentoId = paramsRoute?.id;
 
   const questionarioDinamicoEmEdicao = useSelector(
     store => store.questionarioDinamico.questionarioDinamicoEmEdicao
@@ -55,7 +56,6 @@ const BotoesAcoesEncaminhamentoAEE = props => {
     usuario.permissoes[RotasDto.RELATORIO_AEE_ENCAMINHAMENTO];
 
   const onClickSalvarRascunho = async () => {
-    const encaminhamentoId = match?.params?.id;
     let situacao = situacaoAEE.Rascunho;
 
     if (encaminhamentoId) {
@@ -76,7 +76,6 @@ const BotoesAcoesEncaminhamentoAEE = props => {
   };
 
   const onClickEnviar = async () => {
-    const encaminhamentoId = match?.params?.id;
     const salvou = await ServicoEncaminhamentoAEE.salvarEncaminhamento(
       encaminhamentoId,
       situacaoAEE.Encaminhado,
@@ -97,7 +96,6 @@ const BotoesAcoesEncaminhamentoAEE = props => {
         'Suas alterações não foram salvas, deseja salvar agora?'
       );
       if (confirmou) {
-        const encaminhamentoId = match?.params?.id;
         let situacao = situacaoAEE.Rascunho;
 
         if (encaminhamentoId) {
@@ -116,7 +114,7 @@ const BotoesAcoesEncaminhamentoAEE = props => {
         navigate(RotasDto.RELATORIO_AEE_ENCAMINHAMENTO);
       }
     } else if (
-      match?.params?.id &&
+      encaminhamentoId &&
       dadosEncaminhamento?.situacao === situacaoAEE.Rascunho
     ) {
       const confirmou = await confirmar(
@@ -133,7 +131,6 @@ const BotoesAcoesEncaminhamentoAEE = props => {
   };
 
   const onClickExcluir = async () => {
-    const encaminhamentoId = match?.params?.id;
     if (permissoesTela.podeExcluir && encaminhamentoId) {
       const confirmado = await confirmar(
         'Excluir',
@@ -163,7 +160,6 @@ const BotoesAcoesEncaminhamentoAEE = props => {
 
   const onClickEncerrar = async () => {
     if (!desabilitarCamposEncaminhamentoAEE) {
-      const encaminhamentoId = match?.params?.id;
       const salvou = await ServicoEncaminhamentoAEE.salvarEncaminhamento(
         encaminhamentoId,
         situacaoAEE.Encaminhado,
@@ -178,7 +174,6 @@ const BotoesAcoesEncaminhamentoAEE = props => {
   const onClickEncaminharAEE = async () => {
     if (!desabilitarCamposEncaminhamentoAEE) {
       setDesabilitarBtnAcao(true);
-      const encaminhamentoId = match?.params?.id;
       const salvou = await ServicoEncaminhamentoAEE.salvarEncaminhamento(
         encaminhamentoId,
         situacaoAEE.Encaminhado,
@@ -204,7 +199,6 @@ const BotoesAcoesEncaminhamentoAEE = props => {
 
   const onClickConcluirParecer = async () => {
     if (!desabilitarCamposEncaminhamentoAEE) {
-      const encaminhamentoId = match?.params?.id;
       const salvou = await ServicoEncaminhamentoAEE.salvarEncaminhamento(
         encaminhamentoId,
         situacaoAEE.Analise,
@@ -272,8 +266,8 @@ const BotoesAcoesEncaminhamentoAEE = props => {
           disabled={
             desabilitarCamposEncaminhamentoAEE ||
             !questionarioDinamicoEmEdicao ||
-            (match?.params?.id && !dadosEncaminhamento?.podeEditar) ||
-            (match?.params?.id &&
+            (encaminhamentoId && !dadosEncaminhamento?.podeEditar) ||
+            (encaminhamentoId &&
               dadosEncaminhamento?.situacao !== situacaoAEE.Rascunho &&
               dadosEncaminhamento?.situacao !== situacaoAEE.Deferido)
           }
@@ -362,20 +356,12 @@ const BotoesAcoesEncaminhamentoAEE = props => {
       )}
       <Col>
         <BotaoGerarRelatorioEncaminhamentoAEE
-          disabled={!match?.params?.id}
-          ids={[match?.params?.id]}
+          disabled={!encaminhamentoId}
+          ids={[encaminhamentoId]}
         />
       </Col>
     </Row>
   );
-};
-
-BotoesAcoesEncaminhamentoAEE.propTypes = {
-  match: PropTypes.oneOfType([PropTypes.object]),
-};
-
-BotoesAcoesEncaminhamentoAEE.defaultProps = {
-  match: {},
 };
 
 export default BotoesAcoesEncaminhamentoAEE;

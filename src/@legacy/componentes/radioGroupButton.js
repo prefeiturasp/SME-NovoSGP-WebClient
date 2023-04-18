@@ -13,6 +13,7 @@ const Campo = styled.div`
   }
   .ant-radio-checked .ant-radio-inner {
     border-color: ${Base.Roxo} !important;
+    background-color: initial !important;
   }
   .ant-radio-wrapper:hover .ant-radio,
   .ant-radio:hover .ant-radio-inner,

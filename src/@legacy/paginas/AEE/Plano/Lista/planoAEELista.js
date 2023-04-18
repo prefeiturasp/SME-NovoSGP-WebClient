@@ -182,10 +182,12 @@ const PlanoAEELista = () => {
       const params = {
         dreId: dreSelecionada ? dreSelecionada?.id : '',
         ueId: ueSelecionada ? ueSelecionada?.id : '',
-        turmaId: turmaSelecionada ? turmaSelecionada?.id : '',
         alunoCodigo: aluno,
         situacao: situa,
       };
+      if (turmaSelecionada?.id) {
+        params.turmaId = turmaSelecionada?.id;
+      }
       setFiltro({ ...params });
     }
   };

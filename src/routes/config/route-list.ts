@@ -325,7 +325,7 @@ route.set(`${ROUTES.ATRIBUICAO_RESPONSAVEIS}/:dreId/:tipoResponsavel`, {
   chavePermissao: ROUTES.ATRIBUICAO_RESPONSAVEIS_LISTA,
 });
 
-route.set('/gestao/atribuicao-esporadica', {
+route.set(`${ROUTES.ATRIBUICAO_ESPORADICA_LISTA}`, {
   breadcrumbName: 'Atribuição Esporádica',
   menu: ['Gestão'],
   parent: '/',
@@ -336,7 +336,7 @@ route.set('/gestao/atribuicao-esporadica', {
   chavePermissao: ROUTES.ATRIBUICAO_ESPORADICA_LISTA,
 });
 
-route.set('/gestao/atribuicao-esporadica/novo', {
+route.set(`${ROUTES.ATRIBUICAO_ESPORADICA_NOVO}`, {
   breadcrumbName: 'Atribuição',
   parent: '/gestao/atribuicao-esporadica',
   component: AtribuicaoEsporadicaForm,

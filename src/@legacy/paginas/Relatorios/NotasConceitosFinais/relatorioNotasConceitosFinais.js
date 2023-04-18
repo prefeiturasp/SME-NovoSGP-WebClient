@@ -128,14 +128,14 @@ const RelatorioNotasConceitosFinais = () => {
     }
   };
 
-  const obterUes = useCallback(async () => {
-    if (codigoDre) {
-      setCarregandoUes(true);
-      const retorno = await ServicoFiltroRelatorio.obterUes(
-        codigoDre,
-        consideraHistorico,
-        anoLetivo
-      ).catch(e => {
+  const obterUes = useCallback(async dre => {
+    if (dre) {
+      setCarregandoGeral(true);
+
+      const dataAtual = new Date();
+      const consideraHistorico = anoLetivo != dataAtual.getFullYear();
+      
+      const retorno = await ServicoFiltroRelatorio.obterUes(dre, consideraHistorico, anoLetivo).catch(e => {
         erros(e);
         setCarregandoUes(false);
       });
@@ -349,7 +349,7 @@ const RelatorioNotasConceitosFinais = () => {
     bi.push({ desc: '1º', valor: 1 });
     bi.push({ desc: '2º', valor: 2 });
 
-    if (modalidadeId !== modalidade.EJA) {
+    if (modalidadeId != modalidade.EJA) {
       bi.push({ desc: '3º', valor: 3 });
       bi.push({ desc: '4º', valor: 4 });
     }

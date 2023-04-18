@@ -12,6 +12,7 @@ const Container = styled.div`
 
   .ant-select-single .ant-select-selector {
     ${({ color }) => color && `color: ${color} !important;`}
+    ${({ border }) => border && `border-color: ${border} !important;`}
   }
 
   .ant-select-selection-placeholder {
@@ -25,8 +26,18 @@ const Container = styled.div`
     }
   }
 
+  .ant-select-selection-item {
+    color: inherit;
+  }
+
   label {
     font-weight: bold;
+  }
+
+  .ant-select-multiple .ant-select-selection-overflow {
+    white-space: nowrap;
+    max-height: 100px;
+    overflow: auto;
   }
 `;
 
@@ -61,7 +72,6 @@ const SelectComponent = React.forwardRef((props, ref) => {
     style,
     searchValue,
     setValueOnlyOnChange,
-    maxHeightMultiple,
     labelRequired,
   } = props;
 
@@ -186,7 +196,6 @@ const SelectComponent = React.forwardRef((props, ref) => {
       size={size}
       border={border}
       color={color}
-      maxHeightMultiple={maxHeightMultiple}
     >
       {label ? (
         <Label text={label} control={name} isRequired={labelRequired} />
@@ -224,7 +233,6 @@ SelectComponent.propTypes = {
   style: PropTypes.oneOfType([PropTypes.object]),
   searchValue: PropTypes.bool,
   setValueOnlyOnChange: PropTypes.bool,
-  maxHeightMultiple: PropTypes.string,
   labelRequired: PropTypes.bool,
 };
 
@@ -234,7 +242,6 @@ SelectComponent.defaultProps = {
   style: null,
   searchValue: true,
   setValueOnlyOnChange: false,
-  maxHeightMultiple: '78px',
   labelRequired: false,
   showSearch: true,
 };

@@ -128,7 +128,7 @@ const AcompanhamentoFechamento = () => {
   };
 
   const onChangeCollapse = turmaId => {
-    if (turmaId) {
+    if (turmaId.length) {
       dispatch(setCarregandoAcompanhamentoFechamento(true));
       Promise.all([obterFechamentos(turmaId), obterConselhoClasse(turmaId)])
         .catch(e => erros(e))

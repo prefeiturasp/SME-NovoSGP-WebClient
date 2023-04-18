@@ -1,3 +1,4 @@
+import { Col } from 'antd';
 import styled from 'styled-components';
 import { Base } from '~/componentes';
 
@@ -10,11 +11,11 @@ export const BotaoLista = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  cursor: ${props => (props.disabled ? 'pointer' : '')};
+  cursor: ${props => (props.disabled ? 'not-allowed' : 'pointer')};
 
   :hover {
-    background-color: ${props => (props.disabled ? Base.Roxo : '')}!important;
-    color: ${props => (props.disabled ? 'white' : '')};
+    background-color: ${props => (props.disabled ? '' : Base.Roxo)}!important;
+    color: ${props => (props.disabled ? '' : 'white')};
   }
 
   i {
@@ -22,7 +23,7 @@ export const BotaoLista = styled.div`
   }
 `;
 
-export const ColunaBotaoLista = styled.div`
+export const ColunaBotaoLista = styled(Col)`
   display: flex;
   align-items: center;
   justify-content: center;

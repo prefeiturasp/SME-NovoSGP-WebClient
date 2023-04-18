@@ -112,14 +112,15 @@ const ListaPaginada = props => {
     api
       .get(urlBusca, {
         params: filtro,
-        // TODO
-        // paramsSerializer(params) {
-        //   return queryString.stringify(params, {
-        //     arrayFormat: paramArrayFormat,
-        //     skipEmptyString: true,
-        //     skipNull: true,
-        //   });
-        // },
+        paramsSerializer: {
+          serialize: params => {
+            return queryString.stringify(params, {
+              arrayFormat: paramArrayFormat,
+              skipEmptyString: true,
+              skipNull: true,
+            });
+          },
+        },
       })
       .then(resposta => {
         statusCode = resposta.status;

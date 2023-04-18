@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import PropTypes from 'prop-types';
 
 // Form
 import { Formik, Form } from 'formik';
@@ -40,11 +39,13 @@ import AlertaModalidadeInfantil from '~/componentes-sgp/AlertaModalidadeInfantil
 import { ehTurmaInfantil } from '~/servicos/Validacoes/validacoesInfatil';
 import JoditEditor from '~/componentes/jodit-editor/joditEditor';
 import { SGP_BUTTON_ALTERAR_CADASTRAR } from '~/constantes/ids/button';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 
-function RegistroPOAForm({ match }) {
+function RegistroPOAForm() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const location = useLocation();
+  const paramsRoute = useParams();
 
   const carregando = useSelector(store => store.loader.loaderSecao);
   const permissoesTela = useSelector(store => store.usuario.permissoes);
@@ -64,7 +65,7 @@ function RegistroPOAForm({ match }) {
   const [auditoria, setAuditoria] = useState({});
   const [valoresCarregados, setValoresCarregados] = useState(null);
   const [refForm, setRefForm] = useState({});
-  const ehEdicaoRegistro = match && match.params && match.params.id > 0;
+  const ehEdicaoRegistro = paramsRoute?.id > 0;
   const [valoresIniciais, setValoresIniciais] = useState({
     bimestre: '',
     titulo: '',
@@ -147,7 +148,7 @@ function RegistroPOAForm({ match }) {
       if (cadastrado?.status === 200) {
         dispatch(setLoaderSecao(false));
         sucesso(
-          `Registro ${match?.params?.id ? 'alterado' : 'salvo'} com sucesso.`
+          `Registro ${paramsRoute?.id ? 'alterado' : 'salvo'} com sucesso.`
         );
         navigate(RotasDto.REGISTRO_POA);
       }
@@ -246,14 +247,14 @@ function RegistroPOAForm({ match }) {
   }, [valoresCarregados]);
 
   useEffect(() => {
-    if (match && match.params && match.params.id) {
+    if (paramsRoute?.id) {
       setNovoRegistro(false);
-      setBreadcrumbManual(match.url, 'Registro', RotasDto.REGISTRO_POA);
-      buscarPorId(match.params.id);
+      setBreadcrumbManual(location.pathname, 'Registro', RotasDto.REGISTRO_POA);
+      buscarPorId(paramsRoute.id);
     } else {
       setValoresCarregados(true);
     }
-  }, [buscarPorId, match]);
+  }, [buscarPorId, location, paramsRoute]);
 
   return (
     <>
@@ -289,7 +290,7 @@ function RegistroPOAForm({ match }) {
                       modalidadesFiltroPrincipal,
                       turmaSelecionada
                     ) ||
-                    (match?.params?.id && !modoEdicao)
+                    (paramsRoute?.id && !modoEdicao)
                   }
                 />
               </Cabecalho>
@@ -381,7 +382,7 @@ function RegistroPOAForm({ match }) {
                             id="descricao"
                             alt="Registro das atividades realizadas junto aos professores ao longo do bimestre, considerando a análise e o acompanhamento do planejamento docente"
                             name="descricao"
-                            value={form?.values?.descricao}
+                            value={valoresIniciais?.descricao}
                             desabilitado={somenteConsulta}
                             labelRequired
                             onChange={() => {
@@ -424,16 +425,5 @@ function RegistroPOAForm({ match }) {
     </>
   );
 }
-
-RegistroPOAForm.propTypes = {
-  match: PropTypes.oneOfType([
-    PropTypes.objectOf(PropTypes.object),
-    PropTypes.any,
-  ]),
-};
-
-RegistroPOAForm.defaultProps = {
-  match: {},
-};
 
 export default RegistroPOAForm;

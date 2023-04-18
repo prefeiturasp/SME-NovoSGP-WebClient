@@ -1,6 +1,5 @@
 import { Form, Formik } from 'formik';
 import React, { useCallback, useEffect, useState } from 'react';
-import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
 import * as Yup from 'yup';
 import {
@@ -36,10 +35,13 @@ import { ehTurmaInfantil } from '~/servicos/Validacoes/validacoesInfatil';
 import BotoesAcoesDiarioBordo from './botoesAcoesDiarioBordo';
 import ModalSelecionarAula from './modalSelecionarAula';
 import { removerTagsHtml } from '~/utils';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 
-const DiarioBordo = ({ match }) => {
+const DiarioBordo = () => {
   const navigate = useNavigate();
+  const location = useLocation();
+  const paramsRoute = useParams();
+
   const usuario = useSelector(state => state.usuario);
   const { turmaSelecionada } = usuario;
   const permissoesTela = usuario.permissoes[RotasDto.DIARIO_BORDO];
@@ -79,9 +81,9 @@ const DiarioBordo = ({ match }) => {
   const [ehInseridoCJ, setEhInseridoCJ] = useState(false);
   const dispatch = useDispatch();
 
-  const aulaId = match?.params?.aulaId;
-  const diarioBordoId = match?.params?.diarioBordoId;
-  const componenteCurricularId = match?.params?.componenteCurricularId;
+  const aulaId = paramsRoute?.aulaId;
+  const diarioBordoId = paramsRoute?.diarioBordoId;
+  const componenteCurricularId = paramsRoute?.componenteCurricularId;
 
   const inicial = {
     aulaId: 0,
@@ -253,7 +255,6 @@ const DiarioBordo = ({ match }) => {
       setTemPeriodoAberto(retorno.data.temPeriodoAberto);
       setEhInseridoCJ(retorno.data.inseridoCJ);
       setValoresIniciais(valInicial);
-      setCodDisciplinaPai(componenteCurricular);
       if (retorno?.data?.auditoria?.id) {
         setAuditoria(retorno.data.auditoria);
         obterDadosObservacoes(retorno.data.auditoria.id);
@@ -298,6 +299,7 @@ const DiarioBordo = ({ match }) => {
 
         setDiasParaHabilitar(habilitar);
       } else {
+        setListaDatasAulas([]);
         setDiasParaHabilitar();
       }
     },
@@ -347,9 +349,9 @@ const DiarioBordo = ({ match }) => {
 
   useEffect(() => {
     if (aulaId) {
-      setBreadcrumbManual(match?.url, 'Alterar', RotasDto.DIARIO_BORDO);
+      setBreadcrumbManual(location.pathname, 'Alterar', RotasDto.DIARIO_BORDO);
     }
-  }, [match, aulaId]);
+  }, [location, aulaId]);
 
   const salvarDiarioDeBordo = async (valores, form, clicouBtnSalvar) => {
     setCarregandoGeral(true);
@@ -751,6 +753,7 @@ const DiarioBordo = ({ match }) => {
                             !componenteCurricularSelecionado
                           }
                           diasParaHabilitar={diasParaHabilitar}
+                          desabilitarData={!listaDatasAulas?.length}
                         />
                       </Loader>
                     </div>
@@ -875,14 +878,6 @@ const DiarioBordo = ({ match }) => {
       </Formik>
     </Loader>
   );
-};
-
-DiarioBordo.propTypes = {
-  match: PropTypes.oneOfType([PropTypes.object]),
-};
-
-DiarioBordo.defaultProps = {
-  match: {},
 };
 
 export default DiarioBordo;

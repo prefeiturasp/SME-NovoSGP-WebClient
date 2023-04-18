@@ -315,17 +315,18 @@ const FechaReabCadastroForm = () => {
               <Form>
                 <Col span={24}>
                   <Row gutter={[16, 16]}>
-                    <Col sm={24} md={12} xl={8}>
-                      <TipoCalendarioReabertura
-                        form={form}
-                        onChangeCampos={() => {
-                          onChangeCampos();
-                        }}
-                        obterTiposCalendarios={obterTiposCalendarios}
-                      />
+                    <Col span={24}>
+                      <Col sm={24} md={12} xl={8} style={{ paddingLeft: 0 }}>
+                        <TipoCalendarioReabertura
+                          form={form}
+                          onChangeCampos={() => {
+                            onChangeCampos();
+                          }}
+                          obterTiposCalendarios={obterTiposCalendarios}
+                        />
+                      </Col>
                     </Col>
-                  </Row>
-                  <Row gutter={[16, 16]}>
+
                     <Col md={24} xl={12}>
                       <DreReabertura
                         form={form}
@@ -334,6 +335,7 @@ const FechaReabCadastroForm = () => {
                         }}
                       />
                     </Col>
+
                     <Col md={24} xl={12}>
                       <UeReabertura
                         form={form}
@@ -342,8 +344,7 @@ const FechaReabCadastroForm = () => {
                         }}
                       />
                     </Col>
-                  </Row>
-                  <Row gutter={[16, 16]}>
+
                     <Col span={24}>
                       <CampoTexto
                         label="Descrição"
@@ -356,8 +357,7 @@ const FechaReabCadastroForm = () => {
                         labelRequired
                       />
                     </Col>
-                  </Row>
-                  <Row gutter={[16, 16]}>
+
                     <Col sm={24} md={12} lg={6}>
                       <CampoData
                         label="Início"
@@ -370,6 +370,7 @@ const FechaReabCadastroForm = () => {
                         labelRequired
                       />
                     </Col>
+
                     <Col sm={24} md={12} lg={6}>
                       <CampoData
                         label="Fim"
@@ -382,6 +383,7 @@ const FechaReabCadastroForm = () => {
                         labelRequired
                       />
                     </Col>
+
                     <Col sm={24} md={12} lg={12}>
                       <BimestreReabertura
                         form={form}
@@ -391,6 +393,7 @@ const FechaReabCadastroForm = () => {
                       />
                     </Col>
                   </Row>
+
                   {auditoriaFechaReab?.criadoEm ? (
                     <Auditoria
                       className="ant-col ant-col-24"

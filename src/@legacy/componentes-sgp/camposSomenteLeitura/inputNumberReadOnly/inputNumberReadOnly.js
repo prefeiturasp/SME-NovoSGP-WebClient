@@ -10,7 +10,6 @@ const InputNumberReadOnly = props => {
       className={`ant-input-number ${
         disabled ? 'ant-input-number-disabled' : ''
       }`}
-      style={style}
     >
       <div className="ant-input-number-input-wrap">
         <input
@@ -19,9 +18,9 @@ const InputNumberReadOnly = props => {
           readOnly
           value={value}
           disabled={disabled}
+          className="ant-input"
           placeholder={placeholder}
-          style={{ height: '36px' }}
-          className="ant-input-number-input"
+          style={style}
         />
       </div>
     </Container>

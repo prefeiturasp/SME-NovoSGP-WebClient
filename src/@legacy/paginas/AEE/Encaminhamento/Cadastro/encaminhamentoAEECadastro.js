@@ -1,6 +1,6 @@
-import PropTypes from 'prop-types';
 import React, { useCallback, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { useLocation, useParams } from 'react-router-dom';
 import { Card } from '~/componentes';
 import { Cabecalho } from '~/componentes-sgp';
 import CollapseLocalizarEstudante from '~/componentes-sgp/CollapseLocalizarEstudante/collapseLocalizarEstudante';
@@ -18,40 +18,39 @@ import BotoesAcoesEncaminhamentoAEE from './Componentes/botoesAcoesEncaminhament
 import LoaderEncaminhamento from './Componentes/LoaderEncaminhamento/loaderEncaminhamento';
 import MontarDadosSecoes from './Componentes/MontarDadosSecoes/montarDadosSecoes';
 
-const EncaminhamentoAEECadastro = ({ match }) => {
+const EncaminhamentoAEECadastro = () => {
   const dispatch = useDispatch();
+  const paramsRoute = useParams();
+  const location = useLocation();
 
   const usuario = useSelector(store => store.usuario);
   const permissoesTela =
     usuario.permissoes[RotasDto.RELATORIO_AEE_ENCAMINHAMENTO];
+
+  const encaminhamentoId = paramsRoute?.id || 0;
 
   useEffect(() => {
     verificaSomenteConsulta(permissoesTela);
   }, [permissoesTela]);
 
   useEffect(() => {
-    const encaminhamentoId = match?.params?.id || 0;
-
     const soConsulta = verificaSomenteConsulta(permissoesTela);
     const desabilitar =
       encaminhamentoId > 0
         ? soConsulta || !permissoesTela.podeAlterar
         : soConsulta || !permissoesTela.podeIncluir;
     dispatch(setDesabilitarCamposEncaminhamentoAEE(desabilitar));
-  }, [match, permissoesTela, dispatch]);
+  }, [encaminhamentoId, permissoesTela, dispatch]);
 
   const obterEncaminhamentoPorId = useCallback(async () => {
-    const encaminhamentoId = match?.params?.id;
-
     ServicoEncaminhamentoAEE.obterEncaminhamentoPorId(encaminhamentoId);
-  }, [match]);
+  }, [encaminhamentoId]);
 
   useEffect(() => {
-    const encaminhamentoId = match?.params?.id;
     if (encaminhamentoId) {
       obterEncaminhamentoPorId();
     }
-  }, [match, obterEncaminhamentoPorId, dispatch]);
+  }, [encaminhamentoId, obterEncaminhamentoPorId, dispatch]);
 
   const limparDadosEncaminhamento = useCallback(() => {
     dispatch(setLimparDadosEncaminhamento());
@@ -67,15 +66,14 @@ const EncaminhamentoAEECadastro = ({ match }) => {
   }, [dispatch, limparDadosEncaminhamento]);
 
   useEffect(() => {
-    const encaminhamentoId = match?.params?.id;
     if (encaminhamentoId) {
       setBreadcrumbManual(
-        match.url,
+        location.pathname,
         'Editar',
         `${RotasDto.RELATORIO_AEE_ENCAMINHAMENTO}`
       );
     }
-  }, [match]);
+  }, [encaminhamentoId, location]);
 
   const validarSePermiteProximoPasso = params => {
     return ServicoEncaminhamentoAEE.podeCadastrarEncaminhamentoEstudante(
@@ -86,13 +84,13 @@ const EncaminhamentoAEECadastro = ({ match }) => {
   return (
     <LoaderEncaminhamento>
       <Cabecalho pagina="Encaminhamento AEE">
-        <BotoesAcoesEncaminhamentoAEE match={match} />
+        <BotoesAcoesEncaminhamentoAEE />
       </Cabecalho>
       <Card>
         <div className="col-md-12">
           <div className="row">
-            {match?.params?.id ? (
-              ''
+            {encaminhamentoId ? (
+              <></>
             ) : (
               <div className="col-md-12 mb-2">
                 <CollapseLocalizarEstudante
@@ -105,20 +103,12 @@ const EncaminhamentoAEECadastro = ({ match }) => {
                 />
               </div>
             )}
-            <MontarDadosSecoes match={match} />
+            <MontarDadosSecoes />
           </div>
         </div>
       </Card>
     </LoaderEncaminhamento>
   );
-};
-
-EncaminhamentoAEECadastro.propTypes = {
-  match: PropTypes.oneOfType([PropTypes.object]),
-};
-
-EncaminhamentoAEECadastro.defaultProps = {
-  match: {},
 };
 
 export default EncaminhamentoAEECadastro;

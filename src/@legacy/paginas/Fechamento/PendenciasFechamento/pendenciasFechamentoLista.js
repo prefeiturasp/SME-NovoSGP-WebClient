@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { Loader } from '~/componentes';
 import Cabecalho from '~/componentes-sgp/cabecalho';
 import Alert from '~/componentes/alert';
@@ -34,12 +34,12 @@ import {
 } from '~/constantes/ids/button';
 import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
 
-// eslint-disable-next-line react/prop-types
-const PendenciasFechamentoLista = ({ match }) => {
+const PendenciasFechamentoLista = () => {
   const usuario = useSelector(store => store.usuario);
   const { turmaSelecionada } = usuario;
 
   const navigate = useNavigate();
+  const paramsRoute = useParams();
 
   const modalidadesFiltroPrincipal = useSelector(
     store => store.filtro.modalidades
@@ -154,8 +154,8 @@ const PendenciasFechamentoLista = ({ match }) => {
       }
       setListaBimestres(listaBi);
 
-      if (!filtrouValoresRota && match?.params?.bimestre) {
-        const { bimestre } = match?.params;
+      if (!filtrouValoresRota && paramsRoute?.bimestre) {
+        const bimestre = paramsRoute?.bimestre;
         const temBimestreNaLista = listaBi.find(
           item => Number(item.valor) === Number(bimestre)
         );
@@ -163,9 +163,9 @@ const PendenciasFechamentoLista = ({ match }) => {
           setBimestreSelecionado(String(bimestre));
         }
         setBreadcrumbManual(
-          `${match?.url}`,
+          location.pathname,
           '',
-          `${RotasDto.PENDENCIAS_FECHAMENTO}`
+          RotasDto.PENDENCIAS_FECHAMENTO
         );
         return true;
       }
@@ -207,8 +207,8 @@ const PendenciasFechamentoLista = ({ match }) => {
         );
       }
 
-      if (!filtrouValoresRota && match?.params?.codigoComponenteCurricular) {
-        const { codigoComponenteCurricular } = match?.params;
+      if (!filtrouValoresRota && paramsRoute?.codigoComponenteCurricular) {
+        const { codigoComponenteCurricular } = paramsRoute;
         const temNaLista = disciplinas.data.find(
           item =>
             String(item.codigoComponenteCurricular) ===
@@ -310,6 +310,7 @@ const PendenciasFechamentoLista = ({ match }) => {
       componentesCurriculares: disciplinaIdSelecionada
         ? [disciplinaIdSelecionada]
         : [],
+      TipoPendenciaGrupo: [1],
       exibirDetalhamento: true,
     };
     await ServicoRelatorioPendencias.gerar(params)
@@ -328,7 +329,7 @@ const PendenciasFechamentoLista = ({ match }) => {
       b => String(b?.bimestre) === bimestreSelecionado
     )?.aberto;
 
-  const exibirTabela = match?.params?.codigoComponenteCurricular
+  const exibirTabela = paramsRoute?.codigoComponenteCurricular
     ? !!filtro?.componenteCurricularId
     : !!filtro?.bimestre;
   return (
