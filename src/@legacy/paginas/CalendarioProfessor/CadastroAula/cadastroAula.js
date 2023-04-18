@@ -296,8 +296,8 @@ function CadastroDeAula({ match, location }) {
   const obterAula = useCallback(async () => {
     const carregarComponentesCurriculares = async idTurma => {
       setCarregandoDados(true);
-      const respostaComponentes = await servicoDisciplina
-        .obterDisciplinasPorTurma(idTurma)
+      const respostaComponentes = !!(!!id || aula?.disciplinaId) ? await servicoDisciplina
+        .obterDisciplinasTurma(idTurma) : await servicoDisciplina.obterDisciplinasPorTurma(idTurma)
         .catch(e => erros(e))
         .finally(() => setCarregandoDados(false));
 
@@ -472,7 +472,8 @@ function CadastroDeAula({ match, location }) {
     const componenteSelecionado = obterComponenteSelecionadoPorId(
       aula.disciplinaId
     );
-    carregarGrade(componenteSelecionado, data, aula.tipoAula, controlaGrade);
+    if (!modoEdicao && !aula.id)
+      carregarGrade(componenteSelecionado, data, aula.tipoAula, controlaGrade);
   };
 
   const onChangeTipoAula = e => {
@@ -817,6 +818,7 @@ function CadastroDeAula({ match, location }) {
                         label="Componente Curricular"
                         valueOption={
                           listaComponentes[0]?.regencia &&
+                          listaComponentes[0]?.codDisciplinaPai &&
                           listaComponentes[0]?.codDisciplinaPai !== 0
                             ? 'codDisciplinaPai'
                             :  'id'

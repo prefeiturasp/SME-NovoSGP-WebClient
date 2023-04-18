@@ -88,7 +88,8 @@ const ListaObjetivos = React.memo(props => {
       modalidadesFiltroPrincipal.length
     ) {
       dispatch(setExibirLoaderPlanoAnual(true));
-      ServicoPlanoAnual.obterListaObjetivosPorAnoEComponenteCurricular(
+      ServicoPlanoAnual.obterListaObjetivosPorAnoTurmaEComponenteCurricular(
+        turmaSelecionada.id,
         turmaSelecionada.ano,
         turmaSelecionada.ensinoEspecial,
         tabAtualComponenteCurricular.codigoComponenteCurricular
