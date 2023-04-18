@@ -455,7 +455,8 @@ function CadastroDeAula({ match, location }) {
     const componenteSelecionado = obterComponenteSelecionadoPorId(
       aula.disciplinaId
     );
-    carregarGrade(componenteSelecionado, data, aula.tipoAula, controlaGrade);
+    if (!modoEdicao && !aula.id)
+      carregarGrade(componenteSelecionado, data, aula.tipoAula, controlaGrade);
   };
 
   const onChangeTipoAula = e => {
