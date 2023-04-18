@@ -59,9 +59,16 @@ const TransferenciaLista = props => {
             id={SGP_BUTTON_ADICIONAR_TRANSFERENCIA_LISTA}
             className="mb-2"
             onClick={() => {
-              if (listaEsquerda.selectMultipleRows) onClickAdicionar();
+              if (
+                !listaEsquerda?.disabilitarBotaoAdicionar &&
+                listaEsquerda.selectMultipleRows
+              )
+                onClickAdicionar();
             }}
-            disabled={listaEsquerda.selectMultipleRows}
+            disabled={
+              !listaEsquerda.selectMultipleRows ||
+              listaEsquerda?.disabilitarBotaoAdicionar
+            }
           >
             <i className="fas fa-chevron-right" />
           </BotaoLista>
@@ -70,7 +77,7 @@ const TransferenciaLista = props => {
             onClick={() => {
               if (listaDireita.selectMultipleRows) onClickRemover();
             }}
-            disabled={listaDireita.selectMultipleRows}
+            disabled={!listaDireita.selectMultipleRows}
           >
             <i className="fas fa-chevron-left" />
           </BotaoLista>

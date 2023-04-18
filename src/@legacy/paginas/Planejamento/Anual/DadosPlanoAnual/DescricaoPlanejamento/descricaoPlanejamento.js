@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import React, { useCallback } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Auditoria, Label } from '~/componentes';
 import JoditEditor from '~/componentes/jodit-editor/joditEditor';
@@ -28,6 +28,9 @@ const DescricaoPlanejamento = React.memo(props => {
     store => store.planoAnual.planoAnualSomenteConsulta
   );
 
+  const [descricaoInicial, setDescricaoInicial] = useState();
+  const [descricaoJaAtribuida, setDescricaoJaAtribuida] = useState(false);
+
   const onChange = useCallback(
     valorNovo => {
       const dados = dadosBimestrePlanoAnual;
@@ -41,6 +44,7 @@ const DescricaoPlanejamento = React.memo(props => {
         }
       });
       dispatch(setDadosBimestresPlanoAnual(dados));
+      setDescricaoJaAtribuida(true);
     },
     [dispatch, dadosBimestrePlanoAnual, tabAtualComponenteCurricular]
   );
@@ -79,6 +83,16 @@ const DescricaoPlanejamento = React.memo(props => {
     return '';
   };
 
+  useEffect(() => {
+    if (dadosBimestrePlanoAnual) {
+      const descricao = obterDadosComponenteAtual()?.descricao;
+
+      if (descricao && !descricaoJaAtribuida) {
+        setDescricaoInicial(descricao);
+      }
+    }
+  }, [dadosBimestrePlanoAnual]);
+
   return (
     <>
       {dadosBimestrePlanoAnual &&
@@ -95,12 +109,12 @@ const DescricaoPlanejamento = React.memo(props => {
             validarSeTemErro={validarSeTemErro}
             mensagemErro="Campo obrigatório"
             id={`bimestre-${bimestre}-editor`}
-            value={obterDadosComponenteAtual()?.descricao}
+            value={descricaoInicial}
             onChange={v => {
               if (
                 !planoAnualSomenteConsulta &&
                 periodoAberto &&
-                obterDadosComponenteAtual()?.descricao !== v
+                descricaoInicial !== v
               ) {
                 dispatch(setPlanoAnualEmEdicao(true));
                 onChange(v);

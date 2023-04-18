@@ -864,6 +864,7 @@ const Notas = () => {
           });
         return;
       }
+      setCarregandoGeral(false);
       resolve(false);
       return;
     } catch (er) {
@@ -1339,7 +1340,7 @@ const Notas = () => {
                   <JoditEditor
                     id={SGP_JODIT_EDITOR_DESCRICAO_JUSTIFICATIVA}
                     form={form}
-                    value={form.values.descricao}
+                    value={valoresIniciais?.descricao}
                     onChange={onChangeJustificativa}
                     name="descricao"
                     permiteInserirArquivo={false}

@@ -310,6 +310,7 @@ const PendenciasFechamentoLista = () => {
       componentesCurriculares: disciplinaIdSelecionada
         ? [disciplinaIdSelecionada]
         : [],
+      TipoPendenciaGrupo: [1],
       exibirDetalhamento: true,
     };
     await ServicoRelatorioPendencias.gerar(params)

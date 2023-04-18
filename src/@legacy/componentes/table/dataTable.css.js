@@ -3,7 +3,7 @@ import { Base } from '../colors';
 
 export const Container = styled.div`
   .ocultar-coluna-multi-selecao {
-    background-color: 'black'!important;
+    background-color: 'black' !important;
     .ant-table-selection-column {
       display: none !important;
     }
@@ -37,10 +37,14 @@ export const Container = styled.div`
   }
 
   .ant-table-thead
-    > tr.ant-table-row-hover:not(.ant-table-expanded-row):not(.ant-table-row-selected)
+    > tr.ant-table-row-hover:not(.ant-table-expanded-row):not(
+      .ant-table-row-selected
+    )
     > td,
   .ant-table-tbody
-    > tr.ant-table-row-hover:not(.ant-table-expanded-row):not(.ant-table-row-selected)
+    > tr.ant-table-row-hover:not(.ant-table-expanded-row):not(
+      .ant-table-row-selected
+    )
     > td,
   .ant-table-thead
     > tr:hover:not(.ant-table-expanded-row):not(.ant-table-row-selected)
@@ -48,21 +52,21 @@ export const Container = styled.div`
   .ant-table-tbody
     > tr:hover:not(.ant-table-expanded-row):not(.ant-table-row-selected)
     > td {
-      ${({ semHover }) =>
-        semHover
-          ? css`
+    ${({ semHover }) =>
+      semHover
+        ? css`
                 background: transparent !important;
               }
             `
-          : css`
-              background: ${Base.Roxo} !important;
-              color: ${Base.Branco} !important;
+        : css`
+            background: ${Base.Roxo} !important;
+            color: ${Base.Branco} !important;
 
-              .button-reiniciar-hover {
-                color: ${Base.Branco} !important;
-                border-color: ${Base.Branco} !important;
-              }
-            `}
+            .button-reiniciar-hover {
+              color: ${Base.Branco} !important;
+              border-color: ${Base.Branco} !important;
+            }
+          `}
   }
 
   .ant-table-tbody tr:hover.ant-table-expanded-row > td {
@@ -196,6 +200,12 @@ export const Container = styled.div`
             }
           }
 
+          .ant-table-tbody tr:hover {
+            .manual-style-font-awesome-icon {
+              color: ${Base.Branco} !important;
+            }
+          }
+
           .ant-table-tbody tr:hover:not(.ant-table-expanded-row) > td {
             background: ${Base.Roxo} !important;
             color: ${Base.Branco} !important;
@@ -228,6 +238,10 @@ export const Container = styled.div`
     }
 
     i {
+      color: ${Base.Branco} !important;
+    }
+
+    .manual-style-font-awesome-icon {
       color: ${Base.Branco} !important;
     }
   }

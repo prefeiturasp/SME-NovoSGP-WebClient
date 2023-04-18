@@ -2,6 +2,7 @@ import { store } from '@/core/redux';
 import {
   setExibirLoaderFrequenciaPlanoAula,
   setListaDadosFrequencia,
+  setTemEstudanteAlteradoComCompensacao,
   setTemPeriodoAbertoFrequenciaPlanoAula,
 } from '~/redux/modulos/frequenciaPlanoAula/actions';
 import { erros } from '~/servicos/alertas';
@@ -34,6 +35,7 @@ class ServicoFrequencia {
     const { turmaSelecionada } = usuario;
 
     if (aulaId) {
+      dispatch(setTemEstudanteAlteradoComCompensacao(false));
       dispatch(setExibirLoaderFrequenciaPlanoAula(true));
       const frequenciaAlunos = await api
         .get(`v1/calendarios/frequencias`, {

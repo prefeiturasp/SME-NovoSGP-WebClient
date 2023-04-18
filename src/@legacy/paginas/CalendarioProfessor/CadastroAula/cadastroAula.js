@@ -91,6 +91,7 @@ function CadastroDeAula() {
   const [registroMigrado, setRegistroMigrado] = useState(false);
   const [emManutencao, setEmManutencao] = useState(false);
   const [desabilitarBtnSalvar, setDesabilitarBtnSalvar] = useState(false);
+  const [possuiCompensacao, setPossuiCompensacao] = useState(false);
   const [turmaFiltro] = useState(turmaSelecionada.turma);
 
   const { diaAula } = queryString.parse(location.search);
@@ -261,16 +262,14 @@ function CadastroDeAula() {
       if (componenteSelecionado && dataAula) {
         setCarregandoDados(true);
         servicoCadastroAula
-          .obterGradePorComponenteETurma(
-            turmaSelecionada.turma,
-            componenteSelecionado.territorioSaber
-              ? componenteSelecionado.id
-              : componenteSelecionado.codigoComponenteCurricular,
-            dataAula,
-            id || 0,
-            componenteSelecionado.regencia,
-            tipoAula
-          )
+        .obterGradePorComponenteETurma(
+          turmaSelecionada.turma,
+          componenteSelecionado.territorioSaber ? componenteSelecionado.id : componenteSelecionado.codigoComponenteCurricular,
+          dataAula,
+          id || 0,
+          componenteSelecionado.regencia,
+          tipoAula
+        )
           .then(respostaGrade => {
             setDesabilitarBtnSalvar(false);
             if (respostaGrade.status === 200) {
@@ -304,8 +303,8 @@ function CadastroDeAula() {
   const obterAula = useCallback(async () => {
     const carregarComponentesCurriculares = async idTurma => {
       setCarregandoDados(true);
-      const respostaComponentes = await servicoDisciplina
-        .obterDisciplinasPorTurma(idTurma)
+      const respostaComponentes = !!(!!id || aula?.disciplinaId) ? await servicoDisciplina
+        .obterDisciplinasTurma(idTurma) : await servicoDisciplina.obterDisciplinasPorTurma(idTurma)
         .catch(e => erros(e))
         .finally(() => setCarregandoDados(false));
 
@@ -329,6 +328,7 @@ function CadastroDeAula() {
           setAula(respostaAula);
           setRegistroMigrado(respostaAula.migrado);
           setEmManutencao(respostaAula.emManutencao);
+          setPossuiCompensacao(respostaAula.possuiCompensacao);
           servicoCadastroAula
             .obterRecorrenciaPorIdAula(id, respostaAula.recorrenciaAula)
             .then(resp => {
@@ -389,7 +389,22 @@ function CadastroDeAula() {
     }
   }, [id, turmaSelecionada.turma]);
 
+  const continuarQuandoTemCompensacao = () =>
+    confirmar(
+      'Atenção',
+      'Existe(m) estudante(s) com compensação de ausência para esta aula, ao alterar esta aula a compensação será alterada ou excluída.',
+      'Deseja continuar?'
+    );
+
   const salvar = async valoresForm => {
+    let continuarSalvar = true;
+
+    if (possuiCompensacao) {
+      continuarSalvar = await continuarQuandoTemCompensacao();
+    }
+
+    if (!continuarSalvar) return;
+
     const componente = obterComponenteSelecionadoPorId(
       valoresForm.disciplinaId
     );
@@ -463,7 +478,8 @@ function CadastroDeAula() {
     const componenteSelecionado = obterComponenteSelecionadoPorId(
       aula.disciplinaId
     );
-    carregarGrade(componenteSelecionado, data, aula.tipoAula, controlaGrade);
+    if (!modoEdicao && !aula.id)
+      carregarGrade(componenteSelecionado, data, aula.tipoAula, controlaGrade);
   };
 
   const onChangeTipoAula = e => {
@@ -562,13 +578,18 @@ function CadastroDeAula() {
           infantil ? 'diário de bordo' : 'plano de aula'
         } registrado, ao excluí - la estará excluindo esse registro também`;
       }
-      const confirmado = await confirmar(
+      let confirmado = await confirmar(
         `Excluir aula - ${obterDataFormatada()} `,
         mensagem,
         'Deseja Continuar?',
         'Excluir',
         'Cancelar'
       );
+
+      if (confirmado && possuiCompensacao) {
+        confirmado = await continuarQuandoTemCompensacao();
+      }
+
       if (confirmado) {
         const componenteSelecionado = obterComponenteSelecionadoPorId(
           aula.disciplinaId
@@ -806,6 +827,7 @@ function CadastroDeAula() {
                         label="Componente Curricular"
                         valueOption={
                           listaComponentes[0]?.regencia &&
+                          listaComponentes[0]?.codDisciplinaPai &&
                           listaComponentes[0]?.codDisciplinaPai !== 0
                             ? 'codDisciplinaPai'
                             :  'id'
