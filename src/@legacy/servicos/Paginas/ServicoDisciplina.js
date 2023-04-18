@@ -18,6 +18,13 @@ class ServicoDisciplina {
     const url = `v1/professores/turmas/${turmaId}/disciplinas/planejamento/regencia/${!!temRegencia}?codigoDisciplina=${codigoDisciplina}&turmaPrograma=${!!turmaPrograma}`;
     return api.get(url);
   };
+
+  obterDisciplinasTurma = (
+    turmaId
+  ) => {
+    const url = `v1/professores/turmas/${turmaId}/docencias-compartilhadas/disciplinas/`;
+    return api.get(url);
+  };
 }
 
 export default new ServicoDisciplina();
