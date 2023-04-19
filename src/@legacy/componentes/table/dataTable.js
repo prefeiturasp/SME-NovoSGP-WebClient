@@ -99,7 +99,11 @@ const DataTable = props => {
             }
           },
         })}
-        pagination={pagination}
+        pagination={
+          typeof pagination === 'object'
+            ? { ...pagination, items_per_page: '' }
+            : pagination
+        }
         pageSize={{ pageSize }}
         bordered
         size="middle"
@@ -168,7 +172,7 @@ DataTable.defaultProps = {
   columns: [],
   selectMultipleRows: false,
   pageSize: 10,
-  pagination: true,
+  pagination: { locale: { items_per_page: '' } },
   onClickRow: null,
   locale: { emptyText: 'Sem dados' },
   idLinha: 'id',
