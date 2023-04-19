@@ -890,7 +890,7 @@ const Notas = ({ match }) => {
   const verificaPorcentagemAprovados = () => {
     let bimestreAtual = dadosBimestreAtual;
     let bimestre = {};
-    switch (Number(dadosBimestreAtual.bimestre)) {
+    switch (Number(dadosBimestreAtual?.numero)) {
       case 1:
         bimestre = primeiroBimestre;
         break;
@@ -1233,7 +1233,6 @@ const Notas = ({ match }) => {
   const onConfirmarJustificativa = async () => {
     setExibeModalJustificativa(false);
     await onSalvarNotas(
-      clicouNoBotaoSalvar,
       ServicoNotaConceito.estaEmModoEdicaoGeralNotaFinal(),
       ServicoNotaConceito.estaEmModoEdicaoGeral()
     );
@@ -1250,88 +1249,90 @@ const Notas = ({ match }) => {
 
   return (
     <Container>
-      <ModalConteudoHtml
-        key="inserirJutificativa"
-        visivel={exibeModalJustificativa}
-        onClose={() => {}}
-        titulo="Inserir justificativa"
-        esconderBotaoPrincipal
-        esconderBotaoSecundario
-        closable={false}
-        fecharAoClicarFora={false}
-        fecharAoClicarEsc={false}
-        width="650px"
-      >
-        <Formik
-          enableReinitialize
-          initialValues={valoresIniciais}
-          validationSchema={validacoes}
-          onSubmit={onConfirmarJustificativa}
-          ref={refF => setRefForm(refF)}
-          validateOnChange
-          validateOnBlur
+      {exibeModalJustificativa && (
+        <ModalConteudoHtml
+          key="inserirJutificativa"
+          visivel={exibeModalJustificativa}
+          onClose={() => {}}
+          titulo="Inserir justificativa"
+          esconderBotaoPrincipal
+          esconderBotaoSecundario
+          closable={false}
+          fecharAoClicarFora={false}
+          fecharAoClicarEsc={false}
+          width="650px"
         >
-          {form => (
-            <Form>
-              <div className="col-md-12">
-                <Alert
-                  alerta={{
-                    tipo: 'warning',
-                    id: SGP_ALERT_JUSTIFICATIVA_PORCENTAGEM_NOTAS_CONCEITO,
-                    mensagem: `A maioria dos estudantes está com ${
-                      notasConceitos.Notas === Number(notaTipo)
-                        ? 'notas'
-                        : 'conceitos'
-                    } abaixo do
+          <Formik
+            enableReinitialize
+            initialValues={valoresIniciais}
+            validationSchema={validacoes}
+            onSubmit={onConfirmarJustificativa}
+            ref={refF => setRefForm(refF)}
+            validateOnChange
+            validateOnBlur
+          >
+            {form => (
+              <Form>
+                <div className="col-md-12">
+                  <Alert
+                    alerta={{
+                      tipo: 'warning',
+                      id: SGP_ALERT_JUSTIFICATIVA_PORCENTAGEM_NOTAS_CONCEITO,
+                      mensagem: `A maioria dos estudantes está com ${
+                        notasConceitos.Notas === Number(notaTipo)
+                          ? 'notas'
+                          : 'conceitos'
+                      } abaixo do
                                mínimo considerado para aprovação, por isso é necessário que você insira uma justificativa.`,
-                    estiloTitulo: { fontSize: '18px' },
-                  }}
-                  className="mb-2"
-                />
-              </div>
-              <div className="col-md-12">
-                <fieldset className="mt-3">
-                  <JoditEditor
-                    id={SGP_JODIT_EDITOR_DESCRICAO_JUSTIFICATIVA}
-                    form={form}
-                    value={valoresIniciais?.descricao}
-                    onChange={onChangeJustificativa}
-                    name="descricao"
-                    permiteInserirArquivo={false}
-                    labelRequired
+                      estiloTitulo: { fontSize: '18px' },
+                    }}
+                    className="mb-2"
                   />
-                </fieldset>
-              </div>
-              <div className="d-flex justify-content-end">
-                <Button
-                  key="btn-cancelar-justificativa"
-                  label="Cancelar"
-                  color={Colors.Roxo}
-                  bold
-                  id={SGP_BUTTON_CANCELAR_MODAL}
-                  border
-                  className="mr-3 mt-2 padding-btn-confirmacao"
-                  onClick={() => {
-                    onChangeJustificativa('');
-                    form.resetForm();
-                    setExibeModalJustificativa(false);
-                  }}
-                />
-                <Button
-                  key="btn-sim-confirmacao-justificativa"
-                  label="Confirmar"
-                  color={Colors.Roxo}
-                  bold
-                  id={SGP_BUTTON_SALVAR_MODAL}
-                  border
-                  className="mr-3 mt-2 padding-btn-confirmacao"
-                  onClick={() => validaAntesDoSubmit(form)}
-                />
-              </div>
-            </Form>
-          )}
-        </Formik>
-      </ModalConteudoHtml>
+                </div>
+                <div className="col-md-12">
+                  <fieldset className="mt-3">
+                    <JoditEditor
+                      id={SGP_JODIT_EDITOR_DESCRICAO_JUSTIFICATIVA}
+                      form={form}
+                      value={valoresIniciais?.descricao}
+                      onChange={onChangeJustificativa}
+                      name="descricao"
+                      permiteInserirArquivo={false}
+                      labelRequired
+                    />
+                  </fieldset>
+                </div>
+                <div className="d-flex justify-content-end">
+                  <Button
+                    key="btn-cancelar-justificativa"
+                    label="Cancelar"
+                    color={Colors.Roxo}
+                    bold
+                    id={SGP_BUTTON_CANCELAR_MODAL}
+                    border
+                    className="mr-3 mt-2 padding-btn-confirmacao"
+                    onClick={() => {
+                      onChangeJustificativa('');
+                      form.resetForm();
+                      setExibeModalJustificativa(false);
+                    }}
+                  />
+                  <Button
+                    key="btn-sim-confirmacao-justificativa"
+                    label="Confirmar"
+                    color={Colors.Roxo}
+                    bold
+                    id={SGP_BUTTON_SALVAR_MODAL}
+                    border
+                    className="mr-3 mt-2 padding-btn-confirmacao"
+                    onClick={() => validaAntesDoSubmit(form)}
+                  />
+                </div>
+              </Form>
+            )}
+          </Formik>
+        </ModalConteudoHtml>
+      )}
       {!usuario.turmaSelecionada.turma &&
       !ehTurmaInfantil(modalidadesFiltroPrincipal, usuario.turmaSelecionada) ? (
         <Row className="mb-0 pb-0">
