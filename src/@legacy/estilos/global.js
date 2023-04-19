@@ -482,12 +482,6 @@ export default createGlobalStyle`
     color: #b40c02 !important;
   }
 
-  .position-sticky-col {
-    z-index: 9;
-    position: sticky;
-    background: white;
-    position: -webkit-sticky;
-  }
 
   .texto-vermelho-negrito {
     color: #b40c02 !important;

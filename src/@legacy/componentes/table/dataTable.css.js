@@ -2,16 +2,6 @@ import styled, { css } from 'styled-components';
 import { Base } from '../colors';
 
 export const Container = styled.div`
-  .ocultar-coluna-multi-selecao {
-    background-color: 'black' !important;
-    .ant-table-selection-column {
-      display: none !important;
-    }
-    .ant-table-selection-col {
-      display: none !important;
-    }
-  }
-
   .ant-table table {
     border-collapse: collapse;
   }

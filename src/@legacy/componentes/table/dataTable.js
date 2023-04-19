@@ -26,7 +26,6 @@ const DataTable = props => {
     expandedRowKeys,
     expandIcon,
     tableResponsive,
-    fixExpandedRowResetColSpan,
     gerarIdUnico,
     ...rest
   } = props;
@@ -75,15 +74,8 @@ const DataTable = props => {
         {...rest}
         id={id}
         scroll={scroll}
-        className={selectMultipleRows ? '' : 'ocultar-coluna-multi-selecao'}
         rowKey={idLinha}
-        rowSelection={
-          fixExpandedRowResetColSpan
-            ? selectMultipleRows
-              ? rowSelection
-              : null
-            : rowSelection
-        }
+        rowSelection={selectMultipleRows ? rowSelection : null}
         columns={columns}
         dataSource={gerarIdUnico ? gerarColunaId(dataSource) : dataSource}
         onRow={row => ({
@@ -160,7 +152,6 @@ DataTable.propTypes = {
   expandedRowKeys: PropTypes.oneOfType([PropTypes.array]),
   expandIcon: PropTypes.oneOfType([PropTypes.any]),
   tableResponsive: PropTypes.bool,
-  fixExpandedRowResetColSpan: PropTypes.bool,
   loading: PropTypes.bool,
   gerarIdUnico: PropTypes.bool,
 };
@@ -185,7 +176,6 @@ DataTable.defaultProps = {
   expandedRowKeys: [],
   expandIcon: null,
   tableResponsive: true,
-  fixExpandedRowResetColSpan: false,
   loading: false,
   gerarIdUnico: false,
 };
