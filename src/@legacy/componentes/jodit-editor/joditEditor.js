@@ -172,7 +172,7 @@ const JoditEditor = forwardRef((props, ref) => {
         }
       },
     },
-    countHTMLChars: true,
+    countHTMLChars: false,
     askBeforePasteHTML: valideClipboardHTML,
     askBeforePasteFromWord: false,
     defaultActionOnPaste: 'insert_clear_html',
