@@ -55,7 +55,6 @@ const acharErro = (dados, resposta) => {
 };
 
 const erros = listaErros => {
-  console.log(listaErros);
   const temErroIgual =
     acharErro(listaErros?.message, TOKEN_EXPIRADO) ||
     acharErro(listaErros?.message, CANCELADO_USUARIO);
