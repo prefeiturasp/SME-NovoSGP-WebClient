@@ -12,9 +12,6 @@ const CampoApanhadoGeral = () => {
   const dadosApanhadoGeral = useSelector(
     store => store.acompanhamentoAprendizagem.dadosApanhadoGeral
   );
-  const valorApanhadoGeral = useSelector(
-    store => store.acompanhamentoAprendizagem.dadosApanhadoGeral?.apanhadoGeral
-  );
 
   const qtdMaxImagensCampoPercursoColetivo = useSelector(
     store =>
@@ -26,6 +23,7 @@ const CampoApanhadoGeral = () => {
   const permissoesTela =
     usuario.permissoes[RotasDto.ACOMPANHAMENTO_APRENDIZAGEM];
 
+  const [valorApanhadoGeral, setValorApanhadoGeral] = useState();
   const [desabilitarCampo, setDesabilitarCampo] = useState(false);
 
   const validaPermissoes = useCallback(() => {
@@ -56,6 +54,12 @@ const CampoApanhadoGeral = () => {
   const validarSeTemErro = (valorHtml, texto) => {
     return !valorHtml || !texto;
   };
+
+  useEffect(() => {
+    if (dadosApanhadoGeral) {
+      setValorApanhadoGeral(dadosApanhadoGeral?.apanhadoGeral);
+    }
+  }, [dadosApanhadoGeral]);
 
   return (
     <JoditEditor

@@ -1,7 +1,7 @@
 import { Form, Formik } from 'formik';
 import _ from 'lodash';
 import PropTypes from 'prop-types';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import * as Yup from 'yup';
 import { Auditoria, Colors, Loader } from '~/componentes';
@@ -58,10 +58,11 @@ const Justificativa = props => {
     desabilitarCampos ||
     !dentroPeriodo;
 
-  const valoresIniciais = {
-    justificativa: justificativa || '',
-  };
+  const [valoresIniciais, setValoresIniciais] = useState({
+    justificativa: '',
+  });
 
+  const [emEdicao, setEmEdicao] = useState(false);
   const [carregandoSessao, setCarregandoSessao] = useState(false);
 
   const salvarJustificativa = async () => {
@@ -72,6 +73,7 @@ const Justificativa = props => {
   };
 
   const clicouBotaoSalvar = form => {
+    setEmEdicao(false);
     const arrayCampos = Object.keys(valoresIniciais);
     arrayCampos.forEach(campo => {
       form.setFieldTouched(campo, true, true);
@@ -85,6 +87,7 @@ const Justificativa = props => {
 
   const onChange = justificativaNova => {
     if (!alunoDesabilitado || !desabilitarCampos || dentroPeriodo) {
+      setEmEdicao(true);
       dispatch(setJustificativaAtual(justificativaNova));
     }
   };
@@ -97,6 +100,7 @@ const Justificativa = props => {
         'Deseja realmente cancelar as alterações?'
       );
       if (confirmou) {
+        setEmEdicao(false);
         dispatch(setExpandirLinha([]));
         dispatch(setNotaConceitoPosConselhoAtual({}));
         const dadosCarregar = _.cloneDeep(dadosIniciaisListasNotasConceitos);
@@ -107,6 +111,12 @@ const Justificativa = props => {
       dispatch(setNotaConceitoPosConselhoAtual({}));
     }
   };
+
+  useEffect(() => {
+    if (!emEdicao) {
+      setValoresIniciais(prev => ({ ...prev, justificativa }));
+    }
+  }, [justificativa]);
 
   return (
     <>
