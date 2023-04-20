@@ -105,12 +105,25 @@ const JoditEditor = forwardRef((props, ref) => {
     return temTagSvg;
   };
 
-  const verificaSePodeInserirImagem = e => {
+  const verificaSePodeInserirArquivo = e => {
     const dadosColadoTexto = e?.clipboardData?.getData?.('text');
     const dadosColadoHTML = e?.clipboardData?.getData?.('text/html');
 
     const qtdElementoImgNova = dadosColadoHTML?.match(/<img/g) || [];
+    const qtdElementoVideo = dadosColadoHTML?.match(/<video/g) || [];
     const temImagemNosDadosColados = qtdElementoImgNova.length;
+    const temVideoNosDadosColados = qtdElementoVideo.length;
+
+    if (
+      !permiteInserirArquivo &&
+      (temImagemNosDadosColados || temVideoNosDadosColados)
+    ) {
+      e.preventDefault();
+      e.stopPropagation();
+      erro('Não é possível inserir arquivo');
+
+      return false;
+    }
 
     if (temImagemNosDadosColados && qtdMaxImg) {
       const qtdElementoImgAtual =
@@ -159,6 +172,7 @@ const JoditEditor = forwardRef((props, ref) => {
         }
       },
     },
+    countHTMLChars: false,
     askBeforePasteHTML: valideClipboardHTML,
     askBeforePasteFromWord: false,
     defaultActionOnPaste: 'insert_clear_html',
@@ -244,6 +258,7 @@ const JoditEditor = forwardRef((props, ref) => {
       },
     },
     iframe: true,
+    spellcheck: true,
     showWordsCounter: false,
     showXPathInStatusbar: false,
     buttons: BOTOES_PADRAO,
@@ -255,7 +270,7 @@ const JoditEditor = forwardRef((props, ref) => {
       font: '16px Arial',
       overflow: 'none',
     },
-    iframeStyle,
+    iframeStyle: `${iframeStyle} img{max-width: 100%;max-height: 700px;object-fit: cover;}`,
   };
 
   const onChangePadrao = () => {
@@ -397,7 +412,7 @@ const JoditEditor = forwardRef((props, ref) => {
           }
 
           textArea.current.events.on('beforePaste', e => {
-            if (verificaSeTemSvg(e) || !verificaSePodeInserirImagem(e)) {
+            if (verificaSeTemSvg(e) || !verificaSePodeInserirArquivo(e)) {
               return false;
             }
 

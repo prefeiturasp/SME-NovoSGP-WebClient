@@ -50,6 +50,7 @@ import ServicoNotas from '~/servicos/ServicoNotas';
 import { ehTurmaInfantil } from '~/servicos/Validacoes/validacoesInfatil';
 import BotoesAcoessNotasConceitos from './botoesAcoes';
 import { Container, ContainerAuditoria } from './notas.css';
+import { removerTagsHtml } from '~/utils';
 
 const { TabPane } = Tabs;
 
@@ -70,9 +71,8 @@ const Notas = ({ match }) => {
   const [disciplinaSelecionada, setDisciplinaSelecionada] = useState(undefined);
   const [desabilitarDisciplina, setDesabilitarDisciplina] = useState(false);
   const [notaTipo, setNotaTipo] = useState();
-  const [carregandoListaBimestres, setCarregandoListaBimestres] = useState(
-    false
-  );
+  const [carregandoListaBimestres, setCarregandoListaBimestres] =
+    useState(false);
   const [auditoriaInfo, setAuditoriaInfo] = useState({
     auditoriaAlterado: '',
     auditoriaInserido: '',
@@ -97,7 +97,14 @@ const Notas = ({ match }) => {
     Yup.object({
       descricao: Yup.string()
         .required('Justificativa obrigatória')
-        .max(1000, 'limite de 1000 caracteres'),
+        .test('len', 'limite de 1000 caracteres', val => {
+          const formatedText = removerTagsHtml(val)
+            ?.replaceAll(/\s/g, '')
+            ?.replace(/&nbsp;/g, '');
+          const length = formatedText?.length;
+
+          return length <= 1000;
+        }),
     })
   );
 
@@ -108,9 +115,8 @@ const Notas = ({ match }) => {
 
   const [podeLancaNota, setPodeLancaNota] = useState(true);
 
-  const [showMsgPeriodoFechamento, setShowMsgPeriodoFechamento] = useState(
-    false
-  );
+  const [showMsgPeriodoFechamento, setShowMsgPeriodoFechamento] =
+    useState(false);
 
   const valoresIniciais = { descricao: '' };
 
@@ -131,12 +137,13 @@ const Notas = ({ match }) => {
 
       let dentroDoPeriodo = true;
       if (!desabilitar && bimestre && usuario.turmaSelecionada.turma) {
-        const retorno = await ServicoPeriodoFechamento.verificarSePodeAlterarNoPeriodo(
-          usuario.turmaSelecionada.turma,
-          bimestre
-        ).catch(e => {
-          erros(e);
-        });
+        const retorno =
+          await ServicoPeriodoFechamento.verificarSePodeAlterarNoPeriodo(
+            usuario.turmaSelecionada.turma,
+            bimestre
+          ).catch(e => {
+            erros(e);
+          });
         if (retorno?.status === 200) {
           dentroDoPeriodo = retorno.data;
         }
@@ -188,12 +195,10 @@ const Notas = ({ match }) => {
     dispatch(setModoEdicaoGeral(false));
     dispatch(setModoEdicaoGeralNotaFinal(false));
     dispatch(setExpandirLinha([]));
-
   }, [dispatch]);
 
   useEffect(() => {
     resetarTela();
-
   }, [usuario.turmaSelecionada]);
 
   const obterListaConceitos = async periodoFim => {
@@ -253,7 +258,6 @@ const Notas = ({ match }) => {
         }
       });
     }
-
   }, [usuario.turmaSelecionada]);
 
   const obterBimestres = useCallback(
@@ -422,7 +426,6 @@ const Notas = ({ match }) => {
     if (match?.params?.disciplinaId && match?.params?.bimestre) {
       setDisciplinaSelecionada(String(match?.params.disciplinaId));
     }
-
   }, [usuario.turmaSelecionada.turma]);
 
   const obterTituloTela = useCallback(async () => {
@@ -441,7 +444,6 @@ const Notas = ({ match }) => {
       return 'Lançamento de Notas';
     }
     return '';
-
   }, [usuario.turmaSelecionada.anoLetivo, usuario.turmaSelecionada.turma]);
 
   useEffect(() => {
@@ -464,7 +466,6 @@ const Notas = ({ match }) => {
       setDesabilitarDisciplina(false);
       resetarTela();
     }
-
   }, [obterDisciplinas, usuario.turmaSelecionada.turma]);
 
   useEffect(() => {
@@ -474,7 +475,6 @@ const Notas = ({ match }) => {
     } else {
       resetarTela();
     }
-
   }, [disciplinaSelecionada, usuario.turmaSelecionada]);
 
   const pergutarParaSalvar = () => {
@@ -826,6 +826,7 @@ const Notas = ({ match }) => {
           });
         return;
       }
+      setCarregandoGeral(false);
       resolve(false);
       return;
     } catch (er) {
@@ -897,7 +898,7 @@ const Notas = ({ match }) => {
   const verificaPorcentagemAprovados = () => {
     let bimestreAtual = dadosBimestreAtual;
     let bimestre = {};
-    switch (Number(dadosBimestreAtual.bimestre)) {
+    switch (Number(dadosBimestreAtual?.numero)) {
       case 1:
         bimestre = primeiroBimestre;
         break;
@@ -1087,7 +1088,8 @@ const Notas = ({ match }) => {
     setClicouNoBotaoSalvar(clicouSalvar);
     setClicouNoBotaoVoltar(clicouVoltar);
     const estaEmModoEdicaoGeral = ServicoNotaConceito.estaEmModoEdicaoGeral();
-    const estaEmModoEdicaoGeralNotaFinal = ServicoNotaConceito.estaEmModoEdicaoGeralNotaFinal();
+    const estaEmModoEdicaoGeralNotaFinal =
+      ServicoNotaConceito.estaEmModoEdicaoGeralNotaFinal();
     const modoEdicao = bimestreEmModoEdicao(numeroBimestre);
 
     if (estaEmModoEdicaoGeralNotaFinal || estaEmModoEdicaoGeral) {
@@ -1239,7 +1241,6 @@ const Notas = ({ match }) => {
   const onConfirmarJustificativa = async () => {
     setExibeModalJustificativa(false);
     await onSalvarNotas(
-      clicouNoBotaoSalvar,
       ServicoNotaConceito.estaEmModoEdicaoGeralNotaFinal(),
       ServicoNotaConceito.estaEmModoEdicaoGeral()
     );
@@ -1256,88 +1257,90 @@ const Notas = ({ match }) => {
 
   return (
     <Container>
-      <ModalConteudoHtml
-        key="inserirJutificativa"
-        visivel={exibeModalJustificativa}
-        onClose={() => {}}
-        titulo="Inserir justificativa"
-        esconderBotaoPrincipal
-        esconderBotaoSecundario
-        closable={false}
-        fecharAoClicarFora={false}
-        fecharAoClicarEsc={false}
-        width="650px"
-      >
-        <Formik
-          enableReinitialize
-          initialValues={valoresIniciais}
-          validationSchema={validacoes}
-          onSubmit={onConfirmarJustificativa}
-          ref={refF => setRefForm(refF)}
-          validateOnChange
-          validateOnBlur
+      {exibeModalJustificativa && (
+        <ModalConteudoHtml
+          key="inserirJutificativa"
+          visivel={exibeModalJustificativa}
+          onClose={() => {}}
+          titulo="Inserir justificativa"
+          esconderBotaoPrincipal
+          esconderBotaoSecundario
+          closable={false}
+          fecharAoClicarFora={false}
+          fecharAoClicarEsc={false}
+          width="650px"
         >
-          {form => (
-            <Form>
-              <div className="col-md-12">
-                <Alert
-                  alerta={{
-                    tipo: 'warning',
-                    id: SGP_ALERT_JUSTIFICATIVA_PORCENTAGEM_NOTAS_CONCEITO,
-                    mensagem: `A maioria dos estudantes está com ${
-                      notasConceitos.Notas === Number(notaTipo)
-                        ? 'notas'
-                        : 'conceitos'
-                    } abaixo do
+          <Formik
+            enableReinitialize
+            initialValues={valoresIniciais}
+            validationSchema={validacoes}
+            onSubmit={onConfirmarJustificativa}
+            ref={refF => setRefForm(refF)}
+            validateOnChange
+            validateOnBlur
+          >
+            {form => (
+              <Form>
+                <div className="col-md-12">
+                  <Alert
+                    alerta={{
+                      tipo: 'warning',
+                      id: SGP_ALERT_JUSTIFICATIVA_PORCENTAGEM_NOTAS_CONCEITO,
+                      mensagem: `A maioria dos estudantes está com ${
+                        notasConceitos.Notas === Number(notaTipo)
+                          ? 'notas'
+                          : 'conceitos'
+                      } abaixo do
                                mínimo considerado para aprovação, por isso é necessário que você insira uma justificativa.`,
-                    estiloTitulo: { fontSize: '18px' },
-                  }}
-                  className="mb-2"
-                />
-              </div>
-              <div className="col-md-12">
-                <fieldset className="mt-3">
-                  <JoditEditor
-                    id={SGP_JODIT_EDITOR_DESCRICAO_JUSTIFICATIVA}
-                    form={form}
-                    value={form.values.descricao}
-                    onChange={onChangeJustificativa}
-                    name="descricao"
-                    permiteInserirArquivo={false}
-                    labelRequired
+                      estiloTitulo: { fontSize: '18px' },
+                    }}
+                    className="mb-2"
                   />
-                </fieldset>
-              </div>
-              <div className="d-flex justify-content-end">
-                <Button
-                  key="btn-cancelar-justificativa"
-                  label="Cancelar"
-                  color={Colors.Roxo}
-                  bold
-                  id={SGP_BUTTON_CANCELAR_MODAL}
-                  border
-                  className="mr-3 mt-2 padding-btn-confirmacao"
-                  onClick={() => {
-                    onChangeJustificativa('');
-                    form.resetForm();
-                    setExibeModalJustificativa(false);
-                  }}
-                />
-                <Button
-                  key="btn-sim-confirmacao-justificativa"
-                  label="Confirmar"
-                  color={Colors.Roxo}
-                  bold
-                  id={SGP_BUTTON_SALVAR_MODAL}
-                  border
-                  className="mr-3 mt-2 padding-btn-confirmacao"
-                  onClick={() => validaAntesDoSubmit(form)}
-                />
-              </div>
-            </Form>
-          )}
-        </Formik>
-      </ModalConteudoHtml>
+                </div>
+                <div className="col-md-12">
+                  <fieldset className="mt-3">
+                    <JoditEditor
+                      id={SGP_JODIT_EDITOR_DESCRICAO_JUSTIFICATIVA}
+                      form={form}
+                      value={valoresIniciais?.descricao}
+                      onChange={onChangeJustificativa}
+                      name="descricao"
+                      permiteInserirArquivo={false}
+                      labelRequired
+                    />
+                  </fieldset>
+                </div>
+                <div className="d-flex justify-content-end">
+                  <Button
+                    key="btn-cancelar-justificativa"
+                    label="Cancelar"
+                    color={Colors.Roxo}
+                    bold
+                    id={SGP_BUTTON_CANCELAR_MODAL}
+                    border
+                    className="mr-3 mt-2 padding-btn-confirmacao"
+                    onClick={() => {
+                      onChangeJustificativa('');
+                      form.resetForm();
+                      setExibeModalJustificativa(false);
+                    }}
+                  />
+                  <Button
+                    key="btn-sim-confirmacao-justificativa"
+                    label="Confirmar"
+                    color={Colors.Roxo}
+                    bold
+                    id={SGP_BUTTON_SALVAR_MODAL}
+                    border
+                    className="mr-3 mt-2 padding-btn-confirmacao"
+                    onClick={() => validaAntesDoSubmit(form)}
+                  />
+                </div>
+              </Form>
+            )}
+          </Formik>
+        </ModalConteudoHtml>
+      )}
       {!usuario.turmaSelecionada.turma &&
       !ehTurmaInfantil(modalidadesFiltroPrincipal, usuario.turmaSelecionada) ? (
         <Row className="mb-0 pb-0">

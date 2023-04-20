@@ -117,7 +117,11 @@ const RelatorioNotasConceitosFinais = () => {
   const obterUes = useCallback(async dre => {
     if (dre) {
       setCarregandoGeral(true);
-      const retorno = await ServicoFiltroRelatorio.obterUes(dre, false, anoLetivo).catch(e => {
+
+      const dataAtual = new Date();
+      const consideraHistorico = anoLetivo != dataAtual.getFullYear();
+      
+      const retorno = await ServicoFiltroRelatorio.obterUes(dre, consideraHistorico, anoLetivo).catch(e => {
         erros(e);
         setCarregandoGeral(false);
       });
@@ -328,7 +332,7 @@ const RelatorioNotasConceitosFinais = () => {
     bi.push({ desc: '1º', valor: 1 });
     bi.push({ desc: '2º', valor: 2 });
 
-    if (modalidadeId !== modalidade.EJA) {
+    if (modalidadeId != modalidade.EJA) {
       bi.push({ desc: '3º', valor: 3 });
       bi.push({ desc: '4º', valor: 4 });
     }
