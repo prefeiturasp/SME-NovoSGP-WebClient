@@ -173,7 +173,7 @@ class ServicoConselhoClasse {
   ) => {
     let url = `/v1/conselhos-classe/${conselhoClasseId}/fechamentos/${fechamentoTurmaId}/alunos/${alunoCodigo}/imprimir`;
     if (frequenciaGlobal) {
-      url += `${url}?frequenciaGlobal=${frequenciaGlobal}`;
+      url = `${url}?frequenciaGlobal=${frequenciaGlobal}`;
     }
     return api.get(url);
   };
