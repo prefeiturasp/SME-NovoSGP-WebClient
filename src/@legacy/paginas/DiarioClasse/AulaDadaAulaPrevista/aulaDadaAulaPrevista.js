@@ -38,9 +38,7 @@ const AulaDadaAulaPrevista = () => {
   const [desabilitarDisciplina, setDesabilitarDisciplina] = useState(false);
   const [listaDisciplinas, setListaDisciplinas] = useState([]);
   const [modoEdicao, setModoEdicao] = useState(false);
-  const [disciplinaIdSelecionada, setDisciplinaIdSelecionada] = useState(
-    undefined
-  );
+  const [disciplinaIdSelecionada, setDisciplinaIdSelecionada] = useState();
   const [dadoslista, setDadosLista] = useState([]);
   const [auditoria, setAuditoria] = useState(undefined);
   const permissoesTela = usuario.permissoes[RotasDto.AULA_DADA_AULA_PREVISTA];
@@ -211,7 +209,8 @@ const AulaDadaAulaPrevista = () => {
         await salvar();
       }
     }
-    setDisciplinaIdSelecionada(String(disciplinaId));
+    const disciplina = disciplinaId ? String(disciplinaId) : undefined;
+    setDisciplinaIdSelecionada(disciplina);
     await buscarDados(disciplinaId);
   };
 
@@ -238,7 +237,6 @@ const AulaDadaAulaPrevista = () => {
       setDisciplinaIdSelecionada(undefined);
       setListaDisciplinas([]);
     }
-
   }, [turmaSelecionada, modalidade, modalidadesFiltroPrincipal]);
 
   const onClickVoltar = async () => {
