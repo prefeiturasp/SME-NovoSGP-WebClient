@@ -631,6 +631,7 @@ const CompensacaoAusenciaForm = ({ match }) => {
   const resetarTelaEdicaoComId = async form => {
     setCarregouInformacoes(false);
     setCarregandoDados(true);
+    setAlunosAusenciaCompensada([]);
     const dadosEdicao = await ServicoCompensacaoAusencia.obterPorId(
       match.params.id
     )
