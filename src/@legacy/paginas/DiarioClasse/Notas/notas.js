@@ -50,6 +50,7 @@ import ServicoNotas from '~/servicos/ServicoNotas';
 import { ehTurmaInfantil } from '~/servicos/Validacoes/validacoesInfatil';
 import BotoesAcoessNotasConceitos from './botoesAcoes';
 import { Container, ContainerAuditoria } from './notas.css';
+import { removerTagsHtml } from '~/utils';
 
 const { TabPane } = Tabs;
 
@@ -96,7 +97,14 @@ const Notas = ({ match }) => {
     Yup.object({
       descricao: Yup.string()
         .required('Justificativa obrigatória')
-        .max(1000, 'limite de 1000 caracteres'),
+        .test('len', 'limite de 1000 caracteres', val => {
+          const formatedText = removerTagsHtml(val)
+            ?.replaceAll(/\s/g, '')
+            ?.replace(/&nbsp;/g, '');
+          const length = formatedText?.length;
+
+          return length <= 1000;
+        }),
     })
   );
 
