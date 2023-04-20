@@ -59,12 +59,13 @@ const ObjectCardConselhoClasse = () => {
     }
   }, [dadosAlunoObjectCard.codigoEOL, turma, obterFrequenciaAluno]);
 
-  const gerarConselhoClasseAluno = async () => {
+  const gerarConselhoClasseAluno =  (dados) => {
     setGerandoConselhoClasse(true);
-    await ServicoConselhoClasse.gerarConselhoClasseAluno(
+    ServicoConselhoClasse.gerarConselhoClasseAluno(
       conselhoClasseId,
       fechamentoTurmaId,
-      dadosAlunoObjectCard.codigoEOL
+      dadosAlunoObjectCard.codigoEOL,
+      dados?.frequencia
     )
       .then(() => {
         sucesso(
