@@ -26,7 +26,6 @@ const DetalhesAluno = props => {
     numeroChamada,
     dataNascimento,
     codigoEOL,
-    situacao,
     dataSituacao,
     frequencia,
     nomeResponsavel,
@@ -35,6 +34,8 @@ const DetalhesAluno = props => {
     dataAtualizacaoContato,
     turma,
   } = dados;
+
+  const situacao = dados?.situacao || dados?.situacaoMatricula;
 
   const numeroLinhas = () => {
     if (
