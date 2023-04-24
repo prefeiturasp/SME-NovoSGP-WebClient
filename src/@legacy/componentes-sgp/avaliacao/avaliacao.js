@@ -20,6 +20,7 @@ import {
   setModoEdicaoGeral,
   setModoEdicaoGeralNotaFinal,
 } from '~/redux/modulos/notasConceitos/actions';
+import { formatarFrequencia } from '~/utils';
 import Nota from '../inputs/nota';
 import { moverFocoCampoNota } from '../inputs/nota/funcoes';
 import LabelInterdisciplinar from '../interdisciplinar';
@@ -307,7 +308,7 @@ const Avaliacao = props => {
                       className="sticky-col col-frequencia cabecalho-frequencia"
                       rowSpan="2"
                     >
-                      %Freq.
+                      Frequência
                     </th>
                   </tr>
                   {dados.avaliacoes && dados.avaliacoes.length > 0 ? (
@@ -378,17 +379,20 @@ const Avaliacao = props => {
                             ) : (
                               montarCampoNotaConceitoFinal(aluno, '', i)
                             )}
-                            {aluno?.notasBimestre[0]?.emAprovacao && (
+                            {!!aluno?.notasBimestre?.find(
+                              n => !!n?.emAprovacao
+                            ) && (
                               <Tooltip title="Aguardando aprovação">
                                 <MarcadorTriangulo />
                               </Tooltip>
                             )}
                           </td>
 
-                          <td className="sticky-col col-frequencia linha-frequencia ">
-                            {aluno?.percentualFrequencia
-                              ? `${aluno.percentualFrequencia}%`
-                              : ''}
+                          <td
+                            className="sticky-col col-frequencia linha-frequencia "
+                            style={{ verticalAlign: 'middle' }}
+                          >
+                            {formatarFrequencia(aluno?.percentualFrequencia)}
                           </td>
                         </tr>
                         <LinhaConceitoFinal

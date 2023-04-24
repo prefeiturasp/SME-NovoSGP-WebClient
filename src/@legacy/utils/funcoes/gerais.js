@@ -343,6 +343,8 @@ const verificarDataFimMaiorInicio = (dataInicio, dataFim) => {
   return moment(dataInicio, 'MM-DD-YYYY') <= moment(dataFim, 'MM-DD-YYYY');
 };
 
+const formatarFrequencia = frequencia => (frequencia ? `${frequencia}%` : '');
+
 export {
   validaSeObjetoEhNuloOuVazio,
   valorNuloOuVazio,
@@ -370,4 +372,5 @@ export {
   removerTagsHtml,
   arredondarNota,
   verificarDataFimMaiorInicio,
+  formatarFrequencia,
 };

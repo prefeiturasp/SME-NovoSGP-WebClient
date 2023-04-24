@@ -8,7 +8,6 @@ import {
   SGP_BUTTON_SALVAR,
 } from '~/constantes/ids/button';
 import Button from '~/componentes/button';
-import { setModoEdicaoFechamentoBimestre } from '~/redux/modulos/fechamentoBimestre/actions';
 
 const BtnAcoesFechamentoBimestre = props => {
   const dispatch = useDispatch();
@@ -19,17 +18,9 @@ const BtnAcoesFechamentoBimestre = props => {
     onClickCancelar,
     somenteConsulta,
     ehSintese,
+    emEdicao,
+    setEmEdicao,
   } = props;
-
-  const emEdicao = useSelector(
-    store => store.fechamentoBimestre.modoEdicaoFechamentoBimestre?.emEdicao
-  );
-
-  useEffect(() => {
-    return () => {
-      dispatch(setModoEdicaoFechamentoBimestre({ emEdicao: false }));
-    };
-  }, [dispatch]);
 
   return (
     <>
@@ -40,7 +31,7 @@ const BtnAcoesFechamentoBimestre = props => {
         color={Colors.Roxo}
         border
         className="mr-2"
-        onClick={onClickCancelar}
+        onClick={() => onClickCancelar()}
         disabled={!emEdicao || somenteConsulta}
         hidden={ehSintese}
       />
@@ -50,7 +41,7 @@ const BtnAcoesFechamentoBimestre = props => {
         color={Colors.Roxo}
         border
         bold
-        onClick={salvarFechamentoFinal}
+        onClick={() => salvarFechamentoFinal()}
         disabled={!emEdicao || somenteConsulta}
         hidden={ehSintese}
       />

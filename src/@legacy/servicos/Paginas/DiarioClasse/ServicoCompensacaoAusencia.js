@@ -51,6 +51,21 @@ class ServicoCompensacaoAusencia {
       `${urlPadrao}/turmas/${turmaCodigo}/bimestres/${bimestre}/aberto`
     );
   };
+
+  obterDatasFaltasNaoCompensadas = params =>
+    api.get('/v1/frequencias/acompanhamentos/faltas-nao-compensadas', {
+      params,
+    });
+
+  ordenarDataAusenciaMenorParaMaior = dados => {
+    const sortedArray = dados.sort(
+      (a, b) =>
+        window.moment(a.dataAula).valueOf() -
+        window.moment(b.dataAula).valueOf()
+    );
+
+    return sortedArray;
+  };
 }
 
 export default new ServicoCompensacaoAusencia();

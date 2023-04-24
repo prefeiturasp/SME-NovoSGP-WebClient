@@ -2,7 +2,7 @@ import api from '~/servicos/api';
 
 const AbrangenciaServico = {
   buscarDres(url = '', consideraHistorico = false) {
-    if (url) return api.get(url, (consideraHistorico = false));
+    if (url) return api.get(url, consideraHistorico);
     return api.get(`/v1/abrangencias/${consideraHistorico}/dres`);
   },
   buscarUes(
@@ -119,14 +119,20 @@ const AbrangenciaServico = {
   usuarioTemAbrangenciaTodasTurmas(consideraHistorico = false) {
     return api.get(`v1/abrangencias/${consideraHistorico}/adm`);
   },
-  buscarAnosEscolares(codigoUe, modalidade, consideraHistorico = false) {
+  buscarAnosEscolares(
+    codigoUe,
+    modalidade,
+    consideraHistorico = false,
+    anoLetivo = null
+  ) {
     return api.get(
-      `v1/abrangencias/${consideraHistorico}/ues/${codigoUe}/modalidades/${modalidade}/turmas/anos`
+      `v1/abrangencias/${consideraHistorico}/ues/${codigoUe}/modalidades/${modalidade}/turmas/anos/${anoLetivo}`
     );
   },
   obterSemestres(consideraHistorico, anoLetivo, modalidade, dre, ue) {
-    const url = `v1/abrangencias/${consideraHistorico}/semestres?anoLetivo=${anoLetivo}&modalidade=${modalidade ||
-      0}&dreCodigo=${dre}&ueCodigo=${ue}`;
+    const url = `v1/abrangencias/${consideraHistorico}/semestres?anoLetivo=${anoLetivo}&modalidade=${
+      modalidade || 0
+    }&dreCodigo=${dre}&ueCodigo=${ue}`;
 
     return api.get(url);
   },

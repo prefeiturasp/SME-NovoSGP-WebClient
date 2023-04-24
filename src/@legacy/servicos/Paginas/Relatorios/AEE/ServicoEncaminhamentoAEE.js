@@ -28,6 +28,7 @@ import {
 import { erros } from '~/servicos/alertas';
 import api from '~/servicos/api';
 import history from '~/servicos/history';
+import { ServicoCalendarios } from '../../Calendario';
 
 const urlPadrao = 'v1/encaminhamento-aee';
 
@@ -95,20 +96,25 @@ class ServicoEncaminhamentoAEE {
 
     const resultado = await api
       .get(`${urlPadrao}/${encaminhamentoId}`)
-      .catch(e => erros(e))
-      .finally(() => dispatch(setExibirLoaderEncaminhamentoAEE(false)));
+      .catch(e => erros(e));
 
     if (resultado?.data) {
       const { aluno, turma, responsavelEncaminhamentoAEE } = resultado?.data;
 
       const dadosObjectCard = {
-        nome: aluno.nome,
-        numeroChamada: aluno.numeroAlunoChamada,
-        dataNascimento: aluno.dataNascimento,
+        ...aluno,
         codigoEOL: aluno.codigoAluno,
-        situacao: aluno.situacao,
-        dataSituacao: aluno.dataSituacao,
+        numeroChamada: aluno.numeroAlunoChamada,
+        turma: aluno.turmaEscola,
       };
+
+      const retornoFrequencia = await ServicoCalendarios.obterFrequenciaAluno(
+        aluno.codigoAluno,
+        turma.codigo
+      ).catch(e => erros(e));
+
+      dadosObjectCard.frequencia = retornoFrequencia?.data || '';
+
       dispatch(setDadosObjectCardEstudante(dadosObjectCard));
 
       const dadosCollapseLocalizarEstudante = {
@@ -134,6 +140,8 @@ class ServicoEncaminhamentoAEE {
       dispatch(setLimparDadosLocalizarEstudante());
       dispatch(setLimparDadosEncaminhamento());
     }
+
+    dispatch(setExibirLoaderEncaminhamentoAEE(false));
   };
 
   salvarEncaminhamento = async (
@@ -152,10 +160,8 @@ class ServicoEncaminhamentoAEE {
       encaminhamentoAEE,
     } = state;
     const { formsQuestionarioDinamico, arquivoRemovido } = questionarioDinamico;
-    const {
-      listaSecoesEmEdicao,
-      dadosSecoesPorEtapaDeEncaminhamentoAEE,
-    } = encaminhamentoAEE;
+    const { listaSecoesEmEdicao, dadosSecoesPorEtapaDeEncaminhamentoAEE } =
+      encaminhamentoAEE;
 
     const { dadosCollapseLocalizarEstudante } = collapseLocalizarEstudante;
 
@@ -544,7 +550,8 @@ class ServicoEncaminhamentoAEE {
   gerarRelatorioEncaminhamentoAEE = params =>
     api.post('v1/relatorios/encaminhamento-aee', params);
 
-  gerarRelatorio = params => api.post(`${urlPadrao}/imprimir-detalhado`, params);
+  gerarRelatorio = params =>
+    api.post(`${urlPadrao}/imprimir-detalhado`, params);
 }
 
 export default new ServicoEncaminhamentoAEE();

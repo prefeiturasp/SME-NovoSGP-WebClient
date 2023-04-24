@@ -8,8 +8,9 @@ import {
   setListaDadosFrequencia,
   setModoEdicaoFrequencia,
   setModoEdicaoPlanoAula,
+  setTemEstudanteAlteradoComCompensacao,
 } from '~/redux/modulos/frequenciaPlanoAula/actions';
-import { erro, erros, sucesso } from '~/servicos/alertas';
+import { confirmar, erro, erros, sucesso } from '~/servicos/alertas';
 import ServicoFrequencia from '~/servicos/Paginas/DiarioClasse/ServicoFrequencia';
 import ServicoPlanoAula from '~/servicos/Paginas/DiarioClasse/ServicoPlanoAula';
 
@@ -19,7 +20,22 @@ class ServicoSalvarFrequenciaPlanoAula {
     const state = store.getState();
 
     const { frequenciaPlanoAula, usuario } = state;
-    const { listaDadosFrequencia, aulaId } = frequenciaPlanoAula;
+    const { listaDadosFrequencia, aulaId, temEstudanteAlteradoComCompensacao } =
+      frequenciaPlanoAula;
+
+    let continuarAposValidarEstudanteComCompensacao = true;
+
+    if (temEstudanteAlteradoComCompensacao) {
+      continuarAposValidarEstudanteComCompensacao = await confirmar(
+        'Atenção',
+        'Existe(m) estudante(s) com compensação de ausência para esta aula, ao alterar a frequência, a compensação poderá ser alterada ou excluída.',
+        'Deseja continuar?'
+      );
+    }
+
+    if (!continuarAposValidarEstudanteComCompensacao) {
+      return false;
+    }
 
     const valorParaSalvar = {
       aulaId,
@@ -50,6 +66,7 @@ class ServicoSalvarFrequenciaPlanoAula {
 
       erro('Erro ao salvar frequência, tente novamente mais tarde');
       dispatch(setModoEdicaoFrequencia(false));
+      dispatch(setTemEstudanteAlteradoComCompensacao(false));
     }
 
     dispatch(setExibirLoaderFrequenciaPlanoAula(false));
@@ -69,6 +86,7 @@ class ServicoSalvarFrequenciaPlanoAula {
 
       sucesso('Frequência realizada com sucesso.');
       dispatch(setModoEdicaoFrequencia(false));
+      dispatch(setTemEstudanteAlteradoComCompensacao(false));
       return true;
     }
 

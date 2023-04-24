@@ -1,7 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { Form, Formik } from 'formik';
-import * as Yup from 'yup';
 
 import {
   CheckboxComponent,
@@ -32,17 +31,6 @@ function Filtro({ onFiltrar }) {
     professorRf: '',
     exibirHistorico: false,
   });
-
-  const validacoes = () => {
-    return Yup.object({});
-  };
-
-  const validarFiltro = valores => {
-    const formContext = refForm && refForm.getFormikContext();
-    if (formContext.isValid && Object.keys(formContext.errors).length === 0) {
-      onFiltrar(valores);
-    }
-  };
 
   const obterAnosLetivos = useCallback(async () => {
     setCarregandoAnos(true);
@@ -84,10 +72,8 @@ function Filtro({ onFiltrar }) {
     <Formik
       enableReinitialize
       initialValues={valoresIniciais}
-      validationSchema={validacoes()}
       onSubmit={valores => onFiltrar(valores)}
       ref={refFormik => setRefForm(refFormik)}
-      validate={valores => validarFiltro(valores)}
       validateOnChange
       validateOnBlur
     >
@@ -123,7 +109,7 @@ function Filtro({ onFiltrar }) {
               <DreDropDown
                 url={`v1/dres/atribuicoes?anoLetivo=${form.values.anoLetivo}&consideraHistorico=${consideraHistorico}`}
                 form={form}
-                onChange={() => null}
+                onChange={() => onFiltrar(form.values)}
               />
             </Grid>
             <Grid cols={5}>
@@ -132,7 +118,7 @@ function Filtro({ onFiltrar }) {
                 url={`v1/dres/${form.values.dreId}/ues/atribuicoes?anoLetivo=${form.values.anoLetivo}&consideraHistorico=${consideraHistorico}`}
                 dreId={form.values.dreId}
                 form={form}
-                onChange={() => null}
+                onChange={() => onFiltrar(form.values)}
               />
             </Grid>
           </Linha>
@@ -142,7 +128,7 @@ function Filtro({ onFiltrar }) {
               ueId={form.values.ueId}
               anoLetivo={form.values.anoLetivo}
               form={form}
-              onChange={() => null}
+              onChange={(pessoa) => onFiltrar({...form.values, ...pessoa})}
             />
           </Linha>
         </Form>

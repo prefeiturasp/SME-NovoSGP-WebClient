@@ -265,7 +265,7 @@ const FechamentoFinal = forwardRef((props, ref) => {
                     {ehNota ? 'Nota Final' : 'Conceito Final'}
                   </th>
                 )}
-                {registraFrequencia ? <th>%Freq.</th> : ''}
+                {registraFrequencia ? <th>Frequência</th> : ''}
               </tr>
             </thead>
             <tbody className="tabela-fechamento-final-tbody">

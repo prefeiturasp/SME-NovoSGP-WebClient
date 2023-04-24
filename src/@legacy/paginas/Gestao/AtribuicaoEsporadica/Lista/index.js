@@ -8,7 +8,7 @@ import history from '~/servicos/history';
 import RotasDto from '~/dtos/rotasDto';
 import AtribuicaoEsporadicaServico from '~/servicos/Paginas/AtribuicaoEsporadica';
 import { verificaSomenteConsulta } from '~/servicos/servico-navegacao';
-import { confirmar, sucesso } from '~/servicos/alertas';
+import { confirmar, sucesso,erros } from '~/servicos/alertas';
 
 import Filtro from './componentes/Filtro';
 import { SGP_BUTTON_NOVO } from '~/constantes/ids/button';
@@ -75,24 +75,25 @@ function AtribuicaoEsporadicaLista() {
         'Cancelar'
       );
       if (confirmado) {
-        const excluir = await Promise.all(
+        await Promise.all(
           itensSelecionados.map(x =>
             AtribuicaoEsporadicaServico.deletarAtribuicaoEsporadica(x.id)
+            .then(() => {
+              const mensagemSucesso = `${
+                itensSelecionados.length > 1
+                  ? 'Atribuições excluídas'
+                  : 'Atribuição excluída'
+              } com sucesso.`;
+              sucesso(mensagemSucesso);
+              setFiltro({
+                ...filtro,
+                atualizar: !filtro.atualizar || true,
+              });
+              setItensSelecionados([]);
+            })
+            .catch(e => erros(e))
           )
         );
-        if (excluir) {
-          const mensagemSucesso = `${
-            itensSelecionados.length > 1
-              ? 'Atribuições excluídas'
-              : 'Atribuição excluída'
-          } com sucesso.`;
-          sucesso(mensagemSucesso);
-          setFiltro({
-            ...filtro,
-            atualizar: !filtro.atualizar || true,
-          });
-          setItensSelecionados([]);
-        }
       }
     }
   };

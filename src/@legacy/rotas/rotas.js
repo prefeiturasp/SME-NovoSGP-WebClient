@@ -114,6 +114,8 @@ import RelatorioPlanoAEE from '~/paginas/Relatorios/AEE/plano/relatorioPlanoAEE'
 import DocPlanosTrabalhoLista from '~/paginas/Gestao/DocumentosPlanosTrabalho/lista/docPlanosTrabalhoLista';
 import DocPlanosTrabalhoCadastro from '~/paginas/Gestao/DocumentosPlanosTrabalho/cadastro/docPlanosTrabalhoCadastro';
 import RelatorioEncaminhamentoAEE from '~/paginas/Relatorios/AEE/encaminhamento/relatorioEncaminhamentoAEE';
+import RelatorioEncaminhamentonNAAPA from '~/paginas/Relatorios/NAAPA/encaminhamento/relatorioEncaminhamentoNAAPA';
+import RelatorioSondagemAnalitico from '~/paginas/Relatorios/Sondagem/relatorioSondagem';
 
 const rotas = new Map();
 
@@ -1607,6 +1609,28 @@ rotas.set(RotasDto.RELATORIO_AEE_ENCAMINHAMENTO_IMPRESSAO, {
   tipo: RotasTipo.EstruturadaAutenticada,
   temPermissionamento: true,
   chavePermissao: RotasDto.RELATORIO_AEE_ENCAMINHAMENTO_IMPRESSAO,
+});
+
+rotas.set(RotasDto.RELATORIO_ENCAMINHAMENTO_NAAPA, {
+  breadcrumbName: 'Encaminhamento',
+  menu: ['Relatórios', 'NAAPA'],
+  parent: '/',
+  component: RelatorioEncaminhamentonNAAPA,
+  exact: true,
+  tipo: RotasTipo.EstruturadaAutenticada,
+  temPermissionamento: true,
+  chavePermissao: RotasDto.RELATORIO_ENCAMINHAMENTO_NAAPA,
+});
+
+rotas.set(RotasDto.RELATORIO_SONDAGEM_ANALITICO, {
+  breadcrumbName: 'Relatório analítico',
+  menu: ['Relatórios', 'Sondagem'],
+  parent: '/',
+  component: RelatorioSondagemAnalitico,
+  exact: true,
+  tipo: RotasTipo.EstruturadaAutenticada,
+  temPermissionamento: true,
+  chavePermissao: RotasDto.RELATORIO_SONDAGEM_ANALITICO,
 });
 
 const rotasArray = [];
