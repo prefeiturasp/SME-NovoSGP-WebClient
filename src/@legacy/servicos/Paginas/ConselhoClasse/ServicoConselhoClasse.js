@@ -170,11 +170,14 @@ class ServicoConselhoClasse {
   gerarConselhoClasseAluno = (
     conselhoClasseId,
     fechamentoTurmaId,
-    alunoCodigo
+    alunoCodigo,
+    frequenciaGlobal
   ) => {
-    return api.get(
-      `/v1/conselhos-classe/${conselhoClasseId}/fechamentos/${fechamentoTurmaId}/alunos/${alunoCodigo}/imprimir`
-    );
+    let url = `/v1/conselhos-classe/${conselhoClasseId}/fechamentos/${fechamentoTurmaId}/alunos/${alunoCodigo}/imprimir`;
+    if (frequenciaGlobal) {
+      url = `${url}?frequenciaGlobal=${frequenciaGlobal}`;
+    }
+    return api.get(url);
   };
 
   obterDadosBimestres = turmaId => {
