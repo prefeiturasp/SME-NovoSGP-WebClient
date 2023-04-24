@@ -357,21 +357,12 @@ const AtaFinalResultados = () => {
 
     if (
       turmaItinerancia.length === arrayTurmas?.length ||
-      (ehModalidadeMedio &&
-        !turmaSegundo.length &&
-        (turmaPrimeiro.length || turmaTerceiro.length))
+      (ehModalidadeMedio && !turmaSegundo.length && !turmaTerceiro.length)
     ) {
-      setVisualizacao(
-        `${
-          listaVisualizacao.find(a => a.desc?.toUpperCase() === 'TURMA')?.valor
-        }`
-      );
+      setVisualizacao(`${    listaVisualizacao.find(a => a.desc?.toUpperCase() === 'TURMA')?.valor}`);
       return true;
     }
-    if (!turmaSegundo.length) {
-      return true;
-    }
-    return false;
+    return !turmaSegundo.length && !turmaTerceiro.length;
   };
 
   useEffect(() => {
