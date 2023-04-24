@@ -177,6 +177,79 @@ export default createGlobalStyle`
     background: ${Base.CinzaTabela} !important;
   }
 
+  .ant-pagination {
+    display: flex;
+    align-items: center !important;
+    justify-content: center !important;
+  }
+
+  .ant-pagination-item {
+    a {
+      font-family: Roboto;
+      font-style: normal;
+      font-stretch: normal;
+      font-weight: bold;
+      letter-spacing: normal;
+    }
+
+    border-radius: 0 !important;
+    height: 45px !important;
+    line-height: 45px !important;
+    margin: 0 !important;
+    min-width: 45px !important;
+    border: solid 1px ${Base.CinzaDesabilitado} !important;
+  }
+
+  .ant-pagination-prev {
+    border-radius: 4px 0px 0px 4px !important;
+    border-right: none !important;
+    height: 45px !important;
+    line-height: 40px  !important;
+    margin: 0 !important;
+    min-width: 45px !important;
+    border: solid 1px ${Base.CinzaDesabilitado} !important;
+  }
+
+  .ant-pagination-next {
+    border-radius: 0px 4px 4px 0px !important;
+    border-left: none !important;
+    height: 45px !important;
+    line-height: 40px !important;
+    margin: 0 !important;
+    min-width: 45px !important;
+    border: solid 1px ${Base.CinzaDesabilitado} !important;
+  }
+
+  .ant-pagination-item-active {
+    background: ${Base.Roxo} !important;
+    border-color: ${Base.Roxo} !important;
+    color: ${Base.Branco} !important;
+    font-size: 12px !important;
+  }
+
+  .ant-pagination-item-active a {
+    color: ${Base.Branco} !important;
+  }
+
+  .ant-pagination-item-active:focus,
+  .ant-pagination-item-active:hover {
+    border-color: ${Base.Roxo} !important;
+  }
+
+  .ant-pagination-item-active:focus a,
+  .ant-pagination-item-active:hover a {
+    color: ${Base.Branco} !important;
+  }
+
+  .ant-pagination-options {
+    margin-inline-start: 16px !important;
+
+    .ant-select-selector {
+      height: 38px !important;
+      align-items: center !important;
+    }
+  }
+
   /* Antd V5 End */
 
   .ant-select-dropdown-menu-item  {
@@ -409,12 +482,6 @@ export default createGlobalStyle`
     color: #b40c02 !important;
   }
 
-  .position-sticky-col {
-    z-index: 9;
-    position: sticky;
-    background: white;
-    position: -webkit-sticky;
-  }
 
   .texto-vermelho-negrito {
     color: #b40c02 !important;
