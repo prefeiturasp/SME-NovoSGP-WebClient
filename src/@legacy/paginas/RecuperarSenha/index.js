@@ -3,12 +3,12 @@ import styled from 'styled-components';
 import LogoDoSgp from '~/recursos/LogoDoSgp.svg';
 import { Base, Colors } from '~/componentes/colors';
 import Button from '~/componentes/button';
-import history from '~/servicos/history';
 import Sucesso from './sucesso';
 import Erro from './erro';
 import Orientacoes from './orientacoes';
 import api from '~/servicos/api';
 import { Loader } from '~/componentes';
+import { useNavigate } from 'react-router-dom';
 
 const Nav = styled.nav`
   height: 70px;
@@ -54,6 +54,8 @@ const Input = styled.input`
 `;
 
 const RecuperarSenha = props => {
+  const navigate = useNavigate();
+
   const [rf, setRf] = useState();
   const [retorno, setRetorno] = useState(false);
   const [mensagem, setMensagem] = useState('');
@@ -67,7 +69,6 @@ const RecuperarSenha = props => {
         setRf(props.location.state.rf);
       }
     }
-
   }, []);
 
   useLayoutEffect(() => {
@@ -96,7 +97,7 @@ const RecuperarSenha = props => {
   };
 
   const onClickVoltar = () => {
-    history.push('/login');
+    navigate('/login');
   };
 
   const onClickCancelar = () => {

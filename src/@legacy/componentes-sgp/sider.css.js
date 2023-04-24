@@ -212,6 +212,12 @@ export const MenuScope = styled.div`
     padding-left: 15px !important;
     font-size: 14px !important;
     font-weight: bold;
+    margin-left: 0;
+    width: 100%;
+  }
+
+  .ant-menu-submenu-open.ant-menu-submenu-selected > .ant-menu-submenu-title {
+    color: ${Base.Roxo} !important;
   }
 
   .ant-menu-item:last-child,
@@ -227,6 +233,9 @@ export const MenuScope = styled.div`
     line-height: normal !important;
     padding-top: 10px !important;
     padding-bottom: 10px !important;
+    width: 100% !important;
+    margin: 0 !important;
+    border-radius: 0 !important;
   }
 
   .ant-menu-item-selected {
@@ -240,6 +249,10 @@ export const MenuScope = styled.div`
   .ant-menu-submenu-arrow {
     color: ${Base.Branco};
     opacity: initial !important;
+  }
+
+  .ant-menu-submenu-title:hover {
+    color: ${Base.Roxo} !important;
   }
 
   .ant-menu-submenu-title:hover .ant-menu-submenu-arrow::before {

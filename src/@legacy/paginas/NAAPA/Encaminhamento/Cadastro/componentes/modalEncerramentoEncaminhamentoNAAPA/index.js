@@ -2,7 +2,7 @@ import { Col, Row } from 'antd';
 import { Form, Formik } from 'formik';
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useRouteMatch } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import * as Yup from 'yup';
 import { CampoTexto, Colors, Loader, ModalConteudoHtml } from '~/componentes';
 import Button from '~/componentes/button';
@@ -12,14 +12,15 @@ import {
 } from '~/constantes/ids/button';
 import { RotasDto } from '~/dtos';
 import { setExibirModalEncerramentoEncaminhamentoNAAPA } from '~/redux/modulos/encaminhamentoNAAPA/actions';
-import { confirmar, erros, history, sucesso } from '~/servicos';
+import { confirmar, erros, sucesso } from '~/servicos';
 import ServicoNAAPA from '~/servicos/Paginas/Gestao/NAAPA/ServicoNAAPA';
 
 const ModalEncerramentoEncaminhamentoNAAPA = () => {
   const dispatch = useDispatch();
-  const routeMatch = useRouteMatch();
+  const { id } = useParams();
+  const navigate = useNavigate();
 
-  const encaminhamentoId = routeMatch?.params?.id;
+  const encaminhamentoId = id;
 
   const exibirModalEncerramentoEncaminhamentoNAAPA = useSelector(
     store =>
@@ -35,9 +36,7 @@ const ModalEncerramentoEncaminhamentoNAAPA = () => {
   };
 
   const validacoes = Yup.object().shape({
-    motivoEncerramento: Yup.string()
-      .nullable()
-      .required('Campo obrigatório'),
+    motivoEncerramento: Yup.string().nullable().required('Campo obrigatório'),
   });
 
   const fecharModal = () => {
@@ -90,7 +89,7 @@ const ModalEncerramentoEncaminhamentoNAAPA = () => {
     if (retorno?.status === 200) {
       sucesso('Encaminhamento encerrado com sucesso.');
       fecharModal();
-      history.push(RotasDto.ENCAMINHAMENTO_NAAPA);
+      navigate(RotasDto.ENCAMINHAMENTO_NAAPA);
     }
   };
 

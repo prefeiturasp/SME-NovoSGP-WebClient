@@ -229,7 +229,7 @@ const UploadImagens = props => {
         )}
       </ContainerUpload>
       <Modal
-        visible={configModal?.previewVisible}
+        open={configModal?.previewVisible}
         title={configModal?.previewTitle}
         onCancel={handleCancel}
         footer={null}

@@ -1,4 +1,4 @@
-import { store } from '~/redux';
+import { store } from '@/core/redux';
 import { setDadosDashboardRegistroIndividual } from '~/redux/modulos/dashboardRegistroIndividual/actions';
 import api from '~/servicos/api';
 

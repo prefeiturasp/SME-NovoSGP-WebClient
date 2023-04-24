@@ -7,7 +7,6 @@ import Button from '~/componentes/button';
 import Card from '~/componentes/card';
 import { Colors, Base } from '~/componentes/colors';
 import ModalConteudoHtml from '~/componentes/modalConteudoHtml';
-import history from '~/servicos/history';
 import api from '~/servicos/api';
 import { erros } from '~/servicos/alertas';
 import { meusDados } from '~/redux/modulos/usuario/actions';
@@ -22,22 +21,24 @@ import {
 import DadosEmail from './dadosEmail';
 import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
 import { URL_HOME } from '~/constantes';
+import { useNavigate } from 'react-router-dom';
 
 const MeusDados = () => {
+  const navigate = useNavigate();
+
   const usuarioStore = useSelector(store => store.usuario);
   const [foto, setFoto] = useState(usuarioStore.meusDados.foto);
   const [alterarFoto, setAlterarFoto] = useState(false);
   const [ehFotoInvalida, setEhFotoInvalida] = useState(false);
   const [desabilitaConfirmar, setDesabilitaConfirmar] = useState(true);
-  const [ocultarAlteracoesNaoSalvas, setOcultarAlteracoesNaoSalvas] = useState(
-    true
-  );
+  const [ocultarAlteracoesNaoSalvas, setOcultarAlteracoesNaoSalvas] =
+    useState(true);
   const [ocultarProgresso, setOcultarProgresso] = useState(true);
   const [progresso, setProgresso] = useState(0);
 
   const dispatch = useDispatch();
   const irParaDashboard = () => {
-    history.push(URL_HOME);
+    navigate(URL_HOME);
   };
 
   const ocultarModal = () => {

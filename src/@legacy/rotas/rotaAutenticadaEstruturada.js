@@ -1,6 +1,6 @@
 import React, { memo } from 'react';
 import t from 'prop-types';
-import { Redirect } from 'react-router-dom';
+import { Navigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { setSomenteConsulta } from '~/redux/modulos/navegacao/actions';
 import { Loader } from '~/componentes';
@@ -23,15 +23,15 @@ const RotaAutenticadaEstruturada = memo(
     dispatch(setSomenteConsulta(false));
 
     if (!logado) {
-      return <Redirect to="/login" />;
+      return <Navigate to="/login" />;
     }
 
     if (primeiroAcesso) {
-      return <Redirect to="/redefinir-senha" />;
+      return <Navigate to="/redefinir-senha" />;
     }
 
     if (temPermissionamento && !permissoes[chavePermissao]) {
-      return <Redirect to="/sem-permissao" />;
+      return <Navigate to="/sem-permissao" />;
     }
 
     return (

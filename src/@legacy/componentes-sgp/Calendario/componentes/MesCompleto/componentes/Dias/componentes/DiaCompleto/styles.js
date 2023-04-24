@@ -9,7 +9,6 @@ export const DiaCompletoWrapper = styled.div`
   overflow: hidden;
   max-height: 0;
   width: 100% !important;
-  transition: all 0.9s;
   border-bottom: 1px solid ${Base.CinzaBordaCalendario};
 
   &.visivel {

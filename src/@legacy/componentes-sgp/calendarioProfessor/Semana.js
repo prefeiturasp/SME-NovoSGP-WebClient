@@ -2,7 +2,7 @@
 import PropTypes from 'prop-types';
 import { useSelector } from 'react-redux';
 import { Base } from '~/componentes/colors';
-import { store } from '~/redux';
+import { store } from '@/core/redux';
 import {
   selecionaDia,
   salvarEventoAulaCalendarioEdicao,
@@ -58,10 +58,11 @@ const Dia = props => {
   if (dia.getDay() === 0) style.backgroundColor = Base.RosaCalendario;
   else if (dia.getDay() === 6) style.backgroundColor = Base.CinzaCalendario;
 
-  const className = `col border border-left-0 border-top-0 position-relative ${dia.getDay() ===
-    6 && 'border-right-0'} ${diaSelecionado && 'bg-light'} ${diaSelecionado &&
-    dia === diaSelecionado &&
-    'border-bottom-0 bg-white'}`;
+  const className = `col border border-left-0 border-top-0 position-relative ${
+    dia.getDay() === 6 && 'border-right-0'
+  } ${diaSelecionado && 'bg-light'} ${
+    diaSelecionado && dia === diaSelecionado && 'border-bottom-0 bg-white'
+  }`;
 
   let diaFormatado = dia.getDate();
   if (diaFormatado < 10) diaFormatado = `0${diaFormatado}`;

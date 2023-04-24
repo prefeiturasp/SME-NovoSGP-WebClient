@@ -7,13 +7,8 @@ import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPad
 import { SGP_BUTTON_NOVO } from '~/constantes/ids/button';
 import { URL_HOME } from '~/constantes';
 import { RotasDto } from '~/dtos';
-import {
-  confirmar,
-  erros,
-  history,
-  ServicoOcorrencias,
-  sucesso,
-} from '~/servicos';
+import { confirmar, erros, ServicoOcorrencias, sucesso } from '~/servicos';
+import { useNavigate } from 'react-router-dom';
 
 const ListaOcorrenciasBotoesAcao = props => {
   const {
@@ -27,6 +22,8 @@ const ListaOcorrenciasBotoesAcao = props => {
     setExibirLoaderExcluir,
   } = props;
 
+  const navigate = useNavigate();
+
   const desabilitarExcluir =
     !ocorrenciasSelecionadas?.length ||
     ehTurmaAnoAnterior ||
@@ -35,9 +32,9 @@ const ListaOcorrenciasBotoesAcao = props => {
 
   const desabilitarNovo = ehTurmaAnoAnterior || somenteConsulta || !podeIncluir;
 
-  const onClickVoltar = () => history.push(URL_HOME);
+  const onClickVoltar = () => navigate(URL_HOME);
 
-  const onClickNovo = () => history.push(`${RotasDto.OCORRENCIAS}/novo`);
+  const onClickNovo = () => navigate(`${RotasDto.OCORRENCIAS}/novo`);
 
   const onClickExcluir = async () => {
     if (ocorrenciasSelecionadas?.length) {

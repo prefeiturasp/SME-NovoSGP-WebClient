@@ -1,7 +1,7 @@
 import { Form, Formik } from 'formik';
-import PropTypes from 'prop-types';
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate, useParams } from 'react-router-dom';
 import shortid from 'shortid';
 import * as Yup from 'yup';
 import { CampoTexto, Colors, Loader, ModalConteudoHtml } from '~/componentes';
@@ -13,13 +13,15 @@ import {
 import { SGP_INPUT_JUSTIFIQUE_MOTIVO_DEVOLUCAO } from '~/constantes/ids/input';
 import { RotasDto } from '~/dtos';
 import { setExibirModalDevolverPlanoAEE } from '~/redux/modulos/planoAEE/actions';
-import { confirmar, erros, history, sucesso } from '~/servicos';
+import { confirmar, erros, sucesso } from '~/servicos';
 import ServicoPlanoAEE from '~/servicos/Paginas/Relatorios/AEE/ServicoPlanoAEE';
 
-const ModalDevolverPlanoAEE = props => {
-  const { match } = props;
-
+const ModalDevolverPlanoAEE = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const paramsRoute = useParams();
+
+  const planoId = paramsRoute?.id;
 
   const exibirModalDevolverPlanoAEE = useSelector(
     store => store.planoAEE.exibirModalDevolverPlanoAEE
@@ -34,9 +36,7 @@ const ModalDevolverPlanoAEE = props => {
   };
 
   const validacoes = Yup.object().shape({
-    motivo: Yup.string()
-      .nullable()
-      .required('Campo obrigatório'),
+    motivo: Yup.string().nullable().required('Campo obrigatório'),
   });
 
   const fecharModal = () => {
@@ -74,12 +74,11 @@ const ModalDevolverPlanoAEE = props => {
 
   const onClickDevolver = async valores => {
     const { motivo } = valores;
-    const planoAEEId = match?.params?.id;
 
     setExibirLoader(true);
 
     const retorno = await ServicoPlanoAEE.devolverPlanoAEE({
-      planoAEEId,
+      planoId,
       motivo,
     })
       .catch(e => erros(e))
@@ -88,7 +87,7 @@ const ModalDevolverPlanoAEE = props => {
     if (retorno?.status === 200) {
       sucesso('Plano devolvido com sucesso');
       fecharModal();
-      history.push(RotasDto.RELATORIO_AEE_PLANO);
+      navigate(RotasDto.RELATORIO_AEE_PLANO);
     }
   };
 
@@ -161,14 +160,6 @@ const ModalDevolverPlanoAEE = props => {
       </Formik>
     </ModalConteudoHtml>
   );
-};
-
-ModalDevolverPlanoAEE.propTypes = {
-  match: PropTypes.oneOfType([PropTypes.object]),
-};
-
-ModalDevolverPlanoAEE.defaultProps = {
-  match: {},
 };
 
 export default ModalDevolverPlanoAEE;

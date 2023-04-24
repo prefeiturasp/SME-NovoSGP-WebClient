@@ -77,14 +77,12 @@ const ListaoFiltros = () => {
     }
     setListaAnosLetivo([]);
     setAnoLetivo();
-
   }, [consideraHistorico]);
 
   useEffect(() => {
     if (carregarFiltrosSalvos) return;
 
     obterAnosLetivos();
-
   }, [obterAnosLetivos]);
 
   const obterDres = useCallback(async () => {
@@ -108,7 +106,6 @@ const ListaoFiltros = () => {
       setCodigoDre();
       setListaDres([]);
     }
-
   }, [anoLetivo, consideraHistorico]);
 
   useEffect(() => {
@@ -117,7 +114,6 @@ const ListaoFiltros = () => {
     if (anoLetivo) {
       obterDres();
     }
-
   }, [anoLetivo]);
 
   const obterUes = useCallback(async () => {
@@ -143,7 +139,6 @@ const ListaoFiltros = () => {
       setCodigoUe();
       setListaUes([]);
     }
-
   }, [codigoDre, anoLetivo, consideraHistorico]);
 
   useEffect(() => {
@@ -152,7 +147,6 @@ const ListaoFiltros = () => {
     if (codigoDre) {
       obterUes();
     }
-
   }, [codigoDre, obterUes]);
 
   const obterModalidades = useCallback(async () => {
@@ -173,7 +167,6 @@ const ListaoFiltros = () => {
       }
       setListaModalidades(lista);
     }
-
   }, [anoLetivo, codigoUe, consideraHistorico]);
 
   useEffect(() => {
@@ -182,7 +175,6 @@ const ListaoFiltros = () => {
     if (codigoUe) {
       obterModalidades();
     }
-
   }, [codigoUe, obterModalidades]);
 
   const obterSemestres = useCallback(async () => {
@@ -209,7 +201,6 @@ const ListaoFiltros = () => {
     } else {
       setListaSemestres([]);
     }
-
   }, [anoLetivo, modalidade, consideraHistorico, codigoDre, codigoUe]);
 
   useEffect(() => {
@@ -218,7 +209,6 @@ const ListaoFiltros = () => {
     if (modalidade && String(modalidade) === String(ModalidadeDTO.EJA)) {
       obterSemestres();
     }
-
   }, [obterSemestres, modalidade]);
 
   const obterTurmas = useCallback(async () => {
@@ -245,7 +235,6 @@ const ListaoFiltros = () => {
         setCodigoTurma([String(lista[0].codigo)]);
       }
     }
-
   }, [anoLetivo, consideraHistorico, codigoUe, modalidade]);
 
   useEffect(() => {
@@ -254,7 +243,6 @@ const ListaoFiltros = () => {
     if (modalidade) {
       obterTurmas();
     }
-
   }, [modalidade, obterTurmas]);
 
   const obterBimestres = useCallback(() => {
@@ -271,7 +259,6 @@ const ListaoFiltros = () => {
     }
 
     setListaBimestres(bi);
-
   }, [modalidade]);
 
   useEffect(() => {
@@ -280,7 +267,6 @@ const ListaoFiltros = () => {
     if (modalidade) {
       obterBimestres();
     }
-
   }, [modalidade, obterBimestres]);
 
   const onCheckedConsideraHistorico = e => {
@@ -404,7 +390,7 @@ const ListaoFiltros = () => {
   return (
     <Col span={24}>
       <Row gutter={[16, 16]}>
-        <Col md={24} xl={12}>
+        <Col span={24}>
           <CheckboxComponent
             id={SGP_CHECKBOX_EXIBIR_HISTORICO}
             label="Exibir histórico?"
@@ -412,8 +398,7 @@ const ListaoFiltros = () => {
             checked={consideraHistorico}
           />
         </Col>
-      </Row>
-      <Row gutter={[16, 16]}>
+
         <Col sm={24} md={8} lg={4}>
           <Loader loading={carregandoAnosLetivos} ignorarTip>
             <SelectComponent
@@ -429,6 +414,7 @@ const ListaoFiltros = () => {
             />
           </Loader>
         </Col>
+
         <Col sm={24} md={24} lg={10}>
           <Loader loading={carregandoDres} tip="">
             <SelectComponent
@@ -445,6 +431,7 @@ const ListaoFiltros = () => {
             />
           </Loader>
         </Col>
+
         <Col sm={24} md={24} lg={10}>
           <Loader loading={carregandoUes} ignorarTip>
             <SelectComponent
@@ -461,6 +448,7 @@ const ListaoFiltros = () => {
             />
           </Loader>
         </Col>
+
         <Col sm={24} md={12} lg={8}>
           <Loader loading={carregandoModalidades} ignorarTip>
             <SelectComponent
@@ -476,6 +464,7 @@ const ListaoFiltros = () => {
             />
           </Loader>
         </Col>
+
         {Number(modalidade) === ModalidadeDTO.EJA ? (
           <Col sm={24} md={12} lg={8}>
             <Loader loading={carregandoSemestres} ignorarTip>
@@ -495,6 +484,7 @@ const ListaoFiltros = () => {
         ) : (
           <></>
         )}
+
         <Col sm={24} md={12} lg={8}>
           <Loader loading={carregandoTurmas} ignorarTip>
             <SelectComponent
@@ -512,6 +502,7 @@ const ListaoFiltros = () => {
             />
           </Loader>
         </Col>
+
         <Col sm={24} md={12} lg={8}>
           <SelectComponent
             id={SGP_SELECT_BIMESTRE}

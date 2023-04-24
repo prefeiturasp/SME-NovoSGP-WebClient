@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import { Column } from '@ant-design/charts';
+import { Column } from '@ant-design/plots';
 import React from 'react';
 import { Base, CoresGraficos } from '~/componentes/colors';
 

@@ -73,7 +73,7 @@ const TabelaAvaliacoesFechamento = props => {
           ),
           align: 'center',
           width: '200px',
-          dataIndex: `avaliacoes[${index}]`,
+          dataIndex: ['avaliacoes', `${index}`],
           key: `avaliacoes[${index}]`,
           className: 'position-relative',
           render: dadosAvaliacao => {
@@ -103,14 +103,15 @@ const TabelaAvaliacoesFechamento = props => {
 
   const obterAvaliacoesTabelaFechamento = useCallback(async () => {
     setCarregandoDados(true);
-    const resposta = await ServicoNotaConceito.obterNotasAvaliacoesPorTurmaBimestreAluno(
-      turmaSelecionada.id,
-      periodoEscolarId,
-      codigoAluno,
-      componenteCurricular?.codigoComponenteCurricular
-    )
-      .catch(e => erros(e))
-      .finally(() => setCarregandoDados(false));
+    const resposta =
+      await ServicoNotaConceito.obterNotasAvaliacoesPorTurmaBimestreAluno(
+        turmaSelecionada.id,
+        periodoEscolarId,
+        codigoAluno,
+        componenteCurricular?.codigoComponenteCurricular
+      )
+        .catch(e => erros(e))
+        .finally(() => setCarregandoDados(false));
 
     if (resposta?.data?.length) {
       const avaliacoes = { codigoAluno, avaliacoes: resposta.data };

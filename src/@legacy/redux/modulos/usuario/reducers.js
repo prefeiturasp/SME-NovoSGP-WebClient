@@ -73,13 +73,12 @@ export default function usuario(state = inicial, action) {
         break;
       case '@usuario/deslogar':
         localStorage.clear();
-        inicial.sessaoExpirou = false;
         draft = inicial;
         break;
       case '@usuario/deslogarSessaoExpirou':
         localStorage.clear();
-        inicial.sessaoExpirou = true;
         draft = inicial;
+        draft.sessaoExpirou = true;
         break;
       case '@usuario/selecionarTurma':
         draft.turmaSelecionada = action.payload;

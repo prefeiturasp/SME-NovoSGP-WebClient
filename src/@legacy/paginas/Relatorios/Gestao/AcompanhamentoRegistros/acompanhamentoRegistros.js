@@ -13,7 +13,6 @@ import { Cabecalho, FiltroHelper } from '~/componentes-sgp';
 import {
   AbrangenciaServico,
   erros,
-  history,
   ServicoComponentesCurriculares,
   ServicoFiltroRelatorio,
   ServicoAcompanhamentoRegistros,
@@ -23,8 +22,11 @@ import { ModalidadeDTO } from '~/dtos';
 import { onchangeMultiSelect, ordenarListaMaiorParaMenor } from '~/utils';
 import { OPCAO_TODOS } from '~/constantes';
 import BotoesAcaoRelatorio from '~/componentes-sgp/botoesAcaoRelatorio';
+import { useNavigate } from 'react-router-dom';
 
 const AcompanhamentoRegistros = () => {
+  const navigate = useNavigate();
+
   const [anoAtual] = useState(window.moment().format('YYYY'));
   const [carregandoGerar, setCarregandoGerar] = useState(false);
   const [carregandoAnos, setCarregandoAnos] = useState(false);
@@ -43,10 +45,8 @@ const AcompanhamentoRegistros = () => {
     carregandoComponentesCurriculares,
     setCarregandoComponentesCurriculares,
   ] = useState(false);
-  const [
-    listaComponentesCurriculares,
-    setListaComponentesCurriculares,
-  ] = useState([]);
+  const [listaComponentesCurriculares, setListaComponentesCurriculares] =
+    useState([]);
   const [listaBimestres, setListaBimestres] = useState([]);
   const [professorCodigo, setProfessorCodigo] = useState();
   const [anoLetivo, setAnoLetivo] = useState();
@@ -226,11 +226,10 @@ const AcompanhamentoRegistros = () => {
   const obterModalidades = async (ue, ano) => {
     if (ue && ano) {
       setCarregandoModalidades(true);
-      const {
-        data,
-      } = await ServicoFiltroRelatorio.obterModalidadesPorAbrangencia(ue)
-        .catch(e => erros(e))
-        .finally(() => setCarregandoModalidades(false));
+      const { data } =
+        await ServicoFiltroRelatorio.obterModalidadesPorAbrangencia(ue)
+          .catch(e => erros(e))
+          .finally(() => setCarregandoModalidades(false));
 
       if (data) {
         const lista = data.map(item => ({
@@ -390,12 +389,13 @@ const AcompanhamentoRegistros = () => {
             ? lista.map(a => a.valor).filter(a => a !== '0')
             : codigosTurma
         );
-        const disciplinas = await ServicoComponentesCurriculares.obterComponentesPorListaDeTurmas(
-          turmas,
-          true
-        )
-          .catch(e => erros(e))
-          .finally(() => setCarregandoComponentesCurriculares(false));
+        const disciplinas =
+          await ServicoComponentesCurriculares.obterComponentesPorListaDeTurmas(
+            turmas,
+            true
+          )
+            .catch(e => erros(e))
+            .finally(() => setCarregandoComponentesCurriculares(false));
 
         if (disciplinas?.data?.length) {
           if (disciplinas.data.length > 1) {
@@ -552,7 +552,7 @@ const AcompanhamentoRegistros = () => {
       <Cabecalho pagina="Relatório de acompanhamento dos registros pedagógicos">
         <BotoesAcaoRelatorio
           onClickVoltar={() => {
-            history.push('/');
+            navigate('/');
           }}
           onClickCancelar={cancelar}
           onClickGerar={gerar}
@@ -734,21 +734,19 @@ const AcompanhamentoRegistros = () => {
               </Loader>
             </Col>
           </Row>
-          <Row gutter={[16, 16]} style={{ padding: '8px 8px 5px' }}>
-            <Row type="flex">
-              <Localizador
-                classesRF="px-0"
-                dreId={dreId}
-                ueId={ueId}
-                rfEdicao={professorCodigo}
-                anoLetivo={anoLetivo}
-                showLabel
-                onChange={onChangeLocalizador}
-                buscarCaracterPartir={5}
-                desabilitado={!ueId}
-                buscarPorAbrangencia
-              />
-            </Row>
+          <Row gutter={[16, 16]}>
+            <Localizador
+              dreId={dreId}
+              ueId={ueId}
+              rfEdicao={professorCodigo}
+              anoLetivo={anoLetivo}
+              showLabel
+              onChange={onChangeLocalizador}
+              buscarCaracterPartir={5}
+              desabilitado={!ueId}
+              buscarPorAbrangencia
+              novaEstrutura
+            />
           </Row>
         </Col>
       </Card>

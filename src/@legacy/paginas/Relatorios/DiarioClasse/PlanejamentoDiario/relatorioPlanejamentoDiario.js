@@ -12,7 +12,6 @@ import { ModalidadeDTO } from '~/dtos';
 import AbrangenciaServico from '~/servicos/Abrangencia';
 import { erros, sucesso } from '~/servicos/alertas';
 import api from '~/servicos/api';
-import history from '~/servicos/history';
 import ServicoFiltroRelatorio from '~/servicos/Paginas/FiltroRelatorio/ServicoFiltroRelatorio';
 import ServicoComponentesCurriculares from '~/servicos/Paginas/ComponentesCurriculares/ServicoComponentesCurriculares';
 import ServicoRelatorioPlanejamentoDiario from '~/servicos/Paginas/Relatorios/DiarioClasse/PlanejamentoDiario/ServicoRelatorioPlanejamentoDiario';
@@ -22,8 +21,11 @@ import FiltroHelper from '~/componentes-sgp/filtro/helper';
 import { OPCAO_TODOS } from '~/constantes/constantes';
 import BotoesAcaoRelatorio from '~/componentes-sgp/botoesAcaoRelatorio';
 import { URL_HOME } from '~/constantes';
+import { useNavigate } from 'react-router-dom';
 
 const RelatorioPlanejamentoDiario = () => {
+  const navigate = useNavigate();
+
   const [exibirLoader, setExibirLoader] = useState(false);
 
   const [listaAnosLetivo, setListaAnosLetivo] = useState([]);
@@ -32,10 +34,8 @@ const RelatorioPlanejamentoDiario = () => {
   const [listaModalidades, setListaModalidades] = useState([]);
   const [listaSemestres, setListaSemestres] = useState([]);
   const [listaTurmas, setListaTurmas] = useState([]);
-  const [
-    listaComponentesCurriculares,
-    setListaComponentesCurriculares,
-  ] = useState([]);
+  const [listaComponentesCurriculares, setListaComponentesCurriculares] =
+    useState([]);
   const [
     componentesCurricularesDisponiveis,
     setComponentesCurricularesDisponiveis,
@@ -227,7 +227,6 @@ const RelatorioPlanejamentoDiario = () => {
 
   useEffect(() => {
     validarValorPadraoAnoLetivo(listaAnosLetivo);
-
   }, [consideraHistorico, listaAnosLetivo]);
 
   const obterUes = useCallback(async () => {
@@ -270,9 +269,8 @@ const RelatorioPlanejamentoDiario = () => {
   const obterModalidades = async (ue, ano) => {
     if (ue && ano) {
       setExibirLoader(true);
-      const {
-        data,
-      } = await ServicoFiltroRelatorio.obterModalidadesPorAbrangencia(ue);
+      const { data } =
+        await ServicoFiltroRelatorio.obterModalidadesPorAbrangencia(ue);
 
       if (data) {
         const lista = data.map(item => ({
@@ -300,10 +298,11 @@ const RelatorioPlanejamentoDiario = () => {
 
   const obterBimestres = async () => {
     if (modalidadeId && anoLetivo) {
-      const bimestresResponse = await ServicoPeriodoEscolar.obterPeriodosPorAnoLetivoModalidade(
-        modalidadeId,
-        anoLetivo
-      ).catch(e => erros(e));
+      const bimestresResponse =
+        await ServicoPeriodoEscolar.obterPeriodosPorAnoLetivoModalidade(
+          modalidadeId,
+          anoLetivo
+        ).catch(e => erros(e));
       if (bimestresResponse?.data) {
         const lista = bimestresResponse.data.map(v => {
           return {
@@ -321,7 +320,6 @@ const RelatorioPlanejamentoDiario = () => {
 
   useEffect(() => {
     obterBimestres();
-
   }, [modalidadeId, anoLetivo]);
 
   const checarPeriodoEhMaior = data => {
@@ -345,7 +343,6 @@ const RelatorioPlanejamentoDiario = () => {
 
   useEffect(() => {
     checarPeriodoFinalBimestre();
-
   }, [bimestre]);
 
   const obterTurmas = useCallback(async () => {
@@ -381,7 +378,6 @@ const RelatorioPlanejamentoDiario = () => {
       }
       setExibirLoader(false);
     }
-
   }, [modalidadeId]);
 
   useEffect(() => {
@@ -391,7 +387,6 @@ const RelatorioPlanejamentoDiario = () => {
       setTurmaId();
       setListaTurmas([]);
     }
-
   }, [modalidadeId]);
 
   const obterComponentesCurriculares = useCallback(async () => {
@@ -405,11 +400,12 @@ const RelatorioPlanejamentoDiario = () => {
     }
 
     setExibirLoader(true);
-    const componentes = await ServicoComponentesCurriculares.obterComponentesPorListaDeTurmas(
-      turmas
-    )
-      .catch(e => erros(e))
-      .finally(() => setExibirLoader(false));
+    const componentes =
+      await ServicoComponentesCurriculares.obterComponentesPorListaDeTurmas(
+        turmas
+      )
+        .catch(e => erros(e))
+        .finally(() => setExibirLoader(false));
 
     if (componentes?.data?.length) {
       const lista = [];
@@ -466,7 +462,6 @@ const RelatorioPlanejamentoDiario = () => {
 
     setListaAnosLetivo(anosLetivos);
     setExibirLoader(false);
-
   }, [anoAtual, consideraHistorico]);
 
   useEffect(() => {
@@ -476,8 +471,9 @@ const RelatorioPlanejamentoDiario = () => {
   const obterSemestres = useCallback(async () => {
     setExibirLoader(true);
     const retorno = await api.get(
-      `v1/abrangencias/${consideraHistorico}/semestres?anoLetivo=${anoLetivo}&modalidade=${modalidadeId ||
-        0}`
+      `v1/abrangencias/${consideraHistorico}/semestres?anoLetivo=${anoLetivo}&modalidade=${
+        modalidadeId || 0
+      }`
     );
     if (retorno && retorno.data) {
       const lista = retorno.data.map(periodo => {
@@ -503,7 +499,6 @@ const RelatorioPlanejamentoDiario = () => {
       setSemestre();
       setListaSemestres([]);
     }
-
   }, [obterAnosLetivos, modalidadeId, anoLetivo, consideraHistorico]);
 
   const cancelar = async () => {
@@ -563,7 +558,7 @@ const RelatorioPlanejamentoDiario = () => {
       <Cabecalho pagina="Relatório de controle de planejamento diário">
         <BotoesAcaoRelatorio
           onClick={() => {
-            history.push(URL_HOME);
+            navigate(URL_HOME);
           }}
           onClickCancelar={cancelar}
           onClickGerar={gerar}

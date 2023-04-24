@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import PropTypes from 'prop-types';
 import { isEqual } from 'lodash';
 import queryString from 'query-string';
 import { Formik, Form } from 'formik';
@@ -7,7 +6,6 @@ import * as Yup from 'yup';
 import { useDispatch, useSelector } from 'react-redux';
 
 import RotasDto from '~/dtos/rotasDto';
-import history from '~/servicos/history';
 import { erro, sucesso, confirmar } from '~/servicos/alertas';
 import { setBreadcrumbManual } from '~/servicos/breadcrumb-services';
 import AtribuicaoCJServico from '~/servicos/Paginas/AtribuicaoCJ';
@@ -44,9 +42,13 @@ import {
 import { SGP_BUTTON_SALVAR_ALTERAR } from '~/constantes/ids/button';
 import { verificaSomenteConsulta } from '~/servicos';
 import { setRecarregarFiltroPrincipal } from '~/redux/modulos/usuario/actions';
+import { useLocation, useNavigate } from 'react-router-dom';
 
-function AtribuicaoCJForm({ match, location }) {
+function AtribuicaoCJForm() {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const location = useLocation();
 
   const anoAtual = window.moment().format('YYYY');
   const [carregando, setCarregando] = useState(false);
@@ -126,7 +128,7 @@ function AtribuicaoCJForm({ match, location }) {
         setCarregando(false);
         sucesso('Atribuição de CJ salva com sucesso.');
         dispatch(setRecarregarFiltroPrincipal(true));
-        history.push('/gestao/atribuicao-cjs');
+        navigate('/gestao/atribuicao-cjs');
         obterPerfis(usuario.rf);
       }
     } catch (err) {
@@ -147,10 +149,10 @@ function AtribuicaoCJForm({ match, location }) {
       if (confirmou) {
         validaAntesDoSubmit(form);
       } else {
-        history.push(RotasDto.ATRIBUICAO_CJ_LISTA);
+        navigate(RotasDto.ATRIBUICAO_CJ_LISTA);
       }
     } else {
-      history.push(RotasDto.ATRIBUICAO_CJ_LISTA);
+      navigate(RotasDto.ATRIBUICAO_CJ_LISTA);
     }
   };
 
@@ -181,7 +183,11 @@ function AtribuicaoCJForm({ match, location }) {
   useEffect(() => {
     if (location && location.search) {
       const query = queryString.parse(location.search);
-      setBreadcrumbManual(match.url, 'Atribuição', '/gestao/atribuicao-cjs');
+      setBreadcrumbManual(
+        location.pathname,
+        'Atribuição',
+        '/gestao/atribuicao-cjs'
+      );
       if (query?.modalidadeId || query?.turmaId) {
         setEhEdicao(true);
       }
@@ -204,7 +210,7 @@ function AtribuicaoCJForm({ match, location }) {
       setConsideraHistorico(historico);
       setAnoLetivo(anoSelecionado);
     }
-  }, [location, match.url]);
+  }, [location]);
 
   useEffect(() => {
     async function buscaAtribs(valores) {
@@ -478,21 +484,5 @@ function AtribuicaoCJForm({ match, location }) {
     </>
   );
 }
-
-AtribuicaoCJForm.propTypes = {
-  match: PropTypes.oneOfType([
-    PropTypes.objectOf(PropTypes.object),
-    PropTypes.any,
-  ]),
-  location: PropTypes.oneOfType([
-    PropTypes.objectOf(PropTypes.object),
-    PropTypes.any,
-  ]),
-};
-
-AtribuicaoCJForm.defaultProps = {
-  match: null,
-  location: null,
-};
 
 export default AtribuicaoCJForm;

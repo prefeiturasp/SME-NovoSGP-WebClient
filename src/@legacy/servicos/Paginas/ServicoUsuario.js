@@ -1,4 +1,4 @@
-import { store } from '~/redux';
+import { store } from '@/core/redux';
 import { meusDados } from '~/redux/modulos/usuario/actions';
 import api from '~/servicos/api';
 import { setarPerfis } from '~/redux/modulos/perfil/actions';

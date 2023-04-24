@@ -5,7 +5,6 @@ import { Form } from 'formik';
 import LogoDoSgp from '~/recursos/LogoDoSgp.svg';
 import { Base, Colors } from '~/componentes/colors';
 import Button from '~/componentes/button';
-import history from '~/servicos/history';
 import RedefinirSenhaServico from '~/servicos/Paginas/ServicoRedefinirSenha';
 import {
   Nav,
@@ -29,12 +28,13 @@ import {
   setModificarSenha,
   setLogado,
 } from '~/redux/modulos/usuario/actions';
-import { store } from '~/redux';
+import { store } from '@/core/redux';
 import Erro from '../RecuperarSenha/erro';
 import { setMenusPermissoes } from '~/servicos/servico-navegacao';
 import { obterMeusDados } from '~/servicos/Paginas/ServicoUsuario';
 import { Loader } from '~/componentes';
 import ServicoDashboard from '~/servicos/Paginas/Dashboard/ServicoDashboard';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 
 const Item = styled.li`
   ${props => props.status === true && `color: ${Base.Verde}`};
@@ -42,8 +42,12 @@ const Item = styled.li`
   font-weight: normal;
 `;
 
-const RedefinirSenha = props => {
+const RedefinirSenha = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const location = useLocation();
+  const paramsRoute = useParams();
+
   const [senhas, setSenhas] = useState({
     senha: '',
     confirmarSenha: '',
@@ -56,7 +60,7 @@ const RedefinirSenha = props => {
   const [finalizouCarregamento, setFinalizouCarregamento] = useState(false);
 
   const { senha, confirmarSenha } = senhas;
-  const token = props?.match?.params?.token;
+  const token = paramsRoute?.token;
 
   const [validacoes, setValidacoes] = useState({
     maiuscula: '',
@@ -86,13 +90,13 @@ const RedefinirSenha = props => {
   const trataAcaoTeclado = e => {
     if (!token && e.code === 'F5') {
       store.dispatch(Deslogar());
-      history.push(URL_LOGIN);
+      navigate(URL_LOGIN);
     }
   };
 
   const validarToken = async () => {
     let tokenValido = true;
-    if (!token) history.push(URL_LOGIN);
+    if (!token) navigate(URL_LOGIN);
     if (token) tokenValido = await RedefinirSenhaServico.validarToken(token);
 
     if (!tokenValido) {
@@ -111,7 +115,6 @@ const RedefinirSenha = props => {
     return () => {
       document.removeEventListener('keydown', trataAcaoTeclado);
     };
-
   }, []);
 
   useEffect(() => {
@@ -170,7 +173,7 @@ const RedefinirSenha = props => {
       store.dispatch(setModificarSenha(false));
       store.dispatch(setLogado(false));
     }
-    history.push(URL_LOGIN);
+    navigate(URL_LOGIN);
   };
 
   const alterarSenha = async () => {
@@ -181,18 +184,19 @@ const RedefinirSenha = props => {
           token,
           novaSenha: senha,
         },
-        dispatch
+        dispatch,
+        navigate
       );
 
-      if (requisicao.sucesso) history.push(URL_LOGIN);
+      if (requisicao.sucesso) navigate(URL_LOGIN);
       if (requisicao.tokenExpirado) setTokenExpirado(requisicao.tokenExpirado);
 
       setErroGeral(requisicao.erro);
     } else {
       const rf = Number.isInteger(usuario * 1)
         ? usuario
-        : Number.isInteger(props?.location?.state?.rf * 1)
-        ? props?.location?.state?.rf
+        : Number.isInteger(location?.state?.rf * 1)
+        ? location?.state?.rf
         : '';
 
       const requisicao = await ServicoPrimeiroAcesso.alterarSenha({
@@ -229,7 +233,7 @@ const RedefinirSenha = props => {
         );
         ServicoDashboard.obterDadosDashboard();
         setCarregandoContinuar(false);
-        history.push(URL_HOME);
+        navigate(URL_HOME);
       } else {
         setCarregandoContinuar(false);
         setErroGeral(requisicao.erro);
@@ -242,7 +246,7 @@ const RedefinirSenha = props => {
     setErroGeral('');
 
     if (tokenExpirado) {
-      history.push(URL_RECUPERARSENHA);
+      navigate(URL_RECUPERARSENHA);
       return;
     }
 
@@ -250,7 +254,7 @@ const RedefinirSenha = props => {
   };
 
   const aoClicarContinuarExpirado = () => {
-    if (token && !tokenValidado) history.push(URL_RECUPERARSENHA);
+    if (token && !tokenValidado) navigate(URL_RECUPERARSENHA);
   };
 
   return (

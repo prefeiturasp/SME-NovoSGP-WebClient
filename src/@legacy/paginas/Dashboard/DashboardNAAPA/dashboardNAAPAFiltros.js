@@ -101,7 +101,6 @@ const DashboardNAAPAFiltros = () => {
     }
 
     setListaAnosLetivo(ordenarListaMaiorParaMenor(anosLetivos, 'valor'));
-
   }, [anoAtual]);
 
   useEffect(() => {
@@ -147,7 +146,6 @@ const DashboardNAAPAFiltros = () => {
     }
     setListaDres([]);
     setDre();
-
   }, [anoLetivo, consideraHistorico]);
 
   useEffect(() => {
@@ -204,7 +202,6 @@ const DashboardNAAPAFiltros = () => {
       }
       setListaUes([]);
     }
-
   }, [consideraHistorico, anoLetivo, dre]);
 
   useEffect(() => {
@@ -213,18 +210,16 @@ const DashboardNAAPAFiltros = () => {
     if (dre?.codigo) {
       obterUes(anoLetivo);
     }
-
   }, [dre, anoLetivo, obterUes]);
 
   const onChangeModalidade = valor => setModalidade(valor);
 
   const obterModalidades = useCallback(async () => {
     setCarregandoModalidades(true);
-    const resposta = await ServicoFiltroRelatorio.obterModalidadesPorAbrangencia(
-      ue?.codigo
-    )
-      .catch(e => erros(e))
-      .finally(() => setCarregandoModalidades(false));
+    const resposta =
+      await ServicoFiltroRelatorio.obterModalidadesPorAbrangencia(ue?.codigo)
+        .catch(e => erros(e))
+        .finally(() => setCarregandoModalidades(false));
 
     if (resposta?.data?.length) {
       const lista = resposta.data.map(item => ({
@@ -237,7 +232,6 @@ const DashboardNAAPAFiltros = () => {
       }
       setListaModalidades(lista);
     }
-
   }, [ue]);
 
   useEffect(() => {
@@ -246,7 +240,6 @@ const DashboardNAAPAFiltros = () => {
     if (anoLetivo && ue?.codigo) {
       obterModalidades();
     }
-
   }, [anoLetivo, ue, obterModalidades]);
 
   const onChangeSemestre = valor => setSemestre(valor);
@@ -255,8 +248,9 @@ const DashboardNAAPAFiltros = () => {
     setCarregandoSemestres(true);
     const retorno = await api
       .get(
-        `v1/abrangencias/${consideraHistorico}/semestres?anoLetivo=${anoLetivo}&modalidade=${modalidade ||
-          0}`
+        `v1/abrangencias/${consideraHistorico}/semestres?anoLetivo=${anoLetivo}&modalidade=${
+          modalidade || 0
+        }`
       )
       .catch(e => erros(e))
       .finally(() => {
@@ -275,7 +269,6 @@ const DashboardNAAPAFiltros = () => {
       setListaSemestres();
       setSemestre();
     }
-
   }, [modalidade, anoLetivo, consideraHistorico]);
 
   useEffect(() => {
@@ -286,7 +279,6 @@ const DashboardNAAPAFiltros = () => {
       setSemestre();
       setListaSemestres([]);
     }
-
   }, [modalidade, anoLetivo, obterSemestres]);
 
   const montarMeses = useCallback(() => {
@@ -294,7 +286,6 @@ const DashboardNAAPAFiltros = () => {
     delete meses[0];
     meses.unshift({ numeroMes: OPCAO_TODOS, nome: 'Acumulado' });
     setListaMesesReferencias(meses);
-
   }, []);
 
   useEffect(() => {
@@ -302,112 +293,111 @@ const DashboardNAAPAFiltros = () => {
   }, [montarMeses]);
 
   return (
-    <>
-      <Col span={24}>
-        <Row gutter={[16, 8]}>
-          <Col sm={24}>
-            <CheckboxComponent
-              id={SGP_CHECKBOX_EXIBIR_HISTORICO}
-              label="Exibir histórico?"
-              onChangeCheckbox={onChangeConsideraHistorico}
-              checked={consideraHistorico}
-              disabled={listaAnosLetivo.length === 1}
+    <Col span={24}>
+      <Row gutter={[16, 16]}>
+        <Col sm={24}>
+          <CheckboxComponent
+            id={SGP_CHECKBOX_EXIBIR_HISTORICO}
+            label="Exibir histórico?"
+            onChangeCheckbox={onChangeConsideraHistorico}
+            checked={consideraHistorico}
+            disabled={listaAnosLetivo.length === 1}
+          />
+        </Col>
+
+        <Col sm={24} md={12} xl={4}>
+          <Loader loading={carregandoAnos} ignorarTip>
+            <SelectComponent
+              id={SGP_SELECT_ANO_LETIVO}
+              label="Ano Letivo"
+              lista={listaAnosLetivo}
+              valueOption="valor"
+              valueText="desc"
+              disabled={
+                !consideraHistorico ||
+                !listaAnosLetivo?.length ||
+                listaAnosLetivo?.length === 1
+              }
+              onChange={onChangeAnoLetivo}
+              valueSelect={anoLetivo}
+              placeholder="Ano letivo"
             />
-          </Col>
-        </Row>
-        <Row gutter={[16, 16]}>
-          <Col sm={24} md={12} xl={4}>
-            <Loader loading={carregandoAnos} ignorarTip>
-              <SelectComponent
-                id={SGP_SELECT_ANO_LETIVO}
-                label="Ano Letivo"
-                lista={listaAnosLetivo}
-                valueOption="valor"
-                valueText="desc"
-                disabled={
-                  !consideraHistorico ||
-                  !listaAnosLetivo?.length ||
-                  listaAnosLetivo?.length === 1
-                }
-                onChange={onChangeAnoLetivo}
-                valueSelect={anoLetivo}
-                placeholder="Ano letivo"
-              />
-            </Loader>
-          </Col>
-          <Col sm={24} md={12} xl={10}>
-            <Loader loading={carregandoDres} ignorarTip>
-              <SelectComponent
-                id={SGP_SELECT_DRE}
-                label="Diretoria Regional de Educação (DRE)"
-                lista={listaDres}
-                valueOption="codigo"
-                valueText="nome"
-                disabled={
-                  !anoLetivo || listaDres?.length === 1 || !listaDres?.length
-                }
-                onChange={onChangeDre}
-                valueSelect={dre?.codigo}
-                placeholder="Diretoria Regional De Educação (DRE)"
-                showSearch
-              />
-            </Loader>
-          </Col>
-          <Col sm={24} md={12} xl={10}>
-            <Loader loading={carregandoUes} ignorarTip>
-              <SelectComponent
-                id={SGP_SELECT_UE}
-                label="Unidade Escolar (UE)"
-                lista={listaUes}
-                valueOption="codigo"
-                valueText="nome"
-                disabled={!dre?.codigo || listaUes?.length === 1}
-                onChange={onChangeUe}
-                valueSelect={ue?.codigo}
-                placeholder="Unidade Escolar (UE)"
-                showSearch
-              />
-            </Loader>
-          </Col>
-        </Row>
-        <Row gutter={[16, 16]}>
-          <Col sm={24} md={12} xl={8}>
-            <Loader loading={carregandoModalidades} ignorarTip>
-              <SelectComponent
-                id={SGP_SELECT_MODALIDADE}
-                label="Modalidade"
-                lista={listaModalidades}
-                valueOption="valor"
-                valueText="desc"
-                disabled={!ue?.codigo || listaModalidades?.length === 1}
-                onChange={onChangeModalidade}
-                valueSelect={modalidade}
-                placeholder="Modalidade"
-              />
-            </Loader>
-          </Col>
-          <Col sm={24} md={12} xl={8}>
-            <Loader loading={carregandoSemestres} ignorarTip>
-              <SelectComponent
-                id={SGP_SELECT_SEMESTRE}
-                lista={listaSemestres}
-                valueOption="valor"
-                valueText="desc"
-                label="Semestre"
-                disabled={
-                  !modalidade ||
-                  listaSemestres?.length === 1 ||
-                  Number(modalidade) !== ModalidadeDTO.EJA
-                }
-                valueSelect={semestre}
-                onChange={onChangeSemestre}
-                placeholder="Semestre"
-              />
-            </Loader>
-          </Col>
-        </Row>
-      </Col>
-    </>
+          </Loader>
+        </Col>
+
+        <Col sm={24} md={12} xl={10}>
+          <Loader loading={carregandoDres} ignorarTip>
+            <SelectComponent
+              id={SGP_SELECT_DRE}
+              label="Diretoria Regional de Educação (DRE)"
+              lista={listaDres}
+              valueOption="codigo"
+              valueText="nome"
+              disabled={
+                !anoLetivo || listaDres?.length === 1 || !listaDres?.length
+              }
+              onChange={onChangeDre}
+              valueSelect={dre?.codigo}
+              placeholder="Diretoria Regional De Educação (DRE)"
+              showSearch
+            />
+          </Loader>
+        </Col>
+
+        <Col sm={24} md={12} xl={10}>
+          <Loader loading={carregandoUes} ignorarTip>
+            <SelectComponent
+              id={SGP_SELECT_UE}
+              label="Unidade Escolar (UE)"
+              lista={listaUes}
+              valueOption="codigo"
+              valueText="nome"
+              disabled={!dre?.codigo || listaUes?.length === 1}
+              onChange={onChangeUe}
+              valueSelect={ue?.codigo}
+              placeholder="Unidade Escolar (UE)"
+              showSearch
+            />
+          </Loader>
+        </Col>
+
+        <Col sm={24} md={12} xl={8}>
+          <Loader loading={carregandoModalidades} ignorarTip>
+            <SelectComponent
+              id={SGP_SELECT_MODALIDADE}
+              label="Modalidade"
+              lista={listaModalidades}
+              valueOption="valor"
+              valueText="desc"
+              disabled={!ue?.codigo || listaModalidades?.length === 1}
+              onChange={onChangeModalidade}
+              valueSelect={modalidade}
+              placeholder="Modalidade"
+            />
+          </Loader>
+        </Col>
+
+        <Col sm={24} md={12} xl={8}>
+          <Loader loading={carregandoSemestres} ignorarTip>
+            <SelectComponent
+              id={SGP_SELECT_SEMESTRE}
+              lista={listaSemestres}
+              valueOption="valor"
+              valueText="desc"
+              label="Semestre"
+              disabled={
+                !modalidade ||
+                listaSemestres?.length === 1 ||
+                Number(modalidade) !== ModalidadeDTO.EJA
+              }
+              valueSelect={semestre}
+              onChange={onChangeSemestre}
+              placeholder="Semestre"
+            />
+          </Loader>
+        </Col>
+      </Row>
+    </Col>
   );
 };
 

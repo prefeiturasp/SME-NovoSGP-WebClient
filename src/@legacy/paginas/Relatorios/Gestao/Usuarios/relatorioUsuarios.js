@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import {
   Loader,
   Localizador,
@@ -12,7 +13,6 @@ import Card from '~/componentes/card';
 import { OPCAO_TODOS } from '~/constantes/constantes';
 import { URL_HOME } from '~/constantes/url';
 import { erros, sucesso } from '~/servicos/alertas';
-import history from '~/servicos/history';
 import ServicoFiltroRelatorio from '~/servicos/Paginas/FiltroRelatorio/ServicoFiltroRelatorio';
 import ServicoRelatorioUsuarios from '~/servicos/Paginas/Relatorios/Usuarios/ServicoRelatorioUsuarios';
 import {
@@ -21,6 +21,8 @@ import {
 } from '~/servicos/Paginas/ServicoUsuario';
 
 const RelatorioUsuarios = () => {
+  const navigate = useNavigate();
+
   const [listaDres, setListaDres] = useState([]);
   const [listaUes, setListaUes] = useState([]);
   const [listaPerfis, setListaPerfis] = useState([]);
@@ -46,27 +48,34 @@ const RelatorioUsuarios = () => {
 
   const [modoEdicao, setModoEdicao] = useState(false);
 
-  const obterUes = useCallback(async dre => {
-    if (dre) {
-      setCarregandoGeral(true);      
-      const retorno = await ServicoFiltroRelatorio.obterUes(dre, false, anoAtual).catch(e => {
-        erros(e);
-        setCarregandoGeral(false);
-      });
+  const obterUes = useCallback(
+    async dre => {
+      if (dre) {
+        setCarregandoGeral(true);
+        const retorno = await ServicoFiltroRelatorio.obterUes(
+          dre,
+          false,
+          anoAtual
+        ).catch(e => {
+          erros(e);
+          setCarregandoGeral(false);
+        });
 
-      if (retorno && retorno.data && retorno.data.length) {
-        setListaUes(retorno.data);
+        if (retorno && retorno.data && retorno.data.length) {
+          setListaUes(retorno.data);
 
-        if (retorno && retorno.data.length && retorno.data.length === 1) {
-          setCodigoUe(retorno.data[0].codigo);
+          if (retorno && retorno.data.length && retorno.data.length === 1) {
+            setCodigoUe(retorno.data[0].codigo);
+          }
+        } else {
+          setListaUes([]);
         }
-      } else {
-        setListaUes([]);
-      }
 
-      setCarregandoGeral(false);
-    }
-  }, [anoAtual]);
+        setCarregandoGeral(false);
+      }
+    },
+    [anoAtual]
+  );
 
   const onChangeDre = dre => {
     setCodigoDre(dre);
@@ -156,7 +165,7 @@ const RelatorioUsuarios = () => {
   }, []);
 
   const onClickVoltar = () => {
-    history.push(URL_HOME);
+    navigate(URL_HOME);
   };
 
   const onClickCancelar = () => {

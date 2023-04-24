@@ -1,5 +1,4 @@
 import React, { useState, useRef, useEffect } from 'react';
-import PropTypes from 'prop-types';
 
 import { useDispatch, useSelector } from 'react-redux';
 import * as Yup from 'yup';
@@ -32,12 +31,15 @@ import {
 } from './login.css';
 import CampoTexto from '~/componentes/campoTexto';
 import { URL_RECUPERARSENHA } from '~/constantes/url';
-import history from '~/servicos/history';
 import { Loader } from '~/componentes';
 import { setExibirMensagemSessaoExpirou } from '~/redux/modulos/mensagens/actions';
+import { useNavigate, useParams } from 'react-router-dom';
 
-const Login = props => {
+const Login = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const paramsRoute = useParams();
+
   const inputUsuarioRf = useRef();
   const btnAcessar = useRef();
 
@@ -55,8 +57,7 @@ const Login = props => {
 
   const { versao } = useSelector(store => store.sistema);
 
-  const { match } = props;
-  const redirect = match?.params?.redirect ? match.params.redirect : null;
+  const redirect = paramsRoute?.redirect || null;
 
   const helper = new LoginHelper(dispatch, redirect);
 
@@ -82,7 +83,12 @@ const Login = props => {
     setErroGeral('');
     dispatch(setExibirMensagemSessaoExpirou(false));
 
-    const { sucesso, ...retorno } = await helper.acessar(dados);
+    const { sucesso, ...retorno } = await helper.acessar(
+      dados,
+      false,
+      false,
+      navigate
+    );
 
     if (!sucesso) {
       setErroGeral(retorno.erroGeral);
@@ -118,7 +124,7 @@ const Login = props => {
   const navegarParaRecuperarSenha = () => {
     const rf =
       inputUsuarioRf && inputUsuarioRf.currrent && inputUsuarioRf.current.value;
-    history.push({
+    navigate({
       pathname: URL_RECUPERARSENHA,
       state: {
         rf,
@@ -246,14 +252,6 @@ const Login = props => {
       </Grid>
     </Fundo>
   );
-};
-
-Login.propTypes = {
-  match: PropTypes.oneOfType([PropTypes.any]),
-};
-
-Login.defaultProps = {
-  match: {},
 };
 
 export default Login;

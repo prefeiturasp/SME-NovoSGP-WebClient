@@ -1,18 +1,11 @@
 import api from '~/servicos/api';
-import { store } from '~/redux';
+import { store } from '@/core/redux';
 import { setDadosDashboardFechamento } from '~/redux/modulos/dashboardFechamento/actions';
 
 class ServicoDashboardFechamento {
   montarConsultaPadraoGraficos = params => {
-    const {
-      rota,
-      anoLetivo,
-      dreId,
-      ueId,
-      modalidade,
-      semestre,
-      bimestre,
-    } = params;
+    const { rota, anoLetivo, dreId, ueId, modalidade, semestre, bimestre } =
+      params;
 
     let url = `v1/dashboard/fechamentos/${rota}?anoLetivo=${anoLetivo}`;
 

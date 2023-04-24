@@ -2,7 +2,7 @@ import { Col, Row } from 'antd';
 import { Form, Formik } from 'formik';
 import React, { useCallback, useContext, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { useLocation, useParams } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import shortid from 'shortid';
 import * as Yup from 'yup';
 import {
@@ -26,7 +26,6 @@ import {
   api,
   confirmar,
   erros,
-  history,
   ServicoCalendarios,
   ServicoEvento,
   setBreadcrumbManual,
@@ -79,6 +78,8 @@ const EventosCadastroForm = () => {
     setListaCalendarioParaCopiar,
     setLimparRecorrencia,
   } = useContext(EventosCadastroContext);
+
+  const navigate = useNavigate();
 
   const [validacoes, setValidacoes] = useState({});
   const [listaFeriados, setListaFeriados] = useState([]);
@@ -398,7 +399,7 @@ const EventosCadastroForm = () => {
             } com sucesso. Serão cadastrados eventos recorrentes, em breve você receberá uma notificação com o resultado do processamento.`
           );
         }
-        history.push(urlTelaListagemEventos());
+        navigate(urlTelaListagemEventos());
       }
     };
 
@@ -683,12 +684,18 @@ const EventosCadastroForm = () => {
           >
             {form => (
               <Form>
-                <Col span={24}>
-                  <Row gutter={[16, 16]}>
+                <Row gutter={[16, 16]}>
+                  <Col span={24}>
                     <ContainerColumnReverse
                       style={{ display: 'flex', alignItems: 'center' }}
                     >
-                      <Col sm={24} md={16} lg={12} xl={8}>
+                      <Col
+                        sm={24}
+                        md={16}
+                        lg={12}
+                        xl={10}
+                        style={{ paddingLeft: 0 }}
+                      >
                         <CalendarioCadastroEventos
                           form={form}
                           eventoId={eventoId}
@@ -696,11 +703,12 @@ const EventosCadastroForm = () => {
                           montarTipoCalendarioPorId={montarTipoCalendarioPorId}
                         />
                       </Col>
+
                       <Col
                         sm={24}
                         md={8}
                         lg={12}
-                        xl={16}
+                        xl={14}
                         style={{
                           display: 'flex',
                           justifyContent: 'flex-end',
@@ -708,212 +716,203 @@ const EventosCadastroForm = () => {
                           paddingTop: '8px',
                         }}
                       >
-                        {aguardandoAprovacao ? (
+                        {aguardandoAprovacao && (
                           <LabelAguardandoAprovacao>
                             Aguardando aprovação
                           </LabelAguardandoAprovacao>
-                        ) : (
-                          <></>
                         )}
                       </Col>
                     </ContainerColumnReverse>
-                  </Row>
-                  <Row gutter={[16, 16]}>
-                    <Col md={24} xl={12}>
-                      <DreCadastroEventos
+                  </Col>
+
+                  <Col md={24} xl={12}>
+                    <DreCadastroEventos
+                      form={form}
+                      onChangeCampos={() => {
+                        onChangeDre(form);
+                      }}
+                      desabilitar={desabilitarCampos || !podeAlterarEvento}
+                      eventoId={eventoId}
+                    />
+                  </Col>
+
+                  <Col md={24} xl={12}>
+                    <UeCadastroEventos
+                      form={form}
+                      onChangeCampos={ue => {
+                        form.setFieldValue('tipoEventoId', undefined);
+                        setLimparRecorrencia(true);
+                        onChangeUe(ue, form);
+                        setListaCalendarioParaCopiar([]);
+                      }}
+                      desabilitar={desabilitarCampos || !podeAlterarEvento}
+                      eventoId={eventoId}
+                      tipoCalendarioId={tipoCalendarioId}
+                    />
+                  </Col>
+
+                  <Col sm={24} md={12}>
+                    <CampoTexto
+                      form={form}
+                      label="Nome do evento"
+                      placeholder="Nome do evento"
+                      onChange={onChangeCampos}
+                      name="nome"
+                      desabilitado={desabilitarCampos || !podeAlterarEvento}
+                      labelRequired
+                    />
+                  </Col>
+
+                  <Col
+                    sm={24}
+                    md={
+                      eventoTipoFeriadoSelecionado ||
+                      eventoTipoLocalOcorrenciaSMESelecionado
+                        ? 6
+                        : 12
+                    }
+                  >
+                    <TipoEventoCadastroEventos
+                      form={form}
+                      onChangeCampos={tipo => {
+                        onChangeTipoEvento(listaTipoEvento, tipo, form);
+                        onChangeCampos();
+                        setLimparRecorrencia(true);
+                      }}
+                      desabilitar={desabilitarCampos || !podeAlterarEvento}
+                    />
+                  </Col>
+
+                  {eventoTipoFeriadoSelecionado && (
+                    <Col sm={24} md={6}>
+                      <SelectComponent
                         form={form}
-                        onChangeCampos={() => {
-                          onChangeDre(form);
-                        }}
-                        desabilitar={desabilitarCampos || !podeAlterarEvento}
-                        eventoId={eventoId}
+                        label="Nome feriado"
+                        name="feriadoId"
+                        lista={listaFeriados}
+                        valueOption="id"
+                        valueText="nome"
+                        onChange={onChangeCampos}
+                        placeholder="Selecione o feriado"
+                        disabled={desabilitarCampos || !podeAlterarEvento}
+                        labelRequired
                       />
                     </Col>
-                    <Col md={24} xl={12}>
-                      <UeCadastroEventos
+                  )}
+
+                  {eventoTipoLocalOcorrenciaSMESelecionado && (
+                    <Col sm={24} md={6}>
+                      <BimestreCadastroEventos
                         form={form}
-                        onChangeCampos={ue => {
-                          form.setFieldValue('tipoEventoId', undefined);
-                          setLimparRecorrencia(true);
-                          onChangeUe(ue, form);
-                          setListaCalendarioParaCopiar([]);
-                        }}
-                        desabilitar={desabilitarCampos || !podeAlterarEvento}
-                        eventoId={eventoId}
+                        onChangeCampos={onChangeCampos}
                         tipoCalendarioId={tipoCalendarioId}
                       />
                     </Col>
-                  </Row>
+                  )}
 
-                  <Row gutter={[16, 16]}>
-                    <Col sm={24} md={12}>
-                      <CampoTexto
+                  <Col sm={24} md={12} lg={6}>
+                    <CampoData
+                      form={form}
+                      label={
+                        tipoDataUnico
+                          ? 'Data do evento'
+                          : 'Data início do evento'
+                      }
+                      placeholder="Data início do evento"
+                      formatoData="DD/MM/YYYY"
+                      name="dataInicio"
+                      onChange={onChangeCampos}
+                      desabilitarData={desabilitarData}
+                      desabilitado={desabilitarCampos || !podeAlterarEvento}
+                      labelRequired={isFieldRequired('dataInicio', validacoes)}
+                    />
+                  </Col>
+
+                  {!tipoDataUnico && (
+                    <Col sm={24} md={12} lg={6}>
+                      <CampoData
                         form={form}
-                        label="Nome do evento"
-                        placeholder="Nome do evento"
+                        label="Data fim do evento"
+                        placeholder="Data fim do evento"
+                        formatoData="DD/MM/YYYY"
+                        name="dataFim"
                         onChange={onChangeCampos}
-                        name="nome"
                         desabilitado={desabilitarCampos || !podeAlterarEvento}
                         labelRequired
                       />
                     </Col>
-                    <Col
-                      sm={24}
-                      md={
-                        eventoTipoFeriadoSelecionado ||
-                        eventoTipoLocalOcorrenciaSMESelecionado
-                          ? 6
-                          : 12
-                      }
-                    >
-                      <TipoEventoCadastroEventos
-                        form={form}
-                        onChangeCampos={tipo => {
-                          onChangeTipoEvento(listaTipoEvento, tipo, form);
-                          onChangeCampos();
-                          setLimparRecorrencia(true);
-                        }}
-                        desabilitar={desabilitarCampos || !podeAlterarEvento}
-                      />
-                    </Col>
-                    {eventoTipoFeriadoSelecionado ? (
-                      <Col sm={24} md={6}>
-                        <SelectComponent
-                          form={form}
-                          label="Nome feriado"
-                          name="feriadoId"
-                          lista={listaFeriados}
-                          valueOption="id"
-                          valueText="nome"
-                          onChange={onChangeCampos}
-                          placeholder="Selecione o feriado"
-                          disabled={desabilitarCampos || !podeAlterarEvento}
-                          labelRequired
-                        />
-                      </Col>
-                    ) : (
-                      ''
-                    )}
-                    {eventoTipoLocalOcorrenciaSMESelecionado && (
-                      <Col sm={24} md={6}>
-                        <BimestreCadastroEventos
-                          form={form}
-                          onChangeCampos={onChangeCampos}
-                          tipoCalendarioId={tipoCalendarioId}
-                        />
-                      </Col>
-                    )}
-                  </Row>
-                  <Row gutter={[16, 16]}>
-                    <Col sm={24} md={12} lg={6}>
-                      <CampoData
-                        form={form}
-                        label={
-                          tipoDataUnico
-                            ? 'Data do evento'
-                            : 'Data início do evento'
-                        }
-                        placeholder="Data início do evento"
-                        formatoData="DD/MM/YYYY"
-                        name="dataInicio"
-                        onChange={onChangeCampos}
-                        desabilitarData={desabilitarData}
-                        desabilitado={desabilitarCampos || !podeAlterarEvento}
-                        labelRequired={isFieldRequired(
-                          'dataInicio',
-                          validacoes
-                        )}
-                      />
-                    </Col>
-                    {!tipoDataUnico ? (
-                      <Col sm={24} md={12} lg={6}>
-                        <CampoData
-                          form={form}
-                          label="Data fim do evento"
-                          placeholder="Data fim do evento"
-                          formatoData="DD/MM/YYYY"
-                          name="dataFim"
-                          onChange={onChangeCampos}
-                          desabilitado={desabilitarCampos || !podeAlterarEvento}
-                          labelRequired
-                        />
-                      </Col>
-                    ) : (
-                      ''
-                    )}
-                    <Col sm={24} md={5} lg={4}>
-                      <Button
-                        id="btn-repetir"
-                        label="Repetir"
-                        icon="fas fa-retweet"
-                        color={Colors.Azul}
-                        border
-                        className="mt-4"
-                        onClick={onClickRecorrencia}
-                        disabled={desabilitarRecorrencia(form)}
-                      />
-                      {!!recorrencia && recorrencia.dataInicio && (
-                        <small>Existe recorrência cadastrada</small>
-                      )}
-                    </Col>
+                  )}
 
-                    {!desabilitarLetivo && (
-                      <Col sm={24} md={4}>
-                        <RadioGroupButton
-                          label="Letivo"
-                          form={form}
-                          opcoes={opcoesLetivo}
-                          name="letivo"
-                          valorInicial
-                          onChange={onChangeCampos}
-                          desabilitado={
-                            desabilitarCampos ||
-                            desabilitarOpcaoLetivo ||
-                            !podeAlterarEvento
-                          }
-                        />
-                      </Col>
+                  <Col sm={24} md={5} lg={4}>
+                    <Button
+                      id="btn-repetir"
+                      label="Repetir"
+                      icon="fas fa-retweet"
+                      color={Colors.Azul}
+                      border
+                      className="mt-4"
+                      onClick={onClickRecorrencia}
+                      disabled={desabilitarRecorrencia(form)}
+                    />
+                    {!!recorrencia && recorrencia.dataInicio && (
+                      <small>Existe recorrência cadastrada</small>
                     )}
-                  </Row>
-                  <Row gutter={[16, 16]}>
-                    <Col sm={24}>
-                      <CampoTexto
+                  </Col>
+
+                  {!desabilitarLetivo && (
+                    <Col sm={24} md={4}>
+                      <RadioGroupButton
+                        label="Letivo"
                         form={form}
-                        label="Descrição"
-                        placeholder="Descrição"
+                        opcoes={opcoesLetivo}
+                        name="letivo"
+                        valorInicial
                         onChange={onChangeCampos}
-                        name="descricao"
-                        type="textarea"
-                        desabilitado={desabilitarCampos || !podeAlterarEvento}
-                        labelRequired={campoDescricaoEhObrigatorio()}
+                        desabilitado={
+                          desabilitarCampos ||
+                          desabilitarOpcaoLetivo ||
+                          !podeAlterarEvento
+                        }
                       />
                     </Col>
-                  </Row>
-                  <Row gutter={[16, 16]}>
-                    <Col span={24}>
-                      <Button
-                        id="btn-copiar-evento"
-                        label="Copiar Evento"
-                        icon="fas fa-share"
-                        color={Colors.Azul}
-                        border
-                        className="mt-4 mr-3"
-                        onClick={() => onClickCopiarEvento(form)}
-                        disabled={desabilitarCampos || !podeAlterarEvento}
-                      />
-                      {listaCalendarioParaCopiar &&
-                      listaCalendarioParaCopiar.length ? (
-                        <ListaCopiarEventos>
-                          <div className="mb-1">
-                            Evento será copiado para os calendários:
-                          </div>
-                          {montarExibicaoEventosCopiar()}
-                        </ListaCopiarEventos>
-                      ) : (
-                        ''
-                      )}
-                    </Col>
-                  </Row>
+                  )}
+
+                  <Col sm={24}>
+                    <CampoTexto
+                      form={form}
+                      label="Descrição"
+                      placeholder="Descrição"
+                      onChange={onChangeCampos}
+                      name="descricao"
+                      type="textarea"
+                      desabilitado={desabilitarCampos || !podeAlterarEvento}
+                      labelRequired={campoDescricaoEhObrigatorio()}
+                    />
+                  </Col>
+
+                  <Col span={24}>
+                    <Button
+                      id="btn-copiar-evento"
+                      label="Copiar Evento"
+                      icon="fas fa-share"
+                      color={Colors.Azul}
+                      border
+                      className="mt-4 mr-3"
+                      onClick={() => onClickCopiarEvento(form)}
+                      disabled={desabilitarCampos || !podeAlterarEvento}
+                    />
+                    {listaCalendarioParaCopiar &&
+                    listaCalendarioParaCopiar.length ? (
+                      <ListaCopiarEventos>
+                        <div className="mb-1">
+                          Evento será copiado para os calendários:
+                        </div>
+                        {montarExibicaoEventosCopiar()}
+                      </ListaCopiarEventos>
+                    ) : (
+                      ''
+                    )}
+                  </Col>
 
                   {auditoriaEventos?.criadoEm ? (
                     <Auditoria
@@ -928,7 +927,7 @@ const EventosCadastroForm = () => {
                   ) : (
                     ''
                   )}
-                </Col>
+                </Row>
               </Form>
             )}
           </Formik>

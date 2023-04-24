@@ -3,14 +3,17 @@ import { useSelector } from 'react-redux';
 import Cabecalho from '~/componentes-sgp/cabecalho';
 import Card from '~/componentes/card';
 import { ListaPaginada, ButtonGroup } from '~/componentes';
-import history from '~/servicos/history';
+
 import RotasDto from '~/dtos/rotasDto';
 import Filtro from './componentes/Filtro';
 import servicoTipoAvaliaco from '~/servicos/Paginas/TipoAvaliacao';
 import { sucesso, confirmar, erro, erros } from '~/servicos/alertas';
 import { SGP_BUTTON_NOVO } from '~/constantes/ids/button';
+import { useNavigate } from 'react-router-dom';
 
 const TipoAvaliacaoLista = () => {
+  const navigate = useNavigate();
+
   const [itensSelecionados, setItensSelecionados] = useState([]);
   const [filtro, setFiltro] = useState({});
   const [somenteConsulta] = useState(false);
@@ -37,10 +40,10 @@ const TipoAvaliacaoLista = () => {
     },
   ];
 
-  const onClickVoltar = () => history.push('/');
+  const onClickVoltar = () => navigate('/');
 
   const onClickBotaoPrincipal = () => {
-    history.push(`tipo-avaliacao/novo`);
+    navigate(`tipo-avaliacao/novo`);
   };
 
   const onSelecionarItems = items => {
@@ -68,7 +71,7 @@ const TipoAvaliacaoLista = () => {
   };
 
   const onClickEditar = item => {
-    history.push(`${RotasDto.TIPO_AVALIACAO}/editar/${item.id}`);
+    navigate(`${RotasDto.TIPO_AVALIACAO}/editar/${item.id}`);
   };
 
   const onChangeFiltro = valoresFiltro => {

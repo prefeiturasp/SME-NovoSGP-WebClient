@@ -163,7 +163,6 @@ const EventosListaFiltros = () => {
     } else {
       setListaTipoEventos([]);
     }
-
   }, []);
 
   const obterTiposCalendarios = useCallback(async descricao => {
@@ -193,7 +192,6 @@ const EventosListaFiltros = () => {
     if (!calendarioSelecionado?.id) {
       limparQuandoSemCalendario();
     }
-
   }, [calendarioSelecionado]);
 
   const selecionaTipoCalendario = descricao => {
@@ -254,7 +252,6 @@ const EventosListaFiltros = () => {
       setCodigoDre();
       setListaDres([]);
     }
-
   }, []);
 
   useEffect(() => {
@@ -264,7 +261,6 @@ const EventosListaFiltros = () => {
     return () => {
       clearTimeout(timeoutBuscarPorNome);
     };
-
   }, [obterTiposCalendarios, obterListaEventos]);
 
   const setarDreListaAtual = useCallback(() => {
@@ -283,8 +279,6 @@ const EventosListaFiltros = () => {
         filtroListaLimparDre();
       }
     }
-
-
   }, [listaDres, usuario, filtroListaEventos]);
 
   useEffect(() => {
@@ -302,7 +296,6 @@ const EventosListaFiltros = () => {
     } else {
       setCodigoDre();
     }
-
   }, [obterDres, calendarioSelecionado, listaDres]);
 
   const onChangeDre = codigo => {
@@ -388,7 +381,6 @@ const EventosListaFiltros = () => {
       setCodigoUe();
       setListaUes([]);
     }
-
   }, [codigoDre, calendarioSelecionado, usuario]);
 
   useEffect(() => {
@@ -398,7 +390,6 @@ const EventosListaFiltros = () => {
       setListaUes([]);
       setCodigoUe();
     }
-
   }, [codigoDre, calendarioSelecionado, obterUes]);
 
   const onChangeUe = codigo => {
@@ -457,7 +448,6 @@ const EventosListaFiltros = () => {
         setCalendarioSelecionado(tipoCalendarioParaSetar);
       }
     }
-
   }, [paramsRota, listaCalendarios, filtroListaEventos, limparFiltrosSalvos]);
 
   const limparFiltrosSelecionados = () => {
@@ -472,39 +462,41 @@ const EventosListaFiltros = () => {
   };
 
   return (
-    <Col span={24}>
+    <>
       <Row gutter={[16, 16]}>
-        <Col sm={24} md={12} xl={8}>
-          <div className="col-sm-24 mb-4">
-            <CheckboxComponent
-              id={SGP_CHECKBOX_EXIBIR_HISTORICO}
-              label="Exibir histórico?"
-              onChangeCheckbox={onCheckedConsideraHistorico}
-              checked={consideraHistorico}
-            />
-          </div>
-          <Loader loading={carregandoCalendarios} tip="">
-            <SelectAutocomplete
-              id={SGP_SELECT_TIPO_CALENDARIO}
-              label="Calendário"
-              showList
-              isHandleSearch
-              placeholder="Selecione o calendário"
-              className="ant-col-md-24"
-              name="tipoCalendarioId"
-              lista={listaCalendarios || []}
-              valueField="id"
-              textField="descricao"
-              onSelect={valor => selecionaTipoCalendario(valor)}
-              onChange={valor => selecionaTipoCalendario(valor)}
-              handleSearch={handleSearch}
-              value={calendarioSelecionado?.descricao || ''}
-              allowClear={false}
-            />
-          </Loader>
+        <Col span={24}>
+          <CheckboxComponent
+            id={SGP_CHECKBOX_EXIBIR_HISTORICO}
+            label="Exibir histórico?"
+            onChangeCheckbox={onCheckedConsideraHistorico}
+            checked={consideraHistorico}
+          />
         </Col>
-      </Row>
-      <Row gutter={[16, 16]}>
+
+        <Col span={24} style={{ paddingLeft: 0 }}>
+          <Col sm={24} md={12} xl={10}>
+            <Loader loading={carregandoCalendarios} tip="">
+              <SelectAutocomplete
+                id={SGP_SELECT_TIPO_CALENDARIO}
+                label="Calendário"
+                showList
+                isHandleSearch
+                placeholder="Selecione o calendário"
+                className="ant-col-md-24"
+                name="tipoCalendarioId"
+                lista={listaCalendarios || []}
+                valueField="id"
+                textField="descricao"
+                onSelect={valor => selecionaTipoCalendario(valor)}
+                onChange={valor => selecionaTipoCalendario(valor)}
+                handleSearch={handleSearch}
+                value={calendarioSelecionado?.descricao || ''}
+                allowClear={false}
+              />
+            </Loader>
+          </Col>
+        </Col>
+
         <Col md={24} xl={12}>
           <Loader loading={carregandoDres} tip="">
             <SelectComponent
@@ -521,6 +513,7 @@ const EventosListaFiltros = () => {
             />
           </Loader>
         </Col>
+
         <Col md={24} xl={12}>
           <Loader loading={carregandoUes} tip="">
             <SelectComponent
@@ -537,6 +530,7 @@ const EventosListaFiltros = () => {
             />
           </Loader>
         </Col>
+
         <Col sm={24} md={12} xl={8}>
           <CampoTexto
             id={SGP_INPUT_TEXT_NOME_EVENTO}
@@ -549,6 +543,7 @@ const EventosListaFiltros = () => {
             allowClear
           />
         </Col>
+
         <Col sm={24} md={12} xl={8}>
           <SelectComponent
             id={SGP_SELECT_TIPO_EVENTO}
@@ -564,6 +559,7 @@ const EventosListaFiltros = () => {
             }
           />
         </Col>
+
         <Col sm={12} md={6} xl={4}>
           <CampoData
             id={SGP_DATE_SELECIONAR_DATA_INICIO}
@@ -582,6 +578,7 @@ const EventosListaFiltros = () => {
             mensagemErro={!dataInicio && dataFim ? 'Data obrigatória' : ''}
           />
         </Col>
+
         <Col sm={12} md={6} xl={4}>
           <CampoData
             id={SGP_DATE_SELECIONAR_DATA_FIM}
@@ -600,29 +597,28 @@ const EventosListaFiltros = () => {
             mensagemErro={mensagemErroDataFim()}
           />
         </Col>
+
         {usuario?.possuiPerfilSme &&
-        codigoDre === OPCAO_TODOS &&
-        codigoUe === OPCAO_TODOS ? (
-          <Col span={24}>
-            <ContainerSwitchExibirEventos>
-              <Switch
-                id={SGP_SWITCH_EXIBIR_EVENTO_VALIDO}
-                onChange={() => {
-                  setEhEventosTodaRede(!ehEventosTodaRede);
-                  seFiltrarNovaConsulta(true);
-                }}
-                checked={ehEventosTodaRede}
-                size="default"
-                style={{ marginRight: '10px', color: Base.Roxo }}
-              />
-              <Label text="Exibir somente eventos válidos para toda a rede" />
-            </ContainerSwitchExibirEventos>
-          </Col>
-        ) : (
-          ''
-        )}
+          codigoDre === OPCAO_TODOS &&
+          codigoUe === OPCAO_TODOS && (
+            <Col span={24}>
+              <ContainerSwitchExibirEventos>
+                <Switch
+                  id={SGP_SWITCH_EXIBIR_EVENTO_VALIDO}
+                  onChange={() => {
+                    setEhEventosTodaRede(!ehEventosTodaRede);
+                    seFiltrarNovaConsulta(true);
+                  }}
+                  checked={ehEventosTodaRede}
+                  size="default"
+                  style={{ marginRight: '10px', color: Base.Roxo }}
+                />
+                <Label text="Exibir somente eventos válidos para toda a rede" />
+              </ContainerSwitchExibirEventos>
+            </Col>
+          )}
       </Row>
-    </Col>
+    </>
   );
 };
 

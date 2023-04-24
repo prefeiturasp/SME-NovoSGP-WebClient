@@ -1,4 +1,4 @@
-import React, { useState, useEffect }  from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
 import { Affix } from 'antd';
@@ -33,7 +33,6 @@ const Container = styled.div`
     line-height: normal;
     letter-spacing: normal;
     color: ${Base.CinzaMako};
-    margin-bottom: 0.3rem;
   }
 
   .background-row {
@@ -81,7 +80,7 @@ const Cabecalho = ({
         ...style,
       }}
     >
-      <div className="pt-3">
+      <div className="d-flex align-items-center pt-3">
         <span>{titulo}</span>
         <span className="titulo">{pagina}</span>
         {pagina && urlAjuda && (

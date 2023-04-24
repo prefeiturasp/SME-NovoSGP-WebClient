@@ -144,7 +144,6 @@ const ModalImpressao = ({ dadosAlunos, componenteCurricularId }) => {
       width="50%"
       fecharAoClicarFora
       fecharAoClicarEsc
-      esconderBotoes
       botoesRodape={botoesRodape()}
       fontSizeTitulo="18"
       tipoFonte="bold"
