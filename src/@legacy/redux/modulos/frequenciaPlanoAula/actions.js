@@ -184,3 +184,10 @@ export const setAulaIdPodeEditar = payload => ({
   type: '@frequenciaPlanoAula/setAulaIdPodeEditar',
   payload,
 });
+
+export function setTemEstudanteAlteradoComCompensacao(payload) {
+  return {
+    type: '@frequenciaPlanoAula/setTemEstudanteAlteradoComCompensacao',
+    payload,
+  };
+}

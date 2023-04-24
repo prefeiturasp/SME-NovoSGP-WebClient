@@ -105,22 +105,32 @@ const ListaoOperacoesBotoesAcao = () => {
     );
 
   const salvarFrequencia = async () => {
+    const aulasAlteradasPossuiCompensacao = [];
+
     const paramsSalvar = dadosFrequencia.aulas
       .map(aula => {
         const alunos = dadosFrequencia?.alunos
           ?.map(aluno => {
-            let aulasParaSalvar = [];
-            if (aula?.frequenciaId) {
-              aulasParaSalvar = aluno?.aulas?.filter(a => a?.alterado);
-            } else {
-              aulasParaSalvar = aluno?.aulas;
-            }
-            if (aulasParaSalvar?.length) {
-              const aulaAlunoPorIdAula = aulasParaSalvar.find(
+            if (aluno?.aulas?.length) {
+              const aulaAlunoPorIdAula = aluno?.aulas.find(
                 aulaAluno => aulaAluno?.aulaId === aula?.aulaId
               );
 
+              const possuiCompensacao =
+                aulaAlunoPorIdAula?.detalheFrequencia?.find(
+                  c => !!c?.possuiCompensacao
+                );
+
+              if (possuiCompensacao && aulaAlunoPorIdAula?.alterado) {
+                const dataJaInserida = aulasAlteradasPossuiCompensacao.find(
+                  d => d === aula?.dataAula
+                );
+                if (!dataJaInserida) {
+                  aulasAlteradasPossuiCompensacao.push(aula?.dataAula);
+                }
+              }
               return {
+                desabilitado: aulaAlunoPorIdAula?.desabilitado,
                 codigoAluno: aluno?.codigoAluno,
                 frequencias: aulaAlunoPorIdAula?.detalheFrequencia,
               };
@@ -130,11 +140,26 @@ const ListaoOperacoesBotoesAcao = () => {
           ?.filter(a => a?.codigoAluno && a?.frequencias?.length);
         return {
           aulaId: aula.aulaId,
-          frequenciaId: aula?.frequenciaId,
           alunos,
         };
       })
       ?.filter(a => a?.alunos?.length);
+
+    let continuarSalvar = true;
+
+    if (aulasAlteradasPossuiCompensacao?.length) {
+      continuarSalvar = await confirmar(
+        'Atenção',
+        `Existe(m) estudante(s) com compensação de ausência para esta(s) aula(s) ${aulasAlteradasPossuiCompensacao.join(
+          ', '
+        )}, ao alterar a frequência a compensação poderá ser alterada ou excluída.`,
+        'Deseja continuar?'
+      );
+    }
+
+    if (!continuarSalvar) {
+      return false;
+    }
 
     setExibirLoaderGeral(true);
     const resposta = await ServicoFrequencia.salvarFrequenciaListao(
@@ -144,13 +169,70 @@ const ListaoOperacoesBotoesAcao = () => {
       .finally(() => setExibirLoaderGeral(false));
 
     if (resposta?.data) {
-      const auditoriaNova = resposta.data;
-      dadosFrequencia.auditoria = { ...auditoriaNova };
-      dadosIniciaisFrequencia.auditoria = { ...auditoriaNova };
-      setDadosFrequencia({ ...dadosFrequencia });
-      setDadosIniciaisFrequencia(dadosIniciaisFrequencia);
+      const auditoriaNova = resposta.data?.auditoria;
+      if (auditoriaNova?.id) {
+        dadosFrequencia.auditoria = { ...auditoriaNova };
+        dadosIniciaisFrequencia.auditoria = { ...auditoriaNova };
+        const dadosAtualizados = _.cloneDeep(dadosFrequencia);
+        dadosAtualizados?.alunos?.forEach(a => {
+          a?.aulas?.forEach(b => {
+            b.alterado = false;
+          });
+        });
+        setDadosFrequencia({ ...dadosAtualizados });
+        setDadosIniciaisFrequencia(dadosIniciaisFrequencia);
+      }
 
-      sucesso('Frequência realizada com sucesso.');
+      const aulasIDsComErros = resposta.data?.aulasIDsComErros;
+
+      if (aulasIDsComErros?.length) {
+        const aulasComErros = [];
+        const aulasSemErros = [];
+
+        dadosFrequencia.aulas.forEach(aula => {
+          const aulaComErro = aulasIDsComErros.find(
+            aulaIdErro => aulaIdErro === aula?.aulaId
+          );
+          if (aulaComErro) {
+            aulasComErros.push(aula);
+          } else {
+            aulasSemErros.push(aula);
+          }
+        });
+
+        if (aulasComErros?.length) {
+          const dataAulasComErros = aulasComErros
+            .map(a => a?.dataAula)
+            .join(', ');
+
+          let mensagemErro = 'Não foi possível registrar a frequência';
+          if (aulasComErros?.length > 1) {
+            mensagemErro = `${mensagemErro} dos dias ${dataAulasComErros}`;
+          } else {
+            mensagemErro = `${mensagemErro} do dia ${dataAulasComErros}`;
+          }
+
+          erro(mensagemErro);
+        }
+
+        if (aulasSemErros?.length) {
+          const dataAulasSemErros = aulasSemErros
+            .map(a => a?.dataAula)
+            .join(', ');
+
+          let mensagemSucesso = 'Frequência realizada com sucesso';
+          if (aulasSemErros?.length > 1) {
+            mensagemSucesso = `${mensagemSucesso} dos dias ${dataAulasSemErros}`;
+          } else {
+            mensagemSucesso = `${mensagemSucesso} do dia ${dataAulasSemErros}`;
+          }
+
+          sucesso(mensagemSucesso);
+        }
+      } else {
+        sucesso('Frequência realizada com sucesso.');
+      }
+
       dispatch(setTelaEmEdicao(false));
       return true;
     }
@@ -403,9 +485,8 @@ const ListaoOperacoesBotoesAcao = () => {
       return true;
     }
 
-    const errosDiarioBordo = validarCamposObrigatoriosDiarioBordo(
-      dadosAlterados
-    );
+    const errosDiarioBordo =
+      validarCamposObrigatoriosDiarioBordo(dadosAlterados);
 
     if (errosDiarioBordo?.length) {
       setErrosDiarioBordoListao(errosDiarioBordo);
@@ -587,7 +668,6 @@ const ListaoOperacoesBotoesAcao = () => {
     } else {
       dispatch(setLimparModoEdicaoGeral());
     }
-
   }, [telaEmEdicao]);
 
   const onClickVoltar = async () => {

@@ -50,6 +50,7 @@ import {
   SGP_INPUT_NOME_ATIVIDADE,
   SGP_INPUT_NOME_ESTUDANTE,
 } from '~/constantes/ids/input';
+import _ from 'lodash';
 
 const CompensacaoAusenciaForm = ({ match }) => {
   const usuario = useSelector(store => store.usuario);
@@ -630,6 +631,7 @@ const CompensacaoAusenciaForm = ({ match }) => {
   const resetarTelaEdicaoComId = async form => {
     setCarregouInformacoes(false);
     setCarregandoDados(true);
+    setAlunosAusenciaCompensada([]);
     const dadosEdicao = await ServicoCompensacaoAusencia.obterPorId(
       match.params.id
     )
@@ -731,9 +733,16 @@ const CompensacaoAusenciaForm = ({ match }) => {
       );
     }
     paramas.alunos = alunosAusenciaCompensada.map(item => {
+      const compensacaoAusenciaAlunoAula = item?.compensacoes?.length
+        ? item.compensacoes?.map(c => ({
+            registroFrequenciaAlunoId: c?.registroFrequenciaAlunoId,
+          }))
+        : [];
+
       return {
         id: item.id,
         qtdFaltasCompensadas: item.quantidadeFaltasCompensadas,
+        compensacaoAusenciaAlunoAula,
       };
     });
 
@@ -818,13 +827,18 @@ const CompensacaoAusenciaForm = ({ match }) => {
       idsAlunosAusenciaCompensadas.length
     ) {
       const listaAlunosRemover = alunosAusenciaCompensada.filter(item =>
-        idsAlunosAusenciaCompensadas.find(id => String(id) === String(item.id))
+        idsAlunosAusenciaCompensadas.find(
+          id => String(id) === String(item.id) && !item?.alunoSemSalvar
+        )
       );
 
-      const dadosAlunoMsg = `${listaAlunosRemover[0]?.id} - ${listaAlunosRemover[0]?.nome}`;
+      const dadosAlunoMsg = listaAlunosRemover?.map(
+        item => `${item.id} - ${item.nome}`
+      );
+
       let confirmado = true;
 
-      if (!listaAlunosRemover[0]?.alunoSemSalvar) {
+      if (listaAlunosRemover?.length) {
         confirmado = await confirmar(
           'Excluir estudante',
           dadosAlunoMsg,
@@ -875,7 +889,7 @@ const CompensacaoAusenciaForm = ({ match }) => {
   const atualizarValoresListaCompensacao = novaListaAlunos => {
     if (!desabilitarCampos) {
       onChangeCampos();
-      setAlunosAusenciaCompensada([...novaListaAlunos]);
+      setAlunosAusenciaCompensada(_.cloneDeep(novaListaAlunos));
     }
   };
 
@@ -1176,6 +1190,11 @@ const CompensacaoAusenciaForm = ({ match }) => {
                           atualizarValoresListaCompensacao
                         }
                         desabilitarCampos={desabilitarCampos}
+                        idCompensacaoAusencia={idCompensacaoAusencia}
+                        turmaCodigo={turmaSelecionada.turma}
+                        bimestre={form?.values?.bimestre}
+                        disciplinaId={form?.values?.disciplinaId}
+                        anoLetivo={turmaSelecionada?.anoLetivo}
                       />
                     </div>
                   </div>

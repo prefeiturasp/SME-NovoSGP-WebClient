@@ -273,6 +273,7 @@ function Localizador({
             />
           )}
           <InputRF
+            maxlength={11}
             id={SGP_INPUT_RF}
             pessoaSelecionada={pessoaSelecionada}
             onSelect={onBuscarPorRF}
@@ -333,6 +334,7 @@ function Localizador({
           />
         )}
         <InputRF
+          maxlength={11}
           id={SGP_INPUT_RF}
           pessoaSelecionada={pessoaSelecionada}
           onSelect={onBuscarPorRF}
@@ -417,9 +419,9 @@ Localizador.defaultProps = {
   rfEdicao: '',
   buscarOutrosCargos: false,
   buscandoDados: () => {},
-  labelRF: 'Registro Funcional (RF)',
+  labelRF: 'RF/CPF',
   labelNome: 'Nome',
-  placeholderRF: 'Digite o RF',
+  placeholderRF: 'Digite o RF/CPF',
   placeholderNome: 'Digite o nome da pessoa',
   classesRF: '',
   limparCamposAposPesquisa: false,

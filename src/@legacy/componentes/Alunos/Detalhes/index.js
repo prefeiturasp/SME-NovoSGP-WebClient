@@ -6,6 +6,7 @@ import { SinalizacaoAEE } from '~/componentes-sgp';
 import Button from '~/componentes/button';
 import { Base, Colors } from '~/componentes/colors';
 import { SGP_BUTTON_IMPRIMIR_DADOS_INDIVIDUAIS } from '~/constantes/ids/button';
+import { formatarFrequencia } from '~/utils';
 import FotoEstudanteObjectCard from './imagemEstudanteObjectCard';
 import { Container, DadosAluno, FrequenciaGlobal } from './styles';
 
@@ -129,7 +130,7 @@ const DetalhesAluno = props => {
                   className="ml-auto mb-4"
                   color={Colors.Azul}
                   border
-                  onClick={onClickImprimir}
+                  onClick={() => onClickImprimir(dados)}
                   disabled={desabilitarImprimir}
                   id={SGP_BUTTON_IMPRIMIR_DADOS_INDIVIDUAIS}
                 />
@@ -139,12 +140,7 @@ const DetalhesAluno = props => {
               {exibirFrequencia ? (
                 <FrequenciaGlobal>
                   {`Frequência Global: `}
-                  {frequencia === 0 ||
-                  frequencia === '0' ||
-                  frequencia > 0 ||
-                  frequencia
-                    ? `${frequencia}%`
-                    : ''}
+                  {formatarFrequencia(frequencia)}
                 </FrequenciaGlobal>
               ) : (
                 ''
