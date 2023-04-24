@@ -37,6 +37,10 @@ const DrawerAtendimento = ({
     store => store.encaminhamentoNAAPA.exibirLoaderDrawerAtendimento
   );
 
+  const desabilitarCamposEncaminhamentoNAAPA = useSelector(
+    store => store.encaminhamentoNAAPA.desabilitarCamposEncaminhamentoNAAPA
+  );
+
   const [dadosQuestionarioAtual, setDadosQuestionarioAtual] = useState();
 
   const obterDadosAtendimento = useCallback(async () => {
@@ -59,23 +63,25 @@ const DrawerAtendimento = ({
   }, [questionarioId, atendimentoId]);
 
   const onClickSalvar = async () => {
-    dispatch(setExibirLoaderDrawerAtendimento(true));
+    if (!desabilitarCamposEncaminhamentoNAAPA) {
+      dispatch(setExibirLoaderDrawerAtendimento(true));
 
-    const resposta = await ServicoNAAPA.salvarAtendimento(
-      encaminhamentoId,
-      atendimentoId
-    );
+      const resposta = await ServicoNAAPA.salvarAtendimento(
+        encaminhamentoId,
+        atendimentoId
+      );
 
-    if (resposta?.status === 200) {
-      const mensagem = atendimentoId
-        ? 'Atendimento alterado com sucesso'
-        : 'Atendimento registrado com sucesso';
+      if (resposta?.status === 200) {
+        const mensagem = atendimentoId
+          ? 'Atendimento alterado com sucesso'
+          : 'Atendimento registrado com sucesso';
 
-      sucesso(mensagem);
-      onCloseDrawer({ atualizarDados: true });
+        sucesso(mensagem);
+        onCloseDrawer({ atualizarDados: true });
+      }
+
+      dispatch(setExibirLoaderDrawerAtendimento(false));
     }
-
-    dispatch(setExibirLoaderDrawerAtendimento(false));
   };
 
   const onClose = async () => {
@@ -123,6 +129,7 @@ const DrawerAtendimento = ({
           urlUpload="v1/encaminhamento-naapa/upload"
           dadosQuestionarioAtual={dadosQuestionarioAtual?.questoes}
           prefixId={`${SGP_SECAO}_${dadosTab?.nomeComponente}`}
+          desabilitarCampos={desabilitarCamposEncaminhamentoNAAPA}
           funcaoRemoverArquivoCampoUpload={ServicoNAAPA.removerArquivo}
           onChangeQuestionario={() => {
             ServicoNAAPA.guardarSecaoEmEdicao(dadosTab?.id);

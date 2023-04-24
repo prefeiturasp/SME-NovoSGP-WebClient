@@ -11,11 +11,15 @@ import { store } from '~/redux';
 import {
   setDadosEncaminhamentoNAAPA,
   setDadosSituacaoEncaminhamentoNAAPA,
+  setDesabilitarCamposEncaminhamentoNAAPA,
   setExibirLoaderEncaminhamentoNAAPA,
 } from '~/redux/modulos/encaminhamentoNAAPA/actions';
 import { erros } from '~/servicos';
 import ModalErrosQuestionarioDinamico from '~/componentes-sgp/QuestionarioDinamico/Componentes/ModalErrosQuestionarioDinamico/modalErrosQuestionarioDinamico';
 import LabelSituacao from './componentes/labelSituacao';
+import ModalEncerramentoEncaminhamentoNAAPA from './componentes/modalEncerramentoEncaminhamentoNAAPA';
+import MotivoEncerramentoNAAPA from './componentes/motivoEncerramentoNAAPA';
+import situacaoNAAPA from '~/dtos/situacaoNAAPA';
 
 const CadastroEncaminhamentoNAAPA = () => {
   const routeMatch = useRouteMatch();
@@ -67,6 +71,11 @@ const CadastroEncaminhamentoNAAPA = () => {
         situacao: dados.situacao,
         descricaoSituacao: dados.descricaoSituacao,
       };
+
+      if (dados.situacao === situacaoNAAPA.Encerrado) {
+        dispatch(setDesabilitarCamposEncaminhamentoNAAPA(true));
+      }
+
       store.dispatch(setDadosSituacaoEncaminhamentoNAAPA(dadosSituacao));
 
       store.dispatch(setDadosEncaminhamentoNAAPA(dados));
@@ -152,10 +161,17 @@ const CadastroEncaminhamentoNAAPA = () => {
           />
         </Col>
       </Row>
+      <Row>
+        <Col sm={24}>
+          <MotivoEncerramentoNAAPA />
+        </Col>
+      </Row>
 
       <Row style={{ marginTop: '16px' }}>
         <Col sm={24}>
           <ModalErrosQuestionarioDinamico />
+
+          <ModalEncerramentoEncaminhamentoNAAPA />
 
           <MontarDadosTabs
             anoLetivo={dadosEncaminhamentoNAAPA?.anoLetivo}

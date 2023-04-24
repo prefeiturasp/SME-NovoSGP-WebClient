@@ -80,6 +80,7 @@ const EnvolvidosNaOcorrencia = props => {
             name="codigosAlunos"
             maxHeightMultiple="100%"
             label="Criança(s)/Estudante(s) envolvido(s) na ocorrência"
+            placeholder="Criança(s)/Estudante(s) envolvido(s) na ocorrência"
             lista={listaAlunos}
             valueOption="codigoEOL"
             valueText="nomeExibicao"
@@ -95,7 +96,8 @@ const EnvolvidosNaOcorrencia = props => {
             form={form}
             name="codigosServidores"
             maxHeightMultiple="100%"
-            label="Servidor(es) envolvido(s) na ocorrência"
+            label="Servidor(es)/Funcionário(s) envolvido(s) na ocorrência"
+            placeholder="Servidor(es)/Funcionário(s) envolvido(s) na ocorrência"
             lista={listaServidores}
             valueOption="codigoRf"
             valueText="nomeExibicao"

@@ -4,8 +4,11 @@ import { DataTable, Label } from '~/componentes';
 import SelectComponent from '~/componentes/select';
 import { SGP_SELECT_FALTAS_COMPENSACAO } from '~/constantes/ids/select';
 import { SGP_TABLE_LISTA_ALUNOS_AUSENCIA_COMPENSADA } from '~/constantes/ids/table';
+import _ from 'lodash';
 
 import { CardTabelaAlunos } from '../styles';
+import BtnEditarCompensacoes from './btnEditarCompensacoes';
+import ServicoCompensacaoAusencia from '~/servicos/Paginas/DiarioClasse/ServicoCompensacaoAusencia';
 
 const ListaAlunosAusenciasCompensadas = props => {
   const {
@@ -14,13 +17,26 @@ const ListaAlunosAusenciasCompensadas = props => {
     onSelectRow,
     atualizarValoresListaCompensacao,
     desabilitarCampos,
+    idCompensacaoAusencia,
+    turmaCodigo,
+    bimestre,
+    disciplinaId,
+    anoLetivo,
   } = props;
 
-  const atualizarValores = async (qt, indexAluno) => {
+  const exibirColunaAulas = anoLetivo && Number(anoLetivo) >= 2023;
+
+  const atualizarValores = (
+    qt,
+    indexAluno,
+    dadosIniciaisListasAusenciasCompensadas
+  ) => {
     if (indexAluno >= 0) {
-      const lista = listaAusenciaCompensada;
+      const lista = _.cloneDeep(listaAusenciaCompensada);
       lista[indexAluno].quantidadeFaltasCompensadas = qt;
-      atualizarValoresListaCompensacao(lista);
+      lista[indexAluno].dadosIniciaisListasAusenciasCompensadas =
+        dadosIniciaisListasAusenciasCompensadas;
+      atualizarValoresListaCompensacao(_.cloneDeep(lista));
     }
   };
 
@@ -35,7 +51,7 @@ const ListaAlunosAusenciasCompensadas = props => {
     }
     return (
       <SelectComponent
-        onChange={qt => {
+        onChange={novaQtCompensada => {
           if (!desabilitarCampos) {
             const aluno = listaAusenciaCompensada.find(
               item => Number(item.id) === Number(dadosAluno.id)
@@ -44,7 +60,76 @@ const ListaAlunosAusenciasCompensadas = props => {
             if (aluno) {
               indexAluno = listaAusenciaCompensada.indexOf(aluno);
             }
-            atualizarValores(qt, indexAluno, aluno);
+
+            if (aluno?.dadosIniciaisListasAusenciasCompensadas) {
+              if (!novaQtCompensada) {
+                aluno.dadosIniciaisListasAusenciasCompensadas = {
+                  esquerda: [
+                    ...aluno?.dadosIniciaisListasAusenciasCompensadas?.esquerda,
+                    ...aluno?.dadosIniciaisListasAusenciasCompensadas?.direita,
+                  ],
+                  direita: [],
+                };
+              } else {
+                let qtdAusenciasCompensadas =
+                  aluno.dadosIniciaisListasAusenciasCompensadas?.direita
+                    ?.length;
+
+                if (qtdAusenciasCompensadas) {
+                  while (qtdAusenciasCompensadas < novaQtCompensada) {
+                    aluno.dadosIniciaisListasAusenciasCompensadas.direita.push(
+                      aluno.dadosIniciaisListasAusenciasCompensadas.esquerda.shift()
+                    );
+                    qtdAusenciasCompensadas =
+                      aluno.dadosIniciaisListasAusenciasCompensadas?.direita
+                        ?.length;
+                  }
+
+                  while (qtdAusenciasCompensadas > novaQtCompensada) {
+                    aluno.dadosIniciaisListasAusenciasCompensadas.esquerda.push(
+                      aluno.dadosIniciaisListasAusenciasCompensadas.direita.pop()
+                    );
+                    qtdAusenciasCompensadas =
+                      aluno.dadosIniciaisListasAusenciasCompensadas?.direita
+                        ?.length;
+                  }
+
+                  if (
+                    aluno.dadosIniciaisListasAusenciasCompensadas.esquerda
+                      ?.length
+                  ) {
+                    const listaEsquerdaOrdenada =
+                      ServicoCompensacaoAusencia.ordenarDataAusenciaMenorParaMaior(
+                        aluno.dadosIniciaisListasAusenciasCompensadas.esquerda
+                      );
+                    aluno.dadosIniciaisListasAusenciasCompensadas.esquerda =
+                      listaEsquerdaOrdenada;
+                  }
+
+                  if (
+                    aluno.dadosIniciaisListasAusenciasCompensadas.direita
+                      ?.length
+                  ) {
+                    const listaDireitaOrdenada =
+                      ServicoCompensacaoAusencia.ordenarDataAusenciaMenorParaMaior(
+                        aluno.dadosIniciaisListasAusenciasCompensadas.direita
+                      );
+                    aluno.dadosIniciaisListasAusenciasCompensadas.direita =
+                      listaDireitaOrdenada;
+
+                    aluno.compensacoes = listaDireitaOrdenada;
+                  } else {
+                    aluno.compensacoes = [];
+                  }
+                }
+              }
+            }
+
+            atualizarValores(
+              novaQtCompensada,
+              indexAluno,
+              aluno?.dadosIniciaisListasAusenciasCompensadas
+            );
           }
         }}
         valueOption="valor"
@@ -71,6 +156,27 @@ const ListaAlunosAusenciasCompensadas = props => {
       },
     },
   ];
+
+  if (exibirColunaAulas) {
+    colunasListaAlunosAusenciaCompensada.push({
+      title: 'Aulas',
+      width: '85px',
+      align: 'center',
+      render: (_, dadosAluno, indexAluno) => (
+        <BtnEditarCompensacoes
+          listaAusenciaCompensada={listaAusenciaCompensada}
+          atualizarValoresListaCompensacao={atualizarValoresListaCompensacao}
+          desabilitarCampos={desabilitarCampos}
+          dadosAluno={dadosAluno}
+          idCompensacaoAusencia={idCompensacaoAusencia}
+          turmaCodigo={turmaCodigo}
+          bimestre={bimestre}
+          disciplinaId={disciplinaId}
+          indexAluno={indexAluno}
+        />
+      ),
+    });
+  }
 
   const onSelectRowAlunos = ids => {
     onSelectRow(ids);

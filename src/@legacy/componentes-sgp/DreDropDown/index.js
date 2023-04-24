@@ -24,6 +24,7 @@ function DreDropDown({
 }) {
   const [carregando, setCarregando] = useState(false);
   const [listaDres, setListaDres] = useState([]);
+  const anoLetivo = form?.values?.anoLetivo;
 
   const buscarDres = async () => {
     setCarregando(true);
@@ -54,13 +55,13 @@ function DreDropDown({
 
   useEffect(() => {
     if (temModalidade) buscarDres();
-  }, [url]);
+  }, [url, anoLetivo]);
 
   useEffect(() => {
     if (!valorNuloOuVazio(form.values.dreId)) {
       onChange(form.values.dreId, listaDres);
     }
-  }, [form.values.dreId, onChange]);
+  }, [form.values.dreId]);
 
   return (
     <Loader loading={carregando} tip="">

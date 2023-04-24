@@ -8,7 +8,7 @@ import { Base, DataTable, Loader } from '~/componentes';
 import { BIMESTRE_FINAL } from '~/constantes/constantes';
 import { statusAcompanhamentoConselhoClasse } from '~/dtos';
 import { erros, ServicoAcompanhamentoFechamento } from '~/servicos';
-import { valorNuloOuVazio } from '~/utils/funcoes/gerais';
+import { formatarFrequencia, valorNuloOuVazio } from '~/utils/funcoes/gerais';
 
 import {
   MarcadorTriangulo,
@@ -84,7 +84,7 @@ const TabelaAlunosConselho = props => {
       title: 'Frequência global',
       dataIndex: 'frequenciaGlobal',
       align: 'center',
-      render: frequenciaGlobal => `${frequenciaGlobal}%`,
+      render: frequenciaGlobal => formatarFrequencia(frequenciaGlobal),
     },
     {
       title: 'Situação do conselho de classe',
@@ -186,9 +186,9 @@ const TabelaAlunosConselho = props => {
     },
     {
       title: 'Percentual de frequência',
-      dataIndex: 'percentualFrequencia',
+      dataIndex: 'percentualFrequenciaFormatado',
       align: 'center',
-      render: percentualFrequencia => `${percentualFrequencia}%`,
+      render: percentualFrequencia => formatarFrequencia(percentualFrequencia),
     },
   ];
 

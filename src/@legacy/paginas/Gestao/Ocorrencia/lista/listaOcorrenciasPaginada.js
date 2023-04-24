@@ -45,7 +45,7 @@ const ListaOcorrenciasPaginada = props => {
       ellipsis: true,
     },
     {
-      title: 'Servidor',
+      title: 'Servidores/Funcionários',
       dataIndex: 'servidorOcorrencia',
       width: '30%',
       ellipsis: true,

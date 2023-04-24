@@ -21,7 +21,10 @@ import notasConceitos from '~/dtos/notasConceitos';
 import ListaoContext from '~/paginas/DiarioClasse/Listao/listaoContext';
 import { ContainerAuditoria } from '~/paginas/Fechamento/FechamentoFinal/fechamentoFinal.css';
 import { setTelaEmEdicao } from '~/redux/modulos/geral/actions';
-import { tratarStringComponenteCurricularNome } from '~/utils';
+import {
+  formatarFrequencia,
+  tratarStringComponenteCurricularNome,
+} from '~/utils';
 import FiltroComponentesRegencia from '../componentes/filtroComponentesRegencia';
 import MarcadorAguardandoAprovacao from '../componentes/marcadorAguardandoAprovacao';
 import {
@@ -467,13 +470,13 @@ const ListaoListaFechamento = props => {
           : 'Conceito final',
       align: 'center',
       width: '115px',
+      className: 'position-relative',
     };
 
     if (ehRegencia) {
       paramsColFinal.render = dadosEstudante => {
-        const temNotaConceitoEmAprovacao = dadosEstudante?.notasConceitoFinal?.find?.(
-          item => item?.emAprovacao
-        );
+        const temNotaConceitoEmAprovacao =
+          dadosEstudante?.notasConceitoFinal?.find?.(item => item?.emAprovacao);
 
         const alunoExpandido = temLinhaNotaConceitoExpandida(
           dadosEstudante?.codigoAluno
@@ -523,9 +526,10 @@ const ListaoListaFechamento = props => {
 
     if (ehRegencia) {
       paramsCol.render = dadosEstudante => {
-        const temNotaConceitoEmAprovacao = dadosEstudante?.notasConceitoBimestre?.find?.(
-          item => item?.emAprovacao
-        );
+        const temNotaConceitoEmAprovacao =
+          dadosEstudante?.notasConceitoBimestre?.find?.(
+            item => item?.emAprovacao
+          );
 
         const alunoExpandido = temLinhaNotaConceitoExpandida(
           dadosEstudante?.codigoAluno
@@ -570,8 +574,7 @@ const ListaoListaFechamento = props => {
       align: 'center',
       dataIndex: 'frequencia',
       width: '115px',
-      render: percentualFrequencia =>
-        percentualFrequencia ? `${percentualFrequencia}%` : '',
+      render: percentualFrequencia => formatarFrequencia(percentualFrequencia),
     });
   }
 

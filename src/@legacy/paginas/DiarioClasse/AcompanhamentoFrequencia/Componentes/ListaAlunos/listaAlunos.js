@@ -17,6 +17,7 @@ import {
 import { erros } from '~/servicos';
 import ServicoAcompanhamentoFrequencia from '~/servicos/Paginas/DiarioClasse/ServicoAcompanhamentoFrequencia';
 import { ehTurmaInfantil } from '~/servicos/Validacoes/validacoesInfatil';
+import { formatarFrequencia } from '~/utils';
 import ModalImpressao from '../ModalImpressao/modalImpressao';
 import {
   MarcadorAulas,
@@ -281,7 +282,7 @@ const ListaAlunos = props => {
                               {data.remotos}
                             </td>
                             <td className="col-valor-linha-dois">
-                              {data?.frequencia ? `${data.frequencia}%` : ''}
+                              {formatarFrequencia(data?.frequencia)}
                               {data?.totalAulas > 0 &&
                                 bimestreSelecionado > 0 && (
                                   <BtnExpandirAusenciaEstudante

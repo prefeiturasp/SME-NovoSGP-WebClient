@@ -96,6 +96,8 @@ const RotasDto = {
   RELATORIO_FREQUENCIA_MENSAL: '/relatorios/frequencia/mensal',
   DASHBOARD_NAAPA: '/dashboard/naapa',
   ENCAMINHAMENTO_NAAPA: '/naapa/encaminhamento',
+  RELATORIO_ENCAMINHAMENTO_NAAPA: '/relatorios/naapa/encaminhamento',
+  RELATORIO_SONDAGEM_ANALITICO: '/relatorios/sondagem/analitico',
 };
 
 export default RotasDto;
