@@ -2,6 +2,7 @@ import moment from 'moment';
 import PropTypes from 'prop-types';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { useParams } from 'react-router-dom';
 import shortid from 'shortid';
 import {
   Colors,
@@ -24,7 +25,6 @@ const ModalReestruturacaoPlano = ({
   modoConsulta,
   dadosVisualizacao,
   semestre,
-  match,
 }) => {
   const [modoEdicao, setModoEdicao] = useState(false);
   const [versao, setVersao] = useState('');
@@ -41,6 +41,10 @@ const ModalReestruturacaoPlano = ({
     store => store.planoAEE.dadosModalReestruturacao
   );
 
+  const paramsRoute = useParams();
+
+  const planoId = paramsRoute?.id || 0;
+
   const perguntarSalvarListaUsuario = async () => {
     const resposta = await confirmar(
       'Atenção',
@@ -52,7 +56,7 @@ const ModalReestruturacaoPlano = ({
   const onConfirmarModal = async () => {
     const IdReestruturacao = reestruturacaoId || '';
     const resposta = await ServicoPlanoAEE.salvarReestruturacoes({
-      planoAEEId: match?.params?.id,
+      planoAEEId: planoId,
       reestruturacaoId: IdReestruturacao,
       versaoId,
       semestre,
@@ -168,13 +172,13 @@ const ModalReestruturacaoPlano = ({
 
   const obterVersoes = useCallback(async () => {
     const resposta = await ServicoPlanoAEE.obterVersoes(
-      match?.params?.id,
+      planoId,
       reestruturacaoId
     );
     if (resposta?.data) {
       setListaVersao(resposta.data);
     }
-  }, [match, reestruturacaoId]);
+  }, [planoId, reestruturacaoId]);
 
   useEffect(() => {
     if (
@@ -249,7 +253,6 @@ ModalReestruturacaoPlano.defaultProps = {
   exibirModal: false,
   modoConsulta: false,
   dadosVisualizacao: {},
-  match: {},
 };
 
 ModalReestruturacaoPlano.propTypes = {
@@ -259,7 +262,6 @@ ModalReestruturacaoPlano.propTypes = {
   modoConsulta: PropTypes.bool,
   dadosVisualizacao: PropTypes.oneOfType([PropTypes.object]),
   semestre: PropTypes.number.isRequired,
-  match: PropTypes.oneOfType([PropTypes.object]),
 };
 
 export default ModalReestruturacaoPlano;

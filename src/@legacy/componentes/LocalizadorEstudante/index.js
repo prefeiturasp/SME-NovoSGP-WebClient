@@ -6,7 +6,7 @@ import { erros, erro } from '~/servicos/alertas';
 import InputCodigo from './componentes/InputCodigo';
 import InputNome from './componentes/InputNome';
 import service from './services/LocalizadorEstudanteService';
-import { store } from '~/redux';
+import { store } from '@/core/redux';
 import { setAlunosCodigo } from '~/redux/modulos/localizadorEstudante/actions';
 import { removerNumeros } from '~/utils/funcoes/gerais';
 import { SGP_INPUT_CODIGO_EOL } from '~/constantes/ids/input';
@@ -39,9 +39,8 @@ const LocalizadorEstudante = props => {
     codigo: false,
     nome: false,
   });
-  const [timeoutBuscarPorCodigoNome, setTimeoutBuscarPorCodigoNome] = useState(
-    ''
-  );
+  const [timeoutBuscarPorCodigoNome, setTimeoutBuscarPorCodigoNome] =
+    useState('');
   const [exibirLoader, setExibirLoader] = useState(false);
 
   useEffect(() => {
@@ -301,7 +300,6 @@ const LocalizadorEstudante = props => {
     ) {
       validaAntesBuscarPorCodigo({ codigo: valorInicialAlunoCodigo });
     }
-
   }, [valorInicialAlunoCodigo, dataSource, pessoaSelecionada]);
 
   return novaEstrutura ? (

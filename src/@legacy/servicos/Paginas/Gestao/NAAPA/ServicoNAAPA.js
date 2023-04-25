@@ -1,7 +1,7 @@
 import _ from 'lodash';
 import QuestionarioDinamicoFuncoes from '~/componentes-sgp/QuestionarioDinamico/Funcoes/QuestionarioDinamicoFuncoes';
 import situacaoNAAPA from '~/dtos/situacaoNAAPA';
-import { store } from '~/redux';
+import { store } from '@/core/redux';
 import {
   setLimparDadosEncaminhamentoNAAPA,
   setExibirLoaderEncaminhamentoNAAPA,

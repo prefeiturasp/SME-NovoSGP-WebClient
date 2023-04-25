@@ -2,7 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 // Components
-import { Dropdown, Icon, Menu } from 'antd';
+import { Dropdown, Menu } from 'antd';
+import { DownOutlined } from '@ant-design/icons';
 
 // Styles
 import { DefaultDropDownLink } from '../styles';
@@ -26,9 +27,9 @@ function DropDownTipoRecorrencia({ onChange, value }) {
   );
 
   return (
-    <Dropdown trigger={['click']} overlay={options}>
+    <Dropdown trigger={['click']} menu={options}>
       <DefaultDropDownLink href="#">
-        {value.label ? value.label : 'Selecione'} <Icon type="down" />
+        {value.label ? value.label : 'Selecione'} <DownOutlined />
       </DefaultDropDownLink>
     </Dropdown>
   );

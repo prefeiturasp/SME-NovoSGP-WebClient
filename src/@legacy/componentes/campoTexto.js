@@ -20,6 +20,23 @@ const Campo = styled.div`
   label {
     font-weight: bold;
   }
+
+  .ant-input-affix-wrapper {
+    padding: 0 6px;
+
+    .ant-input-prefix {
+      left: 12px;
+      color: rgba(0, 0, 0, 0.65);
+      line-height: 0;
+      position: absolute;
+      top: 50%;
+      -webkit-transform: translateY(-50%);
+      -ms-transform: translateY(-50%);
+      transform: translateY(-50%);
+      z-index: 2;
+    }
+  }
+
   .ant-input-affix-wrapper .ant-input:not(:first-child) {
     padding-left: 40px;
   }

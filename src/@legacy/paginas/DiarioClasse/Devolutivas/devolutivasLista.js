@@ -11,7 +11,6 @@ import { Colors } from '~/componentes/colors';
 import SelectComponent from '~/componentes/select';
 import { URL_HOME } from '~/constantes/url';
 import { erros } from '~/servicos/alertas';
-import history from '~/servicos/history';
 import ServicoDisciplina from '~/servicos/Paginas/ServicoDisciplina';
 import { ehTurmaInfantil } from '~/servicos/Validacoes/validacoesInfatil';
 import RotasDto from '~/dtos/rotasDto';
@@ -19,8 +18,11 @@ import { verificaSomenteConsulta } from '~/servicos/servico-navegacao';
 import ServicoPeriodoEscolar from '~/servicos/Paginas/Calendario/ServicoPeriodoEscolar';
 import { SGP_BUTTON_NOVO } from '~/constantes/ids/button';
 import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
+import { useNavigate } from 'react-router-dom';
 
 const DevolutivasLista = () => {
+  const navigate = useNavigate();
+
   const usuario = useSelector(state => state.usuario);
   const { turmaSelecionada } = usuario;
 
@@ -28,14 +30,10 @@ const DevolutivasLista = () => {
     store => store.filtro.modalidades
   );
   const turmaCodigo = turmaSelecionada ? turmaSelecionada.turma : 0;
-  const [
-    listaComponenteCurriculare,
-    setListaComponenteCurriculare,
-  ] = useState();
-  const [
-    componenteCurricularSelecionado,
-    setComponenteCurricularSelecionado,
-  ] = useState();
+  const [listaComponenteCurriculare, setListaComponenteCurriculare] =
+    useState();
+  const [componenteCurricularSelecionado, setComponenteCurricularSelecionado] =
+    useState();
   const [dataSelecionada, setDataSelecionada] = useState();
   const [carregandoGeral, setCarregandoGeral] = useState(false);
   const [turmaInfantil, setTurmaInfantil] = useState(false);
@@ -46,9 +44,10 @@ const DevolutivasLista = () => {
 
   const obterPeriodoLetivoTurma = async () => {
     if (turmaSelecionada && turmaSelecionada.turma) {
-      const periodoLetivoTurmaResponse = await ServicoPeriodoEscolar.obterPeriodoLetivoTurma(
-        turmaSelecionada.turma
-      ).catch(e => erros(e));
+      const periodoLetivoTurmaResponse =
+        await ServicoPeriodoEscolar.obterPeriodoLetivoTurma(
+          turmaSelecionada.turma
+        ).catch(e => erros(e));
       if (periodoLetivoTurmaResponse?.data) {
         const datas = [
           moment(periodoLetivoTurmaResponse.data.periodoInicio).format(
@@ -79,7 +78,6 @@ const DevolutivasLista = () => {
       verificaSomenteConsulta(permissoesTela, naoSetarSomenteConsultaNoStore)
     );
     obterPeriodoLetivoTurma();
-
   }, [turmaSelecionada, permissoesTela, modalidadesFiltroPrincipal]);
 
   const colunas = [
@@ -192,14 +190,14 @@ const DevolutivasLista = () => {
   };
 
   const onClickVoltar = () => {
-    history.push(URL_HOME);
+    navigate(URL_HOME);
   };
 
   const onClickNovo = () => {
-    history.push(`${RotasDto.DEVOLUTIVAS}/novo`);
+    navigate(`${RotasDto.DEVOLUTIVAS}/novo`);
   };
   const onClickEditar = item => {
-    history.push(`${RotasDto.DEVOLUTIVAS}/editar/${item.id}`);
+    navigate(`${RotasDto.DEVOLUTIVAS}/editar/${item.id}`);
   };
 
   return (

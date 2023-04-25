@@ -1,6 +1,6 @@
-import PropTypes from 'prop-types';
 import React, { useCallback, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { useParams } from 'react-router-dom';
 import { setDadosSecoesPorEtapaDeEncaminhamentoAEE } from '~/redux/modulos/encaminhamentoAEE/actions';
 import { erros } from '~/servicos';
 import ServicoEncaminhamentoAEE from '~/servicos/Paginas/Relatorios/AEE/ServicoEncaminhamentoAEE';
@@ -9,25 +9,28 @@ import AtribuicaoResponsavel from './atribuicaoResponsavel';
 import SecaoEncaminhamentoCollapse from './SecaoEncaminhamento/secaoEncaminhamentoCollapse';
 import SecaoParecerAEECollapse from './SecaoParecerAEE/secaoParecerAEECollapse';
 
-const MontarDadosSecoes = ({ match }) => {
+const MontarDadosSecoes = () => {
   const dispatch = useDispatch();
+  const paramsRoute = useParams();
+
+  const encaminhamentoId = paramsRoute?.id || 0;
 
   const dadosCollapseLocalizarEstudante = useSelector(
     store => store.collapseLocalizarEstudante.dadosCollapseLocalizarEstudante
   );
 
   const obterSecoesPorEtapaDeEncaminhamentoAEE = useCallback(async () => {
-    const encaminhamentoId = match?.params?.id;
-    const resposta = await ServicoEncaminhamentoAEE.obterSecoesPorEtapaDeEncaminhamentoAEE(
-      encaminhamentoId
-    ).catch(e => erros(e));
+    const resposta =
+      await ServicoEncaminhamentoAEE.obterSecoesPorEtapaDeEncaminhamentoAEE(
+        encaminhamentoId
+      ).catch(e => erros(e));
 
     if (resposta?.data) {
       dispatch(setDadosSecoesPorEtapaDeEncaminhamentoAEE(resposta.data));
     } else {
       dispatch(setDadosSecoesPorEtapaDeEncaminhamentoAEE([]));
     }
-  }, [dispatch, match]);
+  }, [dispatch, encaminhamentoId]);
 
   useEffect(() => {
     if (
@@ -50,24 +53,16 @@ const MontarDadosSecoes = ({ match }) => {
         <MarcadorSituacaoAEE />
       </div>
       <div className="col-md-12 mb-2">
-        <SecaoEncaminhamentoCollapse match={match} />
+        <SecaoEncaminhamentoCollapse />
       </div>
       <div className="col-md-12 mb-2">
-        <AtribuicaoResponsavel match={match} />
+        <AtribuicaoResponsavel />
       </div>
       <div className="col-md-12">
-        <SecaoParecerAEECollapse match={match} />
+        <SecaoParecerAEECollapse />
       </div>
     </>
   );
-};
-
-MontarDadosSecoes.propTypes = {
-  match: PropTypes.oneOfType([PropTypes.object]),
-};
-
-MontarDadosSecoes.defaultProps = {
-  match: {},
 };
 
 export default MontarDadosSecoes;

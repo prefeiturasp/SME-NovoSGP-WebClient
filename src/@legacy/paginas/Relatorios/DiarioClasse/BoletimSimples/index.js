@@ -2,9 +2,6 @@ import React, { useEffect, useState } from 'react';
 
 import { Loader, Card, ButtonGroup, ListaPaginada } from '~/componentes';
 import { Cabecalho } from '~/componentes-sgp';
-
-import history from '~/servicos/history';
-
 import Filtro from './componentes/Filtro';
 import ServicoBoletimSimples from '~/servicos/Paginas/Relatorios/DiarioClasse/BoletimSimples/ServicoBoletimSimples';
 import { sucesso, erro, confirmar } from '~/servicos/alertas';
@@ -13,8 +10,11 @@ import modalidade from '~/dtos/modalidade';
 
 import { ModalidadeDTO } from '~/dtos';
 import { SGP_BUTTON_GERAR } from '~/constantes/ids/button';
+import { useNavigate } from 'react-router-dom';
 
 const BoletimSimples = () => {
+  const navigate = useNavigate();
+
   const [loaderSecao] = useState(false);
   const [somenteConsulta] = useState(false);
   const [clicouBotaoGerar, setClicouBotaoGerar] = useState(false);
@@ -73,7 +73,7 @@ const BoletimSimples = () => {
   };
 
   const onClickVoltar = () => {
-    history.push('/');
+    navigate('/');
   };
 
   const onClickCancelar = async () => {

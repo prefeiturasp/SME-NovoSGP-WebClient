@@ -42,7 +42,7 @@ const Container = styled(Dropdown)`
 const ContainerMenu = styled(Menu)`
   .ant-dropdown-menu-item:hover,
   .ant-dropdown-menu-submenu-title:hover {
-    background-color: ${Base.Roxo};
+    background-color: ${Base.Roxo} !important;
     color: white;
   }
 
@@ -112,24 +112,28 @@ const Ordenacao = props => {
       <Menu.Item
         onClick={ordenarMenorParaMaior}
         id={SGP_MENU_ITEM_ORDENAR_MENOR_PARA_MAIOR}
+        key={SGP_MENU_ITEM_ORDENAR_MENOR_PARA_MAIOR}
       >
         Número (Menor para o maior)
       </Menu.Item>
       <Menu.Item
         onClick={ordenarMaiorParaMenor}
         id={SGP_MENU_ITEM_ORDENAR_MAIOR_PARA_MENOR}
+        key={SGP_MENU_ITEM_ORDENAR_MAIOR_PARA_MENOR}
       >
         Número (Maior para o menor)
       </Menu.Item>
       <Menu.Item
         onClick={ordenarAZ}
         id={SGP_MENU_ITEM_ORDENAR_ORDEM_ALFABETICA_A_Z}
+        key={SGP_MENU_ITEM_ORDENAR_ORDEM_ALFABETICA_A_Z}
       >
         Por ordem alfabética (A–Z)
       </Menu.Item>
       <Menu.Item
         onClick={ordenarZA}
         id={SGP_MENU_ITEM_ORDENAR_ORDEM_ALFABETICA_Z_A}
+        key={SGP_MENU_ITEM_ORDENAR_ORDEM_ALFABETICA_Z_A}
       >
         Por ordem alfabética (Z–A)
       </Menu.Item>
@@ -139,9 +143,9 @@ const Ordenacao = props => {
   return (
     <Container
       trigger={['click']}
-      overlay={menu}
       placement="bottomLeft"
       disabled={desabilitado}
+      dropdownRender={() => menu}
     >
       <Button
         id={SGP_BUTTON_ORDENAR}

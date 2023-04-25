@@ -1,26 +1,27 @@
 import React, { useState, useEffect } from 'react';
-import { useRouteMatch } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { Cabecalho } from '~/componentes-sgp';
 import LocalizarEstudante from '~/componentes-sgp/LocalizarEstudante';
 import { Card } from '~/componentes';
 import CadastroEncaminhamentoNAAPABotoesAcao from './cadastroEncaminhamentoNAAPABotoesAcao';
 import CadastroEncaminhamentoNAAPA from './cadastroEncaminhamentoNAAPA';
-import { store } from '~/redux';
+import { store } from '@/core/redux';
 import LoaderEncaminhamentoNAAPA from './componentes/loaderEncaminhamentoNAAPA';
 import { limparDadosLocalizarEstudante } from '~/redux/modulos/localizarEstudante/actions';
 import { setLimparDadosEncaminhamentoNAAPA } from '~/redux/modulos/encaminhamentoNAAPA/actions';
 import { RotasDto } from '~/dtos';
-import { history, verificaSomenteConsulta } from '~/servicos';
+import { verificaSomenteConsulta } from '~/servicos';
 import { setLimparDadosQuestionarioDinamico } from '~/redux/modulos/questionarioDinamico/actions';
 
 const EncaminhamentoNAAPA = () => {
-  const routeMatch = useRouteMatch();
+  const { id } = useParams();
+  const navigate = useNavigate();
 
   const usuario = useSelector(state => state.usuario);
   const permissoesTela = usuario.permissoes[RotasDto.ENCAMINHAMENTO_NAAPA];
 
-  const encaminhamentoId = routeMatch.params?.id;
+  const encaminhamentoId = id;
 
   const [mostrarBusca, setMostrarBusca] = useState(!encaminhamentoId);
 
@@ -36,7 +37,7 @@ const EncaminhamentoNAAPA = () => {
     const soConsulta = verificaSomenteConsulta(permissoesTela);
 
     if (mostrarBusca && soConsulta) {
-      history.push(RotasDto.ENCAMINHAMENTO_NAAPA);
+      navigate(RotasDto.ENCAMINHAMENTO_NAAPA);
     }
   }, [permissoesTela, mostrarBusca]);
 

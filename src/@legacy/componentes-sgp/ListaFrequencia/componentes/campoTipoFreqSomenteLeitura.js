@@ -4,12 +4,21 @@ import styled from 'styled-components';
 import { Base } from '~/componentes/colors';
 
 const Container = styled.div`
+  height: 45px;
+
+  .tamanho-campo-select {
+    position: relative;
+  }
+
   .ant-select {
     width: 100%;
   }
 
   .ant-select-arrow {
     color: ${Base.CinzaMako};
+    position: absolute;
+    right: 11px;
+    top: 10px;
   }
 
   .ant-select-selection--single {
@@ -24,6 +33,7 @@ const Container = styled.div`
 
   .ant-select-selection-selected-value {
     font-weight: bold;
+    padding-right: 17px;
   }
 `;
 
@@ -32,7 +42,7 @@ const CampoTipoFreqSomenteLeitura = props => {
 
   return (
     <Container>
-      <div id={id} className={`overflow-hidden ant-select ${className}`}>
+      <div id={id} className={`overflow-hidden ant-select ${className} p-0`}>
         <div
           className="ant-select-selection ant-select-selection--single"
           style={{ ...style, cursor: desabilitar ? 'default' : 'pointer' }}
@@ -40,7 +50,7 @@ const CampoTipoFreqSomenteLeitura = props => {
           <div className="ant-select-selection__rendered">
             <div className="ant-select-selection-selected-value">{valor}</div>
           </div>
-          <span className="ant-select-arrow" style={{ marginTop: -9 }}>
+          <span className="ant-select-arrow">
             <i className="fas fa-angle-down" style={{ fontSize: 18 }} />
           </span>
         </div>

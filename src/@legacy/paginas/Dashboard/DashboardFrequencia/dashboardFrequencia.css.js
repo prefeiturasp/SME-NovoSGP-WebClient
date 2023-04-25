@@ -1,11 +1,6 @@
 import styled from 'styled-components';
 
 export const ContainerTabsDashboardFrequencia = styled.div`
-  .ant-tabs-tab {
-    width: auto !important;
-    margin-right: 8px !important;
-  }
-
   .scrolling-chart {
     display: flex;
     flex-wrap: nowrap;

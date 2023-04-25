@@ -20,7 +20,6 @@ import { setDadosIniciaisLocalizarEstudante } from '~/redux/modulos/collapseLoca
 import { setTypePlanoAEECadastro } from '~/redux/modulos/planoAEE/actions';
 
 import { erros, verificaSomenteConsulta } from '~/servicos';
-import history from '~/servicos/history';
 import ServicoPlanoAEE from '~/servicos/Paginas/Relatorios/AEE/ServicoPlanoAEE';
 import FiltroHelper from '~/componentes-sgp/filtro/helper';
 import { SGP_BUTTON_NOVO } from '~/constantes/ids/button';
@@ -35,9 +34,11 @@ import {
 } from '~/constantes/ids/select';
 import { SGP_CHECKBOX_EXIBIR_HISTORICO } from '~/constantes/ids/checkbox';
 import BtnImpressaoListaPlanoAEE from './btnImpressaoListaPlanoAEE';
+import { useNavigate } from 'react-router-dom';
 
 const PlanoAEELista = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const [consideraHistorico, setConsideraHistorico] = useState(false);
   const [filtro, setFiltro] = useState({});
@@ -62,10 +63,8 @@ const PlanoAEELista = () => {
   const [carregandoSituacao, setCarregandoSituacao] = useState(false);
   const [carregandoUes, setCarregandoUes] = useState(false);
 
-  const [
-    alunoLocalizadorSelecionado,
-    setAlunoLocalizadorSelecionado,
-  ] = useState();
+  const [alunoLocalizadorSelecionado, setAlunoLocalizadorSelecionado] =
+    useState();
 
   const [idsPlanosSelecionados, setIdsPlanosSelecionados] = useState([]);
 
@@ -183,10 +182,12 @@ const PlanoAEELista = () => {
       const params = {
         dreId: dreSelecionada ? dreSelecionada?.id : '',
         ueId: ueSelecionada ? ueSelecionada?.id : '',
-        turmaId: turmaSelecionada ? turmaSelecionada?.id : '',
         alunoCodigo: aluno,
         situacao: situa,
       };
+      if (turmaSelecionada?.id) {
+        params.turmaId = turmaSelecionada?.id;
+      }
       setFiltro({ ...params });
     }
   };
@@ -207,13 +208,13 @@ const PlanoAEELista = () => {
   };
 
   const onClickVoltar = () => {
-    history.push(URL_HOME);
+    navigate(URL_HOME);
   };
 
   const onClickNovo = () => {
     if (!somenteConsulta && permissoesTela.podeIncluir) {
       dispatch(setTypePlanoAEECadastro(true));
-      history.push(`${RotasDto.RELATORIO_AEE_PLANO}/novo`);
+      navigate(`${RotasDto.RELATORIO_AEE_PLANO}/novo`);
     }
   };
 
@@ -239,7 +240,6 @@ const PlanoAEELista = () => {
 
   useEffect(() => {
     validarValorPadraoAnoLetivo(listaAnosLetivo);
-
   }, [consideraHistorico, listaAnosLetivo]);
 
   const obterAnosLetivos = useCallback(async () => {
@@ -260,7 +260,6 @@ const PlanoAEELista = () => {
 
     setListaAnosLetivo(anosLetivos);
     setCarregandoAnos(false);
-
   }, [anoAtual, consideraHistorico]);
 
   useEffect(() => {
@@ -371,7 +370,6 @@ const PlanoAEELista = () => {
         }
       }
     }
-
   }, [anoLetivo, ueId]);
 
   useEffect(() => {
@@ -404,14 +402,13 @@ const PlanoAEELista = () => {
   };
 
   const onClickEditar = item => {
-    history.push(`${RotasDto.RELATORIO_AEE_PLANO}/editar/${item.id}`);
+    navigate(`${RotasDto.RELATORIO_AEE_PLANO}/editar/${item.id}`);
   };
 
   useEffect(() => {
     if (dreId && ueId && listaDres?.length && listaUes?.length) {
       filtrar(dreId, ueId, turmaId, alunoLocalizadorSelecionado, situacao);
     }
-
   }, [
     ueId,
     listaDres,

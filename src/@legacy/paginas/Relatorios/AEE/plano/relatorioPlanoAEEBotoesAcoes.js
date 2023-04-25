@@ -1,9 +1,10 @@
 /* eslint-disable react/prop-types */
 import _ from 'lodash';
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import BotoesAcaoRelatorio from '~/componentes-sgp/botoesAcaoRelatorio';
 import { MENSAGEM_SOLICITACAO_RELATORIO_SUCESSO, URL_HOME } from '~/constantes';
-import { erros, history, sucesso } from '~/servicos';
+import { erros, sucesso } from '~/servicos';
 import ServicoPlanoAEE from '~/servicos/Paginas/Relatorios/AEE/ServicoPlanoAEE';
 
 const RelatorioPlanoAEEBotoesAcoes = props => {
@@ -14,6 +15,8 @@ const RelatorioPlanoAEEBotoesAcoes = props => {
     setGerandoRelatorio,
     setDesabilitarGerar,
   } = props;
+
+  const navigate = useNavigate();
 
   const onClickGerar = async values => {
     setGerandoRelatorio(true);
@@ -41,9 +44,9 @@ const RelatorioPlanoAEEBotoesAcoes = props => {
       params.codigosPAAIResponsavel = valuesClone.codigosPAAIResponsavel;
     }
 
-    const retorno = await ServicoPlanoAEE.gerarRelatorioPlanosAEE(
-      params
-    ).catch(e => erros(e));
+    const retorno = await ServicoPlanoAEE.gerarRelatorioPlanosAEE(params).catch(
+      e => erros(e)
+    );
 
     if (retorno?.status === 200) {
       sucesso(MENSAGEM_SOLICITACAO_RELATORIO_SUCESSO);
@@ -66,7 +69,7 @@ const RelatorioPlanoAEEBotoesAcoes = props => {
     });
   };
 
-  const onClickVoltar = async () => history.push(URL_HOME);
+  const onClickVoltar = async () => navigate(URL_HOME);
 
   const onClickCancelar = () => {
     setDesabilitarGerar(false);

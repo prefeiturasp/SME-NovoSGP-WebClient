@@ -1,5 +1,5 @@
 import api from '../api';
-import { store } from '~/redux';
+import { store } from '@/core/redux';
 import {
   perfilSelecionado,
   setarPerfis,

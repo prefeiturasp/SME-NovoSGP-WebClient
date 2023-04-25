@@ -5,19 +5,20 @@ import { Cabecalho } from '~/componentes-sgp';
 import { Card } from '~/componentes';
 
 import { URL_HOME } from '~/constantes';
-import { history } from '~/servicos';
 
 import { limparDadosDashboardFrequencia } from '~/redux/modulos/dashboardFrequencia/actions';
 
 import DashboardFrequenciaFiltros from './DashboardFrequenciaFiltros/dashboardFrequenciaFiltros';
 import TabsDashboardFrequencia from './TabsDashboardFrequencia/tabsDashboardFrequencia';
 import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
+import { useNavigate } from 'react-router-dom';
 
 const DashboardFrequencia = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const onClickVoltar = () => {
-    history.push(URL_HOME);
+    navigate(URL_HOME);
   };
 
   useEffect(() => {

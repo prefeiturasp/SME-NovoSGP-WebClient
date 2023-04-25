@@ -1,5 +1,5 @@
 import tipoPermissao from '~/dtos/tipoPermissao';
-import { store } from '~/redux';
+import { store } from '@/core/redux';
 import { setSomenteConsulta } from '~/redux/modulos/navegacao/actions';
 import {
   setListaUrlAjudaDoSistema,

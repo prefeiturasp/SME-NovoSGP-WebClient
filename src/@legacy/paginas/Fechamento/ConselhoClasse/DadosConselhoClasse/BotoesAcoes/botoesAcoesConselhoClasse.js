@@ -10,15 +10,16 @@ import Button from '~/componentes/button';
 import { Colors } from '~/componentes/colors';
 import { URL_HOME } from '~/constantes/url';
 import { confirmar } from '~/servicos/alertas';
-import history from '~/servicos/history';
 import { ehTurmaInfantil } from '~/servicos/Validacoes/validacoesInfatil';
 import servicoSalvarConselhoClasse from '../../servicoSalvarConselhoClasse';
 
 import { setDadosListasNotasConceitos } from '~/redux/modulos/conselhoClasse/actions';
 import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
+import { useNavigate } from 'react-router-dom';
 
 const BotoesAcoesConselhoClasse = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const alunosConselhoClasse = useSelector(
     store => store.conselhoClasse.alunosConselhoClasse
@@ -48,13 +49,13 @@ const BotoesAcoesConselhoClasse = () => {
   const { turmaSelecionada } = usuario;
 
   const onClickSalvar = async () => {
-    const validouNotaConceitoPosConselho = await servicoSalvarConselhoClasse.validarNotaPosConselho(
-      true
-    );
+    const validouNotaConceitoPosConselho =
+      await servicoSalvarConselhoClasse.validarNotaPosConselho(true);
     if (validouNotaConceitoPosConselho) {
-      const validouAnotacaoRecomendacao = await servicoSalvarConselhoClasse.validarSalvarRecomendacoesAlunoFamilia(
-        true
-      );
+      const validouAnotacaoRecomendacao =
+        await servicoSalvarConselhoClasse.validarSalvarRecomendacoesAlunoFamilia(
+          true
+        );
       return validouNotaConceitoPosConselho && validouAnotacaoRecomendacao;
     }
 
@@ -78,13 +79,13 @@ const BotoesAcoesConselhoClasse = () => {
       if (confirmado) {
         const salvou = await onClickSalvar();
         if (salvou) {
-          history.push(URL_HOME);
+          navigate(URL_HOME);
         }
       } else {
-        history.push(URL_HOME);
+        navigate(URL_HOME);
       }
     } else {
-      history.push(URL_HOME);
+      navigate(URL_HOME);
     }
   };
   const onClickCancelar = async () => {

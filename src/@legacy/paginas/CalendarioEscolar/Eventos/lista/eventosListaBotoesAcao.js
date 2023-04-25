@@ -11,18 +11,19 @@ import { setFiltroListaEventos } from '~/redux/modulos/calendarioEscolar/actions
 import {
   confirmar,
   erros,
-  history,
   ServicoEvento,
   sucesso,
   verificaSomenteConsulta,
 } from '~/servicos';
 import EventosListaContext from './eventosListaContext';
+import { useNavigate } from 'react-router-dom';
 
 const EventosListaBotoesAcao = () => {
   const usuario = useSelector(store => store.usuario);
   const permissoesTela = usuario.permissoes[RotasDto.EVENTOS];
 
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const {
     eventosSelecionados,
@@ -41,7 +42,7 @@ const EventosListaBotoesAcao = () => {
     setSomenteConsulta(verificaSomenteConsulta(permissoesTela));
   }, [permissoesTela]);
 
-  const onClickVoltar = () => history.push(URL_HOME);
+  const onClickVoltar = () => navigate(URL_HOME);
 
   useEffect(() => {
     if (eventosSelecionados?.length) {
@@ -102,7 +103,7 @@ const EventosListaBotoesAcao = () => {
 
   const onClickNovo = () => {
     salvarFiltros();
-    history.push(`${RotasDto.EVENTOS}/novo/${calendarioSelecionado?.id}`);
+    navigate(`${RotasDto.EVENTOS}/novo/${calendarioSelecionado?.id}`);
   };
 
   return (

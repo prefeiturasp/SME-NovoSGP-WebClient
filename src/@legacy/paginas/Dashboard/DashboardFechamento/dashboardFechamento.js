@@ -5,7 +5,6 @@ import { Card } from '~/componentes';
 import { Cabecalho } from '~/componentes-sgp';
 
 import { URL_HOME } from '~/constantes';
-import { history } from '~/servicos';
 
 import { limparDadosDashboardFechamento } from '~/redux/modulos/dashboardFechamento/actions';
 
@@ -13,12 +12,14 @@ import DashboardFechamentoAlertaInfantil from './dashboardDevolutivasAlertaInfan
 import DashboardFechamentoFiltros from './DashboardFechamentoFiltros/dashboardFechamentoFiltros';
 import TabsDashboardFechamento from './TabsDashboardFechamento/tabsDashboardFechamento';
 import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
+import { useNavigate } from 'react-router-dom';
 
 const DashboardFechamento = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const onClickVoltar = () => {
-    history.push(URL_HOME);
+    navigate(URL_HOME);
   };
 
   useEffect(() => {

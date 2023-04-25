@@ -1,4 +1,4 @@
-import { Pie } from '@ant-design/charts';
+import { Pie } from '@ant-design/plots';
 import PropTypes from 'prop-types';
 import React from 'react';
 import { CoresGraficos } from '~/componentes/colors';

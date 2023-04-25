@@ -5,7 +5,7 @@ import styled from 'styled-components';
 import Button from '~/componentes/button';
 import { Base, Colors } from '~/componentes/colors';
 import { URL_LOGIN } from '~/constantes/url';
-import { store } from '~/redux';
+import { store } from '@/core/redux';
 import { limparDadosFiltro } from '~/redux/modulos/filtro/actions';
 import { LimparSessao } from '~/redux/modulos/sessao/actions';
 import {
@@ -14,9 +14,9 @@ import {
 } from '~/redux/modulos/usuario/actions';
 import { erros } from '~/servicos/alertas';
 import api from '~/servicos/api';
-import history from '~/servicos/history';
 
 import ContadorExpiracao from './contadorExpiracao';
+import { useNavigate } from 'react-router-dom';
 
 const Container = styled.div`
   margin-right: 10px;
@@ -70,6 +70,7 @@ const CaixaTempoExpiracao = styled.div`
 `;
 
 const TempoExpiracaoSessao = () => {
+  const navigate = useNavigate();
   const dataHoraExpiracao = useSelector(e => e.usuario.dataHoraExpiracao);
 
   const [mostraTempoExpiracao, setMostraTempoExpiracao] = useState(false);
@@ -97,7 +98,7 @@ const TempoExpiracaoSessao = () => {
     store.dispatch(limparDadosFiltro());
     store.dispatch(DeslogarSessaoExpirou());
     store.dispatch(LimparSessao());
-    history.push(URL_LOGIN);
+    navigate(URL_LOGIN);
   };
 
   useEffect(() => {

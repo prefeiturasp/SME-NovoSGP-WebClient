@@ -1,6 +1,5 @@
 import Api from '../api';
 import { salvarDadosLogin } from '~/redux/modulos/usuario/actions';
-import history from '~/servicos/history';
 import { URL_HOME } from '~/constantes/url';
 import { obterMeusDados } from '~/servicos/Paginas/ServicoUsuario';
 import { setMenusPermissoes } from '~/servicos/servico-navegacao';
@@ -9,11 +8,11 @@ import {
   setarPerfis,
   setTrocouPerfil,
 } from '~/redux/modulos/perfil/actions';
-import { store } from '~/redux';
+import { store } from '@/core/redux';
 import ServicoDashboard from './Dashboard/ServicoDashboard';
 
 class ServicoRedefinirSenha {
-  redefinirSenha = async (redefinirSenhaDto, dispatch) => {
+  redefinirSenha = async (redefinirSenhaDto, dispatch, navigate) => {
     const formData = new FormData();
 
     formData.set('token', redefinirSenhaDto.token);
@@ -54,7 +53,7 @@ class ServicoRedefinirSenha {
         obterMeusDados();
         setMenusPermissoes();
 
-        history.push(URL_HOME);
+        navigate(URL_HOME);
 
         return { sucesso: false, erroGeral: '' };
       })
@@ -64,8 +63,7 @@ class ServicoRedefinirSenha {
         if (!response)
           return {
             sucesso: false,
-            erro:
-              'Ocorreu uma falha na comunicação com o servidor, por favor contate o suporte',
+            erro: 'Ocorreu uma falha na comunicação com o servidor, por favor contate o suporte',
           };
 
         if (response.status === 403)
@@ -83,8 +81,7 @@ class ServicoRedefinirSenha {
 
         return {
           sucesso: false,
-          erro:
-            'Ocorreu uma falha na comunicação com o servidor, por favor contate o suporte',
+          erro: 'Ocorreu uma falha na comunicação com o servidor, por favor contate o suporte',
         };
       });
   };

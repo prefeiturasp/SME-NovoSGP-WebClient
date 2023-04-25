@@ -2,7 +2,7 @@ import _ from 'lodash';
 import ServicoObservacoesUsuario from '~/componentes-sgp/ObservacoesUsuario/ServicoObservacoesUsuario';
 import { BIMESTRE_FINAL } from '~/constantes';
 import notasConceitos from '~/dtos/notasConceitos';
-import { store } from '~/redux';
+import { store } from '@/core/redux';
 import { setTelaEmEdicao } from '~/redux/modulos/geral/actions';
 import { confirmar, erros, ServicoDiarioBordo, sucesso } from '~/servicos';
 import ServicoNotaConceito from '~/servicos/Paginas/DiarioClasse/ServicoNotaConceito';

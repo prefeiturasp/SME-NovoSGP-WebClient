@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import Select from 'antd/es/select';
-import Icon from 'antd/es/icon';
+import { CaretDownOutlined } from '@ant-design/icons';
 import shortid from 'shortid';
 import { Base } from './colors';
 
@@ -46,7 +46,7 @@ const SelectComponent = props => {
     <Container>
       <Select
         mode="multiple"
-        suffixIcon={<Icon type="caret-down" />}
+        suffixIcon={<CaretDownOutlined />}
         className={`overflow-hidden ${className}`}
         name={name}
         id={id}

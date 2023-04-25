@@ -1,7 +1,7 @@
 import { Col, Row } from 'antd';
 import React, { useContext, useEffect } from 'react';
 import { useSelector } from 'react-redux';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { Button, Colors } from '~/componentes';
 import BotaoExcluirPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoExcluirPadrao';
 import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
@@ -13,7 +13,6 @@ import { RotasDto } from '~/dtos';
 import {
   confirmar,
   erros,
-  history,
   ServicoFechamentoReabertura,
   sucesso,
   verificaSomenteConsulta,
@@ -39,13 +38,13 @@ const FechaReabCadastroBotoesAcao = () => {
     usuarioStore.permissoes[RotasDto.PERIODO_FECHAMENTO_REABERTURA];
 
   const paramsRota = useParams();
+  const navigate = useNavigate();
 
   const fechamentoReaberturaId = paramsRota?.id;
   const novoRegistro = !fechamentoReaberturaId;
 
   useEffect(() => {
     setSomenteConsulta(verificaSomenteConsulta(permissoesTela));
-
   }, [permissoesTela]);
 
   useEffect(() => {
@@ -53,7 +52,6 @@ const FechaReabCadastroBotoesAcao = () => {
       ? somenteConsulta || !permissoesTela.podeIncluir
       : somenteConsulta || !permissoesTela.podeAlterar;
     setDesabilitarCampos(desabilitar);
-
   }, [somenteConsulta, novoRegistro, permissoesTela]);
 
   const perguntaAoSalvar = async () => {
@@ -83,10 +81,10 @@ const FechaReabCadastroBotoesAcao = () => {
       if (confirmado) {
         validaAntesDoSubmit(form);
       } else {
-        history.push(RotasDto.PERIODO_FECHAMENTO_REABERTURA);
+        navigate(RotasDto.PERIODO_FECHAMENTO_REABERTURA);
       }
     } else {
-      history.push(RotasDto.PERIODO_FECHAMENTO_REABERTURA);
+      navigate(RotasDto.PERIODO_FECHAMENTO_REABERTURA);
     }
   };
 
@@ -122,7 +120,7 @@ const FechaReabCadastroBotoesAcao = () => {
 
         if (resposta?.status === 200) {
           sucesso(resposta.data);
-          history.push(RotasDto.PERIODO_FECHAMENTO_REABERTURA);
+          navigate(RotasDto.PERIODO_FECHAMENTO_REABERTURA);
         }
       }
     }

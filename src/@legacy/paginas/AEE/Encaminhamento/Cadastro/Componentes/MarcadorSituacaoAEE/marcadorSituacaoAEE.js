@@ -21,7 +21,7 @@ const MarcadorSituacaoAEE = () => {
   return dadosEncaminhamento?.situacaoDescricao ? (
     <SituacaoAEEInfo>{dadosEncaminhamento?.situacaoDescricao}</SituacaoAEEInfo>
   ) : (
-    ''
+    <></>
   );
 };
 

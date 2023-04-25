@@ -3,7 +3,7 @@ import { Form, Formik } from 'formik';
 import * as moment from 'moment';
 import React, { useCallback, useContext, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { useLocation, useParams } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import * as Yup from 'yup';
 import { CampoData, momentSchema } from '~/componentes';
@@ -13,7 +13,6 @@ import { OPCAO_TODOS } from '~/constantes';
 import RotasDto from '~/dtos/rotasDto';
 import { ServicoCalendarios, setBreadcrumbManual } from '~/servicos';
 import { erros, sucesso } from '~/servicos/alertas';
-import history from '~/servicos/history';
 import ServicoFechamentoReabertura from '~/servicos/Paginas/Calendario/ServicoFechamentoReabertura';
 import BimestreReabertura from './campos/bimestreReabertura';
 import DreReabertura from './campos/dreReabertura';
@@ -52,6 +51,7 @@ const FechaReabCadastroForm = () => {
     setListaTipoCalendarioEscolar,
   } = useContext(FechaReabCadastroContext);
 
+  const navigate = useNavigate();
   const paramsRota = useParams();
   const paramsLocation = useLocation();
 
@@ -109,7 +109,6 @@ const FechaReabCadastroForm = () => {
       resetarTela();
       setExecutaResetarTela(false);
     }
-
   }, [executaResetarTela]);
 
   const obterBimestresConsultaPorId = dados => {
@@ -190,7 +189,6 @@ const FechaReabCadastroForm = () => {
     } else {
       resetarTela();
     }
-
   }, [paramsRota, listaTipoCalendarioEscolar]);
 
   useEffect(() => {
@@ -217,9 +215,7 @@ const FechaReabCadastroForm = () => {
           }
         ),
       dataFim: momentSchema.required(textCampoObrigatorio),
-      bimestres: Yup.array()
-        .of(Yup.string())
-        .required(textCampoObrigatorio),
+      bimestres: Yup.array().of(Yup.string()).required(textCampoObrigatorio),
       dreCodigo: Yup.string().required(textCampoObrigatorio),
       ueCodigo: Yup.string().required(textCampoObrigatorio),
     };
@@ -273,7 +269,7 @@ const FechaReabCadastroForm = () => {
 
     if (retorno?.status === 200) {
       sucesso(retorno.data);
-      history.push(RotasDto.PERIODO_FECHAMENTO_REABERTURA);
+      navigate(RotasDto.PERIODO_FECHAMENTO_REABERTURA);
     }
   };
 
@@ -296,7 +292,6 @@ const FechaReabCadastroForm = () => {
     } else {
       setListaTipoCalendarioEscolar([]);
     }
-
   }, []);
 
   useEffect(() => {
@@ -320,17 +315,18 @@ const FechaReabCadastroForm = () => {
               <Form>
                 <Col span={24}>
                   <Row gutter={[16, 16]}>
-                    <Col sm={24} md={12} xl={8}>
-                      <TipoCalendarioReabertura
-                        form={form}
-                        onChangeCampos={() => {
-                          onChangeCampos();
-                        }}
-                        obterTiposCalendarios={obterTiposCalendarios}
-                      />
+                    <Col span={24}>
+                      <Col sm={24} md={12} xl={8} style={{ paddingLeft: 0 }}>
+                        <TipoCalendarioReabertura
+                          form={form}
+                          onChangeCampos={() => {
+                            onChangeCampos();
+                          }}
+                          obterTiposCalendarios={obterTiposCalendarios}
+                        />
+                      </Col>
                     </Col>
-                  </Row>
-                  <Row gutter={[16, 16]}>
+
                     <Col md={24} xl={12}>
                       <DreReabertura
                         form={form}
@@ -339,6 +335,7 @@ const FechaReabCadastroForm = () => {
                         }}
                       />
                     </Col>
+
                     <Col md={24} xl={12}>
                       <UeReabertura
                         form={form}
@@ -347,8 +344,7 @@ const FechaReabCadastroForm = () => {
                         }}
                       />
                     </Col>
-                  </Row>
-                  <Row gutter={[16, 16]}>
+
                     <Col span={24}>
                       <CampoTexto
                         label="Descrição"
@@ -361,8 +357,7 @@ const FechaReabCadastroForm = () => {
                         labelRequired
                       />
                     </Col>
-                  </Row>
-                  <Row gutter={[16, 16]}>
+
                     <Col sm={24} md={12} lg={6}>
                       <CampoData
                         label="Início"
@@ -375,6 +370,7 @@ const FechaReabCadastroForm = () => {
                         labelRequired
                       />
                     </Col>
+
                     <Col sm={24} md={12} lg={6}>
                       <CampoData
                         label="Fim"
@@ -387,6 +383,7 @@ const FechaReabCadastroForm = () => {
                         labelRequired
                       />
                     </Col>
+
                     <Col sm={24} md={12} lg={12}>
                       <BimestreReabertura
                         form={form}
@@ -396,6 +393,7 @@ const FechaReabCadastroForm = () => {
                       />
                     </Col>
                   </Row>
+
                   {auditoriaFechaReab?.criadoEm ? (
                     <Auditoria
                       className="ant-col ant-col-24"

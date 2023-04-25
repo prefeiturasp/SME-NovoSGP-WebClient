@@ -39,16 +39,6 @@ export const ContainerTableAvaliacao = styled.div`
     position: relative;
   }
 
-  .col-numero-chamada {
-    left: 0;
-    border-left: solid 1px #dadada;
-    border-right: 0 !important;
-  }
-
-  .col-nome-aluno {
-    left: 60px;
-    border-left: solid 1px #dadada;
-  }
 `;
 
 const ListaoListaAvaliacoes = () => {
@@ -209,7 +199,7 @@ const ListaoListaAvaliacoes = () => {
       title: 'Nº',
       align: 'center',
       width: '60px',
-      className: 'position-sticky-col col-numero-chamada',
+      fixed: 'left',
       render: montarColunaNumeroAula,
     },
 
@@ -217,7 +207,7 @@ const ListaoListaAvaliacoes = () => {
       title: 'Nome do estudante',
       width: temMaisDeTresAvaliacoes ? '400px' : 'auto',
       render: montarColunaEstudante,
-      className: 'position-sticky-col col-nome-aluno',
+      fixed: 'left',
     },
   ];
 

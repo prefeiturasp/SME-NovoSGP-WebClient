@@ -1,15 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import styled from 'styled-components';
 import * as moment from 'moment';
 import shortid from 'shortid';
 import DataTable from '~/componentes/table/dataTable';
 import { Colors } from '~/componentes/colors';
 import Button from '~/componentes/button';
-import history from '~/servicos/history';
 import { Loader } from '~/componentes';
+import { useNavigate } from 'react-router-dom';
 
 const ListaNotificacoes = () => {
+  const navigate = useNavigate();
+
   const [carregando, setCarregando] = useState(true);
 
   const notificacoes = useSelector(state => state.notificacoes);
@@ -68,11 +69,11 @@ const ListaNotificacoes = () => {
   ];
 
   const aoClicarNaLinha = row => {
-    history.push(`/notificacoes/${row.id}`);
+    navigate(`/notificacoes/${row.id}`);
   };
 
   const onClickVerTudo = () => {
-    history.push(`/notificacoes`);
+    navigate(`/notificacoes`);
   };
 
   return (

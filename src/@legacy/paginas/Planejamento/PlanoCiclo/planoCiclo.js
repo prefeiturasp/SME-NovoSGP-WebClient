@@ -9,7 +9,6 @@ import { Colors } from '../../../componentes/colors';
 import SelectComponent from '../../../componentes/select';
 import { erro, sucesso, confirmar, erros } from '../../../servicos/alertas';
 import api from '../../../servicos/api';
-import history from '../../../servicos/history';
 import {
   Badge,
   BtnLink,
@@ -37,12 +36,14 @@ import {
 } from '~/constantes/ids/button';
 import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
 import { removerTagsHtml } from '~/utils';
+import { useNavigate } from 'react-router-dom';
 
 export default function PlanoCiclo() {
   const urlPrefeitura = 'https://curriculo.sme.prefeitura.sp.gov.br';
   const urlMatrizSaberes = `${urlPrefeitura}/matriz-de-saberes`;
   const urlODS = `${urlPrefeitura}/ods`;
   const textEditorRef = useRef(null);
+  const navigate = useNavigate();
 
   const [listaMatriz, setListaMatriz] = useState([]);
   const [listaODS, setListaODS] = useState([]);
@@ -241,7 +242,6 @@ export default function PlanoCiclo() {
       }
     }
     setCarregando(false);
-
   }, [turmaSelecionada, turmasUsuario]);
 
   useEffect(() => {
@@ -259,7 +259,6 @@ export default function PlanoCiclo() {
     }
 
     if (!Object.entries(turmaSelecionada).length) setCicloSelecionado();
-
   }, [turmaSelecionada, ehModalidadeInfantil]);
 
   function addRemoverMatriz(event, matrizSelecionada) {
@@ -407,7 +406,7 @@ export default function PlanoCiclo() {
         setCarregandoSalvar(false);
         sucesso('Suas informações foram salvas com sucesso.');
         if (navegarParaPlanejamento) {
-          history.push('/');
+          navigate('/');
         } else {
           confirmarCancelamento();
         }
@@ -427,10 +426,10 @@ export default function PlanoCiclo() {
         salvarPlanoCiclo(true);
       } else {
         setModoEdicao(false);
-        history.push('/');
+        navigate('/');
       }
     } else {
-      history.push('/');
+      navigate('/');
     }
   };
 

@@ -4,68 +4,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Base } from '../colors';
 
 export const Campo = styled.div`
-  width: 100%;
-
-  span {
-    margin-bottom: 5px;
-    color: ${Base.Vermelho};
-  }
-
-  span[class*='is-invalid'] {
-    .ant-calendar-picker-input {
-      border-color: #dc3545 !important;
-    }
-
-    .ant-time-picker-input {
-      border-color: #dc3545 !important;
-    }
-  }
-
-  .ant-calendar-picker-input {
-    height: 38px;
-  }
-
-  .ant-time-picker-input {
-    height: 38px;
-  }
-
-  .ant-time-picker {
-    width: 100%;
-  }
-
-  .ant-calendar-picker {
-    width: 100%;
-  }
-
-  .ant-calendar-disabled-cell.ant-calendar-today .ant-calendar-date {
-    background-color: #f5f5f5;
-    ::before {
-      border: 0;
-    }
-  }
-
-  .ant-calendar-today .ant-calendar-date {
-    color: black;
-    border: 0;
-  }
-
-  label {
-    font-weight: bold;
-  }
-
-  .intervalo-datas {
-    text-align: left;
-
-    span {
-      padding: 4px 11px;
-    }
-
-    input {
-      font-size: 14px;
-      line-height: 22px;
-      text-align: left;
-      color: rgba(0, 0, 0, 0.65);
-    }
+  [class*='is-invalid'] {
+    border-color: ${Base.Vermelho} !important;
   }
 `;
 

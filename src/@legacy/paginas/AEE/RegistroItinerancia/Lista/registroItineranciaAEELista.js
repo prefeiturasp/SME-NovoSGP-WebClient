@@ -21,18 +21,18 @@ import { RotasDto } from '~/dtos';
 import {
   AbrangenciaServico,
   erros,
-  history,
   ServicoRegistroItineranciaAEE,
   sucesso,
   verificaSomenteConsulta,
 } from '~/servicos';
 import { BotaoCustomizado } from '../registroItinerancia.css';
+import { useNavigate } from 'react-router-dom';
 
 const RegistroItineranciaAEELista = () => {
-  const [
-    alunoLocalizadorSelecionado,
-    setAlunoLocalizadorSelecionado,
-  ] = useState();
+  const navigate = useNavigate();
+
+  const [alunoLocalizadorSelecionado, setAlunoLocalizadorSelecionado] =
+    useState();
   const [anoAtual] = useState(window.moment().format('YYYY'));
   const [anoLetivo, setAnoLetivo] = useState();
   const [carregandoAnos, setCarregandoAnos] = useState(false);
@@ -60,8 +60,9 @@ const RegistroItineranciaAEELista = () => {
   const usuario = useSelector(store => store.usuario);
   const permissoesTela =
     usuario.permissoes[RotasDto.RELATORIO_AEE_REGISTRO_ITINERANCIA];
-  const somenteConsulta = useSelector(store => store.navegacao)
-    ?.somenteConsulta;
+  const somenteConsulta = useSelector(
+    store => store.navegacao
+  )?.somenteConsulta;
 
   const colunas = [
     {
@@ -136,11 +137,11 @@ const RegistroItineranciaAEELista = () => {
   };
 
   const onClickVoltar = () => {
-    history.push(URL_HOME);
+    navigate(URL_HOME);
   };
 
   const onClickNovo = () => {
-    history.push(`${RotasDto.RELATORIO_AEE_REGISTRO_ITINERANCIA}/novo`);
+    navigate(`${RotasDto.RELATORIO_AEE_REGISTRO_ITINERANCIA}/novo`);
   };
 
   const limparFiltrosSelecionados = () => {
@@ -195,9 +196,10 @@ const RegistroItineranciaAEELista = () => {
         },
       ];
       if (consideraHistorico) {
-        const anosLetivos = await ServicoRegistroItineranciaAEE.obterAnosLetivos()
-          .catch(e => erros(e))
-          .finally(() => setCarregandoAnos(false));
+        const anosLetivos =
+          await ServicoRegistroItineranciaAEE.obterAnosLetivos()
+            .catch(e => erros(e))
+            .finally(() => setCarregandoAnos(false));
 
         anos =
           anosLetivos?.data.map(ano => {
@@ -324,7 +326,7 @@ const RegistroItineranciaAEELista = () => {
     dataInicial,
     dataFinal,
     criador,
-    listaUes
+    listaUes,
   ]);
 
   useEffect(() => {
@@ -407,7 +409,7 @@ const RegistroItineranciaAEELista = () => {
   };
 
   const onClickEditar = item => {
-    history.push(
+    navigate(
       `${RotasDto.RELATORIO_AEE_REGISTRO_ITINERANCIA}/editar/${item.id}`
     );
   };

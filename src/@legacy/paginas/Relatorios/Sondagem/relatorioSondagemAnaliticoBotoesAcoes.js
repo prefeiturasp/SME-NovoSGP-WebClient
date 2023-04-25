@@ -3,10 +3,13 @@ import _ from 'lodash';
 import React from 'react';
 import BotoesAcaoRelatorio from '~/componentes-sgp/botoesAcaoRelatorio';
 import { MENSAGEM_SOLICITACAO_RELATORIO_SUCESSO, URL_HOME } from '~/constantes';
-import { erros, history, sucesso } from '~/servicos';
+import { erros, sucesso } from '~/servicos';
 import ServicoRelatorioSondagem from '~/servicos/Paginas/Relatorios/Sondagem/ServicoRelatorioSondagem';
+import { useNavigate } from 'react-router-dom';
 
 const RelatorioSondagemAnaliticoBotoesAcoes = props => {
+  const navigate = useNavigate();
+
   const {
     form,
     initialValues,
@@ -52,7 +55,7 @@ const RelatorioSondagemAnaliticoBotoesAcoes = props => {
     });
   };
 
-  const onClickVoltar = async () => history.push(URL_HOME);
+  const onClickVoltar = () => navigate(URL_HOME);
 
   const onClickCancelar = () => {
     setDesabilitarGerar(false);

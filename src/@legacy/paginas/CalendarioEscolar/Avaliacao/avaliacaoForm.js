@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import queryString from 'query-string';
 import { useSelector } from 'react-redux';
-import PropTypes from 'prop-types';
 import * as Yup from 'yup';
 import { Formik, Form } from 'formik';
 import _ from 'lodash';
@@ -13,7 +12,6 @@ import RadioGroupButton from '~/componentes/radioGroupButton';
 import CampoTexto from '~/componentes/campoTexto';
 import SelectComponent from '~/componentes/select';
 import { Auditoria, Colors, Label, Loader } from '~/componentes';
-import history from '~/servicos/history';
 import { Div, Badge } from './avaliacao.css';
 import RotasDTO from '~/dtos/rotasDto';
 import ServicoAvaliacao from '~/servicos/Paginas/Calendario/ServicoAvaliacao';
@@ -43,8 +41,13 @@ import {
   SGP_SELECT_TIPO_AVALIACAO,
 } from '~/constantes/ids/select';
 import { SGP_JODIT_EDITOR_CADASTRO_AVALIACAO_DESCRICAO } from '~/constantes/ids/jodit-editor';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 
-const AvaliacaoForm = ({ match, location }) => {
+const AvaliacaoForm = () => {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const paramsRoute = useParams();
+
   const [mostrarModalCopiarAvaliacao, setMostrarModalCopiarAvaliacao] =
     useState(false);
   const permissaoTela = useSelector(
@@ -76,10 +79,10 @@ const AvaliacaoForm = ({ match, location }) => {
       if (confirmado) {
         if (botaoCadastrarRef.current) botaoCadastrarRef.current.click();
       } else {
-        history.push(RotasDTO.CALENDARIO_PROFESSOR);
+        navigate(RotasDTO.CALENDARIO_PROFESSOR);
       }
     } else {
-      history.push(RotasDTO.CALENDARIO_PROFESSOR);
+      navigate(RotasDTO.CALENDARIO_PROFESSOR);
     }
   };
 
@@ -141,7 +144,7 @@ const AvaliacaoForm = ({ match, location }) => {
       if (exclusao && exclusao.status === 200) {
         setCarregandoTela(false);
         sucesso('Atividade avaliativa excluída com sucesso!');
-        history.push(RotasDTO.CALENDARIO_PROFESSOR);
+        navigate(RotasDTO.CALENDARIO_PROFESSOR);
       } else {
         erro(exclusao);
         setCarregandoTela(false);
@@ -277,7 +280,7 @@ const AvaliacaoForm = ({ match, location }) => {
             );
           }
           setCarregandoTela(false);
-          history.push(RotasDTO.CALENDARIO_PROFESSOR);
+          navigate(RotasDTO.CALENDARIO_PROFESSOR);
         } else {
           setCarregandoTela(false);
           erro(salvar);
@@ -429,7 +432,7 @@ const AvaliacaoForm = ({ match, location }) => {
   };
 
   useEffect(() => {
-    if (!match?.params?.id && listaDisciplinas?.length === 1) {
+    if (!paramsRoute?.id && listaDisciplinas?.length === 1) {
       setDadosAvaliacao({
         ...dadosAvaliacao,
         disciplinasId:
@@ -442,7 +445,7 @@ const AvaliacaoForm = ({ match, location }) => {
       setTemRegencia(true);
       obterDisciplinasRegencia();
     }
-  }, [listaDisciplinas, mostrarDisciplinaRegencia, match]);
+  }, [listaDisciplinas, mostrarDisciplinaRegencia, paramsRoute]);
 
   const [listaTiposAvaliacao, setListaTiposAvaliacao] = useState([]);
 
@@ -464,7 +467,7 @@ const AvaliacaoForm = ({ match, location }) => {
     setCarregandoTela(true);
     setTimeout(() => {
       setCarregandoTela(false);
-      history.push(RotasDTO.CALENDARIO_PROFESSOR);
+      navigate(RotasDTO.CALENDARIO_PROFESSOR);
     }, 2000);
   };
 
@@ -475,8 +478,8 @@ const AvaliacaoForm = ({ match, location }) => {
 
     if (!idAvaliacao) setDadosAvaliacao(inicial);
 
-    if (match?.params?.id) {
-      setIdAvaliacao(match.params.id);
+    if (paramsRoute?.id) {
+      setIdAvaliacao(paramsRoute.id);
     } else if (diaAvaliacao) {
       setDataAvaliacao(window.moment(diaAvaliacao));
     } else if (!valorNuloOuVazio(location.search)) {
@@ -910,16 +913,6 @@ const AvaliacaoForm = ({ match, location }) => {
       </Div>
     </>
   );
-};
-
-AvaliacaoForm.propTypes = {
-  match: PropTypes.oneOfType([PropTypes.array, PropTypes.object]),
-  location: PropTypes.oneOfType([PropTypes.array, PropTypes.object]),
-};
-
-AvaliacaoForm.defaultProps = {
-  match: {},
-  location: {},
 };
 
 export default AvaliacaoForm;

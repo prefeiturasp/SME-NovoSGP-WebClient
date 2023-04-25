@@ -1,7 +1,7 @@
 ﻿import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import { store } from '~/redux';
+import { store } from '@/core/redux';
 import { atribuiEventosMes } from '~/redux/modulos/calendarioProfessor/actions';
 import Mes from './Mes';
 import MesCompleto from './MesCompleto';

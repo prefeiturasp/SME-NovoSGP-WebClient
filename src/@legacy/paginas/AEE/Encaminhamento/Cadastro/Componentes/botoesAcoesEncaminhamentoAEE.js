@@ -1,5 +1,4 @@
 import { Col, Row } from 'antd';
-import PropTypes from 'prop-types';
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import BotaoExcluirPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoExcluirPadrao';
@@ -22,14 +21,17 @@ import {
   setExibirModalEncerramentoEncaminhamentoAEE,
 } from '~/redux/modulos/encaminhamentoAEE/actions';
 import { confirmar, erros, sucesso } from '~/servicos';
-import history from '~/servicos/history';
 import ServicoEncaminhamentoAEE from '~/servicos/Paginas/Relatorios/AEE/ServicoEncaminhamentoAEE';
 import BotaoGerarRelatorioEncaminhamentoAEE from '../../BotaoGerarRelatorioEncaminhamentoAEE';
+import { useNavigate, useParams } from 'react-router-dom';
 
-const BotoesAcoesEncaminhamentoAEE = props => {
-  const { match } = props;
-
+const BotoesAcoesEncaminhamentoAEE = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const paramsRoute = useParams();
+
+  const encaminhamentoId = paramsRoute?.id;
 
   const questionarioDinamicoEmEdicao = useSelector(
     store => store.questionarioDinamico.questionarioDinamicoEmEdicao
@@ -54,7 +56,6 @@ const BotoesAcoesEncaminhamentoAEE = props => {
     usuario.permissoes[RotasDto.RELATORIO_AEE_ENCAMINHAMENTO];
 
   const onClickSalvarRascunho = async () => {
-    const encaminhamentoId = match?.params?.id;
     let situacao = situacaoAEE.Rascunho;
 
     if (encaminhamentoId) {
@@ -66,7 +67,8 @@ const BotoesAcoesEncaminhamentoAEE = props => {
       situacao,
       false,
       false,
-      true
+      true,
+      navigate
     );
     if (salvou) {
       sucesso(`Rascunho salvo com sucesso`);
@@ -74,7 +76,6 @@ const BotoesAcoesEncaminhamentoAEE = props => {
   };
 
   const onClickEnviar = async () => {
-    const encaminhamentoId = match?.params?.id;
     const salvou = await ServicoEncaminhamentoAEE.salvarEncaminhamento(
       encaminhamentoId,
       situacaoAEE.Encaminhado,
@@ -83,7 +84,7 @@ const BotoesAcoesEncaminhamentoAEE = props => {
     );
     if (salvou) {
       sucesso('Encaminhamento enviado para validação do CP');
-      history.push(RotasDto.RELATORIO_AEE_ENCAMINHAMENTO);
+      navigate(RotasDto.RELATORIO_AEE_ENCAMINHAMENTO);
     }
   };
 
@@ -95,7 +96,6 @@ const BotoesAcoesEncaminhamentoAEE = props => {
         'Suas alterações não foram salvas, deseja salvar agora?'
       );
       if (confirmou) {
-        const encaminhamentoId = match?.params?.id;
         let situacao = situacaoAEE.Rascunho;
 
         if (encaminhamentoId) {
@@ -108,13 +108,13 @@ const BotoesAcoesEncaminhamentoAEE = props => {
         );
         if (salvou) {
           sucesso(`Rascunho salvo com sucesso`);
-          history.push(RotasDto.RELATORIO_AEE_ENCAMINHAMENTO);
+          navigate(RotasDto.RELATORIO_AEE_ENCAMINHAMENTO);
         }
       } else {
-        history.push(RotasDto.RELATORIO_AEE_ENCAMINHAMENTO);
+        navigate(RotasDto.RELATORIO_AEE_ENCAMINHAMENTO);
       }
     } else if (
-      match?.params?.id &&
+      encaminhamentoId &&
       dadosEncaminhamento?.situacao === situacaoAEE.Rascunho
     ) {
       const confirmou = await confirmar(
@@ -123,15 +123,14 @@ const BotoesAcoesEncaminhamentoAEE = props => {
         `Você salvou o encaminhamento como rascunho. Para dar andamento ao encaminhamento você precisa clicar em "Enviar", deseja realmente sair da tela?`
       );
       if (confirmou) {
-        history.push(RotasDto.RELATORIO_AEE_ENCAMINHAMENTO);
+        navigate(RotasDto.RELATORIO_AEE_ENCAMINHAMENTO);
       }
     } else {
-      history.push(RotasDto.RELATORIO_AEE_ENCAMINHAMENTO);
+      navigate(RotasDto.RELATORIO_AEE_ENCAMINHAMENTO);
     }
   };
 
   const onClickExcluir = async () => {
-    const encaminhamentoId = match?.params?.id;
     if (permissoesTela.podeExcluir && encaminhamentoId) {
       const confirmado = await confirmar(
         'Excluir',
@@ -149,7 +148,7 @@ const BotoesAcoesEncaminhamentoAEE = props => {
 
         if (resposta?.status === 200) {
           sucesso('Registro excluído com sucesso');
-          history.push(RotasDto.RELATORIO_AEE_ENCAMINHAMENTO);
+          navigate(RotasDto.RELATORIO_AEE_ENCAMINHAMENTO);
         }
       }
     }
@@ -161,7 +160,6 @@ const BotoesAcoesEncaminhamentoAEE = props => {
 
   const onClickEncerrar = async () => {
     if (!desabilitarCamposEncaminhamentoAEE) {
-      const encaminhamentoId = match?.params?.id;
       const salvou = await ServicoEncaminhamentoAEE.salvarEncaminhamento(
         encaminhamentoId,
         situacaoAEE.Encaminhado,
@@ -176,7 +174,6 @@ const BotoesAcoesEncaminhamentoAEE = props => {
   const onClickEncaminharAEE = async () => {
     if (!desabilitarCamposEncaminhamentoAEE) {
       setDesabilitarBtnAcao(true);
-      const encaminhamentoId = match?.params?.id;
       const salvou = await ServicoEncaminhamentoAEE.salvarEncaminhamento(
         encaminhamentoId,
         situacaoAEE.Encaminhado,
@@ -184,15 +181,16 @@ const BotoesAcoesEncaminhamentoAEE = props => {
       );
       if (salvou) {
         dispatch(setExibirLoaderEncaminhamentoAEE(true));
-        const resposta = await ServicoEncaminhamentoAEE.enviarParaAnaliseEncaminhamento(
-          encaminhamentoId
-        )
-          .catch(e => erros(e))
-          .finally(() => dispatch(setExibirLoaderEncaminhamentoAEE(false)));
+        const resposta =
+          await ServicoEncaminhamentoAEE.enviarParaAnaliseEncaminhamento(
+            encaminhamentoId
+          )
+            .catch(e => erros(e))
+            .finally(() => dispatch(setExibirLoaderEncaminhamentoAEE(false)));
 
         if (resposta?.status === 200) {
           sucesso('Encaminhamento enviado para a AEE');
-          history.push(RotasDto.RELATORIO_AEE_ENCAMINHAMENTO);
+          navigate(RotasDto.RELATORIO_AEE_ENCAMINHAMENTO);
         }
       }
       setDesabilitarBtnAcao(false);
@@ -201,7 +199,6 @@ const BotoesAcoesEncaminhamentoAEE = props => {
 
   const onClickConcluirParecer = async () => {
     if (!desabilitarCamposEncaminhamentoAEE) {
-      const encaminhamentoId = match?.params?.id;
       const salvou = await ServicoEncaminhamentoAEE.salvarEncaminhamento(
         encaminhamentoId,
         situacaoAEE.Analise,
@@ -217,7 +214,7 @@ const BotoesAcoesEncaminhamentoAEE = props => {
 
         if (resposta?.status === 200) {
           sucesso('Encaminhamento concluído');
-          history.push(RotasDto.RELATORIO_AEE_ENCAMINHAMENTO);
+          navigate(RotasDto.RELATORIO_AEE_ENCAMINHAMENTO);
         }
       }
     }
@@ -269,8 +266,8 @@ const BotoesAcoesEncaminhamentoAEE = props => {
           disabled={
             desabilitarCamposEncaminhamentoAEE ||
             !questionarioDinamicoEmEdicao ||
-            (match?.params?.id && !dadosEncaminhamento?.podeEditar) ||
-            (match?.params?.id &&
+            (encaminhamentoId && !dadosEncaminhamento?.podeEditar) ||
+            (encaminhamentoId &&
               dadosEncaminhamento?.situacao !== situacaoAEE.Rascunho &&
               dadosEncaminhamento?.situacao !== situacaoAEE.Deferido)
           }
@@ -359,20 +356,12 @@ const BotoesAcoesEncaminhamentoAEE = props => {
       )}
       <Col>
         <BotaoGerarRelatorioEncaminhamentoAEE
-          disabled={!match?.params?.id}
-          ids={[match?.params?.id]}
+          disabled={!encaminhamentoId}
+          ids={[encaminhamentoId]}
         />
       </Col>
     </Row>
   );
-};
-
-BotoesAcoesEncaminhamentoAEE.propTypes = {
-  match: PropTypes.oneOfType([PropTypes.object]),
-};
-
-BotoesAcoesEncaminhamentoAEE.defaultProps = {
-  match: {},
 };
 
 export default BotoesAcoesEncaminhamentoAEE;

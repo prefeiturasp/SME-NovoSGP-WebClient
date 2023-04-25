@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import PropTypes from 'prop-types';
 
 // Form
 import { Formik, Form } from 'formik';
@@ -11,7 +10,6 @@ import { setLoaderSecao } from '~/redux/modulos/loader/actions';
 
 // Serviços
 import RotasDto from '~/dtos/rotasDto';
-import history from '~/servicos/history';
 import RegistroPOAServico from '~/servicos/Paginas/DiarioClasse/RegistroPOA';
 import { erros, erro, sucesso, confirmar } from '~/servicos/alertas';
 import { setBreadcrumbManual } from '~/servicos/breadcrumb-services';
@@ -41,9 +39,14 @@ import AlertaModalidadeInfantil from '~/componentes-sgp/AlertaModalidadeInfantil
 import { ehTurmaInfantil } from '~/servicos/Validacoes/validacoesInfatil';
 import JoditEditor from '~/componentes/jodit-editor/joditEditor';
 import { SGP_BUTTON_ALTERAR_CADASTRAR } from '~/constantes/ids/button';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 
-function RegistroPOAForm({ match }) {
+function RegistroPOAForm() {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const location = useLocation();
+  const paramsRoute = useParams();
+
   const carregando = useSelector(store => store.loader.loaderSecao);
   const permissoesTela = useSelector(store => store.usuario.permissoes);
   const anoLetivo =
@@ -62,7 +65,7 @@ function RegistroPOAForm({ match }) {
   const [auditoria, setAuditoria] = useState({});
   const [valoresCarregados, setValoresCarregados] = useState(null);
   const [refForm, setRefForm] = useState({});
-  const ehEdicaoRegistro = match && match.params && match.params.id > 0;
+  const ehEdicaoRegistro = paramsRoute?.id > 0;
   const [valoresIniciais, setValoresIniciais] = useState({
     bimestre: '',
     titulo: '',
@@ -145,9 +148,9 @@ function RegistroPOAForm({ match }) {
       if (cadastrado?.status === 200) {
         dispatch(setLoaderSecao(false));
         sucesso(
-          `Registro ${match?.params?.id ? 'alterado' : 'salvo'} com sucesso.`
+          `Registro ${paramsRoute?.id ? 'alterado' : 'salvo'} com sucesso.`
         );
-        history.push(RotasDto.REGISTRO_POA);
+        navigate(RotasDto.REGISTRO_POA);
       }
     } catch (err) {
       if (err) {
@@ -167,10 +170,10 @@ function RegistroPOAForm({ match }) {
       if (confirmou) {
         validaAntesDoSubmit(form);
       } else {
-        history.push(RotasDto.REGISTRO_POA);
+        navigate(RotasDto.REGISTRO_POA);
       }
     } else {
-      history.push(RotasDto.REGISTRO_POA);
+      navigate(RotasDto.REGISTRO_POA);
     }
   };
 
@@ -203,7 +206,7 @@ function RegistroPOAForm({ match }) {
       );
       if (excluir) {
         sucesso(`Registro excluído com sucesso!`);
-        history.push(RotasDto.REGISTRO_POA);
+        navigate(RotasDto.REGISTRO_POA);
       }
     }
   };
@@ -244,14 +247,14 @@ function RegistroPOAForm({ match }) {
   }, [valoresCarregados]);
 
   useEffect(() => {
-    if (match && match.params && match.params.id) {
+    if (paramsRoute?.id) {
       setNovoRegistro(false);
-      setBreadcrumbManual(match.url, 'Registro', RotasDto.REGISTRO_POA);
-      buscarPorId(match.params.id);
+      setBreadcrumbManual(location.pathname, 'Registro', RotasDto.REGISTRO_POA);
+      buscarPorId(paramsRoute.id);
     } else {
       setValoresCarregados(true);
     }
-  }, [buscarPorId, match]);
+  }, [buscarPorId, location, paramsRoute]);
 
   return (
     <>
@@ -287,7 +290,7 @@ function RegistroPOAForm({ match }) {
                       modalidadesFiltroPrincipal,
                       turmaSelecionada
                     ) ||
-                    (match?.params?.id && !modoEdicao)
+                    (paramsRoute?.id && !modoEdicao)
                   }
                 />
               </Cabecalho>
@@ -422,16 +425,5 @@ function RegistroPOAForm({ match }) {
     </>
   );
 }
-
-RegistroPOAForm.propTypes = {
-  match: PropTypes.oneOfType([
-    PropTypes.objectOf(PropTypes.object),
-    PropTypes.any,
-  ]),
-};
-
-RegistroPOAForm.defaultProps = {
-  match: {},
-};
 
 export default RegistroPOAForm;

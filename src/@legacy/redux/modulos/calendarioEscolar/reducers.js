@@ -1,4 +1,5 @@
 ﻿import produce from 'immer';
+import _ from 'lodash';
 import { Base } from '~/componentes';
 
 const inicial = {
@@ -128,8 +129,9 @@ export default function calendarioEscolar(state = inicial, action) {
         break;
       }
       case '@calendarioEscolar/zeraCalendario': {
-        const meses = Object.assign({}, state.meses);
-        Object.entries(meses).forEach(([indice, _mes]) => {
+        const mesesClone = _.cloneDeep(state.meses);
+        const meses = Object.assign({}, mesesClone);
+        Object.entries(meses).forEach(([indice]) => {
           meses[indice].eventos = 0;
           meses[indice].estaAberto = false;
         });

@@ -11,7 +11,7 @@ import {
 } from '~/constantes/ids/select';
 import { AbrangenciaServico, erros } from '~/servicos';
 import { FiltroHelper } from '..';
-import { store } from '~/redux';
+import { store } from '@/core/redux';
 import {
   setAluno,
   setDre,
@@ -38,8 +38,9 @@ const LocalizarEstudante = props => {
 
   const codigoDre = useSelector(state => state.localizarEstudante.dre)?.codigo;
   const codigoUe = useSelector(state => state.localizarEstudante.ue)?.codigo;
-  const codigoTurma = useSelector(state => state.localizarEstudante.turma)
-    ?.codigo;
+  const codigoTurma = useSelector(
+    state => state.localizarEstudante.turma
+  )?.codigo;
 
   const obterDres = useCallback(async () => {
     setCarregandoDres(true);
@@ -184,7 +185,6 @@ const LocalizarEstudante = props => {
       setListaUes([]);
       store.dispatch(setUe());
     }
-
   }, [codigoDre]);
 
   useEffect(() => {
@@ -194,7 +194,6 @@ const LocalizarEstudante = props => {
       setListaTurmas([]);
       store.dispatch(setTurma());
     }
-
   }, [codigoUe]);
 
   return (

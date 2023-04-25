@@ -44,13 +44,13 @@ export const CampoTexto = styled.input`
     color: ${Base.CinzaBotao} !important;
   }
   ::-moz-placeholder {
-    font-size: 14px !import;
+    font-size: 14px !important;
   }
   :-ms-input-placeholder {
-    font-size: 14px !import;
+    font-size: 14px !important;
   }
   :-moz-placeholder {
-    font-size: 14px !import;
+    font-size: 14px !important;
   }
 `;
 
@@ -75,6 +75,22 @@ export const LogoSP = styled(LogoSGP)`
 export const Cartao = styled(Card)`
   height: auto;
   border-radius: 6px;
+  -webkit-font-feature-settings: 'tnum';
+  font-feature-settings: 'tnum', 'tnum';
+  background: #fff;
+  border-radius: 2px;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  color: rgba(0, 0, 0, 0.65);
+  font-size: 14px;
+  font-variant: tabular-nums;
+  line-height: 1.5;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  position: relative;
+  -webkit-transition: all 0.3s;
+  transition: all 0.3s;
 `;
 
 export const CorpoCartao = styled(CardBody)`
