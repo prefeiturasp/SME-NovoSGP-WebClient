@@ -44,8 +44,11 @@ const FechamentoBimestreLista = props => {
   const [situacaoFechamento, setSituacaoFechamento] = useState(dados.situacao);
   const [carregandoProcesso, setCarregandoProcesso] = useState(false);
   const [podeProcessarReprocessar] = useState(dados.podeProcessarReprocessar);
-  const [situacaosituacaoNomeFechamento, setSituacaosituacaoNomeFechamento] =
-    useState(dados.situacaoNome);
+  const [periodoAberto] = useState(dados.periodoAberto);
+  const [
+    situacaosituacaoNomeFechamento,
+    setSituacaosituacaoNomeFechamento
+  ] = useState(dados.situacaoNome);
   const [dataFechamento] = useState(dados.dataFechamento);
 
   const [exibirModalAnotacao, setExibirModalAnotacao] = useState(false);
@@ -133,13 +136,13 @@ const FechamentoBimestreLista = props => {
           codigoTurma={turmaId}
           anoLetivo={anoLetivo}
           dadosAlunoSelecionado={alunoModalAnotacao}
-          desabilitar={desabilitarCampo || !podeProcessarReprocessar}
+          desabilitar={desabilitarCampo || (!podeProcessarReprocessar && !periodoAberto)}
         />
       ) : (
         ''
       )}
       <div className="row pb-4">
-        {!podeProcessarReprocessar ? (
+        {!periodoAberto ? (
           <div className="col-md-12">
             <Alert
               alerta={{
