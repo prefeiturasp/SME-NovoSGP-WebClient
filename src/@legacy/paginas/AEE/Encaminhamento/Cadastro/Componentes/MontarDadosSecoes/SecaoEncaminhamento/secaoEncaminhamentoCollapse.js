@@ -47,7 +47,7 @@ const SecaoEncaminhamentoCollapse = props => {
             anoLetivo={dadosCollapseLocalizarEstudante?.anoLetivo}
             codigoTurma={dadosCollapseLocalizarEstudante?.codigoTurma}
             exibirBotaoImprimir={false}
-            exibirFrequencia={false}
+            consultarFrequenciaGlobal
             permiteAlterarImagem={!desabilitarCamposEncaminhamentoAEE}
           />
           <MotivoEncerramento />

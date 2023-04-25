@@ -1,7 +1,7 @@
 /* eslint-disable react/prop-types */
 import { Col, Row } from 'antd';
 import React, { useState, useEffect } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Button, Card, Colors } from '~/componentes';
 import { SGP_BUTTON_NOVO_ATENDIMENTO } from '~/constantes/ids/button';
 import { setListaSecoesEmEdicao } from '~/redux/modulos/encaminhamentoNAAPA/actions';
@@ -15,6 +15,10 @@ import ListaHistoricoAtendimentosPaginada from './listaHistoricoAtendimentosPagi
 const MontarDadosTabItinerancia = ({ questionarioId, dadosTab }) => {
   const dispatch = useDispatch();
 
+  const desabilitarCamposEncaminhamentoNAAPA = useSelector(
+    store => store.encaminhamentoNAAPA.desabilitarCamposEncaminhamentoNAAPA
+  );
+
   const [atendimentoId, setAtendimentoId] = useState();
   const [mostrarDrawer, setMostrarDrawer] = useState(false);
   const [atualizarTabela, setAtualizarTabela] = useState(false);
@@ -25,7 +29,7 @@ const MontarDadosTabItinerancia = ({ questionarioId, dadosTab }) => {
   };
 
   const onClickNovoAtendimento = () => {
-    abrirDrawer();
+    if (!desabilitarCamposEncaminhamentoNAAPA) abrirDrawer();
   };
 
   const onCloseDrawer = props => {
@@ -72,6 +76,7 @@ const MontarDadosTabItinerancia = ({ questionarioId, dadosTab }) => {
             label="Novo atendimento"
             id={SGP_BUTTON_NOVO_ATENDIMENTO}
             onClick={() => onClickNovoAtendimento()}
+            disabled={desabilitarCamposEncaminhamentoNAAPA}
           />
         </Col>
       </Row>

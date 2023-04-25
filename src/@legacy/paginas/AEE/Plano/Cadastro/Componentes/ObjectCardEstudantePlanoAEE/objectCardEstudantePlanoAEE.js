@@ -17,7 +17,7 @@ const ObjectCardEstudantePlanoAEE = () => {
       anoLetivo={dadosCollapseLocalizarEstudante?.anoLetivo}
       codigoTurma={dadosCollapseLocalizarEstudante?.codigoTurma}
       exibirBotaoImprimir={false}
-      exibirFrequencia={false}
+      consultarFrequenciaGlobal
       permiteAlterarImagem={!desabilitarCamposPlanoAEE}
     />
   ) : (

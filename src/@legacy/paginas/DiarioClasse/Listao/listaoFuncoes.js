@@ -277,6 +277,43 @@ const mudarStatusEdicaoAlunos = dados => {
   }
 };
 
+const mudarStatusEmAprovacaoAlunosPorBimestre = (
+  dadosAtualizar,
+  dadosAlunosAlterados
+) => {
+  if (dadosAtualizar?.alunos?.length) {
+    const nomeRef = dadosAlunosAlterados?.ehFinal
+      ? 'notasConceitoFinal'
+      : 'notasConceitoBimestre';
+
+    dadosAtualizar.alunos.forEach(aluno => {
+      aluno[nomeRef].forEach(nota => {
+        if (dadosAlunosAlterados?.ehRegencia) {
+          const ehNotaDisciplinaAlterada =
+            dadosAlunosAlterados?.notaConceitoAlunos?.find(
+              a =>
+                a?.codigoAluno === aluno?.codigoAluno &&
+                a?.disciplinaId &&
+                nota?.disciplinaCodigo &&
+                a?.disciplinaId === nota?.disciplinaCodigo
+            );
+
+          if (ehNotaDisciplinaAlterada) {
+            nota.emAprovacao = true;
+          }
+        } else {
+          const ehNotaAlterada = dadosAlunosAlterados?.notaConceitoAlunos?.find(
+            a => a?.codigoAluno === aluno?.codigoAluno
+          );
+          if (ehNotaAlterada) {
+            nota.emAprovacao = true;
+          }
+        }
+      });
+    });
+  }
+};
+
 const salvarFechamentoListao = async (
   turma,
   ehBimestreFinal,
@@ -332,6 +369,10 @@ const salvarFechamentoListao = async (
     const { dispatch } = store;
 
     mudarStatusEdicaoAlunos(dadosFechamento);
+
+    if (resposta?.data?.emAprovacao) {
+      mudarStatusEmAprovacaoAlunosPorBimestre(dadosFechamento, dadosParaSalvar);
+    }
 
     dispatch(setTelaEmEdicao(false));
     const dadosComAuditoriaAtualizada = { ...dadosFechamento };

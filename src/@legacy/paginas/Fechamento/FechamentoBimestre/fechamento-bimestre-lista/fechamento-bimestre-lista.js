@@ -25,6 +25,7 @@ import ModalAnotacaoAluno from '../../FechamentoModalAnotacaoAluno/modal-anotaca
 import SinalizacaoAEE from '~/componentes-sgp/SinalizacaoAEE/sinalizacaoAEE';
 import Alert from '~/componentes/alert';
 import ListaoBotaoAnotacao from '~/paginas/DiarioClasse/Listao/operacoes/listaoTabs/tabFrequencia/lista/componentes/listaoBotaoAnotacao';
+import { formatarFrequencia } from '~/utils';
 
 const FechamentoBimestreLista = props => {
   const {
@@ -60,9 +61,10 @@ const FechamentoBimestreLista = props => {
     'Solicitação de fechamento realizada com sucesso. Em breve você receberá uma notificação com o resultado do processo.';
 
   const onClickReprocessarNotasConceitos = async () => {
-    const processando = await ServicoFechamentoBimestre.reprocessarNotasConceitos(
-      dados.fechamentoId
-    ).catch(e => erros(e));
+    const processando =
+      await ServicoFechamentoBimestre.reprocessarNotasConceitos(
+        dados.fechamentoId
+      ).catch(e => erros(e));
     if (processando?.status === 200) {
       setSituacaoFechamento(situacaoFechamentoDto.EmProcessamento);
       setSituacaosituacaoNomeFechamento('Em Processamento');
@@ -88,9 +90,10 @@ const FechamentoBimestreLista = props => {
       disciplinaId: codigoComponenteCurricular,
       notaConceitoAlunos: alunosParaProcessar,
     };
-    const processando = await ServicoFechamentoBimestre.processarReprocessarSintese(
-      [params]
-    ).catch(e => erros(e));
+    const processando =
+      await ServicoFechamentoBimestre.processarReprocessarSintese([
+        params,
+      ]).catch(e => erros(e));
     setCarregandoProcesso(false);
     if (processando?.status === 200) {
       setSituacaoFechamento(situacaoFechamentoDto.EmProcessamento);
@@ -351,7 +354,7 @@ const FechamentoBimestreLista = props => {
 
                         {!ehSintese
                           ? item?.notas?.length &&
-                            item.notas[0]?.emAprovacao && (
+                            !!item.notas?.find(n => n?.emAprovacao) && (
                               <Tooltip title="Aguardando aprovação">
                                 <MarcadorTriangulo />
                               </Tooltip>
@@ -378,9 +381,7 @@ const FechamentoBimestreLista = props => {
                             !item.ativo ? 'fundo-cinza' : ''
                           }`}
                         >
-                          {item.percentualFrequencia
-                            ? `${item.percentualFrequencia}%`
-                            : ''}
+                          {formatarFrequencia(item?.percentualFrequencia)}
                         </td>
                       ) : (
                         ''
