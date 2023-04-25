@@ -130,7 +130,7 @@ const DetalhesAluno = props => {
                   className="ml-auto mb-4"
                   color={Colors.Azul}
                   border
-                  onClick={onClickImprimir}
+                  onClick={() => onClickImprimir(dados)}
                   disabled={desabilitarImprimir}
                   id={SGP_BUTTON_IMPRIMIR_DADOS_INDIVIDUAIS}
                 />

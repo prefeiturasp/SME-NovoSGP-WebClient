@@ -40,8 +40,7 @@ const AulaDadaAulaPrevista = () => {
   const [desabilitarDisciplina, setDesabilitarDisciplina] = useState(false);
   const [listaDisciplinas, setListaDisciplinas] = useState([]);
   const [modoEdicao, setModoEdicao] = useState(false);
-  const [disciplinaIdSelecionada, setDisciplinaIdSelecionada] =
-    useState(undefined);
+  const [disciplinaIdSelecionada, setDisciplinaIdSelecionada] = useState();
   const [dadoslista, setDadosLista] = useState([]);
   const [auditoria, setAuditoria] = useState(undefined);
   const permissoesTela = usuario.permissoes[RotasDto.AULA_DADA_AULA_PREVISTA];
@@ -212,8 +211,15 @@ const AulaDadaAulaPrevista = () => {
         await salvar();
       }
     }
-    setDisciplinaIdSelecionada(String(disciplinaId));
-    await buscarDados(disciplinaId);
+
+    if (disciplinaId) {
+      setDisciplinaIdSelecionada(String(disciplinaId));
+      await buscarDados(disciplinaId);
+    } else {
+      setDadosLista([]);
+      setAuditoria(undefined);
+      setDisciplinaIdSelecionada(undefined);
+    }
   };
 
   useEffect(() => {

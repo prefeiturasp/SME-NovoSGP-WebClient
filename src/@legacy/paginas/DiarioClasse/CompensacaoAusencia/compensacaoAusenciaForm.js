@@ -627,6 +627,7 @@ const CompensacaoAusenciaForm = () => {
   const resetarTelaEdicaoComId = async form => {
     setCarregouInformacoes(false);
     setCarregandoDados(true);
+    setAlunosAusenciaCompensada([]);
     const dadosEdicao = await ServicoCompensacaoAusencia.obterPorId(
       idCompensacaoAusencia
     )
@@ -822,13 +823,18 @@ const CompensacaoAusenciaForm = () => {
       idsAlunosAusenciaCompensadas.length
     ) {
       const listaAlunosRemover = alunosAusenciaCompensada.filter(item =>
-        idsAlunosAusenciaCompensadas.find(id => String(id) === String(item.id))
+        idsAlunosAusenciaCompensadas.find(
+          id => String(id) === String(item.id) && !item?.alunoSemSalvar
+        )
       );
 
-      const dadosAlunoMsg = `${listaAlunosRemover[0]?.id} - ${listaAlunosRemover[0]?.nome}`;
+      const dadosAlunoMsg = listaAlunosRemover?.map(
+        item => `${item.id} - ${item.nome}`
+      );
+
       let confirmado = true;
 
-      if (!listaAlunosRemover[0]?.alunoSemSalvar) {
+      if (listaAlunosRemover?.length) {
         confirmado = await confirmar(
           'Excluir estudante',
           dadosAlunoMsg,
