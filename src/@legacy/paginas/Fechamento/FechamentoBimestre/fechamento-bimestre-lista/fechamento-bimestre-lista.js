@@ -47,7 +47,7 @@ const FechamentoBimestreLista = props => {
   const [periodoAberto] = useState(dados.periodoAberto);
   const [
     situacaosituacaoNomeFechamento,
-    setSituacaosituacaoNomeFechamento,
+    setSituacaosituacaoNomeFechamento
   ] = useState(dados.situacaoNome);
   const [dataFechamento] = useState(dados.dataFechamento);
 
