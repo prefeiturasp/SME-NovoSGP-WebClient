@@ -626,7 +626,9 @@ const HistoricoEscolar = () => {
       const alunoSelecionado = alunosSelecionados?.find(
         a => a?.codigo === linha?.codigo
       );
-      linha.observacao = alunoSelecionado?.observacao;
+      if (alunoSelecionado) {
+        linha.observacao = alunoSelecionado?.observacao;
+      }
     });
 
     setAlunosSelecionados([...clonedItems]);
