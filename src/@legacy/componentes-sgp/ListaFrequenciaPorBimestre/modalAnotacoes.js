@@ -93,7 +93,11 @@ const ModalAnotacoes = () => {
           />
         </div>
         <div className="col-md-12">
-          <JoditEditor value={dados?.anotacao} readonly removerToolbar />
+          <JoditEditor
+            removerToolbar
+            desabilitar={true}
+            value={dados?.anotacao}
+          />
         </div>
         <div className="mb-2">
           {dados?.auditoria?.criadoPor ? (
