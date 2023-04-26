@@ -110,10 +110,16 @@ const JoditEditor = forwardRef((props, ref) => {
     const dadosColadoHTML = e?.clipboardData?.getData?.('text/html');
 
     const spgURL = url.replace('/api', '');
-    const temImagemNosDadosColados = dadosColadoHTML?.match(/<img/g) || [];
-    const temVideoNosDadosColados = dadosColadoHTML?.match(/<video/g) || [];
-    const qtdElementoImg = temImagemNosDadosColados.length;
-    const qtdElementoVideo = temVideoNosDadosColados.length;
+    const temImagemNosDadosColados = [...e?.clipboardData?.files].filter(item =>
+      item.type.includes('image')
+    );
+
+    const temVideoNosDadosColados = [...e?.clipboardData?.files].filter(item =>
+      item.type.includes('video')
+    );
+
+    const qtdElementoImg = temImagemNosDadosColados?.length || 0;
+    const qtdElementoVideo = temVideoNosDadosColados?.length || 0;
 
     if (!permiteInserirArquivo && (qtdElementoImg || qtdElementoVideo)) {
       e.preventDefault();
@@ -191,7 +197,6 @@ const JoditEditor = forwardRef((props, ref) => {
     enableDragAndDropFileToEditor: true,
     uploader: {
       buildData: data => {
-        console.log('Entrouuu');
         return new Promise((resolve, reject) => {
           if (permiteInserirArquivo) {
             const arquivo = data.getAll('files[0]')[0];
