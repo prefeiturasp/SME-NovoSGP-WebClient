@@ -107,17 +107,19 @@ const JoditEditor = forwardRef((props, ref) => {
 
   const verificaSePodeInserirArquivo = e => {
     const dadosColadoTexto = e?.clipboardData?.getData?.('text');
-    const dadosColadoHTML = e?.clipboardData?.getData?.('text/html');
 
-    const qtdElementoImgNova = dadosColadoHTML?.match(/<img/g) || [];
-    const qtdElementoVideo = dadosColadoHTML?.match(/<video/g) || [];
-    const temImagemNosDadosColados = qtdElementoImgNova.length;
-    const temVideoNosDadosColados = qtdElementoVideo.length;
+    const temImagemNosDadosColados = [...e?.clipboardData?.files].filter(item =>
+      item.type.includes('image')
+    );
 
-    if (
-      !permiteInserirArquivo &&
-      (temImagemNosDadosColados || temVideoNosDadosColados)
-    ) {
+    const temVideoNosDadosColados = [...e?.clipboardData?.files].filter(item =>
+      item.type.includes('video')
+    );
+
+    const qtdElementoImg = temImagemNosDadosColados?.length || 0;
+    const qtdElementoVideo = temVideoNosDadosColados?.length || 0;
+
+    if (!permiteInserirArquivo && (qtdElementoImg || qtdElementoVideo)) {
       e.preventDefault();
       e.stopPropagation();
       erro('Não é possível inserir arquivo');
@@ -125,10 +127,10 @@ const JoditEditor = forwardRef((props, ref) => {
       return false;
     }
 
-    if (temImagemNosDadosColados && qtdMaxImg) {
+    if (qtdElementoImg && qtdMaxImg) {
       const qtdElementoImgAtual =
         textArea?.current?.editorDocument?.querySelectorAll?.('img');
-      const totalImg = qtdElementoImgNova?.length + qtdElementoImgAtual?.length;
+      const totalImg = qtdElementoImg + qtdElementoImgAtual?.lenght;
 
       if (totalImg > qtdMaxImg || dadosColadoTexto === '') {
         if (dadosColadoTexto !== '') {
@@ -140,7 +142,7 @@ const JoditEditor = forwardRef((props, ref) => {
 
         return false;
       }
-    } else if (temImagemNosDadosColados && dadosColadoTexto === '') {
+    } else if (qtdElementoImg && dadosColadoTexto === '') {
       return false;
     }
 
