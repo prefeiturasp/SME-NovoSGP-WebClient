@@ -829,21 +829,7 @@ const Filtro = () => {
         evento.target.nodeName !== 'svg' &&
         evento.target.nodeName !== 'path' &&
         !evento.target.classList.contains('fa-caret-down') &&
-        !evento.target.classList.contains('ant-select-dropdown-menu-item') &&
-        !evento.target.classList.contains(
-          'ant-select-dropdown-menu-item-active'
-        ) &&
-        !evento.target.classList.contains(
-          'ant-select-selection__placeholder'
-        ) &&
-        !evento.target.classList.contains(
-          'ant-select-selection-selected-value'
-        ) &&
-        !evento.target.classList.contains(
-          'ant-select-dropdown-menu-item-selected'
-        ) &&
-        divBuscaRef.current &&
-        !divBuscaRef.current.contains(evento.target)
+        !document.getElementById('containerFiltro').contains(evento.target)
       ) {
         setAlternarFocoBusca(!alternarFocoBusca);
       }

@@ -10,7 +10,8 @@ const SugestaoTopico = () => {
     <>
       {dadosSugestaoTopico?.descricao && (
         <Container>
-          <i className="fas fa-info-circle">&nbsp;Sugestão de tópico:</i>
+          <i className="fas fa-info-circle">&nbsp;</i>
+          <span>Sugestão de tópico:</span>
           &nbsp;{dadosSugestaoTopico?.descricao}
         </Container>
       )}

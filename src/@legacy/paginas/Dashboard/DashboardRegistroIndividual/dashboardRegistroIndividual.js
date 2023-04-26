@@ -1,19 +1,20 @@
 import React, { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import { Cabecalho } from '~/componentes-sgp';
 import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
 import Card from '~/componentes/card';
 import { URL_HOME } from '~/constantes/url';
 import { limparDadosDashboardRegistroIndividual } from '~/redux/modulos/dashboardRegistroIndividual/actions';
-import history from '~/servicos/history';
 import GraficosRegistroIndividual from './DadosDashboardRegistroIndividual/graficosRegistroIndividual';
 import DashboardRegistroIndividualAlertaInfantil from './dashboardRegistroIndividualAlertaInfantil';
 import DashboardRegistroIndividualFiltros from './dashboardRegistroIndividualFiltros';
 
 const DashboardRegistroIndividual = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
-  const onClickVoltar = () => history.push(URL_HOME);
+  const onClickVoltar = () => navigate(URL_HOME);
 
   useEffect(() => {
     return () => {

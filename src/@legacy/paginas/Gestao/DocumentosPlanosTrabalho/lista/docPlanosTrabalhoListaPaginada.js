@@ -4,15 +4,17 @@ import React, { useEffect, useCallback, useState } from 'react';
 import * as moment from 'moment';
 import { Button, Colors, DataTable, ListaPaginada } from '~/componentes';
 import { RotasDto } from '~/dtos';
-import { erros, history } from '~/servicos';
+import { erros } from '~/servicos';
 import { SGP_BUTTON_DOWNLOAD_ARQUIVO } from '~/constantes/ids/button';
 import ServicoArmazenamento from '~/servicos/Componentes/ServicoArmazenamento';
 import { downloadBlob } from '~/utils';
 import { SGP_TABLE_DOCUMENTOS_PLANOS_TRABALHO } from '~/constantes/ids/table';
 import ServicoDocumentosPlanosTrabalho from '~/servicos/Paginas/Gestao/DocumentosPlanosTrabalho/ServicoDocumentosPlanosTrabalho';
+import { useNavigate } from 'react-router-dom';
 
 const DocPlanosTrabalhoListaPaginada = props => {
   const { form } = props;
+  const navigate = useNavigate();
 
   const ueCodigo = form?.values?.ueCodigo;
   const listaUes = form?.values?.listaUes;
@@ -28,10 +30,11 @@ const DocPlanosTrabalhoListaPaginada = props => {
     DOCUMENTOS: '2',
   };
 
-  const ehClassificacaoDocumentosTurma = ServicoDocumentosPlanosTrabalho.verificaSeEhClassificacaoDocumentosTurma(
-    classificacaoId,
-    listaClassificacoes
-  );
+  const ehClassificacaoDocumentosTurma =
+    ServicoDocumentosPlanosTrabalho.verificaSeEhClassificacaoDocumentosTurma(
+      classificacaoId,
+      listaClassificacoes
+    );
 
   const ocultarColunaTurmaComponente =
     (tipoDocumentoId &&
@@ -135,7 +138,6 @@ const DocPlanosTrabalhoListaPaginada = props => {
     } else {
       setFiltros({});
     }
-
   }, [ueCodigo, tipoDocumentoId, classificacaoId, listaUes]);
 
   useEffect(() => {
@@ -152,7 +154,7 @@ const DocPlanosTrabalhoListaPaginada = props => {
     }
 
     if (executarClick) {
-      history.push(
+      navigate(
         `${RotasDto.DOCUMENTOS_PLANOS_TRABALHO}/editar/${linha.documentoId}`
       );
     }

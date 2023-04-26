@@ -4,7 +4,7 @@ import {
   naoLidas,
   notificacoesLista,
 } from '~/redux/modulos/notificacoes/actions';
-import { store } from '~/redux';
+import { store } from '@/core/redux';
 
 class ServicoNotificacao {
   excluirNot = notificacoesId => {

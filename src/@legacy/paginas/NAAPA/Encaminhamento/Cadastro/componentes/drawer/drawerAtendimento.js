@@ -2,7 +2,7 @@ import { Row } from 'antd';
 import PropTypes from 'prop-types';
 import React, { useCallback, useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useRouteMatch } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { Auditoria } from '~/componentes';
 import QuestionarioDinamico from '~/componentes-sgp/QuestionarioDinamico/questionarioDinamico';
 import { SGP_SECAO } from '~/constantes/ids/questionario-dinamico';
@@ -21,9 +21,9 @@ const DrawerAtendimento = ({
   questionarioId,
 }) => {
   const dispatch = useDispatch();
-  const routeMatch = useRouteMatch();
+  const { id } = useParams();
 
-  const encaminhamentoId = routeMatch.params?.id;
+  const encaminhamentoId = id;
 
   const { aluno, turma, anoLetivo } = useSelector(
     state => state.encaminhamentoNAAPA.dadosEncaminhamentoNAAPA
@@ -58,8 +58,6 @@ const DrawerAtendimento = ({
     }
 
     dispatch(setExibirLoaderDrawerAtendimento(false));
-
-
   }, [questionarioId, atendimentoId]);
 
   const onClickSalvar = async () => {
@@ -116,7 +114,7 @@ const DrawerAtendimento = ({
       zIndex={1100}
       onClose={onClose}
       title="Atendimento"
-      visible={mostrarDrawer}
+      open={mostrarDrawer}
       bodyStyle={{ paddingBottom: 80 }}
     >
       <LoaderDrawerAtendimento>

@@ -7,7 +7,6 @@ import Card from '~/componentes/card';
 import Grid from '~/componentes/grid';
 import Button from '~/componentes/button';
 import { Colors, Base } from '~/componentes/colors';
-import history from '~/servicos/history';
 import SelectComponent from '~/componentes/select';
 import api from '~/servicos/api';
 import CampoTexto from '~/componentes/campoTexto';
@@ -22,14 +21,18 @@ import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPad
 import BotaoExcluirPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoExcluirPadrao';
 import { Auditoria, Label } from '~/componentes';
 import { RotasDto } from '~/dtos';
+import { useNavigate, useParams } from 'react-router-dom';
 
-// eslint-disable-next-line react/prop-types
-const TipoEventosForm = ({ match }) => {
+const TipoEventosForm = () => {
   const botaoCadastrarRef = useRef();
   const campoDescricaoRef = useRef();
 
+  const navigate = useNavigate();
+  const paramsRoute = useParams();
+
+  const idTipoEvento = paramsRoute?.id;
+
   const [valoresIniciais, setValoresIniciais] = useState({});
-  const [idTipoEvento, setIdTipoEvento] = useState('');
   const [dadosTipoEvento, setDadosTipoEvento] = useState({
     descricao: '',
     letivo: undefined,
@@ -64,13 +67,6 @@ const TipoEventosForm = ({ match }) => {
       background-color: ${Base.Roxo};
     }
   `;
-
-  useEffect(() => {
-    if (match?.params?.id) {
-      setIdTipoEvento(match?.params?.id);
-    }
-
-  }, []);
 
   const [possuiEventos, setPossuiEventos] = useState(false);
 
@@ -148,7 +144,7 @@ const TipoEventosForm = ({ match }) => {
           .catch(e => erros(e));
         if (excluir) {
           sucesso('Tipos de evento deletados com sucesso!');
-          history.push(RotasDto.TIPO_EVENTOS);
+          navigate(RotasDto.TIPO_EVENTOS);
         }
       }
     }
@@ -178,10 +174,10 @@ const TipoEventosForm = ({ match }) => {
       if (confirmado) {
         clicouBotaoCadastrar(form);
       } else {
-        history.push(RotasDto.TIPO_EVENTOS);
+        navigate(RotasDto.TIPO_EVENTOS);
       }
     } else {
-      history.push(RotasDto.TIPO_EVENTOS);
+      navigate(RotasDto.TIPO_EVENTOS);
     }
   };
 
@@ -194,7 +190,7 @@ const TipoEventosForm = ({ match }) => {
             modoEdicao ? 'atualizado' : 'cadastrado'
           } com sucesso!`
         );
-        history.push(RotasDto.TIPO_EVENTOS);
+        navigate(RotasDto.TIPO_EVENTOS);
       })
       .catch(() => {
         erro(

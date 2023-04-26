@@ -14,20 +14,21 @@ import SelectComponent from '~/componentes/select';
 import RotasDto from '~/dtos/rotasDto';
 import { confirmar, erros, sucesso } from '~/servicos/alertas';
 import api from '~/servicos/api';
-import history from '~/servicos/history';
 import { verificaSomenteConsulta } from '~/servicos/servico-navegacao';
 
 import { Busca, CampoTexto, Div } from './tipoEventos.css';
+import { useNavigate } from 'react-router-dom';
 
 const TipoEventosLista = () => {
   const usuario = useSelector(store => store.usuario);
+  const navigate = useNavigate();
   const permissoesTela = usuario.permissoes[RotasDto.TIPO_EVENTOS];
 
   const [tipoEventoSelecionados, setTipoEventoSelecionados] = useState([]);
   const [filtro, setFiltro] = useState({});
 
   const clicouBotaoVoltar = () => {
-    history.push('/');
+    navigate('/');
   };
 
   const clicouBotaoExcluir = async () => {
@@ -66,17 +67,16 @@ const TipoEventosLista = () => {
 
   useEffect(() => {
     verificaSomenteConsulta(permissoesTela);
-
   }, []);
 
   const clicouBotaoNovo = () => {
     if (permissoesTela.podeIncluir)
-      history.push('/calendario-escolar/tipo-eventos/novo');
+      navigate('/calendario-escolar/tipo-eventos/novo');
   };
 
   const clicouBotaoEditar = tipoEvento => {
     if (permissoesTela.podeAlterar)
-      history.push(`/calendario-escolar/tipo-eventos/editar/${tipoEvento.id}`);
+      navigate(`/calendario-escolar/tipo-eventos/editar/${tipoEvento.id}`);
   };
 
   const listaLetivo = [
@@ -118,10 +118,8 @@ const TipoEventosLista = () => {
 
   const campoNomeTipoEventoRef = useRef();
 
-  const [
-    localOcorrenciaSelecionado,
-    setLocalOcorrenciaSelecionado,
-  ] = useState();
+  const [localOcorrenciaSelecionado, setLocalOcorrenciaSelecionado] =
+    useState();
 
   const aoSelecionarLocalOcorrencia = local => {
     setLocalOcorrenciaSelecionado(local);

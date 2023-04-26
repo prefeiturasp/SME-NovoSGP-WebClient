@@ -1,20 +1,22 @@
 import { Form, Formik } from 'formik';
-import PropTypes from 'prop-types';
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate, useParams } from 'react-router-dom';
 import shortid from 'shortid';
 import * as Yup from 'yup';
 import { CampoTexto, Colors, Loader, ModalConteudoHtml } from '~/componentes';
 import Button from '~/componentes/button';
 import { RotasDto } from '~/dtos';
 import { setExibirModalEncerramentoEncaminhamentoAEE } from '~/redux/modulos/encaminhamentoAEE/actions';
-import { confirmar, erros, history, sucesso } from '~/servicos';
+import { confirmar, erros, sucesso } from '~/servicos';
 import ServicoEncaminhamentoAEE from '~/servicos/Paginas/Relatorios/AEE/ServicoEncaminhamentoAEE';
 
-const ModalEncerramentoEncaminhamentoAEE = props => {
-  const { match } = props;
-
+const ModalEncerramentoEncaminhamentoAEE = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const paramsRoute = useParams();
+
+  const encaminhamentoId = paramsRoute?.id || 0;
 
   const exibirModalEncerramentoEncaminhamentoAEE = useSelector(
     store => store.encaminhamentoAEE.exibirModalEncerramentoEncaminhamentoAEE
@@ -29,9 +31,7 @@ const ModalEncerramentoEncaminhamentoAEE = props => {
   };
 
   const validacoes = Yup.object().shape({
-    motivoEncerramento: Yup.string()
-      .nullable()
-      .required('Campo obrigatório'),
+    motivoEncerramento: Yup.string().nullable().required('Campo obrigatório'),
   });
 
   const fecharModal = () => {
@@ -69,21 +69,21 @@ const ModalEncerramentoEncaminhamentoAEE = props => {
 
   const onClickEncerrar = async valores => {
     const { motivoEncerramento } = valores;
-    const encaminhamentoId = match?.params?.id;
 
     setExibirLoader(true);
 
-    const retorno = await ServicoEncaminhamentoAEE.encerramentoEncaminhamentoAEE(
-      encaminhamentoId,
-      motivoEncerramento
-    )
-      .catch(e => erros(e))
-      .finally(() => setExibirLoader(false));
+    const retorno =
+      await ServicoEncaminhamentoAEE.encerramentoEncaminhamentoAEE(
+        encaminhamentoId,
+        motivoEncerramento
+      )
+        .catch(e => erros(e))
+        .finally(() => setExibirLoader(false));
 
     if (retorno?.status === 200) {
       sucesso('Encaminhamento encerrado com sucesso');
       fecharModal();
-      history.push(RotasDto.RELATORIO_AEE_ENCAMINHAMENTO);
+      navigate(RotasDto.RELATORIO_AEE_ENCAMINHAMENTO);
     }
   };
 
@@ -155,14 +155,6 @@ const ModalEncerramentoEncaminhamentoAEE = props => {
       </Formik>
     </ModalConteudoHtml>
   );
-};
-
-ModalEncerramentoEncaminhamentoAEE.propTypes = {
-  match: PropTypes.oneOfType([PropTypes.object]),
-};
-
-ModalEncerramentoEncaminhamentoAEE.defaultProps = {
-  match: {},
 };
 
 export default ModalEncerramentoEncaminhamentoAEE;

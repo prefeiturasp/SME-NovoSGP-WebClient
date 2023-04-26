@@ -1,6 +1,7 @@
 import * as moment from 'moment';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import { CheckboxComponent, Loader, SelectComponent } from '~/componentes';
 import { Cabecalho, FiltroHelper } from '~/componentes-sgp';
 import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
@@ -9,11 +10,12 @@ import { ANO_INICIO_INFANTIL, OPCAO_TODOS } from '~/constantes/constantes';
 import { URL_HOME } from '~/constantes/url';
 import AbrangenciaServico from '~/servicos/Abrangencia';
 import { erros } from '~/servicos/alertas';
-import history from '~/servicos/history';
 import { obterTodosMeses } from '~/utils';
 import TabsDashboardRegistroItinerancia from './TabsDashboardRegistroItinerancia/tabsDashboardRegistroItinerancia';
 
 const DashboardRegistroItinerancia = () => {
+  const navigate = useNavigate();
+
   const usuario = useSelector(store => store.usuario);
 
   const [listaAnosLetivo, setListaAnosLetivo] = useState([]);
@@ -106,7 +108,6 @@ const DashboardRegistroItinerancia = () => {
         setListaUes([]);
       }
     }
-
   }, [consideraHistorico, anoLetivo, dre, usuario.possuiPerfilSme]);
 
   useEffect(() => {
@@ -178,7 +179,7 @@ const DashboardRegistroItinerancia = () => {
   }, [montarMeses]);
 
   const onClickVoltar = () => {
-    history.push(URL_HOME);
+    navigate(URL_HOME);
   };
 
   const onChangeUe = codigoUe => {

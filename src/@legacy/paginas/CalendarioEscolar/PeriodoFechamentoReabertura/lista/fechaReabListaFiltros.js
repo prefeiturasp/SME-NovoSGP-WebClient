@@ -84,7 +84,6 @@ const FechaReabListaFiltros = () => {
       setCodigoDre();
       setListaDres([]);
     }
-
   }, [usuario]);
 
   useEffect(() => {
@@ -97,8 +96,6 @@ const FechaReabListaFiltros = () => {
     } else if (usuario.possuiPerfilSme && listaDres?.length > 1) {
       setCodigoDre(OPCAO_TODOS);
     }
-
-
   }, [listaDres, usuario]);
 
   useEffect(() => {
@@ -116,7 +113,6 @@ const FechaReabListaFiltros = () => {
     } else {
       setCodigoDre();
     }
-
   }, [obterDres, calendarioSelecionado, listaDres]);
 
   const onChangeDre = codigo => {
@@ -172,7 +168,6 @@ const FechaReabListaFiltros = () => {
       setCodigoUe();
       setListaUes([]);
     }
-
   }, [codigoDre, calendarioSelecionado, usuario]);
 
   useEffect(() => {
@@ -182,7 +177,6 @@ const FechaReabListaFiltros = () => {
       setListaUes([]);
       setCodigoUe();
     }
-
   }, [codigoDre, calendarioSelecionado, obterUes]);
 
   const onChangeUe = codigo => {
@@ -192,29 +186,30 @@ const FechaReabListaFiltros = () => {
   return (
     <Col span={24}>
       <Row gutter={[16, 16]}>
-        <Col sm={24} md={12} xl={8}>
-          <Loader loading={carregandoCalendarios} tip="">
-            <SelectAutocomplete
-              label="Calendário"
-              showList
-              isHandleSearch
-              placeholder="Selecione o calendário"
-              className="ant-col-md-24"
-              name="tipoCalendarioId"
-              id="select-tipo-calendario"
-              lista={listaCalendarios || []}
-              valueField="id"
-              textField="descricao"
-              onSelect={valor => selecionaTipoCalendario(valor)}
-              onChange={valor => selecionaTipoCalendario(valor)}
-              handleSearch={handleSearch}
-              value={calendarioSelecionado?.descricao || ''}
-              allowClear={false}
-            />
-          </Loader>
+        <Col span={24}>
+          <Col sm={24} md={12} xl={8} style={{ paddingLeft: 0 }}>
+            <Loader loading={carregandoCalendarios} tip="">
+              <SelectAutocomplete
+                label="Calendário"
+                showList
+                isHandleSearch
+                placeholder="Selecione o calendário"
+                className="ant-col-md-24"
+                name="tipoCalendarioId"
+                id="select-tipo-calendario"
+                lista={listaCalendarios || []}
+                valueField="id"
+                textField="descricao"
+                onSelect={valor => selecionaTipoCalendario(valor)}
+                onChange={valor => selecionaTipoCalendario(valor)}
+                handleSearch={handleSearch}
+                value={calendarioSelecionado?.descricao || ''}
+                allowClear={false}
+              />
+            </Loader>
+          </Col>
         </Col>
-      </Row>
-      <Row gutter={[16, 16]}>
+
         <Col md={24} xl={12}>
           <Loader loading={carregandoDres} tip="">
             <SelectComponent
@@ -231,6 +226,7 @@ const FechaReabListaFiltros = () => {
             />
           </Loader>
         </Col>
+
         <Col md={24} xl={12}>
           <Loader loading={carregandoUes} tip="">
             <SelectComponent

@@ -28,7 +28,6 @@ import { Linha } from '~/componentes/EstilosGlobais';
 // Serviços
 import AcompanhamentoPAPServico from '~/servicos/Paginas/Relatorios/PAP/Acompanhamento';
 import { erro, confirmar, sucesso } from '~/servicos/alertas';
-import history from '~/servicos/history';
 
 // Reducer Hook
 import Reducer, {
@@ -47,8 +46,11 @@ import AlertaModalidadeInfantil from '~/componentes-sgp/AlertaModalidadeInfantil
 import { ehTurmaInfantil } from '~/servicos/Validacoes/validacoesInfatil';
 import { verificaSomenteConsulta } from '~/servicos';
 import { SGP_BUTTON_SALVAR } from '~/constantes/ids/button';
+import { useNavigate } from 'react-router-dom';
 
 function RelatorioPAPAcompanhamento() {
+  const navigate = useNavigate();
+
   const usuario = useSelector(store => store.usuario);
   const permissoesTela =
     usuario.permissoes[RotasDto.RELATORIO_PAP_ACOMPANHAMENTO];
@@ -291,7 +293,7 @@ function RelatorioPAPAcompanhamento() {
 
   const onClickVoltarHandler = useCallback(async () => {
     if (!modoEdicao) {
-      history.push('/');
+      navigate('/');
       return;
     }
 
@@ -302,7 +304,7 @@ function RelatorioPAPAcompanhamento() {
     );
     if (confirmou) {
       setModoEdicao(false);
-      history.push('/');
+      navigate('/');
     }
   }, [modoEdicao]);
 
@@ -351,7 +353,9 @@ function RelatorioPAPAcompanhamento() {
             modoEdicao={modoEdicao}
             temItemSelecionado
             onClickVoltar={() => onClickVoltarHandler()}
-            onClickBotaoPrincipal={() => salvarAlteracoes(estado.ObjetivoAtivo, true)}
+            onClickBotaoPrincipal={() =>
+              salvarAlteracoes(estado.ObjetivoAtivo, true)
+            }
             onClickCancelar={() => onClickCancelarHandler()}
             labelBotaoPrincipal="Salvar"
             idBotaoPrincipal={SGP_BUTTON_SALVAR}

@@ -1,15 +1,17 @@
 import React, { useCallback, useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Loader, SelectComponent } from '~/componentes';
 import { Cabecalho } from '~/componentes-sgp';
 import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
 import Card from '~/componentes/card';
 import { URL_HOME } from '~/constantes/url';
 import { erros } from '~/servicos/alertas';
-import history from '~/servicos/history';
 import ServicoFiltroRelatorio from '~/servicos/Paginas/FiltroRelatorio/ServicoFiltroRelatorio';
 import TabsDashboardEscolaAqui from './TabsDashboardEscolaAqui/tabsDashboardEscolaAqui';
 
 const DashboardEscolaAqui = () => {
+  const navigate = useNavigate();
+
   const [listaDres, setListaDres] = useState([]);
   const [listaUes, setListaUes] = useState([]);
 
@@ -83,7 +85,7 @@ const DashboardEscolaAqui = () => {
   }, [codigoDre, obterUes]);
 
   const onClickVoltar = () => {
-    history.push(URL_HOME);
+    navigate(URL_HOME);
   };
 
   const onChangeUe = ue => {

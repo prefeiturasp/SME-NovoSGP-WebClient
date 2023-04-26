@@ -124,13 +124,12 @@ const TabsComponentesCorriculares = props => {
                   Number(f.bimestreId) === Number(dadosBimestre.id)
               ).length
             ) {
-              const {
-                componentes,
-              } = await ServicoPlanoAnual.verificarDadosPlanoPorComponenteCurricular(
-                turmaSelecionada.id,
-                item.codigoComponenteCurricular,
-                dadosBimestre.id
-              );
+              const { componentes } =
+                await ServicoPlanoAnual.verificarDadosPlanoPorComponenteCurricular(
+                  turmaSelecionada.id,
+                  item.codigoComponenteCurricular,
+                  dadosBimestre.id
+                );
               if (
                 componentes[0]?.objetivosAprendizagemId?.length ||
                 componentes[0]?.descricao
@@ -153,7 +152,6 @@ const TabsComponentesCorriculares = props => {
       }
     }
     verificarComponentesComObjetivos();
-
   }, [
     listaComponentesCurricularesPlanejamento,
     dadosBimestre,
@@ -207,13 +205,7 @@ const TabsComponentesCorriculares = props => {
   return (
     <>
       {listaComponentesCurricularesPlanejamento?.length ? (
-        <ContainerTabsComponentesCorriculares
-          widthAntTabsNav={
-            listaComponentesCurricularesPlanejamento.length > 4
-              ? `${100 / listaComponentesCurricularesPlanejamento.length}%`
-              : '25%'
-          }
-        >
+        <ContainerTabsComponentesCorriculares widthAntTabsNav="100%">
           {!tabAtualComponenteCurricular?.codigoComponenteCurricular &&
             componenteCurricular?.regencia && (
               <AvisoComponenteCurricular>
@@ -230,25 +222,22 @@ const TabsComponentesCorriculares = props => {
             activeKey={String(
               tabAtualComponenteCurricular?.codigoComponenteCurricular
             )}
-          >
-            {listaComponentesCurricularesPlanejamento.map(item => {
-              return (
-                <TabPane
-                  tab={obterDescricaoNomeTabComponenteCurricular(
-                    item.nome,
-                    item.codigoComponenteCurricular
-                  )}
-                  key={String(item.codigoComponenteCurricular)}
-                >
-                  {String(
+            items={listaComponentesCurricularesPlanejamento.map(item => {
+              return {
+                label: obterDescricaoNomeTabComponenteCurricular(
+                  item.nome,
+                  item.codigoComponenteCurricular
+                ),
+                key: String(item.codigoComponenteCurricular),
+                children:
+                  String(
                     tabAtualComponenteCurricular?.codigoComponenteCurricular
                   ) === String(item.codigoComponenteCurricular)
                     ? montarDados()
-                    : ''}
-                </TabPane>
-              );
+                    : '',
+              };
             })}
-          </ContainerTabsCard>
+          />
         </ContainerTabsComponentesCorriculares>
       ) : (
         ''

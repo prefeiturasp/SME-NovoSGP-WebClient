@@ -628,7 +628,7 @@ const ListaoListaFechamento = props => {
         colunasRegencia.push({
           title: item?.disciplina,
           align: 'center',
-          dataIndex: `${nomeRef}[${index}]`,
+          dataIndex: [`${nomeRef}`, `${index}`],
           key: `${nomeRef}[${index}]`,
           width: '115px',
           className: 'position-relative',
@@ -693,7 +693,6 @@ const ListaoListaFechamento = props => {
           />
         )}
         <DataTable
-          fixExpandedRowResetColSpan
           scroll={{ x: '100%', y: 500 }}
           columns={colunasEstudantes}
           dataSource={dadosFechamento?.alunos}
@@ -762,7 +761,6 @@ const ListaoListaFechamento = props => {
       <LinhaTabela className="col-md-12 p-0">
         <DataTable
           scroll={{ x: '100%', y: 500 }}
-          fixExpandedRowResetColSpan
           columns={colunasEstudantes}
           dataSource={dadosFechamento?.alunos}
           pagination={false}

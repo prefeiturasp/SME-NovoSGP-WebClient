@@ -1,7 +1,7 @@
 import { Col, Row } from 'antd';
 import React, { useContext, useEffect } from 'react';
 import { useSelector } from 'react-redux';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { Button, Colors } from '~/componentes';
 import BotaoExcluirPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoExcluirPadrao';
 import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
@@ -13,7 +13,6 @@ import { RotasDto } from '~/dtos';
 import {
   confirmar,
   erros,
-  history,
   ServicoEvento,
   setBreadcrumbManual,
   sucesso,
@@ -38,6 +37,7 @@ const EventosCadastroBotoesAcao = () => {
   const permissoesTela = usuarioStore.permissoes[RotasDto.EVENTOS];
 
   const paramsRota = useParams();
+  const navigate = useNavigate();
   const tipoCalendarioId = paramsRota?.tipoCalendarioId;
 
   const eventoId = paramsRota?.id;
@@ -45,7 +45,6 @@ const EventosCadastroBotoesAcao = () => {
 
   useEffect(() => {
     setSomenteConsulta(verificaSomenteConsulta(permissoesTela));
-
   }, [permissoesTela]);
 
   const urlTelaListagemEventos = () => {
@@ -93,7 +92,7 @@ const EventosCadastroBotoesAcao = () => {
         );
         if (resposta) {
           sucesso('Evento excluído com sucesso');
-          history.push(urlTelaListagemEventos());
+          navigate(urlTelaListagemEventos());
         }
       }
     }
@@ -121,11 +120,11 @@ const EventosCadastroBotoesAcao = () => {
       if (confirmado) {
         validaAntesDoSubmit();
       } else {
-        history.push(urlTelaListagemEventos());
+        navigate(urlTelaListagemEventos());
       }
     } else {
       setBreadcrumbLista();
-      history.push(urlTelaListagemEventos());
+      navigate(urlTelaListagemEventos());
     }
   };
 

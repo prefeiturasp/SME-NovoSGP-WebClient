@@ -5,7 +5,6 @@ import { useSelector, useDispatch } from 'react-redux';
 import { setLoaderSecao } from '~/redux/modulos/loader/actions';
 
 // Servicos
-import history from '~/servicos/history';
 import RotasDto from '~/dtos/rotasDto';
 import { erro, confirmar, sucesso } from '~/servicos/alertas';
 import { verificaSomenteConsulta } from '~/servicos/servico-navegacao';
@@ -20,8 +19,11 @@ import Filtro from './componentes/Filtro';
 import AlertaModalidadeInfantil from '~/componentes-sgp/AlertaModalidadeInfantil/alertaModalidadeInfantil';
 import { ehTurmaInfantil } from '~/servicos/Validacoes/validacoesInfatil';
 import { SGP_BUTTON_NOVO } from '~/constantes/ids/button';
+import { useNavigate } from 'react-router-dom';
 
 function RegistroPOALista() {
+  const navigate = useNavigate();
+
   const [itensSelecionados, setItensSelecionados] = useState([]);
   const [filtro, setFiltro] = useState({});
   const [filtroValido, setFiltroValido] = useState(false);
@@ -74,13 +76,13 @@ function RegistroPOALista() {
     },
   ];
 
-  const onClickVoltar = () => history.push('/');
+  const onClickVoltar = () => navigate('/');
 
   const onClickBotaoPrincipal = () =>
-    history.push(`/diario-classe/registro-poa/novo`);
+    navigate(`/diario-classe/registro-poa/novo`);
 
   const onClickEditar = item =>
-    history.push(`/diario-classe/registro-poa/editar/${item.id}`);
+    navigate(`/diario-classe/registro-poa/editar/${item.id}`);
 
   const onSelecionarItems = lista => setItensSelecionados(lista);
 

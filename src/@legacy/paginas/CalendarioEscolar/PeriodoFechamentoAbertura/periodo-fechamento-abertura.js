@@ -27,7 +27,6 @@ import { ContainerColumnReverse } from '~/paginas/Planejamento/Anual/planoAnual.
 import {
   confirmar,
   erros,
-  history,
   ServicoCalendarios,
   ServicoPeriodoFechamento,
   sucesso,
@@ -37,15 +36,17 @@ import {
   BoxTextoBimestre,
   CaixaBimestre,
 } from './periodo-fechamento-abertura.css';
+import { useNavigate } from 'react-router-dom';
 
 const PeriodoFechamentoAbertura = () => {
+  const navigate = useNavigate();
+
   const usuarioLogado = useSelector(store => store.usuario);
   const [somenteConsulta, setSomenteConsulta] = useState(false);
   const permissoesTela =
     usuarioLogado.permissoes[RotasDto.PERIODO_FECHAMENTO_ABERTURA];
-  const [tipoCalendarioSelecionado, setTipoCalendarioSelecionado] = useState(
-    ''
-  );
+  const [tipoCalendarioSelecionado, setTipoCalendarioSelecionado] =
+    useState('');
 
   const [emProcessamento, setEmprocessamento] = useState(false);
   const [registroMigrado, setRegistroMigrado] = useState(false);
@@ -158,7 +159,6 @@ const PeriodoFechamentoAbertura = () => {
       periodos = Object.assign({}, validacaoPrimeiroBim, validacaoSegundoBim);
     }
     setValidacoes(Yup.object().shape(periodos));
-
   }, [isTipoCalendarioAnual]);
 
   useEffect(() => {
@@ -188,11 +188,10 @@ const PeriodoFechamentoAbertura = () => {
     (async () => {
       setCarregandoTipos(true);
 
-      const {
-        data,
-      } = await ServicoCalendarios.obterTiposCalendarioAutoComplete(
-        pesquisaTipoCalendario
-      );
+      const { data } =
+        await ServicoCalendarios.obterTiposCalendarioAutoComplete(
+          pesquisaTipoCalendario
+        );
 
       if (isSubscribed) {
         setListaTipoCalendario(data);
@@ -227,36 +226,28 @@ const PeriodoFechamentoAbertura = () => {
             resposta.data.fechamentosBimestres.forEach(item => {
               switch (item.bimestre) {
                 case 1:
-                  resposta.data.bimestre1InicioDoFechamento = montarDataInicio(
-                    item
-                  );
-                  resposta.data.bimestre1FinalDoFechamento = montarDataFim(
-                    item
-                  );
+                  resposta.data.bimestre1InicioDoFechamento =
+                    montarDataInicio(item);
+                  resposta.data.bimestre1FinalDoFechamento =
+                    montarDataFim(item);
                   break;
                 case 2:
-                  resposta.data.bimestre2InicioDoFechamento = montarDataInicio(
-                    item
-                  );
-                  resposta.data.bimestre2FinalDoFechamento = montarDataFim(
-                    item
-                  );
+                  resposta.data.bimestre2InicioDoFechamento =
+                    montarDataInicio(item);
+                  resposta.data.bimestre2FinalDoFechamento =
+                    montarDataFim(item);
                   break;
                 case 3:
-                  resposta.data.bimestre3InicioDoFechamento = montarDataInicio(
-                    item
-                  );
-                  resposta.data.bimestre3FinalDoFechamento = montarDataFim(
-                    item
-                  );
+                  resposta.data.bimestre3InicioDoFechamento =
+                    montarDataInicio(item);
+                  resposta.data.bimestre3FinalDoFechamento =
+                    montarDataFim(item);
                   break;
                 case 4:
-                  resposta.data.bimestre4InicioDoFechamento = montarDataInicio(
-                    item
-                  );
-                  resposta.data.bimestre4FinalDoFechamento = montarDataFim(
-                    item
-                  );
+                  resposta.data.bimestre4InicioDoFechamento =
+                    montarDataInicio(item);
+                  resposta.data.bimestre4FinalDoFechamento =
+                    montarDataFim(item);
                   break;
                 default:
                   break;
@@ -361,7 +352,7 @@ const PeriodoFechamentoAbertura = () => {
         sucesso('Períodos salvos com sucesso.');
         carregaDados();
         setModoEdicao(false);
-        if (voltar) history.push(URL_HOME);
+        if (voltar) navigate(URL_HOME);
       })
       .catch(e => erros(e))
       .finally(() => setEmprocessamento(false));
@@ -394,10 +385,10 @@ const PeriodoFechamentoAbertura = () => {
       if (confirmado) {
         validaAntesDoSubmit(form, true);
       } else {
-        history.push(URL_HOME);
+        navigate(URL_HOME);
       }
     } else {
-      history.push(URL_HOME);
+      navigate(URL_HOME);
     }
   };
 
@@ -523,7 +514,6 @@ const PeriodoFechamentoAbertura = () => {
                         showList
                         isHandleSearch
                         placeholder="Selecione um tipo de calendário"
-                        className="col-md-12"
                         name="tipoCalendarioId"
                         id="tipoCalendarioId"
                         lista={listaTipoCalendario}

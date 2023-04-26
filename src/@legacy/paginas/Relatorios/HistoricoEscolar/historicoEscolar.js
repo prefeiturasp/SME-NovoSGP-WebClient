@@ -13,7 +13,6 @@ import { URL_HOME } from '~/constantes/url';
 import modalidade from '~/dtos/modalidade';
 import AbrangenciaServico from '~/servicos/Abrangencia';
 import api from '~/servicos/api';
-import history from '~/servicos/history';
 import FiltroHelper from '~/componentes-sgp/filtro/helper';
 import { erros, sucesso } from '~/servicos/alertas';
 import LocalizadorEstudante from '~/componentes/LocalizadorEstudante';
@@ -36,8 +35,11 @@ import {
 import _ from 'lodash';
 import TextArea from 'antd/lib/input/TextArea';
 import { SGP_TEXT_AREA_OBSERVACAO } from '~/constantes/ids/text-area';
+import { useNavigate } from 'react-router-dom';
 
 const HistoricoEscolar = () => {
+  const navigate = useNavigate();
+
   const codigosAlunosSelecionados = useSelector(
     state => state.localizadorEstudante.codigosAluno
   );
@@ -450,7 +452,7 @@ const HistoricoEscolar = () => {
   }, [obterDres]);
 
   const onClickVoltar = () => {
-    history.push(URL_HOME);
+    navigate(URL_HOME);
   };
 
   const onClickCancelar = () => {
@@ -626,7 +628,9 @@ const HistoricoEscolar = () => {
       const alunoSelecionado = alunosSelecionados?.find(
         a => a?.codigo === linha?.codigo
       );
-      linha.observacao = alunoSelecionado?.observacao;
+      if (alunoSelecionado) {
+        linha.observacao = alunoSelecionado?.observacao;
+      }
     });
 
     setAlunosSelecionados([...clonedItems]);

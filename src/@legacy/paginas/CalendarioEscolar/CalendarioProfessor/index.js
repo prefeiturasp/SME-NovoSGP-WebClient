@@ -22,7 +22,6 @@ import {
 // Serviços
 import CalendarioProfessorServico from '~/servicos/Paginas/CalendarioProfessor';
 import { erro } from '~/servicos/alertas';
-import { history } from '~/servicos';
 
 // Reducer
 import Reducer, { estadoInicial } from './reducer';
@@ -37,9 +36,12 @@ import {
 import RotasDTO from '~/dtos/rotasDto';
 import { selecionaDia } from '~/redux/modulos/calendarioProfessor/actions';
 import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
+import { useNavigate } from 'react-router-dom';
 
 function CalendarioProfessor() {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+
   const { turmaSelecionada, permissoes } = useSelector(
     estado => estado.usuario
   );
@@ -54,17 +56,15 @@ function CalendarioProfessor() {
       async function buscarEventosMes() {
         try {
           disparar(setarCarregandoMes(true));
-          const {
-            data,
-            status,
-          } = await CalendarioProfessorServico.buscarEventosAulasMes({
-            numeroMes: mes.numeroMes,
-            dre: turmaSelecionada.dre,
-            anoLetivo: turmaSelecionada.anoLetivo,
-            tipoCalendarioId,
-            turma: turmaSelecionada.turma,
-            ue: turmaSelecionada.unidadeEscolar,
-          });
+          const { data, status } =
+            await CalendarioProfessorServico.buscarEventosAulasMes({
+              numeroMes: mes.numeroMes,
+              dre: turmaSelecionada.dre,
+              anoLetivo: turmaSelecionada.anoLetivo,
+              tipoCalendarioId,
+              turma: turmaSelecionada.turma,
+              ue: turmaSelecionada.unidadeEscolar,
+            });
 
           if (data && status === 200) {
             disparar(setarCarregandoMes(false));
@@ -100,19 +100,17 @@ function CalendarioProfessor() {
       async function buscarEventosDias() {
         try {
           disparar(setarCarregandoDia(true));
-          const {
-            data,
-            status,
-          } = await CalendarioProfessorServico.buscarEventosAulasDia({
-            dia: dia.getDate(),
-            numeroMes: dia.getMonth() + 1,
-            tipoCalendarioId,
-            dre: turmaSelecionada.dre,
-            dreId: turmaSelecionada.dreId,
-            ue: turmaSelecionada.unidadeEscolar,
-            turma: turmaSelecionada.turma,
-            anoLetivo: turmaSelecionada.anoLetivo,
-          });
+          const { data, status } =
+            await CalendarioProfessorServico.buscarEventosAulasDia({
+              dia: dia.getDate(),
+              numeroMes: dia.getMonth() + 1,
+              tipoCalendarioId,
+              dre: turmaSelecionada.dre,
+              dreId: turmaSelecionada.dreId,
+              ue: turmaSelecionada.unidadeEscolar,
+              turma: turmaSelecionada.turma,
+              anoLetivo: turmaSelecionada.anoLetivo,
+            });
 
           if (data && status === 200) {
             disparar(setarCarregandoDia(false));
@@ -172,7 +170,7 @@ function CalendarioProfessor() {
         <Cabecalho pagina="Calendário do professor">
           <BotaoVoltarPadrao
             onClick={() => {
-              history.push('/');
+              navigate('/');
             }}
           />
         </Cabecalho>

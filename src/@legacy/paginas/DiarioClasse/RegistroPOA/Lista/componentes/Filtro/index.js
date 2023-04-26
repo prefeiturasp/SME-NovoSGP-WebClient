@@ -16,7 +16,7 @@ import { DreDropDown, UeDropDown } from '~/componentes-sgp';
 
 // Styles
 import { Linha } from '~/componentes/EstilosGlobais';
-import { store } from '~/redux';
+import { store } from '@/core/redux';
 
 function Filtro({ onFiltrar }) {
   const anoLetivo =

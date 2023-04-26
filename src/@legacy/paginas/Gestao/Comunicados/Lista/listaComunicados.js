@@ -2,6 +2,7 @@ import { Col, Row } from 'antd';
 import moment from 'moment';
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import { Button, Card, Colors, ListaPaginada, Loader } from '~/componentes';
 import { Cabecalho } from '~/componentes-sgp';
 import BotaoExcluirPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoExcluirPadrao';
@@ -11,7 +12,6 @@ import { ModalidadeDTO, RotasDto } from '~/dtos';
 import {
   confirmar,
   erros,
-  history,
   ServicoComunicados,
   sucesso,
   verificaSomenteConsulta,
@@ -19,6 +19,8 @@ import {
 import Filtros from './Filtros/filtros';
 
 const ListaComunicados = () => {
+  const navigate = useNavigate();
+
   const [filtros, setFiltros] = useState({});
   const [itensSelecionados, setItensSelecionados] = useState([]);
   const [somenteConsulta, setSomenteConsulta] = useState(false);
@@ -71,7 +73,7 @@ const ListaComunicados = () => {
   ];
 
   const aoClicarBotaoVoltar = () => {
-    history.push('/');
+    navigate('/');
   };
 
   const aoClicarBotaoExcluir = async () => {
@@ -103,14 +105,12 @@ const ListaComunicados = () => {
 
   const aoClicarBotaoNovo = () => {
     if (permissoesTela.podeIncluir) {
-      history.push(`${RotasDto.ACOMPANHAMENTO_COMUNICADOS}/novo`);
+      navigate(`${RotasDto.ACOMPANHAMENTO_COMUNICADOS}/novo`);
     }
   };
 
   const onClickEditar = comunicado => {
-    history.push(
-      `${RotasDto.ACOMPANHAMENTO_COMUNICADOS}/editar/${comunicado.id}`
-    );
+    navigate(`${RotasDto.ACOMPANHAMENTO_COMUNICADOS}/editar/${comunicado.id}`);
   };
 
   const onSelecionarItems = items => {

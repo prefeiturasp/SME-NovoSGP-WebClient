@@ -1,7 +1,7 @@
 /* eslint-disable react/prop-types */
 import React, { useState, useEffect, useCallback } from 'react';
 import PropTypes from 'prop-types';
-import { useRouteMatch } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { ListaPaginada } from '~/componentes';
 import { SGP_TABLE_HISTORICO_ATENDIMENTO } from '~/constantes/ids/table';
 import { Titulo } from './style';
@@ -11,11 +11,11 @@ const ListaHistoricoAtendimentosPaginada = ({
   atualizarTabela,
   setAtendimentoId,
 }) => {
-  const routeMatch = useRouteMatch();
+  const { id } = useParams();
 
   const [filtros, setFiltros] = useState();
 
-  const encaminhamentoNAAPAId = routeMatch.params?.id;
+  const encaminhamentoNAAPAId = id;
 
   const filtroEhValido = !!encaminhamentoNAAPAId;
 
@@ -46,7 +46,6 @@ const ListaHistoricoAtendimentosPaginada = ({
     };
 
     setFiltros({ ...params });
-
   }, [atualizarTabela]);
 
   useEffect(() => {

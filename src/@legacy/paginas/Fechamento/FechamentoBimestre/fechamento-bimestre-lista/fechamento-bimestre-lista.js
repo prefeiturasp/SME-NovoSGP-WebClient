@@ -2,7 +2,7 @@
 import { Tooltip } from 'antd';
 import React, { useState } from 'react';
 import * as moment from 'moment';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import Ordenacao from '~/componentes-sgp/Ordenacao/ordenacao';
 import FechamentoRegencia from '../fechamanto-regencia/fechamento-regencia';
 import BotaoExpandir from './botao-expandir';
@@ -19,7 +19,6 @@ import Button from '~/componentes/button';
 import situacaoFechamentoDto from '~/dtos/situacaoFechamentoDto';
 import ServicoFechamentoBimestre from '~/servicos/Paginas/Fechamento/ServicoFechamentoBimestre';
 import { erros, sucesso } from '~/servicos/alertas';
-import history from '~/servicos/history';
 import RotasDto from '~/dtos/rotasDto';
 import ModalAnotacaoAluno from '../../FechamentoModalAnotacaoAluno/modal-anotacao-aluno';
 import SinalizacaoAEE from '~/componentes-sgp/SinalizacaoAEE/sinalizacaoAEE';
@@ -38,6 +37,9 @@ const FechamentoBimestreLista = props => {
     registraFrequencia,
     desabilitarCampo,
   } = props;
+
+  const navigate = useNavigate();
+
   const [dadosLista, setDadosLista] = useState(
     dados ? dados.alunos : undefined
   );
@@ -101,7 +103,7 @@ const FechamentoBimestreLista = props => {
 
   const onClickVerPendecias = async () => {
     const { bimestre } = dados;
-    history.push({
+    navigate({
       pathname: `${RotasDto.PENDENCIAS_FECHAMENTO}/${bimestre}/${codigoComponenteCurricular}`,
       state: { rotaOrigem: location.pathname },
     });

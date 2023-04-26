@@ -10,7 +10,7 @@ const { TabPane } = Tabs;
 const TabsDashboardRelAcompanhamentoAprendizagem = props => {
   const { anoLetivo, dreId, ueId, dataUltimaConsolidacao } = props;
 
-  const [tabSelecionada, setTabSelecionada] = useState();
+  const [tabSelecionada, setTabSelecionada] = useState(0);
 
   const TAB_ACOMPANHAMENTO_APRENDIZAGEM = '1';
 

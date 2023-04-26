@@ -20,10 +20,8 @@ const ListaoContextProvider = ({ children }) => {
   const [listaTurmas, setListaTurmas] = useState([]);
   const [listaBimestres, setListaBimestres] = useState([]);
   const [carregarFiltrosSalvos, setCarregarFiltrosSalvos] = useState(false);
-  const [
-    componenteCurricularInicial,
-    setComponenteCurricularInicial,
-  ] = useState();
+  const [componenteCurricularInicial, setComponenteCurricularInicial] =
+    useState();
 
   // LISTÃO OPERAÇÃO
   const [componenteCurricular, setComponenteCurricular] = useState();
@@ -59,10 +57,8 @@ const ListaoContextProvider = ({ children }) => {
   ] = useState(false);
 
   // TAB DIÁRIO DE BORDO
-  const [
-    componenteCurricularDiarioBordo,
-    setComponenteCurricularDiarioBordo,
-  ] = useState();
+  const [componenteCurricularDiarioBordo, setComponenteCurricularDiarioBordo] =
+    useState();
   const [
     listaComponentesCurricularesDiario,
     setListaComponentesCurricularesDiario,

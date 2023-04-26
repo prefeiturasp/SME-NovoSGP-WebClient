@@ -1,5 +1,4 @@
 import React, { useEffect, useState, useCallback } from 'react';
-import PropTypes from 'prop-types';
 import { Form, Formik } from 'formik';
 import { useSelector } from 'react-redux';
 import * as Yup from 'yup';
@@ -24,7 +23,6 @@ import {
   api,
   confirmar,
   erros,
-  history,
   setBreadcrumbManual,
   sucesso,
   verificaSomenteConsulta,
@@ -35,9 +33,16 @@ import {
 } from '~/constantes/ids/button';
 import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
 import BotaoExcluirPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoExcluirPadrao';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 
-const TipoCalendarioEscolarForm = ({ match }) => {
+const TipoCalendarioEscolarForm = () => {
   const usuario = useSelector(store => store.usuario);
+  const navigate = useNavigate();
+  const location = useLocation();
+  const paramsRoute = useParams();
+
+  const idTipoCalendario = paramsRoute?.id;
+
   const permissoesTela = usuario.permissoes[RotasDto.TIPO_CALENDARIO_ESCOLAR];
 
   const [somenteConsulta, setSomenteConsulta] = useState(false);
@@ -49,7 +54,6 @@ const TipoCalendarioEscolarForm = ({ match }) => {
   const anoAtual = window.moment().format('YYYY');
 
   const [anoLetivo, setAnoLetivo] = useState(anoAtual);
-  const [idTipoCalendario, setIdTipoCalendario] = useState(0);
   const [exibirAuditoria, setExibirAuditoria] = useState(false);
   const valoresIniciaisForm = {
     situacao: true,
@@ -97,7 +101,6 @@ const TipoCalendarioEscolarForm = ({ match }) => {
       ? somenteConsulta || !permissoesTela.podeIncluir
       : somenteConsulta || !permissoesTela.podeAlterar;
     setDesabilitarCampos(desabilitar);
-
   }, [somenteConsulta, novoRegistro]);
 
   const [possuiEventos, setPossuiEventos] = useState(false);
@@ -140,20 +143,18 @@ const TipoCalendarioEscolarForm = ({ match }) => {
   };
 
   useEffect(() => {
-    if (match && match.params && match.params.id) {
+    if (idTipoCalendario) {
       setBreadcrumbManual(
-        match.url,
+        location.pathname,
         'Alterar Tipo de Calendário Escolar',
         RotasDto.TIPO_CALENDARIO_ESCOLAR
       );
-      setIdTipoCalendario(match.params.id);
-      consultaPorId(match.params.id);
+      consultaPorId(idTipoCalendario);
     } else if (usuario.turmaSelecionada && usuario.turmaSelecionada.anoLetivo) {
       setAnoLetivo(usuario.turmaSelecionada.anoLetivo);
     }
     setSomenteConsulta(verificaSomenteConsulta(permissoesTela));
-
-  }, []);
+  }, [idTipoCalendario, location]);
 
   const resetarTela = form => {
     form.resetForm();
@@ -184,7 +185,7 @@ const TipoCalendarioEscolarForm = ({ match }) => {
     const cadastrado = await api[metodo](url, valoresForm).catch(e => erros(e));
     if (cadastrado) {
       sucesso('Suas informações foram salvas com sucesso.');
-      history.push(RotasDto.TIPO_CALENDARIO_ESCOLAR);
+      navigate(RotasDto.TIPO_CALENDARIO_ESCOLAR);
     }
     setCarregandoBotoesAcao(false);
   };
@@ -211,7 +212,7 @@ const TipoCalendarioEscolarForm = ({ match }) => {
           .catch(e => erros(e));
         if (excluir) {
           sucesso('Tipo de calendário excluído com sucesso.');
-          history.push(RotasDto.TIPO_CALENDARIO_ESCOLAR);
+          navigate(RotasDto.TIPO_CALENDARIO_ESCOLAR);
         }
       }
     }
@@ -240,10 +241,10 @@ const TipoCalendarioEscolarForm = ({ match }) => {
       if (confirmado) {
         validaAntesDoSubmit(form);
       } else {
-        history.push(RotasDto.TIPO_CALENDARIO_ESCOLAR);
+        navigate(RotasDto.TIPO_CALENDARIO_ESCOLAR);
       }
     } else {
-      history.push(RotasDto.TIPO_CALENDARIO_ESCOLAR);
+      navigate(RotasDto.TIPO_CALENDARIO_ESCOLAR);
     }
   };
 
@@ -416,14 +417,6 @@ const TipoCalendarioEscolarForm = ({ match }) => {
       </Formik>
     </Loader>
   );
-};
-
-TipoCalendarioEscolarForm.defaultProps = {
-  match: {},
-};
-
-TipoCalendarioEscolarForm.propTypes = {
-  match: PropTypes.instanceOf(Object),
 };
 
 export default TipoCalendarioEscolarForm;

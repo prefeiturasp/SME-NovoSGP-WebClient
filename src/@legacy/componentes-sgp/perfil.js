@@ -13,18 +13,18 @@ import api from '~/servicos/api';
 import { setMenusPermissoes } from '~/servicos/servico-navegacao';
 
 import { Base } from '../componentes/colors';
-import { store } from '../redux';
+import { store } from '@/core/redux';
 import {
   perfilSelecionado,
   setTrocouPerfil,
 } from '../redux/modulos/perfil/actions';
-import history from '../servicos/history';
 import ServicoDashboard from '~/servicos/Paginas/Dashboard/ServicoDashboard';
 import { validarAcaoTela } from '~/utils';
 import {
   SGP_MENU_PERFIL_BUTTON_EXPANDIR_RETRAIR_PERFIL,
   SGP_MENU_PERFIL_LISTA_PERFIS,
 } from '../constantes/ids/menu';
+import { useNavigate } from 'react-router-dom';
 
 const Perfil = props => {
   // eslint-disable-next-line react/prop-types
@@ -32,6 +32,7 @@ const Perfil = props => {
   const [ocultaPerfis, setarOcultaPerfis] = useState(true);
   const perfilStore = useSelector(e => e.perfil);
   const usuarioStore = useSelector(e => e.usuario);
+  const navigate = useNavigate();
 
   const listaRef = useRef();
 
@@ -179,7 +180,7 @@ const Perfil = props => {
               store.dispatch(Deslogar());
             }, 2000);
           });
-        history.push('/');
+        navigate('/');
       } else {
         store.dispatch(perfilSelecionado(perfilNovo[0]));
         store.dispatch(setTrocouPerfil(true));

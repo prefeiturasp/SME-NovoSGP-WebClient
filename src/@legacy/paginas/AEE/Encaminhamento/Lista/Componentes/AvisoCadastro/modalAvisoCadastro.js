@@ -1,5 +1,6 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import shortid from 'shortid';
 import { Colors, ModalConteudoHtml } from '~/componentes';
 import Button from '~/componentes/button';
@@ -9,10 +10,10 @@ import {
 } from '~/constantes/ids/button';
 import { RotasDto } from '~/dtos';
 import { setExibirModalAviso } from '~/redux/modulos/encaminhamentoAEE/actions';
-import { history } from '~/servicos';
 
 const ModalAvisoNovoEncaminhamentoAEE = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const dadosModalAviso = useSelector(
     store => store.encaminhamentoAEE.dadosModalAviso
@@ -28,7 +29,7 @@ const ModalAvisoNovoEncaminhamentoAEE = () => {
 
   const onClickNovo = () => {
     dispatch(setExibirModalAviso(false));
-    history.push(`${RotasDto.RELATORIO_AEE_ENCAMINHAMENTO}/novo`);
+    navigate(`${RotasDto.RELATORIO_AEE_ENCAMINHAMENTO}/novo`);
   };
 
   return (

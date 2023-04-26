@@ -1,5 +1,4 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import PropTypes from 'prop-types';
 import moment from 'moment';
 
 import { useDispatch, useSelector } from 'react-redux';
@@ -10,13 +9,17 @@ import ServicoPlanoAEE from '~/servicos/Paginas/Relatorios/AEE/ServicoPlanoAEE';
 import ReestruturacaoTabela from '../ReestruturacaoTabela/reestruturacaoTabela';
 import { setReestruturacaoDados } from '~/redux/modulos/planoAEE/actions';
 import { erros } from '~/servicos';
+import { useParams } from 'react-router-dom';
 
-const SecaoReestruturacaoPlano = ({ match }) => {
+const SecaoReestruturacaoPlano = () => {
+  const paramsRoute = useParams();
+
+  const planoId = paramsRoute?.id || 0;
+
   const [listaPrimeiroSemestre, setListaPrimeiroSemestre] = useState([]);
   const [listaSegundoSemestre, setListaSegundoSemestre] = useState([]);
-  const [carregandoReestruturacao, setCarregandoReestruturacao] = useState(
-    false
-  );
+  const [carregandoReestruturacao, setCarregandoReestruturacao] =
+    useState(false);
 
   const keyPrimeiroSemestre = 'secao-1-semestre-plano-collapse';
   const keySegundoSemestre = 'secao-2-semestre-plano-collapse';
@@ -47,15 +50,13 @@ const SecaoReestruturacaoPlano = ({ match }) => {
 
   const obterReestruturacoes = useCallback(async () => {
     setCarregandoReestruturacao(true);
-    const resposta = await ServicoPlanoAEE.obterReestruturacoes(
-      match?.params?.id
-    )
+    const resposta = await ServicoPlanoAEE.obterReestruturacoes(planoId)
       .catch(e => erros(e))
       .finally(() => setCarregandoReestruturacao(false));
     if (resposta?.data) {
       dispatch(setReestruturacaoDados(resposta?.data));
     }
-  }, [dispatch, match]);
+  }, [dispatch, planoId]);
 
   useEffect(() => {
     obterReestruturacoes();
@@ -83,7 +84,6 @@ const SecaoReestruturacaoPlano = ({ match }) => {
           key={keyPrimeiroSemestre}
           semestre={1}
           listaDados={listaPrimeiroSemestre}
-          match={match}
         />
       </CardCollapse>
       <CardCollapse
@@ -97,19 +97,10 @@ const SecaoReestruturacaoPlano = ({ match }) => {
           key={keySegundoSemestre}
           semestre={2}
           listaDados={listaSegundoSemestre}
-          match={match}
         />
       </CardCollapse>
     </Loader>
   );
-};
-
-SecaoReestruturacaoPlano.defaultProps = {
-  match: {},
-};
-
-SecaoReestruturacaoPlano.propTypes = {
-  match: PropTypes.oneOfType([PropTypes.object]),
 };
 
 export default SecaoReestruturacaoPlano;

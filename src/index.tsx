@@ -1,7 +1,6 @@
 import ReactDOM from 'react-dom/client';
 import '~/bibliotecas-legacy';
-import 'antd/dist/antd.css';
 
-import App from './App';
+import App from './app';
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(<App />);

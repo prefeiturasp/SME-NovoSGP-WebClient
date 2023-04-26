@@ -4,7 +4,6 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import { Button, Colors } from '~/componentes';
 
-import { history } from '~/servicos';
 import { URL_HOME } from '~/constantes';
 
 import { setDadosAlunoObjectCard } from '~/redux/modulos/conselhoClasse/actions';
@@ -16,8 +15,11 @@ import {
   SGP_BUTTON_CANCELAR,
 } from '~/constantes/ids/button';
 import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
+import { useNavigate } from 'react-router-dom';
 
 const BotoesAcoes = ({ turmaInfantil }) => {
+  const navigate = useNavigate();
+
   const registroIndividualEmEdicao = useSelector(
     state => state.registroIndividual.registroIndividualEmEdicao
   );
@@ -30,11 +32,12 @@ const BotoesAcoes = ({ turmaInfantil }) => {
   const onClickVoltar = async () => {
     let validouSalvarRegistro = true;
     if (registroIndividualEmEdicao && turmaInfantil && desabilitarCampos) {
-      validouSalvarRegistro = await MetodosRegistroIndividual.salvarRegistroIndividual();
+      validouSalvarRegistro =
+        await MetodosRegistroIndividual.salvarRegistroIndividual();
     }
 
     if (validouSalvarRegistro) {
-      history.push(URL_HOME);
+      navigate(URL_HOME);
       MetodosRegistroIndividual.resetarInfomacoes();
       dispatch(setDadosAlunoObjectCard({}));
     }

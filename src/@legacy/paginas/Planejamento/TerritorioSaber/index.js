@@ -22,7 +22,6 @@ import DropDownTerritorios from './componentes/DropDownTerritorios';
 // Serviços
 import { erro, sucesso, confirmar, erros } from '~/servicos/alertas';
 import TerritorioSaberServico from '~/servicos/Paginas/TerritorioSaber';
-import history from '~/servicos/history';
 import { verificaSomenteConsulta } from '~/servicos/servico-navegacao';
 
 // Utils
@@ -34,6 +33,7 @@ import { URL_HOME } from '~/constantes/url';
 import AlertaModalidadeInfantil from '~/componentes-sgp/AlertaModalidadeInfantil/alertaModalidadeInfantil';
 import { ehTurmaInfantil } from '~/servicos/Validacoes/validacoesInfatil';
 import { SGP_BUTTON_SALVAR } from '~/constantes/ids/button';
+import { useNavigate } from 'react-router-dom';
 
 // Componentes internos
 const DesenvolvimentoReflexao = React.lazy(() =>
@@ -41,16 +41,16 @@ const DesenvolvimentoReflexao = React.lazy(() =>
 );
 
 function TerritorioSaber() {
+  const navigate = useNavigate();
+
   const [modoEdicao, setModoEdicao] = useState(false);
   const [carregando, setCarregando] = useState(false);
   const [bimestreAberto, setBimestreAberto] = useState(false);
   const [somenteConsulta, setSomenteConsulta] = useState(false);
   const [territorioSelecionado, setTerritorioSelecionado] = useState('');
 
-  const [
-    mostraMensagemSemTerritorios,
-    setMostraMensagemSemTerritorios,
-  ] = useState(false);
+  const [mostraMensagemSemTerritorios, setMostraMensagemSemTerritorios] =
+    useState(false);
 
   const [dados, setDados] = useState({ bimestres: [] });
 
@@ -137,7 +137,7 @@ function TerritorioSaber() {
         if (retorno && retorno.status === 200) {
           sucesso('Planejamento salvo com sucesso.');
           if (irParaHome) {
-            history.push(URL_HOME);
+            navigate(URL_HOME);
           } else {
             setBimestreAberto(false);
             buscarPlanejamento();
@@ -211,10 +211,10 @@ function TerritorioSaber() {
       if (confirmado) {
         salvarPlanejamento(true);
       } else {
-        history.push(URL_HOME);
+        navigate(URL_HOME);
       }
     } else {
-      history.push(URL_HOME);
+      navigate(URL_HOME);
     }
   };
 

@@ -1,6 +1,6 @@
+import { Pagination } from 'antd';
 import PropTypes from 'prop-types';
 import React, { useEffect, useState } from 'react';
-import { ContainerPaginacao } from './paginacao.css';
 
 const Paginacao = props => {
   const {
@@ -37,7 +37,7 @@ const Paginacao = props => {
   }, [numeroRegistros, pageSize]);
 
   return (
-    <ContainerPaginacao
+    <Pagination
       {...rest}
       {...paginaAtual}
       onChange={executaPaginacao}

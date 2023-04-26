@@ -20,7 +20,6 @@ import {
   AbrangenciaServico,
   ehTurmaInfantil,
   erros,
-  history,
   ServicoComponentesCurriculares,
   ServicoFiltroRelatorio,
   ServicoRelatorioDevolutivas,
@@ -28,6 +27,8 @@ import {
 } from '~/servicos';
 
 const RelatorioDevolutivas = () => {
+  const navigate = useNavigate();
+
   const [anoAtual] = useState(window.moment().format('YYYY'));
   const [anoLetivo, setAnoLetivo] = useState();
   const [bimestres, setBimestres] = useState(undefined);
@@ -39,9 +40,8 @@ const RelatorioDevolutivas = () => {
   const [consideraHistorico, setConsideraHistorico] = useState(false);
   const [desabilitarGerar, setDesabilitarGerar] = useState(true);
   const [dreId, setDreId] = useState();
-  const [exibirConteudoDevolutiva, setExibirConteudoDevolutiva] = useState(
-    false
-  );
+  const [exibirConteudoDevolutiva, setExibirConteudoDevolutiva] =
+    useState(false);
   const [exibirLoaderGeral, setExibirLoaderGeral] = useState(false);
 
   const [listaAnosLetivo, setListaAnosLetivo] = useState([]);
@@ -59,10 +59,8 @@ const RelatorioDevolutivas = () => {
   const [recarregar, setRecarregar] = useState(false);
 
   const [carregandoComponentes, setCarregandoComponentes] = useState(false);
-  const [
-    listaComponenteCurriculares,
-    setListaComponenteCurriculares,
-  ] = useState();
+  const [listaComponenteCurriculares, setListaComponenteCurriculares] =
+    useState();
   const [componenteCurricular, setComponenteCurricular] = useState();
   const [modoEdicao, setModoEdicao] = useState(false);
 
@@ -92,7 +90,7 @@ const RelatorioDevolutivas = () => {
   };
 
   const onClickVoltar = () => {
-    history.push('/');
+    navigate('/');
   };
 
   const onClickCancelar = () => {
@@ -324,11 +322,10 @@ const RelatorioDevolutivas = () => {
   const obterModalidades = useCallback(async ue => {
     if (ue) {
       setCarregandoModalidade(true);
-      const {
-        data,
-      } = await ServicoFiltroRelatorio.obterModalidadesPorAbrangencia(
-        ue
-      ).finally(() => setCarregandoModalidade(false));
+      const { data } =
+        await ServicoFiltroRelatorio.obterModalidadesPorAbrangencia(ue).finally(
+          () => setCarregandoModalidade(false)
+        );
 
       if (data?.length) {
         const lista = data.map(item => ({
@@ -509,11 +506,12 @@ const RelatorioDevolutivas = () => {
     }
 
     setCarregandoComponentes(true);
-    const componentes = await ServicoComponentesCurriculares.obterComponentesPorListaDeTurmas(
-      codigosTurmas
-    )
-      .catch(e => erros(e))
-      .finally(() => setCarregandoComponentes(false));
+    const componentes =
+      await ServicoComponentesCurriculares.obterComponentesPorListaDeTurmas(
+        codigosTurmas
+      )
+        .catch(e => erros(e))
+        .finally(() => setCarregandoComponentes(false));
 
     if (componentes?.data?.length) {
       const lista = componentes.data;

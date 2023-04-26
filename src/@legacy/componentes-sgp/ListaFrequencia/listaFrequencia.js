@@ -351,7 +351,7 @@ const ListaFrequencia = props => {
       columns.push({
         title: () => <span className="fonte-16">{aula.numeroAula}</span>,
         align: 'center',
-        dataIndex: `aulas.${indexAula}`,
+        dataIndex: ['aulas', `${indexAula}`],
         width: '75px',
         render: (dadosAula, aluno) => {
           const indexAluno = dataSource.indexOf(aluno);
