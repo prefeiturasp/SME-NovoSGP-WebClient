@@ -56,6 +56,12 @@ const TabelaLinhaRemovivel = ({
       title: tituloTabela,
       dataIndex,
       key: dataIndex,
+      render: (_, linha) => {
+        if (linha?.descricao) {
+          return `${linha.nome}: ${linha.descricao}`;
+        }
+        return linha?.nome;
+      },
     },
     {
       title: '',

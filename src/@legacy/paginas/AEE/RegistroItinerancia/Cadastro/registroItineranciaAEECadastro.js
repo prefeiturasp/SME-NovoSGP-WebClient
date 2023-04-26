@@ -97,7 +97,7 @@ const RegistroItineranciaAEECadastro = ({ match }) => {
 
   const permissaoStatus = itineranciaId && !itineranciaAlteracao?.podeEditar;
 
-  const mapearSalvarQuestoesUpload = mapearSomenteUpload => {
+  const mapearSalvarQuestoesUpload = () => {
     const novoMapQuestoes = _.cloneDeep(questoesItinerancia);
 
     const questaoUpload = novoMapQuestoes.find(
@@ -126,11 +126,9 @@ const RegistroItineranciaAEECadastro = ({ match }) => {
     }
     let questoesSalvar = [];
 
-    if (!mapearSomenteUpload) {
-      questoesSalvar = novoMapQuestoes.filter(
-        questao => questao?.tipoQuestao !== tipoQuestaoDto.Upload
-      );
-    }
+    questoesSalvar = novoMapQuestoes.filter(
+      questao => questao?.tipoQuestao !== tipoQuestaoDto.Upload
+    );
 
     if (questaoUpload?.resposta?.length) {
       questaoUpload.resposta.forEach(resposta => {
@@ -161,9 +159,7 @@ const RegistroItineranciaAEECadastro = ({ match }) => {
   };
 
   const onClickSalvar = () => {
-    const mapearSomenteUpload = !!alunosSelecionados?.length;
-
-    const questoes = mapearSalvarQuestoesUpload(mapearSomenteUpload);
+    const questoes = mapearSalvarQuestoesUpload();
 
     const itinerancia = {
       id: itineranciaId,
@@ -194,7 +190,7 @@ const RegistroItineranciaAEECadastro = ({ match }) => {
     if (itinerancia.alunos?.length) {
       itinerancia.alunos.forEach(aluno => {
         const questoesAlunoInvalidas = aluno.questoes.filter(
-          questao => questao.obrigatorio && !questao.resposta
+          questao => !questao.resposta
         );
         if (questoesAlunoInvalidas.length) {
           const camposInvalidos = questoesAlunoInvalidas.map(questao => {
@@ -258,23 +254,8 @@ const RegistroItineranciaAEECadastro = ({ match }) => {
     }
   };
 
-  const selecionarAlunos = async alunos => {
-    const questoes = questoesItinerancia.filter(q => q.resposta);
-    if (!alunosSelecionados?.length && questoes?.length) {
-      const resposta = await confirmar(
-        'Atenção',
-        'Ao selecionar o estudante, o registro será específico por estudante. As informações preenchidas até o momento serão descartadas',
-        'Deseja continuar?'
-      );
-      if (resposta) {
-        setAlunosSelecionados(ordenarPor(alunos, 'alunoNome'));
-        questoesItinerancia.forEach(questao => {
-          questao.resposta = '';
-        });
-      }
-    } else {
-      setAlunosSelecionados(ordenarPor(alunos, 'alunoNome'));
-    }
+  const selecionarAlunos = alunos => {
+    setAlunosSelecionados(ordenarPor(alunos, 'alunoNome'));
   };
 
   const onChangeDataVisita = data => {
@@ -330,7 +311,8 @@ const RegistroItineranciaAEECadastro = ({ match }) => {
 
   const obterQuestoes = async () => {
     setCarregandoQuestoes(true);
-    const result = await ServicoRegistroItineranciaAEE.obterQuestoesItinerancia();
+    const result =
+      await ServicoRegistroItineranciaAEE.obterQuestoesItinerancia();
     if (result?.status === 200) {
       setQuestoesItinerancia(result?.data?.itineranciaQuestao);
       setQuestoesAluno(result?.data?.itineranciaAlunoQuestao);
@@ -499,7 +481,6 @@ const RegistroItineranciaAEECadastro = ({ match }) => {
     } else {
       obterQuestoes();
     }
-
   }, [itineranciaId]);
 
   const perguntarAntesDeRemoverAluno = async () => {
@@ -600,12 +581,13 @@ const RegistroItineranciaAEECadastro = ({ match }) => {
   const obterTiposCalendarios = useCallback(async () => {
     setCarregandoTipos(true);
     const anoLetivo = dataVisita.get('year');
-    const resposta = await ServicoCalendarios.obterTiposCalendarioPorAnoLetivoModalidade(
-      anoLetivo,
-      listaModalidades?.map(item => item?.valor)?.toString()
-    )
-      .catch(e => erros(e))
-      .finally(() => setCarregandoTipos(false));
+    const resposta =
+      await ServicoCalendarios.obterTiposCalendarioPorAnoLetivoModalidade(
+        anoLetivo,
+        listaModalidades?.map(item => item?.valor)?.toString()
+      )
+        .catch(e => erros(e))
+        .finally(() => setCarregandoTipos(false));
 
     if (resposta?.data?.length) {
       const listaCaledariosAtivos = resposta.data
@@ -660,7 +642,6 @@ const RegistroItineranciaAEECadastro = ({ match }) => {
       setEventoId();
       setListaEvento([]);
     }
-
   }, [tipoCalendarioSelecionado, listaUes, itineranciaId]);
 
   const selecionaEvento = evento => {
@@ -1031,6 +1012,30 @@ const RegistroItineranciaAEECadastro = ({ match }) => {
               botaoAdicionar={() => setModalVisivelObjetivos(true)}
             />
           </div>
+
+          {carregandoQuestoes || carregandoGeral ? (
+            <Loader loading tip="Carregando questões" />
+          ) : (
+            questoesItinerancia?.map(questao => {
+              return questao?.tipoQuestao !== tipoQuestaoDto.Upload ? (
+                <div className="row mb-4" key={questao.questaoId}>
+                  <div className="col-12">
+                    <JoditEditor
+                      label={questao.descricao}
+                      value={questao.resposta}
+                      name={NOME_CAMPO_QUESTAO + questao.questaoId}
+                      id={questao?.nomeComponente}
+                      onChange={e => setQuestao(e, questao)}
+                      desabilitar={desabilitarCamposPorPermissao()}
+                    />
+                  </div>
+                </div>
+              ) : (
+                <></>
+              );
+            })
+          )}
+
           {ueId && (
             <div className="row mb-4">
               <div className="col-12 font-weight-bold mb-2">
@@ -1097,27 +1102,8 @@ const RegistroItineranciaAEECadastro = ({ match }) => {
                 </div>
               </div>
             </>
-          ) : carregandoQuestoes || carregandoGeral ? (
-            <Loader loading tip="Carregando questões" />
           ) : (
-            questoesItinerancia?.map(questao => {
-              return questao?.tipoQuestao !== tipoQuestaoDto.Upload ? (
-                <div className="row mb-4" key={questao.questaoId}>
-                  <div className="col-12">
-                    <JoditEditor
-                      label={questao.descricao}
-                      value={questao.resposta}
-                      name={NOME_CAMPO_QUESTAO + questao.questaoId}
-                      id={`editor-questao-${questao.questaoId}`}
-                      onChange={e => setQuestao(e, questao)}
-                      desabilitar={desabilitarCamposPorPermissao()}
-                    />
-                  </div>
-                </div>
-              ) : (
-                <></>
-              );
-            })
+            <></>
           )}
           <div className="row mb-4">
             <div className="col-3">
