@@ -19,13 +19,13 @@ const CollapseAluno = ({
     <div>
       {aluno.questoes?.map(questao => {
         return (
-          <div className="row mb-4">
+          <div className="row mb-4" key={shortid.generate()}>
             <div className="col-12">
               <JoditEditor
                 label={questao.descricao}
                 value={questao.resposta}
                 name={questao.descricao + questao.questaoId}
-                id={questao.questaoId}
+                id={questao?.nomeComponente}
                 onChange={e => onChangeResposta(e, questao)}
                 desabilitar={desabilitar}
               />
