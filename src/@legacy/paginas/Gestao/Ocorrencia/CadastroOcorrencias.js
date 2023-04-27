@@ -164,7 +164,6 @@ const CadastroOcorrencias = () => {
       const valoresTratados = tratarValores(resposta.data);
       setInitialValues(valoresTratados);
     }
-
   }, [ocorrenciaId]);
 
   useEffect(() => {
@@ -214,6 +213,7 @@ const CadastroOcorrencias = () => {
                   listaDres={listaDres}
                   setListaUes={setListaUes}
                   listaUes={listaUes}
+                  initialValues={initialValues}
                 />
                 {auditoria?.criadoEm ? (
                   <div className="row">

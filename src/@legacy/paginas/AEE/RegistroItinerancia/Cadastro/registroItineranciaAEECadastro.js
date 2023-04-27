@@ -330,9 +330,15 @@ const RegistroItineranciaAEECadastro = ({ match }) => {
 
   const obterQuestoes = async () => {
     setCarregandoQuestoes(true);
-    const result = await ServicoRegistroItineranciaAEE.obterQuestoesItinerancia();
+    const result =
+      await ServicoRegistroItineranciaAEE.obterQuestoesItinerancia();
     if (result?.status === 200) {
-      setQuestoesItinerancia(result?.data?.itineranciaQuestao);
+      const itineranciaQuestoes = result?.data?.itineranciaQuestao;
+      const questoesItineranciaComRespostaInicial = itineranciaQuestoes?.map(
+        item => ({ ...item, respostaInicial: item.resposta })
+      );
+
+      setQuestoesItinerancia(questoesItineranciaComRespostaInicial);
       setQuestoesAluno(result?.data?.itineranciaAlunoQuestao);
       setCarregandoQuestoes(false);
     }
@@ -499,7 +505,6 @@ const RegistroItineranciaAEECadastro = ({ match }) => {
     } else {
       obterQuestoes();
     }
-
   }, [itineranciaId]);
 
   const perguntarAntesDeRemoverAluno = async () => {
@@ -600,12 +605,13 @@ const RegistroItineranciaAEECadastro = ({ match }) => {
   const obterTiposCalendarios = useCallback(async () => {
     setCarregandoTipos(true);
     const anoLetivo = dataVisita.get('year');
-    const resposta = await ServicoCalendarios.obterTiposCalendarioPorAnoLetivoModalidade(
-      anoLetivo,
-      listaModalidades?.map(item => item?.valor)?.toString()
-    )
-      .catch(e => erros(e))
-      .finally(() => setCarregandoTipos(false));
+    const resposta =
+      await ServicoCalendarios.obterTiposCalendarioPorAnoLetivoModalidade(
+        anoLetivo,
+        listaModalidades?.map(item => item?.valor)?.toString()
+      )
+        .catch(e => erros(e))
+        .finally(() => setCarregandoTipos(false));
 
     if (resposta?.data?.length) {
       const listaCaledariosAtivos = resposta.data
@@ -660,7 +666,6 @@ const RegistroItineranciaAEECadastro = ({ match }) => {
       setEventoId();
       setListaEvento([]);
     }
-
   }, [tipoCalendarioSelecionado, listaUes, itineranciaId]);
 
   const selecionaEvento = evento => {
@@ -1106,7 +1111,7 @@ const RegistroItineranciaAEECadastro = ({ match }) => {
                   <div className="col-12">
                     <JoditEditor
                       label={questao.descricao}
-                      value={questao.resposta}
+                      value={questao.respostaInicial}
                       name={NOME_CAMPO_QUESTAO + questao.questaoId}
                       id={`editor-questao-${questao.questaoId}`}
                       onChange={e => setQuestao(e, questao)}
