@@ -193,9 +193,10 @@ const DashboardRelAcompanhamentoAprendizagem = () => {
 
   const obterUltimaConsolidacao = useCallback(async () => {
     if (anoLetivo) {
-      const resposta = await ServicoDashboardRelAcompanhamentoAprendizagem.obterUltimaConsolidacao(
-        anoLetivo
-      ).catch(e => erros(e));
+      const resposta =
+        await ServicoDashboardRelAcompanhamentoAprendizagem.obterUltimaConsolidacao(
+          anoLetivo
+        ).catch(e => erros(e));
 
       if (resposta?.data) {
         setDataUltimaConsolidacao(resposta.data);
@@ -212,7 +213,7 @@ const DashboardRelAcompanhamentoAprendizagem = () => {
   return (
     <>
       <AlertaPermiteSomenteTurmaInfantil
-        exibir={ue && ue?.codigo !== OPCAO_TODOS && !ue?.ehInfantil}
+        exibir={!ue || (ue && ue?.codigo !== OPCAO_TODOS && !ue?.ehInfantil)}
         validarModalidadeFiltroPrincipal={false}
       />
       <Cabecalho pagina="Dashboard Relatório do Acompanhamento da Aprendizagem">
