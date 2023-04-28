@@ -109,15 +109,13 @@ const JoditEditor = forwardRef((props, ref) => {
     const dadosColadoTexto = e?.clipboardData?.getData?.('text');
     const dadosColadoHTML = e?.clipboardData?.getData?.('text/html');
 
-    const qtdElementoImgNova = dadosColadoHTML?.match(/<img/g) || [];
-    const qtdElementoVideo = dadosColadoHTML?.match(/<video/g) || [];
-    const temImagemNosDadosColados = qtdElementoImgNova.length;
-    const temVideoNosDadosColados = qtdElementoVideo.length;
+    const spgURL = url.replace('/api', '');
+    const temImagemNosDadosColados = dadosColadoHTML?.match(/<img/g) || [];
+    const temVideoNosDadosColados = dadosColadoHTML?.match(/<video/g) || [];
+    const qtdElementoImg = temImagemNosDadosColados.length;
+    const qtdElementoVideo = temVideoNosDadosColados.length;
 
-    if (
-      !permiteInserirArquivo &&
-      (temImagemNosDadosColados || temVideoNosDadosColados)
-    ) {
+    if (!permiteInserirArquivo && (qtdElementoImg || qtdElementoVideo)) {
       e.preventDefault();
       e.stopPropagation();
       erro('Não é possível inserir arquivo');
@@ -125,10 +123,20 @@ const JoditEditor = forwardRef((props, ref) => {
       return false;
     }
 
-    if (temImagemNosDadosColados && qtdMaxImg) {
+    if (qtdElementoImg) {
+      const regex = new RegExp(`<img[^>]*src=".*?${spgURL}/temp/.*?"[^>]*>`);
+      const temImagemPastaTemporaria = dadosColadoHTML?.match(regex) || [];
+
+      if (temImagemPastaTemporaria.length) {
+        erro('Não é possível inserir este arquivo');
+        return false;
+      }
+    }
+
+    if (qtdElementoImg && qtdMaxImg) {
       const qtdElementoImgAtual =
         textArea?.current?.editorDocument?.querySelectorAll?.('img');
-      const totalImg = qtdElementoImgNova?.length + qtdElementoImgAtual?.length;
+      const totalImg = qtdElementoImg + qtdElementoImgAtual.length;
 
       if (totalImg > qtdMaxImg || dadosColadoTexto === '') {
         if (dadosColadoTexto !== '') {
@@ -140,7 +148,7 @@ const JoditEditor = forwardRef((props, ref) => {
 
         return false;
       }
-    } else if (temImagemNosDadosColados && dadosColadoTexto === '') {
+    } else if (qtdElementoImg && dadosColadoTexto === '') {
       return false;
     }
 
@@ -183,6 +191,7 @@ const JoditEditor = forwardRef((props, ref) => {
     enableDragAndDropFileToEditor: true,
     uploader: {
       buildData: data => {
+        console.log('Entrouuu');
         return new Promise((resolve, reject) => {
           if (permiteInserirArquivo) {
             const arquivo = data.getAll('files[0]')[0];
