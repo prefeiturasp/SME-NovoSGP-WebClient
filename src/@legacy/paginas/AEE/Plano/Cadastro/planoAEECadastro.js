@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import React, { useCallback, useEffect } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Cabecalho } from '~/componentes-sgp';
 import CollapseLocalizarEstudante from '~/componentes-sgp/CollapseLocalizarEstudante/collapseLocalizarEstudante';
 import Card from '~/componentes/card';
@@ -22,6 +22,10 @@ import TabCadastroPlano from './Componentes/TabCadastroPlano/tabCadastroPlano';
 
 const PlanoAEECadastro = ({ match }) => {
   const dispatch = useDispatch();
+
+  const exibirModalDevolverPlanoAEE = useSelector(
+    store => store.planoAEE.exibirModalDevolverPlanoAEE
+  );
 
   const limparDadosPlano = useCallback(() => {
     dispatch(setLimparDadosQuestionarioDinamico());
@@ -94,7 +98,7 @@ const PlanoAEECadastro = ({ match }) => {
             </div>
           </div>
         </div>
-        <ModalDevolverPlanoAEE match={match} />
+        {exibirModalDevolverPlanoAEE && <ModalDevolverPlanoAEE match={match} />}
       </Card>
     </LoaderPlano>
   );
