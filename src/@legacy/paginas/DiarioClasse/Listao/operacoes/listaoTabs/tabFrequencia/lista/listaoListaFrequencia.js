@@ -1,6 +1,6 @@
 import { faAngleDown, faAngleUp } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Tooltip } from 'antd';
+import { Table, Tooltip } from 'antd';
 import React, { useContext, useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { DataTable } from '~/componentes';
@@ -268,11 +268,12 @@ const ListaoListaFrequencia = () => {
     });
   }
 
-  colunasEstudantes.push({
-    title: 'Informações adicionais',
-    align: 'center',
-    width: '130px',
-  });
+  colunasEstudantes.push(Table.EXPAND_COLUMN);
+  // colunasEstudantes.push({
+  //   title: 'Informações adicionais',
+  //   align: 'center',
+  //   width: '130px',
+  // });
 
   const onClickExpandir = (expandir, dadosEstudante) => {
     if (expandir) {
@@ -459,7 +460,6 @@ const ListaoListaFrequencia = () => {
           dataSource={dadosFrequencia?.alunos}
           pagination={false}
           semHover
-          expandIconColumnIndex={dadosFrequencia?.aulas.length + 3 || null}
           expandedRowKeys={expandedRowKeys}
           onClickExpandir={onClickExpandir}
           rowClassName={record => {
@@ -467,6 +467,8 @@ const ListaoListaFrequencia = () => {
             const nomeClasse = ehLinhaExpandida.length ? 'linha-ativa' : '';
             return nomeClasse;
           }}
+          expandableColumnTitle="Informações adicionais"
+          expandableColumnWidth="130px"
           expandedRowRender={(record, indexAluno) => {
             const colunasDetalhe = montarColunasDetalhe(record, indexAluno);
             return (

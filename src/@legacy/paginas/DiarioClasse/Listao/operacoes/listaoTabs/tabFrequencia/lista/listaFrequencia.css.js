@@ -268,6 +268,34 @@ export const TextoEstilizado = styled.div`
 `;
 
 export const LinhaTabela = styled.div`
+  .ant-table-cell.ant-table-row-expand-icon-cell {
+    text-align: center;
+  }
+
+  .ant-table-wrapper
+    .ant-table.ant-table-middle
+    .ant-table-tbody
+    .ant-table-wrapper:only-child
+    .ant-table {
+    margin-block: unset !important;
+    margin-inline: unset !important;
+  }
+
+  .ant-table-wrapper .ant-table.ant-table-middle {
+    .ant-table-container {
+      border-left: none !important;
+    }
+  }
+
+  .table-responsive {
+    background: white !important;
+  }
+
+  .ant-table-expanded-row.ant-table-expanded-row-level-1 > td {
+    border-left: none !important;
+    padding: 0px !important;
+  }
+
   .posicao-marcar-todos-header {
     .ant-table-header-column {
       display: block !important;
@@ -325,8 +353,6 @@ export const LinhaTabela = styled.div`
     td {
       &:first-child {
         position: relative;
-        border: 0 !important;
-        padding: 0 !important;
       }
 
       .table-responsive {
@@ -336,6 +362,10 @@ export const LinhaTabela = styled.div`
       }
 
       table {
+        &:first-child {
+          border-left: 1px !important;
+        }
+
         margin-bottom: 16px;
 
         .linha-ativa {
