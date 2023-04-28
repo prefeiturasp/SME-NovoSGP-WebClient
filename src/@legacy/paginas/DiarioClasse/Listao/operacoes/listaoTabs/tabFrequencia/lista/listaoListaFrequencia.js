@@ -269,11 +269,6 @@ const ListaoListaFrequencia = () => {
   }
 
   colunasEstudantes.push(Table.EXPAND_COLUMN);
-  // colunasEstudantes.push({
-  //   title: 'Informações adicionais',
-  //   align: 'center',
-  //   width: '130px',
-  // });
 
   const onClickExpandir = (expandir, dadosEstudante) => {
     if (expandir) {
