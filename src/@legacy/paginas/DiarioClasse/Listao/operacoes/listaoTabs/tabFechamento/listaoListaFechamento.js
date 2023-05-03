@@ -647,14 +647,6 @@ const ListaoListaFechamento = props => {
     return colunasRegencia;
   };
 
-  const getExpandIconColumnIndex = () => {
-    let expandIconColumnIndex = 2;
-    if (ehFinal) {
-      expandIconColumnIndex = ehEJA ? 4 : 6;
-    }
-    return expandIconColumnIndex;
-  };
-
   const getAuditoria = () => (
     <div className="row mt-2 mb-2 mt-2">
       <div className="col-md-12">
@@ -700,7 +692,7 @@ const ListaoListaFechamento = props => {
           semHover
           tableResponsive={false}
           idLinha="codigoAluno"
-          expandIconColumnIndex={getExpandIconColumnIndex()}
+          showExpandColumn={false}
           expandedRowKeys={getExpandedRowKeys()}
           expandedRowRender={(record, indexAluno) => {
             const colunasDetalhe = montarColunasNotasConceitosRegencia(
@@ -766,7 +758,7 @@ const ListaoListaFechamento = props => {
           pagination={false}
           semHover
           idLinha="codigoAluno"
-          expandIconColumnIndex={getExpandIconColumnIndex()}
+          showExpandColumn={false}
           expandedRowKeys={getExpandedRowKeys()}
           expandedRowRender={record => {
             return (

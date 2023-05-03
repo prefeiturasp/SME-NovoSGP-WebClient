@@ -27,6 +27,9 @@ const DataTable = props => {
     expandIcon,
     tableResponsive,
     gerarIdUnico,
+    expandableColumnWidth,
+    expandableColumnTitle,
+    showExpandColumn,
     ...rest
   } = props;
 
@@ -121,12 +124,17 @@ const DataTable = props => {
           };
         }}
         loading={loading}
-        expandedRowRender={expandedRowRender}
-        expandIconColumnIndex={expandIconColumnIndex}
         expandIconAsCell={false}
-        expandIcon={expandIcon}
-        onExpand={onClickExpandir}
-        expandedRowKeys={expandedRowKeys}
+        expandable={{
+          showExpandColumn,
+          columnWidth: expandableColumnWidth,
+          columnTitle: expandableColumnTitle,
+          expandIconColumnIndex,
+          expandedRowRender,
+          expandIcon,
+          onExpand: onClickExpandir,
+          expandedRowKeys,
+        }}
       />
     </Container>
   );
@@ -154,6 +162,7 @@ DataTable.propTypes = {
   tableResponsive: PropTypes.bool,
   loading: PropTypes.bool,
   gerarIdUnico: PropTypes.bool,
+  showExpandColumn: PropTypes.bool,
 };
 
 DataTable.defaultProps = {
@@ -178,6 +187,7 @@ DataTable.defaultProps = {
   tableResponsive: true,
   loading: false,
   gerarIdUnico: false,
+  showExpandColumn: true,
 };
 
 export default DataTable;

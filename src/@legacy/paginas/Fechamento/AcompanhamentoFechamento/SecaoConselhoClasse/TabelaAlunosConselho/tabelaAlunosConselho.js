@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import { Tooltip } from 'antd';
+import { Tooltip, Table } from 'antd';
 import { faAngleDown, faAngleUp } from '@fortawesome/free-solid-svg-icons';
 
 import { Base, DataTable, Loader } from '~/componentes';
@@ -86,31 +86,7 @@ const TabelaAlunosConselho = props => {
       align: 'center',
       render: frequenciaGlobal => formatarFrequencia(frequenciaGlobal),
     },
-    {
-      title: 'Situação do conselho de classe',
-      dataIndex: 'situacaoFechamentoCodigo',
-      align: 'center',
-      render: (situacaoFechamentoCodigo, aluno) => {
-        if (
-          statusAcompanhamentoConselhoClasse?.NAO_INICIADO?.id !==
-          situacaoFechamentoCodigo
-        ) {
-          const ehLinhaExpandida = temLinhaExpandida(aluno.alunoCodigo);
-          const corTexto = ehLinhaExpandida.length ? Base.Branco : aluno?.cor;
-          const marginRight = ehLinhaExpandida.length && '-11.3px';
-          const marginTop = ehLinhaExpandida.length ? '-33.8px' : '-34.8px';
-
-          return (
-            <MarcadorTriangulo
-              cor={corTexto}
-              marginTop={marginTop}
-              marginRight={marginRight}
-            />
-          );
-        }
-        return null;
-      },
-    }
+    Table.EXPAND_COLUMN
   );
 
   const montarValorNota = componenteCurricular => {
@@ -223,7 +199,8 @@ const TabelaAlunosConselho = props => {
     if (record?.podeExpandir) {
       const ehLinhaExpandida = temLinhaExpandida(record.alunoCodigo);
       const corTexto = ehLinhaExpandida.length ? Base.Branco : record?.cor;
-      return (
+
+      const iconeExpandirLinha = (
         <TextoEstilizado cor={corTexto}>
           {record.situacaoFechamento}
           <IconeEstilizado
@@ -232,6 +209,29 @@ const TabelaAlunosConselho = props => {
           />
         </TextoEstilizado>
       );
+
+      if (
+        statusAcompanhamentoConselhoClasse?.NAO_INICIADO?.id !==
+        record?.situacaoFechamentoCodigo
+      ) {
+        const ehLinhaExpandida = temLinhaExpandida(record.alunoCodigo);
+        const corTexto = ehLinhaExpandida.length ? Base.Branco : record?.cor;
+        const marginRight = ehLinhaExpandida.length && '-11.3px';
+        const marginTop = ehLinhaExpandida.length ? '-33.8px' : '-34.8px';
+
+        return (
+          <>
+            {iconeExpandirLinha}
+            <MarcadorTriangulo
+              cor={corTexto}
+              marginTop={marginTop}
+              marginRight={marginRight}
+            />
+          </>
+        );
+      }
+
+      return iconeExpandirLinha;
     }
     if (!record?.podeExpandir) {
       return record?.situacaoFechamento;
@@ -247,18 +247,19 @@ const TabelaAlunosConselho = props => {
         columns={colunasTabelaAlunos}
         dataSource={dadosComCores}
         pagination={false}
-        expandIconColumnIndex={bimestre === BIMESTRE_FINAL ? 4 : 3}
         expandedRowKeys={expandedRowKeys}
         onClickExpandir={obterDetalhamentoComponentesCurricularesAluno}
         semHover
         expandIcon={({ expanded, onExpand, record }) =>
           expandIcon(expanded, onExpand, record)
         }
-        rowClassName={(record, _) => {
+        rowClassName={record => {
           const ehLinhaExpandida = temLinhaExpandida(record.alunoCodigo);
           const nomeClasse = ehLinhaExpandida.length ? 'linha-ativa' : '';
           return nomeClasse;
         }}
+        expandableColumnWidth="225px"
+        expandableColumnTitle="Situação do conselho de classe"
         expandedRowRender={aluno => {
           if (aluno.podeExpandir) {
             return (

@@ -18,6 +18,7 @@ import {
   IconeEstilizado,
 } from '../../acompanhamentoFechamento.css';
 import { LinhaTabela, IconeSeta } from './tabelaComponentesCurriculares.css';
+import { Table } from 'antd';
 
 const TabelaComponentesCurriculares = ({
   dadosComponentesCurriculares,
@@ -87,26 +88,7 @@ const TabelaComponentesCurriculares = ({
       dataIndex: 'professor',
       align: 'left',
     },
-    {
-      title: 'Situação do fechamento',
-      dataIndex: 'situacaoFechamentoCodigo',
-      align: 'center',
-      width: 330,
-      render: (situacaoFechamentoCodigo, componente) => {
-        if (
-          statusAcompanhamentoFechamento?.NAO_INICIADO?.id !==
-            situacaoFechamentoCodigo &&
-          STATUS_EM_PROCESSAMENTO !== situacaoFechamentoCodigo
-        ) {
-          const ehLinhaExpandida = temLinhaExpandida(componente.id);
-          const corTexto = ehLinhaExpandida.length
-            ? Base.Branco
-            : componente?.cor;
-          return <MarcadorTriangulo cor={corTexto} marginTop="-34.8px" />;
-        }
-        return null;
-      },
-    },
+    Table.EXPAND_COLUMN,
   ];
 
   const obterDetalhePendencia = async dadosLinha => {
@@ -209,6 +191,18 @@ const TabelaComponentesCurriculares = ({
   };
 
   const expandIcon = (expanded, onExpand, record) => {
+    let marcador = <></>;
+
+    if (
+      statusAcompanhamentoFechamento?.NAO_INICIADO?.id !==
+        record?.situacaoFechamentoCodigo &&
+      STATUS_EM_PROCESSAMENTO !== record?.situacaoFechamentoCodigo
+    ) {
+      const ehLinhaExpandida = temLinhaExpandida(record?.id);
+      const corTexto = ehLinhaExpandida.length ? Base.Branco : record?.cor;
+      marcador = <MarcadorTriangulo cor={corTexto} marginTop="-34.8px" />;
+    }
+
     if (
       record?.situacaoFechamentoCodigo ===
       statusAcompanhamentoFechamento.PROCESSADO_PENDENCIAS.id
@@ -216,20 +210,26 @@ const TabelaComponentesCurriculares = ({
       const ehLinhaExpandida = temLinhaExpandida(record.id);
       const corTexto = ehLinhaExpandida.length ? Base.Branco : record?.cor;
       return (
-        <TextoEstilizado cor={corTexto}>
-          {record.situacaoFechamentoNome}
-          <IconeEstilizado
-            icon={expanded ? faAngleUp : faAngleDown}
-            onClick={e => onExpand(record, e)}
-          />
-        </TextoEstilizado>
+        <>
+          <TextoEstilizado cor={corTexto}>
+            {record.situacaoFechamentoNome}
+            <IconeEstilizado
+              icon={expanded ? faAngleUp : faAngleDown}
+              onClick={e => onExpand(record, e)}
+            />
+          </TextoEstilizado>
+          {marcador}
+        </>
       );
     }
 
     return (
-      <TextoEstilizado cor={record?.cor}>
-        {record?.situacaoFechamentoNome}
-      </TextoEstilizado>
+      <>
+        <TextoEstilizado cor={record?.cor}>
+          {record?.situacaoFechamentoNome}
+        </TextoEstilizado>
+        {marcador}
+      </>
     );
   };
 
@@ -241,7 +241,6 @@ const TabelaComponentesCurriculares = ({
         columns={colunasTabelaComponentesCurriculares}
         dataSource={dadosComCores}
         pagination={false}
-        expandIconColumnIndex={3}
         expandedRowKeys={linhasExpandidasPendencia}
         onClickExpandir={(expanded, record) =>
           obterDetalhesPendencias(expanded, record)
@@ -250,11 +249,13 @@ const TabelaComponentesCurriculares = ({
         expandIcon={({ expanded, onExpand, record }) =>
           expandIcon(expanded, onExpand, record)
         }
-        rowClassName={(record, _) => {
+        rowClassName={record => {
           const ehLinhaExpandida = temLinhaExpandida(record.id);
           const nomeClasse = ehLinhaExpandida.length ? 'linha-ativa' : '';
           return nomeClasse;
         }}
+        expandableColumnWidth="200px"
+        expandableColumnTitle="Situação do fechamento"
         expandedRowRender={componentes => {
           if (
             componentes.situacaoFechamentoCodigo ===
@@ -271,7 +272,7 @@ const TabelaComponentesCurriculares = ({
                     columns={colunasTabelaComponentes}
                     dataSource={dadosPendencias}
                     semHover
-                    rowClassName={(record, _) => {
+                    rowClassName={record => {
                       const ehLinhaClicada =
                         record.pendenciaId ===
                         detalhePendenciaEscolhido?.pendenciaId;

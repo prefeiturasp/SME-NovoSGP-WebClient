@@ -246,7 +246,9 @@ const DashboardFechamentoFiltros = () => {
     const retorno = await AbrangenciaServico.obterSemestres(
       consideraHistorico,
       anoLetivo,
-      modalidade
+      modalidade,
+      dre?.codigo === OPCAO_TODOS ? '' : dre?.codigo,
+      ue?.codigo === OPCAO_TODOS ? '' : ue?.codigo
     )
       .catch(e => erros(e))
       .finally(() => setCarregandoSemestres(false));

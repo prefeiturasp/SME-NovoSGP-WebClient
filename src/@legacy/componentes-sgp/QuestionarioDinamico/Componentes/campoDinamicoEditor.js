@@ -19,7 +19,7 @@ const CampoDinamicoEditor = props => {
           readonly={desabilitado}
           name={String(questaoAtual?.id)}
           placeholder={questaoAtual?.placeHolder}
-          value={form?.values?.[String(questaoAtual?.id)]}
+          value={form?.initialValues?.[String(questaoAtual?.id)]}
           onChange={v => {
             if (form?.initialValues?.[String(questaoAtual?.id)] !== v) {
               onChange();
