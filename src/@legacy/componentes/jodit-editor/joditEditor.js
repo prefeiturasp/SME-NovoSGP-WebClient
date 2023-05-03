@@ -19,6 +19,10 @@ const Campo = styled.div`
   .jodit-status-bar :nth-child(2) {
     display: none;
   }
+
+  .jodit-workplace {
+    min-height: 139px !important;
+  }
 `;
 
 let CHANGE_DEBOUNCE_FLAG;
