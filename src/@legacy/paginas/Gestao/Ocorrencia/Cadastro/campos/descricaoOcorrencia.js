@@ -2,12 +2,17 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import { JoditEditor } from '~/componentes';
 
-const DescricaoOcorrencia = ({ form, onChangeCampos, desabilitar }) => {
+const DescricaoOcorrencia = ({
+  form,
+  onChangeCampos,
+  desabilitar,
+  initialValues,
+}) => {
   return (
     <JoditEditor
       label="Descrição"
       form={form}
-      value={form?.values?.descricao}
+      value={initialValues?.descricao}
       name="descricao"
       id="SGP_JODIT_EDITOR_DESCRICAO"
       permiteInserirArquivo

@@ -317,7 +317,12 @@ const RegistroItineranciaAEECadastro = () => {
     const result =
       await ServicoRegistroItineranciaAEE.obterQuestoesItinerancia();
     if (result?.status === 200) {
-      setQuestoesItinerancia(result?.data?.itineranciaQuestao);
+      const itineranciaQuestoes = result?.data?.itineranciaQuestao;
+      const questoesItineranciaComRespostaInicial = itineranciaQuestoes?.map(
+        item => ({ ...item, respostaInicial: item.resposta })
+      );
+
+      setQuestoesItinerancia(questoesItineranciaComRespostaInicial);
       setQuestoesAluno(result?.data?.itineranciaAlunoQuestao);
       setCarregandoQuestoes(false);
     }

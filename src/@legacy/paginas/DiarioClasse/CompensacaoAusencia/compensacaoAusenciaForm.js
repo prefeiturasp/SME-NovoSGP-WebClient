@@ -106,12 +106,15 @@ const CompensacaoAusenciaForm = () => {
     bimestre: 0,
   });
 
-  const [valoresIniciais, setValoresIniciais] = useState({
-    disciplinaId: undefined,
+  const formInicial = {
+    disciplinaId: '',
     bimestre: '',
     atividade: '',
     descricao: '',
-  });
+  };
+
+  const [valoresIniciais, setValoresIniciais] = useState(formInicial);
+  const [limparCampoDescricao, setLimparCampoDescricao] = useState(false);
 
   const [validacoes] = useState(
     Yup.object({
@@ -679,6 +682,8 @@ const CompensacaoAusenciaForm = () => {
         if (idCompensacaoAusencia) {
           resetarTelaEdicaoComId(form);
         } else {
+          setValoresIniciais({ ...formInicial, descricao: null });
+          setLimparCampoDescricao(true);
           setCarregouInformacoes(false);
           setIdsAlunos([]);
           setAlunosAusenciaTurma([]);
@@ -692,6 +697,13 @@ const CompensacaoAusenciaForm = () => {
       }
     }
   };
+
+  useEffect(() => {
+    if (limparCampoDescricao) {
+      setLimparCampoDescricao(false);
+      setValoresIniciais({ ...formInicial, descricao: '' });
+    }
+  }, [limparCampoDescricao]);
 
   const perguntaAoSalvar = async () => {
     return confirmar(

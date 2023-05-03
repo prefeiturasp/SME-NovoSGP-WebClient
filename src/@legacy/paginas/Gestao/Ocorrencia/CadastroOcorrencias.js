@@ -210,6 +210,7 @@ const CadastroOcorrencias = () => {
                   listaDres={listaDres}
                   setListaUes={setListaUes}
                   listaUes={listaUes}
+                  initialValues={initialValues}
                 />
                 {auditoria?.criadoEm ? (
                   <div className="row">
