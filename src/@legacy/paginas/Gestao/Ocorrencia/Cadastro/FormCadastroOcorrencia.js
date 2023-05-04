@@ -22,6 +22,7 @@ const FormCadastroOcorrencia = props => {
     listaDres,
     setListaUes,
     listaUes,
+    initialValues,
   } = props;
 
   const { dreId, ueId } = form?.values;
@@ -116,6 +117,7 @@ const FormCadastroOcorrencia = props => {
             form={form}
             onChangeCampos={onChangeCampos}
             desabilitar={desabilitar}
+            initialValues={initialValues}
           />
         </Col>
       </Row>

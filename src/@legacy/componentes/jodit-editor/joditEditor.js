@@ -116,8 +116,9 @@ const JoditEditor = forwardRef((props, ref) => {
       item.type.includes('video')
     );
 
-    const qtdElementoImg = temImagemNosDadosColados?.length || 0;
-    const qtdElementoVideo = temVideoNosDadosColados?.length || 0;
+    const spgURL = url.replace('/api', '');
+    const qtdElementoImg = temImagemNosDadosColados.length;
+    const qtdElementoVideo = temVideoNosDadosColados.length;
 
     if (!permiteInserirArquivo && (qtdElementoImg || qtdElementoVideo)) {
       e.preventDefault();
@@ -127,10 +128,20 @@ const JoditEditor = forwardRef((props, ref) => {
       return false;
     }
 
+    if (qtdElementoImg) {
+      const regex = new RegExp(`<img[^>]*src=".*?${spgURL}/temp/.*?"[^>]*>`);
+      const temImagemPastaTemporaria = dadosColadoHTML?.match(regex) || [];
+
+      if (temImagemPastaTemporaria.length) {
+        erro('Não é possível inserir este arquivo');
+        return false;
+      }
+    }
+
     if (qtdElementoImg && qtdMaxImg) {
       const qtdElementoImgAtual =
         textArea?.current?.editorDocument?.querySelectorAll?.('img');
-      const totalImg = qtdElementoImg + qtdElementoImgAtual?.lenght;
+      const totalImg = qtdElementoImg + qtdElementoImgAtual?.length;
 
       if (totalImg > qtdMaxImg || dadosColadoTexto === '') {
         if (dadosColadoTexto !== '') {

@@ -44,10 +44,9 @@ const ModalConfirmacao = () => {
     if (!confirmacao.visivel && loadingCliqueOk) {
       setLoadingCliqueOk(false);
     }
-
   }, [confirmacao.visivel]);
 
-  return (
+  return confirmacao.visivel ? (
     <ContainerModal>
       <Modal
         title={confirmacao.titulo}
@@ -95,6 +94,8 @@ const ModalConfirmacao = () => {
         {!primeiroExibirTextoNegrito ? <b>{confirmacao.textoNegrito}</b> : ''}
       </Modal>
     </ContainerModal>
+  ) : (
+    <></>
   );
 };
 
