@@ -19,7 +19,7 @@ const SituacaoProcessoFechamento = props => {
   return (
     <>
       <CardCollapse
-        titulo="Situacao do processo de fechamento (total de componentes por situação)"
+        titulo="Situação do processo de fechamento (total de componentes por situação)"
         key={`${key}-collapse-key`}
         indice={`${key}-collapse-indice`}
         alt={`${key}-alt`}
