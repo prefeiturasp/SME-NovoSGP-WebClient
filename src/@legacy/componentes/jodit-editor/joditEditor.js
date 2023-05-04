@@ -107,11 +107,16 @@ const JoditEditor = forwardRef((props, ref) => {
 
   const verificaSePodeInserirArquivo = e => {
     const dadosColadoTexto = e?.clipboardData?.getData?.('text');
-    const dadosColadoHTML = e?.clipboardData?.getData?.('text/html');
+
+    const temImagemNosDadosColados = [...e?.clipboardData?.files].filter(item =>
+      item.type.includes('image')
+    );
+
+    const temVideoNosDadosColados = [...e?.clipboardData?.files].filter(item =>
+      item.type.includes('video')
+    );
 
     const spgURL = url.replace('/api', '');
-    const temImagemNosDadosColados = dadosColadoHTML?.match(/<img/g) || [];
-    const temVideoNosDadosColados = dadosColadoHTML?.match(/<video/g) || [];
     const qtdElementoImg = temImagemNosDadosColados.length;
     const qtdElementoVideo = temVideoNosDadosColados.length;
 
@@ -136,7 +141,7 @@ const JoditEditor = forwardRef((props, ref) => {
     if (qtdElementoImg && qtdMaxImg) {
       const qtdElementoImgAtual =
         textArea?.current?.editorDocument?.querySelectorAll?.('img');
-      const totalImg = qtdElementoImg + qtdElementoImgAtual.length;
+      const totalImg = qtdElementoImg + qtdElementoImgAtual?.length;
 
       if (totalImg > qtdMaxImg || dadosColadoTexto === '') {
         if (dadosColadoTexto !== '') {
@@ -191,7 +196,6 @@ const JoditEditor = forwardRef((props, ref) => {
     enableDragAndDropFileToEditor: true,
     uploader: {
       buildData: data => {
-        console.log('Entrouuu');
         return new Promise((resolve, reject) => {
           if (permiteInserirArquivo) {
             const arquivo = data.getAll('files[0]')[0];
