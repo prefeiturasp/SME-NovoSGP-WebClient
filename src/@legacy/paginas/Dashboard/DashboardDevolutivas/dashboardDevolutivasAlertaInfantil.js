@@ -15,17 +15,18 @@ const DashboardDevolutivasAlertaInfantil = () => {
 
   const [exibir, setExibir] = useState(false);
 
-  useEffect(() => {
-    let exibirAlerta = false;
+  function exibirAlerta(ue, modalidade) {
+    if (!ue) return true;
 
-    if (ue && ue?.codigo === OPCAO_TODOS) {
-      exibirAlerta =
-        modalidade && Number(modalidade) !== ModalidadeDTO.INFANTIL;
-    } else {
-      exibirAlerta = ue && !ue?.ehInfantil;
+    if (ue?.codigo === OPCAO_TODOS) {
+      return modalidade && Number(modalidade) !== ModalidadeDTO.INFANTIL;
     }
 
-    setExibir(exibirAlerta);
+    return !ue?.ehInfantil;
+  }
+
+  useEffect(() => {
+    setExibir(exibirAlerta(ue, modalidade));
   }, [ue, modalidade]);
 
   return (
