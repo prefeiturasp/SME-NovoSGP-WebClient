@@ -46,8 +46,9 @@ class ServicoNAAPA {
     );
 
   imprimir = idsSelecionados =>
-      api.post(`${URL_PADRAO}/imprimir-detalhado`, { encaminhamentoNaapaIds: idsSelecionados });
-  
+    api.post(`${URL_PADRAO}/imprimir-detalhado`, {
+      encaminhamentoNaapaIds: idsSelecionados,
+    });
 
   guardarSecaoEmEdicao = secaoId => {
     const { dispatch } = store;
@@ -367,6 +368,12 @@ class ServicoNAAPA {
   obterPortasEntrada = () => api.get(`${URL_PADRAO}/portas-entrada`);
 
   obterFluxosAlerta = () => api.get(`${URL_PADRAO}/fluxos-alerta`);
+
+  obterHistoricoPaginado = (encaminhamentoNAAPAId, paginaAtual, numeroPag) => {
+    return api.get(
+      `${URL_PADRAO}/${encaminhamentoNAAPAId}/historico-alteracoes?paginaAtual=${paginaAtual}&numeroPag=${numeroPag}`
+    );
+  };
 }
 
 export default new ServicoNAAPA();

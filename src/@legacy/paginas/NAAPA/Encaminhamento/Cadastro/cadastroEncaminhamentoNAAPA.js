@@ -20,12 +20,11 @@ import LabelSituacao from './componentes/labelSituacao';
 import ModalEncerramentoEncaminhamentoNAAPA from './componentes/modalEncerramentoEncaminhamentoNAAPA';
 import MotivoEncerramentoNAAPA from './componentes/motivoEncerramentoNAAPA';
 import situacaoNAAPA from '~/dtos/situacaoNAAPA';
+import { HistoricoNAAPA } from './componentes/historico';
 
 const CadastroEncaminhamentoNAAPA = () => {
-  const { id } = useParams();
+  const { id: encaminhamentoId } = useParams();
   const dispatch = useDispatch();
-
-  const encaminhamentoId = id;
 
   const novoEncaminhamentoNAAPADados = useSelector(
     state => state.localizarEstudante
@@ -178,6 +177,8 @@ const CadastroEncaminhamentoNAAPA = () => {
             codigoTurma={dadosEncaminhamentoNAAPA?.turma?.codigo}
             codigoAluno={dadosEncaminhamentoNAAPA?.aluno?.codigoAluno}
           />
+
+          <HistoricoNAAPA />
         </Col>
       </Row>
     </Col>
