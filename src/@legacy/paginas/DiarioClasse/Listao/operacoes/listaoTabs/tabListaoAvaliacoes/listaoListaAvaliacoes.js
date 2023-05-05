@@ -16,6 +16,8 @@ import { setTelaEmEdicao } from '~/redux/modulos/geral/actions';
 import { MarcadorSituacao } from '../tabFrequencia/lista/listaFrequencia.css';
 import ListaoCampoConceito from './componentes/listaoCampoConceito';
 import ListaoAuditoriaAvaliacoes from './listaoAuditoriaAvaliacoes';
+import FiltroComponentesRegenciaListao from '../componentes/filtroComponentesRegenciaListao';
+import { ocultarColunaAvaliacaoComponenteRegencia } from '@/@legacy/utils';
 
 export const ContainerTableAvaliacao = styled.div`
   table {
@@ -38,7 +40,6 @@ export const ContainerTableAvaliacao = styled.div`
   tr {
     position: relative;
   }
-
 `;
 
 const ListaoListaAvaliacoes = () => {
@@ -51,6 +52,8 @@ const ListaoListaAvaliacoes = () => {
     setDadosAvaliacao,
     somenteConsultaListao,
     periodoAbertoListao,
+    componenteCurricular,
+    componentesRegenciaListao,
   } = useContext(ListaoContext);
 
   const desabilitarCampos = somenteConsultaListao || !periodoAbertoListao;
@@ -135,9 +138,8 @@ const ListaoListaAvaliacoes = () => {
       item => item.atividadeAvaliativaId === avaliacao.id
     );
 
-    const indexAvaliacao = dadosEstudante.notasAvaliacoes.indexOf(
-      notaAvaliacao
-    );
+    const indexAvaliacao =
+      dadosEstudante.notasAvaliacoes.indexOf(notaAvaliacao);
 
     const professorNaoEditaNota = ehProfessorCj
       ? !avaliacao?.ehCJ
@@ -220,6 +222,15 @@ const ListaoListaAvaliacoes = () => {
   if (dadosAvaliacao?.bimestres?.[0]?.avaliacoes?.length) {
     dadosAvaliacao.bimestres[0].avaliacoes.forEach(avaliacao => {
       const descricaoAvaliacao = montarDescricaoEllipsis(avaliacao.nome, 15);
+
+      const ocultar = ocultarColunaAvaliacaoComponenteRegencia(
+        avaliacao?.disciplinas,
+        componentesRegenciaListao,
+        componenteCurricular?.regencia
+      );
+
+      if (ocultar) return;
+
       colunasEstudantes.push({
         title: () => (
           <div>
@@ -231,7 +242,7 @@ const ListaoListaAvaliacoes = () => {
               <div style={{ display: 'grid' }}>
                 {avaliacao.disciplinas.map(disciplina => (
                   <div
-                    alt={disciplina}
+                    key={shortid.generate()}
                     className="badge badge-pill border text-dark bg-white font-weight-light "
                   >
                     <Tooltip title={disciplina}>
@@ -260,7 +271,7 @@ const ListaoListaAvaliacoes = () => {
   return dadosAvaliacao?.bimestres?.[0]?.alunos?.length &&
     dadosAvaliacao?.bimestres?.[0]?.avaliacoes?.length ? (
     <>
-      <div className="col-sm-12 p-0 mb-3 mt-3 d-flex justify-content-start">
+      <div className="col-sm-12 p-0 mt-3 d-flex justify-content-between align-items-center">
         <Ordenacao
           conteudoParaOrdenar={dadosAvaliacao?.bimestres?.[0]?.alunos}
           ordenarColunaNumero="numeroChamada"
@@ -272,6 +283,7 @@ const ListaoListaAvaliacoes = () => {
             }
           }}
         />
+        <FiltroComponentesRegenciaListao />
       </div>
       <ContainerTableAvaliacao className="col-md-12 p-0">
         <DataTable

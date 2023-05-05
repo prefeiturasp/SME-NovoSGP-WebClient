@@ -1,11 +1,10 @@
-import PropTypes from 'prop-types';
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import shortid from 'shortid';
 import styled from 'styled-components';
 import { Base, Loader } from '~/componentes';
 import { erros, ServicoDisciplina } from '~/servicos';
-import ListaoContext from '../../../listaoContext';
+import { cloneDeep } from 'lodash';
 
 export const ContainerBtn = styled.div`
   span {
@@ -35,115 +34,101 @@ export const ContainerBtn = styled.div`
 
 const FiltroComponentesRegencia = props => {
   const {
-    componentesRegenciaListao,
-    setComponentesRegenciaListao,
-    componenteCurricular,
-  } = useContext(ListaoContext);
+    ehRegencia,
+    componentesRegencia,
+    setComponentesRegencia,
+    codigoComponenteCurricular,
+  } = props;
 
   const usuario = useSelector(store => store.usuario);
   const { turmaSelecionada } = usuario;
 
-  const { ehRegencia, ehSintese } = props;
-
   const [carregando, setCarregando] = useState(false);
 
-  const exibirFiltro = !ehSintese && ehRegencia;
+  const atualizarComponenteAtivo = componente => {
+    setComponentesRegencia(prevState => {
+      const updatedValues = cloneDeep(prevState);
 
-  const validarsetComponenteAtivo = componente => {
-    componentesRegenciaListao.forEach(c => {
-      c.ativo =
-        c.codigoComponenteCurricular === componente.codigoComponenteCurricular;
+      updatedValues.forEach(c => {
+        if (
+          c.codigoComponenteCurricular === componente.codigoComponenteCurricular
+        ) {
+          c.ativo = !c.ativo;
+        }
+      });
+
+      return [...updatedValues];
     });
-    setComponentesRegenciaListao([...componentesRegenciaListao]);
   };
 
   useEffect(() => {
-    if (componenteCurricular?.regencia) {
+    if (ehRegencia) {
       const turmaPrograma = !!(turmaSelecionada.ano === '0');
       setCarregando(true);
       ServicoDisciplina.obterDisciplinasPlanejamento(
-        componenteCurricular?.codigoComponenteCurricular,
+        codigoComponenteCurricular,
         turmaSelecionada?.turma,
         turmaPrograma,
-        componenteCurricular?.regencia
+        ehRegencia
       )
         .then(resposta => {
           if (resposta.data?.length) {
-            setComponentesRegenciaListao(resposta.data);
+            const lista = resposta.data.map(c => ({ ...c, ativo: true }));
+            setComponentesRegencia(lista);
           } else {
-            setComponentesRegenciaListao([]);
+            setComponentesRegencia([]);
           }
-          setCarregando(false);
         })
-        .catch(e => {
-          erros(e);
-          setComponentesRegenciaListao([]);
-          setCarregando(false);
-        });
+        .catch(e => erros(e))
+        .finally(() => setCarregando(false));
     }
 
     return () => {
-      setComponentesRegenciaListao([]);
+      setComponentesRegencia([]);
     };
+  }, [turmaSelecionada, ehRegencia, codigoComponenteCurricular]);
 
-  }, [turmaSelecionada, componenteCurricular]);
-
-  return exibirFiltro ? (
+  return ehRegencia ? (
     <Loader
       loading={carregando}
       tip="Carregando filtro"
       style={carregando ? { paddingBottom: '27px', paddingTop: '20px' } : {}}
     >
       <>
-        {componentesRegenciaListao?.length ? (
+        {componentesRegencia?.length ? (
           <div>
             <div className="row">
               <div className="col-md-12 d-flex justify-content-end">
-                Selecione um componente para consultar as notas ou conceitos dos
-                bimestres
+                Selecionar ou deselecionar componente(s) para exibir ou ocultar
+                avaliações
               </div>
             </div>
-          </div>
-        ) : (
-          <></>
-        )}
-
-        <ContainerBtn className="row pb-4" style={{ alignItems: 'center' }}>
-          <div className="col-md-12 d-flex justify-content-end">
-            {!ehSintese && ehRegencia && (
-              <>
+            <ContainerBtn className="row pb-4" style={{ alignItems: 'center' }}>
+              <div className="col-md-12 d-flex justify-content-end">
                 <div style={{ display: 'flex', flexWrap: 'wrap' }}>
-                  {componentesRegenciaListao.map(componente => (
+                  {componentesRegencia.map(componente => (
                     <span
                       key={shortid.generate()}
-                      className={componente.ativo ? 'ativo' : ''}
+                      className={componente?.ativo ? 'ativo' : ''}
                       onClick={() => {
-                        validarsetComponenteAtivo(componente);
+                        atualizarComponenteAtivo(componente);
                       }}
                     >
                       {componente.nome}
                     </span>
                   ))}
                 </div>
-              </>
-            )}
+              </div>
+            </ContainerBtn>
           </div>
-        </ContainerBtn>
+        ) : (
+          <></>
+        )}
       </>
     </Loader>
   ) : (
     <></>
   );
-};
-
-FiltroComponentesRegencia.propTypes = {
-  ehRegencia: PropTypes.bool,
-  ehSintese: PropTypes.bool,
-};
-
-FiltroComponentesRegencia.defaultProps = {
-  ehRegencia: false,
-  ehSintese: false,
 };
 
 export default FiltroComponentesRegencia;

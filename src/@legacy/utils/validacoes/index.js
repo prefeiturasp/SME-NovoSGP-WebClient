@@ -36,3 +36,25 @@ export const validarNavegacaoTela = async e => {
 export const isFieldRequired = (fieldName, validationSchema) => {
   return validationSchema?.fields?.[fieldName]?._exclusive?.required;
 };
+
+export const ocultarColunaAvaliacaoComponenteRegencia = (
+  componentesAvaliacao,
+  componentesRegencia,
+  ehRegencia
+) => {
+  if (
+    ehRegencia &&
+    componentesAvaliacao?.length &&
+    componentesRegencia?.length
+  ) {
+    const componentesOcultar = componentesAvaliacao.filter(nomeComponente => {
+      const ocultar = componentesRegencia.find(
+        co => co?.nome === nomeComponente && !co?.ativo
+      );
+      return !!ocultar;
+    });
+    return componentesOcultar?.length === componentesAvaliacao?.length;
+  }
+
+  return false;
+};

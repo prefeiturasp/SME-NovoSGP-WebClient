@@ -1,6 +1,7 @@
+import { ocultarColunaAvaliacaoComponenteRegencia } from '@/@legacy/utils';
 import { Tooltip } from 'antd';
 import PropTypes from 'prop-types';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useContext, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { DataTable, Loader } from '~/componentes';
 import LabelAusenteCellTable from '~/componentes-sgp/inputs/nota/labelAusenteCellTable';
@@ -8,18 +9,17 @@ import LabelInterdisciplinar from '~/componentes-sgp/interdisciplinar';
 import { obterDescricaoConceito } from '~/paginas/DiarioClasse/Listao/listaoFuncoes';
 import { erros } from '~/servicos';
 import ServicoNotaConceito from '~/servicos/Paginas/DiarioClasse/ServicoNotaConceito';
+import shortid from 'shortid';
+import ListaoContext from '../../../../listaoContext';
 
 const TabelaAvaliacoesFechamento = props => {
   const usuario = useSelector(store => store.usuario);
   const { turmaSelecionada } = usuario;
 
-  const {
-    codigoAluno,
-    periodoEscolarId,
-    ehNota,
-    listaTiposConceitos,
-    componenteCurricular,
-  } = props;
+  const { componenteCurricular, componentesRegenciaListao } =
+    useContext(ListaoContext);
+
+  const { codigoAluno, periodoEscolarId, ehNota, listaTiposConceitos } = props;
 
   const [dadosAlunoSelecionado, setDadosAlunoSelecionado] = useState();
   const [colunas, setColunas] = useState([]);
@@ -38,6 +38,14 @@ const TabelaAvaliacoesFechamento = props => {
     const cols = [];
     if (dadosAlunoSelecionado?.avaliacoes?.length) {
       dadosAlunoSelecionado.avaliacoes.forEach((avaliacao, index) => {
+        const ocultar = ocultarColunaAvaliacaoComponenteRegencia(
+          avaliacao?.disciplinas,
+          componentesRegenciaListao,
+          componenteCurricular?.regencia
+        );
+
+        if (ocultar) return;
+
         cols.push({
           ellipsis: true,
           title: () => (
@@ -56,6 +64,7 @@ const TabelaAvaliacoesFechamento = props => {
                 <div style={{ display: 'grid' }}>
                   {avaliacao.disciplinas.map(disciplina => (
                     <div
+                      key={shortid.generate()}
                       alt={disciplina}
                       className="badge badge-pill border text-dark bg-white font-weight-light "
                     >
@@ -99,7 +108,13 @@ const TabelaAvaliacoesFechamento = props => {
       });
     }
     setColunas(cols);
-  }, [dadosAlunoSelecionado, ehNota, listaTiposConceitos]);
+  }, [
+    dadosAlunoSelecionado,
+    ehNota,
+    listaTiposConceitos,
+    componentesRegenciaListao,
+    componenteCurricular,
+  ]);
 
   const obterAvaliacoesTabelaFechamento = useCallback(async () => {
     setCarregandoDados(true);
@@ -122,8 +137,8 @@ const TabelaAvaliacoesFechamento = props => {
   }, [turmaSelecionada, periodoEscolarId, codigoAluno, componenteCurricular]);
 
   useEffect(() => {
-    montarColunas(dadosAlunoSelecionado);
-  }, [dadosAlunoSelecionado, montarColunas]);
+    montarColunas();
+  }, [dadosAlunoSelecionado, componentesRegenciaListao, montarColunas]);
 
   useEffect(() => {
     if (codigoAluno) {
@@ -159,7 +174,6 @@ TabelaAvaliacoesFechamento.propTypes = {
   periodoEscolarId: PropTypes.number,
   ehNota: PropTypes.bool,
   listaTiposConceitos: PropTypes.oneOfType([PropTypes.array]),
-  componenteCurricular: PropTypes.oneOfType([PropTypes.any]),
 };
 
 TabelaAvaliacoesFechamento.defaultProps = {
@@ -167,7 +181,6 @@ TabelaAvaliacoesFechamento.defaultProps = {
   periodoEscolarId: null,
   ehNota: true,
   listaTiposConceitos: [],
-  componenteCurricular: null,
 };
 
 export default TabelaAvaliacoesFechamento;
