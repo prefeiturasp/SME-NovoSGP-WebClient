@@ -12,6 +12,7 @@ import {
   SelectComponent,
 } from '~/componentes';
 import { Cabecalho, FiltroHelper } from '~/componentes-sgp';
+import { OPCAO_TODOS } from '~/constantes';
 import { SGP_BUTTON_IMPRIMIR } from '~/constantes/ids/button';
 import { SGP_CHECKBOX_EXIBIR_HISTORICO } from '~/constantes/ids/checkbox';
 import {
@@ -162,6 +163,12 @@ const ListaOcorrencias = () => {
 
       if (lista?.length === 1) {
         setUe(lista[0]);
+      }
+
+      if (lista?.length > 1) {
+        const ueTodos = { nome: 'Todas', codigo: OPCAO_TODOS, id: OPCAO_TODOS };
+        lista.unshift(ueTodos);
+        setUe(ueTodos);
       }
 
       setListaUes(lista);
