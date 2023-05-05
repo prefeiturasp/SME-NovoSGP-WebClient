@@ -19,11 +19,7 @@ export const HistoricoNAAPA = () => {
     corBorda: Base.AzulBordaCollapse,
   };
 
-  const obterHistorico = async (
-    encaminhamentoNAAPAId,
-    paginaAtual,
-    numeroPag
-  ) => {
+  const obterHistorico = async (paginaAtual, numeroPag) => {
     const resposta = await ServicoNAAPA.obterHistoricoPaginado(
       encaminhamentoNAAPAId,
       paginaAtual,
@@ -49,11 +45,9 @@ export const HistoricoNAAPA = () => {
   };
 
   useEffect(() => {
-    obterHistorico(
-      encaminhamentoNAAPAId,
-      numeroRegistros,
-      numeroRegistrosPagina
-    );
+    if (encaminhamentoNAAPAId) {
+      obterHistorico(numeroRegistros, numeroRegistrosPagina);
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [encaminhamentoNAAPAId]);
 

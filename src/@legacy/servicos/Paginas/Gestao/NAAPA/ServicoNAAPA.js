@@ -369,11 +369,32 @@ class ServicoNAAPA {
 
   obterFluxosAlerta = () => api.get(`${URL_PADRAO}/fluxos-alerta`);
 
-  obterHistoricoPaginado = (encaminhamentoNAAPAId, paginaAtual, numeroPag) => {
+  obterHistoricoPaginado = (
+    encaminhamentoNAAPAId,
+    numeroPagina,
+    numeroRegistros
+  ) => {
     return api.get(
-      `${URL_PADRAO}/${encaminhamentoNAAPAId}/historico-alteracoes?paginaAtual=${paginaAtual}&numeroPag=${numeroPag}`
+      `${URL_PADRAO}/${encaminhamentoNAAPAId}/historico-alteracoes?numeroPagina=${numeroPagina}&numeroRegistros=${numeroRegistros}`
     );
   };
+
+  obterObservacoesPaginado = (
+    encaminhamentoNAAPAId,
+    numeroPagina,
+    numeroRegistros
+  ) => {
+    return api.get(
+      `${URL_PADRAO}/${encaminhamentoNAAPAId}/obsevacoes?numeroPagina=${numeroPagina}&numeroRegistros=${numeroRegistros}`
+    );
+  };
+
+  salvarEditarObservacao = params => {
+    return api.post(`${URL_PADRAO}/salvar-obsevacao`, params);
+  };
+
+  excluirObservacao = observacaoId =>
+    api.delete(`${URL_PADRAO}/excluir-obsevacao/${observacaoId}`);
 }
 
 export default new ServicoNAAPA();

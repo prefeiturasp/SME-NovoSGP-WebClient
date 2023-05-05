@@ -14,6 +14,7 @@ const ObservacoesUsuario = props => {
     esconderCaixaExterna,
     verificaProprietario,
     permissoes,
+    mostrarBotaoNotificar,
     mostrarListaNotificacao,
     obterUsuariosNotificadosDiarioBordo,
     usarLocalizadorFuncionario,
@@ -29,7 +30,7 @@ const ObservacoesUsuario = props => {
   const { podeIncluir, podeAlterar, podeExcluir } = permissoes;
 
   return (
-    <div className="col-sm-12 mb-2 mt-4">
+    <div className={`col-sm-12${esconderCaixaExterna ? '' : ' mb-2 mt-4'}`}>
       {!esconderLabel && <Label text="Observações" />}
       <ContainerObservacoesUsuario esconderCaixaExterna={esconderCaixaExterna}>
         <div style={{ margin: `${esconderCaixaExterna ? 0 : 15}px` }}>
@@ -37,6 +38,7 @@ const ObservacoesUsuario = props => {
             desabilitarBotaoNotificar={desabilitarBotaoNotificar}
             salvarObservacao={salvarObservacao}
             esconderCaixaExterna={esconderCaixaExterna}
+            mostrarBotaoNotificar={mostrarBotaoNotificar}
             podeIncluir={podeIncluir}
             obterUsuariosNotificadosDiarioBordo={
               obterUsuariosNotificadosDiarioBordo
@@ -52,6 +54,7 @@ const ObservacoesUsuario = props => {
             onClickSalvarEdicao={editarObservacao}
             onClickExcluir={excluirObservacao}
             verificaProprietario={verificaProprietario}
+            esconderCaixaExterna={esconderCaixaExterna}
             podeAlterar={podeAlterar}
             podeExcluir={podeExcluir}
             mostrarListaNotificacao={mostrarListaNotificacao}
@@ -73,6 +76,7 @@ ObservacoesUsuario.propTypes = {
   esconderCaixaExterna: PropTypes.bool,
   verificaProprietario: PropTypes.bool,
   permissoes: PropTypes.oneOfType([PropTypes.object]),
+  esconderBotaoNotificar: PropTypes.bool,
   mostrarListaNotificacao: PropTypes.bool,
   obterUsuariosNotificadosDiarioBordo: PropTypes.bool,
   usarLocalizadorFuncionario: PropTypes.bool,
@@ -93,6 +97,7 @@ ObservacoesUsuario.defaultProps = {
   esconderCaixaExterna: false,
   verificaProprietario: false,
   permissoes: { podeAlterar: true, podeIncluir: true, podeExcluir: true },
+  mostrarBotaoNotificar: true,
   mostrarListaNotificacao: false,
   obterUsuariosNotificadosDiarioBordo: true,
   usarLocalizadorFuncionario: false,

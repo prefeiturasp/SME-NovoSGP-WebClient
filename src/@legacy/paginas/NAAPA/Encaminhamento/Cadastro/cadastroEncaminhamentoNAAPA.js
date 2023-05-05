@@ -21,6 +21,7 @@ import ModalEncerramentoEncaminhamentoNAAPA from './componentes/modalEncerrament
 import MotivoEncerramentoNAAPA from './componentes/motivoEncerramentoNAAPA';
 import situacaoNAAPA from '~/dtos/situacaoNAAPA';
 import { HistoricoNAAPA } from './componentes/historico';
+import { ObservacoesNAAPA } from './componentes/observacoes';
 
 const CadastroEncaminhamentoNAAPA = () => {
   const { id: encaminhamentoId } = useParams();
@@ -178,7 +179,13 @@ const CadastroEncaminhamentoNAAPA = () => {
             codigoAluno={dadosEncaminhamentoNAAPA?.aluno?.codigoAluno}
           />
 
-          <HistoricoNAAPA />
+          {encaminhamentoId && (
+            <>
+              <ObservacoesNAAPA />
+
+              <HistoricoNAAPA />
+            </>
+          )}
         </Col>
       </Row>
     </Col>
