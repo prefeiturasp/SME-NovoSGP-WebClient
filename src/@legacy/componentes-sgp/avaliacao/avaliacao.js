@@ -330,7 +330,7 @@ const Avaliacao = props => {
 
   return (
     <>
-      {exibiDados ? (
+      {exibiDados && dados?.avaliacoes?.length ? (
         <FiltroComponentesRegencia
           ehRegencia={ehRegencia}
           componentesRegencia={componentesRegencia}

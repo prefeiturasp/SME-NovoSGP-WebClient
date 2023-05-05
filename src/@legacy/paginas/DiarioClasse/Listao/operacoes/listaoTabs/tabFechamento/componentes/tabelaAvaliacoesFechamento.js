@@ -25,6 +25,11 @@ const TabelaAvaliacoesFechamento = props => {
   const [colunas, setColunas] = useState([]);
   const [carregandoDados, setCarregandoDados] = useState(false);
 
+  const ocultarTabelaAvaliacoes =
+    componenteCurricular?.regencia &&
+    componentesRegenciaListao?.filter(c => !c?.ativo)?.length ===
+      componentesRegenciaListao?.length;
+
   const montarNotaConceito = (valorNotaConceito, ausente) => {
     return (
       <>
@@ -150,7 +155,7 @@ const TabelaAvaliacoesFechamento = props => {
 
   return (
     <Loader loading={carregandoDados}>
-      {dadosAlunoSelecionado ? (
+      {dadosAlunoSelecionado && !ocultarTabelaAvaliacoes ? (
         <DataTable
           scroll={{ x: '100%', y: 500 }}
           id={`tabela-aluno-${codigoAluno}`}
