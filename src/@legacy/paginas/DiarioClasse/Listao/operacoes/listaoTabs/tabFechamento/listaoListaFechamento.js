@@ -25,7 +25,6 @@ import {
   formatarFrequencia,
   tratarStringComponenteCurricularNome,
 } from '~/utils';
-import FiltroComponentesRegencia from '../componentes/filtroComponentesRegencia';
 import MarcadorAguardandoAprovacao from '../componentes/marcadorAguardandoAprovacao';
 import {
   LinhaTabela,
@@ -37,6 +36,7 @@ import ColunaNotaConceitoPorBimestre from './componentes/colunaNotaConceitoPorBi
 import DadosCabecalhoTabFechamentoListao from './componentes/dadosCabecalhoTabFechamentoListao';
 import ModalJustificativaFechamento from './componentes/modalJustificativaFechamento';
 import TabelaAvaliacoesFechamento from './componentes/tabelaAvaliacoesFechamento';
+import FiltroComponentesRegenciaListao from '../componentes/filtroComponentesRegenciaListao';
 
 export const ContainerTableFechamento = styled.div`
   tr {
@@ -678,11 +678,12 @@ const ListaoListaFechamento = props => {
         />
       )}
       <LinhaTabela className="col-md-12 p-0">
-        {ehFinal && (
-          <FiltroComponentesRegencia
-            ehRegencia={ehRegencia}
+        {ehFinal || dadosFechamento?.possuiAvaliacao ? (
+          <FiltroComponentesRegenciaListao
             ehSintese={!!dadosFechamento?.ehSintese}
           />
+        ) : (
+          <></>
         )}
         <DataTable
           scroll={{ x: '100%', y: 500 }}
@@ -730,7 +731,6 @@ const ListaoListaFechamento = props => {
                       Number(dadosFechamento?.notaTipo) === notasConceitos.Notas
                     }
                     listaTiposConceitos={dadosFechamento?.listaTiposConceitos}
-                    componenteCurricular={componenteCurricular}
                   />
                 )}
               </>
@@ -769,7 +769,6 @@ const ListaoListaFechamento = props => {
                   Number(dadosFechamento?.notaTipo) === notasConceitos.Notas
                 }
                 listaTiposConceitos={dadosFechamento?.listaTiposConceitos}
-                componenteCurricular={componenteCurricular}
               />
             );
           }}

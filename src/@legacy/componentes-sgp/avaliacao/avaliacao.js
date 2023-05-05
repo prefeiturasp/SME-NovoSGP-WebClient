@@ -1,7 +1,7 @@
 /* eslint-disable react/prop-types */
 import { Tooltip } from 'antd';
 import PropTypes from 'prop-types';
-import React from 'react';
+import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import shortid from 'shortid';
 import { LabelSemDados, MarcadorTriangulo } from '~/componentes';
@@ -20,7 +20,10 @@ import {
   setModoEdicaoGeral,
   setModoEdicaoGeralNotaFinal,
 } from '~/redux/modulos/notasConceitos/actions';
-import { formatarFrequencia } from '~/utils';
+import {
+  formatarFrequencia,
+  ocultarColunaAvaliacaoComponenteRegencia,
+} from '~/utils';
 import Nota from '../inputs/nota';
 import { moverFocoCampoNota } from '../inputs/nota/funcoes';
 import LabelInterdisciplinar from '../interdisciplinar';
@@ -31,6 +34,7 @@ import CampoConceitoFinal from './campoConceitoFinal';
 import ColunaNotaFinalRegencia from './colunaNotaFinalRegencia';
 import LinhaConceitoFinal from './linhaConceitoFinal';
 import SinalizacaoAEE from '../SinalizacaoAEE/sinalizacaoAEE';
+import FiltroComponentesRegencia from '../FiltroComponentesRegencia';
 
 const Avaliacao = props => {
   const dispatch = useDispatch();
@@ -44,11 +48,15 @@ const Avaliacao = props => {
     ehRegencia,
     exibirTootipStatusGsa,
     exibirStatusAlunoAusente,
+    disciplinaSelecionada,
   } = props;
 
   const expandirLinha = useSelector(
     store => store.notasConceitos.expandirLinha
   );
+  const exibiDados = dados?.alunos?.length;
+
+  const [componentesRegencia, setComponentesRegencia] = useState([]);
 
   const onChangeNotaConceito = (nota, valorNovo) => {
     if (!desabilitarCampos && nota.podeEditar) {
@@ -79,8 +87,16 @@ const Avaliacao = props => {
   };
 
   const montarCabecalhoAvaliacoes = () => {
-    return dados?.avaliacoes?.length > 0
-      ? dados.avaliacoes.map(avaliacao => {
+    return dados?.avaliacoes?.length > 0 ? (
+      dados.avaliacoes.map(avaliacao => {
+        const ocultar = ocultarColunaAvaliacaoComponenteRegencia(
+          avaliacao?.disciplinas,
+          componentesRegencia,
+          ehRegencia
+        );
+
+        if (ocultar) return <></>;
+
         return (
           <th key={shortid.generate()} className={obterTamanhoColuna()}>
             <div className="texto-header-avaliacao">
@@ -105,12 +121,24 @@ const Avaliacao = props => {
           </th>
         );
       })
-      : '';
+    ) : (
+      <></>
+    );
   };
 
   const montarCabecalhoInterdisciplinar = () => {
-    return dados.avaliacoes && dados.avaliacoes.length > 0
-      ? dados.avaliacoes.map(avaliacao => {
+    let cabecalho = <></>;
+
+    if (dados?.avaliacoes?.length > 0) {
+      cabecalho = dados.avaliacoes.map(avaliacao => {
+        const ocultar = ocultarColunaAvaliacaoComponenteRegencia(
+          avaliacao?.disciplinas,
+          componentesRegencia,
+          ehRegencia
+        );
+
+        if (ocultar) return <></>;
+
         return avaliacao.ehInterdisciplinar ? (
           <th key={shortid.generate()}>
             <LabelInterdisciplinar disciplinas={avaliacao.disciplinas} />
@@ -118,8 +146,21 @@ const Avaliacao = props => {
         ) : (
           <th key={shortid.generate()} />
         );
-      })
-      : '';
+      });
+    } else {
+      return cabecalho;
+    }
+
+    return (
+      <tr key={shortid.generate()}>
+        <th
+          className="sticky-col col-numero-chamada cinza-fundo"
+          style={{ borderRight: 'none' }}
+        />
+        <th className="sticky-col col-nome-aluno cinza-fundo" />
+        {cabecalho}
+      </tr>
+    );
   };
 
   const montarCampoNotaConceito = (nota, aluno, linha, coluna) => {
@@ -130,9 +171,10 @@ const Avaliacao = props => {
     const desabilitar =
       desabilitarCampos || desabilitarNota || !nota?.podeEditar;
 
+    let campo = <></>;
     switch (Number(notaTipo)) {
       case notasConceitos.Notas:
-        return (
+        campo = (
           <Nota
             id={`${SGP_INPUT_NOTA}_LINHA_${linha}_COLUNA_${coluna}`}
             onKeyDown={e =>
@@ -147,8 +189,9 @@ const Avaliacao = props => {
             }
           />
         );
+        break;
       case notasConceitos.Conceitos:
-        return (
+        campo = (
           <CampoConceito
             id={`${SGP_SELECT_NOTA}_LINHA_${linha}_COLUNA_${coluna}`}
             nota={nota}
@@ -159,9 +202,28 @@ const Avaliacao = props => {
             listaTiposConceitos={dados.listaTiposConceitos}
           />
         );
+        break;
       default:
-        return '';
+        campo = <></>;
+        break;
     }
+
+    const ocultar = ocultarColunaAvaliacaoComponenteRegencia(
+      avaliacao?.disciplinas,
+      componentesRegencia,
+      ehRegencia
+    );
+
+    return ocultar ? (
+      <></>
+    ) : (
+      <td
+        key={shortid.generate()}
+        className={`${obterTamanhoColuna()} position-relative`}
+      >
+        {campo}
+      </td>
+    );
   };
 
   const montaNotaFinal = (aluno, index) => {
@@ -268,7 +330,17 @@ const Avaliacao = props => {
 
   return (
     <>
-      {dados && dados.alunos && dados.alunos.length ? (
+      {exibiDados ? (
+        <FiltroComponentesRegencia
+          ehRegencia={ehRegencia}
+          componentesRegencia={componentesRegencia}
+          setComponentesRegencia={setComponentesRegencia}
+          codigoComponenteCurricular={disciplinaSelecionada}
+        />
+      ) : (
+        <></>
+      )}
+      {exibiDados ? (
         <TabelaColunasFixas>
           <div className="botao-ordenacao-avaliacao">
             <Ordenacao
@@ -281,6 +353,7 @@ const Avaliacao = props => {
               }}
             />
           </div>
+
           <div className="wrapper">
             <div className="header-fixo">
               <table className="table">
@@ -312,16 +385,9 @@ const Avaliacao = props => {
                     </th>
                   </tr>
                   {dados.avaliacoes && dados.avaliacoes.length > 0 ? (
-                    <tr>
-                      <th
-                        className="sticky-col col-numero-chamada cinza-fundo"
-                        style={{ borderRight: 'none' }}
-                      />
-                      <th className="sticky-col col-nome-aluno cinza-fundo" />
-                      {montarCabecalhoInterdisciplinar()}
-                    </tr>
+                    montarCabecalhoInterdisciplinar()
                   ) : (
-                    ''
+                    <></>
                   )}
                 </thead>
               </table>
@@ -347,31 +413,31 @@ const Avaliacao = props => {
                           </td>
 
                           <td className="sticky-col col-nome-aluno">
-                            <div className="d-flex" style={{ justifyContent: 'space-between', alignItems: 'center' }}>
+                            <div
+                              className="d-flex"
+                              style={{
+                                justifyContent: 'space-between',
+                                alignItems: 'center',
+                              }}
+                            >
                               {aluno.nome}
                               <div className="d-flex justify-content-end">
-                                <SinalizacaoAEE exibirSinalizacao={aluno?.ehAtendidoAEE} />
+                                <SinalizacaoAEE
+                                  exibirSinalizacao={aluno?.ehAtendidoAEE}
+                                />
                               </div>
                             </div>
                           </td>
 
-
                           {aluno.notasAvaliacoes.length
                             ? aluno.notasAvaliacoes.map((nota, index) => {
-                              return (
-                                <td
-                                  key={shortid.generate()}
-                                  className={`${obterTamanhoColuna()} position-relative`}
-                                >
-                                  {montarCampoNotaConceito(
-                                    nota,
-                                    aluno,
-                                    i,
-                                    index
-                                  )}
-                                </td>
-                              );
-                            })
+                                return montarCampoNotaConceito(
+                                  nota,
+                                  aluno,
+                                  i,
+                                  index
+                                );
+                              })
                             : ''}
                           <td className="sticky-col col-nota-final linha-nota-conceito-final">
                             {ehRegencia ? (
@@ -429,14 +495,14 @@ const Avaliacao = props => {
 
 Avaliacao.propTypes = {
   notaTipo: PropTypes.number,
-  onChangeOrdenacao: () => { },
+  onChangeOrdenacao: () => {},
   exibirTootipStatusGsa: PropTypes.bool,
   exibirStatusAlunoAusente: PropTypes.bool,
 };
 
 Avaliacao.defaultProps = {
   notaTipo: 0,
-  onChangeOrdenacao: () => { },
+  onChangeOrdenacao: () => {},
   exibirTootipStatusGsa: false,
   exibirStatusAlunoAusente: false,
 };
