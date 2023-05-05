@@ -145,7 +145,7 @@ const GraficoTotalEstudantesPresenciasRemotosAusentes = ({
   const limparDatas = () => {
     setDataInicio(undefined);
     setDataFim(undefined);
-    setDataDiaria(moment());
+    setDataDiaria(moment().year(anoLetivo));
     setDataSemanal(undefined);
   };
 
