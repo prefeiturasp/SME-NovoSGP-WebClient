@@ -62,7 +62,7 @@ const FiltroComponentesRegencia = props => {
   };
 
   useEffect(() => {
-    if (ehRegencia) {
+    if (ehRegencia && codigoComponenteCurricular) {
       const turmaPrograma = !!(turmaSelecionada.ano === '0');
       setCarregando(true);
       ServicoDisciplina.obterDisciplinasPlanejamento(
@@ -88,7 +88,7 @@ const FiltroComponentesRegencia = props => {
     };
   }, [turmaSelecionada, ehRegencia, codigoComponenteCurricular]);
 
-  return ehRegencia ? (
+  return ehRegencia && codigoComponenteCurricular ? (
     <Loader
       loading={carregando}
       tip="Carregando filtro"
@@ -99,8 +99,7 @@ const FiltroComponentesRegencia = props => {
           <div>
             <div className="row">
               <div className="col-md-12 d-flex justify-content-end">
-                Selecionar ou deselecionar componente(s) para exibir ou ocultar
-                avaliações
+                Filtrar avaliações por componente curricular
               </div>
             </div>
             <ContainerBtn className="row pb-4" style={{ alignItems: 'center' }}>
