@@ -554,7 +554,7 @@ const ListaOcorrencias = () => {
                   lista={listaModalidades}
                   valueOption="valor"
                   valueText="descricao"
-                  disabled={!ue?.codigo}
+                  disabled={!ue?.codigo || ue?.codigo === OPCAO_TODOS}
                   onChange={onChangeModalidade}
                   valueSelect={modalidade}
                 />
@@ -570,7 +570,7 @@ const ListaOcorrencias = () => {
                     valueText="desc"
                     label="Semestre"
                     placeholder="Selecione o semestre"
-                    disabled={!modalidade || listaSemestres?.length === 1}
+                    disabled={!modalidade || listaSemestres?.length === 1 || !ue?.codigo || ue?.codigo === OPCAO_TODOS}
                     valueSelect={semestre}
                     onChange={onChangeSemestre}
                   />
@@ -587,7 +587,7 @@ const ListaOcorrencias = () => {
                   valueOption="id"
                   valueText="nomeFiltro"
                   label="Turma"
-                  disabled={!modalidade || (ehEJA && !semestre)}
+                  disabled={!modalidade || (ehEJA && !semestre) || !ue?.codigo || ue?.codigo === OPCAO_TODOS}
                   valueSelect={turmaId}
                   onChange={onChangeTurma}
                   placeholder="Turma"
@@ -595,23 +595,25 @@ const ListaOcorrencias = () => {
                 />
               </Loader>
             </Col>
-            <Col sm={24} md={12}>
-              <CampoTexto
-                id="SGP_INPUT_TEXT_ALUNO_NOME"
-                value={alunoNomeExibicao}
-                onChange={onChangeAlunoNome}
-                label="Crianças/Estudantes"
-                placeholder="Procure pelo nome da criança"
-                iconeBusca
-                allowClear
-              />
-            </Col>
+                <Col sm={24} md={12}>
+                <CampoTexto
+                  id="SGP_INPUT_TEXT_ALUNO_NOME"
+                  value={alunoNomeExibicao}
+                  onChange={onChangeAlunoNome}
+                  label="Crianças/Estudantes"
+                  placeholder="Procure pelo nome da criança"
+                  desabilitado={!ue?.codigo || ue?.codigo === OPCAO_TODOS}
+                  iconeBusca
+                  allowClear
+                />
+              </Col>
             <Col sm={24} md={12}>
               <CampoTexto
                 id="SGP_INPUT_TEXT_SERVIDOR_NOME"
                 value={servidorNomeExibicao}
                 onChange={onChangeServidorNome}
-                label="Servidor/Funcionário"
+                label= "Servidor/Funcionário"
+                desabilitado={!ue?.codigo || ue?.codigo === OPCAO_TODOS}
                 placeholder="Procure pelo nome do servidor/funcionário"
                 iconeBusca
                 allowClear
