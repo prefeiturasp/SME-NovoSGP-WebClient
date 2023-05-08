@@ -18,13 +18,8 @@ const GraficoTotalEstudantesPresenciasRemotosAusentes = ({
   modalidade,
   semestre,
 }) => {
+  const valorPadrao = moment();
   const mesAtual = Number(moment().format('MM'));
-
-  const valorPadrao = useMemo(() => {
-    const dataParcial = moment().format('MM-DD');
-    const dataInteira = moment(`${dataParcial}-${anoLetivo}`);
-    return dataInteira;
-  }, [anoLetivo]);
 
   const [anoTurma, setAnoTurma] = useState();
   const [carregandoSemanas, setCarregandoSemanas] = useState(false);
@@ -66,21 +61,22 @@ const GraficoTotalEstudantesPresenciasRemotosAusentes = ({
     const dataSelecionada = dataInicio || dataDiariaSelecionada;
     const dataMensalSelecionada = ehTipoMensal ? dataMensal : undefined;
 
-    const retorno = await ServicoDashboardFrequencia.obterTotalEstudantesPresenciasRemotosAusentes(
-      anoLetivo,
-      dreId,
-      ueId,
-      modalidade,
-      semestre,
-      anoTurma,
-      dataSelecionada,
-      dataFim,
-      tipoPeriodoDashboard,
-      dataMensalSelecionada,
-      false
-    )
-      .catch(e => erros(e))
-      .finally(() => setExibirLoader(false));
+    const retorno =
+      await ServicoDashboardFrequencia.obterTotalEstudantesPresenciasRemotosAusentes(
+        anoLetivo,
+        dreId,
+        ueId,
+        modalidade,
+        semestre,
+        anoTurma,
+        dataSelecionada,
+        dataFim,
+        tipoPeriodoDashboard,
+        dataMensalSelecionada,
+        false
+      )
+        .catch(e => erros(e))
+        .finally(() => setExibirLoader(false));
 
     let dadosRetorno = [];
     if (retorno?.data) {
