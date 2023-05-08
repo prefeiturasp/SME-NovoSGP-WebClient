@@ -385,16 +385,16 @@ class ServicoNAAPA {
     numeroRegistros
   ) => {
     return api.get(
-      `${URL_PADRAO}/${encaminhamentoNAAPAId}/obsevacoes?numeroPagina=${numeroPagina}&numeroRegistros=${numeroRegistros}`
+      `${URL_PADRAO}/${encaminhamentoNAAPAId}/observacoes?numeroPagina=${numeroPagina}&numeroRegistros=${numeroRegistros}`
     );
   };
 
   salvarEditarObservacao = params => {
-    return api.post(`${URL_PADRAO}/salvar-obsevacao`, params);
+    return api.post(`${URL_PADRAO}/salvar-observacao`, params);
   };
 
   excluirObservacao = observacaoId =>
-    api.delete(`${URL_PADRAO}/excluir-obsevacao/${observacaoId}`);
+    api.delete(`${URL_PADRAO}/excluir-observacao/${observacaoId}`);
 }
 
 export default new ServicoNAAPA();
