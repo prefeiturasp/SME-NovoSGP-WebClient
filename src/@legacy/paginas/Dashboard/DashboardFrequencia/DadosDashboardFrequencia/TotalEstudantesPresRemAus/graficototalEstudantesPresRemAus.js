@@ -145,7 +145,7 @@ const GraficoTotalEstudantesPresenciasRemotosAusentes = ({
   const limparDatas = () => {
     setDataInicio(undefined);
     setDataFim(undefined);
-    setDataDiaria(moment());
+    setDataDiaria(moment().year(anoLetivo));
     setDataSemanal(undefined);
   };
 
@@ -196,7 +196,7 @@ const GraficoTotalEstudantesPresenciasRemotosAusentes = ({
 
   const obterSemanas = useCallback(async () => {
     setCarregandoSemanas(true);
-    const retorno = await ServicoDashboardFrequencia.obterSemanas(anoLetivo)
+    const retorno = await ServicoDashboardFrequencia.obterSemanas(anoLetivo, modalidade, semestre)
       .catch(e => erros(e))
       .finally(() => setCarregandoSemanas(false));
 

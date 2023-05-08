@@ -806,6 +806,7 @@ const CompensacaoAusenciaForm = ({ match }) => {
           item => {
             return {
               ...item,
+              quantidadeFaltasCompensadas: '',
               alunoSemSalvar: true,
             };
           }
