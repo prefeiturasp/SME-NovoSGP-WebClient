@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
 import { useSelector } from 'react-redux';
@@ -18,7 +18,7 @@ const GraficoTotalEstudantesPresenciasRemotosAusentes = ({
   modalidade,
   semestre,
 }) => {
-  const valorPadrao = moment();
+  const valorPadrao = moment().year(anoLetivo);
   const mesAtual = Number(moment().format('MM'));
 
   const [anoTurma, setAnoTurma] = useState();
