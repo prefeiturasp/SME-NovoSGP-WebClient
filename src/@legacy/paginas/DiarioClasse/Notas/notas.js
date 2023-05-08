@@ -1523,6 +1523,7 @@ const Notas = () => {
                           key={segundoBimestre.numero}
                         >
                           <Avaliacao
+                            disciplinaSelecionada={disciplinaSelecionada}
                             dados={segundoBimestre}
                             notaTipo={notaTipo}
                             onChangeOrdenacao={onChangeOrdenacao}
@@ -1551,6 +1552,7 @@ const Notas = () => {
                           key={terceiroBimestre.numero}
                         >
                           <Avaliacao
+                            disciplinaSelecionada={disciplinaSelecionada}
                             dados={terceiroBimestre}
                             notaTipo={notaTipo}
                             onChangeOrdenacao={onChangeOrdenacao}
@@ -1579,6 +1581,7 @@ const Notas = () => {
                           key={quartoBimestre.numero}
                         >
                           <Avaliacao
+                            disciplinaSelecionada={disciplinaSelecionada}
                             dados={quartoBimestre}
                             notaTipo={notaTipo}
                             onChangeOrdenacao={onChangeOrdenacao}
