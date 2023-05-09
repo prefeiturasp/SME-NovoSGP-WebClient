@@ -29,7 +29,7 @@ export const ObservacoesNAAPA = () => {
     ).catch(e => erros(e));
 
     if (resposta?.data?.items) {
-      dispatch(setDadosObservacoesUsuario(resposta.data));
+      dispatch(setDadosObservacoesUsuario(resposta.data.items));
       setNumeroRegistros(resposta.data.totalRegistros);
     } else {
       dispatch(setDadosObservacoesUsuario([]));

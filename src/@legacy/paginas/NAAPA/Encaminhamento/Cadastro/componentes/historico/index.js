@@ -27,7 +27,7 @@ export const HistoricoNAAPA = () => {
     ).catch(e => erros(e));
 
     if (resposta?.data?.items) {
-      setDadosHistorico(resposta.data);
+      setDadosHistorico(resposta.data.items);
       setNumeroRegistros(resposta.data.totalRegistros);
     } else {
       setDadosHistorico([]);
@@ -60,7 +60,7 @@ export const HistoricoNAAPA = () => {
       indice={`history-collapse-indice`}
       id={SGP_COLLAPSE_HISTORICO_ALTERACOES_NAAPA}
     >
-      {dadosHistorico?.items?.map((dados, index) => {
+      {dadosHistorico?.map((dados, index) => {
         return <HistoricoItem key={index} historico={dados} />;
       })}
 

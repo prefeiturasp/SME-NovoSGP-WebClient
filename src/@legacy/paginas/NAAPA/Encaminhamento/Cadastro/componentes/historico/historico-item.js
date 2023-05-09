@@ -3,29 +3,20 @@ import { Container } from './styles';
 export const HistoricoItem = ({ historico }) => {
   return (
     <Container>
-      <div className="bold">{historico?.descricao}</div>
-
-      {historico?.alteradoDto && (
+      {historico && (
         <>
-          <div className="bold">Seção: {historico.alteradoDto?.secao}</div>
-          {historico.alteradoDto?.dataExclusao ? (
-            <div>
-              Excluiu o atendimento registrado no dia{' '}
-              {historico?.alteradoDto.dataExclusao}
-            </div>
-          ) : (
-            <>
-              {historico.alteradoDto?.camposInseridos && (
-                <div>
-                  Campos inseridos: {historico.alteradoDto.camposInseridos}
-                </div>
-              )}
-              {historico.alteradoDto?.camposAlterados && (
-                <div>
-                  Campos alterados: {historico.alteradoDto.camposAlterados}
-                </div>
-              )}
-            </>
+          <div className="bold">{historico?.descricao}</div>
+
+          {historico?.secao && (
+            <div className="bold">Seção: {historico?.secao}</div>
+          )}
+
+          {historico?.camposInseridos && (
+            <div>Campos inseridos: {historico.camposInseridos}</div>
+          )}
+
+          {historico?.camposAlterados && (
+            <div>Campos alterados: {historico.camposAlterados}</div>
           )}
         </>
       )}
