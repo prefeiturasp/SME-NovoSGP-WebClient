@@ -6,7 +6,16 @@ import ServicoEncaminhamentoAEE from '~/servicos/Paginas/Relatorios/AEE/ServicoE
 import { erros } from '~/servicos';
 
 export const PAAIResponsavel = React.memo(
-  ({ name, form, onChange, disabled, allowClear, multiple, ehRelatorio }) => {
+  ({
+    name,
+    form,
+    onChange,
+    disabled,
+    allowClear,
+    multiple,
+    ehRelatorio,
+    label,
+  }) => {
     const [exibirLoader, setExibirLoader] = useState(false);
     const [responsaveisPAAI, setResponsaveisPAAI] = useState([]);
 
@@ -14,11 +23,12 @@ export const PAAIResponsavel = React.memo(
 
     const obterResponsaveisPAAI = useCallback(async () => {
       setExibirLoader(true);
-      const resposta = await ServicoEncaminhamentoAEE.obterResponsaveisPAAIPesquisa(
-        null,
-        dreCodigo,
-        ehRelatorio
-      ).catch(e => erros(e));
+      const resposta =
+        await ServicoEncaminhamentoAEE.obterResponsaveisPAAIPesquisa(
+          null,
+          dreCodigo,
+          ehRelatorio
+        ).catch(e => erros(e));
 
       const dados = resposta?.data?.items;
       if (dados?.length) {
@@ -41,7 +51,6 @@ export const PAAIResponsavel = React.memo(
       form.setFieldValue(name, undefined);
 
       if (dreCodigo) obterResponsaveisPAAI();
-
     }, [dreCodigo]);
 
     return (
@@ -53,7 +62,7 @@ export const PAAIResponsavel = React.memo(
           name={name}
           disabled={disabled}
           multiple={multiple}
-          label="PAAI responsável"
+          label={label}
           allowClear={allowClear}
           lista={responsaveisPAAI}
           valueOption="codigoRF"
@@ -82,6 +91,7 @@ PAAIResponsavel.propTypes = {
   multiple: PropTypes.bool,
   form: PropTypes.oneOfType([PropTypes.any]),
   ehRelatorio: PropTypes.bool,
+  label: PropTypes.string,
 };
 
 PAAIResponsavel.defaultProps = {
@@ -92,4 +102,5 @@ PAAIResponsavel.defaultProps = {
   multiple: false,
   onChange: () => null,
   ehRelatorio: false,
+  label: 'PAAI responsável',
 };

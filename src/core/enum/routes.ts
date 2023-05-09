@@ -96,4 +96,5 @@ export enum ROUTES {
   REDEFINIR_SENHA_TOKEN = '/redefinir-senha/:token',
   RECUPERAR_SENHA = '/recuperar-senha',
   RELATORIO_SONDAGEM_ANALITICO = '/relatorios/sondagem/analitico',
+  RELATORIO_AEE_REGISTRO_ITINERANCIA_IMPRESSAO = '/relatorios/aee/registro-itinerancia',
 }
