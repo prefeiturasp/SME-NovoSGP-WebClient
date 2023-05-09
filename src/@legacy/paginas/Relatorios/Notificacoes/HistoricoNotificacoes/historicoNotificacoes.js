@@ -54,7 +54,6 @@ const HistoricoNotificacoes = () => {
   ] = useState(false);
 
   const [modoEdicao, setModoEdicao] = useState(false);
-
   const opcoesExibirDescricao = [
     { label: 'Sim', value: true },
     { label: 'Não', value: false },
@@ -64,6 +63,8 @@ const HistoricoNotificacoes = () => {
     { label: 'Sim', value: true },
     { label: 'Não', value: false },
   ];
+
+  const [consideraHistorico, setConsideraHistorico] = useState(false);
 
   const obterAnosLetivos = useCallback(async () => {
     setCarregandoGeral(true);
@@ -108,7 +109,7 @@ const HistoricoNotificacoes = () => {
   const obterUes = useCallback(async dre => {
     if (dre) {
       setCarregandoGeral(true);
-      const retorno = await ServicoFiltroRelatorio.obterUes(dre, false, anoLetivo).catch(e => {
+      const retorno = await ServicoFiltroRelatorio.obterUes(dre, consideraHistorico, anoLetivo).catch(e => {
         erros(e);
         setCarregandoGeral(false);
       });
@@ -199,19 +200,18 @@ const HistoricoNotificacoes = () => {
 
   const obterTurmas = useCallback(async () => {
     setCarregandoGeral(true);
-    const resposta = await ServicoFiltroRelatorio.obterTurmasPorCodigoUeModalidadeSemestre(
-      anoLetivo,
+    const resposta = await AbrangenciaServico.buscarTurmas(
       codigoUe,
       modalidadeId,
-      semestre
-    )
-      .catch(e => erros(e))
-      .finally(() => setCarregandoGeral(false));
+      '',
+      anoLetivo,
+      consideraHistorico
+    );
 
     if (resposta?.data?.length) {
       const lista = resposta.data;
       if (lista.length > 1) {
-        lista.unshift({ valor: OPCAO_TODOS, descricao: 'Todas' });
+        lista.unshift({ valor: OPCAO_TODOS, nomeFiltro: 'Todas' });
       }
 
       setListaTurmas(lista);
@@ -219,6 +219,8 @@ const HistoricoNotificacoes = () => {
         setTurmaId(lista[0].valor);
       }
     }
+
+    setCarregandoGeral(false);
   }, [anoLetivo, codigoUe, modalidadeId, semestre]);
 
   useEffect(() => {
@@ -437,9 +439,24 @@ const HistoricoNotificacoes = () => {
 
   const onChangeAnoLetivo = ano => {
     setAnoLetivo(ano);
+    
+    if(ano !== undefined){ 
+      setConsideraHistorico(Number(ano) !== Number(new Date().getFullYear()));
+      obterDres();
+    }
+    else{
+      setListaDres([]);
+      setCodigoDre();
+    }
 
+    setListaUes([]);
+    setCodigoUe();
+    
+    setListaModalidades([]);
+    setModalidadeId();
+    
     setListaSemestre([]);
-    setSemestre(undefined);
+    setSemestre();
 
     setListaTurmas([]);
     setTurmaId();
@@ -469,7 +486,7 @@ const HistoricoNotificacoes = () => {
   const onChangeTurma = valor => {
     setTurmaId(valor);
     let desabilitar = false;
-    if (valor === OPCAO_TODOS && !usuarioRf) {
+    if (valor === OPCAO_TODOS) {
       desabilitar = true;
       setExibirDescricao(false);
       setExibirNotificacoesExcluidas(false);
@@ -511,7 +528,7 @@ const HistoricoNotificacoes = () => {
                   lista={listaDres}
                   valueOption="codigo"
                   valueText="nome"
-                  disabled={listaDres && listaDres.length === 1}
+                  disabled={listaDres && listaDres.length === 1 || !codigoDre}
                   onChange={onChangeDre}
                   valueSelect={codigoDre}
                   placeholder="Diretoria Regional de Educação (DRE)"
@@ -524,7 +541,7 @@ const HistoricoNotificacoes = () => {
                   lista={listaUes}
                   valueOption="valor"
                   valueText="desc"
-                  disabled={listaUes && listaUes.length === 1}
+                  disabled={listaUes && listaUes.length === 1 || !codigoUe}
                   onChange={onChangeUe}
                   valueSelect={codigoUe}
                   placeholder="Unidade Escolar (UE)"
@@ -563,13 +580,12 @@ const HistoricoNotificacoes = () => {
                 <SelectComponent
                   id="drop-turma"
                   lista={listaTurmas}
-                  valueOption="valor"
-                  valueText="descricao"
+                  valueOption="codigo"
+                  valueText="nomeFiltro"
                   label="Turma"
                   disabled={
                     !modalidadeId ||
-                    (listaTurmas && listaTurmas.length === 1) ||
-                    usuarioRf
+                    (listaTurmas && listaTurmas.length === 1)
                   }
                   valueSelect={turmaId}
                   onChange={onChangeTurma}
