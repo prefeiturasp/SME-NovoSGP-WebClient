@@ -113,6 +113,7 @@ import Login from '~/paginas/Login';
 import ListaoPrincipal from '~/paginas/DiarioClasse/Listao';
 import RelatorioEncaminhamentonNAAPA from '~/paginas/Relatorios/NAAPA/encaminhamento/relatorioEncaminhamentoNAAPA';
 import RelatorioSondagemAnalitico from '~/paginas/Relatorios/Sondagem/relatorioSondagem';
+import RelatorioRegistroItinerancia from '@/@legacy/paginas/Relatorios/AEE/registroItinerancia/relatorioRegistroItinerancia';
 
 export interface RouteProps {
   path: string;
@@ -1633,6 +1634,17 @@ route.set(ROUTES.RELATORIO_SONDAGEM_ANALITICO, {
   tipo: RotasTipo.EstruturadaAutenticada,
   temPermissionamento: true,
   chavePermissao: ROUTES.RELATORIO_SONDAGEM_ANALITICO,
+});
+
+route.set(ROUTES.RELATORIO_AEE_REGISTRO_ITINERANCIA_IMPRESSAO, {
+  breadcrumbName: 'Registro de itinerância',
+  menu: ['Relatórios', 'AEE'],
+  parent: '/',
+  component: RelatorioRegistroItinerancia,
+  exact: true,
+  tipo: RotasTipo.EstruturadaAutenticada,
+  temPermissionamento: true,
+  chavePermissao: ROUTES.RELATORIO_AEE_REGISTRO_ITINERANCIA_IMPRESSAO,
 });
 
 const getRoutesArray = () => {
