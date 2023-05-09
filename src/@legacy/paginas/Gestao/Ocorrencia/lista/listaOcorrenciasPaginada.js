@@ -35,6 +35,12 @@ const ListaOcorrenciasPaginada = props => {
       width: '100px',
     },
     {
+      title: 'Unidade Escolar (UE)',
+      dataIndex: 'ueOcorrencia',
+      width: '30%',
+      ellipsis: true,
+    },
+    {
       title: 'Turma',
       dataIndex: 'turma',
       width: '20%',
