@@ -1,4 +1,3 @@
-import moment from 'moment';
 import React, { useCallback, useEffect, useState } from 'react';
 import {
   Loader,
@@ -30,7 +29,7 @@ const HistoricoNotificacoes = () => {
   const [listaTipos, setListaTipos] = useState([]);
   const [listaSituacao, setListaSituacao] = useState([]);
 
-  const [anoAtual] = useState(window.moment().format('YYYY'));
+  const [anoAtual] = useState(moment().format('YYYY'));
   const [anoLetivo, setAnoLetivo] = useState(anoAtual);
   const [codigoDre, setCodigoDre] = useState(undefined);
   const [codigoUe, setCodigoUe] = useState(undefined);
