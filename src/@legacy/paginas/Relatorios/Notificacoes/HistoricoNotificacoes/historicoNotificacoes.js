@@ -1,4 +1,3 @@
-import moment from 'moment';
 import React, { useCallback, useEffect, useState } from 'react';
 import {
   Loader,
