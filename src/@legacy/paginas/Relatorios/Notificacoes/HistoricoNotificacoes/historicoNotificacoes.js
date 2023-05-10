@@ -111,7 +111,6 @@ const HistoricoNotificacoes = () => {
   const obterUes = useCallback(async dre => {
     if (dre) {
       setCarregandoGeral(true);
-      const consideraHistorico = anoLetivo.toString() !== anoAtual;
       const retorno = await ServicoFiltroRelatorio.obterUes(dre, consideraHistorico, anoLetivo).catch(e => {
         erros(e);
         setCarregandoGeral(false);
