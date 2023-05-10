@@ -157,8 +157,12 @@ class ServicoDashboardFrequencia {
     this.atualizarFiltros('listaMeses', meses);
   };
 
-  obterSemanas = anoLetivo => {
-    return api.get(`${urlPadrao}/filtro/anos/${anoLetivo}/semanas`);
+  obterSemanas = (anoLetivo, modalidadeTurma, semestre) => {
+    return api.get(`${urlPadrao}/filtro/anos/${anoLetivo}/modalidadeTurma/${modalidadeTurma}/semanas`,{
+      params: {
+        semestre
+      },
+    });
   };
 
   obterTotalEstudantesPresenciasRemotosAusentes = (

@@ -45,10 +45,8 @@ const FechamentoBimestreLista = props => {
   const [carregandoProcesso, setCarregandoProcesso] = useState(false);
   const [podeProcessarReprocessar] = useState(dados.podeProcessarReprocessar);
   const [periodoAberto] = useState(dados.periodoAberto);
-  const [
-    situacaosituacaoNomeFechamento,
-    setSituacaosituacaoNomeFechamento
-  ] = useState(dados.situacaoNome);
+  const [situacaosituacaoNomeFechamento, setSituacaosituacaoNomeFechamento] =
+    useState(dados.situacaoNome);
   const [dataFechamento] = useState(dados.dataFechamento);
 
   const [exibirModalAnotacao, setExibirModalAnotacao] = useState(false);
@@ -136,7 +134,9 @@ const FechamentoBimestreLista = props => {
           codigoTurma={turmaId}
           anoLetivo={anoLetivo}
           dadosAlunoSelecionado={alunoModalAnotacao}
-          desabilitar={desabilitarCampo || (!podeProcessarReprocessar && !periodoAberto)}
+          desabilitar={
+            desabilitarCampo || (!podeProcessarReprocessar && !periodoAberto)
+          }
         />
       ) : (
         ''

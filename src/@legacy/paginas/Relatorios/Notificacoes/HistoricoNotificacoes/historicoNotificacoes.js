@@ -55,7 +55,6 @@ const HistoricoNotificacoes = () => {
   ] = useState(false);
 
   const [modoEdicao, setModoEdicao] = useState(false);
-
   const opcoesExibirDescricao = [
     { label: 'Sim', value: true },
     { label: 'Não', value: false },
