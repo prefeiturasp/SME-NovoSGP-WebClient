@@ -222,9 +222,6 @@ const HistoricoNotificacoes = () => {
       if (lista.length === 1) {
         setTurmaId(lista[0].valor);
       }
-      // else{
-      //   setTurmaId(lista[0].nomeFiltro);
-      // }
     }
 
     setCarregandoGeral(false);
