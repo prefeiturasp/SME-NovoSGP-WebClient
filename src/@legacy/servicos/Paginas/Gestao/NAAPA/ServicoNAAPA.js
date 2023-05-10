@@ -369,16 +369,6 @@ class ServicoNAAPA {
 
   obterFluxosAlerta = () => api.get(`${URL_PADRAO}/fluxos-alerta`);
 
-  obterHistoricoPaginado = (
-    encaminhamentoNAAPAId,
-    numeroPagina,
-    numeroRegistros
-  ) => {
-    return api.get(
-      `${URL_PADRAO}/${encaminhamentoNAAPAId}/historico-alteracoes?numeroPagina=${numeroPagina}&numeroRegistros=${numeroRegistros}`
-    );
-  };
-
   obterObservacoesPaginado = (
     encaminhamentoNAAPAId,
     numeroPagina,
