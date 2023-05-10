@@ -20,8 +20,8 @@ import LabelSituacao from './componentes/labelSituacao';
 import ModalEncerramentoEncaminhamentoNAAPA from './componentes/modalEncerramentoEncaminhamentoNAAPA';
 import MotivoEncerramentoNAAPA from './componentes/motivoEncerramentoNAAPA';
 import situacaoNAAPA from '~/dtos/situacaoNAAPA';
-import { HistoricoNAAPA } from './componentes/historico';
-import { ObservacoesNAAPA } from './componentes/observacoes';
+import { Historico } from '~/componentes-sgp/historico';
+import { Observacoes } from './componentes/observacoes';
 
 const CadastroEncaminhamentoNAAPA = () => {
   const { id: encaminhamentoId } = useParams();
@@ -181,9 +181,11 @@ const CadastroEncaminhamentoNAAPA = () => {
 
           {encaminhamentoId && (
             <>
-              <ObservacoesNAAPA />
+              <Observacoes />
 
-              <HistoricoNAAPA />
+              <Historico
+                url={`v1/encaminhamento-naapa/${encaminhamentoId}/historico-alteracoes`}
+              />
             </>
           )}
         </Col>
