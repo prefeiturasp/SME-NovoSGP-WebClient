@@ -1,3 +1,4 @@
+import moment from 'moment';
 import React, { useCallback, useEffect, useState } from 'react';
 import {
   Loader,
@@ -108,7 +109,8 @@ const HistoricoNotificacoes = () => {
   const obterUes = useCallback(async dre => {
     if (dre) {
       setCarregandoGeral(true);
-      const retorno = await ServicoFiltroRelatorio.obterUes(dre, false, anoLetivo).catch(e => {
+      const consideraHistorico = anoLetivo.toString() !== anoAtual;
+      const retorno = await ServicoFiltroRelatorio.obterUes(dre, consideraHistorico, anoLetivo).catch(e => {
         erros(e);
         setCarregandoGeral(false);
       });
@@ -124,7 +126,7 @@ const HistoricoNotificacoes = () => {
           setCodigoUe(novaLista[0].valor);
         }
         setListaUes(novaLista);
-      } else {
+      } else {        
         setListaUes([]);
       }
       setCarregandoGeral(false);
@@ -150,24 +152,24 @@ const HistoricoNotificacoes = () => {
   };
 
   const obterDres = async () => {
-    setCarregandoGeral(true);
-    const retorno = await ServicoFiltroRelatorio.obterDres().catch(e => {
-      erros(e);
-      setCarregandoGeral(false);
-    });
-    if (retorno?.data?.length) {
-      const novaLista = retorno.data.filter(
-        item => item?.codigo !== OPCAO_TODOS
-      );
-      setListaDres(novaLista);
+      setCarregandoGeral(true);
+      const retorno = await ServicoFiltroRelatorio.obterDres().catch(e => {
+        erros(e);
+        setCarregandoGeral(false);
+      });
+      if (retorno?.data?.length) {
+        const novaLista = retorno.data.filter(
+          item => item?.codigo !== OPCAO_TODOS
+        );
+        setListaDres(novaLista);
 
-      if (novaLista?.length === 1) {
-        setCodigoDre(novaLista[0].codigo);
+        if (novaLista?.length === 1) {
+          setCodigoDre(novaLista[0].codigo);
+        }
+      } else {
+        setListaDres([]);
       }
-    } else {
-      setListaDres([]);
-    }
-    setCarregandoGeral(false);
+      setCarregandoGeral(false);
   };
 
   const obterSemestres = async (
@@ -437,11 +439,20 @@ const HistoricoNotificacoes = () => {
 
   const onChangeAnoLetivo = ano => {
     setAnoLetivo(ano);
-
+    
+    setCodigoDre();
+    setCodigoUe();
+    
+    if(ano){
+      obterDres();
+      obterUes();
+    }
+    
     setListaSemestre([]);
     setSemestre(undefined);
 
     setListaTurmas([]);
+    setListaDres([]);
     setTurmaId();
 
     setModoEdicao(true);
@@ -511,7 +522,7 @@ const HistoricoNotificacoes = () => {
                   lista={listaDres}
                   valueOption="codigo"
                   valueText="nome"
-                  disabled={listaDres && listaDres.length === 1}
+                  disabled={(listaDres && listaDres.length === 1) || listaDres.length === 0}
                   onChange={onChangeDre}
                   valueSelect={codigoDre}
                   placeholder="Diretoria Regional de Educação (DRE)"
@@ -524,7 +535,7 @@ const HistoricoNotificacoes = () => {
                   lista={listaUes}
                   valueOption="valor"
                   valueText="desc"
-                  disabled={listaUes && listaUes.length === 1}
+                  disabled={(listaUes && listaUes.length === 1) || listaUes.length === 0}
                   onChange={onChangeUe}
                   valueSelect={codigoUe}
                   placeholder="Unidade Escolar (UE)"
