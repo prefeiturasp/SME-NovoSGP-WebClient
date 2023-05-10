@@ -54,6 +54,7 @@ const HistoricoNotificacoes = () => {
   ] = useState(false);
 
   const [modoEdicao, setModoEdicao] = useState(false);
+
   const opcoesExibirDescricao = [
     { label: 'Sim', value: true },
     { label: 'Não', value: false },
@@ -125,7 +126,7 @@ const HistoricoNotificacoes = () => {
           setCodigoUe(novaLista[0].valor);
         }
         setListaUes(novaLista);
-      } else {
+      } else {        
         setListaUes([]);
       }
       setCarregandoGeral(false);
@@ -151,24 +152,24 @@ const HistoricoNotificacoes = () => {
   };
 
   const obterDres = async () => {
-    setCarregandoGeral(true);
-    const retorno = await ServicoFiltroRelatorio.obterDres().catch(e => {
-      erros(e);
-      setCarregandoGeral(false);
-    });
-    if (retorno?.data?.length) {
-      const novaLista = retorno.data.filter(
-        item => item?.codigo !== OPCAO_TODOS
-      );
-      setListaDres(novaLista);
+      setCarregandoGeral(true);
+      const retorno = await ServicoFiltroRelatorio.obterDres().catch(e => {
+        erros(e);
+        setCarregandoGeral(false);
+      });
+      if (retorno?.data?.length) {
+        const novaLista = retorno.data.filter(
+          item => item?.codigo !== OPCAO_TODOS
+        );
+        setListaDres(novaLista);
 
-      if (novaLista?.length === 1) {
-        setCodigoDre(novaLista[0].codigo);
+        if (novaLista?.length === 1) {
+          setCodigoDre(novaLista[0].codigo);
+        }
+      } else {
+        setListaDres([]);
       }
-    } else {
-      setListaDres([]);
-    }
-    setCarregandoGeral(false);
+      setCarregandoGeral(false);
   };
 
   const obterSemestres = async (
@@ -212,6 +213,7 @@ const HistoricoNotificacoes = () => {
       const lista = resposta.data;
       if (lista.length > 1) {
         lista.unshift({ valor: OPCAO_TODOS, nomeFiltro: 'Todas' });
+        setTurmaId();
       }
 
       setListaTurmas(lista);
@@ -440,25 +442,20 @@ const HistoricoNotificacoes = () => {
   const onChangeAnoLetivo = ano => {
     setAnoLetivo(ano);
     
-    if(ano !== undefined){ 
-      setConsideraHistorico(Number(ano) !== Number(new Date().getFullYear()));
-      obterDres();
-    }
-    else{
-      setListaDres([]);
-      setCodigoDre();
-    }
-
-    setListaUes([]);
+    setCodigoDre();
     setCodigoUe();
     
-    setListaModalidades([]);
-    setModalidadeId();
+    if(ano){
+      setConsideraHistorico(Number(ano) !== Number(new Date().getFullYear()));
+      obterDres();
+      obterUes();
+    }
     
     setListaSemestre([]);
-    setSemestre();
+    setSemestre(undefined);
 
     setListaTurmas([]);
+    setListaDres([]);
     setTurmaId();
 
     setModoEdicao(true);
@@ -528,7 +525,7 @@ const HistoricoNotificacoes = () => {
                   lista={listaDres}
                   valueOption="codigo"
                   valueText="nome"
-                  disabled={listaDres && listaDres.length === 1 || !codigoDre}
+                  disabled={(listaDres && listaDres.length === 1) || listaDres.length === 0}
                   onChange={onChangeDre}
                   valueSelect={codigoDre}
                   placeholder="Diretoria Regional de Educação (DRE)"
@@ -541,7 +538,7 @@ const HistoricoNotificacoes = () => {
                   lista={listaUes}
                   valueOption="valor"
                   valueText="desc"
-                  disabled={listaUes && listaUes.length === 1 || !codigoUe}
+                  disabled={(listaUes && listaUes.length === 1) || listaUes.length === 0}
                   onChange={onChangeUe}
                   valueSelect={codigoUe}
                   placeholder="Unidade Escolar (UE)"
@@ -606,9 +603,6 @@ const HistoricoNotificacoes = () => {
                     onChange={valores => {
                       if (valores && valores.professorRf) {
                         setUsuarioRf(valores.professorRf);
-                        if (listaTurmas?.length > 1) {
-                          setTurmaId([OPCAO_TODOS]);
-                        }
                         setDesabilitarDescricaoNotificacoes(false);
                         setModoEdicao(true);
                         return;
