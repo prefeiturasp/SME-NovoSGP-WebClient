@@ -66,6 +66,8 @@ const HistoricoNotificacoes = () => {
     { label: 'Não', value: false },
   ];
 
+  const [consideraHistorico, setConsideraHistorico] = useState(false);
+
   const obterAnosLetivos = useCallback(async () => {
     setCarregandoGeral(true);
     const anosLetivo = await AbrangenciaServico.buscarTodosAnosLetivos().catch(
@@ -201,26 +203,31 @@ const HistoricoNotificacoes = () => {
 
   const obterTurmas = useCallback(async () => {
     setCarregandoGeral(true);
-    const resposta = await ServicoFiltroRelatorio.obterTurmasPorCodigoUeModalidadeSemestre(
-      anoLetivo,
+    const resposta = await AbrangenciaServico.buscarTurmas(
       codigoUe,
       modalidadeId,
-      semestre
-    )
-      .catch(e => erros(e))
-      .finally(() => setCarregandoGeral(false));
+      '',
+      anoLetivo,
+      consideraHistorico
+    );
 
     if (resposta?.data?.length) {
       const lista = resposta.data;
       if (lista.length > 1) {
-        lista.unshift({ valor: OPCAO_TODOS, descricao: 'Todas' });
+        lista.unshift({ valor: OPCAO_TODOS, nomeFiltro: 'Todas' });
+        setTurmaId();
       }
 
       setListaTurmas(lista);
       if (lista.length === 1) {
         setTurmaId(lista[0].valor);
       }
+      // else{
+      //   setTurmaId(lista[0].nomeFiltro);
+      // }
     }
+
+    setCarregandoGeral(false);
   }, [anoLetivo, codigoUe, modalidadeId, semestre]);
 
   useEffect(() => {
@@ -444,6 +451,7 @@ const HistoricoNotificacoes = () => {
     setCodigoUe();
     
     if(ano){
+      setConsideraHistorico(Number(ano) !== Number(new Date().getFullYear()));
       obterDres();
       obterUes();
     }
@@ -480,7 +488,7 @@ const HistoricoNotificacoes = () => {
   const onChangeTurma = valor => {
     setTurmaId(valor);
     let desabilitar = false;
-    if (valor === OPCAO_TODOS && !usuarioRf) {
+    if (valor === OPCAO_TODOS) {
       desabilitar = true;
       setExibirDescricao(false);
       setExibirNotificacoesExcluidas(false);
@@ -574,13 +582,12 @@ const HistoricoNotificacoes = () => {
                 <SelectComponent
                   id="drop-turma"
                   lista={listaTurmas}
-                  valueOption="valor"
-                  valueText="descricao"
+                  valueOption="codigo"
+                  valueText="nomeFiltro"
                   label="Turma"
                   disabled={
                     !modalidadeId ||
-                    (listaTurmas && listaTurmas.length === 1) ||
-                    usuarioRf
+                    (listaTurmas && listaTurmas.length === 1)
                   }
                   valueSelect={turmaId}
                   onChange={onChangeTurma}
@@ -601,9 +608,6 @@ const HistoricoNotificacoes = () => {
                     onChange={valores => {
                       if (valores && valores.professorRf) {
                         setUsuarioRf(valores.professorRf);
-                        if (listaTurmas?.length > 1) {
-                          setTurmaId([OPCAO_TODOS]);
-                        }
                         setDesabilitarDescricaoNotificacoes(false);
                         setModoEdicao(true);
                         return;
