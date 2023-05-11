@@ -7,7 +7,7 @@ const inicial = {
   exibirLoaderDrawerAtendimento: false,
   listaSecoesEmEdicao: [],
   desabilitarCamposEncaminhamentoNAAPA: false,
-  tabAtivaEncaminhamentoNAAPA: null,
+  tabAtivaEncaminhamentoNAAPA: 0,
   dadosSituacaoEncaminhamentoNAAPA: null,
   exibirModalEncerramentoEncaminhamentoNAAPA: false,
 };

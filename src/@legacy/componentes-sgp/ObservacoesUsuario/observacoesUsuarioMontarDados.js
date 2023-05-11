@@ -12,6 +12,7 @@ const ObservacoesUsuarioMontarDados = props => {
     onClickSalvarEdicao,
     onClickExcluir,
     verificaProprietario,
+    esconderCaixaExterna,
     podeAlterar,
     podeExcluir,
     mostrarListaNotificacao,
@@ -82,7 +83,7 @@ const ObservacoesUsuarioMontarDados = props => {
   };
 
   return (
-    <div className="col-md-12 mb-2 mt-2">
+    <div className={`col-sm-12 p-0${esconderCaixaExterna ? '' : ' mb-2 mt-4'}`}>
       {dadosObservacoes && dadosObservacoes.length
         ? dadosObservacoes.map((obs, index) => {
             return montarValores(obs, index);
@@ -96,6 +97,7 @@ ObservacoesUsuarioMontarDados.propTypes = {
   onClickSalvarEdicao: PropTypes.func,
   onClickExcluir: PropTypes.func,
   verificaProprietario: PropTypes.bool,
+  esconderCaixaExterna: PropTypes.bool,
   podeAlterar: PropTypes.bool,
   podeExcluir: PropTypes.bool,
   mostrarListaNotificacao: PropTypes.bool,
@@ -107,6 +109,7 @@ ObservacoesUsuarioMontarDados.defaultProps = {
   onClickExcluir: () => {},
   mudarObservacaoListagem: () => {},
   verificaProprietario: false,
+  esconderCaixaExterna: false,
   podeAlterar: true,
   podeExcluir: true,
   mostrarListaNotificacao: false,

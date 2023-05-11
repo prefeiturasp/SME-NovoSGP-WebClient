@@ -70,6 +70,7 @@ const MontarDadosTabs = () => {
         border
         type="card"
         onChange={onChangeTab}
+        style={{ marginBottom: 20 }}
         activeKey={tabAtivaEncaminhamentoNAAPA}
       >
         {dadosSecoesEncaminhamentoNAAPA?.map(tab => {
@@ -104,7 +105,11 @@ const MontarDadosTabs = () => {
       </ContainerTabsCard>
 
       {!tabAtivaEncaminhamentoNAAPA && (
-        <Row type="flex" justify="center" style={{ marginTop: 20 }}>
+        <Row
+          type="flex"
+          justify="center"
+          style={{ marginTop: 20, marginBottom: 36 }}
+        >
           Selecione uma aba
         </Row>
       )}

@@ -23,6 +23,7 @@ const CampoObservacao = props => {
   const {
     salvarObservacao,
     esconderCaixaExterna,
+    mostrarBotaoNotificar,
     podeIncluir,
     obterUsuariosNotificadosDiarioBordo,
     usarLocalizadorFuncionario,
@@ -130,24 +131,33 @@ const CampoObservacao = props => {
         />
       </div>
       <div
-        className="row pb-4 d-flex"
+        className="row pb-4 d-flex justify-content-between"
         style={{ margin: `${esconderCaixaExterna ? 0 : 15}px` }}
       >
-        <div className="p-0 col-md-6 d-flex justify-content-start">
-          <Button
-            height="30px"
-            id={SGP_BUTTON_ABRIR_MODAL_NOTIFICAR_USUARIOS}
-            label={`Notificar usuários (${listaUsuarios?.length})`}
-            icon="bell"
-            color={Colors.Azul}
-            border
-            onClick={() => setModalVisivel(true)}
-            disabled={
-              !!observacaoEmEdicao || !podeIncluir || desabilitarBotaoNotificar
-            }
-          />
-        </div>
-        <div className="p-0 col-md-6 d-flex justify-content-end">
+        {mostrarBotaoNotificar && (
+          <div className="d-flex justify-content-center p-0">
+            <Button
+              height="30px"
+              id={SGP_BUTTON_ABRIR_MODAL_NOTIFICAR_USUARIOS}
+              label={`Notificar usuários (${listaUsuarios?.length})`}
+              icon="bell"
+              color={Colors.Azul}
+              border
+              onClick={() => setModalVisivel(true)}
+              disabled={
+                !!observacaoEmEdicao ||
+                !podeIncluir ||
+                desabilitarBotaoNotificar
+              }
+            />
+          </div>
+        )}
+
+        <div
+          className={`d-flex justify-content-end p-0 ${
+            mostrarBotaoNotificar ? '' : 'w-100'
+          }`}
+        >
           <Button
             id={SGP_BUTTON_CANCELAR_OBSERVACAO}
             label="Cancelar"
@@ -159,6 +169,7 @@ const CampoObservacao = props => {
             height="30px"
             disabled={!novaObservacao || !podeIncluir}
           />
+
           <Button
             id={SGP_BUTTON_SALVAR_OBSERVACAO}
             label="Salvar"
@@ -191,6 +202,7 @@ const CampoObservacao = props => {
 CampoObservacao.propTypes = {
   salvarObservacao: PropTypes.func,
   esconderCaixaExterna: PropTypes.bool,
+  mostrarBotaoNotificar: PropTypes.bool,
   podeIncluir: PropTypes.bool,
   obterUsuariosNotificadosDiarioBordo: PropTypes.bool,
   usarLocalizadorFuncionario: PropTypes.bool,
@@ -205,6 +217,7 @@ CampoObservacao.propTypes = {
 CampoObservacao.defaultProps = {
   salvarObservacao: () => {},
   esconderCaixaExterna: false,
+  mostrarBotaoNotificar: true,
   podeIncluir: true,
   obterUsuariosNotificadosDiarioBordo: true,
   usarLocalizadorFuncionario: false,
