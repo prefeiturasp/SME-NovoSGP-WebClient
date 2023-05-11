@@ -327,179 +327,167 @@ const ListaEncaminhamentoNAAPA = () => {
       </Cabecalho>
 
       <Card padding="24px 24px">
-        <Col span={24}>
-          <Row gutter={[16, 16]}>
-            <Col md={24} xl={12}>
-              <CheckboxComponent
-                id={SGP_CHECKBOX_EXIBIR_HISTORICO}
-                label="Exibir histórico?"
-                onChangeCheckbox={onCheckedConsideraHistorico}
-                checked={consideraHistorico}
-              />
-            </Col>
-          </Row>
+        <Row gutter={[16, 16]}>
+          <Col span={24}>
+            <CheckboxComponent
+              id={SGP_CHECKBOX_EXIBIR_HISTORICO}
+              label="Exibir histórico?"
+              onChangeCheckbox={onCheckedConsideraHistorico}
+              checked={consideraHistorico}
+            />
+          </Col>
 
-          <Row gutter={[16, 16]}>
-            <Col sm={24} md={8} lg={4}>
-              <Loader loading={carregandoAnosLetivos} ignorarTip>
-                <SelectComponent
-                  valueText="desc"
-                  label="Ano letivo"
-                  valueOption="valor"
-                  placeholder="Ano letivo"
-                  lista={listaAnosLetivo}
-                  valueSelect={anoLetivo}
-                  id={SGP_SELECT_ANO_LETIVO}
-                  onChange={onChangeAnoLetivo}
-                  disabled={listaAnosLetivo?.length === 1}
-                />
-              </Loader>
-            </Col>
-
-            <Col sm={24} md={24} lg={10}>
-              <Loader loading={carregandoDres} ignorarTip>
-                <SelectComponent
-                  showSearch
-                  label="Diretoria Regional de Educação (DRE)"
-                  valueText="nome"
-                  id={SGP_SELECT_DRE}
-                  valueOption="codigo"
-                  onChange={onChangeDre}
-                  lista={listaDres || []}
-                  placeholder="Selecione uma DRE"
-                  disabled={listaDres?.length === 1}
-                  valueSelect={dre?.codigo || undefined}
-                />
-              </Loader>
-            </Col>
-
-            <Col sm={24} md={24} lg={10}>
-              <Loader loading={carregandoUes} ignorarTip>
-                <SelectComponent
-                  showSearch
-                  valueText="nome"
-                  id={SGP_SELECT_UE}
-                  valueOption="codigo"
-                  onChange={onChangeUe}
-                  lista={listaUes || []}
-                  label="Unidade Escolar (UE)"
-                  placeholder="Selecione uma UE"
-                  valueSelect={ue?.codigo || undefined}
-                  disabled={!dre?.codigo || listaUes?.length === 1}
-                />
-              </Loader>
-            </Col>
-          </Row>
-
-          <Row gutter={[16, 16]}>
-            <Col sm={24} md={12}>
-              <Loader loading={carregandoTurmas} ignorarTip>
-                <SelectComponent
-                  showSearch
-                  label="Turma"
-                  placeholder="Turma"
-                  lista={listaTurmas}
-                  id={SGP_SELECT_TURMA}
-                  valueSelect={turmaId}
-                  valueOption="id"
-                  valueText="nomeFiltro"
-                  onChange={onChangeTurma}
-                  disabled={!ue?.codigo || ue?.codigo === OPCAO_TODOS}
-                />
-              </Loader>
-            </Col>
-
-            <Col sm={24} md={12}>
-              <CampoTexto
-                allowClear
-                iconeBusca
-                desabilitado={!ue?.codigo}
-                value={nomeAlunoExibicao}
-                label="Criança/Estudante"
-                onChange={onChangeNomeAluno}
-                id={SGP_INPUT_NOME_CRIANCA_ESTUDANTE}
-                placeholder="Procure pelo nome da Criança/Estudante"
-              />
-            </Col>
-          </Row>
-
-          <Row gutter={[16, 16]}>
-            <Col sm={24} md={12} lg={12} xl={6}>
-              <CampoData
-                desabilitado={!ue?.codigo}
-                formatoData="DD/MM/YYYY"
-                placeholder="Data inicial"
-                valor={dataAberturaQueixaInicio}
-                label="Data de abertura da queixa"
-                id={SGP_DATE_ABERTURA_QUEIXA_INICIO}
-                onChange={setDataAberturaQueixaInicio}
-              />
-            </Col>
-
-            <Col sm={24} md={12} lg={12} xl={6} style={{ marginTop: '25px' }}>
-              <CampoData
-                temErro={!dataFimMaiorInicio}
-                formatoData="DD/MM/YYYY"
-                placeholder="Data final"
-                desabilitado={!ue?.codigo}
-                valor={dataAberturaQueixaFim}
-                id={SGP_DATE_ABERTURA_QUEIXA_FIM}
-                onChange={setDataAberturaQueixaFim}
-                mensagemErro="Data fim deve ser maior que a data início"
-              />
-            </Col>
-
-            <Col sm={24} lg={24} xl={12}>
+          <Col sm={24} md={8} lg={4}>
+            <Loader loading={carregandoAnosLetivos} ignorarTip>
               <SelectComponent
-                allowClear
-                valueOption="id"
-                valueText="descricao"
-                lista={listaSituacoes}
-                disabled={!ue?.codigo}
-                onChange={setSituacao}
-                valueSelect={situacao}
-                label="Situação do encaminhamento"
-                id={SGP_SELECT_SITUACAO_ENCAMINHAMENTO}
-                placeholder="Situação do encaminhamento"
+                valueText="desc"
+                label="Ano letivo"
+                valueOption="valor"
+                placeholder="Ano letivo"
+                lista={listaAnosLetivo}
+                valueSelect={anoLetivo}
+                id={SGP_SELECT_ANO_LETIVO}
+                onChange={onChangeAnoLetivo}
+                disabled={listaAnosLetivo?.length === 1}
               />
-            </Col>
-          </Row>
+            </Loader>
+          </Col>
 
-          <Row gutter={[16, 16]}>
-            <Col sm={24} lg={12}>
+          <Col sm={24} md={24} lg={10}>
+            <Loader loading={carregandoDres} ignorarTip>
               <SelectComponent
-                allowClear
-                valueOption="id"
-                label="Prioridade"
+                showSearch
+                label="Diretoria Regional de Educação (DRE)"
                 valueText="nome"
-                disabled={!ue?.codigo}
-                placeholder="Prioridade"
-                lista={listaPrioridades}
-                onChange={setPrioridade}
-                valueSelect={prioridade}
-                id={SGP_SELECT_PRIORIDADE}
+                id={SGP_SELECT_DRE}
+                valueOption="codigo"
+                onChange={onChangeDre}
+                lista={listaDres || []}
+                placeholder="Selecione uma DRE"
+                disabled={listaDres?.length === 1}
+                valueSelect={dre?.codigo || undefined}
               />
-            </Col>
-          </Row>
+            </Loader>
+          </Col>
 
-          <Row gutter={[16, 16]}>
-            <Col sm={24}>
-              <ListaEncaminhamentoNAAPAPaginada
-                ue={ue}
-                dre={dre}
-                turmaId={turmaId}
-                situacao={situacao}
-                anoLetivo={anoLetivo}
-                nomeAluno={nomeAluno}
-                prioridade={prioridade}
-                consideraHistorico={consideraHistorico}
-                dataAberturaQueixaFim={dataAberturaQueixaFim}
-                dataAberturaQueixaInicio={dataAberturaQueixaInicio}
-                onSelecionarItems={onSelecionarItems}
+          <Col sm={24} md={24} lg={10}>
+            <Loader loading={carregandoUes} ignorarTip>
+              <SelectComponent
+                showSearch
+                valueText="nome"
+                id={SGP_SELECT_UE}
+                valueOption="codigo"
+                onChange={onChangeUe}
+                lista={listaUes || []}
+                label="Unidade Escolar (UE)"
+                placeholder="Selecione uma UE"
+                valueSelect={ue?.codigo || undefined}
+                disabled={!dre?.codigo || listaUes?.length === 1}
               />
-            </Col>
-          </Row>
-        </Col>
+            </Loader>
+          </Col>
+
+          <Col sm={24} md={12}>
+            <Loader loading={carregandoTurmas} ignorarTip>
+              <SelectComponent
+                showSearch
+                label="Turma"
+                placeholder="Turma"
+                lista={listaTurmas}
+                id={SGP_SELECT_TURMA}
+                valueSelect={turmaId}
+                valueOption="id"
+                valueText="nomeFiltro"
+                onChange={onChangeTurma}
+                disabled={!ue?.codigo || ue?.codigo === OPCAO_TODOS}
+              />
+            </Loader>
+          </Col>
+
+          <Col sm={24} md={12}>
+            <CampoTexto
+              allowClear
+              iconeBusca
+              desabilitado={!ue?.codigo}
+              value={nomeAlunoExibicao}
+              label="Criança/Estudante"
+              onChange={onChangeNomeAluno}
+              id={SGP_INPUT_NOME_CRIANCA_ESTUDANTE}
+              placeholder="Procure pelo nome da Criança/Estudante"
+            />
+          </Col>
+
+          <Col sm={24} md={12} lg={12} xl={6}>
+            <CampoData
+              desabilitado={!ue?.codigo}
+              formatoData="DD/MM/YYYY"
+              placeholder="Data inicial"
+              valor={dataAberturaQueixaInicio}
+              label="Data de abertura da queixa"
+              id={SGP_DATE_ABERTURA_QUEIXA_INICIO}
+              onChange={setDataAberturaQueixaInicio}
+            />
+          </Col>
+
+          <Col sm={24} md={12} lg={12} xl={6} style={{ marginTop: '25px' }}>
+            <CampoData
+              temErro={!dataFimMaiorInicio}
+              formatoData="DD/MM/YYYY"
+              placeholder="Data final"
+              desabilitado={!ue?.codigo}
+              valor={dataAberturaQueixaFim}
+              id={SGP_DATE_ABERTURA_QUEIXA_FIM}
+              onChange={setDataAberturaQueixaFim}
+              mensagemErro="Data fim deve ser maior que a data início"
+            />
+          </Col>
+
+          <Col sm={24} lg={24} xl={12}>
+            <SelectComponent
+              allowClear
+              valueOption="id"
+              valueText="descricao"
+              lista={listaSituacoes}
+              disabled={!ue?.codigo}
+              onChange={setSituacao}
+              valueSelect={situacao}
+              label="Situação do encaminhamento"
+              id={SGP_SELECT_SITUACAO_ENCAMINHAMENTO}
+              placeholder="Situação do encaminhamento"
+            />
+          </Col>
+
+          <Col sm={24} lg={12}>
+            <SelectComponent
+              allowClear
+              valueOption="id"
+              label="Prioridade"
+              valueText="nome"
+              disabled={!ue?.codigo}
+              placeholder="Prioridade"
+              lista={listaPrioridades}
+              onChange={setPrioridade}
+              valueSelect={prioridade}
+              id={SGP_SELECT_PRIORIDADE}
+            />
+          </Col>
+
+          <Col sm={24}>
+            <ListaEncaminhamentoNAAPAPaginada
+              ue={ue}
+              dre={dre}
+              turmaId={turmaId}
+              situacao={situacao}
+              anoLetivo={anoLetivo}
+              nomeAluno={nomeAluno}
+              prioridade={prioridade}
+              consideraHistorico={consideraHistorico}
+              dataAberturaQueixaFim={dataAberturaQueixaFim}
+              dataAberturaQueixaInicio={dataAberturaQueixaInicio}
+              onSelecionarItems={onSelecionarItems}
+            />
+          </Col>
+        </Row>
       </Card>
     </>
   );
