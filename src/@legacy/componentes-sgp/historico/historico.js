@@ -2,12 +2,20 @@ import { HistoricoItem } from './historico-item';
 import { Paginacao } from '@/@legacy/componentes-sgp';
 import { useEffect, useState } from 'react';
 import { api, erros } from '@/@legacy/servicos';
+import { setRecarregarHistorico } from '@/@legacy/redux/modulos/historico-paginado/actions';
+import { useDispatch, useSelector } from 'react-redux';
 
 export const HistoricoPaginado = ({ url }) => {
   const [paginaAtual, setPaginaAtual] = useState(1);
   const [dadosHistorico, setDadosHistorico] = useState();
   const [numeroRegistros, setNumeroRegistros] = useState(1);
   const [numeroRegistrosPagina, setNumeroRegistrosPagina] = useState(10);
+
+  const dispatch = useDispatch();
+
+  const recarregarHistorico = useSelector(
+    state => state.historicoPaginado?.recarregarHistorico
+  );
 
   const obterHistorico = async (numeroPagina, numeroRegistros) => {
     const resposta = await api
@@ -38,6 +46,13 @@ export const HistoricoPaginado = ({ url }) => {
   useEffect(() => {
     obterHistorico(paginaAtual, numeroRegistrosPagina);
   }, []);
+
+  useEffect(() => {
+    if (recarregarHistorico) {
+      obterHistorico(paginaAtual, numeroRegistrosPagina);
+      dispatch(setRecarregarHistorico(false));
+    }
+  }, [recarregarHistorico]);
 
   return (
     <>
