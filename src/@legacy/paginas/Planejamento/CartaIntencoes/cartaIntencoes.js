@@ -37,6 +37,7 @@ const CartaIntencoes = () => {
   const usuario = useSelector(store => store.usuario);
   const { turmaSelecionada } = usuario;
   const { turma } = turmaSelecionada;
+  const turmaId = turmaSelecionada?.id || 0;
   const permissoesTela = usuario.permissoes[RotasDto.CARTA_INTENCOES];
 
   const modalidadesFiltroPrincipal = useSelector(
@@ -73,6 +74,13 @@ const CartaIntencoes = () => {
     },
     [dispatch]
   );
+
+  const obterUsuariosNotificar = async () => {
+    return ServicoCartaIntencoes.obterNotificarUsuarios({
+      turmaId,
+      observacaoId: '',
+    }).catch(e => erros(e));
+  };
 
   const obterDadosObservacoes = useCallback(
     async (turmaCodigo, componenteCurricularId) => {
@@ -191,7 +199,8 @@ const CartaIntencoes = () => {
   ]);
 
   const onChangeSemestreComponenteCurricular = async valor => {
-    const continuar = await servicoSalvarCartaIntencoes.perguntaDescartarRegistros();
+    const continuar =
+      await servicoSalvarCartaIntencoes.perguntaDescartarRegistros();
 
     if (continuar) {
       setComponenteCurricular(valor);
@@ -329,12 +338,15 @@ const CartaIntencoes = () => {
           componenteCurricular &&
           exibirObservacoes ? (
             <ObservacoesUsuario
+              verificaProprietario
+              mostrarListaNotificacao
+              dreId={turmaSelecionada.dre}
+              carregarListaUsuariosNotificar={true}
+              ueId={turmaSelecionada.unidadeEscolar}
+              excluirObservacao={obs => excluirObservacao(obs)}
               salvarObservacao={obs => salvarEditarObservacao(obs)}
               editarObservacao={obs => salvarEditarObservacao(obs)}
-              excluirObservacao={obs => excluirObservacao(obs)}
-              verificaProprietario
-              dreId={turmaSelecionada.dre}
-              ueId={turmaSelecionada.unidadeEscolar}
+              obterUsuariosNotificar={() => obterUsuariosNotificar()}
             />
           ) : (
             ''
