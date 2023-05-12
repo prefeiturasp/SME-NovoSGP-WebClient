@@ -28,6 +28,7 @@ import {
 import QuestionarioDinamicoFuncoes from '~/componentes-sgp/QuestionarioDinamico/Funcoes/QuestionarioDinamicoFuncoes';
 import situacaoNAAPA from '~/dtos/situacaoNAAPA';
 import BtnImpressaoEncaminhamentoNAAPA from '../componentes/btnImpressaoNAAPA';
+import BtnReabrirEncaminhamentoNAAPA from './componentes/reabrir';
 
 const CadastroEncaminhamentoNAAPABotoesAcao = props => {
   const { mostrarBusca, setMostrarBusca } = props;
@@ -225,6 +226,8 @@ const CadastroEncaminhamentoNAAPABotoesAcao = props => {
               onClick={() => onClickExcluir()}
             />
           </Col>
+
+          <BtnReabrirEncaminhamentoNAAPA />
 
           <Col>
             <Button
