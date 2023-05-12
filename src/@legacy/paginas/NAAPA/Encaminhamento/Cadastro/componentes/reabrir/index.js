@@ -45,9 +45,12 @@ const BtnReabrirEncaminhamentoNAAPA = () => {
       ServicoNAAPA.reabrir(encaminhamentoId)
         .then(resultado => {
           if (resultado?.status === 200 && resultado?.data) {
-            dispatch(
-              setDadosSituacaoEncaminhamentoNAAPA({ ...resultado.data })
-            );
+            const dadosSituacao = {
+              situacao: resultado?.data?.codigo,
+              descricaoSituacao: resultado?.data?.descricao,
+            };
+
+            dispatch(setDadosSituacaoEncaminhamentoNAAPA(dadosSituacao));
             dispatch(setRecarregarHistorico(true));
             sucesso('Encaminhamento aberto com sucesso');
           }
