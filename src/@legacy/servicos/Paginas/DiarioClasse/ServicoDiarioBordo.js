@@ -93,8 +93,9 @@ class ServicoDiarioBordo {
     numeroPagina,
     numeroRegistros
   ) => {
-    const url = `${urlPadrao}/turmas/${turmaCodigo}/componentes-curriculares/${componenteCurricularId}/inicio/${dataInicio}/fim/${dataFim}?numeroPagina=${numeroPagina ||
-      1}&NumeroRegistros=${numeroRegistros}`;
+    const url = `${urlPadrao}/turmas/${turmaCodigo}/componentes-curriculares/${componenteCurricularId}/inicio/${dataInicio}/fim/${dataFim}?numeroPagina=${
+      numeroPagina || 1
+    }&NumeroRegistros=${numeroRegistros}`;
     return api.get(url);
   };
 
@@ -103,8 +104,9 @@ class ServicoDiarioBordo {
     numeroPagina,
     numeroRegistros
   ) => {
-    const url = `${urlPadrao}/devolutivas/${idDevolutiva}?numeroPagina=${numeroPagina ||
-      1}&NumeroRegistros=${numeroRegistros}`;
+    const url = `${urlPadrao}/devolutivas/${idDevolutiva}?numeroPagina=${
+      numeroPagina || 1
+    }&NumeroRegistros=${numeroRegistros}`;
     return api.get(url);
   };
 
@@ -142,7 +144,7 @@ class ServicoDiarioBordo {
     return api.get(`${urlPadrao}/detalhes/${diarioBordoId}`);
   };
 
-  obterNofiticarUsuarios = ({ turmaId, observacaoId = '', diarioBordoId }) => {
+  obterNotificarUsuarios = ({ turmaId, observacaoId = '', diarioBordoId }) => {
     return api.get(`${urlPadrao}/notificacoes/usuarios`, {
       params: {
         turmaId,
