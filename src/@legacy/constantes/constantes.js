@@ -10,3 +10,4 @@ export const TIPO_DOCUMENTO = {
 export const TIPO_CLASSIFICACAO = {
   DOCUMENTOS_DA_TURMA: 'Documentos da Turma',
 };
+export const CRIANCAS_ESTUDANTES_SELECIONADOS = '1';
