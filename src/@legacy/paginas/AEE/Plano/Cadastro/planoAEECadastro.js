@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect } from 'react';
-import { useDispatch } from 'react-redux';
 import { useLocation, useParams } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
 import { Cabecalho } from '~/componentes-sgp';
 import CollapseLocalizarEstudante from '~/componentes-sgp/CollapseLocalizarEstudante/collapseLocalizarEstudante';
 import Card from '~/componentes/card';
@@ -26,6 +26,10 @@ const PlanoAEECadastro = () => {
   const paramsRoute = useParams();
 
   const planoId = paramsRoute?.id;
+
+  const exibirModalDevolverPlanoAEE = useSelector(
+    store => store.planoAEE.exibirModalDevolverPlanoAEE
+  );
 
   const limparDadosPlano = useCallback(() => {
     dispatch(setLimparDadosQuestionarioDinamico());
@@ -97,7 +101,7 @@ const PlanoAEECadastro = () => {
             </div>
           </div>
         </div>
-        <ModalDevolverPlanoAEE />
+        {exibirModalDevolverPlanoAEE && <ModalDevolverPlanoAEE match={match} />}
       </Card>
     </LoaderPlano>
   );
