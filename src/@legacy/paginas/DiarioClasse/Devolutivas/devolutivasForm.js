@@ -474,6 +474,7 @@ const DevolutivasForm = () => {
       if (confirmou) {
         form.resetForm();
         setModoEdicao(false);
+        setarValorNovoComponenteCurricular(undefined);
       }
     }
   };
@@ -587,6 +588,7 @@ const DevolutivasForm = () => {
           setarValorNovoComponenteCurricular(descricao);
         }
       } else {
+        setModoEdicao(false);
         setarValorNovoComponenteCurricular(descricao);
       }
     } else {

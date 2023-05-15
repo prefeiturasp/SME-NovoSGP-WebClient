@@ -130,7 +130,7 @@ const RelatorioNotasConceitosFinais = () => {
 
   const obterUes = useCallback(async dre => {
     if (dre) {
-      setCarregandoGeral(true);
+      setCarregandoUes(true);
 
       const dataAtual = new Date();
       const consideraHistorico = anoLetivo != dataAtual.getFullYear();
@@ -245,7 +245,7 @@ const RelatorioNotasConceitosFinais = () => {
 
   useEffect(() => {
     if (codigoDre) {
-      obterUes();
+      obterUes(codigoDre);
     } else {
       setCodigoUe(undefined);
       setListaUes([]);
