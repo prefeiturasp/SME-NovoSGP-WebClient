@@ -197,87 +197,81 @@ const LocalizarEstudante = props => {
   }, [codigoUe]);
 
   return (
-    <>
-      <Row gutter={[16, 16]}>
-        <Col sm={24} md={8} lg={4}>
+    <Row gutter={[16, 16]} style={{ width: '100%', margin: 0 }}>
+      <Col sm={24} md={8} lg={4}>
+        <SelectComponent
+          valueText="id"
+          label="Ano letivo"
+          valueOption="label"
+          valueSelect={anoAtual}
+          lista={listaAnosLetivo}
+          placeholder="Ano letivo"
+          id={SGP_SELECT_ANO_LETIVO}
+          disabled={listaAnosLetivo?.length === 1}
+        />
+      </Col>
+
+      <Col sm={24} md={24} lg={10}>
+        <Loader loading={carregandoDres} ignorarTip>
           <SelectComponent
-            valueText="id"
-            label="Ano letivo"
-            valueOption="label"
-            valueSelect={anoAtual}
-            lista={listaAnosLetivo}
-            placeholder="Ano letivo"
-            id={SGP_SELECT_ANO_LETIVO}
-            disabled={listaAnosLetivo?.length === 1}
+            valueText="nome"
+            id={SGP_SELECT_DRE}
+            valueOption="codigo"
+            onChange={onChangeDre}
+            lista={listaDres || []}
+            placeholder="Selecione uma DRE"
+            disabled={listaDres?.length === 1}
+            valueSelect={codigoDre || undefined}
+            label="Diretoria Regional de Educação (DRE)"
           />
-        </Col>
+        </Loader>
+      </Col>
 
-        <Col sm={24} md={24} lg={10}>
-          <Loader loading={carregandoDres} ignorarTip>
-            <SelectComponent
-              valueText="nome"
-              id={SGP_SELECT_DRE}
-              valueOption="codigo"
-              onChange={onChangeDre}
-              lista={listaDres || []}
-              placeholder="Selecione uma DRE"
-              disabled={listaDres?.length === 1}
-              valueSelect={codigoDre || undefined}
-              label="Diretoria Regional de Educação (DRE)"
-            />
-          </Loader>
-        </Col>
-
-        <Col sm={24} md={24} lg={10}>
-          <Loader loading={carregandoUes} ignorarTip>
-            <SelectComponent
-              valueText="nome"
-              id={SGP_SELECT_UE}
-              valueOption="codigo"
-              onChange={onChangeUe}
-              lista={listaUes || []}
-              label="Unidade Escolar (UE)"
-              placeholder="Selecione uma UE"
-              valueSelect={codigoUe || undefined}
-              disabled={!codigoDre || listaUes?.length === 1}
-            />
-          </Loader>
-        </Col>
-      </Row>
-
-      <Row gutter={[16, 16]}>
-        <Col sm={24} md={24} lg={8}>
-          <Loader loading={carregandoTurmas} ignorarTip>
-            <SelectComponent
-              label="Turma"
-              valueText="nome"
-              placeholder="Turma"
-              lista={listaTurmas}
-              valueOption="codigo"
-              id={SGP_SELECT_TURMA}
-              onChange={onChangeTurma}
-              valueSelect={codigoTurma}
-              disabled={!codigoUe || listaTurmas?.length === 1}
-            />
-          </Loader>
-        </Col>
-
-        <Col sm={24} md={24} lg={16} style={{ padding: 0 }}>
-          <LocalizadorEstudante
-            showLabel
-            novaEstrutura
-            anoLetivo={anoAtual}
-            desabilitado={!codigoUe}
-            ueId={codigoDre ? codigoUe : ''}
-            id={SGP_SELECT_ESTUDANTE_CRIANCA}
-            labelAlunoNome="Criança/Estudante"
-            onChange={onChangeLocalizadorEstudante}
-            placeholder="Procure pelo nome da criança"
-            codigoTurma={codigoDre ? codigoTurma : ''}
+      <Col sm={24} md={24} lg={10}>
+        <Loader loading={carregandoUes} ignorarTip>
+          <SelectComponent
+            valueText="nome"
+            id={SGP_SELECT_UE}
+            valueOption="codigo"
+            onChange={onChangeUe}
+            lista={listaUes || []}
+            label="Unidade Escolar (UE)"
+            placeholder="Selecione uma UE"
+            valueSelect={codigoUe || undefined}
+            disabled={!codigoDre || listaUes?.length === 1}
           />
-        </Col>
-      </Row>
-    </>
+        </Loader>
+      </Col>
+
+      <Col sm={24} md={24} lg={8}>
+        <Loader loading={carregandoTurmas} ignorarTip>
+          <SelectComponent
+            label="Turma"
+            valueText="nome"
+            placeholder="Turma"
+            lista={listaTurmas}
+            valueOption="codigo"
+            id={SGP_SELECT_TURMA}
+            onChange={onChangeTurma}
+            valueSelect={codigoTurma}
+            disabled={!codigoUe || listaTurmas?.length === 1}
+          />
+        </Loader>
+      </Col>
+
+      <LocalizadorEstudante
+        showLabel
+        novaEstrutura
+        anoLetivo={anoAtual}
+        desabilitado={!codigoUe}
+        ueId={codigoDre ? codigoUe : ''}
+        id={SGP_SELECT_ESTUDANTE_CRIANCA}
+        labelAlunoNome="Criança/Estudante"
+        onChange={onChangeLocalizadorEstudante}
+        placeholder="Procure pelo nome da criança"
+        codigoTurma={codigoDre ? codigoTurma : ''}
+      />
+    </Row>
   );
 };
 
