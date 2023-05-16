@@ -22,6 +22,7 @@ import BotaoExcluirPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoExcluirP
 import { RotasDto } from '~/dtos';
 import ServicoNAAPA from '~/servicos/Paginas/Gestao/NAAPA/ServicoNAAPA';
 import {
+  setCarregarDadosEncaminhamentoNAAPA,
   setDesabilitarCamposEncaminhamentoNAAPA,
   setExibirModalEncerramentoEncaminhamentoNAAPA,
 } from '~/redux/modulos/encaminhamentoNAAPA/actions';
@@ -143,6 +144,9 @@ const CadastroEncaminhamentoNAAPABotoesAcao = props => {
       situacaoNAAPA.Rascunho
     );
     if (resposta?.status === 200) {
+      if (encaminhamentoId) {
+        dispatch(setCarregarDadosEncaminhamentoNAAPA(true));
+      }
       navigate(`${RotasDto.ENCAMINHAMENTO_NAAPA}/${resposta?.data?.id}`);
     }
   };
