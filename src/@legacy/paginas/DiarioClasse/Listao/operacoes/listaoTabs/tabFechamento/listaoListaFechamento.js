@@ -358,7 +358,7 @@ const ListaoListaFechamento = props => {
         );
       case notasConceitos.Conceitos:
         return (
-          <>
+          <div style={{ width: ehRegencia ? '140px' : '' }}>
             {ehRegencia && (
               <Label
                 text={notaFechamento?.disciplina}
@@ -367,7 +367,13 @@ const ListaoListaFechamento = props => {
               />
             )}
             <ListaoCampoConceito
-              styleContainer={{ padding: '3px 20px 11px' }}
+              styleContainer={
+                ehRegencia
+                  ? {
+                      padding: '2px 20px 11px',
+                    }
+                  : {}
+              }
               dadosConceito={notaFechamento}
               idCampo={shortid.generate()}
               desabilitar={desabilitar}
@@ -384,7 +390,7 @@ const ListaoListaFechamento = props => {
               }
             />
             {notaFechamento?.emAprovacao && <MarcadorAguardandoAprovacao />}
-          </>
+          </div>
         );
       default:
         return '';
@@ -617,6 +623,7 @@ const ListaoListaFechamento = props => {
     const colunasRegencia = [
       {
         align: 'left',
+        width: '100%',
         render: () => 'Componentes regência de classe',
       },
     ];
@@ -630,7 +637,6 @@ const ListaoListaFechamento = props => {
           align: 'center',
           dataIndex: [`${nomeRef}`, `${index}`],
           key: `${nomeRef}[${index}]`,
-          width: '115px',
           className: 'position-relative',
           render: dados =>
             montarCampoNotaConceito(
