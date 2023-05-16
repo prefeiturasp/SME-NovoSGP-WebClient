@@ -114,6 +114,7 @@ import ListaoPrincipal from '~/paginas/DiarioClasse/Listao';
 import RelatorioEncaminhamentonNAAPA from '~/paginas/Relatorios/NAAPA/encaminhamento/relatorioEncaminhamentoNAAPA';
 import RelatorioSondagemAnalitico from '~/paginas/Relatorios/Sondagem/relatorioSondagem';
 import RelatorioRegistroItinerancia from '@/@legacy/paginas/Relatorios/AEE/registroItinerancia/relatorioRegistroItinerancia';
+import RelatorioControleFrequenciaMensal from '@/@legacy/paginas/Relatorios/Frequencia/RelatorioControleFrequenciaMensal/relatorioControleFrequenciaMensal';
 
 export interface RouteProps {
   path: string;
@@ -1645,6 +1646,17 @@ route.set(ROUTES.RELATORIO_AEE_REGISTRO_ITINERANCIA_IMPRESSAO, {
   tipo: RotasTipo.EstruturadaAutenticada,
   temPermissionamento: true,
   chavePermissao: ROUTES.RELATORIO_AEE_REGISTRO_ITINERANCIA_IMPRESSAO,
+});
+
+route.set(ROUTES.RELATORIO_CONTROLE_FREQUENCIA_MENSAL, {
+  breadcrumbName: 'Controle de frequência mensal',
+  menu: ['Relatórios', 'Frequência'],
+  parent: '/',
+  component: RelatorioControleFrequenciaMensal,
+  exact: true,
+  tipo: RotasTipo.EstruturadaAutenticada,
+  temPermissionamento: true,
+  chavePermissao: ROUTES.RELATORIO_CONTROLE_FREQUENCIA_MENSAL,
 });
 
 const getRoutesArray = () => {
