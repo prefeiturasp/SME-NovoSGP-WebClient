@@ -327,7 +327,7 @@ const ListaEncaminhamentoNAAPA = () => {
       </Cabecalho>
 
       <Card padding="24px 24px">
-        <Row gutter={[16, 16]}>
+        <Row gutter={[16, 16]} style={{ maxWidth: '100%', margin: 0 }}>
           <Col span={24}>
             <CheckboxComponent
               id={SGP_CHECKBOX_EXIBIR_HISTORICO}
