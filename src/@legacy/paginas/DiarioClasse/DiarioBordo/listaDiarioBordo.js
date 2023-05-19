@@ -38,14 +38,10 @@ import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPad
 const ListaDiarioBordo = () => {
   const [carregandoGeral, setCarregandoGeral] = useState(false);
   const [turmaInfantil, setTurmaInfantil] = useState(false);
-  const [
-    listaComponenteCurriculares,
-    setListaComponenteCurriculares,
-  ] = useState();
-  const [
-    componenteCurricularSelecionado,
-    setComponenteCurricularSelecionado,
-  ] = useState();
+  const [listaComponenteCurriculares, setListaComponenteCurriculares] =
+    useState();
+  const [componenteCurricularSelecionado, setComponenteCurricularSelecionado] =
+    useState();
   const [dataFinal, setDataFinal] = useState();
   const [dataInicial, setDataInicial] = useState();
   const [diarioBordoAtual, setDiarioBordoAtual] = useState();
@@ -93,7 +89,6 @@ const ListaDiarioBordo = () => {
       turmaSelecionada
     );
     verificaSomenteConsulta(permissoesTela, naoSetarSomenteConsultaNoStore);
-
   }, [permissoesTela, turmaSelecionada]);
 
   const numeroRegistros = 10;
@@ -103,7 +98,6 @@ const ListaDiarioBordo = () => {
   useEffect(() => {
     if (turma && turmaInfantil) {
       obterComponentesCurriculares();
-      return;
     }
     setListaComponenteCurriculares([]);
     setComponenteCurricularSelecionado(undefined);
@@ -164,13 +158,7 @@ const ListaDiarioBordo = () => {
       const dataFinalFormatada = dataFinal && dataFinal.format('MM-DD-YYYY');
       obterTitulos(dataIncialFormatada, dataFinalFormatada);
     }
-  }, [
-    dataInicial,
-    dataFinal,
-    componenteCurricularSelecionado,
-    obterTitulos,
-    numeroPagina,
-  ]);
+  }, [dataInicial, dataFinal, componenteCurricularSelecionado, numeroPagina]);
 
   const onChangePaginacao = pagina => {
     setNumeroPagina(pagina);
@@ -323,7 +311,6 @@ const ListaDiarioBordo = () => {
 
   useEffect(() => {
     if (dataFinal) validarSetarDataFinal(dataFinal);
-
   }, [dataInicial]);
 
   return (
