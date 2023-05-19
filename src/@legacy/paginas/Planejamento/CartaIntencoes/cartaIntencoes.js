@@ -78,7 +78,7 @@ const CartaIntencoes = () => {
   const obterUsuariosNotificar = async () => {
     return ServicoCartaIntencoes.obterNotificarUsuarios({
       turmaId,
-      observacaoId: '',
+      componenteCurricular,
     }).catch(e => erros(e));
   };
 
