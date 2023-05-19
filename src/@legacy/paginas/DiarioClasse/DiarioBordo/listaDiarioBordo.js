@@ -100,7 +100,6 @@ const ListaDiarioBordo = () => {
   useEffect(() => {
     if (turma && turmaInfantil) {
       obterComponentesCurriculares();
-      return;
     }
     setListaComponenteCurriculares([]);
     setComponenteCurricularSelecionado(undefined);
@@ -161,13 +160,7 @@ const ListaDiarioBordo = () => {
       const dataFinalFormatada = dataFinal && dataFinal.format('MM-DD-YYYY');
       obterTitulos(dataIncialFormatada, dataFinalFormatada);
     }
-  }, [
-    dataInicial,
-    dataFinal,
-    componenteCurricularSelecionado,
-    obterTitulos,
-    numeroPagina,
-  ]);
+  }, [dataInicial, dataFinal, componenteCurricularSelecionado, numeroPagina]);
 
   const onChangePaginacao = pagina => {
     setNumeroPagina(pagina);
