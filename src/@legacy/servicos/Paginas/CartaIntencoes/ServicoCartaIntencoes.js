@@ -18,9 +18,9 @@ class ServicoCartaIntencoes {
     );
   };
 
-  obterNotificarUsuarios = ({ turmaId, observacaoId = '' }) => {
+  obterNotificarUsuarios = ({ turmaId, componenteCurricular }) => {
     return api.get(
-      `${urlPadrao}/notificacoes/usuarios?turmaId=${turmaId}&observacaoId=${observacaoId}`
+      `${urlPadrao}/notificacoes/usuarios?turmaId=${turmaId}&componenteCurricular=${componenteCurricular}`
     );
   };
 
