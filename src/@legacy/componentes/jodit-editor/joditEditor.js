@@ -107,6 +107,7 @@ const JoditEditor = forwardRef((props, ref) => {
 
   const verificaSePodeInserirArquivo = e => {
     const dadosColadoTexto = e?.clipboardData?.getData?.('text');
+    const dadosColadoHTML = e?.clipboardData?.getData?.('text/html');
 
     const temImagemNosDadosColados = [...e?.clipboardData?.files].filter(item =>
       item.type.includes('image')

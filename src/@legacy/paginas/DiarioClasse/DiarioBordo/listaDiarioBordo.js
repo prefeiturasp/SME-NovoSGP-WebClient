@@ -47,6 +47,8 @@ const ListaDiarioBordo = () => {
   const [diarioBordoAtual, setDiarioBordoAtual] = useState();
   const [listaTitulos, setListaTitulos] = useState();
   const [numeroPagina, setNumeroPagina] = useState(1);
+  const [carregarListaUsuariosNotificar, setCarregarListaUsuariosNotificar] =
+    useState(false);
   const [resetInitialState, setResetInitialState] = useState(false);
   const usuario = useSelector(state => state.usuario);
   const { turmaSelecionada } = usuario;
@@ -172,6 +174,14 @@ const ListaDiarioBordo = () => {
     setNumeroPagina(pagina);
   };
 
+  const obterUsuariosNotificar = async diarioBordoId => {
+    return ServicoDiarioBordo.obterNotificarUsuarios({
+      turmaId,
+      observacaoId: '',
+      diarioBordoId,
+    }).catch(e => erros(e));
+  };
+
   const onColapse = async aulaId => {
     dispatch(limparDadosObservacoesUsuario());
 
@@ -198,12 +208,15 @@ const ListaDiarioBordo = () => {
           ...dados.data,
           observacoes,
         });
+
+        setCarregarListaUsuariosNotificar(true);
       }
     } else {
       setDiarioBordoAtual({
         ...diario,
         observacoes,
       });
+      setCarregarListaUsuariosNotificar(false);
     }
   };
 
@@ -448,9 +461,14 @@ const ListaDiarioBordo = () => {
                             editarObservacao={obs =>
                               salvarEditarObservacao(obs)
                             }
+                            obterUsuariosNotificar={() =>
+                              !pendente && obterUsuariosNotificar(id)
+                            }
+                            carregarListaUsuariosNotificar={
+                              carregarListaUsuariosNotificar
+                            }
                             excluirObservacao={obs => excluirObservacao(obs)}
                             permissoes={permissoesTela}
-                            diarioBordoId={id}
                             dreId={turmaSelecionada.dre}
                             ueId={turmaSelecionada.unidadeEscolar}
                           />

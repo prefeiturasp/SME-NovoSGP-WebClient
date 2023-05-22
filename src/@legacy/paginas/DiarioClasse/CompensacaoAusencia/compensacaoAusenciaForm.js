@@ -514,7 +514,7 @@ const CompensacaoAusenciaForm = ({ match }) => {
         return {
           ...disciplina,
           codigoSelecao: disciplina.territorioSaber
-            ? disciplina.id
+            ? disciplina.codigoTerritorioSaber
             : disciplina.codigoComponenteCurricular,
         };
       });

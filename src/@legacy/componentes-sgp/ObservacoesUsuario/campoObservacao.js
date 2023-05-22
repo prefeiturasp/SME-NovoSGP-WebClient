@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Label } from '~/componentes';
 import Button from '~/componentes/button';
@@ -15,20 +15,19 @@ import {
   setNovaObservacao,
   setListaUsuariosNotificacao,
 } from '~/redux/modulos/observacoesUsuario/actions';
-import { confirmar, erros } from '~/servicos/alertas';
-import ServicoDiarioBordo from '~/servicos/Paginas/DiarioClasse/ServicoDiarioBordo';
+import { confirmar } from '~/servicos/alertas';
 import { ContainerCampoObservacao } from './observacoesUsuario.css';
 
 const CampoObservacao = props => {
   const {
     salvarObservacao,
     esconderCaixaExterna,
+    obterUsuariosNotificar,
+    carregarListaUsuariosNotificar,
     podeIncluir,
-    obterUsuariosNotificadosDiarioBordo,
     usarLocalizadorFuncionario,
     parametrosLocalizadorFuncionario,
     desabilitarBotaoNotificar,
-    diarioBordoId,
     dreId,
     ueId,
     mudarObservacao,
@@ -37,8 +36,6 @@ const CampoObservacao = props => {
 
   const dispatch = useDispatch();
 
-  const turmaSelecionada = useSelector(state => state.usuario.turmaSelecionada);
-  const turmaId = turmaSelecionada?.id || 0;
   const observacaoEmEdicao = useSelector(
     store => store.observacoesUsuario.observacaoEmEdicao
   );
@@ -68,54 +65,37 @@ const CampoObservacao = props => {
     }
   };
 
-  const onClickSalvar = async () => {
-    const retorno = await salvarObservacao({ observacao: novaObservacao });
-    if (retorno?.status === 200) {
-      dispatch(setNovaObservacao(''));
-      if (obterUsuariosNotificadosDiarioBordo && diarioBordoId) {
-        const retornoUsuarios = await ServicoDiarioBordo.obterNofiticarUsuarios(
-          {
-            turmaId,
-            observacaoId: '',
-            diarioBordoId,
-          }
-        ).catch(e => erros(e));
+  const obterListaUsuariosNotificar = async () => {
+    if (obterUsuariosNotificar) {
+      const retornoUsuarios = await obterUsuariosNotificar();
 
-        if (retornoUsuarios?.status === 200) {
-          dispatch(setListaUsuariosNotificacao(retornoUsuarios.data));
-        }
+      if (retornoUsuarios?.status === 200) {
+        dispatch(setListaUsuariosNotificacao(retornoUsuarios.data));
       }
+    } else {
+      dispatch(setListaUsuariosNotificacao([]));
     }
   };
 
-  const obterNofiticarUsuarios = useCallback(async () => {
-    const retorno = await ServicoDiarioBordo.obterNofiticarUsuarios({
-      turmaId,
-      observacaoId: '',
-      diarioBordoId,
-    }).catch(e => erros(e));
+  const onClickSalvar = async () => {
+    const retorno = await salvarObservacao({ observacao: novaObservacao });
 
     if (retorno?.status === 200) {
-      dispatch(setListaUsuariosNotificacao(retorno.data));
+      dispatch(setNovaObservacao(''));
+      obterListaUsuariosNotificar();
     }
-  }, [turmaId, diarioBordoId, dispatch]);
+  };
 
   useEffect(() => {
     if (
-      turmaId &&
       !listaUsuarios?.length &&
-      obterUsuariosNotificadosDiarioBordo &&
-      diarioBordoId
+      obterListaUsuariosNotificar &&
+      carregarListaUsuariosNotificar
     ) {
-      obterNofiticarUsuarios();
+      obterListaUsuariosNotificar();
     }
-  }, [
-    turmaId,
-    obterNofiticarUsuarios,
-    listaUsuarios,
-    obterUsuariosNotificadosDiarioBordo,
-    diarioBordoId,
-  ]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [listaUsuarios, carregarListaUsuariosNotificar]);
 
   return (
     <>
@@ -190,13 +170,13 @@ const CampoObservacao = props => {
 
 CampoObservacao.propTypes = {
   salvarObservacao: PropTypes.func,
+  obterUsuariosNotificar: PropTypes.func,
+  carregarListaUsuariosNotificar: PropTypes.bool,
   esconderCaixaExterna: PropTypes.bool,
   podeIncluir: PropTypes.bool,
-  obterUsuariosNotificadosDiarioBordo: PropTypes.bool,
   usarLocalizadorFuncionario: PropTypes.bool,
   parametrosLocalizadorFuncionario: PropTypes.oneOfType([PropTypes.object]),
   desabilitarBotaoNotificar: PropTypes.bool,
-  diarioBordoId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   mudarObservacao: PropTypes.func,
   dreId: PropTypes.string,
   ueId: PropTypes.string,
@@ -204,13 +184,13 @@ CampoObservacao.propTypes = {
 
 CampoObservacao.defaultProps = {
   salvarObservacao: () => {},
+  obterUsuariosNotificar: () => {},
+  carregarListaUsuariosNotificar: false,
   esconderCaixaExterna: false,
   podeIncluir: true,
-  obterUsuariosNotificadosDiarioBordo: true,
   usarLocalizadorFuncionario: false,
   parametrosLocalizadorFuncionario: {},
   desabilitarBotaoNotificar: false,
-  diarioBordoId: '',
   mudarObservacao: () => {},
   dreId: '',
   ueId: '',
