@@ -35,6 +35,7 @@ const inicial = {
   },
   recomendacaoFamiliaSelecionados: [],
   recomendacaoAlunoSelecionados: [],
+  dadosInconsistenciasEstudantes: [],
 };
 
 export default function ConselhoClasse(state = inicial, action) {
@@ -242,8 +243,8 @@ export default function ConselhoClasse(state = inicial, action) {
         break;
       }
       case '@conselhoClasse/setAtualizarEmAprovacao': {
-        const novosDadosListasNotasConceitos = state.dadosListasNotasConceitos.map(
-          dados => {
+        const novosDadosListasNotasConceitos =
+          state.dadosListasNotasConceitos.map(dados => {
             const componenteEscolhido = action.payload.ehNota
               ? dados.componentesCurriculares
               : dados.componenteRegencia?.componentesCurriculares ||
@@ -283,8 +284,7 @@ export default function ConselhoClasse(state = inicial, action) {
                 componentesCurriculares: novosComponentes,
               },
             };
-          }
-        );
+          });
 
         return {
           ...draft,
@@ -306,6 +306,12 @@ export default function ConselhoClasse(state = inicial, action) {
       case '@conselhoClasse/setRecomendacaoAlunoSelecionados': {
         draft.recomendacaoAlunoSelecionados = action.payload;
         break;
+      }
+      case '@conselhoClasse/setDadosInconsistenciasEstudantes': {
+        return {
+          ...draft,
+          dadosInconsistenciasEstudantes: action.payload,
+        };
       }
 
       default:
