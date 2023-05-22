@@ -11,6 +11,7 @@ import {
 } from '~/redux/modulos/questionarioDinamico/actions';
 import DrawerAtendimento from '../../drawer/drawerAtendimento';
 import ListaHistoricoAtendimentosPaginada from './listaHistoricoAtendimentosPaginada';
+import { setRecarregarHistorico } from '@/@legacy/redux/modulos/historico-paginado/actions';
 
 const MontarDadosTabItinerancia = ({ questionarioId, dadosTab }) => {
   const dispatch = useDispatch();
@@ -43,6 +44,7 @@ const MontarDadosTabItinerancia = ({ questionarioId, dadosTab }) => {
     dispatch(setQuestionarioDinamicoEmEdicao(false));
     dispatch(setLimparDadosQuestionarioDinamico());
     dispatch(setListaSecoesEmEdicao([]));
+    dispatch(setRecarregarHistorico(true));
   };
 
   useEffect(() => {
