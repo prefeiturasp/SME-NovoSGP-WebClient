@@ -47,6 +47,7 @@ const ListaDiarioBordo = () => {
   const [diarioBordoAtual, setDiarioBordoAtual] = useState();
   const [listaTitulos, setListaTitulos] = useState();
   const [numeroPagina, setNumeroPagina] = useState(1);
+  const [resetInitialState, setResetInitialState] = useState(false);
   const usuario = useSelector(state => state.usuario);
   const { turmaSelecionada } = usuario;
   const permissoesTela = usuario.permissoes[RotasDto.DIARIO_BORDO];
@@ -113,7 +114,13 @@ const ListaDiarioBordo = () => {
   }, [turmaSelecionada, modalidadesFiltroPrincipal, turmaInfantil]);
 
   const onChangeComponenteCurricular = valor => {
+    setNumeroPagina(1);
+    setResetInitialState(true);
     setComponenteCurricularSelecionado(valor);
+
+    if (!valor) {
+      setListaTitulos([]);
+    }
   };
 
   const onClickConsultarDiario = () => {
@@ -126,6 +133,7 @@ const ListaDiarioBordo = () => {
   const obterTitulos = useCallback(
     async (dataInicio, dataFim) => {
       setCarregandoGeral(true);
+      setResetInitialState(false);
       const retorno = await ServicoDiarioBordo.obterTitulosDiarioBordo({
         turmaId,
         componenteCurricularId: componenteCurricularSelecionado,
@@ -461,6 +469,7 @@ const ListaDiarioBordo = () => {
                   numeroRegistros={numeroTotalRegistros}
                   pageSize={10}
                   onChangePaginacao={onChangePaginacao}
+                  resetInitialState={resetInitialState}
                 />
               </div>
             </div>
