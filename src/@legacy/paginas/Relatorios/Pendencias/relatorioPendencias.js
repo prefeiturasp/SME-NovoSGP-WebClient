@@ -500,7 +500,7 @@ const RelatorioPendencias = () => {
   const obterTipoPendenciaGrupo = useCallback(async () => {
     setCarregandoTipoPendenciaGrupo(true);
     const retorno = await ServicoRelatorioPendencias.obterTipoPendenciasGrupos({
-      opcaoTodos: true,
+      opcaoTodos: false,
     })
       .catch(e => erros(e))
       .finally(() => setCarregandoTipoPendenciaGrupo(false));
@@ -558,7 +558,6 @@ const RelatorioPendencias = () => {
       !anoLetivo ||
       !dreId ||
       !ueId ||
-      !tipoPendenciaGrupo?.length ||
       clicouBotaoGerar;
 
     const temModalidadeEja = String(modalidadeId) === String(ModalidadeDTO.EJA);
