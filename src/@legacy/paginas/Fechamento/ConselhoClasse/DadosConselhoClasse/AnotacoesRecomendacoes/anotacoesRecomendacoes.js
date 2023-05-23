@@ -164,20 +164,22 @@ const AnotacoesRecomendacoes = props => {
     return null;
   };
 
-  const desabilitarEdicaoAluno = () => {
-    const dataSituacao = moment(dadosAlunoObjectCard.dataSituacao).format(
-      'MM-DD-YYYY'
-    );
-    const dataFimBimestre = moment(bimestreAtual.dataFim).format('MM-DD-YYYY');
+  const alunoDentroDoPeriodoDoBimestreOuFechamento = () => {
+    const dataSituacao = moment(dadosAlunoObjectCard.dataSituacao);
+    const dataInicioBimestre = moment(bimestreAtual.dataInicio);
     const dataInicioPeriodoFechamento = pegueInicioPeriodoFechamento();
 
-    if (
-      matriculaAtivaPeriodo &&
-      (!alunoDesabilitado ||
-        dataSituacao >= dataFimBimestre ||
-        (dataInicioPeriodoFechamento &&
-          dataSituacao >= dataInicioPeriodoFechamento))
-    ) {
+    const alunoDentroDoBimestre = dataSituacao.isAfter(dataInicioBimestre);
+
+    const alunoDentroDoFechamento =
+      dataInicioPeriodoFechamento &&
+      dataSituacao.isSameOrAfter(dataInicioPeriodoFechamento);
+
+    return alunoDentroDoBimestre || alunoDentroDoFechamento;
+  };
+
+  const desabilitarEdicaoAluno = () => {
+    if (!alunoDesabilitado || alunoDentroDoPeriodoDoBimestreOuFechamento()) {
       return false;
     }
 
@@ -225,7 +227,6 @@ const AnotacoesRecomendacoes = props => {
     setExibir(false);
     setCarregando(false);
     setCarregandoAba(false);
-
   }, [
     alunoCodigo,
     conselhoClasseId,
