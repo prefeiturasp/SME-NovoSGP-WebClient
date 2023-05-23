@@ -45,10 +45,12 @@ const ListaDiarioBordo = () => {
   const [dataFinal, setDataFinal] = useState();
   const [dataInicial, setDataInicial] = useState();
   const [diarioBordoAtual, setDiarioBordoAtual] = useState();
+  const [carregandoCollapse, setCarregandoCollapse] = useState(false);
   const [listaTitulos, setListaTitulos] = useState();
   const [numeroPagina, setNumeroPagina] = useState(1);
   const [carregarListaUsuariosNotificar, setCarregarListaUsuariosNotificar] =
     useState(false);
+  const [resetInitialState, setResetInitialState] = useState(false);
   const usuario = useSelector(state => state.usuario);
   const { turmaSelecionada } = usuario;
   const permissoesTela = usuario.permissoes[RotasDto.DIARIO_BORDO];
@@ -100,7 +102,6 @@ const ListaDiarioBordo = () => {
   useEffect(() => {
     if (turma && turmaInfantil) {
       obterComponentesCurriculares();
-      return;
     }
     setListaComponenteCurriculares([]);
     setComponenteCurricularSelecionado(undefined);
@@ -116,7 +117,13 @@ const ListaDiarioBordo = () => {
   }, [turmaSelecionada, modalidadesFiltroPrincipal, turmaInfantil]);
 
   const onChangeComponenteCurricular = valor => {
+    setNumeroPagina(1);
+    setResetInitialState(true);
     setComponenteCurricularSelecionado(valor);
+
+    if (!valor) {
+      setListaTitulos([]);
+    }
   };
 
   const onClickConsultarDiario = () => {
@@ -129,6 +136,7 @@ const ListaDiarioBordo = () => {
   const obterTitulos = useCallback(
     async (dataInicio, dataFim) => {
       setCarregandoGeral(true);
+      setResetInitialState(false);
       const retorno = await ServicoDiarioBordo.obterTitulosDiarioBordo({
         turmaId,
         componenteCurricularId: componenteCurricularSelecionado,
@@ -161,13 +169,7 @@ const ListaDiarioBordo = () => {
       const dataFinalFormatada = dataFinal && dataFinal.format('MM-DD-YYYY');
       obterTitulos(dataIncialFormatada, dataFinalFormatada);
     }
-  }, [
-    dataInicial,
-    dataFinal,
-    componenteCurricularSelecionado,
-    obterTitulos,
-    numeroPagina,
-  ]);
+  }, [dataInicial, dataFinal, componenteCurricularSelecionado, numeroPagina]);
 
   const onChangePaginacao = pagina => {
     setNumeroPagina(pagina);
@@ -194,6 +196,7 @@ const ListaDiarioBordo = () => {
     let observacoes = [];
 
     if (idDiario) {
+      setCarregandoCollapse(true);
       dados = await ServicoDiarioBordo.obterDiarioBordoDetalhes(idDiario);
       if (dados?.data) {
         if (dados.data.observacoes.length) {
@@ -210,6 +213,8 @@ const ListaDiarioBordo = () => {
 
         setCarregarListaUsuariosNotificar(true);
       }
+
+      setCarregandoCollapse(false);
     } else {
       setDiarioBordoAtual({
         ...diario,
@@ -425,54 +430,58 @@ const ListaDiarioBordo = () => {
                       header={titulo}
                       ehPendente={pendente}
                     >
-                      <div className="row ">
-                        <div className="col-sm-12 mb-3">
-                          <JoditEditor
-                            id={`${id}-editor-planejamento`}
-                            name="planejamento"
-                            value={diarioBordoAtual?.planejamento}
-                            desabilitar
-                          />
+                      <Loader loading={carregandoCollapse} tip="">
+                        <div className="row ">
+                          <div className="col-sm-12 mb-3">
+                            <JoditEditor
+                              id={`${id}-editor-planejamento`}
+                              name="planejamento"
+                              value={diarioBordoAtual?.planejamento}
+                              desabilitar
+                            />
+                          </div>
+                          <div className="col-sm-12 d-flex justify-content-end mb-4">
+                            <Button
+                              id={shortid.generate()}
+                              label={
+                                id
+                                  ? 'Consultar diário completo'
+                                  : 'Inserir novo diário'
+                              }
+                              icon="book"
+                              color={Colors.Azul}
+                              border
+                              onClick={onClickConsultarDiario}
+                              disabled={!diarioBordoAtual}
+                            />
+                          </div>
+                          <div className="col-sm-12 p-0 position-relative">
+                            <ObservacoesUsuario
+                              esconderLabel={pendente}
+                              esconderCaixaExterna={pendente}
+                              desabilitarBotaoNotificar={pendente}
+                              mostrarListaNotificacao={!pendente}
+                              salvarObservacao={obs =>
+                                salvarEditarObservacao(obs)
+                              }
+                              editarObservacao={obs =>
+                                salvarEditarObservacao(obs)
+                              }
+                              obterUsuariosNotificar={() =>
+                                !pendente && obterUsuariosNotificar(id)
+                              }
+                              carregarListaUsuariosNotificar={
+                                carregarListaUsuariosNotificar
+                              }
+                              excluirObservacao={obs => excluirObservacao(obs)}
+                              permissoes={permissoesTela}
+                              diarioBordoId={id}
+                              dreId={turmaSelecionada.dre}
+                              ueId={turmaSelecionada.unidadeEscolar}
+                            />
+                          </div>
                         </div>
-                        <div className="col-sm-12 d-flex justify-content-end mb-4">
-                          <Button
-                            id={shortid.generate()}
-                            label={
-                              id
-                                ? 'Consultar diário completo'
-                                : 'Inserir novo diário'
-                            }
-                            icon="book"
-                            color={Colors.Azul}
-                            border
-                            onClick={onClickConsultarDiario}
-                          />
-                        </div>
-                        <div className="col-sm-12 p-0 position-relative">
-                          <ObservacoesUsuario
-                            esconderLabel={pendente}
-                            esconderCaixaExterna={pendente}
-                            desabilitarBotaoNotificar={pendente}
-                            mostrarListaNotificacao={!pendente}
-                            salvarObservacao={obs =>
-                              salvarEditarObservacao(obs)
-                            }
-                            editarObservacao={obs =>
-                              salvarEditarObservacao(obs)
-                            }
-                            obterUsuariosNotificar={() =>
-                              !pendente && obterUsuariosNotificar(id)
-                            }
-                            carregarListaUsuariosNotificar={
-                              carregarListaUsuariosNotificar
-                            }
-                            excluirObservacao={obs => excluirObservacao(obs)}
-                            permissoes={permissoesTela}
-                            dreId={turmaSelecionada.dre}
-                            ueId={turmaSelecionada.unidadeEscolar}
-                          />
-                        </div>
-                      </div>
+                      </Loader>
                     </PainelCollapse.Painel>
                   );
                 })}
@@ -486,6 +495,7 @@ const ListaDiarioBordo = () => {
                   numeroRegistros={numeroTotalRegistros}
                   pageSize={10}
                   onChangePaginacao={onChangePaginacao}
+                  resetInitialState={resetInitialState}
                 />
               </div>
             </div>
