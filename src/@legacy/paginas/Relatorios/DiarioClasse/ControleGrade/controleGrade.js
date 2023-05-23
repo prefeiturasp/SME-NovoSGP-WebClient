@@ -365,14 +365,18 @@ const ControleGrade = () => {
   }, [turmaId, listaTurmas]);
 
   useEffect(() => {
-    if (ueId && turmaId) {
+    if (ueId && turmaId !== '0' && turmaId !== undefined) {
       obterComponentesCurriculares();
+    } else if (ueId && turmaId === '0') {
+      const lista = [{ valor: '0', desc: 'Todos' }];
+      setComponentesCurricularesId(lista[0].valor);
+      setListaComponentesCurriculares(lista);
     } else {
       setComponentesCurricularesId(undefined);
       setListaComponentesCurriculares([]);
     }
-  }, [ueId, turmaId, obterComponentesCurriculares]);
-
+  }, [ueId, turmaId]);
+  
   const obterSemestres = async (
     modalidadeSelecionada,
     anoLetivoSelecionado
