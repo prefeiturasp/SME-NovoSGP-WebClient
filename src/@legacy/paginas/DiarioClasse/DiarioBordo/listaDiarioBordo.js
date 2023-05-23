@@ -467,6 +467,12 @@ const ListaDiarioBordo = () => {
                               editarObservacao={obs =>
                                 salvarEditarObservacao(obs)
                               }
+                              obterUsuariosNotificar={() =>
+                                !pendente && obterUsuariosNotificar(id)
+                              }
+                              carregarListaUsuariosNotificar={
+                                carregarListaUsuariosNotificar
+                              }
                               excluirObservacao={obs => excluirObservacao(obs)}
                               permissoes={permissoesTela}
                               diarioBordoId={id}
