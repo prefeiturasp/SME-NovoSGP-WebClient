@@ -45,6 +45,7 @@ const ListaDiarioBordo = () => {
   const [dataFinal, setDataFinal] = useState();
   const [dataInicial, setDataInicial] = useState();
   const [diarioBordoAtual, setDiarioBordoAtual] = useState();
+  const [carregandoCollapse, setCarregandoCollapse] = useState(false);
   const [listaTitulos, setListaTitulos] = useState();
   const [numeroPagina, setNumeroPagina] = useState(1);
   const [carregarListaUsuariosNotificar, setCarregarListaUsuariosNotificar] =
@@ -195,6 +196,7 @@ const ListaDiarioBordo = () => {
     let observacoes = [];
 
     if (idDiario) {
+      setCarregandoCollapse(true);
       dados = await ServicoDiarioBordo.obterDiarioBordoDetalhes(idDiario);
       if (dados?.data) {
         if (dados.data.observacoes.length) {
@@ -211,6 +213,8 @@ const ListaDiarioBordo = () => {
 
         setCarregarListaUsuariosNotificar(true);
       }
+
+      setCarregandoCollapse(false);
     } else {
       setDiarioBordoAtual({
         ...diario,
@@ -426,14 +430,50 @@ const ListaDiarioBordo = () => {
                       header={titulo}
                       ehPendente={pendente}
                     >
-                      <div className="row ">
-                        <div className="col-sm-12 mb-3">
-                          <JoditEditor
-                            id={`${id}-editor-planejamento`}
-                            name="planejamento"
-                            value={diarioBordoAtual?.planejamento}
-                            desabilitar
-                          />
+                      <Loader loading={carregandoCollapse} tip="">
+                        <div className="row ">
+                          <div className="col-sm-12 mb-3">
+                            <JoditEditor
+                              id={`${id}-editor-planejamento`}
+                              name="planejamento"
+                              value={diarioBordoAtual?.planejamento}
+                              desabilitar
+                            />
+                          </div>
+                          <div className="col-sm-12 d-flex justify-content-end mb-4">
+                            <Button
+                              id={shortid.generate()}
+                              label={
+                                id
+                                  ? 'Consultar diário completo'
+                                  : 'Inserir novo diário'
+                              }
+                              icon="book"
+                              color={Colors.Azul}
+                              border
+                              onClick={onClickConsultarDiario}
+                              disabled={!diarioBordoAtual}
+                            />
+                          </div>
+                          <div className="col-sm-12 p-0 position-relative">
+                            <ObservacoesUsuario
+                              esconderLabel={pendente}
+                              esconderCaixaExterna={pendente}
+                              desabilitarBotaoNotificar={pendente}
+                              mostrarListaNotificacao={!pendente}
+                              salvarObservacao={obs =>
+                                salvarEditarObservacao(obs)
+                              }
+                              editarObservacao={obs =>
+                                salvarEditarObservacao(obs)
+                              }
+                              excluirObservacao={obs => excluirObservacao(obs)}
+                              permissoes={permissoesTela}
+                              diarioBordoId={id}
+                              dreId={turmaSelecionada.dre}
+                              ueId={turmaSelecionada.unidadeEscolar}
+                            />
+                          </div>
                         </div>
                         <div className="col-sm-12 d-flex justify-content-end mb-4">
                           <Button
@@ -473,7 +513,7 @@ const ListaDiarioBordo = () => {
                             ueId={turmaSelecionada.unidadeEscolar}
                           />
                         </div>
-                      </div>
+                      </Loader>
                     </PainelCollapse.Painel>
                   );
                 })}
