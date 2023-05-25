@@ -466,8 +466,15 @@ class ServicoEncaminhamentoAEE {
     situacao,
     anoLetivo
   ) => {
-    let url = `${urlPadrao}/responsaveis?dreId=${dreId}&ueId=${ueId}&anoLetivo=${anoLetivo}`;
+    let url = `${urlPadrao}/responsaveis?dreId=${dreId}`;
 
+    if (ueId) {
+      url += `&ueId=${ueId}`;
+    }
+
+    if (anoLetivo) {
+      url += `&anoLetivo=${anoLetivo}`;
+    }
     if (turmaId) {
       url += `&turmaId=${turmaId}`;
     }

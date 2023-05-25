@@ -7,6 +7,7 @@ import {
   Card,
   CheckboxComponent,
   Loader,
+  RadioGroupButton,
   SelectComponent,
 } from '~/componentes';
 import { Cabecalho, FiltroHelper } from '~/componentes-sgp';
@@ -31,6 +32,8 @@ import ServicoNAAPA from '~/servicos/Paginas/Gestao/NAAPA/ServicoNAAPA';
 import { ordenarDescPor, verificarDataFimMaiorInicio } from '~/utils';
 import ListaEncaminhamentoNAAPABotoesAcao from './listaEncaminhamentoNAAPABotoesAcao';
 import ListaEncaminhamentoNAAPAPaginada from './listaEncaminhamentoNAAPAPaginada';
+import { SGP_RADIO_EXIBIR_ENCAMINHAMENTOS_NAAPA_ENCERRADOS } from '@/@legacy/constantes/ids/radio';
+import situacaoNAAPA from '@/@legacy/dtos/situacaoNAAPA';
 
 const ListaEncaminhamentoNAAPA = () => {
   const usuario = useSelector(state => state.usuario);
@@ -47,6 +50,8 @@ const ListaEncaminhamentoNAAPA = () => {
   const [dataAberturaQueixaFim, setDataAberturaQueixaFim] = useState();
   const [situacao, setSituacao] = useState();
   const [prioridade, setPrioridade] = useState();
+  const [exibirEncaminhamentosEncerrados, setExibirEncaminhamentosEncerrados] =
+    useState(false);
 
   const [nomeAlunoExibicao, setNomeAlunoExibicao] = useState('');
   const [timeoutDebounce, setTimeoutDebounce] = useState();
@@ -68,6 +73,12 @@ const ListaEncaminhamentoNAAPA = () => {
     idsEncaminhamentoNAAPASelecionados,
     setIdsEncaminhamentoNAAPASelecionados,
   ] = useState([]);
+
+  const opcoesEncerrados = [
+    { label: 'Sim', value: true },
+    { label: 'Não', value: false },
+  ];
+
   useEffect(() => {
     const soConsulta = verificaSomenteConsulta(
       permissoes?.[RotasDto.ENCAMINHAMENTO_NAAPA]
@@ -198,10 +209,19 @@ const ListaEncaminhamentoNAAPA = () => {
     }
   }, [ue, obterTurmas]);
 
+  const atualizarSituacoes = situacoes => {
+    const novasListaSituacoes = situacoes.filter(
+      situacao => situacao?.id !== situacaoNAAPA.Encerrado
+    );
+
+    return novasListaSituacoes;
+  };
+
   useEffect(() => {
     ServicoNAAPA.buscarSituacoes().then(resposta => {
       if (resposta?.data?.length) {
-        setListaSituacoes(resposta.data);
+        const lista = atualizarSituacoes(resposta.data);
+        setListaSituacoes(lista);
       } else {
         setListaSituacoes([]);
       }
@@ -472,6 +492,18 @@ const ListaEncaminhamentoNAAPA = () => {
             />
           </Col>
 
+          <Col sm={24} lg={12}>
+            <RadioGroupButton
+              value={exibirEncaminhamentosEncerrados}
+              label="Exibir encaminhamentos encerrados"
+              opcoes={opcoesEncerrados}
+              id={SGP_RADIO_EXIBIR_ENCAMINHAMENTOS_NAAPA_ENCERRADOS}
+              onChange={e =>
+                setExibirEncaminhamentosEncerrados(e?.target?.value)
+              }
+            />
+          </Col>
+
           <Col sm={24}>
             <ListaEncaminhamentoNAAPAPaginada
               ue={ue}
@@ -485,6 +517,7 @@ const ListaEncaminhamentoNAAPA = () => {
               dataAberturaQueixaFim={dataAberturaQueixaFim}
               dataAberturaQueixaInicio={dataAberturaQueixaInicio}
               onSelecionarItems={onSelecionarItems}
+              exibirEncaminhamentosEncerrados={exibirEncaminhamentosEncerrados}
             />
           </Col>
         </Row>

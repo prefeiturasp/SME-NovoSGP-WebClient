@@ -21,6 +21,7 @@ const ListaEncaminhamentoNAAPAPaginada = props => {
     dataAberturaQueixaFim,
     dataAberturaQueixaInicio,
     onSelecionarItems,
+    exibirEncaminhamentosEncerrados,
   } = props;
 
   const navigate = useNavigate();
@@ -79,6 +80,7 @@ const ListaEncaminhamentoNAAPAPaginada = props => {
         : '',
       situacao,
       prioridade,
+      exibirEncerrados: exibirEncaminhamentosEncerrados,
     };
 
     const dataFimMaiorInicio = verificarDataFimMaiorInicio(
@@ -100,6 +102,7 @@ const ListaEncaminhamentoNAAPAPaginada = props => {
     dataAberturaQueixaFim,
     situacao,
     prioridade,
+    exibirEncaminhamentosEncerrados,
   ]);
 
   useEffect(() => {
