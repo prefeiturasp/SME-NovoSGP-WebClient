@@ -29,6 +29,7 @@ import {
   SGP_SELECT_ANO_LETIVO,
   SGP_SELECT_DRE,
   SGP_SELECT_ESTUDANTE_CRIANCA,
+  SGP_SELECT_RESPONSAVEL,
   SGP_SELECT_SITUACAO,
   SGP_SELECT_TURMA,
   SGP_SELECT_UE,
@@ -38,7 +39,6 @@ import BtnImpressaoListaPlanoAEE from './btnImpressaoListaPlanoAEE';
 import { useNavigate } from 'react-router-dom';
 import { OPCAO_TODOS } from '@/@legacy/constantes';
 import ServicoEncaminhamentoAEE from '@/@legacy/servicos/Paginas/Relatorios/AEE/ServicoEncaminhamentoAEE';
-import LocalizadorFuncionario from '@/@legacy/componentes-sgp/LocalizadorFuncionario';
 import { SGP_RADIO_EXIBIR_PLANOS_ENCERRADOS } from '@/@legacy/constantes/ids/radio';
 
 const PlanoAEELista = () => {
@@ -55,6 +55,8 @@ const PlanoAEELista = () => {
   const [listaUes, setListaUes] = useState([]);
   const [listaTurmas, setListaTurmas] = useState([]);
   const [listaSituacao, setListaSituacao] = useState([]);
+  const [listaResponsavel, setListaResponsavel] = useState([]);
+
   const [responsaveisPAAI, setResponsaveisPAAI] = useState([]);
 
   const [anoLetivo, setAnoLetivo] = useState();
@@ -74,6 +76,7 @@ const PlanoAEELista = () => {
   const [carregandoUes, setCarregandoUes] = useState(false);
   const [carregandoResponsaveisPAAI, setCarregandoResponsaveisPAAI] =
     useState(false);
+  const [carregandoResponsavel, setCarregandoResponsavel] = useState(false);
 
   const [alunoLocalizadorSelecionado, setAlunoLocalizadorSelecionado] =
     useState();
@@ -556,13 +559,65 @@ const PlanoAEELista = () => {
     }
   };
 
-  const onChangeLocalizadorFuncionario = funcionario => {
-    if (funcionario?.codigoRF && funcionario?.nomeServidor) {
-      setResponsavelSelecionado(funcionario?.codigoRF);
-    } else {
-      setResponsavelSelecionado();
-    }
+  const onChangeResponsavel = valor => {
+    setResponsavelSelecionado(valor);
   };
+
+  const obterResponsaveis = useCallback(async () => {
+    if (dreId) {
+      const dreSelecionada = listaDres.find(d => d?.valor === dreId);
+
+      const ueSelecionada = ueId ? listaUes.find(d => d?.valor === ueId) : 0;
+
+      const turmaSelecionada = turmaId
+        ? listaTurmas.find(d => d?.codigo === turmaId)
+        : 0;
+
+      setCarregandoResponsavel(true);
+      setResponsavelSelecionado();
+
+      const resposta = await ServicoPlanoAEE.obterResponsaveis(
+        dreSelecionada?.id,
+        !ueSelecionada?.id || ueSelecionada?.id === OPCAO_TODOS
+          ? 0
+          : ueSelecionada?.id,
+        turmaSelecionada ? turmaSelecionada?.id : 0,
+        alunoLocalizadorSelecionado,
+        situacao,
+        exibirPlanosEncerrados
+      )
+        .catch(e => erros(e))
+        .finally(() => setCarregandoResponsavel(false));
+
+      if (resposta?.data?.length) {
+        const lista = resposta.data.map(item => {
+          return {
+            ...item,
+            codigoRf: String(item.codigoRf),
+            nomeFormatado: `${item.nomeServidor} - ${item.codigoRf}`,
+          };
+        });
+
+        setListaResponsavel(lista);
+      } else {
+        setListaResponsavel([]);
+      }
+    }
+  }, [
+    dreId,
+    ueId,
+    turmaId,
+    alunoLocalizadorSelecionado,
+    situacao,
+    exibirPlanosEncerrados,
+    listaUes,
+  ]);
+
+  useEffect(() => {
+    if (dreId && listaUes.length) {
+      obterResponsaveis();
+    }
+  }, [obterResponsaveis, dreId, listaUes]);
 
   return (
     <>
@@ -671,7 +726,7 @@ const PlanoAEELista = () => {
                   ueId={ueId}
                   onChange={onChangeLocalizadorEstudante}
                   anoLetivo={anoLetivo}
-                  desabilitado={!dreId || !ueId}
+                  desabilitado={!dreId || !ueId || ueId === OPCAO_TODOS}
                   exibirCodigoEOL={false}
                   codigoTurma={turmaId}
                   placeholder="Procure pelo nome da Criança/Estudante"
@@ -705,17 +760,20 @@ const PlanoAEELista = () => {
               />
             </div>
             <div className="col-sm-12 mb-2">
-              <div className="row">
-                <LocalizadorFuncionario
-                  desabilitado={!dreId}
-                  onChange={onChangeLocalizadorFuncionario}
-                  codigoDre={dreId}
-                  limparCampos={!dreId}
-                  url="v1/encaminhamento-aee/responsavel-plano/pesquisa"
+              <Loader loading={carregandoResponsavel} tip="">
+                <SelectComponent
+                  id={SGP_SELECT_RESPONSAVEL}
+                  label="Responsável"
+                  lista={listaResponsavel}
+                  valueOption="codigoRf"
+                  valueText="nomeFormatado"
+                  onChange={onChangeResponsavel}
+                  valueSelect={responsavelSelecionado}
+                  placeholder="Responsável"
                 />
-              </div>
+              </Loader>
             </div>
-            <div className="col-sm-12 mb-2">
+            <div className="col-sm-12 mb-4">
               <Loader loading={carregandoResponsaveisPAAI} tip="">
                 <SelectComponent
                   placeholder="Pesquise por nome ou RF"

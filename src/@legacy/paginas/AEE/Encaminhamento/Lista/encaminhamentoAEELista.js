@@ -240,27 +240,42 @@ const EncaminhamentoAEELista = () => {
   const obterResponsaveis = useCallback(async () => {
     if (anoLetivo) {
       setCarregandoResponsavel(true);
+      setResponsavel();
 
       const resposta = await ServicoEncaminhamentoAEE.obterResponsaveis(
         dre?.id,
-        ue?.id === OPCAO_TODOS ? '' : ue?.id,
+        !ue?.id || ue?.id === OPCAO_TODOS ? 0 : ue?.id,
         turma?.id,
         alunoLocalizadorSelecionado,
         situacao,
-        anoLetivo
+        anoLetivo,
+        exibirEncaminhamentosEncerrados
       )
         .catch(e => erros(e))
         .finally(() => setCarregandoResponsavel(false));
+
       if (resposta?.data?.length) {
         const lista = resposta.data.map(item => {
-          return { ...item, codigoRf: String(item.codigoRf) };
+          return {
+            ...item,
+            codigoRf: String(item.codigoRf),
+            nomeFormatado: `${item.nomeServidor} - ${item.codigoRf}`,
+          };
         });
         setListaResponsavel(lista);
       } else {
         setListaResponsavel([]);
       }
     }
-  }, [anoLetivo, dre, ue, turma, alunoLocalizadorSelecionado, situacao]);
+  }, [
+    anoLetivo,
+    dre,
+    ue,
+    turma,
+    alunoLocalizadorSelecionado,
+    situacao,
+    exibirEncaminhamentosEncerrados,
+  ]);
 
   useEffect(() => {
     if (dre?.id && listaUes.length) {
@@ -721,20 +736,6 @@ const EncaminhamentoAEELista = () => {
                 />
               </Loader>
             </div>
-            <div className="col-sm-12 col-md-6 col-lg-6 col-xl-6 mb-4">
-              <Loader loading={carregandoResponsavel} tip="">
-                <SelectComponent
-                  id={SGP_SELECT_RESPONSAVEL}
-                  label="PAEE/PAAI Responsável"
-                  lista={listaResponsavel}
-                  valueOption="codigoRf"
-                  valueText="nomeServidor"
-                  onChange={onChangeResponsavel}
-                  valueSelect={responsavel}
-                  placeholder="PAEE/PAAI Responsável"
-                />
-              </Loader>
-            </div>
             <div className="col-sm-12 col-md-6 mb-2">
               <RadioGroupButton
                 value={exibirEncaminhamentosEncerrados}
@@ -744,6 +745,21 @@ const EncaminhamentoAEELista = () => {
                 onChange={onChangeEncaminhamentosEncerrados}
               />
             </div>
+            <div className="col-sm-12 mb-4">
+              <Loader loading={carregandoResponsavel} tip="">
+                <SelectComponent
+                  id={SGP_SELECT_RESPONSAVEL}
+                  label="PAEE/PAAI Responsável"
+                  lista={listaResponsavel}
+                  valueOption="codigoRf"
+                  valueText="nomeFormatado"
+                  onChange={onChangeResponsavel}
+                  valueSelect={responsavel}
+                  placeholder="PAEE/PAAI Responsável"
+                />
+              </Loader>
+            </div>
+
             {anoLetivo &&
             dre?.codigo &&
             listaDres?.length &&

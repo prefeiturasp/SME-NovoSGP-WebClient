@@ -464,17 +464,11 @@ class ServicoEncaminhamentoAEE {
     turmaId,
     alunoCodigo,
     situacao,
-    anoLetivo
+    anoLetivo,
+    exibirEncerrados = false
   ) => {
-    let url = `${urlPadrao}/responsaveis?dreId=${dreId}`;
+    let url = `${urlPadrao}/responsaveis?dreId=${dreId}&ueId=${ueId}&anoLetivo=${anoLetivo}&exibirEncerrados=${exibirEncerrados}`;
 
-    if (ueId) {
-      url += `&ueId=${ueId}`;
-    }
-
-    if (anoLetivo) {
-      url += `&anoLetivo=${anoLetivo}`;
-    }
     if (turmaId) {
       url += `&turmaId=${turmaId}`;
     }
