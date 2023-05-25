@@ -521,14 +521,20 @@ const RelatorioDevolutivas = () => {
 
   useEffect(() => {
     if (turmaId?.length) {
-      obterComponentesCurriculares();
+      if (turmaId[0] !== '-99') {
+        obterComponentesCurriculares();
+      } else {
+        const lista = [{ codigo: OPCAO_TODOS, nome: 'Todos' }];
+        setComponenteCurricular(lista[0].codigo);
+        setListaComponenteCurriculares(lista);
+      }
     } else {
       setComponenteCurricular();
       setListaComponenteCurriculares([]);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [turmaId]);
-
+  
   return (
     <Loader loading={exibirLoaderGeral}>
       {naoEhInfantil && (
