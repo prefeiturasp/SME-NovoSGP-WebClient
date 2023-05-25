@@ -1,5 +1,4 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
 import {
   Card,
   CheckboxComponent,
@@ -18,7 +17,6 @@ import { ANO_INICIO_INFANTIL, OPCAO_TODOS } from '~/constantes/constantes';
 import { ModalidadeDTO } from '~/dtos';
 import {
   AbrangenciaServico,
-  ehTurmaInfantil,
   erros,
   history,
   ServicoComponentesCurriculares,
@@ -39,9 +37,8 @@ const RelatorioDevolutivas = () => {
   const [consideraHistorico, setConsideraHistorico] = useState(false);
   const [desabilitarGerar, setDesabilitarGerar] = useState(true);
   const [dreId, setDreId] = useState();
-  const [exibirConteudoDevolutiva, setExibirConteudoDevolutiva] = useState(
-    false
-  );
+  const [exibirConteudoDevolutiva, setExibirConteudoDevolutiva] =
+    useState(false);
   const [exibirLoaderGeral, setExibirLoaderGeral] = useState(false);
 
   const [listaAnosLetivo, setListaAnosLetivo] = useState([]);
@@ -59,14 +56,10 @@ const RelatorioDevolutivas = () => {
   const [recarregar, setRecarregar] = useState(false);
 
   const [carregandoComponentes, setCarregandoComponentes] = useState(false);
-  const [
-    listaComponenteCurriculares,
-    setListaComponenteCurriculares,
-  ] = useState();
+  const [listaComponenteCurriculares, setListaComponenteCurriculares] =
+    useState();
   const [componenteCurricular, setComponenteCurricular] = useState();
   const [modoEdicao, setModoEdicao] = useState(false);
-
-  const { turmaSelecionada } = useSelector(store => store.usuario);
 
   const opcoesRadioSimNao = [
     { label: 'Não', value: false },
@@ -246,6 +239,10 @@ const RelatorioDevolutivas = () => {
     setListaComponenteCurriculares([]);
     setComponenteCurricular();
 
+    if (!dre) {
+      setNaoEhInfantil(false);
+    }
+
     setModoEdicao(true);
   };
 
@@ -324,11 +321,10 @@ const RelatorioDevolutivas = () => {
   const obterModalidades = useCallback(async ue => {
     if (ue) {
       setCarregandoModalidade(true);
-      const {
-        data,
-      } = await ServicoFiltroRelatorio.obterModalidadesPorAbrangencia(
-        ue
-      ).finally(() => setCarregandoModalidade(false));
+      const { data } =
+        await ServicoFiltroRelatorio.obterModalidadesPorAbrangencia(ue).finally(
+          () => setCarregandoModalidade(false)
+        );
 
       if (data?.length) {
         const lista = data.map(item => ({
@@ -463,15 +459,6 @@ const RelatorioDevolutivas = () => {
   }, [modalidadeId, obterBimestres]);
 
   useEffect(() => {
-    const ehInfatil = ehTurmaInfantil(ModalidadeDTO, turmaSelecionada);
-    if (Object.keys(turmaSelecionada).length) {
-      setNaoEhInfantil(!ehInfatil);
-      return;
-    }
-    setNaoEhInfantil(false);
-  }, [turmaSelecionada]);
-
-  useEffect(() => {
     const desabilitar =
       !anoLetivo ||
       !dreId ||
@@ -509,11 +496,12 @@ const RelatorioDevolutivas = () => {
     }
 
     setCarregandoComponentes(true);
-    const componentes = await ServicoComponentesCurriculares.obterComponentesPorListaDeTurmas(
-      codigosTurmas
-    )
-      .catch(e => erros(e))
-      .finally(() => setCarregandoComponentes(false));
+    const componentes =
+      await ServicoComponentesCurriculares.obterComponentesPorListaDeTurmas(
+        codigosTurmas
+      )
+        .catch(e => erros(e))
+        .finally(() => setCarregandoComponentes(false));
 
     if (componentes?.data?.length) {
       const lista = componentes.data;
@@ -538,6 +526,7 @@ const RelatorioDevolutivas = () => {
       setComponenteCurricular();
       setListaComponenteCurriculares([]);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [turmaId]);
 
   return (
@@ -595,9 +584,7 @@ const RelatorioDevolutivas = () => {
                   lista={listaDres}
                   valueOption="valor"
                   valueText="desc"
-                  disabled={
-                    naoEhInfantil || !anoLetivo || listaDres?.length === 1
-                  }
+                  disabled={!anoLetivo || listaDres?.length === 1}
                   onChange={onChangeDre}
                   valueSelect={dreId}
                   placeholder="Diretoria Regional De Educação (DRE)"
