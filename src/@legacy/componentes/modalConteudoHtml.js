@@ -88,9 +88,11 @@ const ModalConteudoHtml = props => {
     botoesRodape,
     fontSizeTitulo,
     tipoFonte,
+    bodyStyle,
   } = props;
   return (
     <Container
+      bodyStyle={bodyStyle || {}}
       keyboard={fecharAoClicarEsc}
       maskClosable={fecharAoClicarFora}
       onCancel={onClose}

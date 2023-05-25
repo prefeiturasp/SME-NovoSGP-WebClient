@@ -151,6 +151,7 @@ const BotaoValidarConselhoClasse = () => {
 
       {exibirModalInconsistencias && dadosInconsistencias?.length ? (
         <ModalConteudoHtml
+          bodyStyle={{ maxHeight: '350px', overflow: 'auto' }}
           titulo="Problemas encontrados na validação"
           visivel
           onClose={() => onCloseModalInconsistencias(false)}
@@ -175,7 +176,7 @@ const BotaoValidarConselhoClasse = () => {
                   }),
                 },
                 {
-                  title: `${dadosEstudante?.nomeAluno} (${dadosEstudante?.codigoAluno})`,
+                  title: `${dadosEstudante?.alunoNome} (${dadosEstudante?.alunoCodigo})`,
                   dataIndex: 'inconsistencias',
                   onCell: () => ({
                     colSpan: 2,

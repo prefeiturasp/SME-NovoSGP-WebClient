@@ -29,7 +29,7 @@ const InconsistenciasEstudante = props => {
 
   if (codigoAluno && dadosInconsistenciasEstudantes?.length) {
     const alunoComInconsistencia = dadosInconsistenciasEstudantes?.find(
-      e => String(e?.codigoAluno) === codigoAluno
+      e => String(e?.alunoCodigo) === codigoAluno
     );
 
     return alunoComInconsistencia ? (
