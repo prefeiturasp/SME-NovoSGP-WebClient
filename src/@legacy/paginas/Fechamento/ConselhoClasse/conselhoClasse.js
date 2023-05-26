@@ -12,6 +12,7 @@ import {
   setDadosAlunoObjectCard,
   setExibirLoaderGeralConselhoClasse,
   setDadosPrincipaisConselhoClasse,
+  setDadosInconsistenciasEstudantes,
 } from '~/redux/modulos/conselhoClasse/actions';
 import { erros } from '~/servicos/alertas';
 import ServicoConselhoClasse from '~/servicos/Paginas/ConselhoClasse/ServicoConselhoClasse';
@@ -28,6 +29,7 @@ import ModalImpressaoBimestre from './DadosConselhoClasse/ModalImpressaoBimestre
 import ObjectCardConselhoClasse from './DadosConselhoClasse/ObjectCardConselhoClasse/objectCardConselhoClasse';
 import TabelaRetratilConselhoClasse from './DadosConselhoClasse/TabelaRetratilConselhoClasse/tabelaRetratilConselhoClasse';
 import servicoSalvarConselhoClasse from './servicoSalvarConselhoClasse';
+import BotaoValidarConselhoClasse from './DadosConselhoClasse/BotaoValidar/botaoValidarConselhoClasse';
 
 const ConselhoClasse = () => {
   const dispatch = useDispatch();
@@ -49,6 +51,7 @@ const ConselhoClasse = () => {
   );
 
   const obterListaAlunos = useCallback(async () => {
+    dispatch(setDadosInconsistenciasEstudantes([]));
     dispatch(setExibirLoaderGeralConselhoClasse(true));
     const retorno = await ServicoConselhoClasse.obterListaAlunos(
       turma,
@@ -177,9 +180,12 @@ const ConselhoClasse = () => {
             <>
               {exibirListas ? (
                 <>
-                  <div className="col-md-12 mb-2 d-flex">
-                    <BotaoOrdenarListaAlunos />
-                    <BotaoGerarRelatorioConselhoClasseTurma />
+                  <div className="col-md-12 mb-2 d-flex justify-content-between">
+                    <div className="d-flex">
+                      <BotaoOrdenarListaAlunos />
+                      <BotaoGerarRelatorioConselhoClasseTurma />
+                    </div>
+                    <BotaoValidarConselhoClasse />
                   </div>
                   <div className="col-md-12 mb-2">
                     <TabelaRetratilConselhoClasse
