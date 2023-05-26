@@ -439,6 +439,29 @@ class ServicoPlanoAEE {
 
   gerarRelatorioPlanosAEE = params =>
     api.post('v1/relatorios/planos-aee', params);
+
+  obterResponsaveis = (
+    dreId,
+    ueId,
+    turmaId,
+    alunoCodigo,
+    situacao,
+    exibirEncerrados = false
+  ) => {
+    let url = `${urlPadrao}/responsaveis?dreId=${dreId}&ueId=${ueId}&exibirEncerrados=${exibirEncerrados}`;
+
+    if (turmaId) {
+      url += `&turmaId=${turmaId}`;
+    }
+    if (alunoCodigo) {
+      url += `&alunoCodigo=${alunoCodigo}`;
+    }
+    if (situacao) {
+      url += `&situacao=${situacao}`;
+    }
+
+    return api.get(url);
+  };
 }
 
 export default new ServicoPlanoAEE();
