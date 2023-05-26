@@ -94,6 +94,10 @@ const PlanoAEELista = () => {
 
   const colunas = [
     {
+      title: 'Unidade Escolar (UE)',
+      dataIndex: 'ue',
+    },
+    {
       title: 'Nº',
       dataIndex: 'numero',
     },
@@ -153,10 +157,6 @@ const PlanoAEELista = () => {
           )}
         </>
       ),
-    },
-    {
-      title: 'UE',
-      dataIndex: 'ue',
     },
   ];
 
@@ -751,7 +751,7 @@ const PlanoAEELista = () => {
             <div className="col-sm-12 col-md-6 mb-2">
               <RadioGroupButton
                 value={exibirPlanosEncerrados}
-                label="Exibir planos encerrados"
+                label="Apresentar planos encerrados"
                 opcoes={opcoesEncerrados}
                 id={SGP_RADIO_EXIBIR_PLANOS_ENCERRADOS}
                 onChange={e => {

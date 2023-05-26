@@ -495,7 +495,7 @@ const ListaEncaminhamentoNAAPA = () => {
           <Col sm={24} lg={12}>
             <RadioGroupButton
               value={exibirEncaminhamentosEncerrados}
-              label="Exibir encaminhamentos encerrados"
+              label="Apresentar encaminhamentos encerrados"
               opcoes={opcoesEncerrados}
               id={SGP_RADIO_EXIBIR_ENCAMINHAMENTOS_NAAPA_ENCERRADOS}
               onChange={e =>

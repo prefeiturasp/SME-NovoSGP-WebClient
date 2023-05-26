@@ -104,6 +104,10 @@ const EncaminhamentoAEELista = () => {
 
   const colunas = [
     {
+      title: 'Unidade Escolar (UE)',
+      dataIndex: 'ue',
+    },
+    {
       title: 'Nº',
       dataIndex: 'numero',
     },
@@ -128,10 +132,6 @@ const EncaminhamentoAEELista = () => {
     {
       title: 'Situação',
       dataIndex: 'situacao',
-    },
-    {
-      title: 'UE',
-      dataIndex: 'ue',
     },
   ];
 
@@ -739,7 +739,7 @@ const EncaminhamentoAEELista = () => {
             <div className="col-sm-12 col-md-6 mb-2">
               <RadioGroupButton
                 value={exibirEncaminhamentosEncerrados}
-                label="Exibir encaminhamentos encerrados"
+                label="Apresentar encaminhamentos encerrados"
                 opcoes={opcoesEncerrados}
                 id={SGP_RADIO_EXIBIR_ENCAMINHAMENTOS_AEE_ENCERRADOS}
                 onChange={onChangeEncaminhamentosEncerrados}
