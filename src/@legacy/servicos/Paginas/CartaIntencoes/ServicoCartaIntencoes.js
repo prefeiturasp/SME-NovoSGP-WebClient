@@ -18,6 +18,12 @@ class ServicoCartaIntencoes {
     );
   };
 
+  obterNotificarUsuarios = ({ turmaId, componenteCurricular }) => {
+    return api.get(
+      `${urlPadrao}/notificacoes/usuarios?turmaId=${turmaId}&componenteCurricular=${componenteCurricular}`
+    );
+  };
+
   salvarEditarObservacao = (dados, turmaCodigo, componenteCurricularId) => {
     const observacaoId = dados.id;
     if (observacaoId) {

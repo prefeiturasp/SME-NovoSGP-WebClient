@@ -217,7 +217,7 @@ const HistoricoNotificacoes = () => {
     if (resposta?.data?.length) {
       const lista = resposta.data;
       if (lista.length > 1) {
-        lista.unshift({ valor: OPCAO_TODOS, nomeFiltro: 'Todas' });
+        lista.unshift({ codigo: OPCAO_TODOS, nomeFiltro: 'Todas' });
         setTurmaId();
       }
 
