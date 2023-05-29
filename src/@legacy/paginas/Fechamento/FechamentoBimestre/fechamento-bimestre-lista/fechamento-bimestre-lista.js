@@ -47,10 +47,8 @@ const FechamentoBimestreLista = props => {
   const [carregandoProcesso, setCarregandoProcesso] = useState(false);
   const [podeProcessarReprocessar] = useState(dados.podeProcessarReprocessar);
   const [periodoAberto] = useState(dados.periodoAberto);
-  const [
-    situacaosituacaoNomeFechamento,
-    setSituacaosituacaoNomeFechamento
-  ] = useState(dados.situacaoNome);
+  const [situacaosituacaoNomeFechamento, setSituacaosituacaoNomeFechamento] =
+    useState(dados.situacaoNome);
   const [dataFechamento] = useState(dados.dataFechamento);
 
   const [exibirModalAnotacao, setExibirModalAnotacao] = useState(false);
@@ -138,7 +136,9 @@ const FechamentoBimestreLista = props => {
           codigoTurma={turmaId}
           anoLetivo={anoLetivo}
           dadosAlunoSelecionado={alunoModalAnotacao}
-          desabilitar={desabilitarCampo || (!podeProcessarReprocessar && !periodoAberto)}
+          desabilitar={
+            desabilitarCampo || (!podeProcessarReprocessar && !periodoAberto)
+          }
         />
       ) : (
         ''
@@ -181,42 +181,24 @@ const FechamentoBimestreLista = props => {
             }}
             desabilitado={!dadosLista?.length}
           />
-          {!ehSintese ? (
-            <>
-              <Button
-                id="btn-reprocessar"
-                label="Reprocessar"
-                color={Colors.Azul}
-                border
-                className="mr-2"
-                onClick={onClickReprocessarNotasConceitos}
-                disabled={
-                  !podeProcessarReprocessar ||
-                  (situacaoFechamento !==
-                    situacaoFechamentoDto.ProcessadoComPendencias &&
-                    situacaoFechamento !==
-                      situacaoFechamentoDto.ProcessadoComErro)
-                }
-              />
-              <Button
-                id="btn-pendencias"
-                label="Ver pendências"
-                color={Colors.Azul}
-                border
-                className="mr-2"
-                onClick={onClickVerPendecias}
-                disabled={
-                  ehSintese ||
-                  !podeProcessarReprocessar ||
+          {!ehSintese && (
+            <Button
+              id="btn-reprocessar"
+              label="Reprocessar"
+              color={Colors.Azul}
+              border
+              className="mr-2"
+              onClick={onClickReprocessarNotasConceitos}
+              disabled={
+                !podeProcessarReprocessar ||
+                (situacaoFechamento !==
+                  situacaoFechamentoDto.ProcessadoComPendencias &&
                   situacaoFechamento !==
-                    situacaoFechamentoDto.ProcessadoComPendencias
-                }
-              />
-            </>
-          ) : (
-            <></>
+                    situacaoFechamentoDto.ProcessadoComErro)
+              }
+            />
           )}
-          {ehSintese ? (
+          {ehSintese && (
             <Loader loading={carregandoProcesso} tip="">
               <Button
                 label={dados?.fechamentoId ? 'Reprocessar' : 'Processar'}
@@ -232,9 +214,20 @@ const FechamentoBimestreLista = props => {
                 }
               />
             </Loader>
-          ) : (
-            <></>
           )}
+          <Button
+            id="btn-pendencias"
+            label="Ver pendências"
+            color={Colors.Azul}
+            border
+            className="mr-2"
+            onClick={onClickVerPendecias}
+            disabled={
+              !podeProcessarReprocessar ||
+              situacaoFechamento !==
+                situacaoFechamentoDto.ProcessadoComPendencias
+            }
+          />
         </div>
         <Marcadores className="col-md-6 col-sm-12 d-flex justify-content-end">
           <SituacaoProcessadoComPendencias>
