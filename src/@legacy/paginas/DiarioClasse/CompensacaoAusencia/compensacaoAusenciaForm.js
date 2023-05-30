@@ -514,7 +514,7 @@ const CompensacaoAusenciaForm = ({ match }) => {
         return {
           ...disciplina,
           codigoSelecao: disciplina.territorioSaber
-            ? disciplina.id
+            ? disciplina.codigoTerritorioSaber
             : disciplina.codigoComponenteCurricular,
         };
       });
@@ -539,11 +539,13 @@ const CompensacaoAusenciaForm = ({ match }) => {
       const disciplina = disciplinas.data[0];
 
       if (registroNovo) {
-        valoresIniciaisForm.disciplinaId = String(
-          disciplina.codigoComponenteCurricular
-        );
+        const disciplinaSelecionada = disciplina.codigoTerritorioSaber
+          ? String(disciplina.codigoTerritorioSaber)
+          : String(disciplina.codigoComponenteCurricular);
 
-        setDisciplinaSelecionada(String(disciplina.codigoComponenteCurricular));
+        valoresIniciaisForm.disciplinaId = disciplinaSelecionada;
+
+        setDisciplinaSelecionada(String(disciplinaSelecionada));
       }
       setCarregandoDisciplinas(false);
     } else {
