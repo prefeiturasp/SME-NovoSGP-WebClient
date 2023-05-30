@@ -1111,7 +1111,7 @@ const RegistroItineranciaAEECadastro = ({ match }) => {
                   <div className="col-12">
                     <JoditEditor
                       label={questao.descricao}
-                      value={questao.respostaInicial}
+                      value={questao.respostaInicial ? questao.respostaInicial : questao.resposta}
                       name={NOME_CAMPO_QUESTAO + questao.questaoId}
                       id={`editor-questao-${questao.questaoId}`}
                       onChange={e => setQuestao(e, questao)}
