@@ -267,7 +267,7 @@ const ListaoListaFechamento = props => {
   ) => {
     const indexLinhaDestino = incrementoIndexLinha + indexLinhaOrigem;
     const aluno = dadosFechamento?.alunos[indexLinhaDestino];
-    if (aluno?.codigoAluno) {
+    if (aluno?.codigoAluno) { 
       onClickExpandirNotaConceitoRegencia(false, aluno?.codigoAluno);
     }
   };
@@ -327,7 +327,7 @@ const ListaoListaFechamento = props => {
               />
             )}
             <Nota
-              styleContainer={{ padding: '3px 20px 11px' }}
+              styleContainer={{ padding: '3px 20px 11px', width: '109px' }}
               ehFechamento
               onKeyDown={e =>
                 onKeyDown(
