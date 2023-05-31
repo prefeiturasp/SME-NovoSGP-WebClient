@@ -16,7 +16,7 @@ const QtdAtendimentosEncaminhamentosProfissional = () => {
   return (
     <div className="mt-3">
       <CardCollapse
-        titulo="Quantidade de atendimentos de encaminhamento NAAPA por profissional"
+        titulo="Quantidade de atendimentos de encaminhamento por profissional"
         key={`${key}-collapse-key`}
         indice={`${key}-collapse-indice`}
         alt={`${key}-alt`}
