@@ -16,7 +16,7 @@ const QuantidadeEncaminhamentosNAAPA = () => {
   return (
     <div className="mt-3">
       <CardCollapse
-        titulo="Quantidade de encaminhamentos NAAPA"
+        titulo="Quantidade de encaminhamentos por DRE"
         key={`${key}-collapse-key`}
         indice={`${key}-collapse-indice`}
         alt={`${key}-alt`}
