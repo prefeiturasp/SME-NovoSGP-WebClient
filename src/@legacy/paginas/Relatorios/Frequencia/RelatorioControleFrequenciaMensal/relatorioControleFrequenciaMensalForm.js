@@ -99,7 +99,11 @@ const RelatorioControleFrequenciaMensalForm = props => {
         </Col>
 
         <Col sm={24} md={12} lg={4}>
-          <FormatoRelatorio form={form} onChange={() => onChangeCampos()} />
+          <FormatoRelatorio
+            form={form}
+            onChange={() => onChangeCampos()}
+            disabled
+          />
         </Col>
 
         {form?.values?.turmaCodigo &&
