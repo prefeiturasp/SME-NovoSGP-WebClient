@@ -7,6 +7,7 @@ import RelatorioControleFrequenciaMensalBotoesAcoes from './relatorioControleFre
 import RelatorioControleFrequenciaMensalForm from './relatorioControleFrequenciaMensalForm';
 import { OPCAO_TODOS } from '@/@legacy/constantes';
 import { ModalidadeDTO } from '@/@legacy/dtos';
+import { TIPO_FORMATO_RELATORIO } from '@/core/enum/tipo-formato-relatorio';
 
 const RelatorioControleFrequenciaMensal = () => {
   const [gerandoRelatorio, setGerandoRelatorio] = useState(false);
@@ -28,7 +29,7 @@ const RelatorioControleFrequenciaMensal = () => {
     listaTurmas: [],
     criancasEstudantes: OPCAO_TODOS,
     mesesReferencias: undefined,
-    tipoFormatoRelatorio: undefined,
+    tipoFormatoRelatorio: TIPO_FORMATO_RELATORIO.XLSX.toString(),
     codigosEstudantes: undefined,
   };
 
