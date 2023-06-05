@@ -113,8 +113,8 @@ import Login from '~/paginas/Login';
 import ListaoPrincipal from '~/paginas/DiarioClasse/Listao';
 import RelatorioEncaminhamentonNAAPA from '~/paginas/Relatorios/NAAPA/encaminhamento/relatorioEncaminhamentoNAAPA';
 import RelatorioSondagemAnalitico from '~/paginas/Relatorios/Sondagem/relatorioSondagem';
-import RelatorioRegistroItinerancia from '@/@legacy/paginas/Relatorios/AEE/registroItinerancia/relatorioRegistroItinerancia';
-import RelatorioControleFrequenciaMensal from '@/@legacy/paginas/Relatorios/Frequencia/RelatorioControleFrequenciaMensal/relatorioControleFrequenciaMensal';
+import RelatorioRegistroItinerancia from '~/paginas/Relatorios/AEE/registroItinerancia/relatorioRegistroItinerancia';
+import RelatorioControleFrequenciaMensal from '~/paginas/Relatorios/Frequencia/RelatorioControleFrequenciaMensal/relatorioControleFrequenciaMensal';
 
 export interface RouteProps {
   path: string;
