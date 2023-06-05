@@ -73,6 +73,15 @@ export default createGlobalStyle`
   }
 
   /* Antd V5 Start */
+
+  .ant-select-item-option:hover  {
+    background-color:  ${Base.Roxo} !important;
+  }
+
+  .ant-select-item-option-active {
+    background-color:  ${Base.Branco} !important;
+  }
+
   .ant-select {
     width: 100%;
   }
@@ -91,9 +100,9 @@ export default createGlobalStyle`
     }
   }
 
-  .ant-select-item-option-active,
   .ant-select-item-option-selected {
     color: #ffffff !important;
+    background-color:  ${Base.Roxo} !important;
   }
 
   .ant-select-selection {
