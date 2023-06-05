@@ -20,8 +20,14 @@ const Campo = styled.div`
     display: none;
   }
 
-  .jodit-workplace {
+  .jodit-workplace,
+  .jodit-wysiwyg {
     min-height: 139px !important;
+  }
+
+  ul,
+  ol {
+    padding-inline-start: 40px;
   }
 `;
 
