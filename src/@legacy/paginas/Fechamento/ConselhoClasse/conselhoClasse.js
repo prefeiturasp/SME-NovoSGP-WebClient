@@ -50,6 +50,10 @@ const ConselhoClasse = () => {
     store => store.conselhoClasse.dadosPrincipaisConselhoClasse
   );
 
+  const dadosAlunoObjectCard = useSelector(
+    store => store.conselhoClasse.dadosAlunoObjectCard
+  );
+
   const obterListaAlunos = useCallback(async () => {
     dispatch(setDadosInconsistenciasEstudantes([]));
     dispatch(setExibirLoaderGeralConselhoClasse(true));
@@ -90,7 +94,6 @@ const ConselhoClasse = () => {
     ) {
       obterListaAlunos();
     }
-
   }, [turmaAtual, turmaSelecionada]);
 
   const verificarExibicaoMarcador = async codigoEOL => {
@@ -113,13 +116,14 @@ const ConselhoClasse = () => {
         conselhoClasseId !== 0 &&
         conselhoClasseAlunoId
       ) {
-        const retorno = await servicoSalvarConselhoClasse.validaParecerConclusivo(
-          conselhoClasseId,
-          fechamentoTurmaId,
-          codigoEOL,
-          turmaSelecionada.turma,
-          usuario.turmaSelecionada.consideraHistorico
-        );
+        const retorno =
+          await servicoSalvarConselhoClasse.validaParecerConclusivo(
+            conselhoClasseId,
+            fechamentoTurmaId,
+            codigoEOL,
+            turmaSelecionada.turma,
+            usuario.turmaSelecionada.consideraHistorico
+          );
 
         const valores = {
           fechamentoTurmaId,
@@ -138,15 +142,19 @@ const ConselhoClasse = () => {
   };
 
   const onChangeAlunoSelecionado = async aluno => {
+    if (aluno.codigoEOL === dadosAlunoObjectCard.codigoEOL) return;
+
     resetarInfomacoes();
     verificarExibicaoMarcador(aluno.codigoEOL);
     dispatch(setDadosAlunoObjectCard(aluno));
   };
 
   const permiteOnChangeAluno = async () => {
-    const validouNotaConceitoPosConselho = await servicoSalvarConselhoClasse.validarNotaPosConselho();
+    const validouNotaConceitoPosConselho =
+      await servicoSalvarConselhoClasse.validarNotaPosConselho();
     if (validouNotaConceitoPosConselho) {
-      const validouAnotacaoRecomendacao = await servicoSalvarConselhoClasse.validarSalvarRecomendacoesAlunoFamilia();
+      const validouAnotacaoRecomendacao =
+        await servicoSalvarConselhoClasse.validarSalvarRecomendacoesAlunoFamilia();
       if (validouNotaConceitoPosConselho && validouAnotacaoRecomendacao) {
         return true;
       }
