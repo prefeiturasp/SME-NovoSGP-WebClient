@@ -711,7 +711,7 @@ class QuestionarioDinamicoFuncoes {
               }
 
               if (
-                questao.tipoQuestao === tipoQuestao.Upload &&
+                questao?.tipoQuestao === tipoQuestao.Upload &&
                 !questao?.resposta &&
                 !questao?.respostaEncaminhamentoId
               ) {
