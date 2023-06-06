@@ -710,6 +710,14 @@ class QuestionarioDinamicoFuncoes {
                 questao = null;
               }
 
+              if (
+                questao.tipoQuestao === tipoQuestao.Upload &&
+                !questao?.resposta &&
+                !questao?.respostaEncaminhamentoId
+              ) {
+                questao = null;
+              }
+
               if (questao) {
                 questoes.push(questao);
               }
