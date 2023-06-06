@@ -166,6 +166,7 @@ const BotaoValidarConselhoClasse = () => {
           idBotaoSecundario={SGP_BUTTON_SECUNDARIO_MODAL_INCONSISTENCIAS}
         >
           <Row gutter={[0, 16]}>
+            <Label text="Em caso de ausência de recomendações ou notas não será gerado o boletim ou ata final de resultados." />
             <Label text="As informações dos seguintes alunos estão incompletas:" />
             {dadosInconsistencias.map(dadosEstudante => {
               const colunas = [
