@@ -1,14 +1,15 @@
 import { Row, Col } from 'antd';
 import React, { useEffect, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useRouteMatch } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { SelectComponent } from '~/componentes';
 import ObjectCardEstudante from '~/componentes-sgp/ObjectCardEstudante/objectCardEstudante';
 import { SGP_SELECT_DRE, SGP_SELECT_UE } from '~/constantes/ids/select';
 import MontarDadosTabs from './componentes/montarDadosTabs/montarDadosTabs';
 import ServicoNAAPA from '~/servicos/Paginas/Gestao/NAAPA/ServicoNAAPA';
-import { store } from '~/redux';
+import { store } from '@/core/redux';
 import {
+  setCarregarDadosEncaminhamentoNAAPA,
   setDadosEncaminhamentoNAAPA,
   setDadosSituacaoEncaminhamentoNAAPA,
   setDesabilitarCamposEncaminhamentoNAAPA,
@@ -20,12 +21,12 @@ import LabelSituacao from './componentes/labelSituacao';
 import ModalEncerramentoEncaminhamentoNAAPA from './componentes/modalEncerramentoEncaminhamentoNAAPA';
 import MotivoEncerramentoNAAPA from './componentes/motivoEncerramentoNAAPA';
 import situacaoNAAPA from '~/dtos/situacaoNAAPA';
+import { Historico } from '~/componentes-sgp/historico';
+import { Observacoes } from './componentes/observacoes';
 
 const CadastroEncaminhamentoNAAPA = () => {
-  const routeMatch = useRouteMatch();
+  const { id: encaminhamentoId } = useParams();
   const dispatch = useDispatch();
-
-  const encaminhamentoId = routeMatch.params?.id;
 
   const novoEncaminhamentoNAAPADados = useSelector(
     state => state.localizarEstudante
@@ -33,6 +34,10 @@ const CadastroEncaminhamentoNAAPA = () => {
 
   const dadosEncaminhamentoNAAPA = useSelector(
     state => state.encaminhamentoNAAPA.dadosEncaminhamentoNAAPA
+  );
+
+  const carregarDadosEncaminhamentoNAAPA = useSelector(
+    state => state.encaminhamentoNAAPA.carregarDadosEncaminhamentoNAAPA
   );
 
   const listaDres = dadosEncaminhamentoNAAPA
@@ -84,10 +89,14 @@ const CadastroEncaminhamentoNAAPA = () => {
       store.dispatch(setDadosSituacaoEncaminhamentoNAAPA(null));
     }
     dispatch(setExibirLoaderEncaminhamentoNAAPA(false));
+    dispatch(setCarregarDadosEncaminhamentoNAAPA(false));
   }, [dispatch, encaminhamentoId]);
 
   useEffect(() => {
-    if (encaminhamentoId) {
+    if (
+      encaminhamentoId ||
+      (encaminhamentoId && carregarDadosEncaminhamentoNAAPA)
+    ) {
       obterDadosEncaminhamentoNAAPA();
     } else if (novoEncaminhamentoNAAPADados?.aluno?.codigoAluno) {
       const turmaAluno = novoEncaminhamentoNAAPADados?.aluno?.turma;
@@ -105,10 +114,11 @@ const CadastroEncaminhamentoNAAPA = () => {
     encaminhamentoId,
     novoEncaminhamentoNAAPADados,
     obterDadosEncaminhamentoNAAPA,
+    carregarDadosEncaminhamentoNAAPA,
   ]);
 
   return dadosEncaminhamentoNAAPA?.aluno?.codigoAluno ? (
-    <>
+    <Col span={24}>
       <Row gutter={[16, 0]} type="flex" justify="end">
         <Col>
           <LabelSituacao />
@@ -178,9 +188,19 @@ const CadastroEncaminhamentoNAAPA = () => {
             codigoTurma={dadosEncaminhamentoNAAPA?.turma?.codigo}
             codigoAluno={dadosEncaminhamentoNAAPA?.aluno?.codigoAluno}
           />
+
+          {encaminhamentoId && (
+            <>
+              <Observacoes />
+
+              <Historico
+                url={`v1/encaminhamento-naapa/${encaminhamentoId}/historico-alteracoes`}
+              />
+            </>
+          )}
         </Col>
       </Row>
-    </>
+    </Col>
   ) : (
     <></>
   );

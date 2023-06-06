@@ -1,5 +1,4 @@
 import { Steps } from 'antd';
-import PropTypes from 'prop-types';
 import React from 'react';
 import { useSelector } from 'react-redux';
 import { ContainerStepsEncaminhamento } from '../../../encaminhamentoAEECadastro.css';
@@ -7,9 +6,7 @@ import DadosPorSecaoCollapse from '../dadosPorSecaoCollapse';
 
 const { Step } = Steps;
 
-const DadosSecaoEncaminhamento = props => {
-  const { match } = props;
-
+const DadosSecaoEncaminhamento = () => {
   const dadosCollapseLocalizarEstudante = useSelector(
     store => store.collapseLocalizarEstudante.dadosCollapseLocalizarEstudante
   );
@@ -32,7 +29,6 @@ const DadosSecaoEncaminhamento = props => {
                 <DadosPorSecaoCollapse
                   dados={item}
                   index={item?.questionarioId}
-                  match={match}
                 />
               }
             />
@@ -40,16 +36,8 @@ const DadosSecaoEncaminhamento = props => {
         })}
     </ContainerStepsEncaminhamento>
   ) : (
-    ''
+    <></>
   );
-};
-
-DadosSecaoEncaminhamento.propTypes = {
-  match: PropTypes.oneOfType([PropTypes.object]),
-};
-
-DadosSecaoEncaminhamento.defaultProps = {
-  match: {},
 };
 
 export default DadosSecaoEncaminhamento;

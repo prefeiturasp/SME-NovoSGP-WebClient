@@ -2,6 +2,7 @@ import { Tabs } from 'antd';
 import { Form, Formik } from 'formik';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate, useParams } from 'react-router-dom';
 import * as Yup from 'yup';
 import { Colors, Grid, Loader, ModalConteudoHtml } from '~/componentes';
 import AlertaModalidadeInfantil from '~/componentes-sgp/AlertaModalidadeInfantil/alertaModalidadeInfantil';
@@ -42,7 +43,6 @@ import {
 } from '~/redux/modulos/notasConceitos/actions';
 import { confirmar, erros, sucesso } from '~/servicos/alertas';
 import api from '~/servicos/api';
-import history from '~/servicos/history';
 import ServicoPeriodoFechamento from '~/servicos/Paginas/Calendario/ServicoPeriodoFechamento';
 import ServicoNotaConceito from '~/servicos/Paginas/DiarioClasse/ServicoNotaConceito';
 import { verificaSomenteConsulta } from '~/servicos/servico-navegacao';
@@ -54,10 +54,11 @@ import { removerTagsHtml } from '~/utils';
 
 const { TabPane } = Tabs;
 
-// eslint-disable-next-line react/prop-types
-const Notas = ({ match }) => {
+const Notas = () => {
   const usuario = useSelector(store => store.usuario);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const paramsRoute = useParams();
 
   const modalidadesFiltroPrincipal = useSelector(
     store => store.filtro.modalidades
@@ -423,10 +424,10 @@ const Notas = ({ match }) => {
       setDisciplinaSelecionada(String(disciplina.id));
       setDesabilitarDisciplina(true);
     }
-    if (match?.params?.disciplinaId && match?.params?.bimestre) {
-      setDisciplinaSelecionada(String(match?.params.disciplinaId));
+    if (paramsRoute?.disciplinaId && paramsRoute?.bimestre) {
+      setDisciplinaSelecionada(String(paramsRoute?.disciplinaId));
     }
-  }, [usuario.turmaSelecionada.turma]);
+  }, [usuario.turmaSelecionada.turma, paramsRoute]);
 
   const obterTituloTela = useCallback(async () => {
     if (usuario && usuario.turmaSelecionada && usuario.turmaSelecionada.turma) {
@@ -486,7 +487,7 @@ const Notas = ({ match }) => {
   };
 
   const irParaHome = () => {
-    history.push(URL_HOME);
+    navigate(URL_HOME);
   };
 
   const montarBimestreParaSalvar = bimestreParaMontar => {
@@ -1522,6 +1523,7 @@ const Notas = ({ match }) => {
                           key={segundoBimestre.numero}
                         >
                           <Avaliacao
+                            disciplinaSelecionada={disciplinaSelecionada}
                             dados={segundoBimestre}
                             notaTipo={notaTipo}
                             onChangeOrdenacao={onChangeOrdenacao}
@@ -1550,6 +1552,7 @@ const Notas = ({ match }) => {
                           key={terceiroBimestre.numero}
                         >
                           <Avaliacao
+                            disciplinaSelecionada={disciplinaSelecionada}
                             dados={terceiroBimestre}
                             notaTipo={notaTipo}
                             onChangeOrdenacao={onChangeOrdenacao}
@@ -1578,6 +1581,7 @@ const Notas = ({ match }) => {
                           key={quartoBimestre.numero}
                         >
                           <Avaliacao
+                            disciplinaSelecionada={disciplinaSelecionada}
                             dados={quartoBimestre}
                             notaTipo={notaTipo}
                             onChangeOrdenacao={onChangeOrdenacao}

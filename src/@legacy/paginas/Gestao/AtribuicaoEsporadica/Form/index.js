@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
-import PropTypes from 'prop-types';
 import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
 import { useSelector } from 'react-redux';
@@ -22,7 +21,6 @@ import DreDropDown from '../componentes/DreDropDown';
 import UeDropDown from '../componentes/UeDropDown';
 
 import RotasDto from '~/dtos/rotasDto';
-import history from '~/servicos/history';
 import AtribuicaoEsporadicaServico from '~/servicos/Paginas/AtribuicaoEsporadica';
 import {
   erros,
@@ -37,8 +35,13 @@ import { validaSeObjetoEhNuloOuVazio } from '~/utils';
 
 import { Row } from './styles';
 import { SGP_BUTTON_ALTERAR_CADASTRAR } from '~/constantes/ids/button';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 
-function AtribuicaoEsporadicaForm({ match }) {
+function AtribuicaoEsporadicaForm() {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const paramsRoute = useParams();
+
   const [carregando, setCarregando] = useState(false);
   const permissoesTela = useSelector(store => store.usuario.permissoes);
   const somenteConsulta = verificaSomenteConsulta(
@@ -85,7 +88,7 @@ function AtribuicaoEsporadicaForm({ match }) {
     anoLetivo: anoAtual,
   });
 
-  const labelBotaoPrincipal = match?.params?.id ? 'Alterar' : 'Cadastrar';
+  const labelBotaoPrincipal = paramsRoute?.id ? 'Alterar' : 'Cadastrar';
   const validacoes = () => {
     return Yup.object({
       ueId: momentSchema.required('Campo obrigatório'),
@@ -117,21 +120,20 @@ function AtribuicaoEsporadicaForm({ match }) {
   const onSubmitFormulario = async valores => {
     try {
       setCarregando(true);
-      const cadastrado = await AtribuicaoEsporadicaServico.salvarAtribuicaoEsporadica(
-        {
+      const cadastrado =
+        await AtribuicaoEsporadicaServico.salvarAtribuicaoEsporadica({
           ...filtroListagem,
           ...valores,
           ehInfantil,
-        }
-      );
+        });
       if (cadastrado && cadastrado.status === 200) {
         setCarregando(false);
         sucesso(
           `Atribuição esporádica ${
-            match?.params?.id ? 'alterada' : 'salva'
+            paramsRoute?.id ? 'alterada' : 'salva'
           } com sucesso.`
         );
-        history.push(RotasDto.ATRIBUICAO_ESPORADICA_LISTA);
+        navigate(RotasDto.ATRIBUICAO_ESPORADICA_LISTA);
       }
     } catch (err) {
       if (err) {
@@ -151,10 +153,10 @@ function AtribuicaoEsporadicaForm({ match }) {
       if (confirmou) {
         validaAntesDoSubmit(form);
       } else {
-        history.push(RotasDto.ATRIBUICAO_ESPORADICA_LISTA);
+        navigate(RotasDto.ATRIBUICAO_ESPORADICA_LISTA);
       }
     } else {
-      history.push(RotasDto.ATRIBUICAO_ESPORADICA_LISTA);
+      navigate(RotasDto.ATRIBUICAO_ESPORADICA_LISTA);
     }
   };
 
@@ -206,12 +208,13 @@ function AtribuicaoEsporadicaForm({ match }) {
       'Cancelar'
     );
     if (confirmado) {
-      const excluir = await AtribuicaoEsporadicaServico.deletarAtribuicaoEsporadica(
-        form.values.id
-      ).catch(e => erros(e));
+      const excluir =
+        await AtribuicaoEsporadicaServico.deletarAtribuicaoEsporadica(
+          form.values.id
+        ).catch(e => erros(e));
       if (excluir) {
         sucesso(`Atribuição excluida com sucesso!`);
-        history.push(RotasDto.ATRIBUICAO_ESPORADICA_LISTA);
+        navigate(RotasDto.ATRIBUICAO_ESPORADICA_LISTA);
       }
     }
   };
@@ -219,9 +222,8 @@ function AtribuicaoEsporadicaForm({ match }) {
   const buscarPorId = async id => {
     try {
       setCarregando(true);
-      const registro = await AtribuicaoEsporadicaServico.buscarAtribuicaoEsporadica(
-        id
-      );
+      const registro =
+        await AtribuicaoEsporadicaServico.buscarAtribuicaoEsporadica(id);
       if (registro && registro.data) {
         setValoresIniciais({
           ...registro.data,
@@ -255,20 +257,20 @@ function AtribuicaoEsporadicaForm({ match }) {
   };
 
   useEffect(() => {
-    if (match?.params?.id) {
+    if (paramsRoute?.id) {
       setNovoRegistro(false);
       setBreadcrumbManual(
-        match.url,
+        location.pathname,
         'Atribuição',
         RotasDto.ATRIBUICAO_ESPORADICA_LISTA
       );
-      buscarPorId(match.params.id);
+      buscarPorId(paramsRoute.id);
     } else {
       setTimeout(() => {
         setValoresCarregados(true);
       }, 1500);
     }
-  }, [match]);
+  }, [paramsRoute, location]);
 
   const onChangeConsideraHistorico = e => {
     setConsideraHistorico(e.target.checked);
@@ -331,13 +333,13 @@ function AtribuicaoEsporadicaForm({ match }) {
 
       if (retorno?.data) {
         setPeriodos(retorno.data);
-        if (!match?.params?.id) {
+        if (!paramsRoute?.id) {
           refForm.setFieldValue('dataInicio', moment(retorno.data.dataInicio));
           refForm.setFieldValue('dataFim', moment(retorno.data.dataFim));
         }
       }
     },
-    [anoLetivo, refForm, match, valoresIniciais]
+    [anoLetivo, refForm, paramsRoute, valoresIniciais]
   );
 
   useEffect(() => {
@@ -381,7 +383,7 @@ function AtribuicaoEsporadicaForm({ match }) {
                   onClickExcluir={() => onClickExcluir(form)}
                   modoEdicao={modoEdicao}
                   idBotaoPrincipal={SGP_BUTTON_ALTERAR_CADASTRAR}
-                  desabilitarBotaoPrincipal={match?.params?.id && !modoEdicao}
+                  desabilitarBotaoPrincipal={paramsRoute?.id && !modoEdicao}
                 />
               </Cabecalho>
               <Card>
@@ -523,16 +525,5 @@ function AtribuicaoEsporadicaForm({ match }) {
     </>
   );
 }
-
-AtribuicaoEsporadicaForm.propTypes = {
-  match: PropTypes.oneOfType([
-    PropTypes.objectOf(PropTypes.object),
-    PropTypes.any,
-  ]),
-};
-
-AtribuicaoEsporadicaForm.defaultProps = {
-  match: {},
-};
 
 export default AtribuicaoEsporadicaForm;

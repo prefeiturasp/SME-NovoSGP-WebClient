@@ -5,6 +5,7 @@ import {
   ListaPaginada,
   Loader,
   CheckboxComponent,
+  Label,
 } from '~/componentes';
 import { Cabecalho } from '~/componentes-sgp';
 import Card from '~/componentes/card';
@@ -12,7 +13,6 @@ import { URL_HOME } from '~/constantes/url';
 import modalidade from '~/dtos/modalidade';
 import AbrangenciaServico from '~/servicos/Abrangencia';
 import api from '~/servicos/api';
-import history from '~/servicos/history';
 import FiltroHelper from '~/componentes-sgp/filtro/helper';
 import { erros, sucesso } from '~/servicos/alertas';
 import LocalizadorEstudante from '~/componentes/LocalizadorEstudante';
@@ -31,11 +31,15 @@ import {
   SGP_SELECT_IMPRIMIR_DADOS_RESPONSAVEIS,
   SGP_SELECT_PREENCHER_DATA_IMPRESSAO,
   SGP_SELECT_ANO_LETIVO,
-  SGP_SELECT_INFORMAR_OBSERVACOES_COMPLEMENTARES,
 } from '~/constantes/ids/select';
-import ModalObservacoesComplementares from './modalObservacoesComplementares';
+import _ from 'lodash';
+import TextArea from 'antd/lib/input/TextArea';
+import { SGP_TEXT_AREA_OBSERVACAO } from '~/constantes/ids/text-area';
+import { useNavigate } from 'react-router-dom';
 
 const HistoricoEscolar = () => {
+  const navigate = useNavigate();
+
   const codigosAlunosSelecionados = useSelector(
     state => state.localizadorEstudante.codigosAluno
   );
@@ -64,7 +68,9 @@ const HistoricoEscolar = () => {
   const [alunosSelecionados, setAlunosSelecionados] = useState([]);
   const [filtro, setFiltro] = useState({});
   const [modoEdicao, setModoEdicao] = useState(false);
-  const [exibirModalObservacoes, setExibirModalObservacoes] = useState(false);
+  const [exibirLoaderObservacao, setExibirLoaderObservacao] = useState(false);
+  const [observacaoEstudanteSelecionado, setObservacaoEstudanteSelecionado] =
+    useState('');
 
   const SIM = '1';
   const NAO = '0';
@@ -72,24 +78,6 @@ const HistoricoEscolar = () => {
   const [preencherDataImpressao, setPreencherDataImpressao] = useState(SIM);
   const [imprimirDadosResponsaveis, setImprimirDadosResponsaveis] =
     useState(SIM);
-  const [
-    informarObservacoesComplementares,
-    setInformarObservacoesComplementares,
-  ] = useState(NAO);
-
-  const desabilitarInformarObsComplementares =
-    alunosSelecionados?.length !== 1 &&
-    !alunoLocalizadorSelecionado?.alunoCodigo;
-
-  const alunosCodigo =
-    codigosAlunosSelecionados?.length > 0
-      ? codigosAlunosSelecionados
-      : alunosSelecionados;
-
-  const alunoCodigo =
-    informarObservacoesComplementares === SIM && alunosCodigo?.length === 1
-      ? alunosCodigo[0]
-      : 0;
 
   const vaidaDesabilitarBtnGerar = useCallback(
     desabilitar => {
@@ -102,16 +90,28 @@ const HistoricoEscolar = () => {
     [modalidadeId]
   );
 
-  useEffect(() => {
-    if (desabilitarInformarObsComplementares) {
-      setInformarObservacoesComplementares(NAO);
-    }
-  }, [desabilitarInformarObsComplementares]);
+  const obterObservacao = codigo => {
+    setExibirLoaderObservacao(true);
+    ServicoHistoricoEscolar.obterObservacaoComplementar(codigo)
+      .then(retorno => {
+        if (retorno?.status === 200) {
+          setObservacaoEstudanteSelecionado(retorno.data?.observacao);
+        } else {
+          setObservacaoEstudanteSelecionado('');
+        }
+      })
+      .catch(e => erros(e))
+      .finally(() => setExibirLoaderObservacao(false));
+  };
 
   useEffect(() => {
     if (codigosAlunosSelecionados?.length > 0) {
       setAlunosSelecionados([]);
       setEstudanteOpt('0');
+
+      obterObservacao(codigosAlunosSelecionados?.[0]);
+    } else {
+      setObservacaoEstudanteSelecionado('');
     }
   }, [codigosAlunosSelecionados]);
 
@@ -133,6 +133,40 @@ const HistoricoEscolar = () => {
     {
       title: 'Nome',
       dataIndex: 'nome',
+    },
+    {
+      title: 'Observação (será impressa no histórico do estudante)',
+      render: (__, linha, indexLinha) => {
+        const alunoSelecionado = alunosSelecionados?.find(
+          a => a?.codigo === linha?.codigo
+        );
+
+        const value = alunoSelecionado
+          ? alunoSelecionado?.observacao
+          : linha?.observacao;
+
+        const indexAluno = alunosSelecionados.indexOf(alunoSelecionado);
+
+        return (
+          <TextArea
+            id={`${SGP_TEXT_AREA_OBSERVACAO}_LINHA_${indexLinha + 1}`}
+            autoSize={{
+              minRows: 1,
+              maxRows: 3,
+            }}
+            value={value}
+            maxLength={500}
+            disabled={!alunoSelecionado}
+            onChange={e => {
+              setAlunosSelecionados(prevState => {
+                const updatedValues = _.cloneDeep(prevState);
+                updatedValues[indexAluno].observacao = e.target.value;
+                return [...updatedValues];
+              });
+            }}
+          />
+        );
+      },
     },
   ];
 
@@ -411,7 +445,6 @@ const HistoricoEscolar = () => {
     vaidaDesabilitarBtnGerar,
     estudanteOpt,
     alunosSelecionados,
-    informarObservacoesComplementares,
   ]);
 
   useEffect(() => {
@@ -419,7 +452,7 @@ const HistoricoEscolar = () => {
   }, [obterDres]);
 
   const onClickVoltar = () => {
-    history.push(URL_HOME);
+    navigate(URL_HOME);
   };
 
   const onClickCancelar = () => {
@@ -437,7 +470,6 @@ const HistoricoEscolar = () => {
 
     setPreencherDataImpressao(SIM);
     setImprimirDadosResponsaveis(SIM);
-    setInformarObservacoesComplementares(NAO);
   };
 
   const gerarHistorico = async params => {
@@ -447,16 +479,23 @@ const HistoricoEscolar = () => {
 
   const [carregandoGerar, setCarregandoGerar] = useState(false);
 
-  const validarAntesDeGerarRel = () => {
-    if (informarObservacoesComplementares === SIM) {
-      setExibirModalObservacoes(true);
-    } else {
-      onClickGerar();
-    }
-  };
-
-  const onClickGerar = (observacaoComplementar = '') => {
+  const onClickGerar = () => {
     setCarregandoGerar(true);
+
+    let alunos = [];
+    if (codigosAlunosSelecionados?.length > 0) {
+      alunos = [
+        {
+          alunoCodigo: codigosAlunosSelecionados[0],
+          observacaoComplementar: observacaoEstudanteSelecionado,
+        },
+      ];
+    } else if (alunosSelecionados?.length) {
+      alunos = alunosSelecionados?.map(a => ({
+        alunoCodigo: a?.codigo,
+        observacaoComplementar: a?.observacao,
+      }));
+    }
 
     const params = {
       anoLetivo,
@@ -466,12 +505,9 @@ const HistoricoEscolar = () => {
       semestre,
       turmaCodigo: turmaId,
       consideraHistorico,
-      alunosCodigo,
-      observacaoComplementar,
+      alunos,
       imprimirDadosResponsaveis: imprimirDadosResponsaveis === SIM,
       preencherDataImpressao: preencherDataImpressao === SIM,
-      informarObservacoesComplementares:
-        informarObservacoesComplementares === SIM,
     };
 
     if (gerarHistorico(params)) {
@@ -587,7 +623,17 @@ const HistoricoEscolar = () => {
   };
 
   const onSelecionarItems = items => {
-    setAlunosSelecionados([...items.map(item => String(item.codigo))]);
+    const clonedItems = _.cloneDeep(items);
+    clonedItems.forEach(linha => {
+      const alunoSelecionado = alunosSelecionados?.find(
+        a => a?.codigo === linha?.codigo
+      );
+      if (alunoSelecionado) {
+        linha.observacao = alunoSelecionado?.observacao;
+      }
+    });
+
+    setAlunosSelecionados([...clonedItems]);
     setModoEdicao(true);
   };
 
@@ -596,21 +642,8 @@ const HistoricoEscolar = () => {
     setModoEdicao(true);
   };
 
-  const onChangeInformarObservacoesComplementares = valor => {
-    setInformarObservacoesComplementares(valor);
-    setModoEdicao(true);
-  };
-
   return (
     <>
-      {exibirModalObservacoes && (
-        <ModalObservacoesComplementares
-          exibirModal={exibirModalObservacoes}
-          setExibirModal={setExibirModalObservacoes}
-          codigoAluno={alunoCodigo}
-          gerarRelatorio={obs => onClickGerar(obs)}
-        />
-      )}
       <AlertaModalidadeInfantil
         exibir={String(modalidadeId) === String(modalidade.INFANTIL)}
         validarModalidadeFiltroPrincipal={false}
@@ -619,7 +652,7 @@ const HistoricoEscolar = () => {
         <BotoesAcaoRelatorio
           onClickVoltar={onClickVoltar}
           onClickCancelar={onClickCancelar}
-          onClickGerar={() => validarAntesDeGerarRel()}
+          onClickGerar={() => onClickGerar()}
           desabilitarBtnGerar={desabilitarBtnGerar}
           carregandoGerar={carregandoGerar}
           temLoaderBtnGerar
@@ -699,6 +732,23 @@ const HistoricoEscolar = () => {
                 />
               </div>
             </div>
+            {codigosAlunosSelecionados?.length ? (
+              <div className="col-md-12 mb-2">
+                <Loader loading={exibirLoaderObservacao}>
+                  <Label text="Observação" />
+                  <TextArea
+                    id={SGP_TEXT_AREA_OBSERVACAO}
+                    value={observacaoEstudanteSelecionado}
+                    maxLength={500}
+                    onChange={e => {
+                      setObservacaoEstudanteSelecionado(e.target.value);
+                    }}
+                  />
+                </Loader>
+              </div>
+            ) : (
+              <></>
+            )}
             <div
               className={`"col-sm-12 col-md-6 ${
                 modalidadeId && String(modalidadeId) === String(modalidade.EJA)
@@ -818,22 +868,10 @@ const HistoricoEscolar = () => {
                 onChange={onChangePreencherDataImpressao}
               />
             </div>
-            <div className="col-sm-12 col-md-6 col-lg-4 col-xl-4 mb-2">
-              <SelectComponent
-                label="Informar observações complementares"
-                id={SGP_SELECT_INFORMAR_OBSERVACOES_COMPLEMENTARES}
-                lista={listaSimNao}
-                valueOption="valor"
-                valueText="desc"
-                valueSelect={informarObservacoesComplementares}
-                onChange={v => onChangeInformarObservacoesComplementares(v)}
-                disabled={desabilitarInformarObsComplementares}
-              />
-            </div>
             <div className="col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-2">
               {estudanteOpt === '1' ? (
                 <ListaPaginada
-                  url="v1/boletim/alunos"
+                  url="v1/boletim/alunos-obsevacoes"
                   id="lista-alunos-historico-escolar"
                   idLinha="codigo"
                   colunaChave="codigo"

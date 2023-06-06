@@ -1,11 +1,9 @@
-import PropTypes from 'prop-types';
 import React from 'react';
 import { useSelector } from 'react-redux';
 import MontarDadosPorSecao from '../montarDadosPorSecao';
+import shortid from 'shortid';
 
-const DadosSecaoParecerAEE = props => {
-  const { match } = props;
-
+const DadosSecaoParecerAEE = () => {
   const dadosCollapseLocalizarEstudante = useSelector(
     store => store.collapseLocalizarEstudante.dadosCollapseLocalizarEstudante
   );
@@ -15,21 +13,15 @@ const DadosSecaoParecerAEE = props => {
   );
 
   return dadosCollapseLocalizarEstudante?.codigoAluno &&
-    dadosSecoesPorEtapaDeEncaminhamentoAEE?.length
-    ? dadosSecoesPorEtapaDeEncaminhamentoAEE
-        .filter(d => d.etapa === 3)
-        .map(item => {
-          return <MontarDadosPorSecao dados={item} match={match} />;
-        })
-    : '';
-};
-
-DadosSecaoParecerAEE.propTypes = {
-  match: PropTypes.oneOfType([PropTypes.object]),
-};
-
-DadosSecaoParecerAEE.defaultProps = {
-  match: {},
+    dadosSecoesPorEtapaDeEncaminhamentoAEE?.length ? (
+    dadosSecoesPorEtapaDeEncaminhamentoAEE
+      .filter(d => d.etapa === 3)
+      .map(item => {
+        return <MontarDadosPorSecao dados={item} key={shortid.generate()} />;
+      })
+  ) : (
+    <></>
+  );
 };
 
 export default DadosSecaoParecerAEE;

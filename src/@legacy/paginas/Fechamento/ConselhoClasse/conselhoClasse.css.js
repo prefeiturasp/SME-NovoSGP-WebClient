@@ -11,18 +11,6 @@ export const Container = styled.div`
     background: white;
   }
 
-  .ant-tab-nav-33 {
-    .ant-tabs-nav {
-      width: 33.33% !important;
-    }
-  }
-
-  .ant-tab-nav-20 {
-    .ant-tabs-nav {
-      width: 20% !important;
-    }
-  }
-
   .ck-editor__editable_inline {
     max-height: 180px !important;
 

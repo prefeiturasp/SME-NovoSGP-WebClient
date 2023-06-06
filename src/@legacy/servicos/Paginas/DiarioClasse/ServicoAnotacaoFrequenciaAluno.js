@@ -1,4 +1,4 @@
-import { store } from '~/redux';
+import { store } from '@/core/redux';
 import { setListaPadraoMotivoAusencia } from '~/redux/modulos/modalAnotacaoFrequencia/actions';
 import api from '~/servicos/api';
 

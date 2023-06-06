@@ -1,7 +1,7 @@
 import { Row, Tabs } from 'antd';
 import React, { useCallback, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useRouteMatch } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { ContainerTabsCard } from '~/componentes/tabs/tabs.css';
 import situacaoNAAPA from '~/dtos/situacaoNAAPA';
 import {
@@ -25,10 +25,10 @@ const MontarDadosTabs = () => {
 
   const situacao = dadosSituacao?.situacao;
 
-  const routeMatch = useRouteMatch();
+  const { id } = useParams();
   const dispatch = useDispatch();
 
-  const encaminhamentoId = routeMatch?.params?.id || 0;
+  const encaminhamentoId = id || 0;
 
   const dadosSecoesEncaminhamentoNAAPA = useSelector(
     store => store.encaminhamentoNAAPA.dadosSecoesEncaminhamentoNAAPA
@@ -46,7 +46,8 @@ const MontarDadosTabs = () => {
 
     dispatch(setDadosSecoesEncaminhamentoNAAPA(resposta?.data || []));
     if (!encaminhamentoId) {
-      const primeiraTabSelecionada = resposta?.data[0]?.questionarioId?.toString();
+      const primeiraTabSelecionada =
+        resposta?.data[0]?.questionarioId?.toString();
       dispatch(setTabAtivaEncaminhamentoNAAPA(primeiraTabSelecionada));
     }
   }, [dispatch, encaminhamentoId, modalidade]);
@@ -69,6 +70,7 @@ const MontarDadosTabs = () => {
         border
         type="card"
         onChange={onChangeTab}
+        style={{ marginBottom: 20 }}
         activeKey={tabAtivaEncaminhamentoNAAPA}
       >
         {dadosSecoesEncaminhamentoNAAPA?.map(tab => {
@@ -103,7 +105,11 @@ const MontarDadosTabs = () => {
       </ContainerTabsCard>
 
       {!tabAtivaEncaminhamentoNAAPA && (
-        <Row type="flex" justify="center" style={{ marginTop: 20 }}>
+        <Row
+          type="flex"
+          justify="center"
+          style={{ marginTop: 20, marginBottom: 36 }}
+        >
           Selecione uma aba
         </Row>
       )}

@@ -1,6 +1,7 @@
 import * as moment from 'moment';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import { CheckboxComponent, Loader, SelectComponent } from '~/componentes';
 import {
   AlertaPermiteSomenteTurmaInfantil,
@@ -19,11 +20,12 @@ import {
 import { URL_HOME } from '~/constantes/url';
 import AbrangenciaServico from '~/servicos/Abrangencia';
 import { erros } from '~/servicos/alertas';
-import history from '~/servicos/history';
 import ServicoDashboardRelAcompanhamentoAprendizagem from '~/servicos/Paginas/Dashboard/ServicoDashboardRelAcompanhamentoAprendizagem';
 import TabsDashboardRelAcompanhamentoAprendizagem from './TabsDashboard/tabsDashboard';
 
 const DashboardRelAcompanhamentoAprendizagem = () => {
+  const navigate = useNavigate();
+
   const usuario = useSelector(store => store.usuario);
 
   const [listaAnosLetivo, setListaAnosLetivo] = useState([]);
@@ -170,7 +172,7 @@ const DashboardRelAcompanhamentoAprendizagem = () => {
     obterDres();
   }, [obterDres, anoLetivo, consideraHistorico]);
 
-  const onClickVoltar = () => history.push(URL_HOME);
+  const onClickVoltar = () => navigate(URL_HOME);
 
   const onChangeUe = codigoUe => {
     if (codigoUe) {

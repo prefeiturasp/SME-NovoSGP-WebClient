@@ -50,7 +50,8 @@ const Justificativa = props => {
     store => store.conselhoClasse.dadosIniciaisListasNotasConceitos
   );
 
-  const { justificativa, auditoria, ehEdicao } = notaConceitoPosConselhoAtual;
+  notaConceitoPosConselhoAtual.justificativa = notaConceitoPosConselhoAtual.justificativa ?? "";
+  const {justificativa, auditoria, ehEdicao } = notaConceitoPosConselhoAtual;
 
   const desabilitarBtnAcoes =
     (alunoDesabilitado && !podeEditarNota) ||

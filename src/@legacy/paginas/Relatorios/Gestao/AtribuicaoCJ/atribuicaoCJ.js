@@ -12,7 +12,6 @@ import { Cabecalho, FiltroHelper } from '~/componentes-sgp';
 import {
   erros,
   sucesso,
-  history,
   ServicoRelatorioAtribuicoes,
   AbrangenciaServico,
   ServicoFiltroRelatorio,
@@ -25,8 +24,11 @@ import { ModalidadeDTO } from '~/dtos';
 import { URL_HOME } from '~/constantes';
 import { OPCAO_TODOS } from '~/constantes/constantes';
 import BotoesAcaoRelatorio from '~/componentes-sgp/botoesAcaoRelatorio';
+import { useNavigate } from 'react-router-dom';
 
 const AtribuicaoCJ = () => {
+  const navigate = useNavigate();
+
   const [listaAnosLetivo, setListaAnosLetivo] = useState([]);
   const [listaDres, setListaDres] = useState([]);
   const [listaUes, setListaUes] = useState([]);
@@ -43,10 +45,8 @@ const AtribuicaoCJ = () => {
   const [turmaId, setTurmaId] = useState([]);
   const [usuarioRf, setUsuarioRf] = useState(undefined);
   const [exibirAulas, setExibirAulas] = useState(false);
-  const [
-    exibirAtribuicoesExporadicas,
-    setExibirAtribuicoesExporadicas,
-  ] = useState(false);
+  const [exibirAtribuicoesExporadicas, setExibirAtribuicoesExporadicas] =
+    useState(false);
   const [tipoVisualizacao, setTipoVisualizacao] = useState(1);
 
   const [desabilitarBtnGerar, setDesabilitarBtnGerar] = useState(true);
@@ -66,7 +66,7 @@ const AtribuicaoCJ = () => {
   ];
 
   const onClickVoltar = () => {
-    history.push(URL_HOME);
+    navigate(URL_HOME);
   };
 
   const onClickCancelar = () => {
@@ -239,29 +239,36 @@ const AtribuicaoCJ = () => {
     obterDres();
   }, [obterDres]);
 
-  const obterUes = useCallback(async dre => {
-    if (dre) {
-      setCarregandoGeral(true);
-      const resposta = await ServicoFiltroRelatorio.obterUes(dre, false, anoLetivo)
-        .catch(e => erros(e))
-        .finally(() => setCarregandoGeral(false));
+  const obterUes = useCallback(
+    async dre => {
+      if (dre) {
+        setCarregandoGeral(true);
+        const resposta = await ServicoFiltroRelatorio.obterUes(
+          dre,
+          false,
+          anoLetivo
+        )
+          .catch(e => erros(e))
+          .finally(() => setCarregandoGeral(false));
 
-      if (resposta?.data?.length) {
-        const lista = resposta.data.map(item => ({
-          desc: item.nome,
-          valor: String(item.codigo),
-        }));
+        if (resposta?.data?.length) {
+          const lista = resposta.data.map(item => ({
+            desc: item.nome,
+            valor: String(item.codigo),
+          }));
 
-        if (lista?.length && lista?.length === 1) {
-          setUeCodigo(lista[0].valor);
+          if (lista?.length && lista?.length === 1) {
+            setUeCodigo(lista[0].valor);
+          }
+
+          setListaUes(lista);
+        } else {
+          setListaUes([]);
         }
-
-        setListaUes(lista);
-      } else {
-        setListaUes([]);
       }
-    }
-  }, [anoLetivo]);
+    },
+    [anoLetivo]
+  );
 
   useEffect(() => {
     if (dreCodigo) {
@@ -275,9 +282,8 @@ const AtribuicaoCJ = () => {
   const obterModalidades = async (ue, ano) => {
     if (ue && ano) {
       setCarregandoGeral(true);
-      const {
-        data,
-      } = await ServicoFiltroRelatorio.obterModalidadesPorAbrangencia(ue);
+      const { data } =
+        await ServicoFiltroRelatorio.obterModalidadesPorAbrangencia(ue);
 
       if (data) {
         const lista = data.map(item => ({

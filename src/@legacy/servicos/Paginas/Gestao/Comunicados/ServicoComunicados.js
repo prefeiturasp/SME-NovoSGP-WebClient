@@ -18,33 +18,31 @@ class ServicoComunicados {
   excluir = async ids => api.delete(`${urlPadrao}`, { data: ids });
 
   buscarAnosPorModalidade = async (modalidades, codigoUe) => {
-    return api.get(`${urlPadrao}/anos/modalidades`, {
+    return await api.get(`${urlPadrao}/anos/modalidades`, {
       params: {
         modalidades,
         codigoUe,
       },
-      paramsSerializer(params) {
-        return queryString.stringify(params, {
-          arrayFormat: 'repeat',
-          skipEmptyString: true,
-          skipNull: true,
-        });
+      paramsSerializer: {
+        serialize: params => {
+          return queryString.stringify(params, {
+            arrayFormat: 'repeat',
+            skipEmptyString: true,
+            skipNull: true,
+          });
+        },
       },
     });
   };
 
   obterGruposPorModalidade = async modalidade => {
-    try {
-      const requisicao = await api.get(
-        `v1/comunicacao/grupos/listar/modalidade/${modalidade}`
-      );
+    const requisicao = await api.get(
+      `v1/comunicacao/grupos/listar/modalidade/${modalidade}`
+    );
 
-      if (requisicao && requisicao.status === 204) return [];
+    if (requisicao && requisicao.status === 204) return [];
 
-      return requisicao.data;
-    } catch (error) {
-      throw error;
-    }
+    return requisicao.data;
   };
 
   obterAlunos = (codigoTurma, anoLetivo) => {
@@ -84,12 +82,14 @@ class ServicoComunicados {
           anos,
           consideraHistorico,
         },
-        paramsSerializer(params) {
-          return queryString.stringify(params, {
-            arrayFormat: 'repeat',
-            skipEmptyString: true,
-            skipNull: true,
-          });
+        paramsSerializer: {
+          serialize: params => {
+            return queryString.stringify(params, {
+              arrayFormat: 'repeat',
+              skipEmptyString: true,
+              skipNull: true,
+            });
+          },
         },
       }
     );
@@ -114,12 +114,14 @@ class ServicoComunicados {
         descricao,
         modalidades,
       },
-      paramsSerializer(params) {
-        return queryString.stringify(params, {
-          arrayFormat: 'repeat',
-          skipEmptyString: true,
-          skipNull: true,
-        });
+      paramsSerializer: {
+        serialize: params => {
+          return queryString.stringify(params, {
+            arrayFormat: 'repeat',
+            skipEmptyString: true,
+            skipNull: true,
+          });
+        },
       },
     });
   };

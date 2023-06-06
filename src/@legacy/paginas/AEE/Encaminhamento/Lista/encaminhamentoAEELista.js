@@ -5,6 +5,7 @@ import {
   CheckboxComponent,
   ListaPaginada,
   Loader,
+  RadioGroupButton,
   SelectComponent,
 } from '~/componentes';
 import { Cabecalho, NomeEstudanteLista } from '~/componentes-sgp';
@@ -15,12 +16,11 @@ import Card from '~/componentes/card';
 import { Colors } from '~/componentes/colors';
 import LocalizadorEstudante from '~/componentes/LocalizadorEstudante';
 import { URL_HOME } from '~/constantes/url';
-import { RotasDto } from '~/dtos';
+import { RotasDto, situacaoAEE } from '~/dtos';
 import { setDadosIniciaisLocalizarEstudante } from '~/redux/modulos/collapseLocalizarEstudante/actions';
 import { verificaSomenteConsulta } from '~/servicos';
 import AbrangenciaServico from '~/servicos/Abrangencia';
 import { erros } from '~/servicos/alertas';
-import history from '~/servicos/history';
 import ServicoEncaminhamentoAEE from '~/servicos/Paginas/Relatorios/AEE/ServicoEncaminhamentoAEE';
 import FiltroHelper from '~/componentes-sgp/filtro/helper';
 import ModalAvisoNovoEncaminhamentoAEE from './Componentes/AvisoCadastro/modalAvisoCadastro';
@@ -36,9 +36,13 @@ import {
 } from '~/constantes/ids/select';
 import { SGP_TABLE_LISTA_ALUNOS_ENCAMINHAMENTO_AEE } from '~/constantes/ids/table';
 import BotaoGerarRelatorioEncaminhamentoAEE from '../BotaoGerarRelatorioEncaminhamentoAEE';
+import { useNavigate } from 'react-router-dom';
+import { OPCAO_TODOS } from '@/@legacy/constantes';
+import { SGP_RADIO_EXIBIR_ENCAMINHAMENTOS_AEE_ENCERRADOS } from '@/@legacy/constantes/ids/radio';
 
 const EncaminhamentoAEELista = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const codigosAlunosSelecionados = useSelector(
     state => state.localizadorEstudante.codigosAluno
@@ -65,12 +69,12 @@ const EncaminhamentoAEELista = () => {
   const [ue, setUe] = useState();
   const [turma, setTurma] = useState();
   const [situacao, setSituacao] = useState();
+  const [exibirEncaminhamentosEncerrados, setExibirEncaminhamentosEncerrados] =
+    useState(false);
   const [responsavel, setResponsavel] = useState();
 
-  const [
-    alunoLocalizadorSelecionado,
-    setAlunoLocalizadorSelecionado,
-  ] = useState();
+  const [alunoLocalizadorSelecionado, setAlunoLocalizadorSelecionado] =
+    useState();
 
   const [filtro, setFiltro] = useState({});
 
@@ -80,10 +84,13 @@ const EncaminhamentoAEELista = () => {
   const [carregandoSituacao, setCarregandoSituacao] = useState(false);
   const [carregandoResponsavel, setCarregandoResponsavel] = useState(false);
 
-  const [
-    idsEncaminhamentosSelecionados,
-    setIdsEncaminhamentosSelecionados,
-  ] = useState([]);
+  const [idsEncaminhamentosSelecionados, setIdsEncaminhamentosSelecionados] =
+    useState([]);
+
+  const opcoesEncerrados = [
+    { label: 'Sim', value: true },
+    { label: 'Não', value: false },
+  ];
 
   useEffect(() => {
     verificaSomenteConsulta(permissoesTela);
@@ -96,6 +103,10 @@ const EncaminhamentoAEELista = () => {
   }, [codigosAlunosSelecionados]);
 
   const colunas = [
+    {
+      title: 'Unidade Escolar (UE)',
+      dataIndex: 'ue',
+    },
     {
       title: 'Nº',
       dataIndex: 'numero',
@@ -124,17 +135,34 @@ const EncaminhamentoAEELista = () => {
     },
   ];
 
-  const filtrar = (dreId, ueId, turmaId, aluno, situa, responsa) => {
+  const filtrar = (
+    dreId,
+    ueSelecionada,
+    turmaId,
+    aluno,
+    situa,
+    exibirEncerrados,
+    responsavelRf
+  ) => {
     if (anoLetivo && dreId) {
+      let ueId = 0;
+      if (ueSelecionada && ueSelecionada !== OPCAO_TODOS) {
+        ueId = ueSelecionada;
+      }
+
       const params = {
+        anoLetivo,
         dreId,
         ueId,
         turmaId,
         alunoCodigo: aluno,
         situacao: situa,
-        responsavelRf: responsa,
-        anoLetivo,
+        exibirEncerrados,
       };
+
+      if (responsavelRf) {
+        params.responsavelRf = responsavelRf;
+      }
       setFiltro({ ...params });
     }
   };
@@ -156,7 +184,6 @@ const EncaminhamentoAEELista = () => {
 
   useEffect(() => {
     validarValorPadraoAnoLetivo(listaAnosLetivo);
-
   }, [consideraHistorico, listaAnosLetivo]);
 
   const obterAnosLetivos = useCallback(async () => {
@@ -177,12 +204,21 @@ const EncaminhamentoAEELista = () => {
 
     setListaAnosLetivo(anosLetivos);
     setCarregandoAnos(false);
-
   }, [anoAtual, consideraHistorico]);
 
   useEffect(() => {
     obterAnosLetivos();
   }, [obterAnosLetivos, consideraHistorico]);
+
+  const atualizarSituacoes = situacoes => {
+    const novasListaSituacoes = situacoes.filter(
+      situacao =>
+        situacao?.codigo !== situacaoAEE.Encerrado &&
+        situacao?.codigo !== situacaoAEE.EncerradoAutomaticamente
+    );
+
+    return novasListaSituacoes;
+  };
 
   const obterSituacoes = useCallback(async () => {
     setCarregandoSituacao(true);
@@ -190,7 +226,8 @@ const EncaminhamentoAEELista = () => {
       .catch(e => erros(e))
       .finally(() => setCarregandoSituacao(false));
     if (resposta?.data?.length) {
-      setListaSituacao(resposta.data);
+      const lista = atualizarSituacoes(resposta.data);
+      setListaSituacao(lista);
     } else {
       setListaSituacao([]);
     }
@@ -201,32 +238,47 @@ const EncaminhamentoAEELista = () => {
   }, [obterSituacoes]);
 
   const obterResponsaveis = useCallback(async () => {
-    if (anoLetivo && ue) {
+    if (anoLetivo) {
       setCarregandoResponsavel(true);
+      setResponsavel();
 
       const resposta = await ServicoEncaminhamentoAEE.obterResponsaveis(
         dre?.id,
-        ue?.id,
+        !ue?.id || ue?.id === OPCAO_TODOS ? 0 : ue?.id,
         turma?.id,
         alunoLocalizadorSelecionado,
         situacao,
-        anoLetivo
+        anoLetivo,
+        exibirEncaminhamentosEncerrados
       )
         .catch(e => erros(e))
         .finally(() => setCarregandoResponsavel(false));
+
       if (resposta?.data?.length) {
         const lista = resposta.data.map(item => {
-          return { ...item, codigoRf: String(item.codigoRf) };
+          return {
+            ...item,
+            codigoRf: String(item.codigoRf),
+            nomeFormatado: `${item.nomeServidor} - ${item.codigoRf}`,
+          };
         });
         setListaResponsavel(lista);
       } else {
         setListaResponsavel([]);
       }
     }
-  }, [anoLetivo, dre, ue, turma, alunoLocalizadorSelecionado, situacao]);
+  }, [
+    anoLetivo,
+    dre,
+    ue,
+    turma,
+    alunoLocalizadorSelecionado,
+    situacao,
+    exibirEncaminhamentosEncerrados,
+  ]);
 
   useEffect(() => {
-    if (ue?.id && listaUes.length) {
+    if (dre?.id && listaUes.length) {
       obterResponsaveis();
     }
   }, [obterResponsaveis, ue, listaUes]);
@@ -244,7 +296,7 @@ const EncaminhamentoAEELista = () => {
         .catch(e => erros(e))
         .finally(() => setCarregandoUes(false));
 
-      if (resposta?.data) {
+      if (resposta?.data?.length) {
         const lista = resposta.data.map(item => ({
           desc: item.nome,
           codigo: String(item.codigo),
@@ -253,22 +305,32 @@ const EncaminhamentoAEELista = () => {
 
         if (lista?.length === 1) {
           setUe(lista[0]);
-          filtrar(
-            dre?.id,
-            lista[0]?.id,
-            turma?.id,
-            alunoLocalizadorSelecionado,
-            situacao,
-            responsavel
-          );
         }
+
+        if (lista?.length > 1) {
+          const todasUE = {
+            codigo: OPCAO_TODOS,
+            id: OPCAO_TODOS,
+            desc: 'Todas',
+          };
+          lista.unshift(todasUE);
+        }
+
+        filtrar(
+          dre?.id,
+          lista[0]?.id,
+          turma?.id,
+          alunoLocalizadorSelecionado,
+          situacao,
+          exibirEncaminhamentosEncerrados,
+          responsavel
+        );
 
         setListaUes(lista);
       } else {
         setListaUes([]);
       }
     }
-
   }, [dre, anoLetivo, consideraHistorico]);
 
   useEffect(() => {
@@ -362,6 +424,7 @@ const EncaminhamentoAEELista = () => {
             resposta.data[0]?.id,
             alunoLocalizadorSelecionado,
             situacao,
+            exibirEncaminhamentosEncerrados,
             responsavel
           );
         }
@@ -369,7 +432,6 @@ const EncaminhamentoAEELista = () => {
         setListaTurmas([]);
       }
     }
-
   }, [anoLetivo, ue]);
 
   useEffect(() => {
@@ -382,7 +444,7 @@ const EncaminhamentoAEELista = () => {
   }, [ue, obterTurmas]);
 
   const onClickVoltar = () => {
-    history.push(URL_HOME);
+    navigate(URL_HOME);
   };
 
   const onClickNovo = () => {
@@ -414,6 +476,7 @@ const EncaminhamentoAEELista = () => {
       turma?.id,
       alunoLocalizadorSelecionado,
       situacao,
+      exibirEncaminhamentosEncerrados,
       responsavel
     );
   };
@@ -452,7 +515,15 @@ const EncaminhamentoAEELista = () => {
     }
 
     setAlunoLocalizadorSelecionado();
-    filtrar(dre?.id, ue?.id, turmaSelecionada?.id, '', situacao, responsavel);
+    filtrar(
+      dre?.id,
+      ue?.id,
+      turmaSelecionada?.id,
+      '',
+      situacao,
+      exibirEncaminhamentosEncerrados,
+      responsavel
+    );
   };
 
   const onChangeLocalizadorEstudante = aluno => {
@@ -464,11 +535,20 @@ const EncaminhamentoAEELista = () => {
         turma?.id,
         aluno?.alunoCodigo,
         situacao,
+        exibirEncaminhamentosEncerrados,
         responsavel
       );
     } else {
       setAlunoLocalizadorSelecionado();
-      filtrar(dre?.id, ue?.id, turma?.id, '', situacao, responsavel);
+      filtrar(
+        dre?.id,
+        ue?.id,
+        turma?.id,
+        '',
+        situacao,
+        exibirEncaminhamentosEncerrados,
+        responsavel
+      );
     }
   };
 
@@ -480,6 +560,20 @@ const EncaminhamentoAEELista = () => {
       turma?.id,
       alunoLocalizadorSelecionado,
       valor,
+      exibirEncaminhamentosEncerrados,
+      responsavel
+    );
+  };
+
+  const onChangeEncaminhamentosEncerrados = e => {
+    setExibirEncaminhamentosEncerrados(e?.target?.value);
+    filtrar(
+      dre?.id,
+      ue?.id,
+      turma?.id,
+      alunoLocalizadorSelecionado,
+      situacao,
+      e?.target?.value,
       responsavel
     );
   };
@@ -492,12 +586,13 @@ const EncaminhamentoAEELista = () => {
       turma?.id,
       alunoLocalizadorSelecionado,
       situacao,
+      exibirEncaminhamentosEncerrados,
       valor
     );
   };
 
   const onClickEditar = item => {
-    history.push(`${RotasDto.RELATORIO_AEE_ENCAMINHAMENTO}/editar/${item.id}`);
+    navigate(`${RotasDto.RELATORIO_AEE_ENCAMINHAMENTO}/editar/${item.id}`);
   };
 
   const onCheckedConsideraHistorico = e => {
@@ -617,14 +712,16 @@ const EncaminhamentoAEELista = () => {
                   ueId={ue?.codigo}
                   onChange={onChangeLocalizadorEstudante}
                   anoLetivo={anoLetivo}
-                  desabilitado={!dre?.codigo || !ue?.codigo}
+                  desabilitado={
+                    !dre?.codigo || !ue?.codigo || ue?.codigo === OPCAO_TODOS
+                  }
                   exibirCodigoEOL={false}
                   codigoTurma={turma?.codigo}
                   placeholder="Procure pelo nome da Criança/Estudante"
                 />
               </div>
             </div>
-            <div className="col-sm-12 col-md-6 col-lg-6 col-xl-6 mb-2">
+            <div className="col-sm-12 col-md-6 mb-2">
               <Loader loading={carregandoSituacao} tip="">
                 <SelectComponent
                   id={SGP_SELECT_SITUACAO}
@@ -639,24 +736,33 @@ const EncaminhamentoAEELista = () => {
                 />
               </Loader>
             </div>
-            <div className="col-sm-12 col-md-6 col-lg-6 col-xl-6 mb-4">
+            <div className="col-sm-12 col-md-6 mb-2">
+              <RadioGroupButton
+                value={exibirEncaminhamentosEncerrados}
+                label="Apresentar encaminhamentos encerrados"
+                opcoes={opcoesEncerrados}
+                id={SGP_RADIO_EXIBIR_ENCAMINHAMENTOS_AEE_ENCERRADOS}
+                onChange={onChangeEncaminhamentosEncerrados}
+              />
+            </div>
+            <div className="col-sm-12 mb-4">
               <Loader loading={carregandoResponsavel} tip="">
                 <SelectComponent
                   id={SGP_SELECT_RESPONSAVEL}
-                  label="Responsável"
+                  label="PAEE/PAAI Responsável"
                   lista={listaResponsavel}
                   valueOption="codigoRf"
-                  valueText="nomeServidor"
+                  valueText="nomeFormatado"
                   onChange={onChangeResponsavel}
                   valueSelect={responsavel}
-                  placeholder="Responsável"
+                  placeholder="PAEE/PAAI Responsável"
                 />
               </Loader>
             </div>
+
             {anoLetivo &&
             dre?.codigo &&
             listaDres?.length &&
-            ue?.codigo &&
             listaUes?.length ? (
               <div className="col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-2">
                 <ListaPaginada
@@ -671,8 +777,6 @@ const EncaminhamentoAEELista = () => {
                       dre?.codigo &&
                       filtro.dreId &&
                       listaDres?.length &&
-                      ue?.codigo &&
-                      filtro.ueId &&
                       listaUes?.length
                     )
                   }

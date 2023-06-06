@@ -1,5 +1,5 @@
 import { conselhoClasseRecomendacaoTipo } from '~/dtos';
-import { store } from '~/redux';
+import { store } from '@/core/redux';
 import {
   setListaoRecomendacoesAlunoFamilia,
   setListaTiposConceitos,
@@ -27,9 +27,9 @@ class ServicoConselhoClasse {
     bimestre,
     consideraHistorico = false
   ) => {
-    const url = `v1/conselhos-classe/${conselhoClasseId ||
-      0}/fechamentos/${fechamentoTurmaId ||
-      0}/alunos/${alunoCodigo}/turmas/${codigoTurma}/bimestres/${
+    const url = `v1/conselhos-classe/${conselhoClasseId || 0}/fechamentos/${
+      fechamentoTurmaId || 0
+    }/alunos/${alunoCodigo}/turmas/${codigoTurma}/bimestres/${
       bimestre !== 'final' ? bimestre : 0
     }/recomendacoes?consideraHistorico=${consideraHistorico}`;
     return api.get(url);
@@ -53,9 +53,9 @@ class ServicoConselhoClasse {
     bimestre
   ) => {
     return api.get(
-      `v1/conselhos-classe/${conselhoClasseId ||
-        0}/fechamentos/${fechamentoTurmaId ||
-        0}/alunos/${alunoCodigo}/turmas/${turmaId}/bimestres/${
+      `v1/conselhos-classe/${conselhoClasseId || 0}/fechamentos/${
+        fechamentoTurmaId || 0
+      }/alunos/${alunoCodigo}/turmas/${turmaId}/bimestres/${
         bimestre === 'final' ? 0 : bimestre
       }/sintese`
     );
@@ -103,9 +103,9 @@ class ServicoConselhoClasse {
     codigoTurma,
     consideraHistorico
   ) => {
-    const url = `v1/conselhos-classe/${conselhoClasseId ||
-      0}/fechamentos/${fechamentoTurmaId ||
-      0}/alunos/${alunoCodigo}/turmas/${codigoTurma}/parecer/consideraHistorico/${consideraHistorico}`;
+    const url = `v1/conselhos-classe/${conselhoClasseId || 0}/fechamentos/${
+      fechamentoTurmaId || 0
+    }/alunos/${alunoCodigo}/turmas/${codigoTurma}/parecer/consideraHistorico/${consideraHistorico}`;
     return api.get(url);
   };
 
@@ -117,9 +117,9 @@ class ServicoConselhoClasse {
     bimestre,
     consideraHistorico = false
   ) => {
-    const url = `v1/conselhos-classe/${conselhoClasseId ||
-      0}/fechamentos/${fechamentoTurmaId ||
-      0}/alunos/${alunoCodigo}/turmas/${turmaId}/bimestres/${
+    const url = `v1/conselhos-classe/${conselhoClasseId || 0}/fechamentos/${
+      fechamentoTurmaId || 0
+    }/alunos/${alunoCodigo}/turmas/${turmaId}/bimestres/${
       bimestre === 'final' ? 0 : bimestre
     }/notas?consideraHistorico=${consideraHistorico}`;
     return api.get(url);
@@ -133,8 +133,9 @@ class ServicoConselhoClasse {
     codigoTurma,
     bimestre
   ) => {
-    const url = `v1/conselhos-classe/${conselhoClasseId ||
-      0}/notas/alunos/${alunoCodigo}/turmas/${codigoTurma}/bimestres/${
+    const url = `v1/conselhos-classe/${
+      conselhoClasseId || 0
+    }/notas/alunos/${alunoCodigo}/turmas/${codigoTurma}/bimestres/${
       bimestre !== 'final' ? bimestre : 0
     }/fechamento-turma/${fechamentoTurmaId || 0}`;
     return api.post(url, notaDto);
@@ -149,8 +150,9 @@ class ServicoConselhoClasse {
     fechamentoTurmaId,
     alunoCodigo
   ) => {
-    const url = `v1/conselhos-classe/${conselhoClasseId ||
-      0}/fechamentos/${fechamentoTurmaId || 0}/alunos/${alunoCodigo}/parecer`;
+    const url = `v1/conselhos-classe/${conselhoClasseId || 0}/fechamentos/${
+      fechamentoTurmaId || 0
+    }/alunos/${alunoCodigo}/parecer`;
     return api.post(url);
   };
 
@@ -234,6 +236,11 @@ class ServicoConselhoClasse {
       }
     }
   };
+
+  validarInconsistencias = (turmaId, bimestre) =>
+    api.get(
+      `/v1/conselhos-classe/validar-inconsistencias/turma/${turmaId}/bimestre/${bimestre}`
+    );
 }
 
 export default new ServicoConselhoClasse();

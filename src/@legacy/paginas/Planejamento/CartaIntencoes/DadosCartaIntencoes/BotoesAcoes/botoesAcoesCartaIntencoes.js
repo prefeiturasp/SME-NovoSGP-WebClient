@@ -14,12 +14,13 @@ import {
   setCarregandoCartaIntencoes,
 } from '~/redux/modulos/cartaIntencoes/actions';
 import { confirmar } from '~/servicos/alertas';
-import history from '~/servicos/history';
 import { ehTurmaInfantil } from '~/servicos/Validacoes/validacoesInfatil';
 import ServicoSalvarCartaIntencoes from '../../servicoSalvarCartaIntencoes';
+import { useNavigate } from 'react-router-dom';
 
 const BotoesAcoesCartaIntencoes = props => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const {
     onClickCancelar,
@@ -45,10 +46,11 @@ const BotoesAcoesCartaIntencoes = props => {
   const onSalvar = async () => {
     if (cartaIntencoesEmEdicao && ehTurmaInfantil) {
       dispatch(setCarregandoCartaIntencoes(true));
-      const salvou = await ServicoSalvarCartaIntencoes.validarSalvarCartaIntencoes(
-        componenteCurricularId,
-        codigoTurma
-      );
+      const salvou =
+        await ServicoSalvarCartaIntencoes.validarSalvarCartaIntencoes(
+          componenteCurricularId,
+          codigoTurma
+        );
       dispatch(setCarregandoCartaIntencoes(false));
       if (salvou) {
         onClickSalvar();
@@ -68,10 +70,11 @@ const BotoesAcoesCartaIntencoes = props => {
     const confirmado = await perguntaAoSalvar();
     if (confirmado) {
       dispatch(setCarregandoCartaIntencoes(true));
-      const salvou = await ServicoSalvarCartaIntencoes.validarSalvarCartaIntencoes(
-        componenteCurricularId,
-        codigoTurma
-      );
+      const salvou =
+        await ServicoSalvarCartaIntencoes.validarSalvarCartaIntencoes(
+          componenteCurricularId,
+          codigoTurma
+        );
       dispatch(setCarregandoCartaIntencoes(false));
       if (salvou) {
         return true;
@@ -117,7 +120,7 @@ const BotoesAcoesCartaIntencoes = props => {
     }
 
     if (validouSalvarCarta && validouSalvarObservacao) {
-      history.push(URL_HOME);
+      navigate(URL_HOME);
     }
   };
 

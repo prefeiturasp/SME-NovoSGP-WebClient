@@ -2,7 +2,7 @@
 import { Row } from 'antd';
 import React, { useEffect, useCallback, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useRouteMatch } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { Auditoria } from '~/componentes';
 import QuestionarioDinamico from '~/componentes-sgp/QuestionarioDinamico/questionarioDinamico';
 import { SGP_SECAO } from '~/constantes/ids/questionario-dinamico';
@@ -14,10 +14,10 @@ import ServicoNAAPA from '~/servicos/Paginas/Gestao/NAAPA/ServicoNAAPA';
 const MontarDadosTabSelecionada = props => {
   const { questionarioId, dadosTab } = props;
 
-  const routeMatch = useRouteMatch();
+  const { id } = useParams();
   const dispatch = useDispatch();
 
-  const encaminhamentoId = routeMatch?.params?.id || 0;
+  const encaminhamentoId = id || 0;
 
   const { aluno, turma, anoLetivo } = useSelector(
     state => state.encaminhamentoNAAPA.dadosEncaminhamentoNAAPA
@@ -48,14 +48,12 @@ const MontarDadosTabSelecionada = props => {
   };
 
   const buscarValoresOpcaoRespostaPorNome = (array, value) => {
-    const opcaoResposta = array.find(x =>
-      x.nome === value
-    );
+    const opcaoResposta = array.find(x => x.nome === value);
     return opcaoResposta?.id?.toString() || null;
   };
 
-  const converterRacaCorEolToOpcaoRespostaGrupoEtnico = (nomeRaca) => {
-    switch(nomeRaca) {
+  const converterRacaCorEolToOpcaoRespostaGrupoEtnico = nomeRaca => {
+    switch (nomeRaca) {
       case 'BRANCA':
         return 'Branco';
       case 'PRETA':
@@ -73,7 +71,7 @@ const MontarDadosTabSelecionada = props => {
       default:
         return '';
     }
-  }
+  };
 
   const buscarValoresSimNao = (array, value) => {
     if (value) {
@@ -138,7 +136,9 @@ const MontarDadosTabSelecionada = props => {
           if (informacoesEstudante?.grupoEtnico) {
             const opcaoRespostaId = buscarValoresOpcaoRespostaPorNome(
               questao.opcaoResposta,
-              converterRacaCorEolToOpcaoRespostaGrupoEtnico(informacoesEstudante?.grupoEtnico)
+              converterRacaCorEolToOpcaoRespostaGrupoEtnico(
+                informacoesEstudante?.grupoEtnico
+              )
             );
             questao.resposta = [{ opcaoRespostaId }];
           }
@@ -200,9 +200,8 @@ const MontarDadosTabSelecionada = props => {
 
       let informacoesAdicionaisEstudante = null;
       if (!encaminhamentoId) {
-        informacoesAdicionaisEstudante = await obterinformacoesAdicionaisEstudante(
-          aluno?.codigoAluno
-        );
+        informacoesAdicionaisEstudante =
+          await obterinformacoesAdicionaisEstudante(aluno?.codigoAluno);
       }
 
       if (!encaminhamentoId && informacoesAdicionaisEstudante) {
@@ -229,7 +228,6 @@ const MontarDadosTabSelecionada = props => {
       setDadosQuestionarioAtual([]);
     }
     dispatch(setExibirLoaderEncaminhamentoNAAPA(false));
-
   }, [dispatch, questionarioId, aluno, turma, encaminhamentoId]);
 
   useEffect(() => {
@@ -259,8 +257,8 @@ const MontarDadosTabSelecionada = props => {
 
       if (!respostasCampoAgrupamento?.length) return questaoAtual.obrigatorio;
 
-      const camposValidarObrigatoriedade = campoAgrupamento.opcaoResposta.filter(
-        opcao => {
+      const camposValidarObrigatoriedade =
+        campoAgrupamento.opcaoResposta.filter(opcao => {
           const opcaoEhSelecionada = respostasCampoAgrupamento.find(
             opcaoRespostaId => opcao.id === Number(opcaoRespostaId)
           );
@@ -270,8 +268,7 @@ const MontarDadosTabSelecionada = props => {
             (opcao?.nome === labelCampoAdoece ||
               opcao?.nome === labelDoencaCronica)
           );
-        }
-      );
+        });
 
       const ehObrigatorio = camposValidarObrigatoriedade.find(campo => {
         if (campo?.questoesComplementares?.length) {
@@ -291,15 +288,14 @@ const MontarDadosTabSelecionada = props => {
 
             const labelOutras = 'Outras';
 
-            const tipoOutrasSelecionada = campoValidarObrigatoriedade.opcaoResposta.find(
-              opcao => {
+            const tipoOutrasSelecionada =
+              campoValidarObrigatoriedade.opcaoResposta.find(opcao => {
                 const opcaoEhSelecionada = respostaTipoAdoece.find(
                   opcaoRespostaId => opcao.id === Number(opcaoRespostaId)
                 );
 
                 return opcaoEhSelecionada && opcao?.nome === labelOutras;
-              }
-            );
+              });
 
             return !!tipoOutrasSelecionada;
           }

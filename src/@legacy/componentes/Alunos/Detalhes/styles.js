@@ -41,23 +41,23 @@ const FrequenciaGlobal = styled.div`
 `;
 
 const ContainerAvatar = styled.div`
-  cursor: ${props => props.cursor};
+  cursor: ${props => props.cursor} !important;
 
   span {
-    width: 80px;
-    height: 80px;
-    line-height: 95px;
-    min-width: 80px;
+    width: 80px !important;
+    height: 80px !important;
+    line-height: 95px !important;
+    min-width: 80px !important;
   }
 
   i {
-    font-size: 40px;
+    font-size: 45px !important;
   }
 
   .desc-alterar-imagem {
-    font-size: 10px;
-    color: ${Base.Roxo};
-    text-align: center;
+    font-size: 10px !important;
+    color: ${Base.Roxo} !important;
+    text-align: center !important;
   }
 `;
 

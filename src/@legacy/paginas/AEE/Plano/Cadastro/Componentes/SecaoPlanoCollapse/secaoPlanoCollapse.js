@@ -1,4 +1,3 @@
-import PropTypes from 'prop-types';
 import React from 'react';
 import * as moment from 'moment';
 import { useSelector } from 'react-redux';
@@ -7,9 +6,7 @@ import SecaoVersaoPlanoCollapse from '../SecaoVersaoPlano/secaoVersaoPlanoCollap
 import MontarDadosPorSecao from './DadosSecaoPlano/montarDadosPorSecao';
 import ModalErrosPlano from '../ModalErrosPlano/modalErrosPlano';
 
-const SecaoPlanoCollapse = props => {
-  const { match } = props;
-
+const SecaoPlanoCollapse = () => {
   const planoAEEDados = useSelector(store => store.planoAEE.planoAEEDados);
 
   const formateAuditoria = versao => {
@@ -46,11 +43,10 @@ const SecaoPlanoCollapse = props => {
             dados={{ questionarioId: 0 }}
             auditoria={formateAuditoria(planoAEEDados?.ultimaVersao)}
             dadosQuestionarioAtual={planoAEEDados?.questoes}
-            match={match}
           />
         </CardCollapse>
       ) : (
-        ''
+        <></>
       )}
       {planoAEEDados?.versoes?.length ? (
         <SecaoVersaoPlanoCollapse
@@ -59,18 +55,10 @@ const SecaoPlanoCollapse = props => {
           versoes={planoAEEDados?.versoes}
         />
       ) : (
-        ''
+        <></>
       )}
     </>
   );
-};
-
-SecaoPlanoCollapse.propTypes = {
-  match: PropTypes.oneOfType([PropTypes.object]),
-};
-
-SecaoPlanoCollapse.defaultProps = {
-  match: {},
 };
 
 export default SecaoPlanoCollapse;

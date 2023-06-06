@@ -1,33 +1,33 @@
-import PropTypes from 'prop-types';
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { useParams } from 'react-router-dom';
 import CollapseAtribuicaoResponsavel from '~/componentes-sgp/CollapseAtribuicaoResponsavel/collapseAtribuicaoResponsavel';
 import { setExibirLoaderEncaminhamentoAEE } from '~/redux/modulos/encaminhamentoAEE/actions';
 import { erros } from '~/servicos';
 import ServicoEncaminhamentoAEE from '~/servicos/Paginas/Relatorios/AEE/ServicoEncaminhamentoAEE';
 
-const AtribuicaoResponsavel = props => {
-  const { match } = props;
-
+const AtribuicaoResponsavel = () => {
   const dispatch = useDispatch();
+  const paramsRoute = useParams();
+
+  const encaminhamentoId = paramsRoute?.id || 0;
 
   const dadosEncaminhamento = useSelector(
     store => store.encaminhamentoAEE.dadosEncaminhamento
   );
 
   const limparAtualizarDados = () => {
-    const encaminhamentoId = match?.params?.id;
     ServicoEncaminhamentoAEE.obterEncaminhamentoPorId(encaminhamentoId);
   };
 
   const params = {
     codigoTurma: dadosEncaminhamento?.turma?.codigo,
     validarAntesAtribuirResponsavel: async funcionario => {
-      const encaminhamentoId = match?.params?.id;
-      const resposta = await ServicoEncaminhamentoAEE.atribuirResponsavelEncaminhamento(
-        funcionario.codigoRF,
-        encaminhamentoId
-      ).catch(e => erros(e));
+      const resposta =
+        await ServicoEncaminhamentoAEE.atribuirResponsavelEncaminhamento(
+          funcionario.codigoRF,
+          encaminhamentoId
+        ).catch(e => erros(e));
 
       if (resposta?.data) {
         limparAtualizarDados();
@@ -36,7 +36,6 @@ const AtribuicaoResponsavel = props => {
       return false;
     },
     clickRemoverResponsavel: async () => {
-      const encaminhamentoId = match?.params?.id;
       if (encaminhamentoId) {
         dispatch(setExibirLoaderEncaminhamentoAEE(true));
         const retorno = await ServicoEncaminhamentoAEE.removerResponsavel(
@@ -56,14 +55,6 @@ const AtribuicaoResponsavel = props => {
   ) : (
     <></>
   );
-};
-
-AtribuicaoResponsavel.propTypes = {
-  match: PropTypes.oneOfType([PropTypes.object]),
-};
-
-AtribuicaoResponsavel.defaultProps = {
-  match: {},
 };
 
 export default AtribuicaoResponsavel;

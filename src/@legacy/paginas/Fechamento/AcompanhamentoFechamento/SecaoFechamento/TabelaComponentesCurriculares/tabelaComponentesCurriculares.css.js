@@ -15,6 +15,30 @@ const LinhaVerticalCss = css`
 `;
 
 export const LinhaTabela = styled.div`
+  .ant-table-wrapper
+    .ant-table.ant-table-middle
+    .ant-table-tbody
+    .ant-table-wrapper:only-child
+    .ant-table {
+    margin-block: unset !important;
+    margin-inline: unset !important;
+  }
+
+  .ant-table-wrapper .ant-table.ant-table-middle {
+    .ant-table-container {
+      border-left: none !important;
+    }
+  }
+
+  .table-responsive {
+    background: white !important;
+  }
+
+  .ant-table-expanded-row.ant-table-expanded-row-level-1 > td {
+    border-left: none !important;
+    padding: 0px !important;
+  }
+
   table:first-child {
     border: 0 !important;
   }
@@ -34,7 +58,7 @@ export const LinhaTabela = styled.div`
     th,
     td {
       border: 1px solid #bfbfbf !important;
-  }
+    }
 
     & > td {
       padding: 8px 12px !important;
@@ -74,8 +98,6 @@ export const LinhaTabela = styled.div`
     td {
       &:first-child {
         position: relative;
-        border: 0 !important;
-        padding: 0 !important;
       }
 
       .table-responsive {
@@ -83,6 +105,10 @@ export const LinhaTabela = styled.div`
       }
 
       table {
+        &:first-child {
+          border-left: 1px !important;
+        }
+
         margin-bottom: 16px;
 
         .linha-ativa {
@@ -100,10 +126,10 @@ export const LinhaTabela = styled.div`
             &:last-child {
               width: 329px;
             }
-            }
           }
         }
       }
+    }
 
     div {
       width: 100%;

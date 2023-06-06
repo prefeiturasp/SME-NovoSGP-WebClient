@@ -1,11 +1,8 @@
 import { createGlobalStyle } from 'styled-components';
 import { Base } from '../componentes/colors';
 import ExclamacaoCampoErro from '~/recursos/ExclamacaoCampoErro.svg';
-import '../componentes/campoData/campoData.css';
 
 export default createGlobalStyle`
-  @import url('https://fonts.googleapis.com/css?family=Roboto:400,700&display=swap');
-
   *, *:before, *:after {
     box-sizing: border-box;
     margin: 0;
@@ -16,7 +13,7 @@ export default createGlobalStyle`
     box-shadow: none;
   }
   html, body, #root {
-    font-family: 'FontAwesome', 'Roboto', sans-serif !important;
+    font-family: 'Roboto', sans-serif !important;
     font-stretch: normal;
     height: 100%;
     letter-spacing: normal;
@@ -75,6 +72,195 @@ export default createGlobalStyle`
     color: #ffffff !important;
   }
 
+  /* Antd V5 Start */
+
+  .ant-select-item-option:hover  {
+    background-color:  ${Base.Roxo} !important;
+  }
+
+  .ant-select-item-option-active {
+    background-color:  ${Base.Branco} !important;
+  }
+
+  .ant-select {
+    width: 100%;
+  }
+
+  .ant-select-item:hover {
+    color: #ffffff !important;
+  }
+
+  .ant-select-item {
+    -webkit-transition: none !important;
+    transition: none !important;
+    border-radius: 0px !important;
+
+    .anticon-check {
+      color: white !important;
+    }
+  }
+
+  .ant-select-item-option-selected {
+    color: #ffffff !important;
+    background-color:  ${Base.Roxo} !important;
+  }
+
+  .ant-select-selection {
+    outline: none;
+    display: block;
+    user-select: none;
+    border-radius: 4px;
+    box-sizing: border-box;
+    background-color: #fff;
+    border: 1px solid #d9d9d9;
+    transition: all .3s cubic-bezier(.645,.045,.355,1);
+  }
+
+  .ant-select-selection-item {
+    font-weight: bold !important;
+    color: rgba(0, 0, 0, 0.65);
+  }
+
+  .ant-select-disabled .ant-select-selection-item {
+    color: rgba(0, 0, 0, 0.25) !important;
+  }
+
+  .ant-select-clear {
+    top: 50% !important;
+    font-size: 15px !important;
+  }
+
+  .ant-picker {
+    height: 38px;
+    width: 100%;
+  }
+
+  .ant-picker-dropdown  {
+    z-index: 9999 !important;
+
+    .ant-picker-cell {
+      padding: 3px 0 !important;
+    }
+  }
+
+  .ant-picker-cell-selected .ant-picker-cell-inner {
+    background: #086397 !important;
+    color: #ffffff;
+  }
+
+  .ant-picker-cell-inner {
+    -webkit-transition: none;
+    transition: none;
+  }
+
+  .ant-picker-cell-in-view:hover{
+    .ant-picker-cell-inner {
+      background: #086397 !important;
+      color: #ffffff !important;
+    }
+  }
+
+  .ant-picker-cell-in-view.ant-picker-cell-today .ant-picker-cell-inner {
+    ::before {
+      border: 0 !important;
+    }
+    color: #bdbdbd;
+    font-weight: 100;
+  }
+
+  .ant-picker-header-view button:hover {
+    color: #086397 !important;
+  }
+
+  .ant-picker-dropdown .ant-picker-cell-in-view.ant-picker-cell-range-end .ant-picker-cell-inner {
+    background: #086397 !important;
+    color: #ffffff !important;
+  }
+
+  .ant-picker-dropdown .ant-picker-cell-in-view.ant-picker-cell-range-start .ant-picker-cell-inner {
+    background: #086397 !important;
+    color: #ffffff !important;
+  }
+
+  .ant-table-thead > tr:hover:not(.ant-table-expanded-row):not(.ant-table-row-selected) > td.ant-table-cell-scrollbar {
+    background: ${Base.CinzaTabela} !important;
+  }
+
+  .ant-pagination {
+    display: flex;
+    align-items: center !important;
+    justify-content: center !important;
+  }
+
+  .ant-pagination-item {
+    a {
+      font-family: Roboto;
+      font-style: normal;
+      font-stretch: normal;
+      font-weight: bold;
+      letter-spacing: normal;
+    }
+
+    border-radius: 0 !important;
+    height: 45px !important;
+    line-height: 45px !important;
+    margin: 0 !important;
+    min-width: 45px !important;
+    border: solid 1px ${Base.CinzaDesabilitado} !important;
+  }
+
+  .ant-pagination-prev {
+    border-radius: 4px 0px 0px 4px !important;
+    border-right: none !important;
+    height: 45px !important;
+    line-height: 40px  !important;
+    margin: 0 !important;
+    min-width: 45px !important;
+    border: solid 1px ${Base.CinzaDesabilitado} !important;
+  }
+
+  .ant-pagination-next {
+    border-radius: 0px 4px 4px 0px !important;
+    border-left: none !important;
+    height: 45px !important;
+    line-height: 40px !important;
+    margin: 0 !important;
+    min-width: 45px !important;
+    border: solid 1px ${Base.CinzaDesabilitado} !important;
+  }
+
+  .ant-pagination-item-active {
+    background: ${Base.Roxo} !important;
+    border-color: ${Base.Roxo} !important;
+    color: ${Base.Branco} !important;
+    font-size: 12px !important;
+  }
+
+  .ant-pagination-item-active a {
+    color: ${Base.Branco} !important;
+  }
+
+  .ant-pagination-item-active:focus,
+  .ant-pagination-item-active:hover {
+    border-color: ${Base.Roxo} !important;
+  }
+
+  .ant-pagination-item-active:focus a,
+  .ant-pagination-item-active:hover a {
+    color: ${Base.Branco} !important;
+  }
+
+  .ant-pagination-options {
+    margin-inline-start: 16px !important;
+
+    .ant-select-selector {
+      height: 38px !important;
+      align-items: center !important;
+    }
+  }
+
+  /* Antd V5 End */
+
   .ant-select-dropdown-menu-item  {
     -webkit-transition: none !important;
     transition: none !important;
@@ -84,9 +270,19 @@ export default createGlobalStyle`
     color: white !important;
   }
 
+  .ant-select .ant-select-clear {
+    top: 45% !important;
+    width: 20px !important;
+    inset-inline-end: 8px !important;
+  }
+
   .desabilitar-elemento {
     pointer-events: none !important;
     opacity: 0.6 !important;
+  }
+
+  .ant-input-clear-icon span {
+    color: rgba(0, 0, 0, 0.25) !important;
   }
 
   @media (max-width: 544px) {
@@ -295,12 +491,6 @@ export default createGlobalStyle`
     color: #b40c02 !important;
   }
 
-  .position-sticky-col {
-    z-index: 9;
-    position: sticky;
-    background: white;
-    position: -webkit-sticky;
-  }
 
   .texto-vermelho-negrito {
     color: #b40c02 !important;

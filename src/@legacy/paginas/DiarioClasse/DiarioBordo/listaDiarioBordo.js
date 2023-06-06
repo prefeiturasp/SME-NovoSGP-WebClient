@@ -24,7 +24,6 @@ import {
   confirmar,
   ehTurmaInfantil,
   erros,
-  history,
   ServicoDisciplina,
   sucesso,
   verificaSomenteConsulta,
@@ -34,8 +33,11 @@ import { Mensagens } from './componentes';
 import { erro } from '~/servicos/alertas';
 import { SGP_BUTTON_NOVO } from '~/constantes/ids/button';
 import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
+import { useNavigate } from 'react-router-dom';
 
 const ListaDiarioBordo = () => {
+  const navigate = useNavigate();
+
   const [carregandoGeral, setCarregandoGeral] = useState(false);
   const [turmaInfantil, setTurmaInfantil] = useState(false);
   const [listaComponenteCurriculares, setListaComponenteCurriculares] =
@@ -128,7 +130,7 @@ const ListaDiarioBordo = () => {
 
   const onClickConsultarDiario = () => {
     dispatch(limparDadosObservacoesUsuario());
-    history.push(
+    navigate(
       `${RotasDto.DIARIO_BORDO}/detalhes/${diarioBordoAtual?.aulaId}/${diarioBordoAtual?.id}/${componenteCurricularSelecionado}`
     );
   };
@@ -321,10 +323,10 @@ const ListaDiarioBordo = () => {
   };
 
   const onClickVoltar = () => {
-    history.push('/');
+    navigate('/');
   };
   const onClickNovo = () => {
-    history.push(`${RotasDto.DIARIO_BORDO}/novo`);
+    navigate(`${RotasDto.DIARIO_BORDO}/novo`);
   };
 
   const validarSetarDataFinal = async data => {

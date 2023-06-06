@@ -2,7 +2,6 @@ import { Col, Row } from 'antd';
 import { Form, Formik } from 'formik';
 import $ from 'jquery';
 import * as moment from 'moment';
-import PropTypes from 'prop-types';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import * as Yup from 'yup';
@@ -32,7 +31,6 @@ import {
 } from '~/redux/modulos/devolutivas/actions';
 import { confirmar, erros, sucesso } from '~/servicos/alertas';
 import { setBreadcrumbManual } from '~/servicos/breadcrumb-services';
-import history from '~/servicos/history';
 import ServicoPeriodoEscolar from '~/servicos/Paginas/Calendario/ServicoPeriodoEscolar';
 import ServicoDevolutivas from '~/servicos/Paginas/DiarioClasse/ServicoDevolutivas';
 import ServicoDiarioBordo from '~/servicos/Paginas/DiarioClasse/ServicoDiarioBordo';
@@ -40,10 +38,16 @@ import ServicoDisciplina from '~/servicos/Paginas/ServicoDisciplina';
 import { verificaSomenteConsulta } from '~/servicos/servico-navegacao';
 import { ehTurmaInfantil } from '~/servicos/Validacoes/validacoesInfatil';
 import DadosPlanejamentoDiarioBordo from './DadosPlanejamentoDiarioBordo/dadosPlanejamentoDiarioBordo';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { removerTagsHtml } from '~/utils';
 
-const DevolutivasForm = ({ match }) => {
+const DevolutivasForm = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const location = useLocation();
+  const paramsRoute = useParams();
+
+  const idDevolutiva = paramsRoute?.id || 0;
 
   const usuario = useSelector(state => state.usuario);
   const { turmaSelecionada } = usuario;
@@ -66,7 +70,6 @@ const DevolutivasForm = ({ match }) => {
   const [turmaInfantil, setTurmaInfantil] = useState(false);
   const [modoEdicao, setModoEdicao] = useState(false);
   const [datasParaHabilitar, setDatasParaHabilitar] = useState();
-  const [idDevolutiva, setIdDevolutiva] = useState(0);
   const [refForm, setRefForm] = useState({});
   const permissoesTela = usuario.permissoes[RotasDto.DEVOLUTIVAS];
   const [desabilitarCampos, setDesabilitarCampos] = useState(false);
@@ -168,20 +171,17 @@ const DevolutivasForm = ({ match }) => {
   ]);
 
   useEffect(() => {
-    if (match && match.params && match.params.id) {
+    if (idDevolutiva) {
       setBreadcrumbManual(
-        match.url,
+        location.pathname,
         'Alterar Devolutiva',
         RotasDto.DEVOLUTIVAS
       );
-      setIdDevolutiva(match.params.id);
 
       dispatch(setPlanejamentoExpandido(false));
       dispatch(setPlanejamentoSelecionado([]));
-    } else {
-      setIdDevolutiva(0);
     }
-  }, [dispatch, match]);
+  }, [dispatch, location, idDevolutiva]);
 
   const resetarTela = useCallback(() => {
     dispatch(limparDadosPlanejamento());
@@ -203,13 +203,13 @@ const DevolutivasForm = ({ match }) => {
 
     if (!infantil) {
       resetarTela();
-      history.push(RotasDto.DEVOLUTIVAS);
+      navigate(RotasDto.DEVOLUTIVAS);
     }
   }, [turmaSelecionada, modalidadesFiltroPrincipal, resetarTela]);
 
   useEffect(() => {
     if (!turmaSelecionada.turma) {
-      history.push(RotasDto.DEVOLUTIVAS);
+      navigate(RotasDto.DEVOLUTIVAS);
     }
     resetarTela();
   }, [turmaSelecionada.turma, resetarTela]);
@@ -341,13 +341,13 @@ const DevolutivasForm = ({ match }) => {
   ]);
 
   useEffect(() => {
-    if (listaComponenteCurriculare?.length && match?.params?.id) {
-      obterDevolutiva(match.params.id);
+    if (listaComponenteCurriculare?.length && idDevolutiva) {
+      obterDevolutiva(idDevolutiva);
     }
-  }, [listaComponenteCurriculare, match, obterDevolutiva]);
+  }, [listaComponenteCurriculare, idDevolutiva, obterDevolutiva]);
 
   useEffect(() => {
-    if (match.params.id) return;
+    if (idDevolutiva) return;
 
     if (listaComponenteCurriculare?.length && codigoComponenteCurricular) {
       setarValoresIniciaisRegistroNovo(codigoComponenteCurricular);
@@ -361,7 +361,7 @@ const DevolutivasForm = ({ match }) => {
     codigoComponenteCurricular,
     listaComponenteCurriculare,
     setarValoresIniciaisRegistroNovo,
-    match,
+    idDevolutiva,
   ]);
 
   const obterComponentesCurriculares = useCallback(async () => {
@@ -432,13 +432,13 @@ const DevolutivasForm = ({ match }) => {
 
   useEffect(() => {
     const { state } = refForm;
-    if (!match?.params?.id && numeroRegistros && state?.values) {
+    if (!idDevolutiva && numeroRegistros && state?.values) {
       obterDadosPlanejamento(state?.values?.periodoFim, state);
     }
   }, [
     dispatch,
     idDevolutiva,
-    match,
+    idDevolutiva,
     numeroRegistros,
     obterDadosPlanejamento,
     refForm,
@@ -535,13 +535,13 @@ const DevolutivasForm = ({ match }) => {
       if (confirmado) {
         const salvou = await validaAntesDoSubmit(form);
         if (salvou) {
-          history.push(RotasDto.DEVOLUTIVAS);
+          navigate(RotasDto.DEVOLUTIVAS);
         }
       } else {
-        history.push(RotasDto.DEVOLUTIVAS);
+        navigate(RotasDto.DEVOLUTIVAS);
       }
     } else {
-      history.push(RotasDto.DEVOLUTIVAS);
+      navigate(RotasDto.DEVOLUTIVAS);
     }
   };
 
@@ -559,7 +559,7 @@ const DevolutivasForm = ({ match }) => {
 
         if (deletou && deletou.status === 200) {
           sucesso('Registro excluído com sucesso.');
-          history.push(RotasDto.DEVOLUTIVAS);
+          navigate(RotasDto.DEVOLUTIVAS);
         }
       }
     }
@@ -657,7 +657,7 @@ const DevolutivasForm = ({ match }) => {
                     onClick={async () => {
                       const salvou = await validaAntesDoSubmit(form, true);
                       if (salvou) {
-                        history.push(RotasDto.DEVOLUTIVAS);
+                        navigate(RotasDto.DEVOLUTIVAS);
                       }
                     }}
                     disabled={
@@ -792,17 +792,6 @@ const DevolutivasForm = ({ match }) => {
       </Formik>
     </Loader>
   );
-};
-
-DevolutivasForm.propTypes = {
-  match: PropTypes.oneOfType([
-    PropTypes.objectOf(PropTypes.object),
-    PropTypes.any,
-  ]),
-};
-
-DevolutivasForm.defaultProps = {
-  match: {},
 };
 
 export default DevolutivasForm;

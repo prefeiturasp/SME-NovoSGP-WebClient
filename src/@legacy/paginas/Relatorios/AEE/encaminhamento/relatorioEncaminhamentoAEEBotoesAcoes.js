@@ -3,8 +3,9 @@ import _ from 'lodash';
 import React from 'react';
 import BotoesAcaoRelatorio from '~/componentes-sgp/botoesAcaoRelatorio';
 import { MENSAGEM_SOLICITACAO_RELATORIO_SUCESSO, URL_HOME } from '~/constantes';
-import { erros, history, sucesso } from '~/servicos';
+import { erros, sucesso } from '~/servicos';
 import ServicoEncaminhamentoAEE from '~/servicos/Paginas/Relatorios/AEE/ServicoEncaminhamentoAEE';
+import { useNavigate } from 'react-router-dom';
 
 const RelatorioEncaminhamentoAEEBotoesAcoes = props => {
   const {
@@ -14,6 +15,8 @@ const RelatorioEncaminhamentoAEEBotoesAcoes = props => {
     setGerandoRelatorio,
     setDesabilitarGerar,
   } = props;
+
+  const navigate = useNavigate();
 
   const onClickGerar = async values => {
     setGerandoRelatorio(true);
@@ -38,9 +41,10 @@ const RelatorioEncaminhamentoAEEBotoesAcoes = props => {
       params.codigosPAAIResponsavel = valuesClone.codigosPAAIResponsavel;
     }
 
-    const retorno = await ServicoEncaminhamentoAEE.gerarRelatorioEncaminhamentoAEE(
-      params
-    ).catch(e => erros(e));
+    const retorno =
+      await ServicoEncaminhamentoAEE.gerarRelatorioEncaminhamentoAEE(
+        params
+      ).catch(e => erros(e));
 
     if (retorno?.status === 200) {
       sucesso(MENSAGEM_SOLICITACAO_RELATORIO_SUCESSO);
@@ -63,7 +67,7 @@ const RelatorioEncaminhamentoAEEBotoesAcoes = props => {
     });
   };
 
-  const onClickVoltar = async () => history.push(URL_HOME);
+  const onClickVoltar = async () => navigate(URL_HOME);
 
   const onClickCancelar = () => {
     setDesabilitarGerar(false);

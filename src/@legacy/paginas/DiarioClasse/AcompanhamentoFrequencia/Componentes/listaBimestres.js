@@ -12,11 +12,8 @@ const { TabPane } = Tabs;
 const ListaBimestres = props => {
   const dispatch = useDispatch();
 
-  const {
-    bimestres,
-    territorioSaber,
-    componenteCurricularIdSelecionado,
-  } = props;
+  const { bimestres, territorioSaber, componenteCurricularIdSelecionado } =
+    props;
 
   const { bimestreSelecionado } = useSelector(
     store => store.acompanhamentoFrequencia
@@ -33,7 +30,6 @@ const ListaBimestres = props => {
     <>
       <ContainerTabsCard
         type="card"
-        width="20%"
         onChange={onChangeTab}
         activeKey={String(bimestreSelecionado)}
       >

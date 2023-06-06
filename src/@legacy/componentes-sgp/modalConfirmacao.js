@@ -50,7 +50,7 @@ const ModalConfirmacao = () => {
     <ContainerModal>
       <Modal
         title={confirmacao.titulo}
-        visible={confirmacao.visivel}
+        open={confirmacao.visivel}
         onOk={() => fecharConfirmacao(true)}
         onCancel={() => fecharConfirmacao(false)}
         footer={[

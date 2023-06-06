@@ -1,20 +1,22 @@
 import { Form, Formik } from 'formik';
-import PropTypes from 'prop-types';
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate, useParams } from 'react-router-dom';
 import shortid from 'shortid';
 import * as Yup from 'yup';
 import { CampoTexto, Colors, Loader, ModalConteudoHtml } from '~/componentes';
 import Button from '~/componentes/button';
 import { RotasDto } from '~/dtos';
 import { setExibirModalDevolverAEE } from '~/redux/modulos/encaminhamentoAEE/actions';
-import { confirmar, erros, history, sucesso } from '~/servicos';
+import { confirmar, erros, sucesso } from '~/servicos';
 import ServicoEncaminhamentoAEE from '~/servicos/Paginas/Relatorios/AEE/ServicoEncaminhamentoAEE';
 
-const ModalDevolverAEE = props => {
-  const { match } = props;
-
+const ModalDevolverAEE = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const paramsRoute = useParams();
+
+  const encaminhamentoId = paramsRoute?.id || 0;
 
   const exibirModalDevolverAEE = useSelector(
     store => store.encaminhamentoAEE.exibirModalDevolverAEE
@@ -29,9 +31,7 @@ const ModalDevolverAEE = props => {
   };
 
   const validacoes = Yup.object().shape({
-    motivo: Yup.string()
-      .nullable()
-      .required('Campo obrigatório'),
+    motivo: Yup.string().nullable().required('Campo obrigatório'),
   });
 
   const fecharModal = () => {
@@ -69,12 +69,11 @@ const ModalDevolverAEE = props => {
 
   const onClickDevolver = async valores => {
     const { motivo } = valores;
-    const encaminhamentoAEEId = match?.params?.id;
 
     setExibirLoader(true);
 
     const retorno = await ServicoEncaminhamentoAEE.devolverEncaminhamentoAEE({
-      encaminhamentoAEEId,
+      encaminhamentoId,
       motivo,
     })
       .catch(e => erros(e))
@@ -83,7 +82,7 @@ const ModalDevolverAEE = props => {
     if (retorno?.status === 200) {
       sucesso('Encaminhamento devolvido com sucesso');
       fecharModal();
-      history.push(RotasDto.RELATORIO_AEE_ENCAMINHAMENTO);
+      navigate(RotasDto.RELATORIO_AEE_ENCAMINHAMENTO);
     }
   };
 
@@ -155,14 +154,6 @@ const ModalDevolverAEE = props => {
       </Formik>
     </ModalConteudoHtml>
   );
-};
-
-ModalDevolverAEE.propTypes = {
-  match: PropTypes.oneOfType([PropTypes.object]),
-};
-
-ModalDevolverAEE.defaultProps = {
-  match: {},
 };
 
 export default ModalDevolverAEE;

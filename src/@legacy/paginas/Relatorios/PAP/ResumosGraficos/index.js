@@ -21,11 +21,13 @@ import { erro } from '~/servicos/alertas';
 import ResumosGraficosPAPServico from '~/servicos/Paginas/Relatorios/PAP/ResumosGraficos';
 
 import RotasDto from '~/dtos/rotasDto';
-import history from '~/servicos/history';
 import { ehTurmaInfantil } from '~/servicos/Validacoes/validacoesInfatil';
 import AlertaModalidadeInfantil from '~/componentes-sgp/AlertaModalidadeInfantil/alertaModalidadeInfantil';
+import { useNavigate } from 'react-router-dom';
 
 const ResumosGraficosPAP = () => {
+  const navigate = useNavigate();
+
   const permissoesTela = useSelector(store => store.usuario.permissoes);
   const [somenteConsulta] = useState(false);
   const [tabAtiva, setTabAtiva] = useState('relatorios');
@@ -39,7 +41,7 @@ const ResumosGraficosPAP = () => {
   );
 
   const onClickVoltar = () => {
-    history.push('/');
+    navigate('/');
   };
 
   const Resumos = lazy(() => import('./componentes/Resumos'));

@@ -1,14 +1,13 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { Formik } from 'formik';
 import { useSelector } from 'react-redux';
-import { useRouteMatch } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import * as Yup from 'yup';
 import { Auditoria, Card, Loader, momentSchema } from '~/componentes';
 import { Cabecalho } from '~/componentes-sgp';
 import { RotasDto } from '~/dtos';
 import {
   erros,
-  history,
   ServicoOcorrencias,
   setBreadcrumbManual,
   sucesso,
@@ -18,7 +17,9 @@ import FormCadastroOcorrencia from './Cadastro/FormCadastroOcorrencia';
 import BotoesCadastroOcorrencias from './Cadastro/BotoesCadastroOcorrencias';
 
 const CadastroOcorrencias = () => {
-  const routeMatch = useRouteMatch();
+  const { pathname } = useLocation();
+  const { id } = useParams();
+  const navigate = useNavigate();
 
   const [somenteConsulta, setSomenteConsulta] = useState(false);
   const [modoEdicao, setModoEdicao] = useState(false);
@@ -33,7 +34,7 @@ const CadastroOcorrencias = () => {
   const [carregandoOcorrencia, setCarregandoOcorrencia] = useState(false);
   const [auditoria, setAuditoria] = useState();
 
-  const ocorrenciaId = routeMatch.params?.id;
+  const ocorrenciaId = id;
 
   useEffect(() => {
     setSomenteConsulta(
@@ -103,14 +104,14 @@ const CadastroOcorrencias = () => {
       ServicoOcorrencias.alterar(params)
         .then(() => {
           sucesso('Ocorrência alterada com sucesso');
-          history.push(RotasDto.OCORRENCIAS);
+          navigate(RotasDto.OCORRENCIAS);
         })
         .catch(e => erros(e));
     } else {
       ServicoOcorrencias.incluir(params)
         .then(() => {
           sucesso('Ocorrência cadastrada com sucesso');
-          history.push(RotasDto.OCORRENCIAS);
+          navigate(RotasDto.OCORRENCIAS);
         })
         .catch(e => erros(e));
     }
@@ -168,14 +169,10 @@ const CadastroOcorrencias = () => {
 
   useEffect(() => {
     if (ocorrenciaId) {
-      setBreadcrumbManual(
-        routeMatch.url,
-        'Alterar ocorrência',
-        RotasDto.OCORRENCIAS
-      );
+      setBreadcrumbManual(pathname, 'Alterar ocorrência', RotasDto.OCORRENCIAS);
       obterComunicadoPorId();
     }
-  }, [ocorrenciaId, routeMatch, obterComunicadoPorId]);
+  }, [ocorrenciaId, pathname, obterComunicadoPorId]);
 
   return (
     <Loader loading={carregandoOcorrencia}>

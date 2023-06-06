@@ -78,7 +78,6 @@ const EnvolvidosNaOcorrencia = props => {
           <SelectComponent
             form={form}
             name="codigosAlunos"
-            maxHeightMultiple="100%"
             label="Criança(s)/Estudante(s) envolvido(s) na ocorrência"
             placeholder="Criança(s)/Estudante(s) envolvido(s) na ocorrência"
             lista={listaAlunos}
@@ -95,7 +94,6 @@ const EnvolvidosNaOcorrencia = props => {
           <SelectComponent
             form={form}
             name="codigosServidores"
-            maxHeightMultiple="100%"
             label="Servidor(es)/Funcionário(s) envolvido(s) na ocorrência"
             placeholder="Servidor(es)/Funcionário(s) envolvido(s) na ocorrência"
             lista={listaServidores}

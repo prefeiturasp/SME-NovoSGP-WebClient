@@ -11,7 +11,7 @@ const { TabPane } = Tabs;
 const TabsDashboardInformacoesEscolares = props => {
   const { anoLetivo, dreId, ueId, modalidade } = props;
 
-  const [tabSelecionada, setTabSelecionada] = useState();
+  const [tabSelecionada, setTabSelecionada] = useState(0);
 
   const TAB_TURMAS = '1';
   const TAB_MATRICULAS = '2';
@@ -22,13 +22,14 @@ const TabsDashboardInformacoesEscolares = props => {
 
   useEffect(() => {
     if (!modalidade) {
-      setTabSelecionada();
+      setTabSelecionada(0);
     }
   }, [modalidade]);
 
   return (
     <ContainerTabsDashboard>
       <ContainerTabsCard
+        width="auto"
         type="card"
         onChange={onChangeTab}
         activeKey={tabSelecionada}

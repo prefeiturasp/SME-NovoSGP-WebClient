@@ -14,9 +14,7 @@ import { Botao } from '../styles';
 
 // DTOs
 import RotasDTO from '~/dtos/rotasDto';
-
-// Serviços
-import history from '~/servicos/history';
+import { useNavigate } from 'react-router-dom';
 
 const Wrapper = styled.div`
   padding-right: 0 !important;
@@ -26,19 +24,20 @@ const Wrapper = styled.div`
 `;
 
 function BotaoAvaliacoes({ atividadesAvaliativas, permissaoTela }) {
-  
+  const navigate = useNavigate();
+
   const onClickAvaliacaoHandler = useCallback(
-    avaliacao => {      
+    avaliacao => {
       if (permissaoTela?.podeConsultar && avaliacao) {
-        history.push(`${RotasDTO.CADASTRO_DE_AVALIACAO}/editar/${avaliacao}`);
+        navigate(`${RotasDTO.CADASTRO_DE_AVALIACAO}/editar/${avaliacao}`);
       }
     },
     [permissaoTela]
   );
 
-  return (
-    <Wrapper className="px-2 p-x-md-3">
-      {atividadesAvaliativas?.length > 1 ? (
+  const montarDados = () => {
+    if (atividadesAvaliativas?.length > 1) {
+      return (
         <SelectComponent
           lista={atividadesAvaliativas}
           classNameContainer="w-100"
@@ -53,12 +52,13 @@ function BotaoAvaliacoes({ atividadesAvaliativas, permissaoTela }) {
           border={Base.Roxo}
           color={Base.Roxo}
         />
-      ) : (
-        atividadesAvaliativas?.length === 1 && (
-          <Tooltip
-            className="zIndex"
-            title={atividadesAvaliativas[0].descricao}
-          >
+      );
+    }
+
+    if (atividadesAvaliativas?.length === 1) {
+      return (
+        <Tooltip className="zIndex" title={atividadesAvaliativas[0].descricao}>
+          <span>
             <Botao
               id={shortid.generate()}
               label="Avaliação"
@@ -71,9 +71,15 @@ function BotaoAvaliacoes({ atividadesAvaliativas, permissaoTela }) {
               padding="0 1rem"
               border
             />
-          </Tooltip>
-        )
-      )}
+          </span>
+        </Tooltip>
+      );
+    }
+  };
+
+  return (
+    <Wrapper key={shortid.generate()} className="px-2 p-x-md-3">
+      {montarDados()}
     </Wrapper>
   );
 }

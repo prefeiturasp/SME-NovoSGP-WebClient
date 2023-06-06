@@ -14,15 +14,14 @@ export const ContainerTabsCard = styled(Tabs)`
     display: none;
   }
 
-  .ant-tabs-nav {
-    width: ${props => (props.width ? props.width : '25%')};
+  .ant-tabs-nav-list {
+    width: 100%;
   }
 
   .ant-tabs-tab {
-    width: 100% !important;
+    width: ${props => (props.width ? props.width : '25%')};
     margin-right: 0px !important;
     border: 1px solid ${Base.CinzaDesabilitado} !important;
-
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -35,7 +34,8 @@ export const ContainerTabsCard = styled(Tabs)`
   .ant-tabs-tab-active:hover {
     color: ${Base.Roxo} !important;
   }
-  .ant-tabs-tab-active {
+  .ant-tabs-tab-active,
+  .ant-tabs-tab-active .ant-tabs-tab-btn {
     color: ${Base.Roxo} !important;
     border-bottom: 1px solid #fff !important;
   }
@@ -59,5 +59,9 @@ export const ContainerTabsCard = styled(Tabs)`
       padding-left: ${props => (props.border ? '25px' : 'initial')};
       padding-right: ${props => (props.border ? '25px' : 'initial')};
     }
+  }
+
+  .ant-tabs-nav-operations {
+    display: none !important;
   }
 `;

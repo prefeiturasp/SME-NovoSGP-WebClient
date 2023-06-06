@@ -77,7 +77,6 @@ const ListaoCampoConceito = props => {
         style={{ ...styleContainer }}
         onFocus={() => validarExibir(true)}
         onMouseEnter={() => validarExibir(true)}
-        onMouseLeave={() => validarExibir(false)}
       >
         {!desabilitar && exibir ? (
           <div>
@@ -107,6 +106,7 @@ const ListaoCampoConceito = props => {
             value={obterDescConceito(conceitoValorAtual)}
             disabled={desabilitar}
             placeholder="Conceito"
+            height="45px"
           />
         )}
       </div>

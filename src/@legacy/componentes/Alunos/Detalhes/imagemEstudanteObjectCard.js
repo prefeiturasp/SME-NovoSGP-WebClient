@@ -1,3 +1,4 @@
+import { Avatar, Space } from 'antd';
 import PropTypes from 'prop-types';
 import React, { useEffect, useState } from 'react';
 import Loader from '~/componentes/loader';
@@ -46,7 +47,6 @@ const ImagemEstudanteObjectCard = props => {
     if (codigoEOL) {
       obterFoto();
     }
-
   }, [codigoEOL]);
 
   const onClickAlterarImagem = () => {
@@ -75,10 +75,10 @@ const ImagemEstudanteObjectCard = props => {
         className="mr-3"
         onClick={onClickAlterarImagem}
         id={SGP_BUTTON_ALTERAR_IMAGEM}
-        cursor={permiteAlterarImagem ? 'cursor' : 'initial'}
+        cursor={permiteAlterarImagem ? 'pointer' : 'initial'}
       >
         <Loader loading={exibirLoader} tip="">
-          <span className="ant-avatar">
+          <Avatar alt="avatar">
             {dadosImagem?.url ? (
               <img
                 src={dadosImagem?.url}
@@ -87,11 +87,11 @@ const ImagemEstudanteObjectCard = props => {
             ) : (
               <i className="far fa-user" />
             )}
-          </span>
+          </Avatar>
           {codigoEOL && permiteAlterarImagem ? (
             <div className="desc-alterar-imagem">Alterar imagem</div>
           ) : (
-            ''
+            <></>
           )}
         </Loader>
       </ContainerAvatar>

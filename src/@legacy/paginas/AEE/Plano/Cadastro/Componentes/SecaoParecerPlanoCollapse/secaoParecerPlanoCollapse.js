@@ -1,4 +1,3 @@
-import PropTypes from 'prop-types';
 import React, { useCallback, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { CardCollapse } from '~/componentes';
@@ -15,8 +14,9 @@ import SecaoParecerPAAI from '../SecaoParecerPAAI/secaoParecerPAAI';
 import SecaoParecerResponsavel from '../SecaoParecerResponsavel/secaoParecerResponsavel';
 import SecaoParecerCoordenacao from '../SecaoParecerCoordenacao/secaoParecerCoordenacao';
 import { SGP_COLLAPSE_PARECER_PLANO_AEE } from '~/constantes/ids/collapse';
+import { useParams } from 'react-router-dom';
 
-const SecaoParecerPlanoCollapse = ({ match }) => {
+const SecaoParecerPlanoCollapse = () => {
   const planoAEEDados = useSelector(store => store.planoAEE.planoAEEDados);
   const dadosParecer = useSelector(store => store.planoAEE.dadosParecer);
   const usuario = useSelector(store => store.usuario);
@@ -25,20 +25,24 @@ const SecaoParecerPlanoCollapse = ({ match }) => {
 
   const dispatch = useDispatch();
 
+  const paramsRoute = useParams();
+
+  const planoId = paramsRoute?.id || 0;
+
   useEffect(() => {
     verificaSomenteConsulta(permissoesTela);
   }, [permissoesTela]);
 
   const obterParecer = useCallback(async () => {
     dispatch(setExibirLoaderPlanoAEE(true));
-    const resultado = await ServicoPlanoAEE.obterParecer(match?.params?.id)
+    const resultado = await ServicoPlanoAEE.obterParecer(planoId)
       .catch(e => erros(e))
       .finally(() => dispatch(setExibirLoaderPlanoAEE(false)));
 
     if (resultado?.data) {
       dispatch(setDadosParecer(resultado?.data));
     }
-  }, [dispatch, match]);
+  }, [dispatch, planoId]);
 
   useEffect(() => {
     obterParecer();
@@ -103,14 +107,6 @@ const SecaoParecerPlanoCollapse = ({ match }) => {
       </CardCollapse>
     </>
   );
-};
-
-SecaoParecerPlanoCollapse.defaultProps = {
-  match: {},
-};
-
-SecaoParecerPlanoCollapse.propTypes = {
-  match: PropTypes.oneOfType([PropTypes.object]),
 };
 
 export default SecaoParecerPlanoCollapse;

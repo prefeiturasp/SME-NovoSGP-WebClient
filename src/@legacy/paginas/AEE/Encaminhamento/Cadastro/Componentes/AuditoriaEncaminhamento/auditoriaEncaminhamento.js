@@ -15,7 +15,7 @@ const AuditoriaEncaminhamento = props => {
       criadoRf={dadosAuditoria?.criadoRF}
     />
   ) : (
-    ''
+    <></>
   );
 };
 

@@ -1,5 +1,5 @@
 import api from '~/servicos/api';
-import { store } from '~/redux';
+import { store } from '@/core/redux';
 import { erros } from '../alertas';
 import {
   setDadosBimestresPlanoAnual,
@@ -115,11 +115,12 @@ class ServicoPlanoAnual {
           dadosBimestre.componentes &&
           dadosBimestre.componentes.length
         ) {
-          const componenteCurricularJaPesquisado = dadosBimestre.componentes.find(
-            item =>
-              String(item.componenteCurricularId) ===
-              String(componenteCurricularId)
-          );
+          const componenteCurricularJaPesquisado =
+            dadosBimestre.componentes.find(
+              item =>
+                String(item.componenteCurricularId) ===
+                String(componenteCurricularId)
+            );
 
           if (componenteCurricularJaPesquisado) {
             const index = dadosBimestre.componentes.indexOf(
@@ -218,26 +219,27 @@ class ServicoPlanoAnual {
     return api.get(url);
   };
 
-  temObjetivosSelecionadosTabComponenteCurricular = codigoComponenteCurricular => {
-    const { planoAnual } = store.getState();
+  temObjetivosSelecionadosTabComponenteCurricular =
+    codigoComponenteCurricular => {
+      const { planoAnual } = store.getState();
 
-    if (planoAnual?.objetivosAprendizagemComponente?.length) {
-      const tabAtual = planoAnual.objetivosAprendizagemComponente.find(
-        item =>
-          String(item.componenteCurricularId) ===
-          String(codigoComponenteCurricular)
-      );
+      if (planoAnual?.objetivosAprendizagemComponente?.length) {
+        const tabAtual = planoAnual.objetivosAprendizagemComponente.find(
+          item =>
+            String(item.componenteCurricularId) ===
+            String(codigoComponenteCurricular)
+        );
 
-      if (
-        tabAtual &&
-        tabAtual.objetivosAprendizagem &&
-        tabAtual.objetivosAprendizagem.length
-      ) {
-        return true;
+        if (
+          tabAtual &&
+          tabAtual.objetivosAprendizagem &&
+          tabAtual.objetivosAprendizagem.length
+        ) {
+          return true;
+        }
       }
-    }
-    return false;
-  };
+      return false;
+    };
 
   verificarDadosPlanoPorComponenteCurricular = async (
     turmaId,

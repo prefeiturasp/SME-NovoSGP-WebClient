@@ -5,7 +5,7 @@ import { erros, erro } from '~/servicos/alertas';
 import InputCodigo from './componentes/InputCodigo';
 import InputNome from './componentes/InputNome';
 import service from './services/LocalizadorEstudantesAtivosService';
-import { store } from '~/redux';
+import { store } from '@/core/redux';
 import { setAlunosCodigo } from '~/redux/modulos/localizadorEstudante/actions';
 import { removerNumeros } from '~/utils/funcoes/gerais';
 
@@ -37,9 +37,8 @@ const LocalizadorEstudantesAtivos = props => {
     codigo: false,
     nome: false,
   });
-  const [timeoutBuscarPorCodigoNome, setTimeoutBuscarPorCodigoNome] = useState(
-    ''
-  );
+  const [timeoutBuscarPorCodigoNome, setTimeoutBuscarPorCodigoNome] =
+    useState('');
   const [exibirLoader, setExibirLoader] = useState(false);
 
   useEffect(() => {
@@ -274,7 +273,6 @@ const LocalizadorEstudantesAtivos = props => {
     ) {
       validaAntesBuscarPorCodigo({ codigo: valorInicialAlunoCodigo });
     }
-
   }, [valorInicialAlunoCodigo, dataSource, pessoaSelecionada]);
 
   return (

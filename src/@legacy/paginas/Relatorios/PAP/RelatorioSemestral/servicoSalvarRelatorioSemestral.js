@@ -1,4 +1,4 @@
-import { store } from '~/redux';
+import { store } from '@/core/redux';
 import {
   limparDadosParaSalvarRelatorioSemestral,
   setAuditoriaRelatorioSemestral,
@@ -76,11 +76,12 @@ class ServicoSalvarRelatorioSemestral {
     };
 
     const atualizarValoresRelatorioSemestral = async () => {
-      const resposta = await ServicoRelatorioSemestral.obterDadosCamposDescritivos(
-        alunoCodigo,
-        turmaCodigo,
-        semestreConsulta
-      ).catch(e => erros(e));
+      const resposta =
+        await ServicoRelatorioSemestral.obterDadosCamposDescritivos(
+          alunoCodigo,
+          turmaCodigo,
+          semestreConsulta
+        ).catch(e => erros(e));
 
       if (resposta?.data) {
         const { auditoria, secoes } = resposta?.data;
@@ -115,12 +116,13 @@ class ServicoSalvarRelatorioSemestral {
         return false;
       }
 
-      const retorno = await ServicoRelatorioSemestral.salvarServicoRelatorioSemestral(
-        turmaCodigo,
-        semestreConsulta,
-        alunoCodigo,
-        params
-      ).catch(e => erros(e));
+      const retorno =
+        await ServicoRelatorioSemestral.salvarServicoRelatorioSemestral(
+          turmaCodigo,
+          semestreConsulta,
+          alunoCodigo,
+          params
+        ).catch(e => erros(e));
 
       if (retorno?.status === 200) {
         atualizarValoresRelatorioSemestral();

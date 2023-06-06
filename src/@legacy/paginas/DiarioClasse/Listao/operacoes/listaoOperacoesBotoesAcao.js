@@ -3,6 +3,7 @@ import $ from 'jquery';
 import _ from 'lodash';
 import React, { useContext, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import { Button, Colors } from '~/componentes';
 import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
 import {
@@ -25,7 +26,6 @@ import {
   confirmar,
   erro,
   erros,
-  history,
   ServicoDiarioBordo,
   sucesso,
 } from '~/servicos';
@@ -50,6 +50,7 @@ import {
 
 const ListaoOperacoesBotoesAcao = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const usuario = useSelector(store => store.usuario);
   const { turmaSelecionada } = usuario;
@@ -673,13 +674,13 @@ const ListaoOperacoesBotoesAcao = () => {
   const onClickVoltar = async () => {
     if (!desabilitarBotoes && telaEmEdicao) {
       const salvou = await validarSalvar(() => {
-        history.push(RotasDto.LISTAO);
+        navigate(RotasDto.LISTAO);
       });
       if (salvou) {
-        history.push(RotasDto.LISTAO);
+        navigate(RotasDto.LISTAO);
       }
     } else {
-      history.push(RotasDto.LISTAO);
+      navigate(RotasDto.LISTAO);
     }
   };
 

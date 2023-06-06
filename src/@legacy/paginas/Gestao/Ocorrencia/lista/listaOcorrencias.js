@@ -12,6 +12,7 @@ import {
   SelectComponent,
 } from '~/componentes';
 import { Cabecalho, FiltroHelper } from '~/componentes-sgp';
+import { OPCAO_TODOS } from '~/constantes';
 import { SGP_BUTTON_IMPRIMIR } from '~/constantes/ids/button';
 import { SGP_CHECKBOX_EXIBIR_HISTORICO } from '~/constantes/ids/checkbox';
 import {
@@ -162,6 +163,12 @@ const ListaOcorrencias = () => {
 
       if (lista?.length === 1) {
         setUe(lista[0]);
+      }
+
+      if (lista?.length > 1) {
+        const ueTodos = { nome: 'Todas', codigo: OPCAO_TODOS, id: OPCAO_TODOS };
+        lista.unshift(ueTodos);
+        setUe(ueTodos);
       }
 
       setListaUes(lista);
@@ -547,7 +554,7 @@ const ListaOcorrencias = () => {
                   lista={listaModalidades}
                   valueOption="valor"
                   valueText="descricao"
-                  disabled={!ue?.codigo}
+                  disabled={!ue?.codigo || ue?.codigo === OPCAO_TODOS}
                   onChange={onChangeModalidade}
                   valueSelect={modalidade}
                 />
@@ -563,7 +570,7 @@ const ListaOcorrencias = () => {
                     valueText="desc"
                     label="Semestre"
                     placeholder="Selecione o semestre"
-                    disabled={!modalidade || listaSemestres?.length === 1}
+                    disabled={!modalidade || listaSemestres?.length === 1 || !ue?.codigo || ue?.codigo === OPCAO_TODOS}
                     valueSelect={semestre}
                     onChange={onChangeSemestre}
                   />
@@ -580,7 +587,7 @@ const ListaOcorrencias = () => {
                   valueOption="id"
                   valueText="nomeFiltro"
                   label="Turma"
-                  disabled={!modalidade || (ehEJA && !semestre)}
+                  disabled={!modalidade || (ehEJA && !semestre) || !ue?.codigo || ue?.codigo === OPCAO_TODOS}
                   valueSelect={turmaId}
                   onChange={onChangeTurma}
                   placeholder="Turma"
@@ -588,23 +595,25 @@ const ListaOcorrencias = () => {
                 />
               </Loader>
             </Col>
-            <Col sm={24} md={12}>
-              <CampoTexto
-                id="SGP_INPUT_TEXT_ALUNO_NOME"
-                value={alunoNomeExibicao}
-                onChange={onChangeAlunoNome}
-                label="Crianças/Estudantes"
-                placeholder="Procure pelo nome da criança"
-                iconeBusca
-                allowClear
-              />
-            </Col>
+                <Col sm={24} md={12}>
+                <CampoTexto
+                  id="SGP_INPUT_TEXT_ALUNO_NOME"
+                  value={alunoNomeExibicao}
+                  onChange={onChangeAlunoNome}
+                  label="Crianças/Estudantes"
+                  placeholder="Procure pelo nome da criança"
+                  desabilitado={!ue?.codigo || ue?.codigo === OPCAO_TODOS}
+                  iconeBusca
+                  allowClear
+                />
+              </Col>
             <Col sm={24} md={12}>
               <CampoTexto
                 id="SGP_INPUT_TEXT_SERVIDOR_NOME"
                 value={servidorNomeExibicao}
                 onChange={onChangeServidorNome}
-                label="Servidor/Funcionário"
+                label= "Servidor/Funcionário"
+                desabilitado={!ue?.codigo || ue?.codigo === OPCAO_TODOS}
                 placeholder="Procure pelo nome do servidor/funcionário"
                 iconeBusca
                 allowClear

@@ -50,7 +50,7 @@ const ModalMultiLinhas = props => {
       onCancel={onClose}
       title={titulo}
       type={type}
-      visible={visivel}
+      open={visivel}
       centered
       footer={[
         <Button

@@ -2,7 +2,7 @@ import * as moment from 'moment';
 import QuestionarioDinamicoFuncoes from '~/componentes-sgp/QuestionarioDinamico/Funcoes/QuestionarioDinamicoFuncoes';
 import situacaoPlanoAEE from '~/dtos/situacaoPlanoAEE';
 import tipoQuestao from '~/dtos/tipoQuestao';
-import { store } from '~/redux';
+import { store } from '@/core/redux';
 import {
   limparDadosParecer,
   setAtualizarDados,
@@ -65,11 +65,8 @@ class ServicoPlanoAEE {
     const { dispatch } = store;
 
     const state = store.getState();
-    const {
-      questionarioDinamico,
-      collapseLocalizarEstudante,
-      planoAEE,
-    } = state;
+    const { questionarioDinamico, collapseLocalizarEstudante, planoAEE } =
+      state;
     const { formsQuestionarioDinamico } = questionarioDinamico;
 
     const { dadosCollapseLocalizarEstudante } = collapseLocalizarEstudante;
@@ -275,10 +272,8 @@ class ServicoPlanoAEE {
     const { dispatch } = store;
     const state = store.getState();
     const { questionarioDinamico } = state;
-    const {
-      planoAEEDados,
-      questionarioDinamicoEmEdicao,
-    } = questionarioDinamico;
+    const { planoAEEDados, questionarioDinamicoEmEdicao } =
+      questionarioDinamico;
 
     if (questionarioDinamicoEmEdicao && key !== '1') {
       const confirmou = await confirmar(
@@ -444,6 +439,29 @@ class ServicoPlanoAEE {
 
   gerarRelatorioPlanosAEE = params =>
     api.post('v1/relatorios/planos-aee', params);
+
+  obterResponsaveis = (
+    dreId,
+    ueId,
+    turmaId,
+    alunoCodigo,
+    situacao,
+    exibirEncerrados = false
+  ) => {
+    let url = `${urlPadrao}/responsaveis?dreId=${dreId}&ueId=${ueId}&exibirEncerrados=${exibirEncerrados}`;
+
+    if (turmaId) {
+      url += `&turmaId=${turmaId}`;
+    }
+    if (alunoCodigo) {
+      url += `&alunoCodigo=${alunoCodigo}`;
+    }
+    if (situacao) {
+      url += `&situacao=${situacao}`;
+    }
+
+    return api.get(url);
+  };
 }
 
 export default new ServicoPlanoAEE();

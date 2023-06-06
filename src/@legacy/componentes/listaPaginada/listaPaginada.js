@@ -112,12 +112,14 @@ const ListaPaginada = props => {
     api
       .get(urlBusca, {
         params: filtro,
-        paramsSerializer(params) {
-          return queryString.stringify(params, {
-            arrayFormat: paramArrayFormat,
-            skipEmptyString: true,
-            skipNull: true,
-          });
+        paramsSerializer: {
+          serialize: params => {
+            return queryString.stringify(params, {
+              arrayFormat: paramArrayFormat,
+              skipEmptyString: true,
+              skipNull: true,
+            });
+          },
         },
       })
       .then(resposta => {
@@ -149,7 +151,6 @@ const ListaPaginada = props => {
     if (filtroEhValido) {
       filtrar();
     }
-
   }, [filtroEhValido, paginaAtual]);
 
   useEffect(() => {
@@ -157,7 +158,6 @@ const ListaPaginada = props => {
     novaPagina.current = 1;
     setPaginaAtual(novaPagina);
     defineUrlBusca(novaPagina);
-
   }, [filtro]);
 
   const executaPaginacao = pagina => {

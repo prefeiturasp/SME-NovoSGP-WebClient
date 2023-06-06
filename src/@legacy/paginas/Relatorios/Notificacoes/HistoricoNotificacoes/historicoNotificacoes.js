@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import {
   Loader,
   Localizador,
@@ -14,11 +15,12 @@ import modalidade from '~/dtos/modalidade';
 import AbrangenciaServico from '~/servicos/Abrangencia';
 import { erros, sucesso } from '~/servicos/alertas';
 import api from '~/servicos/api';
-import history from '~/servicos/history';
 import ServicoFiltroRelatorio from '~/servicos/Paginas/FiltroRelatorio/ServicoFiltroRelatorio';
 import ServicoHistoricoNotificacoes from '~/servicos/Paginas/Relatorios/Historico/HistoricoNotificacoes/ServicoHistoricoNotificacoes';
 
 const HistoricoNotificacoes = () => {
+  const navigate = useNavigate();
+
   const [listaAnosLetivo, setListaAnosLetivo] = useState([]);
   const [listaDres, setListaDres] = useState([]);
   const [listaUes, setListaUes] = useState([]);
@@ -41,10 +43,8 @@ const HistoricoNotificacoes = () => {
   const [tipos, setTipos] = useState([]);
   const [situacoes, setSituacoes] = useState([]);
   const [exibirDescricao, setExibirDescricao] = useState(false);
-  const [
-    exibirNotificacoesExcluidas,
-    setExibirNotificacoesExcluidas,
-  ] = useState(false);
+  const [exibirNotificacoesExcluidas, setExibirNotificacoesExcluidas] =
+    useState(false);
 
   const [carregandoGeral, setCarregandoGeral] = useState(false);
   const [desabilitarBtnGerar, setDesabilitarBtnGerar] = useState(true);
@@ -91,12 +91,13 @@ const HistoricoNotificacoes = () => {
   const obterModalidades = async ue => {
     if (ue) {
       setCarregandoGeral(true);
-      const retorno = await ServicoFiltroRelatorio.obterModalidadesPorAbrangencia(
-        ue
-      ).catch(e => {
-        erros(e);
-        setCarregandoGeral(false);
-      });
+      const retorno =
+        await ServicoFiltroRelatorio.obterModalidadesPorAbrangencia(ue).catch(
+          e => {
+            erros(e);
+            setCarregandoGeral(false);
+          }
+        );
       if (retorno && retorno.data) {
         if (retorno.data && retorno.data.length && retorno.data.length === 1) {
           setModalidadeId(retorno.data[0].valor);
@@ -120,18 +121,21 @@ const HistoricoNotificacoes = () => {
           valor: String(item.codigo),
         }));
 
-        const novaLista = lista?.filter(item => item?.valor !== OPCAO_TODOS);
+          const novaLista = lista?.filter(item => item?.valor !== OPCAO_TODOS);
 
-        if (novaLista?.length === 1) {
-          setCodigoUe(novaLista[0].valor);
+          if (novaLista?.length === 1) {
+            setCodigoUe(novaLista[0].valor);
+          }
+          setListaUes(novaLista);
+        } else {
+          setListaUes([]);
         }
-        setListaUes(novaLista);
-      } else {        
+      } else {
         setListaUes([]);
       }
-      setCarregandoGeral(false);
-    }
-  }, [anoLetivo]);
+    },
+    [anoLetivo]
+  );
 
   const onChangeDre = dre => {
     setCodigoDre(dre);
@@ -179,8 +183,9 @@ const HistoricoNotificacoes = () => {
     setCarregandoGeral(true);
     const retorno = await api
       .get(
-        `v1/abrangencias/false/semestres?anoLetivo=${anoLetivoSelecionado}&modalidade=${modalidadeSelecionada ||
-          0}`
+        `v1/abrangencias/false/semestres?anoLetivo=${anoLetivoSelecionado}&modalidade=${
+          modalidadeSelecionada || 0
+        }`
       )
       .catch(e => {
         erros(e);
@@ -332,7 +337,7 @@ const HistoricoNotificacoes = () => {
   }, [obterAnosLetivos]);
 
   const onClickVoltar = () => {
-    history.push(URL_HOME);
+    navigate(URL_HOME);
   };
 
   const onClickCancelar = () => {
@@ -441,16 +446,16 @@ const HistoricoNotificacoes = () => {
 
   const onChangeAnoLetivo = ano => {
     setAnoLetivo(ano);
-    
+
     setCodigoDre();
     setCodigoUe();
-    
+
     if(ano){
       setConsideraHistorico(Number(ano) !== Number(new Date().getFullYear()));
       obterDres();
       obterUes();
     }
-    
+
     setListaSemestre([]);
     setSemestre(undefined);
 

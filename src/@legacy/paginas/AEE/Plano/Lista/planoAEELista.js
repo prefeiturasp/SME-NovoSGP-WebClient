@@ -8,6 +8,7 @@ import {
   CheckboxComponent,
   ListaPaginada,
   Loader,
+  RadioGroupButton,
   SelectComponent,
 } from '~/componentes';
 import Button from '~/componentes/button';
@@ -15,12 +16,11 @@ import Card from '~/componentes/card';
 import { Colors } from '~/componentes/colors';
 import LocalizadorEstudante from '~/componentes/LocalizadorEstudante';
 import { URL_HOME } from '~/constantes/url';
-import { RotasDto } from '~/dtos';
+import { RotasDto, situacaoPlanoAEE } from '~/dtos';
 import { setDadosIniciaisLocalizarEstudante } from '~/redux/modulos/collapseLocalizarEstudante/actions';
 import { setTypePlanoAEECadastro } from '~/redux/modulos/planoAEE/actions';
 
 import { erros, verificaSomenteConsulta } from '~/servicos';
-import history from '~/servicos/history';
 import ServicoPlanoAEE from '~/servicos/Paginas/Relatorios/AEE/ServicoPlanoAEE';
 import FiltroHelper from '~/componentes-sgp/filtro/helper';
 import { SGP_BUTTON_NOVO } from '~/constantes/ids/button';
@@ -29,15 +29,21 @@ import {
   SGP_SELECT_ANO_LETIVO,
   SGP_SELECT_DRE,
   SGP_SELECT_ESTUDANTE_CRIANCA,
+  SGP_SELECT_RESPONSAVEL,
   SGP_SELECT_SITUACAO,
   SGP_SELECT_TURMA,
   SGP_SELECT_UE,
 } from '~/constantes/ids/select';
 import { SGP_CHECKBOX_EXIBIR_HISTORICO } from '~/constantes/ids/checkbox';
 import BtnImpressaoListaPlanoAEE from './btnImpressaoListaPlanoAEE';
+import { useNavigate } from 'react-router-dom';
+import { OPCAO_TODOS } from '@/@legacy/constantes';
+import ServicoEncaminhamentoAEE from '@/@legacy/servicos/Paginas/Relatorios/AEE/ServicoEncaminhamentoAEE';
+import { SGP_RADIO_EXIBIR_PLANOS_ENCERRADOS } from '@/@legacy/constantes/ids/radio';
 
 const PlanoAEELista = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const [consideraHistorico, setConsideraHistorico] = useState(false);
   const [filtro, setFiltro] = useState({});
@@ -49,23 +55,31 @@ const PlanoAEELista = () => {
   const [listaUes, setListaUes] = useState([]);
   const [listaTurmas, setListaTurmas] = useState([]);
   const [listaSituacao, setListaSituacao] = useState([]);
+  const [listaResponsavel, setListaResponsavel] = useState([]);
+
+  const [responsaveisPAAI, setResponsaveisPAAI] = useState([]);
 
   const [anoLetivo, setAnoLetivo] = useState();
   const [dreId, setDreId] = useState();
   const [ueId, setUeId] = useState();
   const [turmaId, setTurmaId] = useState();
   const [situacao, setSituacao] = useState();
+  const [exibirPlanosEncerrados, setExibirPlanosEncerrados] = useState(false);
+  const [responsavelSelecionado, setResponsavelSelecionado] = useState();
+  const [responsavelPAAISelecionado, setResponsavelPAAISelecionado] =
+    useState();
 
   const [carregandoTurmas, setCarregandoTurmas] = useState(false);
   const [carregandoDres, setCarregandoDres] = useState(false);
   const [carregandoAnos, setCarregandoAnos] = useState(false);
   const [carregandoSituacao, setCarregandoSituacao] = useState(false);
   const [carregandoUes, setCarregandoUes] = useState(false);
+  const [carregandoResponsaveisPAAI, setCarregandoResponsaveisPAAI] =
+    useState(false);
+  const [carregandoResponsavel, setCarregandoResponsavel] = useState(false);
 
-  const [
-    alunoLocalizadorSelecionado,
-    setAlunoLocalizadorSelecionado,
-  ] = useState();
+  const [alunoLocalizadorSelecionado, setAlunoLocalizadorSelecionado] =
+    useState();
 
   const [idsPlanosSelecionados, setIdsPlanosSelecionados] = useState([]);
 
@@ -73,7 +87,16 @@ const PlanoAEELista = () => {
   const permissoesTela = usuario.permissoes[RotasDto.RELATORIO_AEE_PLANO];
   const somenteConsulta = useSelector(store => store.navegacao.somenteConsulta);
 
+  const opcoesEncerrados = [
+    { label: 'Sim', value: true },
+    { label: 'Não', value: false },
+  ];
+
   const colunas = [
+    {
+      title: 'Unidade Escolar (UE)',
+      dataIndex: 'ue',
+    },
     {
       title: 'Nº',
       dataIndex: 'numero',
@@ -159,6 +182,15 @@ const PlanoAEELista = () => {
           setUeId(lista[0].valor);
         }
 
+        if (lista?.length > 1) {
+          const todasUE = {
+            valor: OPCAO_TODOS,
+            id: OPCAO_TODOS,
+            desc: 'Todas',
+          };
+          lista.unshift(todasUE);
+        }
+
         setListaUes(lista);
       } else {
         setListaUes([]);
@@ -166,7 +198,16 @@ const PlanoAEELista = () => {
     }
   }, [dreId, anoLetivo, consideraHistorico]);
 
-  const filtrar = (dre, ue, turma, aluno, situa) => {
+  const filtrar = (
+    dre,
+    ue,
+    turma,
+    aluno,
+    situa,
+    exibirEncerrados,
+    responsavelRf,
+    paaiResponsavelRf
+  ) => {
     if (anoLetivo && dre && listaDres?.length) {
       const dreSelecionada = listaDres.find(
         item => String(item.valor) === String(dre)
@@ -182,12 +223,27 @@ const PlanoAEELista = () => {
 
       const params = {
         dreId: dreSelecionada ? dreSelecionada?.id : '',
-        ueId: ueSelecionada ? ueSelecionada?.id : '',
-        turmaId: turmaSelecionada ? turmaSelecionada?.id : '',
         alunoCodigo: aluno,
         situacao: situa,
+        exibirEncerrados,
       };
+
+      params.ueId = ueSelecionada?.id || 0;
+
+      if (responsavelRf) {
+        params.responsavelRf = responsavelRf;
+      }
+
+      if (paaiResponsavelRf) {
+        params.paaiReponsavelRf = paaiResponsavelRf;
+      }
+
+      if (turmaSelecionada?.id) {
+        params.turmaId = turmaSelecionada?.id;
+      }
       setFiltro({ ...params });
+    } else {
+      setFiltro({});
     }
   };
 
@@ -204,16 +260,20 @@ const PlanoAEELista = () => {
     setAlunoLocalizadorSelecionado();
 
     setSituacao();
+
+    setResponsavelSelecionado();
+
+    setResponsavelPAAISelecionado();
   };
 
   const onClickVoltar = () => {
-    history.push(URL_HOME);
+    navigate(URL_HOME);
   };
 
   const onClickNovo = () => {
     if (!somenteConsulta && permissoesTela.podeIncluir) {
       dispatch(setTypePlanoAEECadastro(true));
-      history.push(`${RotasDto.RELATORIO_AEE_PLANO}/novo`);
+      navigate(`${RotasDto.RELATORIO_AEE_PLANO}/novo`);
     }
   };
 
@@ -239,7 +299,6 @@ const PlanoAEELista = () => {
 
   useEffect(() => {
     validarValorPadraoAnoLetivo(listaAnosLetivo);
-
   }, [consideraHistorico, listaAnosLetivo]);
 
   const obterAnosLetivos = useCallback(async () => {
@@ -260,7 +319,6 @@ const PlanoAEELista = () => {
 
     setListaAnosLetivo(anosLetivos);
     setCarregandoAnos(false);
-
   }, [anoAtual, consideraHistorico]);
 
   useEffect(() => {
@@ -304,6 +362,10 @@ const PlanoAEELista = () => {
   }, [anoLetivo, consideraHistorico]);
 
   useEffect(() => {
+    setResponsavelSelecionado();
+
+    setResponsavelPAAISelecionado();
+
     if (dreId) {
       obterUes();
     } else {
@@ -321,6 +383,9 @@ const PlanoAEELista = () => {
 
     setListaTurmas([]);
     setTurmaId();
+
+    setResponsavelPAAISelecionado();
+    setResponsavelSelecionado();
   };
 
   useEffect(() => {
@@ -371,7 +436,6 @@ const PlanoAEELista = () => {
         }
       }
     }
-
   }, [anoLetivo, ueId]);
 
   useEffect(() => {
@@ -383,13 +447,24 @@ const PlanoAEELista = () => {
     }
   }, [ueId, obterTurmas]);
 
+  const atualizarSituacoes = situacoes => {
+    const novasListaSituacoes = situacoes.filter(
+      situacao =>
+        situacao?.codigo !== situacaoPlanoAEE.Encerrado &&
+        situacao?.codigo !== situacaoPlanoAEE.EncerradoAutomaticamente
+    );
+
+    return novasListaSituacoes;
+  };
+
   const obterSituacoes = useCallback(async () => {
     setCarregandoSituacao(true);
     const resposta = await ServicoPlanoAEE.obterSituacoes()
       .catch(e => erros(e))
       .finally(() => setCarregandoSituacao(false));
     if (resposta?.data?.length) {
-      setListaSituacao(resposta.data);
+      const lista = atualizarSituacoes(resposta.data);
+      setListaSituacao(lista);
     } else {
       setListaSituacao([]);
     }
@@ -404,21 +479,35 @@ const PlanoAEELista = () => {
   };
 
   const onClickEditar = item => {
-    history.push(`${RotasDto.RELATORIO_AEE_PLANO}/editar/${item.id}`);
+    navigate(`${RotasDto.RELATORIO_AEE_PLANO}/editar/${item.id}`);
   };
 
   useEffect(() => {
-    if (dreId && ueId && listaDres?.length && listaUes?.length) {
-      filtrar(dreId, ueId, turmaId, alunoLocalizadorSelecionado, situacao);
+    if (dreId && listaDres?.length && listaUes?.length) {
+      filtrar(
+        dreId,
+        ueId,
+        turmaId,
+        alunoLocalizadorSelecionado,
+        situacao,
+        exibirPlanosEncerrados,
+        responsavelSelecionado,
+        responsavelPAAISelecionado
+      );
+    } else {
+      setFiltro({});
     }
-
   }, [
+    dreId,
     ueId,
     listaDres,
     listaUes,
     turmaId,
     alunoLocalizadorSelecionado,
     situacao,
+    exibirPlanosEncerrados,
+    responsavelSelecionado,
+    responsavelPAAISelecionado,
   ]);
 
   useEffect(() => {
@@ -427,6 +516,108 @@ const PlanoAEELista = () => {
 
   const onSelecionarItems = items =>
     setIdsPlanosSelecionados(items?.map(item => item?.planoAeeVersaoId));
+
+  const obterResponsaveisPAAI = useCallback(async () => {
+    setCarregandoResponsaveisPAAI(true);
+
+    const resposta =
+      await ServicoEncaminhamentoAEE.obterResponsaveisPAAIPesquisa(null, dreId)
+        .catch(e => erros(e))
+        .finally(() => setCarregandoResponsaveisPAAI(false));
+
+    const dados = resposta?.data?.items;
+    if (dados?.length) {
+      const listaResp = dados.map(item => {
+        return {
+          ...item,
+          codigoRF: item.codigoRf,
+          nomeServidorFormatado: `${item.nomeServidor} - ${item.codigoRf}`,
+        };
+      });
+      if (listaResp?.length === 1) {
+        setResponsavelPAAISelecionado(listaResp[0].codigoRF);
+      }
+      setResponsaveisPAAI(listaResp);
+    }
+  }, [dreId]);
+
+  useEffect(() => {
+    if (dreId) {
+      obterResponsaveisPAAI();
+    } else {
+      setResponsaveisPAAI([]);
+    }
+  }, [dreId, obterResponsaveisPAAI]);
+
+  const onChangePAAI = rf => {
+    const funcionario = responsaveisPAAI?.find(r => r?.codigoRF === rf);
+
+    if (funcionario?.codigoRF && funcionario?.nomeServidor) {
+      setResponsavelPAAISelecionado(funcionario?.codigoRF);
+    } else {
+      setResponsavelPAAISelecionado();
+    }
+  };
+
+  const onChangeResponsavel = valor => {
+    setResponsavelSelecionado(valor);
+  };
+
+  const obterResponsaveis = useCallback(async () => {
+    if (dreId) {
+      const dreSelecionada = listaDres.find(d => d?.valor === dreId);
+
+      const ueSelecionada = ueId ? listaUes.find(d => d?.valor === ueId) : 0;
+
+      const turmaSelecionada = turmaId
+        ? listaTurmas.find(d => d?.codigo === turmaId)
+        : 0;
+
+      setCarregandoResponsavel(true);
+      setResponsavelSelecionado();
+
+      const resposta = await ServicoPlanoAEE.obterResponsaveis(
+        dreSelecionada?.id,
+        !ueSelecionada?.id || ueSelecionada?.id === OPCAO_TODOS
+          ? 0
+          : ueSelecionada?.id,
+        turmaSelecionada ? turmaSelecionada?.id : 0,
+        alunoLocalizadorSelecionado,
+        situacao,
+        exibirPlanosEncerrados
+      )
+        .catch(e => erros(e))
+        .finally(() => setCarregandoResponsavel(false));
+
+      if (resposta?.data?.length) {
+        const lista = resposta.data.map(item => {
+          return {
+            ...item,
+            codigoRf: String(item.codigoRf),
+            nomeFormatado: `${item.nomeServidor} - ${item.codigoRf}`,
+          };
+        });
+
+        setListaResponsavel(lista);
+      } else {
+        setListaResponsavel([]);
+      }
+    }
+  }, [
+    dreId,
+    ueId,
+    turmaId,
+    alunoLocalizadorSelecionado,
+    situacao,
+    exibirPlanosEncerrados,
+    listaUes,
+  ]);
+
+  useEffect(() => {
+    if (dreId && listaUes.length) {
+      obterResponsaveis();
+    }
+  }, [obterResponsaveis, dreId, listaUes]);
 
   return (
     <>
@@ -535,14 +726,14 @@ const PlanoAEELista = () => {
                   ueId={ueId}
                   onChange={onChangeLocalizadorEstudante}
                   anoLetivo={anoLetivo}
-                  desabilitado={!dreId || !ueId}
+                  desabilitado={!dreId || !ueId || ueId === OPCAO_TODOS}
                   exibirCodigoEOL={false}
                   codigoTurma={turmaId}
                   placeholder="Procure pelo nome da Criança/Estudante"
                 />
               </div>
             </div>
-            <div className="col-sm-12 col-md-6 col-lg-6 col-xl-5 mb-2">
+            <div className="col-sm-12 col-md-6 mb-2">
               <Loader loading={carregandoSituacao} tip="">
                 <SelectComponent
                   id={SGP_SELECT_SITUACAO}
@@ -557,11 +748,48 @@ const PlanoAEELista = () => {
                 />
               </Loader>
             </div>
-            {anoLetivo &&
-            dreId &&
-            listaDres?.length &&
-            ueId &&
-            listaUes?.length ? (
+            <div className="col-sm-12 col-md-6 mb-2">
+              <RadioGroupButton
+                value={exibirPlanosEncerrados}
+                label="Apresentar planos encerrados"
+                opcoes={opcoesEncerrados}
+                id={SGP_RADIO_EXIBIR_PLANOS_ENCERRADOS}
+                onChange={e => {
+                  setExibirPlanosEncerrados(e?.target?.value);
+                }}
+              />
+            </div>
+            <div className="col-sm-12 mb-2">
+              <Loader loading={carregandoResponsavel} tip="">
+                <SelectComponent
+                  id={SGP_SELECT_RESPONSAVEL}
+                  label="Responsável"
+                  lista={listaResponsavel}
+                  valueOption="codigoRf"
+                  valueText="nomeFormatado"
+                  onChange={onChangeResponsavel}
+                  valueSelect={responsavelSelecionado}
+                  placeholder="Responsável"
+                />
+              </Loader>
+            </div>
+            <div className="col-sm-12 mb-4">
+              <Loader loading={carregandoResponsaveisPAAI} tip="">
+                <SelectComponent
+                  placeholder="Pesquise por nome ou RF"
+                  label="PAAI responsável"
+                  valueOption="codigoRF"
+                  valueText="nomeServidorFormatado"
+                  lista={responsaveisPAAI}
+                  showSearch
+                  valueSelect={responsavelPAAISelecionado}
+                  onChange={onChangePAAI}
+                  searchValue
+                  disabled={!dreId || responsaveisPAAI?.length === 1}
+                />
+              </Loader>
+            </div>
+            {anoLetivo && dreId && listaDres?.length ? (
               <div className="col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-2">
                 <ListaPaginada
                   multiSelecao
@@ -575,8 +803,6 @@ const PlanoAEELista = () => {
                       dreId &&
                       filtro.dreId &&
                       listaDres?.length &&
-                      filtro.ueId &&
-                      ueId &&
                       listaUes?.length
                     )
                   }
