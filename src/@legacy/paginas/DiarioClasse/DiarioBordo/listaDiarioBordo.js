@@ -157,21 +157,41 @@ const ListaDiarioBordo = () => {
     [componenteCurricularSelecionado, turmaId, numeroPagina]
   );
 
+  const consultarDados = useCallback(
+    resetarPaginacao => {
+      if (
+        ((dataInicial && dataFinal && dataFinal >= dataInicial) ||
+          (!dataInicial && !dataFinal) ||
+          (dataInicial && !dataFinal) ||
+          (!dataInicial && dataFinal)) &&
+        componenteCurricularSelecionado &&
+        numeroPagina
+      ) {
+        const dataIncialFormatada =
+          dataInicial && dataInicial.format('MM-DD-YYYY');
+        const dataFinalFormatada = dataFinal && dataFinal.format('MM-DD-YYYY');
+        if (resetarPaginacao) {
+          setResetInitialState(true);
+          if (numeroPagina !== 1) {
+            setNumeroPagina(1);
+          } else {
+            obterTitulos(dataIncialFormatada, dataFinalFormatada);
+          }
+        } else {
+          obterTitulos(dataIncialFormatada, dataFinalFormatada);
+        }
+      }
+    },
+    [dataInicial, dataFinal, componenteCurricularSelecionado, numeroPagina]
+  );
+
   useEffect(() => {
-    if (
-      ((dataInicial && dataFinal && dataFinal >= dataInicial) ||
-        (!dataInicial && !dataFinal) ||
-        (dataInicial && !dataFinal) ||
-        (!dataInicial && dataFinal)) &&
-      componenteCurricularSelecionado &&
-      numeroPagina
-    ) {
-      const dataIncialFormatada =
-        dataInicial && dataInicial.format('MM-DD-YYYY');
-      const dataFinalFormatada = dataFinal && dataFinal.format('MM-DD-YYYY');
-      obterTitulos(dataIncialFormatada, dataFinalFormatada);
-    }
-  }, [dataInicial, dataFinal, componenteCurricularSelecionado, numeroPagina]);
+    consultarDados(true);
+  }, [dataInicial, dataFinal, componenteCurricularSelecionado]);
+
+  useEffect(() => {
+    consultarDados();
+  }, [numeroPagina]);
 
   const onChangePaginacao = pagina => {
     setNumeroPagina(pagina);
@@ -188,7 +208,15 @@ const ListaDiarioBordo = () => {
   const onColapse = async aulaId => {
     dispatch(limparDadosObservacoesUsuario());
 
-    const aulaIdFormatado = Number(aulaId?.split('-').pop());
+    let aulaIdFormatado = '';
+
+    if (Array.isArray(aulaId) && aulaId?.length) {
+      aulaIdFormatado = Number(aulaId?.[0]?.split('-').pop());
+    }
+
+    if (aulaId && typeof aulaId === 'string') {
+      aulaIdFormatado = Number(aulaId?.split('-').pop());
+    }
 
     const diario = listaTitulos?.items?.find(
       item => item?.aulaId === aulaIdFormatado
@@ -498,6 +526,7 @@ const ListaDiarioBordo = () => {
                   pageSize={10}
                   onChangePaginacao={onChangePaginacao}
                   resetInitialState={resetInitialState}
+                  setResetInitialState={setResetInitialState}
                 />
               </div>
             </div>
