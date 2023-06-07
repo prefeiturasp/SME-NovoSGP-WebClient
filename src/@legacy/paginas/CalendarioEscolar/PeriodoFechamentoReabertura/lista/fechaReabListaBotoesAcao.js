@@ -10,15 +10,17 @@ import { RotasDto } from '~/dtos';
 import {
   confirmar,
   erros,
-  history,
   ServicoFechamentoReabertura,
   sucesso,
   verificaSomenteConsulta,
 } from '~/servicos';
 import FechaReabListaContext from './fechaReabListaContext';
+import { useNavigate } from 'react-router-dom';
 
 const FechaReabListaBotoesAcao = () => {
   const usuario = useSelector(store => store.usuario);
+  const navigate = useNavigate();
+
   const permissoesTela =
     usuario.permissoes[RotasDto.PERIODO_FECHAMENTO_REABERTURA];
 
@@ -36,7 +38,7 @@ const FechaReabListaBotoesAcao = () => {
     setSomenteConsulta(verificaSomenteConsulta(permissoesTela));
   }, [permissoesTela]);
 
-  const onClickVoltar = () => history.push(URL_HOME);
+  const onClickVoltar = () => navigate(URL_HOME);
 
   const onClickExcluir = async () => {
     if (idsReaberturasSelecionadas?.length) {
@@ -65,10 +67,10 @@ const FechaReabListaBotoesAcao = () => {
   };
 
   const onClickNovo = () => {
-    history.push(
-      `${
-        RotasDto.PERIODO_FECHAMENTO_REABERTURA
-      }/novo/${calendarioSelecionado?.id || ''}`
+    navigate(
+      `${RotasDto.PERIODO_FECHAMENTO_REABERTURA}/novo/${
+        calendarioSelecionado?.id || ''
+      }`
     );
   };
 

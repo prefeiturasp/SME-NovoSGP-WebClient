@@ -4,7 +4,7 @@ import 'jodit/build/jodit.min.css';
 import PropTypes from 'prop-types';
 import React, { forwardRef, useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
-import { store } from '~/redux';
+import { store } from '@/core/redux';
 import { erro } from '~/servicos/alertas';
 import { urlBase } from '~/servicos/variaveis';
 import { Base } from '../colors';
@@ -18,6 +18,16 @@ const Campo = styled.div`
   }
   .jodit-status-bar :nth-child(2) {
     display: none;
+  }
+
+  .jodit-workplace,
+  .jodit-wysiwyg {
+    min-height: 139px !important;
+  }
+
+  ul,
+  ol {
+    padding-inline-start: 40px;
   }
 `;
 
@@ -271,7 +281,7 @@ const JoditEditor = forwardRef((props, ref) => {
         }
       },
     },
-    iframe: true,
+    // iframe: true, // TODO bug jodit-react
     spellcheck: true,
     showWordsCounter: false,
     showXPathInStatusbar: false,
@@ -441,15 +451,14 @@ const JoditEditor = forwardRef((props, ref) => {
         }
       }
     }
-  }, [url]);
+  }, [textArea, url]);
 
   useEffect(() => {
-    if (textArea && textArea.current) {
-      textArea.current.value = value;
+    if (textArea?.current?.setEditorValue) {
+      textArea.current.setEditorValue(value);
       bloquearTraducaoNavegador();
     }
   }, [textArea, value]);
-
   useEffect(() => {
     if (config && textArea?.current && textArea?.current?.type !== 'textarea') {
       textArea.current.setReadOnly(desabilitar);
@@ -506,13 +515,13 @@ const JoditEditor = forwardRef((props, ref) => {
         {(form && form.errors[name]) || mensagemErro}
       </span>
     ) : (
-      ''
+      <></>
     );
   };
 
   return (
     <>
-      {label ? <Label text={label} isRequired={labelRequired} /> : ''}
+      {label ? <Label text={label} isRequired={labelRequired} /> : <></>}
       {form ? editorComValidacoes() : editorSemValidacoes()}
       {obterErros()}
     </>

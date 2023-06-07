@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
 import { useDispatch, useSelector } from 'react-redux';
-import history from '~/servicos/history';
 import { URL_HOME } from '~/constantes/url';
 import Alert from '~/componentes/alert';
 import Cabecalho from '~/componentes-sgp/cabecalho';
@@ -16,11 +15,13 @@ import modalidade from '~/dtos/modalidade';
 import { setBimestreSelecionado } from '~/redux/modulos/acompanhamentoFrequencia/actions';
 import ServicoConselhoClasse from '~/servicos/Paginas/ConselhoClasse/ServicoConselhoClasse';
 import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
+import { useNavigate } from 'react-router-dom';
 
 const AcompanhamentoFrequencia = () => {
   const usuario = useSelector(store => store.usuario);
   const { turmaSelecionada } = usuario;
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const modalidadesFiltroPrincipal = useSelector(
     store => store.filtro.modalidades
@@ -71,23 +72,19 @@ const AcompanhamentoFrequencia = () => {
   ] = useState(false);
   const [podeLancarFrequencia, setPodeLancarFrequencia] = useState(false);
 
-  const [
-    listaComponentesCurriculares,
-    setListaComponentesCurriculares,
-  ] = useState([]);
+  const [listaComponentesCurriculares, setListaComponentesCurriculares] =
+    useState([]);
 
   const [territorioSaber, setTerritorioSaber] = useState(false);
   const [
     componenteCurricularIdSelecionado,
     setComponenteCurricularIdSelecionado,
   ] = useState(undefined);
-  const [
-    desabilitarComponenteCurricular,
-    setDesabilitarComponenteCurricular,
-  ] = useState(false);
+  const [desabilitarComponenteCurricular, setDesabilitarComponenteCurricular] =
+    useState(false);
 
   const onClickVoltar = () => {
-    history.push(URL_HOME);
+    navigate(URL_HOME);
   };
 
   const resetarFiltro = () => {
@@ -101,9 +98,10 @@ const AcompanhamentoFrequencia = () => {
     const obterComponentesCurriculares = async () => {
       setCarregandoComponentesCurriculares(true);
 
-      const componentesCurriculares = await ServicoDisciplina.obterDisciplinasPorTurma(
-        turmaSelecionada.turma
-      ).catch(e => erros(e));
+      const componentesCurriculares =
+        await ServicoDisciplina.obterDisciplinasPorTurma(
+          turmaSelecionada.turma
+        ).catch(e => erros(e));
       if (
         componentesCurriculares &&
         componentesCurriculares.data &&
@@ -125,9 +123,10 @@ const AcompanhamentoFrequencia = () => {
         setDesabilitarComponenteCurricular(true);
       }
       if (turmaSelecionada.anoLetivo === new Date().getFullYear()) {
-        const bimestreSelecionado = await ServicoConselhoClasse.obterBimestreAtual(
-          turmaSelecionada.modalidade
-        );
+        const bimestreSelecionado =
+          await ServicoConselhoClasse.obterBimestreAtual(
+            turmaSelecionada.modalidade
+          );
         if (bimestreSelecionado?.data) {
           dispatch(setBimestreSelecionado(bimestreSelecionado.data));
         } else {
@@ -146,7 +145,6 @@ const AcompanhamentoFrequencia = () => {
       resetarFiltro();
       setDesabilitarComponenteCurricular(true);
     }
-
   }, [turmaSelecionada, modalidadesFiltroPrincipal]);
 
   const onChangeComponenteCurricular = async componenteCurricularId => {
@@ -171,7 +169,6 @@ const AcompanhamentoFrequencia = () => {
         setBimestres(listagemBimestres);
       }
     }
-
   }, [componenteCurricularIdSelecionado]);
 
   return (

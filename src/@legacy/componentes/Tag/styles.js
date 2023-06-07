@@ -1,5 +1,4 @@
 import styled from 'styled-components';
-import { darken } from 'polished';
 
 const cores = {
   basico: {
@@ -45,7 +44,6 @@ export const TagEstilo = styled.div`
     justify-content: center;
     margin: 0;
     background-color: ${props => cores[props.tipo].fundo};
-    border-color: ${props => darken(0.1, cores[props.tipo].fundo)};
     color: ${props => cores[props.tipo].fonte};
   }
 

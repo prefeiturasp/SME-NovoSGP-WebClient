@@ -11,6 +11,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Col } from 'antd';
 import React, { useCallback, useContext, useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import { Base, ListaPaginada } from '~/componentes';
 import { BIMESTRE_FINAL, OPCAO_TODOS } from '~/constantes';
 import { ModalidadeDTO, RotasDto } from '~/dtos';
@@ -26,7 +27,7 @@ import {
   selecionarTurma,
   setRecarregarFiltroPrincipal,
 } from '~/redux/modulos/usuario/actions';
-import { history } from '~/servicos';
+
 import {
   LISTAO_TAB_AVALIACOES,
   LISTAO_TAB_DIARIO_BORDO,
@@ -39,6 +40,7 @@ import ListaoContext from '../listaoContext';
 
 const ListaoPaginado = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const {
     consideraHistorico,
@@ -168,7 +170,7 @@ const ListaoPaginado = () => {
       setTabAtual(tab);
       setBimestreOperacoes();
       setComponenteCurricularInicial(params?.componenteCurricularCodigo);
-      history.push(RotasDto.LISTAO_OPERACOES);
+      navigate(RotasDto.LISTAO_OPERACOES);
 
       setCarregarFiltrosSalvos(true);
     }
@@ -315,7 +317,6 @@ const ListaoPaginado = () => {
     }
 
     setColunas([...cols]);
-
   }, [modalidade, bimestre]);
 
   useEffect(() => {

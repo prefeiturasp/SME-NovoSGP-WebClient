@@ -1,6 +1,6 @@
 import { Col, Row } from 'antd';
 import React, { useCallback, useEffect, useState } from 'react';
-import { useRouteMatch } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { Button, Card, Colors, Loader, SelectComponent } from '~/componentes';
 import { Cabecalho } from '~/componentes-sgp';
 import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
@@ -11,12 +11,11 @@ import {
 import { SGP_SELECT_DRE } from '~/constantes/ids/select';
 import Auditoria from '~/componentes/auditoria';
 import RotasDto from '~/dtos/rotasDto';
-import { store } from '~/redux';
+import { store } from '@/core/redux';
 import {
   AbrangenciaServico,
   confirmar,
   erros,
-  history,
   setBreadcrumbManual,
   sucesso,
   erro,
@@ -30,7 +29,8 @@ const AtribuicaoResponsaveisCadastro = () => {
   const permissoesTela =
     usuario.permissoes[RotasDto.ATRIBUICAO_RESPONSAVEIS_LISTA];
 
-  const routeMatch = useRouteMatch();
+  const paramsRoute = useParams();
+  const navigate = useNavigate();
 
   const [carregandoDres, setCarregandoDres] = useState(false);
   const [listaDres, setListaDres] = useState([]);
@@ -38,9 +38,8 @@ const AtribuicaoResponsaveisCadastro = () => {
 
   const [tipoResponsavel, setTipoResponsavel] = useState();
   const [listaTipoResponsavel, setListaTipoResponsavel] = useState([]);
-  const [carregandoTipoResponsavel, setCarregandoTipoResponsavel] = useState(
-    false
-  );
+  const [carregandoTipoResponsavel, setCarregandoTipoResponsavel] =
+    useState(false);
 
   const [responsavel, setResponsavel] = useState();
   const [codigoUeSelecionadoGrid, setCodigoUeSelecionadoGrid] = useState('0');
@@ -60,14 +59,14 @@ const AtribuicaoResponsaveisCadastro = () => {
   }, [permissoesTela]);
 
   useEffect(() => {
-    if (routeMatch.params?.dreId) {
+    if (paramsRoute?.dreId) {
       setBreadcrumbManual(
-        routeMatch.url,
+        RotasDto.ATRIBUICAO_RESPONSAVEIS,
         'Editar Atribuição',
         RotasDto.ATRIBUICAO_RESPONSAVEIS_LISTA
       );
     }
-  }, [routeMatch]);
+  }, [paramsRoute]);
 
   const limparTela = () => {
     if (listaTipoResponsavel?.length > 1) {
@@ -93,7 +92,7 @@ const AtribuicaoResponsaveisCadastro = () => {
     ServicoResponsaveis.salvarAtribuicao(atribuicao)
       .then(() => {
         sucesso('Atribuição realizada com sucesso.');
-        history.push(RotasDto.ATRIBUICAO_RESPONSAVEIS_LISTA);
+        navigate(RotasDto.ATRIBUICAO_RESPONSAVEIS_LISTA);
       })
       .catch(e => {
         if (e.response.status === 601) {
@@ -115,10 +114,10 @@ const AtribuicaoResponsaveisCadastro = () => {
       if (confirmado) {
         salvarAtribuicao();
       } else {
-        history.push(RotasDto.ATRIBUICAO_RESPONSAVEIS_LISTA);
+        navigate(RotasDto.ATRIBUICAO_RESPONSAVEIS_LISTA);
       }
     } else {
-      history.push(RotasDto.ATRIBUICAO_RESPONSAVEIS_LISTA);
+      navigate(RotasDto.ATRIBUICAO_RESPONSAVEIS_LISTA);
     }
   };
 
@@ -155,8 +154,8 @@ const AtribuicaoResponsaveisCadastro = () => {
     if (retorno?.data?.length) {
       if (retorno.data.length === 1) {
         setDreId(retorno.data[0].codigo);
-      } else if (routeMatch.params?.dreId) {
-        setDreId(routeMatch.params.dreId);
+      } else if (paramsRoute?.dreId) {
+        setDreId(paramsRoute?.dreId);
       }
 
       setListaDres(retorno.data);
@@ -164,7 +163,7 @@ const AtribuicaoResponsaveisCadastro = () => {
       setListaDres([]);
       setDreId();
     }
-  }, [routeMatch]);
+  }, [paramsRoute]);
 
   useEffect(() => {
     obterDres();
@@ -184,14 +183,14 @@ const AtribuicaoResponsaveisCadastro = () => {
       setListaTipoResponsavel(resposta.data);
       if (resposta?.data?.length === 1) {
         setTipoResponsavel(resposta.data[0]?.codigo?.toString());
-      } else if (routeMatch.params?.tipoResponsavel) {
-        setTipoResponsavel(routeMatch.params.tipoResponsavel);
-        setCodigoUeSelecionadoGrid(routeMatch.params?.codigoUe);
+      } else if (paramsRoute?.tipoResponsavel) {
+        setTipoResponsavel(paramsRoute.tipoResponsavel);
+        setCodigoUeSelecionadoGrid(paramsRoute?.codigoUe);
       }
     } else {
       setListaTipoResponsavel([]);
     }
-  }, [routeMatch]);
+  }, [paramsRoute]);
 
   useEffect(() => {
     obterTipoResponsavel();
@@ -227,19 +226,19 @@ const AtribuicaoResponsaveisCadastro = () => {
 
       if (lista?.length === 1) {
         setResponsavel(lista[0].supervisorId);
-      } else if (routeMatch.params?.supervisorId) {
+      } else if (paramsRoute?.supervisorId) {
         if (
-          routeMatch.params.supervisorId > 0 &&
-          String(routeMatch.params.tipoResponsavel) === String(tipoResponsavel)
+          paramsRoute.supervisorId > 0 &&
+          String(paramsRoute.tipoResponsavel) === String(tipoResponsavel)
         )
-          setResponsavel(routeMatch.params.supervisorId);
+          setResponsavel(paramsRoute.supervisorId);
       }
       setListaResponsavel(lista);
     } else {
       setListaResponsavel([]);
     }
     setCarregandoResponsavel(false);
-  }, [dreId, tipoResponsavel, routeMatch]);
+  }, [dreId, tipoResponsavel, paramsRoute]);
 
   useEffect(() => {
     if (dreId && tipoResponsavel) {
@@ -328,7 +327,6 @@ const AtribuicaoResponsaveisCadastro = () => {
       setTipoResponsavel();
       setResponsavel();
     }
-
   }, [dreId]);
 
   useEffect(() => {
@@ -339,7 +337,6 @@ const AtribuicaoResponsaveisCadastro = () => {
       setResponsavel();
       setUesAtribuidas([]);
     }
-
   }, [dreId, responsavel, obterListaUES]);
 
   useEffect(() => {

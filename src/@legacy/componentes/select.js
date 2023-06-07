@@ -8,78 +8,36 @@ import { Base } from './colors';
 import Label from './label';
 
 const Container = styled.div`
-  ${({ size }) => size && size === 'small' && 'height: 24px;'}
+  ${({ size }) => size && size === 'small' && 'height: 24px !important;'}
 
-  .ant-select {
-    width: 100%;
+  .ant-select-single .ant-select-selector {
+    ${({ color }) => color && `color: ${color} !important;`}
+    ${({ border }) => border && `border-color: ${border} !important;`}
   }
 
-  .ant-select-arrow {
-    color: ${Base.CinzaMako};
-    margin-top: -9px;
-  }
-
-  .ant-select-selection {
-    ${({ border }) => border && `border-color: ${border};`}
-  }
-
-  .ant-select-selection__placeholder {
+  .ant-select-selection-placeholder {
     ${({ color }) => color && `color: ${color};`}
     ${({ border, color }) => border && color && 'font-weight: bold !important;'}
   }
 
-  .ant-select-selection--single {
-    align-items: center;
-    display: flex;
-    ${({ size }) => !size && 'height: 38px;'}
-    ${({ color }) => color && `color: ${color};`}
-  }
-
-  .ant-select-selection__rendered {
-    width: 98%;
-  }
-
-  .ant-select-selection__placeholder {
-    display: block;
-  }
-
-  .ant-select .ant-select-search__field {
-    display: block;
-    max-width: 100% !important;
-  }
-
-  .ant-select-selection-selected-value {
-    font-weight: bold;
-  }
-
-  .ant-select-selection--multiple {
-    min-height: 38px;
-    ${({ maxHeightMultiple }) =>
-      maxHeightMultiple && `max-height: ${maxHeightMultiple};`}
-    overflow-x: hidden;
-
-    .ant-select-selection__placeholder {
-      line-height: 25px;
-    }
-
-    .ant-select-selection__rendered {
-      margin-top: 3px;
-    }
-  }
-
-  .ant-select-selection__clear {
-    top: 50% !important;
-    font-size: 15px !important;
-  }
-
   div[class*='is-invalid'] {
-    .ant-select-selection {
+    .ant-select-selector {
       border-color: #dc3545 !important;
     }
   }
 
+  .ant-select-selection-item {
+    color: inherit;
+  }
+
   label {
     font-weight: bold;
+  }
+
+  .ant-select-multiple .ant-select-selection-overflow {
+    white-space: nowrap;
+    max-height: 100px;
+    overflow: auto;
   }
 `;
 
@@ -114,7 +72,6 @@ const SelectComponent = React.forwardRef((props, ref) => {
     style,
     searchValue,
     setValueOnlyOnChange,
-    maxHeightMultiple,
     labelRequired,
   } = props;
 
@@ -170,8 +127,9 @@ const SelectComponent = React.forwardRef((props, ref) => {
       suffixIcon={<i className="fas fa-angle-down" style={{ fontSize: 18 }} />}
       className={
         form
-          ? `overflow-hidden ${possuiErro() ? 'is-invalid' : ''} ${className ||
-              ''}`
+          ? `overflow-hidden ${possuiErro() ? 'is-invalid' : ''} ${
+              className || ''
+            }`
           : ''
       }
       name={name}
@@ -238,7 +196,6 @@ const SelectComponent = React.forwardRef((props, ref) => {
       size={size}
       border={border}
       color={color}
-      maxHeightMultiple={maxHeightMultiple}
     >
       {label ? (
         <Label text={label} control={name} isRequired={labelRequired} />
@@ -276,7 +233,6 @@ SelectComponent.propTypes = {
   style: PropTypes.oneOfType([PropTypes.object]),
   searchValue: PropTypes.bool,
   setValueOnlyOnChange: PropTypes.bool,
-  maxHeightMultiple: PropTypes.string,
   labelRequired: PropTypes.bool,
 };
 
@@ -286,7 +242,6 @@ SelectComponent.defaultProps = {
   style: null,
   searchValue: true,
   setValueOnlyOnChange: false,
-  maxHeightMultiple: '78px',
   labelRequired: false,
   showSearch: true,
 };

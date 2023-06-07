@@ -1,13 +1,18 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import { useSelector } from 'react-redux';
+import { useParams } from 'react-router-dom';
 import { Auditoria } from '~/componentes';
 import QuestionarioDinamico from '~/componentes-sgp/QuestionarioDinamico/questionarioDinamico';
 import situacaoPlanoAEE from '~/dtos/situacaoPlanoAEE';
 import ServicoPlanoAEE from '~/servicos/Paginas/Relatorios/AEE/ServicoPlanoAEE';
 
 const MontarDadosPorSecao = props => {
-  const { dados, dadosQuestionarioAtual, match, auditoria } = props;
+  const { dados, dadosQuestionarioAtual, auditoria } = props;
+
+  const paramsRoute = useParams();
+
+  const planoId = paramsRoute?.id || 0;
 
   const dadosCollapseLocalizarEstudante = useSelector(
     store => store.collapseLocalizarEstudante.dadosCollapseLocalizarEstudante
@@ -20,8 +25,6 @@ const MontarDadosPorSecao = props => {
   );
 
   const validaSeDesabilitarCampo = () => {
-    const planoId = match?.params?.id;
-
     return (
       desabilitarCamposPlanoAEE ||
       (planoId &&
@@ -44,10 +47,10 @@ const MontarDadosPorSecao = props => {
           funcaoRemoverArquivoCampoUpload={ServicoPlanoAEE.removerArquivo}
           urlUpload="v1/plano-aee/upload"
           turmaId={dadosCollapseLocalizarEstudante?.turmaId}
-          versaoPlano ={planoAEEDados?.ultimaVersao}
+          versaoPlano={planoAEEDados?.ultimaVersao}
         />
       ) : (
-        ''
+        <></>
       )}
 
       {auditoria && (
@@ -67,13 +70,11 @@ const MontarDadosPorSecao = props => {
 MontarDadosPorSecao.propTypes = {
   dados: PropTypes.oneOfType([PropTypes.object]),
   auditoria: PropTypes.oneOfType([PropTypes.object]),
-  match: PropTypes.oneOfType([PropTypes.object]),
   dadosQuestionarioAtual: PropTypes.oneOfType([PropTypes.any]),
 };
 
 MontarDadosPorSecao.defaultProps = {
   dados: {},
-  match: {},
   auditoria: {},
   dadosQuestionarioAtual: [],
 };

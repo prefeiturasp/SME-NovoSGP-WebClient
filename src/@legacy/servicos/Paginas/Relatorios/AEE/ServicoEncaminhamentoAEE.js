@@ -1,7 +1,7 @@
 import QuestionarioDinamicoFuncoes from '~/componentes-sgp/QuestionarioDinamico/Funcoes/QuestionarioDinamicoFuncoes';
 import { RotasDto } from '~/dtos';
 import tipoQuestao from '~/dtos/tipoQuestao';
-import { store } from '~/redux';
+import { store } from '@/core/redux';
 import {
   setDadosCollapseAtribuicaoResponsavel,
   setLimparDadosAtribuicaoResponsavel,
@@ -27,7 +27,6 @@ import {
 } from '~/redux/modulos/questionarioDinamico/actions';
 import { erros } from '~/servicos/alertas';
 import api from '~/servicos/api';
-import history from '~/servicos/history';
 import { ServicoCalendarios } from '../../Calendario';
 
 const urlPadrao = 'v1/encaminhamento-aee';
@@ -149,7 +148,8 @@ class ServicoEncaminhamentoAEE {
     situacao,
     validarCamposObrigatorios,
     enviarEncaminhamento,
-    salvarRascunho
+    salvarRascunho,
+    navigate
   ) => {
     const { dispatch } = store;
 
@@ -401,7 +401,7 @@ class ServicoEncaminhamentoAEE {
             dispatch(setLimparDadosQuestionarioDinamico());
             dispatch(setLimparDadosLocalizarEstudante());
             dispatch(setLimparDadosAtribuicaoResponsavel());
-            history.push(
+            navigate(
               `${RotasDto.RELATORIO_AEE_ENCAMINHAMENTO}/editar/${resposta?.data?.id}`
             );
           }
@@ -464,9 +464,10 @@ class ServicoEncaminhamentoAEE {
     turmaId,
     alunoCodigo,
     situacao,
-    anoLetivo
+    anoLetivo,
+    exibirEncerrados = false
   ) => {
-    let url = `${urlPadrao}/responsaveis?dreId=${dreId}&ueId=${ueId}&anoLetivo=${anoLetivo}`;
+    let url = `${urlPadrao}/responsaveis?dreId=${dreId}&ueId=${ueId}&anoLetivo=${anoLetivo}&exibirEncerrados=${exibirEncerrados}`;
 
     if (turmaId) {
       url += `&turmaId=${turmaId}`;

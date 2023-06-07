@@ -2,7 +2,7 @@ import { Col, Row } from 'antd';
 import PropTypes from 'prop-types';
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useRouteMatch } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { Button, Colors } from '~/componentes';
 import BotaoExcluirPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoExcluirPadrao';
 import QuestionarioDinamicoFuncoes from '~/componentes-sgp/QuestionarioDinamico/Funcoes/QuestionarioDinamicoFuncoes';
@@ -22,7 +22,7 @@ const DrawerAtendimentoBotoesAcao = ({
   atendimentoId,
 }) => {
   const dispatch = useDispatch();
-  const routeMatch = useRouteMatch();
+  const { id } = useParams();
 
   const usuario = useSelector(state => state.usuario);
   const questionarioDinamicoEmEdicao = useSelector(
@@ -39,7 +39,7 @@ const DrawerAtendimentoBotoesAcao = ({
 
   const permissoesTela = usuario.permissoes[RotasDto.ENCAMINHAMENTO_NAAPA];
 
-  const encaminhamentoNAAPAId = routeMatch.params?.id;
+  const encaminhamentoNAAPAId = id;
 
   const soConsulta = verificaSomenteConsulta(permissoesTela);
 

@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import { Button, Colors, Loader, SelectComponent } from '~/componentes';
 import {
   SGP_BUTTON_ATRIBUICAO_RESPONSAVEL,
@@ -12,11 +13,13 @@ import {
   setParecerEmEdicao,
   setPlanoAEELimparDados,
 } from '~/redux/modulos/planoAEE/actions';
-import { erros, history, sucesso } from '~/servicos';
+import { erros, sucesso } from '~/servicos';
 import ServicoEncaminhamentoAEE from '~/servicos/Paginas/Relatorios/AEE/ServicoEncaminhamentoAEE';
 import ServicoPlanoAEE from '~/servicos/Paginas/Relatorios/AEE/ServicoPlanoAEE';
 
 const SecaoParecerResponsavel = () => {
+  const navigate = useNavigate();
+
   const dadosParecer = useSelector(store => store.planoAEE.dadosParecer);
   const planoAEEDados = useSelector(store => store.planoAEE.planoAEEDados);
   const codigoTurma = planoAEEDados?.turma?.codigo;
@@ -79,7 +82,7 @@ const SecaoParecerResponsavel = () => {
     ).catch(e => erros(e));
 
     if (resposta?.data) {
-      history.push(RotasDto.RELATORIO_AEE_PLANO);
+      navigate(RotasDto.RELATORIO_AEE_PLANO);
       sucesso('Atribuição do responsável realizada com sucesso');
     }
   };
@@ -92,9 +95,8 @@ const SecaoParecerResponsavel = () => {
   };
 
   const obterResponsaveisPAAI = useCallback(async () => {
-    const resposta = await ServicoEncaminhamentoAEE.obterResponsaveisPAAIPesquisa(
-      codigoTurma
-    );
+    const resposta =
+      await ServicoEncaminhamentoAEE.obterResponsaveisPAAIPesquisa(codigoTurma);
 
     const dados = resposta?.data?.items;
     if (dados?.length) {
@@ -130,7 +132,7 @@ const SecaoParecerResponsavel = () => {
       dispatch(limparDadosParecer());
       dispatch(setParecerEmEdicao(false));
       dispatch(setPlanoAEELimparDados());
-      history.push(RotasDto.RELATORIO_AEE_PLANO);
+      navigate(RotasDto.RELATORIO_AEE_PLANO);
     }
   };
 

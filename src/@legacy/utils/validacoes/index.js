@@ -1,6 +1,6 @@
-import { store } from '~/redux';
+import { store } from '@/core/redux';
 import { setTelaEmEdicao } from '~/redux/modulos/geral/actions';
-import { confirmar, history } from '~/servicos';
+import { confirmar } from '~/servicos';
 
 export const verificarTelaEdicao = () => {
   const state = store.getState();
@@ -25,16 +25,36 @@ export const validarAcaoTela = async () => {
   return false;
 };
 
-export const validarNavegacaoTela = async (e, urlDestino) => {
+export const validarNavegacaoTela = async e => {
   e.preventDefault();
   const pararAcao = await validarAcaoTela();
   if (pararAcao) return true;
-
-  history.push(urlDestino);
 
   return false;
 };
 
 export const isFieldRequired = (fieldName, validationSchema) => {
   return validationSchema?.fields?.[fieldName]?._exclusive?.required;
+};
+
+export const ocultarColunaAvaliacaoComponenteRegencia = (
+  componentesAvaliacao,
+  componentesRegencia,
+  ehRegencia
+) => {
+  if (
+    ehRegencia &&
+    componentesAvaliacao?.length &&
+    componentesRegencia?.length
+  ) {
+    const componentesOcultar = componentesAvaliacao.filter(nomeComponente => {
+      const ocultar = componentesRegencia.find(
+        co => co?.nome === nomeComponente && !co?.ativo
+      );
+      return !!ocultar;
+    });
+    return componentesOcultar?.length === componentesAvaliacao?.length;
+  }
+
+  return false;
 };

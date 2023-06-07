@@ -24,7 +24,6 @@ const Container = styled(Modal)`
   }
   .ant-modal-header {
     border-bottom: none;
-    padding-top: 27px;
     padding-bottom: 0px;
   }
   .ant-modal-title {
@@ -89,14 +88,16 @@ const ModalConteudoHtml = props => {
     botoesRodape,
     fontSizeTitulo,
     tipoFonte,
+    bodyStyle,
   } = props;
   return (
     <Container
+      bodyStyle={bodyStyle || {}}
       keyboard={fecharAoClicarEsc}
       maskClosable={fecharAoClicarFora}
       onCancel={onClose}
       title={titulo}
-      visible={visivel}
+      open={visivel}
       closable={!!closable}
       centered
       confirmLoading={loader}
@@ -148,35 +149,34 @@ const ModalConteudoHtml = props => {
               </Grid>
             </Row>
           </>
-        ) : (
-          !esconderBotoes && (
-            <div className="d-flex justify-content-end">
-              <Button
-                id={idBotaoPrincipal || SGP_BUTTON_SALVAR_MODAL}
-                key="btn-sim-confirmacao"
-                label={labelBotaoSecundario}
-                color={colorBotaoSecundario}
-                bold
-                border
-                className="mr-2 padding-btn-confirmacao"
-                onClick={onConfirmacaoSecundaria}
-                hidden={esconderBotaoSecundario}
-                disabled={loader}
-              />
-              <Button
-                id={idBotaoSecundario || SGP_BUTTON_CANCELAR_MODAL}
-                key="btn-nao-confirmacao"
-                label={labelBotaoPrincipal}
-                color={Colors.Roxo}
-                bold
-                className="padding-btn-confirmacao"
-                onClick={onConfirmacaoPrincipal}
-                disabled={desabilitarBotaoPrincipal || loader}
-                hidden={esconderBotaoPrincipal}
-              />
-            </div>
-          )
-        ))
+        ) : !esconderBotoes &&
+          (!esconderBotaoPrincipal || !esconderBotaoSecundario) ? (
+          <div className="row d-flex justify-content-end">
+            <Button
+              id={idBotaoPrincipal || SGP_BUTTON_SALVAR_MODAL}
+              key="btn-sim-confirmacao"
+              label={labelBotaoSecundario}
+              color={colorBotaoSecundario}
+              bold
+              border
+              className="mr-2 padding-btn-confirmacao"
+              onClick={onConfirmacaoSecundaria}
+              hidden={esconderBotaoSecundario}
+              disabled={loader}
+            />
+            <Button
+              id={idBotaoSecundario || SGP_BUTTON_CANCELAR_MODAL}
+              key="btn-nao-confirmacao"
+              label={labelBotaoPrincipal}
+              color={Colors.Roxo}
+              bold
+              className="padding-btn-confirmacao"
+              onClick={onConfirmacaoPrincipal}
+              disabled={desabilitarBotaoPrincipal || loader}
+              hidden={esconderBotaoPrincipal}
+            />
+          </div>
+        ) : null)
       }
     >
       {children}

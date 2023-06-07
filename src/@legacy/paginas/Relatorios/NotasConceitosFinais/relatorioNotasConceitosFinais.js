@@ -8,7 +8,6 @@ import modalidade from '~/dtos/modalidade';
 import AbrangenciaServico from '~/servicos/Abrangencia';
 import { erros, sucesso } from '~/servicos/alertas';
 import api from '~/servicos/api';
-import history from '~/servicos/history';
 import ServicoFiltroRelatorio from '~/servicos/Paginas/FiltroRelatorio/ServicoFiltroRelatorio';
 import ServicoRelatorioNotasConceitos from '~/servicos/Paginas/Relatorios/NotasConceitos/servicoRelatorioNotasConceitos';
 import ServicoNotaConceito from '~/servicos/Paginas/DiarioClasse/ServicoNotaConceito';
@@ -17,8 +16,11 @@ import AlertaModalidadeInfantil from '~/componentes-sgp/AlertaModalidadeInfantil
 import { OPCAO_TODOS } from '~/constantes/constantes';
 import BotoesAcaoRelatorio from '~/componentes-sgp/botoesAcaoRelatorio';
 import { ordenarListaMaiorParaMenor } from '~/utils';
+import { useNavigate } from 'react-router-dom';
 
 const RelatorioNotasConceitosFinais = () => {
+  const navigate = useNavigate();
+
   const [listaAnosLetivo, setListaAnosLetivo] = useState([]);
   const [listaSemestre, setListaSemestre] = useState([]);
   const [listaDres, setListaDres] = useState([]);
@@ -455,7 +457,7 @@ const RelatorioNotasConceitosFinais = () => {
   }, [consideraHistorico, obterAnosLetivos]);
 
   const onClickVoltar = () => {
-    history.push(URL_HOME);
+    navigate(URL_HOME);
   };
 
   const onClickCancelar = () => {

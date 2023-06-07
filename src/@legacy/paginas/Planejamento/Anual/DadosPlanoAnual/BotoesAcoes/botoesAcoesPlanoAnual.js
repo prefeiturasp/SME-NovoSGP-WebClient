@@ -14,12 +14,13 @@ import {
   setExibirModalCopiarConteudo,
 } from '~/redux/modulos/anual/actions';
 import { confirmar } from '~/servicos';
-import history from '~/servicos/history';
 import { ehTurmaInfantil } from '~/servicos/Validacoes/validacoesInfatil';
 import servicoSalvarPlanoAnual from '../../servicoSalvarPlanoAnual';
+import { useNavigate } from 'react-router-dom';
 
 const BotoesAcoesPlanoAnual = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const usuario = useSelector(store => store.usuario);
   const { turmaSelecionada } = usuario;
@@ -67,13 +68,13 @@ const BotoesAcoesPlanoAnual = () => {
       if (confirmado) {
         const salvou = await onSalvar();
         if (salvou) {
-          history.push(URL_HOME);
+          navigate(URL_HOME);
         }
       } else {
-        history.push(URL_HOME);
+        navigate(URL_HOME);
       }
     } else {
-      history.push(URL_HOME);
+      navigate(URL_HOME);
     }
   };
 

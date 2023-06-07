@@ -3,10 +3,10 @@ import { ListaPaginada } from '~/componentes';
 import { OPCAO_TODOS } from '~/constantes';
 import { SGP_TABLE_ENCAMINHAMENTO_NAAPA } from '~/constantes/ids/table';
 import { RotasDto } from '~/dtos';
-import { store } from '~/redux';
+import { store } from '@/core/redux';
 import { setTabAtivaEncaminhamentoNAAPA } from '~/redux/modulos/encaminhamentoNAAPA/actions';
-import { history } from '~/servicos';
 import { verificarDataFimMaiorInicio } from '~/utils';
+import { useNavigate } from 'react-router-dom';
 
 const ListaEncaminhamentoNAAPAPaginada = props => {
   const {
@@ -21,7 +21,10 @@ const ListaEncaminhamentoNAAPAPaginada = props => {
     dataAberturaQueixaFim,
     dataAberturaQueixaInicio,
     onSelecionarItems,
+    exibirEncaminhamentosEncerrados,
   } = props;
+
+  const navigate = useNavigate();
 
   const [filtros, setFiltros] = useState();
 
@@ -77,6 +80,7 @@ const ListaEncaminhamentoNAAPAPaginada = props => {
         : '',
       situacao,
       prioridade,
+      exibirEncerrados: exibirEncaminhamentosEncerrados,
     };
 
     const dataFimMaiorInicio = verificarDataFimMaiorInicio(
@@ -98,6 +102,7 @@ const ListaEncaminhamentoNAAPAPaginada = props => {
     dataAberturaQueixaFim,
     situacao,
     prioridade,
+    exibirEncaminhamentosEncerrados,
   ]);
 
   useEffect(() => {
@@ -114,8 +119,8 @@ const ListaEncaminhamentoNAAPAPaginada = props => {
       colunas={colunas}
       filtro={filtros}
       onClick={linha => {
-        store.dispatch(setTabAtivaEncaminhamentoNAAPA());
-        history.push(`${RotasDto.ENCAMINHAMENTO_NAAPA}/${linha?.id}`);
+        store.dispatch(setTabAtivaEncaminhamentoNAAPA(0));
+        navigate(`${RotasDto.ENCAMINHAMENTO_NAAPA}/${linha?.id}`);
       }}
       filtroEhValido={filtroEhValido}
       multiSelecao

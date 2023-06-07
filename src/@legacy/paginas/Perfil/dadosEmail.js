@@ -10,7 +10,7 @@ import ModalConteudoHtml from '~/componentes/modalConteudoHtml';
 import AlertaBalao from '~/componentes/alertaBalao';
 import api from '~/servicos/api';
 import { sucesso, confirmar } from '~/servicos/alertas';
-import { store } from '~/redux';
+import { store } from '@/core/redux';
 import { meusDadosSalvarEmail } from '~/redux/modulos/usuario/actions';
 import FormularioSenha from './FormularioSenha/formularioSenha';
 import RotasDto from '~/dtos/rotasDto';

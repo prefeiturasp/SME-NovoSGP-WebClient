@@ -4,7 +4,6 @@ import { useSelector } from 'react-redux';
 import Cabecalho from '~/componentes-sgp/cabecalho';
 import Alert from '~/componentes/alert';
 import Grid from '~/componentes/grid';
-import history from '~/servicos/history';
 import { URL_HOME } from '~/constantes/url';
 import Card from '../../../../componentes/card';
 import ReiniciarSenha from '../reiniciarSenha';
@@ -12,14 +11,17 @@ import ReiniciarSenhaEA from '../ReiniciarSenhaEA';
 
 import { ContainerTabs } from './style';
 import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
+import { useNavigate } from 'react-router-dom';
 
 const { TabPane } = Tabs;
 
 export default function TabsReiniciarSenha() {
+  const navigate = useNavigate();
+
   const perfilSelecionado = useSelector(
     store => store.perfil.perfilSelecionado.nomePerfil
   );
-  const onClickVoltar = () => history.push(URL_HOME);
+  const onClickVoltar = () => navigate(URL_HOME);
 
   const verificaPerfil = perfil => {
     return perfil === 'CP' || perfil === 'AD' || perfil === 'Secretário';

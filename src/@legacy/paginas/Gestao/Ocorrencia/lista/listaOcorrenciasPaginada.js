@@ -1,9 +1,9 @@
 /* eslint-disable react/prop-types */
 import React, { useEffect, useCallback } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import { ListaPaginada } from '~/componentes';
 import { RotasDto } from '~/dtos';
-import { history } from '~/servicos';
 
 const ListaOcorrenciasPaginada = props => {
   const {
@@ -26,11 +26,19 @@ const ListaOcorrenciasPaginada = props => {
     titulo,
   } = props;
 
+  const navigate = useNavigate();
+
   const colunas = [
     {
       title: 'Data',
       dataIndex: 'dataOcorrencia',
       width: '100px',
+    },
+    {
+      title: 'Unidade Escolar (UE)',
+      dataIndex: 'ueOcorrencia',
+      width: '30%',
+      ellipsis: true,
     },
     {
       title: 'Turma',
@@ -87,7 +95,6 @@ const ListaOcorrenciasPaginada = props => {
       titulo,
     };
     setFiltros({ ...params });
-
   }, [
     consideraHistorico,
     anoLetivo,
@@ -116,7 +123,7 @@ const ListaOcorrenciasPaginada = props => {
       colunas={colunas}
       filtro={filtros}
       onClick={ocorrencia =>
-        history.push(`${RotasDto.OCORRENCIAS}/editar/${ocorrencia.id}`)
+        navigate(`${RotasDto.OCORRENCIAS}/editar/${ocorrencia.id}`)
       }
       multiSelecao
       selecionarItems={onSelecionarItems}

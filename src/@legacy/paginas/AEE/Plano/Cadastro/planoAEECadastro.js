@@ -1,5 +1,5 @@
-import PropTypes from 'prop-types';
 import React, { useCallback, useEffect } from 'react';
+import { useLocation, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { Cabecalho } from '~/componentes-sgp';
 import CollapseLocalizarEstudante from '~/componentes-sgp/CollapseLocalizarEstudante/collapseLocalizarEstudante';
@@ -20,8 +20,12 @@ import ObservacoesPlanoAEE from './Componentes/ObservacoesPlanoAEE/observacoesPl
 import SituacaoEncaminhamentoAEE from './Componentes/SituacaoEncaminhamentoAEE/situacaoEncaminhamentoAEE';
 import TabCadastroPlano from './Componentes/TabCadastroPlano/tabCadastroPlano';
 
-const PlanoAEECadastro = ({ match }) => {
+const PlanoAEECadastro = () => {
   const dispatch = useDispatch();
+  const location = useLocation();
+  const paramsRoute = useParams();
+
+  const planoId = paramsRoute?.id;
 
   const exibirModalDevolverPlanoAEE = useSelector(
     store => store.planoAEE.exibirModalDevolverPlanoAEE
@@ -37,15 +41,14 @@ const PlanoAEECadastro = ({ match }) => {
   };
 
   useEffect(() => {
-    const planoId = match?.params?.id;
     if (planoId) {
       setBreadcrumbManual(
-        match.url,
+        location.pathname,
         'Editar',
         `${RotasDto.RELATORIO_AEE_PLANO}`
       );
     }
-  }, [match]);
+  }, [location, planoId]);
 
   useEffect(() => {
     return () => {
@@ -58,7 +61,7 @@ const PlanoAEECadastro = ({ match }) => {
     <LoaderPlano>
       <Cabecalho pagina="Plano AEE">
         <div className="d-flex justify-content-end">
-          <BotoesAcoesPlanoAEE match={match} />
+          <BotoesAcoesPlanoAEE />
         </div>
       </Cabecalho>
       <Card>
@@ -67,8 +70,8 @@ const PlanoAEECadastro = ({ match }) => {
             <div className="col-md-12 mb-2 d-flex justify-content-end">
               <MarcadorSituacaoPlanoAEE />
             </div>
-            {match?.params?.id ? (
-              ''
+            {planoId ? (
+              <></>
             ) : (
               <div className="col-md-12 mb-2">
                 <CollapseLocalizarEstudante
@@ -91,7 +94,7 @@ const PlanoAEECadastro = ({ match }) => {
               <BotaoVerSituacaoEncaminhamentoAEE />
             </div>
             <div className="col-md-12 mt-2 mb-2">
-              <TabCadastroPlano match={match} />
+              <TabCadastroPlano />
             </div>
             <div className="col-sm-12">
               <ObservacoesPlanoAEE />
@@ -102,14 +105,6 @@ const PlanoAEECadastro = ({ match }) => {
       </Card>
     </LoaderPlano>
   );
-};
-
-PlanoAEECadastro.propTypes = {
-  match: PropTypes.oneOfType([PropTypes.object]),
-};
-
-PlanoAEECadastro.defaultProps = {
-  match: {},
 };
 
 export default PlanoAEECadastro;

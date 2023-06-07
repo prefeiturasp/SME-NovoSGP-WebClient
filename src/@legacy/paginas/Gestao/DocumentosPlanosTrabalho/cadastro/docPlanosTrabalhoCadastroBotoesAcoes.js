@@ -2,6 +2,7 @@ import { Col, Row } from 'antd';
 import _ from 'lodash';
 import PropTypes from 'prop-types';
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Button, Colors } from '~/componentes';
 import BotaoExcluirPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoExcluirPadrao';
 import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
@@ -10,7 +11,7 @@ import {
   SGP_BUTTON_CANCELAR,
 } from '~/constantes/ids/button';
 import { RotasDto } from '~/dtos';
-import { confirmar, erro, erros, history, sucesso } from '~/servicos';
+import { confirmar, erro, erros, sucesso } from '~/servicos';
 import ServicoArmazenamento from '~/servicos/Componentes/ServicoArmazenamento';
 import ServicoDocumentosPlanosTrabalho from '~/servicos/Paginas/Gestao/DocumentosPlanosTrabalho/ServicoDocumentosPlanosTrabalho';
 
@@ -23,6 +24,8 @@ const DocPlanosTrabalhoCadastroBotoesAcoes = props => {
     desabilitarCampos,
     podeExcluir,
   } = props;
+
+  const navigate = useNavigate();
 
   const modoEdicao = !!form?.values?.modoEdicao;
   const listaUes = form?.values?.listaUes;
@@ -51,10 +54,10 @@ const DocPlanosTrabalhoCadastroBotoesAcoes = props => {
             );
           }
         }
-        history.push(RotasDto.DOCUMENTOS_PLANOS_TRABALHO);
+        navigate(RotasDto.DOCUMENTOS_PLANOS_TRABALHO);
       }
     } else {
-      history.push(RotasDto.DOCUMENTOS_PLANOS_TRABALHO);
+      navigate(RotasDto.DOCUMENTOS_PLANOS_TRABALHO);
     }
   };
 
@@ -118,45 +121,42 @@ const DocPlanosTrabalhoCadastroBotoesAcoes = props => {
 
       if (resultado?.status === 200) {
         sucesso('Registro excluído com sucesso!');
-        history.push(RotasDto.DOCUMENTOS_PLANOS_TRABALHO);
+        navigate(RotasDto.DOCUMENTOS_PLANOS_TRABALHO);
       }
     }
   };
 
   const onClickCadastrar = async valores => {
-    const {
-      ueCodigo,
-      usuarioId,
-      classificacaoId,
-      tipoDocumentoId,
-      anoLetivo,
-    } = valores;
+    const { ueCodigo, usuarioId, classificacaoId, tipoDocumentoId, anoLetivo } =
+      valores;
 
     const ueSelecionada = listaUes.find(
       item => String(item.codigo) === String(ueCodigo)
     );
 
     setExibirLoader(true);
-    const ehClassificacaoDocumentosTurma = ServicoDocumentosPlanosTrabalho.verificaSeEhClassificacaoDocumentosTurma(
-      classificacaoId,
-      valores?.listaClassificacoes
-    );
+    const ehClassificacaoDocumentosTurma =
+      ServicoDocumentosPlanosTrabalho.verificaSeEhClassificacaoDocumentosTurma(
+        classificacaoId,
+        valores?.listaClassificacoes
+      );
 
     let continuar = true;
 
     const novoRegistro = !idDocumentosPlanoTrabalho;
     if (novoRegistro && !ehClassificacaoDocumentosTurma) {
-      const existeRegistro = await ServicoDocumentosPlanosTrabalho.validacaoUsuarioDocumento(
-        0,
-        tipoDocumentoId,
-        classificacaoId,
-        usuarioId,
-        ueSelecionada?.id,
-        anoLetivo
-      ).catch(e => {
-        erros(e);
-        setExibirLoader(false);
-      });
+      const existeRegistro =
+        await ServicoDocumentosPlanosTrabalho.validacaoUsuarioDocumento(
+          0,
+          tipoDocumentoId,
+          classificacaoId,
+          usuarioId,
+          ueSelecionada?.id,
+          anoLetivo
+        ).catch(e => {
+          erros(e);
+          setExibirLoader(false);
+        });
 
       if (existeRegistro?.status !== 200) {
         setExibirLoader(false);
@@ -210,7 +210,7 @@ const DocPlanosTrabalhoCadastroBotoesAcoes = props => {
           idDocumentosPlanoTrabalho ? 'alterado' : 'cadastrado'
         } com sucesso`
       );
-      history.push(RotasDto.DOCUMENTOS_PLANOS_TRABALHO);
+      navigate(RotasDto.DOCUMENTOS_PLANOS_TRABALHO);
     }
   };
 

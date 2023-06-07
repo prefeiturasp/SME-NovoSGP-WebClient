@@ -1,5 +1,5 @@
 import api from '~/servicos/api';
-import { store } from '~/redux';
+import { store } from '@/core/redux';
 import {
   setDadosCardsDashboard,
   setCarregandoDadosCardsDashboard,

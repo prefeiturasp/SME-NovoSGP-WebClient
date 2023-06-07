@@ -12,7 +12,7 @@ const LoaderPlanoAnual = ({ children }) => {
 };
 
 LoaderPlanoAnual.propTypes = {
-  children: PropTypes.oneOfType([PropTypes.element, PropTypes.func]),
+  children: PropTypes.oneOfType([PropTypes.any]),
 };
 
 LoaderPlanoAnual.defaultProps = {

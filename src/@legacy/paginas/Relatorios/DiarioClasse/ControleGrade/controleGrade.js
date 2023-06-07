@@ -6,7 +6,6 @@ import modalidade from '~/dtos/modalidade';
 import AbrangenciaServico from '~/servicos/Abrangencia';
 import { erros, sucesso } from '~/servicos/alertas';
 import api from '~/servicos/api';
-import history from '~/servicos/history';
 import ServicoFiltroRelatorio from '~/servicos/Paginas/FiltroRelatorio/ServicoFiltroRelatorio';
 import ServicoRelatorioControleGrade from '~/servicos/Paginas/Relatorios/DiarioClasse/ControleGrade/ServicoRelatorioControleGrade';
 import ServicoComponentesCurriculares from '~/servicos/Paginas/ComponentesCurriculares/ServicoComponentesCurriculares';
@@ -14,8 +13,11 @@ import FiltroHelper from '~/componentes-sgp/filtro/helper';
 import { ordenarListaMaiorParaMenor } from '~/utils/funcoes/gerais';
 import BotoesAcaoRelatorio from '~/componentes-sgp/botoesAcaoRelatorio';
 import { URL_HOME } from '~/constantes';
+import { useNavigate } from 'react-router-dom';
 
 const ControleGrade = () => {
+  const navigate = useNavigate();
+
   const [exibirLoader, setExibirLoader] = useState(false);
   const [listaAnosLetivo, setListaAnosLetivo] = useState([]);
   const [listaDres, setListaDres] = useState([]);
@@ -23,10 +25,8 @@ const ControleGrade = () => {
   const [listaModalidades, setListaModalidades] = useState([]);
   const [listaSemestres, setListaSemestres] = useState([]);
   const [listaTurmas, setListaTurmas] = useState([]);
-  const [
-    listaComponentesCurriculares,
-    setListaComponentesCurriculares,
-  ] = useState([]);
+  const [listaComponentesCurriculares, setListaComponentesCurriculares] =
+    useState([]);
   const [listaBimestres, setListaBimestres] = useState([]);
 
   const listaTipoRelatorio = [
@@ -54,9 +54,8 @@ const ControleGrade = () => {
   const [modalidadeId, setModalidadeId] = useState(undefined);
   const [semestre, setSemestre] = useState(undefined);
   const [turmaId, setTurmaId] = useState(undefined);
-  const [componentesCurricularesId, setComponentesCurricularesId] = useState(
-    undefined
-  );
+  const [componentesCurricularesId, setComponentesCurricularesId] =
+    useState(undefined);
   const [bimestre, setBimestre] = useState(undefined);
   const [tipoRelatorio, setTipoRelatorio] = useState(undefined);
   const [clicouBotaoGerar, setClicouBotaoGerar] = useState(false);
@@ -200,9 +199,8 @@ const ControleGrade = () => {
   const obterModalidades = async (ue, ano) => {
     if (ue && ano) {
       setExibirLoader(true);
-      const {
-        data,
-      } = await ServicoFiltroRelatorio.obterModalidadesPorAbrangencia(ue);
+      const { data } =
+        await ServicoFiltroRelatorio.obterModalidadesPorAbrangencia(ue);
 
       if (data) {
         const lista = data.map(item => ({
@@ -276,7 +274,6 @@ const ControleGrade = () => {
       setListaBimestres(bimestresFundMedio);
     }
     setBimestre();
-
   }, [modalidadeId]);
 
   const obterAnosLetivos = useCallback(async () => {
@@ -330,12 +327,13 @@ const ControleGrade = () => {
     }
 
     setExibirLoader(true);
-    const componentes = await ServicoComponentesCurriculares.obterComponentesPorListaDeTurmas(
-      turmas,
-      true
-    )
-      .catch(e => erros(e))
-      .finally(() => setExibirLoader(false));
+    const componentes =
+      await ServicoComponentesCurriculares.obterComponentesPorListaDeTurmas(
+        turmas,
+        true
+      )
+        .catch(e => erros(e))
+        .finally(() => setExibirLoader(false));
 
     if (componentes && componentes.data && componentes.data.length) {
       const lista = [];
@@ -383,8 +381,9 @@ const ControleGrade = () => {
   ) => {
     setExibirLoader(true);
     const retorno = await api.get(
-      `v1/abrangencias/false/semestres?anoLetivo=${anoLetivoSelecionado}&modalidade=${modalidadeSelecionada ||
-        0}`
+      `v1/abrangencias/false/semestres?anoLetivo=${anoLetivoSelecionado}&modalidade=${
+        modalidadeSelecionada || 0
+      }`
     );
     if (retorno && retorno.data) {
       const lista = retorno.data.map(periodo => {
@@ -505,7 +504,7 @@ const ControleGrade = () => {
       <Cabecalho pagina="Relatório controle de grade">
         <BotoesAcaoRelatorio
           onClick={() => {
-            history.push(URL_HOME);
+            navigate(URL_HOME);
           }}
           onClickCancelar={cancelar}
           onClickGerar={gerar}

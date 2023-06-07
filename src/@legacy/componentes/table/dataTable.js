@@ -26,8 +26,10 @@ const DataTable = props => {
     expandedRowKeys,
     expandIcon,
     tableResponsive,
-    fixExpandedRowResetColSpan,
     gerarIdUnico,
+    expandableColumnWidth,
+    expandableColumnTitle,
+    showExpandColumn,
     ...rest
   } = props;
 
@@ -75,15 +77,8 @@ const DataTable = props => {
         {...rest}
         id={id}
         scroll={scroll}
-        className={selectMultipleRows ? '' : 'ocultar-coluna-multi-selecao'}
         rowKey={idLinha}
-        rowSelection={
-          fixExpandedRowResetColSpan
-            ? selectMultipleRows
-              ? rowSelection
-              : null
-            : rowSelection
-        }
+        rowSelection={selectMultipleRows ? rowSelection : null}
         columns={columns}
         dataSource={gerarIdUnico ? gerarColunaId(dataSource) : dataSource}
         onRow={row => ({
@@ -99,7 +94,11 @@ const DataTable = props => {
             }
           },
         })}
-        pagination={pagination}
+        pagination={
+          typeof pagination === 'object'
+            ? { ...pagination, items_per_page: '' }
+            : pagination
+        }
         pageSize={{ pageSize }}
         bordered
         size="middle"
@@ -125,12 +124,17 @@ const DataTable = props => {
           };
         }}
         loading={loading}
-        expandedRowRender={expandedRowRender}
-        expandIconColumnIndex={expandIconColumnIndex}
         expandIconAsCell={false}
-        expandIcon={expandIcon}
-        onExpand={onClickExpandir}
-        expandedRowKeys={expandedRowKeys}
+        expandable={{
+          showExpandColumn,
+          columnWidth: expandableColumnWidth,
+          columnTitle: expandableColumnTitle,
+          expandIconColumnIndex,
+          expandedRowRender,
+          expandIcon,
+          onExpand: onClickExpandir,
+          expandedRowKeys,
+        }}
       />
     </Container>
   );
@@ -156,9 +160,9 @@ DataTable.propTypes = {
   expandedRowKeys: PropTypes.oneOfType([PropTypes.array]),
   expandIcon: PropTypes.oneOfType([PropTypes.any]),
   tableResponsive: PropTypes.bool,
-  fixExpandedRowResetColSpan: PropTypes.bool,
   loading: PropTypes.bool,
   gerarIdUnico: PropTypes.bool,
+  showExpandColumn: PropTypes.bool,
 };
 
 DataTable.defaultProps = {
@@ -168,7 +172,7 @@ DataTable.defaultProps = {
   columns: [],
   selectMultipleRows: false,
   pageSize: 10,
-  pagination: true,
+  pagination: { locale: { items_per_page: '' } },
   onClickRow: null,
   locale: { emptyText: 'Sem dados' },
   idLinha: 'id',
@@ -181,9 +185,9 @@ DataTable.defaultProps = {
   expandedRowKeys: [],
   expandIcon: null,
   tableResponsive: true,
-  fixExpandedRowResetColSpan: false,
   loading: false,
   gerarIdUnico: false,
+  showExpandColumn: true,
 };
 
 export default DataTable;

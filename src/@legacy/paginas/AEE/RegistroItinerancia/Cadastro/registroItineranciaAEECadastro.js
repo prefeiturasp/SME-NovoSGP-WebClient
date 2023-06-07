@@ -1,9 +1,9 @@
 import { Col, Row } from 'antd';
 import _ from 'lodash';
 import moment from 'moment';
-import PropTypes from 'prop-types';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import shortid from 'shortid';
 import {
   Auditoria,
@@ -35,7 +35,6 @@ import {
   setSomenteConsultaManual,
   sucesso,
   verificaSomenteConsulta,
-  history,
   ServicoCalendarios,
   AbrangenciaServico,
   ServicoFiltroRelatorio,
@@ -52,7 +51,11 @@ import {
 } from './componentes';
 import { NOME_CAMPO_QUESTAO } from './componentes/ConstantesCamposDinâmicos';
 
-const RegistroItineranciaAEECadastro = ({ match }) => {
+const RegistroItineranciaAEECadastro = () => {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const paramsRoute = useParams();
+
   const [carregandoGeral, setCarregandoGeral] = useState(false);
   const [carregandoQuestoes, setCarregandoQuestoes] = useState(false);
   const [dataVisita, setDataVisita] = useState('');
@@ -97,7 +100,7 @@ const RegistroItineranciaAEECadastro = ({ match }) => {
 
   const permissaoStatus = itineranciaId && !itineranciaAlteracao?.podeEditar;
 
-  const mapearSalvarQuestoesUpload = mapearSomenteUpload => {
+  const mapearSalvarQuestoesUpload = () => {
     const novoMapQuestoes = _.cloneDeep(questoesItinerancia);
 
     const questaoUpload = novoMapQuestoes.find(
@@ -126,11 +129,9 @@ const RegistroItineranciaAEECadastro = ({ match }) => {
     }
     let questoesSalvar = [];
 
-    if (!mapearSomenteUpload) {
-      questoesSalvar = novoMapQuestoes.filter(
-        questao => questao?.tipoQuestao !== tipoQuestaoDto.Upload
-      );
-    }
+    questoesSalvar = novoMapQuestoes.filter(
+      questao => questao?.tipoQuestao !== tipoQuestaoDto.Upload
+    );
 
     if (questaoUpload?.resposta?.length) {
       questaoUpload.resposta.forEach(resposta => {
@@ -161,9 +162,7 @@ const RegistroItineranciaAEECadastro = ({ match }) => {
   };
 
   const onClickSalvar = () => {
-    const mapearSomenteUpload = !!alunosSelecionados?.length;
-
-    const questoes = mapearSalvarQuestoesUpload(mapearSomenteUpload);
+    const questoes = mapearSalvarQuestoesUpload();
 
     const itinerancia = {
       id: itineranciaId,
@@ -194,7 +193,7 @@ const RegistroItineranciaAEECadastro = ({ match }) => {
     if (itinerancia.alunos?.length) {
       itinerancia.alunos.forEach(aluno => {
         const questoesAlunoInvalidas = aluno.questoes.filter(
-          questao => questao.obrigatorio && !questao.resposta
+          questao => !questao.resposta
         );
         if (questoesAlunoInvalidas.length) {
           const camposInvalidos = questoesAlunoInvalidas.map(questao => {
@@ -233,7 +232,7 @@ const RegistroItineranciaAEECadastro = ({ match }) => {
             sucesso(
               `Registro ${itineranciaId ? 'alterado' : 'salvo'} com sucesso`
             );
-            history.push(RotasDto.RELATORIO_AEE_REGISTRO_ITINERANCIA);
+            navigate(RotasDto.RELATORIO_AEE_REGISTRO_ITINERANCIA);
           } else {
             setCarregandoGeral(false);
           }
@@ -252,29 +251,14 @@ const RegistroItineranciaAEECadastro = ({ match }) => {
         'Suas alterações não foram salvas, deseja salvar agora?'
       );
       if (confirmou) onClickSalvar();
-      else history.push(RotasDto.RELATORIO_AEE_REGISTRO_ITINERANCIA);
+      else navigate(RotasDto.RELATORIO_AEE_REGISTRO_ITINERANCIA);
     } else {
-      history.push(RotasDto.RELATORIO_AEE_REGISTRO_ITINERANCIA);
+      navigate(RotasDto.RELATORIO_AEE_REGISTRO_ITINERANCIA);
     }
   };
 
-  const selecionarAlunos = async alunos => {
-    const questoes = questoesItinerancia.filter(q => q.resposta);
-    if (!alunosSelecionados?.length && questoes?.length) {
-      const resposta = await confirmar(
-        'Atenção',
-        'Ao selecionar o estudante, o registro será específico por estudante. As informações preenchidas até o momento serão descartadas',
-        'Deseja continuar?'
-      );
-      if (resposta) {
-        setAlunosSelecionados(ordenarPor(alunos, 'alunoNome'));
-        questoesItinerancia.forEach(questao => {
-          questao.resposta = '';
-        });
-      }
-    } else {
-      setAlunosSelecionados(ordenarPor(alunos, 'alunoNome'));
-    }
+  const selecionarAlunos = alunos => {
+    setAlunosSelecionados(ordenarPor(alunos, 'alunoNome'));
   };
 
   const onChangeDataVisita = data => {
@@ -305,15 +289,15 @@ const RegistroItineranciaAEECadastro = ({ match }) => {
   };
 
   useEffect(() => {
-    if (match?.params?.id) {
+    if (paramsRoute?.id) {
       setBreadcrumbManual(
-        match?.url,
+        location.pathname,
         'Alterar',
         RotasDto.RELATORIO_AEE_REGISTRO_ITINERANCIA
       );
-      setItineranciaId(match.params.id);
+      setItineranciaId(paramsRoute?.id);
     }
-  }, [match]);
+  }, [location, paramsRoute]);
 
   const obterObjetivos = async () => {
     const retorno = await ServicoRegistroItineranciaAEE.obterObjetivos().catch(
@@ -564,7 +548,7 @@ const RegistroItineranciaAEECadastro = ({ match }) => {
 
   const desabilitarCamposPorPermissao = () => {
     return (
-      (match?.params?.id
+      (paramsRoute?.id
         ? !permissoesTela?.podeAlterar
         : !permissoesTela?.podeIncluir) ||
       somenteConsulta ||
@@ -580,7 +564,7 @@ const RegistroItineranciaAEECadastro = ({ match }) => {
   const gerarRelatorio = () => {
     setImprimindo(true);
 
-    ServicoRegistroItineranciaAEE.gerarRelatorio([match?.params?.id])
+    ServicoRegistroItineranciaAEE.gerarRelatorio([paramsRoute?.id])
       .then(() => {
         sucesso(
           'Solicitação de geração do relatório gerada com sucesso. Em breve você receberá uma notificação com o resultado.'
@@ -886,12 +870,12 @@ const RegistroItineranciaAEECadastro = ({ match }) => {
           <Col>
             <Button
               id={SGP_BUTTON_SALVAR}
-              label={match?.params?.id ? 'Alterar' : 'Salvar'}
+              label={paramsRoute?.id ? 'Alterar' : 'Salvar'}
               color={Colors.Roxo}
               border
               bold
               onClick={() => onClickSalvar()}
-              disabled={somenteConsulta || (match?.params?.id && !modoEdicao)}
+              disabled={somenteConsulta || (paramsRoute?.id && !modoEdicao)}
             />
           </Col>
         </Row>
@@ -1036,6 +1020,30 @@ const RegistroItineranciaAEECadastro = ({ match }) => {
               botaoAdicionar={() => setModalVisivelObjetivos(true)}
             />
           </div>
+
+          {carregandoQuestoes || carregandoGeral ? (
+            <Loader loading tip="Carregando questões" />
+          ) : (
+            questoesItinerancia?.map(questao => {
+              return questao?.tipoQuestao !== tipoQuestaoDto.Upload ? (
+                <div className="row mb-4" key={questao.questaoId}>
+                  <div className="col-12">
+                    <JoditEditor
+                      label={questao.descricao}
+                      value={questao.resposta}
+                      name={NOME_CAMPO_QUESTAO + questao.questaoId}
+                      id={questao?.nomeComponente}
+                      onChange={e => setQuestao(e, questao)}
+                      desabilitar={desabilitarCamposPorPermissao()}
+                    />
+                  </div>
+                </div>
+              ) : (
+                <></>
+              );
+            })
+          )}
+
           {ueId && (
             <div className="row mb-4">
               <div className="col-12 font-weight-bold mb-2">
@@ -1102,27 +1110,8 @@ const RegistroItineranciaAEECadastro = ({ match }) => {
                 </div>
               </div>
             </>
-          ) : carregandoQuestoes || carregandoGeral ? (
-            <Loader loading tip="Carregando questões" />
           ) : (
-            questoesItinerancia?.map(questao => {
-              return questao?.tipoQuestao !== tipoQuestaoDto.Upload ? (
-                <div className="row mb-4" key={questao.questaoId}>
-                  <div className="col-12">
-                    <JoditEditor
-                      label={questao.descricao}
-                      value={questao.respostaInicial ? questao.respostaInicial : questao.resposta}
-                      name={NOME_CAMPO_QUESTAO + questao.questaoId}
-                      id={`editor-questao-${questao.questaoId}`}
-                      onChange={e => setQuestao(e, questao)}
-                      desabilitar={desabilitarCamposPorPermissao()}
-                    />
-                  </div>
-                </div>
-              ) : (
-                <></>
-              );
-            })
+            <></>
           )}
           <div className="row mb-4">
             <div className="col-3">
@@ -1212,14 +1201,6 @@ const RegistroItineranciaAEECadastro = ({ match }) => {
       )}
     </Loader>
   );
-};
-
-RegistroItineranciaAEECadastro.propTypes = {
-  match: PropTypes.oneOfType([PropTypes.object]),
-};
-
-RegistroItineranciaAEECadastro.defaultProps = {
-  match: {},
 };
 
 export default RegistroItineranciaAEECadastro;

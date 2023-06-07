@@ -4,10 +4,9 @@ import { useSelector } from 'react-redux';
 import shortid from 'shortid';
 import { Base, Colors } from '~/componentes/colors';
 import api from '~/servicos/api';
-import history from '~/servicos/history';
 import Grid from '~/componentes/grid';
 import { Div, Evento, Botao, BotoesAuxiliaresEstilo } from './DiaCompleto.css';
-import { store } from '~/redux';
+import { store } from '@/core/redux';
 import {
   selecionaDia,
   salvarEventoAulaCalendarioEdicao,
@@ -18,6 +17,7 @@ import RotasDTO from '~/dtos/rotasDto';
 import Loader from '~/componentes/loader';
 import { SelectComponent } from '~/componentes';
 import Alert from '~/componentes/alert';
+import { useNavigate } from 'react-router-dom';
 
 const SemEvento = () => {
   return (
@@ -56,6 +56,7 @@ const DiaCompleto = props => {
     todasTurmas,
   } = filtros;
   const [eventosDia, setEventosDia] = useState([]);
+  const navigate = useNavigate();
 
   const permissaoTela = useSelector(
     state => state.usuario.permissoes[RotasDTO.CALENDARIO_PROFESSOR]
@@ -134,14 +135,12 @@ const DiaCompleto = props => {
 
   const aoClicarBotaoNovaAvaliacao = () => {
     salvarDadosEventoAula();
-    history.push(`${RotasDTO.CADASTRO_DE_AVALIACAO}/novo`);
+    navigate(`${RotasDTO.CADASTRO_DE_AVALIACAO}/novo`);
   };
 
   const aoClicarBotaoNovaAula = () => {
     salvarDadosEventoAula();
-    history.push(
-      `${RotasDTO.CADASTRO_DE_AULA}/novo/${tipoCalendarioSelecionado}`
-    );
+    navigate(`${RotasDTO.CADASTRO_DE_AULA}/novo/${tipoCalendarioSelecionado}`);
   };
 
   const BotoesAuxiliares = ({ temAula, podeCadastrarAvaliacao }) => {
@@ -191,9 +190,9 @@ const DiaCompleto = props => {
     if (permissaoTela && permissaoTela.podeConsultar) {
       salvarDadosEventoAula();
       if (tipo === TiposEventoAulaDTO.Aula || tipo === TiposEventoAulaDTO.CJ) {
-        history.push(`${RotasDTO.CADASTRO_DE_AULA}/editar/${id}`);
+        navigate(`${RotasDTO.CADASTRO_DE_AULA}/editar/${id}`);
       } else {
-        history.push(`${RotasDTO.EVENTOS}/editar/${id}`);
+        navigate(`${RotasDTO.EVENTOS}/editar/${id}`);
       }
     }
   };
@@ -201,18 +200,18 @@ const DiaCompleto = props => {
   const aoClicarEditarAvaliacao = id => {
     if (permissaoTela && permissaoTela.podeConsultar) {
       salvarDadosEventoAula();
-      history.push(`${RotasDTO.CADASTRO_DE_AVALIACAO}/editar/${id}`);
+      navigate(`${RotasDTO.CADASTRO_DE_AVALIACAO}/editar/${id}`);
     }
   };
 
   const irParaFrequencia = (disciplinaId, dia) => {
     store.dispatch(salvarDadosAulaFrequencia(disciplinaId, dia));
-    history.push(`${RotasDTO.FREQUENCIA_PLANO_AULA}`);
+    navigate(`${RotasDTO.FREQUENCIA_PLANO_AULA}`);
   };
 
   return (
     estaAberto && (
-      <Loader loading={carregandoDia} tip="">      
+      <Loader loading={carregandoDia} tip="">
         <Div className="border-bottom border-top-0 h-100 p-md-1 p-3">
           {eventosDia &&
           eventosDia.eventosAulas &&
@@ -275,10 +274,11 @@ const DiaCompleto = props => {
                         className="align-self-center font-weight-bold position-relative"
                       >
                         <Div
-                          className={`pl-2 stretched-link ${(evento.tipoEvento ===
-                            TiposEventoAulaDTO.Aula ||
-                            evento.tipoEvento === TiposEventoAulaDTO.CJ) &&
-                            'descricao'}`}
+                          className={`pl-2 stretched-link ${
+                            (evento.tipoEvento === TiposEventoAulaDTO.Aula ||
+                              evento.tipoEvento === TiposEventoAulaDTO.CJ) &&
+                            'descricao'
+                          }`}
                         >
                           {evento.tipoEvento !== TiposEventoAulaDTO.Aula &&
                             evento.tipoEvento !== TiposEventoAulaDTO.CJ &&

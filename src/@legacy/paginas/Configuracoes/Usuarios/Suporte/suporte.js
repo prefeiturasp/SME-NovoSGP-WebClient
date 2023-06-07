@@ -16,18 +16,20 @@ import { SGP_SELECT_DRE, SGP_SELECT_UE } from '~/constantes/ids/select';
 import { OPCAO_TODOS, URL_HOME } from '~/constantes';
 import RotasDto from '~/dtos/rotasDto';
 import LoginHelper from '~/paginas/Login/loginHelper';
-import { store } from '~/redux';
+import { store } from '@/core/redux';
 import {
   AbrangenciaServico,
   api,
   erro,
   erros,
-  history,
   verificaSomenteConsulta,
 } from '~/servicos';
+import { useNavigate, useParams } from 'react-router-dom';
 
-// eslint-disable-next-line react/prop-types
-const Suporte = ({ match }) => {
+const Suporte = () => {
+  const navigate = useNavigate();
+  const paramsRoute = useParams();
+
   const { usuario } = store.getState();
   const permissoesTela = usuario.permissoes[RotasDto.SUPORTE];
 
@@ -48,7 +50,7 @@ const Suporte = ({ match }) => {
 
   const dispatch = useDispatch();
 
-  const redirect = match?.params?.redirect || null;
+  const redirect = paramsRoute?.redirect || null;
 
   const helper = new LoginHelper(dispatch, redirect);
 
@@ -56,7 +58,7 @@ const Suporte = ({ match }) => {
     verificaSomenteConsulta(permissoesTela);
   }, [permissoesTela]);
 
-  const onClickVoltar = () => history.push(URL_HOME);
+  const onClickVoltar = () => navigate(URL_HOME);
 
   const onChangeDre = valor => {
     setUeId();
@@ -149,11 +151,13 @@ const Suporte = ({ match }) => {
 
       const resposta = await helper.acessar(
         { usuario: linha?.codigoRf || linha?.login },
-        true
+        true,
+        false,
+        navigate
       );
 
       if (resposta?.sucesso) {
-        history.push(URL_HOME);
+        navigate(URL_HOME);
       } else if (resposta.erro) {
         erros(resposta.erro);
       }

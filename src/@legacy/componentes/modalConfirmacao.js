@@ -61,7 +61,7 @@ const ModalConfirmacao = props => {
     <Container
       onCancel={onClose}
       title={titulo}
-      visible={visivel}
+      open={visivel}
       centered
       footer={[
         <Button

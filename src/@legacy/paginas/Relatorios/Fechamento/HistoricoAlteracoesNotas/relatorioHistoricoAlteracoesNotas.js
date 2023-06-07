@@ -10,13 +10,16 @@ import modalidade from '~/dtos/modalidade';
 import AbrangenciaServico from '~/servicos/Abrangencia';
 import { erros, sucesso } from '~/servicos/alertas';
 import api from '~/servicos/api';
-import history from '~/servicos/history';
+
 import ServicoComponentesCurriculares from '~/servicos/Paginas/ComponentesCurriculares/ServicoComponentesCurriculares';
 import ServicoFiltroRelatorio from '~/servicos/Paginas/FiltroRelatorio/ServicoFiltroRelatorio';
 import ServicoHistoricoAlteracoesNotas from '~/servicos/Paginas/Relatorios/Fechamento/HistoricoAlteracoesNotas/ServicoHistoricoAlteracoesNotas';
 import FiltroHelper from '~/componentes-sgp/filtro/helper';
+import { useNavigate } from 'react-router-dom';
 
 const RelatorioHistoricoAlteracoesNotas = () => {
+  const navigate = useNavigate();
+
   const [exibirLoader, setExibirLoader] = useState(false);
   const [listaAnosLetivo, setListaAnosLetivo] = useState([]);
   const [listaDres, setListaDres] = useState([]);
@@ -24,10 +27,8 @@ const RelatorioHistoricoAlteracoesNotas = () => {
   const [listaModalidades, setListaModalidades] = useState([]);
   const [listaSemestres, setListaSemestres] = useState([]);
   const [listaTurmas, setListaTurmas] = useState([]);
-  const [
-    listaComponentesCurriculares,
-    setListaComponentesCurriculares,
-  ] = useState([]);
+  const [listaComponentesCurriculares, setListaComponentesCurriculares] =
+    useState([]);
   const [listaBimestres, setListaBimestres] = useState([]);
 
   const listaTipoNota = [
@@ -42,9 +43,8 @@ const RelatorioHistoricoAlteracoesNotas = () => {
   const [modalidadeId, setModalidadeId] = useState(undefined);
   const [semestre, setSemestre] = useState(undefined);
   const [turmaId, setTurmaId] = useState(undefined);
-  const [componentesCurricularesId, setComponentesCurricularesId] = useState(
-    undefined
-  );
+  const [componentesCurricularesId, setComponentesCurricularesId] =
+    useState(undefined);
   const [bimestre, setBimestre] = useState(undefined);
   const [tipoDeNota, setTipoDeNota] = useState('1');
   const [consideraHistorico, setConsideraHistorico] = useState(false);
@@ -202,7 +202,7 @@ const RelatorioHistoricoAlteracoesNotas = () => {
     if (ue && ano) {
       setExibirLoader(true);
 
-      const {data,} = consideraHistorico 
+      const { data } = consideraHistorico
         ? await ServicoFiltroRelatorio.obterModalidadesPorAbrangenciaHistorica(ue, false, true, ano)
         : await ServicoFiltroRelatorio.obterModalidadesPorAbrangencia(ue);
 
@@ -340,11 +340,12 @@ const RelatorioHistoricoAlteracoesNotas = () => {
     }
 
     setExibirLoader(true);
-    const componentes = await ServicoComponentesCurriculares.obterComponentesPorListaDeTurmas(
-      turmas
-    )
-      .catch(e => erros(e))
-      .finally(() => setExibirLoader(false));
+    const componentes =
+      await ServicoComponentesCurriculares.obterComponentesPorListaDeTurmas(
+        turmas
+      )
+        .catch(e => erros(e))
+        .finally(() => setExibirLoader(false));
 
     if (componentes && componentes.data && componentes.data.length) {
       const lista = [];
@@ -527,7 +528,7 @@ const RelatorioHistoricoAlteracoesNotas = () => {
       <Cabecalho pagina="Relatório de alteração de notas">
         <BotoesAcaoRelatorio
           onClickVoltar={() => {
-            history.push(URL_HOME);
+            navigate(URL_HOME);
           }}
           onClickCancelar={cancelar}
           onClickGerar={gerar}

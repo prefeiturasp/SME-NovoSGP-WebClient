@@ -18,16 +18,12 @@ import {
   setLimparDadosComunicados,
   setModoEdicaoCadastroComunicados,
 } from '~/redux/modulos/comunicados/actions';
-import {
-  confirmar,
-  erros,
-  history,
-  ServicoComunicados,
-  sucesso,
-} from '~/servicos';
+import { confirmar, erros, ServicoComunicados, sucesso } from '~/servicos';
+import { useNavigate } from 'react-router-dom';
 
 const BotoesAcoesCadastroComunicados = props => {
   const { comunicadoId, somenteConsulta } = props;
+  const navigate = useNavigate();
 
   const usuario = useSelector(store => store.usuario);
   const permissoesTela =
@@ -62,7 +58,7 @@ const BotoesAcoesCadastroComunicados = props => {
 
         if (resposta?.status === 200) {
           sucesso('Registro excluído com sucesso');
-          history.push(RotasDto.ACOMPANHAMENTO_COMUNICADOS);
+          navigate(RotasDto.ACOMPANHAMENTO_COMUNICADOS);
         }
       }
     }
@@ -120,7 +116,7 @@ const BotoesAcoesCadastroComunicados = props => {
         .finally(() => dispatch(setExibirLoaderGeralComunicados(false)));
 
       if (resposta?.status === 200) {
-        history.push(RotasDto.ACOMPANHAMENTO_COMUNICADOS);
+        navigate(RotasDto.ACOMPANHAMENTO_COMUNICADOS);
         sucesso(
           `Comunicado ${comunicadoId ? 'alterado' : 'cadastrado'} com sucesso`
         );
@@ -174,10 +170,10 @@ const BotoesAcoesCadastroComunicados = props => {
       if (confirmou) {
         validaAntesDoSubmit();
       } else {
-        history.push(RotasDto.ACOMPANHAMENTO_COMUNICADOS);
+        navigate(RotasDto.ACOMPANHAMENTO_COMUNICADOS);
       }
     } else {
-      history.push(RotasDto.ACOMPANHAMENTO_COMUNICADOS);
+      navigate(RotasDto.ACOMPANHAMENTO_COMUNICADOS);
     }
   };
 

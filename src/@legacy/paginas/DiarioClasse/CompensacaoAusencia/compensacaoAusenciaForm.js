@@ -1,6 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { Form, Formik } from 'formik';
-import PropTypes from 'prop-types';
 import { useSelector } from 'react-redux';
 import shortid from 'shortid';
 import * as Yup from 'yup';
@@ -14,10 +13,9 @@ import Card from '~/componentes/card';
 import JoditEditor from '~/componentes/jodit-editor/joditEditor';
 import SelectComponent from '~/componentes/select';
 import modalidade from '~/dtos/modalidade';
-import RotasDto from '~/dtos/rotasDto';
+import { ROUTES } from '@/core/enum/routes';
 import { confirmar, erro, erros, sucesso } from '~/servicos/alertas';
 import { setBreadcrumbManual } from '~/servicos/breadcrumb-services';
-import history from '~/servicos/history';
 import ServicoCompensacaoAusencia from '~/servicos/Paginas/DiarioClasse/ServicoCompensacaoAusencia';
 import ServicoDisciplina from '~/servicos/Paginas/ServicoDisciplina';
 import { verificaSomenteConsulta } from '~/servicos/servico-navegacao';
@@ -50,12 +48,19 @@ import {
   SGP_INPUT_NOME_ATIVIDADE,
   SGP_INPUT_NOME_ESTUDANTE,
 } from '~/constantes/ids/input';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import _ from 'lodash';
 
-const CompensacaoAusenciaForm = ({ match }) => {
+const CompensacaoAusenciaForm = () => {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const paramsRoute = useParams();
+
+  const idCompensacaoAusencia = paramsRoute?.id || 0;
+
   const usuario = useSelector(store => store.usuario);
 
-  const permissoesTela = usuario.permissoes[RotasDto.COMPENSACAO_AUSENCIA];
+  const permissoesTela = usuario.permissoes[ROUTES.COMPENSACAO_AUSENCIA];
   const [somenteConsulta, setSomenteConsulta] = useState(false);
   const [desabilitarCampos, setDesabilitarCampos] = useState(false);
 
@@ -77,7 +82,6 @@ const CompensacaoAusenciaForm = ({ match }) => {
   const [carregandoGeral, setCarregandoGeral] = useState(false);
   const [alunosAusenciaTurma, setAlunosAusenciaTurma] = useState([]);
   const [carregouInformacoes, setCarregouInformacoes] = useState(false);
-  const [idCompensacaoAusencia, setIdCompensacaoAusencia] = useState(0);
   const [carregandoDisciplinas, setCarregandoDisciplinas] = useState(false);
   const [desabilitarDisciplina, setDesabilitarDisciplina] = useState(false);
   const [bimestreSugeridoCopia, setBimestreSugeridoCopia] = useState(null);
@@ -181,12 +185,12 @@ const CompensacaoAusenciaForm = ({ match }) => {
   useEffect(() => {
     if (!novoRegistro) {
       setBreadcrumbManual(
-        match.url,
+        location.pathname,
         'Alterar Compensação de Ausência',
-        '/diario-classe/compensacao-ausencia'
+        ROUTES.COMPENSACAO_AUSENCIA
       );
     }
-  }, [match.url, novoRegistro]);
+  }, [location, novoRegistro]);
 
   useEffect(() => {
     const naoSetarSomenteConsultaNoStore = ehTurmaInfantil(
@@ -386,14 +390,6 @@ const CompensacaoAusenciaForm = ({ match }) => {
   );
 
   useEffect(() => {
-    const temId = match && match.params && match.params.id;
-
-    if (turmaSelecionada.turma && temId) {
-      setIdCompensacaoAusencia(match.params.id);
-    }
-  }, [match, turmaSelecionada.turma]);
-
-  useEffect(() => {
     if (disciplinaSelecionada && listaDisciplinas && listaDisciplinas.length) {
       obterDisciplinasRegencia(String(disciplinaSelecionada), listaDisciplinas);
     }
@@ -531,7 +527,7 @@ const CompensacaoAusenciaForm = ({ match }) => {
       descricao: '',
     };
 
-    const registroNovo = !(match && match.params && match.params.id);
+    const registroNovo = !idCompensacaoAusencia;
 
     if (disciplinas.data && disciplinas.data.length === 1) {
       setDesabilitarDisciplina(true);
@@ -563,11 +559,11 @@ const CompensacaoAusenciaForm = ({ match }) => {
       );
     }
     setCarregandoDisciplinas(false);
-  }, [match, turmaSelecionada.turma, consultaPorId]);
+  }, [idCompensacaoAusencia, turmaSelecionada.turma, consultaPorId]);
 
   useEffect(() => {
     if (!turmaSelecionada.turma) {
-      history.push('/diario-classe/compensacao-ausencia');
+      navigate(ROUTES.COMPENSACAO_AUSENCIA);
     }
 
     if (
@@ -627,7 +623,7 @@ const CompensacaoAusenciaForm = ({ match }) => {
 
         if (excluir && excluir.status === 200) {
           sucesso('Compensação excluída com sucesso.');
-          history.push('/diario-classe/compensacao-ausencia');
+          navigate(ROUTES.COMPENSACAO_AUSENCIA);
         }
       }
     }
@@ -638,7 +634,7 @@ const CompensacaoAusenciaForm = ({ match }) => {
     setCarregandoDados(true);
     setAlunosAusenciaCompensada([]);
     const dadosEdicao = await ServicoCompensacaoAusencia.obterPorId(
-      match.params.id
+      idCompensacaoAusencia
     )
       .catch(e => {
         erros(e);
@@ -685,7 +681,7 @@ const CompensacaoAusenciaForm = ({ match }) => {
         'Deseja realmente cancelar as alterações?'
       );
       if (confirmou) {
-        if (match && match.params && match.params.id) {
+        if (idCompensacaoAusencia) {
           resetarTelaEdicaoComId(form);
         } else {
           setValoresIniciais({ ...formInicial, descricao: null });
@@ -725,10 +721,10 @@ const CompensacaoAusenciaForm = ({ match }) => {
       if (confirmado) {
         validaAntesDoSubmit(form);
       } else {
-        history.push('/diario-classe/compensacao-ausencia');
+        navigate(ROUTES.COMPENSACAO_AUSENCIA);
       }
     } else {
-      history.push('/diario-classe/compensacao-ausencia');
+      navigate(ROUTES.COMPENSACAO_AUSENCIA);
     }
   };
 
@@ -789,7 +785,7 @@ const CompensacaoAusenciaForm = ({ match }) => {
       } else {
         sucesso('Compensação criada com sucesso.');
       }
-      history.push('/diario-classe/compensacao-ausencia');
+      navigate(ROUTES.COMPENSACAO_AUSENCIA);
     }
   };
 
@@ -1046,7 +1042,7 @@ const CompensacaoAusenciaForm = ({ match }) => {
                           turmaSelecionada
                         ) ||
                         desabilitarCampos ||
-                        (match.params.id && !modoEdicao)
+                        (idCompensacaoAusencia && !modoEdicao)
                       }
                     />
                   </Col>
@@ -1263,14 +1259,6 @@ const CompensacaoAusenciaForm = ({ match }) => {
       </Loader>
     </Loader>
   );
-};
-
-CompensacaoAusenciaForm.propTypes = {
-  match: PropTypes.oneOfType([PropTypes.any]),
-};
-
-CompensacaoAusenciaForm.defaultProps = {
-  match: {},
 };
 
 export default CompensacaoAusenciaForm;

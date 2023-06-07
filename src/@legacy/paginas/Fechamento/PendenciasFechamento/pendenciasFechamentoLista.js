@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { Loader } from '~/componentes';
 import Cabecalho from '~/componentes-sgp/cabecalho';
 import Alert from '~/componentes/alert';
@@ -12,7 +12,6 @@ import SelectComponent from '~/componentes/select';
 import { URL_HOME } from '~/constantes/url';
 import modalidade from '~/dtos/modalidade';
 import { erro, erros, sucesso } from '~/servicos/alertas';
-import history from '~/servicos/history';
 import ServicoPendenciasFechamento from '~/servicos/Paginas/Fechamento/ServicoPendenciasFechamento';
 import ServicoDisciplina from '~/servicos/Paginas/ServicoDisciplina';
 import situacaoPendenciaDto from '~/dtos/situacaoPendenciaDto';
@@ -35,10 +34,12 @@ import {
 } from '~/constantes/ids/button';
 import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
 
-// eslint-disable-next-line react/prop-types
-const PendenciasFechamentoLista = ({ match }) => {
+const PendenciasFechamentoLista = () => {
   const usuario = useSelector(store => store.usuario);
   const { turmaSelecionada } = usuario;
+
+  const navigate = useNavigate();
+  const paramsRoute = useParams();
 
   const modalidadesFiltroPrincipal = useSelector(
     store => store.filtro.modalidades
@@ -54,9 +55,8 @@ const PendenciasFechamentoLista = ({ match }) => {
   const [bimestreSelecionado, setBimestreSelecionado] = useState('');
   const [filtro, setFiltro] = useState({});
   const [listaBimestres, setListaBimestres] = useState([]);
-  const [disciplinaIdSelecionada, setDisciplinaIdSelecionada] = useState(
-    undefined
-  );
+  const [disciplinaIdSelecionada, setDisciplinaIdSelecionada] =
+    useState(undefined);
   const [filtrouValoresRota, setFiltrouValoresRota] = useState(false);
   const [imprimindo, setImprimido] = useState(false);
   const [bimestresAbertoFechado, setBimestresAbertoFechado] = useState([]);
@@ -154,8 +154,8 @@ const PendenciasFechamentoLista = ({ match }) => {
       }
       setListaBimestres(listaBi);
 
-      if (!filtrouValoresRota && match?.params?.bimestre) {
-        const { bimestre } = match?.params;
+      if (!filtrouValoresRota && paramsRoute?.bimestre) {
+        const bimestre = paramsRoute?.bimestre;
         const temBimestreNaLista = listaBi.find(
           item => Number(item.valor) === Number(bimestre)
         );
@@ -163,9 +163,9 @@ const PendenciasFechamentoLista = ({ match }) => {
           setBimestreSelecionado(String(bimestre));
         }
         setBreadcrumbManual(
-          `${match?.url}`,
+          location.pathname,
           '',
-          `${RotasDto.PENDENCIAS_FECHAMENTO}`
+          RotasDto.PENDENCIAS_FECHAMENTO
         );
         return true;
       }
@@ -207,8 +207,8 @@ const PendenciasFechamentoLista = ({ match }) => {
         );
       }
 
-      if (!filtrouValoresRota && match?.params?.codigoComponenteCurricular) {
-        const { codigoComponenteCurricular } = match?.params;
+      if (!filtrouValoresRota && paramsRoute?.codigoComponenteCurricular) {
+        const { codigoComponenteCurricular } = paramsRoute;
         const temNaLista = disciplinas.data.find(
           item =>
             String(item.codigoComponenteCurricular) ===
@@ -235,7 +235,6 @@ const PendenciasFechamentoLista = ({ match }) => {
     } else {
       resetarFiltro();
     }
-
   }, [turmaSelecionada, modalidadesFiltroPrincipal]);
 
   useEffect(() => {
@@ -260,17 +259,15 @@ const PendenciasFechamentoLista = ({ match }) => {
 
   const onClickEditar = pendencia => {
     if (permissoesTela.podeConsultar) {
-      history.push(
-        `${RotasDto.PENDENCIAS_FECHAMENTO}/${pendencia.pendenciaId}`
-      );
+      navigate(`${RotasDto.PENDENCIAS_FECHAMENTO}/${pendencia.pendenciaId}`);
     }
   };
 
   const onClickVoltar = () => {
     if (location?.state?.rotaOrigem) {
-      history.push(location.state.rotaOrigem);
+      navigate(location.state.rotaOrigem);
     } else {
-      history.push(URL_HOME);
+      navigate(URL_HOME);
     }
   };
 
@@ -332,7 +329,7 @@ const PendenciasFechamentoLista = ({ match }) => {
       b => String(b?.bimestre) === bimestreSelecionado
     )?.aberto;
 
-  const exibirTabela = match?.params?.codigoComponenteCurricular
+  const exibirTabela = paramsRoute?.codigoComponenteCurricular
     ? !!filtro?.componenteCurricularId
     : !!filtro?.bimestre;
   return (

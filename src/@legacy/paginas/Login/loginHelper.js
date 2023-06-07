@@ -4,7 +4,6 @@ import {
   setLoginAcessoAdmin,
 } from '~/redux/modulos/usuario/actions';
 import { erros } from '~/servicos';
-import history from '~/servicos/history';
 import ServicoDashboard from '~/servicos/Paginas/Dashboard/ServicoDashboard';
 import LoginService from '~/servicos/Paginas/LoginServices';
 import ServicoNotificacao from '~/servicos/Paginas/ServicoNotificacao';
@@ -17,7 +16,7 @@ class LoginHelper {
     this.redirect = redirect;
   }
 
-  acessar = async (login, acessoAdmin, deslogar) => {
+  acessar = async (login, acessoAdmin, deslogar, navigate) => {
     const autenticacao = await LoginService.autenticar(
       login,
       acessoAdmin,
@@ -60,12 +59,7 @@ class LoginHelper {
     ServicoDashboard.obterDadosDashboard();
 
     if (autenticacao.dados.modificarSenha) {
-      history.push({
-        pathname: URL_REDEFINIRSENHA,
-        state: {
-          rf,
-        },
-      });
+      navigate(URL_REDEFINIRSENHA, { state: rf });
       return { sucesso: false, erroGeral: '' };
     }
     obterMeusDados();
@@ -80,8 +74,8 @@ class LoginHelper {
       );
     }
 
-    if (this.redirect) history.push(atob(this.redirect));
-    else history.push(URL_HOME);
+    if (this.redirect) navigate(atob(this.redirect));
+    else navigate(URL_HOME);
     return autenticacao;
   };
 }

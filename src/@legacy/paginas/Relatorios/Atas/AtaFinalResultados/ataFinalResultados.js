@@ -10,7 +10,6 @@ import RotasDto from '~/dtos/rotasDto';
 import AbrangenciaServico from '~/servicos/Abrangencia';
 import { erros, sucesso } from '~/servicos/alertas';
 import api from '~/servicos/api';
-import history from '~/servicos/history';
 import ServicoConselhoAtaFinal from '~/servicos/Paginas/ConselhoAtaFinal/ServicoConselhoAtaFinal';
 import FiltroHelper from '~/componentes-sgp/filtro/helper';
 import AlertaModalidadeInfantil from '~/componentes-sgp/AlertaModalidadeInfantil/alertaModalidadeInfantil';
@@ -28,8 +27,11 @@ import {
   SGP_SELECT_VISUALIZACAO,
 } from '~/constantes/ids/select';
 import { ModalidadeDTO } from '~/dtos';
+import { useNavigate } from 'react-router-dom';
 
 const AtaFinalResultados = () => {
+  const navigate = useNavigate();
+
   const usuarioStore = useSelector(store => store.usuario);
   const permissoesTela = usuarioStore.permissoes[RotasDto.ATA_FINAL_RESULTADOS];
 
@@ -192,7 +194,6 @@ const AtaFinalResultados = () => {
       }
       setCarregandoDres(false);
     }
-
   }, [anoLetivo]);
 
   const obterTurmas = useCallback(
@@ -238,8 +239,9 @@ const AtaFinalResultados = () => {
     anoLetivoSelecionado
   ) => {
     const retorno = await api.get(
-      `v1/abrangencias/${consideraHistorico}/semestres?anoLetivo=${anoLetivoSelecionado}&modalidade=${modalidadeSelecionada ||
-        0}`
+      `v1/abrangencias/${consideraHistorico}/semestres?anoLetivo=${anoLetivoSelecionado}&modalidade=${
+        modalidadeSelecionada || 0
+      }`
     );
     if (retorno && retorno.data) {
       const lista = retorno.data.map(periodo => {
@@ -260,7 +262,6 @@ const AtaFinalResultados = () => {
       setModalidadeId(undefined);
       setListaModalidades([]);
     }
-
   }, [ueId]);
 
   useEffect(() => {
@@ -293,7 +294,6 @@ const AtaFinalResultados = () => {
       setSemestre(undefined);
       setListaSemestre([]);
     }
-
   }, [modalidadeId, anoLetivo]);
 
   useEffect(() => {
@@ -378,11 +378,10 @@ const AtaFinalResultados = () => {
       !turmaId.length ||
       turmaExcecao;
     setDesabilitaVisualizacao(desabilita);
-
   }, [turmaId, modalidadeId, listaTurmasCompletas]);
 
   const onClickVoltar = () => {
-    history.push(URL_HOME);
+    navigate(URL_HOME);
   };
 
   const onClickCancelar = () => {

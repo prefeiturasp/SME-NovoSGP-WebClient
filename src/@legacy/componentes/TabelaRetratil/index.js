@@ -9,6 +9,7 @@ import {
 } from '~/constantes/ids/table';
 import Cabecalho from './componentes/Cabecalho';
 import { DetalhesAluno, LinhaTabela, Tabela, TabelaEstilo } from './style';
+import InconsistenciasEstudante from './componentes/Inconsistencias';
 
 function TabelaRetratil({
   alunos,
@@ -170,8 +171,9 @@ function TabelaRetratil({
                       <span className="iconeSituacao" />
                     </Tooltip>
                   ) : (
-                    ''
+                    <></>
                   )}
+                  <InconsistenciasEstudante codigoAluno={item?.codigoEOL} />
                 </td>
                 <td>
                   <div

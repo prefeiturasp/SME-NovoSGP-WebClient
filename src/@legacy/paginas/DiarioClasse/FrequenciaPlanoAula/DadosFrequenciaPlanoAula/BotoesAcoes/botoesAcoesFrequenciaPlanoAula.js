@@ -1,7 +1,7 @@
 import { Col, Row } from 'antd';
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
 import {
   SGP_BUTTON_ALTERAR_CADASTRAR,
@@ -16,13 +16,14 @@ import {
   setModoEdicaoFrequencia,
   setModoEdicaoPlanoAula,
 } from '~/redux/modulos/frequenciaPlanoAula/actions';
-import { confirmar, history } from '~/servicos';
+import { confirmar } from '~/servicos';
 import ServicoFrequencia from '~/servicos/Paginas/DiarioClasse/ServicoFrequencia';
 import servicoSalvarFrequenciaPlanoAula from '../../servicoSalvarFrequenciaPlanoAula';
 
 const BotoesAcoesFrequenciaPlanoAula = () => {
   const dispatch = useDispatch();
   const location = useLocation();
+  const navigate = useNavigate();
 
   const modoEdicaoFrequencia = useSelector(
     state => state.frequenciaPlanoAula.modoEdicaoFrequencia
@@ -58,9 +59,9 @@ const BotoesAcoesFrequenciaPlanoAula = () => {
 
   const irParaHome = () => {
     if (location?.state?.rotaOrigem) {
-      history.push(location.state.rotaOrigem);
+      navigate(location.state.rotaOrigem);
     } else {
-      history.push(URL_HOME);
+      navigate(URL_HOME);
     }
   };
 
@@ -68,7 +69,8 @@ const BotoesAcoesFrequenciaPlanoAula = () => {
     if ((modoEdicaoFrequencia || modoEdicaoPlanoAula) && aulaIdPodeEditar) {
       const confirmado = await pergutarParaSalvar();
       if (confirmado) {
-        const salvou = await servicoSalvarFrequenciaPlanoAula.validarSalvarFrequenciPlanoAula();
+        const salvou =
+          await servicoSalvarFrequenciaPlanoAula.validarSalvarFrequenciPlanoAula();
         if (salvou) {
           irParaHome();
         }

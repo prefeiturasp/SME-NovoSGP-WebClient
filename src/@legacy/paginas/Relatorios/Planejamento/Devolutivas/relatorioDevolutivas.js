@@ -18,7 +18,6 @@ import { ModalidadeDTO } from '~/dtos';
 import {
   AbrangenciaServico,
   erros,
-  history,
   ServicoComponentesCurriculares,
   ServicoFiltroRelatorio,
   ServicoRelatorioDevolutivas,
@@ -26,6 +25,8 @@ import {
 } from '~/servicos';
 
 const RelatorioDevolutivas = () => {
+  const navigate = useNavigate();
+
   const [anoAtual] = useState(window.moment().format('YYYY'));
   const [anoLetivo, setAnoLetivo] = useState();
   const [bimestres, setBimestres] = useState(undefined);
@@ -85,7 +86,7 @@ const RelatorioDevolutivas = () => {
   };
 
   const onClickVoltar = () => {
-    history.push('/');
+    navigate('/');
   };
 
   const onClickCancelar = () => {

@@ -1,6 +1,6 @@
-import PropTypes from 'prop-types';
 import React, { useCallback, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { useParams } from 'react-router-dom';
 import { setDadosCollapseLocalizarEstudante } from '~/redux/modulos/collapseLocalizarEstudante/actions';
 import { setDadosObjectCardEstudante } from '~/redux/modulos/objectCardEstudante/actions';
 import {
@@ -13,10 +13,11 @@ import { erros, ServicoCalendarios } from '~/servicos';
 import ServicoPlanoAEE from '~/servicos/Paginas/Relatorios/AEE/ServicoPlanoAEE';
 import MontarDadosTabs from './montarDadosTabs';
 
-const TabCadastroPlano = props => {
-  const { match } = props;
-
+const TabCadastroPlano = () => {
   const dispatch = useDispatch();
+  const paramsRoute = useParams();
+
+  const planoId = paramsRoute?.id || 0;
 
   const atualizarDados = useSelector(store => store.planoAEE.atualizarDados);
 
@@ -25,8 +26,6 @@ const TabCadastroPlano = props => {
   );
 
   const obterPlanoPorId = useCallback(async () => {
-    const planoId = match?.params?.id ? match?.params?.id : 0;
-
     let turmaCodigo = 0;
     let codigoAluno = 0;
 
@@ -92,7 +91,7 @@ const TabCadastroPlano = props => {
       dispatch(setPlanoAEELimparDados());
     }
     dispatch(setExibirLoaderPlanoAEE(false));
-  }, [match, dispatch, dadosCollapseLocalizarEstudante]);
+  }, [planoId, dispatch, dadosCollapseLocalizarEstudante]);
 
   useEffect(() => {
     if (atualizarDados) {
@@ -102,23 +101,14 @@ const TabCadastroPlano = props => {
   }, [atualizarDados, dispatch, obterPlanoPorId]);
 
   useEffect(() => {
-    const planoId = match?.params?.id ? match?.params?.id : 0;
     if (planoId && !dadosCollapseLocalizarEstudante?.codigoAluno) {
       obterPlanoPorId();
     } else if (!planoId && dadosCollapseLocalizarEstudante?.codigoAluno) {
       obterPlanoPorId();
     }
-  }, [obterPlanoPorId, match, dadosCollapseLocalizarEstudante]);
+  }, [obterPlanoPorId, planoId, dadosCollapseLocalizarEstudante]);
 
-  return <MontarDadosTabs match={match} />;
-};
-
-TabCadastroPlano.propTypes = {
-  match: PropTypes.oneOfType([PropTypes.object]),
-};
-
-TabCadastroPlano.defaultProps = {
-  match: {},
+  return <MontarDadosTabs />;
 };
 
 export default TabCadastroPlano;

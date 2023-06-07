@@ -25,7 +25,6 @@ import {
   formatarFrequencia,
   tratarStringComponenteCurricularNome,
 } from '~/utils';
-import FiltroComponentesRegencia from '../componentes/filtroComponentesRegencia';
 import MarcadorAguardandoAprovacao from '../componentes/marcadorAguardandoAprovacao';
 import {
   LinhaTabela,
@@ -37,6 +36,7 @@ import ColunaNotaConceitoPorBimestre from './componentes/colunaNotaConceitoPorBi
 import DadosCabecalhoTabFechamentoListao from './componentes/dadosCabecalhoTabFechamentoListao';
 import ModalJustificativaFechamento from './componentes/modalJustificativaFechamento';
 import TabelaAvaliacoesFechamento from './componentes/tabelaAvaliacoesFechamento';
+import FiltroComponentesRegenciaListao from '../componentes/filtroComponentesRegenciaListao';
 
 export const ContainerTableFechamento = styled.div`
   tr {
@@ -267,7 +267,7 @@ const ListaoListaFechamento = props => {
   ) => {
     const indexLinhaDestino = incrementoIndexLinha + indexLinhaOrigem;
     const aluno = dadosFechamento?.alunos[indexLinhaDestino];
-    if (aluno?.codigoAluno) {
+    if (aluno?.codigoAluno) { 
       onClickExpandirNotaConceitoRegencia(false, aluno?.codigoAluno);
     }
   };
@@ -327,7 +327,7 @@ const ListaoListaFechamento = props => {
               />
             )}
             <Nota
-              styleContainer={{ padding: '3px 20px 11px' }}
+              styleContainer={{ padding: '3px 20px 11px', width: '109px' }}
               ehFechamento
               onKeyDown={e =>
                 onKeyDown(
@@ -358,7 +358,7 @@ const ListaoListaFechamento = props => {
         );
       case notasConceitos.Conceitos:
         return (
-          <>
+          <div style={{ width: ehRegencia ? '140px' : '' }}>
             {ehRegencia && (
               <Label
                 text={notaFechamento?.disciplina}
@@ -367,7 +367,13 @@ const ListaoListaFechamento = props => {
               />
             )}
             <ListaoCampoConceito
-              styleContainer={{ padding: '3px 20px 11px' }}
+              styleContainer={
+                ehRegencia
+                  ? {
+                      padding: '2px 20px 11px',
+                    }
+                  : {}
+              }
               dadosConceito={notaFechamento}
               idCampo={shortid.generate()}
               desabilitar={desabilitar}
@@ -384,7 +390,7 @@ const ListaoListaFechamento = props => {
               }
             />
             {notaFechamento?.emAprovacao && <MarcadorAguardandoAprovacao />}
-          </>
+          </div>
         );
       default:
         return '';
@@ -617,6 +623,7 @@ const ListaoListaFechamento = props => {
     const colunasRegencia = [
       {
         align: 'left',
+        width: '100%',
         render: () => 'Componentes regência de classe',
       },
     ];
@@ -628,9 +635,8 @@ const ListaoListaFechamento = props => {
         colunasRegencia.push({
           title: item?.disciplina,
           align: 'center',
-          dataIndex: `${nomeRef}[${index}]`,
+          dataIndex: [`${nomeRef}`, `${index}`],
           key: `${nomeRef}[${index}]`,
-          width: '115px',
           className: 'position-relative',
           render: dados =>
             montarCampoNotaConceito(
@@ -645,14 +651,6 @@ const ListaoListaFechamento = props => {
     }
 
     return colunasRegencia;
-  };
-
-  const getExpandIconColumnIndex = () => {
-    let expandIconColumnIndex = 2;
-    if (ehFinal) {
-      expandIconColumnIndex = ehEJA ? 4 : 6;
-    }
-    return expandIconColumnIndex;
   };
 
   const getAuditoria = () => (
@@ -686,14 +684,14 @@ const ListaoListaFechamento = props => {
         />
       )}
       <LinhaTabela className="col-md-12 p-0">
-        {ehFinal && (
-          <FiltroComponentesRegencia
-            ehRegencia={ehRegencia}
+        {ehFinal || dadosFechamento?.possuiAvaliacao ? (
+          <FiltroComponentesRegenciaListao
             ehSintese={!!dadosFechamento?.ehSintese}
           />
+        ) : (
+          <></>
         )}
         <DataTable
-          fixExpandedRowResetColSpan
           scroll={{ x: '100%', y: 500 }}
           columns={colunasEstudantes}
           dataSource={dadosFechamento?.alunos}
@@ -701,7 +699,7 @@ const ListaoListaFechamento = props => {
           semHover
           tableResponsive={false}
           idLinha="codigoAluno"
-          expandIconColumnIndex={getExpandIconColumnIndex()}
+          showExpandColumn={false}
           expandedRowKeys={getExpandedRowKeys()}
           expandedRowRender={(record, indexAluno) => {
             const colunasDetalhe = montarColunasNotasConceitosRegencia(
@@ -739,7 +737,6 @@ const ListaoListaFechamento = props => {
                       Number(dadosFechamento?.notaTipo) === notasConceitos.Notas
                     }
                     listaTiposConceitos={dadosFechamento?.listaTiposConceitos}
-                    componenteCurricular={componenteCurricular}
                   />
                 )}
               </>
@@ -762,13 +759,12 @@ const ListaoListaFechamento = props => {
       <LinhaTabela className="col-md-12 p-0">
         <DataTable
           scroll={{ x: '100%', y: 500 }}
-          fixExpandedRowResetColSpan
           columns={colunasEstudantes}
           dataSource={dadosFechamento?.alunos}
           pagination={false}
           semHover
           idLinha="codigoAluno"
-          expandIconColumnIndex={getExpandIconColumnIndex()}
+          showExpandColumn={false}
           expandedRowKeys={getExpandedRowKeys()}
           expandedRowRender={record => {
             return (
@@ -779,7 +775,6 @@ const ListaoListaFechamento = props => {
                   Number(dadosFechamento?.notaTipo) === notasConceitos.Notas
                 }
                 listaTiposConceitos={dadosFechamento?.listaTiposConceitos}
-                componenteCurricular={componenteCurricular}
               />
             );
           }}

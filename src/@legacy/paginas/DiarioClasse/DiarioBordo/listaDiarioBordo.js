@@ -24,7 +24,6 @@ import {
   confirmar,
   ehTurmaInfantil,
   erros,
-  history,
   ServicoDisciplina,
   sucesso,
   verificaSomenteConsulta,
@@ -34,8 +33,11 @@ import { Mensagens } from './componentes';
 import { erro } from '~/servicos/alertas';
 import { SGP_BUTTON_NOVO } from '~/constantes/ids/button';
 import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
+import { useNavigate } from 'react-router-dom';
 
 const ListaDiarioBordo = () => {
+  const navigate = useNavigate();
+
   const [carregandoGeral, setCarregandoGeral] = useState(false);
   const [turmaInfantil, setTurmaInfantil] = useState(false);
   const [listaComponenteCurriculares, setListaComponenteCurriculares] =
@@ -128,7 +130,7 @@ const ListaDiarioBordo = () => {
 
   const onClickConsultarDiario = () => {
     dispatch(limparDadosObservacoesUsuario());
-    history.push(
+    navigate(
       `${RotasDto.DIARIO_BORDO}/detalhes/${diarioBordoAtual?.aulaId}/${diarioBordoAtual?.id}/${componenteCurricularSelecionado}`
     );
   };
@@ -155,21 +157,41 @@ const ListaDiarioBordo = () => {
     [componenteCurricularSelecionado, turmaId, numeroPagina]
   );
 
+  const consultarDados = useCallback(
+    resetarPaginacao => {
+      if (
+        ((dataInicial && dataFinal && dataFinal >= dataInicial) ||
+          (!dataInicial && !dataFinal) ||
+          (dataInicial && !dataFinal) ||
+          (!dataInicial && dataFinal)) &&
+        componenteCurricularSelecionado &&
+        numeroPagina
+      ) {
+        const dataIncialFormatada =
+          dataInicial && dataInicial.format('MM-DD-YYYY');
+        const dataFinalFormatada = dataFinal && dataFinal.format('MM-DD-YYYY');
+        if (resetarPaginacao) {
+          setResetInitialState(true);
+          if (numeroPagina !== 1) {
+            setNumeroPagina(1);
+          } else {
+            obterTitulos(dataIncialFormatada, dataFinalFormatada);
+          }
+        } else {
+          obterTitulos(dataIncialFormatada, dataFinalFormatada);
+        }
+      }
+    },
+    [dataInicial, dataFinal, componenteCurricularSelecionado, numeroPagina]
+  );
+
   useEffect(() => {
-    if (
-      ((dataInicial && dataFinal && dataFinal >= dataInicial) ||
-        (!dataInicial && !dataFinal) ||
-        (dataInicial && !dataFinal) ||
-        (!dataInicial && dataFinal)) &&
-      componenteCurricularSelecionado &&
-      numeroPagina
-    ) {
-      const dataIncialFormatada =
-        dataInicial && dataInicial.format('MM-DD-YYYY');
-      const dataFinalFormatada = dataFinal && dataFinal.format('MM-DD-YYYY');
-      obterTitulos(dataIncialFormatada, dataFinalFormatada);
-    }
-  }, [dataInicial, dataFinal, componenteCurricularSelecionado, numeroPagina]);
+    consultarDados(true);
+  }, [dataInicial, dataFinal, componenteCurricularSelecionado]);
+
+  useEffect(() => {
+    consultarDados();
+  }, [numeroPagina]);
 
   const onChangePaginacao = pagina => {
     setNumeroPagina(pagina);
@@ -186,7 +208,15 @@ const ListaDiarioBordo = () => {
   const onColapse = async aulaId => {
     dispatch(limparDadosObservacoesUsuario());
 
-    const aulaIdFormatado = Number(aulaId?.split('-').pop());
+    let aulaIdFormatado = '';
+
+    if (Array.isArray(aulaId) && aulaId?.length) {
+      aulaIdFormatado = Number(aulaId?.[0]?.split('-').pop());
+    }
+
+    if (aulaId && typeof aulaId === 'string') {
+      aulaIdFormatado = Number(aulaId?.split('-').pop());
+    }
 
     const diario = listaTitulos?.items?.find(
       item => item?.aulaId === aulaIdFormatado
@@ -321,10 +351,10 @@ const ListaDiarioBordo = () => {
   };
 
   const onClickVoltar = () => {
-    history.push('/');
+    navigate('/');
   };
   const onClickNovo = () => {
-    history.push(`${RotasDto.DIARIO_BORDO}/novo`);
+    navigate(`${RotasDto.DIARIO_BORDO}/novo`);
   };
 
   const validarSetarDataFinal = async data => {
@@ -534,6 +564,7 @@ const ListaDiarioBordo = () => {
                   pageSize={10}
                   onChangePaginacao={onChangePaginacao}
                   resetInitialState={resetInitialState}
+                  setResetInitialState={setResetInitialState}
                 />
               </div>
             </div>

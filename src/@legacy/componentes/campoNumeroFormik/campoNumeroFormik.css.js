@@ -14,5 +14,9 @@ export const Campo = styled.div`
     height: '38px';
   }
 
+  .ant-input-number-input {
+    height: 26px !important;
+  }
+
   height: ${props => props.height ?? '45px'};
 `;

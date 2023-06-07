@@ -1,4 +1,4 @@
-import { store } from '~/redux';
+import { store } from '@/core/redux';
 import {
   setDadosPlanoAula,
   setExibirCardCollapsePlanoAula,
@@ -24,11 +24,8 @@ class ServicoPlanoAula {
     const state = store.getState();
     const { frequenciaPlanoAula, usuario } = state;
     const { turmaSelecionada } = usuario;
-    const {
-      aulaId,
-      dadosPlanoAula,
-      componenteCurricular,
-    } = frequenciaPlanoAula;
+    const { aulaId, dadosPlanoAula, componenteCurricular } =
+      frequenciaPlanoAula;
 
     // Seta o componente curricular selecionado no SelectComponent quando não é REGENCIA!
     const montarListaComponenteCurricularesPlanejamento = () => {
@@ -192,41 +189,44 @@ class ServicoPlanoAula {
     return [];
   };
 
-  temObjetivosSelecionadosTabComponenteCurricular = codigoComponenteCurricular => {
-    const state = store.getState();
-    const { frequenciaPlanoAula } = state;
-    const { dadosPlanoAula } = frequenciaPlanoAula;
-
-    if (
-      dadosPlanoAula &&
-      dadosPlanoAula.objetivosAprendizagemComponente &&
-      dadosPlanoAula.objetivosAprendizagemComponente.length
-    ) {
-      const tabAtual = dadosPlanoAula.objetivosAprendizagemComponente.find(
-        item =>
-          String(item.componenteCurricularId) ===
-          String(codigoComponenteCurricular)
-      );
+  temObjetivosSelecionadosTabComponenteCurricular =
+    codigoComponenteCurricular => {
+      const state = store.getState();
+      const { frequenciaPlanoAula } = state;
+      const { dadosPlanoAula } = frequenciaPlanoAula;
 
       if (
-        tabAtual &&
-        tabAtual.objetivosAprendizagem &&
-        tabAtual.objetivosAprendizagem.length
+        dadosPlanoAula &&
+        dadosPlanoAula.objetivosAprendizagemComponente &&
+        dadosPlanoAula.objetivosAprendizagemComponente.length
       ) {
-        return true;
+        const tabAtual = dadosPlanoAula.objetivosAprendizagemComponente.find(
+          item =>
+            String(item.componenteCurricularId) ===
+            String(codigoComponenteCurricular)
+        );
+
+        if (
+          tabAtual &&
+          tabAtual.objetivosAprendizagem &&
+          tabAtual.objetivosAprendizagem.length
+        ) {
+          return true;
+        }
       }
-    }
-    return false;
-  };
+      return false;
+    };
 
   temPeloMenosUmObjetivoSelecionado = objetivosAprendizagemComponente => {
     if (
       objetivosAprendizagemComponente &&
       objetivosAprendizagemComponente.length
     ) {
-      const algumaTabTemObjetivoSelecionado = objetivosAprendizagemComponente.find(
-        item => item.objetivosAprendizagem && item.objetivosAprendizagem.length
-      );
+      const algumaTabTemObjetivoSelecionado =
+        objetivosAprendizagemComponente.find(
+          item =>
+            item.objetivosAprendizagem && item.objetivosAprendizagem.length
+        );
       if (algumaTabTemObjetivoSelecionado) {
         return true;
       }

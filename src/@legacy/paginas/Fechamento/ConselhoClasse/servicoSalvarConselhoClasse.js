@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import { store } from '~/redux';
+import { store } from '@/core/redux';
 import { erros, sucesso, confirmar, erro } from '~/servicos/alertas';
 import ServicoConselhoClasse from '~/servicos/Paginas/ConselhoClasse/ServicoConselhoClasse';
 import {
@@ -96,16 +96,15 @@ class ServicoSalvarConselhoClasse {
           : [],
       };
       dispatch(setExibirLoaderGeralConselhoClasse(true));
-      const retorno = await ServicoConselhoClasse.salvarRecomendacoesAlunoFamilia(
-        params
-      )
-        .finally(() => {
-          dispatch(setExibirLoaderGeralConselhoClasse(false));
-        })
-        .catch(e => {
-          dispatch(setExibirLoaderGeralConselhoClasse(false));
-          erros(e);
-        });
+      const retorno =
+        await ServicoConselhoClasse.salvarRecomendacoesAlunoFamilia(params)
+          .finally(() => {
+            dispatch(setExibirLoaderGeralConselhoClasse(false));
+          })
+          .catch(e => {
+            dispatch(setExibirLoaderGeralConselhoClasse(false));
+            erros(e);
+          });
 
       if (retorno && retorno.status === 200) {
         sucesso('Anotações e recomendações salvas com sucesso.');
@@ -243,12 +242,8 @@ class ServicoSalvarConselhoClasse {
       turmaCodigo,
     } = dadosPrincipaisConselhoClasse;
 
-    const {
-      justificativa,
-      nota,
-      conceito,
-      codigoComponenteCurricular,
-    } = notaConceitoPosConselhoAtual;
+    const { justificativa, nota, conceito, codigoComponenteCurricular } =
+      notaConceitoPosConselhoAtual;
 
     const ehNota = Number(tipoNota) === notasConceitos.Notas;
 
@@ -307,14 +302,15 @@ class ServicoSalvarConselhoClasse {
       const bimestre =
         bimestreAtual?.valor === 'final' ? 0 : bimestreAtual?.valor;
 
-      const resultado = await ServicoConselhoClasse.obterNotasConceitosConselhoClasse(
-        retorno?.data?.conselhoClasseId,
-        retorno?.data?.fechamentoTurmaId,
-        alunoCodigo,
-        turmaCodigo,
-        bimestre,
-        consideraHistorico
-      );
+      const resultado =
+        await ServicoConselhoClasse.obterNotasConceitosConselhoClasse(
+          retorno?.data?.conselhoClasseId,
+          retorno?.data?.fechamentoTurmaId,
+          alunoCodigo,
+          turmaCodigo,
+          bimestre,
+          consideraHistorico
+        );
 
       dispatch(setDadosPrincipaisConselhoClasse(dadosPrincipaisConselhoClasse));
 

@@ -6,11 +6,6 @@ class ServicoHistoricoEscolar {
 
   obterObservacaoComplementar = codigoAluno =>
     api.get(`${URL_PADRAO}/aluno/${codigoAluno}/observacao-complementar`);
-
-  salvarObservacaoComplementar = (codigoAluno, observacao) =>
-    api.post(`${URL_PADRAO}/aluno/${codigoAluno}/observacao-complementar`, {
-      observacao
-    });
 }
 
 export default new ServicoHistoricoEscolar();

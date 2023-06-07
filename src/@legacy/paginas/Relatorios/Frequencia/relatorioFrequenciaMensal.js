@@ -22,7 +22,6 @@ import { ModalidadeDTO } from '~/dtos';
 import {
   AbrangenciaServico,
   erros,
-  history,
   ServicoFiltroRelatorio,
   ServicoRelatorioFrequencia,
   sucesso,
@@ -34,8 +33,11 @@ import {
 } from '~/utils';
 import api from '~/servicos/api';
 import BotoesAcaoRelatorio from '~/componentes-sgp/botoesAcaoRelatorio';
+import { useNavigate } from 'react-router-dom';
 
 const RelatorioFrequenciaMensal = () => {
+  const navigate = useNavigate();
+
   const [anoAtual] = useState(window.moment().format('YYYY'));
   const [carregandoGerar, setCarregandoGerar] = useState(false);
   const [carregandoAnos, setCarregandoAnos] = useState(false);
@@ -66,10 +68,8 @@ const RelatorioFrequenciaMensal = () => {
   const [consideraHistorico, setConsideraHistorico] = useState(false);
   const [mesesReferencias, setMesesReferencias] = useState();
   const [tipoFormatoRelatorio, setTipoFormatoRelatorio] = useState('1');
-  const [
-    apenasAlunosPercentualAbaixoDe,
-    setApenasAlunosPercentualAbaixoDe,
-  ] = useState();
+  const [apenasAlunosPercentualAbaixoDe, setApenasAlunosPercentualAbaixoDe] =
+    useState();
   const [modoEdicao, setModoEdicao] = useState(false);
 
   const ANO_MINIMO = 2020;
@@ -251,11 +251,10 @@ const RelatorioFrequenciaMensal = () => {
   const obterModalidades = async (ue, ano) => {
     if (ue && ano) {
       setCarregandoModalidades(true);
-      const {
-        data,
-      } = await ServicoFiltroRelatorio.obterModalidadesPorAbrangencia(ue)
-        .catch(e => erros(e))
-        .finally(() => setCarregandoModalidades(false));
+      const { data } =
+        await ServicoFiltroRelatorio.obterModalidadesPorAbrangencia(ue)
+          .catch(e => erros(e))
+          .finally(() => setCarregandoModalidades(false));
 
       if (data) {
         const lista = data.map(item => ({
@@ -289,8 +288,9 @@ const RelatorioFrequenciaMensal = () => {
     setCarregandoSemestres(true);
     const retorno = await api
       .get(
-        `v1/abrangencias/${consideraHistorico}/semestres?anoLetivo=${anoLetivo}&modalidade=${modalidadeId ||
-          0}`
+        `v1/abrangencias/${consideraHistorico}/semestres?anoLetivo=${anoLetivo}&modalidade=${
+          modalidadeId || 0
+        }`
       )
       .catch(e => erros(e))
       .finally(() => {
@@ -483,7 +483,7 @@ const RelatorioFrequenciaMensal = () => {
     <>
       <Cabecalho pagina="Relatório de frequência mensal">
         <BotoesAcaoRelatorio
-          onClickVoltar={() => history.push(URL_HOME)}
+          onClickVoltar={() => navigate(URL_HOME)}
           onClickCancelar={cancelar}
           onClickGerar={gerar}
           desabilitarBtnGerar={desabilitarBtnGerar}
