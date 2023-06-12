@@ -9,6 +9,7 @@ const Paginacao = props => {
     mostrarNumeroLinhas,
     onChangeNumeroLinhas,
     resetInitialState,
+    setResetInitialState,
     pageSize,
     ...rest
   } = props;
@@ -42,6 +43,7 @@ const Paginacao = props => {
   useEffect(() => {
     if (resetInitialState) {
       setPaginaAtual(initialState);
+      if (setResetInitialState) setResetInitialState(false);
     }
   }, [resetInitialState]);
 

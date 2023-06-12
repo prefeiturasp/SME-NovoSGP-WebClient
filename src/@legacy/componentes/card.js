@@ -9,10 +9,10 @@ const CardEstilo = styled.div`
 `;
 
 const Card = props => {
-  const { children, className, padding } = props;
+  const { children, className, padding, addRow } = props;
   return (
     <CardEstilo className={`shadow bg-white ${className}`} padding={padding}>
-      <Row>{children}</Row>
+      {addRow ? <Row>{children}</Row> : children}
     </CardEstilo>
   );
 };
@@ -21,12 +21,14 @@ Card.propTypes = {
   children: PropTypes.node,
   className: PropTypes.string,
   padding: PropTypes.string,
+  addRow: PropTypes.bool,
 };
 
 Card.defaultProps = {
   children: {},
   className: '',
   padding: '24px 8px',
+  addRow: true,
 };
 
 export default Card;
