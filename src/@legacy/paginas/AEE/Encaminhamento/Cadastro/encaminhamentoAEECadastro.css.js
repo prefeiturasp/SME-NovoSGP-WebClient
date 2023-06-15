@@ -2,6 +2,18 @@ import { Steps } from 'antd';
 import styled from 'styled-components';
 import { Base } from '~/componentes/colors';
 
+
+export const Container = styled.div`
+  .icon-legenda-aluno-ausente {
+    float: right !important;
+    background-color: #d06d12 !important;
+    color: white !important;
+    font-size: 9px !important;
+    border: solid 7px #d06d12 !important;
+    border-radius: 5px !important;
+  }
+`
+
 export const ContainerStepsEncaminhamento = styled(Steps)`
   margin-top: 1rem !important;
   margin-bottom: 1rem !important;
