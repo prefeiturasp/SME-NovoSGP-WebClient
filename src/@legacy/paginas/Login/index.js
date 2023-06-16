@@ -5,7 +5,7 @@ import * as Yup from 'yup';
 import { Tooltip } from 'antd';
 import { Formik, Form } from 'formik';
 import shortid from 'shortid';
-import { isBrowser } from 'react-device-detect';
+import { isBrowser,IOSView } from 'react-device-detect';
 import LoginHelper from './loginHelper';
 import Row from '~/componentes/row';
 import LogoDoSgp from '~/recursos/LogoSgpTexto.svg';
@@ -151,7 +151,7 @@ const Login = () => {
                   id="Formulario"
                   className="col-xl-8 col-md-8 col-sm-8 col-xs-12 p-0"
                 >
-                  {isBrowser ? (
+                  {isBrowser || IOSView ? (
                     <Formik
                       enableReinitialize
                       initialValues={{
