@@ -27,7 +27,7 @@ import ServicoPlanoAEE from '~/servicos/Paginas/Relatorios/AEE/ServicoPlanoAEE';
 import ModalImpressaoPlano from './ModalImpressaoPlano/modalImpressaoPlano';
 import { useNavigate, useParams } from 'react-router-dom';
 
-const BotoesAcoesPlanoAEE = () => {
+const BotoesAcoesPlanoAEE = (prop) => {
   const navigate = useNavigate();
   const paramsRoute = useParams();
 
@@ -91,7 +91,7 @@ const BotoesAcoesPlanoAEE = () => {
     const soConsulta = verificaSomenteConsulta(permissoesTela);
     const desabilitar =
       planoId > 0
-        ? soConsulta || !permissoesTela.podeAlterar
+        ? soConsulta || !permissoesTela.podeAlterar || prop.criadoEmOutraUe
         : soConsulta || !permissoesTela.podeIncluir;
     dispatch(setDesabilitarCamposPlanoAEE(desabilitar));
   }, [planoId, permissoesTela, dispatch]);
