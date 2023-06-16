@@ -134,12 +134,6 @@ export default function PlanoAEE(state = inicial, action) {
           atualizarDados: action.payload,
         };
       }
-      case '@planoAEE/setCriadoEmOutraUe': {
-        return {
-          ...draft,
-          criadoEmOutraUe: action.payload,
-        };
-      }
       case '@planoAEE/setParecerPAAI': {
         return {
           ...draft,
