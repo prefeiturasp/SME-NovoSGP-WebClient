@@ -60,6 +60,11 @@ export const setAtualizarDados = payload => ({
   payload,
 });
 
+export const setCriadoEmOutraUe = payload => ({
+  type: '@planoAEE/setCriadoEmOutraUe',
+  payload,
+});
+
 export const setAtualizarPlanoAEEDados = payload => ({
   type: '@planoAEE/setAtualizarPlanoAEEDados',
   payload,

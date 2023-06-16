@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect } from 'react';
+import React, { useCallback, useEffect,useState } from 'react';
 import { useLocation, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { Cabecalho } from '~/componentes-sgp';
@@ -19,6 +19,12 @@ import ObjectCardEstudantePlanoAEE from './Componentes/ObjectCardEstudantePlanoA
 import ObservacoesPlanoAEE from './Componentes/ObservacoesPlanoAEE/observacoesPlanoAEE';
 import SituacaoEncaminhamentoAEE from './Componentes/SituacaoEncaminhamentoAEE/situacaoEncaminhamentoAEE';
 import TabCadastroPlano from './Componentes/TabCadastroPlano/tabCadastroPlano';
+import Row from '~/componentes/row';
+import Alert from '~/componentes/alert';
+import { Grid } from '~/componentes';
+import { Container } from './planoAEECadastro.css';
+import { SGP_ALERT_PLANO_AEE_EM_OUTRA_UE } from '~/constantes/ids/alert/index';
+
 
 const PlanoAEECadastro = () => {
   const dispatch = useDispatch();
@@ -26,7 +32,8 @@ const PlanoAEECadastro = () => {
   const paramsRoute = useParams();
 
   const planoId = paramsRoute?.id;
-
+  const [cadastradoEmOutraUE, setCadastradoEmOutraUE] = useState(false);
+  const criadoEmOutraUe = useSelector(store => store?.planoAEE?.criadoEmOutraUe);
   const exibirModalDevolverPlanoAEE = useSelector(
     store => store.planoAEE.exibirModalDevolverPlanoAEE
   );
@@ -59,9 +66,25 @@ const PlanoAEECadastro = () => {
 
   return (
     <LoaderPlano>
+        {criadoEmOutraUe ? (<Row className="mb-0 pb-0">
+          <Grid cols={12} className="mb-0 pb-0">
+            <Container>
+              <Alert
+                alerta={{
+                  tipo: 'warning',
+                  id: SGP_ALERT_PLANO_AEE_EM_OUTRA_UE,
+                  mensagem:
+                    'Você tem apenas permissão de consulta nesta tela. Este plano está cadastrado em outra UE.',
+                  estiloTitulo: { fontSize: '18px' },
+                }}
+                className="mb-2"
+              />
+            </Container>
+          </Grid>
+        </Row>):null} 
       <Cabecalho pagina="Plano AEE">
         <div className="d-flex justify-content-end">
-          <BotoesAcoesPlanoAEE />
+          <BotoesAcoesPlanoAEE criadoEmOutraUe />
         </div>
       </Cabecalho>
       <Card>
