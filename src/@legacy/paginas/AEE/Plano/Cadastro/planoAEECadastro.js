@@ -27,9 +27,7 @@ const PlanoAEECadastro = () => {
   const paramsRoute = useParams();
 
   const planoId = paramsRoute?.id;
-  const criadoEmOutraUe = useSelector(
-    store => store?.planoAEE?.criadoEmOutraUe
-  );
+
   const exibirModalDevolverPlanoAEE = useSelector(
     store => store.planoAEE.exibirModalDevolverPlanoAEE
   );
@@ -65,7 +63,7 @@ const PlanoAEECadastro = () => {
       <AlertaCadastradoEmOutraUE />
       <Cabecalho pagina="Plano AEE">
         <div className="d-flex justify-content-end">
-          <BotoesAcoesPlanoAEE criadoEmOutraUe={criadoEmOutraUe} />
+          <BotoesAcoesPlanoAEE />
         </div>
       </Cabecalho>
       <Card>

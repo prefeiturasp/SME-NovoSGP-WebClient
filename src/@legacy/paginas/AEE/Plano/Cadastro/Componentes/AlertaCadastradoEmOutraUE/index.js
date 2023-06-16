@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux';
 
 const AlertaCadastradoEmOutraUE = () => {
   const registroCadastradoEmOutraUE = useSelector(
-    store => store?.planoAEE?.registroCadastradoEmOutraUE
+    store => store?.planoAEEDados?.registroCadastradoEmOutraUE
   );
 
   return registroCadastradoEmOutraUE ? (
