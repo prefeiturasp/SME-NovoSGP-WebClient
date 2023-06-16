@@ -27,7 +27,7 @@ import ServicoPlanoAEE from '~/servicos/Paginas/Relatorios/AEE/ServicoPlanoAEE';
 import ModalImpressaoPlano from './ModalImpressaoPlano/modalImpressaoPlano';
 import { useNavigate, useParams } from 'react-router-dom';
 
-const BotoesAcoesPlanoAEE = (prop) => {
+const BotoesAcoesPlanoAEE = () => {
   const navigate = useNavigate();
   const paramsRoute = useParams();
 
@@ -43,6 +43,10 @@ const BotoesAcoesPlanoAEE = (prop) => {
 
   const perfilSelecionado = useSelector(
     store => store.perfil.perfilSelecionado.nomePerfil
+  );
+
+  const registroCadastradoEmOutraUE = useSelector(
+    store => store.planoAEE?.registroCadastradoEmOutraUE
   );
 
   const dadosParecer = useSelector(store => store.planoAEE.dadosParecer);
@@ -91,11 +95,13 @@ const BotoesAcoesPlanoAEE = (prop) => {
     const soConsulta = verificaSomenteConsulta(permissoesTela);
     const desabilitar =
       planoId > 0
-        ? soConsulta || !permissoesTela.podeAlterar || prop?.criadoEmOutraUe
+        ? soConsulta ||
+          !permissoesTela.podeAlterar ||
+          registroCadastradoEmOutraUE
         : soConsulta || !permissoesTela.podeIncluir;
 
     dispatch(setDesabilitarCamposPlanoAEE(desabilitar));
-  }, [planoId, permissoesTela, dispatch]);
+  }, [planoId, permissoesTela, registroCadastradoEmOutraUE, dispatch]);
 
   const limparParecer = () => {
     dispatch(limparDadosParecer());

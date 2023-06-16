@@ -1,16 +1,13 @@
 import { Alert } from '@/@legacy/componentes';
 import { SGP_ALERT_ENCAMINHAMENTO_AEE_EM_OUTRA_UE } from '@/@legacy/constantes/ids/alert';
-import React from 'react';
 import { useSelector } from 'react-redux';
 
 const AlertaCadastradoEmOutraUE = () => {
-  const dadosEncaminhamento = useSelector(
-    store => store.encaminhamentoAEE?.dadosEncaminhamento
+  const registroCadastradoEmOutraUE = useSelector(
+    store => store?.planoAEE?.registroCadastradoEmOutraUE
   );
 
-  const exibir = dadosEncaminhamento?.registroCadastradoEmOutraUE;
-
-  return exibir ? (
+  return registroCadastradoEmOutraUE ? (
     <div className="row">
       <div className="col-md-12">
         <Alert

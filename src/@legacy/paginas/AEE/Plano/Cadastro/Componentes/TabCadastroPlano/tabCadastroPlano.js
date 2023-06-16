@@ -8,7 +8,6 @@ import {
   setExibirLoaderPlanoAEE,
   setPlanoAEEDados,
   setPlanoAEELimparDados,
-  setCriadoEmOutraUe,
 } from '~/redux/modulos/planoAEE/actions';
 import { erros, ServicoCalendarios } from '~/servicos';
 import ServicoPlanoAEE from '~/servicos/Paginas/Relatorios/AEE/ServicoPlanoAEE';
@@ -42,7 +41,7 @@ const TabCadastroPlano = () => {
       turmaCodigo,
       codigoAluno
     ).catch(e => erros(e));
-    
+
     if (resultado?.data) {
       if (resultado?.data?.aluno) {
         const { aluno } = resultado?.data;
@@ -61,7 +60,7 @@ const TabCadastroPlano = () => {
           ehAtendidoAEE: aluno?.ehAtendidoAEE,
           numeroChamada: aluno.numeroAlunoChamada,
         };
-        
+
         if (resultado?.data?.turma?.codigo) {
           const retornoFrequencia =
             await ServicoCalendarios.obterFrequenciaAluno(
@@ -70,7 +69,6 @@ const TabCadastroPlano = () => {
             ).catch(e => erros(e));
           dadosObjectCard.frequencia = retornoFrequencia?.data || '';
         }
-        dispatch(setCriadoEmOutraUe(resultado?.data?.registroCadastradoEmOutraUE));
         dispatch(setDadosObjectCardEstudante(dadosObjectCard));
       }
 
