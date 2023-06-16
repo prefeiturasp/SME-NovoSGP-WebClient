@@ -17,20 +17,14 @@ import ServicoEncaminhamentoAEE from '~/servicos/Paginas/Relatorios/AEE/ServicoE
 import BotoesAcoesEncaminhamentoAEE from './Componentes/botoesAcoesEncaminhamentoAEE';
 import LoaderEncaminhamento from './Componentes/LoaderEncaminhamento/loaderEncaminhamento';
 import MontarDadosSecoes from './Componentes/MontarDadosSecoes/montarDadosSecoes';
-import Row from '~/componentes/row';
-import Alert from '~/componentes/alert';
-import { Grid } from '~/componentes';
-import { Container } from './encaminhamentoAEECadastro.css';
-import { SGP_ALERT_ENCAMINHAMENTO_AEE_EM_OUTRA_UE } from '~/constantes/ids/alert/index';
+import AlertaCadastradoEmOutraUE from './Componentes/AlertaCadastradoEmOutraUE';
 
 const EncaminhamentoAEECadastro = () => {
   const dispatch = useDispatch();
-  const [cadastradoEmOutraUE, setCadastradoEmOutraUE] = useState(false);
   const paramsRoute = useParams();
   const location = useLocation();
 
   const usuario = useSelector(store => store.usuario);
-  const dadosEncaminhamento = useSelector(store => store.encaminhamentoAEE.dadosEncaminhamento);
   const permissoesTela =
     usuario.permissoes[RotasDto.RELATORIO_AEE_ENCAMINHAMENTO];
 
@@ -51,7 +45,6 @@ const EncaminhamentoAEECadastro = () => {
 
   const obterEncaminhamentoPorId = useCallback(async () => {
     ServicoEncaminhamentoAEE.obterEncaminhamentoPorId(encaminhamentoId);
-    setCadastradoEmOutraUE(dadosEncaminhamento?.registroCadastradoEmOutraUE);
   }, [encaminhamentoId]);
 
   useEffect(() => {
@@ -88,25 +81,10 @@ const EncaminhamentoAEECadastro = () => {
       params
     );
   };
-
+  
   return (
     <LoaderEncaminhamento>
-        {cadastradoEmOutraUE ? (<Row className="mb-0 pb-0">
-          <Grid cols={12} className="mb-0 pb-0">
-            <Container>
-              <Alert
-                alerta={{
-                  tipo: 'warning',
-                  id: SGP_ALERT_ENCAMINHAMENTO_AEE_EM_OUTRA_UE,
-                  mensagem:
-                    'Você tem apenas permissão de consulta nesta tela. Este encaminhamento está cadastrado em outra UE.',
-                  estiloTitulo: { fontSize: '18px' },
-                }}
-                className="mb-2"
-              />
-            </Container>
-          </Grid>
-        </Row>):null} 
+      <AlertaCadastradoEmOutraUE />
       <Cabecalho pagina="Encaminhamento AEE">
         <BotoesAcoesEncaminhamentoAEE />
       </Cabecalho>

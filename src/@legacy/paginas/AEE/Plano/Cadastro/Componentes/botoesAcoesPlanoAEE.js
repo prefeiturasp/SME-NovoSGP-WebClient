@@ -91,8 +91,9 @@ const BotoesAcoesPlanoAEE = (prop) => {
     const soConsulta = verificaSomenteConsulta(permissoesTela);
     const desabilitar =
       planoId > 0
-        ? soConsulta || !permissoesTela.podeAlterar || prop.criadoEmOutraUe
+        ? soConsulta || !permissoesTela.podeAlterar || prop?.criadoEmOutraUe
         : soConsulta || !permissoesTela.podeIncluir;
+
     dispatch(setDesabilitarCamposPlanoAEE(desabilitar));
   }, [planoId, permissoesTela, dispatch]);
 
