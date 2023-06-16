@@ -46,7 +46,7 @@ const BotoesAcoesPlanoAEE = () => {
   );
 
   const registroCadastradoEmOutraUE = useSelector(
-    store => store.planoAEE?.registroCadastradoEmOutraUE
+    store => store.planoAEE.planoAEEDados?.registroCadastradoEmOutraUE
   );
 
   const dadosParecer = useSelector(store => store.planoAEE.dadosParecer);
