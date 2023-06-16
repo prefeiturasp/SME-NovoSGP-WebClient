@@ -81,10 +81,10 @@ const PlanoAEECadastro = () => {
               />
             </Container>
           </Grid>
-        </Row>):null} 
+        </Row>):<></>} 
       <Cabecalho pagina="Plano AEE">
         <div className="d-flex justify-content-end">
-          <BotoesAcoesPlanoAEE criadoEmOutraUe />
+          <BotoesAcoesPlanoAEE criadoEmOutraUe={criadoEmOutraUe} />
         </div>
       </Cabecalho>
       <Card>
