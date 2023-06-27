@@ -16,16 +16,24 @@ class LoginHelper {
     this.redirect = redirect;
   }
 
-  acessar = async (login, acessoAdmin, deslogar, navigate) => {
-    const autenticacao = await LoginService.autenticar(
+  acessar = async props => {
+    const login = props?.login;
+    const acessoAdmin = props?.acessoAdmin;
+    const deslogar = props?.deslogar;
+    const navigate = props?.navigate;
+    const integracaoToken = props?.integracaoToken;
+
+    const autenticacao = await LoginService.autenticar({
       login,
       acessoAdmin,
-      deslogar
-    );
+      deslogar,
+      integracaoToken,
+    });
 
     if (!autenticacao.sucesso) return autenticacao;
 
-    const rf = login.usuario || login.login;
+    const rf =
+      login?.usuario || login?.login || autenticacao?.dados?.usuarioLogin;
 
     this.dispatch(
       setLoginAcessoAdmin({
@@ -37,7 +45,7 @@ class LoginHelper {
       salvarDadosLogin({
         token: autenticacao.dados.token,
         rf,
-        usuario: login.UsuarioLogin,
+        usuario: login?.UsuarioLogin || autenticacao?.dados?.usuarioLogin,
         modificarSenha: autenticacao.dados.modificarSenha,
         perfisUsuario: autenticacao.dados.perfisUsuario,
         possuiPerfilSmeOuDre:

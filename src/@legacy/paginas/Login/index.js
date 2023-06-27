@@ -5,7 +5,7 @@ import * as Yup from 'yup';
 import { Tooltip } from 'antd';
 import { Formik, Form } from 'formik';
 import shortid from 'shortid';
-import { isBrowser,IOSView } from 'react-device-detect';
+import { isBrowser, IOSView } from 'react-device-detect';
 import LoginHelper from './loginHelper';
 import Row from '~/componentes/row';
 import LogoDoSgp from '~/recursos/LogoSgpTexto.svg';

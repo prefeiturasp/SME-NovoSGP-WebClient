@@ -92,6 +92,7 @@ export enum ROUTES {
   ENCAMINHAMENTO_NAAPA = '/naapa/encaminhamento',
   RELATORIO_ENCAMINHAMENTO_NAAPA = '/relatorios/naapa/encaminhamento',
   LOGIN = '/login',
+  AUTENTICACAO_INTEGRACOES_FREQUENCIA = '/autenticacao/integracoes/frequencia/:token',
   REDEFINIR_SENHA = '/redefinir-senha',
   REDEFINIR_SENHA_TOKEN = '/redefinir-senha/:token',
   RECUPERAR_SENHA = '/recuperar-senha',
