@@ -92,12 +92,8 @@ class LoginHelper {
       );
     }
 
-    if (this.redirect) {
-      navigate(atob(this.redirect));
-      return autenticacao;
-    } else {
-      navigate(URL_HOME);
-    }
+    if (this.redirect) navigate(atob(this.redirect));
+    else navigate(URL_HOME);
 
     return autenticacao;
   };
