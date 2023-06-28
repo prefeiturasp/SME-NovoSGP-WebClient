@@ -1,3 +1,4 @@
+import { ROUTES } from '@/core/enum/routes';
 import { URL_HOME, URL_REDEFINIRSENHA } from '~/constantes/url';
 import {
   salvarDadosLogin,
@@ -7,7 +8,10 @@ import { erros } from '~/servicos';
 import ServicoDashboard from '~/servicos/Paginas/Dashboard/ServicoDashboard';
 import LoginService from '~/servicos/Paginas/LoginServices';
 import ServicoNotificacao from '~/servicos/Paginas/ServicoNotificacao';
-import { obterMeusDados } from '~/servicos/Paginas/ServicoUsuario';
+import {
+  buscarVersao,
+  obterMeusDados,
+} from '~/servicos/Paginas/ServicoUsuario';
 import { setMenusPermissoes } from '~/servicos/servico-navegacao';
 
 class LoginHelper {
@@ -16,16 +20,24 @@ class LoginHelper {
     this.redirect = redirect;
   }
 
-  acessar = async (login, acessoAdmin, deslogar, navigate) => {
-    const autenticacao = await LoginService.autenticar(
+  acessar = async props => {
+    const login = props?.login;
+    const acessoAdmin = props?.acessoAdmin;
+    const deslogar = props?.deslogar;
+    const navigate = props?.navigate;
+    const tokenIntegracaoFrequencia = props?.tokenIntegracaoFrequencia;
+
+    const autenticacao = await LoginService.autenticar({
       login,
       acessoAdmin,
-      deslogar
-    );
+      deslogar,
+      tokenIntegracaoFrequencia,
+    });
 
     if (!autenticacao.sucesso) return autenticacao;
 
-    const rf = login.usuario || login.login;
+    const rf =
+      login?.usuario || login?.login || autenticacao?.dados?.usuarioLogin;
 
     this.dispatch(
       setLoginAcessoAdmin({
@@ -37,7 +49,7 @@ class LoginHelper {
       salvarDadosLogin({
         token: autenticacao.dados.token,
         rf,
-        usuario: login.UsuarioLogin,
+        usuario: login?.UsuarioLogin || autenticacao?.dados?.usuarioLogin,
         modificarSenha: autenticacao.dados.modificarSenha,
         perfisUsuario: autenticacao.dados.perfisUsuario,
         possuiPerfilSmeOuDre:
@@ -63,7 +75,13 @@ class LoginHelper {
       return { sucesso: false, erroGeral: '' };
     }
     obterMeusDados();
-    setMenusPermissoes();
+    buscarVersao();
+
+    setMenusPermissoes().then(() => {
+      if (tokenIntegracaoFrequencia) {
+        navigate(ROUTES.FREQUENCIA_PLANO_AULA);
+      }
+    });
 
     if (acessoAdmin) {
       ServicoNotificacao.obterUltimasNotificacoesNaoLidas().catch(e =>
@@ -74,8 +92,13 @@ class LoginHelper {
       );
     }
 
-    if (this.redirect) navigate(atob(this.redirect));
-    else navigate(URL_HOME);
+    if (this.redirect) {
+      navigate(atob(this.redirect));
+      return autenticacao;
+    } else {
+      navigate(URL_HOME);
+    }
+
     return autenticacao;
   };
 }

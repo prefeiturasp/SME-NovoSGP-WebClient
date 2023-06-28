@@ -1,55 +1,55 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import shortid from 'shortid';
 import { Checkbox } from 'antd';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import shortid from 'shortid';
 import {
-  selecionarTurma,
-  turmasUsuario,
   removerTurma,
+  selecionarTurma,
   setRecarregarFiltroPrincipal,
+  turmasUsuario,
 } from '~/redux/modulos/usuario/actions';
 
 import {
   SGP_BUTTON_FILTRO_PRINCIPAL_APLICAR,
+  SGP_BUTTON_FILTRO_PRINCIPAL_EXPANDIR_RETRAIR_FILTRO,
+  SGP_CAMPO_FILTRO_PRINCIPAL_PESQUISAR_TURMA,
   SGP_SELECT_FILTRO_PRINCIPAL_ANOLETIVO,
-  SGP_SELECT_FILTRO_PRINCIPAL_TURMA,
+  SGP_SELECT_FILTRO_PRINCIPAL_DRE,
   SGP_SELECT_FILTRO_PRINCIPAL_MODALIDADE,
   SGP_SELECT_FILTRO_PRINCIPAL_PERIODO,
-  SGP_SELECT_FILTRO_PRINCIPAL_DRE,
+  SGP_SELECT_FILTRO_PRINCIPAL_TURMA,
   SGP_SELECT_FILTRO_PRINCIPAL_UE,
-  SGP_CAMPO_FILTRO_PRINCIPAL_PESQUISAR_TURMA,
-  SGP_BUTTON_FILTRO_PRINCIPAL_EXPANDIR_RETRAIR_FILTRO,
 } from '../../constantes/ids/filtro-principal';
 
-import Grid from '~/componentes/grid';
+import { Loader } from '~/componentes';
 import Button from '~/componentes/button';
 import { Colors } from '~/componentes/colors';
+import Grid from '~/componentes/grid';
 import SelectComponent from '~/componentes/select';
-import api from '~/servicos/api';
+import { TOKEN_EXPIRADO } from '~/constantes';
+import modalidade from '~/dtos/modalidade';
 import {
-  Container,
-  Campo,
-  Busca,
-  Fechar,
-  SetaFunction,
-  ItemLista,
-} from './index.css';
-import {
+  limparDadosFiltro,
   salvarAnosLetivos,
+  salvarDres,
   salvarModalidades,
   salvarPeriodos,
-  salvarDres,
-  salvarUnidadesEscolares,
   salvarTurmas,
-  limparDadosFiltro,
+  salvarUnidadesEscolares,
 } from '~/redux/modulos/filtro/actions';
-import FiltroHelper from './helper';
-import { erro } from '~/servicos/alertas';
-import modalidade from '~/dtos/modalidade';
-import { Loader } from '~/componentes';
-import { TOKEN_EXPIRADO } from '~/constantes';
-import { ordenarDescPor, validarAcaoTela, verificarTelaEdicao } from '~/utils';
 import { setTrocouPerfil } from '~/redux/modulos/perfil/actions';
+import { erro } from '~/servicos/alertas';
+import api from '~/servicos/api';
+import { ordenarDescPor, validarAcaoTela, verificarTelaEdicao } from '~/utils';
+import FiltroHelper from './helper';
+import {
+  Busca,
+  Campo,
+  Container,
+  Fechar,
+  ItemLista,
+  SetaFunction,
+} from './index.css';
 
 const Filtro = () => {
   const dispatch = useDispatch();
@@ -69,6 +69,10 @@ const Filtro = () => {
 
   const usuarioStore = useSelector(state => state.usuario);
   const trocouPerfil = useSelector(state => state.perfil)?.trocouPerfil;
+  const dadosFiltroAutenticacaoFrequencia = useSelector(
+    state => state.turmaFiltroAutenticacaoFrequencia
+  )?.dadosFiltroAutenticacaoFrequencia;
+
   const turmaUsuarioSelecionada = usuarioStore.turmaSelecionada;
   const recarregarFiltroPrincipal = usuarioStore?.recarregarFiltroPrincipal;
   const [campoAnoLetivoDesabilitado, setCampoAnoLetivoDesabilitado] =
@@ -131,7 +135,8 @@ const Filtro = () => {
   const [resultadosFiltro, setResultadosFiltro] = useState([]);
 
   const [consideraHistorico, setConsideraHistorico] = useState(
-    turmaUsuarioSelecionada && !!turmaUsuarioSelecionada.consideraHistorico
+    !!dadosFiltroAutenticacaoFrequencia?.turma?.historica ||
+      !!turmaUsuarioSelecionada.consideraHistorico
   );
 
   const aplicarFiltro = useCallback(
@@ -256,6 +261,41 @@ const Filtro = () => {
     unidadesEscolares,
   ]);
 
+  useEffect(() => {
+    if (
+      dadosFiltroAutenticacaoFrequencia?.turma?.codigo &&
+      anoLetivoSelecionado &&
+      modalidadeSelecionada &&
+      dreSelecionada &&
+      unidadeEscolarSelecionada &&
+      turmaSelecionada
+    ) {
+      aplicarFiltro(
+        consideraHistorico,
+        anoLetivoSelecionado,
+        modalidadeSelecionada,
+        dreSelecionada,
+        unidadeEscolarSelecionada,
+        turmaSelecionada,
+        modalidades,
+        turmas,
+        unidadesEscolares,
+        periodoSelecionado
+      );
+      setPodeRemoverTurma(false);
+    }
+  }, [
+    aplicarFiltro,
+    consideraHistorico,
+    anoLetivoSelecionado,
+    modalidadeSelecionada,
+    periodoSelecionado,
+    dreSelecionada,
+    unidadeEscolarSelecionada,
+    turmaSelecionada,
+    dadosFiltroAutenticacaoFrequencia,
+  ]);
+
   const reabilitarCampos = () => {
     setCampoDreDesabilitado(false);
     setCampoAnoLetivoDesabilitado(false);
@@ -276,7 +316,12 @@ const Filtro = () => {
     );
     setTurmaSelecionada(turmaUsuarioSelecionada.turma || undefined);
     setTextoAutocomplete(turmaUsuarioSelecionada.desc || undefined);
-    setConsideraHistorico(!!turmaUsuarioSelecionada.consideraHistorico);
+
+    const consideraHistoricoAtual =
+      !!dadosFiltroAutenticacaoFrequencia?.turma?.historica ||
+      !!turmaUsuarioSelecionada.consideraHistorico;
+
+    setConsideraHistorico(consideraHistoricoAtual);
 
     if (!turmaUsuarioSelecionada.length) setCampoAnoLetivoDesabilitado(false);
   }, [
@@ -648,39 +693,74 @@ const Filtro = () => {
   /* Sessão que seleciona automaticamente no filtro se houver apenas 1 registro */
 
   useEffect(() => {
-    if (anosLetivos && anosLetivos.length === 1) {
-      setAnoLetivoSelecionado(anosLetivos[0].valor);
+    if (anosLetivos?.length) {
+      if (anosLetivos.length === 1) {
+        setAnoLetivoSelecionado(anosLetivos[0].valor);
+      } else if (dadosFiltroAutenticacaoFrequencia?.turma?.anoLetivo) {
+        setAnoLetivoSelecionado(
+          dadosFiltroAutenticacaoFrequencia.turma.anoLetivo
+        );
+      }
     }
-    setCampoAnoLetivoDesabilitado(anosLetivos && anosLetivos.length === 1);
-  }, [anosLetivos]);
+    setCampoAnoLetivoDesabilitado(anosLetivos?.length === 1);
+  }, [anosLetivos, dadosFiltroAutenticacaoFrequencia]);
 
   useEffect(() => {
-    if (modalidades && modalidades.length === 1) {
-      setModalidadeSelecionada(modalidades[0].valor);
-      setCampoModalidadeDesabilitado(true);
+    if (modalidades?.length) {
+      if (modalidades.length === 1) {
+        setModalidadeSelecionada(modalidades[0].valor);
+      } else if (dadosFiltroAutenticacaoFrequencia?.turma?.modalidadeCodigo) {
+        setModalidadeSelecionada(
+          dadosFiltroAutenticacaoFrequencia.turma.modalidadeCodigo
+        );
+      }
+      setCampoModalidadeDesabilitado(modalidades?.length === 1);
     }
-  }, [modalidades]);
+  }, [modalidades, dadosFiltroAutenticacaoFrequencia]);
 
   useEffect(() => {
-    if (periodos && periodos.length === 1)
-      setPeriodoSelecionado(periodos[0].valor || undefined);
-  }, [periodos]);
-
-  useEffect(() => {
-    if (dres && dres.length === 1) setDreSelecionada(dres[0].valor);
-  }, [dres]);
-
-  useEffect(() => {
-    if (unidadesEscolares && unidadesEscolares.length === 1)
-      setUnidadeEscolarSelecionada(unidadesEscolares[0].valor);
-  }, [unidadesEscolares]);
-
-  useEffect(() => {
-    if (turmas && turmas.length === 1) setTurmaSelecionada(turmas[0].valor);
-    else if (turmas && turmas.length > 1) {
-      setCampoTurmaDesabilitado(false);
+    if (periodos?.length) {
+      if (periodos.length === 1) {
+        setPeriodoSelecionado(periodos[0].valor);
+      } else if (dadosFiltroAutenticacaoFrequencia?.turma?.semestre) {
+        setPeriodoSelecionado(dadosFiltroAutenticacaoFrequencia.turma.semestre);
+      }
     }
-  }, [turmas]);
+  }, [periodos, dadosFiltroAutenticacaoFrequencia]);
+
+  useEffect(() => {
+    if (dres?.length) {
+      if (dres.length === 1) {
+        setDreSelecionada(dres[0].valor);
+      } else if (dadosFiltroAutenticacaoFrequencia?.turma?.dreCodigo) {
+        setDreSelecionada(dadosFiltroAutenticacaoFrequencia.turma.dreCodigo);
+      }
+    }
+  }, [dres, dadosFiltroAutenticacaoFrequencia]);
+
+  useEffect(() => {
+    if (unidadesEscolares?.length) {
+      if (unidadesEscolares.length === 1) {
+        setUnidadeEscolarSelecionada(unidadesEscolares[0].valor);
+      } else if (dadosFiltroAutenticacaoFrequencia?.turma?.ueCodigo) {
+        setUnidadeEscolarSelecionada(
+          dadosFiltroAutenticacaoFrequencia.turma.ueCodigo
+        );
+      }
+    }
+  }, [unidadesEscolares, dadosFiltroAutenticacaoFrequencia]);
+
+  useEffect(() => {
+    if (turmas?.length) {
+      if (turmas.length === 1) {
+        setTurmaSelecionada(turmas[0].valor);
+      } else if (dadosFiltroAutenticacaoFrequencia?.turma?.codigo) {
+        setTurmaSelecionada(dadosFiltroAutenticacaoFrequencia.turma.codigo);
+      }
+
+      setCampoTurmaDesabilitado(turmas?.length === 1);
+    }
+  }, [turmas, dadosFiltroAutenticacaoFrequencia]);
 
   useEffect(() => {
     dispatch(limparDadosFiltro());
@@ -1087,7 +1167,12 @@ const Filtro = () => {
         setTurmaSelecionada(turmaUsuarioSelecionada.turma);
 
       setTextoAutocomplete(turmaUsuarioSelecionada.desc);
-      setConsideraHistorico(!!turmaUsuarioSelecionada.consideraHistorico);
+
+      const consideraHistoricoAtual =
+        !!dadosFiltroAutenticacaoFrequencia?.turma?.historica ||
+        !!turmaUsuarioSelecionada.consideraHistorico;
+
+      setConsideraHistorico(consideraHistoricoAtual);
     }
   }, [
     alternarFocoBusca,
