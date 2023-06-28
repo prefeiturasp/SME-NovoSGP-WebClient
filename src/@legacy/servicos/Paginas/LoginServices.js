@@ -12,39 +12,29 @@ import {
   salvarToken,
 } from '~/redux/modulos/usuario/actions';
 import {
-  setDadosFiltroAutenticacao,
-  setLimparTurmaFiltroAutenticacao,
-} from '../../redux/modulos/dadosAutenticacaoFrequencia/actions';
+  setDadosFiltroAutenticacaoFrequencia,
+  setLimparTurmaFiltroAutenticacaoFrequencia,
+} from '../../redux/modulos/turmaFiltroAutenticacaoFrequencia/actions';
 
 class LoginService {
   autenticar = async props => {
     const login = props?.login;
     const acessoAdmin = props?.acessoAdmin;
     const deslogar = props?.deslogar;
-    const integracaoToken = props?.integracaoToken;
+    const tokenIntegracaoFrequencia = props?.tokenIntegracaoFrequencia;
 
     const endpoint = () => {
-      if (acessoAdmin) {
-        return api.put(`v1/autenticacao/suporte/${login.usuario}`, {
-          login: login.usuario,
-          senha: login.senha,
-        });
-      }
+      if (acessoAdmin)
+        return api.put(`v1/autenticacao/suporte/${login.usuario}`);
 
-      if (deslogar) {
-        return api.put(`v1/autenticacao/suporte/deslogar`, {
-          login: login.usuario,
-          senha: login.senha,
-        });
-      }
+      if (deslogar) return api.put(`v1/autenticacao/suporte/deslogar`);
 
-      if (integracaoToken) {
+      if (tokenIntegracaoFrequencia)
         return api.post(
-          `/v1/autenticacao/integracoes/frequencia/${integracaoToken}`
+          `/v1/autenticacao/integracoes/frequencia/${tokenIntegracaoFrequencia}`
         );
-      }
 
-      return api.post(this.obtenhaUrlAutenticacao(), {
+      return api.post('v1/autenticacao', {
         login: login.usuario,
         senha: login.senha,
       });
@@ -55,7 +45,7 @@ class LoginService {
         .then(res => {
           let dados = null;
 
-          if (integracaoToken) {
+          if (tokenIntegracaoFrequencia) {
             dados = res.data.usuarioAutenticacao;
           } else {
             dados = res.data;
@@ -64,12 +54,12 @@ class LoginService {
           const token = dados?.token;
           store.dispatch(salvarToken(token));
 
-          if (limparDadosSuporte || integracaoToken) {
+          if (limparDadosSuporte || tokenIntegracaoFrequencia) {
             localStorage.clear();
             store.dispatch(limparDadosFiltro());
             store.dispatch(Deslogar());
             store.dispatch(removerTurma());
-            store.dispatch(setLimparTurmaFiltroAutenticacao());
+            store.dispatch(setLimparTurmaFiltroAutenticacaoFrequencia());
           }
 
           if (dados && dados?.perfisUsuario) {
@@ -83,12 +73,18 @@ class LoginService {
             store.dispatch(setTrocouPerfil(true));
           }
 
-          if (integracaoToken) {
+          if (tokenIntegracaoFrequencia) {
             const turmaFrequencia = {
               turma: res.data?.turma,
               componenteCurricularCodigo: res.data?.componenteCurricularCodigo,
             };
-            store.dispatch(setDadosFiltroAutenticacao(turmaFrequencia));
+            store.dispatch(
+              setDadosFiltroAutenticacaoFrequencia(turmaFrequencia)
+            );
+
+            setTimeout(() => {
+              store.dispatch(setLimparTurmaFiltroAutenticacaoFrequencia());
+            }, 15000);
           }
 
           return {
@@ -117,10 +113,6 @@ class LoginService {
     const limparDadosSuporte = acessoAdmin || deslogar;
 
     return validarAutenticar(limparDadosSuporte);
-  };
-
-  obtenhaUrlAutenticacao = () => {
-    return 'v1/autenticacao';
   };
 }
 

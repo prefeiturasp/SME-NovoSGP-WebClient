@@ -1,3 +1,4 @@
+import { ROUTES } from '@/core/enum/routes';
 import { URL_HOME, URL_REDEFINIRSENHA } from '~/constantes/url';
 import {
   salvarDadosLogin,
@@ -7,7 +8,10 @@ import { erros } from '~/servicos';
 import ServicoDashboard from '~/servicos/Paginas/Dashboard/ServicoDashboard';
 import LoginService from '~/servicos/Paginas/LoginServices';
 import ServicoNotificacao from '~/servicos/Paginas/ServicoNotificacao';
-import { obterMeusDados } from '~/servicos/Paginas/ServicoUsuario';
+import {
+  buscarVersao,
+  obterMeusDados,
+} from '~/servicos/Paginas/ServicoUsuario';
 import { setMenusPermissoes } from '~/servicos/servico-navegacao';
 
 class LoginHelper {
@@ -21,13 +25,13 @@ class LoginHelper {
     const acessoAdmin = props?.acessoAdmin;
     const deslogar = props?.deslogar;
     const navigate = props?.navigate;
-    const integracaoToken = props?.integracaoToken;
+    const tokenIntegracaoFrequencia = props?.tokenIntegracaoFrequencia;
 
     const autenticacao = await LoginService.autenticar({
       login,
       acessoAdmin,
       deslogar,
-      integracaoToken,
+      tokenIntegracaoFrequencia,
     });
 
     if (!autenticacao.sucesso) return autenticacao;
@@ -71,7 +75,13 @@ class LoginHelper {
       return { sucesso: false, erroGeral: '' };
     }
     obterMeusDados();
-    setMenusPermissoes();
+    buscarVersao();
+
+    setMenusPermissoes().then(() => {
+      if (tokenIntegracaoFrequencia) {
+        navigate(ROUTES.FREQUENCIA_PLANO_AULA);
+      }
+    });
 
     if (acessoAdmin) {
       ServicoNotificacao.obterUltimasNotificacoesNaoLidas().catch(e =>
@@ -82,8 +92,13 @@ class LoginHelper {
       );
     }
 
-    if (this.redirect) navigate(atob(this.redirect));
-    else navigate(URL_HOME);
+    if (this.redirect) {
+      navigate(atob(this.redirect));
+      return autenticacao;
+    } else {
+      navigate(URL_HOME);
+    }
+
     return autenticacao;
   };
 }

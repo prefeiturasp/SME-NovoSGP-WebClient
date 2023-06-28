@@ -1,7 +1,8 @@
+import { salvarVersao } from '@/@legacy/redux/modulos/sistema/actions';
 import { store } from '@/core/redux';
+import { setarPerfis } from '~/redux/modulos/perfil/actions';
 import { meusDados } from '~/redux/modulos/usuario/actions';
 import api from '~/servicos/api';
-import { setarPerfis } from '~/redux/modulos/perfil/actions';
 import { erro, sucesso } from '../alertas';
 
 const obterMeusDados = () => {
@@ -43,4 +44,21 @@ const obterListaSituacoes = () => {
   return api.get('v1/usuarios/situacoes');
 };
 
-export { obterMeusDados, obterPerfis, obterTodosPerfis, obterListaSituacoes };
+const buscarVersao = async () => {
+  try {
+    const resposta = await api.get('v1/versoes');
+    if (resposta?.data && resposta?.status === 200) {
+      store.dispatch(salvarVersao(resposta.data));
+    }
+  } catch (error) {
+    store.dispatch(salvarVersao(1));
+  }
+};
+
+export {
+  buscarVersao,
+  obterListaSituacoes,
+  obterMeusDados,
+  obterPerfis,
+  obterTodosPerfis,
+};

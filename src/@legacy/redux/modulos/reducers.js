@@ -47,7 +47,7 @@ import dashboardFechamento from './dashboardFechamento/reducers';
 import geral from './geral/reducers';
 import modalAnotacaoFrequencia from './modalAnotacaoFrequencia/reducers';
 import historicoPaginado from './historico-paginado/reducers';
-import turmaFiltroAutenticacao from './dadosAutenticacaoFrequencia/reducers';
+import turmaFiltroAutenticacaoFrequencia from './turmaFiltroAutenticacaoFrequencia/reducers';
 
 const reducers = combineReducers({
   navegacao,
@@ -97,7 +97,7 @@ const reducers = combineReducers({
   geral,
   modalAnotacaoFrequencia,
   historicoPaginado,
-  turmaFiltroAutenticacao,
+  turmaFiltroAutenticacaoFrequencia,
 });
 
 const rootReducer = (state, action) => {

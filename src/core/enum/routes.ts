@@ -92,11 +92,11 @@ export enum ROUTES {
   ENCAMINHAMENTO_NAAPA = '/naapa/encaminhamento',
   RELATORIO_ENCAMINHAMENTO_NAAPA = '/relatorios/naapa/encaminhamento',
   LOGIN = '/login',
-  AUTENTICACAO_INTEGRACOES_FREQUENCIA = '/autenticacao/integracoes/frequencia/:token',
   REDEFINIR_SENHA = '/redefinir-senha',
   REDEFINIR_SENHA_TOKEN = '/redefinir-senha/:token',
   RECUPERAR_SENHA = '/recuperar-senha',
   RELATORIO_SONDAGEM_ANALITICO = '/relatorios/sondagem/analitico',
   RELATORIO_AEE_REGISTRO_ITINERANCIA_IMPRESSAO = '/relatorios/aee/registro-itinerancia',
   RELATORIO_CONTROLE_FREQUENCIA_MENSAL = '/relatorios/frequencia/controle-mensal',
+  AUTENTICACAO_INTEGRACOES_FREQUENCIA = '/autenticacao/integracoes/frequencia/:tokenIntegracaoFrequencia',
 }

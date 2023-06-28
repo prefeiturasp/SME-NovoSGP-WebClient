@@ -83,12 +83,12 @@ const Login = () => {
     setErroGeral('');
     dispatch(setExibirMensagemSessaoExpirou(false));
 
-    const { sucesso, ...retorno } = await helper.acessar(
-      dados,
-      false,
-      false,
-      navigate
-    );
+    const { sucesso, ...retorno } = await helper.acessar({
+      login: dados,
+      acessoAdmin: false,
+      deslogar: false,
+      navigate,
+    });
 
     if (!sucesso) {
       setErroGeral(retorno.erroGeral);
