@@ -98,4 +98,5 @@ export enum ROUTES {
   RELATORIO_SONDAGEM_ANALITICO = '/relatorios/sondagem/analitico',
   RELATORIO_AEE_REGISTRO_ITINERANCIA_IMPRESSAO = '/relatorios/aee/registro-itinerancia',
   RELATORIO_CONTROLE_FREQUENCIA_MENSAL = '/relatorios/frequencia/controle-mensal',
+  AUTENTICACAO_INTEGRACOES_FREQUENCIA = '/autenticacao/integracoes/frequencia/:tokenIntegracaoFrequencia',
 }

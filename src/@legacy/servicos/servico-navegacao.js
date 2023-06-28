@@ -12,7 +12,7 @@ import modalidade from '~/dtos/modalidade';
 import { obterModalidadeFiltroPrincipal } from './Validacoes/validacoesInfatil';
 import { FiltroHelper } from '~/componentes-sgp';
 
-const setMenusPermissoes = () => {
+const setMenusPermissoes = async () => {
   const permissoes = {};
   const menus = [];
 
@@ -27,72 +27,78 @@ const setMenusPermissoes = () => {
 
   const listaUrlAjudaDoSistema = [];
 
-  api.get('v1/menus').then(resp => {
-    resp.data.forEach(item => {
-      const subMenu = {
-        codigo: item.codigo,
-        descricao: item.descricao,
-        ehMenu: item.ehMenu,
-        icone: item.icone,
-        quantidadeMenus: item.quantidadeMenus,
-        url: item.url,
-        menus: [],
-      };
-      if (item.menus && item.menus.length > 0) {
-        item.menus.forEach(itemMenu => {
-          const menu = {
-            codigo: itemMenu.codigo,
-            descricao: itemMenu.descricao,
-            url: itemMenu.url,
-            ajudaDoSistema: itemMenu?.ajudaDoSistema,
-            subMenus: [],
-          };
-          if (itemMenu?.ajudaDoSistema) {
-            listaUrlAjudaDoSistema.push({
-              url: itemMenu?.ajudaDoSistema,
-              rota: itemMenu.url,
-            });
-          }
-          if (subMenu.menus) {
-            subMenu.menus.push(menu);
-            if (itemMenu.url) {
-              setPermissao(itemMenu, permissoes);
-            }
-          }
-          if (itemMenu.subMenus && itemMenu.subMenus.length > 0) {
-            const subMenusOrdenados = itemMenu.subMenus.sort(
-              FiltroHelper.ordenarLista('ordem')
-            );
-            subMenusOrdenados.forEach(subItem => {
-              menu.subMenus.push({
-                codigo: subItem.codigo,
-                descricao: subItem.descricao,
-                url: subItem.url,
-                ajudaDoSistema: subItem?.ajudaDoSistema,
-                subMenus: [],
+  return api
+    .get('v1/menus')
+    .then(resp => {
+      resp.data.forEach(item => {
+        const subMenu = {
+          codigo: item.codigo,
+          descricao: item.descricao,
+          ehMenu: item.ehMenu,
+          icone: item.icone,
+          quantidadeMenus: item.quantidadeMenus,
+          url: item.url,
+          menus: [],
+        };
+        if (item.menus && item.menus.length > 0) {
+          item.menus.forEach(itemMenu => {
+            const menu = {
+              codigo: itemMenu.codigo,
+              descricao: itemMenu.descricao,
+              url: itemMenu.url,
+              ajudaDoSistema: itemMenu?.ajudaDoSistema,
+              subMenus: [],
+            };
+            if (itemMenu?.ajudaDoSistema) {
+              listaUrlAjudaDoSistema.push({
+                url: itemMenu?.ajudaDoSistema,
+                rota: itemMenu.url,
               });
-              if (subItem?.ajudaDoSistema) {
-                listaUrlAjudaDoSistema.push({
-                  url: subItem?.ajudaDoSistema,
-                  rota: subItem?.url,
-                });
+            }
+            if (subMenu.menus) {
+              subMenu.menus.push(menu);
+              if (itemMenu.url) {
+                setPermissao(itemMenu, permissoes);
               }
-              setPermissao(subItem, permissoes);
-            });
-          }
-        });
-      }
-      menus.push(subMenu);
-    });
+            }
+            if (itemMenu.subMenus && itemMenu.subMenus.length > 0) {
+              const subMenusOrdenados = itemMenu.subMenus.sort(
+                FiltroHelper.ordenarLista('ordem')
+              );
+              subMenusOrdenados.forEach(subItem => {
+                menu.subMenus.push({
+                  codigo: subItem.codigo,
+                  descricao: subItem.descricao,
+                  url: subItem.url,
+                  ajudaDoSistema: subItem?.ajudaDoSistema,
+                  subMenus: [],
+                });
+                if (subItem?.ajudaDoSistema) {
+                  listaUrlAjudaDoSistema.push({
+                    url: subItem?.ajudaDoSistema,
+                    rota: subItem?.url,
+                  });
+                }
+                setPermissao(subItem, permissoes);
+              });
+            }
+          });
+        }
+        menus.push(subMenu);
+      });
 
-    if (listaUrlAjudaDoSistema?.length) {
-      store.dispatch(setListaUrlAjudaDoSistema(listaUrlAjudaDoSistema));
-    } else {
-      store.dispatch(setListaUrlAjudaDoSistema([]));
-    }
-    store.dispatch(setMenu(menus));
-    store.dispatch(setPermissoes(permissoes));
-  });
+      if (listaUrlAjudaDoSistema?.length) {
+        store.dispatch(setListaUrlAjudaDoSistema(listaUrlAjudaDoSistema));
+      } else {
+        store.dispatch(setListaUrlAjudaDoSistema([]));
+      }
+      store.dispatch(setMenu(menus));
+      store.dispatch(setPermissoes(permissoes));
+
+      return true;
+    })
+    .catch(() => false)
+    .finally(() => true);
 };
 
 const getObjetoStorageUsuario = objeto => {
