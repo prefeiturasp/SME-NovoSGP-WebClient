@@ -11,6 +11,10 @@ import {
   removerTurma,
   salvarToken,
 } from '~/redux/modulos/usuario/actions';
+import {
+  setDadosFiltroAutenticacao,
+  setLimparTurmaFiltroAutenticacao,
+} from '../../redux/modulos/dadosAutenticacaoFrequencia/actions';
 
 class LoginService {
   autenticar = async props => {
@@ -65,6 +69,7 @@ class LoginService {
             store.dispatch(limparDadosFiltro());
             store.dispatch(Deslogar());
             store.dispatch(removerTurma());
+            store.dispatch(setLimparTurmaFiltroAutenticacao());
           }
 
           if (dados && dados?.perfisUsuario) {
@@ -78,9 +83,13 @@ class LoginService {
             store.dispatch(setTrocouPerfil(true));
           }
 
-          // if(integracaoToken){
-
-          // }
+          if (integracaoToken) {
+            const turmaFrequencia = {
+              turma: res.data?.turma,
+              componenteCurricularCodigo: res.data?.componenteCurricularCodigo,
+            };
+            store.dispatch(setDadosFiltroAutenticacao(turmaFrequencia));
+          }
 
           return {
             sucesso: true,

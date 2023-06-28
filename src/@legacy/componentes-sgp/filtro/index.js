@@ -69,6 +69,9 @@ const Filtro = () => {
 
   const usuarioStore = useSelector(state => state.usuario);
   const trocouPerfil = useSelector(state => state.perfil)?.trocouPerfil;
+  const dadosFiltroAutenticacao = useSelector(
+    state => state.turmaFiltroAutenticacao
+  )?.dadosFiltroAutenticacao;
   const turmaUsuarioSelecionada = usuarioStore.turmaSelecionada;
   const recarregarFiltroPrincipal = usuarioStore?.recarregarFiltroPrincipal;
   const [campoAnoLetivoDesabilitado, setCampoAnoLetivoDesabilitado] =
@@ -648,39 +651,70 @@ const Filtro = () => {
   /* Sessão que seleciona automaticamente no filtro se houver apenas 1 registro */
 
   useEffect(() => {
-    if (anosLetivos && anosLetivos.length === 1) {
-      setAnoLetivoSelecionado(anosLetivos[0].valor);
+    if (anosLetivos?.length) {
+      if (anosLetivos?.length === 1) {
+        setAnoLetivoSelecionado(anosLetivos[0].valor);
+      } else if (dadosFiltroAutenticacao?.turma?.anoLetivo) {
+        setAnoLetivoSelecionado(dadosFiltroAutenticacao?.turma.anoLetivo);
+      }
     }
-    setCampoAnoLetivoDesabilitado(anosLetivos && anosLetivos.length === 1);
-  }, [anosLetivos]);
+    setCampoAnoLetivoDesabilitado(anosLetivos?.length === 1);
+  }, [anosLetivos, dadosFiltroAutenticacao]);
 
   useEffect(() => {
-    if (modalidades && modalidades.length === 1) {
-      setModalidadeSelecionada(modalidades[0].valor);
-      setCampoModalidadeDesabilitado(true);
+    if (modalidades?.length) {
+      if (modalidades?.length === 1) {
+        setModalidadeSelecionada(modalidades[0].valor);
+      } else if (dadosFiltroAutenticacao?.turma?.modalidadeCodigo) {
+        setModalidadeSelecionada(
+          dadosFiltroAutenticacao?.turma.modalidadeCodigo
+        );
+      }
+      setCampoModalidadeDesabilitado(modalidades?.length === 1);
     }
-  }, [modalidades]);
+  }, [modalidades, dadosFiltroAutenticacao]);
 
   useEffect(() => {
-    if (periodos && periodos.length === 1)
-      setPeriodoSelecionado(periodos[0].valor || undefined);
-  }, [periodos]);
-
-  useEffect(() => {
-    if (dres && dres.length === 1) setDreSelecionada(dres[0].valor);
-  }, [dres]);
-
-  useEffect(() => {
-    if (unidadesEscolares && unidadesEscolares.length === 1)
-      setUnidadeEscolarSelecionada(unidadesEscolares[0].valor);
-  }, [unidadesEscolares]);
-
-  useEffect(() => {
-    if (turmas && turmas.length === 1) setTurmaSelecionada(turmas[0].valor);
-    else if (turmas && turmas.length > 1) {
-      setCampoTurmaDesabilitado(false);
+    if (periodos?.length) {
+      if (periodos?.length === 1) {
+        setPeriodoSelecionado(periodos[0].valor);
+      } else if (dadosFiltroAutenticacao?.turma?.periodo) {
+        setPeriodoSelecionado(dadosFiltroAutenticacao?.turma.periodo);
+      }
     }
-  }, [turmas]);
+  }, [periodos, dadosFiltroAutenticacao]);
+
+  useEffect(() => {
+    if (dres?.length) {
+      if (dres?.length === 1) {
+        setDreSelecionada(dres[0].valor);
+      } else if (dadosFiltroAutenticacao?.turma?.dreCodigo) {
+        setDreSelecionada(dadosFiltroAutenticacao?.turma?.dreCodigo);
+      }
+    }
+  }, [dres, dadosFiltroAutenticacao]);
+
+  useEffect(() => {
+    if (unidadesEscolares?.length) {
+      if (unidadesEscolares?.length === 1) {
+        setUnidadeEscolarSelecionada(unidadesEscolares[0].valor);
+      } else if (dadosFiltroAutenticacao?.turma?.ueCodigo) {
+        setUnidadeEscolarSelecionada(dadosFiltroAutenticacao?.turma?.ueCodigo);
+      }
+    }
+  }, [unidadesEscolares, dadosFiltroAutenticacao]);
+
+  useEffect(() => {
+    if (turmas?.length) {
+      if (turmas?.length === 1) {
+        setTurmaSelecionada(turmas[0].valor);
+      } else if (dadosFiltroAutenticacao?.turma?.codigo) {
+        setTurmaSelecionada(dadosFiltroAutenticacao?.turma?.codigo);
+      }
+
+      setCampoTurmaDesabilitado(turmas?.length === 1);
+    }
+  }, [turmas, dadosFiltroAutenticacao]);
 
   useEffect(() => {
     dispatch(limparDadosFiltro());

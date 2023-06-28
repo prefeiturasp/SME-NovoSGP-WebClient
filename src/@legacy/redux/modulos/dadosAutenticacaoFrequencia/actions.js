@@ -1,9 +1,8 @@
-export const setTurmaFiltroAutenticacao = payload => ({
-  type: '@autencicacaoFrequencia/setTurmaFiltroAutenticacao',
+export const setDadosFiltroAutenticacao = payload => ({
+  type: '@turmaFiltroAutenticacao/setDadosFiltroAutenticacao',
   payload,
 });
 
-export const setLimparTurmaFiltroAutenticacao = payload => ({
-  type: '@autencicacaoFrequencia/setLimparTurmaFiltroAutenticacao',
-  payload,
+export const setLimparTurmaFiltroAutenticacao = () => ({
+  type: '@turmaFiltroAutenticacao/setLimparTurmaFiltroAutenticacao',
 });
