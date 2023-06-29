@@ -2,7 +2,15 @@ import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
 import { Button, Colors, Loader } from '@/@legacy/componentes';
+import { limparDadosFiltro } from '@/@legacy/redux/modulos/filtro/actions';
+import { setExibirMensagemSessaoExpirou } from '@/@legacy/redux/modulos/mensagens/actions';
+import { LimparSessao } from '@/@legacy/redux/modulos/sessao/actions';
+import {
+  Deslogar,
+  removerTurma,
+} from '@/@legacy/redux/modulos/usuario/actions';
 import { ROUTES } from '@/core/enum/routes';
+import { store } from '@/core/redux';
 import { Col, Result, Row } from 'antd';
 import { useDispatch } from 'react-redux';
 import LoginHelper from '../Login/loginHelper';
@@ -26,6 +34,11 @@ const AutenticacaoFrequencia = () => {
 
     if (!sucesso && erroGeral) {
       setErroAutenticacao(true);
+      store.dispatch(removerTurma());
+      store.dispatch(limparDadosFiltro());
+      store.dispatch(Deslogar());
+      store.dispatch(LimparSessao());
+      store.dispatch(setExibirMensagemSessaoExpirou(false));
     }
   };
 
