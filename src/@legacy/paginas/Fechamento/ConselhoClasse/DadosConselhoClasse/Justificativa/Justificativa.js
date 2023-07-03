@@ -51,7 +51,8 @@ const Justificativa = props => {
   );
 
   notaConceitoPosConselhoAtual.justificativa = notaConceitoPosConselhoAtual.justificativa ?? "";
-  const {justificativa, auditoria, ehEdicao } = notaConceitoPosConselhoAtual;
+
+  const { justificativa, auditoria, ehEdicao } = notaConceitoPosConselhoAtual;
 
   const desabilitarBtnAcoes =
     (alunoDesabilitado && !podeEditarNota) ||
@@ -114,9 +115,7 @@ const Justificativa = props => {
   };
 
   useEffect(() => {
-    if (!emEdicao) {
-      setValoresIniciais(prev => ({ ...prev, justificativa }));
-    }
+    setValoresIniciais(prev => ({ ...prev, justificativa }));
   }, [justificativa]);
 
   return (
