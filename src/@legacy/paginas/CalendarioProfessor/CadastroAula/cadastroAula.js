@@ -779,7 +779,7 @@ function CadastroDeAula() {
                     gutter={[16, 16]}
                     style={{ paddingBottom: '8px' }}
                   >
-                    <Col md={6}>
+                    <Col xs={24} sm={8} md={6} lg={4}>
                       <CampoData
                         placeholder="Data da aula"
                         label="Data da aula"
@@ -844,7 +844,7 @@ function CadastroDeAula() {
                       />
                     </Col>
 
-                    <Col sm={24} md={6}>
+                    <Col xs={24} sm={8} md={6} lg={4}>
                       <CampoNumeroFormik
                         height="auto"
                         label="Quantidade de aulas"
