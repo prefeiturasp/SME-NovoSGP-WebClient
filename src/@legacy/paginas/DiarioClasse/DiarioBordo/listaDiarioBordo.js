@@ -466,10 +466,24 @@ const ListaDiarioBordo = () => {
                             <JoditEditor
                               id={`${id}-editor-planejamento`}
                               name="planejamento"
+                              label={diarioBordoAtual?.nomeComponente}
                               value={diarioBordoAtual?.planejamento}
                               desabilitar
                             />
                           </div>
+                          {diarioBordoAtual?.nomeComponenteIrmao ? (
+                            <div className="col-sm-12 mb-3">
+                              <JoditEditor
+                                id={`${id}-editor-planejamento`}
+                                name="nomeComponenteIrmao"
+                                label={diarioBordoAtual?.nomeComponenteIrmao}
+                                value={diarioBordoAtual?.planejamentoIrmao}
+                                desabilitar
+                              />
+                            </div>
+                          ) : (
+                            <></>
+                          )}
                           <div className="col-sm-12 d-flex justify-content-end mb-4">
                             <Button
                               id={shortid.generate()}

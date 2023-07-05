@@ -71,14 +71,13 @@ const DiarioBordo = () => {
   const [auditoria, setAuditoria] = useState('');
   const [turmaInfantil, setTurmaInfantil] = useState(false);
   const [refForm, setRefForm] = useState({});
-  const [temPeriodoAberto, setTemPeriodoAberto] = useState(true);
+  const [dadosDiarioBordo, setDadosDiarioBordo] = useState();
   const [aulaSelecionada, setAulaSelecionada] = useState();
   const [aulasParaSelecionar, setAulasParaSelecionar] = useState([]);
   const [exibirModalSelecionarAula, setExibirModalSelecionarAula] =
     useState(false);
   const [desabilitarCampos, setDesabilitarCampos] = useState(false);
   const [somenteConsulta, setSomenteConsulta] = useState(false);
-  const [ehInseridoCJ, setEhInseridoCJ] = useState(false);
   const dispatch = useDispatch();
 
   const aulaId = paramsRoute?.aulaId;
@@ -93,6 +92,7 @@ const DiarioBordo = () => {
     componenteCurricularId: null,
     codDisciplinaPai: null,
     diarioBordoId: null,
+    planejamentoIrmao: '',
   };
   const [valoresIniciais, setValoresIniciais] = useState(inicial);
 
@@ -129,13 +129,13 @@ const DiarioBordo = () => {
         : soConsulta || !permissoesTela.podeIncluir;
     setDesabilitarCampos(desabilitar);
 
-    if (!temPeriodoAberto) {
+    if (!dadosDiarioBordo?.temPeriodoAberto) {
       setDesabilitarCampos(true);
     }
   }, [
     auditoria,
     permissoesTela,
-    temPeriodoAberto,
+    dadosDiarioBordo?.temPeriodoAberto,
     modalidadesFiltroPrincipal,
     turmaSelecionada,
   ]);
@@ -150,8 +150,7 @@ const DiarioBordo = () => {
       setAulaSelecionada();
       setModoEdicao(false);
       setAuditoria();
-      setTemPeriodoAberto(true);
-      setEhInseridoCJ(false);
+      setDadosDiarioBordo();
     },
     [inicial]
   );
@@ -251,9 +250,9 @@ const DiarioBordo = () => {
         devolutivas: retorno.data.devolutivas || '',
         componenteCurricularId: compCurricularSelecionado,
         codDisciplinaPai: codDisciplinaPaiSelecionado,
+        planejamentoIrmao: retorno.data.planejamentoIrmao || '',
       };
-      setTemPeriodoAberto(retorno.data.temPeriodoAberto);
-      setEhInseridoCJ(retorno.data.inseridoCJ);
+      setDadosDiarioBordo(retorno.data);
       setValoresIniciais(valInicial);
       if (retorno?.data?.auditoria?.id) {
         setAuditoria(retorno.data.auditoria);
@@ -319,7 +318,7 @@ const DiarioBordo = () => {
     }
     setDataSelecionada('');
     setComponenteCurricularSelecionado(valor);
-
+    
     const valorCodDisciplinaPai = listaComponenteCurriculares.find(
       item => String(item.codigoComponenteCurricular) === valor
     );
@@ -460,7 +459,7 @@ const DiarioBordo = () => {
       }
     },
 
-    [obterAulasDataSelecionada]
+    [obterAulasDataSelecionada,componenteCurricularSelecionado]
   );
 
   const onChangeData = async (data, form) => {
@@ -670,7 +669,9 @@ const DiarioBordo = () => {
         ''
       )}
       {turmaSelecionada.turma ? <AlertaPermiteSomenteTurmaInfantil /> : ''}
-      <AlertaPeriodoEncerrado exibir={!temPeriodoAberto && !somenteConsulta} />
+      <AlertaPeriodoEncerrado
+        exibir={!dadosDiarioBordo?.temPeriodoAberto && !somenteConsulta}
+      />
       <ModalMultiLinhas
         key="erros-diario-bordo"
         visivel={mostrarErros}
@@ -771,7 +772,7 @@ const DiarioBordo = () => {
                               key="1"
                             >
                               <>
-                                {ehInseridoCJ && (
+                                {dadosDiarioBordo?.ehInseridoCJ && (
                                   <div className="d-flex justify-content-end mb-2">
                                     <MarcadorSituacao>
                                       Registro inserido pelo CJ
@@ -781,6 +782,7 @@ const DiarioBordo = () => {
                                 <JoditEditor
                                   valideClipboardHTML={false}
                                   form={form}
+                                  label={dadosDiarioBordo?.nomeComponente}
                                   value={valoresIniciais.planejamento}
                                   name="planejamento"
                                   onChange={v => {
@@ -790,6 +792,17 @@ const DiarioBordo = () => {
                                   }}
                                   desabilitar={desabilitarCampos}
                                 />
+                                {dadosDiarioBordo?.nomeComponenteIrmao ? (
+                                  <JoditEditor
+                                    label={
+                                      dadosDiarioBordo?.nomeComponenteIrmao
+                                    }
+                                    value={dadosDiarioBordo?.planejamentoIrmao}
+                                    desabilitar
+                                  />
+                                ) : (
+                                  <></>
+                                )}
                               </>
                             </PainelCollapse.Painel>
                           </PainelCollapse>
