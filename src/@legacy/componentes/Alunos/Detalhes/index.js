@@ -2,13 +2,14 @@ import { Card } from 'antd';
 import * as moment from 'moment';
 import PropTypes from 'prop-types';
 import React from 'react';
-import { SinalizacaoAEE } from '~/componentes-sgp';
+import EstudanteAtendidoAEE from '@/components/sgp/estudante-atendido-aee';
 import Button from '~/componentes/button';
 import { Base, Colors } from '~/componentes/colors';
 import { SGP_BUTTON_IMPRIMIR_DADOS_INDIVIDUAIS } from '~/constantes/ids/button';
 import { formatarFrequencia } from '~/utils';
 import FotoEstudanteObjectCard from './imagemEstudanteObjectCard';
 import { Container, DadosAluno, FrequenciaGlobal } from './styles';
+import EstudanteMatriculadoPAP from '@/components/sgp/estudante-matriculado-pap';
 
 const DetalhesAluno = props => {
   const {
@@ -113,7 +114,8 @@ const DetalhesAluno = props => {
                 </p>
               </div>
               <div>
-                <SinalizacaoAEE exibirSinalizacao={dados?.ehAtendidoAEE} />
+                <EstudanteAtendidoAEE show={dados?.ehAtendidoAEE} />
+                <EstudanteMatriculadoPAP show={dados?.ehMatriculadoTurmaPAP} />
               </div>
             </div>
           ) : (

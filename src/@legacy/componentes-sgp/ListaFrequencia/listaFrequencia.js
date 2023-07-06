@@ -6,7 +6,7 @@ import { DataTable } from '~/componentes';
 import tipoFrequencia from '~/dtos/tipoFrequencia';
 import { verificaSomenteConsulta } from '~/servicos/servico-navegacao';
 import ModalAnotacoesListaFrequencia from './componentes/modalAnotacoesListaFrequencia';
-import SinalizacaoAEE from '../SinalizacaoAEE/sinalizacaoAEE';
+import EstudanteAtendidoAEE from '@/components/sgp/estudante-atendido-aee';
 import BotaoAnotacao from './componentes/botaoAnotacao';
 import CampoPreDefinirFrequencia from './componentes/campoPreDefinirFrequencia';
 import CampoTipoFrequencia from './componentes/campoTipoFrequencia';
@@ -18,6 +18,7 @@ import {
 } from './listaFrequencia.css';
 import { formatarFrequencia } from '~/utils';
 import { setTemEstudanteAlteradoComCompensacao } from '~/redux/modulos/frequenciaPlanoAula/actions';
+import EstudanteMatriculadoPAP from '@/components/sgp/estudante-matriculado-pap';
 
 const ListaFrequencia = props => {
   const {
@@ -146,9 +147,8 @@ const ListaFrequencia = props => {
           {aluno?.numeroAlunoChamada} - {aluno?.nomeAluno}
         </div>
         <div className="d-flex justify-content-end">
-          <div className="mr-3">
-            <SinalizacaoAEE exibirSinalizacao={aluno?.ehAtendidoAEE} />
-          </div>
+          <EstudanteAtendidoAEE show={aluno?.ehAtendidoAEE} />
+          <EstudanteMatriculadoPAP show={aluno?.ehMatriculadoTurmaPAP} />
           <BotaoAnotacao
             indexAluno={indexAluno}
             ehInfantil={ehInfantil}
