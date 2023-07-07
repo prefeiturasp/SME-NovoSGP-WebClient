@@ -225,33 +225,30 @@ const ListaDiarioBordo = () => {
     let dados = {};
     let observacoes = [];
 
-    if (idDiario) {
-      setCarregandoCollapse(true);
-      dados = await ServicoDiarioBordo.obterDiarioBordoDetalhes(idDiario);
-      if (dados?.data) {
-        if (dados.data.observacoes.length) {
-          observacoes = ServicoObservacoesUsuario.obterUsuarioPorObservacao(
-            dados.data.observacoes,
-            true
-          );
-          dispatch(setDadosObservacoesUsuario(observacoes));
-        }
-        setDiarioBordoAtual({
-          ...dados.data,
-          observacoes,
-        });
-
-        setCarregarListaUsuariosNotificar(true);
+    setCarregandoCollapse(true);
+    dados = idDiario
+      ? await ServicoDiarioBordo.obterDiarioBordoDetalhes(idDiario)
+      : await ServicoDiarioBordo.obterDiarioBordo(
+          aulaIdFormatado,
+          componenteCurricularSelecionado
+        );
+    if (dados?.data) {
+      if (dados?.data?.observacoes?.length) {
+        observacoes = ServicoObservacoesUsuario.obterUsuarioPorObservacao(
+          dados.data.observacoes,
+          true
+        );
+        dispatch(setDadosObservacoesUsuario(observacoes));
       }
-
-      setCarregandoCollapse(false);
-    } else {
       setDiarioBordoAtual({
-        ...diario,
+        ...dados.data,
         observacoes,
       });
-      setCarregarListaUsuariosNotificar(false);
+
+      setCarregarListaUsuariosNotificar(true);
     }
+
+    setCarregandoCollapse(false);
   };
 
   const salvarEditarObservacao = async valor => {
