@@ -53,7 +53,6 @@ export default function RelatorioPAP(state = inicial, action) {
         };
       }
       case '@relatorioPAP/setPeriodoSelecionadoPAP': {
-        console.log(action.payload);
         return {
           ...draft,
           periodoSelecionadoPAP: action.payload,

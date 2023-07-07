@@ -28,6 +28,7 @@ import AtividadeContraturnoTabela from './Componentes/AtividadeContraturno/ativi
 import CampoDinamicoEditor from './Componentes/campoDinamicoEditor';
 import InformacoesSrmTabela from './Componentes/InformacoesSrm/InformacoesSrmTabela';
 import TurmasProgramaTabela from './Componentes/TurmasPrograma/turmasProgramaTabela';
+import TabelaFrequenciaTurmaPAP from './Componentes/TabelaFrequenciaTurmaPAP/TabelaFrequenciaTurmaPAP';
 
 const QuestionarioDinamico = props => {
   const dispatch = useDispatch();
@@ -65,7 +66,6 @@ const QuestionarioDinamico = props => {
         dados?.id
       );
     }
-
   }, [refForm]);
 
   const montarValoresIniciais = useCallback(() => {
@@ -114,6 +114,7 @@ const QuestionarioDinamico = props => {
           case tipoQuestao.ContatoResponsaveis:
           case tipoQuestao.TurmasPrograma:
           case tipoQuestao.InformacoesSrm:
+          case tipoQuestao.InformacoesFrequenciaTurmaPAP:
             valorRespostaAtual = resposta[0].texto
               ? JSON.parse(resposta[0].texto)
               : '';
@@ -155,11 +156,12 @@ const QuestionarioDinamico = props => {
               q => String(q.id) === String(valorSalvo)
             );
 
-            const montarCampo = montarComboMultiplaEscolhaComplementarComResposta
-              ? opcaoResposta?.questoesComplementares?.find(
-                  q => q.resposta?.length
-                )
-              : opcaoResposta?.questoesComplementares?.length;
+            const montarCampo =
+              montarComboMultiplaEscolhaComplementarComResposta
+                ? opcaoResposta?.questoesComplementares?.find(
+                    q => q.resposta?.length
+                  )
+                : opcaoResposta?.questoesComplementares?.length;
 
             return !!montarCampo;
           }
@@ -167,9 +169,10 @@ const QuestionarioDinamico = props => {
 
         if (idsQuestoesComplementares?.length) {
           idsQuestoesComplementares.forEach(idQuestao => {
-            const questaoComplmentarComResposta = questaoAtual?.opcaoResposta.find(
-              q => String(q.id) === String(idQuestao)
-            );
+            const questaoComplmentarComResposta =
+              questaoAtual?.opcaoResposta.find(
+                q => String(q.id) === String(idQuestao)
+              );
 
             if (questaoComplmentarComResposta?.questoesComplementares?.length) {
               questaoComplmentarComResposta.questoesComplementares.forEach(
@@ -294,19 +297,21 @@ const QuestionarioDinamico = props => {
       if (valorAtualSelecionado?.length) {
         const listaCamposRenderizar = [];
 
-        const todosCamposComplementares = QuestionarioDinamicoFuncoes.obterTodosCamposComplementares(
-          valorAtualSelecionado,
-          questaoAtual
-        );
+        const todosCamposComplementares =
+          QuestionarioDinamicoFuncoes.obterTodosCamposComplementares(
+            valorAtualSelecionado,
+            questaoAtual
+          );
 
         const camposSemEspaco = todosCamposComplementares.map(m => {
           return { ...m, nome: m.nome.trim() };
         });
 
-        const camposDuplicados = QuestionarioDinamicoFuncoes.agruparCamposDuplicados(
-          camposSemEspaco,
-          'nome'
-        );
+        const camposDuplicados =
+          QuestionarioDinamicoFuncoes.agruparCamposDuplicados(
+            camposSemEspaco,
+            'nome'
+          );
 
         if (camposDuplicados?.length) {
           camposDuplicados.forEach(c => {
@@ -322,10 +327,11 @@ const QuestionarioDinamico = props => {
         }
 
         if (camposSemEspaco?.length && camposDuplicados?.length) {
-          const camposNaoDuplicados = QuestionarioDinamicoFuncoes.obterCamposNaoDuplicados(
-            camposSemEspaco,
-            camposDuplicados
-          );
+          const camposNaoDuplicados =
+            QuestionarioDinamicoFuncoes.obterCamposNaoDuplicados(
+              camposSemEspaco,
+              camposDuplicados
+            );
           if (camposNaoDuplicados?.length) {
             camposNaoDuplicados.forEach(c => {
               listaCamposRenderizar.push(c);
@@ -611,6 +617,11 @@ const QuestionarioDinamico = props => {
               onChangeQuestionario();
             }}
           />
+        );
+        break;
+      case tipoQuestao.InformacoesFrequenciaTurmaPAP:
+        campoAtual = (
+          <TabelaFrequenciaTurmaPAP {...params} label={label?.props?.text} />
         );
         break;
       default:

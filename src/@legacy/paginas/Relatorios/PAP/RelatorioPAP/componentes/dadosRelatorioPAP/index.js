@@ -12,6 +12,7 @@ import { useCallback, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import BotaoOrdenarListaAlunosPAP from '../botaoOrdenarListaAlunosPAP';
 import ObjectCardRelatorioPAP from '../objectCardRelatorioPAP';
+import SecoesRelatorioPAP from '../secoes';
 
 const DadosRelatorioPAP = () => {
   const dispatch = useDispatch();
@@ -107,6 +108,7 @@ const DadosRelatorioPAP = () => {
           >
             <>
               <ObjectCardRelatorioPAP />
+              <SecoesRelatorioPAP />
             </>
           </TabelaRetratil>
         </Col>
