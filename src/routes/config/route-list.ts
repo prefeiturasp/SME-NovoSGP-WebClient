@@ -115,6 +115,7 @@ import RelatorioEncaminhamentonNAAPA from '~/paginas/Relatorios/NAAPA/encaminham
 import RelatorioSondagemAnalitico from '~/paginas/Relatorios/Sondagem/relatorioSondagem';
 import RelatorioRegistroItinerancia from '~/paginas/Relatorios/AEE/registroItinerancia/relatorioRegistroItinerancia';
 import RelatorioControleFrequenciaMensal from '~/paginas/Relatorios/Frequencia/RelatorioControleFrequenciaMensal/relatorioControleFrequenciaMensal';
+import RelatorioPAP from '@/@legacy/paginas/Planejamento/RelatorioPAP';
 
 export interface RouteProps {
   path: string;
@@ -1657,6 +1658,17 @@ route.set(ROUTES.RELATORIO_CONTROLE_FREQUENCIA_MENSAL, {
   tipo: RotasTipo.EstruturadaAutenticada,
   temPermissionamento: true,
   chavePermissao: ROUTES.RELATORIO_CONTROLE_FREQUENCIA_MENSAL,
+});
+
+route.set(ROUTES.RELATORIO_PAP, {
+  breadcrumbName: 'Relatorio PAP',
+  menu: ['Planejamento'],
+  parent: '/',
+  component: RelatorioPAP,
+  exact: true,
+  tipo: RotasTipo.EstruturadaAutenticada,
+  // temPermissionamento: true,
+  chavePermissao: ROUTES.RELATORIO_PAP,
 });
 
 const getRoutesArray = () => {
