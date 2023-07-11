@@ -59,6 +59,7 @@ const TabCadastroPlano = () => {
           turma: aluno.turmaEscola,
           ehAtendidoAEE: aluno?.ehAtendidoAEE,
           numeroChamada: aluno.numeroAlunoChamada,
+          ehMatriculadoTurmaPAP: aluno?.ehMatriculadoTurmaPAP
         };
 
         if (resultado?.data?.turma?.codigo) {

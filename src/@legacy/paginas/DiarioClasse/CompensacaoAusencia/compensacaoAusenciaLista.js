@@ -29,6 +29,7 @@ import {
   SGP_SELECT_COMPONENTE_CURRICULAR,
 } from '~/constantes/ids/select';
 import { useNavigate } from 'react-router-dom';
+import EstudanteMatriculadoPAP from '@/components/sgp/estudante-matriculado-pap';
 
 const CompensacaoAusenciaLista = () => {
   const navigate = useNavigate();
@@ -84,7 +85,10 @@ const CompensacaoAusenciaLista = () => {
     return (
       <AlunosCompensacao>
         {dados.map(aluno => (
-          <span key={aluno}>{aluno}</span>
+          <span key={aluno?.nome}>
+            {aluno?.nome}
+            <EstudanteMatriculadoPAP show={!!aluno.ehMatriculadoTurmaPAP} />
+          </span>
         ))}
       </AlunosCompensacao>
     );

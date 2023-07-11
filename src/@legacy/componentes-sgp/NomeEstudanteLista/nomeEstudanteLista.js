@@ -1,30 +1,31 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import SinalizacaoAEE from '../SinalizacaoAEE/sinalizacaoAEE';
+import EstudanteAtendidoAEE from '@/components/sgp/estudante-atendido-aee';
+import EstudanteMatriculadoPAP from '@/components/sgp/estudante-matriculado-pap';
 
-const NomeEstudanteLista = ({ nome, exibirSinalizacao, tituloSinalizacao }) => {
+const NomeEstudanteLista = ({ nome, ehAtendidoAEE, ehMatriculadoTurmaPAP }) => {
   return (
     <div className="d-flex justify-content-between w-100">
-      <span className="pr-2">{nome} </span>
-      <SinalizacaoAEE
-        exibirSinalizacao={exibirSinalizacao}
-        tituloSinalizacao={tituloSinalizacao}
-      />
+      <span>{nome} </span>
+      <div className="d-flex justify-content-end">
+        <EstudanteAtendidoAEE show={ehAtendidoAEE} />
+        <EstudanteMatriculadoPAP show={ehMatriculadoTurmaPAP} />
+      </div>
     </div>
   );
 };
 
 NomeEstudanteLista.defaultProps = {
   nome: '',
-  exibirSinalizacao: false,
-  tituloSinalizacao: 'Criança/Estudante atendida pelo AEE',
+  ehAtendidoAEE: false,
+  ehMatriculadoTurmaPAP: false,
 };
 
 NomeEstudanteLista.propTypes = {
   nome: PropTypes.string,
-  exibirSinalizacao: PropTypes.bool,
-  tituloSinalizacao: PropTypes.string,
+  ehAtendidoAEE: PropTypes.bool,
+  ehMatriculadoTurmaPAP: PropTypes.bool,
 };
 
 export default NomeEstudanteLista;

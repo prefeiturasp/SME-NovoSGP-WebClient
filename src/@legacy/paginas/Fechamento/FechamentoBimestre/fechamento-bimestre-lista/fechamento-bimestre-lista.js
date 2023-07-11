@@ -21,10 +21,11 @@ import ServicoFechamentoBimestre from '~/servicos/Paginas/Fechamento/ServicoFech
 import { erros, sucesso } from '~/servicos/alertas';
 import RotasDto from '~/dtos/rotasDto';
 import ModalAnotacaoAluno from '../../FechamentoModalAnotacaoAluno/modal-anotacao-aluno';
-import SinalizacaoAEE from '~/componentes-sgp/SinalizacaoAEE/sinalizacaoAEE';
+import EstudanteAtendidoAEE from '@/components/sgp/estudante-atendido-aee';
 import Alert from '~/componentes/alert';
 import ListaoBotaoAnotacao from '~/paginas/DiarioClasse/Listao/operacoes/listaoTabs/tabFrequencia/lista/componentes/listaoBotaoAnotacao';
 import { formatarFrequencia } from '~/utils';
+import EstudanteMatriculadoPAP from '@/components/sgp/estudante-matriculado-pap';
 
 const FechamentoBimestreLista = props => {
   const {
@@ -304,12 +305,13 @@ const FechamentoBimestreLista = props => {
                           className="d-flex"
                           style={{ justifyContent: 'space-between' }}
                         >
-                          <div className=" d-flex justify-content-start">
+                          <div className=" d-flex justify-content-start align-items-center">
                             {item.nome}
                           </div>
-                          <div className=" d-flex justify-content-end">
-                            <SinalizacaoAEE
-                              exibirSinalizacao={item.ehAtendidoAEE}
+                          <div className=" d-flex justify-content-end align-items-center">
+                            <EstudanteAtendidoAEE show={item.ehAtendidoAEE} />
+                            <EstudanteMatriculadoPAP
+                              show={item?.ehMatriculadoTurmaPAP}
                             />
                             <ListaoBotaoAnotacao
                               permiteAnotacao={

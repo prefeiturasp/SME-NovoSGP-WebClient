@@ -42,7 +42,8 @@ function TabelaAlunos({
                 <td className="w-100">
                   <NomeEstudanteLista
                     nome={aluno?.nome}
-                    exibirSinalizacao={aluno?.ehAtendidoAEE}
+                    ehAtendidoAEE={aluno?.ehAtendidoAEE}
+                    ehMatriculadoTurmaPAP={aluno?.ehMatriculadoTurmaPAP}
                   />
                 </td>
                 <td>

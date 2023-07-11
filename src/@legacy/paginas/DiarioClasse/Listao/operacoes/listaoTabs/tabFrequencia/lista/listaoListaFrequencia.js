@@ -5,7 +5,7 @@ import React, { useContext, useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { DataTable } from '~/componentes';
 import { Ordenacao } from '~/componentes-sgp';
-import SinalizacaoAEE from '~/componentes-sgp/SinalizacaoAEE/sinalizacaoAEE';
+import EstudanteAtendidoAEE from '@/components/sgp/estudante-atendido-aee';
 import { Base } from '~/componentes/colors';
 import ListaoContext from '~/paginas/DiarioClasse/Listao/listaoContext';
 import { setTelaEmEdicao } from '~/redux/modulos/geral/actions';
@@ -24,6 +24,7 @@ import {
   MarcadorSituacao,
   TextoEstilizado,
 } from './listaFrequencia.css';
+import EstudanteMatriculadoPAP from '@/components/sgp/estudante-matriculado-pap';
 
 const ListaoListaFrequencia = () => {
   const {
@@ -205,7 +206,8 @@ const ListaoListaFrequencia = () => {
           {aluno.nomeAluno}
         </div>
         <div className=" d-flex justify-content-end">
-          <SinalizacaoAEE exibirSinalizacao={aluno.ehAtendidoAEE} />
+          <EstudanteAtendidoAEE show={aluno.ehAtendidoAEE} />
+          <EstudanteMatriculadoPAP show={aluno?.ehMatriculadoTurmaPAP} />
         </div>
       </div>
     );
