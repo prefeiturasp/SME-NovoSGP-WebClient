@@ -59,6 +59,15 @@ export const Tabela = styled.table`
           display: inline-block;
           margin-left: 0.2rem;
         }
+
+        .iconeAusenciaPercurso {
+          background: ${Base.VermelhoAlerta};
+          width: 9px;
+          height: 9px;
+          border-radius: 50%;
+          display: inline-block;
+          margin-left: 0.2rem;
+        }
       }
     }
   }

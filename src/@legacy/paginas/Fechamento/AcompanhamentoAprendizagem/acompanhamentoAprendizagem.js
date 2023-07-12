@@ -41,7 +41,8 @@ import TabelaRetratilAcompanhamentoAprendizagem from './DadosAcompanhamentoApren
 import LoaderAcompanhamentoAprendizagem from './loaderAcompanhamentoAprendizagem';
 import ModalErrosAcompanhamentoAprendizagem from './modalErrosAcompanhamentoAprendizagem';
 import Button from '~/componentes/button';
-import { Colors } from '~/componentes';
+import { Colors, ModalConteudoHtml, Label } from '~/componentes';
+import { Row } from 'antd';
 
 const AcompanhamentoAprendizagem = () => {
   const dispatch = useDispatch();
@@ -67,6 +68,8 @@ const AcompanhamentoAprendizagem = () => {
   const [listaSemestres, setListaSemestres] = useState([]);
   const [semestreSelecionado, setSemestreSelecionado] = useState(undefined);
   const [exibirModalValidar, setExibirModalValidar] = useState(false);
+  const [validarDados, setValidarDados] = useState(null);
+  const [listAlunosValidarDados, setListAlunosValidar] = useState(null)
 
   const resetarInfomacoes = useCallback(() => {
     dispatch(limparDadosAcompanhamentoAprendizagem());
@@ -109,6 +112,30 @@ const AcompanhamentoAprendizagem = () => {
       }
     }
   }, [modalidadesFiltroPrincipal, turmaSelecionada]);
+
+  const onClickValidar = () => {
+    ServicoAcompanhamentoAprendizagem.validarInconsistencias(
+      turmaSelecionada?.turma,
+      semestreSelecionado
+    )
+      .then(resposta => {
+        if (resposta?.data) {
+          setExibirModalValidar(true);
+          setValidarDados(resposta.data);
+        }
+      })
+      .catch(e => erros(e))
+  };
+
+  const onCloseModalValidar = () => {
+    setExibirModalValidar(false);
+    setValidarDados(null);
+  };
+
+  const onClickValidarDados = () => {
+    setListAlunosValidar(validarDados?.InconsistenciaPercursoIndividual?.AlunosComInconsistenciaPercursoIndividualRAA)
+    setExibirModalValidar(false);
+  };
 
   useEffect(() => {
     resetarInfomacoes();
@@ -248,6 +275,36 @@ const AcompanhamentoAprendizagem = () => {
 
   return (
     <Container>
+      {exibirModalValidar ? (
+        <ModalConteudoHtml
+          titulo={validarDados?.MensagemInconsistenciaPercursoColetivo}
+          visivel={exibirModalValidar}
+          onConfirmacaoSecundaria={() => onCloseModalValidar()}
+          onConfirmacaoPrincipal={() => onClickValidarDados()}
+          labelBotaoPrincipal="Validar"
+          labelBotaoSecundario="Cancelar"
+          fontSizeTitulo="18"
+          tipoFonte="bold"
+        >
+          <Label text={validarDados?.InconsistenciaPercursoIndividual?.MensagemInsconsistencia} />
+          <table className="table">
+              <tbody className="tabela-um-tbody">
+                {validarDados?.InconsistenciaPercursoIndividual?.AlunosComInconsistenciaPercursoIndividualRAA.map((dado, index) => {
+                  return (<tr key={index}>
+                    <td className="col-valor-linha-um">
+                      {dado.NumeroChamada}
+                    </td>
+                    <td className="col-valor-linha-um">
+                      {dado.AlunoNome} ({ dado.AlunoCodigo })
+                    </td>
+                  </tr>)
+                })}
+              </tbody>
+            </table>
+        </ModalConteudoHtml>
+      ) : (
+        <></>
+      )}
       {!turmaSelecionada.turma ? (
         <Alert
           alerta={{
@@ -315,7 +372,7 @@ const AcompanhamentoAprendizagem = () => {
                     <Button
                       label="Validar"
                       color={Colors.Roxo}
-                      onClick={() => setExibirModalValidar(true)}
+                      onClick={onClickValidar}
                     />
                   </div>
                   <div className="col-md-12 mb-2 mt-2">
@@ -327,6 +384,7 @@ const AcompanhamentoAprendizagem = () => {
                         onChangeAlunoSelecionado(value, semestreSelecionado);
                       }}
                       permiteOnChangeAluno={permiteOnChangeAluno}
+                      alunosValidar={listAlunosValidarDados}
                     >
                       <ObjectCardAcompanhamentoAprendizagem
                         semestre={semestreSelecionado}

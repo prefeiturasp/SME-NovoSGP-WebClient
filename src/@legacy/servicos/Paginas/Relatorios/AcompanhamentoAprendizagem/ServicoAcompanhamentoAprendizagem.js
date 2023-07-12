@@ -324,6 +324,36 @@ class ServicoAcompanhamentoAprendizagem {
       dispatch(setQtdMaxImagensCampoPercursoIndividual());
     }
   };
+
+  validarInconsistencias = (turmaId, semestre) => {
+    // return new Promise(resolve => {
+    //   resolve({
+    //     data: {
+    //       "MensagemInconsistenciaPercursoColetivo": "Ausência do preenchimento do percurso coletivo do semestre.",
+    //       "InconsistenciaPercursoIndividual": {
+    //         "MensagemInsconsistencia": "Crianças com ausência do percurso individual no semestre:",
+    //         "AlunosComInconsistenciaPercursoIndividualRAA": [{
+    //           "NumeroChamada": 1,
+    //           "AlunoNome": "HELLEN SILVEIRA SANTOS",
+    //           "AlunoCodigo": "1234567"
+    //         },
+    //         {
+    //           "NumeroChamada": 2,
+    //           "AlunoNome": "MARIA CLARA ALMEIDA DIAS",
+    //           "AlunoCodigo": "7654321"
+    //         },
+    //         {
+    //           "NumeroChamada": 3,
+    //           "AlunoNome": "MARILYN HELENA SIMOES DE SOUZA",
+    //           "AlunoCodigo": "4152637"
+    //         }
+    //         ]
+    //       }
+    //     }
+    //   });
+    // });
+    return api.get(`/v1/acompanhamento/alunos/validar-percurso/turma/${turmaId}/semestre/${semestre}`)
+  }
 }
 
 export default new ServicoAcompanhamentoAprendizagem();
