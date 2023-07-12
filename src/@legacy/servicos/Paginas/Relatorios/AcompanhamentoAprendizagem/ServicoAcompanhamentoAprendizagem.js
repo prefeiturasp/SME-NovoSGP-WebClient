@@ -326,33 +326,208 @@ class ServicoAcompanhamentoAprendizagem {
   };
 
   validarInconsistencias = (turmaId, semestre) => {
-    // return new Promise(resolve => {
-    //   resolve({
-    //     data: {
-    //       "mensagemInconsistenciaPercursoColetivo": "Ausência do preenchimento do percurso coletivo do semestre.",
-    //       "inconsistenciaPercursoIndividual": {
-    //         "mensagemInsconsistencia": "Crianças com ausência do percurso individual no semestre:",
-    //         "alunosComInconsistenciaPercursoIndividualRAA": [{
-    //           "numeroChamada": 1,
-    //           "alunoNome": "HELLEN SILVEIRA SANTOS",
-    //           "alunoCodigo": "1234567"
-    //         },
-    //         {
-    //           "numeroChamada": 2,
-    //           "alunoNome": "MARIA CLARA ALMEIDA DIAS",
-    //           "alunoCodigo": "7654321"
-    //         },
-    //         {
-    //           "numeroChamada": 3,
-    //           "alunoNome": "MARILYN HELENA SIMOES DE SOUZA",
-    //           "alunoCodigo": "4152637"
-    //         }
-    //         ]
-    //       }
-    //     }
-    //   });
-    // });
-    return api.get(`/v1/acompanhamento/alunos/validar-percurso/turma/${turmaId}/semestre/${semestre}`)
+    return new Promise(resolve => {
+      resolve({
+        data: {
+          "mensagemInconsistenciaPercursoColetivo": "Ausência do preenchimento do percurso coletivo do semestre.",
+          "inconsistenciaPercursoIndividual": {
+            "mensagemInsconsistencia": "Crianças com ausência do percurso individual no semestre:",
+            "alunosComInconsistenciaPercursoIndividualRAA": [{
+                "numeroChamada": 1,
+                "alunoNome": "ALICE ROCHA GOMES",
+                "alunoCodigo": "7441854"
+              },
+              {
+                "numeroChamada": 2,
+                "alunoNome": "ANA LORRANY ANDRADE DOS SANTOS",
+                "alunoCodigo": "7162172"
+              },
+              {
+                "numeroChamada": 3,
+                "alunoNome": "ANNA CLARA PEREIRA DA COSTA",
+                "alunoCodigo": "7580354"
+              },
+              {
+                "numeroChamada": 29,
+                "alunoNome": "ARTHUR PRATES BATISTA",
+                "alunoCodigo": "7255381"
+              },
+              {
+                "numeroChamada": 28,
+                "alunoNome": "BARBARA HELENA GOMES FRAZAO",
+                "alunoCodigo": "7066117"
+              },
+              {
+                "numeroChamada": 4,
+                "alunoNome": "BERNARDO ALEXANDRE MOREIRA DOS SANTOS",
+                "alunoCodigo": "7178311"
+              },
+              {
+                "numeroChamada": 5,
+                "alunoNome": "BERNARDO DIAS CARNEIRO",
+                "alunoCodigo": "7443855"
+              },
+              {
+                "numeroChamada": 32,
+                "alunoNome": "CLARISSE DE SOUSA SILVA",
+                "alunoCodigo": "7107256"
+              },
+              {
+                "numeroChamada": 6,
+                "alunoNome": "DANIEL PEREIRA DE SOUZA",
+                "alunoCodigo": "7364188"
+              },
+              {
+                "numeroChamada": 0,
+                "alunoNome": "EMERSON FERREIRA DOS SANTOS SILVA",
+                "alunoCodigo": "7527243"
+              },
+              {
+                "numeroChamada": 7,
+                "alunoNome": "ENZO GABRIEL DA SILVA",
+                "alunoCodigo": "7161049"
+              },
+              {
+                "numeroChamada": 40,
+                "alunoNome": "ENZO GABRIEL MARTINS VIEIRA",
+                "alunoCodigo": "7043395"
+              },
+              {
+                "numeroChamada": 9,
+                "alunoNome": "ESTHER GARCIA NOGUEIRA",
+                "alunoCodigo": "7886945"
+              },
+              {
+                "numeroChamada": 37,
+                "alunoNome": "GIOVANNA MACHADO FERREIRA DE SOUZA",
+                "alunoCodigo": "7260099"
+              },
+              {
+                "numeroChamada": 10,
+                "alunoNome": "HANNAH ARAUJO MARQUES FRANCA",
+                "alunoCodigo": "7121604"
+              },
+              {
+                "numeroChamada": 11,
+                "alunoNome": "HEITOR FIGUEIREDO NASCIMENTO",
+                "alunoCodigo": "7538084"
+              },
+              {
+                "numeroChamada": 12,
+                "alunoNome": "HEITOR RIBEIRO DA SILVA SANTOS",
+                "alunoCodigo": "7254340"
+              },
+              {
+                "numeroChamada": 31,
+                "alunoNome": "HELOISA CALLIOPE ABREU GOMES",
+                "alunoCodigo": "7368540"
+              },
+              {
+                "numeroChamada": 13,
+                "alunoNome": "IGOR JOSE SILVA BARBOSA",
+                "alunoCodigo": "7513248"
+              },
+              {
+                "numeroChamada": 14,
+                "alunoNome": "ISABELLY CAVALCANTE DE MEDEIROS",
+                "alunoCodigo": "7249134"
+              },
+              {
+                "numeroChamada": 15,
+                "alunoNome": "ISADORA LAZZARINI DE MELO",
+                "alunoCodigo": "7357480"
+              },
+              {
+                "numeroChamada": 16,
+                "alunoNome": "JAMAL GALDINO SANTOS DE MOURA",
+                "alunoCodigo": "7228253"
+              },
+              {
+                "numeroChamada": 17,
+                "alunoNome": "JOAO PEDRO GOMES DE CARVALHO",
+                "alunoCodigo": "7773653"
+              },
+              {
+                "numeroChamada": 18,
+                "alunoNome": "JOAO PEDRO RIBEIRO DO NASCIMENTO",
+                "alunoCodigo": "7253607"
+              },
+              {
+                "numeroChamada": 19,
+                "alunoNome": "LAURA TAVARES OLIVEIRA",
+                "alunoCodigo": "7074219"
+              },
+              {
+                "numeroChamada": 38,
+                "alunoNome": "LORENA CRISTINA DOS SANTOS",
+                "alunoCodigo": "7136735"
+              },
+              {
+                "numeroChamada": 39,
+                "alunoNome": "LORENA MICAELLY AMORIM DA CRUZ",
+                "alunoCodigo": "7268649"
+              },
+              {
+                "numeroChamada": 20,
+                "alunoNome": "LORENA SOUSA SANTOS",
+                "alunoCodigo": "7215441"
+              },
+              {
+                "numeroChamada": 21,
+                "alunoNome": "LORENNA MASSANARI SOUZA",
+                "alunoCodigo": "7313894"
+              },
+              {
+                "numeroChamada": 22,
+                "alunoNome": "MANOELA DOS SANTOS SOUSA",
+                "alunoCodigo": "6956097"
+              },
+              {
+                "numeroChamada": 36,
+                "alunoNome": "MARIA CECILIA ALBUQUERQUE ALVES",
+                "alunoCodigo": "8176339"
+              },
+              {
+                "numeroChamada": 23,
+                "alunoNome": "MARIA HELOISA GOMES SARDINHA",
+                "alunoCodigo": "7384001"
+              },
+              {
+                "numeroChamada": 24,
+                "alunoNome": "MURILO COSTA MARIANO",
+                "alunoCodigo": "7510039"
+              },
+              {
+                "numeroChamada": 41,
+                "alunoNome": "NICOLLAS GABRIEL BRAGA LOPES",
+                "alunoCodigo": "7385215"
+              },
+              {
+                "numeroChamada": 25,
+                "alunoNome": "SOFIA ALVES AMORIM",
+                "alunoCodigo": "7105072"
+              },
+              {
+                "numeroChamada": 30,
+                "alunoNome": "VALENTINA GODOY",
+                "alunoCodigo": "7340974"
+              },
+              {
+                "numeroChamada": 26,
+                "alunoNome": "VALENTINA VIANA CALIXTO",
+                "alunoCodigo": "7172875"
+              },
+              {
+                "numeroChamada": 27,
+                "alunoNome": "YURI ARAUJO LIMA",
+                "alunoCodigo": "7121607"
+              }
+            ]
+          }
+        }
+      });
+    });
+    // return api.get(`/v1/acompanhamento/alunos/validar-percurso/turma/${turmaId}/semestre/${semestre}`)
   }
 }
 
