@@ -134,7 +134,7 @@ const AcompanhamentoAprendizagem = () => {
 
   const onClickValidarDados = () => {
     setListAlunosValidar(
-      validarDados?.InconsistenciaPercursoIndividual
+      validarDados?.inconsistenciaPercursoIndividual
         ?.alunosComInconsistenciaPercursoIndividualRAA
     );
     setExibirModalValidar(false);
