@@ -115,7 +115,7 @@ const AcompanhamentoAprendizagem = () => {
 
   const onClickValidar = () => {
     ServicoAcompanhamentoAprendizagem.validarInconsistencias(
-      turmaSelecionada?.turma,
+      turmaSelecionada?.id,
       semestreSelecionado
     )
       .then(resposta => {
