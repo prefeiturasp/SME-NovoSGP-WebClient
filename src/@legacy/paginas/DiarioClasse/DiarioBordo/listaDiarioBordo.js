@@ -207,7 +207,7 @@ const ListaDiarioBordo = () => {
 
   const onColapse = async aulaId => {
     dispatch(limparDadosObservacoesUsuario());
-
+    setDiarioBordoAtual();
     let aulaIdFormatado = '';
 
     if (Array.isArray(aulaId) && aulaId?.length) {
@@ -244,7 +244,6 @@ const ListaDiarioBordo = () => {
         ...dados.data,
         observacoes,
       });
-
       setCarregarListaUsuariosNotificar(true);
     }
 
