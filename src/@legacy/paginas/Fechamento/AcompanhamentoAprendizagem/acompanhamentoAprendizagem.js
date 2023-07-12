@@ -69,7 +69,7 @@ const AcompanhamentoAprendizagem = () => {
   const [semestreSelecionado, setSemestreSelecionado] = useState(undefined);
   const [exibirModalValidar, setExibirModalValidar] = useState(false);
   const [validarDados, setValidarDados] = useState(null);
-  const [listAlunosValidarDados, setListAlunosValidar] = useState(null)
+  const [listAlunosValidarDados, setListAlunosValidar] = useState(null);
 
   const resetarInfomacoes = useCallback(() => {
     dispatch(limparDadosAcompanhamentoAprendizagem());
@@ -124,7 +124,7 @@ const AcompanhamentoAprendizagem = () => {
           setValidarDados(resposta.data);
         }
       })
-      .catch(e => erros(e))
+      .catch(e => erros(e));
   };
 
   const onCloseModalValidar = () => {
@@ -133,7 +133,10 @@ const AcompanhamentoAprendizagem = () => {
   };
 
   const onClickValidarDados = () => {
-    setListAlunosValidar(validarDados?.InconsistenciaPercursoIndividual?.AlunosComInconsistenciaPercursoIndividualRAA)
+    setListAlunosValidar(
+      validarDados?.InconsistenciaPercursoIndividual
+        ?.alunosComInconsistenciaPercursoIndividualRAA
+    );
     setExibirModalValidar(false);
   };
 
@@ -277,7 +280,7 @@ const AcompanhamentoAprendizagem = () => {
     <Container>
       {exibirModalValidar ? (
         <ModalConteudoHtml
-          titulo={validarDados?.MensagemInconsistenciaPercursoColetivo}
+          titulo={validarDados?.mensagemInconsistenciaPercursoColetivo}
           visivel={exibirModalValidar}
           onConfirmacaoSecundaria={() => onCloseModalValidar()}
           onConfirmacaoPrincipal={() => onClickValidarDados()}
@@ -286,21 +289,35 @@ const AcompanhamentoAprendizagem = () => {
           fontSizeTitulo="18"
           tipoFonte="bold"
         >
-          <Label text={validarDados?.InconsistenciaPercursoIndividual?.MensagemInsconsistencia} />
-          <table className="table">
+          <Label
+            text={
+              validarDados?.inconsistenciaPercursoIndividual
+                ?.MensagemInsconsistencia
+            }
+          />
+          {validarDados?.inconsistenciaPercursoIndividual
+            ?.alunosComInconsistenciaPercursoIndividualRAA?.length ? (
+            <table className="table">
               <tbody className="tabela-um-tbody">
-                {validarDados?.InconsistenciaPercursoIndividual?.AlunosComInconsistenciaPercursoIndividualRAA.map((dado, index) => {
-                  return (<tr key={index}>
-                    <td className="col-valor-linha-um">
-                      {dado.NumeroChamada}
-                    </td>
-                    <td className="col-valor-linha-um">
-                      {dado.AlunoNome} ({ dado.AlunoCodigo })
-                    </td>
-                  </tr>)
-                })}
+                {validarDados?.inconsistenciaPercursoIndividual?.alunosComInconsistenciaPercursoIndividualRAA.map(
+                  (dado, index) => {
+                    return (
+                      <tr key={index}>
+                        <td className="col-valor-linha-um">
+                          {dado.numeroChamada}
+                        </td>
+                        <td className="col-valor-linha-um">
+                          {dado.alunoNome} ({dado.alunoCodigo})
+                        </td>
+                      </tr>
+                    );
+                  }
+                )}
               </tbody>
             </table>
+          ) : (
+            <></>
+          )}
         </ModalConteudoHtml>
       ) : (
         <></>

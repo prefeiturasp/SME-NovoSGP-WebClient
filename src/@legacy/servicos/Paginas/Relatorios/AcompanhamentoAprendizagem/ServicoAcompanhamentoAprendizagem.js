@@ -329,23 +329,23 @@ class ServicoAcompanhamentoAprendizagem {
     // return new Promise(resolve => {
     //   resolve({
     //     data: {
-    //       "MensagemInconsistenciaPercursoColetivo": "Ausência do preenchimento do percurso coletivo do semestre.",
-    //       "InconsistenciaPercursoIndividual": {
+    //       "mensagemInconsistenciaPercursoColetivo": "Ausência do preenchimento do percurso coletivo do semestre.",
+    //       "inconsistenciaPercursoIndividual": {
     //         "MensagemInsconsistencia": "Crianças com ausência do percurso individual no semestre:",
-    //         "AlunosComInconsistenciaPercursoIndividualRAA": [{
-    //           "NumeroChamada": 1,
-    //           "AlunoNome": "HELLEN SILVEIRA SANTOS",
-    //           "AlunoCodigo": "1234567"
+    //         "alunosComInconsistenciaPercursoIndividualRAA": [{
+    //           "numeroChamada": 1,
+    //           "alunoNome": "HELLEN SILVEIRA SANTOS",
+    //           "alunoCodigo": "1234567"
     //         },
     //         {
-    //           "NumeroChamada": 2,
-    //           "AlunoNome": "MARIA CLARA ALMEIDA DIAS",
-    //           "AlunoCodigo": "7654321"
+    //           "numeroChamada": 2,
+    //           "alunoNome": "MARIA CLARA ALMEIDA DIAS",
+    //           "alunoCodigo": "7654321"
     //         },
     //         {
-    //           "NumeroChamada": 3,
-    //           "AlunoNome": "MARILYN HELENA SIMOES DE SOUZA",
-    //           "AlunoCodigo": "4152637"
+    //           "numeroChamada": 3,
+    //           "alunoNome": "MARILYN HELENA SIMOES DE SOUZA",
+    //           "alunoCodigo": "4152637"
     //         }
     //         ]
     //       }
