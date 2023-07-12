@@ -331,7 +331,7 @@ class ServicoAcompanhamentoAprendizagem {
     //     data: {
     //       "mensagemInconsistenciaPercursoColetivo": "Ausência do preenchimento do percurso coletivo do semestre.",
     //       "inconsistenciaPercursoIndividual": {
-    //         "MensagemInsconsistencia": "Crianças com ausência do percurso individual no semestre:",
+    //         "mensagemInsconsistencia": "Crianças com ausência do percurso individual no semestre:",
     //         "alunosComInconsistenciaPercursoIndividualRAA": [{
     //           "numeroChamada": 1,
     //           "alunoNome": "HELLEN SILVEIRA SANTOS",

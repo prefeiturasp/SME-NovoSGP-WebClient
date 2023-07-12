@@ -284,7 +284,7 @@ const AcompanhamentoAprendizagem = () => {
           visivel={exibirModalValidar}
           onConfirmacaoSecundaria={() => onCloseModalValidar()}
           onConfirmacaoPrincipal={() => onClickValidarDados()}
-          labelBotaoPrincipal="Validar"
+          labelBotaoPrincipal="Atualizar"
           labelBotaoSecundario="Cancelar"
           fontSizeTitulo="18"
           tipoFonte="bold"
@@ -292,7 +292,7 @@ const AcompanhamentoAprendizagem = () => {
           <Label
             text={
               validarDados?.inconsistenciaPercursoIndividual
-                ?.MensagemInsconsistencia
+                ?.mensagemInsconsistencia
             }
           />
           {validarDados?.inconsistenciaPercursoIndividual
