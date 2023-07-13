@@ -3,7 +3,7 @@ import React from 'react';
 import { Col } from 'antd';
 
 const ColunaDimensionavel = props => {
-  const { children, novaEstrutura, dimensao,campoEditor } = props;
+  const { children, novaEstrutura, dimensao } = props;
 
   let dimensaoCampo = 12;
   let dimensaoCalculada = dimensao;
@@ -12,16 +12,14 @@ const ColunaDimensionavel = props => {
     dimensaoCalculada = Number(dimensaoCalculada) * 2;
   }
 
-  if(!campoEditor){
-    dimensaoCampo = dimensao;
-  }
-
   return novaEstrutura ? (
     <Col sm={24} lg={dimensaoCalculada}>
       {children}
     </Col>
   ) : (
-    <div className={`col-12 col-lg-${dimensaoCampo} mb-3`}>{children}</div>
+    <div className={`col-12 col-lg-${dimensao} mb-3`}>
+      {children}
+      </div>
   );
 };
 
