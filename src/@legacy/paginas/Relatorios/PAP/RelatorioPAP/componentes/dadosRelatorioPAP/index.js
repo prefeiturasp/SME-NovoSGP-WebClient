@@ -90,7 +90,6 @@ const DadosRelatorioPAP = () => {
   };
 
   if (!periodoSelecionadoPAP?.periodoRelatorioPAP) return <></>;
-
   return (
     <>
       <Col span={24}>
@@ -108,7 +107,13 @@ const DadosRelatorioPAP = () => {
           >
             <>
               <ObjectCardRelatorioPAP />
-              <SecoesRelatorioPAP />
+              {estudanteSelecionadoRelatorioPAP?.codigoEOL ? (
+                <SecoesRelatorioPAP
+                  codigoAluno={estudanteSelecionadoRelatorioPAP?.codigoEOL}
+                />
+              ) : (
+                <></>
+              )}
             </>
           </TabelaRetratil>
         </Col>

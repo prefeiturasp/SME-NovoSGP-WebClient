@@ -1,38 +1,13 @@
-// import api from '~/servicos/api';
+import api from '~/servicos/api';
 
-// const URL_PADRAO = 'v1/relatorios/pap';
+const URL_PADRAO = 'v1/relatorios/pap';
 
 class ServicoRelatorioPAP {
   obterPeriodos = turmaCodigo => {
-    console.log('Consultando períodos da turma:', turmaCodigo);
-    const mock = [
-      {
-        configuracaoPeriodicaRelatorioPAPId: 1,
-        periodoRelatorioPAPId: 1,
-        tipoConfiguracaoPeriodicaRelatorioPAP: 'TIPO 1',
-        periodoRelatorioPAP: 1,
-        descricaoPeriodo: 'Semestre 1',
-      },
-      {
-        configuracaoPeriodicaRelatorioPAPId: 2,
-        periodoRelatorioPAPId: 2,
-        tipoConfiguracaoPeriodicaRelatorioPAP: 'TIPO 2',
-        periodoRelatorioPAP: 2,
-        descricaoPeriodo: 'Semestre 2',
-      },
-    ];
-
-    return new Promise(resolve => {
-      setTimeout(() => {
-        resolve({ data: mock, status: 200 });
-      }, 2000);
-    });
-
-    // TODO Endpoint ainda não existe!
-    // return api.get(`${URL_PADRAO}/periodos/${turmaCodigo}`);
+    return api.get(`${URL_PADRAO}/periodos/${turmaCodigo}`);
   };
 
-  obterDadosSecoes = () =>
+  obterDadosSecoes = (turmaCodigo,alunoCodigo,periodoRelatorioPAPId) =>
     // turmaCodigo,
     // alunoCodigo,
     // periodoRelatorioPAPId,
@@ -63,15 +38,15 @@ class ServicoRelatorioPAP {
         },
       ];
 
-      return new Promise(resolve => {
-        setTimeout(() => {
-          resolve({ data: mock, status: 200 });
-        }, 2000);
-      });
+      // return new Promise(resolve => {
+      //   setTimeout(() => {
+      //     resolve({ data: consulta, status: 200 });
+      //   }, 2000);
+      // });
 
       // TODO Endpoint ainda não existe!
-      // const url = `${URL_PADRAO}/turmas/${turmaCodigo}/alunos/${alunoCodigo}/periodos/${periodoRelatorioPAPId}/secoes-configuracao`
-      // return api.get(url);
+      const url = `${URL_PADRAO}/turma/${turmaCodigo}/aluno/${alunoCodigo}/periodo/${periodoRelatorioPAPId}/secoes`
+      return api.get(url);
     };
 
   obterQuestionario = () => {

@@ -19,6 +19,9 @@ const SelectPeridosPAP = () => {
     store => store.relatorioPAP.listaPeriodosPAP
   );
 
+  const turmaSelecionada = useSelector(
+    store => store?.usuario?.turmaSelecionada
+  );
   const periodoSelecionadoPAP = useSelector(
     store => store.relatorioPAP.periodoSelecionadoPAP
   );
@@ -30,7 +33,9 @@ const SelectPeridosPAP = () => {
   const obetPeriodosPAP = useCallback(async () => {
     dispatch(setExibirLoaderRelatorioPAP(true));
 
-    const retorno = await ServicoRelatorioPAP.obterPeriodos()
+    const retorno = await ServicoRelatorioPAP.obterPeriodos(
+      turmaSelecionada?.turma
+    )
       .catch(e => erros(e))
       .finally(() => dispatch(setExibirLoaderRelatorioPAP(false)));
 

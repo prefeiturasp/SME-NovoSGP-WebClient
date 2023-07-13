@@ -7,7 +7,7 @@ import ServicoRelatorioPAP from '@/@legacy/servicos/Paginas/Relatorios/PAP/Relat
 import { useDispatch, useSelector } from 'react-redux';
 import CollapseDadosSecaoRelatorioPAP from '../dadosSecoesRelatorioPAP/collapseDadosSecaoRelatorioPAP';
 
-export const SecoesRelatorioPAP = () => {
+export const SecoesRelatorioPAP = prop => {
   const dispatch = useDispatch();
   const usuario = useSelector(store => store.usuario);
   const { turmaSelecionada } = usuario;
@@ -31,12 +31,12 @@ export const SecoesRelatorioPAP = () => {
       const retorno = await ServicoRelatorioPAP.obterDadosSecoes(
         // TODO mudar params
         turmaSelecionada?.turma,
-        turmaSelecionada?.anoLetivo,
+        prop?.codigoAluno,
         periodoSelecionadoPAP?.periodoRelatorioPAP
       ).catch(e => erros(e));
 
-      if (retorno?.data?.length) {
-        dispatch(setDadosSecoesRelatorioPAP(retorno.data));
+      if (retorno?.data?.sessoes?.length) {
+        dispatch(setDadosSecoesRelatorioPAP(retorno?.data?.sessoes));
       } else {
         dispatch(setDadosSecoesRelatorioPAP([]));
       }
