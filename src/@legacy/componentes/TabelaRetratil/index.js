@@ -22,6 +22,7 @@ function TabelaRetratil({
   tituloCabecalho,
   pularDesabilitados,
   larguraAluno,
+  alunosValidar,
 }) {
   const [retraido, setRetraido] = useState(false);
   const [alunoSelecionado, setAlunoSelecionado] = useState(null);
@@ -40,7 +41,7 @@ function TabelaRetratil({
     if (!(alunos && alunos.length)) {
       setAlunoSelecionado(null);
     }
-  }, [alunos, codigoAlunoSelecionado]);
+  }, [alunos, codigoAlunoSelecionado, alunosValidar]);
 
   const permiteSelecionarAluno = useCallback(async () => {
     if (permiteOnChangeAluno) {
@@ -78,7 +79,6 @@ function TabelaRetratil({
         onChangeAlunoSelecionado(aluno);
       }
     }
-
   }, [
     alunoSelecionado,
     alunos,
@@ -110,7 +110,6 @@ function TabelaRetratil({
         onChangeAlunoSelecionado(aluno);
       }
     }
-
   }, [
     alunoSelecionado,
     alunos,
@@ -142,6 +141,17 @@ function TabelaRetratil({
     }
   };
 
+  const encontrarLinhaAluno = (listAlunos, numeroChamada) => {
+    if (listAlunos !== null) {
+      let encontrarAluno = listAlunos?.find(nome => nome.numeroChamada === numeroChamada) ?? null;
+      if (encontrarAluno) {
+        return true;
+      }
+    }
+
+    return false;
+  };
+
   return (
     <TabelaEstilo>
       <div className="tabelaCollapse">
@@ -167,6 +177,14 @@ function TabelaRetratil({
               >
                 <td>
                   {item.numeroChamada}
+                  
+                  {encontrarLinhaAluno(alunosValidar, item.numeroChamada) ? (
+                    <Tooltip title="Ausência do percurso individual ">
+                      <span className="iconeAusenciaPercurso" />
+                    </Tooltip>
+                  ) : (
+                    <></>
+                  )}
                   {item.marcador && item.marcador.descricao ? (
                     <Tooltip title={item.marcador.descricao}>
                       <span className="iconeSituacao" />

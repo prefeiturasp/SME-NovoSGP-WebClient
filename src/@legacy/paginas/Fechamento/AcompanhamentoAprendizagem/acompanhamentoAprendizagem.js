@@ -40,6 +40,9 @@ import ObjectCardAcompanhamentoAprendizagem from './DadosAcompanhamentoAprendiza
 import TabelaRetratilAcompanhamentoAprendizagem from './DadosAcompanhamentoAprendizagem/TabelaRetratilAcompanhamentoAprendizagem/tabelaRetratilAcompanhamentoAprendizagem';
 import LoaderAcompanhamentoAprendizagem from './loaderAcompanhamentoAprendizagem';
 import ModalErrosAcompanhamentoAprendizagem from './modalErrosAcompanhamentoAprendizagem';
+import Button from '~/componentes/button';
+import { Colors, ModalConteudoHtml, Label } from '~/componentes';
+import { Row } from 'antd';
 
 const AcompanhamentoAprendizagem = () => {
   const dispatch = useDispatch();
@@ -64,6 +67,9 @@ const AcompanhamentoAprendizagem = () => {
   );
   const [listaSemestres, setListaSemestres] = useState([]);
   const [semestreSelecionado, setSemestreSelecionado] = useState(undefined);
+  const [exibirModalValidar, setExibirModalValidar] = useState(false);
+  const [validarDados, setValidarDados] = useState(null);
+  const [listAlunosValidarDados, setListAlunosValidar] = useState(null);
 
   const resetarInfomacoes = useCallback(() => {
     dispatch(limparDadosAcompanhamentoAprendizagem());
@@ -95,9 +101,10 @@ const AcompanhamentoAprendizagem = () => {
 
   const obterListaSemestres = useCallback(async () => {
     if (ehTurmaInfantil(modalidadesFiltroPrincipal, turmaSelecionada)) {
-      const retorno = await ServicoAcompanhamentoAprendizagem.obterListaSemestres().catch(
-        e => erros(e)
-      );
+      const retorno =
+        await ServicoAcompanhamentoAprendizagem.obterListaSemestres().catch(e =>
+          erros(e)
+        );
       if (retorno?.data) {
         setListaSemestres(retorno.data);
       } else {
@@ -105,6 +112,33 @@ const AcompanhamentoAprendizagem = () => {
       }
     }
   }, [modalidadesFiltroPrincipal, turmaSelecionada]);
+
+  const onClickValidar = () => {
+    ServicoAcompanhamentoAprendizagem.validarInconsistencias(
+      turmaSelecionada?.id,
+      semestreSelecionado
+    )
+      .then(resposta => {
+        if (resposta?.data) {
+          setExibirModalValidar(true);
+          setValidarDados(resposta.data);
+        }
+      })
+      .catch(e => erros(e));
+  };
+
+  const onCloseModalValidar = () => {
+    setExibirModalValidar(false);
+    setValidarDados(null);
+  };
+
+  const onClickValidarDados = () => {
+    setListAlunosValidar(
+      validarDados?.inconsistenciaPercursoIndividual
+        ?.alunosComInconsistenciaPercursoIndividualRAA
+    );
+    setExibirModalValidar(false);
+  };
 
   useEffect(() => {
     resetarInfomacoes();
@@ -182,15 +216,16 @@ const AcompanhamentoAprendizagem = () => {
       if (turma) {
         dispatch(setExibirLoaderAlunosAcompanhamentoAprendizagem(true));
 
-        const retorno = await ServicoAcompanhamentoAprendizagem.obterListaAlunos(
-          turma,
-          anoLetivo,
-          semestreConsulta
-        )
-          .catch(e => erros(e))
-          .finally(() =>
-            dispatch(setExibirLoaderAlunosAcompanhamentoAprendizagem(false))
-          );
+        const retorno =
+          await ServicoAcompanhamentoAprendizagem.obterListaAlunos(
+            turma,
+            anoLetivo,
+            semestreConsulta
+          )
+            .catch(e => erros(e))
+            .finally(() =>
+              dispatch(setExibirLoaderAlunosAcompanhamentoAprendizagem(false))
+            );
 
         if (retorno?.data) {
           dispatch(setAlunosAcompanhamentoAprendizagem(retorno.data));
@@ -233,15 +268,60 @@ const AcompanhamentoAprendizagem = () => {
   };
 
   const permiteOnChangeAluno = async () => {
-    const continuar = await ServicoAcompanhamentoAprendizagem.salvarDadosAcompanhamentoAprendizagem(
-      semestreSelecionado
-    );
+    const continuar =
+      await ServicoAcompanhamentoAprendizagem.salvarDadosAcompanhamentoAprendizagem(
+        semestreSelecionado
+      );
 
     return continuar;
   };
 
   return (
     <Container>
+      {exibirModalValidar ? (
+        <ModalConteudoHtml
+          titulo={validarDados?.mensagemInconsistenciaPercursoColetivo}
+          visivel={exibirModalValidar}
+          onConfirmacaoSecundaria={() => onCloseModalValidar()}
+          onConfirmacaoPrincipal={() => onClickValidarDados()}
+          labelBotaoPrincipal="Atualizar"
+          labelBotaoSecundario="Cancelar"
+          fontSizeTitulo="18"
+          tipoFonte="bold"
+        >
+          <Label
+            text={
+              validarDados?.inconsistenciaPercursoIndividual
+                ?.mensagemInsconsistencia
+            }
+          />
+          {validarDados?.inconsistenciaPercursoIndividual
+            ?.alunosComInconsistenciaPercursoIndividualRAA?.length ? (
+            <table className="table">
+              <tbody className="tabela-um-tbody">
+                {validarDados?.inconsistenciaPercursoIndividual?.alunosComInconsistenciaPercursoIndividualRAA.map(
+                  (dado, index) => {
+                    return (
+                      <tr key={index}>
+                        <td className="col-valor-linha-um">
+                          {dado.numeroChamada}
+                        </td>
+                        <td className="col-valor-linha-um">
+                          {dado.alunoNome} ({dado.alunoCodigo})
+                        </td>
+                      </tr>
+                    );
+                  }
+                )}
+              </tbody>
+            </table>
+          ) : (
+            <></>
+          )}
+        </ModalConteudoHtml>
+      ) : (
+        <></>
+      )}
       {!turmaSelecionada.turma ? (
         <Alert
           alerta={{
@@ -299,10 +379,17 @@ const AcompanhamentoAprendizagem = () => {
               </div>
               {componenteCurricularSelecionado && semestreSelecionado ? (
                 <>
-                  <div className="col-md-12 mb-2 d-flex">
-                    <BotaoOrdenarListaAlunos />
-                    <BotaoGerarRelatorioAprendizagem
-                      semestre={semestreSelecionado}
+                  <div className="col-md-12 mb-2 d-flex justify-content-between">
+                    <div className="d-flex">
+                      <BotaoOrdenarListaAlunos />
+                      <BotaoGerarRelatorioAprendizagem
+                        semestre={semestreSelecionado}
+                      />
+                    </div>
+                    <Button
+                      label="Validar"
+                      color={Colors.Roxo}
+                      onClick={onClickValidar}
                     />
                   </div>
                   <div className="col-md-12 mb-2 mt-2">
@@ -314,6 +401,7 @@ const AcompanhamentoAprendizagem = () => {
                         onChangeAlunoSelecionado(value, semestreSelecionado);
                       }}
                       permiteOnChangeAluno={permiteOnChangeAluno}
+                      alunosValidar={listAlunosValidarDados}
                     >
                       <ObjectCardAcompanhamentoAprendizagem
                         semestre={semestreSelecionado}
