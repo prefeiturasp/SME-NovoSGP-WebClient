@@ -275,7 +275,7 @@ const QuestionarioDinamico = props => {
     let textoLabel = '';
 
     if (exibirOrdemLabel) {
-      textoLabel = `${ordemLabel} - ${questaoAtual.nome}`;
+      textoLabel = questaoAtual?.nome ? `${ordemLabel} - ${questaoAtual.nome}`: "";
     } else {
       textoLabel = questaoAtual.nome;
     }
