@@ -107,13 +107,9 @@ const DadosRelatorioPAP = () => {
           >
             <>
               <ObjectCardRelatorioPAP />
-              {estudanteSelecionadoRelatorioPAP?.codigoEOL ? (
-                <SecoesRelatorioPAP
-                  codigoAluno={estudanteSelecionadoRelatorioPAP?.codigoEOL}
-                />
-              ) : (
-                <></>
-              )}
+              <SecoesRelatorioPAP
+                codigoAluno={estudanteSelecionadoRelatorioPAP?.codigoEOL}
+              />
             </>
           </TabelaRetratil>
         </Col>

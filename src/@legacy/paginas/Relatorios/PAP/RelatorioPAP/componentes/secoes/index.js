@@ -29,14 +29,12 @@ export const SecoesRelatorioPAP = prop => {
       dispatch(setExibirLoaderRelatorioPAP(true));
 
       const retorno = await ServicoRelatorioPAP.obterDadosSecoes(
-        // TODO mudar params
         turmaSelecionada?.turma,
         prop?.codigoAluno,
         periodoSelecionadoPAP?.periodoRelatorioPAP
       ).catch(e => erros(e));
-
-      if (retorno?.data?.sessoes?.length) {
-        dispatch(setDadosSecoesRelatorioPAP(retorno?.data?.sessoes));
+      if (retorno?.data?.secoes?.length) {
+        dispatch(setDadosSecoesRelatorioPAP(retorno?.data?.secoes));
       } else {
         dispatch(setDadosSecoesRelatorioPAP([]));
       }

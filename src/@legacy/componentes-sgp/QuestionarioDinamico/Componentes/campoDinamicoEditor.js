@@ -10,7 +10,7 @@ const CampoDinamicoEditor = props => {
   const id = QuestionarioDinamicoFuncoes.gerarId(prefixId, questaoAtual);
 
   return (
-    <ColunaDimensionavel dimensao={questaoAtual?.dimensao}>
+    <ColunaDimensionavel dimensao={questaoAtual?.dimensao} campoEditor={true}>
       <div id={id}>
         {label}
         <JoditEditor

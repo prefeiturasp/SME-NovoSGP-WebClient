@@ -13,7 +13,6 @@ const CollapseDadosSecaoRelatorioPAP = props => {
   };
 
   const onClickCardCollapse = () => {};
-
   return (
     <>
       <CardCollapse

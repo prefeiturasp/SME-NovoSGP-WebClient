@@ -2,6 +2,10 @@ import QuestionarioDinamico from '@/@legacy/componentes-sgp/QuestionarioDinamico
 import ServicoRelatorioPAP from '@/@legacy/servicos/Paginas/Relatorios/PAP/RelatorioPAP/ServicoRelatorioPAP';
 import { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import {
+  setEstudanteSelecionadoRelatorioPAP,
+  setPeriodoSelecionadoPAP,
+} from '@/@legacy/redux/modulos/relatorioPAP/actions';
 import { setQuestionarioDinamicoEmEdicao } from '~/redux/modulos/questionarioDinamico/actions';
 import { erros } from '~/servicos';
 
@@ -16,7 +20,9 @@ const MontarDadosPorSecaoRelatorioPAP = props => {
   const estudanteSelecionadoRelatorioPAP = useSelector(
     store => store.relatorioPAP?.estudanteSelecionadoRelatorioPAP
   );
-
+  const periodoSelecionadoPAP = useSelector(
+    store => store.relatorioPAP?.periodoSelecionadoPAP
+  );
   const desabilitarCamposRelatorioPAP = useSelector(
     store => store.relatorioPAP.desabilitarCamposRelatorioPAP
   );
@@ -25,9 +31,14 @@ const MontarDadosPorSecaoRelatorioPAP = props => {
 
   const obterQuestionario = useCallback(async () => {
     dispatch(setQuestionarioDinamicoEmEdicao(false));
-
+    const parametros = {
+      turmaCodigo: turmaSelecionada.turma,
+      alunoCodigo: estudanteSelecionadoRelatorioPAP.codigoEOL,
+      periodoRelatorioPAPId: periodoSelecionadoPAP.periodoRelatorioPAP,
+      questionarioId: dados?.questionarioId,
+    };
     const resposta = await ServicoRelatorioPAP.obterQuestionario(
-      dados?.questionarioId
+      parametros
     ).catch(e => erros(e));
 
     if (!dadosQuestionarioAtual?.length && resposta?.data) {
