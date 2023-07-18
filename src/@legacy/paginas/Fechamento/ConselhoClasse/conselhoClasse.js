@@ -29,7 +29,7 @@ import ModalImpressaoBimestre from './DadosConselhoClasse/ModalImpressaoBimestre
 import ObjectCardConselhoClasse from './DadosConselhoClasse/ObjectCardConselhoClasse/objectCardConselhoClasse';
 import TabelaRetratilConselhoClasse from './DadosConselhoClasse/TabelaRetratilConselhoClasse/tabelaRetratilConselhoClasse';
 import servicoSalvarConselhoClasse from './servicoSalvarConselhoClasse';
-import BotaoValidarConselhoClasse from './DadosConselhoClasse/BotaoValidar/botaoValidarConselhoClasse';
+import BotaoConferirConselhoClasse from './DadosConselhoClasse/BotaoConferir/botaoConferirConselhoClasse';
 
 const ConselhoClasse = () => {
   const dispatch = useDispatch();
@@ -193,7 +193,7 @@ const ConselhoClasse = () => {
                       <BotaoOrdenarListaAlunos />
                       <BotaoGerarRelatorioConselhoClasseTurma />
                     </div>
-                    <BotaoValidarConselhoClasse />
+                    <BotaoConferirConselhoClasse />
                   </div>
                   <div className="col-md-12 mb-2">
                     <TabelaRetratilConselhoClasse
