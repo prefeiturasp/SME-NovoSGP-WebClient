@@ -288,6 +288,7 @@ const AcompanhamentoAprendizagem = () => {
           labelBotaoSecundario="Cancelar"
           fontSizeTitulo="18"
           tipoFonte="bold"
+          bodyStyle={{ maxHeight: '350px', overflow: 'auto' }}
         >
           <Label
             text={
