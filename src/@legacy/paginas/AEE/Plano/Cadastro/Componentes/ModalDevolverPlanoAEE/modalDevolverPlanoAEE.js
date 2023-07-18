@@ -1,7 +1,7 @@
 import { Form, Formik } from 'formik';
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate, useParams} from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import shortid from 'shortid';
 import * as Yup from 'yup';
 import { CampoTexto, Colors, Loader, ModalConteudoHtml } from '~/componentes';
