@@ -139,8 +139,8 @@ const AcompanhamentoAprendizagem = () => {
   };
   const limparListAlunosValidar = (alunoCodigo) => {
     setListAlunosValidar(null);
-    var alunos = listAlunosValidarDados.filter(x => x.alunoCodigo !== alunoCodigo);
-    setListAlunosValidar(alunos);
+    var alunosComMarcador = listAlunosValidarDados.filter(x => x.alunoCodigo !== alunoCodigo);
+    setListAlunosValidar(alunosComMarcador);
   };
   const onClickValidarDados = () => {
     setListAlunosValidar(
