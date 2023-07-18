@@ -1,7 +1,7 @@
 import { Form, Formik } from 'formik';
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams} from 'react-router-dom';
 import shortid from 'shortid';
 import * as Yup from 'yup';
 import { CampoTexto, Colors, Loader, ModalConteudoHtml } from '~/componentes';
@@ -21,7 +21,8 @@ const ModalDevolverPlanoAEE = () => {
   const navigate = useNavigate();
   const paramsRoute = useParams();
 
-  const planoId = paramsRoute?.id;
+
+  const planoAEEId = paramsRoute?.id;
 
   const exibirModalDevolverPlanoAEE = useSelector(
     store => store.planoAEE.exibirModalDevolverPlanoAEE
@@ -78,7 +79,7 @@ const ModalDevolverPlanoAEE = () => {
     setExibirLoader(true);
 
     const retorno = await ServicoPlanoAEE.devolverPlanoAEE({
-      planoId,
+      planoAEEId,
       motivo,
     })
       .catch(e => erros(e))
