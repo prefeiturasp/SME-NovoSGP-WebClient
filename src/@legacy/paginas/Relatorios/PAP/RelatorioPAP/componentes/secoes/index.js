@@ -25,13 +25,14 @@ export const SecoesRelatorioPAP = prop => {
   );
 
   const obterDadosSecoes = useCallback(async () => {
+    var codigoAluno = prop?.codigoAluno ? prop?.codigoAluno : estudanteSelecionadoRelatorioPAP;
     if (turmaSelecionada?.turma) {
       dispatch(setExibirLoaderRelatorioPAP(true));
 
       const retorno = await ServicoRelatorioPAP.obterDadosSecoes(
         turmaSelecionada?.turma,
-        prop?.codigoAluno,
-        periodoSelecionadoPAP?.periodoRelatorioPAP
+        codigoAluno,
+        periodoSelecionadoPAP?.periodoRelatorioPAPId
       ).catch(e => erros(e));
       if (retorno?.data?.secoes?.length) {
         dispatch(setDadosSecoesRelatorioPAP(retorno?.data?.secoes));
