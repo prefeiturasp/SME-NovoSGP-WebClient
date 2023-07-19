@@ -274,7 +274,7 @@ const AcompanhamentoAprendizagem = () => {
                       name="ComponenteCurricularId"
                       lista={listaComponenteCurricular || []}
                       valueOption="codigoComponenteCurricular"
-                      valueText="nome"
+                      valueText="nomeComponenteInfantil"
                       valueSelect={componenteCurricularSelecionado}
                       placeholder="Selecione um componente curricular"
                       disabled={listaComponenteCurricular?.length === 1}
