@@ -407,7 +407,7 @@ const CamposFiltrarDadosFrequenciaPlanoAula = () => {
           id={SGP_SELECT_COMPONENTE_CURRICULAR}
           lista={listaComponenteCurricular}
           valueOption="id"
-          valueText="nome"
+          valueText="nomeComponenteInfantil"
           valueSelect={codigoComponenteCurricular}
           onChange={onChangeComponenteCurricular}
           placeholder="Selecione um componente curricular"

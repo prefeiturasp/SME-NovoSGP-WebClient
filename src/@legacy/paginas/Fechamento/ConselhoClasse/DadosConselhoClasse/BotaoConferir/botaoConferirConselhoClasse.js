@@ -4,7 +4,7 @@ import {
   SGP_BUTTON_PRINCIPAL_MODAL_INCONSISTENCIAS,
   SGP_BUTTON_SECUNDARIO_MODAL_BIMESTRES,
   SGP_BUTTON_SECUNDARIO_MODAL_INCONSISTENCIAS,
-  SGP_BUTTON_VALIDAR_CONSELHO_CLASSE,
+  SGP_BUTTON_CONFERIR_CONSELHO_CLASSE,
 } from '@/@legacy/constantes/ids/button';
 import { ModalidadeDTO } from '@/@legacy/dtos';
 import { RadioGroupButtonCustomizado } from '@/@legacy/paginas/DiarioClasse/AcompanhamentoFrequencia/Componentes/ModalImpressao/modalImpressao.css';
@@ -24,7 +24,7 @@ import shortid from 'shortid';
 import { Row } from 'antd';
 import { setDadosInconsistenciasEstudantes } from '@/@legacy/redux/modulos/conselhoClasse/actions';
 
-const BotaoValidarConselhoClasse = () => {
+const BotaoConferirConselhoClasse = () => {
   const dispatch = useDispatch();
 
   const usuario = useSelector(store => store.usuario);
@@ -66,10 +66,10 @@ const BotaoValidarConselhoClasse = () => {
     label: 'Final',
   });
 
-  const onClickValidar = async () => {
+  const onClickConferir = async () => {
     setExibirLoader(true);
 
-    ServicoConselhoClasse.validarInconsistencias(
+    ServicoConselhoClasse.conferirInconsistencias(
       turmaSelecionada?.id,
       bimestreSelecionado
     )
@@ -91,7 +91,7 @@ const BotaoValidarConselhoClasse = () => {
       });
   };
 
-  const onCloseModalValidar = () => {
+  const onCloseModalConferir = () => {
     setExibirModalBimestres(false);
     setBimestreSelecionado();
   };
@@ -108,20 +108,20 @@ const BotaoValidarConselhoClasse = () => {
   return (
     <>
       <Button
-        label="Validar"
+        label="Conferir"
         color={Colors.Roxo}
         onClick={() => setExibirModalBimestres(true)}
-        id={SGP_BUTTON_VALIDAR_CONSELHO_CLASSE}
+        id={SGP_BUTTON_CONFERIR_CONSELHO_CLASSE}
       />
 
       {exibirModalBimestres ? (
         <ModalConteudoHtml
-          titulo="Validar"
+          titulo="Conferir"
           visivel={exibirModalBimestres}
-          onClose={() => onCloseModalValidar()}
-          onConfirmacaoSecundaria={() => onCloseModalValidar()}
-          onConfirmacaoPrincipal={() => onClickValidar()}
-          labelBotaoPrincipal="Validar"
+          onClose={() => onCloseModalConferir()}
+          onConfirmacaoSecundaria={() => onCloseModalConferir()}
+          onConfirmacaoPrincipal={() => onClickConferir()}
+          labelBotaoPrincipal="Conferir"
           labelBotaoSecundario="Cancelar"
           closable={!exibirLoader}
           fecharAoClicarFora={!exibirLoader}
@@ -215,4 +215,4 @@ const BotaoValidarConselhoClasse = () => {
   );
 };
 
-export default BotaoValidarConselhoClasse;
+export default BotaoConferirConselhoClasse;
