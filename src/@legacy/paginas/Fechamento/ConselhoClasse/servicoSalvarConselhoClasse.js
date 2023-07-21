@@ -309,7 +309,7 @@ class ServicoSalvarConselhoClasse {
           alunoCodigo,
           turmaCodigo,
           bimestre,
-          consideraHistorico
+          (dadosAlunoObjectCard.desabilitado ? true : false)
         );
 
       dispatch(setDadosPrincipaisConselhoClasse(dadosPrincipaisConselhoClasse));

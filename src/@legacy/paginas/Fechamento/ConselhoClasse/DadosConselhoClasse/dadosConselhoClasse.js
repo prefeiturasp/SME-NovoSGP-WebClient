@@ -101,7 +101,7 @@ const DadosConselhoClasse = props => {
           : bimestreConsulta,
         codigoEOL,
         ehFinal,
-        usuario.turmaSelecionada.consideraHistorico
+        (dadosAlunoObjectCard.desabilitado ? true : false)
       ).catch(e => {
         erros(e);
         dispatch(
