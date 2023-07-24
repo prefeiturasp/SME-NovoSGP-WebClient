@@ -232,6 +232,7 @@ class ServicoSalvarConselhoClasse {
       notaConceitoPosConselhoAtual,
       desabilitarCampos,
       bimestreAtual,
+      dadosAlunoObjectCard,
     } = conselhoClasse;
 
     const {
