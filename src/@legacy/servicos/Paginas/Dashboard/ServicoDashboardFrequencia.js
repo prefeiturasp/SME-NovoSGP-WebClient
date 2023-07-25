@@ -1,6 +1,7 @@
 import api from '~/servicos/api';
 import { store } from '@/core/redux';
 import { setDadosDashboardFrequencia } from '~/redux/modulos/dashboardFrequencia/actions';
+import queryString from 'query-string';
 
 const urlPadrao = 'v1/dashboard/frequencias';
 
@@ -161,34 +162,70 @@ class ServicoDashboardFrequencia {
     return api.get(`${urlPadrao}/filtro/anos/${anoLetivo}/semanas`);
   };
 
-  obterTotalEstudantesPresenciasRemotosAusentes = (
+  obterFrequenciasConsolidadacaoDiariaPorTurmaEAno = (
     anoLetivo,
     dreId,
     ueId,
     modalidade,
     semestre,
-    anoTurma,
+    turmaIds,
+    dataAula,
+    visaoDre
+  ) => {
+    const url = `${urlPadrao}/anos/${anoLetivo}/dres/${dreId}/ues/${ueId}/modalidades/${modalidade}/consolidado-diario/anos-turmas`;
+    const params = {
+      semestre,
+      turmaIds,
+      dataAula,
+      visaoDre,
+    };
+    return api.get(url, {
+      params,
+      paramsSerializer: {
+        serialize: params => {
+          return queryString.stringify(params, {
+            arrayFormat: 'repeat',
+            skipEmptyString: true,
+            skipNull: true,
+          });
+        },
+      },
+    });
+  };
+
+  obterFrequenciasConsolidacaoSemanalMensalPorTurmaEAno = (
+    anoLetivo,
+    dreId,
+    ueId,
+    modalidade,
+    turmaIds,
     dataInicio,
     dataFim,
     tipoPeriodoDashboard,
     mes,
     visaoDre
   ) => {
-    return api.get(
-      `${urlPadrao}/anos/${anoLetivo}/dres/${dreId}/ues/${ueId}/modalidades/` +
-        `${modalidade}/consolidado/anos-turmas`,
-      {
-        params: {
-          semestre,
-          anoTurma,
-          dataInicio,
-          dataFim,
-          tipoPeriodoDashboard,
-          mes,
-          visaoDre,
+    const url = `${urlPadrao}/anos/${anoLetivo}/dres/${dreId}/ues/${ueId}/modalidades/${modalidade}/consolidado-semanal-mensal/anos-turmas`;
+    const params = {
+      turmaIds,
+      dataInicio,
+      dataFim,
+      tipoPeriodoDashboard,
+      mes,
+      visaoDre,
+    };
+    return api.get(url, {
+      params,
+      paramsSerializer: {
+        serialize: params => {
+          return queryString.stringify(params, {
+            arrayFormat: 'repeat',
+            skipEmptyString: true,
+            skipNull: true,
+          });
         },
-      }
-    );
+      },
+    });
   };
 
   obterTotalAusenciasCompensadas = (

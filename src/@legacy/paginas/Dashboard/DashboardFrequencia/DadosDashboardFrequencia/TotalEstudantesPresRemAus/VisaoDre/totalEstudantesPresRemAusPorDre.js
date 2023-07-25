@@ -2,8 +2,7 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 
 import { Base, CardCollapse } from '~/componentes';
-
-import GraficoTotalEstudantesPresenciasRemotosAusentesPorDre from './graficototalEstudantesPresRemAusPorDre';
+import GraficoTotalEstudantesPresenciasRemotosAusentes from '../graficototalEstudantesPresRemAus';
 
 const TotalEstudantesPresenciasRemotosAusentesPorDre = ({
   anoLetivo,
@@ -35,7 +34,8 @@ const TotalEstudantesPresenciasRemotosAusentesPorDre = ({
         onClick={() => setExibir(!exibir)}
       >
         {exibir && (
-          <GraficoTotalEstudantesPresenciasRemotosAusentesPorDre
+          <GraficoTotalEstudantesPresenciasRemotosAusentes
+            visaoDre
             anoLetivo={anoLetivo}
             dreId={dreId}
             ueId={ueId}
