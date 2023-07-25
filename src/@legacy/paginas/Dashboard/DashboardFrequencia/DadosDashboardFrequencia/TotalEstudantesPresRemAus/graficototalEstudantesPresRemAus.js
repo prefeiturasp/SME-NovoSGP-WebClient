@@ -16,6 +16,7 @@ const GraficoTotalEstudantesPresenciasRemotosAusentes = ({
   ueId,
   modalidade,
   semestre,
+  visaoDre,
 }) => {
   const valorPadrao = moment().year(anoLetivo);
   const mesAtual = Number(moment().format('MM'));
@@ -52,31 +53,54 @@ const GraficoTotalEstudantesPresenciasRemotosAusentes = ({
 
   const obterDadosGrafico = useCallback(async () => {
     setExibirLoader(true);
-    const ehTipoMensal =
-      Number(tipoPeriodoDashboard) === tipoGraficos.MENSAL.valor;
-    const dataDiariaSelecionada = ehTipoMensal
-      ? undefined
-      : dataDiaria.format('YYYY-MM-DD');
-    const dataSelecionada = dataInicio || dataDiariaSelecionada;
-    const dataMensalSelecionada = ehTipoMensal ? dataMensal : undefined;
+
     const listaTurmaIds = anoTurma?.turmaId;
 
-    const retorno =
-      await ServicoDashboardFrequencia.obterTotalEstudantesPresenciasRemotosAusentes(
-        anoLetivo,
-        dreId,
-        ueId,
-        modalidade,
-        semestre,
-        listaTurmaIds,
-        dataSelecionada,
-        dataFim,
-        tipoPeriodoDashboard,
-        dataMensalSelecionada,
-        false
-      )
-        .catch(e => erros(e))
-        .finally(() => setExibirLoader(false));
+    const ehTipoDiario =
+      Number(tipoPeriodoDashboard) === tipoGraficos.DIARIO.valor;
+
+    let endpoint = null;
+
+    if (ehTipoDiario) {
+      const dataAula = dataDiaria.format('YYYY-MM-DD');
+      endpoint =
+        ServicoDashboardFrequencia.obterFrequenciasConsolidadacaoDiariaPorTurmaEAno(
+          anoLetivo,
+          dreId,
+          ueId,
+          modalidade,
+          semestre,
+          listaTurmaIds,
+          dataAula,
+          visaoDre
+        );
+    } else {
+      const ehTipoMensal =
+        Number(tipoPeriodoDashboard) === tipoGraficos.MENSAL.valor;
+      const dataDiariaSelecionada = ehTipoMensal
+        ? undefined
+        : dataDiaria.format('YYYY-MM-DD');
+      const dataSelecionada = dataInicio || dataDiariaSelecionada;
+      const dataMensalSelecionada = ehTipoMensal ? dataMensal : undefined;
+
+      endpoint =
+        ServicoDashboardFrequencia.obterFrequenciasConsolidacaoSemanalMensalPorTurmaEAno(
+          anoLetivo,
+          dreId,
+          ueId,
+          modalidade,
+          listaTurmaIds,
+          dataSelecionada,
+          dataFim,
+          tipoPeriodoDashboard,
+          dataMensalSelecionada,
+          visaoDre
+        );
+    }
+
+    const retorno = await endpoint()
+      .catch(e => erros(e))
+      .finally(() => setExibirLoader(false));
 
     let dadosRetorno = [];
     if (retorno?.data) {
@@ -96,6 +120,7 @@ const GraficoTotalEstudantesPresenciasRemotosAusentes = ({
     dataFim,
     tipoPeriodoDashboard,
     dataMensal,
+    visaoDre,
   ]);
 
   useEffect(() => {
@@ -330,6 +355,7 @@ GraficoTotalEstudantesPresenciasRemotosAusentes.propTypes = {
   ueId: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   modalidade: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   semestre: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+  visaoDre: PropTypes.bool,
 };
 
 GraficoTotalEstudantesPresenciasRemotosAusentes.defaultProps = {
@@ -338,6 +364,7 @@ GraficoTotalEstudantesPresenciasRemotosAusentes.defaultProps = {
   ueId: null,
   modalidade: null,
   semestre: null,
+  visaoDre: false,
 };
 
 export default GraficoTotalEstudantesPresenciasRemotosAusentes;
