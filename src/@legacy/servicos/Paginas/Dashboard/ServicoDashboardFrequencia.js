@@ -1,6 +1,7 @@
 import api from '~/servicos/api';
 import { store } from '@/core/redux';
 import { setDadosDashboardFrequencia } from '~/redux/modulos/dashboardFrequencia/actions';
+import queryString from 'query-string';
 
 const urlPadrao = 'v1/dashboard/frequencias';
 
@@ -167,7 +168,7 @@ class ServicoDashboardFrequencia {
     ueId,
     modalidade,
     semestre,
-    anoTurma,
+    turmaIds,
     dataInicio,
     dataFim,
     tipoPeriodoDashboard,
@@ -180,12 +181,21 @@ class ServicoDashboardFrequencia {
       {
         params: {
           semestre,
-          anoTurma,
+          turmaIds,
           dataInicio,
           dataFim,
           tipoPeriodoDashboard,
           mes,
           visaoDre,
+        },
+        paramsSerializer: {
+          serialize: params => {
+            return queryString.stringify(params, {
+              arrayFormat: 'repeat',
+              skipEmptyString: true,
+              skipNull: true,
+            });
+          },
         },
       }
     );
