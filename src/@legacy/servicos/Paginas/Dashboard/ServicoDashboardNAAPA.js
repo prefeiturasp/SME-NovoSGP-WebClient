@@ -1,6 +1,7 @@
 import { OPCAO_TODOS } from '~/constantes';
 import api from '~/servicos/api';
 
+const URL_PADRAO = 'v1/dashboard/naapa';
 class ServicoDashboardNAAPA {
   montarConsultaPadraoGraficos = params => {
     const {
@@ -14,7 +15,7 @@ class ServicoDashboardNAAPA {
       mes,
     } = params;
 
-    let url = `v1/dashboard/naapa/${rota}?anoLetivo=${anoLetivo}&&consideraHistorico=${consideraHistorico}`;
+    let url = `${URL_PADRAO}/${rota}?anoLetivo=${anoLetivo}&consideraHistorico=${consideraHistorico}`;
 
     if (dreCodigo) {
       url += `&dreCodigo=${dreCodigo}`;
@@ -73,6 +74,47 @@ class ServicoDashboardNAAPA {
       semestre,
       mes,
     });
+  };
+
+  obterQuantidadeEncaminhamentosNAAPA = (anoLetivo, dreCodigo) =>
+    api.get(
+      `${URL_PADRAO}/quantidade-em-aberto?anoLetivo=${anoLetivo}&codigoDre=${dreCodigo}`
+    );
+
+  obterQuantidadeEncaminhamentosNAAPASituacao = (anoLetivo, dreId, ueId) => {
+    let url = `${URL_PADRAO}/frequencia/turma/encaminhamentosituacao?anoLetivo=${anoLetivo}`;
+
+    if (dreId && dreId !== OPCAO_TODOS) {
+      url += `&dreId=${dreId}`;
+    }
+    if (ueId && ueId !== OPCAO_TODOS) {
+      url += `&ueId=${ueId}`;
+    }
+
+    return api.get(url);
+  };
+
+  obterQuantidadeAtendimentoEncaminhamentosProfissional = (
+    anoLetivo,
+    dreId,
+    ueId,
+    mes
+  ) => {
+    let url = `${URL_PADRAO}/quantidade-por-profissional-mes?anoLetivo=${anoLetivo}`;
+
+    if (dreId && dreId !== OPCAO_TODOS) {
+      url += `&dreId=${dreId}`;
+    }
+
+    if (ueId && ueId !== OPCAO_TODOS) {
+      url += `&ueId=${ueId}`;
+    }
+
+    if (mes && mes !== OPCAO_TODOS) {
+      url += `&mes=${mes}`;
+    }
+
+    return api.get(url);
   };
 }
 

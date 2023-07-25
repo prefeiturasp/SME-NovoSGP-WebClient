@@ -130,11 +130,11 @@ const RelatorioNotasConceitosFinais = () => {
 
   const obterUes = useCallback(async dre => {
     if (dre) {
-      setCarregandoGeral(true);
+      setCarregandoUes(true);
 
       const dataAtual = new Date();
       const consideraHistorico = anoLetivo != dataAtual.getFullYear();
-      
+
       const retorno = await ServicoFiltroRelatorio.obterUes(dre, consideraHistorico, anoLetivo).catch(e => {
         erros(e);
         setCarregandoUes(false);
@@ -218,10 +218,9 @@ const RelatorioNotasConceitosFinais = () => {
           modalidadeSelecionada || 0
         }`
       )
-      .catch(e => {
-        erros(e);
-        setCarregandoSemestres(false);
-      });
+      .catch(e => erros(e))
+      .finally(() => setCarregandoSemestres(false));
+
     if (retorno && retorno.data) {
       const lista = retorno.data.map(periodo => {
         return { desc: periodo, valor: periodo };
@@ -245,7 +244,7 @@ const RelatorioNotasConceitosFinais = () => {
 
   useEffect(() => {
     if (codigoDre) {
-      obterUes();
+      obterUes(codigoDre);
     } else {
       setCodigoUe(undefined);
       setListaUes([]);

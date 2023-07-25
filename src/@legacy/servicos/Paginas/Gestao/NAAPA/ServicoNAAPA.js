@@ -385,6 +385,9 @@ class ServicoNAAPA {
 
   excluirObservacao = observacaoId =>
     api.delete(`${URL_PADRAO}/excluir-observacao/${observacaoId}`);
+
+  reabrir = encaminhamentoNAAPAId =>
+    api.post(`${URL_PADRAO}/reabrir/${encaminhamentoNAAPAId}`);
 }
 
 export default new ServicoNAAPA();

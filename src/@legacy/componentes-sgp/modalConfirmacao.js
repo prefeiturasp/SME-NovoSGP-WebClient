@@ -46,7 +46,7 @@ const ModalConfirmacao = () => {
     }
   }, [confirmacao.visivel]);
 
-  return (
+  return confirmacao.visivel ? (
     <ContainerModal>
       <Modal
         title={confirmacao.titulo}
@@ -94,6 +94,8 @@ const ModalConfirmacao = () => {
         {!primeiroExibirTextoNegrito ? <b>{confirmacao.textoNegrito}</b> : ''}
       </Modal>
     </ContainerModal>
+  ) : (
+    <></>
   );
 };
 

@@ -21,10 +21,11 @@ import ServicoFechamentoBimestre from '~/servicos/Paginas/Fechamento/ServicoFech
 import { erros, sucesso } from '~/servicos/alertas';
 import RotasDto from '~/dtos/rotasDto';
 import ModalAnotacaoAluno from '../../FechamentoModalAnotacaoAluno/modal-anotacao-aluno';
-import SinalizacaoAEE from '~/componentes-sgp/SinalizacaoAEE/sinalizacaoAEE';
+import EstudanteAtendidoAEE from '@/components/sgp/estudante-atendido-aee';
 import Alert from '~/componentes/alert';
 import ListaoBotaoAnotacao from '~/paginas/DiarioClasse/Listao/operacoes/listaoTabs/tabFrequencia/lista/componentes/listaoBotaoAnotacao';
 import { formatarFrequencia } from '~/utils';
+import EstudanteMatriculadoPAP from '@/components/sgp/estudante-matriculado-pap';
 
 const FechamentoBimestreLista = props => {
   const {
@@ -47,10 +48,8 @@ const FechamentoBimestreLista = props => {
   const [carregandoProcesso, setCarregandoProcesso] = useState(false);
   const [podeProcessarReprocessar] = useState(dados.podeProcessarReprocessar);
   const [periodoAberto] = useState(dados.periodoAberto);
-  const [
-    situacaosituacaoNomeFechamento,
-    setSituacaosituacaoNomeFechamento
-  ] = useState(dados.situacaoNome);
+  const [situacaosituacaoNomeFechamento, setSituacaosituacaoNomeFechamento] =
+    useState(dados.situacaoNome);
   const [dataFechamento] = useState(dados.dataFechamento);
 
   const [exibirModalAnotacao, setExibirModalAnotacao] = useState(false);
@@ -138,7 +137,9 @@ const FechamentoBimestreLista = props => {
           codigoTurma={turmaId}
           anoLetivo={anoLetivo}
           dadosAlunoSelecionado={alunoModalAnotacao}
-          desabilitar={desabilitarCampo || (!podeProcessarReprocessar && !periodoAberto)}
+          desabilitar={
+            desabilitarCampo || (!podeProcessarReprocessar && !periodoAberto)
+          }
         />
       ) : (
         ''
@@ -181,42 +182,24 @@ const FechamentoBimestreLista = props => {
             }}
             desabilitado={!dadosLista?.length}
           />
-          {!ehSintese ? (
-            <>
-              <Button
-                id="btn-reprocessar"
-                label="Reprocessar"
-                color={Colors.Azul}
-                border
-                className="mr-2"
-                onClick={onClickReprocessarNotasConceitos}
-                disabled={
-                  !podeProcessarReprocessar ||
-                  (situacaoFechamento !==
-                    situacaoFechamentoDto.ProcessadoComPendencias &&
-                    situacaoFechamento !==
-                      situacaoFechamentoDto.ProcessadoComErro)
-                }
-              />
-              <Button
-                id="btn-pendencias"
-                label="Ver pendências"
-                color={Colors.Azul}
-                border
-                className="mr-2"
-                onClick={onClickVerPendecias}
-                disabled={
-                  ehSintese ||
-                  !podeProcessarReprocessar ||
+          {!ehSintese && (
+            <Button
+              id="btn-reprocessar"
+              label="Reprocessar"
+              color={Colors.Azul}
+              border
+              className="mr-2"
+              onClick={onClickReprocessarNotasConceitos}
+              disabled={
+                !podeProcessarReprocessar ||
+                (situacaoFechamento !==
+                  situacaoFechamentoDto.ProcessadoComPendencias &&
                   situacaoFechamento !==
-                    situacaoFechamentoDto.ProcessadoComPendencias
-                }
-              />
-            </>
-          ) : (
-            <></>
+                    situacaoFechamentoDto.ProcessadoComErro)
+              }
+            />
           )}
-          {ehSintese ? (
+          {ehSintese && (
             <Loader loading={carregandoProcesso} tip="">
               <Button
                 label={dados?.fechamentoId ? 'Reprocessar' : 'Processar'}
@@ -232,9 +215,20 @@ const FechamentoBimestreLista = props => {
                 }
               />
             </Loader>
-          ) : (
-            <></>
           )}
+          <Button
+            id="btn-pendencias"
+            label="Ver pendências"
+            color={Colors.Azul}
+            border
+            className="mr-2"
+            onClick={onClickVerPendecias}
+            disabled={
+              !podeProcessarReprocessar ||
+              situacaoFechamento !==
+                situacaoFechamentoDto.ProcessadoComPendencias
+            }
+          />
         </div>
         <Marcadores className="col-md-6 col-sm-12 d-flex justify-content-end">
           <SituacaoProcessadoComPendencias>
@@ -311,12 +305,13 @@ const FechamentoBimestreLista = props => {
                           className="d-flex"
                           style={{ justifyContent: 'space-between' }}
                         >
-                          <div className=" d-flex justify-content-start">
+                          <div className=" d-flex justify-content-start align-items-center">
                             {item.nome}
                           </div>
-                          <div className=" d-flex justify-content-end">
-                            <SinalizacaoAEE
-                              exibirSinalizacao={item.ehAtendidoAEE}
+                          <div className=" d-flex justify-content-end align-items-center">
+                            <EstudanteAtendidoAEE show={item.ehAtendidoAEE} />
+                            <EstudanteMatriculadoPAP
+                              show={item?.ehMatriculadoTurmaPAP}
                             />
                             <ListaoBotaoAnotacao
                               permiteAnotacao={

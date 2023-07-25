@@ -7,6 +7,7 @@ import { URL_HOME } from '~/constantes';
 import DashboardNAAPAFiltros from './dashboardNAAPAFiltros';
 import DashboardNAAPATabs from './dashboardNAAPATabs';
 import NAAPAContextProvider from './naapaContextProvider';
+import { Col, Row } from 'antd';
 
 const DashboardNAAPA = () => {
   const navigate = useNavigate();
@@ -17,8 +18,16 @@ const DashboardNAAPA = () => {
         <BotaoVoltarPadrao onClick={() => navigate(URL_HOME)} />
       </Cabecalho>
       <Card padding="24px 24px">
-        <DashboardNAAPAFiltros />
-        <DashboardNAAPATabs />
+        <Col span={24}>
+          <Row gutter={[0, 16]}>
+            <Col span={24}>
+              <DashboardNAAPAFiltros />
+            </Col>
+            <Col span={24}>
+              <DashboardNAAPATabs />
+            </Col>
+          </Row>
+        </Col>
       </Card>
     </NAAPAContextProvider>
   );

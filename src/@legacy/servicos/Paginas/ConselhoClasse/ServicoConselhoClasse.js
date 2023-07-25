@@ -236,6 +236,11 @@ class ServicoConselhoClasse {
       }
     }
   };
+
+  conferirInconsistencias = (turmaId, bimestre) =>
+    api.get(
+      `/v1/conselhos-classe/validar-inconsistencias/turma/${turmaId}/bimestre/${bimestre}`
+    );
 }
 
 export default new ServicoConselhoClasse();

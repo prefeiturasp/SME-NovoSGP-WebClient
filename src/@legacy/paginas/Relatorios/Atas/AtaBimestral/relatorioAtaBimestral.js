@@ -367,7 +367,7 @@ const RelatorioAtaBimestral = () => {
           anoLetivo,
           consideraHistorico,
           false,
-          [1, 2, 7]
+          Number(modalidadeSelecionada) === ModalidadeDTO.ENSINO_MEDIO ? [] : [1, 2]
         )
           .catch(e => erros(e))
           .finally(() => setCarregandoTurmas(false));

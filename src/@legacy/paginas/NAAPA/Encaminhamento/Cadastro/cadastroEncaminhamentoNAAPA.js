@@ -9,6 +9,7 @@ import MontarDadosTabs from './componentes/montarDadosTabs/montarDadosTabs';
 import ServicoNAAPA from '~/servicos/Paginas/Gestao/NAAPA/ServicoNAAPA';
 import { store } from '@/core/redux';
 import {
+  setCarregarDadosEncaminhamentoNAAPA,
   setDadosEncaminhamentoNAAPA,
   setDadosSituacaoEncaminhamentoNAAPA,
   setDesabilitarCamposEncaminhamentoNAAPA,
@@ -33,6 +34,10 @@ const CadastroEncaminhamentoNAAPA = () => {
 
   const dadosEncaminhamentoNAAPA = useSelector(
     state => state.encaminhamentoNAAPA.dadosEncaminhamentoNAAPA
+  );
+
+  const carregarDadosEncaminhamentoNAAPA = useSelector(
+    state => state.encaminhamentoNAAPA.carregarDadosEncaminhamentoNAAPA
   );
 
   const listaDres = dadosEncaminhamentoNAAPA
@@ -84,10 +89,14 @@ const CadastroEncaminhamentoNAAPA = () => {
       store.dispatch(setDadosSituacaoEncaminhamentoNAAPA(null));
     }
     dispatch(setExibirLoaderEncaminhamentoNAAPA(false));
+    dispatch(setCarregarDadosEncaminhamentoNAAPA(false));
   }, [dispatch, encaminhamentoId]);
 
   useEffect(() => {
-    if (encaminhamentoId) {
+    if (
+      encaminhamentoId ||
+      (encaminhamentoId && carregarDadosEncaminhamentoNAAPA)
+    ) {
       obterDadosEncaminhamentoNAAPA();
     } else if (novoEncaminhamentoNAAPADados?.aluno?.codigoAluno) {
       const turmaAluno = novoEncaminhamentoNAAPADados?.aluno?.turma;
@@ -105,6 +114,7 @@ const CadastroEncaminhamentoNAAPA = () => {
     encaminhamentoId,
     novoEncaminhamentoNAAPADados,
     obterDadosEncaminhamentoNAAPA,
+    carregarDadosEncaminhamentoNAAPA,
   ]);
 
   return dadosEncaminhamentoNAAPA?.aluno?.codigoAluno ? (

@@ -46,6 +46,8 @@ import comunicados from './comunicados/reducers';
 import dashboardFechamento from './dashboardFechamento/reducers';
 import geral from './geral/reducers';
 import modalAnotacaoFrequencia from './modalAnotacaoFrequencia/reducers';
+import historicoPaginado from './historico-paginado/reducers';
+import relatorioPAP from './relatorioPAP/reducers';
 
 const reducers = combineReducers({
   navegacao,
@@ -94,6 +96,8 @@ const reducers = combineReducers({
   dashboardFechamento,
   geral,
   modalAnotacaoFrequencia,
+  historicoPaginado,
+  relatorioPAP,
 });
 
 const rootReducer = (state, action) => {

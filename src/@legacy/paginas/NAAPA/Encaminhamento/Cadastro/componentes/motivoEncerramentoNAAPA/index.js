@@ -12,8 +12,12 @@ const MotivoEncerramentoNAAPA = () => {
     state => state.encaminhamentoNAAPA.dadosEncaminhamentoNAAPA
   );
 
+  const dadosSituacao = useSelector(
+    state => state.encaminhamentoNAAPA.dadosSituacaoEncaminhamentoNAAPA
+  );
+
   const exibir =
-    dadosEncaminhamentoNAAPA?.situacao === situacaoNAAPA.Encerrado &&
+    dadosSituacao?.situacao === situacaoNAAPA.Encerrado &&
     dadosEncaminhamentoNAAPA?.motivoEncerramento;
 
   return exibir ? (

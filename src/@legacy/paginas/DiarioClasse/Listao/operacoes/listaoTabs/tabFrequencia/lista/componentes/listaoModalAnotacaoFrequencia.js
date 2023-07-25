@@ -27,9 +27,8 @@ const ListaoModalAnotacaoFrequencia = ({
     state => state.modalAnotacaoFrequencia.listaPadraoMotivoAusencia
   );
 
-  const { dadosIniciaisFrequencia, setDadosIniciaisFrequencia } = useContext(
-    ListaoContext
-  );
+  const { dadosIniciaisFrequencia, setDadosIniciaisFrequencia } =
+    useContext(ListaoContext);
 
   const atualizarSePossuiAnotacao = valor => {
     const { codigoAluno } = dadosModalAnotacaoFrequencia;
@@ -46,7 +45,7 @@ const ListaoModalAnotacaoFrequencia = ({
     setDadosIniciaisFrequencia({ ...dadosIniciaisFrequencia });
   };
 
-  return (
+  return exibirModalAnotacaoFrequencia ? (
     <ModalAnotacoesFrequencia
       dadosListaFrequencia={dadosListaFrequencia}
       ehInfantil={ehInfantil}
@@ -67,6 +66,8 @@ const ListaoModalAnotacaoFrequencia = ({
         fechouModal();
       }}
     />
+  ) : (
+    <></>
   );
 };
 

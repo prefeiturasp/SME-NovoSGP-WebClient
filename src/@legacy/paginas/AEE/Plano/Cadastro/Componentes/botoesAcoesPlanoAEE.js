@@ -45,6 +45,10 @@ const BotoesAcoesPlanoAEE = () => {
     store => store.perfil.perfilSelecionado.nomePerfil
   );
 
+  const registroCadastradoEmOutraUE = useSelector(
+    store => store.planoAEE.planoAEEDados?.registroCadastradoEmOutraUE
+  );
+
   const dadosParecer = useSelector(store => store.planoAEE.dadosParecer);
 
   const parecerEmEdicao = useSelector(store => store.planoAEE.parecerEmEdicao);
@@ -91,10 +95,13 @@ const BotoesAcoesPlanoAEE = () => {
     const soConsulta = verificaSomenteConsulta(permissoesTela);
     const desabilitar =
       planoId > 0
-        ? soConsulta || !permissoesTela.podeAlterar
+        ? soConsulta ||
+          !permissoesTela.podeAlterar ||
+          registroCadastradoEmOutraUE
         : soConsulta || !permissoesTela.podeIncluir;
+
     dispatch(setDesabilitarCamposPlanoAEE(desabilitar));
-  }, [planoId, permissoesTela, dispatch]);
+  }, [planoId, permissoesTela, registroCadastradoEmOutraUE, dispatch]);
 
   const limparParecer = () => {
     dispatch(limparDadosParecer());

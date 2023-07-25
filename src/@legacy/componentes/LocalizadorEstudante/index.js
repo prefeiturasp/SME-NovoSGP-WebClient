@@ -304,7 +304,7 @@ const LocalizadorEstudante = props => {
 
   return novaEstrutura ? (
     <>
-      <Col sm={24} md={24} lg={exibirCodigoEOL ? 16 : 24}>
+      <Col sm={24} md={24} lg={exibirCodigoEOL ? 10 : 16}>
         {showLabel && <Label text={labelAlunoNome} control="alunoNome" />}
 
         <InputNome
@@ -322,7 +322,7 @@ const LocalizadorEstudante = props => {
       </Col>
 
       {exibirCodigoEOL && (
-        <Col sm={24} md={24} lg={8}>
+        <Col sm={24} md={24} lg={6}>
           {showLabel && <Label text="Código EOL" control="alunoCodigo" />}
           <InputCodigo
             id={SGP_INPUT_CODIGO_EOL}

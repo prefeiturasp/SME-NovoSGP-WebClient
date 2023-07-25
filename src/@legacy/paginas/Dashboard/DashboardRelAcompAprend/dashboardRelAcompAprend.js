@@ -215,7 +215,7 @@ const DashboardRelAcompanhamentoAprendizagem = () => {
   return (
     <>
       <AlertaPermiteSomenteTurmaInfantil
-        exibir={ue && ue?.codigo !== OPCAO_TODOS && !ue?.ehInfantil}
+        exibir={!ue || (ue && ue?.codigo !== OPCAO_TODOS && !ue?.ehInfantil)}
         validarModalidadeFiltroPrincipal={false}
       />
       <Cabecalho pagina="Dashboard Relatório do Acompanhamento da Aprendizagem">

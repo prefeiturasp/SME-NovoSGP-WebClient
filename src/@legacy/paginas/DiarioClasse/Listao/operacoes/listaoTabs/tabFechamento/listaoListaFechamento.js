@@ -14,7 +14,7 @@ import styled from 'styled-components';
 import { DataTable, Label } from '~/componentes';
 import Nota from '~/componentes-sgp/inputs/nota';
 import { moverFocoCampoNota } from '~/componentes-sgp/inputs/nota/funcoes';
-import SinalizacaoAEE from '~/componentes-sgp/SinalizacaoAEE/sinalizacaoAEE';
+import EstudanteAtendidoAEE from '@/components/sgp/estudante-atendido-aee';
 import { Base } from '~/componentes/colors';
 import { BIMESTRE_FINAL } from '~/constantes/constantes';
 import notasConceitos from '~/dtos/notasConceitos';
@@ -37,6 +37,7 @@ import DadosCabecalhoTabFechamentoListao from './componentes/dadosCabecalhoTabFe
 import ModalJustificativaFechamento from './componentes/modalJustificativaFechamento';
 import TabelaAvaliacoesFechamento from './componentes/tabelaAvaliacoesFechamento';
 import FiltroComponentesRegenciaListao from '../componentes/filtroComponentesRegenciaListao';
+import EstudanteMatriculadoPAP from '@/components/sgp/estudante-matriculado-pap';
 
 export const ContainerTableFechamento = styled.div`
   tr {
@@ -152,12 +153,11 @@ const ListaoListaFechamento = props => {
 
   const montarColunaEstudante = aluno => {
     return (
-      <div className="d-flex justify-content-between">
+      <div className="d-flex justify-content-between align-items-center">
         <div className="d-flex justify-content-start">{aluno.nome}</div>
-        <div className=" d-flex justify-content-end">
-          <div className="mr-3">
-            <SinalizacaoAEE exibirSinalizacao={aluno.ehAtendidoAEE} />
-          </div>
+        <div className=" d-flex justify-content-end align-items-center">
+          <EstudanteAtendidoAEE show={aluno.ehAtendidoAEE} />
+          <EstudanteMatriculadoPAP show={aluno?.ehMatriculadoTurmaPAP} />
           {!ehFinal && (
             <AnotacoesFechamentoLisao
               desabilitar={desabilitarCampos || !aluno?.podeEditar}
@@ -327,7 +327,7 @@ const ListaoListaFechamento = props => {
               />
             )}
             <Nota
-              styleContainer={{ padding: '3px 20px 11px' }}
+              styleContainer={{ padding: '3px 20px 11px', width: '109px' }}
               ehFechamento
               onKeyDown={e =>
                 onKeyDown(
@@ -358,7 +358,7 @@ const ListaoListaFechamento = props => {
         );
       case notasConceitos.Conceitos:
         return (
-          <>
+          <div style={{ width: ehRegencia ? '140px' : '' }}>
             {ehRegencia && (
               <Label
                 text={notaFechamento?.disciplina}
@@ -367,7 +367,13 @@ const ListaoListaFechamento = props => {
               />
             )}
             <ListaoCampoConceito
-              styleContainer={{ padding: '3px 20px 11px' }}
+              styleContainer={
+                ehRegencia
+                  ? {
+                      padding: '2px 20px 11px',
+                    }
+                  : {}
+              }
               dadosConceito={notaFechamento}
               idCampo={shortid.generate()}
               desabilitar={desabilitar}
@@ -384,7 +390,7 @@ const ListaoListaFechamento = props => {
               }
             />
             {notaFechamento?.emAprovacao && <MarcadorAguardandoAprovacao />}
-          </>
+          </div>
         );
       default:
         return '';
@@ -617,6 +623,7 @@ const ListaoListaFechamento = props => {
     const colunasRegencia = [
       {
         align: 'left',
+        width: '100%',
         render: () => 'Componentes regência de classe',
       },
     ];
@@ -630,7 +637,6 @@ const ListaoListaFechamento = props => {
           align: 'center',
           dataIndex: [`${nomeRef}`, `${index}`],
           key: `${nomeRef}[${index}]`,
-          width: '115px',
           className: 'position-relative',
           render: dados =>
             montarCampoNotaConceito(

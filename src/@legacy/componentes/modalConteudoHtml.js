@@ -88,9 +88,11 @@ const ModalConteudoHtml = props => {
     botoesRodape,
     fontSizeTitulo,
     tipoFonte,
+    bodyStyle,
   } = props;
   return (
     <Container
+      bodyStyle={bodyStyle || {}}
       keyboard={fecharAoClicarEsc}
       maskClosable={fecharAoClicarFora}
       onCancel={onClose}
@@ -149,7 +151,7 @@ const ModalConteudoHtml = props => {
           </>
         ) : !esconderBotoes &&
           (!esconderBotaoPrincipal || !esconderBotaoSecundario) ? (
-          <div className="d-flex justify-content-end">
+          <div className="row d-flex justify-content-end">
             <Button
               id={idBotaoPrincipal || SGP_BUTTON_SALVAR_MODAL}
               key="btn-sim-confirmacao"

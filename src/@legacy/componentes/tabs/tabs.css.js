@@ -60,4 +60,8 @@ export const ContainerTabsCard = styled(Tabs)`
       padding-right: ${props => (props.border ? '25px' : 'initial')};
     }
   }
+
+  .ant-tabs-nav-operations {
+    display: none !important;
+  }
 `;

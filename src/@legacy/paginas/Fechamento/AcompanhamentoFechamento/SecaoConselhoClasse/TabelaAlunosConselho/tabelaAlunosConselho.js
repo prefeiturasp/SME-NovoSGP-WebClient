@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import { Tooltip, Table } from 'antd';
+import { Tooltip, Table, Row, Col } from 'antd';
 import { faAngleDown, faAngleUp } from '@fortawesome/free-solid-svg-icons';
 
 import { Base, DataTable, Loader } from '~/componentes';
@@ -16,6 +16,7 @@ import {
   IconeEstilizado,
 } from '../../acompanhamentoFechamento.css';
 import { LinhaTabela } from './tabelaAlunosConselho.css';
+import EstudanteMatriculadoPAP from '@/components/sgp/estudante-matriculado-pap';
 
 const TabelaAlunosConselho = props => {
   const { dadosAlunos, bimestre, turmaId } = props;
@@ -66,8 +67,16 @@ const TabelaAlunosConselho = props => {
       title: 'Estudantes',
       dataIndex: 'numeroChamada',
       align: 'left',
-      render: (valor, aluno) =>
-        `${aluno.numeroChamada} - ${aluno.nomeAluno} (${aluno.alunoCodigo})`,
+      render: (valor, aluno) => {
+        return (
+          <Col span={24}>
+            <Row justify="space-between">
+              {`${aluno.numeroChamada} - ${aluno.nomeAluno} (${aluno.alunoCodigo})`}
+              <EstudanteMatriculadoPAP show={aluno?.ehMatriculadoTurmaPAP} />
+            </Row>
+          </Col>
+        );
+      },
     },
   ];
 

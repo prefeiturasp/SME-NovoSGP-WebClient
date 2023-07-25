@@ -1,5 +1,5 @@
-import React, { useCallback, useEffect } from 'react';
-import { useDispatch } from 'react-redux';
+import { useCallback, useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { useLocation, useParams } from 'react-router-dom';
 import { Cabecalho } from '~/componentes-sgp';
 import CollapseLocalizarEstudante from '~/componentes-sgp/CollapseLocalizarEstudante/collapseLocalizarEstudante';
@@ -10,8 +10,8 @@ import { setPlanoAEELimparDados } from '~/redux/modulos/planoAEE/actions';
 import { setLimparDadosQuestionarioDinamico } from '~/redux/modulos/questionarioDinamico/actions';
 import { setBreadcrumbManual } from '~/servicos';
 import ServicoPlanoAEE from '~/servicos/Paginas/Relatorios/AEE/ServicoPlanoAEE';
+import AlertaCadastradoEmOutraUE from './Componentes/AlertaCadastradoEmOutraUE';
 import BotaoVerSituacaoEncaminhamentoAEE from './Componentes/BotaoVerSituacaoEncaminhamentoAEE/botaoVerSituacaoEncaminhamentoAEE';
-import BotoesAcoesPlanoAEE from './Componentes/botoesAcoesPlanoAEE';
 import LoaderPlano from './Componentes/LoaderPlano/loaderPlano';
 import MarcadorSituacaoPlanoAEE from './Componentes/MarcadorSituacaoPlanoAEE/marcadorSituacaoPlanoAEE';
 import ModalDevolverPlanoAEE from './Componentes/ModalDevolverPlanoAEE/modalDevolverPlanoAEE';
@@ -19,6 +19,7 @@ import ObjectCardEstudantePlanoAEE from './Componentes/ObjectCardEstudantePlanoA
 import ObservacoesPlanoAEE from './Componentes/ObservacoesPlanoAEE/observacoesPlanoAEE';
 import SituacaoEncaminhamentoAEE from './Componentes/SituacaoEncaminhamentoAEE/situacaoEncaminhamentoAEE';
 import TabCadastroPlano from './Componentes/TabCadastroPlano/tabCadastroPlano';
+import BotoesAcoesPlanoAEE from './Componentes/botoesAcoesPlanoAEE';
 
 const PlanoAEECadastro = () => {
   const dispatch = useDispatch();
@@ -26,6 +27,10 @@ const PlanoAEECadastro = () => {
   const paramsRoute = useParams();
 
   const planoId = paramsRoute?.id;
+
+  const exibirModalDevolverPlanoAEE = useSelector(
+    store => store.planoAEE.exibirModalDevolverPlanoAEE
+  );
 
   const limparDadosPlano = useCallback(() => {
     dispatch(setLimparDadosQuestionarioDinamico());
@@ -55,6 +60,7 @@ const PlanoAEECadastro = () => {
 
   return (
     <LoaderPlano>
+      <AlertaCadastradoEmOutraUE />
       <Cabecalho pagina="Plano AEE">
         <div className="d-flex justify-content-end">
           <BotoesAcoesPlanoAEE />
@@ -97,7 +103,7 @@ const PlanoAEECadastro = () => {
             </div>
           </div>
         </div>
-        <ModalDevolverPlanoAEE />
+        {exibirModalDevolverPlanoAEE && <ModalDevolverPlanoAEE match={match} />}
       </Card>
     </LoaderPlano>
   );

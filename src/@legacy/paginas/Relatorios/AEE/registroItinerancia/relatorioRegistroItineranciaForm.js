@@ -51,6 +51,7 @@ const RelatorioRegistroItineranciaForm = props => {
             name="codigosPAAIResponsavel"
             onChange={onChangeCampos}
             disabled={desabilitarResponsavelPAAI}
+            responsaveisAEE={false}
           />
         </Col>
       </Row>

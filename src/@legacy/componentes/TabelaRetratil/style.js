@@ -53,6 +53,15 @@ export const Tabela = styled.table`
 
         .iconeSituacao {
           background: ${Base.Roxo};
+          width: 10px;
+          height: 10px;
+          border-radius: 50%;
+          display: inline-block;
+          margin-left: 0.2rem;
+        }
+
+        .iconeAusenciaPercurso {
+          background: ${Base.VermelhoAlerta};
           width: 9px;
           height: 9px;
           border-radius: 50%;
@@ -88,6 +97,10 @@ export const LinhaTabela = styled.tr`
       background: white !important;
     }
 
+    .icone-inconsistencia {
+      color: white !important;
+    }
+
     .icone-concluido {
       color: ${props =>
         props.processoConcluido ? Base.Verde : Base.CinzaBarras} !important;
@@ -102,6 +115,10 @@ export const LinhaTabela = styled.tr`
 
     .iconeSituacao {
       background: white !important;
+    }
+
+    .icone-inconsistencia {
+      color: white !important;
     }
 
     .icone-concluido {

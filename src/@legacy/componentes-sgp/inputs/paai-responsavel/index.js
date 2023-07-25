@@ -4,6 +4,7 @@ import { Loader, SelectComponent } from '~/componentes';
 import { SGP_SELECT_PAAI_RESPONSAVEL } from '~/constantes/ids/select';
 import ServicoEncaminhamentoAEE from '~/servicos/Paginas/Relatorios/AEE/ServicoEncaminhamentoAEE';
 import { erros } from '~/servicos';
+import ServicoFuncionario from '@/@legacy/servicos/Paginas/ServicoFuncionario';
 
 export const PAAIResponsavel = React.memo(
   ({
@@ -15,24 +16,41 @@ export const PAAIResponsavel = React.memo(
     multiple,
     ehRelatorio,
     label,
+    responsaveisAEE,
   }) => {
     const [exibirLoader, setExibirLoader] = useState(false);
     const [responsaveisPAAI, setResponsaveisPAAI] = useState([]);
 
     const dreCodigo = form.values?.dreCodigo;
+    const listaDres = form.values?.listaDres;
+
+    const consultarDados = async () => {
+      if (responsaveisAEE) {
+        const resposta =
+          await ServicoEncaminhamentoAEE.obterResponsaveisPAAIPesquisa(
+            null,
+            dreCodigo,
+            ehRelatorio
+          ).catch(e => erros(e));
+
+        return resposta?.data?.items?.length ? resposta?.data?.items : [];
+      }
+
+      const dreAtual = listaDres?.find(d => d?.codigo === dreCodigo);
+      const resposta = await ServicoFuncionario.obterFuncionariosPAAIs(
+        dreAtual?.id
+      ).catch(e => erros(e));
+
+      return resposta?.data?.length ? resposta.data : [];
+    };
 
     const obterResponsaveisPAAI = useCallback(async () => {
       setExibirLoader(true);
-      const resposta =
-        await ServicoEncaminhamentoAEE.obterResponsaveisPAAIPesquisa(
-          null,
-          dreCodigo,
-          ehRelatorio
-        ).catch(e => erros(e));
 
-      const dados = resposta?.data?.items;
-      if (dados?.length) {
-        const listaResp = dados.map(item => {
+      const resposta = await consultarDados();
+
+      if (resposta?.length) {
+        const listaResp = resposta.map(item => {
           return {
             ...item,
             codigoRF: item.codigoRf,
@@ -92,6 +110,7 @@ PAAIResponsavel.propTypes = {
   form: PropTypes.oneOfType([PropTypes.any]),
   ehRelatorio: PropTypes.bool,
   label: PropTypes.string,
+  responsaveisAEE: PropTypes.bool,
 };
 
 PAAIResponsavel.defaultProps = {
@@ -103,4 +122,5 @@ PAAIResponsavel.defaultProps = {
   onChange: () => null,
   ehRelatorio: false,
   label: 'PAAI responsável',
+  responsaveisAEE: true,
 };

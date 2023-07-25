@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { Col, Row } from 'antd';
 import { useSelector } from 'react-redux';
-import { SelectComponent, CheckboxComponent, Loader } from '~/componentes';
+import { SelectComponent, CheckboxComponent, Loader, RadioGroupButton } from '~/componentes';
 import { Cabecalho } from '~/componentes-sgp';
 import Card from '~/componentes/card';
 import { URL_HOME } from '~/constantes/url';
@@ -26,7 +26,11 @@ import {
   SGP_SELECT_UE,
   SGP_SELECT_VISUALIZACAO,
 } from '~/constantes/ids/select';
+import { SGP_RADIO_IMPRIMIR_COMPONENTES_SEM_NOTA } from '~/constantes/ids/radio';
 import { ModalidadeDTO } from '~/dtos';
+import { Label } from '~/componentes';
+import { Switch } from 'antd';
+
 import { useNavigate } from 'react-router-dom';
 
 const AtaFinalResultados = () => {
@@ -50,6 +54,7 @@ const AtaFinalResultados = () => {
   const [turmaId, setTurmaId] = useState();
   const [formato, setFormato] = useState('1');
   const [consideraHistorico, setConsideraHistorico] = useState(false);
+  const [imprimirComponentesQueNaoLancamNota, setImprimirComponentesQueNaoLancamNota] = useState(true);
 
   const [desabilitarBtnGerar, setDesabilitarBtnGerar] = useState(true);
   const [desabilitarBtnFormato, setDesabilitarBtnFormato] = useState(true);
@@ -66,6 +71,12 @@ const AtaFinalResultados = () => {
     { valor: '1', desc: 'PDF' },
     { valor: '4', desc: 'EXCEL' },
   ];
+
+  const opcoesImprimirComponentesNaoLancamNota = [
+    { label: 'Sim', value: true },
+    { label: 'Não', value: false },
+  ];
+
 
   const ehEJA = Number(modalidadeId) === ModalidadeDTO.EJA;
 
@@ -323,6 +334,7 @@ const AtaFinalResultados = () => {
     formato,
     semestre,
     visualizacao,
+    imprimirComponentesQueNaoLancamNota,
   ]);
 
   useEffect(() => {
@@ -407,6 +419,7 @@ const AtaFinalResultados = () => {
         tipoFormatoRelatorio: formato,
         visualizacao,
         semestre,
+        imprimirComponentesQueNaoLancamNota,
       };
       if (turmaId.find(t => t === OPCAO_TODOS)) {
         params.turmasCodigos = listaTurmas.map(item => String(item.valor));
@@ -701,6 +714,18 @@ const AtaFinalResultados = () => {
                 onChange={onChangeFormato}
                 disabled={desabilitarBtnFormato}
                 placeholder="Selecione um formato"
+              />
+            </Col>
+
+            <Col sm={24} md={12}>
+              <RadioGroupButton
+                value={imprimirComponentesQueNaoLancamNota}
+                label="Imprimir componentes que não lançam nota"
+                opcoes={opcoesImprimirComponentesNaoLancamNota}
+                id={SGP_RADIO_IMPRIMIR_COMPONENTES_SEM_NOTA}
+                onChange={e => {
+                  setImprimirComponentesQueNaoLancamNota(e.target.value);
+                }}
               />
             </Col>
           </Row>

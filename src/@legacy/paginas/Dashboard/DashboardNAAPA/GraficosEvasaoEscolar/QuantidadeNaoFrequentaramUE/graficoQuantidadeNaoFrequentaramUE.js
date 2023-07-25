@@ -15,13 +15,13 @@ const GraficoQuantidadeNaoFrequentaramUE = () => {
     ue,
     modalidade,
     semestre,
-    listaMesesReferencias,
+    listaMesesReferencias2,
   } = useContext(NAAPAContext);
 
   const [dadosGrafico, setDadosGrafico] = useState([]);
   const [exibirLoader, setExibirLoader] = useState(false);
 
-  const [meseReferencia, setMeseReferencia] = useState(OPCAO_TODOS);
+  const [meseReferencia, setMeseReferencia] = useState();
 
   const ehModalidadeEJA = Number(modalidade) === ModalidadeDTO.EJA;
 
@@ -81,11 +81,11 @@ const GraficoQuantidadeNaoFrequentaramUE = () => {
         <div className="col-sm-12 col-md-12 col-lg-3 col-xl-3 mb-2">
           <SelectComponent
             id="meses"
-            lista={listaMesesReferencias}
+            lista={listaMesesReferencias2}
             valueOption="numeroMes"
             valueText="nome"
             label="Mês de referência"
-            disabled={listaMesesReferencias?.length === 1}
+            disabled={listaMesesReferencias2?.length === 1}
             valueSelect={meseReferencia}
             onChange={mes => {
               onChangeMes(mes);
@@ -102,7 +102,7 @@ const GraficoQuantidadeNaoFrequentaramUE = () => {
         {dadosGrafico?.length ? (
           <GraficoBarras
             data={dadosGrafico}
-            xAxisVisible
+            xAxisVisible={ue.codigo === '-99' ? false : true}
             legendVisible={false}
           />
         ) : !exibirLoader ? (

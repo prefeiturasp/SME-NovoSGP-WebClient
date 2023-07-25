@@ -10,17 +10,17 @@ const ObservacoesUsuario = props => {
     salvarObservacao,
     editarObservacao,
     excluirObservacao,
+    obterUsuariosNotificar,
+    carregarListaUsuariosNotificar,
     esconderLabel,
     esconderCaixaExterna,
     verificaProprietario,
     permissoes,
     mostrarBotaoNotificar,
     mostrarListaNotificacao,
-    obterUsuariosNotificadosDiarioBordo,
     usarLocalizadorFuncionario,
     parametrosLocalizadorFuncionario,
     desabilitarBotaoNotificar,
-    diarioBordoId,
     mudarObservacao,
     mudarObservacaoListagem,
     dreId,
@@ -36,16 +36,14 @@ const ObservacoesUsuario = props => {
         <div style={{ margin: `${esconderCaixaExterna ? 0 : 15}px` }}>
           <CampoObservacao
             desabilitarBotaoNotificar={desabilitarBotaoNotificar}
+            obterUsuariosNotificar={obterUsuariosNotificar}
+            carregarListaUsuariosNotificar={carregarListaUsuariosNotificar}
             salvarObservacao={salvarObservacao}
             esconderCaixaExterna={esconderCaixaExterna}
             mostrarBotaoNotificar={mostrarBotaoNotificar}
             podeIncluir={podeIncluir}
-            obterUsuariosNotificadosDiarioBordo={
-              obterUsuariosNotificadosDiarioBordo
-            }
             usarLocalizadorFuncionario={usarLocalizadorFuncionario}
             parametrosLocalizadorFuncionario={parametrosLocalizadorFuncionario}
-            diarioBordoId={diarioBordoId}
             mudarObservacao={mudarObservacao}
             dreId={dreId}
             ueId={ueId}
@@ -70,6 +68,8 @@ ObservacoesUsuario.propTypes = {
   editarObservacao: PropTypes.func,
   salvarObservacao: PropTypes.func,
   excluirObservacao: PropTypes.func,
+  obterUsuariosNotificar: PropTypes.func,
+  carregarListaUsuariosNotificar: PropTypes.bool,
   mudarObservacao: PropTypes.func,
   mudarObservacaoListagem: PropTypes.func,
   esconderLabel: PropTypes.bool,
@@ -78,11 +78,9 @@ ObservacoesUsuario.propTypes = {
   permissoes: PropTypes.oneOfType([PropTypes.object]),
   esconderBotaoNotificar: PropTypes.bool,
   mostrarListaNotificacao: PropTypes.bool,
-  obterUsuariosNotificadosDiarioBordo: PropTypes.bool,
   usarLocalizadorFuncionario: PropTypes.bool,
   parametrosLocalizadorFuncionario: PropTypes.oneOfType([PropTypes.object]),
   desabilitarBotaoNotificar: PropTypes.bool,
-  diarioBordoId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   dreId: PropTypes.string,
   ueId: PropTypes.string,
 };
@@ -91,19 +89,19 @@ ObservacoesUsuario.defaultProps = {
   editarObservacao: () => {},
   salvarObservacao: () => {},
   excluirObservacao: () => {},
+  obterUsuariosNotificar: () => {},
   mudarObservacao: () => {},
   mudarObservacaoListagem: () => {},
+  carregarListaUsuariosNotificar: false,
   esconderLabel: false,
   esconderCaixaExterna: false,
   verificaProprietario: false,
   permissoes: { podeAlterar: true, podeIncluir: true, podeExcluir: true },
   mostrarBotaoNotificar: true,
   mostrarListaNotificacao: false,
-  obterUsuariosNotificadosDiarioBordo: true,
   usarLocalizadorFuncionario: false,
   parametrosLocalizadorFuncionario: {},
   desabilitarBotaoNotificar: false,
-  diarioBordoId: '',
   dreId: '',
   ueId: '',
 };

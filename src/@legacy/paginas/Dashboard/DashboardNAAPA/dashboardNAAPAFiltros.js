@@ -32,6 +32,7 @@ const DashboardNAAPAFiltros = () => {
     semestre,
     setSemestre,
     setListaMesesReferencias,
+    setListaMesesReferencias2,
   } = useContext(NAAPAContext);
 
   const [anoAtual] = useState(window.moment().format('YYYY'));
@@ -288,9 +289,20 @@ const DashboardNAAPAFiltros = () => {
     setListaMesesReferencias(meses);
   }, []);
 
+  const montarMeses2 = useCallback(() => {
+    const meses2 = obterTodosMeses();
+    delete meses2[0];
+    setListaMesesReferencias2(meses2);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   useEffect(() => {
     montarMeses();
   }, [montarMeses]);
+
+  useEffect(() => {
+    montarMeses2();
+  }, [montarMeses2]);
 
   return (
     <Col span={24}>

@@ -18,7 +18,7 @@ import ServicoAcompanhamentoAprendizagem from '~/servicos/Paginas/Relatorios/Aco
 import { useNavigate } from 'react-router-dom';
 
 const BotoesAcoesAcompanhamentoAprendizagem = props => {
-  const { semestreSelecionado, componenteCurricularId } = props;
+  const { semestreSelecionado, componenteCurricularId,limparAlunoIconeAlunoSelecionado } = props;
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -78,6 +78,9 @@ const BotoesAcoesAcompanhamentoAprendizagem = props => {
       );
 
     if (salvouApanhadoGeral && salvouCompanhamento) await recarregarDados();
+
+    if(salvouApanhadoGeral && salvouCompanhamento)
+           limparAlunoIconeAlunoSelecionado(codigoEOL);
 
     return salvouApanhadoGeral && salvouCompanhamento;
   };

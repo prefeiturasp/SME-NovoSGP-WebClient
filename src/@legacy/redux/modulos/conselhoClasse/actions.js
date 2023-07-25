@@ -172,3 +172,8 @@ export const setRecomendacaoAlunoSelecionados = payload => ({
   type: '@conselhoClasse/setRecomendacaoAlunoSelecionados',
   payload,
 });
+
+export const setDadosInconsistenciasEstudantes = payload => ({
+  type: '@conselhoClasse/setDadosInconsistenciasEstudantes',
+  payload,
+});

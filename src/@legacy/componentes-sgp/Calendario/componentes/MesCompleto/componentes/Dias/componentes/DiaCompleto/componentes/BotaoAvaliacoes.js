@@ -35,9 +35,9 @@ function BotaoAvaliacoes({ atividadesAvaliativas, permissaoTela }) {
     [permissaoTela]
   );
 
-  return (
-    <Wrapper className="px-2 p-x-md-3">
-      {atividadesAvaliativas?.length > 1 ? (
+  const montarDados = () => {
+    if (atividadesAvaliativas?.length > 1) {
+      return (
         <SelectComponent
           lista={atividadesAvaliativas}
           classNameContainer="w-100"
@@ -52,12 +52,13 @@ function BotaoAvaliacoes({ atividadesAvaliativas, permissaoTela }) {
           border={Base.Roxo}
           color={Base.Roxo}
         />
-      ) : (
-        atividadesAvaliativas?.length === 1 && (
-          <Tooltip
-            className="zIndex"
-            title={atividadesAvaliativas[0].descricao}
-          >
+      );
+    }
+
+    if (atividadesAvaliativas?.length === 1) {
+      return (
+        <Tooltip className="zIndex" title={atividadesAvaliativas[0].descricao}>
+          <span>
             <Botao
               id={shortid.generate()}
               label="Avaliação"
@@ -70,9 +71,15 @@ function BotaoAvaliacoes({ atividadesAvaliativas, permissaoTela }) {
               padding="0 1rem"
               border
             />
-          </Tooltip>
-        )
-      )}
+          </span>
+        </Tooltip>
+      );
+    }
+  };
+
+  return (
+    <Wrapper key={shortid.generate()} className="px-2 p-x-md-3">
+      {montarDados()}
     </Wrapper>
   );
 }

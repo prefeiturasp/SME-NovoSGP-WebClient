@@ -1,5 +1,4 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
 import {
   Card,
   CheckboxComponent,
@@ -18,7 +17,6 @@ import { ANO_INICIO_INFANTIL, OPCAO_TODOS } from '~/constantes/constantes';
 import { ModalidadeDTO } from '~/dtos';
 import {
   AbrangenciaServico,
-  ehTurmaInfantil,
   erros,
   ServicoComponentesCurriculares,
   ServicoFiltroRelatorio,
@@ -63,8 +61,6 @@ const RelatorioDevolutivas = () => {
     useState();
   const [componenteCurricular, setComponenteCurricular] = useState();
   const [modoEdicao, setModoEdicao] = useState(false);
-
-  const { turmaSelecionada } = useSelector(store => store.usuario);
 
   const opcoesRadioSimNao = [
     { label: 'Não', value: false },
@@ -243,6 +239,10 @@ const RelatorioDevolutivas = () => {
 
     setListaComponenteCurriculares([]);
     setComponenteCurricular();
+
+    if (!dre) {
+      setNaoEhInfantil(false);
+    }
 
     setModoEdicao(true);
   };
@@ -460,15 +460,6 @@ const RelatorioDevolutivas = () => {
   }, [modalidadeId, obterBimestres]);
 
   useEffect(() => {
-    const ehInfatil = ehTurmaInfantil(ModalidadeDTO, turmaSelecionada);
-    if (Object.keys(turmaSelecionada).length) {
-      setNaoEhInfantil(!ehInfatil);
-      return;
-    }
-    setNaoEhInfantil(false);
-  }, [turmaSelecionada]);
-
-  useEffect(() => {
     const desabilitar =
       !anoLetivo ||
       !dreId ||
@@ -531,13 +522,20 @@ const RelatorioDevolutivas = () => {
 
   useEffect(() => {
     if (turmaId?.length) {
-      obterComponentesCurriculares();
+      if (turmaId[0] !== '-99') {
+        obterComponentesCurriculares();
+      } else {
+        const lista = [{ codigo: OPCAO_TODOS, nome: 'Todos' }];
+        setComponenteCurricular(lista[0].codigo);
+        setListaComponenteCurriculares(lista);
+      }
     } else {
       setComponenteCurricular();
       setListaComponenteCurriculares([]);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [turmaId]);
-
+  
   return (
     <Loader loading={exibirLoaderGeral}>
       {naoEhInfantil && (
@@ -593,9 +591,7 @@ const RelatorioDevolutivas = () => {
                   lista={listaDres}
                   valueOption="valor"
                   valueText="desc"
-                  disabled={
-                    naoEhInfantil || !anoLetivo || listaDres?.length === 1
-                  }
+                  disabled={!anoLetivo || listaDres?.length === 1}
                   onChange={onChangeDre}
                   valueSelect={dreId}
                   placeholder="Diretoria Regional De Educação (DRE)"

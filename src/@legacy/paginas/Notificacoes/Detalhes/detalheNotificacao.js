@@ -343,7 +343,7 @@ const DetalheNotificacao = () => {
                   </Col>
                 </Row>
               </Cabecalho>
-              <Card>
+              <Card addRow={false}>
                 <EstiloDetalhe>
                   <div className="col-xs-12 col-md-12 col-lg-12">
                     <div className="row mg-bottom">

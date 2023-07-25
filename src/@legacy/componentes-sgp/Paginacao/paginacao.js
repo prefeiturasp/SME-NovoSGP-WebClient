@@ -8,18 +8,22 @@ const Paginacao = props => {
     onChangePaginacao,
     mostrarNumeroLinhas,
     onChangeNumeroLinhas,
+    resetInitialState,
+    setResetInitialState,
     pageSize,
     ...rest
   } = props;
 
-  const [paginaAtual, setPaginaAtual] = useState({
+  const initialState = {
     defaultCurrent: 1,
     total: numeroRegistros,
     current: 1,
     pageSize,
     showSizeChanger: mostrarNumeroLinhas,
     onShowSizeChanger: mostrarNumeroLinhas,
-  });
+  };
+
+  const [paginaAtual, setPaginaAtual] = useState(initialState);
 
   const executaPaginacao = pagina => {
     onChangePaginacao(pagina);
@@ -36,6 +40,13 @@ const Paginacao = props => {
     }));
   }, [numeroRegistros, pageSize]);
 
+  useEffect(() => {
+    if (resetInitialState) {
+      setPaginaAtual(initialState);
+      if (setResetInitialState) setResetInitialState(false);
+    }
+  }, [resetInitialState]);
+
   return (
     <Pagination
       {...rest}
@@ -51,6 +62,7 @@ Paginacao.propTypes = {
   numeroRegistros: PropTypes.oneOfType([PropTypes.any]),
   onChangePaginacao: PropTypes.func,
   mostrarNumeroLinhas: PropTypes.bool,
+  resetInitialState: PropTypes.bool,
   onChangeNumeroLinhas: PropTypes.func,
   pageSize: PropTypes.number,
 };
@@ -60,6 +72,7 @@ Paginacao.defaultProps = {
   numeroRegistros: 10,
   onChangePaginacao: () => {},
   mostrarNumeroLinhas: false,
+  resetInitialState: false,
   onChangeNumeroLinhas: () => {},
   pageSize: 10,
 };

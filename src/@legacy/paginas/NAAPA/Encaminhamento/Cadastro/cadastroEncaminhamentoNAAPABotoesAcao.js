@@ -22,12 +22,14 @@ import BotaoExcluirPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoExcluirP
 import { RotasDto } from '~/dtos';
 import ServicoNAAPA from '~/servicos/Paginas/Gestao/NAAPA/ServicoNAAPA';
 import {
+  setCarregarDadosEncaminhamentoNAAPA,
   setDesabilitarCamposEncaminhamentoNAAPA,
   setExibirModalEncerramentoEncaminhamentoNAAPA,
 } from '~/redux/modulos/encaminhamentoNAAPA/actions';
 import QuestionarioDinamicoFuncoes from '~/componentes-sgp/QuestionarioDinamico/Funcoes/QuestionarioDinamicoFuncoes';
 import situacaoNAAPA from '~/dtos/situacaoNAAPA';
 import BtnImpressaoEncaminhamentoNAAPA from '../componentes/btnImpressaoNAAPA';
+import BtnReabrirEncaminhamentoNAAPA from './componentes/reabrir';
 
 const CadastroEncaminhamentoNAAPABotoesAcao = props => {
   const { mostrarBusca, setMostrarBusca } = props;
@@ -142,6 +144,9 @@ const CadastroEncaminhamentoNAAPABotoesAcao = props => {
       situacaoNAAPA.Rascunho
     );
     if (resposta?.status === 200) {
+      if (encaminhamentoId) {
+        dispatch(setCarregarDadosEncaminhamentoNAAPA(true));
+      }
       navigate(`${RotasDto.ENCAMINHAMENTO_NAAPA}/${resposta?.data?.id}`);
     }
   };
@@ -225,6 +230,8 @@ const CadastroEncaminhamentoNAAPABotoesAcao = props => {
               onClick={() => onClickExcluir()}
             />
           </Col>
+
+          <BtnReabrirEncaminhamentoNAAPA />
 
           <Col>
             <Button
