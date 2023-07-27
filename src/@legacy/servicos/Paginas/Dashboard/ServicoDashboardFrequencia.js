@@ -190,7 +190,7 @@ class ServicoDashboardFrequencia {
     anoTurma,
     dataInicio,
     dataFim,
-    tipoPeriodoDashboard,
+    tipoConsolidadoFrequencia,
     mes,
     visaoDre
   ) => {
@@ -198,7 +198,7 @@ class ServicoDashboardFrequencia {
     const params = {
       dataInicio,
       dataFim,
-      tipoPeriodoDashboard,
+      tipoConsolidadoFrequencia,
       mes,
       visaoDre,
     };
