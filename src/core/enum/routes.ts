@@ -99,4 +99,5 @@ export enum ROUTES {
   RELATORIO_AEE_REGISTRO_ITINERANCIA_IMPRESSAO = '/relatorios/aee/registro-itinerancia',
   RELATORIO_CONTROLE_FREQUENCIA_MENSAL = '/relatorios/frequencia/controle-mensal',
   RELATORIO_PAP = '/relatorios/pap/relatorio-pap',
+  RELATORIO_OCORRENCIAS = '/relatorios/ocorrencias',
 }
