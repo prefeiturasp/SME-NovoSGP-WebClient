@@ -116,6 +116,7 @@ import RelatorioSondagemAnalitico from '~/paginas/Relatorios/Sondagem/relatorioS
 import RelatorioRegistroItinerancia from '~/paginas/Relatorios/AEE/registroItinerancia/relatorioRegistroItinerancia';
 import RelatorioControleFrequenciaMensal from '~/paginas/Relatorios/Frequencia/RelatorioControleFrequenciaMensal/relatorioControleFrequenciaMensal';
 import RelatorioPAP from '@/@legacy/paginas/Relatorios/PAP/RelatorioPAP/relatorioPAP';
+import RelatorioOcorrencias from '@/@legacy/paginas/Relatorios/Gestao/Ocorrencias/relatorioOcorrencias';
 
 export interface RouteProps {
   path: string;
@@ -1670,6 +1671,17 @@ route.set(ROUTES.RELATORIO_PAP, {
   // TODO
   // temPermissionamento: true,
   chavePermissao: ROUTES.RELATORIO_PAP,
+});
+
+route.set(ROUTES.RELATORIO_OCORRENCIAS, {
+  breadcrumbName: 'Ocorrências',
+  menu: ['Relatórios', 'Gestão'],
+  parent: '/',
+  component: RelatorioOcorrencias,
+  exact: true,
+  tipo: RotasTipo.EstruturadaAutenticada,
+  temPermissionamento: true,
+  chavePermissao: ROUTES.RELATORIO_OCORRENCIAS,
 });
 
 const getRoutesArray = () => {
