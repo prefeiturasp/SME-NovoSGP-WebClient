@@ -54,8 +54,6 @@ const GraficoTotalEstudantesPresenciasRemotosAusentes = ({
   const obterDadosGrafico = useCallback(async () => {
     setExibirLoader(true);
 
-    const listaTurmaIds = anoTurma?.turmaId;
-
     const ehTipoDiario =
       Number(tipoPeriodoDashboard) === tipoGraficos.DIARIO.valor;
 
@@ -70,7 +68,7 @@ const GraficoTotalEstudantesPresenciasRemotosAusentes = ({
           ueId,
           modalidade,
           semestre,
-          listaTurmaIds,
+          anoTurma?.ano,
           dataAula,
           visaoDre
         );
@@ -89,7 +87,7 @@ const GraficoTotalEstudantesPresenciasRemotosAusentes = ({
           dreId,
           ueId,
           modalidade,
-          listaTurmaIds,
+          anoTurma?.ano,
           dataSelecionada,
           dataFim,
           tipoPeriodoDashboard,
@@ -98,7 +96,7 @@ const GraficoTotalEstudantesPresenciasRemotosAusentes = ({
         );
     }
 
-    const retorno = await endpoint()
+    const retorno = await endpoint
       .catch(e => erros(e))
       .finally(() => setExibirLoader(false));
 
