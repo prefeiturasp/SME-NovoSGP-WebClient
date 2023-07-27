@@ -23,6 +23,8 @@ import {
   ServicoRelatorioDevolutivas,
   sucesso,
 } from '~/servicos';
+import { useNavigate } from "react-router-dom";
+
 
 const RelatorioDevolutivas = () => {
   const navigate = useNavigate();

@@ -24,6 +24,7 @@ const PlanoAEECadastro = () => {
   const dispatch = useDispatch();
   const location = useLocation();
   const paramsRoute = useParams();
+  const match = location.match;
 
   const planoId = paramsRoute?.id;
 
