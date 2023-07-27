@@ -1,7 +1,6 @@
-import api from '~/servicos/api';
 import { store } from '@/core/redux';
 import { setDadosDashboardFrequencia } from '~/redux/modulos/dashboardFrequencia/actions';
-import queryString from 'query-string';
+import api from '~/servicos/api';
 
 const urlPadrao = 'v1/dashboard/frequencias';
 
@@ -168,28 +167,18 @@ class ServicoDashboardFrequencia {
     ueId,
     modalidade,
     semestre,
-    turmaIds,
+    anoTurma,
     dataAula,
     visaoDre
   ) => {
-    const url = `${urlPadrao}/anos/${anoLetivo}/dres/${dreId}/ues/${ueId}/modalidades/${modalidade}/consolidado-diario/anos-turmas`;
+    const url = `${urlPadrao}/anos/${anoLetivo}/dres/${dreId}/ues/${ueId}/modalidades/${modalidade}/anoTurma/${anoTurma}/consolidado-diario`;
     const params = {
       semestre,
-      turmaIds,
       dataAula,
       visaoDre,
     };
     return api.get(url, {
       params,
-      paramsSerializer: {
-        serialize: params => {
-          return queryString.stringify(params, {
-            arrayFormat: 'repeat',
-            skipEmptyString: true,
-            skipNull: true,
-          });
-        },
-      },
     });
   };
 
@@ -198,16 +187,15 @@ class ServicoDashboardFrequencia {
     dreId,
     ueId,
     modalidade,
-    turmaIds,
+    anoTurma,
     dataInicio,
     dataFim,
     tipoPeriodoDashboard,
     mes,
     visaoDre
   ) => {
-    const url = `${urlPadrao}/anos/${anoLetivo}/dres/${dreId}/ues/${ueId}/modalidades/${modalidade}/consolidado-semanal-mensal/anos-turmas`;
+    const url = `${urlPadrao}/anos/${anoLetivo}/dres/${dreId}/ues/${ueId}/modalidades/${modalidade}/anoTurma/${anoTurma}/consolidado-semanal-mensal`;
     const params = {
-      turmaIds,
       dataInicio,
       dataFim,
       tipoPeriodoDashboard,
@@ -216,15 +204,6 @@ class ServicoDashboardFrequencia {
     };
     return api.get(url, {
       params,
-      paramsSerializer: {
-        serialize: params => {
-          return queryString.stringify(params, {
-            arrayFormat: 'repeat',
-            skipEmptyString: true,
-            skipNull: true,
-          });
-        },
-      },
     });
   };
 
