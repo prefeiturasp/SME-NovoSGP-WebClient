@@ -52,8 +52,6 @@ const GraficoTotalEstudantesPresenciasRemotosAusentes = ({
   );
 
   const obterDadosGrafico = useCallback(async () => {
-    setExibirLoader(true);
-
     const ehTipoDiario =
       Number(tipoPeriodoDashboard) === tipoGraficos.DIARIO.valor;
 
@@ -81,6 +79,19 @@ const GraficoTotalEstudantesPresenciasRemotosAusentes = ({
       const dataSelecionada = dataInicio || dataDiariaSelecionada;
       const dataMensalSelecionada = ehTipoMensal ? dataMensal : undefined;
 
+      let tipoConsolidadoFrequencia = null;
+      if (ehTipoMensal) {
+        tipoConsolidadoFrequencia =
+          tipoGraficos.MENSAL.tipoConsolidadoFrequencia;
+      } else {
+        tipoConsolidadoFrequencia =
+          tipoGraficos.SEMANAL.tipoConsolidadoFrequencia;
+      }
+
+      const ehTipoSemanal =
+        Number(tipoPeriodoDashboard) === tipoGraficos.SEMANAL.valor;
+      if (ehTipoSemanal && !dataFim) return;
+
       endpoint =
         ServicoDashboardFrequencia.obterFrequenciasConsolidacaoSemanalMensalPorTurmaEAno(
           anoLetivo,
@@ -90,12 +101,13 @@ const GraficoTotalEstudantesPresenciasRemotosAusentes = ({
           anoTurma?.ano,
           dataSelecionada,
           dataFim,
-          tipoPeriodoDashboard,
+          tipoConsolidadoFrequencia,
           dataMensalSelecionada,
           visaoDre
         );
     }
 
+    setExibirLoader(true);
     const retorno = await endpoint
       .catch(e => erros(e))
       .finally(() => setExibirLoader(false));
