@@ -44,10 +44,17 @@ const ContainerAvatar = styled.div`
   cursor: ${props => props.cursor} !important;
 
   span {
+    display: flex;
+    align-items: center;
+    justify-content: center;
     width: 80px !important;
     height: 80px !important;
-    line-height: 95px !important;
     min-width: 80px !important;
+  }
+
+  img {
+    width: 90px;
+    height: 90px;
   }
 
   i {
