@@ -23,6 +23,7 @@ import ServicoFrequencia from '~/servicos/Paginas/DiarioClasse/ServicoFrequencia
 import ServicoDisciplina from '~/servicos/Paginas/ServicoDisciplina';
 import servicoSalvarFrequenciaPlanoAula from '../../servicoSalvarFrequenciaPlanoAula';
 import ModalSelecionarAulaFrequenciaPlanoAula from '../ModalSelecionarAula/modalSelecionarAulaFrequenciaPlanoAula';
+import { setLimparTurmaFiltroAutenticacaoFrequencia } from '@/@legacy/redux/modulos/turmaFiltroAutenticacaoFrequencia/actions';
 
 const CamposFiltrarDadosFrequenciaPlanoAula = () => {
   const dispatch = useDispatch();
@@ -57,6 +58,10 @@ const CamposFiltrarDadosFrequenciaPlanoAula = () => {
   const atualizarDatas = useSelector(
     state => state.frequenciaPlanoAula.atualizarDatas
   );
+
+  const dadosFiltroAutenticacaoFrequencia = useSelector(
+    state => state.turmaFiltroAutenticacaoFrequencia
+  )?.dadosFiltroAutenticacaoFrequencia;
 
   const [listaComponenteCurricular, setListaComponenteCurricular] = useState(
     []
@@ -128,11 +133,30 @@ const CamposFiltrarDadosFrequenciaPlanoAula = () => {
             .catch(e => erros(e))
         : [];
 
-    if (resposta && resposta.data) {
-      setListaComponenteCurricular(resposta.data);
-      if (resposta.data.length === 1) {
-        const componente = resposta.data[0];
+    const lista = resposta.data;
+
+    if (lista?.length) {
+      setListaComponenteCurricular(lista);
+      if (lista.length === 1) {
+        const componente = lista[0];
         dispatch(setComponenteCurricularFrequenciaPlanoAula(componente));
+      } else if (
+        dadosFiltroAutenticacaoFrequencia?.componenteCurricularCodigo
+      ) {
+        const componenteNaLista = lista.find(
+          item =>
+            String(item?.codigoComponenteCurricular) ===
+            String(
+              dadosFiltroAutenticacaoFrequencia?.componenteCurricularCodigo
+            )
+        );
+
+        if (componenteNaLista) {
+          dispatch(
+            setComponenteCurricularFrequenciaPlanoAula(componenteNaLista)
+          );
+        }
+        dispatch(setLimparTurmaFiltroAutenticacaoFrequencia());
       }
     } else {
       setListaComponenteCurricular([]);
@@ -203,7 +227,8 @@ const CamposFiltrarDadosFrequenciaPlanoAula = () => {
               String(item.codigoComponenteCurricular) ===
                 codigoComponenteCurricularId ||
               String(item.id) === codigoComponenteCurricularId ||
-              String(item.codigoTerritorioSaber) === codigoComponenteCurricularId ||
+              String(item.codigoTerritorioSaber) ===
+                codigoComponenteCurricularId ||
               String(item.codDisciplinaPai) === codigoComponenteCurricularId
           );
           dispatch(setComponenteCurricularFrequenciaPlanoAula(componente));
