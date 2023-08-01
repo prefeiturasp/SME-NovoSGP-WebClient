@@ -98,6 +98,7 @@ const GraficoTotalEstudantesPresenciasRemotosAusentes = ({
           dreId,
           ueId,
           modalidade,
+          semestre,
           anoTurma?.ano,
           dataSelecionada,
           dataFim,
