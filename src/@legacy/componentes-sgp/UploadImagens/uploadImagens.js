@@ -13,7 +13,17 @@ import {
   permiteInserirFormato,
 } from '~/utils/funcoes/gerais';
 
+const ALTURA_MINIMA = 180;
+const LARGURA_MINIMA = 180;
+
 export const ContainerUpload = styled(Upload)`
+  .ant-upload-list-item-container {
+    width: 100% !important;
+    height: 100% !important;
+    margin-block: 0 !important;
+    margin-inline: 0 !important;
+  }
+
   .ant-upload-select-picture-card {
     opacity: ${props => (props.desabilitarUpload ? 0.8 : 1)} !important;
     cursor: ${props =>
@@ -35,36 +45,30 @@ export const ContainerUpload = styled(Upload)`
   }
 `;
 
-const ALTURA_MINIMA = 180;
-const LARGURA_MINIMA = 180;
-
 const UploadImagens = props => {
   const {
-    servicoCustomRequest,
-    afterSuccessUpload,
-    parametrosCustomRequest,
-    removerImagem,
-    listaInicialImagens,
     desabilitar,
-    quantidadeMaxima,
-    tiposArquivosPermitidos,
+    removerImagem,
     showUploadList,
+    quantidadeMaxima,
+    afterSuccessUpload,
+    listaInicialImagens,
+    servicoCustomRequest,
     exibirCarregarImagem,
+    parametrosCustomRequest,
+    tiposArquivosPermitidos,
     valorMinimoAlturaLargura,
   } = props;
 
-  const [listaImagens, setListaImagens] = useState([]);
-
-  const [exibirLoader, setExibirLoader] = useState(false);
-
   const TAMANHO_MAXIMO_UPLOAD = 5;
-
   const CONFIG_PADRAO_MODAL = {
     previewVisible: false,
     previewImage: '',
     previewTitle: '',
   };
 
+  const [listaImagens, setListaImagens] = useState([]);
+  const [exibirLoader, setExibirLoader] = useState(false);
   const [configModal, setConfigModal] = useState(CONFIG_PADRAO_MODAL);
 
   const handleCancel = () => setConfigModal(CONFIG_PADRAO_MODAL);
@@ -205,18 +209,18 @@ const UploadImagens = props => {
   return (
     <Loader loading={exibirLoader} tip="">
       <ContainerUpload
-        listType="picture-card"
-        fileList={listaImagens}
-        onPreview={handlePreview}
-        customRequest={customRequest}
         onRemove={onRemove}
         disabled={desabilitar}
+        fileList={listaImagens}
+        listType="picture-card"
+        onPreview={handlePreview}
+        beforeUpload={beforeUpload}
+        customRequest={customRequest}
+        showUploadList={showUploadList}
         accept={tiposArquivosPermitidos}
         desabilitarUpload={listaImagens?.length >= quantidadeMaxima}
-        beforeUpload={beforeUpload}
-        showUploadList={showUploadList}
       >
-        {exibirCarregarImagem ? (
+        {exibirCarregarImagem && (
           <div>
             <PlusOutlined
               style={{ color: Base.Roxo }}
@@ -224,20 +228,18 @@ const UploadImagens = props => {
             />
             <div style={{ marginTop: 8 }}>Carregar</div>
           </div>
-        ) : (
-          ''
         )}
       </ContainerUpload>
       <Modal
-        open={configModal?.previewVisible}
-        title={configModal?.previewTitle}
-        onCancel={handleCancel}
         footer={null}
+        onCancel={handleCancel}
+        title={configModal?.previewTitle}
+        open={configModal?.previewVisible}
       >
         <img
-          alt={configModal?.previewTitle}
           style={{ width: '100%' }}
           src={configModal?.previewImage}
+          alt={configModal?.previewTitle}
         />
       </Modal>
     </Loader>
@@ -245,34 +247,34 @@ const UploadImagens = props => {
 };
 
 UploadImagens.propTypes = {
-  servicoCustomRequest: PropTypes.func,
-  parametrosCustomRequest: PropTypes.oneOfType([PropTypes.array]),
-  afterSuccessUpload: PropTypes.func,
-  removerImagem: PropTypes.func,
-  listaInicialImagens: PropTypes.oneOfType([PropTypes.array]),
   desabilitar: PropTypes.bool,
+  removerImagem: PropTypes.func,
   quantidadeMaxima: PropTypes.number,
+  afterSuccessUpload: PropTypes.func,
+  servicoCustomRequest: PropTypes.func,
+  exibirCarregarImagem: PropTypes.bool,
   tiposArquivosPermitidos: PropTypes.string,
   showUploadList: PropTypes.oneOfType([PropTypes.object]),
-  exibirCarregarImagem: PropTypes.bool,
+  listaInicialImagens: PropTypes.oneOfType([PropTypes.array]),
+  parametrosCustomRequest: PropTypes.oneOfType([PropTypes.array]),
   valorMinimoAlturaLargura: PropTypes.oneOfType([PropTypes.object]),
 };
 
 UploadImagens.defaultProps = {
-  servicoCustomRequest: null,
-  parametrosCustomRequest: [],
-  afterSuccessUpload: null,
-  removerImagem: null,
-  listaInicialImagens: [],
   desabilitar: false,
+  removerImagem: null,
   quantidadeMaxima: 3,
+  listaInicialImagens: [],
+  afterSuccessUpload: null,
+  servicoCustomRequest: null,
+  exibirCarregarImagem: true,
+  parametrosCustomRequest: [],
   tiposArquivosPermitidos: '.jpg, .jpeg, .png',
   showUploadList: {
     showRemoveIcon: true,
     showPreviewIcon: true,
     showDownloadIcon: false,
   },
-  exibirCarregarImagem: true,
   valorMinimoAlturaLargura: {
     height: ALTURA_MINIMA,
     width: LARGURA_MINIMA,
