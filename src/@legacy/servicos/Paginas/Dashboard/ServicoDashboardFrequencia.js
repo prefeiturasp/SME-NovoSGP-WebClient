@@ -187,6 +187,7 @@ class ServicoDashboardFrequencia {
     dreId,
     ueId,
     modalidade,
+    semestre,
     anoTurma,
     dataInicio,
     dataFim,
@@ -196,6 +197,7 @@ class ServicoDashboardFrequencia {
   ) => {
     const url = `${urlPadrao}/anos/${anoLetivo}/dres/${dreId}/ues/${ueId}/modalidades/${modalidade}/anoTurma/${anoTurma}/consolidado-semanal-mensal`;
     const params = {
+      semestre,
       dataInicio,
       dataFim,
       tipoConsolidadoFrequencia,
