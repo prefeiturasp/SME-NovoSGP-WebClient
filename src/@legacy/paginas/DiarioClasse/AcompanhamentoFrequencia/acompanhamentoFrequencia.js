@@ -212,7 +212,7 @@ const AcompanhamentoFrequencia = () => {
                     name="disciplinaId"
                     lista={listaComponentesCurriculares}
                     valueOption="id"
-                    valueText="nomeComponenteInfantil"
+                    valueText="nome"
                     valueSelect={componenteCurricularIdSelecionado}
                     onChange={onChangeComponenteCurricular}
                     placeholder="Componente curricular"
