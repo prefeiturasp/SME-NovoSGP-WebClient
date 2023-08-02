@@ -232,6 +232,7 @@ class ServicoSalvarConselhoClasse {
       notaConceitoPosConselhoAtual,
       desabilitarCampos,
       bimestreAtual,
+      dadosAlunoObjectCard,
     } = conselhoClasse;
 
     const {
@@ -309,7 +310,7 @@ class ServicoSalvarConselhoClasse {
           alunoCodigo,
           turmaCodigo,
           bimestre,
-          consideraHistorico
+          (dadosAlunoObjectCard.desabilitado ? true : false)
         );
 
       dispatch(setDadosPrincipaisConselhoClasse(dadosPrincipaisConselhoClasse));

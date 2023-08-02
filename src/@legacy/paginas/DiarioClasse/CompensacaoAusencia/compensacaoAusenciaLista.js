@@ -34,26 +34,25 @@ import EstudanteMatriculadoPAP from '@/components/sgp/estudante-matriculado-pap'
 const CompensacaoAusenciaLista = () => {
   const navigate = useNavigate();
   const usuario = useSelector(store => store.usuario);
-  const { turmaSelecionada } = usuario;
-
   const modalidadesFiltroPrincipal = useSelector(
     store => store.filtro.modalidades
   );
 
+  const { turmaSelecionada } = usuario;
   const permissoesTela = usuario.permissoes[ROUTES.COMPENSACAO_AUSENCIA];
-  const [somenteConsulta, setSomenteConsulta] = useState(false);
 
+  const [filtro, setFiltro] = useState({});
+  const [nomeAluno, setNomeAluno] = useState('');
   const [exibirLista, setExibirLista] = useState(false);
+  const [nomeAtividade, setNomeAtividade] = useState('');
+  const [listaBimestres, setListaBimestres] = useState([]);
+  const [listaDisciplinas, setListaDisciplinas] = useState([]);
+  const [somenteConsulta, setSomenteConsulta] = useState(false);
+  const [bimestreSelecionado, setBimestreSelecionado] = useState('');
   const [carregandoDisciplinas, setCarregandoDisciplinas] = useState(false);
   const [desabilitarDisciplina, setDesabilitarDisciplina] = useState(false);
-  const [listaDisciplinas, setListaDisciplinas] = useState([]);
   const [compensacoesSelecionadas, setCompensacoesSelecionadas] = useState([]);
-  const [bimestreSelecionado, setBimestreSelecionado] = useState('');
-  const [filtro, setFiltro] = useState({});
-  const [nomeAtividade, setNomeAtividade] = useState('');
-  const [nomeAluno, setNomeAluno] = useState('');
   const [componenteSemFrequencia, setComponenteSemFrequencia] = useState(false);
-  const [listaBimestres, setListaBimestres] = useState([]);
   const [disciplinaIdSelecionada, setDisciplinaIdSelecionada] =
     useState(undefined);
 
@@ -71,9 +70,7 @@ const CompensacaoAusenciaLista = () => {
     if (!disciplinaIdSelecionada || disciplinaIdSelecionada === 0) return;
 
     const disciplinaSelecionada = listaDisciplinas.find(
-      x =>
-        toString(x.codigoComponenteCurricular) ===
-        toString(disciplinaIdSelecionada)
+      x => x.codigoComponenteCurricular === Number(disciplinaIdSelecionada)
     );
 
     setComponenteSemFrequencia(

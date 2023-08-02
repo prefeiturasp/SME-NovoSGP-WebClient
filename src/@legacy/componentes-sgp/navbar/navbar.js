@@ -59,13 +59,12 @@ const Navbar = () => {
 
   const clickEncerrar = async () => {
     setCarregando(true);
-    const deslogar = true;
-    const resposta = await helper.acessar(
-      usuarioStore.administradorSuporte,
-      false,
-      deslogar,
-      navigate
-    );
+    const resposta = await helper.acessar({
+      login: usuarioStore.administradorSuporte,
+      acessoAdmin: false,
+      deslogar: true,
+      navigate,
+    });
     if (resposta?.sucesso) {
       navigate(URL_HOME);
       ServicoNotificacao.obterUltimasNotificacoesNaoLidas().catch(e =>
