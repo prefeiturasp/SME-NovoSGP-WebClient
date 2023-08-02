@@ -96,12 +96,12 @@ const ConselhoClasse = () => {
     }
   }, [turmaAtual, turmaSelecionada]);
 
-  const verificarExibicaoMarcador = async codigoEOL => {
+  const verificarExibicaoMarcador = async aluno => {
     // Somente quando for bimestre diferente de final vai ter retorno com valor!
     const resposta = await ServicoConselhoClasse.obterConselhoClasseTurmaFinal(
       turmaSelecionada.turma,
-      codigoEOL,
-      turmaSelecionada.consideraHistorico
+      aluno.codigoEOL,
+      (aluno.desabilitado ? true : false)
     );
 
     if (resposta?.data) {
@@ -145,7 +145,7 @@ const ConselhoClasse = () => {
     if (aluno.codigoEOL === dadosAlunoObjectCard.codigoEOL) return;
 
     resetarInfomacoes();
-    verificarExibicaoMarcador(aluno.codigoEOL);
+    verificarExibicaoMarcador(aluno);
     dispatch(setDadosAlunoObjectCard(aluno));
   };
 

@@ -12,6 +12,7 @@ import { store } from '@/core/redux';
 import ReactGA from 'react-ga';
 
 import Auth from '@/routes/config/auth';
+import AutenticacaoFrequencia from '@/@legacy/paginas/AutenticacaoFrequencia/autenticacaoFrequencia';
 
 const Routes = () => {
   const location = useLocation();
@@ -22,6 +23,7 @@ const Routes = () => {
   const loginPage = createElement(Login);
   const elementRedefinirSenha = createElement(RedefinirSenha);
   const elementRecuperarSenha = createElement(RecuperarSenha);
+  const autenticacaoFrequenciaPage = createElement(AutenticacaoFrequencia);
 
   const routesArray = getRoutesArray();
 
@@ -51,6 +53,10 @@ const Routes = () => {
               {routesArray.map((rota: any) => montarRota(rota))}
             </Route>
             <Route path={ROUTES.REDEFINIR_SENHA} element={elementRedefinirSenha} />
+            <Route
+              path={ROUTES.AUTENTICACAO_INTEGRACOES_FREQUENCIA}
+              element={autenticacaoFrequenciaPage}
+            />
           </BaseRoutes>
         </>
       ) : (
@@ -59,6 +65,10 @@ const Routes = () => {
           <Route path={ROUTES.LOGIN} element={loginPage} />
           <Route path={ROUTES.RECUPERAR_SENHA} element={elementRecuperarSenha} />
           <Route path={ROUTES.REDEFINIR_SENHA_TOKEN} element={elementRedefinirSenha} />
+          <Route
+            path={ROUTES.AUTENTICACAO_INTEGRACOES_FREQUENCIA}
+            element={autenticacaoFrequenciaPage}
+          />
         </BaseRoutes>
       )}
     </div>

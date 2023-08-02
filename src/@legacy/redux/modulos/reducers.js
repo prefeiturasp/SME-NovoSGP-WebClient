@@ -47,6 +47,7 @@ import dashboardFechamento from './dashboardFechamento/reducers';
 import geral from './geral/reducers';
 import modalAnotacaoFrequencia from './modalAnotacaoFrequencia/reducers';
 import historicoPaginado from './historico-paginado/reducers';
+import turmaFiltroAutenticacaoFrequencia from './turmaFiltroAutenticacaoFrequencia/reducers';
 import relatorioPAP from './relatorioPAP/reducers';
 
 const reducers = combineReducers({
@@ -97,6 +98,7 @@ const reducers = combineReducers({
   geral,
   modalAnotacaoFrequencia,
   historicoPaginado,
+  turmaFiltroAutenticacaoFrequencia,
   relatorioPAP,
 });
 
