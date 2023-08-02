@@ -47,7 +47,7 @@ pipeline {
                     }
                     withCredentials([file(credentialsId: "${kubeconfig}", variable: 'config')]){
                         sh('cp $config '+"$home"+'/.kube/config')
-                        sh "kubectl rollout restart deployment/${deployment1} -n sme-novosgp"
+                        sh "kubectl rollout restart deployment/${deployment1} -n sme-novosgp-d1"
                         sh('rm -f '+"$home"+'/.kube/config')
                     }
                 }
@@ -76,6 +76,7 @@ def sendTelegram(message) {
 }
 def getKubeconf(branchName) {
     if("main".equals(branchName)) { return "config_prd"; }
+    else if ("pre-prod".equals(branchName)) { return "config_prd"; }
     else if ("master".equals(branchName)) { return "config_prd"; }
     else if ("homolog".equals(branchName)) { return "config_hom"; }
     else if ("release".equals(branchName)) { return "config_hom"; }
