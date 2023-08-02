@@ -149,12 +149,12 @@ const Suporte = () => {
     if (linha?.codigoRf || linha?.login) {
       setCarregando(true);
 
-      const resposta = await helper.acessar(
-        { usuario: linha?.codigoRf || linha?.login },
-        true,
-        false,
-        navigate
-      );
+      const resposta = await helper.acessar({
+        login: { usuario: linha?.codigoRf || linha?.login },
+        acessoAdmin: true,
+        deslogar: false,
+        navigate,
+      });
 
       if (resposta?.sucesso) {
         navigate(URL_HOME);

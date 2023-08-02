@@ -8,7 +8,6 @@ import Routes from 'routes';
 import GlobalStyle from '~/estilos/global';
 import { store, persistor } from '@/core/redux';
 import { Deslogar } from '~/redux/modulos/usuario/actions';
-import VersaoSistema from '~/componentes-sgp/VersaoSistema';
 import { ConfigProvider } from 'antd';
 import ThemeProviders from '@/core/providers/theme-providers';
 import { SGPTheme } from '@/core/config/theme';
@@ -46,7 +45,6 @@ const App: React.FC = () => {
           <PersistGate loading={null} persistor={persistor}>
             <BrowserRouter>
               <GlobalStyle />
-              <VersaoSistema />
               <Routes />
             </BrowserRouter>
           </PersistGate>
