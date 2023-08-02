@@ -11,6 +11,10 @@ import { Base } from '../colors';
 import Label from '../label';
 
 const Campo = styled.div`
+  .jodit-container {
+    display: grid;
+  }
+
   .campo-invalido {
     .jodit-container {
       border-color: #dc3545 !important;
@@ -36,28 +40,28 @@ const TAMANHO_MAXIMO_UPLOAD_MB = 10;
 
 const JoditEditor = forwardRef((props, ref) => {
   const {
-    value,
-    onChange,
-    tabIndex,
-    desabilitar,
-    height,
-    label,
-    name,
     id,
+    name,
     form,
+    value,
+    label,
+    height,
     temErro,
-    mensagemErro,
-    validarSeTemErro,
-    permiteInserirArquivo,
+    tabIndex,
+    onChange,
     readonly,
-    removerToolbar,
-    iframeStyle,
-    disablePlugins,
-    permiteVideo,
     qtdMaxImg,
-    imagensCentralizadas,
-    valideClipboardHTML,
+    iframeStyle,
+    desabilitar,
+    permiteVideo,
+    mensagemErro,
     labelRequired,
+    disablePlugins,
+    removerToolbar,
+    validarSeTemErro,
+    valideClipboardHTML,
+    imagensCentralizadas,
+    permiteInserirArquivo,
   } = props;
 
   const textArea = useRef(null);
@@ -172,6 +176,29 @@ const JoditEditor = forwardRef((props, ref) => {
   };
 
   const config = {
+    height,
+    placeholder: '',
+    spellcheck: true,
+    language: 'pt_br',
+    countHTMLChars: false,
+    buttons: BOTOES_PADRAO,
+    showWordsCounter: false,
+    buttonsXS: BOTOES_PADRAO,
+    buttonsMD: BOTOES_PADRAO,
+    buttonsSM: BOTOES_PADRAO,
+    showXPathInStatusbar: false,
+    askBeforePasteFromWord: false,
+    readonly: readonly || desabilitar,
+    enableDragAndDropFileToEditor: true,
+    askBeforePasteHTML: valideClipboardHTML,
+    // iframe: true, // TODO bug jodit-react
+    defaultActionOnPaste: 'insert_clear_html',
+    disablePlugins: ['image-properties', disablePlugins],
+    iframeStyle: `${iframeStyle} img{max-width: 100%;max-height: 700px;object-fit: cover;}`,
+    style: {
+      font: '16px Arial',
+      overflow: 'none',
+    },
     events: {
       afterRemoveNode: node => {
         if (node.nodeName === 'IMG') {
@@ -196,15 +223,6 @@ const JoditEditor = forwardRef((props, ref) => {
         }
       },
     },
-    countHTMLChars: false,
-    askBeforePasteHTML: valideClipboardHTML,
-    askBeforePasteFromWord: false,
-    defaultActionOnPaste: 'insert_clear_html',
-    disablePlugins: ['image-properties', disablePlugins],
-    language: 'pt_br',
-    height,
-    readonly: readonly || desabilitar,
-    enableDragAndDropFileToEditor: true,
     uploader: {
       buildData: data => {
         return new Promise((resolve, reject) => {
@@ -281,20 +299,6 @@ const JoditEditor = forwardRef((props, ref) => {
         }
       },
     },
-    // iframe: true, // TODO bug jodit-react
-    spellcheck: true,
-    showWordsCounter: false,
-    showXPathInStatusbar: false,
-    buttons: BOTOES_PADRAO,
-    buttonsXS: BOTOES_PADRAO,
-    buttonsMD: BOTOES_PADRAO,
-    buttonsSM: BOTOES_PADRAO,
-    placeholder: '',
-    style: {
-      font: '16px Arial',
-      overflow: 'none',
-    },
-    iframeStyle: `${iframeStyle} img{max-width: 100%;max-height: 700px;object-fit: cover;}`,
   };
 
   const onChangePadrao = () => {
@@ -496,11 +500,11 @@ const JoditEditor = forwardRef((props, ref) => {
           className={validacaoComErro || possuiErro() ? 'campo-invalido' : ''}
         >
           <textarea
-            ref={textArea}
             id={id}
-            hidden={!textArea?.current?.isJodit}
-            value={value || undefined}
+            ref={textArea}
             onChange={e => e}
+            value={value || undefined}
+            hidden={!textArea?.current?.isJodit}
           />
         </div>
       </Campo>
@@ -529,53 +533,53 @@ const JoditEditor = forwardRef((props, ref) => {
 });
 
 JoditEditor.propTypes = {
-  value: PropTypes.string,
-  tabIndex: PropTypes.number,
-  onChange: PropTypes.func,
-  desabilitar: PropTypes.bool,
-  height: PropTypes.string,
-  label: PropTypes.string,
-  name: PropTypes.string,
   id: PropTypes.string,
-  form: PropTypes.oneOfType([PropTypes.any]),
+  name: PropTypes.string,
+  value: PropTypes.string,
+  label: PropTypes.string,
   temErro: PropTypes.bool,
-  mensagemErro: PropTypes.string,
-  validarSeTemErro: PropTypes.func,
-  permiteInserirArquivo: PropTypes.bool,
+  height: PropTypes.string,
+  onChange: PropTypes.func,
   readonly: PropTypes.bool,
-  removerToolbar: PropTypes.bool,
-  iframeStyle: PropTypes.string,
-  disablePlugins: PropTypes.string,
-  permiteVideo: PropTypes.bool,
+  tabIndex: PropTypes.number,
+  desabilitar: PropTypes.bool,
   qtdMaxImg: PropTypes.number,
-  imagensCentralizadas: PropTypes.bool,
-  valideClipboardHTML: PropTypes.bool,
+  permiteVideo: PropTypes.bool,
   labelRequired: PropTypes.bool,
+  iframeStyle: PropTypes.string,
+  mensagemErro: PropTypes.string,
+  removerToolbar: PropTypes.bool,
+  disablePlugins: PropTypes.string,
+  validarSeTemErro: PropTypes.func,
+  valideClipboardHTML: PropTypes.bool,
+  imagensCentralizadas: PropTypes.bool,
+  permiteInserirArquivo: PropTypes.bool,
+  form: PropTypes.oneOfType([PropTypes.any]),
 };
 
 JoditEditor.defaultProps = {
-  value: '',
-  tabIndex: -1,
-  onChange: null,
-  desabilitar: false,
-  height: 'auto',
-  label: '',
   name: '',
-  id: 'editor',
+  label: '',
+  value: '',
   form: null,
+  tabIndex: -1,
+  id: 'editor',
+  onChange: null,
+  height: 'auto',
   temErro: false,
-  mensagemErro: '',
-  validarSeTemErro: null,
-  permiteInserirArquivo: true,
   readonly: false,
-  removerToolbar: false,
   iframeStyle: '',
+  qtdMaxImg: null,
+  mensagemErro: '',
+  desabilitar: false,
   disablePlugins: '',
   permiteVideo: true,
-  qtdMaxImg: null,
-  imagensCentralizadas: false,
-  valideClipboardHTML: false,
   labelRequired: false,
+  removerToolbar: false,
+  validarSeTemErro: null,
+  valideClipboardHTML: false,
+  imagensCentralizadas: false,
+  permiteInserirArquivo: true,
 };
 
 export default JoditEditor;
