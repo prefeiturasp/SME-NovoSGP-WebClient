@@ -72,7 +72,7 @@ function AtribuicaoEsporadicaForm() {
     const anoValidar = anoLetivo || anoAtual;
     if (anoValidar) {
       const dataParcial = moment().format('MM-DD');
-      const dataInteira = moment(`${dataParcial}-${anoValidar}`);
+      const dataInteira = moment(`${anoValidar}-${dataParcial}`);
       return dataInteira;
     }
     return '';
@@ -480,7 +480,6 @@ function AtribuicaoEsporadicaForm() {
                         formatoData="DD/MM/YYYY"
                         desabilitado={somenteConsulta}
                         desabilitarData={desabilitarData}
-                        valorPadrao={valorPadrao}
                         labelRequired
                         onChange={() => {
                           onChangeCampos();
