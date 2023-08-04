@@ -480,6 +480,7 @@ function AtribuicaoEsporadicaForm() {
                         formatoData="DD/MM/YYYY"
                         desabilitado={somenteConsulta}
                         desabilitarData={desabilitarData}
+                        valorPadrao={valorPadrao}
                         labelRequired
                         onChange={() => {
                           onChangeCampos();
