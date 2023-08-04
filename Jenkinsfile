@@ -4,6 +4,7 @@ pipeline {
       kubeconfig = getKubeconf(env.branchname)
       registryCredential = 'jenkins_registry'
       deployment1 = "${env.branchname == 'release-r2' ? 'sme-webclient-rc2' : 'sme-webclient' }"
+      namespace = "${env.branchname == 'pre-prod' ? 'sme-novosgp-d1' : 'sme-novosgp' }"
     }
 
     agent { node { label 'SME-AGENT-SGP' } }
