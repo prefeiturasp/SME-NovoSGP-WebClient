@@ -120,7 +120,7 @@ const ConselhoClasse = () => {
           await servicoSalvarConselhoClasse.validaParecerConclusivo(
             conselhoClasseId,
             fechamentoTurmaId,
-            codigoEOL,
+            aluno.codigoEOL,
             turmaSelecionada.turma,
             usuario.turmaSelecionada.consideraHistorico
           );
@@ -129,7 +129,7 @@ const ConselhoClasse = () => {
           fechamentoTurmaId,
           conselhoClasseId: conselhoClasseId || 0,
           conselhoClasseAlunoId,
-          alunoCodigo: codigoEOL,
+          alunoCodigo: aluno.codigoEOL,
           ...dadosPrincipaisConselhoClasse,
           tipoNota,
         };
