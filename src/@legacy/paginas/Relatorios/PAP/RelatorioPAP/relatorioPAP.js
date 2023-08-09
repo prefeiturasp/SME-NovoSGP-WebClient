@@ -1,33 +1,44 @@
-import { store } from '@/core/redux';
+import {
+  limparDadosRelatorioPAP,
+  setEstudantesRelatorioPAP,
+} from '@/@legacy/redux/modulos/relatorioPAP/actions';
+import { Col, Row } from 'antd';
 import { useEffect } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Card } from '~/componentes';
 import { AlertaModalidadeInfantil, Cabecalho } from '~/componentes-sgp';
-import { setLimparDadosQuestionarioDinamico } from '~/redux/modulos/questionarioDinamico/actions';
+import {
+  setLimparDadosQuestionarioDinamico,
+  setListaSecoesEmEdicao,
+} from '~/redux/modulos/questionarioDinamico/actions';
+import AlertaDentroPeriodoPAP from './componentes/alertaDentroPeriodoPAP';
 import AlertaSemTurmaPAP from './componentes/alertaSemTurmaPAP';
 import AlertaSemTurmaSelecionada from './componentes/alertaSemTurmaSelecionada';
 import BotoesAcoesRelatorioPAP from './componentes/botoesAcoes';
+import DadosRelatorioPAP from './componentes/dadosRelatorioPAP';
 import LoaderRelatorioPAP from './componentes/loader';
 import SelectPeridosPAP from './componentes/selectPeriodo';
-import { Col, Row } from 'antd';
-import DadosRelatorioPAP from './componentes/dadosRelatorioPAP';
 
 const RelatorioPAP = () => {
+  const dispatch = useDispatch();
   const usuario = useSelector(store => store.usuario);
   const { turmaSelecionada } = usuario;
 
   useEffect(() => {
     return () => {
-      // TODO - Deve limpar os dados do relatório PAP quando sair da tela
-      store.dispatch(setLimparDadosQuestionarioDinamico());
+      dispatch(setEstudantesRelatorioPAP([]));
+      dispatch(limparDadosRelatorioPAP());
+      dispatch(setListaSecoesEmEdicao([]));
+      dispatch(setLimparDadosQuestionarioDinamico());
     };
-  }, []);
+  }, [dispatch]);
 
   return (
     <>
       <AlertaSemTurmaSelecionada />
       <AlertaSemTurmaPAP />
       <AlertaModalidadeInfantil />
+      <AlertaDentroPeriodoPAP />
       <LoaderRelatorioPAP>
         <Cabecalho pagina="Relatório de PAP">
           <BotoesAcoesRelatorioPAP />

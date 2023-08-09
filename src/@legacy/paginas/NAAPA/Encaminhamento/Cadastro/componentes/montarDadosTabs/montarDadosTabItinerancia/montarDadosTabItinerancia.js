@@ -4,9 +4,9 @@ import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Button, Card, Colors } from '~/componentes';
 import { SGP_BUTTON_NOVO_ATENDIMENTO } from '~/constantes/ids/button';
-import { setListaSecoesEmEdicao } from '~/redux/modulos/encaminhamentoNAAPA/actions';
 import {
   setLimparDadosQuestionarioDinamico,
+  setListaSecoesEmEdicao,
   setQuestionarioDinamicoEmEdicao,
 } from '~/redux/modulos/questionarioDinamico/actions';
 import DrawerAtendimento from '../../drawer/drawerAtendimento';

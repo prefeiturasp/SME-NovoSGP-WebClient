@@ -3,34 +3,41 @@ import { DataTable } from '~/componentes';
 import Label from '~/componentes/label';
 import { SGP_TABLE_FREQUENCIA_TURMA_PAP } from '~/constantes/ids/table';
 import ColunaDimensionavel from '../ColunaDimensionavel/colunaDimensionavel';
+import { formatarFrequencia } from '@/@legacy/utils';
 
 const TabelaFrequenciaTurmaPAP = props => {
   const { label, questaoAtual, form } = props;
 
   const valoresFormulario = form?.values?.[questaoAtual.id];
-  const dadosTabela = valoresFormulario?.length ? valoresFormulario : [];
+  const dadosTabela = [valoresFormulario];
 
-  // TODO Trocar DTO e alterar os dataIndex
   const colunas = [
     {
       title: 'Qtd. de Aulas',
-      dataIndex: 'qtdAulas',
+      dataIndex: 'TotalAulas',
+      align: 'center',
     },
     {
       title: 'Qtd. de Presença/Remoto',
-      dataIndex: 'qtdPresencaRemoto',
+      dataIndex: 'TotalPresencaRemoto',
+      align: 'center',
     },
     {
       title: 'Qtd. de Ausências',
-      dataIndex: 'qtdAusencias',
+      dataIndex: 'TotalAusencias',
+      align: 'center',
     },
     {
       title: 'Qtd. de Compensações',
-      dataIndex: 'qtdCompensacoes',
+      dataIndex: 'TotalCompensacoes',
+      align: 'center',
     },
     {
       title: 'Percentual de Frequência',
-      dataIndex: 'percentualFrequencia',
+      align: 'center',
+      dataIndex: 'PercentualFrequenciaFormatado',
+      render: percentualFrequenciaFormatado =>
+        formatarFrequencia(percentualFrequenciaFormatado),
     },
   ];
 

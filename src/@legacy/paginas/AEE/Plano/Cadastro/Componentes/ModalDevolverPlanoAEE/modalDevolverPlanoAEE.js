@@ -21,7 +21,8 @@ const ModalDevolverPlanoAEE = () => {
   const navigate = useNavigate();
   const paramsRoute = useParams();
 
-  const planoId = paramsRoute?.id;
+
+  const planoAEEId = paramsRoute?.id;
 
   const exibirModalDevolverPlanoAEE = useSelector(
     store => store.planoAEE.exibirModalDevolverPlanoAEE
@@ -78,7 +79,7 @@ const ModalDevolverPlanoAEE = () => {
     setExibirLoader(true);
 
     const retorno = await ServicoPlanoAEE.devolverPlanoAEE({
-      planoId,
+      planoAEEId,
       motivo,
     })
       .catch(e => erros(e))
