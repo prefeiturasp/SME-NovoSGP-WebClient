@@ -17,6 +17,7 @@ import {
   sucesso,
   erros,
   setBreadcrumbManual,
+  erro,
 } from '~/servicos';
 import BotaoExcluirPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoExcluirPadrao';
 import { RotasDto } from '~/dtos';
@@ -81,7 +82,15 @@ const CadastroEncaminhamentoNAAPABotoesAcao = props => {
   }, [encaminhamentoId, permissoesTela, dispatch]);
 
   const onClickProximoPasso = () => {
-    setMostrarBusca(false);
+    ServicoNAAPA.existeEncaminhamentoAtivo(aluno?.codigoAluno)
+      .then(resposta => {
+        if (resposta.data) {
+          erro('Existe encaminhamento ativo para este estudante');
+        } else {
+          setMostrarBusca(false);
+        }
+      })
+      .catch(e => erros(e));
   };
 
   const onClickVoltar = async () => {

@@ -388,6 +388,9 @@ class ServicoNAAPA {
 
   reabrir = encaminhamentoNAAPAId =>
     api.post(`${URL_PADRAO}/reabrir/${encaminhamentoNAAPAId}`);
+
+  existeEncaminhamentoAtivo = codigoEstudante =>
+    api.get(`${URL_PADRAO}/aluno/${codigoEstudante}/existe-encaminhamento-ativo`);
 }
 
 export default new ServicoNAAPA();
