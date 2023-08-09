@@ -43,9 +43,15 @@ class ServicoRelatorioPAP {
   salvar = async (limparDadosAoSalvar = false) => {
     const state = store.getState();
 
+    const { questionarioDinamico } = state;
+
+    const { questionarioDinamicoEmEdicao } = questionarioDinamico;
+
+    if (!questionarioDinamicoEmEdicao) return true;
+
     const { dispatch } = store;
 
-    const { relatorioPAP, questionarioDinamico, usuario } = state;
+    const { relatorioPAP, usuario } = state;
 
     const { turmaSelecionada } = usuario;
     const { listaSecoesEmEdicao } = questionarioDinamico;
