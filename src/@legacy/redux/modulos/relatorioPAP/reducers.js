@@ -25,7 +25,7 @@ export default function RelatorioPAP(state = inicial, action) {
           exibirLoaderRelatorioPAP: action.payload,
         };
       }
-      case '@relatorioPAP/setLimparDadosRelatorioPAP': {
+      case '@relatorioPAP/limparDadosRelatorioPAP': {
         return {
           ...draft,
           dadosSecoesRelatorioPAP: null,

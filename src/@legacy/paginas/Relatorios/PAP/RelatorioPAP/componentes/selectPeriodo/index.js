@@ -1,6 +1,11 @@
 import { SelectComponent } from '@/@legacy/componentes';
 import { SGP_SELECT_PERIODO_PAP } from '@/@legacy/constantes/ids/select';
 import {
+  setLimparDadosQuestionarioDinamico,
+  setListaSecoesEmEdicao,
+} from '@/@legacy/redux/modulos/questionarioDinamico/actions';
+import {
+  limparDadosRelatorioPAP,
   setEstudantesRelatorioPAP,
   setExibirLoaderRelatorioPAP,
   setListaPeriodosPAP,
@@ -52,6 +57,9 @@ const SelectPeridosPAP = () => {
 
   const onChange = periodoRelatorioPAP => {
     dispatch(setEstudantesRelatorioPAP([]));
+    dispatch(limparDadosRelatorioPAP());
+    dispatch(setListaSecoesEmEdicao([]));
+    dispatch(setLimparDadosQuestionarioDinamico());
 
     const periodoNaLista = listaPeriodosPAP.find(
       item => String(item?.periodoRelatorioPAP) === String(periodoRelatorioPAP)
@@ -62,16 +70,6 @@ const SelectPeridosPAP = () => {
     } else {
       dispatch(setPeriodoSelecionadoPAP());
     }
-
-    // TODO - Endpoint alinhar com back se vai manter aqui
-    // let dentroPeriodo = true;
-    // if (valor) {
-    //   const semestreNovo = listaSemestres.find(
-    //     item => String(item.semestre) === String(valor)
-    //   );
-    //   dentroPeriodo = semestreNovo.podeEditar;
-    // }
-    // dispatch(setDentroPeriodo(dentroPeriodo));
   };
 
   return (

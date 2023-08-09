@@ -1,11 +1,10 @@
+import { Auditoria } from '@/@legacy/componentes';
+import QuestionarioDinamicoFuncoes from '@/@legacy/componentes-sgp/QuestionarioDinamico/Funcoes/QuestionarioDinamicoFuncoes';
 import QuestionarioDinamico from '@/@legacy/componentes-sgp/QuestionarioDinamico/questionarioDinamico';
 import ServicoRelatorioPAP from '@/@legacy/servicos/Paginas/Relatorios/PAP/RelatorioPAP/ServicoRelatorioPAP';
+import { Col, Row } from 'antd';
 import { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import {
-  setEstudanteSelecionadoRelatorioPAP,
-  setPeriodoSelecionadoPAP,
-} from '@/@legacy/redux/modulos/relatorioPAP/actions';
 import { setQuestionarioDinamicoEmEdicao } from '~/redux/modulos/questionarioDinamico/actions';
 import { erros } from '~/servicos';
 
@@ -57,26 +56,36 @@ const MontarDadosPorSecaoRelatorioPAP = props => {
   }, [dados, estudanteSelecionadoRelatorioPAP, obterQuestionario]);
 
   return dados?.questionarioId && dadosQuestionarioAtual?.length ? (
-    <>
-      <QuestionarioDinamico
-        codigoAluno={estudanteSelecionadoRelatorioPAP?.codigoEOL}
-        codigoTurma={turmaSelecionada?.turma}
-        anoLetivo={turmaSelecionada?.anoLetivo}
-        dados={dados}
-        dadosQuestionarioAtual={dadosQuestionarioAtual}
-        desabilitarCampos={desabilitarCamposRelatorioPAP}
-        // funcaoRemoverArquivoCampoUpload={
-        // TODO
-        // ServicoRelatorioPAP.removerArquivo
-        // }
-        // urlUpload="v1/encaminhamento-aee/upload"
-        onChangeQuestionario={() => {
-          // TODO fazer no ServicoRelatorioPAP, comentado abaixo para se basear no AEE ou NAAPA
-          // ServicoEncaminhamentoAEE.guardarSecaoEmEdicao(dados?.id);
-        }}
-      />
-      {/* <AuditoriaEncaminhamento dadosAuditoria={dados?.auditoria} /> */}
-    </>
+    <Row>
+      <Col span={24}>
+        <QuestionarioDinamico
+          codigoAluno={estudanteSelecionadoRelatorioPAP?.codigoEOL}
+          codigoTurma={turmaSelecionada?.turma}
+          anoLetivo={turmaSelecionada?.anoLetivo}
+          dados={dados}
+          dadosQuestionarioAtual={dadosQuestionarioAtual}
+          desabilitarCampos={desabilitarCamposRelatorioPAP}
+          funcaoRemoverArquivoCampoUpload={ServicoRelatorioPAP.removerArquivo}
+          urlUpload="v1/relatorios/pap/upload"
+          onChangeQuestionario={() => {
+            QuestionarioDinamicoFuncoes.guardarSecaoEmEdicao(dados?.id);
+          }}
+        />
+      </Col>
+      {dados?.auditoria?.criadoEm && (
+        <Col span={24} style={{ marginLeft: -14 }}>
+          <Auditoria
+            alteradoEm={dados?.auditoria?.alteradoEm}
+            alteradoPor={dados?.auditoria?.alteradoPor}
+            alteradoRf={dados?.auditoria?.alteradoRF}
+            criadoEm={dados?.auditoria?.criadoEm}
+            criadoPor={dados?.auditoria?.criadoPor}
+            criadoRf={dados?.auditoria?.criadoRF}
+            ignorarMarginTop
+          />
+        </Col>
+      )}
+    </Row>
   ) : (
     <></>
   );

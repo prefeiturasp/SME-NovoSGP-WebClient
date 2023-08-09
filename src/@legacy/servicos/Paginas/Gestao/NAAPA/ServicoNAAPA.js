@@ -5,7 +5,6 @@ import { store } from '@/core/redux';
 import {
   setLimparDadosEncaminhamentoNAAPA,
   setExibirLoaderEncaminhamentoNAAPA,
-  setListaSecoesEmEdicao,
   setTabAtivaEncaminhamentoNAAPA,
   setDadosSecoesEncaminhamentoNAAPA,
   setDadosSituacaoEncaminhamentoNAAPA,
@@ -13,6 +12,7 @@ import {
 import { limparDadosLocalizarEstudante } from '~/redux/modulos/localizarEstudante/actions';
 import {
   setLimparDadosQuestionarioDinamico,
+  setListaSecoesEmEdicao,
   setQuestionarioDinamicoEmEdicao,
 } from '~/redux/modulos/questionarioDinamico/actions';
 import { confirmar, erros, sucesso } from '~/servicos/alertas';
@@ -49,26 +49,6 @@ class ServicoNAAPA {
     api.post(`${URL_PADRAO}/imprimir-detalhado`, {
       encaminhamentoNaapaIds: idsSelecionados,
     });
-
-  guardarSecaoEmEdicao = secaoId => {
-    const { dispatch } = store;
-
-    const state = store.getState();
-    const { encaminhamentoNAAPA } = state;
-    const { listaSecoesEmEdicao } = encaminhamentoNAAPA;
-
-    if (listaSecoesEmEdicao?.length) {
-      const listaNova = [...listaSecoesEmEdicao];
-      const jaTemNaLista = listaNova.find(item => item?.secaoId === secaoId);
-
-      if (jaTemNaLista) return;
-
-      listaNova.push({ secaoId });
-      dispatch(setListaSecoesEmEdicao(listaNova));
-    } else {
-      dispatch(setListaSecoesEmEdicao([{ secaoId }]));
-    }
-  };
 
   removerArquivo = arquivoCodigo =>
     api.delete(`${URL_PADRAO}/arquivo?arquivoCodigo=${arquivoCodigo}`);

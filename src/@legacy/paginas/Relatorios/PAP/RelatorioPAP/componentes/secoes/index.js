@@ -7,7 +7,7 @@ import ServicoRelatorioPAP from '@/@legacy/servicos/Paginas/Relatorios/PAP/Relat
 import { useDispatch, useSelector } from 'react-redux';
 import CollapseDadosSecaoRelatorioPAP from '../dadosSecoesRelatorioPAP/collapseDadosSecaoRelatorioPAP';
 
-export const SecoesRelatorioPAP = prop => {
+export const SecoesRelatorioPAP = () => {
   const dispatch = useDispatch();
   const usuario = useSelector(store => store.usuario);
   const { turmaSelecionada } = usuario;
@@ -25,24 +25,28 @@ export const SecoesRelatorioPAP = prop => {
   );
 
   const obterDadosSecoes = useCallback(async () => {
-    var codigoAluno = prop?.codigoAluno ? prop?.codigoAluno : estudanteSelecionadoRelatorioPAP;
     if (turmaSelecionada?.turma) {
       dispatch(setExibirLoaderRelatorioPAP(true));
 
       const retorno = await ServicoRelatorioPAP.obterDadosSecoes(
         turmaSelecionada?.turma,
-        codigoAluno,
+        estudanteSelecionadoRelatorioPAP?.codigoEOL,
         periodoSelecionadoPAP?.periodoRelatorioPAPId
       ).catch(e => erros(e));
       if (retorno?.data?.secoes?.length) {
-        dispatch(setDadosSecoesRelatorioPAP(retorno?.data?.secoes));
+        dispatch(setDadosSecoesRelatorioPAP(retorno?.data));
       } else {
         dispatch(setDadosSecoesRelatorioPAP([]));
       }
 
       dispatch(setExibirLoaderRelatorioPAP(false));
     }
-  }, [turmaSelecionada, dispatch, periodoSelecionadoPAP]);
+  }, [
+    turmaSelecionada,
+    dispatch,
+    estudanteSelecionadoRelatorioPAP,
+    periodoSelecionadoPAP,
+  ]);
 
   useEffect(() => {
     if (estudanteSelecionadoRelatorioPAP?.codigoEOL) {
@@ -52,9 +56,9 @@ export const SecoesRelatorioPAP = prop => {
     }
   }, [estudanteSelecionadoRelatorioPAP, obterDadosSecoes, dispatch]);
 
-  if (!dadosSecoesRelatorioPAP?.length) return <></>;
+  if (!dadosSecoesRelatorioPAP?.secoes?.length) return <></>;
 
-  return dadosSecoesRelatorioPAP.map((item, index) => (
+  return dadosSecoesRelatorioPAP?.secoes?.map((item, index) => (
     <CollapseDadosSecaoRelatorioPAP key={index} dados={item} index={index} />
   ));
 };

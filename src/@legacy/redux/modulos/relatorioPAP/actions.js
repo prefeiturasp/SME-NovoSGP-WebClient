@@ -8,8 +8,8 @@ export const setExibirLoaderRelatorioPAP = payload => ({
   payload,
 });
 
-export const setLimparDadosRelatorioPAP = payload => ({
-  type: '@relatorioPAP/setLimparDadosRelatorioPAP',
+export const limparDadosRelatorioPAP = payload => ({
+  type: '@relatorioPAP/limparDadosRelatorioPAP',
   payload,
 });
 

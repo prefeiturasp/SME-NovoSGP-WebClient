@@ -1,12 +1,13 @@
 import { TabelaRetratil } from '@/@legacy/componentes';
+import ModalErrosQuestionarioDinamico from '@/@legacy/componentes-sgp/QuestionarioDinamico/Componentes/ModalErrosQuestionarioDinamico/modalErrosQuestionarioDinamico';
 import {
+  limparDadosRelatorioPAP,
   setEstudanteSelecionadoRelatorioPAP,
   setEstudantesRelatorioPAP,
   setExibirLoaderRelatorioPAP,
-  setLimparDadosRelatorioPAP,
 } from '@/@legacy/redux/modulos/relatorioPAP/actions';
 import { ServicoCalendarios } from '@/@legacy/servicos';
-import ServicoRelatorioSemestral from '@/@legacy/servicos/Paginas/Relatorios/PAP/RelatorioSemestral/ServicoRelatorioSemestral';
+import ServicoRelatorioPAP from '@/@legacy/servicos/Paginas/Relatorios/PAP/RelatorioPAP/ServicoRelatorioPAP';
 import { Col } from 'antd';
 import { useCallback, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -35,11 +36,9 @@ const DadosRelatorioPAP = () => {
     if (turmaSelecionada?.turma) {
       dispatch(setExibirLoaderRelatorioPAP(true));
 
-      // TODO Trocar endpoint para obter estudantes
-      const retorno = await ServicoRelatorioSemestral.obterListaAlunos(
+      const retorno = await ServicoRelatorioPAP.obterListaAlunos(
         turmaSelecionada?.turma,
-        turmaSelecionada?.anoLetivo,
-        periodoSelecionadoPAP?.periodoRelatorioPAP
+        periodoSelecionadoPAP?.periodoRelatorioPAPId
       ).catch(e => erros(e));
 
       if (retorno?.data?.length) {
@@ -49,7 +48,7 @@ const DadosRelatorioPAP = () => {
 
         dispatch(setEstudantesRelatorioPAP(retorno.data));
       } else {
-        dispatch(setLimparDadosRelatorioPAP());
+        dispatch(limparDadosRelatorioPAP());
         dispatch(setEstudantesRelatorioPAP([]));
       }
 
@@ -75,7 +74,7 @@ const DadosRelatorioPAP = () => {
   };
 
   const onChangeAlunoSelecionado = async aluno => {
-    dispatch(setLimparDadosRelatorioPAP());
+    dispatch(limparDadosRelatorioPAP());
 
     const frequenciaGeralAluno = await obterFrequenciaAluno(aluno.codigoEOL);
     const novoAluno = aluno;
@@ -84,9 +83,12 @@ const DadosRelatorioPAP = () => {
     dispatch(setEstudanteSelecionadoRelatorioPAP(novoAluno));
   };
 
-  const permiteOnChangeAluno = () => {
-    // TODO - Próxima story
-    return true;
+  const permiteOnChangeAluno = async () => {
+    const continuar = await ServicoRelatorioPAP.salvar(true);
+    if (continuar) {
+      return true;
+    }
+    return false;
   };
 
   if (!periodoSelecionadoPAP?.periodoRelatorioPAP) return <></>;
@@ -98,6 +100,7 @@ const DadosRelatorioPAP = () => {
       </Col>
       {estudantesRelatorioPAP?.length ? (
         <Col span={24}>
+          <ModalErrosQuestionarioDinamico />
           <TabelaRetratil
             onChangeAlunoSelecionado={onChangeAlunoSelecionado}
             permiteOnChangeAluno={permiteOnChangeAluno}
@@ -107,9 +110,9 @@ const DadosRelatorioPAP = () => {
           >
             <>
               <ObjectCardRelatorioPAP />
-              <SecoesRelatorioPAP
-                codigoAluno={estudanteSelecionadoRelatorioPAP?.codigoEOL}
-              />
+              <Col style={{ margin: 12 }}>
+                <SecoesRelatorioPAP />
+              </Col>
             </>
           </TabelaRetratil>
         </Col>
