@@ -6,10 +6,13 @@ import {
   setQuestionarioDinamicoEmEdicao,
 } from '@/@legacy/redux/modulos/questionarioDinamico/actions';
 import {
+  limparDadosRelatorioPAP,
   setDadosSecoesRelatorioPAP,
+  setEstudanteSelecionadoRelatorioPAP,
+  setEstudantesRelatorioPAP,
   setExibirLoaderRelatorioPAP,
 } from '@/@legacy/redux/modulos/relatorioPAP/actions';
-import { erros } from '@/@legacy/servicos/alertas';
+import { erros, sucesso } from '@/@legacy/servicos/alertas';
 import { store } from '@/core/redux';
 import { HttpStatusCode } from 'axios';
 import _ from 'lodash';
@@ -60,6 +63,7 @@ class ServicoRelatorioPAP {
       dadosSecoesRelatorioPAP,
       estudanteSelecionadoRelatorioPAP,
       periodoSelecionadoPAP,
+      estudantesRelatorioPAP,
     } = relatorioPAP;
 
     const secoesRelatorioPAP = _.cloneDeep(dadosSecoesRelatorioPAP?.secoes);
@@ -72,7 +76,8 @@ class ServicoRelatorioPAP {
           e => e.secaoId === secao.id
         );
 
-        const secaoInvalida = !secaoEstaEmEdicao && secao?.questoesObrigatorias;
+        const secaoInvalida =
+          !secaoEstaEmEdicao && !secao.concluido && secao?.questoesObrigatorias;
 
         if (secaoInvalida) {
           nomesSecoesComCamposObrigatorios.push(secao?.nome);
@@ -81,7 +86,6 @@ class ServicoRelatorioPAP {
     }
 
     const validarCamposObrigatorios = true;
-
     const dadosMapeados = await QuestionarioDinamicoFuncoes.mapearQuestionarios(
       dadosSecoesRelatorioPAP?.secoes,
       validarCamposObrigatorios,
@@ -137,7 +141,7 @@ class ServicoRelatorioPAP {
         .post(`${URL_PADRAO}/salvar`, paramsSalvar)
         .catch(e => erros(e));
 
-      if (resposta?.status === HttpStatusCode.Ok) {
+      if (!limparDadosAoSalvar && resposta?.status === HttpStatusCode.Ok) {
         const dadosParaAtualizar = _.cloneDeep(dadosSecoesRelatorioPAP);
         dadosParaAtualizar.papAlunoId = resposta.data.papAlunoId;
         dadosParaAtualizar.papTurmaId = resposta.data.papTurmaId;
@@ -156,12 +160,31 @@ class ServicoRelatorioPAP {
         dispatch(setDadosSecoesRelatorioPAP(_.cloneDeep(dadosParaAtualizar)));
       }
 
-      if (resposta?.data?.id && limparDadosAoSalvar) {
-        dispatch(setQuestionarioDinamicoEmEdicao(false));
-        dispatch(setListaSecoesEmEdicao([]));
-        dispatch(setDadosSecoesRelatorioPAP([]));
+      if (limparDadosAoSalvar) {
+        dispatch(setEstudanteSelecionadoRelatorioPAP());
+        dispatch(limparDadosRelatorioPAP([]));
         dispatch(setLimparDadosQuestionarioDinamico());
+        dispatch(setListaSecoesEmEdicao([]));
+        dispatch(setQuestionarioDinamicoEmEdicao(false));
       }
+
+      if (resposta?.status === HttpStatusCode.Ok) {
+        sucesso('Suas informações foram salvas com sucesso.');
+
+        const estudanteAtualIndex = estudantesRelatorioPAP.findIndex(
+          item => item.codigoEOL === estudanteSelecionadoRelatorioPAP?.codigoEOL
+        );
+        const estudantesRelatorioPAPCloned = _.cloneDeep(
+          estudantesRelatorioPAP
+        );
+
+        estudantesRelatorioPAPCloned[
+          estudanteAtualIndex
+        ].processoConcluido = true;
+
+        dispatch(setEstudantesRelatorioPAP([...estudantesRelatorioPAPCloned]));
+      }
+
       setTimeout(() => {
         dispatch(setExibirLoaderRelatorioPAP(false));
       }, 1000);

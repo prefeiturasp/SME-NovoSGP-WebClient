@@ -28,10 +28,9 @@ export default function RelatorioPAP(state = inicial, action) {
       case '@relatorioPAP/limparDadosRelatorioPAP': {
         return {
           ...draft,
+          estudanteSelecionadoRelatorioPAP: undefined,
           dadosSecoesRelatorioPAP: null,
           exibirLoaderRelatorioPAP: false,
-          desabilitarCamposRelatorioPAP: false,
-          estudanteSelecionadoRelatorioPAP: undefined,
         };
       }
       case '@relatorioPAP/setEstudantesRelatorioPAP': {
