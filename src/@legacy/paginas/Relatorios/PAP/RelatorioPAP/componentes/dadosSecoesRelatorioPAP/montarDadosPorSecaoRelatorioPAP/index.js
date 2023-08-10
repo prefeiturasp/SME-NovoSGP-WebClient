@@ -3,7 +3,7 @@ import QuestionarioDinamicoFuncoes from '@/@legacy/componentes-sgp/QuestionarioD
 import QuestionarioDinamico from '@/@legacy/componentes-sgp/QuestionarioDinamico/questionarioDinamico';
 import ServicoRelatorioPAP from '@/@legacy/servicos/Paginas/Relatorios/PAP/RelatorioPAP/ServicoRelatorioPAP';
 import { Col, Row } from 'antd';
-import { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { setQuestionarioDinamicoEmEdicao } from '~/redux/modulos/questionarioDinamico/actions';
 import { erros } from '~/servicos';
@@ -91,4 +91,4 @@ const MontarDadosPorSecaoRelatorioPAP = props => {
   );
 };
 
-export default MontarDadosPorSecaoRelatorioPAP;
+export default React.memo(MontarDadosPorSecaoRelatorioPAP);

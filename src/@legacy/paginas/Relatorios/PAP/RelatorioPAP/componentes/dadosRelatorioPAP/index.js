@@ -1,5 +1,9 @@
-import { TabelaRetratil } from '@/@legacy/componentes';
 import ModalErrosQuestionarioDinamico from '@/@legacy/componentes-sgp/QuestionarioDinamico/Componentes/ModalErrosQuestionarioDinamico/modalErrosQuestionarioDinamico';
+import {
+  setLimparDadosQuestionarioDinamico,
+  setListaSecoesEmEdicao,
+  setQuestionarioDinamicoEmEdicao,
+} from '@/@legacy/redux/modulos/questionarioDinamico/actions';
 import {
   limparDadosRelatorioPAP,
   setEstudanteSelecionadoRelatorioPAP,
@@ -14,15 +18,12 @@ import { useDispatch, useSelector } from 'react-redux';
 import BotaoOrdenarListaAlunosPAP from '../botaoOrdenarListaAlunosPAP';
 import ObjectCardRelatorioPAP from '../objectCardRelatorioPAP';
 import SecoesRelatorioPAP from '../secoes';
+import TabelaRetratilRelatorioPAP from '../tabelaRetratilRelatorioPAP';
 
 const DadosRelatorioPAP = () => {
   const dispatch = useDispatch();
   const usuario = useSelector(store => store.usuario);
   const { turmaSelecionada } = usuario;
-
-  const estudantesRelatorioPAP = useSelector(
-    store => store.relatorioPAP?.estudantesRelatorioPAP
-  );
 
   const estudanteSelecionadoRelatorioPAP = useSelector(
     store => store.relatorioPAP?.estudanteSelecionadoRelatorioPAP
@@ -73,8 +74,16 @@ const DadosRelatorioPAP = () => {
     return retorno?.data;
   };
 
+  const limparDados = () => {
+    dispatch(setEstudanteSelecionadoRelatorioPAP());
+    dispatch(limparDadosRelatorioPAP([]));
+    dispatch(setLimparDadosQuestionarioDinamico());
+    dispatch(setListaSecoesEmEdicao([]));
+    dispatch(setQuestionarioDinamicoEmEdicao(false));
+  };
+
   const onChangeAlunoSelecionado = async aluno => {
-    dispatch(limparDadosRelatorioPAP());
+    limparDados();
 
     const frequenciaGeralAluno = await obterFrequenciaAluno(aluno.codigoEOL);
     const novoAluno = aluno;
@@ -92,33 +101,31 @@ const DadosRelatorioPAP = () => {
   };
 
   if (!periodoSelecionadoPAP?.periodoRelatorioPAP) return <></>;
+
   return (
     <>
       <Col span={24}>
         <BotaoOrdenarListaAlunosPAP />
         {/* TODO - Botão impressão */}
       </Col>
-      {estudantesRelatorioPAP?.length ? (
-        <Col span={24}>
-          <ModalErrosQuestionarioDinamico />
-          <TabelaRetratil
-            onChangeAlunoSelecionado={onChangeAlunoSelecionado}
-            permiteOnChangeAluno={permiteOnChangeAluno}
-            alunos={estudantesRelatorioPAP}
-            codigoAlunoSelecionado={estudanteSelecionadoRelatorioPAP?.codigoEOL}
-            exibirProcessoConcluido
-          >
+      <Col span={24}>
+        <TabelaRetratilRelatorioPAP
+          onChangeAlunoSelecionado={onChangeAlunoSelecionado}
+          permiteOnChangeAluno={permiteOnChangeAluno}
+        >
+          {estudanteSelecionadoRelatorioPAP?.codigoEOL ? (
             <>
+              <ModalErrosQuestionarioDinamico />
               <ObjectCardRelatorioPAP />
               <Col style={{ margin: 12 }}>
                 <SecoesRelatorioPAP />
               </Col>
             </>
-          </TabelaRetratil>
-        </Col>
-      ) : (
-        <></>
-      )}
+          ) : (
+            <></>
+          )}
+        </TabelaRetratilRelatorioPAP>
+      </Col>
     </>
   );
 };
