@@ -5,7 +5,6 @@ const inicial = {
   dadosSecoesEncaminhamentoNAAPA: null,
   exibirLoaderEncaminhamentoNAAPA: false,
   exibirLoaderDrawerAtendimento: false,
-  listaSecoesEmEdicao: [],
   desabilitarCamposEncaminhamentoNAAPA: false,
   tabAtivaEncaminhamentoNAAPA: 0,
   dadosSituacaoEncaminhamentoNAAPA: null,
@@ -40,19 +39,12 @@ export default function EncaminhamentoNAAPA(state = inicial, action) {
           exibirLoaderDrawerAtendimento: action.payload,
         };
       }
-      case '@encaminhamentoNAAPA/setListaSecoesEmEdicao': {
-        return {
-          ...draft,
-          listaSecoesEmEdicao: action.payload,
-        };
-      }
       case '@encaminhamentoNAAPA/setLimparDadosEncaminhamentoNAAPA': {
         return {
           ...draft,
           dadosEncaminhamentoNAAPA: null,
           dadosSecoesEncaminhamentoNAAPA: null,
           exibirLoaderEncaminhamentoNAAPA: false,
-          listaSecoesEmEdicao: [],
           dadosSituacaoEncaminhamentoNAAPA: null,
           exibirModalEncerramentoEncaminhamentoNAAPA: false,
         };

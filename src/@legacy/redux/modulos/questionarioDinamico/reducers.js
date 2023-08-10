@@ -10,6 +10,7 @@ const inicial = {
   arquivoRemovido: false,
   exibirModalErrosQuestionarioDinamico: false,
   nomesSecoesComCamposObrigatorios: null,
+  listaSecoesEmEdicao: [],
 };
 
 export default function questionarioDinamico(state = inicial, action) {
@@ -79,6 +80,12 @@ export default function questionarioDinamico(state = inicial, action) {
         return {
           ...draft,
           nomesSecoesComCamposObrigatorios: action.payload,
+        };
+      }
+      case '@questionarioDinamico/setListaSecoesEmEdicao': {
+        return {
+          ...draft,
+          listaSecoesEmEdicao: action.payload,
         };
       }
       default:
