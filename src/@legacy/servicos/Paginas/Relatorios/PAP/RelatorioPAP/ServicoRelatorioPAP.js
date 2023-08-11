@@ -31,7 +31,10 @@ class ServicoRelatorioPAP {
   };
 
   obterQuestionario = param => {
-    const url = `${URL_PADRAO}/turma/${param.turmaCodigo}/aluno/${param.alunoCodigo}/periodo/${param.periodoRelatorioPAPId}/questionario/${param.questionarioId}`;
+    let url = `${URL_PADRAO}/turma/${param.turmaCodigo}/aluno/${param.alunoCodigo}/periodo/${param.periodoRelatorioPAPId}/questionario/${param.questionarioId}`;
+    if (param?.papSecaoId) {
+      url = `${url}?papSecaoId=${param?.papSecaoId}`;
+    }
     return api.get(url);
   };
 

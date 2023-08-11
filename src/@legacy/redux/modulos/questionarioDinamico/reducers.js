@@ -11,6 +11,7 @@ const inicial = {
   exibirModalErrosQuestionarioDinamico: false,
   nomesSecoesComCamposObrigatorios: null,
   listaSecoesEmEdicao: [],
+  resetarCampoDinamicoEditor: false,
 };
 
 export default function questionarioDinamico(state = inicial, action) {
@@ -86,6 +87,12 @@ export default function questionarioDinamico(state = inicial, action) {
         return {
           ...draft,
           listaSecoesEmEdicao: action.payload,
+        };
+      }
+      case '@questionarioDinamico/setResetarCampoDinamicoEditor': {
+        return {
+          ...draft,
+          resetarCampoDinamicoEditor: action.payload,
         };
       }
       default:

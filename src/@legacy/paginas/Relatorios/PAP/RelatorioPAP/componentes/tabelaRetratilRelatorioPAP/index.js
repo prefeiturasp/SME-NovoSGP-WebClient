@@ -15,7 +15,7 @@ const TabelaRetratilRelatorioPAP = ({
 
   return (
     <>
-      {estudantesRelatorioPAP?.length && (
+      {estudantesRelatorioPAP?.length ? (
         <TabelaRetratil
           onChangeAlunoSelecionado={onChangeAlunoSelecionado}
           permiteOnChangeAluno={permiteOnChangeAluno}
@@ -25,6 +25,8 @@ const TabelaRetratilRelatorioPAP = ({
         >
           {children}
         </TabelaRetratil>
+      ) : (
+        <></>
       )}
     </>
   );
