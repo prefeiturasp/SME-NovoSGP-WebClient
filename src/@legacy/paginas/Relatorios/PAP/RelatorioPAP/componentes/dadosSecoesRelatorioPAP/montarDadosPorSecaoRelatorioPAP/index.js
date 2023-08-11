@@ -35,6 +35,7 @@ const MontarDadosPorSecaoRelatorioPAP = props => {
       alunoCodigo: estudanteSelecionadoRelatorioPAP.codigoEOL,
       periodoRelatorioPAPId: periodoSelecionadoPAP.periodoRelatorioPAPId,
       questionarioId: dados?.questionarioId,
+      papSecaoId: dados?.papSecaoId,
     };
     const resposta = await ServicoRelatorioPAP.obterQuestionario(
       parametros

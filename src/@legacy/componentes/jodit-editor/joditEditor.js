@@ -23,6 +23,7 @@ const Campo = styled.div`
   .jodit-workplace,
   .jodit-wysiwyg {
     min-height: 139px !important;
+    overflow-wrap: anywhere !important;
   }
 
   ul,

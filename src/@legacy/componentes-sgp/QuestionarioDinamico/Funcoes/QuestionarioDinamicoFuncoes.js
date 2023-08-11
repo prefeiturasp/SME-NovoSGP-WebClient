@@ -1,13 +1,14 @@
+import { store } from '@/core/redux';
 import _, { groupBy } from 'lodash';
 import tipoQuestao from '~/dtos/tipoQuestao';
-import { store } from '@/core/redux';
 import {
   setExibirModalErrosQuestionarioDinamico,
   setFormsQuestionarioDinamico,
-  setQuestionarioDinamicoEmEdicao,
-  setResetarTabela,
-  setNomesSecoesComCamposObrigatorios,
   setListaSecoesEmEdicao,
+  setNomesSecoesComCamposObrigatorios,
+  setQuestionarioDinamicoEmEdicao,
+  setResetarCampoDinamicoEditor,
+  setResetarTabela,
 } from '~/redux/modulos/questionarioDinamico/actions';
 import { confirmar, erros } from '~/servicos';
 
@@ -144,6 +145,7 @@ class QuestionarioDinamicoFuncoes {
       dispatch(setListaSecoesEmEdicao([]));
       dispatch(setQuestionarioDinamicoEmEdicao(false));
       dispatch(setResetarTabela(true));
+      dispatch(setResetarCampoDinamicoEditor(true));
     }
   };
 
