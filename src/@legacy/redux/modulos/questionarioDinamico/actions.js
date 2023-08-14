@@ -53,3 +53,8 @@ export const setListaSecoesEmEdicao = payload => ({
   type: '@questionarioDinamico/setListaSecoesEmEdicao',
   payload,
 });
+
+export const setResetarCampoDinamicoEditor = payload => ({
+  type: '@questionarioDinamico/setResetarCampoDinamicoEditor',
+  payload,
+});

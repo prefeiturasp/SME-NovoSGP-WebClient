@@ -69,12 +69,7 @@ const BotoesAcoesRelatorioPAP = () => {
     dispatch(setDesabilitarCamposRelatorioPAP(desabilitar || !periodoAberto));
   }, [permissoesTela, periodoAberto, dispatch]);
 
-  const onClickSalvar = async () => {
-    const resposta = await ServicoRelatorioPAP.salvar();
-    if (resposta?.status === HttpStatusCode.Ok) {
-      sucesso('Suas informações foram salvas com sucesso.');
-    }
-  };
+  const onClickSalvar = () => ServicoRelatorioPAP.salvar();
 
   const onClickVoltar = async () => {
     if (questionarioDinamicoEmEdicao) {
