@@ -356,7 +356,7 @@ const CamposFiltrarDadosFrequenciaPlanoAula = () => {
   const onClickSelecionarAula = aulaDataSelecionada => {
     setExibirModalSelecionarAula(false);
     if (aulaDataSelecionada) {
-      // Após setar o id vai disparar evento para buscar lista de frequencia!
+      // Após setar o id vai disparar evento para buscar lista de frequencia! -
       dispatch(setAulaIdFrequenciaPlanoAula(aulaDataSelecionada.aulaId));
       dispatch(setAulaIdPodeEditar(aulaDataSelecionada.podeEditar));
     }
