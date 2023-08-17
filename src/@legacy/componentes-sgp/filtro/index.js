@@ -803,10 +803,16 @@ const Filtro = () => {
 
         let continuar = true;
 
+        if (listaModalidades.length <= 0) {
+          limparFiltro();
+          continuar = false;
+        }
+
         if (listaModalidades && listaModalidades.length) {
           const modalidadeNaLista = listaModalidades.find(
             item => String(item.valor) === String(turmaBkp.modalidade)
           );
+
           if (!modalidadeNaLista) {
             limparFiltro();
             continuar = false;
