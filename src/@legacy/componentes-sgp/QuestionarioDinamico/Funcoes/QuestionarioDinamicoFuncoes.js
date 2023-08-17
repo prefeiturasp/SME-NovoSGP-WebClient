@@ -1,13 +1,14 @@
+import { store } from '@/core/redux';
 import _, { groupBy } from 'lodash';
 import tipoQuestao from '~/dtos/tipoQuestao';
-import { store } from '@/core/redux';
-import { setListaSecoesEmEdicao } from '~/redux/modulos/encaminhamentoNAAPA/actions';
 import {
   setExibirModalErrosQuestionarioDinamico,
   setFormsQuestionarioDinamico,
-  setQuestionarioDinamicoEmEdicao,
-  setResetarTabela,
+  setListaSecoesEmEdicao,
   setNomesSecoesComCamposObrigatorios,
+  setQuestionarioDinamicoEmEdicao,
+  setResetarCampoDinamicoEditor,
+  setResetarTabela,
 } from '~/redux/modulos/questionarioDinamico/actions';
 import { confirmar, erros } from '~/servicos';
 
@@ -144,6 +145,7 @@ class QuestionarioDinamicoFuncoes {
       dispatch(setListaSecoesEmEdicao([]));
       dispatch(setQuestionarioDinamicoEmEdicao(false));
       dispatch(setResetarTabela(true));
+      dispatch(setResetarCampoDinamicoEditor(true));
     }
   };
 
@@ -841,6 +843,26 @@ class QuestionarioDinamicoFuncoes {
     if (form) {
       form.setFieldValue(questaoAtual.id, novoMap);
       onChange();
+    }
+  };
+
+  guardarSecaoEmEdicao = secaoId => {
+    const { dispatch } = store;
+
+    const state = store.getState();
+    const { questionarioDinamico } = state;
+    const { listaSecoesEmEdicao } = questionarioDinamico;
+
+    if (listaSecoesEmEdicao?.length) {
+      const listaNova = [...listaSecoesEmEdicao];
+      const jaTemNaLista = listaNova.find(item => item?.secaoId === secaoId);
+
+      if (jaTemNaLista) return;
+
+      listaNova.push({ secaoId });
+      dispatch(setListaSecoesEmEdicao(listaNova));
+    } else {
+      dispatch(setListaSecoesEmEdicao([{ secaoId }]));
     }
   };
 }

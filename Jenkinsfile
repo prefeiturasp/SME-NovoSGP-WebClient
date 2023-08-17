@@ -47,6 +47,7 @@ pipeline {
 	              }
                     }
                     withCredentials([file(credentialsId: "${kubeconfig}", variable: 'config')]){
+                        sh('rm -f '+"$home"+'/.kube/config')
                         sh('cp $config '+"$home"+'/.kube/config')
                         sh "kubectl rollout restart deployment/${deployment1} -n ${namespace}"
                         sh('rm -f '+"$home"+'/.kube/config')

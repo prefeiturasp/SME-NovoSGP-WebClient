@@ -226,9 +226,10 @@ const BotoesAcoesEncaminhamentoAEE = () => {
     !(permissoesTela.podeExcluir && dadosEncaminhamento?.podeEditar);
 
   const ocultarBtnEnviar =
-    dadosEncaminhamento?.situacao &&
+    (dadosEncaminhamento?.situacao &&
     dadosEncaminhamento?.situacao !== situacaoAEE.Rascunho &&
-    dadosEncaminhamento?.situacao !== situacaoAEE.Devolvido;
+    dadosEncaminhamento?.situacao !== situacaoAEE.Devolvido) ||
+    !dadosEncaminhamento?.podeEditar;
 
   const ocultarBtnDevolver =
     dadosEncaminhamento?.situacao !== situacaoAEE.Encaminhado;

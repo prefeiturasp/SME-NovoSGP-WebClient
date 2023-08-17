@@ -8,7 +8,7 @@ import { Ordenacao } from '~/componentes-sgp';
 import Nota from '~/componentes-sgp/inputs/nota';
 import { moverFocoCampoNota } from '~/componentes-sgp/inputs/nota/funcoes';
 import LabelInterdisciplinar from '~/componentes-sgp/interdisciplinar';
-import SinalizacaoAEE from '~/componentes-sgp/SinalizacaoAEE/sinalizacaoAEE';
+import EstudanteAtendidoAEE from '@/components/sgp/estudante-atendido-aee';
 import { Base } from '~/componentes/colors';
 import notasConceitos from '~/dtos/notasConceitos';
 import ListaoContext from '~/paginas/DiarioClasse/Listao/listaoContext';
@@ -18,6 +18,7 @@ import ListaoCampoConceito from './componentes/listaoCampoConceito';
 import ListaoAuditoriaAvaliacoes from './listaoAuditoriaAvaliacoes';
 import FiltroComponentesRegenciaListao from '../componentes/filtroComponentesRegenciaListao';
 import { ocultarColunaAvaliacaoComponenteRegencia } from '@/@legacy/utils';
+import EstudanteMatriculadoPAP from '@/components/sgp/estudante-matriculado-pap';
 
 export const ContainerTableAvaliacao = styled.div`
   table {
@@ -85,7 +86,8 @@ const ListaoListaAvaliacoes = () => {
       <div className="d-flex justify-content-between">
         <div className="d-flex justify-content-start">{aluno.nome}</div>
         <div className=" d-flex justify-content-end">
-          <SinalizacaoAEE exibirSinalizacao={aluno.ehAtendidoAEE} />
+          <EstudanteAtendidoAEE show={aluno.ehAtendidoAEE} />
+          <EstudanteMatriculadoPAP show={aluno?.ehMatriculadoTurmaPAP} />
         </div>
       </div>
     );

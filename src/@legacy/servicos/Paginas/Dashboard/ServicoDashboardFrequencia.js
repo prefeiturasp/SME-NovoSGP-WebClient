@@ -1,6 +1,6 @@
-import api from '~/servicos/api';
 import { store } from '@/core/redux';
 import { setDadosDashboardFrequencia } from '~/redux/modulos/dashboardFrequencia/actions';
+import api from '~/servicos/api';
 
 const urlPadrao = 'v1/dashboard/frequencias';
 
@@ -161,7 +161,28 @@ class ServicoDashboardFrequencia {
     return api.get(`${urlPadrao}/filtro/anos/${anoLetivo}/semanas`);
   };
 
-  obterTotalEstudantesPresenciasRemotosAusentes = (
+  obterFrequenciasConsolidadacaoDiariaPorTurmaEAno = (
+    anoLetivo,
+    dreId,
+    ueId,
+    modalidade,
+    semestre,
+    anoTurma,
+    dataAula,
+    visaoDre
+  ) => {
+    const url = `${urlPadrao}/anos/${anoLetivo}/dres/${dreId}/ues/${ueId}/modalidades/${modalidade}/anoTurma/${anoTurma}/consolidado-diario`;
+    const params = {
+      semestre,
+      dataAula,
+      visaoDre,
+    };
+    return api.get(url, {
+      params,
+    });
+  };
+
+  obterFrequenciasConsolidacaoSemanalMensalPorTurmaEAno = (
     anoLetivo,
     dreId,
     ueId,
@@ -170,25 +191,22 @@ class ServicoDashboardFrequencia {
     anoTurma,
     dataInicio,
     dataFim,
-    tipoPeriodoDashboard,
+    tipoConsolidadoFrequencia,
     mes,
     visaoDre
   ) => {
-    return api.get(
-      `${urlPadrao}/anos/${anoLetivo}/dres/${dreId}/ues/${ueId}/modalidades/` +
-        `${modalidade}/consolidado/anos-turmas`,
-      {
-        params: {
-          semestre,
-          anoTurma,
-          dataInicio,
-          dataFim,
-          tipoPeriodoDashboard,
-          mes,
-          visaoDre,
-        },
-      }
-    );
+    const url = `${urlPadrao}/anos/${anoLetivo}/dres/${dreId}/ues/${ueId}/modalidades/${modalidade}/anoTurma/${anoTurma}/consolidado-semanal-mensal`;
+    const params = {
+      semestre,
+      dataInicio,
+      dataFim,
+      tipoConsolidadoFrequencia,
+      mes,
+      visaoDre,
+    };
+    return api.get(url, {
+      params,
+    });
   };
 
   obterTotalAusenciasCompensadas = (
