@@ -207,7 +207,7 @@ const ListaDiarioBordo = () => {
 
   const onColapse = async aulaId => {
     dispatch(limparDadosObservacoesUsuario());
-
+    setDiarioBordoAtual();
     let aulaIdFormatado = '';
 
     if (Array.isArray(aulaId) && aulaId?.length) {
@@ -225,33 +225,29 @@ const ListaDiarioBordo = () => {
     let dados = {};
     let observacoes = [];
 
-    if (idDiario) {
-      setCarregandoCollapse(true);
-      dados = await ServicoDiarioBordo.obterDiarioBordoDetalhes(idDiario);
-      if (dados?.data) {
-        if (dados.data.observacoes.length) {
-          observacoes = ServicoObservacoesUsuario.obterUsuarioPorObservacao(
-            dados.data.observacoes,
-            true
-          );
-          dispatch(setDadosObservacoesUsuario(observacoes));
-        }
-        setDiarioBordoAtual({
-          ...dados.data,
-          observacoes,
-        });
-
-        setCarregarListaUsuariosNotificar(true);
+    setCarregandoCollapse(true);
+    dados = idDiario
+      ? await ServicoDiarioBordo.obterDiarioBordoDetalhes(idDiario)
+      : await ServicoDiarioBordo.obterDiarioBordo(
+          aulaIdFormatado,
+          componenteCurricularSelecionado
+        );
+    if (dados?.data) {
+      if (dados?.data?.observacoes?.length) {
+        observacoes = ServicoObservacoesUsuario.obterUsuarioPorObservacao(
+          dados.data.observacoes,
+          true
+        );
+        dispatch(setDadosObservacoesUsuario(observacoes));
       }
-
-      setCarregandoCollapse(false);
-    } else {
       setDiarioBordoAtual({
-        ...diario,
+        ...dados.data,
         observacoes,
       });
-      setCarregarListaUsuariosNotificar(false);
+      setCarregarListaUsuariosNotificar(true);
     }
+
+    setCarregandoCollapse(false);
   };
 
   const salvarEditarObservacao = async valor => {
@@ -466,10 +462,24 @@ const ListaDiarioBordo = () => {
                             <JoditEditor
                               id={`${id}-editor-planejamento`}
                               name="planejamento"
+                              label={diarioBordoAtual?.nomeComponente}
                               value={diarioBordoAtual?.planejamento}
                               desabilitar
                             />
                           </div>
+                          {diarioBordoAtual?.nomeComponenteIrmao ? (
+                            <div className="col-sm-12 mb-3">
+                              <JoditEditor
+                                id={`${id}-editor-planejamento`}
+                                name="nomeComponenteIrmao"
+                                label={diarioBordoAtual?.nomeComponenteIrmao}
+                                value={diarioBordoAtual?.planejamentoIrmao}
+                                desabilitar
+                              />
+                            </div>
+                          ) : (
+                            <></>
+                          )}
                           <div className="col-sm-12 d-flex justify-content-end mb-4">
                             <Button
                               id={shortid.generate()}

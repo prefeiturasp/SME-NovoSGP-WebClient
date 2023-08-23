@@ -14,7 +14,7 @@ import styled from 'styled-components';
 import { DataTable, Label } from '~/componentes';
 import Nota from '~/componentes-sgp/inputs/nota';
 import { moverFocoCampoNota } from '~/componentes-sgp/inputs/nota/funcoes';
-import SinalizacaoAEE from '~/componentes-sgp/SinalizacaoAEE/sinalizacaoAEE';
+import EstudanteAtendidoAEE from '@/components/sgp/estudante-atendido-aee';
 import { Base } from '~/componentes/colors';
 import { BIMESTRE_FINAL } from '~/constantes/constantes';
 import notasConceitos from '~/dtos/notasConceitos';
@@ -37,6 +37,7 @@ import DadosCabecalhoTabFechamentoListao from './componentes/dadosCabecalhoTabFe
 import ModalJustificativaFechamento from './componentes/modalJustificativaFechamento';
 import TabelaAvaliacoesFechamento from './componentes/tabelaAvaliacoesFechamento';
 import FiltroComponentesRegenciaListao from '../componentes/filtroComponentesRegenciaListao';
+import EstudanteMatriculadoPAP from '@/components/sgp/estudante-matriculado-pap';
 
 export const ContainerTableFechamento = styled.div`
   tr {
@@ -152,12 +153,11 @@ const ListaoListaFechamento = props => {
 
   const montarColunaEstudante = aluno => {
     return (
-      <div className="d-flex justify-content-between">
+      <div className="d-flex justify-content-between align-items-center">
         <div className="d-flex justify-content-start">{aluno.nome}</div>
-        <div className=" d-flex justify-content-end">
-          <div className="mr-3">
-            <SinalizacaoAEE exibirSinalizacao={aluno.ehAtendidoAEE} />
-          </div>
+        <div className=" d-flex justify-content-end align-items-center">
+          <EstudanteAtendidoAEE show={aluno.ehAtendidoAEE} />
+          <EstudanteMatriculadoPAP show={aluno?.ehMatriculadoTurmaPAP} />
           {!ehFinal && (
             <AnotacoesFechamentoLisao
               desabilitar={desabilitarCampos || !aluno?.podeEditar}
@@ -267,7 +267,7 @@ const ListaoListaFechamento = props => {
   ) => {
     const indexLinhaDestino = incrementoIndexLinha + indexLinhaOrigem;
     const aluno = dadosFechamento?.alunos[indexLinhaDestino];
-    if (aluno?.codigoAluno) { 
+    if (aluno?.codigoAluno) {
       onClickExpandirNotaConceitoRegencia(false, aluno?.codigoAluno);
     }
   };

@@ -19,6 +19,7 @@ const tipoQuestao = {
   EditorTexto: 18,
   TurmasPrograma: 19,
   InformacoesSrm: 20,
+  InformacoesFrequenciaTurmaPAP: 21,
 };
 
 export default tipoQuestao;

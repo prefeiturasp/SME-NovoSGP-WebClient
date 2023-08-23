@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect } from 'react';
+import React, { useCallback, useEffect,useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useLocation, useParams } from 'react-router-dom';
 import { Card } from '~/componentes';
@@ -17,6 +17,7 @@ import ServicoEncaminhamentoAEE from '~/servicos/Paginas/Relatorios/AEE/ServicoE
 import BotoesAcoesEncaminhamentoAEE from './Componentes/botoesAcoesEncaminhamentoAEE';
 import LoaderEncaminhamento from './Componentes/LoaderEncaminhamento/loaderEncaminhamento';
 import MontarDadosSecoes from './Componentes/MontarDadosSecoes/montarDadosSecoes';
+import AlertaCadastradoEmOutraUE from './Componentes/AlertaCadastradoEmOutraUE';
 
 const EncaminhamentoAEECadastro = () => {
   const dispatch = useDispatch();
@@ -64,7 +65,7 @@ const EncaminhamentoAEECadastro = () => {
       dispatch(setLimparDadosAtribuicaoResponsavel());
     };
   }, [dispatch, limparDadosEncaminhamento]);
-
+  
   useEffect(() => {
     if (encaminhamentoId) {
       setBreadcrumbManual(
@@ -74,15 +75,16 @@ const EncaminhamentoAEECadastro = () => {
       );
     }
   }, [encaminhamentoId, location]);
-
+ 
   const validarSePermiteProximoPasso = params => {
     return ServicoEncaminhamentoAEE.podeCadastrarEncaminhamentoEstudante(
       params
     );
   };
-
+  
   return (
     <LoaderEncaminhamento>
+      <AlertaCadastradoEmOutraUE />
       <Cabecalho pagina="Encaminhamento AEE">
         <BotoesAcoesEncaminhamentoAEE />
       </Cabecalho>
