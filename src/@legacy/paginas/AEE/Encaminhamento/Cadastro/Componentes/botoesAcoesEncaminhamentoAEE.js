@@ -229,7 +229,7 @@ const BotoesAcoesEncaminhamentoAEE = () => {
     (dadosEncaminhamento?.situacao &&
     dadosEncaminhamento?.situacao !== situacaoAEE.Rascunho &&
     dadosEncaminhamento?.situacao !== situacaoAEE.Devolvido) ||
-    !dadosEncaminhamento?.podeEditar;
+    (encaminhamentoId && !dadosEncaminhamento?.podeEditar);
 
   const ocultarBtnDevolver =
     dadosEncaminhamento?.situacao !== situacaoAEE.Encaminhado;
