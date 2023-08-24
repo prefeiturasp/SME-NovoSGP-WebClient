@@ -23,11 +23,11 @@ export const setQuestionarioDinamicoExibirModalAnotacao = payload => ({
   payload,
 });
 
-export const setQuestionarioDinamicoExpandirLinhaAusenciaEstudante = payload => ({
-  type:
-    '@questionarioDinamico/setQuestionarioDinamicoExpandirLinhaAusenciaEstudante',
-  payload,
-});
+export const setQuestionarioDinamicoExpandirLinhaAusenciaEstudante =
+  payload => ({
+    type: '@questionarioDinamico/setQuestionarioDinamicoExpandirLinhaAusenciaEstudante',
+    payload,
+  });
 
 export const setResetarTabela = payload => ({
   type: '@questionarioDinamico/setResetarTabela',
@@ -46,5 +46,15 @@ export const setExibirModalErrosQuestionarioDinamico = payload => ({
 
 export const setNomesSecoesComCamposObrigatorios = payload => ({
   type: '@questionarioDinamico/setNomesSecoesComCamposObrigatorios',
+  payload,
+});
+
+export const setListaSecoesEmEdicao = payload => ({
+  type: '@questionarioDinamico/setListaSecoesEmEdicao',
+  payload,
+});
+
+export const setResetarCampoDinamicoEditor = payload => ({
+  type: '@questionarioDinamico/setResetarCampoDinamicoEditor',
   payload,
 });

@@ -28,6 +28,7 @@ import {
   ServicoDisciplina,
   verificaSomenteConsulta,
 } from '~/servicos';
+import Loader from '~/componentes/loader';
 import { erros } from '~/servicos/alertas';
 import ServicoAcompanhamentoAprendizagem from '~/servicos/Paginas/Relatorios/AcompanhamentoAprendizagem/ServicoAcompanhamentoAprendizagem';
 import { Container } from './acompanhamentoAprendizagem.css';
@@ -40,6 +41,9 @@ import ObjectCardAcompanhamentoAprendizagem from './DadosAcompanhamentoAprendiza
 import TabelaRetratilAcompanhamentoAprendizagem from './DadosAcompanhamentoAprendizagem/TabelaRetratilAcompanhamentoAprendizagem/tabelaRetratilAcompanhamentoAprendizagem';
 import LoaderAcompanhamentoAprendizagem from './loaderAcompanhamentoAprendizagem';
 import ModalErrosAcompanhamentoAprendizagem from './modalErrosAcompanhamentoAprendizagem';
+import Button from '~/componentes/button';
+import { Colors, ModalConteudoHtml, Label } from '~/componentes';
+import { Row } from 'antd';
 import AlertaDentroPeriodo from '~/componentes-sgp/Calendario/componentes/MesCompleto/componentes/Dias/componentes/DiaCompleto/componentes/AlertaPeriodoEncerrado';
 
 const AcompanhamentoAprendizagem = () => {
@@ -75,6 +79,10 @@ const AcompanhamentoAprendizagem = () => {
   );
   const [listaSemestres, setListaSemestres] = useState([]);
   const [semestreSelecionado, setSemestreSelecionado] = useState(undefined);
+  const [exibirModalValidar, setExibirModalValidar] = useState(false);
+  const [validarDados, setValidarDados] = useState(null);
+  const [listAlunosValidarDados, setListAlunosValidar] = useState(null);
+  const [carregando, setCarregando] = useState(false);
 
   const resetarInfomacoes = useCallback(() => {
     dispatch(limparDadosAcompanhamentoAprendizagem());
@@ -106,16 +114,52 @@ const AcompanhamentoAprendizagem = () => {
 
   const obterListaSemestres = useCallback(async () => {
     if (ehTurmaInfantil(modalidadesFiltroPrincipal, turmaSelecionada)) {
-      const retorno = await ServicoAcompanhamentoAprendizagem.obterListaSemestres().catch(
-        e => erros(e)
-      );
+      const retorno =
+        await ServicoAcompanhamentoAprendizagem.obterListaSemestres().catch(e =>
+          erros(e)
+        );
       if (retorno?.data) {
         setListaSemestres(retorno.data);
       } else {
         setListaSemestres([]);
+        setListAlunosValidar(null);
       }
     }
   }, [modalidadesFiltroPrincipal, turmaSelecionada]);
+
+  const onClickValidar = () => {
+    setCarregando(true);
+    ServicoAcompanhamentoAprendizagem.validarInconsistencias(
+      turmaSelecionada?.id,
+      semestreSelecionado
+    )
+      .then(resposta => {
+        if (resposta?.data) {
+          setExibirModalValidar(true);
+          setValidarDados(resposta.data);
+          setCarregando(false);
+        }
+        setCarregando(false);
+      })
+      .catch(e => erros(e));
+  };
+
+  const onCloseModalValidar = () => {
+    setExibirModalValidar(false);
+    setValidarDados(null);
+  };
+  const limparListAlunosValidar = (alunoCodigo) => {
+    setListAlunosValidar(null);
+    var alunosComMarcador = listAlunosValidarDados.filter(x => x.alunoCodigo !== alunoCodigo);
+    setListAlunosValidar(alunosComMarcador);
+  };
+  const onClickValidarDados = () => {
+    setListAlunosValidar(
+      validarDados?.inconsistenciaPercursoIndividual
+        ?.alunosComInconsistenciaPercursoIndividualRAA
+    );
+    setExibirModalValidar(false);
+  };
 
   useEffect(() => {
     resetarInfomacoes();
@@ -134,6 +178,7 @@ const AcompanhamentoAprendizagem = () => {
     } else {
       setSemestreSelecionado(undefined);
       setListaSemestres([]);
+      setListAlunosValidar(null);
     }
 
     return () => {
@@ -193,15 +238,16 @@ const AcompanhamentoAprendizagem = () => {
       if (turma) {
         dispatch(setExibirLoaderAlunosAcompanhamentoAprendizagem(true));
 
-        const retorno = await ServicoAcompanhamentoAprendizagem.obterListaAlunos(
-          turma,
-          anoLetivo,
-          semestreConsulta
-        )
-          .catch(e => erros(e))
-          .finally(() =>
-            dispatch(setExibirLoaderAlunosAcompanhamentoAprendizagem(false))
-          );
+        const retorno =
+          await ServicoAcompanhamentoAprendizagem.obterListaAlunos(
+            turma,
+            anoLetivo,
+            semestreConsulta
+          )
+            .catch(e => erros(e))
+            .finally(() =>
+              dispatch(setExibirLoaderAlunosAcompanhamentoAprendizagem(false))
+            );
 
         if (retorno?.data) {
           dispatch(setAlunosAcompanhamentoAprendizagem(retorno.data));
@@ -244,9 +290,10 @@ const AcompanhamentoAprendizagem = () => {
   };
 
   const permiteOnChangeAluno = async () => {
-    const continuar = await ServicoAcompanhamentoAprendizagem.salvarDadosAcompanhamentoAprendizagem(
-      semestreSelecionado
-    );
+    const continuar =
+      await ServicoAcompanhamentoAprendizagem.salvarDadosAcompanhamentoAprendizagem(
+        semestreSelecionado
+      );
 
     return continuar;
   };
@@ -267,11 +314,6 @@ const AcompanhamentoAprendizagem = () => {
       {turmaSelecionada.turma ? <AlertaPermiteSomenteTurmaInfantil /> : ''}
       <ModalErrosAcompanhamentoAprendizagem />
       <LoaderAcompanhamentoAprendizagem>
-      
-      {semestreSelecionado ? <AlertaDentroPeriodo
-            exibir={desabilitar}
-          /> : ''}
-          
         <Cabecalho pagina="Relatório do Acompanhamento da Aprendizagem">
           <BotoesAcoesAcompanhamentoAprendizagem
             semestreSelecionado={semestreSelecionado}

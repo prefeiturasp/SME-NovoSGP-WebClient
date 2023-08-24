@@ -8,8 +8,8 @@ import FrequenciaGlobalPorAno from './FrequenciaGlobalPorAno/frequenciaGlobalPor
 import FrequenciaGlobalPorDRE from './FrequenciaGlobalPorDRE/frequenciaGlobalPorDRE';
 import QuantidadeAusenciasPossuemJustificativa from './QuantidadeAusenciasPossuemJustificativa/quantidadeAusenciasPossuemJustificativa';
 import QuantidadeJustificativasPorMotivo from './QuantidadeJustificativasPorMotivo/quantidadeJustificativasPorMotivo';
-import TotalEstudantesPresenciasRemotosAusentes from './TotalEstudantesPresRemAus/totalEstudantesPresRemAus';
-import TotalEstudantesPresenciasRemotosAusentesPorDre from './TotalEstudantesPresRemAusPorDre/totalEstudantesPresRemAusPorDre';
+import TotalEstudantesPresenciasRemotosAusentes from './TotalEstudantesPresRemAus/VisaoNormal/totalEstudantesPresRemAus';
+import TotalEstudantesPresenciasRemotosAusentesPorDre from './TotalEstudantesPresRemAus/VisaoDre/totalEstudantesPresRemAusPorDre';
 
 const GraficosFrequencia = () => {
   const anoLetivo = useSelector(

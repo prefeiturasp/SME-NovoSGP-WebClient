@@ -15,6 +15,7 @@ export const AnoLetivo = ({
   showSearch,
   labelRequired,
   defaultDataList,
+  anoMinimo,
 }) => {
   const [exibirLoader, setExibirLoader] = useState(false);
 
@@ -50,6 +51,7 @@ export const AnoLetivo = ({
 
     const resposta = await FiltroHelper.obterAnosLetivos({
       consideraHistorico,
+      anoMinimo,
     })
       .catch(e => erros(e))
       .finally(() => setExibirLoader(false));
@@ -109,6 +111,7 @@ AnoLetivo.propTypes = {
   form: PropTypes.oneOfType([PropTypes.any]),
   onChange: PropTypes.oneOfType([PropTypes.any]),
   defaultDataList: PropTypes.oneOfType([PropTypes.any]),
+  anoMinimo: PropTypes.oneOfType([PropTypes.any]),
 };
 
 AnoLetivo.defaultProps = {
@@ -120,4 +123,5 @@ AnoLetivo.defaultProps = {
   onChange: () => null,
   nameList: 'listaAnosLetivos',
   defaultDataList: [],
+  anoMinimo: undefined,
 };

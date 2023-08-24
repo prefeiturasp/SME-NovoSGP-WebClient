@@ -72,9 +72,12 @@ class ServicoDiarioBordo {
   };
 
   obterDiarioBordo = (aulaId, componenteCurricularId) => {
-    return api.get(
-      `${urlPadrao}/${aulaId}?componenteCurricularId=${componenteCurricularId}`
-    );
+    if(aulaId && componenteCurricularId){
+      return api.get(
+        `${urlPadrao}/${aulaId}?componenteCurricularId=${componenteCurricularId}`
+      );
+    }
+    return [];
   };
 
   salvarDiarioBordo = (params, idDiarioBordo) => {

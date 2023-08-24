@@ -2,7 +2,7 @@ import { Tooltip } from 'antd';
 import t from 'prop-types';
 import React, { useCallback, useEffect, useState } from 'react';
 import shortid from 'shortid';
-import SinalizacaoAEE from '~/componentes-sgp/SinalizacaoAEE/sinalizacaoAEE';
+import EstudanteAtendidoAEE from '@/components/sgp/estudante-atendido-aee';
 import {
   SGP_TABLE_REGISTRO_INDIVIDUAL,
   SGP_TABLE_REGISTRO_INDIVIDUAL_LINHA,
@@ -10,6 +10,7 @@ import {
 import Cabecalho from './componentes/Cabecalho';
 import { DetalhesAluno, LinhaTabela, Tabela, TabelaEstilo } from './style';
 import InconsistenciasEstudante from './componentes/Inconsistencias';
+import EstudanteMatriculadoPAP from '@/components/sgp/estudante-matriculado-pap';
 
 function TabelaRetratil({
   alunos,
@@ -21,6 +22,7 @@ function TabelaRetratil({
   tituloCabecalho,
   pularDesabilitados,
   larguraAluno,
+  alunosValidar,
 }) {
   const [retraido, setRetraido] = useState(false);
   const [alunoSelecionado, setAlunoSelecionado] = useState(null);
@@ -39,7 +41,7 @@ function TabelaRetratil({
     if (!(alunos && alunos.length)) {
       setAlunoSelecionado(null);
     }
-  }, [alunos, codigoAlunoSelecionado]);
+  }, [alunos, codigoAlunoSelecionado, alunosValidar]);
 
   const permiteSelecionarAluno = useCallback(async () => {
     if (permiteOnChangeAluno) {
@@ -77,7 +79,6 @@ function TabelaRetratil({
         onChangeAlunoSelecionado(aluno);
       }
     }
-
   }, [
     alunoSelecionado,
     alunos,
@@ -109,7 +110,6 @@ function TabelaRetratil({
         onChangeAlunoSelecionado(aluno);
       }
     }
-
   }, [
     alunoSelecionado,
     alunos,
@@ -141,6 +141,17 @@ function TabelaRetratil({
     }
   };
 
+  const encontrarLinhaAluno = (listAlunos, numeroChamada) => {
+    if (listAlunos !== null) {
+      let encontrarAluno = listAlunos?.find(nome => nome.numeroChamada === numeroChamada) ?? null;
+      if (encontrarAluno) {
+        return true;
+      }
+    }
+
+    return false;
+  };
+
   return (
     <TabelaEstilo>
       <div className="tabelaCollapse">
@@ -166,6 +177,14 @@ function TabelaRetratil({
               >
                 <td>
                   {item.numeroChamada}
+                  
+                  {encontrarLinhaAluno(alunosValidar, item.numeroChamada) ? (
+                    <Tooltip title="Ausência do percurso individual ">
+                      <span className="iconeAusenciaPercurso" />
+                    </Tooltip>
+                  ) : (
+                    <></>
+                  )}
                   {item.marcador && item.marcador.descricao ? (
                     <Tooltip title={item.marcador.descricao}>
                       <span className="iconeSituacao" />
@@ -190,8 +209,10 @@ function TabelaRetratil({
                     </div>
 
                     <div className="d-flex align-items-center justify-content-between">
-                      <SinalizacaoAEE exibirSinalizacao={item.ehAtendidoAEE} />
-
+                      <EstudanteAtendidoAEE show={item.ehAtendidoAEE} />
+                      <EstudanteMatriculadoPAP
+                        show={item?.ehMatriculadoTurmaPAP}
+                      />
                       {item.marcadorDiasSemRegistroExibir && (
                         <div className="pl-3">
                           <Tooltip title={item.marcadorDiasSemRegistroTexto}>

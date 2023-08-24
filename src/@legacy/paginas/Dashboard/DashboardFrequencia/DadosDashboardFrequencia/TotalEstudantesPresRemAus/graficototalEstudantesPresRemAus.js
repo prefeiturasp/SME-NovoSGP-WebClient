@@ -1,14 +1,13 @@
-import React, { useCallback, useEffect, useState } from 'react';
-import PropTypes from 'prop-types';
 import moment from 'moment';
+import PropTypes from 'prop-types';
+import { useCallback, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 
 import { CampoData, Loader, SelectComponent } from '~/componentes';
 import { GraficoBarras, TagGrafico } from '~/componentes-sgp';
 
-import { OPCAO_TODOS } from '~/constantes/constantes';
-import { erros, ServicoDashboardFrequencia } from '~/servicos';
 import { tipoGraficos } from '~/dtos';
+import { erros, ServicoDashboardFrequencia } from '~/servicos';
 import { obterTodosMeses } from '~/utils';
 
 const GraficoTotalEstudantesPresenciasRemotosAusentes = ({
@@ -17,6 +16,7 @@ const GraficoTotalEstudantesPresenciasRemotosAusentes = ({
   ueId,
   modalidade,
   semestre,
+  visaoDre,
 }) => {
   const valorPadrao = moment().year(anoLetivo);
   const mesAtual = Number(moment().format('MM'));
@@ -52,31 +52,66 @@ const GraficoTotalEstudantesPresenciasRemotosAusentes = ({
   );
 
   const obterDadosGrafico = useCallback(async () => {
-    setExibirLoader(true);
-    const ehTipoMensal =
-      Number(tipoPeriodoDashboard) === tipoGraficos.MENSAL.valor;
-    const dataDiariaSelecionada = ehTipoMensal
-      ? undefined
-      : dataDiaria.format('YYYY-MM-DD');
-    const dataSelecionada = dataInicio || dataDiariaSelecionada;
-    const dataMensalSelecionada = ehTipoMensal ? dataMensal : undefined;
+    const ehTipoDiario =
+      Number(tipoPeriodoDashboard) === tipoGraficos.DIARIO.valor;
 
-    const retorno =
-      await ServicoDashboardFrequencia.obterTotalEstudantesPresenciasRemotosAusentes(
-        anoLetivo,
-        dreId,
-        ueId,
-        modalidade,
-        semestre,
-        anoTurma,
-        dataSelecionada,
-        dataFim,
-        tipoPeriodoDashboard,
-        dataMensalSelecionada,
-        false
-      )
-        .catch(e => erros(e))
-        .finally(() => setExibirLoader(false));
+    let endpoint = null;
+
+    if (ehTipoDiario) {
+      const dataAula = dataDiaria.format('YYYY-MM-DD');
+      endpoint =
+        ServicoDashboardFrequencia.obterFrequenciasConsolidadacaoDiariaPorTurmaEAno(
+          anoLetivo,
+          dreId,
+          ueId,
+          modalidade,
+          semestre,
+          anoTurma?.ano,
+          dataAula,
+          visaoDre
+        );
+    } else {
+      const ehTipoMensal =
+        Number(tipoPeriodoDashboard) === tipoGraficos.MENSAL.valor;
+      const dataDiariaSelecionada = ehTipoMensal
+        ? undefined
+        : dataDiaria.format('YYYY-MM-DD');
+      const dataSelecionada = dataInicio || dataDiariaSelecionada;
+      const dataMensalSelecionada = ehTipoMensal ? dataMensal : undefined;
+
+      let tipoConsolidadoFrequencia = null;
+      if (ehTipoMensal) {
+        tipoConsolidadoFrequencia =
+          tipoGraficos.MENSAL.tipoConsolidadoFrequencia;
+      } else {
+        tipoConsolidadoFrequencia =
+          tipoGraficos.SEMANAL.tipoConsolidadoFrequencia;
+      }
+
+      const ehTipoSemanal =
+        Number(tipoPeriodoDashboard) === tipoGraficos.SEMANAL.valor;
+      if (ehTipoSemanal && !dataFim) return;
+
+      endpoint =
+        ServicoDashboardFrequencia.obterFrequenciasConsolidacaoSemanalMensalPorTurmaEAno(
+          anoLetivo,
+          dreId,
+          ueId,
+          modalidade,
+          semestre,
+          anoTurma?.ano,
+          dataSelecionada,
+          dataFim,
+          tipoConsolidadoFrequencia,
+          dataMensalSelecionada,
+          visaoDre
+        );
+    }
+
+    setExibirLoader(true);
+    const retorno = await endpoint
+      .catch(e => erros(e))
+      .finally(() => setExibirLoader(false));
 
     let dadosRetorno = [];
     if (retorno?.data) {
@@ -96,10 +131,11 @@ const GraficoTotalEstudantesPresenciasRemotosAusentes = ({
     dataFim,
     tipoPeriodoDashboard,
     dataMensal,
+    visaoDre,
   ]);
 
   useEffect(() => {
-    if (anoLetivo && modalidade && anoTurma && modalidade) {
+    if (anoLetivo && modalidade && anoTurma?.ano && modalidade) {
       obterDadosGrafico();
       return;
     }
@@ -120,16 +156,16 @@ const GraficoTotalEstudantesPresenciasRemotosAusentes = ({
   ]);
 
   useEffect(() => {
-    if (listaAnosEscolares?.length === 1) {
-      setAnoTurma(listaAnosEscolares[0].ano);
-    }
-    if (listaAnosEscolares?.length > 1) {
-      setAnoTurma(OPCAO_TODOS);
+    if (listaAnosEscolares?.length) {
+      setAnoTurma({ ...listaAnosEscolares[0] });
     }
   }, [listaAnosEscolares]);
 
   const onChangeAnoTurma = valor => {
-    setAnoTurma(valor);
+    const anoSelecionado = listaAnosEscolares.find(
+      item => String(item?.ano) === String(valor)
+    );
+    setAnoTurma(anoSelecionado ? { ...anoSelecionado } : undefined);
   };
 
   useEffect(() => {
@@ -271,7 +307,7 @@ const GraficoTotalEstudantesPresenciasRemotosAusentes = ({
               valueOption="ano"
               valueText="modalidadeAno"
               disabled={listaAnosEscolares?.length === 1}
-              valueSelect={anoTurma}
+              valueSelect={String(anoTurma?.ano)}
               onChange={onChangeAnoTurma}
               placeholder="Selecione o ano"
               allowClear={false}
@@ -330,6 +366,7 @@ GraficoTotalEstudantesPresenciasRemotosAusentes.propTypes = {
   ueId: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   modalidade: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   semestre: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+  visaoDre: PropTypes.bool,
 };
 
 GraficoTotalEstudantesPresenciasRemotosAusentes.defaultProps = {
@@ -338,6 +375,7 @@ GraficoTotalEstudantesPresenciasRemotosAusentes.defaultProps = {
   ueId: null,
   modalidade: null,
   semestre: null,
+  visaoDre: false,
 };
 
 export default GraficoTotalEstudantesPresenciasRemotosAusentes;
