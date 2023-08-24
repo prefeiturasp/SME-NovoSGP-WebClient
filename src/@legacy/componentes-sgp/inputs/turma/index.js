@@ -17,6 +17,7 @@ export const Turma = ({
   labelRequired,
   mostrarOpcaoTodas,
   nameList,
+  selecionarTodasAoCarregar,
 }) => {
   const [exibirLoader, setExibirLoader] = useState(false);
 
@@ -40,7 +41,7 @@ export const Turma = ({
 
     const OPCAO_TODAS_TURMA = { codigo: OPCAO_TODOS, nomeFiltro: 'Todas' };
 
-    if (ueCodigo === OPCAO_TODOS) {
+    if (ueCodigo === OPCAO_TODOS || selecionarTodasAoCarregar) {
       const codigoAtual = multiple ? [OPCAO_TODOS] : OPCAO_TODOS;
 
       form.setFieldValue(nameList, [OPCAO_TODAS_TURMA]);
@@ -82,7 +83,6 @@ export const Turma = ({
     } else {
       limparDados();
     }
-
   }, [ueCodigo, modalidade, anoLetivo, consideraHistorico, semestre]);
 
   useEffect(() => {
@@ -90,8 +90,6 @@ export const Turma = ({
 
     limparDados();
     if (modalidade) obterTurmas();
-
-
   }, [modalidade, semestre]);
 
   const desabilitar =
@@ -147,6 +145,7 @@ Turma.propTypes = {
   mostrarOpcaoTodas: PropTypes.bool,
   form: PropTypes.oneOfType([PropTypes.any]),
   nameList: PropTypes.string,
+  selecionarTodasAoCarregar: PropTypes.bool,
 };
 
 Turma.defaultProps = {
@@ -159,4 +158,5 @@ Turma.defaultProps = {
   onChange: () => null,
   mostrarOpcaoTodas: true,
   nameList: 'listaTurmas',
+  selecionarTodasAoCarregar: false,
 };
