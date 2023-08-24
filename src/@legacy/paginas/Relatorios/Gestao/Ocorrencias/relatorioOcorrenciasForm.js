@@ -19,6 +19,8 @@ const RelatorioOcorrenciasForm = props => {
   const { form, onChangeCampos } = props;
 
   const ueCodigo = form?.values?.ueCodigo;
+  const modalidade = form?.values?.modalidade;
+
   const desabilitarModalidade = ueCodigo === OPCAO_TODOS;
 
   useEffect(() => {
@@ -64,6 +66,7 @@ const RelatorioOcorrenciasForm = props => {
             onChange={onChangeCampos}
             name="codigosTurma"
             multiple
+            selecionarTodasAoCarregar={modalidade === OPCAO_TODOS}
           />
         </Col>
 
