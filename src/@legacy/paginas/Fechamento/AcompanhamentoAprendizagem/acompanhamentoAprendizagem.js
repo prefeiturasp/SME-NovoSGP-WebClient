@@ -62,17 +62,17 @@ const AcompanhamentoAprendizagem = () => {
   );
 
   const permissoesTela =
-    usuario.permissoes[RotasDto.ACOMPANHAMENTO_APRENDIZAGEM];
+  usuario.permissoes[RotasDto.ACOMPANHAMENTO_APRENDIZAGEM];
 
   const desabilitarCamposAcompanhamentoAprendizagem = useSelector(
-      store =>
-        store.acompanhamentoAprendizagem
-          .desabilitarCamposAcompanhamentoAprendizagem
-    );
-    
-  const desabilitar =
-        desabilitarCamposAcompanhamentoAprendizagem ||
-          (!permissoesTela.podeIncluir || !permissoesTela.podeAlterar);
+    store =>
+      store.acompanhamentoAprendizagem
+        .desabilitarCamposAcompanhamentoAprendizagem
+  );
+
+const desabilitar =
+      desabilitarCamposAcompanhamentoAprendizagem ||
+        (!permissoesTela.podeIncluir || !permissoesTela.podeAlterar);
 
   const [listaComponenteCurricular, setListaComponenteCurricular] = useState(
     []
@@ -299,102 +299,171 @@ const AcompanhamentoAprendizagem = () => {
   };
 
   return (
-    <Container>
-      {!turmaSelecionada.turma ? (
-        <Alert
-          alerta={{
-            tipo: 'warning',
-            id: 'alerta-sem-turma',
-            mensagem: 'Você precisa escolher uma turma.',
-          }}
-        />
-      ) : (
-        <></>
-      )}
-      {turmaSelecionada.turma ? <AlertaPermiteSomenteTurmaInfantil /> : ''}
-      <ModalErrosAcompanhamentoAprendizagem />
-      <LoaderAcompanhamentoAprendizagem>
-        <Cabecalho pagina="Relatório do Acompanhamento da Aprendizagem">
-          <BotoesAcoesAcompanhamentoAprendizagem
-            semestreSelecionado={semestreSelecionado}
-            componenteCurricularId={componenteCurricularSelecionado}
-          />
-        </Cabecalho>
-        <Card>
-          {turmaSelecionada?.turma &&
-          ehTurmaInfantil(modalidadesFiltroPrincipal, turmaSelecionada) ? (
-            <>
-              <div className="col-md-12 mb-2">
-                <div className="row">
-                  <div className="col-sm-12 col-md-6 col-lg-6 col-xl-4 mb-2">
-                    <SelectComponent
-                      id="componenteCurricular"
-                      name="ComponenteCurricularId"
-                      lista={listaComponenteCurricular || []}
-                      valueOption="codigoComponenteCurricular"
-                      valueText="nomeComponenteInfantil"
-                      valueSelect={componenteCurricularSelecionado}
-                      placeholder="Selecione um componente curricular"
-                      disabled={listaComponenteCurricular?.length === 1}
-                      onChange={valorNovo => {
-                        dispatch(setComponenteCurricularSelecionado(valorNovo));
-                      }}
-                    />
-                  </div>
-                  <div className="col-sm-12 col-md-6 col-lg-6 col-xl-4 mb-2">
-                    <SelectComponent
-                      id="semestre"
-                      lista={listaSemestres}
-                      valueOption="semestre"
-                      valueText="descricao"
-                      valueSelect={semestreSelecionado}
-                      onChange={onChangeSemestre}
-                      placeholder="Selecione o semestre"
-                      disabled={!componenteCurricularSelecionado}
-                    />
-                  </div>
-                </div>
-              </div>
-              {componenteCurricularSelecionado && semestreSelecionado ? (
+    <>
+      <Loader loading={carregando} tip="">
+        <Container>
+          {exibirModalValidar ? (
+            <ModalConteudoHtml
+              titulo={validarDados?.mensagemInconsistenciaPercursoColetivo}
+              visivel={exibirModalValidar}
+              onConfirmacaoSecundaria={() => onCloseModalValidar()}
+              onConfirmacaoPrincipal={() => onClickValidarDados()}
+              labelBotaoPrincipal="Atualizar"
+              labelBotaoSecundario="Cancelar"
+              fontSizeTitulo="18"
+              tipoFonte="bold"
+            >
+              <Label
+                text={
+                  validarDados?.inconsistenciaPercursoIndividual
+                    ?.mensagemInsconsistencia
+                }
+              />
+              {validarDados?.inconsistenciaPercursoIndividual
+                ?.alunosComInconsistenciaPercursoIndividualRAA?.length ? (
+                <table className="table">
+                  <tbody className="tabela-um-tbody">
+                    {validarDados?.inconsistenciaPercursoIndividual?.alunosComInconsistenciaPercursoIndividualRAA.map(
+                      (dado, index) => {
+                        return (
+                          <tr key={index}>
+                            <td className="col-valor-linha-um">
+                              {dado.numeroChamada}
+                            </td>
+                            <td className="col-valor-linha-um">
+                              {dado.alunoNome} ({dado.alunoCodigo})
+                            </td>
+                          </tr>
+                        );
+                      }
+                    )}
+                  </tbody>
+                </table>
+              ) : (
+                <></>
+              )}
+            </ModalConteudoHtml>
+          ) : (
+            <></>
+          )}
+          {!turmaSelecionada.turma ? (
+            <Alert
+              alerta={{
+                tipo: 'warning',
+                id: 'alerta-sem-turma',
+                mensagem: 'Você precisa escolher uma turma.',
+              }}
+            />
+          ) : (
+            <></>
+          )}
+          {turmaSelecionada.turma ? <AlertaPermiteSomenteTurmaInfantil /> : ''}
+          <ModalErrosAcompanhamentoAprendizagem />
+          <LoaderAcompanhamentoAprendizagem>
+          {semestreSelecionado ? <AlertaDentroPeriodo
+            exibir={desabilitar}
+          /> : ''}
+            <Cabecalho pagina="Relatório do Acompanhamento da Aprendizagem">
+              <BotoesAcoesAcompanhamentoAprendizagem
+                semestreSelecionado={semestreSelecionado}
+                componenteCurricularId={componenteCurricularSelecionado}
+                limparAlunoIconeAlunoSelecionado ={(valor) => limparListAlunosValidar(valor)}
+              />
+            </Cabecalho>
+            <Card>
+              {turmaSelecionada?.turma &&
+              ehTurmaInfantil(modalidadesFiltroPrincipal, turmaSelecionada) ? (
                 <>
-                  <div className="col-md-12 mb-2 d-flex">
-                    <BotaoOrdenarListaAlunos />
-                    <BotaoGerarRelatorioAprendizagem
-                      semestre={semestreSelecionado}
-                    />
-                  </div>
-                  <div className="col-md-12 mb-2 mt-2">
-                    <ApanhadoGeral semestreSelecionado={semestreSelecionado} />
-                  </div>
                   <div className="col-md-12 mb-2">
-                    <TabelaRetratilAcompanhamentoAprendizagem
-                      onChangeAlunoSelecionado={value => {
-                        onChangeAlunoSelecionado(value, semestreSelecionado);
-                      }}
-                      permiteOnChangeAluno={permiteOnChangeAluno}
-                    >
-                      <ObjectCardAcompanhamentoAprendizagem
-                        semestre={semestreSelecionado}
-                      />
-                      <DadosAcompanhamentoAprendizagem
-                        codigoTurma={turmaSelecionada.turma}
-                        modalidade={turmaSelecionada.modalidade}
-                        semestreSelecionado={semestreSelecionado}
-                        componenteCurricularId={componenteCurricularSelecionado}
-                      />
-                    </TabelaRetratilAcompanhamentoAprendizagem>
+                    <div className="row">
+                      <div className="col-sm-12 col-md-6 col-lg-6 col-xl-4 mb-2">
+                        <SelectComponent
+                          id="componenteCurricular"
+                          name="ComponenteCurricularId"
+                          lista={listaComponenteCurricular || []}
+                          valueOption="codigoComponenteCurricular"
+                          valueText="nomeComponenteInfantil"
+                          valueSelect={componenteCurricularSelecionado}
+                          placeholder="Selecione um componente curricular"
+                          disabled={listaComponenteCurricular?.length === 1}
+                          onChange={valorNovo => {
+                            dispatch(
+                              setComponenteCurricularSelecionado(valorNovo)
+                            );
+                          }}
+                        />
+                      </div>
+                      <div className="col-sm-12 col-md-6 col-lg-6 col-xl-4 mb-2">
+                        <SelectComponent
+                          id="semestre"
+                          lista={listaSemestres}
+                          valueOption="semestre"
+                          valueText="descricao"
+                          valueSelect={semestreSelecionado}
+                          onChange={onChangeSemestre}
+                          placeholder="Selecione o semestre"
+                          disabled={!componenteCurricularSelecionado}
+                        />
+                      </div>
+                    </div>
                   </div>
+                  {componenteCurricularSelecionado && semestreSelecionado ? (
+                    <>
+                      <div className="col-md-12 mb-2 d-flex justify-content-between">
+                        <div className="d-flex">
+                          <BotaoOrdenarListaAlunos />
+                          <BotaoGerarRelatorioAprendizagem
+                            semestre={semestreSelecionado}
+                          />
+                        </div>
+                        <Button
+                          label="Conferir"
+                          color={Colors.Roxo}
+                          onClick={onClickValidar}
+                        />
+                      </div>
+                      <div className="col-md-12 mb-2 mt-2">
+                        <ApanhadoGeral
+                          semestreSelecionado={semestreSelecionado}
+                        />
+                      </div>
+                      <div className="col-md-12 mb-2">
+                        <TabelaRetratilAcompanhamentoAprendizagem
+                          onChangeAlunoSelecionado={value => {
+                            onChangeAlunoSelecionado(
+                              value,
+                              semestreSelecionado
+                            );
+                          }}
+                          permiteOnChangeAluno={permiteOnChangeAluno}
+                          alunosValidar={listAlunosValidarDados}
+                        >
+                          <ObjectCardAcompanhamentoAprendizagem
+                            semestre={semestreSelecionado}
+                          />
+                          <DadosAcompanhamentoAprendizagem
+                            codigoTurma={turmaSelecionada.turma}
+                            modalidade={turmaSelecionada.modalidade}
+                            semestreSelecionado={semestreSelecionado}
+                            componenteCurricularId={
+                              componenteCurricularSelecionado
+                            }
+                          />
+                        </TabelaRetratilAcompanhamentoAprendizagem>
+                      </div>
+                    </>
+                  ) : (
+                    ''
+                  )}
                 </>
               ) : (
                 ''
               )}
-            </>
-          ) : (
-            ''
-          )}
-        </Card>
-      </LoaderAcompanhamentoAprendizagem>
-    </Container>
+            </Card>
+          </LoaderAcompanhamentoAprendizagem>
+        </Container>
+      </Loader>
+    </>
   );
 };
 
