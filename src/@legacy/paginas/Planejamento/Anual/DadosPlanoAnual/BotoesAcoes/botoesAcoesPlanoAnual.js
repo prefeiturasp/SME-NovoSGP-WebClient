@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
 import {
   SGP_BUTTON_CANCELAR,
+  SGP_BUTTON_IMPRIMIR,
   SGP_BUTTON_SALVAR,
 } from '~/constantes/ids/button';
 import Button from '~/componentes/button';
@@ -13,10 +14,13 @@ import {
   setComponenteCurricularPlanoAnual,
   setExibirModalCopiarConteudo,
 } from '~/redux/modulos/anual/actions';
-import { confirmar } from '~/servicos';
+import { confirmar, erros, sucesso } from '~/servicos';
 import { ehTurmaInfantil } from '~/servicos/Validacoes/validacoesInfatil';
 import servicoSalvarPlanoAnual from '../../servicoSalvarPlanoAnual';
+import ServicoPlanoAnual from '~/servicos/Paginas/ServicoPlanoAnual';
 import { useNavigate } from 'react-router-dom';
+import { MENSAGEM_SOLICITACAO_RELATORIO_SUCESSO } from '@/@legacy/constantes';
+import { HttpStatusCode } from 'axios';
 
 const BotoesAcoesPlanoAnual = () => {
   const dispatch = useDispatch();
@@ -93,6 +97,12 @@ const BotoesAcoesPlanoAnual = () => {
     }
   };
 
+  const onImprimir = async () => {
+    const resultado = await ServicoPlanoAnual.imprimirPlanoAnual({ id: planejamentoAnualId }).catch(e => erros(e));
+    if (resultado?.status === HttpStatusCode.Ok) 
+      sucesso(MENSAGEM_SOLICITACAO_RELATORIO_SUCESSO);
+  };
+
   const abrirCopiarConteudo = async () => {
     dispatch(setExibirModalCopiarConteudo(true));
   };
@@ -117,6 +127,16 @@ const BotoesAcoesPlanoAnual = () => {
         }
       />
       <BotaoVoltarPadrao className="mr-2" onClick={() => onClickVoltar()} />
+      <Button
+          id={SGP_BUTTON_IMPRIMIR}
+          icon="print"
+          color={Colors.Azul}
+          className="mr-2"
+          semMargemDireita
+          border
+          onClick={onImprimir}
+          disabled={ !planejamentoAnualId }
+        />
       <Button
         id={SGP_BUTTON_CANCELAR}
         label="Cancelar"

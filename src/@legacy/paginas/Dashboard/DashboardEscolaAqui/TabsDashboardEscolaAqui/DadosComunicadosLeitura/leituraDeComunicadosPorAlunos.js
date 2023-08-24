@@ -119,7 +119,8 @@ const LeituraDeComunicadosPorAlunos = props => {
           render: (_, record) => (
             <NomeEstudanteLista
               nome={record?.nomeAluno}
-              exibirSinalizacao={record?.ehAtendidoAEE}
+              ehAtendidoAEE={record?.ehAtendidoAEE}
+              ehMatriculadoTurmaPAP={record?.ehMatriculadoTurmaPAP}
             />
           ),
         },

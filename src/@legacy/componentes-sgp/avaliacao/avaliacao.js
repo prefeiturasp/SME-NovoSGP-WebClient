@@ -33,8 +33,9 @@ import CampoConceito from './campoConceito';
 import CampoConceitoFinal from './campoConceitoFinal';
 import ColunaNotaFinalRegencia from './colunaNotaFinalRegencia';
 import LinhaConceitoFinal from './linhaConceitoFinal';
-import SinalizacaoAEE from '../SinalizacaoAEE/sinalizacaoAEE';
+import EstudanteAtendidoAEE from '@/components/sgp/estudante-atendido-aee';
 import FiltroComponentesRegencia from '../FiltroComponentesRegencia';
+import EstudanteMatriculadoPAP from '@/components/sgp/estudante-matriculado-pap';
 
 const Avaliacao = props => {
   const dispatch = useDispatch();
@@ -422,8 +423,11 @@ const Avaliacao = props => {
                             >
                               {aluno.nome}
                               <div className="d-flex justify-content-end">
-                                <SinalizacaoAEE
-                                  exibirSinalizacao={aluno?.ehAtendidoAEE}
+                                <EstudanteAtendidoAEE
+                                  show={aluno?.ehAtendidoAEE}
+                                />
+                                <EstudanteMatriculadoPAP
+                                  show={aluno?.ehMatriculadoTurmaPAP}
                                 />
                               </div>
                             </div>

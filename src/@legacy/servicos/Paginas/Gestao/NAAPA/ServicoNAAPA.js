@@ -5,7 +5,6 @@ import { store } from '@/core/redux';
 import {
   setLimparDadosEncaminhamentoNAAPA,
   setExibirLoaderEncaminhamentoNAAPA,
-  setListaSecoesEmEdicao,
   setTabAtivaEncaminhamentoNAAPA,
   setDadosSecoesEncaminhamentoNAAPA,
   setDadosSituacaoEncaminhamentoNAAPA,
@@ -13,6 +12,7 @@ import {
 import { limparDadosLocalizarEstudante } from '~/redux/modulos/localizarEstudante/actions';
 import {
   setLimparDadosQuestionarioDinamico,
+  setListaSecoesEmEdicao,
   setQuestionarioDinamicoEmEdicao,
 } from '~/redux/modulos/questionarioDinamico/actions';
 import { confirmar, erros, sucesso } from '~/servicos/alertas';
@@ -50,26 +50,6 @@ class ServicoNAAPA {
       encaminhamentoNaapaIds: idsSelecionados,
     });
 
-  guardarSecaoEmEdicao = secaoId => {
-    const { dispatch } = store;
-
-    const state = store.getState();
-    const { encaminhamentoNAAPA } = state;
-    const { listaSecoesEmEdicao } = encaminhamentoNAAPA;
-
-    if (listaSecoesEmEdicao?.length) {
-      const listaNova = [...listaSecoesEmEdicao];
-      const jaTemNaLista = listaNova.find(item => item?.secaoId === secaoId);
-
-      if (jaTemNaLista) return;
-
-      listaNova.push({ secaoId });
-      dispatch(setListaSecoesEmEdicao(listaNova));
-    } else {
-      dispatch(setListaSecoesEmEdicao([{ secaoId }]));
-    }
-  };
-
   removerArquivo = arquivoCodigo =>
     api.delete(`${URL_PADRAO}/arquivo?arquivoCodigo=${arquivoCodigo}`);
 
@@ -86,12 +66,11 @@ class ServicoNAAPA {
 
     const { dispatch } = store;
 
-    const { encaminhamentoNAAPA } = state;
-    const {
-      listaSecoesEmEdicao,
-      dadosSecoesEncaminhamentoNAAPA,
-      dadosEncaminhamentoNAAPA,
-    } = encaminhamentoNAAPA;
+    const { encaminhamentoNAAPA, questionarioDinamico } = state;
+    const { dadosSecoesEncaminhamentoNAAPA, dadosEncaminhamentoNAAPA } =
+      encaminhamentoNAAPA;
+
+    const { listaSecoesEmEdicao } = questionarioDinamico;
 
     const { aluno, turma } = dadosEncaminhamentoNAAPA;
 
@@ -297,9 +276,9 @@ class ServicoNAAPA {
 
     const { encaminhamentoNAAPA, questionarioDinamico } = state;
 
-    const { dadosSecoesEncaminhamentoNAAPA, listaSecoesEmEdicao } =
-      encaminhamentoNAAPA;
-    const { questionarioDinamicoEmEdicao } = questionarioDinamico;
+    const { dadosSecoesEncaminhamentoNAAPA } = encaminhamentoNAAPA;
+    const { questionarioDinamicoEmEdicao, listaSecoesEmEdicao } =
+      questionarioDinamico;
 
     const secaoDestino = dadosSecoesEncaminhamentoNAAPA?.find(
       secao => secao?.questionarioId?.toString() === tabIndex
@@ -390,7 +369,9 @@ class ServicoNAAPA {
     api.post(`${URL_PADRAO}/reabrir/${encaminhamentoNAAPAId}`);
 
   existeEncaminhamentoAtivo = codigoEstudante =>
-    api.get(`${URL_PADRAO}/aluno/${codigoEstudante}/existe-encaminhamento-ativo`);
+    api.get(
+      `${URL_PADRAO}/aluno/${codigoEstudante}/existe-encaminhamento-ativo`
+    );
 }
 
 export default new ServicoNAAPA();

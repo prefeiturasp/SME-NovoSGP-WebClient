@@ -1,27 +1,51 @@
+import { setResetarCampoDinamicoEditor } from '@/@legacy/redux/modulos/questionarioDinamico/actions';
 import PropTypes from 'prop-types';
-import React from 'react';
+import { useEffect, useRef } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import JoditEditor from '~/componentes/jodit-editor/joditEditor';
-import ColunaDimensionavel from './ColunaDimensionavel/colunaDimensionavel';
 import QuestionarioDinamicoFuncoes from '../Funcoes/QuestionarioDinamicoFuncoes';
+import ColunaDimensionavel from './ColunaDimensionavel/colunaDimensionavel';
 
 const CampoDinamicoEditor = props => {
+  const dispatch = useDispatch();
+  const textArea = useRef(null);
+
   const { questaoAtual, form, label, desabilitado, onChange, prefixId } = props;
 
   const id = QuestionarioDinamicoFuncoes.gerarId(prefixId, questaoAtual);
+
+  const resetarCampoDinamicoEditor = useSelector(
+    store => store.questionarioDinamico.resetarCampoDinamicoEditor
+  );
+
+  const valorInicial = form?.initialValues?.[String(questaoAtual?.id)];
+
+  useEffect(() => {
+    if (resetarCampoDinamicoEditor) {
+      form?.setFieldValue(id, valorInicial);
+
+      if (textArea?.current?.setEditorValue) {
+        textArea.current.setEditorValue(valorInicial);
+      }
+      dispatch(setResetarCampoDinamicoEditor(false));
+    }
+  }, [resetarCampoDinamicoEditor, id, valorInicial, textArea]);
 
   return (
     <ColunaDimensionavel dimensao={questaoAtual?.dimensao}>
       <div id={id}>
         {label}
         <JoditEditor
+          ref={textArea}
+          height="350px"
           id={id}
           form={form}
           readonly={desabilitado}
           name={String(questaoAtual?.id)}
           placeholder={questaoAtual?.placeHolder}
-          value={form?.initialValues?.[String(questaoAtual?.id)]}
+          value={valorInicial}
           onChange={v => {
-            if (form?.initialValues?.[String(questaoAtual?.id)] !== v) {
+            if (valorInicial !== v) {
               onChange();
             }
           }}

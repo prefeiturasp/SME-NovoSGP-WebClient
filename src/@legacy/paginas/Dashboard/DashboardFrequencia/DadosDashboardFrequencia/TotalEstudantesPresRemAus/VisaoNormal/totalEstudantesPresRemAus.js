@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 import { Base, CardCollapse } from '~/componentes';
 
-import GraficoTotalEstudantesPresenciasRemotosAusentes from './graficototalEstudantesPresRemAus';
+import GraficoTotalEstudantesPresenciasRemotosAusentes from '../graficototalEstudantesPresRemAus';
 
 const TotalEstudantesPresenciasRemotosAusentes = ({
   anoLetivo,

@@ -7,6 +7,7 @@ import { store } from '@/core/redux';
 import { setTabAtivaEncaminhamentoNAAPA } from '~/redux/modulos/encaminhamentoNAAPA/actions';
 import { verificarDataFimMaiorInicio } from '~/utils';
 import { useNavigate } from 'react-router-dom';
+import { NomeEstudanteLista } from '@/@legacy/componentes-sgp';
 
 const ListaEncaminhamentoNAAPAPaginada = props => {
   const {
@@ -34,25 +35,26 @@ const ListaEncaminhamentoNAAPAPaginada = props => {
     {
       title: 'Criança/Estudante',
       dataIndex: 'nomeAluno ',
-      ellipsis: true,
-      render: (_, linha) => `${linha?.nomeAluno} (${linha?.codigoAluno})`,
+      render: (_, linha) => (
+        <NomeEstudanteLista
+          nome={`${linha?.nomeAluno} (${linha?.codigoAluno})`}
+          ehMatriculadoTurmaPAP={linha?.ehMatriculadoTurmaPAP}
+        />
+      ),
     },
     {
       title: 'Data de entrada da queixa',
       dataIndex: 'dataAberturaQueixaInicio',
-      ellipsis: true,
       render: dataInicio =>
         dataInicio ? window.moment(dataInicio).format('DD/MM/YYYY') : '',
     },
     {
       title: 'Prioridade',
       dataIndex: 'prioridade',
-      ellipsis: true,
     },
     {
       title: 'Situação',
       dataIndex: 'situacao',
-      ellipsis: true,
     },
   ];
 
@@ -60,7 +62,6 @@ const ListaEncaminhamentoNAAPAPaginada = props => {
     colunas.unshift({
       title: 'Unidade Escolar (UE)',
       dataIndex: 'ue',
-      ellipsis: true,
     });
   }
 

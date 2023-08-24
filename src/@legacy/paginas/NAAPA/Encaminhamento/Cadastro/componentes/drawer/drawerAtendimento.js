@@ -1,6 +1,7 @@
+import QuestionarioDinamicoFuncoes from '@/@legacy/componentes-sgp/QuestionarioDinamico/Funcoes/QuestionarioDinamicoFuncoes';
 import { Row } from 'antd';
 import PropTypes from 'prop-types';
-import React, { useCallback, useState, useEffect } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { Auditoria } from '~/componentes';
@@ -130,7 +131,7 @@ const DrawerAtendimento = ({
           desabilitarCampos={desabilitarCamposEncaminhamentoNAAPA}
           funcaoRemoverArquivoCampoUpload={ServicoNAAPA.removerArquivo}
           onChangeQuestionario={() => {
-            ServicoNAAPA.guardarSecaoEmEdicao(dadosTab?.id);
+            QuestionarioDinamicoFuncoes.guardarSecaoEmEdicao(dadosTab?.id);
           }}
           montarComboMultiplaEscolhaComplementarComResposta={false}
         />
