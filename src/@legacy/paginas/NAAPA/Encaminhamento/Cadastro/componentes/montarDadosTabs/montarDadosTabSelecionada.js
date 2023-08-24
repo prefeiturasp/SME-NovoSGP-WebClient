@@ -1,6 +1,7 @@
 /* eslint-disable react/prop-types */
+import QuestionarioDinamicoFuncoes from '@/@legacy/componentes-sgp/QuestionarioDinamico/Funcoes/QuestionarioDinamicoFuncoes';
 import { Row } from 'antd';
-import React, { useEffect, useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { Auditoria } from '~/componentes';
@@ -323,7 +324,7 @@ const MontarDadosTabSelecionada = props => {
         desabilitarCampos={desabilitarCamposEncaminhamentoNAAPA}
         funcaoRemoverArquivoCampoUpload={ServicoNAAPA.removerArquivo}
         onChangeQuestionario={() => {
-          ServicoNAAPA.guardarSecaoEmEdicao(dadosTab?.id);
+          QuestionarioDinamicoFuncoes.guardarSecaoEmEdicao(dadosTab?.id);
         }}
         validarCampoObrigatorioCustomizado={validarCampoObrigatorioCustomizado}
         montarComboMultiplaEscolhaComplementarComResposta={false}

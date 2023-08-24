@@ -194,6 +194,8 @@ class ServicoPlanoAnual {
     return [];
   };
 
+  imprimirPlanoAnual = (params) => api.post("v1/relatorios/plano-anual", params);
+  
   salvarEditarPlanoAnual = (turmaId, componenteCurricularId, params) => {
     const url = `v1/planejamento/anual/turmas/${turmaId}/componentes-curriculares/${componenteCurricularId}`;
     return api.post(url, params);

@@ -48,6 +48,7 @@ import geral from './geral/reducers';
 import modalAnotacaoFrequencia from './modalAnotacaoFrequencia/reducers';
 import historicoPaginado from './historico-paginado/reducers';
 import turmaFiltroAutenticacaoFrequencia from './turmaFiltroAutenticacaoFrequencia/reducers';
+import relatorioPAP from './relatorioPAP/reducers';
 
 const reducers = combineReducers({
   navegacao,
@@ -98,6 +99,7 @@ const reducers = combineReducers({
   modalAnotacaoFrequencia,
   historicoPaginado,
   turmaFiltroAutenticacaoFrequencia,
+  relatorioPAP,
 });
 
 const rootReducer = (state, action) => {

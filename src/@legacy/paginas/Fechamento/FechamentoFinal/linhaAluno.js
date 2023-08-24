@@ -187,7 +187,8 @@ const LinhaAluno = ({
         <td className="col-nome-aluno">
           <NomeEstudanteLista
             nome={aluno?.nome}
-            exibirSinalizacao={aluno.ehAtendidoAEE}
+            ehAtendidoAEE={aluno?.ehAtendidoAEE}
+            ehMatriculadoTurmaPAP={aluno?.ehMatriculadoTurmaPAP}
           />
         </td>
         {ehSintese ? (
