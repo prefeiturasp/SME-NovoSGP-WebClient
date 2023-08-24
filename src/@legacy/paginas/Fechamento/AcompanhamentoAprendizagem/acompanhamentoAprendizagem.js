@@ -43,6 +43,7 @@ import DadosAcompanhamentoAprendizagem from './DadosAcompanhamentoAprendizagem/d
 import { Container } from './acompanhamentoAprendizagem.css';
 import LoaderAcompanhamentoAprendizagem from './loaderAcompanhamentoAprendizagem';
 import ModalErrosAcompanhamentoAprendizagem from './modalErrosAcompanhamentoAprendizagem';
+import AlertaDentroPeriodo from '~/componentes-sgp/Calendario/componentes/MesCompleto/componentes/Dias/componentes/DiaCompleto/componentes/AlertaPeriodoEncerrado';
 
 const AcompanhamentoAprendizagem = () => {
   const dispatch = useDispatch();
@@ -61,6 +62,17 @@ const AcompanhamentoAprendizagem = () => {
 
   const permissoesTela =
     usuario.permissoes[RotasDto.ACOMPANHAMENTO_APRENDIZAGEM];
+
+  const desabilitarCamposAcompanhamentoAprendizagem = useSelector(
+    store =>
+      store.acompanhamentoAprendizagem
+        .desabilitarCamposAcompanhamentoAprendizagem
+  );
+
+  const desabilitar =
+    desabilitarCamposAcompanhamentoAprendizagem ||
+    !permissoesTela.podeIncluir ||
+    !permissoesTela.podeAlterar;
 
   const [listaComponenteCurricular, setListaComponenteCurricular] = useState(
     []
@@ -350,6 +362,11 @@ const AcompanhamentoAprendizagem = () => {
           {turmaSelecionada.turma ? <AlertaPermiteSomenteTurmaInfantil /> : ''}
           <ModalErrosAcompanhamentoAprendizagem />
           <LoaderAcompanhamentoAprendizagem>
+            {semestreSelecionado ? (
+              <AlertaDentroPeriodo exibir={desabilitar} />
+            ) : (
+              <></>
+            )}
             <Cabecalho pagina="Relatório do Acompanhamento da Aprendizagem">
               <BotoesAcoesAcompanhamentoAprendizagem
                 semestreSelecionado={semestreSelecionado}
