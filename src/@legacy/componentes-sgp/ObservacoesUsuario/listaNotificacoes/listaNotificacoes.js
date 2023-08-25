@@ -5,6 +5,16 @@ import { Container } from './listaNotificacoes.css';
 
 const ListaNotificacoes = ({ obs, somenteLeitura }) => {
 
+const [usuariosNotificacao, setUsuariosNotificacao] = useState();
+
+  useEffect(() => {
+    if (!usuariosNotificacao && obs.usuarios) {
+      setUsuariosNotificacao(obs.usuarios);
+    }
+
+    console.log(usuariosNotificacao);
+  }, [usuariosNotificacao, obs.usuarios]);
+
   return (
     <>
       {obs?.usuarios?.length ? (
@@ -13,8 +23,12 @@ const ListaNotificacoes = ({ obs, somenteLeitura }) => {
           listagemDiario={obs?.listagemDiario}
           somenteLeitura={somenteLeitura}
         >
-        <span style={{ whiteSpace: 'pre-line' }}>Usuários notificados:
-            {obs.usuarios.map(usuario => usuario.nome).join(' / ')}
+       <span> 
+          {usuariosNotificacao ? (
+            `Usuários notificados: ${usuariosNotificacao.map(usuario => usuario.nome).join(", ")}`
+          ) : (
+            ""
+          )}
         </span>
         </Container>
       ) : (
