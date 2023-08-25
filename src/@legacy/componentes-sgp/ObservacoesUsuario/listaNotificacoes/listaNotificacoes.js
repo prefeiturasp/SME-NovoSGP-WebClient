@@ -12,7 +12,6 @@ const [usuariosNotificacao, setUsuariosNotificacao] = useState();
       setUsuariosNotificacao(obs.usuarios);
     }
 
-    console.log(usuariosNotificacao);
   }, [usuariosNotificacao, obs.usuarios]);
 
   return (
