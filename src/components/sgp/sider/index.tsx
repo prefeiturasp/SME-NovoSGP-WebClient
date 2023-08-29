@@ -7,6 +7,7 @@ import { obterDescricaoNomeMenu } from '@/@legacy/servicos';
 import LogoMenuSGP from '@/assets/logo_sgp_menu.svg';
 import { useNavigate } from 'react-router-dom';
 import SiderSME, { MenuItemSMEProps, getItemMenu } from '../../lib/sider';
+import { cloneDeep } from 'lodash';
 
 const SiderSGP: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -81,7 +82,7 @@ const SiderSGP: React.FC = () => {
     });
   };
 
-  const obterDadosMenus = (menu: any) => {
+  const obterDadosMenus = (menu: any): MenuItemSMEProps[] => {
     if (menu?.length) {
       return menu.map((subMenu: any) => {
         const title = subMenu.descricao;
@@ -103,7 +104,12 @@ const SiderSGP: React.FC = () => {
 
   useEffect(() => {
     if (usuario.menu?.length) {
-      const menusValidos = usuario.menu?.filter((m: any) => !!m?.ehMenu);
+      // TODO
+      const menus: any = cloneDeep(usuario.menu);
+      menus[1].icone = 'fas fa-user-edit';
+      menus[1].ehMenu = true;
+
+      const menusValidos = menus?.filter((m: any) => !!m?.ehMenu);
       const items = obterDadosMenus(menusValidos);
       setItems(items);
     }
