@@ -104,10 +104,7 @@ const SiderSGP: React.FC = () => {
 
   useEffect(() => {
     if (usuario.menu?.length) {
-      // TODO
       const menus: any = cloneDeep(usuario.menu);
-      menus[1].icone = 'fas fa-user-edit';
-      menus[1].ehMenu = true;
 
       const menusValidos = menus?.filter((m: any) => !!m?.ehMenu);
       const items = obterDadosMenus(menusValidos);
