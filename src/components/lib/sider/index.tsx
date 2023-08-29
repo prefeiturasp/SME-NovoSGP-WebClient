@@ -112,8 +112,6 @@ const Sider: React.FC<MenuSMEProps> = ({
 
   if (!items?.length) return <></>;
 
-  console.log(menuProps?.selectedKeys);
-
   return (
     <SiderContainer
       width={collapsed ? 90 : 264}
