@@ -222,6 +222,10 @@ const AtribuicaoCJ = () => {
           abrev: item.abreviacao,
         }));
 
+        if(lista?.some(l=> l.valor === "-99")){
+          lista.shift();
+        }
+        
         setListaDres(lista);
 
         if (lista?.length && lista?.length === 1) {
@@ -256,6 +260,10 @@ const AtribuicaoCJ = () => {
             desc: item.nome,
             valor: String(item.codigo),
           }));
+
+          if(lista?.some(l=> l.valor === "-99")){
+            lista.shift();
+          }
 
           if (lista?.length && lista?.length === 1) {
             setUeCodigo(lista[0].valor);

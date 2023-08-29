@@ -66,12 +66,11 @@ class ServicoNAAPA {
 
     const { dispatch } = store;
 
-    const { encaminhamentoNAAPA } = state;
-    const {
-      listaSecoesEmEdicao,
-      dadosSecoesEncaminhamentoNAAPA,
-      dadosEncaminhamentoNAAPA,
-    } = encaminhamentoNAAPA;
+    const { encaminhamentoNAAPA, questionarioDinamico } = state;
+    const { dadosSecoesEncaminhamentoNAAPA, dadosEncaminhamentoNAAPA } =
+      encaminhamentoNAAPA;
+
+    const { listaSecoesEmEdicao } = questionarioDinamico;
 
     const { aluno, turma } = dadosEncaminhamentoNAAPA;
 
@@ -277,9 +276,9 @@ class ServicoNAAPA {
 
     const { encaminhamentoNAAPA, questionarioDinamico } = state;
 
-    const { dadosSecoesEncaminhamentoNAAPA, listaSecoesEmEdicao } =
-      encaminhamentoNAAPA;
-    const { questionarioDinamicoEmEdicao } = questionarioDinamico;
+    const { dadosSecoesEncaminhamentoNAAPA } = encaminhamentoNAAPA;
+    const { questionarioDinamicoEmEdicao, listaSecoesEmEdicao } =
+      questionarioDinamico;
 
     const secaoDestino = dadosSecoesEncaminhamentoNAAPA?.find(
       secao => secao?.questionarioId?.toString() === tabIndex
@@ -368,6 +367,11 @@ class ServicoNAAPA {
 
   reabrir = encaminhamentoNAAPAId =>
     api.post(`${URL_PADRAO}/reabrir/${encaminhamentoNAAPAId}`);
+
+  existeEncaminhamentoAtivo = codigoEstudante =>
+    api.get(
+      `${URL_PADRAO}/aluno/${codigoEstudante}/existe-encaminhamento-ativo`
+    );
 }
 
 export default new ServicoNAAPA();
