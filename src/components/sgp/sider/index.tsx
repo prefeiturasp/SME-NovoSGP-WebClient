@@ -128,7 +128,7 @@ const SiderSGP: React.FC = () => {
     setOpenKeys(keys);
   };
 
-  const onClickMenuButtonTogle = (collapsed: boolean) => {
+  const onClickMenuButtonToggle = (collapsed: boolean) => {
     if (collapsed) setOpenKeys([]);
   };
 
@@ -137,7 +137,7 @@ const SiderSGP: React.FC = () => {
   return (
     <SiderSME
       onClick={itemMenuEscolhido}
-      onClickMenuButtonTogle={(collapsed: boolean) => onClickMenuButtonTogle(collapsed)}
+      onClickMenuButtonToggle={(collapsed: boolean) => onClickMenuButtonToggle(collapsed)}
       menuProps={{
         onOpenChange,
         openKeys,

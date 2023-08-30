@@ -94,7 +94,7 @@ export const SiderSubMenuContainer = styled(SubMenu)<SiderSubMenuStylePros>`
 
 export const SiderMenuContainer = styled.div<SiderMenuStylePros>`
   overflow: auto;
-  height: 100vh;
+  height: calc(100vh - 72px);
 
   ::-webkit-scrollbar {
     width: 4px;
@@ -139,7 +139,7 @@ export const SiderMenuContainer = styled.div<SiderMenuStylePros>`
   }
 `;
 
-export const SiderMenuButtonTogleStyle = styled.div<SiderMenuStylePros>`
+export const SiderMenuButtonToggleStyle = styled.div<SiderMenuStylePros>`
   background-color: ${(props) => props.theme?.antd?.colorPrimary};
   display: flex;
   align-items: center;
