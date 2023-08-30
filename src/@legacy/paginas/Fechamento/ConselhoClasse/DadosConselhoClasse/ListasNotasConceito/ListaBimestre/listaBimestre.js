@@ -13,6 +13,7 @@ import {
   formatarFrequencia,
   tratarStringComponenteCurricularNome,
 } from '~/utils';
+import { useSelector } from 'react-redux';
 
 const ListaBimestre = props => {
   const {
@@ -115,7 +116,10 @@ const ListaBimestre = props => {
     return (
       <div
         className="input-notas-conceitos"
-        style={{ display: 'inline-block' }}
+        style={{
+          display: 'inline-block',
+          cursor: 'not-allowed',
+        }}
       >
         <span>{obterValorNotaConceito(notaFechamento)}</span>
       </div>

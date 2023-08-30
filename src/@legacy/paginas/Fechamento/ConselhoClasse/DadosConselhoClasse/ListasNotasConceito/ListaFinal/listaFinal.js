@@ -119,26 +119,42 @@ const ListaFinal = props => {
     const terceiroBimestre = notasFechamentos.find(item => item.bimestre === 3);
     const quartoBimestre = notasFechamentos.find(item => item.bimestre === 4);
 
+    const stylesProps = {
+      cursor: 'not-allowed',
+    };
+
     return (
       <>
-        <div className="input-notas-conceitos-final float-left">
+        <div
+          className="input-notas-conceitos-final float-left"
+          style={stylesProps}
+        >
           {obterValorNotaConceito(
             primeiroBimestre ? primeiroBimestre.notaConceito : ''
           )}
         </div>
-        <div className="input-notas-conceitos-final float-left">
+        <div
+          className="input-notas-conceitos-final float-left"
+          style={stylesProps}
+        >
           {obterValorNotaConceito(
             segundoBimestre ? segundoBimestre.notaConceito : ''
           )}
         </div>
         {!ehEja ? (
           <>
-            <div className="input-notas-conceitos-final float-left">
+            <div
+              className="input-notas-conceitos-final float-left"
+              style={stylesProps}
+            >
               {obterValorNotaConceito(
                 terceiroBimestre ? terceiroBimestre.notaConceito : ''
               )}
             </div>
-            <div className="input-notas-conceitos-final float-left">
+            <div
+              className="input-notas-conceitos-final float-left"
+              style={stylesProps}
+            >
               {obterValorNotaConceito(
                 quartoBimestre ? quartoBimestre.notaConceito : ''
               )}
