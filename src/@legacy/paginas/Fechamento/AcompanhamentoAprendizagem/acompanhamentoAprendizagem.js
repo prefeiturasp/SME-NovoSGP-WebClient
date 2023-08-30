@@ -1,12 +1,9 @@
-import { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Colors, Label, ModalConteudoHtml } from '~/componentes';
 import { AlertaPermiteSomenteTurmaInfantil } from '~/componentes-sgp';
 import Cabecalho from '~/componentes-sgp/cabecalho';
 import Alert from '~/componentes/alert';
-import Button from '~/componentes/button';
 import Card from '~/componentes/card';
-import Loader from '~/componentes/loader';
 import SelectComponent from '~/componentes/select';
 import { RotasDto } from '~/dtos';
 import situacaoMatriculaAluno from '~/dtos/situacaoMatriculaAluno';
@@ -17,8 +14,8 @@ import {
   setCodigoAlunoSelecionado,
   setDadosAlunoObjectCard,
   setDadosApanhadoGeral,
-  setExibirLoaderAlunosAcompanhamentoAprendizagem,
   setExibirLoaderGeralAcompanhamentoAprendizagem,
+  setExibirLoaderAlunosAcompanhamentoAprendizagem,
 } from '~/redux/modulos/acompanhamentoAprendizagem/actions';
 import {
   resetarDadosRegistroIndividual,
@@ -26,23 +23,27 @@ import {
   setDadosAlunoObjectCard as setDadosAlunoObjectCardRegistroIndividual,
 } from '~/redux/modulos/registroIndividual/actions';
 import {
+  ehTurmaInfantil,
   ServicoCalendarios,
   ServicoDisciplina,
-  ehTurmaInfantil,
   verificaSomenteConsulta,
 } from '~/servicos';
-import ServicoAcompanhamentoAprendizagem from '~/servicos/Paginas/Relatorios/AcompanhamentoAprendizagem/ServicoAcompanhamentoAprendizagem';
+import Loader from '~/componentes/loader';
 import { erros } from '~/servicos/alertas';
+import ServicoAcompanhamentoAprendizagem from '~/servicos/Paginas/Relatorios/AcompanhamentoAprendizagem/ServicoAcompanhamentoAprendizagem';
+import { Container } from './acompanhamentoAprendizagem.css';
 import ApanhadoGeral from './DadosAcompanhamentoAprendizagem/ApanhadoGeral/apanhadoGeral';
 import BotaoGerarRelatorioAprendizagem from './DadosAcompanhamentoAprendizagem/BotaoGerarRelatorioAprendizagem/botaoGerarRelatorioAprendizagem';
 import BotaoOrdenarListaAlunos from './DadosAcompanhamentoAprendizagem/BotaoOrdenarListaAlunos/botaoOrdenarListaAlunos';
 import BotoesAcoesAcompanhamentoAprendizagem from './DadosAcompanhamentoAprendizagem/BotoesAcoes/botoesAcoesAcompanhamentoAprendizagem';
+import DadosAcompanhamentoAprendizagem from './DadosAcompanhamentoAprendizagem/dadosAcompanhamentoAprendizagem';
 import ObjectCardAcompanhamentoAprendizagem from './DadosAcompanhamentoAprendizagem/ObjectCardAcompanhamentoAprendizagem/objectCardAcompanhamentoAprendizagem';
 import TabelaRetratilAcompanhamentoAprendizagem from './DadosAcompanhamentoAprendizagem/TabelaRetratilAcompanhamentoAprendizagem/tabelaRetratilAcompanhamentoAprendizagem';
-import DadosAcompanhamentoAprendizagem from './DadosAcompanhamentoAprendizagem/dadosAcompanhamentoAprendizagem';
-import { Container } from './acompanhamentoAprendizagem.css';
 import LoaderAcompanhamentoAprendizagem from './loaderAcompanhamentoAprendizagem';
 import ModalErrosAcompanhamentoAprendizagem from './modalErrosAcompanhamentoAprendizagem';
+import Button from '~/componentes/button';
+import { Colors, ModalConteudoHtml, Label } from '~/componentes';
+import { Row } from 'antd';
 import AlertaDentroPeriodo from '~/componentes-sgp/Calendario/componentes/MesCompleto/componentes/Dias/componentes/DiaCompleto/componentes/AlertaPeriodoEncerrado';
 
 const AcompanhamentoAprendizagem = () => {
@@ -61,7 +62,7 @@ const AcompanhamentoAprendizagem = () => {
   );
 
   const permissoesTela =
-    usuario.permissoes[RotasDto.ACOMPANHAMENTO_APRENDIZAGEM];
+  usuario.permissoes[RotasDto.ACOMPANHAMENTO_APRENDIZAGEM];
 
   const desabilitarCamposAcompanhamentoAprendizagem = useSelector(
     store =>
@@ -69,10 +70,9 @@ const AcompanhamentoAprendizagem = () => {
         .desabilitarCamposAcompanhamentoAprendizagem
   );
 
-  const desabilitar =
-    desabilitarCamposAcompanhamentoAprendizagem ||
-    !permissoesTela.podeIncluir ||
-    !permissoesTela.podeAlterar;
+const desabilitar =
+      desabilitarCamposAcompanhamentoAprendizagem ||
+        (!permissoesTela.podeIncluir || !permissoesTela.podeAlterar);
 
   const [listaComponenteCurricular, setListaComponenteCurricular] = useState(
     []
@@ -148,11 +148,9 @@ const AcompanhamentoAprendizagem = () => {
     setExibirModalValidar(false);
     setValidarDados(null);
   };
-  const limparListAlunosValidar = alunoCodigo => {
+  const limparListAlunosValidar = (alunoCodigo) => {
     setListAlunosValidar(null);
-    var alunosComMarcador = listAlunosValidarDados.filter(
-      x => x.alunoCodigo !== alunoCodigo
-    );
+    var alunosComMarcador = listAlunosValidarDados.filter(x => x.alunoCodigo !== alunoCodigo);
     setListAlunosValidar(alunosComMarcador);
   };
   const onClickValidarDados = () => {
@@ -362,18 +360,14 @@ const AcompanhamentoAprendizagem = () => {
           {turmaSelecionada.turma ? <AlertaPermiteSomenteTurmaInfantil /> : ''}
           <ModalErrosAcompanhamentoAprendizagem />
           <LoaderAcompanhamentoAprendizagem>
-            {semestreSelecionado ? (
-              <AlertaDentroPeriodo exibir={desabilitar} />
-            ) : (
-              <></>
-            )}
+          {semestreSelecionado ? <AlertaDentroPeriodo
+            exibir={desabilitar}
+          /> : ''}
             <Cabecalho pagina="Relatório do Acompanhamento da Aprendizagem">
               <BotoesAcoesAcompanhamentoAprendizagem
                 semestreSelecionado={semestreSelecionado}
                 componenteCurricularId={componenteCurricularSelecionado}
-                limparAlunoIconeAlunoSelecionado={valor =>
-                  limparListAlunosValidar(valor)
-                }
+                limparAlunoIconeAlunoSelecionado ={(valor) => limparListAlunosValidar(valor)}
               />
             </Cabecalho>
             <Card>
