@@ -1,13 +1,13 @@
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 
 import { useAppDispatch, useAppSelector } from '@/core/hooks/use-redux';
 
 import { menuSelecionado } from '@/@legacy/redux/modulos/navegacao/actions';
 import { obterDescricaoNomeMenu } from '@/@legacy/servicos';
 import LogoMenuSGP from '@/assets/logo_sgp_menu.svg';
+import { cloneDeep } from 'lodash';
 import { useNavigate } from 'react-router-dom';
 import SiderSME, { MenuItemSMEProps, getItemMenu } from '../../lib/sider';
-import { cloneDeep } from 'lodash';
 
 const SiderSGP: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -24,7 +24,7 @@ const SiderSGP: React.FC = () => {
     if (navegacaoStore.rotaAtiva) {
       items.forEach((item) => {
         if (item?.children?.length) {
-          const menuAtual = item.children.find((itemChild) => {
+          let menuAtual = item.children.find((itemChild) => {
             if (itemChild?.children?.length) {
               return itemChild.children.find((a) => {
                 return a?.url === navegacaoStore?.rotaAtiva;
@@ -32,6 +32,12 @@ const SiderSGP: React.FC = () => {
             }
             return itemChild?.url === navegacaoStore?.rotaAtiva;
           });
+
+          if (menuAtual?.children?.length) {
+            menuAtual = menuAtual.children.find((a) => {
+              return a?.url === navegacaoStore?.rotaAtiva;
+            });
+          }
 
           if (menuAtual?.key) {
             dispatch(menuSelecionado([menuAtual?.key?.toString()]));
