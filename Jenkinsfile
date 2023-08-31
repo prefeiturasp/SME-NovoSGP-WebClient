@@ -4,10 +4,13 @@ pipeline {
       kubeconfig = getKubeconf(env.branchname)
       registryCredential = 'jenkins_registry'
       deployment1 = "${env.branchname == 'release-r2' ? 'sme-webclient-rc2' : 'sme-webclient' }"
-      namespace = "${env.branchname == 'pre-prod' ? 'sme-novosgp-d1' : 'sme-novosgp' }"
+      namespace = "${env.branchname == 'pre-prod' ? 'sme-novosgp-d1' : env.branchname == 'development' ? 'novosgp-dev' : 'sme-novosgp' }"
+           
     }
 
-    agent { node { label 'SME-AGENT-SGP' } }
+    agent {
+      kubernetes { label 'builder' }
+    }
 
     options {
       buildDiscarder(logRotator(numToKeepStr: '5', artifactNumToKeepStr: '5'))
@@ -22,6 +25,11 @@ pipeline {
         }
 
         stage('Build') {
+          agent { kubernetes { 
+                  label 'builder'
+                  defaultContainer 'builder'
+                }
+              }
           when { anyOf { branch 'master'; branch 'main'; branch 'pre-prod'; branch "story/*"; branch 'development'; branch 'release'; branch 'release-r2'; } }
           steps {
             script {
@@ -36,6 +44,11 @@ pipeline {
         }
 
         stage('Deploy'){
+              agent { kubernetes { 
+                  label 'builder'
+                  defaultContainer 'builder'
+                }
+              }
             when { anyOf {  branch 'master'; branch 'main'; branch 'pre-prod'; branch 'development'; branch 'release'; branch 'release-r2'; } }
             steps {
                 script{
@@ -83,6 +96,6 @@ def getKubeconf(branchName) {
     else if ("homolog".equals(branchName)) { return "config_hom"; }
     else if ("release".equals(branchName)) { return "config_hom"; }
     else if ("release-r2".equals(branchName)) { return "config_hom"; }
-    else if ("development".equals(branchName)) { return "config_dev"; }
-    else if ("develop".equals(branchName)) { return "config_dev"; }
+    else if ("development".equals(branchName)) { return "config_release"; }
+    else if ("develop".equals(branchName)) { return "config_release"; }
 }
