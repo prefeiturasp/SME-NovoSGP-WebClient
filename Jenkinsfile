@@ -13,25 +13,22 @@ pipeline {
     }
 
     options {
-      buildDiscarder(logRotator(numToKeepStr: '5', artifactNumToKeepStr: '5'))
+      buildDiscarder(logRotator(numToKeepStr: '20', artifactNumToKeepStr: '20'))
       disableConcurrentBuilds()
       skipDefaultCheckout()
     }
 
     stages {
 
-        stage('CheckOut') {
-            steps { checkout scm }
-        }
-
         stage('Build') {
-          agent { kubernetes { 
+         agent { kubernetes { 
                   label 'builder'
                   defaultContainer 'builder'
                 }
               }
           when { anyOf { branch 'master'; branch 'main'; branch 'pre-prod'; branch "story/*"; branch 'development'; branch 'release'; branch 'release-r2'; } }
           steps {
+            checkout scm 
             script {
               imagename1 = "registry.sme.prefeitura.sp.gov.br/${env.branchname}/sme-sgp-webclient"
               dockerImage1 = docker.build(imagename1, "-f Dockerfile .")
