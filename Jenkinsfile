@@ -13,7 +13,7 @@ pipeline {
     }
 
     options {
-      buildDiscarder(logRotator(numToKeepStr: '5', artifactNumToKeepStr: '20'))
+      buildDiscarder(logRotator(numToKeepStr: '20', artifactNumToKeepStr: '20'))
       disableConcurrentBuilds()
       skipDefaultCheckout()
     }
