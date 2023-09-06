@@ -31,7 +31,7 @@ import { IframeStyle } from './pendenciasFechamentoLista.css';
 import { ServicoPeriodoFechamento } from '~/servicos';
 import { SGP_BUTTON_APROVAR } from '~/constantes/ids/button';
 import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
-import { URL_HOME } from '@/@legacy/constantes';
+import { URL_HOME, URL_PENDENCIAFECHAMENTO } from '@/@legacy/constantes';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 
 const PendenciasFechamentoForm = () => {
@@ -206,7 +206,7 @@ const PendenciasFechamentoForm = () => {
     }
   }, [modalidadesFiltroPrincipal, turmaSelecionada, idPendenciaFechamento]);
 
-  const onClickVoltar = () => navigate(URL_HOME);
+  const onClickVoltar = () => navigate(URL_PENDENCIAFECHAMENTO);
 
   const onClickAprovar = async () => {
     const retorno = await ServicoPendenciasFechamento.aprovar([
