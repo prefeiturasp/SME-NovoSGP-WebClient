@@ -59,8 +59,10 @@ export default function PlanoCiclo() {
   const [inseridoAlterado, setInseridoAlterado] = useState({
     alteradoEm: '',
     alteradoPor: '',
+    alteradoRf: '',
     criadoEm: '',
     criadoPor: '',
+    criadoRf: ''
   });
   const [listaMatrizSelecionda, setListaMatrizSelecionda] = useState([]);
   const [listaODSSelecionado, setListaODSSelecionado] = useState([]);
@@ -169,8 +171,10 @@ export default function PlanoCiclo() {
       setInseridoAlterado({
         alteradoEm,
         alteradoPor: ciclo.data.alteradoPor,
+        alteradoRf: ciclo.data.alteradoRf,
         criadoEm,
         criadoPor: ciclo.data.criadoPor,
+        criadoRf: ciclo.data.criadoRf,
       });
       configuraValoresPlanoCiclo(ciclo);
       setPronto(true);
@@ -538,7 +542,6 @@ export default function PlanoCiclo() {
                     tip=""
                   >
                     <SelectComponent
-                      className="col-md-12"
                       name="tipo-ciclo"
                       id="tipo-ciclo"
                       placeHolder="Selecione um tipo de ciclo"
@@ -594,7 +597,7 @@ export default function PlanoCiclo() {
                   <InseridoAlterado>
                     {inseridoAlterado.criadoPor && inseridoAlterado.criadoEm ? (
                       <p className="pt-2">
-                        INSERIDO por {inseridoAlterado.criadoPor} em{' '}
+                        INSERIDO por {inseridoAlterado.criadoPor} &#40;{inseridoAlterado.criadoRf}&#41; em{' '}
                         {inseridoAlterado.criadoEm}
                       </p>
                     ) : (
@@ -604,7 +607,7 @@ export default function PlanoCiclo() {
                     {inseridoAlterado.alteradoPor &&
                     inseridoAlterado.alteradoEm ? (
                       <p>
-                        ALTERADO por {inseridoAlterado.alteradoPor} em{' '}
+                        ALTERADO por {inseridoAlterado.alteradoPor} &#40;{inseridoAlterado.alteradoRf}&#41; em{' '}
                         {inseridoAlterado.alteradoEm}
                       </p>
                     ) : (

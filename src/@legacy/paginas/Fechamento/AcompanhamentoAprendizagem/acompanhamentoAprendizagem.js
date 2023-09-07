@@ -44,6 +44,7 @@ import ModalErrosAcompanhamentoAprendizagem from './modalErrosAcompanhamentoApre
 import Button from '~/componentes/button';
 import { Colors, ModalConteudoHtml, Label } from '~/componentes';
 import { Row } from 'antd';
+import AlertaDentroPeriodo from '~/componentes-sgp/Calendario/componentes/MesCompleto/componentes/Dias/componentes/DiaCompleto/componentes/AlertaPeriodoEncerrado';
 
 const AcompanhamentoAprendizagem = () => {
   const dispatch = useDispatch();
@@ -61,7 +62,17 @@ const AcompanhamentoAprendizagem = () => {
   );
 
   const permissoesTela =
-    usuario.permissoes[RotasDto.ACOMPANHAMENTO_APRENDIZAGEM];
+  usuario.permissoes[RotasDto.ACOMPANHAMENTO_APRENDIZAGEM];
+
+  const desabilitarCamposAcompanhamentoAprendizagem = useSelector(
+    store =>
+      store.acompanhamentoAprendizagem
+        .desabilitarCamposAcompanhamentoAprendizagem
+  );
+
+const desabilitar =
+      desabilitarCamposAcompanhamentoAprendizagem ||
+        (!permissoesTela.podeIncluir || !permissoesTela.podeAlterar);
 
   const [listaComponenteCurricular, setListaComponenteCurricular] = useState(
     []
@@ -349,6 +360,9 @@ const AcompanhamentoAprendizagem = () => {
           {turmaSelecionada.turma ? <AlertaPermiteSomenteTurmaInfantil /> : ''}
           <ModalErrosAcompanhamentoAprendizagem />
           <LoaderAcompanhamentoAprendizagem>
+          {semestreSelecionado ? <AlertaDentroPeriodo
+            exibir={desabilitar}
+          /> : ''}
             <Cabecalho pagina="Relatório do Acompanhamento da Aprendizagem">
               <BotoesAcoesAcompanhamentoAprendizagem
                 semestreSelecionado={semestreSelecionado}
