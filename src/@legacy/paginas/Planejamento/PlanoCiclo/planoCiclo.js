@@ -62,11 +62,11 @@ export default function PlanoCiclo() {
     alteradoRf: '',
     criadoEm: '',
     criadoPor: '',
-    criadoRf: ''
+    criadoRf: '',
   });
   const [listaMatrizSelecionda, setListaMatrizSelecionda] = useState([]);
   const [listaODSSelecionado, setListaODSSelecionado] = useState([]);
-  const [planoCicloId, setPlanoCicloId] = useState(0);
+  const [planoCiclo, setPlanoCiclo] = useState();
   const [modalidadeEja, setModalidadeEja] = useState(false);
   const [somenteConsulta, setSomenteConsulta] = useState(false);
 
@@ -126,26 +126,34 @@ export default function PlanoCiclo() {
     setPronto(false);
   }
 
-  function configuraValoresPlanoCiclo(ciclo) {
-    if (ciclo.data.idsMatrizesSaber && ciclo.data.idsMatrizesSaber.length) {
-      ciclo.data.idsMatrizesSaber.forEach(id => {
+  const carregarIdsSelecionados = useCallback(() => {
+    if (planoCiclo?.idsMatrizesSaber?.length) {
+      planoCiclo?.idsMatrizesSaber.forEach(id => {
         const matriz = document.querySelector(
           `#matriz-${id}:not([opcao-selecionada='true'])`
         );
         if (matriz) matriz.click();
       });
     }
-    if (
-      ciclo.data.idsObjetivosDesenvolvimentoSustentavel &&
-      ciclo.data.idsObjetivosDesenvolvimentoSustentavel.length
-    ) {
-      ciclo.data.idsObjetivosDesenvolvimentoSustentavel.forEach(id => {
+
+    if (planoCiclo?.idsObjetivosDesenvolvimentoSustentavel?.length) {
+      planoCiclo?.idsObjetivosDesenvolvimentoSustentavel.forEach(id => {
         const objetivo = document.querySelector(
           `#ods-${id}:not([opcao-selecionada='true'])`
         );
-        if (objetivo) objetivo.click();
+
+        if (objetivo) {
+          objetivo.click();
+        }
       });
     }
+  }, [planoCiclo]);
+
+  useEffect(() => {
+    if (pronto) carregarIdsSelecionados();
+  }, [carregarIdsSelecionados, planoCiclo, pronto]);
+
+  function configuraValoresPlanoCiclo(ciclo) {
     setDescricaoCiclo(ciclo.data.descricao);
     setCicloSelecionado(String(ciclo.data.cicloId));
     if (ciclo.data.migrado) {
@@ -159,7 +167,7 @@ export default function PlanoCiclo() {
       `v1/planos/ciclo/${ano}/${cicloId}/${escolaId}`
     );
 
-    setPlanoCicloId(ciclo.data.id);
+    setPlanoCiclo(ciclo.data);
 
     if (ciclo && ciclo.data) {
       const alteradoEm = moment(ciclo.data.alteradoEm).format(
@@ -340,9 +348,7 @@ export default function PlanoCiclo() {
 
   function validaODSSelecionado() {
     listaODS.forEach(item => {
-      const jaSelecionado = listaODSSelecionado.find(
-        matriz => matriz.id === item.id
-      );
+      const jaSelecionado = listaODSSelecionado.find(ods => ods.id === item.id);
       if (jaSelecionado) {
         return true;
       }
@@ -397,7 +403,7 @@ export default function PlanoCiclo() {
       cicloId: cicloSelecionado,
       descricao: textEditorRef.current.value,
       escolaId: codEscola,
-      id: planoCicloId || 0,
+      id: planoCiclo?.id || 0,
       idsMatrizesSaber,
       idsObjetivosDesenvolvimento,
     };
@@ -597,7 +603,8 @@ export default function PlanoCiclo() {
                   <InseridoAlterado>
                     {inseridoAlterado.criadoPor && inseridoAlterado.criadoEm ? (
                       <p className="pt-2">
-                        INSERIDO por {inseridoAlterado.criadoPor} &#40;{inseridoAlterado.criadoRf}&#41; em{' '}
+                        INSERIDO por {inseridoAlterado.criadoPor} &#40;
+                        {inseridoAlterado.criadoRf}&#41; em
                         {inseridoAlterado.criadoEm}
                       </p>
                     ) : (
@@ -607,7 +614,8 @@ export default function PlanoCiclo() {
                     {inseridoAlterado.alteradoPor &&
                     inseridoAlterado.alteradoEm ? (
                       <p>
-                        ALTERADO por {inseridoAlterado.alteradoPor} &#40;{inseridoAlterado.alteradoRf}&#41; em{' '}
+                        ALTERADO por {inseridoAlterado.alteradoPor} &#40;
+                        {inseridoAlterado.alteradoRf}&#41; em
                         {inseridoAlterado.alteradoEm}
                       </p>
                     ) : (
