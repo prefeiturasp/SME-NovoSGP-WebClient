@@ -284,6 +284,7 @@ const BotoesAcoesEncaminhamentoAEE = () => {
             bold
             onClick={onClickEnviar}
             disabled={
+              !questionarioDinamicoEmEdicao ||
               !dadosCollapseLocalizarEstudante?.codigoAluno ||
               desabilitarCamposEncaminhamentoAEE
             }
