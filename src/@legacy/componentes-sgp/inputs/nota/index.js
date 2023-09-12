@@ -161,7 +161,7 @@ const Nota = props => {
           onChange={(_, novaNota) => {
             setarValorExibicao(novaNota);
           }}
-          style={{ ...styleCampo }}
+          style={{ ...styleCampo, cursor: desabilitar && 'not-allowed' }}
         />
       ) : (
         <InputNumberReadOnly
@@ -170,7 +170,7 @@ const Nota = props => {
           key={id}
           placeholder="Nota"
           disabled={desabilitar}
-          style={{ ...styleCampo }}
+          style={{ ...styleCampo, cursor: desabilitar && 'not-allowed' }}
           value={formataNotaExibicao(notaValorAtualExibicao)}
         />
       )}

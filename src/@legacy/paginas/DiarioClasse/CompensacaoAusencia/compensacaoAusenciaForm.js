@@ -436,7 +436,7 @@ const CompensacaoAusenciaForm = () => {
     limparListas();
     const dentroPeriodo = await podeAlterarNoPeriodo(String(bimestre));
     setForaDoPeriodo(!dentroPeriodo);
-
+    
     if (dentroPeriodo && (disciplina > 0 || form.values.disciplinaId)) {
       let podeEditar = false;
       const valorDisciplina =
@@ -509,9 +509,7 @@ const CompensacaoAusenciaForm = () => {
       const disciplinasPreparadas = disciplinas.data.map(disciplina => {
         return {
           ...disciplina,
-          codigoSelecao: disciplina.territorioSaber
-            ? disciplina.codigoTerritorioSaber
-            : disciplina.codigoComponenteCurricular,
+          codigoSelecao: disciplina.codigoComponenteCurricular,
         };
       });
 
@@ -535,9 +533,7 @@ const CompensacaoAusenciaForm = () => {
       const disciplina = disciplinas.data[0];
 
       if (registroNovo) {
-        const disciplinaSelecionada = disciplina.codigoTerritorioSaber
-          ? String(disciplina.codigoTerritorioSaber)
-          : String(disciplina.codigoComponenteCurricular);
+        const disciplinaSelecionada = String(disciplina.codigoComponenteCurricular);
 
         valoresIniciaisForm.disciplinaId = disciplinaSelecionada;
 

@@ -1,6 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { JoditEditor } from '~/componentes';
+import { RotasDto } from '~/dtos';
+import { verificaSomenteConsulta } from '~/servicos';
 import { setAcompanhamentoAprendizagemEmEdicao } from '~/redux/modulos/acompanhamentoAprendizagem/actions';
 import ServicoAcompanhamentoAprendizagem from '~/servicos/Paginas/Relatorios/AcompanhamentoAprendizagem/ServicoAcompanhamentoAprendizagem';
 
@@ -22,6 +24,27 @@ const CampoPercursoIndividual = () => {
       store.acompanhamentoAprendizagem?.qtdMaxImagensCampoPercursoIndividual
   );
 
+  const usuario = useSelector(store => store.usuario);
+
+  const permissoesTela =
+    usuario.permissoes[RotasDto.ACOMPANHAMENTO_APRENDIZAGEM];
+
+  const [desabilitarCampo, setDesabilitarCampo] = useState(false);
+
+  const validaPermissoes = useCallback(() => {
+    const somenteConsulta = verificaSomenteConsulta(permissoesTela);
+
+    const desabilitar = dadosAcompanhamentoAprendizagem?.acompanhamentoAlunoId
+      ? somenteConsulta || !permissoesTela.podeIncluir
+      : somenteConsulta || !permissoesTela.podeAlterar;
+
+    setDesabilitarCampo(desabilitar);
+  }, [dadosAcompanhamentoAprendizagem, permissoesTela]);
+
+  useEffect(() => {
+    validaPermissoes();
+  }, [validaPermissoes]);
+
   const [percursoIndividual, setPercursoIndividual] = useState();
 
   useEffect(() => {
@@ -41,10 +64,11 @@ const CampoPercursoIndividual = () => {
       id="percurso-individual-editor"
       value={percursoIndividual}
       onChange={onChange}
-      readonly={desabilitarCamposAcompanhamentoAprendizagem}
+      readonly={desabilitarCampo}
       mensagemErro="Campo obrigatório"
       validarSeTemErro={valorNovo => !valorNovo}
       permiteVideo={false}
+      desabilitar={desabilitarCamposAcompanhamentoAprendizagem}
       qtdMaxImg={qtdMaxImagensCampoPercursoIndividual}
     />
   );
