@@ -359,7 +359,7 @@ const RelatorioFrequencia = () => {
       turmasCodigo?.find(item => item === OPCAO_TODOS) ||
       turmasCodigo === undefined;
 
-    if (ehInfantil) {
+    if (ehInfantil && !(codigoUe === OPCAO_TODOS)) {
       const turmas = ehOpcaoTodas
         ? listaTurmas
             .filter(item => item.valor !== OPCAO_TODOS)
@@ -371,7 +371,8 @@ const RelatorioFrequencia = () => {
         true
       );
     }
-    if (ehTurma) {
+
+    if (ehTurma && !ehInfantil) {
       const turmas = ehOpcaoTodas ? [OPCAO_TODOS] : turmasCodigo;
 
       return ServicoComponentesCurriculares.obterComponetensCurricularesPorTurma(
@@ -381,7 +382,7 @@ const RelatorioFrequencia = () => {
     }
 
     const codigoTodosAnosEscolares = obterCodigoTodosAnosEscolares();
-    return ServicoComponentesCurriculares.obterComponetensCurriculares(
+    return ServicoFiltroRelatorio.obterComponetensCurriculares(
       codigoUe,
       modalidadeId,
       anoLetivo,
@@ -407,7 +408,7 @@ const RelatorioFrequencia = () => {
         .catch(e => erros(e))
         .finally(() => setCarregandoComponentesCurriculares(false));
       if (retorno?.data?.length) {
-        const nomeParametro = ehInfantil ? 'nome' : 'descricao';
+        const nomeParametro = ehInfantil && !(codigoUe === OPCAO_TODOS) ? 'nome' : 'descricao';
         const lista = retorno.data.map(item => ({
           desc: item[nomeParametro],
           valor: String(item.codigo),
@@ -619,7 +620,6 @@ const RelatorioFrequencia = () => {
     setListaAnosEscolares([]);
     setAnosEscolares(undefined);
 
-    setTipoRelatorio(TIPO_RELATORIO.TURMA);
     setModoEdicao(true);
   };
 
