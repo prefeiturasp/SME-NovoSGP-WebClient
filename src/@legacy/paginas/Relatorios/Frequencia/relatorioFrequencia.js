@@ -916,6 +916,7 @@ const RelatorioFrequencia = () => {
                   desabilitado={
                     !codigoUe ||
                     desabilitarTipoRelatorio ||
+                    modalidadeId ||
                     desabilitarSemestre
                   }
                 />

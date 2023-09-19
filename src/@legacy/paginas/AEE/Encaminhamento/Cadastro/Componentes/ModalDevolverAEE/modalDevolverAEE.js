@@ -16,7 +16,7 @@ const ModalDevolverAEE = () => {
   const navigate = useNavigate();
   const paramsRoute = useParams();
 
-  const encaminhamentoId = paramsRoute?.id || 0;
+  const EncaminhamentoAEEId = paramsRoute?.id || 0;
 
   const exibirModalDevolverAEE = useSelector(
     store => store.encaminhamentoAEE.exibirModalDevolverAEE
@@ -73,7 +73,7 @@ const ModalDevolverAEE = () => {
     setExibirLoader(true);
 
     const retorno = await ServicoEncaminhamentoAEE.devolverEncaminhamentoAEE({
-      encaminhamentoId,
+      EncaminhamentoAEEId,
       motivo,
     })
       .catch(e => erros(e))
