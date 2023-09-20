@@ -521,44 +521,6 @@ const ListaDiarioBordo = () => {
                             />
                           </div>
                         </div>
-                        <div className="col-sm-12 d-flex justify-content-end mb-4">
-                          <Button
-                            id={shortid.generate()}
-                            label={
-                              id
-                                ? 'Consultar diário completo'
-                                : 'Inserir novo diário'
-                            }
-                            icon="book"
-                            color={Colors.Azul}
-                            border
-                            onClick={onClickConsultarDiario}
-                          />
-                        </div>
-                        <div className="col-sm-12 p-0 position-relative">
-                          <ObservacoesUsuario
-                            esconderLabel={pendente}
-                            esconderCaixaExterna={pendente}
-                            desabilitarBotaoNotificar={pendente}
-                            mostrarListaNotificacao={!pendente}
-                            salvarObservacao={obs =>
-                              salvarEditarObservacao(obs)
-                            }
-                            editarObservacao={obs =>
-                              salvarEditarObservacao(obs)
-                            }
-                            obterUsuariosNotificar={() =>
-                              !pendente && obterUsuariosNotificar(id)
-                            }
-                            carregarListaUsuariosNotificar={
-                              carregarListaUsuariosNotificar
-                            }
-                            excluirObservacao={obs => excluirObservacao(obs)}
-                            permissoes={permissoesTela}
-                            dreId={turmaSelecionada.dre}
-                            ueId={turmaSelecionada.unidadeEscolar}
-                          />
-                        </div>
                       </Loader>
                     </PainelCollapse.Painel>
                   );
