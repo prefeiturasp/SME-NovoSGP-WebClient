@@ -1,21 +1,25 @@
 import { Tooltip } from 'antd';
 import * as moment from 'moment';
 import PropTypes from 'prop-types';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import styled from 'styled-components';
 import { DataTable } from '~/componentes';
 import Button from '~/componentes/button';
 import { Base, Colors } from '~/componentes/colors';
 import Label from '~/componentes/label';
 import { confirmar } from '~/servicos';
-import ModalCadastroAtendimentoClinico from './modalCadastroAtendimentoClinico';
 import ColunaDimensionavel from '../ColunaDimensionavel/colunaDimensionavel';
+import ModalCadastroAtendimentoClinico from './modalCadastroAtendimentoClinico';
 
 const AtendimentoClinicoTabela = props => {
   const { label, questaoAtual, form, desabilitado, onChange } = props;
 
   const [exibirModal, setExibirModal] = useState(false);
   const [dadosIniciais, setDadosIniciais] = useState();
+
+  const dadosAtuais = form?.values?.[questaoAtual.id]?.length
+    ? form?.values?.[questaoAtual.id]
+    : [];
 
   const onClickNovoDetalhamento = () => {
     setExibirModal(true);
@@ -26,20 +30,19 @@ const AtendimentoClinicoTabela = props => {
     setDadosIniciais();
 
     if (novosDados) {
-      const dadosAtuais = form?.values?.[questaoAtual.id]?.length
-        ? form?.values?.[questaoAtual.id]
-        : [];
       if (novosDados?.id) {
         const indexItemAnterior = dadosAtuais.findIndex(
           x => x.id === novosDados.id
         );
+
         dadosAtuais[indexItemAnterior] = novosDados;
       } else {
         novosDados.id = dadosAtuais.length + 1;
         dadosAtuais.push(novosDados);
       }
+
       if (form) {
-        form.setFieldValue(questaoAtual.id, dadosAtuais);
+        form.setFieldValue(questaoAtual.id, [...dadosAtuais]);
         onChange();
       }
     }
@@ -106,17 +109,12 @@ const AtendimentoClinicoTabela = props => {
                     );
 
                     if (confirmado) {
-                      const dadosAtuais = form?.values?.[questaoAtual.id]
-                        ?.length
-                        ? form?.values?.[questaoAtual.id]
-                        : [];
-
                       const indice = dadosAtuais.findIndex(
                         item => item.id === linha.id
                       );
                       if (indice !== -1) {
                         dadosAtuais.splice(indice, 1);
-                        form.setFieldValue(questaoAtual.id, dadosAtuais);
+                        form.setFieldValue(questaoAtual.id, [...dadosAtuais]);
                         onChange();
                       }
                     }
@@ -165,11 +163,7 @@ const AtendimentoClinicoTabela = props => {
       <div className={possuiErro() ? 'tabela-invalida' : ''}>
         <DataTable
           columns={colunas}
-          dataSource={
-            form?.values?.[questaoAtual.id]?.length
-              ? form?.values?.[questaoAtual.id]
-              : []
-          }
+          dataSource={dadosAtuais}
           pagination={false}
           onClickRow={onClickRow}
         />
