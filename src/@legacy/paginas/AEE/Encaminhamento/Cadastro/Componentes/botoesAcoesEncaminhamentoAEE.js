@@ -72,7 +72,10 @@ const BotoesAcoesEncaminhamentoAEE = () => {
     );
     if (salvou) {
       sucesso(`Rascunho salvo com sucesso`);
-      obterEncaminhamentoPorId();
+    
+      if(encaminhamentoId){
+        obterEncaminhamentoPorId();
+      }    
     }
   };
 
