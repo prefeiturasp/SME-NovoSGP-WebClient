@@ -1,5 +1,5 @@
 import { Col, Row } from 'antd';
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import BotaoExcluirPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoExcluirPadrao';
 import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
@@ -72,6 +72,10 @@ const BotoesAcoesEncaminhamentoAEE = () => {
     );
     if (salvou) {
       sucesso(`Rascunho salvo com sucesso`);
+    
+      if(encaminhamentoId){
+        obterEncaminhamentoPorId();
+      }    
     }
   };
 
@@ -219,6 +223,10 @@ const BotoesAcoesEncaminhamentoAEE = () => {
       }
     }
   };
+
+  const obterEncaminhamentoPorId = useCallback(async () => {
+    ServicoEncaminhamentoAEE.obterEncaminhamentoPorId(encaminhamentoId);
+  }, [encaminhamentoId]);
 
   const ocultarBtnExcluir =
     (dadosEncaminhamento?.situacao !== situacaoAEE.Encaminhado &&
