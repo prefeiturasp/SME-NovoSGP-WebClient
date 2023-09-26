@@ -194,7 +194,7 @@ const JoditEditor = forwardRef((props, ref) => {
     askBeforePasteHTML: valideClipboardHTML,
     // iframe: true, // TODO bug jodit-react
     defaultActionOnPaste: 'insert_clear_html',
-    defaultActionOnPasteFromWord: 'insert_as_html',
+    defaultActionOnPasteFromWord: 'insert_as_text',
     disablePlugins: ['image-properties', disablePlugins],
     iframeStyle: `${iframeStyle} img{max-width: 100%;max-height: 700px;object-fit: cover;}`,
     style: {
@@ -461,7 +461,19 @@ const JoditEditor = forwardRef((props, ref) => {
 
   useEffect(() => {
     if (textArea?.current?.setEditorValue) {
-      textArea.current.setEditorValue(value);
+      const tempDiv = document.createElement('div');
+      tempDiv.innerHTML = value;
+
+      tempDiv.querySelectorAll('*').forEach(elemento => {
+        while (elemento.attributes.length > 0) {
+          elemento.removeAttribute(elemento.attributes[0].name);
+        }
+      });
+
+      let newValue = tempDiv.innerHTML;
+
+      textArea.current.setEditorValue(newValue);
+
       bloquearTraducaoNavegador();
     }
   }, [textArea, value]);
