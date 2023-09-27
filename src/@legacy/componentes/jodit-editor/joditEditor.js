@@ -1,10 +1,10 @@
+import { store } from '@/core/redux';
 import { Field } from 'formik';
 import { Jodit } from 'jodit';
 import 'jodit/build/jodit.min.css';
 import PropTypes from 'prop-types';
-import React, { forwardRef, useEffect, useRef, useState } from 'react';
+import { forwardRef, useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
-import { store } from '@/core/redux';
 import { erro } from '~/servicos/alertas';
 import { urlBase } from '~/servicos/variaveis';
 import { Base } from '../colors';
@@ -193,6 +193,7 @@ const JoditEditor = forwardRef((props, ref) => {
     askBeforePasteHTML: valideClipboardHTML,
     // iframe: true, // TODO bug jodit-react
     defaultActionOnPaste: 'insert_clear_html',
+    defaultActionOnPasteFromWord: 'insert_as_text',
     disablePlugins: ['image-properties', disablePlugins],
     iframeStyle: `${iframeStyle} img{max-width: 100%;max-height: 700px;object-fit: cover;}`,
     style: {
@@ -459,7 +460,19 @@ const JoditEditor = forwardRef((props, ref) => {
 
   useEffect(() => {
     if (textArea?.current?.setEditorValue) {
-      textArea.current.setEditorValue(value);
+      const tempDiv = document.createElement('div');
+      tempDiv.innerHTML = value;
+
+      tempDiv.querySelectorAll('*').forEach(elemento => {
+        while (elemento.attributes.length > 0) {
+          elemento.removeAttribute(elemento.attributes[0].name);
+        }
+      });
+
+      let newValue = tempDiv.innerHTML;
+
+      textArea.current.setEditorValue(newValue);
+
       bloquearTraducaoNavegador();
     }
   }, [textArea, value]);
