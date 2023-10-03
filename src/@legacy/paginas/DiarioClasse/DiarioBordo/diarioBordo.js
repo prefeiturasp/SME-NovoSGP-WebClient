@@ -669,9 +669,11 @@ const DiarioBordo = () => {
         ''
       )}
       {turmaSelecionada.turma ? <AlertaPermiteSomenteTurmaInfantil /> : ''}
+
+      {dataSelecionada && carregandoData ? 
       <AlertaPeriodoEncerrado
         exibir={!dadosDiarioBordo?.temPeriodoAberto && !somenteConsulta}
-      />
+      /> : ''}
       <ModalMultiLinhas
         key="erros-diario-bordo"
         visivel={mostrarErros}
