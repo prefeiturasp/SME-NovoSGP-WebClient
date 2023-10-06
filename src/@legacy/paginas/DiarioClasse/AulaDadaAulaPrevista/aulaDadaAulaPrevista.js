@@ -233,12 +233,21 @@ const AulaDadaAulaPrevista = () => {
         onChangeDisciplinas(disciplina.id);
         setDesabilitarDisciplina(true);
       }
+      else if(disciplinas?.data?.length > 1){
+        setDadosLista([]);
+        setModoEdicao(false);
+        setDisciplinaIdSelecionada(undefined);
+        setListaDisciplinas(disciplinas.data);
+        setDesabilitarDisciplina(false);
+        setAuditoria(undefined);
+      }
     };
+
     if (
       turmaId &&
       !ehTurmaInfantil(modalidadesFiltroPrincipal, turmaSelecionada)
     ) {
-      obterDisciplinas();
+      obterDisciplinas();    
     } else {
       setDadosLista([]);
       setModoEdicao(false);
