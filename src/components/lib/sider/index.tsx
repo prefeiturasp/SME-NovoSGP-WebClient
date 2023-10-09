@@ -11,7 +11,7 @@ import MenuItem from 'antd/es/menu/MenuItem';
 import {
   SiderContainer,
   SiderIconContainer,
-  SiderMenuButtonTogleStyle,
+  SiderMenuButtonToggleStyle,
   SiderMenuContainer,
   SiderMenuGroup,
   SiderMenuTitle,
@@ -57,7 +57,7 @@ export type MenuSMEProps = {
   styleSider?: CSSProperties | undefined;
   logoMenu?: string | undefined;
   onClick: (item: MenuItemSMEProps) => void;
-  onClickMenuButtonTogle?: (collapsed: boolean) => void;
+  onClickMenuButtonToggle?: (collapsed: boolean) => void;
 };
 
 const Sider: React.FC<MenuSMEProps> = ({
@@ -66,7 +66,7 @@ const Sider: React.FC<MenuSMEProps> = ({
   styleSider = {},
   logoMenu,
   onClick,
-  onClickMenuButtonTogle,
+  onClickMenuButtonToggle,
 }) => {
   const [collapsed, setCollapsed] = useState(true);
 
@@ -119,7 +119,7 @@ const Sider: React.FC<MenuSMEProps> = ({
       trigger={null}
       collapsible
     >
-      <SiderMenuButtonTogleStyle collapsed={collapsed}>
+      <SiderMenuButtonToggleStyle collapsed={collapsed}>
         {collapsed ? null : <img src={logoMenu} alt="logo-menu" />}
         <Button
           type="text"
@@ -127,10 +127,10 @@ const Sider: React.FC<MenuSMEProps> = ({
           onClick={() => {
             const newValue = !collapsed;
             setCollapsed(newValue);
-            if (onClickMenuButtonTogle) onClickMenuButtonTogle(newValue);
+            if (onClickMenuButtonToggle) onClickMenuButtonToggle(newValue);
           }}
         />
-      </SiderMenuButtonTogleStyle>
+      </SiderMenuButtonToggleStyle>
 
       <SiderMenuContainer collapsed={collapsed}>
         <Menu

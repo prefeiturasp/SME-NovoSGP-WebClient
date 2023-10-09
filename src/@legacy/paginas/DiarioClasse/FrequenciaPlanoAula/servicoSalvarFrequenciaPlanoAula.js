@@ -128,10 +128,12 @@ class ServicoSalvarFrequenciaPlanoAula {
         exibirSwitchEscolhaObjetivos
           ? checkedExibirEscolhaObjetivos &&
             componenteCurricular.possuiObjetivos &&
+            !componenteCurricular?.objetivosAprendizagemOpcionais &&
             !ServicoPlanoAula.temPeloMenosUmObjetivoSelecionado(
               dadosPlanoAula.objetivosAprendizagemComponente
             )
           : componenteCurricular.possuiObjetivos &&
+            !componenteCurricular?.objetivosAprendizagemOpcionais &&
             !ServicoPlanoAula.temPeloMenosUmObjetivoSelecionado(
               dadosPlanoAula.objetivosAprendizagemComponente
             )

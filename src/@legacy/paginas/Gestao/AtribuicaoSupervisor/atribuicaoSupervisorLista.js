@@ -35,6 +35,7 @@ export default function AtribuicaoSupervisorLista() {
   const [carregandoResponsavel, setCarregandoResponsavel] = useState(false);
   const [carregandoLista, setCarregandoLista] = useState(false);
   const [paginaAtual, setPaginaAtual] = useState(1);
+  const [numeroRegistrosPagina, setNumeroRegistrosPagina] = useState(10);
 
   const usuario = useSelector(store => store.usuario);
   const permissoesTela =
@@ -536,11 +537,13 @@ export default function AtribuicaoSupervisorLista() {
                   dataSource={listaFiltroAtribuicao}
                   semHover
                   pagination={{
-                    pageSize: 10,
+                    pageSize: numeroRegistrosPagina,
                     total: listaFiltroAtribuicao?.length,
                     defaultCurrent: 1,
                     current: paginaAtual,
+                    locale: { items_per_page: '' },
                     onChange: p => setPaginaAtual(p),
+                    onShowSizeChange: p => setNumeroRegistrosPagina (p.pageSize)
                   }}
                 />
               </Loader>
