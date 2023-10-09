@@ -1692,7 +1692,7 @@ route.set(ROUTES.RELATORIO_DINAMICO_NAAPA, {
   component: RelatorioDinamicoNAAPA,
   exact: true,
   tipo: RotasTipo.EstruturadaAutenticada,
-  // temPermissionamento: true,
+  temPermissionamento: true,
   chavePermissao: ROUTES.RELATORIO_DINAMICO_NAAPA,
 });
 
