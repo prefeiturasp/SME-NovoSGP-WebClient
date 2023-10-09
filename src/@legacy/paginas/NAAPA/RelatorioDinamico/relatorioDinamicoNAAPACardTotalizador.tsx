@@ -1,7 +1,7 @@
 import { Base } from '@/@legacy/componentes';
 import { ColorsCards } from '@/@legacy/componentes/colors';
 import { TotalRegistroPorModalidadeRelatorioDinamicoNAAPADTO } from '@/core/dto/TotalRegistroPorModalidadeRelatorioDinamicoNAAPADTO';
-import { ModalidadeEnum, ModalidadeEnumDisplay } from '@/core/enum/modalidade-enum';
+import { ModalidadeEnumDisplay } from '@/core/enum/modalidade-enum';
 import { Col, Divider, Row } from 'antd';
 import React from 'react';
 import styled from 'styled-components';
@@ -40,12 +40,18 @@ const LabelCard = styled.div<ContainerProps>`
 type RelatorioDinamicoNAAPACardTotalizadorProps = {
   totalRegistroPorModalidadesAno: TotalRegistroPorModalidadeRelatorioDinamicoNAAPADTO[];
   totalEncaminhamentos: number;
-  modalidade: ModalidadeEnum;
+  exibirCardsPorModalidade: boolean;
+  exibirCardsPorAno: boolean;
 };
 
 const RelatorioDinamicoNAAPACardTotalizador: React.FC<
   RelatorioDinamicoNAAPACardTotalizadorProps
-> = ({ totalEncaminhamentos, totalRegistroPorModalidadesAno, modalidade }) => {
+> = ({
+  totalEncaminhamentos,
+  totalRegistroPorModalidadesAno,
+  exibirCardsPorModalidade,
+  exibirCardsPorAno,
+}) => {
   return (
     <Col xs={24}>
       <Row gutter={[16, 16]}>
@@ -63,7 +69,7 @@ const RelatorioDinamicoNAAPACardTotalizador: React.FC<
         ) : (
           <></>
         )}
-        {modalidade ? (
+        {exibirCardsPorModalidade ? (
           <>
             <Col xs={24}>
               <TitleCard>Total por modalidade</TitleCard>
@@ -85,7 +91,7 @@ const RelatorioDinamicoNAAPACardTotalizador: React.FC<
           <></>
         )}
 
-        {!modalidade ? (
+        {exibirCardsPorAno ? (
           <>
             <Col xs={24}>
               <TitleCard>Total por ano</TitleCard>

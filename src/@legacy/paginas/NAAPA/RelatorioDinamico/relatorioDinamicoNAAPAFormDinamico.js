@@ -13,7 +13,7 @@ import PropTypes from 'prop-types';
 import { useCallback, useEffect, useState } from 'react';
 
 const RelatorioDinamicoNAAPAFormDinamico = props => {
-  const { form, onChangeCampos, dadosQuestionario } = props;
+  const { form, dadosQuestionario } = props;
 
   const modalidade = form.values?.modalidade;
 
@@ -43,6 +43,7 @@ const RelatorioDinamicoNAAPAFormDinamico = props => {
       obterQuestoes();
     } else {
       setDataSource([]);
+      store.dispatch(setLimparDadosQuestionarioDinamico());
     }
   }, [modalidade, obterQuestoes]);
 
@@ -68,7 +69,7 @@ const RelatorioDinamicoNAAPAFormDinamico = props => {
         />
       </Col>
 
-      {exibirCamposFiltroAvancado ? (
+      {dataSource?.length && exibirCamposFiltroAvancado ? (
         <Col xs={24}>
           <Loader loading={exibirLoader}>
             <Row gutter={[0, 24]}>
@@ -86,7 +87,6 @@ const RelatorioDinamicoNAAPAFormDinamico = props => {
                     QuestionarioDinamicoFuncoes.guardarSecaoEmEdicao(
                       dadosQuestionario?.id
                     );
-                    onChangeCampos();
                   }}
                 />
               </Col>
@@ -101,13 +101,11 @@ const RelatorioDinamicoNAAPAFormDinamico = props => {
 };
 
 RelatorioDinamicoNAAPAFormDinamico.propTypes = {
-  onChangeCampos: PropTypes.func,
   form: PropTypes.oneOfType([PropTypes.any]),
 };
 
 RelatorioDinamicoNAAPAFormDinamico.defaultProps = {
   form: null,
-  onChangeCampos: () => null,
 };
 
 export default RelatorioDinamicoNAAPAFormDinamico;
