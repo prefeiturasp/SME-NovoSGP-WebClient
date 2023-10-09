@@ -53,7 +53,7 @@ const CampoDinamicoPeriodo = props => {
     <ColunaDimensionavel dimensao={questaoAtual?.dimensao}>
       {label}
       <div className="row">
-        <div className="col-md-2">
+        <div className="col-md">
           <CampoData
             form={form}
             placeholder="Início"
@@ -75,7 +75,7 @@ const CampoDinamicoPeriodo = props => {
           {obterErroPorCampo('periodoInicio')}
         </div>
         <span style={{ marginTop: 5 }}>à</span>
-        <div className="col-md-2">
+        <div className="col-md">
           <CampoData
             form={form}
             placeholder="Fim"
