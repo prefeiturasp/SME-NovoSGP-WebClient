@@ -32,8 +32,10 @@ const ModalAnotacoesFrequencia = props => {
 
   useEffect(() => {
     return () => {
-      dispatch(setDadosModal({}));
-      dispatch(setExibirModal(false));
+      if(!dadosModal?.codigoAluno){
+        dispatch(setDadosModal({}));
+        dispatch(setExibirModal(false));
+      }
     };
   }, [dispatch, setExibirModal, setDadosModal]);
 
