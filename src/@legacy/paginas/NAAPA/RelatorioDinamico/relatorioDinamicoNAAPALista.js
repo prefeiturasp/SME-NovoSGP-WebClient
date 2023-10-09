@@ -47,7 +47,7 @@ const RelatorioDinamicoNAAPALista = ({ form, dadosQuestionario }) => {
 
   const [dados, setDados] = useState();
 
-  const ids = dataSource?.map(item => item?.id);
+  const encaminhamentosNAAPAIds = dados?.encaminhamentosNAAPAIds;
 
   const exibirCardsPorModalidade = modalidade && modalidade === OPCAO_TODOS;
 
@@ -202,7 +202,7 @@ const RelatorioDinamicoNAAPALista = ({ form, dadosQuestionario }) => {
     const params = {
       dreCodigo: valuesClone?.dreCodigo,
       ueCodigo: valuesClone?.ueCodigo,
-      ids,
+      ids: encaminhamentosNAAPAIds,
     };
 
     ServicoRelatorioEncaminhamentoNAAPA.gerar(params)
@@ -250,7 +250,7 @@ const RelatorioDinamicoNAAPALista = ({ form, dadosQuestionario }) => {
           border
           bold
           onClick={() => onClickGerar()}
-          disabled={desabilitarGerar || !ids?.length}
+          disabled={desabilitarGerar || !encaminhamentosNAAPAIds?.length}
         />
       </Col>
       <Col xs={24}>
