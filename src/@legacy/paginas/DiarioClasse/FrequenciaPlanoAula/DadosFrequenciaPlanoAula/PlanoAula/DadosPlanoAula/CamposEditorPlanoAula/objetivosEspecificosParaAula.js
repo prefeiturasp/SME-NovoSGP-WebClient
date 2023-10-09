@@ -63,10 +63,12 @@ const ObjetivosEspecificosParaAula = () => {
     return exibirSwitchEscolhaObjetivos
       ? checkedExibirEscolhaObjetivos &&
           componenteCurricular.possuiObjetivos &&
+          !componenteCurricular?.objetivosAprendizagemOpcionais &&
           !ServicoPlanoAula.temPeloMenosUmObjetivoSelecionado(
             objetivosAprendizagemComponente
           )
       : componenteCurricular.possuiObjetivos &&
+          !componenteCurricular?.objetivosAprendizagemOpcionais &&
           !ServicoPlanoAula.temPeloMenosUmObjetivoSelecionado(
             objetivosAprendizagemComponente
           );

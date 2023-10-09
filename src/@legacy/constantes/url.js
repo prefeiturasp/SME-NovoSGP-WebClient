@@ -5,3 +5,4 @@ export const URL_HOME = '/';
 export const URL_LOGIN = '/login';
 export const URL_RECUPERARSENHA = '/recuperar-senha';
 export const URL_REDEFINIRSENHA = '/redefinir-senha';
+export const URL_PENDENCIAFECHAMENTO = '/fechamento/pendencias-fechamento';

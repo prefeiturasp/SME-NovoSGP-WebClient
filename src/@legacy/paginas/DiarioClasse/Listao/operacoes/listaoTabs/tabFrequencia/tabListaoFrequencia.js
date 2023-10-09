@@ -80,7 +80,8 @@ const TabListaoFrequencia = () => {
       if (
         periodoAbertoListao &&
         dadosCarregar?.aulas?.length &&
-        aulaSemFrequenciaId
+        aulaSemFrequenciaId &&
+        componenteCurricular?.registraFrequencia
       ) {
         dispatch(setTelaEmEdicao(true));
       }
