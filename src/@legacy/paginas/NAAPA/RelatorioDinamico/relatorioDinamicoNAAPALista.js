@@ -45,9 +45,8 @@ const RelatorioDinamicoNAAPALista = ({ form, dadosQuestionario }) => {
   const [numeroRegistros, setNumeroRegistros] = useState(1);
   const [exibirLoader, setExibirLoader] = useState(false);
 
-  const [dados, setDados] = useState();
-
-  const encaminhamentosNAAPAIds = dados?.encaminhamentosNAAPAIds;
+  const encaminhamentosNAAPAIds = dataSource?.encaminhamentosNAAPAIds;
+  const encaminhamentosNAAPAPaginado = dataSource?.encaminhamentosNAAPAPaginado;
 
   const exibirCardsPorModalidade = modalidade && modalidade === OPCAO_TODOS;
 
@@ -149,15 +148,13 @@ const RelatorioDinamicoNAAPALista = ({ form, dadosQuestionario }) => {
           resposta?.data?.encaminhamentosNAAPAPaginado;
 
         if (encaminhamentosNAAPAPaginado?.items?.length) {
-          setDataSource(encaminhamentosNAAPAPaginado.items);
           setNumeroRegistros(encaminhamentosNAAPAPaginado?.totalRegistros);
           setDesabilitarGerar(false);
         } else {
           setNumeroRegistros(0);
-          setDataSource([]);
         }
 
-        setDados(resposta.data);
+        setDataSource(resposta.data);
       } else {
         setDataSource([]);
         setNumeroRegistros(0);
@@ -169,15 +166,7 @@ const RelatorioDinamicoNAAPALista = ({ form, dadosQuestionario }) => {
   );
 
   useEffect(() => {
-    if (
-      !anoLetivo ||
-      !dreCodigo ||
-      !ueCodigo ||
-      !modalidade ||
-      !anosEscolaresCodigos?.length
-    ) {
-      setDataSource([]);
-    }
+    setDataSource([]);
   }, [anoLetivo, dreCodigo, ueCodigo, modalidade, anosEscolaresCodigos]);
 
   const validaAntesDeFiltrar = () => {
@@ -218,12 +207,14 @@ const RelatorioDinamicoNAAPALista = ({ form, dadosQuestionario }) => {
 
   return (
     <>
-      {dataSource?.length ? (
+      {encaminhamentosNAAPAPaginado?.items?.length ? (
         <RelatorioDinamicoNAAPACardTotalizador
           exibirCardsPorModalidade={exibirCardsPorModalidade}
           exibirCardsPorAno={exibirCardsPorAno}
-          totalEncaminhamentos={dados?.totalRegistro}
-          totalRegistroPorModalidadesAno={dados?.totalRegistroPorModalidadesAno}
+          totalEncaminhamentos={dataSource?.totalRegistro}
+          totalRegistroPorModalidadesAno={
+            dataSource?.totalRegistroPorModalidadesAno
+          }
         />
       ) : (
         <></>
@@ -250,7 +241,11 @@ const RelatorioDinamicoNAAPALista = ({ form, dadosQuestionario }) => {
           border
           bold
           onClick={() => onClickGerar()}
-          disabled={desabilitarGerar || !encaminhamentosNAAPAIds?.length}
+          disabled={
+            desabilitarGerar ||
+            !encaminhamentosNAAPAIds?.length ||
+            !form.isValid
+          }
         />
       </Col>
       <Col xs={24}>
@@ -258,12 +253,12 @@ const RelatorioDinamicoNAAPALista = ({ form, dadosQuestionario }) => {
           loading={exibirLoader}
           id={SGP_TABLE_RELATORIO_DINAMICO_NAAPA}
           columns={colunas}
-          dataSource={dataSource}
+          dataSource={encaminhamentosNAAPAPaginado?.items}
           pagination={false}
           semHover
         />
       </Col>
-      {dados?.totalRegistro ? (
+      {dataSource?.totalRegistro ? (
         <Col xs={24}>
           <Pagination
             showSizeChanger
