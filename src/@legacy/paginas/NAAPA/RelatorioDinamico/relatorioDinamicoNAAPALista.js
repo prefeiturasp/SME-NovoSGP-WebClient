@@ -64,10 +64,6 @@ const RelatorioDinamicoNAAPALista = ({ form, dadosQuestionario }) => {
 
   const colunas = [
     {
-      title: 'Unidade Escolar (UE)',
-      dataIndex: 'unidadeEscolar',
-    },
-    {
       title: 'Criança/Estudante',
       dataIndex: 'estudante',
     },
@@ -91,10 +87,17 @@ const RelatorioDinamicoNAAPALista = ({ form, dadosQuestionario }) => {
     },
   ];
 
-  if (dreCodigo !== OPCAO_TODOS) {
+  if (dreCodigo === OPCAO_TODOS) {
     colunas.unshift({
       title: 'DRE',
       dataIndex: 'dre',
+    });
+  }
+
+  if (ueCodigo === OPCAO_TODOS) {
+    colunas.unshift({
+      title: 'Unidade Escolar (UE)',
+      dataIndex: 'unidadeEscolar',
     });
   }
 
