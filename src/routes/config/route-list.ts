@@ -117,13 +117,14 @@ import RelatorioRegistroItinerancia from '~/paginas/Relatorios/AEE/registroItine
 import RelatorioControleFrequenciaMensal from '~/paginas/Relatorios/Frequencia/RelatorioControleFrequenciaMensal/relatorioControleFrequenciaMensal';
 import RelatorioPAP from '@/@legacy/paginas/Relatorios/PAP/RelatorioPAP/relatorioPAP';
 import RelatorioOcorrencias from '@/@legacy/paginas/Relatorios/Gestao/Ocorrencias/relatorioOcorrencias';
+import RelatorioDinamicoNAAPA from '@/@legacy/paginas/NAAPA/RelatorioDinamico/relatorioDinamicoNAAPA';
 
 export interface RouteProps {
   path: string;
   breadcrumbName: string[];
   menu: string[];
   parent: string;
-  component: () => JSX.Element;
+  component: () => any;
   exact: boolean;
   tipo: number;
   temPermissionamento: boolean;
@@ -1682,6 +1683,17 @@ route.set(ROUTES.RELATORIO_OCORRENCIAS, {
   tipo: RotasTipo.EstruturadaAutenticada,
   temPermissionamento: true,
   chavePermissao: ROUTES.RELATORIO_OCORRENCIAS,
+});
+
+route.set(ROUTES.RELATORIO_DINAMICO_NAAPA, {
+  breadcrumbName: 'Relatório Dinâmico',
+  menu: ['NAAPA'],
+  parent: '/',
+  component: RelatorioDinamicoNAAPA,
+  exact: true,
+  tipo: RotasTipo.EstruturadaAutenticada,
+  temPermissionamento: true,
+  chavePermissao: ROUTES.RELATORIO_DINAMICO_NAAPA,
 });
 
 const getRoutesArray = () => {

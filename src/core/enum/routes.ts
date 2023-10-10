@@ -101,4 +101,5 @@ export enum ROUTES {
   AUTENTICACAO_INTEGRACOES_FREQUENCIA = '/autenticacao/integracoes/frequencia/:tokenIntegracaoFrequencia',
   RELATORIO_PAP = '/relatorios/pap/relatorio-pap',
   RELATORIO_OCORRENCIAS = '/relatorios/gestao/ocorrencias',
+  RELATORIO_DINAMICO_NAAPA = '/naapa/relatorio-dinamico',
 }

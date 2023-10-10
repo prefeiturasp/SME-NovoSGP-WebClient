@@ -1,3 +1,4 @@
+import * as moment from 'moment';
 import { store } from '@/core/redux';
 import _, { groupBy } from 'lodash';
 import tipoQuestao from '~/dtos/tipoQuestao';
@@ -11,7 +12,6 @@ import {
   setResetarTabela,
 } from '~/redux/modulos/questionarioDinamico/actions';
 import { confirmar, erros } from '~/servicos';
-
 class QuestionarioDinamicoFuncoes {
   agruparCamposDuplicados = (data, campo) => {
     if (data?.length) {
@@ -595,6 +595,7 @@ class QuestionarioDinamicoFuncoes {
             let questao = {
               questaoId: key,
               tipoQuestao: questaoAtual.tipoQuestao,
+              nomeComponente: questaoAtual?.nomeComponente,
             };
 
             switch (questao.tipoQuestao) {
@@ -617,6 +618,20 @@ class QuestionarioDinamicoFuncoes {
               case tipoQuestao.ComboMultiplaEscolha:
                 if (campos[key]?.length) {
                   questao.resposta = campos[key];
+                } else {
+                  questao.resposta = '';
+                }
+                break;
+              case tipoQuestao.Periodo:
+                if (campos[key]?.periodoInicio && campos[key]?.periodoFim) {
+                  questao.resposta = JSON.stringify([
+                    campos[key].periodoInicio
+                      ? moment(campos[key].periodoInicio).format('DD/MM/YYYY')
+                      : '',
+                    campos[key].periodoFim
+                      ? moment(campos[key].periodoFim).format('DD/MM/YYYY')
+                      : '',
+                  ]);
                 } else {
                   questao.resposta = '';
                 }
@@ -699,7 +714,7 @@ class QuestionarioDinamicoFuncoes {
                 }
               });
             } else {
-              if (questaoAtual?.resposta[0]?.id) {
+              if (questaoAtual?.resposta?.[0]?.id) {
                 questao.respostaEncaminhamentoId = questaoAtual.resposta[0].id;
               }
 

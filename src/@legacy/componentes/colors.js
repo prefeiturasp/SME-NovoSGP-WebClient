@@ -105,4 +105,12 @@ const CoresGraficos = [
   '#FF8A65',
 ];
 
-export { Colors, Base, Active, Hover, CoresGraficos };
+const ColorsCards = [
+  '#AE2577',
+  '#D06D12',
+  '#086397',
+  '#0C6B45',
+  ...CoresGraficos,
+];
+
+export { Colors, Base, Active, Hover, CoresGraficos, ColorsCards };
