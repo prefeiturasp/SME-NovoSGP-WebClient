@@ -45,7 +45,6 @@ import PendenciasFechamentoForm from '~/paginas/Fechamento/PendenciasFechamento/
 import ComunicadosCadastro from '~/paginas/Gestao/Comunicados/Cadastro/cadastroComunicados';
 import ComunicadosLista from '~/paginas/Gestao/Comunicados/Lista/listaComunicados';
 import ConselhoClasse from '~/paginas/Fechamento/ConselhoClasse/conselhoClasse';
-import RelatorioSemestral from '~/paginas/Relatorios/PAP/RelatorioSemestral/relatorioSemestral';
 import CalendarioProfessor from '~/paginas/CalendarioEscolar/CalendarioProfessor';
 import TerritorioSaber from '~/paginas/Planejamento/TerritorioSaber';
 import HistoricoEscolar from '~/paginas/Relatorios/HistoricoEscolar/historicoEscolar';
@@ -921,16 +920,6 @@ route.set(ROUTES.CONSELHO_CLASSE, {
   chavePermissao: ROUTES.CONSELHO_CLASSE,
 });
 
-route.set(ROUTES.RELATORIO_SEMESTRAL, {
-  breadcrumbName: 'Relatório Semestral',
-  menu: ['Relatórios', 'PAP'],
-  parent: '/',
-  component: RelatorioSemestral,
-  exact: true,
-  tipo: RotasTipo.EstruturadaAutenticada,
-  temPermissionamento: true,
-  chavePermissao: ROUTES.RELATORIO_SEMESTRAL,
-});
 route.set(ROUTES.ATA_FINAL_RESULTADOS, {
   breadcrumbName: 'Ata final de resultados',
   menu: ['Relatórios', 'Atas'],

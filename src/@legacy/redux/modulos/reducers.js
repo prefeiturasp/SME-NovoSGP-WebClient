@@ -7,14 +7,12 @@ import notificacoes from './notificacoes/reducers';
 import perfil from './perfil/reducers';
 import calendarioEscolar from './calendarioEscolar/reducers';
 import calendarioProfessor from './calendarioProfessor/reducers';
-// import bimestres from './planoAnual/reducers';
 import filtro from './filtro/reducers';
 import atribuicaoEsporadica from './atribuicaoEsporadica/reducers';
 import loader from './loader/reducer';
 import notasConceitos from './notasConceitos/reducer';
 import mensagens from './mensagens/reducers';
 import conselhoClasse from './conselhoClasse/reducers';
-import relatorioSemestralPAP from './relatorioSemestralPAP/reducers';
 import sistema from './sistema/reducers';
 import localizadorEstudante from './localizadorEstudante/reducers';
 import localizarEstudante from './localizarEstudante/reducers';
@@ -57,7 +55,6 @@ const reducers = combineReducers({
   perfil,
   calendarioEscolar,
   notificacoes,
-  // bimestres,
   filtro,
   calendarioProfessor,
   atribuicaoEsporadica,
@@ -65,7 +62,6 @@ const reducers = combineReducers({
   notasConceitos,
   mensagens,
   conselhoClasse,
-  relatorioSemestralPAP,
   sistema,
   localizadorEstudante,
   localizarEstudante,
