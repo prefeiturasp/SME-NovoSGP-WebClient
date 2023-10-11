@@ -465,8 +465,10 @@ const JoditEditor = forwardRef((props, ref) => {
       tempDiv.innerHTML = value;
 
       tempDiv.querySelectorAll('*').forEach(elemento => {
-        while (elemento.attributes.length > 0) {
-          elemento.removeAttribute(elemento.attributes[0].name);
+        if (elemento.tagName.toLowerCase() !== 'img') {
+          while (elemento.attributes.length > 0) {
+            elemento.removeAttribute(elemento.attributes[0].name);
+          }
         }
       });
 
