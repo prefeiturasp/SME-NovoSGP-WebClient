@@ -11,8 +11,8 @@ import {
   setExibirLoaderFrequenciaPlanoAula,
   setModoEdicaoPlanoAula,
 } from '~/redux/modulos/frequenciaPlanoAula/actions';
-import { erros } from '~/servicos/alertas';
 import ServicoPlanoAula from '~/servicos/Paginas/DiarioClasse/ServicoPlanoAula';
+import { erros } from '~/servicos/alertas';
 import { ContainerListaObjetivos } from './listaObjetivosPlanoAula.css';
 
 const ListaObjetivosPlanoAula = React.memo(props => {
@@ -21,7 +21,7 @@ const ListaObjetivosPlanoAula = React.memo(props => {
   const dispatch = useDispatch();
 
   const temPeriodoAberto = useSelector(
-    state => state.frequenciaPlanoAula.listaDadosFrequencia?.temPeriodoAberto
+    state => state.frequenciaPlanoAula?.temPeriodoAberto
   );
 
   const dadosPlanoAula = useSelector(
@@ -67,9 +67,8 @@ const ListaObjetivosPlanoAula = React.memo(props => {
   const montarDadosListasObjetivos = useCallback(
     listaObjetivos => {
       const objetivosPlanoAula = obterObjetivosPlanoAulaComponenteAtual();
-      const objetivosPlanoAnual = obterObjetivosPlanoAnualComponenteAtual(
-        listaObjetivos
-      );
+      const objetivosPlanoAnual =
+        obterObjetivosPlanoAnualComponenteAtual(listaObjetivos);
 
       let listaEsquerda = [];
       let listaDireita = [];
@@ -187,14 +186,16 @@ const ListaObjetivosPlanoAula = React.memo(props => {
   const obterIndexComponenteJaInseridoPlanoAula = () => {
     // Pegar a lista de objetivos  já inseridos no Plano de Aula pelo componente curricular selecionado na tab!
     // Pega o index desse componente e remove o componente na lista de objetivos já inseridos no Plano de Aula pelo componente curricular selecionado na tab!
-    const componenteParaRemover = dadosPlanoAula.objetivosAprendizagemComponente.find(
-      item =>
-        String(item.componenteCurricularId) ===
-        String(tabAtualComponenteCurricular.codigoComponenteCurricular)
-    );
-    const indexComponente = dadosPlanoAula.objetivosAprendizagemComponente.indexOf(
-      componenteParaRemover
-    );
+    const componenteParaRemover =
+      dadosPlanoAula.objetivosAprendizagemComponente.find(
+        item =>
+          String(item.componenteCurricularId) ===
+          String(tabAtualComponenteCurricular.codigoComponenteCurricular)
+      );
+    const indexComponente =
+      dadosPlanoAula.objetivosAprendizagemComponente.indexOf(
+        componenteParaRemover
+      );
 
     return indexComponente;
   };
