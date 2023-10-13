@@ -178,6 +178,7 @@ const DiarioBordo = () => {
     setCarregandoGeral(true);
     const componentes = await ServicoDisciplina.obterDisciplinasPorTurma(
       turmaId,
+      false,
       false
     ).catch(e => erros(e));
     if (componentes?.data?.length) {

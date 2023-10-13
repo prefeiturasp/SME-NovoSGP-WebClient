@@ -3,9 +3,10 @@ import api from '~/servicos/api';
 class ServicoDisciplina {
   obterDisciplinasPorTurma = (
     turmaId,
-    realizarAgrupamentoComponente = true
+    realizarAgrupamentoComponente = true,
+    consideraTurmaInfantil = true,
   ) => {
-    const url = `v1/professores/turmas/${turmaId}/disciplinas?realizarAgrupamentoComponente=${realizarAgrupamentoComponente}`;
+    const url = `v1/professores/turmas/${turmaId}/disciplinas?realizarAgrupamentoComponente=${realizarAgrupamentoComponente}&consideraTurmaInfantil=${consideraTurmaInfantil}`;
     return api.get(url);
   };
 
