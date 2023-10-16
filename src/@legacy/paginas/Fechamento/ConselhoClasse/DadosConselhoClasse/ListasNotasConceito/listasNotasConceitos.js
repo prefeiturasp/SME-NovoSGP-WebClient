@@ -198,7 +198,7 @@ const ListasNotasConceitos = props => {
         alunoCodigo,
         turmaCodigo,
         bimestreSelecionado?.valor,
-        dadosAlunoObjectCard.desabilitado ? true : false
+        !!dadosAlunoObjectCard.desabilitado
       )
         .catch(e => erros(e))
         .finally(() => setCarregando(false));
