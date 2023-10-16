@@ -105,8 +105,12 @@ const RelatorioDinamicoNAAPALista = ({ form, dadosQuestionario }) => {
     async (pagina, registrosPagina) => {
       const dadosMapeados =
         await QuestionarioDinamicoFuncoes.mapearQuestionarios(
-          dadosQuestionario
+          dadosQuestionario,
+          true
         );
+
+      const formsValidos = !!dadosMapeados?.formsValidos;
+      if (!(formsValidos || dadosMapeados?.secoes?.length)) return;
 
       const params = {
         historico: consideraHistorico,
