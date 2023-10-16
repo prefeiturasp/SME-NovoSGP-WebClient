@@ -419,9 +419,7 @@ const JoditEditor = forwardRef((props, ref) => {
         if (textArea?.current?.type === 'textarea') {
           textArea.current = Jodit.make(element, config);
           const elementTextArea =
-            textArea?.current?.editorDocument?.getElementsByClassName(
-              'jodit'
-            )?.[0];
+            textArea?.current?.editorDocument?.getElementsByClassName('jodit');
 
           if (elementTextArea?.style) {
             elementTextArea.style.cssText = 'overflow: auto;';
