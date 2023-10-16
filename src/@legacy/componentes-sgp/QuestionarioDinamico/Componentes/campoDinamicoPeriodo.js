@@ -10,6 +10,10 @@ const CampoDinamicoPeriodo = props => {
 
   const id = QuestionarioDinamicoFuncoes.gerarId(prefixId, questaoAtual);
 
+  const opcionais = questaoAtual?.opcionais
+    ? JSON.parse(questaoAtual?.opcionais)
+    : null;
+
   const obterErroQuestaoAtual = () => {
     return form &&
       form?.touched[questaoAtual?.id] &&
@@ -49,6 +53,13 @@ const CampoDinamicoPeriodo = props => {
     return '';
   };
 
+  const desabilitarDataFutura = current => {
+    if (current) {
+      return current >= window.moment();
+    }
+    return false;
+  };
+
   return (
     <ColunaDimensionavel dimensao={questaoAtual?.dimensao}>
       {label}
@@ -71,6 +82,9 @@ const CampoDinamicoPeriodo = props => {
               );
               onChange();
             }}
+            desabilitarData={
+              opcionais?.desabilitarDataFutura ? desabilitarDataFutura : null
+            }
           />
           {obterErroPorCampo('periodoInicio')}
         </div>
@@ -93,6 +107,9 @@ const CampoDinamicoPeriodo = props => {
               );
               onChange();
             }}
+            desabilitarData={
+              opcionais?.desabilitarDataFutura ? desabilitarDataFutura : null
+            }
           />
           {obterErroPorCampo('periodoFim')}
         </div>
