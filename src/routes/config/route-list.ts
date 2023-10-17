@@ -144,7 +144,7 @@ route.set(ROUTES.LOGIN, {
 
 route.set(ROUTES.RELATORIO_BOLETIM_SIMPLES, {
   breadcrumbName: ['Boletim'],
-  menu: ['Fechamento'],
+  menu: ['Documentos Escolares'],
   parent: '/',
   component: BoletimSimples,
   exact: true,
@@ -198,6 +198,7 @@ route.set(`${ROUTES.PAP}`, {
 
 route.set(ROUTES.CALENDARIO_ESCOLAR, {
   breadcrumbName: 'Calendário Escolar',
+  menu: ['Gestão'],
   parent: '/',
   component: CalendarioEscolar,
   exact: true,
@@ -206,7 +207,7 @@ route.set(ROUTES.CALENDARIO_ESCOLAR, {
 
 route.set(ROUTES.TIPO_EVENTOS, {
   breadcrumbName: 'Tipo de Eventos',
-  menu: ['Calendário Escolar'],
+  menu: ['Gestão'],
   parent: '/',
   component: TipoEventosLista,
   exact: true,
@@ -412,7 +413,8 @@ route.set(ROUTES.NOTIFICACOES, {
 });
 
 route.set(ROUTES.MEUS_DADOS, {
-  breadcrumbName: 'Perfil',
+  breadcrumbName: 'Meus Dados',
+  menu: ['Meus Dados'],
   parent: '/',
   component: MeusDados,
   exact: true,
@@ -423,7 +425,7 @@ route.set(ROUTES.MEUS_DADOS, {
 
 route.set(ROUTES.PERIODOS_ESCOLARES, {
   breadcrumbName: 'Períodos Escolares',
-  menu: ['Calendário Escolar'],
+  menu: ['Gestão'],
   parent: '/',
   component: PeriodosEscolares,
   exact: true,
@@ -434,7 +436,7 @@ route.set(ROUTES.PERIODOS_ESCOLARES, {
 
 route.set(ROUTES.REINICIAR_SENHA, {
   breadcrumbName: 'Reiniciar Senha',
-  menu: ['Configurações', 'Usuários'],
+  menu: ['Configurações'],
   parent: '/',
   component: TabsReiniciarSenha,
   exact: true,
@@ -445,7 +447,7 @@ route.set(ROUTES.REINICIAR_SENHA, {
 
 route.set(ROUTES.SUPORTE, {
   breadcrumbName: 'Suporte',
-  menu: ['Configurações', 'Usuários'],
+  menu: ['Configurações'],
   parent: '/',
   component: Suporte,
   exact: true,
@@ -456,7 +458,7 @@ route.set(ROUTES.SUPORTE, {
 
 route.set(ROUTES.TIPO_CALENDARIO_ESCOLAR, {
   breadcrumbName: 'Tipo de Calendário Escolar',
-  menu: ['Calendário Escolar'],
+  menu: ['Gestão'],
   parent: '/',
   component: TipoCalendarioEscolarLista,
   exact: true,
@@ -500,7 +502,7 @@ route.set(ROUTES.PRINCIPAL, {
 
 route.set(ROUTES.TIPO_FERIADO, {
   breadcrumbName: 'Lista de Tipo de Feriado',
-  menu: ['Tipo Feriado'],
+  menu: ['Gestão'],
   parent: '/',
   component: TipoFeriadoLista,
   exact: true,
@@ -540,7 +542,7 @@ route.set(ROUTES.SEM_PERMISSAO, {
 
 route.set(ROUTES.EVENTOS, {
   breadcrumbName: 'Eventos do calendário escolar',
-  menu: ['Calendário escolar'],
+  menu: ['Gestão'],
   parent: '/',
   component: EventosLista,
   exact: true,
@@ -807,7 +809,7 @@ route.set(`${ROUTES.FECHAMENTO_BIMESTRE}`, {
 
 route.set(`${ROUTES.PERIODO_FECHAMENTO_ABERTURA}`, {
   breadcrumbName: 'Abertura',
-  menu: ['Calendário Escolar', 'Período de Fechamento'],
+  menu: ['Gestão'],
   parent: '/',
   component: PeriodoFechamentoAbertura,
   exact: true,
@@ -818,7 +820,7 @@ route.set(`${ROUTES.PERIODO_FECHAMENTO_ABERTURA}`, {
 
 route.set(`${ROUTES.PERIODO_FECHAMENTO_REABERTURA}`, {
   breadcrumbName: 'Reabertura',
-  menu: ['Calendário Escolar', 'Período de Fechamento'],
+  menu: ['Gestão'],
   parent: '/',
   component: FechaReabLista,
   exact: true,
@@ -922,7 +924,7 @@ route.set(ROUTES.CONSELHO_CLASSE, {
 
 route.set(ROUTES.ATA_FINAL_RESULTADOS, {
   breadcrumbName: 'Ata final de resultados',
-  menu: ['Relatórios', 'Atas'],
+  menu: ['Documentos Escolares'],
   parent: '/',
   component: AtaFinalResultados,
   exact: true,
@@ -933,7 +935,7 @@ route.set(ROUTES.ATA_FINAL_RESULTADOS, {
 
 route.set(ROUTES.HISTORICO_ESCOLAR, {
   breadcrumbName: 'Histórico Escolar',
-  menu: ['Relatórios'],
+  menu: ['Documentos Escolares'],
   parent: '/',
   component: HistoricoEscolar,
   exact: true,
@@ -1032,7 +1034,7 @@ route.set(ROUTES.CARTA_INTENCOES, {
 
 route.set(ROUTES.DEVOLUTIVAS, {
   breadcrumbName: 'Devolutivas',
-  menu: ['Diário de Classe '],
+  menu: ['Gestão'],
   parent: '/',
   component: DevolutivasLista,
   exact: true,
@@ -1085,7 +1087,7 @@ route.set(ROUTES.RELATORIO_COMPENSACAO_AUSENCIA, {
 
 route.set(ROUTES.DASHBOARD_ESCOLA_AQUI, {
   breadcrumbName: 'Escola aqui',
-  menu: ['Dashboard'],
+  menu: ['Gráficos'],
   parent: '/',
   component: DashboardEscolaAqui,
   exact: true,
@@ -1107,7 +1109,7 @@ route.set(ROUTES.CONTROLE_GRADE, {
 
 route.set(ROUTES.RELATORIO_PLANEJAMENTO_DIARIO, {
   breadcrumbName: 'Controle de planejamento diário',
-  menu: ['Relatórios', 'Diário de classe'],
+  menu: ['Relatórios', 'Diário de Classe'],
   parent: '/',
   component: RelatorioPlanejamentoDiario,
   exact: true,
@@ -1126,7 +1128,7 @@ route.set(ROUTES.SONDAGEM, {
 
 route.set(ROUTES.HISTORICO_NOTIFICACOES, {
   breadcrumbName: 'Histórico de notificações',
-  menu: ['Relatórios', 'Notificações'],
+  menu: ['Relatórios', 'Gestão'],
   parent: '/',
   component: HistoricoNotificacoes,
   exact: true,
@@ -1370,7 +1372,7 @@ route.set(ROUTES.ACOMPANHAMENTO_APRENDIZAGEM, {
 
 route.set(ROUTES.DASHBOARD_AEE, {
   breadcrumbName: 'AEE',
-  menu: ['Dashboard'],
+  menu: ['Gráficos'],
   parent: '/',
   component: DashboardAEE,
   exact: true,
@@ -1381,7 +1383,7 @@ route.set(ROUTES.DASHBOARD_AEE, {
 
 route.set(ROUTES.DASHBOARD_REGISTRO_ITINERANCIA, {
   breadcrumbName: 'Registro de Itinerância',
-  menu: ['Dashboard'],
+  menu: ['Gráficos'],
   parent: '/',
   component: DashboardRegistroItinerancia,
   exact: true,
@@ -1403,7 +1405,7 @@ route.set(ROUTES.ACOMPANHAMENTO_FECHAMENTO, {
 
 route.set(ROUTES.DASHBOARD_FREQUENCIA, {
   breadcrumbName: 'Frequência',
-  menu: ['Dashboard'],
+  menu: ['Gráficos'],
   parent: '/',
   component: DashboardFrequencia,
   exact: true,
@@ -1414,7 +1416,7 @@ route.set(ROUTES.DASHBOARD_FREQUENCIA, {
 
 route.set(ROUTES.DASHBOARD_DEVOLUTIVAS, {
   breadcrumbName: 'Devolutivas',
-  menu: ['Dashboard'],
+  menu: ['Gráficos'],
   parent: '/',
   component: DashboardDevolutivas,
   exact: true,
@@ -1425,7 +1427,7 @@ route.set(ROUTES.DASHBOARD_DEVOLUTIVAS, {
 
 route.set(ROUTES.DASHBOARD_INFORMACOES_ESCOLARES, {
   breadcrumbName: 'Informações escolares',
-  menu: ['Dashboard'],
+  menu: ['Gráficos'],
   parent: '/',
   component: DashboardInformacoesEscolares,
   exact: true,
@@ -1436,7 +1438,7 @@ route.set(ROUTES.DASHBOARD_INFORMACOES_ESCOLARES, {
 
 route.set(ROUTES.DASHBOARD_REGISTRO_INDIVIDUAL, {
   breadcrumbName: 'Registro individual',
-  menu: ['Dashboard'],
+  menu: ['Gráficos'],
   parent: '/',
   component: DashboardRegistroIndividual,
   exact: true,
@@ -1447,7 +1449,7 @@ route.set(ROUTES.DASHBOARD_REGISTRO_INDIVIDUAL, {
 
 route.set(ROUTES.DASHBOARD_DIARIO_BORDO, {
   breadcrumbName: 'Diário de bordo',
-  menu: ['Dashboard'],
+  menu: ['Gráficos'],
   parent: '/',
   component: DashboardDiarioBordo,
   exact: true,
@@ -1457,7 +1459,7 @@ route.set(ROUTES.DASHBOARD_DIARIO_BORDO, {
 });
 
 route.set(ROUTES.RELATORIO_ACOMPANHAMENTO_FECHAMENTO, {
-  breadcrumbName: 'Relatório de Acompanhamento do Fechamento',
+  breadcrumbName: 'Acompanhamento do Fechamento',
   menu: ['Relatórios', 'Fechamento'],
   parent: '/',
   component: RelatorioAcompanhamentoFechamento,
@@ -1469,7 +1471,7 @@ route.set(ROUTES.RELATORIO_ACOMPANHAMENTO_FECHAMENTO, {
 
 route.set(ROUTES.DASHBOARD_RELATORIO_ACOMPANHAMENTO_APRENDIZAGEM, {
   breadcrumbName: 'Relatório do Acompanhamento da Aprendizagem',
-  menu: ['Dashboard'],
+  menu: ['Gráficos'],
   parent: '/',
   component: DashboardRelAcompanhamentoAprendizagem,
   exact: true,
@@ -1480,7 +1482,7 @@ route.set(ROUTES.DASHBOARD_RELATORIO_ACOMPANHAMENTO_APRENDIZAGEM, {
 
 route.set(ROUTES.DASHBOARD_FECHAMENTO, {
   breadcrumbName: 'Fechamento',
-  menu: ['Dashboard'],
+  menu: ['Gráficos'],
   parent: '/',
   component: DashboardFechamento,
   exact: true,
@@ -1491,7 +1493,7 @@ route.set(ROUTES.DASHBOARD_FECHAMENTO, {
 
 route.set(ROUTES.ATA_BIMESTRAL, {
   breadcrumbName: 'Ata bimestral',
-  menu: ['Relatórios', 'Atas'],
+  menu: ['Documentos Escolares'],
   parent: '/',
   component: RelatorioAtaBimestral,
   exact: true,
@@ -1545,7 +1547,7 @@ route.set(ROUTES.RELATORIO_FREQUENCIA_MENSAL, {
 
 route.set(ROUTES.DASHBOARD_NAAPA, {
   breadcrumbName: 'NAAPA',
-  menu: ['Dashboard'],
+  menu: ['Gráficos'],
   parent: '/',
   component: DashboardNAAPA,
   exact: true,
@@ -1556,7 +1558,7 @@ route.set(ROUTES.DASHBOARD_NAAPA, {
 
 route.set(ROUTES.ENCAMINHAMENTO_NAAPA, {
   breadcrumbName: 'Encaminhamento NAAPA',
-  menu: ['Gestão'],
+  menu: ['NAAPA'],
   parent: '/',
   component: ListaEncaminhamentoNAAPA,
   exact: true,
@@ -1653,13 +1655,12 @@ route.set(ROUTES.RELATORIO_CONTROLE_FREQUENCIA_MENSAL, {
 
 route.set(ROUTES.RELATORIO_PAP, {
   breadcrumbName: 'Relatório de PAP',
-  menu: ['Relatórios', 'PAP'],
+  menu: ['Diário de Classe'],
   parent: '/',
   component: RelatorioPAP,
   exact: true,
   tipo: RotasTipo.EstruturadaAutenticada,
-  // TODO
-  // temPermissionamento: true,
+  temPermissionamento: true,
   chavePermissao: ROUTES.RELATORIO_PAP,
 });
 
