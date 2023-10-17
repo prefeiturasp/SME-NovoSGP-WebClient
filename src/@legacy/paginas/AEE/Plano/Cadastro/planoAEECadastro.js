@@ -47,7 +47,7 @@ const PlanoAEECadastro = () => {
       setBreadcrumbManual(
         location.pathname,
         'Editar',
-        `${RotasDto.RELATORIO_AEE_PLANO}`
+        `${ROUTES.RELATORIO_AEE_PLANO}`
       );
     }
   }, [location, planoId]);

@@ -61,8 +61,7 @@ const AcompanhamentoAprendizagem = () => {
     state => state.registroIndividual.componenteCurricularSelecionado
   );
 
-  const permissoesTela =
-  usuario.permissoes[RotasDto.ACOMPANHAMENTO_APRENDIZAGEM];
+  const permissoesTela = usuario.permissoes[ROUTES.ACOMPANHAMENTO_APRENDIZAGEM];
 
   const desabilitarCamposAcompanhamentoAprendizagem = useSelector(
     store =>
@@ -70,9 +69,10 @@ const AcompanhamentoAprendizagem = () => {
         .desabilitarCamposAcompanhamentoAprendizagem
   );
 
-const desabilitar =
-      desabilitarCamposAcompanhamentoAprendizagem ||
-        (!permissoesTela.podeIncluir || !permissoesTela.podeAlterar);
+  const desabilitar =
+    desabilitarCamposAcompanhamentoAprendizagem ||
+    !permissoesTela.podeIncluir ||
+    !permissoesTela.podeAlterar;
 
   const [listaComponenteCurricular, setListaComponenteCurricular] = useState(
     []
@@ -148,9 +148,11 @@ const desabilitar =
     setExibirModalValidar(false);
     setValidarDados(null);
   };
-  const limparListAlunosValidar = (alunoCodigo) => {
+  const limparListAlunosValidar = alunoCodigo => {
     setListAlunosValidar(null);
-    var alunosComMarcador = listAlunosValidarDados.filter(x => x.alunoCodigo !== alunoCodigo);
+    var alunosComMarcador = listAlunosValidarDados.filter(
+      x => x.alunoCodigo !== alunoCodigo
+    );
     setListAlunosValidar(alunosComMarcador);
   };
   const onClickValidarDados = () => {
@@ -360,14 +362,18 @@ const desabilitar =
           {turmaSelecionada.turma ? <AlertaPermiteSomenteTurmaInfantil /> : ''}
           <ModalErrosAcompanhamentoAprendizagem />
           <LoaderAcompanhamentoAprendizagem>
-          {semestreSelecionado ? <AlertaDentroPeriodo
-            exibir={desabilitar}
-          /> : ''}
+            {semestreSelecionado ? (
+              <AlertaDentroPeriodo exibir={desabilitar} />
+            ) : (
+              ''
+            )}
             <Cabecalho pagina="Relatório do Acompanhamento da Aprendizagem">
               <BotoesAcoesAcompanhamentoAprendizagem
                 semestreSelecionado={semestreSelecionado}
                 componenteCurricularId={componenteCurricularSelecionado}
-                limparAlunoIconeAlunoSelecionado ={(valor) => limparListAlunosValidar(valor)}
+                limparAlunoIconeAlunoSelecionado={valor =>
+                  limparListAlunosValidar(valor)
+                }
               />
             </Cabecalho>
             <Card>

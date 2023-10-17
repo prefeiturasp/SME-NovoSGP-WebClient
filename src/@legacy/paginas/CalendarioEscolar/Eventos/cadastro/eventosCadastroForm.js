@@ -98,7 +98,7 @@ const EventosCadastroForm = () => {
   const usuarioStore = useSelector(store => store.usuario);
   const { turmaSelecionada } = usuarioStore;
 
-  const permissoesTela = usuarioStore.permissoes[RotasDto.EVENTOS];
+  const permissoesTela = usuarioStore.permissoes[ROUTES.EVENTOS];
 
   const paramsRota = useParams();
   const paramsLocation = useLocation();
@@ -115,7 +115,7 @@ const EventosCadastroForm = () => {
   setBreadcrumbManual(
     paramsLocation?.pathname,
     'Cadastro de eventos do calendário escolar',
-    RotasDto.EVENTOS
+    ROUTES.EVENTOS
   );
 
   useEffect(() => {
@@ -330,9 +330,9 @@ const EventosCadastroForm = () => {
 
   const urlTelaListagemEventos = () => {
     if (tipoCalendarioId) {
-      return `${RotasDto.EVENTOS}/${tipoCalendarioId}`;
+      return `${ROUTES.EVENTOS}/${tipoCalendarioId}`;
     }
-    return RotasDto.EVENTOS;
+    return ROUTES.EVENTOS;
   };
 
   const exibirModalAtualizarEventos = async values => {

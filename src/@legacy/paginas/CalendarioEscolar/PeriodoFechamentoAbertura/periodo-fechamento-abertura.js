@@ -44,7 +44,7 @@ const PeriodoFechamentoAbertura = () => {
   const usuarioLogado = useSelector(store => store.usuario);
   const [somenteConsulta, setSomenteConsulta] = useState(false);
   const permissoesTela =
-    usuarioLogado.permissoes[RotasDto.PERIODO_FECHAMENTO_ABERTURA];
+    usuarioLogado.permissoes[ROUTES.PERIODO_FECHAMENTO_ABERTURA];
   const [tipoCalendarioSelecionado, setTipoCalendarioSelecionado] =
     useState('');
 

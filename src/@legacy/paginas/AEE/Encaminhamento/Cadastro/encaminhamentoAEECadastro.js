@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect,useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useLocation, useParams } from 'react-router-dom';
 import { Card } from '~/componentes';
@@ -26,7 +26,7 @@ const EncaminhamentoAEECadastro = () => {
 
   const usuario = useSelector(store => store.usuario);
   const permissoesTela =
-    usuario.permissoes[RotasDto.RELATORIO_AEE_ENCAMINHAMENTO];
+    usuario.permissoes[ROUTES.RELATORIO_AEE_ENCAMINHAMENTO];
 
   const encaminhamentoId = paramsRoute?.id || 0;
 
@@ -65,23 +65,23 @@ const EncaminhamentoAEECadastro = () => {
       dispatch(setLimparDadosAtribuicaoResponsavel());
     };
   }, [dispatch, limparDadosEncaminhamento]);
-  
+
   useEffect(() => {
     if (encaminhamentoId) {
       setBreadcrumbManual(
         location.pathname,
         'Editar',
-        `${RotasDto.RELATORIO_AEE_ENCAMINHAMENTO}`
+        `${ROUTES.RELATORIO_AEE_ENCAMINHAMENTO}`
       );
     }
   }, [encaminhamentoId, location]);
- 
+
   const validarSePermiteProximoPasso = params => {
     return ServicoEncaminhamentoAEE.podeCadastrarEncaminhamentoEstudante(
       params
     );
   };
-  
+
   return (
     <LoaderEncaminhamento>
       <AlertaCadastradoEmOutraUE />

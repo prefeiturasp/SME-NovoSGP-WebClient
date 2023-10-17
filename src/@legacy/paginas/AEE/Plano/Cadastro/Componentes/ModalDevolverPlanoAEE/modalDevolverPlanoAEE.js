@@ -21,7 +21,6 @@ const ModalDevolverPlanoAEE = () => {
   const navigate = useNavigate();
   const paramsRoute = useParams();
 
-
   const planoAEEId = paramsRoute?.id;
 
   const exibirModalDevolverPlanoAEE = useSelector(
@@ -88,7 +87,7 @@ const ModalDevolverPlanoAEE = () => {
     if (retorno?.status === 200) {
       sucesso('Plano devolvido com sucesso');
       fecharModal();
-      navigate(RotasDto.RELATORIO_AEE_PLANO);
+      navigate(ROUTES.RELATORIO_AEE_PLANO);
     }
   };
 

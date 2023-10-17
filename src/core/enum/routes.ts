@@ -53,7 +53,6 @@ export enum ROUTES {
   REGISTRO_INDIVIDUAL = '/diario-classe/registro-individual',
   CONTROLE_GRADE = '/relatorios/diario-classe/controle-grade',
   RELATORIO_PLANEJAMENTO_DIARIO = '/relatorios/diario-classe/planejamento-diario',
-  POC_EDITOR = '/editor',
   SONDAGEM = '/sondagem',
   HISTORICO_NOTIFICACOES = '/relatorios/notificacoes/historico-notificacoes',
   DOCUMENTOS_PLANOS_TRABALHO = '/gestao/documentos-planos-trabalho',

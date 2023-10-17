@@ -1,12 +1,6 @@
-import React, {
-  useState,
-  useReducer,
-  useMemo,
-  useCallback,
-  useEffect,
-} from 'react';
+import { useCallback, useEffect, useMemo, useReducer, useState } from 'react';
 
-import RotasDto from '~/dtos/rotasDto';
+import { ROUTES } from '@/core/enum/routes';
 
 // Redux
 import { useSelector } from 'react-redux';
@@ -15,45 +9,45 @@ import { useSelector } from 'react-redux';
 import { Cabecalho, Ordenacao } from '~/componentes-sgp';
 
 // Componentes
-import { Card, Loader, ButtonGroup, Grid, Alert } from '~/componentes';
-import PeriodosDropDown from './componentes/PeriodosDropDown';
-import EixoObjetivo from './componentes/EixoObjetivo';
-import BarraNavegacao from './componentes/BarraNavegacao';
-import TabelaAlunos from './componentes/TabelaAlunos';
+import { Alert, ButtonGroup, Card, Grid, Loader } from '~/componentes';
 import AlertaSelecionarTurma from './componentes/AlertaSelecionarTurma';
+import BarraNavegacao from './componentes/BarraNavegacao';
+import EixoObjetivo from './componentes/EixoObjetivo';
+import PeriodosDropDown from './componentes/PeriodosDropDown';
+import TabelaAlunos from './componentes/TabelaAlunos';
 
 // Estilos
 import { Linha } from '~/componentes/EstilosGlobais';
 
 // Serviços
 import AcompanhamentoPAPServico from '~/servicos/Paginas/Relatorios/PAP/Acompanhamento';
-import { erro, confirmar, sucesso } from '~/servicos/alertas';
+import { confirmar, erro, sucesso } from '~/servicos/alertas';
 
 // Reducer Hook
 import Reducer, {
-  estadoInicial,
   carregarAlunos,
-  carregarPeriodo,
   carregarEixos,
   carregarObjetivos,
+  carregarPeriodo,
   carregarRespostas,
+  estadoInicial,
   setarObjetivoAtivo,
 } from './reducer';
 
 // Utils
-import { valorNuloOuVazio } from '~/utils/funcoes/gerais';
-import AlertaModalidadeInfantil from '~/componentes-sgp/AlertaModalidadeInfantil/alertaModalidadeInfantil';
-import { ehTurmaInfantil } from '~/servicos/Validacoes/validacoesInfatil';
-import { verificaSomenteConsulta } from '~/servicos';
-import { SGP_BUTTON_SALVAR } from '~/constantes/ids/button';
 import { useNavigate } from 'react-router-dom';
+import AlertaModalidadeInfantil from '~/componentes-sgp/AlertaModalidadeInfantil/alertaModalidadeInfantil';
+import { SGP_BUTTON_SALVAR } from '~/constantes/ids/button';
+import { verificaSomenteConsulta } from '~/servicos';
+import { ehTurmaInfantil } from '~/servicos/Validacoes/validacoesInfatil';
+import { valorNuloOuVazio } from '~/utils/funcoes/gerais';
 
 function RelatorioPAPAcompanhamento() {
   const navigate = useNavigate();
 
   const usuario = useSelector(store => store.usuario);
   const permissoesTela =
-    usuario.permissoes[RotasDto.RELATORIO_PAP_ACOMPANHAMENTO];
+    usuario.permissoes[ROUTES.RELATORIO_PAP_ACOMPANHAMENTO];
   const [estado, disparar] = useReducer(Reducer, estadoInicial);
   const [periodo, setPeriodo] = useState(undefined);
   const [ordenacao, setOrdenacao] = useState(2);
@@ -62,7 +56,7 @@ function RelatorioPAPAcompanhamento() {
   const [estadoOriginalAlunos, setEstadoOriginalAlunos] = useState(null);
   const { turmaSelecionada } = useSelector(store => store.usuario);
   const [semPeriodos, setSemPeriodos] = useState(false);
-  const permTela = usuario.permissoes[RotasDto.RELATORIO_PAP_ACOMPANHAMENTO];
+  const permTela = usuario.permissoes[ROUTES.RELATORIO_PAP_ACOMPANHAMENTO];
   const [somenteLeitura, setSomenteLeitura] = useState(
     permTela.podeConsultar &&
       !permTela.podeIncluir &&
@@ -348,7 +342,7 @@ function RelatorioPAPAcompanhamento() {
           <ButtonGroup
             somenteConsulta={somenteLeitura}
             permissoesTela={
-              usuario.permissoes[RotasDto.RELATORIO_PAP_ACOMPANHAMENTO]
+              usuario.permissoes[ROUTES.RELATORIO_PAP_ACOMPANHAMENTO]
             }
             modoEdicao={modoEdicao}
             temItemSelecionado

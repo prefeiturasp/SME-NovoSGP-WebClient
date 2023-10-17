@@ -50,7 +50,7 @@ const EncaminhamentoAEELista = () => {
 
   const usuario = useSelector(store => store.usuario);
   const permissoesTela =
-    usuario.permissoes[RotasDto.RELATORIO_AEE_ENCAMINHAMENTO];
+    usuario.permissoes[ROUTES.RELATORIO_AEE_ENCAMINHAMENTO];
 
   const somenteConsulta = useSelector(store => store.navegacao.somenteConsulta);
 
@@ -593,7 +593,7 @@ const EncaminhamentoAEELista = () => {
   };
 
   const onClickEditar = item => {
-    navigate(`${RotasDto.RELATORIO_AEE_ENCAMINHAMENTO}/editar/${item.id}`);
+    navigate(`${ROUTES.RELATORIO_AEE_ENCAMINHAMENTO}/editar/${item.id}`);
   };
 
   const onCheckedConsideraHistorico = e => {

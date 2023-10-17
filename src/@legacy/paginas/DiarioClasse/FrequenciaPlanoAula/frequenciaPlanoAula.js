@@ -31,7 +31,7 @@ const FrequenciaPlanoAula = () => {
     state => state.filtro.modalidades
   );
 
-  const permissoesTela = usuario.permissoes[RotasDto.FREQUENCIA_PLANO_AULA];
+  const permissoesTela = usuario.permissoes[ROUTES.FREQUENCIA_PLANO_AULA];
 
   const resetarInfomacoes = useCallback(() => {
     dispatch(limparDadosFrequenciaPlanoAula());
@@ -75,7 +75,7 @@ const FrequenciaPlanoAula = () => {
         <AlertaDentroPeriodoFrequenciaPlanoAula />
         <Cabecalho
           pagina={obterDescricaoNomeMenu(
-            RotasDto.FREQUENCIA_PLANO_AULA,
+            ROUTES.FREQUENCIA_PLANO_AULA,
             modalidadesFiltroPrincipal,
             turmaSelecionada
           )}

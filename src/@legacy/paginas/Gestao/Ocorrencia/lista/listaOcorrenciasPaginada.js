@@ -123,7 +123,7 @@ const ListaOcorrenciasPaginada = props => {
       colunas={colunas}
       filtro={filtros}
       onClick={ocorrencia =>
-        navigate(`${RotasDto.OCORRENCIAS}/editar/${ocorrencia.id}`)
+        navigate(`${ROUTES.OCORRENCIAS}/editar/${ocorrencia.id}`)
       }
       multiSelecao
       selecionarItems={onSelecionarItems}

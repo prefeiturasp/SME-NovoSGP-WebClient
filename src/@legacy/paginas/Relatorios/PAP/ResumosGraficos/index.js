@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo, lazy } from 'react';
+import { lazy, useEffect, useMemo, useState } from 'react';
 
 // Redux
 import { useSelector } from 'react-redux';
@@ -7,7 +7,7 @@ import { useSelector } from 'react-redux';
 import { Tabs } from 'antd';
 
 // Componentes
-import { Card, ButtonGroup, LazyLoad, Loader } from '~/componentes';
+import { ButtonGroup, Card, LazyLoad, Loader } from '~/componentes';
 import Filtro from './componentes/Filtro';
 
 // Componentes SGP
@@ -20,10 +20,10 @@ import { ContainerTabs } from './styles';
 import { erro } from '~/servicos/alertas';
 import ResumosGraficosPAPServico from '~/servicos/Paginas/Relatorios/PAP/ResumosGraficos';
 
-import RotasDto from '~/dtos/rotasDto';
-import { ehTurmaInfantil } from '~/servicos/Validacoes/validacoesInfatil';
-import AlertaModalidadeInfantil from '~/componentes-sgp/AlertaModalidadeInfantil/alertaModalidadeInfantil';
+import { ROUTES } from '@/core/enum/routes';
 import { useNavigate } from 'react-router-dom';
+import AlertaModalidadeInfantil from '~/componentes-sgp/AlertaModalidadeInfantil/alertaModalidadeInfantil';
+import { ehTurmaInfantil } from '~/servicos/Validacoes/validacoesInfatil';
 
 const ResumosGraficosPAP = () => {
   const navigate = useNavigate();
@@ -112,7 +112,7 @@ const ResumosGraficosPAP = () => {
       <Cabecalho pagina="Resumos e gráficos PAP">
         <ButtonGroup
           somenteConsulta={somenteConsulta}
-          permissoesTela={permissoesTela[RotasDto.PAP]}
+          permissoesTela={permissoesTela[ROUTES.PAP]}
           onClickVoltar={onClickVoltar}
           desabilitarBotaoPrincipal
         />

@@ -121,7 +121,7 @@ const ListaEncaminhamentoNAAPAPaginada = props => {
       filtro={filtros}
       onClick={linha => {
         store.dispatch(setTabAtivaEncaminhamentoNAAPA(0));
-        navigate(`${RotasDto.ENCAMINHAMENTO_NAAPA}/${linha?.id}`);
+        navigate(`${ROUTES.ENCAMINHAMENTO_NAAPA}/${linha?.id}`);
       }}
       filtroEhValido={filtroEhValido}
       multiSelecao

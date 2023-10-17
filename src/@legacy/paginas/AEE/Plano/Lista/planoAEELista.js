@@ -84,7 +84,7 @@ const PlanoAEELista = () => {
   const [idsPlanosSelecionados, setIdsPlanosSelecionados] = useState([]);
 
   const usuario = useSelector(store => store.usuario);
-  const permissoesTela = usuario.permissoes[RotasDto.RELATORIO_AEE_PLANO];
+  const permissoesTela = usuario.permissoes[ROUTES.RELATORIO_AEE_PLANO];
   const somenteConsulta = useSelector(store => store.navegacao.somenteConsulta);
 
   const opcoesEncerrados = [
@@ -274,7 +274,7 @@ const PlanoAEELista = () => {
   const onClickNovo = () => {
     if (!somenteConsulta && permissoesTela.podeIncluir) {
       dispatch(setTypePlanoAEECadastro(true));
-      navigate(`${RotasDto.RELATORIO_AEE_PLANO}/novo`);
+      navigate(`${ROUTES.RELATORIO_AEE_PLANO}/novo`);
     }
   };
 
@@ -480,7 +480,7 @@ const PlanoAEELista = () => {
   };
 
   const onClickEditar = item => {
-    navigate(`${RotasDto.RELATORIO_AEE_PLANO}/editar/${item.id}`);
+    navigate(`${ROUTES.RELATORIO_AEE_PLANO}/editar/${item.id}`);
   };
 
   useEffect(() => {

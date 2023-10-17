@@ -82,7 +82,7 @@ const ModalDevolverAEE = () => {
     if (retorno?.status === 200) {
       sucesso('Encaminhamento devolvido com sucesso');
       fecharModal();
-      navigate(RotasDto.RELATORIO_AEE_ENCAMINHAMENTO);
+      navigate(ROUTES.RELATORIO_AEE_ENCAMINHAMENTO);
     }
   };
 
