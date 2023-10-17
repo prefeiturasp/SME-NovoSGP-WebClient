@@ -17,6 +17,8 @@ class ServicoCalendarios {
     switch (modalidadeCalendario) {
       case modalidadeTipoCalendario.EJA:
         return modalidadeDto.EJA;
+      case modalidadeTipoCalendario.CELP:
+        return modalidadeDto.CELP;
       case modalidadeTipoCalendario.Infantil:
         return modalidadeDto.INFANTIL;
       case modalidadeTipoCalendario.FUNDAMENTAL_MEDIO:

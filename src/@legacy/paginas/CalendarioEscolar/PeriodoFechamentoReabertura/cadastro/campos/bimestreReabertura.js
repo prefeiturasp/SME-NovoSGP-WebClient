@@ -30,7 +30,10 @@ const BimestreReabertura = ({ form, onChangeCampos }) => {
       },
     ];
 
-    if (tipoModalidade !== modalidadeTipoCalendario.EJA) {
+    if (
+      tipoModalidade !== modalidadeTipoCalendario.EJA ||
+      tipoModalidade !== modalidadeTipoCalendario.CELP
+    ) {
       listaNova.push(
         {
           valor: 3,
@@ -56,7 +59,6 @@ const BimestreReabertura = ({ form, onChangeCampos }) => {
     } else {
       setListaBimestres([]);
     }
-
   }, [calendarioSelecionado]);
 
   const onChangeBimestre = novosValores => {
