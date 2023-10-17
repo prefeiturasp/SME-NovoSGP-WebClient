@@ -402,7 +402,7 @@ class ServicoEncaminhamentoAEE {
             dispatch(setLimparDadosLocalizarEstudante());
             dispatch(setLimparDadosAtribuicaoResponsavel());
             navigate(
-              `${RotasDto.RELATORIO_AEE_ENCAMINHAMENTO}/editar/${resposta?.data?.id}`
+              `${ROUTES.RELATORIO_AEE_ENCAMINHAMENTO}/editar/${resposta?.data?.id}`
             );
           }
 

@@ -1,38 +1,38 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import { URL_PENDENCIAFECHAMENTO } from '@/@legacy/constantes';
+import { ROUTES } from '@/core/enum/routes';
+import { useCallback, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { Loader } from '~/componentes';
+import AlertaModalidadeInfantil from '~/componentes-sgp/AlertaModalidadeInfantil/alertaModalidadeInfantil';
+import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
 import Cabecalho from '~/componentes-sgp/cabecalho';
 import Alert from '~/componentes/alert';
+import Auditoria from '~/componentes/auditoria';
 import Button from '~/componentes/button';
 import Card from '~/componentes/card';
 import { Colors } from '~/componentes/colors';
-import SelectComponent from '~/componentes/select';
-import Label from '~/componentes/label';
-import modalidade from '~/dtos/modalidade';
-import { erros, erro, sucesso } from '~/servicos/alertas';
-import ServicoDisciplina from '~/servicos/Paginas/ServicoDisciplina';
-import RotasDto from '~/dtos/rotasDto';
-import situacaoPendenciaDto from '~/dtos/situacaoPendenciaDto';
-import { setBreadcrumbManual } from '~/servicos/breadcrumb-services';
-import Auditoria from '~/componentes/auditoria';
-import {
-  PendenteForm,
-  AprovadoForm,
-  ResolvidoForm,
-  CampoDescricao,
-  Campo,
-} from './situacaoFechamento.css';
-import ServicoPendenciasFechamento from '~/servicos/Paginas/Fechamento/ServicoPendenciasFechamento';
-import { verificaSomenteConsulta } from '~/servicos/servico-navegacao';
-import AlertaModalidadeInfantil from '~/componentes-sgp/AlertaModalidadeInfantil/alertaModalidadeInfantil';
-import { ehTurmaInfantil } from '~/servicos/Validacoes/validacoesInfatil';
 import JoditEditor from '~/componentes/jodit-editor/joditEditor';
-import { IframeStyle } from './pendenciasFechamentoLista.css';
-import { ServicoPeriodoFechamento } from '~/servicos';
+import Label from '~/componentes/label';
+import SelectComponent from '~/componentes/select';
 import { SGP_BUTTON_APROVAR } from '~/constantes/ids/button';
-import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
-import { URL_HOME, URL_PENDENCIAFECHAMENTO } from '@/@legacy/constantes';
-import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import modalidade from '~/dtos/modalidade';
+import situacaoPendenciaDto from '~/dtos/situacaoPendenciaDto';
+import { ServicoPeriodoFechamento } from '~/servicos';
+import ServicoPendenciasFechamento from '~/servicos/Paginas/Fechamento/ServicoPendenciasFechamento';
+import ServicoDisciplina from '~/servicos/Paginas/ServicoDisciplina';
+import { ehTurmaInfantil } from '~/servicos/Validacoes/validacoesInfatil';
+import { erro, erros, sucesso } from '~/servicos/alertas';
+import { setBreadcrumbManual } from '~/servicos/breadcrumb-services';
+import { verificaSomenteConsulta } from '~/servicos/servico-navegacao';
+import { IframeStyle } from './pendenciasFechamentoLista.css';
+import {
+  AprovadoForm,
+  Campo,
+  CampoDescricao,
+  PendenteForm,
+  ResolvidoForm,
+} from './situacaoFechamento.css';
 
 const PendenciasFechamentoForm = () => {
   const navigate = useNavigate();
@@ -48,7 +48,7 @@ const PendenciasFechamentoForm = () => {
     store => store.filtro.modalidades
   );
 
-  const permissoesTela = usuario.permissoes[RotasDto.PENDENCIAS_FECHAMENTO];
+  const permissoesTela = usuario.permissoes[ROUTES.PENDENCIAS_FECHAMENTO];
   const [somenteConsulta, setSomenteConsulta] = useState(false);
 
   const [carregandoDisciplinas, setCarregandoDisciplinas] = useState(false);
@@ -154,7 +154,7 @@ const PendenciasFechamentoForm = () => {
         setBreadcrumbManual(
           location.pathname,
           'Análise de pendências',
-          RotasDto.PENDENCIAS_FECHAMENTO
+          ROUTES.PENDENCIAS_FECHAMENTO
         );
         setCarregandoDados(true);
         const retorno = await ServicoPendenciasFechamento.obterPorId(

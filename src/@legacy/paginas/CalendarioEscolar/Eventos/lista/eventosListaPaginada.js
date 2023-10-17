@@ -145,7 +145,7 @@ const EventosListaPaginada = () => {
   const onClickEditar = evento => {
     salvarFiltros();
     navigate(
-      `${RotasDto.EVENTOS}/editar/${evento.id}/${calendarioSelecionado?.id}`
+      `${ROUTES.EVENTOS}/editar/${evento.id}/${calendarioSelecionado?.id}`
     );
   };
 

@@ -18,7 +18,6 @@ import {
   SGP_BUTTON_ALTERAR_CADASTRAR,
   SGP_BUTTON_CANCELAR,
 } from '~/constantes/ids/button';
-import { RotasDto } from '~/dtos';
 import { setBreadcrumbManual } from '~/servicos';
 import servicoEvento from '~/servicos/Paginas/Calendario/ServicoTipoEvento';
 import { confirmar, erro, erros, sucesso } from '~/servicos/alertas';
@@ -99,7 +98,7 @@ const TipoEventosForm = () => {
       setBreadcrumbManual(
         location.pathname,
         'Alteração de Tipo de Eventos',
-        `${RotasDto.TIPO_EVENTOS}`
+        `${ROUTES.TIPO_EVENTOS}`
       );
     }
   }, [idTipoEvento, location]);
@@ -156,7 +155,7 @@ const TipoEventosForm = () => {
           .catch(e => erros(e));
         if (excluir) {
           sucesso('Tipos de evento deletados com sucesso!');
-          navigate(RotasDto.TIPO_EVENTOS);
+          navigate(ROUTES.TIPO_EVENTOS);
         }
       }
     }
@@ -186,10 +185,10 @@ const TipoEventosForm = () => {
       if (confirmado) {
         clicouBotaoCadastrar(form);
       } else {
-        navigate(RotasDto.TIPO_EVENTOS);
+        navigate(ROUTES.TIPO_EVENTOS);
       }
     } else {
-      navigate(RotasDto.TIPO_EVENTOS);
+      navigate(ROUTES.TIPO_EVENTOS);
     }
   };
 
@@ -202,7 +201,7 @@ const TipoEventosForm = () => {
             modoEdicao ? 'atualizado' : 'cadastrado'
           } com sucesso!`
         );
-        navigate(RotasDto.TIPO_EVENTOS);
+        navigate(ROUTES.TIPO_EVENTOS);
       })
       .catch(() => {
         erro(

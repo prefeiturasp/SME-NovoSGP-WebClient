@@ -155,7 +155,7 @@ const DocPlanosTrabalhoListaPaginada = props => {
 
     if (executarClick) {
       navigate(
-        `${RotasDto.DOCUMENTOS_PLANOS_TRABALHO}/editar/${linha.documentoId}`
+        `${ROUTES.DOCUMENTOS_PLANOS_TRABALHO}/editar/${linha.documentoId}`
       );
     }
   };

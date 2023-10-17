@@ -1,20 +1,23 @@
-import React, { useEffect, useState } from 'react';
+import { ROUTES } from '@/core/enum/routes';
+import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import { Auditoria, Colors, Loader } from '~/componentes';
 import { Cabecalho } from '~/componentes-sgp';
 import AlertaModalidadeInfantil from '~/componentes-sgp/AlertaModalidadeInfantil/alertaModalidadeInfantil';
 import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
-import {
-  SGP_BUTTON_CANCELAR,
-  SGP_BUTTON_SALVAR_ALTERAR,
-} from '~/constantes/ids/button';
 import Alert from '~/componentes/alert';
 import Button from '~/componentes/button';
 import Card from '~/componentes/card';
 import Grid from '~/componentes/grid';
 import SelectComponent from '~/componentes/select';
+import {
+  SGP_BUTTON_CANCELAR,
+  SGP_BUTTON_SALVAR_ALTERAR,
+} from '~/constantes/ids/button';
 import { URL_HOME } from '~/constantes/url';
-import RotasDto from '~/dtos/rotasDto';
+import ServicoDisciplina from '~/servicos/Paginas/ServicoDisciplina';
+import { ehTurmaInfantil } from '~/servicos/Validacoes/validacoesInfatil';
 import {
   confirmar,
   erro,
@@ -23,11 +26,8 @@ import {
   sucesso,
 } from '~/servicos/alertas';
 import api from '~/servicos/api';
-import ServicoDisciplina from '~/servicos/Paginas/ServicoDisciplina';
 import { verificaSomenteConsulta } from '~/servicos/servico-navegacao';
-import { ehTurmaInfantil } from '~/servicos/Validacoes/validacoesInfatil';
 import ListaAulasPorBimestre from './ListaAulasPorBimestre/ListaAulasPorBimestre';
-import { useNavigate } from 'react-router-dom';
 
 const AulaDadaAulaPrevista = () => {
   const navigate = useNavigate();
@@ -43,7 +43,7 @@ const AulaDadaAulaPrevista = () => {
   const [disciplinaIdSelecionada, setDisciplinaIdSelecionada] = useState();
   const [dadoslista, setDadosLista] = useState([]);
   const [auditoria, setAuditoria] = useState(undefined);
-  const permissoesTela = usuario.permissoes[RotasDto.AULA_DADA_AULA_PREVISTA];
+  const permissoesTela = usuario.permissoes[ROUTES.AULA_DADA_AULA_PREVISTA];
   const [somenteConsulta, setSomenteConsulta] = useState(false);
   const [exibirLoader, setExibirLoader] = useState(false);
 

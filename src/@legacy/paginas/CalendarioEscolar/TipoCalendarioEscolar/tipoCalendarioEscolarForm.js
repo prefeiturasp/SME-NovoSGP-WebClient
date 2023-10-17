@@ -43,7 +43,7 @@ const TipoCalendarioEscolarForm = () => {
 
   const idTipoCalendario = paramsRoute?.id;
 
-  const permissoesTela = usuario.permissoes[RotasDto.TIPO_CALENDARIO_ESCOLAR];
+  const permissoesTela = usuario.permissoes[ROUTES.TIPO_CALENDARIO_ESCOLAR];
 
   const [somenteConsulta, setSomenteConsulta] = useState(false);
   const [desabilitarCampos, setDesabilitarCampos] = useState(false);
@@ -147,7 +147,7 @@ const TipoCalendarioEscolarForm = () => {
       setBreadcrumbManual(
         location.pathname,
         'Alterar Tipo de Calendário Escolar',
-        RotasDto.TIPO_CALENDARIO_ESCOLAR
+        ROUTES.TIPO_CALENDARIO_ESCOLAR
       );
       consultaPorId(idTipoCalendario);
     } else if (usuario.turmaSelecionada && usuario.turmaSelecionada.anoLetivo) {
@@ -185,7 +185,7 @@ const TipoCalendarioEscolarForm = () => {
     const cadastrado = await api[metodo](url, valoresForm).catch(e => erros(e));
     if (cadastrado) {
       sucesso('Suas informações foram salvas com sucesso.');
-      navigate(RotasDto.TIPO_CALENDARIO_ESCOLAR);
+      navigate(ROUTES.TIPO_CALENDARIO_ESCOLAR);
     }
     setCarregandoBotoesAcao(false);
   };
@@ -212,7 +212,7 @@ const TipoCalendarioEscolarForm = () => {
           .catch(e => erros(e));
         if (excluir) {
           sucesso('Tipo de calendário excluído com sucesso.');
-          navigate(RotasDto.TIPO_CALENDARIO_ESCOLAR);
+          navigate(ROUTES.TIPO_CALENDARIO_ESCOLAR);
         }
       }
     }
@@ -241,10 +241,10 @@ const TipoCalendarioEscolarForm = () => {
       if (confirmado) {
         validaAntesDoSubmit(form);
       } else {
-        navigate(RotasDto.TIPO_CALENDARIO_ESCOLAR);
+        navigate(ROUTES.TIPO_CALENDARIO_ESCOLAR);
       }
     } else {
-      navigate(RotasDto.TIPO_CALENDARIO_ESCOLAR);
+      navigate(ROUTES.TIPO_CALENDARIO_ESCOLAR);
     }
   };
 

@@ -58,7 +58,7 @@ const PeriodosEscolares = () => {
   };
   const [valoresIniciais, setValoresIniciais] = useState(valoresFormInicial);
   const usuario = useSelector(store => store.usuario);
-  const permissoesTela = usuario.permissoes[RotasDto.PERIODOS_ESCOLARES];
+  const permissoesTela = usuario.permissoes[ROUTES.PERIODOS_ESCOLARES];
   const [somenteConsulta, setSomenteConsulta] = useState(false);
   const [desabilitaCampos, setDesabilitaCampos] = useState(false);
   const [listaTipoCalendario, setListaTipoCalendario] = useState([]);

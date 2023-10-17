@@ -1,33 +1,33 @@
-import React, { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
-import { Formik, Form } from 'formik';
-import * as Yup from 'yup';
+import { ROUTES } from '@/core/enum/routes';
 import { Col, Row } from 'antd';
-import { aviso, erros, erro, sucesso, confirmar } from '~/servicos/alertas';
-import Card from '~/componentes/card';
-import { EstiloDetalhe } from './detalheNotificacao.css';
-import api from '~/servicos/api';
-import * as cores from '~/componentes/colors';
-import Button from '~/componentes/button';
-import Cabecalho from '~/componentes-sgp/cabecalho';
-import CampoTexto from '~/componentes/campoTexto';
-import EstiloLinhaTempo from './linhaTempo.css';
-import LinhaTempo from '~/componentes/linhaTempo/linhaTempo';
-import notificacaoCategoria from '~/dtos/notificacaoCategoria';
-import notificacaoStatus from '~/dtos/notificacaoStatus';
-import servicoNotificacao from '~/servicos/Paginas/ServicoNotificacao';
-import RotasDto from '~/dtos/rotasDto';
-import { verificaSomenteConsulta } from '~/servicos/servico-navegacao';
-import { setBreadcrumbManual } from '~/servicos/breadcrumb-services';
+import { Form, Formik } from 'formik';
+import { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import * as Yup from 'yup';
 import { Loader } from '~/componentes';
+import BotaoExcluirPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoExcluirPadrao';
+import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
+import Cabecalho from '~/componentes-sgp/cabecalho';
+import Button from '~/componentes/button';
+import CampoTexto from '~/componentes/campoTexto';
+import Card from '~/componentes/card';
+import * as cores from '~/componentes/colors';
+import LinhaTempo from '~/componentes/linhaTempo/linhaTempo';
 import {
   SGP_BUTTON_ACEITAR,
   SGP_BUTTON_LIDA,
   SGP_BUTTON_RECUSAR,
 } from '~/constantes/ids/button';
-import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
-import BotaoExcluirPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoExcluirPadrao';
-import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import notificacaoCategoria from '~/dtos/notificacaoCategoria';
+import notificacaoStatus from '~/dtos/notificacaoStatus';
+import servicoNotificacao from '~/servicos/Paginas/ServicoNotificacao';
+import { aviso, confirmar, erro, erros, sucesso } from '~/servicos/alertas';
+import api from '~/servicos/api';
+import { setBreadcrumbManual } from '~/servicos/breadcrumb-services';
+import { verificaSomenteConsulta } from '~/servicos/servico-navegacao';
+import { EstiloDetalhe } from './detalheNotificacao.css';
+import EstiloLinhaTempo from './linhaTempo.css';
 
 const urlTelaNotificacoes = '/notificacoes';
 
@@ -53,7 +53,7 @@ const DetalheNotificacao = () => {
   ];
 
   const usuario = useSelector(state => state.usuario);
-  const permissoesTela = usuario.permissoes[RotasDto.NOTIFICACOES];
+  const permissoesTela = usuario.permissoes[ROUTES.NOTIFICACOES];
 
   const [validacoes, setValidacoes] = useState(
     Yup.object({

@@ -61,7 +61,7 @@ const RelatorioAtaBimestral = () => {
   const [modoEdicao, setModoEdicao] = useState(false);
 
   const usuarioStore = useSelector(store => store.usuario);
-  const permissoesTela = usuarioStore.permissoes[RotasDto.ATA_BIMESTRAL];
+  const permissoesTela = usuarioStore.permissoes[ROUTES.ATA_BIMESTRAL];
 
   const ehModalidadeInfantil =
     String(modalidadeId) === String(ModalidadeDTO.INFANTIL);
@@ -367,7 +367,9 @@ const RelatorioAtaBimestral = () => {
           anoLetivo,
           consideraHistorico,
           false,
-          Number(modalidadeSelecionada) === ModalidadeDTO.ENSINO_MEDIO ? [] : [1, 2]
+          Number(modalidadeSelecionada) === ModalidadeDTO.ENSINO_MEDIO
+            ? []
+            : [1, 2]
         )
           .catch(e => erros(e))
           .finally(() => setCarregandoTurmas(false));

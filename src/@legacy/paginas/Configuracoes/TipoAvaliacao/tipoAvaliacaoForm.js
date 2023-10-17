@@ -1,27 +1,27 @@
-import * as Yup from 'yup';
 import { Form, Formik } from 'formik';
+import { useEffect, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
-import React, { useState, useRef, useEffect } from 'react';
+import * as Yup from 'yup';
 import Cabecalho from '~/componentes-sgp/cabecalho';
-import TextEditor from '~/componentes/textEditor';
 import RadioGroupButton from '~/componentes/radioGroupButton';
+import TextEditor from '~/componentes/textEditor';
 
+import { ROUTES } from '@/core/enum/routes';
 import {
-  CampoTexto,
-  Label,
-  ButtonGroup,
-  Card,
-  momentSchema,
   Auditoria,
+  ButtonGroup,
+  CampoTexto,
+  Card,
+  Label,
   Loader,
+  momentSchema,
 } from '~/componentes';
-import RotasDto from '~/dtos/rotasDto';
-import { erros, sucesso, confirmar, erro } from '~/servicos/alertas';
 import servicoTipoAvaliaco from '~/servicos/Paginas/TipoAvaliacao';
+import { confirmar, erro, erros, sucesso } from '~/servicos/alertas';
 import { setBreadcrumbManual } from '~/servicos/breadcrumb-services';
 
-import { validaSeObjetoEhNuloOuVazio } from '~/utils/funcoes/gerais';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import { validaSeObjetoEhNuloOuVazio } from '~/utils/funcoes/gerais';
 
 const TipoAvaliacaoForm = () => {
   const navigate = useNavigate();
@@ -81,7 +81,7 @@ const TipoAvaliacaoForm = () => {
       ]);
       if (excluir && excluir.status === 200) {
         sucesso(`Tipo Avaliação excluido com sucesso!`);
-        navigate(RotasDto.TIPO_AVALIACAO);
+        navigate(ROUTES.TIPO_AVALIACAO);
       } else {
         erro(excluir);
       }
@@ -108,10 +108,10 @@ const TipoAvaliacaoForm = () => {
         'Deseja realmente cancelar as alterações?'
       );
       if (confirmou) {
-        navigate(RotasDto.TIPO_AVALIACAO);
+        navigate(ROUTES.TIPO_AVALIACAO);
       }
     } else {
-      navigate(RotasDto.TIPO_AVALIACAO);
+      navigate(ROUTES.TIPO_AVALIACAO);
     }
   };
   const validaAntesDoSubmit = form => {
@@ -160,7 +160,7 @@ const TipoAvaliacaoForm = () => {
 
       if (cadastrado && cadastrado.status === 200) {
         sucesso('Tipo de avaliação salvo com sucesso.');
-        navigate(RotasDto.TIPO_AVALIACAO);
+        navigate(ROUTES.TIPO_AVALIACAO);
       }
     } catch (err) {
       if (err) {
@@ -203,7 +203,7 @@ const TipoAvaliacaoForm = () => {
       setBreadcrumbManual(
         location.pathname,
         'Atribuição',
-        RotasDto.TIPO_AVALIACAO
+        ROUTES.TIPO_AVALIACAO
       );
       buscarPorId(idTipoAvaliacao);
     }
@@ -225,7 +225,7 @@ const TipoAvaliacaoForm = () => {
             <Cabecalho pagina="Tipo de Avaliação">
               <ButtonGroup
                 form={form}
-                permissoesTela={permissoesTela[RotasDto.TIPO_AVALIACAO]}
+                permissoesTela={permissoesTela[ROUTES.TIPO_AVALIACAO]}
                 novoRegistro={novoRegistro}
                 labelBotaoPrincipal={idTipoAvaliacao ? 'Alterar' : 'Cadastrar'}
                 onClickBotaoPrincipal={() => onClickBotaoPrincipal(form)}

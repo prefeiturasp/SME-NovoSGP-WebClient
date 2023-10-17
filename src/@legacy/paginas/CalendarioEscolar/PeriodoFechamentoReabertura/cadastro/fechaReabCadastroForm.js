@@ -1,7 +1,8 @@
+import { ROUTES } from '@/core/enum/routes';
 import { Col, Row } from 'antd';
 import { Form, Formik } from 'formik';
 import * as moment from 'moment';
-import React, { useCallback, useContext, useEffect, useState } from 'react';
+import { useCallback, useContext, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import styled from 'styled-components';
@@ -10,10 +11,9 @@ import { CampoData, momentSchema } from '~/componentes';
 import Auditoria from '~/componentes/auditoria';
 import CampoTexto from '~/componentes/campoTexto';
 import { OPCAO_TODOS } from '~/constantes';
-import RotasDto from '~/dtos/rotasDto';
 import { ServicoCalendarios, setBreadcrumbManual } from '~/servicos';
-import { erros, sucesso } from '~/servicos/alertas';
 import ServicoFechamentoReabertura from '~/servicos/Paginas/Calendario/ServicoFechamentoReabertura';
+import { erros, sucesso } from '~/servicos/alertas';
 import BimestreReabertura from './campos/bimestreReabertura';
 import DreReabertura from './campos/dreReabertura';
 import TipoCalendarioReabertura from './campos/tipoCalendarioReabertura';
@@ -58,7 +58,7 @@ const FechaReabCadastroForm = () => {
   setBreadcrumbManual(
     paramsLocation?.pathname,
     'Períodos',
-    RotasDto.PERIODO_FECHAMENTO_REABERTURA
+    ROUTES.PERIODO_FECHAMENTO_REABERTURA
   );
 
   const usuarioStore = useSelector(store => store.usuario);
@@ -269,7 +269,7 @@ const FechaReabCadastroForm = () => {
 
     if (retorno?.status === 200) {
       sucesso(retorno.data);
-      navigate(RotasDto.PERIODO_FECHAMENTO_REABERTURA);
+      navigate(ROUTES.PERIODO_FECHAMENTO_REABERTURA);
     }
   };
 

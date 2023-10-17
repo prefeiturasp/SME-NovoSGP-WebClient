@@ -12,11 +12,11 @@ import DocPlanosTrabalhoListaPaginada from './docPlanosTrabalhoListaPaginada';
 
 const DocPlanosTrabalhoLista = () => {
   const usuario = useSelector(store => store.usuario);
-  const somenteConsulta = useSelector(store => store.navegacao)
-    ?.somenteConsulta;
+  const somenteConsulta = useSelector(
+    store => store.navegacao
+  )?.somenteConsulta;
 
-  const permissoesTela =
-    usuario.permissoes[RotasDto.DOCUMENTOS_PLANOS_TRABALHO];
+  const permissoesTela = usuario.permissoes[ROUTES.DOCUMENTOS_PLANOS_TRABALHO];
 
   useEffect(() => {
     verificaSomenteConsulta(permissoesTela);

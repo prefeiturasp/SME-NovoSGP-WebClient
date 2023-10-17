@@ -43,7 +43,7 @@ const CadastroEncaminhamentoNAAPABotoesAcao = props => {
 
   const usuario = useSelector(state => state.usuario);
 
-  const permissoesTela = usuario.permissoes[RotasDto.ENCAMINHAMENTO_NAAPA];
+  const permissoesTela = usuario.permissoes[ROUTES.ENCAMINHAMENTO_NAAPA];
 
   const questionarioDinamicoEmEdicao = useSelector(
     store => store.questionarioDinamico.questionarioDinamicoEmEdicao
@@ -67,7 +67,7 @@ const CadastroEncaminhamentoNAAPABotoesAcao = props => {
       setBreadcrumbManual(
         pathname,
         'Encaminhamento',
-        `${RotasDto.ENCAMINHAMENTO_NAAPA}`
+        `${ROUTES.ENCAMINHAMENTO_NAAPA}`
       );
     }
   }, [pathname, encaminhamentoId]);
@@ -103,12 +103,12 @@ const CadastroEncaminhamentoNAAPABotoesAcao = props => {
 
       if (confirmou) {
         const resposta = await ServicoNAAPA.salvarPadrao(encaminhamentoId);
-        if (resposta?.status === 200) navigate(RotasDto.ENCAMINHAMENTO_NAAPA);
+        if (resposta?.status === 200) navigate(ROUTES.ENCAMINHAMENTO_NAAPA);
       } else {
-        navigate(RotasDto.ENCAMINHAMENTO_NAAPA);
+        navigate(ROUTES.ENCAMINHAMENTO_NAAPA);
       }
     } else {
-      navigate(RotasDto.ENCAMINHAMENTO_NAAPA);
+      navigate(ROUTES.ENCAMINHAMENTO_NAAPA);
     }
   };
 
@@ -126,7 +126,7 @@ const CadastroEncaminhamentoNAAPABotoesAcao = props => {
       });
       if (resultado?.status === 200) {
         sucesso('Encaminhamento excluído com sucesso');
-        navigate(RotasDto.ENCAMINHAMENTO_NAAPA);
+        navigate(ROUTES.ENCAMINHAMENTO_NAAPA);
       }
     }
   };
@@ -156,7 +156,7 @@ const CadastroEncaminhamentoNAAPABotoesAcao = props => {
       if (encaminhamentoId) {
         dispatch(setCarregarDadosEncaminhamentoNAAPA(true));
       }
-      navigate(`${RotasDto.ENCAMINHAMENTO_NAAPA}/${resposta?.data?.id}`);
+      navigate(`${ROUTES.ENCAMINHAMENTO_NAAPA}/${resposta?.data?.id}`);
     }
   };
 
@@ -167,7 +167,7 @@ const CadastroEncaminhamentoNAAPABotoesAcao = props => {
       situacaoNAAPA.AguardandoAtendimento
     );
     if (resposta?.status === 200) {
-      navigate(RotasDto.ENCAMINHAMENTO_NAAPA);
+      navigate(ROUTES.ENCAMINHAMENTO_NAAPA);
     }
   };
 

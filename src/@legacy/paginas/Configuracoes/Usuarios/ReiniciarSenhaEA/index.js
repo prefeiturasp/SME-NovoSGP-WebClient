@@ -1,23 +1,23 @@
-import React, { useEffect, useState, useMemo, useCallback } from 'react';
-import moment from 'moment';
 import { validate } from 'gerador-validador-cpf';
+import moment from 'moment';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { Loader } from '~/componentes';
 import Button from '~/componentes/button';
 
+import { ROUTES } from '@/core/enum/routes';
+import { store } from '@/core/redux';
+import FiltroHelper from '~/componentes-sgp/filtro/helper';
 import { Colors } from '~/componentes/colors';
 import ModalConteudoHtml from '~/componentes/modalConteudoHtml';
 import SelectComponent from '~/componentes/select';
 import DataTable from '~/componentes/table/dataTable';
+import { confirmar, erro, erros } from '~/servicos/alertas';
 import api from '~/servicos/api';
-import { store } from '@/core/redux';
-import RotasDto from '~/dtos/rotasDto';
-import { verificaSomenteConsulta } from '~/servicos/servico-navegacao';
-import FiltroHelper from '~/componentes-sgp/filtro/helper';
-import { erro, erros, confirmar } from '~/servicos/alertas';
 import cpfMask from '~/servicos/maskCPF';
+import { verificaSomenteConsulta } from '~/servicos/servico-navegacao';
 
-import { MensagemInputError, InputBuscaCPF } from './style';
+import { InputBuscaCPF, MensagemInputError } from './style';
 
 export default function ReiniciarSenhaEA() {
   const [usuarioApp, setUsuarioApp] = useState([]);
@@ -47,7 +47,7 @@ export default function ReiniciarSenhaEA() {
     [usuario.turmaSelecionada]
   );
 
-  const permissoesTela = usuario.permissoes[RotasDto.REINICIAR_SENHA];
+  const permissoesTela = usuario.permissoes[ROUTES.REINICIAR_SENHA];
 
   const onClickBuscaUsuarioPorCPF = async () => {
     if (!permissoesTela.podeConsultar) return;

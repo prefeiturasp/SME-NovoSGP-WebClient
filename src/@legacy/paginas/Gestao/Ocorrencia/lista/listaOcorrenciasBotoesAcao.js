@@ -34,7 +34,7 @@ const ListaOcorrenciasBotoesAcao = props => {
 
   const onClickVoltar = () => navigate(URL_HOME);
 
-  const onClickNovo = () => navigate(`${RotasDto.OCORRENCIAS}/novo`);
+  const onClickNovo = () => navigate(`${ROUTES.OCORRENCIAS}/novo`);
 
   const onClickExcluir = async () => {
     if (ocorrenciasSelecionadas?.length) {

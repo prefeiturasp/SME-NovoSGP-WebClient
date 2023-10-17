@@ -22,7 +22,7 @@ const FechaReabListaBotoesAcao = () => {
   const navigate = useNavigate();
 
   const permissoesTela =
-    usuario.permissoes[RotasDto.PERIODO_FECHAMENTO_REABERTURA];
+    usuario.permissoes[ROUTES.PERIODO_FECHAMENTO_REABERTURA];
 
   const {
     calendarioSelecionado,
@@ -68,7 +68,7 @@ const FechaReabListaBotoesAcao = () => {
 
   const onClickNovo = () => {
     navigate(
-      `${RotasDto.PERIODO_FECHAMENTO_REABERTURA}/novo/${
+      `${ROUTES.PERIODO_FECHAMENTO_REABERTURA}/novo/${
         calendarioSelecionado?.id || ''
       }`
     );

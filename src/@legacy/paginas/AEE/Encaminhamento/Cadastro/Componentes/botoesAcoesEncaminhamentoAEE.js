@@ -53,7 +53,7 @@ const BotoesAcoesEncaminhamentoAEE = () => {
 
   const usuario = useSelector(store => store.usuario);
   const permissoesTela =
-    usuario.permissoes[RotasDto.RELATORIO_AEE_ENCAMINHAMENTO];
+    usuario.permissoes[ROUTES.RELATORIO_AEE_ENCAMINHAMENTO];
 
   const onClickSalvarRascunho = async () => {
     let situacao = situacaoAEE.Rascunho;
@@ -72,10 +72,10 @@ const BotoesAcoesEncaminhamentoAEE = () => {
     );
     if (salvou) {
       sucesso(`Rascunho salvo com sucesso`);
-    
-      if(encaminhamentoId){
+
+      if (encaminhamentoId) {
         obterEncaminhamentoPorId();
-      }    
+      }
     }
   };
 
@@ -88,7 +88,7 @@ const BotoesAcoesEncaminhamentoAEE = () => {
     );
     if (salvou) {
       sucesso('Encaminhamento enviado para validação do CP');
-      navigate(RotasDto.RELATORIO_AEE_ENCAMINHAMENTO);
+      navigate(ROUTES.RELATORIO_AEE_ENCAMINHAMENTO);
     }
   };
 
@@ -112,10 +112,10 @@ const BotoesAcoesEncaminhamentoAEE = () => {
         );
         if (salvou) {
           sucesso(`Rascunho salvo com sucesso`);
-          navigate(RotasDto.RELATORIO_AEE_ENCAMINHAMENTO);
+          navigate(ROUTES.RELATORIO_AEE_ENCAMINHAMENTO);
         }
       } else {
-        navigate(RotasDto.RELATORIO_AEE_ENCAMINHAMENTO);
+        navigate(ROUTES.RELATORIO_AEE_ENCAMINHAMENTO);
       }
     } else if (
       encaminhamentoId &&
@@ -127,10 +127,10 @@ const BotoesAcoesEncaminhamentoAEE = () => {
         `Você salvou o encaminhamento como rascunho. Para dar andamento ao encaminhamento você precisa clicar em "Enviar", deseja realmente sair da tela?`
       );
       if (confirmou) {
-        navigate(RotasDto.RELATORIO_AEE_ENCAMINHAMENTO);
+        navigate(ROUTES.RELATORIO_AEE_ENCAMINHAMENTO);
       }
     } else {
-      navigate(RotasDto.RELATORIO_AEE_ENCAMINHAMENTO);
+      navigate(ROUTES.RELATORIO_AEE_ENCAMINHAMENTO);
     }
   };
 
@@ -152,7 +152,7 @@ const BotoesAcoesEncaminhamentoAEE = () => {
 
         if (resposta?.status === 200) {
           sucesso('Registro excluído com sucesso');
-          navigate(RotasDto.RELATORIO_AEE_ENCAMINHAMENTO);
+          navigate(ROUTES.RELATORIO_AEE_ENCAMINHAMENTO);
         }
       }
     }
@@ -194,7 +194,7 @@ const BotoesAcoesEncaminhamentoAEE = () => {
 
         if (resposta?.status === 200) {
           sucesso('Encaminhamento enviado para a AEE');
-          navigate(RotasDto.RELATORIO_AEE_ENCAMINHAMENTO);
+          navigate(ROUTES.RELATORIO_AEE_ENCAMINHAMENTO);
         }
       }
       setDesabilitarBtnAcao(false);
@@ -218,7 +218,7 @@ const BotoesAcoesEncaminhamentoAEE = () => {
 
         if (resposta?.status === 200) {
           sucesso('Encaminhamento concluído');
-          navigate(RotasDto.RELATORIO_AEE_ENCAMINHAMENTO);
+          navigate(ROUTES.RELATORIO_AEE_ENCAMINHAMENTO);
         }
       }
     }
@@ -235,8 +235,8 @@ const BotoesAcoesEncaminhamentoAEE = () => {
 
   const ocultarBtnEnviar =
     (dadosEncaminhamento?.situacao &&
-    dadosEncaminhamento?.situacao !== situacaoAEE.Rascunho &&
-    dadosEncaminhamento?.situacao !== situacaoAEE.Devolvido) ||
+      dadosEncaminhamento?.situacao !== situacaoAEE.Rascunho &&
+      dadosEncaminhamento?.situacao !== situacaoAEE.Devolvido) ||
     (encaminhamentoId && !dadosEncaminhamento?.podeEditar);
 
   const ocultarBtnDevolver =

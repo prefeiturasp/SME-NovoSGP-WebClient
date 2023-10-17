@@ -11,7 +11,6 @@ import {
   SGP_BUTTON_SALVAR,
 } from '~/constantes/ids/button';
 import { SGP_SELECT_DRE } from '~/constantes/ids/select';
-import RotasDto from '~/dtos/rotasDto';
 import {
   AbrangenciaServico,
   confirmar,
@@ -28,7 +27,7 @@ const AtribuicaoResponsaveisCadastro = () => {
   const { usuario } = store.getState();
   const location = useLocation();
   const permissoesTela =
-    usuario.permissoes[RotasDto.ATRIBUICAO_RESPONSAVEIS_LISTA];
+    usuario.permissoes[ROUTES.ATRIBUICAO_RESPONSAVEIS_LISTA];
 
   const paramsRoute = useParams();
   const navigate = useNavigate();
@@ -64,9 +63,9 @@ const AtribuicaoResponsaveisCadastro = () => {
   useEffect(() => {
     if (dreIDParams) {
       setBreadcrumbManual(
-        RotasDto.ATRIBUICAO_RESPONSAVEIS,
+        ROUTES.ATRIBUICAO_RESPONSAVEIS,
         'Editar Atribuição',
-        RotasDto.ATRIBUICAO_RESPONSAVEIS_LISTA
+        ROUTES.ATRIBUICAO_RESPONSAVEIS_LISTA
       );
     }
   }, [paramsRoute]);
@@ -95,7 +94,7 @@ const AtribuicaoResponsaveisCadastro = () => {
     ServicoResponsaveis.salvarAtribuicao(atribuicao)
       .then(() => {
         sucesso('Atribuição realizada com sucesso.');
-        navigate(RotasDto.ATRIBUICAO_RESPONSAVEIS_LISTA);
+        navigate(ROUTES.ATRIBUICAO_RESPONSAVEIS_LISTA);
       })
       .catch(e => {
         if (e.response.status === 601) {
@@ -117,10 +116,10 @@ const AtribuicaoResponsaveisCadastro = () => {
       if (confirmado) {
         salvarAtribuicao();
       } else {
-        navigate(RotasDto.ATRIBUICAO_RESPONSAVEIS_LISTA);
+        navigate(ROUTES.ATRIBUICAO_RESPONSAVEIS_LISTA);
       }
     } else {
-      navigate(RotasDto.ATRIBUICAO_RESPONSAVEIS_LISTA);
+      navigate(ROUTES.ATRIBUICAO_RESPONSAVEIS_LISTA);
     }
   };
 
@@ -355,7 +354,7 @@ const AtribuicaoResponsaveisCadastro = () => {
       setBreadcrumbManual(
         location.pathname,
         '',
-        `${RotasDto.ATRIBUICAO_RESPONSAVEIS}`
+        `${ROUTES.ATRIBUICAO_RESPONSAVEIS}`
       );
     }
   }, [dreIDParams, location]);

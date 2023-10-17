@@ -26,8 +26,7 @@ const CampoPercursoIndividual = () => {
 
   const usuario = useSelector(store => store.usuario);
 
-  const permissoesTela =
-    usuario.permissoes[RotasDto.ACOMPANHAMENTO_APRENDIZAGEM];
+  const permissoesTela = usuario.permissoes[ROUTES.ACOMPANHAMENTO_APRENDIZAGEM];
 
   const [desabilitarCampo, setDesabilitarCampo] = useState(false);
 

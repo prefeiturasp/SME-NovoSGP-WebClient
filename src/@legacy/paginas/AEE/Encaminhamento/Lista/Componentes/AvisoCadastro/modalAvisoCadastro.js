@@ -29,7 +29,7 @@ const ModalAvisoNovoEncaminhamentoAEE = () => {
 
   const onClickNovo = () => {
     dispatch(setExibirModalAviso(false));
-    navigate(`${RotasDto.RELATORIO_AEE_ENCAMINHAMENTO}/novo`);
+    navigate(`${ROUTES.RELATORIO_AEE_ENCAMINHAMENTO}/novo`);
   };
 
   return (

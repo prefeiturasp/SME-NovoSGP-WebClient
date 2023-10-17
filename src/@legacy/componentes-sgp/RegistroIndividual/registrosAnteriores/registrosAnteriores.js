@@ -23,7 +23,7 @@ const RegistrosAnteriores = () => {
   );
 
   const usuario = useSelector(store => store.usuario);
-  const permissoesTela = usuario.permissoes[RotasDto.REGISTRO_INDIVIDUAL];
+  const permissoesTela = usuario.permissoes[ROUTES.REGISTRO_INDIVIDUAL];
   const turmaSelecionada = useSelector(state => state.usuario.turmaSelecionada);
 
   const mostrarMensagemSemHistorico = useSelector(
@@ -33,9 +33,10 @@ const RegistrosAnteriores = () => {
   const idCollapse = shortid.generate();
   const dispatch = useDispatch();
 
-  const expandirAlternado = useCallback(() => setExpandir(!expandir), [
-    expandir,
-  ]);
+  const expandirAlternado = useCallback(
+    () => setExpandir(!expandir),
+    [expandir]
+  );
 
   const mensagemHistorico = mostrarMensagemSemHistorico
     ? ' - Sem histórico de registros'

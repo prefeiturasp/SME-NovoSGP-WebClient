@@ -1,35 +1,35 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import { ROUTES } from '@/core/enum/routes';
+import { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import AlertaModalidadeInfantil from '~/componentes-sgp/AlertaModalidadeInfantil/alertaModalidadeInfantil';
 import Cabecalho from '~/componentes-sgp/cabecalho';
 import Alert from '~/componentes/alert';
 import Card from '~/componentes/card';
-import RotasDto from '~/dtos/rotasDto';
 import {
   limparDadosConselhoClasse,
   setAlunosConselhoClasse,
-  setPodeAcessar,
   setDadosAlunoObjectCard,
-  setExibirLoaderGeralConselhoClasse,
-  setDadosPrincipaisConselhoClasse,
   setDadosInconsistenciasEstudantes,
+  setDadosPrincipaisConselhoClasse,
+  setExibirLoaderGeralConselhoClasse,
+  setPodeAcessar,
 } from '~/redux/modulos/conselhoClasse/actions';
-import { erros } from '~/servicos/alertas';
 import ServicoConselhoClasse from '~/servicos/Paginas/ConselhoClasse/ServicoConselhoClasse';
-import { verificaSomenteConsulta } from '~/servicos/servico-navegacao';
 import { ehTurmaInfantil } from '~/servicos/Validacoes/validacoesInfatil';
-import { Container } from './conselhoClasse.css';
+import { erros } from '~/servicos/alertas';
+import { verificaSomenteConsulta } from '~/servicos/servico-navegacao';
+import BotaoConferirConselhoClasse from './DadosConselhoClasse/BotaoConferir/botaoConferirConselhoClasse';
 import BotaoGerarRelatorioConselhoClasseTurma from './DadosConselhoClasse/BotaoGerarRelatorioConselhoClasseTurma/botaoGerarRelatorioConselhoClasseTurma';
 import BotaoOrdenarListaAlunos from './DadosConselhoClasse/BotaoOrdenarListaAlunos/botaoOrdenarListaAlunos';
 import BotoesAcoesConselhoClasse from './DadosConselhoClasse/BotoesAcoes/botoesAcoesConselhoClasse';
-import DadosConselhoClasse from './DadosConselhoClasse/dadosConselhoClasse';
 import LoaderConselhoClasse from './DadosConselhoClasse/LoaderConselhoClasse/laderConselhoClasse';
 import MarcadorParecerConclusivo from './DadosConselhoClasse/MarcadorParecerConclusivo/marcadorParecerConclusivo';
 import ModalImpressaoBimestre from './DadosConselhoClasse/ModalImpressaoBimestre/modalImpressaoBimestre';
 import ObjectCardConselhoClasse from './DadosConselhoClasse/ObjectCardConselhoClasse/objectCardConselhoClasse';
 import TabelaRetratilConselhoClasse from './DadosConselhoClasse/TabelaRetratilConselhoClasse/tabelaRetratilConselhoClasse';
+import DadosConselhoClasse from './DadosConselhoClasse/dadosConselhoClasse';
+import { Container } from './conselhoClasse.css';
 import servicoSalvarConselhoClasse from './servicoSalvarConselhoClasse';
-import BotaoConferirConselhoClasse from './DadosConselhoClasse/BotaoConferir/botaoConferirConselhoClasse';
 
 const ConselhoClasse = () => {
   const dispatch = useDispatch();
@@ -37,7 +37,7 @@ const ConselhoClasse = () => {
   const usuario = useSelector(store => store.usuario);
   const { turmaSelecionada } = usuario;
   const { turma, anoLetivo, periodo } = turmaSelecionada;
-  const permissoesTela = usuario.permissoes[RotasDto.CONSELHO_CLASSE];
+  const permissoesTela = usuario.permissoes[ROUTES.CONSELHO_CLASSE];
 
   const [exibirListas, setExibirListas] = useState(false);
   const [turmaAtual, setTurmaAtual] = useState(0);
@@ -101,7 +101,7 @@ const ConselhoClasse = () => {
     const resposta = await ServicoConselhoClasse.obterConselhoClasseTurmaFinal(
       turmaSelecionada.turma,
       aluno.codigoEOL,
-      (aluno.desabilitado ? true : false)
+      aluno.desabilitado ? true : false
     );
 
     if (resposta?.data) {

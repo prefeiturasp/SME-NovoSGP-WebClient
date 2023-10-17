@@ -38,7 +38,7 @@ import situacaoNAAPA from '@/@legacy/dtos/situacaoNAAPA';
 const ListaEncaminhamentoNAAPA = () => {
   const usuario = useSelector(state => state.usuario);
   const { permissoes } = usuario;
-  const { podeIncluir } = permissoes?.[RotasDto.ENCAMINHAMENTO_NAAPA];
+  const { podeIncluir } = permissoes?.[ROUTES.ENCAMINHAMENTO_NAAPA];
 
   const [consideraHistorico, setConsideraHistorico] = useState(false);
   const [anoLetivo, setAnoLetivo] = useState();
@@ -81,7 +81,7 @@ const ListaEncaminhamentoNAAPA = () => {
 
   useEffect(() => {
     const soConsulta = verificaSomenteConsulta(
-      permissoes?.[RotasDto.ENCAMINHAMENTO_NAAPA]
+      permissoes?.[ROUTES.ENCAMINHAMENTO_NAAPA]
     );
     setSomenteConsulta(soConsulta);
   }, [permissoes]);
