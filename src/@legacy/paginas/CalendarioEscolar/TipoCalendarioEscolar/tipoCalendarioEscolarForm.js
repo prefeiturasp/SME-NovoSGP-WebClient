@@ -88,6 +88,7 @@ const TipoCalendarioEscolarForm = () => {
       value: modalidadeTipoCalendario.FUNDAMENTAL_MEDIO,
     },
     { label: 'EJA', value: modalidadeTipoCalendario.EJA },
+    { label: 'CELP', value: modalidadeTipoCalendario.CELP },
     { label: 'Infantil', value: modalidadeTipoCalendario.Infantil },
   ];
 

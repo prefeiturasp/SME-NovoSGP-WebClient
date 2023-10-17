@@ -161,7 +161,8 @@ const FechaReabListaPaginada = () => {
   useEffect(() => {
     if (calendarioSelecionado?.modalidade) {
       const colBim =
-        calendarioSelecionado?.modalidade === modalidadeTipoCalendario.EJA
+        calendarioSelecionado?.modalidade === modalidadeTipoCalendario.EJA ||
+        calendarioSelecionado?.modalidade === modalidadeTipoCalendario.CELP
           ? getColunasBimestreSemestral()
           : getColunasBimestreAnual();
       setColunasBimestre([...colBim]);
