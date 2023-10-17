@@ -20,8 +20,7 @@ const DocPlanosTrabalhoCadastro = () => {
   const paramsRoute = useParams();
 
   const usuario = useSelector(store => store.usuario);
-  const permissoesTela =
-    usuario.permissoes[RotasDto.DOCUMENTOS_PLANOS_TRABALHO];
+  const permissoesTela = usuario.permissoes[ROUTES.DOCUMENTOS_PLANOS_TRABALHO];
 
   const idDocumentosPlanoTrabalho = paramsRoute?.id;
 
@@ -293,7 +292,7 @@ const DocPlanosTrabalhoCadastro = () => {
       setBreadcrumbManual(
         location.pathname,
         'Upload do arquivo',
-        RotasDto.DOCUMENTOS_PLANOS_TRABALHO
+        ROUTES.DOCUMENTOS_PLANOS_TRABALHO
       );
     }
   }, [idDocumentosPlanoTrabalho, location]);

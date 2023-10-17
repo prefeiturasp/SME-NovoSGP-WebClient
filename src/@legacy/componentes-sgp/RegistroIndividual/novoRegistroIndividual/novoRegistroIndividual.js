@@ -1,26 +1,26 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import shortid from 'shortid';
 
 import { useDispatch, useSelector } from 'react-redux';
 import {
-  CardCollapse,
   Auditoria,
   CampoData,
+  CardCollapse,
   JoditEditor,
   Loader,
 } from '~/componentes';
 
+import { ROUTES } from '@/core/enum/routes';
 import { CONFIG_COLLAPSE_REGISTRO_INDIVIDUAL } from '~/constantes';
-import RotasDto from '~/dtos/rotasDto';
 
 import {
   resetDataNovoRegistro,
   setAuditoriaNovoRegistro,
   setDadosParaSalvarNovoRegistro,
   setDadosRegistroAtual,
+  setDadosSugestaoTopico,
   setDesabilitarCampos,
   setRegistroIndividualEmEdicao,
-  setDadosSugestaoTopico,
 } from '~/redux/modulos/registroIndividual/actions';
 
 import {
@@ -29,10 +29,10 @@ import {
   verificaSomenteConsulta,
 } from '~/servicos';
 
-import SugestaoTopico from '../SugestaoTopico/sugestaoTopico';
-import { SGP_DATE_SELECIONAR_DATA_NOVO_REGISTRO_INDIVIDUAL } from '~/constantes/ids/date';
 import { SGP_COLLAPSE_NOVO_REGISTRO_INDIVIDUAL } from '~/constantes/ids/collapse';
+import { SGP_DATE_SELECIONAR_DATA_NOVO_REGISTRO_INDIVIDUAL } from '~/constantes/ids/date';
 import { SGP_JODIT_EDITOR_NOVO_REGISTRO_INDIVIDUAL } from '~/constantes/ids/jodit-editor';
+import SugestaoTopico from '../SugestaoTopico/sugestaoTopico';
 
 const NovoRegistroIndividual = () => {
   const dataAtual = window.moment();
@@ -66,7 +66,7 @@ const NovoRegistroIndividual = () => {
 
   const turmaSelecionada = useSelector(state => state.usuario.turmaSelecionada);
   const permissoes = useSelector(state => state.usuario.permissoes);
-  const permissoesTela = permissoes[RotasDto.REGISTRO_INDIVIDUAL];
+  const permissoesTela = permissoes[ROUTES.REGISTRO_INDIVIDUAL];
 
   const turmaId = turmaSelecionada?.id || 0;
   const alunoCodigo = dadosAlunoObjectCard?.codigoEOL;
@@ -79,10 +79,10 @@ const NovoRegistroIndividual = () => {
     () => (ehMesmoAluno ? dadosRegistroAtual?.registro : ''),
     [dadosRegistroAtual, ehMesmoAluno]
   );
-  const idSecao = useMemo(() => (ehMesmoAluno ? dadosRegistroAtual?.id : ''), [
-    dadosRegistroAtual,
-    ehMesmoAluno,
-  ]);
+  const idSecao = useMemo(
+    () => (ehMesmoAluno ? dadosRegistroAtual?.id : ''),
+    [dadosRegistroAtual, ehMesmoAluno]
+  );
   const auditoria = useMemo(
     () => (ehMesmoAluno ? auditoriaNovoRegistroIndividual : null),
     [auditoriaNovoRegistroIndividual, ehMesmoAluno]
@@ -117,7 +117,6 @@ const NovoRegistroIndividual = () => {
         obterSugestao(mesParseado);
       }
     }
-
   }, [data, expandir, dadosSugestaoTopico]);
 
   useEffect(() => {
@@ -160,16 +159,15 @@ const NovoRegistroIndividual = () => {
   const obterRegistroIndividualPorData = useCallback(
     async dataEscolhida => {
       setCarregandoNovoRegistro(true);
-      const retorno = await ServicoRegistroIndividual.obterRegistroIndividualPorData(
-        {
+      const retorno =
+        await ServicoRegistroIndividual.obterRegistroIndividualPorData({
           alunoCodigo,
           componenteCurricular: componenteCurricularSelecionado,
           data: dataEscolhida,
           turmaId,
-        }
-      )
-        .catch(e => erros(e))
-        .finally(() => setCarregandoNovoRegistro(false));
+        })
+          .catch(e => erros(e))
+          .finally(() => setCarregandoNovoRegistro(false));
 
       const resposta = retorno?.data;
       const ehMesmoCodigo =
@@ -239,9 +237,10 @@ const NovoRegistroIndividual = () => {
     );
   };
 
-  const expandirAlternado = useCallback(() => setExpandir(!expandir), [
-    expandir,
-  ]);
+  const expandirAlternado = useCallback(
+    () => setExpandir(!expandir),
+    [expandir]
+  );
 
   const resetarDados = () => {
     dispatch(setRegistroIndividualEmEdicao(false));

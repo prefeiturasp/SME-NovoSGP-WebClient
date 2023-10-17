@@ -1,5 +1,8 @@
-import tipoPermissao from '~/dtos/tipoPermissao';
+import { ROUTES } from '@/core/enum/routes';
 import { store } from '@/core/redux';
+import { FiltroHelper } from '~/componentes-sgp';
+import modalidade from '~/dtos/modalidade';
+import tipoPermissao from '~/dtos/tipoPermissao';
 import { setSomenteConsulta } from '~/redux/modulos/navegacao/actions';
 import {
   setListaUrlAjudaDoSistema,
@@ -7,10 +10,7 @@ import {
   setPermissoes,
 } from '~/redux/modulos/usuario/actions';
 import api from '~/servicos/api';
-import RotasDto from '~/dtos/rotasDto';
-import modalidade from '~/dtos/modalidade';
 import { obterModalidadeFiltroPrincipal } from './Validacoes/validacoesInfatil';
-import { FiltroHelper } from '~/componentes-sgp';
 
 const setMenusPermissoes = async () => {
   const permissoes = {};
@@ -141,19 +141,19 @@ const obterDescricaoNomeMenu = (
   descricao
 ) => {
   const urls = {
-    [RotasDto.FREQUENCIA_PLANO_AULA]: {
+    [ROUTES.FREQUENCIA_PLANO_AULA]: {
       [String(modalidade.INFANTIL)]: 'Frequência',
       [String(modalidade.EJA)]: 'Frequência/Plano Aula',
       [String(modalidade.FUNDAMENTAL)]: 'Frequência/Plano Aula',
       [String(modalidade.ENSINO_MEDIO)]: 'Frequência/Plano Aula',
     },
-    [RotasDto.PLANO_ANUAL]: {
+    [ROUTES.PLANO_ANUAL]: {
       [String(modalidade.INFANTIL)]: 'Plano Anual',
       [String(modalidade.EJA)]: 'Plano Semestral',
       [String(modalidade.FUNDAMENTAL)]: 'Plano Anual',
       [String(modalidade.ENSINO_MEDIO)]: 'Plano Anual',
     },
-    [RotasDto.PLANO_CICLO]: {
+    [ROUTES.PLANO_CICLO]: {
       [String(modalidade.INFANTIL)]: 'Plano de Ciclo',
       [String(modalidade.EJA)]: 'Plano de Etapa',
       [String(modalidade.FUNDAMENTAL)]: 'Plano de Ciclo',
@@ -194,10 +194,10 @@ const obterAjudaDoSistemaURL = () => {
 };
 
 export {
-  setMenusPermissoes,
   getObjetoStorageUsuario,
-  verificaSomenteConsulta,
-  obterDescricaoNomeMenu,
-  setSomenteConsultaManual,
   obterAjudaDoSistemaURL,
+  obterDescricaoNomeMenu,
+  setMenusPermissoes,
+  setSomenteConsultaManual,
+  verificaSomenteConsulta,
 };

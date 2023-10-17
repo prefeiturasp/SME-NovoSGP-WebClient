@@ -94,7 +94,7 @@ const FechaReabListaPaginada = () => {
   ];
 
   const onClickEditar = item => {
-    navigate(`${RotasDto.PERIODO_FECHAMENTO_REABERTURA}/editar/${item.id}`);
+    navigate(`${ROUTES.PERIODO_FECHAMENTO_REABERTURA}/editar/${item.id}`);
   };
 
   const onSelecionarItems = ids => {

@@ -17,7 +17,7 @@ const ListaEncaminhamentoNAAPABotoesAcao = props => {
 
   const onClickVoltar = () => navigate(URL_HOME);
 
-  const onClickNovo = () => navigate(`${RotasDto.ENCAMINHAMENTO_NAAPA}/novo`);
+  const onClickNovo = () => navigate(`${ROUTES.ENCAMINHAMENTO_NAAPA}/novo`);
 
   return (
     <Row gutter={[8, 8]} type="flex">

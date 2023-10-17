@@ -20,7 +20,7 @@ import { useNavigate } from 'react-router-dom';
 
 const EventosListaBotoesAcao = () => {
   const usuario = useSelector(store => store.usuario);
-  const permissoesTela = usuario.permissoes[RotasDto.EVENTOS];
+  const permissoesTela = usuario.permissoes[ROUTES.EVENTOS];
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -103,7 +103,7 @@ const EventosListaBotoesAcao = () => {
 
   const onClickNovo = () => {
     salvarFiltros();
-    navigate(`${RotasDto.EVENTOS}/novo/${calendarioSelecionado?.id}`);
+    navigate(`${ROUTES.EVENTOS}/novo/${calendarioSelecionado?.id}`);
   };
 
   return (

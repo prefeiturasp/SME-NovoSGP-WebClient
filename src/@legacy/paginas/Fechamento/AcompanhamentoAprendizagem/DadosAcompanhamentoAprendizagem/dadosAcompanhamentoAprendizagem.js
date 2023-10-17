@@ -26,8 +26,7 @@ const DadosAcompanhamentoAprendizagem = props => {
 
   const { semestreSelecionado, componenteCurricularId } = props;
 
-  const permissoesTela =
-    usuario.permissoes[RotasDto.ACOMPANHAMENTO_APRENDIZAGEM];
+  const permissoesTela = usuario.permissoes[ROUTES.ACOMPANHAMENTO_APRENDIZAGEM];
 
   const [tabAtual, setTabAtual] = useState('1');
 
@@ -57,12 +56,13 @@ const DadosAcompanhamentoAprendizagem = props => {
   );
 
   const obterDadosAcompanhamentoAprendizagemPorEstudante = async () => {
-    const retorno = await ServicoAcompanhamentoAprendizagem.obterAcompanhamentoEstudante(
-      turmaSelecionada?.id,
-      codigoEOL,
-      semestreSelecionado,
-      componenteCurricularId
-    );
+    const retorno =
+      await ServicoAcompanhamentoAprendizagem.obterAcompanhamentoEstudante(
+        turmaSelecionada?.id,
+        codigoEOL,
+        semestreSelecionado,
+        componenteCurricularId
+      );
 
     const { acompanhamentoAlunoSemestreId, podeEditar } = retorno;
     validaPermissoes(acompanhamentoAlunoSemestreId, podeEditar);
@@ -72,7 +72,6 @@ const DadosAcompanhamentoAprendizagem = props => {
     if (turmaSelecionada && codigoEOL && semestreSelecionado) {
       obterDadosAcompanhamentoAprendizagemPorEstudante();
     }
-
   }, [turmaSelecionada, codigoEOL, semestreSelecionado]);
 
   const exibirTabs = false;

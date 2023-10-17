@@ -58,7 +58,7 @@ const RegistroIndividual = () => {
   const turmaSelecionada = useSelector(state => state.usuario.turmaSelecionada);
   const permissoes = useSelector(state => state.usuario.permissoes);
   const turmaId = turmaSelecionada?.id || 0;
-  const permissoesTela = permissoes[RotasDto.REGISTRO_INDIVIDUAL];
+  const permissoesTela = permissoes[ROUTES.REGISTRO_INDIVIDUAL];
 
   const modalidadesFiltroPrincipal = useSelector(
     store => store.filtro.modalidades
@@ -93,7 +93,6 @@ const RegistroIndividual = () => {
       dispatch(setAlunosRegistroIndividual([]));
       resetarTela();
     }
-
   }, [componenteCurricularSelecionado]);
 
   useEffect(() => {

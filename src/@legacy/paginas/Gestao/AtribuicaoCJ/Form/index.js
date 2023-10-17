@@ -1,48 +1,48 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import { Form, Formik } from 'formik';
 import { isEqual } from 'lodash';
 import queryString from 'query-string';
-import { Formik, Form } from 'formik';
-import * as Yup from 'yup';
+import { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import * as Yup from 'yup';
 
-import RotasDto from '~/dtos/rotasDto';
-import { erro, sucesso, confirmar } from '~/servicos/alertas';
+import { ROUTES } from '@/core/enum/routes';
+import { confirmar, erro, sucesso } from '~/servicos/alertas';
 import { setBreadcrumbManual } from '~/servicos/breadcrumb-services';
 import AtribuicaoCJServico from '~/servicos/Paginas/AtribuicaoCJ';
 import { obterPerfis } from '~/servicos/Paginas/ServicoUsuario';
 
+import {
+  Auditoria,
+  ButtonGroup,
+  Card,
+  CheckboxComponent,
+  Grid,
+  Loader,
+  Localizador,
+  SelectComponent,
+} from '~/componentes';
 import {
   Cabecalho,
   DreDropDown,
   FiltroHelper,
   UeDropDown,
 } from '~/componentes-sgp';
-import {
-  Card,
-  ButtonGroup,
-  Grid,
-  Localizador,
-  Loader,
-  Auditoria,
-  SelectComponent,
-  CheckboxComponent,
-} from '~/componentes';
 import ModalidadesDropDown from './componentes/ModalidadesDropDown';
-import TurmasDropDown from './componentes/TurmasDropDown';
 import Tabela from './componentes/Tabela';
+import TurmasDropDown from './componentes/TurmasDropDown';
 
 import { Row } from './styles';
 
+import { useLocation, useNavigate } from 'react-router-dom';
+import { SGP_BUTTON_SALVAR_ALTERAR } from '~/constantes/ids/button';
+import { setRecarregarFiltroPrincipal } from '~/redux/modulos/usuario/actions';
+import { verificaSomenteConsulta } from '~/servicos';
 import {
-  validaSeObjetoEhNuloOuVazio,
-  valorNuloOuVazio,
   objetoEstaTodoPreenchido,
   ordenarDescPor,
+  validaSeObjetoEhNuloOuVazio,
+  valorNuloOuVazio,
 } from '~/utils/funcoes/gerais';
-import { SGP_BUTTON_SALVAR_ALTERAR } from '~/constantes/ids/button';
-import { verificaSomenteConsulta } from '~/servicos';
-import { setRecarregarFiltroPrincipal } from '~/redux/modulos/usuario/actions';
-import { useLocation, useNavigate } from 'react-router-dom';
 
 function AtribuicaoCJForm() {
   const dispatch = useDispatch();
@@ -80,7 +80,7 @@ function AtribuicaoCJForm() {
 
   useEffect(() => {
     setSomenteConsulta(
-      verificaSomenteConsulta(permissoesTela[RotasDto.ATRIBUICAO_CJ_LISTA])
+      verificaSomenteConsulta(permissoesTela[ROUTES.ATRIBUICAO_CJ_LISTA])
     );
   }, [permissoesTela]);
 
@@ -149,10 +149,10 @@ function AtribuicaoCJForm() {
       if (confirmou) {
         validaAntesDoSubmit(form);
       } else {
-        navigate(RotasDto.ATRIBUICAO_CJ_LISTA);
+        navigate(ROUTES.ATRIBUICAO_CJ_LISTA);
       }
     } else {
-      navigate(RotasDto.ATRIBUICAO_CJ_LISTA);
+      navigate(ROUTES.ATRIBUICAO_CJ_LISTA);
     }
   };
 
@@ -329,7 +329,7 @@ function AtribuicaoCJForm() {
               <Cabecalho pagina="Atribuição">
                 <ButtonGroup
                   form={form}
-                  permissoesTela={permissoesTela[RotasDto.ATRIBUICAO_CJ_LISTA]}
+                  permissoesTela={permissoesTela[ROUTES.ATRIBUICAO_CJ_LISTA]}
                   novoRegistro={novoRegistro}
                   labelBotaoPrincipal={novoRegistro ? 'Salvar' : 'Alterar'}
                   idBotaoPrincipal={SGP_BUTTON_SALVAR_ALTERAR}

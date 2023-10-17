@@ -1,123 +1,122 @@
-import { setRotas } from '~/redux/modulos/navegacao/actions';
-import Principal from '~/paginas/Principal/principal';
-import PlanoCiclo from '~/paginas/Planejamento/PlanoCiclo/planoCiclo';
-import PlanoAnual from '~/paginas/Planejamento/Anual/planoAnual';
-import AtribuicaoSupervisorLista from '~/paginas/Gestao/AtribuicaoSupervisor/atribuicaoSupervisorLista';
-import AtribuicaoResponsaveisCadastro from '~/paginas/Gestao/AtribuicaoSupervisor/atribuicaoResponsaveisCadastro';
-import AtribuicaoEsporadicaLista from '~/paginas/Gestao/AtribuicaoEsporadica/Lista';
-import AtribuicaoEsporadicaForm from '~/paginas/Gestao/AtribuicaoEsporadica/Form';
-import AtribuicaoCJLista from '~/paginas/Gestao/AtribuicaoCJ/Lista';
-import AtribuicaoCJForm from '~/paginas/Gestao/AtribuicaoCJ/Form';
-import DetalheNotificacao from '~/paginas/Notificacoes/Detalhes/detalheNotificacao';
-import NotificacoesLista from '~/paginas/Notificacoes/Lista/listaNotificacoes';
+import RelatorioDinamicoNAAPA from '@/@legacy/paginas/NAAPA/RelatorioDinamico/relatorioDinamicoNAAPA';
+import RelatorioOcorrencias from '@/@legacy/paginas/Relatorios/Gestao/Ocorrencias/relatorioOcorrencias';
+import RelatorioPAP from '@/@legacy/paginas/Relatorios/PAP/RelatorioPAP/relatorioPAP';
+import { ROUTES } from 'core/enum/routes';
+import { store } from 'core/redux';
 import RotasTipo from '~/constantes/rotasTipo';
-import MeusDados from '~/paginas/Perfil/meusDados';
-import PeriodosEscolares from '~/paginas/CalendarioEscolar/PeriodosEscolares/PeriodosEscolares';
-import TabsReiniciarSenha from '~/paginas/Configuracoes/Usuarios/TabsReiniciarSenha';
-import TipoCalendarioEscolarLista from '~/paginas/CalendarioEscolar/TipoCalendarioEscolar/tipoCalendarioEscolarLista';
-import TipoCalendarioEscolarForm from '~/paginas/CalendarioEscolar/TipoCalendarioEscolar/tipoCalendarioEscolarForm';
-import TipoFeriadoLista from '~/paginas/CalendarioEscolar/TipoFeriado/tipoFeriadoLista';
-import TipoFeriadoForm from '~/paginas/CalendarioEscolar/TipoFeriado/tipoFeriadoForm';
-import CalendarioEscolar from '~/paginas/CalendarioEscolar/Calendario';
-import TipoEventosLista from '~/paginas/CalendarioEscolar/TipoEventos/tipoEventosLista';
-import TipoEventosForm from '~/paginas/CalendarioEscolar/TipoEventos/tipoEventosForm';
-import SemPermissao from '~/paginas/SemPermissao/sem-permissao';
-import CadastroAula from '~/paginas/CalendarioProfessor/CadastroAula/cadastroAula';
-import FrequenciaPlanoAula from '~/paginas/DiarioClasse/FrequenciaPlanoAula/frequenciaPlanoAula';
+import EncaminhamentoAEECadastro from '~/paginas/AEE/Encaminhamento/Cadastro/encaminhamentoAEECadastro';
+import EncaminhamentoAEELista from '~/paginas/AEE/Encaminhamento/Lista/encaminhamentoAEELista';
+import PlanoAEECadastro from '~/paginas/AEE/Plano/Cadastro/planoAEECadastro';
+import PlanoAEELista from '~/paginas/AEE/Plano/Lista/planoAEELista';
+import RegistroItineranciaAEECadastro from '~/paginas/AEE/RegistroItinerancia/Cadastro/registroItineranciaAEECadastro';
+import RegistroItineranciaAEELista from '~/paginas/AEE/RegistroItinerancia/Lista/registroItineranciaAEELista';
 import AvaliacaoForm from '~/paginas/CalendarioEscolar/Avaliacao/avaliacaoForm';
-import Notas from '~/paginas/DiarioClasse/Notas/notas';
-import TipoAvaliacaoLista from '~/paginas/Configuracoes/TipoAvaliacao/tipoAvaliacaoLista';
-import TipoAvaliacaoForm from '~/paginas/Configuracoes/TipoAvaliacao/tipoAvaliacaoForm';
-import AulaDadaAulaPrevista from '~/paginas/DiarioClasse/AulaDadaAulaPrevista/aulaDadaAulaPrevista';
-import RegistroPOALista from '~/paginas/DiarioClasse/RegistroPOA/Lista';
-import RegistroPOAForm from '~/paginas/DiarioClasse/RegistroPOA/Form';
-import CompensacaoAusenciaLista from '~/paginas/DiarioClasse/CompensacaoAusencia/compensacaoAusenciaLista';
-import CompensacaoAusenciaForm from '~/paginas/DiarioClasse/CompensacaoAusencia/compensacaoAusenciaForm';
-import FechamentoBismestre from '~/paginas/Fechamento/FechamentoBimestre/fechamento-bimestre';
+import CalendarioEscolar from '~/paginas/CalendarioEscolar/Calendario';
+import CalendarioProfessor from '~/paginas/CalendarioEscolar/CalendarioProfessor';
+import EventosCadastro from '~/paginas/CalendarioEscolar/Eventos/cadastro/eventosCadastro';
+import EventosLista from '~/paginas/CalendarioEscolar/Eventos/lista/eventosLista';
 import PeriodoFechamentoAbertura from '~/paginas/CalendarioEscolar/PeriodoFechamentoAbertura/periodo-fechamento-abertura';
-import ResumosGraficosPAP from '~/paginas/Relatorios/PAP/ResumosGraficos';
-import PaginaComErro from '~/paginas/Erro/pagina-com-erro';
-import FechaReabLista from '~/paginas/CalendarioEscolar/PeriodoFechamentoReabertura/lista/fechaReabLista';
 import FechaReabCadastro from '~/paginas/CalendarioEscolar/PeriodoFechamentoReabertura/cadastro/fechaReabCadastro';
-import RelatorioPAPAcompanhamento from '~/paginas/Relatorios/PAP/Acompanhamento';
-import PendenciasFechamentoLista from '~/paginas/Fechamento/PendenciasFechamento/pendenciasFechamentoLista';
+import FechaReabLista from '~/paginas/CalendarioEscolar/PeriodoFechamentoReabertura/lista/fechaReabLista';
+import PeriodosEscolares from '~/paginas/CalendarioEscolar/PeriodosEscolares/PeriodosEscolares';
+import TipoCalendarioEscolarForm from '~/paginas/CalendarioEscolar/TipoCalendarioEscolar/tipoCalendarioEscolarForm';
+import TipoCalendarioEscolarLista from '~/paginas/CalendarioEscolar/TipoCalendarioEscolar/tipoCalendarioEscolarLista';
+import TipoEventosForm from '~/paginas/CalendarioEscolar/TipoEventos/tipoEventosForm';
+import TipoEventosLista from '~/paginas/CalendarioEscolar/TipoEventos/tipoEventosLista';
+import TipoFeriadoForm from '~/paginas/CalendarioEscolar/TipoFeriado/tipoFeriadoForm';
+import TipoFeriadoLista from '~/paginas/CalendarioEscolar/TipoFeriado/tipoFeriadoLista';
+import CadastroAula from '~/paginas/CalendarioProfessor/CadastroAula/cadastroAula';
+import TipoAvaliacaoForm from '~/paginas/Configuracoes/TipoAvaliacao/tipoAvaliacaoForm';
+import TipoAvaliacaoLista from '~/paginas/Configuracoes/TipoAvaliacao/tipoAvaliacaoLista';
+import Suporte from '~/paginas/Configuracoes/Usuarios/Suporte/suporte';
+import TabsReiniciarSenha from '~/paginas/Configuracoes/Usuarios/TabsReiniciarSenha';
+import DashboardAEE from '~/paginas/Dashboard/AEE/dashboardAEE';
+import DashboardDevolutivas from '~/paginas/Dashboard/DashboardDevolutivas/dashboardDevolutivas';
+import DashboardDiarioBordo from '~/paginas/Dashboard/DashboardDiarioBordo/dashboardDiarioBordo';
+import DashboardEscolaAqui from '~/paginas/Dashboard/DashboardEscolaAqui/dashboardEscolaAqui';
+import DashboardFechamento from '~/paginas/Dashboard/DashboardFechamento/dashboardFechamento';
+import DashboardFrequencia from '~/paginas/Dashboard/DashboardFrequencia/dashboardFrequencia';
+import DashboardInformacoesEscolares from '~/paginas/Dashboard/DashboardInformacoesEscolares/dashboardInformacoesEscolares';
+import DashboardNAAPA from '~/paginas/Dashboard/DashboardNAAPA/dashboardNAAPA';
+import DashboardRegistroIndividual from '~/paginas/Dashboard/DashboardRegistroIndividual/dashboardRegistroIndividual';
+import DashboardRegistroItinerancia from '~/paginas/Dashboard/DashboardRegistroItinerancia/dashboardRegistroItinerancia';
+import DashboardRelAcompanhamentoAprendizagem from '~/paginas/Dashboard/DashboardRelAcompAprend/dashboardRelAcompAprend';
+import AcompanhamentoFrequencia from '~/paginas/DiarioClasse/AcompanhamentoFrequencia/acompanhamentoFrequencia';
+import AulaDadaAulaPrevista from '~/paginas/DiarioClasse/AulaDadaAulaPrevista/aulaDadaAulaPrevista';
+import CompensacaoAusenciaForm from '~/paginas/DiarioClasse/CompensacaoAusencia/compensacaoAusenciaForm';
+import CompensacaoAusenciaLista from '~/paginas/DiarioClasse/CompensacaoAusencia/compensacaoAusenciaLista';
+import DevolutivasForm from '~/paginas/DiarioClasse/Devolutivas/devolutivasForm';
+import DevolutivasLista from '~/paginas/DiarioClasse/Devolutivas/devolutivasLista';
+import DiarioBordo from '~/paginas/DiarioClasse/DiarioBordo/diarioBordo';
+import ListaDiarioBordo from '~/paginas/DiarioClasse/DiarioBordo/listaDiarioBordo';
+import FrequenciaPlanoAula from '~/paginas/DiarioClasse/FrequenciaPlanoAula/frequenciaPlanoAula';
+import ListaoPrincipal from '~/paginas/DiarioClasse/Listao';
+import Notas from '~/paginas/DiarioClasse/Notas/notas';
+import RegistroIndividual from '~/paginas/DiarioClasse/RegistroIndividual/registroIndividual';
+import RegistroPOAForm from '~/paginas/DiarioClasse/RegistroPOA/Form';
+import RegistroPOALista from '~/paginas/DiarioClasse/RegistroPOA/Lista';
+import PaginaComErro from '~/paginas/Erro/pagina-com-erro';
+import AcompanhamentoAprendizagem from '~/paginas/Fechamento/AcompanhamentoAprendizagem/acompanhamentoAprendizagem';
+import AcompanhamentoFechamento from '~/paginas/Fechamento/AcompanhamentoFechamento/acompanhamentoFechamento';
+import ConselhoClasse from '~/paginas/Fechamento/ConselhoClasse/conselhoClasse';
+import FechamentoBismestre from '~/paginas/Fechamento/FechamentoBimestre/fechamento-bimestre';
 import PendenciasFechamentoForm from '~/paginas/Fechamento/PendenciasFechamento/pendenciasFechamentoForm';
+import PendenciasFechamentoLista from '~/paginas/Fechamento/PendenciasFechamento/pendenciasFechamentoLista';
+import AtribuicaoCJForm from '~/paginas/Gestao/AtribuicaoCJ/Form';
+import AtribuicaoCJLista from '~/paginas/Gestao/AtribuicaoCJ/Lista';
+import AtribuicaoEsporadicaForm from '~/paginas/Gestao/AtribuicaoEsporadica/Form';
+import AtribuicaoEsporadicaLista from '~/paginas/Gestao/AtribuicaoEsporadica/Lista';
+import AtribuicaoResponsaveisCadastro from '~/paginas/Gestao/AtribuicaoSupervisor/atribuicaoResponsaveisCadastro';
+import AtribuicaoSupervisorLista from '~/paginas/Gestao/AtribuicaoSupervisor/atribuicaoSupervisorLista';
 import ComunicadosCadastro from '~/paginas/Gestao/Comunicados/Cadastro/cadastroComunicados';
 import ComunicadosLista from '~/paginas/Gestao/Comunicados/Lista/listaComunicados';
-import ConselhoClasse from '~/paginas/Fechamento/ConselhoClasse/conselhoClasse';
-import RelatorioSemestral from '~/paginas/Relatorios/PAP/RelatorioSemestral/relatorioSemestral';
-import CalendarioProfessor from '~/paginas/CalendarioEscolar/CalendarioProfessor';
-import TerritorioSaber from '~/paginas/Planejamento/TerritorioSaber';
-import HistoricoEscolar from '~/paginas/Relatorios/HistoricoEscolar/historicoEscolar';
-import AtaFinalResultados from '~/paginas/Relatorios/Atas/AtaFinalResultados/ataFinalResultados';
-import BoletimSimples from '~/paginas/Relatorios/DiarioClasse/BoletimSimples';
-import RelatorioFrequencia from '~/paginas/Relatorios/Frequencia/relatorioFrequencia';
-import ListaDiarioBordo from '~/paginas/DiarioClasse/DiarioBordo/listaDiarioBordo';
-import DiarioBordo from '~/paginas/DiarioClasse/DiarioBordo/diarioBordo';
-import RelatorioPendencias from '~/paginas/Relatorios/Pendencias/relatorioPendencias';
+import DocPlanosTrabalhoCadastro from '~/paginas/Gestao/DocumentosPlanosTrabalho/cadastro/docPlanosTrabalhoCadastro';
+import DocPlanosTrabalhoLista from '~/paginas/Gestao/DocumentosPlanosTrabalho/lista/docPlanosTrabalhoLista';
+import CadastroOcorrencias from '~/paginas/Gestao/Ocorrencia/CadastroOcorrencias';
+import ListaOcorrencias from '~/paginas/Gestao/Ocorrencia/lista/listaOcorrencias';
+import Login from '~/paginas/Login';
+import CadastroEncaminhamentoNAAPA from '~/paginas/NAAPA/Encaminhamento/Cadastro/encaminhamentoNAAPA';
+import ListaEncaminhamentoNAAPA from '~/paginas/NAAPA/Encaminhamento/Lista/listaEncaminhamentoNAAPA';
+import DetalheNotificacao from '~/paginas/Notificacoes/Detalhes/detalheNotificacao';
+import NotificacoesLista from '~/paginas/Notificacoes/Lista/listaNotificacoes';
+import MeusDados from '~/paginas/Perfil/meusDados';
+import PlanoAnual from '~/paginas/Planejamento/Anual/planoAnual';
 import CartaIntencoes from '~/paginas/Planejamento/CartaIntencoes/cartaIntencoes';
-import RelatorioParecerConclusivo from '~/paginas/Relatorios/ParecerConclusivo/relatorioParecerConclusivo';
-import DevolutivasLista from '~/paginas/DiarioClasse/Devolutivas/devolutivasLista';
-import RegistroIndividual from '~/paginas/DiarioClasse/RegistroIndividual/registroIndividual';
-import DevolutivasForm from '~/paginas/DiarioClasse/Devolutivas/devolutivasForm';
-import RelatorioNotasConceitosFinais from '~/paginas/Relatorios/NotasConceitosFinais/relatorioNotasConceitosFinais';
+import PlanoCiclo from '~/paginas/Planejamento/PlanoCiclo/planoCiclo';
+import TerritorioSaber from '~/paginas/Planejamento/TerritorioSaber';
+import Principal from '~/paginas/Principal/principal';
+import RelatorioEncaminhamentoAEE from '~/paginas/Relatorios/AEE/encaminhamento/relatorioEncaminhamentoAEE';
+import RelatorioPlanoAEE from '~/paginas/Relatorios/AEE/plano/relatorioPlanoAEE';
+import RelatorioRegistroItinerancia from '~/paginas/Relatorios/AEE/registroItinerancia/relatorioRegistroItinerancia';
+import RelatorioAtaBimestral from '~/paginas/Relatorios/Atas/AtaBimestral/relatorioAtaBimestral';
+import AtaFinalResultados from '~/paginas/Relatorios/Atas/AtaFinalResultados/ataFinalResultados';
 import RelatorioCompensacaoAusencia from '~/paginas/Relatorios/CompensacaoAusencia/relatorioCompensacaoAusencia';
-import DashboardEscolaAqui from '~/paginas/Dashboard/DashboardEscolaAqui/dashboardEscolaAqui';
+import BoletimSimples from '~/paginas/Relatorios/DiarioClasse/BoletimSimples';
 import ControleGrade from '~/paginas/Relatorios/DiarioClasse/ControleGrade/controleGrade';
-import Sondagem from '~/paginas/Sondagem/sondagem';
-import HistoricoNotificacoes from '~/paginas/Relatorios/Notificacoes/HistoricoNotificacoes/historicoNotificacoes';
-import RelatorioUsuarios from '~/paginas/Relatorios/Gestao/Usuarios/relatorioUsuarios';
-import AtribuicaoCJ from '~/paginas/Relatorios/Gestao/AtribuicaoCJ/atribuicaoCJ';
-import RelatorioHistoricoAlteracoesNotas from '~/paginas/Relatorios/Fechamento/HistoricoAlteracoesNotas/relatorioHistoricoAlteracoesNotas';
+import RelatorioPlanejamentoDiario from '~/paginas/Relatorios/DiarioClasse/PlanejamentoDiario/relatorioPlanejamentoDiario';
 import relatorioEscolaAquiAdesao from '~/paginas/Relatorios/EscolaAqui/Adesao/relatorioEscolaAquiAdesao';
 import RelatorioLeitura from '~/paginas/Relatorios/EscolaAqui/Leitura/relatorioLeitura';
-import ListaOcorrencias from '~/paginas/Gestao/Ocorrencia/lista/listaOcorrencias';
-import CadastroOcorrencias from '~/paginas/Gestao/Ocorrencia/CadastroOcorrencias';
-import RelatorioPlanejamentoDiario from '~/paginas/Relatorios/DiarioClasse/PlanejamentoDiario/relatorioPlanejamentoDiario';
-import EncaminhamentoAEELista from '~/paginas/AEE/Encaminhamento/Lista/encaminhamentoAEELista';
-import EncaminhamentoAEECadastro from '~/paginas/AEE/Encaminhamento/Cadastro/encaminhamentoAEECadastro';
-import RegistroItineranciaAEECadastro from '~/paginas/AEE/RegistroItinerancia/Cadastro/registroItineranciaAEECadastro';
-import AcompanhamentoFrequencia from '~/paginas/DiarioClasse/AcompanhamentoFrequencia/acompanhamentoFrequencia';
-import PlanoAEELista from '~/paginas/AEE/Plano/Lista/planoAEELista';
-import PlanoAEECadastro from '~/paginas/AEE/Plano/Cadastro/planoAEECadastro';
-import RegistroItineranciaAEELista from '~/paginas/AEE/RegistroItinerancia/Lista/registroItineranciaAEELista';
-import AcompanhamentoAprendizagem from '~/paginas/Fechamento/AcompanhamentoAprendizagem/acompanhamentoAprendizagem';
-import RelatorioDevolutivas from '~/paginas/Relatorios/Planejamento/Devolutivas/relatorioDevolutivas';
-import DashboardAEE from '~/paginas/Dashboard/AEE/dashboardAEE';
-import DashboardRegistroItinerancia from '~/paginas/Dashboard/DashboardRegistroItinerancia/dashboardRegistroItinerancia';
-import AcompanhamentoFechamento from '~/paginas/Fechamento/AcompanhamentoFechamento/acompanhamentoFechamento';
-import DashboardFrequencia from '~/paginas/Dashboard/DashboardFrequencia/dashboardFrequencia';
-import DashboardDevolutivas from '~/paginas/Dashboard/DashboardDevolutivas/dashboardDevolutivas';
-import DashboardInformacoesEscolares from '~/paginas/Dashboard/DashboardInformacoesEscolares/dashboardInformacoesEscolares';
-import DashboardRegistroIndividual from '~/paginas/Dashboard/DashboardRegistroIndividual/dashboardRegistroIndividual';
-import DashboardDiarioBordo from '~/paginas/Dashboard/DashboardDiarioBordo/dashboardDiarioBordo';
 import RelatorioAcompanhamentoFechamento from '~/paginas/Relatorios/Fechamento/AcompanhamentoFechamento/relatorioAcompanhamentoFechamento';
-import DashboardRelAcompanhamentoAprendizagem from '~/paginas/Dashboard/DashboardRelAcompAprend/dashboardRelAcompAprend';
-import DashboardFechamento from '~/paginas/Dashboard/DashboardFechamento/dashboardFechamento';
-import RelatorioAtaBimestral from '~/paginas/Relatorios/Atas/AtaBimestral/relatorioAtaBimestral';
-import EventosLista from '~/paginas/CalendarioEscolar/Eventos/lista/eventosLista';
-import EventosCadastro from '~/paginas/CalendarioEscolar/Eventos/cadastro/eventosCadastro';
-import RelatorioAcompanhamentoRegistros from '~/paginas/Relatorios/Gestao/AcompanhamentoRegistros/acompanhamentoRegistros';
-import RelatorioFrequenciaMensal from '~/paginas/Relatorios/Frequencia/relatorioFrequenciaMensal';
-import DashboardNAAPA from '~/paginas/Dashboard/DashboardNAAPA/dashboardNAAPA';
-import Suporte from '~/paginas/Configuracoes/Usuarios/Suporte/suporte';
-import ListaEncaminhamentoNAAPA from '~/paginas/NAAPA/Encaminhamento/Lista/listaEncaminhamentoNAAPA';
-import CadastroEncaminhamentoNAAPA from '~/paginas/NAAPA/Encaminhamento/Cadastro/encaminhamentoNAAPA';
-import RelatorioPlanoAEE from '~/paginas/Relatorios/AEE/plano/relatorioPlanoAEE';
-import DocPlanosTrabalhoLista from '~/paginas/Gestao/DocumentosPlanosTrabalho/lista/docPlanosTrabalhoLista';
-import DocPlanosTrabalhoCadastro from '~/paginas/Gestao/DocumentosPlanosTrabalho/cadastro/docPlanosTrabalhoCadastro';
-import RelatorioEncaminhamentoAEE from '~/paginas/Relatorios/AEE/encaminhamento/relatorioEncaminhamentoAEE';
-import { store } from 'core/redux';
-import { ROUTES } from 'core/enum/routes';
-import Login from '~/paginas/Login';
-import ListaoPrincipal from '~/paginas/DiarioClasse/Listao';
-import RelatorioEncaminhamentonNAAPA from '~/paginas/Relatorios/NAAPA/encaminhamento/relatorioEncaminhamentoNAAPA';
-import RelatorioSondagemAnalitico from '~/paginas/Relatorios/Sondagem/relatorioSondagem';
-import RelatorioRegistroItinerancia from '~/paginas/Relatorios/AEE/registroItinerancia/relatorioRegistroItinerancia';
+import RelatorioHistoricoAlteracoesNotas from '~/paginas/Relatorios/Fechamento/HistoricoAlteracoesNotas/relatorioHistoricoAlteracoesNotas';
 import RelatorioControleFrequenciaMensal from '~/paginas/Relatorios/Frequencia/RelatorioControleFrequenciaMensal/relatorioControleFrequenciaMensal';
-import RelatorioPAP from '@/@legacy/paginas/Relatorios/PAP/RelatorioPAP/relatorioPAP';
-import RelatorioOcorrencias from '@/@legacy/paginas/Relatorios/Gestao/Ocorrencias/relatorioOcorrencias';
-import RelatorioDinamicoNAAPA from '@/@legacy/paginas/NAAPA/RelatorioDinamico/relatorioDinamicoNAAPA';
+import RelatorioFrequencia from '~/paginas/Relatorios/Frequencia/relatorioFrequencia';
+import RelatorioFrequenciaMensal from '~/paginas/Relatorios/Frequencia/relatorioFrequenciaMensal';
+import RelatorioAcompanhamentoRegistros from '~/paginas/Relatorios/Gestao/AcompanhamentoRegistros/acompanhamentoRegistros';
+import AtribuicaoCJ from '~/paginas/Relatorios/Gestao/AtribuicaoCJ/atribuicaoCJ';
+import RelatorioUsuarios from '~/paginas/Relatorios/Gestao/Usuarios/relatorioUsuarios';
+import HistoricoEscolar from '~/paginas/Relatorios/HistoricoEscolar/historicoEscolar';
+import RelatorioEncaminhamentonNAAPA from '~/paginas/Relatorios/NAAPA/encaminhamento/relatorioEncaminhamentoNAAPA';
+import RelatorioNotasConceitosFinais from '~/paginas/Relatorios/NotasConceitosFinais/relatorioNotasConceitosFinais';
+import HistoricoNotificacoes from '~/paginas/Relatorios/Notificacoes/HistoricoNotificacoes/historicoNotificacoes';
+import RelatorioPAPAcompanhamento from '~/paginas/Relatorios/PAP/Acompanhamento';
+import ResumosGraficosPAP from '~/paginas/Relatorios/PAP/ResumosGraficos';
+import RelatorioParecerConclusivo from '~/paginas/Relatorios/ParecerConclusivo/relatorioParecerConclusivo';
+import RelatorioPendencias from '~/paginas/Relatorios/Pendencias/relatorioPendencias';
+import RelatorioDevolutivas from '~/paginas/Relatorios/Planejamento/Devolutivas/relatorioDevolutivas';
+import RelatorioSondagemAnalitico from '~/paginas/Relatorios/Sondagem/relatorioSondagem';
+import SemPermissao from '~/paginas/SemPermissao/sem-permissao';
+import Sondagem from '~/paginas/Sondagem/sondagem';
+import { setRotas } from '~/redux/modulos/navegacao/actions';
 
 export interface RouteProps {
   path: string;
@@ -145,7 +144,7 @@ route.set(ROUTES.LOGIN, {
 
 route.set(ROUTES.RELATORIO_BOLETIM_SIMPLES, {
   breadcrumbName: ['Boletim'],
-  menu: ['Fechamento'],
+  menu: ['Documentos Escolares'],
   parent: '/',
   component: BoletimSimples,
   exact: true,
@@ -199,6 +198,7 @@ route.set(`${ROUTES.PAP}`, {
 
 route.set(ROUTES.CALENDARIO_ESCOLAR, {
   breadcrumbName: 'Calendário Escolar',
+  menu: ['Gestão'],
   parent: '/',
   component: CalendarioEscolar,
   exact: true,
@@ -207,7 +207,7 @@ route.set(ROUTES.CALENDARIO_ESCOLAR, {
 
 route.set(ROUTES.TIPO_EVENTOS, {
   breadcrumbName: 'Tipo de Eventos',
-  menu: ['Calendário Escolar'],
+  menu: ['Gestão'],
   parent: '/',
   component: TipoEventosLista,
   exact: true,
@@ -363,7 +363,7 @@ route.set('/gestao/atribuicao-esporadica/editar/:id', {
 
 route.set('/gestao/atribuicao-cjs', {
   breadcrumbName: 'Atribuição de CJ',
-  menu: ['Gestão'],
+  menu: ['Diário de Classe'],
   parent: '/',
   component: AtribuicaoCJLista,
   exact: true,
@@ -413,7 +413,8 @@ route.set(ROUTES.NOTIFICACOES, {
 });
 
 route.set(ROUTES.MEUS_DADOS, {
-  breadcrumbName: 'Perfil',
+  breadcrumbName: 'Meus Dados',
+  menu: ['Meus Dados'],
   parent: '/',
   component: MeusDados,
   exact: true,
@@ -424,7 +425,7 @@ route.set(ROUTES.MEUS_DADOS, {
 
 route.set(ROUTES.PERIODOS_ESCOLARES, {
   breadcrumbName: 'Períodos Escolares',
-  menu: ['Calendário Escolar'],
+  menu: ['Gestão'],
   parent: '/',
   component: PeriodosEscolares,
   exact: true,
@@ -435,7 +436,7 @@ route.set(ROUTES.PERIODOS_ESCOLARES, {
 
 route.set(ROUTES.REINICIAR_SENHA, {
   breadcrumbName: 'Reiniciar Senha',
-  menu: ['Configurações', 'Usuários'],
+  menu: ['Configurações'],
   parent: '/',
   component: TabsReiniciarSenha,
   exact: true,
@@ -446,7 +447,7 @@ route.set(ROUTES.REINICIAR_SENHA, {
 
 route.set(ROUTES.SUPORTE, {
   breadcrumbName: 'Suporte',
-  menu: ['Configurações', 'Usuários'],
+  menu: ['Configurações'],
   parent: '/',
   component: Suporte,
   exact: true,
@@ -457,7 +458,7 @@ route.set(ROUTES.SUPORTE, {
 
 route.set(ROUTES.TIPO_CALENDARIO_ESCOLAR, {
   breadcrumbName: 'Tipo de Calendário Escolar',
-  menu: ['Calendário Escolar'],
+  menu: ['Gestão'],
   parent: '/',
   component: TipoCalendarioEscolarLista,
   exact: true,
@@ -501,7 +502,7 @@ route.set(ROUTES.PRINCIPAL, {
 
 route.set(ROUTES.TIPO_FERIADO, {
   breadcrumbName: 'Lista de Tipo de Feriado',
-  menu: ['Tipo Feriado'],
+  menu: ['Gestão'],
   parent: '/',
   component: TipoFeriadoLista,
   exact: true,
@@ -541,7 +542,7 @@ route.set(ROUTES.SEM_PERMISSAO, {
 
 route.set(ROUTES.EVENTOS, {
   breadcrumbName: 'Eventos do calendário escolar',
-  menu: ['Calendário escolar'],
+  menu: ['Gestão'],
   parent: '/',
   component: EventosLista,
   exact: true,
@@ -593,7 +594,7 @@ route.set('/calendario-escolar/eventos/editar/:id/:tipoCalendarioId', {
 
 route.set(ROUTES.CALENDARIO_PROFESSOR, {
   breadcrumbName: 'Calendário do Professor',
-  menu: ['Calendário Escolar'],
+  menu: ['Diário de Classe'],
   parent: '/',
   component: CalendarioProfessor,
   exact: true,
@@ -808,7 +809,7 @@ route.set(`${ROUTES.FECHAMENTO_BIMESTRE}`, {
 
 route.set(`${ROUTES.PERIODO_FECHAMENTO_ABERTURA}`, {
   breadcrumbName: 'Abertura',
-  menu: ['Calendário Escolar', 'Período de Fechamento'],
+  menu: ['Gestão'],
   parent: '/',
   component: PeriodoFechamentoAbertura,
   exact: true,
@@ -819,7 +820,7 @@ route.set(`${ROUTES.PERIODO_FECHAMENTO_ABERTURA}`, {
 
 route.set(`${ROUTES.PERIODO_FECHAMENTO_REABERTURA}`, {
   breadcrumbName: 'Reabertura',
-  menu: ['Calendário Escolar', 'Período de Fechamento'],
+  menu: ['Gestão'],
   parent: '/',
   component: FechaReabLista,
   exact: true,
@@ -921,19 +922,9 @@ route.set(ROUTES.CONSELHO_CLASSE, {
   chavePermissao: ROUTES.CONSELHO_CLASSE,
 });
 
-route.set(ROUTES.RELATORIO_SEMESTRAL, {
-  breadcrumbName: 'Relatório Semestral',
-  menu: ['Relatórios', 'PAP'],
-  parent: '/',
-  component: RelatorioSemestral,
-  exact: true,
-  tipo: RotasTipo.EstruturadaAutenticada,
-  temPermissionamento: true,
-  chavePermissao: ROUTES.RELATORIO_SEMESTRAL,
-});
 route.set(ROUTES.ATA_FINAL_RESULTADOS, {
   breadcrumbName: 'Ata final de resultados',
-  menu: ['Relatórios', 'Atas'],
+  menu: ['Documentos Escolares'],
   parent: '/',
   component: AtaFinalResultados,
   exact: true,
@@ -944,7 +935,7 @@ route.set(ROUTES.ATA_FINAL_RESULTADOS, {
 
 route.set(ROUTES.HISTORICO_ESCOLAR, {
   breadcrumbName: 'Histórico Escolar',
-  menu: ['Relatórios'],
+  menu: ['Documentos Escolares'],
   parent: '/',
   component: HistoricoEscolar,
   exact: true,
@@ -1043,7 +1034,7 @@ route.set(ROUTES.CARTA_INTENCOES, {
 
 route.set(ROUTES.DEVOLUTIVAS, {
   breadcrumbName: 'Devolutivas',
-  menu: ['Diário de Classe '],
+  menu: ['Gestão'],
   parent: '/',
   component: DevolutivasLista,
   exact: true,
@@ -1096,7 +1087,7 @@ route.set(ROUTES.RELATORIO_COMPENSACAO_AUSENCIA, {
 
 route.set(ROUTES.DASHBOARD_ESCOLA_AQUI, {
   breadcrumbName: 'Escola aqui',
-  menu: ['Dashboard'],
+  menu: ['Gráficos'],
   parent: '/',
   component: DashboardEscolaAqui,
   exact: true,
@@ -1118,7 +1109,7 @@ route.set(ROUTES.CONTROLE_GRADE, {
 
 route.set(ROUTES.RELATORIO_PLANEJAMENTO_DIARIO, {
   breadcrumbName: 'Controle de planejamento diário',
-  menu: ['Relatórios', 'Diário de classe'],
+  menu: ['Relatórios', 'Diário de Classe'],
   parent: '/',
   component: RelatorioPlanejamentoDiario,
   exact: true,
@@ -1137,7 +1128,7 @@ route.set(ROUTES.SONDAGEM, {
 
 route.set(ROUTES.HISTORICO_NOTIFICACOES, {
   breadcrumbName: 'Histórico de notificações',
-  menu: ['Relatórios', 'Notificações'],
+  menu: ['Relatórios', 'Gestão'],
   parent: '/',
   component: HistoricoNotificacoes,
   exact: true,
@@ -1381,7 +1372,7 @@ route.set(ROUTES.ACOMPANHAMENTO_APRENDIZAGEM, {
 
 route.set(ROUTES.DASHBOARD_AEE, {
   breadcrumbName: 'AEE',
-  menu: ['Dashboard'],
+  menu: ['Gráficos'],
   parent: '/',
   component: DashboardAEE,
   exact: true,
@@ -1392,7 +1383,7 @@ route.set(ROUTES.DASHBOARD_AEE, {
 
 route.set(ROUTES.DASHBOARD_REGISTRO_ITINERANCIA, {
   breadcrumbName: 'Registro de Itinerância',
-  menu: ['Dashboard'],
+  menu: ['Gráficos'],
   parent: '/',
   component: DashboardRegistroItinerancia,
   exact: true,
@@ -1414,7 +1405,7 @@ route.set(ROUTES.ACOMPANHAMENTO_FECHAMENTO, {
 
 route.set(ROUTES.DASHBOARD_FREQUENCIA, {
   breadcrumbName: 'Frequência',
-  menu: ['Dashboard'],
+  menu: ['Gráficos'],
   parent: '/',
   component: DashboardFrequencia,
   exact: true,
@@ -1425,7 +1416,7 @@ route.set(ROUTES.DASHBOARD_FREQUENCIA, {
 
 route.set(ROUTES.DASHBOARD_DEVOLUTIVAS, {
   breadcrumbName: 'Devolutivas',
-  menu: ['Dashboard'],
+  menu: ['Gráficos'],
   parent: '/',
   component: DashboardDevolutivas,
   exact: true,
@@ -1436,7 +1427,7 @@ route.set(ROUTES.DASHBOARD_DEVOLUTIVAS, {
 
 route.set(ROUTES.DASHBOARD_INFORMACOES_ESCOLARES, {
   breadcrumbName: 'Informações escolares',
-  menu: ['Dashboard'],
+  menu: ['Gráficos'],
   parent: '/',
   component: DashboardInformacoesEscolares,
   exact: true,
@@ -1447,7 +1438,7 @@ route.set(ROUTES.DASHBOARD_INFORMACOES_ESCOLARES, {
 
 route.set(ROUTES.DASHBOARD_REGISTRO_INDIVIDUAL, {
   breadcrumbName: 'Registro individual',
-  menu: ['Dashboard'],
+  menu: ['Gráficos'],
   parent: '/',
   component: DashboardRegistroIndividual,
   exact: true,
@@ -1458,7 +1449,7 @@ route.set(ROUTES.DASHBOARD_REGISTRO_INDIVIDUAL, {
 
 route.set(ROUTES.DASHBOARD_DIARIO_BORDO, {
   breadcrumbName: 'Diário de bordo',
-  menu: ['Dashboard'],
+  menu: ['Gráficos'],
   parent: '/',
   component: DashboardDiarioBordo,
   exact: true,
@@ -1468,7 +1459,7 @@ route.set(ROUTES.DASHBOARD_DIARIO_BORDO, {
 });
 
 route.set(ROUTES.RELATORIO_ACOMPANHAMENTO_FECHAMENTO, {
-  breadcrumbName: 'Relatório de Acompanhamento do Fechamento',
+  breadcrumbName: 'Acompanhamento do Fechamento',
   menu: ['Relatórios', 'Fechamento'],
   parent: '/',
   component: RelatorioAcompanhamentoFechamento,
@@ -1480,7 +1471,7 @@ route.set(ROUTES.RELATORIO_ACOMPANHAMENTO_FECHAMENTO, {
 
 route.set(ROUTES.DASHBOARD_RELATORIO_ACOMPANHAMENTO_APRENDIZAGEM, {
   breadcrumbName: 'Relatório do Acompanhamento da Aprendizagem',
-  menu: ['Dashboard'],
+  menu: ['Gráficos'],
   parent: '/',
   component: DashboardRelAcompanhamentoAprendizagem,
   exact: true,
@@ -1491,7 +1482,7 @@ route.set(ROUTES.DASHBOARD_RELATORIO_ACOMPANHAMENTO_APRENDIZAGEM, {
 
 route.set(ROUTES.DASHBOARD_FECHAMENTO, {
   breadcrumbName: 'Fechamento',
-  menu: ['Dashboard'],
+  menu: ['Gráficos'],
   parent: '/',
   component: DashboardFechamento,
   exact: true,
@@ -1502,7 +1493,7 @@ route.set(ROUTES.DASHBOARD_FECHAMENTO, {
 
 route.set(ROUTES.ATA_BIMESTRAL, {
   breadcrumbName: 'Ata bimestral',
-  menu: ['Relatórios', 'Atas'],
+  menu: ['Documentos Escolares'],
   parent: '/',
   component: RelatorioAtaBimestral,
   exact: true,
@@ -1556,7 +1547,7 @@ route.set(ROUTES.RELATORIO_FREQUENCIA_MENSAL, {
 
 route.set(ROUTES.DASHBOARD_NAAPA, {
   breadcrumbName: 'NAAPA',
-  menu: ['Dashboard'],
+  menu: ['Gráficos'],
   parent: '/',
   component: DashboardNAAPA,
   exact: true,
@@ -1567,7 +1558,7 @@ route.set(ROUTES.DASHBOARD_NAAPA, {
 
 route.set(ROUTES.ENCAMINHAMENTO_NAAPA, {
   breadcrumbName: 'Encaminhamento NAAPA',
-  menu: ['Gestão'],
+  menu: ['NAAPA'],
   parent: '/',
   component: ListaEncaminhamentoNAAPA,
   exact: true,
@@ -1664,13 +1655,12 @@ route.set(ROUTES.RELATORIO_CONTROLE_FREQUENCIA_MENSAL, {
 
 route.set(ROUTES.RELATORIO_PAP, {
   breadcrumbName: 'Relatório de PAP',
-  menu: ['Relatórios', 'PAP'],
+  menu: ['Diário de Classe'],
   parent: '/',
   component: RelatorioPAP,
   exact: true,
   tipo: RotasTipo.EstruturadaAutenticada,
-  // TODO
-  // temPermissionamento: true,
+  temPermissionamento: true,
   chavePermissao: ROUTES.RELATORIO_PAP,
 });
 

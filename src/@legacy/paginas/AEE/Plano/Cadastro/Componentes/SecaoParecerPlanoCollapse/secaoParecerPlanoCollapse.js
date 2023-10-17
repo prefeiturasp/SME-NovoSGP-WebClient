@@ -20,7 +20,7 @@ const SecaoParecerPlanoCollapse = () => {
   const planoAEEDados = useSelector(store => store.planoAEE.planoAEEDados);
   const dadosParecer = useSelector(store => store.planoAEE.dadosParecer);
   const usuario = useSelector(store => store.usuario);
-  const permissoesTela = usuario.permissoes[RotasDto.RELATORIO_AEE_PLANO];
+  const permissoesTela = usuario.permissoes[ROUTES.RELATORIO_AEE_PLANO];
   const atualizarDados = useSelector(store => store.planoAEE.atualizarDados);
 
   const dispatch = useDispatch();

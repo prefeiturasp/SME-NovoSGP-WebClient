@@ -83,7 +83,7 @@ const ModalEncerramentoEncaminhamentoAEE = () => {
     if (retorno?.status === 200) {
       sucesso('Encaminhamento encerrado com sucesso');
       fecharModal();
-      navigate(RotasDto.RELATORIO_AEE_ENCAMINHAMENTO);
+      navigate(ROUTES.RELATORIO_AEE_ENCAMINHAMENTO);
     }
   };
 

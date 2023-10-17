@@ -17,7 +17,7 @@ const DocPlanosTrabalhoBotoesAcoes = props => {
 
   const onClickNovo = () => {
     if (!desabilitarNovo) {
-      navigate(`${RotasDto.DOCUMENTOS_PLANOS_TRABALHO}/novo`);
+      navigate(`${ROUTES.DOCUMENTOS_PLANOS_TRABALHO}/novo`);
     }
   };
 

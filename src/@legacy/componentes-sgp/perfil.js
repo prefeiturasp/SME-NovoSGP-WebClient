@@ -1,4 +1,4 @@
-import React, { useLayoutEffect, useRef, useState } from 'react';
+import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 import { limparDadosFiltro } from '~/redux/modulos/filtro/actions';
@@ -25,27 +25,38 @@ import {
   SGP_MENU_PERFIL_LISTA_PERFIS,
 } from '../constantes/ids/menu';
 import { useNavigate } from 'react-router-dom';
+import { Button, Dropdown } from 'antd';
 
-const Perfil = props => {
+const ContainerPerfil = styled(Button)`
+  background: #f5f6f8;
+  height: 55px;
+  min-width: 161px;
+  border-radius: 4px;
+  display: flex;
+  padding: 3px 10px;
+`;
+
+const Texto = styled.div`
+  font-size: 12px;
+  color: #42474a;
+`;
+
+const Perfil = () => {
   // eslint-disable-next-line react/prop-types
-  const { Botao, Icone, Texto } = props;
+
   const [ocultaPerfis, setarOcultaPerfis] = useState(true);
   const perfilStore = useSelector(e => e.perfil);
   const usuarioStore = useSelector(e => e.usuario);
   const navigate = useNavigate();
 
-  const listaRef = useRef();
-
   const ItensPerfil = styled.div`
     border-top-left-radius: 5px;
     border-bottom-left-radius: 5px;
     border-bottom-right-radius: 5px;
-    width: 145px;
     height: auto;
     background: ${Base.Branco};
     border: solid ${Base.CinzaDesabilitado} 1px;
     position: absolute;
-    right: 16%;
   `;
 
   const Item = styled.tr`
@@ -74,27 +85,6 @@ const Perfil = props => {
     i {
       font-size: 14px;
       color: #707683;
-    }
-  `;
-
-  const ContainerIcone = styled.div`
-    background: ${perfilStore.perfis.length > 1
-      ? Base.Roxo
-      : Base.CinzaDesabilitado};
-    color: ${Base.Branco};
-    font-size: 18px !important;
-    height: 28px !important;
-    width: 28px !important;
-    vertical-align: middle;
-    box-sizing: border-box;
-    align-items: center !important;
-    border-radius: 50%;
-    display: inline-block;
-    justify-content: center !important;
-    i {
-      background: ${perfilStore.perfis.length > 1
-        ? Base.Roxo
-        : Base.CinzaDesabilitado} !important;
     }
   `;
 
@@ -202,66 +192,88 @@ const Perfil = props => {
     }
   };
 
-  const handleClickFora = event => {
-    if (listaRef.current && !listaRef.current.contains(event.target)) {
-      setarOcultaPerfis(true);
-    }
-  };
-
-  useLayoutEffect(() => {
-    if (ocultaPerfis) document.addEventListener('click', handleClickFora);
-    else document.removeEventListener('click', handleClickFora);
-  }, [ocultaPerfis]);
-
   return (
-    <div className="position-relative" ref={listaRef}>
-      <Botao
-        className="text-center stretched-link"
-        onClick={onClickBotao}
+    <div className="position-relative">
+      <Dropdown
+        placement="bottomRight"
+        trigger={['click']}
         disabled={perfilStore.perfis.length <= 1}
         id={SGP_MENU_PERFIL_BUTTON_EXPANDIR_RETRAIR_PERFIL}
+        onOpenChange={onClickBotao}
+        dropdownRender={() => (
+          <ItensPerfil className="list-inline">
+            <table id={SGP_MENU_PERFIL_LISTA_PERFIS}>
+              <tbody>
+                {perfilStore.perfis.map(item => (
+                  <Item
+                    key={item.codigoPerfil}
+                    onClick={onClickPerfil}
+                    accessKey={item.codigoPerfil}
+                  >
+                    <td style={{ width: '20px' }}>
+                      <i
+                        value={item.codigoPerfil}
+                        className="fas fa-user-circle"
+                      />
+                    </td>
+                    <td
+                      style={{
+                        width: '100%',
+                        fontWeight:
+                          item.codigoPerfil ===
+                          perfilStore?.perfilSelecionado?.codigoPerfil
+                            ? 'bold'
+                            : 'initial',
+                      }}
+                    >
+                      {item.nomePerfil + (item.sigla ? `(${item.sigla})` : '')}
+                    </td>
+                  </Item>
+                ))}
+              </tbody>
+            </table>
+          </ItensPerfil>
+        )}
       >
-        <ContainerIcone>
-          <Icone className="fas fa-user-circle" />
-        </ContainerIcone>
-        <Texto
-          className={`d-block mt-1 ${ocultaPerfis ? '' : ' font-weight-bold'}`}
-        >
-          {perfilStore?.perfilSelecionado?.sigla
-            ? perfilStore?.perfilSelecionado?.sigla
-            : perfilStore?.perfilSelecionado?.nomePerfil}
-        </Texto>
-      </Botao>
-      {ocultaPerfis}
-      <ItensPerfil hidden={ocultaPerfis} className="list-inline">
-        <table id={SGP_MENU_PERFIL_LISTA_PERFIS}>
-          <tbody>
-            {perfilStore.perfis.map(item => (
-              <Item
-                key={item.codigoPerfil}
-                onClick={onClickPerfil}
-                accessKey={item.codigoPerfil}
-              >
-                <td style={{ width: '20px' }}>
-                  <i value={item.codigoPerfil} className="fas fa-user-circle" />
-                </td>
-                <td
-                  style={{
-                    width: '100%',
-                    fontWeight:
-                      item.codigoPerfil ===
-                      perfilStore?.perfilSelecionado?.codigoPerfil
-                        ? 'bold'
-                        : 'initial',
-                  }}
-                >
-                  {item.nomePerfil + (item.sigla ? `(${item.sigla})` : '')}
-                </td>
-              </Item>
-            ))}
-          </tbody>
-        </table>
-      </ItensPerfil>
+        <ContainerPerfil>
+          <div
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'start',
+              marginRight: '7px',
+              lineHeight: '16px',
+            }}
+          >
+            <Texto style={{ fontWeight: 700 }}>
+              {usuarioStore?.meusDados?.rf
+                ? `RF: ${usuarioStore.meusDados.rf}`
+                : ''}
+              {!usuarioStore?.meusDados?.rf && usuarioStore?.meusDados?.cpf
+                ? `CPF: ${usuarioStore?.meusDados?.cpf}`
+                : ''}
+            </Texto>
+            <Texto>{usuarioStore?.meusDados?.nome}</Texto>
+            <Texto>
+              {perfilStore?.perfilSelecionado?.sigla ||
+                perfilStore?.perfilSelecionado?.nomePerfil}
+            </Texto>
+          </div>
+          <div
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+              justifyContent: 'center',
+              height: '100%',
+            }}
+          >
+            <i
+              className={`fas fa-angle-${ocultaPerfis ? 'up' : 'down'}`}
+              style={{ fontSize: 18 }}
+            />
+          </div>
+        </ContainerPerfil>
+      </Dropdown>
     </div>
   );
 };

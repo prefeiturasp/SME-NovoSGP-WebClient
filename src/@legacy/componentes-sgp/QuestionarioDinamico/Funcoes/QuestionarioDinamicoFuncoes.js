@@ -596,6 +596,7 @@ class QuestionarioDinamicoFuncoes {
               questaoId: key,
               tipoQuestao: questaoAtual.tipoQuestao,
               nomeComponente: questaoAtual?.nomeComponente,
+              ordemResposta: 0,
             };
 
             switch (questao.tipoQuestao) {
@@ -686,6 +687,13 @@ class QuestionarioDinamicoFuncoes {
                   .split(',')
                   .map(Number);
               questao.resposta.forEach(valorSelecionado => {
+                const opcaoRespostaSelecionada = this.obterOpcaoRespostaPorId(
+                  questaoAtual?.opcaoResposta,
+                  valorSelecionado
+                );
+
+                questao.ordemResposta = opcaoRespostaSelecionada?.ordem;
+
                 if (valorSelecionado) {
                   if (questaoAtual?.resposta?.length) {
                     const temResposta = questaoAtual.resposta.find(

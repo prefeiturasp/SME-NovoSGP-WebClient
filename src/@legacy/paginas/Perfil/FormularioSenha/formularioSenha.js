@@ -1,31 +1,30 @@
 /* eslint-disable func-names */
-import React, { useState, useEffect } from 'react';
-import { Formik, Form } from 'formik';
-import * as Yup from 'yup';
+import { ROUTES } from '@/core/enum/routes';
+import { Form, Formik } from 'formik';
+import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import '~/servicos/Validacoes/regex';
-import CampoTexto from '~/componentes/campoTexto';
+import * as Yup from 'yup';
+import AlertaBalao from '~/componentes/alertaBalao';
 import Button from '~/componentes/button';
+import CampoTexto from '~/componentes/campoTexto';
 import { Colors } from '~/componentes/colors';
 import ModalConteudoHtml from '~/componentes/modalConteudoHtml';
-import { Validacoes, Validacao } from './formularioSenha.css';
-import api from '~/servicos/api';
+import '~/servicos/Validacoes/regex';
 import { sucesso } from '~/servicos/alertas';
-import AlertaBalao from '~/componentes/alertaBalao';
-import RotasDto from '~/dtos/rotasDto';
+import api from '~/servicos/api';
 import { verificaSomenteConsulta } from '~/servicos/servico-navegacao';
+import { Validacao, Validacoes } from './formularioSenha.css';
 
 const FormularioSenha = () => {
   const [exibirModal, setExibirModal] = useState(false);
   const [erroAlertaBalao, setErroAlertaBalao] = useState('');
   const [exibirAlertaBalao, setExibirAlertaBalao] = useState(false);
   const usuarioStore = useSelector(store => store.usuario);
-  const permissoesTela = usuarioStore.permissoes[RotasDto.MEUS_DADOS];
+  const permissoesTela = usuarioStore.permissoes[ROUTES.MEUS_DADOS];
   const [somenteConsulta, setSomenteConsulta] = useState(false);
 
   useEffect(() => {
     setSomenteConsulta(verificaSomenteConsulta(permissoesTela));
-
   }, []);
 
   const fecharModal = form => {
@@ -43,23 +42,23 @@ const FormularioSenha = () => {
         .contem(/([a-z])/, 'minuscula')
         .naoContem(/([À-ÖØ-öø-ÿ])/, 'acentos')
         .naoContem(' ', 'espaco')
-        .test('tamanho', 'tamanho', function(valor) {
+        .test('tamanho', 'tamanho', function (valor) {
           return valor && valor.length >= 8 && valor.length <= 12;
         })
-        .test('simbolos', 'simbolos', function(valor) {
+        .test('simbolos', 'simbolos', function (valor) {
           return (
             valor &&
             (valor.match(/([!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?])/) ||
               valor.match(/([0-9])/))
           );
         })
-        .test('iguais', 'iguais', function(confirmacao) {
+        .test('iguais', 'iguais', function (confirmacao) {
           return confirmacao === this.options.parent.confirmacaoNovaSenha;
         }),
       confirmacaoNovaSenha: Yup.mixed().test(
         'match',
         'As senhas devem ser iguais',
-        function(confirmacao) {
+        function (confirmacao) {
           return confirmacao && confirmacao === this.options.parent.novaSenha;
         }
       ),
