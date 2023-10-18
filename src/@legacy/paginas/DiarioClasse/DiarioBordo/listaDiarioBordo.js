@@ -15,7 +15,7 @@ import {
 import { Cabecalho, Paginacao } from '~/componentes-sgp';
 import ObservacoesUsuario from '~/componentes-sgp/ObservacoesUsuario/observacoesUsuario';
 import ServicoObservacoesUsuario from '~/componentes-sgp/ObservacoesUsuario/ServicoObservacoesUsuario';
-import { RotasDto } from '~/dtos';
+import { ROUTES } from '@/core/enum/routes';
 import {
   limparDadosObservacoesUsuario,
   setDadosObservacoesUsuario,

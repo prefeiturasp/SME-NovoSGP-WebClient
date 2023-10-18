@@ -5,7 +5,7 @@ import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { ListaPaginada } from '~/componentes';
 import { OPCAO_TODOS } from '~/constantes';
-import { RotasDto } from '~/dtos';
+import { ROUTES } from '@/core/enum/routes';
 import entidadeStatusDto from '~/dtos/entidadeStatusDto';
 import { setFiltroListaEventos } from '~/redux/modulos/calendarioEscolar/actions';
 import EventosListaContext from './eventosListaContext';

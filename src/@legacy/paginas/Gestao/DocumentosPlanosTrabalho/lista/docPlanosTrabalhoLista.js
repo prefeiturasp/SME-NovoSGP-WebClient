@@ -6,7 +6,7 @@ import { Card } from '~/componentes';
 import { Cabecalho } from '~/componentes-sgp';
 import DocPlanosTrabalhoBotoesAcoes from './docPlanosTrabalhoBotoesAcoes';
 import DocPlanosTrabalhoFiltros from './docPlanosTrabalhoFiltros';
-import { RotasDto } from '~/dtos';
+import { ROUTES } from '@/core/enum/routes';
 import { verificaSomenteConsulta } from '~/servicos';
 import DocPlanosTrabalhoListaPaginada from './docPlanosTrabalhoListaPaginada';
 

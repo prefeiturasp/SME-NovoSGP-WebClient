@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import shortid from 'shortid';
 import { ModalConteudoHtml, SelectComponent } from '~/componentes';
-import { RotasDto } from '~/dtos';
+import { ROUTES } from '@/core/enum/routes';
 import EventosCadastroContext from './eventosCadastroContext';
 
 const EventosModalCopiarEvento = () => {
