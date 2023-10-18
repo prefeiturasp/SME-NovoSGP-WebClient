@@ -13,7 +13,6 @@ import {
 } from '~/constantes/ids/button';
 import Button from '~/componentes/button';
 import { Colors } from '~/componentes/colors';
-import { RotasDto } from '~/dtos';
 import situacaoAEE from '~/dtos/situacaoAEE';
 import {
   setExibirLoaderEncaminhamentoAEE,
@@ -24,6 +23,7 @@ import { confirmar, erros, sucesso } from '~/servicos';
 import ServicoEncaminhamentoAEE from '~/servicos/Paginas/Relatorios/AEE/ServicoEncaminhamentoAEE';
 import BotaoGerarRelatorioEncaminhamentoAEE from '../../BotaoGerarRelatorioEncaminhamentoAEE';
 import { useNavigate, useParams } from 'react-router-dom';
+import { ROUTES } from '@/core/enum/routes';
 
 const BotoesAcoesEncaminhamentoAEE = () => {
   const dispatch = useDispatch();

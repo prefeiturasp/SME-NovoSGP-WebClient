@@ -3,7 +3,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import Cabecalho from '~/componentes-sgp/cabecalho';
 import Alert from '~/componentes/alert';
 import Card from '~/componentes/card';
-import { RotasDto } from '~/dtos';
 import { salvarDadosAulaFrequencia } from '~/redux/modulos/calendarioProfessor/actions';
 import {
   limparDadosFrequenciaPlanoAula,
@@ -19,6 +18,7 @@ import MontarListaFrequencia from './DadosFrequenciaPlanoAula/Frequencia/montarL
 import LoaderFrequenciaPlanoAula from './DadosFrequenciaPlanoAula/LoaderFrequenciaPlanoAula/loaderFrequenciaPlanoAula';
 import AlertaDentroPeriodoFrequenciaPlanoAula from './DadosFrequenciaPlanoAula/PlanoAula/DadosPlanoAula/AlertaDentroPeriodo/alertaDentroPeriodoFrequenciaPlanoAula';
 import PlanoAula from './DadosFrequenciaPlanoAula/PlanoAula/planoAula';
+import { ROUTES } from '@/core/enum/routes';
 
 const FrequenciaPlanoAula = () => {
   const dispatch = useDispatch();

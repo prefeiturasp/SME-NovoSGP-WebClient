@@ -3,7 +3,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import ListaFrequencia from '~/componentes-sgp/ListaFrequencia/listaFrequencia';
 import Ordenacao from '~/componentes-sgp/Ordenacao/ordenacao';
 import CardCollapse from '~/componentes/cardCollapse';
-import { RotasDto } from '~/dtos';
 import {
   setExibirCardCollapseFrequencia,
   setListaDadosFrequencia,
@@ -11,6 +10,7 @@ import {
 } from '~/redux/modulos/frequenciaPlanoAula/actions';
 import { ehTurmaInfantil } from '~/servicos/Validacoes/validacoesInfatil';
 import AuditoriaFrequencia from './auditoriaFrequencia';
+import { ROUTES } from '@/core/enum/routes';
 
 const MontarListaFrequencia = () => {
   const dispatch = useDispatch();

@@ -1,10 +1,9 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useLocation, useParams } from 'react-router-dom';
 import { Card } from '~/componentes';
 import { Cabecalho } from '~/componentes-sgp';
 import CollapseLocalizarEstudante from '~/componentes-sgp/CollapseLocalizarEstudante/collapseLocalizarEstudante';
-import { RotasDto } from '~/dtos';
 import { setLimparDadosAtribuicaoResponsavel } from '~/redux/modulos/collapseAtribuicaoResponsavel/actions';
 import { setLimparDadosLocalizarEstudante } from '~/redux/modulos/collapseLocalizarEstudante/actions';
 import {
@@ -18,6 +17,7 @@ import BotoesAcoesEncaminhamentoAEE from './Componentes/botoesAcoesEncaminhament
 import LoaderEncaminhamento from './Componentes/LoaderEncaminhamento/loaderEncaminhamento';
 import MontarDadosSecoes from './Componentes/MontarDadosSecoes/montarDadosSecoes';
 import AlertaCadastradoEmOutraUE from './Componentes/AlertaCadastradoEmOutraUE';
+import { ROUTES } from '@/core/enum/routes';
 
 const EncaminhamentoAEECadastro = () => {
   const dispatch = useDispatch();

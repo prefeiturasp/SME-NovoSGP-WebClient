@@ -10,7 +10,7 @@ import {
   SGP_BUTTON_CANCELAR,
   SGP_BUTTON_SALVAR,
 } from '~/constantes/ids/button';
-import { RotasDto } from '~/dtos';
+import { ROUTES } from '@/core/enum/routes';
 import notasConceitos from '~/dtos/notasConceitos';
 import {
   setAcaoTelaEmEdicao,
