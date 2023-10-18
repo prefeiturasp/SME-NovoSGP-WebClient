@@ -10,7 +10,6 @@ import {
 } from '~/redux/modulos/frequenciaPlanoAula/actions';
 import { ehTurmaInfantil } from '~/servicos/Validacoes/validacoesInfatil';
 import AuditoriaFrequencia from './auditoriaFrequencia';
-import { ROUTES } from '@/core/enum/routes';
 
 const MontarListaFrequencia = () => {
   const dispatch = useDispatch();

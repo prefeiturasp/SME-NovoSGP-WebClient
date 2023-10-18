@@ -17,7 +17,6 @@ import BotoesAcoesEncaminhamentoAEE from './Componentes/botoesAcoesEncaminhament
 import LoaderEncaminhamento from './Componentes/LoaderEncaminhamento/loaderEncaminhamento';
 import MontarDadosSecoes from './Componentes/MontarDadosSecoes/montarDadosSecoes';
 import AlertaCadastradoEmOutraUE from './Componentes/AlertaCadastradoEmOutraUE';
-import { ROUTES } from '@/core/enum/routes';
 
 const EncaminhamentoAEECadastro = () => {
   const dispatch = useDispatch();

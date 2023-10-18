@@ -18,7 +18,6 @@ import MontarListaFrequencia from './DadosFrequenciaPlanoAula/Frequencia/montarL
 import LoaderFrequenciaPlanoAula from './DadosFrequenciaPlanoAula/LoaderFrequenciaPlanoAula/loaderFrequenciaPlanoAula';
 import AlertaDentroPeriodoFrequenciaPlanoAula from './DadosFrequenciaPlanoAula/PlanoAula/DadosPlanoAula/AlertaDentroPeriodo/alertaDentroPeriodoFrequenciaPlanoAula';
 import PlanoAula from './DadosFrequenciaPlanoAula/PlanoAula/planoAula';
-import { ROUTES } from '@/core/enum/routes';
 
 const FrequenciaPlanoAula = () => {
   const dispatch = useDispatch();

@@ -23,7 +23,6 @@ import { confirmar, erros, sucesso } from '~/servicos';
 import ServicoEncaminhamentoAEE from '~/servicos/Paginas/Relatorios/AEE/ServicoEncaminhamentoAEE';
 import BotaoGerarRelatorioEncaminhamentoAEE from '../../BotaoGerarRelatorioEncaminhamentoAEE';
 import { useNavigate, useParams } from 'react-router-dom';
-import { ROUTES } from '@/core/enum/routes';
 
 const BotoesAcoesEncaminhamentoAEE = () => {
   const dispatch = useDispatch();

@@ -10,7 +10,6 @@ import { SGP_COLLAPSE_REGISTROS_ANTERIORES } from '~/constantes/ids/collapse';
 import { setRecolherRegistrosAnteriores } from '~/redux/modulos/registroIndividual/actions';
 
 import { RegistrosAnterioresConteudo } from './registrosAnterioresConteudo';
-import { ROUTES } from '@/core/enum/routes';
 
 const RegistrosAnteriores = () => {
   const [expandir, setExpandir] = useState(false);
