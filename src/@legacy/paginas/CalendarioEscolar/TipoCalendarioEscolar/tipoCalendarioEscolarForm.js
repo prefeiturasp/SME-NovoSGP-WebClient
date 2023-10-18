@@ -219,7 +219,7 @@ const TipoCalendarioEscolarForm = () => {
     valoresForm.anoLetivo = anoLetivo;
     valoresForm.semestre = EjaOuCelp ? valoresForm.semestre : null;
     valoresForm.periodo = EjaOuCelp ? 2 : valoresForm.periodo;
-    /*
+
     const metodo = idTipoCalendario ? 'put' : 'post';
     let url = 'v1/calendarios/tipos';
     if (idTipoCalendario) url += `/${idTipoCalendario}`;
@@ -231,7 +231,6 @@ const TipoCalendarioEscolarForm = () => {
       navigate(RotasDto.TIPO_CALENDARIO_ESCOLAR);
     }
     setCarregandoBotoesAcao(false);
-    */
   };
 
   const onChangeCampos = () => {
