@@ -13,7 +13,7 @@ import {
 } from '~/constantes/ids/button';
 import Button from '~/componentes/button';
 import { Colors } from '~/componentes/colors';
-import { RotasDto } from '~/dtos';
+import { ROUTES } from '@/core/enum/routes';
 import situacaoAEE from '~/dtos/situacaoAEE';
 import {
   setExibirLoaderEncaminhamentoAEE,

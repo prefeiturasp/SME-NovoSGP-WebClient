@@ -20,7 +20,7 @@ import {
   erro,
 } from '~/servicos';
 import BotaoExcluirPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoExcluirPadrao';
-import { RotasDto } from '~/dtos';
+import { ROUTES } from '@/core/enum/routes';
 import ServicoNAAPA from '~/servicos/Paginas/Gestao/NAAPA/ServicoNAAPA';
 import {
   setCarregarDadosEncaminhamentoNAAPA,

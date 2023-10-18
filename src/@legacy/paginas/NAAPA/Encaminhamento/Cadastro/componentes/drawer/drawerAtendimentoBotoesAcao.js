@@ -11,7 +11,7 @@ import {
   SGP_BUTTON_EXCLUIR_ATENDIMENTO,
   SGP_BUTTON_SALVAR_ATENDIMENTO,
 } from '~/constantes/ids/button';
-import { RotasDto } from '~/dtos';
+import { ROUTES } from '@/core/enum/routes';
 import { setExibirLoaderDrawerAtendimento } from '~/redux/modulos/encaminhamentoNAAPA/actions';
 import { confirmar, erros, sucesso, verificaSomenteConsulta } from '~/servicos';
 import ServicoNAAPA from '~/servicos/Paginas/Gestao/NAAPA/ServicoNAAPA';

@@ -8,7 +8,7 @@ import {
   SGP_BUTTON_CONTINUAR_MODAL,
   SGP_BUTTON_VOLTAR_MODAL,
 } from '~/constantes/ids/button';
-import { RotasDto } from '~/dtos';
+import { ROUTES } from '@/core/enum/routes';
 import { setExibirModalAviso } from '~/redux/modulos/encaminhamentoAEE/actions';
 
 const ModalAvisoNovoEncaminhamentoAEE = () => {

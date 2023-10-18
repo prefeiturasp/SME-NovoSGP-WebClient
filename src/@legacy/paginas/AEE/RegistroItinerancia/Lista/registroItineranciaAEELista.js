@@ -17,7 +17,7 @@ import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPad
 import { SGP_BUTTON_NOVO } from '~/constantes/ids/button';
 import LocalizadorPadrao from '~/componentes/LocalizadorPadrao';
 import { URL_HOME } from '~/constantes';
-import { RotasDto } from '~/dtos';
+import { ROUTES } from '@/core/enum/routes';
 import {
   AbrangenciaServico,
   erros,

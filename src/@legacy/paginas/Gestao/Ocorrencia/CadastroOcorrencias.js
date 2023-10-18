@@ -5,7 +5,7 @@ import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import * as Yup from 'yup';
 import { Auditoria, Card, Loader, momentSchema } from '~/componentes';
 import { Cabecalho } from '~/componentes-sgp';
-import { RotasDto } from '~/dtos';
+import { ROUTES } from '@/core/enum/routes';
 import {
   erros,
   ServicoOcorrencias,
