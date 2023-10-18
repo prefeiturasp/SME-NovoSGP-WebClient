@@ -6,7 +6,7 @@ import {
   SGP_SELECT_BIMESTRE,
   SGP_SELECT_COMPONENTE_CURRICULAR,
 } from '~/constantes/ids/select';
-import { ModalidadeDTO, RotasDto } from '~/dtos';
+import { ModalidadeDTO } from '~/dtos';
 import { setLimparModoEdicaoGeral } from '~/redux/modulos/geral/actions';
 import { setSomenteConsulta } from '~/redux/modulos/navegacao/actions';
 import {
@@ -18,6 +18,7 @@ import {
 import ServicoPeriodoEscolar from '~/servicos/Paginas/Calendario/ServicoPeriodoEscolar';
 import { ordenarPor } from '~/utils';
 import ListaoContext from '../listaoContext';
+import { ROUTES } from '@/core/enum/routes';
 
 const ListaoOperacoesFiltros = () => {
   const dispatch = useDispatch();

@@ -8,7 +8,7 @@ import { Cabecalho } from '~/componentes-sgp';
 import BotaoExcluirPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoExcluirPadrao';
 import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
 import { SGP_BUTTON_NOVO } from '~/constantes/ids/button';
-import { ModalidadeDTO, RotasDto } from '~/dtos';
+import { ModalidadeDTO } from '~/dtos';
 import {
   confirmar,
   erros,
@@ -17,6 +17,7 @@ import {
   verificaSomenteConsulta,
 } from '~/servicos';
 import Filtros from './Filtros/filtros';
+import { ROUTES } from '@/core/enum/routes';
 
 const ListaComunicados = () => {
   const navigate = useNavigate();

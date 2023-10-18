@@ -14,7 +14,7 @@ import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { Base, ListaPaginada } from '~/componentes';
 import { BIMESTRE_FINAL, OPCAO_TODOS } from '~/constantes';
-import { ModalidadeDTO, RotasDto } from '~/dtos';
+import { ModalidadeDTO } from '~/dtos';
 import {
   salvarAnosLetivos,
   salvarDres,
@@ -37,6 +37,7 @@ import {
   PARAMETROS,
 } from '../listaoConstantes';
 import ListaoContext from '../listaoContext';
+import { ROUTES } from '@/core/enum/routes';
 
 const ListaoPaginado = () => {
   const dispatch = useDispatch();

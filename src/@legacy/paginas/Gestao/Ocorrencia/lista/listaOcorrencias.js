@@ -23,7 +23,7 @@ import {
   SGP_SELECT_TURMA,
   SGP_SELECT_UE,
 } from '~/constantes/ids/select';
-import { ModalidadeDTO, RotasDto } from '~/dtos';
+import { ModalidadeDTO } from '~/dtos';
 import {
   AbrangenciaServico,
   confirmar,
@@ -36,6 +36,7 @@ import {
 import { ordenarDescPor } from '~/utils';
 import ListaOcorrenciasBotoesAcao from './listaOcorrenciasBotoesAcao';
 import ListaOcorrenciasPaginada from './listaOcorrenciasPaginada';
+import { ROUTES } from '@/core/enum/routes';
 
 const ListaOcorrencias = () => {
   const usuario = useSelector(state => state.usuario);

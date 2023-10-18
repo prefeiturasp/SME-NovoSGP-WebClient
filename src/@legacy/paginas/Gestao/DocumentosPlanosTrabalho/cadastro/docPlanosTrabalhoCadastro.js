@@ -5,7 +5,7 @@ import { useSelector } from 'react-redux';
 import { useLocation, useParams } from 'react-router-dom';
 import { Card, Loader } from '~/componentes';
 import { Cabecalho } from '~/componentes-sgp';
-import { ModalidadeDTO, RotasDto } from '~/dtos';
+import { ModalidadeDTO } from '~/dtos';
 import DocPlanosTrabalhoCadastroBotoesAcoes from './docPlanosTrabalhoCadastroBotoesAcoes';
 import DocPlanosTrabalhoCadastroForm from './docPlanosTrabalhoCadastroForm';
 import {
@@ -14,6 +14,7 @@ import {
   verificaSomenteConsulta,
 } from '~/servicos';
 import ServicoDocumentosPlanosTrabalho from '~/servicos/Paginas/Gestao/DocumentosPlanosTrabalho/ServicoDocumentosPlanosTrabalho';
+import { ROUTES } from '@/core/enum/routes';
 
 const DocPlanosTrabalhoCadastro = () => {
   const location = useLocation();
