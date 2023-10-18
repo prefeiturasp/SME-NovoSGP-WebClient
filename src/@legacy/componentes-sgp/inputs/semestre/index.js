@@ -23,7 +23,9 @@ export const Semestre = ({
 
   const setInitialValues = !form?.values?.modoEdicao;
 
-  const ehEJA = Number(modalidade) === ModalidadeDTO.EJA;
+  const ehEJA =
+    Number(modalidade) === ModalidadeDTO.EJA ||
+    Number(modalidade) === ModalidadeDTO.CELP;
 
   const limparDados = () => {
     form.setFieldValue(nameList, []);
@@ -64,7 +66,6 @@ export const Semestre = ({
     } else {
       limparDados();
     }
-
   }, [consideraHistorico, anoLetivo, modalidade, dreCodigo, ueCodigo]);
 
   useEffect(() => {
@@ -72,8 +73,6 @@ export const Semestre = ({
 
     limparDados();
     if (modalidade && ehEJA) obterSemestres();
-
-
   }, [ehEJA, modalidade]);
 
   const desabilitar =

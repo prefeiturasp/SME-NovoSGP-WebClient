@@ -13,15 +13,15 @@ import {
   RadioGroupButton,
   SelectComponent,
 } from '~/componentes';
-
 import { Cabecalho } from '~/componentes-sgp';
 
-import { modalidadeTipoCalendario, RotasDto } from '~/dtos';
+import { RotasDto } from '~/dtos';
 
 import {
   AbrangenciaServico,
   api,
   confirmar,
+  erro,
   erros,
   setBreadcrumbManual,
   sucesso,
@@ -34,6 +34,11 @@ import {
 import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
 import BotaoExcluirPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoExcluirPadrao';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import {
+  ModalidadeTipoCalendarioEnum,
+  ModalidadeTipoCalendarioEnumDisplay,
+} from '@/core/enum/modalidade-tipo-calendario-enum';
+import { ModalidadeEnum } from '@/core/enum/modalidade-enum';
 
 const TipoCalendarioEscolarForm = () => {
   const usuario = useSelector(store => store.usuario);
@@ -50,6 +55,11 @@ const TipoCalendarioEscolarForm = () => {
   const [auditoria, setAuditoria] = useState([]);
   const [modoEdicao, setModoEdicao] = useState(false);
   const [novoRegistro, setNovoRegistro] = useState(true);
+  const [listaSemestres, setListaSemestres] = useState([]);
+  const [semestre, setSemestre] = useState();
+  const [carregandoSemestres, setCarregandoSemestres] = useState(false);
+  const [semestreRequerido, setSemestreRequerido] = useState(undefined);
+  const [destativarPeriodo, setDestativarPeriodo] = useState(false);
 
   const anoAtual = window.moment().format('YYYY');
 
@@ -60,6 +70,7 @@ const TipoCalendarioEscolarForm = () => {
     nome: '',
     modalidade: '',
     periodo: '',
+    semestre: '',
   };
   const [valoresIniciais, setValoresIniciais] = useState(valoresIniciaisForm);
   const [listaAnosLetivo, setListaAnosLetivo] = useState([]);
@@ -76,7 +87,6 @@ const TipoCalendarioEscolarForm = () => {
       situacao: Yup.string().required('Situação obrigatória'),
     })
   );
-
   const opcoesPeriodo = [
     { label: 'Anual', value: 1 },
     { label: 'Semestral', value: 2 },
@@ -84,12 +94,21 @@ const TipoCalendarioEscolarForm = () => {
 
   const opcoesModalidade = [
     {
-      label: 'Fundamental/Médio',
-      value: modalidadeTipoCalendario.FUNDAMENTAL_MEDIO,
+      label: ModalidadeTipoCalendarioEnumDisplay[1],
+      value: ModalidadeTipoCalendarioEnum.FundamentalMedio,
     },
-    { label: 'EJA', value: modalidadeTipoCalendario.EJA },
-    { label: 'CELP', value: modalidadeTipoCalendario.CELP },
-    { label: 'Infantil', value: modalidadeTipoCalendario.Infantil },
+    {
+      label: ModalidadeTipoCalendarioEnumDisplay[2],
+      value: ModalidadeTipoCalendarioEnum.EJA,
+    },
+    {
+      label: ModalidadeTipoCalendarioEnumDisplay[3],
+      value: ModalidadeTipoCalendarioEnum.Infantil,
+    },
+    {
+      label: ModalidadeTipoCalendarioEnumDisplay[4],
+      value: ModalidadeTipoCalendarioEnum.CELP,
+    },
   ];
 
   const opcoesSituacao = [
@@ -103,6 +122,16 @@ const TipoCalendarioEscolarForm = () => {
       : somenteConsulta || !permissoesTela.podeAlterar;
     setDesabilitarCampos(desabilitar);
   }, [somenteConsulta, novoRegistro]);
+
+  const verificarSeSemestreEhRequerido = valor => {
+    if (valor === undefined) {
+      return false;
+    }
+    const informarSemestre =
+      Number(valor) === ModalidadeTipoCalendarioEnum.CELP ||
+      Number(valor) === ModalidadeTipoCalendarioEnum.EJA;
+    return informarSemestre;
+  };
 
   const [possuiEventos, setPossuiEventos] = useState(false);
 
@@ -123,7 +152,9 @@ const TipoCalendarioEscolarForm = () => {
         periodo: tipoCalendadio.data.periodo,
         situacao: tipoCalendadio.data.situacao,
         modalidade: String(tipoCalendadio.data.modalidade),
+        semestre: tipoCalendadio.data.semestre,
       });
+      setSemestre(tipoCalendadio.data.semestre);
       setAnoLetivo(tipoCalendadio.data.anoLetivo);
       setAuditoria({
         criadoPor: tipoCalendadio.data.criadoPor,
@@ -176,8 +207,19 @@ const TipoCalendarioEscolarForm = () => {
   };
 
   const onClickCadastrar = async valoresForm => {
+    const EjaOuCelp =
+      Number(valoresForm.modalidade) === ModalidadeTipoCalendarioEnum.EJA ||
+      Number(valoresForm.modalidade) === ModalidadeTipoCalendarioEnum.CELP;
+
+    if (!valoresForm.semestre && EjaOuCelp) {
+      erro('Informe o Semestre');
+      return;
+    }
     valoresForm.id = idTipoCalendario || 0;
     valoresForm.anoLetivo = anoLetivo;
+    valoresForm.semestre = EjaOuCelp ? valoresForm.semestre : null;
+    valoresForm.periodo = EjaOuCelp ? 2 : valoresForm.periodo;
+
     const metodo = idTipoCalendario ? 'put' : 'post';
     let url = 'v1/calendarios/tipos';
     if (idTipoCalendario) url += `/${idTipoCalendario}`;
@@ -196,7 +238,17 @@ const TipoCalendarioEscolarForm = () => {
       setModoEdicao(true);
     }
   };
-
+  const changeModalidade = (valor, form) => {
+    setSemestre(undefined);
+    setListaSemestres([]);
+    form.setFieldValue('semestre', undefined);
+    setSemestreRequerido(false);
+    form.setFieldValue('periodo', undefined);
+    form.setFieldTouched('periodo', false, false);
+    setDestativarPeriodo(false);
+    obterSemestres(valor, form);
+    onChangeCampos();
+  };
   const onClickExcluir = async () => {
     if (!desabilitarBotaoExcluir) {
       const confirmado = await confirmar(
@@ -270,9 +322,55 @@ const TipoCalendarioEscolarForm = () => {
     setListaAnosLetivo(valorAnos);
     setCarregandoAnos(false);
   }, []);
+  const onChangeSemestre = valor => {
+    setSemestre(valor);
+  };
+  const obterSemestres = useCallback(
+    async (valor, form) => {
+      if (valor === undefined || Number(valor) === 0) return;
+      const semestreEhRequerido = verificarSeSemestreEhRequerido(valor);
+      setSemestreRequerido(semestreEhRequerido);
+      if (!semestreEhRequerido) {
+        form.setFieldValue('periodo', undefined);
+        form.setFieldTouched('periodo', false, false);
+        setDestativarPeriodo(false);
+        return;
+      }
+      let modalidadeInformada = ModalidadeEnum.EJA;
+      setCarregandoSemestres(true);
+      if (Number(valor) === ModalidadeTipoCalendarioEnum.CELP) {
+        modalidadeInformada = ModalidadeEnum.CELP;
+      }
+      form.setFieldValue('periodo', 2);
+      form.setFieldTouched('periodo', true, true);
+      setDestativarPeriodo(true);
+      const retorno = await AbrangenciaServico.obterSemestres(
+        false,
+        anoLetivo,
+        modalidadeInformada,
+        '',
+        ''
+      )
+        .catch(e => erros(e))
+        .finally(() => setCarregandoSemestres(false));
+
+      if (retorno?.data?.length) {
+        const lista = retorno.data.map(periodo => {
+          return { desc: periodo, valor: periodo };
+        });
+
+        if (lista?.length === 1) {
+          setSemestre(lista[0].valor);
+        }
+        setListaSemestres(lista);
+      }
+    },
+    [anoLetivo]
+  );
 
   useEffect(() => {
     obterAnosLetivos();
+    verificarSeSemestreEhRequerido();
   }, [obterAnosLetivos]);
 
   return (
@@ -281,7 +379,10 @@ const TipoCalendarioEscolarForm = () => {
         enableReinitialize
         initialValues={valoresIniciais}
         validationSchema={validacoes}
-        onSubmit={valores => onClickCadastrar(valores)}
+        onSubmit={valores => {
+          console.log(valores);
+          onClickCadastrar(valores);
+        }}
         validateOnChange
         validateOnBlur
       >
@@ -372,16 +473,36 @@ const TipoCalendarioEscolarForm = () => {
                       labelRequired
                     />
                   </div>
-                  <div className="col-sm-12 col-md-6 col-lg-3 col-xl-4 mb-2">
+                  <div className="col-sm-4 col-md-2 col-lg-2 col-xl-2 mb-2">
                     <RadioGroupButton
                       label="Período"
                       form={form}
                       opcoes={opcoesPeriodo}
                       name="periodo"
                       onChange={onChangeCampos}
-                      desabilitado={desabilitarCampos || possuiEventos}
+                      desabilitado={
+                        desabilitarCampos || possuiEventos || destativarPeriodo
+                      }
                       labelRequired
                     />
+                  </div>
+                  <div className="col-sm-4 col-md-2 col-lg-2 col-xl-2 mb-2">
+                    <Loader loading={carregandoSemestres} ignorarTip>
+                      <SelectComponent
+                        lista={listaSemestres}
+                        valueOption="valor"
+                        valueText="desc"
+                        label="Semestre"
+                        name="semestre"
+                        form={form}
+                        valueSelect={semestre}
+                        onChange={onChangeSemestre}
+                        allowClear={true}
+                        placeholder="Semestre"
+                        labelRequired={semestreRequerido}
+                        disabled={!semestreRequerido}
+                      />
+                    </Loader>
                   </div>
                   <div className="col-sm-12  col-md-12 col-lg-6 col-xl-5 mb-2">
                     <SelectComponent
@@ -393,7 +514,9 @@ const TipoCalendarioEscolarForm = () => {
                       valueText="label"
                       placeholder="Selecione uma modalidade"
                       form={form}
-                      onChange={onChangeCampos}
+                      onChange={async valor => {
+                        changeModalidade(valor, form);
+                      }}
                       disabled={desabilitarCampos || possuiEventos}
                       labelRequired
                     />
