@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import ListaFrequencia from '~/componentes-sgp/ListaFrequencia/listaFrequencia';
 import Ordenacao from '~/componentes-sgp/Ordenacao/ordenacao';
 import CardCollapse from '~/componentes/cardCollapse';
+import { ROUTES } from '@/core/enum/routes';
 import {
   setExibirCardCollapseFrequencia,
   setListaDadosFrequencia,
