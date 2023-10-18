@@ -16,7 +16,7 @@ import Card from '~/componentes/card';
 import { Colors } from '~/componentes/colors';
 import LocalizadorEstudante from '~/componentes/LocalizadorEstudante';
 import { URL_HOME } from '~/constantes/url';
-import { RotasDto, situacaoPlanoAEE } from '~/dtos';
+import { situacaoPlanoAEE } from '~/dtos';
 import { setDadosIniciaisLocalizarEstudante } from '~/redux/modulos/collapseLocalizarEstudante/actions';
 import { setTypePlanoAEECadastro } from '~/redux/modulos/planoAEE/actions';
 
@@ -40,6 +40,7 @@ import { useNavigate } from 'react-router-dom';
 import { OPCAO_TODOS } from '@/@legacy/constantes';
 import ServicoEncaminhamentoAEE from '@/@legacy/servicos/Paginas/Relatorios/AEE/ServicoEncaminhamentoAEE';
 import { SGP_RADIO_EXIBIR_PLANOS_ENCERRADOS } from '@/@legacy/constantes/ids/radio';
+import { ROUTES } from '@/core/enum/routes';
 
 const PlanoAEELista = () => {
   const dispatch = useDispatch();
