@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux';
 import { useLocation, useParams } from 'react-router-dom';
 import { Card } from '~/componentes';
 import { Cabecalho } from '~/componentes-sgp';
-import { RotasDto } from '~/dtos';
+import { ROUTES } from '@/core/enum/routes';
 import { setBreadcrumbManual, verificaSomenteConsulta } from '~/servicos';
 import BotoesAcoesCadastroComunicados from './botoesAcoesCadastroComunicados';
 import FormCadastroComunicados from './Filtros/formCadastroComunicados';

@@ -16,7 +16,7 @@ import {
   SelectComponent,
 } from '~/componentes';
 import { OPCAO_TODOS } from '~/constantes';
-import { RotasDto } from '~/dtos';
+import { ROUTES } from '@/core/enum/routes';
 import entidadeStatusDto from '~/dtos/entidadeStatusDto';
 import eventoLetivo from '~/dtos/eventoLetivo';
 import eventoTipoData from '~/dtos/eventoTipoData';

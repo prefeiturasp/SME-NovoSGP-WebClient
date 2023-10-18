@@ -4,7 +4,7 @@ import { useLocation, useParams } from 'react-router-dom';
 import { Card } from '~/componentes';
 import { Cabecalho } from '~/componentes-sgp';
 import CollapseLocalizarEstudante from '~/componentes-sgp/CollapseLocalizarEstudante/collapseLocalizarEstudante';
-import { RotasDto } from '~/dtos';
+import { ROUTES } from '@/core/enum/routes';
 import { setLimparDadosAtribuicaoResponsavel } from '~/redux/modulos/collapseAtribuicaoResponsavel/actions';
 import { setLimparDadosLocalizarEstudante } from '~/redux/modulos/collapseLocalizarEstudante/actions';
 import {

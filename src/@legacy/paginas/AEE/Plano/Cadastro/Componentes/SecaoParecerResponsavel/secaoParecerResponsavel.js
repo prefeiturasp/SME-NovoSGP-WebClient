@@ -6,7 +6,7 @@ import {
   SGP_BUTTON_ATRIBUICAO_RESPONSAVEL,
   SGP_BUTTON_CANCELAR_ATRIBUICAO_RESPONSAVEL,
 } from '~/constantes/ids/button';
-import { RotasDto } from '~/dtos';
+import { ROUTES } from '@/core/enum/routes';
 import {
   limparDadosParecer,
   setDadosAtribuicaoResponsavel,

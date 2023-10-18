@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { RotasDto } from '~/dtos';
+import { ROUTES } from '@/core/enum/routes';
 import modalidade from '~/dtos/modalidade';
 import {
   setDesabilitarCamposPlanoAula,

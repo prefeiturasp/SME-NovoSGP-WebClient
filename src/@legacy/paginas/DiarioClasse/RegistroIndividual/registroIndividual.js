@@ -33,7 +33,7 @@ import {
   verificaSomenteConsulta,
 } from '~/servicos';
 
-import { RotasDto } from '~/dtos';
+import { ROUTES } from '@/core/enum/routes';
 import MetodosRegistroIndividual from '~/componentes-sgp/RegistroIndividual/metodosRegistroIndividual';
 import { SGP_SELECT_COMPONENTE_CURRICULAR } from '~/constantes/ids/select';
 

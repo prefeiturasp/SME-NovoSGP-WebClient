@@ -5,7 +5,7 @@ import { Button, Colors } from '~/componentes';
 import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
 import { URL_HOME } from '~/constantes';
 import { SGP_BUTTON_NOVO } from '~/constantes/ids/button';
-import { RotasDto } from '~/dtos';
+import { ROUTES } from '@/core/enum/routes';
 import { useNavigate } from 'react-router-dom';
 
 const DocPlanosTrabalhoBotoesAcoes = props => {

@@ -26,7 +26,7 @@ import {
   SGP_BUTTON_SALVAR,
 } from '~/constantes/ids/button';
 import { SGP_UPLOAD_REGISTRO_ITINERANCIA } from '~/constantes/ids/upload';
-import { RotasDto } from '~/dtos';
+import { ROUTES } from '@/core/enum/routes';
 import tipoQuestaoDto from '~/dtos/tipoQuestao';
 import {
   confirmar,

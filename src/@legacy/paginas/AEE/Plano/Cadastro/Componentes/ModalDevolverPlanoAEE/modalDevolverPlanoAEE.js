@@ -11,7 +11,7 @@ import {
   SGP_BUTTON_VOLTAR_MODAL,
 } from '~/constantes/ids/button';
 import { SGP_INPUT_JUSTIFIQUE_MOTIVO_DEVOLUCAO } from '~/constantes/ids/input';
-import { RotasDto } from '~/dtos';
+import { ROUTES } from '@/core/enum/routes';
 import { setExibirModalDevolverPlanoAEE } from '~/redux/modulos/planoAEE/actions';
 import { confirmar, erros, sucesso } from '~/servicos';
 import ServicoPlanoAEE from '~/servicos/Paginas/Relatorios/AEE/ServicoPlanoAEE';

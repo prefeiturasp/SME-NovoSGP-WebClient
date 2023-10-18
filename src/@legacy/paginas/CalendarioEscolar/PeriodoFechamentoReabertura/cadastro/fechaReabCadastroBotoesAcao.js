@@ -9,7 +9,7 @@ import {
   SGP_BUTTON_ALTERAR_CADASTRAR,
   SGP_BUTTON_CANCELAR,
 } from '~/constantes/ids/button';
-import { RotasDto } from '~/dtos';
+import { ROUTES } from '@/core/enum/routes';
 import {
   confirmar,
   erros,
