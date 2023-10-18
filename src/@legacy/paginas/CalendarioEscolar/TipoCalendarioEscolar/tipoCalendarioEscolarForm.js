@@ -16,7 +16,7 @@ import {
 
 import { Cabecalho } from '~/componentes-sgp';
 
-import { modalidadeTipoCalendario, RotasDto } from '~/dtos';
+import { modalidadeTipoCalendario } from '~/dtos';
 
 import {
   AbrangenciaServico,
@@ -34,6 +34,7 @@ import {
 import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
 import BotaoExcluirPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoExcluirPadrao';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import { ROUTES } from '@/core/enum/routes';
 
 const TipoCalendarioEscolarForm = () => {
   const usuario = useSelector(store => store.usuario);

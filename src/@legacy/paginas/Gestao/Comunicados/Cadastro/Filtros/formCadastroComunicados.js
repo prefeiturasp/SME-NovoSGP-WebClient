@@ -7,7 +7,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import * as Yup from 'yup';
 import { Loader, momentSchema } from '~/componentes';
 import { OPCAO_TODOS } from '~/constantes';
-import { ModalidadeDTO, RotasDto } from '~/dtos';
+import { ModalidadeDTO } from '~/dtos';
 import {
   setExibirLoaderGeralComunicados,
   setFormComunicados,
@@ -31,6 +31,7 @@ import TituloComunicados from './campos/tituloComunicados';
 import TurmasComunicados from './campos/turmasComunicados';
 import UeComunicados from './campos/ueComunicados';
 import InfoEstudantesReceberComunicados from './infoEstudantesReceberComunicado';
+import { ROUTES } from '@/core/enum/routes';
 
 const FormCadastroComunicados = props => {
   const { comunicadoId, somenteConsulta } = props;
