@@ -93,7 +93,9 @@ const RelatorioFrequencia = () => {
   };
   const OPCAO_TODOS_ESTUDANTES = '4';
   const ehTurma = tipoRelatorio === TIPO_RELATORIO.TURMA;
-  const ehEJA = Number(modalidadeId) === ModalidadeDTO.EJA;
+  const ehEJAOuCelp =
+    Number(modalidadeId) === ModalidadeDTO.EJA ||
+    Number(modalidadeId) === ModalidadeDTO.CELP;
   const ehInfantil = Number(modalidadeId) === ModalidadeDTO.INFANTIL;
 
   const opcoesListarTurmasDePrograma = [
@@ -294,6 +296,7 @@ const RelatorioFrequencia = () => {
   const obterAnosEscolares = useCallback(async (mod, ue) => {
     if (
       Number(mod) === ModalidadeDTO.EJA ||
+      Number(mod) === ModalidadeDTO.CELP ||
       Number(mod) === ModalidadeDTO.INFANTIL
     ) {
       setListaAnosEscolares([{ descricao: 'Todos', valor: OPCAO_TODOS }]);
@@ -408,7 +411,8 @@ const RelatorioFrequencia = () => {
         .catch(e => erros(e))
         .finally(() => setCarregandoComponentesCurriculares(false));
       if (retorno?.data?.length) {
-        const nomeParametro = ehInfantil && !(codigoUe === OPCAO_TODOS) ? 'nome' : 'descricao';
+        const nomeParametro =
+          ehInfantil && !(codigoUe === OPCAO_TODOS) ? 'nome' : 'descricao';
         const lista = retorno.data.map(item => ({
           desc: item[nomeParametro],
           valor: String(item.codigo),
@@ -480,9 +484,10 @@ const RelatorioFrequencia = () => {
 
   useEffect(() => {
     if (
-      modalidadeId &&
-      anoLetivo &&
-      Number(modalidadeId) === ModalidadeDTO.EJA
+      (modalidadeId &&
+        anoLetivo &&
+        Number(modalidadeId) === ModalidadeDTO.EJA) ||
+      Number(modalidadeId) === ModalidadeDTO.CELP
     ) {
       obterSemestres();
       return;
@@ -493,7 +498,8 @@ const RelatorioFrequencia = () => {
 
   useEffect(() => {
     const desabilitado =
-      String(modalidadeId) === String(ModalidadeDTO.EJA) && !semestre;
+      String(modalidadeId) === String(ModalidadeDTO.EJA) ||
+      (String(modalidadeId) === String(ModalidadeDTO.CELP) && !semestre);
 
     setDesabilitarSemestre(desabilitado);
   }, [modalidadeId, semestre]);
@@ -761,12 +767,12 @@ const RelatorioFrequencia = () => {
 
   useEffect(() => {
     if (modalidadeId && codigoUe) {
-      obterTurmas(modalidadeId, codigoUe, anoLetivo, semestre, ehEJA);
+      obterTurmas(modalidadeId, codigoUe, anoLetivo, semestre, ehEJAOuCelp);
       return;
     }
     setTurmasCodigo();
     setListaTurmas([]);
-  }, [modalidadeId, codigoUe, anoLetivo, semestre, obterTurmas, ehEJA]);
+  }, [modalidadeId, codigoUe, anoLetivo, semestre, obterTurmas, ehEJAOuCelp]);
 
   useEffect(() => {
     if (ehTurma) {
@@ -894,7 +900,9 @@ const RelatorioFrequencia = () => {
                     valueText="desc"
                     label="Semestre"
                     disabled={
-                      !modalidadeId || !ehEJA || listaSemestre?.length === 1
+                      !modalidadeId ||
+                      !ehEJAOuCelp ||
+                      listaSemestre?.length === 1
                     }
                     valueSelect={semestre}
                     onChange={onChangeSemestre}
@@ -980,7 +988,7 @@ const RelatorioFrequencia = () => {
                     disabled={
                       !modalidadeId ||
                       listaTurmas?.length === 1 ||
-                      (ehEJA && !semestre)
+                      (ehEJAOuCelp && !semestre)
                     }
                     valueSelect={turmasCodigo}
                     onChange={valores => {

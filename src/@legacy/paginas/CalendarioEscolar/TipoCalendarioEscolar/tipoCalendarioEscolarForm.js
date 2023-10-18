@@ -15,8 +15,6 @@ import {
 } from '~/componentes';
 import { Cabecalho } from '~/componentes-sgp';
 
-import { RotasDto } from '~/dtos';
-
 import {
   AbrangenciaServico,
   api,
@@ -39,6 +37,7 @@ import {
   ModalidadeTipoCalendarioEnumDisplay,
 } from '@/core/enum/modalidade-tipo-calendario-enum';
 import { ModalidadeEnum } from '@/core/enum/modalidade-enum';
+import { ROUTES } from '@/core/enum/routes';
 
 const TipoCalendarioEscolarForm = () => {
   const usuario = useSelector(store => store.usuario);

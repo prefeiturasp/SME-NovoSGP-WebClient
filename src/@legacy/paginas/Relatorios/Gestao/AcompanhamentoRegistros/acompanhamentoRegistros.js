@@ -294,9 +294,10 @@ const AcompanhamentoRegistros = () => {
 
   useEffect(() => {
     if (
-      modalidadeId &&
-      anoLetivo &&
-      String(modalidadeId) === String(ModalidadeDTO.EJA)
+      (modalidadeId &&
+        anoLetivo &&
+        String(modalidadeId) === String(ModalidadeDTO.EJA)) ||
+      String(modalidadeId) === String(ModalidadeDTO.CELP)
     ) {
       obterSemestres(modalidadeId, anoLetivo, dreId, ueId);
       return;
@@ -492,8 +493,10 @@ const AcompanhamentoRegistros = () => {
   };
 
   useEffect(() => {
-    const temModalidadeEja = String(modalidadeId) === String(ModalidadeDTO.EJA);
-    const consideraSemestre = temModalidadeEja && !semestre;
+    const temModalidadeEjaOuCelp =
+      String(modalidadeId) === String(ModalidadeDTO.EJA) ||
+      String(modalidadeId) === String(ModalidadeDTO.CELP);
+    const consideraSemestre = temModalidadeEjaOuCelp && !semestre;
 
     const desabilitar =
       !anoLetivo ||
@@ -658,7 +661,8 @@ const AcompanhamentoRegistros = () => {
                   disabled={
                     !modalidadeId ||
                     (listaSemestres && listaSemestres.length === 1) ||
-                    String(modalidadeId) !== String(ModalidadeDTO.EJA)
+                    String(modalidadeId) !== String(ModalidadeDTO.EJA) ||
+                    String(modalidadeId) !== String(ModalidadeDTO.CELP)
                   }
                   valueSelect={semestre}
                   onChange={onChangeSemestre}

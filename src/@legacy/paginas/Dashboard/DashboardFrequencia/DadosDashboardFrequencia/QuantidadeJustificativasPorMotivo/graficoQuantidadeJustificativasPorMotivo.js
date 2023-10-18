@@ -31,17 +31,18 @@ const GraficoQuantidadeJustificativasPorMotivo = props => {
 
   const obterDadosGrafico = useCallback(async () => {
     setExibirLoader(true);
-    const retorno = await ServicoDashboardFrequencia.obterQuantidadeJustificativasMotivo(
-      anoLetivo,
-      dreId === OPCAO_TODOS ? '' : dreId,
-      ueId === OPCAO_TODOS ? '' : ueId,
-      modalidade,
-      semestre,
-      anoEscolar === OPCAO_TODOS ? '' : anoEscolar,
-      turmaId === OPCAO_TODOS ? '' : turmaId
-    )
-      .catch(e => erros(e))
-      .finally(() => setExibirLoader(false));
+    const retorno =
+      await ServicoDashboardFrequencia.obterQuantidadeJustificativasMotivo(
+        anoLetivo,
+        dreId === OPCAO_TODOS ? '' : dreId,
+        ueId === OPCAO_TODOS ? '' : ueId,
+        modalidade,
+        semestre,
+        anoEscolar === OPCAO_TODOS ? '' : anoEscolar,
+        turmaId === OPCAO_TODOS ? '' : turmaId
+      )
+        .catch(e => erros(e))
+        .finally(() => setExibirLoader(false));
 
     if (retorno?.data?.length) {
       setDadosGrafico(retorno.data);
@@ -53,13 +54,15 @@ const GraficoQuantidadeJustificativasPorMotivo = props => {
   useEffect(() => {
     const consultaPorTurma = ueId && ueId !== OPCAO_TODOS;
     const consultaPorAnoEscolar = ueId === OPCAO_TODOS;
-
+    const ejaOuCelp =
+      Number(modalidade) === ModalidadeDTO.EJA ||
+      Number(modalidade) === ModalidadeDTO.CELP;
     if (
       anoLetivo &&
       dreId &&
       ueId &&
       modalidade &&
-      !!(Number(modalidade) === ModalidadeDTO.EJA ? semestre : !semestre) &&
+      !!(ejaOuCelp ? semestre : !semestre) &&
       ((consultaPorTurma && turmaId) || (consultaPorAnoEscolar && anoEscolar))
     ) {
       obterDadosGrafico();
@@ -133,7 +136,6 @@ const GraficoQuantidadeJustificativasPorMotivo = props => {
       setTurmaId();
       setListaTurmas([]);
     }
-
   }, [modalidade]);
 
   const onChangeTurma = valor => setTurmaId(valor);

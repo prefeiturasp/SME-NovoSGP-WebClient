@@ -26,7 +26,9 @@ export const AnoEscolar = ({
 
   const setInitialValues = !form?.values?.modoEdicao;
 
-  const ehEJA = Number(modalidade) === ModalidadeDTO.EJA;
+  const ehEJAouCelp =
+    Number(modalidade) === ModalidadeDTO.EJA ||
+    Number(modalidade) === ModalidadeDTO.CELP;
 
   const limparDados = () => {
     form.setFieldValue(nameList, []);
@@ -36,7 +38,7 @@ export const AnoEscolar = ({
   const obterAnosEscolares = useCallback(async () => {
     if (!anoLetivo || !ueCodigo || !modalidade) return;
 
-    if (ehEJA && !semestre) return;
+    if (ehEJAouCelp && !semestre) return;
 
     const OPCAO_TODOS_ANOS = { valor: OPCAO_TODOS, descricao: 'Todos' };
 
@@ -92,7 +94,7 @@ export const AnoEscolar = ({
 
   const desabilitar =
     !modalidade ||
-    (ehEJA && !semestre) ||
+    (ehEJAouCelp && !semestre) ||
     listaAnosEscolares?.length === 1 ||
     disabled;
 

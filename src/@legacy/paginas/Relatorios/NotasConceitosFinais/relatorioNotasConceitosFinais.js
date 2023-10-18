@@ -128,33 +128,40 @@ const RelatorioNotasConceitosFinais = () => {
     }
   };
 
-  const obterUes = useCallback(async dre => {
-    if (dre) {
-      setCarregandoUes(true);
+  const obterUes = useCallback(
+    async dre => {
+      if (dre) {
+        setCarregandoUes(true);
 
-      const dataAtual = new Date();
-      const consideraHistorico = anoLetivo != dataAtual.getFullYear();
+        const dataAtual = new Date();
+        const consideraHistorico = anoLetivo != dataAtual.getFullYear();
 
-      const retorno = await ServicoFiltroRelatorio.obterUes(dre, consideraHistorico, anoLetivo).catch(e => {
-        erros(e);
-        setCarregandoUes(false);
-      });
-      if (retorno && retorno.data) {
-        const lista = retorno.data.map(item => ({
-          desc: item.nome,
-          valor: String(item.codigo),
-        }));
+        const retorno = await ServicoFiltroRelatorio.obterUes(
+          dre,
+          consideraHistorico,
+          anoLetivo
+        ).catch(e => {
+          erros(e);
+          setCarregandoUes(false);
+        });
+        if (retorno && retorno.data) {
+          const lista = retorno.data.map(item => ({
+            desc: item.nome,
+            valor: String(item.codigo),
+          }));
 
-        if (lista && lista.length && lista.length === 1) {
-          setCodigoUe(lista[0].valor);
+          if (lista && lista.length && lista.length === 1) {
+            setCodigoUe(lista[0].valor);
+          }
+          setListaUes(lista);
+        } else {
+          setListaUes([]);
         }
-        setListaUes(lista);
-      } else {
-        setListaUes([]);
+        setCarregandoUes(false);
       }
-      setCarregandoUes(false);
-    }
-  }, [anoLetivo, codigoDre, consideraHistorico]);
+    },
+    [anoLetivo, codigoDre, consideraHistorico]
+  );
 
   const onChangeDre = dre => {
     setCodigoDre(dre);
@@ -253,7 +260,10 @@ const RelatorioNotasConceitosFinais = () => {
 
   const obterAnosEscolares = useCallback(
     async (mod, ue, anoLetivoSelecionado) => {
-      if (String(mod) === String(modalidade.EJA)) {
+      if (
+        String(mod) === String(modalidade.EJA) ||
+        String(mod) === String(modalidade.CELP)
+      ) {
         setListaAnosEscolares([{ descricao: 'Todos', valor: OPCAO_TODOS }]);
         setAnosEscolares([OPCAO_TODOS]);
       } else {
@@ -348,7 +358,7 @@ const RelatorioNotasConceitosFinais = () => {
     bi.push({ desc: '1º', valor: 1 });
     bi.push({ desc: '2º', valor: 2 });
 
-    if (modalidadeId != modalidade.EJA) {
+    if (modalidadeId != modalidade.EJA || modalidadeId != modalidade.CELP) {
       bi.push({ desc: '3º', valor: 3 });
       bi.push({ desc: '4º', valor: 4 });
     }
@@ -369,7 +379,10 @@ const RelatorioNotasConceitosFinais = () => {
 
   useEffect(() => {
     if (modalidadeId && anoLetivo) {
-      if (String(modalidadeId) === String(modalidade.EJA)) {
+      if (
+        String(modalidadeId) === String(modalidade.EJA) ||
+        String(modalidadeId) === String(modalidade.CELP)
+      ) {
         obterSemestres(modalidadeId, anoLetivo);
       } else {
         setSemestre(undefined);
@@ -425,7 +438,10 @@ const RelatorioNotasConceitosFinais = () => {
       !condicao ||
       !tipoNota ||
       valorCondicaoDesabilitar ||
-      (String(modalidadeId) === String(modalidade.EJA) ? !semestre : false) ||
+      (String(modalidadeId) === String(modalidade.EJA) ||
+      String(modalidadeId) === String(modalidade.CELP)
+        ? !semestre
+        : false) ||
       !formato ||
       clicouBotaoGerar;
 
@@ -790,6 +806,7 @@ const RelatorioNotasConceitosFinais = () => {
                     disabled={
                       !modalidadeId ||
                       String(modalidadeId) !== String(modalidade.EJA) ||
+                      String(modalidadeId) !== String(modalidade.CELP) ||
                       (listaSemestre && listaSemestre.length === 1)
                     }
                     valueSelect={semestre}

@@ -6,6 +6,7 @@ import { Cabecalho } from '~/componentes-sgp';
 import { ModalidadeDTO } from '~/dtos';
 import RelatorioOcorrenciasBotoesAcoes from './relatorioOcorrenciasBotoesAcoes';
 import RelatorioOcorrenciasForm from './relatorioOcorrenciasForm';
+import moment from 'moment';
 
 const RelatorioOcorrencias = () => {
   const [gerandoRelatorio, setGerandoRelatorio] = useState(false);
@@ -47,10 +48,12 @@ const RelatorioOcorrencias = () => {
         textoCampoObrigatorio,
         function validar() {
           const { modalidade, semestre } = this.parent;
-          const temModalidadeEja = Number(modalidade) === ModalidadeDTO.EJA;
+          const temModalidadeEjaOuCelp =
+            Number(modalidade) === ModalidadeDTO.EJA ||
+            Number(modalidade) === ModalidadeDTO.CELP;
 
           let ehValido = true;
-          if (!temModalidadeEja) {
+          if (!temModalidadeEjaOuCelp) {
             return ehValido;
           }
           if (!semestre) {

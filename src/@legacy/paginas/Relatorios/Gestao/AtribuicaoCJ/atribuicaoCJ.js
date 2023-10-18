@@ -222,10 +222,10 @@ const AtribuicaoCJ = () => {
           abrev: item.abreviacao,
         }));
 
-        if(lista?.some(l=> l.valor === "-99")){
+        if (lista?.some(l => l.valor === '-99')) {
           lista.shift();
         }
-        
+
         setListaDres(lista);
 
         if (lista?.length && lista?.length === 1) {
@@ -261,7 +261,7 @@ const AtribuicaoCJ = () => {
             valor: String(item.codigo),
           }));
 
-          if(lista?.some(l=> l.valor === "-99")){
+          if (lista?.some(l => l.valor === '-99')) {
             lista.shift();
           }
 
@@ -363,7 +363,10 @@ const AtribuicaoCJ = () => {
     bi.push({ desc: '1º', valor: '1' });
     bi.push({ desc: '2º', valor: '2' });
 
-    if (String(modalidadeId) !== String(ModalidadeDTO.EJA)) {
+    if (
+      String(modalidadeId) !== String(ModalidadeDTO.EJA) ||
+      String(modalidadeId) !== String(ModalidadeDTO.CELP)
+    ) {
       bi.push({ desc: '3º', valor: '3' });
       bi.push({ desc: '4º', valor: '4' });
     }
@@ -479,7 +482,8 @@ const AtribuicaoCJ = () => {
                   disabled={
                     !modalidadeId ||
                     (listaSemestres && listaSemestres.length === 1) ||
-                    String(modalidadeId) !== String(ModalidadeDTO.EJA)
+                    String(modalidadeId) !== String(ModalidadeDTO.EJA) ||
+                    String(modalidadeId) !== String(ModalidadeDTO.CELP)
                   }
                   valueSelect={semestre}
                   onChange={onChangeSemestre}

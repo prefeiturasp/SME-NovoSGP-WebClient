@@ -53,7 +53,8 @@ const BoletimSimples = () => {
       ueCodigo: valoresFiltro.ueCodigo,
       turmaCodigo: valoresFiltro.turmasId,
       semestre:
-        String(valoresFiltro.modalidadeId) === String(modalidade.EJA)
+        String(valoresFiltro.modalidadeId) === String(modalidade.EJA) ||
+        String(valoresFiltro.modalidadeId) === String(modalidade.CELP)
           ? valoresFiltro.semestre
           : 0,
       consideraHistorico: valoresFiltro.consideraHistorico,
@@ -119,6 +120,7 @@ const BoletimSimples = () => {
   useEffect(() => {
     const temSemestreOuNaoEja =
       String(filtro?.modalidade) !== String(ModalidadeDTO.EJA) ||
+      String(filtro?.modalidade) !== String(ModalidadeDTO.CELP) ||
       filtro?.semestre;
     const ehInfantil =
       String(filtro.modalidade) === String(modalidade.INFANTIL);

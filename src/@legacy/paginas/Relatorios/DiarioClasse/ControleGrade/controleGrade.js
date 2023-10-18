@@ -268,7 +268,10 @@ const ControleGrade = () => {
   }, [modalidadeId, ueId, anoLetivo, obterTurmas]);
 
   useEffect(() => {
-    if (String(modalidadeId) === String(modalidade.EJA)) {
+    if (
+      String(modalidadeId) === String(modalidade.EJA) ||
+      String(modalidadeId) === String(modalidade.CELP)
+    ) {
       setListaBimestres(bimestresEja);
     } else {
       setListaBimestres(bimestresFundMedio);
@@ -374,7 +377,7 @@ const ControleGrade = () => {
       setListaComponentesCurriculares([]);
     }
   }, [ueId, turmaId]);
-  
+
   const obterSemestres = async (
     modalidadeSelecionada,
     anoLetivoSelecionado
@@ -400,9 +403,10 @@ const ControleGrade = () => {
 
   useEffect(() => {
     if (
-      modalidadeId &&
-      anoLetivo &&
-      String(modalidadeId) === String(modalidade.EJA)
+      (modalidadeId &&
+        anoLetivo &&
+        String(modalidadeId) === String(modalidade.EJA)) ||
+      String(modalidadeId) === String(modalidade.CELP)
     ) {
       obterSemestres(modalidadeId, anoLetivo);
     } else {
@@ -430,7 +434,10 @@ const ControleGrade = () => {
       !dreId ||
       !ueId ||
       !modalidadeId ||
-      (String(modalidadeId) === String(modalidade.EJA) ? !semestre : false) ||
+      (String(modalidadeId) === String(modalidade.EJA) ||
+      String(modalidadeId) === String(modalidade.CELP)
+        ? !semestre
+        : false) ||
       !turmaId ||
       !componentesCurricularesId ||
       !bimestre ||
@@ -582,7 +589,8 @@ const ControleGrade = () => {
                   disabled={
                     !modalidadeId ||
                     (listaSemestres && listaSemestres.length === 1) ||
-                    String(modalidadeId) !== String(modalidade.EJA)
+                    String(modalidadeId) !== String(modalidade.EJA) ||
+                    String(modalidadeId) !== String(modalidade.CELP)
                   }
                   valueSelect={semestre}
                   onChange={onChangeSemestre}

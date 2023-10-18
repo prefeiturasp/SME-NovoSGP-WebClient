@@ -83,7 +83,9 @@ const AtaFinalResultados = () => {
     { label: 'Não', value: false },
   ];
 
-  const ehEJA = Number(modalidadeId) === ModalidadeDTO.EJA;
+  const ehEJAOuCelp =
+    Number(modalidadeId) === ModalidadeDTO.EJA ||
+    Number(modalidadeId) === ModalidadeDTO.CELP;
 
   const obterAnosLetivos = useCallback(async considHistorico => {
     setCarregandoAnosLetivos(true);
@@ -291,16 +293,16 @@ const AtaFinalResultados = () => {
 
   useEffect(() => {
     if (modalidadeId && ueId) {
-      obterTurmas(modalidadeId, ueId, semestre, ehEJA);
+      obterTurmas(modalidadeId, ueId, semestre, ehEJAOuCelp);
     } else {
       setTurmaId(undefined);
       setListaTurmas([]);
     }
-  }, [modalidadeId, ueId, obterTurmas, semestre, ehEJA]);
+  }, [modalidadeId, ueId, obterTurmas, semestre, ehEJAOuCelp]);
 
   useEffect(() => {
     if (modalidadeId && anoLetivo) {
-      if (modalidadeId === modalidade.EJA) {
+      if (modalidadeId === modalidade.EJA || modalidadeId === modalidade.CELP) {
         obterSemestres(modalidadeId, anoLetivo);
       } else {
         setSemestre(undefined);
@@ -323,7 +325,10 @@ const AtaFinalResultados = () => {
 
     let desabilitado = desabilitar;
 
-    if (Number(modalidadeId) === Number(modalidade.EJA)) {
+    if (
+      Number(modalidadeId) === Number(modalidade.EJA) ||
+      Number(modalidadeId) === Number(modalidade.CELP)
+    ) {
       desabilitado = !semestre || desabilitar;
     } else if (Number(modalidadeId) === Number(modalidade.ENSINO_MEDIO)) {
       desabilitado = desabilitar || !visualizacao;
@@ -468,7 +473,10 @@ const AtaFinalResultados = () => {
     setListaSemestre([]);
     setSemestre(undefined);
 
-    if (Number(novaModalidade) === modalidade.EJA)
+    if (
+      Number(novaModalidade) === modalidade.EJA ||
+      Number(novaModalidade) === modalidade.CELP
+    )
       obterSemestres(novaModalidade, anoLetivo);
 
     setListaTurmas([]);
@@ -667,6 +675,7 @@ const AtaFinalResultados = () => {
                   !permissoesTela.podeConsultar ||
                   !modalidadeId ||
                   Number(modalidadeId) !== modalidade.EJA ||
+                  Number(modalidadeId) !== modalidade.CELP ||
                   (listaSemestre && listaSemestre.length === 1)
                 }
                 valueSelect={semestre}
@@ -686,7 +695,7 @@ const AtaFinalResultados = () => {
                   !permissoesTela.podeConsultar ||
                   !modalidadeId ||
                   listaTurmas?.length === 1 ||
-                  (ehEJA && !semestre)
+                  (ehEJAOuCelp && !semestre)
                 }
                 valueSelect={turmaId}
                 onChange={onChangeTurma}

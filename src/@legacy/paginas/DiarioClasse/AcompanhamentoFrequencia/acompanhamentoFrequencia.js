@@ -117,9 +117,7 @@ const AcompanhamentoFrequencia = () => {
         componentesCurriculares.data.length === 1
       ) {
         const componenteCurricular = componentesCurriculares.data[0];
-        setComponenteCurricularIdSelecionado(
-          String(componenteCurricular.id)
-        );
+        setComponenteCurricularIdSelecionado(String(componenteCurricular.id));
         setDesabilitarComponenteCurricular(true);
       }
       if (turmaSelecionada.anoLetivo === new Date().getFullYear()) {
@@ -155,15 +153,16 @@ const AcompanhamentoFrequencia = () => {
   useEffect(() => {
     if (componenteCurricularIdSelecionado) {
       const componenteCurriular = listaComponentesCurriculares.find(
-        item =>
-          String(item.id) ===
-          String(componenteCurricularIdSelecionado)
+        item => String(item.id) === String(componenteCurricularIdSelecionado)
       );
 
       setPodeLancarFrequencia(componenteCurriular?.registraFrequencia);
       setTerritorioSaber(componenteCurriular?.territorioSaber);
 
-      if (Number(turmaSelecionada.modalidade) === modalidade.EJA) {
+      if (
+        Number(turmaSelecionada.modalidade) === modalidade.EJA ||
+        Number(turmaSelecionada.modalidade) === modalidade.CELP
+      ) {
         setBimestres(listagemBimestresEJA);
       } else {
         setBimestres(listagemBimestres);

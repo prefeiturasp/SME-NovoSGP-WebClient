@@ -180,11 +180,11 @@ const RelatorioPlanejamentoDiario = () => {
     }
 
     if (
-      !desabilitar &&
-      temDreUeSelecionada &&
-      modalidadeId &&
-      modalidadeId === ModalidadeDTO.EJA &&
-      !semestre
+      (!desabilitar &&
+        temDreUeSelecionada &&
+        modalidadeId &&
+        modalidadeId === ModalidadeDTO.EJA) ||
+      (modalidadeId === ModalidadeDTO.CELP && !semestre)
     ) {
       desabilitar = true;
     }
@@ -490,9 +490,10 @@ const RelatorioPlanejamentoDiario = () => {
 
   useEffect(() => {
     if (
-      modalidadeId &&
-      anoLetivo &&
-      String(modalidadeId) === String(ModalidadeDTO.EJA)
+      (modalidadeId &&
+        anoLetivo &&
+        String(modalidadeId) === String(ModalidadeDTO.EJA)) ||
+      String(modalidadeId) === String(ModalidadeDTO.CELP)
     ) {
       obterSemestres();
     } else {
@@ -647,7 +648,8 @@ const RelatorioPlanejamentoDiario = () => {
                 disabled={
                   !modalidadeId ||
                   listaSemestres?.length === 1 ||
-                  String(modalidadeId) !== String(ModalidadeDTO.EJA)
+                  String(modalidadeId) !== String(ModalidadeDTO.EJA) ||
+                  String(modalidadeId) !== String(ModalidadeDTO.CELP)
                 }
                 valueSelect={semestre}
                 onChange={onChangeSemestre}

@@ -203,7 +203,12 @@ const RelatorioHistoricoAlteracoesNotas = () => {
       setExibirLoader(true);
 
       const { data } = consideraHistorico
-        ? await ServicoFiltroRelatorio.obterModalidadesPorAbrangenciaHistorica(ue, false, true, ano)
+        ? await ServicoFiltroRelatorio.obterModalidadesPorAbrangenciaHistorica(
+            ue,
+            false,
+            true,
+            ano
+          )
         : await ServicoFiltroRelatorio.obterModalidadesPorAbrangencia(ue);
 
       if (data) {
@@ -278,7 +283,10 @@ const RelatorioHistoricoAlteracoesNotas = () => {
     bi.push({ desc: '1º', valor: '1' });
     bi.push({ desc: '2º', valor: '2' });
 
-    if (String(modalidadeId) !== String(modalidade.EJA)) {
+    if (
+      String(modalidadeId) !== String(modalidade.EJA) ||
+      String(modalidadeId) !== String(modalidade.CELP)
+    ) {
       bi.push({ desc: '3º', valor: '3' });
       bi.push({ desc: '4º', valor: '4' });
     }
@@ -388,8 +396,9 @@ const RelatorioHistoricoAlteracoesNotas = () => {
   ) => {
     setExibirLoader(true);
     const retorno = await api.get(
-      `v1/abrangencias/${historico}/semestres?anoLetivo=${anoLetivoSelecionado}&modalidade=${modalidadeSelecionada ||
-      0}`
+      `v1/abrangencias/${historico}/semestres?anoLetivo=${anoLetivoSelecionado}&modalidade=${
+        modalidadeSelecionada || 0
+      }`
     );
     if (retorno && retorno.data) {
       const lista = retorno.data.map(periodo => {
@@ -406,9 +415,10 @@ const RelatorioHistoricoAlteracoesNotas = () => {
 
   useEffect(() => {
     if (
-      modalidadeId &&
-      anoLetivo &&
-      String(modalidadeId) === String(modalidade.EJA)
+      (modalidadeId &&
+        anoLetivo &&
+        String(modalidadeId) === String(modalidade.EJA)) ||
+      String(modalidadeId) === String(modalidade.CELP)
     ) {
       obterSemestres(modalidadeId, anoLetivo, consideraHistorico);
     } else {
@@ -436,7 +446,10 @@ const RelatorioHistoricoAlteracoesNotas = () => {
       !dreId ||
       !ueId ||
       !modalidadeId ||
-      (String(modalidadeId) === String(modalidade.EJA) ? !semestre : false) ||
+      (String(modalidadeId) === String(modalidade.EJA) ||
+      String(modalidadeId) === String(modalidade.CELP)
+        ? !semestre
+        : false) ||
       !turmaId ||
       !componentesCurricularesId?.length ||
       !bimestre?.length ||
@@ -622,7 +635,8 @@ const RelatorioHistoricoAlteracoesNotas = () => {
                 disabled={
                   !modalidadeId ||
                   (listaSemestres && listaSemestres.length === 1) ||
-                  String(modalidadeId) !== String(modalidade.EJA)
+                  String(modalidadeId) !== String(modalidade.EJA) ||
+                  String(modalidadeId) !== String(modalidade.CELP)
                 }
                 valueSelect={semestre}
                 onChange={onChangeSemestre}

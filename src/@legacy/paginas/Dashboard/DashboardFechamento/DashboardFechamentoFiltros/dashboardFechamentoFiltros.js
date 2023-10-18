@@ -270,10 +270,11 @@ const DashboardFechamentoFiltros = () => {
 
   useEffect(() => {
     if (
-      ue &&
-      modalidade &&
-      anoLetivo &&
-      String(modalidade) === String(ModalidadeDTO.EJA)
+      (ue &&
+        modalidade &&
+        anoLetivo &&
+        String(modalidade) === String(ModalidadeDTO.EJA)) ||
+      String(modalidade) === String(ModalidadeDTO.CELP)
     ) {
       obterSemestres();
     } else {
@@ -292,10 +293,11 @@ const DashboardFechamentoFiltros = () => {
 
   const obterBimestres = useCallback(async () => {
     setCarregandoBimestres(true);
-    const dados = await ServicoPeriodoEscolar.obterPeriodosPorAnoLetivoModalidade(
-      modalidade,
-      anoLetivo
-    ).finally(() => setCarregandoBimestres(false));
+    const dados =
+      await ServicoPeriodoEscolar.obterPeriodosPorAnoLetivoModalidade(
+        modalidade,
+        anoLetivo
+      ).finally(() => setCarregandoBimestres(false));
 
     if (dados?.data?.length) {
       const dadosBimestres = dados.data.map(item => {
@@ -414,7 +416,8 @@ const DashboardFechamentoFiltros = () => {
               valueText="desc"
               disabled={
                 listaSemestres?.length === 1 ||
-                Number(modalidade) !== ModalidadeDTO.EJA
+                Number(modalidade) !== ModalidadeDTO.EJA ||
+                Number(modalidade) !== ModalidadeDTO.CELP
               }
               onChange={onChangeSemestre}
               valueSelect={semestre}

@@ -16,7 +16,9 @@ const AnoEscolarComunicados = ({ form, onChangeCampos, desabilitar }) => {
 
   const ehTodasModalidade = modalidades?.find(item => item === OPCAO_TODOS);
   const temModalidadeEja = modalidades?.find(
-    item => String(item) === String(ModalidadeDTO.EJA)
+    item =>
+      String(item) === String(ModalidadeDTO.EJA) ||
+      String(item) === String(ModalidadeDTO.CELP)
   );
 
   const dispatch = useDispatch();
@@ -58,7 +60,6 @@ const AnoEscolarComunicados = ({ form, onChangeCampos, desabilitar }) => {
       setListaAnosEscolares([]);
       form.setFieldValue(nomeCampo, []);
     }
-
   }, [modalidades, codigoUe, ehTodasModalidade]);
 
   useEffect(() => {
@@ -68,7 +69,6 @@ const AnoEscolarComunicados = ({ form, onChangeCampos, desabilitar }) => {
       setListaAnosEscolares([]);
       form.setFieldValue(nomeCampo, []);
     }
-
   }, [obterAnosEscolares, modalidades]);
 
   const onChangeAnosEscolares = novosValores => {

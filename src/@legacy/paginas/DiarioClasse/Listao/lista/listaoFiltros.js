@@ -206,7 +206,10 @@ const ListaoFiltros = () => {
   useEffect(() => {
     if (carregarFiltrosSalvos) return;
 
-    if (modalidade && String(modalidade) === String(ModalidadeDTO.EJA)) {
+    if (
+      (modalidade && String(modalidade) === String(ModalidadeDTO.EJA)) ||
+      String(modalidade) === String(ModalidadeDTO.CELP)
+    ) {
       obterSemestres();
     }
   }, [obterSemestres, modalidade]);
@@ -250,7 +253,10 @@ const ListaoFiltros = () => {
     bi.push({ descricao: '1º Bimestre', valor: 1 });
     bi.push({ descricao: '2º Bimestre', valor: 2 });
 
-    if (modalidade !== String(ModalidadeDTO.EJA)) {
+    if (
+      modalidade !== String(ModalidadeDTO.EJA) ||
+      modalidade !== String(ModalidadeDTO.CELP)
+    ) {
       bi.push({ descricao: '3º Bimestre', valor: 3 });
       bi.push({ descricao: '4º Bimestre', valor: 4 });
     }
@@ -465,7 +471,8 @@ const ListaoFiltros = () => {
           </Loader>
         </Col>
 
-        {Number(modalidade) === ModalidadeDTO.EJA ? (
+        {Number(modalidade) === ModalidadeDTO.EJA ||
+        Number(modalidade) === ModalidadeDTO.CELP ? (
           <Col sm={24} md={12} lg={8}>
             <Loader loading={carregandoSemestres} ignorarTip>
               <SelectComponent

@@ -131,7 +131,10 @@ const CompensacaoAusenciaForm = () => {
 
   useEffect(() => {
     let listaBi = [];
-    if (String(turmaSelecionada.modalidade) === String(modalidade.EJA)) {
+    if (
+      String(turmaSelecionada.modalidade) === String(modalidade.EJA) ||
+      String(turmaSelecionada.modalidade) === String(modalidade.CELP)
+    ) {
       listaBi = [
         { valor: 1, descricao: '1°' },
         { valor: 2, descricao: '2°' },
@@ -436,7 +439,7 @@ const CompensacaoAusenciaForm = () => {
     limparListas();
     const dentroPeriodo = await podeAlterarNoPeriodo(String(bimestre));
     setForaDoPeriodo(!dentroPeriodo);
-    
+
     if (dentroPeriodo && (disciplina > 0 || form.values.disciplinaId)) {
       let podeEditar = false;
       const valorDisciplina =
@@ -533,7 +536,9 @@ const CompensacaoAusenciaForm = () => {
       const disciplina = disciplinas.data[0];
 
       if (registroNovo) {
-        const disciplinaSelecionada = String(disciplina.codigoComponenteCurricular);
+        const disciplinaSelecionada = String(
+          disciplina.codigoComponenteCurricular
+        );
 
         valoresIniciaisForm.disciplinaId = disciplinaSelecionada;
 

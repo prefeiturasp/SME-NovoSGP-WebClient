@@ -405,9 +405,10 @@ const AcompanhamentoFechamento = () => {
 
   useEffect(() => {
     if (
-      modalidade &&
-      anoLetivo &&
-      String(modalidade) === String(ModalidadeDTO.EJA)
+      (modalidade &&
+        anoLetivo &&
+        String(modalidade) === String(ModalidadeDTO.EJA)) ||
+      String(modalidade) === String(ModalidadeDTO.CELP)
     ) {
       if (ueCodigo === OPCAO_TODOS) {
         obterSemestresEja(modalidade, anoLetivo);
@@ -500,21 +501,23 @@ const AcompanhamentoFechamento = () => {
   );
 
   useEffect(() => {
-    const temModalidadeEja = Number(modalidade) === ModalidadeDTO.EJA;
+    const temModalidadeEjaOuCelp =
+      Number(modalidade) === ModalidadeDTO.EJA ||
+      Number(modalidade) === ModalidadeDTO.CELP;
     const OPCAO_TODAS_TURMA = { valor: OPCAO_TODOS, nomeFiltro: 'Todas' };
     if (ueCodigo === OPCAO_TODOS) {
       setListaTurmas([OPCAO_TODAS_TURMA]);
       setTurmasCodigo([OPCAO_TODAS_TURMA.valor]);
       return;
     }
-    if (modalidade && ueCodigo && !temModalidadeEja) {
+    if (modalidade && ueCodigo && !temModalidadeEjaOuCelp) {
       obterTurmas(OPCAO_TODAS_TURMA);
       return;
     }
     if (
       modalidade &&
       ueCodigo &&
-      temModalidadeEja &&
+      temModalidadeEjaOuCelp &&
       Object.keys(listaTurmasPorSemestre)?.length &&
       semestre
     ) {
@@ -666,7 +669,10 @@ const AcompanhamentoFechamento = () => {
       !dreCodigo ||
       !ueCodigo ||
       !modalidade ||
-      (String(modalidade) === String(modalidadeDTO.EJA) ? !semestre : false) ||
+      (String(modalidade) === String(modalidadeDTO.EJA) ||
+      String(modalidade) === String(modalidadeDTO.CELP)
+        ? !semestre
+        : false) ||
       !turmasCodigo?.length ||
       !bimestres?.length ||
       desabilitarSituacaoFechamento ||
@@ -846,6 +852,7 @@ const AcompanhamentoFechamento = () => {
                       !modalidade ||
                       listaSemestres?.length === 1 ||
                       String(modalidade) !== String(ModalidadeDTO.EJA) ||
+                      String(modalidade) !== String(ModalidadeDTO.CELP) ||
                       desabilitarCampos
                     }
                     valueSelect={semestre}

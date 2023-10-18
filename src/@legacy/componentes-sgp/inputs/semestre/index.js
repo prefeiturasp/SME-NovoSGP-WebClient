@@ -23,7 +23,7 @@ export const Semestre = ({
 
   const setInitialValues = !form?.values?.modoEdicao;
 
-  const ehEJA =
+  const ehEJAouCelp =
     Number(modalidade) === ModalidadeDTO.EJA ||
     Number(modalidade) === ModalidadeDTO.CELP;
 
@@ -72,12 +72,12 @@ export const Semestre = ({
     if (form.initialValues[nameList]?.length && setInitialValues) return;
 
     limparDados();
-    if (modalidade && ehEJA) obterSemestres();
-  }, [ehEJA, modalidade]);
+    if (modalidade && ehEJAouCelp) obterSemestres();
+  }, [ehEJAouCelp, modalidade]);
 
   const desabilitar =
     !modalidade ||
-    (modalidade && !ehEJA) ||
+    (modalidade && !ehEJAouCelp) ||
     listaSemestres?.length === 1 ||
     disabled;
 
@@ -93,7 +93,7 @@ export const Semestre = ({
         disabled={desabilitar}
         showSearch={showSearch}
         id={SGP_SELECT_SEMESTRE}
-        labelRequired={ehEJA && labelRequired}
+        labelRequired={ehEJAouCelp && labelRequired}
         placeholder="Selecione um semestre"
         setValueOnlyOnChange
         onChange={newValue => {

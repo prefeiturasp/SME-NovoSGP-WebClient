@@ -27,7 +27,9 @@ export const Turma = ({
 
   const setInitialValues = !form?.values?.modoEdicao;
 
-  const ehEJA = Number(modalidade) === ModalidadeDTO.EJA;
+  const ehEJAouCelp =
+    Number(modalidade) === ModalidadeDTO.EJA ||
+    Number(modalidade) === ModalidadeDTO.CELP;
 
   const limparDados = () => {
     form.setFieldValue(nameList, []);
@@ -37,7 +39,7 @@ export const Turma = ({
   const obterTurmas = useCallback(async () => {
     if (!anoLetivo || !ueCodigo || !modalidade) return;
 
-    if (ehEJA && !semestre) return;
+    if (ehEJAouCelp && !semestre) return;
 
     const OPCAO_TODAS_TURMA = { codigo: OPCAO_TODOS, nomeFiltro: 'Todas' };
 
@@ -94,7 +96,7 @@ export const Turma = ({
 
   const desabilitar =
     !modalidade ||
-    (ehEJA && !semestre) ||
+    (ehEJAouCelp && !semestre) ||
     listaTurmas?.length === 1 ||
     disabled;
 

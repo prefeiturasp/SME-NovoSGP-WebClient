@@ -13,7 +13,9 @@ const SemestreComunicados = ({ form, onChangeCampos, desabilitar }) => {
   const { anoLetivo, codigoUe, modalidades } = form.values;
 
   const temModalidadeEja = modalidades?.find(
-    item => String(item) === String(ModalidadeDTO.EJA)
+    item =>
+      String(item) === String(ModalidadeDTO.EJA) ||
+      String(item) === String(ModalidadeDTO.CELP)
   );
 
   const dispatch = useDispatch();
@@ -47,7 +49,6 @@ const SemestreComunicados = ({ form, onChangeCampos, desabilitar }) => {
       form.setFieldValue(nomeCampo, undefined);
       setListaSemestres([]);
     }
-
   }, [anoLetivo, codigoUe]);
 
   useEffect(() => {
@@ -59,7 +60,6 @@ const SemestreComunicados = ({ form, onChangeCampos, desabilitar }) => {
       form.setFieldValue(nomeCampo, undefined);
       setListaSemestres([]);
     }
-
   }, [modalidades, obterSemestres]);
 
   return (

@@ -29,13 +29,14 @@ const TipoCalendarioComunicados = ({ form, onChangeCampos, desabilitar }) => {
         .filter(valor => valor !== OPCAO_TODOS);
     }
 
-    const resposta = await ServicoCalendarios.obterTiposCalendarioPorAnoLetivoModalidade(
-      anoLetivo,
-      modalidadesConsulta,
-      semestre
-    )
-      .catch(e => erros(e))
-      .finally(() => setExibirLoader(false));
+    const resposta =
+      await ServicoCalendarios.obterTiposCalendarioPorAnoLetivoModalidade(
+        anoLetivo,
+        modalidadesConsulta,
+        semestre
+      )
+        .catch(e => erros(e))
+        .finally(() => setExibirLoader(false));
 
     if (resposta?.data?.length) {
       const lista = resposta.data
@@ -52,12 +53,15 @@ const TipoCalendarioComunicados = ({ form, onChangeCampos, desabilitar }) => {
       form.setFieldValue(nomeCampo, undefined);
       setListaCalendario([]);
     }
-
   }, [anoLetivo, modalidades, listaModalidadesComunicados, semestre]);
 
   useEffect(() => {
     if (modalidades?.length && listaModalidadesComunicados?.length) {
-      const ehEja = modalidades.find(mod => Number(mod) === ModalidadeDTO.EJA);
+      const ehEja = modalidades.find(
+        mod =>
+          Number(mod) === ModalidadeDTO.EJA ||
+          Number(mod) === ModalidadeDTO.CELP
+      );
       if (ehEja && semestre) {
         obterTiposCalendarios();
       } else if (!ehEja && !semestre) {

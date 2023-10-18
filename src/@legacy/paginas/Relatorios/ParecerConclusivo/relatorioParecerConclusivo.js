@@ -329,9 +329,10 @@ const RelatorioParecerConclusivo = () => {
 
   useEffect(() => {
     if (
-      modalidadeId &&
-      anoLetivo &&
-      String(modalidadeId) === String(modalidade.EJA)
+      (modalidadeId &&
+        anoLetivo &&
+        String(modalidadeId) === String(modalidade.EJA)) ||
+      String(modalidadeId) === String(modalidade.CELP)
     ) {
       setSemestre();
       obterSemestres();
@@ -344,6 +345,7 @@ const RelatorioParecerConclusivo = () => {
   const obterCiclos = async (modalidadeSelecionada, codigoUe) => {
     if (
       String(modalidadeSelecionada) === String(modalidade.EJA) ||
+      String(modalidadeSelecionada) === String(modalidade.CELP) ||
       String(modalidadeSelecionada) === String(modalidade.ENSINO_MEDIO)
     ) {
       setListaCiclos([{ id: OPCAO_TODOS, descricao: 'Todos' }]);
@@ -397,7 +399,10 @@ const RelatorioParecerConclusivo = () => {
   }, [obterPareceresConclusivos]);
 
   const obterAnos = async (modalidadeIdSelecionada, cicloSelecionado) => {
-    if (String(modalidadeIdSelecionada) === String(modalidade.EJA)) {
+    if (
+      String(modalidadeIdSelecionada) === String(modalidade.EJA) ||
+      String(modalidadeIdSelecionada) === String(modalidade.CELP)
+    ) {
       setListaAnos([{ valor: OPCAO_TODOS, descricao: 'Todos' }]);
       setAno(OPCAO_TODOS);
     } else if (modalidadeIdSelecionada && cicloSelecionado) {
@@ -463,7 +468,8 @@ const RelatorioParecerConclusivo = () => {
       !dreId ||
       !ueId ||
       !modalidadeId ||
-      (String(modalidadeId) === String(modalidade.EJA) ? !semestre : false) ||
+      String(modalidadeId) === String(modalidade.EJA) ||
+      (String(modalidadeId) === String(modalidade.CELP) ? !semestre : false) ||
       (String(modalidadeId) !== String(modalidade.ENSINO_MEDIO)
         ? !ciclo
         : false) ||
@@ -497,7 +503,10 @@ const RelatorioParecerConclusivo = () => {
       ueCodigo: ueId === OPCAO_TODOS ? '' : ueId,
       modalidade: modalidadeId === OPCAO_TODOS ? null : modalidadeId,
       semestre:
-        String(modalidadeId) === String(modalidade.EJA) ? semestre : null,
+        String(modalidadeId) === String(modalidade.EJA) ||
+        String(modalidadeId) === String(modalidade.CELP)
+          ? semestre
+          : null,
       ciclo: ciclo === OPCAO_TODOS ? 0 : ciclo,
       anos: ano.toString() !== OPCAO_TODOS ? [].concat(ano) : [],
       parecerConclusivoId:
@@ -620,7 +629,8 @@ const RelatorioParecerConclusivo = () => {
                   disabled={
                     !modalidadeId ||
                     (listaSemestres && listaSemestres.length === 1) ||
-                    String(modalidadeId) !== String(modalidade.EJA)
+                    String(modalidadeId) !== String(modalidade.EJA) ||
+                    String(modalidadeId) !== String(modalidade.CELP)
                   }
                   valueSelect={semestre}
                   onChange={onChangeSemestre}

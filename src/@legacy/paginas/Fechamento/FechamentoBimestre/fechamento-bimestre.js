@@ -72,8 +72,9 @@ const FechamentoBismestre = () => {
   const [idDisciplinaTerritorioSaber, setIdDisciplinaTerritorioSaber] =
     useState(undefined);
 
-  const ehModaliadeEJA =
-    Number(turmaSelecionada?.modalidade) !== ModalidadeDTO.EJA;
+  const ehModaliadeEJAOuCelp =
+    Number(turmaSelecionada?.modalidade) !== ModalidadeDTO.EJA ||
+    Number(turmaSelecionada?.modalidade) !== ModalidadeDTO.CELP;
 
   const ehIgualPeriodoAnual = periodoFechamento === periodo.Anual;
 
@@ -421,7 +422,7 @@ const FechamentoBismestre = () => {
                       />
                     ) : null}
                   </TabPane>
-                  {ehIgualPeriodoAnual && ehModaliadeEJA ? (
+                  {ehIgualPeriodoAnual && ehModaliadeEJAOuCelp ? (
                     <TabPane
                       tab="3º Bimestre"
                       key="3"
@@ -447,7 +448,7 @@ const FechamentoBismestre = () => {
                       ) : null}
                     </TabPane>
                   ) : null}
-                  {ehIgualPeriodoAnual && ehModaliadeEJA ? (
+                  {ehIgualPeriodoAnual && ehModaliadeEJAOuCelp ? (
                     <TabPane
                       tab="4º Bimestre"
                       key="4"

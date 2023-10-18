@@ -31,8 +31,10 @@ const TabsDashboardFechamento = () => {
     store => store.dashboardFechamento?.dadosDashboardFechamento?.semestre
   );
 
-  const ehModalidadeEJA = Number(modalidade) === ModalidadeDTO.EJA;
-  const semestreDesabilitado = !!(ehModalidadeEJA ? semestre : !semestre);
+  const ehModalidadeEJAouCelp =
+    Number(modalidade) === ModalidadeDTO.EJA ||
+    Number(modalidade) === ModalidadeDTO.CELP;
+  const semestreDesabilitado = !!(ehModalidadeEJAouCelp ? semestre : !semestre);
   const exibirAbas =
     anoLetivo &&
     dre &&

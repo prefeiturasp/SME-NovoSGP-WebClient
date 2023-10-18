@@ -25,9 +25,8 @@ import { onchangeMultiSelect } from '~/utils';
 const Filtros = ({ onChangeFiltros, temModalidadeEja }) => {
   const [anoAtual] = useState(window.moment().format('YYYY'));
   const [anoLetivo, setAnoLetivo] = useState();
-  const [atualizaFiltrosAvançados, setAtualizaFiltrosAvançados] = useState(
-    false
-  );
+  const [atualizaFiltrosAvançados, setAtualizaFiltrosAvançados] =
+    useState(false);
   const [buscou, setBuscou] = useState(false);
   const [carregandoAnosLetivos, setCarregandoAnosLetivos] = useState(false);
   const [carregandoDres, setCarregandoDres] = useState(false);
@@ -38,10 +37,8 @@ const Filtros = ({ onChangeFiltros, temModalidadeEja }) => {
   const [dreCodigo, setDreCodigo] = useState();
   const [dreId, setDreId] = useState();
   const [filtrosPrincipais, setFiltrosPrincipais] = useState();
-  const [
-    habilitaConsideraHistorico,
-    setHabilitaConsideraHistorico,
-  ] = useState();
+  const [habilitaConsideraHistorico, setHabilitaConsideraHistorico] =
+    useState();
   const [listaAnosLetivo, setListaAnosLetivo] = useState({});
   const [listaDres, setListaDres] = useState([]);
   const [listaModalidades, setListaModalidades] = useState([]);
@@ -211,12 +208,11 @@ const Filtros = ({ onChangeFiltros, temModalidadeEja }) => {
   const obterModalidades = useCallback(async ue => {
     if (ue) {
       setCarregandoModalidade(true);
-      const {
-        data,
-      } = await ServicoFiltroRelatorio.obterModalidadesPorAbrangencia(
-        ue,
-        true
-      ).finally(() => setCarregandoModalidade(false));
+      const { data } =
+        await ServicoFiltroRelatorio.obterModalidadesPorAbrangencia(
+          ue,
+          true
+        ).finally(() => setCarregandoModalidade(false));
 
       if (data?.length) {
         const lista = data.map(item => ({
@@ -285,8 +281,15 @@ const Filtros = ({ onChangeFiltros, temModalidadeEja }) => {
     const temEja = modalidades?.find(
       item => String(item) === String(ModalidadeDTO.EJA)
     );
+    const temCelp = modalidades?.find(
+      item => String(item) === String(ModalidadeDTO.CELP)
+    );
     if (modalidades?.length && anoLetivo && temEja) {
       obterSemestres(ModalidadeDTO.EJA, anoLetivo);
+      return;
+    }
+    if (modalidades?.length && anoLetivo && temCelp) {
+      obterSemestres(ModalidadeDTO.CELP, anoLetivo);
       return;
     }
     setSemestre();

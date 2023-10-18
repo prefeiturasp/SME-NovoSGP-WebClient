@@ -23,21 +23,24 @@ const GraficoQuantidadeNaoFrequentaramUE = () => {
 
   const [meseReferencia, setMeseReferencia] = useState();
 
-  const ehModalidadeEJA = Number(modalidade) === ModalidadeDTO.EJA;
+  const ehModalidadeEJAouCelp =
+    Number(modalidade) === ModalidadeDTO.EJA ||
+    Number(modalidade) === ModalidadeDTO.CELP;
 
   const obterDadosGrafico = useCallback(async () => {
     setExibirLoader(true);
-    const retorno = await ServicoDashboardNAAPA.obterFrequenciaTurmaEvasaoSemPresenca(
-      consideraHistorico,
-      anoLetivo,
-      dre?.codigo,
-      ue?.codigo,
-      modalidade,
-      semestre,
-      meseReferencia
-    )
-      .catch(e => erros(e))
-      .finally(() => setExibirLoader(false));
+    const retorno =
+      await ServicoDashboardNAAPA.obterFrequenciaTurmaEvasaoSemPresenca(
+        consideraHistorico,
+        anoLetivo,
+        dre?.codigo,
+        ue?.codigo,
+        modalidade,
+        semestre,
+        meseReferencia
+      )
+        .catch(e => erros(e))
+        .finally(() => setExibirLoader(false));
 
     if (retorno?.data?.length) {
       setDadosGrafico(retorno.data);
@@ -55,7 +58,7 @@ const GraficoQuantidadeNaoFrequentaramUE = () => {
   ]);
 
   useEffect(() => {
-    const validouEJA = ehModalidadeEJA ? !!semestre : true;
+    const validouEJA = ehModalidadeEJAouCelp ? !!semestre : true;
     if (anoLetivo && dre && ue && modalidade && validouEJA && meseReferencia) {
       obterDadosGrafico();
     } else {
@@ -69,7 +72,7 @@ const GraficoQuantidadeNaoFrequentaramUE = () => {
     modalidade,
     semestre,
     meseReferencia,
-    ehModalidadeEJA,
+    ehModalidadeEJAouCelp,
     obterDadosGrafico,
   ]);
 

@@ -12,14 +12,8 @@ const TurmasComunicados = ({ form, onChangeCampos, desabilitar }) => {
   const [exibirLoader, setExibirLoader] = useState(false);
   const [listaTurmas, setListaTurmas] = useState([]);
 
-  const {
-    anoLetivo,
-    codigoUe,
-    modalidades,
-    semestre,
-    anosEscolares,
-    turmas,
-  } = form.values;
+  const { anoLetivo, codigoUe, modalidades, semestre, anosEscolares, turmas } =
+    form.values;
 
   const dispatch = useDispatch();
 
@@ -27,7 +21,9 @@ const TurmasComunicados = ({ form, onChangeCampos, desabilitar }) => {
   const ehTodasUe = codigoUe === OPCAO_TODOS;
 
   const temModalidadeEja = modalidades?.find(
-    item => String(item) === String(ModalidadeDTO.EJA)
+    item =>
+      String(item) === String(ModalidadeDTO.EJA) ||
+      String(item) === String(ModalidadeDTO.CELP)
   );
 
   const nomeCampo = 'turmas';
@@ -71,7 +67,6 @@ const TurmasComunicados = ({ form, onChangeCampos, desabilitar }) => {
       setListaTurmas([]);
       form.setFieldValue(nomeCampo, []);
     }
-
   }, [
     anoLetivo,
     codigoUe,
@@ -89,7 +84,6 @@ const TurmasComunicados = ({ form, onChangeCampos, desabilitar }) => {
       setListaTurmas([]);
       form.setFieldValue(nomeCampo, []);
     }
-
   }, [anosEscolares, obterTurmas]);
 
   const onChangeAnosEscolares = novosValores => {

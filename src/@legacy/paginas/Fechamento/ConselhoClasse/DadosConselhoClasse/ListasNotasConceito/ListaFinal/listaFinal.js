@@ -112,7 +112,9 @@ const ListaFinal = props => {
   };
 
   const montarValoresNotasConceitos = notasFechamentos => {
-    const ehEja = Number(modalidade) === modalidadeDto.EJA;
+    const ehEjaOuCelp =
+      Number(modalidade) === modalidadeDto.EJA ||
+      Number(modalidade) === modalidadeDto.CELP;
 
     const primeiroBimestre = notasFechamentos.find(item => item.bimestre === 1);
     const segundoBimestre = notasFechamentos.find(item => item.bimestre === 2);
@@ -141,7 +143,7 @@ const ListaFinal = props => {
             segundoBimestre ? segundoBimestre.notaConceito : ''
           )}
         </div>
-        {!ehEja ? (
+        {!ehEjaOuCelp ? (
           <>
             <div
               className="input-notas-conceitos-final float-left"

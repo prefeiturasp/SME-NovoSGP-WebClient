@@ -23,8 +23,7 @@ import {
   ServicoRelatorioDevolutivas,
   sucesso,
 } from '~/servicos';
-import { useNavigate } from "react-router-dom";
-
+import { useNavigate } from 'react-router-dom';
 
 const RelatorioDevolutivas = () => {
   const navigate = useNavigate();
@@ -443,7 +442,10 @@ const RelatorioDevolutivas = () => {
     bi.push({ desc: '1º', valor: 1 });
     bi.push({ desc: '2º', valor: 2 });
 
-    if (modalidadeId !== ModalidadeDTO.EJA) {
+    if (
+      modalidadeId !== ModalidadeDTO.EJA ||
+      modalidadeId !== ModalidadeDTO.CELP
+    ) {
       bi.push({ desc: '3º', valor: 3 });
       bi.push({ desc: '4º', valor: 4 });
     }
@@ -537,7 +539,7 @@ const RelatorioDevolutivas = () => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [turmaId]);
-  
+
   return (
     <Loader loading={exibirLoaderGeral}>
       {naoEhInfantil && (

@@ -120,10 +120,12 @@ const DocPlanosTrabalhoCadastro = () => {
         textoCampoObrigatorio,
         function validar() {
           const { modalidade, semestre } = this.parent;
-          const temModalidadeEja = Number(modalidade) === ModalidadeDTO.EJA;
+          const temModalidadeEjaOuCelp =
+            Number(modalidade) === ModalidadeDTO.EJA ||
+            Number(modalidade) === ModalidadeDTO.CELP;
 
           let ehValido = true;
-          if (!temModalidadeEja) {
+          if (!temModalidadeEjaOuCelp) {
             return ehValido;
           }
           if (!semestre) {

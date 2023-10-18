@@ -509,7 +509,8 @@ const Filtro = () => {
         return [];
 
       const periodo =
-        (modalidadeSelecionada.toString() === modalidade.EJA.toString() &&
+        modalidadeSelecionada.toString() === modalidade.EJA.toString() ||
+        (modalidadeSelecionada.toString() === modalidade.CELP.toString() &&
           periodoSelecionado) ||
         null;
 
@@ -603,7 +604,10 @@ const Filtro = () => {
       return retornoEstado;
     }
 
-    if (modalidadeSelecionada.toString() === modalidade.EJA.toString()) {
+    if (
+      modalidadeSelecionada.toString() === modalidade.EJA.toString() ||
+      modalidadeSelecionada.toString() === modalidade.CELP.toString()
+    ) {
       obterPeriodos(estado);
       setCampoDreDesabilitado(true);
       return retornoEstado;
@@ -628,7 +632,10 @@ const Filtro = () => {
       return retornoEstado;
     }
 
-    if (modalidadeSelecionada.toString() !== modalidade.EJA.toString())
+    if (
+      modalidadeSelecionada.toString() !== modalidade.EJA.toString() ||
+      modalidadeSelecionada.toString() !== modalidade.CELP.toString()
+    )
       return retornoEstado;
 
     if (periodoSelecionado) {
@@ -660,8 +667,9 @@ const Filtro = () => {
     }
 
     const periodo =
-      modalidadeSelecionada.toString() === modalidade.EJA.toString() &&
-      periodoSelecionado;
+      modalidadeSelecionada.toString() === modalidade.EJA.toString() ||
+      (modalidadeSelecionada.toString() === modalidade.CELP.toString() &&
+        periodoSelecionado);
     obterUnidadesEscolares(estado, periodo);
 
     return retornoEstado;
@@ -837,7 +845,8 @@ const Filtro = () => {
         }
 
         const periodo =
-          turmaBkp.modalidade.toString() === modalidade.EJA.toString()
+          turmaBkp.modalidade.toString() === modalidade.EJA.toString() ||
+          turmaBkp.modalidade.toString() === modalidade.CELP.toString()
             ? turmaBkp.periodo
             : null;
         const listaUes = await obterUnidadesEscolares(false, periodo);
@@ -1308,8 +1317,11 @@ const Filtro = () => {
               </Grid>
               <Grid
                 cols={
-                  modalidadeSelecionada &&
-                  modalidadeSelecionada.toString() === modalidade.EJA.toString()
+                  (modalidadeSelecionada &&
+                    modalidadeSelecionada.toString() ===
+                      modalidade.EJA.toString()) ||
+                  modalidadeSelecionada.toString() ===
+                    modalidade.CELP.toString()
                     ? 5
                     : 9
                 }
@@ -1332,9 +1344,11 @@ const Filtro = () => {
                   />
                 </Loader>
               </Grid>
-              {modalidadeSelecionada &&
+              {(modalidadeSelecionada &&
                 modalidadeSelecionada.toString() ===
-                  modalidade.EJA.toString() && (
+                  modalidade.EJA.toString()) ||
+                (modalidadeSelecionada.toString() ===
+                  modalidade.CELP.toString() && (
                   <Grid cols={4} className="form-group">
                     <Loader loading={carregandoPeriodos} tip="">
                       <SelectComponent
@@ -1353,7 +1367,7 @@ const Filtro = () => {
                       />
                     </Loader>
                   </Grid>
-                )}
+                ))}
             </div>
             <div className="form-group">
               <Loader loading={carregandoDres} tip="">

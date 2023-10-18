@@ -178,7 +178,10 @@ const CompensacaoAusenciaLista = () => {
     }
 
     let listaBi = [];
-    if (String(turmaSelecionada.modalidade) === String(modalidade.EJA)) {
+    if (
+      String(turmaSelecionada.modalidade) === String(modalidade.EJA) ||
+      String(turmaSelecionada.modalidade) === String(modalidade.CELP)
+    ) {
       listaBi = [
         { valor: 1, descricao: '1° Bimestre' },
         { valor: 2, descricao: '2° Bimestre' },

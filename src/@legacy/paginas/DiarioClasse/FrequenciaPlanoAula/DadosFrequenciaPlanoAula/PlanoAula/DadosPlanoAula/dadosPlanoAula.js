@@ -62,8 +62,9 @@ const DadosPlanoAula = props => {
 
   useEffect(() => {
     const ehEja = !!(
-      turmaSelecionada &&
-      String(turmaSelecionada.modalidade) === String(modalidade.EJA)
+      (turmaSelecionada &&
+        String(turmaSelecionada.modalidade) === String(modalidade.EJA)) ||
+      String(turmaSelecionada.modalidade) === String(modalidade.CELP)
     );
 
     const ehMedio = !!(

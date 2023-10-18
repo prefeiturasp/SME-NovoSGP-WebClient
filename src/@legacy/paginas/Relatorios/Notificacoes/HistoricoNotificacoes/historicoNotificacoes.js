@@ -108,18 +108,23 @@ const HistoricoNotificacoes = () => {
     }
   };
 
-  const obterUes = useCallback(async dre => {
-    if (dre) {
-      setCarregandoGeral(true);
-      const retorno = await ServicoFiltroRelatorio.obterUes(dre, consideraHistorico, anoLetivo).catch(e => {
-        erros(e);
-        setCarregandoGeral(false);
-      });
-      if (retorno?.data?.length) {
-        const lista = retorno.data.map(item => ({
-          desc: item.nome,
-          valor: String(item.codigo),
-        }));
+  const obterUes = useCallback(
+    async dre => {
+      if (dre) {
+        setCarregandoGeral(true);
+        const retorno = await ServicoFiltroRelatorio.obterUes(
+          dre,
+          consideraHistorico,
+          anoLetivo
+        ).catch(e => {
+          erros(e);
+          setCarregandoGeral(false);
+        });
+        if (retorno?.data?.length) {
+          const lista = retorno.data.map(item => ({
+            desc: item.nome,
+            valor: String(item.codigo),
+          }));
 
           const novaLista = lista?.filter(item => item?.valor !== OPCAO_TODOS);
 
@@ -156,24 +161,24 @@ const HistoricoNotificacoes = () => {
   };
 
   const obterDres = async () => {
-      setCarregandoGeral(true);
-      const retorno = await ServicoFiltroRelatorio.obterDres().catch(e => {
-        erros(e);
-        setCarregandoGeral(false);
-      });
-      if (retorno?.data?.length) {
-        const novaLista = retorno.data.filter(
-          item => item?.codigo !== OPCAO_TODOS
-        );
-        setListaDres(novaLista);
-
-        if (novaLista?.length === 1) {
-          setCodigoDre(novaLista[0].codigo);
-        }
-      } else {
-        setListaDres([]);
-      }
+    setCarregandoGeral(true);
+    const retorno = await ServicoFiltroRelatorio.obterDres().catch(e => {
+      erros(e);
       setCarregandoGeral(false);
+    });
+    if (retorno?.data?.length) {
+      const novaLista = retorno.data.filter(
+        item => item?.codigo !== OPCAO_TODOS
+      );
+      setListaDres(novaLista);
+
+      if (novaLista?.length === 1) {
+        setCodigoDre(novaLista[0].codigo);
+      }
+    } else {
+      setListaDres([]);
+    }
+    setCarregandoGeral(false);
   };
 
   const obterSemestres = async (
@@ -260,7 +265,10 @@ const HistoricoNotificacoes = () => {
 
   useEffect(() => {
     if (modalidadeId && anoLetivo) {
-      if (Number(modalidadeId) === modalidade.EJA) {
+      if (
+        Number(modalidadeId) === modalidade.EJA ||
+        Number(modalidadeId) === modalidade.CELP
+      ) {
         obterSemestres(modalidadeId, anoLetivo);
       } else {
         setSemestre(undefined);
@@ -275,7 +283,10 @@ const HistoricoNotificacoes = () => {
   useEffect(() => {
     const desabilitar = !anoLetivo || !codigoDre || !codigoUe;
 
-    if (Number(modalidadeId) === modalidade.EJA) {
+    if (
+      Number(modalidadeId) === modalidade.EJA ||
+      Number(modalidadeId) === modalidade.CELP
+    ) {
       setDesabilitarBtnGerar(!semestre || desabilitar);
     } else {
       setDesabilitarBtnGerar(desabilitar);
@@ -450,7 +461,7 @@ const HistoricoNotificacoes = () => {
     setCodigoDre();
     setCodigoUe();
 
-    if(ano){
+    if (ano) {
       setConsideraHistorico(Number(ano) !== Number(new Date().getFullYear()));
       obterDres();
       obterUes();
@@ -530,7 +541,10 @@ const HistoricoNotificacoes = () => {
                   lista={listaDres}
                   valueOption="codigo"
                   valueText="nome"
-                  disabled={(listaDres && listaDres.length === 1) || listaDres.length === 0}
+                  disabled={
+                    (listaDres && listaDres.length === 1) ||
+                    listaDres.length === 0
+                  }
                   onChange={onChangeDre}
                   valueSelect={codigoDre}
                   placeholder="Diretoria Regional de Educação (DRE)"
@@ -543,7 +557,9 @@ const HistoricoNotificacoes = () => {
                   lista={listaUes}
                   valueOption="valor"
                   valueText="desc"
-                  disabled={(listaUes && listaUes.length === 1) || listaUes.length === 0}
+                  disabled={
+                    (listaUes && listaUes.length === 1) || listaUes.length === 0
+                  }
                   onChange={onChangeUe}
                   valueSelect={codigoUe}
                   placeholder="Unidade Escolar (UE)"
@@ -571,6 +587,7 @@ const HistoricoNotificacoes = () => {
                   disabled={
                     !modalidadeId ||
                     Number(modalidadeId) !== modalidade.EJA ||
+                    Number(modalidadeId) !== modalidade.CELP ||
                     (listaSemestre && listaSemestre.length === 1)
                   }
                   valueSelect={semestre}
@@ -586,8 +603,7 @@ const HistoricoNotificacoes = () => {
                   valueText="nomeFiltro"
                   label="Turma"
                   disabled={
-                    !modalidadeId ||
-                    (listaTurmas && listaTurmas.length === 1)
+                    !modalidadeId || (listaTurmas && listaTurmas.length === 1)
                   }
                   valueSelect={turmaId}
                   onChange={onChangeTurma}

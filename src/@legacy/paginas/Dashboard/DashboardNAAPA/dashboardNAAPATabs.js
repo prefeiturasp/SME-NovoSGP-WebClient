@@ -14,11 +14,14 @@ const DashboardNAAPATabs = () => {
   const TAB_RISCO_ABANDONO = '1';
   const TAB_ENCAMINHAMENTO = '2';
 
-  const ehModalidadeEJA = Number(modalidade) === ModalidadeDTO.EJA;
+  const ehModalidadeEJAouCelp =
+    Number(modalidade) === ModalidadeDTO.EJA ||
+    Number(modalidade) === ModalidadeDTO.CELP;
+
   const exibirAbas = anoLetivo && dre?.codigo && ue?.codigo;
 
   const exibirDadosRiscoAbandono =
-    exibirAbas && modalidade && (ehModalidadeEJA ? !!semestre : true);
+    exibirAbas && modalidade && (ehModalidadeEJAouCelp ? !!semestre : true);
 
   const montarDadosRiscoAbandono = () => {
     if (exibirDadosRiscoAbandono) return <GraficosEvasaoEscolar />;

@@ -13,14 +13,8 @@ import ServicoDashboardFrequencia from '~/servicos/Paginas/Dashboard/ServicoDash
 const DashboardFrequenciaFiltros = () => {
   const usuario = useSelector(store => store.usuario);
 
-  const {
-    anoLetivo,
-    dre,
-    ue,
-    modalidade,
-    semestre,
-    consideraHistorico,
-  } = useSelector(store => store.dashboardFrequencia?.dadosDashboardFrequencia);
+  const { anoLetivo, dre, ue, modalidade, semestre, consideraHistorico } =
+    useSelector(store => store.dashboardFrequencia?.dadosDashboardFrequencia);
 
   const [listaAnosLetivo, setListaAnosLetivo] = useState([]);
   const [listaDres, setListaDres] = useState([]);
@@ -261,10 +255,11 @@ const DashboardFrequenciaFiltros = () => {
 
   useEffect(() => {
     if (
-      ue &&
-      modalidade &&
-      anoLetivo &&
-      String(modalidade) === String(ModalidadeDTO.EJA)
+      (ue &&
+        modalidade &&
+        anoLetivo &&
+        String(modalidade) === String(ModalidadeDTO.EJA)) ||
+      String(modalidade) === String(ModalidadeDTO.CELP)
     ) {
       obterSemestres();
     } else {
@@ -278,13 +273,14 @@ const DashboardFrequenciaFiltros = () => {
   };
 
   const obterAnosEscolares = useCallback(async () => {
-    const respota = await ServicoDashboardFrequencia.obterAnosEscolaresPorModalidade(
-      anoLetivo,
-      dre?.id,
-      ue?.id,
-      modalidade,
-      semestre
-    ).catch(e => erros(e));
+    const respota =
+      await ServicoDashboardFrequencia.obterAnosEscolaresPorModalidade(
+        anoLetivo,
+        dre?.id,
+        ue?.id,
+        modalidade,
+        semestre
+      ).catch(e => erros(e));
 
     if (respota?.data?.length) {
       if (respota.data.length > 1) {
@@ -431,7 +427,8 @@ const DashboardFrequenciaFiltros = () => {
               valueText="desc"
               disabled={
                 listaSemestres?.length === 1 ||
-                Number(modalidade) !== ModalidadeDTO.EJA
+                Number(modalidade) !== ModalidadeDTO.EJA ||
+                Number(modalidade) !== ModalidadeDTO.CELP
               }
               onChange={onChangeSemestre}
               valueSelect={semestre}

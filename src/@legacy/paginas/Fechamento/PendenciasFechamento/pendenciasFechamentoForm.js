@@ -91,7 +91,10 @@ const PendenciasFechamentoForm = () => {
   useEffect(() => {
     const montaBimestre = () => {
       let listaBi = [];
-      if (Number(turmaSelecionada.modalidade) === modalidade.EJA) {
+      if (
+        Number(turmaSelecionada.modalidade) === modalidade.EJA ||
+        Number(turmaSelecionada.modalidade) === modalidade.CELP
+      ) {
         listaBi = [
           { valor: 1, descricao: 'Primeiro bimestre' },
           { valor: 2, descricao: 'Segundo bimestre' },

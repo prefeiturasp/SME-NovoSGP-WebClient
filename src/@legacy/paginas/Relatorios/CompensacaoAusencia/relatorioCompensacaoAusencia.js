@@ -261,7 +261,7 @@ const RelatorioCompensacaoAusencia = () => {
   }, [modalidadeId, ueId, anoLetivo, obterTurmas]);
 
   useEffect(() => {
-    if (modalidadeId === modalidade.EJA) {
+    if (modalidadeId === modalidade.EJA || modalidadeId === modalidade.CELP) {
       setListaBimestres(bimestresEja);
     } else {
       setListaBimestres(bimestresFundMedio);
@@ -382,9 +382,10 @@ const RelatorioCompensacaoAusencia = () => {
 
   useEffect(() => {
     if (
-      modalidadeId &&
-      anoLetivo &&
-      String(modalidadeId) === String(modalidade.EJA)
+      (modalidadeId &&
+        anoLetivo &&
+        String(modalidadeId) === String(modalidade.EJA)) ||
+      String(modalidadeId) === String(modalidade.CELP)
     ) {
       obterSemestres(modalidadeId, anoLetivo);
     } else {
@@ -412,7 +413,10 @@ const RelatorioCompensacaoAusencia = () => {
       !dreId ||
       !ueId ||
       !modalidadeId ||
-      (Number(modalidadeId) === modalidade.EJA ? !semestre : false) ||
+      (Number(modalidadeId) === modalidade.EJA ||
+      Number(modalidadeId) === modalidade.CELP
+        ? !semestre
+        : false) ||
       !turmaId ||
       !componentesCurricularesId ||
       !bimestre ||
@@ -552,7 +556,8 @@ const RelatorioCompensacaoAusencia = () => {
                   disabled={
                     !modalidadeId ||
                     (listaSemestres && listaSemestres.length === 1) ||
-                    String(modalidadeId) !== String(modalidade.EJA)
+                    String(modalidadeId) !== String(modalidade.EJA) ||
+                    String(modalidadeId) !== String(modalidade.CELP)
                   }
                   valueSelect={semestre}
                   onChange={onChangeSemestre}

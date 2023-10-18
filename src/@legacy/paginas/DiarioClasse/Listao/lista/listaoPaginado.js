@@ -66,15 +66,18 @@ const ListaoPaginado = () => {
   const [filtros, setFiltros] = useState({});
   const [colunas, setColunas] = useState([]);
 
-  const temSemetreQuandoEja =
-    modalidade === String(ModalidadeDTO.EJA) ? !!semestre : true;
+  const temSemetreQuandoEjaouCelp =
+    modalidade === String(ModalidadeDTO.EJA) ||
+    modalidade === String(ModalidadeDTO.CELP)
+      ? !!semestre
+      : true;
 
   const filtroEhValido = !!(
     anoLetivo &&
     codigoDre &&
     codigoUe &&
     modalidade &&
-    temSemetreQuandoEja &&
+    temSemetreQuandoEjaouCelp &&
     codigoTurma &&
     bimestre
   );

@@ -167,7 +167,9 @@ const FormCadastroComunicados = props => {
         function validar() {
           const { modalidades, semestre } = this.parent;
           const temModalidadeEja = modalidades?.find(
-            item => String(item) === String(ModalidadeDTO.EJA)
+            item =>
+              String(item) === String(ModalidadeDTO.EJA) ||
+              String(item) === String(ModalidadeDTO.CELP)
           );
           let ehValido = true;
           if (!temModalidadeEja) {

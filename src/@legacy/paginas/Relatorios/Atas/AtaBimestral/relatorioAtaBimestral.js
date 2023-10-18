@@ -1,3 +1,4 @@
+import { ROUTES } from '@/core/enum/routes';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
@@ -17,7 +18,7 @@ import {
 import BotoesAcaoRelatorio from '~/componentes-sgp/botoesAcaoRelatorio';
 
 import { OPCAO_TODOS, URL_HOME } from '~/constantes';
-import { ModalidadeDTO, RotasDto } from '~/dtos';
+import { ModalidadeDTO } from '~/dtos';
 import {
   AbrangenciaServico,
   erros,
@@ -340,9 +341,10 @@ const RelatorioAtaBimestral = () => {
 
   useEffect(() => {
     if (
-      modalidadeId &&
-      anoLetivo &&
-      String(modalidadeId) === String(ModalidadeDTO.EJA)
+      (modalidadeId &&
+        anoLetivo &&
+        String(modalidadeId) === String(ModalidadeDTO.EJA)) ||
+      String(modalidadeId) === String(ModalidadeDTO.CELP)
     ) {
       obterSemestres(modalidadeId, anoLetivo, ueCodigo);
       return;
@@ -426,18 +428,22 @@ const RelatorioAtaBimestral = () => {
   );
 
   useEffect(() => {
-    const temModalidadeEja = Number(modalidadeId) === ModalidadeDTO.EJA;
-    if (modalidadeId && ueCodigo && !temModalidadeEja) {
+    const temModalidadeEjaOuCelp =
+      Number(modalidadeId) === ModalidadeDTO.EJA ||
+      Number(modalidadeId) === ModalidadeDTO.CELP;
+    if (modalidadeId && ueCodigo && !temModalidadeEjaOuCelp) {
       obterTurmas(modalidadeId, ueCodigo);
     }
   }, [modalidadeId, ueCodigo, obterTurmasEJA, obterTurmas]);
 
   useEffect(() => {
-    const temModalidadeEja = Number(modalidadeId) === ModalidadeDTO.EJA;
+    const temModalidadeEjaOuCelp =
+      Number(modalidadeId) === ModalidadeDTO.EJA ||
+      Number(modalidadeId) === ModalidadeDTO.CELP;
     if (
       modalidadeId &&
       ueCodigo &&
-      temModalidadeEja &&
+      temModalidadeEjaOuCelp &&
       Object.keys(listaTurmasPorSemestre)?.length &&
       semestre
     ) {
@@ -501,7 +507,10 @@ const RelatorioAtaBimestral = () => {
 
     let desabilitado = desabilitar;
 
-    if (Number(modalidadeId) === Number(ModalidadeDTO.EJA)) {
+    if (
+      Number(modalidadeId) === Number(ModalidadeDTO.EJA) ||
+      Number(modalidadeId) === Number(ModalidadeDTO.CELP)
+    ) {
       desabilitado = !semestre || desabilitar;
     }
     setDesabilitarBtnGerar(desabilitado);
@@ -667,6 +676,7 @@ const RelatorioAtaBimestral = () => {
                   disabled={
                     !modalidadeId ||
                     Number(modalidadeId) !== ModalidadeDTO.EJA ||
+                    Number(modalidadeId) !== ModalidadeDTO.CELP ||
                     listaSemestres?.length === 1 ||
                     !listaSemestres?.length ||
                     !permissoesTela?.podeConsultar

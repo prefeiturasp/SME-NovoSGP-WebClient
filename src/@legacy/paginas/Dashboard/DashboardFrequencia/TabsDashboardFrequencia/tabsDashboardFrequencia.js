@@ -28,9 +28,11 @@ const TabsDashboardFrequencia = () => {
     store => store.dashboardFrequencia?.dadosDashboardFrequencia?.semestre
   );
 
-  const ehModalidadeEJA = Number(modalidade) === ModalidadeDTO.EJA;
+  const ehModalidadeEJAouCelp =
+    Number(modalidade) === ModalidadeDTO.EJA ||
+    Number(modalidade) === ModalidadeDTO.CELP;
   const ehModalidadeInfatil = Number(modalidade) === ModalidadeDTO.INFANTIL;
-  const semestreDesabilitado = !!(ehModalidadeEJA ? semestre : !semestre);
+  const semestreDesabilitado = !!(ehModalidadeEJAouCelp ? semestre : !semestre);
   const exibirAbas =
     anoLetivo && dre && ue && modalidade && semestreDesabilitado;
 

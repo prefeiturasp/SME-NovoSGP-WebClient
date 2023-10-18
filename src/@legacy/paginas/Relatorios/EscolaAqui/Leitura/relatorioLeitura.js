@@ -188,11 +188,11 @@ const RelatorioLeitura = () => {
     }
 
     if (
-      !desabilitar &&
-      temDreUeSelecionada &&
-      modalidadeId &&
-      modalidadeId === ModalidadeDTO.EJA &&
-      !semestre
+      (!desabilitar &&
+        temDreUeSelecionada &&
+        modalidadeId &&
+        modalidadeId === ModalidadeDTO.EJA) ||
+      (modalidadeId === ModalidadeDTO.CELP && !semestre)
     ) {
       desabilitar = true;
     }
@@ -440,9 +440,10 @@ const RelatorioLeitura = () => {
 
   useEffect(() => {
     if (
-      modalidadeId &&
-      anoLetivo &&
-      String(modalidadeId) === String(ModalidadeDTO.EJA)
+      (modalidadeId &&
+        anoLetivo &&
+        String(modalidadeId) === String(ModalidadeDTO.EJA)) ||
+      String(modalidadeId) === String(ModalidadeDTO.CELP)
     ) {
       obterSemestres(modalidadeId, anoLetivo);
     } else {
@@ -575,9 +576,9 @@ const RelatorioLeitura = () => {
     (async () => {
       if (isSubscribed && anoLetivo && codigoDre && codigoUe && modalidadeId) {
         if (
-          modalidadeId &&
-          String(modalidadeId) === String(ModalidadeDTO.EJA) &&
-          !semestre
+          (modalidadeId &&
+            String(modalidadeId) === String(ModalidadeDTO.EJA)) ||
+          (String(modalidadeId) === String(ModalidadeDTO.CELP) && !semestre)
         ) {
           return;
         }
@@ -755,7 +756,8 @@ const RelatorioLeitura = () => {
                 disabled={
                   !modalidadeId ||
                   listaSemestres?.length === 1 ||
-                  String(modalidadeId) !== String(ModalidadeDTO.EJA)
+                  String(modalidadeId) !== String(ModalidadeDTO.EJA) ||
+                  String(modalidadeId) !== String(ModalidadeDTO.CELP)
                 }
                 valueSelect={semestre}
                 onChange={onChangeSemestre}

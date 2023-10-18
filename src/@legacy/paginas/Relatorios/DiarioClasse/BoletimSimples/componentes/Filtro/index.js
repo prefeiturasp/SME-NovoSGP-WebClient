@@ -63,7 +63,9 @@ const Filtros = ({
     useState();
 
   const ehEnsinoMedio = Number(modalidadeId) === ModalidadeDTO.ENSINO_MEDIO;
-  const ehEJA = Number(modalidadeId) === ModalidadeDTO.EJA;
+  const ehEJAOuCelp =
+    Number(modalidadeId) === ModalidadeDTO.EJA ||
+    Number(modalidadeId) === ModalidadeDTO.CELP;
 
   const OPCAO_TODOS_ESTUDANTES = '0';
   const OPCAO_SELECIONAR_ALUNOS = '1';
@@ -378,11 +380,12 @@ const Filtros = ({
 
   useEffect(() => {
     if (
-      modalidadeId &&
-      anoLetivo &&
-      String(modalidadeId) === String(ModalidadeDTO.EJA) &&
-      dreCodigo &&
-      ueCodigo
+      (modalidadeId &&
+        anoLetivo &&
+        String(modalidadeId) === String(ModalidadeDTO.EJA)) ||
+      (String(modalidadeId) === String(ModalidadeDTO.CELP) &&
+        dreCodigo &&
+        ueCodigo)
     ) {
       obterSemestres(modalidadeId, anoLetivo, dreCodigo, ueCodigo);
       return;
@@ -409,7 +412,7 @@ const Filtros = ({
   };
 
   const obterTurmas = useCallback(async () => {
-    if (ehEJA && !semestre) return;
+    if (ehEJAOuCelp && !semestre) return;
 
     if (dreCodigo && ueCodigo && modalidadeId) {
       setCarregandoTurmas(true);
@@ -449,7 +452,7 @@ const Filtros = ({
       }
     }
   }, [
-    ehEJA,
+    ehEJAOuCelp,
     ueCodigo,
     dreCodigo,
     consideraHistorico,
@@ -608,7 +611,8 @@ const Filtros = ({
               disabled={
                 !modalidadeId ||
                 listaSemestres?.length === 1 ||
-                String(modalidadeId) !== String(ModalidadeDTO.EJA)
+                String(modalidadeId) !== String(ModalidadeDTO.EJA) ||
+                String(modalidadeId) !== String(ModalidadeDTO.CELP)
               }
               valueSelect={semestre}
               onChange={onChangeSemestre}
@@ -627,7 +631,7 @@ const Filtros = ({
               disabled={
                 !modalidadeId ||
                 listaTurmas?.length === 1 ||
-                (ehEJA && !semestre)
+                (ehEJAOuCelp && !semestre)
               }
               valueSelect={turmasId}
               onChange={onChangeTurma}

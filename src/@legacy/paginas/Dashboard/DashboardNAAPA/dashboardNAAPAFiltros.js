@@ -273,7 +273,10 @@ const DashboardNAAPAFiltros = () => {
   }, [modalidade, anoLetivo, consideraHistorico]);
 
   useEffect(() => {
-    if (modalidade && anoLetivo && Number(modalidade) === ModalidadeDTO.EJA) {
+    if (
+      (modalidade && anoLetivo && Number(modalidade) === ModalidadeDTO.EJA) ||
+      Number(modalidade) === ModalidadeDTO.CELP
+    ) {
       setSemestre();
       obterSemestres();
     } else {
@@ -400,7 +403,8 @@ const DashboardNAAPAFiltros = () => {
               disabled={
                 !modalidade ||
                 listaSemestres?.length === 1 ||
-                Number(modalidade) !== ModalidadeDTO.EJA
+                Number(modalidade) !== ModalidadeDTO.EJA ||
+                Number(modalidade) !== ModalidadeDTO.CELP
               }
               valueSelect={semestre}
               onChange={onChangeSemestre}
