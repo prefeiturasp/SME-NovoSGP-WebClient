@@ -26,7 +26,7 @@ import {
   SGP_SELECT_TURMA,
   SGP_SELECT_UE,
 } from '~/constantes/ids/select';
-import { RotasDto } from '~/dtos';
+import { ROUTES } from '@/core/enum/routes';
 import { AbrangenciaServico, erros, verificaSomenteConsulta } from '~/servicos';
 import ServicoNAAPA from '~/servicos/Paginas/Gestao/NAAPA/ServicoNAAPA';
 import { ordenarDescPor, verificarDataFimMaiorInicio } from '~/utils';
