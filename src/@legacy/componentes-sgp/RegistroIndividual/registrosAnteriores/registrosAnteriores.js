@@ -6,7 +6,7 @@ import { CardCollapse, Loader } from '~/componentes';
 
 import { CONFIG_COLLAPSE_REGISTRO_INDIVIDUAL } from '~/constantes';
 import { SGP_COLLAPSE_REGISTROS_ANTERIORES } from '~/constantes/ids/collapse';
-
+import { ROUTES } from '@/core/enum/routes';
 import { setRecolherRegistrosAnteriores } from '~/redux/modulos/registroIndividual/actions';
 
 import { RegistrosAnterioresConteudo } from './registrosAnterioresConteudo';
