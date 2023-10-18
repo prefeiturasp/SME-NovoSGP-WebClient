@@ -11,7 +11,7 @@ const BotaoVerSituacaoEncaminhamentoAEE = () => {
 
   const onClick = () => {
     const win = window.open(
-      `${RotasDto.RELATORIO_AEE_ENCAMINHAMENTO}/editar/${planoAEESituacaoEncaminhamentoAEE?.id}`,
+      `${ROUTES.RELATORIO_AEE_ENCAMINHAMENTO}/editar/${planoAEESituacaoEncaminhamentoAEE?.id}`,
       '_blank'
     );
     win.focus();

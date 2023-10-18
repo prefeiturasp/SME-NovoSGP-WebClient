@@ -24,7 +24,7 @@ const MontarDadosTabs = () => {
   const planoAEEDados = useSelector(store => store.planoAEE.planoAEEDados);
 
   useEffect(() => {
-    if (location.pathname === `${RotasDto.RELATORIO_AEE_PLANO}/novo`) {
+    if (location.pathname === `${ROUTES.RELATORIO_AEE_PLANO}/novo`) {
       dispatch(setTypePlanoAEECadastro(true));
     } else {
       dispatch(setTypePlanoAEECadastro(false));

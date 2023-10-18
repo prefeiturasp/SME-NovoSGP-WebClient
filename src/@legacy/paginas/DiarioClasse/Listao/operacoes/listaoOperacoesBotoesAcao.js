@@ -674,13 +674,13 @@ const ListaoOperacoesBotoesAcao = () => {
   const onClickVoltar = async () => {
     if (!desabilitarBotoes && telaEmEdicao) {
       const salvou = await validarSalvar(() => {
-        navigate(RotasDto.LISTAO);
+        navigate(ROUTES.LISTAO);
       });
       if (salvou) {
-        navigate(RotasDto.LISTAO);
+        navigate(ROUTES.LISTAO);
       }
     } else {
-      navigate(RotasDto.LISTAO);
+      navigate(ROUTES.LISTAO);
     }
   };
 

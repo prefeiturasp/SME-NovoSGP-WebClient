@@ -1,17 +1,17 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import shortid from 'shortid';
 
 import { useDispatch, useSelector } from 'react-redux';
 import {
-  CardCollapse,
   Auditoria,
   CampoData,
+  CardCollapse,
   JoditEditor,
   Loader,
 } from '~/componentes';
 
+import { ROUTES } from '@/core/enum/routes';
 import { CONFIG_COLLAPSE_REGISTRO_INDIVIDUAL } from '~/constantes';
-import RotasDto from '~/dtos/rotasDto';
 
 import {
   resetDataNovoRegistro,
@@ -22,12 +22,12 @@ import {
   setRegistroIndividualEmEdicao,
 } from '~/redux/modulos/registroIndividual/actions';
 
+import moment from 'moment';
 import {
   erros,
   ServicoRegistroIndividual,
   verificaSomenteConsulta,
 } from '~/servicos';
-import moment from 'moment';
 import { aviso } from '~/servicos/alertas';
 
 const NovoRegistroIndividual = () => {
@@ -59,7 +59,7 @@ const NovoRegistroIndividual = () => {
 
   const turmaSelecionada = useSelector(state => state.usuario.turmaSelecionada);
   const permissoes = useSelector(state => state.usuario.permissoes);
-  const permissoesTela = permissoes[RotasDto.REGISTRO_INDIVIDUAL];
+  const permissoesTela = permissoes[ROUTES.REGISTRO_INDIVIDUAL];
 
   const turmaId = turmaSelecionada?.id || 0;
   const alunoCodigo = dadosAlunoObjectCard?.codigoEOL;
@@ -72,10 +72,10 @@ const NovoRegistroIndividual = () => {
     () => (ehMesmoAluno ? dadosRegistroAtual?.registro : ''),
     [dadosRegistroAtual, ehMesmoAluno]
   );
-  const idSecao = useMemo(() => (ehMesmoAluno ? dadosRegistroAtual?.id : ''), [
-    dadosRegistroAtual,
-    ehMesmoAluno,
-  ]);
+  const idSecao = useMemo(
+    () => (ehMesmoAluno ? dadosRegistroAtual?.id : ''),
+    [dadosRegistroAtual, ehMesmoAluno]
+  );
   const auditoria = useMemo(
     () => (ehMesmoAluno ? auditoriaNovoRegistroIndividual : null),
     [auditoriaNovoRegistroIndividual, ehMesmoAluno]
@@ -126,16 +126,15 @@ const NovoRegistroIndividual = () => {
   const obterRegistroIndividualPorData = useCallback(
     async dataEscolhida => {
       setCarregandoNovoRegistro(true);
-      const retorno = await ServicoRegistroIndividual.obterRegistroIndividualPorData(
-        {
+      const retorno =
+        await ServicoRegistroIndividual.obterRegistroIndividualPorData({
           alunoCodigo,
           componenteCurricular: componenteCurricularSelecionado,
           data: dataEscolhida,
           turmaId,
-        }
-      )
-        .catch(e => erros(e))
-        .finally(() => setCarregandoNovoRegistro(false));
+        })
+          .catch(e => erros(e))
+          .finally(() => setCarregandoNovoRegistro(false));
 
       const resposta = retorno?.data;
       const ehMesmoCodigo =
@@ -198,13 +197,18 @@ const NovoRegistroIndividual = () => {
   }, [validaPermissoes, podeRealizarNovoRegistro]);
 
   const desabilitarData = dataCorrente => {
-    return dataCorrente && (dataCorrente > window.moment() 
-    || moment(dataCorrente).format('MM-DD-YYYY') < moment(dadosAlunoObjectCard.dataSituacao).format('MM-DD-YYYY'));
+    return (
+      dataCorrente &&
+      (dataCorrente > window.moment() ||
+        moment(dataCorrente).format('MM-DD-YYYY') <
+          moment(dadosAlunoObjectCard.dataSituacao).format('MM-DD-YYYY'))
+    );
   };
 
-  const expandirAlternado = useCallback(() => setExpandir(!expandir), [
-    expandir,
-  ]);
+  const expandirAlternado = useCallback(
+    () => setExpandir(!expandir),
+    [expandir]
+  );
 
   const resetarDados = () => {
     dispatch(setRegistroIndividualEmEdicao(false));
@@ -213,9 +217,17 @@ const NovoRegistroIndividual = () => {
 
   const mudarData = valor => {
     if (valor) {
-      if(moment(valor).format('MM-DD-YYYY') < moment(dadosAlunoObjectCard.dataSituacao).format('MM-DD-YYYY')){
-        aviso('Aluno(a) ativo(a) em ' + moment(dadosAlunoObjectCard.dataSituacao).format('DD-MM-YYYY').toString());
-      }else{
+      if (
+        moment(valor).format('MM-DD-YYYY') <
+        moment(dadosAlunoObjectCard.dataSituacao).format('MM-DD-YYYY')
+      ) {
+        aviso(
+          'Aluno(a) ativo(a) em ' +
+            moment(dadosAlunoObjectCard.dataSituacao)
+              .format('DD-MM-YYYY')
+              .toString()
+        );
+      } else {
         setData(valor);
         resetarDados();
       }

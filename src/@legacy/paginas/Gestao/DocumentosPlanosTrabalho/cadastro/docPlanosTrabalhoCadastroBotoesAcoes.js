@@ -54,10 +54,10 @@ const DocPlanosTrabalhoCadastroBotoesAcoes = props => {
             );
           }
         }
-        navigate(RotasDto.DOCUMENTOS_PLANOS_TRABALHO);
+        navigate(ROUTES.DOCUMENTOS_PLANOS_TRABALHO);
       }
     } else {
-      navigate(RotasDto.DOCUMENTOS_PLANOS_TRABALHO);
+      navigate(ROUTES.DOCUMENTOS_PLANOS_TRABALHO);
     }
   };
 
@@ -121,7 +121,7 @@ const DocPlanosTrabalhoCadastroBotoesAcoes = props => {
 
       if (resultado?.status === 200) {
         sucesso('Registro excluído com sucesso!');
-        navigate(RotasDto.DOCUMENTOS_PLANOS_TRABALHO);
+        navigate(ROUTES.DOCUMENTOS_PLANOS_TRABALHO);
       }
     }
   };
@@ -210,7 +210,7 @@ const DocPlanosTrabalhoCadastroBotoesAcoes = props => {
           idDocumentosPlanoTrabalho ? 'alterado' : 'cadastrado'
         } com sucesso`
       );
-      navigate(RotasDto.DOCUMENTOS_PLANOS_TRABALHO);
+      navigate(ROUTES.DOCUMENTOS_PLANOS_TRABALHO);
     }
   };
 

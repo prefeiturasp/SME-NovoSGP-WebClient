@@ -16,7 +16,7 @@ const MontarListaFrequencia = () => {
   const dispatch = useDispatch();
 
   const usuario = useSelector(state => state.usuario);
-  const permissoesTela = usuario.permissoes[RotasDto.FREQUENCIA_PLANO_AULA];
+  const permissoesTela = usuario.permissoes[ROUTES.FREQUENCIA_PLANO_AULA];
 
   const { turmaSelecionada } = usuario;
 

@@ -26,8 +26,7 @@ const BotoesAcoesCadastroComunicados = props => {
   const navigate = useNavigate();
 
   const usuario = useSelector(store => store.usuario);
-  const permissoesTela =
-    usuario.permissoes[RotasDto.ACOMPANHAMENTO_COMUNICADOS];
+  const permissoesTela = usuario.permissoes[ROUTES.ACOMPANHAMENTO_COMUNICADOS];
 
   const dispatch = useDispatch();
 
@@ -58,7 +57,7 @@ const BotoesAcoesCadastroComunicados = props => {
 
         if (resposta?.status === 200) {
           sucesso('Registro excluído com sucesso');
-          navigate(RotasDto.ACOMPANHAMENTO_COMUNICADOS);
+          navigate(ROUTES.ACOMPANHAMENTO_COMUNICADOS);
         }
       }
     }
@@ -116,7 +115,7 @@ const BotoesAcoesCadastroComunicados = props => {
         .finally(() => dispatch(setExibirLoaderGeralComunicados(false)));
 
       if (resposta?.status === 200) {
-        navigate(RotasDto.ACOMPANHAMENTO_COMUNICADOS);
+        navigate(ROUTES.ACOMPANHAMENTO_COMUNICADOS);
         sucesso(
           `Comunicado ${comunicadoId ? 'alterado' : 'cadastrado'} com sucesso`
         );
@@ -170,10 +169,10 @@ const BotoesAcoesCadastroComunicados = props => {
       if (confirmou) {
         validaAntesDoSubmit();
       } else {
-        navigate(RotasDto.ACOMPANHAMENTO_COMUNICADOS);
+        navigate(ROUTES.ACOMPANHAMENTO_COMUNICADOS);
       }
     } else {
-      navigate(RotasDto.ACOMPANHAMENTO_COMUNICADOS);
+      navigate(ROUTES.ACOMPANHAMENTO_COMUNICADOS);
     }
   };
 

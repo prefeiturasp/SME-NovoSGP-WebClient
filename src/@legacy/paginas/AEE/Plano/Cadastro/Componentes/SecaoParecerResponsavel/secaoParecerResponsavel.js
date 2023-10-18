@@ -82,7 +82,7 @@ const SecaoParecerResponsavel = () => {
     ).catch(e => erros(e));
 
     if (resposta?.data) {
-      navigate(RotasDto.RELATORIO_AEE_PLANO);
+      navigate(ROUTES.RELATORIO_AEE_PLANO);
       sucesso('Atribuição do responsável realizada com sucesso');
     }
   };
@@ -132,7 +132,7 @@ const SecaoParecerResponsavel = () => {
       dispatch(limparDadosParecer());
       dispatch(setParecerEmEdicao(false));
       dispatch(setPlanoAEELimparDados());
-      navigate(RotasDto.RELATORIO_AEE_PLANO);
+      navigate(ROUTES.RELATORIO_AEE_PLANO);
     }
   };
 

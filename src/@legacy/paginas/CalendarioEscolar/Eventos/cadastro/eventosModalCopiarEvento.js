@@ -43,9 +43,9 @@ const EventosModalCopiarEvento = () => {
 
   const urlTelaListagemEventos = () => {
     if (tipoCalendarioId) {
-      return `${RotasDto.EVENTOS}/${tipoCalendarioId}`;
+      return `${ROUTES.EVENTOS}/${tipoCalendarioId}`;
     }
-    return RotasDto.EVENTOS;
+    return ROUTES.EVENTOS;
   };
 
   const onCloseRetornoCopiarEvento = () => {

@@ -62,7 +62,7 @@ const BotoesAcoesPlanoAEE = () => {
   const [desabilitarBtnAcao, setDesabilitarBtnAcao] = useState(false);
 
   const usuario = useSelector(store => store.usuario);
-  const permissoesTela = usuario.permissoes[RotasDto.RELATORIO_AEE_PLANO];
+  const permissoesTela = usuario.permissoes[ROUTES.RELATORIO_AEE_PLANO];
 
   const ehCP = perfilSelecionado === 'CP';
 
@@ -140,7 +140,7 @@ const BotoesAcoesPlanoAEE = () => {
     if (resposta?.data) {
       sucesso(msg);
       limparParecer();
-      navigate(RotasDto.RELATORIO_AEE_PLANO);
+      navigate(ROUTES.RELATORIO_AEE_PLANO);
     }
     setDesabilitarBtnAcao(false);
   };
@@ -166,14 +166,14 @@ const BotoesAcoesPlanoAEE = () => {
             mensagem = 'Registro alterado com sucesso';
           }
           sucesso(mensagem);
-          navigate(RotasDto.RELATORIO_AEE_PLANO);
+          navigate(ROUTES.RELATORIO_AEE_PLANO);
         }
       } else {
         limparParecer();
-        navigate(RotasDto.RELATORIO_AEE_PLANO);
+        navigate(ROUTES.RELATORIO_AEE_PLANO);
       }
     } else {
-      navigate(RotasDto.RELATORIO_AEE_PLANO);
+      navigate(ROUTES.RELATORIO_AEE_PLANO);
     }
   };
 
@@ -191,7 +191,7 @@ const BotoesAcoesPlanoAEE = () => {
       });
       if (resultado && resultado.status === 200) {
         sucesso('Plano excluído com sucesso');
-        navigate(RotasDto.RELATORIO_AEE_PLANO);
+        navigate(ROUTES.RELATORIO_AEE_PLANO);
       }
     }
   };
@@ -230,7 +230,7 @@ const BotoesAcoesPlanoAEE = () => {
 
       dispatch(setQuestionarioDinamicoEmEdicao(false));
       if (registroNovo) {
-        navigate(`${RotasDto.RELATORIO_AEE_PLANO}`);
+        navigate(`${ROUTES.RELATORIO_AEE_PLANO}`);
       } else {
         dispatch(setAtualizarDados(true));
       }

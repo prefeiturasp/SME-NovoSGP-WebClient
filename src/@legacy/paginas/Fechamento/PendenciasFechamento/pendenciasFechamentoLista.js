@@ -1,7 +1,10 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import { ROUTES } from '@/core/enum/routes';
+import { useCallback, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { Loader } from '~/componentes';
+import AlertaModalidadeInfantil from '~/componentes-sgp/AlertaModalidadeInfantil/alertaModalidadeInfantil';
+import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
 import Cabecalho from '~/componentes-sgp/cabecalho';
 import Alert from '~/componentes/alert';
 import Button from '~/componentes/button';
@@ -9,30 +12,27 @@ import Card from '~/componentes/card';
 import { Colors } from '~/componentes/colors';
 import ListaPaginada from '~/componentes/listaPaginada/listaPaginada';
 import SelectComponent from '~/componentes/select';
+import {
+  SGP_BUTTON_APROVAR,
+  SGP_BUTTON_IMPRIMIR,
+} from '~/constantes/ids/button';
 import { URL_HOME } from '~/constantes/url';
 import modalidade from '~/dtos/modalidade';
-import { erro, erros, sucesso } from '~/servicos/alertas';
-import ServicoPendenciasFechamento from '~/servicos/Paginas/Fechamento/ServicoPendenciasFechamento';
-import ServicoDisciplina from '~/servicos/Paginas/ServicoDisciplina';
 import situacaoPendenciaDto from '~/dtos/situacaoPendenciaDto';
+import ServicoPeriodoEscolar from '~/servicos/Paginas/Calendario/ServicoPeriodoEscolar';
+import ServicoPendenciasFechamento from '~/servicos/Paginas/Fechamento/ServicoPendenciasFechamento';
+import ServicoRelatorioPendencias from '~/servicos/Paginas/Relatorios/Pendencias/ServicoRelatorioPendencias';
+import ServicoDisciplina from '~/servicos/Paginas/ServicoDisciplina';
+import { ehTurmaInfantil } from '~/servicos/Validacoes/validacoesInfatil';
+import { erro, erros, sucesso } from '~/servicos/alertas';
+import { setBreadcrumbManual } from '~/servicos/breadcrumb-services';
+import { verificaSomenteConsulta } from '~/servicos/servico-navegacao';
+import { BotaoImprimir } from './pendenciasFechamentoLista.css';
 import {
   AprovadoList,
   PendenteList,
   ResolvidoList,
 } from './situacaoFechamento.css';
-import RotasDto from '~/dtos/rotasDto';
-import { setBreadcrumbManual } from '~/servicos/breadcrumb-services';
-import { verificaSomenteConsulta } from '~/servicos/servico-navegacao';
-import AlertaModalidadeInfantil from '~/componentes-sgp/AlertaModalidadeInfantil/alertaModalidadeInfantil';
-import { ehTurmaInfantil } from '~/servicos/Validacoes/validacoesInfatil';
-import { BotaoImprimir } from './pendenciasFechamentoLista.css';
-import ServicoRelatorioPendencias from '~/servicos/Paginas/Relatorios/Pendencias/ServicoRelatorioPendencias';
-import ServicoPeriodoEscolar from '~/servicos/Paginas/Calendario/ServicoPeriodoEscolar';
-import {
-  SGP_BUTTON_APROVAR,
-  SGP_BUTTON_IMPRIMIR,
-} from '~/constantes/ids/button';
-import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
 
 const PendenciasFechamentoLista = () => {
   const usuario = useSelector(store => store.usuario);
@@ -45,7 +45,7 @@ const PendenciasFechamentoLista = () => {
     store => store.filtro.modalidades
   );
   const location = useLocation();
-  const permissoesTela = usuario.permissoes[RotasDto.PENDENCIAS_FECHAMENTO];
+  const permissoesTela = usuario.permissoes[ROUTES.PENDENCIAS_FECHAMENTO];
   const [somenteConsulta, setSomenteConsulta] = useState(false);
   const [lista, setLista] = useState([]);
 
@@ -165,7 +165,7 @@ const PendenciasFechamentoLista = () => {
         setBreadcrumbManual(
           location.pathname,
           '',
-          RotasDto.PENDENCIAS_FECHAMENTO
+          ROUTES.PENDENCIAS_FECHAMENTO
         );
         return true;
       }
@@ -259,7 +259,7 @@ const PendenciasFechamentoLista = () => {
 
   const onClickEditar = pendencia => {
     if (permissoesTela.podeConsultar) {
-      navigate(`${RotasDto.PENDENCIAS_FECHAMENTO}/${pendencia.pendenciaId}`);
+      navigate(`${ROUTES.PENDENCIAS_FECHAMENTO}/${pendencia.pendenciaId}`);
     }
   };
 

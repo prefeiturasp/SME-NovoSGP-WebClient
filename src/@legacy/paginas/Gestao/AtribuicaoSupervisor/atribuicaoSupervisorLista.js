@@ -1,12 +1,12 @@
+import { ROUTES } from '@/core/enum/routes';
 import { Col, Row } from 'antd';
-import React, { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { Loader } from '~/componentes';
 import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
 import Cabecalho from '~/componentes-sgp/cabecalho';
 import { SGP_BUTTON_NOVO } from '~/constantes/ids/button';
-import RotasDto from '~/dtos/rotasDto';
 import { AbrangenciaServico, erros } from '~/servicos';
 import ServicoResponsaveis from '~/servicos/Paginas/Gestao/Responsaveis/ServicoResponsaveis';
 import { verificaSomenteConsulta } from '~/servicos/servico-navegacao';
@@ -39,7 +39,7 @@ export default function AtribuicaoSupervisorLista() {
 
   const usuario = useSelector(store => store.usuario);
   const permissoesTela =
-    usuario.permissoes[RotasDto.ATRIBUICAO_RESPONSAVEIS_LISTA];
+    usuario.permissoes[ROUTES.ATRIBUICAO_RESPONSAVEIS_LISTA];
 
   const obterDres = useCallback(async () => {
     const retorno = await AbrangenciaServico.buscarDres().catch(e => erros(e));
@@ -113,7 +113,7 @@ export default function AtribuicaoSupervisorLista() {
     if (!permissoesTela.podeAlterar) return;
 
     const tipoResp = tipoResponsavel ?? tipoResponsavelId;
-    let path = RotasDto.ATRIBUICAO_RESPONSAVEIS;
+    let path = ROUTES.ATRIBUICAO_RESPONSAVEIS;
     if (dresSelecionadas) {
       path = `${path}/${dresSelecionadas}`;
       if (responsavelId && tipoResp && codigoUe) {
@@ -137,13 +137,13 @@ export default function AtribuicaoSupervisorLista() {
     if (!permissoesTela.podeIncluir) return;
 
     if (dresSelecionadas && !tipoResponsavel) {
-      navigate(`${RotasDto.ATRIBUICAO_RESPONSAVEIS}/${dresSelecionadas}/`);
+      navigate(`${ROUTES.ATRIBUICAO_RESPONSAVEIS}/${dresSelecionadas}/`);
     } else if (dresSelecionadas && tipoResponsavel) {
       navigate(
-        `${RotasDto.ATRIBUICAO_RESPONSAVEIS}/${dresSelecionadas}/${tipoResponsavel}/`
+        `${ROUTES.ATRIBUICAO_RESPONSAVEIS}/${dresSelecionadas}/${tipoResponsavel}/`
       );
     } else {
-      navigate(RotasDto.ATRIBUICAO_RESPONSAVEIS);
+      navigate(ROUTES.ATRIBUICAO_RESPONSAVEIS);
     }
   }
 
@@ -543,7 +543,7 @@ export default function AtribuicaoSupervisorLista() {
                     current: paginaAtual,
                     locale: { items_per_page: '' },
                     onChange: p => setPaginaAtual(p),
-                    onShowSizeChange: p => setNumeroRegistrosPagina (p.pageSize)
+                    onShowSizeChange: p => setNumeroRegistrosPagina(p.pageSize),
                   }}
                 />
               </Loader>

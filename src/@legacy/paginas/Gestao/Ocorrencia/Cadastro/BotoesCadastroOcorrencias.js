@@ -64,10 +64,10 @@ const BotoesCadastroOcorrencias = props => {
       if (confirmado) {
         validaAntesDoSubmit(form);
       } else {
-        navigate(RotasDto.OCORRENCIAS);
+        navigate(ROUTES.OCORRENCIAS);
       }
     } else {
-      navigate(RotasDto.OCORRENCIAS);
+      navigate(ROUTES.OCORRENCIAS);
     }
   };
 
@@ -123,7 +123,7 @@ const BotoesCadastroOcorrencias = props => {
       );
       if (retorno?.status === 200) {
         sucesso('Registro excluído com sucesso');
-        navigate(RotasDto.OCORRENCIAS);
+        navigate(ROUTES.OCORRENCIAS);
       }
     }
   };

@@ -23,7 +23,7 @@ const DadosPlanoAula = props => {
   const { aulaId } = props;
 
   const usuario = useSelector(state => state.usuario);
-  const permissoesTela = usuario.permissoes[RotasDto.FREQUENCIA_PLANO_AULA];
+  const permissoesTela = usuario.permissoes[ROUTES.FREQUENCIA_PLANO_AULA];
 
   const dadosPlanoAula = useSelector(
     state => state.frequenciaPlanoAula.dadosPlanoAula
@@ -58,7 +58,6 @@ const DadosPlanoAula = props => {
     }
 
     dispatch(setDesabilitarCamposPlanoAula(desabilitar));
-
   }, [permissoesTela, somenteConsulta, dadosPlanoAula, dispatch]);
 
   useEffect(() => {

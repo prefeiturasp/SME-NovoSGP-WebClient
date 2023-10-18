@@ -1,3 +1,3 @@
 import Popper from 'popper.js';
 
-window.Popper = Popper
+window.Popper = Popper;

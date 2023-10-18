@@ -170,7 +170,7 @@ const ListaoPaginado = () => {
       setTabAtual(tab);
       setBimestreOperacoes();
       setComponenteCurricularInicial(params?.componenteCurricularCodigo);
-      navigate(RotasDto.LISTAO_OPERACOES);
+      navigate(ROUTES.LISTAO_OPERACOES);
 
       setCarregarFiltrosSalvos(true);
     }

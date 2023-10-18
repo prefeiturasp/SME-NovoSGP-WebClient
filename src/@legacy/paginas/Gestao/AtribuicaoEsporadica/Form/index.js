@@ -1,41 +1,41 @@
-import React, { useState, useEffect, useCallback, useMemo } from 'react';
-import { Formik, Form } from 'formik';
-import * as Yup from 'yup';
-import { useSelector } from 'react-redux';
+import { Form, Formik } from 'formik';
 import moment from 'moment';
+import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useSelector } from 'react-redux';
+import * as Yup from 'yup';
 
-import { Cabecalho, FiltroHelper } from '~/componentes-sgp';
 import {
-  Card,
-  ButtonGroup,
-  Grid,
-  Localizador,
-  CampoData,
-  momentSchema,
-  Loader,
   Auditoria,
+  ButtonGroup,
+  CampoData,
+  Card,
   CheckboxComponent,
+  Grid,
+  Loader,
+  Localizador,
   SelectComponent,
+  momentSchema,
 } from '~/componentes';
+import { Cabecalho, FiltroHelper } from '~/componentes-sgp';
 import DreDropDown from '../componentes/DreDropDown';
 import UeDropDown from '../componentes/UeDropDown';
 
-import RotasDto from '~/dtos/rotasDto';
-import AtribuicaoEsporadicaServico from '~/servicos/Paginas/AtribuicaoEsporadica';
+import { ROUTES } from '@/core/enum/routes';
 import {
-  erros,
-  erro,
-  sucesso,
   confirmar,
+  erro,
+  erros,
   setBreadcrumbManual,
+  sucesso,
   verificaSomenteConsulta,
 } from '~/servicos';
+import AtribuicaoEsporadicaServico from '~/servicos/Paginas/AtribuicaoEsporadica';
 
 import { validaSeObjetoEhNuloOuVazio } from '~/utils';
 
-import { Row } from './styles';
-import { SGP_BUTTON_ALTERAR_CADASTRAR } from '~/constantes/ids/button';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import { SGP_BUTTON_ALTERAR_CADASTRAR } from '~/constantes/ids/button';
+import { Row } from './styles';
 
 function AtribuicaoEsporadicaForm() {
   const navigate = useNavigate();
@@ -45,7 +45,7 @@ function AtribuicaoEsporadicaForm() {
   const [carregando, setCarregando] = useState(false);
   const permissoesTela = useSelector(store => store.usuario.permissoes);
   const somenteConsulta = verificaSomenteConsulta(
-    permissoesTela[RotasDto.ATRIBUICAO_ESPORADICA_LISTA]
+    permissoesTela[ROUTES.ATRIBUICAO_ESPORADICA_LISTA]
   );
   const filtroListagem = useSelector(
     store => store.atribuicaoEsporadica.filtro
@@ -133,7 +133,7 @@ function AtribuicaoEsporadicaForm() {
             paramsRoute?.id ? 'alterada' : 'salva'
           } com sucesso.`
         );
-        navigate(RotasDto.ATRIBUICAO_ESPORADICA_LISTA);
+        navigate(ROUTES.ATRIBUICAO_ESPORADICA_LISTA);
       }
     } catch (err) {
       if (err) {
@@ -153,10 +153,10 @@ function AtribuicaoEsporadicaForm() {
       if (confirmou) {
         validaAntesDoSubmit(form);
       } else {
-        navigate(RotasDto.ATRIBUICAO_ESPORADICA_LISTA);
+        navigate(ROUTES.ATRIBUICAO_ESPORADICA_LISTA);
       }
     } else {
-      navigate(RotasDto.ATRIBUICAO_ESPORADICA_LISTA);
+      navigate(ROUTES.ATRIBUICAO_ESPORADICA_LISTA);
     }
   };
 
@@ -214,7 +214,7 @@ function AtribuicaoEsporadicaForm() {
         ).catch(e => erros(e));
       if (excluir) {
         sucesso(`Atribuição excluida com sucesso!`);
-        navigate(RotasDto.ATRIBUICAO_ESPORADICA_LISTA);
+        navigate(ROUTES.ATRIBUICAO_ESPORADICA_LISTA);
       }
     }
   };
@@ -262,7 +262,7 @@ function AtribuicaoEsporadicaForm() {
       setBreadcrumbManual(
         location.pathname,
         'Atribuição',
-        RotasDto.ATRIBUICAO_ESPORADICA_LISTA
+        ROUTES.ATRIBUICAO_ESPORADICA_LISTA
       );
       buscarPorId(paramsRoute.id);
     } else {
@@ -373,7 +373,7 @@ function AtribuicaoEsporadicaForm() {
                 <ButtonGroup
                   form={form}
                   permissoesTela={
-                    permissoesTela[RotasDto.ATRIBUICAO_ESPORADICA_LISTA]
+                    permissoesTela[ROUTES.ATRIBUICAO_ESPORADICA_LISTA]
                   }
                   novoRegistro={novoRegistro}
                   labelBotaoPrincipal={labelBotaoPrincipal}

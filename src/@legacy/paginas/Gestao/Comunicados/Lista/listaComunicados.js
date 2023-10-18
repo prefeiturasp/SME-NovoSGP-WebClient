@@ -26,8 +26,7 @@ const ListaComunicados = () => {
   const [somenteConsulta, setSomenteConsulta] = useState(false);
   const [exibirLoader, setExibirLoader] = useState(false);
   const usuario = useSelector(store => store.usuario);
-  const permissoesTela =
-    usuario.permissoes[RotasDto.ACOMPANHAMENTO_COMUNICADOS];
+  const permissoesTela = usuario.permissoes[ROUTES.ACOMPANHAMENTO_COMUNICADOS];
 
   const temModalidadeEja = !!filtros?.modalidades?.find(
     item => String(item) === String(ModalidadeDTO.EJA)
@@ -105,12 +104,12 @@ const ListaComunicados = () => {
 
   const aoClicarBotaoNovo = () => {
     if (permissoesTela.podeIncluir) {
-      navigate(`${RotasDto.ACOMPANHAMENTO_COMUNICADOS}/novo`);
+      navigate(`${ROUTES.ACOMPANHAMENTO_COMUNICADOS}/novo`);
     }
   };
 
   const onClickEditar = comunicado => {
-    navigate(`${RotasDto.ACOMPANHAMENTO_COMUNICADOS}/editar/${comunicado.id}`);
+    navigate(`${ROUTES.ACOMPANHAMENTO_COMUNICADOS}/editar/${comunicado.id}`);
   };
 
   const onSelecionarItems = items => {

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo, useCallback } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 // Redux
 import { useSelector } from 'react-redux';
@@ -8,19 +8,19 @@ import { Cabecalho } from '~/componentes-sgp';
 
 // Componentes
 import {
-  Card,
   ButtonGroup,
+  Card,
   Grid,
-  PainelCollapse,
-  Loader,
   LazyLoad,
+  Loader,
+  PainelCollapse,
 } from '~/componentes';
 import Alert from '~/componentes/alert';
 import AlertaSelecionarTurma from './componentes/AlertaSelecionarTurma';
 import DropDownTerritorios from './componentes/DropDownTerritorios';
 
 // Serviços
-import { erro, sucesso, confirmar, erros } from '~/servicos/alertas';
+import { confirmar, erro, erros, sucesso } from '~/servicos/alertas';
 import TerritorioSaberServico from '~/servicos/Paginas/TerritorioSaber';
 import { verificaSomenteConsulta } from '~/servicos/servico-navegacao';
 
@@ -28,12 +28,12 @@ import { verificaSomenteConsulta } from '~/servicos/servico-navegacao';
 import { valorNuloOuVazio } from '~/utils/funcoes/gerais';
 
 // DTOs
-import RotasDto from '~/dtos/rotasDto';
-import { URL_HOME } from '~/constantes/url';
-import AlertaModalidadeInfantil from '~/componentes-sgp/AlertaModalidadeInfantil/alertaModalidadeInfantil';
-import { ehTurmaInfantil } from '~/servicos/Validacoes/validacoesInfatil';
-import { SGP_BUTTON_SALVAR } from '~/constantes/ids/button';
+import { ROUTES } from '@/core/enum/routes';
 import { useNavigate } from 'react-router-dom';
+import AlertaModalidadeInfantil from '~/componentes-sgp/AlertaModalidadeInfantil/alertaModalidadeInfantil';
+import { SGP_BUTTON_SALVAR } from '~/constantes/ids/button';
+import { URL_HOME } from '~/constantes/url';
+import { ehTurmaInfantil } from '~/servicos/Validacoes/validacoesInfatil';
 
 // Componentes internos
 const DesenvolvimentoReflexao = React.lazy(() =>
@@ -109,7 +109,7 @@ function TerritorioSaber() {
   ]);
 
   useEffect(() => {
-    const permissoes = permissoesTela[RotasDto.TERRITORIO_SABER];
+    const permissoes = permissoesTela[ROUTES.TERRITORIO_SABER];
     const naoSetarSomenteConsultaNoStore = ehTurmaInfantil(
       modalidadesFiltroPrincipal,
       turmaSelecionada
@@ -245,7 +245,7 @@ function TerritorioSaber() {
         <Cabecalho pagina="Planejamento anual do Território do Saber">
           <ButtonGroup
             idBotaoPrincipal={SGP_BUTTON_SALVAR}
-            permissoesTela={permissoesTela[RotasDto.TERRITORIO_SABER]}
+            permissoesTela={permissoesTela[ROUTES.TERRITORIO_SABER]}
             onClickVoltar={onClickVoltar}
             onClickBotaoPrincipal={() => salvarPlanejamento()}
             onClickCancelar={onClickCancelar}

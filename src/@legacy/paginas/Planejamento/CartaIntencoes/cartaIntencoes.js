@@ -1,34 +1,34 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import { ROUTES } from '@/core/enum/routes';
+import { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import AlertaPermiteSomenteTurmaInfantil from '~/componentes-sgp/AlertaPermiteSomenteTurmaInfantil/alertaPermiteSomenteTurmaInfantil';
+import ServicoObservacoesUsuario from '~/componentes-sgp/ObservacoesUsuario/ServicoObservacoesUsuario';
+import ObservacoesUsuario from '~/componentes-sgp/ObservacoesUsuario/observacoesUsuario';
 import Cabecalho from '~/componentes-sgp/cabecalho';
 import Alert from '~/componentes/alert';
 import Card from '~/componentes/card';
-import SelectComponent from '~/componentes/select';
 import Loader from '~/componentes/loader';
+import SelectComponent from '~/componentes/select';
 import {
   limparDadosCartaIntencoes,
   setCarregandoCartaIntencoes,
   setDadosCartaIntencoes,
 } from '~/redux/modulos/cartaIntencoes/actions';
-import { erros, sucesso, confirmar } from '~/servicos/alertas';
-import ServicoCartaIntencoes from '~/servicos/Paginas/CartaIntencoes/ServicoCartaIntencoes';
-import servicoDisciplinas from '~/servicos/Paginas/ServicoDisciplina';
-import { ehTurmaInfantil } from '~/servicos/Validacoes/validacoesInfatil';
-import { Container } from './cartaIntencoes.css';
-import BotoesAcoesCartaIntencoes from './DadosCartaIntencoes/BotoesAcoes/botoesAcoesCartaIntencoes';
-import DadosCartaIntencoes from './DadosCartaIntencoes/dadosCartaIntencoes';
-import ModalErrosCartaIntencoes from './DadosCartaIntencoes/ModalErros/ModalErrosCartaIntencoes';
-import LoaderCartaIntencoes from './LoaderCartaIntencoes/laderCartaIntencoes';
-import servicoSalvarCartaIntencoes from './servicoSalvarCartaIntencoes';
-import RotasDto from '~/dtos/rotasDto';
-import { verificaSomenteConsulta } from '~/servicos/servico-navegacao';
-import ObservacoesUsuario from '~/componentes-sgp/ObservacoesUsuario/observacoesUsuario';
-import ServicoObservacoesUsuario from '~/componentes-sgp/ObservacoesUsuario/ServicoObservacoesUsuario';
 import {
   limparDadosObservacoesUsuario,
   setDadosObservacoesUsuario,
 } from '~/redux/modulos/observacoesUsuario/actions';
+import ServicoCartaIntencoes from '~/servicos/Paginas/CartaIntencoes/ServicoCartaIntencoes';
+import servicoDisciplinas from '~/servicos/Paginas/ServicoDisciplina';
+import { ehTurmaInfantil } from '~/servicos/Validacoes/validacoesInfatil';
+import { confirmar, erros, sucesso } from '~/servicos/alertas';
+import { verificaSomenteConsulta } from '~/servicos/servico-navegacao';
+import BotoesAcoesCartaIntencoes from './DadosCartaIntencoes/BotoesAcoes/botoesAcoesCartaIntencoes';
+import ModalErrosCartaIntencoes from './DadosCartaIntencoes/ModalErros/ModalErrosCartaIntencoes';
+import DadosCartaIntencoes from './DadosCartaIntencoes/dadosCartaIntencoes';
+import LoaderCartaIntencoes from './LoaderCartaIntencoes/laderCartaIntencoes';
+import { Container } from './cartaIntencoes.css';
+import servicoSalvarCartaIntencoes from './servicoSalvarCartaIntencoes';
 
 const CartaIntencoes = () => {
   const dispatch = useDispatch();
@@ -38,7 +38,7 @@ const CartaIntencoes = () => {
   const { turmaSelecionada } = usuario;
   const { turma } = turmaSelecionada;
   const turmaId = turmaSelecionada?.id || 0;
-  const permissoesTela = usuario.permissoes[RotasDto.CARTA_INTENCOES];
+  const permissoesTela = usuario.permissoes[ROUTES.CARTA_INTENCOES];
 
   const modalidadesFiltroPrincipal = useSelector(
     store => store.filtro.modalidades
